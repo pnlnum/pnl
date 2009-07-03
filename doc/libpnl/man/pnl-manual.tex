@@ -1,0 +1,109 @@
+%% -*- ispell-local-dictionary: "english"; -*-
+
+\documentclass[a4paper,11pt,twoside]{article}
+\usepackage{a4wide}
+\usepackage[dvips=true]{hyperref}
+\usepackage{verbatim,moreverb,alltt}
+\usepackage{makeidx}
+\usepackage[dvips]{color}
+\usepackage[latin1]{inputenc}
+\usepackage[english]{babel}
+\usepackage[strings]{underscore}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{array}
+\usepackage{delarray}
+
+
+
+%% --------------------------------------------
+\hbadness=10000
+\emergencystretch=\hsize
+\tolerance=9999
+\parindent=0pt
+%% --------------------------------------------
+
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\N}{{\mathbb N}}
+
+%%\renewcommand{\exp}[1]{\operatorname{e}^{ #1 } }
+\newcommand{\expp}[1]{\operatorname{e}^{ #1 } }
+\newcommand{\paren}[1]{\left( #1 \right)}
+\newcommand{\recaco}[1]{\left [ #1 \right ]}
+\newcommand{\crochet}[1]{\left \langle #1 \right \rangle}
+\newcommand{\acolade}[1]{\left\{ #1 \right\}}
+\newcommand{\real}[1]{\operatorname{Re}(#1)}
+
+\long\def\varname#1#2{\item[#1]#2}
+\def\var#1{{\tt #1}}
+
+\newcommand{\describefun}[3]{%
+  \index{#2}\label{#2}%
+  {#1~{\bf #2}~(#3)}%
+}
+
+\newcommand{\describemacro}[2]{%
+  \index{#1}\label{#1}%
+  {{\bf #1}~(#2)}%
+}
+
+\newcommand{\constentry}[2]{%
+  \index{#1}\label{#1}{\bf #1} &&  #2 \\
+}
+
+
+\def\refstruct#1{{\color[named]{Red} #1}}
+\def\reffun#1{\hyperref[#1]{#1}}
+\def\refmacro{\reffun}
+\newenvironment{varlist}{\vskip1ex\noindent{\large\bfseries\color[named]{Blue} Parameters}%
+  \unskip\begin{description}}{\end{description}\unskip}
+\newenvironment{example}{\vskip1ex\noindent{\large\bfseries\color[named]{Blue} Examples}\unskip}{}
+\def\code{\unskip\verbatim} \def\endcode{\endverbatim\unskip}
+\newenvironment{describe}{%
+   \vskip1ex\noindent{\large\bfseries\color[named]{Blue} Description}%
+  \vskip1ex\noindent}{} 
+\newenvironment{describeconst}{%
+  \noindent\begin{tabular}{lp{1cm}l}}{\end{tabular}}
+\def\shortdescribe{\unskip\vskip1ex{\color[named]{Blue} Description~}}
+\def\sshortdescribe{\unskip\newline\hskip1em {\color[named]{Blue} Description~}}
+
+
+
+\title{PNL Manual}
+\date{\today}
+\author{J\'er\^ome Lelong \and  David Pommier}
+
+\makeindex
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{What is PNL}
+
+PNL is a scientific library used by most of Premia's algorithms, it is
+intended to provide a uniform framework for contributors to Premia. This
+manual is divided into four parts.
+\begin{itemize}
+\item Linear algebra : vectors, matrices, hypermatrices, and some
+  routines to solve linear systems.
+\item Probabilistic functions: random number generators and  cumulative
+  distribution functions.
+\item Deterministic toolbox : FFT, numerical integration, zero searching,
+  polynomial bases and regression, PDE, $\dots$
+\item Mathematical functions: complex numbers, special functions, standard
+  financial functions for the Black \& Scholes model.
+\end{itemize}
+
+
+
+\input{mathematical_functions.tex}
+\input{linear_algebra.tex}
+\input{probabilistic_methods.tex}
+\input{deterministic_methods.tex}
+
+
+\bibliographystyle{plain}
+\bibliography{pnl-biblio.bib}
+\printindex
+\end{document}

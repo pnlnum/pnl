@@ -1,0 +1,4 @@
+#!/bin/sh
+
+find Src  -name '*.[Cch]' | xargs grep -n -E "$@"
+

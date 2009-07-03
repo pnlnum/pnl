@@ -1,0 +1,647 @@
+dnl Jérôme LELONG Feb 2006
+
+
+AC_REVISION($Revision: 1.47 $)
+AC_INIT(premia, 10.2, contact lelong@cermics.enpc.fr if you encounter any problem)
+
+AC_CONFIG_AUX_DIR(config)
+AM_CONFIG_HEADER(Src/configunix.h)
+
+AM_INIT_AUTOMAKE
+
+if test "X${CXXFLAGS}" != "X"; then
+   user_set_cxxflags=yes
+fi
+if test "X${CFLAGS}" != "X"; then
+   user_set_cflags=yes
+fi
+
+AM_PROG_LIBTOOL
+
+## Initialize maintainer mode
+AM_MAINTAINER_MODE
+
+
+# dnl Get system type
+# dnl use "config.guess" and "config.sub" from directory "config"
+# AC_CANONICAL_HOST
+
+
+AC_ARG_ENABLE(debug,
+   [  --enable-debug          compile with "-g" option, default behavious is to optimize], 
+   [enable_debug="yes"], [enable_debug="no"])
+AC_ARG_ENABLE(optimize,
+   [  --disable-optimize      disable "-0" option off gcc], [enable_optimize="no"], [enable_optimize="yes"])
+AC_ARG_ENABLE(verbose,
+   [  --disable-silent         tell libtool not to be silent], [], [enable_verbose="no"])
+AC_ARG_WITH(pdfviewer,
+   [  --with-pdfviewer=PROG		specify the program to use to view pdf files], [ PDFVIEWER=$withval] )
+AC_ARG_WITH(premiaversion,
+   [  --with-premiaversion=YEAR		to compile either the free or not free version of Premia], [ PREMIAVERSION=$withval] )
+AC_ARG_WITH(blas,
+    [  --without-blas           do not compile with Blas & Lapack libraries ])
+AC_ARG_WITH(gsl,
+    [  --without-gsl           do not compile with GSL library ])
+
+if test "$enable_verbose" = no; then  
+   LIBTOOL="$LIBTOOL --silent"
+fi
+
+################
+## build Paths
+################
+
+local_dir=`pwd`
+local_home=$local_dir
+AC_PREFIX_DEFAULT($local_home)
+if test "x$prefix" = "xNONE" ; then
+   prefix=$local_home
+fi
+
+bindir="$prefix/bin"
+libdir="$prefix/lib"
+includedir="$prefix/include"
+
+##############################
+## define C and C++ compilers
+##############################
+AC_PROG_CXX
+AC_PROG_CC
+AM_PROG_CC_C_O
+AC_PROG_F77
+AC_PROG_MAKE_SET
+AC_PROG_INSTALL
+
+
+##########################
+## updating flags
+##########################
+
+if test "x$enable_optimize" = xyes  && test "x$enable_debug" = xno ; then
+   AC_DEFINE(PNL_RANGE_CHECK_OFF, 1, [turn off range checking by default internally])
+fi
+
+# removing -ansi from CFLAGS
+CC_OPTIONS="`echo $CFLAGS | sed -e 's/-ansi//g'`"
+if test "x$GCC" = xyes ; then
+   if test "x$enable_debug" = xyes || test "x$enable_optimize" = xno ; then
+      CC_OPTIONS=`echo $CC_OPTIONS | sed -e 's/-O[[0-9]]*//g'`   
+      CC_OPTIONS=`echo $CC_OPTIONS | sed -e 's/-g[[0-9]]*$//g'`          
+      CC_OPTIONS=`echo $CC_OPTIONS | sed -e 's/-g[[0-9]]* //g'`           
+      CC_OPTIONS="${CC_OPTIONS} -Wall -g -Wdeclaration-after-statement"
+   else
+      CC_OPTIONS="${CC_OPTIONS} -Wall -Wdeclaration-after-statement"
+   fi
+   #The -mno-cygwin flag to gcc makes gcc link against standard Microsoft DLLs instead of Cygwin. 
+   #This is desirable for native Windows programs that don't need a UNIX emulation layer.
+   case "$host" in
+        *-*-cygwin*)
+	 CC_OPTIONS="${CC_OPTIONS} -mno-cygwin"
+	 ;;
+   esac
+   #This option enables compilation of the free or the complete versions of the source code
+   #for further explanation cf the directory Unix\FreePremiaScripts\
+   if test "$with_premiaversion" != "" ; then
+      CC_OPTIONS="${CC_OPTIONS} -DPremiaCurrentVersion=${PREMIAVERSION}"
+   fi
+fi
+CFLAGS=${CC_OPTIONS}
+
+
+CXX_OPTIONS="`echo $CXXFLAGS | sed -e 's/-ansi//g'`"
+if test "x$GXX" = xyes ; then
+   if test "x$enable_debug" = xyes || test "x$enable_optimize" = xno; then
+      CXX_OPTIONS=`echo $CXX_OPTIONS | sed -e 's/-O[[0-9]]*//g'`   
+      CXX_OPTIONS=`echo $CXX_OPTIONS | sed -e 's/-g[[0-9]]*$//g'`          
+      CXX_OPTIONS=`echo $CXX_OPTIONS | sed -e 's/-g[[0-9]]* //g'`           
+      CXX_OPTIONS="${CXX_OPTIONS} -Wall -g -fno-inline"
+   else
+      CXX_OPTIONS="${CXX_OPTIONS} -Wall"
+   fi
+   #The -mno-cygwin flag to gcc makes gcc link against standard Microsoft DLLs instead of Cygwin. 
+   #This is desirable for native Windows programs that don't need a UNIX emulation layer.
+   case "$host" in
+        *-*-cygwin*)
+     CXX_OPTIONS="${CXX_OPTIONS} -mno-cygwin"
+	 ;;
+   esac
+   #This option enables compilation of the free or the complete versions of the source code
+   #for further explanation cf the directory Unix\FreePremiaScripts\
+   if test "$with_premiaversion" != "" ; then
+      CXX_OPTIONS="${CXX_OPTIONS} -DPremiaCurrentVersion=${PREMIAVERSION}"
+   fi
+fi
+CXXFLAGS=${CXX_OPTIONS}
+
+AM_CFLAGS=${CC_OPTIONS}
+AM_CXXFLAGS=${CXX_OPTIONS}
+
+# if the user has not changed the flags, reset them.
+# They are passed to AM_xxxx
+if test X$user_set_cxxflags != Xyes; then
+   CFLAGS=""
+fi
+if test X$user_set_cflags != Xyes; then
+   CXXFLAGS=""
+fi  
+
+LDFLAGS="${LDFLAGS} -lm"
+
+AC_C_INLINE
+dnl Check for "extern inline", using a modified version of the test
+dnl for AC_C_INLINE from acspecific.mt
+dnl
+AC_CACHE_CHECK([for extern inline], ac_cv_c_extern_inline,
+                    [ac_cv_c_extern_inline=no
+                    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[extern $ac_cv_c_inline double foo(double x);
+                    extern $ac_cv_c_inline double foo(double x) { return x + 1.0 ; } ;
+                    double foo (double x) { return x + 1.0 ; };]],
+                    [[  foo(1.0)  ]])],[ac_cv_c_extern_inline="yes"],[])])
+
+if test "$ac_cv_c_extern_inline" != no ; then
+   AC_DEFINE(HAVE_INLINE,[],[Define if you have inline])
+fi
+
+
+
+
+##########################
+## check for C functions
+##########################
+AC_LANG(C)
+AC_CHECK_LIB(m,main)
+AC_CHECK_FUNCS(tgamma)
+AC_CHECK_FUNCS(lgamma)
+AC_CHECK_FUNCS(exp10)
+AC_CHECK_FUNCS(erfl)
+
+
+##########################
+## Check for headers
+##########################
+AC_CHECK_HEADERS(time.h)
+AC_CHECK_HEADERS(limits.h)
+AC_CHECK_HEADERS(errno.h)
+AC_CHECK_HEADERS(assert.h)
+AC_CHECK_HEADERS(sys/param.h)
+AC_CHECK_HEADERS(stdarg.h)
+AC_CHECK_HEADERS(complex.h)
+
+case "$host" in
+     *-*-cygwin* |   *-*-mingw32*)
+	 AC_CHECK_HEADERS(process.h)
+	 ;;
+esac
+
+
+##########################
+## check for C++ libs
+##########################
+
+AC_LANG(C++)
+AC_CHECK_HEADERS(cmath)
+AC_CHECK_HEADERS(ctime)
+AC_CHECK_HEADERS(vector)
+
+
+
+
+################################
+##  variables for the Makefile
+################################
+PREMIADIR=$prefix
+PATH_SRC_PREMIA="$prefix/Src"
+PATH_UNIX_PREMIA="$prefix/Unix"
+PATH_COMMON="$prefix/Src/common"
+PATH_OPT="$prefix/Src/opt"
+PATH_MOD="$prefix/Src/mod"
+
+
+##################################
+## to build the doc
+##################################
+PATH_MAN="$prefix/man"
+PATH_MAN_TEX="$prefix/man/tex"
+PATH_MAN_PDF="$prefix/man/pdf_html"
+PATH_MAN_UTILS="$prefix/man/utils"
+
+
+AC_SUBST(PREMIADIR)
+AC_SUBST(PATH_SRC_PREMIA)
+AC_SUBST(PATH_UNIX_PREMIA)
+AC_SUBST(PATH_COMMON)
+AC_SUBST(PATH_OPT)
+AC_SUBST(PATH_MOD)
+AC_SUBST(PATH_MAN)
+AC_SUBST(PATH_MAN_TEX)
+AC_SUBST(PATH_MAN_PDF)
+AC_SUBST(PATH_MAN_UTILS)
+
+
+###########################################################
+## fixing some variables for config.h
+## only  used in PremiaCtoTeX. available only under Linux 
+###########################################################
+AC_DEFINE_UNQUOTED(
+		[PREMIA_MAN_TEX_DIR], ["$PATH_MAN_TEX"],
+		[directory where to find tex files of Premia])		
+
+AC_DEFINE_UNQUOTED(
+		[PREMIA_MAN_DIR], ["$PATH_MAN"],
+		[directory where to find the doc of Premia])		
+
+
+########################################################
+## check for blas
+########################################################
+USE_BLAS=no
+BLAS_LIBS=""
+USE_LAPACK=no
+LAPACK_LIBS=""
+
+if test "x$F77" = "x"; then 
+   with_blas=no
+fi
+
+if test "x$with_blas" != "xno"; then
+   builtin(include,config/acx_blas.m4)
+   ACX_BLAS([USE_BLAS=yes])
+
+   if test "$USE_BLAS" = yes; then 
+     AM_CFLAGS="$AM_CFLAGS -DHAVE_BLAS"
+   fi
+
+   builtin(include,config/acx_lapack.m4)
+   ACX_LAPACK([USE_LAPACK=yes])
+
+   if test "$USE_LAPACK" = yes; then 
+     AM_CFLAGS="$AM_CFLAGS -DHAVE_LAPACK"
+   fi
+fi
+
+########################################################
+## check for GSL
+########################################################
+USE_GSL=no
+GSL_LIBS=""
+
+if test "x$with_gsl" != "xno"; then
+   builtin(include,config/gsl.m4)
+   AX_PATH_GSL(1.10,[USE_GSL=yes])
+
+   if test "$USE_GSL" = yes; then 
+      AM_CFLAGS="$AM_CFLAGS -DHAVE_GSL"
+   fi
+fi
+
+####################
+### checking host 
+####################
+
+SPAWN_USE_OPEN=0
+
+case "$host" in
+     *-*-cygwin*)
+	 PREMIADIR=$prefix
+     PREMIA_SRC_DIR="$prefix/Src"
+	 PREMIA_HOME_DIR="$prefix/Unix"
+	 PREMIA_MAN_PDF_DIR="$prefix/man/pdf_html"
+
+     AC_DEFINE_UNQUOTED(
+			[_WIN32], [1],
+			[Running on a Win32 system])
+
+	 AC_DEFINE_UNQUOTED(
+			[_CYGWIN], [1],
+			[Runnning on Cygwin])
+			
+	 if test "$with_pdfviewer" != ""; then
+		AC_CHECK_PROG(Pdf_Viewer_Check, $with_pdfviewer, yes, no)
+		if test "$Pdf_Viewer_Check" = yes; then
+			PDF_VIEWER_PROG=$with_pdfviewer
+		fi
+	 fi
+	 if test "$PDF_VIEWER_PROG" = ""; then
+	 	 AC_CHECK_PROG(Acrobat_Check, AcroRd32.exe, yes, no)
+	   	 if test "$Acrobat_Check" = yes; then
+			PDF_VIEWER_PROG="AcroRd32.exe"
+		 fi
+	 fi
+	 AC_DEFINE_UNQUOTED(
+			[_WIN32], [1],
+			[Running on Cygwin and using Windows Acrobat])
+     ;;
+
+    i*86-*-mingw32*)
+	dnl to cross compile with mingw32 under Linux
+	dnl 	PREMIADIR=$(echo $prefix | sed -e 's+/+\\\\+g' )	
+	dnl 	PREMIA_SRC_DIR="$prefix\\Src"
+	dnl 	PREMIA_HOME_DIR="$prefix\\Win"
+	dnl 	PREMIA_MAN_PDF_DIR="$prefix\\man\\pdf_html"
+	
+	dnl these variables are determined at runtime 
+	dnl using GetModuleFileName from windws.h
+
+
+    AC_DEFINE_UNQUOTED(
+			[_WIN32], [1],
+			[Running on a Win32 system])
+			
+	if test "$with_pdfviewer" != ""; then
+		PDF_VIEWER_PROG=$with_pdfviewer
+	else
+		PDF_VIEWER_PROG="AcroRd32.exe"
+	fi
+    ;;
+
+
+    i*86-*-linux-gnu | *-pc-linux-gnu)
+	PREMIADIR=$prefix	 
+	PREMIA_SRC_DIR="$prefix/Src"
+	PREMIA_HOME_DIR="$prefix/Unix"
+	PREMIA_MAN_PDF_DIR="$prefix/man/pdf_html"
+
+	if test "$with_pdfviewer" != ""; then
+	   AC_CHECK_PROG(Pdf_Viewer_Check, $with_pdfviewer, yes, no)
+	   if test "$Pdf_Viewer_Check" = yes; then
+		  PDF_VIEWER_PROG=$with_pdfviewer
+	   fi
+	fi
+	if test "$PDF_VIEWER_PROG" = ""; then
+	   AC_CHECK_PROG(Acroread_Check, acroread, yes, no)
+		 if test "$Acroread_Check" = yes; then
+			PDF_VIEWER_PROG="acroread"
+		 else
+			AC_CHECK_PROG(Xpdf_Check, xpdf, yes, no)
+			if test "$Xpdf_Check" = yes; then
+			   PDF_VIEWER_PROG="xpdf"
+			fi
+		fi
+	fi
+        
+    pkgconfigdir=/usr/local/lib/pkgconfig
+	;;
+
+    # Darwin/MacOSX
+    *-*-darwin*)
+    PREMIADIR=$prefix	 
+	PREMIA_SRC_DIR="$prefix/Src"
+	PREMIA_HOME_DIR="$prefix/Unix"
+	PREMIA_MAN_PDF_DIR="$prefix/man/pdf_html"
+
+	if test "$with_pdfviewer" != ""; then
+	   AC_CHECK_PROG(Pdf_Viewer_Check, $with_pdfviewer, yes, no)
+	   if test "$Pdf_Viewer_Check" = yes; then
+		  PDF_VIEWER_PROG=$with_pdfviewer
+	   fi
+	fi
+	if test "$PDF_VIEWER_PROG" = ""; then
+       AC_CHECK_PROG(acroread_Check, AdobeReader, yes, no, 
+                    /Applications/Adobe\ Reader\ 8/Adobe\ Reader.app/Contents/MacOS)
+       if test "$acroread_Check" == yes; then
+          PDF_VIEWER_PROG='/Applications/Adobe\\ Reader\\ 8/Adobe\\ Reader.app'
+          AC_DEFINE_UNQUOTED(
+	       [LAUNCH_USE_OPEN], [1],
+	       [use open to launch Preview.app on Mac OS])
+       else
+          AC_CHECK_PROG(Xpdf_Check, xpdf, yes, no)
+          if test "$Xpdf_Check" = yes; then
+            PDF_VIEWER_PROG="xpdf"
+          fi
+       fi
+	fi
+        
+    pkgconfigdir=/sw/lib/pkgconfig
+    ;;
+esac
+
+AC_DEFINE_UNQUOTED(
+	[PREMIADIR], ["$prefix"],
+	[Home directory of Premia])		
+
+AC_DEFINE_UNQUOTED(
+	[PREMIA_SRC_DIR], ["$PREMIA_SRC_DIR"],
+	[Home directory of Premia])		
+
+AC_DEFINE_UNQUOTED(
+	[PDF_VIEWER_PROG], ["$PDF_VIEWER_PROG"],
+	[Program to view pdf files])
+
+AC_DEFINE_UNQUOTED(
+	[PREMIA_HOME_DIR], ["$PREMIA_HOME_DIR"],
+	[Unix Home directory of Premia])		
+
+AC_DEFINE_UNQUOTED(
+	[PREMIA_MAN_PDF_DIR], ["$PREMIA_MAN_PDF_DIR"],
+	[directory where to find the doc of Premia])		
+
+
+AC_DEFINE_UNQUOTED(
+	[PDF_VIEWER_PROG], ["$PDF_VIEWER_PROG"],
+	[Program to view pdf files])
+
+
+AC_SUBST(CC)
+AC_SUBST(CXX)
+AC_SUBST(AM_CFLAGS)
+AC_SUBST(AM_CXXFLAGS)   
+AC_SUBST(CFLAGS)
+AC_SUBST(CXXFLAGS)
+AC_SUBST(LDFLAGS)
+AC_SUBST(VERSION)
+AC_SUBST(HAVE_BLAS)
+AC_SUBST(BLAS_LIBS)
+AC_SUBST(HAVE_LAPACK)
+AC_SUBST(LAPACK_LIBS)
+AC_SUBST(pkgconfigdir)
+AC_SUBST(MKDIR_P)
+
+AC_OUTPUT(Makefile \
+premia.pc \
+Src/Makefile \
+Src/include/Makefile \
+Src/common/Makefile \
+Src/common/math/Makefile \
+Src/common/math/highdim_solver/Makefile \
+Src/common/math/bsnd_math/Makefile \
+Src/common/math/ap_kou_model/Makefile \
+Src/common/math/ap_fusai_levy/Makefile \
+Src/common/math/cgmy/Makefile \
+Src/common/math/lmm/Makefile \
+Src/common/math/credit_cds/Makefile \
+Src/common/math/cdo/Makefile \
+Src/common/math/read_market_zc/Makefile \
+Src/common/math/InterestRateModelTree/Makefile \
+Src/common/math/InterestRateModelTree/TreeHW1D/Makefile \
+Src/common/math/InterestRateModelTree/TreeHW2D/Makefile \
+Src/common/math/InterestRateModelTree/TreeBK1D/Makefile \
+Src/common/math/InterestRateModelTree/TreeCIRpp1D/Makefile \
+Src/common/math/InterestRateModelTree/TreeLRS1D/Makefile \
+Src/common/math/InterestRateModelTree/TreeSG1D/Makefile \
+Src/libpnl/Makefile \
+Src/libpnl/examples/Makefile \
+Src/libpnl/src/Makefile \
+Src/libpnl/src/libamos/Makefile \
+Src/libpnl/src/libcephes/Makefile \
+Src/libpnl/src/librand/Makefile \
+Src/libpnl/src/libfftpack/Makefile \
+Src/libpnl/src/libcsparse/Makefile \
+Src/libpnl/src/linalg/Makefile \
+Src/libpnl/src/sort/Makefile \
+Src/libpnl/src/include/Makefile \
+Src/mod/Makefile \
+Src/mod/affine3d/Makefile \
+Src/mod/affine3d/affine3d_stdi/Makefile \
+Src/mod/bharchiarella1d/Makefile \
+Src/mod/bharchiarella1d/bharchiarella1d_stdi/Makefile \
+Src/mod/blackkarasinski1d/Makefile \
+Src/mod/blackkarasinski1d/blackkarasinski1d_stdi/Makefile \
+Src/mod/bs1d/Makefile \
+Src/mod/bs1d/bs1d_doublim/Makefile \
+Src/mod/bs1d/bs1d_lim/Makefile \
+Src/mod/bs1d/bs1d_limdisc/Makefile \
+Src/mod/bs1d/bs1d_pad/Makefile \
+Src/mod/bs1d/bs1d_std/Makefile \
+Src/mod/bsdisdiv1d/Makefile \
+Src/mod/bsdisdiv1d/bsdisdiv1d_std/Makefile \
+Src/mod/bs2d/Makefile \
+Src/mod/bs2d/bs2d_std2d/Makefile \
+Src/mod/bsnd/Makefile \
+Src/mod/bsnd/bsnd_stdnd/Makefile \
+Src/mod/cir1d/Makefile \
+Src/mod/cir1d/cir1d_stdi/Makefile \
+Src/mod/cir2d/Makefile \
+Src/mod/cir2d/cir2d_stdi/Makefile \
+Src/mod/cirpp1d/Makefile \
+Src/mod/cirpp1d/cirpp1d_stdi/Makefile \
+Src/mod/cirpp2d/Makefile \
+Src/mod/cirpp2d/cirpp2d_stdc/Makefile \
+Src/mod/cgmy1d/Makefile \
+Src/mod/cgmy1d/cgmy1d_std/Makefile \
+Src/mod/cgmy1d/cgmy1d_pad/Makefile \
+Src/mod/copula/Makefile \
+Src/mod/copula/copula_stdndc/Makefile \
+Src/mod/dynamic_cdo/Makefile \
+Src/mod/dynamic_cdo/dynamic_cdo_stdndc/Makefile \
+Src/mod/dup1d/Makefile \
+Src/mod/dup1d/dup1d_std/Makefile \
+Src/mod/fps1d/Makefile \
+Src/mod/fps1d/fps1d_std/Makefile \
+Src/mod/fps2d/Makefile \
+Src/mod/fps2d/fps2d_std/Makefile \
+Src/mod/hes1d/Makefile \
+Src/mod/hes1d/hes1d_pad/Makefile \
+Src/mod/hes1d/hes1d_std/Makefile \
+Src/mod/hes1d/hes1d_lim/Makefile \
+Src/mod/hes1d/hes1d_vol/Makefile \
+Src/mod/hk1d/Makefile \
+Src/mod/hk1d/hk1d_stdi/Makefile \
+Src/mod/hullwhite1d/Makefile \
+Src/mod/hullwhite1d/hullwhite1d_stdi/Makefile \
+Src/mod/hullwhite2d/Makefile \
+Src/mod/hullwhite2d/hullwhite2d_stdi/Makefile \
+Src/mod/hw1d/Makefile \
+Src/mod/hw1d/hw1d_std/Makefile \
+Src/mod/kou1d/Makefile \
+Src/mod/kou1d/kou1d_lim/Makefile \
+Src/mod/kou1d/kou1d_std/Makefile \
+Src/mod/kou1d/kou1d_pad/Makefile \
+Src/mod/rskou1d/Makefile \
+Src/mod/rskou1d/rskou1d_std/Makefile \
+Src/mod/rskou1d/rskou1d_lim/Makefile \
+Src/mod/lrshjm1d/Makefile \
+Src/mod/lrshjm1d/lrshjm1d_stdi/Makefile \
+Src/mod/lmm1d/Makefile \
+Src/mod/lmm1d/lmm1d_stdi/Makefile \
+Src/mod/lmm_heston1d/Makefile \
+Src/mod/lmm_heston1d/lmm_heston1d_stdi/Makefile \
+Src/mod/lmm_jump1d/Makefile \
+Src/mod/lmm_jump1d/lmm_jump1d_stdi/Makefile \
+Src/mod/mer1d/Makefile \
+Src/mod/mer1d/mer1d_lim/Makefile \
+Src/mod/mer1d/mer1d_pad/Makefile \
+Src/mod/mer1d/mer1d_std/Makefile \
+Src/mod/merhes1d/Makefile \
+Src/mod/merhes1d/merhes1d_std/Makefile \
+Src/mod/merhes1d/merhes1d_lim/Makefile \
+Src/mod/nig1d/Makefile \
+Src/mod/nig1d/nig1d_lim/Makefile \
+Src/mod/nig1d/nig1d_std/Makefile \
+Src/mod/nig1d/nig1d_pad/Makefile \
+Src/mod/purejump1d/Makefile \
+Src/mod/purejump1d/purejump1d_pad/Makefile \
+Src/mod/sg1d/Makefile \
+Src/mod/sg1d/sg1d_stdi/Makefile \
+Src/mod/scott1d/Makefile \
+Src/mod/scott1d/scott1d_std/Makefile \
+Src/mod/stein1d/Makefile \
+Src/mod/stein1d/stein1d_std/Makefile \
+Src/mod/qtsm2d/Makefile \
+Src/mod/qtsm2d/qtsm2d_stdi/Makefile \
+Src/mod/temperedstable1d/Makefile \
+Src/mod/temperedstable1d/temperedstable1d_lim/Makefile \
+Src/mod/temperedstable1d/temperedstable1d_std/Makefile \
+Src/mod/temperedstable1d/temperedstable1d_vol/Makefile \
+Src/mod/rstemperedstable1d/Makefile \
+Src/mod/rstemperedstable1d/rstemperedstable1d_lim/Makefile \
+Src/mod/rstemperedstable1d/rstemperedstable1d_std/Makefile \
+Src/mod/variancegamma1d/Makefile \
+Src/mod/variancegamma1d/variancegamma1d_lim/Makefile \
+Src/mod/variancegamma1d/variancegamma1d_pad/Makefile \
+Src/mod/variancegamma1d/variancegamma1d_std/Makefile \
+Src/mod/varswap3d/Makefile \
+Src/mod/varswap3d/varswap3d_std/Makefile \
+Src/mod/wishart2d/Makefile \
+Src/mod/wishart2d/wishart2d_std2d/Makefile \
+Src/mod/nonpar1d/Makefile \
+Src/mod/nonpar1d/nonpar1d_vol/Makefile \
+Src/mod/jarrowyildirim1d/Makefile \
+Src/mod/jarrowyildirim1d/jarrowyildirim1d_stdf/Makefile \
+Src/mod/inflation_lmm_heston1d/Makefile \
+Src/mod/inflation_lmm_heston1d/inflation_lmm_heston1d_stdf/Makefile \
+Src/mod/vasicek1d/Makefile \
+Src/mod/vasicek1d/vasicek1d_stdi/Makefile \
+Src/mod/jump1d/Makefile \
+Src/mod/jump1d/jump1d_std/Makefile \
+Src/opt/Makefile \
+Src/opt/doublim/Makefile \
+Src/opt/lim/Makefile \
+Src/opt/limdisc/Makefile \
+Src/opt/pad/Makefile \
+Src/opt/std/Makefile \
+Src/opt/vol/Makefile \
+Src/opt/std2d/Makefile \
+Src/opt/stdnd/Makefile \
+Src/opt/stdndc/Makefile \
+Src/opt/stdi/Makefile \
+Src/opt/stdc/Makefile \
+Src/opt/stdg/Makefile \
+Src/opt/stdf/Makefile \
+Unix/tex2htmlone \
+Unix/tex2pdfone \
+)
+# dnl make the generated scripts executable
+chmod 755 Unix/tex2pdfone Unix/tex2htmlone 
+
+echo
+echo
+echo "*******************"
+echo "*     Summary     *"
+echo "*******************"
+echo
+echo "C compiler.............:" $CC
+echo "C options..............:" $AM_CFLAGS $CFLAGS
+echo "C++ compiler...........:" $CXX
+echo "C++ options............:" $AM_CXXFLAGS $CXXFLAGS
+echo "linker flags...........:" $LDFLAGS
+echo "installation prefix....:" $prefix
+
+if test "$PDF_VIEWER" = no; then
+   echo "no help will be available in Premia"
+   echo "--with-pdfviewer=... to specify the program to use"
+else
+	echo "PDF Viewer.............:" $PDF_VIEWER_PROG
+fi
+echo
+echo
+

@@ -1,0 +1,16 @@
+
+* réécrire lmm1d/lmm_stdi/mc_glassermanzhao.c avec la lib 
+  (matrices + chol)
+
+* Src/mod/bs1d/bs1d_std/mc_*.c : code recopié de
+  bsnd. il faut simplifier en tenant compte du fait que BS_Dimension =
+  1. Dépendend de Cholesky (deprecated)
+  même problème pour bs2d_std2d....
+  Une fois nettoyé, supprimer linsys.[ch] de Src/common/math.
+
+* Src/mod/bs1d/bs1d_pad/ap_fixedasian_carmonadurlemann.C dépend de
+  Cholesky.
+
+* intégration numérique (intg.c, integral.c)
+
+* terminer le ménage dans les CDO

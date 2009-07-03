@@ -1,0 +1,88 @@
+#ifndef __RANDOM_H__
+#define __RANDOM_H__
+
+#include "pnl_mathtools.h"
+#include "pnl_types.h"
+#include "pnl_vector.h"
+#include "pnl_matrix.h"
+
+/**
+ * \defgroup PnlRandom Random generators for Premia
+ */
+/*@{*/
+
+#define MC 0	
+#define QMC 1	
+#define CREATE 0 
+#define RETRIEVE 1 
+#define GEN_NUMBER 20
+
+/* indices of random generators */
+#define PNL_RNG_KNUTH 0
+#define PNL_RNG_MRGK3 1
+#define PNL_RNG_MRGK5 2
+#define PNL_RNG_SHUFL 3
+#define PNL_RNG_L_ECUYER 4
+#define PNL_RNG_TAUSWORTHE 5
+#define PNL_RNG_MERSENNE 6
+#define PNL_RNG_MERSENNE_RANDOM_SEED 7
+#define PNL_RNG_SQRT 8
+#define PNL_RNG_HALTON 9
+#define PNL_RNG_FAURE 10
+#define PNL_RNG_SOBOL 11
+#define PNL_RNG_SOBOL2 12
+#define PNL_RNG_NIEDERREITER 13
+
+
+
+/*RandomGenerators*/
+typedef struct 
+{
+  const char * Name;
+  void (*Compute)(int, double *);
+  int RandOrQuasi;
+  int Dimension;
+} pnl_generator;
+
+typedef struct 
+{
+  enum_member base;
+  void (*Compute)(int, double *);
+  int RandOrQuasi;
+  int Dimension;
+} random_generator;
+
+extern enum_members RNGs;
+extern enum_members MC_RNGs;
+
+extern int pnl_rand_init(int type_generator, int simulation_dim,long samples);
+extern int pnl_rand_or_quasi(int type_generator);
+extern const char * pnl_rand_name (int type_generator);
+extern double pnl_rand_gauss(int, int, int, int);
+extern int pnl_rand_bernoulli(double p, int generator);
+extern long pnl_rand_poisson(double lambda, int type_generator);
+extern long pnl_rand_poisson1(double lambda,double t, int type_generator);
+extern double pnl_rand_exp(double lambda,int type_generator);
+
+extern double pnl_rand_uni (int type_generator);
+extern double pnl_rand_uni_ab (double a, double b, int type_generator);
+extern double pnl_rand_normal (int type_generator);
+
+extern void
+pnl_vect_rand_uni(PnlVect *G, int samples, double a, double b, int type_generator);
+extern void
+pnl_vect_rand_uni_d(PnlVect *G, int dimension, double a, double b, int type_generator);
+extern void pnl_vect_rand_normal(PnlVect *G, int samples, int generator);
+extern void pnl_vect_rand_normal_d(PnlVect *G, int dimension, int generator);
+extern void
+pnl_mat_rand_uni(PnlMat *M, int samples, int dimension, const PnlVect *a,
+                 const PnlVect *b, int type_generator);
+extern void
+pnl_mat_rand_normal(PnlMat *M, int samples, int dimension, int type_generator);
+extern double pnl_rand_gamma (double a, double b, int gen);
+extern double pnl_rand_chi2  (double nu, int gen);
+
+/*@}*/
+
+
+#endif

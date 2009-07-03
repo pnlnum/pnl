@@ -1,0 +1,20 @@
+##-*-mode:Makefile-*-
+
+datarootdir     = @datarootdir@
+
+PNL_INCLUDES=-I$(top_srcdir)/Src/libpnl/src/include
+
+PREMIA_MINIMUM_INCLUDES=-I$(top_srcdir)/Src -I$(top_srcdir)/Src/common \
+-I$(top_srcdir)/Src/opt -I$(top_srcdir)/Src/mod
+
+
+# removes files in the .deps directories
+clean-deps::
+	@rm -f .deps/*
+	@for i in ${SUBDIRS} ;\
+	do \
+		(cd $$i ;\
+		echo "cleanning .deps in $$i" ;\
+		make clean-deps ) ;\
+	done
+

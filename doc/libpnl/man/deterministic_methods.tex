@@ -1,0 +1,460 @@
+\section{Deterministic methods}
+
+%% --------------------------------------------------------------------- %%
+%% Roots
+\subsection{Root finding}
+\subsubsection{Short Description}
+
+To provide a uniformed framework to root finding functions, we use two
+structures to store functions either returning a single value or computing the
+function and its derivative. The pointer \var{params} is used to store the
+extra parameters. To evaluate such functions, one can use the two macros
+\var{PNL_EVAL_FUNC} and \var{PNL_EVAL_FDF_FUNC}.
+\begin{verbatim}
+typedef struct {
+  double (*function) (double x, void *params);
+  void *params;
+} PnlFunc ;
+
+#define PNL_EVAL_FUNC(F, x) (*((F)->function))(x, (F)->params)
+
+typedef struct {
+  void (*function) (double x, double *f, double *df, void *params);
+  void *params;
+} PnlFuncDFunc ;
+
+#define PNL_EVAL_FDF_FUNC(F, x, f, df) (*((F)->function))(x, f, df, (F)->params)
+\end{verbatim}
+
+\subsubsection{Functions}
+
+\begin{itemize}
+
+\item \describefun{double}{pnl_root_brent}{\refstruct{PnlFunc}$\ast$ F, double
+    x1, double  x2, double $\ast$tol}
+  \sshortdescribe Finds the root of \var{F} between \var{x1} and \var{x2} with
+  an accuracy of order \var{tol}. On exit \var{tol} is an upper bound of the
+  error.
+  
+\item \describefun{int}{pnl_find_root}{\refstruct{PnlFuncDFunc}$\ast$ Func, 
+    double x_min, double x_max, double tol, int N_Max, double$\ast$ res}
+  \sshortdescribe Finds the root of \var{F} between \var{x1} and \var{x2} with
+  an accuracy of order \var{tol} and a maximum of \var{N_max} iterations. On
+  exit, the root is stored in \var{res}. Note that the function \var{F} must
+  also compute the first derivative of the function.
+  
+
+\item \describefun{int}{pnl_root_newton}{\refstruct{PnlFuncDFunc} $\ast$Func, 
+    double x0, double epsrel, double epsabs, int N_max, double $\ast$res}
+  \sshortdescribe Finds the root of \var{F} starting from \var{x0} with an
+  accuracy given both by \var{epsrel} and \var{epsabs} and a maximum number of
+  iterations \var{N_max}. On exit, the root is stored in \var{res}.Note that
+  the function \var{F} must also compute the first derivative of the function.
+  
+
+
+\item \describefun{int}{pnl_root_bisection}{\refstruct{PnlFunc } $\ast$Func, 
+    double xmin, double xmax, double epsrel, double espabs, int N_max, double
+    $\ast$res}
+  \sshortdescribe Finds the root of \var{F} between \var{x1} and \var{x2} with
+  an accuracy given both by \var{epsrel} and \var{epsabs} and a maximum number
+  of iterations \var{N_max}. On exit, the root is stored in \var{res}
+\end{itemize}
+
+
+%% --------------------------------------------------------------------- %%
+%% Roots
+\subsection{Polynomial bases and regression}
+\subsubsection{Short Description}
+
+\begin{verbatim}
+typedef double(*PnlBasis)(double *x, int index) ;
+
+typedef struct {
+  char * label;
+  int    space_dim;
+  int    max_dim;
+  PnlBasis Compute;
+} reg_basis;
+
+\end{verbatim}
+
+\begin{table}[h!]
+  \begin{describeconst}
+    \constentry{CANONICAL}{for the Canonical basis}
+    \constentry{HERMITIAN}{for the Hermitian basis}
+    \constentry{TCHEBYCHEV}{for the Tchebychev basis}
+  \end{describeconst}
+  \caption{indices of bases}
+  \label{basis_index}
+\end{table}
+
+In this section, we provide functions to solve regression problems on
+polynomial functions. Let $(x_i, i=1 \dots n)$ be $n$ points in $\R^d$ and a
+function $g$ defined by the data $(y_i = g(x_i), i=1 \dots n)$. Assume you
+want to approximate the function $g$ by its decomposition on a family of $N$
+polynomial functions $(f_j, j=1\dots N)$. Then, we want to compute the vector
+$\alpha^\star \in \R^N$ which solves
+\begin{equation*} \alpha^\star = \arg\min_\alpha \sum_{i=1}^{n}
+  \left(\sum_{j=0}^N \alpha_j f_j(x_i) - y_i\right)^2
+\end{equation*}
+
+\subsubsection{Functions}
+
+\begin{itemize}
+\item \describefun{PnlBasis}{pnl_init_basis}{int index, int N, int d}
+  \sshortdescribe Creates a \refstruct{PnlBasis} for the polynomial family
+  defined by \var{index} (see Table~\ref{basis_index}) with at most \var{N}
+  elements. \var{d} is the dimension of the space on which the functions are
+  defined.
+
+\item \describefun{int}{pnl_fit_least_squares}{\refstruct{PnlVect}$\ast$ coef, 
+    \refstruct{PnlMat}$\ast$ x, \refstruct{PnlVect}$\ast$ y, 
+    \refstruct{PnlBasis}$\ast$ f, int N}
+  \sshortdescribe Computes the coefficients \var{coef} defined by
+  \begin{equation*}
+    \var{coef} = \arg\min_\alpha \sum_{i=1}^n
+    \left( \sum_{j=0}^{\var{N}} \alpha_j  f_j(x_i) - y_i\right)^2
+  \end{equation*}
+  where \var{N} is the number of functions to regress upon and $n$ is the
+  number of points at which we know the value of the original function. $f_j$
+  is the $j-th$ basis function. Each row of the matrix \var{x} defines the
+  coordinates of one point $x_i$. The function to be approximated is defined
+  by the data \var{y} which is the vector of the values taken by the function
+  at the points \var{x}.
+  
+\item \describefun{double}{pnl_basis_eval}{\refstruct{PnlVect}$\ast$ coef, double
+    $\ast$x, \refstruct{PnlBasis}$\ast$ f}
+  \sshortdescribe Computes the linear combination of \var{f_i(x)} defined by
+  \var{coef}. Given the coefficients computed by the function
+  \reffun{pnl_fit_least_squares}, this function returns $\sum_{j=0}^n
+  \var{coef}_j  f_j(\var{x})$ where \var{x} is a C array.
+\end{itemize}
+
+\subsection{Numerical integration}
+\subsubsection{Short Description}
+
+Numerical integration methods are designed to numerically evaluate the
+integral over an interval (resp. a square) of real valued functions defined on
+$\R$ (resp. $\R^2$).
+
+\begin{verbatim}
+typedef struct {
+  double (*function) (double x, void *params);
+  void *params;
+} pnl_function ;
+
+typedef struct {
+  double (*function) (double x, double y, void *params);
+  void *params;
+} pnl_function_2D ;
+\end{verbatim}
+
+We provide the following two macros to evaluate a \refstruct{pnl_function} at
+a given point
+\begin{verbatim}
+#define PNL_EVAL_FUNC(F, x) (*((F)->function))(x, (F)->params)
+#define PNL_EVAL_FUNC2D(F, x, y) (*((F)->function))(x, y, (F)->params)
+\end{verbatim}
+
+
+
+\subsubsection{Functions}
+
+\begin{itemize}
+\item \describefun{int}{ pnl_integration_GK}{const \refstruct{pnl_function} $\ast$F, 
+    double x0, double x1, double epsabs, double epsrel, double $\ast$result, 
+    double $\ast$abserr,  int $\ast$neval}
+  \sshortdescribe Evaluates $\int_{x_0}^{x_1} F$ with an absolute error less than
+  \var{espabs} and a relative error less than
+  \var{esprel}. The value of the integral is stored in \var{result}, while the
+  variables \var{abserr} and \var{neval} respectively contain the absolute
+  error and the number of iterations.
+
+\item \describefun{int}{ pnl_integration_GK2D}{const \refstruct{pnl_function_2D} $\ast$F, 
+    double x0, double x1, double y0, double y1, double epsabs, double epsrel, 
+    double $\ast$result, double $\ast$abserr, int $\ast$neval}
+  \sshortdescribe Evaluates $\int_{[x_0, x_1] \times [y_0, y_1]} F$ with an
+  absolute error less than \var{espabs} and a relative error less than
+  \var{esprel}. The value of the integral is stored in \var{result}, while the
+  variables \var{abserr} and \var{neval} respectively contain the absolute
+  error and the number of iterations.
+
+\item \describefun{double}{pnl_integration}{const \refstruct{pnl_function} $\ast$F, 
+    double x0, double x1, int n, char $\ast$meth}
+  \sshortdescribe Evaluates $\int_{x_0}^{x_1} F$ using \var{n} discretisation
+  steps. The method used to discretise the integral is defined by \var{meth}
+  which can be \var{"rect"} (rectangle rule), \var{"trap"} (trapezoidal rule),
+  \var{"simpson"} (Simpson's rule).
+
+\item \describefun{double}{pnl_integration_2D}{const \refstruct{pnl_function_2D} $\ast$F,
+    double x0, double x1, double y0, double y1, int nx, int ny, char $\ast$meth}
+  \sshortdescribe Evaluates $\int_{[x_0, x_1] \times [y_0, y_1]} F$ using
+  \var{nx} (resp. \var{ny}) discretisation steps for \var{[x0, x1]}
+  (resp. \var{[y0, y1]}). The method used to discretise the integral is
+  defined by \var{meth} which can be \var{"rect"} (rectangle rule),
+  \var{"trap"} (trapezoidal rule),   \var{"simpson"} (Simpson's rule).
+\end{itemize}
+
+
+%% FFT function
+\subsection{Fast Fourier Transform}
+\subsubsection{Short Description}
+
+In the case of Real Fourier transform, the Fourier coefficients satisfy the
+following relation
+\begin{equation}
+  \label{eq:fft-sym}
+  z_k = \overline{z_{N-k}}, 
+\end{equation}
+where $N$ is the number of discretisation points.
+
+A few remarks on the FFT of real functions and its inverse transformation :
+\begin{itemize}
+\item We only need half of the coefficients.
+\item When a value is known to be real the imaginary part is not stored.
+So the imaginary part of the zero-frequency component is never stored. It is
+known to be zero.
+\item For a sequence of even length the imaginary part of the frequency
+  $n/2$ is not stored either, since the symmetry (\ref{eq:fft-sym}) implies
+  that this is purely real too.
+\end{itemize}
+
+
+\paragraph{FFTPack storage}
+\label{sec:fftpack-storage}
+
+The functions use the fftpack storage convention for half-complex sequences.
+In this convention, the half-complex transform of a real sequence is stored
+with frequencies in increasing order, starting from zero, with the real and
+imaginary parts of each frequency in neighboring locations.
+
+The storage scheme is best shown by some examples. The table below shows the
+output for an odd-length sequence, $n=5$.  The two columns give the
+correspondence between the $5$ values in the half-complex sequence (stored in
+a PnlVect $V$) and the values (PnlVectComplex $C$) that would be returned if
+the same real input sequence were passed to pnl_dft_complex as a complex
+sequence (with imaginary parts set to 0), 
+\begin{equation}
+  \begin{array}{l}
+         C(0) =  V(0) + \imath 0, \\ 
+         C(1) =  V(1) + \imath V(2), \\
+         C(2) =  V(3) + \imath V(4), \\
+         C(3) = V(3) - \imath V(4)=  \overline{C(2)} , \\
+         C(4) = V(1) + \imath V(2)=  \overline{C(1)} 
+  \end{array}   
+\end{equation}
+
+The elements of index greater than $N/2$ of the complex array, as $C(3)$
+$C(4)$, are filled in using the symmetry condition.
+
+The next table shows the output for an even-length sequence, $n=6$.
+In the even case there are two values which are purely real, 
+\begin{equation}
+  \begin{array}{l}
+         C(0) =  V(0) + \imath 0, \\ 
+         C(1) =  V(1) + \imath V(2), \\
+         C(2) =  V(3) + \imath V(4), \\
+         C(3) = V(5) - \imath 0    =  \overline{C(0)} , \\
+         C(4) = V(3) - \imath V(4) =  \overline{C(2)} , \\
+         C(5) = V(1) + \imath V(2) =  \overline{C(1)} 
+  \end{array}   
+ \end{equation}
+
+
+\subsubsection{Functions}
+
+
+The following functions comes from a C version of the Fortran FFTPack library
+available on \url{http://www.netlib.org/fftpack}.
+\begin{itemize}
+\item \describefun{int}{pnl_fft_inplace}{\refstruct{PnlVectComplex} $\ast$data}
+  \sshortdescribe Computes the FFT of \var{data} in place. The original content
+  of \var{data} is lost.
+
+\item \describefun{int}{pnl_ifft_inplace}{\refstruct{PnlVectComplex} $\ast$data}
+  \sshortdescribe Computes the inverse FFT of \var{data} in place. The
+  original content of \var{data} is lost.
+
+\item \describefun{int}{pnl_fft}{const \refstruct{PnlVectComplex} $\ast$in, 
+    \refstruct{PnlVectComplex} $\ast$out}
+  \sshortdescribe Computes the FFT of \var{in} and stores it into \var{out}.
+
+\item \describefun{int}{pnl_ifft}{const \refstruct{PnlVectComplex} $\ast$in, 
+    \refstruct{PnlVectComplex} $\ast$out}
+  \sshortdescribe Computes the inverse FFT of \var{in} and stores it into \var{out}.
+
+\item \describefun{int}{pnl_fft2}{double $\ast$re, double $\ast$im, int n}
+  \sshortdescribe Computes the FFT of the vector of length \var{n} whose real
+  (resp. imaginary) parts are given by the arrays \var{re}
+  (resp. \var{im}). The real and imaginary parts of the FFT are respectively
+  stored in \var{re} and \var{im} on output.
+
+\item \describefun{int}{pnl_ifft2}{double $\ast$re, double $\ast$im, int n}
+  \sshortdescribe Computes the inverse FFT of the vector of length \var{n}
+  whose real (resp. imaginary) parts are given by the arrays \var{re}
+  (resp. \var{im}). The real and imaginary parts of the inverse FFT are
+  respectively stored in \var{re} and \var{im} on output.
+
+\item \describefun{int}{pnl_real_fft}{const \refstruct{PnlVect} $\ast$in, 
+    \refstruct{PnlVectComplex} $\ast$out}
+  \sshortdescribe Computes the FFT of the real valued sequence \var{in} and
+  stores it into \var{out}.
+
+\item \describefun{int}{pnl_real_ifft}{const \refstruct{PnlVect} $\ast$in, 
+    \refstruct{PnlVectComplex} $\ast$out}
+  \sshortdescribe Computes the inverse FFT of \var{in} and stores it into \var{out}.
+
+\item \describefun{int}{pnl_real_fft_inplace}{double $\ast$data, int n}
+  \sshortdescribe Computes the FFT of the real valued vector \var{data} of
+  length \var{n}. The result is stored in \var{data} using the FFTPack storage
+  described above, see~\ref{sec:fftpack-storage}.
+
+\item \describefun{int}{pnl_real_ifft_inplace}{double $\ast$data, int n}
+  \sshortdescribe Computes the inverse FFT of the vector \var{data} of length
+  \var{n}. \var{data} is supposed to be the FFT coefficients a real valued
+  sequence stored using the FFTPack storage. On output, \var{data} contains
+  the inverse FFT.
+
+\item \describefun{int}{pnl_real_fft2}{double $\ast$re, double $\ast$im, int n}
+  \sshortdescribe Computes the FFT of the real vector \var{re} of length \var{n}.
+  \var{im} is only used on output to store the imaginary part the FFT. The
+  real part is stored into \var{re}
+  
+\item \describefun{int}{pnl_real_ifft2}{double $\ast$re, double $\ast$im, int n}
+  \sshortdescribe Computes the inverse FFT of the vector \var{re + i * im} of
+  length \var{n}, which is supposed to be the FFT of a real valued
+  sequence. On exit, \var{im} is unused. 
+\end{itemize}
+
+%% The following functions are deprecated and will be removed in future
+%% releases. Use the above functions instead.
+%% \begin{itemize}
+%% \item \describefun{void}{pnl_dft_complex}{const \refstruct{ PnlVectComplex}
+%%     $\ast$data, \refstruct{ PnlVectComplex} $\ast$result}
+%%   \sshortdescribe classical FFT with complexity  $ O(N^2)$  
+
+%% \item \describefun{void}{pnl_dft_complex_backward}{const \refstruct{
+%%       PnlVectComplex} $\ast$data, \refstruct{ PnlVectComplex} $\ast$result}
+%%   \sshortdescribe classical inverse FFT without $ L_1$ normalisation 
+%%   and with complexity $ O(N^2)$  
+
+%% \item \describefun{void}{pnl_dft_complex_inverse}{const \refstruct{
+%%       PnlVectComplex} $\ast$data, \refstruct{ PnlVectComplex} $\ast$result}
+%%   \sshortdescribe classical inverse FFT on complex in $ O(N^2)$  
+
+%% \item \describefun{void}{pnl_dft_complex_transform}{const
+%%     \refstruct{PnlVectComplex} $\ast$data, \refstruct{ PnlVectComplex} $\ast$result, const int sign}
+%%   \sshortdescribe classical FFT
+
+%% \item \describefun{void}{real_fft}{\refstruct{ PnlVect} $\ast$a, int fft-size, 
+%%     \refstruct{ boolean} inversefft}
+%%   \sshortdescribe in-place FFT for real functions. Extracted from
+%%   Numerical Recipes Paragraph 12.3 and adapted.
+%% \end{itemize}
+
+%% Laplace transform
+\subsection{Inverse Laplace transform}
+\subsubsection{Short Description}
+
+For a real valued function $f$ such that $t \longmapsto f(t) \expp{- \sigma_c
+  t}$ is integrable over $\R^+$, we can define its Laplace transform
+\begin{equation*}
+  \hat{f}(\lambda) = \int_0^\infty f(t) \expp{- \lambda t} dt \qquad
+  \mbox{for $\lambda \in \C$ with $\real{\lambda} \ge \sigma_c$}.
+\end{equation*}
+
+\subsubsection{Functions}
+\begin{itemize}
+\item \describefun{double}{pnl_ilap_euler}{\refstruct{PnlCmplxFunc}
+    $\ast$fhat, double t, int N, int M}
+  \sshortdescribe Computes $f(\var{t})$ where $f$ is given by its Laplace
+  transform \var{fhat} by numerically inverting the Laplace transform using
+  Euler's summation. The values \var{N = M = 15} usually give a very good
+  accuracy. For more details on the accuracy of the method, see \cite{aw, ll}. 
+
+\item \describefun{double}{pnl_ilap_cdf_euler}{\refstruct{PnlCmplxFunc}
+    $\ast$fhat, double t, int N, int M}
+  \sshortdescribe Computes the cumulative distribution function $F(\var{t})$
+  where $F(x) = \int_0^x f(t) dt$ and $f$ is a density function with values on
+  the positive real linegiven by its Laplace transform \var{fhat}. The
+  computation is carried out by numerical inversion of the Laplace transform
+  using Euler's summation. The values \var{N = M = 15} usually give a very
+  good accuracy. The parameter \var{h} is the discretisation step, the
+  algorithm is very sensitive to the choice of \var{h}.
+
+\item \describefun{double}{pnl_ilap_fft}{\refstruct{PnlVect} $\ast$res,
+    \refstruct{PnlCmplxFunc} $\ast$fhat, double T, double eps}
+  \sshortdescribe Computes $f(t)$ for $t \in [h, \var{T}]$ on a regular grid
+  and stores the values in \var{res}, where $h = T / {\mathrm size}(res)$. The
+  function $f$ is defined by its Laplace transform \var{fhat}, which is
+  numerically inverted using a Fast Fourier Transform algorithm. The size of
+  \var{res} is related to the choice of the relative precision \var{eps}
+  required on the value of $f(t)$ for all $t \le T$.
+
+\item \describefun{double}{pnl_ilap_gs}{\refstruct{PnlFunc} $\ast$fhat, double
+    t, int n}
+  \sshortdescribe Computes $f(\var{t})$ where $f$ is given by its Laplace
+  transform \var{fhat} by numerically inverting the Laplace transform using a
+  weighted combination of different Gaver Stehfest's algorithms. Note that
+  this function does not need the comple valued Laplace transform but only the
+  real valued one. \var{n} is the number of terms used in the weighted combination.
+
+\item \describefun{double}{pnl_ilap_gs_basic}{\refstruct{PnlFunc}
+    $\ast$fhat, double t, int n}
+  \sshortdescribe Computes $f(\var{t})$ where $f$ is given by its Laplace
+  transform \var{fhat} by numerically inverting the Laplace transform using
+  Gaver Stehfest's method, see~\cite{aw}. Note that this function does not
+  need the comple valued Laplace transform but only the real valued
+  one. \var{n} is the number of iterations of the algorithm.
+  {\bf Note : }~This function is provided only for test purposes, even though
+  the function \reffun{pnl_ilap_gs} gives far more accurate results.
+\end{itemize}
+
+%% pde tools
+\subsection{PDE tools}
+\subsubsection{Short Description}
+\subsubsection{Functions}
+\begin{itemize}
+\item 
+\describefun{\refstruct{PnlPDEBoundary}$\ast$}{pnl_pde_boundary_create}{double X0, double X1}
+  \sshortdescribe creates a \refstruct{PnlPDEBoundary}  
+\item \describefun{double}{pnl_pde_boundary_real_variable}{const \refstruct{ PnlPDEBoundary} BP, double X}
+\item 
+\describefun{double}{pnl_pde_boundary_unit_interval}{const \refstruct{ PnlPDEBoundary} BP, double X}
+\item 
+\describefun{\refstruct{PnlPDEDimBoundary} $\ast$}{pnl_pde_dim_boundary_create_from_int}{int dim}
+  \sshortdescribe creates a \refstruct{PnlPDEBoundary} with Left down corner is $ (0, \dots, 0)$ and right up corner is $ (1, \dots, 1)$  
+\item \describefun{\refstruct{ PnlPDEDimBoundary} $\ast$}{pnl_pde_dim_boundary_create}{const \refstruct{ PnlVect} $\ast$X0, const \refstruct{ PnlVect} $\ast$X1}
+  \sshortdescribe 
+\item \describefun{void}{pnl_pde_dim_boundary_free}{\refstruct{ PnlPDEDimBoundary} $\ast$$\ast$\refstruct{ v}}
+  \sshortdescribe frees a \refstruct{PnlPDEDimBoundary}  
+\item \describefun{double}{pnl_pde_dim_boundary_eval_from_unit}{double($\ast$f)(const \refstruct{ PnlVect} $\ast$), const \refstruct{ PnlPDEDimBoundary} $\ast$BP, const \refstruct{ PnlVect} $\ast$X}
+\item 
+\describefun{void}{pnl_pde_dim_boundary_from_unit_to_real_variable}{const \refstruct{ PnlPDEDimBoundary} $\ast$BP, \refstruct{ PnlVect} $\ast$X}
+\item 
+\describefun{double}{pnl_pde_dim_boundary_get_step}{const \refstruct{ PnlPDEDimBoundary} $\ast$BP, int i}
+\item 
+\describefun{double}{standard_time_repartition}{int i, int N-T}
+\item \describefun{\refstruct{ PnlPDETimeGrid} $\ast$}{pnl_pde_time_grid}{const
+  double T, const int $N-T$, double($\ast$ repartition)(int i, int NN)}
+  \sshortdescribe creates a \refstruct{PnlPDETimeGrid}
+\item \describefun{\refstruct{ PnlPDETimeGrid} $\ast$}{pnl_pde_time_homogen_grid}{const double T, const int N-T}
+  \sshortdescribe creates a \refstruct{PnlPDETimeGrid}
+\item \describefun{void}{pnl_pde_time_grid_free}{\refstruct{ PnlPDETimeGrid} $\ast$$\ast$TG}
+  \sshortdescribe frees a \refstruct{PnlPDETimeGrid}
+\item \describefun{void}{pnl_pde_time_start}{\refstruct{ PnlPDETimeGrid} $\ast$TG}
+  \sshortdescribe initialise \refstruct{PnlPDETimeGrid}
+\item \describefun{int}{pnl_pde_time_grid_increase}{\refstruct{ PnlPDETimeGrid} $\ast$TG}
+  \sshortdescribe go to the next time step  
+\item \describefun{double}{pnl_pde_time_grid_step}{const \refstruct{ PnlPDETimeGrid} $\ast$TG}
+  \sshortdescribe GET function on current step.  
+\item \describefun{double}{pnl_pde_time_grid_time}{const \refstruct{ PnlPDETimeGrid} $\ast$TG}
+  \sshortdescribe GET function on current time.
+\end{itemize}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "pnl-premia-manual"
+%%% End: 

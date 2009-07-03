@@ -1,0 +1,58 @@
+********************************************************************
+				PREMIA
+********************************************************************
+
+PREMIA is a software for pricing and hedging options on assets and interest rates and for calibration of financial models.
+
+It is developped by the MathFi research group, which gathers scientists from INRIA (the french national institute for research in computer science and control), ENPC (CERMICS laboratory on applied mathematics and computing), and the University of Marne la Vallée.
+
+
+1- The directories
+
+   In directory Src/ you will find the pricing and hedging tools for equity,
+   interest rate and energy derivatives in dimension.
+
+   In directory man/, you will find the documentation of the
+   algorithms implemented in Premia.
+   Please refer to the README file in this directory.
+
+
+
+2- Compilation
+
+   *** Compilation under Linux
+
+   To compile Premia under Linux, issue the following commands
+   in the top level directory
+      ./autogen.sh
+      make 
+
+   These commands create an executable PremiaTerm under the
+   Unix/ directory and a shared library libpremia.so available in
+   the lib directory.
+
+   A few options are available for the configure command, you can get
+   a summary of them by running 
+      ./configure --help
+
+
+
+   *** Compilation under Windows with Cygwin
+
+   Proceede in the same way as compilation under Linux.
+
+   You will need to have installed the folowing Cygwin packages :
+      Devel (default packages)
+      autoconf*
+      automake*
+      binutils
+      gcc and gcc-g++
+      libtool
+      make
+
+   The executable generated is PremiaTerm.exe
+
+**********************************
+For questions or comments visit
+http://www.premia.fr
+***********************************

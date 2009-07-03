@@ -1,0 +1,4 @@
+
+all:
+	(cd libpnl; make)
+

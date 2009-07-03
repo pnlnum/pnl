@@ -1,0 +1,726 @@
+/*  
+ *  This file is a collection of wrappers around the
+ *  Amos Fortran library of functions that take complex
+ *  variables (see www.netlib.org) so that they can be called from
+ *  the cephes library of corresponding name but work with complex
+ *  arguments.
+ * 
+ *  Author:  Travis E. Oliphant
+ *            oliphant.travis@altavista.net
+ *
+ * This can be freely distributed provided this notification remain and it is
+ * understood that no warranty is expressed or implied.
+ *
+ *
+ * These wrappers have been adapted to Nsp by Jean-Philippe Chancelier (Dec
+ * 2007) and later modified by Jerome Lelong (Jan 2009) to deal with negative
+ * orders.
+ *
+ */
+
+#include <stdlib.h>
+#include <math.h>
+#include "amos.h"
+#include "amos_wrappers.h"
+#include "pnl_bessel.h"
+
+int ierr_to_mtherr( int nz, int ierr) 
+{
+  /* Return mtherr equivalents for ierr values */
+  if (nz != 0) return UNDERFLOW;
+  switch (ierr) {
+  case 1:
+    return DOMAIN;
+  case 2:
+    return OVERFLOW;
+  case 3:
+    return PLOSS;
+  case 4:
+    return TLOSS;
+  case 5:   /* Algorithm termination condition not met */
+    return TLOSS;    
+  }
+  return 0;
+}
+
+/* int cairy_wrap(fcomplex z, fcomplex *ai, fcomplex *aip, fcomplex *bi, fcomplex *bip) 
+ * {
+ *   int id = 0;
+ *   int ierr = 0;
+ *   int kode = 1;
+ *   int nz;
+ * 
+ *   pnl_zairy(CADDR(z), &id, &kode, F2C_CST(ai), &nz, &ierr);
+ *   DO_MTHERR("airy:");
+ *   pnl_zbiry(CADDR(z), &id, &kode, F2C_CST(bi),  &ierr);
+ *   DO_MTHERR("airy:");
+ *   id = 1;
+ *   pnl_zairy(CADDR(z), &id, &kode, F2C_CST(aip), &nz, &ierr);
+ *   DO_MTHERR("airy:");
+ *   pnl_zbiry(CADDR(z), &id, &kode, F2C_CST(bip),  &ierr);
+ *   DO_MTHERR("airy:");
+ *   return 0;
+ * }
+ * 
+ * int cairye_wrap(fcomplex z, fcomplex *ai, fcomplex *aip, fcomplex *bi, fcomplex *bip) 
+ * {
+ *   int id = 0;
+ *   int kode = 2;        /\* Exponential scaling *\/
+ *   int nz, ierr;
+ * 
+ *   pnl_zairy(CADDR(z), &id, &kode, F2C_CST(ai), &nz, &ierr);
+ *   DO_MTHERR("airye:");
+ *   pnl_zbiry(CADDR(z), &id, &kode, F2C_CST(bi),  &ierr);
+ *   DO_MTHERR("airye:");
+ *   
+ *   id = 1;
+ *   pnl_zairy(CADDR(z), &id, &kode, F2C_CST(aip), &nz, &ierr);
+ *   DO_MTHERR("airye:");
+ *   pnl_zbiry(CADDR(z), &id, &kode, F2C_CST(bip),  &ierr);
+ *   DO_MTHERR("airye:");
+ *   return 0;
+ * } */
+
+/**
+ * Complex Modified Bessel function of the first kind
+ *
+ * @param z a complex number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+fcomplex pnl_complex_bessel_i ( double v, fcomplex z ) 
+{
+  int nz, ierr;
+  fcomplex cy;
+  int n = 1;
+  int kode = 1;
+  if (v >= 0)
+    {
+      pnl_zbesi(CADDR(z), &v,  &kode, &n, CADDR(cy), &nz, &ierr);
+      DO_MTHERR("iv:");
+    }
+  else
+    {
+      fcomplex aux1, aux2;
+      aux1 = pnl_complex_bessel_i (-v, z);
+      aux2 = pnl_complex_bessel_k (-v, z);
+      aux2 = CRmul (aux2, M_2_PI * sin(M_PI * -v));
+      cy = Cadd (aux1, aux2);
+    }
+  return cy;
+}
+
+/**
+ * Complex Modified Bessel function of the first kind
+ * divided by exp(|Creal(z)|)
+ *
+ * @param z a complex number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+fcomplex pnl_complex_bessel_i_scaled( double v, fcomplex z ) 
+{
+  int nz, ierr;
+  fcomplex cy;
+  int n = 1;
+  int kode = 2;
+  if (v >= 0)
+    {
+      pnl_zbesi(CADDR(z), &v,  &kode, &n, CADDR(cy), &nz, &ierr);
+      DO_MTHERR("ive:");
+    }
+  else
+    {
+      fcomplex aux1, aux2;
+      aux1 = pnl_complex_bessel_i_scaled (-v, z);
+      aux2 = pnl_complex_bessel_k (-v, z);
+      aux2 = CRmul (aux2, M_2_PI * sin(M_PI * -v) * exp ( -abs ( Creal(z) ) ));
+      cy = Cadd (aux1, aux2);
+    }
+  return cy;
+}
+
+
+/**
+ * Complex  Bessel function of the first kind
+ *
+ * @param z a complex number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+fcomplex pnl_complex_bessel_j( double v, fcomplex z ) 
+{
+  int nz, ierr;
+  fcomplex cy;
+  int n = 1;
+  int kode = 1;
+  if (v >= 0)
+    {
+      pnl_zbesj(CADDR(z), &v,  &kode, &n, CADDR(cy), &nz, &ierr);
+      DO_MTHERR("jv:");
+    }
+  else
+    {
+      fcomplex aux1, aux2;
+      aux1 = pnl_complex_bessel_j (-v, z);
+      aux1 = CRmul (aux1, cos(M_PI * v));
+      aux2 = pnl_complex_bessel_y (-v, z);
+      aux2 = CRmul (aux2, sin(M_PI * v));
+      cy = Cadd (aux1, aux2);
+    }
+  return cy;
+}
+
+/**
+ * Complex  Bessel function of the first kind
+ * divided by  exp(|Imag(z)|)
+ *
+ * @param z a complex number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+fcomplex pnl_complex_bessel_j_scaled ( double v, fcomplex z ) 
+{
+  int nz, ierr;
+  fcomplex cy;
+  int n = 1;
+  int kode = 2;
+  if (v >= 0)
+    {
+      pnl_zbesj(CADDR(z), &v,  &kode, &n, CADDR(cy), &nz, &ierr);
+      DO_MTHERR("jve:");
+    }
+  else
+    {
+      fcomplex aux1, aux2;
+      aux1 = pnl_complex_bessel_j_scaled (-v, z);
+      aux1 = CRmul (aux1, cos(M_PI * v));
+      aux2 = pnl_complex_bessel_y_scaled (-v, z);
+      aux2 = CRmul (aux2, sin(M_PI * v));
+      cy = Cadd (aux1, aux2);
+    }
+  return cy;
+}
+
+/**
+ * Complex  Bessel function of the second kind
+ *
+ * @param z a complex number
+ * @param v a real number, the order of the Bessel function
+ *
+ */  
+fcomplex pnl_complex_bessel_y( double v, fcomplex z ) 
+{
+  int nz, ierr;
+  fcomplex cy, cwork;
+  int n = 1;
+  int kode = 1;
+  if (v >= 0)
+    {
+      pnl_zbesy(CADDR(z), &v,  &kode, &n, CADDR(cy), &nz, CADDR(cwork), &ierr);
+      DO_MTHERR("yv:");
+    }
+  else
+    {
+      fcomplex aux1, aux2;
+      aux1 = pnl_complex_bessel_y (-v, z);
+      aux1 = CRmul (aux1, cos(M_PI * v));
+      aux2 = pnl_complex_bessel_j (-v, z);
+      aux2 = CRmul (aux2, sin(M_PI * -v));
+      cy = Cadd (aux1, aux2);
+    }
+  return cy;
+}
+
+/**
+ * Complex  Bessel function of the second kind
+ * divided by  exp(|Imag(z)|)
+ *
+ * @param z a complex number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+fcomplex pnl_complex_bessel_y_scaled( double v, fcomplex z ) 
+{
+  int nz, ierr;
+  fcomplex cy, cwork;
+  int n = 1;
+  int kode = 2;
+  if (v >= 0)
+    {
+      pnl_zbesy(CADDR(z), &v, &kode, &n, CADDR(cy), &nz, CADDR(cwork), &ierr);
+      DO_MTHERR("yve:");
+    }
+  else
+    {
+      fcomplex aux1, aux2;
+      aux1 = pnl_complex_bessel_y_scaled (-v, z);
+      aux1 = CRmul (aux1, cos(M_PI * v));
+      aux2 = pnl_complex_bessel_j_scaled (-v, z);
+      aux2 = CRmul (aux2, sin(M_PI * -v));
+      cy = Cadd (aux1, aux2);
+    }
+  return cy;
+}
+
+
+/**
+ * Complex  Modified Bessel function of the third kind
+ *
+ * @param z a complex number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+fcomplex pnl_complex_bessel_k( double v, fcomplex z ) 
+{
+  int nz, ierr;
+  fcomplex cy;
+  int n = 1;
+  int kode = 1;
+  double nu = fabs (v);
+  pnl_zbesk(CADDR(z), &nu,  &kode, &n, CADDR(cy), &nz, &ierr);
+  DO_MTHERR("kv:");
+  return cy;
+}
+
+/**
+ * Complex Modified Bessel function of the third kind
+ * multiplied by exp(z)
+ *
+ * @param z a complex number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+fcomplex pnl_complex_bessel_k_scaled( double v, fcomplex z ) 
+{
+  int nz, ierr;
+  fcomplex cy;
+  int n = 1;
+  int kode = 2;
+  double nu = fabs (v);
+  pnl_zbesk(CADDR(z), &nu, &kode, &n, CADDR(cy), &nz, &ierr);
+  DO_MTHERR("kve:");
+  return cy;
+}
+  
+/**
+ * Complex   Hankel function of the first kind
+ *
+ * @param z a complex number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+fcomplex pnl_complex_bessel_h1( double v, fcomplex z ) 
+{
+  int nz, ierr;
+  fcomplex cy;
+  int n = 1, kode = 1, m = 1;
+  if (v >= 0)
+    {
+      pnl_zbesh(CADDR(z), &v,  &kode, &m, &n, CADDR(cy), &nz, &ierr);
+      DO_MTHERR("hankel1:");
+    }
+  else
+    {
+      cy = pnl_complex_bessel_h1 (-v, z );
+      cy = Cmul (cy, CIexp (M_PI * -v) );
+    }
+  return cy;
+}
+
+/**
+ * Complex Hankel function of the first kind
+ * divided by Cexp( I * z)
+ *
+ * @param z a complex number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+fcomplex pnl_complex_bessel_h1_scaled( double v, fcomplex z ) 
+{
+  int nz, ierr;
+  fcomplex cy;
+  int n = 1, kode = 2, m = 1;
+  if (v >= 0)
+    {
+      pnl_zbesh(CADDR(z), &v, &kode, &m, &n, CADDR(cy), &nz, &ierr);
+      DO_MTHERR("hankel1e:");
+    }
+  else
+    {
+      cy = pnl_complex_bessel_h1_scaled (-v, z );
+      cy = Cmul (cy, CIexp (M_PI * -v) );
+    }
+  return cy;
+}
+  
+/**
+ * Complex Hankel function of the first kind
+ *
+ * @param z a complex number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+fcomplex pnl_complex_bessel_h2( double v, fcomplex z ) 
+{
+  int nz, ierr;
+  fcomplex cy;
+  int n = 1, kode = 1, m = 2;
+  if (v >= 0)
+    {
+      pnl_zbesh(CADDR(z), &v,  &kode, &m, &n, CADDR(cy), &nz, &ierr);
+      DO_MTHERR("hankel2:");
+    }
+  else
+    {
+      cy = pnl_complex_bessel_h2 (-v, z );
+      cy = Cmul (cy, CIexp (M_PI * v) );
+    }
+  return cy;
+}
+
+/**
+ * Complex Hankel function of the second kind
+ * multiplied by Cexp( I * z)
+ *
+ * @param z a complex number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+fcomplex pnl_complex_bessel_h2_scaled( double v, fcomplex z ) 
+{
+  int nz, ierr;
+  fcomplex cy;
+  int n = 1, kode = 2, m = 2;
+  if (v >= 0)
+    {
+      pnl_zbesh(CADDR(z), &v, &kode, &m, &n, CADDR(cy), &nz, &ierr);
+      DO_MTHERR("hankel2e:");
+    }
+  else
+    {
+      cy = pnl_complex_bessel_h2_scaled (-v, z );
+      cy = Cmul (cy, CIexp (M_PI * v) );
+    }
+  return cy;
+}
+
+/* real Bessel functions */
+/**
+ *  Modified Bessel function of the first kind
+ *
+ * @param x a real number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+double pnl_bessel_i ( double v, double x ) 
+{
+  int nz, ierr;
+  fcomplex cy, z = Complex (x, 0.);
+  int n = 1, kode = 1;
+  if (v >= 0)
+    {
+      pnl_zbesi(CADDR(z), &v,  &kode, &n, CADDR(cy), &nz, &ierr);
+      DO_MTHERR("iv:");
+      return cy.r;
+    }
+  else
+    {
+      double  aux1, aux2;
+      aux1 = pnl_bessel_i (-v, x);
+      aux2 = M_2_PI * sin (M_PI * -v) * pnl_bessel_k (-v, x);
+      return aux1 + aux2;
+    }
+}
+
+/**
+ * Modified Bessel function of the first kind
+ * divided by exp(|x|)
+ *
+ * @param x a real number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+double pnl_bessel_i_scaled( double v, double x ) 
+{
+  int nz, ierr;
+  fcomplex cy, z = Complex (x, 0.);
+  int n = 1, kode = 2;
+  if (v >= 0)
+    {
+      pnl_zbesi(CADDR(z), &v,  &kode, &n, CADDR(cy), &nz, &ierr);
+      DO_MTHERR("ive:");
+      return cy.r;
+    }
+  else
+    {
+      double  aux1, aux2;
+      aux1 = pnl_bessel_i_scaled (-v, x);
+      aux2 = M_2_PI * sin (M_PI * -v) * pnl_bessel_k (-v, x) * exp(-fabs(x));
+      return aux1 + aux2;
+    }
+}
+
+
+/**
+ *   Bessel function of the first kind
+ *
+ * @param x a real number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+double pnl_bessel_j( double v, double x ) 
+{
+  int nz, ierr;
+  fcomplex cy, z = Complex (x, 0.);
+  int n = 1, kode = 1;
+  if (v >= 0)
+    {
+      pnl_zbesj(CADDR(z), &v,  &kode, &n, CADDR(cy), &nz, &ierr);
+      DO_MTHERR("jv:");
+      return cy.r;
+    }
+  else
+    {
+      double  aux1, aux2;
+      aux1 = cos (M_PI * v) * pnl_bessel_j (-v, x);
+      aux2 = sin (M_PI * v) * pnl_bessel_y (-v, x);
+      return aux1 + aux2;
+    }
+}
+
+/**
+ * Bessel function of the first kind
+ * same as pnl_bessel_j
+ *
+ * @param x a real number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+double pnl_bessel_j_scaled ( double v, double x ) 
+{
+  int nz, ierr;
+  fcomplex cy, z = Complex (x, 0.);
+  int n = 1, kode = 2;
+  if (v >= 0)
+    {
+      pnl_zbesj(CADDR(z), &v,  &kode, &n, CADDR(cy), &nz, &ierr);
+      DO_MTHERR("jv:");
+      return cy.r;
+    }
+  else
+    {
+      double  aux1, aux2;
+      aux1 = cos (M_PI * v) * pnl_bessel_j_scaled (-v, x);
+      aux2 = sin (M_PI * v) * pnl_bessel_y_scaled (-v, x);
+      return aux1 +aux2;
+    }
+}
+
+/**
+ *   Bessel function of the second kind
+ *
+ * @param x a real number
+ * @param v a real number, the order of the Bessel function
+ *
+ */  
+double pnl_bessel_y( double v, double x ) 
+{
+  int nz, ierr;
+  fcomplex cy, z, cwork;
+  int n = 1, kode = 1;
+  z = Complex (x, 0.);
+  if (v >= 0)
+    {
+      pnl_zbesy(CADDR(z), &v,  &kode, &n, CADDR(cy), &nz, CADDR(cwork), &ierr);
+      DO_MTHERR("yv:");
+      return cy.r;
+    }
+  else
+    {
+      double  aux1, aux2;
+      aux1 = cos (M_PI * v) * pnl_bessel_y (-v, x);
+      aux2 = sin (M_PI * -v) * pnl_bessel_j (-v, x);
+      return aux1 +aux2;
+    }
+}
+
+/**
+ * Scaled   Bessel function of the second kind
+ * same as pnl_bessel_y
+ *
+ * @param x a real number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+double pnl_bessel_y_scaled( double v, double x ) 
+{
+  int nz, ierr;
+  fcomplex cy, z, cwork;
+  int n = 1;
+  int kode = 2;
+  z = Complex (x, 0.);
+  if (v >= 0)
+    {
+      pnl_zbesy(CADDR(z), &v, &kode, &n, CADDR(cy), &nz, CADDR(cwork), &ierr);
+      DO_MTHERR("yve:");
+      return cy.r;
+    }
+  else
+    {
+      double  aux1, aux2;
+      aux1 = cos (M_PI * v) * pnl_bessel_y_scaled (-v, x);
+      aux2 = sin (M_PI * -v) * pnl_bessel_j_scaled (-v, x);
+      return aux1 +aux2;
+    }
+}
+
+
+/**
+ *   Modified Bessel function of the third kind
+ *
+ * @param x a real number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+double pnl_bessel_k( double v, double x ) 
+{
+  int nz, ierr;
+  fcomplex cy, z = Complex (x, 0.);
+  int n = 1;
+  int kode = 1;
+  double nu = fabs(v);
+  pnl_zbesk(CADDR(z), &nu,  &kode, &n, CADDR(cy), &nz, &ierr);
+  DO_MTHERR("kv:");
+  return cy.r;
+}
+
+/**
+ * Modified Bessel function of the third kind
+ * multiplied by exp(x)
+ *
+ * @param x a real number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+double pnl_bessel_k_scaled( double v, double x ) 
+{
+  int nz, ierr;
+  fcomplex cy, z = Complex (x, 0.);
+  int n = 1;
+  int kode = 2;
+  double nu = fabs (v);
+  pnl_zbesk(CADDR(z), &nu, &kode, &n, CADDR(cy), &nz, &ierr);
+  DO_MTHERR("kve:");
+  return cy.r;
+}
+  
+/**
+ * Hankel function of the first kind
+ *
+ * @param x a real number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+fcomplex pnl_bessel_h1( double v, double x ) 
+{
+  int nz, ierr;
+  fcomplex cy, z = Complex (x, 0.);
+  int n = 1;
+  int kode = 1;
+  int m = 1;
+  if (v >= 0)
+    {
+      pnl_zbesh(CADDR(z), &v,  &kode, &m, &n, CADDR(cy), &nz, &ierr);
+      DO_MTHERR("hankel1:");
+    }
+  else
+    {
+      cy = pnl_bessel_h1 (-v, x );
+      cy = Cmul (cy, CIexp (M_PI * -v) );
+    }
+  return cy;
+}
+
+/**
+ * Hankel function of the first kind
+ * divided by Cexp( I * x)
+ *
+ * @param x a real number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+fcomplex pnl_bessel_h1_scaled( double v, double x ) 
+{
+  int nz, ierr;
+  fcomplex cy, z = Complex (x, 0.);
+  int n = 1;
+  int kode = 2;
+  int m = 1;
+  if (v >= 0)
+    {
+      pnl_zbesh(CADDR(z), &v,  &kode, &m, &n, CADDR(cy), &nz, &ierr);
+      DO_MTHERR("hankel1:");
+    }
+  else
+    {
+      cy = pnl_bessel_h1_scaled (-v, x );
+      cy = Cmul (cy, CIexp (M_PI * -v) );
+    }
+  return cy;
+}
+  
+/**
+ *  Hankel function of the first kind
+ *
+ * @param x a real number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+fcomplex pnl_bessel_h2( double v, double x ) 
+{
+  int nz, ierr;
+  fcomplex cy, z = Complex (x, 0.);
+  int n = 1;
+  int kode = 1;
+  int m = 2;
+  if (v >= 0)
+    {
+      pnl_zbesh(CADDR(z), &v,  &kode, &m, &n, CADDR(cy), &nz, &ierr);
+      DO_MTHERR("hankel2:");
+    }
+  else
+    {
+      cy = pnl_bessel_h2 (-v, x );
+      cy = Cmul (cy, CIexp (M_PI * v) );
+    }
+  return cy;
+}
+
+/**
+ * Hankel function of the second kind
+ * multiplied by Cexp( I * x)
+ *
+ * @param x a real number
+ * @param v a real number, the order of the Bessel function
+ *
+ */
+fcomplex pnl_bessel_h2_scaled( double v, double x ) 
+{
+  int nz, ierr;
+  fcomplex cy, z = Complex (x, 0.);
+  int n = 1;
+  int kode = 2;
+  int m = 2;
+  if (v >= 0)
+    {
+      pnl_zbesh(CADDR(z), &v,  &kode, &m, &n, CADDR(cy), &nz, &ierr);
+      DO_MTHERR("hankel2:");
+    }
+  else
+    {
+      cy = pnl_bessel_h2_scaled (-v, x );
+      cy = Cmul (cy, CIexp (M_PI * v) );
+    }
+  return cy;
+}

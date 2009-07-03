@@ -1,0 +1,25 @@
+
+**********************************************************
+*  Mode d'emploi pour la cross-compilation avec mingw32  *
+**********************************************************
+
+1/ déclarer les bons compilateurs avec la commande
+source /usr/local/src/mingw32-build/scirpts/withmingw
+
+2/ lancer 
+   configure  --host=i686-pc-mingw32
+   make
+
+3/ dans Src/libpnl/src
+   make -f Makelib.win32 pour créer libpnl.dll et libpn.dll.a
+
+4/ dans Src 
+   make -f Makefile.win32 pour créer libpremia.dll
+
+5/ dans nsp/libpremia
+   make -f Makelib clean pour tout nettoyer.
+   Attention : ne pas lancer le builder.sce
+   make -f Makelib
+   make -f Makefile.win32 pour créer libpremiamodel.dll
+   
+   cette librairie se charge dans nsp (cross-compilé) par exec ('loader.sce')

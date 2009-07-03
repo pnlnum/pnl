@@ -1,0 +1,12 @@
+2008-12-09 Jérôme Lelong <jerome.lelong@ensta.fr>
+
+	* common/math/lmm/lmm_generator deleted because lmm1d now uses
+	libpremianum for random numbers
+
+	* mod/lmm1d/lmm1d_stdi/mc_glassermanzhao.c : lots of memory
+	corruption corrected
+
+2008-12-09 Jérôme Lelong <jerome.lelong@ensta.fr>
+
+	* all the routines use the new random generator interface of
+	libpremianum

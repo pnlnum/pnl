@@ -1,0 +1,167 @@
+#ifndef  _MATHTOOLS_H
+#define _MATHTOOLS_H
+
+#include <math.h>
+#include <limits.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef unsigned char boolean;
+
+#define false 0
+#undef FALSE
+#define FALSE 0
+#define true 1
+#undef TRUE
+#define TRUE 1
+
+
+/* The following constants are normally defined in /usr/include/{math.h,
+ * values.h, limits.h}. In
+ * case they are not
+ */
+
+#ifndef M_E
+#define M_E            2.7182818284590452354   /* e */
+#endif
+
+#ifndef M_LOG2E
+#define M_LOG2E        1.4426950408889634074   /* log_2 e */
+#endif
+
+#ifndef M_LOG10E
+#define M_LOG10E       0.43429448190325182765  /* log_10 e */
+#endif
+
+#ifndef M_LN2
+#define M_LN2          0.69314718055994530942  /* log_e 2 */
+#endif
+
+#ifndef M_LN10
+#define M_LN10         2.30258509299404568402  /* log_e 10 */
+#endif
+
+#ifndef M_PI
+#define M_PI           3.14159265358979323846  /* pi */
+#endif
+
+#ifndef M_PI_2
+#define M_PI_2         1.57079632679489661923  /* pi/2 */
+#endif
+
+#ifndef M_PI_4
+#define M_PI_4         0.78539816339744830962  /* pi/4 */
+#endif
+
+#ifndef M_1_PI
+#define M_1_PI         0.31830988618379067154  /* 1/pi */
+#endif
+
+#ifndef M_2_PI
+#define M_2_PI         0.63661977236758134308  /* 2/pi */
+#endif
+
+#ifndef M_2_SQRTPI
+#define M_2_SQRTPI     1.12837916709551257390  /* 2/sqrt(pi) */
+#endif
+
+#ifndef M_SQRT2
+#define M_SQRT2        1.41421356237309504880  /* sqrt(2) */
+#endif
+
+#ifndef M_SQRT1_2
+#define M_SQRT1_2      0.70710678118654752440  /* 1/sqrt(2) */
+#endif
+
+#ifndef M_EULER
+#define M_EULER        0.5772156649015328606
+#endif
+
+#define M_1_SQRT2PI    3.9894228040143267791E-1 /* 1/sqrt(2 pi) */
+#define M_SQRT2_PI     0.79788456080286535588  /* sqrt(2/pi) */
+#define M_2PI          6.28318530717958623199 /* 2 pi */
+
+#ifndef INT_MAX
+#define INT_MAX        2147483647
+#endif
+#define MAX_INT INT_MAX
+
+#ifndef DBL_MAX
+#define DBL_MAX		   1.79769313486231470e+308
+#endif
+#define DOUBLE_MAX DBL_MAX
+
+#ifndef DBL_EPSILON  
+#define DBL_EPSILON        2.2204460492503131e-16
+#endif
+
+#define BIG_DOUBLE 1.0e6
+#define PRECISION 1.0e-7 /*Precision for the localization of FD methods*/
+#define INC 1.0e-5 /*Relative Increment for Delta-Hedging*/
+
+#define MAXLOOPS 5000
+#define POW(x,y) pow( (double) (x), (double) (y))
+
+/* MAX and MIN already defined in <sys/param.h>  */
+/* if we are compiling for Windows (Visual or mingw32
+ * cross-compiling), sys/param.h is not included */ 
+#ifndef MAX
+#define MAX(A,B) ( (A) > (B) ? (A):(B) )
+#endif
+#ifndef MIN
+#define MIN(A,B) ( (A) < (B) ? (A):(B) ) 
+#endif
+
+#ifndef NAN
+#define NAN (0./0.)
+#endif
+
+#define PNL_POSINF (-log(0.))
+#define PNL_NEGINF (log(0.))
+
+#define PNL_IS_ODD(n) ((n) & 1) /* last bit is 1 */
+#define PNL_IS_EVEN(n) ((n) ^ 1) /* last bit is 0 */
+
+#define SQR(X) ((X)*(X))
+#define CUB(X) ((X)*(X)*(X))
+extern int intapprox (double s);
+extern double trunc(double x);
+extern double Cnp(int n, int p);
+extern double pnl_fact(int n);
+
+extern double lgamma (double x);
+extern double tgamma (double x);
+
+#ifdef _MSC_VER
+#define isnan _isnan
+#endif
+
+#define PNL_ERROR(msg, func) {fprintf(stderr, "%s in function %s \n", msg, func); abort();}
+#define OK 0
+#define WRONG 1
+#define FAIL 1 /* synonym of WRONG (more menaningful) */
+
+typedef struct {
+  double (*function) (double x, void *params);
+  void *params;
+} PnlFunc ;
+
+#define PNL_EVAL_FUNC(F, x) (*((F)->function))(x, (F)->params)
+
+typedef struct {
+  double (*function) (double x, double y, void *params);
+  void *params;
+} PnlFunc2D ;
+
+#define PNL_EVAL_FUNC2D(F, x, y) (*((F)->function))(x, y, (F)->params)
+
+typedef struct {
+  void (*function) (double x, double *f, double *df, void *params);
+  void *params;
+} PnlFuncDFunc ;
+
+#define PNL_EVAL_FDF_FUNC(F, x, f, df) (*((F)->function))(x, f, df, (F)->params)
+
+extern void pnl_qsort (void *a, int n, int es, int lda, int *t, int ldt, int use_index, int (*cmp)());
+
+#endif

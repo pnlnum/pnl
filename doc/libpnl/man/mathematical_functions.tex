@@ -1,0 +1,553 @@
+\section{Mathematical framework}
+
+%% --------------------------------------------------------------------- %%
+%% Mathtools
+\subsection{General tools}
+\subsubsection{Short Description}
+
+\subsubsection{Constants} A few mathematical constants are provided by the
+library. Most of them are actually already defined in {\tt math.h}, {\tt
+  values.h} or {\tt limits.h} and a few others have been added.
+\begin{describeconst}
+  \constentry{M_E}{$e^1$}
+  \constentry{M_LOG2E}{$\log_2 e$}
+  \constentry{M_LOG10E}{$\log_{10} e$}
+  \constentry{M_LN2}{$\log_e 2$}
+  \constentry{M_LN10}{$\log_e 10$}
+  \constentry{M_PI}{$\pi$}
+  \constentry{M_2PI}{$2 \pi$}
+  \constentry{M_PI_2}{$\pi/2$}
+  \constentry{M_PI_4}{$\pi/4$}
+  \constentry{M_1_PI}{$1/\pi$}
+  \constentry{M_2_PI}{$2/\pi$}
+  \constentry{M_2_SQRTPI}{$2/\sqrt{\pi}$}
+  \constentry{M_SQRT2}{$\sqrt{2}$}
+  \constentry{M_EULER}{$\gamma = \lim_{n \rightarrow \infty } \left( \sum_{k=1}^{n} \frac {1}{k} - \ln(n) \right)$}
+  \constentry{M_SQRT1_2}{$1/\sqrt{2}$}
+  \constentry{M_1_SQRT2PI}{$1/\sqrt{2 \pi}$}
+  \constentry{M_SQRT2_PI}{$\sqrt{2/\pi}$}
+  \constentry{INT_MAX}{$2147483647$}
+  \constentry{MAX_INT}{INT_MAX}
+  \constentry{DBL_MAX}{$1.79769313486231470e+308$}
+  \constentry{DOUBLE_MAX}{DBL_MAX}
+  \constentry{DBL_EPSILON}{$2.2204460492503131e-16$}
+  \constentry{PNL_NEGINF}{$-\infty$}
+  \constentry{PNL_POSINF}{$+\infty$}
+  \constentry{NAN}{Not a Number}
+\end{describeconst}
+
+\subsubsection{A few macros}
+\begin{itemize}
+\item \describemacro{PNL_IS_ODD}{int n}
+  \sshortdescribe Returns $1$ if \var{n} is odd and $0$ otherwise.
+\item \describemacro{PNL_IS_EVEN}{int n}
+  \sshortdescribe Returns $1$ if \var{n} is even and $0$ otherwise.
+\end{itemize}
+
+\subsubsection{Functions}
+\begin{itemize}
+\item \describefun{int}{intapprox}{double s}
+  \sshortdescribe Returns the nearest integer with the convention ({\tt
+    intapprox(1.5)=1}). This function is similar to the round function
+  (provided by the C library) but the result is typed as an integer and not a
+  double.
+
+\item \describefun{double}{trunc}{double s}
+  \sshortdescribe Returns the nearest integer not greater that the absolute
+  value of \var{s}. This function should part of C99.
+
+\item \describefun{double}{Cnp}{int n, int p}
+  \sshortdescribe Computes the binomial coefficient $\binom{n}{p}$.
+
+\item \describefun{double}{pnl_fact}{int n}
+  \sshortdescribe Computes $n! = \Gamma(n+1)$ in double precision.
+
+\item \describefun{double}{lgamma}{double x}
+  \sshortdescribe Computes $\log(\Gamma(x))$. This function is part of C99 and is
+  redefined for non C99 compliant compilers.
+
+\item \describefun{double}{tgamma}{double x}
+  \sshortdescribe Computes $\Gamma(x)$. This function is part of C99 and is
+  redefined for non C99 compliant compilers.
+
+\end{itemize}
+
+%% --------------------------------------------------------------------- %%
+%% Complex
+\subsection{Complex numbers}
+\subsubsection{Short Description}
+
+The first native implementation of complex numbers in the C language has been
+provided by the C99 implementation, which is not available on all
+platforms. For this reason, we provide here an implementation of complex
+numbers and its associated calculus.
+
+\begin{verbatim}
+typedef struct {
+    double r; /*!< real part */
+    double i; /*!< imaginary part */
+} fcomplex;
+\end{verbatim}
+
+
+\subsubsection{Constants}
+
+\begin{describeconst}
+  \constentry{CZERO}{$0$ as a complex number}
+  \constentry{CONE}{$1$ as a complex number}
+  \constentry{CI}{$I$ the unit complex number}
+\end{describeconst}
+
+\subsubsection{Functions}
+\begin{itemize}
+\item \describefun{double}{Creal}{\refstruct{fcomplex} z}
+  \sshortdescribe $ \mathrm{R}(z) $ 
+
+\item \describefun{double}{Cimag}{\refstruct{fcomplex} z}
+  \sshortdescribe  $ \mathrm{Im}(z) $  
+
+\item \describefun{fcomplex}{Cadd}{\refstruct{fcomplex} z, \refstruct{fcomplex} b}
+  \sshortdescribe $ z+b $  
+
+\item \describefun{fcomplex}{CRadd}{\refstruct{fcomplex} z, double b}
+  \sshortdescribe $ z+b $  
+
+\item \describefun{fcomplex}{RCadd}{double b, \refstruct{fcomplex} z}
+  \sshortdescribe $ b+z $  
+
+\item \describefun{fcomplex}{Csub}{\refstruct{fcomplex} z, \refstruct{fcomplex} b}
+  \sshortdescribe $ z-b $
+
+\item \describefun{fcomplex}{CRsub}{\refstruct{fcomplex} z, double b}
+  \sshortdescribe $ z-b $
+
+\item \describefun{fcomplex}{RCsub}{double b, \refstruct{fcomplex} z}
+  \sshortdescribe $ b-z $
+
+\item \describefun{fcomplex}{Cminus}{\refstruct{fcomplex} z}
+  \sshortdescribe $ -z $  
+
+\item \describefun{fcomplex}{Cmul}{\refstruct{fcomplex} z, \refstruct{fcomplex} b}
+  \sshortdescribe $ z*b $  
+
+\item \describefun{fcomplex}{RCmul}{double x, \refstruct{fcomplex} z}
+  \sshortdescribe $ x*z $
+
+\item \describefun{fcomplex}{CRmul}{\refstruct{fcomplex} z, double x}
+  \sshortdescribe $ z * x $
+
+\item \describefun{fcomplex}{CRdiv}{\refstruct{fcomplex} z, double x}
+  \sshortdescribe $ z/x $
+
+\item \describefun{fcomplex}{Complex}{double x, double y}
+  \sshortdescribe $x + \imath \; y$  
+
+\item \describefun{fcomplex}{Complex_polar}{double r, double theta}
+  \sshortdescribe  $ r e^{\imath \theta} $  
+
+\item \describefun{fcomplex}{Conj}{\refstruct{fcomplex} z}
+  \sshortdescribe $\overline{z}$  
+
+\item \describefun{fcomplex}{Cinv}{\refstruct{fcomplex} z}
+  \sshortdescribe $ \frac{1}{z}$  
+
+\item \describefun{fcomplex}{Cdiv}{\refstruct{fcomplex} z, \refstruct{fcomplex} w}
+  \sshortdescribe $ \frac{z}{w}$  
+
+\item \describefun{double}{Csqr_norm}{\refstruct{fcomplex} z}
+  \sshortdescribe $ \mathrm{Re}(z)^2 + \mathrm{im}(z)^2 $  
+
+\item \describefun{double}{Cabs}{\refstruct{fcomplex} z}
+  \sshortdescribe $ \vert z \vert $  
+
+\item \describefun{fcomplex}{Csqrt}{\refstruct{fcomplex} z}
+  \sshortdescribe $ \sqrt{z} $,  square root (with positive real part)  
+
+\item \describefun{fcomplex}{Clog}{\refstruct{fcomplex} z}
+  \sshortdescribe $\log(z)$  
+
+\item \describefun{fcomplex}{Cexp}{\refstruct{fcomplex} z}
+  \sshortdescribe $ e^z $  
+
+\item \describefun{fcomplex}{CIexp}{double t}
+  \sshortdescribe $ e^{\imath t} $
+
+\item \describefun{fcomplex}{Cpow}{\refstruct{fcomplex} z, \refstruct{fcomplex} w}
+  \sshortdescribe $ z^w$, power function  
+
+\item \describefun{fcomplex}{Cpow_real}{\refstruct{fcomplex} z, double x}
+  \sshortdescribe $ z^x$, power function  
+
+\item \describefun{fcomplex}{Ccos}{\refstruct{fcomplex} z}
+  \sshortdescribe $ \cos(g)$  
+
+\item \describefun{fcomplex}{Csin}{\refstruct{fcomplex} z}
+  \sshortdescribe $\sin(g)$  
+
+\item \describefun{fcomplex}{Ctan}{\refstruct{fcomplex} z}
+  \sshortdescribe $\tan(z)$
+
+\item \describefun{fcomplex}{Ccosh}{\refstruct{fcomplex} z}
+  \sshortdescribe $ \cosh(g)$  
+
+\item \describefun{fcomplex}{Csinh}{\refstruct{fcomplex} z}
+  \sshortdescribe $\sinh(g)$  
+
+\item \describefun{fcomplex}{Ctanh}{\refstruct{fcomplex} z}
+  \sshortdescribe $\tanh(z) = \frac{1 - \expp{-2z} }{1 + \expp{-2z} }$  
+
+\item \describefun{double}{Carg}{\refstruct{fcomplex} z}
+  \sshortdescribe $\arg(z) $
+
+\item \describefun{fcomplex}{Ctgamma}{\refstruct{fcomplex} z}
+  \sshortdescribe $ \Gamma(z)$, the Gamma function  
+
+\item \describefun{fcomplex}{Clgamma}{\refstruct{fcomplex} z}
+  \sshortdescribe $ \ln(\Gamma (z)) $, the logarithm of the Gamma function
+\end{itemize}
+
+Most algebraic operations on complex numbers are implemented using the
+following naming for the functions
+\begin{itemize}
+\item we prefix all these functions with {\tt C_op_}, 
+\item we use two complex numbers {\tt a, b} and a real number {\tt d}, 
+\item we note {\tt i} the multiplication by $\imath$, 
+\item {\tt c} indicates that the second argument is conjugated first.
+\item we note {\tt p, m} the two standard operations {\it plus} and {\it minus}
+\end{itemize}
+For example C_op_idamcb is $\imath d \left( a - \overline{b} \right)$. So
+functions are :
+\begin{itemize}
+\item \describefun{fcomplex}{C_op_apib}{\refstruct{fcomplex} a, \refstruct{fcomplex} b}
+  \sshortdescribe $ a+\imath b  $.
+\item \describefun{fcomplex}{C_op_apcb}{\refstruct{fcomplex} a, \refstruct{fcomplex} b}
+  \sshortdescribe $ a+\overline{ b}  $.
+\item \describefun{fcomplex}{C_op_amcb}{\refstruct{fcomplex} a, \refstruct{fcomplex} b}
+  \sshortdescribe $ a-\overline{b}  $.
+\item \describefun{fcomplex}{C_op_dapb}{double d, \refstruct{fcomplex} a, 
+    \refstruct{fcomplex} b}
+  \sshortdescribe $ d(a+ b)  $.
+\item \describefun{fcomplex}{C_op_damb}{double d, \refstruct{fcomplex} a, 
+    \refstruct{fcomplex} b}
+  \sshortdescribe $ d(a-b)  $.
+\item \describefun{fcomplex}{C_op_dapib}{double d, \refstruct{fcomplex} a, 
+    \refstruct{fcomplex} b}
+  \sshortdescribe $ d(a+\imath b)  $.
+\item \describefun{fcomplex}{C_op_damib}{double d, \refstruct{fcomplex} a, 
+    \refstruct{fcomplex} b}
+  \sshortdescribe $ d(a-\imath b)  $.
+\item \describefun{fcomplex}{C_op_dapcb}{double d, \refstruct{fcomplex} a, 
+    \refstruct{fcomplex} b}
+  \sshortdescribe $ d\left(a+\overline{b}\right)  $.
+\item \describefun{fcomplex}{C_op_damcb}{double d, \refstruct{fcomplex} a, 
+    \refstruct{fcomplex} b}
+  \sshortdescribe $ d\left(a-\overline{b}\right)  $.
+\item \describefun{fcomplex}{C_op_idapb}{double d, \refstruct{fcomplex} a, 
+    \refstruct{fcomplex} b}
+  \sshortdescribe $\imath d\left(a+b\right) $.
+\item \describefun{fcomplex}{C_op_idamb}{double d, \refstruct{fcomplex} a, 
+    \refstruct{fcomplex} b}
+  \sshortdescribe $\imath  d\left(a-b\right) $.
+\item \describefun{fcomplex}{C_op_idapcb}{double d, \refstruct{fcomplex} a, 
+    \refstruct{fcomplex} b}
+  \sshortdescribe $ \imath d\left(a+\overline{b}\right) $.
+\item \describefun{fcomplex}{C_op_idamcb}{double d, \refstruct{fcomplex} a, 
+    \refstruct{fcomplex} b}
+  \sshortdescribe $ \imath  d\left(a-\overline{b}\right) $.
+\end{itemize}
+%% --------------------------------------------------------------------- %%
+
+
+
+
+\subsection{Special Functions}
+
+We provide approximations of the different Bessel (and Hankel) functions both
+for real and complex arguments. These approximations were originally written
+in Fortran in the Amos library and have been translated into C by
+Jean-Philippe Chancelier, to whom we are very greatful, partly by using {\em
+  f2c} partly by hand. The definitions of these functions have been extended
+to negative orders by using the relations given in the {\em Amos} library
+
+We also provide approximations of the different Incomplete Gamma Functions
+(and Exponential integrals) for real arguments. These approximations come from
+``Numerical Recipes''.
+
+\subsubsection{Real Bessel Functions}
+
+\begin{itemize}
+\item \describefun{double}{pnl_bessel_i}{double v, double x}
+  \sshortdescribe   Modified Bessel function of the first
+  kind of order \var{v}.
+\item \describefun{double}{pnl_bessel_i_scaled}{double v, double x}
+  \sshortdescribe   Modified Bessel function of the first
+  kind of order \var{v} divided by $e^{|x|}$.
+\item \describefun{double}{pnl_bessel_j}{double v, double x}
+  \sshortdescribe    Bessel function of the first
+  kind of order \var{v}.
+\item \describefun{double}{pnl_bessel_j_scaled}{double v, double x}
+  \sshortdescribe    Bessel function of the first
+  kind of order \var{v}. Same function as \reffun{pnl_bessel_j}.
+\item \describefun{double}{pnl_bessel_y}{double v, double x}
+  \sshortdescribe   Modified Bessel function of the second
+  kind of order \var{v}.
+\item \describefun{double}{pnl_bessel_y_scaled}{double v, double x}
+  \sshortdescribe   Modified Bessel function of the second
+  kind of order \var{v}. Same function as \reffun{pnl_bessel_y}.
+\item \describefun{double}{pnl_bessel_k}{double v, double x}
+  \sshortdescribe   Bessel function of the third
+  kind of order \var{v}.
+\item \describefun{double}{pnl_bessel_k_scaled}{double v, double x}
+  \sshortdescribe   Bessel function of the third
+  kind of order \var{v} multiplied by $e^{x}$.
+\item \describefun{fcomplex}{pnl_bessel_h1}{double v, double x}
+  \sshortdescribe   Hankel function of the first kind of
+  order \var{v}. 
+\item \describefun{fcomplex}{pnl_bessel_h1_scaled}{double v, double x}
+  \sshortdescribe  Hankel function of the first kind of order
+  \var{v}  and divided by $e^{I x}$.
+\item \describefun{fcomplex}{pnl_bessel_h2}{double v, double x}
+  \sshortdescribe  Hankel function of the second kind of
+  order \var{v}. 
+\item \describefun{fcomplex}{pnl_bessel_h2_scaled}{double v, double x}
+  \sshortdescribe  Hankel function of the second kind of
+  order \var{v}  and multiplied by $e^{I x}$.
+\end{itemize}
+
+\subsubsection{Complex Bessel Functions}
+
+\begin{itemize}
+\item \describefun{fcomplex}{pnl_complex_bessel_i}{double v, fcomplex z}
+  \sshortdescribe  Complex Modified Bessel function of the first
+  kind of order \var{v}.
+\item \describefun{fcomplex}{pnl_complex_bessel_i_scaled}{double v, fcomplex z}
+  \sshortdescribe  Complex Modified Bessel function of the first
+  kind of order \var{v} divided by $e^{|Creal(z)|}$.
+\item \describefun{fcomplex}{pnl_complex_bessel_j}{double v, fcomplex z}
+  \sshortdescribe  Complex  Bessel function of the first
+  kind of order \var{v}.
+\item \describefun{fcomplex}{pnl_complex_bessel_j_scaled}{double v, fcomplex z}
+  \sshortdescribe  Complex  Bessel function of the first
+  kind of order \var{v} divided by $e^{|Cimag(z)|}$.
+\item \describefun{fcomplex}{pnl_complex_bessel_y}{double v, fcomplex z}
+  \sshortdescribe  Complex Modified Bessel function of the second
+  kind of order \var{v}.
+\item \describefun{fcomplex}{pnl_complex_bessel_y_scaled}{double v, fcomplex z}
+  \sshortdescribe  Complex Modified Bessel function of the second
+  kind of order \var{v} divided by $e^{|Cimag(z)|}$.
+\item \describefun{fcomplex}{pnl_complex_bessel_k}{double v, fcomplex z}
+  \sshortdescribe  Complex Bessel function of the third
+  kind of order \var{v}.
+\item \describefun{fcomplex}{pnl_complex_bessel_k_scaled}{double v, fcomplex z}
+  \sshortdescribe  Complex Bessel function of the third
+  kind of order \var{v} multiplied by $e^{z}$.
+\item \describefun{fcomplex}{pnl_complex_bessel_h1}{double v, fcomplex z}
+  \sshortdescribe  Complex Hankel function of the first kind of
+  order \var{v}. 
+\item \describefun{fcomplex}{pnl_complex_bessel_h1_scaled}{double v, fcomplex z}
+  \sshortdescribe  Complex  Hankel function of the first kind of order
+  \var{v}  and divided by $e^{I z}$.
+\item \describefun{fcomplex}{pnl_complex_bessel_h2}{double v, fcomplex z}
+  \sshortdescribe  Complex  Hankel function of the second kind of
+  order \var{v}. 
+\item \describefun{fcomplex}{pnl_complex_bessel_h2_scaled}{double v, fcomplex z}
+  \sshortdescribe  Complex  Hankel function of the second kind of
+  order \var{v}  and multiplied by $e^{I z}$.
+\end{itemize}
+
+
+
+\subsubsection{Incomplete Gamma Function }
+
+For $a \in \R$ and $x>0$, the Incomplete Gamma Function is defined by
+\begin{equation*}
+  \Gamma(a, x)=\int_x^{\infty} \expp{-u} u^{a-1} du.
+\end{equation*}
+A relation similar to the one existing for the standard Gamma function holds
+\begin{equation*}
+  \Gamma\paren{a, x}= \frac{- x^{a} \expp{-x} + \Gamma (a+1, x)}{a}.
+\end{equation*}
+
+\begin{itemize}
+\item \describefun{double}{pnl_gamma_inc_func}{double a, double x}
+  \sshortdescribe   computes $\Gamma(a, x), \quad a \in \R , x \geq 0$
+\item \describefun{void}{pnl_gamma_inc}{double a, double x, double $\ast$Ga, 
+    double $\ast$P, double $\ast$Q}
+  \sshortdescribe   computes for $a >0, x \geq 0$
+  \begin{align*}
+    \Gamma(a)&=\int_0^{\infty} u^{a-1} \expp{-u}du\\ 
+    P(a, x) &= \frac{\Gamma(a) - \Gamma(a, x)}{\Gamma(a)} =
+    \frac{1}{\Gamma(a)} \int_0^x u^{a-1} \expp{-u}  du\\ 
+    Q(a, x) &= 1-P(a, x) =\frac{\Gamma(a, x)}{\Gamma(a)} =
+    \frac{1}{\Gamma(a)} \int_x^{\infty} \expp{-u} u^{a-1} du. 
+  \end{align*}
+\end{itemize}
+
+\subsubsection{Exponential integrals}
+For $x>0$ and $n \in \N$, the  function $E_n$ is defined by
+\begin{equation*}
+  E_n\paren{x}=\int_{1}^{\infty} \expp{-x u} u^{-n} du
+\end{equation*}
+
+This function is linked to the Incomplete Gamma function by the relation
+\begin{equation*}
+  E_n\paren{x}=\int_{x}^{\infty}
+  \expp{-xu} (xu)^{-n} x^{n-1} d(xu)=x^{n-1} \int_{x}^{\infty}
+  \expp{-t} t^{-n} dt =  x^{n-1}  \Gamma\paren{1-n, x}, 
+\end{equation*}
+from which we can deduce
+\begin{equation*}
+  n E_{n+1}(x)  =   \expp{-x} - x E_n(x).
+\end{equation*}
+For $n>1$, the series expansion is given by
+\begin{equation*}
+  E_n(x)=x^{n-1}
+  \Gamma(1-n)+\recaco{-\frac{1}{1-n}+\frac{x}{2-n}-\frac{x^2}{2(3-n)}
+    +\frac{x^3}{6(4-n)}-\dots}.     
+\end{equation*}
+The asymptotic behaviour is given by
+\begin{equation*}
+  E_n(x)=\frac{\expp{-x}}{x}\recaco{1-\frac{n}{x}+\frac{n(n+1)}{x^2}+\dots}. 
+\end{equation*}
+The special case $n=1$ gives 
+\begin{equation*}
+  E_1(x) = \int_x^\infty \frac{e^{-u}}{u}\, du, \quad |\mathrm{Arg}(x)| \ge \pi. 
+\end{equation*}
+For any complex number $x$ with positive real part, this can be written
+\begin{equation*}
+  E_1(x) = \int_1^\infty \frac{e^{-ux}}{u}\, du, \quad \Re(x) \ge 0. 
+\end{equation*}
+By integrating the Taylor expansion of $\expp{-t}/t$, and extracting the
+logarithmic singularity, we can derive the following series representation for
+$E_1(x)$, 
+\begin{equation*}
+  {E_1}(x) =-\gamma-\ln x-\sum_{k=1}^{\infty}\frac{(-1)^k x^k}{k\; k!}
+  \qquad |\mathrm{Arg}(x)| < \pi. 
+\end{equation*}
+The function $E_1$ is linked to the exponential integral $Ei$
+\begin{equation*}
+  Ei(x)=\int_{-\infty}^x\frac{e^u}u\, du=-\int_{-x}^{\infty}
+  \frac{e^{-u}}{u}\, du \quad \forall x \neq 0. 
+\end{equation*}
+The above definition  can be used for positive values of $x$, but the integral
+has to be understood in terms of its Cauchy principal value, due to the
+singularity of the integrand at zero.
+\begin{equation*}
+  {Ei}(-x) = -{E}_1(x) , \quad \Re(x) \ge 0.
+\end{equation*}
+We deduce, 
+\begin{equation*}
+  Ei(x) = \gamma + \ln x+ \sum_{k=1}^{\infty} \frac{x^k}{k\; k!}, \quad x>0.
+\end{equation*}
+For $x \in \R$ 
+\begin{equation*}
+  \Gamma(0, x)=\left\{
+    \begin{array}{l}
+      -Ei(-x)-\imath \pi  \quad  x<0, \\
+      -Ei(-x) \quad x>0. 
+    \end{array}\right.
+\end{equation*}
+
+\begin{itemize}
+\item \describefun{double}{pnl_expint_En}{int n, double x}
+  \sshortdescribe   computes for  $ n\geq 0, x \geq 0$ and $x>0$ if $n=0$ or $1$.
+  \begin{equation*}
+    E_n(x)= \int_1^{\infty} u^{-n} \expp{-x u} du.
+  \end{equation*}
+\item \describefun{double}{pnl_expint_Ei}{double x}
+  \sshortdescribe   computes the principal value of integral, for $x>0$ 
+  \begin{equation*}
+    Ei(x) = - \int_{-x}^{\infty} \frac{\expp{-u}}{u} du = \int_{-\infty}^x \frac{\expp{u}}{u} du 
+  \end{equation*}
+\end{itemize}
+
+
+
+%% --------------------------------------------------------------------- %%
+%% financial functions
+
+\subsection{Financial functions}
+\subsubsection{Short Description}
+\subsubsection{Functions}
+
+We use some practitioner convention. Here function depend of Forward price
+and bond price. This can be useful for time dependant interest rate model.
+
+We note $F_T$ the forward price at maturity $T$, the expected value of $S_T$.
+In Black \& Scholes case, 
+$$ F_T = S_0 \expp{(r-q)t}, $$
+where $r$ is the interest rate and $q$ then dividend yield.
+
+Expression of Bond price, so contract paid $1$ at maturity, in the BS case, 
+is given by
+$$ B_0 = \expp{-r T}.$$
+
+Note that:
+$$ \Delta_{Forward}  \expp{(r-q)T} = \Delta_{S}, \quad \quad
+\Gamma_{Forward}  \expp{2 (r-q)T} = \Gamma_{S}.$$
+
+\begin{itemize}
+\item 
+  \describefun{double}{pnl_bs_call}{double Vol, double Bond, double Forward, 
+    double Strike, double Maturity}
+\item 
+  \describefun{double}{pnl_bs_put}{double Vol, double Bond, double Forward, 
+    double Strike, double Maturity}
+\item 
+  \describefun{double}{pnl_bs_call_delta_forward}{double Vol, double Bond, 
+    double Forward, double Strike, double Maturity}
+\item 
+  \describefun{double}{pnl_bs_put_delta_forward}{double Vol, double Bond, 
+    double Forward, double Strike, double Maturity}
+\item 
+  \describefun{double}{pnl_bs_call_put}{int Is_call, double Vol, double Bond, 
+    double Forward, double Strike, double Maturity}
+\item 
+  \describefun{double}{pnl_bs_call_put_delta_forward}{int Is_call, double Vol, 
+    double Bond, double Forward, double Strike, double Maturity}
+\item 
+  \describefun{double}{pnl_bs_vega}{double Vol, double Bond, double Forward, 
+    double Strike, double Maturity}
+\item 
+  \describefun{double}{pnl_bs_gamma}{double Vol, double Bond, double Forward, 
+    double Strike, double Maturity}
+\item 
+  \describefun{double}{pnl_bs_s_square_gamma}{double Vol, double Bond, 
+    double Forward, double Strike, double Maturity}
+
+  Practitioners don't speak in terms of option price, but rather compare
+  prices in terms of implied Black \& Scholes volatility. So this parameter is
+  very useful in practice. Here we propose two functions to compute
+  $\sigma_{impl}$: the first function is for one up-let, maturity, 
+  strike, option price.  the second function is for a list of strikes and
+  maturities, a matrix of prices (with strikes varying on the rows).
+\item 
+  \describefun{double}{pnl_bs_implicit_vol}{int Is_call, double Price, 
+    double Bond, double Forward, double Strike, double Maturity}
+\item 
+  \describefun{int}{pnl_bs_matrix_implicit_vol}{const \refstruct{PnlMatUint}
+    $\ast$Is_Call, const \refstruct{PnlMat} $\ast$Price, double spot, 
+    double rate, double divid, const \refstruct{PnlVect} $\ast$Strike, 
+    const \refstruct{PnlVect} $\ast$Maturity, \refstruct{PnlMat} $\ast$Vol}
+\end{itemize}
+
+Conversion to standard Premia functions and classic parameters.
+\begin{itemize}
+\item
+  \describefun{int}{pnl_cf_call_bs}{double s, double k, double t, double r, 
+    double divid, double sigma, double $\ast$ptprice, double $\ast$ptdelta}
+\item
+  \describefun{int}{pnl_cf_put_bs}{double s, double k, double t, double r, 
+    double divid, double sigma, double $\ast$ptprice, double $\ast$ptdelta}
+\item
+  \describefun{double}{pnl_cf_bs_gamma}{double s, double k, double t, double r, 
+    double divid, double sigma}
+
+\end{itemize}
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "pnl-premia-manual"
+%%% End: 

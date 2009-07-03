@@ -1,0 +1,22 @@
+# -*- mode: Makefile -*-
+# terminer la compilation en creant le dll a la main 
+# creation du dll 
+
+all:  shared-win32 
+
+ARCS=libamos/.libs/libamos.a libcephes/.libs/libcephes.a librand/.libs/librand.a \
+libcsparse/.libs/libcsparse.a linalg/.libs/liblinalg.a  libfftpack/.libs/libfftpack.a \
+sort/.libs/libsort.a \
+-lstdc++  -lm
+
+OBJS = basis.o pnl_complex.o cumulfunc.o mathtools.o							\
+dft.o finance_function.o brent.o roots.o pde_tools.o integration_GK.o			\
+sparse_grid_constructor.o gridsparse_constructor.o gridsparse_functions.o
+
+shared-win32:: $(OBJS) 
+	gcc -mno-cygwin -shared -o libpnl.dll $(OBJS) \
+		-Wl,--export-all-symbols -Wl,--allow-multiple-definition \
+		-Wl,--enable-auto-import -Wl,--whole-archive $(ARCS)  \
+		-Wl,--no-whole-archive -Xlinker --out-implib -Xlinker libpnl.dll.a
+
+
