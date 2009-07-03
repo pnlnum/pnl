@@ -592,6 +592,8 @@ Src/mod/temperedstable1d/Makefile \
 Src/mod/temperedstable1d/temperedstable1d_lim/Makefile \
 Src/mod/temperedstable1d/temperedstable1d_std/Makefile \
 Src/mod/temperedstable1d/temperedstable1d_vol/Makefile \
+Src/mod/timehes1d/Makefile \
+Src/mod/timehes1d/timehes1d_std/Makefile \
 Src/mod/variancegamma1d/Makefile \
 Src/mod/variancegamma1d/variancegamma1d_lim/Makefile \
 Src/mod/variancegamma1d/variancegamma1d_pad/Makefile \
