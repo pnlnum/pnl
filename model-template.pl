@@ -10,9 +10,11 @@
 ## 5. Edit configure.in and add the new directory
 ## 6. Edit premia_obj.c
 ## 6. Add the documentation
+## 7. svn add the different files
 
 use strict;
 use Getopt::Long;
+use Cwd;
 
 my $model = "";
 my $option = "";
@@ -48,15 +50,36 @@ sub create_dir {
     mkdir $mod || die ("Cannot create $mod");
 }
 
+##
+## Tests if a file alredy exists.
+## Returns 1 if yes, 0 otherwise.
+##
 sub file_exists {
     my ($file) = @_;
+    my $cwd = getcwd ();
     if (-f $file) {
-        print "File $file already exists. Skipping ...\n";
+        print "File $file already exists in $cwd. Skipping ...\n";
         return 1;
     }
     return 0;
 }
 
+
+##
+## Dump a list (without newlines separator) to a file
+## Args :
+## 1. a file name
+## 2. a list
+sub dump_to_file{
+    my ($filename, @list) = @_;
+    my $cwd = getcwd ();
+    open (FILE, ">$filename") || die ("Cannot create file $filename in $cwd.");
+    print "Creating ${filename} in $cwd\n";
+    foreach (@list){
+        print FILE ($_, "\n");
+    }
+    close FILE;
+}
 
 ##
 ## Creates $mod.c, $mod.h  in directory $mod.
@@ -69,8 +92,6 @@ sub create_model_code_templates {
     # mod.h file
     chdir('..') && return if ( file_exists ("${mod}.h") );
     my $upper_mod = uc($mod);
-    open (MOD_H, ">$mod" . ".h") || die ("Cannot create file ${mod}.h");
-    print "Creating ${mod}.h\n";
     @content = ("#ifndef _${upper_mod}_H",
                 "#define _${upper_mod}_H",
                 "",
@@ -91,13 +112,10 @@ sub create_model_code_templates {
                 "",
                 "#endif",
                 "");
-    print MOD_H join("\n", @content);
-    close MOD_H;
+    dump_to_file ("${mod}.h", @content);
 
     # mod.c file
     chdir('..') && return if ( file_exists ("${mod}.c") );
-    open (MOD_C, ">$mod" . ".c")  || die ("Cannot create file ${mod}.c");
-    print "Creating ${mod}.c\n";
     @content = ("#include $mod" . ".c",
                 "#include \"chk.h\"",
                 "#include \"error_msg.h\"",
@@ -147,12 +165,9 @@ sub create_model_code_templates {
                 "  return OK;",
                 "}",
                 "",
-                "TYPEMOD Scott1dim;",
-                "MAKEMOD(Scott1dim);");
-
-    print MOD_C join("\n", @content);
-    close MOD_C;
-    
+                "TYPEMOD ${mod};",
+                "MAKEMOD(${mod});");
+    dump_to_file ("${mod}.c", @content);
     chdir ('..');
 }
 
@@ -168,8 +183,6 @@ sub create_opt_code_templates {
     # mod_opt.h file
     chdir('..') && return if ( file_exists ("${mod_opt}.h") );
     my $upper_mod_opt = uc($mod_opt);
-    open (MOD_OPT_H, ">$mod_opt" . ".h") || die ("Cannot create file ${mod_opt}.h");
-    print "Creating ${mod_opt}.h\n";
     @content = ("#ifndef _${upper_mod_opt}_H",
                 "#define _${upper_mod_opt}_H",
                 "",
@@ -179,13 +192,10 @@ sub create_opt_code_templates {
                 "",
                 "#endif",
                 "");
-    print MOD_OPT_H join("\n", @content);
-    close MOD_OPT_H;
+    dump_to_file ("${mod_opt}.h", @content);
 
     # mod_opt.c file
     chdir('..') && return if ( file_exists ("${mod_opt}.c") );
-    open (MOD_OPT_C, ">$mod_opt" . ".c")  || die ("Cannot create file ${mod_opt}.c");
-    print "Creating ${mod_opt}.c\n";
     @content = (
         "#include  \"${mod_opt}.h\"", 
         "",
@@ -214,30 +224,25 @@ sub create_opt_code_templates {
         "MOD_OPT(tests),",
         "MOD_OPT(ChkMix)",
         "};" );
-    print MOD_OPT_C join("\n", @content);
-    close MOD_OPT_C;
-    
+    dump_to_file ("${mod_opt}.c", @content);
     chdir ('..');
 }
 
 ##
 ## Edit Makefile.am
 ##
-sub edit_makefile{
+sub create_makefile{
     my ($mod) = @_;
     chdir ($mod);
     # Makefile.am
     chdir('..') && return if ( file_exists ("Makefile.am") );
-    open(MAKE, ">Makefile.am")  || die ("Cannot create file Makefile.am");
-    print "Creating Makefile.am\n";
     my @content = ("SUBDIRS = ",
                    'include $(top_srcdir)/Make.incl',
                    'AM_CPPFLAGS = $(PNL_INCLUDES) $(PREMIA_MINIMUM_INCLUDES)',
                    "noinst_LTLIBRARIES = lib${mod}.la",
                    "lib${mod}_la_SOURCES = ${mod}.c",
                    "lib${mod}_la_LIBADD = ");
-    print MAKE join("\n", @content);
-    close MAKE;
+    dump_to_file ("Makefile.am", @content);
     chdir ('..');
 }
 
@@ -282,10 +287,11 @@ sub jump_to_eol {
 ##
 sub edit_upper_makefile {
     my ($mod) = @_;
+    my $cwd = getcwd ();
     # Edit the upper Makefile.am
     # Read file
     open (MAKE, "<Makefile.am")  || die ("Cannot open file Makefile.am");
-    print "Editing upper Makefile.am\n";
+    print "Editing Makefile.am in ${cwd} \n";
     # Modify file
     my @modified_content;
     while (<MAKE>){
@@ -344,8 +350,6 @@ sub create_mod_doc_templates {
     chdir ($mod);
     # mod_doc.tex file
     chdir('..') && return if ( file_exists ("${mod}_doc.tex") );
-    open (MOD_DOC, ">$mod" . "_doc.tex") || die ("Cannot create file ${mod}_doc.tex");
-    print "Creating ${mod}_doc.tex\n";
     @content = ( "\\documentclass[12pt,a4paper]{article}",
                  "\\input premiamble",
                  "\\input premiadata",
@@ -354,15 +358,13 @@ sub create_mod_doc_templates {
                  "",
                  "\\section{Description}",
                  "",
-                 "Insert a short description of the model",
                  "",
                  "\\section{Code Implementation}",
                  "\\verbatiminput{../../../../Src/mod/${mod}/${mod}.h",
                  "\\input premiaend",
                  "\\end{document}",
                  "");
-    print MOD_DOC join("\n", @content);
-    close MOD_DOC;
+    dump_to_file ("${mod}_doc.tex", @content);
     chdir ('..');
 }
 
@@ -375,8 +377,6 @@ sub create_opt_doc_templates {
     chdir ($mod_opt);
     # mod_doc.tex file
     chdir('..') && return if ( file_exists ("${mod_opt}_doc.tex") );
-    open (MOD_OPT_DOC, ">$mod_opt" . "_doc.tex") || die ("Cannot create file ${mod_opt}_doc.tex");
-    print "Creating ${mod_opt}_doc.tex\n";
     @content = ( "\\documentclass[12pt,a4paper]{article}",
                  "\\input premiamble",
                  "\\input premiadata",
@@ -392,8 +392,7 @@ sub create_opt_doc_templates {
                  "\\input premiaend",
                  "\\end{document}",
                  "");
-    print MOD_OPT_DOC join("\n", @content);
-    close MOD_OPT_DOC;
+    dump_to_file ("${mod_opt}_doc.tex", @content);
     chdir ('..');
 }
 
@@ -422,12 +421,12 @@ if ($svn == 1) {
 chdir ("Src"); chdir ("mod");
 create_dir ($model);
 create_model_code_templates ($model);
-edit_makefile ($model);
+create_makefile ($model);
 edit_upper_makefile ($model);
 chdir("../..");
 edit_configure ($model);
 print "\nYou still have to add your model to Src/premia_obj.c
-\textern Model uc(${model})_model;
+\textern Model " . uc(${model}) . "_model;
 \t&" . uc(${model}) . "_model, to the right models array.
 \n";
 
@@ -440,16 +439,17 @@ chdir ('../../..');
 if ($option ne "") {
     my $mod_opt = join ('_', ($model, $option));
 #Code
+    print "\n\n";
     chdir ("Src/mod");
     chdir ($model);
     create_dir ($mod_opt);
     create_opt_code_templates ($model, $option, $mod_opt);
-    edit_makefile ($mod_opt);
+    create_makefile ($mod_opt);
     edit_upper_makefile ($mod_opt);
     chdir ('../../..');    
     edit_configure ("${model}/${mod_opt}");
     print "\nYou still have to add your option to Src/premia_obj.c
-\textern Pricing uc(${mod_opt})_pricing;
+\textern Pricing " .  uc(${mod_opt}) . "_pricing;
 \t&" . uc(${mod_opt}) . "_pricing, to the right pricings array.
 \n";
 #Doc
@@ -459,6 +459,5 @@ if ($option ne "") {
     chdir ('../../..');
 }
 
-print "\nIf you are happy the created files, rerun
-with --svn.\n
+print "\nIf you are happy the created files, rerun with --svn.\n
 ";
