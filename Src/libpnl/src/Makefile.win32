@@ -9,9 +9,10 @@ libcsparse/.libs/libcsparse.a linalg/.libs/liblinalg.a  libfftpack/.libs/libfftp
 sort/.libs/libsort.a \
 -lstdc++  -lm
 
-OBJS = basis.o pnl_complex.o cumulfunc.o mathtools.o							\
-dft.o finance_function.o brent.o roots.o pde_tools.o integration_GK.o			\
-sparse_grid_constructor.o gridsparse_constructor.o gridsparse_functions.o
+OBJS = basis.o pnl_complex.o cumulfunc.o mathtools.o laplace.o			\
+finance_function.o brent.o roots.o pde_tools.o integration_GK.o			\
+sparse_grid_constructor.o gridsparse_constructor.o 						\
+gridsparse_functions.o special_func_integral.o
 
 shared-win32:: $(OBJS) 
 	gcc -mno-cygwin -shared -o libpnl.dll $(OBJS) \

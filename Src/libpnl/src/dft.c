@@ -1,5 +1,16 @@
 #include "pnl_fft.h"
 
+/*
+ * This file must not be compiled within PNL
+ * It is only included in ../examples/dft_test.c for comparing old FFT
+ * routines with FTPack
+ */
+
+extern void pnl_dft_complex_transform(const PnlVectComplex * data, 
+                                      PnlVectComplex * result,
+                                      const int sign);
+extern void pnl_fft_real(PnlVect * a,int fft_size, int sign);
+
 static void swap_double(double * x, double * y)
 {
   double tmp = *x;
