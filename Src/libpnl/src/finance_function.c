@@ -287,7 +287,7 @@ double pnl_bs_s_square_gamma (double Vol,double Bond, double Forward, double Str
   PNL_CHECK(Strike < 0., "Strike required to be >= 0", "pnl_bs_put");
 
   if (Vol == 0.0 || Maturity == 0.0 || Strike== 0.0) return 0.0;
-  V_Sqrt_T=sqrt(Maturity);
+  V_Sqrt_T=Vol * sqrt(Maturity);
   D1 = 0.5 * V_Sqrt_T - log (Strike / Forward) / (V_Sqrt_T);
   return Forward*Bond*pnl_normal_density(D1) / V_Sqrt_T;
 }
