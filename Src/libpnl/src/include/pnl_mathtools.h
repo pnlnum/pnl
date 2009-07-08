@@ -137,6 +137,15 @@ extern double tgamma (double x);
 #endif
 
 #define PNL_ERROR(msg, func) {fprintf(stderr, "%s in function %s \n", msg, func); abort();}
+#ifdef PNL_RANGE_CHECK_OFF 
+#define PNL_CHECK(eq, msg, func)
+#else
+#define PNL_CHECK(eq, msg, func)                                    \
+  if (eq) {                                                         \
+    fprintf(stderr, "%s in function %s \n", msg, func); abort();    \
+  }                                                                 
+#endif
+
 #define OK 0
 #define WRONG 1
 #define FAIL 1 /* synonym of WRONG (more menaningful) */
