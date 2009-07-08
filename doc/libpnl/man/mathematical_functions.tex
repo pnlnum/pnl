@@ -470,16 +470,45 @@ For $x \in \R$
 \subsubsection{Short Description}
 \subsubsection{Functions}
 
-We use some practitioner convention. Here function depend of Forward price
-and bond price. This can be useful for time dependant interest rate model.
 
-We note $F_T$ the forward price at maturity $T$, the expected value of $S_T$.
-In Black \& Scholes case, 
+\begin{itemize}
+\item
+  \describefun{int}{pnl_cf_call_bs}{double s, double k, double T, double r, 
+    double divid, double sigma, double $\ast$ptprice, double $\ast$ptdelta}
+  \sshortdescribe Computes the price and delta of a call option $(\var{s} -
+  \var{k})_+$ in the Black-Scholes model with volatility \var{sigma},
+  instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
+  \var{divid}. The parameters \var{ptprice} and \var{ptdelta} are respectively
+  set to the price and delta on output.
+\item
+  \describefun{int}{pnl_cf_put_bs}{double s, double k, double T, double r, 
+    double divid, double sigma, double $\ast$ptprice, double $\ast$ptdelta}
+  \sshortdescribe Computes the price and delta of a put option $(\var{k} - 
+  \var{s})_+$ in the Black-Scholes model with volatility \var{sigma},
+  instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
+  \var{divid}.  The parameters \var{ptprice} and \var{ptdelta} are respectively
+  set to the price and delta on output.
+\item
+  \describefun{double}{pnl_cf_bs_gamma}{double s, double k, double t, double r, 
+    double divid, double sigma}
+  \sshortdescribe Computes the vega of a put or call option with spot \var{s}
+  and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
+  instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
+  \var{divid}.
+\end{itemize}
+
+
+We use some practitioner's conventions. Here the functions depend on the
+forward and bond prices. This can be useful for time dependent interest rate
+models.
+
+Let $F_T$ denote the forward price at maturity $T$, the expected value of $S_T$.
+In the Black \& Scholes case, 
 $$ F_T = S_0 \expp{(r-q)t}, $$
 where $r$ is the interest rate and $q$ then dividend yield.
 
-Expression of Bond price, so contract paid $1$ at maturity, in the BS case, 
-is given by
+The expression of the Bond price, which pays $1$ at maturity time,  
+is given in the BS case by
 $$ B_0 = \expp{-r T}.$$
 
 Note that:
@@ -515,12 +544,12 @@ $$ \Delta_{Forward}  \expp{(r-q)T} = \Delta_{S}, \quad \quad
   \describefun{double}{pnl_bs_s_square_gamma}{double Vol, double Bond, 
     double Forward, double Strike, double Maturity}
 
-  Practitioners don't speak in terms of option price, but rather compare
-  prices in terms of implied Black \& Scholes volatility. So this parameter is
-  very useful in practice. Here we propose two functions to compute
-  $\sigma_{impl}$: the first function is for one up-let, maturity, 
+  Practitioners don't speak in terms of option prices, but rather compare
+  prices in terms of their implied Black \& Scholes volatilities. So this
+  parameter is very useful in practice. Here we propose two functions to
+  compute $\sigma_{impl}$: the first one is for one up-let, maturity,
   strike, option price.  the second function is for a list of strikes and
-  maturities, a matrix of prices (with strikes varying on the rows).
+  maturities, a matrix of prices (with strikes varying row-wise).
 \item 
   \describefun{double}{pnl_bs_implicit_vol}{int Is_call, double Price, 
     double Bond, double Forward, double Strike, double Maturity}
@@ -531,19 +560,6 @@ $$ \Delta_{Forward}  \expp{(r-q)T} = \Delta_{S}, \quad \quad
     const \refstruct{PnlVect} $\ast$Maturity, \refstruct{PnlMat} $\ast$Vol}
 \end{itemize}
 
-Conversion to standard Premia functions and classic parameters.
-\begin{itemize}
-\item
-  \describefun{int}{pnl_cf_call_bs}{double s, double k, double t, double r, 
-    double divid, double sigma, double $\ast$ptprice, double $\ast$ptdelta}
-\item
-  \describefun{int}{pnl_cf_put_bs}{double s, double k, double t, double r, 
-    double divid, double sigma, double $\ast$ptprice, double $\ast$ptdelta}
-\item
-  \describefun{double}{pnl_cf_bs_gamma}{double s, double k, double t, double r, 
-    double divid, double sigma}
-
-\end{itemize}
 
 
 
