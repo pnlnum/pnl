@@ -105,6 +105,16 @@ Model  *models_f[]=
     NULL
   };
 
+/* Models Insurance*/
+extern Model BSCIR2D_model;
+
+Model  *models_a[]=
+  {
+    &BSCIR2D_model,
+    NULL
+  };
+
+
 /* Models Interest Rates*/
 extern Model Vasicek1D_model;
 extern Model Cir1D_model;
@@ -172,6 +182,7 @@ extern Family STDf_family;
 extern Family STDg_family;
 extern Family STDc_family;
 extern Family STDNDc_family;
+extern Family STDa_family;
 
 Family *families_e[]=
   {
@@ -208,6 +219,12 @@ Family *families_c[]=
   {
     &STDc_family,
     &STDNDc_family,
+    NULL
+  };
+
+Family *families_a[]=
+  {
+    &STDa_family,
     NULL
   };
 
@@ -368,6 +385,13 @@ Pricing *pricings_g[]=
     NULL
   };
 
+extern  Pricing BSCIR2D_STDa_pricing;
+Pricing *pricings_a[]=
+  {
+    &BSCIR2D_STDa_pricing, 
+    NULL
+  };
+
 extern  Pricing JarrowYildirim1D_STDf_pricing;
 extern  Pricing INFLATION_LMM_HESTON1D_STDf_pricing;
 Pricing *pricings_f[]=
@@ -385,6 +409,9 @@ PremiaAsset premia_assets[] =
 #if !(defined(PremiaCurrentVersion) && PremiaCurrentVersion < (2007+2))
     {"inflation", models_f, families_f, pricings_f, 'f'},
     {"energy", models_g, families_g, pricings_g, 'g'},
+#endif
+#if !(defined(PremiaCurrentVersion) && PremiaCurrentVersion < (2010+2))
+    {"insurance", models_a, families_a, pricings_a, 'a'},
 #endif
     {NULL, NULL, NULL, NULL},
   };
