@@ -523,8 +523,8 @@ PnlVect* pnl_tridiagmat_mult_vect(const PnlTriDiagMat *mat, const PnlVect *vec)
       anc_m1=anc_0;
       anc_0=(*rptr);
       lptr++;rptr++;ptr++;ptr_up++;ptr_down++;
-    
     }
+  *lptr = (*ptr_down)*anc_m1+(*ptr) *anc_0;
   return lhs;
 }
 
