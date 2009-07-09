@@ -378,6 +378,22 @@ void pnl_band_matrix_set(PnlBandMatrix * M,int i,int j,double x)
     M->D[i]=x;
 }
 
+
+/** 
+ * pnl_band_matrix_set_double
+ * put value x for all entries of M,
+ *
+ * @param M a bandmatrix.
+ * @param x double.
+ */
+void pnl_band_matrix_set_double(PnlBandMatrix*  M,double x)
+{
+  int k,i;
+  for (i =0;i<M->n;i++) M->D[i] =x;
+  for (k =0;k<M->pL[M->n];k++) M->Lo[k] =x;
+  for (k =0;k<M->pU[M->n];k++) M->Up[k] =x;
+}
+
 void pnl_band_matrix_add(PnlBandMatrix * M,int i,int j,double x)
 { 
   if(j<i) {
@@ -706,3 +722,12 @@ void pnl_band_matrix_lu(PnlBandMatrix * M, double eps)
       
     }
 }
+
+double pnl_band_matrix_conditionning(const PnlBandMatrix *M)
+{
+  double maxi,mini;
+  PnlVect V=pnl_vect_create_wrap_array(M->D,MAX(M->n,M->m));
+  pnl_vect_minmax (&V,&mini,&maxi);
+  return fabs(mini)/fabs(maxi);
+};
+

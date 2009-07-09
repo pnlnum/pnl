@@ -64,6 +64,7 @@ extern PnlBandMatrix* pnl_band_matrix_create_from_full(const PnlMat *PM,int band
 extern void pnl_band_matrix_free(PnlBandMatrix ** M);
 extern void pnl_band_matrix_add(PnlBandMatrix * M,int i,int j,double x);
 extern void pnl_band_matrix_set(PnlBandMatrix * M,int i,int j,double x);
+extern void pnl_band_matrix_set_double(PnlBandMatrix*  M,double x);
 extern PnlBandMatrix* pnl_band_matrix_clone(int n,
                                             double * d,
                                             double* u,
@@ -82,14 +83,15 @@ extern PnlBandMatrix* pnl_band_matrix_Low_Diag(const PnlBandMatrix* M);
 extern PnlBandMatrix* pnl_band_matrix_Up_Diag(const PnlBandMatrix* M);
 extern PnlBandMatrix* pnl_band_matrix_Tran_Low_Diag(const PnlBandMatrix* M);
 extern PnlBandMatrix* pnl_band_matrix_Tran_Up_Diag(const PnlBandMatrix* M);
- 
+
+extern double pnl_band_matrix_conditionning(const PnlBandMatrix *M);
+
 extern void pnl_band_matrix_solve_syslin_inplace(PnlBandMatrix * M, PnlVect *x);
 extern void pnl_band_matrix_cholesky(PnlBandMatrix * M, double eps);
 extern void pnl_band_matrix_crout(PnlBandMatrix * M, double eps);
 extern void pnl_band_matrix_lu(PnlBandMatrix * M, double eps);
 extern void pnl_band_matrix_solve(PnlBandMatrix * M, PnlVect *x,const PnlVect *b);
 /*@}*/
-
 
 #endif /* BAND_MATRIX_H */
 
