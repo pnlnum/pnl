@@ -503,6 +503,8 @@ Src/mod/bs1d/bs1d_pad/Makefile \
 Src/mod/bs1d/bs1d_std/Makefile \
 Src/mod/bs2d/Makefile \
 Src/mod/bs2d/bs2d_std2d/Makefile \
+Src/mod/bscir2d/Makefile \
+Src/mod/bscir2d/bscir2d_stda/Makefile \
 Src/mod/bsdisdiv1d/Makefile \
 Src/mod/bsdisdiv1d/bsdisdiv1d_std/Makefile \
 Src/mod/bsnd/Makefile \
@@ -617,6 +619,7 @@ Src/opt/stdg/Makefile \
 Src/opt/stdi/Makefile \
 Src/opt/stdnd/Makefile \
 Src/opt/stdndc/Makefile \
+Src/opt/stda/Makefile \
 Src/opt/vol/Makefile \
 Unix/tex2htmlone \
 Unix/tex2pdfone \
