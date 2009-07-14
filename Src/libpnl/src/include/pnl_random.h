@@ -77,6 +77,8 @@ extern void pnl_vect_rand_normal_d(PnlVect *G, int dimension, int generator);
 extern void
 pnl_mat_rand_uni(PnlMat *M, int samples, int dimension, const PnlVect *a,
                  const PnlVect *b, int type_generator);
+extern void pnl_mat_rand_uni2(PnlMat *M, int samples, int dimension,
+                              double a, double b, int type_generator);
 extern void
 pnl_mat_rand_normal(PnlMat *M, int samples, int dimension, int type_generator);
 extern double pnl_rand_gamma (double a, double b, int gen);
