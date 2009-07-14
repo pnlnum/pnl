@@ -1007,8 +1007,8 @@ static void MERSENNE_RANDOMSEED(int dimension,double *sample)
 {
   static rk_state s;
 
-  if(counter == 1)  rk_randomseed(&s); 
-
+  if(counter == 1)  rk_randomseed(&s);
+  
   *sample = rk_double(&s);
   counter ++;
   return;
@@ -1621,7 +1621,7 @@ void pnl_vect_rand_normal_d (PnlVect *G, int dimension, int type_generator)
  * important if QMC is used 
  */
 void pnl_mat_rand_uni(PnlMat *M, int samples, int dimension,
-                         const PnlVect *a, const PnlVect *b, int type_generator)
+                      const PnlVect *a, const PnlVect *b, int type_generator)
 {
   int i, j;
   double *ptr, *aj, *bj;
@@ -1655,6 +1655,54 @@ void pnl_mat_rand_uni(PnlMat *M, int samples, int dimension,
     }
 }
 
+
+/**
+ * return a matrix with its rows uniformly distributed on [a,b]^dimension.
+ *
+ * the samples have values in [a, b] (space of dimension dimension)
+ *
+ * @param M : the matrix of gaussian numbers, must already be allocated
+ * @param samples : number of Monte Carlo samples (= number of rows of M)
+ * @param dimension : dimension of the simulation (= number of columns of M)
+ * @param a : real lower bound 
+ * @param b : real upper bound 
+ * @param type_generator : index of the generator 
+ *
+ * WARNING : The rows of M are indenpendent. This is very
+ * important if QMC is used 
+ */
+void pnl_mat_rand_uni2(PnlMat *M, int samples, int dimension,
+                      double a, double b, int type_generator)
+{
+  int i, j;
+  double *ptr;
+  pnl_mat_resize(M,samples,dimension);
+  ptr=M->array;
+
+  if (pnl_rand_or_quasi (type_generator) == MC)
+    {
+      for(i=0;i<samples;i++)
+        {
+          for (j=0; j<dimension; j++)
+            {
+              pnl_Random[type_generator].Compute(1, ptr);
+              *ptr = a + (b - a) * (*ptr);
+              ptr++; 
+            }
+        }
+      return;
+    }
+  CheckMaxQMCDim(type_generator, dimension);
+  for(i=0;i<samples;i++)
+    {
+      pnl_Random[type_generator].Compute(dimension, ptr);
+      for (j=0; j<dimension; j++)
+        {
+          *ptr = a + (b - a) * (*ptr);
+          ptr++; 
+        }
+    }
+}
 
 /**
  * return a matrix with its rows normally distributed on R^dimension.
