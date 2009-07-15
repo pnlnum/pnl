@@ -5,6 +5,11 @@
 \subsection{Vectors}
 \subsubsection{Short Description}
 
+The structures and functions relative to vectors are declared in
+\verb!pnl_vector.h!. One should include the instruction
+\verb!#include "pnl_vector.h"! in his code to use these functions.
+
+
 Vectors are declared for several basic types : double, int, uint and
 fcomplex. In the following declarations, {\tt BASE} must be replaced by one
 the previous types and the corresponding vector structures are respectively
@@ -394,6 +399,10 @@ typedef struct PnlVectCompact {
 \subsection{Matrices}
 \subsubsection{Short Description}
 
+The structures and functions relative to matrices are declared in
+\verb!pnl_matrix.h!. One should include the instruction
+\verb!#include "pnl_matrix.h"! in his code to use these functions.
+
 \begin{verbatim}
 typedef struct PnlMat{
   int m; /*!< nb rows */ 
@@ -574,6 +583,17 @@ the above table.
   \sshortdescribe Replaces the \var{i}-th row of a matrix M by a vector V  
 \end{itemize}
 
+Equivalently to the functions \reffun{pnl_mat_get} and \reffun{pnl_mat_set},
+there exist macros for {\bf \refstruct{PnlMat} only}.
+\begin{itemize}
+\item \describefun{}{MGET}{M, i, j}
+  \sshortdescribe Returns \var{M[i,j]}.
+  
+\item \describefun{}{MLET}{M, i, j}
+  \sshortdescribe Returns \var{M[i,j]} as a lvalue for assignment.
+\end{itemize}
+
+
 \paragraph{Printing Matrices}
 
 \begin{itemize}
@@ -746,7 +766,7 @@ the above table.
 \begin{itemize}
 
 \item \describefun{void}{pnl_mat_axpy}{double alpha, const \refstruct{PnlMat}
-    $\ast$A, const \refstruct{PnlMat} $\ast$B}
+    $\ast$A, \refstruct{PnlMat} $\ast$B}
   \sshortdescribe Computes \var{B := alpha * A + B}
 
 \item \describefun{void}{pnl_mat_scalar_prod_A}{const \refstruct{PnlMat}
@@ -808,8 +828,12 @@ the above table.
   
 \item \describefun{void}{pnl_mat_exp}{\refstruct{PnlMat} $\ast$B, 
     const \refstruct{PnlMat} $\ast$A}
-  \sshortdescribe Computes the matrix exponential \var{exp(A)} and stores the
-  result in \var{B}.
+  \sshortdescribe Computes the matrix exponential \var{B = exp(A)}.
+
+\item \describefun{void}{pnl_mat_log}{\refstruct{PnlMat} $\ast$B, 
+    const \refstruct{PnlMat} $\ast$A}
+  \sshortdescribe Computes the matrix logarithm \var{B = log(A)}. For the
+  moment, this function only works if \var{A} is diagonalizable.
 \end{itemize}
 
 \paragraph{Linear systems and matrix decompositions}
@@ -934,6 +958,11 @@ invert the system matrix because it is much longer.
     $\ast$LU, const \refstruct{PnlPermutation} $\ast$p} 
   \sshortdescribe Computes the inverse of a matrix A given its LU
   decomposition and the associated permutation   
+
+\item \describefun{void}{pnl_mat_lu_inverse}{\refstruct{PnlMat}
+    $\ast$inverse, const \refstruct{PnlMat} $\ast$A}
+  \sshortdescribe Computes the inverse of a matrix A and stores the result
+  into \var{inverse}.
 \end{itemize}
 
 \subsubsection{Permutations}
@@ -1099,6 +1128,11 @@ the above table.
 \subsection{Tri-diagonal matrix}
 \subsubsection{Short Description}
 
+The structures and functions relative to band matrices are declared in
+\verb!pnl_tridiag_matrix.h!. One should include the instruction
+\verb!#include "pnl_tridiag_matrix.h"! in his code to use these functions.
+
+
 The special case of tridiagonal matrix , that is, has nonzero elements only on
 the diagonal plus or minus one column, is one that occurs frequently - specially
 for one dimensional PDE or Alternating direction implicit (ADI) method. Also
@@ -1203,6 +1237,10 @@ pointer (\var{owner}=$1$) or shares it with another structure (\var{owner}=$0$).
 \subsection{Band Matrix structure}
 \subsubsection{Short Description}
 
+The structures and functions relative to matrices are declared in
+\verb!pnl_band_matrix.h!. One should include the instruction
+\verb!#include "pnl_band_matrix.h"! in his code to use these functions.
+
 
 Band Matrix have $m_{up}>0$ nonzero elements immediately to the left of(below)
 the diagonal and $m_{down}$ nonzero elements immediately to the right of(above
@@ -1301,23 +1339,37 @@ remark:
   and do $M_{i, j} \ +=x$.
 \end{itemize}
 
-\paragraph{Extraction operations}
-These functions should not be used by standard developers.
-There do not create a real band matrix, but create an empty structure with owner
-set to $0$ and pointer is set to address of some arguments of $M$.
-Take an example, the transposition construct an empty band matrix $TM$ with
-$TM\rightarrow Up = M\rightarrow Low, \dots $, but not make a copy of array $M\rightarrow Low$. 
+\paragraph{Extraction operations} These functions should not be used by
+standard developers.  They do not create a real band matrix, but create an
+empty structure with owner set to $0$ and pointer is set to address of some
+elements of $M$, which means that a modifcation to $M$ is automically
+propagated to the \refstruct{PnlBandMatrix} created by the functions below and
+vice-versa..  Take an example, the transposition construct an empty band
+matrix $TM$ with $TM\rightarrow Up = M\rightarrow Low, \dots $, but not make a
+copy of array $M\rightarrow Low$.
 \begin{itemize}
-\item \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_transpose}{const \refstruct{PnlBandMatrix} $\ast$M}
-\item \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_Low}{const \refstruct{PnlBandMatrix} $\ast$M}
-\item \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_Up}{const \refstruct{PnlBandMatrix} $\ast$M}
-\item \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_Tran_Low}{const \refstruct{PnlBandMatrix} $\ast$M}
-\item \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_Tran_Up}{const \refstruct{PnlBandMatrix} $\ast$M}
-\item \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_Diag}{const \refstruct{PnlBandMatrix} $\ast$M}
-\item \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_Low_Diag}{const \refstruct{PnlBandMatrix} $\ast$M}
-\item \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_Up_Diag}{const \refstruct{PnlBandMatrix} $\ast$M}
-\item \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_Tran_Low_Diag}{const \refstruct{PnlBandMatrix} $\ast$M}
-\item \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_Tran_Up_Diag}{const \refstruct{PnlBandMatrix} $\ast$M}
+\item \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_transpose}
+  {const \refstruct{PnlBandMatrix} $\ast$M}
+\item \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_Low}
+  {const \refstruct{PnlBandMatrix} $\ast$M}
+\item \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_Up}
+  {const \refstruct{PnlBandMatrix} $\ast$M}
+\item \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_Tran_Low}
+  {const \refstruct{PnlBandMatrix} $\ast$M}
+\item \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_Tran_Up}
+  {const \refstruct{PnlBandMatrix} $\ast$M}
+\item \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_Diag}
+  {const \refstruct{PnlBandMatrix} $\ast$M}
+\item \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_Low_Diag}
+  {const \refstruct{PnlBandMatrix} $\ast$M}
+\item \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_Up_Diag}
+  {const \refstruct{PnlBandMatrix} $\ast$M}
+\item
+  \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_Tran_Low_Diag}
+  {const \refstruct{PnlBandMatrix} $\ast$M}
+\item
+  \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_Tran_Up_Diag}
+  {const \refstruct{PnlBandMatrix} $\ast$M}
 \end{itemize}
 
 \paragraph{Factorization}
@@ -1534,16 +1586,26 @@ From the sparse matrix, we extract LU decomposition stored in \refstruct{PnlSpar
 
 \subsection{Solver Functions}
 \subsubsection{Short Description}
-Most of Iterative method are based on results on Krylov subspace. In linear algebra, the Krylov subspace generated by an n-by-n matrix A and a
-vector b of dimension n is the linear subspace spanned by the images of $b$
-under the first $r$ powers of $M$ (starting from $M^0 = Id$), that is, 
-$$  \mathcal{K}_r(M, b) = \operatorname{span} \, \left\{ b, M b, M^2b, \ldots, M^{r-1}b\right\}.$$ 
+
+The structures and functions relative to solvers are declared in
+\verb!pnl_linalgsolver.h!. One should include the instruction
+\verb!#include "pnl_linalgsover.h"! in his code to use these functions.
+
+
+Most of Iterative method are based on results on Krylov subspace. In linear
+algebra, the Krylov subspace generated by an n-by-n matrix A and a vector b of
+dimension n is the linear subspace spanned by the images of $b$ under the
+first $r$ powers of $M$ (starting from $M^0 = Id$), that is,
+$$  \mathcal{K}_r(M, b) = \operatorname{span} \, \left\{ b, M b, M^2b,
+  \ldots, M^{r-1}b\right\}.$$ 
 
 Main idea of iterative methods or Krylov subspace methods is to form an
 orthogonal basis of the sequence of successive matrix powers times the initial
 residual (the Krylov sequence). The approximations to the solution are then
-formed by minimizing the residual over the subspace formed.
-The prototypical method in this class is the conjugate gradient method (CG). Other methods are the generalized minimal residual method (GMRES) and the Bi-conjugate gradient method (BiCG).
+formed by minimizing the residual over the subspace formed.  The prototypical
+method in this class is the conjugate gradient method (CG). Other methods are
+the generalized minimal residual method (GMRES) and the Bi-conjugate gradient
+method (BiCG).
 
 The approximating operator that appears in stationary iterative methods can
 also be incorporated in Krylov subspace methods such as GMRES where they
@@ -1568,9 +1630,10 @@ More information is given in {\em Saad, Yousef (2003). Iterative methods for
 Reader find in this book some discussion about right or/and left
 preconditioner and description of the following algorithms. 
 
-These algorithms, we implemented with left preconditioner. Right preconditioner can be easily computed changing matrix-vector
-multiplication operation from $M \ x $ to $ M \ P_R \ x$ and solving
-$P_R y = x$ at the end of algorithm.
+These algorithms, we implemented with left preconditioner. Right
+preconditioner can be easily computed changing matrix-vector multiplication
+operation from $M \ x $ to $ M \ P_R \ x$ and solving $P_R y = x$ at the end
+of algorithm.
 
 
 \subsubsection{Functions}

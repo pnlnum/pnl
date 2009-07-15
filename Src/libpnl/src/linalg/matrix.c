@@ -952,6 +952,7 @@ void pnl_mat_chol_syslin_inplace (const PnlMat *chol, PnlVect *b)
   
 }
 
+#ifndef HAVE_LAPACK
 /**
  * computes a P A = LU factoristion. On exit A contains the L and U
  * matrices. Note that the diagonal elemets of L are all 1.
@@ -1011,6 +1012,7 @@ void pnl_mat_lu (PnlMat *A, PnlPermutation *p)
         }
     }
 }
+#endif
 
 /**
  * solves the linear system A x = b with P A = LU. For a symmetric definite
@@ -1289,6 +1291,33 @@ void pnl_mat_lu_inverse (PnlMat *inverse, const PnlMat *LU, const PnlPermutation
     }
   pnl_vect_free (&b);
   pnl_vect_free (&x);
+}
+
+/**
+ * computes the inverse of a matrix 
+ *
+ * @param A 
+ * @param inverse a PnlMat (already allocated). contains
+ * \verbatim A^-1 \endverbatim on exit.
+ */
+void pnl_mat_inverse (PnlMat *inverse, const PnlMat *A)
+{
+  PnlMat *LU;
+  PnlPermutation *p;
+  int n;
+
+  CheckIsSquare (A);
+  n = A->m;
+
+  LU = pnl_mat_copy (A);
+  p = pnl_permutation_create(n);
+  
+
+  pnl_mat_lu (LU, p);
+  pnl_mat_lu_inverse (inverse, LU, p);
+
+  pnl_mat_free (&LU);
+  pnl_permutation_free (&p);
 }
 
 /**
