@@ -274,6 +274,8 @@ if test "x$with_blas" != "xno"; then
    fi
 fi
 
+LDFLAGS="$LDFLAGS $BLAS_LIBS $LAPACK_LIBS"
+
 #######################
 ## test for underscores
 ## note that trailing underscores is already checked 
@@ -683,7 +685,7 @@ echo "C compiler.............:" $CC
 echo "C options..............:" $AM_CFLAGS $CFLAGS
 echo "C++ compiler...........:" $CXX
 echo "C++ options............:" $AM_CXXFLAGS $CXXFLAGS
-echo "linker flags...........:" $LDFLAGS $BLAS_LIBS $LAPACK_LIBS
+echo "linker flags...........:" $LDFLAGS 
 echo "installation prefix....:" $prefix
 
 if test "$PDF_VIEWER" = no; then
