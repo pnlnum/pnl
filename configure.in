@@ -279,6 +279,54 @@ if test "x$with_blas" != "xno"; then
    fi
 fi
 
+#######################
+## test for underscores
+## note that trailing underscores is already checked 
+## elsewhere 
+#######################
+
+FC_TRAILING_UNDERSCORE=no
+
+if test "x$F77" != "x"; then
+   AC_MSG_CHECKING([for leading and/or trailing underscores])
+cat << EOF > pipof.f
+        subroutine pipof
+        end
+EOF
+   eval "FC1=\"$F77\""
+   eval "$FC1 -c pipof.f > /dev/null 2>&1"
+
+   output=`$NM pipof.o|grep _pipof 2>&1`
+   if test ! -z "$output"; then
+     FC_TRAILING_UNDERSCORE=no
+   fi
+
+   output=`$NM pipof.o|grep pipof_ 2>&1`
+   if test ! -z "$output"; then
+     FC_TRAILING_UNDERSCORE=yes
+   fi
+
+   $RM pipof.f pipof.o
+fi
+
+if test "$FC_TRAILING_UNDERSCORE" = yes; then
+   AC_DEFINE(WTU,[],[trailing underscore in fortran symbols])
+fi
+AC_MSG_RESULT([$FC_LEADING_UNDERSCORE $FC_TRAILING_UNDERSCORE])
+
+#####################
+## test for sharpsign
+#####################
+
+AC_MSG_CHECKING([for use of sharpsign in CPP])
+AC_TRY_COMPILE([#define C2F(name) name##_],
+  [C2F(toto)()],
+  AC_MSG_RESULT(yes)
+  AC_DEFINE(USE_SHARP_SIGN,[],[sharp sign can be used to in macros]),
+  AC_MSG_RESULT(no))
+
+
+
 ########################################################
 ## check for GSL
 ########################################################
@@ -638,7 +686,7 @@ echo "C compiler.............:" $CC
 echo "C options..............:" $AM_CFLAGS $CFLAGS
 echo "C++ compiler...........:" $CXX
 echo "C++ options............:" $AM_CXXFLAGS $CXXFLAGS
-echo "linker flags...........:" $LDFLAGS
+echo "linker flags...........:" $LDFLAGS $BLAS_LIBS $LAPACK_LIBS
 echo "installation prefix....:" $prefix
 
 if test "$PDF_VIEWER" = no; then
