@@ -29,6 +29,7 @@
 #include "pnl_fft.h"
 #include "tests.h"
 
+#include "../src/dft.c"
 
 /* static void dft(void )
  * {  
@@ -489,6 +490,80 @@ static void pnl_fft_real2_test(void )
  *   pnl_vect_free(&inverse_fft2);
  * } */
 
+static void fft_real (PnlVect * a,int fft_size, int sign)
+{
+  int i, opposite;
+  double last, second;
+  switch (sign)
+    {
+    case 1 : /* backward */
+      second = pnl_vect_get (a, 1);
+      opposite = 1;
+      for ( i=1 ; i<fft_size - 1 ; i++ )
+        {
+          pnl_vect_set (a, i, opposite * pnl_vect_get (a, i + 1));
+          opposite = - opposite;
+        }
+      pnl_vect_set (a , fft_size - 1, second);
+
+      pnl_real_ifft_inplace (a->array, fft_size);
+      break;
+    case -1 : /* forward */
+      pnl_real_fft_inplace (a->array, fft_size);
+      last = pnl_vect_get (a, fft_size - 1);
+      opposite = -1;
+      for ( i=fft_size - 1 ; i>1 ; i-- )
+        {
+          pnl_vect_set (a, i, opposite * pnl_vect_get (a, i - 1));
+          opposite = - opposite;
+        }
+      pnl_vect_set (a , 1, last);
+      break;
+    }
+}
+
+
+static void pnl_fft_real_inplace_test(void )
+{  
+  int               kmax  = 32;
+  int               Nmax  = 2*kmax;
+  double            L     = 4.0;
+  double            Delta = L/(double) kmax;
+  PnlVect          *vv, *fft;
+  int               j;
+
+  printf("\nFFTPack real sequences -- pnl_real_fft_inplace\n");
+
+  vv          = pnl_vect_create(Nmax);
+  fft         = pnl_vect_create(Nmax);
+  /*function input for direct fourier transform */
+
+  for (j=0; j<Nmax; j++)
+    {
+      double yj = j*Delta;
+      pnl_vect_set(vv,j, exp (-yj * yj / 2));
+    }
+
+  pnl_vect_clone (fft, vv);
+  fft_real(vv, vv->size, -1);
+
+  printf ("res = ");
+  pnl_vect_print_nsp (vv); 
+
+  /*  pnl_fft_real (fft, fft->size, -1); */
+  printf ("res = ");
+  pnl_vect_print_nsp (fft);
+
+  fft_real(vv, vv->size, 1);
+  printf ("res = ");
+  pnl_vect_print_nsp (vv); 
+  
+  
+  pnl_vect_free(&fft);
+  pnl_vect_free(&vv);
+}
+
+
 void dft_test()
 {
   /*  dft(); */
@@ -496,5 +571,6 @@ void dft_test()
   pnl_fft_inplace_test();
   pnl_fft_real_test();
   pnl_fft_real2_test();
+  pnl_fft_real_inplace_test();
   /*  dft_real(); */
 }
