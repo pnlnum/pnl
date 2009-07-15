@@ -10,9 +10,8 @@ finance_function.c pde_tools.c integration_GK.c \
 sparse_grid_constructor.c gridsparse_constructor.c gridsparse_functions.c \
 brent.c roots.c special_func_integral.c integ.c laplace.c
 
-libpnl_la_LDFLAGS=-avoid-version	
+libpnl_la_LDFLAGS=-avoid-version @BLAS_LIBS@ @LAPACK_LIBS@
 libpnl_la_LIBADD=libamos/libamos.la libcephes/libcephes.la librand/librand.la\
 libcsparse/libcsparse.la linalg/liblinalg.la sort/libsort.la \
 libfftpack/libfftpack.la
-
 

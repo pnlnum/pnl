@@ -16,7 +16,10 @@ nodist_EXTRA_PremiaTerm_SOURCES=dummy.cpp
 
 include_HEADERS=premia_obj.h config.h configunix.h
 
-all-local: libpremia.la premiaterm-unix
+all-local: installpnl libpremia.la premiaterm-unix
+
+installpnl:
+	( cd libpnl; make install )
 
 premiaterm-unix: libpremia.la premia.o
 	$(LIBTOOL) --tag=CXX --mode=link $(CXX)  \
