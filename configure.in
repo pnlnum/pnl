@@ -164,6 +164,14 @@ fi
 
 
 
+##########################
+## check for C++ libs
+##########################
+
+AC_LANG(C++)
+AC_CHECK_HEADERS(cmath)
+AC_CHECK_HEADERS(ctime)
+AC_CHECK_HEADERS(vector)
 
 ##########################
 ## check for C functions
@@ -192,19 +200,6 @@ case "$host" in
 	 AC_CHECK_HEADERS(process.h)
 	 ;;
 esac
-
-
-##########################
-## check for C++ libs
-##########################
-
-AC_LANG(C++)
-AC_CHECK_HEADERS(cmath)
-AC_CHECK_HEADERS(ctime)
-AC_CHECK_HEADERS(vector)
-
-
-
 
 ################################
 ##  variables for the Makefile
@@ -318,6 +313,8 @@ AC_MSG_RESULT([$FC_LEADING_UNDERSCORE $FC_TRAILING_UNDERSCORE])
 ## test for sharpsign
 #####################
 
+
+## For this test, make sure to call LANG(C) 
 AC_MSG_CHECKING([for use of sharpsign in CPP])
 AC_TRY_COMPILE([#define C2F(name) name##_],
   [C2F(toto)()],
