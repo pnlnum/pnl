@@ -834,6 +834,12 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
     const \refstruct{PnlMat} $\ast$A}
   \sshortdescribe Computes the matrix logarithm \var{B = log(A)}. For the
   moment, this function only works if \var{A} is diagonalizable.
+
+\item \describefun{void}{pnl_mat_eign}{\refstruct{PnlVect} *v, \refstruct{PnlMat} $\ast$P, 
+    const \refstruct{PnlMat} $\ast$A, int with_eigenvector}
+  \sshortdescribe Computes the eigenvalues (storred in \var{v}) and optionally
+  the eigenvectors storred columnwise in \var{P} when
+  \var{with_eigenvector==TRUE}. If \var{A} is symmetric, \var{P} is orthonormalized.
 \end{itemize}
 
 \paragraph{Linear systems and matrix decompositions}
@@ -959,7 +965,7 @@ invert the system matrix because it is much longer.
   \sshortdescribe Computes the inverse of a matrix A given its LU
   decomposition and the associated permutation   
 
-\item \describefun{void}{pnl_mat_lu_inverse}{\refstruct{PnlMat}
+\item \describefun{void}{pnl_mat_inverse}{\refstruct{PnlMat}
     $\ast$inverse, const \refstruct{PnlMat} $\ast$A}
   \sshortdescribe Computes the inverse of a matrix A and stores the result
   into \var{inverse}.
