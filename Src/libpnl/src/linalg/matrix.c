@@ -696,30 +696,6 @@ double pnl_mat_scalar_prod_A(const PnlMat *A, const PnlVect *x , const PnlVect *
 
 
 /**
- * Prints a matrix to a file in a format which can be read by Nsp
- *
- * @param fic a file descriptor.
- * @param M a PnlMat pointer.
- */
-void pnl_mat_fprint_nsp (FILE *fic, const PnlMat *M)
-{
-  int i, j;
-  fprintf(fic, "[ ");
-  for (i=0;i<M->m;i++)
-    {
-      for (j=0;j<M->n-1;j++)
-        {
-          fprintf (fic, "%f, " , pnl_mat_get (M, i, j));
-        }
-      fprintf (fic, "%f " , pnl_mat_get (M, i, j));
-      if (i < M->m - 1) fprintf (fic, "; \n");
-    }
-  fprintf(fic, " ] ");
-}
-
-
-
-/**
  * inversion of an upper triangular matrix
  *
  * @param A : at the end of the function contains the

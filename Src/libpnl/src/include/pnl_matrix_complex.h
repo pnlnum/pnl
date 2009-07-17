@@ -59,6 +59,7 @@ extern void pnl_mat_complex_sq_transpose(PnlMatComplex *M);
 extern void pnl_mat_complex_print(const PnlMatComplex *M);
 extern void pnl_mat_complex_print_nsp(const PnlMatComplex *M);
 extern void pnl_mat_complex_fprint(FILE *fic,const PnlMatComplex *M);
+extern void pnl_mat_complex_fprint_nsp(FILE *fic,const PnlMatComplex *M);
 extern PnlMatComplex* pnl_mat_complex_create_diag_from_ptr(const fcomplex x[], int d);
 extern PnlMatComplex* pnl_mat_complex_create_diag(const PnlVectComplex *V);
 extern void

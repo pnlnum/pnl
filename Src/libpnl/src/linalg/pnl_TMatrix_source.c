@@ -476,25 +476,33 @@ void FUNCTION(pnl_mat,print )(const TYPE(PnlMat) *M)
 { FUNCTION(pnl_mat,fprint)(stdout, M);}
 
 /**
+ * prints a TYPE(PnlMat) to a file in a format compatible with Nsp
+ *
+ * @param M a(constant) TYPE(PnlMat)ptr.
+ */
+void FUNCTION(pnl_mat, fprint_nsp)(FILE *fic, const TYPE(PnlMat) * M)
+{
+  int i, j;
+  fprintf(fic,"[ ");
+  for (i=0; i<M->m; i++) 
+    {
+      for (j=0;j<M->n;j++)
+        {
+          fprintf(fic,OUT_FORMAT,OUT_PUT_FORMAT(FUNCTION(pnl_mat,get )(M, i, j)));
+          if (j != M->n-1) fprintf (fic,", ");
+        }
+      if (i != M->m-1) fprintf(fic,"; \n  ");
+    }
+  fprintf(fic," ]; \n");
+}
+
+/**
  * prints a TYPE(PnlMat) in a format compatible with Nsp
  *
  * @param M a(constant) TYPE(PnlMat)ptr.
  */
 void FUNCTION(pnl_mat, print_nsp)(const TYPE(PnlMat) * M)
-{
-  int i, j;
-  printf("[ ");
-  for (i=0; i<M->m; i++) 
-    {
-      for (j=0;j<M->n;j++)
-        {
-          printf(OUT_FORMAT,OUT_PUT_FORMAT(FUNCTION(pnl_mat,get )(M, i, j)));
-          if (j != M->n-1) printf (", ");
-        }
-      if (i != M->m-1) printf("; \n  ");
-    }
-  printf(" ]; \n");
-}
+{ FUNCTION(pnl_mat,fprint_nsp)(stdout, M);}
 
 
 /**

@@ -167,7 +167,7 @@ extern void pnl_mat_sq_transpose(PnlMat *M);
 extern PnlMat* pnl_mat_transpose(const PnlMat *M);
 extern void pnl_mat_print(const PnlMat *M);
 extern void pnl_mat_fprint(FILE *fic, const PnlMat *M);
-/* extern void pnl_mat_fprint_nsp (FILE *fic, const PnlMat *M); */
+extern void pnl_mat_fprint_nsp (FILE *fic, const PnlMat *M);
 extern void pnl_mat_print_nsp (const PnlMat *M);
 extern PnlVect pnl_mat_wrap_row(const PnlMat *M, int i);
 extern void pnl_mat_row_to_vect_inplace(PnlVect *V, const PnlMat *M, int i);

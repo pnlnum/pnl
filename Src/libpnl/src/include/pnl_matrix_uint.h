@@ -59,6 +59,7 @@ extern void pnl_mat_uint_sq_transpose(PnlMatUint *M);
 extern void pnl_mat_uint_print(const PnlMatUint *M);
 extern void pnl_mat_uint_print_nsp(const PnlMatUint *M);
 extern void pnl_mat_uint_fprint(FILE *fic,const PnlMatUint *M);
+extern void pnl_mat_uint_fprint_nsp(FILE *fic,const PnlMatUint *M);
 extern PnlMatUint* pnl_mat_uint_create_diag_from_ptr(const uint x[], int d);
 extern PnlMatUint* pnl_mat_uint_create_diag(const PnlVectUint *V);
 extern void

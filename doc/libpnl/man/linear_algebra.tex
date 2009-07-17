@@ -602,6 +602,14 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 
 \item \describefun{void}{pnl_mat_fprint}{FILE $\ast$fic, const \refstruct{PnlMat} $\ast$M}
   \sshortdescribe Prints a matrix to a file.
+
+\item \describefun{void}{pnl_mat_print_nsp}{const \refstruct{PnlMat} $\ast$M}
+  \sshortdescribe Prints a matrix to the standard output in a format
+  compatible with Nsp.  
+
+\item \describefun{void}{pnl_mat_fprint_nsp}{FILE $\ast$fic, const
+    \refstruct{PnlMat} $\ast$M}
+  \sshortdescribe Prints a matrix to a file in a format compatible with Nsp.
 \end{itemize}
 
 \paragraph{Applying external operations}
@@ -751,17 +759,6 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 
 \subsubsection{Functions specific to base type {\tt double}}
 
-\paragraph{Printing Matrices}
-\begin{itemize}  
-\item \describefun{void}{pnl_mat_print_nsp}{const \refstruct{PnlMat} $\ast$M}
-  \sshortdescribe Prints a matrix to the standard output in a format
-  compatible with Nsp.  
-  
-\item \describefun{void}{pnl_mat_fprint_nsp}{FILE $\ast$fic, const \refstruct{PnlMat} $\ast$M}
-  \sshortdescribe Prints a matrix to a file in a format
-  compatible with Nsp.  
-\end{itemize}
-
 \paragraph{Standard matrix operations}
 \begin{itemize}
 
@@ -769,7 +766,7 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
     $\ast$A, \refstruct{PnlMat} $\ast$B}
   \sshortdescribe Computes \var{B := alpha * A + B}
 
-\item \describefun{void}{pnl_mat_scalar_prod_A}{const \refstruct{PnlMat}
+\item \describefun{double}{pnl_mat_scalar_prod_A}{const \refstruct{PnlMat}
     $\ast$A, const \refstruct{PnlVect} $\ast$x, const \refstruct{PnlVect} $\ast$y}
   \sshortdescribe Computes \var{y' * A * y}
 
