@@ -26,43 +26,6 @@
 #include "pnl_random.h"
 #include "tests.h"
 
-/**
- * Creates a diagonalizable matrix of size n
- * @param n an integer
- * @return a matrix
- */
-static PnlMat* pnl_mat_create_diagonalizable (int n)
-{
-  PnlMat *A;
-  PnlMat *P, *invP;
-  int i, j;
-  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-
-  pnl_rand_init (gen, n, n);
-  A = pnl_mat_create (n, n);
-  P = pnl_mat_create (n, n);
-  invP = pnl_mat_create (n, n);
-  pnl_mat_rand_normal (A, n, n, gen);
-
-  /* P = exp (rand) is always invertible */
-  pnl_mat_exp(P, A);
-  pnl_mat_inverse(invP, P);
-
-  /* P = P * D */
-  for ( j=0 ; j<n ; j++ )
-    {
-      double dj = fabs(pnl_rand_uni (gen));
-      for ( i=0 ; i<n ; i++ )
-        {
-          MLET (P, i, j) *= dj;
-        }
-    }
-  pnl_mat_mult_mat_inplace (A, P, invP);
-  pnl_mat_free (&P);
-  pnl_mat_free (&invP);
-  return A;
-}
-
 /* static double function_prod(double x, double y) {return x*y;} */
 
 /*TEST DES FONCTIONS PREMIAMAT */
@@ -922,57 +885,6 @@ static void pnl_mat_exp_test ()
 }
 
 
-
-static void pnl_mat_eigen_test ()
-{
-  PnlMat *A, *B, *P;
-  PnlVect *v;
-  int n = 4;
-  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  printf("test de la fonction eigen : \n");
-  pnl_rand_init (gen, n, n);
-  A = pnl_mat_create (n, n);
-  B = pnl_mat_create (n, n);
-  P = pnl_mat_create (n, n);
-  pnl_mat_rand_uni2 (A, n, n, 0., 1., gen);
-  pnl_mat_dgemm ('N', 'T', 1., A, A, 0., B);
-  v = pnl_vect_create (0);
-  printf ("S = "); pnl_mat_print_nsp (B);
-  pnl_mat_eigen (v, P, B, TRUE);
-  printf ("P = "); pnl_mat_print_nsp (P);
-  printf ("v = "); pnl_vect_print_nsp (v);
-  pnl_mat_free(&A);
-  pnl_mat_free (&B);
-  
-  A = pnl_mat_create_diagonalizable (n);
-  printf ("A = "); pnl_mat_print_nsp (A);
-  pnl_mat_eigen (v, P, A, TRUE);
-  printf ("P = "); pnl_mat_print_nsp (P);
-  printf ("v = "); pnl_vect_print_nsp (v);
-  pnl_vect_free (&v);
-  pnl_mat_free (&A);
-  pnl_mat_free (&P);
-}
-
-static void pnl_mat_log_test ()
-{
-  PnlMat *A, *B;
-  int n = 5;
-  printf("test de la fonction log : \n");
-  A = pnl_mat_create_diagonalizable (n);
-  B = pnl_mat_create (n,n);
-  printf ("A =");
-  pnl_mat_print_nsp (A);
-  pnl_mat_log (B, A);
-  printf ("A =");
-  pnl_mat_print_nsp (A);
-  printf("logA =");
-  pnl_mat_print_nsp (B);
-  printf("\n");
-  pnl_mat_free (&B);
-  pnl_mat_free (&A);
-}
-
 static void all_matrix_test ();
 static list mat_tests[] =
   {
@@ -1015,8 +927,6 @@ static list mat_tests[] =
     MAKE_ENUM(37, pnl_mat_mult_vect_transpose_test),
     MAKE_ENUM(38, pnl_mat_scalar_prod_A_test),
     MAKE_ENUM(39, pnl_mat_dgemv_test),
-    MAKE_ENUM(40, pnl_mat_eigen_test),
-    MAKE_ENUM(41, pnl_mat_log_test),
     MAKE_ENUM(NULL_INT, NULL)
   };
 

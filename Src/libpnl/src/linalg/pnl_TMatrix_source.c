@@ -284,7 +284,7 @@ void FUNCTION(pnl_mat,clone)(TYPE(PnlMat) *clone, const TYPE(PnlMat) *M)
  */
 int FUNCTION(pnl_mat,resize)(TYPE(PnlMat) *v, int m, int n)
 {
-  if (v->owner == 0) return FAIL;
+  if (v->owner == 0) return OK;
   if (m*n < 0) return FAIL;
   if (m*n==0) /* free array */
     {
@@ -460,8 +460,7 @@ void FUNCTION(pnl_mat,fprint )(FILE *fic, const TYPE(PnlMat) *M)
     {
       for (j=0;j<M->n;j++)
         {
-          fprintf (fic, OUT_FORMAT ", ",
-                   OUT_PUT_FORMAT(FUNCTION(pnl_mat,get )(M, i, j)));
+          fprintf (fic,OUT_FORMAT " ",OUT_PUT_FORMAT(FUNCTION(pnl_mat,get )(M, i, j)));
         }
       fprintf (fic, "\n");
     }

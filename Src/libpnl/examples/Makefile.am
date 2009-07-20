@@ -9,7 +9,7 @@ testpnl_SOURCES=cumulfunc_test.c  main.c  vector_test.c matrix_test.c \
 solver_iterativ_test.c basis_test.c dft_test.c finance_function_test.c \
 complex_test.c bessel_test.c integration_test.c sparse_grid_test.c \
 list_test.c root_test.c band_matrix_test.c special_func_test.c \
-laplace_test.c
+laplace_test.c lapack_test.c
 
 testpnl_LDADD=../src/libpnl.la
 

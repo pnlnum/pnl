@@ -30,6 +30,8 @@
 #include "pnl_vector.h"
 #include "pnl_machine.h"
 
+extern double pnl_dlamch (char *cmach);
+
 #ifdef HAVE_LAPACK
 static int pnl_mat_is_sym (const PnlMat *A);
 
@@ -37,6 +39,7 @@ static int pnl_mat_is_sym (const PnlMat *A);
 extern int C2F(dgetrf) (int *m, int *n, double *A, int *lda, int *ipvi, int *info);
 extern int C2F(dgeev) (char *jobvl, char *jobvr, int *n, double *a, int *lda, double *wr, double *wi, double *vl, int *ldvl, double *vr, int *ldvr, double *work, int *lwork, int *info);
 extern int C2F(dsyev) (char *jobz, char *uplo, int *n, double *a, int *lda, double *w, double *work, int *lwork, int *info);
+extern int C2F(dgelsy)(int *m, int *n, int *nrhs, double *A, int *lda, double *B, int *ldb, int *jpvt, double *rcond, int *rank, double *work, int *lwork, int *info);
 
 /* Pnl wrappers */
 static int pnl_dgeev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors);
@@ -275,6 +278,96 @@ void pnl_mat_log (PnlMat *B, const PnlMat *A)
   pnl_mat_free (&invP);
   pnl_vect_free (&D);
 }
+
+/**
+ * Solves A * X = B in the least square sense
+ *
+ * A an m x n matrix with m >= n
+ * X on exit is an n x nrhs matrix
+ * B an m x nrhs matrix
+ *
+ * @return FAIL or OK
+ */
+int pnl_mat_ls_mat (const PnlMat *A, PnlMat *B)
+{
+  int m ,n ,nrhs, lda, ldb, rank, info, lwork, i, j;
+  double *work, qwork, rcond, *X;
+  int *jpvt;
+  PnlMat *tA;
+
+  tA = pnl_mat_transpose (A);
+  
+  m = A->m; n = A->n;
+  nrhs = B->n;
+  lda = A->m;
+  ldb = MAX(A->m, A->n);
+  jpvt = NULL;
+  work = NULL;
+  rcond = MAX(A->m,A->n) * pnl_dlamch("eps");
+
+  /* En large B to contain the solution and  transpose it because
+     of Blas storage.
+     X is matrix of size nrhs x ldb 
+  */
+  if ( (X = malloc(sizeof(double) * ldb * nrhs)) == NULL) return FAIL;
+  for ( i=0 ; i<B->m ; i++ )
+    for ( j=0 ; j<B->n ; j++ )
+      {
+        X[j*ldb+i] = MGET (B, i, j);
+      }
+  
+
+  lwork = -1;
+  C2F(dgelsy) (&m, &n, &nrhs, tA->array, &lda, X, &ldb, jpvt, &rcond, &rank, &qwork, &lwork, &info);
+
+  if ( info != 0 ) goto err;
+  lwork = (int) qwork;
+  if ((work = malloc (sizeof(double)*lwork))==NULL || (jpvt = malloc (sizeof(int) * n))==NULL ) goto err;
+  for ( i=0 ; i<n ; i++ ) jpvt[i] = 0;
+
+  C2F(dgelsy) (&m, &n, &nrhs, tA->array, &lda, X, &ldb, jpvt, &rcond, &rank, work, &lwork, &info);
+
+  pnl_mat_resize (B, A->n, nrhs);
+  for ( i=0 ; i<A->n ; i++ )
+    for ( j=0 ; j<nrhs ; j++ )
+      {
+        MLET(B, i, j) = X[j*ldb+i];
+      }
+  
+  free (work); free (jpvt); free(X);
+  pnl_mat_free (&tA);
+  return OK;
+
+ err:
+  pnl_mat_free (&tA);
+  free (work); free(jpvt);
+  return FAIL;
+}
+
+/**
+ * Solves A * x = b in the least square sense
+ *
+ * A an m x n matrix with m >= n
+ * X on exit is an vector of size n
+ * B is a vector of size m
+ *
+ * @return FAIL or OK
+ */
+int pnl_mat_ls (const PnlMat *A, PnlVect *b)
+{
+  PnlMat *B;
+  int status;
+  B = pnl_mat_create_from_ptr (b->size, 1, b->array);
+
+  status = pnl_mat_ls_mat (A, B);
+  pnl_vect_resize (b, A->n);
+  memcpy (b->array, B->array, b->size*sizeof(double));
+
+  pnl_mat_free (&B);
+  return status;
+}
+
+
 
 #endif
 

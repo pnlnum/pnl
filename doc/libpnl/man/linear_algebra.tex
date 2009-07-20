@@ -504,15 +504,17 @@ the above table.
   aware that this cannot be checked inside the function.
 
 \item \describefun{PnlMat}{pnl_mat_create_wrap_array}{const double $\ast$x, 
-    int size}
-  \sshortdescribe Creates a \refstruct{PnlMat} pointer which contains
-  \var{x}. No copy is made. It is just a container.
+    int m, int n}
+  \sshortdescribe Creates a \refstruct{PnlMat} of size $\var{m} \times
+  \var{n}$ which contains \var{x}. No copy is made. It is just a container.
   
-\item \describefun{\refstruct{PnlMat} $\ast$}{pnl_mat_create_diag_from_ptr}{const double $\ast$x, int d}
+\item \describefun{\refstruct{PnlMat} $\ast$}{pnl_mat_create_diag_from_ptr}
+  {const double $\ast$x, int d}
   \sshortdescribe Creates a new squared \refstruct{PnlMat} by specifying its size and
   diagonal terms as an array.
 
-\item \describefun{\refstruct{PnlMat} $\ast$}{pnl_mat_create_diag}{const \refstruct{PnlVect} $\ast$V}
+\item \describefun{\refstruct{PnlMat} $\ast$}{pnl_mat_create_diag}
+  {const \refstruct{PnlVect} $\ast$V}
   \sshortdescribe Creates a new squared \refstruct{PnlMat} by specifying its diagonal
   terms in a \refstruct{PnlVect}.
 
@@ -940,6 +942,18 @@ using ``inplace'' functions.
   positive definite. The solution of the system is stored in \var{B} on
   exit. On exit, \var{A} contains the Cholesky decomposition of the input
   matrix which is lost.
+
+\item \describefun{void}{pnl_mat_ls_mat}{\refstruct{PnlMat}$\ast$A,
+    \refstruct{PnlMat} $\ast$B}
+  \sshortdescribe Solves a linear system A X = B with \var{A} and \var{B} two
+  matrices in the least square sense, i.e. $\var{X} = \arg\min_U \| A * U -
+  B\|^2$. The solution is stored into B on exit.
+
+\item \describefun{void}{pnl_mat_ls}{\refstruct{PnlMat}$\ast$A, 
+    \refstruct{PnlVect} $\ast$b}
+  \sshortdescribe Solves a linear system A x = b in the least square sense,
+  i.e. $\var{x} = \arg\min_U \| A * u - b\|^2$. The solution is stored into b
+  on exit.
 \end{itemize}
 
 
