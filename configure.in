@@ -520,6 +520,7 @@ Src/common/math/bsnd_math/Makefile \
 Src/common/math/cdo/Makefile \
 Src/common/math/cgmy/Makefile \
 Src/common/math/credit_cds/Makefile \
+Src/common/math/equity_pricer/Makefile \
 Src/common/math/highdim_solver/Makefile \
 Src/common/math/lmm/Makefile \
 Src/common/math/read_market_zc/Makefile \
@@ -542,6 +543,8 @@ Src/mod/bharchiarella1d/Makefile \
 Src/mod/bharchiarella1d/bharchiarella1d_stdi/Makefile \
 Src/mod/blackkarasinski1d/Makefile \
 Src/mod/blackkarasinski1d/blackkarasinski1d_stdi/Makefile \
+Src/mod/bns/Makefile \
+Src/mod/bns/bns_std/Makefile \
 Src/mod/bs1d/Makefile \
 Src/mod/bs1d/bs1d_doublim/Makefile \
 Src/mod/bs1d/bs1d_lim/Makefile \
@@ -569,6 +572,8 @@ Src/mod/cirpp2d/Makefile \
 Src/mod/cirpp2d/cirpp2d_stdc/Makefile \
 Src/mod/copula/Makefile \
 Src/mod/copula/copula_stdndc/Makefile \
+Src/mod/dps/Makefile \
+Src/mod/dps/dps_std/Makefile \
 Src/mod/dup1d/Makefile \
 Src/mod/dup1d/dup1d_std/Makefile \
 Src/mod/dynamic_cdo/Makefile \
