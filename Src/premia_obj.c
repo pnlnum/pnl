@@ -33,6 +33,8 @@ extern Model HES1D_model;
 extern Model TIMEHES1D_model;
 extern Model SCOTT1D_model;
 extern Model STEIN1D_model;
+extern Model BNS_model;
+extern Model DPS_model;
 extern Model FPS1D_model;
 extern Model FPS2D_model;
 extern Model WISHART2D_model;
@@ -78,6 +80,8 @@ Model  *models_e[]=
     &FPS2D_model,
     &WISHART2D_model,
     &MERHES1D_model,
+    &BNS_model,
+    &DPS_model,
     &NONPAR1D_model,
     &VARSWAP3D_model,
 #ifdef XNSP 
@@ -248,6 +252,8 @@ extern  Pricing HES1D_VOL_pricing;
 extern  Pricing TIMEHES1D_STD_pricing;
 extern  Pricing SCOTT1D_STD_pricing;
 extern  Pricing STEIN1D_STD_pricing;
+extern  Pricing BNS_STD_pricing;
+extern  Pricing DPS_STD_pricing;
 extern  Pricing FPS1D_STD_pricing;
 extern  Pricing FPS2D_STD_pricing;
 extern  Pricing WISHART2D_STD2D_pricing;
@@ -298,6 +304,8 @@ Pricing *pricings_e[]=
     &TIMEHES1D_STD_pricing,
     &SCOTT1D_STD_pricing,
     &STEIN1D_STD_pricing,
+    &BNS_STD_pricing,
+    &DPS_STD_pricing,
     &FPS1D_STD_pricing,
     &FPS2D_STD_pricing,
     &WISHART2D_STD2D_pricing,
