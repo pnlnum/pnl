@@ -572,6 +572,9 @@ Src/mod/cirpp2d/Makefile \
 Src/mod/cirpp2d/cirpp2d_stdc/Makefile \
 Src/mod/copula/Makefile \
 Src/mod/copula/copula_stdndc/Makefile \
+Src/mod/doublehes1d/Makefile \
+Src/mod/doublehes1d/doublehes1d_std/Makefile \
+Src/mod/doublehes1d/doublehes1d_vol/Makefile \
 Src/mod/dps/Makefile \
 Src/mod/dps/dps_std/Makefile \
 Src/mod/dup1d/Makefile \
