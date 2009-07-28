@@ -31,6 +31,7 @@ extern Model MER1D_model;
 extern Model HW1D_model;
 extern Model HES1D_model;
 extern Model TIMEHES1D_model;
+extern Model DOUBLEHES1D_model;
 extern Model SCOTT1D_model;
 extern Model STEIN1D_model;
 extern Model BNS_model;
@@ -74,6 +75,7 @@ Model  *models_e[]=
     &HW1D_model,
     &HES1D_model,
     &TIMEHES1D_model,
+    &DOUBLEHES1D_model,
     &SCOTT1D_model,
     &STEIN1D_model,
     &FPS1D_model,
@@ -249,6 +251,8 @@ extern  Pricing HES1D_STD_pricing;
 extern  Pricing HES1D_LIM_pricing;
 extern  Pricing HES1D_PAD_pricing;
 extern  Pricing HES1D_VOL_pricing;
+extern  Pricing DOUBLEHES1D_STD_pricing;
+extern  Pricing DOUBLEHES1D_VOL_pricing;
 extern  Pricing TIMEHES1D_STD_pricing;
 extern  Pricing SCOTT1D_STD_pricing;
 extern  Pricing STEIN1D_STD_pricing;
@@ -301,6 +305,8 @@ Pricing *pricings_e[]=
     &HES1D_LIM_pricing,
     &HES1D_PAD_pricing,
     &HES1D_VOL_pricing,
+    &DOUBLEHES1D_STD_pricing,
+    &DOUBLEHES1D_VOL_pricing,
     &TIMEHES1D_STD_pricing,
     &SCOTT1D_STD_pricing,
     &STEIN1D_STD_pricing,
