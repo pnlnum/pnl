@@ -13,19 +13,21 @@ extern Model *models_i[];
 extern Model *models_g[];
 extern Model *models_f[];
 extern Model *models_c[];
+extern Model *models_a[];
 
 extern Family *families_e[];
 extern Family *families_i[];
 extern Family *families_g[];
 extern Family *families_f[];
 extern Family *families_c[];
+extern Family *families_a[];
 
 extern Pricing *pricings_e[];
 extern Pricing *pricings_i[];
 extern Pricing *pricings_g[];
 extern Pricing *pricings_f[];
 extern Pricing *pricings_c[];
-
+extern Pricing *pricings_a[];
 
 typedef struct PremiaAsset {
   const char *name;
