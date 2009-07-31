@@ -263,6 +263,7 @@ extern  Pricing FPS2D_STD_pricing;
 extern  Pricing WISHART2D_STD2D_pricing;
 extern  Pricing MERHES1D_STD_pricing;
 extern  Pricing MERHES1D_LIM_pricing;
+extern  Pricing MERHES1D_PAD_pricing;
 extern  Pricing PUREJUMP1D_PAD_pricing;
 extern  Pricing VARIANCEGAMMA1D_STD_pricing;
 extern  Pricing VARIANCEGAMMA1D_LIM_pricing;
@@ -317,6 +318,7 @@ Pricing *pricings_e[]=
     &WISHART2D_STD2D_pricing,
     &MERHES1D_STD_pricing,
     &MERHES1D_LIM_pricing,
+    &MERHES1D_PAD_pricing,
     &VARIANCEGAMMA1D_STD_pricing,
     &VARIANCEGAMMA1D_LIM_pricing,
     &VARIANCEGAMMA1D_PAD_pricing,
