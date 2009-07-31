@@ -622,6 +622,7 @@ Src/mod/mer1d/mer1d_pad/Makefile \
 Src/mod/mer1d/mer1d_std/Makefile \
 Src/mod/merhes1d/Makefile \
 Src/mod/merhes1d/merhes1d_lim/Makefile \
+Src/mod/merhes1d/merhes1d_pad/Makefile \
 Src/mod/merhes1d/merhes1d_std/Makefile \
 Src/mod/nig1d/Makefile \
 Src/mod/nig1d/nig1d_lim/Makefile \
