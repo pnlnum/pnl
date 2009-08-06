@@ -251,7 +251,7 @@ void pnl_mat_log (PnlMat *B, const PnlMat *A)
 
   for ( i=0 ; i<n ; i++ )
     {
-      if (pnl_vect_get(D, i) < 0)
+      if (pnl_vect_get(D, i) <= 0)
         {
           PNL_ERROR ("Negative eigenvalues", "pnl_mat_log");
         }
