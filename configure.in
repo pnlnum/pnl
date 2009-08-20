@@ -507,12 +507,10 @@ AC_OUTPUT(Makefile \
 Src/Makefile \
 Src/common/Makefile \
 Src/common/math/InterestRateModelTree/Makefile \
-Src/common/math/InterestRateModelTree/TreeBK1D/Makefile \
 Src/common/math/InterestRateModelTree/TreeCIRpp1D/Makefile \
-Src/common/math/InterestRateModelTree/TreeHW1D/Makefile \
 Src/common/math/InterestRateModelTree/TreeHW2D/Makefile \
 Src/common/math/InterestRateModelTree/TreeLRS1D/Makefile \
-Src/common/math/InterestRateModelTree/TreeSG1D/Makefile \
+Src/common/math/InterestRateModelTree/TreeShortRate/Makefile \
 Src/common/math/Makefile \
 Src/common/math/ap_fusai_levy/Makefile \
 Src/common/math/ap_kou_model/Makefile \
