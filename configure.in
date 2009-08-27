@@ -511,6 +511,7 @@ Src/common/math/InterestRateModelTree/TreeCIRpp1D/Makefile \
 Src/common/math/InterestRateModelTree/TreeHW2D/Makefile \
 Src/common/math/InterestRateModelTree/TreeLRS1D/Makefile \
 Src/common/math/InterestRateModelTree/TreeShortRate/Makefile \
+Src/common/math/InterestRateModelTree/TreeHW1dGeneralized/Makefile \
 Src/common/math/Makefile \
 Src/common/math/ap_fusai_levy/Makefile \
 Src/common/math/ap_kou_model/Makefile \
@@ -592,6 +593,8 @@ Src/mod/hk1d/Makefile \
 Src/mod/hk1d/hk1d_stdi/Makefile \
 Src/mod/hullwhite1d/Makefile \
 Src/mod/hullwhite1d/hullwhite1d_stdi/Makefile \
+Src/mod/hullwhite1dgeneralized/Makefile \
+Src/mod/hullwhite1dgeneralized/hullwhite1dgeneralized_stdi/Makefile \
 Src/mod/hullwhite2d/Makefile \
 Src/mod/hullwhite2d/hullwhite2d_stdi/Makefile \
 Src/mod/hw1d/Makefile \

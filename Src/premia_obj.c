@@ -125,6 +125,7 @@ Model  *models_a[]=
 extern Model Vasicek1D_model;
 extern Model Cir1D_model;
 extern Model HullWhite1D_model;
+extern Model HullWhite1DGeneralized_model;
 extern Model CirPP1D_model;
 extern Model BlackKarasinski1D_model;
 extern Model SG1D_model;
@@ -144,6 +145,7 @@ Model *models_i[]=
     &Vasicek1D_model,
     &Cir1D_model,
     &HullWhite1D_model,
+    &HullWhite1DGeneralized_model,
     &CirPP1D_model,
     &BlackKarasinski1D_model,
     &SG1D_model,
@@ -347,6 +349,7 @@ Pricing *pricings_e[]=
 extern  Pricing Vasicek1D_STDi_pricing;
 extern  Pricing Cir1D_STDi_pricing;
 extern  Pricing HullWhite1D_STDi_pricing;
+extern  Pricing HullWhite1DGeneralized_STDi_pricing;
 extern  Pricing CirPP1D_STDi_pricing;
 extern  Pricing BlackKarasinski1D_STDi_pricing;
 extern  Pricing SG1D_STDi_pricing;
@@ -366,6 +369,7 @@ Pricing *pricings_i[]=
     &Vasicek1D_STDi_pricing,
     &Cir1D_STDi_pricing,
     &HullWhite1D_STDi_pricing,
+    &HullWhite1DGeneralized_STDi_pricing,
     &CirPP1D_STDi_pricing,
     &BlackKarasinski1D_STDi_pricing,
     &SG1D_STDi_pricing,
