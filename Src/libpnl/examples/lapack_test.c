@@ -150,11 +150,11 @@ static void pnl_mat_ls_test ()
 static void all_test ();
 static tst_list lapack_tests[] =
   {
-    MAKE_ENUM(1, all_test),
-    MAKE_ENUM(2, pnl_mat_eigen_test),
-    MAKE_ENUM(3, pnl_mat_log_test),
-    MAKE_ENUM(4, pnl_mat_ls_test),
-    MAKE_ENUM(NULL_INT, NULL)
+    MAKE_ENUM(all_test),
+    MAKE_ENUM(pnl_mat_eigen_test),
+    MAKE_ENUM(pnl_mat_log_test),
+    MAKE_ENUM(pnl_mat_ls_test),
+    MAKE_ENUM(NULL)
   };
 
 static void all_test ()

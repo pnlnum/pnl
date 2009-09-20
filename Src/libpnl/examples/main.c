@@ -47,35 +47,35 @@ extern void special_func_test();
 
 static tst_list tests[] =
   {
-    MAKE_ENUM(1, all_test),
-    MAKE_ENUM(2, random_test),
-    MAKE_ENUM(3, cumulfunc_test),
-    MAKE_ENUM(4, vector_test),
-    MAKE_ENUM(5, matrix_test),
-    MAKE_ENUM(6, lapack_test),
-    MAKE_ENUM(7, speed_test),
-    MAKE_ENUM(8, solver_iterativ_test),
-    MAKE_ENUM(9, special_matrix_test),
-    MAKE_ENUM(10, basis_test),
-    MAKE_ENUM(11,dft_test),
-    MAKE_ENUM(12,laplace_test),
-    MAKE_ENUM(13,finance_function_test),
-    MAKE_ENUM(14,integration_test),
-    MAKE_ENUM(15,complex_test),
-    MAKE_ENUM(16,bessel_test),    
-    MAKE_ENUM(17,perm_test),    
-    MAKE_ENUM(18,SpGrid_test),
-    MAKE_ENUM(19,list_test),
-    MAKE_ENUM(20,root_test),
-    MAKE_ENUM(21,band_matrix_test),
-    MAKE_ENUM(22,special_func_test),
-    MAKE_ENUM(NULL_INT, NULL)
+    MAKE_ENUM(all_test),
+    MAKE_ENUM(random_test),
+    MAKE_ENUM(cumulfunc_test),
+    MAKE_ENUM(vector_test),
+    MAKE_ENUM(matrix_test),
+    MAKE_ENUM(lapack_test),
+    MAKE_ENUM(speed_test),
+    MAKE_ENUM(solver_iterativ_test),
+    MAKE_ENUM(special_matrix_test),
+    MAKE_ENUM(basis_test),
+    MAKE_ENUM(dft_test),
+    MAKE_ENUM(laplace_test),
+    MAKE_ENUM(finance_function_test),
+    MAKE_ENUM(integration_test),
+    MAKE_ENUM(complex_test),
+    MAKE_ENUM(bessel_test),    
+    MAKE_ENUM(perm_test),    
+    MAKE_ENUM(SpGrid_test),
+    MAKE_ENUM(list_test),
+    MAKE_ENUM(root_test),
+    MAKE_ENUM(band_matrix_test),
+    MAKE_ENUM(special_func_test),
+    MAKE_ENUM(NULL)
   };
 
 void run_all_test (tst_list *l)
 {
   int len=0;
-  while (l[len].id != NULL_INT)
+  while (l[len].func != NULL)
     {
       if (strcmp (l[len].label, "all_test") != 0) (l[len].func)();
       len ++;
@@ -92,7 +92,7 @@ void menu_test (tst_list *l)
 {
   int len=0, choice;
 
-  while (l[len].id != NULL_INT)
+  while (l[len].func != NULL)
     {
       printf("%2d. %s\n",  len+1, l[len].label);
       len ++;

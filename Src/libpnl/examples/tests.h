@@ -2,13 +2,11 @@
 #define _TESTS_H
 
 struct tst_list_t {
-    int id;
     char *label;
     void (*func)();
 };
 
-#define MAKE_ENUM(id, f)  {id, #f, f}
-#define NULL_INT -1
+#define MAKE_ENUM(f)  {#f, f}
 
 typedef struct tst_list_t tst_list;
 
