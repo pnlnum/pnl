@@ -62,7 +62,7 @@ static void test_pnl_mat_rand()
 {
     PnlMat *M;
     PnlVect *inf, *sup, *Vsum;
-    int type_generator = 2;
+    int type_generator = PNL_RNG_KNUTH;
     int samples = 100000;
     int dim = 10;
     int i;

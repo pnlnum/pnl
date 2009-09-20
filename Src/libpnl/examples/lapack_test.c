@@ -123,7 +123,7 @@ static void pnl_mat_ls_test ()
   int m, n, gen, nrhs;
   m = 5; n = 6; nrhs = 3;
   gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  printf("test de la fonction eigen : \n");
+  printf("Résolution de A x = b avec A non inversible: \n");
   A = pnl_mat_create (m, n);
   B = pnl_mat_create (m, nrhs);
   b = pnl_vect_create (m);
@@ -147,55 +147,22 @@ static void pnl_mat_ls_test ()
   pnl_vect_free (&b);
 }
 
-static void all_lapack_test ();
-static list lapack_tests[] =
+static void all_test ();
+static tst_list lapack_tests[] =
   {
-    MAKE_ENUM(1, all_lapack_test),
+    MAKE_ENUM(1, all_test),
     MAKE_ENUM(2, pnl_mat_eigen_test),
     MAKE_ENUM(3, pnl_mat_log_test),
     MAKE_ENUM(4, pnl_mat_ls_test),
     MAKE_ENUM(NULL_INT, NULL)
   };
 
-static void all_lapack_test ()
+static void all_test ()
 {
-  int len=0;
-  while (lapack_tests[len].id != NULL_INT)
-    {
-      if (lapack_tests[len].func != all_lapack_test) (lapack_tests[len].func)();
-      len ++;
-    }
+  run_all_test (lapack_tests);
 }
 
 void lapack_test()
 {
-  int len=0, n=0, choice;
-
-  while (lapack_tests[len].id != NULL_INT) len++;
-        
-    
-  while (lapack_tests[n].id != NULL_INT)
-    {
-      printf("%2d. %s\n",  lapack_tests[n].id, lapack_tests[n].label);
-      n ++;
-      if (n/10 == (double)n/10.0)
-        {
-          printf("Which test do you want to run? (type 0 to continue displaying the list)\n");
-          while(1)
-            {
-              scanf("%d", &choice);
-              if (choice ==0) break;
-              choice --;
-              if (choice <0 || choice > len) printf("illegal choice\n");
-              else { (lapack_tests[choice].func)(); return; }
-            }
-        }
-    }
-  printf("Which test do you want to run?\n");
-  while(1)
-    {
-      scanf("%d", &choice); choice --;
-      if (choice <0 || choice > len) printf("illegal choice\n");
-      else { (lapack_tests[choice].func)(); break; }
-    }
+  menu_test (lapack_tests);
 }

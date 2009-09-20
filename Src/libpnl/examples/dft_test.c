@@ -125,7 +125,7 @@
 static void fftpack(void )
 {  
   /*
-    Short program to test discret fourier transform ...
+    Short program to test discrete Fourier transform ...
   */
  
   int kmax=32;

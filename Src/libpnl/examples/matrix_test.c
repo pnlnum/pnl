@@ -885,10 +885,10 @@ static void pnl_mat_exp_test ()
 }
 
 
-static void all_matrix_test ();
-static list mat_tests[] =
+static void all_test ();
+static tst_list mat_tests[] =
   {
-    MAKE_ENUM(1, all_matrix_test),
+    MAKE_ENUM(1, all_test),
     MAKE_ENUM(2, pnl_mat_set_test),
     MAKE_ENUM(3, pnl_mat_get_test),
     MAKE_ENUM(4, pnl_mat_lget_test),
@@ -930,45 +930,12 @@ static list mat_tests[] =
     MAKE_ENUM(NULL_INT, NULL)
   };
 
-static void all_matrix_test ()
+static void all_test ()
 {
-  int len=0;
-  while (mat_tests[len].id != NULL_INT)
-    {
-      if (mat_tests[len].func != all_matrix_test) (mat_tests[len].func)();
-      len ++;
-    }
+  run_all_test (mat_tests);
 }
 
 void matrix_test()
 {
-  int len=0, n=0, choice;
-
-  while (mat_tests[len].id != NULL_INT) len++;
-        
-    
-  while (mat_tests[n].id != NULL_INT)
-    {
-      printf("%2d. %s\n",  mat_tests[n].id, mat_tests[n].label);
-      n ++;
-      if (n/10 == (double)n/10.0)
-        {
-          printf("Which test do you want to run? (type 0 to continue displaying the list)\n");
-          while(1)
-            {
-              scanf("%d", &choice);
-              if (choice ==0) break;
-              choice --;
-              if (choice <0 || choice > len) printf("illegal choice\n");
-              else { (mat_tests[choice].func)(); return; }
-            }
-        }
-    }
-  printf("Which test do you want to run?\n");
-  while(1)
-    {
-      scanf("%d", &choice); choice --;
-      if (choice <0 || choice > len) printf("illegal choice\n");
-      else { (mat_tests[choice].func)(); break; }
-    }
+  menu_test (mat_tests);
 }

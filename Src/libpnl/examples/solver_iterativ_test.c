@@ -106,54 +106,8 @@ void Test_Solver_no_sym(void )
   pnl_vect_free(&b);
 }
 
-static void all_solver_iterativ_test ();
-static list solver_iterativ_tests[] =
-  {
-    MAKE_ENUM(1, all_solver_iterativ_test),
-    MAKE_ENUM(2, Test_Solver_sym),
-    MAKE_ENUM(3, Test_Solver_no_sym),
-    MAKE_ENUM(NULL_INT, NULL)
-  };
-
-static void all_solver_iterativ_test ()
-{
-  int len=0;
-  while (solver_iterativ_tests[len].id != NULL_INT)
-    {
-      if (solver_iterativ_tests[len].func != all_solver_iterativ_test) (solver_iterativ_tests[len].func)();
-      len ++;
-    }
-}
-
 void solver_iterativ_test()
 {
-  int len=0, n=0, choice;
-
-  while (solver_iterativ_tests[len].id != NULL_INT) len++;
-        
-    
-  while (solver_iterativ_tests[n].id != NULL_INT)
-    {
-      printf("%2d. %s\n",  solver_iterativ_tests[n].id, solver_iterativ_tests[n].label);
-      n ++;
-      if (n/10 == (double)n/10.0)
-        {
-          printf("Which test do you want to run? (type 0 to continue displaying the list)\n");
-          while(1)
-            {
-              scanf("%d", &choice);
-              if (choice ==0) break;
-              choice --;
-              if (choice <0 || choice > len) printf("illegal choice\n");
-              else { (solver_iterativ_tests[choice].func)(); return; }
-            }
-        }
-    }
-  printf("Which test do you want to run?\n");
-  while(1)
-    {
-      scanf("%d", &choice); choice --;
-      if (choice <0 || choice > len) printf("illegal choice\n");
-      else { (solver_iterativ_tests[choice].func)(); break; }
-    }
+  Test_Solver_sym ();
+  Test_Solver_no_sym ();
 }

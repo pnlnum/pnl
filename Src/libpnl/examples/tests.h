@@ -1,7 +1,7 @@
 #ifndef _TESTS_H
 #define _TESTS_H
 
-struct list_t {
+struct tst_list_t {
     int id;
     char *label;
     void (*func)();
@@ -10,8 +10,11 @@ struct list_t {
 #define MAKE_ENUM(id, f)  {id, #f, f}
 #define NULL_INT -1
 
-typedef struct list_t list;
+typedef struct tst_list_t tst_list;
 
+
+extern void run_all_test (tst_list *l);
+extern void run_all_test (tst_list *l);
 
 #endif /* TESTS_H */
 

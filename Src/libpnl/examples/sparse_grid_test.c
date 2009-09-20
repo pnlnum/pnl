@@ -175,55 +175,8 @@ void Test_SpGrid_Heat(void )
   printf("End solve Heat on Sparse Grid \n");
 }
 
-  
-static void all_SpGrid_test ();
-static list SpGrid_tests[] =
-  {
-    MAKE_ENUM(1,all_SpGrid_test),
-    MAKE_ENUM(2,Test_SpGrid_Poisson),
-    MAKE_ENUM(3,Test_SpGrid_Heat),
-    MAKE_ENUM(NULL_INT, NULL)
-  };
-
-static void all_SpGrid_test ()
-{
-  int len=0;
-  while (SpGrid_tests[len].id != NULL_INT)
-    {
-      if (SpGrid_tests[len].func != all_SpGrid_test) (SpGrid_tests[len].func)();
-      len ++;
-    }
-}
-
 void SpGrid_test()
 {
-  int len=0, n=0, choice;
-
-  while (SpGrid_tests[len].id != NULL_INT) len++;
-        
-    
-  while (SpGrid_tests[n].id != NULL_INT)
-    {
-      printf("%2d. %s\n",  SpGrid_tests[n].id, SpGrid_tests[n].label);
-      n ++;
-      if (n/10 == (double)n/10.0)
-        {
-          printf("Which test do you want to run? (type 0 to continue displaying the list)\n");
-          while(1)
-            {
-              scanf("%d", &choice);
-              if (choice ==0) break;
-              choice --;
-              if (choice <0 || choice > len) printf("illegal choice\n");
-              else { (SpGrid_tests[choice].func)(); return; }
-            }
-        }
-    }
-  printf("Which test do you want to run?\n");
-  while(1)
-    {
-      scanf("%d", &choice); choice --;
-      if (choice <0 || choice > len) printf("illegal choice\n");
-      else { (SpGrid_tests[choice].func)(); break; }
-    }
+  Test_SpGrid_Poisson ();
+  Test_SpGrid_Heat ();
 }

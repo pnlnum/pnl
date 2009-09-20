@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 #include "tests.h"
 
 static void all_test();
@@ -44,8 +45,8 @@ extern void root_test();
 extern void band_matrix_test();
 extern void special_func_test();
 
-static list tests[] =
-{
+static tst_list tests[] =
+  {
     MAKE_ENUM(1, all_test),
     MAKE_ENUM(2, random_test),
     MAKE_ENUM(3, cumulfunc_test),
@@ -69,46 +70,48 @@ static list tests[] =
     MAKE_ENUM(21,band_matrix_test),
     MAKE_ENUM(22,special_func_test),
     MAKE_ENUM(NULL_INT, NULL)
-};
-      
-static void all_test()
+  };
+
+void run_all_test (tst_list *l)
 {
-    int len=0;
-    while (tests[len].id != NULL_INT)
+  int len=0;
+  while (l[len].id != NULL_INT)
     {
-        if (tests[len].func != all_test) (tests[len].func)();
-        len ++;
+      if (strcmp (l[len].label, "all_test") != 0) (l[len].func)();
+      len ++;
     }
 }
 
 
-int main()
+static void all_test()
+{
+  run_all_test (tests);
+}
+
+void menu_test (tst_list *l)
 {
   int len=0, choice;
-    while (tests[len].id != NULL_INT)
-    {
-        printf("%2d. %s\n",  tests[len].id, tests[len].label);
-        len ++;
-    }
-    len--;
-    printf("Which test do you want to run?\n");
 
-    while(1)
+  while (l[len].id != NULL_INT)
     {
-        scanf("%d", &choice); 
-        if (choice <1 || choice > tests[len].id) printf("illegal choice\n");
-        else break;
+      printf("%2d. %s\n",  len+1, l[len].label);
+      len ++;
     }
-    len = 0;
-    while (tests[len].id != NULL_INT)
-      {
-        if (tests[len].id == choice)
-          {
-            (tests[len].func)();
-            return 0;
-          }
-        len++;
-      }
-    printf("Can't find test %i\n", choice);
-    return 0;
+  len--;
+  printf("Which test do you want to run?\n");
+
+  while (1)
+    {
+      scanf("%d", &choice); 
+      if (choice <1 || choice > len+1) printf("illegal choice\n");
+      else break;
+    }
+  len = 0;
+  (l[choice-1].func)();
+}
+
+int main ()
+{
+  menu_test (tests);
+  return 0;
 }

@@ -143,55 +143,9 @@ static void pnl_sort_list_add_dicho_test()
   free(Cm8);
 }
 
-static void all_list_test ();
-static list list_tests[] =
-  {
-    MAKE_ENUM(1, all_list_test),
-    MAKE_ENUM(2, pnl_sort_list_add_test),
-    MAKE_ENUM(3, pnl_sort_list_add_dicho_test),
-    MAKE_ENUM(NULL_INT, NULL)
-  };
-
-static void all_list_test ()
-{
-  int len=0;
-  while (list_tests[len].id != NULL_INT)
-    {
-      if (list_tests[len].func != all_list_test) (list_tests[len].func)();
-      len ++;
-    }
-}
-
 void list_test()
 {
-  int len=0, n=0, choice;
-
-  while (list_tests[len].id != NULL_INT) len++;
-        
-    
-  while (list_tests[n].id != NULL_INT)
-    {
-      printf("%2d. %s\n",  list_tests[n].id, list_tests[n].label);
-      n ++;
-      if (n/10 == (double)n/10.0)
-        {
-          printf("Which test do you want to run? (type 0 to continue displaying the list)\n");
-          while(1)
-            {
-              scanf("%d", &choice);
-              if (choice ==0) break;
-              choice --;
-              if (choice <0 || choice > len) printf("illegal choice\n");
-              else { (list_tests[choice].func)(); return; }
-            }
-        }
-    }
-  printf("Which test do you want to run?\n");
-  while(1)
-    {
-      scanf("%d", &choice); choice --;
-      if (choice <0 || choice > len) printf("illegal choice\n");
-      else { (list_tests[choice].func)(); break; }
-    }
+  pnl_sort_list_add_test ();
+  pnl_sort_list_add_dicho_test ();
 }
 

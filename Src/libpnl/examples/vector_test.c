@@ -605,10 +605,10 @@ static void pnl_vect_qsort_test ()
   pnl_vect_int_free (&t);
 }
 
-static void all_vector_test ();
-static list vect_tests[] =
+static void all_test ();
+static tst_list vect_tests[] =
   {
-    MAKE_ENUM(1, all_vector_test),
+    MAKE_ENUM(1, all_test),
     MAKE_ENUM(2, pnl_vect_set_test),
     MAKE_ENUM(3, pnl_vect_get_test),
     MAKE_ENUM(4, pnl_vect_lget_test),
@@ -655,43 +655,12 @@ static list vect_tests[] =
     MAKE_ENUM(NULL_INT, NULL)
   };
 
-static void all_vector_test ()
+static void all_test ()
 {
-  int len=0;
-  while (vect_tests[len].id != NULL_INT)
-    {
-      if (vect_tests[len].func != all_vector_test) (vect_tests[len].func)();
-      len ++;
-    }
+  run_all_test (vect_tests);
 }
 
 void vector_test()
 {
-  int len=0, choice;
-  while (vect_tests[len].id != NULL_INT)
-    {
-      printf("%2d. %s\n",  vect_tests[len].id, vect_tests[len].label);
-      len ++;
-    }
-  len--;
-  printf("Which test do you want to run?\n");
-
-  while(1)
-    {
-      scanf("%d", &choice);//!=1)
-      if (choice <1 || choice > vect_tests[len].id) printf("illegal choice\n");
-      else break;
-    }
-  len = 0;
-  while (vect_tests[len].id != NULL_INT)
-    {
-      if (vect_tests[len].id == choice)
-        {
-          (vect_tests[len].func)();
-          return;
-        }
-      len++;
-    }
-  printf("Can't find test %i\n", choice);
-  return;
+  menu_test (vect_tests);
 }
