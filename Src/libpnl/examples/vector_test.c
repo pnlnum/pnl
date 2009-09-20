@@ -117,6 +117,25 @@ static void pnl_vect_clone_test()
   pnl_vect_free(&v2); 
 }
 
+static void pnl_vect_resize_test ()
+{
+  PnlVect *v;
+  printf ("Test of function pnl_vect_resize : \n");
+  v = pnl_vect_create (0);
+  printf ("resize 5 : ");
+  pnl_vect_resize (v, 5);
+  pnl_vect_set_double (v, 0.2);
+  pnl_vect_print (v);
+  printf ("resize 3 : ");
+  pnl_vect_resize (v, 3);
+  pnl_vect_print (v);
+  printf ("resize 4 : ");
+  pnl_vect_resize (v, 4);
+  pnl_vect_print (v);
+  pnl_vect_free (&v);
+}
+
+
 static void pnl_vect_extract_test()
 {
   double x[10]={0.0,1.0, 2.0, 3.0,4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
@@ -616,6 +635,7 @@ static tst_list vect_tests[] =
     MAKE_ENUM(6, pnl_vect_create_from_ptr_test),
     MAKE_ENUM(7, pnl_vect_copy_test),
     MAKE_ENUM(8, pnl_vect_clone_test),
+    MAKE_ENUM(46, pnl_vect_resize_test),
     MAKE_ENUM(9, pnl_vect_plus_vect_test),
     MAKE_ENUM(10, pnl_vect_map_inplace_test),
     MAKE_ENUM(11, pnl_vect_plus_double_test),

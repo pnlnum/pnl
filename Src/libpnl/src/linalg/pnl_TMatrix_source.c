@@ -42,19 +42,20 @@
 TYPE(PnlMat) * FUNCTION(pnl_mat,create)(int m, int n)
 {
   TYPE(PnlMat) *v;
-  if((v=malloc(sizeof(TYPE(PnlMat))))==NULL)
+  if ((v = malloc (sizeof (TYPE(PnlMat)))) == NULL)
     return NULL;
-  v->m=m;
-  v->n=n;
-  v->mn=m*n;
+  v->m = m;
+  v->n = n;
+  v->mn = m * n;
+  v->mem_size = v->mn;
   v->owner = 1;
-  if (v->mn>0)
+  if (v->mn > 0)
     {
-      if((v->array=malloc(v->mn*sizeof(BASE)))==NULL)
+      if ((v->array = malloc (v->mn * sizeof(BASE))) == NULL)
         return NULL;
     }
   else
-    v->array = (BASE*)NULL;
+    v->array = (BASE*)NULL;  
   return v;  
 }
 
@@ -146,6 +147,7 @@ TYPE(PnlMat) FUNCTION(pnl_mat,create_wrap_array)(const BASE* x, int m, int n)
   M.m = m;
   M.n = n;
   M.mn = m*n;
+  M.mem_size = 0;
   M.owner = 0;
   M.array = (BASE *) x;
   return M;
@@ -163,13 +165,11 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,create_from_file )(const char * file)
   TYPE(PnlMat) *M;
   int m, n, count, mn;
   ATOMIC *atomic_data;
-  FILE *FIC = fopen( file, "r");
-  if( FIC == NULL )
-    {PNL_ERROR("Cannot open file", "FUNCTION(pnl_mat,create_from_file)");}
-
-  if ((M = FUNCTION(pnl_mat,create )(0,0))==NULL)
+  FILE *FIC = NULL;
+  
+  if ((FIC = fopen( file, "r")) == NULL )
     {
-      PNL_ERROR("Allocation error", "FUNCTION(pnl_mat,create_from_file)");
+      PNL_ERROR("Cannot open file", "FUNCTION(pnl_mat,create_from_file)");
     }
 
   /* first pass to determine dimensions */
@@ -195,7 +195,6 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,create_from_file )(const char * file)
         }
       else if (empty && isdigit(car)) empty=0;
     }
-  rewind( FIC );
   if (m==0 || n==0)
     {
       PNL_ERROR ("No matrix found in input file",  "pnl_mat_create_from_file");
@@ -207,12 +206,17 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,create_from_file )(const char * file)
       PNL_ERROR ("Incorrect matrix format",  "pnl_mat_create_from_file");
     }
   mn = m*n;
-  FUNCTION(pnl_mat,resize )(M, m/MULTIPLICITY, n);
+  if ((M = FUNCTION(pnl_mat,create )(m/MULTIPLICITY,n))==NULL)
+    {
+      PNL_ERROR("Allocation error", "FUNCTION(pnl_mat,create_from_file)");
+    }
+
   atomic_data = (ATOMIC *) FUNCTION(pnl_mat,lget )(M, 0, 0);
 
   /* second pass to read data */
+  rewind( FIC );
   count = 0;
-  while( fscanf(FIC,IN_FORMAT, atomic_data) > 0 && count < mn) { atomic_data++; count++;}
+  while (fscanf(FIC,IN_FORMAT, atomic_data) > 0 && count < mn) { atomic_data++; count++;}
   fclose( FIC );
   return M;
 }
@@ -270,45 +274,43 @@ void FUNCTION(pnl_mat,clone)(TYPE(PnlMat) *clone, const TYPE(PnlMat) *M)
 /**
  * resizes a TYPE(PnlMat).
  *
- * If the new size is smaller than the current one, no
- * memory is free. If the new size is larger than the
- * current one, more space is allocated. Note that for the
- * sake of efficiency the old data are not copied.
+ * If the new size is smaller than the current one, no memory is freed. If the
+ * new size is larger than the current mem_size, a new pointer is
+ * allocated. The old data are kept.
  *
- * @param v : a pointer to an already existing TYPE(PnlMat) (mn
- * must be initialised)
+ * @param v : a pointer to an already existing TYPE(PnlMat) 
  * @param m : new nb rows
  * @param n : new nb columns
  *
  * @return OK or FAIL. When returns OK, the matrix is changed. 
  */
-int FUNCTION(pnl_mat,resize)(TYPE(PnlMat) *v, int m, int n)
+int FUNCTION(pnl_mat,resize)(TYPE(PnlMat) *M, int m, int n)
 {
-  if (v->owner == 0) return OK;
-  if (m*n < 0) return FAIL;
-  if (m*n==0) /* free array */
+  int mn;
+  mn = m*n;
+  if (M->owner == 0) return OK;
+  if (mn < 0) return FAIL;
+  if (mn == 0) /* free array */
     {
-      v->m = v->n = v->mn = 0;
-      free(v->array); v->array = NULL;
+      M->m = M->n = M->mn = M->mem_size = 0;
+      free(M->array); M->array = NULL;
       return OK;
     }
-  if (v->mn >= m*n) /*nothing to do, just adjust m and n*/
+
+  if (M->mem_size >= mn) 
     {
-      v->m=m; v->n=n; v->mn = m*n;
+      /* If the new size is smaller, we do not reduce the size of the
+         allocated block. It may change, but il may allow to grow the matrix
+         quicker */
+      M->m=m; M->n=n; M->mn = mn;
       return OK;
     }
-  v->m=m; v->n=n; v->mn=m*n;
-  if (v->array==NULL)
-    {
-      if ((v->array = malloc(v->mn*sizeof(BASE)))==NULL)
-        return FAIL;
-    }
-  else
-    {
-      free (v->array);
-      if ((v->array = malloc(v->mn*sizeof(BASE)))==NULL)
-        return FAIL;
-    }
+
+  /* Now, M->mem_size < mn */
+  if (M->array != NULL) free (M->array);
+  if ((M->array = malloc(mn * sizeof(BASE))) == NULL) return FAIL;
+  M->m = m; M->n = n;
+  M->mn = M->mem_size = mn;
   return OK;
 }
 
@@ -663,9 +665,10 @@ TYPE(PnlVect) FUNCTION(pnl_mat,wrap_row)(const TYPE(PnlMat) *M, int i)
 #ifndef PNL_RANGE_CHECK_OFF
   if (i > M->m) {PNL_ERROR ("index out of range", "pnl_mat_row_to_vect");}
 #endif
-  V.size=M->n;
+  V.size = M->n;
+  V.mem_size = 0;
   V.owner = 0;
-  V.array= &(M->array[i*M->n]); 
+  V.array = &(M->array[i*M->n]); 
   return V;
 }
 

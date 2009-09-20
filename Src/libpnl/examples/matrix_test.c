@@ -117,6 +117,28 @@ static void pnl_mat_clone_test()
   pnl_mat_free(&M2); 
 }
 
+
+static void pnl_mat_resize_test ()
+{
+  PnlMat *v;
+  printf ("Test of function pnl_mat_resize : \n");
+  v = pnl_mat_create (0, 0);
+  printf ("resize 5x3 : ");
+  pnl_mat_resize (v, 5, 3);
+  pnl_mat_set_double (v, 0.2);
+  pnl_mat_print (v);
+  printf ("resize 3x5 : ");
+  pnl_mat_resize (v, 3, 5);
+  pnl_mat_print (v);
+  printf ("resize 2x3 : ");
+  pnl_mat_resize (v, 2, 3);
+  pnl_mat_print (v);
+  printf ("resize 3x4 : ");
+  pnl_mat_resize (v, 3, 4);
+  pnl_mat_print (v);
+  pnl_mat_free (&v);
+}
+
 static void pnl_mat_map_inplace_test()
 {
   PnlMat *M;
@@ -896,6 +918,7 @@ static tst_list mat_tests[] =
     MAKE_ENUM(6, pnl_mat_create_from_ptr_test),
     MAKE_ENUM(7, pnl_mat_copy_test),
     MAKE_ENUM(8, pnl_mat_clone_test),
+    MAKE_ENUM(8, pnl_mat_resize_test),
     MAKE_ENUM(9, pnl_mat_map_inplace_test),
     MAKE_ENUM(10, pnl_mat_plus_mat_test),
     MAKE_ENUM(11, pnl_mat_plus_double_test),

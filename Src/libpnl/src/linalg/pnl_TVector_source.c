@@ -34,15 +34,37 @@
 TYPE(PnlVect) * FUNCTION(pnl_vect,create)(int size)
 {
   TYPE(PnlVect)* v;
-  if((v=malloc(sizeof(TYPE(PnlVect))))==NULL) return NULL;
-  v->size=size;
+  if ((v = malloc (sizeof (TYPE(PnlVect)))) == NULL) return NULL;
+  v->size = size;
+  v->mem_size = size;
   v->owner = 1;
-  if (size>0)
+  if (size > 0)
     {
-      if((v->array=malloc(size*sizeof(BASE)))==NULL) return NULL;
+      if ((v->array = malloc (size * sizeof (BASE))) == NULL) return NULL;
     }
   else
-    v->array=(BASE *)NULL;
+    v->array = (BASE*) NULL;
+  return v;
+}
+
+
+/**
+ * creates a new TYPE(PnlVect)pointer.
+ *
+ * @param size the size of the array
+ * @param x value of all component
+ * @return  a TYPE(PnlVect)pointer all value at 0
+ */
+TYPE(PnlVect)* FUNCTION(pnl_vect,CONCAT2(create_from_,BASE))(const int size,BASE x)
+{
+  int i;
+  TYPE(PnlVect) *v;
+  if ((v=FUNCTION(pnl_vect, create)(size))==NULL)
+    return NULL;
+  for ( i=0 ; i<size ; i++ )
+    {
+      FUNCTION(pnl_vect, set) (v, i, x);
+    }
   return v;
 }
 
@@ -55,35 +77,7 @@ TYPE(PnlVect) * FUNCTION(pnl_vect,create)(int size)
 TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_zero)(const int size)
 {
   const BASE zero = ZERO;
-  int i=0;
-  TYPE(PnlVect) *v;
-  if((v=FUNCTION(pnl_vect, create)(size))==NULL)
-    return NULL;
-  while(i<size)
-    {
-      FUNCTION(pnl_vect, set)(v, i, zero); i++;
-    } 
-  return v;
-}
-
-/**
- * creates a new TYPE(PnlVect)pointer.
- *
- * @param size the size of the array
- * @param x value of all component
- * @return  a TYPE(PnlVect)pointer all value at 0
- */
-TYPE(PnlVect)* FUNCTION(pnl_vect,CONCAT2(create_from_,BASE))(const int size,BASE x)
-{
-  int i=0;
-  TYPE(PnlVect) *v;
-  if((v=FUNCTION(pnl_vect, create)(size))==NULL)
-    return NULL;
-  while(i<size)
-    {
-      FUNCTION(pnl_vect, set)(v, i, x); i++;
-    } 
-  return v;
+  return FUNCTION(pnl_vect,CONCAT2(create_from_,BASE)) (size, zero);
 }
 
 /**
@@ -97,9 +91,9 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,CONCAT2(create_from_,BASE))(const int size,BASE
 TYPE(PnlVect) * FUNCTION(pnl_vect,create_from_ptr)(const int size,const BASE  * x)
 {
   TYPE(PnlVect) * v;
-  if ((v=FUNCTION(pnl_vect,create)(size))==NULL)
+  if ((v = FUNCTION(pnl_vect,create) (size)) == NULL)
     return NULL;
-  memcpy(v->array, x, v->size*sizeof(BASE));
+  memcpy (v->array, x, v->size * sizeof(BASE));
   return v;
 }
 
@@ -117,11 +111,11 @@ TYPE(PnlVect) * FUNCTION(pnl_vect,create_from_list)(const int size,...)
   va_list ap;
   int i;
 
-  if ((v=FUNCTION(pnl_vect,create)(size))==NULL)
+  if ((v = FUNCTION(pnl_vect,create)(size)) == NULL)
     return NULL;
   va_start (ap, size);
 
-  for (i=0; i<size; i++)
+  for ( i=0; i<size ; i++ )
     {
       BASE val ;
       val = va_arg (ap, BASE);
@@ -146,6 +140,7 @@ TYPE(PnlVect) FUNCTION(pnl_vect,create_wrap_array)(const BASE* x, int m)
 
   v.size = m;
   v.owner = 0;
+  v.mem_size = 0;
   v.array = (BASE *) x;
   return v;
 }
@@ -163,40 +158,41 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_file) (const char * file)
   int m, count;
   ATOMIC *atomic_data;
   FILE *FIC = fopen( file, "r");
-  if( FIC == NULL )
-    {PNL_ERROR("Cannot open file", "pnl_vect_create_from_file");}
-
-  if ((v = FUNCTION(pnl_vect,create) (0))==NULL)
+  if ( FIC == NULL )
     {
-      PNL_ERROR("Allocation error", "pnl_vect_create_from_file");
+      PNL_ERROR("Cannot open file", "pnl_vect_create_from_file");
     }
 
   /* first pass to determine dimensions */
   m = 0; empty = 1;
   while((car=fgetc(FIC))!= EOF)
     {
-      if( car=='\n' )
+      if ( car=='\n' )
         {
           if (!empty) { ++m; empty = 1;}
           else break;
         }
       else if (empty && isdigit(car)) empty=0;
     }
-  rewind( FIC );
   if (m==0)
     {
       PNL_ERROR ("No matrix found in input file",  "pnl_vect_create_from_file");
     }
+
   /* need special care when MULTIPLICITY > 1 */
   if ( MULTIPLICITY * ((double)m/MULTIPLICITY) != m)
     {
       PNL_ERROR ("Incorrect vector format",  "pnl_mat_create_from_file");
     }
-  FUNCTION(pnl_vect,resize) (v, m/MULTIPLICITY);
-  atomic_data = (ATOMIC*) FUNCTION(pnl_vect,lget) (v, 0);
+  if ((v = FUNCTION(pnl_vect,create) (m/MULTIPLICITY)) == NULL)
+    {
+      PNL_ERROR("Allocation error", "pnl_vect_create_from_file");
+    }  
 
   /* second pass to read data */
+  rewind( FIC );
   count = 0;
+  atomic_data = (ATOMIC*) FUNCTION(pnl_vect,lget) (v, 0);
   while( fscanf(FIC,IN_FORMAT,atomic_data) > 0 && count<m)   { atomic_data++; count++;}
   fclose( FIC );
   return v;
@@ -231,41 +227,38 @@ void FUNCTION(pnl_vect,free)(TYPE(PnlVect) **v)
 int FUNCTION(pnl_vect,resize)(TYPE(PnlVect) * v, int size)
 {
 
-  if(v->owner == 0) return OK;
-  if(size<0) return FAIL;
-  if(size==0)
+  if (v->owner == 0) return OK;
+  if (size < 0) return FAIL;
+  if (size == 0)
     {
-      if(v->size>0)
-        free(v->array); 
+      if (v->mem_size > 0) free (v->array);
+      v->size = 0;
+      v->mem_size = 0;
       v->array=NULL;
       return OK;
     }
-  if(v->size>=size)
+  
+  if (v->mem_size >= size)
     {
-      v->size=size;
-      return OK;
+      /* If the new size is smaller, we do not reduce the size of the
+         allocated block. It may change, but il may allow to grow the vector
+         quicker */
+      v->size=size; return OK;
     }
 
-  v->size=size;
-  if(v->array == NULL)
-    {
-      if((v->array=malloc(size*sizeof(BASE)))==NULL)
-        return FAIL;
-    }
-  else
-    {
-      free (v->array);
-      if((v->array=malloc(size*sizeof(BASE)))==NULL)
-        return FAIL;    
-    }
+  /* Now, v->mem_size < size */
+  if (v->array != NULL) free (v->array);
+  if ((v->array = malloc (size * sizeof(BASE))) == NULL) return FAIL;
+  v->size = size;
+  v->mem_size = size;
   return OK;
 }
 
 
 /**
- * resizes a PnlVect. If the new is smaller than the
- * current one, no memory is free. If the new size is larger
- * than the current one, a new pointer is allocated, the old
+ * resizes a PnlVect. If the new size is smaller than the
+ * current one, no memory is freed. If the new size is larger
+ * than the current mem_size, a new pointer is allocated, the old
  * data are copied and the old pointer is freed.
  *
  * @param v : a pointer to an already existing PnlVect
@@ -285,12 +278,12 @@ int FUNCTION(pnl_vect,CONCAT2(resize_from_,BASE))(TYPE(PnlVect) *v, int size, BA
     return OK;
   if (v->array == NULL)
     {
-      if((v->array=malloc(size*sizeof(BASE)))==NULL)
+      if ((v->array=malloc(size*sizeof(BASE)))==NULL)
         return FAIL;
     }
   else
     {
-      if((v->array=realloc(v->array, size*sizeof(BASE)))==NULL)
+      if ((v->array=realloc(v->array, size*sizeof(BASE)))==NULL)
         return FAIL;
     }
   for(i=old_size; i<size; i++)
@@ -301,15 +294,13 @@ int FUNCTION(pnl_vect,CONCAT2(resize_from_,BASE))(TYPE(PnlVect) *v, int size, BA
 }
 
 /**
- * resizes a PnlVect. If the new size is smaller than the
- * current one, no memory is freed and the datas are
- * kept. If the new size is larger than the current one, a
- * new pointer is allocated. 
+ * resizes a PnlVect. If the new size is smaller than the current one, no
+ * memory is freed. If the new size is larger than the current mem_size, a new
+ * pointer is allocated.
  *
  * @param v a pointer to an already existing PnlVect
- * (size must be initalised)
  * @param size  the new size of the array
- * @param t array used to fill v
+ * @param t array used to fill v, must be of size size
  */
 int FUNCTION(pnl_vect,resize_from_ptr)(TYPE(PnlVect) *v, int size, const BASE *t)
 {
@@ -370,7 +361,7 @@ void FUNCTION(pnl_vect, set_basis)(TYPE(PnlVect) * v, int i)
 TYPE(PnlVect) * FUNCTION(pnl_vect, copy)(const TYPE(PnlVect) * v)
 {
   TYPE(PnlVect) *ret;
-  if((ret=FUNCTION(pnl_vect,create)(v->size))==NULL) return NULL;
+  if ((ret=FUNCTION(pnl_vect,create)(v->size))==NULL) return NULL;
   memcpy(ret->array, v->array, sizeof(BASE)*ret->size);
   return ret;
 }
@@ -407,9 +398,10 @@ TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect)(const TYPE(PnlVect) *V, int i,int
 #ifndef PNL_RANGE_CHECK_OFF
   if ((i >= V->size) ||(s >= V->size) || (s<=0))  {PNL_ERROR ("index out of range", "pnl_vect_extract_with_size");}
 #endif
-  ret.size=s;
+  ret.size = s;
+  ret.mem_size = 0;
   ret.owner = 0;
-  ret.array= &(V->array[i]); 
+  ret.array = &(V->array[i]); 
   return ret;
 } 
 
@@ -945,7 +937,7 @@ void FUNCTION(pnl_vect, swap_elements)(TYPE(PnlVect) * v, int i, int j)
       PNL_ERROR ("index out of range", "pnl_vect_swap_elements");
     }
 #endif
-  if(i != j)
+  if (i != j)
     {
       BASE vj = v->array[j];
       BASE *vi = &(v->array[i]);
@@ -993,11 +985,11 @@ void FUNCTION(pnl_array, min_index)(const BASE *a, int n, int incr,
   for(i = 1, j=incr; i < n; i++, j += incr)
     {
       BASE x = a[j];
-      if(x < min)
+      if (x < min)
         {
           min = x; imin = i;
         }
-      if(isnan(x))
+      if (isnan(x))
         {
           *imin_out = i; *min_out = x;
           return;
@@ -1026,11 +1018,11 @@ void FUNCTION(pnl_array, max_index)(const BASE *a, int n, int incr,
   for(i = 1, j=incr; i < n; i++, j += incr)
     {
       BASE x = a[j];
-      if(x > max)
+      if (x > max)
         {
           max = x; imax = i;
         }
-      if(isnan(x))
+      if (isnan(x))
         {
           *imax_out = i; *max_out = x;
           return;
@@ -1065,15 +1057,15 @@ void FUNCTION(pnl_array, minmax_index)(const BASE *a, int n, int incr,
   for(i = 1, j=incr; i < n; i++, j += incr)
     {
       BASE x = a[j];
-      if(x < min)
+      if (x < min)
         {
           min = x; imin = i;
         }
-      if(x > max)
+      if (x > max)
         {
           max = x; imax = i;
         }
-      if(isnan(x))
+      if (isnan(x))
         {
           *imin_out = *imax_out = i;
           *min_out = *max_out = x;

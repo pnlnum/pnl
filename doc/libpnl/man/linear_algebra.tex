@@ -16,25 +16,29 @@ the previous types and the corresponding vector structures are respectively
 named PnlVect, PnlVectInt, PnlVectUint, PnlVectComplex
 \begin{verbatim}
 typedef struct PnlVect {
-  int size; /*!< size of the vector */ 
+  int size; /*!< size of the vector */
+  int mem_size; /*!< size of the memory block allocated for array */
   double *array; /*!< pointer to store the data */
   int owner; /*!< 1 if the structure owns its array pointer */
 } PnlVect;
 
 typedef struct PnlVectUint {
   int size; /*!< size of the vector */ 
+  int mem_size; /*!< size of the memory block allocated for array */
   uint *array; /*!< pointer to store the data */
   int owner; /*!< 1 if the structure owns its array pointer */
 } PnlVect;
 
 typedef struct PnlVectInt {
   int size; /*!< size of the vector */ 
+  int mem_size; /*!< size of the memory block allocated for array */
   int *array; /*!< pointer to store the data */
   int owner; /*!< 1 if the structure owns its array pointer */
 } PnlVect;
 
 typedef struct PnlVectComplex {
   int size; /*!< size of the vector */ 
+  int mem_size; /*!< size of the memory block allocated for array */
   fcomplex *array; /*!< pointer to store the data */
   int owner; /*!< 1 if the structure owns its array pointer */
 } PnlVect;
@@ -42,6 +46,7 @@ typedef struct PnlVectComplex {
 \var{size} is the size of the vector, \var{array} is a pointer containing the
 data and \var{owner} is an integer to know if the vector owns its \var{array}
 pointer (\var{owner}=$1$) or shares it with another structure (\var{owner}=$0$).
+\var{mem_size} is the number of elements the vector can hold at most.
 
 \subsubsection{Functions}
 
@@ -112,13 +117,16 @@ the above table.
 \subparagraph{Resizing vectors}
 \begin{itemize}
 \item \describefun{int}{pnl_vect_resize}{\refstruct{PnlVect} $\ast$\refstruct{v}, int size}
-  \sshortdescribe Resizes a \refstruct{PnlVect}.  
+  \sshortdescribe Resizes a \refstruct{PnlVect}. The old data are kept up to
+  the new size.
 \item \describefun{int}{pnl_vect_resize_from_double}{\refstruct{PnlVect}
     $\ast$\refstruct{v}, int size, double x} 
-  \sshortdescribe Resizes a \refstruct{PnlVect}.  
+  \sshortdescribe Resizes a \refstruct{PnlVect}.  The old data are kept. If
+  the new size is larger thant the old one, the new cells are set to \var{x}.
 \item \describefun{int}{pnl_vect_resize_from_ptr}{\refstruct{PnlVect}
     $\ast$\refstruct{v}, int size, double $\ast$t} 
-  \sshortdescribe Resizes a \refstruct{PnlVect}.  
+  \sshortdescribe Resizes a \refstruct{PnlVect} and uses \var{t} to fill the
+  vector. \var{t} must be of size \var{size}.
 \end{itemize}  
 
 \subparagraph{Accessing elements}
@@ -408,6 +416,7 @@ typedef struct PnlMat{
   int m; /*!< nb rows */ 
   int n; /*!< nb columns */ 
   int mn; /*!< product m*n */
+  int mem_size; /*!< size of the memory block allocated for array */
   double *array; /*!< pointer to store the data row-wise */
   int owner; /*!< 1 if the structure owns its array pointer */
 } PnlMat;
@@ -416,6 +425,7 @@ typedef struct PnlMatUint{
   int m; /*!< nb rows */ 
   int n; /*!< nb columns */ 
   int mn; /*!< product m*n */
+  int mem_size; /*!< size of the memory block allocated for array */
   uint *array; /*!< pointer to store the data row-wise */
   int owner; /*!< 1 if the structure owns its array pointer */
 } PnlMatUint;
@@ -424,6 +434,7 @@ typedef struct PnlMatInt{
   int m; /*!< nb rows */ 
   int n; /*!< nb columns */ 
   int mn; /*!< product m*n */
+  int mem_size; /*!< size of the memory block allocated for array */
   int *array; /*!< pointer to store the data row-wise */
   int owner; /*!< 1 if the structure owns its array pointer */
 } PnlMatInt;
@@ -432,6 +443,7 @@ typedef struct PnlMatComplex{
   int m; /*!< nb rows */ 
   int n; /*!< nb columns */ 
   int mn; /*!< product m*n */
+  int mem_size; /*!< size of the memory block allocated for array */
   fcomplex *array; /*!< pointer to store the data row-wise */
   int owner; /*!< 1 if the structure owns its array pointer */
 } PnlMatComplex;
@@ -440,7 +452,8 @@ typedef struct PnlMatComplex{
 is a pointer containing the data of the matrix stored linewise, The element
 $(i, j)$ of the matrix is \verb!array[i*m+j]!. \var{owner} is an integer to
 know if the matrix owns its \var{array} pointer (\var{owner}=$1$) or shares it
-with another structure (\var{owner}=$0$).
+with another structure (\var{owner}=$0$). \var{mem_size} is the number of
+elements the matrix can hold at most.
 
 The following operations are implemented on matrices and vectors. \var{alpha}
 and \var{beta} are real numbers, \var{A} and \var{B} are matrices and \var{x}

@@ -14,6 +14,7 @@ extern double pnl_dyadic_cast(uint i);
 /*@{*/
 typedef struct PnlVectUint{
   int size;/*!< size of the vector */ 
+  int mem_size; /*!< size of the memory block allocated for array */
   uint *array;/*!< pointer to store the data */
   int owner; /*!< 1 if the structure owns its array pointer */
 } PnlVectUint;

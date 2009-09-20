@@ -11,6 +11,7 @@ struct PnlVect;
 /*@{*/
 typedef struct PnlVectInt{
   int size;/*!< size of the vector */ 
+  int mem_size; /*!< size of the memory block allocated for array */
   int *array;/*!< pointer to store the data */
   int owner; /*!< 1 if the structure owns its array pointer */
 } PnlVectInt;

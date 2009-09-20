@@ -17,6 +17,7 @@ typedef struct PnlMatUint{
   int m; /*!< nb rows */ 
   int n; /*!< nb columns */ 
   int mn; /*!< product m*n */
+  int mem_size; /*!< size of the memory block allocated for array */
   uint *array; /*!< pointer to store the data row-wise */
   int owner; /*!< 1 if the structure owns its array pointer */
 } PnlMatUint;

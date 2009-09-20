@@ -14,7 +14,7 @@ typedef struct tst_list_t tst_list;
 
 
 extern void run_all_test (tst_list *l);
-extern void run_all_test (tst_list *l);
+extern void menu_test (tst_list *l);
 
 #endif /* TESTS_H */
 
