@@ -444,8 +444,11 @@ int pnl_fit_least_squares (PnlVect *coef, PnlMat *x, PnlVect *y, PnlBasis *f, in
     }
 
   /* Solve A x = b, with A >0 symmetric */
-  pnl_mat_chol (A);
-  pnl_mat_chol_syslin_inplace (A, coef);
+  /* pnl_mat_chol (A);
+     pnl_mat_chol_syslin_inplace (A, coef); */
+  /* Because A often comes from simulation, A is not >0. So we use a LU
+     approach */
+  pnl_mat_syslin_inplace (A, coef);
 
   pnl_vect_free (&phi_k);
   pnl_mat_free (&A);
