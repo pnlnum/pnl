@@ -13,4 +13,4 @@ laplace_test.c lapack_test.c
 
 testpnl_LDADD=../src/libpnl.la
 
-testpnl_LDFLAGS=@BLAS_LIBS@ @LAPACK_LIBS@ @GSL_LIBS@ -no-install
+testpnl_LDFLAGS=@BLAS_LIBS@ @LAPACK_LIBS@ @GSL_LIBS@ 
