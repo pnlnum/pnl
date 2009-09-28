@@ -3,7 +3,7 @@ SUBDIRS=
 include $(top_srcdir)/Make.incl
 AM_CPPFLAGS = $(PNL_INCLUDES)
 
-nobase_include_HEADERS= \
+pkginclude_HEADERS= \
 pnl_finance.h					 pnl_specfun.h         sparse_grid_constructor.h \
 gridsparse_constructor.h		 pnl_integration.h     pnl_spec_matrix.h \
 gridsparse_functions.h			 pnl_linalgsolver.h    pnl_fft.h \
