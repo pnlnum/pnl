@@ -73,6 +73,7 @@ extern void
 pnl_mat_complex_get_row(PnlVectComplex *V, const PnlMatComplex *M, int i);/* V(:)=M(i,:) */
 extern void pnl_mat_complex_get_col(PnlVectComplex *V, const PnlMatComplex *M, int j);
 extern PnlVectComplex pnl_mat_complex_wrap_row(const PnlMatComplex *M, int i);/* M(i,:)=V(:) */
+extern PnlVectComplex pnl_mat_complex_wrap_vect(const PnlMatComplex *M);
 extern void pnl_mat_complex_row_to_vect_inplace(PnlVectComplex * V,const PnlMatComplex *M, int i);/* M(i,:)=V(:) */
 extern void pnl_mat_complex_map_inplace(PnlMatComplex *lhs, fcomplex(*f)(fcomplex)); /*lhs=f(lhs)*/
 extern void pnl_mat_complex_map(PnlMatComplex *lhs, const PnlMatComplex *rhs, fcomplex(*f)(fcomplex));/* lhs(i)=f(rhs(i)) */

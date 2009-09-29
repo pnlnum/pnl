@@ -577,6 +577,13 @@ the above table.
   matrix \var{M}, which means that any modification to one of them will affect
   the other.
   
+\item \describefun{\refstruct{PnlVect}}{pnl_mat_wrap_vect}
+  {const \refstruct{PnlMat} $\ast$M}
+  \sshortdescribe Returns a \refstruct{PnlVect} (not a pointer) whose array is
+  the row-wise array of \var{M}. The new vector shares its data with the
+  matrix \var{M}, which means that any modification to one of them will affect
+  the other.
+
 \item \describefun{void}{pnl_mat_get_row}{\refstruct{PnlVect}
     $\ast$V, const \refstruct{PnlMat} $\ast$M, int i}
   \sshortdescribe Extracts and copies the \var{i}-th row of \var{M} into

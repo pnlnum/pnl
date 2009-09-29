@@ -171,6 +171,7 @@ extern void pnl_mat_fprint(FILE *fic, const PnlMat *M);
 extern void pnl_mat_fprint_nsp (FILE *fic, const PnlMat *M);
 extern void pnl_mat_print_nsp (const PnlMat *M);
 extern PnlVect pnl_mat_wrap_row(const PnlMat *M, int i);
+extern PnlVect pnl_mat_wrap_vect(const PnlMat *M);
 extern void pnl_mat_row_to_vect_inplace(PnlVect *V, const PnlMat *M, int i);
 extern void pnl_mat_get_row(PnlVect *V, const PnlMat *M, int i);
 extern void pnl_mat_get_col(PnlVect *V, const PnlMat *M, int j);

@@ -673,6 +673,22 @@ TYPE(PnlVect) FUNCTION(pnl_mat,wrap_row)(const TYPE(PnlMat) *M, int i)
 }
 
 /**
+ * Cast a mtrix into a PnlVect 
+ * @param M a matrix
+ * @return a vector (not a pointer) whose array pointer is the address of the
+ * first element of the matrix M. No copying is done.
+ */
+TYPE(PnlVect) FUNCTION(pnl_mat,wrap_vect)(const TYPE(PnlMat) *M)
+{
+  TYPE(PnlVect) V;
+  V.size = M->mn;
+  V.mem_size = 0;
+  V.owner = 0;
+  V.array = M->array; 
+  return V;
+}
+
+/**
  * Copies the ith column of M into V
  *
  * @param V a PnlVect resized within the function
