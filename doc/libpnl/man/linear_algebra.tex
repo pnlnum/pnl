@@ -1457,22 +1457,21 @@ copy of array $M\rightarrow Low$.
 
 A system of linear equation is called sparse if only a relatively small number
 of its matrix elements $M_{i, j}$ are nonzero. It is wasteful to use full
-structure to solve the linear system because most of the operations
-devoted to solve the system use zero elements. Furthermore, for some problems
-high dimensional problem, stored the full matrix with zero elements is not
-possible.
+structure to solve the linear system because most of the operations devoted to
+solving the system use elements with values zero. Furthermore, for some 
+high dimensional problems, storing the full matrix with its zero elements is not
+possible the memory usage explodes.
 
 
-In the following, We propose two structures for the Sparse Matrix.
-Must of algorithms which use sparse matrix could be divided in two steps.
-The first step is the construction of the matrix. For this, 
-\refstruct{PnlMorseMat} should be always used. The second step is the
-resolution of a sparse linear system. We have two way to do that. The first is
-to use an direct method based on matrix-decomposition, like LU. The
-\refstruct{PnlSparseMat} is implemented to do that. An other way is to use
-iterative methods like Conjugate Gradient, BICGstab or GMRES. These methods are
-discussed in the next section. If we use iterative methods, we can use 
-\refstruct{PnlMorseMat}. 
+In the following, We propose two structures for Sparse Matrices.  Must of the
+algorithms which use sparse matrices can be divided in two steps.  The first
+step is the construction of the matrix. For this, \refstruct{PnlMorseMat} should
+always be used. The second step is the resolution of a sparse linear system. We
+have two ways of doing that. The first one is to use a direct method based on
+matrix-decomposition, like the LU decomposition. The \refstruct{PnlSparseMat} is
+implemented to do that. The second one is to use iterative methods like
+Conjugate Gradient, BICGstab or GMRES. These methods are discussed in the next
+section. If we use iterative methods, we can use \refstruct{PnlMorseMat}. 
 
 \begin{verbatim}
 typedef struct SpRow{
@@ -1488,8 +1487,8 @@ typedef struct SpRow{
 \end{verbatim}
 \var{size} is the number of elements, 
 \var{Max_size} is the size of memory allocation.
-\var{Index}, is pointer containing the index of row or column, 
-\var{Value}, is pointer containing the value of row or column.
+\var{Index}, is the pointer containing the index of row or column, 
+\var{Value}, is the pointer containing the value of row or column.
 So for a \refstruct{SpRow} which contains row $i$ of $M$.
 If $k \leq size $ then
 $$M_{i, Index[k]}=Value[k].$$  
@@ -1500,11 +1499,11 @@ typedef struct PnlMorseMat{
   int n; /*!< nb columns */ 
   SpRow * array; 
   /*!< pointer in each row or col to store no nul coefficients */
-  int RC; /*!> 0 if store row, 1 if store col*/ 
+  int RC; /*!> 0 if we use row wise storage, 1 if we use column wise storage */ 
 } PnlMorseMat;
 \end{verbatim}
 \var{m} is the number of rows, \var{n} is the number of columns.
-\var{array} is pointer containing on SpRow array of size n or m (depend of
+\var{array} is the pointer containing on SpRow array of size n or m (depend of
 RC).
 \var{RC} is an integer to know if the matrix is stored by row or columns.
 
@@ -1519,17 +1518,23 @@ RC).
   \describefun{\refstruct{PnlMorseMat}$\ast$}{pnl_morse_mat_create_fromfull}{\refstruct{PnlMat}
     $\ast$FM, int RC}
   \sshortdescribe Construct a \refstruct{PnlMorseMat} from  a \refstruct{PnlMat} storing only nonzero elements.
+
 \item \describefun{void}{pnl_morse_mat_free}{\refstruct{PnlMorseMat}$\ast$$\ast$ M}
+  \sshortdescribe Frees the memory used used by \var{$\ast$M}
+
 \item \describefun{int}{pnl_morse_mat_freeze}{PnlMorseMat$\ast$ M}
-  \sshortdescribe Free the memory impose Max size equal to size for each SpRow.
+  \sshortdescribe Sets Max size equal to size for each SpRow and frees the extra
+  memory.
+
 \item \describefun{\refstruct{PnlMat}
     $\ast$}{pnl_morse_mat_full}{\refstruct{PnlMorseMat}$\ast$ M}
-  \sshortdescribe Construct a full matrix from a morse matrix, use only for debug.
+  \sshortdescribe Constructs a full matrix from a morse matrix, use only for debug.
 \end{itemize}
+
+
 \paragraph{Accessing elements}
 \begin{itemize}
-\item \describefun{double}{ pnl_morse_mat_get}{PnlMorseMat$\ast$ M, int i, int
-    j}
+\item \describefun{double}{ pnl_morse_mat_get}{PnlMorseMat$\ast$ M, int i, int j}
   \sshortdescribe Return $M_{i, j}$. 
 \item \describefun{int}{ pnl_morse_mat_set}{PnlMorseMat$\ast$ M, int i, int
     j, double Val}
@@ -1567,15 +1572,14 @@ RC).
 
 \subsection{Sparse Matrix}
 
-\refstruct{PnlSparseMat} is the cs struct of Csparse library written by
+\refstruct{PnlSparseMat} is the cs structure of the Csparse library written by
 Timothy A.Davis under the LGPL licence.  For the sake of convenience, we have
 renamed some functions and structures. We have also reduced the number of
-function parameters for non expert people in sparse matrices.  In the following, 
-we only use LU factorization for sparse systems. In some cases, the factorization
-can computed only one time PIDE-parabolic problem with same operator at each
-time discretisation step. In this case, direct methods are faster than
-iterative methods. When the PIDE coefficients are time dependent, the answer is not
-so clear.
+function parameters for non expert people in sparse matrices.  In the following,
+we only use the LU factorisation for sparse systems. If the same operator is
+used at each time step, direct methods relying on factorisations are faster than
+iterative methods. When the PDE coefficients are time dependent, the answer is
+not so clear.
 
 \subsubsection{Functions}
 \paragraph{Constructors and destructors}
@@ -1607,16 +1611,27 @@ so clear.
 \end{itemize}
 
 \subsubsection{LU structure}
-From the sparse matrix, we extract LU decomposition stored in \refstruct{PnlSparseFactorization}.
+
+From the sparse matrix, we extract the LU decomposition stored in \refstruct{PnlSparseFactorization}.
 \paragraph{Constructors and desctructors}
 \begin{itemize}
 \item \describefun{\refstruct{PnlSparseFactorization}
     $\ast$}{pnl_sparse_factorization_lu_create}{const \refstruct{PnlSparseMat} $\ast$A, double tol}
+  \sshortdescribe Computes the LU factorisation of \var{A}
+
 \item \describefun{void}{pnl_sparse_factorization_free}{\refstruct{PnlSparseFactorization} $\ast$$\ast$ F}
+  \sshortdescribe Frees a \refstruct{PnlSparseFactorization}.
 \end{itemize}
-\paragraph{Solve linear system}
+
+\paragraph{Solving linear systems}
+
 \begin{itemize}
-\item \describefun{void}{pnl_sparse_factorization_lu_syslin}{const \refstruct{PnlSparseFactorization} $\ast$N, PnlVect $\ast$x}
+\item \describefun{void}{pnl_sparse_factorization_lu_syslin}{const
+    \refstruct{PnlSparseFactorization} $\ast$N, PnlVect $\ast$b}
+  \sshortdescribe Solves the linear system \var{Nx = b} and stores the solution \var{x}
+  into \var{b} which means that the r.h.s member of the system is overwritten
+  during the resolution of the system. \var{N} is the decomposition computed by
+  \reffun{pnl_sparse_factorization_lu_create}.
 \end{itemize}
 
 %% solver
@@ -1629,14 +1644,14 @@ The structures and functions relative to solvers are declared in
 \verb!#include "pnl_linalgsover.h"! in his code to use these functions.
 
 
-Most of Iterative method are based on results on Krylov subspace. In linear
+Most iterative methods are based on results on Krylov subspace. In linear
 algebra, the Krylov subspace generated by an n-by-n matrix A and a vector b of
 dimension n is the linear subspace spanned by the images of $b$ under the
 first $r$ powers of $M$ (starting from $M^0 = Id$), that is,
 $$  \mathcal{K}_r(M, b) = \operatorname{span} \, \left\{ b, M b, M^2b,
   \ldots, M^{r-1}b\right\}.$$ 
 
-Main idea of iterative methods or Krylov subspace methods is to form an
+the main idea of iterative methods or Krylov subspace methods is to form an
 orthogonal basis of the sequence of successive matrix powers times the initial
 residual (the Krylov sequence). The approximations to the solution are then
 formed by minimizing the residual over the subspace formed.  The prototypical
@@ -1655,31 +1670,32 @@ and right preconditioner solve
 $$ M P y  = b, \quad \quad P y = x.$$
 
 With some simplifications, number of algorithms iterations depend ( linearly is
-some case ) of conditioning. Conditioning is ratio of maximum eigen value over minimum
-eigen value of $M$. For GMRES algorithm is depend of conditioning of $M^{T}
-M$. So if we can find $P_L$ and $P_R$ such that $P_L M P_R$ is closed to
+some case ) of conditioning. Conditioning is ratio of maximum eigenvalue over
+minimum eigenvalue of $M$. For GMRES algorithm is depend of conditioning of
+$M^{T} M$. So if we can find $P_L$ and $P_R$ such that $P_L M P_R$ is closed to
 identity matrix, then preconditioning problem converge faster than initial
-problem. We have also to solve $P_R y = x$ so $P_R$ has to be constructed to
-do that fast.
+problem. We have also to solve $P_R y = x$ so $P_R$ has to be constructed to do
+that fast.
 
 More information is given in {\em Saad, Yousef (2003). Iterative methods for
   sparse linear systems (2nd ed. ed.). SIAM. ISBN 0898715342. OCLC 51266114}.
-Reader find in this book some discussion about right or/and left
-preconditioner and description of the following algorithms. 
+Reader find in this book some discussion about right or/and left preconditioner
+and description of the following algorithms. 
 
-These algorithms, we implemented with left preconditioner. Right
-preconditioner can be easily computed changing matrix-vector multiplication
-operation from $M \ x $ to $ M \ P_R \ x$ and solving $P_R y = x$ at the end
-of algorithm.
+These algorithms, we implemented with left preconditioner. Right preconditioner
+can be easily computed changing matrix vector multiplication operation from $M \
+x $ to $ M \ P_R \ x$ and solving $P_R y = x$ at the end of algorithm.
 
 
 \subsubsection{Functions}
-Three methods are implemented Conjugate Gradient, BICGstab and GMRES with restart. For each
-of them a structure is created to store temporary vectors used in algorithm. So
-we have constructor and destructor. In some case, we have to apply iterative
-methods more than one time : for example to solve at each time step a discrete form of an elliptic
-problem come from parabolic problem. So do not use constructor and free at
-each time. Use only an initialization and solve procedure.  
+
+Three methods are implemented Conjugate Gradient, BICGstab and GMRES with
+restart. For each of them a structure is created to store temporary vectors used
+in algorithm. So we have constructor and destructor. In some case, we have to
+apply iterative methods more than one time : for example to solve at each time
+step a discrete form of an elliptic problem come from parabolic problem. So do
+not use constructor and free at each time. Use only an initialization and solve
+procedure.  
 
 Formally we have, 
 \begin{verbatim}
@@ -1692,7 +1708,7 @@ free iterative method
 \end{verbatim}
 
 In these functions, we don't use any particular matrix structure. We give the
-matrix-vector multiplication as a parameter of the solver. 
+matrix vector multiplication as a parameter of the solver. 
 
 \paragraph{Conjugate Gradient method}
 
@@ -1705,8 +1721,8 @@ Use only for symmetric and positive matrix.
   \sshortdescribe Initialisation of the solver at the beginning of iterative method.  
 \item \describefun{void}{pnl_cg_solver_free}{\refstruct{PnlCGSolver} $\ast$$\ast$Solver}
   \sshortdescribe Destructor of iterative solver  
-\item \describefun{int}{pnl_cg_solver_solve}{void($\ast$matrix-vector-product)(const void $\ast$, const \refstruct{PnlVect} $\ast$, const double, const double, \refstruct{PnlVect} $\ast$), const void $\ast$Matrix-Data, void($\ast$matrix-vector-product-PC)(const void $\ast$, const \refstruct{PnlVect} $\ast$, const double, const double, \refstruct{PnlVect} $\ast$), const void $\ast$PC-Data, \refstruct{PnlVect} $\ast$x, const \refstruct{PnlVect} $\ast$b, \refstruct{PnlCGSolver} $\ast$Solver}
-  \sshortdescribe Solve the linear system matrix-vector-product is the matrix-vector multiplication function matrix-vector-product-PC is the preconditionner function Matrix-Data \& PC-Data is data to compute matrix-vector multiplication.  
+\item \describefun{int}{pnl_cg_solver_solve}{void($\ast$matrix vector-product)(const void $\ast$, const \refstruct{PnlVect} $\ast$, const double, const double, \refstruct{PnlVect} $\ast$), const void $\ast$Matrix-Data, void($\ast$matrix vector-product-PC)(const void $\ast$, const \refstruct{PnlVect} $\ast$, const double, const double, \refstruct{PnlVect} $\ast$), const void $\ast$PC-Data, \refstruct{PnlVect} $\ast$x, const \refstruct{PnlVect} $\ast$b, \refstruct{PnlCGSolver} $\ast$Solver}
+  \sshortdescribe Solve the linear system matrix vector-product is the matrix vector multiplication function matrix vector-product-PC is the preconditionner function Matrix-Data \& PC-Data is data to compute matrix vector multiplication.  
 \end{itemize}
 \paragraph{BICG stab}
 \begin{itemize}
@@ -1716,8 +1732,8 @@ Use only for symmetric and positive matrix.
   \sshortdescribe Initialisation of the solver at the beginning of iterative method.  
 \item \describefun{void}{pnl_bicg_solver_free}{\refstruct{PnlBICGSolver} $\ast$$\ast$Solver}
   \sshortdescribe Destructor of iterative solver  
-\item \describefun{int}{pnl_bicg_solver_solve}{void($\ast$matrix-vector-product)(const void $\ast$, const \refstruct{PnlVect} $\ast$, const double, const double, \refstruct{PnlVect} $\ast$), const void $\ast$Matrix-Data, void($\ast$matrix-vector-product-PC)(const void $\ast$, const \refstruct{PnlVect} $\ast$, const double, const double, \refstruct{PnlVect} $\ast$), const void $\ast$PC-Data, \refstruct{PnlVect} $\ast$x, const \refstruct{PnlVect} $\ast$b, \refstruct{PnlBICGSolver} $\ast$Solver}
-  \sshortdescribe Solve the linear system matrix-vector-product is the matrix-vector multiplication function matrix-vector-product-PC is the preconditioner function Matrix-Data \& PC-Data is data to compute matrix-vector multiplication.  
+\item \describefun{int}{pnl_bicg_solver_solve}{void($\ast$matrix vector-product)(const void $\ast$, const \refstruct{PnlVect} $\ast$, const double, const double, \refstruct{PnlVect} $\ast$), const void $\ast$Matrix-Data, void($\ast$matrix vector-product-PC)(const void $\ast$, const \refstruct{PnlVect} $\ast$, const double, const double, \refstruct{PnlVect} $\ast$), const void $\ast$PC-Data, \refstruct{PnlVect} $\ast$x, const \refstruct{PnlVect} $\ast$b, \refstruct{PnlBICGSolver} $\ast$Solver}
+  \sshortdescribe Solve the linear system matrix vector-product is the matrix vector multiplication function matrix vector-product-PC is the preconditioner function Matrix-Data \& PC-Data is data to compute matrix vector multiplication.  
 \end{itemize}
 
 \paragraph{GMRES with restart}
@@ -1736,13 +1752,13 @@ Note that with restart equal to $m$, we have classical GMRES algorithm.
   \sshortdescribe Initialisation of the solver at the beginning of iterative method.  
 \item \describefun{void}{pnl_gmres_solver_free}{\refstruct{PnlGMRESSolver} $\ast$$\ast$Solver}
   \sshortdescribe Destructor of iterative solver  
-\item \describefun{int}{pnl_gmres_solver_solve}{void($\ast$matrix-vector-product)(const void $\ast$, const \refstruct{PnlVect} $\ast$, const double, const double, \refstruct{PnlVect} $\ast$), const void $\ast$Matrix-Data, void($\ast$matrix-vector-product-PC)(const void $\ast$, const \refstruct{PnlVect} $\ast$, const double, const double, \refstruct{PnlVect} $\ast$), const void $\ast$PC-Data, \refstruct{PnlVect} $\ast$x, const \refstruct{PnlVect} $\ast$b, \refstruct{PnlGMRESSolver} $\ast$Solver}
-  \sshortdescribe Solve the linear system matrix-vector-product is the matrix-vector multiplication function matrix-vector-product-PC is the preconditionner function Matrix-Data \& PC-Data is data to compute matrix-vector multiplication.  
+\item \describefun{int}{pnl_gmres_solver_solve}{void($\ast$matrix vector-product)(const void $\ast$, const \refstruct{PnlVect} $\ast$, const double, const double, \refstruct{PnlVect} $\ast$), const void $\ast$Matrix-Data, void($\ast$matrix vector-product-PC)(const void $\ast$, const \refstruct{PnlVect} $\ast$, const double, const double, \refstruct{PnlVect} $\ast$), const void $\ast$PC-Data, \refstruct{PnlVect} $\ast$x, const \refstruct{PnlVect} $\ast$b, \refstruct{PnlGMRESSolver} $\ast$Solver}
+  \sshortdescribe Solve the linear system matrix vector-product is the matrix vector multiplication function matrix vector-product-PC is the preconditionner function Matrix-Data \& PC-Data is data to compute matrix vector multiplication.  
 \end{itemize}
 
 
 In the next paragraph, we write all the solvers for \refstruct{PnlMat}. This will be done as
-follow: construct an application matrix-vector.
+follow: construct an application matrix vector.
 \begin{verbatim}
 static void pnl_mat_mult_vect_applied(const void *mat, const PnlVect *vec, 
                                       const double a , const double b, 
@@ -1758,11 +1774,11 @@ int pnl_mat_cg_solver_solve(const PnlMat * Matrix, const PnlMat * PC,
                              PC, x, b, Solver);}
 \end{verbatim}
 
-In practice, we cannot define all iterative methods for all structure.
+In practice, we cannot define all iterative methods for all structures.
 With this implementation, user can easily :
 \begin{itemize}
-\item implemented right precondioner, 
-\item implemented method with sparse matrix and diagonal preconditioner, or
+\item implement right precondioner, 
+\item implement method with sparse matrix and diagonal preconditioner, or
   special combination of this form $\dots$
 \end{itemize}
 
