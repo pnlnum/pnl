@@ -55,9 +55,11 @@ extern fcomplex Clgamma(fcomplex xx);
 extern fcomplex Ccos(fcomplex g);
 extern fcomplex Csin(fcomplex g);
 extern fcomplex Ctan(fcomplex z);
+extern fcomplex Ccotan(fcomplex z);
 extern fcomplex Ccosh(fcomplex g);
 extern fcomplex Csinh(fcomplex g);
 extern fcomplex Ctanh(fcomplex z);
+extern fcomplex Ccotanh(fcomplex z);
 extern fcomplex Cpow(fcomplex z, fcomplex exp);
 extern fcomplex Cpow_real (fcomplex z, double y);
 /* Algebirc operation on C : */

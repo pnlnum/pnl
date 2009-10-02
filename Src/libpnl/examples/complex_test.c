@@ -68,12 +68,16 @@ static void Ctrigo_test ()
   printf("Csin(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
   c = Ctan (z);
   printf("Ctan(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
+  c = Ccotan (z);
+  printf("Ccotan(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
   c = Ccosh (z);
   printf("Ccosh(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
   c = Csinh (z);
   printf("Csinh(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
   c = Ctanh (z);
   printf("Ctanh(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
+  c = Ccotanh (z);
+  printf("Ccotanh(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
 }
 
 

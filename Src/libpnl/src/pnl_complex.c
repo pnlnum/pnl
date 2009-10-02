@@ -566,13 +566,22 @@ fcomplex Csin (fcomplex z)
 /**
  * tan(z)
  * @param z  a complex number
- * @return  sin(z)
+ * @return  tan(z)
  */
 fcomplex Ctan (fcomplex z)
 {
   return Cdiv (Csin (z), Ccos (z));
 }
 
+/**
+ * cotan(z)
+ * @param z  a complex number
+ * @return  cotan(z)
+ */
+fcomplex Ccotan (fcomplex z)
+{
+  return Cdiv (Ccos (z), Csin (z));
+}
 
 /**
  *  cosh(z)
@@ -604,7 +613,7 @@ fcomplex Csinh(fcomplex z)
 }
 
 /**
- * ctanh
+ * tanh
  * based on the formula tanh(z) = -i * tan(i * z)
  * @param z  a complex number
  * @return tanh(z)
@@ -617,10 +626,27 @@ fcomplex Ctanh(fcomplex z)
   tmp2 = Ctan (tmp);
 
   tmp.r = tmp2.i;
-  tmp.i = - tmp2.r;
+  tmp.i = -tmp2.r;
   return tmp;
 }
 
+/**
+ * cotanh
+ * based on the formula cotanh(z) = i * cotan(i * z)
+ * @param z  a complex number
+ * @return cotanh(z)
+ */
+fcomplex Ccotanh(fcomplex z)
+{
+  fcomplex tmp, tmp2;
+  tmp.r = - z.i;
+  tmp.i = z.r;
+  tmp2 = Ccotan (tmp);
+
+  tmp.r = -tmp2.i;
+  tmp.i = tmp2.r;
+  return tmp;
+}
 
 /**
  *  arg(z) , argument
