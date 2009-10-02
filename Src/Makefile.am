@@ -24,7 +24,7 @@ installpnl:
 premiaterm-unix: libpremia.la premia.o
 	$(LIBTOOL) --tag=CXX --mode=link $(CXX)  \
 	-o ../Unix/PremiaTerm $(PremiaTerm_LDFLAGS) $(PremiaTerm_OBJECTS) \
-	$(PremiaTerm_LDADD) $(LIBS) -no-install
+	$(PremiaTerm_LDADD) $(LIBS) 
 
 
 premia.o: premia.c
