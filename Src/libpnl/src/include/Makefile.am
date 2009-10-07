@@ -1,3 +1,5 @@
+pkgincludedir=$(includedir)/pnl
+
 SUBDIRS= 
 
 include $(top_srcdir)/Make.incl

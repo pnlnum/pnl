@@ -1,6 +1,11 @@
 #ifndef _PNL_ROOT_H
 #define _PNL_ROOT_H
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include "pnl_mathtools.h"
 
 /**
@@ -18,5 +23,10 @@ extern int pnl_root_bisection (PnlFunc *Func, double xmin, double xmax,
                                double epsrel, double espabs, int N_max, double *res);
 
 /*@}*/
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
 
 #endif /* _PNL_ROOT_H */

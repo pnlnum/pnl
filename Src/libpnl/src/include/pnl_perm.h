@@ -1,6 +1,11 @@
 #ifndef PNL_PERM_H
 #define PNL_PERM_H
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include "pnl_vector.h"
 
 /**
@@ -22,5 +27,10 @@ extern void pnl_vect_permute_inplace (PnlVect *x, const PnlPermutation *p);
 extern void pnl_permutation_fprint (FILE *fic, const PnlPermutation *p);
 extern void pnl_permutation_print (const PnlPermutation *p);
 /*@}*/
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
 
 #endif /* PNL_PERM_H */

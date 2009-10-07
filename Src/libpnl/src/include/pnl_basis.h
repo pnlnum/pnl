@@ -1,6 +1,11 @@
 #ifndef _BASIS_ND
 #define _BASIS_ND
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+
 #include "pnl_types.h"
 #include "pnl_matrix.h"
 /**
@@ -32,4 +37,9 @@ extern int pnl_fit_least_squares (PnlVect *coef, PnlMat *x, PnlVect *y,
 extern double pnl_basis_eval (PnlVect *coef, double *x, PnlBasis *f);
 
 /*@}*/
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+
 #endif

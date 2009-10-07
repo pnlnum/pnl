@@ -1,6 +1,11 @@
 #ifndef SPECIAL_MATRIX_H
 #define SPECIAL_MATRIX_H
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include "pnl_perm.h"
 #include "pnl_matrix.h"
 #include "cs.h"
@@ -147,6 +152,9 @@ extern PnlMorseLUFact *pnl_morse_lu_fact_create(const PnlMorseMat *A,double tol)
 extern void pnl_morse_lu_fact_solve_inplace(const PnlMorseLUFact *F, PnlVect *x);
 extern void pnl_morsefact_free(PnlMorseLUFact ** Fatc);
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+
 #endif /* SPECIAL_MATRIX_H */
-
-

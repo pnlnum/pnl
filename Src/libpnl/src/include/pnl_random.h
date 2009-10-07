@@ -1,6 +1,11 @@
 #ifndef __RANDOM_H__
 #define __RANDOM_H__
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include "pnl_mathtools.h"
 #include "pnl_types.h"
 #include "pnl_vector.h"
@@ -85,6 +90,11 @@ extern double pnl_rand_gamma (double a, double b, int gen);
 extern double pnl_rand_chi2  (double nu, int gen);
 
 /*@}*/
+
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 
 #endif

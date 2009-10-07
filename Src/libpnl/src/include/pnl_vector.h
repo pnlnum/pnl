@@ -1,6 +1,10 @@
 #ifndef __VECTOR_H__
 #define __VECTOR_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include <stdio.h>
 
 #ifndef PNL_RANGE_CHECK_OFF
@@ -17,5 +21,10 @@
 #include "pnl_vector_complex.h"
 #include "pnl_vector_int.h"
 #include "pnl_vector_uint.h"
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
 
 #endif /* __VECTOR_H__ */

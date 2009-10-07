@@ -1,6 +1,11 @@
 #ifndef _PNL_LIST_H
 #define _PNL_LIST_H
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "pnl_vector_uint.h"
@@ -85,6 +90,9 @@ extern void pnl_sort_list_sparse_point_add(PnlSortListSparsePoint * List,const P
 extern void pnl_sort_list_sparse_point_add_dicho(PnlSortListSparsePoint * List,const PnlSparsePoint *Val);
 extern void pnl_sort_list_sparse_point_print(const PnlSortListSparsePoint * List);
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+
 #endif /* _PNL_LIST_H */
-
-

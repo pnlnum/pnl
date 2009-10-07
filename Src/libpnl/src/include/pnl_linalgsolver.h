@@ -1,6 +1,11 @@
 #ifndef SOLVER_ITERATIV_H
 #define SOLVER_ITERATIV_H
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include "pnl_mathtools.h"
 #include "pnl_matrix.h"
 
@@ -137,4 +142,9 @@ int pnl_mat_gmres_solver_solve(const PnlMat * Matrix,
                                const PnlVect *b,
                                PnlGMRESSolver * Solver);
 /*@}*/
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+
 #endif /* solver_iterativ_H */

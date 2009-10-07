@@ -1,6 +1,10 @@
 #ifndef VECTOR_UINT_H
 #define VECTOR_UINT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include <stdio.h>
 #include "pnl_vector.h"
 
@@ -120,6 +124,9 @@ extern int pnl_vect_uint_equal(const PnlVectUint * a,const PnlVectUint * b);
 
 
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+
 #endif /* VECTOR_UINT_H */
-
-

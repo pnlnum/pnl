@@ -1,6 +1,11 @@
 #ifndef MATRIX_INT_H
 #define MATRIX_INT_H
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include "pnl_vector_int.h"
 #include "pnl_matrix.h"
 
@@ -169,6 +174,9 @@ extern int* pnl_hmat_int_lget(PnlHMatInt *H, int *tab);
 
 /*@}*/
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+
 #endif /* MATRIX_INT_H */
-
-

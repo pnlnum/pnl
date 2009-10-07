@@ -1,6 +1,10 @@
 #ifndef VECTOR_COMPLEX_H
 #define VECTOR_COMPLEX_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include "pnl_complex.h"
 
 /**
@@ -157,6 +161,9 @@ extern void pnl_vect_complex_reverse(PnlVectComplex * v);
 
 
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+
 #endif /* VECTOR_FCOMPLEX_H */
-
-

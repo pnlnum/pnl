@@ -1,6 +1,11 @@
 #ifndef  _MATHTOOLS_H
 #define _MATHTOOLS_H
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include <math.h>
 #include <limits.h>
 #include <stdio.h>
@@ -172,5 +177,10 @@ typedef struct {
 #define PNL_EVAL_FDF_FUNC(F, x, f, df) (*((F)->function))(x, f, df, (F)->params)
 
 extern void pnl_qsort (void *a, int n, int es, int lda, int *t, int ldt, int use_index, int (*cmp)());
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
 
 #endif

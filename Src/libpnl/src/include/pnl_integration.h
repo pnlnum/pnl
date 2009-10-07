@@ -1,6 +1,11 @@
 #ifndef _PNL_INTEGRATIO
 #define _PNL_INTEGRATION
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include "pnl_mathtools.h"
 
 /* Gauss-Kronrod-Patterson quadrature coefficients for use in
@@ -25,5 +30,10 @@ extern int pnl_integration_GK2D (const PnlFunc2D *F,
 extern double pnl_integration (const PnlFunc *F, double x0, double x1, int n, char *meth);
 extern double pnl_integration_2D (const PnlFunc2D *F, double x0, double x1,
                                   double y0,double y1, int nx, int ny, char *meth);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
 
 #endif /* _PNL_INTEGRATION */

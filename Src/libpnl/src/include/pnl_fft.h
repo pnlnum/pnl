@@ -1,4 +1,3 @@
-
 /*************************************************************************/
 /* Written and (C) by Jérôme Lelong <jerome.lelong@gmail.com>            */
 /*                                                                       */
@@ -18,6 +17,11 @@
 
 #ifndef PNL_FFT_H
 #define PNL_FFT_H
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 #include "pnl_mathtools.h"
 #include "pnl_complex.h"
@@ -43,4 +47,9 @@ extern int pnl_real_ifft(const PnlVectComplex *in, PnlVect *out);
 extern int pnl_real_fft2(double *re, double *im, int n);
 extern int pnl_real_ifft2(double *re, double *im, int n);
 /*@}*/
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+
 #endif /* PNL_FFT_H */

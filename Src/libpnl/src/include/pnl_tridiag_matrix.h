@@ -1,6 +1,10 @@
 #ifndef TRIDIAG_MATRIX_H
 #define TRIDIAG_MATRIX_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include "pnl_matrix.h"
 
 #define EPSILON 1e-10  
@@ -78,6 +82,9 @@ extern double pnl_tridiagmat_get(const PnlTriDiagMat *self, int d, int up);
 extern double* pnl_tridiagmat_lget(PnlTriDiagMat *self, int d, int up);
 /*@}*/
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+
 #endif /* TRIDIAG_MATRIX_H */
-
-

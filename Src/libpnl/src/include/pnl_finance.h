@@ -1,6 +1,11 @@
 #ifndef  _FINANCE_FUNCTION_H
 #define _FINANCE_FUNCTION_H
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include "pnl_matrix_uint.h"
 #include "pnl_cdf.h"
 
@@ -30,6 +35,11 @@ extern int pnl_cf_call_bs(double s,double k,double t,double r,double divid,doubl
 extern int pnl_cf_put_bs(double s,double k,double t,double r,double divid,double sigma,
                          double *ptprice,double *ptdelta);
 extern double pnl_cf_bs_gamma(double s,double k,double t,double r,double divid,double sigma);
+
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 
 #endif

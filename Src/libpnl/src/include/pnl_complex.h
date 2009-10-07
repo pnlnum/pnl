@@ -1,6 +1,11 @@
 #ifndef __COMPLEX_H__
 #define __COMPLEX_H__
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 /**
  * \defgroup PnlComplex  Complex structure
  * \brief Operations on complex numbers.
@@ -90,7 +95,9 @@ typedef struct {
   void *params;
 } PnlCmplxFunc;
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+
 #endif /* __COMPLEX_H_ */
-
-
-

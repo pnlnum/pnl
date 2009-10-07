@@ -1,6 +1,11 @@
 #ifndef _CUMULFUNC_H
 #define _CUMULFUNC_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+
 #include "pnl_mathtools.h"
 /**
  * \defgroup bla Cumulative Functions
@@ -43,5 +48,10 @@ double pnl_normal_density(double x);
 double pnl_inv_cdfnor (double u);
   
 /*@}*/
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
 
 #endif /* _CUMULFUNC_H */

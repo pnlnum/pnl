@@ -1,6 +1,11 @@
 #ifndef _MATRIX_DOUBLE_H
 #define _MATRIX_DOUBLE_H
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include "pnl_vector.h"
 #include "pnl_perm.h"
 
@@ -294,6 +299,9 @@ extern double* pnl_hmat_lget(PnlHMat *H, int *tab);
 
 /*@}*/
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+
 #endif /* _MATRIX_DOUBLE_H */
-
-

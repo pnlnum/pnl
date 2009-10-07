@@ -1,6 +1,11 @@
 #ifndef MACHINE_H
 #define MACHINE_H
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include "config.h"
 
 /* Define  C2F entry point conversion */
@@ -13,6 +18,11 @@
 #else
 #define C2F(name) name
 #endif
+
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 
 #endif

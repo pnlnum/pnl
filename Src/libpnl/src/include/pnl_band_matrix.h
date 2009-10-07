@@ -1,6 +1,10 @@
 #ifndef BAND_MATRIX_H
 #define BAND_MATRIX_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include "pnl_matrix.h"
 
 #define EPSILON 1e-10  
@@ -93,6 +97,9 @@ extern void pnl_band_matrix_lu(PnlBandMatrix * M, double eps);
 extern void pnl_band_matrix_solve(PnlBandMatrix * M, PnlVect *x,const PnlVect *b);
 /*@}*/
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+
 #endif /* BAND_MATRIX_H */
-
-

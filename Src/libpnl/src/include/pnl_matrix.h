@@ -2,6 +2,11 @@
 #define _MATRIX_H
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+
 #ifndef PNL_RANGE_CHECK_OFF
 #define CheckIndexHMat(H,index) {{int l;                \
       for(l=0; l<(H)->ndim; l++)                        \
@@ -48,5 +53,9 @@
 #include "pnl_matrix_int.h"
 #include "pnl_matrix_uint.h"
 
-#endif /* _MATRIX_H */
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
+
+#endif /* _MATRIX_H */

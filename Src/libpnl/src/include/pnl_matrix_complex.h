@@ -1,6 +1,11 @@
 #ifndef MATRIX_COMPLEX_H
 #define MATRIX_COMPLEX_H
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include "pnl_complex.h"
 #include "pnl_vector.h"
 
@@ -165,6 +170,9 @@ extern fcomplex* pnl_hmat_complex_lget(PnlHMatComplex *H, int *tab);
 
 /*@}*/
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+
 #endif /* MATRIX_COMPLEX_H */
-
-

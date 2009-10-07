@@ -1,6 +1,10 @@
 #ifndef _PNL_TYPES_H
 #define _PNL_TYPES_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #define NULLINT -1
 /* when label=NULL, key must be set to NULLINT */
 typedef struct
@@ -24,5 +28,10 @@ typedef struct
 } enumeration;
 
 #define DEFINE_ENUM(Name, Members)  enum_members Name = { sizeof(Members[0]), &Members[0], sizeof(Members)/sizeof(Members[0])-1 };
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
 
 #endif /* _PNL_TYPES_H */

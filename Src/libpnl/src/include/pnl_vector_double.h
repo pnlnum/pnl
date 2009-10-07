@@ -1,6 +1,9 @@
 #ifndef VECTOR_DOUBLE_H
 #define VECTOR_DOUBLE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 #include <stdlib.h>
 
@@ -119,6 +122,9 @@ extern void pnl_vect_reverse(PnlVect * v);
 
 
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+
 #endif /* VECTOR_DOUBLE_H */
-
-

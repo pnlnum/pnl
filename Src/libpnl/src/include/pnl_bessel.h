@@ -1,6 +1,11 @@
 #ifndef _PNL_BESSEL
 #define _PNL_BESSEL
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+
 #include "pnl_complex.h"
 
 /**
@@ -42,4 +47,9 @@ extern fcomplex pnl_bessel_h2( double v, double x );
 extern fcomplex pnl_bessel_h2_scaled( double v, double x );
 
 /* @} */
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+
 #endif

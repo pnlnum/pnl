@@ -1,6 +1,10 @@
 #ifndef VECTOR_INT_H
 #define VECTOR_INT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include <stdio.h>
 #include "pnl_vector.h"
 
@@ -112,6 +116,9 @@ extern void pnl_vect_int_reverse(PnlVectInt * v);
 /*@}*/
 
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+
 #endif /* VECTOR_INT_H */
-
-
