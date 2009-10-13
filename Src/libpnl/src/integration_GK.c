@@ -235,15 +235,6 @@ rescale_error (double err, const double result_abs, const double result_asc)
           err = result_asc ;
         }
     }
-  /*
-    if (result_abs > GSL_DBL_MIN / (50 * GSL_DBL_EPSILON))
-    {
-    double min_err = 50 * GSL_DBL_EPSILON * result_abs ;
-    if (result_abs > err) 
-    {
-    err = result_abs ;
-    }
-  */
   return err ;
 }
 
