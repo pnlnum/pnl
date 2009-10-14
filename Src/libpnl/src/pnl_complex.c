@@ -23,11 +23,6 @@
 /*************************************************************************/
 
 
-/*
- * Some of the following functions originally comes from 
- * (C) Copr. 1986-92 Numerical Recipes Software A2.>$Y0%9j.
- */
-
 /**
  * Re(z) the real part
  * @param z  a complex number
@@ -647,7 +642,7 @@ double Carg(dcomplex z)       /* arg(z) in [-pi,pi] */
  * @param a  a complex number
  * @return  Gamma(a), the Gamma function of a
  */
-dcomplex Ctgamma(dcomplex a)   /* Valeur de gamma(z) pour Re(z)!=-k en */
+dcomplex Ctgamma_old(dcomplex a)   /* Valeur de gamma(z) pour Re(z)!=-k en */
 {                             /* utilisant l'approximation de LANCZOS*/
   /* qui donne gamma(z+1) et on divise par z*/
   dcomplex Cun, z, z0, z2, z3, z4, z5, z6, z7, z8, z9, z10, z11, z12, z13, z14, z15, z16, zzz;
@@ -725,7 +720,7 @@ dcomplex Ctgamma(dcomplex a)   /* Valeur de gamma(z) pour Re(z)!=-k en */
  * @param z  a complex number
  * @return ln (Gamma (z))
  */
-dcomplex Clgamma(dcomplex z)
+dcomplex Clgamma_old(dcomplex z)
 {
   dcomplex x,y,tmp,ser;
   static double cof[6]={76.18009172947146,-86.50532032941677,
