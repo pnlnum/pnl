@@ -146,10 +146,6 @@ dcomplex Clgamma (dcomplex z)
   dcomplex c;
   int kf = 0;
   sp_cgamma ((z.r), (z.i), kf, &(c.r), &(c.i));
-  if (isnan (c.r) || isnan (c.i))
-    {
-      PNL_ERROR ("NaN", "Clgamma"); 
-    } 
   return c;
 } 
 
