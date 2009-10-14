@@ -182,6 +182,7 @@ AC_CHECK_FUNCS(tgamma)
 AC_CHECK_FUNCS(lgamma)
 AC_CHECK_FUNCS(exp10)
 AC_CHECK_FUNCS(erfl)
+AC_CHECK_FUNCS(trunc)
 
 
 ##########################

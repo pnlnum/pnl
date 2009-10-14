@@ -28,6 +28,9 @@
 /* Define to 1 if you have the `erfl' function. */
 #undef HAVE_ERFL
 
+/* Define to 1 if you have the `trunc' function. */
+#undef HAVE_TRUNC
+
 /* Define to 1 if you have the <errno.h> header file. */
 #undef HAVE_ERRNO_H
 
