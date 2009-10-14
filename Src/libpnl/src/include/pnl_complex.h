@@ -15,7 +15,7 @@ extern "C" {
 typedef struct {
     double r; /*!< real part */
     double i; /*!< imaginary part */
-} fcomplex;
+} dcomplex;
 
 /** zero complex  0 + i 0  */
 #define CZERO (Complex(0,0))
@@ -26,72 +26,72 @@ typedef struct {
 #define CI (Complex(0,1)) 
 #define CMPLX(z) z.r, z.i
 
-extern double Creal( fcomplex g );
-extern double Cimag( fcomplex g );
-extern fcomplex Cadd(fcomplex a, fcomplex b);
-extern fcomplex CRadd(fcomplex z, double x);
-extern fcomplex RCadd(double b, fcomplex z);
-extern fcomplex Csub(fcomplex a, fcomplex b);
-extern fcomplex CRsub(fcomplex a, double b);
-extern fcomplex RCsub(double a, fcomplex b);
-extern fcomplex Cminus (fcomplex z);
-extern fcomplex Ciadd(fcomplex a, fcomplex b);
-extern fcomplex Cisub(fcomplex a, fcomplex b);
-extern fcomplex Cmul(fcomplex a, fcomplex b);
-extern fcomplex RCmul(double a, fcomplex b);
-extern fcomplex CRmul(fcomplex b, double a);
-extern fcomplex Complex(double re, double im);
-extern fcomplex Complex_polar(double r, double theta);
-extern void Cprintf( fcomplex z);
-extern fcomplex Conj(fcomplex z);
-extern fcomplex Cinv(fcomplex a);
-extern fcomplex Cdiv(fcomplex a, fcomplex b);
-extern fcomplex RCdiv(double a, fcomplex b);
-extern fcomplex CRdiv(fcomplex a, double b);
-extern double Csqr_norm(fcomplex z);
-extern double Cabs(fcomplex z);
-extern fcomplex Csqrt(fcomplex z);
-extern fcomplex Clog(fcomplex z);
-extern fcomplex Cexp(fcomplex z);
-extern fcomplex CIexp(double t);
-extern double Carg(fcomplex a);
-extern fcomplex Ctgamma(fcomplex a);
-extern fcomplex Clgamma(fcomplex xx);
-extern fcomplex Ccos(fcomplex g);
-extern fcomplex Csin(fcomplex g);
-extern fcomplex Ctan(fcomplex z);
-extern fcomplex Ccotan(fcomplex z);
-extern fcomplex Ccosh(fcomplex g);
-extern fcomplex Csinh(fcomplex g);
-extern fcomplex Ctanh(fcomplex z);
-extern fcomplex Ccotanh(fcomplex z);
-extern fcomplex Cpow(fcomplex z, fcomplex exp);
-extern fcomplex Cpow_real (fcomplex z, double y);
+extern double Creal( dcomplex g );
+extern double Cimag( dcomplex g );
+extern dcomplex Cadd(dcomplex a, dcomplex b);
+extern dcomplex CRadd(dcomplex z, double x);
+extern dcomplex RCadd(double b, dcomplex z);
+extern dcomplex Csub(dcomplex a, dcomplex b);
+extern dcomplex CRsub(dcomplex a, double b);
+extern dcomplex RCsub(double a, dcomplex b);
+extern dcomplex Cminus (dcomplex z);
+extern dcomplex Ciadd(dcomplex a, dcomplex b);
+extern dcomplex Cisub(dcomplex a, dcomplex b);
+extern dcomplex Cmul(dcomplex a, dcomplex b);
+extern dcomplex RCmul(double a, dcomplex b);
+extern dcomplex CRmul(dcomplex b, double a);
+extern dcomplex Complex(double re, double im);
+extern dcomplex Complex_polar(double r, double theta);
+extern void Cprintf( dcomplex z);
+extern dcomplex Conj(dcomplex z);
+extern dcomplex Cinv(dcomplex a);
+extern dcomplex Cdiv(dcomplex a, dcomplex b);
+extern dcomplex RCdiv(double a, dcomplex b);
+extern dcomplex CRdiv(dcomplex a, double b);
+extern double Csqr_norm(dcomplex z);
+extern double Cabs(dcomplex z);
+extern dcomplex Csqrt(dcomplex z);
+extern dcomplex Clog(dcomplex z);
+extern dcomplex Cexp(dcomplex z);
+extern dcomplex CIexp(double t);
+extern double Carg(dcomplex a);
+extern dcomplex Ctgamma(dcomplex a);
+extern dcomplex Clgamma(dcomplex xx);
+extern dcomplex Ccos(dcomplex g);
+extern dcomplex Csin(dcomplex g);
+extern dcomplex Ctan(dcomplex z);
+extern dcomplex Ccotan(dcomplex z);
+extern dcomplex Ccosh(dcomplex g);
+extern dcomplex Csinh(dcomplex g);
+extern dcomplex Ctanh(dcomplex z);
+extern dcomplex Ccotanh(dcomplex z);
+extern dcomplex Cpow(dcomplex z, dcomplex exp);
+extern dcomplex Cpow_real (dcomplex z, double y);
 /* Algebirc operation on C : */
 /* use i for multiply by i */
 /* use c for congugate */
 /* use d for double */
 /* use a,b for complex */
 /* use p or m for plus or minus */
-extern fcomplex C_op_apib(fcomplex a, fcomplex b);
-extern fcomplex C_op_amib(fcomplex a, fcomplex b);
-extern fcomplex C_op_apcb(fcomplex a, fcomplex b);
-extern fcomplex C_op_amcb(fcomplex a, fcomplex b);
-extern fcomplex C_op_dapb(double d,fcomplex a, fcomplex b);
-extern fcomplex C_op_damb(double d,fcomplex a, fcomplex b);
-extern fcomplex C_op_dapib(double d,fcomplex a, fcomplex b);
-extern fcomplex C_op_damib(double d,fcomplex a, fcomplex b);
-extern fcomplex C_op_dapcb(double d,fcomplex a, fcomplex b);
-extern fcomplex C_op_damcb(double d,fcomplex a, fcomplex b);
-extern fcomplex C_op_idapb(double d,fcomplex a, fcomplex b);
-extern fcomplex C_op_idamb(double d,fcomplex a, fcomplex b);
-extern fcomplex C_op_idapcb(double d,fcomplex a, fcomplex b);
-extern fcomplex C_op_idamcb(double d,fcomplex a, fcomplex b);
+extern dcomplex C_op_apib(dcomplex a, dcomplex b);
+extern dcomplex C_op_amib(dcomplex a, dcomplex b);
+extern dcomplex C_op_apcb(dcomplex a, dcomplex b);
+extern dcomplex C_op_amcb(dcomplex a, dcomplex b);
+extern dcomplex C_op_dapb(double d,dcomplex a, dcomplex b);
+extern dcomplex C_op_damb(double d,dcomplex a, dcomplex b);
+extern dcomplex C_op_dapib(double d,dcomplex a, dcomplex b);
+extern dcomplex C_op_damib(double d,dcomplex a, dcomplex b);
+extern dcomplex C_op_dapcb(double d,dcomplex a, dcomplex b);
+extern dcomplex C_op_damcb(double d,dcomplex a, dcomplex b);
+extern dcomplex C_op_idapb(double d,dcomplex a, dcomplex b);
+extern dcomplex C_op_idamb(double d,dcomplex a, dcomplex b);
+extern dcomplex C_op_idapcb(double d,dcomplex a, dcomplex b);
+extern dcomplex C_op_idamcb(double d,dcomplex a, dcomplex b);
 
 /*@}*/
 
 typedef struct {
-  fcomplex (*function) (fcomplex x, void *params);
+  dcomplex (*function) (dcomplex x, void *params);
   void *params;
 } PnlCmplxFunc;
 

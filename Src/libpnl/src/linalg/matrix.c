@@ -144,7 +144,7 @@ double pnl_vect_compact_get (const PnlVectCompact *C, int i)
  */
 void pnl_vect_complex_mult_double(PnlVectComplex *lhs , double x)
 {
-  fcomplex *lptr;
+  dcomplex *lptr;
   int i=0;
   while(i<lhs->size)
     {

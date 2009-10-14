@@ -39,7 +39,7 @@
 
 
 #elif defined BASE_PNL_COMPLEX
-#define BASE fcomplex
+#define BASE dcomplex
 #define SHORT Complex
 #define LSHORT _complex
 #define SHORT_REAL

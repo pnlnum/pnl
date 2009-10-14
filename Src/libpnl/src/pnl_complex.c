@@ -33,14 +33,14 @@
  * @param z  a complex number
  * @return  the real part 
  */
-double Creal( fcomplex z ) { return z.r;}
+double Creal( dcomplex z ) { return z.r;}
 
 /**
  *  Im(z) imazinary part 
  * @param z  a complex number
  * @return  the imaginary part  Im(z)
  */
-double Cimag( fcomplex z ) {return z.i;}
+double Cimag( dcomplex z ) {return z.i;}
 
 /**
  * a+b 
@@ -48,9 +48,9 @@ double Cimag( fcomplex z ) {return z.i;}
  * @param b  a complex number 
  * @return the sum:  a+b
  */
-fcomplex Cadd(fcomplex a, fcomplex b)
+dcomplex Cadd(dcomplex a, dcomplex b)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=a.r+b.r;
   c.i=a.i+b.i;
   return c;
@@ -63,9 +63,9 @@ fcomplex Cadd(fcomplex a, fcomplex b)
  * @param x  a real number 
  * @return the sum:  z + x
  */
-fcomplex CRadd(fcomplex z, double x)
+dcomplex CRadd(dcomplex z, double x)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=z.r+x;
   c.i=z.i;
   return c;
@@ -77,9 +77,9 @@ fcomplex CRadd(fcomplex z, double x)
  * @param x  a real number 
  * @return the sum:  z + x
  */
-fcomplex RCadd(double x, fcomplex z)
+dcomplex RCadd(double x, dcomplex z)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=z.r+x;
   c.i=z.i;
   return c;
@@ -92,9 +92,9 @@ fcomplex RCadd(double x, fcomplex z)
  * @param b  a complex number 
  * @return  a-b , substraction
  */
-fcomplex Csub(fcomplex a, fcomplex b)
+dcomplex Csub(dcomplex a, dcomplex b)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=a.r-b.r;
   c.i=a.i-b.i;
   return c;
@@ -106,9 +106,9 @@ fcomplex Csub(fcomplex a, fcomplex b)
  * @param b  a real number 
  * @return  a-b , substraction
  */
-fcomplex CRsub(fcomplex a, double b)
+dcomplex CRsub(dcomplex a, double b)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=a.r-b;
   c.i=a.i;
   return c;
@@ -120,9 +120,9 @@ fcomplex CRsub(fcomplex a, double b)
  * @param b  a real number 
  * @return  a-b , substraction
  */
-fcomplex RCsub(double a, fcomplex b)
+dcomplex RCsub(double a, dcomplex b)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=a-b.r;
   c.i=-b.i;
   return c;
@@ -133,9 +133,9 @@ fcomplex RCsub(double a, fcomplex b)
  * @param z  a complex number
  * @return  -z, unary minus
  */
-fcomplex Cminus(fcomplex z)
+dcomplex Cminus(dcomplex z)
 {
-  fcomplex c;
+  dcomplex c;
   c.r = - z.r;
   c.i = - z.i;
   return c;
@@ -148,9 +148,9 @@ fcomplex Cminus(fcomplex z)
  * @param b  a complex number 
  * @return  a*b , the product
  */
-fcomplex Cmul(fcomplex a, fcomplex b)
+dcomplex Cmul(dcomplex a, dcomplex b)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=a.r*b.r-a.i*b.i;
   c.i=a.i*b.r+a.r*b.i;
   return c;
@@ -163,9 +163,9 @@ fcomplex Cmul(fcomplex a, fcomplex b)
  * @param x  a double
  * @return  x*a
  */
-fcomplex RCmul(double x, fcomplex a)
+dcomplex RCmul(double x, dcomplex a)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=x*a.r;
   c.i=x*a.i;
   return c;
@@ -177,9 +177,9 @@ fcomplex RCmul(double x, fcomplex a)
  * @param x  a double
  * @return  x*a
  */
-fcomplex CRmul(fcomplex a, double x)
+dcomplex CRmul(dcomplex a, double x)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=x*a.r;
   c.i=x*a.i;
   return c;
@@ -191,9 +191,9 @@ fcomplex CRmul(fcomplex a, double x)
  * @param im imaginary part
  * @return  re + i im  
  */
-fcomplex Complex(double re, double im)
+dcomplex Complex(double re, double im)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=re;
   c.i=im;
   return c;
@@ -205,9 +205,9 @@ fcomplex Complex(double re, double im)
  * @param theta : angle  
  * @return  r exp(i theta)
  */
-fcomplex Complex_polar(double r, double theta)
+dcomplex Complex_polar(double r, double theta)
 {
-  fcomplex c;
+  dcomplex c;
   if (r<0)
     {
       PNL_ERROR ("rho < 0", "Complex_polar");
@@ -223,72 +223,57 @@ fcomplex Complex_polar(double r, double theta)
  *
  * @param z a complex number
  */
-void Cprintf( fcomplex z)
+void Cprintf( dcomplex z)
 {
   printf("%f + %f i", z.r, z.i);
 }
-
 
 /**
  * conjugate operator  conf(z)
  * @param z a complex number
  * @return  the conjugate of z
  */
-fcomplex Conj(fcomplex z)
+dcomplex Conj(dcomplex z)
 {
-  fcomplex c;
+  dcomplex c;
   c.r = z.r;
   c.i = -z.i;
   return c;
 }
+
 /**
  *  1/a
  * @param a  a complex number
  * @return  1/a, the inverse
  */
-fcomplex Cinv(fcomplex a)
+dcomplex Cinv(dcomplex a)
 {
-  fcomplex c;
-  double r,den;
-  if (fabs(a.r) >= fabs(a.i))
-    {
-      r=a.i/a.r;
-      den=a.r+r*a.i;
-      c.r=1.0/den;
-      c.i=-r/den;
-    }
-  else
-    {
-      r=a.r/a.i;
-      den=a.i+r*a.r;
-      c.r=r/den;
-      c.i=-1.0/den;
-    }
-  return c;
+  return RCdiv (1., a);
 }
+
 /**
  *  a/b
  * @param a  a complex number
  * @param b  a complex number
  * @return a/b, the division
  */
-fcomplex Cdiv(fcomplex a, fcomplex b)
+dcomplex Cdiv(dcomplex a, dcomplex b)
 {
-  fcomplex c;
-  double r,den;
-  if (fabs(b.r) >= fabs(b.i))
+  dcomplex c;
+  double r,d;
+  if (fabs (b.r) >= fabs (b.i))
     {
-      r=b.i/b.r;
-      den=b.r+r*b.i;
-      c.r=(a.r+r*a.i)/den;
-      c.i=(a.i-r*a.r)/den;
+      r = b.i / b.r;
+      d = b.r * (1. + r * r);
+      c.r = (a.r + r * a.i) / d;
+      c.i = (a.i- r * a.r) / d;
     }
   else
     {
-      r=b.r/b.i;
-      den=b.i+r*b.r;
-      c.r=(a.r*r+a.i)/den;
-      c.i=(a.i*r-a.r)/den;
+      r = b.r / b.i;
+      d = b.i * (1. + r * r);
+      c.r = (a.r * r + a.i) / d;
+      c.i = (a.i * r - a.r) / d;
     }
   return c;
 }
@@ -299,23 +284,23 @@ fcomplex Cdiv(fcomplex a, fcomplex b)
  * @param b  a complex number
  * @return a/b, the division
  */
-fcomplex RCdiv(double a, fcomplex b)
+dcomplex RCdiv(double a, dcomplex b)
 {
-  fcomplex c;
-  double r,den;
+  dcomplex c;
+  double r,d;
   if (fabs(b.r) >= fabs(b.i))
     {
-      r=b.i/b.r;
-      den=b.r+r*b.i;
-      c.r=a/den;
-      c.i=-r*a/den;
+      r = b.i / b.r;
+      d = b.r * (1. + r * r);
+      c.r = a / d;
+      c.i = -r * a / d;
     }
   else
     {
-      r=b.r/b.i;
-      den=b.i+r*b.r;
-      c.r=(a*r)/den;
-      c.i=(-a)/den;
+      r = b.r / b.i;
+      d = b.i * (1. + r * r);
+      c.r = a * r / d;
+      c.i = -a / d;
     }
   return c;
 }
@@ -327,11 +312,12 @@ fcomplex RCdiv(double a, fcomplex b)
  * @param b  a real number
  * @return a/b, the division
  */
-fcomplex CRdiv(fcomplex a, double b)
+dcomplex CRdiv(dcomplex a, double b)
 {
-  fcomplex c;
-  c.r = a.r / b;
-  c.i = a.i / b;
+  dcomplex c;
+  c = a;
+  c.r /= b;
+  c.i /= b;
   return c;
 }
 /**
@@ -339,9 +325,9 @@ fcomplex CRdiv(fcomplex a, double b)
  * @param z  a complex number
  * @return Re(z)^2 + Im(z)^2 
  */
-double Csqr_norm(fcomplex z)
+double Csqr_norm(dcomplex z)
 {
-  return z.r*z.r+z.i*z.i;
+  return z.r * z.r + z.i * z.i;
 }
 
 /**
@@ -349,31 +335,41 @@ double Csqr_norm(fcomplex z)
  * @param z a complex number
  * @return sqrt(x^2 + y^2)
  */
-double Cabs(fcomplex z)
+double Cabs(dcomplex z)
 {
-  double x, y, temp;
+  double x, y, t;
   x = fabs (z.r);
   y = fabs (z.i);
-  if (x == 0.0) return y;
-  if (y == 0.0) return x;
+  if (x == 0.) return y;
+  if (y == 0.) return x;
   if (x > y)
     {
-      temp = y / x;
-      return x * sqrt (1.0 + temp * temp);
+      t = y / x;
+      return x * sqrt (1. + t * t);
     }
-  temp = x / y;
-  return y * sqrt (1.0 + temp * temp);
+  t = x / y;
+  return y * sqrt (1. + t * t);
 }
 
 /**
- *  sqrt(z) , one square root (with positive real part)
+ * sqrt(z) , one square root (with positive real part)
+ *
+ * c = sqrt(z)
+ *
+ * If z.r >= 0
+ *      c.r = sqrt (2 (|z.r| + sqrt(z.r^2 + z.i^2))) / 2
+ *      c.i = z.i / sqrt (2 (|z.r| + sqrt(z.r^2 + z.i^2))) 
+ * else
+ *      c.r = |z.i| / sqrt (2 (|z.r| + sqrt(z.r^2 + z.i^2))) 
+ *      c.i = sign(z.i) sqrt (2 (|z.r| + sqrt(z.r^2 + z.i^2))) / 2
+ *
  * @param z  a complex number
  * @return  sqrt(z) , one square root (with positive real part)
  */
-fcomplex Csqrt(fcomplex z)
+dcomplex Csqrt(dcomplex z)
 {
-  fcomplex c;
-  double x,y,w,r;
+  dcomplex c;
+  double x,y,t;
   if ((z.r == 0.0) && (z.i == 0.0))
     {
       return CZERO;;
@@ -381,25 +377,16 @@ fcomplex Csqrt(fcomplex z)
 
   x=fabs(z.r);
   y=fabs(z.i);
-  if (x >= y)
-    {
-      r=y/x;
-      w=sqrt(x)*sqrt(0.5*(1.0+sqrt(1.0+r*r)));
-    }
-  else
-    {
-      r=x/y;
-      w=sqrt(y)*sqrt(0.5*(r+sqrt(1.0+r*r)));
-    }
+  t = sqrt(2. * (x + Cabs (z)));
   if (z.r >= 0.0)
     {
-      c.r=w;
-      c.i=z.i/(2.0*w);
+      c.r = 0.5 * t;
+      c.i = z.i / t;
     }
   else
     {
-      c.i=(z.i >= 0) ? w : -w;
-      c.r=z.i/(2.0*c.i);
+      c.r = y / t;
+      c.i = 0.5 * ((z.i >= 0) ? t : -t);
     }
   return c;
 }
@@ -409,41 +396,41 @@ fcomplex Csqrt(fcomplex z)
  * @param z  a complex number
  * @return log(z) , the log function
  */
-fcomplex Clog(fcomplex z)
+dcomplex Clog(dcomplex z)
 {
-  fcomplex ztmp;
+  dcomplex c;
   if (z.r == 0. && z.i == 0.)
     {
       PNL_ERROR("z==0", "Clog");
     }
   if (z.i == 0.0)
     {
-      ztmp.r = log( fabs(z.r) );
+      c.r = log( fabs(z.r) );
       if (z.r > 0.0)
         {
-          ztmp.i = 0.0;
+          c.i = 0.0;
         }
       else
         {
-          ztmp.i = M_PI;
+          c.i = M_PI;
         }
-      return ztmp;
+      return c;
     }
   if (z.r == 0.0)
     {
-      ztmp.r = log( fabs(z.i) );
-      ztmp.i = M_PI_2;
+      c.r = log( fabs(z.i) );
+      c.i = M_PI_2;
       if (z.i < 0.0)
         {
-          ztmp.i = -ztmp.i;
+          c.i = -c.i;
         }
-      return ztmp;
+      return c;
     }
   
   /* z.r and z.i != 0. */
-  ztmp.i = Carg (z);
-  ztmp.r = log (Cabs (z));
-  return ztmp;
+  c.i = Carg (z);
+  c.r = 0.5 * log ( z.r * z.r + z.i * z.i);
+  return c;
 }
 
 /**
@@ -451,9 +438,9 @@ fcomplex Clog(fcomplex z)
  * @param z  a complex number
  * @return  exp(z)
  */
-fcomplex Cexp(fcomplex z)
+dcomplex Cexp(dcomplex z)
 {
-  return Complex(exp(z.r)*cos(z.i), exp(z.r)*sin(z.i));
+  return Complex_polar (exp(z.r), z.i);
 }
 
 
@@ -462,7 +449,7 @@ fcomplex Cexp(fcomplex z)
  * @param t   a real number
  * @return exp(i t), the unitary exponential
  */
-fcomplex CIexp(double t)
+dcomplex CIexp(double t)
 {
   return Complex ( cos ( t ), sin ( t ) );
 }
@@ -474,9 +461,9 @@ fcomplex CIexp(double t)
  * @param y  a complex exponential factor
  * @return  z^y the power function 
  */
-fcomplex Cpow(fcomplex z, fcomplex y)
+dcomplex Cpow(dcomplex z, dcomplex y)
 {
-  double z_logrho, z_theta, rho, theta;
+  double logr, theta;
   if (y.r == 0. && y.i == 0.)
     {
       return CONE;
@@ -495,11 +482,10 @@ fcomplex Cpow(fcomplex z, fcomplex y)
       return Cinv(z);
     }
 
-  z_theta = Carg(z);
-  z_logrho = log (Cabs(z));
-  rho = exp (z_logrho * y.r - z_theta * y.i);
-  theta = z_theta * y.r + z_logrho * y.i;
-  return Complex (rho * cos (theta), rho * sin (theta));
+  theta = Carg(z);
+  logr = log (Cabs(z));
+  return Complex_polar (exp (y.r * logr - y.i * theta),
+                        y.i * logr + y.r * theta);
 }
 
 /**
@@ -508,9 +494,9 @@ fcomplex Cpow(fcomplex z, fcomplex y)
  * @param y  a real exponential factor
  * @return  z^y the power function
  */
-fcomplex Cpow_real (fcomplex z, double y)
+dcomplex Cpow_real (dcomplex z, double y)
 {
-  double z_logrho, z_theta, rho, theta;
+  double logr, theta;
   if (y == 0. )
     {
       return CONE;
@@ -528,11 +514,9 @@ fcomplex Cpow_real (fcomplex z, double y)
     {
       return Cinv(z);
     }
-  z_theta = Carg(z);
-  z_logrho = log (Cabs(z));
-  rho = exp (z_logrho * y);
-  theta = z_theta * y;
-  return Complex (rho * cos (theta), rho * sin (theta));
+  theta = Carg(z);
+  logr = log (Cabs(z));
+  return Complex_polar (exp(y * logr), y * theta);
 }
  
 /**
@@ -540,9 +524,9 @@ fcomplex Cpow_real (fcomplex z, double y)
  * @param z  a complex number
  * @return  cos(z)
  */
-fcomplex Ccos (fcomplex z)
+dcomplex Ccos (dcomplex z)
 {
-  fcomplex c;
+  dcomplex c;
   c.r = cos (z.r) * cosh (z.i);
   c.i = - sin (z.r) * sinh (z.i);
 
@@ -554,9 +538,9 @@ fcomplex Ccos (fcomplex z)
  * @param z  a complex number
  * @return  sin(z)
  */
-fcomplex Csin (fcomplex z)
+dcomplex Csin (dcomplex z)
 {
-  fcomplex c;
+  dcomplex c;
   c.r = sin (z.r) * cosh (z.i);
   c.i = cos (z.r) * sinh (z.i);
 
@@ -568,7 +552,7 @@ fcomplex Csin (fcomplex z)
  * @param z  a complex number
  * @return  tan(z)
  */
-fcomplex Ctan (fcomplex z)
+dcomplex Ctan (dcomplex z)
 {
   return Cdiv (Csin (z), Ccos (z));
 }
@@ -578,7 +562,7 @@ fcomplex Ctan (fcomplex z)
  * @param z  a complex number
  * @return  cotan(z)
  */
-fcomplex Ccotan (fcomplex z)
+dcomplex Ccotan (dcomplex z)
 {
   return Cdiv (Ccos (z), Csin (z));
 }
@@ -588,9 +572,9 @@ fcomplex Ccotan (fcomplex z)
  * @param z  a complex number
  * @return  cosh(z)
  */
-fcomplex Ccosh(fcomplex z)
+dcomplex Ccosh(dcomplex z)
 {
-  fcomplex c;
+  dcomplex c;
     
   c.r = cos(z.i) * cosh (z.r);
   c.i = sin(z.i) * sinh (z.r);
@@ -603,9 +587,9 @@ fcomplex Ccosh(fcomplex z)
  * @param z  a complex number
  * @return sinh(z)
  */
-fcomplex Csinh(fcomplex z)
+dcomplex Csinh(dcomplex z)
 {
-  fcomplex c;
+  dcomplex c;
     
   c.r = cos(z.i) * sinh (z.r);
   c.i = sin(z.i) * cosh (z.r);
@@ -618,9 +602,9 @@ fcomplex Csinh(fcomplex z)
  * @param z  a complex number
  * @return tanh(z)
  */
-fcomplex Ctanh(fcomplex z)
+dcomplex Ctanh(dcomplex z)
 {
-  fcomplex tmp, tmp2;
+  dcomplex tmp, tmp2;
   tmp.r = - z.i;
   tmp.i = z.r;
   tmp2 = Ctan (tmp);
@@ -636,9 +620,9 @@ fcomplex Ctanh(fcomplex z)
  * @param z  a complex number
  * @return cotanh(z)
  */
-fcomplex Ccotanh(fcomplex z)
+dcomplex Ccotanh(dcomplex z)
 {
-  fcomplex tmp, tmp2;
+  dcomplex tmp, tmp2;
   tmp.r = - z.i;
   tmp.i = z.r;
   tmp2 = Ccotan (tmp);
@@ -653,12 +637,8 @@ fcomplex Ccotanh(fcomplex z)
  * @param z  a complex number
  * @return  arg(z) 
  */
-double Carg(fcomplex z)       /* arg(z) in [-pi,pi] */
+double Carg(dcomplex z)       /* arg(z) in [-pi,pi] */
 {
-  if (z.r == 0. && z.i == 0.)
-    {
-      return 0.;
-    }
   return atan2 (z.i, z.r);
 }
 
@@ -667,10 +647,10 @@ double Carg(fcomplex z)       /* arg(z) in [-pi,pi] */
  * @param a  a complex number
  * @return  Gamma(a), the Gamma function of a
  */
-fcomplex Ctgamma(fcomplex a)   /* Valeur de gamma(z) pour Re(z)!=-k en */
+dcomplex Ctgamma(dcomplex a)   /* Valeur de gamma(z) pour Re(z)!=-k en */
 {                             /* utilisant l'approximation de LANCZOS*/
   /* qui donne gamma(z+1) et on divise par z*/
-  fcomplex Cun, z, z0, z2, z3, z4, z5, z6, z7, z8, z9, z10, z11, z12, z13, z14, z15, z16, zzz;
+  dcomplex Cun, z, z0, z2, z3, z4, z5, z6, z7, z8, z9, z10, z11, z12, z13, z14, z15, z16, zzz;
   double gam, theta, rho, p1, p2;
   int i, NN, test;
   
@@ -720,7 +700,7 @@ fcomplex Ctgamma(fcomplex a)   /* Valeur de gamma(z) pour Re(z)!=-k en */
   
   if (test==1)
     {
-      fcomplex aa, bb;
+      dcomplex aa, bb;
 
       bb=Cun;
       aa=z0;
@@ -745,14 +725,14 @@ fcomplex Ctgamma(fcomplex a)   /* Valeur de gamma(z) pour Re(z)!=-k en */
  * @param z  a complex number
  * @return ln (Gamma (z))
  */
-fcomplex Clgamma(fcomplex z)
+dcomplex Clgamma(dcomplex z)
 {
-  fcomplex x,y,tmp,ser;
+  dcomplex x,y,tmp,ser;
   static double cof[6]={76.18009172947146,-86.50532032941677,
                         24.01409824083091,-1.231739572450155,
                         0.1208650973866179e-2,-0.5395239384953e-5};
   int j;
-  fcomplex sq2pg = Complex(2.5066282746310005,0);
+  dcomplex sq2pg = Complex(2.5066282746310005,0);
 
   y=x=z;
   tmp=Cadd(x, Complex(5.5,0));
@@ -773,7 +753,7 @@ fcomplex Clgamma(fcomplex z)
 
 
 /*
- * Functions added by David Pommier
+ * All the functions C_op_xxx have written and (C) by David Pommier
  */
 
 /**
@@ -782,9 +762,9 @@ fcomplex Clgamma(fcomplex z)
  * @param b  a complex number 
  * @return the sum:  a+i b 
  */
-fcomplex C_op_apib(fcomplex a, fcomplex b)
+dcomplex C_op_apib(dcomplex a, dcomplex b)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=a.r-b.i;
   c.i=a.i+b.r;
   return c;
@@ -796,9 +776,9 @@ fcomplex C_op_apib(fcomplex a, fcomplex b)
  * @param b  a complex number 
  * @return  a- i b 
  */
-fcomplex C_op_amib(fcomplex a, fcomplex b)
+dcomplex C_op_amib(dcomplex a, dcomplex b)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=a.r+b.i;
   c.i=a.i-b.r;
   return c;
@@ -810,9 +790,9 @@ fcomplex C_op_amib(fcomplex a, fcomplex b)
  * @param b  a complex number 
  * @return  a+conj(b)
  */
-fcomplex C_op_apcb(fcomplex a, fcomplex b)
+dcomplex C_op_apcb(dcomplex a, dcomplex b)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=a.r+b.r;
   c.i=a.i-b.i;
   return c;
@@ -824,9 +804,9 @@ fcomplex C_op_apcb(fcomplex a, fcomplex b)
  * @param b  a complex number 
  * @return  a-conj(b)
  */
-fcomplex C_op_amcb(fcomplex a, fcomplex b)
+dcomplex C_op_amcb(dcomplex a, dcomplex b)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=a.r-b.r;
   c.i=a.i+b.i;
   return c;
@@ -839,9 +819,9 @@ fcomplex C_op_amcb(fcomplex a, fcomplex b)
  * @param b  a complex number 
  * @return  d(a+b)
  */
-fcomplex C_op_dapb(double d,fcomplex a, fcomplex b)
+dcomplex C_op_dapb(double d,dcomplex a, dcomplex b)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=d*(a.r+b.r);
   c.i=d*(a.i+b.i);
   return c;
@@ -854,9 +834,9 @@ fcomplex C_op_dapb(double d,fcomplex a, fcomplex b)
  * @param b  a complex number 
  * @return  d(a-b)
  */
-fcomplex C_op_damb(double d,fcomplex a, fcomplex b)
+dcomplex C_op_damb(double d,dcomplex a, dcomplex b)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=d*(a.r-b.r);
   c.i=d*(a.i-b.i);
   return c;
@@ -869,9 +849,9 @@ fcomplex C_op_damb(double d,fcomplex a, fcomplex b)
  * @param b  a complex number 
  * @return  d (a+ i b)
  */
-fcomplex C_op_dapib(double d,fcomplex a, fcomplex b)
+dcomplex C_op_dapib(double d,dcomplex a, dcomplex b)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=d*(a.r-b.i);
   c.i=d*(a.i+b.r);
   return c;
@@ -884,9 +864,9 @@ fcomplex C_op_dapib(double d,fcomplex a, fcomplex b)
  * @param b  a complex number 
  * @return  d (a- i b)
  */
-fcomplex C_op_damib(double d,fcomplex a, fcomplex b)
+dcomplex C_op_damib(double d,dcomplex a, dcomplex b)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=d*(a.r+b.i);
   c.i=d*(a.i-b.r);
   return c;
@@ -899,9 +879,9 @@ fcomplex C_op_damib(double d,fcomplex a, fcomplex b)
  * @param b  a complex number 
  * @return  d(a+conj(b))
  */
-fcomplex C_op_dapcb(double d,fcomplex a, fcomplex b)
+dcomplex C_op_dapcb(double d,dcomplex a, dcomplex b)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=d*(a.r+b.r);
   c.i=d*(a.i-b.i);
   return c;
@@ -914,9 +894,9 @@ fcomplex C_op_dapcb(double d,fcomplex a, fcomplex b)
  * @param b  a complex number 
  * @return  d(a-conj(b))
  */
-fcomplex C_op_damcb(double d,fcomplex a, fcomplex b)
+dcomplex C_op_damcb(double d,dcomplex a, dcomplex b)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=d*(a.r-b.r);
   c.i=d*(a.i+b.i);
   return c;
@@ -930,9 +910,9 @@ fcomplex C_op_damcb(double d,fcomplex a, fcomplex b)
  * @param b  a complex number 
  * @return  i d(a+b)
  */
-fcomplex C_op_idapb(double d,fcomplex a, fcomplex b)
+dcomplex C_op_idapb(double d,dcomplex a, dcomplex b)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=-d*(a.i+b.i);
   c.i=d*(a.r+b.r);
   return c;
@@ -945,9 +925,9 @@ fcomplex C_op_idapb(double d,fcomplex a, fcomplex b)
  * @param b  a complex number 
  * @return  i d(a-b)
  */
-fcomplex C_op_idamb(double d,fcomplex a, fcomplex b)
+dcomplex C_op_idamb(double d,dcomplex a, dcomplex b)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=d*(-a.i+b.i);
   c.i=d*(a.r-b.r);
   return c;
@@ -960,9 +940,9 @@ fcomplex C_op_idamb(double d,fcomplex a, fcomplex b)
  * @param b  a complex number 
  * @return  i d(a+conj(b))
  */
-fcomplex C_op_idapcb(double d,fcomplex a, fcomplex b)
+dcomplex C_op_idapcb(double d,dcomplex a, dcomplex b)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=d*(-a.i+b.i);
   c.i=d*(a.r+b.r);
   return c;
@@ -975,9 +955,9 @@ fcomplex C_op_idapcb(double d,fcomplex a, fcomplex b)
  * @param b  a complex number 
  * @return i d(a-conj(b))
  */
-fcomplex C_op_idamcb(double d,fcomplex a, fcomplex b)
+dcomplex C_op_idamcb(double d,dcomplex a, dcomplex b)
 {
-  fcomplex c;
+  dcomplex c;
   c.r=-d*(a.i+b.i);
   c.i=d*(a.r-b.r);
   return c;

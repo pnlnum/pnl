@@ -23,7 +23,7 @@
 
 static void Csqrt_test ()
 {
-  fcomplex z, c;
+  dcomplex z, c;
   z = Complex (3., 5.);
   c = Csqrt (z);
   printf("Csqrt(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
@@ -34,7 +34,7 @@ static void Csqrt_test ()
 
 static void Clog_test ()
 {
-  fcomplex z, c;
+  dcomplex z, c;
   z = Complex (3., 5.);
   c = Clog (z);
   printf("Clog(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
@@ -45,22 +45,24 @@ static void Clog_test ()
 
 static void Cpow_test ()
 {
-  fcomplex a, b, c;
+  dcomplex a, b, c, d;
   a = Complex (3., 5.);
   b = Complex (2., -1.5);
   c = Cpow (a, b);
+  d = Cpow_real (a, Creal(b));
   printf("Cpow(%f + %f i, %f + %f i) = %f + %f i\n", CMPLX(a), CMPLX(b), CMPLX(c));
-  printf("Cpow(%f + %f i, %f ) = %f + %f i\n", CMPLX(a), Creal(b), CMPLX(c));
+  printf("Cpow(%f + %f i, %f ) = %f + %f i\n", CMPLX(a), Creal(b), CMPLX(d));
   a = Complex (-3., 5.);
   b = Complex (2., -1.5);
   c = Cpow (a, b);
+  c = Cpow (a, b);
   printf("Cpow(%f + %f i, %f + %f i) = %f + %f i\n", CMPLX(a), CMPLX(b), CMPLX(c));
-  printf("Cpow(%f + %f i, %f ) = %f + %f i\n", CMPLX(a), Creal(b), CMPLX(c));
+  printf("Cpow(%f + %f i, %f ) = %f + %f i\n", CMPLX(a), Creal(b), CMPLX(d));
 }
 
 static void Ctrigo_test ()
 {
-  fcomplex z, c;
+  dcomplex z, c;
   z = Complex (3., 5.);
   c = Ccos (z);
   printf("Ccos(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);

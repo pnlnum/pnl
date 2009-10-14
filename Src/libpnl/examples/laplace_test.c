@@ -33,7 +33,7 @@ static double exp_law_cdf (double x, void *p)
   return 1 - exp ( -mu * x);
 }
 
-static fcomplex exp_law_laplace (fcomplex l, void *p)
+static dcomplex exp_law_laplace (dcomplex l, void *p)
 {
   double mu = *((double *)p);
   return RCdiv (mu, RCadd (mu, l));

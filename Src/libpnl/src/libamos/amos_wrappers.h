@@ -13,7 +13,7 @@
 #ifndef _AMOS_WRAPPERS_H
 #define _AMOS_WRAPPERS_H
 
-#include "pnl_complex.h" /* just for fcomplex ! */
+#include "pnl_complex.h" /* just for dcomplex ! */
 
 #define DOMAIN		1	/* argument domain error */
 #define SING		2	/* argument singularity */
@@ -33,8 +33,8 @@ extern int mtherr(char *name, int code); /* from libcephes */
 
 int ierr_to_mtherr( int nz, int ierr); 
 
-/* extern int cairy_wrap(fcomplex z, fcomplex *ai, fcomplex *aip, fcomplex *bi, fcomplex *bip);
- * extern int cairye_wrap(fcomplex z, fcomplex *ai, fcomplex *aip, fcomplex *bi, fcomplex *bip); */
+/* extern int cairy_wrap(dcomplex z, dcomplex *ai, dcomplex *aip, dcomplex *bi, dcomplex *bip);
+ * extern int cairye_wrap(dcomplex z, dcomplex *ai, dcomplex *aip, dcomplex *bi, dcomplex *bip); */
 
 
 #endif

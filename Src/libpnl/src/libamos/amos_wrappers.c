@@ -43,7 +43,7 @@ int ierr_to_mtherr( int nz, int ierr)
   return 0;
 }
 
-/* int cairy_wrap(fcomplex z, fcomplex *ai, fcomplex *aip, fcomplex *bi, fcomplex *bip) 
+/* int cairy_wrap(dcomplex z, dcomplex *ai, dcomplex *aip, dcomplex *bi, dcomplex *bip) 
  * {
  *   int id = 0;
  *   int ierr = 0;
@@ -62,7 +62,7 @@ int ierr_to_mtherr( int nz, int ierr)
  *   return 0;
  * }
  * 
- * int cairye_wrap(fcomplex z, fcomplex *ai, fcomplex *aip, fcomplex *bi, fcomplex *bip) 
+ * int cairye_wrap(dcomplex z, dcomplex *ai, dcomplex *aip, dcomplex *bi, dcomplex *bip) 
  * {
  *   int id = 0;
  *   int kode = 2;        /\* Exponential scaling *\/
@@ -88,10 +88,10 @@ int ierr_to_mtherr( int nz, int ierr)
  * @param v a real number, the order of the Bessel function
  *
  */
-fcomplex pnl_complex_bessel_i ( double v, fcomplex z ) 
+dcomplex pnl_complex_bessel_i ( double v, dcomplex z ) 
 {
   int nz, ierr;
-  fcomplex cy;
+  dcomplex cy;
   int n = 1;
   int kode = 1;
   if (v >= 0)
@@ -101,7 +101,7 @@ fcomplex pnl_complex_bessel_i ( double v, fcomplex z )
     }
   else
     {
-      fcomplex aux1, aux2;
+      dcomplex aux1, aux2;
       aux1 = pnl_complex_bessel_i (-v, z);
       aux2 = pnl_complex_bessel_k (-v, z);
       aux2 = CRmul (aux2, M_2_PI * sin(M_PI * -v));
@@ -118,10 +118,10 @@ fcomplex pnl_complex_bessel_i ( double v, fcomplex z )
  * @param v a real number, the order of the Bessel function
  *
  */
-fcomplex pnl_complex_bessel_i_scaled( double v, fcomplex z ) 
+dcomplex pnl_complex_bessel_i_scaled( double v, dcomplex z ) 
 {
   int nz, ierr;
-  fcomplex cy;
+  dcomplex cy;
   int n = 1;
   int kode = 2;
   if (v >= 0)
@@ -131,7 +131,7 @@ fcomplex pnl_complex_bessel_i_scaled( double v, fcomplex z )
     }
   else
     {
-      fcomplex aux1, aux2;
+      dcomplex aux1, aux2;
       aux1 = pnl_complex_bessel_i_scaled (-v, z);
       aux2 = pnl_complex_bessel_k (-v, z);
       aux2 = CRmul (aux2, M_2_PI * sin(M_PI * -v) * exp ( -abs ( Creal(z) ) ));
@@ -148,10 +148,10 @@ fcomplex pnl_complex_bessel_i_scaled( double v, fcomplex z )
  * @param v a real number, the order of the Bessel function
  *
  */
-fcomplex pnl_complex_bessel_j( double v, fcomplex z ) 
+dcomplex pnl_complex_bessel_j( double v, dcomplex z ) 
 {
   int nz, ierr;
-  fcomplex cy;
+  dcomplex cy;
   int n = 1;
   int kode = 1;
   if (v >= 0)
@@ -161,7 +161,7 @@ fcomplex pnl_complex_bessel_j( double v, fcomplex z )
     }
   else
     {
-      fcomplex aux1, aux2;
+      dcomplex aux1, aux2;
       aux1 = pnl_complex_bessel_j (-v, z);
       aux1 = CRmul (aux1, cos(M_PI * v));
       aux2 = pnl_complex_bessel_y (-v, z);
@@ -179,10 +179,10 @@ fcomplex pnl_complex_bessel_j( double v, fcomplex z )
  * @param v a real number, the order of the Bessel function
  *
  */
-fcomplex pnl_complex_bessel_j_scaled ( double v, fcomplex z ) 
+dcomplex pnl_complex_bessel_j_scaled ( double v, dcomplex z ) 
 {
   int nz, ierr;
-  fcomplex cy;
+  dcomplex cy;
   int n = 1;
   int kode = 2;
   if (v >= 0)
@@ -192,7 +192,7 @@ fcomplex pnl_complex_bessel_j_scaled ( double v, fcomplex z )
     }
   else
     {
-      fcomplex aux1, aux2;
+      dcomplex aux1, aux2;
       aux1 = pnl_complex_bessel_j_scaled (-v, z);
       aux1 = CRmul (aux1, cos(M_PI * v));
       aux2 = pnl_complex_bessel_y_scaled (-v, z);
@@ -209,10 +209,10 @@ fcomplex pnl_complex_bessel_j_scaled ( double v, fcomplex z )
  * @param v a real number, the order of the Bessel function
  *
  */  
-fcomplex pnl_complex_bessel_y( double v, fcomplex z ) 
+dcomplex pnl_complex_bessel_y( double v, dcomplex z ) 
 {
   int nz, ierr;
-  fcomplex cy, cwork;
+  dcomplex cy, cwork;
   int n = 1;
   int kode = 1;
   if (v >= 0)
@@ -222,7 +222,7 @@ fcomplex pnl_complex_bessel_y( double v, fcomplex z )
     }
   else
     {
-      fcomplex aux1, aux2;
+      dcomplex aux1, aux2;
       aux1 = pnl_complex_bessel_y (-v, z);
       aux1 = CRmul (aux1, cos(M_PI * v));
       aux2 = pnl_complex_bessel_j (-v, z);
@@ -240,10 +240,10 @@ fcomplex pnl_complex_bessel_y( double v, fcomplex z )
  * @param v a real number, the order of the Bessel function
  *
  */
-fcomplex pnl_complex_bessel_y_scaled( double v, fcomplex z ) 
+dcomplex pnl_complex_bessel_y_scaled( double v, dcomplex z ) 
 {
   int nz, ierr;
-  fcomplex cy, cwork;
+  dcomplex cy, cwork;
   int n = 1;
   int kode = 2;
   if (v >= 0)
@@ -253,7 +253,7 @@ fcomplex pnl_complex_bessel_y_scaled( double v, fcomplex z )
     }
   else
     {
-      fcomplex aux1, aux2;
+      dcomplex aux1, aux2;
       aux1 = pnl_complex_bessel_y_scaled (-v, z);
       aux1 = CRmul (aux1, cos(M_PI * v));
       aux2 = pnl_complex_bessel_j_scaled (-v, z);
@@ -271,10 +271,10 @@ fcomplex pnl_complex_bessel_y_scaled( double v, fcomplex z )
  * @param v a real number, the order of the Bessel function
  *
  */
-fcomplex pnl_complex_bessel_k( double v, fcomplex z ) 
+dcomplex pnl_complex_bessel_k( double v, dcomplex z ) 
 {
   int nz, ierr;
-  fcomplex cy;
+  dcomplex cy;
   int n = 1;
   int kode = 1;
   double nu = fabs (v);
@@ -291,10 +291,10 @@ fcomplex pnl_complex_bessel_k( double v, fcomplex z )
  * @param v a real number, the order of the Bessel function
  *
  */
-fcomplex pnl_complex_bessel_k_scaled( double v, fcomplex z ) 
+dcomplex pnl_complex_bessel_k_scaled( double v, dcomplex z ) 
 {
   int nz, ierr;
-  fcomplex cy;
+  dcomplex cy;
   int n = 1;
   int kode = 2;
   double nu = fabs (v);
@@ -310,10 +310,10 @@ fcomplex pnl_complex_bessel_k_scaled( double v, fcomplex z )
  * @param v a real number, the order of the Bessel function
  *
  */
-fcomplex pnl_complex_bessel_h1( double v, fcomplex z ) 
+dcomplex pnl_complex_bessel_h1( double v, dcomplex z ) 
 {
   int nz, ierr;
-  fcomplex cy;
+  dcomplex cy;
   int n = 1, kode = 1, m = 1;
   if (v >= 0)
     {
@@ -336,10 +336,10 @@ fcomplex pnl_complex_bessel_h1( double v, fcomplex z )
  * @param v a real number, the order of the Bessel function
  *
  */
-fcomplex pnl_complex_bessel_h1_scaled( double v, fcomplex z ) 
+dcomplex pnl_complex_bessel_h1_scaled( double v, dcomplex z ) 
 {
   int nz, ierr;
-  fcomplex cy;
+  dcomplex cy;
   int n = 1, kode = 2, m = 1;
   if (v >= 0)
     {
@@ -361,10 +361,10 @@ fcomplex pnl_complex_bessel_h1_scaled( double v, fcomplex z )
  * @param v a real number, the order of the Bessel function
  *
  */
-fcomplex pnl_complex_bessel_h2( double v, fcomplex z ) 
+dcomplex pnl_complex_bessel_h2( double v, dcomplex z ) 
 {
   int nz, ierr;
-  fcomplex cy;
+  dcomplex cy;
   int n = 1, kode = 1, m = 2;
   if (v >= 0)
     {
@@ -387,10 +387,10 @@ fcomplex pnl_complex_bessel_h2( double v, fcomplex z )
  * @param v a real number, the order of the Bessel function
  *
  */
-fcomplex pnl_complex_bessel_h2_scaled( double v, fcomplex z ) 
+dcomplex pnl_complex_bessel_h2_scaled( double v, dcomplex z ) 
 {
   int nz, ierr;
-  fcomplex cy;
+  dcomplex cy;
   int n = 1, kode = 2, m = 2;
   if (v >= 0)
     {
@@ -416,7 +416,7 @@ fcomplex pnl_complex_bessel_h2_scaled( double v, fcomplex z )
 double pnl_bessel_i ( double v, double x ) 
 {
   int nz, ierr;
-  fcomplex cy, z = Complex (x, 0.);
+  dcomplex cy, z = Complex (x, 0.);
   int n = 1, kode = 1;
   if (v >= 0)
     {
@@ -444,7 +444,7 @@ double pnl_bessel_i ( double v, double x )
 double pnl_bessel_i_scaled( double v, double x ) 
 {
   int nz, ierr;
-  fcomplex cy, z = Complex (x, 0.);
+  dcomplex cy, z = Complex (x, 0.);
   int n = 1, kode = 2;
   if (v >= 0)
     {
@@ -472,7 +472,7 @@ double pnl_bessel_i_scaled( double v, double x )
 double pnl_bessel_j( double v, double x ) 
 {
   int nz, ierr;
-  fcomplex cy, z = Complex (x, 0.);
+  dcomplex cy, z = Complex (x, 0.);
   int n = 1, kode = 1;
   if (v >= 0)
     {
@@ -500,7 +500,7 @@ double pnl_bessel_j( double v, double x )
 double pnl_bessel_j_scaled ( double v, double x ) 
 {
   int nz, ierr;
-  fcomplex cy, z = Complex (x, 0.);
+  dcomplex cy, z = Complex (x, 0.);
   int n = 1, kode = 2;
   if (v >= 0)
     {
@@ -527,7 +527,7 @@ double pnl_bessel_j_scaled ( double v, double x )
 double pnl_bessel_y( double v, double x ) 
 {
   int nz, ierr;
-  fcomplex cy, z, cwork;
+  dcomplex cy, z, cwork;
   int n = 1, kode = 1;
   z = Complex (x, 0.);
   if (v >= 0)
@@ -556,7 +556,7 @@ double pnl_bessel_y( double v, double x )
 double pnl_bessel_y_scaled( double v, double x ) 
 {
   int nz, ierr;
-  fcomplex cy, z, cwork;
+  dcomplex cy, z, cwork;
   int n = 1;
   int kode = 2;
   z = Complex (x, 0.);
@@ -586,7 +586,7 @@ double pnl_bessel_y_scaled( double v, double x )
 double pnl_bessel_k( double v, double x ) 
 {
   int nz, ierr;
-  fcomplex cy, z = Complex (x, 0.);
+  dcomplex cy, z = Complex (x, 0.);
   int n = 1;
   int kode = 1;
   double nu = fabs(v);
@@ -606,7 +606,7 @@ double pnl_bessel_k( double v, double x )
 double pnl_bessel_k_scaled( double v, double x ) 
 {
   int nz, ierr;
-  fcomplex cy, z = Complex (x, 0.);
+  dcomplex cy, z = Complex (x, 0.);
   int n = 1;
   int kode = 2;
   double nu = fabs (v);
@@ -622,10 +622,10 @@ double pnl_bessel_k_scaled( double v, double x )
  * @param v a real number, the order of the Bessel function
  *
  */
-fcomplex pnl_bessel_h1( double v, double x ) 
+dcomplex pnl_bessel_h1( double v, double x ) 
 {
   int nz, ierr;
-  fcomplex cy, z = Complex (x, 0.);
+  dcomplex cy, z = Complex (x, 0.);
   int n = 1;
   int kode = 1;
   int m = 1;
@@ -650,10 +650,10 @@ fcomplex pnl_bessel_h1( double v, double x )
  * @param v a real number, the order of the Bessel function
  *
  */
-fcomplex pnl_bessel_h1_scaled( double v, double x ) 
+dcomplex pnl_bessel_h1_scaled( double v, double x ) 
 {
   int nz, ierr;
-  fcomplex cy, z = Complex (x, 0.);
+  dcomplex cy, z = Complex (x, 0.);
   int n = 1;
   int kode = 2;
   int m = 1;
@@ -677,10 +677,10 @@ fcomplex pnl_bessel_h1_scaled( double v, double x )
  * @param v a real number, the order of the Bessel function
  *
  */
-fcomplex pnl_bessel_h2( double v, double x ) 
+dcomplex pnl_bessel_h2( double v, double x ) 
 {
   int nz, ierr;
-  fcomplex cy, z = Complex (x, 0.);
+  dcomplex cy, z = Complex (x, 0.);
   int n = 1;
   int kode = 1;
   int m = 2;
@@ -705,10 +705,10 @@ fcomplex pnl_bessel_h2( double v, double x )
  * @param v a real number, the order of the Bessel function
  *
  */
-fcomplex pnl_bessel_h2_scaled( double v, double x ) 
+dcomplex pnl_bessel_h2_scaled( double v, double x ) 
 {
   int nz, ierr;
-  fcomplex cy, z = Complex (x, 0.);
+  dcomplex cy, z = Complex (x, 0.);
   int n = 1;
   int kode = 2;
   int m = 2;

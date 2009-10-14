@@ -23,7 +23,7 @@
 
 static void complex_bessel_test ()
 {
-  fcomplex z, c;
+  dcomplex z, c;
   double v = -1.5;
   z = Complex (5., 3.);
   printf("Test des fonctions de bessel complexes \n");
@@ -57,7 +57,7 @@ static void complex_bessel_test ()
 static void real_bessel_test ()
 {
   double z, c;
-  fcomplex zc;
+  dcomplex zc;
   double v = -1.5;
   z = 5.;
   printf("Test des fonctions de bessel reelles \n");

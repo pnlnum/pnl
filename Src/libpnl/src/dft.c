@@ -86,10 +86,10 @@ void pnl_dft_complex_transform(const PnlVectComplex * data,
       for (j = 0; j < (data->size); j++)
         {
           /* sum = exp(i theta) * data[j] */
-          fcomplex w = pnl_vect_complex_get (twidle, (i*j)%data->size);
+          dcomplex w = pnl_vect_complex_get (twidle, (i*j)%data->size);
           double w_real = Creal(w);
           double w_imag = Cimag(w);
-          fcomplex tmp = pnl_vect_complex_get(data,j);
+          dcomplex tmp = pnl_vect_complex_get(data,j);
           double data_real = Creal (tmp);
           double data_imag = Cimag (tmp);
 
@@ -197,7 +197,7 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
   double ttheta,theta,c1,c2,h1r;
   int half_fft_size;
   int i, i1,ii,jj, mmax, m,j,istep,isign;
-  fcomplex tw,tw0,w,wp0,temp, h1,h2,*A_ptr,*B_ptr;
+  dcomplex tw,tw0,w,wp0,temp, h1,h2,*A_ptr,*B_ptr;
   if( fft_size==1 )
     {return;}
   ttheta = M_2PI/(double)(fft_size);
@@ -211,8 +211,8 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
       for(i = 2; i <= fft_size/4+1; i++)
         {
           i1 = i+i-2;
-          A_ptr=(fcomplex*) pnl_vect_lget(a,i1);
-          B_ptr=(fcomplex*) pnl_vect_lget(a,fft_size-i1);
+          A_ptr=(dcomplex*) pnl_vect_lget(a,i1);
+          B_ptr=(dcomplex*) pnl_vect_lget(a,fft_size-i1);
           h1=C_op_dapcb(c1,*A_ptr,*B_ptr);
           h2=C_op_idamcb(c2,*A_ptr,*B_ptr);
           temp=Cmul(tw,h2);
@@ -256,8 +256,8 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
           for(jj = 0; jj <= (fft_size-m)/istep; jj++)
             {
               i = m+jj*istep;
-              A_ptr=(fcomplex*) pnl_vect_lget(a,i+mmax-1);
-              B_ptr=(fcomplex*) pnl_vect_lget(a,i-1);
+              A_ptr=(dcomplex*) pnl_vect_lget(a,i+mmax-1);
+              B_ptr=(dcomplex*) pnl_vect_lget(a,i-1);
               temp=Cmul(w,*A_ptr);
               *A_ptr= Csub(*B_ptr,temp);
               *B_ptr= Cadd(*B_ptr,temp);
@@ -279,8 +279,8 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
         {
           
             i1 = i+i-2;
-            A_ptr=(fcomplex*) pnl_vect_lget(a,i1);
-            B_ptr=(fcomplex*) pnl_vect_lget(a,fft_size-i1);
+            A_ptr=(dcomplex*) pnl_vect_lget(a,i1);
+            B_ptr=(dcomplex*) pnl_vect_lget(a,fft_size-i1);
             h1=C_op_dapcb(c1,*A_ptr,*B_ptr);
             h2=C_op_idamcb(c2,*A_ptr,*B_ptr);
             temp=Cmul(tw,h2);
@@ -319,7 +319,7 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
  *   const uint jump = (factor - 1) * product_1;
  *   for (k = 0; k < q; k++)
  *     {
- *       fcomplex w;
+ *       dcomplex w;
  *       if (k == 0)
  *         {
  *           w =CONE;
@@ -340,15 +340,15 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
  * 
  *       for (k1 = 0; k1 < product_1; k1++)
  *         {
- *           const fcomplex z0 = pnl_vect_complex_get(in,i);
- *           const fcomplex z1 = pnl_vect_complex_get(in,i+m);
+ *           const dcomplex z0 = pnl_vect_complex_get(in,i);
+ *           const dcomplex z1 = pnl_vect_complex_get(in,i+m);
  * 
  *           /\* compute x = W(2) z *\/
  * 
  *           /\* x0 = z0 + z1 *\/
- *           const fcomplex x0 =Cadd(z0,z1);
+ *           const dcomplex x0 =Cadd(z0,z1);
  *           /\* x1 = z0 - z1 *\/
- *           const fcomplex x1 = Csub(z0,z1);
+ *           const dcomplex x1 = Csub(z0,z1);
  *           /\* apply twiddle factors *\/
  *           
  *           /\* out0 = 1 * x0 *\/
@@ -386,7 +386,7 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
  * 
  *   for (k = 0; k < q; k++)
  *     {
- *       fcomplex w1,  w2;
+ *       dcomplex w1,  w2;
  * 
  *       if (k == 0)
  *         {
@@ -411,22 +411,22 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
  * 
  *       for (k1 = 0; k1 < product_1; k1++)
  *         {
- *           const fcomplex z0 = pnl_vect_complex_get(in,i);
- *           const fcomplex z1 = pnl_vect_complex_get(in,i+m);
- *           const fcomplex z2 = pnl_vect_complex_get(in,i+2*m);
+ *           const dcomplex z0 = pnl_vect_complex_get(in,i);
+ *           const dcomplex z1 = pnl_vect_complex_get(in,i+m);
+ *           const dcomplex z2 = pnl_vect_complex_get(in,i+2*m);
  *           /\* compute x = W(3) z *\/
  *           /\* t1 = z1 + z2 *\/
- *           const fcomplex t1 = Cadd(z1,z2);
+ *           const dcomplex t1 = Cadd(z1,z2);
  *           /\* t2 = z0 - t1/2 *\/
- *           const fcomplex t2 = Csub(z0,RCmul(0.5,t1));
+ *           const dcomplex t2 = Csub(z0,RCmul(0.5,t1));
  *           /\* t3 = (+/-) sin(pi/3)*(z1 - z2) *\/
- *           const fcomplex t3 = RCmul(sign * tau,Csub(z1,z2));
+ *           const dcomplex t3 = RCmul(sign * tau,Csub(z1,z2));
  *           /\* x0 = z0 + t1 *\/
- *           const fcomplex x0 = Cadd(z0,t1);
+ *           const dcomplex x0 = Cadd(z0,t1);
  *           /\* x1 = t2 + i t3 *\/
- *           const fcomplex x1 = C_op_apib(t2,t3);
+ *           const dcomplex x1 = C_op_apib(t2,t3);
  *           /\* x2 = t2 - i t3 *\/
- *           const fcomplex x2 = C_op_amib(t2,t3);
+ *           const dcomplex x2 = C_op_amib(t2,t3);
  *           /\* apply twiddle factors *\/
  *           /\* to0 = 1 * x0 *\/
  *           pnl_vect_complex_set(out,j,x0);
@@ -462,7 +462,7 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
  * 
  *   for (k = 0; k < q; k++)
  *     {
- *       fcomplex w1, w2, w3;
+ *       dcomplex w1, w2, w3;
  * 
  *       if (k == 0)
  *         {
@@ -491,29 +491,29 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
  * 
  *       for (k1 = 0; k1 < p_1; k1++)
  *         {
- *           const fcomplex z0 = pnl_vect_complex_get(in,i);
- *           const fcomplex z1 = pnl_vect_complex_get(in,i+m);
- *           const fcomplex z2 = pnl_vect_complex_get(in,i+2*m);
- *           const fcomplex z3 = pnl_vect_complex_get(in,i+3*m);
+ *           const dcomplex z0 = pnl_vect_complex_get(in,i);
+ *           const dcomplex z1 = pnl_vect_complex_get(in,i+m);
+ *           const dcomplex z2 = pnl_vect_complex_get(in,i+2*m);
+ *           const dcomplex z3 = pnl_vect_complex_get(in,i+3*m);
  * 
  *           /\* compute x = W(4) z *\/
  *           
  *           /\* t1 = z0 + z2 *\/
- *           const fcomplex t1 = Cadd(z0,z2);
+ *           const dcomplex t1 = Cadd(z0,z2);
  *           /\* t2 = z1 + z3 *\/
- *           const fcomplex t2 = Cadd(z1,z3);
+ *           const dcomplex t2 = Cadd(z1,z3);
  *           /\* t3 = z0 - z2 *\/
- *           const fcomplex t3 = Csub(z0,z2);
+ *           const dcomplex t3 = Csub(z0,z2);
  *           /\* t4 = (+/-) (z1 - z3) *\/
- *           const fcomplex t4 = RCmul( sign,Csub(z1,z3));
+ *           const dcomplex t4 = RCmul( sign,Csub(z1,z3));
  *           /\* x0 = t1 + t2 *\/
- *           const fcomplex x0 = Cadd(t1,t2);
+ *           const dcomplex x0 = Cadd(t1,t2);
  *           /\* x1 = t3 + i t4 *\/
- *           const fcomplex x1 = C_op_apib(t3,t4);
+ *           const dcomplex x1 = C_op_apib(t3,t4);
  *           /\* x2 = Csub(t1,t2) *\/
- *           const fcomplex x2 = Csub(t1,t2);
+ *           const dcomplex x2 = Csub(t1,t2);
  *           /\* x3 = t3 - i t4 *\/
- *           const fcomplex x3 = C_op_amib(t3,t4);
+ *           const dcomplex x3 = C_op_amib(t3,t4);
  *           /\* apply twiddle factors *\/
  * 
  *           /\* to0 = 1 * x0 *\/
@@ -558,7 +558,7 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
  *   for (k = 0; k < q; k++)
  *     {
  * 
- *       fcomplex w1, w2, w3, w4;
+ *       dcomplex w1, w2, w3, w4;
  * 
  *       if (k == 0)
  *         {
@@ -590,46 +590,46 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
  * 
  *       for (k1 = 0; k1 < p_1; k1++)
  *         {
- *           const fcomplex z0 = pnl_vect_complex_get(in,i);
- *           const fcomplex z1 = pnl_vect_complex_get(in,i+m);
- *           const fcomplex z2 = pnl_vect_complex_get(in,i+2*m);
- *           const fcomplex z3 = pnl_vect_complex_get(in,i+3*m);
- *           const fcomplex z4 = pnl_vect_complex_get(in,i+4*m);
+ *           const dcomplex z0 = pnl_vect_complex_get(in,i);
+ *           const dcomplex z1 = pnl_vect_complex_get(in,i+m);
+ *           const dcomplex z2 = pnl_vect_complex_get(in,i+2*m);
+ *           const dcomplex z3 = pnl_vect_complex_get(in,i+3*m);
+ *           const dcomplex z4 = pnl_vect_complex_get(in,i+4*m);
  *       
  *           /\* compute x = W(5) z *\/
  * 
  *           /\* t1 = z1 + z4 *\/
- *           const fcomplex t1 = Cadd(z1,z4);
+ *           const dcomplex t1 = Cadd(z1,z4);
  *           /\* t2 = z2 + z3 *\/
- *           const fcomplex t2 = Cadd(z2,z3);
+ *           const dcomplex t2 = Cadd(z2,z3);
  *           /\* t3 = z1 - z4 *\/
- *           const fcomplex t3 = Csub(z1,z4);
+ *           const dcomplex t3 = Csub(z1,z4);
  *           /\* t4 = z2 - z3 *\/
- *           const fcomplex t4 = Csub(z2,z3);
+ *           const dcomplex t4 = Csub(z2,z3);
  *           /\* t5 = t1 + t2 *\/
- *           const fcomplex t5 = Cadd(t1,t2);
+ *           const dcomplex t5 = Cadd(t1,t2);
  *           /\* t6 = (sqrt(5)/4)(t1 - t2) *\/
- *           const fcomplex t6 = RCmul((sqrt (5.0) / 4.0) , (Csub(t1,t2)));
+ *           const dcomplex t6 = RCmul((sqrt (5.0) / 4.0) , (Csub(t1,t2)));
  *           /\* t7 = z0 - ((t5)/4) *\/
- *           const fcomplex t7 = Csub(z0,RCmul(0.25,t5));
+ *           const dcomplex t7 = Csub(z0,RCmul(0.25,t5));
  *           /\* t8 = t7 + t6 *\/
- *           const fcomplex t8 = Cadd(t7,t6);
+ *           const dcomplex t8 = Cadd(t7,t6);
  *           /\* t9 = t7 - t6 *\/
- *           const fcomplex t9 = Csub(t7,t6);
+ *           const dcomplex t9 = Csub(t7,t6);
  *           /\* t10 = sin(2 pi/5) t3 + sin(2 pi/10) t4 *\/
- *           const fcomplex t10 = RCmul(sign,Cadd(RCmul(sin_2pi_by_5, t3),RCmul(sin_2pi_by_10,t4)));
+ *           const dcomplex t10 = RCmul(sign,Cadd(RCmul(sin_2pi_by_5, t3),RCmul(sin_2pi_by_10,t4)));
  *           /\* t11 = sin(2 pi/10) t3 - sin(2 pi/5) t4 *\/
- *           const fcomplex t11 = RCmul(sign,Csub(RCmul(sin_2pi_by_10, t3),RCmul(sin_2pi_by_5,t4)));
+ *           const dcomplex t11 = RCmul(sign,Csub(RCmul(sin_2pi_by_10, t3),RCmul(sin_2pi_by_5,t4)));
  *           /\* x0 = z0 + t5 *\/
- *           fcomplex x0 = Cadd(z0,t5);
+ *           dcomplex x0 = Cadd(z0,t5);
  *           /\* x1 = t8 + i t10 *\/
- *           fcomplex x1 = C_op_apib(t8,t10);
+ *           dcomplex x1 = C_op_apib(t8,t10);
  *           /\* x2 = t9 + i t11 *\/
- *           fcomplex x2 = C_op_apib(t9, t11);
+ *           dcomplex x2 = C_op_apib(t9, t11);
  *           /\* x3 = t9 - i t11 *\/
- *           fcomplex x3 = C_op_amib(t9, t11);
+ *           dcomplex x3 = C_op_amib(t9, t11);
  *           /\* x4 = t8 - i t10 *\/
- *           fcomplex x4 = C_op_amib(t8, t10);
+ *           dcomplex x4 = C_op_amib(t8, t10);
  *           /\* apply twiddle factors *\/
  *           
  *           /\* to0 = 1 * x0 *\/
@@ -677,7 +677,7 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
  * 
  *   for (k = 0; k < q; k++)
  *     {
- *       fcomplex w1, w2, w3, w4, w5;
+ *       dcomplex w1, w2, w3, w4, w5;
  *       if (k == 0)
  *         {
  *           w1=CONE;
@@ -711,12 +711,12 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
  * 
  *       for (k1 = 0; k1 < p_1; k1++)
  *         {
- *           const fcomplex z0 = pnl_vect_complex_get(in,i);
- *           const fcomplex z1 = pnl_vect_complex_get(in,i+m);
- *           const fcomplex z2 = pnl_vect_complex_get(in,i+2*m);
- *           const fcomplex z3 = pnl_vect_complex_get(in,i+3*m);
- *           const fcomplex z4 = pnl_vect_complex_get(in,i+4*m);
- *           const fcomplex z5 = pnl_vect_complex_get(in,i+5*m);
+ *           const dcomplex z0 = pnl_vect_complex_get(in,i);
+ *           const dcomplex z1 = pnl_vect_complex_get(in,i+m);
+ *           const dcomplex z2 = pnl_vect_complex_get(in,i+2*m);
+ *           const dcomplex z3 = pnl_vect_complex_get(in,i+3*m);
+ *           const dcomplex z4 = pnl_vect_complex_get(in,i+4*m);
+ *           const dcomplex z5 = pnl_vect_complex_get(in,i+5*m);
  *           
  *           /\* compute x = W(6) z *\/
  * 
@@ -724,41 +724,41 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
  *              on the even and odd elements of z *\/
  *           
  *           /\* ta1 = z2 + z4 *\/
- *           const fcomplex ta1 = Cadd(z2,z4);
+ *           const dcomplex ta1 = Cadd(z2,z4);
  *           /\* ta2 = z0 - ta1/2 *\/
- *           const fcomplex ta2 = Csub(z0,RCmul(0.5,ta1));
+ *           const dcomplex ta2 = Csub(z0,RCmul(0.5,ta1));
  *           /\* ta3 = (+/-) sin(pi/3)*(z2 - z4) *\/
- *           const fcomplex ta3 = RCmul((int) sign * tau, (Csub(z2,z4)));
+ *           const dcomplex ta3 = RCmul((int) sign * tau, (Csub(z2,z4)));
  *           /\* a0 = z0 + ta1 *\/
- *           const fcomplex a0 = Cadd(z0,ta1);
+ *           const dcomplex a0 = Cadd(z0,ta1);
  *           /\* a1 = ta2 + i ta3 *\/
- *           const fcomplex a1 = C_op_apib(ta2, ta3);
+ *           const dcomplex a1 = C_op_apib(ta2, ta3);
  *           /\* a2 = ta2 - i ta3 *\/
- *           const fcomplex a2 = C_op_amib(ta2, ta3);
+ *           const dcomplex a2 = C_op_amib(ta2, ta3);
  *           /\* tb1 = z5 + z1 *\/
- *           const fcomplex tb1 = Cadd(z5,z1);
+ *           const dcomplex tb1 = Cadd(z5,z1);
  *           /\* tb2 = z3 - tb1/2 *\/
- *           const fcomplex tb2 = Csub(z3,RCmul(0.5,tb1));
+ *           const dcomplex tb2 = Csub(z3,RCmul(0.5,tb1));
  *           /\* tb3 = (+/-) sin(pi/3)*(z5 - z1) *\/
- *           const fcomplex tb3 = RCmul((int) sign * tau , (Csub(z5,z1)));
+ *           const dcomplex tb3 = RCmul((int) sign * tau , (Csub(z5,z1)));
  *           /\* b0 = z3 + tb1 *\/
- *           const fcomplex b0 = Cadd(z3,tb1);
+ *           const dcomplex b0 = Cadd(z3,tb1);
  *           /\* b1 = tb2 + i tb3 *\/
- *           const fcomplex b1 = C_op_apib(tb2, tb3);
+ *           const dcomplex b1 = C_op_apib(tb2, tb3);
  *           /\* b2 = tb2 - i tb3 *\/
- *           const fcomplex b2 = C_op_amib(tb2,tb3);
+ *           const dcomplex b2 = C_op_amib(tb2,tb3);
  *           /\* x0 = a0 + b0 *\/
- *           const fcomplex x0 = Cadd(a0,b0);
+ *           const dcomplex x0 = Cadd(a0,b0);
  *           /\* x4 = a1 + b1 *\/
- *           const fcomplex x4 = Cadd(a1,b1);
+ *           const dcomplex x4 = Cadd(a1,b1);
  *           /\* x2 = a2 + b2 *\/
- *           const fcomplex x2 = Cadd(a2,b2);
+ *           const dcomplex x2 = Cadd(a2,b2);
  *           /\* x3 = a0 - b0 *\/
- *           const fcomplex x3 = Csub(a0,b0);
+ *           const dcomplex x3 = Csub(a0,b0);
  *           /\* x1 = a1 - b1 *\/
- *           const fcomplex x1 = Csub(a1,b1);
+ *           const dcomplex x1 = Csub(a1,b1);
  *           /\* x5 = a2 - b2 *\/
- *           const fcomplex x5 = Csub(a2,b2);
+ *           const dcomplex x5 = Csub(a2,b2);
  *           /\* apply twiddle factors *\/
  *           
  *           /\* to0 = 1 * x0 *\/
@@ -814,7 +814,7 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
  * 
  *   for (k = 0; k < q; k++)
  *     {
- *       fcomplex w1, w2, w3, w4, w5,w6;
+ *       dcomplex w1, w2, w3, w4, w5,w6;
  *       if (k == 0)
  *         {
  *           w1=CONE;
@@ -851,90 +851,90 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
  * 
  *       for (k1 = 0; k1 < p_1; k1++)
  *         {
- *           const fcomplex z0 = pnl_vect_complex_get(in,i);
- *           const fcomplex z1 = pnl_vect_complex_get(in,i+m);
- *           const fcomplex z2 = pnl_vect_complex_get(in,i+2*m);
- *           const fcomplex z3 = pnl_vect_complex_get(in,i+3*m);
- *           const fcomplex z4 = pnl_vect_complex_get(in,i+4*m);
- *           const fcomplex z5 = pnl_vect_complex_get(in,i+5*m);
- *           const fcomplex z6 = pnl_vect_complex_get(in,i+6*m);
+ *           const dcomplex z0 = pnl_vect_complex_get(in,i);
+ *           const dcomplex z1 = pnl_vect_complex_get(in,i+m);
+ *           const dcomplex z2 = pnl_vect_complex_get(in,i+2*m);
+ *           const dcomplex z3 = pnl_vect_complex_get(in,i+3*m);
+ *           const dcomplex z4 = pnl_vect_complex_get(in,i+4*m);
+ *           const dcomplex z5 = pnl_vect_complex_get(in,i+5*m);
+ *           const dcomplex z6 = pnl_vect_complex_get(in,i+6*m);
  *           
  *           /\* compute x = W(7) z *\/
  *           /\* t0 = z1 + z6 *\/
- *           const fcomplex t0 = Cadd(z1,z6) ;
+ *           const dcomplex t0 = Cadd(z1,z6) ;
  *           /\* t1 = z1 - z6 *\/
- *           const fcomplex t1 = Csub(z1,z6) ;
+ *           const dcomplex t1 = Csub(z1,z6) ;
  *           /\* t2 = z2 + z5 *\/
- *           const fcomplex t2 = Cadd(z2,z5) ;
+ *           const dcomplex t2 = Cadd(z2,z5) ;
  *           /\* t3 = z2 - z5 *\/
- *           const fcomplex t3 = Csub(z2,z5) ;
+ *           const dcomplex t3 = Csub(z2,z5) ;
  *           /\* t4 = z4 + z3 *\/
- *           const fcomplex t4 =Cadd(z4,z3) ;
+ *           const dcomplex t4 =Cadd(z4,z3) ;
  *           /\* t5 = z4 - z3 *\/
- *           const fcomplex t5 = Csub(z4,z3) ;
+ *           const dcomplex t5 = Csub(z4,z3) ;
  *           /\* t6 = t2 + t0 *\/
- *           const fcomplex t6 = Cadd(t2, t0) ;
+ *           const dcomplex t6 = Cadd(t2, t0) ;
  *           /\* t7 = t5 + t3 *\/
- *           const fcomplex t7 = Cadd(t5,t3) ;
+ *           const dcomplex t7 = Cadd(t5,t3) ;
  *           /\* b0 = z0 + t6 + t4 *\/
- *           const fcomplex b0 = Cadd(z0,Cadd(t6, t4)) ;
+ *           const dcomplex b0 = Cadd(z0,Cadd(t6, t4)) ;
  *           /\* b1 = ((cos(2pi/7) + cos(4pi/7) + cos(6pi/7))/3-1) (t6 + t4) *\/
- *           const fcomplex b1 = RCmul(((c1 + c2 + c3)/3.0 - 1.0) , Cadd(t6 , t4));
+ *           const dcomplex b1 = RCmul(((c1 + c2 + c3)/3.0 - 1.0) , Cadd(t6 , t4));
  *           /\* b2 = ((2*cos(2pi/7) - cos(4pi/7) - cos(6pi/7))/3) (t0 - t4) *\/
- *           const fcomplex b2 = RCmul(((2.0 * c1 - c2 - c3)/3.0) ,(Csub(t0,t4)));
+ *           const dcomplex b2 = RCmul(((2.0 * c1 - c2 - c3)/3.0) ,(Csub(t0,t4)));
  *           /\* b3 = ((cos(2pi/7) - 2*cos(4pi/7) + cos(6pi/7))/3) (t4 - t2) *\/
- *           const fcomplex b3 = RCmul(((c1 - 2.0*c2 + c3)/3.0) , (Csub(t4,t2)));
+ *           const dcomplex b3 = RCmul(((c1 - 2.0*c2 + c3)/3.0) , (Csub(t4,t2)));
  *           /\* b4 = ((cos(2pi/7) + cos(4pi/7) - 2*cos(6pi/7))/3) (t2 - t0) *\/
- *           const fcomplex b4 = RCmul(((c1 + c2 - 2.0 * c3)/3.0) , (Csub(t2,t0)));
+ *           const dcomplex b4 = RCmul(((c1 + c2 - 2.0 * c3)/3.0) , (Csub(t2,t0)));
  *           /\* b5 = sign * ((sin(2pi/7) + sin(4pi/7) - sin(6pi/7))/3) (t7 + t1) *\/
- *           const fcomplex b5 = RCmul(-(int)sign * ((s1 + s2 - s3)/3.0) , Cadd(t7 , t1)) ;
+ *           const dcomplex b5 = RCmul(-(int)sign * ((s1 + s2 - s3)/3.0) , Cadd(t7 , t1)) ;
  *           /\* b6 = sign * ((2sin(2pi/7) - sin(4pi/7) + sin(6pi/7))/3) (t1 - t5) *\/
- *           const fcomplex b6 = RCmul(-(int)sign * ((2.0 * s1 - s2 + s3)/3.0) , (Csub(t1,t5))) ;
+ *           const dcomplex b6 = RCmul(-(int)sign * ((2.0 * s1 - s2 + s3)/3.0) , (Csub(t1,t5))) ;
  *           /\* b7 = sign * ((sin(2pi/7) - 2sin(4pi/7) - sin(6pi/7))/3) (Csub(t5,t3)) *\/
- *           const fcomplex b7 = RCmul(-(int)sign * ((s1 - 2.0 * s2 - s3)/3.0) , (Csub(t5,t3))) ;
+ *           const dcomplex b7 = RCmul(-(int)sign * ((s1 - 2.0 * s2 - s3)/3.0) , (Csub(t5,t3))) ;
  *           /\* b8 = sign * ((sin(2pi/7) + sin(4pi/7) + 2sin(6pi/7))/3) (Csub(t3,t1)) *\/
- *           const fcomplex b8 = RCmul(-(int)sign * ((s1 + s2 + 2.0 * s3)/3.0) , (Csub(t3,t1))) ;
+ *           const dcomplex b8 = RCmul(-(int)sign * ((s1 + s2 + 2.0 * s3)/3.0) , (Csub(t3,t1))) ;
  *           
  *           /\* T0 = b0 + b1 *\/
- *           const fcomplex T0 = Cadd(b0 , b1) ;
+ *           const dcomplex T0 = Cadd(b0 , b1) ;
  *           /\* T1 = b2 + b3 *\/
- *           const fcomplex T1 = Cadd(b2 , b3) ;
+ *           const dcomplex T1 = Cadd(b2 , b3) ;
  *           /\* T2 = b4 - b3 *\/
- *           const fcomplex T2 = Csub(b4,b3) ;
+ *           const dcomplex T2 = Csub(b4,b3) ;
  *           /\* T3 = -b2 - b4 *\/
- *           const fcomplex T3 = RCmul(-1.,Cadd(b2,b4));
+ *           const dcomplex T3 = RCmul(-1.,Cadd(b2,b4));
  *           /\* T4 = b6 + b7 *\/
- *           const fcomplex T4 = Cadd(b6 , b7) ;
+ *           const dcomplex T4 = Cadd(b6 , b7) ;
  *           /\* T5 = b8 - b7 *\/
- *           const fcomplex T5 = Csub(b8,b7) ;
+ *           const dcomplex T5 = Csub(b8,b7) ;
  *           /\* T6 = -b8 - b6 *\/
- *           const fcomplex T6 = RCmul(-1,Cadd(b8,b6)) ;
+ *           const dcomplex T6 = RCmul(-1,Cadd(b8,b6)) ;
  *           /\* T7 = T0 + T1 *\/
- *           const fcomplex T7 = Cadd(T0 , T1) ;
+ *           const dcomplex T7 = Cadd(T0 , T1) ;
  *           /\* T8 = T0 + T2 *\/
- *           const fcomplex T8 = Cadd(T0 , T2) ;
+ *           const dcomplex T8 = Cadd(T0 , T2) ;
  *           /\* T9 = T0 + T3 *\/
- *           const fcomplex T9 = Cadd(T0 , T3) ;
+ *           const dcomplex T9 = Cadd(T0 , T3) ;
  *           /\* T10 = T4 + b5 *\/
- *           const fcomplex T10 = Cadd(T4 , b5) ;
+ *           const dcomplex T10 = Cadd(T4 , b5) ;
  *           /\* T11 = T5 + b5 *\/
- *           const fcomplex T11 = Cadd(T5 , b5) ;
+ *           const dcomplex T11 = Cadd(T5 , b5) ;
  *           /\* T12 = T6 + b5 *\/
- *           const fcomplex T12 = Cadd(T6 , b5) ;
+ *           const dcomplex T12 = Cadd(T6 , b5) ;
  *           /\* x0 = b0 *\/
- *           const fcomplex x0 = b0 ;
+ *           const dcomplex x0 = b0 ;
  *           /\* x1 = T7 - i T10 *\/
- *           const fcomplex x1 = C_op_amib(T7,T10);
+ *           const dcomplex x1 = C_op_amib(T7,T10);
  *           /\* x2 = T9 - i T12 *\/
- *           const fcomplex x2 = C_op_amib(T9, T12) ;
+ *           const dcomplex x2 = C_op_amib(T9, T12) ;
  *           /\* x3 = T8 + i T11 *\/
- *           const fcomplex x3 = C_op_apib(T8,T11) ;
+ *           const dcomplex x3 = C_op_apib(T8,T11) ;
  *           /\* x4 = T8 - i T11 *\/
- *           const fcomplex x4 = C_op_amib(T8, T11) ;
+ *           const dcomplex x4 = C_op_amib(T8, T11) ;
  *           /\* x5 = T9 + i T12 *\/
- *           const fcomplex x5 = C_op_apib(T9,T12) ;
+ *           const dcomplex x5 = C_op_apib(T9,T12) ;
  *           /\* x6 = T7 + i T10 *\/
- *           const fcomplex x6 = C_op_apib(T7, T10) ;
+ *           const dcomplex x6 = C_op_apib(T7, T10) ;
  *          
  *           
  *           /\* apply twiddle factors *\/
@@ -1015,7 +1015,7 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
  *     {
  *       uint idx = e*q ;
  *       const uint idx_step = e * q ;
- *       fcomplex w ;
+ *       dcomplex w ;
  * 
  *       const uint em = e * m ;
  *       const uint ecm = (factor - e) * m ;
@@ -1042,12 +1042,12 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
  * 
  *           for (i = 0; i < m; i++) 
  *             {
- *               const fcomplex xp = pnl_vect_complex_get(out,i + e1 * m);
- *               const fcomplex xm = pnl_vect_complex_get(out,i + (factor - e1) *m);
+ *               const dcomplex xp = pnl_vect_complex_get(out,i + e1 * m);
+ *               const dcomplex xm = pnl_vect_complex_get(out,i + (factor - e1) *m);
  *               const double ap = Creal(w) * Creal(xp) ;
  *               const double am = Cimag(w) * Cimag(xm) ; 
  * 
- *               fcomplex sum,sumc;
+ *               dcomplex sum,sumc;
  *               sum.r= ap - am;
  *               sumc.r = ap + am;
  * 
@@ -1105,8 +1105,8 @@ void pnl_fft_real(PnlVect * a,int fft_size, int sign)
  *         {
  *           for (e1 = 1; e1 < factor; e1++)
  *             {
- *               fcomplex x = pnl_vect_complex_get(in,i + e1 * m);
- *               fcomplex w;
+ *               dcomplex x = pnl_vect_complex_get(in,i + e1 * m);
+ *               dcomplex w;
  *               if (sign == -1) {
  *                 w = pnl_vect_complex_get(twiddle,(e1-1)*q + k-1) ;
  *                 
