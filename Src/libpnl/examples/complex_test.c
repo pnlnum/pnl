@@ -82,6 +82,20 @@ static void Ctrigo_test ()
   printf("Ccotanh(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
 }
 
+static void Cgamma_test ()
+{
+  dcomplex z, c1, c2;
+  z = Complex (3., 2.);
+  c1 = Ctgamma (z);
+  c2 = Clgamma (z);
+  printf("Cgamma(%f + %f i) = %f + %f i\n", CMPLX(z), CMPLX(c1));
+  printf("Clgamma(%f + %f i) = %f + %f i\n", CMPLX(z), CMPLX(c2));
+  z = Complex (-3., 2.);
+  c1 = Ctgamma (z);
+  c2 = Clgamma (z);
+  printf("Cgamma(%f + %f i) = %f + %f i\n", CMPLX(z), CMPLX(c1));
+  printf("Clgamma(%f + %f i) = %f + %f i\n", CMPLX(z), CMPLX(c2));
+} 
 
 void complex_test()
 {
@@ -92,4 +106,5 @@ void complex_test()
   Clog_test ();
   Cpow_test ();
   Ctrigo_test ();
+  Cgamma_test ();
 }
