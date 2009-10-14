@@ -112,7 +112,7 @@ void pnl_ilap_fft(PnlVect *res, PnlCmplxFunc *f, double T, double eps)
   int             i, N, size;
   double          h, time_step, a;
   double          f_a, omega;
-  fcomplex        mul, fac;
+  dcomplex        mul, fac;
 
   h = M_PI / (2 * T); 
   a = h * log (1 + 1. / eps) / (M_2PI); 
