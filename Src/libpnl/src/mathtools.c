@@ -11,8 +11,8 @@
 int intapprox(double s)
 {
   int r = (int) s;
-  if(s>r+0.5){r=r+1;}
-  if(s<r-0.5){r=r-1;}
+  if (s > r + 0.5) { r++; }
+  if (s < r - 0.5) { r--; }
   return r;
 }
 
@@ -20,8 +20,7 @@ int intapprox(double s)
 #ifndef HAVE_TRUNC
 double trunc(double x)
 {
-  if(x >= 0) return floor(x);
-  return ceil(x);
+  return (double) ((int) x);
 }
 #endif
 
@@ -38,17 +37,21 @@ double Cnp(int n, int p)
   int i;
   z=0.0;
 
-  if ((n-p<= -1) || (n<0) || (p<0)){
+  if ((n-p<= -1) || (n<0) || (p<0))
+  {
     return z;
   }
-  else{
+  else
+  {
     if (p==0)
       z=1.0;
-    else{
+    else
+    {
       z=1.0;
       iter=z;
       i=0;
-      while(i<=p-1){
+      while(i<=p-1)
+      {
         iter=iter*(double)(n-i)/(p-i);
         i=i+1;
       }
@@ -77,22 +80,13 @@ double pnl_fact(int n)
 
 
 #ifndef HAVE_LGAMMA
-/* (C) Copr. 1986-92 Numerical Recipes Software A2.>$Y0%9j. */
-double lgamma(double xx)
+extern amos_dgamln (double *z__, int *ierr);
+
+double lgamma(double x)
 {
-  double x,y,tmp,ser;
-  static double cof[6]={76.18009172947146,-86.50532032941677,
-                        24.01409824083091,-1.231739572450155,
-                        0.1208650973866179e-2,-0.5395239384953e-5};
-  int j;
-   
-  y=x=xx;
-  tmp=x+5.5;
-  tmp -= (x+0.5)*log(tmp);
-  ser=1.000000000190015;
-  for (j=0;j<=5;j++) ser += cof[j]/++y;
-        
-  return -tmp+log(2.5066282746310005*ser/x);
+  int ierr;
+  if ( x <= 0 ) return NAN;
+  return amos_dgamln (&x, &ierr);
 }
 #endif
 
