@@ -1,4 +1,6 @@
 #include <math.h>
+
+#include "config.h"
 #include "pnl_mathtools.h"
 #include "pnl_cdf.h"
 
@@ -80,7 +82,7 @@ double pnl_fact(int n)
 
 
 #ifndef HAVE_LGAMMA
-extern amos_dgamln (double *z__, int *ierr);
+extern double amos_dgamln (double *z__, int *ierr);
 
 double lgamma(double x)
 {
