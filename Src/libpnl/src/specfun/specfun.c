@@ -36,13 +36,20 @@
  *
  * gr + gi i = Gamma(x + i y) if kf = 1
  * gr + gi i = log(Gamma(x + i y)) if kf = 0
+ *
+ * @param x real part of the argument
+ * @param y imaginary of the argument
+ * @param gr holds the real part of the output
+ * @param gi holds the imaginary part of the output
+ * @param kf an integer flag. If kf==1, Gamma is computed, if kf==0, log(Gamma)
+ * is computed
  */
 static void sp_cgamma (double x, double y, int kf, double *gr, double *gi)
 {
   double x1, _y1, x0, z1, z2, th, gr1, gi1, t;
   double sr, si, th1, th2, g0;
   double tmp;
-  int na, k, j, debug=0;
+  int na, k, j;
   double a[10] = 
     { .08333333333333333, -2.777777777777778e-3,
       7.936507936507937e-4, -5.952380952380952e-4,
@@ -77,7 +84,6 @@ static void sp_cgamma (double x, double y, int kf, double *gr, double *gi)
     } 
   z1 = sqrt (x0 * x0 + y * y);
   th = atan (y / x0);
-  if (debug)  printf ("log(%f) = %f, err = %d\n", z1, log(z1), errno); 
   *gr = (x0 - .5) * log (z1) - th * y - x0 + .5 * log (M_2PI);
   *gi = th * (x0 - .5) + y * log (z1) - y;
 
@@ -85,7 +91,7 @@ static void sp_cgamma (double x, double y, int kf, double *gr, double *gi)
     {
       t = pow (z1, 1- 2 * k);
       *gr += a[k-1] * t * cos ((2. * k - 1.) * th);
-      *gi += a[k-1] * t * sin ((2. * k - 1.) * th);
+      *gi -= a[k-1] * t * sin ((2. * k - 1.) * th);
     } 
   if (x <= 7.)
     {
@@ -121,7 +127,6 @@ static void sp_cgamma (double x, double y, int kf, double *gr, double *gi)
       *gi = g0 * sin (*gi);
     } 
 } 
-
 
 /**
  * Gamma(z), the Gamma function
