@@ -11,6 +11,8 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "pnl_vector.h"
+
 typedef unsigned char boolean;
 
 #define false 0
@@ -96,7 +98,7 @@ typedef unsigned char boolean;
 #endif
 #define DOUBLE_MAX DBL_MAX
 
-#ifndef DBL_EPSILON  
+#ifndef DBL_EPSILON
 #define DBL_EPSILON        2.2204460492503131e-16
 #endif
 
@@ -109,12 +111,12 @@ typedef unsigned char boolean;
 
 /* MAX and MIN already defined in <sys/param.h>  */
 /* if we are compiling for Windows (Visual or mingw32
- * cross-compiling), sys/param.h is not included */ 
+ * cross-compiling), sys/param.h is not included */
 #ifndef MAX
 #define MAX(A,B) ( (A) > (B) ? (A):(B) )
 #endif
 #ifndef MIN
-#define MIN(A,B) ( (A) < (B) ? (A):(B) ) 
+#define MIN(A,B) ( (A) < (B) ? (A):(B) )
 #endif
 
 #ifndef NAN
@@ -142,13 +144,13 @@ extern double tgamma (double x);
 #endif
 
 #define PNL_ERROR(msg, func) {fprintf(stderr, "%s in function %s \n", msg, func); abort();}
-#ifdef PNL_RANGE_CHECK_OFF 
+#ifdef PNL_RANGE_CHECK_OFF
 #define PNL_CHECK(eq, msg, func)
 #else
 #define PNL_CHECK(eq, msg, func)                                    \
   if (eq) {                                                         \
     fprintf(stderr, "%s in function %s \n", msg, func); abort();    \
-  }                                                                 
+  }
 #endif
 
 #define OK 0
@@ -175,6 +177,20 @@ typedef struct {
 } PnlFuncDFunc ;
 
 #define PNL_EVAL_FDF_FUNC(F, x, f, df) (*((F)->function))(x, f, df, (F)->params)
+
+typedef struct {
+  double (*function) (const PnlVect * x, void *params);
+  void *params;
+} PnlRnFuncR ;
+
+#define PNL_EVAL_RNFUNC(F, x) (*((F)->function))(x, (F)->params)
+
+typedef struct {
+  void (*function) (PnlVect * res,const PnlVect * x, void *params);
+  void *params;
+} PnlRnFuncRm ;
+
+#define PNL_EVAL_RNFUNCRM(y,F, x) (*((F)->function))(y,x, (F)->params)
 
 extern void pnl_qsort (void *a, int n, int es, int lda, int *t, int ldt, int use_index, int (*cmp)());
 
