@@ -46,6 +46,11 @@ static int pnl_dgeev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvect
 static int pnl_dsyev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors);
 
 
+/**
+ * Checks if a (real) matrix is symmetric
+ * @param A a real matrix
+ * @return TRUE or FALSE
+ */
 static int pnl_mat_is_sym (const PnlMat *A)
 {
   int i, j;
