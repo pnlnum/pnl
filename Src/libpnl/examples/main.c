@@ -35,7 +35,6 @@ extern void basis_test();
 extern void dft_test();
 extern void laplace_test();
 extern void finance_function_test();
-extern void SpGrid_test();
 extern void integration_test();
 extern void complex_test();
 extern void bessel_test();
@@ -64,7 +63,6 @@ static tst_list tests[] =
     MAKE_ENUM(complex_test),
     MAKE_ENUM(bessel_test),    
     MAKE_ENUM(perm_test),    
-    MAKE_ENUM(SpGrid_test),
     MAKE_ENUM(list_test),
     MAKE_ENUM(root_test),
     MAKE_ENUM(band_matrix_test),
