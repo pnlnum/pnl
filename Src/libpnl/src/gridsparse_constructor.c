@@ -1,3 +1,8 @@
+/*
+ * Writen by David Pommier <david.pommier@gmail.com>
+ * INRIA 2009
+ */
+
 #include <stdlib.h>
 #include <math.h>
 #include <stdio.h>

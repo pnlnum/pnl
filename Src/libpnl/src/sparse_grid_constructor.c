@@ -1,3 +1,8 @@
+/*
+ * Writen by David Pommier <david.pommier@gmail.com>
+ * INRIA 2009
+ */
+
 #include "pnl_list.h"
 #include "pnl_vector_uint.h"
 #include "gridsparse_constructor.h"
@@ -189,6 +194,3 @@ void create_grid_sparse_cpp(int dim,
   free(current);
 };     
   
-  
-    
-

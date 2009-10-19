@@ -1,3 +1,8 @@
+/*
+ * Writen by David Pommier <david.pommier@gmail.com>
+ * INRIA 2009
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -747,4 +752,8 @@ void GridSparse_Solve_heat(HeatSparseOp * Op, const PnlVect * Vin,PnlVect * Vout
   pnl_bicg_solver_free(&Solver);
   pnl_vect_free(&V_rhs);
 }
+
+#undef SPARSE_N2H
+#undef SPARSE_H2N
+#undef SPARSE_N2H_FUNC
 
