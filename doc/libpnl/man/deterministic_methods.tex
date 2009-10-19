@@ -327,32 +327,6 @@ available on \url{http://www.netlib.org/fftpack}.
   sequence. On exit, \var{im} is unused. 
 \end{itemize}
 
-%% The following functions are deprecated and will be removed in future
-%% releases. Use the above functions instead.
-%% \begin{itemize}
-%% \item \describefun{void}{pnl_dft_complex}{const \refstruct{ PnlVectComplex}
-%%     $\ast$data, \refstruct{ PnlVectComplex} $\ast$result}
-%%   \sshortdescribe classical FFT with complexity  $ O(N^2)$  
-
-%% \item \describefun{void}{pnl_dft_complex_backward}{const \refstruct{
-%%       PnlVectComplex} $\ast$data, \refstruct{ PnlVectComplex} $\ast$result}
-%%   \sshortdescribe classical inverse FFT without $ L_1$ normalisation 
-%%   and with complexity $ O(N^2)$  
-
-%% \item \describefun{void}{pnl_dft_complex_inverse}{const \refstruct{
-%%       PnlVectComplex} $\ast$data, \refstruct{ PnlVectComplex} $\ast$result}
-%%   \sshortdescribe classical inverse FFT on complex in $ O(N^2)$  
-
-%% \item \describefun{void}{pnl_dft_complex_transform}{const
-%%     \refstruct{PnlVectComplex} $\ast$data, \refstruct{ PnlVectComplex} $\ast$result, const int sign}
-%%   \sshortdescribe classical FFT
-
-%% \item \describefun{void}{real_fft}{\refstruct{ PnlVect} $\ast$a, int fft-size, 
-%%     \refstruct{ boolean} inversefft}
-%%   \sshortdescribe in-place FFT for real functions. Extracted from
-%%   Numerical Recipes Paragraph 12.3 and adapted.
-%% \end{itemize}
-
 %% Laplace transform
 \subsection{Inverse Laplace transform}
 \subsubsection{Short Description}
@@ -411,47 +385,47 @@ For a real valued function $f$ such that $t \longmapsto f(t) \expp{- \sigma_c
   the function \reffun{pnl_ilap_gs} gives far more accurate results.
 \end{itemize}
 
-%% pde tools
-\subsection{PDE tools}
-\subsubsection{Short Description}
-\subsubsection{Functions}
-\begin{itemize}
-\item 
-\describefun{\refstruct{PnlPDEBoundary}$\ast$}{pnl_pde_boundary_create}{double X0, double X1}
-  \sshortdescribe creates a \refstruct{PnlPDEBoundary}  
-\item \describefun{double}{pnl_pde_boundary_real_variable}{const \refstruct{ PnlPDEBoundary} BP, double X}
-\item 
-\describefun{double}{pnl_pde_boundary_unit_interval}{const \refstruct{ PnlPDEBoundary} BP, double X}
-\item 
-\describefun{\refstruct{PnlPDEDimBoundary} $\ast$}{pnl_pde_dim_boundary_create_from_int}{int dim}
-  \sshortdescribe creates a \refstruct{PnlPDEBoundary} with Left down corner is $ (0, \dots, 0)$ and right up corner is $ (1, \dots, 1)$  
-\item \describefun{\refstruct{ PnlPDEDimBoundary} $\ast$}{pnl_pde_dim_boundary_create}{const \refstruct{ PnlVect} $\ast$X0, const \refstruct{ PnlVect} $\ast$X1}
-  \sshortdescribe 
-\item \describefun{void}{pnl_pde_dim_boundary_free}{\refstruct{ PnlPDEDimBoundary} $\ast$$\ast$\refstruct{ v}}
-  \sshortdescribe frees a \refstruct{PnlPDEDimBoundary}  
-\item \describefun{double}{pnl_pde_dim_boundary_eval_from_unit}{double($\ast$f)(const \refstruct{ PnlVect} $\ast$), const \refstruct{ PnlPDEDimBoundary} $\ast$BP, const \refstruct{ PnlVect} $\ast$X}
-\item 
-\describefun{void}{pnl_pde_dim_boundary_from_unit_to_real_variable}{const \refstruct{ PnlPDEDimBoundary} $\ast$BP, \refstruct{ PnlVect} $\ast$X}
-\item 
-\describefun{double}{pnl_pde_dim_boundary_get_step}{const \refstruct{ PnlPDEDimBoundary} $\ast$BP, int i}
-\item 
-\describefun{double}{standard_time_repartition}{int i, int N-T}
-\item \describefun{\refstruct{ PnlPDETimeGrid} $\ast$}{pnl_pde_time_grid}{const
-  double T, const int $N-T$, double($\ast$ repartition)(int i, int NN)}
-  \sshortdescribe creates a \refstruct{PnlPDETimeGrid}
-\item \describefun{\refstruct{ PnlPDETimeGrid} $\ast$}{pnl_pde_time_homogen_grid}{const double T, const int N-T}
-  \sshortdescribe creates a \refstruct{PnlPDETimeGrid}
-\item \describefun{void}{pnl_pde_time_grid_free}{\refstruct{ PnlPDETimeGrid} $\ast$$\ast$TG}
-  \sshortdescribe frees a \refstruct{PnlPDETimeGrid}
-\item \describefun{void}{pnl_pde_time_start}{\refstruct{ PnlPDETimeGrid} $\ast$TG}
-  \sshortdescribe initialise \refstruct{PnlPDETimeGrid}
-\item \describefun{int}{pnl_pde_time_grid_increase}{\refstruct{ PnlPDETimeGrid} $\ast$TG}
-  \sshortdescribe go to the next time step  
-\item \describefun{double}{pnl_pde_time_grid_step}{const \refstruct{ PnlPDETimeGrid} $\ast$TG}
-  \sshortdescribe GET function on current step.  
-\item \describefun{double}{pnl_pde_time_grid_time}{const \refstruct{ PnlPDETimeGrid} $\ast$TG}
-  \sshortdescribe GET function on current time.
-\end{itemize}
+% %% pde tools
+% \subsection{PDE tools}
+% \subsubsection{Short Description}
+% \subsubsection{Functions}
+% \begin{itemize}
+% \item 
+% \describefun{\refstruct{PnlPDEBoundary}$\ast$}{pnl_pde_boundary_create}{double X0, double X1}
+%   \sshortdescribe creates a \refstruct{PnlPDEBoundary}  
+% \item \describefun{double}{pnl_pde_boundary_real_variable}{const \refstruct{ PnlPDEBoundary} BP, double X}
+% \item 
+% \describefun{double}{pnl_pde_boundary_unit_interval}{const \refstruct{ PnlPDEBoundary} BP, double X}
+% \item 
+% \describefun{\refstruct{PnlPDEDimBoundary} $\ast$}{pnl_pde_dim_boundary_create_from_int}{int dim}
+%   \sshortdescribe creates a \refstruct{PnlPDEBoundary} with Left down corner is $ (0, \dots, 0)$ and right up corner is $ (1, \dots, 1)$  
+% \item \describefun{\refstruct{ PnlPDEDimBoundary} $\ast$}{pnl_pde_dim_boundary_create}{const \refstruct{ PnlVect} $\ast$X0, const \refstruct{ PnlVect} $\ast$X1}
+%   \sshortdescribe 
+% \item \describefun{void}{pnl_pde_dim_boundary_free}{\refstruct{ PnlPDEDimBoundary} $\ast$$\ast$\refstruct{ v}}
+%   \sshortdescribe frees a \refstruct{PnlPDEDimBoundary}  
+% \item \describefun{double}{pnl_pde_dim_boundary_eval_from_unit}{double($\ast$f)(const \refstruct{ PnlVect} $\ast$), const \refstruct{ PnlPDEDimBoundary} $\ast$BP, const \refstruct{ PnlVect} $\ast$X}
+% \item 
+% \describefun{void}{pnl_pde_dim_boundary_from_unit_to_real_variable}{const \refstruct{ PnlPDEDimBoundary} $\ast$BP, \refstruct{ PnlVect} $\ast$X}
+% \item 
+% \describefun{double}{pnl_pde_dim_boundary_get_step}{const \refstruct{ PnlPDEDimBoundary} $\ast$BP, int i}
+% \item 
+% \describefun{double}{standard_time_repartition}{int i, int N-T}
+% \item \describefun{\refstruct{ PnlPDETimeGrid} $\ast$}{pnl_pde_time_grid}{const
+%   double T, const int $N-T$, double($\ast$ repartition)(int i, int NN)}
+%   \sshortdescribe creates a \refstruct{PnlPDETimeGrid}
+% \item \describefun{\refstruct{ PnlPDETimeGrid} $\ast$}{pnl_pde_time_homogen_grid}{const double T, const int N-T}
+%   \sshortdescribe creates a \refstruct{PnlPDETimeGrid}
+% \item \describefun{void}{pnl_pde_time_grid_free}{\refstruct{ PnlPDETimeGrid} $\ast$$\ast$TG}
+%   \sshortdescribe frees a \refstruct{PnlPDETimeGrid}
+% \item \describefun{void}{pnl_pde_time_start}{\refstruct{ PnlPDETimeGrid} $\ast$TG}
+%   \sshortdescribe initialise \refstruct{PnlPDETimeGrid}
+% \item \describefun{int}{pnl_pde_time_grid_increase}{\refstruct{ PnlPDETimeGrid} $\ast$TG}
+%   \sshortdescribe go to the next time step  
+% \item \describefun{double}{pnl_pde_time_grid_step}{const \refstruct{ PnlPDETimeGrid} $\ast$TG}
+%   \sshortdescribe GET function on current step.  
+% \item \describefun{double}{pnl_pde_time_grid_time}{const \refstruct{ PnlPDETimeGrid} $\ast$TG}
+%   \sshortdescribe GET function on current time.
+% \end{itemize}
 
 
 %%% Local Variables: 
