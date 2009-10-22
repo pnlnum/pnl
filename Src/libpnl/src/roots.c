@@ -1,6 +1,7 @@
 
 /*************************************************************************/
-/* Copyright (C) 2009 the PNL Development team                           */
+/* Written and (C) by Jérôme Lelong <jerome.lelong@gmail.com>            */
+/* Written and (C) by David Pommier <pommier.david@gmail.com>            */
 /*                                                                       */
 /* This program is free software; you can redistribute it and/or modify  */
 /* it under the terms of the GNU General Public License as published by  */

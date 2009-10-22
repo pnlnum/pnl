@@ -1,3 +1,7 @@
+/*
+ * This file contains two parts, each with its own copyright.
+ */
+
 /*************************************************************************/
 /* Written and (C) by Jérôme Lelong <jerome.lelong@gmail.com> 2007       */
 /*                                                                       */
@@ -385,40 +389,6 @@ void FUNCTION(pnl_vect, clone)(TYPE(PnlVect) * clone,
 
 
 /**
- * Extract a sub vector and wrap it into a vector.
- * @param V a vector
- * @param i the index of first element to be extracted
- * @param s the size of extracted vector
- * @return a vector (not a pointer) whose array pointer is the address of the
- * ith element of V. No copying is done.
- */
-TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect)(const TYPE(PnlVect) *V, int i,int s)
-{ 
-  TYPE(PnlVect) ret;
-#ifndef PNL_RANGE_CHECK_OFF
-  if ((i >= V->size) ||(s >= V->size) || (s<=0))  {PNL_ERROR ("index out of range", "pnl_vect_extract_with_size");}
-#endif
-  ret.size = s;
-  ret.mem_size = 0;
-  ret.owner = 0;
-  ret.array = &(V->array[i]); 
-  return ret;
-} 
-
-/**
- * Extract  a sub vector and wrap it into a vector.
- * @param V a vector
- * @param i the index of first element to be extracted
- * @param j the index of last  element to be extracted
- * @return a vector (not a pointer) whose array pointer is the address of the
- * ith element of V. No copying is done.
- */
-TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect_with_last)(const TYPE(PnlVect) *V, int i,int j)
-{
-  return FUNCTION(pnl_vect, wrap_subvect)(V,i,j-i+1);
-}
-
-/**
  * prints a TYPE(PnlVect)in file fic.
  *
  * @param V a(constant) TYPE(PnlVect) ptr.
@@ -691,44 +661,6 @@ void FUNCTION(pnl_vect,minus_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
   FUNCTION(pnl_vect,map_vect)(lhs, rhs, FUNCTION(,_op_minus));
 }
 
-/**
- * Computes a x + b y and stores the result in y
- *
- * @param a BASE
- * @param x a vector
- * @param b BASE 
- * @param y a vector
- */
-void FUNCTION(pnl_vect,axpby)(BASE a, const TYPE(PnlVect) *x,  BASE b, TYPE(PnlVect) *y)
-{
-  BASE zero, one, xi, *yi;
-  int i;
-  zero = ZERO;
-  one = ONE;
-
-  if ( EQ(b,zero) )
-    {
-      FUNCTION(pnl_vect,resize) (y, x->size);
-      FUNCTION(pnl_vect,CONCAT2(set_,BASE))(y, zero);
-    }
-  else if ( NEQ(b,one) ) FUNCTION(pnl_vect,CONCAT2(mult_,BASE)) (y, b);
-  if ( EQ(a,zero) ) return;
-
-#ifndef PNL_RANGE_CHECK_OFF
-  if (x->size != y->size)
-    {
-      PNL_ERROR ("size mismatch", "pnl_vect_axpby");
-    }
-#endif
-
-  for (i=0; i< x->size; i++)
-    {
-      xi =  FUNCTION(pnl_vect,get)(x, i);
-      xi = MULT(xi, a);
-      yi = FUNCTION(pnl_vect,lget)(y, i);
-      *yi = PLUS(*yi, xi);      
-    }
-}
 
 /**
  * in-place term by term vector inverse
@@ -865,60 +797,6 @@ void FUNCTION(pnl_vect,cumprod)(TYPE(PnlVect) *V)
 
 
 
-/**
- * returns the X norm of a vector 
- *
- * @param V a TYPE(PnlVect)
- * @param f a pointer's function on a norm function
- * @return the X norm of V
- */
-double FUNCTION(pnl_vect,norm_x)(const TYPE(PnlVect) *V,double(*f)(BASE))
-{
-  int i=0;
-  double p=0;
-  while(i<V->size)
-    { p+=(*f)(FUNCTION(pnl_vect,get)(V, i)); i++;}
-  return p;
-}
-/**
- * returns the two norm of a vector 
- *
- * @param V  TYPE(PnlVect) 
- * @return  the square root of the sum of the square value of components of V
- */
-double FUNCTION(pnl_vect,norm_two)(const TYPE(PnlVect) *V)
-{
-  return sqrt(FUNCTION(pnl_vect,norm_x(V,FUNCTION(,_op_sqr_norm))));
-}
-
-/**
- * returns the one norm of a vector 
- *
- * @param V a vector 
- * @return the sum of the absolute value of components of V
- */
-double FUNCTION(pnl_vect,norm_one)(const TYPE(PnlVect) *V) /*res=\Vert rhs1 \Vert_{l^1} */
-{
-  return FUNCTION(pnl_vect,norm_x)(V,FUNCTION(,_op_abs));
-}
-/**
- * returns the infty norm of a vector 
- *
- * @param V a TYPE(PnlVect) 
- * @return the maximum of the absolute value of components of V
- */
-double FUNCTION(pnl_vect,norm_infty)(const TYPE(PnlVect) *V)
-{
-  int i=0;
-  double p=0.0;
-  double q=0.0;
-  while(i<V->size)
-    {
-      q=NORMONE(FUNCTION(pnl_vect,get)(V,i));
-      p=((p<q)?q:p);i++;
-    }
-  return p;
-}
 
 /* Swap  */
 
@@ -1229,3 +1107,150 @@ void FUNCTION(pnl_vect, qsort_index)(TYPE(PnlVect) * m, PnlVectInt *t, char orde
 }
 
 #endif
+
+/*************************************************************************/
+/* Written and (C) by David Pommier <pommier.david@gmail.com>            */ 
+/*                                                                       */
+/* This program is free software; you can redistribute it and/or modify  */
+/* it under the terms of the GNU General Public License as published by  */
+/* the Free Software Foundation; either version 3 of the License, or     */
+/* (at your option) any later version.                                   */
+/*                                                                       */
+/* This program is distributed in the hope that it will be useful,       */
+/* but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         */
+/* GNU General Public License for more details.                          */
+/*                                                                       */
+/* You should have received a copy of the GNU General Public License     */
+/* along with this program.  If not, see <http://www.gnu.org/licenses/>. */
+/*************************************************************************/
+
+/**
+ * Computes a x + b y and stores the result in y
+ *
+ * @param a BASE
+ * @param x a vector
+ * @param b BASE 
+ * @param y a vector
+ */
+void FUNCTION(pnl_vect,axpby)(BASE a, const TYPE(PnlVect) *x,  BASE b, TYPE(PnlVect) *y)
+{
+  BASE zero, one, xi, *yi;
+  int i;
+  zero = ZERO;
+  one = ONE;
+
+  if ( EQ(b,zero) )
+    {
+      FUNCTION(pnl_vect,resize) (y, x->size);
+      FUNCTION(pnl_vect,CONCAT2(set_,BASE))(y, zero);
+    }
+  else if ( NEQ(b,one) ) FUNCTION(pnl_vect,CONCAT2(mult_,BASE)) (y, b);
+  if ( EQ(a,zero) ) return;
+
+#ifndef PNL_RANGE_CHECK_OFF
+  if (x->size != y->size)
+    {
+      PNL_ERROR ("size mismatch", "pnl_vect_axpby");
+    }
+#endif
+
+  for (i=0; i< x->size; i++)
+    {
+      xi =  FUNCTION(pnl_vect,get)(x, i);
+      xi = MULT(xi, a);
+      yi = FUNCTION(pnl_vect,lget)(y, i);
+      *yi = PLUS(*yi, xi);      
+    }
+}
+
+/**
+ * returns the X norm of a vector 
+ *
+ * @param V a TYPE(PnlVect)
+ * @param f a pointer's function on a norm function
+ * @return the X norm of V
+ */
+double FUNCTION(pnl_vect,norm_x)(const TYPE(PnlVect) *V,double(*f)(BASE))
+{
+  int i=0;
+  double p=0;
+  while(i<V->size)
+    { p+=(*f)(FUNCTION(pnl_vect,get)(V, i)); i++;}
+  return p;
+}
+/**
+ * returns the two norm of a vector 
+ *
+ * @param V  TYPE(PnlVect) 
+ * @return  the square root of the sum of the square value of components of V
+ */
+double FUNCTION(pnl_vect,norm_two)(const TYPE(PnlVect) *V)
+{
+  return sqrt(FUNCTION(pnl_vect,norm_x(V,FUNCTION(,_op_sqr_norm))));
+}
+
+/**
+ * returns the one norm of a vector 
+ *
+ * @param V a vector 
+ * @return the sum of the absolute value of components of V
+ */
+double FUNCTION(pnl_vect,norm_one)(const TYPE(PnlVect) *V) /*res=\Vert rhs1 \Vert_{l^1} */
+{
+  return FUNCTION(pnl_vect,norm_x)(V,FUNCTION(,_op_abs));
+}
+/**
+ * returns the infty norm of a vector 
+ *
+ * @param V a TYPE(PnlVect) 
+ * @return the maximum of the absolute value of components of V
+ */
+double FUNCTION(pnl_vect,norm_infty)(const TYPE(PnlVect) *V)
+{
+  int i=0;
+  double p=0.0;
+  double q=0.0;
+  while(i<V->size)
+    {
+      q=NORMONE(FUNCTION(pnl_vect,get)(V,i));
+      p=((p<q)?q:p);i++;
+    }
+  return p;
+}
+
+/**
+ * Extract a sub vector and wrap it into a vector.
+ * @param V a vector
+ * @param i the index of first element to be extracted
+ * @param s the size of extracted vector
+ * @return a vector (not a pointer) whose array pointer is the address of the
+ * ith element of V. No copying is done.
+ */
+TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect)(const TYPE(PnlVect) *V, int i,int s)
+{ 
+  TYPE(PnlVect) ret;
+#ifndef PNL_RANGE_CHECK_OFF
+  if ((i >= V->size) ||(s >= V->size) || (s<=0))  {PNL_ERROR ("index out of range", "pnl_vect_extract_with_size");}
+#endif
+  ret.size = s;
+  ret.mem_size = 0;
+  ret.owner = 0;
+  ret.array = &(V->array[i]); 
+  return ret;
+} 
+
+/**
+ * Extract  a sub vector and wrap it into a vector.
+ * @param V a vector
+ * @param i the index of first element to be extracted
+ * @param j the index of last  element to be extracted
+ * @return a vector (not a pointer) whose array pointer is the address of the
+ * ith element of V. No copying is done.
+ */
+TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect_with_last)(const TYPE(PnlVect) *V, int i,int j)
+{
+  return FUNCTION(pnl_vect, wrap_subvect)(V,i,j-i+1);
+}
+
+

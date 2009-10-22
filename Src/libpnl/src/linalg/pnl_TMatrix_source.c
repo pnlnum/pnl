@@ -1,3 +1,9 @@
+/*
+ * This code was originally written for matrices of doubles and has been
+ * translated using a template system by
+ *    David Pommier <pommier.david@gmail.com>             
+ *    Jérôme Lelong <jerome.lelong@gmail.com>
+ */
 
 /*************************************************************************/
 /* Written and (C) by Jérôme Lelong <jerome.lelong@gmail.com>            */  
@@ -16,7 +22,6 @@
 /* You should have received a copy of the GNU General Public License     */
 /* along with this program.  If not, see <http://www.gnu.org/licenses/>. */ 
 /*************************************************************************/
-
 
 #include <stdlib.h>
 #include <stdio.h>

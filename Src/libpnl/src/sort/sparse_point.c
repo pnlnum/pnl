@@ -1,5 +1,5 @@
 /*************************************************************************/
-/* Written and (C) by PNL team, 2009                                     */  
+/* Written and (C) by David Pommier <pommier.david@gmail.com>            */
 /*                                                                       */
 /*                                                                       */
 /* This program is free software; you can redistribute it and/or modify  */

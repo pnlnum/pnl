@@ -112,3 +112,26 @@ void pnl_vect_complex_set_imag (const PnlVectComplex *v, int i, double im)
 {
   ((double *)(v->array))[2*i+1] = im;
 }
+
+
+/**
+ * in-place vector scalar double multiplication
+ *
+ * @param lhs : left hand side vector
+ * @param x : scalar double
+ * @return  lhs = lhs*x
+ */
+void pnl_vect_complex_mult_double(PnlVectComplex *lhs , double x)
+{
+  dcomplex *lptr;
+  int i=0;
+  while(i<lhs->size)
+    {
+      lptr = pnl_vect_complex_lget(lhs, i);
+      lptr->r *= x;
+      lptr->i *= x;
+      i++;
+    }
+}
+
+
