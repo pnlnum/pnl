@@ -530,7 +530,6 @@ Src/libpnl/examples/Makefile \
 Src/libpnl/src/Makefile \
 Src/libpnl/src/include/Makefile \
 Src/libpnl/src/libamos/Makefile \
-Src/libpnl/src/libcephes/Makefile \
 Src/libpnl/src/libcsparse/Makefile \
 Src/libpnl/src/libfftpack/Makefile \
 Src/libpnl/src/librand/Makefile \
