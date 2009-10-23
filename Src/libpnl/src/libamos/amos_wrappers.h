@@ -25,13 +25,12 @@
 #define MAXITER        500
 
 
-extern int mtherr(char *name, int code); /* from libcephes */
+static int ierr_to_mtherr( int nz, int ierr);
+static int mtherr(char *name, int code); /* from libcephes */
 
 #define DO_MTHERR(name) if (nz !=0 || ierr !=0) mtherr(name, ierr_to_mtherr(nz, ierr))
 #define CADDR(z) (double *)&z.r, (double*)&z.i
 #define F2C_CST(z) (double *)&z->r, (double *)&z->i
-
-int ierr_to_mtherr( int nz, int ierr); 
 
 /* extern int cairy_wrap(dcomplex z, dcomplex *ai, dcomplex *aip, dcomplex *bi, dcomplex *bip);
  * extern int cairye_wrap(dcomplex z, dcomplex *ai, dcomplex *aip, dcomplex *bi, dcomplex *bip); */

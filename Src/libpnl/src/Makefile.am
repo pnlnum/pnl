@@ -1,4 +1,4 @@
-SUBDIRS = libamos libcephes librand libcsparse libfftpack \
+SUBDIRS = libamos librand libcsparse libfftpack \
 linalg sort include specfun
 
 include $(top_srcdir)/Make.incl
@@ -10,7 +10,7 @@ finance_function.c integration_GK.c \
 brent.c roots.c integ.c laplace.c
 
 libpnl_la_LDFLAGS=-avoid-version @BLAS_LIBS@ @LAPACK_LIBS@
-libpnl_la_LIBADD=libamos/libamos.la libcephes/libcephes.la librand/librand.la\
+libpnl_la_LIBADD=libamos/libamos.la librand/librand.la\
 libcsparse/libcsparse.la linalg/liblinalg.la sort/libsort.la \
 libfftpack/libfftpack.la specfun/libspecfun.la
 

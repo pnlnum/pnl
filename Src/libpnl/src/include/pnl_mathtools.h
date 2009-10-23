@@ -15,6 +15,14 @@ extern "C" {
 
 typedef unsigned char boolean;
 
+extern int intapprox (double s);
+extern double trunc(double x);
+extern double Cnp(int n, int p);
+extern double pnl_fact(int n);
+extern double lgamma (double x);
+extern double tgamma (double x);
+extern double pnl_pow_i (double x, int n);
+
 #define false 0
 #undef FALSE
 #define FALSE 0
@@ -131,16 +139,8 @@ typedef unsigned char boolean;
 
 #define PNL_ALTERNATE(n) (((n)&1) ? -1 : 1) /* (-1)^n */
 
-#define SQR(X) ((X)*(X))
-#define CUB(X) ((X)*(X)*(X))
-extern int intapprox (double s);
-extern double trunc(double x);
-extern double Cnp(int n, int p);
-extern double pnl_fact(int n);
-
-extern double lgamma (double x);
-extern double tgamma (double x);
-
+#define SQR(X) pnl_pow_i(X, 2)
+#define CUB(X) pnl_pow_i(X, 3)
 #ifdef _MSC_VER
 #define isnan _isnan
 #endif

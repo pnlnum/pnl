@@ -24,7 +24,49 @@
 #include "amos_wrappers.h"
 #include "pnl_bessel.h"
 
-int ierr_to_mtherr( int nz, int ierr) 
+static int print_error_messages = 1;
+
+/* Notice: the order of appearance of the following
+ * messages is bound to the error codes defined
+ * in amos_wrappers.h.
+ */
+static char *ermsg[8] = {
+  "unknown",      /* error code 0 */
+  "domain",       /* error code 1 */
+  "singularity",  /* et seq.      */
+  "overflow",
+  "underflow",
+  "total loss of precision",
+  "partial loss of precision",
+  "too many iterations"
+};
+
+
+static int mtherr(char *name, int code)
+{
+
+  /* Display string passed by calling program,
+   * which is supposed to be the name of the
+   * function in which the error occurred:
+   */
+
+  /* Display error message defined
+   * by the code argument.
+   */
+  if( (code <= 0) || (code >= 8) )
+    code = 0;
+  if (print_error_messages) {
+    printf( "\n%s ", name );
+    printf( "%s error\n", ermsg[code] );
+  }
+
+  /* Return to calling
+   * program
+   */
+  return( 0 );
+}
+
+static int ierr_to_mtherr( int nz, int ierr) 
 {
   /* Return mtherr equivalents for ierr values */
   if (nz != 0) return UNDERFLOW;
