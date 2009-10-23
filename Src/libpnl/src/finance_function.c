@@ -302,7 +302,7 @@ static void pnl_bs_increment_call_put(double x,double * fx,double * dfx,void* Da
 { pnl_bs_increment_call_put_Type(x,fx,dfx,Data);}
 
 /**
- * compute implicite volatility of an option price
+ * compute the implied volatility of an option price
  *
  * @param is_call a int, the option type, 1 for call, 0 for put
  * @param Price a double, option price today
@@ -311,7 +311,7 @@ static void pnl_bs_increment_call_put(double x,double * fx,double * dfx,void* Da
  * time T - maturity.
  * @param Strike a double, for value contract
  * @param Maturity a double, echeance time (T)
- * @return implicit_vol of a call/put option
+ * @return implied of a call/put option
  */
 double pnl_bs_implicit_vol (int is_call, double Price,double Bond, double Forward, double Strike,double Maturity)
 {
@@ -352,7 +352,7 @@ double pnl_bs_implicit_vol (int is_call, double Price,double Bond, double Forwar
 
 
 /**
- * compute implicite volatility matrix of a list of options prices
+ * compute implied volatility matrix of a list of options prices
  *
  * @param is_call a int, the option type, 1 for call, 0 for put
  * @param Price a matrix of Prices
