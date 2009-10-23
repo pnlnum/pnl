@@ -1,8 +1,24 @@
+/*************************************************************************/
+/* Written and (C) by Jérôme Lelong <jerome.lelong@gmail.com>            */
+/*                                                                       */
+/* This program is free software; you can redistribute it and/or modify  */
+/* it under the terms of the GNU General Public License as published by  */
+/* the Free Software Foundation; either version 3 of the License, or     */
+/* (at your option) any later version.                                   */
+/*                                                                       */
+/* This program is distributed in the hope that it will be useful,       */
+/* but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         */
+/* GNU General Public License for more details.                          */
+/*                                                                       */
+/* You should have received a copy of the GNU General Public License     */
+/* along with this program.  If not, see <http://www.gnu.org/licenses/>. */ 
+/*************************************************************************/
+
 #include <math.h>
 
 #include "config.h"
 #include "pnl_mathtools.h"
-#include "pnl_cdf.h"
 
 
 /** nearest integer round off function
@@ -83,6 +99,11 @@ double pnl_fact(int n)
 
 #ifndef HAVE_LGAMMA
 extern double amos_dgamln (double *z__, int *ierr);
+/**
+  * Computes the natural logarithm of the Gamma function
+  * @param x  a real number > 0
+  * @return  log(Gamma(x))
+  */ 
 
 double lgamma(double x)
 {
@@ -95,11 +116,40 @@ double lgamma(double x)
 /* the tgamma function is part of C99, not available under
  * Windows */
 #ifndef HAVE_TGAMMA
+/**
+  * Computes the true Gamma function 
+  * @param x  a real number > -1
+  * @return  Gamma(x)
+  */
 double tgamma(double x)
 {
   return (x > 0) ? exp(lgamma(x)) : M_PI/tgamma(1-x)/sin(M_PI*(1-x));
 } 
-
 #endif
 
+/**
+  * Interger power function
+  * @param x a real number
+  * @param n an integer
+  * @ return x^n
+  */
+double pnl_pow_i (double x, int n)
+{
+  double y = 1.;
 
+  if ( x == 0 && n > 0 ) return 0.;
+
+  if ( n < 0 ) 
+    {
+      x = 1. / x;
+      n = -n;
+    }
+
+  while (n)
+    {
+       if (PNL_IS_ODD (n)) y *= x; /* y = x * x^(n-1) */
+       n >>= 1;
+       x *= x;
+    } 
+  return y;
+} 
