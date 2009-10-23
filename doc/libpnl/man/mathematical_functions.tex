@@ -43,7 +43,7 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
 \item \describemacro{PNL_IS_EVEN}{int n}
   \sshortdescribe Returns $1$ if \var{n} is even and $0$ otherwise.
 \item \describemacro{PNL_ALTERNATE}{int n}
-  \sshortdescribe Returns $(-1)^\var{n}}$.
+  \sshortdescribe Returns $(-1)^\var{n}$.
 \end{itemize}
 
 \subsubsection{Functions}
@@ -63,6 +63,9 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
 
 \item \describefun{double}{pnl_fact}{int n}
   \sshortdescribe Computes $n! = \Gamma(n+1)$ in double precision.
+
+\item \describefun{double}{pnl_int_i}{double x, int n}
+  \sshortdescribe Computes $x^n$ for $n \in \N$ using a squaring method.
 
 \item \describefun{double}{lgamma}{double x}
   \sshortdescribe Computes $\log(\Gamma(x))$. This function is part of C99 and is
