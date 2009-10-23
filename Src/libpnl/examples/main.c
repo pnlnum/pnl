@@ -37,6 +37,7 @@ extern void laplace_test();
 extern void finance_function_test();
 extern void integration_test();
 extern void complex_test();
+extern void mathtools_test();
 extern void bessel_test();
 extern void perm_test();
 extern void list_test();
@@ -60,6 +61,7 @@ static tst_list tests[] =
     MAKE_ENUM(laplace_test),
     MAKE_ENUM(finance_function_test),
     MAKE_ENUM(integration_test),
+    MAKE_ENUM(mathtools_test),
     MAKE_ENUM(complex_test),
     MAKE_ENUM(bessel_test),    
     MAKE_ENUM(perm_test),    
