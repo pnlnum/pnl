@@ -49,7 +49,7 @@ typedef struct PnlHMatComplex{
 /*@{*/
  
 extern PnlMatComplex* pnl_mat_complex_create(int m, int n); 
-extern PnlMatComplex* pnl_mat_complex_create_from_complex(int m, int n, dcomplex x);
+extern PnlMatComplex* pnl_mat_complex_create_from_dcomplex(int m, int n, dcomplex x);
 extern PnlMatComplex* pnl_mat_complex_create_from_ptr(int m, int n, const dcomplex* x);
 extern PnlMatComplex* pnl_mat_complex_create_from_list(int m, int n, ...); 
 extern PnlMatComplex pnl_mat_complex_create_wrap_array(const dcomplex* x, int m, int n);
@@ -58,7 +58,7 @@ extern int pnl_mat_complex_resize(PnlMatComplex *v, int m, int n);
 extern void pnl_mat_complex_free(PnlMatComplex **v);
 extern PnlMatComplex* pnl_mat_complex_copy(const PnlMatComplex *v);
 extern void pnl_mat_complex_clone(PnlMatComplex *clone, const PnlMatComplex *M);
-extern void pnl_mat_complex_set_complex(PnlMatComplex *lhs, dcomplex x);/*lhs=x*/
+extern void pnl_mat_complex_set_dcomplex(PnlMatComplex *lhs, dcomplex x);/*lhs=x*/
 extern void pnl_mat_complex_set_id(PnlMatComplex *lhs);
 extern PnlMatComplex* pnl_mat_complex_transpose(const PnlMatComplex *M);
 extern void pnl_mat_complex_sq_transpose(PnlMatComplex *M);
@@ -82,12 +82,12 @@ extern PnlVectComplex pnl_mat_complex_wrap_vect(const PnlMatComplex *M);
 extern void pnl_mat_complex_row_to_vect_inplace(PnlVectComplex * V,const PnlMatComplex *M, int i);/* M(i,:)=V(:) */
 extern void pnl_mat_complex_map_inplace(PnlMatComplex *lhs, dcomplex(*f)(dcomplex)); /*lhs=f(lhs)*/
 extern void pnl_mat_complex_map(PnlMatComplex *lhs, const PnlMatComplex *rhs, dcomplex(*f)(dcomplex));/* lhs(i)=f(rhs(i)) */
-extern void pnl_mat_complex_plus_complex(PnlMatComplex *lhs, dcomplex x); /*lhs+=x*/
-extern void pnl_mat_complex_minus_complex(PnlMatComplex *lhs, dcomplex x); /*lhs-=x*/
+extern void pnl_mat_complex_plus_dcomplex(PnlMatComplex *lhs, dcomplex x); /*lhs+=x*/
+extern void pnl_mat_complex_minus_dcomplex(PnlMatComplex *lhs, dcomplex x); /*lhs-=x*/
 extern void pnl_mat_complex_plus_mat(PnlMatComplex *lhs, const PnlMatComplex *rhs); /*lhs+=rhs*/
 extern void pnl_mat_complex_minus_mat(PnlMatComplex *lhs, const PnlMatComplex *rhs); /*lhs-=rhs*/
-extern void pnl_mat_complex_mult_complex(PnlMatComplex *lhs, dcomplex x); /*lhs*=x*/
-extern void pnl_mat_complex_div_complex(PnlMatComplex *lhs, dcomplex x); /*lhs/=x*/
+extern void pnl_mat_complex_mult_dcomplex(PnlMatComplex *lhs, dcomplex x); /*lhs*=x*/
+extern void pnl_mat_complex_div_dcomplex(PnlMatComplex *lhs, dcomplex x); /*lhs/=x*/
 extern void
 pnl_mat_complex_mult_mat_term(PnlMatComplex *lhs, const PnlMatComplex *rhs); /*lhs=lhs.*rhs*/
 extern void
@@ -106,14 +106,14 @@ extern void pnl_mat_complex_cumprod(PnlMatComplex *lhs, char a);
  */
 /*@{*/
 extern PnlHMatComplex* pnl_hmat_complex_create(int ndim, const int *dims); 
-extern PnlHMatComplex* pnl_hmat_complex_create_from_complex(int ndim, const int *dims, dcomplex x); 
+extern PnlHMatComplex* pnl_hmat_complex_create_from_dcomplex(int ndim, const int *dims, dcomplex x); 
 extern PnlHMatComplex* pnl_hmat_complex_create_from_ptr(int ndim, const int *dims, const dcomplex *x);
 extern int pnl_hmat_complex_resize(PnlHMatComplex *v, int ndim, const int *dims);
 extern void pnl_hmat_complex_free(PnlHMatComplex **v);
 extern PnlHMatComplex* pnl_hmat_complex_copy(const PnlHMatComplex *H);
 extern void pnl_hmat_complex_clone(PnlHMatComplex *clone, const PnlHMatComplex *H);
 extern void pnl_hmat_complex_plus_hmat(PnlHMatComplex *lhs, const PnlHMatComplex *rhs);/*lhs+=rhs*/
-extern void pnl_hmat_complex_mult_complex(PnlHMatComplex *lhs, dcomplex x);/* lhs *=x;*/
+extern void pnl_hmat_complex_mult_dcomplex(PnlHMatComplex *lhs, dcomplex x);/* lhs *=x;*/
 /*@}*/
 
 /* inline functions if you are using GCC */
