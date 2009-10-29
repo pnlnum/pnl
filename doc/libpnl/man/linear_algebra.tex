@@ -11,7 +11,7 @@ The structures and functions relative to vectors are declared in
 
 
 Vectors are declared for several basic types : double, int, uint and
-fcomplex. In the following declarations, {\tt BASE} must be replaced by one
+dcomplex. In the following declarations, {\tt BASE} must be replaced by one
 the previous types and the corresponding vector structures are respectively
 named PnlVect, PnlVectInt, PnlVectUint, PnlVectComplex
 \begin{verbatim}
@@ -39,7 +39,7 @@ typedef struct PnlVectInt {
 typedef struct PnlVectComplex {
   int size; /*!< size of the vector */ 
   int mem_size; /*!< size of the memory block allocated for array */
-  fcomplex *array; /*!< pointer to store the data */
+  dcomplex *array; /*!< pointer to store the data */
   int owner; /*!< 1 if the structure owns its array pointer */
 } PnlVect;
 \end{verbatim}
@@ -65,7 +65,7 @@ Here is the table of prefixes used for the different basic types.
     \hline
     uint & pnl_vect_uint & uint\\
     \hline
-    fcomplex & pnl_vect_complex & fcomplex
+    dcomplex & pnl_vect_complex & dcomplex
   \end{tabular}
 \end{center}
 
@@ -444,7 +444,7 @@ typedef struct PnlMatComplex{
   int n; /*!< nb columns */ 
   int mn; /*!< product m*n */
   int mem_size; /*!< size of the memory block allocated for array */
-  fcomplex *array; /*!< pointer to store the data row-wise */
+  dcomplex *array; /*!< pointer to store the data row-wise */
   int owner; /*!< 1 if the structure owns its array pointer */
 } PnlMatComplex;
 \end{verbatim}
@@ -486,7 +486,7 @@ Here is the table of prefixes used for the different basic types.
     \hline
     uint & pnl_mat_uint & uint\\
     \hline
-    fcomplex & pnl_mat_complex & fcomplex
+    dcomplex & pnl_mat_complex & dcomplex
   \end{tabular}
 \end{center}
 
@@ -1069,7 +1069,7 @@ typedef struct PnlHMatComplex{
   int ndim; /*!< nb dimensions */ 
   int *dims; /*!< pointer to store the value of the ndim dimensions */ 
   int mn; /*!< product dim_1 *...*dim_ndim */
-  fcomplex *array; /*!< pointer to store */
+  dcomplex *array; /*!< pointer to store */
 } PnlHMatComplex;
 \end{verbatim}
 \var{ndim} is the number of dimensions, \var{dim} is an array to store the
@@ -1094,7 +1094,7 @@ Here is the table of prefixes used for the different basic types.
     \hline
     uint & pnl_hmat_uint & uint\\
     \hline
-    fcomplex & pnl_hmat_complex & fcomplex
+    dcomplex & pnl_hmat_complex & dcomplex
   \end{tabular}
 \end{center}
 
