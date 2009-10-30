@@ -777,42 +777,14 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 \item \describefun{\refstruct{PnlMat} $\ast$}{pnl_mat_transpose}{const
     \refstruct{PnlMat} $\ast$M} 
   \sshortdescribe Transposition of matrices
-\end{itemize}
-
-\subsubsection{Functions specific to base type {\tt double}}
-
-\paragraph{Standard matrix operations}
-\begin{itemize}
 
 \item \describefun{void}{pnl_mat_axpy}{double alpha, const \refstruct{PnlMat}
     $\ast$A, \refstruct{PnlMat} $\ast$B}
   \sshortdescribe Computes \var{B := alpha * A + B}
 
-\item \describefun{double}{pnl_mat_scalar_prod_A}{const \refstruct{PnlMat}
-    $\ast$A, const \refstruct{PnlVect} $\ast$x, const \refstruct{PnlVect} $\ast$y}
-  \sshortdescribe Computes \var{y' * A * y}
-
 \item \describefun{void}{pnl_mat_dger}{double alpha, const \refstruct{PnlVect}
     $\ast$x, const \refstruct{PnlVect} $\ast$y, \refstruct{PnlMat} $\ast$A}
   \sshortdescribe Computes \var{A := alpha x' * y + A}
-  
-\item \describefun{void}{pnl_mat_dgemm}{char transA, char transB, double
-    alpha, const \refstruct{PnlMat} $\ast$A, const \refstruct{PnlMat} $\ast$B, 
-    double beta, \refstruct{PnlMat} $\ast$C}
-  \sshortdescribe Computes \var{C := alpha * op(A) * op (B) + beta *
-    C}. When beta=0, the content of \var{C} is unused and instead \var{C}
-  is resized to store \var{alpha A $\ast$B}. If \var{transA='N'} or
-  \var{transA='n'}, \var{op (A) = A}, whereas If \var{transA='T'} or
-  \var{transA='t'}, \var{op (A) = A'}. The same holds for \var{transB}.
-  
-\item \describefun{\refstruct{PnlMat} $\ast$}{pnl_mat_mult_mat}{const
-    \refstruct{PnlMat} $\ast$rhs1, const \refstruct{PnlMat} $\ast$rhs2} 
-  \sshortdescribe Matrix multiplication  \var{rhs1 * rhs2}
-
-\item \describefun{void}{pnl_mat_mult_mat_inplace}{\refstruct{PnlMat}
-    $\ast$lhs, const \refstruct{PnlMat} $\ast$rhs1, const \refstruct{PnlMat}
-    $\ast$rhs2} 
-  \sshortdescribe In-place matrix multiplication  \var{lhs = rhs1 * rhs2}
 
 \item \describefun{\refstruct{PnlVect} $\ast$}{pnl_mat_mult_vect}{const
     \refstruct{PnlMat} $\ast$A, const \refstruct{PnlVect} $\ast$x} 
@@ -844,6 +816,37 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
     op(A) x + mu b}, where \var{op (X) = X} or \var{op (X) = X'}. When
   \var{mu==0}, the content of \var{b} is not used and instead \var{b} is resized
   to match \var{op(A)*x}
+
+\item \describefun{void}{pnl_mat_dgemm}{char transA, char transB, double
+    alpha, const \refstruct{PnlMat} $\ast$A, const \refstruct{PnlMat} $\ast$B, 
+    double beta, \refstruct{PnlMat} $\ast$C}
+  \sshortdescribe Computes \var{C := alpha * op(A) * op (B) + beta *
+    C}. When beta=0, the content of \var{C} is unused and instead \var{C}
+  is resized to store \var{alpha A $\ast$B}. If \var{transA='N'} or
+  \var{transA='n'}, \var{op (A) = A}, whereas If \var{transA='T'} or
+  \var{transA='t'}, \var{op (A) = A'}. The same holds for \var{transB}.
+  
+\item \describefun{\refstruct{PnlMat} $\ast$}{pnl_mat_mult_mat}{const
+    \refstruct{PnlMat} $\ast$rhs1, const \refstruct{PnlMat} $\ast$rhs2} 
+  \sshortdescribe Matrix multiplication  \var{rhs1 * rhs2}
+
+\item \describefun{void}{pnl_mat_mult_mat_inplace}{\refstruct{PnlMat}
+    $\ast$lhs, const \refstruct{PnlMat} $\ast$rhs1, const \refstruct{PnlMat}
+    $\ast$rhs2} 
+  \sshortdescribe In-place matrix multiplication  \var{lhs = rhs1 * rhs2}
+\end{itemize}
+
+\subsubsection{Functions specific to base type {\tt double}}
+
+\paragraph{Standard matrix operations}
+\begin{itemize}
+
+\item \describefun{double}{pnl_mat_scalar_prod_A}{const \refstruct{PnlMat}
+    $\ast$A, const \refstruct{PnlVect} $\ast$x, const \refstruct{PnlVect} $\ast$y}
+  \sshortdescribe Computes \var{y' * A * y}
+
+ 
+
   
 \item \describefun{void}{pnl_mat_exp}{\refstruct{PnlMat} $\ast$B, 
     const \refstruct{PnlMat} $\ast$A}
@@ -890,7 +893,6 @@ using ``inplace'' functions.
   (including the diagonal terms) contains U. Remember that the diagonal
   elements of $L$ are all $1$.
 
-
 \item \describefun{void}{pnl_mat_upper_syslin}{\refstruct{PnlVect}
     $\ast$x, const \refstruct{PnlMat} $\ast$U, const \refstruct{PnlVect}$\ast$b}
   \sshortdescribe Solves an upper triangular linear system \var{U x = b}
@@ -899,13 +901,11 @@ using ``inplace'' functions.
     $\ast$x, const \refstruct{PnlMat} $\ast$L, const \refstruct{PnlVect}$\ast$b}
   \sshortdescribe Solves a lower triangular linear system  \var{L x = b}
   
-
 \item \describefun{void}{pnl_mat_chol_syslin}{\refstruct{PnlVect} $\ast$x, 
     const \refstruct{PnlMat} $\ast$chol, const \refstruct{PnlVect} $\ast$b} 
   \sshortdescribe Solves a symmetric definite positive linear system A x = b, 
   in which \var{chol} is assumed to be the Cholesky decomposition of A
   computed by \reffun{pnl_mat_chol}
-
 
 \item \describefun{void}{pnl_mat_chol_syslin_inplace}{
     const \refstruct{PnlMat} $\ast$chol, \refstruct{PnlVect} $\ast$b} 
