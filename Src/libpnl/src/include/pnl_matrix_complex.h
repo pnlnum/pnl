@@ -92,6 +92,21 @@ extern void
 pnl_mat_complex_mult_mat_term(PnlMatComplex *lhs, const PnlMatComplex *rhs); /*lhs=lhs.*rhs*/
 extern void
 pnl_mat_complex_div_mat_term(PnlMatComplex *lhs, const PnlMatComplex *rhs); /*lhs=lhs./rhs*/
+extern void pnl_mat_complex_axpy (dcomplex a, const PnlMatComplex *X, PnlMatComplex *Y); 
+extern void pnl_mat_complex_dger (dcomplex alpha, const PnlVectComplex *x, const PnlVectComplex *y, PnlMatComplex *A);
+extern PnlVectComplex* pnl_mat_complex_mult_vect(const PnlMatComplex *mat, const PnlVectComplex *vec);
+extern void pnl_mat_complex_mult_vect_inplace(PnlVectComplex *lhs, const PnlMatComplex *mat,
+                                              const PnlVectComplex *rhs);
+extern PnlVectComplex* pnl_mat_complex_mult_vect_transpose(const PnlMatComplex *mat, const PnlVectComplex *vec);
+extern void pnl_mat_complex_mult_vect_transpose_inplace(PnlVectComplex *lhs, const PnlMatComplex *mat, const PnlVectComplex *rhs);
+extern  void pnl_mat_complex_lAxpby(dcomplex l, const PnlMatComplex *A, const PnlVectComplex *x, dcomplex b, PnlVectComplex * y);
+extern void pnl_mat_complex_dgemv (char trans, dcomplex alpha, const PnlMatComplex *A,
+                                   const PnlVectComplex *x , dcomplex beta, PnlVectComplex * y);
+extern PnlMatComplex* pnl_mat_complex_mult_mat(const PnlMatComplex *rhs1, const PnlMatComplex *rhs2);
+extern void pnl_mat_complex_mult_mat_inplace(PnlMatComplex *lhs, const PnlMatComplex *rhs1,
+                                          const PnlMatComplex *rhs2);/*lhs=rhs1*rhs2*/
+extern void pnl_mat_complex_dgemm (char transA, char transB, dcomplex alpha, const PnlMatComplex *A,
+                                const PnlMatComplex *B, dcomplex beta, PnlMatComplex *C);
 extern dcomplex pnl_mat_complex_sum(const PnlMatComplex *lhs);
 extern dcomplex pnl_mat_complex_prod(const PnlMatComplex *lhs);
 extern void pnl_mat_complex_sum_vect (PnlVectComplex *y, const PnlMatComplex *M, char a);

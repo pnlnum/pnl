@@ -92,6 +92,22 @@ extern void
 pnl_mat_uint_mult_mat_term(PnlMatUint *lhs, const PnlMatUint *rhs); /*lhs=lhs.*rhs*/
 extern void
 pnl_mat_uint_div_mat_term(PnlMatUint *lhs, const PnlMatUint *rhs); /*lhs=lhs./rhs*/
+extern void pnl_mat_uint_axpy (uint a, const PnlMatUint *X, PnlMatUint *Y); 
+extern void pnl_mat_uint_dger (uint alpha, const PnlVectUint *x, const PnlVectUint *y, PnlMatUint *A);
+extern PnlVectUint* pnl_mat_uint_mult_vect(const PnlMatUint *mat, const PnlVectUint *vec);
+extern void pnl_mat_uint_mult_vect_inplace(PnlVectUint *lhs, const PnlMatUint *mat,
+                                          const PnlVectUint *rhs);
+
+extern PnlVectUint* pnl_mat_uint_mult_vect_transpose(const PnlMatUint *mat, const PnlVectUint *vec);
+extern void pnl_mat_uint_mult_vect_transpose_inplace(PnlVectUint *lhs, const PnlMatUint *mat, const PnlVectUint *rhs);
+extern  void pnl_mat_uint_lAxpby(uint l, const PnlMatUint *A, const PnlVectUint *x, uint b, PnlVectUint * y);
+extern void pnl_mat_uint_dgemv (char trans, uint alpha, const PnlMatUint *A,
+                               const PnlVectUint *x , uint beta, PnlVectUint * y);
+extern PnlMatUint* pnl_mat_uint_mult_mat(const PnlMatUint *rhs1, const PnlMatUint *rhs2);
+extern void pnl_mat_uint_mult_mat_inplace(PnlMatUint *lhs, const PnlMatUint *rhs1,
+                                          const PnlMatUint *rhs2);/*lhs=rhs1*rhs2*/
+extern void pnl_mat_uint_dgemm (char transA, char transB, uint alpha, const PnlMatUint *A,
+                                const PnlMatUint *B, uint beta, PnlMatUint *C); 
 extern uint pnl_mat_uint_sum(const PnlMatUint *lhs);
 extern uint pnl_mat_uint_prod(const PnlMatUint *lhs);
 extern void pnl_mat_uint_sum_vect (PnlVectUint *y, const PnlMatUint *M, char a);

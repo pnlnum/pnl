@@ -884,6 +884,503 @@ void FUNCTION(pnl_mat,div_mat_term)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
   FUNCTION(pnl_mat,map_mat)(lhs, rhs, CONCAT2(__op_div_,BASE));
 }
 
+/**
+ * Computes y := alpha * op(A) * x + beta * y
+ *     where op(X) = X or op(X) = X'
+ *
+ * @param A a  matrix
+ * @param trans a char. If trans=='T', op(X) = X'. If trans=='N', op(X) = X.
+ * @param x a vector such that op(A) * x is legal
+ * @param alpha  a BASE constant
+ * @param beta  a BASE constant. When b==0, the content of y is not used, instead y
+ * is resized to store op(A) * x
+ * @param y a vector containing alpha * op(A) * x + beta * y on exit.
+ */
+void FUNCTION(pnl_mat,dgemv) (char trans, BASE alpha, const TYPE(PnlMat) *A,
+                    const TYPE(PnlVect) *x , BASE beta, TYPE(PnlVect) * y)
+{
+  BASE yi, temp;
+  int i,j;
+  
+  if ( EQ(beta,ZERO) )
+    {
+      if (trans=='N' || trans=='n') FUNCTION(pnl_vect,resize) (y, A->m);
+      else FUNCTION(pnl_vect,resize)(y, A->n);
+      FUNCTION(pnl_vect,CONCAT2(set_,BASE)) (y, ZERO);
+    }
+  else if ( NEQ(beta, ONE) ) FUNCTION(pnl_vect,CONCAT2(mult_,BASE)) (y, beta);
+  if ( EQ(alpha, ZERO) ) return;
+  
+
+  /* Form alpha * A * x + beta * y */
+  if (trans=='N' || trans=='n')
+    {
+#ifndef PNL_RANGE_CHECK_OFF
+      if (A->n != x->size || A->m != y->size)
+        {
+          PNL_ERROR ("size mismatch", "pnl_mat_dgemv");
+        }
+#endif
+      for (i=0; i<y->size; i++)
+        {
+          temp = ZERO;
+          for ( j=0 ; j<A->n ; j++)
+            {
+              temp = PLUS (temp, MULT(FUNCTION(pnl_mat,get) (A, i, j), 
+                                      FUNCTION(pnl_vect,get) (x, j) ) );  
+            } 
+          yi = FUNCTION(pnl_vect,get) (y, i);
+          yi = PLUS( yi, MULT(alpha, temp)); 
+          FUNCTION(pnl_vect,set) (y, i, yi);
+        }
+    }
+  /* Form alpha * A' * x + beta * y */
+  else   if (trans=='T' || trans=='t')
+    {
+#ifndef PNL_RANGE_CHECK_OFF
+      if (A->m != x->size || A->n != y->size)
+        {
+          PNL_ERROR ("size mismatch", "pnl_mat_dgmev");
+        }
+#endif
+      for (j=0; j<A->m; j++)
+        {
+          temp = MULT(alpha, FUNCTION(pnl_vect,get) (x, j));
+          for (i=0; i<y->size; i++)
+            {
+              yi =  FUNCTION(pnl_vect,get) (y, i);
+              yi = PLUS(yi, MULT(FUNCTION(pnl_mat,get) (A, j, i), temp));
+              FUNCTION(pnl_vect,set) (y, i, yi);
+            }
+        }
+    }
+  else
+    {
+      PNL_ERROR ("invalid value for trans", "pnl_mat_dgemv");
+    }
+}
+
+/**
+ *  Computes A * x
+ *
+ * @param A : matrix
+ * @param x : vector
+ * @return  y = A * x
+ */
+TYPE(PnlVect)* FUNCTION(pnl_mat,mult_vect)(const TYPE(PnlMat) *A, const TYPE(PnlVect) *x)
+{
+  TYPE(PnlVect) *y;
+  y = FUNCTION(pnl_vect,create) (0);
+  FUNCTION(pnl_mat,dgemv) ('N', ONE, A, x, ZERO, y);
+  return y;
+}
+
+/**
+ *  Computes A' * x
+ *
+ * @param A : matrix
+ * @param x : vector
+ * @return  y = A' * x
+ */
+TYPE(PnlVect)* FUNCTION(pnl_mat,mult_vect_transpose)(const TYPE(PnlMat) *A, const TYPE(PnlVect) *x)
+{
+  TYPE(PnlVect) *y;
+  y = FUNCTION(pnl_vect,create) (A->n);
+  FUNCTION(pnl_mat,dgemv) ('T', ONE, A, x, ZERO, y);
+  return y;
+}
+
+/**
+ *  Computes y = A * x
+ *
+ * @param A : matrix
+ * @param x : vector
+ * @param y : vector
+ * @return  lhs=mat*rhs
+ */
+void FUNCTION(pnl_mat,mult_vect_inplace)(TYPE(PnlVect) *y, const TYPE(PnlMat) *A, const TYPE(PnlVect) *x)
+{
+  FUNCTION(pnl_mat,dgemv) ('N', ONE, A, x, ZERO, y);
+}
+
+
+/**
+ *  Computes y = A' * x
+ *
+ * @param A : matrix
+ * @param x : vector
+ * @param y : vector
+ * @return  y = A' * x
+ */
+void FUNCTION(pnl_mat,mult_vect_transpose_inplace)(TYPE(PnlVect) *y, const TYPE(PnlMat) *A, const TYPE(PnlVect) *x)
+{
+  FUNCTION(pnl_mat,dgemv) ('T', ONE, A, x, ZERO, y);
+}
+
+/**
+ * Computes y := alpha * A * x + beta * y
+ *
+ * @param A a  matrix
+ * @param x a vector such that A * x is legal
+ * @param alpha  a BASE constant
+ * @param beta  a BASE constant. When b==0, the content of y is not used, instead y
+ * is resized to store A * x
+ * @param y a vector containing alpha * A * x + beta * y on exit.
+ */
+void FUNCTION(pnl_mat,lAxpby)(BASE alpha, const TYPE(PnlMat) *A, const TYPE(PnlVect) *x, BASE beta, TYPE(PnlVect) * y)
+{
+  FUNCTION(pnl_mat,dgemv) ('N', alpha, A, x, beta, y);
+}
+
+/**
+ * Computes Y := a * X + Y
+ *
+ * @param a BASE coefficient
+ * @param X a matrix
+ * @param Y a matrix whose size must be the same as the one of X. Contains the
+ * result on exit
+ */
+void FUNCTION(pnl_mat,axpy) (BASE a, const TYPE(PnlMat) *X, TYPE(PnlMat) *Y)
+{
+  int i;
+  CheckMatMatch(X, Y);
+  if ( EQ(a, ZERO) ) return;
+  if ( EQ(a, ONE) )
+    {
+      for ( i=0 ; i<Y->mn ; i++ )
+        {
+          Y->array[i] = PLUS(Y->array[i], X->array[i]);
+        }
+      return;
+    }
+  for ( i=0 ; i<Y->mn ; i++)
+    {
+        Y->array[i] = PLUS(Y->array[i], MULT(a, X->array[i]));
+    }
+}
+
+/**
+ * Computes A := alpha x' * y + A
+ *
+ * @param alpha a BASE number
+ * @param x a vector
+ * @param y a vector
+ * @param A a matrix
+ */
+void FUNCTION(pnl_mat,dger) (BASE alpha, const TYPE(PnlVect) *x, const TYPE(PnlVect) *y, TYPE(PnlMat) *A)
+{
+  int i, j;
+  BASE ai, alpha_xi;
+#ifdef PNL_RANGE_CHECK_OFF
+  if ((x->size != y->size) || (A->m != A->n) || (A->m != x->size))
+    {
+      PNL_ERROR ("size mismatch", "pnl_mat_dger");
+    }
+#endif
+  if ( EQ(alpha,ZERO) ) return;
+
+  for ( i=0 ; i<x->size ; i++)
+    {
+      alpha_xi = MULT(alpha, FUNCTION(pnl_vect,get) (x, i));
+      for (j=0; j<x->size; j++)
+        {
+          ai = FUNCTION(pnl_mat,get) (A, i, j);
+          ai = PLUS(ai, MULT(alpha_xi, FUNCTION(pnl_vect,get) (x, j)));
+          FUNCTION(pnl_mat,set) (A, i, j, ai);
+        }
+    }
+}
+
+/**
+ *  matrix multiplication
+ *
+ * @param rhs1 : first right hand side matrix
+ * @param rhs2 : second right hand side matrix
+ * @return  rhs1*rhs2
+ */
+
+TYPE(PnlMat)* FUNCTION(pnl_mat,mult_mat)(const TYPE(PnlMat) *rhs1, const TYPE(PnlMat) *rhs2)
+{
+  TYPE(PnlMat) *lhs;
+  lhs = FUNCTION(pnl_mat,create) (0,0);
+  FUNCTION(pnl_mat,dgemm) ('N', 'N', ONE, rhs1, rhs2, ZERO, lhs);
+  return lhs;
+}
+
+/**
+ *  in-place matrix multiplication
+ *
+ * @param lhs : left hand side matrix
+ * @param rhs1 : first right hand side matrix
+ * @param rhs2 : second right hand side matrix
+ * @return  lhs=rhs1*rhs2
+ */
+
+void FUNCTION(pnl_mat,mult_mat_inplace)(TYPE(PnlMat) *lhs, const  TYPE(PnlMat) *rhs1, const TYPE(PnlMat) *rhs2)
+{
+  FUNCTION(pnl_mat,dgemm) ('N', 'N', ONE, rhs1, rhs2, ZERO, lhs);
+}
+
+
+/**
+ * Computes C := alpha * A * B + C with alpha != 0
+ *
+ * @param alpha a real coefficient
+ * @param A a matrix
+ * @param B a matrix
+ * @param C a matrix. On exit contains the result of alpha * A * B + C
+ */
+static void FUNCTION(pnl_mat,dgemmNN) (BASE alpha, const TYPE(PnlMat) *A, const TYPE(PnlMat) *B, TYPE(PnlMat) *C)
+{
+  int i, i1, i2, j, k, p, block;
+  BASE Cij, Cij1, Cij2, Bkj, aibk, ai1bk, ai2bk;
+  
+  block = 3;
+
+#ifndef PNL_RANGE_CHECK_OFF
+  if (A->n != B->m || (A->m != C->m || B->n != C->n) )
+    {
+      PNL_ERROR ("size mismatch", "pnl_mat_dgemm");
+    }
+#endif
+
+  p = C->m % block;
+  for (i=0; i<p; i++)
+    {
+      for (k=0; k<A->n; k++)
+        {
+          BASE temp = MULT(alpha, FUNCTION(pnl_mat,get) (A, i, k));
+          for (j=0; j<C->n; j++)
+            {
+              Cij = FUNCTION(pnl_mat,get)(C, i, j);
+              Cij = PLUS (Cij, MULT(temp, FUNCTION(pnl_mat,get) (B, k, j)));
+              FUNCTION(pnl_mat,set) (C, i, j, Cij);
+            }
+        }
+    }
+  
+  for (i=p, i1=p+1, i2=p+2; i<C->m; i+=block, i1+=block, i2+=block)
+    {
+      for (k=0; k<A->n; k++) 
+        {
+          BASE temp = MULT(alpha, FUNCTION(pnl_mat,get) (A, i, k));
+          BASE temp1 = MULT(alpha, FUNCTION(pnl_mat,get) (A, i1, k));
+          BASE temp2 = MULT(alpha, FUNCTION(pnl_mat,get) (A, i2, k));
+          for (j=0; j<C->n; j++)
+            {
+              Bkj = FUNCTION(pnl_mat,get) (B, k, j);
+
+              Cij = FUNCTION(pnl_mat,get)(C, i, j);
+              aibk = MULT(temp, Bkj);
+              Cij = PLUS(Cij, aibk);
+              FUNCTION(pnl_mat,set) (C, i, j, Cij);
+              
+              Cij1 = FUNCTION(pnl_mat,get)(C, i1, j);
+              ai1bk = MULT(temp1, Bkj);
+              Cij1 = PLUS(Cij1, ai1bk);
+              FUNCTION(pnl_mat,set) (C, i1, j, Cij1);
+              
+              Cij2 = FUNCTION(pnl_mat,get)(C, i2, j);
+              ai2bk = MULT(temp2, Bkj);
+              Cij2 = PLUS(Cij2, ai2bk);
+              FUNCTION(pnl_mat,set) (C, i2, j, Cij2);
+            }
+        }
+    }
+}
+
+/**
+ * Computes C := alpha * A' * B + C with alpha != 0
+ *
+ * @param alpha a real coefficient
+ * @param A a matrix
+ * @param B a matrix
+ * @param C a matrix. On exit contains the result of alpha * A' * B + C
+ */
+static void FUNCTION(pnl_mat,dgemmTN) (BASE alpha, const TYPE(PnlMat) *A, const TYPE(PnlMat) *B, TYPE(PnlMat) *C)
+{
+  TYPE(PnlMat) * tA;
+
+  /* It seems much faster to create a new matrix which is the transposition of
+     A and call dgemmNN, rather than trying to rewrite loops in order to make
+     the most of data alignment.
+
+     Atcually, to avoid using all the memory, we should break A, B and C into
+     smaller blocks and only copy these smaller blocks of A.
+  */
+  tA = FUNCTION(pnl_mat,transpose) (A);
+  FUNCTION(pnl_mat,dgemmNN) (alpha, tA, B, C);
+  FUNCTION(pnl_mat,free) (&tA);
+  return;
+}
+
+/**
+ * Computes C := alpha * A * B' + C with alpha != 0
+ *
+ * @param alpha a real coefficient
+ * @param A a matrix
+ * @param B a matrix
+ * @param C a matrix. On exit contains the result of alpha * A * B' + C
+ */
+static void FUNCTION(pnl_mat,dgemmNT) (BASE alpha, const TYPE(PnlMat) *A, const TYPE(PnlMat) *B, TYPE(PnlMat) *C)
+{
+  int i, i1, i2, j, k, p, block;
+  BASE Cij, Cij1, Cij2, Bkj, sum, sum1, sum2;
+  
+
+  block = 3;
+
+#ifndef PNL_RANGE_CHECK_OFF
+  if (A->n != B->n || (A->m != C->m || B->m != C->n) )
+    {
+      PNL_ERROR ("size mismatch", "pnl_mat_dgemm");
+    }
+#endif
+
+  p = C->m % block;
+  for (i=0; i<p; i++)
+    {
+      for (j=0; j<C->n; j++)
+        {
+          sum = ZERO;
+          for (k=0; k<A->n; k++)
+            {
+              sum = PLUS(sum, MULT(FUNCTION(pnl_mat,get) (A, i, k),
+                                   FUNCTION(pnl_mat,get) (B, j, k) ) );
+            }
+          Cij = FUNCTION(pnl_mat,get)(C, i, j);
+          Cij = PLUS(Cij, MULT(alpha, sum));
+          FUNCTION(pnl_mat,set) (C, i, j, Cij);
+        }
+    }
+  
+ 
+  for (i=p, i1=p+1, i2=p+2; i<C->m; i+=block, i1+=block, i2+=block)
+    {
+      for (j=0; j<C->n; j++)
+        {
+          sum = ZERO;
+          sum1 = ZERO;
+          sum2 = ZERO;
+          for (k=0; k<A->n; k++) 
+            {
+              Bkj = FUNCTION(pnl_mat,get) (B, j, k);
+   
+              sum = PLUS(sum, MULT( FUNCTION(pnl_mat,get)(A, i, k), Bkj));
+              sum1 = PLUS(sum1, MULT( FUNCTION(pnl_mat,get)(A, i1, k), Bkj));
+              sum2 = PLUS(sum2, MULT( FUNCTION(pnl_mat,get)(A, i2, k), Bkj));
+   
+            }
+          Cij = FUNCTION(pnl_mat,get)(C, i, j);
+          sum = MULT(sum, alpha);
+          Cij = PLUS(Cij, sum);
+          FUNCTION(pnl_mat,set) (C, i, j, Cij);
+          
+          Cij1 = FUNCTION(pnl_mat,get)(C, i1, j);
+          sum1 = MULT(sum1, alpha);
+          Cij1 = PLUS(Cij1, sum1);
+          FUNCTION(pnl_mat,set) (C, i1, j, Cij1);
+           
+          Cij2 = FUNCTION(pnl_mat,get)(C, i2, j);
+          sum2 = MULT(sum2, alpha);
+          Cij2 = PLUS(Cij2, sum2);
+          FUNCTION(pnl_mat,set) (C, i2, j, Cij2);
+        }
+    }
+}
+
+/**
+ * Computes C := alpha * A' * B' + C with alpha != 0
+ *
+ * @param alpha a real coefficient
+ * @param A a matrix
+ * @param B a matrix
+ * @param C a matrix. On exit contains the result of alpha * A' * B' + C
+ */
+static void FUNCTION(pnl_mat,dgemmTT) (BASE alpha, const TYPE(PnlMat) *A, const TYPE(PnlMat) *B, TYPE(PnlMat) *C)
+{
+  TYPE(PnlMat) *tA;
+  /* It seems much faster to create a new matrix which is the transposition of
+     A and call dgemmNT, rather than trying to rewrite loops in order to make
+     the most of data alignment.
+     
+     Atcually, to avoid using all the memory, we should break A, B and C into
+     smaller blocks and only copy this smaller block of A.
+  */
+  tA = FUNCTION(pnl_mat,transpose) (A);
+  FUNCTION(pnl_mat,dgemmNT) (alpha, tA, B, C);
+  FUNCTION(pnl_mat,free) (&tA);
+}
+
+
+/**
+ * Computes C := alpha * op (A) * op (B) + beta C
+ *
+ * @param transA a char :
+ * 'N' or 'n' for op (A) = A  and 'T' or 't' for op (A) = A'
+ * @param transB a char :
+ * 'N' or 'n' for op (B) = B  and 'T' or 't' for op (B) = B'
+ * @param alpha a real coefficient
+ * @param A a matrix
+ * @param B a matrix
+ * @param beta a real coefficient
+ * @param C a matrix. On exit contains the result of alpha * op (A) * op (B) + beta
+ * C. When beta equals 0, the size of C is not checked and its content not
+ * used; instead C is resized to store the result
+ */
+void FUNCTION(pnl_mat,dgemm) (char transA, char transB, BASE alpha, const TYPE(PnlMat) *A,
+                    const TYPE(PnlMat) *B, BASE beta, TYPE(PnlMat) *C)
+{
+  int m, n, opA, opB;
+
+  m = A->m; n = B->n;
+  opA = 0; opB = 0;
+  if (transA == 'T' || transA == 't') { m = A->n; opA = 1; }
+  if (transB == 'T' || transB == 't') { n = B->m; opB = 1; }
+  
+  if ( EQ(beta,ZERO) )
+    {
+      FUNCTION(pnl_mat,resize) (C, m, n);
+      FUNCTION(pnl_mat,CONCAT2(set_,BASE)) (C, ZERO);
+    }
+  else if ( NEQ(beta, ONE) )
+    {
+      FUNCTION(pnl_mat,CONCAT2(mult_,BASE)) (C, beta); 
+    }
+  if ( EQ(alpha,ZERO) ) return;
+
+#ifndef PNL_RANGE_CHECK_OFF
+  if (((opA==0 && opB == 0) && (A->n != B->m || (A->m != C->m || B->n != C->n)))
+      || ((opA==1 && opB == 0) && (A->m != B->m || (A->n != C->m || B->n != C->n)))
+      || ((opA==1 && opB == 1) && (A->m != B->n || (A->n != C->m || B->m != C->n)))
+      || ((opA==0 && opB == 1) && (A->n != B->n || (A->m != C->m || B->m != C->n))))    
+    {
+      PNL_ERROR ("size mismatch", "pnl_mat_dgemm");
+    }
+#endif
+
+  /* Form alpha * A * B + beta * C */
+  if (opA == 0 && opB == 0)
+    {
+      FUNCTION(pnl_mat,dgemmNN) (alpha, A, B, C);
+    }
+  else if (opA == 1 && opB == 0)
+    /* Form alpha * A' * B + beta * C */
+    {
+      FUNCTION(pnl_mat,dgemmTN) (alpha, A, B, C);
+    }
+  else if (opA == 1 && opB == 1)
+    /* Form alpha * A' * B' + beta * C */
+    {
+      FUNCTION(pnl_mat,dgemmTT) (alpha, A, B, C);
+    }
+  else
+    /* Form alpha * A * B' + beta * C */
+    {
+      FUNCTION(pnl_mat,dgemmNT) (alpha, A, B, C);
+    }
+}
+
 
 /**
  * sum matrix componentwise
