@@ -283,7 +283,7 @@ void FUNCTION(pnl_mat,clone)(TYPE(PnlMat) *clone, const TYPE(PnlMat) *M)
  * new size is larger than the current mem_size, a new pointer is
  * allocated. The old data are kept.
  *
- * @param v : a pointer to an already existing TYPE(PnlMat) 
+ * @param M : a pointer to an already existing TYPE(PnlMat) 
  * @param m : new nb rows
  * @param n : new nb columns
  *
@@ -484,6 +484,7 @@ void FUNCTION(pnl_mat,print )(const TYPE(PnlMat) *M)
 /**
  * prints a TYPE(PnlMat) to a file in a format compatible with Nsp
  *
+ * @param fic a file descriptor
  * @param M a(constant) TYPE(PnlMat)ptr.
  */
 void FUNCTION(pnl_mat, fprint_nsp)(FILE *fic, const TYPE(PnlMat) * M)
@@ -1329,7 +1330,7 @@ static void FUNCTION(pnl_mat,dgemmTT) (BASE alpha, const TYPE(PnlMat) *A, const 
  * used; instead C is resized to store the result
  */
 void FUNCTION(pnl_mat,dgemm) (char transA, char transB, BASE alpha, const TYPE(PnlMat) *A,
-                    const TYPE(PnlMat) *B, BASE beta, TYPE(PnlMat) *C)
+                              const TYPE(PnlMat) *B, BASE beta, TYPE(PnlMat) *C)
 {
   int m, n, opA, opB;
 
