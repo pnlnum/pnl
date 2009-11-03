@@ -43,6 +43,51 @@ static double __op_div(double a, double b) { return a/b; }
 /*static double __op_inv(double a) { return 1.0/a; } */
 /*static double __op_square(double a) { return a*a; } */
 
+
+
+/**
+ * solve a special tridiag_system with the same three value for each row.
+
+ * @param low  : a double value of M(i,i-1)
+ * @param diag : low : a double value of M(i,i)
+ * @param up   : a double value of M(i,i+1)
+ * @param rhs    : a PnlVect pointer on the right and side
+ * @param lhs    : a PnlVect pointer on result
+ * solve M lhs = rhs
+ */
+void pnl_progonka(const double low, 
+                  const double diag, const double up, 
+                  const PnlVect * rhs,
+                  PnlVect * lhs)
+{
+  int i;
+  double *Diag,tmp;
+  Diag = malloc((rhs->size)*sizeof(double));
+  /* Do Down-Solve L y = rhs  */
+  if((Diag[0]=diag)==0)
+    {
+      PNL_ERROR("division by zero","pnl_progonka");
+    }
+  pnl_vect_set(lhs,0,pnl_vect_get(rhs,0));
+  for(i=1; i<rhs->size; i++)
+    {
+      tmp=low/Diag[i-1];
+      if((Diag[i]=diag-tmp*up)==0)
+        {
+           PNL_ERROR("division by zero","pnl_progonka");
+        }
+      pnl_vect_set(lhs,i,pnl_vect_get(rhs,i)-tmp*pnl_vect_get(lhs,i-1));
+    }
+  /* Do Up-Solve L y = rhs  */
+  pnl_vect_set(lhs,rhs->size-1,pnl_vect_get(lhs,rhs->size-1)/Diag[rhs->size-1]);
+  for(i=rhs->size-2;i>=0;i--)
+    {
+      pnl_vect_set(lhs,i,(pnl_vect_get(lhs,i)-up*pnl_vect_get(lhs,i+1))/Diag[i]);
+    }
+  free(Diag);
+
+}
+
 /***************************
  *** PnlTridiagmat functions ***
  ***************************/
@@ -261,7 +306,7 @@ int pnl_tridiagmat_resize(PnlTriDiagMat *v, int size)
 
 
 /**
- * sets the value of if up== 1self[d,d+1]  =x, if up== -1 self[d-1,d]  = x if up== 0 self[d,d] 
+ * sets the value of if up== 1self[d,d+1]  =x, if up== -1 self[d,d-1]  = x if up== 0 self[d,d] 
  *
  * @param self : a PnlTriDiagMat
  * @param d : index of element
@@ -280,7 +325,7 @@ void pnl_tridiagmat_set (PnlTriDiagMat *self, int d, int up, double x)
 }
 
 /**
- * gets the value of if up== 1self[d,d+1], if up== -1 self[d-1,d] if up== 0 self[d,d] 
+ * gets the value of if up== 1self[d,d+1], if up== -1 self[d,d-1] if up== 0 self[d,d] 
  *
  * @param self : a PnlTriDiagMat
  * @param d : index of element
@@ -491,42 +536,6 @@ void pnl_tridiagmat_div_tridiagmat_term(PnlTriDiagMat *lhs, const PnlTriDiagMat 
   pnl_tridiagmat_set(lhs, lhs->size-1, 1,0.0);
 }
 
-/**
- *  matrix multiplication
- *
- * @param mat : matrix
- * @param vec : vector
- * @return  mat*vec
- */
-PnlVect* pnl_tridiagmat_mult_vect(const PnlTriDiagMat *mat, const PnlVect *vec)
-{
-  PnlVect *lhs;
-  double *rptr, *ptr, *ptr_up,*ptr_down,*lptr;
-  int i;
-  double anc_m1;
-  double anc_0;
-
-  CheckTriDiagMatVectIsCompatible(mat, vec);
-  if ((lhs=pnl_vect_create(mat->size))==NULL)
-    return NULL;
-  rptr = vec->array;
-  lptr=lhs->array;
-  ptr = mat->diag;
-  ptr_up = mat->diag_up;
-  ptr_down = mat->diag_down;
-  anc_m1=0.0;
-  anc_0=(*rptr);
-  rptr++;
-  for (i=0; i<lhs->size-1; i++)
-    {
-      *lptr = (*ptr_down)*anc_m1+(*ptr) *anc_0 + (*ptr_up) *(*rptr);
-      anc_m1=anc_0;
-      anc_0=(*rptr);
-      lptr++;rptr++;ptr++;ptr_up++;ptr_down++;
-    }
-  *lptr = (*ptr_down)*anc_m1+(*ptr) *anc_0;
-  return lhs;
-}
 
 /**
  *  in place matrix multiplication
@@ -562,6 +571,51 @@ void pnl_tridiagmat_mult_vect_inplace(PnlVect *lhs, const PnlTriDiagMat *mat, co
     }
   *lptr = (*ptr_down)*anc_m1+(*ptr) *anc_0;
 }
+
+/**
+ *  in place matrix multiplication
+ *
+ * @param mat : matrix
+ * @param lhs : vector
+ * @return  lhs=mat*rhs
+ */
+void pnl_tridiagmat_mult_vect_inplace_from_lhs(PnlVect *lhs, const PnlTriDiagMat *mat)
+{
+  double *ptr, *ptr_up,*ptr_down,*lptr;
+  int i;
+  double anc_m1;
+  double anc_0;
+
+  lptr = lhs->array;
+  ptr  = mat->diag;
+  ptr_up = mat->diag_up;
+  ptr_down = mat->diag_down;
+  anc_m1=0.0;
+  anc_0=(*lptr);
+  for (i=0; i<lhs->size-1; i++,ptr++,ptr_up++,ptr_down++)
+    {
+      *lptr = (*ptr_down)*anc_m1+(*ptr) *anc_0 + (*ptr_up) *(*(lptr+1));
+      anc_m1=anc_0;
+      lptr++;
+      anc_0=(*lptr);
+    }
+  *lptr = (*ptr_down)*anc_m1+(*ptr) *anc_0;
+}
+
+/**
+ *  matrix multiplication
+ *
+ * @param mat : matrix
+ * @param vec : vector
+ * @return  mat*vec
+ */
+PnlVect* pnl_tridiagmat_mult_vect(const PnlTriDiagMat *mat, const PnlVect *vec)
+{
+  PnlVect *lhs=pnl_vect_copy(vec);
+  pnl_tridiagmat_mult_vect_inplace_from_lhs(lhs,mat);
+  return lhs;
+}
+
 
 /**
  * Prints a tri-diagonale matrix to a file
@@ -629,3 +683,91 @@ void pnl_tridiagmat_lu_syslin (PnlVect *lhs, const PnlTriDiagMat *M,const PnlVec
   free(Diag);
 }
 
+
+/**
+ * compute scalar product <lhs,A rhs >
+ *
+ * @param lhs : vector
+ * @param mat : matrix
+ * @param rhs : vector
+ * @return  =lhs'*mat*rhs
+ */
+double pnl_tridiagmat_prod_scale(const PnlVect *lhs, const PnlTriDiagMat *mat,const PnlVect *rhs)
+{
+  double sum=0.;
+  double term;
+  double *ptr, *ptr_up,*ptr_down,*lptr,*rptr;
+  int i;
+  double anc_m1;
+  double anc_0;
+
+  lptr = lhs->array;
+  rptr = rhs->array;
+  ptr  = mat->diag;
+  ptr_up = mat->diag_up;
+  ptr_down = mat->diag_down;
+  anc_m1=0.0;
+  anc_0=(*rptr);
+  for (i=0; i<lhs->size-1; i++,ptr++,ptr_up++,ptr_down++)
+    {
+      term= (*ptr_down)*anc_m1+(*ptr) *anc_0 + (*ptr_up) *(*(rptr+1));
+      sum+=(*lptr)*term;
+      anc_m1=anc_0;
+      lptr++;
+      rptr++;
+      anc_0=(*rptr);
+    }
+  term= (*ptr_down)*anc_m1+(*ptr) *anc_0;
+  sum+=(*lptr)*term;
+  return sum;
+}
+
+/**
+ * compute y=l A x + b y >
+ *
+ * @param l  : double
+ * @param A : PnlTriDiagMat
+ * @param x : vector
+ * @param b : double
+ * @param y : vector
+ */
+void pnl_tridiagmat_lAxpby(double l, const PnlTriDiagMat *A, const PnlVect *x, double b, PnlVect * y)
+{
+  if(l==0.0)
+    {
+      pnl_vect_mult_double(y,b);
+      return ;
+    }
+  if(b==0.0)
+    {
+      pnl_tridiagmat_mult_vect_inplace(y,A,x);
+      pnl_vect_mult_double(y,l);
+      return ;
+    }
+  {
+    double *rptr, *ptr, *ptr_up,*ptr_down,*lptr;
+    int i;
+    double anc_m1;
+    double anc_0;
+    CheckTriDiagMatVectIsCompatible(A, x);
+    CheckTriDiagMatVectIsCompatible(A, y);
+    rptr = x->array;
+    lptr = y->array;
+    ptr  = A->diag;
+    ptr_up = A->diag_up;
+    ptr_down = A->diag_down;
+    anc_m1=0.0;
+    anc_0=(*rptr);
+    rptr++;
+    for (i=0; i<x->size-1; i++)
+      {
+        *lptr*=b;
+        *lptr +=l*((*ptr_down)*anc_m1+(*ptr) *anc_0 + (*ptr_up) *(*rptr));
+        anc_m1=anc_0;
+        anc_0=(*rptr);
+        lptr++;rptr++;ptr++;ptr_up++;ptr_down++;
+      }
+    *lptr*=b;
+    *lptr += l*((*ptr_down)*anc_m1+(*ptr) *anc_0);
+  }
+};

@@ -18,6 +18,10 @@ extern "C" {
 #define CheckSparseMatVectIsCompatible(mat, vect){            \
     if((mat)->m != (vect)->size)                        \
       {perror("non compatible dimensions"); abort();}}
+#define CheckSparseMatMatch(lhs,rhs){             \
+  if(lhs->nzmax!=rhs->nzmax && lhs->n!=rhs->n &&  \
+     lhs->m!=rhs->m && lhs->nz!=rhs->nz)           \
+      {perror("non compatible dimensions"); abort();}}
 #else
 #define CheckIndexSparseMat(v,i,j) {}                          
 #define CheckSparseMatMatch(lhs, rhs) {}
@@ -103,6 +107,16 @@ extern void pnl_sparse_mat_free(PnlSparseMat **M);
 extern int pnl_sparse_mat_gaxpby(PnlVect *lhs, const PnlSparseMat *M, const PnlVect *rhs);
 extern int pnl_sparse_mat_mult_vect_inplace(PnlVect *lhs, const PnlSparseMat *M, const PnlVect *rhs);
 extern void pnl_sparse_mat_print(PnlSparseMat *A);
+extern void pnl_sparse_mat_map_inplace(PnlSparseMat *lhs,double(*f)(double ));
+extern void pnl_sparse_mat_plus_double(PnlSparseMat *lhs , double x);
+extern void pnl_sparse_mat_minus_double(PnlSparseMat *lhs , double x);
+extern void pnl_sparse_mat_mult_double(PnlSparseMat *lhs , double x);
+extern void pnl_sparse_mat_div_double(PnlSparseMat *lhs , double x);
+extern void pnl_sparse_mat_plus_mat(PnlSparseMat *lhs, const PnlSparseMat *rhs);
+extern void pnl_sparse_mat_minus_mat(PnlSparseMat *lhs, const PnlSparseMat *rhs);
+extern void pnl_sparse_mat_inv_term(PnlSparseMat *lhs);
+extern void pnl_sparse_mat_div_mat_term(PnlSparseMat *lhs, const PnlSparseMat *rhs);
+extern void pnl_sparse_mat_mult_mat_term(PnlSparseMat *lhs, const PnlSparseMat *rhs);
 
 typedef struct PnlSparseFactorization
 {

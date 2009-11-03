@@ -35,6 +35,7 @@
 #include "pnl_band_matrix.h"
 #include "pnl_matrix.h"
 #include "pnl_mathtools.h"
+#include "pnl_array.h"
 
 
 /** 
@@ -145,6 +146,27 @@ void pnl_band_matrix_free(PnlBandMatrix **M)
       *M=NULL;
     }
 }
+/**
+ * clones a PnlBandMatrix
+ *
+ * @param clone needs to be already allocated.
+ * @param v a constant PnlBandMatrixpointer
+ */
+void pnl_bnd_matrix_clone(PnlBandMatrix * clone,
+                          const PnlBandMatrix * v)
+{
+  if (clone->owner == 0 && clone->n != v->n && clone->m != v->m)
+    {
+      PNL_ERROR ("owner == 0 and size mismatch", "pnl_vect_clone");
+    }
+  memcpy(clone->D, v->D, sizeof(double)*v->n);
+  memcpy(clone->pL,v->pL,sizeof(int)*(v->n+1));
+  memcpy(clone->Up,v->Up,sizeof(double)*v->pL[v->n]);
+  memcpy(clone->Lo,v->Lo,sizeof(double)*v->pL[v->n]);
+  clone->pU=clone->pL;
+  clone->typefac=v->typefac;
+}
+
 
 /** 
  * pnl_band_matrix_copy_create 
@@ -159,12 +181,12 @@ void pnl_band_matrix_free(PnlBandMatrix **M)
  * @param pl adress of repartition for triangular low matrix.
  * @return adress of PnlBandMatrix.
  */
-PnlBandMatrix* pnl_band_matrix_clone(int      n,
-                                     double  *d,
-                                     double  *u,
-                                     int     *pu,
-                                     double  *l,
-                                     int     *pl)
+static PnlBandMatrix* pnl_band_matrix_cloned_mat(int      n,
+                                                 double  *d,
+                                                 double  *u,
+                                                 int     *pu,
+                                                 double  *l,
+                                                 int     *pl)
 {
   PnlBandMatrix * M = malloc(sizeof(PnlBandMatrix));
   M->n=n;
@@ -178,6 +200,8 @@ PnlBandMatrix* pnl_band_matrix_clone(int      n,
   M->typefac=FactorizationNO;
   return M;
 }
+ 
+
 
 
 void pnl_bnd_matrix_store_infull(const PnlBandMatrix *BM,PnlMat *M)
@@ -185,16 +209,6 @@ void pnl_bnd_matrix_store_infull(const PnlBandMatrix *BM,PnlMat *M)
   int i,k;
   
   pnl_mat_set_double(M,0.0);
-  /*
-    for (i=0;i<BM->m;i++)
-    for (k=BM->pL[i];k<BM->pL[i+1];k++)
-      MLET(M,i,BM->pL[i+1]-k)=BM->Lo[k];
-  for (i=0;i<BM->n;i++)
-    for (k=BM->pU[i];k<BM->pU[i+1];k++)
-      MLET(M,BM->pU[i+1]-k,i)=BM->Up[k];
-  for (i=0;i<BM->n;i++)
-    MLET(M,i,i)=BM->D[i];
-*/
   for (i =0;i<BM->n;i++) MLET(M,i,i)=BM->D[i];
   i=0;
   for (k =0;k<BM->pL[BM->n];k++) 
@@ -207,6 +221,156 @@ void pnl_bnd_matrix_store_infull(const PnlBandMatrix *BM,PnlMat *M)
 }
 
 
+
+/**
+ * in-place map function
+ *
+ * @param lhs left hand side PnlBandMatrix
+ * @param f the function to be applied term by term
+ * @return  lhs = f(lhs)
+ */
+void pnl_bnd_matrix_map_inplace(PnlBandMatrix *lhs, 
+                                double(*f)(double ))
+{
+  pnl_array_map_inplace(lhs->D,f,lhs->n);
+  pnl_array_map_inplace(lhs->Up,f,lhs->pU[lhs->n]);
+  pnl_array_map_inplace(lhs->Lo,f,lhs->pL[lhs->n]);
+}
+
+/**
+ * in-place PnlBandMatrix scalar addition
+ *
+ * @param lhs left hand side PnlBandMatrix
+ * @param x scalar
+ * @return  lhs = lhs+x
+ */
+void pnl_bnd_matrix_plus_double(PnlBandMatrix *lhs , double x)
+{
+  pnl_array_plus_double(lhs->D,x,lhs->n);    
+  pnl_array_plus_double(lhs->Up,x,lhs->pU[lhs->n]);    
+  pnl_array_plus_double(lhs->Lo,x,lhs->pL[lhs->n]);    
+ 
+}
+
+/**
+ * in-place PnlBandMatrix scalar substraction
+ *
+ * @param lhs left hand side PnlBandMatrix
+ * @param x scalar
+ * @return  lhs = lhs-x
+ */
+void pnl_bnd_matrix_minus_double(PnlBandMatrix *lhs , double x)
+{
+  pnl_array_minus_double(lhs->D,x,lhs->n);
+  pnl_array_minus_double(lhs->Up,x,lhs->pU[lhs->n]);    
+  pnl_array_minus_double(lhs->Lo,x,lhs->pL[lhs->n]);    
+}
+
+/**
+ * in-place PnlBandMatrix scalar multiplication
+ *
+ * @param lhs left hand side PnlBandMatrix
+ * @param x scalar
+ * @return  lhs = lhs*x
+ */
+void pnl_bnd_matrix_mult_double(PnlBandMatrix *lhs , double x)
+{
+  pnl_array_mult_double(lhs->D,x,lhs->n);
+  pnl_array_mult_double(lhs->Up,x,lhs->pU[lhs->n]);    
+  pnl_array_mult_double(lhs->Lo,x,lhs->pL[lhs->n]);    
+}
+
+/**
+ * in-place PnlBandMatrix scalar division
+ *
+ * @param lhs left hand side PnlBandMatrix
+ * @param x scalar
+ * @return  lhs = lhs/x
+ */
+void pnl_bnd_matrix_div_double(PnlBandMatrix *lhs , double x)
+{
+  pnl_array_div_double(lhs->D,x,lhs->n);
+  pnl_array_div_double(lhs->Up,x,lhs->pU[lhs->n]);    
+  pnl_array_div_double(lhs->Lo,x,lhs->pL[lhs->n]);    
+}
+
+
+/**
+ * map PnlBandMatrix componentwise
+ *
+ * @param lhs each component lhs(i) contains f(rhs(i))
+ * @param rhs right hand side PnlBandMatrix
+ * @param f real function 
+ */
+void pnl_bnd_matrix_map(PnlBandMatrix *lhs, const PnlBandMatrix *rhs, double(*f)(double))
+{
+  pnl_bnd_matrix_clone(lhs, rhs);
+  pnl_bnd_matrix_map_inplace(lhs, f);
+}
+
+/**
+ * in-place PnlBandMatrix PnlBandMatrix addition
+ *
+ * @param lhs left hand side PnlBandMatrix
+ * @param rhs rigth hand side PnlBandMatrix
+ * @return  lhs = lhs+rhs
+ */
+void pnl_bnd_matrix_plus_mat(PnlBandMatrix *lhs, const PnlBandMatrix *rhs)
+{
+  pnl_array_plus_array_term(lhs->D, rhs->D,lhs->n);
+  pnl_array_plus_array_term(lhs->Up,rhs->Up,lhs->pU[lhs->n]);    
+  pnl_array_plus_array_term(lhs->Lo,rhs->Lo,lhs->pL[lhs->n]);    
+}
+
+void pnl_bnd_matrix_minus_mat(PnlBandMatrix *lhs, const PnlBandMatrix *rhs)
+{
+  pnl_array_minus_array_term(lhs->D,rhs->D,lhs->n);
+  pnl_array_minus_array_term(lhs->Up,rhs->Up,lhs->pU[lhs->n]);    
+  pnl_array_minus_array_term(lhs->Lo,rhs->Lo,lhs->pL[lhs->n]);
+ 
+}
+
+/**
+ * in-place term by term PnlBandMatrix inverse
+ *
+ * @param lhs left hand side PnlBandMatrix
+ * @return  lhs = 1 ./ lhs
+ */
+void pnl_bnd_matrix_inv_term(PnlBandMatrix *lhs)
+{
+  pnl_array_inv_term(lhs->D,lhs->n);
+  pnl_array_inv_term(lhs->Up,lhs->pU[lhs->n]);    
+  pnl_array_inv_term(lhs->Lo,lhs->pL[lhs->n]);    
+}
+
+/**
+ * in-place term by term PnlBandMatrix inverse
+ *
+ * @param lhs left hand side PnlBandMatrix
+ * @param rhs right hand side PnlBandMatrix
+ * @return  lhs = lhs ./ rhs
+ */
+void pnl_bnd_matrix_div_mat_term(PnlBandMatrix *lhs, const PnlBandMatrix *rhs)
+{
+  pnl_array_div_array_term(lhs->D,rhs->D,lhs->n);
+  pnl_array_div_array_term(lhs->Up,rhs->Up,lhs->pU[lhs->n]);    
+  pnl_array_div_array_term(lhs->Lo,rhs->Lo,lhs->pL[lhs->n]);
+}
+
+/**
+ * in-place PnlBandMatrix term by term multiplication
+ *
+ * @param lhs left hand side PnlBandMatrix
+ * @param rhs right hand side PnlBandMatrix
+ * @return  lhs = lhs.*rhs
+ */
+void pnl_bnd_matrix_mult_mat_term(PnlBandMatrix *lhs, const PnlBandMatrix *rhs)
+{
+  pnl_array_mult_array_term(lhs->D,rhs->D,lhs->n);
+ pnl_array_mult_array_term(lhs->Up,rhs->Up,lhs->pU[lhs->n]);    
+ pnl_array_mult_array_term(lhs->Lo,rhs->Lo,lhs->pL[lhs->n]);
+}
+
 /** 
  * pnl_band_matrix_transpose
  * return adress of \f$ M^{T} \f$
@@ -216,7 +380,7 @@ void pnl_bnd_matrix_store_infull(const PnlBandMatrix *BM,PnlMat *M)
  */
 PnlBandMatrix* pnl_band_matrix_transpose(const PnlBandMatrix* M)
 {
-  return pnl_band_matrix_clone(M->n,M->D,M->Lo,M->pL,M->Up,M->pU);
+  return pnl_band_matrix_cloned_mat(M->n,M->D,M->Lo,M->pL,M->Up,M->pU);
 }
 
 /** 
@@ -229,7 +393,7 @@ PnlBandMatrix* pnl_band_matrix_transpose(const PnlBandMatrix* M)
  * @return adress of PnlBandMatrix.
  */
 PnlBandMatrix* pnl_band_matrix_low(const PnlBandMatrix* M)
-{return pnl_band_matrix_clone(M->n,NULL,NULL,NULL,M->Lo,M->pL);}
+{return pnl_band_matrix_cloned_mat(M->n,NULL,NULL,NULL,M->Lo,M->pL);}
 
 /** 
  * pnl_band_matrix_up
@@ -244,7 +408,7 @@ PnlBandMatrix* pnl_band_matrix_low(const PnlBandMatrix* M)
  * @return adress of PnlBandMatrix.
  */
 PnlBandMatrix* pnl_band_matrix_up(const PnlBandMatrix* M)
-{return pnl_band_matrix_clone(M->n,NULL,M->Up,M->pU,NULL,NULL);}
+{return pnl_band_matrix_cloned_mat(M->n,NULL,M->Up,M->pU,NULL,NULL);}
 
 /** 
  * pnl_band_matrix_tran_low
@@ -259,7 +423,7 @@ PnlBandMatrix* pnl_band_matrix_up(const PnlBandMatrix* M)
  * @return adress of PnlBandMatrix.
  */
 PnlBandMatrix* pnl_band_matrix_tran_low(const PnlBandMatrix* M)
-{return pnl_band_matrix_clone(M->n,NULL,M->Lo,M->pL,NULL,NULL);}
+{return pnl_band_matrix_cloned_mat(M->n,NULL,M->Lo,M->pL,NULL,NULL);}
 /** 
  * pnl_band_matrix_tran_up
  * return adress of
@@ -273,7 +437,7 @@ PnlBandMatrix* pnl_band_matrix_tran_low(const PnlBandMatrix* M)
  * @return adress of PnlBandMatrix.
  */
 PnlBandMatrix* pnl_band_matrix_tran_up(const PnlBandMatrix* M)
-{return pnl_band_matrix_clone(M->n,NULL,NULL,NULL,M->Up,M->pU);}
+{return pnl_band_matrix_cloned_mat(M->n,NULL,NULL,NULL,M->Up,M->pU);}
 
 /** 
  * pnl_band_matrix_diag
@@ -287,7 +451,7 @@ PnlBandMatrix* pnl_band_matrix_tran_up(const PnlBandMatrix* M)
  * @return adress of PnlBandMatrix.
  */
 PnlBandMatrix* pnl_band_matrix_diag(const PnlBandMatrix* M)
-{return pnl_band_matrix_clone(M->n,M->D,NULL,NULL,NULL,NULL);}
+{return pnl_band_matrix_cloned_mat(M->n,M->D,NULL,NULL,NULL,NULL);}
 
 /** 
  * pnl_band_matrix_low_diag
@@ -297,7 +461,7 @@ PnlBandMatrix* pnl_band_matrix_diag(const PnlBandMatrix* M)
  * @return adress of PnlBandMatrix.
  */
  PnlBandMatrix* pnl_band_matrix_low_diag(const PnlBandMatrix* M)
-{return pnl_band_matrix_clone(M->n,M->D,NULL,NULL,M->Lo,M->pL);}
+{return pnl_band_matrix_cloned_mat(M->n,M->D,NULL,NULL,M->Lo,M->pL);}
 
 /** 
  * pnl_band_matrix_up_diag
@@ -307,7 +471,7 @@ PnlBandMatrix* pnl_band_matrix_diag(const PnlBandMatrix* M)
  * @return adress of PnlBandMatrix.
  */
 PnlBandMatrix* pnl_band_matrix_up_diag(const PnlBandMatrix* M)
-{return pnl_band_matrix_clone(M->n,M->D,M->Up,M->pU,NULL,NULL);}
+{return pnl_band_matrix_cloned_mat(M->n,M->D,M->Up,M->pU,NULL,NULL);}
 
 /** 
  * pnl_band_matrix_tran_low_diag
@@ -317,7 +481,7 @@ PnlBandMatrix* pnl_band_matrix_up_diag(const PnlBandMatrix* M)
  * @return adress of PnlBandMatrix.
  */
 PnlBandMatrix* pnl_band_matrix_tran_low_diag(const PnlBandMatrix* M)
-{return pnl_band_matrix_clone(M->n,M->D,M->Lo,M->pL,NULL,NULL);}
+{return pnl_band_matrix_cloned_mat(M->n,M->D,M->Lo,M->pL,NULL,NULL);}
 
 /** 
  * pnl_band_matrix_tran_up_diag
@@ -327,7 +491,7 @@ PnlBandMatrix* pnl_band_matrix_tran_low_diag(const PnlBandMatrix* M)
  * @return adress of PnlBandMatrix.
  */
 PnlBandMatrix* pnl_band_matrix_tran_up_diag(const PnlBandMatrix* M)
-{return pnl_band_matrix_clone(M->n,M->D,NULL,NULL,M->Up,M->pU);}
+{return pnl_band_matrix_cloned_mat(M->n,M->D,NULL,NULL,M->Up,M->pU);}
  
 
 /** 
@@ -348,30 +512,47 @@ double pnl_band_matrix_get_diag(PnlBandMatrix * M,int i)
  */
 double pnl_band_matrix_get(PnlBandMatrix * M,int i,int j)
 { 
-  if( j<i) {
-    int ij= M->pL[i+1]-i+j;
-    assert(M->pL[i]<=ij);
-    return M->Lo[ij];
-  }
+  if( j<i)
+    {
+      int ij= M->pL[i+1]-i+j;
+#ifndef PNL_RANGE_CHECK_OFF
+      assert(M->pL[i]<=ij);
+#endif
+      return M->Lo[ij];
+    }
   else if( j>i)
-    { int ij= M->pU[j+1]-j+i;
+    {
+      int ij= M->pU[j+1]-j+i;
+#ifndef PNL_RANGE_CHECK_OFF
       assert(M->pU[j]<=ij);
+#endif
       return M->Up[ij];
     }
   else
     return M->D[i];
 }
 
+/** 
+ * pnl_band_matrix_set
+ * @param M adress of PnlBandMatrix
+ * @param i row index 
+ * @param j col index
+ * @param x do \f$ M(i,j) = x \f$.
+ */
 void pnl_band_matrix_set(PnlBandMatrix * M,int i,int j,double x)
 { 
   if(j<i) {
     int ij= M->pL[i+1]-i+j;
+#ifndef PNL_RANGE_CHECK_OFF
     assert(M->pL[i]<=ij);
+#endif
     M->Lo[ij]=x;
   }
   else if( j>i)
     { int ij= M->pU[j+1]-j+i;
+#ifndef PNL_RANGE_CHECK_OFF
       assert(M->pU[j]<=ij);
+#endif
       M->Up[ij]=x;
     }
   else
@@ -398,17 +579,119 @@ void pnl_band_matrix_add(PnlBandMatrix * M,int i,int j,double x)
 { 
   if(j<i) {
     int ij= M->pL[i+1]-i+j;
+#ifndef PNL_RANGE_CHECK_OFF
     assert(M->pL[i]<=ij);
+#endif
     M->Lo[ij]+=x;
   }
   else if( j>i)
     { int ij= M->pU[j+1]-j+i;
+#ifndef PNL_RANGE_CHECK_OFF
       assert(M->pU[j]<=ij);
+#endif
       M->Up[ij]+=x;
     }
   else
     M->D[i]+=x;
 }
+
+
+/**
+ *  in place matrix multiplication
+ *
+ * @param lhs : vector
+ * @param mat  : Band matrix
+ * @param rhs : vector
+ * @return  lhs=mat*rhs
+ */
+void pnl_band_matrix_mult_vect_inplace(PnlVect *lhs, const PnlBandMatrix *mat, const PnlVect *rhs)
+{
+  int i,k;
+  for (i =0;i<mat->n;i++)
+    LET(lhs,i)=mat->D[i]*GET(rhs,i);
+  i=0;
+  for (k =0;k<mat->pL[mat->n];k++) 
+    {
+      if (k>=mat->pL[i+1])
+        i++;
+      LET(lhs,i)+=mat->Lo[k]*GET(rhs,i-mat->pL[i+1]+k);
+      LET(lhs,i-mat->pU[i+1]+k)+=mat->Up[k]*GET(rhs,i);
+    }
+}
+
+/**
+ *  matrix multiplication
+ *
+ * @param mat : matrix
+ * @param vec : vector
+ * @return  mat*vec
+ */
+PnlVect* pnl_band_matrix_mult_vect(const PnlBandMatrix *mat, const PnlVect *vec)
+{
+  PnlVect *lhs=pnl_vect_create(vec->size);
+  pnl_band_matrix_mult_vect_inplace(lhs,mat,vec);
+  return lhs;
+}
+
+
+/**
+ * compute scalar product <lhs,A rhs >
+ *
+ * @param lhs : vector
+ * @param mat : matrix
+ * @param rhs : vector
+ * @return  =lhs'*mat*rhs
+ */
+double pnl_band_matrixprod_scale(const PnlVect *lhs, const PnlBandMatrix *mat,const PnlVect *rhs)
+{
+  double res;
+  PnlVect *tmp=pnl_band_matrix_mult_vect(mat,rhs);
+  res=pnl_vect_scalar_prod(lhs,tmp);
+  pnl_vect_free(&tmp);
+  return res;
+}
+
+/**
+ * compute y=l A x + b y 
+ *
+ * @param l  : double
+ * @param A : BandMatrix
+ * @param x : vector
+ * @param b : double
+ * @param y : vector
+ */
+void pnl_band_matrix_lAxpby(double l, const PnlBandMatrix *A, const PnlVect *x, double b, PnlVect * y)
+{
+  if(l==0.0)
+    {
+      pnl_vect_mult_double(y,b);
+      return ;
+    }
+  if(b==0.0)
+    {
+      pnl_band_matrix_mult_vect_inplace(y,A,x);
+      pnl_vect_mult_double(y,l);
+      return ;
+    }
+  {
+    int i,k;
+    for (i =0;i<A->n;i++)
+      LET(y,i)=b*LET(y,i)+l*A->D[i]*GET(x,i);
+    i=0;
+    for (k =0;k<A->pL[A->n];k++) 
+      {
+        if (k>=A->pL[i+1])
+          i++;
+        LET(y,i)+=l*A->Lo[k]*GET(x,i-A->pL[i+1]+k);
+        LET(y,i-A->pU[i+1]+k)+=l*A->Up[k]*GET(x,i);
+      }
+  }
+}
+
+
+
+
+
 
 
 /**
@@ -445,8 +728,8 @@ void pnl_band_matrix_solve_syslin_inplace(PnlBandMatrix * M, PnlVect *x)
           abort();
         }
       if (M->Up!=NULL && M->Lo==NULL)
-        { /* matrice triangulaire superieure */
-          /*  remonter  (M->D ? "DU" : "U")  */
+        { /* Up TriDiag Matrix */
+          /*  go up  (M->D ? "DU" : "U")  */
           ki = M->Up + M->pU[n]; 
           i = n;
           while ( i-- )
@@ -461,29 +744,27 @@ void pnl_band_matrix_solve_syslin_inplace(PnlBandMatrix * M, PnlVect *x)
             }
         }
      else if (M->Up==NULL && M->Lo!=NULL)
-      { /* matrice triangulaire inferieure */
-        /* " descente "  <<( M->D ? "LD" : "L" )  */
+      { /* Low TriDiag Matrix */
+        /* go down  ( M->D ? "LD" : "L" )  */
         ii = M->Lo;
         for (i=0; i<n; i++)
-          { ij = ik = (M->Lo + M->pL[i+1]) ;  /* ii =debut,ij=fin+1 de la ligne  */
+          { ij = ik = (M->Lo + M->pL[i+1]) ;  /* ii =start,ij=end 1 at row  */
             xk = v + i;
             ss = v[i]; 
             while ( ik > ii) 
               ss -= *--ik * *--xk ; 
-            if ( M->D) ss /= M->D[i];/* pour crout ou LU */
+            if ( M->D) ss /= M->D[i];/* for crout or LU */
             v[i] = ss ;
             ii = ij;
           }
       }
     else if (M->D!=NULL) 
-      { /* matrice diagonale */
-        /* cout << " diagonal D" <<endl; */
+      { /* Diag Matrix */
         for (i=0;i<n;i++) 
           LET(x,i)/=M->D[i];
       }
       break;
     case FactorizationCholeski:
-      /*     cout << " FactorizationChosleski" << endl; */
       {
         PnlBandMatrix *D=pnl_band_matrix_low_diag(M);
         PnlBandMatrix *TL=pnl_band_matrix_tran_low_diag(M);
@@ -494,7 +775,6 @@ void pnl_band_matrix_solve_syslin_inplace(PnlBandMatrix * M, PnlVect *x)
         break;
       }
     case FactorizationCrout:
-      /*   cout << " FactorizationCrout" << endl; */
       {
         PnlBandMatrix *L=pnl_band_matrix_low(M);
         PnlBandMatrix *D=pnl_band_matrix_diag(M);
@@ -509,7 +789,6 @@ void pnl_band_matrix_solve_syslin_inplace(PnlBandMatrix * M, PnlVect *x)
       }
     case FactorizationLU:
       {
-        /*  cout << " FactorizationLU" << endl; */
         PnlBandMatrix *L=pnl_band_matrix_low(M);
         PnlBandMatrix *U=pnl_band_matrix_up_diag(M);
         pnl_band_matrix_solve_syslin_inplace(L,x);
@@ -518,9 +797,8 @@ void pnl_band_matrix_solve_syslin_inplace(PnlBandMatrix * M, PnlVect *x)
         pnl_band_matrix_free(&U);
         break;
       }
-      /*   default:
-           ERREUR  (operator /=(MatriceProfile," Error unkwon type of Factorization  =" << typefac);
-      */
+    default:
+      PNL_ERROR(" Error unkwon type of Factorization  ","band matrix.c");
     }
 }
 

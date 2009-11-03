@@ -69,13 +69,26 @@ extern void pnl_band_matrix_free(PnlBandMatrix ** M);
 extern void pnl_band_matrix_add(PnlBandMatrix * M,int i,int j,double x);
 extern void pnl_band_matrix_set(PnlBandMatrix * M,int i,int j,double x);
 extern void pnl_band_matrix_set_double(PnlBandMatrix*  M,double x);
-extern PnlBandMatrix* pnl_band_matrix_clone(int n,
-                                            double * d,
-                                            double* u,
-                                            int * pu,
-                                            double* l,
-                                            int * pl);
+extern void pnl_band_matrix_map_inplace(PnlBandMatrix *lhs,double(*f)(double ));
+extern void pnl_band_matrix_plus_double(PnlBandMatrix *lhs , double x);
+extern void pnl_band_matrix_minus_double(PnlBandMatrix *lhs , double x);
+extern void pnl_band_matrix_mult_double(PnlBandMatrix *lhs , double x);
+extern void pnl_band_matrix_div_double(PnlBandMatrix *lhs , double x);
+extern void pnl_band_matrix_plus_mat(PnlBandMatrix *lhs, const PnlBandMatrix *rhs);
+extern void pnl_band_matrix_minus_mat(PnlBandMatrix *lhs, const PnlBandMatrix *rhs);
+extern void pnl_band_matrix_inv_term(PnlBandMatrix *lhs);
+extern void pnl_band_matrix_div_mat_term(PnlBandMatrix *lhs, const PnlBandMatrix *rhs);
+extern void pnl_band_matrix_mult_mat_term(PnlBandMatrix *lhs, const PnlBandMatrix *rhs);
+extern void pnl_bnd_matrix_clone(PnlBandMatrix * clone,const PnlBandMatrix * v);
 extern void pnl_bnd_matrix_store_infull(const PnlBandMatrix *BM,PnlMat *M);
+
+extern PnlVect* pnl_band_matrix_mult_vect(const PnlBandMatrix *mat,const PnlVect *vec);/*mat*vec*/
+extern void pnl_band_matrix_mult_vect_inplace(PnlVect *lhs, const PnlBandMatrix *mat, const PnlVect *rhs);/*lhs=mat*rhs */
+extern void pnl_band_matrix_lAxpby(double l, const PnlBandMatrix *A, const PnlVect *x, double b, PnlVect * y);/*lhs=l*A*x +b*y*/
+extern double pnl_band_matrix_prod_scale(const PnlVect *lhs, const PnlBandMatrix *mat,const PnlVect *rhs);
+extern void pnl_band_matrix_lu_syslin (PnlVect *lhs, const PnlBandMatrix *M,const PnlVect *rhs);/* solve M lhs = rhs */
+
+
 /*,FactorizationType tf = FactorizationNO);  */
 extern PnlBandMatrix* pnl_band_matrix_transpose(const PnlBandMatrix* M);
 extern PnlBandMatrix* pnl_band_matrix_Low(const PnlBandMatrix* M);

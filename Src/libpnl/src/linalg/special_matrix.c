@@ -37,6 +37,7 @@
 #include "pnl_vector.h"
 #include "pnl_matrix.h"
 #include "pnl_mathtools.h"
+#include "pnl_array.h"
 
 #define GETROWORCOLSIZE(M) ((M)->RC) ? ((M)->n): ((M)->m)
 #define GETROWORCOL(M,i,j) ((M)->RC) ? &((M)->array[(j)]): &((M)->array[(i)])
@@ -758,6 +759,124 @@ int pnl_sparse_mat_mult_vect_inplace(PnlVect *lhs, const PnlSparseMat *M, const 
 {
   pnl_vect_set_zero(lhs);
   return cs_gaxpy (M,rhs->array,lhs->array);
+}
+
+
+
+/**
+ * in-place map function
+ *
+ * @param lhs left hand side PnlSparseMat
+ * @param f the function to be applied term by term
+ * @return  lhs = f(lhs)
+ */
+void pnl_sparse_matrix_map_inplace(PnlSparseMat *lhs, 
+                                double(*f)(double ))
+{
+  pnl_array_map_inplace(lhs->x,f,lhs->nzmax);
+}
+
+/**
+ * in-place PnlSparseMat scalar addition
+ *
+ * @param lhs left hand side PnlSparseMat
+ * @param x scalar
+ * @return  lhs = lhs+x
+ */
+void pnl_sparse_matrix_plus_double(PnlSparseMat *lhs , double x)
+{
+  pnl_array_plus_double(lhs->x,x,lhs->nzmax);     
+}
+
+/**
+ * in-place PnlSparseMat scalar substraction
+ *
+ * @param lhs left hand side PnlSparseMat
+ * @param x scalar
+ * @return  lhs = lhs-x
+ */
+void pnl_sparse_matrix_minus_double(PnlSparseMat *lhs , double x)
+{
+  pnl_array_minus_double(lhs->x,x,lhs->nzmax);
+}
+
+/**
+ * in-place PnlSparseMat scalar multiplication
+ *
+ * @param lhs left hand side PnlSparseMat
+ * @param x scalar
+ * @return  lhs = lhs*x
+ */
+void pnl_sparse_matrix_mult_double(PnlSparseMat *lhs , double x)
+{
+  pnl_array_mult_double(lhs->x,x,lhs->nzmax);
+}
+
+/**
+ * in-place PnlSparseMat scalar division
+ *
+ * @param lhs left hand side PnlSparseMat
+ * @param x scalar
+ * @return  lhs = lhs/x
+ */
+void pnl_sparse_matrix_div_double(PnlSparseMat *lhs , double x)
+{
+  pnl_array_div_double(lhs->x,x,lhs->nzmax);
+}
+
+/**
+ * in-place PnlSparseMat PnlSparseMat addition
+ *
+ * @param lhs left hand side PnlSparseMat
+ * @param rhs rigth hand side PnlSparseMat
+ * @return  lhs = lhs+rhs
+ */
+void pnl_sparse_matrix_plus_mat(PnlSparseMat *lhs, const PnlSparseMat *rhs)
+{
+  pnl_array_plus_array_term(lhs->x, rhs->x,lhs->nzmax);
+}
+
+void pnl_sparse_matrix_minus_mat(PnlSparseMat *lhs, const PnlSparseMat *rhs)
+{
+  CheckSparseMatMatch(lhs,rhs);
+  pnl_array_minus_array_term(lhs->x,rhs->x,lhs->nzmax);
+}
+
+/**
+ * in-place term by term PnlSparseMat inverse
+ *
+ * @param lhs left hand side PnlSparseMat
+ * @return  lhs = 1 ./ lhs
+ */
+void pnl_sparse_matrix_inv_term(PnlSparseMat *lhs)
+{
+  pnl_array_inv_term(lhs->x,lhs->nzmax);
+}
+
+/**
+ * in-place term by term PnlSparseMat inverse
+ *
+ * @param lhs left hand side PnlSparseMat
+ * @param rhs right hand side PnlSparseMat
+ * @return  lhs = lhs ./ rhs
+ */
+void pnl_sparse_matrix_div_mat_term(PnlSparseMat *lhs, const PnlSparseMat *rhs)
+{
+  CheckSparseMatMatch(lhs,rhs);
+  pnl_array_div_array_term(lhs->x,rhs->x,lhs->nzmax);
+}
+
+/**
+ * in-place PnlSparseMat term by term multiplication
+ *
+ * @param lhs left hand side PnlSparseMat
+ * @param rhs right hand side PnlSparseMat
+ * @return  lhs = lhs.*rhs
+ */
+void pnl_sparse_matrix_mult_mat_term(PnlSparseMat *lhs, const PnlSparseMat *rhs)
+{
+  CheckSparseMatMatch(lhs,rhs);
+  pnl_array_mult_array_term(lhs->x,rhs->x,lhs->nzmax);
 }
 
 /**
