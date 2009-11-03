@@ -26,6 +26,8 @@
 #include "pnl_random.h"
 #include "tests.h"
 
+#ifdef WITH_BLAS
+
 /**
  * Creates a diagonalizable matrix of size n
  * @param n an integer
@@ -166,3 +168,12 @@ void lapack_test()
 {
   menu_test (lapack_tests);
 }
+
+#else
+
+void lapack_test ()
+{
+  printf ("No available because Bals/Lapack is not installed.\n");
+}
+
+#endif
