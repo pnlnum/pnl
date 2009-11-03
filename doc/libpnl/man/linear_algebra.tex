@@ -845,8 +845,6 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
     $\ast$A, const \refstruct{PnlVect} $\ast$x, const \refstruct{PnlVect} $\ast$y}
   \sshortdescribe Computes \var{y' * A * y}
 
- 
-
   
 \item \describefun{void}{pnl_mat_exp}{\refstruct{PnlMat} $\ast$B, 
     const \refstruct{PnlMat} $\ast$A}
@@ -1262,8 +1260,18 @@ pointer (\var{owner}=$1$) or shares it with another structure (\var{owner}=$0$).
 \begin{itemize}
 \item \describefun{void}{pnl_tridiagmat_mult_vect_inplace}{\refstruct{PnlVect} $\ast$lhs, const \refstruct{PnlTriDiagMat} $\ast$mat, const \refstruct{PnlVect} $\ast$rhs}
   \sshortdescribe In place matrix multiplication  
+\item \describefun{void}{pnl_tridiagmat_mult_vect_inplace_from_lhs}{\refstruct{PnlVect} $\ast$lhs, const \refstruct{PnlTriDiagMat} $\ast$mat}
+  \sshortdescribe In place matrix multiplication : lhs = M lhs  
 \item \describefun{\refstruct{PnlVect} $\ast$}{pnl_tridiagmat_mult_vect}{const \refstruct{PnlTriDiagMat} $\ast$mat, const \refstruct{PnlVect} $\ast$vec}
   \sshortdescribe Matrix multiplication  
+\item \describefun{void}{pnl_tridiagmat_lAxpby}{double lambda, const \refstruct{PnlTriDiagMat}
+    $\ast$A, const \refstruct{PnlVect} $\ast$x, double mu, \refstruct{PnlVect} $\ast$b} 
+  \sshortdescribe Computes \var{b := lambda A x + mu b}. When \var{mu==0}, the
+  content of \var{b} is not used on input and instead \var{b} is resized to
+  match \var{A*x}
+\item \describefun{double}{pnl_tridiagmat_scalar_prod}{const \refstruct{PnlVect} $\ast$x,const \refstruct{PnlTriDiagMat}
+    $\ast$A, const \refstruct{PnlVect} $\ast$y}
+  \sshortdescribe Computes \var{x' * A * y}
 \item \describefun{void}{pnl_tridiagmat_lu_syslin}{\refstruct{PnlVect} $\ast$lhs, const \refstruct{PnlTriDiagMat} $\ast$M, const \refstruct{PnlVect} $\ast$rhs}
   \sshortdescribe Solves the linear system M x = b. Note, in this function, the LU decomposition
   is not explicitly computed.
@@ -1351,11 +1359,9 @@ remark:
 \item
   \describefun{void}{pnl_band_matrix_free}{\refstruct{PnlMat} $\ast$
     $\ast$PnlBandMatrix}
-
-\item 
-  \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_clone}{int n, double $\ast$d, double $\ast$u, int $\ast$pu, double $\ast$l, int $\ast$pl}
-  \sshortdescribe Create a void sparse matrix with pointer on real sparse Matrix d, u, l is set
-  to NULL in some case.
+\item \describefun{\refstruct{PnlBandMatrix}$\ast$}{pnl_band_matrix_clone}{\refstruct{PnlBandMatrix} $\ast$clone, const \refstruct{PnlBandMatrix} $\ast$M}
+  \sshortdescribe Clones \var{M} into \var{clone}. No no new
+  \refstruct{PnlBandMatrix} is created.
 \end{itemize}
 \paragraph{Accessing elements}
 \begin{itemize}
@@ -1375,6 +1381,39 @@ remark:
   band $ - not true for first and last lines )
   and do $M_{i, j} \ +=x$.
 \end{itemize}
+
+\subparagraph{Element wise operations}
+
+\begin{itemize}
+\item \describefun{void}{pnl_band_matrix_plus_band_matrix}{\refstruct{PnlBand_Matrix} $\ast$lhs, 
+    const \refstruct{PnlBand_Matrix} $\ast$rhs} 
+  \sshortdescribe In-place addition  
+
+\item \describefun{void}{pnl_band_matrix_minus_band_matrix}{\refstruct{PnlBand_Matrix} $\ast$lhs, 
+    const \refstruct{PnlBand_Matrix} $\ast$rhs} 
+  \sshortdescribe In-place substraction  
+
+\item \describefun{void}{pnl_band_matrix_inv_term}{\refstruct{PnlBand_Matrix} $\ast$lhs}
+  \sshortdescribe In-place term by term  inversion  
+
+\item \describefun{void}{pnl_band_matrix_div_mat_term}{\refstruct{PnlBand_Matrix}
+    $\ast$lhs, const \refstruct{PnlBand_Matrix} $\ast$rhs} 
+  \sshortdescribe In-place term by term  division
+
+\item \describefun{void}{pnl_band_matrix_mult_mat_term}{\refstruct{PnlBand_Matrix}
+    $\ast$lhs, const \refstruct{PnlBand_Matrix} $\ast$rhs} 
+  \sshortdescribe In-place term by term multiplication  
+
+\item \describefun{void}{pnl_band_matrix_map}{\refstruct{PnlBand_Matrix} $\ast$lhs, const
+    \refstruct{PnlBand_Matrix} $\ast$rhs, double($\ast$f)(double)} 
+  \sshortdescribe Applies the function \var{f} to each element of \var{rhs} and
+  stores the result in \var{lhs}
+
+\item \describefun{void}{pnl_band_matrix_map_inplace}{\refstruct{PnlBand_Matrix} $\ast$lhs, double($\ast$f)(double)}
+  \sshortdescribe Same function as \reffun{pnl_band_matrix_map} but the result is
+  stored in \var{lhs} itself.
+\end{itemize}
+
 
 \paragraph{Extraction operations} These functions should not be used by
 standard developers.  They do not create a real band matrix, but create an
@@ -1435,6 +1474,14 @@ copy of array $M\rightarrow Low$.
 
 \paragraph{Standard matrix operations \& Linear system}
 \begin{itemize}
+\item \describefun{void}{pnl_band_matrix_lAxpby}{double lambda, const \refstruct{PnlBandMatrix}
+    $\ast$A, const \refstruct{PnlVect} $\ast$x, double mu, \refstruct{PnlVect} $\ast$b} 
+  \sshortdescribe Computes \var{b := lambda A x + mu b}. When \var{mu==0}, the
+  content of \var{b} is not used on input and instead \var{b} is resized to
+  match \var{A*x}
+\item \describefun{double}{pnl_band_matrix_scalar_prod}{const \refstruct{PnlVect} $\ast$x,const \refstruct{PnlBandMatrix}
+    $\ast$A, const \refstruct{PnlVect} $\ast$y}
+  \sshortdescribe Computes \var{x' * A * y}
 \item 
   \describefun{void}{pnl_band_matrix_solve_syslin_inplace}{\refstruct{PnlBandMatrix}
     $\ast$M, \refstruct{PnlVect} $\ast$x}
@@ -1599,6 +1646,36 @@ not so clear.
 \begin{itemize}
 \item \describefun{void}{pnl_sparse_mat_print}{\refstruct{PnlSparseMat} $\ast$A}
 \end{itemize}
+
+\subparagraph{Element wise operations}
+
+\begin{itemize}
+\item \describefun{void}{pnl_sparse_mat_plus_sparse_mat}{\refstruct{PnlSparseMat} $\ast$lhs, 
+    const \refstruct{PnlSparseMat} $\ast$rhs} 
+  \sshortdescribe In-place addition  
+
+\item \describefun{void}{pnl_sparse_mat_minus_sparse_mat}{\refstruct{PnlSparseMat} $\ast$lhs, 
+    const \refstruct{PnlSparseMat} $\ast$rhs} 
+  \sshortdescribe In-place substraction  
+
+\item \describefun{void}{pnl_sparse_mat_inv_term}{\refstruct{PnlSparseMat} $\ast$lhs}
+  \sshortdescribe In-place term by term inversion  
+
+\item \describefun{void}{pnl_sparse_mat_div_mat_term}{\refstruct{PnlSparseMat}
+    $\ast$lhs, const \refstruct{PnlSparseMat} $\ast$rhs} 
+  \sshortdescribe In-place term by term division
+
+\item \describefun{void}{pnl_sparse_mat_mult_mat_term}{\refstruct{PnlSparseMat}
+    $\ast$lhs, const \refstruct{PnlSparseMat} $\ast$rhs} 
+  \sshortdescribe In-place term by term multiplication  
+
+
+
+\item \describefun{void}{pnl_sparse_mat_map_inplace}{\refstruct{PnlSparseMat} $\ast$lhs, double($\ast$f)(double)}
+  \sshortdescribe Same function as \reffun{pnl_sparse_mat_map} but the result is
+  stored in \var{lhs} itself.
+\end{itemize}
+
 
 \paragraph{Standard matrix operations}
 \begin{itemize}
