@@ -596,7 +596,7 @@ PnlBasis*  pnl_basis_init ( int index, int nb_func, int space_dim)
 /**
  * Finds the best approximation of function defined by f(x(i,:)) = y(i)
  *
- * @param f a PnlBasis
+ * @param basis a PnlBasis
  * @param x the matrix of points at which we know the value of the function. One line
  * of the matrix is the vector of the coordinates of one point
  * @param y the values of the function f at the points defined by x
@@ -650,7 +650,7 @@ int pnl_fit_least_squares (PnlVect *coef, PnlMat *x, PnlVect *y, PnlBasis *basis
  *
  * @param coef a vector typically computed by pnl_fit_least_squares
  * @param x the coordinates of the point at which to evaluate the function
- * @param f a PnlBasis
+ * @param basis a PnlBasis
  *
  * @return sum (coef .* f(x))
  */
@@ -666,6 +666,56 @@ double pnl_basis_eval (PnlVect *coef, double *x, PnlBasis *basis)
     }
   return y;
 }
+
+/**
+ * Evaluates the first derivative with respect to x[i] of a linear combination
+ * of basis functions at x
+ *
+ * @param coef a vector typically computed by pnl_fit_least_squares
+ * @param x the coordinates of the point at which to evaluate the function
+ * @param basis a PnlBasis
+ * @param i the index with respect to which the derivative is computed
+ *
+ * @return sum (coef .* f(x))
+ */
+double pnl_basis_eval_D (PnlVect *coef, double *x, PnlBasis *basis, int i)
+{
+  int k;
+  double y;
+
+  y = 0;
+  for (k=0; k<coef->size; k++)
+    {
+      y += pnl_vect_get (coef, k) * (basis->Df)(x, k, i);
+    }
+  return y;
+}
+
+/**
+ * Evaluates the second derivative with respect to x[i] and x[j] of a linear
+ * combination of basis functions at x
+ *
+ * @param coef a vector typically computed by pnl_fit_least_squares
+ * @param x the coordinates of the point at which to evaluate the function
+ * @param basis a PnlBasis
+ * @param i the index with respect to which the derivative is computed
+ * @param j the index with respect to which the derivative is computed
+ *
+ * @return sum (coef .* f(x))
+ */
+double pnl_basis_eval_D2 (PnlVect *coef, double *x, PnlBasis *basis, int i, int j)
+{
+  int k;
+  double y;
+
+  y = 0;
+  for (k=0; k<coef->size; k++)
+    {
+      y += pnl_vect_get (coef, k) * (basis->D2f)(x, k, i, j);
+    }
+  return y;
+}
+
 
 
 /*
