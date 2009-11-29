@@ -275,7 +275,7 @@ dcomplex Cdiv(dcomplex a, dcomplex b)
 
 /**
  *  a/b
- * @param a  a complex number
+ * @param a  a real number
  * @param b  a complex number
  * @return a/b, the division
  */

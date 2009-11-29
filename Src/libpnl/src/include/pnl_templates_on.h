@@ -47,7 +47,7 @@
 #define MULTIPLICITY 2
 #define FP 1
 #define IN_FORMAT "%lf"
-#define OUT_FORMAT "%7.4f + i * %7.4f"
+#define OUT_FORMAT "%f + i * %f"
 #define OUT_PUT_FORMAT(a) (a).r,(a).i
 #define ATOMIC_IO ATOMIC
 #define ZERO CZERO
