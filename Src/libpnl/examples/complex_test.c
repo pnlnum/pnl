@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "pnl_complex.h"
+#include "pnl_random.h"
 
 static void Csqrt_test ()
 {
@@ -97,6 +98,20 @@ static void Cgamma_test ()
   printf("Clgamma(%f + %f i) = %f + %f i\n", CMPLX(z), CMPLX(c2));
 } 
 
+static void Cdiv_test ()
+{
+  dcomplex z1, z2;
+  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
+  pnl_rand_init (gen, 1, 1);
+  z1 = Complex (pnl_rand_uni (gen), pnl_rand_uni (gen));
+  z2 = Complex (pnl_rand_uni (gen), pnl_rand_uni (gen));
+
+  printf ("(%.12f + %.12f * %%i) / (%.12f + %.12f * %%i) = (%.12f + %.12f * %%i)\n", CMPLX(z1), CMPLX(z2), CMPLX(Cdiv(z1,z2)));
+  printf ("%.12f / (%.12f + %.12f * %%i) = (%.12f + %.12f * %%i)\n", z1.r, CMPLX(z2), CMPLX(RCdiv(z1.r,z2)));
+  printf ("(%.12f + %.12f * %%i) / %.12f = (%.12f + %.12f * %%i)\n", CMPLX(z1), z2.r, CMPLX(CRdiv(z1,z2.r)));
+} 
+
+
 void complex_test()
 {
   printf("\n");
@@ -107,4 +122,5 @@ void complex_test()
   Cpow_test ();
   Ctrigo_test ();
   Cgamma_test ();
+  Cdiv_test ();
 }
