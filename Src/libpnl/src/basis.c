@@ -191,57 +191,57 @@ static int TensorBasisD10[DimBasisDefaultD10][10]=
     {1,1,1,1,1,1,1,1,1}};
 
 
-#define DEFINE_BASIS_COMPUTES(name, dim)                           \
-  static double name##D##dim(double *x, int ind)                   \
-{                                                                  \
-  int i;                                                           \
-  double aux = 1;                                                  \
-  for (i = 0 ; i < dim ; i++)                                      \
-    {                                                              \
-      aux *= name##D1 (x + i, TensorBasisD##dim[ind][i]);          \
-    }                                                              \
-  return aux;                                                      \
-}                                                                  \
-                                                                   \
-static double D##name##D##dim(double *x, int ind, int k)           \
-{                                                                  \
-  int i;                                                           \
-  double aux = 1;                                                  \
-  for ( i = 0 ; i < dim ; i++ )                                    \
-    {                                                              \
-      if ( i == k )                                                \
+#define DEFINE_BASIS_COMPUTES(name, dim)                            \
+  static double name##D##dim(double *x, int ind)                    \
+{                                                                   \
+  int i;                                                            \
+  double aux = 1;                                                   \
+  for (i = 0 ; i < dim ; i++)                                       \
+    {                                                               \
+      aux *= name##D1 (x + i, TensorBasisD##dim[ind][i]);           \
+    }                                                               \
+  return aux;                                                       \
+}                                                                   \
+                                                                    \
+static double D##name##D##dim(double *x, int ind, int k)            \
+{                                                                   \
+  int i;                                                            \
+  double aux = 1;                                                   \
+  for ( i = 0 ; i < dim ; i++ )                                     \
+    {                                                               \
+      if ( i == k-1 )                                               \
       aux *= _D##name##D1 (x + i, TensorBasisD##dim[ind][i]);       \
-      else                                                         \
-      aux *= name##D1 (x + i, TensorBasisD##dim[ind][i]);          \
-    }                                                              \
-  return aux;                                                      \
-}                                                                  \
-static double DD##name##D##dim(double *x, int ind, int k1, int k2) \
-{                                                                  \
-  int i;                                                           \
-  double aux = 1;                                                  \
-  if (k1 == k2)                                                    \
-    {                                                              \
-      for ( i = 0 ; i < dim ; i++ )                                \
-        {                                                          \
-          if ( i == k1 )                                           \
+      else                                                          \
+      aux *= name##D1 (x + i, TensorBasisD##dim[ind][i]);           \
+    }                                                               \
+  return aux;                                                       \
+}                                                                   \
+static double DD##name##D##dim(double *x, int ind, int k1, int k2)  \
+{                                                                   \
+  int i;                                                            \
+  double aux = 1;                                                   \
+  if (k1 == k2)                                                     \
+    {                                                               \
+      for ( i = 0 ; i < dim ; i++ )                                 \
+        {                                                           \
+          if ( i == k1-1 )                                          \
           aux *= _DD##name##D1 (x + i, TensorBasisD##dim[ind][i]);  \
-          else                                                     \
-          aux *= name##D1 (x + i, TensorBasisD##dim[ind][i]);      \
-        }                                                          \
-    }                                                              \
-  else                                                             \
-    {                                                              \
-      for ( i = 0 ; i < dim ; i++ )                                \
-        {                                                          \
-          if ( i == k1  || i == k2)                                \
+          else                                                      \
+          aux *= name##D1 (x + i, TensorBasisD##dim[ind][i]);       \
+        }                                                           \
+    }                                                               \
+  else                                                              \
+    {                                                               \
+      for ( i = 0 ; i < dim ; i++ )                                 \
+        {                                                           \
+          if ( i == k1-1  || i == k2-1)                             \
           aux *= _D##name##D1 (x + i, TensorBasisD##dim[ind][i]);   \
-          else                                                     \
-          aux *= name##D1 (x + i, TensorBasisD##dim[ind][i]);      \
-        }                                                          \
-                                                                   \
-    }                                                              \
-  return aux;                                                      \
+          else                                                      \
+          aux *= name##D1 (x + i, TensorBasisD##dim[ind][i]);       \
+        }                                                           \
+                                                                    \
+    }                                                               \
+  return aux;                                                       \
 }
 
 
