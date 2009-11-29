@@ -676,7 +676,7 @@ double pnl_basis_eval (PnlVect *coef, double *x, PnlBasis *basis)
  * @param basis a PnlBasis
  * @param i the index with respect to which the derivative is computed
  *
- * @return sum (coef .* f(x))
+ * @return sum (coef .* D_i f(x))
  */
 double pnl_basis_eval_D (PnlVect *coef, double *x, PnlBasis *basis, int i)
 {
@@ -701,7 +701,7 @@ double pnl_basis_eval_D (PnlVect *coef, double *x, PnlBasis *basis, int i)
  * @param i the index with respect to which the derivative is computed
  * @param j the index with respect to which the derivative is computed
  *
- * @return sum (coef .* f(x))
+ * @return sum (coef .* D2_{i,j} f(x))
  */
 double pnl_basis_eval_D2 (PnlVect *coef, double *x, PnlBasis *basis, int i, int j)
 {

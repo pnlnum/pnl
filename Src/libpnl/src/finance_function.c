@@ -229,15 +229,15 @@ static void pnl_bs_increment_call_put(double x, double * fx, double * dfx, void*
 { pnl_bs_increment_call_put_Type(x,fx,dfx,Data);}
 
 /**
- * compute the implied volatility of an option price
+ * Computes the implied volatility of an option price
  *
  * @param is_call a int, the option type, 1 for call, 0 for put
  * @param Price a double, option price today
- * @param Bond    = exp(-r*Maturity), a double, price of Zero coupon bond
- * @param Forward = Spot*exp((r-divid)*Maturity) a double, price of Spot at
- * time T - maturity.
+ * @param r the instantaneous interest rate
+ * @param divid the instantaneous dividend rate
+ * @param spot the initial value of the asset
  * @param Strike a double, for value contract
- * @param Maturity a double, echeance time (T)
+ * @param T a double, echeance time (T)
  * @param error, an integer containing the error code on output (OK or FAIL) 
  * @return implied of a call/put option
  */
