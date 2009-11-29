@@ -568,7 +568,7 @@ DEFINE_ENUM( PnlBases, _reg_basis);
  * defined
  * @return a PnlBasis
  */
-PnlBasis*  pnl_init_basis ( int index, int nb_func, int space_dim)
+PnlBasis*  pnl_basis_init ( int index, int nb_func, int space_dim)
 {
   enum_member *e = _reg_basis;
   PnlBasis *b = Bases_tab;

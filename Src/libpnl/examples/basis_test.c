@@ -66,7 +66,7 @@ static void exp_regression2()
   space_dim = 1; /* real valued basis */
   basis_dim = 5; /* number of elements in the basis */
 
-  basis = pnl_init_basis (basis_name, basis_dim, space_dim);
+  basis = pnl_basis_init (basis_name, basis_dim, space_dim);
 
   pnl_fit_least_squares (alpha, t, y, basis, basis_dim);
   printf("coefficients of the decomposition : ");
@@ -128,7 +128,7 @@ static void regression_multid()
   space_dim = 2; /* real valued basis */
   basis_dim = 10; /* number of elements in the basis */
 
-  basis = pnl_init_basis (basis_name, basis_dim, space_dim);
+  basis = pnl_basis_init (basis_name, basis_dim, space_dim);
 
   pnl_fit_least_squares (alpha, t, y, basis, basis_dim);
   printf("coefficients of the decomposition : ");
