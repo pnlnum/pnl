@@ -68,22 +68,21 @@ typedef struct {
 \subsubsection{Short Description}
 
 \begin{verbatim}
-typedef double(*PnlBasis)(double *x, int index) ;
-
 typedef struct {
-  char * label;
-  int    space_dim;
-  int    max_dim;
-  PnlBasis Compute;
-} reg_basis;
-
+  char * label; /*!< string to label the basis */
+  int    space_dim; /*!< dimension of the space in which we are working */
+  int    max_dim; /*!< maximum number of elements in the basis */
+  double (*f)(double *x, int ind); /*!< the evaluation function */
+  double (*Df)(double *x, int ind, int i); /*!< the first derivative function */
+  double (*D2f)(double *x, int ind, int i, int j); /*!< the second derivative function */
+} PnlBasis;
 \end{verbatim}
 
 \begin{table}[h!]
   \begin{describeconst}
-    \constentry{CANONICAL}{for the Canonical basis}
-    \constentry{HERMITIAN}{for the Hermitian basis}
-    \constentry{TCHEBYCHEV}{for the Tchebychev basis}
+    \constentry{CANONICAL}{for the Canonical polynomials}
+    \constentry{HERMITIAN}{for the Hermite polynomials}
+    \constentry{TCHEBYCHEV}{for the Tchebychev polynomials}
   \end{describeconst}
   \caption{indices of bases}
   \label{basis_index}
@@ -102,7 +101,7 @@ $\alpha^\star \in \R^N$ which solves
 \subsubsection{Functions}
 
 \begin{itemize}
-\item \describefun{PnlBasis}{pnl_init_basis}{int index, int N, int d}
+  \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_init}{int index, int N, int d}
   \sshortdescribe Creates a \refstruct{PnlBasis} for the polynomial family
   defined by \var{index} (see Table~\ref{basis_index}) with at most \var{N}
   elements. \var{d} is the dimension of the space on which the functions are
@@ -110,26 +109,43 @@ $\alpha^\star \in \R^N$ which solves
 
 \item \describefun{int}{pnl_fit_least_squares}{\refstruct{PnlVect}$\ast$ coef, 
     \refstruct{PnlMat}$\ast$ x, \refstruct{PnlVect}$\ast$ y, 
-    \refstruct{PnlBasis}$\ast$ f, int N}
+    \refstruct{PnlBasis}$\ast$ P, int N}
   \sshortdescribe Computes the coefficients \var{coef} defined by
   \begin{equation*}
     \var{coef} = \arg\min_\alpha \sum_{i=1}^n
-    \left( \sum_{j=0}^{\var{N}} \alpha_j  f_j(x_i) - y_i\right)^2
+    \left( \sum_{j=0}^{\var{N}} \alpha_j  P_j(x_i) - y_i\right)^2
   \end{equation*}
   where \var{N} is the number of functions to regress upon and $n$ is the
-  number of points at which we know the value of the original function. $f_j$
+  number of points at which we know the value of the original function. $P_j$
   is the $j-th$ basis function. Each row of the matrix \var{x} defines the
   coordinates of one point $x_i$. The function to be approximated is defined
   by the data \var{y} which is the vector of the values taken by the function
   at the points \var{x}.
   
 \item \describefun{double}{pnl_basis_eval}{\refstruct{PnlVect}$\ast$ coef, double
-    $\ast$x, \refstruct{PnlBasis}$\ast$ f}
-  \sshortdescribe Computes the linear combination of \var{f_i(x)} defined by
+    $\ast$x, \refstruct{PnlBasis}$\ast$ *P}
+  \sshortdescribe Computes the linear combination of \var{P_k(x)} defined by
   \var{coef}. Given the coefficients computed by the function
-  \reffun{pnl_fit_least_squares}, this function returns $\sum_{j=0}^n
-  \var{coef}_j  f_j(\var{x})$ where \var{x} is a C array.
+  \reffun{pnl_fit_least_squares}, this function returns $\sum_{k=0}^n
+  \var{coef}_k  P_k(\var{x})$ where \var{x} is a C array.
+
+\item \describefun{double}{pnl_basis_eval_D}{\refstruct{PnlVect}$\ast$ coef, double
+    $\ast$x, \refstruct{PnlBasis}$\ast$ *P, int i}
+  \sshortdescribe Computes the derivative with repsect to \var{x_i} of the
+  linear combination of \var{P_k(x)} defined by \var{coef}. Given the
+  coefficients computed by the function \reffun{pnl_fit_least_squares}, this
+  function returns $\partial_{x_i} \sum_{k=0}^n \var{coef}_k  P_k(\var{x})$
+  where \var{x} is a C array.
+
+\item \describefun{double}{pnl_basis_eval_D2}{\refstruct{PnlVect}$\ast$ coef, double
+    $\ast$x, \refstruct{PnlBasis}$\ast$ *P, int i, int j}
+  \sshortdescribe Computes the derivative with repsect to \var{x_i} of the
+  linear combination of \var{P_k(x)} defined by \var{coef}. Given the
+  coefficients computed by the function \reffun{pnl_fit_least_squares}, this
+  function returns $\partial_{x_i} \partial_{x_j} \sum_{k=0}^n \var{coef}_k  P_k(\var{x})$
+  where \var{x} is a C array.
 \end{itemize}
+
 
 \subsection{Numerical integration}
 \subsubsection{Short Description}
