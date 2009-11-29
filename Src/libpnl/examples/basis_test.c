@@ -40,12 +40,12 @@ static void exp_regression2()
   PnlVect *y;
   PnlVect *alpha;
 
-  PnlBasis basis;
+  PnlBasis *basis;
 
   printf("\nRegression of the exponential function on [0:0.05:5]\n");
-  
+
   alpha = pnl_vect_create (0);
-  
+
   /* creating the grid */
   a=0.0; b=5.0;
   n = 100;
@@ -61,14 +61,14 @@ static void exp_regression2()
       pnl_vect_set (y, i, function(pnl_mat_get(t, i, 0)));
     }
 
-  
+
   basis_name = HERMITIAN; /* TCHEBYCHEV; */
   space_dim = 1; /* real valued basis */
   basis_dim = 5; /* number of elements in the basis */
 
   basis = pnl_init_basis (basis_name, basis_dim, space_dim);
 
-  pnl_fit_least_squares (alpha, t, y, &basis, basis_dim);
+  pnl_fit_least_squares (alpha, t, y, basis, basis_dim);
   printf("coefficients of the decomposition : ");
   pnl_vect_print (alpha);
   /* computing the infinity norm of the error */
@@ -76,7 +76,7 @@ static void exp_regression2()
   for (i=0; i<t->m; i++)
     {
       double tmp = function(pnl_mat_get(t, i, 0)) -
-        pnl_basis_eval (alpha, pnl_mat_lget(t, i, 0), &basis);
+        pnl_basis_eval (alpha, pnl_mat_lget(t, i, 0), basis);
       if (fabs(tmp) > err) err = fabs(tmp);
     }
   printf ("L^infty error : %f \n", err);
@@ -101,10 +101,10 @@ static void regression_multid()
   PnlVect *y;
   PnlVect *alpha;
 
-  PnlBasis basis;
+  PnlBasis *basis;
   printf("\nMulti dimensional regression on of log (1+x[0]*x[0] + x[1]*x[1]\n");
   alpha = pnl_vect_create (0);
-  
+
   /* creating the grid */
   a=-2.0; b=2.0;
   n = 100;
@@ -123,14 +123,14 @@ static void regression_multid()
         }
     }
 
-  
+
   basis_name = HERMITIAN;
   space_dim = 2; /* real valued basis */
   basis_dim = 10; /* number of elements in the basis */
 
   basis = pnl_init_basis (basis_name, basis_dim, space_dim);
 
-  pnl_fit_least_squares (alpha, t, y, &basis, basis_dim);
+  pnl_fit_least_squares (alpha, t, y, basis, basis_dim);
   printf("coefficients of the decomposition : ");
   pnl_vect_print (alpha);
 
@@ -139,7 +139,7 @@ static void regression_multid()
   for (i=0; i<t->m; i++)
     {
       double tmp = function2d(pnl_mat_lget(t, i, 0)) -
-        pnl_basis_eval (alpha, pnl_mat_lget(t, i, 0), &basis);
+        pnl_basis_eval (alpha, pnl_mat_lget(t, i, 0), basis);
       if (fabs(tmp) > err) err = fabs(tmp);
     }
 
@@ -149,7 +149,7 @@ static void regression_multid()
   pnl_vect_free (&alpha);
 }
 
-  
+
 void basis_test ()
 {
   /* exp_regression(); */

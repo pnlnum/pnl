@@ -60,119 +60,6 @@
 #define DimBasisDefaultD9 26
 #define DimBasisDefaultD10 29
 
-
-
-static double HermiteD1(double *x, int ind);
-static double HermiteD2(double *x, int ind); 
-static double HermiteD3(double *x, int ind);
-static double HermiteD4(double *x, int ind);
-static double HermiteD5(double *x, int ind);
-static double HermiteD6(double *x, int ind);
-static double HermiteD7(double *x, int ind); 
-static double HermiteD8(double *x, int ind);
-static double HermiteD9(double *x, int ind); 
-static double HermiteD10(double *x, int ind);
-static double CanoniqueD1(double *x, int ind);
-static double CanoniqueD2(double *x, int ind); 
-static double CanoniqueD3(double *x, int ind);
-static double CanoniqueD4(double *x, int ind);
-static double CanoniqueD5(double *x, int ind);
-static double CanoniqueD6(double *x, int ind);
-static double CanoniqueD7(double *x, int ind); 
-static double CanoniqueD8(double *x, int ind);
-static double CanoniqueD9(double *x, int ind); 
-static double CanoniqueD10(double *x, int ind);
-static double TchebychevD1(double *x, int ind);
-static double TchebychevD2(double *x, int ind); 
-static double TchebychevD3(double *x, int ind);
-static double TchebychevD4(double *x, int ind);
-static double TchebychevD5(double *x, int ind);
-static double TchebychevD6(double *x, int ind);
-static double TchebychevD7(double *x, int ind); 
-static double TchebychevD8(double *x, int ind);
-static double TchebychevD9(double *x, int ind); 
-static double TchebychevD10(double *x, int ind);
-
-
-static reg_basis Bases_tab[]=
-  {
-    {"Hermite", 1,  DimBasisDefaultHD1,  &HermiteD1 },
-    {"Hermite", 2,  DimBasisDefaultHD2,  &HermiteD2 },
-    {"Hermite", 3,  DimBasisDefaultHD3,  &HermiteD3 },
-    {"Hermite", 4,  DimBasisDefaultHD4,  &HermiteD4 },
-    {"Hermite", 5,  DimBasisDefaultHD5,  &HermiteD5 },
-    {"Hermite", 6,  DimBasisDefaultHD6,  &HermiteD6 },
-    {"Hermite", 7,  DimBasisDefaultHD7,  &HermiteD7 },
-    {"Hermite", 8,  DimBasisDefaultHD8,  &HermiteD8 },
-    {"Hermite", 9,  DimBasisDefaultHD9,  &HermiteD9 },
-    {"Hermite", 10,  DimBasisDefaultHD10,  &HermiteD10 },
-    {"Canonical", 1,  DimBasisDefaultD1,  &CanoniqueD1 },
-    {"Canonical", 2,  DimBasisDefaultD2,  &CanoniqueD2 },
-    {"Canonical", 3,  DimBasisDefaultD3,  &CanoniqueD3 },
-    {"Canonical", 4,  DimBasisDefaultD4,  &CanoniqueD4 },
-    {"Canonical", 5,  DimBasisDefaultD5,  &CanoniqueD5 },
-    {"Canonical", 6,  DimBasisDefaultD6,  &CanoniqueD6 },
-    {"Canonical", 7,  DimBasisDefaultD7,  &CanoniqueD7 },
-    {"Canonical", 8,  DimBasisDefaultD8,  &CanoniqueD8 },
-    {"Canonical", 9,  DimBasisDefaultD9,  &CanoniqueD9 },
-    {"Canonical", 10,  DimBasisDefaultD10,  &CanoniqueD10 },
-    {"Tchebychev", 1,  DimBasisDefaultD1,  &TchebychevD1 },
-    {"Tchebychev", 2,  DimBasisDefaultD2,  &TchebychevD2 },
-    {"Tchebychev", 3,  DimBasisDefaultD3,  &TchebychevD3 },
-    {"Tchebychev", 4,  DimBasisDefaultD4,  &TchebychevD4 },
-    {"Tchebychev", 5,  DimBasisDefaultD5,  &TchebychevD5 },
-    {"Tchebychev", 6,  DimBasisDefaultD6,  &TchebychevD6 },
-    {"Tchebychev", 7,  DimBasisDefaultD7,  &TchebychevD7 },
-    {"Tchebychev", 8,  DimBasisDefaultD8,  &TchebychevD8 },
-    {"Tchebychev", 9,  DimBasisDefaultD9,  &TchebychevD9 },
-    {"Tchebychev", 10,  DimBasisDefaultD10,  &TchebychevD10 },
-    {NULL, NULLINT, NULLINT, NULL},
-  };
-
-enum_member RegBasis [] =
-  {
-    { "Canonical", CANONICAL},
-    { "Hermite", HERMITIAN},
-    { "Tchebychev", TCHEBYCHEV},
-    { NULL, NULLINT},
-  };
-
-DEFINE_ENUM( PnlBases, RegBasis)
-
-/**
- * identify_basis returns a pointer of function
- * double fake (double *, int)
- *
- * @param index the index of the family to be used
- * @param nb_func the maximum number of functions which may be used
- * @param space_dim the size of the space in which the basis functions are
- * defined
- * @return a PnlBasis
- */
-PnlBasis pnl_init_basis ( int index, int nb_func, int space_dim)
-{
-  enum_member *e = RegBasis;
-  reg_basis *b = Bases_tab;
-
-  while (e->label != NULL && e->key != index) { e++; }
-  if (e->label == NULL )
-    {
-      printf ("No basis found : index exceeded\n"); abort();
-    }
-
-  while (b->label != NULL)
-    {
-      if (strcmp (e->label, b->label) == 0 &&
-          space_dim == b->space_dim &&
-          nb_func <= b->max_dim)
-        return b->Compute;
-      else
-        b++;
-    }
-  printf ("No basis found : size exceeded \n"); abort();
-  return NULL;
-}
-
 /* multidimensional bases are obtained as tensor products of
  * one-dimensional ones
  * the numbers inside the braces are the indices of the
@@ -185,190 +72,324 @@ PnlBasis pnl_init_basis ( int index, int nb_func, int space_dim)
  * the values come from Premia
  */
 static int TensorBasisD2[DimBasisDefaultD2][2]=
-  {{0,0},
-                                        
-   {1,0},{0,1},
-                                        
-   {1,1},{2,0},{0,2},
-                                             
-   {2,1},{1,2},{3,0},{0,3},
-                                        
-   {2,2},{1,3},{3,1},{4,0},{0,4},
-                                        
-   {1,4},{4,1},{3,2},{2,3},{5,0},{0,5}};
-                                        
+{{0,0},
+
+    {1,0},{0,1},
+
+    {1,1},{2,0},{0,2},
+
+    {2,1},{1,2},{3,0},{0,3},
+
+    {2,2},{1,3},{3,1},{4,0},{0,4},
+
+    {1,4},{4,1},{3,2},{2,3},{5,0},{0,5}};
+
 static int TensorBasisD3[DimBasisDefaultD3][3]=
-  {{0,0,0},
-   
-   {1,0,0},{0,1,0},{0,0,1},
-   
-   {2,0,0},{0,2,0},{0,0,2},{1,1,0},{1,0,1},{0,1,1},
-   
-   {1,1,1},{2,1,0},{1,2,0},{0,1,2},{0,2,1},{1,0,2},{2,0,1},{3,0,0},{0,3,0},{0,0,3}};
-                                        
+{{0,0,0},
+
+    {1,0,0},{0,1,0},{0,0,1},
+
+    {2,0,0},{0,2,0},{0,0,2},{1,1,0},{1,0,1},{0,1,1},
+
+    {1,1,1},{2,1,0},{1,2,0},{0,1,2},{0,2,1},{1,0,2},{2,0,1},{3,0,0},{0,3,0},{0,0,3}};
+
 static int TensorBasisD4[DimBasisDefaultD4][4]=
-  {{0,0,0,0},
-   
-   {1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1},
-                                        
-   {2,0,0,0},{0,2,0,0},{0,0,2,0},{0,0,0,2},{1,1,0,0},{0,1,1,0},{0,0,1,1},
-                                        
-   {1,1,1,0},{0,1,1,1},{1,0,1,1},{1,1,0,1},{3,0,0,0},{0,3,0,0},{0,0,3,0},{0,0,0,3},
-                                        
-   {1,1,1,1}};
-                                        
+{{0,0,0,0},
+
+    {1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1},
+
+    {2,0,0,0},{0,2,0,0},{0,0,2,0},{0,0,0,2},{1,1,0,0},{0,1,1,0},{0,0,1,1},
+
+    {1,1,1,0},{0,1,1,1},{1,0,1,1},{1,1,0,1},{3,0,0,0},{0,3,0,0},{0,0,3,0},{0,0,0,3},
+
+    {1,1,1,1}};
+
 static int TensorBasisD5[DimBasisDefaultD5][5]=
-  {{0,0,0,0,0},
-                                        
-   {1,0,0,0,0},{0,1,0,0,0},{0,0,1,0,0},{0,0,0,1,0},{0,0,0,0,1},
-                                        
-   {2,0,0,0,0},{0,2,0,0,0},{0,0,2,0,0},{0,0,0,2,0},{0,0,0,0,2},{1,1,0,0,0},
-   {1,1,0,0,0},{1,1,0,0,0},{0,1,1,0,0},{0,0,1,1,0},{0,0,0,1,1},
-   
-   {1,1,1,0,0},{0,1,1,1,0},{0,0,1,1,1}};
-                                        
+{{0,0,0,0,0},
+
+    {1,0,0,0,0},{0,1,0,0,0},{0,0,1,0,0},{0,0,0,1,0},{0,0,0,0,1},
+
+    {2,0,0,0,0},{0,2,0,0,0},{0,0,2,0,0},{0,0,0,2,0},{0,0,0,0,2},{1,1,0,0,0},
+    {1,1,0,0,0},{1,1,0,0,0},{0,1,1,0,0},{0,0,1,1,0},{0,0,0,1,1},
+
+    {1,1,1,0,0},{0,1,1,1,0},{0,0,1,1,1}};
+
 static int TensorBasisD6[DimBasisDefaultD6][6]=
-  {{0,0,0,0,0,0},
+{{0,0,0,0,0,0},
 
-   {1,0,0,0,0,0},{0,1,0,0,0,0},{0,0,1,0,0,0},{0,0,0,1,0,0},{0,0,0,0,1,0},{0,0,0,0,0,1},
-                                             
-   {2,0,0,0,0,0},{0,2,0,0,0,0},{0,0,2,0,0,0},{0,0,0,2,0,0},{0,0,0,0,2,0},{0,0,0,0,0,2},
+    {1,0,0,0,0,0},{0,1,0,0,0,0},{0,0,1,0,0,0},{0,0,0,1,0,0},{0,0,0,0,1,0},{0,0,0,0,0,1},
 
-   {1,1,1,0,0,0},{0,1,1,1,0,0},{0,0,1,1,1,0},{0,0,0,1,1,1},
+    {2,0,0,0,0,0},{0,2,0,0,0,0},{0,0,2,0,0,0},{0,0,0,2,0,0},{0,0,0,0,2,0},{0,0,0,0,0,2},
 
-   {1,1,1,1,1,1}};
-                                        
+    {1,1,1,0,0,0},{0,1,1,1,0,0},{0,0,1,1,1,0},{0,0,0,1,1,1},
+
+    {1,1,1,1,1,1}};
+
 static int TensorBasisD7[DimBasisDefaultD7][7]=
-  {{0,0,0,0,0,0,0},
-                                        
-   {1,0,0,0,0,0,0},{0,1,0,0,0,0,0},{0,0,1,0,0,0,0},{0,0,0,1,0,0,0},{0,0,0,0,1,0,0},
-   {0,0,0,0,0,1,0},{0,0,0,0,0,0,1},
-                                        
-   {2,0,0,0,0,0,0},{0,2,0,0,0,0,0},{0,0,2,0,0,0,0},{0,0,0,2,0,0,0},{0,0,0,0,2,0,0},
-   {0,0,0,0,0,2,0},{0,0,0,0,0,0,2},
+{{0,0,0,0,0,0,0},
 
-   {1,1,1,1,0,0,0},{0,1,1,1,1,0,0},{0,0,1,1,1,1,0},{0,0,0,1,1,1,1},
+    {1,0,0,0,0,0,0},{0,1,0,0,0,0,0},{0,0,1,0,0,0,0},{0,0,0,1,0,0,0},{0,0,0,0,1,0,0},
+    {0,0,0,0,0,1,0},{0,0,0,0,0,0,1},
 
-   {1,1,1,1,1,1,1}};
+    {2,0,0,0,0,0,0},{0,2,0,0,0,0,0},{0,0,2,0,0,0,0},{0,0,0,2,0,0,0},{0,0,0,0,2,0,0},
+    {0,0,0,0,0,2,0},{0,0,0,0,0,0,2},
 
-                                        
+    {1,1,1,1,0,0,0},{0,1,1,1,1,0,0},{0,0,1,1,1,1,0},{0,0,0,1,1,1,1},
+
+    {1,1,1,1,1,1,1}};
+
+
 static int TensorBasisD8[DimBasisDefaultD8][8]=
-  {{0,0,0,0,0,0,0,0},
+{{0,0,0,0,0,0,0,0},
 
-   {1,0,0,0,0,0,0,0},{0,1,0,0,0,0,0,0},{0,0,1,0,0,0,0,0},{0,0,0,1,0,0,0,0},
-   {0,0,0,0,1,0,0,0},{0,0,0,0,0,1,0,0},{0,0,0,0,0,0,1,0},{0,0,0,0,0,0,0,1},
-                                             
-   {2,0,0,0,0,0,0,0},{0,2,0,0,0,0,0,0},{0,0,2,0,0,0,0,0},{0,0,0,2,0,0,0,0},
-   {0,0,0,0,2,0,0,0},{0,0,0,0,0,2,0,0},{0,0,0,0,0,0,2,0},{0,0,0,0,0,0,0,2},
+    {1,0,0,0,0,0,0,0},{0,1,0,0,0,0,0,0},{0,0,1,0,0,0,0,0},{0,0,0,1,0,0,0,0},
+    {0,0,0,0,1,0,0,0},{0,0,0,0,0,1,0,0},{0,0,0,0,0,0,1,0},{0,0,0,0,0,0,0,1},
 
-   {1,1,1,1,0,0,0,0},{0,1,1,1,1,0,0,0},{0,0,1,1,1,1,0,0},{0,0,0,1,1,1,1,0},
-   {0,0,0,0,1,1,1,1},
+    {2,0,0,0,0,0,0,0},{0,2,0,0,0,0,0,0},{0,0,2,0,0,0,0,0},{0,0,0,2,0,0,0,0},
+    {0,0,0,0,2,0,0,0},{0,0,0,0,0,2,0,0},{0,0,0,0,0,0,2,0},{0,0,0,0,0,0,0,2},
 
-   {1,1,1,1,1,1,1,1}};
+    {1,1,1,1,0,0,0,0},{0,1,1,1,1,0,0,0},{0,0,1,1,1,1,0,0},{0,0,0,1,1,1,1,0},
+    {0,0,0,0,1,1,1,1},
 
-                                        
+    {1,1,1,1,1,1,1,1}};
+
+
 static int TensorBasisD9[DimBasisDefaultD9][9]=
-  {{0,0,0,0,0,0,0,0,0},
-                                             
-   {1,0,0,0,0,0,0,0,0},{0,1,0,0,0,0,0,0,0},{0,0,1,0,0,0,0,0,0},{0,0,0,1,0,0,0,0,0},
-   {0,0,0,0,1,0,0,0,0},{0,0,0,0,0,1,0,0,0},{0,0,0,0,0,0,1,0,0},{0,0,0,0,0,0,0,1,0},
-   {0,0,0,0,0,0,0,0,1},
-                                        
-   {2,0,0,0,0,0,0,0,0},{0,2,0,0,0,0,0,0,0},{0,0,2,0,0,0,0,0,0},{0,0,0,2,0,0,0,0,0},
-   {0,0,0,0,2,0,0,0,0},{0,0,0,0,0,2,0,0,0},{0,0,0,0,0,0,2,0,0},{0,0,0,0,0,0,0,2,0},
-   {0,0,0,0,0,0,0,0,2},
+{{0,0,0,0,0,0,0,0,0},
 
-   {1,1,1,1,0,0,0,0,0},{0,1,1,1,1,0,0,0,0},{0,0,1,1,1,1,0,0,0},{0,0,0,1,1,1,1,0,0},
-   {0,0,0,0,1,1,1,1,0},{0,0,0,0,0,1,1,1,1},
-                                             
-   {1,1,1,1,1,1,1,1,1}};
+    {1,0,0,0,0,0,0,0,0},{0,1,0,0,0,0,0,0,0},{0,0,1,0,0,0,0,0,0},{0,0,0,1,0,0,0,0,0},
+    {0,0,0,0,1,0,0,0,0},{0,0,0,0,0,1,0,0,0},{0,0,0,0,0,0,1,0,0},{0,0,0,0,0,0,0,1,0},
+    {0,0,0,0,0,0,0,0,1},
 
-                                        
+    {2,0,0,0,0,0,0,0,0},{0,2,0,0,0,0,0,0,0},{0,0,2,0,0,0,0,0,0},{0,0,0,2,0,0,0,0,0},
+    {0,0,0,0,2,0,0,0,0},{0,0,0,0,0,2,0,0,0},{0,0,0,0,0,0,2,0,0},{0,0,0,0,0,0,0,2,0},
+    {0,0,0,0,0,0,0,0,2},
+
+    {1,1,1,1,0,0,0,0,0},{0,1,1,1,1,0,0,0,0},{0,0,1,1,1,1,0,0,0},{0,0,0,1,1,1,1,0,0},
+    {0,0,0,0,1,1,1,1,0},{0,0,0,0,0,1,1,1,1},
+
+    {1,1,1,1,1,1,1,1,1}};
+
+
 static int TensorBasisD10[DimBasisDefaultD10][10]=
-  {{0,0,0,0,0,0,0,0,0,0},
+{{0,0,0,0,0,0,0,0,0,0},
 
-   {1,0,0,0,0,0,0,0,0,0},{0,1,0,0,0,0,0,0,0,0},{0,0,1,0,0,0,0,0,0,0},
-   {0,0,0,1,0,0,0,0,0,0},{0,0,0,0,1,0,0,0,0,0},{0,0,0,0,0,1,0,0,0,0},
-   {0,0,0,0,0,0,1,0,0,0},{0,0,0,0,0,0,0,1,0,0},{0,0,0,0,0,0,0,0,1,0},
-   {0,0,0,0,0,0,0,0,0,1},
-                                               
-   {2,0,0,0,0,0,0,0,0,0},{0,2,0,0,0,0,0,0,0,0},{0,0,2,0,0,0,0,0,0,0},
-   {0,0,0,2,0,0,0,0,0,0},{0,0,0,0,2,0,0,0,0,0},{0,0,0,0,0,2,0,0,0,0},
-   {0,0,0,0,0,0,2,0,0,0},{0,0,0,0,0,0,0,2,0,0},{0,0,0,0,0,0,0,0,2,0},
-   {0,0,0,0,0,0,0,0,0,2},
+    {1,0,0,0,0,0,0,0,0,0},{0,1,0,0,0,0,0,0,0,0},{0,0,1,0,0,0,0,0,0,0},
+    {0,0,0,1,0,0,0,0,0,0},{0,0,0,0,1,0,0,0,0,0},{0,0,0,0,0,1,0,0,0,0},
+    {0,0,0,0,0,0,1,0,0,0},{0,0,0,0,0,0,0,1,0,0},{0,0,0,0,0,0,0,0,1,0},
+    {0,0,0,0,0,0,0,0,0,1},
 
-   {1,1,1,1,0,0,0,0,0,0},{0,1,1,1,1,0,0,0,0,0},{0,0,1,1,1,1,0,0,0,0},
-   {0,0,0,1,1,1,1,0,0,0},{0,0,0,0,1,1,1,1,0,0},{0,0,0,0,0,1,1,1,1,0},
-   {0,0,0,0,0,0,1,1,1,1},
-                                               
-   {1,1,1,1,1,1,1,1,1}};
+    {2,0,0,0,0,0,0,0,0,0},{0,2,0,0,0,0,0,0,0,0},{0,0,2,0,0,0,0,0,0,0},
+    {0,0,0,2,0,0,0,0,0,0},{0,0,0,0,2,0,0,0,0,0},{0,0,0,0,0,2,0,0,0,0},
+    {0,0,0,0,0,0,2,0,0,0},{0,0,0,0,0,0,0,2,0,0},{0,0,0,0,0,0,0,0,2,0},
+    {0,0,0,0,0,0,0,0,0,2},
+
+    {1,1,1,1,0,0,0,0,0,0},{0,1,1,1,1,0,0,0,0,0},{0,0,1,1,1,1,0,0,0,0},
+    {0,0,0,1,1,1,1,0,0,0},{0,0,0,0,1,1,1,1,0,0},{0,0,0,0,0,1,1,1,1,0},
+    {0,0,0,0,0,0,1,1,1,1},
+
+    {1,1,1,1,1,1,1,1,1}};
 
 
-#define DEFINE_BASIS(name, dim)                     \
-  static double name##D##dim(double *x, int ind)    \
-  {                                                 \
-    int i;                                          \
-    double aux = 1;                                 \
-    for (i=0;i<dim;i++){                            \
-      aux*=name##D1(x+i,TensorBasisD##dim[ind][i]); \
-    }                                               \
-    return aux;                                     \
-  }                                                       
+#define DEFINE_BASIS_COMPUTES(name, dim)                           \
+  static double name##D##dim(double *x, int ind)                   \
+{                                                                  \
+  int i;                                                           \
+  double aux = 1;                                                  \
+  for (i = 0 ; i < dim ; i++)                                      \
+    {                                                              \
+      aux *= name##D1 (x + i, TensorBasisD##dim[ind][i]);          \
+    }                                                              \
+  return aux;                                                      \
+}                                                                  \
+                                                                   \
+static double D##name##D##dim(double *x, int ind, int k)           \
+{                                                                  \
+  int i;                                                           \
+  double aux = 1;                                                  \
+  for ( i = 0 ; i < dim ; i++ )                                    \
+    {                                                              \
+      if ( i == k )                                                \
+      aux *= _D##name##D1 (x + i, TensorBasisD##dim[ind][i]);       \
+      else                                                         \
+      aux *= name##D1 (x + i, TensorBasisD##dim[ind][i]);          \
+    }                                                              \
+  return aux;                                                      \
+}                                                                  \
+static double DD##name##D##dim(double *x, int ind, int k1, int k2) \
+{                                                                  \
+  int i;                                                           \
+  double aux = 1;                                                  \
+  if (k1 == k2)                                                    \
+    {                                                              \
+      for ( i = 0 ; i < dim ; i++ )                                \
+        {                                                          \
+          if ( i == k1 )                                           \
+          aux *= _DD##name##D1 (x + i, TensorBasisD##dim[ind][i]);  \
+          else                                                     \
+          aux *= name##D1 (x + i, TensorBasisD##dim[ind][i]);      \
+        }                                                          \
+    }                                                              \
+  else                                                             \
+    {                                                              \
+      for ( i = 0 ; i < dim ; i++ )                                \
+        {                                                          \
+          if ( i == k1  || i == k2)                                \
+          aux *= _D##name##D1 (x + i, TensorBasisD##dim[ind][i]);   \
+          else                                                     \
+          aux *= name##D1 (x + i, TensorBasisD##dim[ind][i]);      \
+        }                                                          \
+                                                                   \
+    }                                                              \
+  return aux;                                                      \
+}
+
 
 
 /*
  * Canonical basis, dimension=1..10
  */
-static double CanoniqueD1(double *x, int ind)
+
+/**
+ *  Canonical polynomials
+ *  @ param x the address of a real number
+ *  @ param ind the index of the polynom to be evaluated
+ */
+static double CanonicalD1(double *x, int ind)
 {
-  int i;
-  double aux=1;
-  for (i=0;i<ind;i++){ aux*=(*x); }
-  return aux;
+  return pnl_pow_i (*x, ind);
 }
 
-DEFINE_BASIS(Canonique, 2)
-DEFINE_BASIS(Canonique, 3)
-DEFINE_BASIS(Canonique, 4)
-DEFINE_BASIS(Canonique, 5)
-DEFINE_BASIS(Canonique, 6)
-DEFINE_BASIS(Canonique, 7)
-DEFINE_BASIS(Canonique, 8)
-DEFINE_BASIS(Canonique, 9)
-DEFINE_BASIS(Canonique, 10)
+/**
+ *  First derivative of the Canonical polynomials
+ *  @ param x the address of a real number
+ *  @ param ind the index of the polynom whose first derivative is to be evaluated
+ */
+static double _DCanonicalD1(double *x, int ind)
+{
+  if (ind == 0) return 0.;
+  return ind * pnl_pow_i (*x, ind - 1);
+}
+
+static double DCanonicalD1(double *x, int ind, int i)
+{
+  return _DCanonicalD1(x, ind);
+}
 
 
+/**
+ *  Second derivative of the Canonical polynomials
+ *  @ param x the address of a real number
+ *  @ param ind the index of the polynom whose second derivative is to be evaluated
+ */
+static double _DDCanonicalD1(double *x, int ind)
+{
+  if (ind <= 1) return 0.;
+  return ind * (ind - 1) * pnl_pow_i (*x, ind - 2);
+}
+
+static double DDCanonicalD1(double *x, int ind, int i, int j)
+{
+  return _DCanonicalD1(x, ind);
+}
+
+DEFINE_BASIS_COMPUTES(Canonical, 2);
+DEFINE_BASIS_COMPUTES(Canonical, 3);
+DEFINE_BASIS_COMPUTES(Canonical, 4);
+DEFINE_BASIS_COMPUTES(Canonical, 5);
+DEFINE_BASIS_COMPUTES(Canonical, 6);
+DEFINE_BASIS_COMPUTES(Canonical, 7);
+DEFINE_BASIS_COMPUTES(Canonical, 8);
+DEFINE_BASIS_COMPUTES(Canonical, 9);
+DEFINE_BASIS_COMPUTES(Canonical, 10);
 
 /*
  * Hermite basis, dimension=1..10
  */
+/**
+ *  Hermite polynomials
+ *  @ param x the address of a real number
+ *  @ param ind the index of the polynom to be evaluated
+ */
 static double HermiteD1(double *x, int ind)
 {
   switch (ind){
-  case 0 : return 1;
-  case 1 : return 1.414213562*(*x);
-  case 2 : return 1.414213562*(*x)*(*x)-0.707106781;
-  case 3 : return (1.154700538*(*x)*(*x)-1.732050808)*(*x);
-  case 4 : return (0.816496581*(*x)*(*x)-2.449489743)*(*x)*(*x)+0.612372436;
-  case 5 : return ((0.516397779*(*x)*(*x)-2.581988897)*(*x)*(*x)+1.936491673)*(*x);
+      case 0 : return 1;
+      case 1 : return 1.414213562*(*x);
+      case 2 : return 1.414213562*(*x)*(*x)-0.707106781;
+      case 3 : return (1.154700538*(*x)*(*x)-1.732050808)*(*x);
+      case 4 : return (0.816496581*(*x)*(*x)-2.449489743)*(*x)*(*x)+0.612372436;
+      case 5 : return ((0.516397779*(*x)*(*x)-2.581988897)*(*x)*(*x)+1.936491673)*(*x);
 
-  default : return 1;
+      default : return 1;
   }
 }
 
-DEFINE_BASIS( Hermite, 2)
-DEFINE_BASIS( Hermite, 3)
-DEFINE_BASIS( Hermite, 4)
-DEFINE_BASIS( Hermite, 5)
-DEFINE_BASIS( Hermite, 6)
-DEFINE_BASIS( Hermite, 7)
-DEFINE_BASIS( Hermite, 8)
-DEFINE_BASIS( Hermite, 9)
-DEFINE_BASIS( Hermite, 10)
+/**
+ *  First derivative of the Hermite polynomials
+ *  @ param x the address of a real number
+ *  @ param ind the index of the polynom whose derivative is to be evaluated
+ */
+static double _DHermiteD1(double *x, int ind)
+{
+  switch (ind){
+      case 0 : return 0;
+      case 1 : return 1.414213562;
+      case 2 : return 2*1.414213562*(*x);
+      case 3 : return 3*1.154700538*(*x)*(*x)-1.732050808;
+      case 4 : return 4*0.816496581*(*x)*(*x)*(*x)-2*2.449489743*(*x);
+      case 5 : return 5*0.516397779*(*x)*(*x)*(*x)*(*x)-3*2.581988897*(*x)*(*x)+1.936491673;
+
+      default : return 1;
+  }
+}
+
+static double DHermiteD1(double *x, int ind, int i)
+{
+  return _DHermiteD1(x, ind);
+}
+/**
+ *  Second derivative of the Hermite polynomials
+ *  @ param x the address of a real number
+ *  @ param ind the index of the polynom whose second derivative is to be evaluated
+ */
+static double _DDHermiteD1(double *x, int ind)
+{
+  switch (ind){
+      case 0 : return 0;
+      case 1 : return 0;
+      case 2 : return 2*1.414213562;
+      case 3 : return 6*1.154700538*(*x);
+      case 4 : return 12*0.816496581*(*x)*(*x)-2*2.449489743;
+      case 5 : return 20*0.516397779*(*x)*(*x)*(*x)-6*2.581988897*(*x);
+
+      default : return 1;
+  }
+}
+
+static double DDHermiteD1(double *x, int ind, int i, int j)
+{
+  return _DDHermiteD1(x, ind);
+}
+
+DEFINE_BASIS_COMPUTES( Hermite, 2);
+DEFINE_BASIS_COMPUTES( Hermite, 3);
+DEFINE_BASIS_COMPUTES( Hermite, 4);
+DEFINE_BASIS_COMPUTES( Hermite, 5);
+DEFINE_BASIS_COMPUTES( Hermite, 6);
+DEFINE_BASIS_COMPUTES( Hermite, 7);
+DEFINE_BASIS_COMPUTES( Hermite, 8);
+DEFINE_BASIS_COMPUTES( Hermite, 9);
+DEFINE_BASIS_COMPUTES( Hermite, 10);
 
 
 /*
  * Tchebychev basis, dimension=1..10
+ */
+/**
+ *  Tchebytchev polynomials
+ *  @ param x the address of a real number
+ *  @ param ind the index of the polynom to be evaluated
  */
 static double TchebychevD1(double *x, int ind)
 {
@@ -376,37 +397,205 @@ static double TchebychevD1(double *x, int ind)
   double val2, val3, val4;
   switch (ind)
     {
-    case 0 : return 1.;
-    case 1 : return val;
-    case 2 : return 2. * val * val - 1.;
-    case 3 : return (4. * val * val - 3.) * val;
-    case 4 :
-      val2 = val * val;
-      return 8. * val2 * val2 - 8. * val2 + 1.;
-    case 5 :
-      val2 = val * val; val3 = val2 * val;
-      return 16. * val3 * val2 - 20. * val3 + 5.* val;
-    case 6 :
-      val2 = val * val; val4 = val2 * val2;
-      return 32. * val4 * val2 - 48. * val4 + 18. * val2 - 1;
-    default : return 1.;
+      case 0 :
+        return 1.;
+      case 1 :
+        return val;
+      case 2 :
+        return 2. * val * val - 1.;
+      case 3 :
+        return (4. * val * val - 3.) * val;
+      case 4 :
+        val2 = val * val;
+        return 8. * val2 * val2 - 8. * val2 + 1.;
+        break;
+      case 5 :
+        val2 = val * val; val3 = val2 * val;
+        return 16. * val3 * val2 - 20. * val3 + 5.* val;
+      case 6 :
+        val2 = val * val; val4 = val2 * val2;
+        return 32. * val4 * val2 - 48. * val4 + 18. * val2 - 1;
+      case 7 :
+        val2 = val * val; val3 = val2 * val; val4 = val2 * val2;
+        return (64. * val4 - 112. * val2 + 56) * val3 - 7. * val;
+      default : PNL_ERROR ("order exceeded", "TchebytchevD1");
     }
 }
 
-DEFINE_BASIS( Tchebychev, 2)
-DEFINE_BASIS( Tchebychev, 3)
-DEFINE_BASIS( Tchebychev, 4)
-DEFINE_BASIS( Tchebychev, 5)
-DEFINE_BASIS( Tchebychev, 6)
-DEFINE_BASIS( Tchebychev, 7)
-DEFINE_BASIS( Tchebychev, 8)
-DEFINE_BASIS( Tchebychev, 9)
-DEFINE_BASIS( Tchebychev, 10)
+/**
+ *  First derivative of the Tchebytchev polynomials
+ *  @ param x the address of a real number
+ *  @ param ind the index of the polynom whose first derivative is to be evaluated
+ */
+static double _DTchebychevD1(double *x, int ind)
+{
+  double val = *x;
+  double val2, val3, val4;
+  switch (ind)
+    {
+      case 0 :
+        return 0.;
+      case 1 :
+        return 1.;
+      case 2 :
+        return 4. * val;
+      case 3 :
+        return (12. * val * val - 3.);
+      case 4 :
+        return (32. * val * val - 16.) * val;
+      case 5 :
+        val2 = val * val;
+        return 80. * val2 * val2 - 60. * val2 + 5.;
+      case 6 :
+        val2 = val * val; val4 = val2 * val2;
+        return (192. * val4 - 192. * val2 + 36.) * val;
+      case 7 :
+        val2 = val * val; val3 = val2 * val; val4 = val2 * val2;
+        return (448. * val4 - 560. * val2 + 168) * val2 - 7.;
+      default : PNL_ERROR ("order exceeded", "DTchebytchevD1");
+    }
+}
+
+static double DTchebychevD1(double *x, int ind, int i)
+{
+  return _DTchebychevD1(x, ind);
+}
+/**
+ *  Second derivative of the Tchebytchev polynomials
+ *  @ param x the address of a real number
+ *  @ param ind the index of the polynom whose second derivative is to be evaluated
+ */
+static double _DDTchebychevD1(double *x, int ind)
+{
+  double val = *x;
+  double val2, val3, val4;
+  switch (ind)
+    {
+      case 0 :
+        return 0.;
+      case 1 :
+        return 0.;
+      case 2 :
+        return 4.;
+      case 3 :
+        return 24. * val;
+      case 4 :
+        return (96. * val * val - 16.);
+      case 5 :
+        val2 = val * val;
+        return 240. * val2 * val - 160. * val;
+      case 6 :
+        val2 = val * val; val4 = val2 * val2;
+        return (960. * val4 - 576. * val2 + 36.);
+      case 7 :
+        val2 = val * val; val3 = val2 * val; val4 = val2 * val2;
+        return (2688. * val4 - 2240. * val2 + 336) * val;
+      default : PNL_ERROR ("order exceeded", "DDTchebytchevD1");
+    }
+}
+
+static double DDTchebychevD1(double *x, int ind, int i, int j)
+{
+  return _DDTchebychevD1(x, ind);
+}
+
+DEFINE_BASIS_COMPUTES( Tchebychev, 2);
+DEFINE_BASIS_COMPUTES( Tchebychev, 3);
+DEFINE_BASIS_COMPUTES( Tchebychev, 4);
+DEFINE_BASIS_COMPUTES( Tchebychev, 5);
+DEFINE_BASIS_COMPUTES( Tchebychev, 6);
+DEFINE_BASIS_COMPUTES( Tchebychev, 7);
+DEFINE_BASIS_COMPUTES( Tchebychev, 8);
+DEFINE_BASIS_COMPUTES( Tchebychev, 9);
+DEFINE_BASIS_COMPUTES( Tchebychev, 10);
+
+
+#define DEFINE_BASIS(name, d, maxdim) \
+{ #name, d, maxdim, name##D##d, D##name##D##d, DD##name##D##d }
+
+static PnlBasis Bases_tab[]=
+{
+  DEFINE_BASIS (Hermite, 1, DimBasisDefaultHD1),
+  DEFINE_BASIS (Hermite, 2, DimBasisDefaultHD2),
+  DEFINE_BASIS (Hermite, 3, DimBasisDefaultHD3),
+  DEFINE_BASIS (Hermite, 4, DimBasisDefaultHD4),
+  DEFINE_BASIS (Hermite, 5, DimBasisDefaultHD5),
+  DEFINE_BASIS (Hermite, 6, DimBasisDefaultHD6),
+  DEFINE_BASIS (Hermite, 7, DimBasisDefaultHD7),
+  DEFINE_BASIS (Hermite, 8, DimBasisDefaultHD8),
+  DEFINE_BASIS (Hermite, 9, DimBasisDefaultHD9),
+  DEFINE_BASIS (Hermite, 10, DimBasisDefaultHD10),
+  DEFINE_BASIS (Canonical, 1, DimBasisDefaultD1),
+  DEFINE_BASIS (Canonical, 2, DimBasisDefaultD2),
+  DEFINE_BASIS (Canonical, 3, DimBasisDefaultD3),
+  DEFINE_BASIS (Canonical, 4, DimBasisDefaultD4),
+  DEFINE_BASIS (Canonical, 5, DimBasisDefaultD5),
+  DEFINE_BASIS (Canonical, 6, DimBasisDefaultD6),
+  DEFINE_BASIS (Canonical, 7, DimBasisDefaultD7),
+  DEFINE_BASIS (Canonical, 8, DimBasisDefaultD8),
+  DEFINE_BASIS (Canonical, 9, DimBasisDefaultD9),
+  DEFINE_BASIS (Canonical, 10, DimBasisDefaultD10),
+  DEFINE_BASIS (Tchebychev, 1, DimBasisDefaultD1),
+  DEFINE_BASIS (Tchebychev, 2, DimBasisDefaultD2),
+  DEFINE_BASIS (Tchebychev, 3, DimBasisDefaultD3),
+  DEFINE_BASIS (Tchebychev, 4, DimBasisDefaultD4),
+  DEFINE_BASIS (Tchebychev, 5, DimBasisDefaultD5),
+  DEFINE_BASIS (Tchebychev, 6, DimBasisDefaultD6),
+  DEFINE_BASIS (Tchebychev, 7, DimBasisDefaultD7),
+  DEFINE_BASIS (Tchebychev, 8, DimBasisDefaultD8),
+  DEFINE_BASIS (Tchebychev, 9, DimBasisDefaultD9),
+  DEFINE_BASIS (Tchebychev, 10, DimBasisDefaultD10),
+  {NULL, NULLINT, NULLINT, NULL, NULL, NULL},
+};
+
+enum_member _reg_basis [] =
+{
+    { "Canonical", CANONICAL},
+    { "Hermite", HERMITIAN},
+    { "Tchebychev", TCHEBYCHEV},
+    { NULL, NULLINT},
+};
+
+DEFINE_ENUM( PnlBases, _reg_basis);
+
+/**
+ * identify_basis returns a pointer of function
+ * double fake (double *, int)
+ *
+ * @param index the index of the family to be used
+ * @param nb_func the maximum number of functions which may be used
+ * @param space_dim the size of the space in which the basis functions are
+ * defined
+ * @return a PnlBasis
+ */
+PnlBasis*  pnl_init_basis ( int index, int nb_func, int space_dim)
+{
+  enum_member *e = _reg_basis;
+  PnlBasis *b = Bases_tab;
+
+  while (e->label != NULL && e->key != index) { e++; }
+  if (e->label == NULL )
+    {
+      printf ("No basis found : index exceeded\n"); abort();
+    }
+
+  while (b->label != NULL)
+    {
+      if ( strcmp (e->label, b->label) == 0 &&
+          space_dim == b->space_dim &&
+          nb_func <= b->max_dim )
+        return b;
+      else
+        b++;
+    }
+  printf ("No basis found : size exceeded \n"); abort();
+  return NULL;
+}
 
 
 /**
  * Finds the best approximation of function defined by f(x(i,:)) = y(i)
- * 
+ *
  * @param f a PnlBasis
  * @param x the matrix of points at which we know the value of the function. One line
  * of the matrix is the vector of the coordinates of one point
@@ -416,13 +605,13 @@ DEFINE_BASIS( Tchebychev, 10)
  *
  * @return OK or FAIL
  */
-int pnl_fit_least_squares (PnlVect *coef, PnlMat *x, PnlVect *y, PnlBasis *f, int nb_func)
+int pnl_fit_least_squares (PnlVect *coef, PnlMat *x, PnlVect *y, PnlBasis *basis, int nb_func)
 {
   int N, i, k;
   double b_k;
   PnlMat *A;
   PnlVect *phi_k;
-  
+
   N = y->size;
   pnl_vect_resize_from_double (coef, nb_func, 0.);
   phi_k = pnl_vect_create_from_double (nb_func, 0.);
@@ -433,7 +622,7 @@ int pnl_fit_least_squares (PnlVect *coef, PnlMat *x, PnlVect *y, PnlBasis *f, in
     {
       for (k=0; k<nb_func; k++)
         {
-          double tmp = (*f)(pnl_mat_lget(x, i, 0), k);
+          double tmp = (basis->f)(pnl_mat_lget(x, i, 0), k);
           b_k =  pnl_vect_get(coef, k);
           b_k += tmp * pnl_vect_get (y, i);
           pnl_vect_set (coef, k, b_k);
@@ -465,7 +654,7 @@ int pnl_fit_least_squares (PnlVect *coef, PnlMat *x, PnlVect *y, PnlBasis *f, in
  *
  * @return sum (coef .* f(x))
  */
-double pnl_basis_eval (PnlVect *coef, double *x, PnlBasis *f)
+double pnl_basis_eval (PnlVect *coef, double *x, PnlBasis *basis)
 {
   int i;
   double y;
@@ -473,7 +662,7 @@ double pnl_basis_eval (PnlVect *coef, double *x, PnlBasis *f)
   y = 0;
   for (i=0; i<coef->size; i++)
     {
-      y += pnl_vect_get (coef, i) * (*f)(x, i);
+      y += pnl_vect_get (coef, i) * (basis->f)(x, i);
     }
   return y;
 }
@@ -482,7 +671,7 @@ double pnl_basis_eval (PnlVect *coef, double *x, PnlBasis *f)
 /*
  * these undef must be at the end of the file
  */
-   
+
 #undef DimBasisDefaultHD1
 #undef DimBasisDefaultHD2
 #undef DimBasisDefaultHD3
