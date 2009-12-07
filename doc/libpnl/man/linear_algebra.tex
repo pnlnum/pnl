@@ -1671,9 +1671,9 @@ not so clear.
 
 
 
-\item \describefun{void}{pnl_sparse_mat_map_inplace}{\refstruct{PnlSparseMat} $\ast$lhs, double($\ast$f)(double)}
-  \sshortdescribe Same function as \reffun{pnl_sparse_mat_map} but the result is
-  stored in \var{lhs} itself.
+\item \describefun{void}{pnl_sparse_mat_map_inplace}{\refstruct{PnlSparseMat} $\ast$M, double($\ast$f)(double)}
+  \sshortdescribe Applies function \var{f} to each entry of \var{M}, which
+  is modified on exit.
 \end{itemize}
 
 
@@ -1682,9 +1682,11 @@ not so clear.
 \item \describefun{int}{pnl_sparse_mat_gaxpby}{\refstruct{PnlVect} $\ast$lhs, 
     const \refstruct{PnlSparseMat} $\ast$M, const \refstruct{PnlVect}
     $\ast$rhs}
-  \sshortdescribe Compute $lhs=lhs+ M \ rhs$.
-\item \describefun{int}{pnl_sparse_mat_mult_vect_inplace}{\refstruct{PnlVect} $\ast$lhs, const \refstruct{PnlSparseMat} $\ast$M, const \refstruct{PnlVect} $\ast$rhs}
-  \sshortdescribe Compute $lhs= M \ rhs$.
+  \sshortdescribe Computes $lhs=lhs+ M * rhs$.
+\item \describefun{int}{pnl_sparse_mat_mult_vect_inplace}{\refstruct{PnlVect}
+    $\ast$lhs, const \refstruct{PnlSparseMat} $\ast$M, const
+    \refstruct{PnlVect} $\ast$rhs}
+  \sshortdescribe Computes $lhs= M * rhs$.
 \end{itemize}
 
 \subsubsection{LU structure}
@@ -1728,7 +1730,7 @@ first $r$ powers of $M$ (starting from $M^0 = Id$), that is,
 $$  \mathcal{K}_r(M, b) = \operatorname{span} \, \left\{ b, M b, M^2b,
   \ldots, M^{r-1}b\right\}.$$ 
 
-the main idea of iterative methods or Krylov subspace methods is to form an
+The main idea of iterative methods or Krylov subspace methods is to form an
 orthogonal basis of the sequence of successive matrix powers times the initial
 residual (the Krylov sequence). The approximations to the solution are then
 formed by minimizing the residual over the subspace formed.  The prototypical
@@ -1789,7 +1791,7 @@ matrix vector multiplication as a parameter of the solver.
 
 \paragraph{Conjugate Gradient method}
 
-Use only for symmetric and positive matrix.
+Only available for symmetric and positive matrix.
 \begin{itemize}
 \item 
   \describefun{\refstruct{PnlCGSolver} $\ast$}{pnl_cg_solver_create}{int Size, int max-iter, double tolerance}
@@ -1799,7 +1801,7 @@ Use only for symmetric and positive matrix.
 \item \describefun{void}{pnl_cg_solver_free}{\refstruct{PnlCGSolver} $\ast$$\ast$Solver}
   \sshortdescribe Destructor of iterative solver  
 \item \describefun{int}{pnl_cg_solver_solve}{void($\ast$matrix vector-product)(const void $\ast$, const \refstruct{PnlVect} $\ast$, const double, const double, \refstruct{PnlVect} $\ast$), const void $\ast$Matrix-Data, void($\ast$matrix vector-product-PC)(const void $\ast$, const \refstruct{PnlVect} $\ast$, const double, const double, \refstruct{PnlVect} $\ast$), const void $\ast$PC-Data, \refstruct{PnlVect} $\ast$x, const \refstruct{PnlVect} $\ast$b, \refstruct{PnlCGSolver} $\ast$Solver}
-  \sshortdescribe Solve the linear system matrix vector-product is the matrix vector multiplication function matrix vector-product-PC is the preconditionner function Matrix-Data \& PC-Data is data to compute matrix vector multiplication.  
+  \sshortdescribe Solves the linear system matrix vector-product is the matrix vector multiplication function matrix vector-product-PC is the preconditionner function Matrix-Data \& PC-Data is data to compute matrix vector multiplication.  
 \end{itemize}
 \paragraph{BICG stab}
 \begin{itemize}
