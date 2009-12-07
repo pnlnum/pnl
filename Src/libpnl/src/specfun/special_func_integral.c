@@ -19,12 +19,6 @@
 /* along with this program.  If not, see <http://www.gnu.org/licenses/>. */ 
 /*************************************************************************/
 
-/*
- * Most of the following functions originally comes from 
- * (C) Copr. 1986-92 Numerical Recipes Software A2.>$Y0%9j.
- */
-
-
 #define SPECFUNC_EPS 3.0e-7
 /*Relative accurancy for incomplete gamma function  */ 
 #define SPECFUNC_ITMAX 100
@@ -32,7 +26,6 @@
 #define SPECFUNC_FPMIN 1.0e-30 
 /*Number near the smallest representable floatting-point number  for incomplete gamma function*/
 
-/* (C) Copr. 1986-92 Numerical Recipes Software A2.>$Y0%9j. */
 static void gamma_inc_compute_P(double * res,double a,double x,double lnga)
 {
      
@@ -58,7 +51,6 @@ static void gamma_inc_compute_P(double * res,double a,double x,double lnga)
   }
 }
 
-/* (C) Copr. 1986-92 Numerical Recipes Software A2.>$Y0%9j. */
 static void gamma_inc_compute_Q(double * res,double a,double x,double lnga)
 {
      
@@ -133,7 +125,6 @@ double pnl_gamma_inc_func(double a,double x)
  * @param P a pointer on double
  * @param Q a pointer on double
  */
-/* (C) Copr. 1986-92 Numerical Recipes Software A2.>$Y0%9j. */
 void pnl_gamma_inc(double a,double x,double * Ga,double *P,double *Q)
 {
   double lgamma_a,res;
@@ -167,7 +158,6 @@ void pnl_gamma_inc(double a,double x,double * Ga,double *P,double *Q)
  * @param x double
  * @return int_1^{infty} u^{-n} exp(-x u) du
  */
-/* (C) Copr. 1986-92 Numerical Recipes Software A2.>$Y0%9j. */
 double pnl_expint_En(int n,double x)
 {
   int i,j,nm1;
@@ -231,7 +221,6 @@ double pnl_expint_En(int n,double x)
  * @param x double
  * @return - int_{-x}^{infty} exp(-u)/u du x>0
  */
-/* (C) Copr. 1986-92 Numerical Recipes Software A2.>$Y0%9j. */
 double pnl_expint_Ei(double x)
 {
   int i;
