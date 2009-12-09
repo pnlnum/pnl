@@ -4,16 +4,15 @@
 
 all:  shared-win32 
 
-ARCS=libamos/.libs/libamos.a libcephes/.libs/libcephes.a \
+ARCS=libamos/.libs/libamos.a \
 	 librand/.libs/librand.a libcsparse/.libs/libcsparse.a \
 	 linalg/.libs/liblinalg.a  libfftpack/.libs/libfftpack.a \
-	 sort/.libs/libsort.a ../lib/libblas.dll \
-	 ../lib/liblapack.dll -lstdc++  -lm
+	 sort/.libs/libsort.a libspecfun/.libs/libspecfun.a \
+	 ../lib/libblas.dll ../lib/liblapack.dll -lstdc++  -lm
 
-OBJS = basis.o pnl_complex.o cumulfunc.o mathtools.o laplace.o			\
-finance_function.o brent.o roots.o pde_tools.o integration_GK.o			\
-sparse_grid_constructor.o gridsparse_constructor.o 						\
-gridsparse_functions.o special_func_integral.o
+OBJS = basis.o pnl_complex.o cumulfunc.o mathtools.o laplace.o	\
+	   finance_function.o brent.o roots.o							\
+	   integ.o	 integration_GK.o laplace.o
 
 shared-win32:: $(OBJS) 
 	gcc -mno-cygwin -shared -o libpnl.dll $(OBJS) \
