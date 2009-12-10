@@ -13,5 +13,5 @@ dlamch.c
 
 dlamch.lo: dlamch.c
 	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) -Wall -O0 -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $< 
-	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
+	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
 
