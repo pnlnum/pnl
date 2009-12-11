@@ -7,7 +7,7 @@ all:  shared-win32
 ARCS=libamos/.libs/libamos.a \
 	 librand/.libs/librand.a libcsparse/.libs/libcsparse.a \
 	 linalg/.libs/liblinalg.a  libfftpack/.libs/libfftpack.a \
-	 sort/.libs/libsort.a libspecfun/.libs/libspecfun.a \
+	 sort/.libs/libsort.a specfun/.libs/libspecfun.a \
 	 ../lib/libblas.dll ../lib/liblapack.dll -lstdc++  -lm
 
 OBJS = basis.o pnl_complex.o cumulfunc.o mathtools.o laplace.o	\
