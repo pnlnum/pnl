@@ -92,7 +92,8 @@ PnlVectCompact* pnl_vect_compact_copy(const PnlVectCompact *v)
  */
 void pnl_vect_compact_free (PnlVectCompact **v)
 {
-  if ((*v)->convert == 'a')
+  if ((*v) == NULL) return;
+  if ((*v)->convert == 'a' && (*v)->array!= NULL)
     {
       free ((*v)->array); (*v)->array = NULL;
     }
