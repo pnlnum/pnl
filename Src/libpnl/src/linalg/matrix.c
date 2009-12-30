@@ -795,7 +795,7 @@ void pnl_mat_exp (PnlMat *B, const PnlMat *A)
   for (j=0; j<A->m; j++)
     {
       for (i=0; i<A->m; i++)
-        work[i] += work[i] + fabs( pnl_mat_get(A,i,j) );      
+        work[i] += fabs( pnl_mat_get(A,i,j) );      
     }
 
   hnorm = 0.;
@@ -811,7 +811,7 @@ void pnl_mat_exp (PnlMat *B, const PnlMat *A)
       return;
     }
   ns = MAX( 0, (int)(log(hnorm)/log(2.)) + 2 );
-  scale = 1. / pow(2., ns);
+  scale = 1. / pnl_pow_i (2., ns);
   scale2 = scale*scale;
 
   /*  compute Pade coefficients ... */
