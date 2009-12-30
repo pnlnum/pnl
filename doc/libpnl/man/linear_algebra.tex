@@ -570,6 +570,11 @@ the above table.
   \sshortdescribe Sets the matrix \var{self} to the identity
   matrix. \var{self} must be a square matrix.
 
+\item \describefun{void}{pnl_mat_set_diag}{\refstruct{PnlMat} $\ast$self,
+    double x, int d}
+  \sshortdescribe Sets the $\var{d}^{\text{th}}$ diagonal terms of the matrix
+  \var{self} to the value \var{x}. \var{self} must be a square matrix.
+
 \item \describefun{\refstruct{PnlVect}}{pnl_mat_wrap_row}
   {const \refstruct{PnlMat} $\ast$M, int i}
   \sshortdescribe Returns a \refstruct{PnlVect} (not a pointer) whose array is
