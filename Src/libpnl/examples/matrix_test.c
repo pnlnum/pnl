@@ -92,6 +92,35 @@ static void pnl_mat_create_from_ptr_test()
   pnl_mat_free(&M);
 }
 
+static void pnl_mat_set_diag_test ()
+{
+  int d, n;
+  double x;
+  PnlMat *M;
+
+  n = 8;
+  x = 5.;
+  M = pnl_mat_create (n, n);
+
+  d = 0;
+  pnl_mat_set_double (M, 0.);
+  pnl_mat_set_diag (M, x, d);
+  pnl_mat_print (M);
+  printf ("\n");
+
+  d = 3;
+  pnl_mat_set_double (M, 0.);
+  pnl_mat_set_diag (M, x, d);
+  pnl_mat_print (M);
+  printf ("\n");
+
+  d = -2;
+  pnl_mat_set_double (M, 0.);
+  pnl_mat_set_diag (M, x, d);
+  pnl_mat_print (M);
+  printf ("\n");
+}
+
 static void pnl_mat_copy_test()
 {
   PnlMat *M1;
@@ -916,6 +945,7 @@ static tst_list mat_tests[] =
     MAKE_ENUM(pnl_mat_lget_test),
     MAKE_ENUM(pnl_mat_create_from_double_test),
     MAKE_ENUM(pnl_mat_create_from_ptr_test),
+    MAKE_ENUM(pnl_mat_set_diag_test),
     MAKE_ENUM(pnl_mat_copy_test),
     MAKE_ENUM(pnl_mat_clone_test),
     MAKE_ENUM(pnl_mat_resize_test),
