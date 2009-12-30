@@ -402,6 +402,21 @@ void FUNCTION(pnl_mat,set_id)(TYPE(PnlMat) *lhs)
     }
 }
 
+/**
+ * in-place set matrix to identity
+ *
+ * @param lhs : left hand side matrix
+ * 
+ */
+void FUNCTION(pnl_mat,set_diag)(TYPE(PnlMat) *lhs, BASE x, int d)
+{
+  int i;
+  CheckIsSquare (lhs);
+  for ( i=MAX(0, -d) ; i<lhs->m + MIN(0, -d) ; i++ )
+    {
+      FUNCTION(pnl_mat, set) (lhs, i, i+d, x);
+    }
+}
 
 
 /**

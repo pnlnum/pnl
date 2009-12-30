@@ -60,6 +60,7 @@ extern PnlMatComplex* pnl_mat_complex_copy(const PnlMatComplex *v);
 extern void pnl_mat_complex_clone(PnlMatComplex *clone, const PnlMatComplex *M);
 extern void pnl_mat_complex_set_dcomplex(PnlMatComplex *lhs, dcomplex x);/*lhs=x*/
 extern void pnl_mat_complex_set_id(PnlMatComplex *lhs);
+extern void pnl_mat_complex_set_diag(PnlMatComplex *lhs, dcomplex x, int d);
 extern PnlMatComplex* pnl_mat_complex_transpose(const PnlMatComplex *M);
 extern void pnl_mat_complex_sq_transpose(PnlMatComplex *M);
 extern void pnl_mat_complex_print(const PnlMatComplex *M);

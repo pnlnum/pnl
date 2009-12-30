@@ -60,6 +60,7 @@ extern PnlMatUint* pnl_mat_uint_copy(const PnlMatUint *v);
 extern void pnl_mat_uint_clone(PnlMatUint *clone, const PnlMatUint *M);
 extern void pnl_mat_uint_set_uint(PnlMatUint *lhs, uint x);/*lhs=x*/
 extern void pnl_mat_uint_set_id(PnlMatUint *lhs);
+extern void pnl_mat_uint_set_diag(PnlMatUint *lhs, uint x, int d);
 extern PnlMatUint* pnl_mat_uint_transpose(const PnlMatUint *M);
 extern void pnl_mat_uint_sq_transpose(PnlMatUint *M);
 extern void pnl_mat_uint_print(const PnlMatUint *M);
