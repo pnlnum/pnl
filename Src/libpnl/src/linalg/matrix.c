@@ -24,6 +24,7 @@
 #include <math.h>
 
 #define PNL_MATRIX_PRIVATE
+#include "config.h"
 #include "pnl_matrix.h"
 #include "pnl_mathtools.h"
 
