@@ -27,7 +27,7 @@
  * @param x1 rightt corner of domain
  * @param n the number of steps to be used
  * @param meth a character string can be "rect" (rectangle rule), "trap"
- * (rapezoidal rule), "simpson" (Simpson's rule)
+ * (trapezoidal rule), "simpson" (Simpson's rule)
  * @return the value of the integral
  */
 double pnl_integration (const PnlFunc *F, double x0, double x1, int n, char *meth)
