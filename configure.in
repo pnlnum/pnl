@@ -264,14 +264,16 @@ if test "x$with_blas" != "xno"; then
    ACX_BLAS([USE_BLAS=yes])
 
    if test "$USE_BLAS" = yes; then 
-     AM_CFLAGS="$AM_CFLAGS -DHAVE_BLAS"
+     AM_CFLAGS="$AM_CFLAGS"
+     AC_DEFINE(HAVE_BLAS,[],[Use Blas])
    fi
 
    builtin(include,config/acx_lapack.m4)
    ACX_LAPACK([USE_LAPACK=yes])
 
    if test "$USE_LAPACK" = yes; then 
-     AM_CFLAGS="$AM_CFLAGS -DHAVE_LAPACK"
+     AM_CFLAGS="$AM_CFLAGS"
+     AC_DEFINE(HAVE_LAPACK,[],[Use Lapack])
    fi
 fi
 
@@ -324,7 +326,6 @@ AC_TRY_COMPILE([#define C2F(name) name##_],
   AC_MSG_RESULT(yes)
   AC_DEFINE(USE_SHARP_SIGN,[],[sharp sign can be used to in macros]),
   AC_MSG_RESULT(no))
-
 
 
 ########################################################
