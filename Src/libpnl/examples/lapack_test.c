@@ -149,6 +149,38 @@ static void pnl_mat_ls_test ()
   pnl_vect_free (&b);
 }
 
+static void pnl_mat_qr_test ()
+{
+  PnlMat *A, *Q, *R;
+  PnlPermutation *p;
+  int m, gen;
+  m = 5;
+  gen = PNL_RNG_MERSENNE_RANDOM_SEED;
+  p = pnl_permutation_create (m);
+  A = pnl_mat_create (m, m);
+  Q = pnl_mat_create (m, m);
+  R = pnl_mat_create (m, m);
+  pnl_rand_init (gen, m, m);
+  pnl_mat_rand_uni2 (A, m, m, 0, 1, gen);
+
+  printf("QR Decomposition\n");
+  printf ("A = "); pnl_mat_print_nsp (A);
+  pnl_mat_qr (Q, R, NULL, A);
+  printf ("Q = "); pnl_mat_print_nsp (Q);
+  printf ("R = "); pnl_mat_print_nsp (R);
+
+  printf("QR Decomposition with pivoting\n");
+  pnl_mat_qr (Q, R, p, A);
+  printf ("Q = "); pnl_mat_print_nsp (Q);
+  printf ("R = "); pnl_mat_print_nsp (R);
+  printf ("P = "); pnl_permutation_print (p);
+  
+  pnl_mat_free (&A);
+  pnl_mat_free (&Q);
+  pnl_mat_free (&R);
+  pnl_permutation_free (&p);
+}
+
 static void all_test ();
 static tst_list lapack_tests[] =
   {
@@ -156,6 +188,7 @@ static tst_list lapack_tests[] =
     MAKE_ENUM(pnl_mat_eigen_test),
     MAKE_ENUM(pnl_mat_log_test),
     MAKE_ENUM(pnl_mat_ls_test),
+    MAKE_ENUM(pnl_mat_qr_test),
     MAKE_ENUM(NULL)
   };
 
