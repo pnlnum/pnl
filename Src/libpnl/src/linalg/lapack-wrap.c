@@ -25,6 +25,7 @@
 #include <string.h>
 
 #include "config.h"
+#include "pnl_internals.h"
 #include "pnl_mathtools.h"
 #include "pnl_matrix.h"
 #include "pnl_vector.h"
@@ -40,7 +41,10 @@ extern int C2F(dgetrf) (int *m, int *n, double *A, int *lda, int *ipvi, int *inf
 extern int C2F(dgeev) (char *jobvl, char *jobvr, int *n, double *a, int *lda, double *wr, double *wi, double *vl, int *ldvl, double *vr, int *ldvr, double *work, int *lwork, int *info);
 extern int C2F(dsyev) (char *jobz, char *uplo, int *n, double *a, int *lda, double *w, double *work, int *lwork, int *info);
 extern int C2F(dgelsy)(int *m, int *n, int *nrhs, double *A, int *lda, double *B, int *ldb, int *jpvt, double *rcond, int *rank, double *work, int *lwork, int *info);
-
+extern int C2F(dgeqrf) (int *m, int *n, double *A, int *lda, double *tau, double *work, int *lwork, int *info);
+extern int C2F(dorgqr) (int *m, int *n, int *k, double *Q, int *lda, double *tau, double *work, int *lwork, int *info);
+extern int C2F(dgeqp3) (int *m, int *n, double *A, int *lda, int *jpvt, double *tau, double *work, int *lwork, int *info);
+                      
 /* Pnl wrappers */
 static int pnl_dgeev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors);
 static int pnl_dsyev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors);
@@ -65,6 +69,22 @@ static int pnl_mat_is_sym (const PnlMat *A)
 }
 
 /**
+ * Puts 0 in the lower triangular part of a square matrix
+ * @param A a real matrix
+ */
+static void pnl_mat_make_upper (PnlMat *A)
+{
+  int i, j;
+  for ( i=1 ; i<A->m ; i++ )
+    {
+      for ( j=0 ; j<i ; j++ )
+        {
+          pnl_mat_set (A, i, j, 0.);
+        }
+    }
+}
+
+/**
  * computes a P A = LU factoristion. On exit A contains the L and U
  * matrices. Note that the diagonal elemets of L are all 1.
  *
@@ -77,7 +97,7 @@ void pnl_mat_lu (PnlMat *A, PnlPermutation *p)
   int *invpiv;
   
   CheckIsSquare(A);
-  invpiv = malloc (N * sizeof(int));
+  invpiv = MALLOC_INT(N);
   pnl_permutation_init (p);
 
   pnl_mat_sq_transpose (A);
@@ -101,6 +121,84 @@ void pnl_mat_lu (PnlMat *A, PnlPermutation *p)
         }
     }
   free (invpiv);
+}
+
+/**
+ * computes a P A = LU factoristion. On exit A contains the L and U
+ * matrices. Note that the diagonal elemets of L are all 1.
+ *
+ * @param Q an orthogonal matrix on exit
+ * @param R an upper triangular matrix on exit
+ * @param p a PnlPermutation. If p is NULL no permutation is computed.
+ * @param A the matrix to decompose. PA = QR
+ *
+ */
+void pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
+{
+  double *tau, *work, qlwork;
+  int     lwork, info, m, i;
+  CheckIsSquare (A);
+
+  tau = NULL;
+  work = NULL;
+  m = A->m;
+  pnl_mat_clone (R, A);
+  pnl_mat_sq_transpose (R);
+  tau=MALLOC_DOUBLE(m);
+  
+  if ( p == NULL )
+    {
+      lwork = -1;
+      C2F(dgeqrf) (&m, &m, R->array, &m, tau, &qlwork, &lwork, &info);
+      if ( info != 0 )
+        {
+          PNL_ERROR ("QR decomposition cannot be computed", "pnl_mat_qr");
+        }
+      lwork = (int) qlwork;
+      work=MALLOC_DOUBLE(lwork);
+      C2F(dgeqrf) (&m, &m, R->array, &m, tau, work, &lwork, &info);
+      if ( info != 0 )
+        {
+          PNL_ERROR ("QR decomposition cannot be computed", "pnl_mat_qr");
+        }
+    }
+  else
+    {
+      for (i = 0; i < m ; i++) p->array[i]= 0;
+      lwork = -1;
+      C2F(dgeqp3)(&m, &m, R->array, &m, p->array, tau, &qlwork, &lwork, &info);
+      if ( info != 0 )
+        {
+          PNL_ERROR ("QR decomposition cannot be computed", "pnl_mat_qr");
+        }
+      lwork = (int) qlwork;
+      work=MALLOC_DOUBLE(lwork);
+      C2F(dgeqp3)(&m, &m, R->array, &m, p->array, tau, work, &lwork, &info);
+      if ( info != 0 )
+        {
+          PNL_ERROR ("QR decomposition cannot be computed", "pnl_mat_qr");
+        }
+    }
+
+  /* extract Q */
+  pnl_mat_clone (Q, R);
+  C2F(dorgqr)(&m, &m, &m, Q->array, &m, tau, work, &lwork, &info);
+  if ( info != 0 )
+    {
+      PNL_ERROR ("QR decomposition cannot be computed", "pnl_mat_qr");
+    }
+
+
+  /* reverse the matrix storage */
+  pnl_mat_sq_transpose (R);
+  pnl_mat_sq_transpose (Q);
+
+  /* extract R */
+  pnl_mat_make_upper (R);
+
+  
+  FREE (work);
+  FREE (tau);
 }
 
 
@@ -153,7 +251,7 @@ static int pnl_dsyev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvect
   C2F(dsyev)((with_eigenvectors==TRUE)?"V":"N", "L", &n, P->array, &n, v->array, 
              &qlwork, &lwork, &info);
   lwork = (int) qlwork;
-  if ( (work=malloc(sizeof(double)*lwork)) == NULL ) goto err;
+  if ( (work=MALLOC_DOUBLE(lwork)) == NULL ) goto err;
   C2F(dsyev)((with_eigenvectors==TRUE)?"V":"N", "L", &n, P->array, &n, v->array, 
              work, &lwork, &info);
 
@@ -191,8 +289,8 @@ static int pnl_dgeev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvect
   double *work=NULL, *wi=NULL, *input=NULL;
   double qlwork;
 
-  wi = malloc (n * sizeof(double));
-  input = malloc (A->mn * sizeof(double));
+  wi = MALLOC_DOUBLE(n);
+  input = MALLOC_DOUBLE(A->mn);
   if ( wi == NULL || input == NULL ) goto err;
   if ( with_eigenvectors == TRUE ) { pnl_mat_resize (P, n, n); }
   pnl_vect_resize (v, n);
@@ -205,7 +303,7 @@ static int pnl_dgeev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvect
              (with_eigenvectors==FALSE)?NULL:P->array, &n, NULL, &n,
              &qlwork, &lwork, &info);
   lwork = (int) qlwork;
-  if ( (work=malloc(sizeof(double)*lwork)) == NULL ) goto err;
+  if ( (work=MALLOC_DOUBLE(lwork)) == NULL ) goto err;
   C2F(dgeev)((with_eigenvectors==FALSE)?"N":"V", "N", &n, input, &n, v->array, wi,
              (with_eigenvectors==FALSE)?NULL:P->array, &n, NULL, &n,
              work, &lwork, &info);
@@ -314,7 +412,7 @@ int pnl_mat_ls_mat (const PnlMat *A, PnlMat *B)
      of Blas storage.
      X is matrix of size nrhs x ldb 
   */
-  if ( (X = malloc(sizeof(double) * ldb * nrhs)) == NULL) return FAIL;
+  if ( (X = MALLOC_DOUBLE(ldb * nrhs)) == NULL) return FAIL;
   for ( i=0 ; i<B->m ; i++ )
     for ( j=0 ; j<B->n ; j++ )
       {
@@ -327,7 +425,7 @@ int pnl_mat_ls_mat (const PnlMat *A, PnlMat *B)
 
   if ( info != 0 ) goto err;
   lwork = (int) qwork;
-  if ((work = malloc (sizeof(double)*lwork))==NULL || (jpvt = malloc (sizeof(int) * n))==NULL ) goto err;
+  if ((work = MALLOC_DOUBLE(lwork))==NULL || (jpvt = MALLOC_INT(n))==NULL ) goto err;
   for ( i=0 ; i<n ; i++ ) jpvt[i] = 0;
 
   C2F(dgelsy) (&m, &n, &nrhs, tA->array, &lda, X, &ldb, jpvt, &rcond, &rank, work, &lwork, &info);
@@ -339,13 +437,13 @@ int pnl_mat_ls_mat (const PnlMat *A, PnlMat *B)
         MLET(B, i, j) = X[j*ldb+i];
       }
   
-  free (work); free (jpvt); free(X);
+  FREE (work); FREE (jpvt); FREE(X);
   pnl_mat_free (&tA);
   return OK;
 
  err:
   pnl_mat_free (&tA);
-  free (work); free(jpvt);
+  FREE (work); FREE(jpvt);
   return FAIL;
 }
 

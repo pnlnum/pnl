@@ -221,6 +221,7 @@ extern void pnl_mat_read_matrix_from_file (PnlMat *M,const char * filename);
 extern void pnl_mat_exp (PnlMat *B, const PnlMat *A);
 extern void pnl_mat_log (PnlMat *B, const PnlMat *A);
 extern void pnl_mat_eigen (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors);
+extern void pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A);
 extern int pnl_mat_ls_mat (const PnlMat *A, PnlMat *B);
 extern int pnl_mat_ls (const PnlMat *A, PnlVect *b);
 
