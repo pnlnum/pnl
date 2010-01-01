@@ -895,6 +895,17 @@ using ``inplace'' functions.
   stored in \var{A}, the lower part of \var{A} contains L while the upper part
   (including the diagonal terms) contains U. Remember that the diagonal
   elements of $L$ are all $1$.
+  
+\item \describefun{void}{pnl_mat_qr}{\refstruct{PnlMat} $\ast$Q,
+    \refstruct{PnlMat} $\ast$R, \refstruct{PnlPermutation} $\ast$p,
+    \refstruct{PnlMat} $\ast$A} 
+  \sshortdescribe Computes a $A P = QR$ decomposition. If on entry $P=NULL$,
+  then the decomposition is computed without pivoting, i.e $A = QR$. When $P
+  \ne NULL$, \var{P} must be an already allocated
+  \refstruct{PnlPermutation}. \var{Q} is an orthogonal matrix, i.e
+  $\var{Q}^{-1} = \var{Q}^{T}$ and \var{R} is an upper triangualr matrix. The
+  use os pivoting improves the numerical stability when \var{A} is almost rank
+  deficient, i.e when the smallest eigenvalue of \var{A} is very close to $0$.
 
 \item \describefun{void}{pnl_mat_upper_syslin}{\refstruct{PnlVect}
     $\ast$x, const \refstruct{PnlMat} $\ast$U, const \refstruct{PnlVect}$\ast$b}
@@ -966,17 +977,20 @@ using ``inplace'' functions.
   exit. On exit, \var{A} contains the Cholesky decomposition of the input
   matrix which is lost.
 
+\item \describefun{void}{pnl_mat_ls}{\refstruct{PnlMat}$\ast$A, 
+    \refstruct{PnlVect} $\ast$b}
+  \sshortdescribe Solves a linear system A x = b in the least square sense,
+  i.e. $\var{x} = \arg\min_U \| A * u - b\|^2$. The solution is stored into
+  \var{b} on exit. It internally uses a $AP = QR$ decomposition.
+
 \item \describefun{void}{pnl_mat_ls_mat}{\refstruct{PnlMat}$\ast$A,
     \refstruct{PnlMat} $\ast$B}
   \sshortdescribe Solves a linear system A X = B with \var{A} and \var{B} two
   matrices in the least square sense, i.e. $\var{X} = \arg\min_U \| A * U -
-  B\|^2$. The solution is stored into B on exit.
+  B\|^2$. The solution is stored into \var{B} on exit. It internally uses a
+  $AP = QR$ decomposition. Same function as \reffun{pnl_mat_ls} but handles
+  several r.h.s.
 
-\item \describefun{void}{pnl_mat_ls}{\refstruct{PnlMat}$\ast$A, 
-    \refstruct{PnlVect} $\ast$b}
-  \sshortdescribe Solves a linear system A x = b in the least square sense,
-  i.e. $\var{x} = \arg\min_U \| A * u - b\|^2$. The solution is stored into b
-  on exit.
 \end{itemize}
 
 
