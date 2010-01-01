@@ -641,7 +641,7 @@ int pnl_fit_least_squares (PnlVect *coef, PnlMat *x, PnlVect *y, PnlBasis *basis
   pnl_mat_ls (A, coef);
 #else
   pnl_mat_syslin_inplace (A, coef);
-#fi
+#endif
   
   pnl_vect_free (&phi_k);
   pnl_mat_free (&A);
