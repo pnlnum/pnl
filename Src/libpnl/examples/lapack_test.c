@@ -44,7 +44,7 @@ static PnlMat* pnl_mat_create_diagonalizable (int n)
   A = pnl_mat_create (n, n);
   P = pnl_mat_create (n, n);
   invP = pnl_mat_create (n, n);
-  pnl_mat_rand_normal (A, n, n, gen);
+  pnl_mat_rand_uni2 (A, n, n, 0., 1., gen);
 
   /* P = exp (rand) is always invertible */
   pnl_mat_exp(P, A);
