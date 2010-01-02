@@ -466,7 +466,7 @@ and \var{y} are vectors.
   \reffun{pnl_mat_mult_vect_inplace} & \var{y = A * x}\\
   \reffun{pnl_mat_lAxpby} & \var{y := alpha * A * x + beta * y}\\
   \reffun{pnl_mat_dgemv} & \var{y := alpha * op (A) * x + beta * y}\\
-  \reffun{pnl_mat_dger} & \var{A := alpha x' * y + A}
+  \reffun{pnl_mat_dger} & \var{A := alpha x * y' + A}
 \end{tabular}
 
 
@@ -789,7 +789,7 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 
 \item \describefun{void}{pnl_mat_dger}{double alpha, const \refstruct{PnlVect}
     $\ast$x, const \refstruct{PnlVect} $\ast$y, \refstruct{PnlMat} $\ast$A}
-  \sshortdescribe Computes \var{A := alpha x' * y + A}
+  \sshortdescribe Computes \var{A := alpha x * y' + A}
 
 \item \describefun{\refstruct{PnlVect} $\ast$}{pnl_mat_mult_vect}{const
     \refstruct{PnlMat} $\ast$A, const \refstruct{PnlVect} $\ast$x} 
@@ -1007,16 +1007,17 @@ invert the system matrix because it is much longer.
     const \refstruct{PnlMat} $\ast$B}
   \sshortdescribe Inversion of a lower triangular matrix  
 
-\item \describefun{void}{pnl_mat_lu_inverse}{\refstruct{PnlMat}
-    $\ast$inverse, const \refstruct{PnlMat}
-    $\ast$LU, const \refstruct{PnlPermutation} $\ast$p} 
-  \sshortdescribe Computes the inverse of a matrix A given its LU
-  decomposition and the associated permutation   
+\item \describefun{void}{pnl_mat_chol_inverse}{\refstruct{PnlMat}
+    $\ast$inverse, const \refstruct{PnlMat} $\ast$A}
+  \sshortdescribe Computes the inverse of a symmetric definite positive matrix
+  A and stores the result into \var{inverse}. The inverse is computed using the
+  Cholesky factorization of \var{A}.
 
 \item \describefun{void}{pnl_mat_inverse}{\refstruct{PnlMat}
     $\ast$inverse, const \refstruct{PnlMat} $\ast$A}
   \sshortdescribe Computes the inverse of a matrix A and stores the result
-  into \var{inverse}.
+  into \var{inverse}. The inverse is computed using a LU factorization of
+  \var{A}.
 \end{itemize}
 
 \subsubsection{Permutations}
