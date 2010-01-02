@@ -28,7 +28,56 @@
 
 /* static double function_prod(double x, double y) {return x*y;} */
 
-/*TEST DES FONCTIONS PREMIAMAT */
+/* A few utilities functions */
+
+/*
+ * Generates an invertible matrix of size nxn using the exponential function
+ */
+void generate_invertible_matrix (PnlMat *A, int n)
+{
+  PnlMat *B;
+  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
+
+  pnl_rand_init (gen, n, n);
+  B = pnl_mat_create (n, n);
+  pnl_mat_rand_uni2 (B, n, n, 0., 1., gen);
+
+  pnl_mat_exp (A, B);
+  pnl_mat_free (&B);
+}
+
+/*
+ * Generates a symmetric definite positive matrix of size nxn
+ */
+void generate_sym_pos_matrix (PnlMat *S, int n)
+{
+  PnlVect *b;
+  double g;
+  int i;
+  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
+
+  pnl_rand_init (gen, n, n);
+  b = pnl_vect_create (n);
+  pnl_vect_rand_uni (b, n, 0., 1., gen);
+
+  /* S is set to a diagonal matrix with positive eigenvalues */
+  pnl_mat_set_double (S, 0.);
+  for ( i=0 ; i<S->n ; i++ )
+    {
+      do
+        {
+          g = fabs (pnl_rand_normal (gen));
+        }
+      while (g < 1E-4);
+      pnl_mat_set (S, i, i, g);
+    }
+
+  pnl_mat_dger (1., b, b, S);
+  pnl_vect_free (&b);
+}
+
+
+/* Test of the PnlMat functions */
 
 
 static void pnl_mat_set_test()
@@ -624,7 +673,7 @@ static void pnl_mat_set_row_test()
   pnl_mat_free(&M);
 }
 
-static void pnl_mat_inverse_test ()
+static void pnl_mat_triangular_inverse_test ()
 {
   PnlMat *A, *B;
   double x[16] = {1.0, 2.0, 3.0, 4.0, 0.0, 5.0, 6.0, 7.0, 0.0, 0.0, 8.0, 9.0, 0.0, 0.0, 0.0, 10.0};
@@ -642,21 +691,44 @@ static void pnl_mat_inverse_test ()
   pnl_mat_free(&B);
 }
 
+static void pnl_mat_inverse_test ()
+{
+  PnlMat *A, *invA;
+  int n = 5;
+
+  A = pnl_mat_create (n, n);
+  invA = pnl_mat_create (n, n);
+
+  generate_invertible_matrix (A, n);
+  pnl_mat_inverse (invA, A);
+  printf("test de la fonction 'pnl_mat_inverse' : \n");
+  printf ("A = "); pnl_mat_print_nsp (A);
+  printf ("invA = "); pnl_mat_print_nsp (invA);
+
+  generate_sym_pos_matrix (A, n);
+  pnl_mat_chol_inverse (invA, A);
+  printf("test de la fonction 'pnl_mat_chol_inverse' : \n");
+  printf ("A = "); pnl_mat_print_nsp (A);
+  printf ("invA = "); pnl_mat_print_nsp (invA);
+
+  pnl_mat_free (&A);
+  pnl_mat_free (&invA);
+}
+
+
 static void pnl_mat_syslin_test ()
 {
   PnlMat *S, *Scopy, *B, *Bcopy;
-  PnlVect *v, *b, *x;
+  PnlVect *b, *x;
   PnlPermutation *p;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
   printf("test de la fonction 'pnl_mat_chol' : \n");
   pnl_rand_init (gen, 5, 5);
   b = pnl_vect_create (5);
-  v = pnl_vect_create (5);
   S = pnl_mat_create (5, 5);
-  pnl_mat_set_id (S);
-  pnl_vect_rand_normal (v, 5, gen);
   pnl_vect_rand_normal (b, 5, gen);
-  pnl_mat_dger (1., v, v, S);
+  generate_sym_pos_matrix (S, 5);
+
   Scopy = pnl_mat_copy (S);
   printf ("S = "); pnl_mat_print_nsp (S);
   printf ("\nb = "); pnl_vect_print_nsp (b);
@@ -707,9 +779,8 @@ static void pnl_mat_syslin_test ()
 
 
   printf("test de la fonction 'pnl_mat_lu_syslin' : \n");
-  pnl_mat_rand_normal (S, 5, 5, gen);
-  pnl_mat_exp (Scopy, S);
-  pnl_mat_clone (S, Scopy);
+  generate_invertible_matrix (S, 5);
+  pnl_mat_clone (Scopy, S);
   printf ("A = "); pnl_mat_print_nsp (S);
   p = pnl_permutation_create (5);
   pnl_permutation_init (p);
@@ -736,7 +807,6 @@ static void pnl_mat_syslin_test ()
   pnl_mat_free (&Scopy);
   pnl_vect_free (&b);
   pnl_vect_free (&x);
-  pnl_vect_free (&v);
 }
 
 
@@ -972,6 +1042,7 @@ static tst_list mat_tests[] =
     MAKE_ENUM(pnl_mat_qsort_test),
     MAKE_ENUM(pnl_mat_map_test),
     MAKE_ENUM(pnl_mat_set_row_test),
+    MAKE_ENUM(pnl_mat_triangular_inverse_test),
     MAKE_ENUM(pnl_mat_inverse_test),
     MAKE_ENUM(pnl_mat_syslin_test),
     MAKE_ENUM(pnl_mat_create_from_file_test),
