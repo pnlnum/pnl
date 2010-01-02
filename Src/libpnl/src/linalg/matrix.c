@@ -686,32 +686,71 @@ void pnl_mat_chol_syslin_mat2 (PnlMat *A,  PnlMat *B)
     }
 }
 
+typedef enum { LU=0, Chol=1, QR=2 } factorization;
+
 
 /**
- * computes the inverse of a matrix A given its LU decomposition and the
- * associated permutation
- *
- * @param LU LU decomposition of P A computed by pnl_mat_lu.
- * @param p a PnlPermutation.
- * @param inverse a PnlMat (already allocated). contains
- * \verbatim A^-1 \endverbatim on exit.
+ * Computes the inverse of a matrix using the factorization defined by type
+ * @param inverse contains the inverse on exit, must be already allocated
+ * @param A a matrix to be inverted
+ * @param type a factorization variable (currently only LU or Chol are
+ * supported)
  */
-void pnl_mat_lu_inverse (PnlMat *inverse, const PnlMat *LU, const PnlPermutation*p)
+static void pnl_mat_inverse_aux (PnlMat *inverse, const PnlMat *A,
+                                 factorization type)
 {
   int k;
-  PnlVect *b = pnl_vect_create_from_double (LU->m, 0.0);
+  PnlPermutation *p = NULL;
+  PnlMat *Acopy = pnl_mat_copy (A);
+  PnlVect *b = pnl_vect_create_from_double (A->m, 0.0);
   PnlVect *x = pnl_vect_create (0);
-  pnl_mat_resize (inverse, LU->m, LU->n);
-  for (k=0; k<LU->m; k++)
+
+  switch (type)
+    {
+    case LU :
+      p = pnl_permutation_create(A->n);
+      pnl_mat_lu (Acopy, p);
+      break;
+    case Chol :   pnl_mat_chol (Acopy);
+      break;
+    default: break;
+    }
+  pnl_mat_resize (inverse, A->m, A->n);
+  for (k=0; k<A->m; k++)
     {
       pnl_vect_set (b, k, 1.0);
-      pnl_mat_lu_syslin (x, LU, p, b);
+      switch (type)
+        {
+        case LU : pnl_mat_lu_syslin (x, Acopy, p, b);
+          break;
+        case Chol : pnl_mat_chol_syslin (x, Acopy, b);
+          break;
+        default: break;
+        }
       pnl_mat_set_col (inverse, x, k);
       pnl_vect_set (b, k, 0.0);
     }
   pnl_vect_free (&b);
   pnl_vect_free (&x);
+  pnl_mat_free (&Acopy);
+  pnl_permutation_free (&p);
 }
+
+
+/**
+ * computes the inverse of a matrix A using its Cholesky decomposition which
+ * is computed inside this function
+ *
+ * @param A a symmetric definite positive matrix
+ * @param inverse a PnlMat (already allocated). contains
+ * \verbatim A^-1 \endverbatim on exit.
+ */
+void pnl_mat_chol_inverse (PnlMat *inverse, const PnlMat *A)
+{
+  pnl_mat_inverse_aux (inverse, A, Chol);
+}
+
+
 
 /**
  * computes the inverse of a matrix 
@@ -722,22 +761,7 @@ void pnl_mat_lu_inverse (PnlMat *inverse, const PnlMat *LU, const PnlPermutation
  */
 void pnl_mat_inverse (PnlMat *inverse, const PnlMat *A)
 {
-  PnlMat *LU;
-  PnlPermutation *p;
-  int n;
-
-  CheckIsSquare (A);
-  n = A->m;
-
-  LU = pnl_mat_copy (A);
-  p = pnl_permutation_create(n);
-  
-
-  pnl_mat_lu (LU, p);
-  pnl_mat_lu_inverse (inverse, LU, p);
-
-  pnl_mat_free (&LU);
-  pnl_permutation_free (&p);
+  pnl_mat_inverse_aux (inverse, A, LU);
 }
 
 /**

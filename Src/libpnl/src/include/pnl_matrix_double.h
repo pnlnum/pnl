@@ -215,7 +215,7 @@ extern void pnl_mat_syslin_mat (PnlMat *A,  PnlMat *B);
 extern void pnl_mat_chol_syslin_mat (PnlMat *A,  PnlMat *B);
 extern void pnl_mat_syslin (PnlVect *x, const PnlMat *A, const PnlVect *b);
 extern void pnl_mat_syslin_inplace (PnlMat *A, PnlVect *b);
-extern void pnl_mat_lu_inverse (PnlMat *inverse, const PnlMat *LU, const PnlPermutation *p);
+extern void pnl_mat_chol_inverse (PnlMat *inverse, const PnlMat *A);
 extern void pnl_mat_inverse (PnlMat *inverse, const PnlMat *A);
 extern void pnl_mat_read_matrix_from_file (PnlMat *M,const char * filename);
 extern void pnl_mat_exp (PnlMat *B, const PnlMat *A);
