@@ -104,8 +104,8 @@ void pnl_permutation_swap (PnlPermutation *p, int i, int j)
  */
 void pnl_permutation_free (PnlPermutation **p)
 {
-  if ((*p)->size >0)
-    free ((*p)->array);
+  if ( *p == NULL ) return ;
+  if ( (*p)->size >0 ) free ((*p)->array);
   free (*p); *p=NULL;
 }
 
