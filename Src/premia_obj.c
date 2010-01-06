@@ -38,6 +38,7 @@ extern Model BNS_model;
 extern Model DPS_model;
 extern Model FPS1D_model;
 extern Model FPS2D_model;
+extern Model HESCIR1D_model;
 extern Model WISHART2D_model;
 extern Model MERHES1D_model;
 extern Model PUREJUMP1D_model;
@@ -80,6 +81,7 @@ Model  *models_e[]=
     &STEIN1D_model,
     &FPS1D_model,
     &FPS2D_model,
+    &HESCIR1D_model,
     &WISHART2D_model,
     &MERHES1D_model,
     &BNS_model,
@@ -262,6 +264,7 @@ extern  Pricing BNS_STD_pricing;
 extern  Pricing DPS_STD_pricing;
 extern  Pricing FPS1D_STD_pricing;
 extern  Pricing FPS2D_STD_pricing;
+extern  Pricing HESCIR1D_STD_pricing;
 extern  Pricing WISHART2D_STD2D_pricing;
 extern  Pricing MERHES1D_STD_pricing;
 extern  Pricing MERHES1D_LIM_pricing;
@@ -318,6 +321,7 @@ Pricing *pricings_e[]=
     &DPS_STD_pricing,
     &FPS1D_STD_pricing,
     &FPS2D_STD_pricing,
+    &HESCIR1D_STD_pricing,
     &WISHART2D_STD2D_pricing,
     &MERHES1D_STD_pricing,
     &MERHES1D_LIM_pricing,
