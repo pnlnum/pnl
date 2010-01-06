@@ -591,6 +591,8 @@ Src/mod/hes1d/hes1d_lim/Makefile \
 Src/mod/hes1d/hes1d_pad/Makefile \
 Src/mod/hes1d/hes1d_std/Makefile \
 Src/mod/hes1d/hes1d_vol/Makefile \
+Src/mod/hescir1d/Makefile \
+Src/mod/hescir1d/hescir1d_std/Makefile \
 Src/mod/hk1d/Makefile \
 Src/mod/hk1d/hk1d_stdi/Makefile \
 Src/mod/hullwhite1d/Makefile \
