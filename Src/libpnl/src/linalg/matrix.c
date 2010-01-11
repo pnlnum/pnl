@@ -270,6 +270,7 @@ static void pnl_mat_chol_aux(PnlMat *M, double round_off)
             {
               if (somme<=-round_off)
                 {
+                  printf("negative eigenvalue : %f\n", somme);
                   PNL_ERROR("matrix not positive", "pnl_mat_chol");
                 }
               else
