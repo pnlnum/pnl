@@ -169,9 +169,12 @@ Model *models_i[]=
 extern Model CirPP2D_model;
 extern Model COPULA_model;
 extern Model DYNAMIC_CDO_model;
+extern Model BLACK_COX_EXTENDED_model;
+
 
 Model *models_c[]=
   {
+    &BLACK_COX_EXTENDED_model,
     &CirPP2D_model,
     &COPULA_model,
     &DYNAMIC_CDO_model,
@@ -393,7 +396,7 @@ Pricing *pricings_i[]=
 extern  Pricing CirPP2D_STDc_pricing;
 extern  Pricing COPULA_STDNDc_pricing;
 extern  Pricing DYNAMIC_CDO_STDNDc_pricing;
-
+extern  Pricing BLACK_COX_EXTENDED_STDc_pricing;
 
 
 Pricing *pricings_c[]=
@@ -401,6 +404,7 @@ Pricing *pricings_c[]=
     &CirPP2D_STDc_pricing,
     &COPULA_STDNDc_pricing,
     &DYNAMIC_CDO_STDNDc_pricing,
+    &BLACK_COX_EXTENDED_STDc_pricing,
     NULL
   };
 

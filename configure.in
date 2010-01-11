@@ -542,6 +542,8 @@ Src/mod/affine3d/Makefile \
 Src/mod/affine3d/affine3d_stdi/Makefile \
 Src/mod/bharchiarella1d/Makefile \
 Src/mod/bharchiarella1d/bharchiarella1d_stdi/Makefile \
+Src/mod/black_cox_extended/Makefile \
+Src/mod/black_cox_extended/black_cox_extended_stdc/Makefile \
 Src/mod/blackkarasinski1d/Makefile \
 Src/mod/blackkarasinski1d/blackkarasinski1d_stdi/Makefile \
 Src/mod/bns/Makefile \
