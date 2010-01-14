@@ -613,7 +613,8 @@ int pnl_fit_least_squares (PnlVect *coef, PnlMat *x, PnlVect *y, PnlBasis *basis
   PnlVect *phi_k;
 
   N = y->size;
-  pnl_vect_resize_from_double (coef, nb_func, 0.);
+  pnl_vect_resize (coef, nb_func);
+  pnl_vect_set_double (coef, 0.);
   phi_k = pnl_vect_create_from_double (nb_func, 0.);
   A = pnl_mat_create_from_double (nb_func, nb_func, 0.);
 
