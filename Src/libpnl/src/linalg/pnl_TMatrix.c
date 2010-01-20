@@ -2,9 +2,7 @@
 
 #include "config.h"
 #include "pnl_vector.h"
-#include "pnl_matrix_uint.h"
-#include "pnl_matrix_int.h"
-#include "pnl_matrix_complex.h"
+#include "pnl_matrix.h"
 
 typedef int(*cmp_func)(const void *, const void *);
 

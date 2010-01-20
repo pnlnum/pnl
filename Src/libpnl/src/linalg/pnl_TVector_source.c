@@ -123,7 +123,7 @@ TYPE(PnlVect) * FUNCTION(pnl_vect,create_from_list)(const int size,...)
     {
       BASE val ;
       val = va_arg (ap, BASE);
-      FUNCTION(pnl_vect,set)(v, i, val);
+      PNL_SET(v, i, val);
     }
   va_end(ap);
   return v;
@@ -632,7 +632,7 @@ static void FUNCTION(pnl_vect,map_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) 
   while(i<lhs->size)
     {
       lptr = FUNCTION(pnl_vect,lget)(lhs, i);
-      *lptr =(*f)(*lptr, FUNCTION(pnl_vect,get)(rhs,i)); i++;
+      *lptr =(*f)(*lptr, PNL_GET(rhs,i)); i++;
     }
 }
 
@@ -710,7 +710,7 @@ BASE FUNCTION(pnl_vect,sum)(const TYPE(PnlVect) *lhs)
   int i=0;
   sum=ZERO;
   while(i<lhs->size)
-    {sum = PLUS(sum, FUNCTION(pnl_vect,get)(lhs, i)); i++;}
+    {sum = PLUS(sum, PNL_GET(lhs, i)); i++;}
   return sum;
 }
 
@@ -726,7 +726,7 @@ void FUNCTION(pnl_vect,cumsum)(TYPE(PnlVect) *lhs)
   sum=ZERO;
   for (i=0; i<lhs->size; i++)
     {
-      sum = PLUS(sum, FUNCTION(pnl_vect,get)(lhs, i)); 
+      sum = PLUS(sum, PNL_GET(lhs, i)); 
       FUNCTION(pnl_vect, set) (lhs, i, sum);
     }
 }
@@ -749,8 +749,8 @@ BASE FUNCTION(pnl_vect,scalar_prod)(const TYPE(PnlVect) *x,
   CheckVectMatch(x, y);
   while(i<x->size)
     {
-      xi = FUNCTION(pnl_vect,get)(x, i); 
-      yi = FUNCTION(pnl_vect,get)(y, i);
+      xi = PNL_GET(x, i); 
+      yi = PNL_GET(y, i);
 #if MULTIPLICITY == 1
       sum += xi * yi;
 #else
@@ -773,7 +773,7 @@ BASE FUNCTION(pnl_vect,prod)(const TYPE(PnlVect) *V)
   BASE p=ONE;
   for (i=0; i<V->size; i++)
     {
-      p = MULT(p,FUNCTION(pnl_vect,get)(V, i));
+      p = MULT(p,PNL_GET(V, i));
     }
   return p;
 }
@@ -789,7 +789,7 @@ void FUNCTION(pnl_vect,cumprod)(TYPE(PnlVect) *V)
   BASE p=ONE;
   for (i=0; i<V->size; i++)
     {
-      p = MULT(p,FUNCTION(pnl_vect,get)(V, i));
+      p = MULT(p,PNL_GET(V, i));
       FUNCTION(pnl_vect, set) (V, i, p);      
     }
 }
@@ -1157,7 +1157,7 @@ void FUNCTION(pnl_vect,axpby)(BASE a, const TYPE(PnlVect) *x,  BASE b, TYPE(PnlV
 
   for (i=0; i< x->size; i++)
     {
-      xi =  FUNCTION(pnl_vect,get)(x, i);
+      xi =  PNL_GET(x, i);
       xi = MULT(xi, a);
       yi = FUNCTION(pnl_vect,lget)(y, i);
       *yi = PLUS(*yi, xi);      
@@ -1176,7 +1176,7 @@ double FUNCTION(pnl_vect,norm_x)(const TYPE(PnlVect) *V,double(*f)(BASE))
   int i=0;
   double p=0;
   while(i<V->size)
-    { p+=(*f)(FUNCTION(pnl_vect,get)(V, i)); i++;}
+    { p+=(*f)(PNL_GET(V, i)); i++;}
   return p;
 }
 /**
@@ -1213,7 +1213,7 @@ double FUNCTION(pnl_vect,norm_infty)(const TYPE(PnlVect) *V)
   double q=0.0;
   while(i<V->size)
     {
-      q=NORMONE(FUNCTION(pnl_vect,get)(V,i));
+      q=NORMONE(PNL_GET(V,i));
       p=((p<q)?q:p);i++;
     }
   return p;

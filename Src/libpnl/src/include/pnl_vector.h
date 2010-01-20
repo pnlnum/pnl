@@ -17,6 +17,11 @@ extern "C" {
 #define CheckVectMatch(lhs, rhs){}
 #endif /* PNL_RANGE_CHECK_OFF */
 
+#define PNL_GET(v,i) (v)->array[i]
+#define PNL_LET(v,i) (v)->array[i]
+#define PNL_SET(v,i,x) (v)->array[i]=(x)
+
+
 #include "pnl_vector_double.h"
 #include "pnl_vector_complex.h"
 #include "pnl_vector_int.h"

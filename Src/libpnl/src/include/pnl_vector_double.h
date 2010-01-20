@@ -49,8 +49,8 @@ void pnl_vect_set (PnlVect *self, int i, double x)
 #define GET(v,i) pnl_vect_get(v,i)
 #define LET(v,i) *(pnl_vect_lget(v,i))
 #else
-#define GET(v,i) v->array[i]
-#define LET(v,i) v->array[i]
+#define GET(v,i) (v)->array[i]
+#define LET(v,i) (v)->array[i]
 #endif
 
 extern void pnl_vect_set(PnlVect *v, int i, double x);

@@ -10,32 +10,6 @@ extern "C" {
 #include "pnl_perm.h"
 
 #ifndef PNL_RANGE_CHECK_OFF
-#define CheckIndexHMat(H,index) {{int l;                \
-      for(l=0; l<(H)->ndim; l++)                        \
-        { if((index)[l]>(H)->dims[l] || (index)[l]<0)   \
-            {perror("index out of range"); abort();}    \
-        }                                               \
-    }}
-#define CheckIndexMat(v,i,j) {                                          \
-    if (i>=v->m || j>=v->n || i<0 || j<0) {perror("index out of range"); abort();}}
-#define CheckIsSquare(v) {                                          \
-    if (v->m != v->n) {perror("not a square matrix"); abort();}}
-#define CheckMatIsCompatible(lhs, rhs) {                \
-    if((lhs)->n != (rhs)->m)                            \
-      {perror("non compatible dimensions"); abort();}}
-#define CheckMatVectIsCompatible(mat, vect){            \
-    if((mat)->n != (vect)->size)                        \
-      {perror("non compatible dimensions"); abort();}}
-#define CheckMatMatch(lhs, rhs) { if ((lhs)->m != (rhs)->m || (lhs)->n != (rhs)->n) \
-      {perror("non compatible dimensions"); abort();}}
-#define CheckHMatMatch(lhs,rhs) {                                       \
-    if  ((lhs)->ndim != (rhs)->ndim) {perror("index out of range"); abort();} \
-    {int l;                                                             \
-      for(l=0; l<(lhs)->ndim; l++)                                      \
-        { if((lhs)->dims[l] != (rhs)->dims[l])                          \
-            {perror("index out of range"); abort();}                    \
-        }                                                               \
-    }}
 
 #define MGET(v,i,j) pnl_mat_get((v), (i), (j))
 #define MLET(v,i,j) *(pnl_mat_lget((v), (i), (j)))
@@ -45,19 +19,7 @@ extern "C" {
 #define MGET(v,i,j) v->array[(i)*v->n+(j)]
 #define MLET(v,i,j) v->array[(i)*v->n+(j)]
 
-#define CheckIndexHMat(H,index) {}
-#define CheckIndexMat(v,i,j) {}
-#define CheckIsSquare(v) {}
-#define CheckMatIsCompatible(lhs, rhs) {}
-#define CheckMatVectIsCompatible(mat, vect){}
-#define CheckMatMatch(lhs, rhs) {}
-#define CheckHMatMatch(lhs,rhs) {}
-
-
 #endif /* PNL_RANGE_CHECK_OFF */
-
-
-
 
 /**
  * \defgroup PnlVect Vector structure for Premia
@@ -247,12 +209,12 @@ extern void pnl_hmat_mult_double(PnlHMat *lhs, double x);/* lhs *=x;*/
 
 
 
-/* inline functions if you are using GCC */
-#ifdef HAVE_INLINE 
 /**
  * \addtogroup PnlMat
  */
 /*@{*/
+/* inline functions if you are using GCC */
+#ifdef HAVE_INLINE 
 extern inline
 double pnl_mat_get (const PnlMat *self, int i, int j)
 {
@@ -273,22 +235,12 @@ void pnl_mat_set (PnlMat *self, int i, int j, double x)
   CheckIndexMat(self,i, j);
   self->array[i*self->n+j] = x;
 }
-
-/*@}*/
 #endif
-
-
-
-/**
- * \addtogroup PnlMat
- */
-/*@{*/
 
 extern void pnl_mat_set(PnlMat *v, int i, int j, double x);
 extern double pnl_mat_get(const PnlMat *v, int i, int j);
 extern double* pnl_mat_lget(PnlMat *v, int i, int j);
 
-/*@}*/
 
 /**
  * \addtogroup PnlHMat
