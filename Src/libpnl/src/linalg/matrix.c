@@ -802,8 +802,7 @@ void pnl_mat_exp (PnlMat *B, const PnlMat *A)
   
   CheckIsSquare (A);
   
-  /* Mwork is used as a container to pnl_mat_xxx routines */
-  
+  /* Mwork is used as a container for pnl_mat_xxx routines */
   pnl_mat_resize (B, A->m, A->n);
   
   icoef = 0;
@@ -821,7 +820,7 @@ void pnl_mat_exp (PnlMat *B, const PnlMat *A)
   for (j=0; j<A->m; j++)
     {
       for (i=0; i<A->m; i++)
-        work[i] += fabs( pnl_mat_get(A,i,j) );      
+        work[i] += fabs( PNL_MGET(A,i,j) );      
     }
 
   hnorm = 0.;
