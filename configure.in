@@ -542,6 +542,10 @@ Src/mod/Hawkes_Intensity/Makefile \
 Src/mod/Makefile \
 Src/mod/affine3d/Makefile \
 Src/mod/affine3d/affine3d_stdi/Makefile \
+Src/mod/alsabr11d/Makefile \
+Src/mod/alsabr11d/alsabr11d_std/Makefile \
+Src/mod/alsabr21d/Makefile \
+Src/mod/alsabr21d/alsabr21d_std/Makefile \
 Src/mod/bharchiarella1d/Makefile \
 Src/mod/bharchiarella1d/bharchiarella1d_stdi/Makefile \
 Src/mod/black_cox_extended/Makefile \
