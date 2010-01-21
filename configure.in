@@ -537,6 +537,8 @@ Src/libpnl/src/librand/Makefile \
 Src/libpnl/src/linalg/Makefile \
 Src/libpnl/src/sort/Makefile \
 Src/libpnl/src/specfun/Makefile \
+Src/mod/Hawkes_Intensity/Hawkes_Intensity_stdndc/Makefile \
+Src/mod/Hawkes_Intensity/Makefile \
 Src/mod/Makefile \
 Src/mod/affine3d/Makefile \
 Src/mod/affine3d/affine3d_stdi/Makefile \
