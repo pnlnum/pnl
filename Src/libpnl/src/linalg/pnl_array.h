@@ -1,7 +1,3 @@
-/*************************************************************************/
-/* Written and (C) by David Pommier <pommier.david@gmail.com>            */
-/*                                                                       */
-/*************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

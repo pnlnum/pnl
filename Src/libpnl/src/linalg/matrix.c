@@ -1,21 +1,22 @@
 
-/*************************************************************************/
-/* Written and (C) by Jérôme Lelong <jerome.lelong@gmail.com>            */  
-/* and Céline Labart, 2007                                               */
-/*                                                                       */
-/* This program is free software; you can redistribute it and/or modify  */
-/* it under the terms of the GNU General Public License as published by  */
-/* the Free Software Foundation; either version 3 of the License, or     */
-/* (at your option) any later version.                                   */
-/*                                                                       */
-/* This program is distributed in the hope that it will be useful,       */
-/* but WITHOUT ANY WARRANTY; without even the implied warranty of        */
-/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         */
-/* GNU General Public License for more details.                          */
-/*                                                                       */
-/* You should have received a copy of the GNU General Public License     */
-/* along with this program.  If not, see <http://www.gnu.org/licenses/>. */
-/*************************************************************************/
+/************************************************************************/
+/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
+/* Copyright Céline Labart                                              */
+/*                                                                      */
+/* This program is free software: you can redistribute it and/or modify */
+/* it under the terms of the GNU Lesser General Public License as       */
+/* published by the Free Software Foundation, either version 3 of the   */
+/* License, or (at your option) any later version.                      */
+/*                                                                      */
+/* This program is distributed in the hope that it will be useful, but  */
+/* WITHOUT ANY WARRANTY; without even the implied warranty of           */
+/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU    */
+/* Lesser General Public License for more details.                      */
+/*                                                                      */
+/* You should have received a copy of the GNU Lesser General Public     */
+/* License along with this program.  If not, see                        */
+/* <http://www.gnu.org/licenses/>.                                      */
+/************************************************************************/
 
 
 #include <stdlib.h>
@@ -833,6 +834,7 @@ void pnl_mat_exp (PnlMat *B, const PnlMat *A)
     /* matrix is full of zeros */
     {
       pnl_mat_set_id (B);
+      free (work); work = NULL;
       return;
     }
   ns = MAX( 0, (int)(log(hnorm)/log(2.)) + 2 );
@@ -927,23 +929,25 @@ void pnl_mat_exp (PnlMat *B, const PnlMat *A)
   free (work); work = NULL;
 }
 
-/*************************************************************************/
-/* Written and (C) by Jérôme Lelong <jerome.lelong@gmail.com>            */  
-/* Written and (C) by David Pommier <pommier.david@gmail.com>            */ 
-/*                                                                       */
-/* This program is free software; you can redistribute it and/or modify  */
-/* it under the terms of the GNU General Public License as published by  */
-/* the Free Software Foundation; either version 3 of the License, or     */
-/* (at your option) any later version.                                   */
-/*                                                                       */
-/* This program is distributed in the hope that it will be useful,       */
-/* but WITHOUT ANY WARRANTY; without even the implied warranty of        */
-/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         */
-/* GNU General Public License for more details.                          */
-/*                                                                       */
-/* You should have received a copy of the GNU General Public License     */
-/* along with this program.  If not, see <http://www.gnu.org/licenses/>. */
-/*************************************************************************/
+
+/************************************************************************/
+/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
+/* Copyright David Pommier <pommier.david@gmail.com>                    */
+/*                                                                      */
+/* This program is free software: you can redistribute it and/or modify */
+/* it under the terms of the GNU Lesser General Public License as       */
+/* published by the Free Software Foundation, either version 3 of the   */
+/* License, or (at your option) any later version.                      */
+/*                                                                      */
+/* This program is distributed in the hope that it will be useful, but  */
+/* WITHOUT ANY WARRANTY; without even the implied warranty of           */
+/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU    */
+/* Lesser General Public License for more details.                      */
+/*                                                                      */
+/* You should have received a copy of the GNU Lesser General Public     */
+/* License along with this program.  If not, see                        */
+/* <http://www.gnu.org/licenses/>.                                      */
+/************************************************************************/
 
 /**
  * Computes y' A x 

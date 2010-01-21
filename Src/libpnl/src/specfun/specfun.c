@@ -1,3 +1,21 @@
+/************************************************************************/
+/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
+/*                                                                      */
+/* This program is free software: you can redistribute it and/or modify */
+/* it under the terms of the GNU Lesser General Public License as       */
+/* published by the Free Software Foundation, either version 3 of the   */
+/* License, or (at your option) any later version.                      */
+/*                                                                      */
+/* This program is distributed in the hope that it will be useful, but  */
+/* WITHOUT ANY WARRANTY; without even the implied warranty of           */
+/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU    */
+/* Lesser General Public License for more details.                      */
+/*                                                                      */
+/* You should have received a copy of the GNU Lesser General Public     */
+/* License along with this program.  If not, see                        */
+/* <http://www.gnu.org/licenses/>.                                      */
+/************************************************************************/
+
 /* 
  * This code originally comes from specfun.f written and copyrighted by 
  *      Shanjie Zhang and Jianming Jin
@@ -5,26 +23,8 @@
  * but permission is granted to use code in programs
  * "Computation of Special Functions", 1996, John Wiley & Sons, Inc.
  *
- * The fortran code has been hand translated into C by JÃ©rÃ´me Lelong
+ * The fortran code has been hand translated into C by Jérôme Lelong
  */
-
-
-/*************************************************************************/
-/* Written and (C) by JÃ©rÃ´me Lelong <jerome.lelong@gmail.com>            */
-/*                                                                       */
-/* This program is free software; you can redistribute it and/or modify  */
-/* it under the terms of the GNU General Public License as published by  */
-/* the Free Software Foundation; either version 3 of the License, or     */
-/* (at your option) any later version.                                   */
-/*                                                                       */
-/* This program is distributed in the hope that it will be useful,       */
-/* but WITHOUT ANY WARRANTY; without even the implied warranty of        */
-/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         */
-/* GNU General Public License for more details.                          */
-/*                                                                       */
-/* You should have received a copy of the GNU General Public License     */
-/* along with this program.  If not, see <http://www.gnu.org/licenses/>. */ 
-/*************************************************************************/
 
 #include <errno.h>
 #include <math.h>
