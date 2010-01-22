@@ -172,7 +172,7 @@ Model *models_i[]=
 /* Models Credit*/
 extern Model CirPP2D_model;
 extern Model COPULA_model;
-extern Model DYNAMIC_CDO_model;
+extern Model DYNAMIC_model;
 extern Model BLACK_COX_EXTENDED_model;
 extern Model HAWKES_INTENSITY_model;
 
@@ -181,7 +181,7 @@ Model *models_c[]=
     &BLACK_COX_EXTENDED_model,
     &CirPP2D_model,
     &COPULA_model,
-    &DYNAMIC_CDO_model,
+    &DYNAMIC_model,
     &HAWKES_INTENSITY_model,
     NULL
   };
@@ -404,7 +404,7 @@ Pricing *pricings_i[]=
 
 extern  Pricing CirPP2D_STDc_pricing;
 extern  Pricing COPULA_STDNDc_pricing;
-extern  Pricing DYNAMIC_CDO_STDNDc_pricing;
+extern  Pricing DYNAMIC_STDNDc_pricing;
 extern  Pricing BLACK_COX_EXTENDED_STDc_pricing;
 extern  Pricing HAWKES_INTENSITY_STDNDc_pricing;
 
@@ -412,7 +412,7 @@ Pricing *pricings_c[]=
   {
     &CirPP2D_STDc_pricing,
     &COPULA_STDNDc_pricing,
-    &DYNAMIC_CDO_STDNDc_pricing,
+    &DYNAMIC_STDNDc_pricing,
     &BLACK_COX_EXTENDED_STDc_pricing,
 	&HAWKES_INTENSITY_STDNDc_pricing,
     NULL
