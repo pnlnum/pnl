@@ -1,10 +1,4 @@
 /*
- * The idea of using such template files is owed to the GSL and has been
- * adapted to match the need of PNL
- */
-
-
-/*
  * If BASE is undefined we use function names like pnl_name()
  *  and assume that we are using doubles.
  *
@@ -33,6 +27,10 @@
 #define MINUS(a,b) (a)-(b)
 #define MULT(a,b) (a)*(b)
 #define DIV(a,b) (a)/(b)
+#define PLUSEQ(a,b) (a)+=(b)
+#define MINUSEQ(a,b) (a)-=(b)
+#define MULTEQ(a,b) (a)*=(b)
+#define DIVEQ(a,b) (a)/=(b)
 #define INV(a) 1/(a)
 #define SQUARE_NORM(a) (a)*(a)
 #define NORMONE(a) fabs(a)
@@ -59,6 +57,10 @@
 #define MINUS(a,b) Csub(a,b)
 #define MULT(a,b) Cmul(a,b)
 #define DIV(a,b) Cdiv(a,b)
+#define PLUSEQ(a,b) a=Cadd(a,b)
+#define MINUSEQ(a,b) a=Csub(a,b)
+#define MULTEQ(a,b) a=Cmul(a,b)
+#define DIVEQ(a,b) a=Cdiv(a,b)
 #define INV(a) Cinv(a)
 #define SQUARE_NORM(a) Csqr_norm(a)
 #define NORMONE(a) Cabs(a)
@@ -82,6 +84,10 @@
 #define MINUS(a,b) (a)>(b)?(a)-(b):0
 #define MULT(a,b) (a)*(b)
 #define DIV(a,b) (a)/(b)
+#define PLUSEQ(a,b) (a)+=(b)
+#define MINUSEQ(a,b) (a)-=(b)
+#define MULTEQ(a,b) (a)*=(b)
+#define DIVEQ(a,b) (a)/=(b)
 #define INV(a) 1
 #define SQUARE_NORM(a) (a)*(a)
 #define NORMONE(a) (a)
@@ -106,6 +112,10 @@
 #define MINUS(a,b) (a)-(b)
 #define MULT(a,b) (a)*(b)
 #define DIV(a,b) (a)/(b)
+#define PLUSEQ(a,b) (a)+=(b)
+#define MINUSEQ(a,b) (a)-=(b)
+#define MULTEQ(a,b) (a)*=(b)
+#define DIVEQ(a,b) (a)/=(b)
 #define INV(a) 1
 #define SQUARE_NORM(a) (a)*(a)
 #define NORMONE(a) abs(a)

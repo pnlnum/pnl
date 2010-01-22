@@ -1,8 +1,3 @@
-/*
- * The idea of using such template files is owed to the GSL and has been
- * adapted to match the need of PNL
- */
-
 #ifdef FUNCTION
 #undef FUNCTION
 #endif
@@ -99,6 +94,10 @@
 #undef MINUS
 #undef MULT
 #undef DIV
+#undef PLUSEQ
+#undef MINUSEQ
+#undef MULTEQ
+#undef DIVEQ
 #undef INV
 #undef SQUARE_NORM
 #undef NORMONE

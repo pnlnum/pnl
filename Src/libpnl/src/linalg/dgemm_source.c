@@ -1,6 +1,6 @@
 
 /************************************************************************/
-/* Copyright JÃ©rÃ´me Lelong <jerome.lelong@gmail.com>                    */
+/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
 /* Copyright David Pommier <pommier.david@gmail.com                     */
 /*                                                                      */
 /* This program is free software: you can redistribute it and/or modify */
@@ -81,7 +81,7 @@ static void FUNCTION(pnl_mat,dgemmNN) (BASE alpha, const TYPE(PnlMat) *A, const 
           for (j=0; j<C->n; j++)
             {
               Cij = PNL_MGET(C, i, j);
-              Cij = PLUS (Cij, MULT(temp, PNL_MGET (B, k, j)));
+              PLUSEQ (Cij, MULT(temp, PNL_MGET (B, k, j)));
               PNL_MLET (C, i, j) = Cij;
             }
         }
@@ -100,17 +100,17 @@ static void FUNCTION(pnl_mat,dgemmNN) (BASE alpha, const TYPE(PnlMat) *A, const 
 
               Cij = PNL_MGET(C, i, j);
               aibk = MULT(temp, Bkj);
-              Cij = PLUS(Cij, aibk);
+              PLUSEQ (Cij, aibk);
               PNL_MLET (C, i, j) = Cij;
               
               Cij1 = PNL_MGET(C, i1, j);
               ai1bk = MULT(temp1, Bkj);
-              Cij1 = PLUS(Cij1, ai1bk);
+              PLUSEQ (Cij1, ai1bk);
               PNL_MLET (C, i1, j) = Cij1;
               
               Cij2 = PNL_MGET(C, i2, j);
               ai2bk = MULT(temp2, Bkj);
-              Cij2 = PLUS(Cij2, ai2bk);
+              PLUSEQ (Cij2, ai2bk);
               PNL_MLET (C, i2, j) = Cij2;
             }
         }
@@ -173,11 +173,11 @@ static void FUNCTION(pnl_mat,dgemmNT) (BASE alpha, const TYPE(PnlMat) *A, const 
           sum = ZERO;
           for (k=0; k<A->n; k++)
             {
-              sum = PLUS(sum, MULT(PNL_MGET (A, i, k),
-                                   PNL_MGET (B, j, k) ) );
+              PLUSEQ (sum, MULT(PNL_MGET (A, i, k),
+                                PNL_MGET (B, j, k) ) );
             }
           Cij = PNL_MGET(C, i, j);
-          Cij = PLUS(Cij, MULT(alpha, sum));
+          PLUSEQ (Cij, MULT(alpha, sum));
           PNL_MLET(C, i, j) =  Cij;
         }
     }
@@ -194,24 +194,24 @@ static void FUNCTION(pnl_mat,dgemmNT) (BASE alpha, const TYPE(PnlMat) *A, const 
             {
               Bkj = PNL_MGET (B, j, k);
    
-              sum = PLUS(sum, MULT( PNL_MGET(A, i, k), Bkj));
-              sum1 = PLUS(sum1, MULT( PNL_MGET(A, i1, k), Bkj));
-              sum2 = PLUS(sum2, MULT( PNL_MGET(A, i2, k), Bkj));
+              PLUSEQ (sum, MULT( PNL_MGET(A, i, k), Bkj));
+              PLUSEQ (sum1, MULT( PNL_MGET(A, i1, k), Bkj));
+              PLUSEQ (sum2, MULT( PNL_MGET(A, i2, k), Bkj));
    
             }
           Cij = PNL_MGET(C, i, j);
-          sum = MULT(sum, alpha);
-          Cij = PLUS(Cij, sum);
+          MULTEQ (sum, alpha);
+          PLUSEQ (Cij, sum);
           PNL_MLET (C, i, j) = Cij;
           
           Cij1 = PNL_MGET(C, i1, j);
-          sum1 = MULT(sum1, alpha);
-          Cij1 = PLUS(Cij1, sum1);
+          MULTEQ (sum1, alpha);
+          PLUSEQ (Cij1, sum1);
           PNL_MLET (C, i1, j) = Cij1;
            
           Cij2 = PNL_MGET(C, i2, j);
-          sum2 = MULT(sum2, alpha);
-          Cij2 = PLUS(Cij2, sum2);
+          MULTEQ (sum2, alpha);
+          PLUSEQ (Cij2, sum2);
           PNL_MLET (C, i2, j) = Cij2;
         }
     }
