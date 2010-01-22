@@ -590,6 +590,7 @@ Src/mod/dup1d/Makefile \
 Src/mod/dup1d/dup1d_std/Makefile \
 Src/mod/dynamic/Makefile \
 Src/mod/dynamic/dynamic_stdndc/Makefile \
+Src/mod/dynamic/dynamic_stdc/Makefile \
 Src/mod/fps1d/Makefile \
 Src/mod/fps1d/fps1d_std/Makefile \
 Src/mod/fps2d/Makefile \

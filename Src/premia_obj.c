@@ -404,6 +404,7 @@ Pricing *pricings_i[]=
 
 extern  Pricing CirPP2D_STDc_pricing;
 extern  Pricing COPULA_STDNDc_pricing;
+extern  Pricing DYNAMIC_STDc_pricing;
 extern  Pricing DYNAMIC_STDNDc_pricing;
 extern  Pricing BLACK_COX_EXTENDED_STDc_pricing;
 extern  Pricing HAWKES_INTENSITY_STDNDc_pricing;
@@ -413,6 +414,7 @@ Pricing *pricings_c[]=
     &CirPP2D_STDc_pricing,
     &COPULA_STDNDc_pricing,
     &DYNAMIC_STDNDc_pricing,
+    &DYNAMIC_STDc_pricing,
     &BLACK_COX_EXTENDED_STDc_pricing,
 	&HAWKES_INTENSITY_STDNDc_pricing,
     NULL
