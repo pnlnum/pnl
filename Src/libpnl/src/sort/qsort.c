@@ -178,7 +178,7 @@ void pnl_qsort(void *a, int n, int es, int lda, int *t, int ldt, int index_flag,
   swap_cnt = 0;
   if (n < 7)
     {
-      for (pm = a + esa, tm = t + est; pm < (char *) a + n * esa; pm += esa, tm += est)
+      for (pm = a + esa, tm = t + est; pm < ((char *)) a + n * esa; pm += esa, tm += est)
         {
           for (pl = pm, tl = tm; pl > (char *) a && cmp(pl - esa, pl) > 0; pl -= esa, tl -= est)
             {
@@ -188,12 +188,12 @@ void pnl_qsort(void *a, int n, int es, int lda, int *t, int ldt, int index_flag,
         }
       return;
     }
-  pm = a + (n / 2) * esa;
+  pm = ((char *) a) + (n / 2) * esa;
   tm = t + (n / 2) * est;
   if (n > 7) {
     pl = a;
     tl = t;
-    pn = a + (n - 1) * esa;
+    pn = ((char *) a) + (n - 1) * esa;
     tn = t + (n - 1) * est;
     if (n > 40) {
       d = (n / 8) * esa;
@@ -207,8 +207,8 @@ void pnl_qsort(void *a, int n, int es, int lda, int *t, int ldt, int index_flag,
   swap(a, pm);
   swapindex(t, tm);
 
-  pa = pb = a + esa;
-  pc = pd = a + (n - 1) * esa;
+  pa = pb = ((char *) a) + esa;
+  pc = pd = ((char *)a ) + (n - 1) * esa;
 
   ta = tb = t + est;
   tc = td = t + (n-1) * est;
@@ -251,7 +251,7 @@ void pnl_qsort(void *a, int n, int es, int lda, int *t, int ldt, int index_flag,
     tc -= est;
   }
   if (swap_cnt == 0) {  /* Switch to insertion sort */
-    for (pm = a + esa, tm = t + est; pm < (char *) a + n * esa; pm += esa, tm+= est)
+    for (pm = a + esa, tm = t + est; pm < ((char *) a) + n * esa; pm += esa, tm+= est)
       {
       for (pl = pm, tl = tm; pl > (char *) a && cmp(pl - esa, pl) > 0; 
            pl -= esa, tl -= est)
@@ -263,7 +263,7 @@ void pnl_qsort(void *a, int n, int es, int lda, int *t, int ldt, int index_flag,
     return;
   }
 
-  pn = a + n * esa;
+  pn = ((char *) a) + n * esa;
   r = MIN(pa - (char *)a, pb - pa);
   vecswap(a, pb - r, r/lda, lda);
   
