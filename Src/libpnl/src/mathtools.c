@@ -110,7 +110,7 @@ extern double amos_dgamln (double *z__, int *ierr);
 double lgamma(double x)
 {
   int ierr;
-  if ( x <= 0 ) return NAN;
+  if ( x <= 0 ) { PNL_ERROR ("negative argument", "lgamma");}
   return amos_dgamln (&x, &ierr);
 }
 #endif
