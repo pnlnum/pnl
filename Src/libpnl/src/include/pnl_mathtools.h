@@ -7,6 +7,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 #include <math.h>
+#include <float.h>
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -127,8 +128,9 @@ extern double pnl_pow_i (double x, int n);
 #define MIN(A,B) ( (A) < (B) ? (A):(B) )
 #endif
 
-#ifndef NAN
-#define NAN (0./0.)
+#if defined(WIN32) && !defined(NAN)
+static const unsigned long __pnl_nan__[2] = {0xffffffff, 0x7fffffff};
+#define NAN (*(const double *) __pnl_nan__)
 #endif
 
 #define PNL_POSINF (-log(0.))
