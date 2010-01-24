@@ -207,7 +207,7 @@ static double f_tilde (PnlFunc *fhat, PnlMat *work, int m, double t, int j)
   x = pnl_mat_get(work, m-1, j);
   if (isnan(x))
     { /*
-       * In this case, the corresponding f_m(,j) has not been computing yet,
+       * In this case, the corresponding f_m(,j) has not been computed yet,
        * so we do it and store the result in work(m-1, j)
       */
       if (j==0)
@@ -222,6 +222,10 @@ static double f_tilde (PnlFunc *fhat, PnlMat *work, int m, double t, int j)
             ((double) m / (double) j) * f_tilde (fhat, work, m + 1, t, j - 1);
         }
       pnl_mat_set (work, m-1, j, x);
+    }
+  if (isnan(x))
+    {
+      PNL_ERROR ("NaN detected", "pnl_ilap_gs");
     }
   return x;
 }
