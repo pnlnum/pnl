@@ -178,7 +178,7 @@ void pnl_qsort(void *a, int n, int es, int lda, int *t, int ldt, int index_flag,
   swap_cnt = 0;
   if (n < 7)
     {
-      for (pm = a + esa, tm = t + est; pm < ((char *)) a + n * esa; pm += esa, tm += est)
+      for (pm = a + esa, tm = t + est; pm < ((char *) a) + n * esa; pm += esa, tm += est)
         {
           for (pl = pm, tl = tm; pl > (char *) a && cmp(pl - esa, pl) > 0; pl -= esa, tl -= est)
             {
