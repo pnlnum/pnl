@@ -495,7 +495,7 @@ static void pnl_vect_complex_div_vect_term_test()
 {
   PnlVectComplex *v1;
   PnlVectComplex *v2;
-  dcomplex x[4]={Complex(1.0,4.0), Complex(5.0,3.0), Complex(6.0,-1.0), Complex(8.0,2.0)};
+  dcomplex x[4]={{1.0,4.0}, {5.0,3.0}, {6.0,-1.0}, {8.0,2.0}};
   printf("test de la fonction 'pnl_vect_complex_div_term' : ");
   v1=pnl_vect_complex_create_from_ptr(4,x);
   v2=pnl_vect_complex_create_from_dcomplex(4,Complex(3.0,2.0));
