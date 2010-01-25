@@ -194,18 +194,19 @@ double pnl_ilap_gs_basic (PnlFunc *fhat, double t, int n)
  *           OF PROBABILITY DISTRIBUTIONS
  * by Abate and Whitt
  * @param fhat the real valued Laplace transform of f
- * @param res is a workspace used by the functino to avoid recoputing the same
+ * @param work is a workspace used by the function to avoid recomputing the same
  * quantity twice.
+ * @param iwork is a boolean matrix used to know if the corresponding element
+ * of the matrix work has already been computed
  * @param t the point at which f is to be recovered
  * @param m an index
  * @param j an index
  * @return \berbatim \tilde f_m(t, j) \endverbatim
  */
-static double f_tilde (PnlFunc *fhat, PnlMat *work, int m, double t, int j)
+static double f_tilde (PnlFunc *fhat, PnlMat *work, PnlMatInt *iwork, int m, double t, int j)
 {
   double x;
-  x = pnl_mat_get(work, m-1, j);
-  if (isnan(x))
+  if (PNL_MGET(iwork, m-1, j) == 0)
     { /*
        * In this case, the corresponding f_m(,j) has not been computed yet,
        * so we do it and store the result in work(m-1, j)
@@ -214,20 +215,21 @@ static double f_tilde (PnlFunc *fhat, PnlMat *work, int m, double t, int j)
         {
           double alpha = M_LN2 / t;
           x = m * alpha * PNL_EVAL_FUNC(fhat, m * alpha);
-          pnl_mat_set (work, m-1, j, x);
+          PNL_MSET (work, m-1, j, x);
         }
       else
         {
-          x = (1. + (double) m / (double) j) * f_tilde (fhat, work, m, t, j - 1) -
-            ((double) m / (double) j) * f_tilde (fhat, work, m + 1, t, j - 1);
+          x = (1. + (double) m / (double) j) * f_tilde (fhat, work, iwork, m, t, j - 1) -
+            ((double) m / (double) j) * f_tilde (fhat, work, iwork, m + 1, t, j - 1);
         }
-      pnl_mat_set (work, m-1, j, x);
+      PNL_MSET (work, m-1, j, x);
+      PNL_MSET (iwork, m-1, j, 1);
+      return x;
     }
-  if (isnan(x))
+  else
     {
-      PNL_ERROR ("NaN detected", "pnl_ilap_gs");
+      return PNL_MGET (work, m-1, j);
     }
-  return x;
 }
 
 
@@ -246,16 +248,19 @@ double pnl_ilap_gs (PnlFunc *fhat, double t, int n)
   int k;
   double f, Cnk;
   PnlMat *work;
+  PnlMatInt *iwork;
 
   f = 0.;
   Cnk = 1. / pnl_fact (n-1);
-  work = pnl_mat_create_from_double (2 * n, n+1, NAN); 
+  work = pnl_mat_create (2 * n, n+1); 
+  iwork = pnl_mat_int_create_from_int (2 * n, n+1, 0);
   for ( k=1 ; k<n+1 ; k++ )
     {
-      f += ALTERNATE(n-k) * pow(k, n) * Cnk * f_tilde (fhat, work, k, t, k);
+      f += ALTERNATE(n-k) * pow(k, n) * Cnk * f_tilde (fhat, work, iwork, k, t, k);
       Cnk = (Cnk * (n - k)) / (k + 1);
     }
   pnl_mat_free (&work);
+  pnl_mat_int_free (&iwork);
   return f;
 }
 
