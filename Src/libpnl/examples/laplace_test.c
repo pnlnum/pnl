@@ -75,6 +75,7 @@ static void euler_test()
           pnl_vect_get (res, res->size - 1), PNL_EVAL_FUNC (&density, t));
   printf ("inverse laplace CDF %f (true value %f)\n",
           pnl_ilap_cdf_euler (&lap, t, 0.05, 10000, 1), PNL_EVAL_FUNC (&cdf, t));
+  pnl_vect_free (&res);
 }
 
 
