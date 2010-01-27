@@ -134,7 +134,7 @@ static const unsigned long __pnl_nan__[2] = {0xffffffff, 0x7fffffff};
 #define NAN (*(const double *) __pnl_nan__)
 #else
 static double __pnl_nan__ = 1.0/0.0 - 1.0/0.0;
-#define NAN __pnl_nan__;
+#define NAN __pnl_nan__
 #endif
 #endif
 
