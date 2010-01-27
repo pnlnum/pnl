@@ -10,10 +10,13 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 
-void pnl_gamma_inc(double a,double x,double * Ga,double *P,double *Q);
-double pnl_gamma_inc_func(double a,double x);
-double pnl_expint_En(int n,double x);
-double pnl_expint_Ei(double x);
+double pnl_sf_gamma_inc(double a,double x);
+double pnl_sf_gamma_inc_P(double a,double x);
+double pnl_sf_gamma_inc_Q(double a,double x);
+double pnl_sf_expint_En(int n,double x);
+
+extern double pnl_sp_gamma (double);
+extern double pnl_sp_log_gamma (double);
 
 #ifdef __cplusplus
 }
