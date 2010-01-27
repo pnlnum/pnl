@@ -57,9 +57,6 @@
 #include <stdio.h>
 #include "mconf.h"
 
-void scipy_special_raise_warning(char *fmt, ...);
-int scipy_special_print_error_messages = 0;
-
 int merror = 0;
 
 /* Notice: the order of appearance of the following
@@ -94,10 +91,8 @@ int mtherr(char *name, int code)
   if ((code <= 0) || (code >= 8))
     code = 0;
 
-  if (scipy_special_print_error_messages) {
-    scipy_special_raise_warning("%s: %s error", name, ermsg[code]);
-  }
-
+  printf("%s: %s error", name, ermsg[code]);
+  
   /* Return to calling
    * program
    */
