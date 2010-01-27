@@ -458,8 +458,8 @@ static unsigned short RQ[32] = {
 };
 #endif
 
-extern double polevl ( double, void *, int );
-extern double p1evl ( double, void *, int );
+extern double polevl ( double, double *, int );
+extern double p1evl ( double, double *, int );
 extern double log ( double );
 extern double sin ( double );
 extern double cos ( double );

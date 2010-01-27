@@ -444,8 +444,8 @@ static unsigned short DZ2[] = {0x4048,0x9bf6,0x6072,0xa432};
 #define Z2 (*(double *)DZ2)
 #endif
 
-extern double polevl ( double, void *, int );
-extern double p1evl ( double, void *, int );
+extern double polevl ( double, double *, int );
+extern double p1evl ( double, double *, int );
 extern double log ( double );
 extern double sin ( double );
 extern double cos ( double );

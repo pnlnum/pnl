@@ -64,7 +64,7 @@ extern int airy(double, double *, double *, double *, double *);
 extern double fabs(double);
 extern double floor(double);
 extern double frexp(double, int *);
-extern double polevl(double, void *, int);
+extern double polevl(double, double *, int);
 extern double j0(double);
 extern double j1(double);
 extern double sqrt(double);

@@ -273,7 +273,7 @@ static unsigned short B[] = {
 #endif
 
 /*                                                      k0.c    */
-extern double chbevl ( double, void *, int );
+extern double chbevl ( double, double *, int );
 extern double exp ( double );
 extern double i0 ( double );
 extern double log ( double );

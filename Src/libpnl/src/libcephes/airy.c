@@ -824,8 +824,8 @@ static unsigned short APGD[40] = {
 extern double fabs ( double );
 extern double exp ( double );
 extern double sqrt ( double );
-extern double polevl ( double, void *, int );
-extern double p1evl ( double, void *, int );
+extern double polevl ( double, double *, int );
+extern double p1evl ( double, double *, int );
 extern double sin ( double );
 extern double cos ( double );
 

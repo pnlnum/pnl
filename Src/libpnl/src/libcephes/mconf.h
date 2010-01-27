@@ -108,7 +108,7 @@ Copyright 1984, 1987, 1989, 1995 by Stephen L. Moshier
 /* Define to distinguish between -0.0 and +0.0.  */
 #define MINUSZERO 1
 
-#include "protos.h"
+#include "cephes_protos.h"
 
 /* Variable for error reporting.  See mtherr.c.  */
 extern int merror;
