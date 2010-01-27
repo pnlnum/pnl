@@ -21,6 +21,7 @@
 
 #include "config.h"
 #include "pnl_mathtools.h"
+#include "pnl_specfun.h"
 
 
 /** nearest integer round off function
@@ -100,7 +101,6 @@ double pnl_fact(int n)
 
 
 #ifndef HAVE_LGAMMA
-extern double amos_dgamln (double *z__, int *ierr);
 /**
   * Computes the natural logarithm of the Gamma function
   * @param x  a real number > 0
@@ -109,9 +109,7 @@ extern double amos_dgamln (double *z__, int *ierr);
 
 double lgamma(double x)
 {
-  int ierr;
-  if ( x <= 0 ) { PNL_ERROR ("negative argument", "lgamma");}
-  return amos_dgamln (&x, &ierr);
+  return pnl_sp_log_gamma (x);
 }
 #endif
 
@@ -125,7 +123,7 @@ double lgamma(double x)
   */
 double tgamma(double x)
 {
-  return (x > 0) ? exp(lgamma(x)) : M_PI/tgamma(1-x)/sin(M_PI*(1-x));
+  return pnl_sp_gamma (x);
 } 
 #endif
 

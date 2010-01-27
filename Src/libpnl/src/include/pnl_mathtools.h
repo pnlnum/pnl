@@ -128,13 +128,27 @@ extern double pnl_pow_i (double x, int n);
 #define MIN(A,B) ( (A) < (B) ? (A):(B) )
 #endif
 
-#if defined(WIN32) && !defined(NAN)
+#ifndef NAN
+#ifdef WIN32
 static const unsigned long __pnl_nan__[2] = {0xffffffff, 0x7fffffff};
 #define NAN (*(const double *) __pnl_nan__)
+#else
+static double __pnl_nan__ = 1.0/0.0 - 1.0/0.0;
+#define NAN __pnl_nan__;
+#endif
 #endif
 
-#define PNL_POSINF (-log(0.))
-#define PNL_NEGINF (log(0.))
+#ifndef INFINITY
+#ifdef WIN32
+#define INFINITY 1.79769313486231570815E308    /* 2**1024*(1-MACHEP) */
+#else
+double __pnl__infinity__ = 1.0/0.0;  /* 99e999; */
+#define INFINITY __pnl__infinity__
+#endif
+#endif
+
+#define PNL_POSINF INFINITY
+#define PNL_NEGINF (-INFINITY)
 
 #define PNL_IS_ODD(n) ((n) & 1) /* last bit is 1 */
 #define PNL_IS_EVEN(n) ((n) ^ 1) /* last bit is 0 */
@@ -145,7 +159,9 @@ static const unsigned long __pnl_nan__[2] = {0xffffffff, 0x7fffffff};
 #define CUB(X) pnl_pow_i(X, 3)
 #ifdef _MSC_VER
 #define isnan _isnan
+#define isfinite _finite
 #endif
+
 
 #define PNL_ERROR(msg, func) {fprintf(stderr, "%s in function %s \n", msg, func); abort();}
 #ifdef PNL_RANGE_CHECK_OFF
