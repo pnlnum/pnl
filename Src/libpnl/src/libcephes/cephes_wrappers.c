@@ -22,6 +22,6 @@
 
 double pnl_sf_gamma_inc (double a, double x)
 {
-  return  pnl_sf_gamma_inc_Q (a, x) * pnl_sp_gamma (a);
+  return  pnl_sf_gamma_inc_Q (a, x) * pnl_sf_gamma (a);
 }
 
