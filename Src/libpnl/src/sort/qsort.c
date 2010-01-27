@@ -149,7 +149,7 @@ static __inline__ void med3noindex(char *ans, int *i_ans, char *a, char *b, char
     :(cmp(b, c) > 0 ? (ans=b) : (cmp(a, c) < 0 ? (ans=a) : (ans=c)));
 }
 
-#define med3index index_flag==TRUE ? med3withindex : med3noindex
+#define med3index (index_flag==TRUE ? med3withindex : med3noindex)
 
 /**
  * @param a a generic pointer to be sorted
@@ -178,7 +178,7 @@ void pnl_qsort(void *a, int n, int es, int lda, int *t, int ldt, int index_flag,
   swap_cnt = 0;
   if (n < 7)
     {
-      for (pm = a + esa, tm = t + est; pm < ((char *) a) + n * esa; pm += esa, tm += est)
+      for (pm = ((char*)a) + esa, tm = t + est; pm < ((char *) a) + n * esa; pm += esa, tm += est)
         {
           for (pl = pm, tl = tm; pl > (char *) a && cmp(pl - esa, pl) > 0; pl -= esa, tl -= est)
             {
@@ -251,7 +251,7 @@ void pnl_qsort(void *a, int n, int es, int lda, int *t, int ldt, int index_flag,
     tc -= est;
   }
   if (swap_cnt == 0) {  /* Switch to insertion sort */
-    for (pm = a + esa, tm = t + est; pm < ((char *) a) + n * esa; pm += esa, tm+= est)
+    for (pm = ((char*)a) + esa, tm = t + est; pm < ((char *) a) + n * esa; pm += esa, tm+= est)
       {
       for (pl = pm, tl = tm; pl > (char *) a && cmp(pl - esa, pl) > 0; 
            pl -= esa, tl -= est)
