@@ -273,17 +273,6 @@ functions are :
 
 \subsection{Special Functions}
 
-We provide approximations of the different Bessel (and Hankel) functions both
-for real and complex arguments. These approximations were originally written
-in Fortran in the Amos library and have been translated into C by
-Jean-Philippe Chancelier, to whom we are very greatful, partly by using {\em
-  f2c} partly by hand. The definitions of these functions have been extended
-to negative orders by using the relations given in the {\em Amos} library
-
-We also provide approximations of the different Incomplete Gamma Functions
-(and Exponential integrals) for real arguments. These approximations come from
-``Numerical Recipes''.
-
 \subsubsection{Real Bessel Functions}
 
 \begin{itemize}
@@ -366,7 +355,14 @@ We also provide approximations of the different Incomplete Gamma Functions
   order \var{v}  and multiplied by $e^{I z}$.
 \end{itemize}
 
+\subsubsection{Error functions}
 
+\begin{itemize}
+\item \describefun{double}{pnl_sp_erf}{double x}
+  \sshortdescribe Computes $\frac{2}{\pi}\int_0^\infty \expp{-t^2} ft$
+\item \describefun{double}{pnl_sp_erfc}{double x}
+  \sshortdescribe Computes $1. - \frac{2}{\pi}\int_0^\infty \expp{-t^2} ft$  
+\end{itemize}
 
 \subsubsection{Incomplete Gamma Function }
 
@@ -378,20 +374,21 @@ A relation similar to the one existing for the standard Gamma function holds
 \begin{equation*}
   \Gamma\paren{a, x}= \frac{- x^{a} \expp{-x} + \Gamma (a+1, x)}{a}.
 \end{equation*}
+\begin{align*}
+  \Gamma(a)&=\int_0^{\infty} u^{a-1} \expp{-u}du\\ 
+  P(a, x) &= \frac{\Gamma(a) - \Gamma(a, x)}{\Gamma(a)} =
+  \frac{1}{\Gamma(a)} \int_0^x u^{a-1} \expp{-u}  du\\ 
+  Q(a, x) &= 1-P(a, x) =\frac{\Gamma(a, x)}{\Gamma(a)} =
+  \frac{1}{\Gamma(a)} \int_x^{\infty} \expp{-u} u^{a-1} du. 
+\end{align*}
 
 \begin{itemize}
-\item \describefun{double}{pnl_gamma_inc_func}{double a, double x}
+\item \describefun{double}{pnl_gamma_inc}{double a, double x}
   \sshortdescribe   computes $\Gamma(a, x), \quad a \in \R , x \geq 0$
-\item \describefun{void}{pnl_gamma_inc}{double a, double x, double $\ast$Ga, 
-    double $\ast$P, double $\ast$Q}
-  \sshortdescribe   computes for $a >0, x \geq 0$
-  \begin{align*}
-    \Gamma(a)&=\int_0^{\infty} u^{a-1} \expp{-u}du\\ 
-    P(a, x) &= \frac{\Gamma(a) - \Gamma(a, x)}{\Gamma(a)} =
-    \frac{1}{\Gamma(a)} \int_0^x u^{a-1} \expp{-u}  du\\ 
-    Q(a, x) &= 1-P(a, x) =\frac{\Gamma(a, x)}{\Gamma(a)} =
-    \frac{1}{\Gamma(a)} \int_x^{\infty} \expp{-u} u^{a-1} du. 
-  \end{align*}
+\item \describefun{void}{pnl_gamma_inc_P}{double a, double x}
+  \sshortdescribe  computes $P(a, x), \quad a \in \R , x \geq 0$
+\item \describefun{void}{pnl_gamma_inc_Q}{double a, double x}
+  \sshortdescribe  computes $Q(a, x), \quad a \in \R , x \geq 0$
 \end{itemize}
 
 \subsubsection{Exponential integrals}
@@ -460,15 +457,10 @@ For $x \in \R$
 \end{equation*}
 
 \begin{itemize}
-\item \describefun{double}{pnl_expint_En}{int n, double x}
+\item \describefun{double}{pnl_sf_expint_En}{int n, double x}
   \sshortdescribe   computes for  $ n\geq 0, x \geq 0$ and $x>0$ if $n=0$ or $1$.
   \begin{equation*}
     E_n(x)= \int_1^{\infty} u^{-n} \expp{-x u} du.
-  \end{equation*}
-\item \describefun{double}{pnl_expint_Ei}{double x}
-  \sshortdescribe   computes the principal value of integral, for $x>0$ 
-  \begin{equation*}
-    Ei(x) = - \int_{-x}^{\infty} \frac{\expp{-u}}{u} du = \int_{-\infty}^x \frac{\expp{u}}{u} du 
   \end{equation*}
 \end{itemize}
 
@@ -522,41 +514,41 @@ For $x \in \R$
 % \Gamma_{Forward}  \expp{2 (r-q)T} = \Gamma_{S}.$$
 
 \begin{itemize}
-  \item 
-    \describefun{double}{pnl_bs_call}{double s,double k,double T,double r,double divid,double sigma}
-    \sshortdescribe Computes the price of a call option with spot \var{s}
-    and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
-    instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
-    \var{divid}.
+\item 
+  \describefun{double}{pnl_bs_call}{double s,double k,double T,double r,double divid,double sigma}
+  \sshortdescribe Computes the price of a call option with spot \var{s}
+  and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
+  instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
+  \var{divid}.
 
-  \item 
-    \describefun{double}{pnl_bs_put}{double s,double k,double T,double r,double divid,double sigma}
-    \sshortdescribe Computes the price a put option with spot \var{s}
-    and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
-    instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
-    \var{divid}.
+\item 
+  \describefun{double}{pnl_bs_put}{double s,double k,double T,double r,double divid,double sigma}
+  \sshortdescribe Computes the price a put option with spot \var{s}
+  and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
+  instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
+  \var{divid}.
 
-  \item 
-    \describefun{double}{pnl_bs_call_put}{int iscall, double s,double k,double T,double r,
-      double divid,double sigma}
-    \sshortdescribe Computes the price of a put option if \var{iscall=0} or a
-    call option if \var{iscall=1} with spot \var{s} and strike \var{k} in the
-    Black-Scholes model with volatility \var{sigma}, instantaneous interest rate
-    \var{r}, maturity \var{T} and dividend rate \var{divid}.
+\item 
+  \describefun{double}{pnl_bs_call_put}{int iscall, double s,double k,double T,double r,
+    double divid,double sigma}
+  \sshortdescribe Computes the price of a put option if \var{iscall=0} or a
+  call option if \var{iscall=1} with spot \var{s} and strike \var{k} in the
+  Black-Scholes model with volatility \var{sigma}, instantaneous interest rate
+  \var{r}, maturity \var{T} and dividend rate \var{divid}.
 
-  \item 
-    \describefun{double}{pnl_bs_vega}{double s,double k,double T,double r,double divid,double sigma}
-    \sshortdescribe Computes the vega of a put or call option with spot \var{s}
-    and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
-    instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
-    \var{divid}.
+\item 
+  \describefun{double}{pnl_bs_vega}{double s,double k,double T,double r,double divid,double sigma}
+  \sshortdescribe Computes the vega of a put or call option with spot \var{s}
+  and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
+  instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
+  \var{divid}.
 
-  \item 
-    \describefun{double}{pnl_bs_gamma}{double s,double k,double T,double r,double divid,double sigma}
-    \sshortdescribe Computes the gamma of a put or call option with spot \var{s}
-    and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
-    instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
-    \var{divid}.
+\item 
+  \describefun{double}{pnl_bs_gamma}{double s,double k,double T,double r,double divid,double sigma}
+  \sshortdescribe Computes the gamma of a put or call option with spot \var{s}
+  and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
+  instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
+  \var{divid}.
 \end{itemize}
 
 Practitioners do not speak in terms of option prices, but rather compare
@@ -567,25 +559,25 @@ strike, option price.  the second function is for a list of strikes and
 maturities, a matrix of prices (with strikes varying row-wise).
 
 \begin{itemize}
-  \item 
-    \describefun{double}{pnl_bs_implicit_vol}{int is_call, double Price, double s,
-      double K, double T, double r, double divid, int *error}
-    \sshortdescribe Computes the implied volatility of a put option if
-    \var{iscall=0} or a call option if \var{iscall=1} with spot \var{s} and
-    strike \var{K} in the Black-Scholes model with instantaneous interest rate
-    \var{r}, maturity \var{T} and dividend rate \var{divid}. On output
-    \var{error} is \var{OK} if the computed of the implied volatility succeeded
-    or \var{FAIL} if it failed.
+\item 
+  \describefun{double}{pnl_bs_implicit_vol}{int is_call, double Price, double s,
+    double K, double T, double r, double divid, int *error}
+  \sshortdescribe Computes the implied volatility of a put option if
+  \var{iscall=0} or a call option if \var{iscall=1} with spot \var{s} and
+  strike \var{K} in the Black-Scholes model with instantaneous interest rate
+  \var{r}, maturity \var{T} and dividend rate \var{divid}. On output
+  \var{error} is \var{OK} if the computed of the implied volatility succeeded
+  or \var{FAIL} if it failed.
 
-  \item 
-    \describefun{int}{pnl_bs_matrix_implicit_vol}{const \refstruct{PnlMatInt}
-      $\ast$iscall, const \refstruct{PnlMat} $\ast$Price, double s, 
-      double r, double divid, const \refstruct{PnlVect} $\ast$K, 
-      const \refstruct{PnlVect} $\ast$T, \refstruct{PnlMat} $\ast$Vol}
-    \sshortdescribe Computes the matrix of implied volatilities \var{Vol(i,j)} of a put option if
-    \var{iscall(i,j)=0} or a call option if \var{iscall(i,j)=1} with spot \var{s} and
-    strike \var{K(j)} in the Black-Scholes model with instantaneous interest rate
-    \var{r}, maturity \var{T(j)} and dividend rate \var{divid}. This function
-    returns the number of failures, when everything succeded it returns $0$.
+\item 
+  \describefun{int}{pnl_bs_matrix_implicit_vol}{const \refstruct{PnlMatInt}
+    $\ast$iscall, const \refstruct{PnlMat} $\ast$Price, double s, 
+    double r, double divid, const \refstruct{PnlVect} $\ast$K, 
+    const \refstruct{PnlVect} $\ast$T, \refstruct{PnlMat} $\ast$Vol}
+  \sshortdescribe Computes the matrix of implied volatilities \var{Vol(i,j)} of a put option if
+  \var{iscall(i,j)=0} or a call option if \var{iscall(i,j)=1} with spot \var{s} and
+  strike \var{K(j)} in the Black-Scholes model with instantaneous interest rate
+  \var{r}, maturity \var{T(j)} and dividend rate \var{divid}. This function
+  returns the number of failures, when everything succeded it returns $0$.
 \end{itemize}
 
