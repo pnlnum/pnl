@@ -37,17 +37,18 @@ static void exp_int_test ()
 {
 #ifdef HAVE_GSL
   int      n;
-  double Gamma_gsl,IP_gsl,IQ_gsl,En_gsl,Ei_gsl,Gamma_neg_gsl;
+  double Gamma_gsl,IP_gsl,IQ_gsl,En_gsl,Gamma_neg_gsl;
   double a,x;
-  double Gamma,IP,IQ,En,Ei,Gamma_neg;
+  double Gamma,IP,IQ,En,Gamma_neg;
 
   a=0.2;
   x=5.0;
   
-  pnl_gamma_inc(a,x,&Gamma,&IP,&IQ);
+  Gamma = pnl_sf_gamma_inc(a,x);
+  IP = pnl_sf_gamma_inc_Q(a,x);
+  IQ = pnl_sf_gamma_inc_P(a,x);
 
-  Gamma_neg=pnl_gamma_inc_func(-a,x);
-  Ei=pnl_expint_Ei(x);
+  Gamma_neg=pnl_sf_gamma_inc(-a,x);
 
   printf( "error in Exponential Integrals\n");
 
@@ -55,11 +56,10 @@ static void exp_int_test ()
   Gamma_neg_gsl=gsl_sf_gamma_inc(-a,x);
   IQ_gsl=gsl_sf_gamma_inc_Q (a,x);
   IP_gsl=gsl_sf_gamma_inc_P (a,x);
-  Ei_gsl=gsl_sf_expint_Ei (x);
 
   for(n=1;n<10;n++)
     {
-      En=pnl_expint_En(n,x);
+      En=pnl_sf_expint_En(n,x);
       En_gsl=gsl_sf_expint_En (n,x);
       printf( "  E_%d      = %7.4f - %7.4f = %7.4f \n",n,En,En_gsl,En-En_gsl);
     }
@@ -67,7 +67,6 @@ static void exp_int_test ()
   printf( "Gamma_neg = %7.4f - %7.4f = %7.4f \n",Gamma_neg,Gamma_neg_gsl,Gamma_neg-Gamma_neg_gsl);
   printf( "  IQ      = %7.4f - %7.4f = %7.4f \n",IQ,IQ_gsl,IQ-IQ_gsl);
   printf( "  IP      = %7.4f - %7.4f = %7.4f \n",IP,IP_gsl,IP-IP_gsl);
-  printf( "  Ei      = %7.4f - %7.4f = %7.4f \n",Ei,Ei_gsl,Ei-Ei_gsl);
   printf( "  En      = %7.4f - %7.4f = %7.4f \n",En,En_gsl,En-En_gsl);
 #else
   printf("Tests for Exponential Integrals only available with GSL\n");
