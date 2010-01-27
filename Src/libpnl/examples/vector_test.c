@@ -404,7 +404,7 @@ static void pnl_vect_complex_create_from_ptr_test()
 {
   PnlVectComplex *v;
   int size;
-  dcomplex x[4]={Complex(1.0,4.0), Complex(5.0,3.0), Complex(6.0,-1.0), Complex(8.0,2.0)};
+  dcomplex x[4]={{1.0,4.0}, {5.0,3.0}, {6.0,-1.0}, {8.0,2.0}};
   printf("test de la fonction 'pnl_vect_complex_create_from_ptr' : ");
   size=4;
   v=pnl_vect_complex_create_from_ptr(size,x);
@@ -441,7 +441,7 @@ static void pnl_vect_complex_plus_vect_test()
 {
   PnlVectComplex *v1;
   PnlVectComplex *v2;
-  dcomplex x[4]={Complex(1.0,4.0), Complex(5.0,3.0), Complex(6.0,-1.0), Complex(8.0,2.0)};
+  dcomplex x[4]={{1.0,4.0}, {5.0,3.0}, {6.0,-1.0}, {8.0,2.0}};
   printf("test de la fonction 'pnl_vect_complex_plus_vect' : ");
   v1=pnl_vect_complex_create_from_ptr(4,x);
   v2=pnl_vect_complex_create_from_dcomplex(4,Complex(3.0,2.0));
@@ -509,7 +509,7 @@ static void pnl_vect_complex_mult_vect_term_test()
 {
   PnlVectComplex *v1;
   PnlVectComplex *v2;
-  dcomplex x[4]={Complex(1.0,4.0), Complex(5.0,3.0), Complex(6.0,-1.0), Complex(8.0,2.0)};
+  dcomplex x[4]={{1.0,4.0}, {5.0,3.0}, {6.0,-1.0}, {8.0,2.0}};
   printf("test de la fonction 'pnl_vect_complex_mult_vect_term' : ");
   v1=pnl_vect_complex_create_from_ptr(4,x);
   v2=pnl_vect_complex_create_from_dcomplex(4,Complex(3.0,2.0));
@@ -572,7 +572,7 @@ static void pnl_vect_complex_scalar_prod_test()
   PnlVectComplex *v1;
   PnlVectComplex *v2;
   dcomplex y;
-  dcomplex x[4]={Complex(1.0,4.0), Complex(5.0,3.0), Complex(6.0,-1.0), Complex(8.0,2.0)};
+  dcomplex x[4]={{1.0,4.0}, {5.0,3.0}, {6.0,-1.0}, {8.0,2.0}};
   printf("test de la fonction 'pnl_vect_complex_scalar_prod' : ");
   v1=pnl_vect_complex_create_from_ptr(4,x);
   v2=pnl_vect_complex_create_from_dcomplex(4,Complex(3.0,2.0));
@@ -586,7 +586,7 @@ static void pnl_vect_complex_prod_test()
 {
   PnlVectComplex *v1;
   dcomplex y;
-  dcomplex x[4]={Complex(1.0,4.0), Complex(5.0,3.0), Complex(6.0,-1.0), Complex(8.0,2.0)};
+  dcomplex x[4]={{1.0,4.0}, {5.0,3.0}, {6.0,-1.0}, {8.0,2.0}};
   printf("test de la fonction 'pnl_vect_complex_prod' : ");
   v1=pnl_vect_complex_create_from_ptr(4,x);
   y=pnl_vect_complex_prod(v1);
