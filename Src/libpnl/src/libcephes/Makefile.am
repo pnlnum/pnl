@@ -1,0 +1,19 @@
+SUBDIRS =
+
+include $(top_srcdir)/Make.incl
+AM_CPPFLAGS = $(PNL_INCLUDES)
+
+noinst_LTLIBRARIES = libcephes.la 
+libcephes_la_SOURCES = \
+airy.c    ellie.c   fdtr.c    igami.c   kolmogorov.c  polmisc.c   sici.c    unity.c \
+bdtr.c    ellik.c   fresnl.c  incbet.c  mmmpy.c       polrt.c     simpsn.c  yn.c \
+beta.c    ellpe.c   gamma.c   incbi.c   mtherr.c      polyn.c     simq.c    zeta.c \
+btdtr.c   ellpj.c   gdtr.c    mtransp.c     zetac.c \
+cbrt.c    ellpk.c   gels.c    j0.c      mvmpy.c       psi.c       sindg.c \
+chbevl.c  hyp2f1.c  j1.c      nbdtr.c       rgamma.c    spence.c \
+chdtr.c   hyperg.c  jv.c      ndtr.c        round.c     stdtr.c \
+const.c   i0.c      k0.c      ndtri.c       scipy_iv.c  struve.c \
+cpmul.c   expn.c    i1.c      k1.c      pdtr.c        setprec.c   tandg.c \
+dawsn.c   igam.c    kn.c      polevl.c      shichi.c    tukey.c \
+cephes_wrappers.c
+
