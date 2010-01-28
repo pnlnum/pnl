@@ -361,7 +361,11 @@ functions are :
 \item \describefun{double}{pnl_sp_erf}{double x}
   \sshortdescribe Computes $\frac{2}{\pi}\int_0^\infty \expp{-t^2} ft$
 \item \describefun{double}{pnl_sp_erfc}{double x}
-  \sshortdescribe Computes $1. - \frac{2}{\pi}\int_0^\infty \expp{-t^2} ft$  
+  \sshortdescribe Computes $1. - \frac{2}{\pi}\int_0^\infty \expp{-t^2} ft$
+\item \describefun{double}{pnl_sp_log_erf}{double x}
+  \sshortdescribe Computes $\log(pnl_sp_erf (x))$
+\item \describefun{double}{pnl_sp_log_erfc}{double x}
+  \sshortdescribe Computes$\log(pnl_sp_erfc (x))$
 \end{itemize}
 
 \subsubsection{Incomplete Gamma Function }
@@ -386,9 +390,9 @@ A relation similar to the one existing for the standard Gamma function holds
 \item \describefun{double}{pnl_gamma_inc}{double a, double x}
   \sshortdescribe   computes $\Gamma(a, x), \quad a \in \R , x \geq 0$
 \item \describefun{void}{pnl_gamma_inc_P}{double a, double x}
-  \sshortdescribe  computes $P(a, x), \quad a \in \R , x \geq 0$
+  \sshortdescribe  computes $P(a, x), \quad a > 0 , x \geq 0$
 \item \describefun{void}{pnl_gamma_inc_Q}{double a, double x}
-  \sshortdescribe  computes $Q(a, x), \quad a \in \R , x \geq 0$
+  \sshortdescribe  computes $Q(a, x), \quad a > 0 , x \geq 0$
 \end{itemize}
 
 \subsubsection{Exponential integrals}
@@ -462,9 +466,29 @@ For $x \in \R$
   \begin{equation*}
     E_n(x)= \int_1^{\infty} u^{-n} \expp{-x u} du.
   \end{equation*}
+\item \describefun{double}{pnl_sf_expint_Ei}{double x}
+  \sshortdescribe   computes for  $x>0$  the principal value of
+  \begin{equation*}
+    Ei(x)= \int_{-\infty}^x \frac{\expp{t}}{t}  du.
+  \end{equation*}
 \end{itemize}
 
+\subsubsection{Hypergeometric functions}
 
+\begin{itemize}
+\item \describefun{double}{pnl_sf_hyperg_2F1}{double a, double b, double c,
+    double x}
+\sshortdescribe Computes the Gauss hypergeometric function $2F1(a,b,c,x)$. 
+\item \describefun{double}{pnl_sf_hyperg_1F1}{double a, double b, double x}
+  \sshortdescribe Computes the hypergeometric function $1F1(a,b,x) = M(a,b,x)$
+\item \describefun{double}{pnl_sf_hyperg_2F0}{double a, double b, double x}
+  \sshortdescribe Computes the hypergeometric function $2F0(a,b,x)$. For
+  $x<0$, $2F0 (a,b,x) = (-x)^{-a} U(a,1+a-b,-\frac{1}{x})$.
+\item \describefun{double}{pnl_sf_hyperg_0F1}{double c, double x}
+  \sshortdescribe Computes the hypergeometric function $0F1(c,x)$
+\item \describefun{double}{pnl_sf_hyperg_U}{double a, double b, double x}
+    \sshortdescribe Computes the confluent hypergeometric function $U(a,b,x)$
+\end{itemize}
 
 %% --------------------------------------------------------------------- %%
 %% financial functions
