@@ -139,7 +139,7 @@ extern int pnl_isfinite (double x);
 #endif
 
 #ifndef INFINITY
-#define (pnl_posinf ())
+#define INFINITY (pnl_posinf ())
 #endif
 
 #define PNL_POSINF INFINITY
