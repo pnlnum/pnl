@@ -6,12 +6,6 @@
  *
  * SYNOPSIS:
  *
- * typedef struct
- *      {
- *      double r;
- *      double i;
- *      }dcomplex;
- *
  * double xcof[], cof[];
  * int m;
  * dcomplex root[];
