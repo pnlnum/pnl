@@ -23,6 +23,7 @@
 
 #include "config.h"
 #include "pnl_specfun.h"
+#include "pnl_random.h"
 
 #ifdef HAVE_GSL
 extern double gsl_sf_expint_Ei (double x);
@@ -30,6 +31,15 @@ extern double gsl_sf_expint_En (int n,double x);
 extern double gsl_sf_gamma_inc(double a,double x);
 extern double gsl_sf_gamma_inc_Q (double a,double x);
 extern double gsl_sf_gamma_inc_P (double a,double x);
+extern double gsl_sf_gamma (double);
+extern double gsl_sf_lngamma (double);
+extern double gsl_sf_log_erfc (double x);
+extern double gsl_sf_erf (double x);
+extern double gsl_sf_erfc (double x);
+extern double gsl_sf_hyperg_2F1 (double a, double b, double c, double x);
+extern double gsl_sf_hyperg_1F1 (double a, double b, double x);
+extern double gsl_sf_hyperg_2F0 (double a, double b, double x);
+extern double gsl_sf_hyperg_0F1 (double c, double x);
 #endif
 
 
@@ -44,37 +54,80 @@ static void exp_int_test ()
   a=0.2;
   x=5.0;
   
-  Gamma = pnl_sf_gamma_inc(a,x);
-  IP = pnl_sf_gamma_inc_Q(a,x);
-  IQ = pnl_sf_gamma_inc_P(a,x);
-
+  Gamma = pnl_sf_gamma_inc(a,0);
+  IP = pnl_sf_gamma_inc_P(a,x);
+  IQ = pnl_sf_gamma_inc_Q(a,x);
+  /* Ei=pnl_sf_expint_Ei(x); */
   Gamma_neg=pnl_sf_gamma_inc(-a,x);
 
-  printf( "error in Exponential Integrals\n");
+  printf( "Test of Exponential Integrals\n");
 
   Gamma_gsl=gsl_sf_gamma_inc(a,0);
   Gamma_neg_gsl=gsl_sf_gamma_inc(-a,x);
   IQ_gsl=gsl_sf_gamma_inc_Q (a,x);
   IP_gsl=gsl_sf_gamma_inc_P (a,x);
+  /* Ei_gsl=gsl_sf_expint_Ei (x); */
 
   for(n=1;n<10;n++)
     {
       En=pnl_sf_expint_En(n,x);
       En_gsl=gsl_sf_expint_En (n,x);
-      printf( "  E_%d      = %7.4f - %7.4f = %7.4f \n",n,En,En_gsl,En-En_gsl);
+      printf( "  E_%d      = %f - %f = %f \n",n,En,En_gsl,En-En_gsl);
     }
-  printf( "Gamma     = %7.4f - %7.4f = %7.4f \n",Gamma,Gamma_gsl,Gamma-Gamma_gsl);
-  printf( "Gamma_neg = %7.4f - %7.4f = %7.4f \n",Gamma_neg,Gamma_neg_gsl,Gamma_neg-Gamma_neg_gsl);
-  printf( "  IQ      = %7.4f - %7.4f = %7.4f \n",IQ,IQ_gsl,IQ-IQ_gsl);
-  printf( "  IP      = %7.4f - %7.4f = %7.4f \n",IP,IP_gsl,IP-IP_gsl);
-  printf( "  En      = %7.4f - %7.4f = %7.4f \n",En,En_gsl,En-En_gsl);
+  printf( "Gamma     = %f - %f = %f \n",Gamma,Gamma_gsl,Gamma-Gamma_gsl);
+  printf( "Gamma_neg = %f - %f = %f \n",Gamma_neg,Gamma_neg_gsl,Gamma_neg-Gamma_neg_gsl);
+  printf( "  IQ      = %f - %f = %f \n",IQ,IQ_gsl,IQ-IQ_gsl);
+  printf( "  IP      = %f - %f = %f \n",IP,IP_gsl,IP-IP_gsl);
+  /* printf( "  Ei      = %f - %f = %f \n",Ei,Ei_gsl,Ei-Ei_gsl); */
+  printf( "  En      = %f - %f = %f \n",En,En_gsl,En-En_gsl);
 #else
   printf("Tests for Exponential Integrals only available with GSL\n");
 #endif
 }
 
+
+void gamma_test ()
+{
+#ifdef HAVE_GSL
+  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
+  double x;
+  pnl_rand_init (1, 1, gen);
+  x = fabs (pnl_rand_normal (gen));
+  printf( "Test error of Gamma functions\n");
+  printf ("error on gamma : %f\n", gsl_sf_gamma (x) - pnl_sf_gamma (x));
+  printf ("error on log_gamma : %f\n", gsl_sf_lngamma (x) - pnl_sf_log_gamma (x));
+  printf ("error on erf : %f\n", gsl_sf_erf (x) - pnl_sf_erf (x));
+  printf ("error on erfc : %f\n", gsl_sf_erfc (x) - pnl_sf_erfc (x));
+  printf ("error on log_erfc : %f\n", gsl_sf_log_erfc (x) - pnl_sf_log_erfc (x));
+#else
+  printf( "Test error of Gamma functions only available with GSL\n");  
+#endif
+}
+
+void hyperg_test ()
+{
+#ifdef HAVE_GSL
+  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
+  double x, a, b, c;
+  pnl_rand_init (1, 1, gen);
+  x = pnl_rand_uni (gen);
+  a = fabs (pnl_rand_normal (gen));
+  b = fabs (pnl_rand_normal (gen));
+  c = fabs (pnl_rand_normal (gen));
+  printf( "Test error of Hypergeometric functions\n");
+  printf ("error on 0F1 : %f\n", gsl_sf_hyperg_0F1(c,x) - pnl_sf_hyperg_0F1(c,x));
+  printf ("error on 1F1 : %f\n", gsl_sf_hyperg_1F1(a,b,x) - pnl_sf_hyperg_1F1(a,b,x) );
+  printf ("error on 2F0 : %f\n", gsl_sf_hyperg_2F0(a+b,b,-x) - pnl_sf_hyperg_2F0(a+b,b,-x));
+  printf ("error on 2F1 : %f\n", gsl_sf_hyperg_2F1(a,b,c,x) - pnl_sf_hyperg_2F1(a,b,c,x));
+#else
+  printf( "Test error of Hypergoemtric functions only available with GSL\n");  
+#endif
+}
+
+
 void special_func_test ()
 {
   exp_int_test();
- 
+  gamma_test ();
+  hyperg_test ();
 }
