@@ -5,8 +5,8 @@ include $(top_srcdir)/Make.incl
 AM_CPPFLAGS = $(PNL_INCLUDES)
 
 lib_LTLIBRARIES = libpnl.la
-libpnl_la_SOURCES = basis.c pnl_complex.c cumulfunc.c mathtools.c \
-finance_function.c integration_GK.c \
+libpnl_la_SOURCES = infnan.c pnl_complex.c cumulfunc.c mathtools.c \
+basis.c finance_function.c integration_GK.c \
 brent.c roots.c integ.c laplace.c
 
 libpnl_la_LDFLAGS=-avoid-version @BLAS_LIBS@ @LAPACK_LIBS@

@@ -104,12 +104,12 @@ double pnl_fact(int n)
 /**
   * Computes the natural logarithm of the Gamma function
   * @param x  a real number > 0
-  * @return  log(Gamma(x))
+  * @return  log(gamma(x))
   */ 
 
 double lgamma(double x)
 {
-  return pnl_sp_log_gamma (x);
+  return pnl_sf_log_gamma (x);
 }
 #endif
 
@@ -119,11 +119,11 @@ double lgamma(double x)
 /**
   * Computes the true Gamma function 
   * @param x  a real number > -1
-  * @return  Gamma(x)
+  * @return  gamma(x)
   */
 double tgamma(double x)
 {
-  return pnl_sp_gamma (x);
+  return pnl_sf_gamma (x);
 } 
 #endif
 
@@ -153,3 +153,5 @@ double pnl_pow_i (double x, int n)
     } 
   return y;
 } 
+
+

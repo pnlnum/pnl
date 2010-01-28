@@ -129,26 +129,23 @@ extern double pnl_pow_i (double x, int n);
 #endif
 
 #ifndef NAN
-#ifdef WIN32
-static const unsigned long __pnl_nan__[2] = {0xffffffff, 0x7fffffff};
-#define NAN (*(const double *) __pnl_nan__)
-#else
-static double __pnl_nan__ = 1.0/0.0 - 1.0/0.0;
-#define NAN __pnl_nan__
-#endif
+#define NAN (pnl_nan ())
 #endif
 
 #ifndef INFINITY
-#ifdef WIN32
-#define INFINITY 1.79769313486231570815E308    /* 2**1024*(1-MACHEP) */
-#else
-double __pnl__infinity__ = 1.0/0.0;  /* 99e999; */
-#define INFINITY __pnl__infinity__
-#endif
+#define (pnl_posinf ())
 #endif
 
 #define PNL_POSINF INFINITY
 #define PNL_NEGINF (-INFINITY)
+
+#ifndef isnan
+#define isnan pnl_isnan
+#endif
+#ifndef isfinite 
+#define isfinite pnl_isfinite
+#endif
+
 
 #define PNL_IS_ODD(n) ((n) & 1) /* last bit is 1 */
 #define PNL_IS_EVEN(n) ((n) ^ 1) /* last bit is 0 */
@@ -157,10 +154,6 @@ double __pnl__infinity__ = 1.0/0.0;  /* 99e999; */
 
 #define SQR(X) pnl_pow_i(X, 2)
 #define CUB(X) pnl_pow_i(X, 3)
-#ifdef _MSC_VER
-#define isnan _isnan
-#define isfinite _finite
-#endif
 
 
 #define PNL_ERROR(msg, func) {fprintf(stderr, "%s in function %s \n", msg, func); abort();}
