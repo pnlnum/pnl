@@ -23,6 +23,12 @@ extern double pnl_fact(int n);
 extern double lgamma (double x);
 extern double tgamma (double x);
 extern double pnl_pow_i (double x, int n);
+extern double pnl_nan (void);
+extern double pnl_posinf (void);
+extern double pnl_neginf (void);
+extern int pnl_isnan (double x);
+extern int pnl_isfinite (double x);
+
 
 #define false 0
 #undef FALSE

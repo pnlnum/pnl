@@ -19,14 +19,14 @@
 
 #include "pnl_mathtools.h"
 
-static __pnl_div (double x, double y)
+static double __pnl_div (double x, double y)
 {
   return (x / y);
 }
 
 double pnl_nan (void)
 {
-  return pnl_div (0.0, 0.0);
+  return __pnl_div (0.0, 0.0);
 }
 
 double pnl_posinf (void)
