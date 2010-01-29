@@ -276,6 +276,7 @@ extern  Pricing FPS1D_STD_pricing;
 extern  Pricing FPS2D_STD_pricing;
 extern  Pricing HESCIR1D_STD_pricing;
 extern  Pricing WISHART2D_STD2D_pricing;
+extern  Pricing WISHART2D_VOL_pricing;
 extern  Pricing MERHES1D_STD_pricing;
 extern  Pricing MERHES1D_LIM_pricing;
 extern  Pricing MERHES1D_PAD_pricing;
@@ -335,6 +336,7 @@ Pricing *pricings_e[]=
     &FPS2D_STD_pricing,
     &HESCIR1D_STD_pricing,
     &WISHART2D_STD2D_pricing,
+    &WISHART2D_VOL_pricing,
     &MERHES1D_STD_pricing,
     &MERHES1D_LIM_pricing,
     &MERHES1D_PAD_pricing,
