@@ -678,6 +678,7 @@ Src/mod/vasicek1d/Makefile \
 Src/mod/vasicek1d/vasicek1d_stdi/Makefile \
 Src/mod/wishart2d/Makefile \
 Src/mod/wishart2d/wishart2d_std2d/Makefile \
+Src/mod/wishart2d/wishart2d_vol/Makefile \
 Src/opt/Makefile \
 Src/opt/doublim/Makefile \
 Src/opt/lim/Makefile \
