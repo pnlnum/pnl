@@ -23,6 +23,13 @@
 
 extern double hyp2f0 (double, double, double, int, double*);
 
+/**
+ * Incomplete Gamma function
+ *
+ * @param a the power of the Gamma function
+ * @param x the lower bound of the integral
+ * @return Gamma (a, x)
+ */
 double pnl_sf_gamma_inc (double a, double x)
 {
   if (x == 0.)
@@ -59,12 +66,37 @@ double pnl_sf_log_erfc (double x)
   return log (pnl_sf_erfc (x));
 }
 
+/*
+ * This a wrapper to hyp2f0 from the Cephes library, but it does not return
+ * the same result as GSL which uses the relation between 2F0 and U as
+ * implemented in the function pnl_sf_hyperg_2F0
+ */
+
+/* double pnl_sf_hyperg_2F0 (double a, double b, double x)
+ * {
+ *   int type;
+ *   double err1, res1;
+ *   type = 1;
+ *   res1 = hyp2f0 (a, b, x, type, &err1);
+ *   return res1;
+ * } */
+
 double pnl_sf_hyperg_2F0 (double a, double b, double x)
 {
-  int type;
-  double err;
-  type = 2;
-  return hyp2f0 (a, b, x, type, &err);
+  if (x < 0.)
+    {
+      double mult;
+      mult = pow (-1. / x, a);
+      return mult * pnl_sf_hyperg_U (a, 1. + a - b, -1 / x);
+    }
+  else if (x == 0.)
+    {
+      return 1.;
+    }
+  else
+    {
+      PNL_ERROR ("x must be <= 0", "hyperg_2F0");
+    }
 }
 
 double pnl_sf_hyperg_0F1 (double v, double x)

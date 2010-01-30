@@ -29,6 +29,7 @@ extern double pnl_sf_hyperg_2F1 (double a, double b, double c, double x);
 extern double pnl_sf_hyperg_1F1 (double a, double b, double x);
 extern double pnl_sf_hyperg_2F0 (double a, double b, double x);
 extern double pnl_sf_hyperg_0F1 (double c, double x);
+extern double pnl_sf_hyperg_U (double a, double b, double x);
 
 
 #ifdef __cplusplus

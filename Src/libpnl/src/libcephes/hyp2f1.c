@@ -92,12 +92,6 @@
 
 #define ETHRESH 1.0e-12
 
-extern double fabs ( double );
-extern double pow ( double, double );
-extern double round ( double );
-extern double gamma ( double );
-extern double log ( double );
-extern double exp ( double );
 extern double psi ( double );
 static double hyt2f1(double, double, double, double, double *);
 static double hys2f1(double, double, double, double, double *);
@@ -183,9 +177,9 @@ double hyp2f1( a, b, c, x )
     q = hyp2f1(b, 1-c+b, 1-a+b, 1.0/x);
     p *= pow(-x, -a);
     q *= pow(-x, -b);
-    t1 = gamma(c);
-    s = t1*gamma(b-a)/(gamma(b)*gamma(c-a));
-    y = t1*gamma(a-b)/(gamma(a)*gamma(c-b));
+    t1 = Gamma(c);
+    s = t1*Gamma(b-a)/(Gamma(b)*Gamma(c-a));
+    y = t1*Gamma(a-b)/(Gamma(a)*Gamma(c-b));
     return s*p + y*q;
   }
 
@@ -217,7 +211,7 @@ double hyp2f1( a, b, c, x )
       }
       if( d <= 0.0 )
         goto hypdiv;
-      y = gamma(c)*gamma(d)/(gamma(p)*gamma(r));
+      y = Gamma(c)*Gamma(d)/(Gamma(p)*Gamma(r));
       goto hypdon;
     }
     if( d <= -1.0 )
@@ -322,9 +316,9 @@ static double hyt2f1( a, b, c, x, loss )
             goto done;
           /* If power series fails, then apply AMS55 #15.3.6 */
           q = hys2f1( a, b, 1.0-d, s, &err );     
-          q *= gamma(d) /(gamma(c-a) * gamma(c-b));
+          q *= Gamma(d) /(Gamma(c-a) * Gamma(c-b));
           r = pow(s,d) * hys2f1( c-a, c-b, d+1.0, s, &err1 );
-          r *= gamma(-d)/(gamma(a) * gamma(b));
+          r *= Gamma(-d)/(Gamma(a) * Gamma(b));
           y = q + r;
 
           q = fabs(q); /* estimate cancellation error */
@@ -333,7 +327,7 @@ static double hyt2f1( a, b, c, x, loss )
             r = q;
           err += err1 + (MACHEP*r)/y;
 
-          y *= gamma(c);
+          y *= Gamma(c);
           goto done;
         }
       else
@@ -358,9 +352,9 @@ static double hyt2f1( a, b, c, x, loss )
 
           /* sum for t = 0 */
           y = psi(1.0) + psi(1.0+e) - psi(a+d1) - psi(b+d1) - ax;
-          y /= gamma(e+1.0);
+          y /= Gamma(e+1.0);
 
-          p = (a+d1) * (b+d1) * s / gamma(e+2.0); /* Poch for t=1 */
+          p = (a+d1) * (b+d1) * s / Gamma(e+2.0); /* Poch for t=1 */
           t = 1.0;
           do
             {
@@ -377,7 +371,7 @@ static double hyt2f1( a, b, c, x, loss )
 
           if( id == 0.0 )
             {
-              y *= gamma(c)/(gamma(a)*gamma(b));
+              y *= Gamma(c)/(Gamma(a)*Gamma(b));
               goto psidon;
             }
 
@@ -397,10 +391,10 @@ static double hyt2f1( a, b, c, x, loss )
               y1 += p;
             }
         nosum:
-          p = gamma(c);
-          y1 *= gamma(e) * p / (gamma(a+d1) * gamma(b+d1));
+          p = Gamma(c);
+          y1 *= Gamma(e) * p / (Gamma(a+d1) * Gamma(b+d1));
 
-          y *= p / (gamma(a+d2) * gamma(b+d2));
+          y *= p / (Gamma(a+d2) * Gamma(b+d2));
           if( (aid & 1) != 0 )
             y = -y;
 

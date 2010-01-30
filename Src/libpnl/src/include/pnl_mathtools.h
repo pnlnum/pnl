@@ -122,7 +122,25 @@ extern int pnl_isfinite (double x);
 #define INC 1.0e-5 /*Relative Increment for Delta-Hedging*/
 
 #define MAXLOOPS 5000
+#ifdef POW
+#undef POW
+#endif
 #define POW(x,y) pow( (double) (x), (double) (y))
+
+#ifdef SQR
+#undef SQR
+#endif
+#define SQR(x) pnl_pow_i(x, 2)
+
+#ifdef CUB
+#undef CUB
+#endif
+#define CUB(x) pnl_pow_i(x, 3)
+
+#ifdef ABS
+#undef ABS
+#endif
+#define ABS(x) ( ((x) >= 0) ? (x) : -(x) )
 
 /* MAX and MIN already defined in <sys/param.h>  */
 /* if we are compiling for Windows (Visual or mingw32
@@ -157,9 +175,6 @@ extern int pnl_isfinite (double x);
 #define PNL_IS_EVEN(n) ((n) ^ 1) /* last bit is 0 */
 
 #define PNL_ALTERNATE(n) (((n)&1) ? -1 : 1) /* (-1)^n */
-
-#define SQR(X) pnl_pow_i(X, 2)
-#define CUB(X) pnl_pow_i(X, 3)
 
 
 #define PNL_ERROR(msg, func) {fprintf(stderr, "%s in function %s \n", msg, func); abort();}
