@@ -39,6 +39,7 @@ extern double gsl_sf_erfc (double x);
 extern double gsl_sf_hyperg_2F1 (double a, double b, double c, double x);
 extern double gsl_sf_hyperg_1F1 (double a, double b, double x);
 extern double gsl_sf_hyperg_2F0 (double a, double b, double x);
+extern double gsl_sf_hyperg_U (double a, double b, double x);
 extern double gsl_sf_hyperg_0F1 (double c, double x);
 #endif
 
@@ -60,7 +61,7 @@ static void exp_int_test ()
   /* Ei=pnl_sf_expint_Ei(x); */
   Gamma_neg=pnl_sf_gamma_inc(-a,x);
 
-  printf( "Test of Exponential Integrals\n");
+  printf( "\nTest of Exponential Integrals\n");
 
   Gamma_gsl=gsl_sf_gamma_inc(a,0);
   Gamma_neg_gsl=gsl_sf_gamma_inc(-a,x);
@@ -93,12 +94,12 @@ void gamma_test ()
   double x;
   pnl_rand_init (1, 1, gen);
   x = fabs (pnl_rand_normal (gen));
-  printf( "Test error of Gamma functions\n");
-  printf ("error on gamma : %f\n", gsl_sf_gamma (x) - pnl_sf_gamma (x));
+  printf( "\nTest error of Gamma functions\n");
+  printf ("error on gamma     : %f\n", gsl_sf_gamma (x) - pnl_sf_gamma (x));
   printf ("error on log_gamma : %f\n", gsl_sf_lngamma (x) - pnl_sf_log_gamma (x));
-  printf ("error on erf : %f\n", gsl_sf_erf (x) - pnl_sf_erf (x));
-  printf ("error on erfc : %f\n", gsl_sf_erfc (x) - pnl_sf_erfc (x));
-  printf ("error on log_erfc : %f\n", gsl_sf_log_erfc (x) - pnl_sf_log_erfc (x));
+  printf ("error on erf       : %f\n", gsl_sf_erf (x) - pnl_sf_erf (x));
+  printf ("error on erfc      : %f\n", gsl_sf_erfc (x) - pnl_sf_erfc (x));
+  printf ("error on log_erfc  : %f\n", gsl_sf_log_erfc (x) - pnl_sf_log_erfc (x));
 #else
   printf( "Test error of Gamma functions only available with GSL\n");  
 #endif
@@ -108,17 +109,31 @@ void hyperg_test ()
 {
 #ifdef HAVE_GSL
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  double x, a, b, c;
+  double x, a, b, c, r, r_gsl;
   pnl_rand_init (1, 1, gen);
-  x = pnl_rand_uni (gen);
+  x = fabs (pnl_rand_normal (gen));
   a = fabs (pnl_rand_normal (gen));
   b = fabs (pnl_rand_normal (gen));
   c = fabs (pnl_rand_normal (gen));
-  printf( "Test error of Hypergeometric functions\n");
-  printf ("error on 0F1 : %f\n", gsl_sf_hyperg_0F1(c,x) - pnl_sf_hyperg_0F1(c,x));
-  printf ("error on 1F1 : %f\n", gsl_sf_hyperg_1F1(a,b,x) - pnl_sf_hyperg_1F1(a,b,x) );
-  printf ("error on 2F0 : %f\n", gsl_sf_hyperg_2F0(a+b,b,-x) - pnl_sf_hyperg_2F0(a+b,b,-x));
-  printf ("error on 2F1 : %f\n", gsl_sf_hyperg_2F1(a,b,c,x) - pnl_sf_hyperg_2F1(a,b,c,x));
+  printf( "\nTest error of Hypergeometric functions\n");
+  printf ("a = %f; b = %f; c = %f; x = %f\n", a,b,c,x);
+  r_gsl = gsl_sf_hyperg_0F1(c,x);
+  r = pnl_sf_hyperg_0F1(c,x);
+  printf ("error on 0F1 %f - %f = %f\n", r, r_gsl, r-r_gsl);
+  r_gsl = gsl_sf_hyperg_1F1(a,b,x);
+  r = pnl_sf_hyperg_1F1(a,b,x);
+  printf ("error on 1F1 %f - %f = %f\n", r, r_gsl, r-r_gsl);
+  r = pnl_sf_hyperg_2F0(a,b,-x);
+  r_gsl = gsl_sf_hyperg_2F0(a,b,-x);
+  printf ("error on 2F0 %f - %f = %f\n", r, r_gsl, r-r_gsl);
+
+  x = pnl_rand_uni (gen);
+  r_gsl = gsl_sf_hyperg_2F1(a,b,c,x);
+  r = pnl_sf_hyperg_2F1(a,b,c,x);
+  printf ("error on 2F1 %f - %f = %f\n", r, r_gsl, r-r_gsl);
+  r_gsl = gsl_sf_hyperg_U(a,b,x);
+  r = pnl_sf_hyperg_U(a,b,x);
+  printf ("error on U %f - %f = %f\n", r, r_gsl, r-r_gsl);
 #else
   printf( "Test error of Hypergoemtric functions only available with GSL\n");  
 #endif
