@@ -391,9 +391,9 @@ void FUNCTION(pnl_vect, clone)(TYPE(PnlVect) * clone,
 
 
 /**
- * prints a TYPE(PnlVect)in file fic.
+ * prints a TYPE(PnlVect) to a  file.
  *
- * @param V a(constant) TYPE(PnlVect) ptr.
+ * @param V a(constant) TYPE(PnlVect)
  * @param fic a file descriptor.
  */
 void FUNCTION(pnl_vect, fprint)(FILE *fic, const TYPE(PnlVect) * V)
@@ -411,7 +411,7 @@ void FUNCTION(pnl_vect, fprint)(FILE *fic, const TYPE(PnlVect) * V)
 /**
  * prints a TYPE(PnlVect).
  *
- * @param V a(constant) TYPE(PnlVect)ptr.
+ * @param V a(constant) TYPE(PnlVect).
  */
 void FUNCTION(pnl_vect, print)(const TYPE(PnlVect) * V)
 {
@@ -419,21 +419,33 @@ void FUNCTION(pnl_vect, print)(const TYPE(PnlVect) * V)
 }
 
 /**
- * prints a TYPE(PnlVect) in a format compatible with Nsp
+ * prints a TYPE(PnlVect) in a format compatible with Nsp to a file
  *
- * @param V a(constant) TYPE(PnlVect)ptr.
+ * @param V a(constant) TYPE(PnlVect).
+ * @param fic a file descriptor.
  */
-void FUNCTION(pnl_vect, print_nsp)(const TYPE(PnlVect) * V)
+void FUNCTION(pnl_vect, fprint_nsp)(FILE *fic, const TYPE(PnlVect) * V)
 {
   int i;
   printf("[ ");
   for (i=0; i<V->size-1; i++) 
     {
-      printf(OUT_FORMAT,OUT_PUT_FORMAT(V->array[i]));
-      printf("; ");
+      fprintf(fic,OUT_FORMAT,OUT_PUT_FORMAT(V->array[i]));
+      fprintf(fic,"; ");
     }
-  printf(OUT_FORMAT,OUT_PUT_FORMAT(V->array[i]));
-  printf(" ]; \n");
+  fprintf(fic,OUT_FORMAT,OUT_PUT_FORMAT(V->array[i]));
+  fprintf(fic," ]; \n");
+}
+
+
+/**
+ * prints a TYPE(PnlVect) in a format compatible with Nsp
+ *
+ * @param V a(constant) TYPE(PnlVect).
+ */
+void FUNCTION(pnl_vect, print_nsp)(const TYPE(PnlVect) * V)
+{
+  FUNCTION(pnl_vect, fprint_nsp)(stdout, V);
 }
 
 /**

@@ -120,6 +120,7 @@ extern PnlVectComplex pnl_vect_complex_wrap_subvect_with_last(const PnlVectCompl
 extern void pnl_vect_complex_print(const PnlVectComplex *V);
 extern void pnl_vect_complex_print_nsp(const PnlVectComplex *V);
 extern void pnl_vect_complex_fprint(FILE *fic, const PnlVectComplex *V);
+extern void pnl_vect_complex_fprint_nsp(FILE *fic, const PnlVectComplex *V);
 
 extern void pnl_vect_complex_plus_vect(PnlVectComplex *lhs, const PnlVectComplex *rhs); 
 extern void pnl_vect_complex_minus_vect(PnlVectComplex *lhs, const PnlVectComplex *rhs); 

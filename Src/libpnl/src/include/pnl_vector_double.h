@@ -74,6 +74,7 @@ extern PnlVect pnl_vect_wrap_subvect_with_last(const PnlVect *V, int i,int j);
 extern void pnl_vect_print(const PnlVect *V);
 extern void pnl_vect_print_nsp(const PnlVect *V);
 extern void pnl_vect_fprint(FILE *fic, const PnlVect *V);
+extern void pnl_vect_fprint_nsp(FILE *fic, const PnlVect *V);
 extern void pnl_vect_plus_vect(PnlVect *lhs, const PnlVect *rhs); 
 extern void pnl_vect_minus_vect(PnlVect *lhs, const PnlVect *rhs); 
 

@@ -63,6 +63,7 @@ extern PnlVectInt pnl_vect_int_wrap_subvect_with_last(const PnlVectInt *V, int i
 extern void pnl_vect_int_print(const PnlVectInt *V);
 extern void pnl_vect_int_print_nsp(const PnlVectInt *V);
 extern void pnl_vect_int_fprint(FILE *fic, const PnlVectInt *V);
+extern void pnl_vect_int_fprint_nsp(FILE *fic, const PnlVectInt *V);
 extern void pnl_vect_int_plus_vect(PnlVectInt *lhs, const PnlVectInt *rhs); 
 extern void pnl_vect_int_minus_vect(PnlVectInt *lhs, const PnlVectInt *rhs); 
 extern void pnl_vect_int_minus(PnlVectInt *lhs);
