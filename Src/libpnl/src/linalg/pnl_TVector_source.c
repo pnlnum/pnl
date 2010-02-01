@@ -427,7 +427,7 @@ void FUNCTION(pnl_vect, print)(const TYPE(PnlVect) * V)
 void FUNCTION(pnl_vect, fprint_nsp)(FILE *fic, const TYPE(PnlVect) * V)
 {
   int i;
-  printf("[ ");
+  fprintf(fic,"[ ");
   for (i=0; i<V->size-1; i++) 
     {
       fprintf(fic,OUT_FORMAT,OUT_PUT_FORMAT(V->array[i]));
