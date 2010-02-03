@@ -163,6 +163,13 @@ Equivalently to these functions, there exist macros for {\bf \refstruct{PnlVect}
   \sshortdescribe Prints a \refstruct{PnlVect}.  
 \item \describefun{void}{pnl_vect_fprint}{FILE $\ast$fic, const \refstruct{PnlVect} $\ast$V}
   \sshortdescribe Prints a \refstruct{PnlVect} in file \var{fic}.  
+\item \describefun{void}{pnl_vect_print_nsp}{const \refstruct{PnlVect} $\ast$V}
+  \sshortdescribe Prints a vector to the standard output in a format
+  compatible with Nsp.  
+
+\item \describefun{void}{pnl_vect_fprint_nsp}{FILE $\ast$fic, const
+    \refstruct{PnlVect} $\ast$V}
+  \sshortdescribe Prints a vector to a file in a format compatible with Nsp.
 \end{itemize}
 
 \subparagraph{Applying external operation to vectors}
