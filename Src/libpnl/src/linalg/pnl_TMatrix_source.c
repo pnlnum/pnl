@@ -1107,6 +1107,37 @@ void FUNCTION(pnl_mat,dger) (BASE alpha, const TYPE(PnlVect) *x, const TYPE(PnlV
     }
 }
 
+/**
+ *  matrix multiplication
+ *
+ * @param rhs1 : first right hand side matrix
+ * @param rhs2 : second right hand side matrix
+ * @return  rhs1*rhs2
+ */
+
+TYPE(PnlMat)* FUNCTION(pnl_mat,mult_mat)(const TYPE(PnlMat) *rhs1, const TYPE(PnlMat) *rhs2)
+{
+  TYPE(PnlMat) *lhs;
+  lhs = FUNCTION(pnl_mat,create) (0,0);
+  FUNCTION(pnl_mat,dgemm) ('N', 'N', ONE, rhs1, rhs2, ZERO, lhs);
+  return lhs;
+}
+
+/**
+ *  in-place matrix multiplication
+ *
+ * @param lhs : left hand side matrix
+ * @param rhs1 : first right hand side matrix
+ * @param rhs2 : second right hand side matrix
+ * @return  lhs=rhs1*rhs2
+ */
+
+void FUNCTION(pnl_mat,mult_mat_inplace)(TYPE(PnlMat) *lhs, const  TYPE(PnlMat) *rhs1, const TYPE(PnlMat) *rhs2)
+{
+  FUNCTION(pnl_mat,dgemm) ('N', 'N', ONE, rhs1, rhs2, ZERO, lhs);
+}
+
+
 
 
 /**
