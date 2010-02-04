@@ -183,7 +183,10 @@ AC_CHECK_FUNCS(lgamma)
 AC_CHECK_FUNCS(exp10)
 AC_CHECK_FUNCS(erfl)
 AC_CHECK_FUNCS(trunc)
-
+AC_CHECK_FUNCS(isfinite)
+AC_CHECK_FUNCS(finite)
+AC_CHECK_FUNCS(isnan)
+AC_CHECK_FUNCS(isinf)
 
 ##########################
 ## Check for headers
@@ -639,6 +642,7 @@ Src/mod/merhes1d/Makefile \
 Src/mod/merhes1d/merhes1d_lim/Makefile \
 Src/mod/merhes1d/merhes1d_pad/Makefile \
 Src/mod/merhes1d/merhes1d_std/Makefile \
+Src/mod/merhes1d/merhes1d_vol/Makefile \
 Src/mod/nig1d/Makefile \
 Src/mod/nig1d/nig1d_lim/Makefile \
 Src/mod/nig1d/nig1d_pad/Makefile \
@@ -661,8 +665,6 @@ Src/mod/sg1d/Makefile \
 Src/mod/sg1d/sg1d_stdi/Makefile \
 Src/mod/stein1d/Makefile \
 Src/mod/stein1d/stein1d_std/Makefile \
-Src/mod/svj1d/Makefile \
-Src/mod/svj1d/svj1d_vol/Makefile \
 Src/mod/temperedstable1d/Makefile \
 Src/mod/temperedstable1d/temperedstable1d_lim/Makefile \
 Src/mod/temperedstable1d/temperedstable1d_std/Makefile \
