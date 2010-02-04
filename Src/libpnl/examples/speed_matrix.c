@@ -123,8 +123,101 @@ void speed_copy ()
   free (d);
 }
 
-extern void square_dgemm(const unsigned M, 
-                         const double *A, const double *B, double *C);
+void dgemm3 (double alpha, const PnlMat *A,
+             const PnlMat *B, double beta, PnlMat *C)
+{
+  int m, n;
+  int i, j, k;
+  double Cij, Bkj, aibk;
+  
+  m = A->m; n = B->n;
+  if ( beta == 0. )
+    {
+      pnl_mat_resize (C, m, n);
+      pnl_mat_set_double (C, 0.);
+    }
+  else if ( beta != 1. )
+    {
+      pnl_mat_mult_double (C, beta); 
+    }
+  if ( alpha == 0.) return;
+
+
+#ifndef PNL_RANGE_CHECK_OFF
+  if (A->n != B->m || (A->m != C->m || B->n != C->n) )
+    {
+      PNL_ERROR ("size mismatch", "pnl_mat_dgemm");
+    }
+#endif
+
+  for (k=0; k<A->n; k++) 
+    {
+      for (i=0; i<C->m; i++)
+        {
+          double temp = alpha * PNL_MGET (A, i, k);
+          for (j=0; j<C->n; j++)
+            {
+              Bkj = PNL_MGET (B, k, j);
+              
+              Cij = PNL_MGET(C, i, j);
+              aibk = temp * Bkj;
+              Cij += aibk;
+              PNL_MLET (C, i, j) = Cij;
+              
+            }
+        }
+    }
+}
+
+void dgemm2 (double alpha, const PnlMat *A,
+             const PnlMat *B, double beta, PnlMat *C)
+{
+  int m, n;
+  int i, j, k;
+  double Cij, Bkj, aibk;
+  
+  m = A->m; n = B->n;
+  if ( beta == 0. )
+    {
+      pnl_mat_resize (C, m, n);
+      pnl_mat_set_double (C, 0.);
+    }
+  else if ( beta != 1. )
+    {
+      pnl_mat_mult_double (C, beta); 
+    }
+  if ( alpha == 0.) return;
+
+
+#ifndef PNL_RANGE_CHECK_OFF
+  if (A->n != B->m || (A->m != C->m || B->n != C->n) )
+    {
+      PNL_ERROR ("size mismatch", "pnl_mat_dgemm");
+    }
+#endif
+
+  for (i=0; i<C->m; i++)
+    {
+      for (k=0; k<A->n; k++) 
+        {
+          double temp = alpha * PNL_MGET (A, i, k);
+          for (j=0; j<C->n; j++)
+            {
+              Bkj = PNL_MGET (B, k, j);
+              
+              Cij = PNL_MGET(C, i, j);
+              aibk = temp * Bkj;
+              Cij += aibk;
+              PNL_MLET (C, i, j) = Cij;
+              
+            }
+        }
+    }
+}
+
+     
+
+
 
 void speed_dgemm ()
 {
@@ -164,6 +257,22 @@ void speed_dgemm ()
   cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
   printf("pnl_mat_dgemm NN time : %f\n", cpu_time_used);
 
+
+  pnl_mat_clone (C, CC);
+  start = clock();
+  dgemm2 (alpha, A, B, beta, C);
+  end = clock();
+  cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+  printf("dgemm2 time : %f\n", cpu_time_used);
+
+  pnl_mat_clone (C, CC);
+  start = clock();
+  dgemm3 (alpha, A, B, beta, C);
+  end = clock();
+  cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+  printf("dgemm3 time : %f\n", cpu_time_used);
+
+#if 0
   pnl_mat_clone (C, CC);
   start = clock();
   pnl_mat_dgemm ('N', 'T', alpha, A, B, beta, C);
@@ -184,6 +293,7 @@ void speed_dgemm ()
   end = clock();
   cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
   printf("pnl_mat_dgemm TT time : %f\n", cpu_time_used);
+#endif
 
   pnl_mat_free (&A);
   pnl_mat_free (&B);
@@ -473,7 +583,7 @@ static void speed_syslin_mat ()
 void speed_test ()
 {
   speed_access ();
-  speed_copy (); 
+  speed_copy ();
   speed_dgemm ();
   speed_dgemv ();
   speed_mat_sum_vect ();
