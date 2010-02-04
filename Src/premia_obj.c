@@ -43,6 +43,7 @@ extern Model FPS2D_model;
 extern Model HESCIR1D_model;
 extern Model WISHART2D_model;
 extern Model MERHES1D_model;
+extern Model SVJ1D_model;
 extern Model PUREJUMP1D_model;
 extern Model VARIANCEGAMMA1D_model;
 extern Model NIG1D_model;
@@ -88,6 +89,7 @@ Model  *models_e[]=
     &HESCIR1D_model,
     &WISHART2D_model,
     &MERHES1D_model,
+    &SVJ1D_model,
     &BNS_model,
     &DPS_model,
     &NONPAR1D_model,
@@ -280,7 +282,7 @@ extern  Pricing WISHART2D_VOL_pricing;
 extern  Pricing MERHES1D_STD_pricing;
 extern  Pricing MERHES1D_LIM_pricing;
 extern  Pricing MERHES1D_PAD_pricing;
-extern  Pricing MERHES1D_VOL_pricing;
+extern  Pricing SVJ1D_VOL_pricing;
 extern  Pricing PUREJUMP1D_PAD_pricing;
 extern  Pricing VARIANCEGAMMA1D_STD_pricing;
 extern  Pricing VARIANCEGAMMA1D_LIM_pricing;
@@ -340,7 +342,7 @@ Pricing *pricings_e[]=
     &MERHES1D_STD_pricing,
     &MERHES1D_LIM_pricing,
     &MERHES1D_PAD_pricing,
-    &MERHES1D_VOL_pricing,
+    &SVJ1D_VOL_pricing,
     &VARIANCEGAMMA1D_STD_pricing,
     &VARIANCEGAMMA1D_LIM_pricing,
     &VARIANCEGAMMA1D_PAD_pricing,
