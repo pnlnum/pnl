@@ -1,5 +1,6 @@
 
 /************************************************************************/
+/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
 /* Copyright David Pommier <david.pommier@gmail.com>                    */
 /*                                                                      */
 /* This program is free software: you can redistribute it and/or modify */
@@ -139,9 +140,79 @@ void hyperg_test ()
 #endif
 }
 
+static void complex_bessel_test ()
+{
+  dcomplex z, c;
+  double v = -1.5;
+  z = Complex (5., 3.);
+  printf("Test des fonctions de bessel complexes \n");
+  c = pnl_complex_bessel_i (v, z);
+  printf("bessel_i(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
+  c = pnl_complex_bessel_i_scaled (v, z);
+  printf("bessel_i_scaled(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
+  c = pnl_complex_bessel_j (v, z);
+  printf("bessel_j(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
+  c = pnl_complex_bessel_j_scaled (v, z);
+  printf("bessel_j_scaled(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
+  c = pnl_complex_bessel_y (v, z);
+  printf("bessel_y(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
+  c = pnl_complex_bessel_y_scaled (v, z);
+  printf("bessel_y_scaled(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
+  c = pnl_complex_bessel_k (v, z);
+  printf("bessel_k(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
+  c = pnl_complex_bessel_k_scaled (v, z);
+  printf("bessel_k_scaled(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
+  c = pnl_complex_bessel_h1 (v, z);
+  printf("bessel_h1(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
+  c = pnl_complex_bessel_h1_scaled (v, z);
+  printf("bessel_h1_scaled(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
+  c = pnl_complex_bessel_h2 (v, z);
+  printf("bessel_h2(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
+  c = pnl_complex_bessel_h2_scaled (v, z);
+  printf("bessel_h2_scaled(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
+
+}
+
+static void real_bessel_test ()
+{
+  double z, c;
+  dcomplex zc;
+  double v = -1.5;
+  z = 5.;
+  printf("Test des fonctions de bessel reelles \n");
+  c = pnl_bessel_i (v, z);
+  printf("bessel_i(%f, %f) = %f\n", v, z, c);
+  c = pnl_bessel_i_scaled (v, z);
+  printf("bessel_i_scaled(%f, %f) = %f\n", v, z, c);
+  c = pnl_bessel_j (v, z);
+  printf("bessel_j(%f, %f) = %f\n", v, z, c);
+  c = pnl_bessel_j_scaled (v, z);
+  printf("bessel_j_scaled(%f, %f) = %f\n", v, z, c);
+  c = pnl_bessel_y (v, z);
+  printf("bessel_y(%f, %f) = %f\n", v, z, c);
+  c = pnl_bessel_y_scaled (v, z);
+  printf("bessel_y_scaled(%f, %f) = %f\n", v, z, c);
+  c = pnl_bessel_k (v, z);
+  printf("bessel_k(%f, %f) = %f\n", v, z, c);
+  c = pnl_bessel_k_scaled (v, z);
+  printf("bessel_k_scaled(%f, %f) = %f\n", v, z, c);
+  zc = pnl_bessel_h1 (v, z);
+  printf("bessel_h1(%f, %f) = %f + %f i\n", v, z, CMPLX(zc));
+  zc = pnl_bessel_h1_scaled (v, z);
+  printf("bessel_h1_scaled(%f, %f) = %f + %f i\n", v, z, CMPLX(zc));
+  zc = pnl_bessel_h2 (v, z);
+  printf("bessel_h2(%f, %f) = %f + %f i\n", v, z, CMPLX(zc));
+  zc = pnl_bessel_h2_scaled (v, z);
+  printf("bessel_h2_scaled(%f, %f) = %f + %f i\n", v, z, CMPLX(zc));
+}
 
 void special_func_test ()
 {
+  printf("\n");
+  printf("Special function tests.\n");
+  printf("\n");
+  complex_bessel_test ();
+  real_bessel_test ();
   exp_int_test();
   gamma_test ();
   hyperg_test ();
