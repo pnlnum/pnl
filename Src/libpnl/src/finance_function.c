@@ -238,7 +238,7 @@ static void pnl_bs_increment_call_put(double x, double * fx, double * dfx, void*
  * @param spot the initial value of the asset
  * @param Strike a double, for value contract
  * @param T a double, echeance time (T)
- * @param error, an integer containing the error code on output (OK or FAIL) 
+ * @param error an integer containing the error code on output (OK or FAIL) 
  * @return implied of a call/put option
  */
 double pnl_bs_implicit_vol (int is_call, double Price, double spot, double Strike,

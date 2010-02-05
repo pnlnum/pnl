@@ -406,16 +406,19 @@ void FUNCTION(pnl_mat,set_id)(TYPE(PnlMat) *lhs)
 /**
  * in-place set matrix to identity
  *
- * @param lhs : left hand side matrix
+ * @param M a matrix
+ * @param x the value used to fill the diagonal
+ * @param d the index of the diagonal (if d>0, we consider the d-th upper
+ * diagonal, if d<0, we consider the (-d)-th lower diagonal)
  * 
  */
-void FUNCTION(pnl_mat,set_diag)(TYPE(PnlMat) *lhs, BASE x, int d)
+void FUNCTION(pnl_mat,set_diag)(TYPE(PnlMat) *M, BASE x, int d)
 {
   int i;
-  CheckIsSquare (lhs);
-  for ( i=MAX(0, -d) ; i<lhs->m + MIN(0, -d) ; i++ )
+  CheckIsSquare (M);
+  for ( i=MAX(0, -d) ; i<M->m + MIN(0, -d) ; i++ )
     {
-      PNL_MLET (lhs, i, i+d) = x;
+      PNL_MLET (M, i, i+d) = x;
     }
 }
 

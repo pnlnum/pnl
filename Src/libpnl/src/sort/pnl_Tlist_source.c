@@ -51,15 +51,15 @@ NODE *FUNCTION_NODE(pnl_,create_from_key_val)(const KEY key,const VALUE val)
 
 /**
  * free a Node
- * @param N address of a NODE
+ * @param node address of a NODE
  */
-void FUNCTION_NODE(pnl_,free)(NODE ** N)
+void FUNCTION_NODE(pnl_,free)(NODE ** node)
 {
-  if (*N != NULL)
+  if (*node != NULL)
     {
-      FUNCTION_CONTAIN(pnl_,free)(&((*N)->obj));
-      free(*N);
-      *N=NULL;
+      FUNCTION_CONTAIN(pnl_,free)(&((*node)->obj));
+      free(*node);
+      *node=NULL;
     }
 }
 

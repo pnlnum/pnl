@@ -241,6 +241,7 @@ extern void pnl_mat_set(PnlMat *v, int i, int j, double x);
 extern double pnl_mat_get(const PnlMat *v, int i, int j);
 extern double* pnl_mat_lget(PnlMat *v, int i, int j);
 
+/*@}*/
 
 /**
  * \addtogroup PnlHMat

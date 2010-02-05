@@ -22,7 +22,7 @@
 #include <math.h>
 #include "amos.h"
 #include "amos_wrappers.h"
-#include "pnl_bessel.h"
+#include "pnl_specfun.h"
 
 static int print_error_messages = 1;
 
