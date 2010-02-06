@@ -10,7 +10,7 @@ extern "C" {
 
 struct PnlVect;
 /**
- * \defgroup PnlVectInt Int Vector structure for Premia
+ * \defgroup PnlVectInt Int Vector structure 
  */
 /*@{*/
 typedef struct PnlVectInt{

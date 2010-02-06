@@ -22,7 +22,7 @@ extern "C" {
 #endif /* PNL_RANGE_CHECK_OFF */
 
 /**
- * \defgroup PnlVect Vector structure for Premia
+ * \defgroup PnlVect Vector structure 
  */
 /*@{*/
 /* Compact PnlVect : used for variables that can either contain a single
@@ -40,7 +40,7 @@ typedef struct PnlVectCompact {
 /*@}*/
 
 /**
- * \defgroup PnlMat Matrix structure for Premia
+ * \defgroup PnlMat Matrix structure 
  */
 /*@{*/
 
@@ -57,7 +57,7 @@ typedef struct PnlMat{
 /*@}*/
 
 /**
- * \defgroup PnlHMat HyperMatrix structure for Premia
+ * \defgroup PnlHMat HyperMatrix structure 
  */
 /*@{*/
 

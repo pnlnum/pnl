@@ -53,7 +53,7 @@ struct _sprow {
 };
 
 /**
- * \defgroup PnlMorseMat Morse Matrix structure for Premia
+ * \defgroup PnlMorseMat Morse Matrix structure 
  */
 /*@{*/
 
@@ -83,7 +83,7 @@ extern PnlMat * pnl_morse_mat_full(PnlMorseMat * M);
 /*@}*/
 
 /**
- * \defgroup PnlSparseMat Sparse Matrix structure for Premia
+ * \defgroup PnlSparseMat Sparse Matrix structure 
  *
  * This struct is the cs struct of Csparse librarie
  * written by Timothy A.Davis on LGPL licence.
@@ -139,7 +139,7 @@ struct _spwaverow {
 };
 
 /**
- * \defgroup PnlMorseMat Morse Matrix structure for Premia
+ * \defgroup PnlMorseMat Morse Matrix structure 
  */
 /*@{*/
 

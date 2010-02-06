@@ -9,7 +9,7 @@ extern "C" {
 #include "pnl_vector.h"
 
 /**
- * \defgroup PnlPermutation  Permutation structure for Premia
+ * \defgroup PnlPermutation  Permutation structure 
  */
 /*@{*/
 typedef  struct {

@@ -47,7 +47,7 @@ PnlVectCompact* pnl_vect_compact_create (int n, double x)
 
 /**
  * resize a PnlVectCompact.
- * @param v the Premiavectcompact to be resized
+ * @param v the PvlVectCompact to be resized
  * @param size new size
  * @param x new value to set
  * @return OK or WRONG

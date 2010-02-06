@@ -120,7 +120,7 @@ PnlBandMatrix* pnl_band_matrix_create_from_full(const PnlMat *PM,int band)
 /** 
  * frees a PnlBandMatrix
  *
- * @param M adress of a PnlPremiaBandMatrix.
+ * @param M adress of a PnlBandMatrix.
  * M is set to NULL at exit.
  */
 void pnl_band_matrix_free(PnlBandMatrix **M)
@@ -697,7 +697,7 @@ void pnl_band_matrix_lAxpby(double l, const PnlBandMatrix *A, const PnlVect *x, 
  * pnl_band_matrix_solve_syslin_inplace
  * solves the linear system M x = x with M PnlBand Matrix.
  *
- * @param M a Premia Band Matrix 
+ * @param M a PnlBandMatrix 
  * @param x right hand side member, use to store solution
  */
 void pnl_band_matrix_solve_syslin_inplace(PnlBandMatrix * M, PnlVect *x)
@@ -803,11 +803,11 @@ void pnl_band_matrix_solve_syslin_inplace(PnlBandMatrix * M, PnlVect *x)
 
 /**
  * pnl_band_matrix_solve
- * solves the linear system \f$ M x = b \f$ with M PnlBand Matrix.
+ * solves the linear system M x = b with M a PnlBand Matrix.
  * For a symmetric definite Choleski or Crout factorization,
  * else us LU factorization
  *
- * @param M a Premia Band Matrixt 
+ * @param M a PnlBandMatrix
  * @param x the solution
  * @param b right hand side member
  */
@@ -828,9 +828,9 @@ void pnl_band_matrix_solve(PnlBandMatrix * M, PnlVect *x,const PnlVect *b)
 
 /**
  * pnl_band_matrix_cholesky 
- * Cholesky factorization \f$ M= U^T U\f$ of a Band Matrix (Symetric)
+ * Cholesky factorization M= U^T U of a Band Matrix (Symetric)
  *
- * @param M a Premia Band Matrixt 
+ * @param M a PnlBandMatrix
  * @param eps double use for stability of Pivot coefficient
  */
 void pnl_band_matrix_cholesky(PnlBandMatrix * M, double eps)
@@ -874,7 +874,7 @@ void pnl_band_matrix_cholesky(PnlBandMatrix * M, double eps)
 
 /**
  * pnl_band_matrix_crout
- * Crout factorization \f$ M= L U\f$  of a Band Matrix (Symetric) 
+ * Crout factorization M= L U of a Band Matrix (Symetric) 
  * \f[
  L=\left(\begin{array}{cccc}
  l_{11}&0&0&0\\
@@ -890,7 +890,7 @@ void pnl_band_matrix_cholesky(PnlBandMatrix * M, double eps)
  0&0&&1\\
  \end{array}\right)
  \f]
- * @param M a Premia Band Matrix 
+ * @param M a PnlBandMatrix 
  * @param eps double use for stability of Pivot coefficient
  */
 void pnl_band_matrix_crout(PnlBandMatrix * M, double eps)
@@ -934,8 +934,8 @@ void pnl_band_matrix_crout(PnlBandMatrix * M, double eps)
 
 /**
  * pnl_band_matrix_crout
- * Crout factorization \f$ M= L U\f$  of a Band Matrix (No Symetric) 
- * @param M a Premia Band Matrix 
+ * Crout factorization M= L U of a Band Matrix (No Symetric) 
+ * @param M a PnlBandMatrix 
  * @param eps double use for stability of Pivot coefficient
  */
 void pnl_band_matrix_lu(PnlBandMatrix * M, double eps)

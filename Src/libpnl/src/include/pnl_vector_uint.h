@@ -13,7 +13,7 @@ extern uint log2uint(uint x);
 extern double pnl_dyadic_cast(uint i);
 
 /**
- * \defgroup PnlVectUint Uint Vector structure for Premia
+ * \defgroup PnlVectUint Uint Vector structure 
  */
 /*@{*/
 typedef struct PnlVectUint{

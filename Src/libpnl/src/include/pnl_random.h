@@ -12,7 +12,7 @@ extern "C" {
 #include "pnl_matrix.h"
 
 /**
- * \defgroup PnlRandom Random generators for Premia
+ * \defgroup PnlRandom Random generators 
  */
 /*@{*/
 

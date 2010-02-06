@@ -8,7 +8,7 @@ extern "C" {
 #include "pnl_complex.h"
 
 /**
- * \defgroup PnlVectComplex Complex Vector structure for Premia
+ * \defgroup PnlVectComplex Complex Vector structure 
  */
 /*@{*/
 typedef struct PnlVectComplex{

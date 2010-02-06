@@ -14,7 +14,7 @@ extern "C" {
 /*@}*/
 
 /**
- * \defgroup PnlMatUint Uint matrix structure for Premia
+ * \defgroup PnlMatUint Uint matrix structure 
  */
 /*@{*/
 
@@ -30,7 +30,7 @@ typedef struct PnlMatUint{
 /*@}*/
 
 /**
- * \defgroup PnlHMatUint Uint HyperMatrix structure for Premia
+ * \defgroup PnlHMatUint Uint HyperMatrix structure 
  */
 /*@{*/
 
