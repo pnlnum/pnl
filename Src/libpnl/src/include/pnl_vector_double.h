@@ -8,6 +8,10 @@ extern "C" {
 #include <stdlib.h>
 
 /**
+ * \ingroup PnlVectors
+ */
+/*@{*/
+/**
  * \addtogroup PnlVect 
  */
 
@@ -16,7 +20,7 @@ typedef struct PnlVect{
   int size;/*!< size of the vector */ 
   double *array;/*!< pointer to store the data */
   int mem_size; /*!< size of the memory block allocated for array */
-  int owner; /*!< 1 if the structure owns its array pointer */
+  int owner; /*!< 1 if the owns its array pointer */
 } PnlVect;
 
 #include "pnl_vector_int.h"
@@ -119,6 +123,7 @@ extern double pnl_vect_norm_infty(const PnlVect *V); /*res=\Vert V \Vert_{l^\inf
 extern double pnl_vect_norm_x(const PnlVect *V,double(*f)(double)); /*res=\Vert V \Vert_{l^X} */
 extern void pnl_vect_swap_elements(PnlVect * v, int i, int j); 
 extern void pnl_vect_reverse(PnlVect * v);
+/*@}*/
 /*@}*/
 
 

@@ -1,4 +1,4 @@
-#ifndef  _FINANCE_FUNCTION_H
+#ifndef _FINANCE_FUNCTION_H
 #define _FINANCE_FUNCTION_H
 
 
@@ -8,6 +8,11 @@ extern "C" {
 
 #include "pnl_matrix_uint.h"
 #include "pnl_cdf.h"
+
+/**
+ * \defgroup Finance A few financial functions
+ */
+/*@{*/
 
 extern int pnl_cf_call_bs(double s,double k,double t,double r,double divid,double sigma,
                           double *ptprice,double *ptdelta);
@@ -23,6 +28,7 @@ double pnl_bs_implicit_vol (int is_call, double Price, double spot, double Strik
 extern int pnl_bs_matrix_implicit_vol(const PnlMatInt * Is_Call, const PnlMat * Price,
                                       double spot,double rate, double divid,
                                       const PnlVect * Strike,const PnlVect * Maturity,PnlMat * Vol);
+/*@}*/
 
 #ifdef __cplusplus
 }

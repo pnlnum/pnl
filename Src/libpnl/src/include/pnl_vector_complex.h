@@ -8,14 +8,19 @@ extern "C" {
 #include "pnl_complex.h"
 
 /**
- * \defgroup PnlVectComplex Complex Vector structure 
+ * \ingroup PnlVectors
+ */
+/*@{*/
+
+/**
+ * \defgroup PnlVectComplex Complex Vector 
  */
 /*@{*/
 typedef struct PnlVectComplex{
   int size;/*!< size of the vector */ 
   dcomplex *array;/*!< pointer to store the data */
   int mem_size; /*!< size of the memory block allocated for array */
-  int owner; /*!< 1 if the structure owns its array pointer */
+  int owner; /*!< 1 if the owns its array pointer */
 } PnlVectComplex;
 
 #ifdef HAVE_INLINE 
@@ -158,6 +163,7 @@ extern void pnl_vect_complex_split_in_vect(PnlVectComplex* v, PnlVect *re, PnlVe
 extern void pnl_vect_complex_swap_elements(PnlVectComplex * v, int i, int j); 
 extern void pnl_vect_complex_reverse(PnlVectComplex * v);
 
+/*@}*/
 /*@}*/
 
 

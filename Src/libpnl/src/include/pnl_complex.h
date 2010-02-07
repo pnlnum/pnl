@@ -7,7 +7,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * \defgroup PnlComplex  Complex structure
+ * \defgroup PnlComplex  Complex numbers
  * \brief Operations on complex numbers.
  */
 /*@{*/

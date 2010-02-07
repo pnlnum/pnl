@@ -33,9 +33,9 @@ extern void pnl_progonka(const double low,
                          const PnlVect * rhs, PnlVect * lhs);
 
 /**
- * \defgroup PnlTriDiagMat Tri diagonal Matrix structure
+ * \defgroup PnlTriDiagMat Tri diagonal Matrix
  * \author David Pommier 
- * \brief A Tridiagonal Matrix structure for Numerical Algorithm to solve PDE,
+ * \brief A Tridiagonal Matrix for Numerical Algorithm to solve PDE,
  * (strongly inspired by work of J P.Chancelier & al in NSP software)
  * \date July 2008 
  * \version 0.1
@@ -44,7 +44,7 @@ extern void pnl_progonka(const double low,
 
 typedef struct PnlTriDiagMat{
   int size; /*!< diagonal dimension product  */
-  int owner; /*!< 1 if the structure owns its array pointer */
+  int owner; /*!< 1 if the owns its array pointer */
   double *diag; /*!< pointer to store diagonal*/
   double *diag_up; /*!< pointer to store up diagonal*/
   double *diag_down; /*!< pointer to store down diagonal*/

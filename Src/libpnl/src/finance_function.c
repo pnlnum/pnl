@@ -30,15 +30,10 @@
  * November 2009
  */
 
-/**
- * \defgroup Pnl_Data_Vol_Impli_BS  Implied Volatlity
- */
-/*@{*/
 typedef struct Pnl_Data_Vol_Impli_BS{
   int is_call;
   double price, r, divid, spot, strike, T;
 }Pnl_Data_Vol_Impli_BS;
-/*@}*/
 
 
 /**

@@ -9,7 +9,7 @@ extern "C" {
 #include "pnl_vector.h"
 
 /**
- * \defgroup PnlPermutation  Permutation structure 
+ * \defgroup PnlPermutation  Permutation 
  */
 /*@{*/
 typedef  struct {

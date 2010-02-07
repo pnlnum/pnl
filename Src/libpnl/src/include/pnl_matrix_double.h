@@ -8,6 +8,8 @@ extern "C" {
 
 #include "pnl_vector.h"
 #include "pnl_perm.h"
+#include "pnl_matrix_int.h"
+
 
 #ifndef PNL_RANGE_CHECK_OFF
 
@@ -22,7 +24,7 @@ extern "C" {
 #endif /* PNL_RANGE_CHECK_OFF */
 
 /**
- * \defgroup PnlVect Vector structure 
+ * \defgroup PnlVect Double Vector 
  */
 /*@{*/
 /* Compact PnlVect : used for variables that can either contain a single
@@ -39,38 +41,6 @@ typedef struct PnlVectCompact {
 
 /*@}*/
 
-/**
- * \defgroup PnlMat Matrix structure 
- */
-/*@{*/
-
-typedef struct PnlMat{
-  int m; /*!< nb rows */ 
-  int n; /*!< nb columns */ 
-  int mn; /*!< product m*n */
-  int mem_size; /*!< size of the memory block allocated for array */
-  double *array; /*!< pointer to store the data row-wise */
-  int owner; /*!< 1 if the structure owns its array pointer */
-  /*! set x as the value of v[i,j].*/
-} PnlMat;
-
-/*@}*/
-
-/**
- * \defgroup PnlHMat HyperMatrix structure 
- */
-/*@{*/
-
-typedef struct PnlHMat{
-  int ndim; /*!< nb dimensions */ 
-  int *dims; /*!< pointer to store the value of the ndim dimensions */ 
-  int mn; /*!< product dim_1 *...*dim_ndim */
-  double *array; /*!< pointer to store */
-} PnlHMat;
-
-/*@}*/
-
-#include "pnl_matrix_int.h"
 
 /**
  * \addtogroup PnlVect
@@ -86,11 +56,27 @@ extern double pnl_vect_compact_get (const PnlVectCompact *C, int i);
 
 /*@}*/
 
+
 /**
- * \addtogroup PnlMat
+ * \ingroup PnlMatrices
  */
 /*@{*/
- 
+
+/**
+ * \defgroup PnlMat Double Matrix 
+ */
+/*@{*/
+
+typedef struct PnlMat{
+  int m; /*!< nb rows */ 
+  int n; /*!< nb columns */ 
+  int mn; /*!< product m*n */
+  int mem_size; /*!< size of the memory block allocated for array */
+  double *array; /*!< pointer to store the data row-wise */
+  int owner; /*!< 1 if the owns its array pointer */
+  /*! set x as the value of v[i,j].*/
+} PnlMat;
+
 extern PnlMat* pnl_mat_create(int m, int n); 
 extern PnlMat* pnl_mat_create_from_double(int m, int n, double x);
 extern PnlMat* pnl_mat_create_from_ptr(int m, int n, const double* x);
@@ -187,32 +173,6 @@ extern void pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A
 extern int pnl_mat_ls_mat (const PnlMat *A, PnlMat *B);
 extern int pnl_mat_ls (const PnlMat *A, PnlVect *b);
 
-/*@}*/
-
-
-/**
- * \addtogroup PnlHMat
- */
-/*@{*/
- 
-extern PnlHMat* pnl_hmat_create(int ndim, const int *dims); 
-extern PnlHMat* pnl_hmat_create_from_double(int ndim, const int *dims, double x); 
-extern PnlHMat* pnl_hmat_create_from_ptr(int ndim, const int *dims, const double *x);
-extern int pnl_hmat_resize(PnlHMat *v, int ndim, const int *dims);
-extern void pnl_hmat_free(PnlHMat **v);
-extern PnlHMat* pnl_hmat_copy(const PnlHMat *H);
-extern void pnl_hmat_clone(PnlHMat *clone, const PnlHMat *H);
-extern void pnl_hmat_print(const PnlHMat *H);
-extern void pnl_hmat_plus_hmat(PnlHMat *lhs, const PnlHMat *rhs);/*lhs+=rhs*/
-extern void pnl_hmat_mult_double(PnlHMat *lhs, double x);/* lhs *=x;*/
-/*@}*/
-
-
-
-/**
- * \addtogroup PnlMat
- */
-/*@{*/
 /* inline functions if you are using GCC */
 #ifdef HAVE_INLINE 
 extern inline
@@ -242,16 +202,41 @@ extern double pnl_mat_get(const PnlMat *v, int i, int j);
 extern double* pnl_mat_lget(PnlMat *v, int i, int j);
 
 /*@}*/
+/*@}*/
 
 /**
- * \addtogroup PnlHMat
+ * \ingroup PnlHMatrices
  */
 /*@{*/
+
+/**
+ * \defgroup PnlHMat Double HyperMatrix 
+ */
+/*@{*/
+
+typedef struct PnlHMat{
+  int ndim; /*!< nb dimensions */ 
+  int *dims; /*!< pointer to store the value of the ndim dimensions */ 
+  int mn; /*!< product dim_1 *...*dim_ndim */
+  double *array; /*!< pointer to store */
+} PnlHMat;
+
+extern PnlHMat* pnl_hmat_create(int ndim, const int *dims); 
+extern PnlHMat* pnl_hmat_create_from_double(int ndim, const int *dims, double x); 
+extern PnlHMat* pnl_hmat_create_from_ptr(int ndim, const int *dims, const double *x);
+extern int pnl_hmat_resize(PnlHMat *v, int ndim, const int *dims);
+extern void pnl_hmat_free(PnlHMat **v);
+extern PnlHMat* pnl_hmat_copy(const PnlHMat *H);
+extern void pnl_hmat_clone(PnlHMat *clone, const PnlHMat *H);
+extern void pnl_hmat_print(const PnlHMat *H);
+extern void pnl_hmat_plus_hmat(PnlHMat *lhs, const PnlHMat *rhs);/*lhs+=rhs*/
+extern void pnl_hmat_mult_double(PnlHMat *lhs, double x);/* lhs *=x;*/
 
 extern void pnl_hmat_set(PnlHMat *H, int *tab, double x);
 extern double pnl_hmat_get(const PnlHMat *H, int *tab);
 extern double* pnl_hmat_lget(PnlHMat *H, int *tab);
 
+/*@}*/
 /*@}*/
 
 #ifdef __cplusplus

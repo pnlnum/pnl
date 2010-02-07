@@ -11,7 +11,12 @@ extern "C" {
 
 
 /**
- * \defgroup PnlMatInt Int matrix structure 
+ * \ingroup PnlMatrices
+ */
+/*@{*/
+
+/**
+ * \defgroup PnlMatInt Int Matrix 
  */
 /*@{*/
 
@@ -21,30 +26,9 @@ typedef struct PnlMatInt{
   int mn; /*!< product m*n */
   int mem_size; /*!< size of the memory block allocated for array */
   int *array; /*!< pointer to store the data row-wise */
-  int owner; /*!< 1 if the structure owns its array pointer */
+  int owner; /*!< 1 if the owns its array pointer */
 } PnlMatInt;
 
-/*@}*/
-
-/**
- * \defgroup PnlHMatInt Int HyperMatrix structure 
- */
-/*@{*/
-
-typedef struct PnlHMatInt{
-  int ndim; /*!< nb dimensions */ 
-  int *dims; /*!< pointer to store the value of the ndim dimensions */ 
-  int mn; /*!< product dim_1 *...*dim_ndim */
-  int *array; /*!< pointer to store */
-} PnlHMatInt;
-
-/*@}*/
-
-/**
- * \addtogroup PnlMatInt
- */
-/*@{*/
- 
 extern PnlMatInt* pnl_mat_int_create(int m, int n); 
 extern PnlMatInt* pnl_mat_int_create_from_int(int m, int n, int x);
 extern PnlMatInt* pnl_mat_int_create_from_ptr(int m, int n, const int* x);
@@ -119,30 +103,10 @@ extern void pnl_mat_int_min_index (const PnlMatInt *A, PnlVectInt *out, PnlVectI
 extern void pnl_mat_int_max_index (const PnlMatInt *A, PnlVectInt *out, PnlVectInt *i, char d);
 extern void pnl_mat_int_minmax_index (const PnlMatInt *A, PnlVectInt *m, PnlVectInt *M, PnlVectInt *im, PnlVectInt *iM, char d);
 extern void pnl_mat_int_qsort_index (PnlMatInt *A, PnlMatInt *t, char dir, char order);
-/*@}*/
 
-
-/**
- * \addtogroup PnlHMatInt
- */
-/*@{*/
-extern PnlHMatInt* pnl_hmat_int_create(int ndim, const int *dims); 
-extern PnlHMatInt* pnl_hmat_int_create_from_int(int ndim, const int *dims, int x); 
-extern PnlHMatInt* pnl_hmat_int_create_from_ptr(int ndim, const int *dims, const int *x);
-extern int pnl_hmat_int_resize(PnlHMatInt *v, int ndim, const int *dims);
-extern void pnl_hmat_int_free(PnlHMatInt **v);
-extern PnlHMatInt* pnl_hmat_int_copy(const PnlHMatInt *H);
-extern void pnl_hmat_int_clone(PnlHMatInt *clone, const PnlHMatInt *H);
-extern void pnl_hmat_int_plus_hmat(PnlHMatInt *lhs, const PnlHMatInt *rhs);/*lhs+=rhs*/
-extern void pnl_hmat_int_mult_int(PnlHMatInt *lhs, int x);/* lhs *=x;*/
-/*@}*/
 
 /* inline functions if you are using GCC */
 #ifdef HAVE_INLINE 
-/**
- * \addtogroup PnlMatInt
- */
-/*@{*/
 extern inline
 int pnl_mat_int_get (const PnlMatInt *self, int i, int j)
 {
@@ -164,31 +128,47 @@ void pnl_mat_int_set (PnlMatInt *self, int i, int j, int x)
   self->array[i*self->n+j] = x;
 }
 
-/*@}*/
 #endif
-
-
-
-/**
- * \addtogroup PnlMatInt
- */
-/*@{*/
 
 extern void pnl_mat_int_set(PnlMatInt *v, int i, int j, int x);
 extern int pnl_mat_int_get(const PnlMatInt *v, int i, int j);
 extern int* pnl_mat_int_lget(PnlMatInt *v, int i, int j);
 
 /*@}*/
+/*@}*/
+
 
 /**
- * \addtogroup PnlHMatInt
+ * \ingroup PnlHMatrices a Hyper Matrix
  */
 /*@{*/
+/**
+ * \defgroup PnlHMatInt Int HyperMatrix 
+ */
+/*@{*/
+
+typedef struct PnlHMatInt{
+  int ndim; /*!< nb dimensions */ 
+  int *dims; /*!< pointer to store the value of the ndim dimensions */ 
+  int mn; /*!< product dim_1 *...*dim_ndim */
+  int *array; /*!< pointer to store */
+} PnlHMatInt;
+
+extern PnlHMatInt* pnl_hmat_int_create(int ndim, const int *dims); 
+extern PnlHMatInt* pnl_hmat_int_create_from_int(int ndim, const int *dims, int x); 
+extern PnlHMatInt* pnl_hmat_int_create_from_ptr(int ndim, const int *dims, const int *x);
+extern int pnl_hmat_int_resize(PnlHMatInt *v, int ndim, const int *dims);
+extern void pnl_hmat_int_free(PnlHMatInt **v);
+extern PnlHMatInt* pnl_hmat_int_copy(const PnlHMatInt *H);
+extern void pnl_hmat_int_clone(PnlHMatInt *clone, const PnlHMatInt *H);
+extern void pnl_hmat_int_plus_hmat(PnlHMatInt *lhs, const PnlHMatInt *rhs);/*lhs+=rhs*/
+extern void pnl_hmat_int_mult_int(PnlHMatInt *lhs, int x);/* lhs *=x;*/
 
 extern void pnl_hmat_int_set(PnlHMatInt *H, int *tab, int x);
 extern int pnl_hmat_int_get(const PnlHMatInt *H, int *tab);
 extern int* pnl_hmat_int_lget(PnlHMatInt *H, int *tab);
 
+/*@}*/
 /*@}*/
 
 #ifdef __cplusplus

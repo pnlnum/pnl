@@ -27,13 +27,12 @@ extern "C" {
 #endif /* PNL_RANGE_CHECK_OFF */
 
 /**
- * \defgroup PnlBandMatrix Band Matrix Structure
- * \brief Band Matrix structure for Numerical Algorithm to solve PDE, (strongly inspired by work of F.Hecht on RMN class).
- * \version 0.1
+ * \defgroup PnlBandMatrix Band Matrix
+ * \brief Band Matrix for Numerical Algorithm to solve PDE, (strongly inspired by the work of F.Hecht on RMN class).
  * \warning Not tested at yet.
  * \f[  D(i) = A(i,i), \f] 
  * \f[ Lo(k) = A(i,j),\quad   j < i \textit{ with: }  \quad  pL(i)<= k < pL(i+1) \textit{ and }
- i-j = pL(i+1)-k. \f]                                                      \
+ i-j = pL(i+1)-k. \f]                                                      
  * \f[ Up(k) = A(i,j),\quad   i < j \textit{ with: }   \quad pU(j)<= k < pU(j+1) \textit{
   and } j-i = pU(i+1)-k. \f]
  * remark:
@@ -59,7 +58,7 @@ struct _band_matrix{
   int    *pL; /*!< Triangular down profil:\f$ Lo(k)=A(i,j), \ j<i \f$
                  with:\f$ pL(i)<=k<pL(i+1)\f$ & \f$ j=pL(i+1)-k\f$ */
   FactorizationType typefac;
-  int owner; /*!< 1 if the structure owns its array pointer */
+  int owner; /*!< 1 if the owns its array pointer */
 };
 
 /*PnlBandMatrix* pnl_band_matrix_create(const int  n,const double *a); */

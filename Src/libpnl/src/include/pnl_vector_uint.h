@@ -13,14 +13,19 @@ extern uint log2uint(uint x);
 extern double pnl_dyadic_cast(uint i);
 
 /**
- * \defgroup PnlVectUint Uint Vector structure 
+ * \ingroup PnlVectors
+ */
+/*@{*/
+
+/**
+ * \defgroup PnlVectUint Uint Vector 
  */
 /*@{*/
 typedef struct PnlVectUint{
   int size;/*!< size of the vector */ 
   uint *array;/*!< pointer to store the data */
   int mem_size; /*!< size of the memory block allocated for array */
-  int owner; /*!< 1 if the structure owns its array pointer */
+  int owner; /*!< 1 if the owns its array pointer */
 } PnlVectUint;
 
 
@@ -118,9 +123,7 @@ extern void pnl_vect_unit_reverse(PnlVectUint * v);
 extern int pnl_vect_uint_less(const PnlVectUint * a,const PnlVectUint * b);
 extern int pnl_vect_uint_equal(const PnlVectUint * a,const PnlVectUint * b);
 
-/*extern void pnl_vect_uint_compute_father(const PnlVectUint *v, PnlVectUint * father, int i); */
-/*extern PnlVectUint * pnl_vect_uint_create_son(const PnlVectUint *v, int i,boolean LorR); */
-/*extern void pnl_vect_uint_compute_son(const PnlVectUint *v,PnlVectUint *son, int i,boolean LorR); */
+/*@}*/
 /*@}*/
 
 

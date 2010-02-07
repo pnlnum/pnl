@@ -10,11 +10,19 @@ extern "C" {
 #include "pnl_complex.h"
 #include "pnl_vector.h"
 
+/**
+ * \defgroup Laplace Laplace transforms
+ *
+ * Numercial inversion of Laplace transforms either on the real axis or
+ * in the complex plane
+ */
+/*@{*/
 extern double pnl_ilap_cdf_euler(PnlCmplxFunc *f, double t, double h, int N, int M);
 extern double pnl_ilap_euler(PnlCmplxFunc *f, double t, int N, int M);
 extern void pnl_ilap_fft(PnlVect *res, PnlCmplxFunc *f, double T, double eps);
 extern double pnl_ilap_gs_basic (PnlFunc *fhat, double t, int n);
 extern double pnl_ilap_gs (PnlFunc *fhat, double t, int n);
+/*@}*/
 
 #ifdef __cplusplus
 }

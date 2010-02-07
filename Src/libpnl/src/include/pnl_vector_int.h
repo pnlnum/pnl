@@ -9,15 +9,20 @@ extern "C" {
 #include "pnl_vector.h"
 
 struct PnlVect;
+
 /**
- * \defgroup PnlVectInt Int Vector structure 
+ * \ingroup PnlVectors
+ */
+/*@{*/
+/**
+ * \defgroup PnlVectInt Int Vector 
  */
 /*@{*/
 typedef struct PnlVectInt{
   int size;/*!< size of the vector */ 
   int *array;/*!< pointer to store the data */
   int mem_size; /*!< size of the memory block allocated for array */
-  int owner; /*!< 1 if the structure owns its array pointer */
+  int owner; /*!< 1 if the owns its array pointer */
 } PnlVectInt;
 
 #ifdef HAVE_INLINE 
@@ -110,10 +115,7 @@ extern void pnl_vect_int_dyadic_cast(const PnlVectInt * v_int,PnlVect * v_out);
 extern void pnl_vect_int_swap_elements(PnlVectInt * v, int i, int j); 
 extern void pnl_vect_int_reverse(PnlVectInt * v);
 
-
-/*extern void pnl_vect_int_compute_father(const PnlVectInt *v, PnlVectInt * father, int i); */
-/*extern PnlVectInt * pnl_vect_int_create_son(const PnlVectInt *v, int i,boolean LorR); */
-/*extern void pnl_vect_int_compute_son(const PnlVectInt *v,PnlVectInt *son, int i,boolean LorR); */
+/*@}*/
 /*@}*/
 
 

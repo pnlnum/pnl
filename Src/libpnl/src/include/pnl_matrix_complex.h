@@ -9,12 +9,13 @@ extern "C" {
 #include "pnl_complex.h"
 #include "pnl_vector.h"
 
-
-
-/*@}*/
+/**
+ * \ingroup PnlMatrices
+ */
+/*@{*/
 
 /**
- * \defgroup PnlMatComplex Int matrix structure 
+ * \defgroup PnlMatComplex Complex Matrix
  */
 /*@{*/
 
@@ -24,30 +25,9 @@ typedef struct PnlMatComplex{
   int mn; /*!< product m*n */
   int mem_size; /*!< size of the memory block allocated for array */
   dcomplex *array; /*!< pointer to store the data row-wise */
-  int owner; /*!< 1 if the structure owns its array pointer */
+  int owner; /*!< 1 if the owns its array pointer */
 } PnlMatComplex;
 
-/*@}*/
-
-/**
- * \defgroup PnlHMatComplex Int HyperMatrix structure 
- */
-/*@{*/
-
-typedef struct PnlHMatComplex{
-  int ndim; /*!< nb dimensions */ 
-  int *dims; /*!< pointer to store the value of the ndim dimensions */ 
-  int mn; /*!< product dim_1 *...*dim_ndim */
-  dcomplex *array; /*!< pointer to store */
-} PnlHMatComplex;
-
-/*@}*/
-
-/**
- * \addtogroup PnlMatComplex
- */
-/*@{*/
- 
 extern PnlMatComplex* pnl_mat_complex_create(int m, int n); 
 extern PnlMatComplex* pnl_mat_complex_create_from_dcomplex(int m, int n, dcomplex x);
 extern PnlMatComplex* pnl_mat_complex_create_from_ptr(int m, int n, const dcomplex* x);
@@ -114,30 +94,11 @@ extern void pnl_mat_complex_sum_vect (PnlVectComplex *y, const PnlMatComplex *M,
 extern void pnl_mat_complex_cumsum(PnlMatComplex *lhs, char a);
 extern void pnl_mat_complex_prod_vect (PnlVectComplex *y, const PnlMatComplex *M, char a);
 extern void pnl_mat_complex_cumprod(PnlMatComplex *lhs, char a);
-/*@}*/
 
 
-/**
- * \addtogroup PnlHMatComplex
- */
-/*@{*/
-extern PnlHMatComplex* pnl_hmat_complex_create(int ndim, const int *dims); 
-extern PnlHMatComplex* pnl_hmat_complex_create_from_dcomplex(int ndim, const int *dims, dcomplex x); 
-extern PnlHMatComplex* pnl_hmat_complex_create_from_ptr(int ndim, const int *dims, const dcomplex *x);
-extern int pnl_hmat_complex_resize(PnlHMatComplex *v, int ndim, const int *dims);
-extern void pnl_hmat_complex_free(PnlHMatComplex **v);
-extern PnlHMatComplex* pnl_hmat_complex_copy(const PnlHMatComplex *H);
-extern void pnl_hmat_complex_clone(PnlHMatComplex *clone, const PnlHMatComplex *H);
-extern void pnl_hmat_complex_plus_hmat(PnlHMatComplex *lhs, const PnlHMatComplex *rhs);/*lhs+=rhs*/
-extern void pnl_hmat_complex_mult_dcomplex(PnlHMatComplex *lhs, dcomplex x);/* lhs *=x;*/
-/*@}*/
 
 /* inline functions if you are using GCC */
 #ifdef HAVE_INLINE 
-/**
- * \addtogroup PnlMatComplex
- */
-/*@{*/
 extern inline
 dcomplex pnl_mat_complex_get (const PnlMatComplex *self, int i, int j)
 {
@@ -158,32 +119,47 @@ void pnl_mat_complex_set (PnlMatComplex *self, int i, int j, dcomplex x)
   CheckIndexMat(self,i, j);
   self->array[i*self->n+j] = x;
 }
-
-/*@}*/
 #endif
-
-
-
-/**
- * \addtogroup PnlMatComplex
- */
-/*@{*/
 
 extern void pnl_mat_complex_set(PnlMatComplex *v, int i, int j, dcomplex x);
 extern dcomplex pnl_mat_complex_get(const PnlMatComplex *v, int i, int j);
 extern dcomplex* pnl_mat_complex_lget(PnlMatComplex *v, int i, int j);
 
 /*@}*/
+/*@}*/
+
 
 /**
- * \addtogroup PnlHMatComplex
+ * \ingroup PnlHMatrices a Hyper Matrix
  */
 /*@{*/
+/**
+ * \defgroup PnlHMatComplex Complex HyperMatrix 
+ */
+/*@{*/
+
+typedef struct PnlHMatComplex{
+  int ndim; /*!< nb dimensions */ 
+  int *dims; /*!< pointer to store the value of the ndim dimensions */ 
+  int mn; /*!< product dim_1 *...*dim_ndim */
+  dcomplex *array; /*!< pointer to store */
+} PnlHMatComplex;
+
+extern PnlHMatComplex* pnl_hmat_complex_create(int ndim, const int *dims); 
+extern PnlHMatComplex* pnl_hmat_complex_create_from_dcomplex(int ndim, const int *dims, dcomplex x); 
+extern PnlHMatComplex* pnl_hmat_complex_create_from_ptr(int ndim, const int *dims, const dcomplex *x);
+extern int pnl_hmat_complex_resize(PnlHMatComplex *v, int ndim, const int *dims);
+extern void pnl_hmat_complex_free(PnlHMatComplex **v);
+extern PnlHMatComplex* pnl_hmat_complex_copy(const PnlHMatComplex *H);
+extern void pnl_hmat_complex_clone(PnlHMatComplex *clone, const PnlHMatComplex *H);
+extern void pnl_hmat_complex_plus_hmat(PnlHMatComplex *lhs, const PnlHMatComplex *rhs);/*lhs+=rhs*/
+extern void pnl_hmat_complex_mult_dcomplex(PnlHMatComplex *lhs, dcomplex x);/* lhs *=x;*/
 
 extern void pnl_hmat_complex_set(PnlHMatComplex *H, int *tab, dcomplex x);
 extern dcomplex pnl_hmat_complex_get(const PnlHMatComplex *H, int *tab);
 extern dcomplex* pnl_hmat_complex_lget(PnlHMatComplex *H, int *tab);
 
+/*@}*/
 /*@}*/
 
 #ifdef __cplusplus

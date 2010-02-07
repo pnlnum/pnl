@@ -47,9 +47,19 @@ extern "C" {
 
 #endif /* PNL_RANGE_CHECK_OFF */
 
+
+/**
+ * \defgroup PnlMatrices a Matrix object
+ */
+/*@{*/
 #define PNL_MGET(v,i,j) (v)->array[(i)*(v)->n+(j)]
 #define PNL_MSET(v,i,j, x) (v)->array[(i)*(v)->n+(j)] = (x)
 #define PNL_MLET(v,i,j) (v)->array[(i)*(v)->n+(j)]
+/*@}*/
+
+/**
+ * \defgroup PnlHMatrices Hyper Matrix object
+ */
 
 #include "pnl_matrix_double.h"
 #include "pnl_matrix_complex.h"
