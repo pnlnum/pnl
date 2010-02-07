@@ -28,34 +28,37 @@ extern "C" {
 #define CheckSparseMatVectIsCompatible(mat, vect){}
 #endif /* PNL_RANGE_CHECK_OFF */
 
-/* Morse Matrix, use only for construction 
+/**
+ * \defgroup PnlMorseMat Morse Matrix 
+ *
+ * Morse matrices are only used for for construction 
  * 
- * m,n :  size of matrix 
+ * m,n :  size of matrix
+ *
  * D[i]-> points to the ith column
- * D[i]-> size : number of non nul elements in col i 
- * D[i]->Index : array of rows of the elements of lin i
- * D[i]->Value : array of real part of the elements of lin i
- * D[i]->C : array of imaginary part of the elements of lin i
+ *
+ * D[i]-> size : number of non zero elements in column i
+ *
+ * D[i]->Index : array of the index  of the elements of line i
+ *
+ * D[i]->Value : array of the real part of the elements of line i
+ *
+ * D[i]->C : array of the imaginary part of the elements of line i
+ *
  */
+/*@{*/
+
 
 /* used to store a matlab compatible representation */
 typedef struct _sprow  SpRow ;
 
 struct _sprow {
-  int size;
-  /* size of a row */
-  int Max_size;
-  /* max size allocation of a row */
-  int    *Index;
-  /* pointer to an int array giving the columns or row i */
-  double *Value;
-  /* Pointer on values */
+  int size; /*!< size of a row */
+  int Max_size; /*!< max size allocation of a row */
+  int    *Index; /*!< pointer to an int array giving the columns or row i */
+  double *Value; /*!< Pointer on values */
 };
 
-/**
- * \defgroup PnlMorseMat Morse Matrix 
- */
-/*@{*/
 
 
 typedef struct PnlMorseMat{
@@ -80,20 +83,49 @@ extern PnlVect* pnl_morse_mat_mult_vect(const PnlMorseMat *M, const PnlVect *vec
 extern void pnl_morse_mat_print (const PnlMorseMat *M);
 extern PnlMat * pnl_morse_mat_full(PnlMorseMat * M);
 
+typedef struct _spwaverow  SpWaveRow ;
+
+struct _spwaverow {
+  int level_size;
+  SpRow * L_Value;
+};
+
+
+typedef struct PnlMorseWaveMat{
+  int m; /*!< nb rows */ 
+  int n; /*!< nb columns */ 
+  SpWaveRow * array; 
+  /*!< pointer in each row and each column level to store no nul coefficients */
+} PnlMorseWaveMat;
+
+
+
+typedef struct PnlMorseLUFact
+/* LU, factorization */
+{
+    PnlMorseMat *L ; /* L for LU and Cholesky, V for QR */
+    PnlMorseMat *U ; /* U for LU, R for QR, not used for Cholesky */
+    PnlPermutation *pinv; /* partial pivoting for LU */
+}PnlMorseLUFact;
+
+extern PnlMorseLUFact *pnl_morsefact_empty_create(int m,int n,int max_size);
+extern PnlMorseLUFact *pnl_morse_lu_fact_create(const PnlMorseMat *A,double tol);
+extern void pnl_morse_lu_fact_solve_inplace(const PnlMorseLUFact *F, PnlVect *x);
+extern void pnl_morsefact_free(PnlMorseLUFact ** Fatc);
+
 /*@}*/
 
 /**
  * \defgroup PnlSparseMat Sparse Matrix 
  *
- * This struct is the cs struct of Csparse librarie
- * written by Timothy A.Davis on LGPL licence.
+ * This is the cs struct of Csparse library written by Timothy A.Davis
  *
- * For convenient, we have rename somes functions and struct.
- * we have also reduce numbers of function parameters for non
+ * For convenience, we have renamed somes functions and structures.
+ * We have also reduced then numbers of function parameters for non
  * expert in sparse matrix.
  *
- * In following, we use only LU factorization for sparse system
- * Factorization can be stored for PDE-parabolic problem with same
+ * In the following, we only use the LU factorization for sparse system.  The
+ * factorization can be stored for PDE-parabolic problem with the same
  * operator at each time discretisation step.
  *
  */
@@ -130,41 +162,6 @@ extern void pnl_sparse_factorization_lu_syslin(const PnlSparseFactorization * N,
 
 /*@}*/
 
-
-typedef struct _spwaverow  SpWaveRow ;
-
-struct _spwaverow {
-  int level_size;
-  SpRow * L_Value;
-};
-
-/**
- * \defgroup PnlMorseMat Morse Matrix 
- */
-/*@{*/
-
-typedef struct PnlMorseWaveMat{
-  int m; /*!< nb rows */ 
-  int n; /*!< nb columns */ 
-  SpWaveRow * array; 
-  /*!< pointer in each row and each column level to store no nul coefficients */
-} PnlMorseWaveMat;
-
-/*@}*/
-
-
-typedef struct PnlMorseLUFact
-/* LU, factorization */
-{
-    PnlMorseMat *L ;	    /* L for LU and Cholesky, V for QR */
-    PnlMorseMat *U ;	    /* U for LU, R for QR, not used for Cholesky */
-    PnlPermutation *pinv;   /* partial pivoting for LU */
-}PnlMorseLUFact;
-
-extern PnlMorseLUFact *pnl_morsefact_empty_create(int m,int n,int max_size);
-extern PnlMorseLUFact *pnl_morse_lu_fact_create(const PnlMorseMat *A,double tol);
-extern void pnl_morse_lu_fact_solve_inplace(const PnlMorseLUFact *F, PnlVect *x);
-extern void pnl_morsefact_free(PnlMorseLUFact ** Fatc);
 
 #ifdef __cplusplus
 }
