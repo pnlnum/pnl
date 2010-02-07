@@ -41,46 +41,6 @@ double pnl_dyadic_cast(uint i)
   return (double)(((i-(1<<l))<<1)+1)/ 
     (double)(2<<l);} 
 
-uint pnl_vect_uint_level(PnlVectUint *v, int i)
-{return log2uint(pnl_vect_uint_get(v,i));}
-
-uint pnl_vect_uint_level_norm_one(PnlVectUint *v)
-{
-  uint sum=0,i; 
-  for(i=0;i<v->size;i++) 
-    sum+=log2uint(pnl_vect_uint_get(v,i)); 
-  return sum;
-}
-
-uint pnl_vect_uint_level_norm_inf(PnlVectUint *v)
-{
-  uint max=0,i,max_tmp=0; 
-  for(i=0;i<v->size;i++) 
-    { max_tmp=log2uint(pnl_vect_uint_get(v,i)); 
-      max=(max_tmp>max)?max_tmp:max; 
-    }
-  return max;
-}
-
-void pnl_vect_uint_compute_father(const PnlVectUint *v, 
-                                  PnlVectUint * father, 
-                                  int i)
-{pnl_vect_uint_clone(father,v);father->array[i]>>=1;}
-
-PnlVectUint * pnl_vect_uint_create_son(const PnlVectUint *v, int i,boolean LorR)
-{
-  PnlVectUint * son;
-  son= pnl_vect_uint_copy(v);
-  son->array[i]=(son->array[i]>>=1)+(LorR)?0:1;
-  return son;
-}
-
-void pnl_vect_uint_compute_son(const PnlVectUint *v,PnlVectUint *son, int i,boolean LorR)
-{
-  pnl_vect_uint_clone(son,v);
-  son->array[i]=(son->array[i]>>=1)+(LorR)?0:1;
-}
-
 void pnl_vect_uint_dyadic_cast(const PnlVectUint * v_in,PnlVect * v_out)
 {
   int i;
