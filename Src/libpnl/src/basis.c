@@ -483,7 +483,7 @@ static double _DDTchebychevD1(double *x, int ind)
         return (96. * val * val - 16.);
       case 5 :
         val2 = val * val;
-        return 240. * val2 * val - 160. * val;
+        return 320. * val2 * val - 120. * val;
       case 6 :
         val2 = val * val; val4 = val2 * val2;
         return (960. * val4 - 576. * val2 + 36.);
