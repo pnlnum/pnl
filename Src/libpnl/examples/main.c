@@ -40,7 +40,6 @@ extern void integration_test();
 extern void complex_test();
 extern void mathtools_test();
 extern void perm_test();
-extern void list_test();
 extern void root_test();
 extern void band_matrix_test();
 extern void special_func_test();
@@ -64,7 +63,6 @@ static tst_list tests[] =
     MAKE_ENUM(mathtools_test),
     MAKE_ENUM(complex_test),
     MAKE_ENUM(perm_test),    
-    MAKE_ENUM(list_test),
     MAKE_ENUM(root_test),
     MAKE_ENUM(band_matrix_test),
     MAKE_ENUM(special_func_test),

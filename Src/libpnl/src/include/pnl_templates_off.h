@@ -34,42 +34,12 @@
 #undef REAL_TYPE
 #endif
 
-#ifdef QUALIFIED_TYPE
-#undef QUALIFIED_TYPE
-#endif
-
-#ifdef VIEW
-#undef VIEW
-#endif
-
-#ifdef REAL_VIEW
-#undef REAL_VIEW
-#endif
-
-#ifdef QUALIFIED_VIEW
-#undef QUALIFIED_VIEW
-#endif
-
-#ifdef QUALIFIED_REAL_TYPE
-#undef QUALIFIED_REAL_TYPE
-#endif
-
-#ifdef QUALIFIED_REAL_VIEW
-#undef QUALIFIED_REAL_VIEW
-#endif
-
 #ifdef USES_LONGDOUBLE
 #undef USES_LONGDOUBLE
 #endif
 
 #ifdef SHORT_REAL
 #undef SHORT_REAL
-#endif
-
-#ifndef USE_QUALIFIER
-#ifdef QUALIFIER
-#undef QUALIFIER
-#endif
 #endif
 
 #undef BASE
@@ -103,11 +73,6 @@
 #undef NORMONE
 #undef VALUE
 #undef KEY
-#undef CONTAIN
-#undef NODE
-#undef NODE_SHORT
-#undef CONTAIN_SHORT
-
 
 #ifdef ORDERED
 #undef ORDERED

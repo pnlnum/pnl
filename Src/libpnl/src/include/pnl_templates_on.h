@@ -120,36 +120,10 @@
 #define SQUARE_NORM(a) (a)*(a)
 #define NORMONE(a) abs(a)
 
-#elif defined BASE_CONTAIN
-#define BASE 
-#define KEY int
-#define VALUE double
-#define CONTAIN PnlContains
-#define NODE PnlNode
-#define NODE_SHORT node
-#define CONTAIN_SHORT contains 
-#define SHORT  
-#define LSHORT sort_list
-#define IN_FORMAT "%lf"
-#define OUT_FORMAT "%f"
-#define OUT_PUT_FORMAT(a) a
-
-#elif defined BASE_SPARSE_POINT
-#define BASE 
-#define KEY PnlVectUint *
-#define VALUE int
-#define CONTAIN PnlSparsePoint
-#define NODE PnlNodeSparsePoint
-#define NODE_SHORT node_sparse_point
-#define CONTAIN_SHORT sparse_point
-#define SHORT SparsePoint  
-#define LSHORT sort_list_sparse_point
-#define IN_FORMAT "%lf"
-#define OUT_FORMAT "%f"
-#define OUT_PUT_FORMAT(a) a
+#elif defined MY_NEW_BASE
 
 #else
-#error unknown BASE_ directive in source.h
+#error unknown BASE_ directive
 #endif
  
 #define CONCAT2x(a,b) a ## b
@@ -159,20 +133,9 @@
 #define CONCAT4x(a,b,c,d) a ## _ ## b ## _ ## c ## _ ## d
 #define CONCAT4(a,b,c,d) CONCAT4x(a,b,c,d)
 
-
-#define USE_QUALIFIER = true
-#ifndef USE_QUALIFIER
-#define QUALIFIER
-#endif
-
 #define FUNCTION(dir,name) CONCAT3(dir,LSHORT,name)
-#define FUNCTION_NODE(dir,name) CONCAT3(dir,NODE_SHORT,name)
-#define FUNCTION_CONTAIN(dir,name) CONCAT3(dir,CONTAIN_SHORT,name)
 
 #define TYPE(dir) CONCAT2(dir,SHORT) /*dir */
-#define VIEW(dir,name) CONCAT2(dir,name)
-#define QUALIFIED_TYPE(dir) QUALIFIER dir
-#define QUALIFIED_VIEW(dir,name) CONCAT3(dir,QUALIFIER,name)
 
 #define STRING(x) #x
 #define EXPAND(x) STRING(x)
