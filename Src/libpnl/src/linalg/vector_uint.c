@@ -20,42 +20,13 @@
 #include "pnl_vector_uint.h"
 #include "pnl_mathtools.h"
 
-uint log2uint(uint x)
-{
-  uint level, y;
-  if(x==0){printf("error in log2uint ");abort();}
-  level=0;
-  y=x;
-  while(y>1)
-    {
-      level++;
-      y>>=1;
-    }
-  return level;
-}
-
-double pnl_dyadic_cast(uint i)
-{
-  /* \frac{2 (i-2^(lev))+1 }{2^{lev+1}} */
-  int l=log2uint(i);
-  return (double)(((i-(1<<l))<<1)+1)/ 
-    (double)(2<<l);} 
-
-void pnl_vect_uint_dyadic_cast(const PnlVectUint * v_in,PnlVect * v_out)
-{
-  int i;
-  for(i=0;i<v_in->size;i++)
-    LET(v_out,i)=pnl_dyadic_cast(v_in->array[i]);
-}
-
-
 int pnl_vect_uint_less(const PnlVectUint * a,const PnlVectUint * b)
 {
   int i;
   for( i=0;i<a->size;i++)
     if(a->array[i]!=b->array[i])
       return a->array[i]<b->array[i];
-  return false;
+  return FALSE;
 }
 
 int pnl_vect_uint_equal(const PnlVectUint * a,const PnlVectUint * b)
@@ -63,7 +34,7 @@ int pnl_vect_uint_equal(const PnlVectUint * a,const PnlVectUint * b)
   int i;
   for(i=0;i<a->size;i++)
     if(a->array[i]!=b->array[i])
-      return false;
-  return true;
+      return FALSE;
+  return TRUE;
 }
 

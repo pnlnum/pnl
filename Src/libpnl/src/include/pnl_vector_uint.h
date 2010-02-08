@@ -9,8 +9,6 @@ extern "C" {
 #include "pnl_vector.h"
 
 typedef unsigned int uint;
-extern uint log2uint(uint x);
-extern double pnl_dyadic_cast(uint i);
 
 /**
  * \ingroup PnlVectors
@@ -18,7 +16,7 @@ extern double pnl_dyadic_cast(uint i);
 /*@{*/
 
 /**
- * \defgroup PnlVectUint Uint Vector 
+ * \defgroup PnlVectUint Unsigned integer Vector 
  */
 /*@{*/
 typedef struct PnlVectUint{
