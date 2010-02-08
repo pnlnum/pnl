@@ -8,7 +8,7 @@ extern "C" {
 
 #include "pnl_mathtools.h"
 /**
- * \defgroup bla Cumulative Functions
+ * \defgroup PnlCDF Cumulative Distribution Functions
  */
 /*@{*/
 
