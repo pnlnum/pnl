@@ -86,7 +86,7 @@ void pnl_sparse_point_free(PnlSparsePoint **C)
  * Prints a contains to a file 
  *
  * @param fic a file descriptor.
- * @param C a Contians pointer.
+ * @param C a Contains pointer.
  */
 void pnl_sparse_point_fprint(FILE *fic,PnlSparsePoint *C)
 {
@@ -99,7 +99,7 @@ void pnl_sparse_point_fprint(FILE *fic,PnlSparsePoint *C)
  * Add - do nothing in this case 
  *
  * @param C a PnlSparsePoint pointer, C.Value Value.
- * @param C2 a Contians pointer.
+ * @param C2 a Contains pointer.
  */
 void  pnl_sparse_point_add(PnlSparsePoint *C,const PnlSparsePoint *C2)
 {}
@@ -108,7 +108,7 @@ void  pnl_sparse_point_add(PnlSparsePoint *C,const PnlSparsePoint *C2)
  * Less compute relation C1<C2
  *
  * @param C1 a PnlSparsePoint pointer.
- * @param C2 a Contians pointer.
+ * @param C2 a Contains pointer.
  * @return a int C1<C2
  */
 int  pnl_sparse_point_less(const PnlSparsePoint *C1,const PnlSparsePoint *C2)
@@ -118,7 +118,7 @@ int  pnl_sparse_point_less(const PnlSparsePoint *C1,const PnlSparsePoint *C2)
  * Equal compute relation C1==C2
  *
  * @param C1 a PnlSparsePoint pointer.
- * @param C2 a Contians pointer.
+ * @param C2 a Contains pointer.
  * @return a int C1==C2
  */
 int  pnl_sparse_point_equal(const PnlSparsePoint *C1,const PnlSparsePoint *C2)

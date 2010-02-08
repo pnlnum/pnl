@@ -110,7 +110,6 @@ extern double pnl_vect_uint_norm_one(const PnlVectUint *V); /*res=\Vert V \Vert_
 extern double pnl_vect_uint_norm_infty(const PnlVectUint *V); /*res=\Vert V \Vert_{l^\infty} */
 extern double pnl_vect_uint_norm_x(const PnlVectUint *V,double(*f)(uint)); /*res=\Vert V \Vert_{l^X} */
 
-extern void pnl_vect_uint_dyadic_cast(const PnlVectUint * v_int,PnlVect * v_out);
 extern void pnl_vect_uint_swap_elements(PnlVectUint * v, int i, int j); 
 extern void pnl_vect_unit_reverse(PnlVectUint * v);
 
