@@ -5,9 +5,8 @@
 \subsection{Vectors}
 \subsubsection{Short Description}
 
-The structures and functions relative to vectors are declared in
-\verb!pnl_vector.h!. One should include the instruction
-\verb!#include "pnl_vector.h"! in his code to use these functions.
+The structures and functions related to vectors are declared in
+\verb!pnl_vector.h!.
 
 
 Vectors are declared for several basic types : double, int, uint and
@@ -79,7 +78,8 @@ the above table.
   \sshortdescribe Creates a new \refstruct{PnlVect} pointer.  
 \item \describefun{\refstruct{PnlVect} $\ast$}{pnl_vect_create_from_zero}{int size}
   \sshortdescribe Creates a new \refstruct{PnlVect} pointer and sets it to zero.  
-\item \describefun{\refstruct{PnlVect} $\ast$}{pnl_vect_create_from_double}{int size, double x}
+\item \describefun{\refstruct{PnlVect} $\ast$}{pnl_vect_create_from_double}
+  {int size, double x}
   \sshortdescribe Creates a new \refstruct{PnlVect} pointer and sets all
   elements t \var{x}.  
 \item \describefun{\refstruct{PnlVect} $\ast$}{pnl_vect_create_from_ptr}{int
@@ -92,13 +92,15 @@ the above table.
   \var{size} filled with the extra arguments passed to the function. The
   number of extra arguments passed must be equal to \var{size}, be aware that
   this cannot be checked inside the function.
-\item \describefun{PnlVect}{pnl_vect_create_wrap_array}{const double $\ast$x, 
+\item \describefun{\refstruct{PnlVect}}{pnl_vect_create_wrap_array}{const double $\ast$x, 
     int size}
   \sshortdescribe Creates a \refstruct{PnlVect} pointer which contains
   \var{x}. No copy is made. It is just a container.
   
-\item \describefun{\refstruct{PnlVect} $\ast$}{pnl_vect_create_from_file}{const char $\ast$file}
-  \sshortdescribe Reads a vector from a file and creates the corresponding \refstruct{PnlVect}.  
+\item \describefun{\refstruct{PnlVect} $\ast$}{pnl_vect_create_from_file}
+  {const char $\ast$file}
+  \sshortdescribe Reads a vector from a file and creates the corresponding
+  \refstruct{PnlVect}.  
 
 \item \describefun{\refstruct{PnlVect} $\ast$}{pnl_vect_copy}{const
     \refstruct{PnlVect} $\ast$\refstruct{v}}
@@ -111,7 +113,7 @@ the above table.
   affect \var{clone}.
 
 \item \describefun{void}{pnl_vect_free}{\refstruct{PnlVect} $\ast\ast$\refstruct{v}}
-  \sshortdescribe Free a \refstruct{PnlVect} pointer and set the data pointer to NULL  
+  \sshortdescribe Frees a \refstruct{PnlVect} pointer and set the data pointer to NULL  
 \end{itemize}
 
 \subparagraph{Resizing vectors}
@@ -122,7 +124,7 @@ the above table.
 \item \describefun{int}{pnl_vect_resize_from_double}{\refstruct{PnlVect}
     $\ast$\refstruct{v}, int size, double x} 
   \sshortdescribe Resizes a \refstruct{PnlVect}.  The old data are kept. If
-  the new size is larger thant the old one, the new cells are set to \var{x}.
+  the new size is larger than the old one, the new cells are set to \var{x}.
 \item \describefun{int}{pnl_vect_resize_from_ptr}{\refstruct{PnlVect}
     $\ast$\refstruct{v}, int size, double $\ast$t} 
   \sshortdescribe Resizes a \refstruct{PnlVect} and uses \var{t} to fill the
@@ -131,9 +133,9 @@ the above table.
 
 \subparagraph{Accessing elements}
 
-If it is supported by the compiler, the following functions are declared inline. You
-just need to define the macro \verb!HAVE_INLINE! for by passing
-\verb!-DHAVE_INLINE! to gcc to use the inline version of the following
+If it is supported by the compiler, the following functions are declared
+inline. You just need to define the macro \verb!HAVE_INLINE! for by passing
+\verb!-DHAVE_INLINE! to gcc to use the inline versions of the following
 functions.
 \begin{itemize}
 \item \describefun{void}{pnl_vect_set}{\refstruct{PnlVect} $\ast$\refstruct{v}, int i, double x}
@@ -272,15 +274,13 @@ no total ordering on Complex numbers
 
 \item \describefun{void}{pnl_vect_qsort}{\refstruct{PnlVect} $\ast$, char order}
   \sshortdescribe Sorts a vector using a quick sort algorithm according to
-  \var{order} which can be \verb!'i'! for an increasing order sort or
-  \verb!'d'! for an decreasing order sort.
+  \var{order} (\verb!'i'! for increasing or \verb!'d'! for decreasing).
 
 \item \describefun{void}{pnl_vect_qsort_index}{\refstruct{PnlVect} $\ast$,
     \refstruct{PnlVectInt} *index, char order}
   \sshortdescribe Sorts a vector using a quick sort algorithm according to
-  \var{order} which can be \verb!'i'! for an increasing order sort or
-  \verb!'d'! for an decreasing order sort. On output, \var{index} contains the
-  permutation used to sort the vector.
+  \var{order} (\verb!'i'! for increasing or \verb!'d'! for decreasing ). On
+  output, \var{index} contains the permutation used to sort the vector.
 \end{itemize}
 
 \subparagraph{Scalar products and norms}
@@ -302,15 +302,20 @@ no total ordering on Complex numbers
 \subparagraph{Misc}
 
 \begin{itemize}
-\item \describefun{void}{pnl_vect_swap_elements}{\refstruct{PnlVect} $\ast$v, int i, int j}
+\item \describefun{void}{pnl_vect_swap_elements}{\refstruct{PnlVect} $\ast$v,
+    int i, int j}
+  \sshortdescribe Exchanges \var{v[i]} and \var{v[j]}.
 \item \describefun{void}{pnl_vect_reverse}{\refstruct{PnlVect} $\ast$v}
+  \sshortdescribe Performs a mirror operation on v. On output \var{v[i]
+    $\leftarrow$ v[n-i]} where \var{n} is the length of the vector.
 \end{itemize}
 
 
 \paragraph{Complex vector functions}
 
 \begin{itemize}
-\item \describefun{void}{pnl_vect_complex_mult_double}{\refstruct{PnlVectComplex} $\ast$lhs, double x}
+\item \describefun{void}{pnl_vect_complex_mult_double}
+  {\refstruct{PnlVectComplex} $\ast$lhs, double x}
   \sshortdescribe In-place multiplication by a double.
 
 \item \describefun{PnlVectComplex$\ast$}{pnl_vect_complex_create_from_array}{int
@@ -334,22 +339,28 @@ element of a complex vector. These functions also have inlined versions that
 are used if the variable \var{HAVE_INLINE} was declared at compilation time.
 
 \begin{itemize}
-\item \describefun{double}{pnl_vect_complex_get_real}{const \refstruct{PnlVectComplex} $\ast$v, int i}
+\item \describefun{double}{pnl_vect_complex_get_real}
+  {const \refstruct{PnlVectComplex} $\ast$v, int i}
   \sshortdescribe Returns the real part of \var{v[i]}.
   
-\item \describefun{double}{pnl_vect_complex_get_imag}{const \refstruct{PnlVectComplex} $\ast$v, int i}
+\item \describefun{double}{pnl_vect_complex_get_imag}
+  {const \refstruct{PnlVectComplex} $\ast$v, int i}
   \sshortdescribe Returns the imaginary part of \var{v[i]}.
 
-\item \describefun{double$\ast$}{pnl_vect_complex_lget_real}{const \refstruct{PnlVectComplex} $\ast$v, int i}
+\item \describefun{double$\ast$}{pnl_vect_complex_lget_real}
+  {const \refstruct{PnlVectComplex} $\ast$v, int i}
   \sshortdescribe Returns the real part of \var{v[i]} as a lvalue.
 
-\item \describefun{double$\ast$}{pnl_vect_complex_lget_imag}{const \refstruct{PnlVectComplex} $\ast$v, int i}
+\item \describefun{double$\ast$}{pnl_vect_complex_lget_imag}
+  {const \refstruct{PnlVectComplex} $\ast$v, int i}
   \sshortdescribe Returns the imaginary part of \var{v[i]} as a lvalue.
 
-\item \describefun{void}{pnl_vect_complex_set_real}{const \refstruct{PnlVectComplex} $\ast$v, int i, double re}
+\item \describefun{void}{pnl_vect_complex_set_real}
+  {const \refstruct{PnlVectComplex} $\ast$v, int i, double re}
   \sshortdescribe Sets the real part of \var{v[i]} to \var{re}.
 
-\item \describefun{void}{pnl_vect_complex_set_imag}{const \refstruct{PnlVectComplex} $\ast$v, int i, double im}
+\item \describefun{void}{pnl_vect_complex_set_imag}
+  {const \refstruct{PnlVectComplex} $\ast$v, int i, double im}
   \sshortdescribe Sets the imaginary part of \var{v[i]} to \var{im}.
 \end{itemize}
 
@@ -414,9 +425,8 @@ typedef struct PnlVectCompact {
 \subsection{Matrices}
 \subsubsection{Short Description}
 
-The structures and functions relative to matrices are declared in
-\verb!pnl_matrix.h!. One should include the instruction
-\verb!#include "pnl_matrix.h"! in his code to use these functions.
+The structures and functions related to matrices are declared in
+\verb!pnl_matrix.h!.
 
 \begin{verbatim}
 typedef struct PnlMat{
@@ -754,8 +764,7 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 
 \item \describefun{void}{pnl_mat_qsort}{\refstruct{PnlMat} $\ast$, char dir, char order}
   \sshortdescribe Sorts a matrix using a quick sort algorithm according to
-  \var{order} which can be \verb!'i'! for an increasing order sort or
-  \verb!'d'! for an decreasing order sort. The parameter \var{dir} determines
+  \var{order} (\verb!'i'! for increasing or \verb!'d'! for decreasing). The parameter \var{dir} determines
   whether the matrix is sorted by rows or columns. If \var{dir='c'}, each row
   is sorted independtly of the others whereas if \var{dir='r'}, each column
   is sorted independtly of the others.
@@ -763,13 +772,12 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 \item \describefun{void}{pnl_qsort_index}{\refstruct{PnlMat} $\ast$,
     \refstruct{PnlMatInt} *index, char dir, char order}
   \sshortdescribe Sorts a matrix using a quick sort algorithm according to
-  \var{order} which can be \verb!'i'! for an increasing order sort or
-  \verb!'d'! for an decreasing order sort. The parameter \var{dir} determines
-  whether the matrix is sorted by rows or columns. If \var{dir='c'}, each row
-  is sorted independtly of the others whereas if \var{dir='r'}, each column
-  is sorted independtly of the others. In addition to the function
-  \reffun{pnl_mat_qsort}, the permutation index is computed and stored into 
-  \var{index}.
+  \var{order} (\verb!'i'! for increasing or \verb!'d'! for decreasing). The
+  parameter \var{dir} determines whether the matrix is sorted by rows or
+  columns. If \var{dir='c'}, each row is sorted independently of the others
+  whereas if \var{dir='r'}, each column is sorted independently of the
+  others. In addition to the function \reffun{pnl_mat_qsort}, the permutation
+  index is computed and stored into \var{index}.
 \end{itemize}
 
 
@@ -1068,6 +1076,8 @@ typedef  struct {
 \subsection{Hyper matrices}
 \subsubsection{Short description}
 
+The Hyper matrix types and related functions are defined in the header \verb!pnl_matrix.h!.
+
 \begin{verbatim}
 typedef struct PnlHMat{
   int ndim; /*!< nb dimensions */ 
@@ -1190,53 +1200,45 @@ the above table.
 \subsection{Tri-diagonal matrix}
 \subsubsection{Short Description}
 
-The structures and functions relative to band matrices are declared in
-\verb!pnl_tridiag_matrix.h!. One should include the instruction
-\verb!#include "pnl_tridiag_matrix.h"! in his code to use these functions.
+The structures and functions related to tri-diagonal matrices are declared in
+\verb!pnl_tridiag_matrix.h!. 
 
-
-The special case of tridiagonal matrix , that is, has nonzero elements only on
-the diagonal plus or minus one column, is one that occurs frequently - specially
-for one dimensional PDE or Alternating direction implicit (ADI) method. Also
-common matrix that are band diagonal or band matrix, which nonzero elements
-only along a few diagonal lines adjacent to the main diagonal (above and
-below). This case is discuss in the next sub-section.
-
-For the tridiagonal sets, the solution of a linear system is performed in $O(n)$
-operations. Using inline LU decomposition and forward-backward substitution.
-
-Naturally, we store only the nonzero components, stored as three vectors.
+Naturally, we only store the nonzero components, stored as three vectors.
 
 \begin{verbatim}
 typedef struct PnlTriDiagMat{
   int size;           /*!< diagonal dimension product  */
   int owner;          /*!< 1 if the structure owns its array pointer */
-  double *diag;       /*!< pointer to store diagonal*/
-  double *diag_up;    /*!< pointer to store up diagonal*/
-  double *diag_down;  /*!< pointer to store down diagonal*/
+  double *diag;       /*!< pointer to store the diagonal*/
+  double *diag_up;    /*!< pointer to store the upper diagonal*/
+  double *diag_down;  /*!< pointer to store the lower diagonal*/
 } PnlTriDiagMat;
 \end{verbatim}
-\var{size} is the size of the matrix, \var{diag}, \var{diag_up}, \var{diag_down}  are pointers containing the
-data of diagonal, up diagonal ($M_{i, i+1}$) and  down diagonal ($M_{i-1, i}$).
-\var{owner} is an integer to know if the vector owns its three diagonals
-pointer (\var{owner}=$1$) or shares it with another structure (\var{owner}=$0$).
+
+\var{size} is the size of the matrix, \var{diag}, \var{diag_up},
+\var{diag_down} are pointers containing the data of the diagonal, the upper
+diagonal ($M_{i, i+1}$) and the lower diagonal ($M_{i-1, i}$).  \var{owner} is
+an integer to know if the vector owns its three  pointers
+(\var{owner}=$1$) or shares them with another object (\var{owner}=$0$).
 
 \subsubsection{Functions}
 \paragraph{Constructors and destructors}
 \begin{itemize}
 \item 
   \describefun{\refstruct{PnlTriDiagMat} $\ast$}{pnl_tridiagmat_create}{int size}
-  \sshortdescribe Creates a \refstruct{PnlTriDiagMat}  
+  \sshortdescribe Creates a \refstruct{PnlTriDiagMat}
 \item \describefun{\refstruct{PnlTriDiagMat} $\ast$}{pnl_tridiagmat_create_from_double}{int size, double x}
-  \sshortdescribe Creates a \refstruct{PnlTriDiagMat}  
+  \sshortdescribe Creates a \refstruct{PnlTriDiagMat} with the 3 diagonals
+  filled with \var{x}
 \item \describefun{\refstruct{PnlTriDiagMat} $\ast$}{pnl_tridiagmat_create_from_two_double}{int size, double x, double y}
-  \sshortdescribe Creates a \refstruct{PnlTriDiagMat}  
-\item \describefun{\refstruct{PnlTriDiagMat} $\ast$}{pnl_tridiagmat_create_from_ptr}{int size, const double $\ast$diag, const double $\ast$diag-up, const double $\ast$diag-down}
+  \sshortdescribe Creates a \refstruct{PnlTriDiagMat}  with the diagonal
+  filled with \var{x} and the upper ans lower diagonals filled with \var{y}
+\item \describefun{\refstruct{PnlTriDiagMat} $\ast$}{pnl_tridiagmat_create_from_ptr}{int size, const double $\ast$diag, const double $\ast$upper_diag, const double $\ast$lower_diag}
   \sshortdescribe Creates a \refstruct{PnlTriDiagMat}  
 \item \describefun{\refstruct{PnlTriDiagMat} $\ast$}{pnl_tridiagmat_create_from_matrix}{const \refstruct{PnlMat} $\ast$mat}
-  \sshortdescribe Reads a tri-diagonal matrix from a Matrix and creates
+  \sshortdescribe Reads a tri-diagonal matrix from a full matrix and creates
   the corresponding \refstruct{PnlTriDiagMat}.
-\item void \refstruct{pnl_tridiagmat_free}{\refstruct{PnlTriDiagMat} $\ast$$\ast$\refstruct{v}}
+\item \describefun{void }{pnl_tridiagmat_free}{\refstruct{PnlTriDiagMat} $\ast$$\ast$\refstruct{v}}
   \sshortdescribe Frees a \refstruct{PnlTriDiagMat}  
 \item \describefun{int}{pnl_tridiagmat_resize}{\refstruct{PnlTriDiagMat} $\ast$\refstruct{v}, int size}
   \sshortdescribe Resizes a \refstruct{PnlTriDiagMat}.  
@@ -1244,11 +1246,11 @@ pointer (\var{owner}=$1$) or shares it with another structure (\var{owner}=$0$).
 \paragraph{Accessing elements}
 \begin{itemize}
 \item \describefun{void}{pnl_tridiagmat_set}{\refstruct{PnlTriDiagMat} $\ast$self, int d, int up, double x}
-  \sshortdescribe Sets the value of if up= 1self[d, d+1] =x, if up= -1 self[d-1, d] = x if up= 0 self[d, d]  
+  \sshortdescribe Sets \var{self[d, d+up] = x}, \var{up} can be $\{-1, 0, 1\}$.  
 \item \describefun{double}{pnl_tridiagmat_get}{const \refstruct{PnlTriDiagMat} $\ast$self, int d, int up}
-  \sshortdescribe Gets the value of if up= 1self[d, d+1], if up= -1 self[d-1, d] if up= 0 self[d, d]  
+  \sshortdescribe Gets \var{self[d, d+up]}, \var{up} can be $\{-1, 0, 1\}$.  
 \item \describefun{double $\ast$}{pnl_tridiagmat_lget}{\refstruct{PnlTriDiagMat} $\ast$self, int d, int up}
-  \sshortdescribe Returns the address of if up= 1self[d, d+1], if up= -1 self[d-1, d] if up= 0 self[d, d] for use as a lvalue  
+  \sshortdescribe Returns the address \var{self[d, d+up] = x}, \var{up} can be $\{-1, 0, 1\}$.  
 \end{itemize}
 
 \paragraph{Printing Matrix}
@@ -1309,22 +1311,21 @@ pointer (\var{owner}=$1$) or shares it with another structure (\var{owner}=$0$).
 \subsection{Band Matrix structure}
 \subsubsection{Short Description}
 
-The structures and functions relative to matrices are declared in
-\verb!pnl_band_matrix.h!. One should include the instruction
-\verb!#include "pnl_band_matrix.h"! in his code to use these functions.
+The structures and functions related to band matrices are declared in
+\verb!pnl_band_matrix.h!. 
 
 
-Band Matrix have $m_{up}>0$ nonzero elements immediately to the left of(below)
-the diagonal and $m_{down}$ nonzero elements immediately to the right of(above
-it). Of course the next structure is useful only if $m_{up}$ and $m_{down}$
-are smaller compare to $N$, the size of the matrix. In the case of Band
-Matrix, the solution of the linear system by classical decomposition algorithms
-LU, Cholesky, $\dots$ could be performed much faster and in much less storage, 
-than for the $N\times N $ case. For simplification, we make the assumption $m_{up}=m_{down}=band$.
+Band Matrices have $m_{up}>0$ nonzero upper diagonals and $m_{low}$ nonzero
+lower diagonals. Of course the next structure is useful only if $m_{up}$ and
+$m_{down}$ are smaller compare to $N$, the size of the matrix. In the case of
+Band Matrix, the solution of the linear system by classical decomposition
+algorithms LU, Cholesky, $\dots$ could be performed much faster and in much
+less storage, than for the $N\times N $ case. For simplification, we make the
+assumption $m_{up}=m_{down}=band$.
 
 
 This structure is used in practice to solve multi-dimensional PDE in a Galerkin
-framework. It is strongly inspired by work of F.Hecht on RMN class. 
+framework. It is strongly inspired by the work of F.Hecht on RMN class. 
 
 
 \begin{verbatim}
@@ -1339,10 +1340,10 @@ struct PnlBandMatrix{
   int n;      /*!< size of row */ 
   int m;      /*!< size of col */ 
   double *D;  /*!< diagonal vector */  
-  double *Up; /*!< Triangular up matrix, only no nul coeffieciens */ 
-  double *Lo; /*!< Triangular down matrix, only no nul coeffieciens */
-  int    *pU; /*!< Triangular up profil   */ 
-  int    *pL; /*!< Triangular down profil */
+  double *Up; /*!< upper Triangular matrix, only no nul coeffieciens */ 
+  double *Lo; /*!< lower Triangular matrix, only no nul coeffieciens */
+  int    *pU; /*!< upper Triangular  profil   */ 
+  int    *pL; /*!< lower Triangular profil */
   FactorizationType typefac;
   int owner;  /*!< 1 if the structure owns its array pointer */
 }PnlBandMatrix;
@@ -1534,13 +1535,13 @@ of its matrix elements $M_{i, j}$ are nonzero. It is wasteful to use full
 structure to solve the linear system because most of the operations devoted to
 solving the system use elements with values zero. Furthermore, for some 
 high dimensional problems, storing the full matrix with its zero elements is not
-possible the memory usage explodes.
+possible because of memory limitations.
 
 
-In the following, We propose two structures for Sparse Matrices.  Must of the
+In the following, we propose two structures for Sparse Matrices.  Must of the
 algorithms which use sparse matrices can be divided in two steps.  The first
 step is the construction of the matrix. For this, \refstruct{PnlMorseMat} should
-always be used. The second step is the resolution of a sparse linear system. We
+be used. The second step is the resolution of a sparse linear system. We
 have two ways of doing that. The first one is to use a direct method based on
 matrix-decomposition, like the LU decomposition. The \refstruct{PnlSparseMat} is
 implemented to do that. The second one is to use iterative methods like
@@ -1549,14 +1550,10 @@ section. If we use iterative methods, we can use \refstruct{PnlMorseMat}.
 
 \begin{verbatim}
 typedef struct SpRow{
-  int size;
-  /* size of a row */
-  int Max_size;
-  /* max size allocation of a row */
-  int    *Index;
-  /* pointer to an int array giving the columns or row i */
-  double *Value;
-  /* Pointer on values */
+  int size;  /*!< size of a row */
+  int Max_size; /*!< max size allocation of a row */
+  int    *Index; /*!< pointer to an int array giving the columns or row i */
+  double *Value; /*!< Pointer on values */
 }SpRow;
 \end{verbatim}
 \var{size} is the number of elements, 
@@ -1571,9 +1568,8 @@ $$M_{i, Index[k]}=Value[k].$$
 typedef struct PnlMorseMat{
   int m; /*!< nb rows */ 
   int n; /*!< nb columns */ 
-  SpRow * array; 
-  /*!< pointer in each row or col to store no nul coefficients */
-  int RC; /*!> 0 if we use row wise storage, 1 if we use column wise storage */ 
+  SpRow * array; /*!< pointer in each row or col to store no nul coefficients */
+  int RC; /*!< 0 if we use row-wise storage, 1 if we use column-wise storage */ 
 } PnlMorseMat;
 \end{verbatim}
 \var{m} is the number of rows, \var{n} is the number of columns.
@@ -1586,23 +1582,24 @@ RC).
 \begin{itemize}
 \item \describefun{\refstruct{PnlMorseMat}$\ast$}{pnl_morse_mat_create}{int m, 
     int n, int Max_size_row, int RC}
-  \sshortdescribe Construction of empty \refstruct{PnlMorseMat} with memory
-  allocation for each component of array. 
+  \sshortdescribe Creates an empty \refstruct{PnlMorseMat} with memory
+  allocated for each component of the array. 
 \item
-  \describefun{\refstruct{PnlMorseMat}$\ast$}{pnl_morse_mat_create_fromfull}{\refstruct{PnlMat}
-    $\ast$FM, int RC}
-  \sshortdescribe Construct a \refstruct{PnlMorseMat} from  a \refstruct{PnlMat} storing only nonzero elements.
+  \describefun{\refstruct{PnlMorseMat}$\ast$}{pnl_morse_mat_create_fromfull}
+  {\refstruct{PnlMat} $\ast$FM, int RC}
+  \sshortdescribe Creates a \refstruct{PnlMorseMat} from  a \refstruct{PnlMat}
+  storing only its nonzero elements.
 
 \item \describefun{void}{pnl_morse_mat_free}{\refstruct{PnlMorseMat}$\ast$$\ast$ M}
-  \sshortdescribe Frees the memory used used by \var{$\ast$M}
+  \sshortdescribe Frees a \refstruct{PnlMorseMat}
 
 \item \describefun{int}{pnl_morse_mat_freeze}{PnlMorseMat$\ast$ M}
   \sshortdescribe Sets Max size equal to size for each SpRow and frees the extra
   memory.
 
-\item \describefun{\refstruct{PnlMat}
-    $\ast$}{pnl_morse_mat_full}{\refstruct{PnlMorseMat}$\ast$ M}
-  \sshortdescribe Constructs a full matrix from a morse matrix, use only for debug.
+\item \describefun{\refstruct{PnlMat} $\ast$}{pnl_morse_mat_full}
+  {\refstruct{PnlMorseMat}$\ast$ M}
+  \sshortdescribe Creates a full matrix from a morse matrix.
 \end{itemize}
 
 
@@ -1647,31 +1644,35 @@ RC).
 \subsection{Sparse Matrix}
 
 \refstruct{PnlSparseMat} is the cs structure of the Csparse library written by
-Timothy A.Davis under the LGPL licence.  For the sake of convenience, we have
-renamed some functions and structures. We have also reduced the number of
-function parameters for non expert people in sparse matrices.  In the following,
-we only use the LU factorisation for sparse systems. If the same operator is
-used at each time step, direct methods relying on factorisations are faster than
-iterative methods. When the PDE coefficients are time dependent, the answer is
-not so clear.
+Timothy A.Davis.  For the sake of convenience, we have renamed some functions
+and structures. We have also reduced the number of function parameters for non
+expert users in sparse matrices.  In the following, we only use the LU
+factorisation for sparse systems. If the same operator is used at each time
+step, direct methods relying on factorisations are faster than iterative
+methods. When the PDE coefficients are time dependent, the answer is not so
+clear.
 
 \subsubsection{Functions}
 \paragraph{Constructors and destructors}
 \begin{itemize}
 \item \describefun{\refstruct{PnlSparseMat}
     $\ast$}{pnl_sparse_mat_create_fromfull}{\refstruct{PnlMat} $\ast$M}
-  \sshortdescribe Construct a \refstruct{PnlSparseMat} from  a
+  \sshortdescribe Creates a \refstruct{PnlSparseMat} from  a
   \refstruct{PnlMat} storing only nonzero elements.
 \item \describefun{\refstruct{PnlSparseMat}
     $\ast$}{pnl_sparse_mat_create_frommorse}{\refstruct{PnlMorseMat}$\ast$ M}
-  \sshortdescribe Construct a \refstruct{PnlSparseMat} from  a
+  \sshortdescribe Creates a \refstruct{PnlSparseMat} from  a
   \refstruct{PnlMorseMat} with $M\rightarrow M->RC =1$.
-\item \describefun{void}{pnl_sparse_mat_free}{\refstruct{PnlSparseMat} $\ast$$\ast$M}
+\item \describefun{void}{pnl_sparse_mat_free}{\refstruct{PnlSparseMat}
+    $\ast$$\ast$M}
+  \sshortdescribe Frees a \refstruct{PnlSparseMat}.
 \end{itemize}
 
 \paragraph{Printing Matrix}
 \begin{itemize}
-\item \describefun{void}{pnl_sparse_mat_print}{\refstruct{PnlSparseMat} $\ast$A}
+\item \describefun{void}{pnl_sparse_mat_print}{\refstruct{PnlSparseMat}
+    $\ast$A}
+  \sshortdescribe Prints a \refstruct{PnlSparseMat}.
 \end{itemize}
 
 \subparagraph{Element wise operations}
@@ -1745,63 +1746,40 @@ From the sparse matrix, we extract the LU decomposition stored in \refstruct{Pnl
 \subsection{Solver Functions}
 \subsubsection{Short Description}
 
-The structures and functions relative to solvers are declared in
-\verb!pnl_linalgsolver.h!. One should include the instruction
-\verb!#include "pnl_linalgsover.h"! in his code to use these functions.
+The structures and functions related to solvers are declared in
+\verb!pnl_linalgsolver.h!. 
 
-
-Most iterative methods are based on results on Krylov subspace. In linear
-algebra, the Krylov subspace generated by an n-by-n matrix A and a vector b of
-dimension n is the linear subspace spanned by the images of $b$ under the
-first $r$ powers of $M$ (starting from $M^0 = Id$), that is,
-$$  \mathcal{K}_r(M, b) = \operatorname{span} \, \left\{ b, M b, M^2b,
-  \ldots, M^{r-1}b\right\}.$$ 
-
-The main idea of iterative methods or Krylov subspace methods is to form an
-orthogonal basis of the sequence of successive matrix powers times the initial
-residual (the Krylov sequence). The approximations to the solution are then
-formed by minimizing the residual over the subspace formed.  The prototypical
-method in this class is the conjugate gradient method (CG). Other methods are
-the generalized minimal residual method (GMRES) and the Bi-conjugate gradient
-method (BiCG).
-
-The approximating operator that appears in stationary iterative methods can
-also be incorporated in Krylov subspace methods such as GMRES where they
-become transformations of the original operator
-to a presumably better conditioned one.
-
-Left preconditioner solve the problem :
+A Left preconditioner solves the problem :
 $$ P M x = P b, $$
-and right preconditioner solve
+and whereas right preconditioner solves
 $$ M P y  = b, \quad \quad P y = x.$$
 
-With some simplifications, number of algorithms iterations depend ( linearly is
-some case ) of conditioning. Conditioning is ratio of maximum eigenvalue over
-minimum eigenvalue of $M$. For GMRES algorithm is depend of conditioning of
-$M^{T} M$. So if we can find $P_L$ and $P_R$ such that $P_L M P_R$ is closed to
-identity matrix, then preconditioning problem converge faster than initial
-problem. We have also to solve $P_R y = x$ so $P_R$ has to be constructed to do
-that fast.
+%% With some simplifications, the number of algorithm iterations depends on
+%% conditioning. Conditioning is ratio of maximum eigenvalue over minimum
+%% eigenvalue of $M$. For GMRES algorithm is depend of conditioning of $M^{T}
+%% M$. So if we can find $P_L$ and $P_R$ such that $P_L M P_R$ is closed to
+%% identity matrix, then preconditioning problem converge faster than initial
+%% problem. We have also to solve $P_R y = x$ so $P_R$ has to be constructed to
+%% do that fast.
 
 More information is given in {\em Saad, Yousef (2003). Iterative methods for
   sparse linear systems (2nd ed. ed.). SIAM. ISBN 0898715342. OCLC 51266114}.
-Reader find in this book some discussion about right or/and left preconditioner
-and description of the following algorithms. 
+The reader will find in this book some discussion about right or/and left
+preconditioner and a description of the following algorithms.
 
-These algorithms, we implemented with left preconditioner. Right preconditioner
-can be easily computed changing matrix vector multiplication operation from $M \
+These algorithms, we implemented with a left preconditioner. Right preconditioner
+can be easily computed changing matrix vector multiplication operator from $M \
 x $ to $ M \ P_R \ x$ and solving $P_R y = x$ at the end of algorithm.
 
 
 \subsubsection{Functions}
 
-Three methods are implemented Conjugate Gradient, BICGstab and GMRES with
-restart. For each of them a structure is created to store temporary vectors used
-in algorithm. So we have constructor and destructor. In some case, we have to
-apply iterative methods more than one time : for example to solve at each time
-step a discrete form of an elliptic problem come from parabolic problem. So do
-not use constructor and free at each time. Use only an initialization and solve
-procedure.  
+Three methods are implemented : Conjugate Gradient, BICGstab and GMRES with
+restart. For each of them a structure is created to store temporary vectors
+used in the algorithm. In some cases, we have to apply iterative methods more
+than once : for example to solve at each time step a discrete form of an
+elliptic problem come from parabolic problem. In the cases, do not call the constructor and
+destructor at each time, but instead use the initialization and solve procedures.
 
 Formally we have, 
 \begin{verbatim}
@@ -1818,7 +1796,7 @@ matrix vector multiplication as a parameter of the solver.
 
 \paragraph{Conjugate Gradient method}
 
-Only available for symmetric and positive matrix.
+Only available for symmetric and positive matrices.
 \begin{itemize}
 \item 
   \describefun{\refstruct{PnlCGSolver} $\ast$}{pnl_cg_solver_create}{int Size, int max-iter, double tolerance}
@@ -1839,17 +1817,17 @@ Only available for symmetric and positive matrix.
 \item \describefun{void}{pnl_bicg_solver_free}{\refstruct{PnlBICGSolver} $\ast$$\ast$Solver}
   \sshortdescribe Destructor of iterative solver  
 \item \describefun{int}{pnl_bicg_solver_solve}{void($\ast$matrix vector-product)(const void $\ast$, const \refstruct{PnlVect} $\ast$, const double, const double, \refstruct{PnlVect} $\ast$), const void $\ast$Matrix-Data, void($\ast$matrix vector-product-PC)(const void $\ast$, const \refstruct{PnlVect} $\ast$, const double, const double, \refstruct{PnlVect} $\ast$), const void $\ast$PC-Data, \refstruct{PnlVect} $\ast$x, const \refstruct{PnlVect} $\ast$b, \refstruct{PnlBICGSolver} $\ast$Solver}
-  \sshortdescribe Solve the linear system matrix vector-product is the matrix vector multiplication function matrix vector-product-PC is the preconditioner function Matrix-Data \& PC-Data is data to compute matrix vector multiplication.  
+  \sshortdescribe Solves the linear system matrix vector-product is the matrix vector multiplication function matrix vector-product-PC is the preconditioner function Matrix-Data \& PC-Data is data to compute matrix vector multiplication.  
 \end{itemize}
 
-\paragraph{GMRES with restart}
-See {\em Saad, Yousef (2003)} for discussion about restart parameter. In some
-words, for GMRES we need to store at the p-th iteration $p$ vectors of the same size of the right
-and side. It could be very expensive in term of memory allocation. So GMRES
-with restart algorithm stop if $p=restart$ and restart algorithm with the
-previous computed solution as initial guess.
+\paragraph{GMRES with restart} See {\em Saad, Yousef (2003)} for discussion
+about the restart parameter. For GMRES we need to store at the p-th iteration
+$p$ vectors of the same size of the right and side. It could be very expensive
+in term of memory allocation. So GMRES with restart algorithm stop if
+$p=restart$ and restarts the algorithm with the previously computed solution
+as initial guess.
 
-Note that with restart equal to $m$, we have classical GMRES algorithm.
+Note that if restart equals $m$, we have a classical GMRES algorithm.
 
 \begin{itemize}
 \item \describefun{\refstruct{PnlGMRESSolver} $\ast$}{pnl_gmres_solver_create}{int Size, int max-iter, int restart, double tolerance}
@@ -1859,7 +1837,7 @@ Note that with restart equal to $m$, we have classical GMRES algorithm.
 \item \describefun{void}{pnl_gmres_solver_free}{\refstruct{PnlGMRESSolver} $\ast$$\ast$Solver}
   \sshortdescribe Destructor of iterative solver  
 \item \describefun{int}{pnl_gmres_solver_solve}{void($\ast$matrix vector-product)(const void $\ast$, const \refstruct{PnlVect} $\ast$, const double, const double, \refstruct{PnlVect} $\ast$), const void $\ast$Matrix-Data, void($\ast$matrix vector-product-PC)(const void $\ast$, const \refstruct{PnlVect} $\ast$, const double, const double, \refstruct{PnlVect} $\ast$), const void $\ast$PC-Data, \refstruct{PnlVect} $\ast$x, const \refstruct{PnlVect} $\ast$b, \refstruct{PnlGMRESSolver} $\ast$Solver}
-  \sshortdescribe Solve the linear system matrix vector-product is the matrix vector multiplication function matrix vector-product-PC is the preconditionner function Matrix-Data \& PC-Data is data to compute matrix vector multiplication.  
+  \sshortdescribe Solves the linear system matrix vector-product is the matrix vector multiplication function matrix vector-product-PC is the preconditionner function Matrix-Data \& PC-Data is data to compute matrix vector multiplication.  
 \end{itemize}
 
 
@@ -1881,7 +1859,7 @@ int pnl_mat_cg_solver_solve(const PnlMat * Matrix, const PnlMat * PC,
 \end{verbatim}
 
 In practice, we cannot define all iterative methods for all structures.
-With this implementation, user can easily :
+With this implementation, the user can easily :
 \begin{itemize}
 \item implement right precondioner, 
 \item implement method with sparse matrix and diagonal preconditioner, or
@@ -1893,14 +1871,14 @@ With this implementation, user can easily :
 
 
 \begin{itemize}
-\item \describefun{int}{pnl_mat_cg_solver_solve}{const \refstruct{PnlMat} $\ast$Matrix, const \refstruct{PnlMat} $\ast$PC, \refstruct{PnlVect} $\ast$x, const \refstruct{PnlVect} $\ast$b, \refstruct{PnlCGSolver} $\ast$Solver}
-  \sshortdescribe Solve the linear system Matrix x = b with preconditionner PC.  
-\item \describefun{int}{pnl_mat_bicg_solver_solve}{const \refstruct{PnlMat} $\ast$Matrix, const \refstruct{PnlMat} $\ast$PC, \refstruct{PnlVect} $\ast$x, const \refstruct{PnlVect} $\ast$b, \refstruct{PnlBICGSolver} $\ast$Solver}
-  \sshortdescribe Solve the linear system Matrix x = b with preconditionner PC.  
+\item \describefun{int}{pnl_mat_cg_solver_solve}{const \refstruct{PnlMat} $\ast$M, const \refstruct{PnlMat} $\ast$PC, \refstruct{PnlVect} $\ast$x, const \refstruct{PnlVect} $\ast$b, \refstruct{PnlCGSolver} $\ast$Solver}
+  \sshortdescribe Solves the linear system \var{M x = b} with preconditionner PC.  
+\item \describefun{int}{pnl_mat_bicg_solver_solve}{const \refstruct{PnlMat} $\ast$M, const \refstruct{PnlMat} $\ast$PC, \refstruct{PnlVect} $\ast$x, const \refstruct{PnlVect} $\ast$b, \refstruct{PnlBICGSolver} $\ast$Solver}
+  \sshortdescribe Solves the linear system \var{M x = b} with preconditionner PC.  
 \item \describefun{int}{pnl_mat_gmres_solver_solve}{const \refstruct{
-      PnlMat} $\ast$Matrix, const \refstruct{PnlMat} $\ast$PC, 
+      PnlMat} $\ast$M, const \refstruct{PnlMat} $\ast$PC, 
     \refstruct{PnlVect} $\ast$x, \refstruct{PnlVect} $\ast$b, \refstruct{PnlGMRESSolver} $\ast$Solver}
-  \sshortdescribe Solve the linear system Matrix x = b with preconditionner PC.
+  \sshortdescribe Solve the linear system \var{M x = b} with preconditionner PC.
 \end{itemize}
 
 

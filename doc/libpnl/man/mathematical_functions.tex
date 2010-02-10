@@ -3,7 +3,8 @@
 %% --------------------------------------------------------------------- %%
 %% Mathtools
 \subsection{General tools}
-\subsubsection{Short Description}
+
+The macros and functions of this paragraph are defined in \verb!pnl_mathtools.h!.
 
 \subsubsection{Constants} A few mathematical constants are provided by the
 library. Most of them are actually already defined in {\tt math.h}, {\tt
@@ -81,6 +82,9 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
 %% Complex
 \subsection{Complex numbers}
 \subsubsection{Short Description}
+
+The complex type and related functions are defined in the header
+\verb!pnl_complex.h!.\\
 
 The first native implementation of complex numbers in the C language has been
 provided by the C99 implementation, which is not available on all
@@ -271,9 +275,11 @@ functions are :
 
 
 
-\subsection{Special Functions}
+\subsection{Special functions}
 
-\subsubsection{Real Bessel Functions}
+The special function approximations are defined in the header \verb!pnl_specfun.h!.\\
+
+\subsubsection{Real Bessel functions}
 
 \begin{itemize}
 \item \describefun{double}{pnl_bessel_i}{double v, double x}
@@ -314,7 +320,7 @@ functions are :
   order \var{v}  and multiplied by $e^{I x}$.
 \end{itemize}
 
-\subsubsection{Complex Bessel Functions}
+\subsubsection{Complex Bessel functions}
 
 \begin{itemize}
 \item \describefun{dcomplex}{pnl_complex_bessel_i}{double v, dcomplex z}
@@ -368,7 +374,7 @@ functions are :
   \sshortdescribe Computes $\log(\reffun{pnl_sp_erfc} (x))$
 \end{itemize}
 
-\subsubsection{Incomplete Gamma Function }
+\subsubsection{Incomplete Gamma functions}
 
 For $a \in \R$ and $x>0$, the Incomplete Gamma Function is defined by
 \begin{equation*}
@@ -495,6 +501,9 @@ For $x \in \R$
 
 \subsection{Financial functions}
 \subsubsection{Short Description}
+
+The financial functions are defined in the header \verb!pnl_finance.h!.\\
+
 \subsubsection{Functions}
 
 
@@ -520,55 +529,42 @@ For $x \in \R$
 \end{itemize}
 
 
-% We use some practitioner's conventions. Here the functions depend on the
-% forward and bond prices. This can be useful for time dependent interest rate
-% models.
-
-% Let $F_T$ denote the forward price at maturity $T$, the expected value of $S_T$.
-% In the Black \& Scholes case, 
-% $$ F_T = S_0 \expp{(r-q)t}, $$
-% where $r$ is the interest rate and $q$ then dividend yield.
-
-% The expression of the Bond price, which pays $1$ at maturity time,  
-% is given in the BS case by
-% $$ B_0 = \expp{-r T}.$$
-
-% Note that:
-% $$ \Delta_{Forward}  \expp{(r-q)T} = \Delta_{S}, \quad \quad
-% \Gamma_{Forward}  \expp{2 (r-q)T} = \Gamma_{S}.$$
-
 \begin{itemize}
 \item 
-  \describefun{double}{pnl_bs_call}{double s,double k,double T,double r,double divid,double sigma}
+  \describefun{double}{pnl_bs_call}{double s,double k,double T,
+    double r,double divid,double sigma}
   \sshortdescribe Computes the price of a call option with spot \var{s}
   and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
   instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
   \var{divid}.
 
 \item 
-  \describefun{double}{pnl_bs_put}{double s,double k,double T,double r,double divid,double sigma}
+  \describefun{double}{pnl_bs_put}{double s,double k,double T,
+    double r,double divid,double sigma}
   \sshortdescribe Computes the price a put option with spot \var{s}
   and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
   instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
   \var{divid}.
 
 \item 
-  \describefun{double}{pnl_bs_call_put}{int iscall, double s,double k,double T,double r,
-    double divid,double sigma}
+  \describefun{double}{pnl_bs_call_put}{int iscall, double s,double k,
+    double T,double r, double divid,double sigma}
   \sshortdescribe Computes the price of a put option if \var{iscall=0} or a
   call option if \var{iscall=1} with spot \var{s} and strike \var{k} in the
   Black-Scholes model with volatility \var{sigma}, instantaneous interest rate
   \var{r}, maturity \var{T} and dividend rate \var{divid}.
 
 \item 
-  \describefun{double}{pnl_bs_vega}{double s,double k,double T,double r,double divid,double sigma}
+  \describefun{double}{pnl_bs_vega}{double s,double k,double T,
+    double r,double divid,double sigma}
   \sshortdescribe Computes the vega of a put or call option with spot \var{s}
   and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
   instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
   \var{divid}.
 
 \item 
-  \describefun{double}{pnl_bs_gamma}{double s,double k,double T,double r,double divid,double sigma}
+  \describefun{double}{pnl_bs_gamma}{double s,double k,double T,double r,
+    double divid,double sigma}
   \sshortdescribe Computes the gamma of a put or call option with spot \var{s}
   and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
   instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
@@ -598,10 +594,11 @@ maturities, a matrix of prices (with strikes varying row-wise).
     $\ast$iscall, const \refstruct{PnlMat} $\ast$Price, double s, 
     double r, double divid, const \refstruct{PnlVect} $\ast$K, 
     const \refstruct{PnlVect} $\ast$T, \refstruct{PnlMat} $\ast$Vol}
-  \sshortdescribe Computes the matrix of implied volatilities \var{Vol(i,j)} of a put option if
-  \var{iscall(i,j)=0} or a call option if \var{iscall(i,j)=1} with spot \var{s} and
-  strike \var{K(j)} in the Black-Scholes model with instantaneous interest rate
-  \var{r}, maturity \var{T(j)} and dividend rate \var{divid}. This function
-  returns the number of failures, when everything succeded it returns $0$.
+  \sshortdescribe Computes the matrix of implied volatilities \var{Vol(i,j)}
+  of a put option if \var{iscall(i,j)=0} or a call option if
+  \var{iscall(i,j)=1} with spot \var{s} and strike \var{K(j)} in the
+  Black-Scholes model with instantaneous interest rate \var{r}, maturity
+  \var{T(j)} and dividend rate \var{divid}. This function returns the number
+  of failures, when everything succeded it returns $0$.
 \end{itemize}
 
