@@ -55,9 +55,11 @@
 */
 
 #include <stdio.h>
+#include "pnl_mathtools.h"
 #include "mconf.h"
 
-int merror = 0;
+static int _mtherr_activated = TRUE;
+static int merror = 0;
 
 /* Notice: the order of appearance of the following
  * messages is bound to the error codes defined
@@ -77,6 +79,9 @@ static char *ermsg[8] = {
 
 int mtherr(char *name, int code)
 {
+
+  if (_mtherr_activated == FALSE) return (0);
+  
   /* Display string passed by calling program,
    * which is supposed to be the name of the
    * function in which the error occurred:
@@ -97,4 +102,19 @@ int mtherr(char *name, int code)
    * program
    */
   return (0);
+}
+
+
+/*
+ * Functions added to activate/deactivate mtherr
+ */
+void pnl_decativate_mtherr ()
+{
+  _mtherr_activated = FALSE;
+}
+
+
+void pnl_ativate_mtherr ()
+{
+  _mtherr_activated = TRUE;
 }

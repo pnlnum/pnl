@@ -18,6 +18,10 @@ extern "C" {
  */
 /*@{*/
 
+extern void pnl_decativate_mtherr ();
+extern void pnl_ativate_mtherr ();
+
+
 /**
  * \defgroup PnlBessel  Bessel functions
  * \brief Approximations of the Bessel functions
