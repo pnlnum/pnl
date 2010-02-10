@@ -108,13 +108,13 @@ int mtherr(char *name, int code)
 /*
  * Functions added to activate/deactivate mtherr
  */
-void pnl_decativate_mtherr ()
+void pnl_deactivate_mtherr ()
 {
   _mtherr_activated = FALSE;
 }
 
 
-void pnl_ativate_mtherr ()
+void pnl_activate_mtherr ()
 {
   _mtherr_activated = TRUE;
 }
