@@ -163,6 +163,9 @@ extern int pnl_isfinite (double x);
 #define PNL_POSINF INFINITY
 #define PNL_NEGINF (-INFINITY)
 
+#ifndef isinf
+#define isinf pnl_isinf
+#endif
 #ifndef isnan
 #define isnan pnl_isnan
 #endif
