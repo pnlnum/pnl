@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="3"
 				AdditionalIncludeDirectories=".\;libpnl\src\include;common\;common\math\;common\math\InterestRateModelTree;common\math\ap_fusai_levy\;common\math\ap_kou_model\;common\math\bsnd_math\;common\math\cdo\;common\math\cgmy\;common\math\credit_cds\;common\math\highdim_solver\;common\math\highdim_solver\laspack\;common\math\lmm\;mod\;mod\affine3d\;mod\affine3d\affine3d_stdi\;mod\bharchiarella1d\;mod\bharchiarella1d\bharchiarella1d_stdi\;mod\blackkarasinski1d\;mod\blackkarasinski1d\blackkarasinski1d_stdi\;mod\bs1d\;mod\bs1d\bs1d_doublim\;mod\bs1d\bs1d_lim\;mod\bs1d\bs1d_limdisc\;mod\bs1d\bs1d_pad\;mod\bs1d\bs1d_std\;mod\bs2d\;mod\bs2d\bs2d_std2d\;mod\bsdisdiv1d\;mod\bsdisdiv1d\bsdisdiv1d_std\;mod\bsnd\;mod\bsnd\bsnd_stdnd\;mod\cgmy1d\;mod\cgmy1d\cgmy1d_pad\;mod\cgmy1d\cgmy1d_std\;mod\cir1d\;mod\cir1d\cir1d_stdi\;mod\cir2d\;mod\cir2d\cir2d_stdi\;mod\cirpp1d\;mod\cirpp1d\cirpp1d_stdi\;mod\cirpp2d\;mod\cirpp2d\cirpp2d_stdc\;mod\copula\;mod\copula\copula_stdndc\;mod\dup1d\;mod\dup1d\dup1d_std\;mod\fps1d\;mod\fps1d\fps1d_std\;mod\fps2d\;mod\fps2d\fps2d_std\;mod\hes1d\;mod\hes1d\hes1d_lim\;mod\hes1d\hes1d_pad\;mod\hes1d\hes1d_std\;mod\hes1d\hes1d_vol\;mod\hk1d\;mod\hk1d\hk1d_stdi\;mod\hullwhite1d\;mod\hullwhite1d\hullwhite1d_stdi\;mod\hullwhite2d\;mod\hullwhite2d\hullwhite2d_stdc\;mod\hw1d\;mod\hw1d\hw1d_std\;mod\inflation_lmm_heston1d\;mod\inflation_lmm_heston1d\inflation_lmm_heston1d_stdf\;mod\jarrowyildirim1d\;mod\jarrowyildirim1d\jarrowyildirim1d_stdf\;mod\jump1d\;mod\jump1d\jump1d_std\;mod\kou1d\;mod\kou1d\kou1d_lim\;mod\kou1d\kou1d_pad\;mod\kou1d\kou1d_std\;mod\lmm_heston1d\;mod\lmm_heston1d\lmm_heston1d_stdi\;mod\lmm_jump1d\;mod\lmm_jump1d\lmm_jump1d_stdi\;mod\lmm1d\;mod\lmm1d\lmm1d_stdi\;mod\lrshjm1d\;mod\lrshjm1d\lrshjm1d_stdi\;mod\mer1d\;mod\mer1d\mer1d_lim\;mod\mer1d\mer1d_pad\;mod\mer1d\mer1d_std\;mod\merhes1d\;mod\merhes1d\merhes1d_lim\;mod\merhes1d\merhes1d_std\;mod\nig1d\;mod\nig1d\nig1d_lim\;mod\nig1d\nig1d_pad\;mod\nig1d\nig1d_std\;mod\nonpar1d\;mod\nonpar1d\nonpar1d_vol\;mod\purejump1d\;mod\purejump1d\purejump1d_pad\;mod\qtsm2d\;mod\sg1d\;mod\sg1d\sg1d_stdi\;mod\temperedstable1d\;mod\temperedstable1d\temperedstable1d_lim\;mod\temperedstable1d\temperedstable1d_std\;mod\temperedstable1d\temperedstable1d_vol\;mod\variancegamma1d\;mod\variancegamma1d\variancegamma1d_lim\;mod\variancegamma1d\variancegamma1d_pad\;mod\variancegamma1d\variancegamma1d_std\;mod\varswap3d\;mod\varswap3d\varswap3d_std\;mod\vasicek1d\;mod\vasicek1d\vasicek1d_stdi\;opt\;opt\doublim\;opt\lim\;opt\limdisc\;opt\pad\;opt\std\;opt\std2d\;opt\stdc\;opt\stdf\;opt\stdg\;opt\stdi\;opt\stdnd\;opt\stdndc\;opt\vol\"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;HAVE_LAPACK;_WIN32;MSDOS;Allow_TYQUAD"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;HAVE_LAPACK;PNL_CHECK_RANGE_OFF;_WIN32;MSDOS;Allow_TYQUAD"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="1"
@@ -1134,11 +1134,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\libpnl\src\clapack\blaswrap.h"
+			RelativePath=".\libpnl\src\blas\blaswrap.h"
 			>
 		</File>
 		<File
-			RelativePath=".\libpnl\src\blas\blaswrap.h"
+			RelativePath=".\libpnl\src\clapack\blaswrap.h"
 			>
 		</File>
 		<File
@@ -2346,6 +2346,26 @@
 			>
 		</File>
 		<File
+			RelativePath=".\common\math\cgmy\cgmy.C"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					CompileAs="2"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					CompileAs="2"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
 			RelativePath=".\common\math\equity_pricer\cgmy.c"
 			>
 			<FileConfiguration
@@ -2367,31 +2387,11 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\common\math\cgmy\cgmy.C"
+			RelativePath=".\common\math\equity_pricer\cgmy.h"
 			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					CompileAs="2"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					CompileAs="2"
-				/>
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath=".\common\math\cgmy\cgmy.h"
-			>
-		</File>
-		<File
-			RelativePath=".\common\math\equity_pricer\cgmy.h"
 			>
 		</File>
 		<File
@@ -3171,6 +3171,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\common\math\equity_pricer\contains.c"
+			>
+		</File>
+		<File
 			RelativePath=".\libpnl\src\sort\contains.c"
 			>
 			<FileConfiguration
@@ -3189,10 +3193,6 @@
 					Name="VCCLCompilerTool"
 				/>
 			</FileConfiguration>
-		</File>
-		<File
-			RelativePath=".\common\math\equity_pricer\contains.c"
-			>
 		</File>
 		<File
 			RelativePath=".\mod\copula\copula.c"
@@ -7499,6 +7499,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\libpnl\src\interpolation.c"
+			>
+		</File>
+		<File
 			RelativePath=".\common\math\intg.C"
 			>
 			<FileConfiguration
@@ -8023,11 +8027,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\libpnl\src\clapack\lsame.c"
+			RelativePath=".\libpnl\src\blas\lsame.c"
 			>
 		</File>
 		<File
-			RelativePath=".\libpnl\src\blas\lsame.c"
+			RelativePath=".\libpnl\src\clapack\lsame.c"
 			>
 		</File>
 		<File
@@ -8040,10 +8044,6 @@
 		</File>
 		<File
 			RelativePath=".\libpnl\src\mainpage.h"
-			>
-		</File>
-		<File
-			RelativePath=".\common\math\ap_kou_model\Makefile.am"
 			>
 		</File>
 		<File
@@ -8100,6 +8100,10 @@
 		</File>
 		<File
 			RelativePath=".\common\math\highdim_solver\Makefile.am"
+			>
+		</File>
+		<File
+			RelativePath=".\common\math\ap_kou_model\Makefile.am"
 			>
 		</File>
 		<File
@@ -8855,11 +8859,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\mod\hes1d\hes1d_pad\model.h"
+			RelativePath=".\common\model.h"
 			>
 		</File>
 		<File
-			RelativePath=".\common\model.h"
+			RelativePath=".\mod\hes1d\hes1d_pad\model.h"
 			>
 		</File>
 		<File
@@ -9180,6 +9184,10 @@
 		</File>
 		<File
 			RelativePath=".\libpnl\src\include\pnl_internals.h"
+			>
+		</File>
+		<File
+			RelativePath=".\libpnl\src\include\pnl_interpolation.h"
 			>
 		</File>
 		<File
@@ -11951,11 +11959,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\mod\hullwhite1dgeneralized\hullwhite1dgeneralized_stdi\tr_hullwhite1d_bermudianswaption.c"
+			RelativePath=".\mod\hullwhite1d\hullwhite1d_stdi\tr_hullwhite1d_bermudianswaption.c"
 			>
 		</File>
 		<File
-			RelativePath=".\mod\hullwhite1d\hullwhite1d_stdi\tr_hullwhite1d_bermudianswaption.c"
+			RelativePath=".\mod\hullwhite1dgeneralized\hullwhite1dgeneralized_stdi\tr_hullwhite1d_bermudianswaption.c"
 			>
 		</File>
 		<File
@@ -12307,11 +12315,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\libpnl\src\libI77\Version.c"
+			RelativePath=".\libpnl\src\libF77\Version.c"
 			>
 		</File>
 		<File
-			RelativePath=".\libpnl\src\libF77\Version.c"
+			RelativePath=".\libpnl\src\libI77\Version.c"
 			>
 		</File>
 		<File

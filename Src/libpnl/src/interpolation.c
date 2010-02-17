@@ -155,7 +155,7 @@ void nsp_nlinear_interp(double **x , double val[], int dim[], int n,
 {
   int i, j, l, p, temp, b, two_p_n;
   double xx;
-  double nan_val = 0.0/0.0;
+  double nan_val = pnl_nan();
 
   /*
    *   calcul des decalages d'indices pour retrouver les valeurs
@@ -771,7 +771,7 @@ void nsp_eval_piecewise_hermite(double *t, double *st, double *dst, double *d2st
 
   i_old=-1;
   c2=0; c3=0;
-  Nan = 0.0/0.0;
+  Nan = pnl_nan();
 
   i = -1;
   for ( j = 0 ; j < m ; j++ )
@@ -1121,10 +1121,11 @@ static void nsp_eval_bicubic_patch_with_grad(double xx, double yy, double xk, do
  **/
 void nsp_eval_bicubic(double *x, double *y, double *C, int nx, int ny, double *x_eval, double *y_eval, double *z_eval, double *dzdx_eval, double *dzdy_eval, int m, int outmode)
 {
-  double xx, yy, Nan=0.0/0.0;
+  double xx, yy, Nan;
   int k, i, j, change_dzdx, change_dzdy, without_grad = dzdx_eval==NULL;
   int stride = nx-1;
 
+  Nan = pnl_nan();
   i = -1;
   j = -1;
   for ( k = 0 ; k < m ; k++ )
