@@ -16,7 +16,11 @@ extern "C" {
 #define C2F(name) name/**/_
 #endif
 #else
-#define C2F(name) name
+#  ifdef _MSC_VER
+#    define C2F(name) name##_
+#  else
+#    define C2F(name) name
+#  endif
 #endif
 
 
