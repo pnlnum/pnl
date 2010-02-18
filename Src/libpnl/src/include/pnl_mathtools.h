@@ -28,6 +28,7 @@ extern double pnl_posinf (void);
 extern double pnl_neginf (void);
 extern int pnl_isnan (double x);
 extern int pnl_isfinite (double x);
+extern int pnl_isinf (double x);
 
 
 #define false 0
