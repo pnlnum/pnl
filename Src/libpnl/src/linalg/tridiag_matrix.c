@@ -1,4 +1,5 @@
 /************************************************************************/
+/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
 /* Copyright David Pommier <pommier.david@gmail.com>                    */
 /*                                                                      */
 /* This program is free software: you can redistribute it and/or modify */
@@ -16,22 +17,15 @@
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
 
-/*************************************************************************/
-/*These struct and functions are strongly inspired by work of            */
-/* - JP Chancelier & al in NSP software                                  */
-/*     http://cermics.enpc.fr/~jpc/nsp-tiddly/mine.html                  */ 
-/*************************************************************************/
-
   
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
-#include <assert.h>
 
 #include "config.h"
 #include "pnl_tridiag_matrix.h"
+#include "pnl_machine.h"
 #include "pnl_matrix.h"
 #include "pnl_mathtools.h"
 
@@ -40,19 +34,21 @@ static double __op_minus(double a, double b) { return a-b; }
 static double __op_mult(double a, double b) { return a*b; }
 static double __op_div(double a, double b) { return a/b; }
 /*static double __op_inv(double a) { return 1.0/a; } */
-/*static double __op_square(double a) { return a*a; } */
 
-
+extern int C2F(dlagtm)(char *trans, int *n, int *nrhs, double *alpha, 
+                       double *dl, double *d, double *du, double *x,
+                       int *ldx, double *beta, double *b, int *ldb);
+extern int C2F(dgtsv)(int *n, int *nrhs, double *dl, double *d, double *du, 
+                       double *b, int *ldb, int *info);
 
 /**
- * solve a special tridiag_system with the same three value for each row.
-
- * @param low  : a double value of M(i,i-1)
- * @param diag : low : a double value of M(i,i)
- * @param up   : a double value of M(i,i+1)
- * @param rhs    : a PnlVect pointer on the right and side
- * @param lhs    : a PnlVect pointer on result
- * solve M lhs = rhs
+ * Solves a tridiagonal system defined by matrix whose three diagonals are
+ * defined by three values. 
+ * @param low the double value of M(i,i-1)
+ * @param diag the double value of M(i,i)
+ * @param up the double value of M(i,i+1)
+ * @param rhs the right and side member of the system
+ * @param lhs contains the solution on exit
  */
 void pnl_progonka(const double low, 
                   const double diag, const double up, 
@@ -60,36 +56,36 @@ void pnl_progonka(const double low,
                   PnlVect * lhs)
 {
   int i;
-  double *Diag,tmp;
-  Diag = malloc((rhs->size)*sizeof(double));
+  double *D,tmp;
+  D = malloc((rhs->size)*sizeof(double));
   /* Do Down-Solve L y = rhs  */
-  if((Diag[0]=diag)==0)
+  if((D[0]=diag)==0)
     {
       PNL_ERROR("division by zero","pnl_progonka");
     }
   pnl_vect_set(lhs,0,pnl_vect_get(rhs,0));
   for(i=1; i<rhs->size; i++)
     {
-      tmp=low/Diag[i-1];
-      if((Diag[i]=diag-tmp*up)==0)
+      tmp=low/D[i-1];
+      if((D[i]=diag-tmp*up)==0)
         {
            PNL_ERROR("division by zero","pnl_progonka");
         }
       pnl_vect_set(lhs,i,pnl_vect_get(rhs,i)-tmp*pnl_vect_get(lhs,i-1));
     }
   /* Do Up-Solve L y = rhs  */
-  pnl_vect_set(lhs,rhs->size-1,pnl_vect_get(lhs,rhs->size-1)/Diag[rhs->size-1]);
+  pnl_vect_set(lhs,rhs->size-1,pnl_vect_get(lhs,rhs->size-1)/D[rhs->size-1]);
   for(i=rhs->size-2;i>=0;i--)
     {
-      pnl_vect_set(lhs,i,(pnl_vect_get(lhs,i)-up*pnl_vect_get(lhs,i+1))/Diag[i]);
+      pnl_vect_set(lhs,i,(pnl_vect_get(lhs,i)-up*pnl_vect_get(lhs,i+1))/D[i]);
     }
-  free(Diag);
+  free(D);
 
 }
 
-/***************************
- *** PnlTridiagmat functions ***
- ***************************/
+/*******************************
+ *** PnlTriDiagmat functions ***
+ *******************************/
 
 /**
  * creates a PnlTriDiagMat
@@ -99,63 +95,21 @@ void pnl_progonka(const double low,
 PnlTriDiagMat* pnl_tridiagmat_create(int size)
 {
   PnlTriDiagMat *v;
-  if((v=malloc(sizeof(PnlTriDiagMat)))==NULL)
-    return NULL;
+  if((v=malloc(sizeof(PnlTriDiagMat)))==NULL) return NULL;
   v->size=size;
-  v->owner = 1;
-  if (v->size>0)
+  if (size>0)
     {
-      if((v->diag=malloc(v->size*sizeof(double)))==NULL)
-        return NULL;
-      if((v->diag_up=malloc(v->size*sizeof(double)))==NULL)
-        return NULL;
-      if((v->diag_down=malloc(v->size*sizeof(double)))==NULL)
-        return NULL;
+      if((v->D=malloc(size*sizeof(double)))==NULL) return NULL;
+      if((v->DU=malloc((size-1)*sizeof(double)))==NULL) return NULL;
+      if((v->DL=malloc((size-1)*sizeof(double)))==NULL) return NULL;
     }
   else
     {
-      v->diag = (double*)NULL;
-      v->diag_up = (double*)NULL;
-      v->diag_down = (double*)NULL;
+      v->D = (double*)NULL;
+      v->DU = (double*)NULL;
+      v->DL = (double*)NULL;
     }
   return v;  
-}
-
-/**
- * creates a PnlTriDiagMat
- * @param size number of rows
- * @param x used to fill the matrix with
- * @return a PnlTriDiagMat pointer
- */
-PnlTriDiagMat* pnl_tridiagmat_create_from_double(int size, double x)
-{
-  PnlTriDiagMat *v;
-  int i=0;
-  double *ptr,*ptr_up,*ptr_down;
-  
-  if ((v=pnl_tridiagmat_create(size))==NULL)
-    return NULL;
-
-  ptr= pnl_tridiagmat_lget (v, 0, 0);
-  ptr_up= pnl_tridiagmat_lget (v, 0, 1);
-  ptr_down= pnl_tridiagmat_lget (v, 0, -1);
-  *ptr=x;
-  *ptr_up=x; 
-  *ptr_down=0.0; 
-  ptr++; ptr_up++;   
-  ptr_down++; i++;
-  while(i<v->size-1)
-    {
-      *ptr=x;
-      *ptr_up=x; 
-      *ptr_down=x; 
-      ptr++; ptr_up++;   
-      ptr_down++; i++;
-    }
-  *ptr=x;
-  *ptr_up=0.0; 
-  *ptr_down=x; 
-  return v;
 }
 
 /**
@@ -167,22 +121,16 @@ PnlTriDiagMat* pnl_tridiagmat_create_from_double(int size, double x)
  */
 PnlTriDiagMat* pnl_tridiagmat_create_from_two_double(int size, double x, double y)
 {
-  PnlTriDiagMat *v;
-  int i=0;
+  PnlTriDiagMat *mat;
   double *ptr,*ptr_up,*ptr_down;
+  int i=0;
   
-  if ((v=pnl_tridiagmat_create(size))==NULL)
-    return NULL;
+  if ((mat=pnl_tridiagmat_create(size))==NULL) return NULL;
 
-  ptr= pnl_tridiagmat_lget (v, 0, 0);
-  ptr_up= pnl_tridiagmat_lget (v, 0, 1);
-  ptr_down= pnl_tridiagmat_lget (v, 0, -1);
-  *ptr=x;
-  *ptr_up=y; 
-  *ptr_down=0.0; 
-  ptr++; ptr_up++;   
-  ptr_down++; i++;
-  while(i<v->size-1)
+  ptr = mat->D;
+  ptr_up = mat->DU;
+  ptr_down = mat->DL;
+  while(i<mat->size-1)
     {
       *ptr=x;
       *ptr_up=y; 
@@ -191,35 +139,43 @@ PnlTriDiagMat* pnl_tridiagmat_create_from_two_double(int size, double x, double 
       ptr_down++; i++;
     }
   *ptr=x;
-  *ptr_up=0.0; 
-  *ptr_down=y; 
-  return v;
+  return mat;
 }
 
 /**
  * creates a PnlTriDiagMat
  * @param size number of rows
- * @param diag principal diagonal
- * @param diag_up diagonal v[i,i+1]
- * @param diag_down diagonal v[i,i-1]
+ * @param x used to fill the three diagonals 
  * @return a PnlTriDiagMat pointer
  */
-PnlTriDiagMat* pnl_tridiagmat_create_from_ptr(int size, const double* diag, const double* diag_up, const double* diag_down)
+PnlTriDiagMat* pnl_tridiagmat_create_from_double(int size, double x)
+{
+  return pnl_tridiagmat_create_from_two_double (size, x, x);
+}
+
+/**
+ * creates a PnlTriDiagMat
+ * @param size number of rows
+ * @param D principal diagonal
+ * @param DU diagonal v[i,i+1]
+ * @param DL diagonal v[i,i-1]
+ * @return a PnlTriDiagMat pointer
+ */
+PnlTriDiagMat* pnl_tridiagmat_create_from_ptr(int size, const double* DL, const double* D, const double* DU)
 {
   PnlTriDiagMat *v;
   
-  if ((v=pnl_tridiagmat_create(size))==NULL)
-    return NULL;
+  if ((v=pnl_tridiagmat_create(size))==NULL) return NULL;
   
-  memcpy(v->diag, diag, v->size*sizeof(double));
-  memcpy(v->diag_up, diag_up, v->size*sizeof(double));
-  memcpy(v->diag_down, diag_down, v->size*sizeof(double));
+  memcpy(v->D, D, v->size*sizeof(double));
+  memcpy(v->DU, DU, (v->size-1)*sizeof(double));
+  memcpy(v->DL, DL, (v->size-1)*sizeof(double));
   return v;
 }
 
 /**
- * Reads a tri-diagonale matrix from a Matrix and creates the corresponding PnlTriDiagMat
- * all element extern to diagonal ,diag up and diag down is put to 0
+ * Reads a tri-Dagonal matrix from a PnlMat and creates the corresponding PnlTriDiagMat
+ * all elements buth those of the diagonals are set to 0
  * @param mat a PnlMat
  * @return a PnlTriDiagMat
  */
@@ -227,38 +183,59 @@ PnlTriDiagMat* pnl_tridiagmat_create_from_matrix (const PnlMat * mat)
 {
   PnlTriDiagMat *M;
   int i;
-  CheckIsSquare (mat)
-    M=pnl_tridiagmat_create(mat->m);
+  CheckIsSquare (mat);
+  M=pnl_tridiagmat_create(mat->m);
   for (i=0; i<mat->m-1; i++)
     {
-      M->diag_up[i] = pnl_mat_get (mat, i, i+1);
-      M->diag[i] = pnl_mat_get (mat, i, i);
-      M->diag_down[i] = pnl_mat_get (mat, i+1, i);
+      M->DU[i] = pnl_mat_get (mat, i, i+1);
+      M->D[i] = pnl_mat_get (mat, i, i);
+      M->DL[i] = pnl_mat_get (mat, i+1, i);
     }
-  M->diag[mat->m] = pnl_mat_get (mat, mat->m, mat->m);
+  M->D[mat->m] = pnl_mat_get (mat, mat->m-1, mat->m-1);
+  return M;
+}
+
+/**
+ * Reads a tri-diagonale matrix from a PnlMat and creates the corresponding PnlTriDiagMat
+ * all elements buth those of the diagonal, upper Donal and lower Donal are set to 0
+ * @param mat a PnlMat
+ * @return a PnlTriDiagMat
+ */
+PnlMat* pnl_tridiagmat_to_matrix (const PnlTriDiagMat * T)
+{
+  PnlMat *M;
+  int i;
+  M=pnl_mat_create(T->size, T->size);
+  for (i=0; i<T->size-1; i++)
+    {
+      PNL_MLET(M, i, i+1) = T->DU[i];
+      PNL_MLET(M, i, i) = T->D[i];
+      PNL_MLET(M, i+1, i) = T->DL[i];
+    }
+  PNL_MLET (M, i, i) = T->D[T->size-1];
   return M;
 }
 
 
 /**
- * frees a PnlTriDiagMat
+ * Frees a PnlTriDiagMat
  *
- * @param v adress of a PnlTriDiagMat*. v is set to NULL at exit.
+ * @param v adress of a PnlTriDiagMat*. 
  */
 void pnl_tridiagmat_free(PnlTriDiagMat **v)
 {
   if (*v != NULL)
     {
-      if ((*v)->diag != NULL && (*v)->owner == 1) free((*v)->diag);
-      if ((*v)->diag_up != NULL && (*v)->owner == 1) free((*v)->diag_up);
-      if ((*v)->diag_down != NULL && (*v)->owner == 1) free((*v)->diag_down);
+      if ((*v)->D != NULL) free((*v)->D);
+      if ((*v)->DU != NULL) free((*v)->DU);
+      if ((*v)->DL != NULL) free((*v)->DL);
       free(*v);
       *v=NULL;
     }
 }
 
 /**
- * resizes a PnlTriDiagMat.
+ * Resizes a PnlTriDiagMat.
  *
  * If the new size is smaller than the current one, no
  * memory is free. If the new size is larger than the
@@ -272,14 +249,13 @@ void pnl_tridiagmat_free(PnlTriDiagMat **v)
  */
 int pnl_tridiagmat_resize(PnlTriDiagMat *v, int size)
 {
-  if (v->owner == 0) return FAIL;
   if (size < 0) return FAIL;
   if (size==0) /* free array */
     {
       v->size = 0;
-      free(v->diag); v->diag = NULL;
-      free(v->diag_up); v->diag_up = NULL;
-      free(v->diag_down); v->diag_down = NULL;
+      if (v->D != NULL) { free(v->D); v->D = NULL; }
+      if (v->DU != NULL) { free(v->DU); v->DU = NULL; }
+      if (v->DL != NULL) { free(v->DL); v->DL = NULL; }
       return OK;
     }
   if (v->size >= size) /*nothing to do, just adjust m and n*/
@@ -288,16 +264,21 @@ int pnl_tridiagmat_resize(PnlTriDiagMat *v, int size)
       return OK;
     }
   v->size=size;
-  if (v->diag==NULL)
+  if (v->D==NULL)
     {
-      if (((v->diag = malloc(v->size*sizeof(double)))==NULL)
-          || ((v->diag_up = malloc(v->size*sizeof(double)))==NULL) || ((v->diag_down = malloc(v->size*sizeof(double)))==NULL))
+      if (((v->D = malloc(v->size*sizeof(double)))==NULL)
+          || ((v->DU = malloc((v->size-1)*sizeof(double)))==NULL) 
+          || ((v->DL = malloc((v->size-1)*sizeof(double)))==NULL))
         return FAIL;
-    }else
+    }
+  else
     {
-      if (((v->diag = realloc(v->diag, v->size*sizeof(double)))==NULL)||((v->diag_up = realloc(v->diag_up, v->size*sizeof(double)))==NULL)
-          ||((v->diag_down = realloc(v->diag_down, v->size*sizeof(double)))==NULL))
-        
+      free (v->D);
+      free (v->DL);
+      free (v->DU);
+      if (((v->D = malloc(v->size*sizeof(double)))==NULL)
+          ||((v->DU = malloc((v->size-1)*sizeof(double)))==NULL)
+          ||((v->DL = malloc((v->size-1)*sizeof(double)))==NULL))
         return FAIL;
     }
   return OK;
@@ -305,7 +286,7 @@ int pnl_tridiagmat_resize(PnlTriDiagMat *v, int size)
 
 
 /**
- * sets the value of if up== 1self[d,d+1]  =x, if up== -1 self[d,d-1]  = x if up== 0 self[d,d] 
+ * Sets the value of self[d,d+up]=x
  *
  * @param self : a PnlTriDiagMat
  * @param d : index of element
@@ -315,16 +296,13 @@ int pnl_tridiagmat_resize(PnlTriDiagMat *v, int size)
 void pnl_tridiagmat_set (PnlTriDiagMat *self, int d, int up, double x)
 {
   CheckIndexTriDiagMat(self,d, up);
-  if(up==1)
-    self->diag_up[d]= x;
-  if(up==-1)
-    self->diag_down[d]= x;
-  if(up==0)
-    self->diag[d]= x;
+  if (up==1) self->DU[d]= x;
+  else if (up==-1) self->DL[d-1]= x;
+  else if (up==0) self->D[d]= x;
 }
 
 /**
- * gets the value of if up== 1self[d,d+1], if up== -1 self[d,d-1] if up== 0 self[d,d] 
+ * gets the value of if self[d,d+up]
  *
  * @param self : a PnlTriDiagMat
  * @param d : index of element
@@ -334,18 +312,14 @@ void pnl_tridiagmat_set (PnlTriDiagMat *self, int d, int up, double x)
 double pnl_tridiagmat_get(const PnlTriDiagMat *self, int d, int up)
 {
   CheckIndexTriDiagMat(self,d, up);
-  if(up==1)
-    return self->diag_up[d];
-  if(up==-1)
-    return self->diag_down[d];
-  if(up==0)
-    return self->diag[d];
-  return 0.0;
+  if (up==1) return self->DU[d];
+  else if (up==-1) return self->DL[d-1];
+  else if (up==0) return self->D[d];
+  else return 0.0;
 }
 
 /**
- * returns the address of if up== 1self[d,d+1], if up== -1 self[d-1,d] 
- * if up== 0 self[d,d] for use as a lvalue 
+ * Returns the address of self[d,d+up] to be used as a lvalue
  *
  * @param self : a PnlTriDiagMat
  * @param d : index of element 
@@ -355,13 +329,10 @@ double pnl_tridiagmat_get(const PnlTriDiagMat *self, int d, int up)
 double* pnl_tridiagmat_lget (PnlTriDiagMat *self, int d, int up)
 {
   CheckIndexTriDiagMat(self,d,up);
-  if(up==1)
-    return &(self->diag_up[d]);
-  if(up==-1)
-    return &(self->diag_down[d]);
-  if(up==0)
-    return &(self->diag[d]);
-  return NULL;
+  if (up==1) return &(self->DU[d]);
+  else if (up==-1) return &(self->DL[d-1]);
+  else if (up==0) return &(self->D[d]);
+  else return NULL;
 }
 
 /**
@@ -373,17 +344,18 @@ double* pnl_tridiagmat_lget (PnlTriDiagMat *self, int d, int up)
  */
 void pnl_tridiagmat_map_inplace(PnlTriDiagMat *lhs, double(*f)(double))
 {
-  double *lptr = pnl_tridiagmat_lget (lhs, 0, 0);
-  double *lptr_up = pnl_tridiagmat_lget (lhs, 0, 1);
-  double *lptr_down = pnl_tridiagmat_lget (lhs, 0, -1);
+  double *lptr = lhs->D;
+  double *lptr_up = lhs->DU;
+  double *lptr_down = lhs->DL;
   int i=0;
-  while (i<lhs->size)
+  while (i<lhs->size-1)
     {
-      (*lptr)= f(*lptr);  
-      (*lptr_up)= f(*lptr_up);  
-      (*lptr_down)= f(*lptr_down); 
-      lptr++; lptr_up++;lptr_down++;i++;
+      (*lptr) = f(*lptr);  
+      (*lptr_up) = f(*lptr_up);  
+      (*lptr_down) = f(*lptr_down); 
+      lptr++; lptr_up++; lptr_down++; i++;
     }
+      (*lptr) = f(*lptr);  
 }
 
 
@@ -396,18 +368,23 @@ void pnl_tridiagmat_map_inplace(PnlTriDiagMat *lhs, double(*f)(double))
  */
 void pnl_tridiagmat_map_tridiagmat(PnlTriDiagMat *lhs, const PnlTriDiagMat *rhs, double(*f)(double,double))
 {
-  double *lptr = pnl_tridiagmat_lget(lhs, 0, 0);
-  double *lptr_up = pnl_tridiagmat_lget (lhs, 0, 1);
-  double *lptr_down = pnl_tridiagmat_lget (lhs, 0, -1);
+  double *lptr = lhs->D;
+  double *lptr_up = lhs->DU;
+  double *lptr_down = lhs->DL;
+  double *rptr = rhs->D;
+  double *rptr_up = rhs->DU;
+  double *rptr_down = rhs->DL;
   int i=0;
   CheckTriDiagMatMatch(lhs, rhs);
-  while (i<lhs->size)
+  while (i<lhs->size-1)
     {
-      (*lptr)=(*f)(*lptr,pnl_tridiagmat_get(rhs,i,0));
-      (*lptr_up)=(*f)(*lptr_up,pnl_tridiagmat_get(rhs,i,1));
-      (*lptr_down)=(*f)(*lptr_down,pnl_tridiagmat_get(rhs,i,-1));
+      (*lptr)=(*f)(*lptr,*rptr);
+      (*lptr_up)=(*f)(*lptr_up,*rptr_up);
+      (*lptr_down)=(*f)(*lptr_down,*rptr_down);
+      rptr++; rptr_up++; rptr_down++;
       lptr++; lptr_up++; lptr_down++; i++;
     }
+  (*lptr)=(*f)(*lptr,*rptr);
 }
 
 
@@ -421,17 +398,18 @@ void pnl_tridiagmat_map_tridiagmat(PnlTriDiagMat *lhs, const PnlTriDiagMat *rhs,
  */
 static void __pnl_tridiagmat_apply_op(PnlTriDiagMat *lhs, double x, double (*op)(double, double))
 {
-  double *lptr = pnl_tridiagmat_lget(lhs, 0, 0);
-  double *lptr_up = pnl_tridiagmat_lget(lhs, 0, 1);
-  double *lptr_down = pnl_tridiagmat_lget(lhs, 0, -1);
+  double *lptr = lhs->D;
+  double *lptr_up = lhs->DU;
+  double *lptr_down = lhs->DL;
   int i=0;
-  while (i<lhs->size)
+  while (i<lhs->size-1)
     {
       (*lptr)= op(*lptr,x);  
       (*lptr_up)= op(*lptr_up,x);  
       (*lptr_down)= op(*lptr_down,x); 
       lptr++; lptr_up++;lptr_down++;i++;
     }
+  (*lptr)= op(*lptr,x);  
 }
 
 /**
@@ -530,9 +508,6 @@ void pnl_tridiagmat_mult_tridiagmat_term(PnlTriDiagMat *lhs, const PnlTriDiagMat
 void pnl_tridiagmat_div_tridiagmat_term(PnlTriDiagMat *lhs, const PnlTriDiagMat *rhs)
 {
   pnl_tridiagmat_map_tridiagmat(lhs, rhs, __op_div);
-  /* impose Tri mat structure  */
-  pnl_tridiagmat_set(lhs, 0, -1,0.0);
-  pnl_tridiagmat_set(lhs, lhs->size-1, 1,0.0);
 }
 
 
@@ -546,59 +521,7 @@ void pnl_tridiagmat_div_tridiagmat_term(PnlTriDiagMat *lhs, const PnlTriDiagMat 
  */
 void pnl_tridiagmat_mult_vect_inplace(PnlVect *lhs, const PnlTriDiagMat *mat, const PnlVect *rhs)
 {
-  double *rptr, *ptr, *ptr_up,*ptr_down,*lptr;
-  int i;
-  double anc_m1;
-  double anc_0;
-
-  CheckTriDiagMatVectIsCompatible(mat, lhs);
-  CheckTriDiagMatVectIsCompatible(mat, rhs);
-  rptr = rhs->array;
-  lptr = lhs->array;
-  ptr  = mat->diag;
-  ptr_up = mat->diag_up;
-  ptr_down = mat->diag_down;
-  anc_m1=0.0;
-  anc_0=(*rptr);
-  rptr++;
-  for (i=0; i<rhs->size-1; i++)
-    {
-      *lptr = (*ptr_down)*anc_m1+(*ptr) *anc_0 + (*ptr_up) *(*rptr);
-      anc_m1=anc_0;
-      anc_0=(*rptr);
-      lptr++;rptr++;ptr++;ptr_up++;ptr_down++;
-    }
-  *lptr = (*ptr_down)*anc_m1+(*ptr) *anc_0;
-}
-
-/**
- *  in place matrix multiplication
- *
- * @param mat : matrix
- * @param lhs : vector
- * @return  lhs=mat*rhs
- */
-void pnl_tridiagmat_mult_vect_inplace_from_lhs(PnlVect *lhs, const PnlTriDiagMat *mat)
-{
-  double *ptr, *ptr_up,*ptr_down,*lptr;
-  int i;
-  double anc_m1;
-  double anc_0;
-
-  lptr = lhs->array;
-  ptr  = mat->diag;
-  ptr_up = mat->diag_up;
-  ptr_down = mat->diag_down;
-  anc_m1=0.0;
-  anc_0=(*lptr);
-  for (i=0; i<lhs->size-1; i++,ptr++,ptr_up++,ptr_down++)
-    {
-      *lptr = (*ptr_down)*anc_m1+(*ptr) *anc_0 + (*ptr_up) *(*(lptr+1));
-      anc_m1=anc_0;
-      lptr++;
-      anc_0=(*lptr);
-    }
-  *lptr = (*ptr_down)*anc_m1+(*ptr) *anc_0;
+  pnl_tridiagmat_lAxpby (1., mat, rhs, 0., lhs);
 }
 
 /**
@@ -610,76 +533,85 @@ void pnl_tridiagmat_mult_vect_inplace_from_lhs(PnlVect *lhs, const PnlTriDiagMat
  */
 PnlVect* pnl_tridiagmat_mult_vect(const PnlTriDiagMat *mat, const PnlVect *vec)
 {
-  PnlVect *lhs=pnl_vect_copy(vec);
-  pnl_tridiagmat_mult_vect_inplace_from_lhs(lhs,mat);
+  PnlVect *lhs=pnl_vect_create (vec->size);
+  pnl_tridiagmat_lAxpby (1., mat, vec, 0., lhs);
   return lhs;
 }
 
 
 /**
- * Prints a tri-diagonale matrix to a file
+ * Prints a tridiagonal matrix to a file
  *
  * @param fic a file descriptor.
  * @param M a PnlTriDiagMat pointer.
  */
 void pnl_tridiagmat_fprint (FILE *fic, const PnlTriDiagMat *M)
 {
-  int i, up;
+  int i;
+  for (i=0;i<M->size-1;i++)
+    {
+      fprintf (fic, "%f" , M->DL[i]);
+      if ( i < M->size-2) printf (", ");
+    }
+  fprintf (fic, "\n");
   for (i=0;i<M->size;i++)
     {
-      for (up=-1;up<=1;up++)
-        {
-          fprintf (fic, "%7.4f " , pnl_tridiagmat_get (M, i, up));
-        }
-      fprintf (fic, "\n");
+      fprintf (fic, "%f " , M->D[i]);
+      if ( i < M->size-1) printf (", ");
     }
+  fprintf (fic, "\n");
+  for (i=0;i<M->size-1;i++)
+    {
+      fprintf (fic, "%f " , M->DU[i]);
+      if ( i < M->size-2) printf (", ");
+    }
+  fprintf (fic, "\n");
 }
 
 /**
- * Prints a tri-diagonale matrix to the standard output
+ * Prints a tridiagonal matrix to the standard output
  *
  * @param M a PnlTriDiagMat pointer.
  */
-void pnl_tridiagmat_print (const PnlTriDiagMat *M) { pnl_tridiagmat_fprint(stdout, M);}
+void pnl_tridiagmat_print (const PnlTriDiagMat *M) 
+{
+  pnl_tridiagmat_fprint(stdout, M);
+}
 
 
 /**
- * solves the linear system M x = b with M = LU.
- * For a symmetric definite
- * positive system, prefer pnl_tridiagmat_chol_syslin
+ * solves the linear system A x = b
  *
- * @param lhs existing vector that contains the solution on exit
- * @param M a PnlTriDiagMat 
- * @param rhs right hand side member
+ * @param A a PnlTriDiagMat 
+ * @param b right hand side member. On exit b contains the solution x
+ * @return FAIL or OK
  */
-void pnl_tridiagmat_lu_syslin (PnlVect *lhs, const PnlTriDiagMat *M,const PnlVect *rhs)
+int pnl_tridiagmat_lu_syslin_inplace (const PnlTriDiagMat *A, PnlVect *b)
 {
-  int i;
-  double *Diag,tmp;
-  Diag = malloc((M->size)*sizeof(double));
-  /* Do Down-Solve L y = rhs  */
-  if((Diag[0]=pnl_tridiagmat_get(M,0,0))==0)
-    {
-      PNL_ERROR("division by zero","pnl_tridiagmat_lu_syslin");
-    }
-  pnl_vect_set(lhs,0,pnl_vect_get(rhs,0));
-  for(i=1; i<M->size; i++)
-    {
-      tmp=pnl_tridiagmat_get(M,i,-1)/Diag[i-1];
-      if((Diag[i]=pnl_tridiagmat_get(M,i,0)-tmp*pnl_tridiagmat_get(M,i-1,1))==0)
-        {
-           PNL_ERROR("division by zero","pnl_tridiagmat_lu_syslin");
-        }
-      pnl_vect_set(lhs,i,pnl_vect_get(rhs,i)-tmp*pnl_vect_get(lhs,i-1));
-    }
-  /* Do Up-Solve L y = rhs  */
-  pnl_vect_set(lhs,M->size-1,pnl_vect_get(lhs,M->size-1)/Diag[M->size-1]);
-  for(i=M->size-2;i>=0;i--)
-    {
-      pnl_vect_set(lhs,i,(pnl_vect_get(lhs,i)-pnl_tridiagmat_get(M,i,1)*
-                          pnl_vect_get(lhs,i+1))/Diag[i]);
-    }
-  free(Diag);
+  int n, nrhs, info, ldb;
+  n = A->size;
+  nrhs = 1;
+  ldb = A->size;
+
+  PNL_CHECK (A->size != b->size, "incompatible size", "tridiag_lu");
+
+  C2F(dgtsv)(&n, &nrhs, A->DL, A->D, A->DU, b->array, &ldb, &info);
+  if (info == 0) return OK;
+  else return FAIL;
+}
+
+/**
+ * solves the linear system A x = b
+ *
+ * @param A a PnlTriDiagMat 
+ * @param x contains the solution on exit
+ * @param b right hand side member. 
+ * @return FAIL or OK
+ */
+int pnl_tridiagmat_lu_syslin (PnlVect *x, const PnlTriDiagMat *A, const PnlVect *b)
+{
+  pnl_vect_clone (x, b);
+  return pnl_tridiagmat_lu_syslin_inplace (A, x);
 }
 
 
@@ -691,7 +623,7 @@ void pnl_tridiagmat_lu_syslin (PnlVect *lhs, const PnlTriDiagMat *M,const PnlVec
  * @param rhs : vector
  * @return  =lhs'*mat*rhs
  */
-double pnl_tridiagmat_prod_scale(const PnlVect *lhs, const PnlTriDiagMat *mat,const PnlVect *rhs)
+double pnl_tridiagmat_scalar_prod (const PnlVect *lhs, const PnlTriDiagMat *mat,const PnlVect *rhs)
 {
   double sum=0.;
   double term;
@@ -702,9 +634,9 @@ double pnl_tridiagmat_prod_scale(const PnlVect *lhs, const PnlTriDiagMat *mat,co
 
   lptr = lhs->array;
   rptr = rhs->array;
-  ptr  = mat->diag;
-  ptr_up = mat->diag_up;
-  ptr_down = mat->diag_down;
+  ptr  = mat->D;
+  ptr_up = mat->DU;
+  ptr_down = mat->DL;
   anc_m1=0.0;
   anc_0=(*rptr);
   for (i=0; i<lhs->size-1; i++,ptr++,ptr_up++,ptr_down++)
@@ -722,51 +654,53 @@ double pnl_tridiagmat_prod_scale(const PnlVect *lhs, const PnlTriDiagMat *mat,co
 }
 
 /**
- * compute y=l A x + b y >
+ * compute y=l * A * x + b * y 
  *
- * @param l  : double
+ * @param l  : double.
  * @param A : PnlTriDiagMat
  * @param x : vector
  * @param b : double
  * @param y : vector
  */
-void pnl_tridiagmat_lAxpby(double l, const PnlTriDiagMat *A, const PnlVect *x, double b, PnlVect * y)
+void pnl_tridiagmat_lAxpby (double l, const PnlTriDiagMat *A, const PnlVect *x,
+                            double b, PnlVect * y)
 {
-  if(l==0.0)
+  int n, nrhs, ldb;
+  double alpha, beta;
+  if ( b==0.0 )
     {
-      pnl_vect_mult_double(y,b);
-      return ;
+      beta = 0.;
+      pnl_vect_resize (y, x->size);
     }
-  if(b==0.0)
+  else
     {
-      pnl_tridiagmat_mult_vect_inplace(y,A,x);
-      pnl_vect_mult_double(y,l);
-      return ;
+      if (l == 0. || l == 1. || l == 1.) 
+        {
+          alpha = l;
+        }
+      else
+        {
+          b /= l; 
+        }
+      if ( b == 1. || b == 1.) 
+        {
+          beta = b;
+        }
+      else 
+        {
+          beta = 1.;
+          pnl_vect_mult_double (y, b);
+        }
     }
-  {
-    double *rptr, *ptr, *ptr_up,*ptr_down,*lptr;
-    int i;
-    double anc_m1;
-    double anc_0;
-    CheckTriDiagMatVectIsCompatible(A, x);
-    CheckTriDiagMatVectIsCompatible(A, y);
-    rptr = x->array;
-    lptr = y->array;
-    ptr  = A->diag;
-    ptr_up = A->diag_up;
-    ptr_down = A->diag_down;
-    anc_m1=0.0;
-    anc_0=(*rptr);
-    rptr++;
-    for (i=0; i<x->size-1; i++)
-      {
-        *lptr*=b;
-        *lptr +=l*((*ptr_down)*anc_m1+(*ptr) *anc_0 + (*ptr_up) *(*rptr));
-        anc_m1=anc_0;
-        anc_0=(*rptr);
-        lptr++;rptr++;ptr++;ptr_up++;ptr_down++;
-      }
-    *lptr*=b;
-    *lptr += l*((*ptr_down)*anc_m1+(*ptr) *anc_0);
-  }
-};
+
+  n = A->size;
+  ldb = A->size;
+  nrhs = 1;
+  alpha = 1;
+  C2F(dlagtm)("N", &n, &nrhs, &alpha, A->DL, A->D, 
+              A->DU, x->array, &n, &beta, y->array, &n);
+  if (l != 0. && l != 1.&& l != 1.)
+    {
+      pnl_vect_mult_double (y, l);
+    }
+}
