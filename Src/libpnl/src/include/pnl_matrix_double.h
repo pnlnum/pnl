@@ -74,7 +74,6 @@ typedef struct PnlMat{
   int mem_size; /*!< size of the memory block allocated for array */
   double *array; /*!< pointer to store the data row-wise */
   int owner; /*!< 1 if the owns its array pointer */
-  /*! set x as the value of v[i,j].*/
 } PnlMat;
 
 extern PnlMat* pnl_mat_create(int m, int n); 
