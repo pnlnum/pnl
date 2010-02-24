@@ -300,7 +300,7 @@ int FUNCTION(pnl_mat,resize)(TYPE(PnlMat) *M, int m, int n)
   if (mn == 0) /* free array */
     {
       M->m = M->n = M->mn = M->mem_size = 0;
-      free(M->array); M->array = NULL;
+      if (M->array != NULL) { free(M->array); M->array = NULL; }
       return OK;
     }
 
