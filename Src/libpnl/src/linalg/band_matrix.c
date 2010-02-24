@@ -36,6 +36,7 @@
 #include "pnl_mathtools.h"
 #include "pnl_array.h"
 
+#if 0
 
 /** 
  * pnl_band_matrix_create 
@@ -1007,4 +1008,4 @@ double pnl_band_matrix_conditionning(const PnlBandMatrix *M)
   pnl_vect_minmax (&V,&mini,&maxi);
   return fabs(mini)/fabs(maxi);
 };
-
+#endif
