@@ -10,17 +10,17 @@ extern "C" {
 
 /* Define  C2F entry point conversion */
 #if defined(WTU)
-#if defined(USE_SHARP_SIGN)
-#define C2F(name) name##_
-#else
-#define C2F(name) name/**/_
-#endif
-#else
-#  ifdef _MSC_VER
+#  if defined(USE_SHARP_SIGN)
 #    define C2F(name) name##_
 #  else
-#    define C2F(name) name
+#    define C2F(name) name/**/_
 #  endif
+#else
+#  define C2F(name) name##_
+#endif
+
+#ifdef USE_INTERNAL_BLAS
+#  define C2F(name) name##_
 #endif
 
 
