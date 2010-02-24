@@ -30,7 +30,6 @@
 
 extern double pnl_dlamch (char *cmach);
 
-#ifdef HAVE_LAPACK
 static int pnl_mat_is_sym (const PnlMat *A);
 
 /* lapack headers */
@@ -467,7 +466,4 @@ int pnl_mat_ls (const PnlMat *A, PnlVect *b)
   return status;
 }
 
-
-
-#endif
 
