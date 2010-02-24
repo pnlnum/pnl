@@ -33,7 +33,6 @@ static double __op_plus(double a, double b) { return a+b; }
 static double __op_minus(double a, double b) { return a-b; }
 static double __op_mult(double a, double b) { return a*b; }
 static double __op_div(double a, double b) { return a/b; }
-/*static double __op_inv(double a) { return 1.0/a; } */
 
 extern int C2F(dlagtm)(char *trans, int *n, int *nrhs, double *alpha, 
                        double *dl, double *d, double *du, double *x,
@@ -173,33 +172,35 @@ PnlTriDiagMat* pnl_tridiagmat_create_from_ptr(int size, const double* DL, const 
   return v;
 }
 
-/**
- * Reads a tri-Dagonal matrix from a PnlMat and creates the corresponding PnlTriDiagMat
- * all elements buth those of the diagonals are set to 0
- * @param mat a PnlMat
+/** 
+ * Creates a tridiagonal matrix from a standard matrix by only taking into
+ * account the three main diagonals.
+ *
+ * @param mat a PnlMat 
  * @return a PnlTriDiagMat
  */
-PnlTriDiagMat* pnl_tridiagmat_create_from_matrix (const PnlMat * mat)
+PnlTriDiagMat* pnl_tridiagmat_create_from_matrix (const PnlMat * mat) 
 {
-  PnlTriDiagMat *M;
-  int i;
-  CheckIsSquare (mat);
+  PnlTriDiagMat *M; 
+  int i; 
+  CheckIsSquare (mat); 
+
   M=pnl_tridiagmat_create(mat->m);
-  for (i=0; i<mat->m-1; i++)
-    {
-      M->DU[i] = pnl_mat_get (mat, i, i+1);
+  for (i=0; i<mat->m-1; i++) 
+    { 
+      M->DU[i] = pnl_mat_get (mat, i, i+1); 
       M->D[i] = pnl_mat_get (mat, i, i);
-      M->DL[i] = pnl_mat_get (mat, i+1, i);
+      M->DL[i] = pnl_mat_get (mat, i+1, i); 
     }
-  M->D[mat->m] = pnl_mat_get (mat, mat->m-1, mat->m-1);
-  return M;
+  M->D[mat->m] = pnl_mat_get (mat, mat->m-1, mat->m-1); 
+  return M; 
 }
 
 /**
- * Reads a tri-diagonale matrix from a PnlMat and creates the corresponding PnlTriDiagMat
- * all elements buth those of the diagonal, upper Donal and lower Donal are set to 0
- * @param mat a PnlMat
- * @return a PnlTriDiagMat
+ * Creates a standard matrix from a tridiagonal matrix. 
+ * All elements buth those of the diagonal, upper diagonal and lower diagonal are set to 0
+ * @param T a PnlTriDiagMat
+ * @return a PnlMat
  */
 PnlMat* pnl_tridiagmat_to_matrix (const PnlTriDiagMat * T)
 {
@@ -220,7 +221,7 @@ PnlMat* pnl_tridiagmat_to_matrix (const PnlTriDiagMat * T)
 /**
  * Frees a PnlTriDiagMat
  *
- * @param v adress of a PnlTriDiagMat*. 
+ * @param v a PnlTriDiagMat**. 
  */
 void pnl_tridiagmat_free(PnlTriDiagMat **v)
 {
