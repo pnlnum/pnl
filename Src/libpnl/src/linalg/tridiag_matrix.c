@@ -121,23 +121,17 @@ PnlTriDiagMat* pnl_tridiagmat_create(int size)
 PnlTriDiagMat* pnl_tridiagmat_create_from_two_double(int size, double x, double y)
 {
   PnlTriDiagMat *mat;
-  double *ptr,*ptr_up,*ptr_down;
-  int i=0;
+  int i;
   
   if ((mat=pnl_tridiagmat_create(size))==NULL) return NULL;
 
-  ptr = mat->D;
-  ptr_up = mat->DU;
-  ptr_down = mat->DL;
-  while(i<mat->size-1)
+  for ( i=0 ; i<size-1 ; i++ )
     {
-      *ptr=x;
-      *ptr_up=y; 
-      *ptr_down=y; 
-      ptr++; ptr_up++;   
-      ptr_down++; i++;
+      mat->D[i] = x;
+      mat->DL[i] = y;
+      mat->DU[i] = y;
     }
-  *ptr=x;
+  mat->D[size-1] = x;
   return mat;
 }
 
@@ -172,6 +166,33 @@ PnlTriDiagMat* pnl_tridiagmat_create_from_ptr(int size, const double* DL, const 
   return v;
 }
 
+/**
+ * Clones a PnlTriDiagMat
+ * @param T a PnlTriDiagMat
+ * @param clone a PnlTriDiagMat, on exit contains a copy of T
+ */
+void pnl_tridiagmat_clone(PnlTriDiagMat *clone, const PnlTriDiagMat *T)
+{
+  pnl_tridiagmat_resize (clone, T->size);
+  
+  memcpy(clone->D, T->D, T->size*sizeof(double));
+  memcpy(clone->DU, T->DU, (T->size-1)*sizeof(double));
+  memcpy(clone->DL, T->DL, (T->size-1)*sizeof(double));
+}
+
+/**
+ * Copies a PnlTriDiagMat
+ * @param T a PnlTriDiagMat
+ */
+PnlTriDiagMat* pnl_tridiagmat_copy(const PnlTriDiagMat *T)
+{
+  PnlTriDiagMat *clone;
+  clone = pnl_tridiagmat_create (0);
+  pnl_tridiagmat_clone (clone, T);
+  return clone;
+}
+
+
 /** 
  * Creates a tridiagonal matrix from a standard matrix by only taking into
  * account the three main diagonals.
@@ -179,7 +200,7 @@ PnlTriDiagMat* pnl_tridiagmat_create_from_ptr(int size, const double* DL, const 
  * @param mat a PnlMat 
  * @return a PnlTriDiagMat
  */
-PnlTriDiagMat* pnl_tridiagmat_create_from_matrix (const PnlMat * mat) 
+PnlTriDiagMat* pnl_tridiagmat_create_from_mat (const PnlMat * mat) 
 {
   PnlTriDiagMat *M; 
   int i; 
@@ -202,11 +223,11 @@ PnlTriDiagMat* pnl_tridiagmat_create_from_matrix (const PnlMat * mat)
  * @param T a PnlTriDiagMat
  * @return a PnlMat
  */
-PnlMat* pnl_tridiagmat_to_matrix (const PnlTriDiagMat * T)
+PnlMat* pnl_tridiagmat_to_mat (const PnlTriDiagMat * T)
 {
   PnlMat *M;
   int i;
-  M=pnl_mat_create(T->size, T->size);
+  M=pnl_mat_create_from_double(T->size, T->size,0.);
   for (i=0; i<T->size-1; i++)
     {
       PNL_MLET(M, i, i+1) = T->DU[i];
@@ -345,18 +366,15 @@ double* pnl_tridiagmat_lget (PnlTriDiagMat *self, int d, int up)
  */
 void pnl_tridiagmat_map_inplace(PnlTriDiagMat *lhs, double(*f)(double))
 {
-  double *lptr = lhs->D;
-  double *lptr_up = lhs->DU;
-  double *lptr_down = lhs->DL;
-  int i=0;
-  while (i<lhs->size-1)
+  int i, size;
+  size = lhs->size;
+  for ( i=0 ; i<size-1 ; i++)
     {
-      (*lptr) = f(*lptr);  
-      (*lptr_up) = f(*lptr_up);  
-      (*lptr_down) = f(*lptr_down); 
-      lptr++; lptr_up++; lptr_down++; i++;
+      lhs->D[i] = f(lhs->D[i]);
+      lhs->DL[i] = f(lhs->DL[i]);
+      lhs->DU[i] = f(lhs->DU[i]);
     }
-      (*lptr) = f(*lptr);  
+  lhs->D[size-1] = f(lhs->D[size-1]);
 }
 
 
@@ -367,25 +385,19 @@ void pnl_tridiagmat_map_inplace(PnlTriDiagMat *lhs, double(*f)(double))
  * @param rhs : right hand side vector
  * @param f   : real function 
  */
-void pnl_tridiagmat_map_tridiagmat(PnlTriDiagMat *lhs, const PnlTriDiagMat *rhs, double(*f)(double,double))
+void pnl_tridiagmat_map_tridiagmat(PnlTriDiagMat *lhs, const PnlTriDiagMat *rhs, 
+                                   double(*f)(double,double))
 {
-  double *lptr = lhs->D;
-  double *lptr_up = lhs->DU;
-  double *lptr_down = lhs->DL;
-  double *rptr = rhs->D;
-  double *rptr_up = rhs->DU;
-  double *rptr_down = rhs->DL;
-  int i=0;
+  int i, size;
   CheckTriDiagMatMatch(lhs, rhs);
-  while (i<lhs->size-1)
+  size = lhs->size;
+  for ( i=0 ; i<size-1 ; i++)
     {
-      (*lptr)=(*f)(*lptr,*rptr);
-      (*lptr_up)=(*f)(*lptr_up,*rptr_up);
-      (*lptr_down)=(*f)(*lptr_down,*rptr_down);
-      rptr++; rptr_up++; rptr_down++;
-      lptr++; lptr_up++; lptr_down++; i++;
+      lhs->D[i] = f(lhs->D[i], rhs->D[i]);
+      lhs->DL[i] = f(lhs->DL[i], rhs->DL[i]);
+      lhs->DU[i] = f(lhs->DU[i], rhs->DU[i]);
     }
-  (*lptr)=(*f)(*lptr,*rptr);
+  lhs->D[size-1] = f(lhs->D[size-1], rhs->D[size-1]);
 }
 
 
@@ -399,18 +411,15 @@ void pnl_tridiagmat_map_tridiagmat(PnlTriDiagMat *lhs, const PnlTriDiagMat *rhs,
  */
 static void __pnl_tridiagmat_apply_op(PnlTriDiagMat *lhs, double x, double (*op)(double, double))
 {
-  double *lptr = lhs->D;
-  double *lptr_up = lhs->DU;
-  double *lptr_down = lhs->DL;
-  int i=0;
-  while (i<lhs->size-1)
+  int i, size;
+  size = lhs->size;
+  for ( i=0 ; i<size-1 ; i++)
     {
-      (*lptr)= op(*lptr,x);  
-      (*lptr_up)= op(*lptr_up,x);  
-      (*lptr_down)= op(*lptr_down,x); 
-      lptr++; lptr_up++;lptr_down++;i++;
+      lhs->D[i] = op(lhs->D[i], x);
+      lhs->DL[i] = op(lhs->DL[i], x);
+      lhs->DU[i] = op(lhs->DU[i], x);
     }
-  (*lptr)= op(*lptr,x);  
+  lhs->D[size-1] = op(lhs->D[size-1], x);
 }
 
 /**
@@ -617,40 +626,29 @@ int pnl_tridiagmat_lu_syslin (PnlVect *x, const PnlTriDiagMat *A, const PnlVect 
 
 
 /**
- * compute scalar product <lhs,A rhs >
+ * Computes the scalar product <x,A * y>
  *
- * @param lhs : vector
- * @param mat : matrix
- * @param rhs : vector
- * @return  =lhs'*mat*rhs
+ * @param x a real vector
+ * @param T a tridiagonal matrix
+ * @param y a real vector
+ * @return  x' * A * y
  */
-double pnl_tridiagmat_scalar_prod (const PnlVect *lhs, const PnlTriDiagMat *mat,const PnlVect *rhs)
+double pnl_tridiagmat_scalar_prod (const PnlVect *x, const PnlTriDiagMat *T,const PnlVect *y)
 {
-  double sum=0.;
-  double term;
-  double *ptr, *ptr_up,*ptr_down,*lptr,*rptr;
-  int i;
-  double anc_m1;
-  double anc_0;
+  int n, k;
+  double sum;
 
-  lptr = lhs->array;
-  rptr = rhs->array;
-  ptr  = mat->D;
-  ptr_up = mat->DU;
-  ptr_down = mat->DL;
-  anc_m1=0.0;
-  anc_0=(*rptr);
-  for (i=0; i<lhs->size-1; i++,ptr++,ptr_up++,ptr_down++)
+  PNL_CHECK (T->size != y->size || x->size != T->size, "size mismatched", "tridiag_scalar_prod"); 
+  n = x->size;
+  sum = 0.;
+
+  for ( k=1 ; k<n-1 ; k++ )
     {
-      term= (*ptr_down)*anc_m1+(*ptr) *anc_0 + (*ptr_up) *(*(rptr+1));
-      sum+=(*lptr)*term;
-      anc_m1=anc_0;
-      lptr++;
-      rptr++;
-      anc_0=(*rptr);
+      sum += PNL_GET(x,k) * (T->DL[k-1] * PNL_GET(y,k-1) + T->D[k] * PNL_GET(y,k) + 
+                             T->DU[k] * PNL_GET(y,k+1)); 
     }
-  term= (*ptr_down)*anc_m1+(*ptr) *anc_0;
-  sum+=(*lptr)*term;
+  sum += PNL_GET(x,0) * (T->D[0] * PNL_GET(y,0) + T->DU[0] * PNL_GET(y,1) );
+  sum += PNL_GET(x, n-1) * (T->DL[n-2] * PNL_GET(y,n-2) + T->D[n-1] * PNL_GET(y, n-1));
   return sum;
 }
 

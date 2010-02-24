@@ -50,8 +50,10 @@ extern PnlTriDiagMat* pnl_tridiagmat_create_from_double(int size, double x);
 extern PnlTriDiagMat* pnl_tridiagmat_create_from_two_double(int size, double x, double y);
 extern PnlTriDiagMat* pnl_tridiagmat_create_from_ptr(int size, const double* DL, 
 						   const double* D, const double* DU);
-extern PnlTriDiagMat* pnl_tridiagmat_create_from_matrix(const PnlMat * mat);
-extern PnlMat* pnl_tridiagmat_to_matrix(const PnlTriDiagMat * mat);
+extern PnlTriDiagMat* pnl_tridiagmat_create_from_mat(const PnlMat * mat);
+extern PnlMat* pnl_tridiagmat_to_mat(const PnlTriDiagMat * mat);
+extern PnlTriDiagMat* pnl_tridiagmat_copy(const PnlTriDiagMat * mat);
+extern void pnl_tridiagmat_clone(PnlTriDiagMat *clone, const PnlTriDiagMat * mat);
 
 extern void pnl_tridiagmat_print(const PnlTriDiagMat *M);
 extern void pnl_tridiagmat_fprint(FILE *fic, const PnlTriDiagMat *M);
