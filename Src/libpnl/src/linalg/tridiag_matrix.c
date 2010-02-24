@@ -192,13 +192,13 @@ PnlTriDiagMat* pnl_tridiagmat_create_from_matrix (const PnlMat * mat)
       M->D[i] = pnl_mat_get (mat, i, i);
       M->DL[i] = pnl_mat_get (mat, i+1, i); 
     }
-  M->D[mat->m] = pnl_mat_get (mat, mat->m-1, mat->m-1); 
+  M->D[mat->m-1] = pnl_mat_get (mat, mat->m-1, mat->m-1); 
   return M; 
 }
 
 /**
  * Creates a standard matrix from a tridiagonal matrix. 
- * All elements buth those of the diagonal, upper diagonal and lower diagonal are set to 0
+ * All elements but those of the diagonal, upper diagonal and lower diagonal are set to 0
  * @param T a PnlTriDiagMat
  * @return a PnlMat
  */
@@ -213,7 +213,7 @@ PnlMat* pnl_tridiagmat_to_matrix (const PnlTriDiagMat * T)
       PNL_MLET(M, i, i) = T->D[i];
       PNL_MLET(M, i+1, i) = T->DL[i];
     }
-  PNL_MLET (M, i, i) = T->D[T->size-1];
+  PNL_MLET (M, T->size-1, T->size-1) = T->D[T->size-1];
   return M;
 }
 
