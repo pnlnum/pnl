@@ -31,7 +31,6 @@ extern void matrix_test();
 extern void lapack_test();
 extern void speed_test();
 extern void solver_iterativ_test();
-extern void special_matrix_test();
 extern void basis_test();
 extern void dft_test();
 extern void laplace_test();
@@ -41,8 +40,9 @@ extern void complex_test();
 extern void mathtools_test();
 extern void perm_test();
 extern void root_test();
-extern void band_matrix_test();
 extern void special_func_test();
+extern void tridiag_matrix_test ();
+extern void band_matrix_test ();
 
 static tst_list tests[] =
   {
@@ -54,7 +54,8 @@ static tst_list tests[] =
     MAKE_ENUM(lapack_test),
     MAKE_ENUM(speed_test),
     MAKE_ENUM(solver_iterativ_test),
-    MAKE_ENUM(special_matrix_test),
+    MAKE_ENUM(tridiag_matrix_test),
+    MAKE_ENUM(band_matrix_test),
     MAKE_ENUM(basis_test),
     MAKE_ENUM(dft_test),
     MAKE_ENUM(laplace_test),
@@ -64,7 +65,6 @@ static tst_list tests[] =
     MAKE_ENUM(complex_test),
     MAKE_ENUM(perm_test),    
     MAKE_ENUM(root_test),
-    MAKE_ENUM(band_matrix_test),
     MAKE_ENUM(special_func_test),
     MAKE_ENUM(NULL)
   };
