@@ -2,7 +2,7 @@ dnl Jérôme LELONG Feb 2006
 
 
 AC_REVISION($Revision: 1.47 $)
-AC_INIT(premia, 10.2, contact lelong@cermics.enpc.fr if you encounter any problem)
+AC_INIT(premia, 12, contact <jerome.lelong@imag.fr> if you encounter any problem)
 
 AC_CONFIG_AUX_DIR(config)
 AM_CONFIG_HEADER(Src/configunix.h)
@@ -38,8 +38,8 @@ AC_ARG_WITH(pdfviewer,
    [  --with-pdfviewer=PROG		specify the program to use to view pdf files], [ PDFVIEWER=$withval] )
 AC_ARG_WITH(premiaversion,
    [  --with-premiaversion=YEAR		to compile either the free or not free version of Premia], [ PREMIAVERSION=$withval] )
-AC_ARG_WITH(blas,
-    [  --without-blas           do not compile with Blas & Lapack libraries ])
+AC_ARG_WITH(internal_blas,
+    [  --with-internal-blas    use the internal Blas and Lapack libraries ])
 AC_ARG_WITH(gsl,
     [  --without-gsl           do not compile with GSL library ])
 
@@ -257,18 +257,28 @@ USE_BLAS=no
 BLAS_LIBS=""
 USE_LAPACK=no
 LAPACK_LIBS=""
+INTERNAL_F2C_DIR=""
+INTERNAL_F2C_LA=""
+INTERNAL_BLAS_DIR=""
+INTERNAL_BLAS_LA=""
+INTERNAL_LAPACK_DIR=""
+INTERNAL_LAPACK_LA=""
+USE_INTERNAL_BLAS=0
 
 if test "x$F77" = "x"; then 
-   with_blas=no
+   with_internal_blas=yes   
 fi
 
-if test "x$with_blas" != "xno"; then
+if test "x$with_internal_blas" != "xyes"; then
    builtin(include,config/acx_blas.m4)
    ACX_BLAS([USE_BLAS=yes])
 
    if test "$USE_BLAS" = yes; then 
      AM_CFLAGS="$AM_CFLAGS"
-     AC_DEFINE(HAVE_BLAS,[],[Use Blas])
+     HAVE_BLAS=1
+     AC_DEFINE(HAVE_BLAS, [], [Blas is installed])
+   else
+     with_internal_blas=yes
    fi
 
    builtin(include,config/acx_lapack.m4)
@@ -276,9 +286,22 @@ if test "x$with_blas" != "xno"; then
 
    if test "$USE_LAPACK" = yes; then 
      AM_CFLAGS="$AM_CFLAGS"
-     AC_DEFINE(HAVE_LAPACK,[],[Use Lapack])
+     HAVE_LAPACK=1
+     AC_DEFINE(HAVE_LAPACK, [], [Lapack is installed])
+   else
+     with_internal_blas=yes
    fi
 fi
+
+if test "x$with_internal_blas" == "xyes"; then
+    USE_INTERNAL_BLAS=1
+    INTERNAL_F2C_DIR="libf2c"
+    INTERNAL_F2C_LA="libf2c/libf2c.la"
+    INTERNAL_BLAS_DIR="libblas"
+    INTERNAL_BLAS_LA="libblas/libblas.la"
+    INTERNAL_LAPACK_DIR="liblapack"
+    INTERNAL_LAPACK_LA="liblapack/liblapack.la"
+fi 
 
 LDFLAGS="$LDFLAGS $BLAS_LIBS $LAPACK_LIBS"
 
@@ -508,6 +531,14 @@ AC_SUBST(LAPACK_LIBS)
 AC_SUBST(pkgconfigdir)
 AC_SUBST(MKDIR_P)
 
+AC_SUBST(USE_INTERNAL_BLAS)
+AC_SUBST(INTERNAL_F2C_DIR)
+AC_SUBST(INTERNAL_F2C_LA)
+AC_SUBST(INTERNAL_BLAS_DIR)
+AC_SUBST(INTERNAL_BLAS_LA)
+AC_SUBST(INTERNAL_LAPACK_DIR)
+AC_SUBST(INTERNAL_LAPACK_LA)
+
 AC_OUTPUT(Makefile \
 Src/Makefile \
 Src/common/Makefile \
@@ -534,8 +565,10 @@ Src/libpnl/examples/Makefile \
 Src/libpnl/src/Makefile \
 Src/libpnl/src/include/Makefile \
 Src/libpnl/src/libamos/Makefile \
+Src/libpnl/src/libf2c/Makefile \
+Src/libpnl/src/libblas/Makefile \
+Src/libpnl/src/liblapack/Makefile \
 Src/libpnl/src/libcephes/Makefile \
-Src/libpnl/src/libcsparse/Makefile \
 Src/libpnl/src/libfftpack/Makefile \
 Src/libpnl/src/librand/Makefile \
 Src/libpnl/src/linalg/Makefile \
