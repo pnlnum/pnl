@@ -374,7 +374,7 @@ void pnl_mat_chol_syslin_inplace (const PnlMat *chol, PnlVect *b)
   
 }
 
-#ifndef HAVE_LAPACK
+#if 0
 /**
  * computes a P A = LU factoristion. On exit A contains the L and U
  * matrices. Note that the diagonal elemets of L are all 1.
