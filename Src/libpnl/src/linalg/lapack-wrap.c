@@ -27,20 +27,12 @@
 #include "pnl_matrix.h"
 #include "pnl_vector.h"
 #include "pnl_machine.h"
+#include "clapack.h"
 
 extern double pnl_dlamch (char *cmach);
 
 static int pnl_mat_is_sym (const PnlMat *A);
 
-/* lapack headers */
-extern int C2F(dgetrf) (int *m, int *n, double *A, int *lda, int *ipvi, int *info);
-extern int C2F(dgeev) (char *jobvl, char *jobvr, int *n, double *a, int *lda, double *wr, double *wi, double *vl, int *ldvl, double *vr, int *ldvr, double *work, int *lwork, int *info);
-extern int C2F(dsyev) (char *jobz, char *uplo, int *n, double *a, int *lda, double *w, double *work, int *lwork, int *info);
-extern int C2F(dgelsy)(int *m, int *n, int *nrhs, double *A, int *lda, double *B, int *ldb, int *jpvt, double *rcond, int *rank, double *work, int *lwork, int *info);
-extern int C2F(dgeqrf) (int *m, int *n, double *A, int *lda, double *tau, double *work, int *lwork, int *info);
-extern int C2F(dorgqr) (int *m, int *n, int *k, double *Q, int *lda, double *tau, double *work, int *lwork, int *info);
-extern int C2F(dgeqp3) (int *m, int *n, double *A, int *lda, int *jpvt, double *tau, double *work, int *lwork, int *info);
-                      
 /* Pnl wrappers */
 static int pnl_dgeev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors);
 static int pnl_dsyev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors);
