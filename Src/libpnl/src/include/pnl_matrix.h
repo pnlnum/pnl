@@ -50,6 +50,9 @@ extern "C" {
 
 /**
  * \defgroup PnlMatrices a Matrix object
+ *
+ * Matrix are stored row-wise in a one dimensional array.
+ * The element (i,j) of a matrix is stored in array[i*n+j]
  */
 /*@{*/
 #define PNL_MGET(v,i,j) (v)->array[(i)*(v)->n+(j)]

@@ -8,21 +8,25 @@ extern "C" {
 #include "pnl_matrix.h"
 
 #ifndef PNL_RANGE_CHECK_OFF
-#define CheckIndexTriDiagMat(v,i,j){             \
-    if (i>=v->size || abs(j)>1  || i<0 )       \
-      {perror("index out of range"); abort();\
-      }}
-#define CheckTriDiagMatMatch(lhs, rhs){          \
-    if ((lhs)->size != (rhs)->size )             \
-      {perror("non compatible dimensions"); abort();\
-}}
-#define CheckTriDiagMatVectIsCompatible(mat, vect){            \
-    if((mat)->size != (vect)->size)                        \
-      {perror("non compatible dimensions"); abort();}}
+#define CheckIndexTriDiagMat(v,i,j)                                                     \
+  if (i<0 || i>=(v)->size || j<-1 || j>1 || (i==0 && j==1) || (i=(v)->size-1 && j==-1)) \
+    {                                                                                   \
+      perror("index out of range"); abort();                                            \
+    }
+#define CheckTriDiagMatMatch(lhs, rhs)                                                  \
+  if ((lhs)->size != (rhs)->size )                                                      \
+    {                                                                                   \
+      perror("non compatible dimensions"); abort();                                     \
+    }
+#define CheckTriDiagMatVectIsCompatible(mat, vect)                                      \
+  if ((mat)->size != (vect)->size)                                                      \
+    {                                                                                   \
+      perror("non compatible dimensions"); abort();                                     \
+    }
 #else
 #define CheckIndexTriDiagMat(v,i,j) {}                          
 #define CheckTriDiagMatMatch(lhs, rhs) {}
-#define CheckTriDiagMatVectIsCompatible(mat, vect){}
+#define CheckTriDiagMatVectIsCompatible(mat, vect) {}
 #endif /* PNL_RANGE_CHECK_OFF */
 
 
@@ -33,9 +37,14 @@ extern void pnl_progonka(const double low,
 
 /**
  * \defgroup PnlTriDiagMat Tridiagonal Matrix
+ *
+ * Three arrays are used to store the three main diagonals. The arrays used to
+ * store the lower and upper diagonals are of size n-1 for a n x n matrix.
+ * Tridiagonal matrices must be square.
  */
 
-typedef struct PnlTriDiagMat{
+typedef struct 
+{
   int size; /*!< number of rows, the matrix must be square */
   double *D; /*!< diagonal elements */
   double *DU; /*!< upper diagonal elements */
