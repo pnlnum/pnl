@@ -73,8 +73,8 @@ static void pnl_mat_make_upper (PnlMat *A)
 }
 
 /**
- * computes a P A = LU factoristion. On exit A contains the L and U
- * matrices. Note that the diagonal elemets of L are all 1.
+ * computes a P A = LU factorisation. On exit A contains the L and U
+ * matrices. Note that the diagonal elements of L are all 1.
  *
  * @param A the matrix to decompose.
  * @param p a PnlPermutation.
@@ -112,8 +112,8 @@ void pnl_mat_lu (PnlMat *A, PnlPermutation *p)
 }
 
 /**
- * computes a P A = LU factoristion. On exit A contains the L and U
- * matrices. Note that the diagonal elemets of L are all 1.
+ * computes a P A = LU factorisation. On exit A contains the L and U
+ * matrices. Note that the diagonal elements of L are all 1.
  *
  * @param Q an orthogonal matrix on exit
  * @param R an upper triangular matrix on exit
@@ -197,7 +197,7 @@ void pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
  * @param P a matrix containing the eigenvectors on exit
  * @param A a matrix
  * @param with_eigenvectors can be TRUE to compute the eigenvectors or FALSE
- * if they are nt required, in this latter case P can be NULL
+ * if they are not required, in this latter case P can be NULL
  */
 void pnl_mat_eigen (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors)
 {
@@ -222,7 +222,7 @@ void pnl_mat_eigen (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvector
  * @param P a matrix containing the eigenvectors on exit (P is orthonormal)
  * @param A a real symmetric matrix
  * @param with_eigenvectors can be TRUE to compute the eigenvectors or FALSE
- * if they are nt required, in this latter case P can be NULL
+ * if they are not required, in this latter case P can be NULL
  */
 static int pnl_dsyev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors)
 {
@@ -262,13 +262,13 @@ static int pnl_dsyev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvect
 
 /**
  * Wrapper to dgeev
- * Computes the eigenvalues and eigenvectors of a real non-symmetric matrix
+ * Computes the eigenvalues and eigenvectors of a real non symmetric matrix
  *
  * @param v a vector containing the eigenvalues on exit
  * @param P a matrix containing the eigenvectors on exit
- * @param A a real non-symmetric matrix
+ * @param A a real non symmetric matrix
  * @param with_eigenvectors can be TRUE to compute the eigenvectors or FALSE
- * if they are nt required, in this latter case P can be NULL
+ * if they are not required, in this latter case P can be NULL
  */
 static int pnl_dgeev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors)
 {
