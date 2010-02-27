@@ -80,8 +80,8 @@ extern PnlVect* pnl_tridiagmat_mult_vect(const PnlTriDiagMat *mat,const PnlVect 
 extern void pnl_tridiagmat_mult_vect_inplace(PnlVect *lhs, const PnlTriDiagMat *mat, const PnlVect *rhs);
 extern void pnl_tridiagmat_lAxpby(double l, const PnlTriDiagMat *A, const PnlVect *x, double b, PnlVect * y);
 extern double pnl_tridiagmat_scalar_prod(const PnlVect *lhs, const PnlTriDiagMat *mat,const PnlVect *rhs);
-extern int pnl_tridiagmat_lu_syslin (PnlVect *lhs, const PnlTriDiagMat *M,const PnlVect *rhs);
-extern int pnl_tridiagmat_lu_syslin_inplace (const PnlTriDiagMat *M, PnlVect *rhs);
+extern int pnl_tridiagmat_syslin (PnlVect *lhs, const PnlTriDiagMat *M,const PnlVect *rhs);
+extern int pnl_tridiagmat_syslin_inplace (const PnlTriDiagMat *M, PnlVect *rhs);
 
 
 extern void pnl_tridiagmat_set(PnlTriDiagMat *v, int d, int up, double x);

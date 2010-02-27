@@ -596,7 +596,7 @@ void pnl_tridiagmat_print (const PnlTriDiagMat *M)
  * @param b right hand side member. On exit b contains the solution x
  * @return FAIL or OK
  */
-int pnl_tridiagmat_lu_syslin_inplace (const PnlTriDiagMat *A, PnlVect *b)
+int pnl_tridiagmat_syslin_inplace (const PnlTriDiagMat *A, PnlVect *b)
 {
   int n, nrhs, info, ldb;
   n = A->size;
@@ -618,10 +618,10 @@ int pnl_tridiagmat_lu_syslin_inplace (const PnlTriDiagMat *A, PnlVect *b)
  * @param b right hand side member. 
  * @return FAIL or OK
  */
-int pnl_tridiagmat_lu_syslin (PnlVect *x, const PnlTriDiagMat *A, const PnlVect *b)
+int pnl_tridiagmat_syslin (PnlVect *x, const PnlTriDiagMat *A, const PnlVect *b)
 {
   pnl_vect_clone (x, b);
-  return pnl_tridiagmat_lu_syslin_inplace (A, x);
+  return pnl_tridiagmat_syslin_inplace (A, x);
 }
 
 
