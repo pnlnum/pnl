@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int dpocon_(char *uplo, integer *n, doublereal *a, integer *

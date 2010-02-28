@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int csptri_(char *uplo, integer *n, complex *ap, integer *

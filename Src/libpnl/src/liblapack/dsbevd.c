@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int dsbevd_(char *jobz, char *uplo, integer *n, integer *kd, 

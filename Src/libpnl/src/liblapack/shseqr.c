@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int shseqr_(char *job, char *compz, integer *n, integer *ilo,

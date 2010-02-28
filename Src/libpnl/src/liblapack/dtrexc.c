@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int dtrexc_(char *compq, integer *n, doublereal *t, integer *

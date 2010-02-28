@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int sgegs_(char *jobvsl, char *jobvsr, integer *n, real *a, 

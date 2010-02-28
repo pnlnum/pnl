@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int dstedc_(char *compz, integer *n, doublereal *d__, 

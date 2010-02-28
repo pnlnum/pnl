@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int dlasyf_(char *uplo, integer *n, integer *nb, integer *kb,

@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 doublereal dlansy_(char *norm, char *uplo, integer *n, doublereal *a, integer 

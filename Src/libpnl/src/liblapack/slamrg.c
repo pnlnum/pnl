@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int slamrg_(integer *n1, integer *n2, real *a, integer *

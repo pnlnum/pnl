@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int sgttrf_(integer *n, real *dl, real *d__, real *du, real *

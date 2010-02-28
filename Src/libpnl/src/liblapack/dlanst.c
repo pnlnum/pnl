@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 doublereal dlanst_(char *norm, integer *n, doublereal *d__, doublereal *e)

@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int ssyevr_(char *jobz, char *range, char *uplo, integer *n, 

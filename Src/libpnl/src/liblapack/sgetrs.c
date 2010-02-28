@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int sgetrs_(char *trans, integer *n, integer *nrhs, real *a, 

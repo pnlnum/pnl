@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int spbequ_(char *uplo, integer *n, integer *kd, real *ab, 

@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int clals0_(integer *icompq, integer *nl, integer *nr, 

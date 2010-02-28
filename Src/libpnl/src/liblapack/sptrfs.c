@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int sptrfs_(integer *n, integer *nrhs, real *d__, real *e, 

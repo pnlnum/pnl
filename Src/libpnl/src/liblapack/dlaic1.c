@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int dlaic1_(integer *job, integer *j, doublereal *x, 

@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int slaqps_(integer *m, integer *n, integer *offset, integer 

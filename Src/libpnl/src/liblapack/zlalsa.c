@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int zlalsa_(integer *icompq, integer *smlsiz, integer *n, 

@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int ssbgst_(char *vect, char *uplo, integer *n, integer *ka, 

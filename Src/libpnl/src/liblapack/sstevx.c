@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int sstevx_(char *jobz, char *range, integer *n, real *d__, 

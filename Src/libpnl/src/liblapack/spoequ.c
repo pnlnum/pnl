@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int spoequ_(integer *n, real *a, integer *lda, real *s, real 

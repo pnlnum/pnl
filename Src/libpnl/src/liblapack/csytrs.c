@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int csytrs_(char *uplo, integer *n, integer *nrhs, complex *

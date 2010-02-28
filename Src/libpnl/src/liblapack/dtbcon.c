@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int dtbcon_(char *norm, char *uplo, char *diag, integer *n, 

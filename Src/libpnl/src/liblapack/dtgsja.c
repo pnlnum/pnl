@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int dtgsja_(char *jobu, char *jobv, char *jobq, integer *m, 

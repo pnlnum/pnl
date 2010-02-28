@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int dlaed6_(integer *kniter, logical *orgati, doublereal *

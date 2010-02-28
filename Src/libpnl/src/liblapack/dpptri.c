@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int dpptri_(char *uplo, integer *n, doublereal *ap, integer *

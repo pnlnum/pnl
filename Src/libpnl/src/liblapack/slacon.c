@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int slacon_(integer *n, real *v, real *x, integer *isgn, 

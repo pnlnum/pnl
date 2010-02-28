@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int claqhp_(char *uplo, integer *n, complex *ap, real *s, 

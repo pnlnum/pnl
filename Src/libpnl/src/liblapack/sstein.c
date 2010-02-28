@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int sstein_(integer *n, real *d__, real *e, integer *m, real 

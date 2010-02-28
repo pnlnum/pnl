@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int dlasd0_(integer *n, integer *sqre, doublereal *d__, 

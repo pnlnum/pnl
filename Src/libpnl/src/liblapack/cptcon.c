@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int cptcon_(integer *n, real *d__, complex *e, real *anorm, 

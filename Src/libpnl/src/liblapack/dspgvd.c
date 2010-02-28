@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int dspgvd_(integer *itype, char *jobz, char *uplo, integer *

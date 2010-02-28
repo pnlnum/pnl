@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int strsyl_(char *trana, char *tranb, integer *isgn, integer 

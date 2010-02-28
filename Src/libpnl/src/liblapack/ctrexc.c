@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int ctrexc_(char *compq, integer *n, complex *t, integer *

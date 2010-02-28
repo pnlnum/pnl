@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int chgeqz_(char *job, char *compq, char *compz, integer *n, 

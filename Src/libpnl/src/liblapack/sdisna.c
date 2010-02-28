@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int sdisna_(char *job, integer *m, integer *n, real *d__, 

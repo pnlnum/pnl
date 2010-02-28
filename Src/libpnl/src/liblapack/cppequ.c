@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int cppequ_(char *uplo, integer *n, complex *ap, real *s, 

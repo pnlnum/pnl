@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int zlahqr_(logical *wantt, logical *wantz, integer *n, 

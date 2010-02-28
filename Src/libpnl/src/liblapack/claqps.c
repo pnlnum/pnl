@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int claqps_(integer *m, integer *n, integer *offset, integer 

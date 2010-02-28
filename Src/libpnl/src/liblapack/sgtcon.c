@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int sgtcon_(char *norm, integer *n, real *dl, real *d__, 

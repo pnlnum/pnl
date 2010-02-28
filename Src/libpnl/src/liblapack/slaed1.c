@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int slaed1_(integer *n, real *d__, real *q, integer *ldq, 

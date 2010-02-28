@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 doublereal slantr_(char *norm, char *uplo, char *diag, integer *m, integer *n,

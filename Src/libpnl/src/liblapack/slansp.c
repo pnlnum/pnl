@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 doublereal slansp_(char *norm, char *uplo, integer *n, real *ap, real *work)

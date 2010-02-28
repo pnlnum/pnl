@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int dlasq3_(integer *i0, integer *n0, doublereal *z__, 

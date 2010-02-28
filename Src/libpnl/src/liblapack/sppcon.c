@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int sppcon_(char *uplo, integer *n, real *ap, real *anorm, 

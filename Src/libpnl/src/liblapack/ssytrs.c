@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int ssytrs_(char *uplo, integer *n, integer *nrhs, real *a, 

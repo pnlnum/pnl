@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int slarre_(integer *n, real *d__, real *e, real *tol, 

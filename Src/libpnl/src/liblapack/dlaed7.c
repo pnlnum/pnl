@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int dlaed7_(integer *icompq, integer *n, integer *qsiz, 

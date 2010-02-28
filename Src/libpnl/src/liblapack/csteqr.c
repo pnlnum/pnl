@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int csteqr_(char *compz, integer *n, real *d__, real *e, 

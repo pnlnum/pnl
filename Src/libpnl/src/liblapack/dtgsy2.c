@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int dtgsy2_(char *trans, integer *ijob, integer *m, integer *

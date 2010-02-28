@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int zgtcon_(char *norm, integer *n, doublecomplex *dl, 

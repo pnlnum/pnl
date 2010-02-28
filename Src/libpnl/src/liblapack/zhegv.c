@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int zhegv_(integer *itype, char *jobz, char *uplo, integer *

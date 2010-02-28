@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int cgtts2_(integer *itrans, integer *n, integer *nrhs, 

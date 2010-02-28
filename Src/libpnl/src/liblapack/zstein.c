@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int zstein_(integer *n, doublereal *d__, doublereal *e, 

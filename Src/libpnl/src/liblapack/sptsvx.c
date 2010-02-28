@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int sptsvx_(char *fact, integer *n, integer *nrhs, real *d__,

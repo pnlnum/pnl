@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int zsycon_(char *uplo, integer *n, doublecomplex *a, 

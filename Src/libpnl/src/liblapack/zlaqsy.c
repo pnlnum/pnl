@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int zlaqsy_(char *uplo, integer *n, doublecomplex *a, 

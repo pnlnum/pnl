@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int sopgtr_(char *uplo, integer *n, real *ap, real *tau, 

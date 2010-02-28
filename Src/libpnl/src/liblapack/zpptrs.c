@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int zpptrs_(char *uplo, integer *n, integer *nrhs, 

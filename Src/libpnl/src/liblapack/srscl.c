@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int srscl_(integer *n, real *sa, real *sx, integer *incx)

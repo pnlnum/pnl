@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int strexc_(char *compq, integer *n, real *t, integer *ldt, 

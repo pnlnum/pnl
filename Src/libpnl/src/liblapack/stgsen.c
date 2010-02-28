@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int stgsen_(integer *ijob, logical *wantq, logical *wantz, 

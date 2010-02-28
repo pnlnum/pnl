@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int slassq_(integer *n, real *x, integer *incx, real *scale, 

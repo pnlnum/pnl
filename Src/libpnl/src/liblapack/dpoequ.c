@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int dpoequ_(integer *n, doublereal *a, integer *lda, 

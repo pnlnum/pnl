@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int ssptrd_(char *uplo, integer *n, real *ap, real *d__, 

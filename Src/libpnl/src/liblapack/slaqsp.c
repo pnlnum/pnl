@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int slaqsp_(char *uplo, integer *n, real *ap, real *s, real *
