@@ -1,18 +1,16 @@
-%% -*- ispell-local-dictionary: "english"; -*-
 
 \documentclass[a4paper,11pt,twoside]{article}
 \usepackage{a4wide}
+\usepackage{t1enc,lmodern}
 \usepackage[dvips=true]{hyperref}
+\usepackage{textcomp}
 \usepackage{verbatim,moreverb,alltt}
 \usepackage{makeidx}
 \usepackage[dvips]{color}
 \usepackage[latin1]{inputenc}
 \usepackage[english]{babel}
 \usepackage[strings]{underscore}
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{array}
-\usepackage{delarray}
+\usepackage{amsmath,amsfonts}
 
 
 
@@ -26,6 +24,7 @@
 \newcommand{\R}{{\mathbb R}}
 \newcommand{\C}{{\mathbb C}}
 \newcommand{\N}{{\mathbb N}}
+\newcommand{\ptr}{\textasteriskcentered}
 
 %%\renewcommand{\exp}[1]{\operatorname{e}^{ #1 } }
 \newcommand{\cotan}{\operatorname{cotan}}
@@ -37,39 +36,54 @@
 \newcommand{\acolade}[1]{\left\{ #1 \right\}}
 \newcommand{\real}[1]{\operatorname{Re}(#1)}
 
-\long\def\varname#1#2{\item[#1]#2}
+\makeatletter
+
+% For dvips + ps2pdf generation
+\ifx\HCode\undefined%
+
 \def\var#1{{\tt #1}}
 
 \newcommand{\describefun}[3]{%
-  \index{#2}\label{#2}%
-  {#1~{\bf #2}~(#3)}%
-}
+  \index{#2}\label{#2} {#1~{\bf #2}~(#3)}}
 
 \newcommand{\describemacro}[2]{%
-  \index{#1}\label{#1}%
-  {{\bf #1}~(#2)}%
-}
+  \index{#1}\label{#1} {{\bf #1}~(#2)}}
 
 \newcommand{\constentry}[2]{%
-  \index{#1}\label{#1}{\bf #1} &&  #2 \\
-}
-
+  \index{#1}\label{#1}{\bf #1} &&  #2 \\ }
 
 \def\refstruct#1{{\color[named]{Red} #1}}
 \def\reffun#1{\hyperref[#1]{#1}}
 \def\refmacro{\reffun}
-\newenvironment{varlist}{\vskip1ex\noindent{\large\bfseries\color[named]{Blue} Parameters}%
-  \unskip\begin{description}}{\end{description}\unskip}
-\newenvironment{example}{\vskip1ex\noindent{\large\bfseries\color[named]{Blue} Examples}\unskip}{}
-\def\code{\unskip\verbatim} \def\endcode{\endverbatim\unskip}
-\newenvironment{describe}{%
-   \vskip1ex\noindent{\large\bfseries\color[named]{Blue} Description}%
-  \vskip1ex\noindent}{} 
 \newenvironment{describeconst}{%
   \noindent\begin{tabular}{lp{1cm}l}}{\end{tabular}}
 \def\shortdescribe{\unskip\vskip1ex{\color[named]{Blue} Description~}}
 \def\sshortdescribe{\unskip\newline\hskip1em {\color[named]{Blue} Description~}}
 
+% Html related stuff
+\else%
+
+\def\var#1{\HCode{<span class='var'>}#1\HCode{</span>}}
+
+\newcommand{\describefun}[3]{%
+\index{#2}\label{#2} {\HCode{<span class='ret'>}#1\HCode{</span>}~{\bf \HCode{<span class='fun'>}#2\HCode{</span>}}~(\HCode{<span class='args'>}#3\HCode{</span>})}}
+
+\newcommand{\describemacro}[2]{%
+  \index{#1}\label{#1} {{\bf #1}~(#2)}}
+
+\newcommand{\constentry}[2]{%
+  \index{#1}\label{#1}\HCode{<span class='struct'>}#1\HCode{</span>} && #2 \\ }
+
+\def\refstruct#1{\HCode{<span class='struct'>}#1\HCode{</span>}}
+\def\reffun#1{\hyperref[#1]{#1}}
+\def\refmacro{\reffun}
+\newenvironment{describeconst}{%
+  \noindent\begin{tabular}{lp{1cm}l}}{\end{tabular}}
+\def\shortdescribe{\unskip\vskip1ex{\HCode{<span class='description'>}Description~\HCode{</span>}}}
+\def\sshortdescribe{\unskip\newline\hskip1em \HCode{<span class='description'>}Description~\HCode{</span>}}
+
+\fi
+\makeatother
 
 
 \title{Pnl Manual}
@@ -105,8 +119,5 @@ parts.
 \input{probabilistic_methods.tex}
 \input{deterministic_methods.tex}
 
-
-\bibliographystyle{plain}
-\bibliography{pnl-biblio.bib}
 \printindex
 \end{document}

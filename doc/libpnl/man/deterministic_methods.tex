@@ -30,22 +30,22 @@ typedef struct {
 
 \begin{itemize}
 
-\item \describefun{double}{pnl_root_brent}{\refstruct{PnlFunc}$\ast$ F, double
-    x1, double  x2, double $\ast$tol}
+\item \describefun{double}{pnl_root_brent}{\refstruct{PnlFunc}\ptr  F, double
+    x1, double  x2, double \ptr tol}
   \sshortdescribe Finds the root of \var{F} between \var{x1} and \var{x2} with
   an accuracy of order \var{tol}. On exit \var{tol} is an upper bound of the
   error.
   
-\item \describefun{int}{pnl_find_root}{\refstruct{PnlFuncDFunc}$\ast$ Func, 
-    double x_min, double x_max, double tol, int N_Max, double$\ast$ res}
+\item \describefun{int}{pnl_find_root}{\refstruct{PnlFuncDFunc}\ptr  Func, 
+    double x_min, double x_max, double tol, int N_Max, double\ptr  res}
   \sshortdescribe Finds the root of \var{F} between \var{x1} and \var{x2} with
   an accuracy of order \var{tol} and a maximum of \var{N_max} iterations. On
   exit, the root is stored in \var{res}. Note that the function \var{F} must
   also compute the first derivative of the function.
   
 
-\item \describefun{int}{pnl_root_newton}{\refstruct{PnlFuncDFunc} $\ast$Func, 
-    double x0, double epsrel, double epsabs, int N_max, double $\ast$res}
+\item \describefun{int}{pnl_root_newton}{\refstruct{PnlFuncDFunc} \ptr Func, 
+    double x0, double epsrel, double epsabs, int N_max, double \ptr res}
   \sshortdescribe Finds the root of \var{F} starting from \var{x0} with an
   accuracy given both by \var{epsrel} and \var{epsabs} and a maximum number of
   iterations \var{N_max}. On exit, the root is stored in \var{res}.Note that
@@ -53,9 +53,9 @@ typedef struct {
   
 
 
-\item \describefun{int}{pnl_root_bisection}{\refstruct{PnlFunc } $\ast$Func, 
+\item \describefun{int}{pnl_root_bisection}{\refstruct{PnlFunc } \ptr Func, 
     double xmin, double xmax, double epsrel, double espabs, int N_max, double
-    $\ast$res}
+    \ptr res}
   \sshortdescribe Finds the root of \var{F} between \var{x1} and \var{x2} with
   an accuracy given both by \var{epsrel} and \var{epsabs} and a maximum number
   of iterations \var{N_max}. On exit, the root is stored in \var{res}
@@ -107,9 +107,9 @@ $\alpha^\star \in \R^N$ which solves
   elements. \var{d} is the dimension of the space on which the functions are
   defined.
 
-\item \describefun{int}{pnl_fit_least_squares}{\refstruct{PnlVect}$\ast$ coef, 
-    \refstruct{PnlMat}$\ast$ x, \refstruct{PnlVect}$\ast$ y, 
-    \refstruct{PnlBasis}$\ast$ P, int N}
+\item \describefun{int}{pnl_fit_least_squares}{\refstruct{PnlVect}\ptr  coef, 
+    \refstruct{PnlMat}\ptr  x, \refstruct{PnlVect}\ptr  y, 
+    \refstruct{PnlBasis}\ptr  P, int N}
   \sshortdescribe Computes the coefficients \var{coef} defined by
   \begin{equation*}
     \var{coef} = \arg\min_\alpha \sum_{i=1}^n
@@ -122,23 +122,23 @@ $\alpha^\star \in \R^N$ which solves
   by the data \var{y} which is the vector of the values taken by the function
   at the points \var{x}.
   
-\item \describefun{double}{pnl_basis_eval}{\refstruct{PnlVect}$\ast$ coef, double
-    $\ast$x, \refstruct{PnlBasis}$\ast$ *P}
+\item \describefun{double}{pnl_basis_eval}{\refstruct{PnlVect}\ptr  coef, double
+    \ptr x, \refstruct{PnlBasis}\ptr  *P}
   \sshortdescribe Computes the linear combination of \var{P_k(x)} defined by
   \var{coef}. Given the coefficients computed by the function
   \reffun{pnl_fit_least_squares}, this function returns $\sum_{k=0}^n
   \var{coef}_k  P_k(\var{x})$ where \var{x} is a C array.
 
-\item \describefun{double}{pnl_basis_eval_D}{\refstruct{PnlVect}$\ast$ coef, double
-    $\ast$x, \refstruct{PnlBasis}$\ast$ *P, int i}
+\item \describefun{double}{pnl_basis_eval_D}{\refstruct{PnlVect}\ptr  coef, double
+    \ptr x, \refstruct{PnlBasis}\ptr  *P, int i}
   \sshortdescribe Computes the derivative with repsect to \var{x_i} of the
   linear combination of \var{P_k(x)} defined by \var{coef}. Given the
   coefficients computed by the function \reffun{pnl_fit_least_squares}, this
   function returns $\partial_{x_i} \sum_{k=0}^n \var{coef}_k  P_k(\var{x})$
   where \var{x} is a C array.
 
-\item \describefun{double}{pnl_basis_eval_D2}{\refstruct{PnlVect}$\ast$ coef, double
-    $\ast$x, \refstruct{PnlBasis}$\ast$ *P, int i, int j}
+\item \describefun{double}{pnl_basis_eval_D2}{\refstruct{PnlVect}\ptr  coef, double
+    \ptr x, \refstruct{PnlBasis}\ptr  *P, int i, int j}
   \sshortdescribe Computes the derivative with repsect to \var{x_i} of the
   linear combination of \var{P_k(x)} defined by \var{coef}. Given the
   coefficients computed by the function \reffun{pnl_fit_least_squares}, this
@@ -178,33 +178,33 @@ a given point
 \subsubsection{Functions}
 
 \begin{itemize}
-\item \describefun{int}{ pnl_integration_GK}{const \refstruct{pnl_function} $\ast$F, 
-    double x0, double x1, double epsabs, double epsrel, double $\ast$result, 
-    double $\ast$abserr,  int $\ast$neval}
+\item \describefun{int}{ pnl_integration_GK}{const \refstruct{pnl_function} \ptr F, 
+    double x0, double x1, double epsabs, double epsrel, double \ptr result, 
+    double \ptr abserr,  int \ptr neval}
   \sshortdescribe Evaluates $\int_{x_0}^{x_1} F$ with an absolute error less than
   \var{espabs} and a relative error less than
   \var{esprel}. The value of the integral is stored in \var{result}, while the
   variables \var{abserr} and \var{neval} respectively contain the absolute
   error and the number of iterations.
 
-\item \describefun{int}{ pnl_integration_GK2D}{const \refstruct{pnl_function_2D} $\ast$F, 
+\item \describefun{int}{ pnl_integration_GK2D}{const \refstruct{pnl_function_2D} \ptr F, 
     double x0, double x1, double y0, double y1, double epsabs, double epsrel, 
-    double $\ast$result, double $\ast$abserr, int $\ast$neval}
+    double \ptr result, double \ptr abserr, int \ptr neval}
   \sshortdescribe Evaluates $\int_{[x_0, x_1] \times [y_0, y_1]} F$ with an
   absolute error less than \var{espabs} and a relative error less than
   \var{esprel}. The value of the integral is stored in \var{result}, while the
   variables \var{abserr} and \var{neval} respectively contain the absolute
   error and the number of iterations.
 
-\item \describefun{double}{pnl_integration}{const \refstruct{pnl_function} $\ast$F, 
-    double x0, double x1, int n, char $\ast$meth}
+\item \describefun{double}{pnl_integration}{const \refstruct{pnl_function} \ptr F, 
+    double x0, double x1, int n, char \ptr meth}
   \sshortdescribe Evaluates $\int_{x_0}^{x_1} F$ using \var{n} discretisation
   steps. The method used to discretise the integral is defined by \var{meth}
   which can be \var{"rect"} (rectangle rule), \var{"trap"} (trapezoidal rule),
   \var{"simpson"} (Simpson's rule).
 
-\item \describefun{double}{pnl_integration_2D}{const \refstruct{pnl_function_2D} $\ast$F,
-    double x0, double x1, double y0, double y1, int nx, int ny, char $\ast$meth}
+\item \describefun{double}{pnl_integration_2D}{const \refstruct{pnl_function_2D} \ptr F,
+    double x0, double x1, double y0, double y1, int nx, int ny, char \ptr meth}
   \sshortdescribe Evaluates $\int_{[x_0, x_1] \times [y_0, y_1]} F$ using
   \var{nx} (resp. \var{ny}) discretisation steps for \var{[x0, x1]}
   (resp. \var{[y0, y1]}). The method used to discretise the integral is
@@ -284,60 +284,60 @@ In the even case there are two values which are purely real,
 The following functions comes from a C version of the Fortran FFTPack library
 available on \url{http://www.netlib.org/fftpack}.
 \begin{itemize}
-\item \describefun{int}{pnl_fft_inplace}{\refstruct{PnlVectComplex} $\ast$data}
+\item \describefun{int}{pnl_fft_inplace}{\refstruct{PnlVectComplex} \ptr data}
   \sshortdescribe Computes the FFT of \var{data} in place. The original content
   of \var{data} is lost.
 
-\item \describefun{int}{pnl_ifft_inplace}{\refstruct{PnlVectComplex} $\ast$data}
+\item \describefun{int}{pnl_ifft_inplace}{\refstruct{PnlVectComplex} \ptr data}
   \sshortdescribe Computes the inverse FFT of \var{data} in place. The
   original content of \var{data} is lost.
 
-\item \describefun{int}{pnl_fft}{const \refstruct{PnlVectComplex} $\ast$in, 
-    \refstruct{PnlVectComplex} $\ast$out}
+\item \describefun{int}{pnl_fft}{const \refstruct{PnlVectComplex} \ptr in, 
+    \refstruct{PnlVectComplex} \ptr out}
   \sshortdescribe Computes the FFT of \var{in} and stores it into \var{out}.
 
-\item \describefun{int}{pnl_ifft}{const \refstruct{PnlVectComplex} $\ast$in, 
-    \refstruct{PnlVectComplex} $\ast$out}
+\item \describefun{int}{pnl_ifft}{const \refstruct{PnlVectComplex} \ptr in, 
+    \refstruct{PnlVectComplex} \ptr out}
   \sshortdescribe Computes the inverse FFT of \var{in} and stores it into \var{out}.
 
-\item \describefun{int}{pnl_fft2}{double $\ast$re, double $\ast$im, int n}
+\item \describefun{int}{pnl_fft2}{double \ptr re, double \ptr im, int n}
   \sshortdescribe Computes the FFT of the vector of length \var{n} whose real
   (resp. imaginary) parts are given by the arrays \var{re}
   (resp. \var{im}). The real and imaginary parts of the FFT are respectively
   stored in \var{re} and \var{im} on output.
 
-\item \describefun{int}{pnl_ifft2}{double $\ast$re, double $\ast$im, int n}
+\item \describefun{int}{pnl_ifft2}{double \ptr re, double \ptr im, int n}
   \sshortdescribe Computes the inverse FFT of the vector of length \var{n}
   whose real (resp. imaginary) parts are given by the arrays \var{re}
   (resp. \var{im}). The real and imaginary parts of the inverse FFT are
   respectively stored in \var{re} and \var{im} on output.
 
-\item \describefun{int}{pnl_real_fft}{const \refstruct{PnlVect} $\ast$in, 
-    \refstruct{PnlVectComplex} $\ast$out}
+\item \describefun{int}{pnl_real_fft}{const \refstruct{PnlVect} \ptr in, 
+    \refstruct{PnlVectComplex} \ptr out}
   \sshortdescribe Computes the FFT of the real valued sequence \var{in} and
   stores it into \var{out}.
 
-\item \describefun{int}{pnl_real_ifft}{const \refstruct{PnlVect} $\ast$in, 
-    \refstruct{PnlVectComplex} $\ast$out}
+\item \describefun{int}{pnl_real_ifft}{const \refstruct{PnlVect} \ptr in, 
+    \refstruct{PnlVectComplex} \ptr out}
   \sshortdescribe Computes the inverse FFT of \var{in} and stores it into \var{out}.
 
-\item \describefun{int}{pnl_real_fft_inplace}{double $\ast$data, int n}
+\item \describefun{int}{pnl_real_fft_inplace}{double \ptr data, int n}
   \sshortdescribe Computes the FFT of the real valued vector \var{data} of
   length \var{n}. The result is stored in \var{data} using the FFTPack storage
   described above, see~\ref{sec:fftpack-storage}.
 
-\item \describefun{int}{pnl_real_ifft_inplace}{double $\ast$data, int n}
+\item \describefun{int}{pnl_real_ifft_inplace}{double \ptr data, int n}
   \sshortdescribe Computes the inverse FFT of the vector \var{data} of length
   \var{n}. \var{data} is supposed to be the FFT coefficients a real valued
   sequence stored using the FFTPack storage. On output, \var{data} contains
   the inverse FFT.
 
-\item \describefun{int}{pnl_real_fft2}{double $\ast$re, double $\ast$im, int n}
+\item \describefun{int}{pnl_real_fft2}{double \ptr re, double \ptr im, int n}
   \sshortdescribe Computes the FFT of the real vector \var{re} of length \var{n}.
   \var{im} is only used on output to store the imaginary part the FFT. The
   real part is stored into \var{re}
   
-\item \describefun{int}{pnl_real_ifft2}{double $\ast$re, double $\ast$im, int n}
+\item \describefun{int}{pnl_real_ifft2}{double \ptr re, double \ptr im, int n}
   \sshortdescribe Computes the inverse FFT of the vector \var{re + i * im} of
   length \var{n}, which is supposed to be the FFT of a real valued
   sequence. On exit, \var{im} is unused. 
@@ -357,14 +357,14 @@ For a real valued function $f$ such that $t \longmapsto f(t) \expp{- \sigma_c
 \subsubsection{Functions}
 \begin{itemize}
 \item \describefun{double}{pnl_ilap_euler}{\refstruct{PnlCmplxFunc}
-    $\ast$fhat, double t, int N, int M}
+    \ptr fhat, double t, int N, int M}
   \sshortdescribe Computes $f(\var{t})$ where $f$ is given by its Laplace
   transform \var{fhat} by numerically inverting the Laplace transform using
   Euler's summation. The values \var{N = M = 15} usually give a very good
-  accuracy. For more details on the accuracy of the method, see \cite{aw, ll}. 
+  accuracy. For more details on the accuracy of the method. 
 
 \item \describefun{double}{pnl_ilap_cdf_euler}{\refstruct{PnlCmplxFunc}
-    $\ast$fhat, double t, int N, int M}
+    \ptr fhat, double t, int N, int M}
   \sshortdescribe Computes the cumulative distribution function $F(\var{t})$
   where $F(x) = \int_0^x f(t) dt$ and $f$ is a density function with values on
   the positive real linegiven by its Laplace transform \var{fhat}. The
@@ -373,8 +373,8 @@ For a real valued function $f$ such that $t \longmapsto f(t) \expp{- \sigma_c
   good accuracy. The parameter \var{h} is the discretisation step, the
   algorithm is very sensitive to the choice of \var{h}.
 
-\item \describefun{double}{pnl_ilap_fft}{\refstruct{PnlVect} $\ast$res,
-    \refstruct{PnlCmplxFunc} $\ast$fhat, double T, double eps}
+\item \describefun{double}{pnl_ilap_fft}{\refstruct{PnlVect} \ptr res,
+    \refstruct{PnlCmplxFunc} \ptr fhat, double T, double eps}
   \sshortdescribe Computes $f(t)$ for $t \in [h, \var{T}]$ on a regular grid
   and stores the values in \var{res}, where $h = T / {\mathrm size}(res)$. The
   function $f$ is defined by its Laplace transform \var{fhat}, which is
@@ -382,7 +382,7 @@ For a real valued function $f$ such that $t \longmapsto f(t) \expp{- \sigma_c
   \var{res} is related to the choice of the relative precision \var{eps}
   required on the value of $f(t)$ for all $t \le T$.
 
-\item \describefun{double}{pnl_ilap_gs}{\refstruct{PnlFunc} $\ast$fhat, double
+\item \describefun{double}{pnl_ilap_gs}{\refstruct{PnlFunc} \ptr fhat, double
     t, int n}
   \sshortdescribe Computes $f(\var{t})$ where $f$ is given by its Laplace
   transform \var{fhat} by numerically inverting the Laplace transform using a
@@ -391,10 +391,10 @@ For a real valued function $f$ such that $t \longmapsto f(t) \expp{- \sigma_c
   real valued one. \var{n} is the number of terms used in the weighted combination.
 
 \item \describefun{double}{pnl_ilap_gs_basic}{\refstruct{PnlFunc}
-    $\ast$fhat, double t, int n}
+    \ptr fhat, double t, int n}
   \sshortdescribe Computes $f(\var{t})$ where $f$ is given by its Laplace
   transform \var{fhat} by numerically inverting the Laplace transform using
-  Gaver Stehfest's method, see~\cite{aw}. Note that this function does not
+  Gaver Stehfest's method. Note that this function does not
   need the comple valued Laplace transform but only the real valued
   one. \var{n} is the number of iterations of the algorithm.
   {\bf Note : }~This function is provided only for test purposes, even though
@@ -407,44 +407,39 @@ For a real valued function $f$ such that $t \longmapsto f(t) \expp{- \sigma_c
 % \subsubsection{Functions}
 % \begin{itemize}
 % \item 
-% \describefun{\refstruct{PnlPDEBoundary}$\ast$}{pnl_pde_boundary_create}{double X0, double X1}
+% \describefun{\refstruct{PnlPDEBoundary}\ptr }{pnl_pde_boundary_create}{double X0, double X1}
 %   \sshortdescribe creates a \refstruct{PnlPDEBoundary}  
 % \item \describefun{double}{pnl_pde_boundary_real_variable}{const \refstruct{ PnlPDEBoundary} BP, double X}
 % \item 
 % \describefun{double}{pnl_pde_boundary_unit_interval}{const \refstruct{ PnlPDEBoundary} BP, double X}
 % \item 
-% \describefun{\refstruct{PnlPDEDimBoundary} $\ast$}{pnl_pde_dim_boundary_create_from_int}{int dim}
+% \describefun{\refstruct{PnlPDEDimBoundary} \ptr }{pnl_pde_dim_boundary_create_from_int}{int dim}
 %   \sshortdescribe creates a \refstruct{PnlPDEBoundary} with Left down corner is $ (0, \dots, 0)$ and right up corner is $ (1, \dots, 1)$  
-% \item \describefun{\refstruct{ PnlPDEDimBoundary} $\ast$}{pnl_pde_dim_boundary_create}{const \refstruct{ PnlVect} $\ast$X0, const \refstruct{ PnlVect} $\ast$X1}
+% \item \describefun{\refstruct{ PnlPDEDimBoundary} \ptr }{pnl_pde_dim_boundary_create}{const \refstruct{ PnlVect} \ptr X0, const \refstruct{ PnlVect} \ptr X1}
 %   \sshortdescribe 
-% \item \describefun{void}{pnl_pde_dim_boundary_free}{\refstruct{ PnlPDEDimBoundary} $\ast$$\ast$\refstruct{ v}}
+% \item \describefun{void}{pnl_pde_dim_boundary_free}{\refstruct{ PnlPDEDimBoundary} \ptr \ptr \refstruct{ v}}
 %   \sshortdescribe frees a \refstruct{PnlPDEDimBoundary}  
-% \item \describefun{double}{pnl_pde_dim_boundary_eval_from_unit}{double($\ast$f)(const \refstruct{ PnlVect} $\ast$), const \refstruct{ PnlPDEDimBoundary} $\ast$BP, const \refstruct{ PnlVect} $\ast$X}
+% \item \describefun{double}{pnl_pde_dim_boundary_eval_from_unit}{double(\ptr f)(const \refstruct{ PnlVect} \ptr ), const \refstruct{ PnlPDEDimBoundary} \ptr BP, const \refstruct{ PnlVect} \ptr X}
 % \item 
-% \describefun{void}{pnl_pde_dim_boundary_from_unit_to_real_variable}{const \refstruct{ PnlPDEDimBoundary} $\ast$BP, \refstruct{ PnlVect} $\ast$X}
+% \describefun{void}{pnl_pde_dim_boundary_from_unit_to_real_variable}{const \refstruct{ PnlPDEDimBoundary} \ptr BP, \refstruct{ PnlVect} \ptr X}
 % \item 
-% \describefun{double}{pnl_pde_dim_boundary_get_step}{const \refstruct{ PnlPDEDimBoundary} $\ast$BP, int i}
+% \describefun{double}{pnl_pde_dim_boundary_get_step}{const \refstruct{ PnlPDEDimBoundary} \ptr BP, int i}
 % \item 
 % \describefun{double}{standard_time_repartition}{int i, int N-T}
-% \item \describefun{\refstruct{ PnlPDETimeGrid} $\ast$}{pnl_pde_time_grid}{const
-%   double T, const int $N-T$, double($\ast$ repartition)(int i, int NN)}
+% \item \describefun{\refstruct{ PnlPDETimeGrid} \ptr }{pnl_pde_time_grid}{const
+%   double T, const int $N-T$, double(\ptr  repartition)(int i, int NN)}
 %   \sshortdescribe creates a \refstruct{PnlPDETimeGrid}
-% \item \describefun{\refstruct{ PnlPDETimeGrid} $\ast$}{pnl_pde_time_homogen_grid}{const double T, const int N-T}
+% \item \describefun{\refstruct{ PnlPDETimeGrid} \ptr }{pnl_pde_time_homogen_grid}{const double T, const int N-T}
 %   \sshortdescribe creates a \refstruct{PnlPDETimeGrid}
-% \item \describefun{void}{pnl_pde_time_grid_free}{\refstruct{ PnlPDETimeGrid} $\ast$$\ast$TG}
+% \item \describefun{void}{pnl_pde_time_grid_free}{\refstruct{ PnlPDETimeGrid} \ptr \ptr TG}
 %   \sshortdescribe frees a \refstruct{PnlPDETimeGrid}
-% \item \describefun{void}{pnl_pde_time_start}{\refstruct{ PnlPDETimeGrid} $\ast$TG}
+% \item \describefun{void}{pnl_pde_time_start}{\refstruct{ PnlPDETimeGrid} \ptr TG}
 %   \sshortdescribe initialise \refstruct{PnlPDETimeGrid}
-% \item \describefun{int}{pnl_pde_time_grid_increase}{\refstruct{ PnlPDETimeGrid} $\ast$TG}
+% \item \describefun{int}{pnl_pde_time_grid_increase}{\refstruct{ PnlPDETimeGrid} \ptr TG}
 %   \sshortdescribe go to the next time step  
-% \item \describefun{double}{pnl_pde_time_grid_step}{const \refstruct{ PnlPDETimeGrid} $\ast$TG}
+% \item \describefun{double}{pnl_pde_time_grid_step}{const \refstruct{ PnlPDETimeGrid} \ptr TG}
 %   \sshortdescribe GET function on current step.  
-% \item \describefun{double}{pnl_pde_time_grid_time}{const \refstruct{ PnlPDETimeGrid} $\ast$TG}
+% \item \describefun{double}{pnl_pde_time_grid_time}{const \refstruct{ PnlPDETimeGrid} \ptr TG}
 %   \sshortdescribe GET function on current time.
 % \end{itemize}
 
-
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: "pnl-premia-manual"
-%%% End: 

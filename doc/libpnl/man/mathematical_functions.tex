@@ -44,7 +44,7 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
 \item \describemacro{PNL_IS_EVEN}{int n}
   \sshortdescribe Returns $1$ if \var{n} is even and $0$ otherwise.
 \item \describemacro{PNL_ALTERNATE}{int n}
-  \sshortdescribe Returns $(-1)^\var{n}$.
+  \sshortdescribe Returns $(-1)^{\var{n}}$.
 \end{itemize}
 
 \subsubsection{Functions}
@@ -369,9 +369,9 @@ The special function approximations are defined in the header \verb!pnl_specfun.
 \item \describefun{double}{pnl_sp_erfc}{double x}
   \sshortdescribe Computes $1. - \frac{2}{\pi}\int_0^\infty \expp{-t^2} ft$
 \item \describefun{double}{pnl_sp_log_erf}{double x}
-  \sshortdescribe Computes $\log(\reffun{pnl_sp_erf} (x))$
+  \sshortdescribe Computes $\log$ \reffun{pnl_sp_erf}$(x)$
 \item \describefun{double}{pnl_sp_log_erfc}{double x}
-  \sshortdescribe Computes $\log(\reffun{pnl_sp_erfc} (x))$
+  \sshortdescribe Computes $\log$ \reffun{pnl_sp_erfc}$(x)$
 \end{itemize}
 
 \subsubsection{Incomplete Gamma functions}
@@ -510,7 +510,7 @@ The financial functions are defined in the header \verb!pnl_finance.h!.\\
 \begin{itemize}
 \item
   \describefun{int}{pnl_cf_call_bs}{double s, double k, double T, double r, 
-    double divid, double sigma, double $\ast$ptprice, double $\ast$ptdelta}
+    double divid, double sigma, double \ptr ptprice, double \ptr ptdelta}
   \sshortdescribe Computes the price and delta of a call option $(\var{s} -
   \var{k})_+$ in the Black-Scholes model with volatility \var{sigma},
   instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
@@ -519,7 +519,7 @@ The financial functions are defined in the header \verb!pnl_finance.h!.\\
 
 \item
   \describefun{int}{pnl_cf_put_bs}{double s, double k, double T, double r, 
-    double divid, double sigma, double $\ast$ptprice, double $\ast$ptdelta}
+    double divid, double sigma, double \ptr ptprice, double \ptr ptdelta}
   \sshortdescribe Computes the price and delta of a put option $(\var{k} - 
   \var{s})_+$ in the Black-Scholes model with volatility \var{sigma},
   instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
@@ -591,9 +591,9 @@ maturities, a matrix of prices (with strikes varying row-wise).
 
 \item 
   \describefun{int}{pnl_bs_matrix_implicit_vol}{const \refstruct{PnlMatInt}
-    $\ast$iscall, const \refstruct{PnlMat} $\ast$Price, double s, 
-    double r, double divid, const \refstruct{PnlVect} $\ast$K, 
-    const \refstruct{PnlVect} $\ast$T, \refstruct{PnlMat} $\ast$Vol}
+    \ptr iscall, const \refstruct{PnlMat} \ptr Price, double s, 
+    double r, double divid, const \refstruct{PnlVect} \ptr K, 
+    const \refstruct{PnlVect} \ptr T, \refstruct{PnlMat} \ptr Vol}
   \sshortdescribe Computes the matrix of implied volatilities \var{Vol(i,j)}
   of a put option if \var{iscall(i,j)=0} or a call option if
   \var{iscall(i,j)=1} with spot \var{s} and strike \var{K(j)} in the
