@@ -193,7 +193,7 @@ static void tridiag_syslin_test ()
   pnl_tridiagmat_print_as_full (M); printf ("\n");
 
   printf ("b = "); pnl_vect_print_nsp (b); printf ("\n");
-  pnl_tridiagmat_lu_syslin (x, M, b);
+  pnl_tridiagmat_syslin (x, M, b);
   printf ("x = "); pnl_vect_print_nsp (x); printf ("\n");
 
   pnl_vect_free (&x);
@@ -209,7 +209,7 @@ static void triadiag_scalar_prod_test ()
   int n = 5;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
 
-  printf ("Syslin tridiag test\n");
+  printf ("x' * A * y tridiag test\n");
 
   pnl_rand_init (gen, 1, 1);
   x = pnl_vect_create (n);
