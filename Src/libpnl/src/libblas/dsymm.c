@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int dsymm_(char *side, char *uplo, integer *m, integer *n, 

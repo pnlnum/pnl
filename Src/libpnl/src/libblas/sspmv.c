@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int sspmv_(char *uplo, integer *n, real *alpha, real *ap, 

@@ -1,4 +1,4 @@
-#include "blaswrap.h"
+
 #include "f2c.h"
 
 /* Subroutine */ int srotg_(real *sa, real *sb, real *c__, real *s)
