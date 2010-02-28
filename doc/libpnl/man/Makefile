@@ -5,7 +5,6 @@ TEXFILES=$(wildcard *.tex)
 manual: pnl-manual.tex
 	latex -src $<
 	makeindex -s index.isty ${<:%.tex=%}
-	bibtex ${<:%.tex=%}
 	latex -src $<
 	dvipdf ${<:%.tex=%.dvi}
 
