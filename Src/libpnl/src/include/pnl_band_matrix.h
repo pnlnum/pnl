@@ -6,8 +6,8 @@ extern "C" {
 #endif /* __cplusplus */
 
 #include "pnl_matrix.h"
+#include "pnl_vector.h"
 
-#define EPSILON 1e-10  
 #ifndef PNL_RANGE_CHECK_OFF
 #define CheckIndexBandMat(v,i,j){             \
     if (i>=v->size || abs(j)>1  || i<0 )       \
@@ -26,87 +26,68 @@ extern "C" {
 #define CheckBandMatVectIsCompatible(mat, vect){}
 #endif /* PNL_RANGE_CHECK_OFF */
 
-/**
- * \defgroup PnlBandMatrix Band Matrix
- * \brief Band Matrix for Numerical Algorithm to solve PDE, (strongly inspired by the work of F.Hecht on RMN class).
- * \warning Not tested at yet.
- * \f[  D(i) = A(i,i), \f] 
- * \f[ Lo(k) = A(i,j),\quad   j < i \textit{ with: }  \quad  pL(i)<= k < pL(i+1) \textit{ and }
- i-j = pL(i+1)-k. \f]                                                      
- * \f[ Up(k) = A(i,j),\quad   i < j \textit{ with: }   \quad pU(j)<= k < pU(j+1) \textit{
-  and } j-i = pU(i+1)-k. \f]
- * remark:
- * \f$ pL = pU \f$ in most of case 
- * if \f$L = U\f$ then symetric matrix} 
+/** \defgroup PnlBandMat Band Matrix
+ *
+ * A standard Lapack band storage is used.
+ *
+ * An m x n band matrix with nl lowerdiagonals and nu upperdiagonals is stored
+ * in a two-dimensional array with kl+ku+1  rows and n columns. Columns of the
+ * matrix are stored in corresponding columns of the array, and diagonals of the
+ * matrix are stored in rows of the array. 
+ *
+ * To be precise, M(i,j) is stored in B(nu+i-j,j) for max(0,j-nu) <= i <=
+ * min(m,j+nl)
  */
 /*@{*/
-typedef struct _band_matrix PnlBandMatrix;
-typedef enum {
-  FactorizationNO=0,
-  FactorizationCholeski=1,
-  FactorizationCrout=2,
-  FactorizationLU=3
-}FactorizationType;
+typedef struct
+{
+  int m; /*!< nb rows */ 
+  int n; /*!< nb columns */ 
+  int nu; /*!< nb of upperdiagonals */
+  int nl; /*!< nb of lowerdiagonals */
+  int m_band; /*!< nb rows of the band storage */
+  int n_band; /*!< nb columns of the band storage */
+  double *array;  /*!< a block to store the bands */  
+} PnlBandMat;
 
-struct _band_matrix{
-  int n; /*!< size of row */ 
-  int m; /*!< size of col */ 
-  double *D;  /*!< diagonal vector */  
-  double *Up; /*!< Triangular up matrix, only no nul coeffieciens */ 
-  double *Lo; /*!< Triangular down matrix, only no nul coeffieciens */
-  int    *pU; /*!< Triangular up profil: \f$ Up(k)=A(i,j),\ i<j \f$ with: \f$ pU(j)<=k<pU(j+1)\f$ & \f$i=pU(i+1)-k \f$*/ 
-  int    *pL; /*!< Triangular down profil:\f$ Lo(k)=A(i,j), \ j<i \f$
-                 with:\f$ pL(i)<=k<pL(i+1)\f$ & \f$ j=pL(i+1)-k\f$ */
-  FactorizationType typefac;
-  int owner; /*!< 1 if the owns its array pointer */
-};
+extern PnlBandMat* pnl_bandmat_create (int m, int n, int nl, int nu);
+extern PnlBandMat* pnl_bandmat_create_from_mat (const PnlMat *M, int nl, int nu);
+extern void pnl_bandmat_free (PnlBandMat **BM);
+extern int pnl_bandmat_resize (PnlBandMat *BM, int m, int n, int nl, int nu);
+extern void pnl_bandmat_clone (PnlBandMat * Bclone, const PnlBandMat * BM);
+extern PnlBandMat* pnl_bandmat_copy (const PnlBandMat * BM);
+extern PnlMat* pnl_bandmat_to_mat (const PnlBandMat *BM);
+extern void pnl_bandmat_print_as_full (const PnlBandMat *BM);
+extern void pnl_bandmat_map (PnlBandMat *lhs, const PnlBandMat *rhs, double(*f)(double));
+extern void pnl_bandmat_map_inplace (PnlBandMat *BM, double(*f)(double));
+extern void pnl_bandmat_map_bandmat (PnlBandMat *BA, const PnlBandMat *BB, double(*f)(double, double));
 
-/*PnlBandMatrix* pnl_band_matrix_create(const int  n,const double *a); */
-extern PnlBandMatrix* pnl_band_matrix_create(const int  n,int band);
-extern PnlBandMatrix* pnl_band_matrix_create_from_full(const PnlMat *PM,int band);
-extern void pnl_band_matrix_free(PnlBandMatrix ** M);
-extern void pnl_band_matrix_add(PnlBandMatrix * M,int i,int j,double x);
-extern void pnl_band_matrix_set(PnlBandMatrix * M,int i,int j,double x);
-extern void pnl_band_matrix_set_double(PnlBandMatrix*  M,double x);
-extern void pnl_band_matrix_map_inplace(PnlBandMatrix *lhs,double(*f)(double ));
-extern void pnl_band_matrix_plus_double(PnlBandMatrix *lhs , double x);
-extern void pnl_band_matrix_minus_double(PnlBandMatrix *lhs , double x);
-extern void pnl_band_matrix_mult_double(PnlBandMatrix *lhs , double x);
-extern void pnl_band_matrix_div_double(PnlBandMatrix *lhs , double x);
-extern void pnl_band_matrix_plus_mat(PnlBandMatrix *lhs, const PnlBandMatrix *rhs);
-extern void pnl_band_matrix_minus_mat(PnlBandMatrix *lhs, const PnlBandMatrix *rhs);
-extern void pnl_band_matrix_inv_term(PnlBandMatrix *lhs);
-extern void pnl_band_matrix_div_mat_term(PnlBandMatrix *lhs, const PnlBandMatrix *rhs);
-extern void pnl_band_matrix_mult_mat_term(PnlBandMatrix *lhs, const PnlBandMatrix *rhs);
-extern void pnl_bnd_matrix_clone(PnlBandMatrix * clone,const PnlBandMatrix * v);
-extern void pnl_bnd_matrix_store_infull(const PnlBandMatrix *BM,PnlMat *M);
+extern void pnl_bandmat_plus_double (PnlBandMat *BM, double x);
+extern void pnl_bandmat_minus_double (PnlBandMat *BM, double x);
+extern void pnl_bandmat_mult_double (PnlBandMat *BM, double x);
+extern void pnl_bandmat_div_double (PnlBandMat *BM, double x);
+extern void pnl_bandmat_inv_double(PnlBandMat *BM);
 
-extern PnlVect* pnl_band_matrix_mult_vect(const PnlBandMatrix *mat,const PnlVect *vec);/*mat*vec*/
-extern void pnl_band_matrix_mult_vect_inplace(PnlVect *lhs, const PnlBandMatrix *mat, const PnlVect *rhs);/*lhs=mat*rhs */
-extern void pnl_band_matrix_lAxpby(double l, const PnlBandMatrix *A, const PnlVect *x, double b, PnlVect * y);/*lhs=l*A*x +b*y*/
-extern double pnl_band_matrix_prod_scale(const PnlVect *lhs, const PnlBandMatrix *mat,const PnlVect *rhs);
-extern void pnl_band_matrix_lu_syslin (PnlVect *lhs, const PnlBandMatrix *M,const PnlVect *rhs);/* solve M lhs = rhs */
+extern void pnl_bandmat_plus_bandmat (PnlBandMat *lhs, const PnlBandMat *rhs);
+extern void pnl_bandmat_minus_bandmat (PnlBandMat *lhs, const PnlBandMat *rhs);
+extern void pnl_bandmat_div_bandmat_term (PnlBandMat *lhs, const PnlBandMat *rhs);
+extern void pnl_bandmat_mult_bandmat_term (PnlBandMat *lhs, const PnlBandMat *rhs);
 
+extern double pnl_bandmat_get (PnlBandMat * M, int i, int j);
+extern double* pnl_bandmat_lget (PnlBandMat * M, int i, int j);
+extern void pnl_bandmat_set (PnlBandMat * M, int i, int j, double x);
+extern void pnl_bandmat_set_double (PnlBandMat* BM, double x);
 
-/*,FactorizationType tf = FactorizationNO);  */
-extern PnlBandMatrix* pnl_band_matrix_transpose(const PnlBandMatrix* M);
-extern PnlBandMatrix* pnl_band_matrix_Low(const PnlBandMatrix* M);
-extern PnlBandMatrix* pnl_band_matrix_Up(const PnlBandMatrix* M);
-extern PnlBandMatrix* pnl_band_matrix_Tran_Low(const PnlBandMatrix* M);
-extern PnlBandMatrix* pnl_band_matrix_Tran_Up(const PnlBandMatrix* M);
-extern PnlBandMatrix* pnl_band_matrix_Diag(const PnlBandMatrix* M);
-extern PnlBandMatrix* pnl_band_matrix_Low_Diag(const PnlBandMatrix* M);
-extern PnlBandMatrix* pnl_band_matrix_Up_Diag(const PnlBandMatrix* M);
-extern PnlBandMatrix* pnl_band_matrix_Tran_Low_Diag(const PnlBandMatrix* M);
-extern PnlBandMatrix* pnl_band_matrix_Tran_Up_Diag(const PnlBandMatrix* M);
+extern void pnl_bandmat_mult_vect_inplace (PnlVect *lhs, const PnlBandMat *mat, const 
+PnlVect *rhs);
+extern void pnl_bandmat_lAxpby (double l, const PnlBandMat *A, const PnlVect *x, double b, PnlVect * y);
 
-extern double pnl_band_matrix_conditionning(const PnlBandMatrix *M);
+extern void pnl_bandmat_lu (PnlBandMat *BM, PnlVectInt *p);
+extern void pnl_bandmat_syslin_inplace (PnlBandMat *BM, PnlVect *b);
+extern void pnl_bandmat_syslin (PnlVect *x, PnlBandMat *BM, const PnlVect *b);
+extern void pnl_bandmat_lu_syslin_inplace (const PnlBandMat *LU, const PnlVectInt *p, PnlVect *b);
+extern void pnl_bandmat_lu_syslin (PnlVect *x, const PnlBandMat *LU, const PnlVectInt *p, const PnlVect *b);
 
-extern void pnl_band_matrix_solve_syslin_inplace(PnlBandMatrix * M, PnlVect *x);
-extern void pnl_band_matrix_cholesky(PnlBandMatrix * M, double eps);
-extern void pnl_band_matrix_crout(PnlBandMatrix * M, double eps);
-extern void pnl_band_matrix_lu(PnlBandMatrix * M, double eps);
-extern void pnl_band_matrix_solve(PnlBandMatrix * M, PnlVect *x,const PnlVect *b);
 /*@}*/
 
 #ifdef __cplusplus
