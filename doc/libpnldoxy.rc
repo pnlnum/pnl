@@ -17,7 +17,7 @@
 # The PROJECT_NAME tag is a single word (or a sequence of words surrounded 
 # by quotes) that should identify the project.
 
-PROJECT_NAME           = 'Premia Numerical Library'
+PROJECT_NAME           = Pnl
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number. 
 # This could be handy for archiving the generated documentation or 
@@ -30,7 +30,7 @@ PROJECT_NUMBER         = 1.0
 # If a relative path is entered, it will be relative to the location 
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = ../../doc/libpnl
+OUTPUT_DIRECTORY       = ../doc/
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create 
 # 4096 sub-directories (in 2 levels) under the output directory of each output 
@@ -449,7 +449,8 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = . libamos 
+INPUT                  = . libamos linalg libfftpack \
+       	 libcsparse libcephes include sort librand specfun
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
@@ -464,16 +465,14 @@ FILE_PATTERNS          = *.c *.h
 # should be searched for input files as well. Possible values are YES and NO. 
 # If left blank NO is used.
 
-RECURSIVE              = YES
+RECURSIVE              = NO
 
 # The EXCLUDE tag can be used to specify files and/or directories that should 
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE                = linalg/pnl_TMatrix_source.c \
-                         linalg/pnl_TVector_source.c \
-                         sort/pnl_Tlist_source.c \
-                         *template_on.h *template_off.h
+EXCLUDE                = 
+                         
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or 
 # directories that are symbolic links (a Unix filesystem feature) are excluded 
@@ -487,7 +486,7 @@ EXCLUDE_SYMLINKS       = NO
 # against the file with absolute path, so to exclude all test directories 
 # for example use the pattern test
 
-EXCLUDE_PATTERNS       = 
+EXCLUDE_PATTERNS       = *_source.c *template_on.h *template_off.h
 
 # The EXAMPLE_PATH tag can be used to specify one or more files or 
 # directories that contain example code fragments that are included (see 
@@ -764,7 +763,7 @@ PAPER_TYPE             = a4wide
 # The EXTRA_PACKAGES tag can be to specify one or more names of LaTeX 
 # packages that should be included in the LaTeX output.
 
-EXTRA_PACKAGES         = amsmath
+EXTRA_PACKAGES         = 
 
 # The LATEX_HEADER tag can be used to specify a personal LaTeX header for 
 # the generated latex document. The header should contain everything until 
