@@ -1,0 +1,32 @@
+               ******************************
+               ** Premia Numerical Library **
+               ******************************
+
+
+1/ Compilation
+
+   To compile the library launch
+      sh autogen.sh
+      make
+      make install
+   
+   The documentation of the library can be built by running make in
+   the directory doc. You must have doxygen installed.
+
+2/ Using the library
+
+   If we want to use the library to develop your own code, here is one way of doing it.
+
+   1/ create a new directory at the top level.
+
+   3/ Copy the Makefile located in perso/ to your new directory and
+   edit it according to your needs. You must specify the list of .o
+   file needed to create your executable by properly filling the
+   variable OBJS. The variable TARGET must be assigned to the name of
+   your executable.
+
+   4/ Before running make, be sure that you have already run in the
+      top level directory
+           sh autogen.sh 
+           make 
+           make install
