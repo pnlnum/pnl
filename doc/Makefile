@@ -1,8 +1,5 @@
 
-do: book doxy
-
-book:
-	(cd man; make)
+do: doxy
 
 doxy:
-	(cd ../../Src/libpnl; doxygen ../../doc/libpnl/libpnldoxy.rc)
+	(cd ../src; doxygen ../doc/libpnl/libpnldoxy.rc)
