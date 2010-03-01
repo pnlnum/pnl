@@ -1,0 +1,82 @@
+#/* -*- Mode: Makefile -*- */
+#-----------------------------------------------------------------
+# This file can be used to compile and link external files to the PNL 
+# This Makefile comes from Nsp
+# Copyright Enpc (Jean-Philippe Chancelier)
+#-----------------------------------------------------------------
+
+
+
+###
+### DO NOT MODIFY ANYTHING BELOW THIS LINE
+###
+
+
+LIBPNLDIR = @LIBPNLDIR@
+top_builddir = $(LIBPNLDIR)/@top_builddir@
+top_srcdir = $(LIBPNLDIR)/@top_srcdir@
+CC = @CC@
+AM_CFLAGS = @AM_CFLAGS@
+SHELL = @SHELL@
+LIBTOOL = @LIBTOOL@
+LN_S = @LN_S@
+INCLUDES = -I$(top_builddir)/include/pnl
+OTHERLIBS = -L$(top_builddir)/lib -lpnl -lm
+#******************************************************************* 
+
+QUIET=--quiet
+
+COMPILE = $(CC) $(INCLUDES) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CXXCOMPILE = $(CXX) $(INCLUDES) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+
+LTCOMPILE = $(LIBTOOL) --mode=compile $(QUIET) $(CC) $(INCLUDES)  $(AM_CFLAGS) $(CFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(QUIET) $(CXX) $(INCLUDES)  $(AM_CFLAGS) $(CXXFLAGS)
+
+LINK = $(LIBTOOL) --mode=link $(QUIET) $(CC) $(CFLAGS) $(LDFLAGS) $(OTHERLIBS) -o $@
+
+OBJECTS = $(OBJS:.o=.lo)
+#******************************************************************* 
+
+all:: $(TARGET)
+
+$(TARGET) : $(OBJECTS) 
+	$(LINK) $(OBJECTS)
+
+.SUFFIXES:
+.SUFFIXES: .c .lo .o .C .cpp
+
+
+clean::
+	@$(RM) *.o *.lo
+	@$(RM) -r .libs
+
+cleanall:: clean
+	$(RM) $(TARGET)
+
+.c.o:
+	$(COMPILE)  -c $<
+
+.c.lo :
+	$(LTCOMPILE) -c $<
+
+
+.cpp.o:
+	$(CXXCOMPILE)  -c $<
+
+.cpp.lo :
+	$(LTCXXCOMPILE) -c $<
+
+.C.o:
+	$(CXXCOMPILE)  -c $<
+
+.C.lo :
+	$(LTCXXCOMPILE) -c $<
+
+
+
+
+
+
+
+
+

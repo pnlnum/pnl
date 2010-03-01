@@ -1,0 +1,123 @@
+/* config.h.in.  Generated from configure.in by autoheader.  */
+
+/* Define to dummy 'main' function (if any) required to link to the Fortran
+   libraries. */
+#undef F77_DUMMY_MAIN
+
+/* Define if F77 and FC dummy 'main' functions are identical. */
+#undef FC_DUMMY_MAIN_EQ_F77
+
+/* Blas is installed */
+#undef HAVE_BLAS
+
+/* Define to 1 if you have the <dlfcn.h> header file. */
+#undef HAVE_DLFCN_H
+
+/* Define to 1 if you have the 'erfl' function. */
+#undef HAVE_ERFL
+
+/* Define to 1 if you have the <errno.h> header file. */
+#undef HAVE_ERRNO_H
+
+/* Define to 1 if you have the 'exp10' function. */
+#undef HAVE_EXP10
+
+/* Define to 1 if you have the 'finite' function. */
+#undef HAVE_FINITE
+
+/* Define if you have inline */
+#undef HAVE_INLINE
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the 'isfinite' function. */
+#undef HAVE_ISFINITE
+
+/* Define to 1 if you have the 'isinf' function. */
+#undef HAVE_ISINF
+
+/* Define to 1 if you have the 'isnan' function. */
+#undef HAVE_ISNAN
+
+/* Lapack is installed */
+#undef HAVE_LAPACK
+
+/* Define to 1 if you have the 'lgamma' function. */
+#undef HAVE_LGAMMA
+
+/* Define to 1 if you have the 'm' library (-lm). */
+#undef HAVE_LIBM
+
+/* Define to 1 if you have the <limits.h> header file. */
+#undef HAVE_LIMITS_H
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the <process.h> header file. */
+#undef HAVE_PROCESS_H
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the 'tgamma' function. */
+#undef HAVE_TGAMMA
+
+/* Define to 1 if you have the <time.h> header file. */
+#undef HAVE_TIME_H
+
+/* Define to 1 if you have the 'trunc' function. */
+#undef HAVE_TRUNC
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define to the sub-directory in which libtool stores uninstalled libraries.
+   */
+#undef LT_OBJDIR
+
+/* Define to 1 if your C compiler doesnt accept -c and -o together. */
+#undef NO_MINUS_C_MINUS_O
+
+/* turn off range checking by default internally */
+#undef PNL_RANGE_CHECK_OFF
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* sharp sign can be used to in macros */
+#undef USE_SHARP_SIGN
+
+/* Version number of package */
+#undef VERSION
+
+/* trailing underscore in fortran symbols */
+#undef WTU
+
+/* Runnning on Cygwin */
+#undef _CYGWIN
+
+/* Running on a Win32 system */
+#undef _WIN32
+
+/* Define to '__inline__' or '__inline' if that s what the C compiler
+   calls it, or to nothing if 'inline' is not supported under any name.  */
+#ifndef __cplusplus
+#undef inline
+#endif

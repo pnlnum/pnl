@@ -1,0 +1,25 @@
+Jérôme Lelong <jerome.lelong@gmail.com> (2007 - 2010)
+
+   - Overall design
+   - Linear algebra
+   - hyper matrices 
+   - Matrix matrix multiplication
+   - Tridiagonal matrices
+   - Band matrices
+   - Special functions
+   - FFT
+   - Laplace inversion
+   - Polynomial regression
+   - Random number generators
+   - Root finding
+   - Numerical integration
+   - Sorting
+
+David Pommier <pommier.david@gmail.com> (2007 - April 2009)
+
+   - Matrix matrix multiplication
+   - Tridiagonal matrices
+   - Iterative solvers for linear systems
+   - Financial functions
+   - Root finding
+   - Numerical integration
