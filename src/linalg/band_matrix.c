@@ -556,7 +556,7 @@ void pnl_bandmat_lu (PnlBandMat * BM, PnlVectInt *p)
 /**
  * solves the linear system M x = b with M PnlBand Matrix.
  *
- * @param M a PnlBandMat 
+ * @param BM a PnlBandMat 
  * @param b right hand side member, used to the store solution on exit.
  */
 void pnl_bandmat_syslin_inplace (PnlBandMat *BM, PnlVect *b)
@@ -631,6 +631,7 @@ void pnl_bandmat_lu_syslin_inplace (const PnlBandMat *BM, const PnlVectInt *p, P
  * Solves the linear system M x = b with M a PnlBand Matrix.
  *
  * @param BM the LU decomposition of a PnlBandMat as computed by pnl_bandmat_lu 
+ * @param p a vector of integers used to store the permutation
  * @param x a vector containing the solution on exit
  * @param b right hand side vector
  */

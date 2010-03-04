@@ -450,7 +450,7 @@ WARN_LOGFILE           =
 # with spaces.
 
 INPUT                  = . libamos linalg libfftpack \
-       	 libcsparse libcephes include sort librand specfun
+       	                 libcephes include sort librand specfun
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
@@ -471,7 +471,7 @@ RECURSIVE              = NO
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE                = 
+EXCLUDE                = linalg/clapack.h
                          
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or 
