@@ -36,8 +36,15 @@ if ( coef->size != basis->nb_func )                             \
 #define CHECK_NB_FUNC(coef, basis) 
 #endif
 
-/*
+/**
  * Returns the total degree of the polynomials represented by 
+ * line i of T
+ *
+ * @param T a matrix of integers representing the decomposition of the mutli-d
+ * polynomials
+ * @param i the index of the element to be considered in the basis (i.e. the row
+ * of T to consider)
+ * @return  the total degree of the polynomials represented by 
  * line i of T
  */
 static int count_degree (const PnlMatInt *T, int i)
@@ -50,6 +57,15 @@ static int count_degree (const PnlMatInt *T, int i)
 }
 
 
+/** 
+ * Copies T_prev(T_previ, :) into T(Ti,:)
+ * 
+ * @param T an integer matrix with more columns than that T_prev
+ * @param T_prev an integer matrix containing the last tensor computed
+ * @param Ti the index of the line to consider in T
+ * @param T_previ the index of the line to consider in T_prev
+ * 
+ */
 static void copy_previous_basis (PnlMatInt *T, PnlMatInt *T_prev, int Ti, int T_previ)
 {
   int j;
@@ -59,6 +75,15 @@ static void copy_previous_basis (PnlMatInt *T, PnlMatInt *T_prev, int Ti, int T_
     }
 }
 
+/** 
+ * Computes the integer matrix representing the decomposition as a tensor
+ * product of the elements of * the multi-b basis onto the 1-d basis
+ * 
+ * @param d the number of variates
+ * @param N the nuber of elements of the basis
+ * 
+ * @return a tensor
+ */
 static PnlMatInt* compute_tensor (int d, int N)
 {
   PnlMatInt *T;
@@ -112,33 +137,12 @@ static PnlMatInt* compute_tensor (int d, int N)
     }
 }
 
-/** 
- * Evaluates the i-th elements of the basis b at the point x
- * 
- * @param b a PnlBasis
- * @param x a C array containing the coordinates of the point at which to
- * evaluate the basis
- * @param i an integer describing the index of the element of the basis to
- * considier
- * 
- * @return f_i(x) where f is the i-th basis function
- */
-double pnl_basis_i ( PnlBasis *b, double *x, int i )
-{
-  int k; 
-  double aux = 1.;
-  for ( k=0 ; k<b->space_dim ; k++ )
-    {
-      aux *= (b->f)(x+k, PNL_MGET (b->T, i, k));
-    }
-  return aux;
-}
 
 static double D_basis_i ( PnlBasis *b, double *x, int i, int j )
 {
     int k;
     double aux = 1;
-    for ( k=0 ; k < b->space_dim ; k++ ) 
+    for ( k=0 ; k < b->nb_variates ; k++ ) 
       {
         if ( k == j-1 ) 
           aux *= (b->Df) (x + k, PNL_MGET(b->T, i, k));
@@ -154,7 +158,7 @@ static double D2_basis_i (PnlBasis *b, double *x, int i, int j1, int j2)
   double aux = 1;
   if (j1 == j2)
     {
-      for ( k = 0 ; k < b->space_dim ; k++ )
+      for ( k = 0 ; k < b->nb_variates ; k++ )
         {
           if ( k == j1-1 )
             aux *= (b->D2f) (x + k, PNL_MGET(b->T, i, k));
@@ -164,7 +168,7 @@ static double D2_basis_i (PnlBasis *b, double *x, int i, int j1, int j2)
     }
   else
     {
-      for ( k = 0 ; k < b->space_dim ; k++ )
+      for ( k = 0 ; k < b->nb_variates ; k++ )
         {
           if ( k == j1-1  || k == j2-1)
             aux *= (b->Df) (x + k, PNL_MGET(b->T, i, k));
@@ -176,10 +180,6 @@ static double D2_basis_i (PnlBasis *b, double *x, int i, int j1, int j2)
   return aux;
 }
 
-
-/*
- * Canonical basis, dimension=1..10
- */
 
 /**
  *  Canonical polynomials
@@ -213,9 +213,6 @@ static double D2CanonicalD1(double *x, int ind)
   return ind * (ind - 1) * pnl_pow_i (*x, ind - 2);
 }
 
-/*
- * Hermite basis, dimension=1..10
- */
 /**
  * The terminal recursive function to compute Hermite polynomials of any
  * order. This function is only used for order > 7
@@ -294,9 +291,6 @@ static double D2HermiteD1(double *x, int n)
   return n * (n-1) * HermiteD1 (x, n-2);
 }
 
-/*
- * Tchebychev basis, dimension=1..10
- */
 /**
  * The terminal recursive function to compute Tchebychev polynomials of any
  * order. This function is only used for order > 7
@@ -494,6 +488,10 @@ static double D2TchebychevD1(double *x, int n)
     }
 }
 
+/*
+ * Interface for the PnlBasis object
+ */
+
 enum_member _reg_basis [] =
 {
     { "Canonical", CANONICAL},
@@ -509,11 +507,11 @@ DEFINE_ENUM(PnlBases, _reg_basis);
  *
  * @param index the index of the family to be used
  * @param nb_func the maximum number of functions which may be used
- * @param space_dim the size of the space in which the basis functions are
+ * @param nb_variates the size of the space in which the basis functions are
  * defined
  * @return a PnlBasis
  */
-PnlBasis*  pnl_basis_init (int index, int nb_func, int space_dim)
+PnlBasis*  pnl_basis_init (int index, int nb_func, int nb_variates)
 {
   PnlBasis *b;
   enum_member *e;
@@ -530,8 +528,8 @@ PnlBasis*  pnl_basis_init (int index, int nb_func, int space_dim)
   b->nb_func = nb_func;
   b->id = index;
   b->label = e->label;
-  b->space_dim = space_dim;
-  b->T = compute_tensor (space_dim, nb_func);
+  b->nb_variates = nb_variates;
+  b->T = compute_tensor (nb_variates, nb_func);
 
   switch ( index )
     {
@@ -568,60 +566,26 @@ void pnl_basis_free (PnlBasis **basis)
   free (*basis); basis = NULL;
 }
 
-/**
- * Finds the best approximation of the function defined by f(x(i,:)) = y(i)
- *
- * @param basis a PnlBasis
- * @param x the matrix of points at which we know the value of the function. One line
- * of the matrix is the vector of the coordinates of one point
- * @param y the values of the function f at the points defined by x
- * @param coef contains on exit the coefficients of the regression
- *
- * @return OK or FAIL
+/** 
+ * Evaluates the i-th elements of the basis b at the point x
+ * 
+ * @param b a PnlBasis
+ * @param x a C array containing the coordinates of the point at which to
+ * evaluate the basis
+ * @param i an integer describing the index of the element of the basis to
+ * considier
+ * 
+ * @return f_i(x) where f is the i-th basis function
  */
-int pnl_basis_fit_ls (PnlBasis *basis, PnlVect *coef, PnlMat *x, PnlVect *y)
+double pnl_basis_i ( PnlBasis *b, double *x, int i )
 {
-  int N, i, k;
-  double b_k;
-  PnlMat *A;
-  PnlVect *phi_k;
-
-  N = y->size;
-  pnl_vect_resize (coef, basis->nb_func);
-  pnl_vect_set_double (coef, 0.);
-  phi_k = pnl_vect_create_from_double (basis->nb_func, 0.);
-  A = pnl_mat_create_from_double (basis->nb_func, basis->nb_func, 0.);
-
-  /* construct A and b*/
-  for ( i=0 ; i<N ; i++ )
+  int k; 
+  double aux = 1.;
+  for ( k=0 ; k<b->nb_variates ; k++ )
     {
-      for ( k=0 ; k<basis->nb_func ; k++ )
-        {
-          double tmp = pnl_basis_i (basis, &(PNL_MGET(x, i, 0)), k);
-          b_k =  pnl_vect_get(coef, k);
-          b_k += tmp * pnl_vect_get (y, i);
-          pnl_vect_set (coef, k, b_k);
-          pnl_vect_set (phi_k, k, tmp);
-        }
-      /* A += phi_k' * phi_k */
-      pnl_mat_dger(1., phi_k, phi_k, A);
+      aux *= (b->f)(x+k, PNL_MGET (b->T, i, k));
     }
-
-  /* Solve A x = b, with A >0 symmetric */
-  /* pnl_mat_chol (A);
-     pnl_mat_chol_syslin_inplace (A, coef); */
-  /* Because A often comes from simulation, A is not >0. So we use a QR
-     approach */
-#ifdef HAVE_LAPACK
-  pnl_mat_ls (A, coef);
-#else
-  pnl_mat_syslin_inplace (A, coef);
-#endif
-  
-  pnl_vect_free (&phi_k);
-  pnl_mat_free (&A);
-
-  return OK;
+  return aux;
 }
 
 /**
@@ -698,3 +662,58 @@ double pnl_basis_eval_D2 (PnlBasis *basis, PnlVect *coef, double *x, int i, int 
   return y;
 }
 
+/**
+ * Finds the best approximation of the function defined by f(x(i,:)) = y(i)
+ *
+ * @param basis a PnlBasis
+ * @param x the matrix of points at which we know the value of the function. One line
+ * of the matrix is the vector of the coordinates of one point
+ * @param y the values of the function f at the points defined by x
+ * @param coef contains on exit the coefficients of the regression
+ *
+ * @return OK or FAIL
+ */
+int pnl_basis_fit_ls (PnlBasis *basis, PnlVect *coef, PnlMat *x, PnlVect *y)
+{
+  int N, i, k;
+  double b_k;
+  PnlMat *A;
+  PnlVect *phi_k;
+
+  N = y->size;
+  pnl_vect_resize (coef, basis->nb_func);
+  pnl_vect_set_double (coef, 0.);
+  phi_k = pnl_vect_create_from_double (basis->nb_func, 0.);
+  A = pnl_mat_create_from_double (basis->nb_func, basis->nb_func, 0.);
+
+  /* construct A and b*/
+  for ( i=0 ; i<N ; i++ )
+    {
+      for ( k=0 ; k<basis->nb_func ; k++ )
+        {
+          double tmp = pnl_basis_i (basis, &(PNL_MGET(x, i, 0)), k);
+          b_k =  pnl_vect_get(coef, k);
+          b_k += tmp * pnl_vect_get (y, i);
+          pnl_vect_set (coef, k, b_k);
+          pnl_vect_set (phi_k, k, tmp);
+        }
+      /* A += phi_k' * phi_k */
+      pnl_mat_dger(1., phi_k, phi_k, A);
+    }
+
+  /* Solve A x = b, with A >0 symmetric */
+  /* pnl_mat_chol (A);
+     pnl_mat_chol_syslin_inplace (A, coef); */
+  /* Because A often comes from simulation, A is not >0. So we use a QR
+     approach */
+#ifdef HAVE_LAPACK
+  pnl_mat_ls (A, coef);
+#else
+  pnl_mat_syslin_inplace (A, coef);
+#endif
+  
+  pnl_vect_free (&phi_k);
+  pnl_mat_free (&A);
+
+  return OK;
+}

@@ -17,20 +17,19 @@ extern "C" {
 /* basis indices */
 enum {CANONICAL, HERMITIAN, TCHEBYCHEV }; 
 
-typedef struct PnlBasis_t PnlBasis;
-
-struct PnlBasis_t {
-  int         id;
+typedef struct {
+  int         id; /*<! basis type */
   const char *label; /*!< string to label the basis */
-  int         space_dim;  /*!< dimension of the space in which we are working */
+  int         nb_variates;  /*!< number of variates */
   int         nb_func; /*!< number of elements in the basis */
   PnlMatInt  *T; /*!< Tensor matrix */
-  double    (*f)(double    *x, int ind); /*!< the evaluation function */
-  double    (*Df)(double   *x, int ind); /*!< the first derivative function */
-  double    (*D2f)(double  *x, int ind); /*!< the second derivative function */
-};
-
-
+  double    (*f)(double    *x, int i); /*!< Computes the i-th element of the one
+                                            dimensional basis */
+  double    (*Df)(double   *x, int i); /*!< Computes the first derivative of i-th element 
+                                            of the one dimensional basis */
+  double    (*D2f)(double  *x, int i); /*!< Computes the second derivative of the i-th element 
+                                            of the one dimensional basis */
+} PnlBasis;
 
 extern enum_members PnlBases ;
 extern PnlBasis* pnl_basis_init ( int index, int nb_func, int space_dim);

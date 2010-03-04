@@ -68,14 +68,19 @@ typedef struct {
 \subsubsection{Short Description}
 
 \begin{verbatim}
-typedef struct {
-  char * label; /*!< string to label the basis */
-  int    space_dim; /*!< dimension of the space in which we are working */
-  int    max_dim; /*!< maximum number of elements in the basis */
-  double (*f)(double *x, int ind); /*!< the evaluation function */
-  double (*Df)(double *x, int ind, int i); /*!< the first derivative function */
-  double (*D2f)(double *x, int ind, int i, int j); /*!< the second derivative function */
-} PnlBasis;
+struct PnlBasis_t {
+  int         id;
+  const char *label; /*!< string to label the basis */
+  int         nb_variates;  /*!< number of variates */
+  int         nb_func; /*!< number of elements in the basis */
+  PnlMatInt  *T; /*!< Tensor matrix */
+  double    (*f)(double    *x, int i); /*!< Computes the i-th element 
+                                        of the one dimensional basis */
+  double    (*Df)(double   *x, int i); /*!< Computes the first derivative 
+                   of the i-th element of the one dimensional basis */
+  double    (*D2f)(double  *x, int i); /*!< Computes the second derivative
+                      of the i-th element of the one dimensional basis */
+};
 \end{verbatim}
 
 \begin{table}[h!]
@@ -84,7 +89,7 @@ typedef struct {
     \constentry{HERMITIAN}{for the Hermite polynomials}
     \constentry{TCHEBYCHEV}{for the Tchebychev polynomials}
   \end{describeconst}
-  \caption{indices of bases}
+  \caption{Names of the bases}
   \label{basis_index}
 \end{table}
 
@@ -107,9 +112,20 @@ $\alpha^\star \in \R^N$ which solves
   elements. \var{d} is the dimension of the space on which the functions are
   defined.
 
-\item \describefun{int}{pnl_fit_least_squares}{\refstruct{PnlVect}\ptr  coef, 
-    \refstruct{PnlMat}\ptr  x, \refstruct{PnlVect}\ptr  y, 
-    \refstruct{PnlBasis}\ptr  P, int N}
+\item  \describefun{void}{pnl_basis_free}{\refstruct{PnlBasis} \ptr\ptr basis}
+    \sshortdescribe Frees a \refstruct{PnlBasis} created by
+    \reffun{pnl_basis_init}. Beware that \var{basis} is the address of a
+    \refstruct{PnlBasis}\ptr.
+
+\item  \describefun{void}{pnl_basis_i}{\refstruct{PnlBasis }\ptr basis,
+  double \ptr x, int i}
+  \sshortdescribe If \var{basis} is composed of $f_0, \dots, f_{\var{nb\_func}}$,
+  then this function returns $f_i(x)$. \var{x} must be a C array of length
+  \var{nb_variates}.
+
+\item \describefun{int}{pnl_basis_fit_ls}{\refstruct{PnlBasis} \ptr
+  P, \refstruct{PnlVect} \ptr  coef, \refstruct{PnlMat} \ptr  x,
+  \refstruct{PnlVect} \ptr  y}
   \sshortdescribe Computes the coefficients \var{coef} defined by
   \begin{equation*}
     \var{coef} = \arg\min_\alpha \sum_{i=1}^n
@@ -121,29 +137,31 @@ $\alpha^\star \in \R^N$ which solves
   coordinates of one point $x_i$. The function to be approximated is defined
   by the data \var{y} which is the vector of the values taken by the function
   at the points \var{x}.
-  
-\item \describefun{double}{pnl_basis_eval}{\refstruct{PnlVect}\ptr  coef, double
-    \ptr x, \refstruct{PnlBasis}\ptr  *P}
+
+
+\item \describefun{double}{pnl_basis_eval}{\refstruct{PnlBasis} \ptr
+  P, \refstruct{PnlVect}\ptr  coef, double \ptr x}
   \sshortdescribe Computes the linear combination of \var{P_k(x)} defined by
   \var{coef}. Given the coefficients computed by the function
-  \reffun{pnl_fit_least_squares}, this function returns $\sum_{k=0}^n
-  \var{coef}_k  P_k(\var{x})$ where \var{x} is a C array.
+  \reffun{pnl_basis_fit_ls}, this function returns $\sum_{k=0}^n
+  \var{coef}_k  P_k(\var{x})$ where \var{x} is a C array of length
+  \var{nb_variates}.
 
-\item \describefun{double}{pnl_basis_eval_D}{\refstruct{PnlVect}\ptr  coef, double
-    \ptr x, \refstruct{PnlBasis}\ptr  *P, int i}
+\item \describefun{double}{pnl_basis_eval_D}{\refstruct{PnlBasis} \ptr
+  P, \refstruct{PnlVect} \ptr  coef, double \ptr x, int i}
   \sshortdescribe Computes the derivative with repsect to \var{x_i} of the
   linear combination of \var{P_k(x)} defined by \var{coef}. Given the
-  coefficients computed by the function \reffun{pnl_fit_least_squares}, this
+  coefficients computed by the function \reffun{pnl_basis_fit_ls}, this
   function returns $\partial_{x_i} \sum_{k=0}^n \var{coef}_k  P_k(\var{x})$
-  where \var{x} is a C array.
+  where \var{x} is a C array of length \var{nb_variates}.
 
-\item \describefun{double}{pnl_basis_eval_D2}{\refstruct{PnlVect}\ptr  coef, double
-    \ptr x, \refstruct{PnlBasis}\ptr  *P, int i, int j}
+\item \describefun{double}{pnl_basis_eval_D2}{\refstruct{PnlBasis} \ptr  P,
+  \refstruct{PnlVect} \ptr  coef, double \ptr x,  int i, int j}
   \sshortdescribe Computes the derivative with repsect to \var{x_i} of the
   linear combination of \var{P_k(x)} defined by \var{coef}. Given the
-  coefficients computed by the function \reffun{pnl_fit_least_squares}, this
+  coefficients computed by the function \reffun{pnl_basis_fit_ls}, this
   function returns $\partial_{x_i} \partial_{x_j} \sum_{k=0}^n \var{coef}_k  P_k(\var{x})$
-  where \var{x} is a C array.
+  where \var{x} is a C array of length \var{nb_variates}.
 \end{itemize}
 
 
@@ -387,7 +405,7 @@ For a real valued function $f$ such that $t \longmapsto f(t) \expp{- \sigma_c
   \sshortdescribe Computes $f(\var{t})$ where $f$ is given by its Laplace
   transform \var{fhat} by numerically inverting the Laplace transform using a
   weighted combination of different Gaver Stehfest's algorithms. Note that
-  this function does not need the comple valued Laplace transform but only the
+  this function does not need the complex valued Laplace transform but only the
   real valued one. \var{n} is the number of terms used in the weighted combination.
 
 \item \describefun{double}{pnl_ilap_gs_basic}{\refstruct{PnlFunc}
