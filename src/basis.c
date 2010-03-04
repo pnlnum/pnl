@@ -112,7 +112,18 @@ static PnlMatInt* compute_tensor (int d, int N)
     }
 }
 
-static double basis_i ( PnlBasis *b, double *x, int i )
+/** 
+ * Evaluates the i-th elements of the basis b at the point x
+ * 
+ * @param b a PnlBasis
+ * @param x a C array containing the coordinates of the point at which to
+ * evaluate the basis
+ * @param i an integer describing the index of the element of the basis to
+ * considier
+ * 
+ * @return f_i(x) where f is the i-th basis function
+ */
+double pnl_basis_i ( PnlBasis *b, double *x, int i )
 {
   int k; 
   double aux = 1.;
@@ -586,7 +597,7 @@ int pnl_fit_least_squares (PnlVect *coef, PnlMat *x, PnlVect *y, PnlBasis *basis
     {
       for ( k=0 ; k<basis->nb_func ; k++ )
         {
-          double tmp = basis_i (basis, &(PNL_MGET(x, i, 0)), k);
+          double tmp = pnl_basis_i (basis, &(PNL_MGET(x, i, 0)), k);
           b_k =  pnl_vect_get(coef, k);
           b_k += tmp * pnl_vect_get (y, i);
           pnl_vect_set (coef, k, b_k);
@@ -631,7 +642,7 @@ double pnl_basis_eval (PnlVect *coef, double *x, PnlBasis *basis)
   y = 0;
   for (i=0; i<coef->size; i++)
     {
-      y += pnl_vect_get (coef, i) * basis_i (basis, x, i);
+      y += pnl_vect_get (coef, i) * pnl_basis_i (basis, x, i);
     }
   return y;
 }
