@@ -3,7 +3,7 @@ all: manual index manual
 manual:
 	@echo "running htlatex"
 	@export TEXINPUTS=`pwd`/..//:: ; \
-	htlatex ../pnl-manual 'xhtml,uni-html4,3,section+,next,notoc*' 
+	htlatex ../pnl-manual 'xhtml,uni-html4,2,section+,next' 
 	cp ../pnl.css pnl-manual.css
 
 index:
