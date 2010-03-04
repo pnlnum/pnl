@@ -69,7 +69,7 @@ static void exp_regression2()
 
   basis = pnl_basis_init (basis_name, basis_dim, space_dim);
 
-  pnl_fit_least_squares (alpha, t, y, basis, basis_dim);
+  pnl_fit_least_squares (alpha, t, y, basis);
   printf("coefficients of the decomposition : ");
   pnl_vect_print (alpha);
   /* computing the infinity norm of the error */
@@ -82,6 +82,7 @@ static void exp_regression2()
     }
   printf ("L^infty error : %f \n", err);
 
+  pnl_basis_free (&basis);
   pnl_mat_free (&t);
   pnl_vect_free (&y);
   pnl_vect_free (&alpha);
@@ -103,7 +104,7 @@ static void regression_multid()
   PnlVect *alpha;
 
   PnlBasis *basis;
-  printf("\nMulti dimensional regression on of log (1+x[0]*x[0] + x[1]*x[1]\n");
+  printf("\nMulti dimensional regression on log (1+x[0]*x[0] + x[1]*x[1])\n");
   alpha = pnl_vect_create (0);
 
   /* creating the grid */
@@ -126,12 +127,12 @@ static void regression_multid()
 
 
   basis_name = HERMITIAN;
-  space_dim = 2; /* real valued basis */
+  space_dim = 2; /* functions with values in R^2 */
   basis_dim = 10; /* number of elements in the basis */
 
   basis = pnl_basis_init (basis_name, basis_dim, space_dim);
 
-  pnl_fit_least_squares (alpha, t, y, basis, basis_dim);
+  pnl_fit_least_squares (alpha, t, y, basis);
   printf("coefficients of the decomposition : ");
   pnl_vect_print (alpha);
 
@@ -145,6 +146,7 @@ static void regression_multid()
     }
 
   printf ("L^infty error : %f \n", err);
+  pnl_basis_free (&basis);
   pnl_mat_free (&t);
   pnl_vect_free (&y);
   pnl_vect_free (&alpha);
