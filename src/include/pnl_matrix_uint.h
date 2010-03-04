@@ -103,7 +103,7 @@ extern void pnl_mat_uint_min_index (const PnlMatUint *A, PnlVectUint *out, PnlVe
 extern void pnl_mat_uint_max_index (const PnlMatUint *A, PnlVectUint *out, PnlVectInt *i, char d);
 extern void pnl_mat_uint_minmax_index (const PnlMatUint *A, PnlVectUint *m, PnlVectUint *M, PnlVectInt *im, PnlVectInt *iM, char d);
 extern void pnl_mat_uint_qsort_index (PnlMatUint *A, PnlMatInt *t, char dir, char order);
-extern void pnl_mat_uint_qsort_index (PnlMatUint *A, char dir, char order);
+extern void pnl_mat_uint_qsort (PnlMatUint *A, char dir, char order);
 
 
 /* inline functions if you are using GCC */

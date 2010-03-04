@@ -143,7 +143,7 @@ extern void pnl_mat_min_index (const PnlMat *A, PnlVect *out, PnlVectInt *i, cha
 extern void pnl_mat_max_index (const PnlMat *A, PnlVect *out, PnlVectInt *i, char d);
 extern void pnl_mat_minmax_index (const PnlMat *A, PnlVect *m, PnlVect *M, PnlVectInt *im, PnlVectInt *iM, char d);
 extern void pnl_mat_qsort_index (PnlMat *A, PnlMatInt *t, char dir, char order);
-extern void pnl_mat_qsort_index (PnlMat *A, char dir, char order);
+extern void pnl_mat_qsort (PnlMat *A, char dir, char order);
 extern void pnl_mat_set_row(PnlMat *M, const PnlVect *V, int i);
 extern void pnl_mat_set_col(PnlMat *M, const PnlVect *V, int j);
 extern void pnl_mat_swap_rows (PnlMat *M, int i, int j);
