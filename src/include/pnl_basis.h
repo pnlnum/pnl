@@ -37,6 +37,7 @@ extern PnlBasis* pnl_basis_init ( int index, int nb_func, int space_dim);
 extern void pnl_basis_free (PnlBasis **basis);
 extern int pnl_fit_least_squares (PnlVect *coef, PnlMat *x, PnlVect *y,
                                   PnlBasis *f);
+extern double pnl_basis_i ( PnlBasis *b, double *x, int i );
 extern double pnl_basis_eval (PnlVect *coef, double *x, PnlBasis *basis);
 extern double pnl_basis_eval_D (PnlVect *coef, double *x, PnlBasis *basis, int i);
 extern double pnl_basis_eval_D2 (PnlVect *coef, double *x, PnlBasis *basis, int i, int j);
