@@ -393,7 +393,7 @@ echo "C options..............:" $AM_CFLAGS $CFLAGS
 echo "$user_set_cflags"
 echo "linker flags...........:" $LDFLAGS 
 echo "installation prefix....:" $prefix
-if test "x$USE_INTERNAL_BLAS" != "x"; then 
+if test "x$USE_INTERNAL_BLAS" == "x"; then 
     echo "using internal Blas & Lapack"
 fi
 echo
