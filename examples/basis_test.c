@@ -29,7 +29,7 @@
 
 
 /*
- * example of how to use  pnl_fit_least_squares to regress on a basis.
+ * example of how to use  pnl_basis_fit_ls to regress on a basis.
  * regression of the exponential function on the grid [0:0.05:5]
  */
 static void exp_regression2()
@@ -69,7 +69,7 @@ static void exp_regression2()
 
   basis = pnl_basis_init (basis_name, basis_dim, space_dim);
 
-  pnl_fit_least_squares (alpha, t, y, basis);
+  pnl_basis_fit_ls (basis, alpha, t, y);
   printf("coefficients of the decomposition : ");
   pnl_vect_print (alpha);
   /* computing the infinity norm of the error */
@@ -77,7 +77,7 @@ static void exp_regression2()
   for (i=0; i<t->m; i++)
     {
       double tmp = function(pnl_mat_get(t, i, 0)) -
-        pnl_basis_eval (alpha, pnl_mat_lget(t, i, 0), basis);
+        pnl_basis_eval (basis,alpha, pnl_mat_lget(t, i, 0));
       if (fabs(tmp) > err) err = fabs(tmp);
     }
   printf ("L^infty error : %f \n", err);
@@ -132,7 +132,7 @@ static void regression_multid()
 
   basis = pnl_basis_init (basis_name, basis_dim, space_dim);
 
-  pnl_fit_least_squares (alpha, t, y, basis);
+  pnl_basis_fit_ls (basis, alpha, t, y);
   printf("coefficients of the decomposition : ");
   pnl_vect_print (alpha);
 
@@ -141,7 +141,7 @@ static void regression_multid()
   for (i=0; i<t->m; i++)
     {
       double tmp = function2d(pnl_mat_lget(t, i, 0)) -
-        pnl_basis_eval (alpha, pnl_mat_lget(t, i, 0), basis);
+        pnl_basis_eval (basis,alpha, pnl_mat_lget(t, i, 0));
       if (fabs(tmp) > err) err = fabs(tmp);
     }
 
