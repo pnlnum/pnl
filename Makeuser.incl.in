@@ -1,8 +1,7 @@
-#/* -*- Mode: Makefile -*- */
+# vim: set filetype=make: 
 #-----------------------------------------------------------------
 # This file can be used to compile and link external files to the PNL 
-# This Makefile comes from Nsp
-# Copyright Enpc (Jean-Philippe Chancelier)
+# The first part of this Makefile comes from Nsp (Jean-Philippe Chancelier)
 #-----------------------------------------------------------------
 
 
@@ -22,7 +21,6 @@ LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 INCLUDES = -I$(top_builddir)/include/pnl
 OTHERLIBS = -L$(top_builddir)/lib -lpnl -lm
-#******************************************************************* 
 
 QUIET=--quiet
 
@@ -32,26 +30,36 @@ CXXCOMPILE = $(CXX) $(INCLUDES) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(QUIET) $(CC) $(INCLUDES)  $(AM_CFLAGS) $(CFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(QUIET) $(CXX) $(INCLUDES)  $(AM_CFLAGS) $(CXXFLAGS)
 
-LINK = $(LIBTOOL) --mode=link $(QUIET) $(CC) $(CFLAGS) $(LDFLAGS) $(OTHERLIBS) -o $@
+LINK = $(LIBTOOL) --mode=link $(QUIET) $(CC) $(CFLAGS) $(LDFLAGS) $(OTHERLIBS)
 
 OBJECTS = $(OBJS:.o=.lo)
 #******************************************************************* 
 
-all:: $(TARGET)
+## Creates targets. A target is created by linking the objects listed in
+## $(target_OBJS)
+define new_target
+local_bin=$(subst -,_,$(1))
+LOBJS=$$($$(local_bin)_OBJS)
+LOBJS2=$${LOBJS:%.o=%.lo}
+$(1) : $$(LOBJS2)
+	$(LINK) -o $(1) $$^ 
+endef
+
+$(foreach target,$(BINS),$(eval $(call new_target,$(target))))
+
+all:: $(TARGET) $(BINS)
 
 $(TARGET) : $(OBJECTS) 
-	$(LINK) $(OBJECTS)
+	$(LINK) -o $@ $(OBJECTS)
 
-.SUFFIXES:
 .SUFFIXES: .c .lo .o .C .cpp
-
 
 clean::
 	@$(RM) *.o *.lo
 	@$(RM) -r .libs
 
 cleanall:: clean
-	$(RM) $(TARGET)
+	$(RM) $(TARGET) $(BINS)
 
 .c.o:
 	$(COMPILE)  -c $<
@@ -71,12 +79,4 @@ cleanall:: clean
 
 .C.lo :
 	$(LTCXXCOMPILE) -c $<
-
-
-
-
-
-
-
-
 
