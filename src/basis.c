@@ -502,7 +502,7 @@ enum_member _reg_basis [] =
     { NULL, NULLINT},
 };
 
-DEFINE_ENUM( PnlBases, _reg_basis);
+DEFINE_ENUM(PnlBases, _reg_basis);
 
 /**
  * returns a  PnlBasis
@@ -513,7 +513,7 @@ DEFINE_ENUM( PnlBases, _reg_basis);
  * defined
  * @return a PnlBasis
  */
-PnlBasis*  pnl_basis_init ( int index, int nb_func, int space_dim)
+PnlBasis*  pnl_basis_init (int index, int nb_func, int space_dim)
 {
   PnlBasis *b;
   enum_member *e;
@@ -579,7 +579,7 @@ void pnl_basis_free (PnlBasis **basis)
  *
  * @return OK or FAIL
  */
-int pnl_fit_least_squares (PnlVect *coef, PnlMat *x, PnlVect *y, PnlBasis *basis)
+int pnl_basis_fit_ls (PnlBasis *basis, PnlVect *coef, PnlMat *x, PnlVect *y)
 {
   int N, i, k;
   double b_k;
@@ -627,13 +627,13 @@ int pnl_fit_least_squares (PnlVect *coef, PnlMat *x, PnlVect *y, PnlBasis *basis
 /**
  * Evaluates a linear combination of basis functions at x
  *
- * @param coef a vector typically computed by pnl_fit_least_squares
+ * @param coef a vector typically computed by pnl_basis_fit_ls
  * @param x the coordinates of the point at which to evaluate the function
  * @param basis a PnlBasis
  *
  * @return sum (coef .* f(x))
  */
-double pnl_basis_eval (PnlVect *coef, double *x, PnlBasis *basis)
+double pnl_basis_eval (PnlBasis *basis, PnlVect *coef, double *x)
 {
   int i;
   double y;
@@ -651,14 +651,14 @@ double pnl_basis_eval (PnlVect *coef, double *x, PnlBasis *basis)
  * Evaluates the first derivative with respect to x[i] of a linear combination
  * of basis functions at x
  *
- * @param coef a vector typically computed by pnl_fit_least_squares
+ * @param coef a vector typically computed by pnl_basis_fit_ls
  * @param x the coordinates of the point at which to evaluate the function
  * @param basis a PnlBasis
  * @param i the index with respect to which the derivative is computed
  *
  * @return sum (coef .* D_i f(x))
  */
-double pnl_basis_eval_D (PnlVect *coef, double *x, PnlBasis *basis, int i)
+double pnl_basis_eval_D (PnlBasis *basis, PnlVect *coef, double *x, int i)
 {
   int k;
   double y;
@@ -676,7 +676,7 @@ double pnl_basis_eval_D (PnlVect *coef, double *x, PnlBasis *basis, int i)
  * Evaluates the second derivative with respect to x[i] and x[j] of a linear
  * combination of basis functions at x
  *
- * @param coef a vector typically computed by pnl_fit_least_squares
+ * @param coef a vector typically computed by pnl_basis_fit_ls
  * @param x the coordinates of the point at which to evaluate the function
  * @param basis a PnlBasis
  * @param i the index with respect to which the derivative is computed
@@ -684,7 +684,7 @@ double pnl_basis_eval_D (PnlVect *coef, double *x, PnlBasis *basis, int i)
  *
  * @return sum (coef .* D2_{i,j} f(x))
  */
-double pnl_basis_eval_D2 (PnlVect *coef, double *x, PnlBasis *basis, int i, int j)
+double pnl_basis_eval_D2 (PnlBasis *basis, PnlVect *coef, double *x, int i, int j)
 {
   int k;
   double y;

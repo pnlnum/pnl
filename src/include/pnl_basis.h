@@ -35,12 +35,11 @@ struct PnlBasis_t {
 extern enum_members PnlBases ;
 extern PnlBasis* pnl_basis_init ( int index, int nb_func, int space_dim);
 extern void pnl_basis_free (PnlBasis **basis);
-extern int pnl_fit_least_squares (PnlVect *coef, PnlMat *x, PnlVect *y,
-                                  PnlBasis *f);
+extern int pnl_basis_fit_ls (PnlBasis *f, PnlVect *coef, PnlMat *x, PnlVect *y);
 extern double pnl_basis_i ( PnlBasis *b, double *x, int i );
-extern double pnl_basis_eval (PnlVect *coef, double *x, PnlBasis *basis);
-extern double pnl_basis_eval_D (PnlVect *coef, double *x, PnlBasis *basis, int i);
-extern double pnl_basis_eval_D2 (PnlVect *coef, double *x, PnlBasis *basis, int i, int j);
+extern double pnl_basis_eval (PnlBasis *basis,PnlVect *coef, double *x);
+extern double pnl_basis_eval_D (PnlBasis *basis,PnlVect *coef, double *x, int i);
+extern double pnl_basis_eval_D2 (PnlBasis *basis,PnlVect *coef, double *x, int i, int j);
 
 /*@}*/
 #ifdef __cplusplus
