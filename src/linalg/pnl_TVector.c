@@ -24,9 +24,3 @@
 #include "pnl_templates_off.h"
 #undef  BASE_INT
 
-#define BASE_UINT
-#include "pnl_templates_on.h"
-#include "pnl_TVector_source.c"
-#include "pnl_templates_off.h"
-#undef  BASE_UINT
-

@@ -8,22 +8,15 @@ The structures and functions related to vectors are declared in
 \verb!pnl_vector.h!.
 
 
-Vectors are declared for several basic types : double, int, uint and
+Vectors are declared for several basic types : double, int, and
 dcomplex. In the following declarations, {\tt BASE} must be replaced by one
 the previous types and the corresponding vector structures are respectively
-named PnlVect, PnlVectInt, PnlVectUint, PnlVectComplex
+named PnlVect, PnlVectInt, PnlVectComplex
 \begin{verbatim}
 typedef struct PnlVect {
   int size; /*!< size of the vector */
   int mem_size; /*!< size of the memory block allocated for array */
   double *array; /*!< pointer to store the data */
-  int owner; /*!< 1 if the structure owns its array pointer */
-} PnlVect;
-
-typedef struct PnlVectUint {
-  int size; /*!< size of the vector */ 
-  int mem_size; /*!< size of the memory block allocated for array */
-  uint *array; /*!< pointer to store the data */
   int owner; /*!< 1 if the structure owns its array pointer */
 } PnlVect;
 
@@ -60,8 +53,6 @@ Here is the table of prefixes used for the different basic types.
     double & pnl_vect & double \\
     \hline
     int & pnl_vect_int & int \\
-    \hline
-    uint & pnl_vect_uint & uint\\
     \hline
     dcomplex & pnl_vect_complex & dcomplex
   \end{tabular}
@@ -448,15 +439,6 @@ typedef struct PnlMat{
   int owner; /*!< 1 if the structure owns its array pointer */
 } PnlMat;
 
-typedef struct PnlMatUint{
-  int m; /*!< nb rows */ 
-  int n; /*!< nb columns */ 
-  int mn; /*!< product m*n */
-  int mem_size; /*!< size of the memory block allocated for array */
-  uint *array; /*!< pointer to store the data row-wise */
-  int owner; /*!< 1 if the structure owns its array pointer */
-} PnlMatUint;
-
 typedef struct PnlMatInt{
   int m; /*!< nb rows */ 
   int n; /*!< nb columns */ 
@@ -510,8 +492,6 @@ Here is the table of prefixes used for the different basic types.
     double & pnl_mat & double \\
     \hline
     int & pnl_mat_int & int \\
-    \hline
-    uint & pnl_mat_uint & uint\\
     \hline
     dcomplex & pnl_mat_complex & dcomplex
   \end{tabular}
@@ -1394,13 +1374,6 @@ typedef struct PnlHMat{
   double *array; /*!< pointer to store */
 } PnlHMat;
 
-typedef struct PnlHMatUint{
-  int ndim; /*!< nb dimensions */ 
-  int *dims; /*!< pointer to store the value of the ndim dimensions */ 
-  int mn; /*!< product dim_1 *...*dim_ndim */
-  uint *array; /*!< pointer to store */
-} PnlHMatUint;
-
 typedef struct PnlHMatInt{
   int ndim; /*!< nb dimensions */ 
   int *dims; /*!< pointer to store the value of the ndim dimensions */ 
@@ -1434,8 +1407,6 @@ Here is the table of prefixes used for the different basic types.
     double & pnl_hmat & double \\
     \hline
     int & pnl_hmat_int & int \\
-    \hline
-    uint & pnl_hmat_uint & uint\\
     \hline
     dcomplex & pnl_hmat_complex & dcomplex
   \end{tabular}

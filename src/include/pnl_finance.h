@@ -6,7 +6,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include "pnl_matrix_uint.h"
+#include "pnl_matrix.h"
 #include "pnl_cdf.h"
 
 /**

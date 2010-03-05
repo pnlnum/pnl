@@ -17,8 +17,7 @@ pnl_matrix_complex.h			 pnl_types.h  \
 pnl_matrix_double.h				 pnl_vector_complex.h \
 pnl_band_matrix.h				 pnl_matrix.h  \
 pnl_basis.h						 pnl_matrix_int.h  \
-pnl_matrix_uint.h                pnl_vector_int.h \
+pnl_random.h 					 pnl_vector_int.h \
 pnl_cdf.h						 pnl_perm.h \
-pnl_random.h                     pnl_vector_uint.h \
 pnl_vector_double.h              pnl_vector.h \
 pnl_laplace.h                    pnl_integration.h				 

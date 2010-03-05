@@ -29,7 +29,6 @@ extern "C" {
 #include "pnl_vector_double.h"
 #include "pnl_vector_complex.h"
 #include "pnl_vector_int.h"
-#include "pnl_vector_uint.h"
 
 #ifdef __cplusplus
 }

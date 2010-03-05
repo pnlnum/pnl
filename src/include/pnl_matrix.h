@@ -67,7 +67,6 @@ extern "C" {
 #include "pnl_matrix_double.h"
 #include "pnl_matrix_complex.h"
 #include "pnl_matrix_int.h"
-#include "pnl_matrix_uint.h"
 
 #ifdef __cplusplus
 }
