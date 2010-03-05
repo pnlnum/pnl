@@ -635,18 +635,6 @@ void FUNCTION(pnl_mat,get_row)(TYPE(PnlVect) *V, const TYPE(PnlMat) *M, int i)
 }
 
 /**
- * Extract the ith row of M. Makes a copy.
- *
- * @param V a PnlVect which contains the row on exit
- * @param M a PnlMat
- * @param i the index of the row to be extracted
- */
-void FUNCTION(pnl_mat,row_to_vect_inplace)(TYPE(PnlVect) *V, const TYPE(PnlMat) *M, int i)
-{
-  FUNCTION(pnl_mat,get_row)(V, M, i);
-}
-
-/**
  * Extract a row of a matrix and wrap it into a vector.
  * @param M a matrix
  * @param i the index of the row to be extracted
