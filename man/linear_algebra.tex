@@ -786,11 +786,15 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
   \sshortdescribe In-place matrix matrix substraction  
   
 \item \describefun{void}{pnl_mat_sq_transpose}{\refstruct{PnlMat} \ptr M}
-  \sshortdescribe In-place transposition of square matrices  
+  \sshortdescribe On exit, \var{M} is transposed
 
 \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_transpose}{const
     \refstruct{PnlMat} \ptr M} 
-  \sshortdescribe Transposition of matrices
+    \sshortdescribe Creates a new matrix which is the transpoition of \var{M}
+
+\item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_transpose}{
+  \refstruct{PnlMat} \ptr tM, const \refstruct{PnlMat} \ptr M} 
+  \sshortdescribe On exit, \var{tM = M'}
 
 \item \describefun{void}{pnl_mat_axpy}{double alpha, const \refstruct{PnlMat}
     \ptr A, \refstruct{PnlMat} \ptr B}
@@ -1016,17 +1020,11 @@ invert the system matrix because it is much longer.
     const \refstruct{PnlMat} \ptr B}
   \sshortdescribe Inversion of a lower triangular matrix  
 
-\item \describefun{void}{pnl_mat_chol_inverse}{\refstruct{PnlMat}
-    \ptr inverse, const \refstruct{PnlMat} \ptr A}
-  \sshortdescribe Computes the inverse of a symmetric definite positive matrix
-  A and stores the result into \var{inverse}. The inverse is computed using the
-  Cholesky factorization of \var{A}.
-
 \item \describefun{void}{pnl_mat_inverse}{\refstruct{PnlMat}
     \ptr inverse, const \refstruct{PnlMat} \ptr A}
   \sshortdescribe Computes the inverse of a matrix A and stores the result
-  into \var{inverse}. The inverse is computed using a LU factorization of
-  \var{A}.
+  into \var{inverse}. A LU factorisation of the matrix \var{A} is computed
+  inside this function.
 \end{itemize}
 
 \subsubsection{Permutations}

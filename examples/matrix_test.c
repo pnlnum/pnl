@@ -29,6 +29,40 @@
 
 /* static double function_prod(double x, double y) {return x*y;} */
 
+
+/** 
+ * Sets the upper (uplo='U') or lower (uplo='L') triangle to 0
+ * 
+ * @param uplo 'U' or 'L'
+ * @param A a real matrix
+ */
+static void set_triangular_to_zero (PnlMat *A, char uplo)
+{
+  int i, j;
+
+  if ( uplo == 'L')
+    {
+      for ( i=0 ; i <A->m ; i++ )
+        {
+          for ( j=0 ; j<i ; j++ )
+            {
+              PNL_MLET (A, i, j) = 0;
+            }
+        }
+    }
+  else
+    {
+      for ( i=0 ; i <A->m ; i++ )
+        {
+          for ( j=i+1 ; j<A->n ; j++ )
+            {
+              PNL_MLET (A, i, j) = 0;
+            }
+        }
+    }
+}
+
+
 /** 
  * Creates an invertible matrix of size nxn using the exponential function
  * 
@@ -678,17 +712,27 @@ static void pnl_mat_set_row_test()
 static void pnl_mat_triangular_inverse_test ()
 {
   PnlMat *A, *B;
-  double x[16] = {1.0, 2.0, 3.0, 4.0, 0.0, 5.0, 6.0, 7.0, 0.0, 0.0, 8.0, 9.0, 0.0, 0.0, 0.0, 10.0};
+  int gen;
+  int n = 5;
 
-  B = pnl_mat_create_from_ptr(4,4, x);
-  A=pnl_mat_create(0,0);
+  gen = PNL_RNG_MERSENNE_RANDOM_SEED;
+  pnl_rand_init (gen, n, n);
+  A = pnl_mat_create (n, n);
+  B = pnl_mat_create (n, n);
+  create_invertible_matrix (B, n, gen);
+
+  set_triangular_to_zero (B, 'L');
   printf("test de la fonction 'pnl_mat_upper_inverse' : \n");
+  printf ("B = "); pnl_mat_print_nsp (B); printf ("\n");
   pnl_mat_upper_inverse(A,B);
-  pnl_mat_print(A);
+  printf ("invB = "); pnl_mat_print_nsp (A); printf ("\n");
+
   printf("test de la fonction 'pnl_mat_lower_inverse' : \n");
-  pnl_mat_sq_transpose (B);
+  create_invertible_matrix (B, n, gen);
+  set_triangular_to_zero (B, 'U');
+  printf ("B = "); pnl_mat_print_nsp (B); printf ("\n");
   pnl_mat_lower_inverse(A,B);
-  pnl_mat_print(A);
+  printf ("invB = "); pnl_mat_print_nsp (A); printf ("\n");
   pnl_mat_free(&A);
   pnl_mat_free(&B);
 }
@@ -707,12 +751,6 @@ static void pnl_mat_inverse_test ()
   create_invertible_matrix (A, n, gen);
   pnl_mat_inverse (invA, A);
   printf("test de la fonction 'pnl_mat_inverse' : \n");
-  printf ("A = "); pnl_mat_print_nsp (A);
-  printf ("invA = "); pnl_mat_print_nsp (invA);
-
-  create_sym_pos_matrix (A, n, gen);
-  pnl_mat_chol_inverse (invA, A);
-  printf("test de la fonction 'pnl_mat_chol_inverse' : \n");
   printf ("A = "); pnl_mat_print_nsp (A);
   printf ("invA = "); pnl_mat_print_nsp (invA);
 

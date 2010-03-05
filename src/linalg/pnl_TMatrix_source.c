@@ -409,29 +409,41 @@ void FUNCTION(pnl_mat,set_diag)(TYPE(PnlMat) *M, BASE x, int d)
 
 
 /**
- *  transposition of  matrices
+ *  Non square matrix transposition
  *
- * @param M : a TYPE(PnlMat) pointer.
- * @return the transpose of M
+ * @param M a TYPE(PnlMat) pointer.
+ * @param tM on exit contains the transpose of M
  */
-TYPE(PnlMat)* FUNCTION(pnl_mat,transpose)(const TYPE(PnlMat) *M)
+void FUNCTION(pnl_mat,tr)(TYPE(PnlMat)*tM, const TYPE(PnlMat) *M)
 {
-  TYPE(PnlMat) *res;
   BASE *mptr;
   BASE *rptr;
   int i,j;
-  res=FUNCTION(pnl_mat,create)(M->n,M->m);
-  rptr=res->array;
+  FUNCTION(pnl_mat,resize)(tM, M->n,M->m);
+  rptr=tM->array;
   
-  for (i=0;i<res->m;i++)
+  for (i=0;i<tM->m;i++)
     {
       mptr=M->array+i;
-      for (j=0;j<res->n;j++)
+      for (j=0;j<tM->n;j++)
         {
           (*rptr)=(*mptr); rptr++;mptr+=M->n;
         }
     }
-  return res;
+}
+
+/**
+ *  Non square matrix transposition
+ *
+ * @param M a TYPE(PnlMat) pointer.
+ * @return the transpose of M
+ */
+TYPE(PnlMat)* FUNCTION(pnl_mat,transpose)(const TYPE(PnlMat) *M)
+{
+  TYPE(PnlMat)*tM;
+  tM = FUNCTION(pnl_mat,create)(0,0);
+  FUNCTION(pnl_mat,tr)(tM, M);
+  return tM;
 }
 
 /**

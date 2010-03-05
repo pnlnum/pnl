@@ -101,8 +101,6 @@ void pnl_vect_compact_free (PnlVectCompact **v)
   free (*v); *v=NULL;
 }
 
-
-
 /**
  * Convert a PnlVectCompact pointeur to a PnlVect pointeur
  * @param C the PnlVectCompact to be expanded
@@ -137,118 +135,18 @@ double pnl_vect_compact_get (const PnlVectCompact *C, int i)
 }
 
 
-
-
 /**
- * inversion of an upper triangular matrix
- *
- * @param A : at the end of the function contains the
- * inverse of <tt>B</tt>. A must be an already allocated PnlMat
- * @param B : the matrix to be inverted
- */
-void pnl_mat_upper_inverse(PnlMat *A, const PnlMat *B)
-{
-  int i, j, k;
-  double y, sum;
-  CheckIsSquare(B);
-  pnl_mat_resize (A, B->m, B->n);
-  pnl_mat_set_double (A, 0.0);
-  for (k=0; k<B->m; k++)
-    {
-      for (i=k; i>=0; i--)
-        {
-          if (k==i) y=1; else y=0;
-          sum = 0.0;
-          for (j=i+1; j <B->n; j++)
-            sum+= pnl_mat_get (B, i, j) * pnl_mat_get (A, j, k);
-          pnl_mat_set (A, i, k, (y - sum) / pnl_mat_get (B, i, i));
-        }
-    }
-}
-
-/**
- * inversion of a lower triangular matrix
- *
- * @param A : at the end of the function contains the
- * inverse of <tt>B</tt>. A must be an already allocated PnlMat
- * @param B : the matrix to be inverted
- */
-void pnl_mat_lower_inverse (PnlMat *A, const PnlMat *B)
-{
-  int k;
-  PnlVect *b = pnl_vect_create_from_double (B->m, 0.0);
-  PnlVect *x = pnl_vect_create (0);
-  CheckIsSquare(B);
-  pnl_mat_resize (A, B->m, B->n);
-  pnl_mat_set_double (A, 0.0);
-  for (k=0; k<B->m; k++)
-    {
-      pnl_vect_set (b, k, 1.0);
-      pnl_mat_lower_syslin (x, B, b);
-      pnl_mat_set_col (A, x, k);
-      pnl_vect_set (b, k, 0.0);
-    }
-  pnl_vect_free (&b);
-  pnl_vect_free (&x);
-}
-
-/**
- * solves an upper triangular linear system
- *
- * @param x already existing PnlVect that contains the solution on exit
- * @param U the matrix of the system
- * @param b right hand side member
- */
-void pnl_mat_upper_syslin (PnlVect *x, const PnlMat *U, const  PnlVect *b)
-{
-  int i, j;
-  double sum;
-  CheckIsSquare(U);
-  pnl_vect_resize (x, U->n);
-  for (i=U->m-1; i>=0; i--)
-    {
-      sum = 0.0;
-      for (j=i+1; j <U->n; j++)
-        sum+= pnl_mat_get (U, i, j) * pnl_vect_get (x,j);
-      *(pnl_vect_lget (x, i)) = (pnl_vect_get (b, i) - sum) / pnl_mat_get (U, i, i);
-    }
-}
-
-
-/**
- * solves a lower triangular linear system
- *
- * @param x already existing PnlVect that contains the solution on exit
- * @param L the matrix of the system
- * @param b right hand side member
- */
-void pnl_mat_lower_syslin (PnlVect *x, const PnlMat *L, const  PnlVect *b)
-{
-  int i, j;
-  double sum;
-  CheckIsSquare(L);
-  pnl_vect_resize (x, L->n);
-  for (i=0; i<L->n; i++)
-    {
-      sum = 0.0;
-      for (j=0; j < i; j++)
-        sum+= pnl_mat_get (L,i,j) * pnl_vect_get (x,j);
-      pnl_vect_set(x, i, (pnl_vect_get (b, i) - sum) / pnl_mat_get (L, i, i));
-    }
-}
-
-/**
- * Cholesky decomposition. Postivity is checked during the
- * transformation, but no test of symmetry.
- *
- * Decomposition done in place. The lower part of the matrix
- * contains the cholesky decomposition. The upper part is
- * set to 0.
- *
- * @param M a PnlMat pointer.
- * @param round_off eigenvalue smaller that -round_off are set to
- * +round_off. Useful for badly contionned matrices.
- */
+* Cholesky decomposition. Postivity is checked during the
+* transformation, but no test of symmetry.
+*
+* Decomposition done in place. The lower part of the matrix
+* contains the cholesky decomposition. The upper part is
+* set to 0.
+*
+* @param M a PnlMat pointer.
+* @param round_off eigenvalue smaller that -round_off are set to
+* +round_off. Useful for badly contionned matrices.
+*/
 static void pnl_mat_chol_aux(PnlMat *M, double round_off)
 {
   int i=0,j,k;
@@ -435,52 +333,6 @@ void pnl_mat_lu (PnlMat *A, PnlVectInt *p)
 }
 #endif
 
-/**
- * solves the linear system A x = b with P A = LU. For a symmetric definite
- * positive system, prefer pnl_mat_chol_syslin
- *
- * @param LU a PnlMat containing the LU decomposition of A
- * @param p a PnlVectInt.
- * @param b right hand side member. Contains the solution x on exit
- */
-void pnl_mat_lu_syslin_inplace (const PnlMat *LU, const PnlVectInt *p, PnlVect *b)
-{
-  int i, j;
-  double Bi, temp, Aii;
-  CheckIsSquare(LU);
-  CheckMatVectIsCompatible (LU, b);
-  CheckVectMatch (p, b); 
-
-  /* apply the permutation */
-  pnl_vect_permute_inplace (b, p);
-  
-  /* solve L y = b, store x into b. Remember that the diagonal of L is filled
-     with 1 */
-  for (i=0; i<LU->n; i++)
-    {
-      temp = 0.;
-      for (j=0; j < i; j++)
-        {
-          temp += pnl_mat_get (LU, i, j) * pnl_vect_get (b, j);
-        }
-      Bi = pnl_vect_get(b, i);
-      pnl_vect_set(b, i, Bi - temp);
-    }
-
-  /* solve U x = y, where y is the solution computed above stored into b */
-  for (i=LU->m-1; i>=0; i--)
-    {
-      Bi = pnl_vect_get(b, i);
-      /* using two descreasing loops improves performance */
-      for (j=LU->m-1; j>i; j--)
-        {
-          Bi -= pnl_mat_get (LU, i, j) * pnl_vect_get (b, j);
-        }
-      Aii = pnl_mat_get (LU, i, i);
-      Bi /= Aii;
-      pnl_vect_set (b, i, Bi);
-    }
-}
 
 /**
  * solves the linear system A x = b with P A = LU. For a symmetric definite
@@ -491,14 +343,11 @@ void pnl_mat_lu_syslin_inplace (const PnlMat *LU, const PnlVectInt *p, PnlVect *
  * @param b right hand side member
  * @param p a PnlVectInt.
  */
-void pnl_mat_lu_syslin (PnlVect *x, const PnlMat *LU,
-                        const PnlVectInt *p, const PnlVect *b)
+void pnl_mat_lu_syslin (PnlVect *x, PnlMat *LU, const PnlVectInt *p, const PnlVect *b)
 {
   pnl_vect_clone (x, b);
   pnl_mat_lu_syslin_inplace (LU, p, x);
 }
-
-
 
 /**
  * solves a linear system A x = b using a LU factorization
@@ -531,32 +380,6 @@ void pnl_mat_syslin_inplace (PnlMat *A, PnlVect *b)
   pnl_vect_int_free (&p);
 }
 
-/**
- * solves a linear system A X = B using a LU factorization where B is a matrix
- * @param A the matrix of the system of size n x n. On exit contains the LU decomposition
- * @param B the r.h.s. matrix of the system of size n x m. On exit B contains
- * the solution X
- */
-void pnl_mat_syslin_mat (PnlMat *A,  PnlMat *B)
-{
-  PnlVectInt *p;
-  PnlVect *b;
-  int i;
-
-  CheckIsSquare(A);
-  b = pnl_vect_create (0);
-  p = pnl_vect_int_create (A->m);
-  pnl_mat_lu (A, p);
-
-  for (i=0; i<B->n; i++)
-    {
-      pnl_mat_get_col (b, B, i);
-      pnl_mat_lu_syslin_inplace (A, p, b);
-      pnl_mat_set_col (B, b, i);
-    }
-  pnl_vect_free (&b);
-  pnl_vect_int_free (&p);
-}
 
 #if 0
 /*
@@ -740,21 +563,6 @@ static void pnl_mat_inverse_aux (PnlMat *inverse, const PnlMat *A,
   pnl_mat_free (&Acopy);
   pnl_vect_int_free (&p);
 }
-
-
-/**
- * computes the inverse of a matrix A using its Cholesky decomposition which
- * is computed inside this function
- *
- * @param A a symmetric definite positive matrix
- * @param inverse a PnlMat (already allocated). contains
- * \verbatim A^-1 \endverbatim on exit.
- */
-void pnl_mat_chol_inverse (PnlMat *inverse, const PnlMat *A)
-{
-  pnl_mat_inverse_aux (inverse, A, Chol);
-}
-
 
 
 /**

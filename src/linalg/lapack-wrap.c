@@ -95,19 +95,20 @@ void pnl_mat_lu (PnlMat *A, PnlPermutation *p)
       PNL_ERROR ("LU decomposition cannot be computed", "pnl_mat_lu");
     }
   pnl_mat_sq_transpose (A);
-  /* Fortran indices start at 1 */
-  for ( i=0 ; i<N ; i++ ) invpiv[i]--;
-  /* the permutation is computed the other round */
-  for ( i=0 ; i<N ; i++ )
-    {
-      int ipiv = invpiv[i];
-      if (ipiv != i)
-        {
-          int tmp = p->array[i] ;
-          p->array[i] = p->array[ipiv];
-          p->array[ipiv] = tmp;
-        }
-    }
+  /* |+ Fortran indices start at 1 +| */
+  /* for ( i=0 ; i<N ; i++ ) invpiv[i]--; */
+  /* |+ the permutation is computed the other round +| */
+  /* for ( i=0 ; i<N ; i++ ) */
+  /*   { */
+  /*     int ipiv = invpiv[i]; */
+  /*     if (ipiv != i) */
+  /*       { */
+  /*         int tmp = p->array[i] ; */
+  /*         p->array[i] = p->array[ipiv]; */
+  /*         p->array[ipiv] = tmp; */
+  /*       } */
+  /*   } */
+  for ( i=0 ; i<N ; i++ ) p->array[i] = invpiv[i];
   free (invpiv);
 }
 
@@ -189,6 +190,157 @@ void pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
   FREE (tau);
 }
 
+/**
+ * solves an upper triangular linear system
+ *
+ * @param x already existing PnlVect that contains the solution on exit
+ * @param A an upper triangular matric
+ * @param b right hand side member
+ */
+void pnl_mat_upper_syslin (PnlVect *x, const PnlMat *A, const  PnlVect *b)
+{
+  int n, nrhs, lda, ldb, info;
+  
+  CheckIsSquare(A);
+  n = A->n;
+  nrhs = 1;
+  lda = A->m;
+  ldb = A->m;
+  pnl_vect_clone (x, b);
+  C2F(dtrtrs)("U","T","N",&n,&nrhs,A->array,&lda,x->array,&ldb,&info);
+  if (info != 0)
+    {
+      PNL_ERROR ("Matrix is singular", "pnl_mat_upper_syslin");
+    }
+}
+
+/**
+ * solves a lower triangular linear system
+ *
+ * @param x already existing PnlVect that contains the solution on exit
+ * @param A a lower triangular matrix
+ * @param b right hand side member
+ */
+void pnl_mat_lower_syslin (PnlVect *x, const PnlMat *A, const  PnlVect *b)
+{
+  int n, nrhs, lda, ldb, info;
+  
+  CheckIsSquare(A);
+  n = A->n;
+  nrhs = 1;
+  lda = A->m;
+  ldb = A->m;
+  pnl_vect_clone (x, b);
+  C2F(dtrtrs)("L","T","N",&n,&nrhs,A->array,&lda,x->array,&ldb,&info);
+  if (info != 0)
+    {
+      PNL_ERROR ("Matrix is singular", "pnl_mat_lower_syslin");
+    }
+}
+
+/**
+ * solves the linear system A x = b with P A = LU. For a symmetric definite
+ * positive system, prefer pnl_mat_chol_syslin
+ *
+ * @param A a PnlMat containing the LU decomposition of A
+ * @param p a PnlVectInt.
+ * @param b right hand side member. Contains the solution x on exit
+ */
+void pnl_mat_lu_syslin_inplace (PnlMat *A, const PnlVectInt *p, PnlVect *b)
+{
+  int n, nrhs, lda, ldb, info;
+  CheckIsSquare(A);
+  CheckMatVectIsCompatible (A, b);
+  CheckVectMatch (p, b); 
+
+  n = A->n;
+  nrhs = 1;
+  lda = A->m;
+  ldb = A->m;
+  pnl_mat_sq_transpose (A);
+  C2F(dgetrs)("N",&n,&nrhs,A->array,&lda,p->array,b->array,&ldb,&info);
+  pnl_mat_sq_transpose (A);
+  if (info != 0)
+    {
+      PNL_ERROR ("Matrix is singular", "pnl_lu_syslin");
+    }
+}
+
+/**
+ * solves a linear system A X = B using a LU factorization where B is a matrix
+ * @param A the matrix of the system of size n x n. On exit contains the LU decomposition
+ * @param B the r.h.s. matrix of the system of size n x m. On exit B contains
+ * the solution X
+ */
+void pnl_mat_syslin_mat (PnlMat *A,  PnlMat *B)
+{
+  int n, nrhs, lda, ldb, info;
+  PnlMat *tB;
+  PnlVectInt *p;
+  CheckIsSquare(A);
+  p = pnl_vect_int_create (A->m);
+  PNL_CHECK (A->m != B->m, "size mismatch", "pnl_mat_syslin_mat");
+  pnl_mat_lu (A, p);
+
+  n = A->n;
+  nrhs = B->n;
+  lda = A->m;
+  ldb = A->m;
+  pnl_mat_sq_transpose (A);
+  tB = pnl_mat_create (0,0);
+  pnl_mat_tr (tB, B);
+  C2F(dgetrs)("N",&n,&nrhs,A->array,&lda,p->array,tB->array,&ldb,&info);
+  pnl_mat_sq_transpose (A);
+  pnl_mat_tr (B, tB);
+  if (info != 0)
+    {
+      PNL_ERROR ("Matrix is singular", "pnl_lu_syslin");
+    }
+  pnl_vect_int_free (&p);
+  pnl_mat_free (&tB);
+}
+
+/**
+ * inversion of an upper triangular matrix
+ *
+ * @param A on exit, contains the inverse of B. A must be an already allocated PnlMat
+ * @param B an upper triangular matrix
+ */
+void pnl_mat_upper_inverse(PnlMat *A, const PnlMat *B)
+{
+  int n, lda, info;
+  
+  CheckIsSquare(B);
+  pnl_mat_clone (A, B);
+  n = A->n;
+  lda = A->m;
+  C2F(dtrtri)("L","N",&n,A->array,&lda,&info);
+  if (info != 0)
+    {
+      PNL_ERROR ("Matrix is singular", "pnl_mat_upper_inverse");
+    }
+}
+
+/**
+ * inversion of a lower triangular matrix
+ *
+ * @param A on exit, contains the inverse of B. A must be an already allocated PnlMat
+ * @param B a lower triangular matrix
+ */
+void pnl_mat_lower_inverse (PnlMat *A, const PnlMat *B)
+{
+  int n, lda, info;
+  
+  CheckIsSquare(B);
+  pnl_mat_clone (A, B);
+  n = A->n;
+  lda = A->m;
+  C2F(dtrtri)("U","N",&n,A->array,&lda,&info);
+  if (info != 0)
+    {
+      PNL_ERROR ("Matrix is singular", "pnl_mat_upper_inverse");
+    }
+}
 
 /**
  * Computes the eigenvalues and eigenvectors of a real matrix
