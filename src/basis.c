@@ -549,7 +549,7 @@ PnlBasis*  pnl_basis_create (int index, int nb_func, int nb_variates)
         b->D2f = D2TchebychevD1;
         break;
       default:
-        PNL_ERROR ("unknow basis", "pnl_basis_init");
+        PNL_ERROR ("unknow basis", "pnl_basis_create");
     }
   return b; 
 }

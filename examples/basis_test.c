@@ -68,7 +68,7 @@ static void exp_regression2()
   space_dim = 1; /* real valued basis */
   basis_dim = 5; /* number of elements in the basis */
 
-  basis = pnl_basis_init (basis_name, basis_dim, space_dim);
+  basis = pnl_basis_create (basis_name, basis_dim, space_dim);
 
   pnl_basis_fit_ls (basis, alpha, t, y);
   printf("coefficients of the decomposition : ");
@@ -131,7 +131,7 @@ static void regression_multid()
   space_dim = 2; /* functions with values in R^2 */
   basis_dim = 10; /* number of elements in the basis */
 
-  basis = pnl_basis_init (basis_name, basis_dim, space_dim);
+  basis = pnl_basis_create (basis_name, basis_dim, space_dim);
 
   pnl_basis_fit_ls (basis, alpha, t, y);
   printf("coefficients of the decomposition : ");
@@ -222,7 +222,7 @@ static void pnl_basis_eval_test ()
   //retrouver
   pnl_vect_rand_uni(x,n,-5,4,7);
   pnl_vect_rand_uni(t,n,0,1,7);
-  basis = pnl_basis_init (HERMITIAN, m, 2);
+  basis = pnl_basis_create (HERMITIAN, m, 2);
   alpha = pnl_vect_create (m);
   X = pnl_mat_create (n, 2);
   for(j=0;j<n;j++)
