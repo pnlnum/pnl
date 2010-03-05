@@ -98,12 +98,12 @@ the above table.
   
 \item \describefun{\refstruct{PnlVect}}{pnl_vect_wrap_subvect}{const
   \refstruct{PnlVect} \ptr x, int i, int s}
-    \sshortdescribe Creates a \refstruct{PnlVect} containing \var{x(i:i+s)}. No
-    copy is made. It is just a container.
+  \sshortdescribe Creates a \refstruct{PnlVect} containing \var{x(i:i+s)}. No
+  copy is made. It is just a container.
 
-  \item \describefun{\refstruct{PnlVect}}{pnl_vect_create_wrap_subvect_with_last}{const \refstruct{PnlVect} \ptr x, int i, int j}
-    \sshortdescribe Creates a \refstruct{PnlVect} containing \var{x(i:j)}. No
-    copy is made. It is just a container.
+\item \describefun{\refstruct{PnlVect}}{pnl_vect_wrap_subvect_with_last}{const \refstruct{PnlVect} \ptr x, int i, int j}
+  \sshortdescribe Creates a \refstruct{PnlVect} containing \var{x(i:j)}. No
+  copy is made. It is just a container.
 
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_from_file}
   {const char \ptr file}
@@ -1339,7 +1339,7 @@ The structures and functions related to band matrices are declared in
 \item \describefun{void}{pnl_bandmat_map_inplace}{\refstruct{PnlBandMat} \ptr lhs, double(\ptr f)(double)}
   \sshortdescribe  \var{lhs = f(lhs)}
 
-\item \describefun{void}{pnl_bandmat_map_map}{\refstruct{PnlBandMat} \ptr lhs, const
+\item \describefun{void}{pnl_bandmat_map_bandmat}{\refstruct{PnlBandMat} \ptr lhs, const
   \refstruct{PnlBandMat} \ptr rhs, double(\ptr f)(double,double)} 
   \sshortdescribe \var{lhs = f(lhs,rhs)}
 \end{itemize}

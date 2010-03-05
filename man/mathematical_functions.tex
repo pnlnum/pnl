@@ -76,6 +76,15 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
   \sshortdescribe Computes $\Gamma(x)$. This function is part of C99 and is
   redefined for non C99 compliant compilers.
 
+\item \describefun{void}{pnl_qsort}{void *a, int n, int es, int lda, int *t,
+  int ldt, int use_index, int (*cmp)(void const *, void const *)}
+  \sshortdescribe Sorts the array \var{a} using the comparaison function
+  \var{cmp}. \var{n} is the number elements in \var{a}, each element being of
+  size \var{es}. \var{t} is an array of integers of length \var{n} used to store
+  the permutation when \var{use_index=TRUE}. \var{lda} and \var{ldt} are the
+  leading dimensions of the arrays \var{a} and \var{t} and are used to sort
+  matrices column-wise. 
+
 \item \describefun{double}{pnl_nan}{}
   \sshortdescribe Returns \var{Nan}
 
