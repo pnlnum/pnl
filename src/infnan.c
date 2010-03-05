@@ -24,16 +24,25 @@ static double __pnl_div (double x, double y)
   return (x / y);
 }
 
+/** 
+ * @return  Nan
+ */
 double pnl_nan (void)
 {
   return __pnl_div (0.0, 0.0);
 }
 
+/** 
+ * @return  +Inf
+ */
 double pnl_posinf (void)
 {
   return __pnl_div (+1.0, 0.0);
 }
 
+/** 
+ * @return  -Inf
+ */
 double pnl_neginf (void)
 {
   return __pnl_div (-1.0, 0.0);
@@ -45,6 +54,14 @@ int pnl_isnan (double x)
   return _isnan(x);
 }
 
+
+/** 
+ * 
+ * 
+ * @param x a real value
+ * 
+ * @return +1 if x=+Inf, -1 if x=-Inf, 0 otherwise
+ */
 int pnl_isinf (double x)
 {
   int fpc = _fpclass(x);
@@ -60,6 +77,11 @@ int pnl_isfinite (double x)
 }
 #else /* _MSC_VER */
 
+/** 
+ * @param x a real value
+ * 
+ * @return 1 if x!=Inf
+ */
 int pnl_isfinite (double x)
 {
 #ifdef HAVE_ISFINITE
@@ -79,6 +101,11 @@ int pnl_isfinite (double x)
 #endif
 }
 
+/** 
+ * @param x a real value
+ * 
+ * @return 1 if x=Nan
+ */
 int pnl_isnan (double x)
 {
 #ifdef HAVE_ISNAN
@@ -89,6 +116,11 @@ int pnl_isnan (double x)
 # endif
 }
 
+/** 
+ * @param x a real value
+ * 
+ * @return +1 if x=+Inf, -1 if x=-Inf, 0 otherwise
+ */
 int pnl_isinf (double x)
 {
 #ifdef HAVE_ISINF

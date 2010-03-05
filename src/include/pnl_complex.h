@@ -35,8 +35,6 @@ extern dcomplex Csub(dcomplex a, dcomplex b);
 extern dcomplex CRsub(dcomplex a, double b);
 extern dcomplex RCsub(double a, dcomplex b);
 extern dcomplex Cminus (dcomplex z);
-extern dcomplex Ciadd(dcomplex a, dcomplex b);
-extern dcomplex Cisub(dcomplex a, dcomplex b);
 extern dcomplex Cmul(dcomplex a, dcomplex b);
 extern dcomplex RCmul(double a, dcomplex b);
 extern dcomplex CRmul(dcomplex b, double a);

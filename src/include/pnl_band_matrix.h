@@ -66,7 +66,6 @@ extern void pnl_bandmat_plus_double (PnlBandMat *BM, double x);
 extern void pnl_bandmat_minus_double (PnlBandMat *BM, double x);
 extern void pnl_bandmat_mult_double (PnlBandMat *BM, double x);
 extern void pnl_bandmat_div_double (PnlBandMat *BM, double x);
-extern void pnl_bandmat_inv_double(PnlBandMat *BM);
 
 extern void pnl_bandmat_plus_bandmat (PnlBandMat *lhs, const PnlBandMat *rhs);
 extern void pnl_bandmat_minus_bandmat (PnlBandMat *lhs, const PnlBandMat *rhs);

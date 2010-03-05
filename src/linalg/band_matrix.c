@@ -309,15 +309,6 @@ void pnl_bandmat_mult_double(PnlBandMat *BM , double x)
   __pnl_bandmat_apply_op (BM, x, __op_mult);
 }
 
-/**
- * in-place PnlBandMat term by term inversion *
- * @param BM left hand side PnlBandMat
- * @return  BM = 1 ./ BM
- */
-void pnl_bandmat_inv_double(PnlBandMat *BM)
-{
-  pnl_bandmat_map_inplace (BM, __op_inv);
-}
 
 /**
  * in-place PnlBandMat scalar division

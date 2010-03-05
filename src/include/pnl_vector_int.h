@@ -107,7 +107,6 @@ extern void pnl_vect_int_qsort_index (PnlVectInt *, PnlVectInt *, char);
 extern double pnl_vect_int_norm_two(const PnlVectInt *V); /*res=\Vert V \Vert_{l^2} */
 extern double pnl_vect_int_norm_one(const PnlVectInt *V); /*res=\Vert V \Vert_{l^1} */
 extern double pnl_vect_int_norm_infty(const PnlVectInt *V); /*res=\Vert V \Vert_{l^\infty} */
-extern double pnl_vect_int_norm_x(const PnlVectInt *V,double(*f)(int)); /*res=\Vert V \Vert_{l^X} */
 
 extern int pnl_vect_int_level(PnlVectInt *v, int i);
 extern int pnl_vect_int_level_norm_one(PnlVectInt *v);

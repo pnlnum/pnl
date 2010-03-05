@@ -159,7 +159,6 @@ extern void pnl_vect_complex_cumprod(PnlVectComplex *V);
 extern double pnl_vect_complex_norm_two(const PnlVectComplex *V); /*res=\Vert V \Vert_{l^2} */
 extern double pnl_vect_complex_norm_one(const PnlVectComplex *V); /*res=\Vert V \Vert_{l^1} */
 extern double pnl_vect_complex_norm_infty(const PnlVectComplex *V); /*res=\Vert V \Vert_{l^\infty} */
-extern double pnl_vect_complex_norm_x(const PnlVectComplex *V,double(*f)(dcomplex)); /*res=\Vert V \Vert_{l^X} */
 extern void pnl_vect_complex_split_in_array(PnlVectComplex* v, double *re, double *im);
 extern void pnl_vect_complex_split_in_vect(PnlVectComplex* v, PnlVect *re, PnlVect *im);
 extern void pnl_vect_complex_swap_elements(PnlVectComplex * v, int i, int j); 

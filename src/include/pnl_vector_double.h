@@ -98,7 +98,6 @@ extern void
 pnl_vect_mult_vect_term(PnlVect *lhs, const PnlVect *rhs); /* lhs= lhs.*rhs */ 
 extern void pnl_vect_set_double(PnlVect *v, double x);/* v[j]= x */
 extern void pnl_vect_set_zero(PnlVect * v); /* v[j]= 0 */
-extern void pnl_vect_set_basis(PnlVect * v, int i); /* v[j]= \delta_i^j */
 extern double pnl_vect_sum(const PnlVect *lhs);/* sum(x) */
 extern void pnl_vect_cumsum(PnlVect *lhs);
 extern void
@@ -120,7 +119,6 @@ extern void pnl_vect_qsort_index (PnlVect *, PnlVectInt *, char);
 extern double pnl_vect_norm_two(const PnlVect *V); /*res=\Vert V \Vert_{l^2} */
 extern double pnl_vect_norm_one(const PnlVect *V); /*res=\Vert V \Vert_{l^1} */
 extern double pnl_vect_norm_infty(const PnlVect *V); /*res=\Vert V \Vert_{l^\infty} */
-extern double pnl_vect_norm_x(const PnlVect *V,double(*f)(double)); /*res=\Vert V \Vert_{l^X} */
 extern void pnl_vect_swap_elements(PnlVect * v, int i, int j); 
 extern void pnl_vect_reverse(PnlVect * v);
 /*@}*/

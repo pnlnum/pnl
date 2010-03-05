@@ -93,9 +93,18 @@ the above table.
   this cannot be checked inside the function.
 \item \describefun{\refstruct{PnlVect}}{pnl_vect_create_wrap_array}{const double \ptr x, 
     int size}
-  \sshortdescribe Creates a \refstruct{PnlVect} pointer which contains
+    \sshortdescribe Creates a \refstruct{PnlVect} containing the data 
   \var{x}. No copy is made. It is just a container.
   
+\item \describefun{\refstruct{PnlVect}}{pnl_vect_wrap_subvect}{const
+  \refstruct{PnlVect} \ptr x, int i, int s}
+    \sshortdescribe Creates a \refstruct{PnlVect} containing \var{x(i:i+s)}. No
+    copy is made. It is just a container.
+
+  \item \describefun{\refstruct{PnlVect}}{pnl_vect_create_wrap_subvect_with_last}{const \refstruct{PnlVect} \ptr x, int i, int j}
+    \sshortdescribe Creates a \refstruct{PnlVect} containing \var{x(i:j)}. No
+    copy is made. It is just a container.
+
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_from_file}
   {const char \ptr file}
   \sshortdescribe Reads a vector from a file and creates the corresponding
@@ -774,7 +783,7 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
   is sorted independtly of the others whereas if \var{dir='r'}, each column
   is sorted independtly of the others.
 
-\item \describefun{void}{pnl_qsort_index}{\refstruct{PnlMat} \ptr ,
+\item \describefun{void}{pnl_mat_qsort_index}{\refstruct{PnlMat} \ptr ,
     \refstruct{PnlMatInt} *index, char dir, char order}
   \sshortdescribe Sorts a matrix using a quick sort algorithm according to
   \var{order} (\verb!'i'! for increasing or \verb!'d'! for decreasing). The
@@ -1176,6 +1185,14 @@ diagonal ($M_{i, i+1}$) and the lower diagonal ($M_{i-1, i}$).
     \sshortdescribe In-place matrix matrix term by term product  
   \item \describefun{void}{pnl_tridiagmat_div_tridiagmat_term}{\refstruct{PnlTriDiagMat} \ptr lhs, const \refstruct{PnlTriDiagMat} \ptr rhs}
     \sshortdescribe In-place matrix matrix term by term division  
+  \item \describefun{void}{pnl_tridiagmat_map_inplace}{\refstruct{PnlTriDiagMat} \ptr lhs, 
+    double(\ptr f)(double)} 
+  \sshortdescribe \var{lhs = f(lhs)}.
+
+
+\item \describefun{void}{pnl_tridiagmat_map_tridiagmat}{\refstruct{PnlTriDiagMat} \ptr lhs, const
+  \refstruct{PnlTriDiagMat} \ptr rhs, double(\ptr f)(double, double)} 
+  \sshortdescribe \var{lhs = f(lhs, rhs)}.
 \end{itemize}
 
 \paragraph{Standard matrix operations \& Linear systems}
@@ -1226,34 +1243,76 @@ The structures and functions related to band matrices are declared in
 \subsubsection{Functions}
 \paragraph{Constructors and destructors}
 \begin{itemize}
-\item 
-  \describefun{\refstruct{PnlBandMat}\ptr }{pnl_bandmat_create}{int m, int n, int
+\item \describefun{\refstruct{PnlBandMat}\ptr }{pnl_bandmat_create}{int m, int n, int
     nl, int nu}
   \sshortdescribe Creates a band matrix of size \var{m x n} with \var{nl} lower
   diagonals and \var{nu} upper diagonals.
-\item
-  \describefun{\refstruct{PnlBandMat}\ptr }{pnl_bandmat_create_from_mat}{const
+
+\item \describefun{\refstruct{PnlBandMat}\ptr }{pnl_bandmat_create_from_mat}{const
     \refstruct{PnlMat} \ptr BM, int nl, int nu}
   \sshortdescribe Extracts a band matrix from a \refstruct{PnlMat}.
-\item
-  \describefun{void}{pnl_bandmat_free}{\refstruct{PnlBandMat}\ptr\ptr}
+
+\item \describefun{void}{pnl_bandmat_free}{\refstruct{PnlBandMat}\ptr\ptr}
   \sshortdescribe Frees a band matrix.
+
 \item \describefun{void}{pnl_bandmat_clone}{\refstruct{PnlBandMat} \ptr clone, 
   const \refstruct{PnlBandMat} \ptr M}
   \sshortdescribe Copies the band matrix \var{M} into \var{clone}. No new
   \refstruct{PnlBandMat} is created.
+
+\item \describefun{\refstruct{PnlBandMat}\ptr }{pnl_bandmat_copy}{\refstruct{PnlBandMat} \ptr BM}
+  \sshortdescribe Creates a new band matrix which is a copy of \var{BM}. Each
+  band matrix owns its data array.
+
+\item \describefun{\refstruct{PnlMat}\ptr }{pnl_bandmat_to_mat}{\refstruct{PnlBandMat} \ptr BM}
+  \sshortdescribe Creates a full matrix from a band matrix.
+
+\item \describefun{int}{pnl_bandmat_resize}{\refstruct{PnlBandMat} \ptr BM, int
+  m, int n, int nl, int nu}
+  \sshortdescribe Resizes \var{BM} to store a \var{m x n} band matrix with
+  \var{nu} upper diagonals and \var{nl} lower diagonals.
 \end{itemize}
 \paragraph{Accessing elements}
 \begin{itemize}
-\item 
-  \describefun{void}{pnl_pnl_bandmat_set}{\refstruct{PnlBandMat}
+\item \describefun{void}{pnl_bandmat_set}{\refstruct{PnlBandMat}
     \ptr M, int i, int j, double x}
   \sshortdescribe $M_{i, j}=x$.
+
+\item \describefun{void}{pnl_bandmat_get}{\refstruct{PnlBandMat}
+    \ptr M, int i, int j}
+    \sshortdescribe Returns $M_{i, j}$.
+
+\item \describefun{void}{pnl_bandmat_lget}{\refstruct{PnlBandMat}
+    \ptr M, int i, int j}
+    \sshortdescribe Returns the address $\&(M_{i, j})$.
+\item \describefun{void}{pnl_bandmat_set_double}{\refstruct{PnlBandMat}
+    \ptr M, double x}
+    \sshortdescribe Sets all the elements of \var{M} to \var{x}.
+
+  \item \describefun{void}{pnl_bandmat_print_as_full}{\refstruct{PnlBandMat}
+    \ptr M}
+    \sshortdescribe Prints a band matrix in a full format.
 \end{itemize}
 
 \subparagraph{Element wise operations}
 
 \begin{itemize}
+  \item \describefun{void}{pnl_bandmat_plus_double}{\refstruct{PnlBandMat} \ptr lhs, 
+  double x} 
+    \sshortdescribe In-place addition, \var{lhs += x} 
+
+  \item \describefun{void}{pnl_bandmat_minus_double}{\refstruct{PnlBandMat} \ptr lhs, 
+  double x} 
+  \sshortdescribe In-place substraction \var{lhs -= x} 
+
+\item \describefun{void}{pnl_bandmat_div_double}{\refstruct{PnlBandMat}
+  \ptr lhs, double x} 
+  \sshortdescribe \var{lhs = lhs ./ x}
+
+\item \describefun{void}{pnl_bandmat_mult_double}{\refstruct{PnlBandMat}
+  \ptr lhs, double x} 
+  \sshortdescribe \var{lhs = lhs * x}
+
 \item \describefun{void}{pnl_bandmat_plus_bandmat}{\refstruct{PnlBandMat} \ptr lhs, 
     const \refstruct{PnlBandMat} \ptr rhs} 
     \sshortdescribe In-place addition, \var{lhs += rhs} 
@@ -1265,22 +1324,24 @@ The structures and functions related to band matrices are declared in
 \item \describefun{void}{pnl_bandmat_inv_term}{\refstruct{PnlBandMat} \ptr lhs}
   \sshortdescribe In-place term by term  inversion \var{lhs = 1 ./ rhs} 
 
-\item \describefun{void}{pnl_bandmat_div_mat_term}{\refstruct{PnlBandMat}
+\item \describefun{void}{pnl_bandmat_div_bandmat_term}{\refstruct{PnlBandMat}
     \ptr lhs, const \refstruct{PnlBandMat} \ptr rhs} 
   \sshortdescribe In-place term by term  division \var{lhs = lhs ./ rhs}
 
-\item \describefun{void}{pnl_bandmat_mult_mat_term}{\refstruct{PnlBandMat}
+\item \describefun{void}{pnl_bandmat_mult_bandmat_term}{\refstruct{PnlBandMat}
     \ptr lhs, const \refstruct{PnlBandMat} \ptr rhs} 
   \sshortdescribe In-place term by term multiplication  \var{lhs = lhs .* rhs}
 
 \item \describefun{void}{pnl_bandmat_map}{\refstruct{PnlBandMat} \ptr lhs, const
     \refstruct{PnlBandMat} \ptr rhs, double(\ptr f)(double)} 
-  \sshortdescribe Applies the function \var{f} to each element of \var{rhs} and
-  stores the result in \var{lhs}. \var{lhs(i) = f(rhs(i))}
+  \sshortdescribe \var{lhs = f(rhs)}
 
 \item \describefun{void}{pnl_bandmat_map_inplace}{\refstruct{PnlBandMat} \ptr lhs, double(\ptr f)(double)}
-  \sshortdescribe Same function as \reffun{pnl_bandmat_map} but the result is
-  stored in \var{lhs} itself. \var{lhs(i) = f(lhs(i))}
+  \sshortdescribe  \var{lhs = f(lhs)}
+
+\item \describefun{void}{pnl_bandmat_map_map}{\refstruct{PnlBandMat} \ptr lhs, const
+  \refstruct{PnlBandMat} \ptr rhs, double(\ptr f)(double,double)} 
+  \sshortdescribe \var{lhs = f(lhs,rhs)}
 \end{itemize}
 
 
@@ -1291,6 +1352,9 @@ The structures and functions related to band matrices are declared in
   \sshortdescribe Computes \var{b := lambda A x + mu b}. When \var{mu==0}, the
   content of \var{b} is not used on input and instead \var{b} is resized to
   match the size of \var{A*x}.
+\item \describefun{void}{pnl_bandmat_mult_vect_inplace}{\refstruct{PnlVect} \ptr
+  y, const \refstruct{PnlBandMat} \ptr BM, const \refstruct{PnlVect} \ptr x}
+  \sshortdescribe \var{y = BM * x}
 \item 
   \describefun{void}{pnl_bandmat_syslin_inplace}{\refstruct{PnlBandMat}
     \ptr M, \refstruct{PnlVect} \ptr b}
