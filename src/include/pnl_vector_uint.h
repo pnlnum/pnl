@@ -111,7 +111,7 @@ extern double pnl_vect_uint_norm_one(const PnlVectUint *V); /*res=\Vert V \Vert_
 extern double pnl_vect_uint_norm_infty(const PnlVectUint *V); /*res=\Vert V \Vert_{l^\infty} */
 
 extern void pnl_vect_uint_swap_elements(PnlVectUint * v, int i, int j); 
-extern void pnl_vect_unit_reverse(PnlVectUint * v);
+extern void pnl_vect_uint_reverse(PnlVectUint * v);
 
 
 extern int pnl_vect_uint_less(const PnlVectUint * a,const PnlVectUint * b);

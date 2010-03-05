@@ -5,9 +5,10 @@ LDFLAGS=
 CFLAGS=
 
 ## list of executables to create
-BINS=pipo
+BINS=pipo tensor
 
 pipo_OBJS=main.o
+tensor_OBJS=tensor.o
 
 ## This line must be the last one
 include ../Makeuser.incl
