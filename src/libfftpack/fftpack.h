@@ -78,47 +78,35 @@
 #ifndef FFTPACK_H
 #define FFTPACK_H
 
-typedef int integer_t;            /* must be a signed integral type         */
-typedef double real_t;            /* can be a float, double, or long-double */
-
-/* Depending on the 'real_t' typedef, use the appropriate definition below  */
-/* #define REAL_CONSTANT(x) x##f   // real_t <==> float                     */
-#   define REAL_CONSTANT(x) x      /* real_t <==> double                    */
-/* #define REAL_CONSTANT(x) x##l   // real_t <==> long double               */
-
-/* Lastly, you will need to declare/define/alias the appropriate trig     */
-/* functions 'cos/cosf/cosl' and 'sin/sinf/sinl' in fftpack.{c,cpp}       */
-
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void cfftb( integer_t *n, real_t *c, real_t *wsave, integer_t *ifac );
-void cfftf( integer_t *n, real_t *c, real_t *wsave, integer_t *ifac );
-void cffti( integer_t *n, real_t *wsave, integer_t *ifac );
+void cfftb( int n, double *c, double *wsave );
+void cfftf( int n, double *c, double *wsave );
+void cffti( int n, double *wsave );
 
-void cosqb( integer_t *n, real_t *x, real_t *wsave, integer_t *ifac );
-void cosqf( integer_t *n, real_t *x, real_t *wsave, integer_t *ifac );
-void cosqi( integer_t *n, real_t *wsave, integer_t *ifac );
+void cosqb( int *n, double *x, double *wsave, int *ifac );
+void cosqf( int *n, double *x, double *wsave, int *ifac );
+void cosqi( int *n, double *wsave, int *ifac );
 
-void cost( integer_t *n, real_t *x, real_t *wsave, integer_t *ifac );
-void costi( integer_t *n, real_t *wsave, integer_t *ifac );
+void cost( int *n, double *x, double *wsave, int *ifac );
+void costi( int *n, double *wsave, int *ifac );
 
-void ezfftb( integer_t *n, real_t *r, real_t *azero, real_t *a, real_t *b, real_t *wsave, integer_t *ifac );
-void ezfftf( integer_t *n, real_t *r, real_t *azero, real_t *a, real_t *b, real_t *wsave, integer_t *ifac );
-void ezffti( integer_t *n, real_t *wsave, integer_t *ifac );
+void ezfftb( int *n, double *r, double *azero, double *a, double *b, double *wsave, int *ifac );
+void ezfftf( int *n, double *r, double *azero, double *a, double *b, double *wsave, int *ifac );
+void ezffti( int *n, double *wsave, int *ifac );
 
-void rfftb( integer_t *n, real_t *r, real_t *wsave, integer_t *ifac );
-void rfftf( integer_t *n, real_t *r, real_t *wsave, integer_t *ifac );
-void rffti( integer_t *n, real_t *wsave, integer_t *ifac );
+void rfftb( int n, double *r, double *wsave );
+void rfftf( int n, double *r, double *wsave );
+void rffti( int n, double *wsave );
 
-void sinqb( integer_t *n, real_t *x, real_t *wsave, integer_t *ifac );
-void sinqf( integer_t *n, real_t *x, real_t *wsave, integer_t *ifac );
-void sinqi( integer_t *n, real_t *wsave, integer_t *ifac );
+void sinqb( int *n, double *x, double *wsave, int *ifac );
+void sinqf( int *n, double *x, double *wsave, int *ifac );
+void sinqi( int *n, double *wsave, int *ifac );
 
-void sint( integer_t *n, real_t *x, real_t *wsave, integer_t *ifac );
-void sinti( integer_t *n, real_t *wsave, integer_t *ifac );
+void sint( int *n, double *x, double *wsave, int *ifac );
+void sinti( int *n, double *wsave, int *ifac );
 
 #ifdef __cplusplus
 }

@@ -58,6 +58,7 @@
 */
 
 #include <stdio.h>
+#include "cephes_protos.h"
 
 double chbevl( x, array, n )
      double x;

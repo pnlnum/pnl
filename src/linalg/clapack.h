@@ -13,7 +13,7 @@ extern "C" {
 
 #include "pnl_complex.h"
 
-typedef int (*L_fp)();
+typedef int (*L_fp)(void);
 
 extern int C2F(caxpy)(int *n, dcomplex *ca, dcomplex *cx, int * incx, dcomplex *cy, int *incy);
 
@@ -7209,13 +7209,13 @@ extern int C2F(zupmtr)(char *side, char *uplo, char *trans, int *m,
 
 extern int C2F(dlamc1)(int *beta, int *t, int *rnd, int *ieee1);
 
-double C2F(dsecnd)();
+double C2F(dsecnd)(void);
 
 extern int C2F(ilaver)(int *vers_major__, int *vers_minor__, int *vers_patch__);
 
 int C2F(lsame)(char *ca, char *cb);
 
-double C2F(second)();
+double C2F(second)(void);
 
 double C2F(slamch)(char *cmach);
 

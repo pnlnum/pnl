@@ -146,6 +146,7 @@
 
 
 #include "mconf.h"
+#include "cephes_protos.h"
 
 extern double SQRTH;
 extern double MAXLOG;
@@ -380,8 +381,6 @@ static unsigned short U[] = {
 #define UTHRESH 37.519379347
 #endif
 
-double polevl(), p1evl(), exp(), log(), fabs();
-double erf(), erfc();
 
 double ndtr(double a)
 {

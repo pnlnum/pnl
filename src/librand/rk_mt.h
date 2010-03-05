@@ -145,7 +145,7 @@ extern "C" {
    * Calling multiple times rk_randomseed should be avoided therefore calling
    * multiple times rk_fill with state == NULL should be avoided.
    */
-  extern void rk_fill(void *buffer, size_t size, rk_state *state);
+  extern void rk_fill(void *buffer, int size, rk_state *state);
 
   /*
    * fill the buffer with randombytes from the random device
@@ -155,7 +155,7 @@ extern "C" {
    * Warning: on most unixes RK_DEV_RANDOM will wait for enough entropy to answer
    * which can take a very long time on quiet systems.
    */
-  extern rk_error rk_devfill(void *buffer, size_t size, int strong);
+  extern rk_error rk_devfill(void *buffer, int size, int strong);
 
   /*
    * fill the buffer using rk_devfill if the random device is available and using
@@ -163,7 +163,7 @@ extern "C" {
    * parameters have the same meaning as rk_fill and rk_devfill
    * Returns RK_ENODEV if the device is unavailable, or RK_NOERR if it is
    */
-  extern rk_error rk_altfill(void *buffer, size_t size, int strong,
+  extern rk_error rk_altfill(void *buffer, int size, int strong,
 			     rk_state *state);
 
   /*

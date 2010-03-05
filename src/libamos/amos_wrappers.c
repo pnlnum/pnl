@@ -176,7 +176,7 @@ dcomplex pnl_complex_bessel_i_scaled( double v, dcomplex z )
       dcomplex aux1, aux2;
       aux1 = pnl_complex_bessel_i_scaled (-v, z);
       aux2 = pnl_complex_bessel_k (-v, z);
-      aux2 = CRmul (aux2, M_2_PI * sin(M_PI * -v) * exp ( -abs ( Creal(z) ) ));
+      aux2 = CRmul (aux2, M_2_PI * sin(M_PI * -v) * exp ( -fabs ( Creal(z) ) ));
       cy = Cadd (aux1, aux2);
     }
   return cy;

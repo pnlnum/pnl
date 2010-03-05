@@ -56,6 +56,7 @@
 
 #include <stdio.h>
 #include "pnl_mathtools.h"
+#include "pnl_specfun.h"
 #include "mconf.h"
 
 static int _mtherr_activated = TRUE;
@@ -108,13 +109,13 @@ int mtherr(char *name, int code)
 /*
  * Functions added to activate/deactivate mtherr
  */
-void pnl_deactivate_mtherr ()
+void pnl_deactivate_mtherr (void)
 {
   _mtherr_activated = FALSE;
 }
 
 
-void pnl_activate_mtherr ()
+void pnl_activate_mtherr (void)
 {
   _mtherr_activated = TRUE;
 }

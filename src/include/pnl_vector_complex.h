@@ -109,13 +109,14 @@ extern void pnl_vect_complex_free(PnlVectComplex **v);
 extern PnlVectComplex* pnl_vect_complex_create(int size);
 extern PnlVectComplex pnl_vect_complex_create_wrap_array(const dcomplex *x, int size);
 extern PnlVectComplex* pnl_vect_complex_create_from_dcomplex(int size, dcomplex x);
+extern PnlVectComplex* pnl_vect_complex_create_from_zero(int size);
 extern PnlVectComplex* pnl_vect_complex_create_from_array(int size, const double *re, const double *im);
 extern PnlVectComplex* pnl_vect_complex_create_from_ptr(int size, const dcomplex* x);
 extern PnlVectComplex* pnl_vect_complex_create_from_list(int size,...);
 extern PnlVectComplex* pnl_vect_complex_create_from_file (const char * file);
 
 extern int pnl_vect_complex_resize(PnlVectComplex *v, int size);
-extern int pnl_vect_complex_resize_from_complex(PnlVectComplex *v, int size, dcomplex x);
+extern int pnl_vect_complex_resize_from_dcomplex(PnlVectComplex *v, int size, dcomplex x);
 extern int pnl_vect_complex_resize_from_ptr(PnlVectComplex *v, int size, const dcomplex *t);
 extern PnlVectComplex* pnl_vect_complex_copy(const PnlVectComplex *v);
 extern void pnl_vect_complex_clone(PnlVectComplex *clone, const PnlVectComplex *v);
@@ -142,7 +143,8 @@ extern void
 pnl_vect_complex_div_vect_term(PnlVectComplex *lhs, const PnlVectComplex *rhs);/* lhs = lhs ./ rhs*/
 extern void
 pnl_vect_complex_mult_vect_term(PnlVectComplex *lhs, const PnlVectComplex *rhs); /* lhs= lhs.*rhs */ 
-extern void pnl_vect_complex_set_dcomplex(PnlVectComplex *v, dcomplex x);/* v[j]= x */
+extern void pnl_vect_complex_set_dcomplex(PnlVectComplex *v, dcomplex x);
+extern void pnl_vect_complex_set_zero(PnlVectComplex *v);
 extern void pnl_vect_set_zero(PnlVect * v); /* v[j]= 0 */
 extern dcomplex pnl_vect_complex_sum(const PnlVectComplex *lhs);/* sum(x) */
 extern void pnl_vect_complex_cumsum(PnlVectComplex *lhs);

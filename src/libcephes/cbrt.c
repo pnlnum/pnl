@@ -43,13 +43,13 @@
 
 
 #include "mconf.h"
+#include "cephes_protos.h"
 
 static double CBRT2  = 1.2599210498948731647672;
 static double CBRT4  = 1.5874010519681994747517;
 static double CBRT2I = 0.79370052598409973737585;
 static double CBRT4I = 0.62996052494743658238361;
 
-double frexp(), ldexp();
 
 double cbrt(double x)
 {

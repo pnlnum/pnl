@@ -22,6 +22,7 @@
 #include "pnl_vector.h"
 #include "pnl_matrix.h"
 #include "pnl_fft.h"
+#include "pnl_laplace.h"
 
 #define ALTERNATE(n) (((n)&1) ? -1 : 1) /* (-1)^n */
 

@@ -19,13 +19,8 @@
 
 #include "pnl_mathtools.h"
 #include "pnl_vector.h"
-
-extern void cfftb(int, double*, double*);
-extern void cfftf(int, double*, double*);
-extern void cffti(int, double*);
-extern void rfftb(int, double*, double*);
-extern void rfftf(int, double*, double*);
-extern void rffti(int, double*);
+#include "pnl_fft.h"
+#include "fftpack.h"
 
 /**
  * In-place Forward FFT

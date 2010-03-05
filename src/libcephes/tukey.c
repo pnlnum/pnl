@@ -9,6 +9,7 @@
 */
 
 #include <math.h>
+#include "cephes_protos.h"
 
 #define SMALLVAL 1e-4
 #define EPS 1.0e-14

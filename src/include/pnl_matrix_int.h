@@ -64,6 +64,7 @@ extern PnlVectInt pnl_mat_int_wrap_vect(const PnlMatInt *M);
 extern void pnl_mat_int_row_to_vect_inplace(PnlVectInt * V,const PnlMatInt *M, int i);/* M(i,:)=V(:) */
 extern void pnl_mat_int_map_inplace(PnlMatInt *lhs, int(*f)(int)); /*lhs=f(lhs)*/
 extern void pnl_mat_int_map(PnlMatInt *lhs, const PnlMatInt *rhs, int(*f)(int));/* lhs(i)=f(rhs(i)) */
+extern void pnl_mat_int_map_mat(PnlMatInt *lhs, const PnlMatInt *rhs, int(*f)(int,int));
 extern void pnl_mat_int_plus_int(PnlMatInt *lhs, int x); /*lhs+=x*/
 extern void pnl_mat_int_minus_int(PnlMatInt *lhs, int x); /*lhs-=x*/
 extern void pnl_mat_int_plus_mat(PnlMatInt *lhs, const PnlMatInt *rhs); /*lhs+=rhs*/
@@ -161,6 +162,7 @@ extern PnlHMatInt* pnl_hmat_int_create_from_ptr(int ndim, const int *dims, const
 extern int pnl_hmat_int_resize(PnlHMatInt *v, int ndim, const int *dims);
 extern void pnl_hmat_int_free(PnlHMatInt **v);
 extern PnlHMatInt* pnl_hmat_int_copy(const PnlHMatInt *H);
+extern void pnl_hmat_int_print(const PnlHMatInt *H);
 extern void pnl_hmat_int_clone(PnlHMatInt *clone, const PnlHMatInt *H);
 extern void pnl_hmat_int_plus_hmat(PnlHMatInt *lhs, const PnlHMatInt *rhs);/*lhs+=rhs*/
 extern void pnl_hmat_int_mult_int(PnlHMatInt *lhs, int x);/* lhs *=x;*/

@@ -18,12 +18,12 @@ typedef struct {
 } dcomplex;
 
 /** zero complex  0 + i 0  */
-#define CZERO (Complex(0,0))
+#define CZERO (Complex(0.,0.))
 /** unitary real complex  1 + i 0 */
-#define CUNO (Complex(1,0))
-#define CONE (Complex(1,0))
+#define CUNO (Complex(1.,0.))
+#define CONE (Complex(1.,0.))
 /** unitary pure imaginary complex  0 + i */
-#define CI (Complex(0,1)) 
+#define CI (Complex(0.,1.)) 
 #define CMPLX(z) z.r, z.i
 
 extern double Creal( dcomplex g );

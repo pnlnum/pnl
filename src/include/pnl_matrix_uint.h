@@ -64,6 +64,7 @@ extern PnlVectUint pnl_mat_uint_wrap_vect(const PnlMatUint *M);
 extern void pnl_mat_uint_row_to_vect_inplace(PnlVectUint * V,const PnlMatUint *M, int i);/* M(i,:)=V(:) */
 extern void pnl_mat_uint_map_inplace(PnlMatUint *lhs, uint(*f)(uint)); /*lhs=f(lhs)*/
 extern void pnl_mat_uint_map(PnlMatUint *lhs, const PnlMatUint *rhs, uint(*f)(uint));/* lhs(i)=f(rhs(i)) */
+extern void pnl_mat_uint_map_mat(PnlMatUint *lhs, const PnlMatUint *rhs, uint(*f)(uint,uint));
 extern void pnl_mat_uint_plus_uint(PnlMatUint *lhs, uint x); /*lhs+=x*/
 extern void pnl_mat_uint_minus_uint(PnlMatUint *lhs, uint x); /*lhs-=x*/
 extern void pnl_mat_uint_plus_mat(PnlMatUint *lhs, const PnlMatUint *rhs); /*lhs+=rhs*/
@@ -104,6 +105,7 @@ extern void pnl_mat_uint_max_index (const PnlMatUint *A, PnlVectUint *out, PnlVe
 extern void pnl_mat_uint_minmax_index (const PnlMatUint *A, PnlVectUint *m, PnlVectUint *M, PnlVectInt *im, PnlVectInt *iM, char d);
 extern void pnl_mat_uint_qsort_index (PnlMatUint *A, PnlMatInt *t, char dir, char order);
 extern void pnl_mat_uint_qsort (PnlMatUint *A, char dir, char order);
+extern void pnl_vect_uint_reverse(PnlVectUint * v);
 
 
 /* inline functions if you are using GCC */
@@ -160,6 +162,7 @@ extern PnlHMatUint* pnl_hmat_uint_create_from_uint(int ndim, const int *dims, ui
 extern PnlHMatUint* pnl_hmat_uint_create_from_ptr(int ndim, const int *dims, const uint *x);
 extern int pnl_hmat_uint_resize(PnlHMatUint *v, int ndim, const int *dims);
 extern void pnl_hmat_uint_free(PnlHMatUint **v);
+extern void pnl_hmat_uint_print(const PnlHMatUint *H);
 extern PnlHMatUint* pnl_hmat_uint_copy(const PnlHMatUint *H);
 extern void pnl_hmat_uint_clone(PnlHMatUint *clone, const PnlHMatUint *H);
 extern void pnl_hmat_uint_plus_hmat(PnlHMatUint *lhs, const PnlHMatUint *rhs);/*lhs+=rhs*/

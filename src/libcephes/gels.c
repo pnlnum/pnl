@@ -65,6 +65,7 @@
 */
 
 #include "pnl_mathtools.h"
+#include "cephes_protos.h"
 
 int
 gels( A, R, M, EPS, AUX )

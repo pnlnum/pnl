@@ -50,6 +50,7 @@
 */
 
 #include "mconf.h"
+#include "cephes_protos.h"
 
 #ifdef UNK
 static double A[8] = {
@@ -140,7 +141,6 @@ static unsigned short B[32] = {
 };
 #endif
 
-double polevl();
 extern double MACHEP;
 
 double spence(x)

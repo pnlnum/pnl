@@ -5,6 +5,8 @@
  *   Created: Wed Jan 27 14:21:34 2010
  */
 
+#include "pnl_complex.h"
+
 extern int airy ( double x, double *ai, double *aip, double *bi, double *bip );
 extern double bdtrc ( int k, int n, double p );
 extern double bdtr ( int k, int n, double p );

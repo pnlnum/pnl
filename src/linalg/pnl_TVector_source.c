@@ -340,23 +340,6 @@ void FUNCTION(pnl_vect, set_zero)(TYPE(PnlVect) * v)
   for(i = 0; i < v->size; i++)
     {v->array[i] = zero;}
 }
-/**
- * Sets v to the i-th basis vector
- * v[j]=0 if i!=j and v[i] = 1
- *
- * @param v a constant TYPE(PnlVect)pointer
- * @param i a index of the vector
- */
-void FUNCTION(pnl_vect, set_basis)(TYPE(PnlVect) * v, int i)
-{
-  const BASE zero = ZERO ;
-  const BASE one = ONE;
-  int k;
-  CheckIndexVect(v,i);
-  for(k = 0; k < v->size; k++)
-    {v->array[k] = zero; }
-  v->array[i] = one;
-}
 
 /**
  * copies a TYPE(PnlVect)

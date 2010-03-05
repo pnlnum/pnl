@@ -32,6 +32,7 @@ typedef struct {
 } PnlBasis;
 
 extern enum_members PnlBases ;
+extern PnlBasis* pnl_basis_create ( int index, int nb_func, int space_dim);
 extern PnlBasis* pnl_basis_init ( int index, int nb_func, int space_dim);
 extern void pnl_basis_free (PnlBasis **basis);
 extern int pnl_basis_fit_ls (PnlBasis *f, PnlVect *coef, PnlMat *x, PnlVect *y);

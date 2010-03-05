@@ -115,7 +115,7 @@ double amos_d1mach (int i)
  *  Using spConfig.h to get the largest int 
  */
 
-static int largestint()
+static int largestint(void)
 {
   static int first=0,large;
   if ( first == 0) 

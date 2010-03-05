@@ -30,11 +30,10 @@
  */
 
 
+#include "cephes_protos.h"
 
 void
-mmmpy( r, c, A, B, Y )
-     int r, c;
-     double *A, *B, *Y;
+mmmpy( int r, int c, double *A, double *B, double *Y )
 {
   register double s;
   double *pA, *pB, *pY, *pt;

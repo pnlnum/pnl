@@ -85,9 +85,9 @@
 */
 
 #include "mconf.h"
+#include "cephes_protos.h"
 
 extern double MACHEP, MAXNUM;
-double incbet(), incbi();
 
 double stdtr( k, t )
      int k;

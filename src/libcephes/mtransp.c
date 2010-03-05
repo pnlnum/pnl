@@ -27,10 +27,10 @@
  */
 
 
+#include "cephes_protos.h"
+
 void
-mtransp( n, A, T )
-     int n;
-     double *A, *T;
+mtransp( int n, double *A, double *T )
 {
   int i, j, np1;
   double *pAc, *pAr, *pTc, *pTr, *pA0, *pT0;

@@ -18,8 +18,8 @@ extern "C" {
  */
 /*@{*/
 
-extern void pnl_deactivate_mtherr ();
-extern void pnl_activate_mtherr ();
+extern void pnl_deactivate_mtherr (void);
+extern void pnl_activate_mtherr (void);
 
 
 /**

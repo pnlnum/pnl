@@ -242,7 +242,7 @@ static double Hermite_rec (double *x, int n, int n0, double *f_n, double *f_n_1)
  *  @param x the address of a real number
  *  @param n the index of the polynom to be evaluated
  */
-double HermiteD1(double *x, int n)
+static double HermiteD1(double *x, int n)
 {
   double val = *x;
   double val2;
@@ -319,7 +319,7 @@ static double Tchebychev_rec (double *x, int n, double *f_n, double *f_n_1)
  *  @param x the address of a real number
  *  @param n the order of the polynom to be evaluated
  */
-double TchebychevD1(double *x, int n)
+static double TchebychevD1(double *x, int n)
 {
   double val = *x;
   double val2, val3, val4;
@@ -511,7 +511,7 @@ DEFINE_ENUM(PnlBases, _reg_basis);
  * defined
  * @return a PnlBasis
  */
-PnlBasis*  pnl_basis_init (int index, int nb_func, int nb_variates)
+PnlBasis*  pnl_basis_create (int index, int nb_func, int nb_variates)
 {
   PnlBasis *b;
   enum_member *e;
@@ -552,6 +552,15 @@ PnlBasis*  pnl_basis_init (int index, int nb_func, int nb_variates)
         PNL_ERROR ("unknow basis", "pnl_basis_init");
     }
   return b; 
+}
+
+/*
+ * This a deprecated function synonymous of pnl_basis_create.
+ * It will removed in the future 
+ */
+PnlBasis*  pnl_basis_init (int index, int nb_func, int nb_variates)
+{
+  return pnl_basis_create (index, nb_func, nb_variates);
 }
 
 /** 

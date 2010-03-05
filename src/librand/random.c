@@ -50,11 +50,6 @@ static int draw_new_sample = 0;
       }                                                                 \
   }
 
-int pnl_counter ()
-{
-  return counter;
-}
-
 /********************************/
 /******MONTE CARLO STANDARD******/
 /********************************/
@@ -439,7 +434,7 @@ static void ECUYER(int dimension,double *sample)
    here we choose x^18 + x^5 + x^2 + x + 1 .
    It is described in 'Numerical Recipes in C' page 296. */
 /* ---------------------------------------------------- */
-static int bit_random()
+static int bit_random(void)
 {
   static int compt = 1;
   int degre = 18;
@@ -697,7 +692,7 @@ static void SQRT(int dim, double X_m[])
       prime_number(dim, prime);
       for(i=0; i<dim; i++)
         {
-          alpha[i]= sqrt(prime[i]);
+          alpha[i]= (int) sqrt((double) prime[i]);
         }
     }
 

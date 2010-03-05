@@ -683,13 +683,13 @@ static const unsigned long rk_sobol_primitive_polynomials[] = {
   0UL
 };
 
-rk_sobol_error rk_sobol_init(size_t dimension, rk_sobol_state *s, 
+rk_sobol_error rk_sobol_init(int dimension, rk_sobol_state *s, 
 			     rk_state *rs_dir, const unsigned long *directions,
 			     const unsigned long *polynomials)
 {
   rk_state rs_dir_temp;
   int j, l, degree = 0, last_degree = 0, ooord = 0;
-  size_t k, cdir = 0, cpol = 0;
+  int k, cdir = 0, cpol = 0;
   unsigned long polynomial = 1, rev = 0, last = 0;
 
   if (dimension == 0)
@@ -831,7 +831,7 @@ rk_sobol_error rk_sobol_init(size_t dimension, rk_sobol_state *s,
 
 void rk_sobol_reinit(rk_sobol_state *s)
 {
-  size_t k;
+  int k;
 
   /* Initialize numerator */
   for (k=0; k<s->dimension; k++)
@@ -844,7 +844,7 @@ void rk_sobol_reinit(rk_sobol_state *s)
 void rk_sobol_randomshift(rk_sobol_state *s, rk_state *rs_num)
 {
   rk_state rs_num_temp;
-  size_t k;
+  int k;
 
   if (rs_num == NULL)
     {
@@ -859,7 +859,7 @@ void rk_sobol_randomshift(rk_sobol_state *s, rk_state *rs_num)
 
 rk_sobol_error rk_sobol_copy(rk_sobol_state *copy, rk_sobol_state *orig)
 {
-  size_t k;
+  int k;
 
   /* Allocate the structure */
   copy->direction = NULL; copy->numerator = NULL;
@@ -888,7 +888,7 @@ rk_sobol_error rk_sobol_copy(rk_sobol_state *copy, rk_sobol_state *orig)
 rk_sobol_error rk_sobol_double(rk_sobol_state *s, double *x)
 {
   int j;
-  size_t k;
+  int k;
   unsigned long im;
   const double inverse_denominator=1.0/(ULONG_MAX+1.0);
 
@@ -980,7 +980,7 @@ double inverse_normal(double p)
 
 rk_sobol_error rk_sobol_gauss(rk_sobol_state *s, double *x)
 {
-  size_t k;
+  int k;
   rk_sobol_error rc = rk_sobol_double(s, x);
  
   for (k=0; k<s->dimension; k++)

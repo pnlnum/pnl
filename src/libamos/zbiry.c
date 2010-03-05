@@ -330,7 +330,7 @@ pnl_zbiry (double *zr, double *zi, int *id, int *kode, double *bir,
   r1m5 = amos_d1mach (5);
   /*Computing MIN 
    */
-  i__1 = fabs (k1), i__2 = fabs (k2);
+  i__1 = abs (k1), i__2 = abs (k2);
   k = MIN (i__1, i__2);
   elim = ((double) k * r1m5 - 3.) * 2.303;
   k1 = amos_i1mach (14) - 1;

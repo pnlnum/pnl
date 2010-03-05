@@ -230,7 +230,7 @@ typedef struct {
 
 #define PNL_EVAL_RNFUNCRM(y,F, x) (*((F)->function))(y,x, (F)->params)
 
-extern void pnl_qsort (void *a, int n, int es, int lda, int *t, int ldt, int use_index, int (*cmp)());
+extern void pnl_qsort (void *a, int n, int es, int lda, int *t, int ldt, int use_index, int (*cmp)(void const *, void const *));
 
 #ifdef __cplusplus
 }

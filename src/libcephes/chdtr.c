@@ -149,7 +149,7 @@
 */
 
 #include "mconf.h"
-double igamc(), igam(), igami();
+#include "cephes_protos.h"
 
 
 double chdtrc(df,x)

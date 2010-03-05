@@ -71,7 +71,6 @@ double simpsn( f, delta )
      double f[];     /* tabulated function */
      double delta;   /* spacing of arguments */
 {
-  extern double simcon[];
   double ans;
   int i;
 

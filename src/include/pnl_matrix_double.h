@@ -88,6 +88,7 @@ extern PnlMat* pnl_mat_copy(const PnlMat *v);
 extern void pnl_mat_clone(PnlMat *clone, const PnlMat *M);
 extern void pnl_mat_map_inplace(PnlMat *lhs, double(*f)(double)); /*lhs=f(lhs)*/
 extern void pnl_mat_map(PnlMat *lhs, const PnlMat *rhs, double(*f)(double));/* lhs(i)=f(rhs(i)) */
+extern void pnl_mat_map_mat(PnlMat *lhs, const PnlMat *rhs, double(*f)(double,double));
 extern void pnl_mat_plus_double(PnlMat *lhs, double x); /*lhs+=x*/
 extern void pnl_mat_minus_double(PnlMat *lhs, double x); /*lhs-=x*/
 extern void pnl_mat_plus_mat(PnlMat *lhs, const PnlMat *rhs); /*lhs+=rhs*/

@@ -1867,7 +1867,7 @@ void FUNCTION(pnl_hmat,plus_hmat)(TYPE(PnlHMat) *lhs, const TYPE(PnlHMat) *rhs)
  * @param x : scalar
  * @return  lhs = lhs*x
  */
-void FUNCTION(pnl_hmat,mult_BASE)(TYPE(PnlHMat) *lhs, BASE x)
+void FUNCTION(pnl_hmat,CONCAT2(mult_,BASE))(TYPE(PnlHMat) *lhs, BASE x)
 {
   BASE *lptr=lhs->array;
   int i=0;

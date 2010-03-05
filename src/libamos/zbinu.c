@@ -79,7 +79,7 @@ int amos_zbinu (double *zr, double *zi, double *fnu, int *kode,const int *n,
    *----------------------------------------------------------------------- 
    */
   amos_zseri (zr, zi, fnu, kode, &nn, &cyr[1], &cyi[1], &nw, tol, elim, alim);
-  inw = fabs (nw);
+  inw = abs (nw);
   *nz += inw;
   nn -= inw;
   if (nn == 0)

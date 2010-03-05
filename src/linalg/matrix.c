@@ -24,7 +24,6 @@
 #include <string.h>
 #include <math.h>
 
-#define PNL_MATRIX_PRIVATE
 #include "config.h"
 #include "pnl_matrix.h"
 #include "pnl_mathtools.h"
@@ -559,6 +558,7 @@ void pnl_mat_syslin_mat (PnlMat *A,  PnlMat *B)
   pnl_permutation_free (&p);
 }
 
+#if 0
 /*
  * This function solves a linear system A * X = B in place using a LU
  * factorization. This implementation is strongly inspired from CBlas and does
@@ -607,6 +607,7 @@ void pnl_mat_syslin_mat2 (PnlMat *A,  PnlMat *B)
         }
     }
 }
+#endif
 
 /**
  * solves a linear system A X = B using a Cholesky factorization of A where B
@@ -635,6 +636,7 @@ void pnl_mat_chol_syslin_mat (PnlMat *A,  PnlMat *B)
   pnl_vect_free (&b);
 }
 
+#if 0
 /*
  * This function solves a linear system A * X = B in place when A>0 using a
  * Cholecky factorization. This implementation is strongly inspired from CBlas
@@ -687,8 +689,9 @@ void pnl_mat_chol_syslin_mat2 (PnlMat *A,  PnlMat *B)
         }
     }
 }
+#endif
 
-typedef enum { LU=0, Chol=1, QR=2 } factorization;
+typedef enum { LU, Chol } factorization;
 
 
 /**
@@ -879,8 +882,10 @@ void pnl_mat_exp (PnlMat *B, const PnlMat *A)
       pnl_mat_dgemm('N', 'N', 1., &Mwork1, &Mwork2, 0., &Mwork);
       
       for (j=0; j<A->m; j++)
-        /* add work[icoef+k-1]; to the diagonal */
-        work[ifree+j*(A->m+1)] += work[icoef+k-1];
+        {
+          /* add work[icoef+k-1]; to the diagonal */
+          work[ifree+j*(A->m+1)] += work[icoef+k-1];
+        }
       ip = (1-iodd)*ifree + iodd*ip;
       iq = iodd*ifree + (1-iodd)*iq;
       ifree = iused;
@@ -931,7 +936,6 @@ void pnl_mat_exp (PnlMat *B, const PnlMat *A)
 
 
 /************************************************************************/
-/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
 /* Copyright David Pommier <pommier.david@gmail.com>                    */
 /*                                                                      */
 /* This program is free software: you can redistribute it and/or modify */

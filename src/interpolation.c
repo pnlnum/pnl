@@ -385,7 +385,7 @@ static void nearly_tri_diag_solve(double *d, double *lsd, double *lll, double *b
  *
  **/
 
-void nsp_derivd(double *x, double *u, double *du, int n, int inc, int type)
+static void nsp_derivd(double *x, double *u, double *du, int n, int inc, int type)
 {
   /*
    *     AUTHOR: Bruno Pincon
@@ -475,7 +475,7 @@ void nsp_derivd(double *x, double *u, double *du, int n, int inc, int type)
  *
  **/
 
-void nsp_cubic_spline(double *x, double *y, double *d, int n, int type,
+static void nsp_cubic_spline(double *x, double *y, double *d, int n, int type,
 		      double *A_d, double *A_sd, double *qdy, double *lll)
 {
   int i;
@@ -591,7 +591,7 @@ static int dpchst(double arg1, double arg2)
  * DPCHIM:  Piecewise Cubic Hermite Interpolation to Monotone data
  **/
 
-void nsp_dpchim(double *x, double *u, double *d, int n, int inc)
+static void nsp_dpchim(double *x, double *u, double *d, int n, int inc)
 {
   int i;
   double del1, del2, dmax, dmin, drat1, drat2, dsave,
@@ -1004,7 +1004,7 @@ int nsp_bicubic_subspline(double *x, double *y, double *u, int nx, int ny, doubl
  * return %OK or %FAIL (%FAIL when allocation of works arrays fail)
  *
  **/
-int nsp_bicubic_spline(double *x, double *y, double *u, int nx, int ny, double *C, int type)
+static int nsp_bicubic_spline(double *x, double *y, double *u, int nx, int ny, double *C, int type)
 {
   double *p=NULL, *q=NULL, *r=NULL, *u_temp=NULL, *d=NULL, *Ad=NULL, *Asd=NULL, *qdu=NULL, *ll=NULL;
   int i, j, k, n = MAX(nx,ny);
@@ -1118,7 +1118,7 @@ static void nsp_eval_bicubic_patch_with_grad(double xx, double yy, double xk, do
  * grid values with either #nsp_bicubic_spline or  #nsp_bicubic_subspline.
  *
  **/
-void nsp_eval_bicubic(double *x, double *y, double *C, int nx, int ny, double *x_eval, double *y_eval, double *z_eval, double *dzdx_eval, double *dzdy_eval, int m, int outmode)
+static void nsp_eval_bicubic(double *x, double *y, double *C, int nx, int ny, double *x_eval, double *y_eval, double *z_eval, double *dzdx_eval, double *dzdy_eval, int m, int outmode)
 {
   double xx, yy, Nan;
   int k, i, j, change_dzdx, change_dzdy, without_grad = dzdx_eval==NULL;

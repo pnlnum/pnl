@@ -64,6 +64,8 @@ extern PnlMat* pnl_tridiagmat_to_mat(const PnlTriDiagMat * mat);
 extern PnlTriDiagMat* pnl_tridiagmat_copy(const PnlTriDiagMat * mat);
 extern void pnl_tridiagmat_clone(PnlTriDiagMat *clone, const PnlTriDiagMat * mat);
 
+extern void pnl_tridiagmat_map_inplace(PnlTriDiagMat *lhs, double(*f)(double));
+extern void pnl_tridiagmat_map_tridiagmat(PnlTriDiagMat *lhs, const PnlTriDiagMat *rhs, double(*f)(double,double));
 extern void pnl_tridiagmat_print(const PnlTriDiagMat *M);
 extern void pnl_tridiagmat_fprint(FILE *fic, const PnlTriDiagMat *M);
 

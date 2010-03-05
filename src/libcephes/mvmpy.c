@@ -31,6 +31,7 @@
  */
 
 
+#include "cephes_protos.h"
 
 void
 mvmpy( r, c, A, V, Y )

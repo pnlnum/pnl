@@ -96,7 +96,7 @@
 */
 
 #include "mconf.h"
-double igam(), igamc();
+#include "cephes_protos.h"
 
 
 double gdtr( a, b, x )

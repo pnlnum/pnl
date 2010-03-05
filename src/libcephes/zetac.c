@@ -51,7 +51,7 @@
 */
 
 #include "mconf.h"
-
+#include "cephes_protos.h"
 extern double MAXNUM, PI;
 
 /* Riemann zeta(x) - 1
@@ -494,8 +494,6 @@ static unsigned short S[20] = {
 /*
  * Riemann zeta function, minus one
  */
-double sin(), floor(), Gamma(), pow(), exp();
-double polevl(), p1evl();
 extern double MACHEP;
 
 double zetac(x)

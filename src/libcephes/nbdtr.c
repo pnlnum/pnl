@@ -151,7 +151,7 @@
 */
 
 #include "mconf.h"
-double incbet(), incbi();
+#include "cephes_protos.h"
 
 double nbdtrc( k, n, p )
      int k, n;

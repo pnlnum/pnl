@@ -43,6 +43,8 @@
  */
 
 
+#include "cephes_protos.h"
+
 /*
   Cephes Math Library Release 2.1:  December, 1988
   Copyright 1984, 1987, 1988 by Stephen L. Moshier

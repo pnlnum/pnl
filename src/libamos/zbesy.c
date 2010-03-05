@@ -248,7 +248,7 @@ int pnl_zbesy (double *zr, double *zi, double *fnu, int *kode,const int *n,
   k2 = amos_i1mach (16);
   /*Computing MIN 
    */
-  i__1 = fabs (k1), i__2 = fabs (k2);
+  i__1 = abs (k1), i__2 = abs (k2);
   k = MIN (i__1, i__2);
   r1m5 = amos_d1mach (5);
   /*----------------------------------------------------------------------- 

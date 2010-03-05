@@ -123,15 +123,15 @@ swapfunc_int(int *a, int *b, int n, int lda)
 
 #define vecswapindex(a, b, n, lda)    if ((n) > 0 && index_flag==TRUE) swapfunc_int(a, b, n, lda)
 
-static __inline__ char *med3(char *a, char *b, char *c, int (*cmp)())
-{
-  return cmp(a, b) < 0 ?
-    (cmp(b, c) < 0 ? b : (cmp(a, c) < 0 ? c : a ))
-    :(cmp(b, c) > 0 ? b : (cmp(a, c) < 0 ? a : c ));
-}
+/* static __inline__ char *med3(char *a, char *b, char *c, int (*cmp)(const void*, const void *)) */
+/* { */
+/*   return cmp(a, b) < 0 ? */
+/*     (cmp(b, c) < 0 ? b : (cmp(a, c) < 0 ? c : a )) */
+/*     :(cmp(b, c) > 0 ? b : (cmp(a, c) < 0 ? a : c )); */
+/* } */
 
 static __inline__ void med3withindex(char *ans, int *i_ans, char *a, char *b, char *c,
-                                 int *i_a, int *i_b, int *i_c, int (*cmp)())
+                                 int *i_a, int *i_b, int *i_c, int (*cmp)(const void*, const void*))
 {
   cmp(a, b) < 0 ?
     (cmp(b, c) < 0 ? (ans=b, i_ans=i_b) :
@@ -143,7 +143,7 @@ static __inline__ void med3withindex(char *ans, int *i_ans, char *a, char *b, ch
 }
 
 static __inline__ void med3noindex(char *ans, int *i_ans, char *a, char *b, char *c,
-                                   int *i_a, int *i_b, int *i_c, int (*cmp)())
+                                   int *i_a, int *i_b, int *i_c, int (*cmp)(const void *, const void *))
 {
   cmp(a, b) < 0 ? (cmp(b, c) < 0 ? (ans=b) : (cmp(a, c) < 0 ? (ans=c) : (ans=a) ))
     :(cmp(b, c) > 0 ? (ans=b) : (cmp(a, c) < 0 ? (ans=a) : (ans=c)));
@@ -164,7 +164,7 @@ static __inline__ void med3noindex(char *ans, int *i_ans, char *a, char *b, char
  * computed. If FALSE the parameter t is not used
  * @param cmp the comparaison function
  */
-void pnl_qsort(void *a, int n, int es, int lda, int *t, int ldt, int index_flag, int (*cmp)())
+void pnl_qsort(void *a, int n, int es, int lda, int *t, int ldt, int index_flag, int (*cmp)(const void *, const void *))
 {
   char *pa, *pb, *pc, *pd, *pl, *pm, *pn;
   int d, r, swap_cnt;

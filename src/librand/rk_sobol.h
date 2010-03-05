@@ -77,7 +77,7 @@ extern char *rk_sobol_strerror[];
 
 typedef struct
 {
-  size_t dimension;
+  int dimension;
   unsigned long *direction;
   unsigned long *numerator;
   unsigned long count;
@@ -120,7 +120,7 @@ extern "C" {
    * polynomials is a zero terminated list of primitive polynomials to use if
    * it is != NULL to speed up initialization for dimension > 1024.
    */
-  extern rk_sobol_error rk_sobol_init(size_t dimension, rk_sobol_state *s, 
+  extern rk_sobol_error rk_sobol_init(int dimension, rk_sobol_state *s, 
 				      rk_state *rs_dir, const unsigned long *directions,
 				      const unsigned long *polynomials);
 

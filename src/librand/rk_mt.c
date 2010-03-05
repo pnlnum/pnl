@@ -149,8 +149,8 @@ rk_error rk_randomseed(rk_state *state)
 
 #ifndef _WIN32
   gettimeofday(&tv, NULL);
-  rk_seed(rk_hash(getpid()) ^ rk_hash(tv.tv_sec) ^ rk_hash(tv.tv_usec)
-          ^ rk_hash(clock()), state);
+  rk_seed( rk_hash((unsigned long) getpid()) ^ rk_hash((unsigned long)tv.tv_sec) 
+           ^ rk_hash((unsigned long)tv.tv_usec) ^ rk_hash((unsigned long)clock()), state);
 #else
   _ftime(&tv);
   rk_seed(rk_hash(tv.time) ^ rk_hash(tv.millitm) ^ rk_hash(clock()), state);
@@ -251,7 +251,7 @@ void rk_copy(rk_state *copy, rk_state *orig)
   memcpy(copy, orig, sizeof(rk_state));
 }
 
-void rk_fill(void *buffer, size_t size, rk_state *state)
+void rk_fill(void *buffer, int size, rk_state *state)
 {
   unsigned long r;
   unsigned char *buf = buffer;
@@ -280,7 +280,7 @@ void rk_fill(void *buffer, size_t size, rk_state *state)
     *(buf++) = (unsigned char)(r & 0xFF);
 }
 
-rk_error rk_devfill(void *buffer, size_t size, int strong)
+rk_error rk_devfill(void *buffer, int size, int strong)
 {
 #ifndef _WIN32
   FILE *rfile;
@@ -292,7 +292,7 @@ rk_error rk_devfill(void *buffer, size_t size, int strong)
     rfile = fopen(RK_DEV_URANDOM, "rb");
   if (rfile == NULL)
     return RK_ENODEV;
-  done = fread(buffer, size, 1, rfile);
+  done = fread(buffer, (size_t) size, 1, rfile);
   fclose(rfile);
   if (done)
     return RK_NOERR;
@@ -316,7 +316,7 @@ rk_error rk_devfill(void *buffer, size_t size, int strong)
   return RK_ENODEV;
 }
 
-rk_error rk_altfill(void *buffer, size_t size, int strong, rk_state *state)
+rk_error rk_altfill(void *buffer, int size, int strong, rk_state *state)
 {
   rk_error err;
 
