@@ -725,7 +725,7 @@ static void pnl_mat_syslin_test ()
 {
   PnlMat *S, *Scopy, *B, *Bcopy;
   PnlVect *b, *x;
-  PnlPermutation *p;
+  PnlVectInt *p;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
   printf("test de la fonction 'pnl_mat_chol' : \n");
   pnl_rand_init (gen, 5, 5);
@@ -754,12 +754,12 @@ static void pnl_mat_syslin_test ()
 
   printf("test de la fonction 'pnl_mat_lu_syslin' (symmetric matrix) : \n");
   pnl_mat_clone (S, Scopy);
-  p = pnl_permutation_create (5);
+  p = pnl_vect_int_create (5);
   pnl_permutation_init (p);
   pnl_mat_lu (S, p);
   pnl_mat_lu_syslin (x, S, p, b);
   pnl_vect_print(x);
-  pnl_permutation_free (&p);
+  pnl_vect_int_free (&p);
 
   printf("test de la fonction 'pnl_mat_syslin' (symmetric matrix) : \n");
   pnl_mat_clone (S, Scopy);
@@ -787,12 +787,12 @@ static void pnl_mat_syslin_test ()
   create_invertible_matrix (S, 5, gen);
   pnl_mat_clone (Scopy, S);
   printf ("A = "); pnl_mat_print_nsp (S);
-  p = pnl_permutation_create (5);
+  p = pnl_vect_int_create (5);
   pnl_permutation_init (p);
   pnl_mat_lu (S, p);
   pnl_mat_lu_syslin (x, S, p, b);
   printf("x = "); pnl_vect_print_nsp(x); printf("\n");
-  pnl_permutation_free (&p);
+  pnl_vect_int_free (&p);
 
   printf("test de la fonction 'pnl_mat_syslin' : \n");
   pnl_mat_clone (S, Scopy);

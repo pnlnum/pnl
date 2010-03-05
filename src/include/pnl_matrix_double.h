@@ -155,10 +155,10 @@ extern void pnl_mat_upper_syslin (PnlVect *x, const PnlMat *U, const  PnlVect *b
 extern void pnl_mat_lower_syslin (PnlVect *x, const PnlMat *L, const  PnlVect *b);
 extern void pnl_mat_chol_syslin (PnlVect *x, const PnlMat *chol, const  PnlVect *b);
 extern void pnl_mat_chol_syslin_inplace (const PnlMat *chol, PnlVect *b);
-extern void pnl_mat_lu (PnlMat *A, PnlPermutation *p);
+extern void pnl_mat_lu (PnlMat *A, PnlVectInt *p);
 extern void pnl_mat_lu_syslin (PnlVect *x, const PnlMat *LU,
-                               const PnlPermutation *p, const PnlVect *b);
-extern void pnl_mat_lu_syslin_inplace(const PnlMat *LU, const PnlPermutation *p, PnlVect *b);
+                               const PnlVectInt *p, const PnlVect *b);
+extern void pnl_mat_lu_syslin_inplace(const PnlMat *LU, const PnlVectInt *p, PnlVect *b);
 extern void pnl_mat_syslin_mat (PnlMat *A,  PnlMat *B);
 extern void pnl_mat_chol_syslin_mat (PnlMat *A,  PnlMat *B);
 extern void pnl_mat_syslin (PnlVect *x, const PnlMat *A, const PnlVect *b);
@@ -168,7 +168,7 @@ extern void pnl_mat_inverse (PnlMat *inverse, const PnlMat *A);
 extern void pnl_mat_exp (PnlMat *B, const PnlMat *A);
 extern void pnl_mat_log (PnlMat *B, const PnlMat *A);
 extern void pnl_mat_eigen (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors);
-extern void pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A);
+extern void pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlVectInt *p, const PnlMat *A);
 extern int pnl_mat_ls_mat (const PnlMat *A, PnlMat *B);
 extern int pnl_mat_ls (const PnlMat *A, PnlVect *b);
 

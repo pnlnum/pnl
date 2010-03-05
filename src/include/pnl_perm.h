@@ -12,10 +12,7 @@ extern "C" {
  * \defgroup PnlPermutation  Permutation 
  */
 /*@{*/
-typedef  struct {
-  int size;
-  int *array;
-} PnlPermutation;
+typedef PnlVectInt PnlPermutation;
 
 extern PnlPermutation* pnl_permutation_create (int n);
 extern void pnl_permutation_init (PnlPermutation *p);

@@ -379,9 +379,9 @@ void pnl_mat_chol_syslin_inplace (const PnlMat *chol, PnlVect *b)
  * matrices. Note that the diagonal elemets of L are all 1.
  *
  * @param A the matrix to decompose.
- * @param p a PnlPermutation.
+ * @param p a PnlVectInt.
  */
-void pnl_mat_lu (PnlMat *A, PnlPermutation *p)
+void pnl_mat_lu (PnlMat *A, PnlVectInt *p)
 {
   int i, j, k, i_pivot;
   double aij, ajj, aik, ajk, max;
@@ -440,10 +440,10 @@ void pnl_mat_lu (PnlMat *A, PnlPermutation *p)
  * positive system, prefer pnl_mat_chol_syslin
  *
  * @param LU a PnlMat containing the LU decomposition of A
- * @param p a PnlPermutation.
+ * @param p a PnlVectInt.
  * @param b right hand side member. Contains the solution x on exit
  */
-void pnl_mat_lu_syslin_inplace (const PnlMat *LU, const PnlPermutation *p, PnlVect *b)
+void pnl_mat_lu_syslin_inplace (const PnlMat *LU, const PnlVectInt *p, PnlVect *b)
 {
   int i, j;
   double Bi, temp, Aii;
@@ -489,10 +489,10 @@ void pnl_mat_lu_syslin_inplace (const PnlMat *LU, const PnlPermutation *p, PnlVe
  * @param x existing vector that contains the solution on exit
  * @param LU a PnlMat containing the LU decomposition of A
  * @param b right hand side member
- * @param p a PnlPermutation.
+ * @param p a PnlVectInt.
  */
 void pnl_mat_lu_syslin (PnlVect *x, const PnlMat *LU,
-                        const PnlPermutation *p, const PnlVect *b)
+                        const PnlVectInt *p, const PnlVect *b)
 {
   pnl_vect_clone (x, b);
   pnl_mat_lu_syslin_inplace (LU, p, x);
@@ -523,12 +523,12 @@ void pnl_mat_syslin (PnlVect *x, const PnlMat *A, const PnlVect *b)
  */
 void pnl_mat_syslin_inplace (PnlMat *A, PnlVect *b)
 {
-  PnlPermutation *p;
+  PnlVectInt *p;
   CheckIsSquare(A);
-  p = pnl_permutation_create (A->m);
+  p = pnl_vect_int_create (A->m);
   pnl_mat_lu (A, p);
   pnl_mat_lu_syslin_inplace (A, p, b);
-  pnl_permutation_free (&p);
+  pnl_vect_int_free (&p);
 }
 
 /**
@@ -539,13 +539,13 @@ void pnl_mat_syslin_inplace (PnlMat *A, PnlVect *b)
  */
 void pnl_mat_syslin_mat (PnlMat *A,  PnlMat *B)
 {
-  PnlPermutation *p;
+  PnlVectInt *p;
   PnlVect *b;
   int i;
 
   CheckIsSquare(A);
   b = pnl_vect_create (0);
-  p = pnl_permutation_create (A->m);
+  p = pnl_vect_int_create (A->m);
   pnl_mat_lu (A, p);
 
   for (i=0; i<B->n; i++)
@@ -555,7 +555,7 @@ void pnl_mat_syslin_mat (PnlMat *A,  PnlMat *B)
       pnl_mat_set_col (B, b, i);
     }
   pnl_vect_free (&b);
-  pnl_permutation_free (&p);
+  pnl_vect_int_free (&p);
 }
 
 #if 0
@@ -569,11 +569,11 @@ void pnl_mat_syslin_mat (PnlMat *A,  PnlMat *B)
  */
 void pnl_mat_syslin_mat2 (PnlMat *A,  PnlMat *B)
 {
-  PnlPermutation *p;
+  PnlVectInt *p;
   int i, j, k;
 
   CheckIsSquare(A);
-  p = pnl_permutation_create (A->m);
+  p = pnl_vect_int_create (A->m);
   pnl_mat_lu (A, p);
   
   /* solve L Y = B, store the result in B */
@@ -705,7 +705,7 @@ static void pnl_mat_inverse_aux (PnlMat *inverse, const PnlMat *A,
                                  factorization type)
 {
   int k;
-  PnlPermutation *p = NULL;
+  PnlVectInt *p = NULL;
   PnlMat *Acopy = pnl_mat_copy (A);
   PnlVect *b = pnl_vect_create_from_double (A->m, 0.0);
   PnlVect *x = pnl_vect_create (0);
@@ -713,7 +713,7 @@ static void pnl_mat_inverse_aux (PnlMat *inverse, const PnlMat *A,
   switch (type)
     {
     case LU :
-      p = pnl_permutation_create(A->n);
+      p = pnl_vect_int_create(A->n);
       pnl_mat_lu (Acopy, p);
       break;
     case Chol :   pnl_mat_chol (Acopy);
@@ -738,7 +738,7 @@ static void pnl_mat_inverse_aux (PnlMat *inverse, const PnlMat *A,
   pnl_vect_free (&b);
   pnl_vect_free (&x);
   pnl_mat_free (&Acopy);
-  pnl_permutation_free (&p);
+  pnl_vect_int_free (&p);
 }
 
 

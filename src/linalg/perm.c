@@ -36,13 +36,7 @@
 PnlPermutation* pnl_permutation_create (int n)
 {
   PnlPermutation *p;
-  if ((p=malloc(sizeof(PnlPermutation)))==NULL) return NULL;
-  p->size = n;
-  if (p->size > 0)
-    {
-      if ((p->array=malloc(sizeof(int)*n))==NULL) return NULL;
-    }
-  else p->array = NULL;
+  p = pnl_vect_int_create (n);
   return p;
 }
 
@@ -69,17 +63,8 @@ void pnl_permutation_init (PnlPermutation *p)
  */
 void pnl_permutation_swap (PnlPermutation *p, int i, int j)
 {
-#ifndef PNL_RANGE_CHECK_OFF
-  if (i >= p->size)
-    {
-      PNL_ERROR("first index is out of range", "pnl_permutation_swap");
-    }
-    
-  if (j >= p->size)
-    {
-      PNL_ERROR("second index is out of range", "pnl_permutation_swap");
-    }
-#endif
+  PNL_CHECK (i >= p->size, "first index is out of range", "pnl_permutation_swap");
+  PNL_CHECK (j >= p->size, "second index is out of range", "pnl_permutation_swap");
   
   if (i != j)
     {
@@ -96,9 +81,7 @@ void pnl_permutation_swap (PnlPermutation *p, int i, int j)
  */
 void pnl_permutation_free (PnlPermutation **p)
 {
-  if ( *p == NULL ) return ;
-  if ( (*p)->size >0 ) free ((*p)->array);
-  free (*p); *p=NULL;
+  pnl_vect_int_free (p);
 }
 
 /**
@@ -112,12 +95,7 @@ void pnl_permutation_free (PnlPermutation **p)
 void pnl_vect_permute (PnlVect *px, const PnlVect *x, const PnlPermutation *p)
 {
   int i, k;
-#ifndef  PNL_RANGE_CHECK_OFF
-  if (x->size != p->size)
-    {
-      PNL_ERROR("incompatible permutation size", "pnl_vect_permute");
-    }
-#endif
+  PNL_CHECK (x->size != p->size, "incompatible permutation size", "pnl_vect_permute");
   pnl_vect_resize (px, x->size);
   for (i=0; i<x->size; i++)
     {
@@ -182,12 +160,7 @@ static void pnl_permute_inplace (double *x, const int *p, int n)
  */
 void pnl_vect_permute_inplace (PnlVect *x, const PnlPermutation *p)
 {
-#ifndef PNL_RANGE_CHECK_OFF
-  if (x->size != p->size)
-    {
-      PNL_ERROR("incompatible permutation size", "pnl_vect_permute");
-    }
-#endif
+  PNL_CHECK (x->size != p->size, "incompatible permutation size", "pnl_vect_permute");
   pnl_permute_inplace (x->array, p->array, x->size);
 }
   
@@ -199,12 +172,7 @@ void pnl_vect_permute_inplace (PnlVect *x, const PnlPermutation *p)
  */
 void pnl_permutation_fprint (FILE *fic, const PnlPermutation *p)
 {
-  int i;
-  for (i=0; i<p->size; i++)
-    {
-      fprintf (fic, "%d ", p->array[i]);
-    }
-  fprintf (fic, "\n");
+  pnl_vect_int_fprint (fic, p);
 }
 
 /**
@@ -214,6 +182,6 @@ void pnl_permutation_fprint (FILE *fic, const PnlPermutation *p)
  */
 void pnl_permutation_print (const PnlPermutation *p)
 { 
-  pnl_permutation_fprint (stdout, p);
+  pnl_vect_int_print (p);
 }
 
