@@ -1,0 +1,4 @@
+#!/bin/sh
+
+find src examples -name '*.[ch]' | xargs grep -n -E "$@"
+
