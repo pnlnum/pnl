@@ -46,16 +46,6 @@ PnlPermutation* pnl_permutation_create (int n)
   return p;
 }
 
-PnlPermutation* pnl_permutation_create_from_ptr (int n, const int *t)
-{
-  int i;
-  PnlPermutation *p;
-  p = pnl_permutation_create (n);
-  for (i=0; i<n; i++)
-    p->array[i] = t[i];
-  return p;
-}
-
 /**
  * Initializes an existing permutation to the identity permutation
  *
@@ -223,5 +213,7 @@ void pnl_permutation_fprint (FILE *fic, const PnlPermutation *p)
  * @param p the permutation to print
  */
 void pnl_permutation_print (const PnlPermutation *p)
-{ pnl_permutation_fprint (stdout, p); }
+{ 
+  pnl_permutation_fprint (stdout, p);
+}
 

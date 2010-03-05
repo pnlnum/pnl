@@ -18,7 +18,6 @@ typedef  struct {
 } PnlPermutation;
 
 extern PnlPermutation* pnl_permutation_create (int n);
-extern PnlPermutation* pnl_permutation_create_from_ptr (int n, const int *);
 extern void pnl_permutation_init (PnlPermutation *p);
 extern void pnl_permutation_swap (PnlPermutation *p, int i, int j);
 extern void pnl_permutation_free (PnlPermutation **p);

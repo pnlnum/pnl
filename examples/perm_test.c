@@ -28,13 +28,14 @@ static void permute_vect_test ()
 {
   PnlVect *x, *px;
   PnlPermutation *p;
+  int i;
   int t[10] = { 2, 4, 7, 9, 1, 0, 3, 6, 5, 8};
 
   printf("Test of permutation functions\n");
   x = pnl_vect_create_from_double(10, 1.);
   pnl_vect_cumsum (x);
   px = pnl_vect_create (0);
-  p = pnl_permutation_create_from_ptr (10, t);
+  for ( i=0 ; i<10 ; i++) p->array[i] = t[i];
 
   printf("original vector\n");
   pnl_vect_print (x);
