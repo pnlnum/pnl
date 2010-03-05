@@ -112,6 +112,16 @@ parts.
   polynomial bases and regression, $\dots$
 \end{itemize}
 
+\section{A few guidelines used by the Pnl developers}
+
+\begin{itemize}
+  \item All functions and header file names are prefixed by \verb!pnl_!
+  \item Functions ending in \verb!_create! always return an object created by
+    one or several calls to \verb!malloc!. Once these objects are not used, they
+    must be freed by calling the same function but ending in \verb!_free!
+\end{itemize}
+
+
 
 
 \input{mathematical_functions.tex}

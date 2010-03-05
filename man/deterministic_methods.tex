@@ -106,7 +106,7 @@ $\alpha^\star \in \R^N$ which solves
 \subsubsection{Functions}
 
 \begin{itemize}
-  \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_init}{int index, int N, int d}
+  \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create}{int index, int N, int d}
   \sshortdescribe Creates a \refstruct{PnlBasis} for the polynomial family
   defined by \var{index} (see Table~\ref{basis_index}) with at most \var{N}
   elements. \var{d} is the dimension of the space on which the functions are
@@ -114,7 +114,7 @@ $\alpha^\star \in \R^N$ which solves
 
 \item  \describefun{void}{pnl_basis_free}{\refstruct{PnlBasis} \ptr\ptr basis}
     \sshortdescribe Frees a \refstruct{PnlBasis} created by
-    \reffun{pnl_basis_init}. Beware that \var{basis} is the address of a
+    \reffun{pnl_basis_create}. Beware that \var{basis} is the address of a
     \refstruct{PnlBasis}\ptr.
 
 \item  \describefun{void}{pnl_basis_i}{\refstruct{PnlBasis }\ptr basis,

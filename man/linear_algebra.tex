@@ -212,12 +212,14 @@ Equivalently to these functions, there exist macros for {\bf \refstruct{PnlVect}
 
 \item \describefun{void}{pnl_vect_map}{\refstruct{PnlVect} \ptr lhs, const
     \refstruct{PnlVect} \ptr rhs, double(\ptr f)(double)} 
-  \sshortdescribe Applies the function \var{f} to each element of \var{rhs} and
-  stores the result in \var{lhs}
+    \sshortdescribe \var{lhs = f(rhs)} 
 
 \item \describefun{void}{pnl_vect_map_inplace}{\refstruct{PnlVect} \ptr lhs, double(\ptr f)(double)}
-  \sshortdescribe Same function as \reffun{pnl_vect_map} but the result is
-  stored in \var{lhs} itself.
+  \sshortdescribe \var{lhs = f(lhs)} 
+
+\item \describefun{void}{pnl_vect_map_vect}{\refstruct{PnlVect} \ptr lhs, const
+  \refstruct{PnlVect} \ptr rhs, double(\ptr f)(double, double)} 
+    \sshortdescribe \var{lhs = f(lhs,rhs)} 
 
 \item \describefun{void}{pnl_vect_axpby}{double a, const \refstruct{PnlVect} \ptr x, 
     double b, \refstruct{PnlVect} \ptr y} 
@@ -684,12 +686,16 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 
 \item \describefun{void}{pnl_mat_map_inplace}{\refstruct{PnlMat} \ptr lhs, 
     double(\ptr f)(double)} 
-  \sshortdescribe Applies function \var{f} to all elements of \var{lhs}.
+  \sshortdescribe \var{lhs = f(lhs)}.
+
 
 \item \describefun{void}{pnl_mat_map}{\refstruct{PnlMat} \ptr lhs, const
     \refstruct{PnlMat} \ptr rhs, double(\ptr f)(double)} 
-  \sshortdescribe Applies function \var{f} to \var{rhs} and stores the result
-  into \var{lhs}.
+    \sshortdescribe \var{lhs = f(rhs)}.
+
+\item \describefun{void}{pnl_mat_map_mat}{\refstruct{PnlMat} \ptr lhs, const
+  \refstruct{PnlMat} \ptr rhs, double(\ptr f)(double, double)} 
+  \sshortdescribe \var{lhs = f(lhs, rhs)}.
 
 \item \describefun{double}{pnl_mat_sum}{const \refstruct{PnlMat} \ptr lhs}
   \sshortdescribe Sums matrix component-wise  
