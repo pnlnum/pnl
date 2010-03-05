@@ -17,10 +17,10 @@
 /************************************************************************/
 
 #include "config.h"
-#include "pnl_vector_uint.h"
+#include "pnl_vector.h"
 #include "pnl_mathtools.h"
 
-int pnl_vect_uint_less(const PnlVectUint * a,const PnlVectUint * b)
+int pnl_vect_int_less(const PnlVectInt * a,const PnlVectInt * b)
 {
   int i;
   for( i=0;i<a->size;i++)
@@ -29,7 +29,7 @@ int pnl_vect_uint_less(const PnlVectUint * a,const PnlVectUint * b)
   return FALSE;
 }
 
-int pnl_vect_uint_equal(const PnlVectUint * a,const PnlVectUint * b)
+int pnl_vect_int_equal(const PnlVectInt * a,const PnlVectInt * b)
 {
   int i;
   for(i=0;i<a->size;i++)

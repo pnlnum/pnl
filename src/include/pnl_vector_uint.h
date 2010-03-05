@@ -114,8 +114,6 @@ extern void pnl_vect_uint_swap_elements(PnlVectUint * v, int i, int j);
 extern void pnl_vect_uint_reverse(PnlVectUint * v);
 
 
-extern int pnl_vect_uint_less(const PnlVectUint * a,const PnlVectUint * b);
-extern int pnl_vect_uint_equal(const PnlVectUint * a,const PnlVectUint * b);
 
 /*@}*/
 /*@}*/

@@ -115,6 +115,8 @@ extern void pnl_vect_int_dyadic_cast(const PnlVectInt * v_int,PnlVect * v_out);
 extern void pnl_vect_int_swap_elements(PnlVectInt * v, int i, int j); 
 extern void pnl_vect_int_reverse(PnlVectInt * v);
 
+extern int pnl_vect_int_less(const PnlVectInt * a,const PnlVectInt * b);
+extern int pnl_vect_int_equal(const PnlVectInt * a,const PnlVectInt * b);
 /*@}*/
 /*@}*/
 
