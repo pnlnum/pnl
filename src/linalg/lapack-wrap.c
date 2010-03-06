@@ -73,6 +73,39 @@ static void pnl_mat_make_upper (PnlMat *A)
 }
 
 /**
+ * Cholesky decomposition. Postivity is checked during the
+ * transformation, but no test of symmetry.
+ *
+ * Decomposition done in place. The lower part of the matrix
+ * contains the cholesky decomposition. The upper part is
+ * set to 0.
+ *
+ * @param M : a PnlMat pointer.
+ */
+void pnl_mat_chol(PnlMat *M)
+{
+  int n, lda, info, i, j;
+  CheckIsSquare(M);
+  n = M->m;
+  lda = M->m;
+  /* Because of Fortran column wise storage, we ask for an upper triangular
+   * matrix to actually have a lower one */
+  C2F(dpotrf)("U", &n, M->array, &lda, &info);
+  if (info != 0)
+    {
+      PNL_ERROR ("matrix is singular", "pnl_mat_chol");
+    }
+  /* Sets the upper part to 0 */
+  for ( i=0 ; i<M->m ; i++ )
+    {
+      for ( j=i+1 ; j<M->n ; j++ )
+        {
+          PNL_MLET (M, i, j) = 0.;
+        }
+    }
+}
+
+/**
  * computes a P A = LU factorisation. On exit A contains the L and U
  * matrices. Note that the diagonal elements of L are all 1.
  *
@@ -81,7 +114,7 @@ static void pnl_mat_make_upper (PnlMat *A)
  */
 void pnl_mat_lu (PnlMat *A, PnlPermutation *p)
 {
-  int info, i, N = A->n;
+  int info, N = A->n;
   
   CheckIsSquare(A);
 
@@ -226,6 +259,78 @@ void pnl_mat_lower_syslin (PnlVect *x, const PnlMat *A, const  PnlVect *b)
 }
 
 /**
+ * solves a symmetric DEFINITE POSITIVE linear system using the Cholesky
+ * decomposition of the system A x = b
+ *
+ * @param chol the Cholesky decomposition of the system as computed by pnl_mat_chol
+ * @param b right hand side member. On exit, b contains the solution of the system.
+ */
+void pnl_mat_chol_syslin_inplace (const PnlMat *chol, PnlVect *b)
+{
+  int n, nrhs, lda, ldb, info;
+  CheckIsSquare(chol);
+  CheckMatVectIsCompatible (chol, b);
+  n = chol->m;
+  lda = chol->m;
+  ldb = b->size;
+  nrhs = 1;
+
+  C2F(dpotrs)("U", &n, &nrhs, chol->array, &lda, b->array, &ldb, &info);
+  if (info != 0)
+    {
+      PNL_ERROR ("illegal value", "pnl_mat_chol_syslin");
+    }
+}
+
+/**
+ * solves a symmetric DEFINITE POSITIVE linear system using the Cholesky
+ * decomposition of the system A x = b
+ *
+ * @param x already existing PnlVect that contains the solution on exit
+ * @param chol the Cholesky decomposition of the system as computed by pnl_mat_chol
+ * @param b right hand side member
+ */
+void pnl_mat_chol_syslin (PnlVect *x, const PnlMat *chol, const  PnlVect *b)
+{
+  pnl_vect_clone (x,b);
+  pnl_mat_chol_syslin_inplace (chol, x);
+}
+
+/**
+ * solves a linear system A X = B using a Cholesky factorization of A where B
+ * is a matrix. Note that A must be symmetrix positive definite
+ *
+ * @param A contains the Cholesky decomposition of the matrix A as computed by
+ * pnl_mat_chol
+ * @param B the r.h.s. matrix of the system of size n x m. On exit B contains
+ * the solution X
+ */
+void pnl_mat_chol_syslin_mat (const PnlMat *A,  PnlMat *B)
+{
+  int n, nrhs, lda, ldb, info;
+  PnlMat *tB;
+  CheckIsSquare(A);
+  PNL_CHECK (A->m != B->m, "size mismatch", "pnl_mat_chol_syslin_mat");
+  n = A->m;
+  lda = A->m;
+  ldb = B->m;
+  nrhs = B->n;
+
+  /* Some tweaks are needed because of Fortran storage in Blas */
+  tB = pnl_mat_create (0,0);
+  /* Convert to column wise storage */
+  pnl_mat_tr (tB, B);
+  C2F(dpotrs)("U", &n, &nrhs, A->array, &lda, tB->array, &ldb, &info);
+  if (info != 0)
+    {
+      PNL_ERROR ("illegal value", "pnl_mat_chol_syslin");
+    }
+  /* Revert to row wise storage */
+  pnl_mat_tr (B, tB);
+  pnl_mat_free (&tB);
+}
+
+/**
  * solves the linear system A x = b with P A = LU. For a symmetric definite
  * positive system, prefer pnl_mat_chol_syslin
  *
@@ -245,14 +350,14 @@ void pnl_mat_lu_syslin_inplace (PnlMat *A, const PnlVectInt *p, PnlVect *b)
   lda = A->m;
   ldb = A->m;
   /* Fortran indices start at 1 */
-  pnl_vect_int_plus_int (p, 1);
+  for ( i=0 ; i<p->size ; i++ ) (p->array[i])++;
   /* Convert to a column wise storage */
   pnl_mat_sq_transpose (A);
   C2F(dgetrs)("N",&n,&nrhs,A->array,&lda,p->array,b->array,&ldb,&info);
   /* Revert to a row wise storage */
   pnl_mat_sq_transpose (A);
   /* Fortran indices start at 1 */
-  pnl_vect_int_minus_int (p, 1);
+  for ( i=0 ; i<p->size ; i++ ) (p->array[i])--;
   if (info != 0)
     {
       PNL_ERROR ("Matrix is singular", "pnl_lu_syslin");
@@ -315,7 +420,7 @@ void pnl_mat_syslin_inplace (PnlMat *A, PnlVect *b)
  */
 void pnl_mat_lu_syslin_mat (const PnlMat *A,  const PnlPermutation *p, PnlMat *B)
 {
-  int n, nrhs, lda, ldb, info;
+  int i, n, nrhs, lda, ldb, info;
   PnlMat *tB;
   CheckIsSquare(A);
   PNL_CHECK (A->m != B->m, "size mismatch", "pnl_mat_lu_syslin_mat");
@@ -328,17 +433,18 @@ void pnl_mat_lu_syslin_mat (const PnlMat *A,  const PnlPermutation *p, PnlMat *B
   /* Some tweaks are needed because of Fortran storage in Blas */
   tB = pnl_mat_create (0,0);
   /* Convert to column wise storage */
-  pnl_mat_sq_transpose (A);
+  pnl_mat_sq_transpose ( (PnlMat *) A); /* drop the const because A is reverted at the end */
   pnl_mat_tr (tB, B);
   /* shift indices of pivoting */
-  pnl_vect_int_plus_int (p, 1);
+  for ( i=0 ; i<p->size ; i++ ) (p->array[i])++;
 
   C2F(dgetrs)("N",&n,&nrhs,A->array,&lda,p->array,tB->array,&ldb,&info);
   /* Revert to row wise storage */
-  pnl_mat_sq_transpose (A);
+  pnl_mat_sq_transpose ( (PnlMat *) A); /* drop the const because A is reverted at the end */
+
   pnl_mat_tr (B, tB);
   /* unshift indices of pivoting */
-  pnl_vect_int_minus_int (p, 1);
+  for ( i=0 ; i<p->size ; i++ ) (p->array[i])--;
   if (info != 0)
     {
       PNL_ERROR ("Matrix is singular", "pnl_lu_syslin");
@@ -404,6 +510,73 @@ void pnl_mat_lower_inverse (PnlMat *A, const PnlMat *B)
     {
       PNL_ERROR ("Matrix is singular", "pnl_mat_upper_inverse");
     }
+}
+
+/**
+ * Computes the inverse of a symmetric positive defnite matrix using a Cholesky
+ * decomposition
+ *
+ * @param A a matrix.
+ * @param inv a PnlMat (already allocated). contains
+ * \verbatim A^-1 \endverbatim on exit.
+ */
+void pnl_mat_inverse_with_chol (PnlMat *inv, const PnlMat *A)
+{
+  int i, j, n, lda, info;
+  pnl_mat_clone (inv, A);
+  pnl_mat_chol (inv);
+  n = A->m;
+  lda = A->m;
+
+  C2F(dpotri)("U", &n, inv->array, &lda, &info);
+  if (info != 0)
+    {
+      PNL_ERROR ("illegal values", "pnl_mat_inverse_with_chol");
+    }
+  /* Now we need to symmetrise inv because the upper part is 0 */
+  for ( i=0 ; i<inv->m ; i++ )
+    {
+      for ( j=0 ; j<i ; j++ )
+        {
+          PNL_MLET (inv, j, i) = PNL_MGET (inv, i, j);
+        }
+    }
+}
+
+/**
+ * Computes the inverse of a matrix using a LU decomposition
+ *
+ * @param A a matrix.
+ * @param inverse a PnlMat (already allocated). contains
+ * \verbatim A^-1 \endverbatim on exit.
+ */
+void pnl_mat_inverse (PnlMat *inv, const PnlMat *A)
+{
+  int n, lda, lwork, info, *ipiv;
+  double *work, qwork;
+  n = A->m;
+  lda = A->m;
+  pnl_mat_tr (inv, A);
+  ipiv = MALLOC_INT (A->m);
+  C2F(dgetrf)(&n, &n, inv->array, &lda, ipiv, &info);
+  if (info != 0)
+    {
+      PNL_ERROR ("matrix is singular", "pnl_mat_inverse");
+    }
+  lwork = -1;
+  C2F(dgetri)(&n,inv->array,&lda,ipiv,&qwork,&lwork,&info);
+  if (info != 0)
+    {
+      PNL_ERROR ("Cannot query workspace", "pnl_mat_inverse");
+    }
+  lwork = (int) qwork;
+  work = MALLOC_DOUBLE (lwork);
+  C2F(dgetri)(&n,inv->array,&lda,ipiv,work,&lwork,&info);
+  if (info != 0)
+    {
+      PNL_ERROR ("matrix is singular", "pnl_mat_inverse");
+    }
+  pnl_mat_sq_transpose (inv);
 }
 
 /**

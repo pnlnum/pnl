@@ -1,0 +1,256 @@
+/* vim: set filetype=c: */
+
+/**
+* Cholesky decomposition. Postivity is checked during the
+* transformation, but no test of symmetry.
+*
+* Decomposition done in place. The lower part of the matrix
+* contains the cholesky decomposition. The upper part is
+* set to 0.
+*
+* @param M a PnlMat pointer.
+* @param round_off eigenvalue smaller that -round_off are set to
+* +round_off. Useful for badly contionned matrices.
+*/
+static void pnl_mat_chol_aux(PnlMat *M, double round_off)
+{
+  int i=0,j,k;
+  double somme;
+  int dim=M->m;
+  int i_dim=0, j_dim=0;
+
+  CheckIsSquare(M);
+  while (i<dim)
+    {
+      /* i_dim = i*dim;*/
+      for (j=i, j_dim=i_dim;j<dim;j++, j_dim+=dim)
+        {
+          /* j_dim = j*dim; */
+          somme=M->array[i_dim+j];
+          for (k=i-1;k>=0;k--)
+            somme -= M->array[i_dim+k] * M->array[j_dim+k];
+          if (i==j)
+            {
+              if (somme<=-round_off)
+                {
+                  printf("negative eigenvalue : %f\n", somme);
+                  PNL_ERROR("matrix not positive", "pnl_mat_chol");
+                }
+              else
+                {
+                  somme = MAX( somme, round_off );
+                  M->array[j_dim+i]=sqrt(somme);
+                }
+            }
+          else M->array[j_dim+i]=somme/M->array[i_dim+i];
+          
+        }
+      i++; i_dim+=dim;
+    }
+  i=0;j=0;
+  for(i=0;i<dim;i++)
+    {
+      for(j=i+1;j<dim;j++)
+        pnl_mat_set (M, i, j, 0.0);
+    }
+}
+
+/**
+ * computes a P A = LU factoristion. On exit A contains the L and U
+ * matrices. Note that the diagonal elemets of L are all 1.
+ *
+ * @param A the matrix to decompose.
+ * @param p a PnlVectInt.
+ */
+void pnl_mat_lu (PnlMat *A, PnlVectInt *p)
+{
+  int i, j, k, i_pivot;
+  double aij, ajj, aik, ajk, max;
+  int N = A->n;
+  CheckIsSquare(A);
+
+  pnl_permutation_init (p);
+  for (j=0; j<N; j++)
+    {
+      /* Find maximum in the j-th column */
+      max = fabs (pnl_mat_get (A, j, j));
+      i_pivot = j;
+        
+      for (i=j+1; i<N; i++)
+        {
+          aij = fabs (pnl_mat_get (A, i, j));
+          if (aij > max)
+            {
+              max = aij;
+              i_pivot = i;
+            }
+        }
+        
+      if (i_pivot != j)
+        {
+          pnl_mat_swap_rows (A, j, i_pivot);
+          pnl_permutation_swap (p, j, i_pivot);
+        }
+        
+      ajj = pnl_mat_get (A, j, j);
+      if (ajj != 0.0)
+        {
+          for (i=j+1; i<N; i++)
+            {
+              aij = pnl_mat_get (A, i, j) / ajj;
+              pnl_mat_set (A, i, j, aij);
+                
+              for (k=j+1; k<N; k++)
+                {
+                  aik = pnl_mat_get (A, i, k);
+                  ajk = pnl_mat_get (A, j, k);
+                  pnl_mat_set (A, i, k, aik - aij * ajk);
+                }
+            }
+        }
+      else
+        {
+          PNL_ERROR("can't find a LU decomposition", "pnl_mat_lu");
+        }
+    }
+}
+
+
+/*
+ * This function solves a linear system A * X = B in place using a LU
+ * factorization. This implementation is strongly inspired from CBlas and does
+ * not require any working space unlike pnl_mat_syslin_mat which is faster but
+ * does require a working space of size equal to the number of lines of B
+ *
+ * This function is currently not exported in any .h file 
+ */
+void pnl_mat_syslin_mat2 (PnlMat *A,  PnlMat *B)
+{
+  PnlVectInt *p;
+  int i, j, k;
+
+  CheckIsSquare(A);
+  p = pnl_vect_int_create (A->m);
+  pnl_mat_lu (A, p);
+  
+  /* solve L Y = B, store the result in B */
+  for (i=0; i<B->m; i++)
+    {
+      for (k=i+1; k < B->m; k++)
+        {
+          double aki = pnl_mat_get (A, k, i);
+          for (j=0; j<B->n; j++)
+            {
+              *(pnl_mat_lget (B, k, j)) -= aki * pnl_mat_get (B, i, j);
+            }
+        }
+    }
+  
+  /* solve L' X = Y, where y is the solution computed above stored into B */
+  for (i=B->m-1; i>=0; i--)
+    {
+      double aii = pnl_mat_get (A, i, i);
+      for (j=0; j<B->n; j++)
+        {
+          *(pnl_mat_lget (B, i, j)) /= aii;
+        }
+      for (k=0; k < i; k++)
+        {
+          double aki = pnl_mat_get (A, k, i);
+          for (j=0; j<B->n; j++)
+            {
+              *(pnl_mat_lget (B, k, j)) -= aki * pnl_mat_get (B, i, j);
+            }
+        }
+    }
+}
+
+
+/*
+ * This function solves a linear system A * X = B in place when A>0 using a
+ * Cholecky factorization. This implementation is strongly inspired from CBlas
+ * and does not require any working space unlike pnl_mat_chol_syslin_mat which
+ * is faster but does require a working space of size equal to the number of
+ * lines of B
+ *
+ * This function is currently not exported in any .h file 
+ */
+void pnl_mat_chol_syslin_mat2 (PnlMat *A,  PnlMat *B)
+{
+  int i, j, k;
+  CheckMatMatch(A, B);
+  pnl_mat_chol (A);
+
+  /* solve L Y = B, store the result in B */
+  for (i=0; i<B->m; i++)
+    {
+      double aii = pnl_mat_get (A, i, i);
+      for (j=0; j<B->n; j++)
+        {
+          *(pnl_mat_lget (B, i, j)) /= aii;
+        }
+      for (k=i+1; k < B->m; k++)
+        {
+          double aki = pnl_mat_get (A, k, i);
+          for (j=0; j<B->n; j++)
+            {
+              *(pnl_mat_lget (B, k, j)) -= aki * pnl_mat_get (B, i, j);
+            }
+        }
+    }
+  
+  /* solve L' X = Y, where y is the solution computed above stored into B */
+  for (i=B->m-1; i>=0; i--)
+    {
+       double aii = pnl_mat_get (A, i, i);
+      for (j=0; j<B->n; j++)
+        {
+          *(pnl_mat_lget (B, i, j)) /= aii;
+        }
+      for (k=0; k < i; k++)
+        {
+           double aik = pnl_mat_get (A, i, k); /* the upper of the matrix is 0, need
+                                                  to take A(i,k) instead of A(k,i) */
+          for (j=0; j<B->n; j++)
+            {
+              *(pnl_mat_lget (B, k, j)) -= aik * pnl_mat_get (B, i, j);
+            }
+        }
+    }
+}
+
+/**
+ * solves a symmetric DEFINITE POSITIVE linear system using the Cholesky
+ * decomposition of the system A x = b
+ *
+ * @param chol the Cholesky decomposition of the system as computed by pnl_mat_chol
+ * @param b right hand side member. On exit, b contains the solution of the system.
+ */
+void pnl_mat_chol_syslin_inplace (const PnlMat *chol, PnlVect *b)
+{
+  int i, j;
+  double sum, Bj;
+  CheckIsSquare(chol);
+  CheckMatVectIsCompatible (chol, b);
+
+  /* solve L y = b, store x into b. */
+  for (i=0; i<chol->n; i++)
+    {
+      sum = 0.0;
+      for (j=0; j < i; j++)
+        sum+= pnl_mat_get (chol,i,j) * pnl_vect_get (b,j);
+      pnl_vect_set (b, i, (pnl_vect_get (b, i) - sum) /  pnl_mat_get (chol, i, i));
+    }
+
+  /* solve L' x = y, where y is the solution computed above stored into b */
+  for (j=chol->n-1; j>=0; j--)
+    {
+      Bj = pnl_vect_get(b, j) / pnl_mat_get (chol, j, j);
+      pnl_vect_set (b, j, Bj);
+      for (i=j-1; i>=0; i--)
+        {
+          pnl_vect_set (b, i, pnl_vect_get (b, i) - Bj *  pnl_mat_get (chol, j, i));
+        }
+    }
+  
+}

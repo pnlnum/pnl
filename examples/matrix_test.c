@@ -748,16 +748,21 @@ static void pnl_mat_inverse_test ()
   A = pnl_mat_create (n, n);
   invA = pnl_mat_create (n, n);
 
+  printf("test de la fonction 'pnl_mat_inverse_with_chol' : \n");
+  create_sym_pos_matrix (A, n, gen);
+  pnl_mat_inverse_with_chol (invA, A);
+  printf ("A = "); pnl_mat_print_nsp (A);
+  printf ("invA = "); pnl_mat_print_nsp (invA);
+
+  printf("test de la fonction 'pnl_mat_inverse' : \n");
   create_invertible_matrix (A, n, gen);
   pnl_mat_inverse (invA, A);
-  printf("test de la fonction 'pnl_mat_inverse' : \n");
   printf ("A = "); pnl_mat_print_nsp (A);
   printf ("invA = "); pnl_mat_print_nsp (invA);
 
   pnl_mat_free (&A);
   pnl_mat_free (&invA);
 }
-
 
 static void pnl_mat_syslin_test ()
 {
@@ -864,7 +869,6 @@ static void pnl_mat_syslin_test ()
   pnl_vect_free (&x);
   pnl_vect_int_free (&p);
 }
-
 
 static void pnl_mat_create_from_file_test ()
 {
