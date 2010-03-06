@@ -661,7 +661,7 @@ void pnl_mat_exp (PnlMat *B, const PnlMat *A)
       work[icoef+k] = (work[icoef+k-1]*( i-k )) / ( k*(j-k) );
     }
 
-  Mwork = pnl_mat_create_wrap_array (&(work[ih2]), A->m, A->n);
+  Mwork = pnl_mat_wrap_array (&(work[ih2]), A->m, A->n);
   pnl_mat_dgemm ('N', 'N', scale2, A, A, 0., &Mwork);  /* H2 = scale2*H*H */
   
   /* initialize p (numerator) and q (denominator) */
@@ -684,9 +684,9 @@ void pnl_mat_exp (PnlMat *B, const PnlMat *A)
   while (k > 0)
     {
       iused = iodd*iq + (1-iodd)*ip;
-      Mwork = pnl_mat_create_wrap_array (&(work[ifree]), A->m, A->m);
-      Mwork1 = pnl_mat_create_wrap_array (&(work[iused]), A->m, A->m);
-      Mwork2 = pnl_mat_create_wrap_array (&(work[ih2]), A->m, A->m);
+      Mwork = pnl_mat_wrap_array (&(work[ifree]), A->m, A->m);
+      Mwork1 = pnl_mat_wrap_array (&(work[iused]), A->m, A->m);
+      Mwork2 = pnl_mat_wrap_array (&(work[ih2]), A->m, A->m);
       pnl_mat_dgemm('N', 'N', 1., &Mwork1, &Mwork2, 0., &Mwork);
       
       for (j=0; j<A->m; j++)
@@ -702,13 +702,13 @@ void pnl_mat_exp (PnlMat *B, const PnlMat *A)
     }
  
   /* Obtain (+-)(I + 2 * (p/q))  */
-  Mwork = pnl_mat_create_wrap_array (&(work[ifree]), A->m, A->m);
-  Mwork1 = pnl_mat_create_wrap_array (&(work[ip]), A->m, A->m);
+  Mwork = pnl_mat_wrap_array (&(work[ifree]), A->m, A->m);
+  Mwork1 = pnl_mat_wrap_array (&(work[ip]), A->m, A->m);
   pnl_mat_dgemm ('N', 'N', scale, &Mwork1, A, 0., &Mwork);
   ip = ifree;
 
-  Mwork1 = pnl_mat_create_wrap_array (&(work[ip]), A->m, A->m);
-  Mwork2 = pnl_mat_create_wrap_array (&(work[iq]), A->m, A->m);
+  Mwork1 = pnl_mat_wrap_array (&(work[ip]), A->m, A->m);
+  Mwork2 = pnl_mat_wrap_array (&(work[iq]), A->m, A->m);
 
   pnl_mat_axpy (-1., &Mwork1, &Mwork2 );
   pnl_mat_syslin_mat (&Mwork2, &Mwork1);
@@ -729,8 +729,8 @@ void pnl_mat_exp (PnlMat *B, const PnlMat *A)
         {
           iget = iodd*ip + (1-iodd)*iq;
           iput = (1-iodd)*ip + iodd*iq;
-          Mwork = pnl_mat_create_wrap_array (&(work[iget]), A->m, A->m);
-          Mwork1 = pnl_mat_create_wrap_array (&(work[iput]), A->m, A->m);
+          Mwork = pnl_mat_wrap_array (&(work[iget]), A->m, A->m);
+          Mwork1 = pnl_mat_wrap_array (&(work[iput]), A->m, A->m);
           pnl_mat_dgemm ('N', 'N', 1., &Mwork, &Mwork, 0., &Mwork1);
           iodd = 1-iodd;
         }
