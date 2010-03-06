@@ -8,8 +8,6 @@ extern "C" {
 #include <stdio.h>
 #include "pnl_vector.h"
 
-struct PnlVect;
-
 /**
  * \ingroup PnlVectors
  */
@@ -18,12 +16,12 @@ struct PnlVect;
  * \defgroup PnlVectInt Int Vector 
  */
 /*@{*/
-typedef struct PnlVectInt{
+struct _PnlVectInt {
   int size;/*!< size of the vector */ 
   int *array;/*!< pointer to store the data */
   int mem_size; /*!< size of the memory block allocated for array */
   int owner; /*!< 1 if the owns its array pointer */
-} PnlVectInt;
+}; 
 
 #ifdef HAVE_INLINE 
 extern inline
@@ -53,7 +51,7 @@ extern int pnl_vect_int_get(const PnlVectInt *v, int i);
 extern int* pnl_vect_int_lget(PnlVectInt *v, int i);
 extern void pnl_vect_int_free(PnlVectInt **v);
 extern PnlVectInt* pnl_vect_int_create(int size);
-extern PnlVectInt pnl_vect_int_create_wrap_array(const int *x, int size);
+extern PnlVectInt pnl_vect_int_wrap_array(const int *x, int size);
 extern PnlVectInt* pnl_vect_int_create_from_int(int size, int x);
 extern PnlVectInt* pnl_vect_int_create_from_zero(int size);
 extern PnlVectInt* pnl_vect_int_create_from_ptr(int size, const int* x);
@@ -66,6 +64,7 @@ extern PnlVectInt* pnl_vect_int_copy(const PnlVectInt *v);
 extern void pnl_vect_int_clone(PnlVectInt *clone, const PnlVectInt *v);
 extern PnlVectInt pnl_vect_int_wrap_subvect(const PnlVectInt *V, int i,int s);
 extern PnlVectInt pnl_vect_int_wrap_subvect_with_last(const PnlVectInt *V, int i,int j);
+extern PnlVectInt pnl_vect_int_wrap_mat(const PnlMatInt *M);
 extern void pnl_vect_int_print(const PnlVectInt *V);
 extern void pnl_vect_int_print_nsp(const PnlVectInt *V);
 extern void pnl_vect_int_fprint(FILE *fic, const PnlVectInt *V);

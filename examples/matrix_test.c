@@ -443,14 +443,14 @@ static void pnl_mat_transpose_test()
   pnl_mat_free(&M1);
 }
 
-static void pnl_mat_wrap_row_test()
+static void pnl_vect_wrap_mat_row_test()
 {
   PnlMat *M;
   PnlVect V;
   double x[8]={1.0, 5.0, 3.0, 8.0, 3.0, 7.0, 6.0, 9.0};
-  printf("test de la fonction 'pnl_mat_wrap_row : \n");
+  printf("test de la fonction 'pnl_vect_wrap_mat_row : \n");
   M=pnl_mat_create_from_ptr(4,2,x);
-  V=pnl_mat_wrap_row(M,2);
+  V=pnl_vect_wrap_mat_row(M,2);
   pnl_vect_print(&V);
   pnl_mat_free(&M);
 }
@@ -1074,7 +1074,7 @@ static tst_list mat_tests[] =
     MAKE_ENUM(pnl_mat_chol_test),
     MAKE_ENUM(pnl_mat_sq_transpose_test),
     MAKE_ENUM(pnl_mat_transpose_test),
-    MAKE_ENUM(pnl_mat_wrap_row_test),
+    MAKE_ENUM(pnl_vect_wrap_mat_row_test),
     MAKE_ENUM(pnl_mat_get_row_test),
     MAKE_ENUM(pnl_mat_create_diag_test),
     MAKE_ENUM(pnl_mat_sum_test),

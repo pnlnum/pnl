@@ -67,20 +67,20 @@ extern double pnl_vect_compact_get (const PnlVectCompact *C, int i);
  */
 /*@{*/
 
-typedef struct PnlMat{
+struct _PnlMat{
   int m; /*!< nb rows */ 
   int n; /*!< nb columns */ 
   int mn; /*!< product m*n */
   int mem_size; /*!< size of the memory block allocated for array */
   double *array; /*!< pointer to store the data row-wise */
   int owner; /*!< 1 if the owns its array pointer */
-} PnlMat;
+}; 
 
 extern PnlMat* pnl_mat_create(int m, int n); 
 extern PnlMat* pnl_mat_create_from_double(int m, int n, double x);
 extern PnlMat* pnl_mat_create_from_ptr(int m, int n, const double* x);
 extern PnlMat* pnl_mat_create_from_list(int m, int n, ...); 
-extern PnlMat pnl_mat_create_wrap_array(const double* x,int m, int n);
+extern PnlMat pnl_mat_wrap_array(const double* x,int m, int n);
 extern PnlMat* pnl_mat_create_from_file (const char * file);
 extern int pnl_mat_resize(PnlMat *v, int m, int n);
 extern void pnl_mat_free(PnlMat **v);
@@ -125,8 +125,8 @@ extern void pnl_mat_print(const PnlMat *M);
 extern void pnl_mat_fprint(FILE *fic, const PnlMat *M);
 extern void pnl_mat_fprint_nsp (FILE *fic, const PnlMat *M);
 extern void pnl_mat_print_nsp (const PnlMat *M);
-extern PnlVect pnl_mat_wrap_row(const PnlMat *M, int i);
-extern PnlVect pnl_mat_wrap_vect(const PnlMat *M);
+extern PnlVect pnl_vect_wrap_mat_row(const PnlMat *M, int i);
+extern PnlMat pnl_mat_wrap_vect(const PnlVect *v);
 extern void pnl_mat_get_row(PnlVect *V, const PnlMat *M, int i);
 extern void pnl_mat_get_col(PnlVect *V, const PnlMat *M, int j);
 extern PnlMat* pnl_mat_create_diag_from_ptr(const double x[], int d);

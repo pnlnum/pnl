@@ -25,7 +25,7 @@ extern "C" {
 #define PNL_LET(v,i) (v)->array[i]
 #define PNL_SET(v,i,x) (v)->array[i]=(x)
 
-
+#include "pnl_types.h"
 #include "pnl_vector_double.h"
 #include "pnl_vector_complex.h"
 #include "pnl_vector_int.h"

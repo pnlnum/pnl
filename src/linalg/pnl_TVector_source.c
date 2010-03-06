@@ -140,7 +140,7 @@ TYPE(PnlVect) * FUNCTION(pnl_vect,create_from_list)(const int size,...)
  * m. No test can be done about it.
  * @return a TYPE(PnlVect) pointer
  */
-TYPE(PnlVect) FUNCTION(pnl_vect,create_wrap_array)(const BASE* x, int m)
+TYPE(PnlVect) FUNCTION(pnl_vect,wrap_array)(const BASE* x, int m)
 {
   TYPE(PnlVect) v;
 
@@ -1251,4 +1251,19 @@ TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect_with_last)(const TYPE(PnlVect) *V,
   return FUNCTION(pnl_vect, wrap_subvect)(V,i,j-i+1);
 }
 
+/**
+ * Wraps a matrix into a PnlVect 
+ * @param M a matrix
+ * @return a vector (not a pointer) whose array pointer is the address of the
+ * first element of the matrix M. No copying is done.
+ */
+TYPE(PnlVect) FUNCTION(pnl_vect,wrap_mat)(const TYPE(PnlMat) *M)
+{
+  TYPE(PnlVect) V;
+  V.size = M->mn;
+  V.mem_size = 0;
+  V.owner = 0;
+  V.array = M->array; 
+  return V;
+}
 

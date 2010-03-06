@@ -16,12 +16,12 @@ extern "C" {
  */
 
 /*@{*/
-typedef struct PnlVect{
+struct _PnlVect {
   int size;/*!< size of the vector */ 
   double *array;/*!< pointer to store the data */
   int mem_size; /*!< size of the memory block allocated for array */
   int owner; /*!< 1 if the owns its array pointer */
-} PnlVect;
+};
 
 #include "pnl_vector_int.h"
 
@@ -62,7 +62,7 @@ extern double pnl_vect_get(const PnlVect *v, int i);
 extern double* pnl_vect_lget(PnlVect *v, int i);
 extern void pnl_vect_free(PnlVect **v);
 extern PnlVect* pnl_vect_create(int size);
-extern PnlVect pnl_vect_create_wrap_array(const double *x, int size);
+extern PnlVect pnl_vect_wrap_array(const double *x, int size);
 extern PnlVect* pnl_vect_create_from_zero(int size);
 extern PnlVect* pnl_vect_create_from_double(int size, double x);
 extern PnlVect* pnl_vect_create_from_ptr(int size, const double* x);
@@ -75,6 +75,7 @@ extern PnlVect* pnl_vect_copy(const PnlVect *v);
 extern void pnl_vect_clone(PnlVect *clone, const PnlVect *v);
 extern PnlVect pnl_vect_wrap_subvect(const PnlVect *V, int i,int s);
 extern PnlVect pnl_vect_wrap_subvect_with_last(const PnlVect *V, int i,int j);
+extern PnlVect pnl_vect_wrap_mat(const PnlMat *M);
 extern void pnl_vect_print(const PnlVect *V);
 extern void pnl_vect_print_nsp(const PnlVect *V);
 extern void pnl_vect_fprint(FILE *fic, const PnlVect *V);

@@ -147,7 +147,7 @@ TYPE(PnlMat) * FUNCTION(pnl_mat,create_from_list)(int m, int n, ...)
  * <tt> mxn </tt>. No test can be done about it.
  * @return a TYPE(PnlMat) pointer
  */
-TYPE(PnlMat) FUNCTION(pnl_mat,create_wrap_array)(const BASE* x, int m, int n)
+TYPE(PnlMat) FUNCTION(pnl_mat,wrap_array)(const BASE* x, int m, int n)
 {
   TYPE(PnlMat) M;
 
@@ -653,10 +653,10 @@ void FUNCTION(pnl_mat,get_row)(TYPE(PnlVect) *V, const TYPE(PnlMat) *M, int i)
  * @return a vector (not a pointer) whose array pointer is the address of the
  * first element of the ith row of M. No copying is done.
  */
-TYPE(PnlVect) FUNCTION(pnl_mat,wrap_row)(const TYPE(PnlMat) *M, int i)
+TYPE(PnlVect) FUNCTION(pnl_vect,wrap_mat_row)(const TYPE(PnlMat) *M, int i)
 {
   TYPE(PnlVect) V;
-  PNL_CHECK (i>=M->m,"index out of range", "pnl_mat_wrap_row");
+  PNL_CHECK (i>=M->m,"index out of range", "pnl_vect_wrap_mat_row");
   V.size = M->n;
   V.mem_size = 0;
   V.owner = 0;
@@ -665,19 +665,21 @@ TYPE(PnlVect) FUNCTION(pnl_mat,wrap_row)(const TYPE(PnlMat) *M, int i)
 }
 
 /**
- * Cast a mtrix into a PnlVect 
- * @param M a matrix
- * @return a vector (not a pointer) whose array pointer is the address of the
- * first element of the matrix M. No copying is done.
+ * Wraps a vector into a PnlMat 
+ * @param V a vector
+ * @return a matrix (not a pointer) whose array pointer is the address of the
+ * first element of the vector V. No copying is done.
  */
-TYPE(PnlVect) FUNCTION(pnl_mat,wrap_vect)(const TYPE(PnlMat) *M)
+TYPE(PnlMat) FUNCTION(pnl_mat,wrap_vect)(const TYPE(PnlVect) *V)
 {
-  TYPE(PnlVect) V;
-  V.size = M->mn;
-  V.mem_size = 0;
-  V.owner = 0;
-  V.array = M->array; 
-  return V;
+  TYPE(PnlMat) M;
+  M.m = V->size;
+  M.n = 1;
+  M.mn = V->size;
+  M.mem_size = 0;
+  M.owner = 0;
+  M.array = V->array; 
+  return M;
 }
 
 /**

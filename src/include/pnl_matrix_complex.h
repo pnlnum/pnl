@@ -19,20 +19,21 @@ extern "C" {
  */
 /*@{*/
 
-typedef struct PnlMatComplex{
+struct _PnlMatComplex {
   int m; /*!< nb rows */ 
   int n; /*!< nb columns */ 
   int mn; /*!< product m*n */
   int mem_size; /*!< size of the memory block allocated for array */
   dcomplex *array; /*!< pointer to store the data row-wise */
   int owner; /*!< 1 if the owns its array pointer */
-} PnlMatComplex;
+};
+
 
 extern PnlMatComplex* pnl_mat_complex_create(int m, int n); 
 extern PnlMatComplex* pnl_mat_complex_create_from_dcomplex(int m, int n, dcomplex x);
 extern PnlMatComplex* pnl_mat_complex_create_from_ptr(int m, int n, const dcomplex* x);
 extern PnlMatComplex* pnl_mat_complex_create_from_list(int m, int n, ...); 
-extern PnlMatComplex pnl_mat_complex_create_wrap_array(const dcomplex* x, int m, int n);
+extern PnlMatComplex pnl_mat_complex_wrap_array(const dcomplex* x, int m, int n);
 extern PnlMatComplex* pnl_mat_complex_create_from_file (const char * file);
 extern int pnl_mat_complex_resize(PnlMatComplex *v, int m, int n);
 extern void pnl_mat_complex_free(PnlMatComplex **v);
@@ -59,8 +60,8 @@ pnl_mat_complex_swap_rows (PnlMatComplex *M, int i, int j);
 extern void
 pnl_mat_complex_get_row(PnlVectComplex *V, const PnlMatComplex *M, int i);/* V(:)=M(i,:) */
 extern void pnl_mat_complex_get_col(PnlVectComplex *V, const PnlMatComplex *M, int j);
-extern PnlVectComplex pnl_mat_complex_wrap_row(const PnlMatComplex *M, int i);/* M(i,:)=V(:) */
-extern PnlVectComplex pnl_mat_complex_wrap_vect(const PnlMatComplex *M);
+extern PnlVectComplex pnl_vect_complex_wrap_mat_row(const PnlMatComplex *M, int i);/* M(i,:)=V(:) */
+extern PnlMatComplex pnl_mat_complex_wrap_vect(const PnlVectComplex *V);
 extern void pnl_mat_complex_map_inplace(PnlMatComplex *lhs, dcomplex(*f)(dcomplex)); /*lhs=f(lhs)*/
 extern void pnl_mat_complex_map(PnlMatComplex *lhs, const PnlMatComplex *rhs, dcomplex(*f)(dcomplex));/* lhs(i)=f(rhs(i)) */
 extern void pnl_mat_complex_map_mat(PnlMatComplex *lhs, const PnlMatComplex *rhs, dcomplex(*f)(dcomplex,dcomplex));

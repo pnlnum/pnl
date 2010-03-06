@@ -2,6 +2,7 @@
 
 #include "config.h"
 #include "pnl_vector.h"
+#include "pnl_matrix.h"
 
 
 #define BASE_DOUBLE

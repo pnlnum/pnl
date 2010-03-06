@@ -64,6 +64,7 @@ extern "C" {
  * \defgroup PnlHMatrices Hyper Matrix object
  */
 
+#include "pnl_types.h"
 #include "pnl_matrix_double.h"
 #include "pnl_matrix_complex.h"
 #include "pnl_matrix_int.h"

@@ -16,12 +16,12 @@ extern "C" {
  * \defgroup PnlVectComplex Complex Vector 
  */
 /*@{*/
-typedef struct PnlVectComplex{
+struct _PnlVectComplex {
   int size;/*!< size of the vector */ 
   dcomplex *array;/*!< pointer to store the data */
   int mem_size; /*!< size of the memory block allocated for array */
   int owner; /*!< 1 if the owns its array pointer */
-} PnlVectComplex;
+};
 
 #ifdef HAVE_INLINE 
 extern inline
@@ -107,7 +107,7 @@ extern void pnl_vect_complex_set_imag (const PnlVectComplex *v, int i, double im
 
 extern void pnl_vect_complex_free(PnlVectComplex **v);
 extern PnlVectComplex* pnl_vect_complex_create(int size);
-extern PnlVectComplex pnl_vect_complex_create_wrap_array(const dcomplex *x, int size);
+extern PnlVectComplex pnl_vect_complex_wrap_array(const dcomplex *x, int size);
 extern PnlVectComplex* pnl_vect_complex_create_from_dcomplex(int size, dcomplex x);
 extern PnlVectComplex* pnl_vect_complex_create_from_zero(int size);
 extern PnlVectComplex* pnl_vect_complex_create_from_array(int size, const double *re, const double *im);
@@ -122,6 +122,7 @@ extern PnlVectComplex* pnl_vect_complex_copy(const PnlVectComplex *v);
 extern void pnl_vect_complex_clone(PnlVectComplex *clone, const PnlVectComplex *v);
 extern PnlVectComplex pnl_vect_complex_wrap_subvect(const PnlVectComplex *V, int i,int s);
 extern PnlVectComplex pnl_vect_complex_wrap_subvect_with_last(const PnlVectComplex *V, int i,int j);
+extern PnlVectComplex pnl_vect_complex_wrap_mat(const PnlMatComplex *M);
 
 extern void pnl_vect_complex_print(const PnlVectComplex *V);
 extern void pnl_vect_complex_print_nsp(const PnlVectComplex *V);

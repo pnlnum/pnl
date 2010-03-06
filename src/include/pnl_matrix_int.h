@@ -19,21 +19,21 @@ extern "C" {
  * \defgroup PnlMatInt Int Matrix 
  */
 /*@{*/
-
-typedef struct PnlMatInt{
+  
+struct _PnlMatInt {
   int m; /*!< nb rows */ 
   int n; /*!< nb columns */ 
   int mn; /*!< product m*n */
   int mem_size; /*!< size of the memory block allocated for array */
   int *array; /*!< pointer to store the data row-wise */
   int owner; /*!< 1 if the owns its array pointer */
-} PnlMatInt;
+};
 
 extern PnlMatInt* pnl_mat_int_create(int m, int n); 
 extern PnlMatInt* pnl_mat_int_create_from_int(int m, int n, int x);
 extern PnlMatInt* pnl_mat_int_create_from_ptr(int m, int n, const int* x);
 extern PnlMatInt* pnl_mat_int_create_from_list(int m, int n, ...); 
-extern PnlMatInt pnl_mat_int_create_wrap_array(const int* x,int m, int n);
+extern PnlMatInt pnl_mat_int_wrap_array(const int* x,int m, int n);
 extern PnlMatInt* pnl_mat_int_create_from_file (const char * file);
 extern int pnl_mat_int_resize(PnlMatInt *v, int m, int n);
 extern void pnl_mat_int_free(PnlMatInt **v);
@@ -60,8 +60,8 @@ pnl_mat_int_swap_rows (PnlMatInt *M, int i, int j);
 extern void
 pnl_mat_int_get_row(PnlVectInt *V, const PnlMatInt *M, int i);/* V(:)=M(i,:) */
 extern void pnl_mat_int_get_col(PnlVectInt *V, const PnlMatInt *M, int j);
-extern PnlVectInt pnl_mat_int_wrap_row(const PnlMatInt *M, int i);/* M(i,:)=V(:) */
-extern PnlVectInt pnl_mat_int_wrap_vect(const PnlMatInt *M);
+extern PnlVectInt pnl_vect_int_wrap_mat_row(const PnlMatInt *M, int i);/* M(i,:)=V(:) */
+extern PnlMatInt pnl_mat_int_wrap_vect(const PnlVectInt *V);
 extern void pnl_mat_int_map_inplace(PnlMatInt *lhs, int(*f)(int)); /*lhs=f(lhs)*/
 extern void pnl_mat_int_map(PnlMatInt *lhs, const PnlMatInt *rhs, int(*f)(int));/* lhs(i)=f(rhs(i)) */
 extern void pnl_mat_int_map_mat(PnlMatInt *lhs, const PnlMatInt *rhs, int(*f)(int,int));

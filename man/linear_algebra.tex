@@ -82,7 +82,7 @@ the above table.
   \var{size} filled with the extra arguments passed to the function. The
   number of extra arguments passed must be equal to \var{size}, be aware that
   this cannot be checked inside the function.
-\item \describefun{\refstruct{PnlVect}}{pnl_vect_create_wrap_array}{const double \ptr x, 
+\item \describefun{\refstruct{PnlVect}}{pnl_vect_wrap_array}{const double \ptr x, 
     int size}
     \sshortdescribe Creates a \refstruct{PnlVect} containing the data 
   \var{x}. No copy is made. It is just a container.
@@ -96,6 +96,12 @@ the above table.
   \sshortdescribe Creates a \refstruct{PnlVect} containing \var{x(i:j)}. No
   copy is made. It is just a container.
 
+\item \describefun{\refstruct{PnlVect}}{pnl_vect_wrap_mat}
+  {const \refstruct{PnlMat} \ptr M}
+  \sshortdescribe Returns a \refstruct{PnlVect} (not a pointer) whose array is
+  the row wise array of \var{M}. The new vector shares its data with the
+  matrix \var{M}, which means that any modification to one of them will affect
+  the other.
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_from_file}
   {const char \ptr file}
   \sshortdescribe Reads a vector from a file and creates the corresponding
@@ -523,7 +529,7 @@ the above table.
   number of extra arguments passed must be equal to \var{m x n}, be
   aware that this cannot be checked inside the function.
 
-\item \describefun{PnlMat}{pnl_mat_create_wrap_array}{const double \ptr x, 
+\item \describefun{PnlMat}{pnl_mat_wrap_array}{const double \ptr x, 
     int m, int n}
     \sshortdescribe Creates a \refstruct{PnlMat} of size \var{m x n} 
     which contains \var{x}. No copy is made. It is just a container.
@@ -582,18 +588,18 @@ the above table.
   \sshortdescribe Sets the $\var{d}^{\text{th}}$ diagonal terms of the matrix
   \var{self} to the value \var{x}. \var{self} must be a square matrix.
 
-\item \describefun{\refstruct{PnlVect}}{pnl_mat_wrap_row}
+\item \describefun{\refstruct{PnlVect}}{pnl_vect_wrap_mat_row}
   {const \refstruct{PnlMat} \ptr M, int i}
   \sshortdescribe Returns a \refstruct{PnlVect} (not a pointer) whose array is
   the \var{i}-th row of \var{M}. The new vector shares its data with the
   matrix \var{M}, which means that any modification to one of them will affect
   the other.
   
-\item \describefun{\refstruct{PnlVect}}{pnl_mat_wrap_vect}
-  {const \refstruct{PnlMat} \ptr M}
-  \sshortdescribe Returns a \refstruct{PnlVect} (not a pointer) whose array is
-  the row-wise array of \var{M}. The new vector shares its data with the
-  matrix \var{M}, which means that any modification to one of them will affect
+\item \describefun{\refstruct{PnlMat}}{pnl_mat_wrap_vect}
+  {const \refstruct{PnlVect} \ptr V}
+  \sshortdescribe Returns a \refstruct{PnlMat} (not a pointer) whose array is
+  the array of \var{V}. The new matrix shares its data with the
+  vector \var{V}, which means that any modification to one of them will affect
   the other.
 
 \item \describefun{void}{pnl_mat_get_row}{\refstruct{PnlVect}
@@ -788,11 +794,11 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 \item \describefun{void}{pnl_mat_sq_transpose}{\refstruct{PnlMat} \ptr M}
   \sshortdescribe On exit, \var{M} is transposed
 
-\item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_tr}{const
+\item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_transpose}{const
     \refstruct{PnlMat} \ptr M} 
     \sshortdescribe Creates a new matrix which is the transpoition of \var{M}
 
-\item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_transpose}{
+\item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_tr}{
   \refstruct{PnlMat} \ptr tM, const \refstruct{PnlMat} \ptr M} 
   \sshortdescribe On exit, \var{tM = M'}
 
@@ -907,7 +913,8 @@ using ``inplace'' functions.
   already allocated  \refstruct{PnlPermutation}. On exit the decomposition is
   stored in \var{A}, the lower part of \var{A} contains L while the upper part
   (including the diagonal terms) contains U. Remember that the diagonal
-  elements of \var{L} are all 1.
+  elements of \var{L} are all 1. Row \var{i} of \var{A} was interchanged with
+  row \var{p(i)}.
   
 \item \describefun{void}{pnl_mat_qr}{\refstruct{PnlMat} \ptr Q,
   \refstruct{PnlMat} \ptr R, \refstruct{PnlPermutation} \ptr p,
@@ -1032,6 +1039,14 @@ invert the system matrix because it is much longer.
 \begin{verbatim}
 typedef PnlVectInt PnlPermutation;
 \end{verbatim}
+
+The \verb!PnlPermutation! type is actually nothing else than a vector of
+integers, i.e. a \verb!PnlVectInt!. It is used to store the partial pivoting
+with row interchanges needed in the LU decomposition.  We use the {\it Blas}
+convention for storing permutation. Consider a \verb!PnlPermutation p! generated
+by a LU decomposition of matrix \verb!A! : to compute de decomposition, row
+\verb!i! of \verb!A! was interchanged with row \verb!p(i)!.
+
 
 \begin{itemize}
 \item \describefun{\refstruct{PnlPermutation} \ptr }{pnl_permutation_create}{int n}
