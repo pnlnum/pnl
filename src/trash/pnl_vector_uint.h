@@ -55,7 +55,7 @@ extern uint pnl_vect_uint_get(const PnlVectUint *v, int i);
 extern uint* pnl_vect_uint_lget(PnlVectUint *v, int i);
 extern void pnl_vect_uint_free(PnlVectUint **v);
 extern PnlVectUint* pnl_vect_uint_create(int size);
-extern PnlVectUint pnl_vect_uint_create_wrap_array(const uint *x, int size);
+extern PnlVectUint pnl_vect_uint_wrap_array(const uint *x, int size);
 extern PnlVectUint* pnl_vect_uint_create_from_uint(int size, uint x);
 extern PnlVectUint* pnl_vect_uint_create_from_zero(int size);
 extern PnlVectUint* pnl_vect_uint_create_from_ptr(int size, const uint* x);

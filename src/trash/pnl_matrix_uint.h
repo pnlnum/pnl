@@ -33,7 +33,7 @@ extern PnlMatUint* pnl_mat_uint_create(int m, int n);
 extern PnlMatUint* pnl_mat_uint_create_from_uint(int m, int n, uint x);
 extern PnlMatUint* pnl_mat_uint_create_from_ptr(int m, int n, const uint* x);
 extern PnlMatUint* pnl_mat_uint_create_from_list(int m, int n, ...); 
-extern PnlMatUint pnl_mat_uint_create_wrap_array(const uint* x,int m, int n);
+extern PnlMatUint pnl_mat_uint_wrap_array(const uint* x,int m, int n);
 extern PnlMatUint* pnl_mat_uint_create_from_file (const char * file);
 extern int pnl_mat_uint_resize(PnlMatUint *v, int m, int n);
 extern void pnl_mat_uint_free(PnlMatUint **v);
@@ -59,7 +59,7 @@ pnl_mat_uint_swap_rows (PnlMatUint *M, int i, int j);
 extern void
 pnl_mat_uint_get_row(PnlVectUint *V, const PnlMatUint *M, int i);/* V(:)=M(i,:) */
 extern void pnl_mat_uint_get_col(PnlVectUint *V, const PnlMatUint *M, int j);
-extern PnlVectUint pnl_mat_uint_wrap_row(const PnlMatUint *M, int i);/* M(i,:)=V(:) */
+extern PnlVectUint pnl_vect_uint_wrap_mat_row(const PnlMatUint *M, int i);/* M(i,:)=V(:) */
 extern PnlVectUint pnl_mat_uint_wrap_vect(const PnlMatUint *M);
 extern void pnl_mat_uint_map_inplace(PnlMatUint *lhs, uint(*f)(uint)); /*lhs=f(lhs)*/
 extern void pnl_mat_uint_map(PnlMatUint *lhs, const PnlMatUint *rhs, uint(*f)(uint));/* lhs(i)=f(rhs(i)) */
