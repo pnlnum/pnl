@@ -1,5 +1,5 @@
-#ifndef __VECTOR_H__
-#define __VECTOR_H__
+#ifndef _PNL_VECTOR_H
+#define _PNL_VECTOR_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -25,7 +25,10 @@ extern "C" {
 #define PNL_LET(v,i) (v)->array[i]
 #define PNL_SET(v,i,x) (v)->array[i]=(x)
 
-#include "pnl_types.h"
+typedef struct _PnlVect PnlVect;
+typedef struct _PnlVectInt PnlVectInt;
+typedef struct _PnlVectComplex PnlVectComplex;
+
 #include "pnl_vector_double.h"
 #include "pnl_vector_complex.h"
 #include "pnl_vector_int.h"
@@ -35,4 +38,4 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#endif /* __VECTOR_H__ */
+#endif /* _PNL_VECTOR_H */

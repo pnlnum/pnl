@@ -1,6 +1,9 @@
-#ifndef MATRIX_COMPLEX_H
-#define MATRIX_COMPLEX_H
+#ifndef _PNL_MATRIX_COMPLEX_H
+#define _PNL_MATRIX_COMPLEX_H
 
+#ifndef _PNL_MATRIX_H
+#error "Do not include this file directly. Include pnl_matrix.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,6 +21,7 @@ extern "C" {
  * \defgroup PnlMatComplex Complex Matrix
  */
 /*@{*/
+
 
 struct _PnlMatComplex {
   int m; /*!< nb rows */ 
@@ -170,4 +174,4 @@ extern dcomplex* pnl_hmat_complex_lget(PnlHMatComplex *H, int *tab);
 #endif /* __cplusplus */
 
 
-#endif /* MATRIX_COMPLEX_H */
+#endif /* _PNL_MATRIX_COMPLEX_H */

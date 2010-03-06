@@ -1,5 +1,5 @@
-#ifndef _MATRIX_H
-#define _MATRIX_H
+#ifndef _PNL_MATRIX_H
+#define _PNL_MATRIX_H
 
 
 #ifdef __cplusplus
@@ -64,7 +64,11 @@ extern "C" {
  * \defgroup PnlHMatrices Hyper Matrix object
  */
 
-#include "pnl_types.h"
+
+typedef struct _PnlMat PnlMat;
+typedef struct _PnlMatComplex PnlMatComplex;
+typedef struct _PnlMatInt PnlMatInt;
+
 #include "pnl_matrix_double.h"
 #include "pnl_matrix_complex.h"
 #include "pnl_matrix_int.h"
@@ -74,4 +78,4 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#endif /* _MATRIX_H */
+#endif /* _PNL_MATRIX_H */

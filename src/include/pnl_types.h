@@ -5,12 +5,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-typedef struct _PnlMat PnlMat;
-typedef struct _PnlMatInt PnlMatInt;
-typedef struct _PnlMatComplex PnlMatComplex;
-typedef struct _PnlVect PnlVect;
-typedef struct _PnlVectInt PnlVectInt;
-typedef struct _PnlVectComplex PnlVectComplex;
 
 
 #define NULLINT -1

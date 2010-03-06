@@ -1,11 +1,16 @@
-#ifndef VECTOR_DOUBLE_H
-#define VECTOR_DOUBLE_H
+#ifndef _PNL_VECTOR_DOUBLE_H
+#define _PNL_VECTOR_DOUBLE_H
+
+#ifndef _PNL_VECTOR_H
+#error "Do not include this file directly. Include pnl_vector.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
 #include <stdlib.h>
+#include "pnl_matrix.h"
 
 /**
  * \ingroup PnlVectors
@@ -22,8 +27,6 @@ struct _PnlVect {
   int mem_size; /*!< size of the memory block allocated for array */
   int owner; /*!< 1 if the owns its array pointer */
 };
-
-#include "pnl_vector_int.h"
 
 
 #ifdef HAVE_INLINE 
@@ -132,4 +135,4 @@ extern void pnl_vect_reverse(PnlVect * v);
 #endif /* __cplusplus */
 
 
-#endif /* VECTOR_DOUBLE_H */
+#endif /* _PNL_VECTOR_DOUBLE_H */

@@ -1,12 +1,16 @@
-#ifndef VECTOR_INT_H
-#define VECTOR_INT_H
+#ifndef _PNL_VECTOR_INT_H
+#define _PNL_VECTOR_INT_H
+
+#ifndef _PNL_VECTOR_H
+#error "Do not include this file directly. Include pnl_matrix.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
 #include <stdio.h>
-#include "pnl_vector.h"
+#include "pnl_matrix.h"
 
 /**
  * \ingroup PnlVectors
@@ -125,4 +129,4 @@ extern int pnl_vect_int_equal(const PnlVectInt * a,const PnlVectInt * b);
 #endif /* __cplusplus */
 
 
-#endif /* VECTOR_INT_H */
+#endif /* _PNL_VECTOR_INT_H */

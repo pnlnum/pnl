@@ -1,13 +1,15 @@
-#ifndef MATRIX_INT_H
-#define MATRIX_INT_H
+#ifndef _PNL_MATRIX_INT_H
+#define _PNL_MATRIX_INT_H
 
+#ifndef _PNL_MATRIX_H
+#error "Do not include this file directly. Include pnl_matrix.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-#include "pnl_vector_int.h"
-#include "pnl_matrix.h"
+#include "pnl_vector.h"
 
 
 /**
@@ -20,6 +22,7 @@ extern "C" {
  */
 /*@{*/
   
+
 struct _PnlMatInt {
   int m; /*!< nb rows */ 
   int n; /*!< nb columns */ 
@@ -179,4 +182,4 @@ extern int* pnl_hmat_int_lget(PnlHMatInt *H, int *tab);
 #endif /* __cplusplus */
 
 
-#endif /* MATRIX_INT_H */
+#endif /* _PNL_MATRIX_INT_H */

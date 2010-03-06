@@ -1,11 +1,17 @@
-#ifndef VECTOR_COMPLEX_H
-#define VECTOR_COMPLEX_H
+#ifndef _PNL_VECTOR_COMPLEX_H
+#define _PNL_VECTOR_COMPLEX_H
+
+
+#ifndef _PNL_VECTOR_H
+#error "Do not include this file directly. Include pnl_vector.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
 #include "pnl_complex.h"
+#include "pnl_matrix.h"
 
 /**
  * \ingroup PnlVectors
@@ -175,4 +181,4 @@ extern void pnl_vect_complex_reverse(PnlVectComplex * v);
 #endif /* __cplusplus */
 
 
-#endif /* VECTOR_FCOMPLEX_H */
+#endif /* _PNL_VECTOR_FCOMPLEX_H */

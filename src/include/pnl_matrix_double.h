@@ -1,6 +1,9 @@
-#ifndef _MATRIX_DOUBLE_H
-#define _MATRIX_DOUBLE_H
+#ifndef _PNL_MATRIX_DOUBLE_H
+#define _PNL_MATRIX_DOUBLE_H
 
+#ifndef _PNL_MATRIX_H
+#error "Do not include this file directly. Include pnl_matrix.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -8,7 +11,6 @@ extern "C" {
 
 #include "pnl_vector.h"
 #include "pnl_perm.h"
-#include "pnl_matrix_int.h"
 
 
 #ifndef PNL_RANGE_CHECK_OFF
@@ -244,4 +246,4 @@ extern double* pnl_hmat_lget(PnlHMat *H, int *tab);
 #endif /* __cplusplus */
 
 
-#endif /* _MATRIX_DOUBLE_H */
+#endif /* _PNL_MATRIX_DOUBLE_H */
