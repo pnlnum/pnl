@@ -793,11 +793,9 @@ static void pnl_mat_syslin_test ()
   printf("test de la fonction 'pnl_mat_lu_syslin' (symmetric matrix) : \n");
   pnl_mat_clone (S, Scopy);
   p = pnl_vect_int_create (5);
-  pnl_permutation_init (p);
   pnl_mat_lu (S, p);
   pnl_mat_lu_syslin (x, S, p, b);
   pnl_vect_print(x);
-  pnl_vect_int_free (&p);
 
   printf("test de la fonction 'pnl_mat_syslin' (symmetric matrix) : \n");
   pnl_mat_clone (S, Scopy);
@@ -810,7 +808,16 @@ static void pnl_mat_syslin_test ()
   printf("test de la fonction 'pnl_mat_chol_syslin_mat' : \n");
   pnl_mat_clone (S, Scopy);
   printf ("B = "); pnl_mat_print_nsp (B); printf ("\n");
+  pnl_mat_chol (S);
   pnl_mat_chol_syslin_mat (S, B);
+  printf ("X = "); pnl_mat_print_nsp (B); printf ("\n");
+
+  printf("test de la fonction 'pnl_mat_lu_syslin_mat' (symmetric matrix): \n");
+  pnl_mat_clone (S, Scopy);
+  pnl_mat_clone (B, Bcopy);
+  printf ("B = "); pnl_mat_print_nsp (B); printf ("\n");
+  pnl_mat_lu (S, p);
+  pnl_mat_lu_syslin_mat (S, p, B);
   printf ("X = "); pnl_mat_print_nsp (B); printf ("\n");
 
   printf("test de la fonction 'pnl_mat_syslin_mat' (symmetric matrix): \n");
@@ -825,17 +832,22 @@ static void pnl_mat_syslin_test ()
   create_invertible_matrix (S, 5, gen);
   pnl_mat_clone (Scopy, S);
   printf ("A = "); pnl_mat_print_nsp (S);
-  p = pnl_vect_int_create (5);
-  pnl_permutation_init (p);
   pnl_mat_lu (S, p);
   pnl_mat_lu_syslin (x, S, p, b);
   printf("x = "); pnl_vect_print_nsp(x); printf("\n");
-  pnl_vect_int_free (&p);
 
   printf("test de la fonction 'pnl_mat_syslin' : \n");
   pnl_mat_clone (S, Scopy);
   pnl_mat_syslin (x, S, b);
   printf("x = "); pnl_vect_print_nsp(x); printf("\n");
+
+  printf("test de la fonction 'pnl_mat_syslin_mat' : \n");
+  pnl_mat_clone (S, Scopy);
+  pnl_mat_clone (B, Bcopy);
+  printf ("B = "); pnl_mat_print_nsp (B); printf ("\n");
+  pnl_mat_lu (S, p);
+  pnl_mat_lu_syslin_mat (S, p, B);
+  printf ("X = "); pnl_mat_print_nsp (B); printf ("\n");
 
   printf("test de la fonction 'pnl_mat_syslin_mat' : \n");
   pnl_mat_clone (S, Scopy);
@@ -850,6 +862,7 @@ static void pnl_mat_syslin_test ()
   pnl_mat_free (&Scopy);
   pnl_vect_free (&b);
   pnl_vect_free (&x);
+  pnl_vect_int_free (&p);
 }
 
 

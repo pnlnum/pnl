@@ -82,34 +82,18 @@ static void pnl_mat_make_upper (PnlMat *A)
 void pnl_mat_lu (PnlMat *A, PnlPermutation *p)
 {
   int info, i, N = A->n;
-  int *invpiv;
   
   CheckIsSquare(A);
-  invpiv = MALLOC_INT(N);
-  pnl_permutation_init (p);
 
   pnl_mat_sq_transpose (A);
-  C2F(dgetrf) (&N, &N, A->array, &N, invpiv, &info);
+  C2F(dgetrf) (&N, &N, A->array, &N, p->array, &info);
   if ( info != 0 )
     {
       PNL_ERROR ("LU decomposition cannot be computed", "pnl_mat_lu");
     }
   pnl_mat_sq_transpose (A);
-  /* |+ Fortran indices start at 1 +| */
-  /* for ( i=0 ; i<N ; i++ ) invpiv[i]--; */
-  /* |+ the permutation is computed the other round +| */
-  /* for ( i=0 ; i<N ; i++ ) */
-  /*   { */
-  /*     int ipiv = invpiv[i]; */
-  /*     if (ipiv != i) */
-  /*       { */
-  /*         int tmp = p->array[i] ; */
-  /*         p->array[i] = p->array[ipiv]; */
-  /*         p->array[ipiv] = tmp; */
-  /*       } */
-  /*   } */
-  for ( i=0 ; i<N ; i++ ) p->array[i] = invpiv[i];
-  free (invpiv);
+  /* C indices start at 0 */
+  pnl_vect_int_minus_int (p, 1);
 }
 
 /**
@@ -132,6 +116,7 @@ void pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
   work = NULL;
   m = A->m;
   pnl_mat_clone (R, A);
+  /* Convert to column wise storage */
   pnl_mat_sq_transpose (R);
   tau=MALLOC_DOUBLE(m);
   
@@ -178,7 +163,7 @@ void pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
     }
 
 
-  /* reverse the matrix storage */
+  /* Revert to row wise storage */
   pnl_mat_sq_transpose (R);
   pnl_mat_sq_transpose (Q);
 
@@ -207,6 +192,7 @@ void pnl_mat_upper_syslin (PnlVect *x, const PnlMat *A, const  PnlVect *b)
   lda = A->m;
   ldb = A->m;
   pnl_vect_clone (x, b);
+  /* Beware that Fortran uses a column wise store, we actually consider A^T */
   C2F(dtrtrs)("U","T","N",&n,&nrhs,A->array,&lda,x->array,&ldb,&info);
   if (info != 0)
     {
@@ -231,6 +217,7 @@ void pnl_mat_lower_syslin (PnlVect *x, const PnlMat *A, const  PnlVect *b)
   lda = A->m;
   ldb = A->m;
   pnl_vect_clone (x, b);
+  /* Beware that Fortran uses a column wise store, we actually consider A^T */
   C2F(dtrtrs)("L","T","N",&n,&nrhs,A->array,&lda,x->array,&ldb,&info);
   if (info != 0)
     {
@@ -248,7 +235,7 @@ void pnl_mat_lower_syslin (PnlVect *x, const PnlMat *A, const  PnlVect *b)
  */
 void pnl_mat_lu_syslin_inplace (PnlMat *A, const PnlVectInt *p, PnlVect *b)
 {
-  int n, nrhs, lda, ldb, info;
+  int i, n, nrhs, lda, ldb, info;
   CheckIsSquare(A);
   CheckMatVectIsCompatible (A, b);
   CheckVectMatch (p, b); 
@@ -257,13 +244,106 @@ void pnl_mat_lu_syslin_inplace (PnlMat *A, const PnlVectInt *p, PnlVect *b)
   nrhs = 1;
   lda = A->m;
   ldb = A->m;
+  /* Fortran indices start at 1 */
+  pnl_vect_int_plus_int (p, 1);
+  /* Convert to a column wise storage */
   pnl_mat_sq_transpose (A);
   C2F(dgetrs)("N",&n,&nrhs,A->array,&lda,p->array,b->array,&ldb,&info);
+  /* Revert to a row wise storage */
   pnl_mat_sq_transpose (A);
+  /* Fortran indices start at 1 */
+  pnl_vect_int_minus_int (p, 1);
   if (info != 0)
     {
       PNL_ERROR ("Matrix is singular", "pnl_lu_syslin");
     }
+}
+
+/**
+ * solves the linear system A x = b with P A = LU. For a symmetric definite
+ * positive system, prefer pnl_mat_chol_syslin
+ *
+ * @param x existing vector that contains the solution on exit
+ * @param LU a PnlMat containing the LU decomposition of A
+ * @param b right hand side member
+ * @param p a PnlVectInt.
+ */
+void pnl_mat_lu_syslin (PnlVect *x, PnlMat *LU, const PnlVectInt *p, const PnlVect *b)
+{
+  pnl_vect_clone (x, b);
+  pnl_mat_lu_syslin_inplace (LU, p, x);
+}
+
+/**
+ * solves a linear system A x = b using a LU factorization
+ * @param x a PnlVect containing the solution on exit (must have already
+ * been created )
+ * @param A the matrix of the system
+ * @param b the r.h.s. member
+ */
+void pnl_mat_syslin (PnlVect *x, const PnlMat *A, const PnlVect *b)
+{
+  PnlMat *LU;
+  LU = pnl_mat_copy (A);
+  pnl_vect_clone (x, b);
+  pnl_mat_syslin_inplace (LU, x);
+  pnl_mat_free (&LU);
+}
+
+/**
+ * solves a linear system A x = b using a LU factorization
+ * @param A the matrix of the system. On exit contains the LU decomposition of A.
+ * @param b the r.h.s. member
+ */
+void pnl_mat_syslin_inplace (PnlMat *A, PnlVect *b)
+{
+  PnlVectInt *p;
+  CheckIsSquare(A);
+  p = pnl_vect_int_create (A->m);
+  pnl_mat_lu (A, p);
+  pnl_mat_lu_syslin_inplace (A, p, b);
+  pnl_vect_int_free (&p);
+}
+
+/**
+ * solves a linear system A X = B using a LU factorization where B is a matrix
+ * @param A contains the L and U factors of the PA = LU factoratisation
+ * previously computed by pnl_mat_lu
+ * @param p the permutation associated to the PA = LU factotisation
+ * @param B the r.h.s. matrix of the system of size n x m. On exit B contains
+ * the solution X
+ */
+void pnl_mat_lu_syslin_mat (const PnlMat *A,  const PnlPermutation *p, PnlMat *B)
+{
+  int n, nrhs, lda, ldb, info;
+  PnlMat *tB;
+  CheckIsSquare(A);
+  PNL_CHECK (A->m != B->m, "size mismatch", "pnl_mat_lu_syslin_mat");
+
+  n = A->n;
+  nrhs = B->n;
+  lda = A->m;
+  ldb = A->m;
+
+  /* Some tweaks are needed because of Fortran storage in Blas */
+  tB = pnl_mat_create (0,0);
+  /* Convert to column wise storage */
+  pnl_mat_sq_transpose (A);
+  pnl_mat_tr (tB, B);
+  /* shift indices of pivoting */
+  pnl_vect_int_plus_int (p, 1);
+
+  C2F(dgetrs)("N",&n,&nrhs,A->array,&lda,p->array,tB->array,&ldb,&info);
+  /* Revert to row wise storage */
+  pnl_mat_sq_transpose (A);
+  pnl_mat_tr (B, tB);
+  /* unshift indices of pivoting */
+  pnl_vect_int_minus_int (p, 1);
+  if (info != 0)
+    {
+      PNL_ERROR ("Matrix is singular", "pnl_lu_syslin");
+    }
+  pnl_mat_free (&tB);
 }
 
 /**
@@ -274,30 +354,12 @@ void pnl_mat_lu_syslin_inplace (PnlMat *A, const PnlVectInt *p, PnlVect *b)
  */
 void pnl_mat_syslin_mat (PnlMat *A,  PnlMat *B)
 {
-  int n, nrhs, lda, ldb, info;
-  PnlMat *tB;
   PnlVectInt *p;
   CheckIsSquare(A);
   p = pnl_vect_int_create (A->m);
-  PNL_CHECK (A->m != B->m, "size mismatch", "pnl_mat_syslin_mat");
   pnl_mat_lu (A, p);
 
-  n = A->n;
-  nrhs = B->n;
-  lda = A->m;
-  ldb = A->m;
-  pnl_mat_sq_transpose (A);
-  tB = pnl_mat_create (0,0);
-  pnl_mat_tr (tB, B);
-  C2F(dgetrs)("N",&n,&nrhs,A->array,&lda,p->array,tB->array,&ldb,&info);
-  pnl_mat_sq_transpose (A);
-  pnl_mat_tr (B, tB);
-  if (info != 0)
-    {
-      PNL_ERROR ("Matrix is singular", "pnl_lu_syslin");
-    }
-  pnl_vect_int_free (&p);
-  pnl_mat_free (&tB);
+  pnl_mat_lu_syslin_mat (A, p , B);
 }
 
 /**
@@ -314,6 +376,7 @@ void pnl_mat_upper_inverse(PnlMat *A, const PnlMat *B)
   pnl_mat_clone (A, B);
   n = A->n;
   lda = A->m;
+  /* Beware that Fortran uses a column wise storage, we actually consider A^T */
   C2F(dtrtri)("L","N",&n,A->array,&lda,&info);
   if (info != 0)
     {
@@ -335,6 +398,7 @@ void pnl_mat_lower_inverse (PnlMat *A, const PnlMat *B)
   pnl_mat_clone (A, B);
   n = A->n;
   lda = A->m;
+  /* Beware that Fortran uses a column wise storage, we actually consider A^T */
   C2F(dtrtri)("U","N",&n,A->array,&lda,&info);
   if (info != 0)
     {
@@ -401,7 +465,7 @@ static int pnl_dsyev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvect
       goto err;
     }
 
-  /* extract results */ 
+  /* Revert to row wise storage */
   pnl_mat_sq_transpose (P);
 
   free(work);
@@ -460,6 +524,7 @@ static int pnl_dgeev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvect
       if (wi[i] != 0.) { printf ("Some eigenvalues are complex\n"); goto err;}
     }
 
+  /* Convert to row wise storage */
   pnl_mat_sq_transpose (P);
 
   free(wi); free(work); free(input);
@@ -538,6 +603,7 @@ int pnl_mat_ls_mat (const PnlMat *A, PnlMat *B)
   int *jpvt;
   PnlMat *tA;
 
+  /* Convert to column wise storage */
   tA = pnl_mat_transpose (A);
   
   m = A->m; n = A->n;
@@ -549,7 +615,7 @@ int pnl_mat_ls_mat (const PnlMat *A, PnlMat *B)
   rcond = MAX(A->m,A->n) * pnl_dlamch("eps");
 
   /* En large B to contain the solution and  transpose it because
-     of Blas storage.
+     of column wise storage.
      X is matrix of size nrhs x ldb 
   */
   if ( (X = MALLOC_DOUBLE(ldb * nrhs)) == NULL) return FAIL;

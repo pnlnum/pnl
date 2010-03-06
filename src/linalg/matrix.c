@@ -271,6 +271,32 @@ void pnl_mat_chol_syslin_inplace (const PnlMat *chol, PnlVect *b)
   
 }
 
+/**
+ * solves a linear system A X = B using a Cholesky factorization of A where B
+ * is a matrix. Note that A must be symmetrix positive definite
+ *
+ * @param A contains the Cholesky decomposition of the matrix A as computed by
+ * pnl_mat_chol
+ * @param B the r.h.s. matrix of the system of size n x m. On exit B contains
+ * the solution X
+ */
+void pnl_mat_chol_syslin_mat (const PnlMat *A,  PnlMat *B)
+{
+  PnlVect *b;
+  int i;
+
+  CheckIsSquare(A);
+  b = pnl_vect_create (0);
+
+  for (i=0; i<B->n; i++)
+    {
+      pnl_mat_get_col (b, B, i);
+      pnl_mat_chol_syslin_inplace (A, b);
+      pnl_mat_set_col (B, b, i);
+    }
+  pnl_vect_free (&b);
+}
+
 #if 0
 /**
  * computes a P A = LU factoristion. On exit A contains the L and U
@@ -333,54 +359,6 @@ void pnl_mat_lu (PnlMat *A, PnlVectInt *p)
 }
 #endif
 
-
-/**
- * solves the linear system A x = b with P A = LU. For a symmetric definite
- * positive system, prefer pnl_mat_chol_syslin
- *
- * @param x existing vector that contains the solution on exit
- * @param LU a PnlMat containing the LU decomposition of A
- * @param b right hand side member
- * @param p a PnlVectInt.
- */
-void pnl_mat_lu_syslin (PnlVect *x, PnlMat *LU, const PnlVectInt *p, const PnlVect *b)
-{
-  pnl_vect_clone (x, b);
-  pnl_mat_lu_syslin_inplace (LU, p, x);
-}
-
-/**
- * solves a linear system A x = b using a LU factorization
- * @param x a PnlVect containing the solution on exit (must have already
- * been created )
- * @param A the matrix of the system
- * @param b the r.h.s. member
- */
-void pnl_mat_syslin (PnlVect *x, const PnlMat *A, const PnlVect *b)
-{
-  PnlMat *LU;
-  LU = pnl_mat_copy (A);
-  pnl_vect_clone (x, b);
-  pnl_mat_syslin_inplace (LU, x);
-  pnl_mat_free (&LU);
-}
-
-/**
- * solves a linear system A x = b using a LU factorization
- * @param A the matrix of the system. On exit contains the LU decomposition of A.
- * @param b the r.h.s. member
- */
-void pnl_mat_syslin_inplace (PnlMat *A, PnlVect *b)
-{
-  PnlVectInt *p;
-  CheckIsSquare(A);
-  p = pnl_vect_int_create (A->m);
-  pnl_mat_lu (A, p);
-  pnl_mat_lu_syslin_inplace (A, p, b);
-  pnl_vect_int_free (&p);
-}
-
-
 #if 0
 /*
  * This function solves a linear system A * X = B in place using a LU
@@ -432,32 +410,6 @@ void pnl_mat_syslin_mat2 (PnlMat *A,  PnlMat *B)
 }
 #endif
 
-/**
- * solves a linear system A X = B using a Cholesky factorization of A where B
- * is a matrix. Note that A must be symmetrix positive definite
- *
- * @param A the matrix of the system of size n x n. On exit contains the
- * Cholesky decomposition 
- * @param B the r.h.s. matrix of the system of size n x m. On exit B contains
- * the solution X
- */
-void pnl_mat_chol_syslin_mat (PnlMat *A,  PnlMat *B)
-{
-  PnlVect *b;
-  int i;
-
-  CheckIsSquare(A);
-  b = pnl_vect_create (0);
-  pnl_mat_chol (A);
-
-  for (i=0; i<B->n; i++)
-    {
-      pnl_mat_get_col (b, B, i);
-      pnl_mat_chol_syslin_inplace (A, b);
-      pnl_mat_set_col (B, b, i);
-    }
-  pnl_vect_free (&b);
-}
 
 #if 0
 /*

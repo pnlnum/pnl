@@ -888,12 +888,12 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 
 \paragraph{Linear systems and matrix decompositions}
 
-The following functions are designed to solve linear system of the from \var{A
-  x = b} where \var{A} is a matrix and \var{b} is a vector except in the
-functions \reffun{pnl_mat_syslin_mat} and \reffun{pnl_mat_chol_syslin_mat}
-which expect the right hand side member to be a matrix too. Whenever the
-vector \var{b} is not needed once the system is solved, you should consider
-using ``inplace'' functions.
+The following functions are designed to solve linear system of the from \var{A x
+= b} where \var{A} is a matrix and \var{b} is a vector except in the functions
+\reffun{pnl_mat_syslin_mat}, \reffun{pnl_mat_lu_syslin_mat} and
+\reffun{pnl_mat_chol_syslin_mat} which expect the right hand side member to be a
+matrix too. Whenever the vector \var{b} is not needed once the system is solved,
+you should consider using ``inplace'' functions.
 
 \begin{itemize}
 \item \describefun{void}{pnl_mat_chol}{\refstruct{PnlMat} \ptr M}
@@ -988,17 +988,22 @@ using ``inplace'' functions.
   \var{B} on exit. On exit, \var{A} contains the LU decomposition of the input
   matrix which is lost.
 
-\item \describefun{void}{pnl_mat_chol_syslin_mat}{\refstruct{PnlMat}\ptr A, 
-    \refstruct{PnlMat} \ptr B}
-  \sshortdescribe Solves a linear system A X = B
-  using a Cholesky factorization which is computed inside this
-  function. \var{A} and \var{B} are matrices. \var{A} must be symmetric
-  positive definite. The solution of the system is stored in \var{B} on
-  exit. On exit, \var{A} contains the Cholesky decomposition of the input
-  matrix which is lost.
+\item \describefun{void}{pnl_mat_chol_syslin_mat}{const \refstruct{PnlMat}\ptr A, \refstruct{PnlMat} \ptr B}
+  \sshortdescribe Solves a linear system A X = B using a Cholesky factorization
+  of the symmetric positive defnite matrix \var{A}.  \var{A} contains the
+  Cholesky decomposition as computed by \reffun{pnl_mat_chol}. \var{B} is matrix
+  with the same number of rows as \var{A}. The solution of
+  the system is stored in \var{B} on exit. 
 
-\item \describefun{void}{pnl_mat_ls}{\refstruct{PnlMat}\ptr A, 
-    \refstruct{PnlVect} \ptr b}
+\item \describefun{void}{pnl_mat_lu_syslin_mat}{const \refstruct{PnlMat}\ptr A,
+  const \refstruct{PnlPermutation} \ptr p, \refstruct{PnlMat} \ptr B}
+  \sshortdescribe Solves a linear system A X = B using a \var{P A = L U} factorization.
+  \var{A} contains the \var{L U} factors and \var{p} the associated permutation.
+  \var{A} and \var{p} must have been computed by \reffun{pnl_mat_lu}. \var{B} is matrix
+  with the same number of rows as \var{A}.
+  The solution of the system is stored in \var{B} on exit. 
+
+\item \describefun{void}{pnl_mat_ls}{\refstruct{PnlMat}\ptr A, \refstruct{PnlVect} \ptr b}
   \sshortdescribe Solves a linear system A x = b in the least square sense,
   i.e. $\var{x} = \arg\min_U \| A * u - b\|^2$. The solution is stored into
   \var{b} on exit. It internally uses a \var{AP = QR} decomposition.
