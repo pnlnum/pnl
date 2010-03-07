@@ -1768,24 +1768,24 @@ matrix vector multiplication as a parameter of the solver.
 Only available for symmetric and positive matrices.
 \begin{itemize}
 \item 
-  \describefun{\refstruct{PnlCGSolver} \ptr }{pnl_cg_solver_create}{int Size, int max-iter, double tolerance}
-  \sshortdescribe Creates a new \refstruct{PnlCGSolver} pointer.  
-\item \describefun{void}{pnl_cg_solver_initialisation}{\refstruct{PnlCGSolver} \ptr Solver, const \refstruct{PnlVect} \ptr b}
+  \describefun{\refstruct{PnlCgSolver} \ptr }{pnl_cg_solver_create}{int Size, int max-iter, double tolerance}
+  \sshortdescribe Creates a new \refstruct{PnlCgSolver} pointer.  
+\item \describefun{void}{pnl_cg_solver_initialisation}{\refstruct{PnlCgSolver} \ptr Solver, const \refstruct{PnlVect} \ptr b}
   \sshortdescribe Initialisation of the solver at the beginning of iterative method.  
-\item \describefun{void}{pnl_cg_solver_free}{\refstruct{PnlCGSolver} \ptr \ptr Solver}
+\item \describefun{void}{pnl_cg_solver_free}{\refstruct{PnlCgSolver} \ptr \ptr Solver}
   \sshortdescribe Destructor of iterative solver  
-\item \describefun{int}{pnl_cg_solver_solve}{void(\ptr matrix vector-product)(const void \ptr , const \refstruct{PnlVect} \ptr , const double, const double, \refstruct{PnlVect} \ptr ), const void \ptr Matrix-Data, void(\ptr matrix vector-product-PC)(const void \ptr , const \refstruct{PnlVect} \ptr , const double, const double, \refstruct{PnlVect} \ptr ), const void \ptr PC-Data, \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr b, \refstruct{PnlCGSolver} \ptr Solver}
+\item \describefun{int}{pnl_cg_solver_solve}{void(\ptr matrix vector-product)(const void \ptr , const \refstruct{PnlVect} \ptr , const double, const double, \refstruct{PnlVect} \ptr ), const void \ptr Matrix-Data, void(\ptr matrix vector-product-PC)(const void \ptr , const \refstruct{PnlVect} \ptr , const double, const double, \refstruct{PnlVect} \ptr ), const void \ptr PC-Data, \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr b, \refstruct{PnlCgSolver} \ptr Solver}
   \sshortdescribe Solves the linear system matrix vector-product is the matrix vector multiplication function matrix vector-product-PC is the preconditionner function Matrix-Data \& PC-Data is data to compute matrix vector multiplication.  
 \end{itemize}
 \paragraph{BICG stab}
 \begin{itemize}
-\item \describefun{\refstruct{PnlBICGSolver} \ptr }{pnl_bicg_solver_create}{int Size, int max-iter, double tolerance}
-  \sshortdescribe Creates a new \refstruct{PnlBICGSolver} pointer.  
-\item \describefun{void}{pnl_bicg_solver_initialisation}{\refstruct{PnlBICGSolver} \ptr Solver, const \refstruct{PnlVect} \ptr b}
+\item \describefun{\refstruct{PnlBicgSolver} \ptr }{pnl_bicg_solver_create}{int Size, int max-iter, double tolerance}
+  \sshortdescribe Creates a new \refstruct{PnlBicgSolver} pointer.  
+\item \describefun{void}{pnl_bicg_solver_initialisation}{\refstruct{PnlBicgSolver} \ptr Solver, const \refstruct{PnlVect} \ptr b}
   \sshortdescribe Initialisation of the solver at the beginning of iterative method.  
-\item \describefun{void}{pnl_bicg_solver_free}{\refstruct{PnlBICGSolver} \ptr \ptr Solver}
+\item \describefun{void}{pnl_bicg_solver_free}{\refstruct{PnlBicgSolver} \ptr \ptr Solver}
   \sshortdescribe Destructor of iterative solver  
-\item \describefun{int}{pnl_bicg_solver_solve}{void(\ptr matrix vector-product)(const void \ptr , const \refstruct{PnlVect} \ptr , const double, const double, \refstruct{PnlVect} \ptr ), const void \ptr Matrix-Data, void(\ptr matrix vector-product-PC)(const void \ptr , const \refstruct{PnlVect} \ptr , const double, const double, \refstruct{PnlVect} \ptr ), const void \ptr PC-Data, \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr b, \refstruct{PnlBICGSolver} \ptr Solver}
+\item \describefun{int}{pnl_bicg_solver_solve}{void(\ptr matrix vector-product)(const void \ptr , const \refstruct{PnlVect} \ptr , const double, const double, \refstruct{PnlVect} \ptr ), const void \ptr Matrix-Data, void(\ptr matrix vector-product-PC)(const void \ptr , const \refstruct{PnlVect} \ptr , const double, const double, \refstruct{PnlVect} \ptr ), const void \ptr PC-Data, \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr b, \refstruct{PnlBicgSolver} \ptr Solver}
   \sshortdescribe Solves the linear system matrix vector-product is the matrix vector multiplication function matrix vector-product-PC is the preconditioner function Matrix-Data \& PC-Data is data to compute matrix vector multiplication.  
 \end{itemize}
 
@@ -1799,13 +1799,13 @@ as initial guess.
 Note that if restart equals $m$, we have a classical GMRES algorithm.
 
 \begin{itemize}
-\item \describefun{\refstruct{PnlGMRESSolver} \ptr }{pnl_gmres_solver_create}{int Size, int max-iter, int restart, double tolerance}
-  \sshortdescribe Creates a new \refstruct{PnlGMRESSolver} pointer.  
-\item \describefun{void}{pnl_gmres_solver_initialisation}{\refstruct{PnlGMRESSolver} \ptr Solver, const \refstruct{PnlVect} \ptr b}
+\item \describefun{\refstruct{PnlGmresSolver} \ptr }{pnl_gmres_solver_create}{int Size, int max-iter, int restart, double tolerance}
+  \sshortdescribe Creates a new \refstruct{PnlGmresSolver} pointer.  
+\item \describefun{void}{pnl_gmres_solver_initialisation}{\refstruct{PnlGmresSolver} \ptr Solver, const \refstruct{PnlVect} \ptr b}
   \sshortdescribe Initialisation of the solver at the beginning of iterative method.  
-\item \describefun{void}{pnl_gmres_solver_free}{\refstruct{PnlGMRESSolver} \ptr \ptr Solver}
+\item \describefun{void}{pnl_gmres_solver_free}{\refstruct{PnlGmresSolver} \ptr \ptr Solver}
   \sshortdescribe Destructor of iterative solver  
-\item \describefun{int}{pnl_gmres_solver_solve}{void(\ptr matrix vector-product)(const void \ptr , const \refstruct{PnlVect} \ptr , const double, const double, \refstruct{PnlVect} \ptr ), const void \ptr Matrix-Data, void(\ptr matrix vector-product-PC)(const void \ptr , const \refstruct{PnlVect} \ptr , const double, const double, \refstruct{PnlVect} \ptr ), const void \ptr PC-Data, \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr b, \refstruct{PnlGMRESSolver} \ptr Solver}
+\item \describefun{int}{pnl_gmres_solver_solve}{void(\ptr matrix vector-product)(const void \ptr , const \refstruct{PnlVect} \ptr , const double, const double, \refstruct{PnlVect} \ptr ), const void \ptr Matrix-Data, void(\ptr matrix vector-product-PC)(const void \ptr , const \refstruct{PnlVect} \ptr , const double, const double, \refstruct{PnlVect} \ptr ), const void \ptr PC-Data, \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr b, \refstruct{PnlGmresSolver} \ptr Solver}
   \sshortdescribe Solves the linear system matrix vector-product is the matrix vector multiplication function matrix vector-product-PC is the preconditionner function Matrix-Data \& PC-Data is data to compute matrix vector multiplication.  
 \end{itemize}
 
@@ -1821,7 +1821,7 @@ static void pnl_mat_mult_vect_applied(const void *mat, const PnlVect *vec,
 and give this as the parameter of the iterative method
 \begin{verbatim}
 int pnl_mat_cg_solver_solve(const PnlMat * Matrix, const PnlMat * PC, 
-                            PnlVect * x, const PnlVect *b, PnlCGSolver * Solver)
+                            PnlVect * x, const PnlVect *b, PnlCgSolver * Solver)
 { return pnl_cg_solver_solve(pnl_mat_mult_vect_applied, 
                              Matrix, pnl_mat_mult_vect_applied, 
                              PC, x, b, Solver);}
@@ -1840,13 +1840,13 @@ With this implementation, the user can easily :
 
 
 \begin{itemize}
-\item \describefun{int}{pnl_mat_cg_solver_solve}{const \refstruct{PnlMat} \ptr M, const \refstruct{PnlMat} \ptr PC, \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr b, \refstruct{PnlCGSolver} \ptr Solver}
+\item \describefun{int}{pnl_mat_cg_solver_solve}{const \refstruct{PnlMat} \ptr M, const \refstruct{PnlMat} \ptr PC, \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr b, \refstruct{PnlCgSolver} \ptr Solver}
   \sshortdescribe Solves the linear system \var{M x = b} with preconditionner PC.  
-\item \describefun{int}{pnl_mat_bicg_solver_solve}{const \refstruct{PnlMat} \ptr M, const \refstruct{PnlMat} \ptr PC, \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr b, \refstruct{PnlBICGSolver} \ptr Solver}
+\item \describefun{int}{pnl_mat_bicg_solver_solve}{const \refstruct{PnlMat} \ptr M, const \refstruct{PnlMat} \ptr PC, \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr b, \refstruct{PnlBicgSolver} \ptr Solver}
   \sshortdescribe Solves the linear system \var{M x = b} with preconditionner PC.  
 \item \describefun{int}{pnl_mat_gmres_solver_solve}{const \refstruct{
       PnlMat} \ptr M, const \refstruct{PnlMat} \ptr PC, 
-    \refstruct{PnlVect} \ptr x, \refstruct{PnlVect} \ptr b, \refstruct{PnlGMRESSolver} \ptr Solver}
+    \refstruct{PnlVect} \ptr x, \refstruct{PnlVect} \ptr b, \refstruct{PnlGmresSolver} \ptr Solver}
   \sshortdescribe Solve the linear system \var{M x = b} with preconditionner PC.
 \end{itemize}
 
