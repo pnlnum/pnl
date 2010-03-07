@@ -1539,18 +1539,18 @@ void FUNCTION(pnl_mat, qsort_index)(TYPE(PnlMat) * A, PnlMatInt *t, char dir, ch
 #endif
 
 /****************************
- *** PnlHMat functions ***
+ *** PnlHmat functions ***
  ****************************/
 
 
-TYPE(PnlHMat)* FUNCTION(pnl_hmat,create)(int ndim, const int *dims)
+TYPE(PnlHmat)* FUNCTION(pnl_hmat,create)(int ndim, const int *dims)
 {
-  TYPE(PnlHMat) *H;
+  TYPE(PnlHmat) *H;
   int i;
   int s=1;
   const int *ptr;
   ptr=dims;
-  if((H=malloc(sizeof(TYPE(PnlHMat))))==NULL)
+  if((H=malloc(sizeof(TYPE(PnlHmat))))==NULL)
     return NULL;
   H->ndim=ndim;
   if (ndim>0)
@@ -1573,9 +1573,9 @@ TYPE(PnlHMat)* FUNCTION(pnl_hmat,create)(int ndim, const int *dims)
   return H;  
 }
 
-TYPE(PnlHMat)* FUNCTION(pnl_hmat,CONCAT2(create_from_,BASE))(int ndim, const int *dims, BASE x)
+TYPE(PnlHmat)* FUNCTION(pnl_hmat,CONCAT2(create_from_,BASE))(int ndim, const int *dims, BASE x)
 {
-  TYPE(PnlHMat) *H;
+  TYPE(PnlHmat) *H;
   int i=0;
   BASE *ptr;
   
@@ -1592,9 +1592,9 @@ TYPE(PnlHMat)* FUNCTION(pnl_hmat,CONCAT2(create_from_,BASE))(int ndim, const int
 }
 
 
-TYPE(PnlHMat)* FUNCTION(pnl_hmat,create_from_ptr)(int ndim, const int *dims, const BASE *x)
+TYPE(PnlHmat)* FUNCTION(pnl_hmat,create_from_ptr)(int ndim, const int *dims, const BASE *x)
 {
-  TYPE(PnlHMat) *H;
+  TYPE(PnlHmat) *H;
   
   if ((H=FUNCTION(pnl_hmat,create)(ndim,dims))==NULL)
     return NULL;
@@ -1604,7 +1604,7 @@ TYPE(PnlHMat)* FUNCTION(pnl_hmat,create_from_ptr)(int ndim, const int *dims, con
 }
 
 
-void FUNCTION(pnl_hmat,free)(TYPE(PnlHMat) **H)
+void FUNCTION(pnl_hmat,free)(TYPE(PnlHmat) **H)
 {
   if (*H != NULL)
     {
@@ -1617,14 +1617,14 @@ void FUNCTION(pnl_hmat,free)(TYPE(PnlHMat) **H)
 
 
 /**
- * copies a TYPE(PnlHMat) 
+ * copies a TYPE(PnlHmat) 
  *
- * @param H : a constant TYPE(PnlHMat) pointer
- * @return a TYPE(PnlHMat) pointer initialised with H
+ * @param H : a constant TYPE(PnlHmat) pointer
+ * @return a TYPE(PnlHmat) pointer initialised with H
  */
-TYPE(PnlHMat)* FUNCTION(pnl_hmat,copy)(const TYPE(PnlHMat) *H)
+TYPE(PnlHmat)* FUNCTION(pnl_hmat,copy)(const TYPE(PnlHmat) *H)
 {
-  TYPE(PnlHMat) *ret;
+  TYPE(PnlHmat) *ret;
   if ((ret=FUNCTION(pnl_hmat,create)(H->ndim, H->dims))==NULL) return NULL;
   memcpy(ret->array, H->array, sizeof(BASE)*ret->mn);
   return ret;
@@ -1632,33 +1632,33 @@ TYPE(PnlHMat)* FUNCTION(pnl_hmat,copy)(const TYPE(PnlHMat) *H)
 
 
 /**
- * clones a TYPE(PnlHMat)
+ * clones a TYPE(PnlHmat)
  *
- * @param H : a constant TYPE(PnlHMat) pointer
+ * @param H : a constant TYPE(PnlHmat) pointer
  * @param clone : needs to be already allocated. NOT TESTED
  */
-void FUNCTION(pnl_hmat,clone)(TYPE(PnlHMat) *clone, const TYPE(PnlHMat) *H)
+void FUNCTION(pnl_hmat,clone)(TYPE(PnlHmat) *clone, const TYPE(PnlHmat) *H)
 {
   FUNCTION(pnl_hmat,resize)(clone, H->ndim,H->dims);
   memcpy(clone->array, H->array, sizeof(BASE)*H->mn);
 }
 
 /**
- * resizes a TYPE(PnlHMat).
+ * resizes a TYPE(PnlHmat).
  *
  * If the new size is smaller than the current one, no
  * memory is free. If the new size is larger than the
  * current one, more space is allocated. Note that for the
  * sake of efficiency the old data are not copied.
  *
- * @param H : a pointer to an already existing TYPE(PnlHMat) (mn
+ * @param H : a pointer to an already existing TYPE(PnlHmat) (mn
  * must be initialised)
  * @param ndim : new nb dimensions
  * @param dims : new pointer to the dimensions array
  *
  * @return OK or FAIL. When returns OK, the hmatrix is changed. 
  */
-int FUNCTION(pnl_hmat,resize)(TYPE(PnlHMat) *H, int ndim, const int *dims)
+int FUNCTION(pnl_hmat,resize)(TYPE(PnlHmat) *H, int ndim, const int *dims)
 {
   int i;
   int s=1;
@@ -1701,18 +1701,18 @@ int FUNCTION(pnl_hmat,resize)(TYPE(PnlHMat) *H, int ndim, const int *dims)
 /**
  * sets the value of self[tab]=x
  *
- * @param self : a TYPE(PnlHMat)
+ * @param self : a TYPE(PnlHmat)
  * @param tab : coordinates array 
  * @param x : self[tab]=x
  */
-void FUNCTION(pnl_hmat,set)(TYPE(PnlHMat) *self, int *tab, BASE x)
+void FUNCTION(pnl_hmat,set)(TYPE(PnlHmat) *self, int *tab, BASE x)
 {
   int i,j;
   int *ptr;
   int s=0;
   int p;
   int d=self->ndim;
-  CheckIndexHMat(self,tab);
+  CheckIndexHmat(self,tab);
   
  
   for(i=0;i<d;i++)
@@ -1731,18 +1731,18 @@ void FUNCTION(pnl_hmat,set)(TYPE(PnlHMat) *self, int *tab, BASE x)
 /**
  * gets the value of self[tab]
  *
- * @param self : a TYPE(PnlHMat)
+ * @param self : a TYPE(PnlHmat)
  * @param tab : coordinates array; 
  * @return  self[tab]
  */
-BASE FUNCTION(pnl_hmat,get)(const TYPE(PnlHMat) *self, int *tab)
+BASE FUNCTION(pnl_hmat,get)(const TYPE(PnlHmat) *self, int *tab)
 {
   int i,j;
   int *ptr;
   int s=0;
   int p;
   int d=self->ndim;
-  CheckIndexHMat(self,tab);
+  CheckIndexHmat(self,tab);
   
  
   for(i=0;i<d;i++)
@@ -1761,18 +1761,18 @@ BASE FUNCTION(pnl_hmat,get)(const TYPE(PnlHMat) *self, int *tab)
 /**
  * returns the address of self[tab] for use as a lvalue.
  *
- * @param self : a TYPE(PnlHMat)
+ * @param self : a TYPE(PnlHmat)
  * @param tab : coordinates array 
  * @return  &(self[i,j])
  */
-BASE* FUNCTION(pnl_hmat,lget)(TYPE(PnlHMat) *self, int *tab)
+BASE* FUNCTION(pnl_hmat,lget)(TYPE(PnlHmat) *self, int *tab)
 {
   int i,j;
   int *ptr;
   int s=0;
   int p;
   int d=self->ndim;
-  CheckIndexHMat(self,tab);
+  CheckIndexHmat(self,tab);
   
  
   for(i=0;i<d;i++)
@@ -1791,9 +1791,9 @@ BASE* FUNCTION(pnl_hmat,lget)(TYPE(PnlHMat) *self, int *tab)
 /**
  * Print a hmatrix
  *
- * @param H : a TYPE(PnlHMat) pointer.
+ * @param H : a TYPE(PnlHmat) pointer.
  */
-void FUNCTION(pnl_hmat,print)(const TYPE(PnlHMat) *H)
+void FUNCTION(pnl_hmat,print)(const TYPE(PnlHmat) *H)
 {
   BASE *lptr=H->array;
   int *ptr=NULL;
@@ -1850,12 +1850,12 @@ void FUNCTION(pnl_hmat,print)(const TYPE(PnlHMat) *H)
  * @param rhs : rigth hand side hypermatrix
  * @return  lhs = lhs+rhs
  */
-void FUNCTION(pnl_hmat,plus_hmat)(TYPE(PnlHMat) *lhs, const TYPE(PnlHMat) *rhs)
+void FUNCTION(pnl_hmat,plus_hmat)(TYPE(PnlHmat) *lhs, const TYPE(PnlHmat) *rhs)
 {
 
   BASE *lptr=lhs->array, *rptr=rhs->array;
   int i=0;
-  CheckHMatMatch(lhs, rhs);
+  CheckHmatMatch(lhs, rhs);
   while (i<lhs->mn)
     {
       (*lptr)=PLUS((*lptr),(*rptr)); lptr++; rptr++;  i++;
@@ -1869,7 +1869,7 @@ void FUNCTION(pnl_hmat,plus_hmat)(TYPE(PnlHMat) *lhs, const TYPE(PnlHMat) *rhs)
  * @param x : scalar
  * @return  lhs = lhs*x
  */
-void FUNCTION(pnl_hmat,CONCAT2(mult_,BASE))(TYPE(PnlHMat) *lhs, BASE x)
+void FUNCTION(pnl_hmat,CONCAT2(mult_,BASE))(TYPE(PnlHmat) *lhs, BASE x)
 {
   BASE *lptr=lhs->array;
   int i=0;

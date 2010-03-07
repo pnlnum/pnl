@@ -40,14 +40,14 @@ extern void create_invertible_matrix (PnlMat *A, int n, int gen);
  * 
  * @return a band matrix
  */
-PnlBandMat* create_bandmat (int m, int n, int nl, int nu, int gen)
+PnlBandMat* create_band_mat (int m, int n, int nl, int nu, int gen)
 {
   PnlMat *M;
   PnlBandMat *BM;
 
   M = pnl_mat_create (m, n);
   pnl_mat_rand_normal (M, m, n, gen);
-  BM = pnl_bandmat_create_from_mat (M, nl, nu);
+  BM = pnl_band_mat_create_from_mat (M, nl, nu);
   pnl_mat_free (&M);
   return (BM);   
 }
@@ -62,14 +62,14 @@ PnlBandMat* create_bandmat (int m, int n, int nl, int nu, int gen)
  * 
  * @return a band matrix
  */
-PnlBandMat* create_invertible_bandmat (int n, int nl, int nu, int gen)
+PnlBandMat* create_invertible_band_mat (int n, int nl, int nu, int gen)
 {
   PnlMat *M;
   PnlBandMat *BM;
 
   M = pnl_mat_create (n, n);
   create_invertible_matrix (M, n, gen);
-  BM = pnl_bandmat_create_from_mat (M, nl, nu);
+  BM = pnl_band_mat_create_from_mat (M, nl, nu);
   pnl_mat_free (&M);
   return (BM);   
 }
@@ -82,19 +82,19 @@ PnlBandMat* create_invertible_bandmat (int n, int nl, int nu, int gen)
  * 
  * @return a band matrix
  */
-PnlBandMat* create_sys_pos_bandmat (int n, int nu, int gen)
+PnlBandMat* create_sys_pos_band_mat (int n, int nu, int gen)
 {
   PnlMat *M;
   PnlBandMat *BM;
 
   M = pnl_mat_create (n, n);
   create_sym_pos_matrix (M, n, gen);
-  BM = pnl_bandmat_create_from_mat (M, nu, nu);
+  BM = pnl_band_mat_create_from_mat (M, nu, nu);
   pnl_mat_free (&M);
   return (BM);   
 }
 
-static void basic_bandmat_test ()
+static void basic_band_mat_test ()
 {
   PnlBandMat *BM, *BMclone;
   int m, n, nl, nu, gen;
@@ -105,29 +105,29 @@ static void basic_bandmat_test ()
 
   printf ("BandMat basic operations.\n");
 
-  BMclone = pnl_bandmat_create (m, n, nl, nu);
-  BM = create_bandmat (m, n, nl, nu, gen);
-  printf ("BM = "); pnl_bandmat_print_as_full (BM); printf ("\n");
-  pnl_bandmat_clone (BMclone, BM);
+  BMclone = pnl_band_mat_create (m, n, nl, nu);
+  BM = create_band_mat (m, n, nl, nu, gen);
+  printf ("BM = "); pnl_band_mat_print_as_full (BM); printf ("\n");
+  pnl_band_mat_clone (BMclone, BM);
 
-  printf ("M(%i, %i) = %f\n", 2, 2, pnl_bandmat_get (BM, 2, 2));
-  printf ("M(%i, %i) = %f\n", 2, 3, pnl_bandmat_get (BM, 2, 3));
-  printf ("M(%i, %i) = %f\n", 3, 1, pnl_bandmat_get (BM, 3, 1));
+  printf ("M(%i, %i) = %f\n", 2, 2, pnl_band_mat_get (BM, 2, 2));
+  printf ("M(%i, %i) = %f\n", 2, 3, pnl_band_mat_get (BM, 2, 3));
+  printf ("M(%i, %i) = %f\n", 3, 1, pnl_band_mat_get (BM, 3, 1));
   printf("\n");
 
-  pnl_bandmat_clone (BM, BMclone);
-  pnl_bandmat_mult_double (BM, 2.0);
-  printf ("2.0 * BM = "); pnl_bandmat_print_as_full (BM); printf ("\n");
+  pnl_band_mat_clone (BM, BMclone);
+  pnl_band_mat_mult_double (BM, 2.0);
+  printf ("2.0 * BM = "); pnl_band_mat_print_as_full (BM); printf ("\n");
 
-  pnl_bandmat_clone (BM, BMclone);
-  pnl_bandmat_plus_double (BM, 2.0);
-  printf ("2.0 + BM = "); pnl_bandmat_print_as_full (BM); printf ("\n");
+  pnl_band_mat_clone (BM, BMclone);
+  pnl_band_mat_plus_double (BM, 2.0);
+  printf ("2.0 + BM = "); pnl_band_mat_print_as_full (BM); printf ("\n");
 
-  pnl_bandmat_free (&BM);
-  pnl_bandmat_free (&BMclone);
+  pnl_band_mat_free (&BM);
+  pnl_band_mat_free (&BMclone);
 }
 
-static void bandmat_ops_test ()
+static void band_mat_ops_test ()
 {
   PnlBandMat *BA, *BB, *BAclone;
   int m, n, nl, nu, gen;
@@ -138,27 +138,27 @@ static void bandmat_ops_test ()
 
   printf ("BandMat term by term operations.\n");
 
-  BAclone = pnl_bandmat_create (m, n, nl, nu);
-  BA = create_bandmat (m, n, nl, nu, gen);
-  BB = create_bandmat (m, n, nl, nu, gen);
-  printf ("BA = "); pnl_bandmat_print_as_full (BA); printf ("\n");
-  printf ("BB = "); pnl_bandmat_print_as_full (BB); printf ("\n");
-  pnl_bandmat_clone (BAclone, BA);
+  BAclone = pnl_band_mat_create (m, n, nl, nu);
+  BA = create_band_mat (m, n, nl, nu, gen);
+  BB = create_band_mat (m, n, nl, nu, gen);
+  printf ("BA = "); pnl_band_mat_print_as_full (BA); printf ("\n");
+  printf ("BB = "); pnl_band_mat_print_as_full (BB); printf ("\n");
+  pnl_band_mat_clone (BAclone, BA);
 
-  pnl_bandmat_clone (BA, BAclone);
-  pnl_bandmat_plus_bandmat (BA, BB);
-  printf ("BA + BB  = "); pnl_bandmat_print_as_full (BA); printf ("\n");
+  pnl_band_mat_clone (BA, BAclone);
+  pnl_band_mat_plus_band_mat (BA, BB);
+  printf ("BA + BB  = "); pnl_band_mat_print_as_full (BA); printf ("\n");
 
-  pnl_bandmat_clone (BA, BAclone);
-  pnl_bandmat_mult_bandmat_term (BA, BB);
-  printf ("BA .* BB  = "); pnl_bandmat_print_as_full (BA); printf ("\n");
+  pnl_band_mat_clone (BA, BAclone);
+  pnl_band_mat_mult_band_mat_term (BA, BB);
+  printf ("BA .* BB  = "); pnl_band_mat_print_as_full (BA); printf ("\n");
 
-  pnl_bandmat_free (&BA);
-  pnl_bandmat_free (&BB);
-  pnl_bandmat_free (&BAclone);
+  pnl_band_mat_free (&BA);
+  pnl_band_mat_free (&BB);
+  pnl_band_mat_free (&BAclone);
 }
 
-static void bandmat_syslin_test ()
+static void band_mat_syslin_test ()
 {
   PnlBandMat *S, *Scopy, *B, *Bcopy;
   PnlVect *b, *x;
@@ -167,57 +167,57 @@ static void bandmat_syslin_test ()
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
   pnl_rand_init (gen, n, n);
   b = pnl_vect_create (n);
-  S = create_sys_pos_bandmat (n, nu, gen);
+  S = create_sys_pos_band_mat (n, nu, gen);
   pnl_vect_rand_normal (b, n, gen);
 
-  Scopy = pnl_bandmat_copy (S);
-  printf ("S = "); pnl_bandmat_print_as_full (S);
+  Scopy = pnl_band_mat_copy (S);
+  printf ("S = "); pnl_band_mat_print_as_full (S);
   printf ("\nb = "); pnl_vect_print_nsp (b);
   printf ("\n");
   x = pnl_vect_create(0);
 
-  printf("test of pnl_bandmat_syslin (symmetric band matrix) : \n");
-  pnl_bandmat_clone (S, Scopy);
-  pnl_bandmat_syslin (x, S, b);
+  printf("test of pnl_band_mat_syslin (symmetric band matrix) : \n");
+  pnl_band_mat_clone (S, Scopy);
+  pnl_band_mat_syslin (x, S, b);
   pnl_vect_print(x);
   
-  printf("test of pnl_bandmat_lu_syslin (symmetric band matrix) : \n");
-  pnl_bandmat_clone (S, Scopy);
+  printf("test of pnl_band_mat_lu_syslin (symmetric band matrix) : \n");
+  pnl_band_mat_clone (S, Scopy);
   p = pnl_vect_int_create (n);
-  pnl_bandmat_lu (S, p);
-  pnl_bandmat_lu_syslin (x, S, p, b);
+  pnl_band_mat_lu (S, p);
+  pnl_band_mat_lu_syslin (x, S, p, b);
   pnl_vect_print(x);
   pnl_vect_int_free (&p);
 
 
-  B = create_invertible_bandmat (n, nl, nu, gen);
-  Bcopy = pnl_bandmat_copy (B);
+  B = create_invertible_band_mat (n, nl, nu, gen);
+  Bcopy = pnl_band_mat_copy (B);
 
   printf("test of pnl_mat_syslin : \n");
-  printf ("A = "); pnl_bandmat_print_as_full (B);
-  pnl_bandmat_clone (B, Bcopy);
-  pnl_bandmat_syslin (x, B, b);
+  printf ("A = "); pnl_band_mat_print_as_full (B);
+  pnl_band_mat_clone (B, Bcopy);
+  pnl_band_mat_syslin (x, B, b);
   printf("x = "); pnl_vect_print_nsp(x); printf("\n");
 
-  printf("test of pnl_bandmat_lu_syslin : \n");
-  pnl_bandmat_clone (B, Bcopy);
+  printf("test of pnl_band_mat_lu_syslin : \n");
+  pnl_band_mat_clone (B, Bcopy);
   p = pnl_vect_int_create (n);
-  pnl_bandmat_lu (B, p);
-  pnl_bandmat_lu_syslin (x, B, p, b);
+  pnl_band_mat_lu (B, p);
+  pnl_band_mat_lu_syslin (x, B, p, b);
   printf("x = "); pnl_vect_print_nsp(x); printf("\n");
 
   pnl_vect_int_free (&p);
-  pnl_bandmat_free (&B);
-  pnl_bandmat_free (&Bcopy);
-  pnl_bandmat_free (&S);
-  pnl_bandmat_free (&Scopy);
+  pnl_band_mat_free (&B);
+  pnl_band_mat_free (&Bcopy);
+  pnl_band_mat_free (&S);
+  pnl_band_mat_free (&Scopy);
   pnl_vect_free (&b);
   pnl_vect_free (&x);
 }
 
 void band_matrix_test()
 {
-  basic_bandmat_test ();
-  bandmat_ops_test ();
-  bandmat_syslin_test ();
+  basic_band_mat_test ();
+  band_mat_ops_test ();
+  band_mat_syslin_test ();
 }

@@ -1,5 +1,5 @@
-#ifndef  _SPECIAL_FUNC_H
-#define _SPECIAL_FUNS_H
+#ifndef _PNL_SPECFUN_H 
+#define _PNL_SPECFUN_H 
 
 #ifdef __cplusplus
 extern "C" {
@@ -92,4 +92,4 @@ extern double pnl_sf_hyperg_U (double a, double b, double x);
 #endif /* __cplusplus */
 
 
-#endif
+#endif /* _PNL_SPECFUN_H */ 

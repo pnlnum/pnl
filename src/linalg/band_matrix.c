@@ -45,7 +45,7 @@ static double __op_inv(double a) { return 1./a; }
  * @param nu the number of upper diagonals
  * @return a PnlBandMat.
  */
-PnlBandMat* pnl_bandmat_create (int m, int n, int nl, int nu) 
+PnlBandMat* pnl_band_mat_create (int m, int n, int nl, int nu) 
 {
   PnlBandMat *BM;
 
@@ -77,11 +77,11 @@ PnlBandMat* pnl_bandmat_create (int m, int n, int nl, int nu)
  * @param nu the number of upper diagonal
  * @return a PnlBandMat.
  */
-PnlBandMat* pnl_bandmat_create_from_mat(const PnlMat *M,int nl, int nu)
+PnlBandMat* pnl_band_mat_create_from_mat(const PnlMat *M,int nl, int nu)
 {
   PnlBandMat *BM;
   int i, j;
-  BM = pnl_bandmat_create (M->m, M->n, nl, nu);
+  BM = pnl_band_mat_create (M->m, M->n, nl, nu);
 
   for ( j=0 ; j<BM->n ; j++ )
     {
@@ -99,7 +99,7 @@ PnlBandMat* pnl_bandmat_create_from_mat(const PnlMat *M,int nl, int nu)
  *
  * @param BM adress of a PnlBandMat.
  */
-void pnl_bandmat_free(PnlBandMat **BM)
+void pnl_band_mat_free(PnlBandMat **BM)
 {
   if ( (*BM) != NULL && (*BM)->array != NULL )
     {
@@ -118,7 +118,7 @@ void pnl_bandmat_free(PnlBandMat **BM)
  * @param nl the new number of lower diagonals
  * @param nu the new number of upper diagonals
  */
-int pnl_bandmat_resize(PnlBandMat *BM, int m, int n, int nl, int nu)
+int pnl_band_mat_resize(PnlBandMat *BM, int m, int n, int nl, int nu)
 {
   int size;
   if ( m < 0 || n< 0 || nu < 0 || nl < 0 ) return FAIL;
@@ -156,9 +156,9 @@ int pnl_bandmat_resize(PnlBandMat *BM, int m, int n, int nl, int nu)
  * @param Bclone an already existing PnlBandMat.
  * @param BM a PnlBandMat
  */
-void pnl_bandmat_clone(PnlBandMat * Bclone, const PnlBandMat * BM)
+void pnl_band_mat_clone(PnlBandMat * Bclone, const PnlBandMat * BM)
 {
-  pnl_bandmat_resize (Bclone, BM->m, BM->n, BM->nl, BM->nu);
+  pnl_band_mat_resize (Bclone, BM->m, BM->n, BM->nl, BM->nu);
   memcpy (Bclone->array, BM->array, BM->m_band * BM->n_band * sizeof(double));
 }
 
@@ -167,10 +167,10 @@ void pnl_bandmat_clone(PnlBandMat * Bclone, const PnlBandMat * BM)
  *
  * @param BM a PnlBandMat
  */
-PnlBandMat* pnl_bandmat_copy(const PnlBandMat * BM)
+PnlBandMat* pnl_band_mat_copy(const PnlBandMat * BM)
 {
   PnlBandMat *Bcopy;
-  Bcopy = pnl_bandmat_create (BM->m, BM->n, BM->nl, BM->nu);
+  Bcopy = pnl_band_mat_create (BM->m, BM->n, BM->nl, BM->nu);
   memcpy (Bcopy->array, BM->array, BM->m_band * BM->n_band * sizeof(double));
   return Bcopy;
 }
@@ -180,7 +180,7 @@ PnlBandMat* pnl_bandmat_copy(const PnlBandMat * BM)
  * @param BM a PnlBandMat
  * @return a PnlMat
  */
-PnlMat* pnl_bandmat_to_mat(const PnlBandMat *BM)
+PnlMat* pnl_band_mat_to_mat(const PnlBandMat *BM)
 {
   PnlMat *M;
   int i, j;
@@ -200,9 +200,9 @@ PnlMat* pnl_bandmat_to_mat(const PnlBandMat *BM)
  * 
  * @param BM a band matrix
  */
-void pnl_bandmat_print_as_full (const PnlBandMat *BM)
+void pnl_band_mat_print_as_full (const PnlBandMat *BM)
 {
-  PnlMat *M = pnl_bandmat_to_mat (BM);
+  PnlMat *M = pnl_band_mat_to_mat (BM);
   pnl_mat_print_nsp (M);
   pnl_mat_free (&M);
 }
@@ -215,7 +215,7 @@ void pnl_bandmat_print_as_full (const PnlBandMat *BM)
  * @param f the function to be applied term by term
  * On exit  BM = f(BM)
  */
-void pnl_bandmat_map_inplace(PnlBandMat *BM, double(*f)(double ))
+void pnl_band_mat_map_inplace(PnlBandMat *BM, double(*f)(double ))
 {
   int i, j;
   for ( j=0 ; j<BM->n_band ; j++ )
@@ -236,12 +236,12 @@ void pnl_bandmat_map_inplace(PnlBandMat *BM, double(*f)(double ))
  * @param f the function to be applied term by term
  * On exit  BA = f(BA,BB)
  */
-void pnl_bandmat_map_bandmat(PnlBandMat *BA, const PnlBandMat *BB, 
+void pnl_band_mat_map_band_mat(PnlBandMat *BA, const PnlBandMat *BB, 
                              double(*f)(double, double ))
 {
   int i, j;
   PNL_CHECK (BA->m != BB->m || BA->n != BB->n || BA->nu != BB->nu || BA->nl != BB->nl,
-             "size mismatched", "bandmat_map_bandlat");
+             "size mismatched", "band_mat_map_bandlat");
   for ( j=0 ; j<BA->n_band ; j++ )
     {
       for ( i=MAX(0, BA->nu-j) ; i<BA->m_band - MAX(BA->nl-BA->n_band+j+1, 0) ; i++)
@@ -260,7 +260,7 @@ void pnl_bandmat_map_bandmat(PnlBandMat *BA, const PnlBandMat *BB,
  * @param x : double arg
  * @param op : a binary operator, given as a function
  */
-static void __pnl_bandmat_apply_op(PnlBandMat *BM, double x, double (*op)(double, double))
+static void __pnl_band_mat_apply_op(PnlBandMat *BM, double x, double (*op)(double, double))
 {
   int i, j;
   for ( j=0 ; j<BM->n_band ; j++ )
@@ -280,9 +280,9 @@ static void __pnl_bandmat_apply_op(PnlBandMat *BM, double x, double (*op)(double
  * @param x scalar
  * @return  BM += x
  */
-void pnl_bandmat_plus_double(PnlBandMat *BM , double x)
+void pnl_band_mat_plus_double(PnlBandMat *BM , double x)
 {
-  __pnl_bandmat_apply_op (BM, x, __op_plus);
+  __pnl_band_mat_apply_op (BM, x, __op_plus);
 }
 
 /**
@@ -292,9 +292,9 @@ void pnl_bandmat_plus_double(PnlBandMat *BM , double x)
  * @param x scalar
  * @return  BM -= x
  */
-void pnl_bandmat_minus_double(PnlBandMat *BM , double x)
+void pnl_band_mat_minus_double(PnlBandMat *BM , double x)
 {
-  __pnl_bandmat_apply_op (BM, x, __op_minus);
+  __pnl_band_mat_apply_op (BM, x, __op_minus);
 }
 
 /**
@@ -304,9 +304,9 @@ void pnl_bandmat_minus_double(PnlBandMat *BM , double x)
  * @param x scalar
  * @return  BM *= x
  */
-void pnl_bandmat_mult_double(PnlBandMat *BM , double x)
+void pnl_band_mat_mult_double(PnlBandMat *BM , double x)
 {
-  __pnl_bandmat_apply_op (BM, x, __op_mult);
+  __pnl_band_mat_apply_op (BM, x, __op_mult);
 }
 
 
@@ -317,9 +317,9 @@ void pnl_bandmat_mult_double(PnlBandMat *BM , double x)
  * @param x scalar
  * @return  BM /= x
  */
-void pnl_bandmat_div_double(PnlBandMat *BM , double x)
+void pnl_band_mat_div_double(PnlBandMat *BM , double x)
 {
-  __pnl_bandmat_apply_op (BM, x, __op_div);
+  __pnl_band_mat_apply_op (BM, x, __op_div);
 }
 
 
@@ -331,10 +331,10 @@ void pnl_bandmat_div_double(PnlBandMat *BM , double x)
  * @param rhs a PnlBandMat
  * @param f real function 
  */
-void pnl_bandmat_map(PnlBandMat *lhs, const PnlBandMat *rhs, double(*f)(double))
+void pnl_band_mat_map(PnlBandMat *lhs, const PnlBandMat *rhs, double(*f)(double))
 {
-  pnl_bandmat_clone(lhs, rhs);
-  pnl_bandmat_map_inplace(lhs, f);
+  pnl_band_mat_clone(lhs, rhs);
+  pnl_band_mat_map_inplace(lhs, f);
 }
 
 /**
@@ -344,14 +344,14 @@ void pnl_bandmat_map(PnlBandMat *lhs, const PnlBandMat *rhs, double(*f)(double))
  * @param BB rigth hand side PnlBandMat
  * @return  BA += BB
  */
-void pnl_bandmat_plus_bandmat(PnlBandMat *BA, const PnlBandMat *BB)
+void pnl_band_mat_plus_band_mat(PnlBandMat *BA, const PnlBandMat *BB)
 {
-  pnl_bandmat_map_bandmat(BA, BB, __op_plus);
+  pnl_band_mat_map_band_mat(BA, BB, __op_plus);
 }
 
-void pnl_bandmat_minus_bandmat(PnlBandMat *BA, const PnlBandMat *BB)
+void pnl_band_mat_minus_band_mat(PnlBandMat *BA, const PnlBandMat *BB)
 {
-  pnl_bandmat_map_bandmat (BA, BB, __op_minus);
+  pnl_band_mat_map_band_mat (BA, BB, __op_minus);
 }
 
 /**
@@ -361,9 +361,9 @@ void pnl_bandmat_minus_bandmat(PnlBandMat *BA, const PnlBandMat *BB)
  * @param BB right hand side PnlBandMat
  * @return  BA = BA ./ BB
  */
-void pnl_bandmat_div_bandmat_term(PnlBandMat *BA, const PnlBandMat *BB)
+void pnl_band_mat_div_band_mat_term(PnlBandMat *BA, const PnlBandMat *BB)
 {
-  pnl_bandmat_map_bandmat (BA, BB, __op_div);
+  pnl_band_mat_map_band_mat (BA, BB, __op_div);
 }
 
 /**
@@ -373,9 +373,9 @@ void pnl_bandmat_div_bandmat_term(PnlBandMat *BA, const PnlBandMat *BB)
  * @param BB right hand side PnlBandMat
  * @return  BA = BA.*BB
  */
-void pnl_bandmat_mult_bandmat_term(PnlBandMat *BA, const PnlBandMat *BB)
+void pnl_band_mat_mult_band_mat_term(PnlBandMat *BA, const PnlBandMat *BB)
 {
-  pnl_bandmat_map_bandmat (BA, BB, __op_mult);
+  pnl_band_mat_map_band_mat (BA, BB, __op_mult);
 }
 
 /** 
@@ -386,10 +386,10 @@ void pnl_bandmat_mult_bandmat_term(PnlBandMat *BA, const PnlBandMat *BB)
  * @param j an integer
  * @return M(i,j).
  */
-double pnl_bandmat_get(PnlBandMat *BM,int i,int j)
+double pnl_band_mat_get(PnlBandMat *BM,int i,int j)
 { 
   PNL_CHECK ( j<0 || j>BM->n || i<MAX(0, j - BM->nu) || i>=MIN(BM->m, j+BM->nl+1),
-              "index out of range", "bandmat_get");
+              "index out of range", "band_mat_get");
   return PNL_BMGET(BM, i, j);
 }
 
@@ -401,10 +401,10 @@ double pnl_bandmat_get(PnlBandMat *BM,int i,int j)
  * @param j an integer
  * @return &(M(i,j)).
  */
-double* pnl_bandmat_lget(PnlBandMat *BM,int i,int j)
+double* pnl_band_mat_lget(PnlBandMat *BM,int i,int j)
 { 
   PNL_CHECK ( j<0 || j>BM->n || i<MAX(0, j - BM->nu) || i>=MIN(BM->m, j+BM->nl+1),
-              "index out of range", "bandmat_get");
+              "index out of range", "band_mat_get");
   return &(PNL_BMGET(BM, i, j));
 }
 
@@ -417,22 +417,22 @@ double* pnl_bandmat_lget(PnlBandMat *BM,int i,int j)
  * @param j an integer
  * @param x a real. 
  */
-void pnl_bandmat_set(PnlBandMat * BM,int i,int j,double x)
+void pnl_band_mat_set(PnlBandMat * BM,int i,int j,double x)
 { 
   PNL_CHECK ( j<0 || j>BM->n || i<MAX(0, j - BM->nu) || i>=MIN(BM->m, j+BM->nl+1),
-              "index out of range", "bandmat_get");
+              "index out of range", "band_mat_get");
   PNL_BMLET(BM, i, j) = x;
 }
 
 
 /** 
- * pnl_bandmat_set_double
+ * pnl_band_mat_set_double
  * put value x for all entries of M,
  *
  * @param BM a PnlBandMat.
  * @param x double.
  */
-void pnl_bandmat_set_double(PnlBandMat*  BM,double x)
+void pnl_band_mat_set_double(PnlBandMat*  BM,double x)
 {
   int i, j;
   for ( j=0 ; j<BM->n_band ; j++ )
@@ -453,9 +453,9 @@ void pnl_bandmat_set_double(PnlBandMat*  BM,double x)
  * @param x a vector
  * @return  y = BM * x
  */
-void pnl_bandmat_mult_vect_inplace(PnlVect *y, const PnlBandMat *BM, const PnlVect *x)
+void pnl_band_mat_mult_vect_inplace(PnlVect *y, const PnlBandMat *BM, const PnlVect *x)
 {
-  pnl_bandmat_lAxpby (1., BM, x, 0., y);
+  pnl_band_mat_lAxpby (1., BM, x, 0., y);
 }
 
 /**
@@ -467,12 +467,12 @@ void pnl_bandmat_mult_vect_inplace(PnlVect *y, const PnlBandMat *BM, const PnlVe
  * @param b a real
  * @param y a vector
  */
-void pnl_bandmat_lAxpby(double l, const PnlBandMat *BM, const PnlVect *x, double b, PnlVect * y)
+void pnl_band_mat_lAxpby(double l, const PnlBandMat *BM, const PnlVect *x, double b, PnlVect * y)
 {
   int m, n, kl, ku, lda, incx, incy;
 
   PNL_CHECK ( (b != 0. && y->size != BM->m) || x->size != BM->n,
-              "size mismatched", "bandmat_lAxpby");
+              "size mismatched", "band_mat_lAxpby");
   m = BM->m;
   n = BM->n;
   kl = BM->nl;
@@ -494,7 +494,7 @@ void pnl_bandmat_lAxpby(double l, const PnlBandMat *BM, const PnlVect *x, double
  *  
  * @param BM
  */
-static void pnl_bandmat_enlarge_for_lu (PnlBandMat *BM)
+static void pnl_band_mat_enlarge_for_lu (PnlBandMat *BM)
 {
   int rows;
   int i, j;
@@ -524,13 +524,13 @@ static void pnl_bandmat_enlarge_for_lu (PnlBandMat *BM)
  * matrix was interchanged with row p(i) with the Fortran convention  1 <= p(i)
  * <= N
  */
-void pnl_bandmat_lu (PnlBandMat * BM, PnlVectInt *p)
+void pnl_band_mat_lu (PnlBandMat * BM, PnlVectInt *p)
 {
   /* dgbtrf */
   int N, kl, ku, ldab, info;
   
-  PNL_CHECK (BM->m != BM->n, "Matrix is not squared", "bandmat_lu");
-  pnl_bandmat_enlarge_for_lu (BM);
+  PNL_CHECK (BM->m != BM->n, "Matrix is not squared", "band_mat_lu");
+  pnl_band_mat_enlarge_for_lu (BM);
   N = BM->m;
   kl = BM->nl;
   ku = BM->nu;
@@ -540,7 +540,7 @@ void pnl_bandmat_lu (PnlBandMat * BM, PnlVectInt *p)
   C2F(dgbtrf) (&N, &N, &kl, &ku, BM->array, &ldab, p->array, &info);
   if (info != 0)
     {
-      PNL_ERROR ("LU decomposition cannot be computed", "bandmat_lu");
+      PNL_ERROR ("LU decomposition cannot be computed", "band_mat_lu");
     }
 }
 
@@ -550,14 +550,14 @@ void pnl_bandmat_lu (PnlBandMat * BM, PnlVectInt *p)
  * @param BM a PnlBandMat 
  * @param b right hand side member, used to the store solution on exit.
  */
-void pnl_bandmat_syslin_inplace (PnlBandMat *BM, PnlVect *b)
+void pnl_band_mat_syslin_inplace (PnlBandMat *BM, PnlVect *b)
 {
   int N, kl, nrhs, ku, ldab, ldb, info;
   int *invpiv;
   
-  PNL_CHECK (BM->m != BM->n, "Matrix is not squared", "bandmat_syslin_inplace");
-  PNL_CHECK (BM->m != b->size, "size mismatched", "bandmat_syslin_inplace");
-  pnl_bandmat_enlarge_for_lu (BM);
+  PNL_CHECK (BM->m != BM->n, "Matrix is not squared", "band_mat_syslin_inplace");
+  PNL_CHECK (BM->m != b->size, "size mismatched", "band_mat_syslin_inplace");
+  pnl_band_mat_enlarge_for_lu (BM);
   N = BM->m;
   nrhs = 1;
   kl = BM->nl;
@@ -569,7 +569,7 @@ void pnl_bandmat_syslin_inplace (PnlBandMat *BM, PnlVect *b)
   C2F(dgbsv) (&N, &kl, &ku, &nrhs, BM->array, &ldab, invpiv, b->array, &ldb, &info);
   if (info != 0)
     {
-      PNL_ERROR ("Error code", "bandmat_lu");
+      PNL_ERROR ("Error code", "band_mat_lu");
     }
   free (invpiv);
 }
@@ -581,16 +581,16 @@ void pnl_bandmat_syslin_inplace (PnlBandMat *BM, PnlVect *b)
  * @param x a vector containing the solution on exit
  * @param b right hand side vector
  */
-void pnl_bandmat_syslin (PnlVect *x, PnlBandMat *BM, const PnlVect *b)
+void pnl_band_mat_syslin (PnlVect *x, PnlBandMat *BM, const PnlVect *b)
 {
   pnl_vect_clone (x, b);
-  pnl_bandmat_syslin_inplace (BM, x);
+  pnl_band_mat_syslin_inplace (BM, x);
 }
 
 /**
  * solves the linear system M x = x with a M PnlBand Matrix.
  *
- * @param BM the LU decomposition of a PnlBandMat as computed by pnl_bandmat_lu 
+ * @param BM the LU decomposition of a PnlBandMat as computed by pnl_band_mat_lu 
  * @param b right hand side member, used to the store solution on exit.
  * @param p a PnlPermutation (output parameter) to store the permutation used to
  * compute the LU decomposition
@@ -598,12 +598,12 @@ void pnl_bandmat_syslin (PnlVect *x, PnlBandMat *BM, const PnlVect *b)
  * matrix was interchanged with row p(i) with the Fortran convention  1 <= p(i)
  * <= N
  */
-void pnl_bandmat_lu_syslin_inplace (const PnlBandMat *BM, const PnlVectInt *p, PnlVect *b)
+void pnl_band_mat_lu_syslin_inplace (const PnlBandMat *BM, const PnlVectInt *p, PnlVect *b)
 {
   int N, kl, nrhs, ku, ldab, ldb, info;
   
-  PNL_CHECK (BM->m != BM->n, "Matrix is not squared", "bandmat_syslin_inplace");
-  PNL_CHECK (BM->m != b->size, "size mismatched", "bandmat_syslin_inplace");
+  PNL_CHECK (BM->m != BM->n, "Matrix is not squared", "band_mat_syslin_inplace");
+  PNL_CHECK (BM->m != b->size, "size mismatched", "band_mat_syslin_inplace");
   N = BM->m;
   nrhs = 1;
   kl = BM->nl;
@@ -614,22 +614,22 @@ void pnl_bandmat_lu_syslin_inplace (const PnlBandMat *BM, const PnlVectInt *p, P
   C2F(dgbtrs) ("N", &N, &kl, &ku, &nrhs, BM->array, &ldab, p->array, b->array, &ldb, &info);
   if (info != 0)
     {
-      PNL_ERROR ("Error code", "bandmat_lu_syslin");
+      PNL_ERROR ("Error code", "band_mat_lu_syslin");
     }
 }
 
 /**
  * Solves the linear system M x = b with M a PnlBand Matrix.
  *
- * @param BM the LU decomposition of a PnlBandMat as computed by pnl_bandmat_lu 
+ * @param BM the LU decomposition of a PnlBandMat as computed by pnl_band_mat_lu 
  * @param p a vector of integers used to store the permutation
  * @param x a vector containing the solution on exit
  * @param b right hand side vector
  */
-void pnl_bandmat_lu_syslin (PnlVect *x, const PnlBandMat *BM, const PnlVectInt *p, const PnlVect *b)
+void pnl_band_mat_lu_syslin (PnlVect *x, const PnlBandMat *BM, const PnlVectInt *p, const PnlVect *b)
 {
   pnl_vect_clone (x, b);
-  pnl_bandmat_lu_syslin_inplace (BM, p, x);
+  pnl_band_mat_lu_syslin_inplace (BM, p, x);
 } 
 
 

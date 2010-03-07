@@ -1,5 +1,5 @@
-#ifndef PNL_PERM_H
-#define PNL_PERM_H
+#ifndef _PNL_PERM_H
+#define _PNL_PERM_H
 
 
 #ifdef __cplusplus
@@ -29,4 +29,4 @@ extern void pnl_permutation_print (const PnlPermutation *p);
 #endif /* __cplusplus */
 
 
-#endif /* PNL_PERM_H */
+#endif /* _PNL_PERM_H */

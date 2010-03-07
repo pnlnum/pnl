@@ -1,5 +1,5 @@
-#ifndef TRID_MATRIX_H
-#define TRID_MATRIX_H
+#ifndef _PNL_TRIDIAG_MATRIX_H 
+#define _PNL_TRIDIAG_MATRIX_H 
 
 #ifdef __cplusplus
 extern "C" {
@@ -8,25 +8,25 @@ extern "C" {
 #include "pnl_matrix.h"
 
 #ifndef PNL_RANGE_CHECK_OFF
-#define CheckIndexTriDiagMat(v,i,j)                                                     \
+#define CheckIndexTridiagMat(v,i,j)                                                     \
   if (i<0 || i>=(v)->size || j<-1 || j>1 || (i==0 && j==1) || (i=(v)->size-1 && j==-1)) \
     {                                                                                   \
       perror("index out of range"); abort();                                            \
     }
-#define CheckTriDiagMatMatch(lhs, rhs)                                                  \
+#define CheckTridiagMatMatch(lhs, rhs)                                                  \
   if ((lhs)->size != (rhs)->size )                                                      \
     {                                                                                   \
       perror("non compatible dimensions"); abort();                                     \
     }
-#define CheckTriDiagMatVectIsCompatible(mat, vect)                                      \
+#define CheckTridiagMatVectIsCompatible(mat, vect)                                      \
   if ((mat)->size != (vect)->size)                                                      \
     {                                                                                   \
       perror("non compatible dimensions"); abort();                                     \
     }
 #else
-#define CheckIndexTriDiagMat(v,i,j) {}                          
-#define CheckTriDiagMatMatch(lhs, rhs) {}
-#define CheckTriDiagMatVectIsCompatible(mat, vect) {}
+#define CheckIndexTridiagMat(v,i,j) {}                          
+#define CheckTridiagMatMatch(lhs, rhs) {}
+#define CheckTridiagMatVectIsCompatible(mat, vect) {}
 #endif /* PNL_RANGE_CHECK_OFF */
 
 
@@ -36,7 +36,7 @@ extern void pnl_progonka(const double low,
                          const PnlVect * rhs, PnlVect * lhs);
 
 /**
- * \defgroup PnlTriDiagMat Tridiagonal Matrix
+ * \defgroup PnlTridiagMat Tridiagonal Matrix
  *
  * Three arrays are used to store the three main diagonals. The arrays used to
  * store the lower and upper diagonals are of size n-1 for a n x n matrix.
@@ -49,46 +49,46 @@ typedef struct
   double *D; /*!< diagonal elements */
   double *DU; /*!< upper diagonal elements */
   double *DL; /*!< lower diagonal elements */
-} PnlTriDiagMat;
+} PnlTridiagMat;
 
 
-extern void pnl_tridiagmat_free(PnlTriDiagMat **m);
-extern int pnl_tridiagmat_resize(PnlTriDiagMat *v, int size);
-extern PnlTriDiagMat* pnl_tridiagmat_create(int size);
-extern PnlTriDiagMat* pnl_tridiagmat_create_from_double(int size, double x);
-extern PnlTriDiagMat* pnl_tridiagmat_create_from_two_double(int size, double x, double y);
-extern PnlTriDiagMat* pnl_tridiagmat_create_from_ptr(int size, const double* DL, 
+extern void pnl_tridiag_mat_free(PnlTridiagMat **m);
+extern int pnl_tridiag_mat_resize(PnlTridiagMat *v, int size);
+extern PnlTridiagMat* pnl_tridiag_mat_create(int size);
+extern PnlTridiagMat* pnl_tridiag_mat_create_from_double(int size, double x);
+extern PnlTridiagMat* pnl_tridiag_mat_create_from_two_double(int size, double x, double y);
+extern PnlTridiagMat* pnl_tridiag_mat_create_from_ptr(int size, const double* DL, 
 						   const double* D, const double* DU);
-extern PnlTriDiagMat* pnl_tridiagmat_create_from_mat(const PnlMat * mat);
-extern PnlMat* pnl_tridiagmat_to_mat(const PnlTriDiagMat * mat);
-extern PnlTriDiagMat* pnl_tridiagmat_copy(const PnlTriDiagMat * mat);
-extern void pnl_tridiagmat_clone(PnlTriDiagMat *clone, const PnlTriDiagMat * mat);
+extern PnlTridiagMat* pnl_tridiag_mat_create_from_mat(const PnlMat * mat);
+extern PnlMat* pnl_tridiag_mat_to_mat(const PnlTridiagMat * mat);
+extern PnlTridiagMat* pnl_tridiag_mat_copy(const PnlTridiagMat * mat);
+extern void pnl_tridiag_mat_clone(PnlTridiagMat *clone, const PnlTridiagMat * mat);
 
-extern void pnl_tridiagmat_map_inplace(PnlTriDiagMat *lhs, double(*f)(double));
-extern void pnl_tridiagmat_map_tridiagmat(PnlTriDiagMat *lhs, const PnlTriDiagMat *rhs, double(*f)(double,double));
-extern void pnl_tridiagmat_print(const PnlTriDiagMat *M);
-extern void pnl_tridiagmat_fprint(FILE *fic, const PnlTriDiagMat *M);
+extern void pnl_tridiag_mat_map_inplace(PnlTridiagMat *lhs, double(*f)(double));
+extern void pnl_tridiag_mat_map_tridiag_mat(PnlTridiagMat *lhs, const PnlTridiagMat *rhs, double(*f)(double,double));
+extern void pnl_tridiag_mat_print(const PnlTridiagMat *M);
+extern void pnl_tridiag_mat_fprint(FILE *fic, const PnlTridiagMat *M);
 
-extern void pnl_tridiagmat_plus_tridiagmat(PnlTriDiagMat *lhs, const PnlTriDiagMat *rhs); 
-extern void pnl_tridiagmat_minus_tridiagmat(PnlTriDiagMat *lhs, const PnlTriDiagMat *rhs); 
-extern void pnl_tridiagmat_plus_double(PnlTriDiagMat *lhs, double x);
-extern void pnl_tridiagmat_minus_double(PnlTriDiagMat *lhs, double x);
-extern void pnl_tridiagmat_mult_double(PnlTriDiagMat *lhs, double x); 
-extern void pnl_tridiagmat_div_double(PnlTriDiagMat *lhs, double x); 
-extern void pnl_tridiagmat_mult_tridiagmat_term(PnlTriDiagMat *lhs, const PnlTriDiagMat *rhs);
-extern void pnl_tridiagmat_div_tridiagmat_term(PnlTriDiagMat *lhs, const PnlTriDiagMat *rhs);
+extern void pnl_tridiag_mat_plus_tridiag_mat(PnlTridiagMat *lhs, const PnlTridiagMat *rhs); 
+extern void pnl_tridiag_mat_minus_tridiag_mat(PnlTridiagMat *lhs, const PnlTridiagMat *rhs); 
+extern void pnl_tridiag_mat_plus_double(PnlTridiagMat *lhs, double x);
+extern void pnl_tridiag_mat_minus_double(PnlTridiagMat *lhs, double x);
+extern void pnl_tridiag_mat_mult_double(PnlTridiagMat *lhs, double x); 
+extern void pnl_tridiag_mat_div_double(PnlTridiagMat *lhs, double x); 
+extern void pnl_tridiag_mat_mult_tridiag_mat_term(PnlTridiagMat *lhs, const PnlTridiagMat *rhs);
+extern void pnl_tridiag_mat_div_tridiag_mat_term(PnlTridiagMat *lhs, const PnlTridiagMat *rhs);
 
-extern PnlVect* pnl_tridiagmat_mult_vect(const PnlTriDiagMat *mat,const PnlVect *vec);
-extern void pnl_tridiagmat_mult_vect_inplace(PnlVect *lhs, const PnlTriDiagMat *mat, const PnlVect *rhs);
-extern void pnl_tridiagmat_lAxpby(double l, const PnlTriDiagMat *A, const PnlVect *x, double b, PnlVect * y);
-extern double pnl_tridiagmat_scalar_prod(const PnlVect *lhs, const PnlTriDiagMat *mat,const PnlVect *rhs);
-extern int pnl_tridiagmat_syslin (PnlVect *lhs, const PnlTriDiagMat *M,const PnlVect *rhs);
-extern int pnl_tridiagmat_syslin_inplace (const PnlTriDiagMat *M, PnlVect *rhs);
+extern PnlVect* pnl_tridiag_mat_mult_vect(const PnlTridiagMat *mat,const PnlVect *vec);
+extern void pnl_tridiag_mat_mult_vect_inplace(PnlVect *lhs, const PnlTridiagMat *mat, const PnlVect *rhs);
+extern void pnl_tridiag_mat_lAxpby(double l, const PnlTridiagMat *A, const PnlVect *x, double b, PnlVect * y);
+extern double pnl_tridiag_mat_scalar_prod(const PnlVect *lhs, const PnlTridiagMat *mat,const PnlVect *rhs);
+extern int pnl_tridiag_mat_syslin (PnlVect *lhs, const PnlTridiagMat *M,const PnlVect *rhs);
+extern int pnl_tridiag_mat_syslin_inplace (const PnlTridiagMat *M, PnlVect *rhs);
 
 
-extern void pnl_tridiagmat_set(PnlTriDiagMat *v, int d, int up, double x);
-extern double pnl_tridiagmat_get(const PnlTriDiagMat *self, int d, int up);
-extern double* pnl_tridiagmat_lget(PnlTriDiagMat *self, int d, int up);
+extern void pnl_tridiag_mat_set(PnlTridiagMat *v, int d, int up, double x);
+extern double pnl_tridiag_mat_get(const PnlTridiagMat *self, int d, int up);
+extern double* pnl_tridiag_mat_lget(PnlTridiagMat *self, int d, int up);
 /*@}*/
 
 #ifdef __cplusplus
@@ -96,4 +96,4 @@ extern double* pnl_tridiagmat_lget(PnlTriDiagMat *self, int d, int up);
 #endif /* __cplusplus */
 
 
-#endif /* TRID_MATRIX_H */
+#endif /* _PNL_TRIDIAG_MATRIX_H  */

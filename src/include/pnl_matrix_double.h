@@ -207,36 +207,36 @@ extern double* pnl_mat_lget(PnlMat *v, int i, int j);
 /*@}*/
 
 /**
- * \ingroup PnlHMatrices
+ * \ingroup PnlHmatrices
  */
 /*@{*/
 
 /**
- * \defgroup PnlHMat Double HyperMatrix 
+ * \defgroup PnlHmat Double HyperMatrix 
  */
 /*@{*/
 
-typedef struct PnlHMat{
+typedef struct PnlHmat{
   int ndim; /*!< nb dimensions */ 
   int *dims; /*!< pointer to store the value of the ndim dimensions */ 
   int mn; /*!< product dim_1 *...*dim_ndim */
   double *array; /*!< pointer to store */
-} PnlHMat;
+} PnlHmat;
 
-extern PnlHMat* pnl_hmat_create(int ndim, const int *dims); 
-extern PnlHMat* pnl_hmat_create_from_double(int ndim, const int *dims, double x); 
-extern PnlHMat* pnl_hmat_create_from_ptr(int ndim, const int *dims, const double *x);
-extern int pnl_hmat_resize(PnlHMat *v, int ndim, const int *dims);
-extern void pnl_hmat_free(PnlHMat **v);
-extern PnlHMat* pnl_hmat_copy(const PnlHMat *H);
-extern void pnl_hmat_clone(PnlHMat *clone, const PnlHMat *H);
-extern void pnl_hmat_print(const PnlHMat *H);
-extern void pnl_hmat_plus_hmat(PnlHMat *lhs, const PnlHMat *rhs);/*lhs+=rhs*/
-extern void pnl_hmat_mult_double(PnlHMat *lhs, double x);/* lhs *=x;*/
+extern PnlHmat* pnl_hmat_create(int ndim, const int *dims); 
+extern PnlHmat* pnl_hmat_create_from_double(int ndim, const int *dims, double x); 
+extern PnlHmat* pnl_hmat_create_from_ptr(int ndim, const int *dims, const double *x);
+extern int pnl_hmat_resize(PnlHmat *v, int ndim, const int *dims);
+extern void pnl_hmat_free(PnlHmat **v);
+extern PnlHmat* pnl_hmat_copy(const PnlHmat *H);
+extern void pnl_hmat_clone(PnlHmat *clone, const PnlHmat *H);
+extern void pnl_hmat_print(const PnlHmat *H);
+extern void pnl_hmat_plus_hmat(PnlHmat *lhs, const PnlHmat *rhs);/*lhs+=rhs*/
+extern void pnl_hmat_mult_double(PnlHmat *lhs, double x);/* lhs *=x;*/
 
-extern void pnl_hmat_set(PnlHMat *H, int *tab, double x);
-extern double pnl_hmat_get(const PnlHMat *H, int *tab);
-extern double* pnl_hmat_lget(PnlHMat *H, int *tab);
+extern void pnl_hmat_set(PnlHmat *H, int *tab, double x);
+extern double pnl_hmat_get(const PnlHmat *H, int *tab);
+extern double* pnl_hmat_lget(PnlHmat *H, int *tab);
 
 /*@}*/
 /*@}*/

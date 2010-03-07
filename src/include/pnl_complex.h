@@ -1,5 +1,5 @@
-#ifndef __COMPLEX_H__
-#define __COMPLEX_H__
+#ifndef _PNL_COMPLEX_H
+#define _PNL_COMPLEX_H
 
 
 #ifdef __cplusplus
@@ -98,4 +98,4 @@ typedef struct {
 #endif /* __cplusplus */
 
 
-#endif /* __COMPLEX_H_ */
+#endif /* _PNL_COMPLEX_H */

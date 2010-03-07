@@ -136,35 +136,35 @@ extern dcomplex* pnl_mat_complex_lget(PnlMatComplex *v, int i, int j);
 
 
 /**
- * \ingroup PnlHMatrices a Hyper Matrix
+ * \ingroup PnlHmatrices a Hyper Matrix
  */
 /*@{*/
 /**
- * \defgroup PnlHMatComplex Complex HyperMatrix 
+ * \defgroup PnlHmatComplex Complex HyperMatrix 
  */
 /*@{*/
 
-typedef struct PnlHMatComplex{
+typedef struct PnlHmatComplex{
   int ndim; /*!< nb dimensions */ 
   int *dims; /*!< pointer to store the value of the ndim dimensions */ 
   int mn; /*!< product dim_1 *...*dim_ndim */
   dcomplex *array; /*!< pointer to store */
-} PnlHMatComplex;
+} PnlHmatComplex;
 
-extern PnlHMatComplex* pnl_hmat_complex_create(int ndim, const int *dims); 
-extern PnlHMatComplex* pnl_hmat_complex_create_from_dcomplex(int ndim, const int *dims, dcomplex x); 
-extern PnlHMatComplex* pnl_hmat_complex_create_from_ptr(int ndim, const int *dims, const dcomplex *x);
-extern int pnl_hmat_complex_resize(PnlHMatComplex *v, int ndim, const int *dims);
-extern void pnl_hmat_complex_free(PnlHMatComplex **v);
-extern void pnl_hmat_complex_print(const PnlHMatComplex *H);
-extern PnlHMatComplex* pnl_hmat_complex_copy(const PnlHMatComplex *H);
-extern void pnl_hmat_complex_clone(PnlHMatComplex *clone, const PnlHMatComplex *H);
-extern void pnl_hmat_complex_plus_hmat(PnlHMatComplex *lhs, const PnlHMatComplex *rhs);/*lhs+=rhs*/
-extern void pnl_hmat_complex_mult_dcomplex(PnlHMatComplex *lhs, dcomplex x);/* lhs *=x;*/
+extern PnlHmatComplex* pnl_hmat_complex_create(int ndim, const int *dims); 
+extern PnlHmatComplex* pnl_hmat_complex_create_from_dcomplex(int ndim, const int *dims, dcomplex x); 
+extern PnlHmatComplex* pnl_hmat_complex_create_from_ptr(int ndim, const int *dims, const dcomplex *x);
+extern int pnl_hmat_complex_resize(PnlHmatComplex *v, int ndim, const int *dims);
+extern void pnl_hmat_complex_free(PnlHmatComplex **v);
+extern void pnl_hmat_complex_print(const PnlHmatComplex *H);
+extern PnlHmatComplex* pnl_hmat_complex_copy(const PnlHmatComplex *H);
+extern void pnl_hmat_complex_clone(PnlHmatComplex *clone, const PnlHmatComplex *H);
+extern void pnl_hmat_complex_plus_hmat(PnlHmatComplex *lhs, const PnlHmatComplex *rhs);/*lhs+=rhs*/
+extern void pnl_hmat_complex_mult_dcomplex(PnlHmatComplex *lhs, dcomplex x);/* lhs *=x;*/
 
-extern void pnl_hmat_complex_set(PnlHMatComplex *H, int *tab, dcomplex x);
-extern dcomplex pnl_hmat_complex_get(const PnlHMatComplex *H, int *tab);
-extern dcomplex* pnl_hmat_complex_lget(PnlHMatComplex *H, int *tab);
+extern void pnl_hmat_complex_set(PnlHmatComplex *H, int *tab, dcomplex x);
+extern dcomplex pnl_hmat_complex_get(const PnlHmatComplex *H, int *tab);
+extern dcomplex* pnl_hmat_complex_lget(PnlHmatComplex *H, int *tab);
 
 /*@}*/
 /*@}*/

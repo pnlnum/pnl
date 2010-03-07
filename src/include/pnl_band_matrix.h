@@ -1,5 +1,5 @@
-#ifndef BAND_MATRIX_H
-#define BAND_MATRIX_H
+#ifndef _PNL_BAND_MATRIX_H
+#define _PNL_BAND_MATRIX_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,42 +50,42 @@ typedef struct
   double *array;  /*!< a block to store the bands */  
 } PnlBandMat;
 
-extern PnlBandMat* pnl_bandmat_create (int m, int n, int nl, int nu);
-extern PnlBandMat* pnl_bandmat_create_from_mat (const PnlMat *M, int nl, int nu);
-extern void pnl_bandmat_free (PnlBandMat **BM);
-extern int pnl_bandmat_resize (PnlBandMat *BM, int m, int n, int nl, int nu);
-extern void pnl_bandmat_clone (PnlBandMat * Bclone, const PnlBandMat * BM);
-extern PnlBandMat* pnl_bandmat_copy (const PnlBandMat * BM);
-extern PnlMat* pnl_bandmat_to_mat (const PnlBandMat *BM);
-extern void pnl_bandmat_print_as_full (const PnlBandMat *BM);
-extern void pnl_bandmat_map (PnlBandMat *lhs, const PnlBandMat *rhs, double(*f)(double));
-extern void pnl_bandmat_map_inplace (PnlBandMat *BM, double(*f)(double));
-extern void pnl_bandmat_map_bandmat (PnlBandMat *BA, const PnlBandMat *BB, double(*f)(double, double));
+extern PnlBandMat* pnl_band_mat_create (int m, int n, int nl, int nu);
+extern PnlBandMat* pnl_band_mat_create_from_mat (const PnlMat *M, int nl, int nu);
+extern void pnl_band_mat_free (PnlBandMat **BM);
+extern int pnl_band_mat_resize (PnlBandMat *BM, int m, int n, int nl, int nu);
+extern void pnl_band_mat_clone (PnlBandMat * Bclone, const PnlBandMat * BM);
+extern PnlBandMat* pnl_band_mat_copy (const PnlBandMat * BM);
+extern PnlMat* pnl_band_mat_to_mat (const PnlBandMat *BM);
+extern void pnl_band_mat_print_as_full (const PnlBandMat *BM);
+extern void pnl_band_mat_map (PnlBandMat *lhs, const PnlBandMat *rhs, double(*f)(double));
+extern void pnl_band_mat_map_inplace (PnlBandMat *BM, double(*f)(double));
+extern void pnl_band_mat_map_band_mat (PnlBandMat *BA, const PnlBandMat *BB, double(*f)(double, double));
 
-extern void pnl_bandmat_plus_double (PnlBandMat *BM, double x);
-extern void pnl_bandmat_minus_double (PnlBandMat *BM, double x);
-extern void pnl_bandmat_mult_double (PnlBandMat *BM, double x);
-extern void pnl_bandmat_div_double (PnlBandMat *BM, double x);
+extern void pnl_band_mat_plus_double (PnlBandMat *BM, double x);
+extern void pnl_band_mat_minus_double (PnlBandMat *BM, double x);
+extern void pnl_band_mat_mult_double (PnlBandMat *BM, double x);
+extern void pnl_band_mat_div_double (PnlBandMat *BM, double x);
 
-extern void pnl_bandmat_plus_bandmat (PnlBandMat *lhs, const PnlBandMat *rhs);
-extern void pnl_bandmat_minus_bandmat (PnlBandMat *lhs, const PnlBandMat *rhs);
-extern void pnl_bandmat_div_bandmat_term (PnlBandMat *lhs, const PnlBandMat *rhs);
-extern void pnl_bandmat_mult_bandmat_term (PnlBandMat *lhs, const PnlBandMat *rhs);
+extern void pnl_band_mat_plus_band_mat (PnlBandMat *lhs, const PnlBandMat *rhs);
+extern void pnl_band_mat_minus_band_mat (PnlBandMat *lhs, const PnlBandMat *rhs);
+extern void pnl_band_mat_div_band_mat_term (PnlBandMat *lhs, const PnlBandMat *rhs);
+extern void pnl_band_mat_mult_band_mat_term (PnlBandMat *lhs, const PnlBandMat *rhs);
 
-extern double pnl_bandmat_get (PnlBandMat * M, int i, int j);
-extern double* pnl_bandmat_lget (PnlBandMat * M, int i, int j);
-extern void pnl_bandmat_set (PnlBandMat * M, int i, int j, double x);
-extern void pnl_bandmat_set_double (PnlBandMat* BM, double x);
+extern double pnl_band_mat_get (PnlBandMat * M, int i, int j);
+extern double* pnl_band_mat_lget (PnlBandMat * M, int i, int j);
+extern void pnl_band_mat_set (PnlBandMat * M, int i, int j, double x);
+extern void pnl_band_mat_set_double (PnlBandMat* BM, double x);
 
-extern void pnl_bandmat_mult_vect_inplace (PnlVect *lhs, const PnlBandMat *mat, const 
+extern void pnl_band_mat_mult_vect_inplace (PnlVect *lhs, const PnlBandMat *mat, const 
 PnlVect *rhs);
-extern void pnl_bandmat_lAxpby (double l, const PnlBandMat *A, const PnlVect *x, double b, PnlVect * y);
+extern void pnl_band_mat_lAxpby (double l, const PnlBandMat *A, const PnlVect *x, double b, PnlVect * y);
 
-extern void pnl_bandmat_lu (PnlBandMat *BM, PnlVectInt *p);
-extern void pnl_bandmat_syslin_inplace (PnlBandMat *BM, PnlVect *b);
-extern void pnl_bandmat_syslin (PnlVect *x, PnlBandMat *BM, const PnlVect *b);
-extern void pnl_bandmat_lu_syslin_inplace (const PnlBandMat *LU, const PnlVectInt *p, PnlVect *b);
-extern void pnl_bandmat_lu_syslin (PnlVect *x, const PnlBandMat *LU, const PnlVectInt *p, const PnlVect *b);
+extern void pnl_band_mat_lu (PnlBandMat *BM, PnlVectInt *p);
+extern void pnl_band_mat_syslin_inplace (PnlBandMat *BM, PnlVect *b);
+extern void pnl_band_mat_syslin (PnlVect *x, PnlBandMat *BM, const PnlVect *b);
+extern void pnl_band_mat_lu_syslin_inplace (const PnlBandMat *LU, const PnlVectInt *p, PnlVect *b);
+extern void pnl_band_mat_lu_syslin (PnlVect *x, const PnlBandMat *LU, const PnlVectInt *p, const PnlVect *b);
 
 /*@}*/
 
@@ -94,4 +94,4 @@ extern void pnl_bandmat_lu_syslin (PnlVect *x, const PnlBandMat *LU, const PnlVe
 #endif /* __cplusplus */
 
 
-#endif /* BAND_MATRIX_H */
+#endif /* _PNL_BAND_MATRIX_H */

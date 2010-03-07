@@ -1,5 +1,5 @@
-#ifndef _CUMULFUNC_H
-#define _CUMULFUNC_H
+#ifndef _PNL_CDF_H
+#define _PNL_CDF_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -54,4 +54,4 @@ double pnl_inv_cdfnor (double u);
 #endif /* __cplusplus */
 
 
-#endif /* _CUMULFUNC_H */
+#endif /* _PNL_CDF_H */

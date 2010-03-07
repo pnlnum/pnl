@@ -141,36 +141,36 @@ extern uint* pnl_mat_uint_lget(PnlMatUint *v, int i, int j);
 
 
 /**
- * \ingroup PnlHMatrices a Hyper Matrix
+ * \ingroup PnlHmatrices a Hyper Matrix
  */
 /*@{*/
 /**
- * \defgroup PnlHMatUint Uint HyperMatrix 
+ * \defgroup PnlHmatUint Uint HyperMatrix 
  */
 /*@{*/
 
-typedef struct PnlHMatUint{
+typedef struct PnlHmatUint{
   int ndim; /*!< nb dimensions */ 
   int *dims; /*!< pointer to store the value of the ndim dimensions */ 
   int mn; /*!< product dim_1 *...*dim_ndim */
   uint *array; /*!< pointer to store */
-} PnlHMatUint;
+} PnlHmatUint;
 
-extern PnlHMatUint* pnl_hmat_uint_create(int ndim, const int *dims); 
-extern PnlHMatUint* pnl_hmat_uint_create_from_uint(int ndim, const int *dims, uint x); 
-extern PnlHMatUint* pnl_hmat_uint_create_from_ptr(int ndim, const int *dims, const uint *x);
-extern int pnl_hmat_uint_resize(PnlHMatUint *v, int ndim, const int *dims);
-extern void pnl_hmat_uint_free(PnlHMatUint **v);
-extern void pnl_hmat_uint_print(const PnlHMatUint *H);
-extern PnlHMatUint* pnl_hmat_uint_copy(const PnlHMatUint *H);
-extern void pnl_hmat_uint_clone(PnlHMatUint *clone, const PnlHMatUint *H);
-extern void pnl_hmat_uint_plus_hmat(PnlHMatUint *lhs, const PnlHMatUint *rhs);/*lhs+=rhs*/
-extern void pnl_hmat_uint_mult_uint(PnlHMatUint *lhs, uint x);/* lhs *=x;*/
+extern PnlHmatUint* pnl_hmat_uint_create(int ndim, const int *dims); 
+extern PnlHmatUint* pnl_hmat_uint_create_from_uint(int ndim, const int *dims, uint x); 
+extern PnlHmatUint* pnl_hmat_uint_create_from_ptr(int ndim, const int *dims, const uint *x);
+extern int pnl_hmat_uint_resize(PnlHmatUint *v, int ndim, const int *dims);
+extern void pnl_hmat_uint_free(PnlHmatUint **v);
+extern void pnl_hmat_uint_print(const PnlHmatUint *H);
+extern PnlHmatUint* pnl_hmat_uint_copy(const PnlHmatUint *H);
+extern void pnl_hmat_uint_clone(PnlHmatUint *clone, const PnlHmatUint *H);
+extern void pnl_hmat_uint_plus_hmat(PnlHmatUint *lhs, const PnlHmatUint *rhs);/*lhs+=rhs*/
+extern void pnl_hmat_uint_mult_uint(PnlHmatUint *lhs, uint x);/* lhs *=x;*/
 
 
-extern void pnl_hmat_uint_set(PnlHMatUint *H, int *tab, uint x);
-extern uint pnl_hmat_uint_get(const PnlHMatUint *H, int *tab);
-extern uint* pnl_hmat_uint_lget(PnlHMatUint *H, int *tab);
+extern void pnl_hmat_uint_set(PnlHmatUint *H, int *tab, uint x);
+extern uint pnl_hmat_uint_get(const PnlHmatUint *H, int *tab);
+extern uint* pnl_hmat_uint_lget(PnlHmatUint *H, int *tab);
 
 /*@}*/
 /*@}*/

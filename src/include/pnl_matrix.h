@@ -8,7 +8,7 @@ extern "C" {
 
 
 #ifndef PNL_RANGE_CHECK_OFF
-#define CheckIndexHMat(H,index) {{int l;                \
+#define CheckIndexHmat(H,index) {{int l;                \
       for(l=0; l<(H)->ndim; l++)                        \
         { if((index)[l]>(H)->dims[l] || (index)[l]<0)   \
             {perror("index out of range"); abort();}    \
@@ -26,7 +26,7 @@ extern "C" {
       {perror("non compatible dimensions"); abort();}}
 #define CheckMatMatch(lhs, rhs) { if ((lhs)->m != (rhs)->m || (lhs)->n != (rhs)->n) \
       {perror("non compatible dimensions"); abort();}}
-#define CheckHMatMatch(lhs,rhs) {                                       \
+#define CheckHmatMatch(lhs,rhs) {                                       \
     if  ((lhs)->ndim != (rhs)->ndim) {perror("index out of range"); abort();} \
     {int l;                                                             \
       for(l=0; l<(lhs)->ndim; l++)                                      \
@@ -37,13 +37,13 @@ extern "C" {
 
 #else
 
-#define CheckIndexHMat(H,index) {}
+#define CheckIndexHmat(H,index) {}
 #define CheckIndexMat(v,i,j) {}
 #define CheckIsSquare(v) {}
 #define CheckMatIsCompatible(lhs, rhs) {}
 #define CheckMatVectIsCompatible(mat, vect){}
 #define CheckMatMatch(lhs, rhs) {}
-#define CheckHMatMatch(lhs,rhs) {}
+#define CheckHmatMatch(lhs,rhs) {}
 
 #endif /* PNL_RANGE_CHECK_OFF */
 
@@ -61,7 +61,7 @@ extern "C" {
 /*@}*/
 
 /**
- * \defgroup PnlHMatrices Hyper Matrix object
+ * \defgroup PnlHmatrices Hyper Matrix object
  */
 
 

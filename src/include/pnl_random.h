@@ -1,5 +1,5 @@
-#ifndef __RANDOM_H__
-#define __RANDOM_H__
+#ifndef _PNL_RANDOM_H 
+#define _PNL_RANDOM_H 
 
 
 #ifdef __cplusplus
@@ -97,4 +97,4 @@ extern double pnl_rand_chi2  (double nu, int gen);
 #endif /* __cplusplus */
 
 
-#endif
+#endif /* _PNL_RANDOM_H */ 

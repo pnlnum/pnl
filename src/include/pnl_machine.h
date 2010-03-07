@@ -1,5 +1,5 @@
-#ifndef MACHINE_H
-#define MACHINE_H
+#ifndef _PNL_MACHINE_H 
+#define _PNL_MACHINE_H 
 
 
 #ifdef __cplusplus
@@ -29,4 +29,4 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#endif
+#endif /* _PNL_MACHINE_H  */

@@ -547,7 +547,7 @@ void pnl_mat_inverse_with_chol (PnlMat *inv, const PnlMat *A)
  * Computes the inverse of a matrix using a LU decomposition
  *
  * @param A a matrix.
- * @param inverse a PnlMat (already allocated). contains
+ * @param inv a PnlMat (already allocated). contains
  * \verbatim A^-1 \endverbatim on exit.
  */
 void pnl_mat_inverse (PnlMat *inv, const PnlMat *A)

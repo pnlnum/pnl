@@ -1,5 +1,5 @@
-#ifndef _PNL_INTEGRATIO
-#define _PNL_INTEGRATION
+#ifndef _PNL_INTEGRATION_H
+#define _PNL_INTEGRATION_H
 
 
 #ifdef __cplusplus
@@ -36,4 +36,4 @@ extern double pnl_integration_2D (const PnlFunc2D *F, double x0, double x1,
 #endif /* __cplusplus */
 
 
-#endif /* _PNL_INTEGRATION */
+#endif /* _PNL_INTEGRATION_H */

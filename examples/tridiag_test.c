@@ -26,24 +26,24 @@
 #include "pnl_random.h"
 #include "tests.h"
 
-static void pnl_tridiagmat_print_as_full (const PnlTriDiagMat *T)
+static void pnl_tridiag_mat_print_as_full (const PnlTridiagMat *T)
 {
-  PnlMat *Tfull = pnl_tridiagmat_to_mat (T);
+  PnlMat *Tfull = pnl_tridiag_mat_to_mat (T);
   pnl_mat_print_nsp (Tfull);
   pnl_mat_free (&Tfull);
 }
 
-static PnlTriDiagMat* create_random_tridiag (n, gen)
+static PnlTridiagMat* create_random_tridiag (n, gen)
 {
   PnlVect *dl, *du, *d;
-  PnlTriDiagMat *M;
+  PnlTridiagMat *M;
   d = pnl_vect_create (n);
   du = pnl_vect_create (n);
   dl = pnl_vect_create (n);
   pnl_vect_rand_uni (d, n, 0., 1., gen);
   pnl_vect_rand_uni (du, n-1, 0., 1., gen);
   pnl_vect_rand_uni (dl, n-1, 0., 1., gen);
-  M = pnl_tridiagmat_create_from_ptr (n, dl->array, d->array, du->array);
+  M = pnl_tridiag_mat_create_from_ptr (n, dl->array, d->array, du->array);
   pnl_vect_free (&d);
   pnl_vect_free (&dl);
   pnl_vect_free (&du);
@@ -53,73 +53,73 @@ static PnlTriDiagMat* create_random_tridiag (n, gen)
 static void tridiag_create_test ()
 {
   int n;
-  PnlTriDiagMat *A;
+  PnlTridiagMat *A;
   printf ("Create tridiag test\n");
   n = 5;
-  A = pnl_tridiagmat_create_from_two_double (n, -2.5, 4);
-  pnl_tridiagmat_print_as_full (A); printf("\n");
-  pnl_tridiagmat_free (&A);
+  A = pnl_tridiag_mat_create_from_two_double (n, -2.5, 4);
+  pnl_tridiag_mat_print_as_full (A); printf("\n");
+  pnl_tridiag_mat_free (&A);
 }
 
 static void tridiag_get_test ()
 {
-  PnlTriDiagMat *T;
+  PnlTridiagMat *T;
   int n, gen;
   printf ("Get tridiag test\n");
   n = 5;
   gen = PNL_RNG_MERSENNE_RANDOM_SEED;
   pnl_rand_init (gen, n, 1);
   T = create_random_tridiag (n, gen);
-  pnl_tridiagmat_print_as_full (T);
-  printf ("T(%i,%i+1) = %f\n", 3, 3, pnl_tridiagmat_get (T, 3, 1));
-  printf ("T(%i,%i) = %f\n", 3, 3, pnl_tridiagmat_get (T, 3, 0));
-  printf ("T(%i,%i-1) = %f\n", 3, 3, pnl_tridiagmat_get (T, 3, -1));
+  pnl_tridiag_mat_print_as_full (T);
+  printf ("T(%i,%i+1) = %f\n", 3, 3, pnl_tridiag_mat_get (T, 3, 1));
+  printf ("T(%i,%i) = %f\n", 3, 3, pnl_tridiag_mat_get (T, 3, 0));
+  printf ("T(%i,%i-1) = %f\n", 3, 3, pnl_tridiag_mat_get (T, 3, -1));
   printf ("\n");
-  pnl_tridiagmat_free (&T);
+  pnl_tridiag_mat_free (&T);
 }
 
 static void tridiag_add_test ()
 {
-  PnlTriDiagMat *A, *Aclone, *B;
+  PnlTridiagMat *A, *Aclone, *B;
   int n = 5;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
 
   printf ("mat_plus tridiag test\n");
 
   pnl_rand_init (gen, 1, 1);
-  Aclone = pnl_tridiagmat_create (0);
+  Aclone = pnl_tridiag_mat_create (0);
   A = create_random_tridiag (n, gen);
   B = create_random_tridiag (n, gen);
-  pnl_tridiagmat_clone (Aclone, A);
+  pnl_tridiag_mat_clone (Aclone, A);
 
   printf ("A = ");
-  pnl_tridiagmat_print_as_full (A); printf ("\n");
+  pnl_tridiag_mat_print_as_full (A); printf ("\n");
   printf ("B = ");
-  pnl_tridiagmat_print_as_full (B); printf ("\n");
+  pnl_tridiag_mat_print_as_full (B); printf ("\n");
 
-  pnl_tridiagmat_clone (A, Aclone);
-  pnl_tridiagmat_plus_tridiagmat (A, B);
+  pnl_tridiag_mat_clone (A, Aclone);
+  pnl_tridiag_mat_plus_tridiag_mat (A, B);
   printf ("A+B = ");
-  pnl_tridiagmat_print_as_full (A); printf ("\n");
+  pnl_tridiag_mat_print_as_full (A); printf ("\n");
 
-  pnl_tridiagmat_clone (A, Aclone);
-  pnl_tridiagmat_minus_tridiagmat (A, B);
+  pnl_tridiag_mat_clone (A, Aclone);
+  pnl_tridiag_mat_minus_tridiag_mat (A, B);
   printf ("A-B = ");
-  pnl_tridiagmat_print_as_full (A); printf ("\n");
+  pnl_tridiag_mat_print_as_full (A); printf ("\n");
 
-  pnl_tridiagmat_clone (A, Aclone);
-  pnl_tridiagmat_mult_tridiagmat_term (A, B);
+  pnl_tridiag_mat_clone (A, Aclone);
+  pnl_tridiag_mat_mult_tridiag_mat_term (A, B);
   printf ("A.*B = ");
-  pnl_tridiagmat_print_as_full (A); printf ("\n");
-  pnl_tridiagmat_free (&A);
-  pnl_tridiagmat_free (&Aclone);
-  pnl_tridiagmat_free (&B);
+  pnl_tridiag_mat_print_as_full (A); printf ("\n");
+  pnl_tridiag_mat_free (&A);
+  pnl_tridiag_mat_free (&Aclone);
+  pnl_tridiag_mat_free (&B);
 }
 
 static void tridiag_mv_test ()
 {
   PnlVect *y, *x;
-  PnlTriDiagMat *M;
+  PnlTridiagMat *M;
   int n = 5;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
 
@@ -132,22 +132,22 @@ static void tridiag_mv_test ()
   M = create_random_tridiag (n, gen);
 
   printf ("M = ");
-  pnl_tridiagmat_print_as_full (M); printf ("\n");
+  pnl_tridiag_mat_print_as_full (M); printf ("\n");
 
   printf ("x = "); pnl_vect_print_nsp (x); printf ("\n");
 
-  pnl_tridiagmat_mult_vect_inplace (y, M, x);
+  pnl_tridiag_mat_mult_vect_inplace (y, M, x);
   printf ("y = "); pnl_vect_print_nsp (y); printf ("\n");
 
   pnl_vect_free (&x);
   pnl_vect_free (&y);
-  pnl_tridiagmat_free (&M);
+  pnl_tridiag_mat_free (&M);
 }
 
 static void tridiag_lAxpby_test ()
 {
   PnlVect *y, *x;
-  PnlTriDiagMat *M;
+  PnlTridiagMat *M;
   int n = 5;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
 
@@ -161,23 +161,23 @@ static void tridiag_lAxpby_test ()
   M = create_random_tridiag (n, gen);
 
   printf ("M = ");
-  pnl_tridiagmat_print_as_full (M); printf ("\n");
+  pnl_tridiag_mat_print_as_full (M); printf ("\n");
 
   printf ("y = "); pnl_vect_print_nsp (y); printf ("\n");
   printf ("x = "); pnl_vect_print_nsp (x); printf ("\n");
 
-  pnl_tridiagmat_lAxpby (1.5, M, x, 3., y);
+  pnl_tridiag_mat_lAxpby (1.5, M, x, 3., y);
   printf ("y = "); pnl_vect_print_nsp (y); printf ("\n");
 
   pnl_vect_free (&x);
   pnl_vect_free (&y);
-  pnl_tridiagmat_free (&M);
+  pnl_tridiag_mat_free (&M);
 }
 
 static void tridiag_syslin_test ()
 {
   PnlVect *b, *x;
-  PnlTriDiagMat *M;
+  PnlTridiagMat *M;
   int n = 5;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
 
@@ -190,21 +190,21 @@ static void tridiag_syslin_test ()
   M = create_random_tridiag (n, gen);
 
   printf ("M = ");
-  pnl_tridiagmat_print_as_full (M); printf ("\n");
+  pnl_tridiag_mat_print_as_full (M); printf ("\n");
 
   printf ("b = "); pnl_vect_print_nsp (b); printf ("\n");
-  pnl_tridiagmat_syslin (x, M, b);
+  pnl_tridiag_mat_syslin (x, M, b);
   printf ("x = "); pnl_vect_print_nsp (x); printf ("\n");
 
   pnl_vect_free (&x);
   pnl_vect_free (&b);
-  pnl_tridiagmat_free (&M);
+  pnl_tridiag_mat_free (&M);
 }
 
 static void triadiag_scalar_prod_test ()
 {
   PnlVect *y, *x;
-  PnlTriDiagMat *M;
+  PnlTridiagMat *M;
   PnlMat *full;
   int n = 5;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
@@ -217,23 +217,23 @@ static void triadiag_scalar_prod_test ()
   pnl_vect_rand_normal (x, n, gen);
   pnl_vect_rand_normal (y, n, gen);
   M = create_random_tridiag (n, gen);
-  full = pnl_tridiagmat_to_mat (M);
+  full = pnl_tridiag_mat_to_mat (M);
 
   printf ("M = ");
   pnl_mat_print_nsp (full); printf ("\n");
 
   printf ("x = "); pnl_vect_print_nsp (x); printf ("\n");
   printf ("y = "); pnl_vect_print_nsp (y); printf ("\n");
-  printf ("x' * M * y = %f\n", pnl_tridiagmat_scalar_prod (x, M, y));
+  printf ("x' * M * y = %f\n", pnl_tridiag_mat_scalar_prod (x, M, y));
   pnl_vect_free (&x);
   pnl_vect_free (&y);
-  pnl_tridiagmat_free (&M);
+  pnl_tridiag_mat_free (&M);
   pnl_mat_free (&full); 
 }
 
-static void tridiagmat_op_tridiagmat_test ()
+static void tridiag_mat_op_tridiag_mat_test ()
 {
-  PnlTriDiagMat *T1, *T2;
+  PnlTridiagMat *T1, *T2;
   int gen, n;
 
   gen = PNL_RNG_MERSENNE_RANDOM_SEED;
@@ -243,13 +243,13 @@ static void tridiagmat_op_tridiagmat_test ()
   T1 = create_random_tridiag (n, gen);
   T2 = create_random_tridiag (n, gen);
 
-  printf ("T1 = "); pnl_tridiagmat_print_as_full (T1); printf ("\n");
-  printf ("T2 = "); pnl_tridiagmat_print_as_full (T2); printf ("\n");
-  pnl_tridiagmat_plus_tridiagmat (T1, T2);
-  printf ("T1 + T2 = "); pnl_tridiagmat_print_as_full (T1); printf ("\n");
+  printf ("T1 = "); pnl_tridiag_mat_print_as_full (T1); printf ("\n");
+  printf ("T2 = "); pnl_tridiag_mat_print_as_full (T2); printf ("\n");
+  pnl_tridiag_mat_plus_tridiag_mat (T1, T2);
+  printf ("T1 + T2 = "); pnl_tridiag_mat_print_as_full (T1); printf ("\n");
 
-  pnl_tridiagmat_free (&T1);
-  pnl_tridiagmat_free (&T2);
+  pnl_tridiag_mat_free (&T1);
+  pnl_tridiag_mat_free (&T2);
 }
 
 
@@ -263,5 +263,5 @@ void tridiag_matrix_test()
   tridiag_lAxpby_test ();
   tridiag_syslin_test ();
   triadiag_scalar_prod_test ();
-  tridiagmat_op_tridiagmat_test ();
+  tridiag_mat_op_tridiag_mat_test ();
 }

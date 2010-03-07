@@ -1,5 +1,5 @@
-#ifndef _FINANCE_FUNCTION_H
-#define _FINANCE_FUNCTION_H
+#ifndef _PNL_FINANCE_H
+#define _PNL_FINANCE_H
 
 
 #ifdef __cplusplus
@@ -35,4 +35,4 @@ extern int pnl_bs_matrix_implicit_vol(const PnlMatInt * Is_Call, const PnlMat * 
 #endif /* __cplusplus */
 
 
-#endif
+#endif /* _PNL_FINANCE_H */

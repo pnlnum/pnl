@@ -1,5 +1,5 @@
-#ifndef SOLVER_ITERATIV_H
-#define SOLVER_ITERATIV_H
+#ifndef _PNL_LINALGSOLVER_H 
+#define _PNL_LINALGSOLVER_H 
 
 
 #ifdef __cplusplus
@@ -147,4 +147,4 @@ int pnl_mat_gmres_solver_solve(const PnlMat * Matrix,
 #endif /* __cplusplus */
 
 
-#endif /* solver_iterativ_H */
+#endif /* _PNL_LINALGSOLVER_H  */

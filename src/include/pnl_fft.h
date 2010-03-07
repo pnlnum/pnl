@@ -1,5 +1,5 @@
-#ifndef PNL_FFT_H
-#define PNL_FFT_H
+#ifndef _PNL_FFT_H
+#define _PNL_FFT_H
 
 
 #ifdef __cplusplus
@@ -35,4 +35,4 @@ extern int pnl_real_ifft2(double *re, double *im, int n);
 #endif /* __cplusplus */
 
 
-#endif /* PNL_FFT_H */
+#endif /* _PNL_FFT_H */

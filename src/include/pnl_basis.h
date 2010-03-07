@@ -1,5 +1,5 @@
-#ifndef _BASIS_ND
-#define _BASIS_ND
+#ifndef _PNL_BASIS_H
+#define _PNL_BASIS_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -47,4 +47,4 @@ extern double pnl_basis_eval_D2 (PnlBasis *basis,PnlVect *coef, double *x, int i
 #endif /* __cplusplus */
 
 
-#endif
+#endif /* _PNL_BASIS_H */

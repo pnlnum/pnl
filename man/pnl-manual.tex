@@ -104,21 +104,143 @@ parts.
 \begin{itemize}
 \item Mathematical functions: complex numbers, special functions, standard
   financial functions for the Black \& Scholes model.
-\item Linear algebra : vectors, matrices, hypermatrices, and some
-  routines to solve linear systems.
+\item Linear algebra : vectors, matrices, hypermatrices, tridiagonal matrices,
+  band matrices and the corresponding routines to manipulate them and solve linear systems.
 \item Probabilistic functions: random number generators and  cumulative
   distribution functions.
 \item Deterministic toolbox : FFT, Laplace inversion, numerical integration, zero searching,
-  polynomial bases and regression, $\dots$
+  multivariate polynomial regression, $\dots$
 \end{itemize}
 
-\section{A few guidelines used by the Pnl developers}
+\section{A few helpful conventions}
 
 \begin{itemize}
-  \item All functions and header file names are prefixed by \verb!pnl_!
-  \item Functions ending in \verb!_create! always return an object created by
-    one or several calls to \verb!malloc!. Once these objects are not used, they
-    must be freed by calling the same function but ending in \verb!_free!
+  \item All header file names are prefixed by \verb!pnl_! and are surrounded by
+    the preprocessor conditionals
+\begin{verbatim}
+#ifndef _PNL_MATRIX_H
+#define _PNL_MATRIX_H
+
+...
+
+#endif /* _PNL_MATRIX_H
+\end{verbatim}
+All the header files are protected by an \verb!extern ``C''! declaration for
+possible use with a C++ compiler.
+
+  \item All function names are prefixed by \verb!pnl_! except those implementing
+    complex number arithmetic which are named following the \textit{C99}
+    complex library but using a capitalised first letter \verb!C!. \\
+    For example, the addition of two complex numbers is performed by the
+    function \verb!Cadd!.
+
+  \item Function containing \verb!_create! in their names always return a
+    pointer to an object created by one or several calls to some dynamic
+    allocation. Once these objects are not used, they must be freed by calling
+    the same function but ending in \verb!_free!
+    If calling a function \verb!pnl_xxx_create_yyy! to create an object, say
+    \verb!poo!, the object must be freed by calling \verb!pnl_xxx_free (&poo)!.
+
+  \item Functions containing \verb!_wrap_! in their names always return an
+    object, not a pointer to an object, and do not make any use of dynamic
+    allocation. The returned object must not be freed. 
+    \begin{verbatim}
+    PnlVect *v1;
+    PnlVect v2;
+    v1 = pnl_vect_complex_create_from_complex (5, Complex(0., 1.));
+    v2 = pnl_vect_complex_wrap_subvect (v1, 1, 2);
+
+    ...
+
+    pnl_vect_complex_free (&v1);
+    \end{verbatim}
+    The vector \verb!v1! is of size 5 and contains the pure imaginary number
+    $i$. The vector \verb!v2! only provides a view to \verb!v1(1:1+2)!, which
+    means that modifying \verb!v2! will also modify \verb!v1! and vice-versa
+    because \verb!v1! shares part of its data with \verb!v2!. Note that only
+    \verb!v1! must be freed and {\bf not} \verb!v2!.
+  
+  \item Functions ending in \verb!_init! do not create any object but only
+    perform some internal initialisation.
+  
+  \item Hypermatrices, matrices and vectors are stored using a flat block of
+    memory obtained by concatenating the matrix rows and C-style
+    pointer-to-pointer arrays. Matrices are stored in row-major order, which
+    means that the column index moves continuously.
+    Note that this convention is not \textit{Blas \& Lapack} compliant since
+    Fortran expects 2-dimensional arrays to be stored in a column-major order.
+
+  \item Type names always begin with \verb!Pnl!, they do not contain underscores
+    but instead we use capital letters to separate units in type names. \\
+    Examples : \verb!PnlMat!, \verb!PnlMatComplex!.
+
+  \item Objects and functions for manipulating them are named following the
+    convention : an object \verb!PnlFoo! is manipulated by functions starting in
+    \verb!pnl_foo!, an object \verb!PnlFooBar! is manipulated by functions starting in
+    \verb!pnl_foo_bar!. In the following table we summarise the types and their
+    corresponding prefix
+
+    \begin{figure}[h!]
+      \centering\begin{tabular}{|l|l|}
+      \hline
+      Pnl types & Pnl prefix \\
+      \hline
+      PnlVect & pnl_vect \\
+      PnlVectComplex & pnl_vect_complex \\
+      PnlVectInt & pnl_vect_int \\
+       &\\
+      PnlMat & pnl_mat \\
+      PnlMatComplex & pnl_mat_complex \\
+      PnlMatInt & pnl_mat_int \\
+      & \\
+      PnlHmat & pnl_hmat \\
+      PnlHmatComplex & pnl_hmat_complex \\
+      PnlHmatInt & pnl_hmat_int \\
+      & \\
+      PnlTridiagMat & pnl_tridiag_mat \\
+      PnlBandMat & pnl_band_mat \\
+      & \\
+      PnlBasis & pnl_basis \\
+      \hline
+    \end{tabular}
+  \end{figure}
+
+  \item All macro names begin with \verb!PNL_! and are capitalised.
+
+  \item Differences between \textbf{copy} and \textbf{clone} methods.
+    The \verb!copy! methods take a single argument and return a pointer to an object
+    of the same time which is independent copy of its argument. 
+    Example:
+    \begin{verbatim}
+    PnlVect *v1, *v2;
+    v1 = pnl_vect_create_from_double (5, 2.5);
+    v2 = pnl_vect_copy (v1);
+    \end{verbatim}
+    \verb!v1! and \verb!v2! are two vectors of size 5 with all their elements
+    equal to 2.5. Note that \verb!v2! {\bf must not} have been created by a call
+    to \verb!pnl_vect_create_xxx! because otherwise it will cause a memory leak.
+    \verb!v1! and \verb!v2! are independent in the sense that a modification to
+    one of them does not modify the other.
+
+    The \verb!clone! methods take two arguments are fill in the first one with the
+    second one. 
+    Example:
+    \begin{verbatim}
+    PnlVect *v1, *v2;
+    v1 = pnl_vect_create_from_double (5, 2.5);
+    v2 = pnl_vect_create (0);
+    pnl_vect_clone (v2, v1);
+    \end{verbatim}
+    \verb!v1! and \verb!v2! are two vectors of size 5 with all their elements
+    equal to 2.5. Note that \verb!v2! {\bf must} have been created by a call to
+    \verb!pnl_vect_create_xxx! because the function \verb!pnl_vect_clone!  will
+    crash.  \verb!v1! and \verb!v2! are independent in the sense that a
+    modification to one of them does not modify the other.
+
+
+  \item All objects are measured using integers \verb!int! and not
+    \verb!size_t!. Hence iterations over vectors, matrices, \dots should use an
+    index of type \verb!int!.
 \end{itemize}
 
 
@@ -130,4 +252,5 @@ parts.
 \input{deterministic_methods.tex}
 
 \printindex
+
 \end{document}

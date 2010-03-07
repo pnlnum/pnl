@@ -1,5 +1,5 @@
-#ifndef INTERPOLATION_H_INCLUDED
-#define INTERPOLATION_H_INCLUDED
+#ifndef _PNL_INTERPOLATION_H
+#define _PNL_INTERPOLATION_H
 
 #include "pnl_vector.h"
 #include "pnl_matrix.h"
@@ -11,4 +11,4 @@ int pnl_bicubic_spline(PnlVect *x, PnlVect *y, PnlMat *u, double *C, int type);
 
 void pnl_eval_bicubic(PnlVect *x, PnlVect *y, double *C, PnlVect *x_eval, PnlVect *y_eval, PnlMat *z_eval, PnlMat *dzdx_eval, PnlMat *dzdy_eval, int outmode);
 
-#endif // INTERPOLATION_H_INCLUDED
+#endif /* _PNL_INTERPOLATION_H */

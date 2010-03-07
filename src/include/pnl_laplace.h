@@ -1,5 +1,5 @@
-#ifndef PNL_LAPLACE
-#define PNL_LAPLACE
+#ifndef _PNL_LAPLACE_H
+#define _PNL_LAPLACE_H
 
 
 #ifdef __cplusplus
@@ -29,4 +29,4 @@ extern double pnl_ilap_gs (PnlFunc *fhat, double t, int n);
 #endif /* __cplusplus */
 
 
-#endif /* PNL_LAPLACE */
+#endif /* _PNL_LAPLACE_H */

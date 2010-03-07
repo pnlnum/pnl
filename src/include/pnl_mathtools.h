@@ -1,5 +1,5 @@
-#ifndef  _MATHTOOLS_H
-#define _MATHTOOLS_H
+#ifndef _PNL_MATHTOOLS_H
+#define _PNL_MATHTOOLS_H 
 
 
 #ifdef __cplusplus
@@ -237,4 +237,4 @@ extern void pnl_qsort (void *a, int n, int es, int lda, int *t, int ldt, int use
 #endif /* __cplusplus */
 
 
-#endif
+#endif /* _PNL_MATHTOOLS_H */ 
