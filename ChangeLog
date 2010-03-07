@@ -1,12 +1,39 @@
-2008-12-09 Jérôme Lelong <jerome.lelong@ensta.fr>
+06/03/10 <jerome.lelong@gmail.com>
 
-	* common/math/lmm/lmm_generator deleted because lmm1d now uses
-	libpremianum for random numbers
+	* All syslin related routines rely on Blas & Lapack
+	
+	* all header files are surrounded by the preprocessor conditionals
+		#ifndef _PNL_HEADER_NAME_H
+		#define _PNL_HEADER_NAME_H
+		...
+		#endif /* _PNL_HEADER_NAME_H */
 
-	* mod/lmm1d/lmm1d_stdi/mc_glassermanzhao.c : lots of memory
-	corruption corrected
+05/03/10 <jerome.lelong@gmail.com>
 
-2008-12-09 Jérôme Lelong <jerome.lelong@ensta.fr>
+	* a few functions have been renamed because their names did not follow the
+	overall conventions
+		pnl_mat_row_to_vect_inplace --> pnl_mat_get_row
+		pnl_mat_create_wrap_array   --> pnl_mat_wrap_array
+		pnl_basis_init              --> pnl_basis_init
 
-	* all the routines use the new random generator interface of
-	libpremianum
+	* uint based objects removed.
+
+	* PnlPermutation becomes a synonymous PnlVectInt although it has a few more
+	specific routines.
+
+04/03/10 <jerome.lelong@gmail.com>
+
+	* New PnlBasis implementation to allow mutlivariate polynomial regression
+	witohut any limitation on the numbers of basis functions used
+
+03/03/10 <jerome.lelong@gmail.com>
+
+	* Makeuser improved to handle the compilation of several executables
+
+28/02/10 <jerome.lelong@gmail.com>
+
+	* New implementation of band matrices compliant with Lapack
+
+24/02/10 <jerome.lelong@gmail.com>
+
+	* tridiag matrices recoded in a Lapack compliant format
