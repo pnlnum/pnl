@@ -33,6 +33,7 @@ typedef struct {
 
 extern enum_members PnlBases ;
 extern PnlBasis* pnl_basis_create ( int index, int nb_func, int space_dim);
+extern PnlBasis* pnl_basis_create_with_degree ( int index, int degree, int space_dim);
 extern PnlBasis* pnl_basis_create_from_tensor ( int index, PnlMatInt *T);
 extern PnlBasis* pnl_basis_init ( int index, int nb_func, int space_dim);
 extern void pnl_basis_free (PnlBasis **basis);

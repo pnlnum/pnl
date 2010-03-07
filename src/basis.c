@@ -52,7 +52,7 @@ static int count_degree (const PnlMatInt *T, int i)
   int j, deg;
   deg = 0;
 
-  for ( j=0 ; j<T->n ; j++ ) deg += PNL_MGET (T, i, j);
+  for ( j=0 ; j<T->n ; j++ ) { deg += PNL_MGET (T, i, j); }
   return deg;
 }
 
@@ -79,22 +79,19 @@ static void copy_previous_basis (PnlMatInt *T, PnlMatInt *T_prev, int Ti, int T_
  * Computes the integer matrix representing the decomposition as a tensor
  * product of the elements of * the multi-b basis onto the 1-d basis
  * 
- * @param d the number of variates
- * @param N the nuber of elements of the basis
+ * @param nb_variates the number of variates
+ * @param nb_func the number of elements of the basis
  * 
  * @return a tensor
  */
-static PnlMatInt* compute_tensor (int d, int N)
+static PnlMatInt* compute_tensor (int nb_func, int nb_variates)
 {
   PnlMatInt *T;
-  T = pnl_mat_int_create (N, d);
-  if (d == 1) 
+  T = pnl_mat_int_create (nb_func, nb_variates);
+  if (nb_variates == 1) 
     {
       int i;
-      for ( i=0 ; i<N ; i++ )
-        {
-          PNL_MLET (T, i, 0) = i;
-        }
+      for ( i=0 ; i<nb_func ; i++ ) { PNL_MLET (T, i, 0) = i; }
       return T;
     }
   else
@@ -104,14 +101,14 @@ static PnlMatInt* compute_tensor (int d, int N)
       int i, j, k;
       PnlMatInt *T_prev; 
       current_degree = 0;
-      T_prev = compute_tensor (d-1, N); 
+      T_prev = compute_tensor (nb_func, nb_variates-1); 
 
       i = 0;
       while (1) /* loop on global degree */
         {
           /* determining the last element of global degree <= current_degree */
           j = 0;
-          while ( count_degree (T_prev, j) < current_degree + 1) { j++; } 
+          while ( j<T_prev->m && count_degree (T_prev, j) < current_degree + 1) { j++; } 
           j--;
           for ( k=j, deg=current_degree ; k>=0 ; deg--)
             {
@@ -125,9 +122,9 @@ static PnlMatInt* compute_tensor (int d, int N)
               /* Loop in an incresing order over the block of global degree deg */ 
               for ( block=block_start ; block<=k ; block++ , i++ )
                 {
-                  if ( i==N ) { pnl_mat_int_free (&T_prev); return T; }
+                  if ( i==nb_func ) { pnl_mat_int_free (&T_prev); return T; }
                   copy_previous_basis (T, T_prev, i, block); 
-                  PNL_MLET (T, i, d-1) = current_degree - deg;
+                  PNL_MLET (T, i, nb_variates-1) = current_degree - deg;
                 }
               /* Consider the previous block */
               k = block_start - 1;
@@ -137,7 +134,116 @@ static PnlMatInt* compute_tensor (int d, int N)
     }
 }
 
+/** 
+ * Computes the number of elements with total degree less or equal than degree
+ * in the basis with (T->n + 1) variates
+ * 
+ * @param T the tensor matrix of the basis with n-1 variates
+ * @param degree the maximum total degree requested
+ * 
+ * @return the number of elements with total degree less or equal than degree in
+ * the basis with n variates
+ */
+static int compute_nb_elements (const PnlMatInt *T, int degree)
+{
+  int i; 
+  int current_degree; /* Current total degree under investigation in the loop */
+  int total_elements; /* Number of elements of total degree smaller than degree */
+  int elements_in_degree; /* Number of element of degree exactly the one under investigation */
+  i = 0;
+  current_degree = 0;
+  total_elements = 0;
+  while ( i<T->m )
+    {
+      elements_in_degree = 0;
+      /* search for the numbers of elements with exact degree "current_degree" */
+      while ( i + elements_in_degree < T->m && count_degree (T, elements_in_degree + i) < current_degree + 1) 
+        { 
+          elements_in_degree++; 
+        } 
+      total_elements += elements_in_degree * (degree - current_degree + 1);
+      /* jump ahead of the number of elements of the current degree */
+      i += elements_in_degree;
+      current_degree++;
+    }
+  return total_elements;
+}
 
+/** 
+ * Computes the tensor matrix of the nb_variates variate basis with a total degree less or
+ * equal than degree
+ * 
+ * @param nb_variates the number of variates of the basis.
+ * @param degree the total degree
+ * 
+ * @return the tensor matrix of the nb_variates variate basis with a total degree less or
+ * equal than degree
+ */
+static PnlMatInt* compute_tensor_with_degree (int degree, int nb_variates)
+{
+  PnlMatInt *T;
+  if (nb_variates == 1) 
+    {
+      int i;
+      T = pnl_mat_int_create (degree+1, nb_variates);
+      for ( i=0 ; i<degree+1 ; i++ ) { PNL_MLET (T, i, 0) = i; }
+      return T;
+    }
+  else
+    {
+      int nb_elements;
+      int current_degree, deg;
+      int block, block_start;
+      int i, j, k;
+      PnlMatInt *T_prev; 
+      current_degree = 0;
+      /* Compute the tensor with one variate less */
+      T_prev = compute_tensor_with_degree (degree, nb_variates-1); 
+      /* Compute the number of rows of T */
+      nb_elements = compute_nb_elements (T_prev, degree);
+      T = pnl_mat_int_create (nb_elements, nb_variates);
+      i = 0;
+      /* loop on global degree */
+      for ( current_degree=0 ; current_degree <= degree ; current_degree++ )
+        {
+          /* Determine the last element of global degree <= current_degree */
+          j = 0;
+          while ( j<T_prev->m && count_degree (T_prev, j) < current_degree + 1 ) { j++; } 
+          j--;
+          for ( k=j, deg=current_degree ; k>=0 ; deg--)
+            {
+              block_start = k;
+              if (deg > 0)
+                {
+                  /* Find the beginning of the block with global degree deg */
+                  while ( count_degree (T_prev, block_start) == deg ) { block_start--; }
+                  block_start++;
+                }
+              /* Loop in an incresing order over the block of global degree deg */ 
+              for ( block=block_start ; block<=k ; block++ , i++ )
+                {
+                  copy_previous_basis (T, T_prev, i, block); 
+                  PNL_MLET (T, i, nb_variates-1) = current_degree - deg;
+                }
+              /* Consider the previous block  */
+              k = block_start - 1;
+            }
+        }
+      pnl_mat_int_free (&T_prev);
+      return T;
+    }
+}
+
+/** 
+ * First order derivative
+ * 
+ * @param b a basis
+ * @param x the point at which to evaluate the first derivative
+ * @param i the index of the basis element to differentiate
+ * @param j the index of the variable w.r.t which we differentiate
+ * 
+ * @return (D(b_i)/Dj)(x)
+ */
 static double D_basis_i ( PnlBasis *b, double *x, int i, int j )
 {
     int k;
@@ -152,6 +258,17 @@ static double D_basis_i ( PnlBasis *b, double *x, int i, int j )
     return aux;
 }
 
+/** 
+ * Second order derivative
+ * 
+ * @param b a basis
+ * @param x the point at which to evaluate the first derivative
+ * @param i the index of the basis element to differentiate
+ * @param j1 the index of the first variable w.r.t which we differentiate
+ * @param j the index of the second variable w.r.t which we differentiate
+ * 
+ * @return (D(b_i)/(Dj1 Dj2))(x)
+ */
 static double D2_basis_i (PnlBasis *b, double *x, int i, int j1, int j2)
 {
   int k;
@@ -448,8 +565,6 @@ static double D2Tchebychev_rec (double *x, int n, int n0, double *f_n, double *f
     }
 }
 
-
-
 /**
  *  Second derivative of the Tchebytchev polynomials
  *  @param x the address of a real number
@@ -502,9 +617,8 @@ enum_member _reg_basis [] =
 
 DEFINE_ENUM(PnlBases, _reg_basis);
 
-
 /**
- * returns a  PnlBasis
+ * Returns a  PnlBasis
  *
  * @param index the index of the family to be used
  * @param T the tensor of the multi-dimensionnal basis. No copy of T is done, so
@@ -555,7 +669,7 @@ PnlBasis*  pnl_basis_create_from_tensor (int index, PnlMatInt *T)
 }
 
 /**
- * returns a  PnlBasis
+ * Returns a  PnlBasis
  *
  * @param index the index of the family to be used
  * @param nb_func the maximum number of functions which may be used
@@ -566,9 +680,27 @@ PnlBasis*  pnl_basis_create_from_tensor (int index, PnlMatInt *T)
 PnlBasis*  pnl_basis_create (int index, int nb_func, int nb_variates)
 {
   PnlMatInt *T;
-  T = compute_tensor (nb_variates, nb_func);
+  T = compute_tensor (nb_func, nb_variates);
   return pnl_basis_create_from_tensor (index, T);
 }
+
+/**
+ * Returns a  PnlBasis
+ *
+ * @param index the index of the family to be used
+ * @param nb_func the maximum number of functions which may be used
+ * @param nb_variates the size of the space in which the basis functions are
+ * defined
+ * @return a PnlBasis
+ */
+PnlBasis*  pnl_basis_create_with_degree (int index, int degree, int nb_variates)
+{
+  PnlMatInt *T;
+  T = compute_tensor_with_degree (degree, nb_variates);
+  return pnl_basis_create_from_tensor (index, T);
+}
+
+
 /*
  * This a deprecated function synonymous of pnl_basis_create.
  * It will removed in the future 

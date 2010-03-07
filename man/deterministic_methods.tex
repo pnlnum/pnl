@@ -104,11 +104,17 @@ $\alpha^\star \in \R^N$ which solves
 \subsubsection{Functions}
 
 \begin{itemize}
-  \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create}{int index, int N, int d}
+  \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create}{int index, int
+    nb_func, int nb_variates}
     \sshortdescribe Creates a \refstruct{PnlBasis} for the polynomial family
-    defined by \var{index} (see Table~\ref{basis_index}) with at most \var{N}
-    elements. \var{d} is the dimension of the space on which the functions are
-    defined.
+    defined by \var{index} (see Table~\ref{basis_index}) with \var{nb_variates}
+    variates. The basis will contain \var{nb_func}. 
+
+  \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create_with_degree}{int
+    index, int degree, int nb_variates}
+    \sshortdescribe Creates a \refstruct{PnlBasis} for the polynomial family
+    defined by \var{index} (see Table~\ref{basis_index}) with total degree less
+    or equal than \var{degree} and \var{nb_variates} variates.
 
   \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create_from_tensor}{int
     index, PnlMatInt \ptr T}

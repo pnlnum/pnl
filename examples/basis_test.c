@@ -97,7 +97,7 @@ static double function2d( double *x )
 
 static void regression_multid()
 {
-  int n, basis_name, basis_dim, space_dim;
+  int n, basis_name, nb_func, nb_variates, degree;
   int i, j;
   double a, b, h, err;
   PnlMat *t;
@@ -126,12 +126,12 @@ static void regression_multid()
         }
     }
 
-
   basis_name = HERMITIAN;
-  space_dim = 2; /* functions with values in R^2 */
-  basis_dim = 10; /* number of elements in the basis */
+  nb_variates = 2; /* functions with values in R^2 */
+  printf ("Creating basis by specifying the number of functions\n");
+  nb_func = 15; /* number of elements in the basis */
 
-  basis = pnl_basis_create (basis_name, basis_dim, space_dim);
+  basis = pnl_basis_create (basis_name, nb_func, nb_variates);
 
   pnl_basis_fit_ls (basis, alpha, t, y);
   printf("coefficients of the decomposition : ");
@@ -148,6 +148,27 @@ static void regression_multid()
 
   printf ("L^infty error : %f \n", err);
   pnl_basis_free (&basis);
+
+  printf ("\nCreating basis by specifying the total degree\n");
+  degree = 4; /* total degree */
+  basis = pnl_basis_create_with_degree (basis_name, degree, nb_variates);
+
+  pnl_basis_fit_ls (basis, alpha, t, y);
+  printf("coefficients of the decomposition : ");
+  pnl_vect_print (alpha);
+
+  /* computing the infinity norm of the error */
+  err = 0.;
+  for (i=0; i<t->m; i++)
+    {
+      double tmp = function2d(pnl_mat_lget(t, i, 0)) -
+        pnl_basis_eval (basis,alpha, pnl_mat_lget(t, i, 0));
+      if (fabs(tmp) > err) err = fabs(tmp);
+    }
+
+  printf ("L^infty error : %f \n", err);
+  pnl_basis_free (&basis);
+
   pnl_mat_free (&t);
   pnl_vect_free (&y);
   pnl_vect_free (&alpha);
