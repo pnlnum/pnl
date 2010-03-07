@@ -35,9 +35,9 @@ void Test_Solver_sym(void )
   int Size;
   PnlVect *x1,*x2,*x3, *b;
   PnlMat *M,*PC;
-  PnlCGSolver* Solver;
-  PnlBICGSolver* Solver2;
-  PnlGMRESSolver* Solver3;
+  PnlCgSolver* Solver;
+  PnlBicgSolver* Solver2;
+  PnlGmresSolver* Solver3;
   printf(">>>>>> Test iterativ Solver  Symetric matrix \n");
   Size=10;
   b=pnl_vect_create_from_double(Size,1);
@@ -78,8 +78,8 @@ void Test_Solver_no_sym(void )
   int Size;
   PnlVect *b,*res, *x1,*x2;
   PnlMat *Q,*PC;
-  PnlBICGSolver* Solver2;
-  PnlGMRESSolver* Solver3;
+  PnlBicgSolver* Solver2;
+  PnlGmresSolver* Solver3;
   printf(">>>>>> Test iterativ Solver Non Symetric matrix \n");
   Size=20;
   b   = pnl_vect_create_from_file ("Data/Test_vect_rhs.dat");
