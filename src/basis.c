@@ -688,7 +688,7 @@ PnlBasis*  pnl_basis_create (int index, int nb_func, int nb_variates)
  * Returns a  PnlBasis
  *
  * @param index the index of the family to be used
- * @param nb_func the maximum number of functions which may be used
+ * @param degree the maximum total degree of the elements in the basis
  * @param nb_variates the size of the space in which the basis functions are
  * defined
  * @return a PnlBasis
