@@ -32,7 +32,7 @@ typedef struct PnlIterationBase{
 } PnlIterationBase;
 
 /* When you repeatedly use Iterative solvers, do not malloc each time */
-typedef struct PnlCGSolver{
+typedef struct PnlCgSolver{
   PnlVect * r;
   PnlVect * z;
   PnlVect * p;
@@ -42,9 +42,9 @@ typedef struct PnlCGSolver{
   double beta;
   double alpha;
   PnlIterationBase * iter;
-} PnlCGSolver;
+} PnlCgSolver;
 
-typedef struct PnlBICGSolver{ 
+typedef struct PnlBicgSolver{ 
   double rho_1, rho_2, alpha, beta, omega;
   PnlVect * p;
   PnlVect * phat;
@@ -55,9 +55,9 @@ typedef struct PnlBICGSolver{
   PnlVect * r;
   PnlVect *  rtilde;
   PnlIterationBase * iter;
-} PnlBICGSolver;
+} PnlBicgSolver;
 
-typedef struct PnlGMRESSolver{ 
+typedef struct PnlGmresSolver{ 
   int restart;
   double beta;
   PnlVect * s;
@@ -69,12 +69,12 @@ typedef struct PnlGMRESSolver{
   PnlVect * v[MAX_RESTART];
   PnlIterationBase *iter;
   PnlIterationBase *iter_inner;
-} PnlGMRESSolver;
+} PnlGmresSolver;
 
 
-extern PnlCGSolver* pnl_cg_solver_create(int Size,int max_iter_, double tolerance_);
-extern void pnl_cg_solver_initialisation(PnlCGSolver * Solver,const PnlVect * b);
-extern void pnl_cg_solver_free(PnlCGSolver ** Solver);
+extern PnlCgSolver* pnl_cg_solver_create(int Size,int max_iter_, double tolerance_);
+extern void pnl_cg_solver_initialisation(PnlCgSolver * Solver,const PnlVect * b);
+extern void pnl_cg_solver_free(PnlCgSolver ** Solver);
 
 
 extern int pnl_cg_solver_solve(void(* matrix_vector_product )(const void *,const PnlVect*,
@@ -85,19 +85,19 @@ extern int pnl_cg_solver_solve(void(* matrix_vector_product )(const void *,const
                                const void * PC_Data,
                                PnlVect * x, 
                                const PnlVect * b, 
-                               PnlCGSolver * Solver);
+                               PnlCgSolver * Solver);
 
 extern int pnl_mat_cg_solver_solve(const PnlMat *Matrix,
                                    const PnlMat *PC,
                                    PnlVect *x, 
                                    const PnlVect *b,
-                                   PnlCGSolver * Solver);
+                                   PnlCgSolver * Solver);
 
 
  
-extern PnlBICGSolver* pnl_bicg_solver_create(int Size,int max_iter_, double tolerance_);
-extern void pnl_bicg_solver_initialisation(PnlBICGSolver * Solver,const PnlVect * b);
-extern void pnl_bicg_solver_free(PnlBICGSolver ** Solver);
+extern PnlBicgSolver* pnl_bicg_solver_create(int Size,int max_iter_, double tolerance_);
+extern void pnl_bicg_solver_initialisation(PnlBicgSolver * Solver,const PnlVect * b);
+extern void pnl_bicg_solver_free(PnlBicgSolver ** Solver);
 extern int
 pnl_bicg_solver_solve(void (* matrix_vector_product )(const void *,const PnlVect*,
                                                       const double,const double,PnlVect*), 
@@ -107,23 +107,23 @@ pnl_bicg_solver_solve(void (* matrix_vector_product )(const void *,const PnlVect
                       const void * PC_Data,
                       PnlVect * x, 
                       const PnlVect *b,
-                      PnlBICGSolver * Solver);
+                      PnlBicgSolver * Solver);
 extern int pnl_mat_bicg_solver_solve(const PnlMat *Matrix,
                                      const PnlMat *PC,
                                      PnlVect *x, 
                                      const PnlVect *b,
-                                     PnlBICGSolver * Solver);
+                                     PnlBicgSolver * Solver);
 
 
 
-extern PnlGMRESSolver* pnl_gmres_solver_create(int Size,
+extern PnlGmresSolver* pnl_gmres_solver_create(int Size,
                                                int max_iter_, 
                                                int restart_,
                                                double tolerance_);
 
-extern void pnl_gmres_solver_initialisation(PnlGMRESSolver *Solver,
+extern void pnl_gmres_solver_initialisation(PnlGmresSolver *Solver,
                                             const PnlVect * b);
-extern void pnl_gmres_solver_free(PnlGMRESSolver ** Solver);
+extern void pnl_gmres_solver_free(PnlGmresSolver ** Solver);
 
 extern int
 pnl_gmres_solver_solve(void (* matrix_vector_product )(const void *,const PnlVect*,
@@ -134,13 +134,13 @@ pnl_gmres_solver_solve(void (* matrix_vector_product )(const void *,const PnlVec
                        const void * PC_Data,
                        PnlVect * x, 
                        const PnlVect *b,
-                       PnlGMRESSolver *Solver);
+                       PnlGmresSolver *Solver);
 
 int pnl_mat_gmres_solver_solve(const PnlMat * Matrix,
                                const PnlMat * PC,
                                PnlVect * x, 
                                const PnlVect *b,
-                               PnlGMRESSolver * Solver);
+                               PnlGmresSolver * Solver);
 /*@}*/
 #ifdef __cplusplus
 }

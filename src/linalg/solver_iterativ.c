@@ -227,17 +227,17 @@ static void pnl_iterationbase_failed(PnlIterationBase * it,int err_code,
 
 
 /**
- * creates a new PnlCGSolver pointer.
+ * creates a new PnlCgSolver pointer.
  *
  * @param Size : the size of temporary vectors use in the method
  * @param max_iter_  : maximum iteration number 
  * @param tolerance_ : relativ error of iterativ method
- *@return  a PnlCGSolver pointer
+ *@return  a PnlCgSolver pointer
  */
-PnlCGSolver* pnl_cg_solver_create(int Size,int max_iter_, double tolerance_)
+PnlCgSolver* pnl_cg_solver_create(int Size,int max_iter_, double tolerance_)
 {
-  PnlCGSolver * Solver;
-  if((Solver=malloc(sizeof(PnlCGSolver)))==NULL)
+  PnlCgSolver * Solver;
+  if((Solver=malloc(sizeof(PnlCgSolver)))==NULL)
     return NULL;
   Solver->r=pnl_vect_create_from_double(Size,0.0);
   Solver->z=pnl_vect_create_from_double(Size,0.0);
@@ -250,10 +250,10 @@ PnlCGSolver* pnl_cg_solver_create(int Size,int max_iter_, double tolerance_)
 /**
  * initialisation of the solver at the beginning of iterativ method.
  *
- * @param Solver : PnlCGSolver  ptr
+ * @param Solver : PnlCgSolver  ptr
  * @param b       : PnlVect ptr 
  */
-void pnl_cg_solver_initialisation(PnlCGSolver * Solver,const PnlVect * b)
+void pnl_cg_solver_initialisation(PnlCgSolver * Solver,const PnlVect * b)
 {
   pnl_vect_clone(Solver->r,b);
   Solver->rho=0.0;
@@ -265,9 +265,9 @@ void pnl_cg_solver_initialisation(PnlCGSolver * Solver,const PnlVect * b)
 /**
  * destructor of iterativ solver 
  *
- * @param Solver : PnlCGSolver  ptr
+ * @param Solver : PnlCgSolver  ptr
  */
-void pnl_cg_solver_free(PnlCGSolver ** Solver)
+void pnl_cg_solver_free(PnlCgSolver ** Solver)
 {
   if (*Solver != NULL)
     {
@@ -298,7 +298,7 @@ void pnl_cg_solver_free(PnlCGSolver ** Solver)
  * @param PC_Data : void ptr
  * @param x       : PnlVect ptr 
  * @param b       : PnlVect ptr
- * @param Solver  : PnlCGSolver ptr 
+ * @param Solver  : PnlCgSolver ptr 
  * @return Int : error code.
  */
 int pnl_cg_solver_solve(void (* matrix_vector_product )(const void *,const PnlVect*,const double,const double,PnlVect*), 
@@ -307,7 +307,7 @@ int pnl_cg_solver_solve(void (* matrix_vector_product )(const void *,const PnlVe
                         const void * PC_Data,
                         PnlVect * x, 
                         const PnlVect *b,
-                        PnlCGSolver * Solver)
+                        PnlCgSolver * Solver)
 {
   /* residual */
   pnl_cg_solver_initialisation(Solver,b);
@@ -345,17 +345,17 @@ int pnl_cg_solver_solve(void (* matrix_vector_product )(const void *,const PnlVe
 
 
 /**
- * creates a new PnlBICGSolver pointer.
+ * creates a new PnlBicgSolver pointer.
  *
  * @param Size : the size of temporary vectors use in the method
  * @param max_iter_  : maximum iteration number 
  * @param tolerance_ : relativ error of iterativ method
- *@return  a PnlBICGSolver pointer
+ *@return  a PnlBicgSolver pointer
  */
-PnlBICGSolver* pnl_bicg_solver_create(int Size,int max_iter_, double tolerance_)
+PnlBicgSolver* pnl_bicg_solver_create(int Size,int max_iter_, double tolerance_)
 {
-  PnlBICGSolver * Solver;
-  if((Solver=malloc(sizeof(PnlBICGSolver)))==NULL)
+  PnlBicgSolver * Solver;
+  if((Solver=malloc(sizeof(PnlBicgSolver)))==NULL)
     return NULL;
   Solver->r=pnl_vect_create_from_double(Size,0.0);
   Solver->rtilde=pnl_vect_create_from_double(Size,0.0);
@@ -373,10 +373,10 @@ PnlBICGSolver* pnl_bicg_solver_create(int Size,int max_iter_, double tolerance_)
 /**
  * initialisation of the solver at the beginning of iterativ method.
  *
- * @param Solver : PnlBICGSolver  ptr
+ * @param Solver : PnlBicgSolver  ptr
  * @param b       : PnlVect ptr 
  */
-void pnl_bicg_solver_initialisation(PnlBICGSolver * Solver,const PnlVect * b)
+void pnl_bicg_solver_initialisation(PnlBicgSolver * Solver,const PnlVect * b)
 {
   pnl_vect_clone(Solver->r,b);
   Solver->rho_1=0.0;
@@ -390,9 +390,9 @@ void pnl_bicg_solver_initialisation(PnlBICGSolver * Solver,const PnlVect * b)
 /**
  * destructor of iterativ solver 
  *
- * @param Solver : PnlBICGSolver  ptr
+ * @param Solver : PnlBicgSolver  ptr
  */
-void pnl_bicg_solver_free(PnlBICGSolver ** Solver)
+void pnl_bicg_solver_free(PnlBicgSolver ** Solver)
 {
   if (*Solver != NULL)
     {
@@ -427,7 +427,7 @@ void pnl_bicg_solver_free(PnlBICGSolver ** Solver)
  * @param PC_Data : void ptr
  * @param x       : PnlVect ptr 
  * @param b       : PnlVect ptr
- * @param Solver  : PnlBICGSolver ptr 
+ * @param Solver  : PnlBicgSolver ptr 
  * @return Int : error code.
  */
 int pnl_bicg_solver_solve(void (* matrix_vector_product )(const void *,const PnlVect*,const double,const double,PnlVect*), 
@@ -436,7 +436,7 @@ int pnl_bicg_solver_solve(void (* matrix_vector_product )(const void *,const Pnl
                           const void * PC_Data,
                           PnlVect * x, 
                           const PnlVect *b,
-                          PnlBICGSolver * Solver)
+                          PnlBicgSolver * Solver)
 {
   pnl_bicg_solver_initialisation(Solver,b);
   /* r = b - A x: initial residual */
@@ -499,22 +499,22 @@ int pnl_bicg_solver_solve(void (* matrix_vector_product )(const void *,const Pnl
 
 
 /**
- * creates a new PnlGMRESSolver pointer.
+ * creates a new PnlGmresSolver pointer.
  *
  * @param Size : the size of temporary vectors use in the method
  * @param max_iter_  : maximum iteration number 
  * @param restart_   : restart parameters for gmres method
  * @param tolerance_ : relativ error of iterativ method
- *@return  a PnlGMRESSolver pointer
+ *@return  a PnlGmresSolver pointer
  */
-PnlGMRESSolver* pnl_gmres_solver_create(int Size,
+PnlGmresSolver* pnl_gmres_solver_create(int Size,
                                         int max_iter_, 
                                         int restart_,
                                         double tolerance_)
 {
   int i;
-  PnlGMRESSolver *Solver;
-  if((Solver=malloc(sizeof(PnlGMRESSolver)))==NULL)
+  PnlGmresSolver *Solver;
+  if((Solver=malloc(sizeof(PnlGmresSolver)))==NULL)
     return NULL;
   Solver->restart=MIN(MAX_RESTART - 1,restart_);
   Solver->s=pnl_vect_create_from_double(Solver->restart+1,0.0);
@@ -535,10 +535,10 @@ PnlGMRESSolver* pnl_gmres_solver_create(int Size,
 /**
  * initialisation of the solver at the beginning of iterativ method.
  *
- * @param Solver  : PnlGMRESSolver  ptr
+ * @param Solver  : PnlGmresSolver  ptr
  * @param b       : PnlVect ptr 
  */
-void pnl_gmres_solver_initialisation(PnlGMRESSolver *Solver,
+void pnl_gmres_solver_initialisation(PnlGmresSolver *Solver,
                                      const PnlVect * b)
 {
   double normb=pnl_vect_norm_two(b);
@@ -552,9 +552,9 @@ void pnl_gmres_solver_initialisation(PnlGMRESSolver *Solver,
 /**
  * destructor of iterativ solver 
  *
- * @param Solver : PnlGMRESSolver  ptr
+ * @param Solver : PnlGmresSolver  ptr
  */
-void pnl_gmres_solver_free(PnlGMRESSolver ** Solver)
+void pnl_gmres_solver_free(PnlGmresSolver ** Solver)
 {
   int i;
   if (*Solver != NULL)
@@ -628,7 +628,7 @@ static void ApplyPlaneRotation(double *dx, double *dy, const double cs, const do
  * @param PC_Data : void ptr
  * @param x       : PnlVect ptr 
  * @param b       : PnlVect ptr
- * @param Solver  : PnlGMRESSolver ptr 
+ * @param Solver  : PnlGmresSolver ptr 
  * @return Int : error code.
  */
 int pnl_gmres_solver_solve(void (* matrix_vector_product )(const void *,const PnlVect*,const double,const double,PnlVect*), 
@@ -637,7 +637,7 @@ int pnl_gmres_solver_solve(void (* matrix_vector_product )(const void *,const Pn
                            const void * PC_Data,
                            PnlVect * x, 
                            const PnlVect *b,
-                           PnlGMRESSolver *Solver)
+                           PnlGmresSolver *Solver)
 {
   int i, j, k, p;
   double s_j;
@@ -732,14 +732,14 @@ static void pnl_mat_mult_vect_applied(const void *mat, const PnlVect *vec,const 
  * @param PC     :PnlMat  ptr 
  * @param x       : PnlVect ptr 
  * @param b       : PnlVect ptr
- * @param Solver  : PnlCGSolver ptr 
+ * @param Solver  : PnlCgSolver ptr 
  * @return Int : error code.
  */
 int pnl_mat_cg_solver_solve(const PnlMat * Matrix,
                             const PnlMat * PC,
                             PnlVect * x, 
                             const PnlVect *b,
-                            PnlCGSolver * Solver)
+                            PnlCgSolver * Solver)
 { return 
     pnl_cg_solver_solve(pnl_mat_mult_vect_applied,Matrix,pnl_mat_mult_vect_applied,PC,x,b,Solver);}
 
@@ -752,14 +752,14 @@ int pnl_mat_cg_solver_solve(const PnlMat * Matrix,
  * @param PC     :PnlMat  ptr 
  * @param x       : PnlVect ptr 
  * @param b       : PnlVect ptr
- * @param Solver  : PnlBICGSolver ptr 
+ * @param Solver  : PnlBicgSolver ptr 
  * @return Int : error code.
  */
 int pnl_mat_bicg_solver_solve(const PnlMat * Matrix,
                               const PnlMat * PC,
                               PnlVect * x, 
                               const PnlVect *b,
-                              PnlBICGSolver * Solver)
+                              PnlBicgSolver * Solver)
 {return pnl_bicg_solver_solve(pnl_mat_mult_vect_applied,Matrix,pnl_mat_mult_vect_applied,PC,x,b,Solver);}
 
 /**
@@ -770,14 +770,14 @@ int pnl_mat_bicg_solver_solve(const PnlMat * Matrix,
  * @param PC     :PnlMat  ptr 
  * @param x       : PnlVect ptr 
  * @param b       : PnlVect ptr
- * @param Solver  : PnlGMRESSolver ptr 
+ * @param Solver  : PnlGmresSolver ptr 
  * @return Int : error code.
  */
 int pnl_mat_gmres_solver_solve(const PnlMat * Matrix,
                                const PnlMat * PC,
                                PnlVect * x, 
                                const PnlVect *b,
-                               PnlGMRESSolver * Solver)
+                               PnlGmresSolver * Solver)
 {return pnl_gmres_solver_solve(pnl_mat_mult_vect_applied,Matrix,pnl_mat_mult_vect_applied,PC,x,b,Solver);}
 
 
