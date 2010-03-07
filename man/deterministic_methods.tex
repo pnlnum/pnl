@@ -30,35 +30,33 @@ typedef struct {
 
 \begin{itemize}
 
-\item \describefun{double}{pnl_root_brent}{\refstruct{PnlFunc}\ptr  F, double
+  \item \describefun{double}{pnl_root_brent}{\refstruct{PnlFunc}\ptr  F, double
     x1, double  x2, double \ptr tol}
-  \sshortdescribe Finds the root of \var{F} between \var{x1} and \var{x2} with
-  an accuracy of order \var{tol}. On exit \var{tol} is an upper bound of the
-  error.
-  
-\item \describefun{int}{pnl_find_root}{\refstruct{PnlFuncDFunc}\ptr  Func, 
+    \sshortdescribe Finds the root of \var{F} between \var{x1} and \var{x2} with
+    an accuracy of order \var{tol}. On exit \var{tol} is an upper bound of the
+    error.
+
+  \item \describefun{int}{pnl_find_root}{\refstruct{PnlFuncDFunc}\ptr  Func, 
     double x_min, double x_max, double tol, int N_Max, double\ptr  res}
-  \sshortdescribe Finds the root of \var{F} between \var{x1} and \var{x2} with
-  an accuracy of order \var{tol} and a maximum of \var{N_max} iterations. On
-  exit, the root is stored in \var{res}. Note that the function \var{F} must
-  also compute the first derivative of the function.
-  
+    \sshortdescribe Finds the root of \var{F} between \var{x1} and \var{x2} with
+    an accuracy of order \var{tol} and a maximum of \var{N_max} iterations. On
+    exit, the root is stored in \var{res}. Note that the function \var{F} must
+    also compute the first derivative of the function.
 
-\item \describefun{int}{pnl_root_newton}{\refstruct{PnlFuncDFunc} \ptr Func, 
+
+  \item \describefun{int}{pnl_root_newton}{\refstruct{PnlFuncDFunc} \ptr Func, 
     double x0, double epsrel, double epsabs, int N_max, double \ptr res}
-  \sshortdescribe Finds the root of \var{F} starting from \var{x0} with an
-  accuracy given both by \var{epsrel} and \var{epsabs} and a maximum number of
-  iterations \var{N_max}. On exit, the root is stored in \var{res}.Note that
-  the function \var{F} must also compute the first derivative of the function.
-  
+    \sshortdescribe Finds the root of \var{F} starting from \var{x0} with an
+    accuracy given both by \var{epsrel} and \var{epsabs} and a maximum number of
+    iterations \var{N_max}. On exit, the root is stored in \var{res}.Note that
+    the function \var{F} must also compute the first derivative of the function.
 
-
-\item \describefun{int}{pnl_root_bisection}{\refstruct{PnlFunc } \ptr Func, 
+  \item \describefun{int}{pnl_root_bisection}{\refstruct{PnlFunc } \ptr Func, 
     double xmin, double xmax, double epsrel, double espabs, int N_max, double
     \ptr res}
-  \sshortdescribe Finds the root of \var{F} between \var{x1} and \var{x2} with
-  an accuracy given both by \var{epsrel} and \var{epsabs} and a maximum number
-  of iterations \var{N_max}. On exit, the root is stored in \var{res}
+    \sshortdescribe Finds the root of \var{F} between \var{x1} and \var{x2} with
+    an accuracy given both by \var{epsrel} and \var{epsabs} and a maximum number
+    of iterations \var{N_max}. On exit, the root is stored in \var{res}
 \end{itemize}
 
 
@@ -107,61 +105,88 @@ $\alpha^\star \in \R^N$ which solves
 
 \begin{itemize}
   \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create}{int index, int N, int d}
-  \sshortdescribe Creates a \refstruct{PnlBasis} for the polynomial family
-  defined by \var{index} (see Table~\ref{basis_index}) with at most \var{N}
-  elements. \var{d} is the dimension of the space on which the functions are
-  defined.
+    \sshortdescribe Creates a \refstruct{PnlBasis} for the polynomial family
+    defined by \var{index} (see Table~\ref{basis_index}) with at most \var{N}
+    elements. \var{d} is the dimension of the space on which the functions are
+    defined.
 
-\item  \describefun{void}{pnl_basis_free}{\refstruct{PnlBasis} \ptr\ptr basis}
+  \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create_from_tensor}{int
+    index, PnlMatInt \ptr T}
+    \sshortdescribe Creates a \refstruct{PnlBasis} for the polynomial family
+    defined by \var{index} (see Table~\ref{basis_index}) using the basis
+    described by the tensor matrix \var{T}. The number of lines of \var{T} is
+    the number of functions of the basis whereas the numbers of columns of
+    \var{T} is the number of variates of the functions.
+    Note that \var{T} is not copied inside this function but only its address is
+    stored, so {\bf never} free \var{T}. It will be freed when calling
+    \reffun{pnl_basis_free} on the returned object. i\\
+    Here is an example of a tensor matrix. Assume you are working with three
+    variate functions, the basis \verb!{ 1, x, y, z, x^2, xy, yz, z^3}! is
+    decomposed in the one dimensional canonical basis using the following tensor
+    matrix
+    \[ \left(
+    \begin{array}{ccc}
+      0 & 0 & 0 \\
+      1 & 0 & 0 \\
+      0 & 1 & 0 \\
+      0 & 0 & 1 \\
+      2 & 0 & 0 \\
+      1 & 1 & 0 \\
+      0 & 1 & 1\\
+      0 & 0 & 3
+    \end{array}
+    \right) \]
+    
+  \item  \describefun{void}{pnl_basis_free}{\refstruct{PnlBasis} \ptr\ptr basis}
     \sshortdescribe Frees a \refstruct{PnlBasis} created by
     \reffun{pnl_basis_create}. Beware that \var{basis} is the address of a
     \refstruct{PnlBasis}\ptr.
 
-\item  \describefun{void}{pnl_basis_i}{\refstruct{PnlBasis }\ptr basis,
-  double \ptr x, int i}
-  \sshortdescribe If \var{basis} is composed of $f_0, \dots, f_{\var{nb\_func}}$,
-  then this function returns $f_i(x)$. \var{x} must be a C array of length
-  \var{nb_variates}.
+  \item  \describefun{void}{pnl_basis_i}{\refstruct{PnlBasis }\ptr basis,
+    double \ptr x, int i}
+    \sshortdescribe If \var{basis} is composed of $f_0, \dots, f_{\var{nb\_func}}$,
+    then this function returns $f_i(x)$. \var{x} must be a C array of length
+    \var{nb_variates}.
 
-\item \describefun{int}{pnl_basis_fit_ls}{\refstruct{PnlBasis} \ptr
-  P, \refstruct{PnlVect} \ptr  coef, \refstruct{PnlMat} \ptr  x,
-  \refstruct{PnlVect} \ptr  y}
-  \sshortdescribe Computes the coefficients \var{coef} defined by
-  \begin{equation*}
-    \var{coef} = \arg\min_\alpha \sum_{i=1}^n
-    \left( \sum_{j=0}^{\var{N}} \alpha_j  P_j(x_i) - y_i\right)^2
-  \end{equation*}
-  where \var{N} is the number of functions to regress upon and $n$ is the
-  number of points at which we know the value of the original function. $P_j$
-  is the $j-th$ basis function. Each row of the matrix \var{x} defines the
-  coordinates of one point $x_i$. The function to be approximated is defined
-  by the data \var{y} which is the vector of the values taken by the function
-  at the points \var{x}.
+  \item \describefun{int}{pnl_basis_fit_ls}{\refstruct{PnlBasis} \ptr
+    P, \refstruct{PnlVect} \ptr  coef, \refstruct{PnlMat} \ptr  x,
+    \refstruct{PnlVect} \ptr  y}
+    \sshortdescribe Computes the coefficients \var{coef} defined by
+    \begin{equation*}
+      \var{coef} = \arg\min_\alpha \sum_{i=1}^n
+      \left( \sum_{j=0}^{\var{N}} \alpha_j  P_j(x_i) - y_i\right)^2
+    \end{equation*}
+    where \var{N} is the number of functions to regress upon and $n$ is the
+    number of points at which we know the value of the original function. $P_j$
+    is the $j-th$ basis function. Each row of the matrix \var{x} defines the
+    coordinates of one point $x_i$. The function to be approximated is defined
+    by the data \var{y} which is the vector of the values taken by the function
+    at the points \var{x}.
 
 
-\item \describefun{double}{pnl_basis_eval}{\refstruct{PnlBasis} \ptr
-  P, \refstruct{PnlVect}\ptr  coef, double \ptr x}
-  \sshortdescribe Computes the linear combination of \var{P_k(x)} defined by
-  \var{coef}. Given the coefficients computed by the function
-  \reffun{pnl_basis_fit_ls}, this function returns $\sum_{k=0}^n
-  \var{coef}_k  P_k(\var{x})$ where \var{x} is a C array of length
-  \var{nb_variates}.
+  \item \describefun{double}{pnl_basis_eval}{\refstruct{PnlBasis} \ptr
+    P, \refstruct{PnlVect}\ptr  coef, double \ptr x}
+    \sshortdescribe Computes the linear combination of \var{P_k(x)} defined by
+    \var{coef}. Given the coefficients computed by the function
+    \reffun{pnl_basis_fit_ls}, this function returns $\sum_{k=0}^n
+    \var{coef}_k  P_k(\var{x})$ where \var{x} is a C array of length
+    \var{nb_variates}.
 
-\item \describefun{double}{pnl_basis_eval_D}{\refstruct{PnlBasis} \ptr
-  P, \refstruct{PnlVect} \ptr  coef, double \ptr x, int i}
-  \sshortdescribe Computes the derivative with repsect to \var{x_i} of the
-  linear combination of \var{P_k(x)} defined by \var{coef}. Given the
-  coefficients computed by the function \reffun{pnl_basis_fit_ls}, this
-  function returns $\partial_{x_i} \sum_{k=0}^n \var{coef}_k  P_k(\var{x})$
-  where \var{x} is a C array of length \var{nb_variates}.
+  \item \describefun{double}{pnl_basis_eval_D}{\refstruct{PnlBasis} \ptr
+    P, \refstruct{PnlVect} \ptr  coef, double \ptr x, int i}
+    \sshortdescribe Computes the derivative with repsect to \var{x_i} of the
+    linear combination of \var{P_k(x)} defined by \var{coef}. Given the
+    coefficients computed by the function \reffun{pnl_basis_fit_ls}, this
+    function returns $\partial_{x_i} \sum_{k=0}^n \var{coef}_k  P_k(\var{x})$
+    where \var{x} is a C array of length \var{nb_variates}.
 
-\item \describefun{double}{pnl_basis_eval_D2}{\refstruct{PnlBasis} \ptr  P,
-  \refstruct{PnlVect} \ptr  coef, double \ptr x,  int i, int j}
-  \sshortdescribe Computes the derivative with repsect to \var{x_i} of the
-  linear combination of \var{P_k(x)} defined by \var{coef}. Given the
-  coefficients computed by the function \reffun{pnl_basis_fit_ls}, this
-  function returns $\partial_{x_i} \partial_{x_j} \sum_{k=0}^n \var{coef}_k  P_k(\var{x})$
-  where \var{x} is a C array of length \var{nb_variates}.
+  \item \describefun{double}{pnl_basis_eval_D2}{\refstruct{PnlBasis} \ptr  P,
+    \refstruct{PnlVect} \ptr  coef, double \ptr x,  int i, int j}
+    \sshortdescribe Computes the derivative with repsect to \var{x_i} of the
+    linear combination of \var{P_k(x)} defined by \var{coef}. Given the
+    coefficients computed by the function \reffun{pnl_basis_fit_ls}, this
+    function returns $\partial_{x_i} \partial_{x_j} \sum_{k=0}^n \var{coef}_k  P_k(\var{x})$
+    where \var{x} is a C array of length \var{nb_variates}.
 \end{itemize}
 
 

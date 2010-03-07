@@ -33,13 +33,14 @@ typedef struct {
 
 extern enum_members PnlBases ;
 extern PnlBasis* pnl_basis_create ( int index, int nb_func, int space_dim);
+extern PnlBasis* pnl_basis_create_from_tensor ( int index, PnlMatInt *T);
 extern PnlBasis* pnl_basis_init ( int index, int nb_func, int space_dim);
 extern void pnl_basis_free (PnlBasis **basis);
 extern int pnl_basis_fit_ls (PnlBasis *f, PnlVect *coef, PnlMat *x, PnlVect *y);
 extern double pnl_basis_i ( PnlBasis *b, double *x, int i );
-extern double pnl_basis_eval (PnlBasis *basis,PnlVect *coef, double *x);
-extern double pnl_basis_eval_D (PnlBasis *basis,PnlVect *coef, double *x, int i);
-extern double pnl_basis_eval_D2 (PnlBasis *basis,PnlVect *coef, double *x, int i, int j);
+extern double pnl_basis_eval (PnlBasis *basis, PnlVect *coef, double *x);
+extern double pnl_basis_eval_D (PnlBasis *basis, PnlVect *coef, double *x, int i);
+extern double pnl_basis_eval_D2 (PnlBasis *basis, PnlVect *coef, double *x, int i, int j);
 
 /*@}*/
 #ifdef __cplusplus

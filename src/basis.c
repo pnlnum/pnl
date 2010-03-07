@@ -502,16 +502,16 @@ enum_member _reg_basis [] =
 
 DEFINE_ENUM(PnlBases, _reg_basis);
 
+
 /**
  * returns a  PnlBasis
  *
  * @param index the index of the family to be used
- * @param nb_func the maximum number of functions which may be used
- * @param nb_variates the size of the space in which the basis functions are
- * defined
+ * @param T the tensor of the multi-dimensionnal basis. No copy of T is done, so
+ * do not free T. It will be freed transparently by pnl_basis_free
  * @return a PnlBasis
  */
-PnlBasis*  pnl_basis_create (int index, int nb_func, int nb_variates)
+PnlBasis*  pnl_basis_create_from_tensor (int index, PnlMatInt *T)
 {
   PnlBasis *b;
   enum_member *e;
@@ -525,11 +525,11 @@ PnlBasis*  pnl_basis_create (int index, int nb_func, int nb_variates)
     }
 
   b = malloc (sizeof (PnlBasis));
-  b->nb_func = nb_func;
+  b->nb_func = T->m;
   b->id = index;
   b->label = e->label;
-  b->nb_variates = nb_variates;
-  b->T = compute_tensor (nb_variates, nb_func);
+  b->nb_variates = T->n;
+  b->T = T;
 
   switch ( index )
     {
@@ -554,6 +554,21 @@ PnlBasis*  pnl_basis_create (int index, int nb_func, int nb_variates)
   return b; 
 }
 
+/**
+ * returns a  PnlBasis
+ *
+ * @param index the index of the family to be used
+ * @param nb_func the maximum number of functions which may be used
+ * @param nb_variates the size of the space in which the basis functions are
+ * defined
+ * @return a PnlBasis
+ */
+PnlBasis*  pnl_basis_create (int index, int nb_func, int nb_variates)
+{
+  PnlMatInt *T;
+  T = compute_tensor (nb_variates, nb_func);
+  return pnl_basis_create_from_tensor (index, T);
+}
 /*
  * This a deprecated function synonymous of pnl_basis_create.
  * It will removed in the future 
