@@ -47,7 +47,7 @@ typedef struct
   void (*Compute)(int, double *);
   int RandOrQuasi;
   int Dimension;
-} pnl_generator;
+} PnlGenerator;
 
 typedef struct 
 {
