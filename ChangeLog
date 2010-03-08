@@ -1,4 +1,11 @@
-06/03/10 <jerome.lelong@gmail.com>
+08/03/10 <jerome.lelong@gmail.com>
+
+	* Prefix pnl_iterationbase renamed pnl_iteration_base to follow the coding
+	conventions.
+
+07/03/10 <jerome.lelong@gmail.com>
+
+	* Possibility to create bases by specifying the total degree
 
 	* All syslin related routines rely on Blas & Lapack
 	
@@ -8,7 +15,7 @@
 		...
 		#endif /* _PNL_HEADER_NAME_H */
 
-05/03/10 <jerome.lelong@gmail.com>
+06/03/10 <jerome.lelong@gmail.com>
 
 	* a few functions have been renamed because their names did not follow the
 	overall conventions
