@@ -265,7 +265,7 @@ static double D_basis_i ( PnlBasis *b, double *x, int i, int j )
  * @param x the point at which to evaluate the first derivative
  * @param i the index of the basis element to differentiate
  * @param j1 the index of the first variable w.r.t which we differentiate
- * @param j the index of the second variable w.r.t which we differentiate
+ * @param j2 the index of the second variable w.r.t which we differentiate
  * 
  * @return (D(b_i)/(Dj1 Dj2))(x)
  */

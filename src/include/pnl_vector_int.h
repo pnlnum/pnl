@@ -24,7 +24,7 @@ struct _PnlVectInt {
   int size;/*!< size of the vector */ 
   int *array;/*!< pointer to store the data */
   int mem_size; /*!< size of the memory block allocated for array */
-  int owner; /*!< 1 if the owns its array pointer */
+  int owner; /*!< 1 if the object owns its array member, 0 otherwise */
 }; 
 
 #ifdef HAVE_INLINE 

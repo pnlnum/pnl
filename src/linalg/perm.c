@@ -108,8 +108,9 @@ void pnl_vect_permute (PnlVect *px, const PnlVect *x, const PnlPermutation *p)
  * Applies a Permutation to an array in place
  * x[i] = x[p[i]]
  *
- * @param x the vector to permute. Contains the permuted vector on exit
- * @param p a permutation
+ * @param x a C array of real values to permute. On exit, contains the permuted data.
+ * @param p a C arary of integers representing a permutation
+ * @param n the size of the array x (it is also the size of p)
  *
  * This algorithm comes
  * From Knuth "Sorting and Searching", Volume 3 (3rd ed), Section 5.2

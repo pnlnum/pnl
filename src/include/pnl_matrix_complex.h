@@ -29,7 +29,7 @@ struct _PnlMatComplex {
   int mn; /*!< product m*n */
   int mem_size; /*!< size of the memory block allocated for array */
   dcomplex *array; /*!< pointer to store the data row-wise */
-  int owner; /*!< 1 if the owns its array pointer */
+  int owner; /*!< 1 if the object owns its array member, 0 otherwise */
 };
 
 
