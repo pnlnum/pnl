@@ -151,7 +151,7 @@ static void regression_multid()
 
   printf ("\nCreating basis by specifying the total degree\n");
   degree = 4; /* total degree */
-  basis = pnl_basis_create_with_degree (basis_name, degree, nb_variates);
+  basis = pnl_basis_create_from_degree (basis_name, degree, nb_variates);
 
   pnl_basis_fit_ls (basis, alpha, t, y);
   printf("coefficients of the decomposition : ");

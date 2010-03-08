@@ -867,7 +867,7 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 
 \item \describefun{double}{pnl_mat_scalar_prod_A}{const \refstruct{PnlMat}
     \ptr A, const \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr y}
-  \sshortdescribe Computes \var{y' * A * y}
+  \sshortdescribe Computes \var{x' * A * y}
 
   
 \item \describefun{void}{pnl_mat_exp}{\refstruct{PnlMat} \ptr B, 
@@ -902,11 +902,6 @@ you should consider using ``inplace'' functions.
   part of \var{M} contains the Cholesky decomposition and the upper part is
   set to zero.
 
-\item \describefun{void}{pnl_mat_chol_robust}{\refstruct{PnlMat} \ptr M}
-  \sshortdescribe Same function as \reffun{pnl_mat_chol} except that if a negative
-  eigen value greater than a given threshold is found, this eigenvalue is
-  considered to be that positive.
-
 \item \describefun{void}{pnl_mat_lu}{\refstruct{PnlMat} \ptr A, 
     \refstruct{PnlPermutation} \ptr p} 
   \sshortdescribe Computes a P A = LU factorization. \var{P} must be an
@@ -918,7 +913,7 @@ you should consider using ``inplace'' functions.
   
 \item \describefun{void}{pnl_mat_qr}{\refstruct{PnlMat} \ptr Q,
   \refstruct{PnlMat} \ptr R, \refstruct{PnlPermutation} \ptr p,
-  \refstruct{PnlMat} \ptr A} 
+  const \refstruct{PnlMat} \ptr A} 
   \sshortdescribe Computes a \var{A P = QR} decomposition. If on entry
   \var{P=NULL}, then the decomposition is computed without pivoting, i.e
   \var{A = QR}. When $P \ne NULL$, \var{P} must be an already allocated

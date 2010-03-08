@@ -179,7 +179,7 @@ static int compute_nb_elements (const PnlMatInt *T, int degree)
  * @return the tensor matrix of the nb_variates variate basis with a total degree less or
  * equal than degree
  */
-static PnlMatInt* compute_tensor_with_degree (int degree, int nb_variates)
+static PnlMatInt* compute_tensor_from_degree (int degree, int nb_variates)
 {
   PnlMatInt *T;
   if (nb_variates == 1) 
@@ -198,7 +198,7 @@ static PnlMatInt* compute_tensor_with_degree (int degree, int nb_variates)
       PnlMatInt *T_prev; 
       current_degree = 0;
       /* Compute the tensor with one variate less */
-      T_prev = compute_tensor_with_degree (degree, nb_variates-1); 
+      T_prev = compute_tensor_from_degree (degree, nb_variates-1); 
       /* Compute the number of rows of T */
       nb_elements = compute_nb_elements (T_prev, degree);
       T = pnl_mat_int_create (nb_elements, nb_variates);
@@ -693,10 +693,10 @@ PnlBasis*  pnl_basis_create (int index, int nb_func, int nb_variates)
  * defined
  * @return a PnlBasis
  */
-PnlBasis*  pnl_basis_create_with_degree (int index, int degree, int nb_variates)
+PnlBasis*  pnl_basis_create_from_degree (int index, int degree, int nb_variates)
 {
   PnlMatInt *T;
-  T = compute_tensor_with_degree (degree, nb_variates);
+  T = compute_tensor_from_degree (degree, nb_variates);
   return pnl_basis_create_from_tensor (index, T);
 }
 

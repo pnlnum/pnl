@@ -110,11 +110,34 @@ $\alpha^\star \in \R^N$ which solves
     defined by \var{index} (see Table~\ref{basis_index}) with \var{nb_variates}
     variates. The basis will contain \var{nb_func}. 
 
-  \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create_with_degree}{int
+  \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create_from_degree}{int
     index, int degree, int nb_variates}
     \sshortdescribe Creates a \refstruct{PnlBasis} for the polynomial family
     defined by \var{index} (see Table~\ref{basis_index}) with total degree less
-    or equal than \var{degree} and \var{nb_variates} variates.
+    or equal than \var{degree} and \var{nb_variates} variates.\\
+    For instance, calling \verb!pnl_basis_create_from_degree (index, 2, 4)! is
+    equivalent to calling \verb!pnl_basis_create_from_tensor (index, T)! where
+    \var{T} is given by
+    \[ \left(
+    \begin{array}{cccc}
+      0 & 0 & 0 & 0\\
+      1 & 0 & 0 & 0\\
+      0 & 1 & 0 & 0\\
+      0 & 0 & 1 & 0\\
+      0 & 0 & 0 & 1\\
+      1 & 1 & 0 & 0\\
+      1 & 0 & 1 & 0\\
+      1 & 0 & 0 & 1\\
+      0 & 1 & 1 & 0\\
+      0 & 1 & 0 & 1\\
+      0 & 0 & 1 & 1\\
+      2 & 0 & 0 & 0\\
+      0 & 2 & 0 & 0\\
+      0 & 0 & 2 & 0\\
+      0 & 0 & 0 & 2\\
+    \end{array}
+    \right) \]
+
 
   \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create_from_tensor}{int
     index, PnlMatInt \ptr T}
