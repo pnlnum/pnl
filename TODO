@@ -1,0 +1,26 @@
+- Change the functions to apply permutations because of the new Blas convention
+
+- Add a PnlObject
+
+- Create an object for Random Number Generators
+
+- binding for MPI
+
+- splines 
+    CMlib 
+    in scilab routines/callelm/somespline.f
+
+- Should dgemm use Blas ?
+
+- complex tridiag and band matrices
+
+- interface dgesvd
+
+- integrate the BFGS algorithm written by Ismail
+
+- mutlivariate zero searching
+
+- gradient algorithm
+
+- binding for quadpack (numerical integration + ode)
+
