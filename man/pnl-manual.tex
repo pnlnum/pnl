@@ -145,8 +145,8 @@ possible use with a C++ compiler.
     object, not a pointer to an object, and do not make any use of dynamic
     allocation. The returned object must not be freed. 
     \begin{verbatim}
-    PnlVect *v1;
-    PnlVect v2;
+    PnlVectComplex *v1;
+    PnlVectComplex v2;
     v1 = pnl_vect_complex_create_from_complex (5, Complex(0., 1.));
     v2 = pnl_vect_complex_wrap_subvect (v1, 1, 2);
 
@@ -204,7 +204,7 @@ possible use with a C++ compiler.
       & \\
       PnlCgSolver & pnl_cg_solver \\
       PnlBicgSolver & pnl_bicg_solver \\
-      PnlGmresSolver & pnl_Gmres_solver \\
+      PnlGmresSolver & pnl_gmres_solver \\
       \hline
     \end{tabular}
   \end{figure}
