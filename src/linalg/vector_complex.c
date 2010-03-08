@@ -21,9 +21,9 @@
 
 
 /**
- * Creates a Complex Vector from the arrays of real an imaginary parts
+ * Creates a Complex Vector from the arrays of its real and imaginary parts
  *
- * @param size  size of the vector
+ * @param size size of the vector
  * @param re array of the real parts
  * @param im array of the imaginary parts
  * @return v[i] = re[i] + I im[i]
@@ -45,14 +45,13 @@ PnlVectComplex* pnl_vect_complex_create_from_array(int size, const double *re, c
 }
 
 /**
- * Stores a Complex Vector in two arrays of real an imaginary parts
+ * Stores a Complex Vector in two real C arrays
  *
  * @param v a complex vector
- * @param re array of the real parts. Must already be allocated.
- * @param im array of the imaginary parts. Must already be allocated.
- * v[i] = re[i] + I im[i]
+ * @param re on exit contains the real parts of the elements of v. Must already be allocated.
+ * @param im on exit contains the imaginary parts of the elements of v. Must already be allocated.
  */
-void pnl_vect_complex_split_in_array(PnlVectComplex* v, double *re, double *im)
+void pnl_vect_complex_split_in_array(const PnlVectComplex* v, double *re, double *im)
 {
   int i, i_re, i_im;
   int size =v->size;
@@ -69,14 +68,13 @@ void pnl_vect_complex_split_in_array(PnlVectComplex* v, double *re, double *im)
 
 
 /**
- * Stores a Complex Vector in two Real Vectors of real an imaginary parts
+ * Stores a Complex Vector in two real valued vectors
  *
  * @param v a complex vector
- * @param re PnlVect of the real parts. Must already be allocated.
- * @param im PnlVect of the imaginary parts. Must already be allocated.
- * v[i] = re[i] + I im[i]
+ * @param re on exit contains the real parts of the elements of v. Must already be allocated.
+ * @param im on exit contains the imaginary parts of the elements of v. Must already be allocated.
  */
-void pnl_vect_complex_split_in_vect(PnlVectComplex* v, PnlVect *re, PnlVect *im)
+void pnl_vect_complex_split_in_vect(const PnlVectComplex* v, PnlVect *re, PnlVect *im)
 {
   pnl_vect_resize (re, v->size);
   pnl_vect_resize (im, v->size);

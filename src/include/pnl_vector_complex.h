@@ -26,7 +26,7 @@ struct _PnlVectComplex {
   int size;/*!< size of the vector */ 
   dcomplex *array;/*!< pointer to store the data */
   int mem_size; /*!< size of the memory block allocated for array */
-  int owner; /*!< 1 if the owns its array pointer */
+  int owner; /*!< 1 if the object owns its array member, 0 otherwise */
 };
 
 #ifdef HAVE_INLINE 
@@ -166,8 +166,8 @@ extern void pnl_vect_complex_cumprod(PnlVectComplex *V);
 extern double pnl_vect_complex_norm_two(const PnlVectComplex *V); /*res=\Vert V \Vert_{l^2} */
 extern double pnl_vect_complex_norm_one(const PnlVectComplex *V); /*res=\Vert V \Vert_{l^1} */
 extern double pnl_vect_complex_norm_infty(const PnlVectComplex *V); /*res=\Vert V \Vert_{l^\infty} */
-extern void pnl_vect_complex_split_in_array(PnlVectComplex* v, double *re, double *im);
-extern void pnl_vect_complex_split_in_vect(PnlVectComplex* v, PnlVect *re, PnlVect *im);
+extern void pnl_vect_complex_split_in_array(const PnlVectComplex* v, double *re, double *im);
+extern void pnl_vect_complex_split_in_vect(const PnlVectComplex* v, PnlVect *re, PnlVect *im);
 extern void pnl_vect_complex_swap_elements(PnlVectComplex * v, int i, int j); 
 extern void pnl_vect_complex_reverse(PnlVectComplex * v);
 
