@@ -13,12 +13,9 @@ extern "C" {
 #define MAX_RESTART   50 
 #endif
 
-/*
- * \defgroup IterationBase Iterativ Solvers
- * \author David Pommier 
+/**
+ * \defgroup IterationBase Iterative Solvers
  * \brief Iterative Solvers like Conjugate Gradient, BICGStab and GMRES.
- * \date October 2008 
- * \version 0.1
  */
 /*@{*/
 typedef struct PnlIterationBase{
@@ -31,7 +28,7 @@ typedef struct PnlIterationBase{
   /* char *  err_msg; */
 } PnlIterationBase;
 
-/* When you repeatedly use Iterative solvers, do not malloc each time */
+/* When you repeatedly use iterative solvers, do not malloc each time */
 typedef struct PnlCgSolver{
   PnlVect * r;
   PnlVect * z;
@@ -78,10 +75,10 @@ extern void pnl_cg_solver_free(PnlCgSolver ** Solver);
 
 
 extern int pnl_cg_solver_solve(void(* matrix_vector_product )(const void *,const PnlVect*,
-                                                              const double,const double,PnlVect*), 
+                                                              double,double,PnlVect*), 
                                const void * Matrix_Data,
                                void (*matrix_vector_product_PC)(const void *,const PnlVect*,
-                                                                const double,const double,PnlVect*), 
+                                                                double,double,PnlVect*), 
                                const void * PC_Data,
                                PnlVect * x, 
                                const PnlVect * b, 
@@ -100,10 +97,10 @@ extern void pnl_bicg_solver_initialisation(PnlBicgSolver * Solver,const PnlVect 
 extern void pnl_bicg_solver_free(PnlBicgSolver ** Solver);
 extern int
 pnl_bicg_solver_solve(void (* matrix_vector_product )(const void *,const PnlVect*,
-                                                      const double,const double,PnlVect*), 
+                                                      double,double,PnlVect*), 
                       const void * Matrix_Data,
                       void (*matrix_vector_product_PC)(const void *,const PnlVect*,
-                                                       const double,const double,PnlVect*), 
+                                                       double,double,PnlVect*), 
                       const void * PC_Data,
                       PnlVect * x, 
                       const PnlVect *b,
@@ -127,10 +124,10 @@ extern void pnl_gmres_solver_free(PnlGmresSolver ** Solver);
 
 extern int
 pnl_gmres_solver_solve(void (* matrix_vector_product )(const void *,const PnlVect*,
-                                                       const double,const double,PnlVect*), 
+                                                       double,double,PnlVect*), 
                        const void * Matrix_Data,
                        void (*matrix_vector_product_PC)(const void *,const PnlVect*,
-                                                        const double,const double,PnlVect*), 
+                                                        double,double,PnlVect*), 
                        const void * PC_Data,
                        PnlVect * x, 
                        const PnlVect *b,

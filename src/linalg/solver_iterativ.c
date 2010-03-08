@@ -29,11 +29,11 @@
 /**
  * creates a new PnlIterationBase pointer.
  *
- * @param max_iter : maximum of iteration 
- * @param t : tolerance, parameter of iterativ methods, ie relativ error
+ * @param max_iter_ : maximum number of iterations 
+ * @param t : tolerance, parameter of iterative methods, ie relative error
  * @return  a PnlIterationBase pointer
  */
-static PnlIterationBase* pnl_iterationbase_create(int max_iter_, double t) 
+static PnlIterationBase* pnl_iteration_base_create(int max_iter_, double t) 
 {
   PnlIterationBase * It;
   if((It=malloc(sizeof(PnlIterationBase)))==NULL)
@@ -46,15 +46,15 @@ static PnlIterationBase* pnl_iterationbase_create(int max_iter_, double t)
   It->error=0;
   return It;
 }
+
 /**
- * Test if iterativ solution is converged
+ * Test if the iterative solution has converged
  *
  * @param it : a PnlIterationBase ptr. 
  * @param rhs : a PnlVect ptr
  * @return  boolean.
  */
-
-static boolean pnl_iterationbase_converged(PnlIterationBase * it,const PnlVect *rhs) 
+static boolean pnl_iteration_base_converged(PnlIterationBase * it,const PnlVect *rhs) 
 {
   it->resid = pnl_vect_norm_two(rhs)/it->normb;
 #if DEBUG_SOLVER
@@ -72,37 +72,36 @@ static boolean pnl_iterationbase_converged(PnlIterationBase * it,const PnlVect *
 }
 
 /**
- * Test if iterativ solution is converged
+ * Test if the iterative solution has converged
  *
  * @param it : a PnlIterationBase ptr. 
  * @param Res : a double
  * @return  boolean.
  */
-
-static boolean pnl_iterationbase_converged_norm(PnlIterationBase * it,const double Res) 
+static boolean pnl_iteration_base_converged_norm(PnlIterationBase * it,double Res) 
 {
   it->resid = Res/it->normb;
   return (it->resid <= it->tol_)?true:false;
 }
 
 /**
- * Test if iterativ method is finished 
- * ie converged or iteration index is larger than max_iteration 
+ * Test if the iterative method has finished 
+ * ie convergence or iteration index is larger than max_iteration?
  *
  * @param it : a PnlIterationBase ptr. 
  * @param rhs : a PnlVect ptr
  * @return  boolean.
  */
-static boolean pnl_iterationbase_finished(PnlIterationBase * it, const  PnlVect *rhs) 
+static boolean pnl_iteration_base_finished(PnlIterationBase * it, const  PnlVect *rhs) 
 {
-  if (pnl_iterationbase_converged(it,rhs))
+  if (pnl_iteration_base_converged(it,rhs))
     return true;
   /*    printf("converged in %d iterations , with residu = %f max_iter = %d \n" , */
   /*       it->iteration,it->resid,it->max_iter); */
   if ((*it).iteration >(*it).max_iter)
     {
       (*it).error = 1;
-      printf("ITERATIV Solver not converged in last iterations with residu = %f iter = %d \n" ,
+      printf("iterative Solver not converged in last iterations with residu = %f iter = %d \n" ,
              it->resid,it->iteration);
       abort();
       return true;
@@ -112,23 +111,23 @@ static boolean pnl_iterationbase_finished(PnlIterationBase * it, const  PnlVect 
 }
 
 /* /\**
- *  * Test if iterativ method is finished 
+ *  * Test if iterative method is finished 
  *  * ie converged or iteration index is larger than max_iteration 
  *  *
  *  * @param it : a PnlIterationBase ptr. 
  *  * @param Res : a double
  *  * @return  boolean.
  *  *\/
- * static boolean pnl_iterationbase_finished_norm(PnlIterationBase * it,const double Res)
+ * static boolean pnl_iteration_base_finished_norm(PnlIterationBase * it,double Res)
  * {
- *   if (pnl_iterationbase_converged_norm(it,Res))
+ *   if (pnl_iteration_base_converged_norm(it,Res))
  *     return true;
  *   /\*       printf("converged in %d iterations , with residu = %f max_iter = %d \n" , *\/
  *   /\*       it->iteration,it->resid,it->max_iter); *\/
  *   if ((*it).iteration > (*it).max_iter)
  *     {
  *       (*it).error = 1;
- *       printf("ITERATIV Solver not converged in last iterations with residu = %f iter = %d \n" ,
+ *       printf("iterative Solver not converged in last iterations with residu = %f iter = %d \n" ,
  *              it->resid,it->iteration);
  *       abort();
  *       return true;
@@ -143,7 +142,7 @@ static boolean pnl_iterationbase_finished(PnlIterationBase * it, const  PnlVect 
  * @param it : a PnlIterationBase ptr. 
  * @param b  : a PnlVect ptr
  */
-static void pnl_iterationbase_initialisation(PnlIterationBase * it,const PnlVect *b ) 
+static void pnl_iteration_base_initialisation(PnlIterationBase * it,const PnlVect *b ) 
 {
   (*it).iteration = 0;
   it->normb=pnl_vect_norm_two(b);
@@ -156,18 +155,19 @@ static void pnl_iterationbase_initialisation(PnlIterationBase * it,const PnlVect
  * @param it : a PnlIterationBase ptr. 
  * @param normb : a double
  */
-static void pnl_iterationbase_initialisation_norm(PnlIterationBase * it,const double normb ) 
+static void pnl_iteration_base_initialisation_norm(PnlIterationBase * it,double normb ) 
 {
   (*it).iteration = 0;
   it->normb=fabs(normb);
 }
+
 /**
  * increment PnlIterationBase
  * iteration++
  *
  * @param it : a PnlIterationBase ptr. 
  */
-static void pnl_iterationbase_increment(PnlIterationBase * it)
+static void pnl_iteration_base_increment(PnlIterationBase * it)
 { (*it).iteration++; }
 
 /**
@@ -176,16 +176,16 @@ static void pnl_iterationbase_increment(PnlIterationBase * it)
  * @param it : a PnlIterationBase ptr. 
  * @return  int
  */
-static int pnl_iterationbase_error_code(PnlIterationBase * it) { return it->error; }
+static int pnl_iteration_base_error_code(PnlIterationBase * it) { return it->error; }
 
 /*
-  static boolean pnl_iterationbase_iterate(PnlIterationBase * it) 
+  static boolean pnl_iteration_base_iterate(PnlIterationBase * it) 
   {return (it->iteration < it->max_iter)?true:false;}
-  static int pnl_iterationbase_iterations(PnlIterationBase * it) { return it->iteration; }
-  static double pnl_iterationbase_residu(PnlIterationBase * it) { return it->resid; }
-  static double pnl_iterationbase_norm_rhs(PnlIterationBase * it) { return it->normb; }
-  static double pnl_iterationbase_tolerance(PnlIterationBase * it) { return (*it).tol_; }
-  static int pnl_iterationbase_iter_max(PnlIterationBase * it){return (*it).max_iter;}    
+  static int pnl_iteration_base_iterations(PnlIterationBase * it) { return it->iteration; }
+  static double pnl_iteration_base_residu(PnlIterationBase * it) { return it->resid; }
+  static double pnl_iteration_base_norm_rhs(PnlIterationBase * it) { return it->normb; }
+  static double pnl_iteration_base_tolerance(PnlIterationBase * it) { return (*it).tol_; }
+  static int pnl_iteration_base_iter_max(PnlIterationBase * it){return (*it).max_iter;}    
 
 */
 
@@ -195,14 +195,14 @@ static int pnl_iterationbase_error_code(PnlIterationBase * it) { return it->erro
  * @param it : a PnlIterationBase ptr. 
  * @return  boolean
  */
-static boolean pnl_iterationbase_first(PnlIterationBase * it) { return it->iteration == 0; }
+static boolean pnl_iteration_base_first(PnlIterationBase * it) { return it->iteration == 0; }
 
 /**
  * Restart iterationbase, ie iteration=0
  *
  * @param it : a PnlIterationBase ptr. 
  */
-static void  pnl_iterationbase_begin(PnlIterationBase * it) { it->iteration = 0; }
+static void  pnl_iteration_base_begin(PnlIterationBase * it) { it->iteration = 0; }
 
 
 /**
@@ -211,7 +211,7 @@ static void  pnl_iterationbase_begin(PnlIterationBase * it) { it->iteration = 0;
  * @param it : a PnlIterationBase ptr. 
  * @param err_code : a int. 
  */ 
-static void pnl_iterationbase_fail(PnlIterationBase * it,int err_code) { it->error = err_code; }
+static void pnl_iteration_base_fail(PnlIterationBase * it,int err_code) { it->error = err_code; }
 
 /**
  * Store error code & error message if Iteration method fail, ie in BREAKDOWN case
@@ -220,9 +220,9 @@ static void pnl_iterationbase_fail(PnlIterationBase * it,int err_code) { it->err
  * @param err_code : a int. 
  * @param msg : a char ptr. 
  */ 
-static void pnl_iterationbase_failed(PnlIterationBase * it,int err_code, 
+static void pnl_iteration_base_failed(PnlIterationBase * it,int err_code, 
                                      const char * msg)
-{ (*it).error = err_code;  PNL_ERROR(msg," in  iterativ solver" );
+{ (*it).error = err_code;  PNL_ERROR(msg,"iterative solver" );
 }
 
 
@@ -231,7 +231,7 @@ static void pnl_iterationbase_failed(PnlIterationBase * it,int err_code,
  *
  * @param Size : the size of temporary vectors use in the method
  * @param max_iter_  : maximum iteration number 
- * @param tolerance_ : relativ error of iterativ method
+ * @param tolerance_ : relative error of iterative method
  *@return  a PnlCgSolver pointer
  */
 PnlCgSolver* pnl_cg_solver_create(int Size,int max_iter_, double tolerance_)
@@ -243,12 +243,12 @@ PnlCgSolver* pnl_cg_solver_create(int Size,int max_iter_, double tolerance_)
   Solver->z=pnl_vect_create_from_double(Size,0.0);
   Solver->p=pnl_vect_create_from_double(Size,0.0);
   Solver->q=pnl_vect_create_from_double(Size,0.0);
-  Solver->iter=pnl_iterationbase_create(max_iter_,tolerance_);
+  Solver->iter=pnl_iteration_base_create(max_iter_,tolerance_);
   return Solver;
 }
 
 /**
- * initialisation of the solver at the beginning of iterativ method.
+ * initialisation of the solver at the beginning of iterative method.
  *
  * @param Solver : PnlCgSolver  ptr
  * @param b       : PnlVect ptr 
@@ -260,10 +260,11 @@ void pnl_cg_solver_initialisation(PnlCgSolver * Solver,const PnlVect * b)
   Solver->oldrho=0.0;
   Solver->beta=0.0;
   Solver->alpha=0.0;
-  pnl_iterationbase_initialisation(Solver->iter,b);
+  pnl_iteration_base_initialisation(Solver->iter,b);
 }
+
 /**
- * destructor of iterativ solver 
+ * destructor of iterative solver 
  *
  * @param Solver : PnlCgSolver  ptr
  */
@@ -301,9 +302,10 @@ void pnl_cg_solver_free(PnlCgSolver ** Solver)
  * @param Solver  : PnlCgSolver ptr 
  * @return Int : error code.
  */
-int pnl_cg_solver_solve(void (* matrix_vector_product )(const void *,const PnlVect*,const double,const double,PnlVect*), 
+int pnl_cg_solver_solve(void (* matrix_vector_product )(const void *,const PnlVect*, double, double, PnlVect*), 
                         const void * Matrix_Data,
-                        void (*matrix_vector_product_PC)(const void *,const PnlVect*,const double,const double,PnlVect*), 
+                        void (*matrix_vector_product_PC)(const void *,const PnlVect*,
+                                                         double, double, PnlVect*), 
                         const void * PC_Data,
                         PnlVect * x, 
                         const PnlVect *b,
@@ -313,20 +315,20 @@ int pnl_cg_solver_solve(void (* matrix_vector_product )(const void *,const PnlVe
   pnl_cg_solver_initialisation(Solver,b);
   /* r = b - A x: initial residual */
   matrix_vector_product(Matrix_Data,x,-1.0,1.0,Solver->r);
-  while(! pnl_iterationbase_finished(Solver->iter,Solver->r) )
+  while(! pnl_iteration_base_finished(Solver->iter,Solver->r) )
     {
       matrix_vector_product_PC(PC_Data,Solver->r,1.0,0.0,Solver->z);
       Solver->rho = pnl_vect_scalar_prod(Solver->r,Solver->z);
-      if (pnl_iterationbase_first(Solver->iter))
+      if (pnl_iteration_base_first(Solver->iter))
         pnl_vect_axpby(1.0, Solver->z, 0.0, Solver->p);
       else
         {
           Solver->beta = Solver->rho/Solver->oldrho;
           if (fabs(Solver->beta) <1.0e-9)
             {
-              pnl_iterationbase_fail(Solver->iter,2);
-              printf(">> Error code %d \n",pnl_iterationbase_error_code(Solver->iter));
-              return pnl_iterationbase_error_code(Solver->iter);
+              pnl_iteration_base_fail(Solver->iter,2);
+              printf(">> Error code %d \n",pnl_iteration_base_error_code(Solver->iter));
+              return pnl_iteration_base_error_code(Solver->iter);
             }
       
           pnl_vect_axpby(1.0, Solver->z, Solver->beta, Solver->p);
@@ -338,9 +340,9 @@ int pnl_cg_solver_solve(void (* matrix_vector_product )(const void *,const PnlVe
       pnl_vect_axpby(Solver->alpha, Solver->p, 1.0, x);     
       pnl_vect_axpby(-Solver->alpha, Solver->q, 1.0, Solver->r);
       Solver->oldrho = Solver->rho;
-      pnl_iterationbase_increment(Solver->iter);
+      pnl_iteration_base_increment(Solver->iter);
     }
-  return pnl_iterationbase_error_code(Solver->iter);
+  return pnl_iteration_base_error_code(Solver->iter);
 }
 
 
@@ -349,7 +351,7 @@ int pnl_cg_solver_solve(void (* matrix_vector_product )(const void *,const PnlVe
  *
  * @param Size : the size of temporary vectors use in the method
  * @param max_iter_  : maximum iteration number 
- * @param tolerance_ : relativ error of iterativ method
+ * @param tolerance_ : relative error of iterative method
  *@return  a PnlBicgSolver pointer
  */
 PnlBicgSolver* pnl_bicg_solver_create(int Size,int max_iter_, double tolerance_)
@@ -365,13 +367,13 @@ PnlBicgSolver* pnl_bicg_solver_create(int Size,int max_iter_, double tolerance_)
   Solver->shat=pnl_vect_create_from_double(Size,0.0);
   Solver->t=pnl_vect_create_from_double(Size,0.0);
   Solver->v=pnl_vect_create_from_double(Size,0.0);
-  Solver->iter=pnl_iterationbase_create(max_iter_,tolerance_);
+  Solver->iter=pnl_iteration_base_create(max_iter_,tolerance_);
   return Solver;
 }
 
   
 /**
- * initialisation of the solver at the beginning of iterativ method.
+ * initialisation of the solver at the beginning of iterative method.
  *
  * @param Solver : PnlBicgSolver  ptr
  * @param b       : PnlVect ptr 
@@ -384,11 +386,11 @@ void pnl_bicg_solver_initialisation(PnlBicgSolver * Solver,const PnlVect * b)
   Solver->alpha=0.0;
   Solver->beta=0.0;
   Solver->omega=0.0;
-  pnl_iterationbase_initialisation(Solver->iter,b);
+  pnl_iteration_base_initialisation(Solver->iter,b);
 }
 
 /**
- * destructor of iterativ solver 
+ * destructor of iterative solver 
  *
  * @param Solver : PnlBicgSolver  ptr
  */
@@ -430,9 +432,9 @@ void pnl_bicg_solver_free(PnlBicgSolver ** Solver)
  * @param Solver  : PnlBicgSolver ptr 
  * @return Int : error code.
  */
-int pnl_bicg_solver_solve(void (* matrix_vector_product )(const void *,const PnlVect*,const double,const double,PnlVect*), 
+int pnl_bicg_solver_solve(void (* matrix_vector_product )(const void *,const PnlVect*,double,double,PnlVect*), 
                           const void * Matrix_Data,
-                          void (*matrix_vector_product_PC)(const void *,const PnlVect*,const double,const double,PnlVect*), 
+                          void (*matrix_vector_product_PC)(const void *,const PnlVect*,double,double,PnlVect*), 
                           const void * PC_Data,
                           PnlVect * x, 
                           const PnlVect *b,
@@ -443,18 +445,18 @@ int pnl_bicg_solver_solve(void (* matrix_vector_product )(const void *,const Pnl
   matrix_vector_product(Matrix_Data,x,-1.0,1.0,Solver->r);
   pnl_vect_clone(Solver->rtilde,Solver->r);            
   /* r~ = r */
-  while(! pnl_iterationbase_finished(Solver->iter,Solver->r) )
+  while(! pnl_iteration_base_finished(Solver->iter,Solver->r) )
     {
       Solver->rho_1 = pnl_vect_scalar_prod(Solver->rtilde,Solver->r);
       if (Solver->rho_1==0)
-        pnl_iterationbase_failed(Solver->iter,2, "bicg breakdown #1");
-      if (pnl_iterationbase_first(Solver->iter))
+        pnl_iteration_base_failed(Solver->iter,2, "bicg breakdown #1");
+      if (pnl_iteration_base_first(Solver->iter))
         pnl_vect_axpby(1.0, Solver->r, 0.0, Solver->p);
       else 
         {
           if (Solver->omega == 0.) 
             {
-              pnl_iterationbase_failed(Solver->iter,3, "bicg breakdown #2");
+              pnl_iteration_base_failed(Solver->iter,3, "bicg breakdown #2");
               break;
             }
       
@@ -472,7 +474,7 @@ int pnl_bicg_solver_solve(void (* matrix_vector_product )(const void *,const Pnl
       pnl_vect_axpby(-1.0*Solver->alpha, Solver->v, 0.0, Solver->s); 
       pnl_vect_axpby(1.0, Solver->r, 1.0, Solver->s);
       /* s = r - alpha * v */
-      if(pnl_iterationbase_converged(Solver->iter,Solver->s)) 
+      if(pnl_iteration_base_converged(Solver->iter,Solver->s)) 
         {
           pnl_vect_axpby(Solver->alpha, Solver->phat, 1.0, x); 
           /* x += alpha * phat */
@@ -490,9 +492,9 @@ int pnl_bicg_solver_solve(void (* matrix_vector_product )(const void *,const Pnl
       pnl_vect_axpby(-1.0*Solver->omega, Solver->t, 1.0, Solver->r);
       /* r = s - omega * t */
       Solver->rho_2 = Solver->rho_1;
-      pnl_iterationbase_increment(Solver->iter);
+      pnl_iteration_base_increment(Solver->iter);
     }
-  return pnl_iterationbase_error_code(Solver->iter);
+  return pnl_iteration_base_error_code(Solver->iter);
 }
 
 
@@ -504,7 +506,7 @@ int pnl_bicg_solver_solve(void (* matrix_vector_product )(const void *,const Pnl
  * @param Size : the size of temporary vectors use in the method
  * @param max_iter_  : maximum iteration number 
  * @param restart_   : restart parameters for gmres method
- * @param tolerance_ : relativ error of iterativ method
+ * @param tolerance_ : relative error of iterative method
  *@return  a PnlGmresSolver pointer
  */
 PnlGmresSolver* pnl_gmres_solver_create(int Size,
@@ -525,15 +527,15 @@ PnlGmresSolver* pnl_gmres_solver_create(int Size,
   Solver->H=pnl_mat_create_from_double(Solver->restart+1,Solver->restart,0.0);
   for(i=0;i<=Solver->restart+1;i++)
     Solver->v[i]=pnl_vect_create_from_double(Size,0.0);
-  Solver->iter=pnl_iterationbase_create(max_iter_,tolerance_);
-  Solver->iter_inner=pnl_iterationbase_create(restart_,tolerance_);
+  Solver->iter=pnl_iteration_base_create(max_iter_,tolerance_);
+  Solver->iter_inner=pnl_iteration_base_create(restart_,tolerance_);
   return Solver;
 }
 
 
   
 /**
- * initialisation of the solver at the beginning of iterativ method.
+ * initialisation of the solver at the beginning of iterative method.
  *
  * @param Solver  : PnlGmresSolver  ptr
  * @param b       : PnlVect ptr 
@@ -545,12 +547,12 @@ void pnl_gmres_solver_initialisation(PnlGmresSolver *Solver,
   pnl_vect_clone(Solver->r,b);
   pnl_mat_set_double(Solver->H,0.0);
   Solver->beta=0.0;
-  pnl_iterationbase_initialisation_norm(Solver->iter,normb);
-  pnl_iterationbase_initialisation_norm(Solver->iter_inner,normb);
+  pnl_iteration_base_initialisation_norm(Solver->iter,normb);
+  pnl_iteration_base_initialisation_norm(Solver->iter_inner,normb);
 }
 
 /**
- * destructor of iterativ solver 
+ * destructor of iterative solver 
  *
  * @param Solver : PnlGmresSolver  ptr
  */
@@ -579,7 +581,7 @@ void pnl_gmres_solver_free(PnlGmresSolver ** Solver)
  * @param dx,dy : double  
  * @param cs,sn : double  ptr
  */
-static void GeneratePlaneRotation(const double dx, const double  dy, double *cs, double *sn)
+static void GeneratePlaneRotation(double dx, double  dy, double *cs, double *sn)
 {
   if (dy == 0.0) 
     {
@@ -604,7 +606,7 @@ static void GeneratePlaneRotation(const double dx, const double  dy, double *cs,
  * @param dx,dy : double  ptr 
  * @param cs,sn : double 
  */
-static void ApplyPlaneRotation(double *dx, double *dy, const double cs, const double sn)
+static void ApplyPlaneRotation(double *dx, double *dy, double cs, double sn)
 {
   double temp  =  cs * (*dx) + sn * (*dy);
   (*dy) = -1.0*sn * (*dx) + cs * (*dy);
@@ -631,9 +633,9 @@ static void ApplyPlaneRotation(double *dx, double *dy, const double cs, const do
  * @param Solver  : PnlGmresSolver ptr 
  * @return Int : error code.
  */
-int pnl_gmres_solver_solve(void (* matrix_vector_product )(const void *,const PnlVect*,const double,const double,PnlVect*), 
+int pnl_gmres_solver_solve(void (* matrix_vector_product )(const void *,const PnlVect*,double,double,PnlVect*), 
                            const void * Matrix_Data,
-                           void (*matrix_vector_product_PC)(const void *,const PnlVect*,const double,const double,PnlVect*), 
+                           void (*matrix_vector_product_PC)(const void *,const PnlVect*,double,double,PnlVect*), 
                            const void * PC_Data,
                            PnlVect * x, 
                            const PnlVect *b,
@@ -646,13 +648,13 @@ int pnl_gmres_solver_solve(void (* matrix_vector_product )(const void *,const Pn
   matrix_vector_product(Matrix_Data,x,-1.0,1.0,Solver->r);
   matrix_vector_product_PC(PC_Data,Solver->r,1.0,0.0,Solver->w);
   Solver->beta = pnl_vect_norm_two(Solver->w);
-  while(!pnl_iterationbase_finished(Solver->iter,Solver->w))
+  while(!pnl_iteration_base_finished(Solver->iter,Solver->w))
     {
       pnl_vect_axpby(1.0 /Solver->beta, Solver->w, 0.0, Solver->v[0]);    
       pnl_vect_set_double(Solver->s,0.0);
       pnl_vect_set(Solver->s,0,Solver->beta);
       i = 0;
-      pnl_iterationbase_begin(Solver->iter_inner);
+      pnl_iteration_base_begin(Solver->iter_inner);
       /*>>Restart loop */
       do {
         matrix_vector_product(Matrix_Data,Solver->v[i],1.0,0.0,Solver->r);
@@ -683,10 +685,10 @@ int pnl_gmres_solver_solve(void (* matrix_vector_product )(const void *,const Pn
                            pnl_vect_lget(Solver->s,i+1), 
                            pnl_vect_get(Solver->cs,i), 
                            pnl_vect_get(Solver->sn,i));
-        pnl_iterationbase_increment(Solver->iter_inner);
-        pnl_iterationbase_increment(Solver->iter);
+        pnl_iteration_base_increment(Solver->iter_inner);
+        pnl_iteration_base_increment(Solver->iter);
         ++i;
-      }while((!pnl_iterationbase_converged_norm(Solver->iter_inner,fabs(pnl_vect_get(Solver->s,i))))
+      }while((!pnl_iteration_base_converged_norm(Solver->iter_inner,fabs(pnl_vect_get(Solver->s,i))))
              &&(i<Solver->iter_inner->max_iter));
       for(j = i-1;j >= 0;j--) 
         /* loop on the columns of the matrix */
@@ -707,7 +709,7 @@ int pnl_gmres_solver_solve(void (* matrix_vector_product )(const void *,const Pn
       matrix_vector_product_PC(PC_Data,Solver->r,1.0,0.0,Solver->w);
       Solver->beta = pnl_vect_norm_two(Solver->w);
     }
-  return pnl_iterationbase_error_code(Solver->iter);
+  return pnl_iteration_base_error_code(Solver->iter);
 }
 
 /**
@@ -721,7 +723,7 @@ int pnl_gmres_solver_solve(void (* matrix_vector_product )(const void *,const Pn
  * @param lhs : PnlVect ptr
  * lhs = a*(mat*vec)+b*lhs. 
  */ 
-static void pnl_mat_mult_vect_applied(const void *mat, const PnlVect *vec,const double a ,const double b,PnlVect *lhs)
+static void pnl_mat_mult_vect_applied(const void *mat, const PnlVect *vec,double a ,double b,PnlVect *lhs)
 {pnl_mat_lAxpby(a,(PnlMat*)mat,vec,b,lhs);}
 
 /**
