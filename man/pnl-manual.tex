@@ -138,12 +138,18 @@ possible use with a C++ compiler.
     pointer to an object created by one or several calls to some dynamic
     allocation. Once these objects are not used, they must be freed by calling
     the same function but ending in \verb!_free!
-    If calling a function \verb!pnl_xxx_create_yyy! to create an object, say
-    \verb!poo!, the object must be freed by calling \verb!pnl_xxx_free (&poo)!.
+    A function \verb!pnl_foo_create_yyy! returns a \verb!PnlFoo *! object (note
+    the ``\ptr'') and a function \verb!pnl_foo_bar_create_yyy! returns a
+    \verb!PnlFooBar *! object (note the ``\ptr'')
+    These objects must be freed by calling respectively \verb!pnl_foo_free! or
+    \verb!pnl_foo_bar_free!
 
   \item Functions containing \verb!_wrap_! in their names always return an
     object, not a pointer to an object, and do not make any use of dynamic
     allocation. The returned object must not be freed. 
+    For instance, a function \verb!pnl_foo_wrap_xxx! return an object
+    \verb!PnlFoo! and a function \verb!pnl_foo_bar_wrap_xxx! return an object
+    \verb!PnlFooBar! 
     \begin{verbatim}
     PnlVectComplex *v1;
     PnlVectComplex v2;
