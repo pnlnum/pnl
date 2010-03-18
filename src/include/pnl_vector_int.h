@@ -77,6 +77,9 @@ extern void pnl_vect_int_plus_vect(PnlVectInt *lhs, const PnlVectInt *rhs);
 extern void pnl_vect_int_minus_vect(PnlVectInt *lhs, const PnlVectInt *rhs); 
 extern void pnl_vect_int_minus(PnlVectInt *lhs);
 extern void pnl_vect_int_map_inplace(PnlVectInt *lhs, int(*f)(int)); /*lhs=f(lhs)*/
+extern void pnl_vect_int_map(PnlVectInt *lhs, const PnlVectInt *rhs, int(*f)(int));
+extern void pnl_vect_int_map_vect_inplace(PnlVectInt *lhs, const PnlVectInt *rhs, int(*f)(int, int)); 
+extern void pnl_vect_int_map_vect(PnlVectInt *lhs, const PnlVectInt *rhs1, const PnlVectInt *rhs2, int(*f)(int, int));
 extern void pnl_vect_int_plus_int(PnlVectInt *lhs, int x); /*lhs+=x*/
 extern void pnl_vect_int_minus_int(PnlVectInt *lhs, int x); /*lhs-=x*/
 extern void pnl_vect_int_axpby(int a, const PnlVectInt *x, int b, PnlVectInt *y); /* y:=a x + b y */
@@ -91,9 +94,6 @@ extern void pnl_vect_int_set_int(PnlVectInt *v, int x);/* v[j]= x */
 extern void pnl_vect_int_set_zero(PnlVectInt *v); /* v[j]= 0 */
 extern int pnl_vect_int_sum(const PnlVectInt *lhs);/* sum(x) */
 extern void pnl_vect_int_cumsum(PnlVectInt *lhs);
-extern void
-pnl_vect_int_map(PnlVectInt *lhs, const PnlVectInt *rhs,
-                int(*f)(int));/* lhs(i)=f(rhs(i)) */
 extern int
 pnl_vect_int_scalar_prod(const PnlVectInt *rhs1, const PnlVectInt *rhs2); /*rhs1.rhs2*/
 extern int pnl_vect_int_prod(const PnlVectInt *V); /*res=prod(V(i))*/

@@ -60,7 +60,7 @@ extern PnlMat* pnl_band_mat_to_mat (const PnlBandMat *BM);
 extern void pnl_band_mat_print_as_full (const PnlBandMat *BM);
 extern void pnl_band_mat_map (PnlBandMat *lhs, const PnlBandMat *rhs, double(*f)(double));
 extern void pnl_band_mat_map_inplace (PnlBandMat *BM, double(*f)(double));
-extern void pnl_band_mat_map_band_mat (PnlBandMat *BA, const PnlBandMat *BB, double(*f)(double, double));
+extern void pnl_band_mat_map_band_mat_inplace (PnlBandMat *BA, const PnlBandMat *BB, double(*f)(double, double));
 
 extern void pnl_band_mat_plus_double (PnlBandMat *BM, double x);
 extern void pnl_band_mat_minus_double (PnlBandMat *BM, double x);

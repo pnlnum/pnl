@@ -86,13 +86,15 @@ extern void pnl_vect_fprint_nsp(FILE *fic, const PnlVect *V);
 extern void pnl_vect_plus_vect(PnlVect *lhs, const PnlVect *rhs); 
 extern void pnl_vect_minus_vect(PnlVect *lhs, const PnlVect *rhs); 
 
-/*lhs+=rhs*/
 
-extern void pnl_vect_map_inplace(PnlVect *lhs, double(*f)(double)); /*lhs=f(lhs)*/
+extern void pnl_vect_map_inplace(PnlVect *lhs, double(*f)(double)); 
+extern void pnl_vect_map(PnlVect *lhs, const PnlVect *rhs, double(*f)(double));
+extern void pnl_vect_map_vect_inplace(PnlVect *lhs, const PnlVect *rhs, double(*f)(double, double));
+extern void pnl_vect_map_vect(PnlVect *lhs, const PnlVect *rhs1, const PnlVect *rhs2, double(*f)(double, double));
 extern void pnl_vect_minus(PnlVect *lhs);
-extern void pnl_vect_plus_double(PnlVect *lhs, double x); /*lhs+=x*/
-extern void pnl_vect_minus_double(PnlVect *lhs, double x); /*lhs-=x*/
-extern void pnl_vect_axpby(double a, const PnlVect *x, double b, PnlVect *y); /* y := a x + b y */
+extern void pnl_vect_plus_double(PnlVect *lhs, double x); 
+extern void pnl_vect_minus_double(PnlVect *lhs, double x);
+extern void pnl_vect_axpby(double a, const PnlVect *x, double b, PnlVect *y); 
 extern void pnl_vect_mult_double(PnlVect *lhs, double x); /*lhs*=x*/
 extern void pnl_vect_div_double(PnlVect *lhs, double x); /*lhs*=x*/
 extern void pnl_vect_inv_term(PnlVect *lhs); /* lhs = 1 ./ lhs*/
@@ -104,11 +106,7 @@ extern void pnl_vect_set_double(PnlVect *v, double x);/* v[j]= x */
 extern void pnl_vect_set_zero(PnlVect * v); /* v[j]= 0 */
 extern double pnl_vect_sum(const PnlVect *lhs);/* sum(x) */
 extern void pnl_vect_cumsum(PnlVect *lhs);
-extern void
-pnl_vect_map(PnlVect *lhs, const PnlVect *rhs,
-                double(*f)(double));/* lhs(i)=f(rhs(i)) */
-extern double
-pnl_vect_scalar_prod(const PnlVect *rhs1, const PnlVect *rhs2); /*rhs1.rhs2*/
+extern double pnl_vect_scalar_prod(const PnlVect *rhs1, const PnlVect *rhs2); /*rhs1.rhs2*/
 extern double pnl_vect_prod(const PnlVect *V); /*res=prod(V(i))*/
 extern void pnl_vect_cumprod(PnlVect *V); /*res=prod(V(i))*/
 extern double pnl_vect_max(const PnlVect *V); /*res=max(V)*/

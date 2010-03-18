@@ -137,7 +137,10 @@ extern void pnl_vect_complex_fprint_nsp(FILE *fic, const PnlVectComplex *V);
 
 extern void pnl_vect_complex_plus_vect(PnlVectComplex *lhs, const PnlVectComplex *rhs); 
 extern void pnl_vect_complex_minus_vect(PnlVectComplex *lhs, const PnlVectComplex *rhs); 
-extern void pnl_vect_complex_map_inplace(PnlVectComplex *lhs, dcomplex(*f)(dcomplex)); /*lhs=f(lhs)*/
+extern void pnl_vect_complex_map_inplace(PnlVectComplex *lhs, dcomplex(*f)(dcomplex));
+extern void pnl_vect_complex_map(PnlVectComplex *lhs, const PnlVectComplex *rhs, dcomplex(*f)(dcomplex));
+extern void pnl_vect_complex_map_vect_inplace(PnlVectComplex *lhs, const PnlVectComplex *rhs, dcomplex(*f)(dcomplex,dcomplex));
+extern void pnl_vect_complex_map_vect(PnlVectComplex *lhs, const PnlVectComplex *rhs1, const PnlVectComplex *rhs2, dcomplex(*f)(dcomplex,dcomplex));
 extern void pnl_vect_complex_minus(PnlVectComplex *lhs);
 extern void pnl_vect_complex_plus_dcomplex(PnlVectComplex *lhs, dcomplex x); /*lhs+=x*/
 extern void pnl_vect_complex_minus_dcomplex(PnlVectComplex *lhs, dcomplex x); /*lhs-=x*/
@@ -155,9 +158,6 @@ extern void pnl_vect_complex_set_zero(PnlVectComplex *v);
 extern void pnl_vect_set_zero(PnlVect * v); /* v[j]= 0 */
 extern dcomplex pnl_vect_complex_sum(const PnlVectComplex *lhs);/* sum(x) */
 extern void pnl_vect_complex_cumsum(PnlVectComplex *lhs);
-extern void
-pnl_vect_complex_map(PnlVectComplex *lhs, const PnlVectComplex *rhs,
-                dcomplex(*f)(dcomplex));/* lhs(i)=f(rhs(i)) */
 extern dcomplex
 pnl_vect_complex_scalar_prod(const PnlVectComplex *rhs1, const PnlVectComplex *rhs2); /*rhs1.rhs2*/
 extern dcomplex pnl_vect_complex_prod(const PnlVectComplex *V);

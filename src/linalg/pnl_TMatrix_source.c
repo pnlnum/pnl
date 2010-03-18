@@ -703,7 +703,7 @@ void FUNCTION(pnl_mat, get_col)(TYPE(PnlVect) *V, const TYPE(PnlMat) *M, int j)
 /**
  * in-place map function
  *
- * @param x a vector
+ * @param x a matrix
  * @param f : the function to be applied term by term
  * @return  x = f(x)
  */
@@ -759,11 +759,11 @@ static void FUNCTION(__pnl_mat,apply_op)(TYPE(PnlMat) *lhs, BASE x, BASE (*op)(B
 /**
  * map matrix componentwise
  *
- * @param lhs : each component lhs(i) contains f(lhs(i),rhs(i))
- * @param rhs : right hand side vector
- * @param f   : real function 
+ * @param lhs  each component lhs(i) contains f(lhs(i),rhs(i))
+ * @param rhs  a matrix
+ * @param f a function taking two real numbers and returning a real number 
  */
-void FUNCTION(pnl_mat,map_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs, BASE(*f)(BASE,BASE))
+void FUNCTION(pnl_mat,map_mat_inplace)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs, BASE(*f)(BASE,BASE))
 {
   int i;
   CheckMatMatch(lhs, rhs);
@@ -771,6 +771,20 @@ void FUNCTION(pnl_mat,map_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs, BASE(
     {
       lhs->array[i] = (*f) (lhs->array[i], rhs->array[i]);
     }
+}
+
+/**
+ * map matrix componentwise
+ *
+ * @param lhs : each component lhs(i) contains f(rhs1(i),rhs2(i))
+ * @param rhs1 a matrix
+ * @param rhs2 a matrix
+ * @param f a function taking two real numbers and returning a real number 
+ */
+void FUNCTION(pnl_mat,map_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs1, const TYPE(PnlMat) *rhs2, BASE(*f)(BASE,BASE))
+{
+  FUNCTION(pnl_mat,clone) (lhs, rhs1);
+  FUNCTION(pnl_mat,map_mat_inplace) (lhs, rhs2, f); 
 }
 
 /**
@@ -782,7 +796,7 @@ void FUNCTION(pnl_mat,map_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs, BASE(
  */
 void FUNCTION(pnl_mat,plus_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
 {
-  FUNCTION(pnl_mat,map_mat)(lhs, rhs, CONCAT2(__op_plus_,BASE));
+  FUNCTION(pnl_mat,map_mat_inplace)(lhs, rhs, CONCAT2(__op_plus_,BASE));
 }
 
 /**
@@ -794,7 +808,7 @@ void FUNCTION(pnl_mat,plus_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
  */
 void FUNCTION(pnl_mat,minus_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
 {
-  FUNCTION(pnl_mat,map_mat)(lhs, rhs, CONCAT2(__op_minus_,BASE));
+  FUNCTION(pnl_mat,map_mat_inplace)(lhs, rhs, CONCAT2(__op_minus_,BASE));
 }
   
 /**
@@ -856,7 +870,7 @@ void FUNCTION(pnl_mat,CONCAT2(div_,BASE))(TYPE(PnlMat) *lhs, BASE x)
  */
 void FUNCTION(pnl_mat,mult_mat_term)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
 {
-  FUNCTION(pnl_mat,map_mat)(lhs, rhs, CONCAT2(__op_mult_,BASE));
+  FUNCTION(pnl_mat,map_mat_inplace)(lhs, rhs, CONCAT2(__op_mult_,BASE));
 }
 
 /**
@@ -868,7 +882,7 @@ void FUNCTION(pnl_mat,mult_mat_term)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
  */
 void FUNCTION(pnl_mat,div_mat_term)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
 {
-  FUNCTION(pnl_mat,map_mat)(lhs, rhs, CONCAT2(__op_div_,BASE));
+  FUNCTION(pnl_mat,map_mat_inplace)(lhs, rhs, CONCAT2(__op_div_,BASE));
 }
 
 /**

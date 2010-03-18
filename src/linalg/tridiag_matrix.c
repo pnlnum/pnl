@@ -385,7 +385,7 @@ void pnl_tridiag_mat_map_inplace(PnlTridiagMat *lhs, double(*f)(double))
  * @param rhs : right hand side vector
  * @param f   : real function 
  */
-void pnl_tridiag_mat_map_tridiag_mat(PnlTridiagMat *lhs, const PnlTridiagMat *rhs, 
+void pnl_tridiag_mat_map_tridiag_mat_inplace(PnlTridiagMat *lhs, const PnlTridiagMat *rhs, 
                                    double(*f)(double,double))
 {
   int i, size;
@@ -431,7 +431,7 @@ static void __pnl_tridiag_mat_apply_op(PnlTridiagMat *lhs, double x, double (*op
  */
 void pnl_tridiag_mat_plus_tridiag_mat(PnlTridiagMat *lhs, const PnlTridiagMat *rhs)
 {
-  pnl_tridiag_mat_map_tridiag_mat(lhs, rhs, __op_plus);
+  pnl_tridiag_mat_map_tridiag_mat_inplace(lhs, rhs, __op_plus);
 }
 
 /**
@@ -443,7 +443,7 @@ void pnl_tridiag_mat_plus_tridiag_mat(PnlTridiagMat *lhs, const PnlTridiagMat *r
  */
 void pnl_tridiag_mat_minus_tridiag_mat(PnlTridiagMat *lhs, const PnlTridiagMat *rhs)
 {
-  pnl_tridiag_mat_map_tridiag_mat(lhs, rhs, __op_minus);
+  pnl_tridiag_mat_map_tridiag_mat_inplace(lhs, rhs, __op_minus);
 }
   
 /**
@@ -505,7 +505,7 @@ void pnl_tridiag_mat_div_double(PnlTridiagMat *lhs, double x)
  */
 void pnl_tridiag_mat_mult_tridiag_mat_term(PnlTridiagMat *lhs, const PnlTridiagMat *rhs)
 {
-  pnl_tridiag_mat_map_tridiag_mat(lhs, rhs, __op_mult);
+  pnl_tridiag_mat_map_tridiag_mat_inplace(lhs, rhs, __op_mult);
 }
 
 /**
@@ -517,7 +517,7 @@ void pnl_tridiag_mat_mult_tridiag_mat_term(PnlTridiagMat *lhs, const PnlTridiagM
  */
 void pnl_tridiag_mat_div_tridiag_mat_term(PnlTridiagMat *lhs, const PnlTridiagMat *rhs)
 {
-  pnl_tridiag_mat_map_tridiag_mat(lhs, rhs, __op_div);
+  pnl_tridiag_mat_map_tridiag_mat_inplace(lhs, rhs, __op_div);
 }
 
 

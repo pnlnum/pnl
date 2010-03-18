@@ -236,12 +236,12 @@ void pnl_band_mat_map_inplace(PnlBandMat *BM, double(*f)(double ))
  * @param f the function to be applied term by term
  * On exit  BA = f(BA,BB)
  */
-void pnl_band_mat_map_band_mat(PnlBandMat *BA, const PnlBandMat *BB, 
+void pnl_band_mat_map_band_mat_inplace(PnlBandMat *BA, const PnlBandMat *BB, 
                              double(*f)(double, double ))
 {
   int i, j;
   PNL_CHECK (BA->m != BB->m || BA->n != BB->n || BA->nu != BB->nu || BA->nl != BB->nl,
-             "size mismatched", "band_mat_map_bandlat");
+             "size mismatched", "band_mat_map_band_mat");
   for ( j=0 ; j<BA->n_band ; j++ )
     {
       for ( i=MAX(0, BA->nu-j) ; i<BA->m_band - MAX(BA->nl-BA->n_band+j+1, 0) ; i++)
@@ -346,12 +346,12 @@ void pnl_band_mat_map(PnlBandMat *lhs, const PnlBandMat *rhs, double(*f)(double)
  */
 void pnl_band_mat_plus_band_mat(PnlBandMat *BA, const PnlBandMat *BB)
 {
-  pnl_band_mat_map_band_mat(BA, BB, __op_plus);
+  pnl_band_mat_map_band_mat_inplace(BA, BB, __op_plus);
 }
 
 void pnl_band_mat_minus_band_mat(PnlBandMat *BA, const PnlBandMat *BB)
 {
-  pnl_band_mat_map_band_mat (BA, BB, __op_minus);
+  pnl_band_mat_map_band_mat_inplace (BA, BB, __op_minus);
 }
 
 /**
@@ -363,7 +363,7 @@ void pnl_band_mat_minus_band_mat(PnlBandMat *BA, const PnlBandMat *BB)
  */
 void pnl_band_mat_div_band_mat_term(PnlBandMat *BA, const PnlBandMat *BB)
 {
-  pnl_band_mat_map_band_mat (BA, BB, __op_div);
+  pnl_band_mat_map_band_mat_inplace (BA, BB, __op_div);
 }
 
 /**
@@ -375,7 +375,7 @@ void pnl_band_mat_div_band_mat_term(PnlBandMat *BA, const PnlBandMat *BB)
  */
 void pnl_band_mat_mult_band_mat_term(PnlBandMat *BA, const PnlBandMat *BB)
 {
-  pnl_band_mat_map_band_mat (BA, BB, __op_mult);
+  pnl_band_mat_map_band_mat_inplace (BA, BB, __op_mult);
 }
 
 /** 

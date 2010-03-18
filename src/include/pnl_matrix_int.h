@@ -67,7 +67,8 @@ extern PnlVectInt pnl_vect_int_wrap_mat_row(const PnlMatInt *M, int i);/* M(i,:)
 extern PnlMatInt pnl_mat_int_wrap_vect(const PnlVectInt *V);
 extern void pnl_mat_int_map_inplace(PnlMatInt *lhs, int(*f)(int)); /*lhs=f(lhs)*/
 extern void pnl_mat_int_map(PnlMatInt *lhs, const PnlMatInt *rhs, int(*f)(int));/* lhs(i)=f(rhs(i)) */
-extern void pnl_mat_int_map_mat(PnlMatInt *lhs, const PnlMatInt *rhs, int(*f)(int,int));
+extern void pnl_mat_int_map_mat_inplace(PnlMatInt *lhs, const PnlMatInt *rhs, int(*f)(int,int));
+extern void pnl_mat_int_map_mat(PnlMatInt *lhs, const PnlMatInt *rhs1, const PnlMatInt *rhs2, int(*f)(int,int));
 extern void pnl_mat_int_plus_int(PnlMatInt *lhs, int x); /*lhs+=x*/
 extern void pnl_mat_int_minus_int(PnlMatInt *lhs, int x); /*lhs-=x*/
 extern void pnl_mat_int_plus_mat(PnlMatInt *lhs, const PnlMatInt *rhs); /*lhs+=rhs*/

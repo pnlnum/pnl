@@ -224,8 +224,13 @@ Equivalently to these functions, there exist macros for {\bf \refstruct{PnlVect}
   \sshortdescribe \var{lhs = f(lhs)} 
 
 \item \describefun{void}{pnl_vect_map_vect}{\refstruct{PnlVect} \ptr lhs, const
-  \refstruct{PnlVect} \ptr rhs, double(\ptr f)(double, double)} 
-    \sshortdescribe \var{lhs = f(lhs,rhs)} 
+  \refstruct{PnlVect} \ptr rhs1, const \refstruct{PnlVect} \ptr rhs2,
+  double(\ptr f)(double, double)} 
+  \sshortdescribe \var{lhs = f(rhs1, rhs2)} 
+
+\item \describefun{void}{pnl_vect_map_vect_inplace}{\refstruct{PnlVect} \ptr
+  lhs, \refstruct{PnlVect} \ptr rhs, double(\ptr f)(double,double)}
+  \sshortdescribe \var{lhs = f(lhs,rhs)} 
 
 \item \describefun{void}{pnl_vect_axpby}{double a, const \refstruct{PnlVect} \ptr x, 
     double b, \refstruct{PnlVect} \ptr y} 
@@ -688,9 +693,14 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
     \refstruct{PnlMat} \ptr rhs, double(\ptr f)(double)} 
     \sshortdescribe \var{lhs = f(rhs)}.
 
-\item \describefun{void}{pnl_mat_map_mat}{\refstruct{PnlMat} \ptr lhs, const
+  \item \describefun{void}{pnl_mat_map_mat_inplace}{\refstruct{PnlMat} \ptr lhs, const
   \refstruct{PnlMat} \ptr rhs, double(\ptr f)(double, double)} 
   \sshortdescribe \var{lhs = f(lhs, rhs)}.
+
+\item \describefun{void}{pnl_mat_map_mat}{\refstruct{PnlMat} \ptr lhs, const
+  \refstruct{PnlMat} \ptr rhs1, const
+  \refstruct{PnlMat} \ptr rhs2, double(\ptr f)(double, double)} 
+  \sshortdescribe \var{lhs = f(rhs1, rhs2)}.
 
 \item \describefun{double}{pnl_mat_sum}{const \refstruct{PnlMat} \ptr lhs}
   \sshortdescribe Sums matrix component-wise  
@@ -1185,7 +1195,7 @@ diagonal ($M_{i, i+1}$) and the lower diagonal ($M_{i-1, i}$).
   \sshortdescribe \var{lhs = f(lhs)}.
 
 
-\item \describefun{void}{pnl_tridiag_mat_map_tridiag_mat}{\refstruct{PnlTridiagMat} \ptr lhs, const
+\item \describefun{void}{pnl_tridiag_mat_map_tridiag_mat_inplace}{\refstruct{PnlTridiagMat} \ptr lhs, const
   \refstruct{PnlTridiagMat} \ptr rhs, double(\ptr f)(double, double)} 
   \sshortdescribe \var{lhs = f(lhs, rhs)}.
 \end{itemize}
@@ -1334,8 +1344,8 @@ The structures and functions related to band matrices are declared in
 \item \describefun{void}{pnl_band_mat_map_inplace}{\refstruct{PnlBandMat} \ptr lhs, double(\ptr f)(double)}
   \sshortdescribe  \var{lhs = f(lhs)}
 
-\item \describefun{void}{pnl_band_mat_map_band_mat}{\refstruct{PnlBandMat} \ptr lhs, const
-  \refstruct{PnlBandMat} \ptr rhs, double(\ptr f)(double,double)} 
+\item \describefun{void}{pnl_band_mat_map_band_mat_inplace}{\refstruct{PnlBandMat} \ptr lhs,
+  const \refstruct{PnlBandMat} \ptr rhs, double(\ptr f)(double,double)} 
   \sshortdescribe \var{lhs = f(lhs,rhs)}
 \end{itemize}
 

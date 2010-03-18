@@ -620,7 +620,7 @@ void FUNCTION(pnl_vect,map)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs, BASE(*
  * @param rhs right hand side vector
  * @param f real function 
  */
-static void FUNCTION(pnl_vect,map_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs, BASE(*f)(BASE,BASE))
+void FUNCTION(pnl_vect,map_vect_inplace)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs, BASE(*f)(BASE,BASE))
 {
   BASE *lptr;
   int i;
@@ -633,6 +633,19 @@ static void FUNCTION(pnl_vect,map_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) 
     }
 }
 
+/**
+ * map vector componentwise
+ *
+ * @param lhs each component lhs(i) contains f(rhs1(i),rhs2(i))
+ * @param rhs1 a vector
+ * @param rhs2 a vector
+ * @param f real function 
+ */
+void FUNCTION(pnl_vect,map_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs1, const TYPE(PnlVect) *rhs2, BASE(*f)(BASE,BASE))
+{
+  FUNCTION(pnl_vect,clone)(lhs,rhs1);
+  FUNCTION(pnl_vect,map_vect_inplace) (lhs, rhs2, f);
+}
 
 /**
  * in-place vector vector addition
@@ -643,7 +656,7 @@ static void FUNCTION(pnl_vect,map_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) 
  */
 void FUNCTION(pnl_vect,plus_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
 {
-  FUNCTION(pnl_vect,map_vect)(lhs, rhs, FUNCTION(,_op_plus));
+  FUNCTION(pnl_vect,map_vect_inplace)(lhs, rhs, FUNCTION(,_op_plus));
 }
 
 /**
@@ -655,7 +668,7 @@ void FUNCTION(pnl_vect,plus_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
  */
 void FUNCTION(pnl_vect,minus_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
 {
-  FUNCTION(pnl_vect,map_vect)(lhs, rhs, FUNCTION(,_op_minus));
+  FUNCTION(pnl_vect,map_vect_inplace)(lhs, rhs, FUNCTION(,_op_minus));
 }
 
 
@@ -679,7 +692,7 @@ void FUNCTION(pnl_vect,inv_term)(TYPE(PnlVect) *lhs)
  */
 void FUNCTION(pnl_vect,div_vect_term)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
 {
-  FUNCTION(pnl_vect,map_vect)(lhs, rhs,FUNCTION(,_op_div));
+  FUNCTION(pnl_vect,map_vect_inplace)(lhs, rhs,FUNCTION(,_op_div));
 }
 
 /**
@@ -691,7 +704,7 @@ void FUNCTION(pnl_vect,div_vect_term)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *r
  */
 void FUNCTION(pnl_vect,mult_vect_term)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
 {
-  FUNCTION(pnl_vect,map_vect)(lhs, rhs, FUNCTION(,_op_mult));
+  FUNCTION(pnl_vect,map_vect_inplace)(lhs, rhs, FUNCTION(,_op_mult));
 }
 
 
