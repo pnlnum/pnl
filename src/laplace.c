@@ -190,7 +190,7 @@ double pnl_ilap_gs_basic (PnlFunc *fhat, double t, int n)
 /**
  * Auxiliary function used in pnl_ilap_gs
  * See the recurrence relation on
- * \berbatim \tilde f_m(t, j) \endverbatim in
+ * \verbatim \tilde f_m(t, j) \endverbatim in
  * THE FOURIER-SERIES METHOD FOR INVERTING TRANSFORMS
  *           OF PROBABILITY DISTRIBUTIONS
  * by Abate and Whitt
@@ -202,7 +202,7 @@ double pnl_ilap_gs_basic (PnlFunc *fhat, double t, int n)
  * @param t the point at which f is to be recovered
  * @param m an index
  * @param j an index
- * @return \berbatim \tilde f_m(t, j) \endverbatim
+ * @return \verbatim \tilde f_m(t, j) \endverbatim
  */
 static double f_tilde (PnlFunc *fhat, PnlMat *work, PnlMatInt *iwork, int m, double t, int j)
 {
