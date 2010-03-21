@@ -61,6 +61,8 @@ extern PnlVectInt* pnl_vect_int_create_from_zero(int size);
 extern PnlVectInt* pnl_vect_int_create_from_ptr(int size, const int* x);
 extern PnlVectInt* pnl_vect_int_create_from_list(int size,...);
 extern PnlVectInt* pnl_vect_int_create_from_file (const char * file);
+extern PnlVectInt* pnl_vect_int_create_subvect (const PnlVectInt *V, const PnlVectInt *ind);
+extern void pnl_vect_int_extract_subvect (PnlVectInt *V_sub, const PnlVectInt *V, const PnlVectInt *ind);
 extern int pnl_vect_int_resize(PnlVectInt *v, int size);
 extern int pnl_vect_int_resize_from_int(PnlVectInt *v, int size, int x);
 extern int pnl_vect_int_resize_from_ptr(PnlVectInt *v, int size, const int *t);
@@ -80,6 +82,8 @@ extern void pnl_vect_int_map_inplace(PnlVectInt *lhs, int(*f)(int)); /*lhs=f(lhs
 extern void pnl_vect_int_map(PnlVectInt *lhs, const PnlVectInt *rhs, int(*f)(int));
 extern void pnl_vect_int_map_vect_inplace(PnlVectInt *lhs, const PnlVectInt *rhs, int(*f)(int, int)); 
 extern void pnl_vect_int_map_vect(PnlVectInt *lhs, const PnlVectInt *rhs1, const PnlVectInt *rhs2, int(*f)(int, int));
+extern void pnl_vect_int_find(PnlVectInt *ind, PnlVectInt *val, const PnlVectInt *V, int(*f)(int));
+extern void pnl_vect_int_find_vect(PnlVectInt *ind, PnlVectInt *val, const PnlVectInt *V1, const PnlVectInt *V2, int(*f)(int,int));
 extern void pnl_vect_int_plus_int(PnlVectInt *lhs, int x); /*lhs+=x*/
 extern void pnl_vect_int_minus_int(PnlVectInt *lhs, int x); /*lhs-=x*/
 extern void pnl_vect_int_axpby(int a, const PnlVectInt *x, int b, PnlVectInt *y); /* y:=a x + b y */

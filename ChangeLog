@@ -1,3 +1,20 @@
+21/03/10 <jerome.lelong@gmail.com>
+
+	* Functions added to emulate Scilab's find function
+		pnl_vect_find, pnl_vect_find_vect
+		pnl_mat_find, pnl_mat_find_mat
+	
+	* Extraction of non contiguous blocks of a vector or matrix
+		pnl_vect_extract_subvect, pnl_vect_create_subvect
+		pnl_vect_extract_submat, pnl_vect_create_submat
+
+	* Inplace map functions added
+		pnl_vect_map_vect_inplace
+		pnl_mat_map_mat_inplace
+	 Functions pnl_mat_map_mat, pnl_vect_map_vect are not inplace anymore,
+	 use the above functions instead.
+	 Idem for tridiag_mat and band_mat
+
 08/03/10 <jerome.lelong@gmail.com>
 
 	* Prefix pnl_iterationbase renamed pnl_iteration_base to follow the coding
@@ -6,6 +23,8 @@
 07/03/10 <jerome.lelong@gmail.com>
 
 	* Possibility to create bases by specifying the total degree
+		pnl_basis_create_from_degree
+		pnl_basis_create_from_tensor
 
 	* All syslin related routines rely on Blas & Lapack
 	
@@ -22,11 +41,18 @@
 		pnl_mat_row_to_vect_inplace --> pnl_mat_get_row
 		pnl_mat_create_wrap_array   --> pnl_mat_wrap_array
 		pnl_basis_init              --> pnl_basis_init
+		pnl_mat_wrap_row			--> pnl_vect_wrap_mat_row
+		pnl_vect_create_wrap_array  --> pnl_vect_wrap_array
+		pnl_mat_create_wrap_array   --> pnl_mat_wrap_array
+		pnl_vect_create_wrap_subvect_with_last --> pnl_vect_wrap_subvect_with_last	
+		pnl_bandmat_map_map         --> pnl_bandmat_map_bandmat
 
 	* uint based objects removed.
 
 	* PnlPermutation becomes a synonymous PnlVectInt although it has a few more
 	specific routines.
+
+	* Special functions always begin in pnl_sf
 
 04/03/10 <jerome.lelong@gmail.com>
 

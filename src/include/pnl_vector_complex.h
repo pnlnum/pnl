@@ -120,6 +120,8 @@ extern PnlVectComplex* pnl_vect_complex_create_from_array(int size, const double
 extern PnlVectComplex* pnl_vect_complex_create_from_ptr(int size, const dcomplex* x);
 extern PnlVectComplex* pnl_vect_complex_create_from_list(int size,...);
 extern PnlVectComplex* pnl_vect_complex_create_from_file (const char * file);
+extern PnlVectComplex* pnl_vect_complex_create_subvect (const PnlVectComplex *V, const PnlVectInt *ind);
+extern void pnl_vect_complex_extract_subvect (PnlVectComplex *V_sub, const PnlVectComplex *V, const PnlVectInt *ind);
 
 extern int pnl_vect_complex_resize(PnlVectComplex *v, int size);
 extern int pnl_vect_complex_resize_from_dcomplex(PnlVectComplex *v, int size, dcomplex x);
@@ -141,6 +143,8 @@ extern void pnl_vect_complex_map_inplace(PnlVectComplex *lhs, dcomplex(*f)(dcomp
 extern void pnl_vect_complex_map(PnlVectComplex *lhs, const PnlVectComplex *rhs, dcomplex(*f)(dcomplex));
 extern void pnl_vect_complex_map_vect_inplace(PnlVectComplex *lhs, const PnlVectComplex *rhs, dcomplex(*f)(dcomplex,dcomplex));
 extern void pnl_vect_complex_map_vect(PnlVectComplex *lhs, const PnlVectComplex *rhs1, const PnlVectComplex *rhs2, dcomplex(*f)(dcomplex,dcomplex));
+extern void pnl_vect_complex_find(PnlVectInt *ind, PnlVectComplex *val, const PnlVectComplex *V, int(*f)(dcomplex));
+extern void pnl_vect_complex_find_vect(PnlVectInt *ind, PnlVectComplex *val, const PnlVectComplex *V1, const PnlVectComplex *V2, int(*f)(dcomplex,dcomplex));
 extern void pnl_vect_complex_minus(PnlVectComplex *lhs);
 extern void pnl_vect_complex_plus_dcomplex(PnlVectComplex *lhs, dcomplex x); /*lhs+=x*/
 extern void pnl_vect_complex_minus_dcomplex(PnlVectComplex *lhs, dcomplex x); /*lhs-=x*/

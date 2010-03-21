@@ -82,6 +82,30 @@ the above table.
   \var{size} filled with the extra arguments passed to the function. The
   number of extra arguments passed must be equal to \var{size}, be aware that
   this cannot be checked inside the function.
+\item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_from_file}
+  {const char \ptr file}
+  \sshortdescribe Reads a vector from a file and creates the corresponding
+  \refstruct{PnlVect}.  
+
+\item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_copy}{const
+    \refstruct{PnlVect} \ptr v}
+  \sshortdescribe This is a copying constructor. It creates a copy of a \refstruct{PnlVect}.
+\item \describefun{void}{pnl_vect_clone}{\refstruct{PnlVect} \ptr clone, 
+    const \refstruct{PnlVect} \ptr v} 
+  \sshortdescribe Clones a \refstruct{PnlVect}. \var{clone} must be an
+  already existing  \refstruct{PnlVect}. It is resized to match the size of
+  \var{v} and the data are copied. Future modifications to \var{v} will not
+  affect \var{clone}.
+
+\item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_subvect}{const
+  \refstruct{PnlVect} \ptr V, const \refstruct{PnlVectInt} \ptr ind}
+  \sshortdescribe Creates a new vector containing \var{V(ind(:))}
+\item \describefun{void}{pnl_vect_extract_subvect}{\refstruct{PnlVect} \ptr
+  V_sub, const \refstruct{PnlVect} \ptr V, const \refstruct{PnlVectInt} \ptr ind}
+  \sshortdescribe On exit, \var{V_sub = V(ind(:))}
+
+\item \describefun{void}{pnl_vect_free}{\refstruct{PnlVect} \ptr\ptr v}
+  \sshortdescribe Frees a \refstruct{PnlVect} pointer and set the data pointer to NULL  
 \item \describefun{\refstruct{PnlVect}}{pnl_vect_wrap_array}{const double \ptr x, 
     int size}
     \sshortdescribe Creates a \refstruct{PnlVect} containing the data 
@@ -102,23 +126,6 @@ the above table.
   the row wise array of \var{M}. The new vector shares its data with the
   matrix \var{M}, which means that any modification to one of them will affect
   the other.
-\item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_from_file}
-  {const char \ptr file}
-  \sshortdescribe Reads a vector from a file and creates the corresponding
-  \refstruct{PnlVect}.  
-
-\item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_copy}{const
-    \refstruct{PnlVect} \ptr \refstruct{v}}
-  \sshortdescribe This is a copying constructor. It creates a copy of a \refstruct{PnlVect}.
-\item \describefun{void}{pnl_vect_clone}{\refstruct{PnlVect} \ptr clone, 
-    const \refstruct{PnlVect} \ptr \refstruct{v}} 
-  \sshortdescribe Clones a \refstruct{PnlVect}. \var{clone} must be an
-  already existing  \refstruct{PnlVect}. It is resized to match the size of
-  \var{v} and the data are copied. Future modifications to \var{v} will not
-  affect \var{clone}.
-
-\item \describefun{void}{pnl_vect_free}{\refstruct{PnlVect} \ptr\ptr v}
-  \sshortdescribe Frees a \refstruct{PnlVect} pointer and set the data pointer to NULL  
 \end{itemize}
 
 \subparagraph{Resizing vectors}
@@ -293,6 +300,18 @@ no total ordering on Complex numbers
   \sshortdescribe Sorts a vector using a quick sort algorithm according to
   \var{order} (\verb!'i'! for increasing or \verb!'d'! for decreasing ). On
   output, \var{index} contains the permutation used to sort the vector.
+
+\item \describefun{void}{pnl_vect_find}{\refstruct{PnlVectInt} \ptr
+  ind, \refstruct{PnlVect} \ptr val, const \refstruct{PnlVect} \ptr V,
+  int(\ptr f)(double)}
+  \sshortdescribe \var{ind} contains on exit the indices \var{i} for which
+  \var{f(V(i)) ==1 }. If \var{val} is not NULL, on exit \var{val = V(ind)}.
+
+\item \describefun{void}{pnl_vect_find_vect}{\refstruct{PnlVectInt} \ptr
+  ind, \refstruct{PnlVect} \ptr val, const \refstruct{PnlVect} \ptr V1, 
+  const \refstruct{PnlVect} \ptr V2, int(\ptr f)(double, double)}
+  \sshortdescribe \var{ind} contains on exit the indices \var{i} for which
+  \var{f(V1(i),V2(i)) ==1 }. If \var{val} is not NULL, on exit \var{val = V(ind)}.
 \end{itemize}
 
 \subparagraph{Scalar products and norms}
@@ -491,7 +510,6 @@ and \var{y} are vectors.
 
 
 \subsubsection{Generic Functions}
-\paragraph{General functions}
 These functions exist for all types of matrices no matter what the basic type
 is. The following conventions are used to name functions operating on matrices.
 Here is the table of prefixes used for the different basic types.
@@ -534,10 +552,8 @@ the above table.
   number of extra arguments passed must be equal to \var{m x n}, be
   aware that this cannot be checked inside the function.
 
-\item \describefun{PnlMat}{pnl_mat_wrap_array}{const double \ptr x, 
-    int m, int n}
-    \sshortdescribe Creates a \refstruct{PnlMat} of size \var{m x n} 
-    which contains \var{x}. No copy is made. It is just a container.
+\item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_copy}{const \refstruct{PnlMat} \ptr M}
+  \sshortdescribe Creates a new \refstruct{PnlMat} which is a copy of \var{M}.
   
 \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_create_diag_from_ptr}
   {const double \ptr x, int d}
@@ -552,47 +568,12 @@ the above table.
 \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_create_from_file}{const char \ptr file}
   \sshortdescribe Reads a matrix from a file and creates the corresponding \refstruct{PnlMat}.  
 
-\item \describefun{void}{pnl_mat_free}{\refstruct{PnlMat} \ptr \ptr \refstruct{v}}
-  \sshortdescribe Frees a \refstruct{PnlMat} and sets \var{\ptr v} to \var{NULL} 
-
-\item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_copy}{const \refstruct{PnlMat} \ptr \refstruct{v}}
-  \sshortdescribe Creates a new \refstruct{PnlMat} which is a copy of
-  \var{v}.
-  
-\item \describefun{void}{pnl_mat_clone}{\refstruct{PnlMat} \ptr clone, const \refstruct{PnlMat} \ptr M}
-  \sshortdescribe Clones \var{M} into \var{clone}. No no new
-  \refstruct{PnlMat} is created.
-
-\item \describefun{int}{pnl_mat_resize}{\refstruct{PnlMat} \ptr \refstruct{v}, int m, int n}
-  \sshortdescribe Resizes a \refstruct{PnlMat}. The new matrix is of size
-  \var{m x n}.  
-\end{itemize}  
-
-
-\paragraph{Accessing elements}
-
-\begin{itemize}
-\item \describefun{void}{pnl_mat_set}{\refstruct{PnlMat} \ptr self, int i, int j, double x}
-  \sshortdescribe Sets the value of self[i, j]=x  
-
-\item \describefun{double}{pnl_mat_get}{const \refstruct{PnlMat} \ptr self, int i, int j}
-  \sshortdescribe Gets the value of self[i, j]  
-
-\item \describefun{double \ptr }{pnl_mat_lget}{\refstruct{PnlMat} \ptr self, int i, int j}
-  \sshortdescribe Returns the address of self[i, j] for use as a lvalue.
-
-\item \describefun{void}{pnl_mat_set_double}{\refstruct{PnlMat} \ptr self, double x}
-  \sshortdescribe Sets all elements of \var{self} to \var{x}.
-  
-\item \describefun{void}{pnl_mat_set_id}{\refstruct{PnlMat} \ptr self}
-  \sshortdescribe Sets the matrix \var{self} to the identity
-  matrix. \var{self} must be a square matrix.
-
-\item \describefun{void}{pnl_mat_set_diag}{\refstruct{PnlMat} \ptr self,
-    double x, int d}
-  \sshortdescribe Sets the $\var{d}^{\text{th}}$ diagonal terms of the matrix
-  \var{self} to the value \var{x}. \var{self} must be a square matrix.
-
+\item \describefun{void}{pnl_mat_free}{\refstruct{PnlMat} \ptr \ptr M}
+  \sshortdescribe Frees a \refstruct{PnlMat} and sets \var{\ptr M} to \var{NULL} 
+\item \describefun{\refstruct{PnlMat}}{pnl_mat_wrap_array}{const double \ptr x, 
+    int m, int n}
+    \sshortdescribe Creates a \refstruct{PnlMat} of size \var{m x n} 
+    which contains \var{x}. No copy is made. It is just a container.
 \item \describefun{\refstruct{PnlVect}}{pnl_vect_wrap_mat_row}
   {const \refstruct{PnlMat} \ptr M, int i}
   \sshortdescribe Returns a \refstruct{PnlVect} (not a pointer) whose array is
@@ -606,6 +587,52 @@ the above table.
   the array of \var{V}. The new matrix shares its data with the
   vector \var{V}, which means that any modification to one of them will affect
   the other.
+
+
+\item \describefun{void}{pnl_mat_clone}{\refstruct{PnlMat} \ptr clone, const \refstruct{PnlMat} \ptr M}
+  \sshortdescribe Clones \var{M} into \var{clone}. No no new
+  \refstruct{PnlMat} is created.
+
+\item \describefun{int}{pnl_mat_resize}{\refstruct{PnlMat} \ptr M, int m, int n}
+  \sshortdescribe Resizes a \refstruct{PnlMat}. The new matrix is of size
+  \var{m x n}.  
+\item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_submat}{const
+  \refstruct{PnlMat} \ptr M, const \refstruct{PnlVectInt} \ptr indi, const
+  \refstruct{PnlVectInt} \ptr indj}
+  \sshortdescribe Creates a new vector containing the values \var{M(indi(:),
+  indj(:))}. \var{indi} and \var{indj} must be of the same size.
+
+\item \describefun{void}{pnl_vect_extract_submat}{\refstruct{PnlVect} \ptr
+  V_sub, const \refstruct{PnlMat} \ptr M, const \refstruct{PnlVectInt} \ptr indi,
+  const \refstruct{PnlVectInt} \ptr indj}
+  \sshortdescribe On exit, \var{V_sub = M(indi(:), indj(:))}. \var{indi} and
+  \var{indj} must be of the same size.
+\end{itemize}  
+
+
+\paragraph{Accessing elements}
+
+\begin{itemize}
+\item \describefun{void}{pnl_mat_set}{\refstruct{PnlMat} \ptr M, int i, int j, double x}
+  \sshortdescribe Sets the value of M[i, j]=x  
+
+\item \describefun{double}{pnl_mat_get}{const \refstruct{PnlMat} \ptr M, int i, int j}
+  \sshortdescribe Gets the value of M[i, j]  
+
+\item \describefun{double \ptr }{pnl_mat_lget}{\refstruct{PnlMat} \ptr M, int i, int j}
+  \sshortdescribe Returns the address of M[i, j] for use as a lvalue.
+
+\item \describefun{void}{pnl_mat_set_double}{\refstruct{PnlMat} \ptr M, double x}
+  \sshortdescribe Sets all elements of \var{M} to \var{x}.
+  
+\item \describefun{void}{pnl_mat_set_id}{\refstruct{PnlMat} \ptr M}
+  \sshortdescribe Sets the matrix \var{M} to the identity
+  matrix. \var{M} must be a square matrix.
+
+\item \describefun{void}{pnl_mat_set_diag}{\refstruct{PnlMat} \ptr M,
+    double x, int d}
+  \sshortdescribe Sets the $\var{d}^{\text{th}}$ diagonal terms of the matrix
+  \var{M} to the value \var{x}. \var{M} must be a square matrix.
 
 \item \describefun{void}{pnl_mat_get_row}{\refstruct{PnlVect}
     \ptr V, const \refstruct{PnlMat} \ptr M, int i}
@@ -702,6 +729,7 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
   \refstruct{PnlMat} \ptr rhs2, double(\ptr f)(double, double)} 
   \sshortdescribe \var{lhs = f(rhs1, rhs2)}.
 
+
 \item \describefun{double}{pnl_mat_sum}{const \refstruct{PnlMat} \ptr lhs}
   \sshortdescribe Sums matrix component-wise  
 
@@ -788,6 +816,30 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
   whereas if \var{dir='r'}, each column is sorted independently of the
   others. In addition to the function \reffun{pnl_mat_qsort}, the permutation
   index is computed and stored into \var{index}.
+
+\item \describefun{void}{pnl_mat_find}{\refstruct{PnlVectInt} \ptr
+  indi, \refstruct{PnlVectInt} \ptr indj, \refstruct{PnlVect} \ptr val,
+  const \refstruct{PnlMat} \ptr M, int(\ptr f)(double)}
+  \sshortdescribe If \var{indj} is not NULL, \var{indi} and \var{indj} contains
+  on exit the indices \var{(i,j)} for which \var{f(M(i,j))==1}. If \var{indj}
+  is NULL, then a linear indexing is used : \var{M} is seen as a large vector
+  built by stacking the rows of \var{M} and \var{indi} contains the values of
+  the linear index for which the test is positive. If \var{val} is not NULL, it
+  is used to store {\bf in a vector} the entries of \var{M} for which the test
+  \var{f} is positive, i.e. \var{val = M((indi(:), indj(:)))}.
+
+\item \describefun{void}{pnl_mat_find_mat}{\refstruct{PnlVectInt} \ptr
+  indi, \refstruct{PnlVectInt} \ptr indj,  \refstruct{PnlVect} \ptr val,
+  const \refstruct{PnlMat} \ptr M1,
+  const \refstruct{PnlMat} \ptr M2, int(\ptr f)(double, double)}
+  \sshortdescribe If \var{indj} is not NULL, \var{indi} and \var{indj} contains
+  on exit the indices \var{(i,j)} for which \var{f(M1(i,j), M2(i,j))==1}. If
+  \var{indj} is NULL, then a linear indexing is used : \var{M1} and \var{M2} are
+  seen as large vectors built by stacking the rows of the matrices and
+  \var{indi} contains the values of the linear index for which the test is
+  positive. If \var{val} is not NULL, it is used to store {\bf in a vector} the
+  entries of \var{M1} for which the test \var{f} is positive, i.e. \var{val =
+  M((indi(:), indj(:)))}.
 \end{itemize}
 
 

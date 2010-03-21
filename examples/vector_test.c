@@ -140,28 +140,71 @@ static void pnl_vect_resize_test ()
 static void pnl_vect_extract_test()
 {
   double x[10]={0.0,1.0, 2.0, 3.0,4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
-  PnlVect *v1;
+  PnlVect v1;
   PnlVect *v2;
   printf("test de la fonction 'pnl_vect_extract' : ");
   v2=pnl_vect_create_from_ptr(10,x);
-  v1=pnl_vect_create(0);
-  (*v1)=pnl_vect_wrap_subvect_with_last(v2,3,5);
+  pnl_vect_print(v2);
+  v1=pnl_vect_wrap_subvect_with_last(v2,3,5);
   printf("i=3, j=5 \n");
-  pnl_vect_print(v1);
-  (*v1)=pnl_vect_wrap_subvect(v2,5,4);
+  pnl_vect_print(&v1);
+  v1=pnl_vect_wrap_subvect(v2,5,4);
   printf("i=5, size = 4 \n");
-  pnl_vect_print(v1);
-  pnl_vect_free(&v1);
+  pnl_vect_print(&v1);
   pnl_vect_free(&v2); 
 }
 
+static int ispos (double x) { return x >= 0; }
+static int islarger (double x, double y) { return x >= y; }
+
+static void pnl_vect_subvect_test ()
+{
+  double gen=PNL_RNG_MERSENNE_RANDOM_SEED;
+  PnlVect *v1, *v2, *v3, *v4;
+  PnlVectInt *ind;
+  printf ("\nTest of extract_subvect function : \n");
+  pnl_rand_init (gen, 10, 1);
+  v1 = pnl_vect_create (10);
+  v3 = pnl_vect_create (10);
+  pnl_vect_rand_normal(v1, 10, gen);
+  pnl_vect_rand_normal(v3, 10, gen);
+  ind = pnl_vect_int_create (10);
+  
+  pnl_vect_find (ind, NULL, v1, ispos);
+  v2 = pnl_vect_create_subvect (v1, ind);
+  printf ("v1 = "); pnl_vect_print_nsp (v1);
+  printf ("find (v1 >= 0)\n");
+  printf ("ind = "); pnl_vect_int_print_nsp (ind);
+  printf ("sub = "); pnl_vect_print_nsp (v2);
+  v4 = pnl_vect_create (0);
+  pnl_vect_find (ind, v4, v1, ispos);
+  printf ("ind = "); pnl_vect_int_print_nsp (ind);
+  printf ("sub = "); pnl_vect_print_nsp (v4);
+  pnl_vect_free (&v2);
+
+  pnl_vect_find_vect (ind, NULL, v1, v3, islarger);
+  v2 = pnl_vect_create_subvect (v1, ind);
+  printf ("v1 = "); pnl_vect_print_nsp (v1);
+  printf ("v3 = "); pnl_vect_print_nsp (v3);
+  printf ("find (v1 >= v3)\n");
+  printf ("ind = "); pnl_vect_int_print_nsp (ind);
+  printf ("sub = "); pnl_vect_print_nsp (v2);
+  pnl_vect_find_vect (ind, v4, v1, v3, islarger);
+  printf ("ind = "); pnl_vect_int_print_nsp (ind);
+  printf ("sub = "); pnl_vect_print_nsp (v4);
+  pnl_vect_int_free (&ind);
+  pnl_vect_free (&v1);
+  pnl_vect_free (&v2);
+  pnl_vect_free (&v3);
+  pnl_vect_free (&v4);
+}
 
 static void pnl_vect_plus_vect_test()
 {
   PnlVect *v1;
   PnlVect *v2;
   double x[4]={1.0, 5.0, 3.0, 8.0};
-  printf("test de la fonction 'pnl_vect_plus_vect' : ");
+  printf("\nTest of pnl_vect_plus_vect : \n");
   v1=pnl_vect_create_from_ptr(4,x);
   v2=pnl_vect_create_from_double(4,3.0);
   pnl_vect_plus_vect(v1,v2);
@@ -673,6 +716,7 @@ static tst_list vect_tests[] =
     MAKE_ENUM(pnl_vect_complex_prod_test),
     MAKE_ENUM(pnl_vect_qsort_test),
     MAKE_ENUM(pnl_vect_extract_test),
+    MAKE_ENUM(pnl_vect_subvect_test),
     MAKE_ENUM(NULL)
   };
 

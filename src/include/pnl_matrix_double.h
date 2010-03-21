@@ -84,6 +84,8 @@ extern PnlMat* pnl_mat_create_from_ptr(int m, int n, const double* x);
 extern PnlMat* pnl_mat_create_from_list(int m, int n, ...); 
 extern PnlMat pnl_mat_wrap_array(const double* x,int m, int n);
 extern PnlMat* pnl_mat_create_from_file (const char * file);
+extern void pnl_vect_extract_submat (PnlVect *M_sub, const PnlMat *M, const PnlVectInt *indi, const PnlVectInt *indj);
+extern PnlVect* pnl_vect_create_submat (const PnlMat *M, const PnlVectInt *indi, const PnlVectInt *indj);
 extern int pnl_mat_resize(PnlMat *v, int m, int n);
 extern void pnl_mat_free(PnlMat **v);
 extern PnlMat* pnl_mat_copy(const PnlMat *v);
@@ -92,6 +94,8 @@ extern void pnl_mat_map_inplace(PnlMat *lhs, double(*f)(double)); /*lhs=f(lhs)*/
 extern void pnl_mat_map(PnlMat *lhs, const PnlMat *rhs, double(*f)(double));/* lhs(i)=f(rhs(i)) */
 extern void pnl_mat_map_mat_inplace(PnlMat *lhs, const PnlMat *rhs, double(*f)(double,double));
 extern void pnl_mat_map_mat(PnlMat *lhs, const PnlMat *rhs1, const PnlMat *rhs2, double(*f)(double,double));
+extern void pnl_mat_find(PnlVectInt *indi, PnlVectInt *indj, PnlVect *val, const PnlMat *M, int(*f)(double));
+extern void pnl_mat_find_mat(PnlVectInt *indi, PnlVectInt *indj, PnlVect *val, const PnlMat*,const PnlMat *, int(*f)(double,double));
 extern void pnl_mat_plus_double(PnlMat *lhs, double x); /*lhs+=x*/
 extern void pnl_mat_minus_double(PnlMat *lhs, double x); /*lhs-=x*/
 extern void pnl_mat_plus_mat(PnlMat *lhs, const PnlMat *rhs); /*lhs+=rhs*/

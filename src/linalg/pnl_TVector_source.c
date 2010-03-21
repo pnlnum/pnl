@@ -131,27 +131,6 @@ TYPE(PnlVect) * FUNCTION(pnl_vect,create_from_list)(const int size,...)
   return v;
 }
 
-
-
-/**
- * creates a TYPE(PnlVect)
- * @param m number of elements
- * @param x an array of BASE used to fill the TYPE(PnlVect). should be of length
- * m. No test can be done about it.
- * @return a TYPE(PnlVect) pointer
- */
-TYPE(PnlVect) FUNCTION(pnl_vect,wrap_array)(const BASE* x, int m)
-{
-  TYPE(PnlVect) v;
-
-  v.size = m;
-  v.owner = 0;
-  v.mem_size = 0;
-  v.array = (BASE *) x;
-  return v;
-}
-
-
 /**
  * Reads a vector from a file and creates the corresponding PnlVect
  * @param file  the file to be read
@@ -204,6 +183,105 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_file) (const char * file)
   return v;
 }
 
+/** 
+ * Extracts a sub vector from a vector V. The components to be extracted are
+ * sepcified by the indices listed in the vector ind
+ * 
+ * @param V_sub (output) V(ind(:))
+ * @param V a vector 
+ * @param ind a vector of integers representing the list of indices to be extracted
+ */
+void FUNCTION(pnl_vect,extract_subvect) (TYPE(PnlVect) *V_sub, const TYPE(PnlVect) *V, const PnlVectInt *ind)
+{
+  int i;
+  FUNCTION(pnl_vect,resize)(V_sub, ind->size);
+  for ( i=0 ; i<ind->size ; i++ )
+    {
+      PNL_CHECK (PNL_GET(ind, i) >= V->size, "index exceeded", "pnl_vect_create_subvect");
+      PNL_LET (V_sub, i) = PNL_GET(V, PNL_GET(ind, i));
+    }
+}
+
+/** 
+ * Extracts a sub vector from a vector V. The components to be extracted are
+ * sepcified by the indices listed in the vector ind
+ * 
+ * @param V a vector 
+ * @param ind a vector of integers representing the list of indices to be extracted
+ * @return V(ind(:))
+ */
+TYPE(PnlVect)* FUNCTION(pnl_vect,create_subvect) (const TYPE(PnlVect) *V, const PnlVectInt *ind)
+{
+  TYPE(PnlVect) *V_sub;
+  V_sub  = FUNCTION(pnl_vect,create)(ind->size);
+  FUNCTION(pnl_vect,extract_subvect)(V_sub, V, ind); 
+  return V_sub;
+}
+
+/**
+ * creates a TYPE(PnlVect)
+ * @param m number of elements
+ * @param x an array of BASE used to fill the TYPE(PnlVect). should be of length
+ * m. No test can be done about it.
+ * @return a TYPE(PnlVect) pointer
+ */
+TYPE(PnlVect) FUNCTION(pnl_vect,wrap_array)(const BASE* x, int m)
+{
+  TYPE(PnlVect) v;
+
+  v.size = m;
+  v.owner = 0;
+  v.mem_size = 0;
+  v.array = (BASE *) x;
+  return v;
+}
+
+/** 
+ * Creates a sub matrix from a matrix M only containing the indices present in
+ * (indi ,indj)
+ * 
+ * @param val (output) a vector containing M( (indi(:),indj(:)) )
+ * @param M a matrix
+ * @param indi a vector of integers
+ * @param indj a vector of integers
+ */
+void FUNCTION(pnl_vect,extract_submat) (TYPE(PnlVect) *val, const TYPE(PnlMat) *M, 
+                                        const PnlVectInt *indi, const PnlVectInt *indj)
+{
+  int k;
+  int i, j;
+  CheckVectMatch (indi, indj);
+
+  FUNCTION(pnl_vect,resize)(val, indi->size);
+  for ( k=0 ; k<indi->size ; k++ )
+    {
+      i = PNL_GET (indi, k);
+      j = PNL_GET (indj, k);
+      PNL_CHECK (i<0 || j<0 || i>= M->m || j>= M->n, "index of range", "extract_submat");
+      PNL_LET (val, k) = PNL_MGET (M, i, j);
+    }
+}
+
+/** 
+ * Creates a sub matrix from a matrix M only containing the indices present in
+ * (indi ,indj)
+ * 
+ * @param M a vector
+ * @param indi a vector of integers
+ * @param indj a vector of integers. The pairs (indi, indj) are the indices (i,
+ * j) of the elements to be extracted
+ * @return M(indi(:),indj(:))
+ */
+TYPE(PnlVect)* FUNCTION(pnl_vect,create_submat) (const TYPE(PnlMat) *M, 
+                                        const PnlVectInt *indi, const PnlVectInt *indj)
+{
+  TYPE(PnlVect) *val;
+  val  = FUNCTION(pnl_vect,create)(0);
+  FUNCTION(pnl_vect,extract_submat)(val, M, indi, indj); 
+  return val;
+}
+
+
 /**
  * free a TYPE(PnlVect)pointer and set the data pointer to
  * NULL
@@ -224,7 +302,7 @@ void FUNCTION(pnl_vect,free)(TYPE(PnlVect) **v)
  * resizes a TYPE(PnlVect). If the new size is smaller than the
  * current one, no memory is freed and the datas are
  * kept. If the new size is larger than the current one, a
- * new pointer is allocated. The old datas are lost. 
+ * new pointer is allocated. The old datas are kept. 
  *
  * @param v a pointer to an already existing TYPE(PnlVect). If v->owner=0,
  * nothing is done
@@ -253,8 +331,7 @@ int FUNCTION(pnl_vect,resize)(TYPE(PnlVect) * v, int size)
     }
 
   /* Now, v->mem_size < size */
-  if (v->array != NULL) free (v->array);
-  if ((v->array = malloc (size * sizeof(BASE))) == NULL) return FAIL;
+  if ((v->array = realloc (v->array,  size * sizeof(BASE))) == NULL) return FAIL;
   v->size = size;
   v->mem_size = size;
   return OK;
@@ -632,6 +709,110 @@ void FUNCTION(pnl_vect,map_vect_inplace)(TYPE(PnlVect) *lhs, const TYPE(PnlVect)
       *lptr =(*f)(*lptr, PNL_GET(rhs,i)); i++;
     }
 }
+
+/** 
+ * Find this indices i for which f(V(i)) == 1
+ * 
+ * @param ind (output) a vector of integers
+ * @param val (output) a vector. If not NULL, it  contains the values V(ind(:)) 
+ * @param V a vector
+ * @param f a function returning an integer (typically a test function)
+ */
+void FUNCTION(pnl_vect,find)(PnlVectInt *ind, TYPE(PnlVect) *val, 
+                             const TYPE(PnlVect) *V, int(*f)(BASE))
+{
+  int i, count_i;
+  count_i = 0;
+  /* We need 2 passes.
+   * First pass to determine the size */
+  for ( i=0 ; i<V->size ; i++ ) 
+    {
+      if (f(PNL_GET (V, i)) == 1) count_i++;
+    }
+  pnl_vect_int_resize (ind, count_i);
+
+  /* Second pass to extract the data */
+  if ( val != NULL ) 
+    {
+      FUNCTION(pnl_vect, resize)(val, count_i);
+      count_i = 0;
+      for ( i=0 ; i<V->size ; i++ ) 
+        {
+          if (f(PNL_GET (V, i)) == 1)
+            {
+              PNL_LET(ind, count_i) = i; 
+              PNL_LET(val, count_i) = PNL_GET(V, i);
+              count_i++;
+            }
+        }
+    }
+  else
+    {
+      /* Second pass to extract the data */
+      count_i = 0;
+      for ( i=0 ; i<V->size ; i++ ) 
+        {
+          if (f(PNL_GET (V, i)) == 1)
+            {
+              PNL_LET(ind, count_i) = i; count_i++;
+            }
+        }
+
+    }
+}
+
+/** 
+ * Find this indices i for which f(V1(i),V2(i)) == 1
+ * 
+ * @param ind (output) a vector of integers
+ * @param val (output) a vector. If not NULL, it  contains the values V(ind(:)) 
+ * @param V1 a vector
+ * @param V2 a vector
+ * @param f a function returning an integer (typically a test function)
+ */
+void FUNCTION(pnl_vect,find_vect)(PnlVectInt *ind, TYPE(PnlVect) *val,
+                                  const TYPE(PnlVect) *V1, const TYPE(PnlVect) *V2,
+                                  int(*f)(BASE,BASE))
+{
+  int i, count_i;
+  CheckVectMatch (V1, V2);
+  count_i = 0;
+  /* We need 2 passes.
+   * First pass to determine the size */
+  for ( i=0 ; i<V1->size ; i++ ) 
+    {
+      if (f(PNL_GET (V1, i), PNL_GET(V2, i)) == 1) count_i++;
+    }
+  pnl_vect_int_resize (ind, count_i);
+
+  /* Second pass to extract the data */
+  if ( val != NULL ) 
+    {
+      FUNCTION(pnl_vect, resize)(val, count_i);
+      count_i = 0;
+      for ( i=0 ; i<V1->size ; i++ ) 
+        {
+          if (f(PNL_GET (V1, i), PNL_GET(V2, i)) == 1)
+            {
+              PNL_LET(ind, count_i) = i; 
+              PNL_LET(val, count_i) = PNL_GET(V1, i);
+              count_i++;
+            }
+        }
+    }
+  else
+    {
+      count_i = 0;
+      for ( i=0 ; i<V1->size ; i++ ) 
+        {
+          if (f(PNL_GET (V1, i), PNL_GET(V2, i)) == 1)
+            {
+              PNL_LET(ind, count_i) = i; count_i++;
+            }
+        }
+    }
+}
+
 
 /**
  * map vector componentwise
@@ -1231,7 +1412,7 @@ double FUNCTION(pnl_vect,norm_infty)(const TYPE(PnlVect) *V)
 }
 
 /**
- * Extract a sub vector and wrap it into a vector.
+ * Extracts a sub vector and wrap it into a vector.
  * @param V a vector
  * @param i the index of first element to be extracted
  * @param s the size of extracted vector
@@ -1252,7 +1433,7 @@ TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect)(const TYPE(PnlVect) *V, int i,int
 } 
 
 /**
- * Extract  a sub vector and wrap it into a vector.
+ * Extracts  a sub vector and wrap it into a vector.
  * @param V a vector
  * @param i the index of first element to be extracted
  * @param j the index of last  element to be extracted
