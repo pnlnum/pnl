@@ -2,7 +2,10 @@
 #define _PNL_OBJECT_H
 
 /**
- * \defgroup PnlObject The top level object used for derivation 
+ * \defgroup PnlObject The top level object
+ *
+ *
+ * \brief PnlOject is the top level object used for inheritance
  *
  * All objects of the Pnl must inherit from \a PnlObject and implement a
  * \a pnl_xxx_new function. For instance, a \a PnlFooBar object must implement a
@@ -12,11 +15,21 @@
  *
  * Each type type must be added into the function \a pnl_object_new
  */
+/*@{*/
 typedef struct _PnlObject PnlObject;
 
+/**
+ * Casts any object into a PnlObject
+ */
 #define PNL_OBJECT(o) ((PnlObject *) o)
-#define PNL_GET_TYPE (o) ( ((PnlObject *) o)->type)
-#define PNL_GET_PARENT_TYPE (o) ( ((PnlObject *) o)->parent_type)
+/**
+ * Returns the type of any object inheriting from PnlObject
+ */
+#define PNL_GET_TYPE(o) (((PnlObject *) o)->type)
+/**
+ * Returns the parent type of any object inheriting from PnlObject
+ */
+#define PNL_GET_PARENT_TYPE(o) (((PnlObject *) o)->parent_type)
 
 /**
  * PnlType is used to store the id of all the objects existing in Pnl 
@@ -71,5 +84,6 @@ struct _PnlObject
 
 extern PnlObject* pnl_object_new (PnlType type);
 
+/*@}*/
 
 #endif /* _PNL_OBJECT_H */
