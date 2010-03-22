@@ -35,6 +35,7 @@ static void permute_vect_test ()
   x = pnl_vect_create_from_double(10, 1.);
   pnl_vect_cumsum (x);
   px = pnl_vect_create (0);
+  p = pnl_permutation_create (10);
   for ( i=0 ; i<10 ; i++) p->array[i] = t[i];
 
   printf("original vector\n");
