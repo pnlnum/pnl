@@ -274,11 +274,9 @@ void FUNCTION(pnl_mat,clone)(TYPE(PnlMat) *clone, const TYPE(PnlMat) *M)
 }
 
 /**
- * resizes a TYPE(PnlMat).
- *
- * If the new size is smaller than the current one, no memory is freed. If the
- * new size is larger than the current mem_size, a new pointer is
- * allocated. The old data are kept.
+ * Resizes a TYPE(PnlMat).  If the new size is smaller than the current one, no
+ * memory is freed. If the new size is larger than the current mem_size, a new
+ * pointer is allocated. The old data are kept.
  *
  * @param M : a pointer to an already existing TYPE(PnlMat) 
  * @param m : new nb rows
@@ -302,14 +300,13 @@ int FUNCTION(pnl_mat,resize)(TYPE(PnlMat) *M, int m, int n)
   if (M->mem_size >= mn) 
     {
       /* If the new size is smaller, we do not reduce the size of the
-         allocated block. It may change, but il may allow to grow the matrix
+         allocated block. It may change, but it may allow to grow the matrix
          quicker */
       M->m=m; M->n=n; M->mn = mn;
       return OK;
     }
 
   /* Now, M->mem_size < mn */
-  if (M->array != NULL) free (M->array);
   if ((M->array = realloc(M->array, mn * sizeof(BASE))) == NULL) return FAIL;
   M->m = m; M->n = n;
   M->mn = M->mem_size = mn;
