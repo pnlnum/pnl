@@ -41,6 +41,16 @@
  ***************************/
  
 /**
+ * Initializes a PnlMat
+ */
+void FUNCTION(pnl_mat,init)(TYPE(PnlMat) *o)
+{
+  o->object.parent_type = PNL_TYPE_MATRIX;
+  o->object.type = CONCAT2(PNL_TYPE_MATRIX_, BASE_TYPE);
+  o->object.label = FUNCTION(pnl_mat,label);
+}
+
+/**
  * Creates an empty PnlMat
  * @return a TYPE(PnlMat) pointer
  */
@@ -48,8 +58,7 @@ TYPE(PnlMat) * FUNCTION(pnl_mat,new)()
 {
   TYPE(PnlMat) *o;
   if ( (o = (TYPE(PnlMat) *) pnl_mat_object_new ()) == NULL) return NULL;
-  o->object.type = CONCAT2(PNL_TYPE_MATRIX_, BASE_TYPE);
-  o->object.label = FUNCTION(pnl_mat,label);
+  FUNCTION(pnl_mat,init)(o);
   return o;
 }
 
@@ -151,7 +160,7 @@ TYPE(PnlMat) * FUNCTION(pnl_mat,create_from_list)(int m, int n, ...)
 TYPE(PnlMat) FUNCTION(pnl_mat,wrap_array)(const BASE* x, int m, int n)
 {
   TYPE(PnlMat) M;
-
+  FUNCTION(pnl_mat,init)(&M);
   M.m = m;
   M.n = n;
   M.mn = m*n;
@@ -655,6 +664,7 @@ TYPE(PnlVect) FUNCTION(pnl_vect,wrap_mat_row)(const TYPE(PnlMat) *M, int i)
 {
   TYPE(PnlVect) V;
   PNL_CHECK (i>=M->m,"index out of range", "pnl_vect_wrap_mat_row");
+  FUNCTION(pnl_vect,init)(&V);
   V.size = M->n;
   V.mem_size = 0;
   V.owner = 0;
@@ -671,6 +681,7 @@ TYPE(PnlVect) FUNCTION(pnl_vect,wrap_mat_row)(const TYPE(PnlMat) *M, int i)
 TYPE(PnlMat) FUNCTION(pnl_mat,wrap_vect)(const TYPE(PnlVect) *V)
 {
   TYPE(PnlMat) M;
+  FUNCTION(pnl_mat,init)(&M);
   M.m = V->size;
   M.n = 1;
   M.mn = V->size;

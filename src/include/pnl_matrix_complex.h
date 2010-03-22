@@ -38,6 +38,7 @@ struct _PnlMatComplex {
 };
 
 
+extern void pnl_mat_complex_init(PnlMatComplex *); 
 extern PnlMatComplex* pnl_mat_complex_new(); 
 extern PnlMatComplex* pnl_mat_complex_create(int m, int n); 
 extern PnlMatComplex* pnl_mat_complex_create_from_dcomplex(int m, int n, dcomplex x);

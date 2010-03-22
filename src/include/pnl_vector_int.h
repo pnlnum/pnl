@@ -60,6 +60,7 @@ extern void pnl_vect_int_set(PnlVectInt *v, int i, int x);
 extern int pnl_vect_int_get(const PnlVectInt *v, int i);
 extern int* pnl_vect_int_lget(PnlVectInt *v, int i);
 extern void pnl_vect_int_free(PnlVectInt **v);
+extern void pnl_vect_int_init(PnlVectInt *v);
 extern PnlVectInt* pnl_vect_int_new();
 extern PnlVectInt* pnl_vect_int_create(int size);
 extern PnlVectInt pnl_vect_int_wrap_array(const int *x, int size);

@@ -118,6 +118,7 @@ extern void pnl_vect_complex_set_real (const PnlVectComplex *v, int i, double re
 extern void pnl_vect_complex_set_imag (const PnlVectComplex *v, int i, double im);
 
 extern void pnl_vect_complex_free(PnlVectComplex **v);
+extern void pnl_vect_complex_init(PnlVectComplex *v);
 extern PnlVectComplex* pnl_vect_complex_new();
 extern PnlVectComplex* pnl_vect_complex_create(int size);
 extern PnlVectComplex pnl_vect_complex_wrap_array(const dcomplex *x, int size);

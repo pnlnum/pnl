@@ -50,6 +50,7 @@ struct _PnlMat{
   int owner; /*!< 1 if the object owns its array member, 0 otherwise */
 }; 
 
+extern void pnl_mat_init(PnlMat *); 
 extern PnlMat* pnl_mat_new(); 
 extern PnlMat* pnl_mat_create(int m, int n); 
 extern PnlMat* pnl_mat_create_from_double(int m, int n, double x);

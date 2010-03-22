@@ -30,6 +30,17 @@
 #include <stdarg.h>
 #include "pnl_mathtools.h"
 
+
+/** 
+ * Initializes a PnlVect with size 0 
+ */
+void FUNCTION(pnl_vect,init)(TYPE(PnlVect) *o)
+{
+  o->object.parent_type = PNL_TYPE_VECTOR;
+  o->object.type = CONCAT2(PNL_TYPE_VECTOR_, BASE_TYPE);
+  o->object.label = FUNCTION(pnl_vect,label);
+}
+
 /** 
  * Creates a new PnlVect with size 0 and initializes the object
  * 
@@ -38,8 +49,7 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,new)()
 {
   TYPE(PnlVect) *o;
   if ( (o = (TYPE(PnlVect) *) pnl_vect_object_new ()) == NULL) return NULL;
-  o->object.type = CONCAT2(PNL_TYPE_VECTOR_, BASE_TYPE);
-  o->object.label = FUNCTION(pnl_vect,label);
+  FUNCTION(pnl_vect,init)(o);
   return o;
 }
 
@@ -239,6 +249,7 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_subvect) (const TYPE(PnlVect) *V, const 
 TYPE(PnlVect) FUNCTION(pnl_vect,wrap_array)(const BASE* x, int m)
 {
   TYPE(PnlVect) v;
+  FUNCTION (pnl_vect,init) (&v);
 
   v.size = m;
   v.owner = 0;
@@ -1436,6 +1447,7 @@ TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect)(const TYPE(PnlVect) *V, int i,int
 #ifndef PNL_RANGE_CHECK_OFF
   if ((i >= V->size) ||(s >= V->size) || (s<=0))  {PNL_ERROR ("index out of range", "pnl_vect_extract_with_size");}
 #endif
+  FUNCTION(pnl_vect,init)(&ret);
   ret.size = s;
   ret.mem_size = 0;
   ret.owner = 0;
@@ -1465,6 +1477,7 @@ TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect_with_last)(const TYPE(PnlVect) *V,
 TYPE(PnlVect) FUNCTION(pnl_vect,wrap_mat)(const TYPE(PnlMat) *M)
 {
   TYPE(PnlVect) V;
+  FUNCTION(pnl_vect,init)(&V);
   V.size = M->mn;
   V.mem_size = 0;
   V.owner = 0;

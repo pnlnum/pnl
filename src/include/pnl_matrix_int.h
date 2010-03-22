@@ -37,6 +37,7 @@ struct _PnlMatInt {
   int owner; /*!< 1 if the object owns its array member, 0 otherwise */
 };
 
+extern void pnl_mat_int_init(PnlMatInt *); 
 extern PnlMatInt* pnl_mat_int_new(); 
 extern PnlMatInt* pnl_mat_int_create(int m, int n); 
 extern PnlMatInt* pnl_mat_int_create_from_int(int m, int n, int x);
