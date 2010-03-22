@@ -125,7 +125,7 @@ parts.
 
 #endif /* _PNL_MATRIX_H
 \end{verbatim}
-All the header files are protected by an \verb!extern ``C''! declaration for
+All the header files are protected by an \verb!extern "C"! declaration for
 possible use with a C++ compiler.
 
   \item All function names are prefixed by \verb!pnl_! except those implementing
@@ -144,10 +144,11 @@ possible use with a C++ compiler.
     These objects must be freed by calling respectively \verb!pnl_foo_free! or
     \verb!pnl_foo_bar_free!
     
-  \item Every object must implement a \verb!pnl_xxx_new! function which an empty
-    object with all its elements properly initialized. This means that the
-    objects returned that \verb!pnl_xxx_new! functions can be used as output
-    arguments. They are suitable for being resized. 
+  \item Every object must implement a \verb!pnl_xxx_new! function which creates
+    an empty object with all its elements properly set to $0$. This means that
+    the objects returned by \verb!pnl_xxx_new! functions can be used as output
+    arguments for functions ending in \verb!_inplace! for instance. They are
+    suitable for being resized. 
 
   \item Functions containing \verb!_wrap_! in their names always return an
     object, not a pointer to an object, and do not make any use of dynamic
@@ -243,7 +244,7 @@ possible use with a C++ compiler.
     \begin{verbatim}
     PnlVect *v1, *v2;
     v1 = pnl_vect_create_from_double (5, 2.5);
-    v2 = pnl_vect_create (0);
+    v2 = pnl_vect_new ();
     pnl_vect_clone (v2, v1);
     \end{verbatim}
     \verb!v1! and \verb!v2! are two vectors of size 5 with all their elements
