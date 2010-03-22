@@ -30,6 +30,19 @@
 #include <stdarg.h>
 #include "pnl_mathtools.h"
 
+/** 
+ * Creates a new PnlVect with size 0 and initializes the object
+ * 
+ */
+TYPE(PnlVect)* FUNCTION(pnl_vect,new)()
+{
+  TYPE(PnlVect) *o;
+  if ( (o = (TYPE(PnlVect) *) pnl_vect_object_new ()) == NULL) return NULL;
+  o->object.type = CONCAT2(PNL_TYPE_VECTOR_, BASE_TYPE);
+  o->object.label = FUNCTION(pnl_vect,label);
+  return o;
+}
+
 
 /**
  * creates a new TYPE(PnlVect)pointer.
@@ -40,16 +53,14 @@
 TYPE(PnlVect) * FUNCTION(pnl_vect,create)(int size)
 {
   TYPE(PnlVect)* v;
-  if ((v = malloc (sizeof (TYPE(PnlVect)))) == NULL) return NULL;
-  v->size = size;
-  v->mem_size = size;
-  v->owner = 1;
+  if ((v = FUNCTION(pnl_vect,new)()) == NULL) return NULL;
   if (size > 0)
     {
       if ((v->array = malloc (size * sizeof (BASE))) == NULL) return NULL;
+      v->size = size;
+      v->mem_size = size;
+      v->owner = 1;
     }
-  else
-    v->array = (BASE*) NULL;
   return v;
 }
 
@@ -299,7 +310,7 @@ void FUNCTION(pnl_vect,free)(TYPE(PnlVect) **v)
 }
 
 /**
- * resizes a TYPE(PnlVect). If the new size is smaller than the
+ * Resizes a TYPE(PnlVect). If the new size is smaller than the
  * current one, no memory is freed and the datas are
  * kept. If the new size is larger than the current one, a
  * new pointer is allocated. The old datas are kept. 
@@ -325,7 +336,7 @@ int FUNCTION(pnl_vect,resize)(TYPE(PnlVect) * v, int size)
   if (v->mem_size >= size)
     {
       /* If the new size is smaller, we do not reduce the size of the
-         allocated block. It may change, but il may allow to grow the vector
+         allocated block. It may change, but it may allow to grow the vector
          quicker */
       v->size=size; return OK;
     }

@@ -24,6 +24,11 @@ extern "C" {
   
 
 struct _PnlMatInt {
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows any PnlMatXXX pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
   int m; /*!< nb rows */ 
   int n; /*!< nb columns */ 
   int mn; /*!< product m*n */
@@ -32,6 +37,7 @@ struct _PnlMatInt {
   int owner; /*!< 1 if the object owns its array member, 0 otherwise */
 };
 
+extern PnlMatInt* pnl_mat_int_new(); 
 extern PnlMatInt* pnl_mat_int_create(int m, int n); 
 extern PnlMatInt* pnl_mat_int_create_from_int(int m, int n, int x);
 extern PnlMatInt* pnl_mat_int_create_from_ptr(int m, int n, const int* x);
@@ -158,12 +164,18 @@ extern int* pnl_mat_int_lget(PnlMatInt *v, int i, int j);
 /*@{*/
 
 typedef struct PnlHmatInt{
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows any PnlMatXXX pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
   int ndim; /*!< nb dimensions */ 
   int *dims; /*!< pointer to store the value of the ndim dimensions */ 
   int mn; /*!< product dim_1 *...*dim_ndim */
   int *array; /*!< pointer to store */
 } PnlHmatInt;
 
+extern PnlHmatInt* pnl_hmat_int_new(); 
 extern PnlHmatInt* pnl_hmat_int_create(int ndim, const int *dims); 
 extern PnlHmatInt* pnl_hmat_int_create_from_int(int ndim, const int *dims, int x); 
 extern PnlHmatInt* pnl_hmat_int_create_from_ptr(int ndim, const int *dims, const int *x);

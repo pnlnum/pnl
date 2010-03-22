@@ -47,6 +47,7 @@
 #undef SHORT
 #undef LSHORT
 #undef ATOMIC
+#undef BASE_TYPE
 #undef MULTIPLICITY
 #undef IN_FORMAT
 #undef OUT_FORMAT

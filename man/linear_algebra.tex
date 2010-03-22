@@ -64,6 +64,8 @@ other basic types, one must replace {\tt pnl_vect} and {\tt double} according
 the above table. 
 \subparagraph{Constructors and destructors}
 \begin{itemize}
+  \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_new}{}
+  \sshortdescribe Creates a new \refstruct{PnlVect} of size 0.  
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create}{int size}
   \sshortdescribe Creates a new \refstruct{PnlVect} pointer.  
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_from_zero}{int size}
@@ -429,8 +431,11 @@ typedef struct PnlVectCompact {
 \subsubsection{Functions}
 
 \begin{itemize}
+  \item \describefun{\refstruct{PnlVectCompact} \ptr }{pnl_vect_compact_new}{}
+  \sshortdescribe Creates a \refstruct{PnlVectCompact} of size 0.  
+
 \item \describefun{\refstruct{PnlVectCompact} \ptr }{pnl_vect_compact_create}{int n, double x}
-  \sshortdescribe Allocates a \refstruct{PnlVectCompact}.  
+  \sshortdescribe Creates a \refstruct{PnlVectCompact}.  
 
 \item \describefun{int}{pnl_vect_compact_resize}{\refstruct{PnlVectCompact}
     \ptr \refstruct{v}, int size, double x} 
@@ -533,6 +538,9 @@ the above table.
 
 \paragraph{Constructors and destructors}
 \begin{itemize}
+  \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_new}{}
+  \sshortdescribe Creates a \refstruct{PnlMat} of size 0
+
 \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_create}{int m, int n}
   \sshortdescribe Creates a \refstruct{PnlMat}  with \var{m} rows and \var{n} columns.
 
@@ -1171,9 +1179,10 @@ diagonal ($M_{i, i+1}$) and the lower diagonal ($M_{i-1, i}$).
 \subsubsection{Functions}
 \paragraph{Constructors and destructors}
 \begin{itemize}
-  \item 
-    \describefun{\refstruct{PnlTridiagMat} \ptr }{pnl_tridiag_mat_create}{int size}
-    \sshortdescribe Creates a \refstruct{PnlTridiagMat}
+  \item \describefun{\refstruct{PnlTridiagMat} \ptr }{pnl_tridiag_mat_new}{}
+    \sshortdescribe Creates a \refstruct{PnlTridiagMat} with size 0
+  \item \describefun{\refstruct{PnlTridiagMat} \ptr }{pnl_tridiag_mat_create}{int size}
+    \sshortdescribe Creates a \refstruct{PnlTridiagMat} with size \var{size}
   \item \describefun{\refstruct{PnlTridiagMat} \ptr }{pnl_tridiag_mat_create_from_double}{int size, double x}
     \sshortdescribe Creates a \refstruct{PnlTridiagMat} with the 3 diagonals
     filled with \var{x}
@@ -1300,6 +1309,9 @@ The structures and functions related to band matrices are declared in
 \subsubsection{Functions}
 \paragraph{Constructors and destructors}
 \begin{itemize}
+  \item \describefun{\refstruct{PnlBandMat}\ptr }{pnl_band_mat_new}{}
+  \sshortdescribe Creates a band matrix of size 0.
+
 \item \describefun{\refstruct{PnlBandMat}\ptr }{pnl_band_mat_create}{int m, int n, int
     nl, int nu}
   \sshortdescribe Creates a band matrix of size \var{m x n} with \var{nl} lower
@@ -1502,16 +1514,24 @@ the above table.
 
 \paragraph{Constructors and destructors}
 \begin{itemize}
+  \item \describefun{\refstruct{PnlHmat} \ptr }{pnl_hmat_new}{}
+    \sshortdescribe Creates an empty \refstruct{PnlHmat}.
+
 \item \describefun{\refstruct{PnlHmat} \ptr }{pnl_hmat_create}{int ndim, const int \ptr dims}
+  \sshortdescribe Creates a \refstruct{PnlHmat} with \var{ndim} dimensions and
+  the size of each dimension is given by the entries of the integer array
+  \var{dims}
   
 \item 
   \describefun{\refstruct{PnlHmat} \ptr }{pnl_hmat_create_from_double}{int ndim, const int \ptr dims, double x}
+  \sshortdescribe Creates a \refstruct{PnlHmat} with \var{ndim} dimensions given
+  by $\prod_i \var{dims[i]}$ filled with \var{x}.
   
 \item 
   \describefun{\refstruct{PnlHmat} \ptr }{pnl_hmat_create_from_ptr}{int ndim, const int \ptr dims, const double \ptr x}
   
-\item 
-  \describefun{void}{pnl_hmat_free}{\refstruct{PnlHmat} \ptr \ptr H}
+\item \describefun{void}{pnl_hmat_free}{\refstruct{PnlHmat} \ptr \ptr H}
+  \sshortdescribe Frees a \refstruct{PnlHmat}
   
 \item \describefun{\refstruct{PnlHmat} \ptr }{pnl_hmat_copy}{const \refstruct{PnlHmat} \ptr H}
   \sshortdescribe Copies a \refstruct{PnlHmat}.
@@ -1824,8 +1844,9 @@ matrix vector multiplication as a parameter of the solver.
 
 Only available for symmetric and positive matrices.
 \begin{itemize}
-\item 
-  \describefun{\refstruct{PnlCgSolver} \ptr }{pnl_cg_solver_create}{int Size, int max-iter, double tolerance}
+  \item \describefun{\refstruct{PnlCgSolver} \ptr }{pnl_cg_solver_new}{}
+    \sshortdescribe Creates an empty \refstruct{PnlCgSolver}  
+\item   \describefun{\refstruct{PnlCgSolver} \ptr }{pnl_cg_solver_create}{int Size, int max-iter, double tolerance}
   \sshortdescribe Creates a new \refstruct{PnlCgSolver} pointer.  
 \item \describefun{void}{pnl_cg_solver_initialisation}{\refstruct{PnlCgSolver} \ptr Solver, const \refstruct{PnlVect} \ptr b}
   \sshortdescribe Initialisation of the solver at the beginning of iterative method.  
@@ -1836,6 +1857,8 @@ Only available for symmetric and positive matrices.
 \end{itemize}
 \paragraph{BICG stab}
 \begin{itemize}
+  \item \describefun{\refstruct{PnlBicgSolver} \ptr }{pnl_bicg_solver_new}{}
+    \sshortdescribe Creates an empty \refstruct{PnlBicgSolver}.  
 \item \describefun{\refstruct{PnlBicgSolver} \ptr }{pnl_bicg_solver_create}{int Size, int max-iter, double tolerance}
   \sshortdescribe Creates a new \refstruct{PnlBicgSolver} pointer.  
 \item \describefun{void}{pnl_bicg_solver_initialisation}{\refstruct{PnlBicgSolver} \ptr Solver, const \refstruct{PnlVect} \ptr b}
@@ -1856,6 +1879,8 @@ as initial guess.
 Note that if restart equals $m$, we have a classical GMRES algorithm.
 
 \begin{itemize}
+  \item \describefun{\refstruct{PnlGmresSolver} \ptr }{pnl_gmres_solver_new}{}
+    \sshortdescribe Creates an empty \refstruct{PnlGmresSolver}  
 \item \describefun{\refstruct{PnlGmresSolver} \ptr }{pnl_gmres_solver_create}{int Size, int max-iter, int restart, double tolerance}
   \sshortdescribe Creates a new \refstruct{PnlGmresSolver} pointer.  
 \item \describefun{void}{pnl_gmres_solver_initialisation}{\refstruct{PnlGmresSolver} \ptr Solver, const \refstruct{PnlVect} \ptr b}

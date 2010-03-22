@@ -41,33 +41,42 @@
  ***************************/
  
 /**
- * creates a PnlMat
- * @param m number of rows
- * @param n number of columns
+ * Creates an empty PnlMat
  * @return a TYPE(PnlMat) pointer
  */
-TYPE(PnlMat) * FUNCTION(pnl_mat,create)(int m, int n)
+TYPE(PnlMat) * FUNCTION(pnl_mat,new)()
 {
-  TYPE(PnlMat) *v;
-  if ((v = malloc (sizeof (TYPE(PnlMat)))) == NULL)
-    return NULL;
-  v->m = m;
-  v->n = n;
-  v->mn = m * n;
-  v->mem_size = v->mn;
-  v->owner = 1;
-  if (v->mn > 0)
-    {
-      if ((v->array = malloc (v->mn * sizeof(BASE))) == NULL)
-        return NULL;
-    }
-  else
-    v->array = (BASE*)NULL;  
-  return v;  
+  TYPE(PnlMat) *o;
+  if ( (o = (TYPE(PnlMat) *) pnl_mat_object_new ()) == NULL) return NULL;
+  o->object.type = CONCAT2(PNL_TYPE_MATRIX_, BASE_TYPE);
+  o->object.label = FUNCTION(pnl_mat,label);
+  return o;
 }
 
 /**
- * creates a TYPE(PnlMat)
+ * Creates a PnlMat
+ * @param m number of rows
+ * @param n number of columns
+ * @return a TYPE(PnlMat) pointer. The content of the array is not set.
+ */
+TYPE(PnlMat) * FUNCTION(pnl_mat,create)(int m, int n)
+{
+  TYPE(PnlMat) *M;
+  if ((M = FUNCTION(pnl_mat,new)()) == NULL) return NULL;
+  if (m>0 && n>0)
+    {
+      M->m = m;
+      M->n = n;
+      M->mn = m * n;
+      if ((M->array = malloc (M->mn * sizeof(BASE))) == NULL) return NULL;
+      M->mem_size = M->mn;
+      M->owner = 1;
+    }
+  return M;  
+}
+
+/**
+ * Creates a TYPE(PnlMat) filled with a constant value
  * @param m number of rows
  * @param n number of columns
  * @param x used to fill the matrix with
@@ -75,23 +84,17 @@ TYPE(PnlMat) * FUNCTION(pnl_mat,create)(int m, int n)
  */
 TYPE(PnlMat)* FUNCTION(pnl_mat,CONCAT2(create_from_,BASE))(int m, int n, BASE x)
 {
-  TYPE(PnlMat) *v;
+  TYPE(PnlMat) *M;
   int i;
-  BASE *ptr;
   
-  if ((v=FUNCTION(pnl_mat,create)(m, n))==NULL)
-    return NULL;
+  if ((M=FUNCTION(pnl_mat,create)(m, n))==NULL) return NULL;
 
-  ptr= FUNCTION(pnl_mat,lget) (v, 0, 0);
-  for (i=0; i<v->mn; i++)
-    {
-      *ptr = x; ptr++;
-    }
-  return v;
+  for (i=0; i<M->mn; i++) { M->array[i] = x; }
+  return M;
 }
 
 /**
- * creates a TYPE(PnlMat)
+ * Creates a TYPE(PnlMat) from a C array
  * @param m number of rows
  * @param n number of columns
  * @param x an array of BASE used to fill the TYPE(PnlMat). should be of length
@@ -100,18 +103,17 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,CONCAT2(create_from_,BASE))(int m, int n, BASE x)
  */
 TYPE(PnlMat)* FUNCTION(pnl_mat,create_from_ptr)(int m, int n, const BASE* x)
 {
-  TYPE(PnlMat) *v;
+  TYPE(PnlMat) *M;
   
-  if ((v=FUNCTION(pnl_mat,create)(m, n))==NULL)
-    return NULL;
+  if ((M=FUNCTION(pnl_mat,create)(m, n))==NULL) return NULL;
   
-  memcpy(v->array, x, v->mn*sizeof(BASE));
-  return v;
+  memcpy(M->array, x, M->mn*sizeof(BASE));
+  return M;
 }
 
 
 /**
- * creates a new TYPE(PnlVect)pointer.
+ * Creates a new TYPE(PnlMat) using a list of values.
  *
  * @param m number of rows
  * @param n number of columns
@@ -125,8 +127,7 @@ TYPE(PnlMat) * FUNCTION(pnl_mat,create_from_list)(int m, int n, ...)
   va_list ap;
   int i;
 
-  if ((M=FUNCTION(pnl_mat,create)(m, n))==NULL)
-    return NULL;
+  if ((M=FUNCTION(pnl_mat,create)(m, n))==NULL) return NULL;
   va_start (ap, n);
 
   for (i=0; i<M->mn; i++)
@@ -140,7 +141,7 @@ TYPE(PnlMat) * FUNCTION(pnl_mat,create_from_list)(int m, int n, ...)
 }
 
 /**
- * creates a TYPE(PnlMat)
+ * Wraps a C array into a PnlMat
  * @param m number of rows
  * @param n number of columns
  * @param x an array of BASE used to fill the TYPE(PnlMat). should be of length
@@ -1768,6 +1769,15 @@ void FUNCTION(pnl_mat, qsort_index)(TYPE(PnlMat) * A, PnlMatInt *t, char dir, ch
  *** PnlHmat functions ***
  ****************************/
 
+
+TYPE(PnlHmat)* FUNCTION(pnl_hmat,new)()
+{
+  TYPE(PnlHmat) *o;
+  if ( (o = (TYPE(PnlHmat) *) pnl_hmat_object_new ()) == NULL) return NULL;
+  o->object.type = CONCAT2(PNL_TYPE_HMATRIX_, BASE_TYPE);
+  o->object.label = FUNCTION(pnl_hmat,label);
+  return o;
+}
 
 TYPE(PnlHmat)* FUNCTION(pnl_hmat,create)(int ndim, const int *dims)
 {

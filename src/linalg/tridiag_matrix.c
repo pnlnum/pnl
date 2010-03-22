@@ -86,6 +86,33 @@ void pnl_progonka(const double low,
  *** PnlTridiagmat functions ***
  *******************************/
 
+static char pnl_tridiag_mat_object_label[] = "PnlTridiagMatObject";
+static char pnl_tridiag_mat_label[] = "PnlTridiagMat";
+
+PnlTridiagMatObject* pnl_tridiag_mat_object_new ()
+{
+  PnlTridiagMatObject *o;
+  if ( (o = malloc (sizeof(PnlTridiagMatObject))) == NULL) return NULL;
+  o->size = 0;
+  o->D = o->DU = o->DL = NULL;
+  o->object.type = PNL_TYPE_TRIDIAG_MATRIX;
+  o->object.parent_type = PNL_TYPE_TRIDIAG_MATRIX;
+  o->object.label = pnl_tridiag_mat_object_label;
+  return o;
+}
+
+/**
+ * Creates an empty PnlTridiagMat
+ */
+PnlTridiagMat* pnl_tridiag_mat_new()
+{
+  PnlTridiagMat *o;
+  if ( (o = (PnlTridiagMat *) pnl_tridiag_mat_object_new ()) == NULL) return NULL;
+  o->object.parent_type = PNL_TYPE_TRIDIAG_MATRIX_DOUBLE;
+  o->object.label = pnl_tridiag_mat_label;
+  return o;
+}
+
 /**
  * creates a PnlTridiagMat
  * @param size number of rows
@@ -93,22 +120,16 @@ void pnl_progonka(const double low,
  */
 PnlTridiagMat* pnl_tridiag_mat_create(int size)
 {
-  PnlTridiagMat *v;
-  if((v=malloc(sizeof(PnlTridiagMat)))==NULL) return NULL;
-  v->size=size;
+  PnlTridiagMat *o;
+  if ( (o = pnl_tridiag_mat_new ()) == NULL) return NULL;
   if (size>0)
     {
-      if((v->D=malloc(size*sizeof(double)))==NULL) return NULL;
-      if((v->DU=malloc((size-1)*sizeof(double)))==NULL) return NULL;
-      if((v->DL=malloc((size-1)*sizeof(double)))==NULL) return NULL;
+      o->size=size;
+      if((o->D=malloc(size*sizeof(double)))==NULL) return NULL;
+      if((o->DU=malloc((size-1)*sizeof(double)))==NULL) return NULL;
+      if((o->DL=malloc((size-1)*sizeof(double)))==NULL) return NULL;
     }
-  else
-    {
-      v->D = (double*)NULL;
-      v->DU = (double*)NULL;
-      v->DL = (double*)NULL;
-    }
-  return v;  
+  return o;  
 }
 
 /**

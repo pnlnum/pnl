@@ -43,17 +43,37 @@ extern void pnl_progonka(const double low,
  * Tridiagonal matrices must be square.
  */
 
-typedef struct 
+typedef struct _PnlTridiagMatObject PnlTridiagMatObject;
+typedef struct _PnlTridiagMat PnlTridiagMat;
+
+struct _PnlTridiagMat
 {
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows any PnlVectXXX pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
   int size; /*!< number of rows, the matrix must be square */
   double *D; /*!< diagonal elements */
   double *DU; /*!< upper diagonal elements */
   double *DL; /*!< lower diagonal elements */
-} PnlTridiagMat;
+};
 
+struct _PnlTridiagMatObject
+{
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows any PnlVectXXX pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
+  int size; /*!< number of rows, the matrix must be square */
+  void *D; /*!< diagonal elements */
+  void *DU; /*!< upper diagonal elements */
+  void *DL; /*!< lower diagonal elements */
+};
 
-extern void pnl_tridiag_mat_free(PnlTridiagMat **m);
-extern int pnl_tridiag_mat_resize(PnlTridiagMat *v, int size);
+extern PnlTridiagMatObject* pnl_tridiag_mat_object_new();
+extern PnlTridiagMat* pnl_tridiag_mat_new();
 extern PnlTridiagMat* pnl_tridiag_mat_create(int size);
 extern PnlTridiagMat* pnl_tridiag_mat_create_from_double(int size, double x);
 extern PnlTridiagMat* pnl_tridiag_mat_create_from_two_double(int size, double x, double y);
@@ -63,6 +83,8 @@ extern PnlTridiagMat* pnl_tridiag_mat_create_from_mat(const PnlMat * mat);
 extern PnlMat* pnl_tridiag_mat_to_mat(const PnlTridiagMat * mat);
 extern PnlTridiagMat* pnl_tridiag_mat_copy(const PnlTridiagMat * mat);
 extern void pnl_tridiag_mat_clone(PnlTridiagMat *clone, const PnlTridiagMat * mat);
+extern void pnl_tridiag_mat_free(PnlTridiagMat **m);
+extern int pnl_tridiag_mat_resize(PnlTridiagMat *v, int size);
 
 extern void pnl_tridiag_mat_map_inplace(PnlTridiagMat *lhs, double(*f)(double));
 extern void pnl_tridiag_mat_map_tridiag_mat_inplace(PnlTridiagMat *lhs, const PnlTridiagMat *rhs, double(*f)(double,double));

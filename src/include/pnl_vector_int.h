@@ -10,6 +10,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 #include <stdio.h>
+#include "pnl_object.h"
 #include "pnl_matrix.h"
 
 /**
@@ -21,6 +22,11 @@ extern "C" {
  */
 /*@{*/
 struct _PnlVectInt {
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows a PnlVectInt pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
   int size;/*!< size of the vector */ 
   int *array;/*!< pointer to store the data */
   int mem_size; /*!< size of the memory block allocated for array */
@@ -54,6 +60,7 @@ extern void pnl_vect_int_set(PnlVectInt *v, int i, int x);
 extern int pnl_vect_int_get(const PnlVectInt *v, int i);
 extern int* pnl_vect_int_lget(PnlVectInt *v, int i);
 extern void pnl_vect_int_free(PnlVectInt **v);
+extern PnlVectInt* pnl_vect_int_new();
 extern PnlVectInt* pnl_vect_int_create(int size);
 extern PnlVectInt pnl_vect_int_wrap_array(const int *x, int size);
 extern PnlVectInt* pnl_vect_int_create_from_int(int size, int x);

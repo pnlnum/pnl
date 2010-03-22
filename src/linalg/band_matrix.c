@@ -37,6 +37,39 @@ static double __op_mult(double a, double b) { return a*b; }
 static double __op_div(double a, double b) { return a/b; }
 static double __op_inv(double a) { return 1./a; }
 
+static char pnl_band_mat_object_label[] = "PnlBandMatObject";
+static char pnl_band_mat_label[] = "PnlBandMat";
+
+PnlBandMatObject* pnl_band_mat_object_new ()
+{
+  PnlBandMatObject *o;
+  if ( (o = malloc (sizeof(PnlBandMatObject))) == NULL) return NULL;
+  o->m = o->n = o->nu = o->nl = 0;
+  o->m_band = o->n_band = 0;
+  o->array = NULL;
+  o->object.type = PNL_TYPE_BAND_MATRIX;
+  o->object.parent_type = PNL_TYPE_BAND_MATRIX;
+  o->object.label = pnl_band_mat_object_label;
+  return o;
+}
+
+/**  
+ * Creates an empty band matrix 
+ *
+ * @return a PnlBandMat.
+ */
+PnlBandMat* pnl_band_mat_new () 
+{
+  PnlBandMat *o;
+
+  if ( (o = (PnlBandMat *) pnl_band_mat_object_new ()) == NULL ) return NULL;
+  o->object.type = PNL_TYPE_BAND_MATRIX_DOUBLE;
+  o->object.parent_type = PNL_TYPE_BAND_MATRIX;
+  o->object.label = pnl_band_mat_label;
+  return o;
+}
+
+
 /**  Creates a band matrix 
  *
  * @param m the number of rows.  
@@ -49,22 +82,19 @@ PnlBandMat* pnl_band_mat_create (int m, int n, int nl, int nu)
 {
   PnlBandMat *BM;
 
-  if (m < 0 || n < 0|| nu > n || nl > m) return NULL;
-  if ((BM = malloc (sizeof (PnlBandMat))) == NULL) return NULL;
-  BM->m = m;
-  BM->n = n;
-  BM->nl = nl;
-  BM->nu = nu;
-  if (m == 0 || n == 0)
+  if ( (BM = pnl_band_mat_new ()) == NULL ) return NULL;
+  if (m > 0 && n > 0)
     {
-      BM->m_band = BM->n_band = 0;
-      BM->array = NULL; return BM;
-    }
-  BM->m_band = (nl+nu+1); BM->n_band = n;
-  if ((BM->array = malloc ( BM->m_band * BM->n_band * sizeof(double))) == NULL)
-    {
-      free (BM);
-      return NULL;
+      BM->m = m;
+      BM->n = n;
+      BM->nl = nl;
+      BM->nu = nu;
+      BM->m_band = (nl+nu+1); BM->n_band = n;
+      if ((BM->array = malloc ( BM->m_band * BM->n_band * sizeof(double))) == NULL)
+        {
+          free (BM);
+          return NULL;
+        }
     }
   return BM;
 }
@@ -92,7 +122,6 @@ PnlBandMat* pnl_band_mat_create_from_mat(const PnlMat *M,int nl, int nu)
     }
   return BM;
 }
-
 
 /** 
  * Frees a PnlBandMat

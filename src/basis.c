@@ -617,6 +617,29 @@ enum_member _reg_basis [] =
 
 DEFINE_ENUM(PnlBases, _reg_basis);
 
+static char pnl_basis_label[] = "PnlBasis";
+
+/**
+ * Creates an empty PnlBasis
+ *
+ * @return a PnlBasis
+ */
+PnlBasis*  pnl_basis_new ()
+{
+  PnlBasis *o;
+
+  if ( (o = malloc (sizeof(PnlBasis))) == NULL ) return NULL;
+  o->nb_func = 0;
+  o->id = 0;
+  o->label = "";
+  o->nb_variates = 0;
+  o->T = NULL;
+  o->object.type = PNL_TYPE_BASIS;
+  o->object.parent_type = PNL_TYPE_OBJECT;
+  o->object.label = pnl_basis_label;
+  return o;
+}
+
 /**
  * Returns a  PnlBasis
  *
@@ -638,7 +661,7 @@ PnlBasis*  pnl_basis_create_from_tensor (int index, PnlMatInt *T)
       printf ("No basis found : index exceeded\n"); abort();
     }
 
-  b = malloc (sizeof (PnlBasis));
+  if ( (b = pnl_basis_new ()) == NULL ) return NULL;
   b->nb_func = T->m;
   b->id = index;
   b->label = e->label;
@@ -700,15 +723,6 @@ PnlBasis*  pnl_basis_create_from_degree (int index, int degree, int nb_variates)
   return pnl_basis_create_from_tensor (index, T);
 }
 
-
-/*
- * This a deprecated function synonymous of pnl_basis_create.
- * It will removed in the future 
- */
-PnlBasis*  pnl_basis_init (int index, int nb_func, int nb_variates)
-{
-  return pnl_basis_create (index, nb_func, nb_variates);
-}
 
 /** 
  * Frees a PnlBasis

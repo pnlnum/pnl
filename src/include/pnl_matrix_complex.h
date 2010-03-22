@@ -24,6 +24,11 @@ extern "C" {
 
 
 struct _PnlMatComplex {
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows any PnlMatXXX pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
   int m; /*!< nb rows */ 
   int n; /*!< nb columns */ 
   int mn; /*!< product m*n */
@@ -33,6 +38,7 @@ struct _PnlMatComplex {
 };
 
 
+extern PnlMatComplex* pnl_mat_complex_new(); 
 extern PnlMatComplex* pnl_mat_complex_create(int m, int n); 
 extern PnlMatComplex* pnl_mat_complex_create_from_dcomplex(int m, int n, dcomplex x);
 extern PnlMatComplex* pnl_mat_complex_create_from_ptr(int m, int n, const dcomplex* x);
@@ -150,12 +156,18 @@ extern dcomplex* pnl_mat_complex_lget(PnlMatComplex *v, int i, int j);
 /*@{*/
 
 typedef struct PnlHmatComplex{
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows any PnlMatXXX pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
   int ndim; /*!< nb dimensions */ 
   int *dims; /*!< pointer to store the value of the ndim dimensions */ 
   int mn; /*!< product dim_1 *...*dim_ndim */
   dcomplex *array; /*!< pointer to store */
 } PnlHmatComplex;
 
+extern PnlHmatComplex* pnl_hmat_complex_new(); 
 extern PnlHmatComplex* pnl_hmat_complex_create(int ndim, const int *dims); 
 extern PnlHmatComplex* pnl_hmat_complex_create_from_dcomplex(int ndim, const int *dims, dcomplex x); 
 extern PnlHmatComplex* pnl_hmat_complex_create_from_ptr(int ndim, const int *dims, const dcomplex *x);

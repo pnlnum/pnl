@@ -39,8 +39,17 @@ extern "C" {
  * min(m,j+nl)
  */
 /*@{*/
-typedef struct
+
+typedef struct _PnlBandMatObject PnlBandMatObject;
+typedef struct _PnlBandMat PnlBandMat;
+
+struct _PnlBandMat
 {
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows any PnlVectXXX pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
   int m; /*!< nb rows */ 
   int n; /*!< nb columns */ 
   int nu; /*!< nb of upperdiagonals */
@@ -48,8 +57,26 @@ typedef struct
   int m_band; /*!< nb rows of the band storage */
   int n_band; /*!< nb columns of the band storage */
   double *array;  /*!< a block to store the bands */  
-} PnlBandMat;
+} ;
 
+struct _PnlBandMatObject
+{
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows any PnlVectXXX pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
+  int m; /*!< nb rows */ 
+  int n; /*!< nb columns */ 
+  int nu; /*!< nb of upperdiagonals */
+  int nl; /*!< nb of lowerdiagonals */
+  int m_band; /*!< nb rows of the band storage */
+  int n_band; /*!< nb columns of the band storage */
+  void *array;  /*!< a block to store the bands */  
+} ;
+
+extern PnlBandMatObject* pnl_band_mat_object_new ();
+extern PnlBandMat* pnl_band_mat_new ();
 extern PnlBandMat* pnl_band_mat_create (int m, int n, int nl, int nu);
 extern PnlBandMat* pnl_band_mat_create_from_mat (const PnlMat *M, int nl, int nu);
 extern void pnl_band_mat_free (PnlBandMat **BM);

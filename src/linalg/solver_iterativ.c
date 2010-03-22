@@ -26,8 +26,34 @@
 #define DEBUG_SOLVER 0
 #define INFO_SOLVER 0
 
+static char pnl_iteration_label[] = "PnlIterationBase";
+static char pnl_cg_solver_label[] = "PnlCgSolver";
+static char pnl_bicg_solver_label[] = "PnlBicgSolver";
+static char pnl_gmres_solver_label[] = "PnlGmresSolver";
+
 /**
- * creates a new PnlIterationBase pointer.
+ * Creates an empty PnlIterationBase.
+ *
+ * @return  a PnlIterationBasepointer
+ */
+static PnlIterationBase* pnl_iteration_base_new() 
+{
+  PnlIterationBase * o;
+  if( (o=malloc(sizeof(PnlIterationBase)))==NULL ) return NULL;
+  o->iteration=0;
+  o->max_iter=0;
+  o->normb=0;
+  o->tol_=0;
+  o->resid=0.0;
+  o->error=0;
+  o->object.type = PNL_TYPE_ITERATION_BASE;
+  o->object.parent_type = PNL_TYPE_OBJECT;
+  o->object.label = pnl_iteration_label;
+  return o;
+}
+
+/**
+ * Creates a new PnlIterationBase pointer.
  *
  * @param max_iter_ : maximum number of iterations 
  * @param t : tolerance, parameter of iterative methods, ie relative error
@@ -36,14 +62,10 @@
 static PnlIterationBase* pnl_iteration_base_create(int max_iter_, double t) 
 {
   PnlIterationBase * It;
-  if((It=malloc(sizeof(PnlIterationBase)))==NULL)
-    return NULL;
-  It->iteration=0;
+  if((It = pnl_iteration_base_new ())==NULL) return NULL;
   It->max_iter=max_iter_;
   It->normb=1.0;
   It->tol_=t;
-  It->resid=0.0;
-  It->error=0;
   return It;
 }
 
@@ -227,6 +249,23 @@ static void pnl_iteration_base_failed(PnlIterationBase * it,int err_code,
 
 
 /**
+ * Creates an empty PnlCgSolver 
+ *
+ *@return  a PnlCgSolver pointer
+ */
+PnlCgSolver* pnl_cg_solver_new()
+{
+  PnlCgSolver * o;
+  if((o=malloc(sizeof(PnlCgSolver)))==NULL) return NULL;
+  o->r = o->z = o->p = o->q = NULL;
+  o->iter=pnl_iteration_base_new();
+  o->object.type = PNL_TYPE_CG_SOLVER;
+  o->object.parent_type = PNL_TYPE_OBJECT;
+  o->object.label = pnl_cg_solver_label;
+  return o;
+}
+
+/**
  * creates a new PnlCgSolver pointer.
  *
  * @param Size : the size of temporary vectors use in the method
@@ -237,8 +276,7 @@ static void pnl_iteration_base_failed(PnlIterationBase * it,int err_code,
 PnlCgSolver* pnl_cg_solver_create(int Size,int max_iter_, double tolerance_)
 {
   PnlCgSolver * Solver;
-  if((Solver=malloc(sizeof(PnlCgSolver)))==NULL)
-    return NULL;
+  if((Solver = pnl_cg_solver_new ()) ==NULL) return NULL;
   Solver->r=pnl_vect_create_from_double(Size,0.0);
   Solver->z=pnl_vect_create_from_double(Size,0.0);
   Solver->p=pnl_vect_create_from_double(Size,0.0);
@@ -347,6 +385,29 @@ int pnl_cg_solver_solve(void (* matrix_vector_product )(const void *,const PnlVe
 
 
 /**
+ * Creates an empty PnlBicgSolver 
+ *
+ *@return  a PnlBicgSolver pointer
+ */
+PnlBicgSolver* pnl_bicg_solver_new()
+{
+  PnlBicgSolver * o;
+  if((o=malloc(sizeof(PnlBicgSolver)))==NULL) return NULL;
+  o->r = NULL;
+  o->rtilde = NULL;
+  o->p = NULL;
+  o->phat = NULL;
+  o->s = NULL;
+  o->shat = NULL;
+  o->t = NULL;
+  o->v = NULL;
+  o->iter=pnl_iteration_base_new();
+  o->object.type = PNL_TYPE_CG_SOLVER;
+  o->object.parent_type = PNL_TYPE_OBJECT;
+  o->object.label = pnl_bicg_solver_label;
+  return o;
+}
+/**
  * creates a new PnlBicgSolver pointer.
  *
  * @param Size : the size of temporary vectors use in the method
@@ -357,8 +418,7 @@ int pnl_cg_solver_solve(void (* matrix_vector_product )(const void *,const PnlVe
 PnlBicgSolver* pnl_bicg_solver_create(int Size,int max_iter_, double tolerance_)
 {
   PnlBicgSolver * Solver;
-  if((Solver=malloc(sizeof(PnlBicgSolver)))==NULL)
-    return NULL;
+  if ((Solver = pnl_bicg_solver_new ()) == NULL) return NULL;
   Solver->r=pnl_vect_create_from_double(Size,0.0);
   Solver->rtilde=pnl_vect_create_from_double(Size,0.0);
   Solver->p=pnl_vect_create_from_double(Size,0.0);
@@ -498,10 +558,36 @@ int pnl_bicg_solver_solve(void (* matrix_vector_product )(const void *,const Pnl
 }
 
 
+/**
+ * Creates an empty PnlGmresSolver
+ *
+ *@return  a PnlGmresSolver pointer
+ */
+PnlGmresSolver* pnl_gmres_solver_new()
+{
+  int i;
+  PnlGmresSolver *o;
+  if((o=malloc(sizeof(PnlGmresSolver)))==NULL) return NULL;
+  o->restart = 0;
+  o->s = NULL;
+  o->cs = NULL;
+  o->sn = NULL;
+  o->w = NULL;
+  o->r = NULL;
+  o->H = NULL;
+  for(i=0;i<MAX_RESTART;i++) { o->v[i] = NULL; }
+  o->iter=pnl_iteration_base_new();
+  o->iter_inner=pnl_iteration_base_new();
+  o->object.type = PNL_TYPE_GMRES_SOLVER;
+  o->object.parent_type = PNL_TYPE_OBJECT;
+  o->object.label = pnl_gmres_solver_label;
+  return o;
+}
+
 
 
 /**
- * creates a new PnlGmresSolver pointer.
+ * Creates a new PnlGmresSolver pointer.
  *
  * @param Size : the size of temporary vectors use in the method
  * @param max_iter_  : maximum iteration number 
@@ -509,15 +595,12 @@ int pnl_bicg_solver_solve(void (* matrix_vector_product )(const void *,const Pnl
  * @param tolerance_ : relative error of iterative method
  *@return  a PnlGmresSolver pointer
  */
-PnlGmresSolver* pnl_gmres_solver_create(int Size,
-                                        int max_iter_, 
-                                        int restart_,
-                                        double tolerance_)
+PnlGmresSolver* pnl_gmres_solver_create(int Size, int max_iter_,
+                                        int restart_, double tolerance_)
 {
   int i;
   PnlGmresSolver *Solver;
-  if((Solver=malloc(sizeof(PnlGmresSolver)))==NULL)
-    return NULL;
+  if( (Solver = pnl_gmres_solver_new ()) == NULL ) return NULL;
   Solver->restart=MIN(MAX_RESTART - 1,restart_);
   Solver->s=pnl_vect_create_from_double(Solver->restart+1,0.0);
   Solver->cs=pnl_vect_create_from_double(Solver->restart+1,0.0);

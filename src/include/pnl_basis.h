@@ -8,6 +8,8 @@ extern "C" {
 
 #include "pnl_types.h"
 #include "pnl_matrix.h"
+#include "pnl_object.h"
+
 /**
  * \defgroup reg_basis Polynomial Bases
  */
@@ -18,6 +20,11 @@ extern "C" {
 enum {CANONICAL, HERMITIAN, TCHEBYCHEV }; 
 
 typedef struct {
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows any PnlBasis pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
   int         id; /*<! basis type */
   const char *label; /*!< string to label the basis */
   int         nb_variates;  /*!< number of variates */
@@ -32,6 +39,7 @@ typedef struct {
 } PnlBasis;
 
 extern enum_members PnlBases ;
+extern PnlBasis* pnl_basis_new ();
 extern PnlBasis* pnl_basis_create ( int index, int nb_func, int space_dim);
 extern PnlBasis* pnl_basis_create_from_degree ( int index, int degree, int space_dim);
 extern PnlBasis* pnl_basis_create_from_tensor ( int index, PnlMatInt *T);

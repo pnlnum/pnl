@@ -1,18 +1,14 @@
-- Change the functions to apply permutations because of the new Blas convention
-
-- Add a PnlObject
+- Should dgemm use Blas ?
 
 - Create an object for Random Number Generators
 
-- binding for MPI
+- Bindings for MPI
+
+- binding for quadpack (numerical integration + ode)
 
 - splines 
     CMlib 
     in scilab routines/callelm/somespline.f
-
-- Should dgemm use Blas ?
-
-- complex tridiag and band matrices
 
 - interface dgesvd
 
@@ -22,5 +18,6 @@
 
 - gradient algorithm
 
-- binding for quadpack (numerical integration + ode)
+- Change the functions to apply permutations because of the new Blas convention
 
+- Complex tridiag and band matrices

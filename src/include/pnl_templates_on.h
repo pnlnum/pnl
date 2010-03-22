@@ -12,6 +12,7 @@
 #define SHORT
 #define LSHORT
 #define ATOMIC double
+#define BASE_TYPE DOUBLE
 #define MULTIPLICITY 1
 #define FP 1
 #define IN_FORMAT "%lf"
@@ -42,6 +43,7 @@
 #define LSHORT _complex
 #define SHORT_REAL
 #define ATOMIC double
+#define BASE_TYPE DOUBLE
 #define MULTIPLICITY 2
 #define FP 1
 #define IN_FORMAT "%lf"
@@ -71,6 +73,7 @@
 #define SHORT Uint
 #define LSHORT _uint
 #define ATOMIC unsigned int
+#define BASE_TYPE UINT
 #define MULTIPLICITY 1
 #define IN_FORMAT "%u"
 #define OUT_FORMAT "%u"
@@ -99,6 +102,7 @@
 #define SHORT Int
 #define LSHORT _int
 #define ATOMIC int
+#define BASE_TYPE INT
 #define MULTIPLICITY 1
 #define IN_FORMAT "%d"
 #define OUT_FORMAT "%d"

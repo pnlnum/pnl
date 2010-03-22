@@ -143,6 +143,11 @@ possible use with a C++ compiler.
     \verb!PnlFooBar *! object (note the ``\ptr'')
     These objects must be freed by calling respectively \verb!pnl_foo_free! or
     \verb!pnl_foo_bar_free!
+    
+  \item Every object must implement a \verb!pnl_xxx_new! function which an empty
+    object with all its elements properly initialized. This means that the
+    objects returned that \verb!pnl_xxx_new! functions can be used as output
+    arguments. They are suitable for being resized. 
 
   \item Functions containing \verb!_wrap_! in their names always return an
     object, not a pointer to an object, and do not make any use of dynamic

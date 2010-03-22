@@ -1,3 +1,12 @@
+22/03/10 <jerome.lelong@gmail.com>
+	
+	* A top level class PnlObject added to simulate some inheritance.
+	All objects used in the Pnl now inherit from PnlObject and implement a
+	pnl_xxx_new which basically creates an empty object with all its fields
+	properly set to 0.
+	The function pnl_object_new can create any type of object returned as a
+	PnlObject *.
+
 21/03/10 <jerome.lelong@gmail.com>
 
 	* Functions added to emulate Scilab's find function

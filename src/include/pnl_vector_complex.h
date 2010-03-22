@@ -10,6 +10,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#include "pnl_object.h"
 #include "pnl_complex.h"
 #include "pnl_matrix.h"
 
@@ -23,6 +24,11 @@ extern "C" {
  */
 /*@{*/
 struct _PnlVectComplex {
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows a PnlVectComplex pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
   int size;/*!< size of the vector */ 
   dcomplex *array;/*!< pointer to store the data */
   int mem_size; /*!< size of the memory block allocated for array */
@@ -112,6 +118,7 @@ extern void pnl_vect_complex_set_real (const PnlVectComplex *v, int i, double re
 extern void pnl_vect_complex_set_imag (const PnlVectComplex *v, int i, double im);
 
 extern void pnl_vect_complex_free(PnlVectComplex **v);
+extern PnlVectComplex* pnl_vect_complex_new();
 extern PnlVectComplex* pnl_vect_complex_create(int size);
 extern PnlVectComplex pnl_vect_complex_wrap_array(const dcomplex *x, int size);
 extern PnlVectComplex* pnl_vect_complex_create_from_dcomplex(int size, dcomplex x);

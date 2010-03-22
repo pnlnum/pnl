@@ -10,18 +10,25 @@ extern "C" {
 #endif /* __cplusplus */
 
 #include <stdlib.h>
+#include "pnl_object.h"
 #include "pnl_matrix.h"
 
 /**
  * \ingroup PnlVectors
  */
 /*@{*/
-/**
- * \addtogroup PnlVect 
- */
 
+/**
+ * \defgroup PnlVect Double Vector 
+ */
 /*@{*/
+
 struct _PnlVect {
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows a PnlVect pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
   int size;/*!< size of the vector */ 
   double *array;/*!< pointer to store the data */
   int mem_size; /*!< size of the memory block allocated for array */
@@ -64,6 +71,7 @@ extern void pnl_vect_set(PnlVect *v, int i, double x);
 extern double pnl_vect_get(const PnlVect *v, int i);
 extern double* pnl_vect_lget(PnlVect *v, int i);
 extern void pnl_vect_free(PnlVect **v);
+extern PnlVect* pnl_vect_new();
 extern PnlVect* pnl_vect_create(int size);
 extern PnlVect pnl_vect_wrap_array(const double *x, int size);
 extern PnlVect* pnl_vect_create_from_zero(int size);
@@ -127,6 +135,30 @@ extern double pnl_vect_norm_one(const PnlVect *V); /*res=\Vert V \Vert_{l^1} */
 extern double pnl_vect_norm_infty(const PnlVect *V); /*res=\Vert V \Vert_{l^\infty} */
 extern void pnl_vect_swap_elements(PnlVect * v, int i, int j); 
 extern void pnl_vect_reverse(PnlVect * v);
+
+/**
+ * Compact PnlVect : used for variables that can either contain a single
+  * number or a PnlVect.
+  * vectors likes x*ones(n,1) are simply stored as a double x 
+  */
+typedef struct PnlVectCompact {
+  PnlObject object;
+  int size; /*!< size of the vector */
+  union {
+    double val; /*!< single value */
+    double *array; /*!< Pointer to double values */
+  };
+  char convert; /*!< 'a', 'd' : array, double */
+} PnlVectCompact;
+
+extern PnlVectCompact* pnl_vect_compact_new ();
+extern PnlVectCompact* pnl_vect_compact_create (int n, double x);
+extern int pnl_vect_compact_resize (PnlVectCompact *v, int size, double x);
+extern PnlVectCompact* pnl_vect_compact_copy(const PnlVectCompact *v);
+extern void pnl_vect_compact_free (PnlVectCompact **v);
+extern PnlVect* pnl_vect_compact_to_pnl_vect (const PnlVectCompact *C);
+extern double pnl_vect_compact_get (const PnlVectCompact *C, int i);
+
 /*@}*/
 /*@}*/
 

@@ -25,39 +25,6 @@ extern "C" {
 
 #endif /* PNL_RANGE_CHECK_OFF */
 
-/**
- * \defgroup PnlVect Double Vector 
- */
-/*@{*/
-/* Compact PnlVect : used for variables that can either contain a single
-   number or a PnlVect.
-   vectors likes x*ones(n,1) are simply stored as a double x */
-typedef struct PnlVectCompact {
-  int size; /*!< size of the vector */
-  union {
-    double val; /*!< single value */
-    double *array; /*!< Pointer to double values */
-  };
-  char convert; /*!< 'a', 'd' : array, double */
-} PnlVectCompact;
-
-/*@}*/
-
-
-/**
- * \addtogroup PnlVect
- */
-/*@{*/
- 
-extern PnlVectCompact* pnl_vect_compact_create (int n, double x);
-extern int pnl_vect_compact_resize (PnlVectCompact *v, int size, double x);
-extern PnlVectCompact* pnl_vect_compact_copy(const PnlVectCompact *v);
-extern void pnl_vect_compact_free (PnlVectCompact **v);
-extern PnlVect* pnl_vect_compact_to_pnl_vect (const PnlVectCompact *C);
-extern double pnl_vect_compact_get (const PnlVectCompact *C, int i);
-
-/*@}*/
-
 
 /**
  * \ingroup PnlMatrices
@@ -70,6 +37,11 @@ extern double pnl_vect_compact_get (const PnlVectCompact *C, int i);
 /*@{*/
 
 struct _PnlMat{
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows any PnlMatXXX pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
   int m; /*!< nb rows */ 
   int n; /*!< nb columns */ 
   int mn; /*!< product m*n */
@@ -78,6 +50,7 @@ struct _PnlMat{
   int owner; /*!< 1 if the object owns its array member, 0 otherwise */
 }; 
 
+extern PnlMat* pnl_mat_new(); 
 extern PnlMat* pnl_mat_create(int m, int n); 
 extern PnlMat* pnl_mat_create_from_double(int m, int n, double x);
 extern PnlMat* pnl_mat_create_from_ptr(int m, int n, const double* x);
@@ -222,12 +195,18 @@ extern double* pnl_mat_lget(PnlMat *v, int i, int j);
 /*@{*/
 
 typedef struct PnlHmat{
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows any PnlMatXXX pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
   int ndim; /*!< nb dimensions */ 
   int *dims; /*!< pointer to store the value of the ndim dimensions */ 
   int mn; /*!< product dim_1 *...*dim_ndim */
   double *array; /*!< pointer to store */
 } PnlHmat;
 
+extern PnlHmat* pnl_hmat_new(); 
 extern PnlHmat* pnl_hmat_create(int ndim, const int *dims); 
 extern PnlHmat* pnl_hmat_create_from_double(int ndim, const int *dims, double x); 
 extern PnlHmat* pnl_hmat_create_from_ptr(int ndim, const int *dims, const double *x);
