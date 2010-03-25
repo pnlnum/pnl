@@ -35,7 +35,7 @@ static double __op_plus(double a, double b) { return a+b; }
 static double __op_minus(double a, double b) { return a-b; }
 static double __op_mult(double a, double b) { return a*b; }
 static double __op_div(double a, double b) { return a/b; }
-static double __op_inv(double a) { return 1./a; }
+/* static double __op_inv(double a) { return 1./a; } */
 
 static char pnl_band_mat_object_label[] = "PnlBandMatObject";
 static char pnl_band_mat_label[] = "PnlBandMat";
