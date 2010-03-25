@@ -22,7 +22,10 @@ extern "C" {
 #define RETRIEVE 1 
 #define GEN_NUMBER 20
 
-/* indices of random generators */
+/* indices of random generators 
+ * The first generators must be true MC generators and the last ones are QMC
+ * Do NOT mix them otherwise the arrays  pnl_random and pnl_random_MC will be
+ * wrong */
 #define PNL_RNG_KNUTH 0
 #define PNL_RNG_MRGK3 1
 #define PNL_RNG_MRGK5 2
@@ -31,6 +34,7 @@ extern "C" {
 #define PNL_RNG_TAUSWORTHE 5
 #define PNL_RNG_MERSENNE 6
 #define PNL_RNG_MERSENNE_RANDOM_SEED 7
+/* beginning of QMC sequences */
 #define PNL_RNG_SQRT 8
 #define PNL_RNG_HALTON 9
 #define PNL_RNG_FAURE 10
@@ -57,6 +61,8 @@ typedef struct
   int Dimension;
 } random_generator;
 
+extern random_generator pnl_Random_MC[];
+extern random_generator pnl_Random[];
 extern enum_members RNGs;
 extern enum_members MC_RNGs;
 
