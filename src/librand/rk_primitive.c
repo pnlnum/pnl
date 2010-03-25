@@ -480,7 +480,7 @@ unsigned long modpow(unsigned long polynomial, unsigned long power,
 /*
  * Test the primitivity of a polynomial
  */
-int rk_isprimitive(unsigned long polynomial)
+int pnl_rk_isprimitive(unsigned long polynomial)
 {
   unsigned long pelement = 2, temp = polynomial >> 1;
   int k, degree = 0, weight = 1;

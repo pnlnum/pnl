@@ -43,9 +43,9 @@ extern "C" {
    *
    * Typical use:
    *   int test;
-   *   test = rk_isprimitive(3, &divisors);
+   *   test = pnl_rk_isprimitive(3, &divisors);
    */
-  extern int rk_isprimitive(unsigned long polynomial);
+  extern int pnl_rk_isprimitive(unsigned long polynomial);
 
 #ifdef __cplusplus
 }

@@ -3,7 +3,7 @@
 /*
  * Copyright (c) 2003-2005, Jean-Sebastien Roy (js@jeannot.org)
  *
- * The rk_random and rk_seed functions algorithms and the original design of 
+ * The rk_random and pnl_rk_seed functions algorithms and the original design of 
  * the Mersenne Twister RNG:
  *
  * Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
@@ -13,7 +13,7 @@
  * Richard J. Wagner's implementation of the Mersenne Twister RNG, optimised by
  * Magnus Jonsson.
  *
- * Constants used in the rk_double implementation by Isaku Wada.
+ * Constants used in the pnl_rk_double implementation by Isaku Wada.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
@@ -74,13 +74,20 @@ static char const rcsid[] =
 #define RK_DEV_RANDOM "/dev/random"
 #endif
 
+static unsigned long rk_random(rk_state *state);
+static rk_error rk_devfill(void *buffer, int size, int strong);
+
+
 char *rk_strerror[RK_ERR_MAX] =
   {
     "no error",
     "random device unvavailable"
   };
 
-void rk_seed(unsigned long seed, rk_state *state)
+/*
+ * Initializes the state of the generator using the variable ssed
+ */
+void pnl_rk_seed(unsigned long seed, rk_state *state)
 {
   int pos;
   seed &= 0xffffffffUL;
@@ -108,7 +115,7 @@ static unsigned long rk_hash(unsigned long key)
   return key;
 }
 
-rk_error rk_randomseed(rk_state *state)
+rk_error pnl_rk_randomseed(rk_state *state)
 {
   /* #ifndef _WIN32
    *   struct timeval tv;
@@ -126,11 +133,11 @@ rk_error rk_randomseed(rk_state *state)
    * 
    * #ifndef _WIN32
    *   gettimeofday(&tv, NULL);
-   *   rk_seed(rk_hash(getpid()) ^ rk_hash(tv.tv_sec) ^ rk_hash(tv.tv_usec)
+   *   pnl_rk_seed(rk_hash(getpid()) ^ rk_hash(tv.tv_sec) ^ rk_hash(tv.tv_usec)
    *    ^ rk_hash(clock()), state);
    * #else
    *   _ftime(&tv);
-   *   rk_seed(rk_hash(tv.time) ^ rk_hash(tv.millitm) ^ rk_hash(clock()), state);
+   *   pnl_rk_seed(rk_hash(tv.time) ^ rk_hash(tv.millitm) ^ rk_hash(clock()), state);
    * #endif
    * 
    *   return RK_ENODEV; */
@@ -143,17 +150,17 @@ rk_error rk_randomseed(rk_state *state)
   unsigned long s;
   if(rk_devfill(&s, sizeof(unsigned long), 0) == RK_NOERR)
     {
-      rk_seed (s, state);
+      pnl_rk_seed (s, state);
       return RK_NOERR;
     }
 
 #ifndef _WIN32
   gettimeofday(&tv, NULL);
-  rk_seed( rk_hash((unsigned long) getpid()) ^ rk_hash((unsigned long)tv.tv_sec) 
+  pnl_rk_seed( rk_hash((unsigned long) getpid()) ^ rk_hash((unsigned long)tv.tv_sec) 
            ^ rk_hash((unsigned long)tv.tv_usec) ^ rk_hash((unsigned long)clock()), state);
 #else
   _ftime(&tv);
-  rk_seed(rk_hash(tv.time) ^ rk_hash(tv.millitm) ^ rk_hash(clock()), state);
+  pnl_rk_seed(rk_hash(tv.time) ^ rk_hash(tv.millitm) ^ rk_hash(clock()), state);
 #endif
 
   return RK_ENODEV;
@@ -167,7 +174,7 @@ rk_error rk_randomseed(rk_state *state)
 #define LOWER_MASK 0x7fffffffUL
 
 /* Slightly optimised reference implementation of the Mersenne Twister */
-unsigned long rk_random(rk_state *state)
+static unsigned long rk_random(rk_state *state)
 {
   unsigned long y;
 
@@ -202,12 +209,12 @@ unsigned long rk_random(rk_state *state)
   return y;
 }
 
-long rk_long(rk_state *state)
-{
-  return rk_ulong(state) >> 1;
-}
+/* static long rk_long(rk_state *state) */
+/* { */
+/*   return pnl_rk_ulong(state) >> 1; */
+/* } */
 
-unsigned long rk_ulong(rk_state *state)
+unsigned long pnl_rk_ulong(rk_state *state)
 {
 #if ULONG_MAX <= 0xffffffffUL
   return rk_random(state);
@@ -217,36 +224,36 @@ unsigned long rk_ulong(rk_state *state)
 #endif
 }
 
-unsigned long rk_interval(unsigned long max, rk_state *state)
-{
-  unsigned long mask = max, value;
+/* static unsigned long rk_interval(unsigned long max, rk_state *state) */
+/* { */
+/*   unsigned long mask = max, value; */
 
-  if (max == 0) return 0;
+/*   if (max == 0) return 0; */
 
-  /* Smallest bit mask >= max */
-  mask |= mask >> 1;
-  mask |= mask >> 2;
-  mask |= mask >> 4;
-  mask |= mask >> 8;
-  mask |= mask >> 16;
-#if ULONG_MAX > 0xffffffffUL
-  mask |= mask >> 32;
-#endif
+/*   |+ Smallest bit mask >= max +| */
+/*   mask |= mask >> 1; */
+/*   mask |= mask >> 2; */
+/*   mask |= mask >> 4; */
+/*   mask |= mask >> 8; */
+/*   mask |= mask >> 16; */
+/* #if ULONG_MAX > 0xffffffffUL */
+/*   mask |= mask >> 32; */
+/* #endif */
 
-  /* Search a random value in [0..mask] <= max */
-  while ((value = (rk_ulong(state) & mask)) > max);
+/*   |+ Search a random value in [0..mask] <= max +| */
+/*   while ((value = (pnl_rk_ulong(state) & mask)) > max); */
 
-  return value;
-}
+/*   return value; */
+/* } */
 
-double rk_double(rk_state *state)
+double pnl_rk_double(rk_state *state)
 {
   /* shifts : 67108864 = 0x4000000, 9007199254740992 = 0x20000000000000 */
   long a = rk_random(state) >> 5, b = rk_random(state) >> 6;
   return (a * 67108864.0 + b) / 9007199254740992.0;
 }
 
-void rk_copy(rk_state *copy, rk_state *orig)
+void pnl_rk_copy(rk_state *copy, rk_state *orig)
 {
   memcpy(copy, orig, sizeof(rk_state));
 }
@@ -259,7 +266,7 @@ void rk_fill(void *buffer, int size, rk_state *state)
   
   if (size > 0 && state == NULL)
     {
-      rk_randomseed(&tempstate);
+      pnl_rk_randomseed(&tempstate);
       state = &tempstate;
     }
   
@@ -316,38 +323,38 @@ rk_error rk_devfill(void *buffer, int size, int strong)
   return RK_ENODEV;
 }
 
-rk_error rk_altfill(void *buffer, int size, int strong, rk_state *state)
-{
-  rk_error err;
+/* rk_error rk_altfill(void *buffer, int size, int strong, rk_state *state) */
+/* { */
+/*   rk_error err; */
 
-  err = rk_devfill(buffer, size, strong);
-  if (err)
-    rk_fill(buffer, size, state);
+/*   err = rk_devfill(buffer, size, strong); */
+/*   if (err) */
+/*     rk_fill(buffer, size, state); */
 
-  return err;
-}
+/*   return err; */
+/* } */
 
-double rk_gauss(rk_state *state)
-{
-  if (state->has_gauss)
-    {
-      state->has_gauss = 0;
-      return state->gauss;
-    }
-  else
-    {
-      double f, x1, x2, r2;
-      do
-        {
-          x1 = 2.0*rk_double(state) - 1.0;
-          x2 = 2.0*rk_double(state) - 1.0;
-          r2 = x1*x1 + x2*x2;
-        }
-      while (r2 >= 1.0 || r2 == 0.0);
-    
-      f = sqrt(-2.0*log(r2)/r2); /* Box-Muller transform */
-      state->has_gauss = 1;
-      state->gauss = f*x1; /* Keep for next call */
-      return f*x2;
-    }
-}
+/* static double rk_gauss(rk_state *state) */
+/* { */
+/*   if (state->has_gauss) */
+/*     { */
+/*       state->has_gauss = 0; */
+/*       return state->gauss; */
+/*     } */
+/*   else */
+/*     { */
+/*       double f, x1, x2, r2; */
+/*       do */
+/*         { */
+/*           x1 = 2.0*pnl_rk_double(state) - 1.0; */
+/*           x2 = 2.0*pnl_rk_double(state) - 1.0; */
+/*           r2 = x1*x1 + x2*x2; */
+/*         } */
+/*       while (r2 >= 1.0 || r2 == 0.0); */
+/*      */
+/*       f = sqrt(-2.0*log(r2)/r2); |+ Box-Muller transform +| */
+/*       state->has_gauss = 1; */
+/*       state->gauss = f*x1; |+ Keep for next call +| */
+/*       return f*x2; */
+/*     } */
+/* } */

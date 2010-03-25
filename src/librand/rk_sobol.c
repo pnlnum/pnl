@@ -32,20 +32,10 @@ static char const rcsid[] =
   "@(#) $Jeannot: rk_sobol.c,v 1.6 2005/12/28 23:20:10 js Exp $";
 
 #include <stdlib.h>
-#include <math.h>
-#include <limits.h>
 #include "rk_sobol.h"
-#include "rk_mt.h"
 #include "rk_primitive.h"
-#include "pnl_cdf.h"
+#include "pnl_mathtools.h"
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
-#ifndef M_SQRT1_2
-#define  M_SQRT1_2  0.70710678118654752440  /* 1/sqrt(2) */
-#endif
-#define RK_SOBOL_M_SQRT2M_PI 2.506628274631000502415 /* sqrt(2*pi) */
 
 #ifndef LONG_BIT
 #if ULONG_MAX <= 0xffffffffUL
@@ -63,14 +53,13 @@ char *rk_sobol_strerror[] =
     "not enough memory"
   };
 
-static double inverse_normal(double p);
 
 /*
  * Sobol/Levitan coefficients of the free direction integers as given
  * by Bratley, P., Fox, B.L. (1988)
  */
 
-const unsigned long rk_sobol_SLdirections[] = {
+const unsigned long pnl_rk_sobol_SLdirections[] = {
   1,
   1, 1,
   1, 3, 7,
@@ -118,7 +107,7 @@ const unsigned long rk_sobol_SLdirections[] = {
  * in QuantLib by Christiane Lemieux, private communication, September 2004
  */
 
-const unsigned long rk_sobol_Ldirections[] = {
+const unsigned long pnl_rk_sobol_Ldirections[] = {
   1,
   1, 1,
   1, 3, 7,
@@ -487,7 +476,7 @@ const unsigned long rk_sobol_Ldirections[] = {
  * "Monte Carlo Methods in Finance", by Peter Jäckel, section 8.3
  */
 
-const unsigned long rk_sobol_Jdirections[] = {
+const unsigned long pnl_rk_sobol_Jdirections[] = {
   1,
   1, 1,
   1, 3, 7,
@@ -683,7 +672,7 @@ static const unsigned long rk_sobol_primitive_polynomials[] = {
   0UL
 };
 
-rk_sobol_error rk_sobol_init(int dimension, rk_sobol_state *s, 
+rk_sobol_error pnl_rk_sobol_init(int dimension, rk_sobol_state *s, 
 			     rk_state *rs_dir, const unsigned long *directions,
 			     const unsigned long *polynomials)
 {
@@ -766,7 +755,7 @@ rk_sobol_error rk_sobol_init(int dimension, rk_sobol_state *s,
 		    continue;
 		}
 
-	      if (rk_isprimitive(polynomial))
+	      if (pnl_rk_isprimitive(polynomial))
 		break;
 	    }
 
@@ -788,10 +777,10 @@ rk_sobol_error rk_sobol_init(int dimension, rk_sobol_state *s,
 	      if (rs_dir == NULL)
 		{
 		  rs_dir = &rs_dir_temp;
-		  rk_randomseed(rs_dir);
+		  pnl_rk_randomseed(rs_dir);
 		}
 	      /* Draw a direction at random (the highest bits will be discarded) */
-	      m = rk_ulong(rs_dir) | 1;
+	      m = pnl_rk_ulong(rs_dir) | 1;
 	    }
 	  else
 	    m = directions[cdir++];
@@ -829,7 +818,7 @@ rk_sobol_error rk_sobol_init(int dimension, rk_sobol_state *s,
   return RK_SOBOL_OK;
 }
 
-void rk_sobol_reinit(rk_sobol_state *s)
+void pnl_rk_sobol_reinit(rk_sobol_state *s)
 {
   int k;
 
@@ -841,23 +830,23 @@ void rk_sobol_reinit(rk_sobol_state *s)
   s->gcount = 0;
 }
 
-void rk_sobol_randomshift(rk_sobol_state *s, rk_state *rs_num)
-{
-  rk_state rs_num_temp;
-  int k;
+/* void rk_sobol_randomshift(rk_sobol_state *s, rk_state *rs_num) */
+/* { */
+/*   rk_state rs_num_temp; */
+/*   int k; */
 
-  if (rs_num == NULL)
-    {
-      rs_num = &rs_num_temp;
-      rk_randomseed(rs_num);
-    }
+/*   if (rs_num == NULL) */
+/*     { */
+/*       rs_num = &rs_num_temp; */
+/*       pnl_rk_randomseed(rs_num); */
+/*     } */
 
-  /* Initialize numerator */
-  for (k=0; k<s->dimension; k++)
-    s->numerator[k] = rk_ulong(rs_num);
-}
+/*   |+ Initialize numerator +| */
+/*   for (k=0; k<s->dimension; k++) */
+/*     s->numerator[k] = pnl_rk_ulong(rs_num); */
+/* } */
 
-rk_sobol_error rk_sobol_copy(rk_sobol_state *copy, rk_sobol_state *orig)
+rk_sobol_error pnl_rk_sobol_copy(rk_sobol_state *copy, rk_sobol_state *orig)
 {
   int k;
 
@@ -885,7 +874,7 @@ rk_sobol_error rk_sobol_copy(rk_sobol_state *copy, rk_sobol_state *orig)
   return RK_SOBOL_OK;
 }
 
-rk_sobol_error rk_sobol_double(rk_sobol_state *s, double *x)
+rk_sobol_error pnl_rk_sobol_double(rk_sobol_state *s, double *x)
 {
   int j;
   int k;
@@ -908,83 +897,24 @@ rk_sobol_error rk_sobol_double(rk_sobol_state *s, double *x)
   return RK_SOBOL_OK;
 }
 
-void rk_sobol_setcount(rk_sobol_state *s, unsigned long count)
-{
-  s->count = count;
-}
+/* void rk_sobol_setcount(rk_sobol_state *s, unsigned long count) */
+/* { */
+/*   s->count = count; */
+/* } */
 
-void rk_sobol_free(rk_sobol_state *s)
+void pnl_rk_sobol_free(rk_sobol_state *s)
 {
   free(s->direction);
   free(s->numerator);
 }
 
-double inverse_normal(double p)
-{
-  double q, t, x;
-  
-  /* Peter J. Acklam constants for the rational approximation */
-  const double a[6] =
-    {
-      -3.969683028665376e+01,  2.209460984245205e+02,
-      -2.759285104469687e+02,  1.383577518672690e+02,
-      -3.066479806614716e+01,  2.506628277459239e+00
-    };
-  const double b[5] = 
-    {
-      -5.447609879822406e+01,  1.615858368580409e+02,
-      -1.556989798598866e+02,  6.680131188771972e+01,
-      -1.328068155288572e+01
-    };
-  const double c[6] = 
-    {
-      -7.784894002430293e-03, -3.223964580411365e-01,
-      -2.400758277161838e+00, -2.549732539343734e+00,
-      4.374664141464968e+00,  2.938163982698783e+00
-    };
-  const double d[4] = 
-    {
-      7.784695709041462e-03,  3.224671290700398e-01,
-      2.445134137142996e+00,  3.754408661907416e+00
-    };
+/* rk_sobol_error rk_sobol_gauss(rk_sobol_state *s, double *x) */
+/* { */
+/*   int k; */
+/*   rk_sobol_error rc = pnl_rk_sobol_double(s, x); */
+/*   */
+/*   for (k=0; k<s->dimension; k++) */
+/*     x[k] = inverse_normal(x[k]); */
 
-  if (p <= 0)
-    return -HUGE_VAL;
-  else if (p >= 1)
-    return HUGE_VAL;
-
-  q = p<0.5 ? p : 1-p;
-  if (q > 0.02425)
-    {
-      /* Rational approximation for central region */
-      x = q-0.5;
-      t = x*x;
-      x = x*(((((a[0]*t+a[1])*t+a[2])*t+a[3])*t+a[4])*t+a[5])
-        /(((((b[0]*t+b[1])*t+b[2])*t+b[3])*t+b[4])*t+1);
-    }
-  else
-    {
-      /* Rational approximation for tail region */
-      t = sqrt(-2*log(q));
-      x = (((((c[0]*t+c[1])*t+c[2])*t+c[3])*t+c[4])*t+c[5])
-        /((((d[0]*t+d[1])*t+d[2])*t+d[3])*t+1);
-    }
-
-  /* Halley's rational method */
-  /*t = (0.5 * erfc(-x*M_SQRT1_2) - q) * RK_SOBOL_M_SQRT2M_PI * exp(x*x/2);*/
-  t = (cdf_nor(x) - q) * RK_SOBOL_M_SQRT2M_PI * exp(x*x/2); /* erfc is not available in VC++*/
-  x -= t/(1 + x*t/2);
-
-  return p>0.5 ? -x : x;
-}
-
-rk_sobol_error rk_sobol_gauss(rk_sobol_state *s, double *x)
-{
-  int k;
-  rk_sobol_error rc = rk_sobol_double(s, x);
- 
-  for (k=0; k<s->dimension; k++)
-    x[k] = inverse_normal(x[k]);
-
-  return rc;
-}
+/*   return rc; */
+/* } */
