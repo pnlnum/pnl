@@ -281,6 +281,8 @@ static void pnl_basis_eval_test ()
          derive_t_fonction_a_retrouver(t0,x0));
   printf("valeur approchee de la derivee en temps de la fonction  :%f \n",
          pnl_vect_get(D,3));
+  pnl_basis_free (&basis);
+  pnl_vect_free(&alpha);
   pnl_vect_free(&x);
   pnl_vect_free(&t);
   pnl_vect_free(&V);
