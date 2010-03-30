@@ -90,8 +90,7 @@ extern void pnl_vect_int_map_inplace(PnlVectInt *lhs, int(*f)(int)); /*lhs=f(lhs
 extern void pnl_vect_int_map(PnlVectInt *lhs, const PnlVectInt *rhs, int(*f)(int));
 extern void pnl_vect_int_map_vect_inplace(PnlVectInt *lhs, const PnlVectInt *rhs, int(*f)(int, int)); 
 extern void pnl_vect_int_map_vect(PnlVectInt *lhs, const PnlVectInt *rhs1, const PnlVectInt *rhs2, int(*f)(int, int));
-extern void pnl_vect_int_find(PnlVectInt *ind, PnlVectInt *val, const PnlVectInt *V, int(*f)(int));
-extern void pnl_vect_int_find_vect(PnlVectInt *ind, PnlVectInt *val, const PnlVectInt *V1, const PnlVectInt *V2, int(*f)(int,int));
+extern int pnl_vect_int_find(PnlVectInt *ind, char *type, int(*f)(int *), ...);
 extern void pnl_vect_int_plus_int(PnlVectInt *lhs, int x); /*lhs+=x*/
 extern void pnl_vect_int_minus_int(PnlVectInt *lhs, int x); /*lhs-=x*/
 extern void pnl_vect_int_axpby(int a, const PnlVectInt *x, int b, PnlVectInt *y); /* y:=a x + b y */

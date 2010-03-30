@@ -154,13 +154,13 @@ static void pnl_vect_extract_test()
   pnl_vect_free(&v2); 
 }
 
-static int ispos (double x) { return x >= 0; }
-static int islarger (double x, double y) { return x >= y; }
+static int ispos (double *x) { return *x >= 0; }
+static int islarger (double *t) { return t[0] >= t[1]; }
 
 static void pnl_vect_subvect_test ()
 {
-  double gen=PNL_RNG_MERSENNE_RANDOM_SEED;
-  PnlVect *v1, *v2, *v3, *v4;
+  int gen=PNL_RNG_MERSENNE_RANDOM_SEED;
+  PnlVect *v1, *v2, *v3;
   PnlVectInt *ind;
   printf ("\nTest of extract_subvect function : \n");
   pnl_rand_init (gen, 10, 1);
@@ -170,33 +170,25 @@ static void pnl_vect_subvect_test ()
   pnl_vect_rand_normal(v3, 10, gen);
   ind = pnl_vect_int_create (10);
   
-  pnl_vect_find (ind, NULL, v1, ispos);
+  pnl_vect_find (ind, "v", ispos, v1);
   v2 = pnl_vect_create_subvect (v1, ind);
   printf ("v1 = "); pnl_vect_print_nsp (v1);
   printf ("find (v1 >= 0)\n");
   printf ("ind = "); pnl_vect_int_print_nsp (ind);
   printf ("sub = "); pnl_vect_print_nsp (v2);
-  v4 = pnl_vect_create (0);
-  pnl_vect_find (ind, v4, v1, ispos);
-  printf ("ind = "); pnl_vect_int_print_nsp (ind);
-  printf ("sub = "); pnl_vect_print_nsp (v4);
   pnl_vect_free (&v2);
 
-  pnl_vect_find_vect (ind, NULL, v1, v3, islarger);
+  pnl_vect_find (ind, "vv", islarger, v1, v3);
   v2 = pnl_vect_create_subvect (v1, ind);
   printf ("v1 = "); pnl_vect_print_nsp (v1);
   printf ("v3 = "); pnl_vect_print_nsp (v3);
   printf ("find (v1 >= v3)\n");
   printf ("ind = "); pnl_vect_int_print_nsp (ind);
   printf ("sub = "); pnl_vect_print_nsp (v2);
-  pnl_vect_find_vect (ind, v4, v1, v3, islarger);
-  printf ("ind = "); pnl_vect_int_print_nsp (ind);
-  printf ("sub = "); pnl_vect_print_nsp (v4);
   pnl_vect_int_free (&ind);
   pnl_vect_free (&v1);
   pnl_vect_free (&v2);
   pnl_vect_free (&v3);
-  pnl_vect_free (&v4);
 }
 
 static void pnl_vect_plus_vect_test()

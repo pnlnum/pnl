@@ -79,8 +79,7 @@ extern void pnl_mat_complex_map_inplace(PnlMatComplex *lhs, dcomplex(*f)(dcomple
 extern void pnl_mat_complex_map(PnlMatComplex *lhs, const PnlMatComplex *rhs, dcomplex(*f)(dcomplex));/* lhs(i)=f(rhs(i)) */
 extern void pnl_mat_complex_map_mat_inplace(PnlMatComplex *lhs, const PnlMatComplex *rhs, dcomplex(*f)(dcomplex,dcomplex));
 extern void pnl_mat_complex_map_mat(PnlMatComplex *lhs, const PnlMatComplex *rhs1, const PnlMatComplex *rhs2, dcomplex(*f)(dcomplex,dcomplex));
-extern void pnl_mat_complex_find(PnlVectInt *indi, PnlVectInt *indj, PnlVectComplex *val, const PnlMatComplex *M, int(*f)(dcomplex));
-extern void pnl_mat_complex_find_mat(PnlVectInt *indi, PnlVectInt *indj, PnlVectComplex *val, const PnlMatComplex *,const PnlMatComplex *, int(*f)(dcomplex, dcomplex));
+extern int pnl_mat_complex_find(PnlVectInt *indi, PnlVectInt *indj, char* type, int(*f)(dcomplex *), ...);
 extern void pnl_mat_complex_plus_dcomplex(PnlMatComplex *lhs, dcomplex x); /*lhs+=x*/
 extern void pnl_mat_complex_minus_dcomplex(PnlMatComplex *lhs, dcomplex x); /*lhs-=x*/
 extern void pnl_mat_complex_plus_mat(PnlMatComplex *lhs, const PnlMatComplex *rhs); /*lhs+=rhs*/

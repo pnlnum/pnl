@@ -151,8 +151,7 @@ extern void pnl_vect_complex_map_inplace(PnlVectComplex *lhs, dcomplex(*f)(dcomp
 extern void pnl_vect_complex_map(PnlVectComplex *lhs, const PnlVectComplex *rhs, dcomplex(*f)(dcomplex));
 extern void pnl_vect_complex_map_vect_inplace(PnlVectComplex *lhs, const PnlVectComplex *rhs, dcomplex(*f)(dcomplex,dcomplex));
 extern void pnl_vect_complex_map_vect(PnlVectComplex *lhs, const PnlVectComplex *rhs1, const PnlVectComplex *rhs2, dcomplex(*f)(dcomplex,dcomplex));
-extern void pnl_vect_complex_find(PnlVectInt *ind, PnlVectComplex *val, const PnlVectComplex *V, int(*f)(dcomplex));
-extern void pnl_vect_complex_find_vect(PnlVectInt *ind, PnlVectComplex *val, const PnlVectComplex *V1, const PnlVectComplex *V2, int(*f)(dcomplex,dcomplex));
+extern int pnl_vect_complex_find(PnlVectInt *ind, char *type, int(*f)(dcomplex *), ...);  
 extern void pnl_vect_complex_minus(PnlVectComplex *lhs);
 extern void pnl_vect_complex_plus_dcomplex(PnlVectComplex *lhs, dcomplex x); /*lhs+=x*/
 extern void pnl_vect_complex_minus_dcomplex(PnlVectComplex *lhs, dcomplex x); /*lhs-=x*/

@@ -177,15 +177,16 @@ static void pnl_mat_create_from_ptr_test()
   pnl_mat_free(&M);
 }
 
-static int ispos (double x) { return x >= 0; }
-static int islarger (double x, double y) { return x >= y; }
+static int ispos (double x[]) { return x[0] >= 0; }
+static int islarger (double x[]) { return x[0] >= x[1]; }
+static int cmp (double x[]) { return (x[0] >= x[1]) && (x[1] < x[2]); }
 
 static void pnl_mat_submat_test ()
 {
   double gen=PNL_RNG_MERSENNE_RANDOM_SEED;
   int m = 5, n = 7;
   PnlMat *M1, *M2;
-  PnlVect *v1, *v2;
+  PnlVect *v1;
   PnlVectInt *indi, *indj;
   printf ("\nTest of extract_submat function : \n");
   pnl_rand_init (gen, m, n);
@@ -196,31 +197,32 @@ static void pnl_mat_submat_test ()
   indi = pnl_vect_int_create (0);
   indj = pnl_vect_int_create (0);
   
-  pnl_mat_find (indi, indj, NULL, M1, ispos);
+  if ( pnl_mat_find (indi, indj, "m", ispos, M1) == FAIL ) 
+    {
+      printf ("Error in pnl_mat_find\n");
+    }
   v1 = pnl_vect_create_submat (M1, indi, indj);
   printf ("M1 = "); pnl_mat_print_nsp (M1);
   printf ("[i, j] = find (M1 >= 0)\n");
   printf ("indi = "); pnl_vect_int_print_nsp (indi);
   printf ("indj = "); pnl_vect_int_print_nsp (indj);
   printf ("sub = "); pnl_vect_print_nsp (v1);
-  v2 = pnl_vect_create (0);
-  pnl_mat_find (indi, indj, v2, M1, ispos);
-  printf ("indi = "); pnl_vect_int_print_nsp (indi);
-  printf ("indj = "); pnl_vect_int_print_nsp (indj);
-  printf ("sub = "); pnl_vect_print_nsp (v2);
   printf ("\n");
   pnl_vect_free (&v1);
 
-  pnl_mat_find (indi, NULL, NULL, M1, ispos);
+  if ( pnl_mat_find (indi, NULL, "m", ispos, M1) == FAIL )
+    {
+      printf ("Error in pnl_mat_find\n");
+    }
   printf ("M1 = "); pnl_mat_print_nsp (M1);
-  printf ("[i, j] = find (M1 >= 0)\n");
+  printf ("[i] = find (M1 >= 0)\n");
   printf ("indi = "); pnl_vect_int_print_nsp (indi);
-  pnl_mat_find (indi, NULL, v2, M1, ispos);
-  printf ("indi = "); pnl_vect_int_print_nsp (indi);
-  printf ("sub = "); pnl_vect_print_nsp (v2);
   printf ("\n");
 
-  pnl_mat_find_mat (indi, indj, NULL, M1, M2, islarger);
+  if ( pnl_mat_find (indi, indj, "mm", islarger, M1, M2) == FAIL ) 
+    {
+      printf ("Error in pnl_mat_find\n");
+    }
   v1 = pnl_vect_create_submat (M1, indi, indj);
   printf ("M1 = "); pnl_mat_print_nsp (M1);
   printf ("M2 = "); pnl_mat_print_nsp (M2);
@@ -228,28 +230,24 @@ static void pnl_mat_submat_test ()
   printf ("indi = "); pnl_vect_int_print_nsp (indi);
   printf ("indj = "); pnl_vect_int_print_nsp (indj);
   printf ("sub = "); pnl_vect_print_nsp (v1);
-  pnl_mat_find_mat (indi, indj, v2, M1, M2, islarger);
-  printf ("indi = "); pnl_vect_int_print_nsp (indi);
-  printf ("indj = "); pnl_vect_int_print_nsp (indj);
-  printf ("sub = "); pnl_vect_print_nsp (v2);
   printf ("\n");
   pnl_vect_free (&v1);
 
-  pnl_mat_find_mat (indi, NULL, NULL, M1, M2, islarger);
+  pnl_mat_find (indi, indj, "mmr", cmp, M1, M2, 0.);
+  v1 = pnl_vect_create_submat (M1, indi, indj);
   printf ("M1 = "); pnl_mat_print_nsp (M1);
   printf ("M2 = "); pnl_mat_print_nsp (M2);
-  printf ("[i, j] = find (M1 >= M2)\n");
+  printf ("[i, j] = find ((M1 >= M2) && (M2 < 0))\n");
   printf ("indi = "); pnl_vect_int_print_nsp (indi);
-  pnl_mat_find_mat (indi, NULL, v2, M1, M2, islarger);
-  printf ("indi = "); pnl_vect_int_print_nsp (indi);
-  printf ("sub = "); pnl_vect_print_nsp (v2);
+  printf ("indj = "); pnl_vect_int_print_nsp (indj);
+  printf ("sub = "); pnl_vect_print_nsp (v1);
   printf ("\n");
 
+  pnl_vect_free (&v1);
   pnl_vect_int_free (&indi);
   pnl_vect_int_free (&indj);
   pnl_mat_free (&M1);
   pnl_mat_free (&M2);
-  pnl_vect_free (&v2);
 }
 
 static void pnl_mat_set_diag_test ()

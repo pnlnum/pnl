@@ -797,218 +797,311 @@ void FUNCTION(pnl_mat,map_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs1, cons
 }
 
 
+typedef struct {
+  union {BASE x; TYPE(PnlMat) *V ;};
+  char type;
+} TYPE(cell);
 /** 
  * Finds the indices (i, j) for which f(M(i,j)) == 1
  * 
  * @param indi (output) a vector of integers
  * @param indj (output) a vector of integers
- * If indj == NULL, then a linear indexing of the matrix component is used
- * between 1 and M1->mn (the matrix is seen as a vector created by staking the
- * rows of the matrix). If indj!=NULL, the pairs (indi(:), indj(:)) are the
- * lists of values (i,j) for which the test is true
- * @param val (output) if not NULL contains on exit the entries of the matrix M
- * for which the test is positive
- * @param M a matrix
  * @param f a function returning an integer (typically a test function)
+ * @return OK or FAIL if something went wrong
  */
-void FUNCTION(pnl_mat,find)(PnlVectInt *indi, PnlVectInt *indj, TYPE(PnlVect) *val, 
-                            const TYPE(PnlMat) *M, int(*f)(BASE))
+int FUNCTION(pnl_mat,find) (PnlVectInt *indi, PnlVectInt *indj, char* type, int(*f)(BASE *), ...)
 {
-  int i, j, count_ij;
-  /* 2 passes are needed.
-   * First pass to determine the size of indi, indj, val */
-  count_ij = 0;
-  for ( i=0 ; i<M->m ; i++ ) 
-    {
-      for ( j=0 ; j<M->n ; j++ )
-        {
-          if (f(PNL_MGET (M, i, j)) == 1) { count_ij++; }
-        }
-    }
-  pnl_vect_int_resize (indi, count_ij);
-  if (indj != NULL) pnl_vect_int_resize (indj, count_ij);
-  if (val != NULL) FUNCTION(pnl_vect,resize) (val, count_ij);
+  va_list ap;
+  TYPE(cell) *args;
+  int i, j, k, m, n, count, nvar;
+  BASE val, *t;
+  m = n = -1;
 
-  /* Second pass to extract data */
-  if ( indj == NULL && val == NULL )
-    {
-      /* We use a linear indexing and do not store the values */
-      count_ij = 0;
-      for ( i=0 ; i<M->m ; i++ ) 
-        {
-          for ( j=0 ; j<M->n ; j++ )
-            {
-              if (f(PNL_MGET (M, i, j)) == 1)
-                {
-                  PNL_LET(indi, count_ij) = i * M->n + j;
-                  count_ij++;
-                }
-            }
-        }
-    }
-  else if ( indj == NULL )
-    {
-      /* We use a linear indexing and store the values */
-      count_ij = 0;
-      for ( i=0 ; i<M->m ; i++ ) 
-        {
-          for ( j=0 ; j<M->n ; j++ )
-            {
-              if (f(PNL_MGET (M, i, j)) == 1)
-                {
-                  PNL_LET(indi, count_ij) = i * M->n + j;
-                  PNL_LET (val, count_ij) = PNL_MGET (M, i, j);
-                  count_ij++;
-                }
-            }
-        }
-    }
-  else if ( val == NULL )
-    {
-      /* We use a standard indexing and do not store the values */
-      count_ij = 0;
-      for ( i=0 ; i<M->m ; i++ ) 
-        {
-          for ( j=0 ; j<M->n ; j++ )
-            {
-              if (f(PNL_MGET (M, i, j)) == 1)
-                {
-                  PNL_LET(indi, count_ij) = i;
-                  PNL_LET(indj, count_ij) = j;
-                  count_ij++;
-                }
-            }
-        }
+  nvar = strlen (type);
+  if ((args = malloc (sizeof(cell) * nvar)) == NULL) return FAIL;
+  if ((t = malloc (sizeof(BASE) * nvar)) == NULL) return FAIL;
 
+  va_start (ap, f);
+
+  for ( k=0; k<nvar ; k++ )
+    {
+      switch (type[k])
+        {
+          case 'r' : 
+            val = va_arg (ap, BASE); 
+            args[k].x = val; args[k].type = 'r';
+            break;
+          case 'm' : 
+            args[k].V= va_arg (ap, TYPE(PnlMat) *);
+            args[k].type = 'm';
+            if ( m == -1 ) { m = args[k].V->m; n = args[k].V->n; }
+            else { PNL_CHECK ( (m != args[k].V->m) || (n != args[k].V->n) , 
+                               "incompatible size", "pnl_mat_find"); }
+            break;
+          default:
+            return FAIL;
+        }
+    }
+  va_end(ap);
+
+  /*
+   * 2 passes are needed.
+   * The first one to determine the size of index 
+   */
+  for ( i=0, count=0 ; i<m ; i++ )
+    {
+      for ( j=0 ; j<n ; j++ )
+        {
+          for ( k=0 ; k<nvar ; k++ )
+            {
+              if ( args[k].type == 'r' ) t[k] = args[k].x;
+              else t[k] = PNL_MGET(args[k].V, i, j);
+            }
+          if ( f(t) == 1 ) { count++; }
+        }
+    }
+  /*
+   * Second pass to extract the indices for which f == 1
+   */
+  if ( indj == NULL )
+    {
+      pnl_vect_int_resize (indi, count);
+      for ( i=0, count=0 ; i<m*n ; i++ )
+        {
+          for ( k=0 ; k<nvar ; k++ )
+            {
+              if ( args[k].type == 'r' ) t[k] = args[k].x;
+              else t[k] = (args[k].V)->array[i];
+            }
+          if ( f(t) == 1 ) { PNL_LET(indi, count) = i; count++; }
+        }
     }
   else
     {
-      /* We use a standard indexing and store the values */
-      count_ij = 0;
-      for ( i=0 ; i<M->m ; i++ ) 
+      pnl_vect_int_resize (indi, count);
+      pnl_vect_int_resize (indj, count);
+
+      for ( i=0, count=0 ; i<m ; i++ )
         {
-          for ( j=0 ; j<M->n ; j++ )
+          for ( j=0 ; j<n ; j++ )
             {
-              if (f(PNL_MGET (M, i, j)) == 1)
+              for ( k=0 ; k<nvar ; k++ )
                 {
-                  PNL_LET(indi, count_ij) = i;
-                  PNL_LET(indj, count_ij) = j;
-                  PNL_LET (val, count_ij) = PNL_MGET (M, i, j);
-                  count_ij++;
+                  if ( args[k].type == 'r' ) t[k] = args[k].x;
+                  else t[k] = PNL_MGET(args[k].V, i, j);
+                }
+              if ( f(t) == 1 ) 
+                { 
+                  PNL_LET(indi, count) = i; PNL_LET(indj, count) = j;
+                  count++; 
                 }
             }
         }
-
     }
+
+  free (args);
+  free (t);
+  return OK;
 }
 
-/** 
- * Find this indices (i, j) for which f(M1(i,j), M2(i,j) ) == 1
- * 
- * @param indi (output) a vector of integers
- * @param indj (output) a vector of integers
- * If indj == NULL, then a linear indexing of the matrix component is used
- * between 1 and M1->mn (the matrix is seen as a vector created by staking the
- * rows of the matrix). If indj!=NULL, the pairs (indi(:), indj(:)) are the
- * lists of values (i,j) for which the test is true
- * @param val (output) if not NULL contains on exit the entries of the matrix M1
- * for which the test is positive
- * @param M1 a matrix
- * @param M2 a matrix
- * @param f a function returning an integer (typically a test function)
- */
-void FUNCTION(pnl_mat,find_mat)(PnlVectInt *indi, PnlVectInt *indj, TYPE(PnlVect) *val,
-                                const TYPE(PnlMat) *M1, const TYPE(PnlMat) *M2, 
-                                int(*f)(BASE,BASE))
-{
-  int i, j, count_ij;
-  CheckMatMatch (M1, M2);
-  /* 2 passes are needed.
-   * First pass to determine the size of indi, indj, val */
-  count_ij = 0;
-  for ( i=0 ; i<M1->m ; i++ ) 
-    {
-      for ( j=0 ; j<M1->n ; j++ )
-        {
-          if (f(PNL_MGET (M1, i, j), PNL_MGET (M2, i, j)) == 1) { count_ij++; }
-        }
-    }
-  pnl_vect_int_resize (indi, count_ij);
-  if (indj != NULL) pnl_vect_int_resize (indj, count_ij);
-  if (val != NULL) FUNCTION(pnl_vect,resize) (val, count_ij);
+/* void FUNCTION(pnl_mat,find)(PnlVectInt *indi, PnlVectInt *indj, TYPE(PnlVect) *val,  */
+/*                             const TYPE(PnlMat) *M, int(*f)(BASE)) */
+/* { */
+/*   int i, j, count_ij; */
+/*   |+ 2 passes are needed. */
+/*    * First pass to determine the size of indi, indj, val +| */
+/*   count_ij = 0; */
+/*   for ( i=0 ; i<M->m ; i++ )  */
+/*     { */
+/*       for ( j=0 ; j<M->n ; j++ ) */
+/*         { */
+/*           if (f(PNL_MGET (M, i, j)) == 1) { count_ij++; } */
+/*         } */
+/*     } */
+/*   pnl_vect_int_resize (indi, count_ij); */
+/*   if (indj != NULL) pnl_vect_int_resize (indj, count_ij); */
+/*   if (val != NULL) FUNCTION(pnl_vect,resize) (val, count_ij); */
 
-  /* Second pass to extract data */
-  if ( indj == NULL && val == NULL )
-    {
-      /* We use a linear indexing and do not store the values */
-      count_ij = 0;
-      for ( i=0 ; i<M1->m ; i++ ) 
-        {
-          for ( j=0 ; j<M1->n ; j++ )
-            {
-              if (f(PNL_MGET (M1, i, j), PNL_MGET (M2, i, j)) == 1)
-                {
-                  PNL_LET(indi, count_ij) = i * M1->n + j;
-                  count_ij++;
-                }
-            }
-        }
-    }
-  else if ( indj == NULL )
-    {
-      /* We use a linear indexing and store the values */
-      count_ij = 0;
-      for ( i=0 ; i<M1->m ; i++ ) 
-        {
-          for ( j=0 ; j<M1->n ; j++ )
-            {
-              if (f(PNL_MGET (M1, i, j), PNL_MGET (M2, i, j)) == 1)
-                {
-                  PNL_LET(indi, count_ij) = i * M1->n + j;
-                  PNL_LET (val, count_ij) = PNL_MGET (M1, i, j);
-                  count_ij++;
-                }
-            }
-        }
-    }
-  else if ( val == NULL )
-    {
-      /* We use a standard indexing and do not store the values */
-      count_ij = 0;
-      for ( i=0 ; i<M1->m ; i++ ) 
-        {
-          for ( j=0 ; j<M1->n ; j++ )
-            {
-              if (f(PNL_MGET (M1, i, j), PNL_MGET (M2, i, j)) == 1)
-                {
-                  PNL_LET(indi, count_ij) = i;
-                  PNL_LET(indj, count_ij) = j;
-                  count_ij++;
-                }
-            }
-        }
+/*   |+ Second pass to extract data +| */
+/*   if ( indj == NULL && val == NULL ) */
+/*     { */
+/*       |+ We use a linear indexing and do not store the values +| */
+/*       count_ij = 0; */
+/*       for ( i=0 ; i<M->m ; i++ )  */
+/*         { */
+/*           for ( j=0 ; j<M->n ; j++ ) */
+/*             { */
+/*               if (f(PNL_MGET (M, i, j)) == 1) */
+/*                 { */
+/*                   PNL_LET(indi, count_ij) = i * M->n + j; */
+/*                   count_ij++; */
+/*                 } */
+/*             } */
+/*         } */
+/*     } */
+/*   else if ( indj == NULL ) */
+/*     { */
+/*       |+ We use a linear indexing and store the values +| */
+/*       count_ij = 0; */
+/*       for ( i=0 ; i<M->m ; i++ )  */
+/*         { */
+/*           for ( j=0 ; j<M->n ; j++ ) */
+/*             { */
+/*               if (f(PNL_MGET (M, i, j)) == 1) */
+/*                 { */
+/*                   PNL_LET(indi, count_ij) = i * M->n + j; */
+/*                   PNL_LET (val, count_ij) = PNL_MGET (M, i, j); */
+/*                   count_ij++; */
+/*                 } */
+/*             } */
+/*         } */
+/*     } */
+/*   else if ( val == NULL ) */
+/*     { */
+/*       |+ We use a standard indexing and do not store the values +| */
+/*       count_ij = 0; */
+/*       for ( i=0 ; i<M->m ; i++ )  */
+/*         { */
+/*           for ( j=0 ; j<M->n ; j++ ) */
+/*             { */
+/*               if (f(PNL_MGET (M, i, j)) == 1) */
+/*                 { */
+/*                   PNL_LET(indi, count_ij) = i; */
+/*                   PNL_LET(indj, count_ij) = j; */
+/*                   count_ij++; */
+/*                 } */
+/*             } */
+/*         } */
 
-    }
-  else
-    {
-      /* We use a standard indexing and store the values */
-      count_ij = 0;
-      for ( i=0 ; i<M1->m ; i++ ) 
-        {
-          for ( j=0 ; j<M1->n ; j++ )
-            {
-              if (f(PNL_MGET (M1, i, j), PNL_MGET (M2, i, j)) == 1)
-                {
-                  PNL_LET(indi, count_ij) = i;
-                  PNL_LET(indj, count_ij) = j;
-                  PNL_LET (val, count_ij) = PNL_MGET (M1, i, j);
-                  count_ij++;
-                }
-            }
-        }
+/*     } */
+/*   else */
+/*     { */
+/*       |+ We use a standard indexing and store the values +| */
+/*       count_ij = 0; */
+/*       for ( i=0 ; i<M->m ; i++ )  */
+/*         { */
+/*           for ( j=0 ; j<M->n ; j++ ) */
+/*             { */
+/*               if (f(PNL_MGET (M, i, j)) == 1) */
+/*                 { */
+/*                   PNL_LET(indi, count_ij) = i; */
+/*                   PNL_LET(indj, count_ij) = j; */
+/*                   PNL_LET (val, count_ij) = PNL_MGET (M, i, j); */
+/*                   count_ij++; */
+/*                 } */
+/*             } */
+/*         } */
 
-    }
-}
+/*     } */
+/* } */
+
+/* |+*  */
+/*  * Find this indices (i, j) for which f(M1(i,j), M2(i,j) ) == 1 */
+/*  *  */
+/*  * @param indi (output) a vector of integers */
+/*  * @param indj (output) a vector of integers */
+/*  * If indj == NULL, then a linear indexing of the matrix component is used */
+/*  * between 1 and M1->mn (the matrix is seen as a vector created by staking the */
+/*  * rows of the matrix). If indj!=NULL, the pairs (indi(:), indj(:)) are the */
+/*  * lists of values (i,j) for which the test is true */
+/*  * @param val (output) if not NULL contains on exit the entries of the matrix M1 */
+/*  * for which the test is positive */
+/*  * @param M1 a matrix */
+/*  * @param M2 a matrix */
+/*  * @param f a function returning an integer (typically a test function) */
+/*  +| */
+/* void FUNCTION(pnl_mat,find_mat)(PnlVectInt *indi, PnlVectInt *indj, TYPE(PnlVect) *val, */
+/*                                 const TYPE(PnlMat) *M1, const TYPE(PnlMat) *M2,  */
+/*                                 int(*f)(BASE,BASE)) */
+/* { */
+/*   int i, j, count_ij; */
+/*   CheckMatMatch (M1, M2); */
+/*   |+ 2 passes are needed. */
+/*    * First pass to determine the size of indi, indj, val +| */
+/*   count_ij = 0; */
+/*   for ( i=0 ; i<M1->m ; i++ )  */
+/*     { */
+/*       for ( j=0 ; j<M1->n ; j++ ) */
+/*         { */
+/*           if (f(PNL_MGET (M1, i, j), PNL_MGET (M2, i, j)) == 1) { count_ij++; } */
+/*         } */
+/*     } */
+/*   pnl_vect_int_resize (indi, count_ij); */
+/*   if (indj != NULL) pnl_vect_int_resize (indj, count_ij); */
+/*   if (val != NULL) FUNCTION(pnl_vect,resize) (val, count_ij); */
+
+/*   |+ Second pass to extract data +| */
+/*   if ( indj == NULL && val == NULL ) */
+/*     { */
+/*       |+ We use a linear indexing and do not store the values +| */
+/*       count_ij = 0; */
+/*       for ( i=0 ; i<M1->m ; i++ )  */
+/*         { */
+/*           for ( j=0 ; j<M1->n ; j++ ) */
+/*             { */
+/*               if (f(PNL_MGET (M1, i, j), PNL_MGET (M2, i, j)) == 1) */
+/*                 { */
+/*                   PNL_LET(indi, count_ij) = i * M1->n + j; */
+/*                   count_ij++; */
+/*                 } */
+/*             } */
+/*         } */
+/*     } */
+/*   else if ( indj == NULL ) */
+/*     { */
+/*       |+ We use a linear indexing and store the values +| */
+/*       count_ij = 0; */
+/*       for ( i=0 ; i<M1->m ; i++ )  */
+/*         { */
+/*           for ( j=0 ; j<M1->n ; j++ ) */
+/*             { */
+/*               if (f(PNL_MGET (M1, i, j), PNL_MGET (M2, i, j)) == 1) */
+/*                 { */
+/*                   PNL_LET(indi, count_ij) = i * M1->n + j; */
+/*                   PNL_LET (val, count_ij) = PNL_MGET (M1, i, j); */
+/*                   count_ij++; */
+/*                 } */
+/*             } */
+/*         } */
+/*     } */
+/*   else if ( val == NULL ) */
+/*     { */
+/*       |+ We use a standard indexing and do not store the values +| */
+/*       count_ij = 0; */
+/*       for ( i=0 ; i<M1->m ; i++ )  */
+/*         { */
+/*           for ( j=0 ; j<M1->n ; j++ ) */
+/*             { */
+/*               if (f(PNL_MGET (M1, i, j), PNL_MGET (M2, i, j)) == 1) */
+/*                 { */
+/*                   PNL_LET(indi, count_ij) = i; */
+/*                   PNL_LET(indj, count_ij) = j; */
+/*                   count_ij++; */
+/*                 } */
+/*             } */
+/*         } */
+
+/*     } */
+/*   else */
+/*     { */
+/*       |+ We use a standard indexing and store the values +| */
+/*       count_ij = 0; */
+/*       for ( i=0 ; i<M1->m ; i++ )  */
+/*         { */
+/*           for ( j=0 ; j<M1->n ; j++ ) */
+/*             { */
+/*               if (f(PNL_MGET (M1, i, j), PNL_MGET (M2, i, j)) == 1) */
+/*                 { */
+/*                   PNL_LET(indi, count_ij) = i; */
+/*                   PNL_LET(indj, count_ij) = j; */
+/*                   PNL_LET (val, count_ij) = PNL_MGET (M1, i, j); */
+/*                   count_ij++; */
+/*                 } */
+/*             } */
+/*         } */
+
+/*     } */
+/* } */
 
 
 /**

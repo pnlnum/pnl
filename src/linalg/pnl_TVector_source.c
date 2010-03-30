@@ -732,109 +732,184 @@ void FUNCTION(pnl_vect,map_vect_inplace)(TYPE(PnlVect) *lhs, const TYPE(PnlVect)
     }
 }
 
+/* |+*  */
+/*  * Finds the indices i for which f(V(i)) == 1 */
+/*  *  */
+/*  * @param ind (output) a vector of integers */
+/*  * @param val (output) a vector. If not NULL, it  contains the values V(ind(:))  */
+/*  * @param V a vector */
+/*  * @param f a function returning an integer (typically a test function) */
+/*  +| */
+/* void FUNCTION(pnl_vect,find)(PnlVectInt *ind, TYPE(PnlVect) *val,  */
+/*                              const TYPE(PnlVect) *V, int(*f)(BASE)) */
+/* { */
+/*   int i, count_i; */
+/*   count_i = 0; */
+/*   |+ We need 2 passes. */
+/*    * First pass to determine the size +| */
+/*   for ( i=0 ; i<V->size ; i++ )  */
+/*     { */
+/*       if (f(PNL_GET (V, i)) == 1) count_i++; */
+/*     } */
+/*   pnl_vect_int_resize (ind, count_i); */
+
+/*   |+ Second pass to extract the data +| */
+/*   if ( val != NULL )  */
+/*     { */
+/*       FUNCTION(pnl_vect, resize)(val, count_i); */
+/*       count_i = 0; */
+/*       for ( i=0 ; i<V->size ; i++ )  */
+/*         { */
+/*           if (f(PNL_GET (V, i)) == 1) */
+/*             { */
+/*               PNL_LET(ind, count_i) = i;  */
+/*               PNL_LET(val, count_i) = PNL_GET(V, i); */
+/*               count_i++; */
+/*             } */
+/*         } */
+/*     } */
+/*   else */
+/*     { */
+/*       |+ Second pass to extract the data +| */
+/*       count_i = 0; */
+/*       for ( i=0 ; i<V->size ; i++ )  */
+/*         { */
+/*           if (f(PNL_GET (V, i)) == 1) */
+/*             { */
+/*               PNL_LET(ind, count_i) = i; count_i++; */
+/*             } */
+/*         } */
+
+/*     } */
+/* } */
+
+/* |+*  */
+/*  * Finds the indices i for which f(V1(i),V2(i)) == 1 */
+/*  *  */
+/*  * @param ind (output) a vector of integers */
+/*  * @param val (output) a vector. If not NULL, it  contains the values V(ind(:))  */
+/*  * @param V1 a vector */
+/*  * @param V2 a vector */
+/*  * @param f a function returning an integer (typically a test function) */
+/*  +| */
+/* void FUNCTION(pnl_vect,find_vect)(PnlVectInt *ind, TYPE(PnlVect) *val, */
+/*                                   const TYPE(PnlVect) *V1, const TYPE(PnlVect) *V2, */
+/*                                   int(*f)(BASE,BASE)) */
+/* { */
+/*   int i, count_i; */
+/*   CheckVectMatch (V1, V2); */
+/*   count_i = 0; */
+/*   |+ We need 2 passes. */
+/*    * First pass to determine the size +| */
+/*   for ( i=0 ; i<V1->size ; i++ )  */
+/*     { */
+/*       if (f(PNL_GET (V1, i), PNL_GET(V2, i)) == 1) count_i++; */
+/*     } */
+/*   pnl_vect_int_resize (ind, count_i); */
+
+/*   |+ Second pass to extract the data +| */
+/*   if ( val != NULL )  */
+/*     { */
+/*       FUNCTION(pnl_vect, resize)(val, count_i); */
+/*       count_i = 0; */
+/*       for ( i=0 ; i<V1->size ; i++ )  */
+/*         { */
+/*           if (f(PNL_GET (V1, i), PNL_GET(V2, i)) == 1) */
+/*             { */
+/*               PNL_LET(ind, count_i) = i;  */
+/*               PNL_LET(val, count_i) = PNL_GET(V1, i); */
+/*               count_i++; */
+/*             } */
+/*         } */
+/*     } */
+/*   else */
+/*     { */
+/*       count_i = 0; */
+/*       for ( i=0 ; i<V1->size ; i++ )  */
+/*         { */
+/*           if (f(PNL_GET (V1, i), PNL_GET(V2, i)) == 1) */
+/*             { */
+/*               PNL_LET(ind, count_i) = i; count_i++; */
+/*             } */
+/*         } */
+/*     } */
+/* } */
+
+typedef struct {
+  union {BASE x; TYPE(PnlVect) *V ;};
+  char type;
+} TYPE(cell);
+
 /** 
- * Find this indices i for which f(V(i)) == 1
+ * Finds the indices i for which f == 1
  * 
  * @param ind (output) a vector of integers
- * @param val (output) a vector. If not NULL, it  contains the values V(ind(:)) 
- * @param V a vector
+ * @param type a string composed by the letters 'r' and 'v'.
  * @param f a function returning an integer (typically a test function)
  */
-void FUNCTION(pnl_vect,find)(PnlVectInt *ind, TYPE(PnlVect) *val, 
-                             const TYPE(PnlVect) *V, int(*f)(BASE))
+int FUNCTION(pnl_vect,find) (PnlVectInt *index, char* type, int(*f)(BASE *), ...)
 {
-  int i, count_i;
-  count_i = 0;
-  /* We need 2 passes.
-   * First pass to determine the size */
-  for ( i=0 ; i<V->size ; i++ ) 
-    {
-      if (f(PNL_GET (V, i)) == 1) count_i++;
-    }
-  pnl_vect_int_resize (ind, count_i);
+  va_list ap;
+  TYPE(cell) *args;
+  int i, j, count, size, nvar;
+  BASE val, *t;
+  size = -1;
 
-  /* Second pass to extract the data */
-  if ( val != NULL ) 
+  nvar = strlen (type);
+  if ((args = malloc (sizeof(cell) * nvar)) == NULL) return FAIL;
+  if ((t = malloc (sizeof(BASE) * nvar)) == NULL) return FAIL;
+
+  va_start (ap, f);
+
+  for ( i=0; i<nvar ; i++ )
     {
-      FUNCTION(pnl_vect, resize)(val, count_i);
-      count_i = 0;
-      for ( i=0 ; i<V->size ; i++ ) 
+      switch (type[i])
         {
-          if (f(PNL_GET (V, i)) == 1)
-            {
-              PNL_LET(ind, count_i) = i; 
-              PNL_LET(val, count_i) = PNL_GET(V, i);
-              count_i++;
-            }
+          case 'r' : 
+            val = va_arg (ap, BASE); 
+            args[i].x = val; args[i].type = 'r';
+            break;
+          case 'v' : 
+            args[i].V= va_arg (ap, TYPE(PnlVect) *);
+            args[i].type = 'v';
+            if ( size == -1 ) size = args[i].V->size;
+            else { PNL_CHECK ( size != args[i].V->size , "incompatible size", "pnl_vect_find"); }
+            break;
         }
     }
-  else
-    {
-      /* Second pass to extract the data */
-      count_i = 0;
-      for ( i=0 ; i<V->size ; i++ ) 
-        {
-          if (f(PNL_GET (V, i)) == 1)
-            {
-              PNL_LET(ind, count_i) = i; count_i++;
-            }
-        }
+  va_end(ap);
 
+  /*
+   * 2 passes are needed.
+   * The first one to determine the size of index 
+   */
+  for ( i=0, count=0 ; i<size ; i++ )
+    {
+       for ( j=0 ; j<nvar ; j++ )
+         {
+           if ( args[j].type == 'r' ) t[j] = args[j].x;
+           else t[j] = PNL_GET(args[j].V, i);
+         }
+       if ( f(t) == 1 ) count++;
     }
+  pnl_vect_int_resize (index, count);
+  /*
+   * Second pass to extract the indices for which f == 1
+   */
+  for ( i=0, count=0 ; i<size ; i++ )
+    {
+       for ( j=0 ; j<nvar ; j++ )
+         {
+           if ( args[j].type == 'r' ) t[j] = args[j].x;
+           else t[j] = PNL_GET(args[j].V, i);
+         }
+       if ( f(t) == 1 ) { PNL_LET (index, count) = i; count++; }
+    }
+
+  free (args);
+  free (t);
+  return OK;
 }
-
-/** 
- * Find this indices i for which f(V1(i),V2(i)) == 1
- * 
- * @param ind (output) a vector of integers
- * @param val (output) a vector. If not NULL, it  contains the values V(ind(:)) 
- * @param V1 a vector
- * @param V2 a vector
- * @param f a function returning an integer (typically a test function)
- */
-void FUNCTION(pnl_vect,find_vect)(PnlVectInt *ind, TYPE(PnlVect) *val,
-                                  const TYPE(PnlVect) *V1, const TYPE(PnlVect) *V2,
-                                  int(*f)(BASE,BASE))
-{
-  int i, count_i;
-  CheckVectMatch (V1, V2);
-  count_i = 0;
-  /* We need 2 passes.
-   * First pass to determine the size */
-  for ( i=0 ; i<V1->size ; i++ ) 
-    {
-      if (f(PNL_GET (V1, i), PNL_GET(V2, i)) == 1) count_i++;
-    }
-  pnl_vect_int_resize (ind, count_i);
-
-  /* Second pass to extract the data */
-  if ( val != NULL ) 
-    {
-      FUNCTION(pnl_vect, resize)(val, count_i);
-      count_i = 0;
-      for ( i=0 ; i<V1->size ; i++ ) 
-        {
-          if (f(PNL_GET (V1, i), PNL_GET(V2, i)) == 1)
-            {
-              PNL_LET(ind, count_i) = i; 
-              PNL_LET(val, count_i) = PNL_GET(V1, i);
-              count_i++;
-            }
-        }
-    }
-  else
-    {
-      count_i = 0;
-      for ( i=0 ; i<V1->size ; i++ ) 
-        {
-          if (f(PNL_GET (V1, i), PNL_GET(V2, i)) == 1)
-            {
-              PNL_LET(ind, count_i) = i; count_i++;
-            }
-        }
-    }
-}
-
 
 /**
  * map vector componentwise

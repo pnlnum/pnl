@@ -68,8 +68,7 @@ extern void pnl_mat_map_inplace(PnlMat *lhs, double(*f)(double)); /*lhs=f(lhs)*/
 extern void pnl_mat_map(PnlMat *lhs, const PnlMat *rhs, double(*f)(double));/* lhs(i)=f(rhs(i)) */
 extern void pnl_mat_map_mat_inplace(PnlMat *lhs, const PnlMat *rhs, double(*f)(double,double));
 extern void pnl_mat_map_mat(PnlMat *lhs, const PnlMat *rhs1, const PnlMat *rhs2, double(*f)(double,double));
-extern void pnl_mat_find(PnlVectInt *indi, PnlVectInt *indj, PnlVect *val, const PnlMat *M, int(*f)(double));
-extern void pnl_mat_find_mat(PnlVectInt *indi, PnlVectInt *indj, PnlVect *val, const PnlMat*,const PnlMat *, int(*f)(double,double));
+extern int pnl_mat_find(PnlVectInt *indi, PnlVectInt *indj, char* type, int(*f)(double *), ...);
 extern void pnl_mat_plus_double(PnlMat *lhs, double x); /*lhs+=x*/
 extern void pnl_mat_minus_double(PnlMat *lhs, double x); /*lhs-=x*/
 extern void pnl_mat_plus_mat(PnlMat *lhs, const PnlMat *rhs); /*lhs+=rhs*/

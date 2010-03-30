@@ -303,17 +303,38 @@ no total ordering on Complex numbers
   \var{order} (\verb!'i'! for increasing or \verb!'d'! for decreasing ). On
   output, \var{index} contains the permutation used to sort the vector.
 
-\item \describefun{void}{pnl_vect_find}{\refstruct{PnlVectInt} \ptr
-  ind, \refstruct{PnlVect} \ptr val, const \refstruct{PnlVect} \ptr V,
-  int(\ptr f)(double)}
-  \sshortdescribe \var{ind} contains on exit the indices \var{i} for which
-  \var{f(V(i)) ==1 }. If \var{val} is not NULL, on exit \var{val = V(ind)}.
+\item \describefun{int}{pnl_vect_find}{\refstruct{PnlVectInt} \ptr
+  ind, char \ptr type, int(\ptr f)(double \ptr t), \ldots}
+  \sshortdescribe \var{f} is a function taking a C array as argument and
+  returning an integer. \var{type} is a string composed by the letters 'r' and
+  'v' and is used to describe the types of the arguments appearing after \var{f}.
+  This function aims at simulating Scilab's \var{find}
+  function. Here are a few examples (capital letters are used for vectors and
+  small letters for real values)
+  \begin{itemize}
+    \item \verb!ind = find ( a < X )!
+      \begin{verbatim}
+      int isless ( double *t ) { return t[0] < t[1]; }
+      pnl_vect_find ( ind, "rv", isless, a, X );
+      \end{verbatim}
+    \item \verb!ind = find (X <= Y)!
+      \begin{verbatim}
+      int isless ( double *t ) { return t[0] <= t[1]; }
+      pnl_vect_find ( ind, "vv", isless, X, Y );
+      \end{verbatim}
+    \item \verb!ind = find ((a < X) && (X <= Y))!
+      \begin{verbatim}
+      int cmp ( double *t ) 
+      { 
+        return (t[0] <= t[1]) && (t[1] <= t[2]); 
+      }
+      pnl_vect_find ( ind, "rvv", cmp, a, X, Y );
+      \end{verbatim}
+  \end{itemize}
+  \var{ind} contains on exit the indices \var{i} for which the function \var{f}
+  returned \var{1}. This function returns \var{OK} or \var{FAIL} when something
+  went wrong (size mismatch between matrices, invalid string type).
 
-\item \describefun{void}{pnl_vect_find_vect}{\refstruct{PnlVectInt} \ptr
-  ind, \refstruct{PnlVect} \ptr val, const \refstruct{PnlVect} \ptr V1, 
-  const \refstruct{PnlVect} \ptr V2, int(\ptr f)(double, double)}
-  \sshortdescribe \var{ind} contains on exit the indices \var{i} for which
-  \var{f(V1(i),V2(i)) ==1 }. If \var{val} is not NULL, on exit \var{val = V(ind)}.
 \end{itemize}
 
 \subparagraph{Scalar products and norms}
@@ -825,29 +846,40 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
   others. In addition to the function \reffun{pnl_mat_qsort}, the permutation
   index is computed and stored into \var{index}.
 
-\item \describefun{void}{pnl_mat_find}{\refstruct{PnlVectInt} \ptr
-  indi, \refstruct{PnlVectInt} \ptr indj, \refstruct{PnlVect} \ptr val,
-  const \refstruct{PnlMat} \ptr M, int(\ptr f)(double)}
-  \sshortdescribe If \var{indj} is not NULL, \var{indi} and \var{indj} contains
-  on exit the indices \var{(i,j)} for which \var{f(M(i,j))==1}. If \var{indj}
-  is NULL, then a linear indexing is used : \var{M} is seen as a large vector
-  built by stacking the rows of \var{M} and \var{indi} contains the values of
-  the linear index for which the test is positive. If \var{val} is not NULL, it
-  is used to store {\bf in a vector} the entries of \var{M} for which the test
-  \var{f} is positive, i.e. \var{val = M((indi(:), indj(:)))}.
-
-\item \describefun{void}{pnl_mat_find_mat}{\refstruct{PnlVectInt} \ptr
-  indi, \refstruct{PnlVectInt} \ptr indj,  \refstruct{PnlVect} \ptr val,
-  const \refstruct{PnlMat} \ptr M1,
-  const \refstruct{PnlMat} \ptr M2, int(\ptr f)(double, double)}
-  \sshortdescribe If \var{indj} is not NULL, \var{indi} and \var{indj} contains
-  on exit the indices \var{(i,j)} for which \var{f(M1(i,j), M2(i,j))==1}. If
-  \var{indj} is NULL, then a linear indexing is used : \var{M1} and \var{M2} are
-  seen as large vectors built by stacking the rows of the matrices and
-  \var{indi} contains the values of the linear index for which the test is
-  positive. If \var{val} is not NULL, it is used to store {\bf in a vector} the
-  entries of \var{M1} for which the test \var{f} is positive, i.e. \var{val =
-  M((indi(:), indj(:)))}.
+\item \describefun{int}{pnl_mat_find}{\refstruct{PnlVectInt} \ptr
+  indi, \refstruct{PnlVectInt} indj, char \ptr type, int(\ptr f)(double \ptr t), \ldots}
+  \sshortdescribe \var{f} is a function taking a C array as argument and
+  returning an integer. \var{type} is a string composed by the letters 'r' and
+  'm' and is used to describe the types of the arguments appearing after \var{f}
+  : 'r' for real numbers and 'm' for matrices.
+  This function aims at simulating Scilab's \var{find}
+  function. Here are a few examples (capital letters are used for matrices and
+  small letters for real values)
+  \begin{itemize}
+    \item \verb![indi, indj] = find ( a < X )!
+      \begin{verbatim}
+      int isless ( double *t ) { return t[0] < t[1]; }
+      pnl_mat_find ( indi, indj, "rm", isless, a, X );
+      \end{verbatim}
+    \item \verb!ind = find (X <= Y)!
+      \begin{verbatim}
+      int isless ( double *t ) { return t[0] <= t[1]; }
+      pnl_mat_find ( ind, "mm", isless, X, Y );
+      \end{verbatim}
+    \item \verb![indi, indj] = find ((a < X) && (X <= Y))!
+      \begin{verbatim}
+      int cmp ( double *t ) 
+      { 
+        return (t[0] <= t[1]) && (t[1] <= t[2]); 
+      }
+      pnl_mat_find ( indi, indj, "rmm", cmp, a, X, Y );
+      \end{verbatim}
+  \end{itemize}
+  \var{(indi, indj)} contains on exit the indices \var{(i,j)} for which the function \var{f}
+  returned \var{1}. Note that if \var{indj == NULL} on entry, a linear indexing
+  is used for matrices, which means that matrices are seen as large vectors
+  built up be stacking rows. This function returns \var{OK} or \var{FAIL} if
+  something went wrong (size mismatch between matrices, invalid string type).
 \end{itemize}
 
 

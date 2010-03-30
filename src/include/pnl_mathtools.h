@@ -100,9 +100,21 @@ extern int pnl_isinf (double x);
 #define M_EULER        0.5772156649015328606
 #endif
 
+#ifndef M_1_SQRT2PI
 #define M_1_SQRT2PI    3.9894228040143267791E-1 /* 1/sqrt(2 pi) */
-#define M_SQRT2_PI     0.79788456080286535588  /* sqrt(2/pi) */
-#define M_2PI          6.28318530717958623199 /* 2 pi */
+#endif
+
+#ifndef M_SQRT2_PI
+#define M_SQRT2_PI     0.79788456080286535588   /* sqrt(2/pi) */
+#endif
+
+#ifndef M_2PI
+#define M_2PI          6.28318530717958623199   /* 2 pi */
+#endif
+
+#ifndef M_SQRT2PI 
+#define M_SQRT2PI      2.506628274631000502415  /* sqrt(2*pi) */
+#endif
 
 #ifndef INT_MAX
 #define INT_MAX        2147483647

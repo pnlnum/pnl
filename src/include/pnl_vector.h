@@ -6,6 +6,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 #include <stdio.h>
+#include <string.h>
 
 #ifndef PNL_RANGE_CHECK_OFF
 #define CheckIndexVect(v,i) {                                           \
