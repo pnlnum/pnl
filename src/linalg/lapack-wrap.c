@@ -466,6 +466,7 @@ void pnl_mat_syslin_mat (PnlMat *A,  PnlMat *B)
   pnl_mat_lu (A, p);
 
   pnl_mat_lu_syslin_mat (A, p , B);
+  pnl_vect_int_free (&p);
 }
 
 /**
@@ -561,6 +562,7 @@ void pnl_mat_inverse (PnlMat *inv, const PnlMat *A)
   C2F(dgetrf)(&n, &n, inv->array, &lda, ipiv, &info);
   if (info != 0)
     {
+      free (ipiv); 
       PNL_ERROR ("matrix is singular", "pnl_mat_inverse");
     }
   lwork = -1;
@@ -574,9 +576,11 @@ void pnl_mat_inverse (PnlMat *inv, const PnlMat *A)
   C2F(dgetri)(&n,inv->array,&lda,ipiv,work,&lwork,&info);
   if (info != 0)
     {
+      free (ipiv); free (work);
       PNL_ERROR ("matrix is singular", "pnl_mat_inverse");
     }
   pnl_mat_sq_transpose (inv);
+  free (ipiv); free (work);
 }
 
 /**
