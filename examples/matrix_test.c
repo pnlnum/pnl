@@ -276,6 +276,7 @@ static void pnl_mat_set_diag_test ()
   pnl_mat_set_double (M, 0.);
   pnl_mat_set_diag (M, x, d);
   pnl_mat_print (M);
+  pnl_mat_free (&M);
   printf ("\n");
 }
 
