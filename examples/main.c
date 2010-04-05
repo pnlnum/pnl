@@ -38,7 +38,6 @@ extern void finance_function_test();
 extern void integration_test();
 extern void complex_test();
 extern void mathtools_test();
-extern void perm_test();
 extern void root_test();
 extern void special_func_test();
 extern void tridiag_matrix_test ();
@@ -63,7 +62,6 @@ static tst_list tests[] =
     MAKE_ENUM(integration_test),
     MAKE_ENUM(mathtools_test),
     MAKE_ENUM(complex_test),
-    MAKE_ENUM(perm_test),    
     MAKE_ENUM(root_test),
     MAKE_ENUM(special_func_test),
     MAKE_ENUM(NULL)
