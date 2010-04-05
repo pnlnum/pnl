@@ -1,10 +1,11 @@
-- Should dgemm use Blas ?
 
 - Create an object for Random Number Generators
+    We also want to tackle the problem of generating random numbers
+    in a parallel environment. This constraint must be taken into 
+    account when devising the RNG object.
 
 - Bindings for MPI
-
-- binding for quadpack (numerical integration + ode)
+    At least for vectors, matrices, (hypermatrices ?) and RNG.
 
 - splines 
     CMlib 
@@ -12,12 +13,17 @@
 
 - interface dgesvd
 
+- binding for quadpack (numerical integration + ode)
+
 - integrate the BFGS algorithm written by Ismail
 
 - mutlivariate zero searching
 
-- gradient algorithm
-
-- Change the functions to apply permutations because of the new Blas convention
-
 - Complex tridiag and band matrices
+    I am not sure these sotrages are so meaningful for complex data
+
+- Should dgemm use Blas ? 
+    Probably yes if we can differentiate between Blas & Atlas, because using
+    Fortran style storage induces several temporary copies so it must be worth
+    it.
+
