@@ -1156,8 +1156,8 @@ decomposition, row \verb!i! of \verb!A! was interchanged with row \verb!p(i)!.
 
 
 \begin{itemize}
-\item \describefun{\refstruct{PnlPermutation} \ptr }{pnl_permutation_create}{int n}
-  \sshortdescribe Creates an empty \refstruct{PnlPermutation}.  
+  \item \describefun{\refstruct{PnlPermutation} \ptr }{pnl_permutation_new}{}
+    \sshortdescribe Creates an empty \refstruct{PnlPermutation}.  
 
 \item \describefun{\refstruct{PnlPermutation} \ptr }{pnl_permutation_create}{int n}
   \sshortdescribe Creates a \refstruct{PnlPermutation} of size \var{n}.  
@@ -1165,6 +1165,15 @@ decomposition, row \verb!i! of \verb!A! was interchanged with row \verb!p(i)!.
 \item \describefun{void}{pnl_permutation_free}{\refstruct{PnlPermutation} \ptr \ptr p}
   \sshortdescribe Frees a \refstruct{PnlPermutation}.
 
+\item \describefun{void}{pnl_vect_permute}{\refstruct{PnlVect} \ptr px, const
+    \refstruct{PnlVect} \ptr x, const \refstruct{PnlPermutation} \ptr p} 
+  \sshortdescribe Applies a \refstruct{PnlPermutation} to a \refstruct{PnlVect}.  
+
+\item \describefun{void}{pnl_vect_permute_inplace}{\refstruct{PnlVect} \ptr x, 
+    const \refstruct{PnlPermutation} \ptr p} 
+  \sshortdescribe Applies a \refstruct{PnlPermutation} to a
+  \refstruct{PnlVect} in-place.  
+  
 \item \describefun{void}{pnl_permutation_fprint}{FILE \ptr fic, const \refstruct{PnlPermutation} \ptr p}
   \sshortdescribe Prints a permutation to a file.  
 
