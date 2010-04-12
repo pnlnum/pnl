@@ -21,7 +21,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "config.h"
 #include "pnl_matrix.h"
 #include "pnl_matrix_complex.h"
 #include "pnl_random.h"

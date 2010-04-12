@@ -21,7 +21,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "config.h"
 #include "pnl_tridiag_matrix.h"
 #include "pnl_random.h"
 #include "tests.h"

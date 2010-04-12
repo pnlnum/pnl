@@ -21,16 +21,12 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "config.h"
 #include "pnl_vector.h"
 #include "pnl_vector_complex.h"
 #include "pnl_random.h"
 #include "tests.h"
 
 /* static double function_prod(double x, double y) {return x*y;} */
-
-
-/* TEST DES FONCTIONS PREMIAVECT */
 
 static void pnl_vect_set_test()
 {

@@ -21,13 +21,11 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "config.h"
 #include "pnl_matrix.h"
 #include "pnl_matrix_complex.h"
 #include "pnl_random.h"
 #include "tests.h"
 
-#ifdef HAVE_BLAS
 
 /**
  * Creates a diagonalizable matrix of size n
@@ -65,8 +63,6 @@ static PnlMat* pnl_mat_create_diagonalizable (int n)
   pnl_mat_free (&invP);
   return A;
 }
-
-
 
 static void pnl_mat_eigen_test ()
 {
@@ -117,7 +113,6 @@ static void pnl_mat_log_test ()
   pnl_mat_free (&B);
   pnl_mat_free (&A);
 }
-
 
 static void pnl_mat_ls_test ()
 {
@@ -182,10 +177,8 @@ static void pnl_mat_qr_test ()
   pnl_permutation_free (&p);
 }
 
-static void all_test ();
 static tst_list lapack_tests[] =
   {
-    MAKE_ENUM(all_test),
     MAKE_ENUM(pnl_mat_eigen_test),
     MAKE_ENUM(pnl_mat_log_test),
     MAKE_ENUM(pnl_mat_ls_test),
@@ -193,21 +186,8 @@ static tst_list lapack_tests[] =
     MAKE_ENUM(NULL)
   };
 
-static void all_test ()
+void lapack_test()
 {
   run_all_test (lapack_tests);
 }
 
-void lapack_test()
-{
-  menu_test (lapack_tests);
-}
-
-#else
-
-void lapack_test ()
-{
-  printf ("Not available because Blas/Lapack is not installed.\n");
-}
-
-#endif

@@ -22,7 +22,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "config.h"
 #include "pnl_specfun.h"
 #include "pnl_random.h"
 

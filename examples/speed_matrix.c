@@ -22,12 +22,10 @@
 #include <math.h>
 #include <time.h>
 
-#include "config.h"
 #include "pnl_machine.h"
 #include "pnl_matrix.h"
 #include "pnl_random.h"
 
-#ifdef HAVE_BLAS
 extern int C2F(dgemm) (char *transa, char *transb, int *m, int *n, int *k, double *alpha,
                        double *a, int *lda, double *b, int *ldb, double *beta,
                        double *c__, int *ldc);
@@ -35,9 +33,6 @@ extern int C2F(dgemm) (char *transa, char *transb, int *m, int *n, int *k, doubl
 extern int C2F(dgemv) (char *transa, int *m, int *n, double *alpha,
                        double *a, int *lda, double *x, int *incx, double *beta,
                        double *y, int *incy);
-#endif
-
-#ifdef HAVE_LAPACK
 extern int C2F(dgesv) (int *n, int *nrhs, double *A, int *lda, int *ipvi, double *B,
                        int *ldb, int *info);
 extern int C2F(dposv) (char *uplo, int *n, int *nrhs, double *A, int *lda, double *B,
@@ -46,7 +41,6 @@ extern int C2F(dgetrf) (int *m, int *n, double *A, int *lda, int *ipvi, int *inf
 extern int C2F(dgetf2) (int *m, int *n, double *A, int *lda, int *ipvi, int *info);
 extern int C2F(dpotrf) (char *uplo, int *n, double *a, int *lda, int *info);
 
-#endif
 
 static void speed_access ()
 {
