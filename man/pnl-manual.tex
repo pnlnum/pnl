@@ -225,7 +225,7 @@ possible use with a C++ compiler.
 
   \item Differences between \textbf{copy} and \textbf{clone} methods.
     The \verb!copy! methods take a single argument and return a pointer to an object
-    of the same time which is independent copy of its argument. 
+    of the same type which is independent copy of its argument. 
     Example:
     \begin{verbatim}
     PnlVect *v1, *v2;
@@ -249,9 +249,9 @@ possible use with a C++ compiler.
     \end{verbatim}
     \verb!v1! and \verb!v2! are two vectors of size 5 with all their elements
     equal to 2.5. Note that \verb!v2! {\bf must} have been created by a call to
-    \verb!pnl_vect_create_xxx! because the function \verb!pnl_vect_clone!  will
-    crash.  \verb!v1! and \verb!v2! are independent in the sense that a
-    modification to one of them does not modify the other.
+    \verb!pnl_vect_create_xxx! because otherwise the function
+    \verb!pnl_vect_clone!  will crash.  \verb!v1! and \verb!v2! are independent
+    in the sense that a modification to one of them does not modify the other.
 
 
   \item All objects are measured using integers \verb!int! and not
