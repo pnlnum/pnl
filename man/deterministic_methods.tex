@@ -1,7 +1,7 @@
 \section{Deterministic methods}
 
-%% --------------------------------------------------------------------- %%
-%% Roots
+% --------------------------------------------------------------------- %%
+% Roots
 \subsection{Root finding}
 \subsubsection{Short Description}
 
@@ -206,19 +206,22 @@ $\alpha^\star \in \R^N$ which solves
 
   \item \describefun{double}{pnl_basis_eval_D}{\refstruct{PnlBasis} \ptr
     P, \refstruct{PnlVect} \ptr  coef, double \ptr x, int i}
-    \sshortdescribe Computes the derivative with repsect to \var{x_i} of the
+    \sshortdescribe Computes the derivative with respect to \var{x_i} of the
     linear combination of \var{P_k(x)} defined by \var{coef}. Given the
     coefficients computed by the function \reffun{pnl_basis_fit_ls}, this
     function returns $\partial_{x_i} \sum_{k=0}^n \var{coef}_k  P_k(\var{x})$
-    where \var{x} is a C array of length \var{nb_variates}.
+    where \var{x} is a C array of length \var{nb_variates}. The index \var{i}
+    may vary between \var{0} and \var{P->nb_variates - 1}.
+
 
   \item \describefun{double}{pnl_basis_eval_D2}{\refstruct{PnlBasis} \ptr  P,
     \refstruct{PnlVect} \ptr  coef, double \ptr x,  int i, int j}
-    \sshortdescribe Computes the derivative with repsect to \var{x_i} of the
+    \sshortdescribe Computes the derivative with respect to \var{x_i} of the
     linear combination of \var{P_k(x)} defined by \var{coef}. Given the
     coefficients computed by the function \reffun{pnl_basis_fit_ls}, this
     function returns $\partial_{x_i} \partial_{x_j} \sum_{k=0}^n \var{coef}_k  P_k(\var{x})$
-    where \var{x} is a C array of length \var{nb_variates}.
+    where \var{x} is a C array of length \var{nb_variates}. The indices \var{i}
+    and \var{j} may vary between \var{0} and \var{P->nb_variates - 1}.
 \end{itemize}
 
 
@@ -273,16 +276,16 @@ a given point
 
 \item \describefun{double}{pnl_integration}{const \refstruct{pnl_function} \ptr F, 
     double x0, double x1, int n, char \ptr meth}
-  \sshortdescribe Evaluates $\int_{x_0}^{x_1} F$ using \var{n} discretisation
-  steps. The method used to discretise the integral is defined by \var{meth}
+  \sshortdescribe Evaluates $\int_{x_0}^{x_1} F$ using \var{n} discretization
+  steps. The method used to discretize the integral is defined by \var{meth}
   which can be \var{"rect"} (rectangle rule), \var{"trap"} (trapezoidal rule),
   \var{"simpson"} (Simpson's rule).
 
 \item \describefun{double}{pnl_integration_2D}{const \refstruct{pnl_function_2D} \ptr F,
     double x0, double x1, double y0, double y1, int nx, int ny, char \ptr meth}
   \sshortdescribe Evaluates $\int_{[x_0, x_1] \times [y_0, y_1]} F$ using
-  \var{nx} (resp. \var{ny}) discretisation steps for \var{[x0, x1]}
-  (resp. \var{[y0, y1]}). The method used to discretise the integral is
+  \var{nx} (resp. \var{ny}) discretization steps for \var{[x0, x1]}
+  (resp. \var{[y0, y1]}). The method used to discretize the integral is
   defined by \var{meth} which can be \var{"rect"} (rectangle rule),
   \var{"trap"} (trapezoidal rule),   \var{"simpson"} (Simpson's rule).
 \end{itemize}
@@ -298,7 +301,7 @@ following relation
   \label{eq:fft-sym}
   z_k = \overline{z_{N-k}}, 
 \end{equation}
-where $N$ is the number of discretisation points.
+where $N$ is the number of discretization points.
 
 A few remarks on the FFT of real functions and its inverse transformation :
 \begin{itemize}
@@ -419,7 +422,7 @@ available on \url{http://www.netlib.org/fftpack}.
 \end{itemize}
 
 %% Laplace transform
-\subsection{Inverse Laplace transform}
+\subsection{Inverse Laplace Transform}
 \subsubsection{Short Description}
 
 For a real valued function $f$ such that $t \longmapsto f(t) \expp{- \sigma_c
@@ -439,13 +442,13 @@ For a real valued function $f$ such that $t \longmapsto f(t) \expp{- \sigma_c
   accuracy. For more details on the accuracy of the method. 
 
 \item \describefun{double}{pnl_ilap_cdf_euler}{\refstruct{PnlCmplxFunc}
-    \ptr fhat, double t, int N, int M}
+  \ptr fhat, double t, double h, int N, int M}
   \sshortdescribe Computes the cumulative distribution function $F(\var{t})$
   where $F(x) = \int_0^x f(t) dt$ and $f$ is a density function with values on
   the positive real linegiven by its Laplace transform \var{fhat}. The
   computation is carried out by numerical inversion of the Laplace transform
   using Euler's summation. The values \var{N = M = 15} usually give a very
-  good accuracy. The parameter \var{h} is the discretisation step, the
+  good accuracy. The parameter \var{h} is the discretization step, the
   algorithm is very sensitive to the choice of \var{h}.
 
 \item \describefun{double}{pnl_ilap_fft}{\refstruct{PnlVect} \ptr res,
@@ -476,45 +479,4 @@ For a real valued function $f$ such that $t \longmapsto f(t) \expp{- \sigma_c
   the function \reffun{pnl_ilap_gs} gives far more accurate results.
 \end{itemize}
 
-% %% pde tools
-% \subsection{PDE tools}
-% \subsubsection{Short Description}
-% \subsubsection{Functions}
-% \begin{itemize}
-% \item 
-% \describefun{\refstruct{PnlPDEBoundary}\ptr }{pnl_pde_boundary_create}{double X0, double X1}
-%   \sshortdescribe creates a \refstruct{PnlPDEBoundary}  
-% \item \describefun{double}{pnl_pde_boundary_real_variable}{const \refstruct{ PnlPDEBoundary} BP, double X}
-% \item 
-% \describefun{double}{pnl_pde_boundary_unit_interval}{const \refstruct{ PnlPDEBoundary} BP, double X}
-% \item 
-% \describefun{\refstruct{PnlPDEDimBoundary} \ptr }{pnl_pde_dim_boundary_create_from_int}{int dim}
-%   \sshortdescribe creates a \refstruct{PnlPDEBoundary} with Left down corner is $ (0, \dots, 0)$ and right up corner is $ (1, \dots, 1)$  
-% \item \describefun{\refstruct{ PnlPDEDimBoundary} \ptr }{pnl_pde_dim_boundary_create}{const \refstruct{ PnlVect} \ptr X0, const \refstruct{ PnlVect} \ptr X1}
-%   \sshortdescribe 
-% \item \describefun{void}{pnl_pde_dim_boundary_free}{\refstruct{ PnlPDEDimBoundary} \ptr \ptr \refstruct{ v}}
-%   \sshortdescribe frees a \refstruct{PnlPDEDimBoundary}  
-% \item \describefun{double}{pnl_pde_dim_boundary_eval_from_unit}{double(\ptr f)(const \refstruct{ PnlVect} \ptr ), const \refstruct{ PnlPDEDimBoundary} \ptr BP, const \refstruct{ PnlVect} \ptr X}
-% \item 
-% \describefun{void}{pnl_pde_dim_boundary_from_unit_to_real_variable}{const \refstruct{ PnlPDEDimBoundary} \ptr BP, \refstruct{ PnlVect} \ptr X}
-% \item 
-% \describefun{double}{pnl_pde_dim_boundary_get_step}{const \refstruct{ PnlPDEDimBoundary} \ptr BP, int i}
-% \item 
-% \describefun{double}{standard_time_repartition}{int i, int N-T}
-% \item \describefun{\refstruct{ PnlPDETimeGrid} \ptr }{pnl_pde_time_grid}{const
-%   double T, const int $N-T$, double(\ptr  repartition)(int i, int NN)}
-%   \sshortdescribe creates a \refstruct{PnlPDETimeGrid}
-% \item \describefun{\refstruct{ PnlPDETimeGrid} \ptr }{pnl_pde_time_homogen_grid}{const double T, const int N-T}
-%   \sshortdescribe creates a \refstruct{PnlPDETimeGrid}
-% \item \describefun{void}{pnl_pde_time_grid_free}{\refstruct{ PnlPDETimeGrid} \ptr \ptr TG}
-%   \sshortdescribe frees a \refstruct{PnlPDETimeGrid}
-% \item \describefun{void}{pnl_pde_time_start}{\refstruct{ PnlPDETimeGrid} \ptr TG}
-%   \sshortdescribe initialise \refstruct{PnlPDETimeGrid}
-% \item \describefun{int}{pnl_pde_time_grid_increase}{\refstruct{ PnlPDETimeGrid} \ptr TG}
-%   \sshortdescribe go to the next time step  
-% \item \describefun{double}{pnl_pde_time_grid_step}{const \refstruct{ PnlPDETimeGrid} \ptr TG}
-%   \sshortdescribe GET function on current step.  
-% \item \describefun{double}{pnl_pde_time_grid_time}{const \refstruct{ PnlPDETimeGrid} \ptr TG}
-%   \sshortdescribe GET function on current time.
-% \end{itemize}
 

@@ -250,7 +250,7 @@ static double D_basis_i ( PnlBasis *b, double *x, int i, int j )
     double aux = 1;
     for ( k=0 ; k < b->nb_variates ; k++ ) 
       {
-        if ( k == j-1 ) 
+        if ( k == j ) 
           aux *= (b->Df) (x + k, PNL_MGET(b->T, i, k));
         else
           aux *= (b->f) (x + k, PNL_MGET(b->T, i, k)); 
@@ -277,7 +277,7 @@ static double D2_basis_i (PnlBasis *b, double *x, int i, int j1, int j2)
     {
       for ( k = 0 ; k < b->nb_variates ; k++ )
         {
-          if ( k == j1-1 )
+          if ( k == j1 )
             aux *= (b->D2f) (x + k, PNL_MGET(b->T, i, k));
           else
             aux *= (b->f) (x + k, PNL_MGET(b->T, i, k));
@@ -287,7 +287,7 @@ static double D2_basis_i (PnlBasis *b, double *x, int i, int j1, int j2)
     {
       for ( k = 0 ; k < b->nb_variates ; k++ )
         {
-          if ( k == j1-1  || k == j2-1)
+          if ( k == j1 || k == j2 )
             aux *= (b->Df) (x + k, PNL_MGET(b->T, i, k));
           else
             aux *= (b->f) (x + k, PNL_MGET(b->T, i, k));
