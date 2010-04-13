@@ -223,6 +223,7 @@ if test "x$with_internal_blas" == "xyes"; then
     INTERNAL_BLAS_LA="libblas/libblas.la"
     INTERNAL_LAPACK_DIR="liblapack"
     INTERNAL_LAPACK_LA="liblapack/liblapack.la"
+    LDFLAGS="$LDFLAGS -u MAIN__"
 fi 
 
 LDFLAGS="$LDFLAGS $BLAS_LIBS $LAPACK_LIBS"
