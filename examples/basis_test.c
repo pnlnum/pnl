@@ -199,7 +199,7 @@ static double derive_x_approx_fonction(PnlBasis *B, PnlVect *alpha, double t, do
 {
   double arg[2];
   arg[0] = t; arg[1] = x;
-  return pnl_basis_eval_D (B, alpha, arg, 2); 
+  return pnl_basis_eval_D (B, alpha, arg, 1); 
 }
 
 static void derive_approx_fonction(PnlBasis *B, PnlVect *D, PnlVect *alpha, double t, double x)
@@ -213,9 +213,9 @@ static void derive_approx_fonction(PnlBasis *B, PnlVect *D, PnlVect *alpha, doub
   sum3=0.0;//calcule la valeur de sa derivee en t
 
   sum0 = pnl_basis_eval (B, alpha, arg);
-  sum1 = pnl_basis_eval_D (B, alpha, arg, 2);
-  sum2 = pnl_basis_eval_D2 (B, alpha, arg, 2, 2);
-  sum3 = pnl_basis_eval_D (B, alpha, arg, 1);
+  sum1 = pnl_basis_eval_D (B, alpha, arg, 1);
+  sum2 = pnl_basis_eval_D2 (B, alpha, arg, 1, 1);
+  sum3 = pnl_basis_eval_D (B, alpha, arg, 0);
 
   LET(D,0)=sum0;
   LET(D,1)=sum1;
