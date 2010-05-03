@@ -13,9 +13,10 @@
 
 - interface dgesvd
 
-- binding for quadpack (numerical integration + ode)
-
-- integrate the BFGS algorithm written by Ismail
+- Optimization 
+    Integrate the BFGS algorithm written by Ismail
+    Interface Cminpack for solving nonlinear equations and 
+    least squares problems.
 
 - mutlivariate zero searching
 
