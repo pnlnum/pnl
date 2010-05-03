@@ -72,7 +72,7 @@ static void integration_qagp_test()
   int neval;
   PnlFunc func;
 
-  pts = pnl_vect_create_from_list (2.5, 5.);
+  pts = pnl_vect_create_from_list (2, 2.5, 5.);
   func.function = singular;
   func.params = NULL;
   pnl_integration_qagp(&func,0.0,10,pts,0.00001,0.000001,0,&result,&abserr,&neval);
