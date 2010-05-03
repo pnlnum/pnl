@@ -64,7 +64,7 @@ amos_zmlri (double *zr, double *zi, double *fnu,const int *kode,const int *n,
   --yr;
 
   /* Function Body */
-  scle = amos_d1mach (1) / *tol;
+  scle = pnl_d1mach (1) / *tol;
   *nz = 0;
   az = amos_azabs (zr, zi);
   iaz = (int) az;

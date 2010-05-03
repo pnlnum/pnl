@@ -122,7 +122,7 @@ int amos_zacon (double *zr, double *zi, double *fnu, int *kode, int *mr,const in
   c1i = s1i;
   c2r = yr[1];
   c2i = yi[1];
-  ascle = amos_d1mach (1) * 1e3 / *tol;
+  ascle = pnl_d1mach (1) * 1e3 / *tol;
   if (*kode == 1)
     {
       goto L30;
@@ -190,7 +190,7 @@ int amos_zacon (double *zr, double *zi, double *fnu, int *kode, int *mr,const in
   csrr[2] = cscl;
   bry[0] = ascle;
   bry[1] = 1. / ascle;
-  bry[2] = amos_d1mach (2);
+  bry[2] = pnl_d1mach (2);
   as2 = amos_azabs (&s2r, &s2i);
   kflag = 2;
   if (as2 > bry[0])

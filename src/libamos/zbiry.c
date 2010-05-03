@@ -194,7 +194,7 @@ pnl_zbiry (double *zr, double *zi, int *id, int *kode, double *bir,
   az = amos_azabs (zr, zi);
   /*Computing MAX 
    */
-  d__1 = amos_d1mach (4);
+  d__1 = pnl_d1mach (4);
   tol = MAX (d__1, 1e-18);
   fid = (double) (*id);
   if (az > 1.)
@@ -327,7 +327,7 @@ pnl_zbiry (double *zr, double *zi, int *id, int *kode, double *bir,
    */
   k1 = amos_i1mach (15);
   k2 = amos_i1mach (16);
-  r1m5 = amos_d1mach (5);
+  r1m5 = pnl_d1mach (5);
   /*Computing MIN 
    */
   i__1 = abs (k1), i__2 = abs (k2);

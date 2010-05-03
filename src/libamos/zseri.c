@@ -71,7 +71,7 @@ amos_zseri (double *zr, double *zi, double *fnu,const int *kode,const int *n,
     {
       goto L160;
     }
-  arm = amos_d1mach (1) * 1e3;
+  arm = pnl_d1mach (1) * 1e3;
   rtr1 = sqrt (arm);
   crscr = 1.;
   iflag = 0;

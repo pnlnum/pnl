@@ -81,7 +81,7 @@ int amos_zwrsk (double *zrr, double *zri, double *fnu, int *kode,const int *n,
    *----------------------------------------------------------------------- 
    */
   acw = amos_azabs (&cwr[2], &cwi[2]);
-  ascle = amos_d1mach (1) * 1e3 / *tol;
+  ascle = pnl_d1mach (1) * 1e3 / *tol;
   csclr = 1.;
   if (acw > ascle)
     {

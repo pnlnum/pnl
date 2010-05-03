@@ -126,10 +126,10 @@ double amos_dgamln (double *z__, int *ierr)
     }
   return  gln[nz - 1];
  L10:
-  wdtol = amos_d1mach (4);
+  wdtol = pnl_d1mach (4);
   wdtol = MAX (wdtol, 5e-19);
   i1m = amos_i1mach (14);
-  rln = amos_d1mach (5) * (double) i1m;
+  rln = pnl_d1mach (5) * (double) i1m;
   fln = MIN (rln, 20.);
   fln = MAX (fln, 3.);
   fln += -3.;

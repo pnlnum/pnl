@@ -155,7 +155,7 @@ int amos_zacai (double *zr, double *zi, double *fnu,const int *kode, int *mr,con
       goto L70;
     }
   iuf = 0;
-  ascle = amos_d1mach (1) * 1e3 / *tol;
+  ascle = pnl_d1mach (1) * 1e3 / *tol;
   amos_zs1s2 (&znr, &zni, &c1r, &c1i, &c2r, &c2i, &nw, &ascle, alim, &iuf);
   *nz += nw;
  L70:

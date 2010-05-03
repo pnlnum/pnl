@@ -119,7 +119,7 @@ amos_zunik (double *zrr, double *zri, double *fnu,const int *ikflg,const int *ip
    *    OVERFLOW TEST (ZR/FNU TOO SMALL) 
    *----------------------------------------------------------------------- 
    */
-  test = amos_d1mach (1) * 1e3;
+  test = pnl_d1mach (1) * 1e3;
   ac = *fnu * test;
   if (fabs (*zrr) > ac || fabs (*zri) > ac)
     {

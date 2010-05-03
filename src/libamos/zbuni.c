@@ -106,7 +106,7 @@ int amos_zbuni (double *zr, double *zi, double *fnu, int *kode,const int *n,
    *    SCALE BACKWARD RECURRENCE, BRY(3) IS DEFINED BUT NEVER USED 
    *---------------------------------------------------------------------- 
    */
-  bry[0] = amos_d1mach (1) * 1e3 / *tol;
+  bry[0] = pnl_d1mach (1) * 1e3 / *tol;
   bry[1] = 1. / bry[0];
   bry[2] = bry[1];
   iflag = 2;

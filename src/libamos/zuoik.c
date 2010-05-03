@@ -212,7 +212,7 @@ int amos_zuoik (double *zr, double *zi, double *fnu,const int *kode,const int *i
   *nuf = nn;
   return 0;
  L110:
-  ascle = amos_d1mach (1) * 1e3 / *tol;
+  ascle = pnl_d1mach (1) * 1e3 / *tol;
   amos_azlog (&phir, &phii, &str, &sti, &idum);
   czr += str;
   czi += sti;
@@ -303,7 +303,7 @@ int amos_zuoik (double *zr, double *zi, double *fnu,const int *kode,const int *i
     }
   goto L140;
  L190:
-  ascle = amos_d1mach (1) * 1e3 / *tol;
+  ascle = pnl_d1mach (1) * 1e3 / *tol;
   amos_azlog (&phir, &phii, &str, &sti, &idum);
   czr += str;
   czi += sti;

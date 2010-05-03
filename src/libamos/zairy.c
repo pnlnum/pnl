@@ -195,7 +195,7 @@ int pnl_zairy (double *zr, double *zi,const int *id,const int *kode, double *air
   az = amos_azabs (zr, zi);
   /*Computing MAX 
    */
-  d__1 = amos_d1mach (4);	/*  */
+  d__1 = pnl_d1mach (4);	/*  */
   tol = MAX (d__1, 1e-18);
   fid = (double) (*id);
   if (az > 1.)
@@ -325,7 +325,7 @@ int pnl_zairy (double *zr, double *zi,const int *id,const int *kode, double *air
    */
   k1 = amos_i1mach (15);
   k2 = amos_i1mach (16);
-  r1m5 = amos_d1mach (5);
+  r1m5 = pnl_d1mach (5);
   /*Computing MIN 
    */
   i__1 = abs (k1), i__2 = abs (k2);
@@ -491,7 +491,7 @@ int pnl_zairy (double *zr, double *zi,const int *id,const int *kode, double *air
   *aii = s1i / sfac;
   return 0;
  L170:
-  aa = amos_d1mach (1) * 1e3;
+  aa = pnl_d1mach (1) * 1e3;
   s1r = zeror;
   s1i = zeroi;
   if (*id == 1)

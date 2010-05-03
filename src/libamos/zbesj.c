@@ -226,11 +226,11 @@ int pnl_zbesj (double *zr, double *zi, double *fnu, int *kode,const int *n,
    *----------------------------------------------------------------------- 
    *Computing MAX 
    */
-  d__1 = amos_d1mach (4);
+  d__1 = pnl_d1mach (4);
   tol = MAX (d__1, 1e-18);
   k1 = amos_i1mach (15);
   k2 = amos_i1mach (16);
-  r1m5 = amos_d1mach (5);
+  r1m5 = pnl_d1mach (5);
   /*Computing MIN 
    */
   i__1 = abs (k1), i__2 = abs (k2);
@@ -318,7 +318,7 @@ int pnl_zbesj (double *zr, double *zi, double *fnu, int *kode,const int *n,
       return 0;
     }
   rtol = 1. / tol;
-  ascle = amos_d1mach (1) * rtol * 1e3;
+  ascle = pnl_d1mach (1) * rtol * 1e3;
   i__1 = nl;
   for (i__ = 1; i__ <= i__1; ++i__)
     {

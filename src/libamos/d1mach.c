@@ -41,7 +41,7 @@ extern double pnl_dlamch (char *cmach);
  *  I1MACH(16) = EMAX, the largest exponent E. 
  */
 
-double amos_d1mach (int i)
+double pnl_d1mach (int i)
 {
   switch (i) 
     {

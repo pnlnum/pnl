@@ -7,7 +7,7 @@
 #define D_SIGN(a,b) ( b >= 0 ? (a >= 0 ? a : - a) : -(a >= 0 ? a : -a))
 #define D_INT(x) ( (x>0) ? floor(x) : -floor(- x) )
 
-extern double amos_d1mach (int i);
+extern double pnl_d1mach (int i);
 extern double pnl_dlamch (char *cmach);
 extern int pnl_ipmpar (int i);
 extern double amos_dgamln (double *z__, int *ierr);

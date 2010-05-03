@@ -265,7 +265,7 @@ amos_zunhj (double *zr, double *zi, double *fnu,const int *ipmtr, double *tol,
    *    OVERFLOW TEST (Z/FNU TOO SMALL) 
    *----------------------------------------------------------------------- 
    */
-  test = amos_d1mach (1) * 1e3;
+  test = pnl_d1mach (1) * 1e3;
   ac = *fnu * test;
   if (fabs (*zr) > ac || fabs (*zi) > ac)
     {

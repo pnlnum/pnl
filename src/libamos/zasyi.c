@@ -72,7 +72,7 @@ int amos_zasyi (double *zr, double *zi, double *fnu,const int *kode,const  int *
    */
   *nz = 0;
   az = amos_azabs (zr, zi);
-  arm = amos_d1mach (1) * 1e3;
+  arm = pnl_d1mach (1) * 1e3;
   rtr1 = sqrt (arm);
   il = MIN (2, *n);
   dfnu = *fnu + (double) (*n - il);

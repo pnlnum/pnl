@@ -104,9 +104,9 @@ amos_zbknu (double *zr, double *zi, double *fnu,const int *kode,const int *n,
   csrr[0] = crscr;
   csrr[1] = 1.;
   csrr[2] = csclr;
-  bry[0] = amos_d1mach (1) * 1e3 / *tol;
+  bry[0] = pnl_d1mach (1) * 1e3 / *tol;
   bry[1] = 1. / bry[0];
-  bry[2] = amos_d1mach (2);
+  bry[2] = pnl_d1mach (2);
   *nz = 0;
   iflag = 0;
   koded = *kode;
@@ -362,7 +362,7 @@ amos_zbknu (double *zr, double *zi, double *fnu,const int *kode,const int *n,
    *----------------------------------------------------------------------- 
    */
   t1 = (double) (amos_i1mach (14) - 1);
-  t1 = t1 * amos_d1mach (5) * 3.321928094;
+  t1 = t1 * pnl_d1mach (5) * 3.321928094;
   t1 = MAX (t1, 12.);
   t1 = MIN (t1, 60.);
   t2 = tth * t1 - 6.;

@@ -92,7 +92,7 @@ int amos_zuni1 (double *zr, double *zi, double *fnu, int *kode,const int *n,
   csrr[0] = crsc;
   csrr[1] = coner;
   csrr[2] = cscl;
-  bry[0] = amos_d1mach (1) * 1e3 / *tol;
+  bry[0] = pnl_d1mach (1) * 1e3 / *tol;
   /*----------------------------------------------------------------------- 
    *    CHECK FOR UNDERFLOW AND OVERFLOW ON FIRST MEMBER 
    *----------------------------------------------------------------------- 
@@ -227,7 +227,7 @@ int amos_zuni1 (double *zr, double *zi, double *fnu, int *kode,const int *n,
   rzr = (str + str) * rast;
   rzi = (sti + sti) * rast;
   bry[1] = 1. / bry[0];
-  bry[2] = amos_d1mach (2);
+  bry[2] = pnl_d1mach (2);
   s1r = cyr[0];
   s1i = cyi[0];
   s2r = cyr[1];
