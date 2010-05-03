@@ -377,6 +377,7 @@ src/libcephes/Makefile \
 src/libf2c/Makefile \
 src/librand/Makefile \
 src/libfftpack/Makefile \
+src/libinteg/Makefile \
 src/linalg/Makefile \
 src/sort/Makefile \
 src/specfun/Makefile \

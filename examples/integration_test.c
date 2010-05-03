@@ -20,37 +20,86 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "pnl_mathtools.h"
 #include "pnl_integration.h"
 
 #include "tests.h"
 
 static double x_square(double x, void *p)
-{ return tan(x);}
+{ return tan(x) ;}
 
 static double test_xy(double x,double y, void *p)
 { return cos(x+y);}
 
+static double singular (double x, void *p)
+{
+  if ( x > 0 && x < 2.5 ) return sin(x);
+  else if ( x >= 2.5 && x <= 5. ) return exp(-x);
+  else return 0.0;
+}
 
-static void integration_GK_test()
+static double indefinite (double x, void *p)
+{
+  return -exp(-x) * log(x);
+}
+
+static void integration_qag_test()
 {
   double result,abserr;
   int neval;
   PnlFunc func;
   func.function = x_square;
   func.params = NULL;
-  pnl_integration_GK(&func,0.0,1.0,0.00001,0.000001,&result,&abserr,&neval);
-  printf(" integration res %f error %f , iter %d \n",result,abserr,neval); 
+  pnl_integration_qag(&func,0.0,1.0,0.00001,0.000001,0,&result,&abserr,&neval);
+  printf(" integration (QAGS finite interval with no singularity )\n\tres %f error %f , iter %d \n",result,abserr,neval); 
+
+  func.function = indefinite;
+  func.params = NULL;
+  pnl_integration_qag(&func,0,PNL_POSINF,0.00001,0.000001,0,&result,&abserr,&neval);
+  printf(" integration (QAGI infinite interval) \n\tres %f true value %f , iter %d \n",result,M_EULER,neval); 
+
+  func.function = singular;
+  func.params = NULL;
+  pnl_integration_qag(&func,0.0,10,0.00001,0.000001,0,&result,&abserr,&neval);
+  printf(" integration (QAGS with singularities) \n\tres %f true value %f , iter %d \n",result, 
+         1 - cos(2.5) + exp(-2.5) - exp(-5.0),neval); 
 }
 
-static void integration_GK2D_test()
+static void integration_qagp_test()
+{
+  double result,abserr;
+  PnlVect *pts;
+  int neval;
+  PnlFunc func;
+
+  pts = pnl_vect_create_from_list (2.5, 5.);
+  func.function = singular;
+  func.params = NULL;
+  pnl_integration_qagp(&func,0.0,10,pts,0.00001,0.000001,0,&result,&abserr,&neval);
+  printf(" integration (QAGP known singularities) \n\tres %f true value %f , iter %d \n",result, 
+         1 - cos(2.5) + exp(-2.5) - exp(-5.0),neval); 
+  pnl_vect_free (&pts);
+}
+static void integration_qng_test()
+{
+  double result,abserr;
+  int neval;
+  PnlFunc func;
+  func.function = x_square;
+  func.params = NULL;
+  pnl_integration_qng(&func,0.0,1.0,0.00001,0.000001,&result,&abserr,&neval);
+  printf(" integration (qng) res %f error %f , iter %d \n",result,abserr,neval); 
+}
+
+static void integration_qng_2d_test()
 {
   double result,abserr;
   int neval;
   PnlFunc2D func;
   func.function = test_xy;
   func.params = NULL;
-  pnl_integration_GK2D(&func,-1.0,1.0,-1.0,1.0,0.00001,0.000001,&result,&abserr,&neval);
-  printf(" integration 2D res %f error %f , iter %d \n",result,abserr,neval); 
+  pnl_integration_qng_2d(&func,-1.0,1.0,-1.0,1.0,0.00001,0.000001,&result,&abserr,&neval);
+  printf(" integration 2D (qng) res %f error %f , iter %d \n",result,abserr,neval); 
 }
 
 
@@ -69,7 +118,7 @@ static void integ_test()
   printf(" integration (simpson rule) : %f, iter %d \n", result, n); 
 }
 
-static void integ_2D_test()
+static void integ_2d_test()
 {
   double result;
   int nx, ny;
@@ -78,18 +127,20 @@ static void integ_2D_test()
   ny = 50;
   func.function = test_xy;
   func.params = NULL;
-  result = pnl_integration_2D(&func,-1.0,1.0,-1.0,1.0,nx, ny, "rect");
+  result = pnl_integration_2d(&func,-1.0,1.0,-1.0,1.0,nx, ny, "rect");
   printf(" integration 2D (rectangle rule) : %f, iter %d \n", result, nx * ny); 
-  result = pnl_integration_2D(&func,-1.0,1.0,-1.0,1.0,nx, ny, "trap");
+  result = pnl_integration_2d(&func,-1.0,1.0,-1.0,1.0,nx, ny, "trap");
   printf(" integration 2D (trapezoidal rule) : %f, iter %d \n", result, nx *ny); 
-  result = pnl_integration_2D(&func,-1.0,1.0,-1.0,1.0,nx, ny, "simpson");
+  result = pnl_integration_2d(&func,-1.0,1.0,-1.0,1.0,nx, ny, "simpson");
   printf(" integration 2D (simpson rule) : %f, iter %d \n", result, nx *ny); 
 }
 
 void integration_test()
 {
-  integration_GK_test();
-  integration_GK2D_test();
+  integration_qag_test();
+  integration_qagp_test();
+  integration_qng_test();
+  integration_qng_2d_test();
   integ_test();
-  integ_2D_test();
+  integ_2d_test();
 }

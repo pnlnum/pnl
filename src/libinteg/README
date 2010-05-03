@@ -1,0 +1,15 @@
+    ** libinteg directory **
+
+All the files starting in quadpack_ originates from QuadPack, a
+Fortran library for numerical integration available from Netlib. The
+Fortran code has been translated using f2c and a few more
+modifications have been made by Jerome Lelong for a better integration
+in Pnl. In particular, most quadpack routines have been prefixed by
+pnl_ to avoid name clashes.
+
+
+For the moment, all the qegX mathods iand the qng method have been
+interfaced.  Do we need to interface the qawX methods? Their code is
+in there and already compiled but we need to write a wrapper.
+
+

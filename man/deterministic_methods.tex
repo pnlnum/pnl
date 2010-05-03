@@ -228,24 +228,26 @@ $\alpha^\star \in \R^N$ which solves
 \subsection{Numerical integration}
 \subsubsection{Short Description}
 
-Numerical integration methods are designed to numerically evaluate the
-integral over an interval (resp. a square) of real valued functions defined on
-$\R$ (resp. $\R^2$).
+To use these functionalities, you should include \verb!pnl_integration.h!.
+
+Numerical integration methods are designed to numerically evaluate the integral
+over a finite or non finite interval (resp. over a square) of real valued
+functions defined on $\R$ (resp. on $\R^2$).
 
 \begin{verbatim}
 typedef struct {
   double (*function) (double x, void *params);
   void *params;
-} pnl_function ;
+} PnlFunc;
 
 typedef struct {
   double (*function) (double x, double y, void *params);
   void *params;
-} pnl_function_2D ;
+} PnlFunc2D;
 \end{verbatim}
 
-We provide the following two macros to evaluate a \refstruct{pnl_function} at
-a given point
+We provide the following two macros to evaluate a \refstruct{PnlFunc} or
+\refstruct{PnlFunc2D} at a given point
 \begin{verbatim}
 #define PNL_EVAL_FUNC(F, x) (*((F)->function))(x, (F)->params)
 #define PNL_EVAL_FUNC2D(F, x, y) (*((F)->function))(x, y, (F)->params)
@@ -256,38 +258,91 @@ a given point
 \subsubsection{Functions}
 
 \begin{itemize}
-\item \describefun{int}{ pnl_integration_GK}{const \refstruct{pnl_function} \ptr F, 
-    double x0, double x1, double epsabs, double epsrel, double \ptr result, 
-    double \ptr abserr,  int \ptr neval}
-  \sshortdescribe Evaluates $\int_{x_0}^{x_1} F$ with an absolute error less than
-  \var{espabs} and a relative error less than
-  \var{esprel}. The value of the integral is stored in \var{result}, while the
-  variables \var{abserr} and \var{neval} respectively contain the absolute
-  error and the number of iterations.
-
-\item \describefun{int}{ pnl_integration_GK2D}{const \refstruct{pnl_function_2D} \ptr F, 
-    double x0, double x1, double y0, double y1, double epsabs, double epsrel, 
-    double \ptr result, double \ptr abserr, int \ptr neval}
-  \sshortdescribe Evaluates $\int_{[x_0, x_1] \times [y_0, y_1]} F$ with an
-  absolute error less than \var{espabs} and a relative error less than
-  \var{esprel}. The value of the integral is stored in \var{result}, while the
-  variables \var{abserr} and \var{neval} respectively contain the absolute
-  error and the number of iterations.
-
-\item \describefun{double}{pnl_integration}{const \refstruct{pnl_function} \ptr F, 
+\item \describefun{double}{pnl_integration}{\refstruct{PnlFunc} \ptr F, 
     double x0, double x1, int n, char \ptr meth}
   \sshortdescribe Evaluates $\int_{x_0}^{x_1} F$ using \var{n} discretization
   steps. The method used to discretize the integral is defined by \var{meth}
   which can be \var{"rect"} (rectangle rule), \var{"trap"} (trapezoidal rule),
   \var{"simpson"} (Simpson's rule).
 
-\item \describefun{double}{pnl_integration_2D}{const \refstruct{pnl_function_2D} \ptr F,
+\item \describefun{double}{pnl_integration_2d}{\refstruct{PnlFunc2D} \ptr F,
     double x0, double x1, double y0, double y1, int nx, int ny, char \ptr meth}
   \sshortdescribe Evaluates $\int_{[x_0, x_1] \times [y_0, y_1]} F$ using
   \var{nx} (resp. \var{ny}) discretization steps for \var{[x0, x1]}
   (resp. \var{[y0, y1]}). The method used to discretize the integral is
   defined by \var{meth} which can be \var{"rect"} (rectangle rule),
   \var{"trap"} (trapezoidal rule),   \var{"simpson"} (Simpson's rule).
+
+
+\item \describefun{int}{pnl_integration_qng}{\refstruct{PnlFunc} \ptr F, 
+    double x0, double x1, double epsabs, double epsrel, double \ptr result, 
+    double \ptr abserr,  int \ptr neval}
+  \sshortdescribe Evaluates $\int_{x_0}^{x_1} F$ with an absolute error less
+  than \var{espabs} and a relative error less than \var{esprel}. The value of
+  the integral is stored in \var{result}, while the variables \var{abserr} and
+  \var{neval} respectively contain the absolute error and the number of function
+  evaluations. This function returns \var{OK} if the required accuracy has been
+  reached and \var{FAIL} otherwise. This function uses a non-adaptive Gauss
+  Konrod procedure (qng routine from {\it QuadPack}).
+
+\item \describefun{int}{pnl_integration_GK}{\refstruct{PnlFunc} \ptr F, 
+    double x0, double x1, double epsabs, double epsrel, double \ptr result, 
+    double \ptr abserr,  int \ptr neval}
+    \sshortdescribe This function is a synonymous of
+    \reffun{pnl_integration_qng} and is only available for backward
+    compatibility. It is deprecated, please use \reffun{pnl_integration_qng}
+    instead. 
+
+\item \describefun{int}{pnl_integration_qng_2d}{\refstruct{PnlFunc2D} \ptr F, 
+    double x0, double x1, double y0, double y1, double epsabs, double epsrel, 
+    double \ptr result, double \ptr abserr, int \ptr neval}
+  \sshortdescribe Evaluates $\int_{[x_0, x_1] \times [y_0, y_1]} F$ with an
+  absolute error less than \var{espabs} and a relative error less than
+  \var{esprel}. The value of the integral is stored in \var{result}, while the
+  variables \var{abserr} and \var{neval} respectively contain the absolute error
+  and the number of function evaluations. This function returns \var{OK} if the
+  required accuracy has been reached and \var{FAIL} otherwise.
+
+\item \describefun{int}{pnl_integration_GK2D}{\refstruct{PnlFunc} \ptr F, 
+  double x0, double x1, double epsabs, double epsrel, double \ptr result, 
+  double \ptr abserr,  int \ptr neval}
+  \sshortdescribe This function is a synonymous of
+  \reffun{pnl_integration_qng_2d} and is only available for backward
+  compatibility. It is deprecated, please use \reffun{pnl_integration_qng_2d}
+  instead. 
+
+\item \describefun{int}{pnl_integration_qag}{\refstruct{PnlFunc} \ptr F,
+  double x0, double x1, double epsabs, int limit, double epsrel, double \ptr
+  result, double \ptr abserr,  int \ptr neval}
+  \sshortdescribe Evaluates $\int_{x_0}^{x_1} F$ with an absolute error less
+  than \var{espabs} and a relative error less than \var{esprel}. \var{x0} and
+  \var{x1} can be non finite (i.e. \var{PNL_NEGINF} or \var{PNL_POSINF}). The
+  value of the integral is stored in \var{result}, while the variables
+  \var{abserr} and \var{neval} respectively contain the absolute error and the
+  number of iterations. \var{limit} is the maximum number of subdivisions of the
+  interval \var{(x0,x1)} used during the integration. If on input, \var{limit =
+  0}, then 750 subdivisions are used.  This function returns \var{OK} if the
+  required accuracy has been reached and \var{FAIL} otherwise. This function
+  uses some adaptive procedures (qags and qagi routines from {\it QuadPack}).
+  This function is able to handle functions \var{F} with integrable
+  singularities on the interval \var{[x0,x1]}.
+
+\item \describefun{int}{pnl_integration_qagp}{\refstruct{PnlFunc} \ptr F,
+  double x0, double x1, const PnlVect \ptr singularities, double epsabs,
+  int limit, double epsrel, double \ptr result, double \ptr abserr,  int \ptr neval}
+  \sshortdescribe Evaluates $\int_{x_0}^{x_1} F$  for a function
+  \var{F} with known singularities listed in \var{singularities}.
+  \var{singularities} must be a sorted vector which does not contain \var{x0}
+  nor \var{x1}.  \var{x0} and \var{x1} must be  finite. The value of the
+  integral is stored in \var{result}, while the variables \var{abserr} and
+  \var{neval} respectively contain the absolute error and the number of
+  iterations. \var{limit} is the maximum number of subdivisions of the interval
+  \var{(x0,x1)} used during the integration. If on input, \var{limit = 0}, then
+  750 subdivisions are used.  This function returns \var{OK} if the required
+  accuracy has been reached and \var{FAIL} otherwise. This function uses some
+  adaptive procedures (qagp routine from {\it QuadPack}).  This function is
+  able to handle functions \var{F} with integrable singularities on the interval
+  \var{[x0,x1]}.
 \end{itemize}
 
 

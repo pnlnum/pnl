@@ -97,8 +97,7 @@
 
 \section{What is Pnl}
 
-Pnl is a scientific library originally designed to to provide a unified
-framework for contributors to Premia. It is written in C and distributed under
+Pnl is a scientific library written in C and distributed under
 the Gnu Lesser General Public License (LGPL). This manual is divided into four
 parts.
 \begin{itemize}
@@ -135,26 +134,26 @@ possible use with a C++ compiler.
     function \verb!Cadd!.
 
   \item Function containing \verb!_create! in their names always return a
-    pointer to an object created by one or several calls to some dynamic
+    pointer to an object created by one or several calls to dynamic
     allocation. Once these objects are not used, they must be freed by calling
-    the same function but ending in \verb!_free!
+    the same function but ending in \verb!_free!.
     A function \verb!pnl_foo_create_yyy! returns a \verb!PnlFoo *! object (note
     the ``\ptr'') and a function \verb!pnl_foo_bar_create_yyy! returns a
-    \verb!PnlFooBar *! object (note the ``\ptr'')
+    \verb!PnlFooBar *! object (note the ``\ptr'').
     These objects must be freed by calling respectively \verb!pnl_foo_free! or
-    \verb!pnl_foo_bar_free!
+    \verb!pnl_foo_bar_free!.
     
-  \item Every object must implement a \verb!pnl_xxx_new! function which creates
-    an empty object with all its elements properly set to $0$. This means that
-    the objects returned by \verb!pnl_xxx_new! functions can be used as output
-    arguments for functions ending in \verb!_inplace! for instance. They are
-    suitable for being resized. 
+  \item Every object must implement a \verb!pnl_xxx_new! function which returns
+    a pointer to an empty object with all its elements properly set to $0$. This
+    means that the objects returned by the \verb!pnl_xxx_new! functions can be
+    used as output arguments for functions ending in \verb!_inplace! for
+    instance. They are suitable for being resized. 
 
   \item Functions containing \verb!_wrap_! in their names always return an
     object, not a pointer to an object, and do not make any use of dynamic
     allocation. The returned object must not be freed. 
-    For instance, a function \verb!pnl_foo_wrap_xxx! return an object
-    \verb!PnlFoo! and a function \verb!pnl_foo_bar_wrap_xxx! return an object
+    For instance, a function \verb!pnl_foo_wrap_xxx! returns an object
+    \verb!PnlFoo! and a function \verb!pnl_foo_bar_wrap_xxx! returns an object
     \verb!PnlFooBar! 
     \begin{verbatim}
     PnlVectComplex *v1;
@@ -186,11 +185,11 @@ possible use with a C++ compiler.
     but instead we use capital letters to separate units in type names. \\
     Examples : \verb!PnlMat!, \verb!PnlMatComplex!.
 
-  \item Objects and functions for manipulating them are named following the
-    convention : an object \verb!PnlFoo! is manipulated by functions starting in
-    \verb!pnl_foo!, an object \verb!PnlFooBar! is manipulated by functions starting in
-    \verb!pnl_foo_bar!. In the following table we summarise the types and their
-    corresponding prefix
+  \item Object and function names are intimately linked : an object
+    \verb!PnlFoo! is manipulated by functions starting in \verb!pnl_foo!, an
+    object \verb!PnlFooBar! is manipulated by functions starting in
+    \verb!pnl_foo_bar!. In table~\ref{pnltypes}, we summarise the types and their
+    corresponding prefixes.
 
     \begin{figure}[h!]
       \centering\begin{tabular}{|l|l|}
@@ -219,13 +218,15 @@ possible use with a C++ compiler.
       PnlGmresSolver & pnl_gmres_solver \\
       \hline
     \end{tabular}
+    \caption{Pnl types}
+    \label{pnltypes}
   \end{figure}
 
   \item All macro names begin with \verb!PNL_! and are capitalised.
 
   \item Differences between \textbf{copy} and \textbf{clone} methods.
     The \verb!copy! methods take a single argument and return a pointer to an object
-    of the same type which is independent copy of its argument. 
+    of the same type which is an independent copy of its argument. 
     Example:
     \begin{verbatim}
     PnlVect *v1, *v2;
@@ -236,9 +237,9 @@ possible use with a C++ compiler.
     equal to 2.5. Note that \verb!v2! {\bf must not} have been created by a call
     to \verb!pnl_vect_create_xxx! because otherwise it will cause a memory leak.
     \verb!v1! and \verb!v2! are independent in the sense that a modification to
-    one of them does not modify the other.
+    one of them does not affect the other.
 
-    The \verb!clone! methods take two arguments are fill in the first one with the
+    The \verb!clone! methods take two arguments and fill in the first one with the
     second one. 
     Example:
     \begin{verbatim}
@@ -249,13 +250,13 @@ possible use with a C++ compiler.
     \end{verbatim}
     \verb!v1! and \verb!v2! are two vectors of size 5 with all their elements
     equal to 2.5. Note that \verb!v2! {\bf must} have been created by a call to
-    \verb!pnl_vect_create_xxx! because otherwise the function
+    \verb!pnl_vect_new! because otherwise the function
     \verb!pnl_vect_clone!  will crash.  \verb!v1! and \verb!v2! are independent
     in the sense that a modification to one of them does not modify the other.
 
 
   \item All objects are measured using integers \verb!int! and not
-    \verb!size_t!. Hence iterations over vectors, matrices, \dots should use an
+    \verb!size_t!. Hence, iterations over vectors, matrices, \dots should use an
     index of type \verb!int!.
 \end{itemize}
 

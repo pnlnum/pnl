@@ -52,16 +52,17 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
 \begin{itemize}
 \item \describefun{int}{intapprox}{double s}
   \sshortdescribe Returns the nearest integer with the convention ({\tt
-    intapprox(1.5)=1}). This function is similar to the round function
-  (provided by the C library) but the result is typed as an integer and not a
+  intapprox(1.5)=1}). This function is similar to the \var{round} function
+  (provided by the C library) but the result is typed as an integer instead of a
   double.
 
 \item \describefun{double}{trunc}{double s}
   \sshortdescribe Returns the nearest integer not greater than the absolute
-  value of \var{s}. This function should part of C99.
+  value of \var{s}. This function is part of C99.
 
 \item \describefun{double}{Cnp}{int n, int p}
-  \sshortdescribe Computes the binomial coefficient $\binom{n}{p}$.
+  \sshortdescribe Computes the binomial coefficient $\binom{n}{p}$ in double
+  precision.
 
 \item \describefun{double}{pnl_fact}{int n}
   \sshortdescribe Computes $n! = \Gamma(n+1)$ in double precision.
@@ -70,17 +71,15 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
   \sshortdescribe Computes $x^n$ for $n \in \N$ using a squaring method.
 
 \item \describefun{double}{lgamma}{double x}
-  \sshortdescribe Computes $\log(\Gamma(x))$. This function is part of C99 and is
-  redefined for non C99 compliant compilers.
+  \sshortdescribe Computes $\log(\Gamma(x))$. This function is part of C99.
 
 \item \describefun{double}{tgamma}{double x}
-  \sshortdescribe Computes $\Gamma(x)$. This function is part of C99 and is
-  redefined for non C99 compliant compilers.
+  \sshortdescribe Computes $\Gamma(x)$. This function is part of C99.
 
 \item \describefun{void}{pnl_qsort}{void *a, int n, int es, int lda, int *t,
   int ldt, int use_index, int (*cmp)(void const *, void const *)}
-  \sshortdescribe Sorts the array \var{a} using the comparaison function
-  \var{cmp}. \var{n} is the number elements in \var{a}, each element being of
+  \sshortdescribe Sorts the array \var{a} using the comparison function
+  \var{cmp}. \var{n} is the number of elements in \var{a}, each element being of
   size \var{es}. \var{t} is an array of integers of length \var{n} used to store
   the permutation when \var{use_index=TRUE}. \var{lda} and \var{ldt} are the
   leading dimensions of the arrays \var{a} and \var{t} and are used to sort
@@ -96,30 +95,29 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
   \sshortdescribe Returns \var{- infinity} 
 
 \item \describefun{int}{pnl_isnan}{double x}
-  \sshortdescribe Returns \var{1} if \var{x=Nan}
+  \sshortdescribe Returns \var{1} if \var{x = Nan}
 
 \item \describefun{int}{pnl_isfinite}{}
   \sshortdescribe Returns \var{1} if \var{x != Inf}
 
 \item \describefun{int}{pnl_isinf}{}
-  \sshortdescribe Returns \var{+1} if \var{x=+Inf}, \var{-1} if \var{x=-Inf},
+  \sshortdescribe Returns \var{+1} if \var{x = +Inf}, \var{-1} if \var{x = -Inf},
   \var{0} otherwise.
 \end{itemize}
 
 
 
-%% --------------------------------------------------------------------- %%
-%% Complex
+% --------------------------------------------------------------------- %
+% Complex
 \subsection{Complex numbers}
 \subsubsection{Short Description}
 
 The complex type and related functions are defined in the header
 \verb!pnl_complex.h!.\\
 
-The first native implementation of complex numbers in the C language has been
-provided by the C99 implementation, which is not available on all
-platforms. For this reason, we provide here an implementation of complex
-numbers and its associated calculus.
+The first native implementation of complex numbers in the C language appeared in
+C99, which is unfortunately not available on all platforms. For this reason, we
+provide here an implementation of complex numbers.
 
 \begin{verbatim}
 typedef struct {
@@ -251,7 +249,7 @@ typedef struct {
   \sshortdescribe \var{ Gamma(z)}, the Gamma function  
 
 \item \describefun{dcomplex}{Clgamma}{\refstruct{dcomplex} z}
-  \sshortdescribe \var{ log(Gamma (z)) }, the logarithm of the Gamma function
+  \sshortdescribe \var{ log(Gamma (z))}, the logarithm of the Gamma function
 
 \item \describefun{void}{Cprintf}{\refstruct{dcomplex} z}
   \sshortdescribe Prints a complex number on the standard output
@@ -417,9 +415,9 @@ functions
 
 \begin{itemize}
 \item \describefun{double}{pnl_sf_erf}{double x}
-  \sshortdescribe Computes $\frac{2}{\pi}\int_0^\infty \expp{-t^2} ft$
+  \sshortdescribe Computes $\frac{2}{\pi}\int_0^\infty \expp{-t^2} dt$
 \item \describefun{double}{pnl_sf_erfc}{double x}
-  \sshortdescribe Computes $1. - \frac{2}{\pi}\int_0^\infty \expp{-t^2} ft$
+  \sshortdescribe Computes $1. - \frac{2}{\pi}\int_0^\infty \expp{-t^2} dt$
 \item \describefun{double}{pnl_sf_log_erf}{double x}
   \sshortdescribe Computes $\log$ \reffun{pnl_sf_erf}$(x)$
 \item \describefun{double}{pnl_sf_log_erfc}{double x}
@@ -435,9 +433,9 @@ For $x>0$, the Gamma Function is defined by
 
 \begin{itemize}
 \item \describefun{double}{pnl_sf_gamma}{double a, double x}
-  \sshortdescribe   computes $\Gamma(x), x \geq 0$
+  \sshortdescribe   Computes $\Gamma(x), x \geq 0$
 \item \describefun{double}{pnl_sf_log_gamma}{double a, double x}
-  \sshortdescribe   computes $\log(\Gamma(x)), x \geq 0$
+  \sshortdescribe   Computes $\log(\Gamma(x)), x \geq 0$
 \end{itemize}
 
 \subsubsection{Incomplete Gamma functions}
@@ -460,11 +458,11 @@ A relation similar to the one existing for the standard Gamma function holds
 
 \begin{itemize}
 \item \describefun{double}{pnl_sf_gamma_inc}{double a, double x}
-  \sshortdescribe   computes $\Gamma(a, x), \quad a \in \R , x \geq 0$
+  \sshortdescribe   Computes $\Gamma(a, x), \quad a \in \R , x \geq 0$
 \item \describefun{void}{pnl_sf_gamma_inc_P}{double a, double x}
-  \sshortdescribe  computes $P(a, x), \quad a > 0 , x \geq 0$
+  \sshortdescribe  Computes $P(a, x), \quad a > 0 , x \geq 0$
 \item \describefun{void}{pnl_sf_gamma_inc_Q}{double a, double x}
-  \sshortdescribe  computes $Q(a, x), \quad a > 0 , x \geq 0$
+  \sshortdescribe  Computes $Q(a, x), \quad a > 0 , x \geq 0$
 \end{itemize}
 
 \subsubsection{Exponential integrals}
@@ -473,7 +471,7 @@ For $x>0$ and $n \in \N$, the  function $E_n$ is defined by
   E_n\paren{x}=\int_{1}^{\infty} \expp{-x u} u^{-n} du
 \end{equation*}
 
-This function is linked to the Incomplete Gamma function by the relation
+This function is linked to the Incomplete Gamma function by 
 \begin{equation*}
   E_n\paren{x}=\int_{x}^{\infty}
   \expp{-xu} (xu)^{-n} x^{n-1} d(xu)=x^{n-1} \int_{x}^{\infty}
@@ -534,12 +532,12 @@ For $x \in \R$
 
 \begin{itemize}
 \item \describefun{double}{pnl_sf_expint_En}{int n, double x}
-  \sshortdescribe   computes for  $ n\geq 0, x \geq 0$ and $x>0$ if $n=0$ or $1$.
+  \sshortdescribe   Computes for  $ n\geq 0, x \geq 0$ and $x>0$ if $n=0$ or $1$.
   \begin{equation*}
     E_n(x)= \int_1^{\infty} u^{-n} \expp{-x u} du.
   \end{equation*}
 \item \describefun{double}{pnl_sf_expint_Ei}{double x}
-  \sshortdescribe   computes for  $x>0$  the principal value of
+  \sshortdescribe   Computes for  $x>0$  the principal value of
   \begin{equation*}
     Ei(x)= \int_{-\infty}^x \frac{\expp{t}}{t}  du.
   \end{equation*}
@@ -597,40 +595,40 @@ The financial functions are defined in the header \verb!pnl_finance.h!.\\
 
 \begin{itemize}
 \item 
-  \describefun{double}{pnl_bs_call}{double s,double k,double T,
-    double r,double divid,double sigma}
+  \describefun{double}{pnl_bs_call}{double s, double k, double T,
+    double r, double divid, double sigma}
   \sshortdescribe Computes the price of a call option with spot \var{s}
   and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
   instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
   \var{divid}.
 
 \item 
-  \describefun{double}{pnl_bs_put}{double s,double k,double T,
-    double r,double divid,double sigma}
+  \describefun{double}{pnl_bs_put}{double s, double k, double T,
+    double r, double divid, double sigma}
   \sshortdescribe Computes the price a put option with spot \var{s}
   and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
   instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
   \var{divid}.
 
 \item 
-  \describefun{double}{pnl_bs_call_put}{int iscall, double s,double k,
-    double T,double r, double divid,double sigma}
+  \describefun{double}{pnl_bs_call_put}{int iscall, double s, double k,
+    double T, double r, double divid, double sigma}
   \sshortdescribe Computes the price of a put option if \var{iscall=0} or a
   call option if \var{iscall=1} with spot \var{s} and strike \var{k} in the
   Black-Scholes model with volatility \var{sigma}, instantaneous interest rate
   \var{r}, maturity \var{T} and dividend rate \var{divid}.
 
 \item 
-  \describefun{double}{pnl_bs_vega}{double s,double k,double T,
-    double r,double divid,double sigma}
+  \describefun{double}{pnl_bs_vega}{double s, double k, double T,
+    double r, double divid, double sigma}
   \sshortdescribe Computes the vega of a put or call option with spot \var{s}
   and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
   instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
   \var{divid}.
 
 \item 
-  \describefun{double}{pnl_bs_gamma}{double s,double k,double T,double r,
-    double divid,double sigma}
+  \describefun{double}{pnl_bs_gamma}{double s, double k, double T, double r,
+    double divid, double sigma}
   \sshortdescribe Computes the gamma of a put or call option with spot \var{s}
   and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
   instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
@@ -652,7 +650,7 @@ maturities, a matrix of prices (with strikes varying row-wise).
   \var{iscall=0} or a call option if \var{iscall=1} with spot \var{s} and
   strike \var{K} in the Black-Scholes model with instantaneous interest rate
   \var{r}, maturity \var{T} and dividend rate \var{divid}. On output
-  \var{error} is \var{OK} if the computed of the implied volatility succeeded
+  \var{error} is \var{OK} if the computation of the implied volatility succeeded
   or \var{FAIL} if it failed.
 
 \item 
@@ -665,6 +663,6 @@ maturities, a matrix of prices (with strikes varying row-wise).
   \var{iscall(i,j)=1} with spot \var{s} and strike \var{K(j)} in the
   Black-Scholes model with instantaneous interest rate \var{r}, maturity
   \var{T(j)} and dividend rate \var{divid}. This function returns the number
-  of failures, when everything succeded it returns $0$.
+  of failures, when everything succeeded it returns $0$.
 \end{itemize}
 
