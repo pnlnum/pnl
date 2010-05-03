@@ -15,7 +15,7 @@ typedef double(*D_weight)();
 extern int pnl_dqk15w(PnlFunc *, D_weight, double *, double *
                    , double *, double *, int *, double *, double 
                    *, double *, double *, double *, double *);
-extern int dgtsl_(int *, double *, double *, double *, 
+extern int pnl_dgtsl(int *, double *, double *, double *, 
                   double *, int *);
 extern int pnl_dqcheb(double *, double *, 
                    double *, double *);
@@ -286,7 +286,7 @@ L10:
 /* ***        call to dgtsl must be replaced by call to */
 /* ***        double precision version of linpack routine sgtsl */
 
-    dgtsl_(&noequ, d1, d__, d2, &v[3], &iers);
+    pnl_dgtsl(&noequ, d1, d__, d2, &v[3], &iers);
     goto L50;
 
 /*           compute the chebyshev moments by means of forward */
@@ -350,7 +350,7 @@ L50:
 /* ***        call to dgtsl must be replaced by call to */
 /* ***        double precision version of linpack routine sgtsl */
 
-    dgtsl_(&noequ, d1, d__, d2, &v[2], &iers);
+    pnl_dgtsl(&noequ, d1, d__, d2, &v[2], &iers);
     goto L100;
 
 /*           compute the chebyshev moments by means of forward recursion. */
