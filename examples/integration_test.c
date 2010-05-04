@@ -1,6 +1,6 @@
 
 /************************************************************************/
-/* Copyright the PNL developpers                                        */
+/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
 /*                                                                      */
 /* This program is free software: you can redistribute it and/or modify */
 /* it under the terms of the GNU Lesser General Public License as       */
@@ -31,6 +31,10 @@ static double x_square(double x, void *p)
 static double test_xy(double x,double y, void *p)
 { return cos(x+y);}
 
+/*
+ * Function used to test integration of a function with singular points 
+ * The integral over (0,10) is equal to 1 - cos(2.5) + exp(-2.5) - exp(-5.0)
+ */
 static double singular (double x, void *p)
 {
   if ( x > 0 && x < 2.5 ) return sin(x);
@@ -38,6 +42,10 @@ static double singular (double x, void *p)
   else return 0.0;
 }
 
+/*
+ * Function used to test integration over a non finite interval (0, +oo)
+ * Its integral over (0 +oo) is the Euler Gamma constant
+ */
 static double indefinite (double x, void *p)
 {
   return -exp(-x) * log(x);
@@ -61,10 +69,13 @@ static void integration_qag_test()
   func.function = singular;
   func.params = NULL;
   pnl_integration_qag(&func,0.0,10,0.00001,0.000001,0,&result,&abserr,&neval);
-  printf(" integration (QAGS with singularities) \n\tres %f true value %f , iter %d \n",result, 
-         1 - cos(2.5) + exp(-2.5) - exp(-5.0),neval); 
+  printf(" integration (QAGS with singularities) \n\tres %f true value %f , iter %d \n",
+         result, 1 - cos(2.5) + exp(-2.5) - exp(-5.0),neval); 
 }
 
+/*
+ * Test of integration routines for functions with known singular points
+ */
 static void integration_qagp_test()
 {
   double result,abserr;
@@ -76,8 +87,8 @@ static void integration_qagp_test()
   func.function = singular;
   func.params = NULL;
   pnl_integration_qagp(&func,0.0,10,pts,0.00001,0.000001,0,&result,&abserr,&neval);
-  printf(" integration (QAGP known singularities) \n\tres %f true value %f , iter %d \n",result, 
-         1 - cos(2.5) + exp(-2.5) - exp(-5.0),neval); 
+  printf(" integration (QAGP known singularities) \n\tres %f true value %f , iter %d \n",
+         result, 1 - cos(2.5) + exp(-2.5) - exp(-5.0),neval); 
   pnl_vect_free (&pts);
 }
 static void integration_qng_test()
