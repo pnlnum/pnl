@@ -8,15 +8,15 @@
  * been replaced by calls to dlamch coming from Lapack
  */
 
-#include "pnl_internals.h"
+#include "pnl_machine.h"
 #include "pnl_mathtools.h"
+#include "clapack.h"
+
 typedef double(*D_weight)();
 
 extern int pnl_dqk15w(PnlFunc *, D_weight, double *, double *
                    , double *, double *, int *, double *, double 
                    *, double *, double *, double *, double *);
-extern int pnl_dgtsl(int *, double *, double *, double *, 
-                  double *, int *);
 extern int pnl_dqcheb(double *, double *, 
                    double *, double *);
 extern double pnl_dqwgtf();
@@ -41,11 +41,8 @@ int pnl_dqc25f(PnlFunc * f, double *a, double *b, double
 	    .130526192220051591548406227895489 };
 
     /* System generated locals */
-    int chebmo_dim1, chebmo_offset, i__1;
+    int chebmo_dim1, chebmo_offset, i__1, nrhs;
     double d__1, d__2;
-
-    /* Builtin functions */
-    double cos(double), sin(double);
 
     /* Local variables */
     double d__[25];
@@ -154,7 +151,7 @@ int pnl_dqc25f(PnlFunc * f, double *a, double *b, double
 
 /* ...................................................................... */
 /* ***references  (none) */
-/* ***routines called  dgtsl,dqcheb,dqk15w,dqwgtf */
+/* ***routines called  dqcheb,dqk15w,dqwgtf */
 /* ***end prologue  dqc25f */
 
 
@@ -283,10 +280,13 @@ L10:
 /*           solve the tridiagonal system by means of gaussian */
 /*           eliMINation with partial pivoting. */
 
-/* ***        call to dgtsl must be replaced by call to */
-/* ***        double precision version of linpack routine sgtsl */
-
-    pnl_dgtsl(&noequ, d1, d__, d2, &v[3], &iers);
+    /*
+     * Call to dgtsl from linpack replaced by call to dgtsv.
+     * The storage convention of the lower diagonal is different in linpack and
+     * in lapack, this is why we use d1 - 1 instead of d1
+     */
+    nrhs = 1;
+    C2F(dgtsv)(&noequ, &nrhs, d1 - 1, d__, d2, &v[3], &noequ, &iers);
     goto L50;
 
 /*           compute the chebyshev moments by means of forward */
@@ -347,10 +347,13 @@ L50:
 /*           solve the tridiagonal system by means of gaussian */
 /*           eliMINation with partial pivoting. */
 
-/* ***        call to dgtsl must be replaced by call to */
-/* ***        double precision version of linpack routine sgtsl */
-
-    pnl_dgtsl(&noequ, d1, d__, d2, &v[2], &iers);
+    /*
+     * Call to dgtsl from linpack replaced by call to dgtsv.
+     * The storage convention of the lower diagonal is different in linpack and
+     * in lapack, this is why we use d1 - 1 instead of d1
+     */
+    nrhs = 1;
+    C2F(dgtsv)(&noequ, &nrhs, d1 - 1, d__, d2, &v[2], &noequ, &iers);
     goto L100;
 
 /*           compute the chebyshev moments by means of forward recursion. */
