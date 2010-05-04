@@ -1,0 +1,24 @@
+#!/bin/bash
+
+
+for name in "$@"
+do
+    # grep -v "#include[ ]*\"f2c\.h\"" $name > $name-tmp
+    # mv $name-tmp $name
+    grep -v 'routines called  d1mach' $name > $name-tmp
+    mv $name-tmp $name
+    sed -i~ \
+        -e "s/doublereal/double/g" \
+        -e "s/ftnlen/unsigned long/g" \
+        -e "s/logical/int/g" \
+        -e "s/integer/int/g" \
+        -e "s/real/float/g" \
+        -e "s/min(/MIN(/g" \
+        -e "s/max(/MAX(/g" \
+        -e "s/abs(/ABS(/g" \
+        -e "s/FALSE_/FALSE/g" \
+        -e "s/TRUE_/TRUE/g" \
+        -e "s/extern double d1mach_(int \*);//" \
+        -e "s/d1mach,//g" \
+        $name    
+done
