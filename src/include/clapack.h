@@ -12,6 +12,7 @@ extern "C" {
 #endif		
 
 #include "pnl_complex.h"
+#include "pnl_internals.h"
 
 typedef int (*L_fp)(void);
 
