@@ -3,7 +3,7 @@ SUBDIRS =
 include $(top_srcdir)/Make.incl
 AM_CPPFLAGS = $(PNL_INCLUDES)
 
-lib_LTLIBRARIES = libinteg.la
+noinst_LTLIBRARIES = libinteg.la
 libinteg_la_SOURCES =  \
 quadpack_dqage.c quadpack_dqagie.c quadpack_dqagpe.c  quadpack_dqagse.c\
 quadpack_dqawce.c quadpack_dqawfe.c quadpack_dqawoe.c quadpack_dqawse.c\
