@@ -38,9 +38,6 @@ int pnl_dqc25c(PnlFunc * f, double *a, double *b, double
     /* System generated locals */
     double d__1;
 
-    /* Builtin functions */
-    double log(double);
-
     /* Local variables */
     int i__, k;
     double u, p2, p3, p4, cc;

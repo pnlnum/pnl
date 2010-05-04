@@ -17,9 +17,6 @@ double pnl_dqwgtf(double *x, double *omega, double *p2,
     /* System generated locals */
     double ret_val;
 
-    /* Builtin functions */
-    double cos(double), sin(double);
-
     /* Local variables */
     double omx;
 
