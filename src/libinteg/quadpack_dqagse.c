@@ -36,7 +36,7 @@ int pnl_dqagse(PnlFunc *f, double *a, double *b, double
     double dres;
     int ksgn, nres;
     double area1, area2, area12;
-    double small, erro12;
+    double small=0, erro12;
     int ierro;
     double defab1, defab2;
     int ktMIN, nrMAX;
@@ -48,13 +48,13 @@ int pnl_dqagse(PnlFunc *f, double *a, double *b, double
     int iroff1, iroff2, iroff3;
     double res3la[3], error1, error2, rlist2[52];
     int numrl2;
-    double defabs, epmach, erlarg, abseps, correc, errbnd, resabs;
+    double defabs, epmach, erlarg=0, abseps, correc=0, errbnd, resabs;
     int jupbnd;
     double erlast, errMAX;
     int MAXerr;
     double reseps;
     int extrap;
-    double ertest, errsum;
+    double ertest=0, errsum;
 
 /* ***begin prologue  dqagse */
 /* ***date written   800101   (yymmdd) */

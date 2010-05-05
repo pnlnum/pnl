@@ -48,7 +48,7 @@ int pnl_dqagpe(PnlFunc * f, double *a, double *b, int *
     int nintp1;
     double error1, error2, rlist2[52];
     int numrl2;
-    double defabs, epmach, erlarg, abseps, correc, errbnd, resabs;
+    double defabs, epmach, erlarg, abseps, correc=0, errbnd, resabs;
     int jupbnd;
     double erlast;
     int levMAX;

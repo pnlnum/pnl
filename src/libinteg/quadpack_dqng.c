@@ -151,11 +151,11 @@ int pnl_dqng(PnlFunc *f, double *a, double *b, double *
     /* Local variables */
     int k, l;
     double fv1[5], fv2[5], fv3[5], fv4[5];
-    int ipx;
-    double absc, fval, res10, res21, res43, res87, fval1, fval2, hlgth, 
+    int ipx=0;
+    double absc, fval, res10, res21=0, res43=0, res87, fval1, fval2, hlgth, 
 	    centr, reskh, uflow;
     
-    double epmach, dhlgth, resabs, resasc, fcentr, savfun[21];
+    double epmach, dhlgth, resabs=0, resasc=0, fcentr, savfun[21];
 
 /* non-adaptive integration */
 /* double precision version */
