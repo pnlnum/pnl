@@ -42,12 +42,12 @@ int pnl_find_root (PnlFuncDFunc *func, double x_min, double x_max, double tol, i
   double func_low, func_high, func_current, diff_func_current;
   double rts, dx_anc, dx,xl, xh;
 
-  PNL_EVAL_FDF_FUNC (func, x_min, &func_low, &diff_func_current);
+  PNL_EVAL_FUNC_DFUNC (func, x_min, &func_low, &diff_func_current);
   if (func_low == 0.0)
     {
       *res=x_min;return OK;
     }
-  PNL_EVAL_FDF_FUNC (func, x_max, &func_high,&diff_func_current);
+  PNL_EVAL_FUNC_DFUNC (func, x_max, &func_high,&diff_func_current);
   if (func_high == 0.0) 
     {
       *res=x_max;return OK;
@@ -66,7 +66,7 @@ int pnl_find_root (PnlFuncDFunc *func, double x_min, double x_max, double tol, i
   rts = 0.5 * (x_min + x_max);
   dx_anc = fabs(x_max - x_min);
   dx = dx_anc;
-  PNL_EVAL_FDF_FUNC (func, rts, &func_current, &diff_func_current);
+  PNL_EVAL_FUNC_DFUNC (func, rts, &func_current, &diff_func_current);
   for (iter=0;iter<N_max;iter++)
     {
       if (((rts - xh) * diff_func_current - func_current) * ((rts - xl) * diff_func_current - func_current) >= 0.0
@@ -86,7 +86,7 @@ int pnl_find_root (PnlFuncDFunc *func, double x_min, double x_max, double tol, i
         {
           *res= rts;return OK;
         }
-      PNL_EVAL_FDF_FUNC (func, rts, &func_current,&diff_func_current);
+      PNL_EVAL_FUNC_DFUNC (func, rts, &func_current,&diff_func_current);
       if (func_current < 0.0)
         xl = rts;
       else 
@@ -119,7 +119,7 @@ int pnl_root_newton (PnlFuncDFunc *func, double x0, double epsrel, double epsabs
 
   for (i=0; i<N_max; i++)
     {
-      PNL_EVAL_FDF_FUNC (func, root, &f, &df);
+      PNL_EVAL_FUNC_DFUNC (func, root, &f, &df);
       if (df == 0.)
         {
           PNL_ERROR ("div by zero", "pnl_root_newton");

@@ -207,40 +207,83 @@ extern int pnl_isinf (double x);
 #define WRONG 1
 #define FAIL 1 /* synonym of WRONG (more menaningful) */
 
+/*
+ * f: R --> R
+ * The function returns it value at x
+ */
 typedef struct {
   double (*function) (double x, void *params);
   void *params;
 } PnlFunc ;
-
 #define PNL_EVAL_FUNC(F, x) (*((F)->function))(x, (F)->params)
 
+/*
+ * f: R^2 --> R
+ * The function returns it value at x
+ */
 typedef struct {
   double (*function) (double x, double y, void *params);
   void *params;
 } PnlFunc2D ;
-
 #define PNL_EVAL_FUNC2D(F, x, y) (*((F)->function))(x, y, (F)->params)
 
+/*
+ * f: R --> R
+ * The function computes its value and derivative at x and stores them in f
+ * and df respectively
+ */
 typedef struct {
   void (*function) (double x, double *f, double *df, void *params);
   void *params;
 } PnlFuncDFunc ;
+#define PNL_EVAL_FUNC_DFUNC(F, x, f, df) (*((F)->function))(x, f, df, (F)->params)
 
-#define PNL_EVAL_FDF_FUNC(F, x, f, df) (*((F)->function))(x, f, df, (F)->params)
-
+/*
+ * f: R^n --> R
+ * The function returns its value at x, which is a vector
+ */
 typedef struct {
-  double (*function) (const PnlVect * x, void *params);
+  double (*function) (const PnlVect *x, void *params);
   void *params;
 } PnlRnFuncR ;
+#define PNL_EVAL_RNFUNCR(F, x) (*((F)->function))(x, (F)->params)
 
-#define PNL_EVAL_RNFUNC(F, x) (*((F)->function))(x, (F)->params)
-
+/*
+ * f: R^n --> R^m
+ * The function computes its value at x (vector of size n) and stores it in
+ * f (vector of size m)
+ */
 typedef struct {
-  void (*function) (PnlVect * res,const PnlVect * x, void *params);
+  void (*function) (const PnlVect *x, PnlVect *f, void *params);
   void *params;
 } PnlRnFuncRm ;
+#define PNL_EVAL_RNFUNCRM(F, x, f) (*((F)->function))(x, f, (F)->params)
 
-#define PNL_EVAL_RNFUNCRM(y,F, x) (*((F)->function))(y,x, (F)->params)
+/*
+ * f: R^n --> R^n
+ * The function computes its value at x (vector of size n) and stores it in
+ * res (vector of size n)
+ */
+typedef struct {
+  void (*function) (const PnlVect *x, PnlVect *f, void *params);
+  void *params;
+} PnlRnFuncRn ;
+#define PNL_EVAL_RNFUNCRN(F, x, f) (*((F)->function))(x, f, (F)->params)
+
+
+/*
+ * f: R^n --> R^n
+ * The function computes its value and gradient at x (vector of size n) 
+ * and stores them in f (vector of size n) and df (matrix of size nxn) 
+ * respectively
+ */
+typedef struct {
+  void (*function) (const PnlVect *x, PnlVect *f, PnlMat *df, void *params);
+  void *params;
+} PnlRnFuncRnDFunc ;
+#define PNL_EVAL_RNFUNCRN_DFUNC(F, x, f, df) (*((F)->function))(x, f, df, (F)->params)
+
+
 
 extern void pnl_qsort (void *a, int n, int es, int lda, int *t, int ldt, int use_index, int (*cmp)(void const *, void const *));
 
