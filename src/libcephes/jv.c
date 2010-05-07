@@ -186,7 +186,7 @@ double jv(double n, double x)
         k = t;
       }
       if (q == 0.0) {
-      underf:
+      /* underf: */
         y = 0.0;
         goto done;
       }
