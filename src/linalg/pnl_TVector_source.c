@@ -1514,13 +1514,17 @@ double FUNCTION(pnl_vect,norm_infty)(const TYPE(PnlVect) *V)
  * @param i the index of first element to be extracted
  * @param s the size of extracted vector
  * @return a vector (not a pointer) whose array pointer is the address of the
- * ith element of V. No copying is done.
+ * i-th element of V. No copying is done. This is a container for
+ * V(i:i+s-1). The length of the xtracted vector is s.
  */
 TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect)(const TYPE(PnlVect) *V, int i,int s)
 { 
   TYPE(PnlVect) ret;
 #ifndef PNL_RANGE_CHECK_OFF
-  if ((i >= V->size) ||(s >= V->size) || (s<=0))  {PNL_ERROR ("index out of range", "pnl_vect_extract_with_size");}
+  if ( (i+s-1 >= V->size) || (s<=0) || (i<0) ) 
+    {
+      PNL_ERROR ("index out of range", "pnl_vect_extract_with_size");
+    }
 #endif
   FUNCTION(pnl_vect,init)(&ret);
   ret.size = s;
@@ -1536,7 +1540,7 @@ TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect)(const TYPE(PnlVect) *V, int i,int
  * @param i the index of first element to be extracted
  * @param j the index of last  element to be extracted
  * @return a vector (not a pointer) whose array pointer is the address of the
- * ith element of V. No copying is done.
+ * i-th element of V. No copying is done. This is a container for V(i:j)
  */
 TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect_with_last)(const TYPE(PnlVect) *V, int i,int j)
 {
