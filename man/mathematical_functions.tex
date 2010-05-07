@@ -35,6 +35,7 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
   \constentry{DBL_EPSILON}{$2.2204460492503131e-16$}
   \constentry{PNL_NEGINF}{$-\infty$}
   \constentry{PNL_POSINF}{$+\infty$}
+  \constentry{PNL_INF}{$+\infty$}
   \constentry{NAN}{Not a Number}
 \end{describeconst}
 
@@ -46,6 +47,16 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
   \sshortdescribe Returns $1$ if \var{n} is even and $0$ otherwise.
 \item \describemacro{PNL_ALTERNATE}{int n}
   \sshortdescribe Returns $(-1)^{\var{n}}$.
+\item \describemacro{MIN}{x,y}
+  \sshortdescribe Returns the minimum of \var{x} and \var{y}.
+\item \describemacro{MAX}{x,y}
+  \sshortdescribe Returns the maximum of \var{x} and \var{y}.
+\item \describemacro{ABS}{x}
+  \sshortdescribe Returns the absolute value of \var{x}.
+\item \describemacro{SQR}{x}
+  \sshortdescribe Returns \var{$x^2$}.
+\item \describemacro{CUB}{x}
+  \sshortdescribe Returns \var{$x^3$}.
 \end{itemize}
 
 \subsubsection{Functions}
