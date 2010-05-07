@@ -115,8 +115,9 @@ the above table.
   
 \item \describefun{\refstruct{PnlVect}}{pnl_vect_wrap_subvect}{const
   \refstruct{PnlVect} \ptr x, int i, int s}
-  \sshortdescribe Creates a \refstruct{PnlVect} containing \var{x(i:i+s)}. No
-  copy is made. It is just a container.
+  \sshortdescribe Creates a \refstruct{PnlVect} containing
+  \var{x(i:i+s-1)}. No copy is made. It is just a container. The returned
+  \refstruct{PnlVect} has \var{size=s} and \var{owner=0}.
 
 \item \describefun{\refstruct{PnlVect}}{pnl_vect_wrap_subvect_with_last}{const \refstruct{PnlVect} \ptr x, int i, int j}
   \sshortdescribe Creates a \refstruct{PnlVect} containing \var{x(i:j)}. No
