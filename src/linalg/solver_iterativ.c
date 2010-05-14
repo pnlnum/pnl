@@ -74,9 +74,9 @@ static PnlIterationBase* pnl_iteration_base_create(int max_iter_, double t)
  *
  * @param it : a PnlIterationBase ptr. 
  * @param rhs : a PnlVect ptr
- * @return  boolean.
+ * @return   TRUE or FALSE.
  */
-static boolean pnl_iteration_base_converged(PnlIterationBase * it,const PnlVect *rhs) 
+static int pnl_iteration_base_converged(PnlIterationBase * it,const PnlVect *rhs) 
 {
   it->resid = pnl_vect_norm_two(rhs)/it->normb;
 #if DEBUG_SOLVER
@@ -98,9 +98,9 @@ static boolean pnl_iteration_base_converged(PnlIterationBase * it,const PnlVect 
  *
  * @param it : a PnlIterationBase ptr. 
  * @param Res : a double
- * @return  boolean.
+ * @return   TRUE or FALSE.
  */
-static boolean pnl_iteration_base_converged_norm(PnlIterationBase * it,double Res) 
+static int pnl_iteration_base_converged_norm(PnlIterationBase * it,double Res) 
 {
   it->resid = Res/it->normb;
   return (it->resid <= it->tol_)?true:false;
@@ -112,9 +112,9 @@ static boolean pnl_iteration_base_converged_norm(PnlIterationBase * it,double Re
  *
  * @param it : a PnlIterationBase ptr. 
  * @param rhs : a PnlVect ptr
- * @return  boolean.
+ * @return   TRUE or FALSE.
  */
-static boolean pnl_iteration_base_finished(PnlIterationBase * it, const  PnlVect *rhs) 
+static int pnl_iteration_base_finished(PnlIterationBase * it, const  PnlVect *rhs) 
 {
   if (pnl_iteration_base_converged(it,rhs))
     return true;
@@ -138,9 +138,9 @@ static boolean pnl_iteration_base_finished(PnlIterationBase * it, const  PnlVect
  *  *
  *  * @param it : a PnlIterationBase ptr. 
  *  * @param Res : a double
- *  * @return  boolean.
+ *  * @return   TRUE or FALSE.
  *  *\/
- * static boolean pnl_iteration_base_finished_norm(PnlIterationBase * it,double Res)
+ * static int pnl_iteration_base_finished_norm(PnlIterationBase * it,double Res)
  * {
  *   if (pnl_iteration_base_converged_norm(it,Res))
  *     return true;
@@ -201,7 +201,7 @@ static void pnl_iteration_base_increment(PnlIterationBase * it)
 static int pnl_iteration_base_error_code(PnlIterationBase * it) { return it->error; }
 
 /*
-  static boolean pnl_iteration_base_iterate(PnlIterationBase * it) 
+  static int pnl_iteration_base_iterate(PnlIterationBase * it) 
   {return (it->iteration < it->max_iter)?true:false;}
   static int pnl_iteration_base_iterations(PnlIterationBase * it) { return it->iteration; }
   static double pnl_iteration_base_residu(PnlIterationBase * it) { return it->resid; }
@@ -215,9 +215,9 @@ static int pnl_iteration_base_error_code(PnlIterationBase * it) { return it->err
  * Test first iteration 
  *
  * @param it : a PnlIterationBase ptr. 
- * @return  boolean
+ * @return   TRUE or FALSE
  */
-static boolean pnl_iteration_base_first(PnlIterationBase * it) { return it->iteration == 0; }
+static int pnl_iteration_base_first(PnlIterationBase * it) { return it->iteration == 0; }
 
 /**
  * Restart iterationbase, ie iteration=0
