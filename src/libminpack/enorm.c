@@ -101,87 +101,74 @@ double pnl_minpack_enorm(int n, const double *x)
   x3max = 0.;
   floatn = (double) (n);
   agiant = rgiant / floatn;
-  for ( i = 0 ; i < n; i++ ) {
-    xabs = fabs(x[i]);
-    if (xabs > rdwarf && xabs < agiant) {
-      goto L70;
+  for ( i = 0 ; i < n; i++ ) 
+    {
+      xabs = fabs(x[i]);
+      if (xabs > rdwarf && xabs < agiant)
+        {
+          /* sum for intermediate components. */
+          d__1 = xabs;
+          s2 += d__1 * d__1;
+          continue;
+        }
+      if (xabs <= rdwarf) 
+        {
+          /* sum for small components. */
+          if (xabs <= x3max)
+            {
+              if (xabs != 0.) 
+                {
+                  d__1 = xabs / x3max;
+                  s3 += d__1 * d__1;
+                }
+            }
+          else
+            {
+              d__1 = x3max / xabs;
+              s3 = 1. + s3 * (d__1 * d__1);
+              x3max = xabs;
+            }
+          continue;
+        }
+
+      /* sum for large components. */
+
+      if (xabs > x1max)
+        {
+          d__1 = x1max / xabs;
+          s1 = 1. + s1 * (d__1 * d__1);
+          x1max = xabs;
+        }
+      else
+        {
+          d__1 = xabs / x1max;
+          s1 += d__1 * d__1;
+        }
     }
-    if (xabs <= rdwarf) {
-      goto L30;
-    }
-
-    /* sum for large components. */
-
-    if (xabs <= x1max) {
-      goto L10;
-    }
-    /* Computing 2nd power */
-    d__1 = x1max / xabs;
-    s1 = 1. + s1 * (d__1 * d__1);
-    x1max = xabs;
-    goto L20;
-L10:
-    /* Computing 2nd power */
-    d__1 = xabs / x1max;
-    s1 += d__1 * d__1;
-L20:
-    goto L60;
-L30:
-
-    /* sum for small components. */
-
-    if (xabs <= x3max) {
-      goto L40;
-    }
-    /* Computing 2nd power */
-    d__1 = x3max / xabs;
-    s3 = 1. + s3 * (d__1 * d__1);
-    x3max = xabs;
-    goto L50;
-L40:
-    if (xabs != 0.) {
-      /* Computing 2nd power */
-      d__1 = xabs / x3max;
-      s3 += d__1 * d__1;
-    }
-L50:
-L60:
-    goto L80;
-L70:
-
-    /* sum for intermediate components. */
-
-    /* Computing 2nd power */
-    d__1 = xabs;
-    s2 += d__1 * d__1;
-L80:
-    /* L90: */
-    ;
-  }
 
   /* calculation of norm. */
-
-  if (s1 == 0.) {
-    goto L100;
-  }
-  ret_val = x1max * sqrt(s1 + s2 / x1max / x1max);
-  goto L130;
-L100:
-  if (s2 == 0.) {
-    goto L110;
-  }
-  if (s2 >= x3max) {
-    ret_val = sqrt(s2 * (1. + x3max / s2 * (x3max * s3)));
-  }
-  if (s2 < x3max) {
-    ret_val = sqrt(x3max * (s2 / x3max + x3max * s3));
-  }
-  goto L120;
-L110:
-  ret_val = x3max * sqrt(s3);
-L120:
-L130:
+  if (s1 == 0.)
+    {
+      if (s2 == 0.)
+        {
+          ret_val = x3max * sqrt(s3);
+        }
+      else
+        {
+          if (s2 >= x3max) 
+            {
+              ret_val = sqrt(s2 * (1. + x3max / s2 * (x3max * s3)));
+            }
+          else 
+            {
+              ret_val = sqrt(x3max * (s2 / x3max + x3max * s3));
+            }
+        }
+    }
+  else
+    {
+      ret_val = x1max * sqrt(s1 + s2 / x1max / x1max);
+    }
   return ret_val;
-
 } 
 
