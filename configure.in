@@ -289,17 +289,6 @@ if test "x$with_gsl" != "xno"; then
    fi
 fi
 
-
-################################
-##  variables for the Makefile
-################################
-
-
-##################################
-## to build the doc
-##################################
-
-
 ####################
 ### checking host 
 ####################
@@ -331,14 +320,10 @@ case "$host" in
 
 
     i*86-*-linux-gnu | *-pc-linux-gnu)
-        
-    pkgconfigdir=/usr/local/lib/pkgconfig
 	;;
 
     # Darwin/MacOSX
     *-*-darwin*)
-
-    pkgconfigdir=/sw/lib/pkgconfig
     ;;
 esac
 
@@ -380,6 +365,7 @@ src/fft/Makefile \
 src/math/Makefile \
 src/interpol/Makefile \
 src/libinteg/Makefile \
+src/libminpack/Makefile \
 src/linalg/Makefile \
 src/sort/Makefile \
 src/roots/Makefile \

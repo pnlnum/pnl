@@ -1,6 +1,6 @@
 SUBDIRS = libamos librand fft math \
 linalg sort include specfun libcephes \
-libinteg interpol roots \
+libinteg interpol roots libminpack\
 @INTERNAL_BLAS_DIR@ @INTERNAL_LAPACK_DIR@ @INTERNAL_F2C_DIR@
 
 include $(top_srcdir)/Make.incl
@@ -15,7 +15,7 @@ libpnl_la_LIBADD=libamos/libamos.la librand/librand.la\
 math/libmath.la linalg/liblinalg.la sort/libsort.la \
 fft/libfft.la specfun/libspecfun.la libcephes/libcephes.la \
 libinteg/libinteg.la interpol/libinterpol.la\
-roots/libroots.la \
+roots/libroots.la libminpack/libminpack.la \
 @INTERNAL_BLAS_LA@ @INTERNAL_LAPACK_LA@ @INTERNAL_F2C_LA@
 
 

@@ -1,0 +1,187 @@
+/* Minpack Copyright Notice (1999) University of Chicago.  All rights reserved
+ * 
+ * Redistribution and use in source and binary forms, with or
+ * without modification, are permitted provided that the
+ * following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above
+ * copyright notice, this list of conditions and the following
+ * disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above
+ * copyright notice, this list of conditions and the following
+ * disclaimer in the documentation and/or other materials
+ * provided with the distribution.
+ * 
+ * 3. The end-user documentation included with the
+ * redistribution, if any, must include the following
+ * acknowledgment:
+ * 
+ *    "This product includes software developed by the
+ *    University of Chicago, as Operator of Argonne National
+ *    Laboratory.
+ * 
+ * Alternately, this acknowledgment may appear in the software
+ * itself, if and wherever such third-party acknowledgments
+ * normally appear.
+ * 
+ * 4. WARRANTY DISCLAIMER. THE SOFTWARE IS SUPPLIED "AS IS"
+ * WITHOUT WARRANTY OF ANY KIND. THE COPYRIGHT HOLDER, THE
+ * UNITED STATES, THE UNITED STATES DEPARTMENT OF ENERGY, AND
+ * THEIR EMPLOYEES: (1) DISCLAIM ANY WARRANTIES, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO ANY IMPLIED WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE
+ * OR NON-INFRINGEMENT, (2) DO NOT ASSUME ANY LEGAL LIABILITY
+ * OR RESPONSIBILITY FOR THE ACCURACY, COMPLETENESS, OR
+ * USEFULNESS OF THE SOFTWARE, (3) DO NOT REPRESENT THAT USE OF
+ * THE SOFTWARE WOULD NOT INFRINGE PRIVATELY OWNED RIGHTS, (4)
+ * DO NOT WARRANT THAT THE SOFTWARE WILL FUNCTION
+ * UNINTERRUPTED, THAT IT IS ERROR-FREE OR THAT ANY ERRORS WILL
+ * BE CORRECTED.
+ * 
+ * 5. LIMITATION OF LIABILITY. IN NO EVENT WILL THE COPYRIGHT
+ * HOLDER, THE UNITED STATES, THE UNITED STATES DEPARTMENT OF
+ * ENERGY, OR THEIR EMPLOYEES: BE LIABLE FOR ANY INDIRECT,
+ * INCIDENTAL, CONSEQUENTIAL, SPECIAL OR PUNITIVE DAMAGES OF
+ * ANY KIND OR NATURE, INCLUDING BUT NOT LIMITED TO LOSS OF
+ * PROFITS OR LOSS OF DATA, FOR ANY REASON WHATSOEVER, WHETHER
+ * SUCH LIABILITY IS ASSERTED ON THE BASIS OF CONTRACT, TORT
+ * (INCLUDING NEGLIGENCE OR STRICT LIABILITY), OR OTHERWISE,
+ * EVEN IF ANY OF SAID PARTIES HAS BEEN WARNED OF THE
+ * POSSIBILITY OF SUCH LOSS OR DAMAGES.
+ */
+
+#include <math.h>
+#include "cminpack.h"
+
+/* 
+ * function enorm
+ * 
+ * given an n-vector x, this function calculates the
+ * euclidean norm of x.
+ * 
+ * the euclidean norm is computed by accumulating the sum of
+ * squares in three different sums. the sums of squares for the
+ * small and large components are scaled so that no overflows
+ * occur. non-destructive underflows are permitted. underflows
+ * and overflows do not occur in the computation of the unscaled
+ * sum of squares for the intermediate components.
+ * the definitions of small, intermediate and large components
+ * depend on two constants, rdwarf and rgiant. the main
+ * restrictions on these constants are that rdwarf**2 not
+ * underflow and rgiant**2 not overflow. the constants
+ * given here are suitable for every known computer.
+ * the function statement is
+ *   double precision function pnl_minpack_enorm(n,x)
+ * where
+ *   n is a positive integer input variable.
+ *   x is an input array of length n.
+ * argonne national laboratory. minpack project. march 1980.
+ * burton s. garbow, kenneth e. hillstrom, jorge j. more
+ */
+
+double pnl_minpack_enorm(int n, const double *x)
+{
+
+  double rdwarf=3.834e-20;
+  double rgiant=1.304e19;
+
+  /* System generated locals */
+  double ret_val, d__1;
+
+  /* Local variables */
+  int i;
+  double s1, s2, s3, xabs, x1max, x3max, agiant, floatn;
+
+  /* Function Body */
+  s1 = 0.;
+  s2 = 0.;
+  s3 = 0.;
+  x1max = 0.;
+  x3max = 0.;
+  floatn = (double) (n);
+  agiant = rgiant / floatn;
+  for ( i = 0 ; i < n; i++ ) {
+    xabs = fabs(x[i]);
+    if (xabs > rdwarf && xabs < agiant) {
+      goto L70;
+    }
+    if (xabs <= rdwarf) {
+      goto L30;
+    }
+
+    /* sum for large components. */
+
+    if (xabs <= x1max) {
+      goto L10;
+    }
+    /* Computing 2nd power */
+    d__1 = x1max / xabs;
+    s1 = 1. + s1 * (d__1 * d__1);
+    x1max = xabs;
+    goto L20;
+L10:
+    /* Computing 2nd power */
+    d__1 = xabs / x1max;
+    s1 += d__1 * d__1;
+L20:
+    goto L60;
+L30:
+
+    /* sum for small components. */
+
+    if (xabs <= x3max) {
+      goto L40;
+    }
+    /* Computing 2nd power */
+    d__1 = x3max / xabs;
+    s3 = 1. + s3 * (d__1 * d__1);
+    x3max = xabs;
+    goto L50;
+L40:
+    if (xabs != 0.) {
+      /* Computing 2nd power */
+      d__1 = xabs / x3max;
+      s3 += d__1 * d__1;
+    }
+L50:
+L60:
+    goto L80;
+L70:
+
+    /* sum for intermediate components. */
+
+    /* Computing 2nd power */
+    d__1 = xabs;
+    s2 += d__1 * d__1;
+L80:
+    /* L90: */
+    ;
+  }
+
+  /* calculation of norm. */
+
+  if (s1 == 0.) {
+    goto L100;
+  }
+  ret_val = x1max * sqrt(s1 + s2 / x1max / x1max);
+  goto L130;
+L100:
+  if (s2 == 0.) {
+    goto L110;
+  }
+  if (s2 >= x3max) {
+    ret_val = sqrt(s2 * (1. + x3max / s2 * (x3max * s3)));
+  }
+  if (s2 < x3max) {
+    ret_val = sqrt(x3max * (s2 / x3max + x3max * s3));
+  }
+  goto L120;
+L110:
+  ret_val = x3max * sqrt(s3);
+L120:
+L130:
+  return ret_val;
+
+} 
+

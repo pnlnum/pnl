@@ -1,0 +1,51 @@
+The Minpack routines used here come from the  C/C++ Minpack 
+version available at http://devernay.free.fr/hacks/cminpack.html 
+
+All these routines have been slightly modified by Jérôme Lelong
+<jerome.lelong@gmail.com> to compile without the f2c library. For a
+better integration into Pnl, all minpack routines have been prefixed
+by pnl_minpack.
+
+
+====== C language readme for minpack ======
+
+This is a C version of the minpack minimization package.
+It has been derived from the fortran code using f2c and
+some limited manual editing. Note that you need to link
+against libf2c to use this version of minpack. Extern "C"
+linkage permits the package routines to be called from C++.
+Check ftp://netlib.bell-labs.com/netlib/f2c for the latest
+f2c version. For general minpack info and test programs, see
+the accompanying readme.txt and http://www.netlib.org/minpack/.
+
+This software has been tested on a RedHat 7.3 Linux machine -
+usual 'use at your own risk' warnings apply.
+
+Manolis Lourakis -- lourakis at ics forth gr, July 2002
+	Institute of Computer Science,
+	Foundation for Research and Technology - Hellas
+	Heraklion, Crete, Greece
+
+Repackaging by Frederic Devernay -- frederic dot devernay at m4x dot org:
+- Added fortran and C examples
+- Added documentation from Debian man pages
+- Wrote pure C version
+- Added covar() and covar_(), and use it in tlmdef/tlmdif
+
+
+========== Original Fortran Minpack ==============
+
+Minpack includes software for solving nonlinear equations and
+nonlinear least squares problems.  Five algorithmic paths each include
+a core subroutine and an easy-to-use driver.  The algorithms proceed
+either from an analytic specification of the Jacobian matrix or
+directly from the problem functions.  The paths include facilities for
+systems of equations with a banded Jacobian matrix, for least squares
+problems with a large amount of data, and for checking the consistency
+of the Jacobian matrix with the functions.
+
+This directory contains the double-precision versions.
+
+Jorge More', Burt Garbow, and Ken Hillstrom at Argonne National Laboratory.
+
+

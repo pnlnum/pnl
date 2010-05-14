@@ -14,8 +14,6 @@ extern "C" {
 
 #include "pnl_vector.h"
 
-typedef unsigned char boolean;
-
 extern int intapprox (double s);
 extern double trunc(double x);
 extern double Cnp(int n, int p);
@@ -143,12 +141,12 @@ extern int pnl_isinf (double x);
 #ifdef SQR
 #undef SQR
 #endif
-#define SQR(x) pnl_pow_i(x, 2)
+#define SQR(x) ((x) * (x))
 
 #ifdef CUB
 #undef CUB
 #endif
-#define CUB(x) pnl_pow_i(x, 3)
+#define CUB(x) ((x) * (x) * (x))
 
 #ifdef ABS
 #undef ABS
@@ -173,6 +171,7 @@ extern int pnl_isinf (double x);
 #define INFINITY (pnl_posinf ())
 #endif
 
+#define PNL_INF INFINITY
 #define PNL_POSINF INFINITY
 #define PNL_NEGINF (-INFINITY)
 
@@ -209,7 +208,7 @@ extern int pnl_isinf (double x);
 
 /*
  * f: R --> R
- * The function returns it value at x
+ * The function  pointer returns f(x)
  */
 typedef struct {
   double (*function) (double x, void *params);
@@ -219,7 +218,7 @@ typedef struct {
 
 /*
  * f: R^2 --> R
- * The function returns it value at x
+ * The function pointer returns f(x)
  */
 typedef struct {
   double (*function) (double x, double y, void *params);
@@ -229,18 +228,18 @@ typedef struct {
 
 /*
  * f: R --> R
- * The function computes its value and derivative at x and stores them in f
- * and df respectively
+ * The function pointer computes f(x) and Df(x) and stores them in fx
+ * and dfx respectively
  */
 typedef struct {
-  void (*function) (double x, double *f, double *df, void *params);
+  void (*function) (double x, double *fx, double *dfx, void *params);
   void *params;
 } PnlFuncDFunc ;
-#define PNL_EVAL_FUNC_DFUNC(F, x, f, df) (*((F)->function))(x, f, df, (F)->params)
+#define PNL_EVAL_FUNC_DFUNC(F, x, fx, dfx) (*((F)->function))(x, fx, dfx, (F)->params)
 
 /*
  * f: R^n --> R
- * The function returns its value at x, which is a vector
+ * The function pointer returns f(x)
  */
 typedef struct {
   double (*function) (const PnlVect *x, void *params);
@@ -250,39 +249,41 @@ typedef struct {
 
 /*
  * f: R^n --> R^m
- * The function computes its value at x (vector of size n) and stores it in
- * f (vector of size m)
+ * The function pointer computes the vector f(x) and stores it in
+ * fx (vector of size m)
  */
 typedef struct {
-  void (*function) (const PnlVect *x, PnlVect *f, void *params);
+  void (*function) (const PnlVect *x, PnlVect *fx, void *params);
   void *params;
 } PnlRnFuncRm ;
-#define PNL_EVAL_RNFUNCRM(F, x, f) (*((F)->function))(x, f, (F)->params)
+#define PNL_EVAL_RNFUNCRM(F, x, fx) (*((F)->function))(x, fx, (F)->params)
 
 /*
- * f: R^n --> R^n
- * The function computes its value at x (vector of size n) and stores it in
- * res (vector of size n)
+ * Synonymous of PnlRnFuncRm for f:R^n --> R^n 
  */
-typedef struct {
-  void (*function) (const PnlVect *x, PnlVect *f, void *params);
-  void *params;
-} PnlRnFuncRn ;
-#define PNL_EVAL_RNFUNCRN(F, x, f) (*((F)->function))(x, f, (F)->params)
+typedef PnlRnFuncRm PnlRnFuncRn;
+#define PNL_EVAL_RNFUNCRN  PNL_EVAL_RNFUNCRM
 
 
 /*
- * f: R^n --> R^n
- * The function computes its value and gradient at x (vector of size n) 
- * and stores them in f (vector of size n) and df (matrix of size nxn) 
- * respectively
+ * f: R^n --> R^m
+ * The function pointer computes the vector f(x) and stores it in fx
+ * (vector of size m) 
+ * The Dfunction pointer computes the matrix Df(x) and stores it in dfx
+ * (matrix of size m x n) 
  */
 typedef struct {
-  void (*function) (const PnlVect *x, PnlVect *f, PnlMat *df, void *params);
+  void (*function) (const PnlVect *x, PnlVect *fx, void *params);
+  void (*Dfunction) (const PnlVect *x, PnlMat *dfx, void *params);
   void *params;
-} PnlRnFuncRnDFunc ;
-#define PNL_EVAL_RNFUNCRN_DFUNC(F, x, f, df) (*((F)->function))(x, f, df, (F)->params)
+} PnlRnFuncRmDFunc ;
+#define PNL_EVAL_RNFUNCRM_DFUNC(F, x, dfx) (*((F)->Dfunction))(x, dfx, (F)->params)
 
+/*
+ * Synonymous of PnlRnFuncRmDFunc for f:R^n --> R^m
+ */
+typedef PnlRnFuncRmDFunc PnlRnFuncRnDFunc;
+#define PNL_EVAL_RNFUNCRN_DFUNC PNL_EVAL_RNFUNCRM_DFUNC
 
 
 extern void pnl_qsort (void *a, int n, int es, int lda, int *t, int ldt, int use_index, int (*cmp)(void const *, void const *));
