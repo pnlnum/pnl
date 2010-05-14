@@ -109,12 +109,6 @@ double pnl_d1mach (int i)
  * 
  */
 
-/*
- *  MACHINE CONSTANTS
- *  These numbers must be updated when the program is ported to a new machine.
- *  Using spConfig.h to get the largest int 
- */
-
 static int largestint(void)
 {
   static int first=0,large;
