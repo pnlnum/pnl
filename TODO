@@ -11,20 +11,15 @@
     CMlib 
     in scilab routines/callelm/somespline.f
 
-- interface dgesvd
-
 - Optimization 
     Integrate the BFGS algorithm written by Ismail
-    Interface Cminpack for solving nonlinear equations and 
-    least squares problems.
-
-- mutlivariate zero searching
 
 - Complex tridiag and band matrices
     I am not sure these sotrages are so meaningful for complex data
 
 - Should dgemm use Blas ? 
-    Probably yes if we can differentiate between Blas & Atlas, because using
-    Fortran style storage induces several temporary copies so it must be worth
-    it.
+    Probably yes if we can differentiate between Blas & Atlas, because
+    using Fortran style storage induces several temporary copies so it must
+    be worth it.
 
+- interface dgesvd

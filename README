@@ -5,13 +5,24 @@
 
 1/ Compilation
 
-   To compile the library launch
+    1.1 If you have downloaded a tarball of the library, simply run
+      ./configure
+      make
+      make install
+    
+      The documentation of the library is available in the directory man
+      as a pdf pnl-manual.pdf and in the directory man/pnl-man.html as a
+      bunch of html files.
+   
+    1.2 If you have checked out a development version using svn, simply run
       sh autogen.sh
       make
       make install
-   
-   The documentation of the library can be built by running make in
-   the directory doc. You must have doxygen installed.
+
+      You need to compile the documentation yourself.
+      Go to directory man and 
+        - for the pdf version, run make (you need a LaTeX compiler). 
+        - for the html version, run make html (you need tex4ht). 
 
 2/ Using the library
 
@@ -31,6 +42,6 @@
 
    4/ Before running make, be sure that you have already run in the
       top level directory
-           sh autogen.sh 
+           ./configure
            make 
            make install
