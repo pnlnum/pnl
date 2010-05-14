@@ -235,12 +235,12 @@ int pnl_minpack_hybrd(minpack_func_nn fcn, void *p, int n, double *x, double *
     int iter;
     double temp;
     int msum, iflag;
-    double delta;
+    double delta=0.0;
     int jeval;
     int ncsuc;
     double ratio;
     double fnorm;
-    double pnorm, xnorm, fnorm1;
+    double pnorm, xnorm=0.0, fnorm1;
     int nslow1, nslow2;
     int ncfail;
     double actred, epsmch, prered;

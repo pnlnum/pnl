@@ -111,7 +111,7 @@ void pnl_minpack_r1mpyq(int m, int n, double *a, int
 
     /* Local variables */
     int i__, j, nm1, nmj;
-    double cos__, sin__, temp;
+    double cos__=0.0, sin__=0.0, temp;
 
 
     /* Parameter adjustments */

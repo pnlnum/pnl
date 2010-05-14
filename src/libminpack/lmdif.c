@@ -256,12 +256,12 @@
     int i__, j, l;
     double par, sum;
     int iter;
-    double temp, temp1, temp2;
+    double temp=0., temp1, temp2;
     int iflag;
-    double delta;
+    double delta=0.0;
     double ratio;
     double fnorm, gnorm;
-    double pnorm, xnorm, fnorm1, actred, dirder, epsmch, prered;
+    double pnorm, xnorm=0.0, fnorm1, actred, dirder, epsmch, prered;
     int info;
 
 
