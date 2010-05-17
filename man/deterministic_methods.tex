@@ -147,17 +147,19 @@ two wrappers for calling minpack routines.
         store the Jacobian of the function, if not it is computed using
         finite differences (see the file \url{examples/minpack_test.c} for
         a usage example),
-      \item  \var{x} contains on input the starting
-        point of the search and an approximation of the root of \var{f} on
-        output,
-      \item \var{xtol} is the precision required on \var{x},
+      \item  \var{x} contains on input the starting point of the search and
+        an approximation of the root of \var{f} on output,
+      \item \var{xtol} is the precision required on \var{x}, if set to 0 a
+        default value is used.
       \item \var{maxfev} is the maximum number of evaluations of the function
-        \var{f} before the algorithm returns, 
+        \var{f} before the algorithm returns, if set to 0, a coherent
+        number is determined internally.
       \item \var{nfev} contains on output the number of evaluations of
         \var{f} during the algorithm,
-      \item \var{scale} is a vector used to
-        rescale \var{x} in a way that each coordinate of the solution is
-        approximately of order 1 after rescaling, 
+      \item \var{scale} is a vector used to rescale \var{x} in a way that
+        each coordinate of the solution is approximately of order 1 after
+        rescaling. If on input \var{scale=NULL}, a scaling vector is
+        computed internally by the algorithm.
       \item \var{error_msg} is a boolean
         (\var{TRUE} or \var{FALSE}) to specify if an error message should be
         printed when the algorithm stops before having converged.
@@ -181,20 +183,25 @@ two wrappers for calling minpack routines.
       \item  \var{x} contains on input the starting
         point of the search and an approximation of the root of \var{f} on
         output,
-      \item \var{m} is the number of components of \var{f},
-      \item \var{xtol} is the precision required on \var{x},
-      \item \var{ftol} is the precision required on \var{f},
-      \item \var{gtol} is the precision required on the Jacobian of \var{f}
+      \item \var{m} is the number of components of \var{f},      
+      \item \var{xtol} is the precision required on \var{x}, if set to 0 a
+        default value is used.
+      \item \var{ftol} is the precision required on \var{f}, if set to 0 a
+        default value is used.
+      \item \var{gtol} is the precision required on the Jacobian of
+        \var{f}, if set to 0 a default value is used.
       \item \var{maxfev} is the maximum number of evaluations of the function
-        \var{f} before the algorithm returns, 
+        \var{f} before the algorithm returns, if set to 0, a coherent
+        number is determined internally.
       \item \var{nfev} contains on output the number of evaluations of
         \var{f} during the algorithm,
-      \item \var{scale} is a vector used to
-        rescale \var{x} in a way that each coordinate of the solution is
-        approximately of order 1 after rescaling, 
-      \item \var{error_msg} is a boolean
-        (\var{TRUE} or \var{FALSE}) to specify if an error message should be
-        printed when the algorithm stops before having converged.
+      \item \var{scale} is a vector used to rescale \var{x} in a way that
+        each coordinate of the solution is approximately of order 1 after
+        rescaling.  If on input \var{scale=NULL}, a scaling vector is
+        computed internally by the algorithm.
+      \item \var{error_msg} is a boolean (\var{TRUE} or \var{FALSE}) to
+        specify if an error message should be printed when the algorithm
+        stops before having converged.
       \item On output, \var{fx} contains \var{f(x)}.
     \end{itemize}
 \end{itemize}

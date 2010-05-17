@@ -1,3 +1,10 @@
+17/05/10 <jerome.lelong@gmail.com>
+
+	* Multidimensional root finding based on Minpack. It provides two new
+	functions
+		pnl_root_fsolve and pnl_root_lsq
+
+
 05/05/10 <jerome.lelong@gmail.com>
 
 	* some uniformisation in names for PnlFunc and the EVAL macro

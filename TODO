@@ -1,3 +1,4 @@
+- Some code can be factorized in libminpack
 
 - Create an object for Random Number Generators
     We also want to tackle the problem of generating random numbers
