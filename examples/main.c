@@ -42,6 +42,7 @@ extern void root_test();
 extern void special_func_test();
 extern void tridiag_matrix_test ();
 extern void band_matrix_test ();
+extern void optim_intpoints_bfgs_test ();
 
 static tst_list tests[] =
   {
@@ -64,6 +65,7 @@ static tst_list tests[] =
     MAKE_ENUM(complex_test),
     MAKE_ENUM(root_test),
     MAKE_ENUM(special_func_test),
+    MAKE_ENUM(optim_intpoints_bfgs_test),
     MAKE_ENUM(NULL)
   };
 
