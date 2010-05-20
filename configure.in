@@ -364,6 +364,7 @@ src/librand/Makefile \
 src/fft/Makefile \
 src/math/Makefile \
 src/interpol/Makefile \
+src/optim/Makefile \
 src/libinteg/Makefile \
 src/libminpack/Makefile \
 src/linalg/Makefile \
