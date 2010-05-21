@@ -30,8 +30,26 @@
 #include "pnl_vector.h"
 #include "pnl_matrix.h"
 
-#include "pnl_optim_intpoints_bfgs.h"
+#include "pnl_optim.h"
 
+
+/**
+ * Structure containing the inequality constraints.
+ */
+typedef struct AllConstraints
+{
+    PnlRnFuncRm* NL_Constraints; // non linear constraints
+    PnlVect* LowerBounds; // lower bound constraints
+    PnlVect* UpperBounds; // upper bound constraints
+
+    PnlVectInt* LowerBoundsIndex; // index of variable where a bound constraints is applied
+    PnlVectInt* UpperBoundsIndex; // index of variable where a bound constraints is applied
+
+    int nbr_nl_constraints;
+    int nbr_lower_bounds;
+    int nbr_upper_bounds;
+
+} AllConstraints;
 
 /**
  * Frees the structure AllConstraints
