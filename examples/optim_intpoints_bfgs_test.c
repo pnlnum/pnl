@@ -24,7 +24,7 @@
 #include "pnl_vector.h"
 #include "pnl_random.h"
 
-#include "pnl_optim_intpoints_bfgs.h"
+#include "pnl_optim.h"
 
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  *  This file contains routines to implement test problem HS15 from
