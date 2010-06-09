@@ -82,8 +82,9 @@ the above table.
     size, ...}
   \sshortdescribe Creates a new \refstruct{PnlVect} pointer of length
   \var{size} filled with the extra arguments passed to the function. The
-  number of extra arguments passed must be equal to \var{size}, be aware that
-  this cannot be checked inside the function.
+  number of extra arguments passed must be equal to \var{size} and they must be of the type BASE.
+  Example: To create a vector \{1., 2.\}, you should enter pnl_vect_create_from_list(2, 1.0, 2.0) and NOT pnl_vect_create_from_list(2, 1.0, 2) or pnl_vect_create_from_list(2, 1, 2.0).
+  Be aware that this cannot be checked inside the function.
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_from_file}
   {const char \ptr file}
   \sshortdescribe Reads a vector from a file and creates the corresponding
