@@ -806,6 +806,8 @@ typedef struct {
  * 
  * @param indi (output) a vector of integers
  * @param indj (output) a vector of integers
+ * @param type is a string composed of the letters 'r' (real) and 'm' (matrix)
+ * to specify the type of the extra arguments
  * @param f a function returning an integer (typically a test function)
  * @return OK or FAIL if something went wrong
  */

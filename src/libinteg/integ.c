@@ -60,8 +60,8 @@ static int status, xneval;
  * procedure
  *
  * @param *F a PnlFunc to be integrated 
- * @param x0 lower bound for integration (may be -Inf)
- * @param x1 upper bound for integration (may be -Inf)
+ * @param a lower bound for integration (may be -Inf)
+ * @param b upper bound for integration (may be -Inf)
  * @param epsabs maximum absolute error accepted
  * @param epsrel maximum relative error accepted
  * @param result the result of the integration
@@ -90,8 +90,8 @@ int pnl_integration_qng (PnlFunc *F,
  * compatibility
  *
  * @param *F a PnlFunc to be integrated 
- * @param x0 lower bound for integration (may be -Inf)
- * @param x1 upper bound for integration (may be -Inf)
+ * @param a lower bound for integration (may be -Inf)
+ * @param b upper bound for integration (may be -Inf)
  * @param epsabs maximum absolute error accepted
  * @param epsrel maximum relative error accepted
  * @param result the result of the integration
@@ -118,7 +118,7 @@ int pnl_integration_GK (PnlFunc *F,
 /**
  * Integration over a finite or non finite interval
  *
- * @param *F a PnlFunc to be integrated 
+ * @param *f a PnlFunc to be integrated 
  * @param a lower bound for integration (may be -Inf)
  * @param b upper bound for integration (may be -Inf)
  * @param epsabs maximum absolute error accepted
@@ -217,7 +217,7 @@ int pnl_integration_qag (PnlFunc *f, double a, double b, double epsabs,
  * Integration over a finite or non finite interval of a function with known
  * singular points
  *
- * @param *F a PnlFunc to be integrated 
+ * @param *f a PnlFunc to be integrated 
  * @param a lower bound for integration (may be -Inf)
  * @param b upper bound for integration (may be -Inf)
  * @param singularities a vector containing the singular points of f over the

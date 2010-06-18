@@ -54,7 +54,7 @@ typedef struct AllConstraints
 /**
  * Frees the structure AllConstraints
  *
- * @param AllConstraints
+ * @param all_constraints
  */
 static void AllConstraints_Free(AllConstraints *all_constraints)
 {
@@ -68,6 +68,7 @@ static void AllConstraints_Free(AllConstraints *all_constraints)
 /**
  * Initialize all_constraints with:
  *
+ * @param all_constraints
  * @param NL_Constraints: the PnlRnFuncRm that computes a vector of nonlinear constraints
  * @param LowerBounds: the lower bound constraints. LowerBounds[i] may be -inf if no lower bound constraint is applied on x[i]
  * @param UpperBounds: the upper bound constraints. UpperBounds[i] may be +inf if no upper bound constraint is applied on x[i]
@@ -225,7 +226,7 @@ static void gradient_f(PnlRnFuncRm *grad_func, PnlRnFuncR * func, PnlVect * x, P
  *
  * @param all_constraints: AllConstraints structure
  * @param x: vector where gradient is computed
- * @param grad: vector containting value of gradient valued at x
+ * @param grad_c: vector containting value of gradient valued at x
  */
 static void gradient_c(AllConstraints* all_constraints, PnlVect* x, PnlMat* grad_c)
 {
@@ -296,7 +297,7 @@ static void gradient_c(AllConstraints* all_constraints, PnlVect* x, PnlMat* grad
 
 This Algorithm was proposed by P.ARMAND, J-C.GILBERT, and S.JAN-JEGOU in their article
 "A feasible BFGS interior point algorithm for solving strongly convex minimization problems."
-SIAM J. Optim. (2000) 11, 199–222"
+SIAM J. Optim. (2000) 11, 199 222"
 For sake of simplicity, we used the same names for the variables in this implentation.
 
         Input parameters:
