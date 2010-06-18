@@ -55,10 +55,10 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,new)()
 
 
 /**
- * creates a new TYPE(PnlVect)pointer.
+ * creates a new TYPE(PnlVect) pointer.
  *
  * @param size the size of the array
- * @return  a TYPE(PnlVect)pointer
+ * @return  a TYPE(PnlVect) pointer
  */
 TYPE(PnlVect) * FUNCTION(pnl_vect,create)(int size)
 {
@@ -76,7 +76,7 @@ TYPE(PnlVect) * FUNCTION(pnl_vect,create)(int size)
 
 
 /**
- * creates a new TYPE(PnlVect)pointer.
+ * creates a new TYPE(PnlVect) pointer.
  *
  * @param size the size of the array
  * @param x value of all component
@@ -96,7 +96,7 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,CONCAT2(create_from_,BASE))(const int size,BASE
 }
 
 /**
- * creates a new TYPE(PnlVect)pointer.
+ * creates a new TYPE(PnlVect) pointer.
  *
  * @param size the size of the array
  * @return  a TYPE(PnlVect)pointer all value at 0
@@ -108,7 +108,7 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_zero)(const int size)
 }
 
 /**
- * creates a new TYPE(PnlVect)pointer.
+ * creates a new TYPE(PnlVect) pointer.
  *
  * @param size the size of the array
  * @param x the values used to fill the array. Obviously
@@ -212,7 +212,7 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_file) (const char * file)
  * @param V a vector 
  * @param ind a vector of integers representing the list of indices to be extracted
  */
-void FUNCTION(pnl_vect,extract_subvect) (TYPE(PnlVect) *V_sub, const TYPE(PnlVect) *V, const PnlVectInt *ind)
+void FUNCTION(pnl_vect,extract_subvect)(TYPE(PnlVect) *V_sub, const TYPE(PnlVect) *V, const PnlVectInt *ind)
 {
   int i;
   FUNCTION(pnl_vect,resize)(V_sub, ind->size);
@@ -732,109 +732,6 @@ void FUNCTION(pnl_vect,map_vect_inplace)(TYPE(PnlVect) *lhs, const TYPE(PnlVect)
     }
 }
 
-/* |+*  */
-/*  * Finds the indices i for which f(V(i)) == 1 */
-/*  *  */
-/*  * @param ind (output) a vector of integers */
-/*  * @param val (output) a vector. If not NULL, it  contains the values V(ind(:))  */
-/*  * @param V a vector */
-/*  * @param f a function returning an integer (typically a test function) */
-/*  +| */
-/* void FUNCTION(pnl_vect,find)(PnlVectInt *ind, TYPE(PnlVect) *val,  */
-/*                              const TYPE(PnlVect) *V, int(*f)(BASE)) */
-/* { */
-/*   int i, count_i; */
-/*   count_i = 0; */
-/*   |+ We need 2 passes. */
-/*    * First pass to determine the size +| */
-/*   for ( i=0 ; i<V->size ; i++ )  */
-/*     { */
-/*       if (f(PNL_GET (V, i)) == 1) count_i++; */
-/*     } */
-/*   pnl_vect_int_resize (ind, count_i); */
-
-/*   |+ Second pass to extract the data +| */
-/*   if ( val != NULL )  */
-/*     { */
-/*       FUNCTION(pnl_vect, resize)(val, count_i); */
-/*       count_i = 0; */
-/*       for ( i=0 ; i<V->size ; i++ )  */
-/*         { */
-/*           if (f(PNL_GET (V, i)) == 1) */
-/*             { */
-/*               PNL_LET(ind, count_i) = i;  */
-/*               PNL_LET(val, count_i) = PNL_GET(V, i); */
-/*               count_i++; */
-/*             } */
-/*         } */
-/*     } */
-/*   else */
-/*     { */
-/*       |+ Second pass to extract the data +| */
-/*       count_i = 0; */
-/*       for ( i=0 ; i<V->size ; i++ )  */
-/*         { */
-/*           if (f(PNL_GET (V, i)) == 1) */
-/*             { */
-/*               PNL_LET(ind, count_i) = i; count_i++; */
-/*             } */
-/*         } */
-
-/*     } */
-/* } */
-
-/* |+*  */
-/*  * Finds the indices i for which f(V1(i),V2(i)) == 1 */
-/*  *  */
-/*  * @param ind (output) a vector of integers */
-/*  * @param val (output) a vector. If not NULL, it  contains the values V(ind(:))  */
-/*  * @param V1 a vector */
-/*  * @param V2 a vector */
-/*  * @param f a function returning an integer (typically a test function) */
-/*  +| */
-/* void FUNCTION(pnl_vect,find_vect)(PnlVectInt *ind, TYPE(PnlVect) *val, */
-/*                                   const TYPE(PnlVect) *V1, const TYPE(PnlVect) *V2, */
-/*                                   int(*f)(BASE,BASE)) */
-/* { */
-/*   int i, count_i; */
-/*   CheckVectMatch (V1, V2); */
-/*   count_i = 0; */
-/*   |+ We need 2 passes. */
-/*    * First pass to determine the size +| */
-/*   for ( i=0 ; i<V1->size ; i++ )  */
-/*     { */
-/*       if (f(PNL_GET (V1, i), PNL_GET(V2, i)) == 1) count_i++; */
-/*     } */
-/*   pnl_vect_int_resize (ind, count_i); */
-
-/*   |+ Second pass to extract the data +| */
-/*   if ( val != NULL )  */
-/*     { */
-/*       FUNCTION(pnl_vect, resize)(val, count_i); */
-/*       count_i = 0; */
-/*       for ( i=0 ; i<V1->size ; i++ )  */
-/*         { */
-/*           if (f(PNL_GET (V1, i), PNL_GET(V2, i)) == 1) */
-/*             { */
-/*               PNL_LET(ind, count_i) = i;  */
-/*               PNL_LET(val, count_i) = PNL_GET(V1, i); */
-/*               count_i++; */
-/*             } */
-/*         } */
-/*     } */
-/*   else */
-/*     { */
-/*       count_i = 0; */
-/*       for ( i=0 ; i<V1->size ; i++ )  */
-/*         { */
-/*           if (f(PNL_GET (V1, i), PNL_GET(V2, i)) == 1) */
-/*             { */
-/*               PNL_LET(ind, count_i) = i; count_i++; */
-/*             } */
-/*         } */
-/*     } */
-/* } */
-
 typedef struct {
   union {BASE x; TYPE(PnlVect) *V ;};
   char type;
@@ -843,7 +740,7 @@ typedef struct {
 /** 
  * Finds the indices i for which f == 1
  * 
- * @param ind (output) a vector of integers
+ * @param index (output) a vector of integers
  * @param type a string composed by the letters 'r' and 'v'.
  * @param f a function returning an integer (typically a test function)
  */
@@ -1468,6 +1365,7 @@ static double FUNCTION(pnl_vect,norm_x)(const TYPE(PnlVect) *V,double(*f)(BASE))
     { p+=(*f)(PNL_GET(V, i)); i++;}
   return p;
 }
+
 /**
  * returns the two norm of a vector 
  *
@@ -1485,10 +1383,11 @@ double FUNCTION(pnl_vect,norm_two)(const TYPE(PnlVect) *V)
  * @param V a vector 
  * @return the sum of the absolute value of components of V
  */
-double FUNCTION(pnl_vect,norm_one)(const TYPE(PnlVect) *V) /*res=\Vert rhs1 \Vert_{l^1} */
+double FUNCTION(pnl_vect,norm_one)(const TYPE(PnlVect) *V) 
 {
   return FUNCTION(pnl_vect,norm_x)(V,FUNCTION(,_op_abs));
 }
+
 /**
  * returns the infty norm of a vector 
  *

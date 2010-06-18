@@ -29,8 +29,10 @@
  * @param pnl_func this will actually be a pointer to a PnlRnFuncRnDFunc object
  * @param x the point at which the function is evaluated
  * @param n size of the vector x
- * @param fvec a vector of size n, containing on output f(x)
- * @param fjac a vector of size n, containing on output Jac(f)(x)
+ * @param fvec an array of size n, containing on output f(x)
+ * @param fjac an array of size nxn, containing on output Jac(f)(x) using a
+ * column major order
+ * @param ldfjac is the number of rows of the Jacobian matrix
  * @param iflag internal minpack variable. if iflag=0, the function does
  * nothing. If iflag=1, it computes fvec. If iflag=2, it computes fjac
  * @return an integer. If the returned value is negative the function hybrd
@@ -124,6 +126,9 @@ static int lmdif_fcn (void *pnl_func, int m, int n, const double *x, double *fve
  * @param m number of componenets of f (may be different from n)
  * @param n size of the vector x
  * @param fvec a vector of size m, containing on output f(x)
+ * @param fjac contains the Jacobian matrix on exit stored in a column major
+ * order
+ * @param ldfjac is the number of rows of the Jacobian matrix
  * @param iflag internal minpack variable. if iflag=0, the function does
  * nothing
  * @return an integer. If the returned value is negative the function hybrd
@@ -166,7 +171,7 @@ static int lmder_fcn (void *pnl_func, int m, int n, const double *x, double *fve
   return 0;
 }
 
-/** 
+/**
  * 
  * 
  * @param f a pointer to a PnlRnFuncRnDFunc. This an object for storing a
@@ -179,6 +184,7 @@ static int lmder_fcn (void *pnl_func, int m, int n, const double *x, double *fve
  * If the lower bound if reached, the function returns 1
  * @param maxfev maximum number of evaluation of f. If the number is
  * reached, the function returns with the value 2
+ * @param nfev number of evaluations of f in the algorithm
  * @param scale a vector of scale factors to make the components of the
  * solution roughly of the same order, once they have been scaled
  * @param error_msg a boolean TRUE or FALSE. If TRUE, a message is printed
@@ -298,8 +304,8 @@ int pnl_root_fsolve (PnlRnFuncRnDFunc *f, PnlVect *x, PnlVect *fx,  double xtol,
 
 }
 
-/** 
- * 
+/**
+ * Minimizes a sum of squares
  * 
  * @param f a pointer to a PnlRnFuncRmDFunc. This an object for storing a
  * fonction f:R^n -> R^m and its Jacobian.
@@ -310,14 +316,17 @@ int pnl_root_fsolve (PnlRnFuncRnDFunc *f, PnlVect *x, PnlVect *fx,  double xtol,
  * a vector of zeros
  * @param xtol is the minimum relative error between two consecutive iterates.
  * If the lower bound if reached, the function returns 1
+ * @param ftol minimum relative error in the computation of the sum
+ * @param gtol minimum relative error in the computation of the gradient of the sum
  * @param maxfev maximum number of evaluation of f. If the number is
  * reached, the function returns with the value 2
+ * @param nfev number of evaluations of f in the algorithm
  * @param scale a vector of scale factors to make the components of the
  * solution roughly of the same order, once they have been scaled
  * @param error_msg a boolean TRUE or FALSE. If TRUE, a message is printed
  * if the lmdif or lmder function did not return properly
  *
- * @return OK or FAIL (if FAIL, use error_msg=TRUEto know what happened)
+ * @return OK or FAIL (if FAIL, use error_msg=TRUE to know what happened)
  */
 int pnl_root_fsolve_lsq (PnlRnFuncRmDFunc *f, PnlVect *x, int m, PnlVect *fx,  double xtol, 
                     double ftol, double gtol, int maxfev, int *nfev, 

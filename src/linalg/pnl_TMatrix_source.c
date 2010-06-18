@@ -32,7 +32,6 @@
 #include <ctype.h>
 #include <stdarg.h>
 
-#define PNL_MATRIX_PRIVATE
 #include "pnl_mathtools.h"
 
 

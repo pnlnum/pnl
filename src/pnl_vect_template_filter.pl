@@ -4,12 +4,12 @@
 ## Jérôme Lelong 2008
 
 ## This filter is intended to be used by doxygen to expand the
-## template files of PremiaVect so that doxygen actually generates the
+## template files of PnlVect so that doxygen actually generates the
 ## whole documentation for the different atomic types.
 
 use strict;
 
-my @dirs = ( "../include", "include", ".", "linalg", "sort");
+my @dirs = ( "../include", "include", ".", "linalg");
 
 sub dump_file
 {
@@ -52,16 +52,21 @@ sub parse
 
 
 my $INPUT;
-if (@ARGV == 1)
+if (@ARGV >= 1)
 {
-    open($INPUT, "<", $ARGV[0]) or die "unable to open $ARGV[0]";
+    foreach my $f (@ARGV)
+    {
+        open($INPUT, "<", $f) or die "unable to open $f";
+        parse ($INPUT);
+        close $INPUT;
+    }
 }
 else
 {
     open ($INPUT, "-");
+    parse ($INPUT);
+    close $INPUT;
 }
 
-parse ($INPUT);
-close $INPUT;
 
 
