@@ -9,21 +9,16 @@
 
 use strict;
 
-my @dirs = ( "../include", "include", ".", "linalg");
-
 sub dump_file
 {
     my ($file) = @_;
     my $FILE;
-    foreach my $dir (@dirs)
-        {
-            if (open($FILE , "<", $dir . "/" . $file))
-                {
-                    while (<$FILE>) { print $_;}
-                    close $FILE;
-                    return;
-                }
-        }
+    if (open($FILE , "<", $file))
+    {
+        while (<$FILE>) { print $_;}
+        close $FILE;
+        return;
+    }
     die "Unable to open $file";
 }
 
@@ -38,7 +33,8 @@ sub parse
         if ($line =~ m/^#include[ ]*"(.*)"/ && ! $in_comment)
         {
             my $file = $1;
-            dump_file ($file) if ($file =~ m/pnl_templates/ || $file =~ m/_source\.c/);
+            dump_file ("include/" . $file) if ($file =~ m/pnl_templates/);
+            dump_file ("linalg/" . $file) if ($file =~ m/_source\.c/);
         }
         else
         {
