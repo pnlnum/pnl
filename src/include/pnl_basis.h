@@ -19,7 +19,10 @@ extern "C" {
 /* basis indices */
 enum {CANONICAL, HERMITIAN, TCHEBYCHEV }; 
 
-typedef struct {
+typedef struct _PnlBasis PnlBasis;
+
+struct _PnlBasis
+{
   /** 
    * Must be the first element in order for the object mechanism to work
    * properly. This allows any PnlBasis pointer to be cast to a PnlObject
@@ -36,7 +39,7 @@ typedef struct {
                                             of the one dimensional basis */
   double    (*D2f)(double  *x, int i); /*!< Computes the second derivative of the i-th element 
                                             of the one dimensional basis */
-} PnlBasis;
+};
 
 extern enum_members PnlBases ;
 extern PnlBasis* pnl_basis_new ();

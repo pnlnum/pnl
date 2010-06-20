@@ -23,6 +23,10 @@ typedef struct _PnlObject PnlObject;
  */
 #define PNL_OBJECT(o) ((PnlObject *) o)
 /**
+ * Returns the name of the type of any object inheriting from PnlObject
+ */
+#define PNL_GET_TYPENAME(o) (((PnlObject *) o)->label)
+/**
  * Returns the type of any object inheriting from PnlObject
  */
 #define PNL_GET_TYPE(o) (((PnlObject *) o)->type)
