@@ -165,11 +165,6 @@ AC_CHECK_HEADERS(time.h)
 AC_CHECK_HEADERS(limits.h)
 AC_CHECK_HEADERS(errno.h)
 
-case "$host" in
-     *-*-cygwin* |   *-*-mingw32*)
-	 AC_CHECK_HEADERS(process.h)
-	 ;;
-esac
 
 
 ########################################################
@@ -187,44 +182,59 @@ INTERNAL_LAPACK_DIR=""
 INTERNAL_LAPACK_LA=""
 USE_INTERNAL_BLAS=0
 
-if test "x$F77" = "x"; then 
-   with_internal_blas=yes   
-fi
+case "$host" in
+    # Darwin/MacOSX
+    *-*-darwin*)
+    # When Xcode is installed, Atlas and Lapack can be found in vectlib
+    USE_BLAS=yes
+    BLAS_LIBS="-lblas"
+    USE_LAPACK=yes
+    LAPACK_LIBS="-llapack"
+    AC_DEFINE(HAVE_BLAS, [], [Blas is installed])
+    AC_DEFINE(HAVE_LAPACK, [], [Lapack is installed])
+    ;;
 
-if test "x$with_internal_blas" != "xyes"; then
-   builtin(include,config/acx_blas.m4)
-   ACX_BLAS([USE_BLAS=yes])
+    *)
+    if test "x$F77" = "x"; then 
+       with_internal_blas=yes   
+    fi
 
-   if test "$USE_BLAS" = yes; then 
-     AM_CFLAGS="$AM_CFLAGS"
-     HAVE_BLAS=1
-     AC_DEFINE(HAVE_BLAS, [], [Blas is installed])
-   else
-     with_internal_blas=yes
-   fi
+    if test "x$with_internal_blas" != "xyes"; then
+       builtin(include,config/acx_blas.m4)
+       ACX_BLAS([USE_BLAS=yes])
 
-   builtin(include,config/acx_lapack.m4)
-   ACX_LAPACK([USE_LAPACK=yes])
+       if test "$USE_BLAS" = yes; then 
+         AM_CFLAGS="$AM_CFLAGS"
+         HAVE_BLAS=1
+         AC_DEFINE(HAVE_BLAS, [], [Blas is installed])
+       else
+         with_internal_blas=yes
+       fi
 
-   if test "$USE_LAPACK" = yes; then 
-     AM_CFLAGS="$AM_CFLAGS"
-     HAVE_LAPACK=1
-     AC_DEFINE(HAVE_LAPACK, [], [Lapack is installed])
-   else
-     with_internal_blas=yes
-   fi
-fi
+       builtin(include,config/acx_lapack.m4)
+       ACX_LAPACK([USE_LAPACK=yes])
 
-if test "x$with_internal_blas" == "xyes"; then
-    USE_INTERNAL_BLAS=1
-    INTERNAL_F2C_DIR="libf2c"
-    INTERNAL_F2C_LA="libf2c/libf2c.la"
-    INTERNAL_BLAS_DIR="libblas"
-    INTERNAL_BLAS_LA="libblas/libblas.la"
-    INTERNAL_LAPACK_DIR="liblapack"
-    INTERNAL_LAPACK_LA="liblapack/liblapack.la"
-    LDFLAGS="$LDFLAGS -u MAIN__"
-fi 
+       if test "$USE_LAPACK" = yes; then 
+         AM_CFLAGS="$AM_CFLAGS"
+         HAVE_LAPACK=1
+         AC_DEFINE(HAVE_LAPACK, [], [Lapack is installed])
+       else
+         with_internal_blas=yes
+       fi
+    fi
+
+    if test "x$with_internal_blas" == "xyes"; then
+        USE_INTERNAL_BLAS=1
+        INTERNAL_F2C_DIR="libf2c"
+        INTERNAL_F2C_LA="libf2c/libf2c.la"
+        INTERNAL_BLAS_DIR="libblas"
+        INTERNAL_BLAS_LA="libblas/libblas.la"
+        INTERNAL_LAPACK_DIR="liblapack"
+        INTERNAL_LAPACK_LA="liblapack/liblapack.la"
+        LDFLAGS="$LDFLAGS -u MAIN__"
+    fi
+    ;;
+esac
 
 LDFLAGS="$LDFLAGS $BLAS_LIBS $LAPACK_LIBS"
 #######################
@@ -324,6 +334,20 @@ case "$host" in
 
     # Darwin/MacOSX
     *-*-darwin*)
+    # When Xcode is installed, Atlas and Lapack can be found in vectlib
+    USE_BLAS=yes
+    BLAS_LIBS="-lblas"
+    USE_LAPACK=yes
+    LAPACK_LIBS="-llapack"
+    INTERNAL_F2C_DIR=""
+    INTERNAL_F2C_LA=""
+    INTERNAL_BLAS_DIR=""
+    INTERNAL_BLAS_LA=""
+    INTERNAL_LAPACK_DIR=""
+    INTERNAL_LAPACK_LA=""
+    USE_INTERNAL_BLAS=0
+    AC_DEFINE(HAVE_BLAS, [], [Blas is installed])
+    AC_DEFINE(HAVE_LAPACK, [], [Lapack is installed])
     ;;
 esac
 
