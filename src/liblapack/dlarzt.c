@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dlarzt_(char *direct, char *storev, integer *n, integer *
 	k, doublereal *v, integer *ldv, doublereal *tau, doublereal *t, 

@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int sgttrs_(char *trans, integer *n, integer *nrhs, real *dl,
 	 real *d__, real *du, real *du2, integer *ipiv, real *b, integer *ldb,

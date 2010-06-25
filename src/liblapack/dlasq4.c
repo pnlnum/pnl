@@ -4,7 +4,7 @@
 	-lf2c -lm   (in that order)
 */
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dlasq4_(integer *i0, integer *n0, doublereal *z__, 
 	integer *pp, integer *n0in, doublereal *dmin__, doublereal *dmin1, 

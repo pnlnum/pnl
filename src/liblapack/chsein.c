@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int chsein_(char *side, char *eigsrc, char *initv, logical *
 	select, integer *n, complex *h__, integer *ldh, complex *w, complex *

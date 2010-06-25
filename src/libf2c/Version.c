@@ -6,7 +6,7 @@ static char junk[] = "\n@(#)LIBF77 VERSION 19990503\n";
 	[ d]erf[c ] added
 	 8 Aug. 1989: #ifdefs for f2c -i2 added to s_cat.c
 	29 Nov. 1989: s_cmp returns long (for f2c)
-	30 Nov. 1989: arg types from f2c.h
+	30 Nov. 1989: arg types from pnl_f2c.h
 	12 Dec. 1989: s_rnge allows long names
 	19 Dec. 1989: getenv_ allows unsorted environment
 	28 Mar. 1990: add exit(0) to end of main()

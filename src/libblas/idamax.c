@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 integer idamax_(integer *n, doublereal *dx, integer *incx)
 {

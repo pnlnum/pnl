@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int clagtm_(char *trans, integer *n, integer *nrhs, real *
 	alpha, complex *dl, complex *d__, complex *du, complex *x, integer *

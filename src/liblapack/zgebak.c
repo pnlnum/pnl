@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int zgebak_(char *job, char *side, integer *n, integer *ilo, 
 	integer *ihi, doublereal *scale, integer *m, doublecomplex *v, 

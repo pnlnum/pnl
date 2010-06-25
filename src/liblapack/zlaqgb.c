@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int zlaqgb_(integer *m, integer *n, integer *kl, integer *ku,
 	 doublecomplex *ab, integer *ldab, doublereal *r__, doublereal *c__, 

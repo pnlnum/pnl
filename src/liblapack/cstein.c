@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int cstein_(integer *n, real *d__, real *e, integer *m, real 
 	*w, integer *iblock, integer *isplit, complex *z__, integer *ldz, 

@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int cgttrf_(integer *n, complex *dl, complex *d__, complex *
 	du, complex *du2, integer *ipiv, integer *info)

@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int slacon_(integer *n, real *v, real *x, integer *isgn, 
 	real *est, integer *kase)

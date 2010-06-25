@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int slaqps_(integer *m, integer *n, integer *offset, integer 
 	*nb, integer *kb, real *a, integer *lda, integer *jpvt, real *tau, 

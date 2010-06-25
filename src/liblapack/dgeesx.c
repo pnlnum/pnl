@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dgeesx_(char *jobvs, char *sort, L_fp select, char *
 	sense, integer *n, doublereal *a, integer *lda, integer *sdim, 

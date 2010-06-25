@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int zlassq_(integer *n, doublecomplex *x, integer *incx, 
 	doublereal *scale, doublereal *sumsq)

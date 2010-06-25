@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int cggrqf_(integer *m, integer *p, integer *n, complex *a, 
 	integer *lda, complex *taua, complex *b, integer *ldb, complex *taub, 

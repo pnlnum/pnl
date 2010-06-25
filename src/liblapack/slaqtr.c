@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int slaqtr_(logical *ltran, logical *lreal, integer *n, real 
 	*t, integer *ldt, real *b, real *w, real *scale, real *x, real *work, 

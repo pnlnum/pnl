@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int chemm_(char *side, char *uplo, integer *m, integer *n, 
 	complex *alpha, complex *a, integer *lda, complex *b, integer *ldb, 

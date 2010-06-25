@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dopmtr_(char *side, char *uplo, char *trans, integer *m, 
 	integer *n, doublereal *ap, doublereal *tau, doublereal *c__, integer 

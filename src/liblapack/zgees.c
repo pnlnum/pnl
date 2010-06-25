@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int zgees_(char *jobvs, char *sort, L_fp select, integer *n, 
 	doublecomplex *a, integer *lda, integer *sdim, doublecomplex *w, 

@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int sgehrd_(integer *n, integer *ilo, integer *ihi, real *a, 
 	integer *lda, real *tau, real *work, integer *lwork, integer *info)

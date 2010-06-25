@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 doublereal dzasum_(integer *n, doublecomplex *zx, integer *incx)
 {

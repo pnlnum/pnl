@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int zppsv_(char *uplo, integer *n, integer *nrhs, 
 	doublecomplex *ap, doublecomplex *b, integer *ldb, integer *info)

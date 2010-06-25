@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int zlatrs_(char *uplo, char *trans, char *diag, char *
 	normin, integer *n, doublecomplex *a, integer *lda, doublecomplex *x, 

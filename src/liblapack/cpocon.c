@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int cpocon_(char *uplo, integer *n, complex *a, integer *lda,
 	 real *anorm, real *rcond, complex *work, real *rwork, integer *info)

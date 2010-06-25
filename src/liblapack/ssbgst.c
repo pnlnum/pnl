@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int ssbgst_(char *vect, char *uplo, integer *n, integer *ka, 
 	integer *kb, real *ab, integer *ldab, real *bb, integer *ldbb, real *

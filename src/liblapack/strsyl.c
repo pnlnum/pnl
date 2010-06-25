@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int strsyl_(char *trana, char *tranb, integer *isgn, integer 
 	*m, integer *n, real *a, integer *lda, real *b, integer *ldb, real *

@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int zggev_(char *jobvl, char *jobvr, integer *n, 
 	doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, 

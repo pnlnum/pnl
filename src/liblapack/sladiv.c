@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int sladiv_(real *a, real *b, real *c__, real *d__, real *p, 
 	real *q)

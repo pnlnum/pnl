@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dspgvd_(integer *itype, char *jobz, char *uplo, integer *
 	n, doublereal *ap, doublereal *bp, doublereal *w, doublereal *z__, 

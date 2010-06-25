@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int cgebal_(char *job, integer *n, complex *a, integer *lda, 
 	integer *ilo, integer *ihi, real *scale, integer *info)

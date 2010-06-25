@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int sspgst_(integer *itype, char *uplo, integer *n, real *ap,
 	 real *bp, integer *info)

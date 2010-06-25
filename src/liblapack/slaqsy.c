@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int slaqsy_(char *uplo, integer *n, real *a, integer *lda, 
 	real *s, real *scond, real *amax, char *equed)

@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int sgetri_(integer *n, real *a, integer *lda, integer *ipiv,
 	 real *work, integer *lwork, integer *info)

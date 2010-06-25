@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int zlacon_(integer *n, doublecomplex *v, doublecomplex *x, 
 	doublereal *est, integer *kase)

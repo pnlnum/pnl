@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int claein_(logical *rightv, logical *noinit, integer *n, 
 	complex *h__, integer *ldh, complex *w, complex *v, complex *b, 

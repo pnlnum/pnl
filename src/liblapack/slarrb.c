@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int slarrb_(integer *n, real *d__, real *l, real *ld, real *
 	lld, integer *ifirst, integer *ilast, real *sigma, real *reltol, real 

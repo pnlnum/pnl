@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int clalsa_(integer *icompq, integer *smlsiz, integer *n, 
 	integer *nrhs, complex *b, integer *ldb, complex *bx, integer *ldbx, 

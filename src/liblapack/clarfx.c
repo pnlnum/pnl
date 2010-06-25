@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int clarfx_(char *side, integer *m, integer *n, complex *v, 
 	complex *tau, complex *c__, integer *ldc, complex *work)

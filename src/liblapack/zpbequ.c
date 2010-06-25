@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int zpbequ_(char *uplo, integer *n, integer *kd, 
 	doublecomplex *ab, integer *ldab, doublereal *s, doublereal *scond, 

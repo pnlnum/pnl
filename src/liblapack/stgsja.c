@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int stgsja_(char *jobu, char *jobv, char *jobq, integer *m, 
 	integer *p, integer *n, integer *k, integer *l, real *a, integer *lda,

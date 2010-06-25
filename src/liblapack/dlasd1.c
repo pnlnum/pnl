@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dlasd1_(integer *nl, integer *nr, integer *sqre, 
 	doublereal *d__, doublereal *alpha, doublereal *beta, doublereal *u, 

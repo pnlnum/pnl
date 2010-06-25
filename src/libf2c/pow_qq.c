@@ -1,4 +1,4 @@
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 #ifdef KR_headers
 longint pow_qq(ap, bp) longint *ap, *bp;

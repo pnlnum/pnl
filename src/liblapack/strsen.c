@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int strsen_(char *job, char *compq, logical *select, integer 
 	*n, real *t, integer *ldt, real *q, integer *ldq, real *wr, real *wi, 

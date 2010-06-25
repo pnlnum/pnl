@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int cgbtf2_(integer *m, integer *n, integer *kl, integer *ku,
 	 complex *ab, integer *ldab, integer *ipiv, integer *info)

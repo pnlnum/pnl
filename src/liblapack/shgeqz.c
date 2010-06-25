@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int shgeqz_(char *job, char *compq, char *compz, integer *n, 
 	integer *ilo, integer *ihi, real *a, integer *lda, real *b, integer *

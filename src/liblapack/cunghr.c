@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int cunghr_(integer *n, integer *ilo, integer *ihi, complex *
 	a, integer *lda, complex *tau, complex *work, integer *lwork, integer 

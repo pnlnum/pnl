@@ -4,7 +4,7 @@
 	-lf2c -lm   (in that order)
 */
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int slasd4_(integer *n, integer *i__, real *d__, real *z__, 
 	real *delta, real *rho, real *sigma, real *work, integer *info)

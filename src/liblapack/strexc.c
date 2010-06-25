@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int strexc_(char *compq, integer *n, real *t, integer *ldt, 
 	real *q, integer *ldq, integer *ifst, integer *ilst, real *work, 

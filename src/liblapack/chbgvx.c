@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int chbgvx_(char *jobz, char *range, char *uplo, integer *n, 
 	integer *ka, integer *kb, complex *ab, integer *ldab, complex *bb, 

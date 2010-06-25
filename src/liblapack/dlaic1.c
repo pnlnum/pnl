@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dlaic1_(integer *job, integer *j, doublereal *x, 
 	doublereal *sest, doublereal *w, doublereal *gamma, doublereal *

@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 doublereal clansy_(char *norm, char *uplo, integer *n, complex *a, integer *
 	lda, real *work)

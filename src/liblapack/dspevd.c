@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dspevd_(char *jobz, char *uplo, integer *n, doublereal *
 	ap, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, 

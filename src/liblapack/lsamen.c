@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 logical lsamen_(integer *n, char *ca, char *cb)
 {

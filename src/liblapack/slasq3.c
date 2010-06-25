@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int slasq3_(integer *i0, integer *n0, real *z__, integer *pp,
 	 real *dmin__, real *sigma, real *desig, real *qmax, integer *nfail, 

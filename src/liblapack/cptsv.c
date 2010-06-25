@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int cptsv_(integer *n, integer *nrhs, real *d__, complex *e, 
 	complex *b, integer *ldb, integer *info)

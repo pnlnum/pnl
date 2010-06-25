@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int spotf2_(char *uplo, integer *n, real *a, integer *lda, 
 	integer *info)

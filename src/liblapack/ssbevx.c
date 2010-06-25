@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int ssbevx_(char *jobz, char *range, char *uplo, integer *n, 
 	integer *kd, real *ab, integer *ldab, real *q, integer *ldq, real *vl,

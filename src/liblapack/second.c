@@ -1,5 +1,5 @@
 /* rbd 14-Dec-99 for Win32 */
-#include "f2c.h"
+#include "pnl_f2c.h"
 #if !defined _WIN32
 #include <sys/times.h>
 #endif

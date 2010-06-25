@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int clatdf_(integer *ijob, integer *n, complex *z__, integer 
 	*ldz, complex *rhs, real *rdsum, real *rdscal, integer *ipiv, integer 

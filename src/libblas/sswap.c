@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int sswap_(integer *n, real *sx, integer *incx, real *sy, 
 	integer *incy)

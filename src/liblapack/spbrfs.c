@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int spbrfs_(char *uplo, integer *n, integer *kd, integer *
 	nrhs, real *ab, integer *ldab, real *afb, integer *ldafb, real *b, 

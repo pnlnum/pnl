@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int slaed0_(integer *icompq, integer *qsiz, integer *n, real 
 	*d__, real *e, real *q, integer *ldq, real *qstore, integer *ldqs, 

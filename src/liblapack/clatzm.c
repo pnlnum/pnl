@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int clatzm_(char *side, integer *m, integer *n, complex *v, 
 	integer *incv, complex *tau, complex *c1, complex *c2, integer *ldc, 

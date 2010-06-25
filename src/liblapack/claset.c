@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int claset_(char *uplo, integer *m, integer *n, complex *
 	alpha, complex *beta, complex *a, integer *lda)

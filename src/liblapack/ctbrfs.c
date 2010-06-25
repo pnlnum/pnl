@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int ctbrfs_(char *uplo, char *trans, char *diag, integer *n, 
 	integer *kd, integer *nrhs, complex *ab, integer *ldab, complex *b, 

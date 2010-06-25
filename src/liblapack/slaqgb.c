@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int slaqgb_(integer *m, integer *n, integer *kl, integer *ku,
 	 real *ab, integer *ldab, real *r__, real *c__, real *rowcnd, real *

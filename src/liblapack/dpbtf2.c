@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dpbtf2_(char *uplo, integer *n, integer *kd, doublereal *
 	ab, integer *ldab, integer *info)

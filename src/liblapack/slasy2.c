@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int slasy2_(logical *ltranl, logical *ltranr, integer *isgn, 
 	integer *n1, integer *n2, real *tl, integer *ldtl, real *tr, integer *

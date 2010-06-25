@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int zgtts2_(integer *itrans, integer *n, integer *nrhs, 
 	doublecomplex *dl, doublecomplex *d__, doublecomplex *du, 

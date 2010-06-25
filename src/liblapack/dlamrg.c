@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dlamrg_(integer *n1, integer *n2, doublereal *a, integer 
 	*dtrd1, integer *dtrd2, integer *index)

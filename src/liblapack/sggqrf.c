@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int sggqrf_(integer *n, integer *m, integer *p, real *a, 
 	integer *lda, real *taua, real *b, integer *ldb, real *taub, real *

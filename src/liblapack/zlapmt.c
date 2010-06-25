@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int zlapmt_(logical *forwrd, integer *m, integer *n, 
 	doublecomplex *x, integer *ldx, integer *k)

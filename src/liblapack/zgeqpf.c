@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int zgeqpf_(integer *m, integer *n, doublecomplex *a, 
 	integer *lda, integer *jpvt, doublecomplex *tau, doublecomplex *work, 

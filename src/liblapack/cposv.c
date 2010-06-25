@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int cposv_(char *uplo, integer *n, integer *nrhs, complex *a,
 	 integer *lda, complex *b, integer *ldb, integer *info)

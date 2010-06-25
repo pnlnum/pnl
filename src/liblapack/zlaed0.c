@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int zlaed0_(integer *qsiz, integer *n, doublereal *d__, 
 	doublereal *e, doublecomplex *q, integer *ldq, doublecomplex *qstore, 

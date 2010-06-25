@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int sorgl2_(integer *m, integer *n, integer *k, real *a, 
 	integer *lda, real *tau, real *work, integer *info)

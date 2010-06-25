@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dlargv_(integer *n, doublereal *x, integer *incx, 
 	doublereal *y, integer *incy, doublereal *c__, integer *incc)

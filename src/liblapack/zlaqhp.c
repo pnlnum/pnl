@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int zlaqhp_(char *uplo, integer *n, doublecomplex *ap, 
 	doublereal *s, doublereal *scond, doublereal *amax, char *equed)

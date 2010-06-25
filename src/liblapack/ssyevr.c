@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int ssyevr_(char *jobz, char *range, char *uplo, integer *n, 
 	real *a, integer *lda, real *vl, real *vu, integer *il, integer *iu, 

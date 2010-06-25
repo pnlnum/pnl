@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int slatrd_(char *uplo, integer *n, integer *nb, real *a, 
 	integer *lda, real *e, real *tau, real *w, integer *ldw)

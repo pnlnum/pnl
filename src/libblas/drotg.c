@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int drotg_(doublereal *da, doublereal *db, doublereal *c__, 
 	doublereal *s)

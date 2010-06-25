@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, 
 	real *ab, integer *ldab, real *d__, real *e, real *q, integer *ldq, 

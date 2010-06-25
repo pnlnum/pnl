@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 doublereal clangb_(char *norm, integer *n, integer *kl, integer *ku, complex *
 	ab, integer *ldab, real *work)

@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int cgebd2_(integer *m, integer *n, complex *a, integer *lda,
 	 real *d__, real *e, complex *tauq, complex *taup, complex *work, 

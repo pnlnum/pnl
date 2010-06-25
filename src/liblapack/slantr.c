@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 doublereal slantr_(char *norm, char *uplo, char *diag, integer *m, integer *n,
 	 real *a, integer *lda, real *work)

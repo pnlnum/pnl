@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int sgeevx_(char *balanc, char *jobvl, char *jobvr, char *
 	sense, integer *n, real *a, integer *lda, real *wr, real *wi, real *

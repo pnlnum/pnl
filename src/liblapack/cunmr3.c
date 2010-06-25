@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int cunmr3_(char *side, char *trans, integer *m, integer *n, 
 	integer *k, integer *l, complex *a, integer *lda, complex *tau, 

@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int clasr_(char *side, char *pivot, char *direct, integer *m,
 	 integer *n, real *c__, real *s, complex *a, integer *lda)

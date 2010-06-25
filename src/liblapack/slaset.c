@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int slaset_(char *uplo, integer *m, integer *n, real *alpha, 
 	real *beta, real *a, integer *lda)

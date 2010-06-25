@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int sgbcon_(char *norm, integer *n, integer *kl, integer *ku,
 	 real *ab, integer *ldab, integer *ipiv, real *anorm, real *rcond, 

@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dlatps_(char *uplo, char *trans, char *diag, char *
 	normin, integer *n, doublereal *ap, doublereal *x, doublereal *scale, 

@@ -1,4 +1,4 @@
-#include "f2c.h"
+#include "pnl_f2c.h"
 #include "fio.h"
 
 extern int f__cursor;

@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int stptri_(char *uplo, char *diag, integer *n, real *ap, 
 	integer *info)

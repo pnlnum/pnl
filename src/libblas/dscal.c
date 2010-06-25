@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dscal_(integer *n, doublereal *da, doublereal *dx, 
 	integer *incx)

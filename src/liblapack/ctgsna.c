@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int ctgsna_(char *job, char *howmny, logical *select, 
 	integer *n, complex *a, integer *lda, complex *b, integer *ldb, 

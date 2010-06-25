@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int slasrt_(char *id, integer *n, real *d__, integer *info)
 {

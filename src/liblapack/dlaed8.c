@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dlaed8_(integer *icompq, integer *k, integer *n, integer 
 	*qsiz, doublereal *d__, doublereal *q, integer *ldq, integer *indxq, 

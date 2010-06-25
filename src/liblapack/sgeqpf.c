@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int sgeqpf_(integer *m, integer *n, real *a, integer *lda, 
 	integer *jpvt, real *tau, real *work, integer *info)

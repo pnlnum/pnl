@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int stgex2_(logical *wantq, logical *wantz, integer *n, real 
 	*a, integer *lda, real *b, integer *ldb, real *q, integer *ldq, real *

@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dlar2v_(integer *n, doublereal *x, doublereal *y, 
 	doublereal *z__, integer *incx, doublereal *c__, doublereal *s, 

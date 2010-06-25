@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int sspcon_(char *uplo, integer *n, real *ap, integer *ipiv, 
 	real *anorm, real *rcond, real *work, integer *iwork, integer *info)

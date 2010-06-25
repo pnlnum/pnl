@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int slartv_(integer *n, real *x, integer *incx, real *y, 
 	integer *incy, real *c__, real *s, integer *incc)

@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int chpgvx_(integer *itype, char *jobz, char *range, char *
 	uplo, integer *n, complex *ap, complex *bp, real *vl, real *vu, 

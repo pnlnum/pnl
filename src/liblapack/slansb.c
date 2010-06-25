@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 doublereal slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab, 
 	integer *ldab, real *work)

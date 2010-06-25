@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int classq_(integer *n, complex *x, integer *incx, real *
 	scale, real *sumsq)

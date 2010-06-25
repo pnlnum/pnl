@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dsymv_(char *uplo, integer *n, doublereal *alpha, 
 	doublereal *a, integer *lda, doublereal *x, integer *incx, doublereal 

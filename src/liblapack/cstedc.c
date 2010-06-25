@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int cstedc_(char *compz, integer *n, real *d__, real *e, 
 	complex *z__, integer *ldz, complex *work, integer *lwork, real *

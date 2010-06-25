@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int cgtsvx_(char *fact, char *trans, integer *n, integer *
 	nrhs, complex *dl, complex *d__, complex *du, complex *dlf, complex *

@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int ssbmv_(char *uplo, integer *n, integer *k, real *alpha, 
 	real *a, integer *lda, real *x, integer *incx, real *beta, real *y, 

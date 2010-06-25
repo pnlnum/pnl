@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int zrot_(integer *n, doublecomplex *cx, integer *incx, 
 	doublecomplex *cy, integer *incy, doublereal *c__, doublecomplex *s)

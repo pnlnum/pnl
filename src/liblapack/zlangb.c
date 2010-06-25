@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 doublereal zlangb_(char *norm, integer *n, integer *kl, integer *ku, 
 	doublecomplex *ab, integer *ldab, doublereal *work)

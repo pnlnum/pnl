@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 doublereal slangt_(char *norm, integer *n, real *dl, real *d__, real *du)
 {

@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dlaqps_(integer *m, integer *n, integer *offset, integer 
 	*nb, integer *kb, doublereal *a, integer *lda, integer *jpvt, 

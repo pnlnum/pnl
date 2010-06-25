@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int stgsen_(integer *ijob, logical *wantq, logical *wantz, 
 	logical *select, integer *n, real *a, integer *lda, real *b, integer *

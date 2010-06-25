@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int zppcon_(char *uplo, integer *n, doublecomplex *ap, 
 	doublereal *anorm, doublereal *rcond, doublecomplex *work, doublereal 

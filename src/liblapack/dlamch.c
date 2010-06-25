@@ -1,4 +1,4 @@
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /*
  * Turn off compiler optimization for Win32. Also need
@@ -135,7 +135,7 @@ nding
 
 } /* dlamch_ */
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dlamc1_(integer *beta, integer *t, logical *rnd, logical 
 	*ieee1)
@@ -348,7 +348,7 @@ L30:
 
 } /* dlamc1_ */
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dlamc2_(integer *beta, integer *t, logical *rnd, 
 	doublereal *eps, integer *emin, doublereal *rmin, integer *emax, 
@@ -653,7 +653,7 @@ ing
 
 } /* dlamc2_ */
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 doublereal dlamc3_(doublereal *a, doublereal *b)
 {
@@ -694,7 +694,7 @@ doublereal dlamc3_(doublereal *a, doublereal *b)
 
 } /* dlamc3_ */
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dlamc4_(integer *emin, doublereal *start, integer *base)
 {
@@ -785,7 +785,7 @@ L10:
 
 } /* dlamc4_ */
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int dlamc5_(integer *beta, integer *p, integer *emin, 
 	logical *ieee, integer *emax, doublereal *rmax)

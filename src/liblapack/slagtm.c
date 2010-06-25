@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int slagtm_(char *trans, integer *n, integer *nrhs, real *
 	alpha, real *dl, real *d__, real *du, real *x, integer *ldx, real *

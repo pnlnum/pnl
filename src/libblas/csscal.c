@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int csscal_(integer *n, real *sa, complex *cx, integer *incx)
 {

@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int ssyrfs_(char *uplo, integer *n, integer *nrhs, real *a, 
 	integer *lda, real *af, integer *ldaf, integer *ipiv, real *b, 

@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int sgesc2_(integer *n, real *a, integer *lda, real *rhs, 
 	integer *ipiv, integer *jpiv, real *scale)

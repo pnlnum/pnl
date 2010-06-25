@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int zhseqr_(char *job, char *compz, integer *n, integer *ilo,
 	 integer *ihi, doublecomplex *h__, integer *ldh, doublecomplex *w, 

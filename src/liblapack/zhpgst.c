@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int zhpgst_(integer *itype, char *uplo, integer *n, 
 	doublecomplex *ap, doublecomplex *bp, integer *info)

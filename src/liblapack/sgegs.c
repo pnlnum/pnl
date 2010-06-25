@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int sgegs_(char *jobvsl, char *jobvsr, integer *n, real *a, 
 	integer *lda, real *b, integer *ldb, real *alphar, real *alphai, real 

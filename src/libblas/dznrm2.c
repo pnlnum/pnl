@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 doublereal dznrm2_(integer *n, doublecomplex *x, integer *incx)
 {

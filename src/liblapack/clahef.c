@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int clahef_(char *uplo, integer *n, integer *nb, integer *kb,
 	 complex *a, integer *lda, integer *ipiv, complex *w, integer *ldw, 

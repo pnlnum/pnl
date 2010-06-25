@@ -1,5 +1,5 @@
 
-#include "f2c.h"
+#include "pnl_f2c.h"
 
 /* Subroutine */ int zggbal_(char *job, integer *n, doublecomplex *a, integer 
 	*lda, doublecomplex *b, integer *ldb, integer *ilo, integer *ihi, 
