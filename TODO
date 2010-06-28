@@ -1,5 +1,3 @@
-- HAVE_{BLAS,LAPACK} have become irrelevant, remove them
-
 - Create a List structure and use it in MPI
 
 - Some code can be factorized in libminpack
@@ -9,18 +7,15 @@
     in a parallel environment. This constraint must be taken into 
     account when devising the RNG object.
 
-- Bindings for MPI
-    At least for vectors, matrices, (hypermatrices ?) and RNG.
-
 - splines 
     CMlib 
     in scilab routines/callelm/somespline.f
 
 - Complex tridiag and band matrices
-    I am not sure these sotrages are so meaningful for complex data
+    I am not sure these storages are so meaningful for complex data
 
-- Should dgemm use Blas ? 
-    Probably yes if we can differentiate between Blas & Atlas, because
+- Should dgemm use Blas ?
+    Probably yes, if we can differentiate between Blas & Atlas, because
     using Fortran style storage induces several temporary copies so it must
     be worth it.
 

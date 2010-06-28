@@ -7,9 +7,6 @@
 /* Define if F77 and FC dummy 'main' functions are identical. */
 #undef FC_DUMMY_MAIN_EQ_F77
 
-/* Blas is installed */
-#undef HAVE_BLAS
-
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
@@ -39,9 +36,6 @@
 
 /* Define to 1 if you have the 'isnan' function. */
 #undef HAVE_ISNAN
-
-/* Lapack is installed */
-#undef HAVE_LAPACK
 
 /* Define to 1 if you have the 'lgamma' function. */
 #undef HAVE_LGAMMA
@@ -103,9 +97,6 @@
 
 /* sharp sign can be used to in macros */
 #undef USE_SHARP_SIGN
-
-/* Version number of package */
-#undef VERSION
 
 /* trailing underscore in fortran symbols */
 #undef WTU
