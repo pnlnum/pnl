@@ -576,10 +576,22 @@ static void speed_syslin_mat ()
 
 void speed_test ()
 {
-  speed_access ();
-  speed_copy ();
-  speed_dgemm ();
-  speed_dgemv ();
-  speed_mat_sum_vect ();
-  speed_syslin_mat ();
+  int choice;
+  printf("Are you sure you want to run speed tests (It may take a while)?\n");
+  printf("0. No\n1. Yes\n");
+  while (1)
+    {
+      scanf("%d", &choice); 
+      if (choice != 0 && choice != 1) printf("illegal choice\n");
+      else break;
+    }
+  if (choice == 1)
+    {
+      speed_access ();
+      speed_copy ();
+      speed_dgemm ();
+      speed_dgemv ();
+      speed_mat_sum_vect ();
+      speed_syslin_mat ();
+    }
 }
