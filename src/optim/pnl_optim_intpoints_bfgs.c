@@ -483,11 +483,7 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm *grad_func, Pn
             }
 
             //Compute primal descent direction d_x by solving linear system
-#ifdef HAVE_LAPACK
             pnl_mat_ls (A, d_x);
-#else
-            pnl_mat_syslin_inplace (A, d_x);
-#endif
 
             //Compute dual descent direction d_lambda
             for (i = 0; i < nbr_constraints; i++)
