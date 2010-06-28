@@ -29,6 +29,7 @@
 #include "config.h"
 #include "pnl_vector.h"
 #include "pnl_mathtools.h"
+#include "pnl_internals.h"
 
 static char pnl_vector_label[] = "PnlVectObject";
 
@@ -65,7 +66,7 @@ PnlVectObject* pnl_vect_object_new ()
 int pnl_vect_object_resize(PnlVectObject * v, int size)
 {
 
-  size_t sizeof_base;
+  size_t sizeof_base = 0;
   if (v->owner == 0) return OK;
   if (size < 0) return FAIL;
   if (size == 0)
@@ -94,6 +95,8 @@ int pnl_vect_object_resize(PnlVectObject * v, int size)
       break;
     case PNL_TYPE_VECTOR_INT : sizeof_base = sizeof(int);
       break;
+    default : PNL_MESSAGE (1, "Unknown type in pnl_vect_object_resize.\n");
+      return FAIL;
     }
   if ((v->array=realloc(v->array,size*sizeof_base)) == NULL) return FAIL;
   v->size = size;

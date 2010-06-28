@@ -66,7 +66,7 @@ PnlMatObject* pnl_mat_object_new ()
 int pnl_mat_object_resize(PnlMatObject *M, int m, int n)
 {
   int mn;
-  size_t sizeof_base;
+  size_t sizeof_base = 0;
   mn = m*n;
   if (M->owner == 0) return OK;
   if (mn < 0) return FAIL;
@@ -97,6 +97,8 @@ int pnl_mat_object_resize(PnlMatObject *M, int m, int n)
       break;
     case PNL_TYPE_MATRIX_INT : sizeof_base = sizeof(int);
       break;
+    default : PNL_MESSAGE (1, "Unknown type in pnl_mat_object_resize.\n");
+      return FAIL;
     }
   if ((M->array=realloc(M->array,mn*sizeof_base)) == NULL) return FAIL;
   return OK;
@@ -136,8 +138,8 @@ PnlHmatObject* pnl_hmat_object_new ()
  */
 int pnl_hmat_object_resize(PnlHmatObject *H, int ndim, const int *dims)
 {
-  size_t sizeof_base;
   int i, s=1;
+  size_t sizeof_base = 0;
   const int *ptr;
   ptr=dims;
   for(i=0;i<ndim;i++) { s*=(*ptr); ptr++; }
@@ -169,6 +171,8 @@ int pnl_hmat_object_resize(PnlHmatObject *H, int ndim, const int *dims)
       break;
     case PNL_TYPE_HMATRIX_INT : sizeof_base = sizeof(int);
       break;
+    default : PNL_MESSAGE (1, "Unknown type in pnl_hmat_object_resize.\n");
+      return FAIL;
     }
   if (H->array==NULL)
     {
