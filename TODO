@@ -1,3 +1,7 @@
+- HAVE_{BLAS,LAPACK} have become irrelevant, remove them
+
+- Create a List structure and use it in MPI
+
 - Some code can be factorized in libminpack
 
 - Create an object for Random Number Generators
@@ -11,9 +15,6 @@
 - splines 
     CMlib 
     in scilab routines/callelm/somespline.f
-
-- Optimization 
-    Integrate the BFGS algorithm written by Ismail
 
 - Complex tridiag and band matrices
     I am not sure these sotrages are so meaningful for complex data

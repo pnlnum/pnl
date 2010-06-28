@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "config.h"
 #include "pnl_basis.h"
 #include "pnl_vector.h"
 #include "pnl_matrix.h"
@@ -33,18 +34,18 @@ if ( coef->size != basis->nb_func )                             \
   PNL_ERROR("Wrong number of coefficients", "pnl_basis_eval"); \
 }
 #else
-#define CHECK_NB_FUNC(coef, basis) 
+#define CHECK_NB_FUNC(coef, basis)
 #endif
 
 /**
- * Returns the total degree of the polynomials represented by 
+ * Returns the total degree of the polynomials represented by
  * line i of T
  *
  * @param T a matrix of integers representing the decomposition of the mutli-d
  * polynomials
  * @param i the index of the element to be considered in the basis (i.e. the row
  * of T to consider)
- * @return  the total degree of the polynomials represented by 
+ * @return  the total degree of the polynomials represented by
  * line i of T
  */
 static int count_degree (const PnlMatInt *T, int i)
@@ -57,14 +58,14 @@ static int count_degree (const PnlMatInt *T, int i)
 }
 
 
-/** 
+/**
  * Copies T_prev(T_previ, :) into T(Ti,:)
- * 
+ *
  * @param T an integer matrix with more columns than that T_prev
  * @param T_prev an integer matrix containing the last tensor computed
  * @param Ti the index of the line to consider in T
  * @param T_previ the index of the line to consider in T_prev
- * 
+ *
  */
 static void copy_previous_basis (PnlMatInt *T, PnlMatInt *T_prev, int Ti, int T_previ)
 {
@@ -75,20 +76,20 @@ static void copy_previous_basis (PnlMatInt *T, PnlMatInt *T_prev, int Ti, int T_
     }
 }
 
-/** 
+/**
  * Computes the integer matrix representing the decomposition as a tensor
  * product of the elements of * the multi-b basis onto the 1-d basis
- * 
+ *
  * @param nb_variates the number of variates
  * @param nb_func the number of elements of the basis
- * 
+ *
  * @return a tensor
  */
 static PnlMatInt* compute_tensor (int nb_func, int nb_variates)
 {
   PnlMatInt *T;
   T = pnl_mat_int_create (nb_func, nb_variates);
-  if (nb_variates == 1) 
+  if (nb_variates == 1)
     {
       int i;
       for ( i=0 ; i<nb_func ; i++ ) { PNL_MLET (T, i, 0) = i; }
@@ -99,16 +100,16 @@ static PnlMatInt* compute_tensor (int nb_func, int nb_variates)
       int current_degree, deg;
       int block, block_start;
       int i, j, k;
-      PnlMatInt *T_prev; 
+      PnlMatInt *T_prev;
       current_degree = 0;
-      T_prev = compute_tensor (nb_func, nb_variates-1); 
+      T_prev = compute_tensor (nb_func, nb_variates-1);
 
       i = 0;
       while (1) /* loop on global degree */
         {
           /* determining the last element of global degree <= current_degree */
           j = 0;
-          while ( j<T_prev->m && count_degree (T_prev, j) < current_degree + 1) { j++; } 
+          while ( j<T_prev->m && count_degree (T_prev, j) < current_degree + 1) { j++; }
           j--;
           for ( k=j, deg=current_degree ; k>=0 ; deg--)
             {
@@ -119,11 +120,11 @@ static PnlMatInt* compute_tensor (int nb_func, int nb_variates)
                   while ( count_degree (T_prev, block_start) == deg ) { block_start--; }
                   block_start++;
                 }
-              /* Loop in an incresing order over the block of global degree deg */ 
+              /* Loop in an incresing order over the block of global degree deg */
               for ( block=block_start ; block<=k ; block++ , i++ )
                 {
                   if ( i==nb_func ) { pnl_mat_int_free (&T_prev); return T; }
-                  copy_previous_basis (T, T_prev, i, block); 
+                  copy_previous_basis (T, T_prev, i, block);
                   PNL_MLET (T, i, nb_variates-1) = current_degree - deg;
                 }
               /* Consider the previous block */
@@ -134,19 +135,19 @@ static PnlMatInt* compute_tensor (int nb_func, int nb_variates)
     }
 }
 
-/** 
+/**
  * Computes the number of elements with total degree less or equal than degree
  * in the basis with (T->n + 1) variates
- * 
+ *
  * @param T the tensor matrix of the basis with n-1 variates
  * @param degree the maximum total degree requested
- * 
+ *
  * @return the number of elements with total degree less or equal than degree in
  * the basis with n variates
  */
 static int compute_nb_elements (const PnlMatInt *T, int degree)
 {
-  int i; 
+  int i;
   int current_degree; /* Current total degree under investigation in the loop */
   int total_elements; /* Number of elements of total degree smaller than degree */
   int elements_in_degree; /* Number of element of degree exactly the one under investigation */
@@ -157,10 +158,10 @@ static int compute_nb_elements (const PnlMatInt *T, int degree)
     {
       elements_in_degree = 0;
       /* search for the numbers of elements with exact degree "current_degree" */
-      while ( i + elements_in_degree < T->m && count_degree (T, elements_in_degree + i) < current_degree + 1) 
-        { 
-          elements_in_degree++; 
-        } 
+      while ( i + elements_in_degree < T->m && count_degree (T, elements_in_degree + i) < current_degree + 1)
+        {
+          elements_in_degree++;
+        }
       total_elements += elements_in_degree * (degree - current_degree + 1);
       /* jump ahead of the number of elements of the current degree */
       i += elements_in_degree;
@@ -169,20 +170,20 @@ static int compute_nb_elements (const PnlMatInt *T, int degree)
   return total_elements;
 }
 
-/** 
+/**
  * Computes the tensor matrix of the nb_variates variate basis with a total degree less or
  * equal than degree
- * 
+ *
  * @param nb_variates the number of variates of the basis.
  * @param degree the total degree
- * 
+ *
  * @return the tensor matrix of the nb_variates variate basis with a total degree less or
  * equal than degree
  */
 static PnlMatInt* compute_tensor_from_degree (int degree, int nb_variates)
 {
   PnlMatInt *T;
-  if (nb_variates == 1) 
+  if (nb_variates == 1)
     {
       int i;
       T = pnl_mat_int_create (degree+1, nb_variates);
@@ -195,10 +196,10 @@ static PnlMatInt* compute_tensor_from_degree (int degree, int nb_variates)
       int current_degree, deg;
       int block, block_start;
       int i, j, k;
-      PnlMatInt *T_prev; 
+      PnlMatInt *T_prev;
       current_degree = 0;
       /* Compute the tensor with one variate less */
-      T_prev = compute_tensor_from_degree (degree, nb_variates-1); 
+      T_prev = compute_tensor_from_degree (degree, nb_variates-1);
       /* Compute the number of rows of T */
       nb_elements = compute_nb_elements (T_prev, degree);
       T = pnl_mat_int_create (nb_elements, nb_variates);
@@ -208,7 +209,7 @@ static PnlMatInt* compute_tensor_from_degree (int degree, int nb_variates)
         {
           /* Determine the last element of global degree <= current_degree */
           j = 0;
-          while ( j<T_prev->m && count_degree (T_prev, j) < current_degree + 1 ) { j++; } 
+          while ( j<T_prev->m && count_degree (T_prev, j) < current_degree + 1 ) { j++; }
           j--;
           for ( k=j, deg=current_degree ; k>=0 ; deg--)
             {
@@ -219,10 +220,10 @@ static PnlMatInt* compute_tensor_from_degree (int degree, int nb_variates)
                   while ( count_degree (T_prev, block_start) == deg ) { block_start--; }
                   block_start++;
                 }
-              /* Loop in an incresing order over the block of global degree deg */ 
+              /* Loop in an incresing order over the block of global degree deg */
               for ( block=block_start ; block<=k ; block++ , i++ )
                 {
-                  copy_previous_basis (T, T_prev, i, block); 
+                  copy_previous_basis (T, T_prev, i, block);
                   PNL_MLET (T, i, nb_variates-1) = current_degree - deg;
                 }
               /* Consider the previous block  */
@@ -234,39 +235,39 @@ static PnlMatInt* compute_tensor_from_degree (int degree, int nb_variates)
     }
 }
 
-/** 
+/**
  * First order derivative
- * 
+ *
  * @param b a basis
  * @param x the point at which to evaluate the first derivative
  * @param i the index of the basis element to differentiate
  * @param j the index of the variable w.r.t which we differentiate
- * 
+ *
  * @return (D(b_i)/Dj)(x)
  */
 static double D_basis_i ( PnlBasis *b, double *x, int i, int j )
 {
     int k;
     double aux = 1;
-    for ( k=0 ; k < b->nb_variates ; k++ ) 
+    for ( k=0 ; k < b->nb_variates ; k++ )
       {
-        if ( k == j ) 
+        if ( k == j )
           aux *= (b->Df) (x + k, PNL_MGET(b->T, i, k));
         else
-          aux *= (b->f) (x + k, PNL_MGET(b->T, i, k)); 
-      } 
+          aux *= (b->f) (x + k, PNL_MGET(b->T, i, k));
+      }
     return aux;
 }
 
-/** 
+/**
  * Second order derivative
- * 
+ *
  * @param b a basis
  * @param x the point at which to evaluate the first derivative
  * @param i the index of the basis element to differentiate
  * @param j1 the index of the first variable w.r.t which we differentiate
  * @param j2 the index of the second variable w.r.t which we differentiate
- * 
+ *
  * @return (D(b_i)/(Dj1 Dj2))(x)
  */
 static double D2_basis_i (PnlBasis *b, double *x, int i, int j1, int j2)
@@ -394,7 +395,7 @@ static double DHermiteD1(double *x, int n)
 {
   if (n == 0) return 0.;
   else return n * HermiteD1 (x, n-1);
-  
+
 }
 
 /**
@@ -480,9 +481,9 @@ static double TchebychevD1(double *x, int n)
  *  @param n the order of the polynomial to be evaluated
  *  @param n0 7 on input
  *  @param f_n used to store the derivative of the polynomial of order n. On
- *  input is P'(7) 
+ *  input is P'(7)
  *  @param f_n_1 used to store the derivative of  the polynomial of order
- *  n-1. On input is P'(6) 
+ *  n-1. On input is P'(6)
  */
 static double DTchebychev_rec (double *x, int n, int n0, double *f_n, double *f_n_1)
 {
@@ -546,9 +547,9 @@ static double DTchebychevD1(double *x, int n)
  *  @param n the order of the polynomial to be evaluated
  *  @param n0 7 on input
  *  @param f_n used to store the derivative of the polynomial of order n. On
- *  input is P''(7) 
+ *  input is P''(7)
  *  @param f_n_1 used to store the derivative of  the polynomial of order
- *  n-1. On input is P''(6) 
+ *  n-1. On input is P''(6)
  */
 static double D2Tchebychev_rec (double *x, int n, int n0, double *f_n, double *f_n_1)
 {
@@ -635,22 +636,21 @@ PnlBasis*  pnl_basis_new ()
   o->nb_variates = 0;
   o->T = NULL;
   o->object.type = PNL_TYPE_BASIS;
-  o->object.parent_type = PNL_TYPE_OBJECT;
+  o->object.parent_type = PNL_TYPE_BASIS;
   o->object.label = pnl_basis_label;
   return o;
 }
 
 /**
- * Returns a  PnlBasis
+ * Creates a PnlBasis and stores it into its first argument
  *
+ * @param b an already allocated basis (as returned by pnl_basis_new for instance)
  * @param index the index of the family to be used
  * @param T the tensor of the multi-dimensionnal basis. No copy of T is done, so
  * do not free T. It will be freed transparently by pnl_basis_free
- * @return a PnlBasis
  */
-PnlBasis*  pnl_basis_create_from_tensor (int index, PnlMatInt *T)
+void  pnl_basis_set_from_tensor (PnlBasis *b, int index, PnlMatInt *T)
 {
-  PnlBasis *b;
   enum_member *e;
 
   e = _reg_basis;
@@ -661,11 +661,13 @@ PnlBasis*  pnl_basis_create_from_tensor (int index, PnlMatInt *T)
       printf ("No basis found : index exceeded\n"); abort();
     }
 
-  if ( (b = pnl_basis_new ()) == NULL ) return NULL;
   b->nb_func = T->m;
   b->id = index;
   b->label = e->label;
   b->nb_variates = T->n;
+
+  /* Not sure this is the right place to put it */
+  pnl_mat_int_free (&(b->T));
   b->T = T;
 
   switch ( index )
@@ -688,7 +690,23 @@ PnlBasis*  pnl_basis_create_from_tensor (int index, PnlMatInt *T)
       default:
         PNL_ERROR ("unknow basis", "pnl_basis_create");
     }
-  return b; 
+}
+
+
+/**
+ * Returns a  PnlBasis
+ *
+ * @param index the index of the family to be used
+ * @param T the tensor of the multi-dimensionnal basis. No copy of T is done, so
+ * do not free T. It will be freed transparently by pnl_basis_free
+ * @return a PnlBasis
+ */
+PnlBasis*  pnl_basis_create_from_tensor (int index, PnlMatInt *T)
+{
+  PnlBasis *b;
+  if ((b = pnl_basis_new ()) == NULL) return NULL;
+  pnl_basis_set_from_tensor (b, index, T);
+  return b;
 }
 
 /**
@@ -724,9 +742,9 @@ PnlBasis*  pnl_basis_create_from_degree (int index, int degree, int nb_variates)
 }
 
 
-/** 
+/**
  * Frees a PnlBasis
- * 
+ *
  * @param basis
  */
 void pnl_basis_free (PnlBasis **basis)
@@ -736,20 +754,34 @@ void pnl_basis_free (PnlBasis **basis)
   free (*basis); basis = NULL;
 }
 
-/** 
+/**
+ * Prints a PnlBasis
+ * @param B a basis
+ */
+void pnl_basis_print (const PnlBasis *B)
+{
+  printf ("Basis Name : %s\n", B->label);
+  printf ("\tNumber of variates : %d\n", B->nb_variates);
+  printf ("\tNumber of functions : %d\n", B->nb_func);
+  printf ("\tTensor matrix : \n");
+  pnl_mat_int_print (B->T);
+  printf("\n");
+}
+
+/**
  * Evaluates the i-th elements of the basis b at the point x
- * 
+ *
  * @param b a PnlBasis
  * @param x a C array containing the coordinates of the point at which to
  * evaluate the basis
  * @param i an integer describing the index of the element of the basis to
  * considier
- * 
+ *
  * @return f_i(x) where f is the i-th basis function
  */
 double pnl_basis_i ( PnlBasis *b, double *x, int i )
 {
-  int k; 
+  int k;
   double aux = 1.;
   for ( k=0 ; k<b->nb_variates ; k++ )
     {
@@ -881,7 +913,7 @@ int pnl_basis_fit_ls (PnlBasis *basis, PnlVect *coef, PnlMat *x, PnlVect *y)
 #else
   pnl_mat_syslin_inplace (A, coef);
 #endif
-  
+
   pnl_vect_free (&phi_k);
   pnl_mat_free (&A);
 

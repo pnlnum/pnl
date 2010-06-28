@@ -22,13 +22,6 @@
 /************************************************************************/
 
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <ctype.h>
-#include <stdarg.h>
-#include "pnl_mathtools.h"
 
 
 /** 
@@ -74,7 +67,6 @@ TYPE(PnlVect) * FUNCTION(pnl_vect,create)(int size)
   return v;
 }
 
-
 /**
  * creates a new TYPE(PnlVect) pointer.
  *
@@ -93,6 +85,25 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,CONCAT2(create_from_,BASE))(const int size,BASE
       FUNCTION(pnl_vect, set) (v, i, x);
     }
   return v;
+}
+
+
+/**
+ * Test if 2 vectors are equal
+ *
+ * @param v1 a vector
+ * @param v2 a vector
+ * @return  TRUE or FALSE
+ */
+int FUNCTION(pnl_vect,eq)(const TYPE(PnlVect) *v1, const TYPE(PnlVect) *v2)
+{
+  int i;
+  if (v1->size != v2->size) return FAIL;
+  for ( i=0 ; i<v1->size ; i++ )
+    {
+      if ( NEQ(PNL_GET(v1, i), PNL_GET(v2, i)) ) return FAIL;
+    }
+  return OK;
 }
 
 /**
@@ -332,31 +343,7 @@ void FUNCTION(pnl_vect,free)(TYPE(PnlVect) **v)
  */
 int FUNCTION(pnl_vect,resize)(TYPE(PnlVect) * v, int size)
 {
-
-  if (v->owner == 0) return OK;
-  if (size < 0) return FAIL;
-  if (size == 0)
-    {
-      if (v->mem_size > 0) free (v->array);
-      v->size = 0;
-      v->mem_size = 0;
-      v->array=NULL;
-      return OK;
-    }
-  
-  if (v->mem_size >= size)
-    {
-      /* If the new size is smaller, we do not reduce the size of the
-         allocated block. It may change, but it may allow to grow the vector
-         quicker */
-      v->size=size; return OK;
-    }
-
-  /* Now, v->mem_size < size */
-  if ((v->array = realloc (v->array,  size * sizeof(BASE))) == NULL) return FAIL;
-  v->size = size;
-  v->mem_size = size;
-  return OK;
+  return pnl_vect_object_resize (PNL_VECT_OBJECT(v), size);
 }
 
 

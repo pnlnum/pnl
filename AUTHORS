@@ -2,24 +2,28 @@ Jérôme Lelong <jerome.lelong@gmail.com> (2007 - 2010)
 
    - Overall design
    - Linear algebra
-   - hyper matrices 
+   - hyper matrices
    - Matrix matrix multiplication
    - Tridiagonal matrices
    - Band matrices
    - Special functions
    - FFT
    - Laplace inversion
-   - Polynomial regression
+   - Multivariate polynomial regression
    - Random number generators
-   - Root finding
+   - Multidimensional root finding
    - Numerical integration
    - Sorting
 
 David Pommier <pommier.david@gmail.com> (2007 - April 2009)
 
    - Matrix matrix multiplication
-   - Tridiagonal matrices
    - Iterative solvers for linear systems
+   - Tridiagonal matrices
    - Financial functions
-   - Root finding
-   - Numerical integration
+   - One dimensional root finding
+
+Contributions from
+
+   Ismail Laachir <ismail.laachir@inria.fr>
+      - Optimization routine

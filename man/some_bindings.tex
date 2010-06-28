@@ -1,0 +1,77 @@
+\section{Some bindings}
+
+% --------------------------------------------------------------------- %%
+% MPI
+\subsection{MPI bindings}
+\subsubsection{Short Description}
+
+We provide some bindings for the MPI library to natively handle {\it PnlObjects}.
+
+\subsubsection{Functions}
+
+All the following functions return an error code as an integer value. This
+returned value should be tested against \var{MPI_SUCCESS} to check that no
+error occurred.
+
+\begin{itemize}
+\item \describefun{int}{pnl_object_mpi_pack_size}{const
+    \refstruct{PnlObject} \ptr Obj, MPI_Comm comm, int \ptr size}
+  \sshortdescribe Computes in \var{size} the amount of space needed to pack \var{Obj}.
+\item \describefun{int}{pnl_object_mpi_pack}{const \refstruct{PnlObject}
+    \ptr Obj, void \ptr buf, int bufsize, int \ptr pos, MPI_Comm comm}
+  \sshortdescribe Packs \var{Obj} into \var{buf} which must be at least of
+  length \var{size}. \var{size} must be at least equal to the value returned
+  by \reffun{pnl_object_mpi_pack_size}. 
+\item \describefun{int}{pnl_object_mpi_unpack}{\refstruct{PnlObject} \ptr
+    Obj, void \ptr buf, int bufsize, int \ptr pos, MPI_Comm comm}
+  \sshortdescribe Unpacks the content of \var{buf} starting at position
+  \var{pos} (unless several objects have been packed contiguously, \var{\ptr
+    pos} should be equal to \var{0}). \var{buf} is a contigous memery area
+  of length \var{bufsize} (note that the size is counted in bytes).
+  \var{pos} is incremented and is on output the first location in the input
+  buffer after the locations occupied by the message that was
+  unpacked. \var{pos} is properly set for a future call to {\it MPI_Unpack}
+  if any.
+  
+\item \describefun{int}{pnl_object_mpi_send}{const \refstruct{PnlObject}
+    \ptr Obj, int dest, int tag, MPI_Comm comm}
+  \sshortdescribe Performs a standard-mode blocking send of \var{Obj}. The
+  object is sent to the process with rank \var{dest}.
+  
+\item \describefun{int}{pnl_object_mpi_recv}{\refstruct{PnlObject} \ptr Obj,
+    int src, int tag, MPI_Comm comm, MPI_Status \ptr status} 
+  \sshortdescribe Performs a standard-mode blocking receive of \var{Obj}. The
+  object is sent to the process with rank \var{dest}. Note that \var{Obj}
+  should be an already allocated object and that its type should match the
+  true type of the object to be received. \var{src} is the rank of the
+  process who sent the object.
+
+  
+\item \describefun{int}{pnl_object_mpi_bcast}{\refstruct{PnlObject} \ptr
+    Obj, int root, MPI_Comm comm}
+  \sshortdescribe Broadcasts the object \var{Obj} from the process with rank
+  \var{root} to all other processes of the group \var{comm}.
+\end{itemize}
+
+For more expect users, we provide the following nonblocking functions.
+\begin{itemize}
+\item \describefun{int}{pnl_object_mpi_isend}{const \refstruct{PnlObject}
+    \ptr Obj, int dest, int tag, MPI_Comm comm, MPI_Request \ptr request}
+  \sshortdescribe Starts a standard-mode, nonblocking send of object
+  \var{Obj} to the process with rank \var{dest}.
+  
+  
+\item \describefun{int}{pnl_object_mpi_irecv}{void \ptr \ptr buf, int \ptr
+    size, int src, int tag, MPI_Comm comm, int \ptr flag, MPI_Request \ptr
+    request}
+  \sshortdescribe Starts a standard-mode, nonblocking receive of object
+  \var{Obj} from the process with rank \var{root}. On output \var{flag} equals
+  to \var{TRUE} if the object can be received and \var{FALSE} otherwise (this
+  is the same as for {\it MPI_Iprobe}).
+\end{itemize}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "pnl-manual"
+%%% End: 

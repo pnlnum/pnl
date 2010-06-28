@@ -19,9 +19,16 @@
 
 
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <ctype.h>
+#include <stdarg.h>
+
 
 #include "config.h"
 #include "pnl_vector.h"
+#include "pnl_mathtools.h"
 
 static char pnl_vector_label[] = "PnlVectObject";
 
@@ -42,6 +49,56 @@ PnlVectObject* pnl_vect_object_new ()
   o->object.parent_type = PNL_TYPE_VECTOR;
   o->object.label = pnl_vector_label;
   return o;
+}
+
+
+/**
+ * Resizes a PnlVectObject. If the new size is smaller than the
+ * current one, no memory is freed and the datas are
+ * kept. If the new size is larger than the current one, a
+ * new pointer is allocated. The old datas are kept. 
+ *
+ * @param v a pointer to an already existing PnlVectObject. If v->owner=0,
+ * nothing is done
+ * @param size the new size of the array
+ */
+int pnl_vect_object_resize(PnlVectObject * v, int size)
+{
+
+  size_t sizeof_base;
+  if (v->owner == 0) return OK;
+  if (size < 0) return FAIL;
+  if (size == 0)
+    {
+      if (v->mem_size > 0) free (v->array);
+      v->size = 0;
+      v->mem_size = 0;
+      v->array=NULL;
+      return OK;
+    }
+  
+  if (v->mem_size >= size)
+    {
+      /* If the new size is smaller, we do not reduce the size of the
+         allocated block. It may change, but it allows to grow the vector
+         quicker */
+      v->size=size; return OK;
+    }
+
+  /* Now, v->mem_size < size */
+  switch (PNL_GET_TYPE(v))
+    {
+    case PNL_TYPE_VECTOR_DOUBLE : sizeof_base = sizeof(double);
+      break;
+    case PNL_TYPE_VECTOR_COMPLEX : sizeof_base = sizeof(dcomplex);
+      break;
+    case PNL_TYPE_VECTOR_INT : sizeof_base = sizeof(int);
+      break;
+    }
+  if ((v->array=realloc(v->array,size*sizeof_base)) == NULL) return FAIL;
+  v->size = size;
+  v->mem_size = size;
+  return OK;
 }
 
 

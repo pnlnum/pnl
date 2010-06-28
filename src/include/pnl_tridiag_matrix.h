@@ -42,7 +42,7 @@ extern void pnl_progonka(const double low,
  * store the lower and upper diagonals are of size n-1 for a n x n matrix.
  * Tridiagonal matrices must be square.
  */
-
+/* @{ */
 typedef struct _PnlTridiagMatObject PnlTridiagMatObject;
 typedef struct _PnlTridiagMat PnlTridiagMat;
 

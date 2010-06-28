@@ -23,6 +23,35 @@ typedef struct _PnlObject PnlObject;
  */
 #define PNL_OBJECT(o) ((PnlObject *) o)
 /**
+ * Casts any object into a PnlVectObject
+ */
+#define PNL_VECT_OBJECT(o) ((PnlVectObject *) o)
+/**
+ * Casts any object into a PnlMatObject
+ */
+#define PNL_MAT_OBJECT(o) ((PnlMatObject *) o)
+/**
+ * Casts any object into a PnlHmatObject
+ */
+#define PNL_HMAT_OBJECT(o) ((PnlHmatObject *) o)
+/**
+ * Casts any object into a PnlBandMatObject
+ */
+#define PNL_BANDMAT_OBJECT(o) ((PnlBandMatObject *) o)
+/**
+ * Casts any object into a PnlTridiagMatObject
+ */
+#define PNL_TRIDIAGMAT_OBJECT(o) ((PnlTridiagMatObject *) o)
+/**
+ * Casts any object into a PnlBasis
+ */
+#define PNL_BASIS_OBJECT(o) ((PnlBasis *) o)
+/**
+ * Casts any object into a PnlRng
+ */
+#define PNL_RNG_OBJECT(o) (o)
+
+/**
  * Returns the name of the type of any object inheriting from PnlObject
  */
 #define PNL_GET_TYPENAME(o) (((PnlObject *) o)->label)
@@ -83,10 +112,16 @@ struct _PnlObject
 {
   PnlType type; /*!< a unique integer id */
   const char *label; /*!< a string identifier (for the moment not useful) */
-  PnlType parent_type;
+  PnlType parent_type; /*!< the identifier of the parent object is any,
+                          otherwise parent_type=id */
 };
 
 extern PnlObject* pnl_object_new (PnlType type);
+
+extern void pnl_message_on ();
+extern void pnl_message_off ();
+extern int pnl_message_is_on ();
+
 
 /*@}*/
 

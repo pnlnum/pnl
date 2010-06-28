@@ -51,6 +51,7 @@ struct _PnlVectObject
 };
   
 extern PnlVectObject* pnl_vect_object_new ();
+extern int pnl_vect_object_resize(PnlVectObject * v, int size);
 
 #include "pnl_vector_double.h"
 #include "pnl_vector_complex.h"

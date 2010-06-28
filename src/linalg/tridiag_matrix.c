@@ -17,7 +17,7 @@
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
 
-  
+
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -34,23 +34,23 @@ static double __op_minus(double a, double b) { return a-b; }
 static double __op_mult(double a, double b) { return a*b; }
 static double __op_div(double a, double b) { return a/b; }
 
-extern int C2F(dlagtm)(char *trans, int *n, int *nrhs, double *alpha, 
+extern int C2F(dlagtm)(char *trans, int *n, int *nrhs, double *alpha,
                        double *dl, double *d, double *du, double *x,
                        int *ldx, double *beta, double *b, int *ldb);
-extern int C2F(dgtsv)(int *n, int *nrhs, double *dl, double *d, double *du, 
+extern int C2F(dgtsv)(int *n, int *nrhs, double *dl, double *d, double *du,
                        double *b, int *ldb, int *info);
 
 /**
  * Solves a tridiagonal system defined by matrix whose three diagonals are
- * defined by three values. 
+ * defined by three values.
  * @param low the double value of M(i,i-1)
  * @param diag the double value of M(i,i)
  * @param up the double value of M(i,i+1)
  * @param rhs the right and side member of the system
  * @param lhs contains the solution on exit
  */
-void pnl_progonka(const double low, 
-                  const double diag, const double up, 
+void pnl_progonka(const double low,
+                  const double diag, const double up,
                   const PnlVect * rhs,
                   PnlVect * lhs)
 {
@@ -108,7 +108,7 @@ PnlTridiagMat* pnl_tridiag_mat_new()
 {
   PnlTridiagMat *o;
   if ( (o = (PnlTridiagMat *) pnl_tridiag_mat_object_new ()) == NULL) return NULL;
-  o->object.parent_type = PNL_TYPE_TRIDIAG_MATRIX_DOUBLE;
+  o->object.type = PNL_TYPE_TRIDIAG_MATRIX_DOUBLE;
   o->object.label = pnl_tridiag_mat_label;
   return o;
 }
@@ -129,7 +129,7 @@ PnlTridiagMat* pnl_tridiag_mat_create(int size)
       if((o->DU=malloc((size-1)*sizeof(double)))==NULL) return NULL;
       if((o->DL=malloc((size-1)*sizeof(double)))==NULL) return NULL;
     }
-  return o;  
+  return o;
 }
 
 /**
@@ -143,7 +143,7 @@ PnlTridiagMat* pnl_tridiag_mat_create_from_two_double(int size, double x, double
 {
   PnlTridiagMat *mat;
   int i;
-  
+
   if ((mat=pnl_tridiag_mat_create(size))==NULL) return NULL;
 
   for ( i=0 ; i<size-1 ; i++ )
@@ -159,7 +159,7 @@ PnlTridiagMat* pnl_tridiag_mat_create_from_two_double(int size, double x, double
 /**
  * creates a PnlTridiagMat
  * @param size number of rows
- * @param x used to fill the three diagonals 
+ * @param x used to fill the three diagonals
  * @return a PnlTridiagMat pointer
  */
 PnlTridiagMat* pnl_tridiag_mat_create_from_double(int size, double x)
@@ -178,9 +178,9 @@ PnlTridiagMat* pnl_tridiag_mat_create_from_double(int size, double x)
 PnlTridiagMat* pnl_tridiag_mat_create_from_ptr(int size, const double* DL, const double* D, const double* DU)
 {
   PnlTridiagMat *v;
-  
+
   if ((v=pnl_tridiag_mat_create(size))==NULL) return NULL;
-  
+
   memcpy(v->D, D, v->size*sizeof(double));
   memcpy(v->DU, DU, (v->size-1)*sizeof(double));
   memcpy(v->DL, DL, (v->size-1)*sizeof(double));
@@ -195,7 +195,7 @@ PnlTridiagMat* pnl_tridiag_mat_create_from_ptr(int size, const double* DL, const
 void pnl_tridiag_mat_clone(PnlTridiagMat *clone, const PnlTridiagMat *T)
 {
   pnl_tridiag_mat_resize (clone, T->size);
-  
+
   memcpy(clone->D, T->D, T->size*sizeof(double));
   memcpy(clone->DU, T->DU, (T->size-1)*sizeof(double));
   memcpy(clone->DL, T->DL, (T->size-1)*sizeof(double));
@@ -214,32 +214,32 @@ PnlTridiagMat* pnl_tridiag_mat_copy(const PnlTridiagMat *T)
 }
 
 
-/** 
+/**
  * Creates a tridiagonal matrix from a standard matrix by only taking into
  * account the three main diagonals.
  *
- * @param mat a PnlMat 
+ * @param mat a PnlMat
  * @return a PnlTridiagMat
  */
-PnlTridiagMat* pnl_tridiag_mat_create_from_mat (const PnlMat * mat) 
+PnlTridiagMat* pnl_tridiag_mat_create_from_mat (const PnlMat * mat)
 {
-  PnlTridiagMat *M; 
-  int i; 
-  CheckIsSquare (mat); 
+  PnlTridiagMat *M;
+  int i;
+  CheckIsSquare (mat);
 
   M=pnl_tridiag_mat_create(mat->m);
-  for (i=0; i<mat->m-1; i++) 
-    { 
-      M->DU[i] = pnl_mat_get (mat, i, i+1); 
+  for (i=0; i<mat->m-1; i++)
+    {
+      M->DU[i] = pnl_mat_get (mat, i, i+1);
       M->D[i] = pnl_mat_get (mat, i, i);
-      M->DL[i] = pnl_mat_get (mat, i+1, i); 
+      M->DL[i] = pnl_mat_get (mat, i+1, i);
     }
-  M->D[mat->m-1] = pnl_mat_get (mat, mat->m-1, mat->m-1); 
-  return M; 
+  M->D[mat->m-1] = pnl_mat_get (mat, mat->m-1, mat->m-1);
+  return M;
 }
 
 /**
- * Creates a standard matrix from a tridiagonal matrix. 
+ * Creates a standard matrix from a tridiagonal matrix.
  * All elements but those of the diagonal, upper diagonal and lower diagonal are set to 0
  * @param T a PnlTridiagMat
  * @return a PnlMat
@@ -263,7 +263,7 @@ PnlMat* pnl_tridiag_mat_to_mat (const PnlTridiagMat * T)
 /**
  * Frees a PnlTridiagMat
  *
- * @param v a PnlTridiagMat**. 
+ * @param v a PnlTridiagMat**.
  */
 void pnl_tridiag_mat_free(PnlTridiagMat **v)
 {
@@ -288,7 +288,7 @@ void pnl_tridiag_mat_free(PnlTridiagMat **v)
  * @param v : a pointer to an already existing PnlTridiagMat (size
  * must be initialised)
  * @param size : new nb rows
- * @return OK or FAIL. When returns OK, the matrix is changed. 
+ * @return OK or FAIL. When returns OK, the matrix is changed.
  */
 int pnl_tridiag_mat_resize(PnlTridiagMat *v, int size)
 {
@@ -310,7 +310,7 @@ int pnl_tridiag_mat_resize(PnlTridiagMat *v, int size)
   if (v->D==NULL)
     {
       if (((v->D = malloc(v->size*sizeof(double)))==NULL)
-          || ((v->DU = malloc((v->size-1)*sizeof(double)))==NULL) 
+          || ((v->DU = malloc((v->size-1)*sizeof(double)))==NULL)
           || ((v->DL = malloc((v->size-1)*sizeof(double)))==NULL))
         return FAIL;
     }
@@ -365,7 +365,7 @@ double pnl_tridiag_mat_get(const PnlTridiagMat *self, int d, int up)
  * Returns the address of self[d,d+up] to be used as a lvalue
  *
  * @param self : a PnlTridiagMat
- * @param d : index of element 
+ * @param d : index of element
  * @param up : index of diagonale
  * @return  &(self[d,d+up])
  */
@@ -404,9 +404,9 @@ void pnl_tridiag_mat_map_inplace(PnlTridiagMat *lhs, double(*f)(double))
  *
  * @param lhs : each component lhs(i) contains f(lhs(i),rhs(i))
  * @param rhs : right hand side vector
- * @param f   : real function 
+ * @param f   : real function
  */
-void pnl_tridiag_mat_map_tridiag_mat_inplace(PnlTridiagMat *lhs, const PnlTridiagMat *rhs, 
+void pnl_tridiag_mat_map_tridiag_mat_inplace(PnlTridiagMat *lhs, const PnlTridiagMat *rhs,
                                    double(*f)(double,double))
 {
   int i, size;
@@ -466,7 +466,7 @@ void pnl_tridiag_mat_minus_tridiag_mat(PnlTridiagMat *lhs, const PnlTridiagMat *
 {
   pnl_tridiag_mat_map_tridiag_mat_inplace(lhs, rhs, __op_minus);
 }
-  
+
 /**
  * in-place matrix scalar addition
  *
@@ -501,7 +501,7 @@ void pnl_tridiag_mat_minus_double(PnlTridiagMat *lhs, double x)
 void pnl_tridiag_mat_mult_double(PnlTridiagMat *lhs, double x)
 {
   __pnl_tridiag_mat_apply_op(lhs, x, __op_mult);
-}  
+}
 
 
 /**
@@ -604,7 +604,7 @@ void pnl_tridiag_mat_fprint (FILE *fic, const PnlTridiagMat *M)
  *
  * @param M a PnlTridiagMat pointer.
  */
-void pnl_tridiag_mat_print (const PnlTridiagMat *M) 
+void pnl_tridiag_mat_print (const PnlTridiagMat *M)
 {
   pnl_tridiag_mat_fprint(stdout, M);
 }
@@ -613,7 +613,7 @@ void pnl_tridiag_mat_print (const PnlTridiagMat *M)
 /**
  * solves the linear system A x = b
  *
- * @param A a PnlTridiagMat 
+ * @param A a PnlTridiagMat
  * @param b right hand side member. On exit b contains the solution x
  * @return FAIL or OK
  */
@@ -634,9 +634,9 @@ int pnl_tridiag_mat_syslin_inplace (const PnlTridiagMat *A, PnlVect *b)
 /**
  * solves the linear system A x = b
  *
- * @param A a PnlTridiagMat 
+ * @param A a PnlTridiagMat
  * @param x contains the solution on exit
- * @param b right hand side member. 
+ * @param b right hand side member.
  * @return FAIL or OK
  */
 int pnl_tridiag_mat_syslin (PnlVect *x, const PnlTridiagMat *A, const PnlVect *b)
@@ -659,14 +659,14 @@ double pnl_tridiag_mat_scalar_prod (const PnlVect *x, const PnlTridiagMat *T,con
   int n, k;
   double sum;
 
-  PNL_CHECK (T->size != y->size || x->size != T->size, "size mismatched", "tridiag_scalar_prod"); 
+  PNL_CHECK (T->size != y->size || x->size != T->size, "size mismatched", "tridiag_scalar_prod");
   n = x->size;
   sum = 0.;
 
   for ( k=1 ; k<n-1 ; k++ )
     {
-      sum += PNL_GET(x,k) * (T->DL[k-1] * PNL_GET(y,k-1) + T->D[k] * PNL_GET(y,k) + 
-                             T->DU[k] * PNL_GET(y,k+1)); 
+      sum += PNL_GET(x,k) * (T->DL[k-1] * PNL_GET(y,k-1) + T->D[k] * PNL_GET(y,k) +
+                             T->DU[k] * PNL_GET(y,k+1));
     }
   sum += PNL_GET(x,0) * (T->D[0] * PNL_GET(y,0) + T->DU[0] * PNL_GET(y,1) );
   sum += PNL_GET(x, n-1) * (T->DL[n-2] * PNL_GET(y,n-2) + T->D[n-1] * PNL_GET(y, n-1));
@@ -674,7 +674,7 @@ double pnl_tridiag_mat_scalar_prod (const PnlVect *x, const PnlTridiagMat *T,con
 }
 
 /**
- * compute y=l * A * x + b * y 
+ * compute y=l * A * x + b * y
  *
  * @param l  : double.
  * @param A : PnlTridiagMat
@@ -694,19 +694,19 @@ void pnl_tridiag_mat_lAxpby (double l, const PnlTridiagMat *A, const PnlVect *x,
     }
   else
     {
-      if (l == 0. || l == 1. || l == 1.) 
+      if (l == 0. || l == 1. || l == 1.)
         {
           alpha = l;
         }
       else
         {
-          b /= l; 
+          b /= l;
         }
-      if ( b == 1. || b == 1.) 
+      if ( b == 1. || b == 1.)
         {
           beta = b;
         }
-      else 
+      else
         {
           beta = 1.;
           pnl_vect_mult_double (y, b);
@@ -717,7 +717,7 @@ void pnl_tridiag_mat_lAxpby (double l, const PnlTridiagMat *A, const PnlVect *x,
   ldb = A->size;
   nrhs = 1;
   alpha = 1;
-  C2F(dlagtm)("N", &n, &nrhs, &alpha, A->DL, A->D, 
+  C2F(dlagtm)("N", &n, &nrhs, &alpha, A->DL, A->D,
               A->DU, x->array, &n, &beta, y->array, &n);
   if (l != 0. && l != 1.&& l != 1.)
     {

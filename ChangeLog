@@ -1,11 +1,21 @@
-17/05/10 <jerome.lelong@gmail.com>
+25-06-2010 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* configure.in modified to use Blac & Lapack froim Vectlib on Mac OS X
+	* f2c.h modified to ensure Fortran integer type is always mapped
+	to int even on x86_64
+
+
+09-06-2010 Ismail Laachir <ismail.laachir@inria.fr>
+
+	* Optimization routine for minimization problems under inequality
+	constraints
+
+17-05-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* Multidimensional root finding based on Minpack. It provides two new
-	functions
-		pnl_root_fsolve and pnl_root_lsq
+	functions pnl_root_fsolve and pnl_root_lsq
 
-
-05/05/10 <jerome.lelong@gmail.com>
+05-05-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* some uniformisation in names for PnlFunc and the EVAL macro
 		PnlFunc --> PNL_EVAL_FUNC
@@ -15,18 +25,15 @@
 
 	  The order of the arguments in PnlRnFuncRm has been changed
 
-
-
-
-04/05/10 <jerome.lelong@gmail.com>
+04-05-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* Numerical integration now relies on routines from QuadPack
 		qng, qage, qagi, qags.
 	  The former pnl_integration_GK routine is replaced by the QNG routine
 	  from QuadPack.
 
-22/03/10 <jerome.lelong@gmail.com>
-	
+22-03-2010 Jérôme Lelong <jerome.lelong@gmail.com>
+
 	* A top level class PnlObject added to simulate some inheritance.  All
 	objects used in the Pnl now inherit from PnlObject and implement a
 	pnl_xxx_new which basically creates an empty object with all its fields
@@ -34,12 +41,12 @@
 	The function pnl_object_new can create any type of object returned as a
 	PnlObject *.
 
-21/03/10 <jerome.lelong@gmail.com>
+21-03-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* Functions added to emulate Scilab's find function
 		pnl_vect_find, pnl_vect_find_vect
 		pnl_mat_find, pnl_mat_find_mat
-	
+
 	* Extraction of non contiguous blocks of a vector or matrix
 		pnl_vect_extract_subvect, pnl_vect_create_subvect
 		pnl_vect_extract_submat, pnl_vect_create_submat
@@ -51,26 +58,26 @@
 	 use the above functions instead.
 	 Idem for tridiag_mat and band_mat
 
-08/03/10 <jerome.lelong@gmail.com>
+08-03-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* Prefix pnl_iterationbase renamed pnl_iteration_base to follow the coding
 	conventions.
 
-07/03/10 <jerome.lelong@gmail.com>
+07-03-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* Possibility to create bases by specifying the total degree
 		pnl_basis_create_from_degree
 		pnl_basis_create_from_tensor
 
 	* All syslin related routines rely on Blas & Lapack
-	
+
 	* all header files are surrounded by the preprocessor conditionals
 		#ifndef _PNL_HEADER_NAME_H
 		#define _PNL_HEADER_NAME_H
 		...
 		#endif /* _PNL_HEADER_NAME_H */
 
-06/03/10 <jerome.lelong@gmail.com>
+06-03-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* a few functions have been renamed because their names did not follow the
 	overall conventions
@@ -80,7 +87,7 @@
 		pnl_mat_wrap_row			--> pnl_vect_wrap_mat_row
 		pnl_vect_create_wrap_array  --> pnl_vect_wrap_array
 		pnl_mat_create_wrap_array   --> pnl_mat_wrap_array
-		pnl_vect_create_wrap_subvect_with_last --> pnl_vect_wrap_subvect_with_last	
+		pnl_vect_create_wrap_subvect_with_last --> pnl_vect_wrap_subvect_with_last
 		pnl_bandmat_map_map         --> pnl_bandmat_map_bandmat
 
 	* uint based objects removed.
@@ -90,19 +97,19 @@
 
 	* Special functions always begin in pnl_sf
 
-04/03/10 <jerome.lelong@gmail.com>
+04-03-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* New PnlBasis implementation to allow mutlivariate polynomial regression
 	witohut any limitation on the numbers of basis functions used
 
-03/03/10 <jerome.lelong@gmail.com>
+03-03-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* Makeuser improved to handle the compilation of several executables
 
-28/02/10 <jerome.lelong@gmail.com>
+28-02-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* New implementation of band matrices compliant with Lapack
 
-24/02/10 <jerome.lelong@gmail.com>
+24-02-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* tridiag matrices recoded in a Lapack compliant format

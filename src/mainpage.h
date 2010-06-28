@@ -1,6 +1,7 @@
 
 /**
    @mainpage Pnl
+   @version 1.2
    @author Jérôme Lelong (2007 - 2010)
    @author David Pommier (2007 - Apr. 2009)
  
@@ -18,9 +19,12 @@
    - Laplace Inversion
    - Least-Squares fitting
    - Linear Algebra
+   - MPI bindings
+   - Multidimensional root Finding
+   - Multivariate polynomial regression
    - Numerical Integration
+   - Optimization with inequality contraints
    - Random Generators
-   - Root Finding
    - Sorting
    - Special Functions
 

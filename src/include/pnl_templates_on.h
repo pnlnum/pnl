@@ -43,7 +43,7 @@
 #define LSHORT _complex
 #define SHORT_REAL
 #define ATOMIC double
-#define BASE_TYPE DOUBLE
+#define BASE_TYPE COMPLEX
 #define MULTIPLICITY 2
 #define FP 1
 #define IN_FORMAT "%lf"

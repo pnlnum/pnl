@@ -19,9 +19,16 @@
 
 
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <ctype.h>
+#include <stdarg.h>
 
 #include "config.h"
+#include "pnl_mathtools.h"
 #include "pnl_matrix.h"
+#include "pnl_internals.h"
 
 static char pnl_matrix_label[] = "PnlMatObject";
 static char pnl_hmatrix_label[] = "PnlHmatObject";
@@ -46,6 +53,57 @@ PnlMatObject* pnl_mat_object_new ()
 }
 
 /**
+ * Resizes a PnlMatObject.  If the new size is smaller than the current one, no
+ * memory is freed. If the new size is larger than the current mem_size, a new
+ * pointer is allocated. The old data are kept.
+ *
+ * @param M : a pointer to an already existing PnlMatObject 
+ * @param m : new nb rows
+ * @param n : new nb columns
+ *
+ * @return OK or FAIL. When returns OK, the matrix is changed. 
+ */
+int pnl_mat_object_resize(PnlMatObject *M, int m, int n)
+{
+  int mn;
+  size_t sizeof_base;
+  mn = m*n;
+  if (M->owner == 0) return OK;
+  if (mn < 0) return FAIL;
+  if (mn == 0) /* free array */
+    {
+      M->m = M->n = M->mn = M->mem_size = 0;
+      if (M->array != NULL) { free(M->array); M->array = NULL; }
+      return OK;
+    }
+
+  if (M->mem_size >= mn) 
+    {
+      /* If the new size is smaller, we do not reduce the size of the
+         allocated block. It may change, but it may allow to grow the matrix
+         quicker */
+      M->m=m; M->n=n; M->mn = mn;
+      return OK;
+    }
+
+  /* Now, M->mem_size < mn */
+  M->m = m; M->n = n;
+  M->mn = M->mem_size = mn;
+  switch (PNL_GET_TYPE(M))
+    {
+    case PNL_TYPE_MATRIX_DOUBLE : sizeof_base = sizeof(double);
+      break;
+    case PNL_TYPE_MATRIX_COMPLEX : sizeof_base = sizeof(dcomplex);
+      break;
+    case PNL_TYPE_MATRIX_INT : sizeof_base = sizeof(int);
+      break;
+    }
+  if ((M->array=realloc(M->array,mn*sizeof_base)) == NULL) return FAIL;
+  return OK;
+}
+
+
+/**
  * Creates a PnlHmatObject which is the parent type of all hyper-matrices
  */
 PnlHmatObject* pnl_hmat_object_new ()
@@ -61,6 +119,70 @@ PnlHmatObject* pnl_hmat_object_new ()
   o->object.label = pnl_hmatrix_label;
   return o;
 }
+
+/**
+ * resizes a PnlHmatObject.
+ *
+ * If the new size is smaller than the current one, no
+ * memory is free. If the new size is larger than the
+ * current one, more space is allocated. Note that for the
+ * sake of efficiency the old data are not copied.
+ *
+ * @param H : a pointer to an already existing PnlHmatObject
+ * @param ndim : new nb dimensions
+ * @param dims : new pointer to the dimensions array
+ *
+ * @return OK or FAIL. When returns OK, the hmatrix is changed. 
+ */
+int pnl_hmat_object_resize(PnlHmatObject *H, int ndim, const int *dims)
+{
+  size_t sizeof_base;
+  int i, s=1;
+  const int *ptr;
+  ptr=dims;
+  for(i=0;i<ndim;i++) { s*=(*ptr); ptr++; }
+
+  if (H->mn == s) /*nothing to do, just adjust ndim and dims*/
+    {
+      H->ndim=ndim;
+      if(H->ndim> ndim) if ((H->dims=realloc(H->dims,sizeof(int)*ndim))==NULL) return FAIL;
+      memcpy(H->dims, dims, ndim*sizeof(int));
+      return OK;
+    }
+  if (s< 0) return FAIL;
+  if (s==0) /* free array */
+    {
+      H->ndim =  H->mn = 0;
+      H->dims=NULL;
+      free(H->array); H->array = NULL;
+      return OK;
+    }
+  H->ndim=ndim; H->mn=s;
+  if ((H->dims=realloc(H->dims,sizeof(int)*ndim))==NULL) return FAIL;
+  memcpy(H->dims, dims, ndim*sizeof(int));
+
+  switch (PNL_GET_TYPE (H))
+    {
+    case PNL_TYPE_HMATRIX_DOUBLE : sizeof_base = sizeof(double);
+      break;
+    case PNL_TYPE_HMATRIX_COMPLEX : sizeof_base = sizeof(dcomplex);
+      break;
+    case PNL_TYPE_HMATRIX_INT : sizeof_base = sizeof(int);
+      break;
+    }
+  if (H->array==NULL)
+    {
+      if ((H->array = malloc(H->mn*sizeof_base))==NULL)
+        return FAIL;
+    }else
+    {
+      if ((H->array = realloc(H->array,H->mn*sizeof_base))==NULL)
+        return FAIL;
+    }
+  return OK;
+}
+
+
 typedef int(*cmp_func)(const void *, const void *);
 
 #define BASE_DOUBLE

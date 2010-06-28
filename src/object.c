@@ -91,3 +91,11 @@ PnlObject* pnl_object_new (PnlType type)
     }
   return o;
 }
+
+static int MessageIsOn = FALSE;
+void pnl_message_on () { MessageIsOn = TRUE; }
+void pnl_message_off () { MessageIsOn = FALSE; }
+int pnl_message_is_on ()
+{
+  return ( MessageIsOn == TRUE ) ? TRUE : FALSE;
+}

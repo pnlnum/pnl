@@ -105,7 +105,9 @@ struct _PnlHmatObject
 } ;
 
 extern PnlMatObject* pnl_mat_object_new ();
+extern int pnl_mat_object_resize(PnlMatObject *M, int m, int n);
 extern PnlHmatObject* pnl_hmat_object_new ();
+extern int pnl_hmat_object_resize(PnlHmatObject *H, int ndim, const int *dims);
 
 #include "pnl_matrix_double.h"
 #include "pnl_matrix_complex.h"

@@ -6,5 +6,5 @@ do: doxy
 doxy:
 	(cd ../src; \
 	cat linalg/pnl_TMatrix.c linalg/pnl_TVector.c > linalg/pnl_Talltemplates.c; \
-	doxygen ../doc/libpnldoxy.rc \
-	rm -f /linalg/pnl_Talltemplates.c; )
+	doxygen ../doc/libpnldoxy.rc ; \
+	rm -f linalg/pnl_Talltemplates.c; )

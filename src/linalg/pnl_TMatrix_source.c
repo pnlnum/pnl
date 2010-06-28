@@ -25,15 +25,6 @@
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <ctype.h>
-#include <stdarg.h>
-
-#include "pnl_mathtools.h"
-
 
 /***************************
  *** PnlMat functions ***
@@ -60,6 +51,26 @@ TYPE(PnlMat) * FUNCTION(pnl_mat,new)()
   FUNCTION(pnl_mat,init)(o);
   return o;
 }
+
+
+/**
+ * Test if 2 matrices are equal
+ *
+ * @param M1 a matrix
+ * @param M2 a matrix
+ * @return  TRUE or FALSE
+ */
+int FUNCTION(pnl_mat,eq)(const TYPE(PnlMat) *M1, const TYPE(PnlMat) *M2)
+{
+  int i;
+  if ( (M1->m != M2->m) || (M1->n != M2->n) ) return FAIL;
+  for ( i=0 ; i<M1->mn ; i++ )
+    {
+      if ( NEQ(M1->array[i],M2->array[i]) ) return FAIL;
+    }
+  return OK;
+}
+
 
 /**
  * Creates a PnlMat
@@ -295,31 +306,7 @@ void FUNCTION(pnl_mat,clone)(TYPE(PnlMat) *clone, const TYPE(PnlMat) *M)
  */
 int FUNCTION(pnl_mat,resize)(TYPE(PnlMat) *M, int m, int n)
 {
-  int mn;
-  mn = m*n;
-  if (M->owner == 0) return OK;
-  if (mn < 0) return FAIL;
-  if (mn == 0) /* free array */
-    {
-      M->m = M->n = M->mn = M->mem_size = 0;
-      if (M->array != NULL) { free(M->array); M->array = NULL; }
-      return OK;
-    }
-
-  if (M->mem_size >= mn) 
-    {
-      /* If the new size is smaller, we do not reduce the size of the
-         allocated block. It may change, but it may allow to grow the matrix
-         quicker */
-      M->m=m; M->n=n; M->mn = mn;
-      return OK;
-    }
-
-  /* Now, M->mem_size < mn */
-  if ((M->array = realloc(M->array, mn * sizeof(BASE))) == NULL) return FAIL;
-  M->m = m; M->n = n;
-  M->mn = M->mem_size = mn;
-  return OK;
+  return pnl_mat_object_resize (PNL_MAT_OBJECT(M), m, n);
 }
 
 /**
@@ -1889,21 +1876,15 @@ TYPE(PnlHmat)* FUNCTION(pnl_hmat,create)(int ndim, const int *dims)
   TYPE(PnlHmat) *H;
   int i;
   int s=1;
-  const int *ptr;
-  ptr=dims;
-  if((H=malloc(sizeof(TYPE(PnlHmat))))==NULL)
-    return NULL;
-  H->ndim=ndim;
+  if ((H=FUNCTION(pnl_hmat,new)())==NULL) return NULL;
+  H->ndim = ndim;
   if (ndim>0)
     {
-      if ((H->dims=malloc(sizeof(int)*ndim))==NULL)
-        return NULL;
+      if ((H->dims=malloc(sizeof(int)*ndim))==NULL) return NULL;
       memcpy(H->dims, dims, ndim*sizeof(int));
-      for(i=0;i<ndim;i++)
-        { s*=(*ptr); ptr++;}
+      for ( i=0 ; i<ndim ; i++ ) { s *= dims[i]; }
       H->mn=s;
-      if((H->array=malloc(H->mn*sizeof(BASE)))==NULL)
-        return NULL;
+      if((H->array=malloc(H->mn*sizeof(BASE)))==NULL) return NULL;
     }
   else
     {
@@ -2001,41 +1982,7 @@ void FUNCTION(pnl_hmat,clone)(TYPE(PnlHmat) *clone, const TYPE(PnlHmat) *H)
  */
 int FUNCTION(pnl_hmat,resize)(TYPE(PnlHmat) *H, int ndim, const int *dims)
 {
-  int i;
-  int s=1;
-  const int *ptr;
-  ptr=dims;
-  for(i=0;i<ndim;i++) { s*=(*ptr); ptr++; }
-
-  if (H->mn == s) /*nothing to do, just adjust ndim and dims*/
-    {
-      H->ndim=ndim;
-      if(H->ndim> ndim) if ((H->dims=realloc(H->dims,sizeof(int)*ndim))==NULL) return FAIL;
-      memcpy(H->dims, dims, ndim*sizeof(int));
-      return OK;
-    }
-  if (s< 0) return FAIL;
-  if (s==0) /* free array */
-    {
-      H->ndim =  H->mn = 0;
-      H->dims=NULL;
-      free(H->array); H->array = NULL;
-      return OK;
-    }
-
-  H->ndim=ndim; H->mn=s;
-  if ((H->dims=realloc(H->dims,sizeof(int)*ndim))==NULL) return FAIL;
-  memcpy(H->dims, dims, ndim*sizeof(int));
-  if (H->array==NULL)
-    {
-      if ((H->array = malloc(H->mn*sizeof(BASE)))==NULL)
-        return FAIL;
-    }else
-    {
-      if ((H->array = realloc(H->array,H->mn*sizeof(BASE)))==NULL)
-        return FAIL;
-    }
-  return OK;
+  return pnl_hmat_object_resize (PNL_HMAT_OBJECT(H), ndim, dims);
 }
 
 
@@ -2148,18 +2095,18 @@ void FUNCTION(pnl_hmat,print)(const TYPE(PnlHmat) *H)
   ptr=H->dims+(d-1);/*last cell of H->dims */
   nd=*(ptr);
   nd_1=*(ptr-1);
-  if ((index=malloc((d-2)*sizeof(int)))==NULL)
-    abort();
+  if ((index=malloc((d-2)*sizeof(int)))==NULL) abort();
   for (i=0; i<d-2; i++) index[i]=0;
-  while(s<H->mn)
-    { printf("cell=[ ");
-      for(i=0;i<d-2;i++) printf("%d ",index[i]);
+  while (s<H->mn)
+    {
+      printf("cell=[ ");
+      for ( i=0 ; i<d-2 ; i++) printf("%d ",index[i]);
       printf("]\n");
-      for (i=0;i<nd_1;i++)
+      for ( i=0 ; i<nd_1 ; i++)
         {
-          for (j=0;j<nd;j++)
+          for (j=0 ; j<nd ;j++)
             {
-              printf(OUT_FORMAT ,OUT_PUT_FORMAT(*lptr));
+              printf(OUT_FORMAT ,OUT_PUT_FORMAT(*lptr)); printf (" ");
               lptr++;s++;
             }
           printf("\n");
@@ -2172,8 +2119,7 @@ void FUNCTION(pnl_hmat,print)(const TYPE(PnlHmat) *H)
             {
               while(l>=0 && index[l]==H->dims[l]-1)
                 {index[l]=0; l--;}
-              if (l==-1 && s != H->mn)
-                abort();
+              if (l==-1 && s != H->mn) abort();
               if (l>=0)
                 {
                   (index[l])++; l=d-3;
