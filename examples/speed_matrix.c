@@ -234,15 +234,12 @@ void speed_dgemm ()
   
   printf ("\n");
 
-#ifdef HAVE_BLAS
   pnl_mat_clone (C, CC);
   start = clock();
   dgemm_ ("N", "N", &A->m,&A->m,&A->m, &alpha, A->array, &A->m, B->array, &B->m,&beta, C->array,&C->m);
   end = clock();
   cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
   printf("BLAS dgemm time NN : %f\n", cpu_time_used);
-
-#endif
   
   pnl_mat_clone (C, CC);
   start = clock();
@@ -326,14 +323,12 @@ void speed_dgemv ()
   cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
   printf("pnl_mat_dgemv 'N' time : %f\n", cpu_time_used);
 
-#ifdef HAVE_BLAS
   pnl_vect_clone (y, yy);
   start = clock();
   dgemv_ ("N", &A->m,&A->m, &alpha, tA->array, &A->m, x->array, &inc, &beta, y->array, &inc);
   end = clock();
   cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
   printf("BLAS dgemv time 'N': %f\n", cpu_time_used);
-#endif
 
   pnl_vect_clone (y, yy);
   start = clock();
@@ -342,14 +337,12 @@ void speed_dgemv ()
   cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
   printf("pnl_mat_dgemv 'T' time : %f\n", cpu_time_used);
 
-#ifdef HAVE_BLAS
   pnl_vect_clone (y, yy);
   start = clock();
   dgemv_ ("T", &A->m,&A->m, &alpha, tA->array, &A->m, x->array, &inc, &beta, y->array, &inc);
   end = clock();
   cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
   printf("BLAS dgemv time 'T': %f\n", cpu_time_used);
-#endif
 
   pnl_mat_free (&A);
   pnl_mat_free (&tA);
@@ -462,7 +455,6 @@ static void speed_syslin_mat ()
   cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
   printf("pnl_mat_syslin_mat time : %f\n", cpu_time_used);
 
-#ifdef HAVE_LAPACK
   pnl_mat_clone (S, Scopy);
   pnl_mat_clone (B, Bcopy);
   start = clock();
@@ -483,7 +475,6 @@ static void speed_syslin_mat ()
   end = clock();
   cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
   printf("BLAS dposv mat time : %f \n", cpu_time_used);
-#endif
 
   pnl_vect_clone (v, vcopy);
   pnl_mat_clone (S, Scopy);
@@ -503,7 +494,6 @@ static void speed_syslin_mat ()
   cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
   printf("pnl_mat_chol_syslin time : %f\n", cpu_time_used);
 
-#ifdef HAVE_LAPACK
   nrhs = 1;
   pnl_vect_clone (v, vcopy);
   pnl_mat_clone (S, Scopy);
@@ -523,8 +513,6 @@ static void speed_syslin_mat ()
   end = clock();
   cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
   printf("BLAS dposv time : %f \n", cpu_time_used);
-
-#endif
   
   pnl_mat_clone (S, Scopy);
   start = clock();
@@ -542,9 +530,6 @@ static void speed_syslin_mat ()
   cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
   printf("pnl_mat_chol time : %f\n", cpu_time_used);
 
-
-  
-#ifdef HAVE_LAPACK
   nrhs = 1;
   pnl_mat_clone (S, Scopy);
   start = clock();
@@ -555,7 +540,6 @@ static void speed_syslin_mat ()
   cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
   printf("BLAS LU dgetrf time : %f \n", cpu_time_used);
 
-
   nrhs = 1;
   pnl_mat_clone (S, Scopy);
   start = clock();
@@ -563,7 +547,6 @@ static void speed_syslin_mat ()
   end = clock();
   cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
   printf("BLAS Chol dpotrf time : %f \n", cpu_time_used);
-#endif
 
   pnl_mat_free (&B);
   pnl_mat_free (&Bcopy);
