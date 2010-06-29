@@ -893,13 +893,13 @@ int pnl_object_mpi_recv (PnlObject *Obj, int src, int tag, MPI_Comm comm, MPI_St
 {
   int info, size=0, pos=0;
   char *buf = NULL;
-  info = MPI_Probe (0, tag, comm, status);
+  info = MPI_Probe (src, tag, comm, status);
   PNL_MPI_MESSAGE( info, "error in Probe.\n");
   info = MPI_Get_count (status, MPI_PACKED, &size);
   PNL_MPI_MESSAGE( info, "error in Get_count.\n");
   buf = malloc(size);
-  info = MPI_Recv (buf, size, MPI_PACKED, 0, tag, comm, status);
-  PNL_MPI_MESSAGE( info, "error in MPI_Get.\n");
+  info = MPI_Recv (buf, size, MPI_PACKED, src, tag, comm, status);
+  PNL_MPI_MESSAGE( info, "error in MPI_Recv.\n");
   info = pnl_object_mpi_unpack(Obj, buf, size, &pos, comm);
   free (buf);
   return info;
