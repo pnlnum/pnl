@@ -17,6 +17,7 @@ testpnl_LDFLAGS=@GSL_LIBS@
 if USE_MPI
 bin_PROGRAMS+=pnl-mpi
 pnl_mpi_SOURCES=mpibindings_test.c
+pnl_mpi_CFLAGS = @MPI_CFLAGS@
 pnl_mpi_LDADD=../src/libpnl.la
 endif
 

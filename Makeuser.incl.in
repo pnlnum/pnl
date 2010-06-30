@@ -1,3 +1,4 @@
+# -*- mode: Makefile -*-
 # vim: set filetype=make: 
 #-----------------------------------------------------------------
 # This file can be used to compile and link external files to the PNL 
@@ -18,6 +19,7 @@ CC = @CC@
 AM_CFLAGS = @AM_CFLAGS@
 SHELL = @SHELL@
 LIBTOOL = @LIBTOOL@
+MPI_CFLAGS=@MPI_CFLAGS@
 LN_S = @LN_S@
 INCLUDES = -I$(top_builddir)/include/pnl
 OTHERLIBS = -L$(top_builddir)/lib -lpnl -lm @LDFLAGS@
