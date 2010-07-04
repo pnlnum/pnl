@@ -769,7 +769,7 @@ void pnl_basis_print (const PnlBasis *B)
 }
 
 /**
- * Evaluates the i-th elements of the basis b at the point x
+ * Evaluates the i-th element of the basis b at the point x
  *
  * @param b a PnlBasis
  * @param x a C array containing the coordinates of the point at which to

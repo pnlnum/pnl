@@ -1,3 +1,7 @@
+28-06-2010 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* MPI bindings for handling PnlObjects natively
+
 25-06-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* configure.in modified to use Blac & Lapack froim Vectlib on Mac OS X
