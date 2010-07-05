@@ -1,1 +1,84 @@
-See the README file.
+            *************************
+            ** Installation of PNL **
+            *************************
+
+Depending on whether you are using an official release or the development
+version available using subversion from http://gforge.inria.fr/pnl, the
+installation differs. We describe here the different procedures.
+
+0. Dependencies
+
+    There are no required dependencies to compile PNL. However, the user
+    should know that :
+    - The Linear Algebra routines mainly rely on Blas & Lapack. If these
+    two libraries are not found on the machine, the versions shipped with
+    PNL are used. For better performances, one should consider to use
+    Atlas.
+    - When an MPI implementation is detected on the computer, some MPI
+    bindings are available which enable to natively handle PnlObjects.
+
+1. Official Releases
+
+    Just extract the tarball and change to the newly create directory named
+    pnl-XXX where XXX is the version number. Then, run the following
+    command
+    > ./configure
+    > make
+    > make install
+
+    Per default, the make install command installs the library where it has
+    been extracted. You can specify an other directory where to install the
+    library by specifying the option --prefix=/new/path/. The default
+    behaviour corresponds to --prefix=`pwd`
+
+    The configure script accepts several options, just run
+    > ./configure --help
+    to get a complete lists of options.
+
+2. Development version
+
+    We assume you have a complete checkout of the subversion trunk
+    repository. To compile this version, you need the following tools:
+
+        libtool
+        autoconf
+        automake
+
+    Run the following commands
+
+    > ./autogen.sh
+    > make
+    > make install
+
+    Per default, the make install command installs the library where it has
+    been extracted. You can specify an other directory where to install the
+    library by specifying the option --prefix=/new/path/. The default
+    behaviour corresponds to --prefix=`pwd`
+
+3. Building the documentation
+
+    Two different types of documentation are available :
+
+    - The user manual available both in PDF and HTML format, change to
+    directory man and issue
+        > make (to compile the PDF version, you need a latex compiler)
+        > make html (to compile ht html version, you need tex4ht)
+
+    - The internal documentation generated using Doxygen, go to directory
+    doc and run
+        > make (you need to have Doxygen installed)
+    
+4. For any versions
+
+    Once you have run the make install command, you will find the headers
+    of the library into prefix/include/pnl and the dynamic and static
+    versions of the library in prefix/lib.
+
+    An executable to test the features of the library can found in
+    prefix/bin
+
+
+
+If you encounter any problem or want to report some bug, contact 
+Jerome Lelong <jerome.lelong@gmail.com>
+
