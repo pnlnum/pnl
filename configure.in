@@ -315,7 +315,7 @@ AX_MPI([use_mpi=1], [use_mpi=0])
 
 # We will use CC and not MPICC to compile and link, so we need
 # to tweak MPI_LIBS
-if test $use_mpi; then
+if test $use_mpi = 1; then
    MPI_CFLAGS=`$MPICC --showme:compile`
    if test "x " = x"$MPILIBS"; then
       MPI_LIBS=`$MPICC --showme:link`
@@ -446,7 +446,7 @@ echo "C options..............:" $AM_CFLAGS $CFLAGS
 echo "$user_set_cflags"
 echo "linker flags...........:" $LDFLAGS 
 echo "installation prefix....:" $prefix
-if test USE_MPI; then
+if test $use_mpi = 1; then
   echo "MPI detected..........:"
   echo "   MPICC..............:" $MPICC
   echo "   MPI_CFLAGS.........:" $MPI_CFLAGS
