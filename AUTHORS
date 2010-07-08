@@ -1,27 +1,28 @@
 Jérôme Lelong <jerome.lelong@gmail.com> (2007 - 2010)
 
-   - Overall design
-   - Linear algebra
-   - hyper matrices
-   - Matrix matrix multiplication
-   - Tridiagonal matrices
    - Band matrices
-   - Special functions
    - FFT
    - Laplace inversion
-   - Multivariate polynomial regression
-   - Random number generators
+   - Linear algebra
+   - Matrix matrix multiplication
    - Multidimensional root finding
+   - Multivariate polynomial regression
+   - MPI Bindings
    - Numerical integration
+   - Overall design
+   - Random number generators
    - Sorting
+   - Special functions
+   - Tridiagonal matrices
+   - hyper matrices
 
 David Pommier <pommier.david@gmail.com> (2007 - April 2009)
 
-   - Matrix matrix multiplication
-   - Iterative solvers for linear systems
-   - Tridiagonal matrices
    - Financial functions
+   - Iterative solvers for linear systems
+   - Matrix matrix multiplication
    - One dimensional root finding
+   - Tridiagonal matrices
 
 Contributions from
 
