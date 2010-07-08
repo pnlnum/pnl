@@ -26,6 +26,7 @@ DIE=0
 
 (grep "^AM_PROG_LIBTOOL" $srcdir/configure.in >/dev/null) && {
   (libtool --version) < /dev/null > /dev/null 2>&1 || 
+  (libtool -V) < /dev/null > /dev/null 2>&1 || 
   (glibtool --version) < /dev/null > /dev/null 2>&1 || {
     echo
     echo "**Error**: You must have \`libtool' installed."
@@ -69,7 +70,7 @@ aclocalinclude="$ACLOCAL_FLAGS"
 if grep "^AM_PROG_LIBTOOL" configure.in >/dev/null; then
 	if test -z "$NO_LIBTOOLIZE" ; then 
 	    echo "Running libtoolize..."
-	    libtoolize --force --copy
+        glibtoolize --force --copy || libtoolize --force --copy
 	fi
 fi
 echo "Running aclocal  ..."
