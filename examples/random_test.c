@@ -28,7 +28,7 @@ static double square (double x) { return x*x;}
 static void test_pnl_vect_rand()
 {
     int samples = 10000;
-    int type_generator = 8;
+    int type_generator = PNL_RNG_TAUSWORTHE;
     double sum;
     int i;
     PnlVect *G;
