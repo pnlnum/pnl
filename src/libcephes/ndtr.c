@@ -415,7 +415,7 @@ double erfc(double a)
 
   if (isnan(a)) {
     mtherr("erfc", DOMAIN);
-    return (x);
+    return (a);
   }
 
   if( a < 0.0 )
