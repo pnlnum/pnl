@@ -9,7 +9,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include "pnl_vector.h"
 #include "pnl_perm.h"
 
 
@@ -36,19 +35,6 @@ extern "C" {
  */
 /*@{*/
 
-struct _PnlMat{
-  /** 
-   * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlMatXXX pointer to be cast to a PnlObject
-   */
-  PnlObject object; 
-  int m; /*!< nb rows */ 
-  int n; /*!< nb columns */ 
-  int mn; /*!< product m*n */
-  int mem_size; /*!< size of the memory block allocated for array */
-  double *array; /*!< pointer to store the data row-wise */
-  int owner; /*!< 1 if the object owns its array member, 0 otherwise */
-}; 
 
 extern void pnl_mat_init(PnlMat *); 
 extern PnlMat* pnl_mat_new(); 
@@ -195,17 +181,6 @@ extern double* pnl_mat_lget(PnlMat *v, int i, int j);
  */
 /*@{*/
 
-typedef struct PnlHmat{
-  /** 
-   * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlMatXXX pointer to be cast to a PnlObject
-   */
-  PnlObject object; 
-  int ndim; /*!< nb dimensions */ 
-  int *dims; /*!< pointer to store the value of the ndim dimensions */ 
-  int mn; /*!< product dim_1 *...*dim_ndim */
-  double *array; /*!< pointer to store */
-} PnlHmat;
 
 extern PnlHmat* pnl_hmat_new(); 
 extern PnlHmat* pnl_hmat_create(int ndim, const int *dims); 

@@ -11,7 +11,6 @@ extern "C" {
 
 #include <stdlib.h>
 #include "pnl_object.h"
-#include "pnl_matrix.h"
 
 /**
  * \ingroup PnlVectors
@@ -22,18 +21,6 @@ extern "C" {
  * \defgroup PnlVect Double Vector 
  */
 /*@{*/
-
-struct _PnlVect {
-  /** 
-   * Must be the first element in order for the object mechanism to work
-   * properly. This allows a PnlVect pointer to be cast to a PnlObject
-   */
-  PnlObject object; 
-  int size;/*!< size of the vector */ 
-  double *array;/*!< pointer to store the data */
-  int mem_size; /*!< size of the memory block allocated for array */
-  int owner; /*!< 1 if the object owns its array member, 0 otherwise */
-};
 
 
 #ifdef HAVE_INLINE 

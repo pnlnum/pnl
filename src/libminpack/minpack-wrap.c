@@ -19,6 +19,7 @@
 
 #include "pnl_mathtools.h"
 #include "pnl_vector.h"
+#include "pnl_matrix.h"
 #include "pnl_internals.h"
 #include "cminpack.h"
 

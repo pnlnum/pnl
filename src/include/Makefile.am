@@ -22,4 +22,4 @@ pnl_cdf.h                        pnl_perm.h           \
 pnl_vector_double.h              pnl_vector.h         \
 pnl_laplace.h                    pnl_integration.h    \
 pnl_object.h			 		 pnl_optim.h          \
-pnl_mpi.h
+pnl_mpi.h						 pnl_matvect.h

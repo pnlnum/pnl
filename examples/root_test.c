@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "pnl_root.h"
+#include "pnl_matrix.h"
 
 #include "tests.h"
 

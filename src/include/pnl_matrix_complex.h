@@ -10,7 +10,6 @@ extern "C" {
 #endif /* __cplusplus */
 
 #include "pnl_complex.h"
-#include "pnl_vector.h"
 
 /**
  * \ingroup PnlMatrices
@@ -23,19 +22,6 @@ extern "C" {
 /*@{*/
 
 
-struct _PnlMatComplex {
-  /** 
-   * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlMatXXX pointer to be cast to a PnlObject
-   */
-  PnlObject object; 
-  int m; /*!< nb rows */ 
-  int n; /*!< nb columns */ 
-  int mn; /*!< product m*n */
-  int mem_size; /*!< size of the memory block allocated for array */
-  dcomplex *array; /*!< pointer to store the data row-wise */
-  int owner; /*!< 1 if the object owns its array member, 0 otherwise */
-};
 
 
 extern void pnl_mat_complex_init(PnlMatComplex *); 
@@ -156,17 +142,6 @@ extern dcomplex* pnl_mat_complex_lget(PnlMatComplex *v, int i, int j);
  */
 /*@{*/
 
-typedef struct PnlHmatComplex{
-  /** 
-   * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlMatXXX pointer to be cast to a PnlObject
-   */
-  PnlObject object; 
-  int ndim; /*!< nb dimensions */ 
-  int *dims; /*!< pointer to store the value of the ndim dimensions */ 
-  int mn; /*!< product dim_1 *...*dim_ndim */
-  dcomplex *array; /*!< pointer to store */
-} PnlHmatComplex;
 
 extern PnlHmatComplex* pnl_hmat_complex_new(); 
 extern PnlHmatComplex* pnl_hmat_complex_create(int ndim, const int *dims); 

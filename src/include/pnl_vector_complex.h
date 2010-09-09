@@ -12,7 +12,6 @@ extern "C" {
 
 #include "pnl_object.h"
 #include "pnl_complex.h"
-#include "pnl_matrix.h"
 
 /**
  * \ingroup PnlVectors
@@ -23,17 +22,6 @@ extern "C" {
  * \defgroup PnlVectComplex Complex Vector 
  */
 /*@{*/
-struct _PnlVectComplex {
-  /** 
-   * Must be the first element in order for the object mechanism to work
-   * properly. This allows a PnlVectComplex pointer to be cast to a PnlObject
-   */
-  PnlObject object; 
-  int size;/*!< size of the vector */ 
-  dcomplex *array;/*!< pointer to store the data */
-  int mem_size; /*!< size of the memory block allocated for array */
-  int owner; /*!< 1 if the object owns its array member, 0 otherwise */
-};
 
 #ifdef HAVE_INLINE 
 extern inline

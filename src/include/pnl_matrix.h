@@ -47,6 +47,8 @@ extern "C" {
 
 #endif /* PNL_RANGE_CHECK_OFF */
 
+#include "pnl_matvect.h"
+
 
 /**
  * \defgroup PnlMatrices a Matrix object
@@ -58,56 +60,18 @@ extern "C" {
 #define PNL_MGET(v,i,j) (v)->array[(i)*(v)->n+(j)]
 #define PNL_MSET(v,i,j, x) (v)->array[(i)*(v)->n+(j)] = (x)
 #define PNL_MLET(v,i,j) (v)->array[(i)*(v)->n+(j)]
-/*@}*/
-
-#include "pnl_object.h"
-/**
- * \defgroup PnlHmatrices Hyper Matrix object
- */
-
-typedef struct _PnlMatObject PnlMatObject;
-typedef struct _PnlHmatObject PnlHmatObject;
-typedef struct _PnlMat PnlMat;
-typedef struct _PnlMatComplex PnlMatComplex;
-typedef struct _PnlMatInt PnlMatInt;
-
-/**
- * \private 
- * This structure is only used internally and should never be accessed directly.
- * It is only useful for handling the different types of vectors together
- */
-struct _PnlMatObject
-{
-  /** 
-   * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlMatXXX pointer to be cast to a PnlObject
-   */
-  PnlObject object; 
-  int m; /*!< nb rows */ 
-  int n; /*!< nb columns */ 
-  int mn; /*!< product m*n */
-  int mem_size; /*!< size of the memory block allocated for array */
-  void *array; /*!< pointer to store the data row-wise */
-  int owner; /*!< 1 if the object owns its array member, 0 otherwise */
-}; 
-
-struct _PnlHmatObject
-{
-  /** 
-   * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlHmatXXX pointer to be cast to a PnlObject
-   */
-  PnlObject object; 
-  int ndim; /*!< nb dimensions */ 
-  int *dims; /*!< pointer to store the value of the ndim dimensions */ 
-  int mn; /*!< product dim_1 *...*dim_ndim */
-  void *array; /*!< pointer to store */
-} ;
 
 extern PnlMatObject* pnl_mat_object_new ();
 extern int pnl_mat_object_resize(PnlMatObject *M, int m, int n);
+/*@}*/
+
+/**
+ * \defgroup PnlHmatrices Hyper Matrix object
+ */
+/*@{*/
 extern PnlHmatObject* pnl_hmat_object_new ();
 extern int pnl_hmat_object_resize(PnlHmatObject *H, int ndim, const int *dims);
+/*@}*/
 
 #include "pnl_matrix_double.h"
 #include "pnl_matrix_complex.h"
