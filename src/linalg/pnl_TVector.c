@@ -64,9 +64,9 @@ void pnl_vect_object_free(PnlVectObject **v)
 {
   if (*v != NULL)
     {
-      if ((*v)->array != NULL && (*v)->owner == 1) free((*v)->array);
+      if ((*v)->array != NULL && (*v)->owner == 1)
+        { free((*v)->array); (*v)->array = NULL; }
       free(*v);
-      *v=NULL;
     }
 }
 

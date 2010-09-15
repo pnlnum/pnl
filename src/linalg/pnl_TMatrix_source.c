@@ -259,6 +259,7 @@ void FUNCTION(pnl_mat,free)(TYPE(PnlMat) **v)
   PnlMatObject *o;
   o = PNL_MAT_OBJECT(*v);
   pnl_mat_object_free (&o);
+  *v = NULL;
 }
 
 /**
@@ -1928,6 +1929,7 @@ void FUNCTION(pnl_hmat,free)(TYPE(PnlHmat) **H)
   PnlHmatObject *o;
   o = PNL_HMAT_OBJECT (*H);
   pnl_hmat_object_free (&o);
+  *H = NULL;
 }
 
 

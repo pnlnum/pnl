@@ -60,9 +60,9 @@ void pnl_mat_object_free (PnlMatObject **o)
 {
     if (*o != NULL)
     {
-      if ((*o)->array != NULL && (*o)->owner == 1) free((*o)->array);
+      if ((*o)->array != NULL && (*o)->owner == 1)
+        { free((*o)->array); (*o)->array = NULL; }
       free(*o);
-      *o=NULL;
     }
 }
 

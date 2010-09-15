@@ -326,6 +326,7 @@ void FUNCTION(pnl_vect,free)(TYPE(PnlVect) **v)
   PnlVectObject *o;
   o = PNL_VECT_OBJECT(*v);
   pnl_vect_object_free (&o);
+  *v = NULL;
 }
 
 /**
