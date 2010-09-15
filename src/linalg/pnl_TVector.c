@@ -50,9 +50,25 @@ PnlVectObject* pnl_vect_object_new ()
   o->object.type = PNL_TYPE_VECTOR;
   o->object.parent_type = PNL_TYPE_VECTOR;
   o->object.label = pnl_vector_label;
+  o->object.destroy = (destroy_func *) pnl_vect_object_free;
   return o;
 }
 
+/**
+ * free a TYPE(PnlVect)pointer and set the data pointer to
+ * NULL
+ *
+ * @param v address of the pointer to free
+ */
+void pnl_vect_object_free(PnlVectObject **v)
+{
+  if (*v != NULL)
+    {
+      if ((*v)->array != NULL && (*v)->owner == 1) free((*v)->array);
+      free(*v);
+      *v=NULL;
+    }
+}
 
 /**
  * Resizes a PnlVectObject. If the new size is smaller than the

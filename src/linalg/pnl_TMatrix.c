@@ -49,7 +49,21 @@ PnlMatObject* pnl_mat_object_new ()
   o->object.type = PNL_TYPE_MATRIX;
   o->object.parent_type = PNL_TYPE_MATRIX;
   o->object.label = pnl_matrix_label;
+  o->object.destroy = (destroy_func *) pnl_mat_object_free;
   return o;
+}
+
+/**
+ * Frees a PnlMatObject
+ */
+void pnl_mat_object_free (PnlMatObject **o)
+{
+    if (*o != NULL)
+    {
+      if ((*o)->array != NULL && (*o)->owner == 1) free((*o)->array);
+      free(*o);
+      *o=NULL;
+    }
 }
 
 /**
@@ -121,6 +135,21 @@ PnlHmatObject* pnl_hmat_object_new ()
   o->object.label = pnl_hmatrix_label;
   return o;
 }
+
+/**
+ * Frees a Hmat object
+ */
+void pnl_hmat_object_free(PnlHmatObject **H)
+{
+  if (*H != NULL)
+    {
+      free((*H)->array);
+      free((*H)->dims);
+      free(*H);
+      *H=NULL;
+    }
+}
+
 
 /**
  * resizes a PnlHmatObject.

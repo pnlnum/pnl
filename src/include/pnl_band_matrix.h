@@ -76,6 +76,7 @@ struct _PnlBandMatObject
 } ;
 
 extern PnlBandMatObject* pnl_band_mat_object_new ();
+extern void pnl_band_mat_object_free (PnlBandMatObject **BM);
 extern PnlBandMat* pnl_band_mat_new ();
 extern PnlBandMat* pnl_band_mat_create (int m, int n, int nl, int nu);
 extern PnlBandMat* pnl_band_mat_create_from_mat (const PnlMat *M, int nl, int nu);

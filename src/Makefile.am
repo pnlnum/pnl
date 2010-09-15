@@ -1,14 +1,13 @@
-SUBDIRS = libamos librand fft math \
+SUBDIRS = objects libamos librand fft math \
 linalg sort include specfun libcephes \
-libinteg interpol roots libminpack optim \
-@MPI_DIR@ @INTERNAL_BLAS_DIR@ @INTERNAL_LAPACK_DIR@ @INTERNAL_F2C_DIR@
+libinteg interpol roots libminpack optim
+
 
 include $(top_srcdir)/Make.incl
 AM_CPPFLAGS = $(PNL_INCLUDES)
 
 lib_LTLIBRARIES = libpnl.la
-libpnl_la_SOURCES =  cumulfunc.c \
-finance_function.c object.c
+libpnl_la_SOURCES =  cumulfunc.c finance_function.c 
 
 libpnl_la_LDFLAGS=-avoid-version @BLAS_LIBS@ @LAPACK_LIBS@
 libpnl_la_LIBADD=libamos/libamos.la librand/librand.la\
@@ -16,6 +15,17 @@ math/libmath.la linalg/liblinalg.la sort/libsort.la \
 fft/libfft.la specfun/libspecfun.la libcephes/libcephes.la \
 libinteg/libinteg.la interpol/libinterpol.la optim/liboptim.la\
 roots/libroots.la libminpack/libminpack.la \
-@LIBMPI_LA@ @INTERNAL_BLAS_LA@ @INTERNAL_LAPACK_LA@ @INTERNAL_F2C_LA@
+objects/libobjects.la
 
+if HAVE_MPI
+SUBDIRS+=mpi
+libpnl_la_LIBADD+=mpi/libpnlmpi.la
+endif
 
+if !HAVE_BLASLAPACK
+SUBDIRS+=libf2c libblas liblapack
+libpnl_la_LIBADD+=libf2c/libf2c.la libblas/libblas.la liblapack/liblapack.la
+endif
+
+emacs-tags:
+	find . \( -name "*.[chCH]" -o -name "*.cpp" \) -print | etags -

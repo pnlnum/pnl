@@ -1,0 +1,135 @@
+\section{Objects}
+
+\subsection{The top-level object}
+
+The PnlObject structure is used to simulate some inheritance between the
+ojbects of Pnl.  It must be the first element of all the objects existing in
+Pnl so that casting any object to a PnlObject is legal
+
+\begin{verbatim}
+typedef unsigned int PnlType; 
+
+typedef void (destroy_func) (void **);
+struct _PnlObject
+{
+  PnlType type; /*!< a unique integer id */
+  const char *label; /*!< a string identifier (for the moment not useful) */
+  PnlType parent_type; /*!< the identifier of the parent object is any,
+                          otherwise parent_type=id */
+  destroy_func *destroy; /*!< frees an object */
+};
+
+\end{verbatim}
+
+We provide several macros for manipulating PnlObejcts.
+\begin{itemize}
+\item \describemacro{PNL_OBJECT}{o}
+  \sshortdescribe Casts any object into a PnlObject
+
+\item \describemacro{PNL_VECT_OBJECT}{o}
+  \sshortdescribe Casts any object into a PnlVectObject
+
+\item \describemacro{PNL_MAT_OBJECT}{o}
+  \sshortdescribe Casts any object into a PnlMatObject
+
+\item \describemacro{PNL_HMAT_OBJECT}{o}
+  \sshortdescribe Casts any object into a PnlHmatObject
+
+\item \describemacro{PNL_BAND_MAT_OBJECT}{o}
+  \sshortdescribe Casts any object into a PnlBandMatObject
+
+\item \describemacro{PNL_TRIDIAGMAT_OBJECT}{o}
+  \sshortdescribe Casts any object into a PnlTridiagMatObject
+
+\item \describemacro{PNL_BASIS_OBJECT}{o}
+  \sshortdescribe Casts any object into a PnlBasis
+
+\item \describemacro{PNL_RNG_OBJECT}{o}
+  \sshortdescribe Casts any object into a PnlRng
+
+\item \describemacro{PNL_LIST_OBJECT}{o}
+  \sshortdescribe Casts any object into a PnlList
+
+\item \describemacro{PNL_GET_TYPENAME}{o}
+  \sshortdescribe Returns the name of the type of any object inheriting from PnlObject
+
+\item \describemacro{PNL_GET_TYPE}{o}
+  \sshortdescribe Returns the type of any object inheriting from PnlObject
+ 
+\item \describemacro{PNL_GET_PARENT_TYPE}{o}
+  \sshortdescribe Returns the parent type of any object inheriting from PnlObject
+\end{itemize}
+
+
+
+\subsection{List object}
+
+This section describes functions for creating an manipulating lists. Lists are
+internally stored as doubly linked lists.
+
+\subsubsection{Short Description}
+
+The structures and functions related to lists are declared in
+\verb!pnl_list.h!.
+
+\begin{verbatim}
+typedef struct _PnlCell PnlCell;
+struct _PnlCell
+{
+  struct _PnlCell *prev;  /*!< previous cell or 0 */
+  struct _PnlCell *next;  /*!< next cell or 0 */
+  PnlObject *self;       /*!< stored object */
+};
+
+
+typedef struct _PnlList PnlList;
+struct _PnlList
+{
+  /**
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows any PnlList pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
+  PnlCell *first; /*!< first element of the list */
+  PnlCell *last; /*!< last element of the list */
+  int len; /*!< length of the list */
+};
+\end{verbatim}
+
+\subsubsection{Functions}
+
+\begin{itemize}
+\item \describefun{\refstruct{PnlList} \ptr }{pnl_list_new}{}
+  \sshortdescribe Creates an empty list
+\item \describefun{\refstruct{PnlCell} \ptr }{pnl_cell_new}{}
+  \sshortdescribe Creates an cell list
+\item \describefun{void}{pnl_list_free}{\refstruct{PnlList}  \ptr \ptr L}
+  \sshortdescribe Frees a list
+\item \describefun{void}{pnl_cell_free}{\refstruct{PnlCell}  \ptr \ptr c}
+  \sshortdescribe Frees a list
+\item \describefun{void}{pnl_list_insert_first}{\refstruct{PnlList}  \ptr L,
+    \refstruct{PnlObject}  \ptr o}
+  \sshortdescribe Insert the object \var{o} on top of the list \var{L}. Note that
+  \var{o} is not copied in \var{L}, so do  {\bf not} free \var{o} yourself, it
+  will be done automatically when calling \reffun{pnl_list_free}
+\item \describefun{void}{pnl_list_insert_last}{\refstruct{PnlList}  \ptr L,
+    \refstruct{PnlObject}  \ptr o}
+  \sshortdescribe Insert the object \var{o} at the bottom of the list \var{L}. Note that
+  \var{o} is not copied in \var{L}, so do  {\bf not} free \var{o} yourself, it
+  will be done automatically when calling \reffun{pnl_list_free}
+\item \describefun{void}{pnl_list_remove_last}{\refstruct{PnlList}  \ptr L}
+  \sshortdescribe Removes the last element of the list \var{L} and frees it.
+\item \describefun{void}{pnl_list_remove_first}{\refstruct{PnlList}  \ptr L}
+  \sshortdescribe Removes the first element of the list \var{L} and frees it.
+\item \describefun{void}{pnl_list_remove_i}{\refstruct{PnlList}  \ptr L, int i}
+  \sshortdescribe Removes the \var{i-th} element of the list \var{L} and frees it.
+\item \describefun{void}{pnl_list_concat}{\refstruct{PnlList}  \ptr L1,
+    \refstruct{PnlList}  \ptr L2}
+  \sshortdescribe Concatenates the two lists \var{L1} and \var{L2}. The
+  resulting list is store in \var{L1} on exit. Do {\bf not} free \var{L2}
+  since concatenation does not actually copy objects but only manipulates
+  addresses.
+\item \describefun{void}{pnl_list_print}{const \refstruct{PnlList}  \ptr L}
+  \sshortdescribe Not yet implemented because it would require that the
+  structure \refstruct{PnlObject} has a field copy.
+\end{itemize}

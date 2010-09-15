@@ -1,11 +1,9 @@
-- Create a List structure and use it in MPI
+- List structure
+       * Add it to the MPI bindings
+       * Add a pnl_list_copy function. It implies to add a
+         copy function to PnlObject
 
 - Some code can be factorized in libminpack
-
-- Create an object for Random Number Generators
-    We also want to tackle the problem of generating random numbers
-    in a parallel environment. This constraint must be taken into 
-    account when devising the RNG object.
 
 - splines 
     CMlib 

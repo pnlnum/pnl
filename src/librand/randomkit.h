@@ -34,7 +34,6 @@
 #ifndef _RANDOMKIT_
 #define _RANDOMKIT_
 
-#include "rk_mt.h"
 #include "rk_sobol.h"
 #include "rk_primitive.h"
 

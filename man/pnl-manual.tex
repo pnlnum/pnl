@@ -215,6 +215,8 @@ possible use with a C++ compiler.
       PnlTridiagMat & pnl_tridiag_mat \\
       PnlBandMat & pnl_band_mat \\
       & \\
+      PnlList & pnl_list \\
+      & \\
       PnlBasis & pnl_basis \\
       & \\
       PnlCgSolver & pnl_cg_solver \\
@@ -243,7 +245,7 @@ possible use with a C++ compiler.
     \verb!v1! and \verb!v2! are independent in the sense that a modification to
     one of them does not affect the other.
 
-    The \verb!clone! methods take two arguments and fill in the first one with the
+    The \verb!clone! methods take two arguments and fill the first one with the
     second one. 
     Example:
     \begin{verbatim}
@@ -267,6 +269,7 @@ possible use with a C++ compiler.
 
 
 
+\input{types.tex}
 \input{mathematical_functions.tex}
 \input{linear_algebra.tex}
 \input{probabilistic_methods.tex}

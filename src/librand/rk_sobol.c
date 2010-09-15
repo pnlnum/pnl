@@ -32,6 +32,7 @@ static char const rcsid[] =
   "@(#) $Jeannot: rk_sobol.c,v 1.6 2005/12/28 23:20:10 js Exp $";
 
 #include <stdlib.h>
+#include <time.h>
 #include "rk_sobol.h"
 #include "rk_primitive.h"
 #include "pnl_mathtools.h"
@@ -673,10 +674,10 @@ static const unsigned long rk_sobol_primitive_polynomials[] = {
 };
 
 rk_sobol_error pnl_rk_sobol_init(int dimension, rk_sobol_state *s, 
-			     rk_state *rs_dir, const unsigned long *directions,
+			     mt_state *rs_dir, const unsigned long *directions,
 			     const unsigned long *polynomials)
 {
-  rk_state rs_dir_temp;
+  mt_state rs_dir_temp;
   int j, l, degree = 0, last_degree = 0, ooord = 0;
   int k, cdir = 0, cpol = 0;
   unsigned long polynomial = 1, rev = 0, last = 0;
@@ -777,10 +778,12 @@ rk_sobol_error pnl_rk_sobol_init(int dimension, rk_sobol_state *s,
 	      if (rs_dir == NULL)
 		{
 		  rs_dir = &rs_dir_temp;
-		  pnl_rk_randomseed(rs_dir);
+      /* pnl_rk_randomseed(rs_dir); */
+      pnl_mt_set_seed(rs_dir, time(NULL));
+
 		}
 	      /* Draw a direction at random (the highest bits will be discarded) */
-	      m = pnl_rk_ulong(rs_dir) | 1;
+	      m = pnl_mt_genrand(rs_dir) | 1;
 	    }
 	  else
 	    m = directions[cdir++];
@@ -832,7 +835,7 @@ void pnl_rk_sobol_reinit(rk_sobol_state *s)
 
 /* void rk_sobol_randomshift(rk_sobol_state *s, rk_state *rs_num) */
 /* { */
-/*   rk_state rs_num_temp; */
+/*   mt_state rs_num_temp; */
 /*   int k; */
 
 /*   if (rs_num == NULL) */

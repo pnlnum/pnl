@@ -2,7 +2,7 @@ dnl Jérôme LELONG Feb 2006
 
 
 AC_REVISION($Revision: 1.47 $)
-AC_INIT(PNL, 1.0, contact <jerome.lelong@imag.fr> if you encounter any problem)
+AC_INIT(PNL, 1.0, jerome.lelong@imag.fr)
 
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_HEADERS(config.h)
@@ -170,28 +170,18 @@ AC_CHECK_HEADERS(errno.h)
 ########################################################
 ## check for blas
 ########################################################
-USE_BLAS=no
+HAVE_BLAS=no
+HAVE_LAPACK=no
 BLAS_LIBS=""
-USE_LAPACK=no
 LAPACK_LIBS=""
-INTERNAL_F2C_DIR=""
-INTERNAL_F2C_LA=""
-INTERNAL_BLAS_DIR=""
-INTERNAL_BLAS_LA=""
-INTERNAL_LAPACK_DIR=""
-INTERNAL_LAPACK_LA=""
-USE_INTERNAL_BLAS=0
+use_internal_blas=0
 
 case "$host" in
     # Darwin/MacOSX
     *-*-darwin*)
     # When Xcode is installed, Atlas and Lapack can be found in vectlib
-    USE_BLAS=yes
     BLAS_LIBS="-lblas"
-    USE_LAPACK=yes
     LAPACK_LIBS="-llapack"
-    AC_DEFINE(HAVE_BLAS, [], [Blas is installed])
-    AC_DEFINE(HAVE_LAPACK, [], [Lapack is installed])
     ;;
 
     *)
@@ -201,40 +191,33 @@ case "$host" in
 
     if test "x$with_internal_blas" != "xyes"; then
        builtin(include,config/acx_blas.m4)
-       ACX_BLAS([USE_BLAS=yes])
+       ACX_BLAS([HAVE_BLAS=yes])
 
-       if test "$USE_BLAS" = yes; then 
+       if test "$HAVE_BLAS" = yes; then 
          AM_CFLAGS="$AM_CFLAGS"
-         HAVE_BLAS=1
-         AC_DEFINE(HAVE_BLAS, [], [Blas is installed])
        else
          with_internal_blas=yes
        fi
 
        builtin(include,config/acx_lapack.m4)
-       ACX_LAPACK([USE_LAPACK=yes])
+       ACX_LAPACK([HAVE_LAPACK=yes])
 
-       if test "$USE_LAPACK" = yes; then 
+       if test "$HAVE_LAPACK" = yes; then 
          AM_CFLAGS="$AM_CFLAGS"
-         HAVE_LAPACK=1
-         AC_DEFINE(HAVE_LAPACK, [], [Lapack is installed])
        else
          with_internal_blas=yes
        fi
     fi
 
     if test "x$with_internal_blas" == "xyes"; then
-        USE_INTERNAL_BLAS=1
-        INTERNAL_F2C_DIR="libf2c"
-        INTERNAL_F2C_LA="libf2c/libf2c.la"
-        INTERNAL_BLAS_DIR="libblas"
-        INTERNAL_BLAS_LA="libblas/libblas.la"
-        INTERNAL_LAPACK_DIR="liblapack"
-        INTERNAL_LAPACK_LA="liblapack/liblapack.la"
+        use_internal_blas=1
         LDFLAGS="$LDFLAGS -u MAIN__"
     fi
     ;;
 esac
+
+AM_CONDITIONAL([HAVE_BLASLAPACK], [test $use_internal_blas == 0])
+
 
 LDFLAGS="$LDFLAGS $BLAS_LIBS $LAPACK_LIBS"
 #######################
@@ -303,29 +286,24 @@ fi
 # check for MPI
 #################
 
-HAVE_MPI=0
-MPI_DIR=""
-LIBMPI_LA=""
 MPI_LIBS=""
 MPI_CFLAGS=""
 MPICC=""
 MPICXX=""
 builtin(include,config/ax_mpi.m4)
-AX_MPI([use_mpi=1], [use_mpi=0])
+AX_MPI([have_mpi=1], [have_mpi=0])
 
 # We will use CC and not MPICC to compile and link, so we need
 # to tweak MPI_LIBS
-if test $use_mpi = 1; then
+if test $have_mpi = 1; then
    MPI_CFLAGS=`$MPICC --showme:compile`
    if test "x " = x"$MPILIBS"; then
       MPI_LIBS=`$MPICC --showme:link`
     else
       MPI_LIBS="$MPILIBS"
    fi
-   MPI_DIR="mpi"
-   LIBMPI_LA="mpi/libmpi.la"
 fi
-AM_CONDITIONAL([USE_MPI], [test $use_mpi == 1])
+AM_CONDITIONAL([HAVE_MPI], [test $have_mpi == 1])
 
 
 ####################
@@ -363,20 +341,6 @@ case "$host" in
 
     # Darwin/MacOSX
     *-*-darwin*)
-    # When Xcode is installed, Atlas and Lapack can be found in vectlib
-    USE_BLAS=yes
-    BLAS_LIBS="-lblas"
-    USE_LAPACK=yes
-    LAPACK_LIBS="-llapack"
-    INTERNAL_F2C_DIR=""
-    INTERNAL_F2C_LA=""
-    INTERNAL_BLAS_DIR=""
-    INTERNAL_BLAS_LA=""
-    INTERNAL_LAPACK_DIR=""
-    INTERNAL_LAPACK_LA=""
-    USE_INTERNAL_BLAS=0
-    AC_DEFINE(HAVE_BLAS, [], [Blas is installed])
-    AC_DEFINE(HAVE_LAPACK, [], [Lapack is installed])
     ;;
 esac
 
@@ -388,27 +352,15 @@ AC_SUBST(CFLAGS)
 AC_SUBST(CXXFLAGS)
 AC_SUBST(LDFLAGS)
 AC_SUBST(MKDIR_P)
-AC_SUBST(HAVE_BLAS)
-AC_SUBST(HAVE_LAPACK)
 AC_SUBST(BLAS_LIBS)
 AC_SUBST(LAPACK_LIBS)
 AC_SUBST(LIBPNLDIR)
 
 AC_SUBST(MPI_DIR)
-AC_SUBST(LIBMPI_LA)
+AC_SUBST(LIBPNLMPI_LA)
 AC_SUBST(MPICC)
 AC_SUBST(MPI_LIBS)
 AC_SUBST(MPI_CFLAGS)
-
-
-AC_SUBST(USE_INTERNAL_BLAS)
-AC_SUBST(INTERNAL_F2C_DIR)
-AC_SUBST(INTERNAL_F2C_LA)
-AC_SUBST(INTERNAL_BLAS_DIR)
-AC_SUBST(INTERNAL_BLAS_LA)
-AC_SUBST(INTERNAL_LAPACK_DIR)
-AC_SUBST(INTERNAL_LAPACK_LA)
-
 
 
 AC_OUTPUT(Makefile \
@@ -429,6 +381,7 @@ src/librand/Makefile \
 src/linalg/Makefile \
 src/math/Makefile \
 src/mpi/Makefile \
+src/objects/Makefile \
 src/optim/Makefile \
 src/roots/Makefile \
 src/sort/Makefile \
@@ -446,13 +399,13 @@ echo "C options..............:" $AM_CFLAGS $CFLAGS
 echo "$user_set_cflags"
 echo "linker flags...........:" $LDFLAGS 
 echo "installation prefix....:" $prefix
-if test $use_mpi = 1; then
+if test $have_mpi = 1; then
   echo "MPI detected..........:"
   echo "   MPICC..............:" $MPICC
   echo "   MPI_CFLAGS.........:" $MPI_CFLAGS
   echo "   MPI_LIBS...........:" $MPI_LIBS 
 fi
-if test "x$USE_INTERNAL_BLAS" == "x"; then 
+if test $use_internal_blas = 1; then 
     echo "using internal Blas & Lapack"
 fi
 echo

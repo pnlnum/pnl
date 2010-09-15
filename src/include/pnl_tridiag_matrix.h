@@ -73,6 +73,7 @@ struct _PnlTridiagMatObject
 };
 
 extern PnlTridiagMatObject* pnl_tridiag_mat_object_new();
+extern void pnl_tridiag_mat_object_free (PnlTridiagMatObject **BM);
 extern PnlTridiagMat* pnl_tridiag_mat_new();
 extern PnlTridiagMat* pnl_tridiag_mat_create(int size);
 extern PnlTridiagMat* pnl_tridiag_mat_create_from_double(int size, double x);

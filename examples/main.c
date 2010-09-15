@@ -26,6 +26,7 @@
 static void all_test();
 extern void random_test();
 extern void cumulfunc_test();
+extern void list_test();
 extern void vector_test();
 extern void matrix_test();
 extern void lapack_test();
@@ -49,6 +50,7 @@ static tst_list tests[] =
     MAKE_ENUM(all_test),
     MAKE_ENUM(random_test),
     MAKE_ENUM(cumulfunc_test),
+    MAKE_ENUM(list_test),
     MAKE_ENUM(vector_test),
     MAKE_ENUM(matrix_test),
     MAKE_ENUM(lapack_test),

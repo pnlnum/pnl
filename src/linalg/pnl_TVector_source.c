@@ -323,12 +323,9 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_submat) (const TYPE(PnlMat) *M,
  */
 void FUNCTION(pnl_vect,free)(TYPE(PnlVect) **v)
 {
-  if (*v != NULL)
-    {
-      if ((*v)->array != NULL && (*v)->owner == 1) free((*v)->array);
-      free(*v);
-      *v=NULL;
-    }
+  PnlVectObject *o;
+  o = PNL_VECT_OBJECT(*v);
+  pnl_vect_object_free (&o);
 }
 
 /**

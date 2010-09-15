@@ -98,8 +98,27 @@ PnlTridiagMatObject* pnl_tridiag_mat_object_new ()
   o->object.type = PNL_TYPE_TRIDIAG_MATRIX;
   o->object.parent_type = PNL_TYPE_TRIDIAG_MATRIX;
   o->object.label = pnl_tridiag_mat_object_label;
+  o->object.destroy = (destroy_func *) pnl_tridiag_mat_object_free;
   return o;
 }
+
+/**
+ * Frees a PnlTridiagMatObject
+ *
+ * @param v a PnlTridiagMatObject**.
+ */
+void pnl_tridiag_mat_object_free(PnlTridiagMatObject **v)
+{
+  if (*v != NULL)
+    {
+      if ((*v)->D != NULL) free((*v)->D);
+      if ((*v)->DU != NULL) free((*v)->DU);
+      if ((*v)->DL != NULL) free((*v)->DL);
+      free(*v);
+      *v=NULL;
+    }
+}
+
 
 /**
  * Creates an empty PnlTridiagMat
@@ -267,14 +286,9 @@ PnlMat* pnl_tridiag_mat_to_mat (const PnlTridiagMat * T)
  */
 void pnl_tridiag_mat_free(PnlTridiagMat **v)
 {
-  if (*v != NULL)
-    {
-      if ((*v)->D != NULL) free((*v)->D);
-      if ((*v)->DU != NULL) free((*v)->DU);
-      if ((*v)->DL != NULL) free((*v)->DL);
-      free(*v);
-      *v=NULL;
-    }
+  PnlTridiagMatObject *o;
+  o = PNL_TRIDIAGMAT_OBJECT (*v);
+  pnl_tridiag_mat_object_free (&o);
 }
 
 /**

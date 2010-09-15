@@ -26,6 +26,7 @@
 #include "pnl_mathtools.h"
 #include "pnl_internals.h"
 #include "pnl_basis.h"
+#include "pnl_random.h"
 #include "pnl_mpi.h"
 
 #define PNL_MPI_MESSAGE(info, msg)                             \
@@ -185,7 +186,7 @@ static int size_tridiag_matrix (const PnlObject *Obj, MPI_Comm comm, int *size)
 static int size_band_matrix (const PnlObject *Obj, MPI_Comm comm, int *size)
 {
   int info, count, n;
-  PnlBandMatObject *M = PNL_BANDMAT_OBJECT(Obj);
+  PnlBandMatObject *M = PNL_BAND_MAT_OBJECT(Obj);
   *size = 0;
   /* M->{m,n,nu,nl} */
   if((info=MPI_Pack_size(1,MPI_INT, comm,&count))) return(info);
@@ -268,9 +269,49 @@ static int size_basis (const PnlObject *Obj, MPI_Comm comm, int *size)
   return (info);
 }
 
+/**
+ * Computes the length of the buffer needed to pack the PnlObject
+ *
+ * @param Obj a PnlObject actually containing a PnlBasi
+ * @param comm an MPI Communicator
+ * @param size the upper bound on the number of bytes needed to pack Obj
+ *
+ * @return an error value equal to MPI_SUCCESS when everything is OK
+ */
 static int size_rng (const PnlObject *Obj, MPI_Comm comm, int *size)
 {
-  return (!MPI_SUCCESS);
+  int info, count;
+  PnlRng *rng = PNL_RNG_OBJECT(Obj);
+  *size = 0;
+
+  /* rng->type */
+  if((info=MPI_Pack_size(1, MPI_INT, comm, &count))) return(info);
+  *size += count;
+  /* rng->dimension */
+  if((info=MPI_Pack_size(1, MPI_INT, comm, &count))) return(info);
+  *size += count;
+  /* rng->counter */
+  if((info=MPI_Pack_size(1, MPI_INT, comm, &count))) return(info);
+  *size += count;
+  /* rng->has_gauss */
+  if((info=MPI_Pack_size(1, MPI_INT, comm, &count))) return(info);
+  *size += count;
+  if (rng->has_gauss == 1)
+    {
+      /* rng->gauss */
+      if((info=MPI_Pack_size(1, MPI_DOUBLE, comm, &count))) return(info);
+      *size += count;
+    }
+  /* rng->size_state */
+  if((info=MPI_Pack_size(1, MPI_INT, comm, &count))) return(info);
+  *size += count;
+  if (rng->size_state > 0)
+    {
+      /* rng->state */
+      if((info=MPI_Pack_size(rng->size_state, MPI_BYTE, comm, &count))) return(info);
+      *size += count;
+    }
+  return (info);
 }
 
 /**
@@ -385,7 +426,7 @@ static int pack_tridiag_matrix (const PnlObject *Obj, void *buf, int bufsize, in
 static int pack_band_matrix (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
   int info;
-  PnlBandMatObject *M = PNL_BANDMAT_OBJECT(Obj);
+  PnlBandMatObject *M = PNL_BAND_MAT_OBJECT(Obj);
   if ((info=MPI_Pack(&M->m, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
   if ((info=MPI_Pack(&M->n, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
   if ((info=MPI_Pack(&M->nu, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
@@ -437,7 +478,7 @@ static int pack_hmatrix (const PnlObject *Obj, void *buf, int bufsize, int *pos,
 /**
  * Packs a PnlBasis
  *
- * @param Obj a PnlObject containing a PnlHmatObject
+ * @param Obj a PnlObject containing a PnlBasis
  * @param buf an already allocated buffer of length bufsize used to store Obj
  * @param bufsize the size of the buffer. It must be at least equal to the value
  * computed by size_matrix
@@ -455,10 +496,37 @@ static int pack_basis (const PnlObject *Obj, void *buf, int bufsize, int *pos, M
   return(info);
 }
 
+/**
+ * Packs a PnlRng
+ *
+ * @param Obj a PnlObject containing a PnlRng
+ * @param buf an already allocated buffer of length bufsize used to store Obj
+ * @param bufsize the size of the buffer. It must be at least equal to the value
+ * computed by size_matrix
+ * @param comm an MPI Communicator
+ * @param pos (in/out) the current position in buf
+ *
+ * @return an error value equal to MPI_SUCCESS when everything is OK
+ */
 static int pack_rng (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
-  printf("Packing for %s is not implemented yet.\n", PNL_GET_TYPENAME(Obj));
-  abort();
+  int info;
+  PnlRng *rng = PNL_RNG_OBJECT(Obj);
+  
+  if ((info=MPI_Pack(&rng->type, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
+  if ((info=MPI_Pack(&rng->dimension, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
+  if ((info=MPI_Pack(&rng->counter, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
+  if ((info=MPI_Pack(&rng->has_gauss, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
+  if (rng->has_gauss == 1)
+    {
+      if ((info=MPI_Pack(&rng->gauss, 1, MPI_DOUBLE, buf, bufsize, pos, comm))) return info;
+    }
+  if ((info=MPI_Pack(&rng->size_state, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
+  if (rng->size_state > 0)
+    {
+      if ((info=MPI_Pack(rng->state, rng->size_state, MPI_BYTE, buf, bufsize, pos, comm))) return info;
+    }
+  return (info);
 }
 
 
@@ -682,12 +750,34 @@ static int unpack_basis (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_C
  */
 static int unpack_rng (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
-  return (MPI_ERR_TYPE);
+  int type, info, id;
+  PnlRng *rng = PNL_RNG_OBJECT(Obj);
+
+  /* unpacking Obj->object.id */
+  if ((info=MPI_Unpack(buf,bufsize,pos,&id,1,MPI_INT,comm))) return info;
+  
+  if ((info=MPI_Unpack(buf,bufsize,pos,&type,1,MPI_INT,comm))) return info;
+  pnl_rng_init (rng, type);
+  
+  if ((info=MPI_Unpack(buf,bufsize,pos,&rng->dimension,1,MPI_INT,comm))) return info;
+  if ((info=MPI_Unpack(buf,bufsize,pos,&rng->counter,1,MPI_INT,comm))) return info;
+  if ((info=MPI_Unpack(buf,bufsize,pos,&rng->has_gauss,1,MPI_INT,comm))) return info;
+  if (rng->has_gauss == 1)
+    {
+      if ((info=MPI_Unpack(buf,bufsize,pos,&rng->gauss,1,MPI_DOUBLE,comm))) return info;
+    }
+  if ((info=MPI_Unpack(buf,bufsize,pos,&rng->size_state,1,MPI_INT,comm))) return info;
+  if (rng->size_state > 0)
+    {
+      if ((rng->state = malloc (rng->size_state)) == NULL) return MPI_ERR_BUFFER;
+      if ((info=MPI_Unpack(buf,bufsize,pos,rng->state, rng->size_state,MPI_BYTE,comm))) return info;
+    }
+  return (info);
 }
 
 
 /*
- * Exported wrappers handling PnlObjects
+ * Exported wrappers for handling PnlObjects
  */
 
 
@@ -812,15 +902,16 @@ int pnl_object_mpi_pack (const PnlObject *Obj, void *buf, int bufsize, int *pos,
  */
 int pnl_object_mpi_unpack (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
-  int id, info;
-  if ((info=MPI_Unpack(buf, bufsize, pos, &id, 1, MPI_INT, comm))) return info;
-  if (id != PNL_GET_PARENT_TYPE(Obj))
+  int parent_id, info;
+
+  if ((info=MPI_Unpack(buf, bufsize, pos, &parent_id, 1, MPI_INT, comm))) return info;
+  if (parent_id != PNL_GET_PARENT_TYPE(Obj))
     {
       printf("Expected object type does not match the type of the received one.\n");
       return MPI_ERR_TYPE;
     }
 
-  switch (id)
+  switch (parent_id)
     {
     case PNL_TYPE_VECTOR:
       return unpack_vector (Obj, buf, bufsize, pos, comm);
@@ -901,9 +992,10 @@ int pnl_object_mpi_recv (PnlObject *Obj, int src, int tag, MPI_Comm comm, MPI_St
   info = MPI_Recv (buf, size, MPI_PACKED, src, tag, comm, status);
   PNL_MPI_MESSAGE( info, "error in MPI_Recv.\n");
   info = pnl_object_mpi_unpack(Obj, buf, size, &pos, comm);
-  free (buf);
+  free (buf); buf=NULL;
   return info;
 }
+
 
 /**
  * Broadcasts  a PnlObject from the process with rank root to
@@ -938,7 +1030,7 @@ int pnl_object_mpi_bcast (PnlObject *Obj, int root, MPI_Comm comm)
   PNL_MPI_MESSAGE( info, "error in MPI_Bcast.\n");
   pos = 0;
   pnl_object_mpi_unpack(Obj, buf, size, &pos, comm);
-  if ( rank != 0 ) free (buf);
+  if ( rank != 0 ) free (buf); buf=NULL;
   return info;
 }
 
@@ -963,7 +1055,7 @@ int pnl_object_mpi_isend (const PnlObject *Obj, int dest, int tag, MPI_Comm comm
   info = pnl_object_mpi_pack(Obj, buf, size, &pos, comm);
   PNL_MPI_MESSAGE( info, "error in packing.\n");
   info = MPI_Isend (buf, pos, MPI_PACKED, dest, tag, comm, request);
-  free (buf);
+  free (buf); buf=NULL;
   return info;
 }
 

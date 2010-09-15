@@ -117,11 +117,11 @@ name. All these functions are based on the same prototype
 \subsection{Random Numbers}
 \subsubsection{Short Description}
 
-At the moment, there are $14$ random number generators implemented. Each of
-them is identified by a macro, actually an integer. One must not refer to a
-generator using directly the value of the macro \var{PNL_RNG_XXX} rather than
-the macro itself because there is no warranty that the order used to store the
-generators will remain the same in future releases.
+At the moment, there are $14$ random number generators implemented. Each of them is
+identified by a macro, actually an integer. One must {\bf NOT} refer to a generator
+using directly the value of the macro \var{PNL_RNG_XXX} because there is no warranty
+that the order used to store the generators will remain the same in future releases.
+Instead, one should call generators directly using their macro names.
 
 \begin{table}[h!]
   \begin{tabular}{l|l|l}
@@ -151,6 +151,7 @@ PNL_RNG_MERSENNE_RANDOM_SEED, which is a Mersenne Twister generator with a
 random initial seed, read from {\tt /dev/urandom/} on Unix platforms.
 
 \subsubsection{Functions}
+\label{std-rng}
 
 Before starting to use random number generators, you must initialize them by
 calling 
@@ -165,12 +166,11 @@ calling
 \begin{itemize}
   
 \item \describefun{int}{pnl_rand_or_quasi}{int generator}
-  \sshortdescribe Returns the type the generator of index \var{generator}, 
+  \sshortdescribe Returns the type the generator of index \var{type_generator}, 
   \var{MC} or \var{QMC}
   
-  
 \item \describefun{const char \ptr }{pnl_rand_name}{int type_generator}
-  \sshortdescribe Returns the name of the generator of index \var{generator}
+  \sshortdescribe Returns the name of the generator of index \var{type_generator}
 \end{itemize}
 
 Once a generator is chosen, there are several functions available in the
@@ -178,7 +178,7 @@ library to draw samples according to a given law.
 
 The following functions return one sample from a specified law.
 \begin{itemize}
-\item \describefun{int}{pnl_rand_bernoulli}{double p, int generator}
+\item \describefun{int}{pnl_rand_bernoulli}{double p, int type_generator}
   \sshortdescribe Generates a sample from the Bernouilli law on $\{0, 1\}$ with
   parameter \var{p}.
   
@@ -213,7 +213,7 @@ The following functions return one sample from a specified law.
 \end{itemize}
 
 The following functions take an already existing \refstruct{PnlVect}\ptr  as
-first argument and fill each entry of the vector with a sample from the
+its first argument and fill each entry of the vector with a sample from the
 specified law. All the entries are independent. The difference between
 $n-$samples from a distribution in dimension $1$, and one sample from the same
 distribution in dimension $n$ only matters when using a {\bf Quasi} random
@@ -279,6 +279,56 @@ that you can access the elements individually afterwards.
   and stores them for future usage. They can be withdrawn using \var{RETRIEVE}
   with the index of the number to be retrieved.
 \end{itemize}
+
+\subsubsection{Advanced usage}
+
+Besides the generators listed in Table~\ref{rng_indices}, it is possible to
+add some more generators. For the moment, only ``Dynamically created Mersenne
+Twister'' random generators (DCMT) can be added to the list of dynamic random number
+generators. Once a generator is added to this list, it is assigned an ID which
+makes it possible to use it through all the functions listed above.
+
+Some functions to create a DCMT random number generator.
+\begin{itemize}
+\item \describefun{dcmt_state\ptr}{pnl_dcmt_get_parameter}{ulong seed}
+  \sshortdescribe Creates a DCMT. \var{seed} is the seed used to initialize
+  the Mersenne Twister generator internally used to find new DCMT.
+\item \describefun{dcmt_state \ptr \ptr}{pnl_dcmt_create_array}{int n, ulong seed, int \ptr count}
+  \sshortdescribe Creates an array of \var{n} independent DCMT. \var{seed} is
+  the seed used to initialize the MErsenne Twister generator internally used to
+  find new DCMT. On exit, \var{count} contains the number of generators actually
+  created.
+\item \describefun{\refstruct{PnlRng} \ptr \ptr}{pnl_rng_dcmt_create_array}{int n, ulong seed, int \ptr count}
+  \sshortdescribe Creates an array of \var{n} independent DCMT. \var{seed} is
+  the seed used to initialize the Mersenne Twister generator internally used to
+  find new DCMT. On exit, \var{count} contains the number of generators actually
+  created. Same function as \reffun{pnl_dcmt_create_array} instead that it
+  directly returns an array of \reffun{PnlRng}.
+\item \describefun{void}{pnl_dcmt_sgenrand}{dcmt_state \ptr mts, ulong s}
+  \sshortdescribe Generates a uniformly distributed unsigned integer
+\item \describefun{double}{pnl_dcmt_genrand_double}{dcmt_state \ptr mts}
+  \sshortdescribe Generates a uniformly distributed random variable on \var{[0,1]}.
+\item \describefun{void}{pnl_dcmt_free}{dcmt_state \ptr \ptr mts}
+  \sshortdescribe Frees a dcmt.
+\item \describefun{void}{pnl_dcmt_free_array}{dcmt_state \ptr \ptr mts, int count}
+  \sshortdescribe Frees an array of dcmt as returned by \reffun{pnl_dcmt_create_array}
+\end{itemize}
+
+Some functions to manipulate the list of dynamic rng
+\begin{itemize}
+\item \describefun{int}{pnl_rand_add}{PnlRng \ptr rng}
+  \sshortdescribe Adds the generator \var{rng} to the list of dynamic
+  rng. This function returns an integer which can be used as a
+  \var{type_generator} argument for the functions of Section~\ref{std-rng}
+\item \describefun{int}{pnl_rand_add_dcmt}{dcmt_state \ptr mts}
+  \sshortdescribe Adds the generator \var{mts} to the list of dynamic
+  rng. This function returns an integer which can be used as a
+  \var{type_generator} argument for the functions of Section~\ref{std-rng}
+\item \describefun{void}{pnl_rand_remove}{int id}
+  \sshortdescribe Removes a dcmt from the list of dynamic rng. \var{id} must
+  be an index previously returned by \reffun{pnl_rand_add_dcmt}.
+\end{itemize}
+
 
 \clearpage
 

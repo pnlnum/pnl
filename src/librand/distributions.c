@@ -24,19 +24,15 @@
 
 /* Maximum dimension for random sequences */
 #define DIM_MAX 100000
-#define CheckMaxQMCDim(type_generator, dimension)                       \
-  {   if (dimension >= pnl_Random[type_generator].Dimension)         \
-      {                                                                 \
-        perror("maximum dimension of QMC exceeded\n"); abort(); \
-      }                                                                 \
-  }
-static double ArrayOfRandomNumbers[DIM_MAX];
-static int draw_new_sample = 0;
 
-extern void pnl_rand_reset_all ()
-{
-  draw_new_sample = 1;
+#define CheckMaxQMCDim(rng, dimension)                        \
+{   if (dimension >= rng->max_dim)                            \
+    {                                                         \
+      perror("maximum dimension of QMC exceeded\n"); abort(); \
+    }                                                         \
 }
+
+static double ArrayOfRandomNumbers[DIM_MAX];
 
 
 /**
@@ -47,26 +43,29 @@ extern void pnl_rand_reset_all ()
 static double Gauss_BoxMuller(int type_generator)
 {
   double xs,ys, g1, g2;
-  static double random_number;
+  PnlRng *rng;
+  rng = pnl_rng_get_from_id(type_generator);
 
   /* do not wast any samples. But be sure to throw away any remaining
      samples when pnl_rand_init is called */
-  if (draw_new_sample==1)
+  if (rng->counter == 1 || rng->has_gauss == 0)
     {
       /* draw 2 new samples */
-      pnl_Random[type_generator].Compute(1,&xs);
-      pnl_Random[type_generator].Compute(1,&ys);
-      g1 = sqrt(-2.0*log(xs))*cos(2.0*M_PI*ys);
-      g2 = sqrt(-2.0*log(xs))*sin(2.0*M_PI*ys);
-      random_number = g2;
-      draw_new_sample=0;
+      rng->Compute(rng,&xs);
+      rng->Compute(rng,&ys);
+      xs = sqrt( -2. * log(xs) );
+      ys = M_2PI * ys;
+      g1 = xs * cos(ys);
+      g2 = xs * sin(ys);
+      rng->gauss = g2;
+      rng->has_gauss = 1;
       return g1;
     }
   else
     {
       /* use the remaining sample from the last call */
-      draw_new_sample=1;
-      return random_number;
+      rng->has_gauss = 0;
+      return rng->gauss;
     }
 }
 
@@ -74,11 +73,9 @@ static double Gauss_BoxMuller(int type_generator)
 /**
  * Simulation of a Gaussian standard variable.
  *
- * WARNING : A new random variable is drawn at each call.
- *
  * @param dimension size of the vector to simulate
- * @param create_or_retrieve boolean can be CREATE or RETRIEVE. UNUSED
- * @param index UNUSED
+ * @param create_or_retrieve boolean can be CREATE or RETRIEVE. 
+ * @param index (unused when calling with CREATE)
  * @param type_generator index of the generator
  */
 static double GaussMC(int dimension, int create_or_retrieve, int index, int type_generator)
@@ -86,9 +83,8 @@ static double GaussMC(int dimension, int create_or_retrieve, int index, int type
   if (create_or_retrieve == CREATE)
     {
       int i;
-      double *ptr = ArrayOfRandomNumbers;
-      for (i=0; i<dimension; i++, ptr++)
-        *ptr = Gauss_BoxMuller(type_generator);
+      for (i=0; i<dimension; i++)
+        ArrayOfRandomNumbers[i] = Gauss_BoxMuller(type_generator);
     }
   return (ArrayOfRandomNumbers[index]);
 }
@@ -108,37 +104,37 @@ static double GaussMC(int dimension, int create_or_retrieve, int index, int type
  */
 static double GaussQMC(int dimension, int create_or_retrieve, int index, int type_generator)
 {
-  if (dimension >= pnl_Random[type_generator].Dimension)
+  PnlRng *rng;
+  rng = pnl_rng_get_from_id(type_generator);
+  if (dimension > rng->dimension)
     {
       perror("maximum dimension of Monte Carlo exceeded\n"); abort();
     }
 
   if (create_or_retrieve == CREATE)
-    pnl_Random[type_generator].Compute(dimension,ArrayOfRandomNumbers);
+    rng->Compute(rng,ArrayOfRandomNumbers);
   return pnl_inv_cdfnor(ArrayOfRandomNumbers[index]);
 }
 
 
 /**
- * Simulation of a Gaussian standard variable for Quasi Monte Carlo Simulation,
- * that is with the pnl_inv_cdfnor function. 
- *  This function can be called for the generation of a n-dimensional vector of 
- *  independent variables: call to a n-dimensional low-discrepancy sequence.
- * @param dimension size of the vector to simulate
+ * Simulation of a Gaussian standard variable in dimension d
+ * @param d size od the vector we are simulating
  * @param create_or_retrieve boolean can be CREATE or
  * RETRIEVE. if it is CREATE, draw all the dimensions and returns the fisrt
  * one. If it s RETRIEVE, returns the dimension corresponding to index
  * @param index index to be returned
  * @param type_generator index of the generator
  */
-double pnl_rand_gauss(int dimension, int create_or_retrieve, int index, int type_generator)
+double pnl_rand_gauss(int d, int create_or_retrieve, int index, int type_generator)
 {
   if (pnl_rand_or_quasi (type_generator) == QMC)
-    return GaussQMC(dimension, create_or_retrieve, index, type_generator);
+    return GaussQMC(d, create_or_retrieve, index, type_generator);
   else
-    return GaussMC(dimension, create_or_retrieve, index, type_generator);
-            
+    return GaussMC(d, create_or_retrieve, index, type_generator);
+
 }
+
 /**
  * Simulation of a Bernoulli random variable
  * @param p parameter of the law
@@ -146,8 +142,10 @@ double pnl_rand_gauss(int dimension, int create_or_retrieve, int index, int type
  */
 int pnl_rand_bernoulli(double p, int type_generator)
 {
+  PnlRng *rng;
   double x=0.0;
-  pnl_Random[type_generator].Compute(1,&x);
+  rng = pnl_rng_get_from_id(type_generator);
+  rng->Compute(rng,&x);
   if (x<p) return 1; else return  0;
 }
 
@@ -161,15 +159,18 @@ long pnl_rand_poisson(double lambda, int type_generator)
   double u;
   double a = exp(-lambda);
   long n = 0;
-  static double random_number;
+  double random_number;
+  PnlRng *rng;
+  rng = pnl_rng_get_from_id(type_generator);
 
-  pnl_Random[type_generator].Compute(1,&random_number);
+  rng->Compute(rng,&random_number);
   u = random_number;
-  while (u>a){
-    pnl_Random[type_generator].Compute(1,&random_number); 
-    u *= random_number;
-    n++;
-  }
+  while (u>a)
+    {
+      rng->Compute(rng,&random_number); 
+      u *= random_number;
+      n++;
+    }
   return n;
 }
 
@@ -181,11 +182,11 @@ long pnl_rand_poisson(double lambda, int type_generator)
 double pnl_rand_exp(double lambda,int type_generator)
 {
   double x;
-  static double random_number;
+  PnlRng *rng;
+  rng = pnl_rng_get_from_id(type_generator);
 
   do{
-    pnl_Random[type_generator].Compute(1,&random_number); 
-    x=random_number;
+    rng->Compute(rng,&x); 
   } while(x==0);
   return (double) (-log(x)/lambda);
 }
@@ -219,8 +220,11 @@ long pnl_rand_poisson1(double lambda, double t, int type_generator)
  */
 double pnl_rand_uni (int type_generator)
 {
-  double u=0.;
-  while (u == 0) pnl_Random[type_generator].Compute(1,&u);
+  PnlRng *rng;
+  double u;
+  rng = pnl_rng_get_from_id(type_generator);
+  do { rng->Compute(rng,&u); }
+  while (u == 0); 
   return u;
 }
 
@@ -234,8 +238,10 @@ double pnl_rand_uni (int type_generator)
  */
 double pnl_rand_uni_ab (double a, double b, int type_generator)
 {
-  double u=0.0;
-  pnl_Random[type_generator].Compute(1,&u);
+  double u;
+  PnlRng *rng;
+  rng = pnl_rng_get_from_id(type_generator);
+  rng->Compute(rng,&u);
   return a+(b-a)*u;
 }
 
@@ -246,11 +252,12 @@ double pnl_rand_uni_ab (double a, double b, int type_generator)
  */
 double pnl_rand_normal (int type_generator)
 {
-  int mc_or_qmc = pnl_rand_or_quasi (type_generator);
-  if (mc_or_qmc == QMC)
+  PnlRng *rng;
+  rng = pnl_rng_get_from_id(type_generator);
+  if (rng->rand_or_quasi == QMC)
     {
       double u;
-      pnl_Random[type_generator].Compute(1,&u);
+      rng->Compute(rng,&u);
       return pnl_inv_cdfnor(u);
     }
   return Gauss_BoxMuller(type_generator);
@@ -269,15 +276,14 @@ double pnl_rand_normal (int type_generator)
 void pnl_vect_rand_uni(PnlVect *G, int samples, double a, double b, int type_generator)
 {
   int i;
-  double random_number;
-  double *ptr;
+  double u;
+  PnlRng *rng;
+  rng = pnl_rng_get_from_id(type_generator);
   pnl_vect_resize(G,samples);
-  ptr=G->array;
   for(i=0;i<samples;i++)
     {
-      pnl_Random[type_generator].Compute(1,&random_number);
-      *ptr=a+(b-a)*random_number;
-      ptr++;
+      rng->Compute(rng,&u);
+      PNL_LET(G, i) = a+(b-a)*u;
     }
 }
 
@@ -301,26 +307,26 @@ void pnl_vect_rand_uni(PnlVect *G, int samples, double a, double b, int type_gen
 void pnl_vect_rand_uni_d (PnlVect *G, int dimension, double a, double b, int type_generator)
 {
   int i;
-  double *ptr;
+  double u;
+  PnlRng *rng;
+  rng = pnl_rng_get_from_id(type_generator);
   pnl_vect_resize(G,dimension);
-  ptr=G->array;
   if (pnl_rand_or_quasi (type_generator) == QMC)
     {
-      CheckMaxQMCDim(type_generator, dimension);
-      pnl_Random[type_generator].Compute(dimension, ptr);
+      CheckMaxQMCDim(rng, dimension);
       for(i=0;i<dimension;i++)
         {
-          *ptr=a+(b-a)* (*ptr);  ptr++;
+          rng->Compute(rng, &u);
+          PNL_LET(G,i) = a+(b-a)*u;
         }
       return;
     }
   for(i=0;i<dimension;i++)
     {
-      pnl_Random[type_generator].Compute(1, ptr);
-      *ptr=a+(b-a)* (*ptr);  ptr++;
+      rng->Compute(rng, &u);
+      PNL_LET(G,i) = a+(b-a)*u;
     }
 }
-
 
 
 /**
@@ -335,23 +341,22 @@ void pnl_vect_rand_uni_d (PnlVect *G, int dimension, double a, double b, int typ
 void pnl_vect_rand_normal (PnlVect *G, int samples, int type_generator)
 {
   int i;
-  double *ptr;
+  double u;
+  PnlRng *rng;
+  rng = pnl_rng_get_from_id(type_generator);
   pnl_vect_resize(G,samples);
-  ptr = G->array;
   if ( pnl_rand_or_quasi(type_generator) == QMC)
     {
       for (i=0; i<samples; i++)
         {
-          pnl_Random[type_generator].Compute(1,ptr);
-          *ptr=pnl_inv_cdfnor(*ptr);
-          ptr++;
+          rng->Compute(rng,&u);
+          PNL_LET(G,i) = pnl_inv_cdfnor(u);
         }
       return;
     }
   for (i=0; i<samples; i++)
     {
-      *ptr=Gauss_BoxMuller(type_generator);
-      ptr++;
+      PNL_LET(G,i) = Gauss_BoxMuller(type_generator);
     }
 }
 
@@ -373,24 +378,22 @@ void pnl_vect_rand_normal (PnlVect *G, int samples, int type_generator)
 void pnl_vect_rand_normal_d (PnlVect *G, int dimension, int type_generator)
 {
   int i;
-  double *ptr;
+  PnlRng *rng;
+  rng = pnl_rng_get_from_id(type_generator);
   pnl_vect_resize(G,dimension);
-  ptr = G->array;
   if (pnl_rand_or_quasi(type_generator) == QMC)
     {
-      CheckMaxQMCDim(type_generator, dimension);
-      pnl_Random[type_generator].Compute(dimension,ptr);
+      CheckMaxQMCDim(rng, dimension);
+      rng->Compute(rng,G->array);
       for (i=0; i<dimension; i++)
         {
-          *ptr=pnl_inv_cdfnor(*ptr);
-          ptr++;
+          PNL_LET(G,i) = pnl_inv_cdfnor(PNL_GET(G,i));
         }
       return;
     }
   for (i=0; i<dimension; i++)
     {
-      *ptr=Gauss_BoxMuller(type_generator);
-      ptr++;
+      PNL_LET(G,i) = Gauss_BoxMuller(type_generator);
     }
 }
 
@@ -413,33 +416,30 @@ void pnl_mat_rand_uni(PnlMat *M, int samples, int dimension,
                       const PnlVect *a, const PnlVect *b, int type_generator)
 {
   int i, j;
-  double *ptr, *aj, *bj;
+  double u;
+  PnlRng *rng;
+  rng = pnl_rng_get_from_id(type_generator);
   pnl_mat_resize(M,samples,dimension);
-  ptr=M->array;
 
   if (pnl_rand_or_quasi (type_generator) == MC)
     {
       for(i=0;i<samples;i++)
         {
-          aj=a->array; bj=b->array;
           for (j=0; j<dimension; j++)
             {
-              pnl_Random[type_generator].Compute(1, ptr);
-              *ptr=(*aj)+(*bj- (*aj))*(*ptr);
-              ptr++; aj++; bj++;
+              rng->Compute(rng, &u);
+              PNL_MLET(M,i,j)=PNL_GET(a,j)+(PNL_GET(b,j)- PNL_GET(a,j))*u;
             }
         }
       return;
     }
-  CheckMaxQMCDim(type_generator, dimension);
+  CheckMaxQMCDim(rng, dimension);
   for(i=0;i<samples;i++)
     {
-      pnl_Random[type_generator].Compute(dimension, ptr);
-      aj=a->array; bj=b->array;
+      rng->Compute(rng, &(PNL_MGET(M, i, 0)));
       for (j=0; j<dimension; j++)
         {
-          *ptr=(*aj)+(*bj- (*aj))*(*ptr);
-          ptr++; aj++; bj++;
+          PNL_MLET(M,i,j)=PNL_GET(a,j)+(PNL_GET(b,j)- PNL_GET(a,j))*PNL_MGET(M,i,j);
         }
     }
 }
@@ -461,12 +461,13 @@ void pnl_mat_rand_uni(PnlMat *M, int samples, int dimension,
  * important if QMC is used 
  */
 void pnl_mat_rand_uni2(PnlMat *M, int samples, int dimension,
-                      double a, double b, int type_generator)
+                       double a, double b, int type_generator)
 {
   int i, j;
-  double *ptr;
+  double u;
+  PnlRng *rng;
+  rng = pnl_rng_get_from_id(type_generator);
   pnl_mat_resize(M,samples,dimension);
-  ptr=M->array;
 
   if (pnl_rand_or_quasi (type_generator) == MC)
     {
@@ -474,21 +475,19 @@ void pnl_mat_rand_uni2(PnlMat *M, int samples, int dimension,
         {
           for (j=0; j<dimension; j++)
             {
-              pnl_Random[type_generator].Compute(1, ptr);
-              *ptr = a + (b - a) * (*ptr);
-              ptr++; 
+              rng->Compute(rng, &u);
+              PNL_MLET(M,i,j)=a+(b- a)*u;
             }
         }
       return;
     }
-  CheckMaxQMCDim(type_generator, dimension);
+  CheckMaxQMCDim(rng, dimension);
   for(i=0;i<samples;i++)
     {
-      pnl_Random[type_generator].Compute(dimension, ptr);
+      rng->Compute(rng, &(PNL_MGET(M, i, 0)));
       for (j=0; j<dimension; j++)
         {
-          *ptr = a + (b - a) * (*ptr);
-          ptr++; 
+          PNL_MLET(M,i,j)=a+(b -a)*PNL_MGET(M,i,j);
         }
     }
 }
@@ -507,27 +506,27 @@ void pnl_mat_rand_uni2(PnlMat *M, int samples, int dimension,
  * dimensionnal normal distribution
  */
 void pnl_mat_rand_normal(PnlMat *M, int samples, int dimension,
-                            int type_generator)
+                         int type_generator)
 {
   int i, j;
-  double *ptr;
+  PnlRng *rng;
+  rng = pnl_rng_get_from_id(type_generator);
   pnl_mat_resize(M,samples,dimension);
-  ptr=M->array;
   if (pnl_rand_or_quasi(type_generator) == MC)
     {
       for (i=0; i<M->mn; i++)
         {
-          *ptr = Gauss_BoxMuller(type_generator); ptr++;
+          M->array[i] = Gauss_BoxMuller(type_generator);
         }
       return;
     }
-  CheckMaxQMCDim(type_generator, dimension);
+  CheckMaxQMCDim(rng, dimension);
   for(i=0;i<samples;i++)
     {
-      pnl_Random[type_generator].Compute(dimension, ptr);
+      rng->Compute(rng, &(PNL_MGET(M, i, 0)));
       for (j=0; j<dimension; j++)
         {
-          *ptr=pnl_inv_cdfnor(*ptr); ptr++;
+          PNL_MLET(M,i,j)=pnl_inv_cdfnor(PNL_MGET(M,i,j));
         }
     }
 }
@@ -544,7 +543,6 @@ void pnl_mat_rand_normal(PnlMat *M, int samples, int dimension,
  * generating gamma variables", ACM Transactions on Mathematical
  * Software, Vol 26, No 3 (2000), p363-372.
  */
-
 double pnl_rand_gamma (double a, double b, int gen)
 {
   /* assume a > 0 */
@@ -555,32 +553,32 @@ double pnl_rand_gamma (double a, double b, int gen)
       return pnl_rand_gamma ( 1.0 + a, b, gen) * pow (u, 1.0 / a);
     }
 
-  {
-    double x, v, u;
-    double d = a - 1.0 / 3.0;
-    double c = (1.0 / 3.0) / sqrt (d);
+    {
+      double x, v, u;
+      double d = a - 1.0 / 3.0;
+      double c = (1.0 / 3.0) / sqrt (d);
 
-    while (1)
-      {
-        do
-          {
-            x = pnl_rand_normal (gen);
-		     v = 1.0 + c * x;
-          }
-        while (v <= 0);
+      while (1)
+        {
+          do
+            {
+              x = pnl_rand_normal (gen);
+              v = 1.0 + c * x;
+            }
+          while (v <= 0);
 
-        v = v * v * v;
-        u = pnl_rand_uni (gen);
+          v = v * v * v;
+          u = pnl_rand_uni (gen);
 
-        if (u < 1 - 0.0331 * x * x * x * x) 
-          break;
+          if (u < 1 - 0.0331 * x * x * x * x) 
+            break;
 
-        if (log (u) < 0.5 * x * x + d * (1 - v + log (v)))
-          break;
-      }
-    
-    return b * d * v;
-  }
+          if (log (u) < 0.5 * x * x + d * (1 - v + log (v)))
+            break;
+        }
+
+      return b * d * v;
+    }
 }
 
 /**

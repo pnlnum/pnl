@@ -66,7 +66,11 @@
 #ifndef _RK_SOBOL_
 #define _RK_SOBOL_
 
-#include "rk_mt.h"
+#include "mt.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef enum {
   RK_SOBOL_OK      = 0, /* No error */
@@ -88,9 +92,6 @@ typedef struct
   unsigned long gcount;
 } rk_sobol_state;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
   /* Sobol directions initializations (zero terminated lists) */
 
@@ -125,7 +126,7 @@ extern "C" {
    * it is != NULL to speed up initialization for dimension > 1024.
    */
   extern rk_sobol_error pnl_rk_sobol_init(int dimension, rk_sobol_state *s, 
-				      rk_state *rs_dir, const unsigned long *directions,
+				      mt_state *rs_dir, const unsigned long *directions,
 				      const unsigned long *polynomials);
 
   /*

@@ -30,6 +30,7 @@ extern "C" {
 
   
 extern PnlVectObject* pnl_vect_object_new ();
+extern void pnl_vect_object_free (PnlVectObject **);
 extern int pnl_vect_object_resize(PnlVectObject * v, int size);
 
 #include "pnl_vector_double.h"

@@ -249,19 +249,16 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,create_from_file )(const char * file)
 }
 
 
-/** 
+/**
  * frees a TYPE(PnlMat)
  *
  * @param v adress of a TYPE(PnlMat)*. v is set to NULL at exit.
  */
 void FUNCTION(pnl_mat,free)(TYPE(PnlMat) **v)
 {
-  if (*v != NULL)
-    {
-      if ((*v)->array != NULL && (*v)->owner == 1) free((*v)->array);
-      free(*v);
-      *v=NULL;
-    }
+  PnlMatObject *o;
+  o = PNL_MAT_OBJECT(*v);
+  pnl_mat_object_free (&o);
 }
 
 /**
@@ -1928,13 +1925,9 @@ TYPE(PnlHmat)* FUNCTION(pnl_hmat,create_from_ptr)(int ndim, const int *dims, con
 
 void FUNCTION(pnl_hmat,free)(TYPE(PnlHmat) **H)
 {
-  if (*H != NULL)
-    {
-      free((*H)->array);
-      free((*H)->dims);
-      free(*H);
-      *H=NULL;
-    }
+  PnlHmatObject *o;
+  o = PNL_HMAT_OBJECT (*H);
+  pnl_hmat_object_free (&o);
 }
 
 

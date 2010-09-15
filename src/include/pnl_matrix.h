@@ -62,6 +62,7 @@ extern "C" {
 #define PNL_MLET(v,i,j) (v)->array[(i)*(v)->n+(j)]
 
 extern PnlMatObject* pnl_mat_object_new ();
+extern void pnl_mat_object_free (PnlMatObject **);
 extern int pnl_mat_object_resize(PnlMatObject *M, int m, int n);
 /*@}*/
 
@@ -70,6 +71,7 @@ extern int pnl_mat_object_resize(PnlMatObject *M, int m, int n);
  */
 /*@{*/
 extern PnlHmatObject* pnl_hmat_object_new ();
+extern void pnl_hmat_object_free (PnlHmatObject **);
 extern int pnl_hmat_object_resize(PnlHmatObject *H, int ndim, const int *dims);
 /*@}*/
 

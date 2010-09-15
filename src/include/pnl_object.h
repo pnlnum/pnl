@@ -37,7 +37,7 @@ typedef struct _PnlObject PnlObject;
 /**
  * Casts any object into a PnlBandMatObject
  */
-#define PNL_BANDMAT_OBJECT(o) ((PnlBandMatObject *) o)
+#define PNL_BAND_MAT_OBJECT(o) ((PnlBandMatObject *) o)
 /**
  * Casts any object into a PnlTridiagMatObject
  */
@@ -49,7 +49,11 @@ typedef struct _PnlObject PnlObject;
 /**
  * Casts any object into a PnlRng
  */
-#define PNL_RNG_OBJECT(o) (o)
+#define PNL_RNG_OBJECT(o) ((PnlRng *) o)
+/**
+ * Casts any object into a PnlList
+ */
+#define PNL_LIST_OBJECT(o) ((PnlList *) o)
 
 /**
  * Returns the name of the type of any object inheriting from PnlObject
@@ -87,6 +91,7 @@ enum {
   PNL_TYPE_HMATRIX_DOUBLE,
   PNL_TYPE_HMATRIX_INT,
   PNL_TYPE_HMATRIX_COMPLEX,
+  PNL_TYPE_LIST,
   PNL_TYPE_BASIS,
   PNL_TYPE_RNG,
   PNL_TYPE_ITERATION_BASE,
@@ -102,6 +107,7 @@ enum {
  */
 typedef unsigned int PnlType; 
 
+typedef void (destroy_func) (void **);
 /**
  * The \a PnlObject structure is used to simulate some inheritance between the
  * ojbects of Pnl.  It must be the first element of all the objects existing in
@@ -114,6 +120,7 @@ struct _PnlObject
   const char *label; /*!< a string identifier (for the moment not useful) */
   PnlType parent_type; /*!< the identifier of the parent object is any,
                           otherwise parent_type=id */
+  destroy_func *destroy; /*!< frees an object */
 };
 
 extern PnlObject* pnl_object_new (PnlType type);
