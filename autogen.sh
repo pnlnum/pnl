@@ -9,6 +9,15 @@ srcdir=`dirname $0`
 test -z "$srcdir" && srcdir=.
 DIE=0
 
+if test `uname -s` = Darwin ; then
+    LIBTOOL=glibtool
+    LIBTOOLIZE=glibtoolize
+else
+    LIBTOOL=libtool
+    LIBTOOLIZE=libtoolize
+fi
+
+
 (test -f $srcdir/configure.in) || {
     echo -n "**Error**: Directory "\'$srcdir\'" does not look like the"
     echo " top-level package directory"
@@ -25,9 +34,7 @@ DIE=0
 }
 
 (grep "^AM_PROG_LIBTOOL" $srcdir/configure.in >/dev/null) && {
-  (libtool --version) < /dev/null > /dev/null 2>&1 || 
-  (libtool -V) < /dev/null > /dev/null 2>&1 || 
-  (glibtool --version) < /dev/null > /dev/null 2>&1 || {
+  ("$LIBTOOL" --version) < /dev/null > /dev/null 2>&1  || {
     echo
     echo "**Error**: You must have \`libtool' installed."
     echo "You can get it from: ftp://ftp.gnu.org/pub/gnu/"
@@ -69,8 +76,8 @@ cd $srcdir
 aclocalinclude="$ACLOCAL_FLAGS"
 if grep "^AM_PROG_LIBTOOL" configure.in >/dev/null; then
 	if test -z "$NO_LIBTOOLIZE" ; then 
-	    echo "Running libtoolize..."
-        glibtoolize --force --copy || libtoolize --force --copy
+	    echo "Running $LIBTOOLIZE..."
+	  "$LIBTOOLIZE" --force --copy
 	fi
 fi
 echo "Running aclocal  ..."
