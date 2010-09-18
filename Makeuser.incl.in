@@ -21,7 +21,7 @@ SHELL = @SHELL@
 LIBTOOL = @LIBTOOL@
 MPI_CFLAGS=@MPI_CFLAGS@
 LN_S = @LN_S@
-INCLUDES = -I$(top_builddir)/include/pnl
+INCLUDES = -I$(top_builddir)/include/pnl  -I$(top_builddir)/include
 OTHERLIBS = -L$(top_builddir)/lib -lpnl -lm @LDFLAGS@
 
 QUIET=--quiet

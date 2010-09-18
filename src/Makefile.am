@@ -1,5 +1,5 @@
 SUBDIRS = objects libamos librand fft math \
-linalg sort include specfun libcephes \
+linalg sort include/pnl specfun libcephes \
 libinteg interpol roots libminpack optim
 
 
