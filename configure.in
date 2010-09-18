@@ -1,8 +1,7 @@
 dnl Jérôme LELONG Feb 2006
 
 
-AC_REVISION($Revision: 1.47 $)
-AC_INIT(PNL, 1.0, jerome.lelong@imag.fr)
+AC_INIT(PNL, 1.3, jerome.lelong@imag.fr)
 
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_HEADERS(config.h)
@@ -368,7 +367,7 @@ Makeuser.incl \
 examples/Makefile \
 src/Makefile \
 src/fft/Makefile \
-src/include/Makefile \
+src/include/pnl/Makefile \
 src/interpol/Makefile \
 src/libamos/Makefile \
 src/libblas/Makefile \
