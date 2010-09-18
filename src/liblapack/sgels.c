@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int sgels_(char *trans, integer *m, integer *n, integer *
 	nrhs, real *a, integer *lda, real *b, integer *ldb, real *work, 

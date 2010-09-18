@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zgtcon_(char *norm, integer *n, doublecomplex *dl, 
 	doublecomplex *d__, doublecomplex *du, doublecomplex *du2, integer *

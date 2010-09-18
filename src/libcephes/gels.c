@@ -64,7 +64,7 @@
   C
 */
 
-#include "pnl_mathtools.h"
+#include "pnl/pnl_mathtools.h"
 #include "cephes_protos.h"
 
 int

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 doublereal dlapy3_(doublereal *x, doublereal *y, doublereal *z__)
 {

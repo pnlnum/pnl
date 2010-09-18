@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int chpgst_(integer *itype, char *uplo, integer *n, complex *
 	ap, complex *bp, integer *info)

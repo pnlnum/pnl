@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 doublereal clanhs_(char *norm, integer *n, complex *a, integer *lda, real *
 	work)

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dtgevc_(char *side, char *howmny, logical *select, 
 	integer *n, doublereal *a, integer *lda, doublereal *b, integer *ldb, 

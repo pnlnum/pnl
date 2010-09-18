@@ -17,9 +17,9 @@
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
 
-#include "pnl_mathtools.h"
-#include "pnl_vector.h"
-#include "pnl_fft.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_fft.h"
 #include "fftpack.h"
 
 /**

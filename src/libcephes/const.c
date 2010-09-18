@@ -60,7 +60,7 @@
 */
 
 #include "mconf.h"
-#include "pnl_mathtools.h"
+#include "pnl/pnl_mathtools.h"
 
 double EULER  = M_EULER;        /* Euler constant */
 

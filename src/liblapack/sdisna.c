@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int sdisna_(char *job, integer *m, integer *n, real *d__, 
 	real *sep, integer *info)

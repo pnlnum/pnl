@@ -1,5 +1,5 @@
 /* sequential formatted external common routines*/
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 #include "fio.h"
 
 extern char *f__fmtbuf;

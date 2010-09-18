@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int spoequ_(integer *n, real *a, integer *lda, real *s, real 
 	*scond, real *amax, integer *info)

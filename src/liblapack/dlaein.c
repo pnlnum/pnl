@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dlaein_(logical *rightv, logical *noinit, integer *n, 
 	doublereal *h__, integer *ldh, doublereal *wr, doublereal *wi, 

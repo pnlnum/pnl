@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int cheevd_(char *jobz, char *uplo, integer *n, complex *a, 
 	integer *lda, real *w, complex *work, integer *lwork, real *rwork, 

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int crot_(integer *n, complex *cx, integer *incx, complex *
 	cy, integer *incy, real *c__, complex *s)

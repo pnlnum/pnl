@@ -28,8 +28,8 @@
 
 #include <errno.h>
 #include <math.h>
-#include "pnl_complex.h"
-#include "pnl_mathtools.h"
+#include "pnl/pnl_complex.h"
+#include "pnl/pnl_mathtools.h"
 
 /*
  * Computes the Gamma function for complex argument

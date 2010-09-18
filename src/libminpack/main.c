@@ -1,4 +1,4 @@
-#include "pnl_mathtools.h"
+#include "pnl/pnl_mathtools.h"
 
 
 extern int pnl_root_fsolve (PnlRnFuncRnDFunc *f, PnlVect *x, PnlVect *fx,

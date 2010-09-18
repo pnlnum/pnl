@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int claic1_(integer *job, integer *j, complex *x, real *sest,
 	 complex *w, complex *gamma, real *sestpr, complex *s, complex *c__)

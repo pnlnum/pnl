@@ -1,7 +1,7 @@
 #ifndef _PNL_INTERNALS_H
 #define _PNL_INTERNALS_H
 
-#include "pnl_object.h"
+#include "pnl/pnl_object.h"
 
 /**
  * \defgroup PnlInternals Internal macros

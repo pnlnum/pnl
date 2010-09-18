@@ -1,4 +1,4 @@
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 #ifdef KR_headers
 VOID pow_zi(p, a, b) 	/* p = a**b  */

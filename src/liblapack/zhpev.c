@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zhpev_(char *jobz, char *uplo, integer *n, doublecomplex 
 	*ap, doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex *

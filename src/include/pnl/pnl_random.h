@@ -6,12 +6,12 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include "pnl_object.h"
-#include "pnl_mathtools.h"
-#include "pnl_types.h"
-#include "pnl_vector.h"
-#include "pnl_matrix.h"
-#include "pnl_list.h"
+#include "pnl/pnl_object.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_types.h"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_list.h"
 
 /**
  * \defgroup PnlRandom Random generators 

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int cunmhr_(char *side, char *trans, integer *m, integer *n, 
 	integer *ilo, integer *ihi, complex *a, integer *lda, complex *tau, 

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int sgelsy_(integer *m, integer *n, integer *nrhs, real *a, 
 	integer *lda, real *b, integer *ldb, integer *jpvt, real *rcond, 

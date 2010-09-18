@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int spttrs_(integer *n, integer *nrhs, real *d__, real *e, 
 	real *b, integer *ldb, integer *info)

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zlaic1_(integer *job, integer *j, doublecomplex *x, 
 	doublereal *sest, doublecomplex *w, doublecomplex *gamma, doublereal *

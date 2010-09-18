@@ -58,7 +58,7 @@
  * Vol. 8, No. 1, January 1998, pp 3--30.                         
  */
 
-#include "pnl_random.h"
+#include "pnl/pnl_random.h"
 #include "mt.h"
 
 /* #define N 624, in mt.h */

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slassq_(integer *n, real *x, integer *incx, real *scale, 
 	real *sumsq)

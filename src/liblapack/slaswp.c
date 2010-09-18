@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slaswp_(integer *n, real *a, integer *lda, integer *k1, 
 	integer *k2, integer *ipiv, integer *incx)

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dormtr_(char *side, char *uplo, char *trans, integer *m, 
 	integer *n, doublereal *a, integer *lda, doublereal *tau, doublereal *

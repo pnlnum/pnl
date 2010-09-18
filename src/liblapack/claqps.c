@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int claqps_(integer *m, integer *n, integer *offset, integer 
 	*nb, integer *kb, complex *a, integer *lda, integer *jpvt, complex *

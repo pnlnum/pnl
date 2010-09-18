@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slahqr_(logical *wantt, logical *wantz, integer *n, 
 	integer *ilo, integer *ihi, real *h__, integer *ldh, real *wr, real *

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int chbmv_(char *uplo, integer *n, integer *k, complex *
 	alpha, complex *a, integer *lda, complex *x, integer *incx, complex *

@@ -6,9 +6,9 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include "pnl_mathtools.h"
-#include "pnl_matrix.h"
-#include "pnl_object.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_object.h"
 
 #ifndef MAX_RESTART 
 #define MAX_RESTART   50 

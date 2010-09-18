@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zsytri_(char *uplo, integer *n, doublecomplex *a, 
 	integer *lda, integer *ipiv, doublecomplex *work, integer *info)

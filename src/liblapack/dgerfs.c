@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dgerfs_(char *trans, integer *n, integer *nrhs, 
 	doublereal *a, integer *lda, doublereal *af, integer *ldaf, integer *

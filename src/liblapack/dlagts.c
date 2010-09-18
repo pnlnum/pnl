@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dlagts_(integer *job, integer *n, doublereal *a, 
 	doublereal *b, doublereal *c__, doublereal *d__, integer *in, 

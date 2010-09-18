@@ -6,7 +6,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include "pnl_vector.h"
+#include "pnl/pnl_vector.h"
 
 /**
  * \defgroup PnlPermutation  Permutation 

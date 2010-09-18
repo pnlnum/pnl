@@ -33,9 +33,9 @@
 
 #define _PNL_PRIVATE 1
 
-#include "pnl_mathtools.h"
-#include "pnl_random.h"
-#include "pnl_cdf.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_random.h"
+#include "pnl/pnl_cdf.h"
 #include "randomkit.h"
 
 /* ---------------------------------- */

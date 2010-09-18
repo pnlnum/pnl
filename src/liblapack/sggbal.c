@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int sggbal_(char *job, integer *n, real *a, integer *lda, 
 	real *b, integer *ldb, integer *ilo, integer *ihi, real *lscale, real 

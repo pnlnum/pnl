@@ -17,8 +17,8 @@
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
 
-#include "pnl_mathtools.h"
-#include "pnl_specfun.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_specfun.h"
 
 
 extern double hyp2f0 (double, double, double, int, double*);

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dlaebz_(integer *ijob, integer *nitmax, integer *n, 
 	integer *mmax, integer *minp, integer *nbmin, doublereal *abstol, 

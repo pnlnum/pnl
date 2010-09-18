@@ -17,12 +17,12 @@
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
 
-#include "pnl_complex.h"
-#include "pnl_mathtools.h"
-#include "pnl_vector.h"
-#include "pnl_matrix.h"
-#include "pnl_fft.h"
-#include "pnl_laplace.h"
+#include "pnl/pnl_complex.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_fft.h"
+#include "pnl/pnl_laplace.h"
 
 #define ALTERNATE(n) (((n)&1) ? -1 : 1) /* (-1)^n */
 

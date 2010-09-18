@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int ssytri_(char *uplo, integer *n, real *a, integer *lda, 
 	integer *ipiv, real *work, integer *info)

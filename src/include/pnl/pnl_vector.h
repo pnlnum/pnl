@@ -18,7 +18,7 @@ extern "C" {
 #define CheckVectMatch(lhs, rhs){}
 #endif /* PNL_RANGE_CHECK_OFF */
 
-#include "pnl_matvect.h"
+#include "pnl/pnl_matvect.h"
 
 /**
  * \defgroup PnlVectors  a Vector object
@@ -33,9 +33,9 @@ extern PnlVectObject* pnl_vect_object_new ();
 extern void pnl_vect_object_free (PnlVectObject **);
 extern int pnl_vect_object_resize(PnlVectObject * v, int size);
 
-#include "pnl_vector_double.h"
-#include "pnl_vector_complex.h"
-#include "pnl_vector_int.h"
+#include "pnl/pnl_vector_double.h"
+#include "pnl/pnl_vector_complex.h"
+#include "pnl/pnl_vector_int.h"
 
 #ifdef __cplusplus
 }

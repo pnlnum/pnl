@@ -17,8 +17,8 @@
 /************************************************************************/
 
 #include "config.h"
-#include "pnl_vector.h"
-#include "pnl_mathtools.h"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_mathtools.h"
 
 int pnl_vect_int_less(const PnlVectInt * a,const PnlVectInt * b)
 {

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dgesc2_(integer *n, doublereal *a, integer *lda, 
 	doublereal *rhs, integer *ipiv, integer *jpiv, doublereal *scale)

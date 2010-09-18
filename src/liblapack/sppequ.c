@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int sppequ_(char *uplo, integer *n, real *ap, real *s, real *
 	scond, real *amax, integer *info)

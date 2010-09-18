@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int chptrd_(char *uplo, integer *n, complex *ap, real *d__, 
 	real *e, complex *tau, integer *info)

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slatdf_(integer *ijob, integer *n, real *z__, integer *
 	ldz, real *rhs, real *rdsum, real *rdscal, integer *ipiv, integer *

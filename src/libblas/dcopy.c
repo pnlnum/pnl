@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dcopy_(integer *n, doublereal *dx, integer *incx, 
 	doublereal *dy, integer *incy)

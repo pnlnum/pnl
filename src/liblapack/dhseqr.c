@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dhseqr_(char *job, char *compz, integer *n, integer *ilo,
 	 integer *ihi, doublereal *h__, integer *ldh, doublereal *wr, 

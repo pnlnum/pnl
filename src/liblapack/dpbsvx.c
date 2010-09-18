@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dpbsvx_(char *fact, char *uplo, integer *n, integer *kd, 
 	integer *nrhs, doublereal *ab, integer *ldab, doublereal *afb, 

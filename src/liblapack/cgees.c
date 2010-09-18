@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int cgees_(char *jobvs, char *sort, L_fp select, integer *n, 
 	complex *a, integer *lda, integer *sdim, complex *w, complex *vs, 

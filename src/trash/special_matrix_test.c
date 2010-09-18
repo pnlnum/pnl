@@ -20,11 +20,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "pnl_matrix.h"
-#include"pnl_perm.h"
-#include "pnl_band_matrix.h"
-#include "pnl_spec_matrix.h"
-#include "pnl_random.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_perm.h"
+#include "pnl/pnl_band_matrix.h"
+#include "pnl/pnl_spec_matrix.h"
+#include "pnl/pnl_random.h"
 #include "tests.h"
 
 

@@ -21,8 +21,8 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "pnl_tridiag_matrix.h"
-#include "pnl_random.h"
+#include "pnl/pnl_tridiag_matrix.h"
+#include "pnl/pnl_random.h"
 #include "tests.h"
 
 static void pnl_tridiag_mat_print_as_full (const PnlTridiagMat *T)

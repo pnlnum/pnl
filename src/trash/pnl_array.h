@@ -4,8 +4,8 @@
 #include <math.h>
 #include <ctype.h>
 #include <stdarg.h>
-#include "pnl_mathtools.h"
-#include "pnl_complex.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_complex.h"
 
 void pnl_array_map_inplace(double *lhs, double(*f)(double ),int n);
 void pnl_array_plus_double(double *lhs , double x, int n);

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int ctrsna_(char *job, char *howmny, logical *select, 
 	integer *n, complex *t, integer *ldt, complex *vl, integer *ldvl, 

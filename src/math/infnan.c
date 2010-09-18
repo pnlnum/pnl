@@ -17,7 +17,7 @@
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
 
-#include "pnl_mathtools.h"
+#include "pnl/pnl_mathtools.h"
 
 static double __pnl_div (double x, double y)
 {

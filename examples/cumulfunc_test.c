@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "pnl_cdf.h"
+#include "pnl/pnl_cdf.h"
 
 /*test des fonctions pnl_cdf_ */
 

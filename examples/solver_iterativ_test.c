@@ -20,8 +20,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "pnl_matrix.h"
-#include "pnl_linalgsolver.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_linalgsolver.h"
 #include "tests.h"
 
 

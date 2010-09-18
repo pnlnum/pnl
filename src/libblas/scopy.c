@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int scopy_(integer *n, real *sx, integer *incx, real *sy, 
 	integer *incy)

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int chbgst_(char *vect, char *uplo, integer *n, integer *ka, 
 	integer *kb, complex *ab, integer *ldab, complex *bb, integer *ldbb, 

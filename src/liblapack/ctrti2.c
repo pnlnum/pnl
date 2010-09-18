@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int ctrti2_(char *uplo, char *diag, integer *n, complex *a, 
 	integer *lda, integer *info)

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dsbev_(char *jobz, char *uplo, integer *n, integer *kd, 
 	doublereal *ab, integer *ldab, doublereal *w, doublereal *z__, 

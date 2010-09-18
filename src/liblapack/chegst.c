@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int chegst_(integer *itype, char *uplo, integer *n, complex *
 	a, integer *lda, complex *b, integer *ldb, integer *info)

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 integer izmax1_(integer *n, doublecomplex *cx, integer *incx)
 {

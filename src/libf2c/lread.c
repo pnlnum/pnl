@@ -1,4 +1,4 @@
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 #include "fio.h"
 
 /* Compile with -DF8X_NML_ELIDE_QUOTES to permit eliding quotation */

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int sopgtr_(char *uplo, integer *n, real *ap, real *tau, 
 	real *q, integer *ldq, real *work, integer *info)

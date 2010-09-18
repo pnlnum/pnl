@@ -24,8 +24,8 @@
 #include <math.h>
 
 #include "config.h"
-#include "pnl_matrix.h"
-#include "pnl_mathtools.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_mathtools.h"
 
 
 

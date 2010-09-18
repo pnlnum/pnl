@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int cppcon_(char *uplo, integer *n, complex *ap, real *anorm,
 	 real *rcond, complex *work, real *rwork, integer *info)

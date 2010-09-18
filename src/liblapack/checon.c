@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int checon_(char *uplo, integer *n, complex *a, integer *lda,
 	 integer *ipiv, real *anorm, real *rcond, complex *work, integer *

@@ -2,7 +2,7 @@
 #define __PNL_MPI_
 
 #include <mpi.h>
-#include "pnl_object.h"
+#include "pnl/pnl_object.h"
 
 /**
  * \defgroup PnlMpi MPI bindings

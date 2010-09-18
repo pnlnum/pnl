@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int stgevc_(char *side, char *howmny, logical *select, 
 	integer *n, real *a, integer *lda, real *b, integer *ldb, real *vl, 

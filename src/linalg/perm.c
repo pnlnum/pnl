@@ -23,10 +23,10 @@
 #include <string.h>
 #include <math.h>
 
-#include "pnl_vector.h"
-#include "pnl_perm.h"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_perm.h"
 #include "config.h"
-#include "pnl_mathtools.h"
+#include "pnl/pnl_mathtools.h"
 
 /**
  * Creates an empty PnlPermutation

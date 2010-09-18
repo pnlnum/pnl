@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zgbcon_(char *norm, integer *n, integer *kl, integer *ku,
 	 doublecomplex *ab, integer *ldab, integer *ipiv, doublereal *anorm, 

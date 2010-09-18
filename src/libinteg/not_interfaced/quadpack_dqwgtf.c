@@ -8,8 +8,8 @@
  * been replaced by calls to dlamch coming from Lapack
  */
 
-#include "pnl_internals.h"
-#include "pnl_mathtools.h"
+#include "pnl/pnl_internals.h"
+#include "pnl/pnl_mathtools.h"
 
 double pnl_dqwgtf(double *x, double *omega, double *p2, 
 	double *p3, double *p4, int *integr)

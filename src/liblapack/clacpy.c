@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int clacpy_(char *uplo, integer *m, integer *n, complex *a, 
 	integer *lda, complex *b, integer *ldb)

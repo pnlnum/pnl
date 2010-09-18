@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zlatrz_(integer *m, integer *n, integer *l, 
 	doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *

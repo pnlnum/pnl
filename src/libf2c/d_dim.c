@@ -1,4 +1,4 @@
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 #ifdef KR_headers
 double d_dim(a,b) doublereal *a, *b;

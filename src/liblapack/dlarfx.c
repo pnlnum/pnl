@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dlarfx_(char *side, integer *m, integer *n, doublereal *
 	v, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work)

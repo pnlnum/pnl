@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int ssygvx_(integer *itype, char *jobz, char *range, char *
 	uplo, integer *n, real *a, integer *lda, real *b, integer *ldb, real *

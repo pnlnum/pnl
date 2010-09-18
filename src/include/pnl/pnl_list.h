@@ -1,7 +1,7 @@
 #ifndef _PNL_LIST_H_
 #define _PNL_LIST_H_
 
-#include "pnl_object.h"
+#include "pnl/pnl_object.h"
 
 /**
  * \defgroup PnlList a List object

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 integer icmax1_(integer *n, complex *cx, integer *incx)
 {

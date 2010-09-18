@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int ztgsen_(integer *ijob, logical *wantq, logical *wantz, 
 	logical *select, integer *n, doublecomplex *a, integer *lda, 

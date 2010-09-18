@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int ztrtri_(char *uplo, char *diag, integer *n, 
 	doublecomplex *a, integer *lda, integer *info)

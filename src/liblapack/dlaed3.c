@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dlaed3_(integer *k, integer *n, integer *n1, doublereal *
 	d__, doublereal *q, integer *ldq, doublereal *rho, doublereal *dlamda,

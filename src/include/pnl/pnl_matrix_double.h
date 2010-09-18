@@ -9,7 +9,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include "pnl_perm.h"
+#include "pnl/pnl_perm.h"
 
 
 #ifndef PNL_RANGE_CHECK_OFF

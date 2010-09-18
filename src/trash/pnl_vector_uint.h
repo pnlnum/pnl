@@ -6,7 +6,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 #include <stdio.h>
-#include "pnl_vector.h"
+#include "pnl/pnl_vector.h"
 
 typedef unsigned int uint;
 

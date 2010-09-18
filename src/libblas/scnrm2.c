@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 doublereal scnrm2_(integer *n, complex *x, integer *incx)
 {

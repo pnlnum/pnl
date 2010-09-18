@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int cgttrs_(char *trans, integer *n, integer *nrhs, complex *
 	dl, complex *d__, complex *du, complex *du2, integer *ipiv, complex *

@@ -1,8 +1,8 @@
 #ifndef _PNL_INTERPOLATION_H
 #define _PNL_INTERPOLATION_H
 
-#include "pnl_vector.h"
-#include "pnl_matrix.h"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_matrix.h"
 
 enum {NOT_A_KNOT, NATURAL, CLAMPED, PERIODIC, FAST, FAST_PERIODIC,
       MONOTONE, BY_ZERO, C0, LINEAR, BY_NAN, UNDEFINED};

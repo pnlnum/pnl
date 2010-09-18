@@ -21,9 +21,9 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "pnl_vector.h"
-#include "pnl_vector_complex.h"
-#include "pnl_random.h"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_vector_complex.h"
+#include "pnl/pnl_random.h"
 #include "tests.h"
 
 /* static double function_prod(double x, double y) {return x*y;} */

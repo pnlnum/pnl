@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dgebal_(char *job, integer *n, doublereal *a, integer *
 	lda, integer *ilo, integer *ihi, doublereal *scale, integer *info)

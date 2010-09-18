@@ -1,4 +1,4 @@
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 #include "fio.h"
 
 #ifndef KR_headers

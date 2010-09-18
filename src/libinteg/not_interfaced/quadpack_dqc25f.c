@@ -8,8 +8,8 @@
  * been replaced by calls to dlamch coming from Lapack
  */
 
-#include "pnl_machine.h"
-#include "pnl_mathtools.h"
+#include "pnl/pnl_machine.h"
+#include "pnl/pnl_mathtools.h"
 #include "clapack.h"
 
 typedef double(*D_weight)();

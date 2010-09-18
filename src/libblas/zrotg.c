@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zrotg_(doublecomplex *ca, doublecomplex *cb, doublereal *
 	c__, doublecomplex *s)

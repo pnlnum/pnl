@@ -9,7 +9,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include "pnl_complex.h"
+#include "pnl/pnl_complex.h"
 
 /**
  * \ingroup PnlMatrices

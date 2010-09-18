@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int csyrk_(char *uplo, char *trans, integer *n, integer *k, 
 	complex *alpha, complex *a, integer *lda, complex *beta, complex *c__,

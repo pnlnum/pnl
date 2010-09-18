@@ -1,5 +1,5 @@
 #include "stdio.h"
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 #ifdef KR_headers
 extern void f_exit();

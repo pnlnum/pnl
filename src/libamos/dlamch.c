@@ -7,7 +7,7 @@
    because the later doesn't exist in Windows' standard C libraries */
 #define strncasecmp _strnicmp   
 #endif
-#include "pnl_mathtools.h"
+#include "pnl/pnl_mathtools.h"
 
 
 static int pnl_lsame (const char *ca,const  char *cb);

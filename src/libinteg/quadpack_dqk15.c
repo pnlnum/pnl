@@ -8,8 +8,8 @@
  * been replaced by calls to dlamch coming from Lapack
  */
 
-#include "pnl_internals.h"
-#include "pnl_mathtools.h"
+#include "pnl/pnl_internals.h"
+#include "pnl/pnl_mathtools.h"
 
 
 int pnl_dqk15(PnlFunc * f, double *a, double *b, double *

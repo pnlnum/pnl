@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dlatrs_(char *uplo, char *trans, char *diag, char *
 	normin, integer *n, doublereal *a, integer *lda, doublereal *x, 

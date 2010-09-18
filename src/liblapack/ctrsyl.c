@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int ctrsyl_(char *trana, char *tranb, integer *isgn, integer 
 	*m, integer *n, complex *a, integer *lda, complex *b, integer *ldb, 

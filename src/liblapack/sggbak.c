@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int sggbak_(char *job, char *side, integer *n, integer *ilo, 
 	integer *ihi, real *lscale, real *rscale, integer *m, real *v, 

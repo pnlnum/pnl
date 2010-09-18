@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zunmtr_(char *side, char *uplo, char *trans, integer *m, 
 	integer *n, doublecomplex *a, integer *lda, doublecomplex *tau, 

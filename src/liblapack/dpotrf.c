@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dpotrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *info)
 {

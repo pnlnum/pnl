@@ -1,4 +1,4 @@
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 /*
  * Turn off compiler optimization for Win32. Also need
  * stdio.h for the printf() EMIN warning code.
@@ -134,7 +134,7 @@ nding
 
 } /* slamch_ */
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slamc1_(integer *beta, integer *t, logical *rnd, logical 
 	*ieee1)
@@ -347,7 +347,7 @@ L30:
 
 } /* slamc1_ */
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slamc2_(integer *beta, integer *t, logical *rnd, real *
 	eps, integer *emin, real *rmin, integer *emax, real *rmax)
@@ -651,7 +651,7 @@ ing
 
 } /* slamc2_ */
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 doublereal slamc3_(real *a, real *b)
 {
@@ -692,7 +692,7 @@ doublereal slamc3_(real *a, real *b)
 
 } /* slamc3_ */
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slamc4_(integer *emin, real *start, integer *base)
 {
@@ -783,7 +783,7 @@ L10:
 
 } /* slamc4_ */
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slamc5_(integer *beta, integer *p, integer *emin, 
 	logical *ieee, integer *emax, real *rmax)

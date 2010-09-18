@@ -5,8 +5,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include "pnl_matrix.h"
-#include "pnl_vector.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_vector.h"
 
 #ifndef PNL_RANGE_CHECK_OFF
 #define CheckIndexBandMat(v,i,j){             \

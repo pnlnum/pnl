@@ -1,4 +1,4 @@
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 #include "fio.h"
 #include "fmt.h"
 #define skip(s) while(*s==' ') s++

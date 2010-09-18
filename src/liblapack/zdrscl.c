@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zdrscl_(integer *n, doublereal *sa, doublecomplex *sx, 
 	integer *incx)

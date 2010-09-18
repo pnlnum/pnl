@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slatps_(char *uplo, char *trans, char *diag, char *
 	normin, integer *n, real *ap, real *x, real *scale, real *cnorm, 

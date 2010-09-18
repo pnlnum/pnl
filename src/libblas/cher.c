@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int cher_(char *uplo, integer *n, real *alpha, complex *x, 
 	integer *incx, complex *a, integer *lda)

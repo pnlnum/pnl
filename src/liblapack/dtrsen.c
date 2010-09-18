@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dtrsen_(char *job, char *compq, logical *select, integer 
 	*n, doublereal *t, integer *ldt, doublereal *q, integer *ldq, 

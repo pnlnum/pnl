@@ -26,9 +26,9 @@
 #include <stdarg.h>
 
 #include "config.h"
-#include "pnl_mathtools.h"
-#include "pnl_matrix.h"
-#include "pnl_internals.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_internals.h"
 
 static char pnl_matrix_label[] = "PnlMatObject";
 static char pnl_hmatrix_label[] = "PnlHmatObject";
@@ -219,29 +219,29 @@ int pnl_hmat_object_resize(PnlHmatObject *H, int ndim, const int *dims)
 typedef int(*cmp_func)(const void *, const void *);
 
 #define BASE_DOUBLE
-#include "pnl_templates_on.h"
+#include "pnl/pnl_templates_on.h"
 static char pnl_mat_label[] = "PnlMatrixDouble";
 static char pnl_hmat_label[] = "PnlHmatrixDouble";
 #include "pnl_TMatrix_source.c"
 #include "dgemm_source.c"
-#include "pnl_templates_off.h"
+#include "pnl/pnl_templates_off.h"
 #undef  BASE_DOUBLE
 
 
 #define BASE_PNL_COMPLEX
-#include "pnl_templates_on.h"
+#include "pnl/pnl_templates_on.h"
 static char pnl_mat_complex_label[] = "PnlMatrixComplex";
 static char pnl_hmat_complex_label[] = "PnlHmatrixComplex";
 #include "pnl_TMatrix_source.c"
 #include "dgemm_source.c"
-#include "pnl_templates_off.h"
+#include "pnl/pnl_templates_off.h"
 #undef  BASE_PNL_COMPLEX
 
 #define BASE_INT
-#include "pnl_templates_on.h"
+#include "pnl/pnl_templates_on.h"
 static char pnl_mat_int_label[] = "PnlMatrixInt";
 static char pnl_hmat_int_label[] = "PnlHmatrixInt";
 #include "pnl_TMatrix_source.c"
 #include "dgemm_source.c"
-#include "pnl_templates_off.h"
+#include "pnl/pnl_templates_off.h"
 #undef  BASE_INT

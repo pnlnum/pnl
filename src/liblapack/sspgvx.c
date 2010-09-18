@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int sspgvx_(integer *itype, char *jobz, char *range, char *
 	uplo, integer *n, real *ap, real *bp, real *vl, real *vu, integer *il,

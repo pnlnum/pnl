@@ -55,8 +55,8 @@
 */
 
 #include <stdio.h>
-#include "pnl_mathtools.h"
-#include "pnl_specfun.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_specfun.h"
 #include "mconf.h"
 
 static int _mtherr_activated = TRUE;

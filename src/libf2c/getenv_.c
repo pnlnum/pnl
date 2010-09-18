@@ -1,4 +1,4 @@
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 #undef abs
 #ifdef KR_headers
 extern char *F77_aloc(), *getenv();

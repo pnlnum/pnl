@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int claev2_(complex *a, complex *b, complex *c__, real *rt1, 
 	real *rt2, real *cs1, complex *sn1)

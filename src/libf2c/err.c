@@ -4,7 +4,7 @@
 #include "sys/types.h"
 #include "sys/stat.h"
 #endif
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 #ifdef KR_headers
 extern char *malloc();
 #else

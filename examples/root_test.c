@@ -22,8 +22,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "pnl_root.h"
-#include "pnl_matrix.h"
+#include "pnl/pnl_root.h"
+#include "pnl/pnl_matrix.h"
 
 #include "tests.h"
 

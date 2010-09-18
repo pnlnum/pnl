@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "pnl_random.h"
+#include "pnl/pnl_random.h"
 
 static double square (double x) { return x*x;}
 

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dgtts2_(integer *itrans, integer *n, integer *nrhs, 
 	doublereal *dl, doublereal *d__, doublereal *du, doublereal *du2, 

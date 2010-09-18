@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int sgglse_(integer *m, integer *n, integer *p, real *a, 
 	integer *lda, real *b, integer *ldb, real *c__, real *d__, real *x, 

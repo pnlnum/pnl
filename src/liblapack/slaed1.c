@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slaed1_(integer *n, real *d__, real *q, integer *ldq, 
 	integer *indxq, real *rho, integer *cutpnt, real *work, integer *

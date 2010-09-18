@@ -32,10 +32,10 @@
 
 
  
-#include "pnl_mathtools.h"
-#include "pnl_specfun.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_specfun.h"
 #include "config.h"
-#include "pnl_machine.h"
+#include "pnl/pnl_machine.h"
 
 static int c_n1 = -1;
 

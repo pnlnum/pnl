@@ -65,7 +65,7 @@ Copyright 1984, 1987, 1989, 1995 by Stephen L. Moshier
 #ifndef CEPHES_MCONF_H
 #define CEPHES_MCONF_H
 
-#include "pnl_mathtools.h"
+#include "pnl/pnl_mathtools.h"
 /* to prefix several functions with pnl_sp */
 #include "pnl_names.h"
 

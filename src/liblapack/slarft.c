@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slarft_(char *direct, char *storev, integer *n, integer *
 	k, real *v, integer *ldv, real *tau, real *t, integer *ldt)

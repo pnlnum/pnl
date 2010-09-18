@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int ssyev_(char *jobz, char *uplo, integer *n, real *a, 
 	integer *lda, real *w, real *work, integer *lwork, integer *info)

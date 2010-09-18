@@ -6,8 +6,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include "pnl_matrix.h"
-#include "pnl_cdf.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_cdf.h"
 
 /**
  * \defgroup Finance A few financial functions

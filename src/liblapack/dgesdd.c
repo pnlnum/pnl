@@ -4,7 +4,7 @@
 	-lf2c -lm   (in that order)
 */
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Table of constant values */
 

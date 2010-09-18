@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dlag2_(doublereal *a, integer *lda, doublereal *b, 
 	integer *ldb, doublereal *safmin, doublereal *scale1, doublereal *

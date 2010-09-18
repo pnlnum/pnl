@@ -8,8 +8,8 @@
  * been replaced by calls to dlamch coming from Lapack
  */
 
-#include "pnl_internals.h"
-#include "pnl_mathtools.h"
+#include "pnl/pnl_internals.h"
+#include "pnl/pnl_mathtools.h"
 
 extern int pnl_dqc25c(PnlFunc *, double *, double *, double *, double *, double *, int *, int *);
 extern int pnl_dqpsrt(int *, int *, int *, double *, double *, int *, int *);

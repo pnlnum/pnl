@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dlagtm_(char *trans, integer *n, integer *nrhs, 
 	doublereal *alpha, doublereal *dl, doublereal *d__, doublereal *du, 

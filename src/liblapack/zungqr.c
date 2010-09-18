@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zungqr_(integer *m, integer *n, integer *k, 
 	doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *

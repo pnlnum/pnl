@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int stpsv_(char *uplo, char *trans, char *diag, integer *n, 
 	real *ap, real *x, integer *incx)

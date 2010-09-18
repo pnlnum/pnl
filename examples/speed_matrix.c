@@ -22,9 +22,9 @@
 #include <math.h>
 #include <time.h>
 
-#include "pnl_machine.h"
-#include "pnl_matrix.h"
-#include "pnl_random.h"
+#include "pnl/pnl_machine.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_random.h"
 
 extern int C2F(dgemm) (char *transa, char *transb, int *m, int *n, int *k, double *alpha,
                        double *a, int *lda, double *b, int *ldb, double *beta,

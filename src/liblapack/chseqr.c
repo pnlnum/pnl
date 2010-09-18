@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int chseqr_(char *job, char *compz, integer *n, integer *ilo,
 	 integer *ihi, complex *h__, integer *ldh, complex *w, complex *z__, 

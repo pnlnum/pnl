@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "pnl_list.h"
+#include "pnl/pnl_list.h"
 #include "tests.h"
 
 /*test des fonctions pnl_sortlist_ */

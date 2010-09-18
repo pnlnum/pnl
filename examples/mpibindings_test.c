@@ -21,13 +21,13 @@
 #include <stdlib.h>
 #include <mpi.h>
 
-#include "pnl_random.h"
-#include "pnl_vector.h"
-#include "pnl_matrix.h"
-#include "pnl_band_matrix.h"
-#include "pnl_tridiag_matrix.h"
-#include "pnl_basis.h"
-#include "pnl_mpi.h"
+#include "pnl/pnl_random.h"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_band_matrix.h"
+#include "pnl/pnl_tridiag_matrix.h"
+#include "pnl/pnl_basis.h"
+#include "pnl/pnl_mpi.h"
 
 #define SENDTAG 1
 #define PNL_MPI_MESSAGE(info, msg)                             \

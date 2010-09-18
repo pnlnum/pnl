@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 doublereal dlange_(char *norm, integer *m, integer *n, doublereal *a, integer 
 	*lda, doublereal *work)

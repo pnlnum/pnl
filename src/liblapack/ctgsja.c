@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int ctgsja_(char *jobu, char *jobv, char *jobq, integer *m, 
 	integer *p, integer *n, integer *k, integer *l, complex *a, integer *

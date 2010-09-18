@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dlasq3_(integer *i0, integer *n0, doublereal *z__, 
 	integer *pp, doublereal *dmin__, doublereal *sigma, doublereal *desig,

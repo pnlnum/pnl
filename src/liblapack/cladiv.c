@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Complex */ VOID cladiv_(complex * ret_val, complex *x, complex *y)
 {

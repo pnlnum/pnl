@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zlaesy_(doublecomplex *a, doublecomplex *b, 
 	doublecomplex *c__, doublecomplex *rt1, doublecomplex *rt2, 

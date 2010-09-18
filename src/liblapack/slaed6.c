@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slaed6_(integer *kniter, logical *orgati, real *rho, 
 	real *d__, real *z__, real *finit, real *tau, integer *info)

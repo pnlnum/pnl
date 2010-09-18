@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zlaed7_(integer *n, integer *cutpnt, integer *qsiz, 
 	integer *tlvls, integer *curlvl, integer *curpbm, doublereal *d__, 

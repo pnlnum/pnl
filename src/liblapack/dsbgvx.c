@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dsbgvx_(char *jobz, char *range, char *uplo, integer *n, 
 	integer *ka, integer *kb, doublereal *ab, integer *ldab, doublereal *

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dlaeda_(integer *n, integer *tlvls, integer *curlvl, 
 	integer *curpbm, integer *prmptr, integer *perm, integer *givptr, 

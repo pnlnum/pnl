@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slahrd_(integer *n, integer *k, integer *nb, real *a, 
 	integer *lda, real *tau, real *t, integer *ldt, real *y, integer *ldy)

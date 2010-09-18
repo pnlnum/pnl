@@ -48,7 +48,7 @@
  */
 
 #include "config.h"
-#include "pnl_random.h"
+#include "pnl/pnl_random.h"
 #include "mt.h"
 
 #define LSB 0x1

@@ -18,13 +18,13 @@
 /*************************************************************************/
 
 
-#include "pnl_object.h"
-#include "pnl_vector.h"
-#include "pnl_matrix.h"
-#include "pnl_tridiag_matrix.h"
-#include "pnl_band_matrix.h"
-#include "pnl_basis.h"
-#include "pnl_linalgsolver.h"
+#include "pnl/pnl_object.h"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_tridiag_matrix.h"
+#include "pnl/pnl_band_matrix.h"
+#include "pnl/pnl_basis.h"
+#include "pnl/pnl_linalgsolver.h"
 
 /** 
  * Creates a new PnlObject from a PnlType

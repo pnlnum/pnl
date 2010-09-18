@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int chetrd_(char *uplo, integer *n, complex *a, integer *lda,
 	 real *d__, real *e, complex *tau, complex *work, integer *lwork, 

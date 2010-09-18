@@ -32,11 +32,11 @@
 #include <math.h>
 #include <assert.h>
   
-#include "pnl_spec_matrix.h"
-#include "pnl_vector.h"
-#include "pnl_matrix.h"
-#include "pnl_mathtools.h"
-#include "pnl_array.h"
+#include "pnl/pnl_spec_matrix.h"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_array.h"
 
 #define GETROWORCOLSIZE(M) ((M)->RC) ? ((M)->n): ((M)->m)
 #define GETROWORCOL(M,i,j) ((M)->RC) ? &((M)->array[(j)]): &((M)->array[(i)])

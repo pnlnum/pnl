@@ -23,9 +23,9 @@
 #include <string.h>
 #include <math.h>
 
-#include "pnl_mathtools.h"
+#include "pnl/pnl_mathtools.h"
 
-#include "pnl_interpolation.h"
+#include "pnl/pnl_interpolation.h"
 
 
 

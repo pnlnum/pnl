@@ -311,7 +311,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "pnl_cdf.h"
+#include "pnl/pnl_cdf.h"
 #include "libamos/amos.h"
 
 static double algdiv(double *a,double *b);

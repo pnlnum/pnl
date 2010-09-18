@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "pnl_mathtools.h"
+#include "pnl/pnl_mathtools.h"
 
 static void pow_i_test ()
 {

@@ -6,7 +6,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include "pnl_mathtools.h"
+#include "pnl/pnl_mathtools.h"
 
 extern double pnl_integration (PnlFunc *F, double x0, double x1, 
                   int n, char *meth);

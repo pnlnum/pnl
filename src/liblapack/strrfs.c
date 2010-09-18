@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int strrfs_(char *uplo, char *trans, char *diag, integer *n, 
 	integer *nrhs, real *a, integer *lda, real *b, integer *ldb, real *x, 

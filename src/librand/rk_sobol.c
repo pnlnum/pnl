@@ -35,7 +35,7 @@ static char const rcsid[] =
 #include <time.h>
 #include "rk_sobol.h"
 #include "rk_primitive.h"
-#include "pnl_mathtools.h"
+#include "pnl/pnl_mathtools.h"
 
 
 #ifndef LONG_BIT

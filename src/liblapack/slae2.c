@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slae2_(real *a, real *b, real *c__, real *rt1, real *rt2)
 {

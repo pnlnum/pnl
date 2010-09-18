@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dtrexc_(char *compq, integer *n, doublereal *t, integer *
 	ldt, doublereal *q, integer *ldq, integer *ifst, integer *ilst, 

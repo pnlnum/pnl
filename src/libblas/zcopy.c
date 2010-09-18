@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zcopy_(integer *n, doublecomplex *zx, integer *incx, 
 	doublecomplex *zy, integer *incy)

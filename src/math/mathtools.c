@@ -20,8 +20,8 @@
 #include <math.h>
 
 #include "config.h"
-#include "pnl_mathtools.h"
-#include "pnl_specfun.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_specfun.h"
 
 
 /** nearest integer round off function

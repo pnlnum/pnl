@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int clar1v_(integer *n, integer *b1, integer *bn, real *
 	sigma, real *d__, real *l, real *ld, real *lld, real *gersch, complex 

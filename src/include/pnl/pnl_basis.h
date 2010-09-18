@@ -6,9 +6,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#include "pnl_types.h"
-#include "pnl_matrix.h"
-#include "pnl_object.h"
+#include "pnl/pnl_types.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_object.h"
 
 /**
  * \defgroup reg_basis Polynomial Bases

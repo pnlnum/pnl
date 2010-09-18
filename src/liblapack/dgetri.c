@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dgetri_(integer *n, doublereal *a, integer *lda, integer 
 	*ipiv, doublereal *work, integer *lwork, integer *info)

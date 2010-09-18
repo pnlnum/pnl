@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int cgesc2_(integer *n, complex *a, integer *lda, complex *
 	rhs, integer *ipiv, integer *jpiv, real *scale)

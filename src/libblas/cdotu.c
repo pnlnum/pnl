@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Complex */ VOID cdotu_(complex * ret_val, integer *n, complex *cx, integer 
 	*incx, complex *cy, integer *incy)

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 doublereal dlantp_(char *norm, char *uplo, char *diag, integer *n, doublereal 
 	*ap, doublereal *work)

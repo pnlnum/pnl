@@ -1,7 +1,7 @@
 /*	@(#)fmtlib.c	1.2	*/
 #define MAXINTLENGTH 23
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 #ifndef Allow_TYQUAD
 #undef longint
 #define longint long

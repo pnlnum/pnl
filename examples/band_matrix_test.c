@@ -20,9 +20,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "pnl_matrix.h"
-#include "pnl_band_matrix.h"
-#include "pnl_random.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_band_matrix.h"
+#include "pnl/pnl_random.h"
 #include "tests.h"
 
 extern void create_sym_pos_matrix (PnlMat *S, int n, int gen);

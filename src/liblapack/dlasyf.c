@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dlasyf_(char *uplo, integer *n, integer *nb, integer *kb,
 	 doublereal *a, integer *lda, integer *ipiv, doublereal *w, integer *

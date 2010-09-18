@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dlanv2_(doublereal *a, doublereal *b, doublereal *c__, 
 	doublereal *d__, doublereal *rt1r, doublereal *rt1i, doublereal *rt2r,

@@ -12,7 +12,7 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "pnl_vector.h"
+#include "pnl/pnl_vector.h"
 
 extern int intapprox (double s);
 extern double trunc(double x);

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int clauu2_(char *uplo, integer *n, complex *a, integer *lda,
 	 integer *info)

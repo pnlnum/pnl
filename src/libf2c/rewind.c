@@ -1,4 +1,4 @@
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 #include "fio.h"
 #ifdef KR_headers
 integer f_rew(a) alist *a;

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slasd9_(integer *icompq, integer *ldu, integer *k, real *
 	d__, real *z__, real *vf, real *vl, real *difl, real *difr, real *

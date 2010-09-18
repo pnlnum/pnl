@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dgesv_(integer *n, integer *nrhs, doublereal *a, integer 
 	*lda, integer *ipiv, doublereal *b, integer *ldb, integer *info)

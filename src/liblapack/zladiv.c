@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Double Complex */ VOID zladiv_(doublecomplex * ret_val, doublecomplex *x, 
 	doublecomplex *y)

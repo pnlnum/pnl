@@ -10,7 +10,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 #include <stdio.h>
-#include "pnl_object.h"
+#include "pnl/pnl_object.h"
 
 /**
  * \ingroup PnlVectors

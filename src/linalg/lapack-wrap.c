@@ -22,11 +22,11 @@
 #include <string.h>
 
 #include "config.h"
-#include "pnl_internals.h"
-#include "pnl_mathtools.h"
-#include "pnl_matrix.h"
-#include "pnl_vector.h"
-#include "pnl_machine.h"
+#include "pnl/pnl_internals.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_machine.h"
 #include "clapack.h"
 
 extern double pnl_dlamch (char *cmach);

@@ -21,11 +21,11 @@
 #include <string.h>
 
 #include "config.h"
-#include "pnl_band_matrix.h"
-#include "pnl_machine.h"
-#include "pnl_matrix.h"
-#include "pnl_mathtools.h"
-#include "pnl_internals.h"
+#include "pnl/pnl_band_matrix.h"
+#include "pnl/pnl_machine.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_internals.h"
 #include "clapack.h"
 
 #define PNL_BMGET(BM,i,j) BM->array[(BM->nu+i-j) + BM->m_band * j]

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int cggevx_(char *balanc, char *jobvl, char *jobvr, char *
 	sense, integer *n, complex *a, integer *lda, complex *b, integer *ldb,

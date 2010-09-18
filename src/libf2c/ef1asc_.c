@@ -1,6 +1,6 @@
 /* EFL support routine to copy string b to string a */
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 
 #define M	( (long) (sizeof(long) - 1) )

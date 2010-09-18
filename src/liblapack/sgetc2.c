@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int sgetc2_(integer *n, real *a, integer *lda, integer *ipiv,
 	 integer *jpiv, integer *info)

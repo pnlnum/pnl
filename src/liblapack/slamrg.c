@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slamrg_(integer *n1, integer *n2, real *a, integer *
 	strd1, integer *strd2, integer *index)

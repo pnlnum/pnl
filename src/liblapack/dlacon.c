@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dlacon_(integer *n, doublereal *v, doublereal *x, 
 	integer *isgn, doublereal *est, integer *kase)

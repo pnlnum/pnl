@@ -6,8 +6,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include "pnl_perm.h"
-#include "pnl_matrix.h"
+#include "pnl/pnl_perm.h"
+#include "pnl/pnl_matrix.h"
 #include "cs.h"
 
 #ifndef PNL_RANGE_CHECK_OFF

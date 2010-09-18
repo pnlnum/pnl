@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int cgeev_(char *jobvl, char *jobvr, integer *n, complex *a, 
 	integer *lda, complex *w, complex *vl, integer *ldvl, complex *vr, 

@@ -17,9 +17,9 @@
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
 
-#include "pnl_mathtools.h"
-#include "pnl_random.h"
-#include "pnl_cdf.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_random.h"
+#include "pnl/pnl_cdf.h"
 #include "randomkit.h"
 
 /* Maximum dimension for random sequences */

@@ -13,7 +13,7 @@
 #ifndef _AMOS_WRAPPERS_H
 #define _AMOS_WRAPPERS_H
 
-#include "pnl_complex.h" /* just for dcomplex ! */
+#include "pnl/pnl_complex.h" /* just for dcomplex ! */
 
 #define DOMAIN		1	/* argument domain error */
 #define SING		2	/* argument singularity */

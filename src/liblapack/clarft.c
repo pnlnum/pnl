@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int clarft_(char *direct, char *storev, integer *n, integer *
 	k, complex *v, integer *ldv, complex *tau, complex *t, integer *ldt)

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zaxpy_(integer *n, doublecomplex *za, doublecomplex *zx, 
 	integer *incx, doublecomplex *zy, integer *incy)

@@ -1,8 +1,8 @@
 #ifndef _PNL_MATVECT_H
 #define _PNL_MATVECT_H
 
-#include "pnl_object.h"
-#include "pnl_complex.h"
+#include "pnl/pnl_object.h"
+#include "pnl/pnl_complex.h"
 
 /**
  * \ingroup PnlVectors

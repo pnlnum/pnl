@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int ctrsm_(char *side, char *uplo, char *transa, char *diag, 
 	integer *m, integer *n, complex *alpha, complex *a, integer *lda, 

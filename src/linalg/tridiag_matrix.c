@@ -24,10 +24,10 @@
 #include <string.h>
 
 #include "config.h"
-#include "pnl_tridiag_matrix.h"
-#include "pnl_machine.h"
-#include "pnl_matrix.h"
-#include "pnl_mathtools.h"
+#include "pnl/pnl_tridiag_matrix.h"
+#include "pnl/pnl_machine.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_mathtools.h"
 
 static double __op_plus(double a, double b) { return a+b; }
 static double __op_minus(double a, double b) { return a-b; }

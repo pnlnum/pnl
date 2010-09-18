@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int cgeqlf_(integer *m, integer *n, complex *a, integer *lda,
 	 complex *tau, complex *work, integer *lwork, integer *info)

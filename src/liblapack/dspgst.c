@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dspgst_(integer *itype, char *uplo, integer *n, 
 	doublereal *ap, doublereal *bp, integer *info)

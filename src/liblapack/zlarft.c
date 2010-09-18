@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zlarft_(char *direct, char *storev, integer *n, integer *
 	k, doublecomplex *v, integer *ldv, doublecomplex *tau, doublecomplex *

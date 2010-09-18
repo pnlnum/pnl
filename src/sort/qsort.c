@@ -40,7 +40,7 @@
 #include <sys/types.h>
 #include <stdlib.h>
 
-#include "pnl_mathtools.h"
+#include "pnl/pnl_mathtools.h"
 #include "config.h"
 
 #ifdef HAVE_INLINE

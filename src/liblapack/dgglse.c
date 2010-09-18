@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dgglse_(integer *m, integer *n, integer *p, doublereal *
 	a, integer *lda, doublereal *b, integer *ldb, doublereal *c__, 

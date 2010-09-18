@@ -1,7 +1,7 @@
 #ifndef __CMINPACK_H__
 #define __CMINPACK_H__
 
-#include "pnl_mathtools.h"
+#include "pnl/pnl_mathtools.h"
 
 
 #ifdef __cplusplus

@@ -1,4 +1,4 @@
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 #ifdef KR_headers
 integer i_mod(a,b) integer *a, *b;

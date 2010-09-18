@@ -17,7 +17,7 @@
 /************************************************************************/
 
 #include "config.h"
-#include "pnl_vector.h"
+#include "pnl/pnl_vector.h"
 
 
 /**

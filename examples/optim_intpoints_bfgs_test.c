@@ -20,11 +20,11 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "pnl_mathtools.h"
-#include "pnl_vector.h"
-#include "pnl_random.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_random.h"
 
-#include "pnl_optim.h"
+#include "pnl/pnl_optim.h"
 
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  *  This file contains routines to implement test problem HS15 from

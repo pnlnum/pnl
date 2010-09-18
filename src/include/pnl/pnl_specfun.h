@@ -32,7 +32,7 @@ extern void pnl_activate_mtherr (void);
  */
 /*@{*/
 
-#include "pnl_complex.h"
+#include "pnl/pnl_complex.h"
 /* complex Bessel functions from libamos */
 
 extern dcomplex pnl_complex_bessel_i ( double v, dcomplex z );

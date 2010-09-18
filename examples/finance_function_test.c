@@ -21,10 +21,10 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "pnl_vector.h"
-#include "pnl_matrix.h"
-#include "pnl_cdf.h"
-#include "pnl_finance.h"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_cdf.h"
+#include "pnl/pnl_finance.h"
 
 /* Old version of premia close formula  */
 int CF_Call_BS(double s,double k,double t,double r,double divid,double sigma,double *ptprice,double *ptdelta){

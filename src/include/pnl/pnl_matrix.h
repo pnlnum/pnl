@@ -47,7 +47,7 @@ extern "C" {
 
 #endif /* PNL_RANGE_CHECK_OFF */
 
-#include "pnl_matvect.h"
+#include "pnl/pnl_matvect.h"
 
 
 /**
@@ -75,9 +75,9 @@ extern void pnl_hmat_object_free (PnlHmatObject **);
 extern int pnl_hmat_object_resize(PnlHmatObject *H, int ndim, const int *dims);
 /*@}*/
 
-#include "pnl_matrix_double.h"
-#include "pnl_matrix_complex.h"
-#include "pnl_matrix_int.h"
+#include "pnl/pnl_matrix_double.h"
+#include "pnl/pnl_matrix_complex.h"
+#include "pnl/pnl_matrix_int.h"
 
 #ifdef __cplusplus
 }

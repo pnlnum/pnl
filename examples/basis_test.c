@@ -20,11 +20,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "pnl_matrix.h"
-#include "pnl_vector.h"
-#include "pnl_basis.h"
-#include "pnl_mathtools.h"
-#include "pnl_random.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_basis.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_random.h"
 
 #define function exp
 

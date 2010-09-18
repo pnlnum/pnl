@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zgeequ_(integer *m, integer *n, doublecomplex *a, 
 	integer *lda, doublereal *r__, doublereal *c__, doublereal *rowcnd, 

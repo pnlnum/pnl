@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, 
 	doublecomplex *ap, doublecomplex *x, integer *incx, doublecomplex *

@@ -18,8 +18,8 @@
 /************************************************************************/
 
 #include <string.h>
-#include "pnl_mathtools.h"
-#include "pnl_integration.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_integration.h"
 
 /**
  * Evaluates an integral over [x0, x1] with a non-adaptive method

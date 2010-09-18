@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slas2_(real *f, real *g, real *h__, real *ssmin, real *
 	ssmax)

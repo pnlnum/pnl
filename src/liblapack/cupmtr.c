@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int cupmtr_(char *side, char *uplo, char *trans, integer *m, 
 	integer *n, complex *ap, complex *tau, complex *c__, integer *ldc, 

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zptcon_(integer *n, doublereal *d__, doublecomplex *e, 
 	doublereal *anorm, doublereal *rcond, doublereal *rwork, integer *

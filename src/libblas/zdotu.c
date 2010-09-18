@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Double Complex */ VOID zdotu_(doublecomplex * ret_val, integer *n, 
 	doublecomplex *zx, integer *incx, doublecomplex *zy, integer *incy)

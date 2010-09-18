@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slaqsb_(char *uplo, integer *n, integer *kd, real *ab, 
 	integer *ldab, real *s, real *scond, real *amax, char *equed)

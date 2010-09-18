@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dlasd5_(integer *i__, doublereal *d__, doublereal *z__, 
 	doublereal *delta, doublereal *rho, doublereal *dsigma, doublereal *

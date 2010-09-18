@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int sormtr_(char *side, char *uplo, char *trans, integer *m, 
 	integer *n, real *a, integer *lda, real *tau, real *c__, integer *ldc,

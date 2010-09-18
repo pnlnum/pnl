@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int cgbsv_(integer *n, integer *kl, integer *ku, integer *
 	nrhs, complex *ab, integer *ldab, integer *ipiv, complex *b, integer *

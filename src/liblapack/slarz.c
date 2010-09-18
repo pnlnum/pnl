@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slarz_(char *side, integer *m, integer *n, integer *l, 
 	real *v, integer *incv, real *tau, real *c__, integer *ldc, real *

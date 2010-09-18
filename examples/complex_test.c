@@ -21,8 +21,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "pnl_complex.h"
-#include "pnl_random.h"
+#include "pnl/pnl_complex.h"
+#include "pnl/pnl_random.h"
 
 static void Csqrt_test ()
 {

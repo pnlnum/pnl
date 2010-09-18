@@ -4,7 +4,7 @@
 	-lf2c -lm   (in that order)
 */
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dgtsv_(integer *n, integer *nrhs, doublereal *dl, 
 	doublereal *d__, doublereal *du, doublereal *b, integer *ldb, integer 

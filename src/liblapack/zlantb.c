@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 doublereal zlantb_(char *norm, char *uplo, char *diag, integer *n, integer *k,
 	 doublecomplex *ab, integer *ldab, doublereal *work)

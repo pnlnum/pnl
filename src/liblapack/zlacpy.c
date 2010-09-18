@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zlacpy_(char *uplo, integer *m, integer *n, 
 	doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb)

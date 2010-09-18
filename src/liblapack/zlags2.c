@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zlags2_(logical *upper, doublereal *a1, doublecomplex *
 	a2, doublereal *a3, doublereal *b1, doublecomplex *b2, doublereal *b3,

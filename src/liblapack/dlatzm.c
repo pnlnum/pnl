@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dlatzm_(char *side, integer *m, integer *n, doublereal *
 	v, integer *incv, doublereal *tau, doublereal *c1, doublereal *c2, 

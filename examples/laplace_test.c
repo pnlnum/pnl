@@ -17,8 +17,8 @@
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
 
-#include "pnl_mathtools.h"
-#include "pnl_laplace.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_laplace.h"
 
 static double exp_law_density (double x, void *p)
 {

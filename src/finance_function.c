@@ -1,8 +1,8 @@
 #include "config.h"
-#include "pnl_matrix.h"
-#include "pnl_cdf.h"
-#include "pnl_finance.h"
-#include "pnl_root.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_cdf.h"
+#include "pnl/pnl_finance.h"
+#include "pnl/pnl_root.h"
 
 
 /************************************************************************/

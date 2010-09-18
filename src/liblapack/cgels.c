@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int cgels_(char *trans, integer *m, integer *n, integer *
 	nrhs, complex *a, integer *lda, complex *b, integer *ldb, complex *

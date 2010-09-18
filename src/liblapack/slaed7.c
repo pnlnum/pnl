@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slaed7_(integer *icompq, integer *n, integer *qsiz, 
 	integer *tlvls, integer *curlvl, integer *curpbm, real *d__, real *q, 

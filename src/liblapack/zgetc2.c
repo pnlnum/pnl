@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zgetc2_(integer *n, doublecomplex *a, integer *lda, 
 	integer *ipiv, integer *jpiv, integer *info)

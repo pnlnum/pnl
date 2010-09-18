@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int slaexc_(logical *wantq, integer *n, real *t, integer *
 	ldt, real *q, integer *ldq, integer *j1, integer *n1, integer *n2, 

@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int clacon_(integer *n, complex *v, complex *x, real *est, 
 	integer *kase)

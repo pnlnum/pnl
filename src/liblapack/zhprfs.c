@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zhprfs_(char *uplo, integer *n, integer *nrhs, 
 	doublecomplex *ap, doublecomplex *afp, integer *ipiv, doublecomplex *

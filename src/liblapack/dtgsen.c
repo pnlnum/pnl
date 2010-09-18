@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dtgsen_(integer *ijob, logical *wantq, logical *wantz, 
 	logical *select, integer *n, doublereal *a, integer *lda, doublereal *

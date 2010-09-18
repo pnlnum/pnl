@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dlahrd_(integer *n, integer *k, integer *nb, doublereal *
 	a, integer *lda, doublereal *tau, doublereal *t, integer *ldt, 

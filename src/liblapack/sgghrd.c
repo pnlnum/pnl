@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int sgghrd_(char *compq, char *compz, integer *n, integer *
 	ilo, integer *ihi, real *a, integer *lda, real *b, integer *ldb, real 

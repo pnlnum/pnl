@@ -22,8 +22,8 @@
 #include <math.h>
 #include <ctype.h>
 #include <stdarg.h>
-#include "pnl_mathtools.h"
-#include "pnl_complex.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_complex.h"
 
 static BASE FUNCTION(,_op_plus)(BASE a, BASE b) { return PLUS(a,b);}
 static BASE FUNCTION(,_op_minus)(BASE a, BASE b) { return MINUS(a,b);}

@@ -22,8 +22,8 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "pnl_specfun.h"
-#include "pnl_random.h"
+#include "pnl/pnl_specfun.h"
+#include "pnl/pnl_random.h"
 
 #ifdef HAVE_GSL
 extern double gsl_sf_expint_Ei (double x);

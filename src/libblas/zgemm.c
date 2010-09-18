@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zgemm_(char *transa, char *transb, integer *m, integer *
 	n, integer *k, doublecomplex *alpha, doublecomplex *a, integer *lda, 

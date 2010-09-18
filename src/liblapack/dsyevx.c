@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int dsyevx_(char *jobz, char *range, char *uplo, integer *n, 
 	doublereal *a, integer *lda, doublereal *vl, doublereal *vu, integer *

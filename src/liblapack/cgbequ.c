@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int cgbequ_(integer *m, integer *n, integer *kl, integer *ku,
 	 complex *ab, integer *ldab, real *r__, real *c__, real *rowcnd, real 

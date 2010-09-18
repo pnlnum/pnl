@@ -20,8 +20,8 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "pnl_complex.h"
-#include "pnl_mathtools.h"
+#include "pnl/pnl_complex.h"
+#include "pnl/pnl_mathtools.h"
 
 
 /**

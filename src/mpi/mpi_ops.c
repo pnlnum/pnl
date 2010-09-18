@@ -20,14 +20,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <mpi.h>
-#include "pnl_object.h"
-#include "pnl_tridiag_matrix.h"
-#include "pnl_band_matrix.h"
-#include "pnl_mathtools.h"
-#include "pnl_internals.h"
-#include "pnl_basis.h"
-#include "pnl_random.h"
-#include "pnl_mpi.h"
+#include "pnl/pnl_object.h"
+#include "pnl/pnl_tridiag_matrix.h"
+#include "pnl/pnl_band_matrix.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_internals.h"
+#include "pnl/pnl_basis.h"
+#include "pnl/pnl_random.h"
+#include "pnl/pnl_mpi.h"
 
 #define PNL_MPI_MESSAGE(info, msg)                             \
   if ( info != MPI_SUCCESS )                                   \

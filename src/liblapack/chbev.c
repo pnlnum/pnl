@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int chbev_(char *jobz, char *uplo, integer *n, integer *kd, 
 	complex *ab, integer *ldab, real *w, complex *z__, integer *ldz, 

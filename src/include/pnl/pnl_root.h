@@ -6,7 +6,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include "pnl_mathtools.h"
+#include "pnl/pnl_mathtools.h"
 
 /**
  * \defgroup Root Searching for zeros

@@ -8,8 +8,8 @@
  * been replaced by calls to dlamch coming from Lapack
  */
 
-#include "pnl_internals.h"
-#include "pnl_mathtools.h"
+#include "pnl/pnl_internals.h"
+#include "pnl/pnl_mathtools.h"
 typedef double(*D_weight)();
 
 int pnl_dqk15w(PnlFunc * f, D_weight w, double *p1, double *p2, 

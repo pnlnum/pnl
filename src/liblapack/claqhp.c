@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int claqhp_(char *uplo, integer *n, complex *ap, real *s, 
 	real *scond, real *amax, char *equed)

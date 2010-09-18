@@ -1,5 +1,5 @@
 #include "stdio.h"
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* called when a subscript is out of range */
 

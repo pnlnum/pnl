@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int zlaset_(char *uplo, integer *m, integer *n, 
 	doublecomplex *alpha, doublecomplex *beta, doublecomplex *a, integer *

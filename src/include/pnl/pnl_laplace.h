@@ -6,9 +6,9 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include "pnl_mathtools.h"
-#include "pnl_complex.h"
-#include "pnl_vector.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_complex.h"
+#include "pnl/pnl_vector.h"
 
 /**
  * \defgroup Laplace Laplace transforms

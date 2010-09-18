@@ -19,8 +19,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "pnl_list.h"
-#include "pnl_mathtools.h"
+#include "pnl/pnl_list.h"
+#include "pnl/pnl_mathtools.h"
 
 static char pnl_list_label[] = "PnlList";
 

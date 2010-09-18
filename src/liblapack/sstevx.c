@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int sstevx_(char *jobz, char *range, integer *n, real *d__, 
 	real *e, real *vl, real *vu, integer *il, integer *iu, real *abstol, 

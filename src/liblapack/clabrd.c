@@ -1,5 +1,5 @@
 
-#include "pnl_f2c.h"
+#include "pnl/pnl_f2c.h"
 
 /* Subroutine */ int clabrd_(integer *m, integer *n, integer *nb, complex *a, 
 	integer *lda, real *d__, real *e, complex *tauq, complex *taup, 
