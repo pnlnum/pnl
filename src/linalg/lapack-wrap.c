@@ -27,7 +27,7 @@
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_machine.h"
-#include "clapack.h"
+#include "pnl/clapack.h"
 
 extern double pnl_dlamch (char *cmach);
 

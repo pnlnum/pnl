@@ -26,7 +26,7 @@
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_internals.h"
-#include "clapack.h"
+#include "pnl/clapack.h"
 
 #define PNL_BMGET(BM,i,j) BM->array[(BM->nu+i-j) + BM->m_band * j]
 #define PNL_BMLET(BM,i,j) BM->array[(BM->nu+i-j) + BM->m_band * j]

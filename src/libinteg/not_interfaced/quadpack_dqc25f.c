@@ -10,7 +10,7 @@
 
 #include "pnl/pnl_machine.h"
 #include "pnl/pnl_mathtools.h"
-#include "clapack.h"
+#include "pnl/clapack.h"
 
 typedef double(*D_weight)();
 
