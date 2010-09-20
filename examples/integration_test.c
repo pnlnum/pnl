@@ -59,17 +59,17 @@ static void integration_qag_test()
   func.function = x_square;
   func.params = NULL;
   pnl_integration_qag(&func,0.0,1.0,0.00001,0.000001,0,&result,&abserr,&neval);
-  printf(" integration (QAGS finite interval with no singularity )\n\tres %f error %f , iter %d \n",result,abserr,neval); 
+  printf("integration (QAGS finite interval with no singularity )\n\tres %f error %f , iter %d \n",result,abserr,neval); 
 
   func.function = indefinite;
   func.params = NULL;
   pnl_integration_qag(&func,0,PNL_POSINF,0.00001,0.000001,0,&result,&abserr,&neval);
-  printf(" integration (QAGI infinite interval) \n\tres %f true value %f , iter %d \n",result,M_EULER,neval); 
+  printf("integration (QAGI infinite interval) \n\tres %f true value %f , iter %d \n",result,M_EULER,neval); 
 
   func.function = singular;
   func.params = NULL;
   pnl_integration_qag(&func,0.0,10,0.00001,0.000001,0,&result,&abserr,&neval);
-  printf(" integration (QAGS with singularities) \n\tres %f true value %f , iter %d \n",
+  printf("integration (QAGS with singularities) \n\tres %f true value %f , iter %d \n",
          result, 1 - cos(2.5) + exp(-2.5) - exp(-5.0),neval); 
 }
 
@@ -87,7 +87,7 @@ static void integration_qagp_test()
   func.function = singular;
   func.params = NULL;
   pnl_integration_qagp(&func,0.0,10,pts,0.00001,0.000001,0,&result,&abserr,&neval);
-  printf(" integration (QAGP known singularities) \n\tres %f true value %f , iter %d \n",
+  printf("integration (QAGP known singularities) \n\tres %f true value %f , iter %d \n",
          result, 1 - cos(2.5) + exp(-2.5) - exp(-5.0),neval); 
   pnl_vect_free (&pts);
 }
@@ -99,7 +99,7 @@ static void integration_qng_test()
   func.function = x_square;
   func.params = NULL;
   pnl_integration_qng(&func,0.0,1.0,0.00001,0.000001,&result,&abserr,&neval);
-  printf(" integration (qng) res %f error %f , iter %d \n",result,abserr,neval); 
+  printf("integration (qng) res %f error %f , iter %d \n",result,abserr,neval); 
 }
 
 static void integration_qng_2d_test()
@@ -110,7 +110,7 @@ static void integration_qng_2d_test()
   func.function = test_xy;
   func.params = NULL;
   pnl_integration_qng_2d(&func,-1.0,1.0,-1.0,1.0,0.00001,0.000001,&result,&abserr,&neval);
-  printf(" integration 2D (qng) res %f error %f , iter %d \n",result,abserr,neval); 
+  printf("integration 2D (qng) res %f error %f , iter %d \n",result,abserr,neval); 
 }
 
 
@@ -122,11 +122,11 @@ static void integ_test()
   func.function = x_square;
   func.params = NULL;
   result = pnl_integration(&func,0.0,1.0,n, "rect");
-  printf(" integration (rectangle rule) : %f, iter %d \n", result, n); 
+  printf("integration (rectangle rule) : %f, iter %d \n", result, n); 
   result = pnl_integration(&func,0.0,1.0,n, "trap");
-  printf(" integration (trapezoidal rule) : %f, iter %d \n", result, n); 
+  printf("integration (trapezoidal rule) : %f, iter %d \n", result, n); 
   result = pnl_integration(&func,0.0,1.0,n, "simpson");
-  printf(" integration (simpson rule) : %f, iter %d \n", result, n); 
+  printf("integration (simpson rule) : %f, iter %d \n", result, n); 
 }
 
 static void integ_2d_test()
@@ -139,11 +139,11 @@ static void integ_2d_test()
   func.function = test_xy;
   func.params = NULL;
   result = pnl_integration_2d(&func,-1.0,1.0,-1.0,1.0,nx, ny, "rect");
-  printf(" integration 2D (rectangle rule) : %f, iter %d \n", result, nx * ny); 
+  printf("integration 2D (rectangle rule) : %f, iter %d \n", result, nx * ny); 
   result = pnl_integration_2d(&func,-1.0,1.0,-1.0,1.0,nx, ny, "trap");
-  printf(" integration 2D (trapezoidal rule) : %f, iter %d \n", result, nx *ny); 
+  printf("integration 2D (trapezoidal rule) : %f, iter %d \n", result, nx *ny); 
   result = pnl_integration_2d(&func,-1.0,1.0,-1.0,1.0,nx, ny, "simpson");
-  printf(" integration 2D (simpson rule) : %f, iter %d \n", result, nx *ny); 
+  printf("integration 2D (simpson rule) : %f, iter %d \n", result, nx *ny); 
 }
 
 void integration_test()
