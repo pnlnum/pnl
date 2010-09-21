@@ -59,17 +59,17 @@
  */
 
 #include "pnl/pnl_random.h"
-#include "mt.h"
 
-/* #define N 624, in mt.h */
-#define M 397
+
+/* #define MT_N 624, in mt.h */
+#define MT_M 397
 #define UPPER_MASK 0x80000000 /* most significant w-r bits */
 #define LOWER_MASK 0x7fffffff /* least significant r bits */
 #define BIT32_MASK 0xffffffffUL
 
 
 /* Initializing the array with a seed */
-void pnl_mt_set_seed(mt_state *state, unsigned long int s)
+void pnl_mt_sseed(mt_state *state, unsigned long int s)
 {
   int i;
 
@@ -77,7 +77,7 @@ void pnl_mt_set_seed(mt_state *state, unsigned long int s)
 
   state->mt[0] = s & BIT32_MASK;
 
-  for ( i=1 ; i<N ; i++ ) 
+  for ( i=1 ; i<MT_N ; i++ ) 
     {
       state->mt[i] = (1812433253UL * (state->mt[i-1]  ^ (state->mt[i-1] >> 30))) + i;
       /* See Knuth TAOCP Vol2. 3rd Ed. P.106 for multiplier. */
@@ -98,22 +98,22 @@ unsigned long pnl_mt_genrand (mt_state *state)
 {
   unsigned long y;
 
-  if (state->mti >= N) 
-    { /* generate N words at one time */
+  if (state->mti >= MT_N) 
+    { /* generate MT_N words at one time */
       int kk;
 
-      for ( kk=0 ; kk<N-M ; kk++ ) 
+      for ( kk=0 ; kk<MT_N-MT_M ; kk++ ) 
         {
           y = (state->mt[kk] & UPPER_MASK) | (state->mt[kk+1] & LOWER_MASK);
-          state->mt[kk] = state->mt[kk+M] ^ (y >> 1) ^ MAGIC(y);
+          state->mt[kk] = state->mt[kk+MT_M] ^ (y >> 1) ^ MAGIC(y);
         }
-      for (; kk<N-1 ; kk++) 
+      for (; kk<MT_N-1 ; kk++) 
         {
           y = (state->mt[kk] & UPPER_MASK) | (state->mt[kk+1] & LOWER_MASK);
-          state->mt[kk] = state->mt[kk+(M-N)] ^ (y >> 1) ^ MAGIC(y);
+          state->mt[kk] = state->mt[kk+(MT_M-MT_N)] ^ (y >> 1) ^ MAGIC(y);
         }
-      y = (state->mt[N-1] & UPPER_MASK) | (state->mt[0] & LOWER_MASK);
-      state->mt[N-1] = state->mt[M-1] ^ (y >> 1) ^ MAGIC(y);
+      y = (state->mt[MT_N-1] & UPPER_MASK) | (state->mt[0] & LOWER_MASK);
+      state->mt[MT_N-1] = state->mt[MT_M-1] ^ (y >> 1) ^ MAGIC(y);
 
       state->mti = 0;
     }

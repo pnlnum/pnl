@@ -38,6 +38,7 @@ static char const rcsid[] =
 #include "pnl/pnl_mathtools.h"
 
 
+
 #ifndef LONG_BIT
 #if ULONG_MAX <= 0xffffffffUL
 #define LONG_BIT 32
@@ -779,7 +780,7 @@ rk_sobol_error pnl_rk_sobol_init(int dimension, rk_sobol_state *s,
 		{
 		  rs_dir = &rs_dir_temp;
       /* pnl_rk_randomseed(rs_dir); */
-      pnl_mt_set_seed(rs_dir, time(NULL));
+      pnl_mt_sseed(rs_dir, time(NULL));
 
 		}
 	      /* Draw a direction at random (the highest bits will be discarded) */

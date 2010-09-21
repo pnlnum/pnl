@@ -129,11 +129,29 @@ extern double pnl_rand_gamma (double a, double b, int gen);
 extern double pnl_rand_chi2  (double nu, int gen);
 
 /*
+ * MT
+ */
+#define MT_N 624
+
+typedef struct 
+{
+  unsigned long mt[MT_N];
+  int mti;
+} mt_state;
+
+extern void pnl_mt_sseed(mt_state *state, unsigned long int s);
+extern unsigned long pnl_mt_genrand (mt_state *state);
+extern double pnl_mt_genrand_double (mt_state *state);
+
+
+
+/*
  * DCMT
  */
 #define DCMT_N 17 /* N = p / w + 1; p = 521; w = 32; */
 
-typedef struct {
+typedef struct
+{
   ulong aaa;
   int mm,nn,rr,ww;
   ulong wmask,umask,lmask;
@@ -145,7 +163,7 @@ typedef struct {
 
 extern dcmt_state* pnl_dcmt_get_parameter(ulong seed);
 extern dcmt_state** pnl_dcmt_create_array(int n, ulong seed, int *count);
-extern void pnl_dcmt_sgenrand(dcmt_state *mts, ulong s);
+extern void pnl_dcmt_sseed (dcmt_state *mts, ulong s);
 extern double pnl_dcmt_genrand_double(dcmt_state *mts);
 extern void pnl_dcmt_free(dcmt_state **mts);
 extern void pnl_dcmt_free_array(dcmt_state **mts, int count);

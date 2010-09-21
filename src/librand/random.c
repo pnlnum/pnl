@@ -1309,7 +1309,7 @@ int pnl_rand_init (int type_generator, int dimension, long samples)
         pnl_rand_sseed (type_generator, time(NULL));
       break;
     case PNL_RNG_DCMT:
-      pnl_dcmt_sgenrand ((dcmt_state *)(rng->state), 1234);
+      pnl_dcmt_sseed ((dcmt_state *)(rng->state), 1234);
       break;
     default:
       break;
@@ -1331,10 +1331,10 @@ void pnl_rand_sseed (int type_generator, ulong seed)
     {
     case PNL_RNG_MERSENNE :
     case PNL_RNG_MERSENNE_RANDOM_SEED :
-      pnl_mt_set_seed((mt_state *)(rng->state), seed);
+      pnl_mt_sseed((mt_state *)(rng->state), seed);
       break;
     case PNL_RNG_DCMT :
-      pnl_dcmt_sgenrand ((dcmt_state *)(rng->state), seed);
+      pnl_dcmt_sseed ((dcmt_state *)(rng->state), seed);
     }
   rng->counter=1;
   rng->has_gauss=0;

@@ -66,7 +66,7 @@
 #ifndef _RK_SOBOL_
 #define _RK_SOBOL_
 
-#include "mt.h"
+#include "pnl/pnl_random.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -282,6 +282,35 @@ that you can access the elements individually afterwards.
 
 \subsubsection{Advanced usage}
 
+\paragraph{Mersenne Twister}
+
+It is possible to create Mersenne Twister random number generator each with
+its state variable so that they can evolve independently in a shared memory
+environment. These generators are suitable for use with OpenMP
+
+\begin{verbatim}
+typedef struct 
+{
+  unsigned long mt[624];
+  int mti;
+} mt_state;
+typedef unsigned long ulong;
+\end{verbatim}
+
+\begin{itemize}
+\item \describefun{void}{pnl_mt_sseed}{mt_state \ptr state, unsigned long int
+    s}
+  \describefun Sets the initial value of variable \var{state} using \var{s}
+\item \describefun{ulong}{pnl_mt_genrand}{mt_state \ptr state}
+  \describefun Returns the following number in the sequence as an unsigned
+  long variable. A mask is applied so that only the lowest 32-bits are used.
+\item \describefun{double}{pnl_mt_genrand_double}{mt_state \ptr state}
+  \describefun Returns the following number in the sequence as a double.
+\end{itemize}
+
+
+\paragraph{Dynamically created Mersenne Twister}
+
 Besides the generators listed in Table~\ref{rng_indices}, it is possible to
 add some more generators. For the moment, only ``Dynamically created Mersenne
 Twister'' random generators (DCMT) can be added to the list of dynamic random number
@@ -295,7 +324,7 @@ Some functions to create a DCMT random number generator.
   the Mersenne Twister generator internally used to find new DCMT.
 \item \describefun{dcmt_state \ptr \ptr}{pnl_dcmt_create_array}{int n, ulong seed, int \ptr count}
   \sshortdescribe Creates an array of \var{n} independent DCMT. \var{seed} is
-  the seed used to initialize the MErsenne Twister generator internally used to
+  the seed used to initialize the Mersenne Twister generator internally used to
   find new DCMT. On exit, \var{count} contains the number of generators actually
   created.
 \item \describefun{\refstruct{PnlRng} \ptr \ptr}{pnl_rng_dcmt_create_array}{int n, ulong seed, int \ptr count}
@@ -304,7 +333,7 @@ Some functions to create a DCMT random number generator.
   find new DCMT. On exit, \var{count} contains the number of generators actually
   created. Same function as \reffun{pnl_dcmt_create_array} instead that it
   directly returns an array of \reffun{PnlRng}.
-\item \describefun{void}{pnl_dcmt_sgenrand}{dcmt_state \ptr mts, ulong s}
+\item \describefun{void}{pnl_dcmt_sseed}{dcmt_state \ptr mts, ulong s}
   \sshortdescribe Generates a uniformly distributed unsigned integer
 \item \describefun{double}{pnl_dcmt_genrand_double}{dcmt_state \ptr mts}
   \sshortdescribe Generates a uniformly distributed random variable on \var{[0,1]}.

@@ -49,7 +49,7 @@
 
 #include "config.h"
 #include "pnl/pnl_random.h"
-#include "mt.h"
+
 
 #define LSB 0x1
 #define WORDLEN 32
@@ -1319,7 +1319,7 @@ dcmt_state* pnl_dcmt_get_parameter(ulong seed)
   mt_state org;
   check32_t ck;
 
-  pnl_mt_set_seed(&org, seed);
+  pnl_mt_sseed(&org, seed);
   mts = init_mt_search(&ck, &pre);
   if (mts == NULL) return NULL;
 
@@ -1375,7 +1375,7 @@ dcmt_state** pnl_dcmt_create_array(int n, ulong seed, int *count)
       *count = 0;
       return NULL;
     }
-  pnl_mt_set_seed(&org, seed);
+  pnl_mt_sseed(&org, seed);
   if ((mtss = malloc(sizeof(dcmt_state*)*n)) == NULL) return NULL;
 
   if ((template_mts = init_mt_search(&ck, &pre)) == NULL)
@@ -1419,7 +1419,7 @@ dcmt_state** pnl_dcmt_create_array(int n, ulong seed, int *count)
  * @param s an unsigned integer used as seed
  * @param mts a dcmt
  */
-void pnl_dcmt_sgenrand(dcmt_state *mts, ulong s) 
+void pnl_dcmt_sseed(dcmt_state *mts, ulong s) 
 {
   int i;
   mts->state[0] = s & BIT32_MASK;

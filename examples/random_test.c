@@ -143,7 +143,7 @@ static void std_call_dcmt ()
   for ( j=0 ; j<count ; j++ )
     {
       sum[j] = var[j] = 0.;
-      pnl_dcmt_sgenrand (mts[j], 1234);
+      pnl_dcmt_sseed (mts[j], 1234);
     }
 
   for (i=0; i<N; i++) 
