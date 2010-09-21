@@ -87,13 +87,13 @@ if test "x$GCC" = xyes ; then
       CC_OPTIONS=`echo $CC_OPTIONS | sed -e 's/-O[[0-9]]*//g'`   
       CC_OPTIONS=`echo $CC_OPTIONS | sed -e 's/-g[[0-9]]*$//g'`          
       CC_OPTIONS=`echo $CC_OPTIONS | sed -e 's/-g[[0-9]]* //g'`           
-      CC_OPTIONS="${CC_OPTIONS} -Wall -g -Wdeclaration-after-statement"
+      CC_OPTIONS="${CC_OPTIONS} -Wall -g"
       CXX_OPTIONS=`echo $CXX_OPTIONS | sed -e 's/-O[[0-9]]*//g'`   
       CXX_OPTIONS=`echo $CXX_OPTIONS | sed -e 's/-g[[0-9]]*$//g'`          
       CXX_OPTIONS=`echo $CXX_OPTIONS | sed -e 's/-g[[0-9]]* //g'`           
       CXX_OPTIONS="${CXX_OPTIONS} -Wall -g -fno-inline"
    else
-      CC_OPTIONS="${CC_OPTIONS} -Wall -Wdeclaration-after-statement"
+      CC_OPTIONS="${CC_OPTIONS} -Wall"
    fi
    #The -mno-cygwin flag to gcc makes gcc link against standard Microsoft DLLs instead of Cygwin. 
    #This is desirable for native Windows programs that don't need a UNIX emulation layer.
