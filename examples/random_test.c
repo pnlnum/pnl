@@ -109,7 +109,7 @@ static void test_pnl_rand_gauss(int type_generator)
   printf("Cov = %f (should be 0)\n", sum/samples);
 }
 
-void test_rng ()
+static void test_rng ()
 {
   int i, type_gen;
   PnlRng *rng;
@@ -125,6 +125,29 @@ void test_rng ()
       i++;
     }
 }
+
+static void rng_call ()
+{
+  int j, N=10000;
+  double sum, var;
+  PnlRng *rng;
+
+  printf ("\n--> Test of the rng interface\n");
+  rng = pnl_rng_create (PNL_RNG_MERSENNE);
+  pnl_rng_sseed (rng, 4172);
+  var = sum = 0.;
+  
+  for ( j=0 ; j<N ; j++ )
+    {
+      double tmp;
+      tmp = pnl_rng_normal(rng);
+      sum += tmp; var += tmp * tmp;
+    }
+  
+    printf ("mean = %f (sould be 0.) \tvar = %f (souble be 1)\n", sum/N, var/N);
+    pnl_rng_free (&rng);
+}
+
 
 #define NGEN 3
 static void std_call_dcmt ()
@@ -243,6 +266,7 @@ static void rand_call_dcmt2 ()
 void random_test(void)
 {
   test_rng();
+  rng_call ();
   std_call_dcmt ();
   rand_call_dcmt ();
   rand_call_dcmt2 ();

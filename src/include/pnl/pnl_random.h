@@ -60,7 +60,6 @@ struct _PnlRng
   int id; /*!< index of the generator in the list */
   void (*Compute)(PnlRng *g, double *sample); /*!< the function to compute the
                                                 next number in the sequence */
-  void (*destroy)(PnlRng **g);
   int rand_or_quasi; /*!< can be MC or QMC */
   int dimension; /*!< dimension of the space in which we draw the samples */
   int max_dim; /*!< maximum dimension of the space in which we draw the samples */
@@ -128,6 +127,27 @@ extern void pnl_mat_rand_normal(PnlMat *M, int samples, int dimension, int type_
 extern double pnl_rand_gamma (double a, double b, int gen);
 extern double pnl_rand_chi2  (double nu, int gen);
 
+extern double pnl_rng_gauss(int, int, int, PnlRng *rng);
+extern int pnl_rng_bernoulli(double p, PnlRng *rng);
+extern long pnl_rng_poisson(double lambda, PnlRng *rng);
+extern long pnl_rng_poisson1(double lambda,double t, PnlRng *rng);
+extern double pnl_rng_exp(double lambda,PnlRng *rng);
+extern double pnl_rng_uni (PnlRng *rng);
+extern double pnl_rng_uni_ab (double a, double b, PnlRng *rng);
+extern double pnl_rng_normal (PnlRng *rng);
+extern void pnl_vect_rng_uni(PnlVect *G, int samples, double a, double b, PnlRng *rng);
+extern void pnl_vect_rng_uni_d(PnlVect *G, int dimension, double a, double b, PnlRng *rng);
+extern void pnl_vect_rng_normal(PnlVect *G, int samples, PnlRng *rng);
+extern void pnl_vect_rng_normal_d(PnlVect *G, int dimension, PnlRng *rng);
+extern void pnl_mat_rng_uni(PnlMat *M, int samples, int dimension, const PnlVect *a,
+                             const PnlVect *b, PnlRng *rng);
+extern void pnl_mat_rng_uni2(PnlMat *M, int samples, int dimension,
+                              double a, double b, PnlRng *rng);
+extern void pnl_mat_rng_normal(PnlMat *M, int samples, int dimension, PnlRng *rng);
+extern double pnl_rng_gamma (double a, double b, PnlRng *rng);
+extern double pnl_rng_chi2  (double nu, PnlRng *rng);
+
+
 /*
  * MT
  */
@@ -187,14 +207,8 @@ extern PnlRng* pnl_rng_new ();
 extern PnlRng* pnl_rng_create (int type);
 extern void pnl_rng_init (PnlRng *rng, int type);
 PnlRng* pnl_rng_get_from_id (int type_generator);
+extern void pnl_rng_sseed(PnlRng *rng, unsigned long int s);
 
-
-
-#ifdef _PNL_PRIVATE
-
-static void pnl_rng_free_dcmt (PnlRng **rng);
-
-#endif
 
 #ifdef __cplusplus
 }
