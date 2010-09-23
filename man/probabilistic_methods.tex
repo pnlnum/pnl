@@ -293,26 +293,26 @@ moment, it is only possible to create Mersenne Twister générators this way.
 
 The following functions return one sample from a specified law.
 \begin{itemize}
-\item \describefun{int}{pnl_rng_bernoulli}{double p, PnlRng *rng}
+\item \describefun{int}{pnl_rng_bernoulli}{double p, \refstruct{PnlRng} \ptr rng}
   \sshortdescribe Generates a sample from the Bernouilli law on $\{0, 1\}$ with
   parameter \var{p}.
   
-\item \describefun{long}{pnl_rng_poisson}{double lambda, PnlRng *rng}
+\item \describefun{long}{pnl_rng_poisson}{double lambda, \refstruct{PnlRng} \ptr rng}
   \sshortdescribe Generates a sample from the Poisson law with
   parameter \var{lambda}.
 
-\item \describefun{double}{pnl_rng_exp}{double lambda, PnlRng *rng}
+\item \describefun{double}{pnl_rng_exp}{double lambda, \refstruct{PnlRng} \ptr rng}
   \sshortdescribe Generates a sample from the Exponential law with
   parameter \var{lambda}.
 
-\item \describefun{double}{pnl_rng_uni} {PnlRng *rng}
+\item \describefun{double}{pnl_rng_uni} {\refstruct{PnlRng} \ptr rng}
   \sshortdescribe Generates a sample from the Uniform law on $[0, 1]$.
 
 \item \describefun{double}{pnl_rng_uni_ab} {double a, double b, int
     type_generator}
   \sshortdescribe Generates a sample from the Uniform law on $[a, b]$.
 
-\item \describefun{double}{pnl_rng_normal} {PnlRng *rng}
+\item \describefun{double}{pnl_rng_normal} {\refstruct{PnlRng} \ptr rng}
   \sshortdescribe Generates a sample from the standard normal distribution.
 
 \item \describefun{long}{pnl_rng_poisson1}{double lambda, double t, int
@@ -320,10 +320,10 @@ The following functions return one sample from a specified law.
   \sshortdescribe Generates a sample from a Poisson process with intensity
   \var{lambda} at time \var{t}.
 
-\item \describefun{double}{pnl_rng_gamma} {double a, double b, PnlRng *rng}
+\item \describefun{double}{pnl_rng_gamma} {double a, double b, \refstruct{PnlRng} \ptr rng}
   \sshortdescribe Generates a sample from the $\Gamma(a, b)$ distribution.  
   
-\item \describefun{double}{pnl_rng_chi2} {double n, PnlRng *rng}
+\item \describefun{double}{pnl_rng_chi2} {double n, \refstruct{PnlRng} \ptr rng}
   \sshortdescribe Generates a sample from the centered $\chi^2(n)$ distribution.
 \end{itemize}
 
@@ -335,22 +335,22 @@ distribution in dimension $n$ only matters when using a {\bf Quasi} random
 number generator.
 \begin{itemize}
 \item \describefun{void}{pnl_vect_rng_uni}{\refstruct{PnlVect} \ptr G, int
-    samples, double a, double b, PnlRng *rng}
+    samples, double a, double b, \refstruct{PnlRng} \ptr rng}
   \sshortdescribe \var{G} is a vector of independent and identically distributed
   samples from the uniform distribution on $[a, b]$.
 
 \item \describefun{void}{pnl_vect_rng_normal}{\refstruct{PnlVect} \ptr G, 
-    int samples, PnlRng *rng}
+    int samples, \refstruct{PnlRng} \ptr rng}
   \sshortdescribe \var{G} is a vector of independent and identically distributed
   samples from the standard normal distribution.
 
 \item \describefun{void}{pnl_vect_rng_uni_d}{\refstruct{PnlVect} \ptr G, int
-    d, double a, double b, PnlRng *rng}
+    d, double a, double b, \refstruct{PnlRng} \ptr rng}
   \sshortdescribe \var{G} is a sample from the uniform distribution on $[a, 
   b]^{\text{d}}$.
 
 \item \describefun{void}{pnl_vect_rng_normal_d}{\refstruct{PnlVect} \ptr G, 
-    int d, PnlRng *rng}
+    int d, \refstruct{PnlRng} \ptr rng}
   \sshortdescribe \var{G} is a sample from the \var{d}-dimensional
   standard normal distribution.
 
@@ -364,17 +364,17 @@ and identically distributed. Each row is a sample from the given law in
 dimension \var{dimension}.
 \begin{itemize}
 \item \describefun{void}{pnl_mat_rng_uni}{\refstruct{PnlMat} \ptr M, int
-    samples, int d, const PnlVect \ptr a, const PnlVect \ptr b, PnlRng *rng}
+    samples, int d, const PnlVect \ptr a, const PnlVect \ptr b, \refstruct{PnlRng} \ptr rng}
   \sshortdescribe \var{M} contains \var{samples} samples from the uniform
   distribution on $\prod_{i=1}^d [a_i, b_i]$.
 
 \item \describefun{void}{pnl_mat_rng_uni2}{\refstruct{PnlMat} \ptr M, int
-    samples, int d, double a, double b, PnlRng *rng}
+    samples, int d, double a, double b, \refstruct{PnlRng} \ptr rng}
   \sshortdescribe \var{M} contains \var{samples} samples from the uniform
   distribution on $[a, b]^{\text{d}}$.
   
 \item \describefun{void}{pnl_mat_rng_normal}{\refstruct{PnlMat} \ptr M, int
-    samples, int d, PnlRng *rng}
+    samples, int d, \refstruct{PnlRng} \ptr rng}
   \sshortdescribe \var{M} contains \var{samples} samples from the
   \var{d}-dimensional standard normal distribution.
 \end{itemize}
