@@ -315,7 +315,16 @@ struct _PnlRng
   \sshortdescribe Creates a \refstruct{PnlRng} corresponding to \var{type}
   which must be PNL_RNG_MERSENNE or PNL_RNG_DCMT.
   Once a generator has been created, you {\bf must} call
-  \reffun{pnl_rng_sseed} before using it.
+  \reffun{pnl_rng_sseed} before using it. To create several PNL_RNG_DCMT type
+  generators it is better to \reffun{pnl_rng_dcmt_create_array} because the
+  function \reffun{pnl_rng_create} produces a memory leak
+\item \describefun{\refstruct{PnlRng} \ptr
+    \ptr}{pnl_rng_dcmt_create_array}{int n, ulong seed, int \ptr count} 
+  \sshortdescribe Creates an array of \var{n} independent DCMT. \var{seed} is
+  the seed used to initialize the Mersenne Twister generator internally used to
+  find new DCMT. On exit, \var{count} contains the number of generators actually
+  created. Same function as \reffun{pnl_dcmt_create_array} instead that it
+  directly returns an array of \refstruct{PnlRng}.
 \item \describefun{void}{pnl_rng_init}{\refstruct{PnlRng} \ptr rng, int type}
   \sshortdescribe Initializes an empty \refstruct{PnlRng} as returned by
   \reffun{pnl_rng_new} using \var{type} which must be PNL_RNG_MERSENNE or
@@ -324,13 +333,6 @@ struct _PnlRng
 \item \describefun{void}{pnl_rng_sseed}{\refstruct{PnlRng} \ptr rng, unsigned
     long int s}
   \sshortdescribe Sets the seed of the genrator \var{rng} using \var{s}.
-\item \describefun{\refstruct{PnlRng} \ptr
-    \ptr}{pnl_rng_dcmt_create_array}{int n, ulong seed, int \ptr count} 
-  \sshortdescribe Creates an array of \var{n} independent DCMT. \var{seed} is
-  the seed used to initialize the Mersenne Twister generator internally used to
-  find new DCMT. On exit, \var{count} contains the number of generators actually
-  created. Same function as \reffun{pnl_dcmt_create_array} instead that it
-  directly returns an array of \refstruct{PnlRng}.
 \end{itemize}
 
 
