@@ -347,7 +347,7 @@ static int pnl_dlamc2 (int *beta, int *t, int *rnd, double *eps,
 
   int ieee;
   double half;
-  int lrnd;
+  static int lrnd;
   static double leps;
   double zero, a, b, c_;
   int i_;
