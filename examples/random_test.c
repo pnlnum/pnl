@@ -198,18 +198,12 @@ static void rand_call_dcmt ()
   for ( j=0 ; j<NGEN ; j++ )
     {
       sum[j] = var[j] = 0.;
-      /* if ( (rng[j] = pnl_rng_create (PNL_RNG_DCMT)) == NULL)
-       *   {
-       *     perror ("Cannot create a DCMT.\n"); abort();
-       *   }
-       * pnl_rng_sseed (rng[j], 1234); */
+      if ( (rng[j] = pnl_rng_create (PNL_RNG_DCMT)) == NULL)
+        {
+          perror ("Cannot create a DCMT.\n"); abort();
+        }
+      pnl_rng_sseed (rng[j], 1234);
     }
-  rng[0] = pnl_rng_create (PNL_RNG_DCMT);
-  pnl_rng_sseed (rng[0], 1234);
-  rng[1] = pnl_rng_create (PNL_RNG_DCMT);
-  pnl_rng_sseed (rng[1], 1234);
-  rng[2] = pnl_rng_create (PNL_RNG_DCMT);
-  pnl_rng_sseed (rng[2], 1234);
 
   for (i=0; i<N; i++) 
     {
