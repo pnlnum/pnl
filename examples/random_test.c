@@ -117,7 +117,7 @@ static void test_rng ()
   while (PnlRngArray[i].rng != NULL)
     {
       rng = PnlRngArray[i].rng;
-      type_gen = rng->id;
+      type_gen = rng->type;
       printf ("--> Generator %s\n", PnlRngArray[i].base.label);
       test_pnl_vect_rand(type_gen);
       test_pnl_mat_rand(type_gen);
@@ -188,33 +188,39 @@ static void std_call_dcmt ()
 
 static void rand_call_dcmt ()
 {
-  int i, j, N=10000, count;
+  int i, j, N=10000;
   PnlRng **rng;
   double sum[NGEN], var[NGEN];
 
-  printf ("\n--> Test of call to DCMT through pnl_rand_xxx\n");  
-  rng = pnl_rng_dcmt_create_array(NGEN,4172,&count);
-  if (count != NGEN)
-    {
-      printf ("Error in creating dcmt\n"); abort ();
-    }
+  printf ("\n--> Test of call to DCMT through pnl_rng_xxx\n");
+  rng = malloc (NGEN * sizeof(PnlRng *));
   
-  for ( j=0 ; j<count ; j++ )
+  for ( j=0 ; j<NGEN ; j++ )
     {
       sum[j] = var[j] = 0.;
-      pnl_rng_sseed (rng[j], 1234);
+      /* if ( (rng[j] = pnl_rng_create (PNL_RNG_DCMT)) == NULL)
+       *   {
+       *     perror ("Cannot create a DCMT.\n"); abort();
+       *   }
+       * pnl_rng_sseed (rng[j], 1234); */
     }
+  rng[0] = pnl_rng_create (PNL_RNG_DCMT);
+  pnl_rng_sseed (rng[0], 1234);
+  rng[1] = pnl_rng_create (PNL_RNG_DCMT);
+  pnl_rng_sseed (rng[1], 1234);
+  rng[2] = pnl_rng_create (PNL_RNG_DCMT);
+  pnl_rng_sseed (rng[2], 1234);
 
   for (i=0; i<N; i++) 
     {
-      for ( j=0 ; j<count ; j++ )
+      for ( j=0 ; j<NGEN ; j++ )
         {
           double tmp;
           tmp = pnl_rng_uni(rng[j]);
           sum[j] += tmp; var[j] += tmp * tmp;
         }
     }
-  for ( j=0 ; j<count ; j++ )
+  for ( j=0 ; j<NGEN ; j++ )
     {
       printf ("mean = %f (sould be 0.5) \tvar = %f (souble be 1/3)\n", sum[j]/N, var[j]/N);
       pnl_rng_free(&(rng[j]));
@@ -225,8 +231,8 @@ static void rand_call_dcmt ()
 
 void random_test(void)
 {
-  test_rng();
-  rng_call ();
-  std_call_dcmt ();
+  /* test_rng();
+   * rng_call ();
+   * std_call_dcmt (); */
   rand_call_dcmt ();
 }

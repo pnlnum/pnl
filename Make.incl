@@ -1,3 +1,3 @@
 # -*- mode: Makefile -*-
 
-PNL_INCLUDES = -I$(top_srcdir)/src/include -I$(top_srcdir)/src/include/pnl
+PNL_INCLUDES = -I$(top_srcdir)/src/include

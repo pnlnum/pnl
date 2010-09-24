@@ -129,7 +129,10 @@ parts.
 #endif /* _PNL_MATRIX_H
 \end{verbatim}
 All the header files are protected by an \verb!extern "C"! declaration for
-possible use with a C++ compiler.
+possible use with a C++ compiler. The header files must be include using
+\begin{verbatim}
+#include "pnl/pnl_xxx.h"
+\end{verbatim}
 
   \item All function names are prefixed by \verb!pnl_! except those implementing
     complex number arithmetic which are named following the \textit{C99}

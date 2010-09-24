@@ -26,6 +26,7 @@ extern "C" {
  * The first generators must be true MC generators and the last ones are QMC
  * Do NOT mix them otherwise the arrays  pnl_random and pnl_random_MC will be
  * wrong */
+#define PNL_RNG_NULL -1
 enum {
   PNL_RNG_KNUTH,
   PNL_RNG_MRGK3,
@@ -56,7 +57,6 @@ struct _PnlRng
 {
   PnlObject object;
   int type; /*!< generator type */
-  int id; /*!< index of the generator in the list */
   void (*Compute)(PnlRng *g, double *sample); /*!< the function to compute the
                                                 next number in the sequence */
   int rand_or_quasi; /*!< can be MC or QMC */
@@ -78,20 +78,20 @@ struct _PnlRngTypes
   PnlRng *rng;
 };
 
-/* extern PnlRng PnlRngKnuth;
- * extern PnlRng PnlRngMrgk3;
- * extern PnlRng PnlRngMrgk5;
- * extern PnlRng PnlRngShufl;
- * extern PnlRng PnlRngLecuyer;
- * extern PnlRng PnlRngTausworthe;
- * extern PnlRng PnlRngMersenne;
- * extern PnlRng PnlRngMersenneRandomSeed;
- * extern PnlRng PnlRngSqrt;
- * extern PnlRng PnlRngHalton;
- * extern PnlRng PnlRngFaure;
- * extern PnlRng PnlRngSobol;
- * extern PnlRng PnlRngSobol2;
- * extern PnlRng PnlRngNiederreiter; */
+extern PnlRng PnlRngKnuth;
+extern PnlRng PnlRngMrgk3;
+extern PnlRng PnlRngMrgk5;
+extern PnlRng PnlRngShufl;
+extern PnlRng PnlRngLecuyer;
+extern PnlRng PnlRngTausworthe;
+extern PnlRng PnlRngMersenne;
+extern PnlRng PnlRngMersenneRandomSeed;
+extern PnlRng PnlRngSqrt;
+extern PnlRng PnlRngHalton;
+extern PnlRng PnlRngFaure;
+extern PnlRng PnlRngSobol;
+extern PnlRng PnlRngSobol2;
+extern PnlRng PnlRngNiederreiter;
 
 extern PnlRngTypes PnlRngArray[];
 extern enum_members RNGs;
@@ -101,6 +101,7 @@ extern enum_members MC_RNGs;
 extern int pnl_rand_init(int type_generator, int simulation_dim,long samples);
 extern void pnl_rand_sseed (int type_generator, ulong seed);
 extern int pnl_rand_or_quasi(int type_generator);
+PnlRng* pnl_rng_get_from_id (int type_generator);
 
 /*
  * Generation functions
@@ -180,6 +181,7 @@ typedef struct
 } dcmt_state;
 
 extern dcmt_state* pnl_dcmt_get_parameter(ulong seed);
+extern dcmt_state* pnl_dcmt_create ();
 extern dcmt_state** pnl_dcmt_create_array(int n, ulong seed, int *count);
 extern void pnl_dcmt_sseed (dcmt_state *mts, ulong s);
 extern double pnl_dcmt_genrand_double(dcmt_state *mts);
@@ -195,7 +197,6 @@ extern PnlRng* pnl_rng_new ();
 extern PnlRng* pnl_rng_create (int type);
 extern PnlRng** pnl_rng_dcmt_create_array (int n, ulong seed, int *count);
 extern void pnl_rng_init (PnlRng *rng, int type);
-PnlRng* pnl_rng_get_from_id (int type_generator);
 extern void pnl_rng_sseed(PnlRng *rng, unsigned long int s);
 
 /*@}*/

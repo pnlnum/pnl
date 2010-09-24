@@ -1334,6 +1334,8 @@ dcmt_state* pnl_dcmt_get_parameter(ulong seed)
   return mts;
 }
 
+
+
 /**
  * Copies a DCMT
  *
@@ -1353,6 +1355,47 @@ static void copy_params_of_dcmt_state(dcmt_state *src, dcmt_state *dst)
 
 #define DEFAULT_ID_SIZE 16
 /* id <= 0xffff */
+/**
+ * Creates a MT generator. When called several times, the returned generators
+ * are independent
+ */
+dcmt_state* pnl_dcmt_create ()
+{
+  dcmt_state *mts;
+  static dcmt_state *template_mts;
+  static prescr_t pre;
+  static mt_state org;
+  static check32_t ck;
+  static int id = 0;
+  
+  if ( id == 0 )
+    {
+      pnl_mt_sseed(&org, 4172);
+      if ( (template_mts = init_mt_search(&ck, &pre)) == NULL )
+        return NULL;
+    }
+
+  if ( (mts = malloc(sizeof(dcmt_state))) == NULL ) return NULL;
+  copy_params_of_dcmt_state(template_mts, mts);
+  if ( NOT_FOUND == get_irred_param(&ck, &pre, &org, mts,id,DEFAULT_ID_SIZE) )
+    {
+      pnl_dcmt_free(&mts);
+      return NULL;
+    }
+  _get_tempering_parameter_hard_dc(mts);
+  id++;
+
+  /*
+   * we should call end_mt_search(&pre) after the last call to
+   * pnl_dcmt_create.
+   * But how to know?
+   */
+  
+  return mts;
+}
+
+
+
 /**
  * Creates an array of DCMT
  *

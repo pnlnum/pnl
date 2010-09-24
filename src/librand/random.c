@@ -1106,97 +1106,91 @@ static void NIEDERREITER(PnlRng *rng, double X_n[])
  * Interface for Random Generators
  */
 
-/* Maximum dimension for random sequences
- * duplicated from distributions.c and mt.c */
-#define DIM_MAX 100000
-
-
-
-static PnlRng PnlRngKnuth = 
+PnlRng PnlRngKnuth = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
-    PNL_RNG_KNUTH,PNL_RNG_KNUTH,&KNUTH,
+    PNL_RNG_KNUTH,&KNUTH,
     MC,0, 0,0,0,0,NULL
 };
-static PnlRng PnlRngMrgk3 = 
+PnlRng PnlRngMrgk3 = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
-    PNL_RNG_MRGK3,PNL_RNG_MRGK3,&MRGK3,
+    PNL_RNG_MRGK3,&MRGK3,
     MC,0,0,0,0,0,NULL
 };
-static PnlRng PnlRngMrgk5 = 
+PnlRng PnlRngMrgk5 = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
-    PNL_RNG_MRGK5,PNL_RNG_MRGK5,&MRGK5,
+    PNL_RNG_MRGK5,&MRGK5,
     MC,0,0,0,0,0,NULL
 };
-static PnlRng PnlRngShufl = 
+PnlRng PnlRngShufl = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
-    PNL_RNG_SHUFL,PNL_RNG_SHUFL,&SHUFL,
+    PNL_RNG_SHUFL,&SHUFL,
     MC,0,0,0,0,0,NULL
 };
-static PnlRng PnlRngLecuyer =
+PnlRng PnlRngLecuyer =
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
-    PNL_RNG_LECUYER,PNL_RNG_LECUYER,&LECUYER,
+    PNL_RNG_LECUYER,&LECUYER,
     MC,0, 0,0,0,0,NULL
 };
-static PnlRng PnlRngTausworthe = 
+PnlRng PnlRngTausworthe = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
-    PNL_RNG_TAUSWORTHE,PNL_RNG_TAUSWORTHE,&TAUS,
+    PNL_RNG_TAUSWORTHE,&TAUS,
     MC,0, 0,0,0,0,NULL
 };
 
 static mt_state state1;
 static mt_state state2;
-static PnlRng PnlRngMersenne = 
+PnlRng PnlRngMersenne = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
-    PNL_RNG_MERSENNE,PNL_RNG_MERSENNE,&MERSENNE,
+    PNL_RNG_MERSENNE,&MERSENNE,
     MC,0,0, 0,0,sizeof(mt_state),&state1
 };
-static PnlRng PnlRngMersenneRandomSeed = 
+PnlRng PnlRngMersenneRandomSeed = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
-    PNL_RNG_MERSENNE_RANDOM_SEED,PNL_RNG_MERSENNE_RANDOM_SEED,&MERSENNE,
+    PNL_RNG_MERSENNE_RANDOM_SEED,&MERSENNE,
     MC,0,0, 0,0,sizeof(mt_state),&state2
 };
-static PnlRng PnlRngSqrt = 
+PnlRng PnlRngSqrt = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
-    PNL_RNG_SQRT,PNL_RNG_SQRT,&SQRT,
+    PNL_RNG_SQRT,&SQRT,
     QMC,0, 0,0,0,0,NULL
 };
-static PnlRng PnlRngHalton = 
+PnlRng PnlRngHalton = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
-    PNL_RNG_HALTON,PNL_RNG_HALTON,&HALTON,
+    PNL_RNG_HALTON,&HALTON,
     QMC,0, 0,0,0,0,NULL
 };
-static PnlRng PnlRngFaure = 
+PnlRng PnlRngFaure = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
-    PNL_RNG_FAURE,PNL_RNG_FAURE,&FAURE,
+    PNL_RNG_FAURE,&FAURE,
     QMC,0, 0,0,0,0,NULL
 };
-static PnlRng PnlRngSobol = 
+PnlRng PnlRngSobol = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
-    PNL_RNG_SOBOL,PNL_RNG_SOBOL,&SOBOL,
+    PNL_RNG_SOBOL,&SOBOL,
     QMC,0, 0,0,0,0,NULL
 };
-static PnlRng PnlRngSobol2 = 
+PnlRng PnlRngSobol2 = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
-    PNL_RNG_SOBOL2,PNL_RNG_SOBOL2,&SOBOL2,
+    PNL_RNG_SOBOL2,&SOBOL2,
     QMC,0, 0,0,0,0,NULL
 };
-static PnlRng PnlRngNiederreiter = 
+PnlRng PnlRngNiederreiter = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
-    PNL_RNG_NIEDERREITER,PNL_RNG_NIEDERREITER,&NIEDERREITER,
+    PNL_RNG_NIEDERREITER,&NIEDERREITER,
     QMC,0, 0,0,0,0,NULL
 };
 
@@ -1416,75 +1410,136 @@ int pnl_rand_or_quasi (int type_generator)
 }
 
 
+/**
+ * Frees an rng
+ *
+ * @param rng the address of an rng
+ */
+void pnl_rng_free (PnlRng **rng)
+{
+  if ( *rng == NULL ) return;
+  switch ( (*rng)->type )
+    {
+    case PNL_RNG_MERSENNE:
+    case PNL_RNG_DCMT:
+      if ( (*rng)->state != NULL )
+        {
+          free ((*rng)->state); (*rng)->state = NULL;
+        }
+      break;
+    }
+  free (*rng); *rng = NULL;
+}
 
-/* /\**
- *  * Adds a newly created MT generator to the list PnlRngDynamicList
- *  *
- *  * @param mts the state of a dcmt
- *  * @return the index of the added generator in the list
- *  *\/
- * int pnl_rand_add (PnlRng *rng)
- * {
- *   int id;
- * 
- *   if ( PnlRngDynamicList == NULL )
- *     {
- *       PnlRngDynamicList = pnl_list_new ();
- *       id = PnlRngMaxStaticIndex + 1;
- *     }
- *   else
- *     {
- *       id = (PNL_RNG_OBJECT(PnlRngDynamicList->last->self))->id + 1;
- *     }
- * 
- *   rng->id = id;
- * 
- *   pnl_list_insert_last (PnlRngDynamicList, PNL_OBJECT (rng));
- *   return rng->id;
- * }
- * 
- * /\**
- *  * Adds a newly created MT generator to the list PnlRngDynamicList
- *  *
- *  * @param mts the state of a dcmt
- *  * @return the index of the added generator in the list
- *  *\/
- * int pnl_rand_add_dcmt (dcmt_state *mts)
- * {
- *   PnlRng *rng;
- * 
- *   rng = pnl_rng_new ();
- *   pnl_rng_init (rng,  PNL_RNG_DCMT);
- *   rng->size_state = sizeof (dcmt_state);
- *   rng->state = mts;
- *   return pnl_rand_add (rng);
- * }
- * 
- * 
- * 
- * /\**
- *  * Removes a generator from the list of PnlRngs and frees some unused memory
- *  *\/
- * void pnl_rand_remove (int id)
- * {
- *   int i;
- *   PnlCell *C;
- *   /\*
- *    * Test if generator has been dynamically added
- *    *\/
- *   if ( PnlRngDynamicList == NULL ) return;
- *   if (id < PnlRngMaxStaticIndex)  return;
- * 
- *   C = PnlRngDynamicList->first;
- *   for ( i=0 ; i<PnlRngDynamicList->len ; i++ )
- *     {
- *       if ( (PNL_RNG_OBJECT(C->self))->id == id )
- *         {
- *           pnl_list_remove_i (PnlRngDynamicList, i);
- *           if ( PnlRngDynamicList->len == 0 ) pnl_list_free (&PnlRngDynamicList);
- *           return;
- *         }
- *       C = C->next;
- *     }
- * } */
+/**
+ * Creates an empty rng
+ */
+PnlRng* pnl_rng_new ()
+{
+  PnlRng *rng;
+  if ((rng = malloc (sizeof(PnlRng))) == NULL) return NULL;
+  
+  rng->object.type = PNL_TYPE_RNG;
+  rng->object.label = pnl_rng_label;
+  rng->object.parent_type = PNL_TYPE_RNG;
+  rng->object.destroy = (destroy_func *) pnl_rng_free;
 
+  rng->type = PNL_RNG_NULL;
+  rng->Compute = NULL;
+  rng->rand_or_quasi = MC;
+  rng->dimension = 0;
+  rng->counter = 0;
+  rng->has_gauss = 0;
+  rng->gauss = 0;
+  rng->size_state = 0;
+  rng->state = NULL;
+  return rng;
+}
+
+
+/**
+ * Creates a rng of the given type.
+ * Note that the fields size_state and state are set to zero, which implies
+ * that the created generator is unusable. It is only usefull to receive an
+ * already workin generator.
+ *
+ * @param type the type of generator to create
+ * @return a PnlRng or NULL if an error occurred
+ */
+PnlRng* pnl_rng_create (int type)
+{
+  PnlRng *rng;
+  if ((rng = pnl_rng_new()) == NULL) return NULL;
+
+  rng->type = type;
+  rng->dimension = 0;
+  rng->counter = 0;
+  rng->has_gauss = 0;
+  rng->gauss = 0;
+  rng->size_state = 0;
+  rng->state = NULL;
+  switch (type)
+    {
+    case PNL_RNG_MERSENNE:
+      rng->Compute = MERSENNE;
+      rng->rand_or_quasi = MC;
+      rng->size_state = sizeof(mt_state);
+      rng->state = malloc(rng->size_state);
+      break;
+    case PNL_RNG_DCMT:
+      rng->Compute = DYNAMIC_MT;
+      rng->rand_or_quasi = MC;
+      rng->size_state = sizeof(dcmt_state);
+      rng->state = pnl_dcmt_create ();
+      break;
+    default:
+      free (rng); rng = NULL;
+      printf("Unknown generator type\n");
+    }
+  return rng;
+}
+
+
+PnlRng** pnl_rng_dcmt_create_array (int n, ulong seed, int *count)
+{
+  PnlRng **rngtab;
+  dcmt_state **mts;
+  int i;
+
+  mts = pnl_dcmt_create_array (n, seed, count);
+  if (n != *count)
+    {
+      perror ("Not all generators could be created\n");
+      abort ();
+    }
+  if ( (rngtab = malloc (n * sizeof(PnlRng *))) == NULL)
+    {
+      pnl_dcmt_free_array (mts, n); return NULL;
+    }
+  for ( i=0 ; i<n ; i++ )
+    {
+      rngtab[i] = pnl_rng_new ();
+      pnl_rng_init (rngtab[i], PNL_RNG_DCMT);
+      rngtab[i]->size_state = sizeof (dcmt_state);
+      rngtab[i]->state = mts[i];
+    }
+  free (mts);
+  return rngtab;
+}
+
+void pnl_rng_sseed (PnlRng *rng, ulong seed)
+{
+  switch (rng->type)
+    {
+    case PNL_RNG_MERSENNE :
+    case PNL_RNG_MERSENNE_RANDOM_SEED :
+      pnl_mt_sseed((mt_state *)(rng->state), seed);
+      break;
+    case PNL_RNG_DCMT :
+      pnl_dcmt_sseed ((dcmt_state *)(rng->state), seed);
+      break;
+    }
+  rng->counter=1;
+  rng->has_gauss=0;
+  rng->gauss=0.;
+}

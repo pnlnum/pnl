@@ -114,7 +114,7 @@ name. All these functions are based on the same prototype
   \sshortdescribe Inverse of the cumulative normal distribution function.
 \end{itemize}
 
-\subsection{Random Numbers}
+\subsection{Random Number Generators}
 \subsubsection{Short Description}
 
 At the moment, there are $14$ random number generators implemented. Each of them is
@@ -280,15 +280,58 @@ that you can access the elements individually afterwards.
   with the index of the number to be retrieved.
 \end{itemize}
 
-\subsubsection{Advanced usage}
-
-
-\paragraph{The rng interface}
+\subsubsection{The rng interface}
 
 It is possible to create random number generators each with its own state
 variable so that they can evolve independently in a shared memory
 environment. These generators are suitable for use with OpenMP. For the
 moment, it is only possible to create Mersenne Twister générators this way.
+
+\begin{verbatim}
+typedef struct _PnlRng PnlRng;
+struct _PnlRng
+{
+  PnlObject object;
+  int type; /*!< generator type */
+  void (*Compute)(PnlRng *g, double *sample); /*!< the function to compute the
+                                                next number in the sequence */
+  int rand_or_quasi; /*!< can be MC or QMC */
+  int dimension; /*!< dimension of the space in which we draw the samples */
+  int counter; /*!< counter = number of samples already drawn */
+  int has_gauss; /*!< Is a gaussian deviate available? */
+  double gauss; /*!< If has_gauss==1, gauss a gaussian sample */
+  int size_state; /*!< size in bytes of the state variable */
+  void *state; /*!< state of the random generator */
+};
+\end{verbatim}
+
+
+\begin{itemize}
+\item \describefun{\refstruct{PnlRng}\ptr }{pnl_rng_new}{}
+  \sshortdescribe Creates an empty \refstruct{PnlRng}\ptr.
+\item \describefun{void}{pnl_rng_free}{\refstruct{PnlRng} \ptr \ptr }
+  \sshortdescribe Frees a \refstruct{PnlRng}.
+\item \describefun{\refstruct{PnlRng}\ptr }{pnl_rng_create}{int type}
+  \sshortdescribe Creates a \refstruct{PnlRng} corresponding to \var{type}
+  which must be PNL_RNG_MERSENNE or PNL_RNG_DCMT.
+  Once a generator has been created, you {\bf must} call
+  \reffun{pnl_rng_sseed} before using it.
+\item \describefun{void}{pnl_rng_init}{\refstruct{PnlRng} \ptr rng, int type}
+  \sshortdescribe Initializes an empty \refstruct{PnlRng} as returned by
+  \reffun{pnl_rng_new} using \var{type} which must be PNL_RNG_MERSENNE or
+  PNL_RNG_DCMT. Calling \reffun{pnl_rng_create} is equivalent to calling first
+  \reffun{pnl_rng_new} and then \reffun{pnl_rng_init}.
+\item \describefun{void}{pnl_rng_sseed}{\refstruct{PnlRng} \ptr rng, unsigned
+    long int s}
+  \sshortdescribe Sets the seed of the genrator \var{rng} using \var{s}.
+\item \describefun{\refstruct{PnlRng} \ptr
+    \ptr}{pnl_rng_dcmt_create_array}{int n, ulong seed, int \ptr count} 
+  \sshortdescribe Creates an array of \var{n} independent DCMT. \var{seed} is
+  the seed used to initialize the Mersenne Twister generator internally used to
+  find new DCMT. On exit, \var{count} contains the number of generators actually
+  created. Same function as \reffun{pnl_dcmt_create_array} instead that it
+  directly returns an array of \refstruct{PnlRng}.
+\end{itemize}
 
 
 The following functions return one sample from a specified law.
@@ -386,7 +429,6 @@ dimension \var{dimension}.
 It is possible to create Mersenne Twister random number generators each with
 its state variable so that they can evolve independently in a shared memory
 environment. These generators are suitable for use with OpenMP
-
 \begin{verbatim}
 typedef struct 
 {
@@ -410,7 +452,18 @@ typedef unsigned long ulong;
 
 \paragraph{Dynamically created Mersenne Twister}
 
-
+\begin{verbatim}
+typedef struct
+{
+  ulong aaa;
+  int mm,nn,rr,ww;
+  ulong wmask,umask,lmask;
+  int shift0, shift1, shiftB, shiftC;
+  ulong maskB, maskC;
+  int i;
+  ulong state[17];
+} dcmt_state;
+\end{verbatim}
 
 Some functions to use ``Dynamically Created Mersenne Twister'' random number
 generators (DCMT).
@@ -423,12 +476,6 @@ generators (DCMT).
   the seed used to initialize the Mersenne Twister generator internally used to
   find new DCMT. On exit, \var{count} contains the number of generators actually
   created.
-\item \describefun{\refstruct{PnlRng} \ptr \ptr}{pnl_rng_dcmt_create_array}{int n, ulong seed, int \ptr count}
-  \sshortdescribe Creates an array of \var{n} independent DCMT. \var{seed} is
-  the seed used to initialize the Mersenne Twister generator internally used to
-  find new DCMT. On exit, \var{count} contains the number of generators actually
-  created. Same function as \reffun{pnl_dcmt_create_array} instead that it
-  directly returns an array of \refstruct{PnlRng}.
 \item \describefun{void}{pnl_dcmt_sseed}{dcmt_state \ptr mts, ulong s}
   \sshortdescribe Generates a uniformly distributed unsigned integer
 \item \describefun{double}{pnl_dcmt_genrand_double}{dcmt_state \ptr mts}
