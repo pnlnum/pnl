@@ -24,29 +24,25 @@
 
 /* Maximum dimension for random sequences */
 #define DIM_MAX 100000
-
-#define CheckMaxQMCDim(rng, dimension)                        \
-{   if (dimension >= rng->max_dim)                            \
-    {                                                         \
-      perror("maximum dimension of QMC exceeded\n"); abort(); \
-    }                                                         \
-}
-
 static double ArrayOfRandomNumbers[DIM_MAX];
+
+#define CheckQMCDim(rng, dim)                                       \
+  if ( rng->dimension != dim )                                      \
+    {                                                               \
+      perror ("dimension cannot be changed for QMC\n"); abort ();   \
+    }
 
 
 /**
  * Simulates a standard random normal variable using Box Muller's algorithm
- * @param type_generator index of the generator to be used
+ * @param rng a PnlRng
  * @return a normal random variable
- */    
+ */
 static double Gauss_BoxMuller(PnlRng *rng)
 {
   double xs,ys, g1, g2;
 
-  /* do not wast any samples. But be sure to throw away any remaining
-     samples when pnl_rand_init is called */
-  if (rng->counter == 1 || rng->has_gauss == 0)
+  if ( rng->has_gauss == 0 )
     {
       /* draw 2 new samples */
       rng->Compute(rng,&xs);
@@ -72,7 +68,7 @@ static double Gauss_BoxMuller(PnlRng *rng)
  * Simulation of a Gaussian standard variable.
  *
  * @param dimension size of the vector to simulate
- * @param create_or_retrieve boolean can be CREATE or RETRIEVE. 
+ * @param create_or_retrieve boolean can be CREATE or RETRIEVE.
  * @param index (unused when calling with CREATE)
  * @param type_generator index of the generator
  */
@@ -93,8 +89,8 @@ static double GaussMC(int dimension, int create_or_retrieve, int index, int type
 
 /**
  * Simulation of a Gaussian standard variable for Quasi Monte Carlo Simulation,
- * that is with the pnl_inv_cdfnor function. 
- *  This function can be called for the generation of a n-dimensional vector of 
+ * that is with the pnl_inv_cdfnor function.
+ *  This function can be called for the generation of a n-dimensional vector of
  *  independent variables: call to a n-dimensional low-discrepancy sequence.
  * @param dimension size of the vector to simulate
  * @param create_or_retrieve boolean can be CREATE or
@@ -107,11 +103,7 @@ static double GaussQMC(int dimension, int create_or_retrieve, int index, int typ
 {
   PnlRng *rng;
   rng = pnl_rng_get_from_id(type_generator);
-  if (dimension > rng->dimension)
-    {
-      perror("maximum dimension of Monte Carlo exceeded\n"); abort();
-    }
-
+  CheckQMCDim(rng, dimension);
   if (create_or_retrieve == CREATE)
     rng->Compute(rng,ArrayOfRandomNumbers);
   return pnl_inv_cdfnor(ArrayOfRandomNumbers[index]);
@@ -120,8 +112,7 @@ static double GaussQMC(int dimension, int create_or_retrieve, int index, int typ
 
 
 /*
- * Random number generation interface using the array PnlRngArray[] and the
- * dynamic list PnlRngList
+ * Random number generation interface using the array PnlRngArray[]
  */
 
 /**
@@ -155,7 +146,7 @@ int pnl_rand_bernoulli(double p, int type_generator)
 }
 
 /**
- * Simulation of a Poisson random variable 
+ * Simulation of a Poisson random variable
  * @param lambda parameter of the law
  * @param type_generator index of the generator ot be used
  */
@@ -181,7 +172,7 @@ double pnl_rand_exp(double lambda,int type_generator)
 
 
 /**
- * Simulation of a Poisson process 
+ * Simulation of a Poisson process
  * @param lambda parameter of the law
  * @param t time of the simulation
  * @param type_generator index of the generator ot be used
@@ -208,7 +199,7 @@ double pnl_rand_uni (int type_generator)
 }
 
 /**
- * Generate a uniformly distributed number on [a,b].
+ * Generates a uniformly distributed number on [a,b].
  * @param a lower bound
  * @param b upper bound
  * @param type_generator index ot the generator to be used
@@ -225,7 +216,7 @@ double pnl_rand_uni_ab (double a, double b, int type_generator)
 
 
 /**
- * Generate a normally distributed number.
+ * Generates a normally distributed number.
  * @param type_generator index ot the generator to be used
  */
 double pnl_rand_normal (int type_generator)
@@ -236,11 +227,11 @@ double pnl_rand_normal (int type_generator)
 }
 
 /**
- * return a vector of uniformly distributed components on [a,b]
+ * Computes a vector of independent and uniformly distributed r.v. on [a,b]
  * @param G existing PnlVect containing the random numbers on exit
  * @param samples size of G (number of independent samples requested)
- * @param a lower bound 
- * @param b upper bound 
+ * @param a lower bound
+ * @param b upper bound
  * @param type_generator index ot the generator to be used
  *
  * @see pnl_vect_rand_uni_d
@@ -254,7 +245,7 @@ void pnl_vect_rand_uni(PnlVect *G, int samples, double a, double b, int type_gen
 
 
 /**
- * return a vector uniformly distributed on [a,b]^dimension
+ * Computes a random vector uniformly distributed on [a,b]^dimension
  *
  * if the generator is a true MC generator, no difference between this
  * function and pnl_vect_rand_uni. In case of a QMC generator, this
@@ -263,8 +254,8 @@ void pnl_vect_rand_uni(PnlVect *G, int samples, double a, double b, int type_gen
  *
  * @param G existing PnlVect containing the random numbers on exit
  * @param dimension dimension of the state space
- * @param a lower bound 
- * @param b upper bound 
+ * @param a lower bound
+ * @param b upper bound
  * @param type_generator index ot the generator to be used
  *
  * @see pnl_vect_rand_uni
@@ -278,11 +269,11 @@ void pnl_vect_rand_uni_d (PnlVect *G, int dimension, double a, double b, int typ
 
 
 /**
- * return a vector of normaly distributed components on R
+ * Computes a vector of independent and normaly distributed r.v. on R
  *
  * @param samples number of samples
  * @param G : the vector of gaussian numbers, must already be allocated.
- * @param type_generator : the index of the generator to be used 
+ * @param type_generator : the index of the generator to be used
  *
  * @see pnl_vect_rand_normal_d
  */
@@ -295,7 +286,7 @@ void pnl_vect_rand_normal (PnlVect *G, int samples, int type_generator)
 
 
 /**
- * return a vector normally distributed on R^dimension.
+ * Computes a random vector normally distributed on R^dimension.
  *
  * if the generator is a true MC generator, no difference between this
  * function and pnl_vect_rand_uni. In case of a QMC generator, this
@@ -304,7 +295,7 @@ void pnl_vect_rand_normal (PnlVect *G, int samples, int type_generator)
  *
  * @param dimension : size of the vector. one sample of a Gaussian vector.
  * @param G : the vector of gaussian numbers, must already be allocated.
- * @param type_generator : the index of the generator to be used 
+ * @param type_generator : the index of the generator to be used
  *
  * @see pnl_vect_rand_normal
  */
@@ -316,7 +307,7 @@ void pnl_vect_rand_normal_d (PnlVect *G, int dimension, int type_generator)
 }
 
 /**
- * return a matrix with its rows uniformly distributed on [a,b]^dimension.
+ * Computes a matrix with independent and uniformly distributed rows on [a,b]
  *
  * the samples have values in [a, b] (space of dimension dimension)
  *
@@ -325,10 +316,10 @@ void pnl_vect_rand_normal_d (PnlVect *G, int dimension, int type_generator)
  * @param dimension : dimension of the simulation (= number of columns of M)
  * @param a : lower bound vector of size dimension
  * @param b : upper bound vector of size dimension
- * @param type_generator : index of the generator 
+ * @param type_generator : index of the generator
  *
  * WARNING : The rows of M are indenpendent. This is very
- * important if QMC is used 
+ * important if QMC is used
  */
 void pnl_mat_rand_uni(PnlMat *M, int samples, int dimension,
                       const PnlVect *a, const PnlVect *b, int type_generator)
@@ -340,19 +331,19 @@ void pnl_mat_rand_uni(PnlMat *M, int samples, int dimension,
 
 
 /**
- * return a matrix with its rows uniformly distributed on [a,b]^dimension.
+ * Computes a matrix with independent and uniformly distributed rows on [a,b]^dimension.
  *
  * the samples have values in [a, b] (space of dimension dimension)
  *
  * @param M : the matrix of gaussian numbers, must already be allocated
  * @param samples : number of Monte Carlo samples (= number of rows of M)
  * @param dimension : dimension of the simulation (= number of columns of M)
- * @param a : real lower bound 
- * @param b : real upper bound 
- * @param type_generator : index of the generator 
+ * @param a : real lower bound
+ * @param b : real upper bound
+ * @param type_generator : index of the generator
  *
  * WARNING : The rows of M are indenpendent. This is very
- * important if QMC is used 
+ * important if QMC is used
  */
 void pnl_mat_rand_uni2(PnlMat *M, int samples, int dimension,
                        double a, double b, int type_generator)
@@ -364,13 +355,13 @@ void pnl_mat_rand_uni2(PnlMat *M, int samples, int dimension,
 }
 
 /**
- * return a matrix with its rows normally distributed on R^dimension.
+ * Computes a matrix with independent and normally distributed rows on R^dimension.
  * The samples have values in R^dimension
  *
  * @param M : the matrix of gaussian numbers, must already be allocated
  * @param samples : number of Monte Carlo samples (= number of rows of M)
  * @param dimension : dimension of the simulation (= number of columns of M)
- * @param type_generator : index of the generator 
+ * @param type_generator : index of the generator
  *
  * WARNING : The rows of M are indenpendent. This is very important if QMC is
  * used (independent dimensions). Each row represents a sample from the one
@@ -439,7 +430,7 @@ int pnl_rng_bernoulli(double p, PnlRng *rng)
 }
 
 /**
- * Simulation of a Poisson random variable 
+ * Simulation of a Poisson random variable
  * @param lambda parameter of the law
  * @param rng generator to use
  */
@@ -454,7 +445,7 @@ long pnl_rng_poisson(double lambda, PnlRng *rng)
   u = random_number;
   while (u>a)
     {
-      rng->Compute(rng,&random_number); 
+      rng->Compute(rng,&random_number);
       u *= random_number;
       n++;
     }
@@ -471,14 +462,14 @@ double pnl_rng_exp(double lambda,PnlRng *rng)
   double x;
 
   do{
-    rng->Compute(rng,&x); 
+    rng->Compute(rng,&x);
   } while(x==0);
   return (double) (-log(x)/lambda);
 }
 
 
 /**
- * Simulation of a Poisson process 
+ * Simulation of a Poisson process
  * @param lambda parameter of the law
  * @param t time of the simulation
  * @param rng generator to use
@@ -498,7 +489,7 @@ long pnl_rng_poisson1(double lambda, double t, PnlRng *rng)
 
 
 /**
- * Generate a uniformly distributed number on ]0,1).
+ * Generates a uniformly distributed number on ]0,1).
  * @param rng generator to use
  *
  * @see pnl_rng_uni_ab
@@ -507,12 +498,12 @@ double pnl_rng_uni (PnlRng *rng)
 {
   double u;
   do { rng->Compute(rng,&u); }
-  while (u == 0); 
+  while (u == 0);
   return u;
 }
 
 /**
- * Generate a uniformly distributed number on [a,b].
+ * Generates a uniformly distributed number on [a,b].
  * @param a lower bound
  * @param b upper bound
  * @param rng generator to use
@@ -528,13 +519,14 @@ double pnl_rng_uni_ab (double a, double b, PnlRng *rng)
 
 
 /**
- * Generate a normally distributed number.
+ * Generates a normally distributed number.
  * @param rng generator to use
  */
 double pnl_rng_normal (PnlRng *rng)
 {
   if (rng->rand_or_quasi == QMC)
     {
+      CheckQMCDim(rng, 1);
       double u;
       rng->Compute(rng,&u);
       return pnl_inv_cdfnor(u);
@@ -543,12 +535,12 @@ double pnl_rng_normal (PnlRng *rng)
 }
 
 /**
- * return a vector of uniformly distributed components on [a,b]
+ * Computes a vector of independent and uniformly distributed r.v. on [a,b]
  * @param G existing PnlVect containing the random numbers on exit
  * @param samples size of G (number of independent samples requested)
- * @param a lower bound 
+ * @param a lower bound
  * @param b upper bound
- * @param rng generator to use 
+ * @param rng generator to use
  *
  * @see pnl_vect_rng_uni_d
  */
@@ -566,7 +558,7 @@ void pnl_vect_rng_uni(PnlVect *G, int samples, double a, double b, PnlRng *rng)
 
 
 /**
- * return a vector uniformly distributed on [a,b]^dimension
+ * Computes a random vector uniformly distributed on [a,b]^dimension
  *
  * if the generator is a true MC generator, no difference between this
  * function and pnl_vect_rng_uni. In case of a QMC generator, this
@@ -575,8 +567,8 @@ void pnl_vect_rng_uni(PnlVect *G, int samples, double a, double b, PnlRng *rng)
  *
  * @param G existing PnlVect containing the random numbers on exit
  * @param dimension dimension of the state space
- * @param a lower bound 
- * @param b upper bound 
+ * @param a lower bound
+ * @param b upper bound
  * @param rng generator to use
  *
  * @see pnl_vect_rng_uni
@@ -588,11 +580,11 @@ void pnl_vect_rng_uni_d (PnlVect *G, int dimension, double a, double b, PnlRng *
   pnl_vect_resize(G,dimension);
   if (rng->rand_or_quasi == QMC)
     {
-      CheckMaxQMCDim(rng, dimension);
+      CheckQMCDim(rng, dimension);
+      rng->Compute(rng, G->array);
       for(i=0;i<dimension;i++)
         {
-          rng->Compute(rng, &u);
-          PNL_LET(G,i) = a+(b-a)*u;
+          PNL_LET(G,i) = a+(b-a)*PNL_GET(G,i);
         }
       return;
     }
@@ -605,7 +597,7 @@ void pnl_vect_rng_uni_d (PnlVect *G, int dimension, double a, double b, PnlRng *
 
 
 /**
- * return a vector of normaly distributed components on R
+ * Computes a vector of independent and normaly distributed r.v. on R
  *
  * @param samples number of samples
  * @param G : the vector of gaussian numbers, must already be allocated.
@@ -620,6 +612,7 @@ void pnl_vect_rng_normal (PnlVect *G, int samples, PnlRng *rng)
   pnl_vect_resize(G,samples);
   if (rng->rand_or_quasi == QMC)
     {
+      CheckQMCDim(rng, 1);
       for (i=0; i<samples; i++)
         {
           rng->Compute(rng,&u);
@@ -635,7 +628,7 @@ void pnl_vect_rng_normal (PnlVect *G, int samples, PnlRng *rng)
 
 
 /**
- * return a vector normally distributed on R^dimension.
+ * Computes a random vector normally distributed on R^dimension.
  *
  * if the generator is a true MC generator, no difference between this
  * function and pnl_vect_rng_uni. In case of a QMC generator, this
@@ -654,7 +647,7 @@ void pnl_vect_rng_normal_d (PnlVect *G, int dimension, PnlRng *rng)
   pnl_vect_resize(G,dimension);
   if (rng->rand_or_quasi == QMC)
     {
-      CheckMaxQMCDim(rng, dimension);
+      CheckQMCDim(rng, dimension);
       rng->Compute(rng,G->array);
       for (i=0; i<dimension; i++)
         {
@@ -669,11 +662,12 @@ void pnl_vect_rng_normal_d (PnlVect *G, int dimension, PnlRng *rng)
 }
 
 /**
- * return a matrix with its rows uniformly distributed on [a,b]^dimension.
+ * Computes a matrix with independent and uniformly distributed rows on [a,b]
+ * ( a and b are vectors )
  *
  * the samples have values in [a, b] (space of dimension dimension)
  *
- * @param M : the matrix of gaussian numbers, must already be allocated
+ * @param M : the matrix of random numbers, must already be allocated
  * @param samples : number of Monte Carlo samples (= number of rows of M)
  * @param dimension : dimension of the simulation (= number of columns of M)
  * @param a : lower bound vector of size dimension
@@ -681,10 +675,10 @@ void pnl_vect_rng_normal_d (PnlVect *G, int dimension, PnlRng *rng)
  * @param rng generator to use
  *
  * WARNING : The rows of M are indenpendent. This is very
- * important if QMC is used 
+ * important if QMC is used
  */
 void pnl_mat_rng_uni(PnlMat *M, int samples, int dimension,
-                      const PnlVect *a, const PnlVect *b, PnlRng *rng)
+                     const PnlVect *a, const PnlVect *b, PnlRng *rng)
 {
   int i, j;
   double u;
@@ -702,9 +696,9 @@ void pnl_mat_rng_uni(PnlMat *M, int samples, int dimension,
         }
       return;
     }
-  CheckMaxQMCDim(rng, dimension);
   for(i=0;i<samples;i++)
     {
+      CheckQMCDim(rng, dimension);
       rng->Compute(rng, &(PNL_MGET(M, i, 0)));
       for (j=0; j<dimension; j++)
         {
@@ -715,22 +709,22 @@ void pnl_mat_rng_uni(PnlMat *M, int samples, int dimension,
 
 
 /**
- * return a matrix with its rows uniformly distributed on [a,b]^dimension.
+ * Computes a  matrix with independent and uniformly distributed rows on [a,b]^dimension.
  *
  * the samples have values in [a, b] (space of dimension dimension)
  *
  * @param M : the matrix of gaussian numbers, must already be allocated
  * @param samples : number of Monte Carlo samples (= number of rows of M)
  * @param dimension : dimension of the simulation (= number of columns of M)
- * @param a : real lower bound 
- * @param b : real upper bound 
+ * @param a : real lower bound
+ * @param b : real upper bound
  * @param rng generator to use
  *
  * WARNING : The rows of M are indenpendent. This is very
- * important if QMC is used 
+ * important if QMC is used
  */
 void pnl_mat_rng_uni2(PnlMat *M, int samples, int dimension,
-                       double a, double b, PnlRng *rng)
+                      double a, double b, PnlRng *rng)
 {
   int i, j;
   double u;
@@ -748,9 +742,9 @@ void pnl_mat_rng_uni2(PnlMat *M, int samples, int dimension,
         }
       return;
     }
-  CheckMaxQMCDim(rng, dimension);
   for(i=0;i<samples;i++)
     {
+      CheckQMCDim(rng, dimension);
       rng->Compute(rng, &(PNL_MGET(M, i, 0)));
       for (j=0; j<dimension; j++)
         {
@@ -760,7 +754,7 @@ void pnl_mat_rng_uni2(PnlMat *M, int samples, int dimension,
 }
 
 /**
- * return a matrix with its rows normally distributed on R^dimension.
+ * Computes a matrix with independent and normally distributed rows on R^dimension.
  * The samples have values in R^dimension
  *
  * @param M : the matrix of gaussian numbers, must already be allocated
@@ -772,8 +766,7 @@ void pnl_mat_rng_uni2(PnlMat *M, int samples, int dimension,
  * used (independent dimensions). Each row represents a sample from the one
  * dimensionnal normal distribution
  */
-void pnl_mat_rng_normal(PnlMat *M, int samples, int dimension,
-                         PnlRng *rng)
+void pnl_mat_rng_normal(PnlMat *M, int samples, int dimension, PnlRng *rng)
 {
   int i, j;
   pnl_mat_resize(M,samples,dimension);
@@ -785,9 +778,9 @@ void pnl_mat_rng_normal(PnlMat *M, int samples, int dimension,
         }
       return;
     }
-  CheckMaxQMCDim(rng, dimension);
   for(i=0;i<samples;i++)
     {
+      CheckQMCDim(rng, dimension);
       rng->Compute(rng, &(PNL_MGET(M, i, 0)));
       for (j=0; j<dimension; j++)
         {
@@ -818,32 +811,32 @@ double pnl_rng_gamma (double a, double b, PnlRng *rng)
       return pnl_rng_gamma ( 1.0 + a, b, rng) * pow (u, 1.0 / a);
     }
 
-    {
-      double x, v, u;
-      double d = a - 1.0 / 3.0;
-      double c = (1.0 / 3.0) / sqrt (d);
+  {
+    double x, v, u;
+    double d = a - 1.0 / 3.0;
+    double c = (1.0 / 3.0) / sqrt (d);
 
-      while (1)
-        {
-          do
-            {
-              x = pnl_rng_normal (rng);
-              v = 1.0 + c * x;
-            }
-          while (v <= 0);
+    while (1)
+      {
+        do
+          {
+            x = pnl_rng_normal (rng);
+            v = 1.0 + c * x;
+          }
+        while (v <= 0);
 
-          v = v * v * v;
-          u = pnl_rng_uni (rng);
+        v = v * v * v;
+        u = pnl_rng_uni (rng);
 
-          if (u < 1 - 0.0331 * x * x * x * x) 
-            break;
+        if (u < 1 - 0.0331 * x * x * x * x)
+          break;
 
-          if (log (u) < 0.5 * x * x + d * (1 - v + log (v)))
-            break;
-        }
+        if (log (u) < 0.5 * x * x + d * (1 - v + log (v)))
+          break;
+      }
 
-      return b * d * v;
-    }
+    return b * d * v;
+  }
 }
 
 /**

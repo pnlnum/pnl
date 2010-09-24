@@ -20,12 +20,17 @@
 #include <math.h>
 #include <stdio.h>
 
+#define _PNL_PRIVATE 1
 
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_random.h"
 
-static char pnl_rng_label[] = "PnlRng";
 
+/**
+ * Frees an rng
+ *
+ * @param rng the address of an rng
+ */
 void pnl_rng_free (PnlRng **rng)
 {
   if ( *rng == NULL ) return;
@@ -60,7 +65,6 @@ PnlRng* pnl_rng_new ()
   rng->Compute = NULL;
   rng->rand_or_quasi = MC;
   rng->dimension = 0;
-  rng->max_dim = INT_MAX;
   rng->counter = 0;
   rng->has_gauss = 0;
   rng->gauss = 0;

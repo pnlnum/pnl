@@ -1110,49 +1110,43 @@ static void NIEDERREITER(PnlRng *rng, double X_n[])
  * duplicated from distributions.c and mt.c */
 #define DIM_MAX 100000
 
-static char pnl_rng_label[] = "PnlRng";
+
 
 static PnlRng PnlRngKnuth = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_KNUTH,PNL_RNG_KNUTH,&KNUTH,
-    MC,0,DIM_MAX,
-    0,0,0,0,NULL
+    MC,0, 0,0,0,0,NULL
 };
 static PnlRng PnlRngMrgk3 = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_MRGK3,PNL_RNG_MRGK3,&MRGK3,
-    MC,0,DIM_MAX,
-    0,0,0,0,NULL
+    MC,0,0,0,0,0,NULL
 };
 static PnlRng PnlRngMrgk5 = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_MRGK5,PNL_RNG_MRGK5,&MRGK5,
-    MC,0,DIM_MAX,
-    0,0,0,0,NULL
+    MC,0,0,0,0,0,NULL
 };
 static PnlRng PnlRngShufl = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_SHUFL,PNL_RNG_SHUFL,&SHUFL,
-    MC,0,DIM_MAX,
-    0,0,0,0,NULL
+    MC,0,0,0,0,0,NULL
 };
 static PnlRng PnlRngLecuyer =
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_LECUYER,PNL_RNG_LECUYER,&LECUYER,
-    MC,0,DIM_MAX,
-    0,0,0,0,NULL
+    MC,0, 0,0,0,0,NULL
 };
 static PnlRng PnlRngTausworthe = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_TAUSWORTHE,PNL_RNG_TAUSWORTHE,&TAUS,
-    MC,0,DIM_MAX,
-    0,0,0,0,NULL
+    MC,0, 0,0,0,0,NULL
 };
 
 static mt_state state1;
@@ -1161,57 +1155,49 @@ static PnlRng PnlRngMersenne =
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_MERSENNE,PNL_RNG_MERSENNE,&MERSENNE,
-    MC,0,DIM_MAX,0,
-    0,0,sizeof(mt_state),&state1
+    MC,0,0, 0,0,sizeof(mt_state),&state1
 };
 static PnlRng PnlRngMersenneRandomSeed = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_MERSENNE_RANDOM_SEED,PNL_RNG_MERSENNE_RANDOM_SEED,&MERSENNE,
-    MC,0,DIM_MAX,0,
-    0,0,sizeof(mt_state),&state2
+    MC,0,0, 0,0,sizeof(mt_state),&state2
 };
 static PnlRng PnlRngSqrt = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_SQRT,PNL_RNG_SQRT,&SQRT,
-    QMC,0,DIM_MAX_QMC,
-    0,0,0,0,NULL
+    QMC,0, 0,0,0,0,NULL
 };
 static PnlRng PnlRngHalton = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_HALTON,PNL_RNG_HALTON,&HALTON,
-    QMC,0,DIM_MAX_QMC,
-    0,0,0,0,NULL
+    QMC,0, 0,0,0,0,NULL
 };
 static PnlRng PnlRngFaure = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_FAURE,PNL_RNG_FAURE,&FAURE,
-    QMC,0,DIM_MAX_FAURE,
-    0,0,0,0,NULL
+    QMC,0, 0,0,0,0,NULL
 };
 static PnlRng PnlRngSobol = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_SOBOL,PNL_RNG_SOBOL,&SOBOL,
-    QMC,0,DIM_MAX_SOBOL,
-    0,0,0,0,NULL
+    QMC,0, 0,0,0,0,NULL
 };
 static PnlRng PnlRngSobol2 = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_SOBOL2,PNL_RNG_SOBOL2,&SOBOL2,
-    QMC,0,DIM_MAX,
-    0,0,0,0,NULL
+    QMC,0, 0,0,0,0,NULL
 };
 static PnlRng PnlRngNiederreiter = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_NIEDERREITER,PNL_RNG_NIEDERREITER,&NIEDERREITER,
-    QMC,0,DIM_MAX_NIED,
-    0,0,0,0,NULL
+    QMC,0, 0,0,0,0,NULL
 };
 
 /*
@@ -1252,29 +1238,14 @@ PnlRngTypes PnlRngMCArray[]=
     {{"MERSENNE (Random Seed)", PNL_RNG_MERSENNE_RANDOM_SEED},&PnlRngMersenneRandomSeed},
     {{NULL, NULLINT}, NULL}
 };
-PnlList *PnlRngDynamicList;
-static int PnlRngMaxStaticIndex = sizeof(PnlRngArray)/sizeof(PnlRngTypes) + 1;
 
 enum_members RNGs = { sizeof(PnlRngArray[0]), (enum_member*)&PnlRngArray[0], sizeof(PnlRngArray)/sizeof(PnlRngTypes) };
 enum_members MC_RNGs = { sizeof(PnlRngMCArray[0]), (enum_member*)&PnlRngMCArray[0], sizeof(PnlRngMCArray)/sizeof(PnlRngTypes) };
 
+
 PnlRng* pnl_rng_get_from_id (int id)
 {
-  int i;
-  PnlCell *C;
-  /*
-   * Test if generator has been dynamically added
-   */
-  if (id < PnlRngMaxStaticIndex) return PnlRngArray[id].rng;
-
-  C = PnlRngDynamicList->first;
-  for ( i=0 ; i<PnlRngDynamicList->len ; i++ )
-    {
-      if ( (PNL_RNG_OBJECT (C->self))->id == id )
-        return PNL_RNG_OBJECT (C->self);
-      C = C->next;
-    }
-  return NULL;
+  return PnlRngArray[id].rng;
 }
 
 /**
@@ -1289,19 +1260,12 @@ int pnl_rand_init (int type_generator, int dimension, long samples)
 {
   PnlRng *rng;
   rng = pnl_rng_get_from_id(type_generator); 
-  if (rng->rand_or_quasi==QMC &&  
-      dimension >= rng->max_dim)
-    return FAIL; 
 
   switch (rng->type)
     {
-    case PNL_RNG_FAURE : 
-      /*For the Faure sequences we need to compute binomial coefficients
-        wich are storable with a Long Type only up to the number 32.
-        The corresponding sample value is MAX_SAMPLE_FAURE*/
-      if (samples>MAX_SAMPLE_FAURE) return FAIL;
-      binomial(MAXI);
-      break;
+      /*
+       * some MC generators which must be initialized
+       */
     case PNL_RNG_MERSENNE:
       pnl_rand_sseed (type_generator, 0);
       break;
@@ -1310,6 +1274,23 @@ int pnl_rand_init (int type_generator, int dimension, long samples)
       break;
     case PNL_RNG_DCMT:
       pnl_dcmt_sseed ((dcmt_state *)(rng->state), 1234);
+      break;
+      /*
+       * Check if dimension > max_dim for QMC
+       */
+    case PNL_RNG_FAURE : 
+      if (dimension > DIM_MAX_FAURE || samples>MAX_SAMPLE_FAURE) return FAIL;
+      binomial(MAXI);
+      break;
+    case PNL_RNG_SQRT:
+    case PNL_RNG_HALTON:
+      if ( dimension  > DIM_MAX_QMC ) return FAIL;
+      break;
+    case PNL_RNG_SOBOL:
+      if ( dimension  > DIM_MAX_SOBOL ) return FAIL;
+      break;
+    case PNL_RNG_NIEDERREITER:
+      if ( dimension  > DIM_MAX_NIED ) return FAIL;
       break;
     default:
       break;
@@ -1436,74 +1417,74 @@ int pnl_rand_or_quasi (int type_generator)
 
 
 
-/**
- * Adds a newly created MT generator to the list PnlRngDynamicList
- *
- * @param mts the state of a dcmt
- * @return the index of the added generator in the list
- */
-int pnl_rand_add (PnlRng *rng)
-{
-  int id;
-
-  if ( PnlRngDynamicList == NULL )
-    {
-      PnlRngDynamicList = pnl_list_new ();
-      id = PnlRngMaxStaticIndex + 1;
-    }
-  else
-    {
-      id = (PNL_RNG_OBJECT(PnlRngDynamicList->last->self))->id + 1;
-    }
-
-  rng->id = id;
-
-  pnl_list_insert_last (PnlRngDynamicList, PNL_OBJECT (rng));
-  return rng->id;
-}
-
-/**
- * Adds a newly created MT generator to the list PnlRngDynamicList
- *
- * @param mts the state of a dcmt
- * @return the index of the added generator in the list
- */
-int pnl_rand_add_dcmt (dcmt_state *mts)
-{
-  PnlRng *rng;
-
-  rng = pnl_rng_new ();
-  pnl_rng_init (rng,  PNL_RNG_DCMT);
-  rng->size_state = sizeof (dcmt_state);
-  rng->state = mts;
-  return pnl_rand_add (rng);
-}
-
-
-
-/**
- * Removes a generator from the list of PnlRngs and frees some unused memory
- */
-void pnl_rand_remove (int id)
-{
-  int i;
-  PnlCell *C;
-  /*
-   * Test if generator has been dynamically added
-   */
-  if ( PnlRngDynamicList == NULL ) return;
-  if (id < PnlRngMaxStaticIndex)  return;
-
-  C = PnlRngDynamicList->first;
-  for ( i=0 ; i<PnlRngDynamicList->len ; i++ )
-    {
-      if ( (PNL_RNG_OBJECT(C->self))->id == id )
-        {
-          pnl_list_remove_i (PnlRngDynamicList, i);
-          if ( PnlRngDynamicList->len == 0 ) pnl_list_free (&PnlRngDynamicList);
-          return;
-        }
-      C = C->next;
-    }
-}
+/* /\**
+ *  * Adds a newly created MT generator to the list PnlRngDynamicList
+ *  *
+ *  * @param mts the state of a dcmt
+ *  * @return the index of the added generator in the list
+ *  *\/
+ * int pnl_rand_add (PnlRng *rng)
+ * {
+ *   int id;
+ * 
+ *   if ( PnlRngDynamicList == NULL )
+ *     {
+ *       PnlRngDynamicList = pnl_list_new ();
+ *       id = PnlRngMaxStaticIndex + 1;
+ *     }
+ *   else
+ *     {
+ *       id = (PNL_RNG_OBJECT(PnlRngDynamicList->last->self))->id + 1;
+ *     }
+ * 
+ *   rng->id = id;
+ * 
+ *   pnl_list_insert_last (PnlRngDynamicList, PNL_OBJECT (rng));
+ *   return rng->id;
+ * }
+ * 
+ * /\**
+ *  * Adds a newly created MT generator to the list PnlRngDynamicList
+ *  *
+ *  * @param mts the state of a dcmt
+ *  * @return the index of the added generator in the list
+ *  *\/
+ * int pnl_rand_add_dcmt (dcmt_state *mts)
+ * {
+ *   PnlRng *rng;
+ * 
+ *   rng = pnl_rng_new ();
+ *   pnl_rng_init (rng,  PNL_RNG_DCMT);
+ *   rng->size_state = sizeof (dcmt_state);
+ *   rng->state = mts;
+ *   return pnl_rand_add (rng);
+ * }
+ * 
+ * 
+ * 
+ * /\**
+ *  * Removes a generator from the list of PnlRngs and frees some unused memory
+ *  *\/
+ * void pnl_rand_remove (int id)
+ * {
+ *   int i;
+ *   PnlCell *C;
+ *   /\*
+ *    * Test if generator has been dynamically added
+ *    *\/
+ *   if ( PnlRngDynamicList == NULL ) return;
+ *   if (id < PnlRngMaxStaticIndex)  return;
+ * 
+ *   C = PnlRngDynamicList->first;
+ *   for ( i=0 ; i<PnlRngDynamicList->len ; i++ )
+ *     {
+ *       if ( (PNL_RNG_OBJECT(C->self))->id == id )
+ *         {
+ *           pnl_list_remove_i (PnlRngDynamicList, i);
+ *           if ( PnlRngDynamicList->len == 0 ) pnl_list_free (&PnlRngDynamicList);
+ *           return;
+ *         }
+ *       C = C->next;
+ *     }
+ * } */
 

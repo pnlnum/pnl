@@ -51,8 +51,7 @@ static int send_rng ()
   if ((gen = malloc (count * sizeof(int))) == NULL) return MPI_ERR_BUFFER;
   for ( i=0 ; i<count ; i++ )
     {
-      gen[i] = pnl_rand_add (rngtab[i]);
-      pnl_rand_init (gen[i], 1, 10);
+      pnl_rng_sseed (rngtab[i], 1273);
     }
 
   /*
@@ -70,7 +69,7 @@ static int send_rng ()
   for ( i=0 ; i<count ; i++ )
     {
       for ( j=0 ; j<NB_INT ; j++ )
-        printf ("%f ",pnl_rand_uni (gen[i]));
+        printf ("%f ",pnl_rng_uni (rngtab[i]));
       printf("\n");
     }
 
@@ -79,9 +78,8 @@ static int send_rng ()
    */
   for ( i=0 ; i<count ; i++ )
     {
-      pnl_rand_remove (gen[i]);
+      pnl_rng_free (&(rngtab[i]));
     }
-  free (gen);
   free (rngtab);
   return MPI_SUCCESS;
 }
@@ -90,21 +88,19 @@ static int send_rng ()
 static int recv_rng ()
 {
   PnlRng **rngtab;
-  int i, j, *gen;
+  int i, j;
   MPI_Status status;
 
   /*
    * Receive and add
    */
   if ((rngtab = malloc (NB_GEN * sizeof(PnlRng *))) == NULL) return MPI_ERR_BUFFER;
-  if ((gen = malloc (NB_GEN * sizeof(int))) == NULL) return MPI_ERR_BUFFER;
   for ( i=0 ; i<NB_GEN ; i++ )
     {
       rngtab[i] = pnl_rng_new ();
       printf ("receiving gen %d\n", i);
       PNL_MPI_MESSAGE(pnl_object_mpi_recv (PNL_OBJECT(rngtab[i]), 0, SENDTAG, MPI_COMM_WORLD, &status),
                       "error in receving rng");
-      gen[i] = pnl_rand_add (rngtab[i]);
     }
 
 
@@ -114,7 +110,7 @@ static int recv_rng ()
   for ( i=0 ; i<NB_GEN ; i++ )
     {
       for ( j=0 ; j<NB_INT ; j++ )
-        printf ("%f ",pnl_rand_uni (gen[i]));
+        printf ("%f ",pnl_rng_uni (rngtab[i]));
       printf("\n");
     }
   
@@ -123,9 +119,8 @@ static int recv_rng ()
    */
   for ( i=0 ; i<NB_GEN ; i++ )
     {
-      pnl_rand_remove (gen[i]);
+      pnl_rng_free (&(rngtab[i]));
     }
-  free (gen);
   free (rngtab);
   return MPI_SUCCESS;
 

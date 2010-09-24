@@ -11,7 +11,6 @@ extern "C" {
 #include "pnl/pnl_types.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
-#include "pnl/pnl_list.h"
 
 /**
  * \defgroup PnlRandom Random generators 
@@ -62,7 +61,6 @@ struct _PnlRng
                                                 next number in the sequence */
   int rand_or_quasi; /*!< can be MC or QMC */
   int dimension; /*!< dimension of the space in which we draw the samples */
-  int max_dim; /*!< maximum dimension of the space in which we draw the samples */
   int counter; /*!< counter = number of samples already drawn */
   int has_gauss; /*!< Is a gaussian deviate available? */
   double gauss; /*!< If has_gauss==1, gauss a gaussian sample */
@@ -187,17 +185,7 @@ extern void pnl_dcmt_sseed (dcmt_state *mts, ulong s);
 extern double pnl_dcmt_genrand_double(dcmt_state *mts);
 extern void pnl_dcmt_free(dcmt_state **mts);
 extern void pnl_dcmt_free_array(dcmt_state **mts, int count);
-extern PnlRng** pnl_rng_dcmt_create_array (int n, ulong seed, int *count);
 
-/*
- * Dynamic List of Rngs
- */
-/* extern PnlList *PnlRngList; */
-extern int pnl_rand_add (PnlRng *rng);
-extern int pnl_rand_add_dcmt (dcmt_state *mts);
-extern void pnl_rand_remove (int id);
-
-/*@}*/
 
 /*
  * PnlRng interface
@@ -205,10 +193,16 @@ extern void pnl_rand_remove (int id);
 extern void pnl_rng_free(PnlRng **);
 extern PnlRng* pnl_rng_new ();
 extern PnlRng* pnl_rng_create (int type);
+extern PnlRng** pnl_rng_dcmt_create_array (int n, ulong seed, int *count);
 extern void pnl_rng_init (PnlRng *rng, int type);
 PnlRng* pnl_rng_get_from_id (int type_generator);
 extern void pnl_rng_sseed(PnlRng *rng, unsigned long int s);
 
+/*@}*/
+
+#ifdef _PNL_PRIVATE
+static char pnl_rng_label[] = "PnlRng";
+#endif
 
 #ifdef __cplusplus
 }

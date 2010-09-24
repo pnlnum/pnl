@@ -212,7 +212,7 @@ The following functions return one sample from a specified law.
   \sshortdescribe Generates a sample from the centered $\chi^2(n)$ distribution.
 \end{itemize}
 
-The following functions take an already existing \refstruct{PnlVect}\ptr  as
+The following functions take an already existing \refstruct{PnlVect}\ptr\  as
 its first argument and fill each entry of the vector with a sample from the
 specified law. All the entries are independent. The difference between
 $n-$samples from a distribution in dimension $1$, and one sample from the same
@@ -241,7 +241,7 @@ number generator.
 
 \end{itemize}
 
-The following functions take an already existing \refstruct{PnlMat}\ptr  as
+The following functions take an already existing \refstruct{PnlMat}\ptr\  as
 first argument and fill each entry of the vector with a sample from the
 specified law. All the entries are in-dependant. On return, the matrix \var{M}
 is of size \verb!samples x dimension!. The rows of \var{M} are independently
@@ -410,13 +410,10 @@ typedef unsigned long ulong;
 
 \paragraph{Dynamically created Mersenne Twister}
 
-Besides the generators listed in Table~\ref{rng_indices}, it is possible to
-add some more generators. For the moment, only ``Dynamically created Mersenne
-Twister'' random generators (DCMT) can be added to the list of dynamic random number
-generators. Once a generator is added to this list, it is assigned an ID which
-makes it possible to use it through all the functions listed above.
 
-Some functions to create a DCMT random number generator.
+
+Some functions to use ``Dynamically Created Mersenne Twister'' random number
+generators (DCMT).
 \begin{itemize}
 \item \describefun{dcmt_state\ptr}{pnl_dcmt_get_parameter}{ulong seed}
   \sshortdescribe Creates a DCMT. \var{seed} is the seed used to initialize
@@ -441,22 +438,6 @@ Some functions to create a DCMT random number generator.
 \item \describefun{void}{pnl_dcmt_free_array}{dcmt_state \ptr \ptr mts, int count}
   \sshortdescribe Frees an array of dcmt as returned by \reffun{pnl_dcmt_create_array}
 \end{itemize}
-
-Some functions to manipulate the list of dynamic rng
-\begin{itemize}
-\item \describefun{int}{pnl_rand_add}{PnlRng \ptr rng}
-  \sshortdescribe Adds the generator \var{rng} to the list of dynamic
-  rng. This function returns an integer which can be used as a
-  \var{type_generator} argument for the functions of Section~\ref{std-rng}
-\item \describefun{int}{pnl_rand_add_dcmt}{dcmt_state \ptr mts}
-  \sshortdescribe Adds the generator \var{mts} to the list of dynamic
-  rng. This function returns an integer which can be used as a
-  \var{type_generator} argument for the functions of Section~\ref{std-rng}
-\item \describefun{void}{pnl_rand_remove}{int id}
-  \sshortdescribe Removes a dcmt from the list of dynamic rng. \var{id} must
-  be an index previously returned by \reffun{pnl_rand_add_dcmt}.
-\end{itemize}
-
 
 \clearpage
 

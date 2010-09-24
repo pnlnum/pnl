@@ -185,51 +185,12 @@ static void std_call_dcmt ()
   pnl_dcmt_free_array(mts, count);
 }  
 
+
 static void rand_call_dcmt ()
-{
-  int i, j, N=10000, count;
-  dcmt_state **mts;
-  double sum[NGEN], var[NGEN];
-  int gen[NGEN];
-
-  printf ("\n--> Test of call to DCMT through pnl_rand_xxx\n");  
-  mts = pnl_dcmt_create_array(NGEN,4172,&count);
-  if (count != NGEN)
-    {
-      printf ("Error in creating dcmt\n"); abort ();
-    }
-  
-  for ( j=0 ; j<count ; j++ )
-    {
-      sum[j] = var[j] = 0.;
-      gen[j] = pnl_rand_add_dcmt(mts[j]);
-      pnl_rand_sseed (gen[j], 1234);
-    }
-
-  for (i=0; i<N; i++) 
-    {
-      for ( j=0 ; j<count ; j++ )
-        {
-          double tmp;
-          tmp = pnl_rand_uni(gen[j]);
-          sum[j] += tmp; var[j] += tmp * tmp;
-        }
-    }
-  for ( j=0 ; j<count ; j++ )
-    {
-      printf ("mean = %f (sould be 0.5) \tvar = %f (souble be 1/3)\n", sum[j]/N, var[j]/N);
-      pnl_rand_remove(gen[j]);
-    }
-  free (mts);
-}  
-
-
-static void rand_call_dcmt2 ()
 {
   int i, j, N=10000, count;
   PnlRng **rng;
   double sum[NGEN], var[NGEN];
-  int gen[NGEN];
 
   printf ("\n--> Test of call to DCMT through pnl_rand_xxx\n");  
   rng = pnl_rng_dcmt_create_array(NGEN,4172,&count);
@@ -241,8 +202,7 @@ static void rand_call_dcmt2 ()
   for ( j=0 ; j<count ; j++ )
     {
       sum[j] = var[j] = 0.;
-      gen[j] = pnl_rand_add(rng[j]);
-      pnl_rand_sseed (gen[j], 1234);
+      pnl_rng_sseed (rng[j], 1234);
     }
 
   for (i=0; i<N; i++) 
@@ -250,14 +210,14 @@ static void rand_call_dcmt2 ()
       for ( j=0 ; j<count ; j++ )
         {
           double tmp;
-          tmp = pnl_rand_uni(gen[j]);
+          tmp = pnl_rng_uni(rng[j]);
           sum[j] += tmp; var[j] += tmp * tmp;
         }
     }
   for ( j=0 ; j<count ; j++ )
     {
       printf ("mean = %f (sould be 0.5) \tvar = %f (souble be 1/3)\n", sum[j]/N, var[j]/N);
-      pnl_rand_remove(gen[j]);
+      pnl_rng_free(&(rng[j]));
     }
   free (rng);
 }  
@@ -269,5 +229,4 @@ void random_test(void)
   rng_call ();
   std_call_dcmt ();
   rand_call_dcmt ();
-  rand_call_dcmt2 ();
 }
