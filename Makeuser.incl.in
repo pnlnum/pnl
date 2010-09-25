@@ -64,21 +64,21 @@ cleanall:: clean
 	$(RM) $(TARGET) $(BINS)
 
 .c.o:
-	$(COMPILE)  -c $<
+	$(COMPILE)  -o $@ -c $<
 
 .c.lo :
-	$(LTCOMPILE) -c $<
+	$(LTCOMPILE) -o $@ -c $<
 
 
 .cpp.o:
-	$(CXXCOMPILE)  -c $<
+	$(CXXCOMPILE)  -o $@ -c $<
 
 .cpp.lo :
-	$(LTCXXCOMPILE) -c $<
+	$(LTCXXCOMPILE) -o $@ -c $<
 
 .C.o:
-	$(CXXCOMPILE)  -c $<
+	$(CXXCOMPILE) -o $@  -c $<
 
 .C.lo :
-	$(LTCXXCOMPILE) -c $<
+	$(LTCXXCOMPILE) -o $@ -c $<
 
