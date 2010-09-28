@@ -82,3 +82,10 @@ cleanall:: clean
 .C.lo :
 	$(LTCXXCOMPILE) -o $@ -c $<
 
+.cc.o:
+	$(CXXCOMPILE) -o $@  -c $<
+
+.cc.lo :
+	$(LTCXXCOMPILE) -o $@ -c $<
+
+
