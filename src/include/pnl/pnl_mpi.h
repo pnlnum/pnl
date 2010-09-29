@@ -17,6 +17,7 @@ extern int pnl_object_mpi_pack_size (const PnlObject *Obj, MPI_Comm comm, int *s
 extern int pnl_object_mpi_pack (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 extern int pnl_object_mpi_unpack (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 extern int pnl_object_mpi_send (const PnlObject *Obj, int dest, int tag, MPI_Comm comm);
+extern int pnl_object_mpi_ssend (const PnlObject *Obj, int dest, int tag, MPI_Comm comm);
 extern int pnl_object_mpi_recv (PnlObject *Obj, int src, int tag, MPI_Comm comm, MPI_Status *status);
 extern int pnl_object_mpi_bcast (PnlObject *Obj, int root, MPI_Comm comm);
 extern int pnl_object_mpi_isend (const PnlObject *Obj, int dest, int tag, MPI_Comm comm, MPI_Request *request);

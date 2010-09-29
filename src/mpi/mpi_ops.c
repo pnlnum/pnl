@@ -968,6 +968,31 @@ int pnl_object_mpi_send (const PnlObject *Obj, int dest, int tag, MPI_Comm comm)
 }
 
 /**
+ * Performs a blocking standard synchronous send of a PnlObject
+ *
+ * @param Obj a PnlObject to send
+ * @param dest the rank of destination (integer)
+ * @param tag the message tag (integer)
+ * @param comm a Communicator (handle)
+ *
+ * @return an error value, it should be MPI_SUCCESS when everything went OK
+ */
+int pnl_object_mpi_ssend (const PnlObject *Obj, int dest, int tag, MPI_Comm comm)
+{
+  int info, size=0, pos=0;
+  char *buf = NULL;
+  info = pnl_object_mpi_pack_size (Obj, comm, &size);
+  PNL_MPI_MESSAGE(info, "error in computing size.\n");
+  if ((buf = malloc(size)) == NULL) return MPI_ERR_BUFFER;
+  info = pnl_object_mpi_pack(Obj, buf, size, &pos, comm);
+  PNL_MPI_MESSAGE( info, "error in packing.\n");
+  info = MPI_Ssend (buf, pos, MPI_PACKED, dest, tag, comm);
+  free (buf);
+  return info;
+}
+
+
+/**
  * Performs a blocking receive of a PnlObject
  *
  * @param Obj a PnlObject used to store the received object. It must have

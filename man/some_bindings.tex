@@ -37,6 +37,11 @@ error occurred.
     \ptr Obj, int dest, int tag, MPI_Comm comm}
   \sshortdescribe Performs a standard-mode blocking send of \var{Obj}. The
   object is sent to the process with rank \var{dest}.
+
+\item \describefun{int}{pnl_object_mpi_ssend}{const \refstruct{PnlObject} \ptr
+    Obj, int dest, int tag, MPI_Comm comm}
+  \sshortdescribe Performs a standard-mode synchronous blocking send of
+  \var{Obj}. The object is sent to the process with rank \var{dest}.
   
 \item \describefun{int}{pnl_object_mpi_recv}{\refstruct{PnlObject} \ptr Obj,
     int src, int tag, MPI_Comm comm, MPI_Status \ptr status} 

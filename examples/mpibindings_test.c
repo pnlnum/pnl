@@ -274,6 +274,21 @@ static int send_basis ()
   return info;
 }
 
+static int ssend_basis ()
+{
+  PnlBasis *B;
+  int info, index, degree, spaced;
+  index = CANONICAL;
+  degree = 4;
+  spaced =3;
+  B = pnl_basis_create_from_degree (index, degree, spaced);
+  printf ("Original Basis \n"); pnl_basis_print (B); printf ("\n");
+  info = pnl_object_mpi_ssend (PNL_OBJECT(B), 1, SENDTAG, MPI_COMM_WORLD);
+  PNL_MPI_MESSAGE (info, "Basis not sent\n");
+  pnl_basis_free (&B);
+  return info;
+}
+
 
 static int recv_tridiagmatrix ()
 {
@@ -445,6 +460,7 @@ int main(int argc, char *argv[])
       isend_matrix (); MPI_Barrier (MPI_COMM_WORLD);
       send_matrix (); MPI_Barrier (MPI_COMM_WORLD);
       send_basis (); MPI_Barrier (MPI_COMM_WORLD);
+      ssend_basis (); MPI_Barrier (MPI_COMM_WORLD);
     }
   else
     {
@@ -459,6 +475,7 @@ int main(int argc, char *argv[])
       recv_int_hmatrix (); MPI_Barrier (MPI_COMM_WORLD);
       recv_matrix (); MPI_Barrier (MPI_COMM_WORLD);
       irecv_matrix (); MPI_Barrier (MPI_COMM_WORLD);
+      recv_basis (); MPI_Barrier (MPI_COMM_WORLD);
       recv_basis (); MPI_Barrier (MPI_COMM_WORLD);
     }
 
