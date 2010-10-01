@@ -45,7 +45,11 @@ static double Gauss_BoxMuller(PnlRng *rng)
   if ( rng->has_gauss == 0 )
     {
       /* draw 2 new samples */
-      rng->Compute(rng,&xs);
+      do
+        {
+          rng->Compute(rng,&xs);
+        }
+      while (xs == 0.);
       rng->Compute(rng,&ys);
       xs = sqrt( -2. * log(xs) );
       ys = M_2PI * ys;
