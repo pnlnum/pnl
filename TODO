@@ -1,8 +1,9 @@
 - List structure
-       * Add it to the MPI bindings
        * Add a pnl_list_copy function. It implies to add a
          copy function to PnlObject
 
+- Add a thread-safe version for all the generators
+         
 - Some code can be factorized in libminpack
 
 - splines 

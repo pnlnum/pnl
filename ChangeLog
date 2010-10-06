@@ -1,8 +1,19 @@
+06-10-2010 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* PNL_RNG_KNUTH is now reentrant
+	* Packing of PnlRng is portable
+	* PnlList is now supported by MPI bindings
+
+20-09-2010 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* New interface for direcly using PnlRng and not the list of
+	global generators (_rng_ functions). The dynamic list is removed.
+
 12-09-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* A dynamic list of rng has been added making it possible to call
 	dynamically created Mersenne Twister (DCMT) through the standard
-	set of funtions operating on rng
+	set of funtions operating on rng (_rand_ functions)
 
 10-09-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
