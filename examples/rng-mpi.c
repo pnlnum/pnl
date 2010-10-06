@@ -39,7 +39,7 @@
  * Send / Recv examples
  */
 
-static int send_rng ()
+static int send_dcmt ()
 {
   PnlRng **rngtab;
   int i, j, count, *gen;
@@ -85,7 +85,7 @@ static int send_rng ()
 }
 
 
-static int recv_rng ()
+static int recv_dcmt ()
 {
   PnlRng **rngtab;
   int i, j;
@@ -126,6 +126,44 @@ static int recv_rng ()
 
 }
 
+
+static int send_rng ()
+{
+  PnlRng *rng;
+  int i;
+
+  rng = pnl_rng_create (PNL_RNG_MERSENNE);
+  pnl_rng_sseed (rng, 1273);
+  PNL_MPI_MESSAGE(pnl_object_mpi_send (PNL_OBJECT(rng), 1, SENDTAG, MPI_COMM_WORLD), "error in sending rng");
+
+  for ( i=0 ; i<NB_INT ; i++ )
+    printf ("%f ",pnl_rng_uni (rng));
+  printf("\n");
+
+  pnl_rng_free (&rng);
+  return MPI_SUCCESS;
+}
+
+static int recv_rng ()
+{
+  PnlRng *rng;
+  int j;
+  MPI_Status status;
+
+  rng = pnl_rng_new ();
+  PNL_MPI_MESSAGE(pnl_object_mpi_recv (PNL_OBJECT(rng), 0, SENDTAG, MPI_COMM_WORLD, &status),
+                  "error in receving rng");
+
+  for ( j=0 ; j<NB_INT ; j++ )
+    printf ("%f ",pnl_rng_uni (rng));
+  
+  printf("\n");
+  pnl_rng_free (&rng);
+  return MPI_SUCCESS;
+
+}
+
+
 int main(int argc, char *argv[])
 {
   int rank, nproc;
@@ -146,12 +184,13 @@ int main(int argc, char *argv[])
 
   if ( rank == 0 )
     {
-      /* initializes some integers for the tests */
-      send_rng (); 
+      send_dcmt ();  MPI_Barrier(MPI_COMM_WORLD);
+      send_rng ();  MPI_Barrier(MPI_COMM_WORLD);
     }
   else
     {
-      recv_rng (); 
+      recv_dcmt ();   MPI_Barrier(MPI_COMM_WORLD);
+      recv_rng ();   MPI_Barrier(MPI_COMM_WORLD);
     }
 
   MPI_Finalize ();

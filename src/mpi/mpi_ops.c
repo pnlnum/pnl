@@ -312,7 +312,7 @@ static int size_rng (const PnlObject *Obj, MPI_Comm comm, int *size)
   if (rng->size_state > 0)
     {
       /* rng->state */
-      if((info=MPI_Pack_size(rng->size_state, MPI_BYTE, comm, &count))) return(info);
+      if((info=pnl_rng_state_mpi_pack_size(rng, comm, &count))) return(info);
       *size += count;
     }
   return (info);
@@ -565,7 +565,7 @@ static int pack_rng (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI
   if ((info=MPI_Pack(&rng->size_state, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
   if (rng->size_state > 0)
     {
-      if ((info=MPI_Pack(rng->state, rng->size_state, MPI_BYTE, buf, bufsize, pos, comm))) return info;
+      if ((info=pnl_rng_state_mpi_pack(rng, buf, bufsize, pos, comm))) return info;
     }
   return (info);
 }
@@ -840,7 +840,7 @@ static int unpack_rng (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Com
   if (rng->size_state > 0)
     {
       if ((rng->state = malloc (rng->size_state)) == NULL) return MPI_ERR_BUFFER;
-      if ((info=MPI_Unpack(buf,bufsize,pos,rng->state, rng->size_state,MPI_BYTE,comm))) return info;
+      if ((info=pnl_rng_state_mpi_unpack(rng,buf,bufsize,pos,comm))) return info;
     }
   return (info);
 }
