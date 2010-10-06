@@ -13,7 +13,7 @@
  * \a pnl_foo_bar_new() which creates an empty \a PnlFooBar object with all its
  * elements properly initialized.
  *
- * Each type type must be added into the function \a pnl_object_new
+ * Each type type must be added into the function \a pnl_object_create
  */
 /*@{*/
 typedef struct _PnlObject PnlObject;
@@ -123,7 +123,7 @@ struct _PnlObject
   destroy_func *destroy; /*!< frees an object */
 };
 
-extern PnlObject* pnl_object_new (PnlType type);
+extern PnlObject* pnl_object_create (PnlType type);
 
 extern void pnl_message_on ();
 extern void pnl_message_off ();

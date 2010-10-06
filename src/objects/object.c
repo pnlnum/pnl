@@ -24,9 +24,12 @@
 #include "pnl/pnl_tridiag_matrix.h"
 #include "pnl/pnl_band_matrix.h"
 #include "pnl/pnl_basis.h"
+#include "pnl/pnl_random.h"
+#include "pnl/pnl_list.h"
 #include "pnl/pnl_linalgsolver.h"
 
-/** 
+
+/**
  * Creates a new PnlObject from a PnlType
  * 
  * @param type is one the PNL_TYPE_xxx values used to create a given specialised
@@ -34,58 +37,58 @@
  * 
  * @return a PnlObject
  */
-PnlObject* pnl_object_new (PnlType type)
+PnlObject* pnl_object_create (PnlType type)
 {
   PnlObject *o;
   /* Do not change the order of the cases, because types are grouped together */
   switch (type)
     {
     case PNL_TYPE_VECTOR:
+      o = PNL_OBJECT(pnl_vect_object_new ()); break;
     case PNL_TYPE_VECTOR_DOUBLE:
+      o = PNL_OBJECT(pnl_vect_new ()); break;
     case PNL_TYPE_VECTOR_INT:
+      o = PNL_OBJECT(pnl_vect_int_new ()); break;
     case PNL_TYPE_VECTOR_COMPLEX:
-      o = PNL_OBJECT(pnl_vect_object_new ());
-      break;
+      o = PNL_OBJECT(pnl_vect_complex_new ()); break;
     case PNL_TYPE_VECTOR_COMPACT:
-      o = PNL_OBJECT(pnl_vect_object_new ());
-      break;
+      o = PNL_OBJECT(pnl_vect_object_new ()); break;
     case PNL_TYPE_MATRIX:
+      o = PNL_OBJECT(pnl_mat_object_new ()); break;
     case PNL_TYPE_MATRIX_DOUBLE:
+      o = PNL_OBJECT(pnl_mat_new ()); break;
     case PNL_TYPE_MATRIX_INT:
+      o = PNL_OBJECT(pnl_mat_int_new ()); break;
     case PNL_TYPE_MATRIX_COMPLEX:
-      o = PNL_OBJECT(pnl_mat_object_new ());
-      break;
+      o = PNL_OBJECT(pnl_mat_complex_new ()); break;
     case PNL_TYPE_TRIDIAG_MATRIX:
+      o = PNL_OBJECT(pnl_tridiag_mat_object_new ()); break;
     case PNL_TYPE_TRIDIAG_MATRIX_DOUBLE:
-      o = PNL_OBJECT(pnl_tridiag_mat_object_new ());
-      break;
+      o = PNL_OBJECT(pnl_tridiag_mat_new ()); break;
     case PNL_TYPE_BAND_MATRIX:
+      o = PNL_OBJECT(pnl_band_mat_object_new ()); break;
     case PNL_TYPE_BAND_MATRIX_DOUBLE:
-      o = PNL_OBJECT(pnl_band_mat_object_new ());
-      break;
+      o = PNL_OBJECT(pnl_band_mat_new ()); break;
     case PNL_TYPE_HMATRIX:
+      o = PNL_OBJECT(pnl_hmat_object_new ()); break;
     case PNL_TYPE_HMATRIX_DOUBLE:
+      o = PNL_OBJECT(pnl_hmat_new ()); break;
     case PNL_TYPE_HMATRIX_INT:
+      o = PNL_OBJECT(pnl_hmat_int_new ()); break;
     case PNL_TYPE_HMATRIX_COMPLEX:
-      o = PNL_OBJECT(pnl_hmat_object_new ());
-      break;
+      o = PNL_OBJECT(pnl_hmat_complex_new ()); break;
     case PNL_TYPE_BASIS:
       o = PNL_OBJECT(pnl_basis_new ());
-    /* case PNL_TYPE_RNG: */
-    /* PnlIterationBase is an internal object which never exists on its own.
-     * For now, it is not properly interfaced */
-    /* case PNL_TYPE_ITERATION_BASE: */
-    /*   o = PNL_OBJECT(pnl_iteration_base_new ()); */
-    /*   break; */
+    case PNL_TYPE_RNG:
+      o = PNL_OBJECT(pnl_rng_new()); break;
+    case PNL_TYPE_LIST:
+      o = PNL_OBJECT(pnl_list_new()); break;
     case PNL_TYPE_CG_SOLVER:
-      o = PNL_OBJECT(pnl_cg_solver_new ());
-      break;
+      o = PNL_OBJECT(pnl_cg_solver_new ()); break;
     case PNL_TYPE_BICG_SOLVER:
-      o = PNL_OBJECT(pnl_bicg_solver_new ());
-      break;
+      o = PNL_OBJECT(pnl_bicg_solver_new ()); break;
     case PNL_TYPE_GMRES_SOLVER:
-      o = PNL_OBJECT(pnl_gmres_solver_new ());
-      break;
+      o = PNL_OBJECT(pnl_gmres_solver_new ()); break;
     default:
       o = NULL;
     }
