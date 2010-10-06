@@ -49,33 +49,29 @@
 
 static void KNUTH(PnlRng *rng,double *sample)
 {
-  static long M    = 1000000000;
-  static long SEED = 161803398;
-
-  /* Initialize the sequence with a positive seed */
-  static long alea= 1; 
-  static int inc1, inc2;
-  static long t_alea[56];
   long X_n, y_k;
   int i, ii, l;
+  knuth_state *state;
 
+  state = (knuth_state *) rng->state;
+  
   /* First call to the sequence */
   if(rng->counter == 1)
     {
-      X_n= SEED- alea;
-      X_n%= M;
-      t_alea[55]= X_n;
+      X_n= state->SEED- state->alea;
+      X_n%= state->M;
+      state->t_alea[55]= X_n;
       y_k= 1;
       /* Initialization of the table */
       for(i= 1; i<= 54; i++)
         {
           ii= (21*i)%55; /* 21 was chosen to alleviate initial
                             nonrandomness problems */
-          t_alea[ii]= y_k;
+          state->t_alea[ii]= y_k;
           y_k= X_n - y_k;
           if(y_k < 0) 
-            y_k+= M;
-          X_n= t_alea[ii];
+            y_k+= state->M;
+          X_n= state->t_alea[ii];
         }
 
       /* Randomization of the elements of the table */   
@@ -83,31 +79,31 @@ static void KNUTH(PnlRng *rng,double *sample)
         {
           for(i= 1; i<= 55; i++)
             {
-              t_alea[i]-= t_alea[1+(i+30)%55];
-              if(t_alea[i] < 0) 
-                t_alea[i]+= M;
+              state->t_alea[i]-= state->t_alea[1+(i+30)%55];
+              if(state->t_alea[i] < 0) 
+                state->t_alea[i]+= state->M;
             }
         }
-      inc1= 0;
-      inc2= 31;  /* 31 is a special value of Knuth : 31= 55-24 */
-      alea= 1;
+      state->inc1= 0;
+      state->inc2= 31;  /* 31 is a special value of Knuth : 31= 55-24 */
+      state->alea= 1;
     }
 
   rng->counter++;
 
   /* For each call to the sequence, computation of a new point */
-  if(++inc1 == 56) 
-    inc1= 1;
-  if(++inc2 == 56) 
-    inc2= 1;
+  if(++(state->inc1) == 56) 
+    state->inc1= 1;
+  if(++(state->inc2) == 56) 
+    state->inc2= 1;
   /* Substractive method*/
-  X_n= t_alea[inc1] - t_alea[inc2];
+  X_n= state->t_alea[state->inc1] - state->t_alea[state->inc2];
 
   if(X_n < 0) 
-    X_n+= M;
-  t_alea[inc1]= X_n;
+    X_n+= state->M;
+  state->t_alea[state->inc1]= X_n;
   /* Normalized value */
-  *sample = (double) X_n / (double) M;
+  *sample = (double) X_n / (double) state->M;
   return;
 }
 
@@ -417,8 +413,7 @@ static void LECUYER(PnlRng *rng,double *sample)
 /* ---------------------------------------------------- */
 /* Generation of a random bit
    Algorithm based on a prime polynomial : 
-   here we choose x^18 + x^5 + x^2 + x + 1 .
-   It is described in 'Numerical Recipes in C' page 296. */
+   here we choose x^18 + x^5 + x^2 + x + 1 . */
 /* ---------------------------------------------------- */
 static int bit_random(void)
 {
@@ -1106,11 +1101,12 @@ static void NIEDERREITER(PnlRng *rng, double X_n[])
  * Interface for Random Generators
  */
 
+static knuth_state knuth_st;
 PnlRng PnlRngKnuth = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_KNUTH,&KNUTH,
-    MC,0, 0,0,0,0,NULL
+    MC,0, 0,0,0,sizeof(knuth_state), &knuth_st
 };
 PnlRng PnlRngMrgk3 = 
 {
@@ -1143,19 +1139,19 @@ PnlRng PnlRngTausworthe =
     MC,0, 0,0,0,0,NULL
 };
 
-static mt_state state1;
-static mt_state state2;
+static mt_state mt_st1;
+static mt_state mt_st2;
 PnlRng PnlRngMersenne = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_MERSENNE,&MERSENNE,
-    MC,0,0, 0,0,sizeof(mt_state),&state1
+    MC,0,0, 0,0,sizeof(mt_state),&mt_st1
 };
 PnlRng PnlRngMersenneRandomSeed = 
 {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_MERSENNE_RANDOM_SEED,&MERSENNE,
-    MC,0,0, 0,0,sizeof(mt_state),&state2
+    MC,0,0, 0,0,sizeof(mt_state),&mt_st2
 };
 PnlRng PnlRngSqrt = 
 {
@@ -1260,6 +1256,9 @@ int pnl_rand_init (int type_generator, int dimension, long samples)
       /*
        * some MC generators which must be initialized
        */
+    case PNL_RNG_KNUTH:
+      pnl_rand_sseed (type_generator, 161803398L);
+      break;
     case PNL_RNG_MERSENNE:
       pnl_rand_sseed (type_generator, 0);
       break;
@@ -1302,18 +1301,7 @@ void pnl_rand_sseed (int type_generator, ulong seed)
   PnlRng *rng;
 
   rng = pnl_rng_get_from_id(type_generator);
-  switch (rng->type)
-    {
-    case PNL_RNG_MERSENNE :
-    case PNL_RNG_MERSENNE_RANDOM_SEED :
-      pnl_mt_sseed((mt_state *)(rng->state), seed);
-      break;
-    case PNL_RNG_DCMT :
-      pnl_dcmt_sseed ((dcmt_state *)(rng->state), seed);
-    }
-  rng->counter=1;
-  rng->has_gauss=0;
-  rng->gauss=0.;
+  pnl_rng_sseed (rng, seed);
 }
 
 
@@ -1418,15 +1406,9 @@ int pnl_rand_or_quasi (int type_generator)
 void pnl_rng_free (PnlRng **rng)
 {
   if ( *rng == NULL ) return;
-  switch ( (*rng)->type )
+  if ( (*rng)->state != NULL )
     {
-    case PNL_RNG_MERSENNE:
-    case PNL_RNG_DCMT:
-      if ( (*rng)->state != NULL )
-        {
-          free ((*rng)->state); (*rng)->state = NULL;
-        }
-      break;
+      free ((*rng)->state); (*rng)->state = NULL;
     }
   free (*rng); *rng = NULL;
 }
@@ -1480,6 +1462,12 @@ PnlRng* pnl_rng_create (int type)
   rng->state = NULL;
   switch (type)
     {
+    case PNL_RNG_KNUTH:
+      rng->Compute = KNUTH;
+      rng->rand_or_quasi = MC;
+      rng->size_state = sizeof(knuth_state);
+      rng->state = malloc(rng->size_state);
+      break;
     case PNL_RNG_MERSENNE:
       rng->Compute = MERSENNE;
       rng->rand_or_quasi = MC;
@@ -1527,10 +1515,20 @@ PnlRng** pnl_rng_dcmt_create_array (int n, ulong seed, int *count)
   return rngtab;
 }
 
+static void pnl_knuth_sseed (knuth_state *s, ulong seed)
+{
+  s->M    = 1000000000L;
+  s->SEED = seed;
+  s->alea= 1L; 
+}
+
 void pnl_rng_sseed (PnlRng *rng, ulong seed)
 {
   switch (rng->type)
     {
+    case PNL_RNG_KNUTH :
+      pnl_knuth_sseed((knuth_state *)(rng->state), seed);
+      break;
     case PNL_RNG_MERSENNE :
     case PNL_RNG_MERSENNE_RANDOM_SEED :
       pnl_mt_sseed((mt_state *)(rng->state), seed);

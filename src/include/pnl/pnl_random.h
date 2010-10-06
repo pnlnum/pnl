@@ -148,6 +148,19 @@ extern double pnl_rng_chi2  (double nu, PnlRng *rng);
 
 
 /*
+ * States for different generators
+ */
+typedef struct
+{
+  long M;
+  long SEED;
+  long alea;
+  int inc1, inc2;
+  long t_alea[56];
+} knuth_state;
+
+
+/*
  * MT
  */
 #define MT_N 624
