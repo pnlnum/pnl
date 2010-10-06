@@ -25,15 +25,16 @@
 #include "pnl/pnl_band_matrix.h"
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_internals.h"
+#include "pnl/pnl_list.h"
 #include "pnl/pnl_basis.h"
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_mpi.h"
 
-#define PNL_MPI_MESSAGE(info, msg)                             \
-  if ( info != MPI_SUCCESS )                                   \
-    {                                                          \
-      if (pnl_message_is_on ()) printf (msg);                  \
-      return info;                                             \
+#define PNL_MPI_MESSAGE(info, msg)              \
+  if ( info != MPI_SUCCESS )                    \
+    {                                           \
+      if (pnl_message_is_on ()) printf (msg);   \
+      return info;                              \
     }
 
 
@@ -47,6 +48,7 @@ static int size_band_matrix (const PnlObject *Obj, MPI_Comm comm, int *size);
 static int size_hmatrix (const PnlObject *Obj, MPI_Comm comm, int *size);
 static int size_basis (const PnlObject *Obj, MPI_Comm comm, int *size);
 static int size_rng (const PnlObject *Obj, MPI_Comm comm, int *size);
+static int size_list (const PnlObject *Obj, MPI_Comm comm, int *size);
 
 /*
  * MPI_Pack wrappers
@@ -58,6 +60,7 @@ static int pack_band_matrix (const PnlObject *Obj, void *buf, int bufsize, int *
 static int pack_hmatrix (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_basis (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_rng (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
+static int pack_list (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 
 /*
  * MPI_Unpack wrappers
@@ -69,6 +72,7 @@ static int unpack_band_matrix (PnlObject *Obj, void *buf, int bufsize, int *pos,
 static int unpack_hmatrix (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_basis (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_rng (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
+static int unpack_list (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 
 /**
  * Computes the length of the buffer needed to pack the PnlObject
@@ -100,7 +104,7 @@ static int size_vector (const PnlObject *Obj, MPI_Comm comm, int *size)
     case PNL_TYPE_VECTOR_COMPACT :
       PNL_ERROR ("Not implemented", "size_vector");
       break;
-     }
+    }
   info=MPI_Pack_size(mn,t,comm,&count);
   *size += count;
   return (info);
@@ -199,7 +203,7 @@ static int size_band_matrix (const PnlObject *Obj, MPI_Comm comm, int *size)
   *size += count;
   /* m_band and n_band are not needed because they are computed inside the
      resize function */
- if (PNL_GET_TYPE(M)!=PNL_TYPE_BAND_MATRIX_DOUBLE)
+  if (PNL_GET_TYPE(M)!=PNL_TYPE_BAND_MATRIX_DOUBLE)
     {
       PNL_ERROR ("Unknown type", "size_band_matrix");
     }
@@ -272,7 +276,7 @@ static int size_basis (const PnlObject *Obj, MPI_Comm comm, int *size)
 /**
  * Computes the length of the buffer needed to pack the PnlObject
  *
- * @param Obj a PnlObject actually containing a PnlBasi
+ * @param Obj a PnlObject actually containing a PnlBasis
  * @param comm an MPI Communicator
  * @param size the upper bound on the number of bytes needed to pack Obj
  *
@@ -313,6 +317,43 @@ static int size_rng (const PnlObject *Obj, MPI_Comm comm, int *size)
     }
   return (info);
 }
+
+/**
+ * Computes the length of the buffer needed to pack the PnlObject
+ *
+ * @param Obj a PnlObject actually containing a PnlList
+ * @param comm an MPI Communicator
+ * @param size the upper bound on the number of bytes needed to pack Obj
+ *
+ * @return an error value equal to MPI_SUCCESS when everything is OK
+ */
+static int size_list (const PnlObject *Obj, MPI_Comm comm, int *size)
+{
+  int info, count, i;
+  PnlCell *C;
+  PnlList *L = PNL_LIST_OBJECT(Obj);
+  
+  *size = 0;
+
+  /* L->len */
+  if((info=MPI_Pack_size(1, MPI_INT, comm, &count))) return(info);
+  *size += count;
+
+  /* Compute length for each element */
+  C = L->first;
+  for ( i=0 ; i<L->len ; i++ )
+    {
+      /* we store PNL_GET_TYPE(C->self) twice for unpacking easier */
+      if((info=MPI_Pack_size(1, MPI_INT, comm, &count))) return(info);
+      *size += count;
+      if ((pnl_object_mpi_pack_size (C->self, comm, &count))) return(info);
+      *size += count;
+      C = C->next;
+    }
+  return (info);
+}
+
+
 
 /**
  * Packs a PnlVectObject
@@ -431,9 +472,9 @@ static int pack_band_matrix (const PnlObject *Obj, void *buf, int bufsize, int *
   if ((info=MPI_Pack(&M->n, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
   if ((info=MPI_Pack(&M->nu, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
   if ((info=MPI_Pack(&M->nl, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
-   /* m_band and n_band are not needed because they are computed inside the
-      resize function */
- if (PNL_GET_TYPE(M)!=PNL_TYPE_BAND_MATRIX_DOUBLE)
+  /* m_band and n_band are not needed because they are computed inside the
+     resize function */
+  if (PNL_GET_TYPE(M)!=PNL_TYPE_BAND_MATRIX_DOUBLE)
     {
       PNL_ERROR ("Unknown type", "pack_band_matrix");
     }
@@ -525,6 +566,35 @@ static int pack_rng (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI
   if (rng->size_state > 0)
     {
       if ((info=MPI_Pack(rng->state, rng->size_state, MPI_BYTE, buf, bufsize, pos, comm))) return info;
+    }
+  return (info);
+}
+
+/**
+ * Packs a PnlList
+ *
+ * @param Obj a PnlObject containing a PnlList
+ * @param buf an already allocated buffer of length bufsize used to store Obj
+ * @param bufsize the size of the buffer. It must be at least equal to the value
+ * computed by size_matrix
+ * @param comm an MPI Communicator
+ * @param pos (in/out) the current position in buf
+ *
+ * @return an error value equal to MPI_SUCCESS when everything is OK
+ */
+static int pack_list (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
+{
+  int info, i;
+  PnlCell *C;
+  PnlList *L = PNL_LIST_OBJECT(Obj);
+  
+  if ((info=MPI_Pack(&L->len, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
+  C = L->first;
+  for ( i=0 ; i<L->len ; i++ )
+    {
+      if ((info=MPI_Pack(&(PNL_GET_TYPE(C->self)), 1, MPI_INT, buf, bufsize, pos, comm))) return info;
+      if ((info=pnl_object_mpi_pack(C->self, buf, bufsize, pos, comm))) return info;
+      C = C->next;
     }
   return (info);
 }
@@ -632,7 +702,7 @@ static int unpack_tridiag_matrix (PnlObject *Obj, void *buf, int bufsize, int *p
   if ((info=MPI_Unpack(buf,bufsize,pos,&id,1,MPI_INT,comm))) return info;
   if (PNL_GET_TYPE(M)!=PNL_TYPE_TRIDIAG_MATRIX_DOUBLE)
     {
-      PNL_ERROR ("Unknown type", "pack_tridiag_matrix");
+      PNL_ERROR ("Unknown type", "unpack_tridiag_matrix");
     }
   if ((info=MPI_Unpack(buf,bufsize,pos,&n, 1, MPI_INT, comm))) return info;
   pnl_tridiag_mat_resize (M, n);
@@ -775,6 +845,67 @@ static int unpack_rng (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Com
   return (info);
 }
 
+/**
+ * Unpacks a PnlList
+ *
+ * If the length of the list > 0, we try to unpack the buffer into the objects
+ * already stored in list. An error occurs if the parent types of the stored
+ * objects do not match the ones of the packed objects.
+ *
+ * @param Obj a PnlObject containing a PnlList
+ * @param buf an already allocated buffer of length bufsize used to store Obj
+ * @param bufsize the size of the buffer. It must be at least equal to the value
+ * computed by size_vector
+ * @param comm an MPI Communicator
+ * @param pos (in/out) the current position in buf
+ *
+ * @return an error value equal to MPI_SUCCESS when everything is OK
+ */
+static int unpack_list (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
+{
+  int info, len, i, id;
+  PnlList *L = PNL_LIST_OBJECT(Obj);
+
+  /* unpacking Obj->object.id */
+  if ((info=MPI_Unpack(buf,bufsize,pos,&id,1,MPI_INT,comm))) return info;
+  /* length of packed list */
+  if ((info=MPI_Unpack(buf,bufsize,pos,&len,1,MPI_INT,comm))) return info;
+
+  /*
+   * if the list is already of the correct length, we assume that we want to
+   * unpack buf into the objects already stored in the list. It is only
+   * possible if the parent types of the stored objects match the ones the
+   * packed objects
+   */
+  if ( len == L->len )
+    {
+      PnlCell *C;
+      C = L->first;
+      for ( i=0 ; i<len ; i++ )
+        {
+          int ptype;
+          if ((info=MPI_Unpack(buf,bufsize,pos,&ptype,1,MPI_INT,comm))) return info;
+          if ((info=pnl_object_mpi_unpack (C->self, buf, bufsize, pos, comm))) return info;
+          C = C->next;
+        }
+      return info;
+    }
+  if ( L->len != 0 && len != L->len )
+    {
+      PNL_ERROR ( "size_mismatched", "unpack_list");
+    }
+  for ( i=0 ; i<len ; i++ )
+    {
+      PnlObject *O;
+      int ptype;
+      if ((info=MPI_Unpack(buf,bufsize,pos,&ptype,1,MPI_INT,comm))) return info;
+      O = pnl_object_create (ptype);
+      if ((info=pnl_object_mpi_unpack (O, buf, bufsize, pos, comm))) return info;
+      pnl_list_insert_last (L, O);
+    }
+  return (info);
+}
+
 
 /*
  * Exported wrappers for handling PnlObjects
@@ -825,11 +956,11 @@ int pnl_object_mpi_pack_size (const PnlObject *Obj, MPI_Comm comm, int *size)
     case PNL_TYPE_RNG:
       info = size_rng (Obj, comm, &count);
       break;
-    case PNL_TYPE_OBJECT :
-      printf("Computing size of %s is not implemented yet", Obj->label);
-      return MPI_ERR_TYPE;
+    case PNL_TYPE_LIST:
+      info = size_list (Obj, comm, &count);
       break;
     default:
+      printf("Computing size of %s is not implemented yet", Obj->label);
       return MPI_ERR_TYPE;
     }
   *size += count; return info;
@@ -878,11 +1009,11 @@ int pnl_object_mpi_pack (const PnlObject *Obj, void *buf, int bufsize, int *pos,
     case PNL_TYPE_RNG:
       return pack_rng (Obj, buf, bufsize, pos, comm);
       break;
-    case PNL_TYPE_OBJECT :
-      printf("Packing for type %s is not implemented yet", Obj->label);
-      return MPI_ERR_TYPE;
+    case PNL_TYPE_LIST:
+      return pack_list (Obj, buf, bufsize, pos, comm);
       break;
     default:
+      printf("Packing for type %s is not implemented yet", Obj->label);
       return MPI_ERR_TYPE;
     }
 }
@@ -928,17 +1059,17 @@ int pnl_object_mpi_unpack (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI
     case PNL_TYPE_HMATRIX:
       return unpack_hmatrix (Obj, buf, bufsize, pos, comm);
       break;
-     case PNL_TYPE_BASIS:
+    case PNL_TYPE_BASIS:
       return unpack_basis (Obj, buf, bufsize, pos, comm);
       break;
     case PNL_TYPE_RNG:
       return unpack_rng (Obj, buf, bufsize, pos, comm);
       break;
-    case PNL_TYPE_OBJECT :
-      printf("Unpacking for type %s is not implemented yet", Obj->label);
-      return MPI_ERR_TYPE;
+    case PNL_TYPE_LIST:
+      return unpack_list (Obj, buf, bufsize, pos, comm);
       break;
     default:
+      printf("Unpacking for type %s is not implemented yet", Obj->label);
       return MPI_ERR_TYPE;
     }
 }

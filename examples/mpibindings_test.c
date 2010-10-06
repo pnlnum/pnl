@@ -27,6 +27,7 @@
 #include "pnl/pnl_band_matrix.h"
 #include "pnl/pnl_tridiag_matrix.h"
 #include "pnl/pnl_basis.h"
+#include "pnl/pnl_list.h"
 #include "pnl/pnl_mpi.h"
 
 #define SENDTAG 1
@@ -310,7 +311,6 @@ static int send_int_hmatrix ()
   M = pnl_hmat_int_create_from_ptr (3, dims, IntArray);
   printf ("Original Hmatrix \n"); pnl_hmat_int_print (M); printf ("\n");
   info = pnl_object_mpi_send (PNL_OBJECT(M), 1, SENDTAG, MPI_COMM_WORLD);
-  
   printf ("Hmat sent\n");
   pnl_hmat_int_free (&M);
   return info;
@@ -339,6 +339,44 @@ static int recv_basis ()
   pnl_basis_free (&B);
   return info;
 }
+
+static int send_list ()
+{
+  int info;
+  PnlList *L;
+  PnlMat *M;
+  PnlTridiagMat *T;
+
+  L = pnl_list_new ();
+  M = pnl_mat_create_from_double (2, 3, 3.5);
+  T = pnl_tridiag_mat_create_from_double (4, 0.5);
+  pnl_list_insert_first (L, PNL_OBJECT(M));
+  pnl_list_insert_first (L, PNL_OBJECT(T));
+  pnl_list_print (L);
+  info = pnl_object_mpi_send (PNL_OBJECT(L), 1, SENDTAG, MPI_COMM_WORLD);
+  printf ("List sent\n");
+  pnl_list_free (&L);
+  return info;
+}
+
+static int recv_list ()
+{
+  MPI_Status status;
+  PnlList *L;
+  PnlMat *M;
+  PnlTridiagMat *T;
+  int info;
+  L = pnl_list_new ();
+  M = pnl_mat_new ();
+  T = pnl_tridiag_mat_new ();
+  pnl_list_insert_last (L, PNL_OBJECT(T));
+  pnl_list_insert_last (L, PNL_OBJECT(M));
+  info = pnl_object_mpi_recv (PNL_OBJECT(L), 0, SENDTAG, MPI_COMM_WORLD, &status);
+  printf ("Received list\n"); pnl_list_print (L); printf ("\n");
+  pnl_list_free (&L);
+  return info;
+}
+
 
 /*
  * Isend / Irecv examples
@@ -461,6 +499,7 @@ int main(int argc, char *argv[])
       send_matrix (); MPI_Barrier (MPI_COMM_WORLD);
       send_basis (); MPI_Barrier (MPI_COMM_WORLD);
       ssend_basis (); MPI_Barrier (MPI_COMM_WORLD);
+      send_list (); MPI_Barrier (MPI_COMM_WORLD);
     }
   else
     {
@@ -477,6 +516,7 @@ int main(int argc, char *argv[])
       irecv_matrix (); MPI_Barrier (MPI_COMM_WORLD);
       recv_basis (); MPI_Barrier (MPI_COMM_WORLD);
       recv_basis (); MPI_Barrier (MPI_COMM_WORLD);
+      recv_list (); MPI_Barrier (MPI_COMM_WORLD);
     }
 
   M = pnl_mat_new ();
