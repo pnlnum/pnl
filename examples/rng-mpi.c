@@ -127,12 +127,12 @@ static int recv_dcmt ()
 }
 
 
-static int send_rng ()
+static int send_rng (PnlType t)
 {
   PnlRng *rng;
   int i;
 
-  rng = pnl_rng_create (PNL_RNG_MERSENNE);
+  rng = pnl_rng_create (t);
   pnl_rng_sseed (rng, 1273);
   PNL_MPI_MESSAGE(pnl_object_mpi_send (PNL_OBJECT(rng), 1, SENDTAG, MPI_COMM_WORLD), "error in sending rng");
 
@@ -184,13 +184,21 @@ int main(int argc, char *argv[])
 
   if ( rank == 0 )
     {
-      send_dcmt ();  MPI_Barrier(MPI_COMM_WORLD);
-      send_rng ();  MPI_Barrier(MPI_COMM_WORLD);
+      printf ("--> DCMT\n");
+      send_dcmt ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      printf ("--> MERSENNE\n");
+      send_rng (PNL_RNG_MERSENNE); fflush(stdout);  MPI_Barrier(MPI_COMM_WORLD);
+      printf ("--> MRGK3\n");
+      send_rng (PNL_RNG_MRGK3); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      printf ("--> MRGK5\n");
+      send_rng (PNL_RNG_MRGK5); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
     }
   else
     {
-      recv_dcmt ();   MPI_Barrier(MPI_COMM_WORLD);
-      recv_rng ();   MPI_Barrier(MPI_COMM_WORLD);
+      recv_dcmt (); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
     }
 
   MPI_Finalize ();

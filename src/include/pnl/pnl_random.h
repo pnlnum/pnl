@@ -17,8 +17,8 @@ extern "C" {
  */
 /*@{*/
 
-#define MC 0	
-#define QMC 1	
+#define MC 0    
+#define QMC 1   
 #define CREATE 0 
 #define RETRIEVE 1 
 
@@ -139,9 +139,9 @@ extern void pnl_vect_rng_uni_d(PnlVect *G, int dimension, double a, double b, Pn
 extern void pnl_vect_rng_normal(PnlVect *G, int samples, PnlRng *rng);
 extern void pnl_vect_rng_normal_d(PnlVect *G, int dimension, PnlRng *rng);
 extern void pnl_mat_rng_uni(PnlMat *M, int samples, int dimension, const PnlVect *a,
-                             const PnlVect *b, PnlRng *rng);
+                            const PnlVect *b, PnlRng *rng);
 extern void pnl_mat_rng_uni2(PnlMat *M, int samples, int dimension,
-                              double a, double b, PnlRng *rng);
+                             double a, double b, PnlRng *rng);
 extern void pnl_mat_rng_normal(PnlMat *M, int samples, int dimension, PnlRng *rng);
 extern double pnl_rng_gamma (double a, double b, PnlRng *rng);
 extern double pnl_rng_chi2  (double nu, PnlRng *rng);
@@ -152,13 +152,22 @@ extern double pnl_rng_chi2  (double nu, PnlRng *rng);
  */
 typedef struct
 {
-  long M;
   long SEED;
-  long alea;
   int inc1, inc2;
   long t_alea[56];
 } knuth_state;
 
+typedef struct
+{
+  long x10, x11, x12;
+  long x20, x21, x22;
+} mrgk3_state;
+
+typedef struct
+{
+  long x10, x11, x12, x13, x14;
+  long x20, x21, x22, x23, x24;
+} mrgk5_state;
 
 /*
  * MT

@@ -53,13 +53,16 @@ static void KNUTH(PnlRng *rng,double *sample)
   int i, ii, l;
   knuth_state *state;
 
+  static const long M    = 1000000000L;
+  static const long alea = 1L; 
+
   state = (knuth_state *) rng->state;
   
   /* First call to the sequence */
   if(rng->counter == 1)
     {
-      X_n= state->SEED- state->alea;
-      X_n%= state->M;
+      X_n= state->SEED - alea;
+      X_n%= M;
       state->t_alea[55]= X_n;
       y_k= 1;
       /* Initialization of the table */
@@ -70,7 +73,7 @@ static void KNUTH(PnlRng *rng,double *sample)
           state->t_alea[ii]= y_k;
           y_k= X_n - y_k;
           if(y_k < 0) 
-            y_k+= state->M;
+            y_k+= M;
           X_n= state->t_alea[ii];
         }
 
@@ -81,12 +84,11 @@ static void KNUTH(PnlRng *rng,double *sample)
             {
               state->t_alea[i]-= state->t_alea[1+(i+30)%55];
               if(state->t_alea[i] < 0) 
-                state->t_alea[i]+= state->M;
+                state->t_alea[i]+= M;
             }
         }
       state->inc1= 0;
       state->inc2= 31;  /* 31 is a special value of Knuth : 31= 55-24 */
-      state->alea= 1;
     }
 
   rng->counter++;
@@ -100,10 +102,10 @@ static void KNUTH(PnlRng *rng,double *sample)
   X_n= state->t_alea[state->inc1] - state->t_alea[state->inc2];
 
   if(X_n < 0) 
-    X_n+= state->M;
+    X_n+= M;
   state->t_alea[state->inc1]= X_n;
   /* Normalized value */
-  *sample = (double) X_n / (double) state->M;
+  *sample = (double) X_n / (double) M;
   return;
 }
 
@@ -112,57 +114,46 @@ static void KNUTH(PnlRng *rng,double *sample)
 /* ----------------------------------------------------------------------- */
 static void MRGK3(PnlRng *rng, double *sample)
 {
-
-  static double M1   = 4294967087.0;
-  static double M2   = 4294944443.0;
-  static double A12  = 1403580.0;
-  static double A13N = 810728.0;
-  static double A21  = 527612.0;
-  static double A23N = 1370589.0;
-  static double NORM = 2.328306549295728e-10;
-
-
-  static double x10, x11, x12, x20, x21, x22;
   long k;
-  double p1, p2;
+  long p1, p2;
+  mrgk3_state *s;
 
-  /* First call to the sequence */
-  if (rng->counter == 1 ) 
-    {
-      /* Initialization */
-      x10=231458761.;
-      x11=34125679.;
-      x12=45678213.;
-      x20=57964412.;
-      x21=12365487.;
-      x22=77221456.;
-    }
+  static const long M1   = 4294967087;
+  static const long M2   = 4294944443;
+  static const long A12  = 1403580;
+  static const long A13N = 810728;
+  static const long A21  = 527612;
+  static const long A23N = 1370589;
+  static const double NORM = 2.328306549295728e-10;
+
+
+  s = (mrgk3_state *) (rng->state);
   rng->counter++; 
 
   /* For each call to the sequence, computation of a new point */
   /* First generator */
-  p1= A12*x11 - A13N*x10;
-  k= (long)floor(p1/M1); /*TOCHECK*/
-  p1-= k*M1;
+  p1 = A12*s->x11 - A13N*s->x10;
+  k= p1 / M1; /*TOCHECK*/
+  p1 -= k*M1;
 
   if(p1 < 0.0) 
-    p1+= M1;
+    p1 += M1;
 
-  x10= x11;
-  x11= x12;
-  x12= p1;
+  s->x10 = s->x11;
+  s->x11 = s->x12;
+  s->x12 = p1;
 
   /* Second generator */
-  p2= A21*x22 - A23N*x20;
-  k= (long)floor(p2/M2);/*TOCHECK*/
-  p2-= k*M2;
+  p2 = A21*s->x22 - A23N*s->x20;
+  k = p2 / M2;/*TOCHECK*/
+  p2 -= k*M2;
 
   if(p2 < 0.0) 
-    p2+= M2;
+    p2 += M2;
 
-  x20= x21;
-  x21= x22;
-  x22= p2;
+  s->x20= s->x21;
+  s->x21= s->x22;
+  s->x22= p2;
 
 
   /* Combination of the two generators */
@@ -180,76 +171,62 @@ static void MRGK3(PnlRng *rng, double *sample)
 /* ----------------------------------------------------------------------- */
 static void MRGK5(PnlRng *rng,double *sample)
 {
-  static double M1   = 4294949027.0;
-  static double M2   =    4294934327.0;
-  static double A12  =   1154721.0;
-  static double A14  =   1739991.0;
-  static double A15N =  1108499.0;
-  static double A21  =   1776413.0;
-  static double A23  =   865203.0;
-  static double A25N = 1641052.0;
-  static double NORM =  2.3283163396834613e-10;
-
-  static double x10, x11, x12, x13, x14, x20, x21, x22, x23, x24;
   long k;
-  double p1, p2;
+  long p1, p2;
+  mrgk5_state *s;
 
-  /* First call to the sequence */
-  if (rng->counter == 1) 
-    {
-      /*Initialization*/
-      x10= 231458761.;
-      x11= 34125679.;
-      x12= 45678213.;
-      x13= 7438902.;
-      x14= 957345.;
+  static const long M1   = 4294949027;
+  static const long M2   = 4294934327;
+  static const long A12  = 1154721;
+  static const long A14  = 1739991;
+  static const long A15N = 1108499;
+  static const long A21  = 1776413;
+  static const long A23  = 865203;
+  static const long A25N = 1641052;
+  static const double NORM =  2.3283163396834613e-10;
 
-      x20= 57964412.;
-      x21= 12365487.;
-      x22= 77221456.;
-      x23= 816403.;
-      x24= 8488912.;
-    }
+  s = (mrgk5_state *)(rng->state);
+  
   rng->counter++;
 
   /* For each call to the sequence, computation of a new point */
   /* First generator with Schrage method */
-  p1= A12*x13 - A15N*x10;
+  p1= A12*s->x13 - A15N*s->x10;
 
   if(p1> 0.0) 
     p1-= A14*M1;
 
-  p1+= A14*x11;
-  k= (long)floor(p1/M1);/*TOCHECK*/
+  p1+= A14*s->x11;
+  k= p1/M1;/*TOCHECK*/
   p1-= k*M1;
 
   if(p1< 0.0) 
     p1+= M1;
 
-  x10= x11;
-  x11= x12;
-  x12= x13; 
-  x13= x14;
-  x14= p1;
+  s->x10= s->x11;
+  s->x11= s->x12;
+  s->x12= s->x13; 
+  s->x13= s->x14;
+  s->x14= p1;
 
   /* Second generator with Schrage method */
-  p2= A21*x24 - A25N*x20;
+  p2= A21*s->x24 - A25N*s->x20;
 
   if(p2> 0.0)
     p2-= A23*M2;
 
-  p2+= A23*x22;
-  k= (long)floor(p2/M2);/*TOCHECK*/
+  p2+= A23*s->x22;
+  k= p2/M2;/*TOCHECK*/
   p2-= k*M2;
 
   if(p2< 0.0)
     p2+= M2;
 
-  x20= x21;
-  x21= x22;
-  x22= x23;
-  x23= x24;
-  x24= p2;
+  s->x20= s->x21;
+  s->x21= s->x22;
+  s->x22= s->x23;
+  s->x23= s->x24;
+  s->x24= p2;
 
 
   /*Combination of the two generators */
@@ -262,9 +239,9 @@ static void MRGK5(PnlRng *rng,double *sample)
 }
 /* ------------------------------------------------------------------------ */
 /* Random numbers generator of  Park & Miller with Bayes & Durham shuffling
-procedure : the next random number is not obtained from the previous one 
-but we use an intermediate table which contains the 32 precedent random 
-numbers and we choose one of them randomly.  */
+   procedure : the next random number is not obtained from the previous one 
+   but we use an intermediate table which contains the 32 precedent random 
+   numbers and we choose one of them randomly.  */
 /* ----------------------------------------------------------------------- */
 static void SHUFL(PnlRng *rng,double *sample)
 {
@@ -327,9 +304,9 @@ static void SHUFL(PnlRng *rng,double *sample)
 
 /* ------------------------------------------------------------------------- */
 /* Random numbers generator of L'Ecuyer with Bayes & Durham shuffling
-procedure : 
-Combination of two short periods LCG to obtain a longer period generator.
-The period is the least common multiple of the 2 others.  */
+   procedure : 
+   Combination of two short periods LCG to obtain a longer period generator.
+   The period is the least common multiple of the 2 others.  */
 /* ------------------------------------------------------------------------- */
 
 static void LECUYER(PnlRng *rng,double *sample)
@@ -468,14 +445,14 @@ static unsigned long random_word(int k)
     Combination  of 3 Tausworthe generators 
     u(n)[j]= u(n-r)[j] ^ u(n-k)[j], j=1,..,3
     with parameters k, q, r, s and t.
-Generator :
-v= =(u[0] ^ u[1] ^ u[2])/2^32.    
+    Generator :
+    v= =(u[0] ^ u[1] ^ u[2])/2^32.    
 
-L= 32 length of a word.
-We use a mask to make the generator 
-(originally designed for 32-bit unsigned int) 
-work on 64 bit machines : this mask enables to drop 
-the 32 highest bits on 64 bit machines*/
+    L= 32 length of a word.
+    We use a mask to make the generator 
+    (originally designed for 32-bit unsigned int) 
+    work on 64 bit machines : this mask enables to drop 
+    the 32 highest bits on 64 bit machines*/
 /* ---------------------------------------------------------------- */
 #define TAUS_MASK 0xffffffffUL
 
@@ -639,7 +616,7 @@ static int search_value(int seuil, int tab[], int dim)
 /* Computation of the binomial coefficients.  */
 /* -------------------------------------------*/
 static void binomial(int Max)
-     /*Max should be less than 33 otherwise C[n][p] could exceed LONG_MAX*/
+/*Max should be less than 33 otherwise C[n][p] could exceed LONG_MAX*/
 {
   int n, p, i;
 
@@ -841,46 +818,46 @@ static void SOBOL(PnlRng *rng, double X_n[])
   /* Initial values for C */
   /* The second dimension is the maximum degree of a primitive polynomial +1 */
   static unsigned long C_init[DIM_MAX_SOBOL+1][9]={
-      {0,0, 0, 0, 0,  0,  0,  0,   0},
-      {0,1, 0, 0, 0,  0,  0,  0,   0},
-      {0,1, 1, 0, 0,  0,  0,  0,   0},
-      {0,1, 3, 7, 0,  0,  0,  0,   0},
-      {0,1, 1, 5, 0,  0,  0,  0,   0},
-      {0,1, 3, 1, 1,  0,  0,  0,   0},
-      {0,1, 1, 3, 7,  0,  0,  0,   0},
-      {0,1, 3, 3, 9,  9,  0,  0,   0},
-      {0,1, 3, 7, 13, 3 , 0,  0,   0},
-      {0,1, 1, 5, 11, 27, 0,  0,   0},
-      {0,1, 3, 5, 1,  15, 0,  0,   0},
-      {0,1, 1, 7, 3,  29, 0,  0,   0},
-      {0,1, 3, 7, 7,  21, 0,  0,   0},
-      {0,1, 1, 1, 9,  23, 37, 0,   0},
-      {0,1, 3, 3, 5,  19, 33, 0,   0},
-      {0,1, 1, 3, 13, 11, 7,  0,   0},
-      {0,1, 1, 7, 13, 25, 5,  0,   0},
-      {0,1, 3, 5, 11, 7,  11, 0,   0},
-      {0,1, 1, 1, 3,  13, 39, 0,   0},
-      {0,1, 3, 1, 15, 17, 63, 13,  0},
-      {0,1, 1, 5, 5,  1,  27, 33,  0},
-      {0,1, 3, 3, 3,  25, 17, 115, 0},
-      {0,1, 1, 3, 15, 29, 15, 41,  0},
-      {0,1, 3, 1, 7,  3,  23, 79,  0},
-      {0,1, 3, 7, 9,  31, 29, 17,  0},
-      {0,1, 1, 5, 13, 11, 3,  29,  0},
-      {0,1, 3, 1, 9,  5,  21, 119, 0},
-      {0,1, 1, 3, 1,  23, 13, 75,  0},
-      {0,1, 3, 3, 11, 27, 31, 73,  0},
-      {0,1, 1, 7, 7,  19, 25, 105, 0},
-      {0,1, 3, 5, 5,  21, 9,  7,   0},
-      {0,1, 1, 1, 15, 5,  49, 59,  0},
-      {0,1, 1, 1, 1,  1,  33, 65,  0},
-      {0,1, 3, 5, 15, 17, 19, 21,  0},
-      {0,1, 1, 7, 11, 13, 29, 3,   0},
-      {0,1, 3, 7, 5,  7,  11, 113, 0},
-      {0,1, 1, 5, 3,  15, 19, 61,  0},
-      {0,1, 3, 1, 1,  9,  27, 89,  7},
-      {0,1, 1, 3, 7,  31, 15, 45,  23},
-      {0,1, 3, 3, 9,  9,  25, 107, 39}
+    {0,0, 0, 0, 0,  0,  0,  0,   0},
+    {0,1, 0, 0, 0,  0,  0,  0,   0},
+    {0,1, 1, 0, 0,  0,  0,  0,   0},
+    {0,1, 3, 7, 0,  0,  0,  0,   0},
+    {0,1, 1, 5, 0,  0,  0,  0,   0},
+    {0,1, 3, 1, 1,  0,  0,  0,   0},
+    {0,1, 1, 3, 7,  0,  0,  0,   0},
+    {0,1, 3, 3, 9,  9,  0,  0,   0},
+    {0,1, 3, 7, 13, 3 , 0,  0,   0},
+    {0,1, 1, 5, 11, 27, 0,  0,   0},
+    {0,1, 3, 5, 1,  15, 0,  0,   0},
+    {0,1, 1, 7, 3,  29, 0,  0,   0},
+    {0,1, 3, 7, 7,  21, 0,  0,   0},
+    {0,1, 1, 1, 9,  23, 37, 0,   0},
+    {0,1, 3, 3, 5,  19, 33, 0,   0},
+    {0,1, 1, 3, 13, 11, 7,  0,   0},
+    {0,1, 1, 7, 13, 25, 5,  0,   0},
+    {0,1, 3, 5, 11, 7,  11, 0,   0},
+    {0,1, 1, 1, 3,  13, 39, 0,   0},
+    {0,1, 3, 1, 15, 17, 63, 13,  0},
+    {0,1, 1, 5, 5,  1,  27, 33,  0},
+    {0,1, 3, 3, 3,  25, 17, 115, 0},
+    {0,1, 1, 3, 15, 29, 15, 41,  0},
+    {0,1, 3, 1, 7,  3,  23, 79,  0},
+    {0,1, 3, 7, 9,  31, 29, 17,  0},
+    {0,1, 1, 5, 13, 11, 3,  29,  0},
+    {0,1, 3, 1, 9,  5,  21, 119, 0},
+    {0,1, 1, 3, 1,  23, 13, 75,  0},
+    {0,1, 3, 3, 11, 27, 31, 73,  0},
+    {0,1, 1, 7, 7,  19, 25, 105, 0},
+    {0,1, 3, 5, 5,  21, 9,  7,   0},
+    {0,1, 1, 1, 15, 5,  49, 59,  0},
+    {0,1, 1, 1, 1,  1,  33, 65,  0},
+    {0,1, 3, 5, 15, 17, 19, 21,  0},
+    {0,1, 1, 7, 11, 13, 29, 3,   0},
+    {0,1, 3, 7, 5,  7,  11, 113, 0},
+    {0,1, 1, 5, 3,  15, 19, 61,  0},
+    {0,1, 3, 1, 1,  9,  27, 89,  7},
+    {0,1, 1, 3, 7,  31, 15, 45,  23},
+    {0,1, 3, 3, 9,  9,  25, 107, 39}
   };
 
 
@@ -983,68 +960,68 @@ static void NIEDERREITER(PnlRng *rng, double X_n[])
   /* Niederreiter's constants */
   /* Une fonction de calcul de ces coefficients est donnee dans Owen.c */
   static unsigned long C[BIT_MAX_NIED+1][DIM_MAX_NIED+1]={
-      {0,1073741824,1073741824,1610612736,1879048192,1879048192,2013265920,
-        2013265920,2013265920,2080374784,2080374784,2080374784,2080374784},
-      {0,536870912,1610612736,1207959552,1644167168,1644167168,1887436800,
-        1887436800,1887436800,2015363072,2015363072,2015363072,2015363072},
-      {0,268435456,1342177280,939524096,1174405120,1442840576,1635778560,
-        1769996288,1769996288,1885339648,1885339648,1885339648,1952448512},
-      {0,134217728,2013265920,2046820352,503316480,771751936,1132462080,
-        1400897536,1535115264,1625292800,1692401664,1692401664,1759510528},
-      {0,67108864,1140850688,1577058304,742391808,1312817152,260046848,
-        796917760,1065353216,1172307968,1306525696,1239416832,1373634560},
-      {0,33554432,1711276032,914358272,1522532352,515899392,386400256,
-        1602748416,2131230720,266338304,467664896,333447168,601882624},
-      {0,16777216,1426063360,1702887424,935329792,1069547520,639107072,
-        932708352,1981284352,465633280,937492480,669057024,1205927936},
-      {0,8388608,2139095040,1260388352,2106064896,2106064896,1287127040,
-        1740111872,1815609344,933429248,1810038784,1338179584,197328896},
-      {0,4194304,1077936128,1046478848,1800929280,1767374848,435683328,
-        1341652992,1484259328,1869021184,1407647744,461832192,327614464},
-      {0,2097152,1616904192,2127036416,1152909312,1387790336,863010816,
-        393248768,946896896,1592721408,669974528,858718208,655294464},
-      {0,1048576,1347420160,1572339712,456196096,661716992,1851883520,
-        644448256,2020179968,973012992,1275002880,1652490240,1243545600},
-      {0,524288,2021130240,827981824,639827968,1286275072,1422622720,
-        1154711552,1893433344,2011039744,333383680,1090455552,339675136},
-      {0,262144,1145307136,1614675968,1548156928,425656320,697794560,
-        162496512,1774157824,1807554560,597563392,100603904,679417856},
-      {0,131072,1717960704,1216249856,952508416,817766400,1537673216,
-        458721280,1543473152,1465595904,1125922816,201209856,1426012160},
-      {0,655336,1431633920,945651712,1908695040,1903452160,1069946880,
-        1043306496,1073190912,714504192,102332416,402487296,771651584},
-      {0,32768,2147450880,2050039808,1669980160,1655300096,2139371520,
-        2094512128,2137503744,1359804416,137558016,804976640,1541273600},
-      {0,16384,1073758208,1583374336,1192936448,1461445632,2004908032,
-        1907357696,1984428032,574156864,342224960,1542844480,865859648},
-      {0,8192,1610637312,919095296,511552512,780127232,1736994944,
-        1809315968,1812428928,1081139392,686547136,938205376,1664612544},
-      {0,4096,1342197760,1706571776,754088960,1320655872,1201168768,
-        1471148416,1476817280,79806912,1442300352,1811333568,1114634688},
-      {0,2048,2013296640,1264220672,1538054272,522598528,255345536,
-        794291072,939811712,161711040,802130880,1473022912,83819456},
-      {0,1024,1140868096,1044274688,924431744,1044738432,376967040,
-        1580193664,2013284224,325519296,1604198336,731389888,234684352},
-      {0,512,1711302144,2130622080,2088397696,2093148032,611882760,
-        878683912,1887440776,651102082,993804162,1393639298,536412034},
-      {0,256,1426085120,1574823296,1794429712,1774512912,1215931928,
-        1614267928,1770004376,1235158790,1987673862,570654470,1005715270},
-      {0,128,2139127680,823225120,1168671280,1401549360,410242232,
-        1223658552,1535129528,389942798,1825766990,1143404110,1944254158},
-      {0,64,1077952576,1610636896,458752112,656139376,812620280,
-        299341944,1065379832,777854046,1501951134,208530654,1743054302},
-      {0,32,1616928864,1207973576,649592930,1283443810,1758968688,
-        590295160,2131249016,1488664830,856416638,484104702,1340654590},
-      {0,16,1347440720,939550136,1563492422,414686294,1369962081,
-        1180590193,1981288049,827816380,1645658814,966114238,468813820},
-      {0,8,2021161080,2046839642,941817886,824588462,726658251,
-        205277419,1815616739,1722809210,1143770494,1997176636,935528440},
-      {0,4,1145324612,1577074238,1879506988,1879405006,1578619287,
-        410522071,1484272071,1298134710,209263358,1846933048,1871120370},
-      {0,2,1717986918,914390782,1644568666,1644357534,1009722151,
-        947430191,946922383,513795374,483606012,1546380400,1596917668},
-      {0,1,1431655765,1702911453,1174691895,1443162927,2019444294,
-        2020722270,2020198302,1027523167,1032223673,1014481121,1048512329}};
+    {0,1073741824,1073741824,1610612736,1879048192,1879048192,2013265920,
+     2013265920,2013265920,2080374784,2080374784,2080374784,2080374784},
+    {0,536870912,1610612736,1207959552,1644167168,1644167168,1887436800,
+     1887436800,1887436800,2015363072,2015363072,2015363072,2015363072},
+    {0,268435456,1342177280,939524096,1174405120,1442840576,1635778560,
+     1769996288,1769996288,1885339648,1885339648,1885339648,1952448512},
+    {0,134217728,2013265920,2046820352,503316480,771751936,1132462080,
+     1400897536,1535115264,1625292800,1692401664,1692401664,1759510528},
+    {0,67108864,1140850688,1577058304,742391808,1312817152,260046848,
+     796917760,1065353216,1172307968,1306525696,1239416832,1373634560},
+    {0,33554432,1711276032,914358272,1522532352,515899392,386400256,
+     1602748416,2131230720,266338304,467664896,333447168,601882624},
+    {0,16777216,1426063360,1702887424,935329792,1069547520,639107072,
+     932708352,1981284352,465633280,937492480,669057024,1205927936},
+    {0,8388608,2139095040,1260388352,2106064896,2106064896,1287127040,
+     1740111872,1815609344,933429248,1810038784,1338179584,197328896},
+    {0,4194304,1077936128,1046478848,1800929280,1767374848,435683328,
+     1341652992,1484259328,1869021184,1407647744,461832192,327614464},
+    {0,2097152,1616904192,2127036416,1152909312,1387790336,863010816,
+     393248768,946896896,1592721408,669974528,858718208,655294464},
+    {0,1048576,1347420160,1572339712,456196096,661716992,1851883520,
+     644448256,2020179968,973012992,1275002880,1652490240,1243545600},
+    {0,524288,2021130240,827981824,639827968,1286275072,1422622720,
+     1154711552,1893433344,2011039744,333383680,1090455552,339675136},
+    {0,262144,1145307136,1614675968,1548156928,425656320,697794560,
+     162496512,1774157824,1807554560,597563392,100603904,679417856},
+    {0,131072,1717960704,1216249856,952508416,817766400,1537673216,
+     458721280,1543473152,1465595904,1125922816,201209856,1426012160},
+    {0,655336,1431633920,945651712,1908695040,1903452160,1069946880,
+     1043306496,1073190912,714504192,102332416,402487296,771651584},
+    {0,32768,2147450880,2050039808,1669980160,1655300096,2139371520,
+     2094512128,2137503744,1359804416,137558016,804976640,1541273600},
+    {0,16384,1073758208,1583374336,1192936448,1461445632,2004908032,
+     1907357696,1984428032,574156864,342224960,1542844480,865859648},
+    {0,8192,1610637312,919095296,511552512,780127232,1736994944,
+     1809315968,1812428928,1081139392,686547136,938205376,1664612544},
+    {0,4096,1342197760,1706571776,754088960,1320655872,1201168768,
+     1471148416,1476817280,79806912,1442300352,1811333568,1114634688},
+    {0,2048,2013296640,1264220672,1538054272,522598528,255345536,
+     794291072,939811712,161711040,802130880,1473022912,83819456},
+    {0,1024,1140868096,1044274688,924431744,1044738432,376967040,
+     1580193664,2013284224,325519296,1604198336,731389888,234684352},
+    {0,512,1711302144,2130622080,2088397696,2093148032,611882760,
+     878683912,1887440776,651102082,993804162,1393639298,536412034},
+    {0,256,1426085120,1574823296,1794429712,1774512912,1215931928,
+     1614267928,1770004376,1235158790,1987673862,570654470,1005715270},
+    {0,128,2139127680,823225120,1168671280,1401549360,410242232,
+     1223658552,1535129528,389942798,1825766990,1143404110,1944254158},
+    {0,64,1077952576,1610636896,458752112,656139376,812620280,
+     299341944,1065379832,777854046,1501951134,208530654,1743054302},
+    {0,32,1616928864,1207973576,649592930,1283443810,1758968688,
+     590295160,2131249016,1488664830,856416638,484104702,1340654590},
+    {0,16,1347440720,939550136,1563492422,414686294,1369962081,
+     1180590193,1981288049,827816380,1645658814,966114238,468813820},
+    {0,8,2021161080,2046839642,941817886,824588462,726658251,
+     205277419,1815616739,1722809210,1143770494,1997176636,935528440},
+    {0,4,1145324612,1577074238,1879506988,1879405006,1578619287,
+     410522071,1484272071,1298134710,209263358,1846933048,1871120370},
+    {0,2,1717986918,914390782,1644568666,1644357534,1009722151,
+     947430191,946922383,513795374,483606012,1546380400,1596917668},
+    {0,1,1431655765,1702911453,1174691895,1443162927,2019444294,
+     2020722270,2020198302,1027523167,1032223673,1014481121,1048512329}};
 
 
   /* First call to the sequence */
@@ -1102,99 +1079,101 @@ static void NIEDERREITER(PnlRng *rng, double X_n[])
  */
 
 static knuth_state knuth_st;
+static mrgk3_state mrgk3_st;
+static mrgk5_state mrgk5_st;
+static mt_state mt_st1;
+static mt_state mt_st2;
+
 PnlRng PnlRngKnuth = 
-{
+  {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_KNUTH,&KNUTH,
     MC,0, 0,0,0,sizeof(knuth_state), &knuth_st
-};
+  };
 PnlRng PnlRngMrgk3 = 
-{
+  {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_MRGK3,&MRGK3,
-    MC,0,0,0,0,0,NULL
-};
+    MC,0,0,0,0,sizeof(mrgk3_state),&mrgk3_st
+  };
 PnlRng PnlRngMrgk5 = 
-{
+  {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_MRGK5,&MRGK5,
-    MC,0,0,0,0,0,NULL
-};
+    MC,0,0,0,0,sizeof(mrgk5_state),&mrgk5_st
+  };
 PnlRng PnlRngShufl = 
-{
+  {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_SHUFL,&SHUFL,
     MC,0,0,0,0,0,NULL
-};
+  };
 PnlRng PnlRngLecuyer =
-{
+  {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_LECUYER,&LECUYER,
     MC,0, 0,0,0,0,NULL
-};
+  };
 PnlRng PnlRngTausworthe = 
-{
+  {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_TAUSWORTHE,&TAUS,
     MC,0, 0,0,0,0,NULL
-};
-
-static mt_state mt_st1;
-static mt_state mt_st2;
+  };
 PnlRng PnlRngMersenne = 
-{
+  {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_MERSENNE,&MERSENNE,
     MC,0,0, 0,0,sizeof(mt_state),&mt_st1
-};
+  };
 PnlRng PnlRngMersenneRandomSeed = 
-{
+  {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_MERSENNE_RANDOM_SEED,&MERSENNE,
     MC,0,0, 0,0,sizeof(mt_state),&mt_st2
-};
+  };
 PnlRng PnlRngSqrt = 
-{
+  {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_SQRT,&SQRT,
     QMC,0, 0,0,0,0,NULL
-};
+  };
 PnlRng PnlRngHalton = 
-{
+  {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_HALTON,&HALTON,
     QMC,0, 0,0,0,0,NULL
-};
+  };
 PnlRng PnlRngFaure = 
-{
+  {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_FAURE,&FAURE,
     QMC,0, 0,0,0,0,NULL
-};
+  };
 PnlRng PnlRngSobol = 
-{
+  {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_SOBOL,&SOBOL,
     QMC,0, 0,0,0,0,NULL
-};
+  };
 PnlRng PnlRngSobol2 = 
-{
+  {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_SOBOL2,&SOBOL2,
     QMC,0, 0,0,0,0,NULL
-};
+  };
 PnlRng PnlRngNiederreiter = 
-{
+  {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_NIEDERREITER,&NIEDERREITER,
     QMC,0, 0,0,0,0,NULL
-};
+  };
 
 /*
  * Random Number Generator Array
  */
 PnlRngTypes PnlRngArray[]= 
-{
+  {
     {{"KNUTH", PNL_RNG_KNUTH},&PnlRngKnuth},
     {{"MRGK3", PNL_RNG_MRGK3},&PnlRngMrgk3},
     {{"MRGK5", PNL_RNG_MRGK5},&PnlRngMrgk5},
@@ -1210,14 +1189,14 @@ PnlRngTypes PnlRngArray[]=
     {{"SOBOL2", PNL_RNG_SOBOL2},&PnlRngSobol2},
     {{"NIEDERREITER", PNL_RNG_NIEDERREITER},&PnlRngNiederreiter},
     {{NULL, NULLINT}, NULL}
-};
+  };
 
 /*
  * True MC generators do not take into account the parameter dimension in the
  * Compute function.
  */
 PnlRngTypes PnlRngMCArray[]= 
-{
+  {
     {{"KNUTH", PNL_RNG_KNUTH},&PnlRngKnuth},
     {{"MRGK3", PNL_RNG_MRGK3},&PnlRngMrgk3},
     {{"MRGK5", PNL_RNG_MRGK5},&PnlRngMrgk5},
@@ -1227,7 +1206,7 @@ PnlRngTypes PnlRngMCArray[]=
     {{"MERSENNE", PNL_RNG_MERSENNE},&PnlRngMersenne},
     {{"MERSENNE (Random Seed)", PNL_RNG_MERSENNE_RANDOM_SEED},&PnlRngMersenneRandomSeed},
     {{NULL, NULLINT}, NULL}
-};
+  };
 
 enum_members RNGs = { sizeof(PnlRngArray[0]), (enum_member*)&PnlRngArray[0], sizeof(PnlRngArray)/sizeof(PnlRngTypes) };
 enum_members MC_RNGs = { sizeof(PnlRngMCArray[0]), (enum_member*)&PnlRngMCArray[0], sizeof(PnlRngMCArray)/sizeof(PnlRngTypes) };
@@ -1259,11 +1238,17 @@ int pnl_rand_init (int type_generator, int dimension, long samples)
     case PNL_RNG_KNUTH:
       pnl_rand_sseed (type_generator, 161803398L);
       break;
+    case PNL_RNG_MRGK3:
+      pnl_rand_sseed (type_generator, 161803398L);
+      break;
+    case PNL_RNG_MRGK5:
+      pnl_rand_sseed (type_generator, 161803398L);
+      break;
     case PNL_RNG_MERSENNE:
       pnl_rand_sseed (type_generator, 0);
       break;
     case PNL_RNG_MERSENNE_RANDOM_SEED:
-        pnl_rand_sseed (type_generator, time(NULL));
+      pnl_rand_sseed (type_generator, time(NULL));
       break;
     case PNL_RNG_DCMT:
       pnl_dcmt_sseed ((dcmt_state *)(rng->state), 1234);
@@ -1468,6 +1453,18 @@ PnlRng* pnl_rng_create (int type)
       rng->size_state = sizeof(knuth_state);
       rng->state = malloc(rng->size_state);
       break;
+    case PNL_RNG_MRGK3:
+      rng->Compute = MRGK3;
+      rng->rand_or_quasi = MC;
+      rng->size_state = sizeof(mrgk3_state);
+      rng->state = malloc(rng->size_state);
+      break;
+    case PNL_RNG_MRGK5:
+      rng->Compute = MRGK5;
+      rng->rand_or_quasi = MC;
+      rng->size_state = sizeof(mrgk5_state);
+      rng->state = malloc(rng->size_state);
+      break;
     case PNL_RNG_MERSENNE:
       rng->Compute = MERSENNE;
       rng->rand_or_quasi = MC;
@@ -1517,9 +1514,34 @@ PnlRng** pnl_rng_dcmt_create_array (int n, ulong seed, int *count)
 
 static void pnl_knuth_sseed (knuth_state *s, ulong seed)
 {
-  s->M    = 1000000000L;
   s->SEED = seed;
-  s->alea= 1L; 
+}
+
+static void pnl_mrgk3_sseed (mrgk3_state *s, ulong seed)
+{
+  /* Initialization  of the two generators */
+  s->x10=231458761.;
+  s->x11=34125679.;
+  s->x12=45678213.;
+  s->x20=57964412.;
+  s->x21=12365487.;
+  s->x22=77221456.;
+}
+
+static void pnl_mrgk5_sseed (mrgk5_state *s, ulong seed)
+{
+  /* Initialization  of the two generators */
+  s->x10= 231458761.;
+  s->x11= 34125679.;
+  s->x12= 45678213.;
+  s->x13= 7438902.;
+  s->x14= 957345.;
+
+  s->x20= 57964412.;
+  s->x21= 12365487.;
+  s->x22= 77221456.;
+  s->x23= 816403.;
+  s->x24= 8488912.;
 }
 
 void pnl_rng_sseed (PnlRng *rng, ulong seed)
@@ -1528,6 +1550,12 @@ void pnl_rng_sseed (PnlRng *rng, ulong seed)
     {
     case PNL_RNG_KNUTH :
       pnl_knuth_sseed((knuth_state *)(rng->state), seed);
+      break;
+    case PNL_RNG_MRGK3 :
+      pnl_mrgk3_sseed((mrgk3_state *)(rng->state), seed);
+      break;
+    case PNL_RNG_MRGK5 :
+      pnl_mrgk5_sseed((mrgk5_state *)(rng->state), seed);
       break;
     case PNL_RNG_MERSENNE :
     case PNL_RNG_MERSENNE_RANDOM_SEED :
