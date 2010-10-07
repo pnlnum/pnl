@@ -115,29 +115,25 @@ static void KNUTH(PnlRng *rng,double *sample)
 static void MRGK3(PnlRng *rng, double *sample)
 {
   long k;
-  long p1, p2;
+  double p1, p2;
   mrgk3_state *s;
 
-  static const long M1   = 4294967087;
-  static const long M2   = 4294944443;
-  static const long A12  = 1403580;
-  static const long A13N = 810728;
-  static const long A21  = 527612;
-  static const long A23N = 1370589;
-  static const double NORM = 2.328306549295728e-10;
+  static const double M1   = 4294967087.;
+  static const double M2   = 4294944443.;
+  static const double A12  = 1403580.;
+  static const double A13N = 810728.;
+  static const double A21  = 527612.;
+  static const double A23N = 1370589.;
 
 
   s = (mrgk3_state *) (rng->state);
   rng->counter++; 
 
-  /* For each call to the sequence, computation of a new point */
   /* First generator */
   p1 = A12*s->x11 - A13N*s->x10;
-  k= p1 / M1; /*TOCHECK*/
+  k = p1 / M1; 
   p1 -= k*M1;
-
-  if(p1 < 0.0) 
-    p1 += M1;
+  if(p1 < 0) p1 += M1;
 
   s->x10 = s->x11;
   s->x11 = s->x12;
@@ -145,11 +141,9 @@ static void MRGK3(PnlRng *rng, double *sample)
 
   /* Second generator */
   p2 = A21*s->x22 - A23N*s->x20;
-  k = p2 / M2;/*TOCHECK*/
+  k = p2 / M2;
   p2 -= k*M2;
-
-  if(p2 < 0.0) 
-    p2 += M2;
+  if(p2 < 0) p2 += M2;
 
   s->x20= s->x21;
   s->x21= s->x22;
@@ -158,9 +152,9 @@ static void MRGK3(PnlRng *rng, double *sample)
 
   /* Combination of the two generators */
   if (p1< p2) 
-    *sample= (p1- p2+ M1)*NORM;
+    *sample= (p1- p2+ M1) / (double) M1;
   else 
-    *sample=(p1- p2)*NORM;
+    *sample=(p1- p2) / (double) M1;
   return;
 }
 
@@ -172,18 +166,17 @@ static void MRGK3(PnlRng *rng, double *sample)
 static void MRGK5(PnlRng *rng,double *sample)
 {
   long k;
-  long p1, p2;
+  double p1, p2;
   mrgk5_state *s;
 
-  static const long M1   = 4294949027;
-  static const long M2   = 4294934327;
-  static const long A12  = 1154721;
-  static const long A14  = 1739991;
-  static const long A15N = 1108499;
-  static const long A21  = 1776413;
-  static const long A23  = 865203;
-  static const long A25N = 1641052;
-  static const double NORM =  2.3283163396834613e-10;
+  static const double M1   = 4294949027.;
+  static const double M2   = 4294934327.;
+  static const double A12  = 1154721.;
+  static const double A14  = 1739991.;
+  static const double A15N = 1108499.;
+  static const double A21  = 1776413.;
+  static const double A23  = 865203.;
+  static const double A25N = 1641052.;
 
   s = (mrgk5_state *)(rng->state);
   
@@ -192,16 +185,12 @@ static void MRGK5(PnlRng *rng,double *sample)
   /* For each call to the sequence, computation of a new point */
   /* First generator with Schrage method */
   p1= A12*s->x13 - A15N*s->x10;
+  if(p1> 0) p1 -= A14*M1;
+  p1 += A14*s->x11;
+  k = p1/M1;
+  p1 -= k*M1;
 
-  if(p1> 0.0) 
-    p1-= A14*M1;
-
-  p1+= A14*s->x11;
-  k= p1/M1;/*TOCHECK*/
-  p1-= k*M1;
-
-  if(p1< 0.0) 
-    p1+= M1;
+  if (p1< 0) p1+= M1;
 
   s->x10= s->x11;
   s->x11= s->x12;
@@ -211,16 +200,12 @@ static void MRGK5(PnlRng *rng,double *sample)
 
   /* Second generator with Schrage method */
   p2= A21*s->x24 - A25N*s->x20;
+  if (p2> 0) p2-= A23*M2;
+  p2 += A23*s->x22;
+  k = p2 / M2;
+  p2 -= k*M2;
 
-  if(p2> 0.0)
-    p2-= A23*M2;
-
-  p2+= A23*s->x22;
-  k= p2/M2;/*TOCHECK*/
-  p2-= k*M2;
-
-  if(p2< 0.0)
-    p2+= M2;
+  if (p2 < 0) p2+= M2;
 
   s->x20= s->x21;
   s->x21= s->x22;
@@ -230,10 +215,10 @@ static void MRGK5(PnlRng *rng,double *sample)
 
 
   /*Combination of the two generators */
-  if (p1<= p2) 
-    *sample= (p1- p2+ M1)*NORM;
+  if (p1 <= p2) 
+    *sample = (p1 - p2 + M1) / (double) M1;
   else 
-    *sample=(p1- p2)*NORM;
+    *sample = (p1 - p2) / (double) M1;
 
   return;
 }
@@ -245,18 +230,15 @@ static void MRGK5(PnlRng *rng,double *sample)
 /* ----------------------------------------------------------------------- */
 static void SHUFL(PnlRng *rng,double *sample)
 {
-  static long A= 16807;        /* multiplier */
-  static long M= 2147483647L;    /* 2**31 - 1  */
-  static long Q= 127773L;        /*   M div A  */  
-  static long R= 2836;           /*   M mod A  */
   long N1;
-
   int j;
   long hi;                 /* high order bit */
-  static long y= 0;
-  static long t[32];       /* 32 refers to the size of a computer word */
-  /* Initialisation */
-  static long x;
+  shufl_state *s = (shufl_state *)(rng->state);
+
+  static const long A = 16807;        /* multiplier */
+  static const long M = 2147483647;   /* 2**31 - 1  */
+  static const long Q = 127773;       /*   M div A  */  
+  static const long R = 2836;         /*   M mod A  */
 
 
   N1=(M/32);
@@ -264,40 +246,33 @@ static void SHUFL(PnlRng *rng,double *sample)
   /* First call to the sequence */
   if (rng->counter == 1)
     {
-      x= 1043618065;
-
       /* After 8 "warm-ups", initialisation of the shuffle table */
       for (j= 39; j>= 0; j--)
         {
-          hi= x/Q;
+          hi= s->x/Q;
           /*Schrage's method to avoid overflows */
-          x= A*(x- hi*Q)- R*hi; 
-          if (x < 0) 
-            x+= M;
-          if (j< 32) 
-            t[j]= x;
+          s->x= A*(s->x- hi*Q)- R*hi; 
+          if (s->x < 0) s->x+= M;
+          if (j< 32) s->t[j]= s->x;
         }
-      y= t[0];                    
+      s->y= s->t[0];                    
     }
   rng->counter++;
 
 
   /* For each call to the sequence, computation of a new point */
-  hi= x/Q;
-  x= A*(x-hi*Q)- R*hi;
-  if (x < 0) 
-    x+= M;
+  hi= s->x/Q;
+  s->x= A*(s->x-hi*Q)- R*hi;
+  if (s->x < 0) s->x += M;
 
   /* Shuffling procedure of Bayes & Durham */
   /* Index j dependent on the last point */
-  j= y/N1;
+  j= s->y/N1;
   /* Next point dependent on j */
-  y= t[j];
+  s->y= s->t[j];
 
-  t[j]= x;
-  *sample = (double) y / (double) M; 
-
-  return;
+  s->t[j]= s->x;
+  *sample = (double) s->y / (double) M; 
 }
 
 
@@ -1081,6 +1056,7 @@ static void NIEDERREITER(PnlRng *rng, double X_n[])
 static knuth_state knuth_st;
 static mrgk3_state mrgk3_st;
 static mrgk5_state mrgk5_st;
+static shufl_state shufl_st;
 static mt_state mt_st1;
 static mt_state mt_st2;
 
@@ -1106,7 +1082,7 @@ PnlRng PnlRngShufl =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_SHUFL,&SHUFL,
-    MC,0,0,0,0,0,NULL
+    MC,0,0,0,0,sizeof(shufl_state),&shufl_st
   };
 PnlRng PnlRngLecuyer =
   {
@@ -1239,10 +1215,13 @@ int pnl_rand_init (int type_generator, int dimension, long samples)
       pnl_rand_sseed (type_generator, 161803398L);
       break;
     case PNL_RNG_MRGK3:
-      pnl_rand_sseed (type_generator, 161803398L);
+      pnl_rand_sseed (type_generator, 0);
       break;
     case PNL_RNG_MRGK5:
-      pnl_rand_sseed (type_generator, 161803398L);
+      pnl_rand_sseed (type_generator, 0);
+      break;
+    case PNL_RNG_SHUFL:
+      pnl_rand_sseed (type_generator, 1043618065);
       break;
     case PNL_RNG_MERSENNE:
       pnl_rand_sseed (type_generator, 0);
@@ -1465,6 +1444,12 @@ PnlRng* pnl_rng_create (int type)
       rng->size_state = sizeof(mrgk5_state);
       rng->state = malloc(rng->size_state);
       break;
+    case PNL_RNG_SHUFL:
+      rng->Compute = SHUFL;
+      rng->rand_or_quasi = MC;
+      rng->size_state = sizeof(shufl_state);
+      rng->state = malloc(rng->size_state);
+      break;
     case PNL_RNG_MERSENNE:
       rng->Compute = MERSENNE;
       rng->rand_or_quasi = MC;
@@ -1523,6 +1508,7 @@ static void pnl_mrgk3_sseed (mrgk3_state *s, ulong seed)
   s->x10=231458761.;
   s->x11=34125679.;
   s->x12=45678213.;
+  
   s->x20=57964412.;
   s->x21=12365487.;
   s->x22=77221456.;
@@ -1544,6 +1530,12 @@ static void pnl_mrgk5_sseed (mrgk5_state *s, ulong seed)
   s->x24= 8488912.;
 }
 
+static void pnl_shufl_sseed (shufl_state *s, ulong seed)
+{
+  s->y = 0;
+  s->x= seed;
+}
+
 void pnl_rng_sseed (PnlRng *rng, ulong seed)
 {
   switch (rng->type)
@@ -1556,6 +1548,9 @@ void pnl_rng_sseed (PnlRng *rng, ulong seed)
       break;
     case PNL_RNG_MRGK5 :
       pnl_mrgk5_sseed((mrgk5_state *)(rng->state), seed);
+      break;
+    case PNL_RNG_SHUFL :
+      pnl_shufl_sseed((shufl_state *)(rng->state), seed);
       break;
     case PNL_RNG_MERSENNE :
     case PNL_RNG_MERSENNE_RANDOM_SEED :

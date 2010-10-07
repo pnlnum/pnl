@@ -31,18 +31,21 @@ static int size_mt_state (const PnlRng *rng, MPI_Comm comm, int *size);
 static int size_dcmt_state (const PnlRng *rng, MPI_Comm comm, int *size);
 static int size_mrgk3_state (const PnlRng *rng, MPI_Comm comm, int *size);
 static int size_mrgk5_state (const PnlRng *rng, MPI_Comm comm, int *size);
+static int size_shufl_state (const PnlRng *rng, MPI_Comm comm, int *size);
 
 static int pack_knuth_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_mt_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_dcmt_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_mrgk3_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_mrgk5_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
+static int pack_shufl_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 
 static int unpack_knuth_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_mt_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_dcmt_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_mrgk3_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_mrgk5_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
+static int unpack_shufl_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 
 
 static int size_knuth_state (const PnlRng *rng, MPI_Comm comm, int *size)
@@ -64,7 +67,7 @@ static int size_mrgk3_state (const PnlRng *rng, MPI_Comm comm, int *size)
   int info, count;
   *size = 0;
 
-  if((info=MPI_Pack_size(6,MPI_LONG, comm,&count))) return(info);
+  if((info=MPI_Pack_size(6,MPI_DOUBLE, comm,&count))) return(info);
   *size += count;
   return info;
 }
@@ -74,7 +77,17 @@ static int size_mrgk5_state (const PnlRng *rng, MPI_Comm comm, int *size)
   int info, count;
   *size = 0;
 
-  if((info=MPI_Pack_size(10,MPI_LONG, comm,&count))) return(info);
+  if((info=MPI_Pack_size(10,MPI_DOUBLE, comm,&count))) return(info);
+  *size += count;
+  return info;
+}
+
+static int size_shufl_state (const PnlRng *rng, MPI_Comm comm, int *size)
+{
+  int info, count;
+  *size = 0;
+
+  if((info=MPI_Pack_size(34,MPI_LONG, comm,&count))) return(info);
   *size += count;
   return info;
 }
@@ -121,7 +134,7 @@ static int pack_mrgk3_state (const PnlRng *rng, void *buf, int bufsize, int *pos
 {
   int info;
   mrgk3_state *s = (mrgk3_state *)(rng->state);
-  if ((info=MPI_Pack(s,6,MPI_LONG,buf,bufsize,pos,comm))) return info;
+  if ((info=MPI_Pack(s,6,MPI_DOUBLE,buf,bufsize,pos,comm))) return info;
   return info;
 }
 
@@ -129,7 +142,15 @@ static int pack_mrgk5_state (const PnlRng *rng, void *buf, int bufsize, int *pos
 {
   int info;
   mrgk5_state *s = (mrgk5_state *)(rng->state);
-  if ((info=MPI_Pack(s,10,MPI_LONG,buf,bufsize,pos,comm))) return info;
+  if ((info=MPI_Pack(s,10,MPI_DOUBLE,buf,bufsize,pos,comm))) return info;
+  return info;
+}
+
+static int pack_shufl_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
+{
+  int info;
+  shufl_state *s = (shufl_state *)(rng->state);
+  if ((info=MPI_Pack(s,34,MPI_LONG,buf,bufsize,pos,comm))) return info;
   return info;
 }
 
@@ -181,7 +202,7 @@ static int unpack_mrgk3_state (PnlRng *rng, void *buf, int bufsize, int *pos, MP
 {
   int info;
   mrgk3_state *s = (mrgk3_state *)(rng->state);
-  if ((info=MPI_Unpack(buf,bufsize,pos,s,6,MPI_LONG,comm))) return info;
+  if ((info=MPI_Unpack(buf,bufsize,pos,s,6,MPI_DOUBLE,comm))) return info;
   return info;
 }
 
@@ -189,10 +210,17 @@ static int unpack_mrgk5_state (PnlRng *rng, void *buf, int bufsize, int *pos, MP
 {
   int info;
   mrgk5_state *s = (mrgk5_state *)(rng->state);
-  if ((info=MPI_Unpack(buf,bufsize,pos,s,10,MPI_LONG,comm))) return info;
+  if ((info=MPI_Unpack(buf,bufsize,pos,s,10,MPI_DOUBLE,comm))) return info;
   return info;
 }
 
+static int unpack_shufl_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
+{
+  int info;
+  shufl_state *s = (shufl_state *)(rng->state);
+  if ((info=MPI_Unpack(buf,bufsize,pos,s,34,MPI_LONG,comm))) return info;
+  return info;
+}
 
 static int unpack_mt_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -241,6 +269,9 @@ int pnl_rng_state_mpi_pack_size (const PnlRng *rng, MPI_Comm comm, int *size)
     case PNL_RNG_MRGK5:
       return size_mrgk5_state (rng, comm, size);
       break;
+    case PNL_RNG_SHUFL:
+      return size_shufl_state (rng, comm, size);
+      break;
     case PNL_RNG_MERSENNE:
       return size_mt_state (rng, comm, size);
       break;
@@ -264,6 +295,9 @@ int pnl_rng_state_mpi_pack (const PnlRng *rng, void *buf, int bufsize, int *pos,
     case PNL_RNG_MRGK5:
       return pack_mrgk5_state (rng, buf, bufsize, pos, comm);
       break;
+    case PNL_RNG_SHUFL:
+      return pack_shufl_state (rng, buf, bufsize, pos, comm);
+      break;
     case PNL_RNG_MERSENNE:
       return pack_mt_state (rng, buf, bufsize, pos, comm);
       break;
@@ -286,6 +320,9 @@ int pnl_rng_state_mpi_unpack (PnlRng *rng, void *buf, int bufsize, int *pos, MPI
       break;
     case PNL_RNG_MRGK5:
       return unpack_mrgk5_state (rng, buf, bufsize, pos, comm);
+      break;
+    case PNL_RNG_SHUFL:
+      return unpack_shufl_state (rng, buf, bufsize, pos, comm);
       break;
     case PNL_RNG_MERSENNE:
       return unpack_mt_state (rng, buf, bufsize, pos, comm);

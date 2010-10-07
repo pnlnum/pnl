@@ -159,15 +159,22 @@ typedef struct
 
 typedef struct
 {
-  long x10, x11, x12;
-  long x20, x21, x22;
+  double x10, x11, x12;
+  double x20, x21, x22;
 } mrgk3_state;
 
 typedef struct
 {
-  long x10, x11, x12, x13, x14;
-  long x20, x21, x22, x23, x24;
+  double x10, x11, x12, x13, x14;
+  double x20, x21, x22, x23, x24;
 } mrgk5_state;
+
+typedef struct
+{
+  long y;
+  long t[32];       /* 32 refers to the size of a computer word */
+  long x;
+} shufl_state;
 
 /*
  * MT
