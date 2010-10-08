@@ -286,72 +286,69 @@ static void SHUFL(PnlRng *rng,double *sample)
 
 static void LECUYER(PnlRng *rng,double *sample)
 { 
-  static long A1 = 40014;        /* multiplier of the 1st generator */
-  static long A2 = 40692;        /* multiplier of the 2nd generator */
-  static long M1 = 2147483647;   /* 2**31 - 1   */ 
-  static long M2 = 2147483399;   /* 2**31 - 249 */
-  static long Q1 = 53668;        /* m1 div a1   */  
-  static long Q2 = 52774;        /* m2 div a2   */ 
-  static long R1 = 12221;        /* m1 mod a1   */
-  static long R2 = 3791;         /* m2 mod a2   */
   long N1;
-
-  static long x;
-  static long y= 978543162;
   int j;
   long hi;               /* high order bit */
-  static long z= 0;
-  static long t[32];     /* 32 is the size of a computer word */
+  lecuyer_state *s = (lecuyer_state *)(rng->state);
 
-  N1= (M1/32);
+  static const long A1 = 40014;        /* multiplier of the 1st generator */
+  static const long A2 = 40692;        /* multiplier of the 2nd generator */
+  static const long M1 = 2147483647;   /* 2**31 - 1   */ 
+  static const long M2 = 2147483399;   /* 2**31 - 249 */
+  static const long Q1 = 53668;        /* m1 div a1   */  
+  static const long Q2 = 52774;        /* m2 div a2   */ 
+  static const long R1 = 12221;        /* m1 mod a1   */
+  static const long R2 = 3791;         /* m2 mod a2   */
+
+  N1 = (M1/32);
 
   /* First call to the sequence */
   if (rng->counter == 1)
     {
-      x= 437651926;
-      y= x;
+      s->x= 437651926;
+      s->y= s->x;
 
       /* After 8 "warm-ups", initialisation of the shuffle table */
       for (j= 39; j>= 0; j--)
         {
           /* Park & Miller's generator */
-          hi= x/Q1;  
-          x= A1*(x-hi*Q1) - R1*hi;
-          if (x < 0) 
-            x+= M1;
+          hi= s->x/Q1;  
+          s->x= A1*(s->x-hi*Q1) - R1*hi;
+          if (s->x < 0) 
+            s->x+= M1;
           if (j < 32)
-            t[j]= x;
+            s->t[j]= s->x;
         }
-      z= t[0];
+      s->z= s->t[0];
     }
   rng->counter++;              
 
   /* For each call to the sequence, computation of a new point */
   /* First generator */
-  hi= x/Q1;
-  x= A1*(x-hi*Q1) - R1*hi;
-  if (x < 0) 
-    x+= M1;
+  hi= s->x/Q1;
+  s->x= A1*(s->x-hi*Q1) - R1*hi;
+  if (s->x < 0) 
+    s->x+= M1;
 
   /* Second generator */
-  hi= y/Q2;
-  y= A2*(y-hi*Q2) - R2*hi;
-  if (y < 0) 
-    y+= M2;
+  hi= s->y/Q2;
+  s->y= A2*(s->y-hi*Q2) - R2*hi;
+  if (s->y < 0) 
+    s->y+= M2;
 
   /* Shuffling procedure of Bayes & Durham */
-  /* Index j dependent on the last point */
-  j= z/N1;
+  /* Indes->x j dependent on the last point */
+  j= s->z/N1;
   /* Next point dependent on j */
-  z= t[j]- y; 
-  t[j]= x;
+  s->z= s->t[j]- s->y; 
+  s->t[j]= s->x;
 
 
   /* To avoid 0 value */
-  if (z < 1) 
-    z+= M1-1;
+  if (s->z < 1) 
+    s->z+= M1-1;
 
-  *sample = (double) z / (double) M1; 
+  *sample = (double) s->z / (double) M1; 
   return;
 }
 
@@ -1057,6 +1054,7 @@ static knuth_state knuth_st;
 static mrgk3_state mrgk3_st;
 static mrgk5_state mrgk5_st;
 static shufl_state shufl_st;
+static lecuyer_state lecuyer_st;
 static mt_state mt_st1;
 static mt_state mt_st2;
 
@@ -1088,7 +1086,7 @@ PnlRng PnlRngLecuyer =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_LECUYER,&LECUYER,
-    MC,0, 0,0,0,0,NULL
+    MC,0, 0,0,0,sizeof(lecuyer_state),&lecuyer_st
   };
 PnlRng PnlRngTausworthe = 
   {
@@ -1450,6 +1448,12 @@ PnlRng* pnl_rng_create (int type)
       rng->size_state = sizeof(shufl_state);
       rng->state = malloc(rng->size_state);
       break;
+    case PNL_RNG_LECUYER:
+      rng->Compute = LECUYER;
+      rng->rand_or_quasi = MC;
+      rng->size_state = sizeof(lecuyer_state);
+      rng->state = malloc(rng->size_state);
+      break;
     case PNL_RNG_MERSENNE:
       rng->Compute = MERSENNE;
       rng->rand_or_quasi = MC;
@@ -1504,7 +1508,10 @@ static void pnl_knuth_sseed (knuth_state *s, ulong seed)
 
 static void pnl_mrgk3_sseed (mrgk3_state *s, ulong seed)
 {
-  /* Initialization  of the two generators */
+  /*
+   * Il n'est pas clair comment on peut utiliser seed
+   * pour fixer les valeurs initiales ddes 2 générateurs
+   */
   s->x10=231458761.;
   s->x11=34125679.;
   s->x12=45678213.;
@@ -1516,7 +1523,10 @@ static void pnl_mrgk3_sseed (mrgk3_state *s, ulong seed)
 
 static void pnl_mrgk5_sseed (mrgk5_state *s, ulong seed)
 {
-  /* Initialization  of the two generators */
+  /*
+   * Il n'est pas clair comment on peut utiliser seed
+   * pour fixer les valeurs initiales ddes 2 générateurs
+   */
   s->x10= 231458761.;
   s->x11= 34125679.;
   s->x12= 45678213.;
@@ -1532,10 +1542,24 @@ static void pnl_mrgk5_sseed (mrgk5_state *s, ulong seed)
 
 static void pnl_shufl_sseed (shufl_state *s, ulong seed)
 {
-  s->y = 0;
   s->x= seed;
+  s->y = 0;
 }
 
+static void pnl_lecuyer_sseed (lecuyer_state *s, ulong seed)
+{
+  s->x= seed;
+  s->y= seed;
+  s->z = 0;
+}
+
+
+/**
+ * Sets the seed of a Random Number Generator
+ * 
+ * @param rng a PnlRng
+ * @param seed an unsigned lon integer used to initialize the generator
+ */
 void pnl_rng_sseed (PnlRng *rng, ulong seed)
 {
   switch (rng->type)
@@ -1551,6 +1575,9 @@ void pnl_rng_sseed (PnlRng *rng, ulong seed)
       break;
     case PNL_RNG_SHUFL :
       pnl_shufl_sseed((shufl_state *)(rng->state), seed);
+      break;
+    case PNL_RNG_LECUYER :
+      pnl_lecuyer_sseed((lecuyer_state *)(rng->state), seed);
       break;
     case PNL_RNG_MERSENNE :
     case PNL_RNG_MERSENNE_RANDOM_SEED :

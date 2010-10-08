@@ -184,20 +184,23 @@ int main(int argc, char *argv[])
 
   if ( rank == 0 )
     {
-      printf ("--> DCMT\n");
+      printf ("--> DCMT\n"); fflush(stdout);
       send_dcmt ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
-      printf ("--> MERSENNE\n");
+      printf ("--> MERSENNE\n");fflush(stdout);
       send_rng (PNL_RNG_MERSENNE); fflush(stdout);  MPI_Barrier(MPI_COMM_WORLD);
-      printf ("--> MRGK3\n");
+      printf ("--> MRGK3\n"); fflush(stdout);
       send_rng (PNL_RNG_MRGK3); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
-      printf ("--> MRGK5\n");
+      printf ("--> MRGK5\n"); fflush(stdout);
       send_rng (PNL_RNG_MRGK5); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
-      printf ("--> SHUFL\n");
+      printf ("--> SHUFL\n"); fflush(stdout);
       send_rng (PNL_RNG_SHUFL); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      printf ("--> LECUYER\n"); fflush(stdout);
+      send_rng (PNL_RNG_LECUYER); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
     }
   else
     {
       recv_dcmt (); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
       recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
       recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
       recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);

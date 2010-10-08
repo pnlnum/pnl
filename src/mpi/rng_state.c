@@ -32,6 +32,7 @@ static int size_dcmt_state (const PnlRng *rng, MPI_Comm comm, int *size);
 static int size_mrgk3_state (const PnlRng *rng, MPI_Comm comm, int *size);
 static int size_mrgk5_state (const PnlRng *rng, MPI_Comm comm, int *size);
 static int size_shufl_state (const PnlRng *rng, MPI_Comm comm, int *size);
+static int size_lecuyer_state (const PnlRng *rng, MPI_Comm comm, int *size);
 
 static int pack_knuth_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_mt_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
@@ -39,6 +40,7 @@ static int pack_dcmt_state (const PnlRng *rng, void *buf, int bufsize, int *pos,
 static int pack_mrgk3_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_mrgk5_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_shufl_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
+static int pack_lecuyer_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 
 static int unpack_knuth_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_mt_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
@@ -46,8 +48,69 @@ static int unpack_dcmt_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI
 static int unpack_mrgk3_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_mrgk5_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_shufl_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
+static int unpack_lecuyer_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
+
+typedef int(pack_size_func)(const PnlRng *rng, MPI_Comm comm, int *size);
+typedef int(pack_func)(const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
+typedef int(unpack_func)(PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
+
+typedef struct
+{
+  PnlType t;
+  pack_size_func *pack_size;
+  pack_func      *pack;
+  unpack_func    *unpack;
+} PnlRngMPIFunc;
+
+#define MAKE_PROPERTY(TYPE, str) {PNL_RNG_##TYPE, size_##str##_state, pack_##str##_state, unpack_##str##_state}
+
+PnlRngMPIFunc rng_pack_func[] =
+  {
+    MAKE_PROPERTY(KNUTH,knuth),
+    MAKE_PROPERTY(MERSENNE,mt),
+    MAKE_PROPERTY(DCMT,dcmt),
+    MAKE_PROPERTY(MRGK3,mrgk3),
+    MAKE_PROPERTY(MRGK5,mrgk5),
+    MAKE_PROPERTY(SHUFL,shufl),
+    MAKE_PROPERTY(LECUYER,lecuyer),
+    {PNL_RNG_NULL, NULL, NULL, NULL}
+  };
 
 
+static PnlRngMPIFunc* lookup (PnlType t)
+{
+  int i;
+  while ( rng_pack_func[i].t != PNL_RNG_NULL )
+    {
+      if (  rng_pack_func[i].t == t ) return &(rng_pack_func[i]);
+      i++;
+    }
+  return NULL;
+}
+  
+
+int pnl_rng_state_mpi_pack_size (const PnlRng *rng, MPI_Comm comm, int *size)
+{
+  PnlRngMPIFunc *property;
+  property = lookup (rng->type);
+  return (*(property->pack_size)) (rng, comm, size);
+}
+
+int pnl_rng_state_mpi_pack (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
+{
+  PnlRngMPIFunc *property;
+  property = lookup (rng->type);
+  return (*(property->pack)) (rng, buf, bufsize, pos, comm);
+}
+
+int pnl_rng_state_mpi_unpack (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
+{
+  PnlRngMPIFunc *property;
+  property = lookup (rng->type);
+  return (*(property->unpack)) (rng, buf, bufsize, pos, comm);
+}
+
+  
 static int size_knuth_state (const PnlRng *rng, MPI_Comm comm, int *size)
 {
   int info, count;
@@ -88,6 +151,16 @@ static int size_shufl_state (const PnlRng *rng, MPI_Comm comm, int *size)
   *size = 0;
 
   if((info=MPI_Pack_size(34,MPI_LONG, comm,&count))) return(info);
+  *size += count;
+  return info;
+}
+
+static int size_lecuyer_state (const PnlRng *rng, MPI_Comm comm, int *size)
+{
+  int info, count;
+  *size = 0;
+
+  if((info=MPI_Pack_size(35,MPI_LONG, comm,&count))) return(info);
   *size += count;
   return info;
 }
@@ -151,6 +224,14 @@ static int pack_shufl_state (const PnlRng *rng, void *buf, int bufsize, int *pos
   int info;
   shufl_state *s = (shufl_state *)(rng->state);
   if ((info=MPI_Pack(s,34,MPI_LONG,buf,bufsize,pos,comm))) return info;
+  return info;
+}
+
+static int pack_lecuyer_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
+{
+  int info;
+  lecuyer_state *s = (lecuyer_state *)(rng->state);
+  if ((info=MPI_Pack(s,35,MPI_LONG,buf,bufsize,pos,comm))) return info;
   return info;
 }
 
@@ -222,6 +303,15 @@ static int unpack_shufl_state (PnlRng *rng, void *buf, int bufsize, int *pos, MP
   return info;
 }
 
+static int unpack_lecuyer_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
+{
+  int info;
+  lecuyer_state *s = (lecuyer_state *)(rng->state);
+  if ((info=MPI_Unpack(buf,bufsize,pos,s,35,MPI_LONG,comm))) return info;
+  return info;
+}
+
+
 static int unpack_mt_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
   int info;
@@ -255,81 +345,3 @@ static int unpack_dcmt_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI
 }
 
 
-
-int pnl_rng_state_mpi_pack_size (const PnlRng *rng, MPI_Comm comm, int *size)
-{
-  switch (rng->type)
-    {
-    case PNL_RNG_KNUTH:
-      return size_knuth_state (rng, comm, size);
-      break;
-    case PNL_RNG_MRGK3:
-      return size_mrgk3_state (rng, comm, size);
-      break;
-    case PNL_RNG_MRGK5:
-      return size_mrgk5_state (rng, comm, size);
-      break;
-    case PNL_RNG_SHUFL:
-      return size_shufl_state (rng, comm, size);
-      break;
-    case PNL_RNG_MERSENNE:
-      return size_mt_state (rng, comm, size);
-      break;
-    case PNL_RNG_DCMT:
-      return size_dcmt_state (rng, comm, size);
-      break;
-    }
-  return MPI_ERR_TYPE;
-}
-
-int pnl_rng_state_mpi_pack (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
-{
-  switch (rng->type)
-    {
-    case PNL_RNG_KNUTH:
-      return pack_knuth_state (rng, buf, bufsize, pos, comm);
-      break;
-    case PNL_RNG_MRGK3:
-      return pack_mrgk3_state (rng, buf, bufsize, pos, comm);
-      break;
-    case PNL_RNG_MRGK5:
-      return pack_mrgk5_state (rng, buf, bufsize, pos, comm);
-      break;
-    case PNL_RNG_SHUFL:
-      return pack_shufl_state (rng, buf, bufsize, pos, comm);
-      break;
-    case PNL_RNG_MERSENNE:
-      return pack_mt_state (rng, buf, bufsize, pos, comm);
-      break;
-    case PNL_RNG_DCMT:
-      return pack_dcmt_state (rng, buf, bufsize, pos, comm);
-      break;
-    }
-  return MPI_ERR_TYPE;
-}
-
-int pnl_rng_state_mpi_unpack (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
-{
-  switch (rng->type)
-    {
-    case PNL_RNG_KNUTH:
-      return unpack_knuth_state (rng, buf, bufsize, pos, comm);
-      break;
-    case PNL_RNG_MRGK3:
-      return unpack_mrgk3_state (rng, buf, bufsize, pos, comm);
-      break;
-    case PNL_RNG_MRGK5:
-      return unpack_mrgk5_state (rng, buf, bufsize, pos, comm);
-      break;
-    case PNL_RNG_SHUFL:
-      return unpack_shufl_state (rng, buf, bufsize, pos, comm);
-      break;
-    case PNL_RNG_MERSENNE:
-      return unpack_mt_state (rng, buf, bufsize, pos, comm);
-      break;
-    case PNL_RNG_DCMT:
-      return unpack_dcmt_state (rng, buf, bufsize, pos, comm);
-      break;
-    }
-  return MPI_ERR_TYPE;
-}

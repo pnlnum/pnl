@@ -176,6 +176,12 @@ typedef struct
   long x;
 } shufl_state;
 
+typedef struct
+{
+  long x, y, z;
+  long t[32];     /* 32 is the size of a computer word */
+} lecuyer_state;
+
 /*
  * MT
  */
