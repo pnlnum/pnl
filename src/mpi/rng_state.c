@@ -83,7 +83,7 @@ PnlRngMPIFunc rng_pack_func[] =
 
 static PnlRngMPIFunc* lookup (PnlType t)
 {
-  int i;
+  int i = 0;
   while ( rng_pack_func[i].t != PNL_RNG_NULL )
     {
       if (  rng_pack_func[i].t == t ) return &(rng_pack_func[i]);
