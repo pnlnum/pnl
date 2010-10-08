@@ -182,6 +182,12 @@ typedef struct
   long t[32];     /* 32 is the size of a computer word */
 } lecuyer_state;
 
+typedef struct
+{
+  ulong u[3];
+  ulong a;
+} tausworthe_state;
+
 /*
  * MT
  */

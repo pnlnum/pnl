@@ -196,10 +196,13 @@ int main(int argc, char *argv[])
       send_rng (PNL_RNG_SHUFL); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
       printf ("--> LECUYER\n"); fflush(stdout);
       send_rng (PNL_RNG_LECUYER); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      printf ("--> TAUSWORTHE\n"); fflush(stdout);
+      send_rng (PNL_RNG_TAUSWORTHE); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
     }
   else
     {
       recv_dcmt (); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
       recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
       recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
       recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);

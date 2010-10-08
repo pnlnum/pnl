@@ -249,11 +249,11 @@ static void SHUFL(PnlRng *rng,double *sample)
       /* After 8 "warm-ups", initialisation of the shuffle table */
       for (j= 39; j>= 0; j--)
         {
-          hi= s->x/Q;
           /*Schrage's method to avoid overflows */
-          s->x= A*(s->x- hi*Q)- R*hi; 
-          if (s->x < 0) s->x+= M;
-          if (j< 32) s->t[j]= s->x;
+          hi = s->x/Q;
+          s->x = A*(s->x- hi*Q)- R*hi; 
+          if (s->x < 0) s->x += M;
+          if (j< 32) s->t[j] = s->x;
         }
       s->y= s->t[0];                    
     }
@@ -261,17 +261,17 @@ static void SHUFL(PnlRng *rng,double *sample)
 
 
   /* For each call to the sequence, computation of a new point */
-  hi= s->x/Q;
-  s->x= A*(s->x-hi*Q)- R*hi;
+  hi = s->x/Q;
+  s->x = A*(s->x-hi*Q) - R*hi;
   if (s->x < 0) s->x += M;
 
   /* Shuffling procedure of Bayes & Durham */
   /* Index j dependent on the last point */
-  j= s->y/N1;
+  j = s->y/N1;
   /* Next point dependent on j */
-  s->y= s->t[j];
+  s->y = s->t[j];
 
-  s->t[j]= s->x;
+  s->t[j] = s->x;
   *sample = (double) s->y / (double) M; 
 }
 
@@ -305,9 +305,6 @@ static void LECUYER(PnlRng *rng,double *sample)
   /* First call to the sequence */
   if (rng->counter == 1)
     {
-      s->x= 437651926;
-      s->y= s->x;
-
       /* After 8 "warm-ups", initialisation of the shuffle table */
       for (j= 39; j>= 0; j--)
         {
@@ -364,31 +361,21 @@ static void LECUYER(PnlRng *rng,double *sample)
    Algorithm based on a prime polynomial : 
    here we choose x^18 + x^5 + x^2 + x + 1 . */
 /* ---------------------------------------------------- */
-static int bit_random(void)
+static int bit_random(tausworthe_state *s)
 {
-  static int compt = 1;
-  int degre = 18;
-  static unsigned long a;
   unsigned long new_bit;
-
-  /* Initialisation for the n first values */
-  /* random number over [1, 2^18] ; 2^18= 262144 */
-  if(compt == 1)
-    {
-      a= 176355;
-    }
-  compt++;
+  const const int degre = 18;
 
   /* Next bit calculation by the recurrence relation  */
-  new_bit= (a & (1<<17)) >> 17
-    ^ (a & (1<<4)) >> 4
-    ^ (a & (1<<1)) >> 1
-    ^ (a & 1);
-  a <<= 1;
+  new_bit= (s->a & (1<<17)) >> 17
+    ^ (s->a & (1<<4)) >> 4
+    ^ (s->a & (1<<1)) >> 1
+    ^ (s->a & 1);
+  s->a <<= 1;
   /* The new bit is shift on the right */
-  a ^= new_bit;
+  s->a ^= new_bit;
   /* The most left bit is put to 0 */
-  a ^= (1 << degre);
+  s->a ^= (1 << degre);
 
   return((int)new_bit);
 }
@@ -398,15 +385,15 @@ static int bit_random(void)
 /* --------------------------------------------------------------- */
 /* Generation of a word of k random bits. */
 /* --------------------------------------------------------------- */
-static unsigned long random_word(int k)
+static unsigned long random_word(int k, tausworthe_state *s)
 {
   int i, bit;
   unsigned long mot;
 
   mot= 0;
-  for(i= 0; i< k; i++)
+  for ( i=0 ; i<k ; i++ )
     {
-      bit= bit_random();
+      bit= bit_random(s);
       mot= (mot<<1) ^ bit;
     }
   return(mot);
@@ -431,46 +418,36 @@ static unsigned long random_word(int k)
 static void TAUS(PnlRng *rng,double *sample)
 {
   int i;
-  int L= 32;
-  static unsigned long u[3];
-  static unsigned long c[3];
   unsigned long b;
-  static int k[3], q[3];
-  static int s[3], r[3], t[3];
+  tausworthe_state *st;
+
+  /* Choice of the parameters to have ME-CF generators (cf L'Ecuyer) */
+  static const int k[3] = { 31, 29, 28};
+  static const int q[3] = { 13, 2 , 3};
+  static const int s[3] = { 12, 4 , 17};
+  static const int t[3] = { 19, 25, 11 }; /* t = k - s */
+  /* constant c : k bits to one and (L-k) bits to zero */
+  /* c[j]= 2^32 - 2^(L-k[j]) */
+  static const unsigned long c[3] = { 4294967294, 4294967288, 4294967280};
   unsigned long v= 0;
+  const int L= 32;
+  st = (tausworthe_state *)(rng->state);
 
   /* First call to the sequence. Initialisation */
   if (rng->counter == 1) 
     {
-      /* Choice of the parameters to have ME-CF generators (cf L'Ecuyer) */
-      k[0]= 31; q[0]= 13; s[0]= 12;
-      r[0]= k[0]- q[0]; t[0]= k[0]- s[0];
-
-      k[1]= 29; q[1]= 2; s[1]= 4;
-      r[1]= k[1]- q[1]; t[1]= k[1]- s[1];
-
-      k[2]= 28; q[2]= 3; s[2]= 17;
-      r[2]= k[2]- q[2]; t[2]= k[2]-s[2];
-
-      /* constant c : k bits to one and (L-k) bits to zero */
-      /* c[j]= 2^32 - 2^(L-k[j]) */
-      c[0]= 4294967294ul;
-      c[1]= 4294967288ul;
-      c[2]= 4294967280ul;
-
       /* initialisation of each generator */
-      u[0]= 0; u[1]= 0; u[2]= 0;
       for(i= 0; i< 3; i++)
         {
           /* The first k bits are chosen randomly */
-          u[i]= random_word(k[i]);
+          st->u[i]= random_word(k[i], st);
           /* The next L-k bits are initially fixed to zero */
-          u[i] <<= (L- k[i]);  
+          st->u[i] <<= (L- k[i]);  
           /* Now they are computed with the recurrence on u */
-          b= u[i] << q[i];
-          b ^= u[i];
+          b= st->u[i] << q[i];
+          b ^= st->u[i];
           b >>= k[i];
-          u[i] ^= b;
+          st->u[i] ^= b;
         }
     }
 
@@ -479,16 +456,15 @@ static void TAUS(PnlRng *rng,double *sample)
     { 
       /* Calculus of the next points for the 3 generators */
       /* 6 steps explained by L'Ecuyer */
-      b=((u[i]<<q[i]) & TAUS_MASK) ^ u[i];         /* Steps 1 and 2 */
-      b >>= t[i];                    /* Step 3 */
-      u[i]= ((u[i] & c[i]) << s[i]) & TAUS_MASK ;   /* Steps 4 et 5 */
-      u[i] ^= b;                     /* Step 6 */
-      /* Combination : XOR between the J generators */
-      v^= u[i];
+      b=((st->u[i]<<q[i]) & TAUS_MASK) ^ st->u[i];         /* Steps 1 and 2 */
+      b >>= t[i];                                          /* Step 3 */
+      st->u[i]= ((st->u[i] & c[i]) << s[i]) & TAUS_MASK ;  /* Steps 4 et 5 */
+      st->u[i] ^= b;                                       /* Step 6 */
+      v^= st->u[i];       /* Combination : XOR between the J generators */
     }
 
   /* Normalization by 2^32 */
-  *sample=v / 4294967296.0;
+  *sample = v / 4294967296.0;
   rng->counter++; 
 }
 
@@ -1055,6 +1031,7 @@ static mrgk3_state mrgk3_st;
 static mrgk5_state mrgk5_st;
 static shufl_state shufl_st;
 static lecuyer_state lecuyer_st;
+static tausworthe_state tausworthe_st;
 static mt_state mt_st1;
 static mt_state mt_st2;
 
@@ -1092,7 +1069,7 @@ PnlRng PnlRngTausworthe =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_TAUSWORTHE,&TAUS,
-    MC,0, 0,0,0,0,NULL
+    MC,0, 0,0,0,sizeof(tausworthe_state),&tausworthe_st
   };
 PnlRng PnlRngMersenne = 
   {
@@ -1221,6 +1198,12 @@ int pnl_rand_init (int type_generator, int dimension, long samples)
     case PNL_RNG_SHUFL:
       pnl_rand_sseed (type_generator, 1043618065);
       break;
+    case PNL_RNG_LECUYER:
+      pnl_rand_sseed (type_generator, 437651926);
+      break;
+    case PNL_RNG_TAUSWORTHE:
+      pnl_rand_sseed (type_generator, 176355);
+      break;
     case PNL_RNG_MERSENNE:
       pnl_rand_sseed (type_generator, 0);
       break;
@@ -1228,7 +1211,7 @@ int pnl_rand_init (int type_generator, int dimension, long samples)
       pnl_rand_sseed (type_generator, time(NULL));
       break;
     case PNL_RNG_DCMT:
-      pnl_dcmt_sseed ((dcmt_state *)(rng->state), 1234);
+      pnl_rand_sseed (type_generator, 1234);
       break;
       /*
        * Check if dimension > max_dim for QMC
@@ -1454,6 +1437,12 @@ PnlRng* pnl_rng_create (int type)
       rng->size_state = sizeof(lecuyer_state);
       rng->state = malloc(rng->size_state);
       break;
+    case PNL_RNG_TAUSWORTHE:
+      rng->Compute = TAUS;
+      rng->rand_or_quasi = MC;
+      rng->size_state = sizeof(tausworthe_state);
+      rng->state = malloc(rng->size_state);
+      break;
     case PNL_RNG_MERSENNE:
       rng->Compute = MERSENNE;
       rng->rand_or_quasi = MC;
@@ -1542,15 +1531,23 @@ static void pnl_mrgk5_sseed (mrgk5_state *s, ulong seed)
 
 static void pnl_shufl_sseed (shufl_state *s, ulong seed)
 {
-  s->x= seed;
+  s->x= seed % 2147483647; /* 2**31 - 1 */
   s->y = 0;
 }
 
 static void pnl_lecuyer_sseed (lecuyer_state *s, ulong seed)
 {
-  s->x= seed;
-  s->y= seed;
+  s->x= seed % 2147483647;   /* 2**31 - 1   */ 
+  s->y= seed % 2147483399;   /* 2**31 - 249 */
   s->z = 0;
+}
+
+static void pnl_tausworthe_sseed (tausworthe_state *s, ulong seed)
+{
+  /* Initialisation for the n first values */
+  /* random number over [1, 2^18] ; 2^18= 262144 */
+  s->a = seed % 262144;
+  if ( s->a == 0 ) s->a = 1;
 }
 
 
@@ -1578,6 +1575,9 @@ void pnl_rng_sseed (PnlRng *rng, ulong seed)
       break;
     case PNL_RNG_LECUYER :
       pnl_lecuyer_sseed((lecuyer_state *)(rng->state), seed);
+      break;
+    case PNL_RNG_TAUSWORTHE :
+      pnl_tausworthe_sseed((tausworthe_state *)(rng->state), seed);
       break;
     case PNL_RNG_MERSENNE :
     case PNL_RNG_MERSENNE_RANDOM_SEED :

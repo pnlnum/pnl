@@ -32,6 +32,7 @@ static int size_dcmt_state (const PnlRng *rng, MPI_Comm comm, int *size);
 static int size_mrgk3_state (const PnlRng *rng, MPI_Comm comm, int *size);
 static int size_mrgk5_state (const PnlRng *rng, MPI_Comm comm, int *size);
 static int size_shufl_state (const PnlRng *rng, MPI_Comm comm, int *size);
+static int size_tausworthe_state (const PnlRng *rng, MPI_Comm comm, int *size);
 static int size_lecuyer_state (const PnlRng *rng, MPI_Comm comm, int *size);
 
 static int pack_knuth_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
@@ -41,6 +42,7 @@ static int pack_mrgk3_state (const PnlRng *rng, void *buf, int bufsize, int *pos
 static int pack_mrgk5_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_shufl_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_lecuyer_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
+static int pack_tausworthe_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 
 static int unpack_knuth_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_mt_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
@@ -49,6 +51,7 @@ static int unpack_mrgk3_state (PnlRng *rng, void *buf, int bufsize, int *pos, MP
 static int unpack_mrgk5_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_shufl_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_lecuyer_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
+static int unpack_tausworthe_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 
 typedef int(pack_size_func)(const PnlRng *rng, MPI_Comm comm, int *size);
 typedef int(pack_func)(const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
@@ -73,6 +76,7 @@ PnlRngMPIFunc rng_pack_func[] =
     MAKE_PROPERTY(MRGK5,mrgk5),
     MAKE_PROPERTY(SHUFL,shufl),
     MAKE_PROPERTY(LECUYER,lecuyer),
+    MAKE_PROPERTY(TAUSWORTHE,tausworthe),
     {PNL_RNG_NULL, NULL, NULL, NULL}
   };
 
@@ -165,6 +169,16 @@ static int size_lecuyer_state (const PnlRng *rng, MPI_Comm comm, int *size)
   return info;
 }
 
+static int size_tausworthe_state (const PnlRng *rng, MPI_Comm comm, int *size)
+{
+  int info, count;
+  *size = 0;
+
+  if((info=MPI_Pack_size(4,MPI_UNSIGNED_LONG, comm,&count))) return(info);
+  *size += count;
+  return info;
+}
+
 
 static int size_mt_state (const PnlRng *rng, MPI_Comm comm, int *size)
 {
@@ -232,6 +246,14 @@ static int pack_lecuyer_state (const PnlRng *rng, void *buf, int bufsize, int *p
   int info;
   lecuyer_state *s = (lecuyer_state *)(rng->state);
   if ((info=MPI_Pack(s,35,MPI_LONG,buf,bufsize,pos,comm))) return info;
+  return info;
+}
+
+static int pack_tausworthe_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
+{
+  int info;
+  tausworthe_state *s = (tausworthe_state *)(rng->state);
+  if ((info=MPI_Pack(s,4,MPI_UNSIGNED_LONG,buf,bufsize,pos,comm))) return info;
   return info;
 }
 
@@ -308,6 +330,14 @@ static int unpack_lecuyer_state (PnlRng *rng, void *buf, int bufsize, int *pos, 
   int info;
   lecuyer_state *s = (lecuyer_state *)(rng->state);
   if ((info=MPI_Unpack(buf,bufsize,pos,s,35,MPI_LONG,comm))) return info;
+  return info;
+}
+
+static int unpack_tausworthe_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
+{
+  int info;
+  tausworthe_state *s = (tausworthe_state *)(rng->state);
+  if ((info=MPI_Unpack(buf,bufsize,pos,s,4,MPI_UNSIGNED_LONG,comm))) return info;
   return info;
 }
 
