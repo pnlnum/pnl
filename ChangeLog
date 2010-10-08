@@ -1,3 +1,7 @@
+08-10-2010 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* All true random number generators are now reentrant
+
 06-10-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* PNL_RNG_KNUTH is now reentrant
