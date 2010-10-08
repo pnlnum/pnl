@@ -428,7 +428,7 @@ static void TAUS(PnlRng *rng,double *sample)
   static const int t[3] = { 19, 25, 11 }; /* t = k - s */
   /* constant c : k bits to one and (L-k) bits to zero */
   /* c[j]= 2^32 - 2^(L-k[j]) */
-  static const unsigned long c[3] = { 4294967294, 4294967288, 4294967280};
+  static const unsigned long c[3] = { 4294967294UL, 4294967288UL, 4294967280UL};
   unsigned long v= 0;
   const int L= 32;
   st = (tausworthe_state *)(rng->state);
