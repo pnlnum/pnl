@@ -246,7 +246,7 @@ static void SHUFL(PnlRng *rng,double *sample)
   /* First call to the sequence */
   if (rng->counter == 1)
     {
-      /* After 8 "warm-ups", initialisation of the shuffle table */
+      /* initialisation of the shuffle table */
       for (j= 39; j>= 0; j--)
         {
           /*Schrage's method to avoid overflows */
@@ -259,8 +259,6 @@ static void SHUFL(PnlRng *rng,double *sample)
     }
   rng->counter++;
 
-
-  /* For each call to the sequence, computation of a new point */
   hi = s->x/Q;
   s->x = A*(s->x-hi*Q) - R*hi;
   if (s->x < 0) s->x += M;
@@ -305,7 +303,7 @@ static void LECUYER(PnlRng *rng,double *sample)
   /* First call to the sequence */
   if (rng->counter == 1)
     {
-      /* After 8 "warm-ups", initialisation of the shuffle table */
+      /* initialisation of the shuffle table */
       for (j= 39; j>= 0; j--)
         {
           /* Park & Miller's generator */
@@ -320,7 +318,6 @@ static void LECUYER(PnlRng *rng,double *sample)
     }
   rng->counter++;              
 
-  /* For each call to the sequence, computation of a new point */
   /* First generator */
   hi= s->x/Q1;
   s->x= A1*(s->x-hi*Q1) - R1*hi;
@@ -355,6 +352,7 @@ static void LECUYER(PnlRng *rng,double *sample)
 /* ------------------------ */
 
 
+#define BIT32_MASK 0xffffffffUL
 
 /* ---------------------------------------------------- */
 /* Generation of a random bit
@@ -371,7 +369,7 @@ static int bit_random(tausworthe_state *s)
     ^ (s->a & (1<<4)) >> 4
     ^ (s->a & (1<<1)) >> 1
     ^ (s->a & 1);
-  s->a <<= 1;
+  s->a = (s->a << 1) & BIT32_MASK;
   /* The new bit is shift on the right */
   s->a ^= new_bit;
   /* The most left bit is put to 0 */
@@ -394,7 +392,7 @@ static unsigned long random_word(int k, tausworthe_state *s)
   for ( i=0 ; i<k ; i++ )
     {
       bit= bit_random(s);
-      mot= (mot<<1) ^ bit;
+      mot= ((mot<<1) & BIT32_MASK) ^ bit;
     }
   return(mot);
 }
@@ -413,7 +411,6 @@ static unsigned long random_word(int k, tausworthe_state *s)
     work on 64 bit machines : this mask enables to drop 
     the 32 highest bits on 64 bit machines*/
 /* ---------------------------------------------------------------- */
-#define TAUS_MASK 0xffffffffUL
 
 static void TAUS(PnlRng *rng,double *sample)
 {
@@ -442,11 +439,9 @@ static void TAUS(PnlRng *rng,double *sample)
           /* The first k bits are chosen randomly */
           st->u[i]= random_word(k[i], st);
           /* The next L-k bits are initially fixed to zero */
-          st->u[i] <<= (L- k[i]);  
+          st->u[i] = (st->u[i] << (L- k[i])) & BIT32_MASK;  
           /* Now they are computed with the recurrence on u */
-          b= st->u[i] << q[i];
-          b ^= st->u[i];
-          b >>= k[i];
+          b= (((st->u[i] << q[i]) & BIT32_MASK) ^ st->u[i]) >> k[i];
           st->u[i] ^= b;
         }
     }
@@ -456,11 +451,9 @@ static void TAUS(PnlRng *rng,double *sample)
     { 
       /* Calculus of the next points for the 3 generators */
       /* 6 steps explained by L'Ecuyer */
-      b=((st->u[i]<<q[i]) & TAUS_MASK) ^ st->u[i];         /* Steps 1 and 2 */
-      b >>= t[i];                                          /* Step 3 */
-      st->u[i]= ((st->u[i] & c[i]) << s[i]) & TAUS_MASK ;  /* Steps 4 et 5 */
-      st->u[i] ^= b;                                       /* Step 6 */
-      v^= st->u[i];       /* Combination : XOR between the J generators */
+      b = (((st->u[i]<<q[i]) & BIT32_MASK) ^ st->u[i]) >> t[i]; 
+      st->u[i] = (((st->u[i] & c[i]) << s[i]) & BIT32_MASK ) ^ b;
+      v ^= st->u[i];       /* Combination : XOR between the J generators */
     }
 
   /* Normalization by 2^32 */
