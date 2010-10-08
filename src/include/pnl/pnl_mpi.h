@@ -3,6 +3,7 @@
 
 #include <mpi.h>
 #include "pnl/pnl_object.h"
+#include "pnl/pnl_random.h"
 
 /**
  * \defgroup PnlMpi MPI bindings
