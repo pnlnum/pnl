@@ -8,8 +8,6 @@ manual:
 	cat ../pnl.css >> pnl-manual.css
 
 
-	#  cp ../pnl.css pnl-manual.css
-
 index:
 	tex '\def\filename{{pnl-manual}{idx}{4dx}{ind}} \input  idxmake.4ht'
 	makeindex -o pnl-manual.ind pnl-manual.4dx
