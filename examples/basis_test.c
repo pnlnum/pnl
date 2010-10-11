@@ -235,6 +235,9 @@ static void derive_approx_fonction(PnlBasis *B, PnlVect *D, PnlVect *alpha, doub
   LET(D,0) = sum0;
   LET(D,2) = PNL_MGET(Hes, 1, 1);
   LET(D,4) = PNL_MGET(Hes, 0, 1);
+
+  pnl_mat_free (&Hes);
+  pnl_vect_free (&grad);
   
 }
 

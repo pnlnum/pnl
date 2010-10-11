@@ -215,7 +215,7 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_file) (const char * file)
   return v;
 }
 
-/** 
+/**
  * Extracts a sub vector from a vector V. The components to be extracted are
  * sepcified by the indices listed in the vector ind
  * 
@@ -223,7 +223,7 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_file) (const char * file)
  * @param V a vector 
  * @param ind a vector of integers representing the list of indices to be extracted
  */
-void FUNCTION(pnl_vect,extract_subvect)(TYPE(PnlVect) *V_sub, const TYPE(PnlVect) *V, const PnlVectInt *ind)
+void FUNCTION(pnl_vect,extract_subvect_with_ind)(TYPE(PnlVect) *V_sub, const TYPE(PnlVect) *V, const PnlVectInt *ind)
 {
   int i;
   FUNCTION(pnl_vect,resize)(V_sub, ind->size);
@@ -234,7 +234,27 @@ void FUNCTION(pnl_vect,extract_subvect)(TYPE(PnlVect) *V_sub, const TYPE(PnlVect
     }
 }
 
-/** 
+/**
+ * Extracts a sub vector from a vector V. The components to be extracted are
+ * (i:i+len)
+ * 
+ * @param V_sub (output) V(i:i+len)
+ * @param V a vector 
+ * @param i starting point of extraction
+ * @param len length of extraction
+ */
+void FUNCTION(pnl_vect,extract_subvect)(TYPE(PnlVect) *V_sub, const TYPE(PnlVect) *V, int i, int len)
+{
+  int j;
+  FUNCTION(pnl_vect,resize)(V_sub, len);
+  PNL_CHECK (V->size <= len + i, "index exceeded", "pnl_vect_create_subvect");
+  for ( j=0 ; j<len ; j++ )
+    {
+      PNL_LET (V_sub, j) = PNL_GET(V, j+i);
+    }
+}
+
+/**
  * Extracts a sub vector from a vector V. The components to be extracted are
  * sepcified by the indices listed in the vector ind
  * 
@@ -242,11 +262,28 @@ void FUNCTION(pnl_vect,extract_subvect)(TYPE(PnlVect) *V_sub, const TYPE(PnlVect
  * @param ind a vector of integers representing the list of indices to be extracted
  * @return V(ind(:))
  */
-TYPE(PnlVect)* FUNCTION(pnl_vect,create_subvect) (const TYPE(PnlVect) *V, const PnlVectInt *ind)
+TYPE(PnlVect)* FUNCTION(pnl_vect,create_subvect_with_ind) (const TYPE(PnlVect) *V, const PnlVectInt *ind)
 {
   TYPE(PnlVect) *V_sub;
   V_sub  = FUNCTION(pnl_vect,create)(ind->size);
-  FUNCTION(pnl_vect,extract_subvect)(V_sub, V, ind); 
+  FUNCTION(pnl_vect,extract_subvect_with_ind)(V_sub, V, ind); 
+  return V_sub;
+}
+
+/**
+ * Extracts a sub vector from a vector V. The components to be extracted are
+ * (i:i+len)
+ * 
+ * @param V_sub (output) V(i:i+len)
+ * @param V a vector 
+ * @param i starting point of extraction
+ * @param len length of extraction
+ */
+TYPE(PnlVect)* FUNCTION(pnl_vect,create_subvect) (const TYPE(PnlVect) *V, int i, int len)
+{
+  TYPE(PnlVect) *V_sub;
+  V_sub  = FUNCTION(pnl_vect,new)();
+  FUNCTION(pnl_vect,extract_subvect)(V_sub, V, i, len); 
   return V_sub;
 }
 

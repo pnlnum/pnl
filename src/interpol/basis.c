@@ -926,20 +926,19 @@ void pnl_basis_eval_derivs (PnlBasis *basis, PnlVect *coef, double *x,
           PNL_LET(grad,j) = PNL_GET(grad, j) + a * aux * Df[j];
 
           /* diagonal terms of the Hessian matrix */
-          D2f = (basis->D2f) (x + k, PNL_MGET(basis->T, i, j));
-          PNL_MLET(hes,j,j) = PNL_MLET(hes,j,j) + a * aux * D2f;
+          D2f = (basis->D2f) (x + j, PNL_MGET(basis->T, i, j));
+          PNL_MLET(hes,j,j) = PNL_MGET(hes,j,j) + a * aux * D2f;
 
           /* non diagonal terms of the Hessian matrix */
-          aux = 1;
           for ( l=0 ; l<j ; l++)
             {
+              aux = 1;
               for ( k=0 ; k<l ; k++ ) aux *= f[k];
               for ( k=k+1 ; k<j ; k++ ) aux *= f[k];
               for ( k=k+1 ; k<n ; k++ ) aux *= f[k];
               
-              aux *= Df[j] * Df[l];
-              PNL_MLET(hes,j,l) = PNL_MLET(hes,j,l) + a * aux;
-              PNL_MLET(hes,l,j) = PNL_MLET(hes,j,l);
+              PNL_MLET(hes,j,l) = PNL_MGET(hes,j,l) + a * aux * Df[j] * Df[l];
+              PNL_MLET(hes,l,j) = PNL_MGET(hes,j,l);
             }
         }
     }

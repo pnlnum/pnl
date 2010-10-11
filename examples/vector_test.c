@@ -167,7 +167,7 @@ static void pnl_vect_subvect_test ()
   ind = pnl_vect_int_create (10);
   
   pnl_vect_find (ind, "v", ispos, v1);
-  v2 = pnl_vect_create_subvect (v1, ind);
+  v2 = pnl_vect_create_subvect_with_ind (v1, ind);
   printf ("v1 = "); pnl_vect_print_nsp (v1);
   printf ("find (v1 >= 0)\n");
   printf ("ind = "); pnl_vect_int_print_nsp (ind);
@@ -175,7 +175,7 @@ static void pnl_vect_subvect_test ()
   pnl_vect_free (&v2);
 
   pnl_vect_find (ind, "vv", islarger, v1, v3);
-  v2 = pnl_vect_create_subvect (v1, ind);
+  v2 = pnl_vect_create_subvect_with_ind (v1, ind);
   printf ("v1 = "); pnl_vect_print_nsp (v1);
   printf ("v3 = "); pnl_vect_print_nsp (v3);
   printf ("find (v1 >= v3)\n");

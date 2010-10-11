@@ -1091,6 +1091,33 @@ int FUNCTION(pnl_mat,find) (PnlVectInt *indi, PnlVectInt *indj, char* type, int(
 
 
 /**
+ * Extract a subblock from a matrix
+ *
+ * @param M_sub
+ * @param M
+ * @param i
+ * @param len_i
+ * @param j
+ * @param len_j
+ *
+ */
+void FUNCTION(pnl_mat,extract_subblock)(TYPE(PnlMat) *M_sub, const TYPE(PnlMat) *M, int i, int len_i, int j, int len_j)
+{
+  int k, l;
+  PNL_CHECK (i+len_i <= M->m, "size exceeded", "mat_subblock");
+  PNL_CHECK (j+len_j <= M->n, "size exceeded", "mat_subblock");
+  FUNCTION(pnl_mat,resize)(M_sub, len_i, len_j);
+
+  for ( k=0 ; k<len_i ; k++ )
+    {
+      for ( l=0 ; l<len_j ; l++ )
+        {
+          PNL_MLET(M_sub, k, l) = PNL_MGET (M, i + k, j + l);
+        }
+    }
+}
+
+/**
  * in-place matrix matrix addition
  *
  * @param lhs : left hand side matrix

@@ -115,12 +115,20 @@ the above table.
   \var{v} and the data are copied. Future modifications to \var{v} will not
   affect \var{clone}.
 
-\item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_subvect}{const
+\item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_subvect_with_ind}{const
   \refstruct{PnlVect} \ptr V, const \refstruct{PnlVectInt} \ptr ind}
   \sshortdescribe Creates a new vector containing \var{V(ind(:))}
-\item \describefun{void}{pnl_vect_extract_subvect}{\refstruct{PnlVect} \ptr
+
+\item \describefun{void}{pnl_vect_extract_subvect_with_ind}{\refstruct{PnlVect} \ptr
   V_sub, const \refstruct{PnlVect} \ptr V, const \refstruct{PnlVectInt} \ptr ind}
   \sshortdescribe On exit, \var{V_sub = V(ind(:))}
+
+\item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_subvect}{const
+    \refstruct{PnlVect} \ptr V, int i, int len}
+  \sshortdescribe Creates a new vector containing \var{V(i:i+len)}
+\item \describefun{void}{pnl_vect_extract_subvect}{\refstruct{PnlVect} \ptr
+  V_sub, const \refstruct{PnlVect} \ptr V, int i, int len}
+  \sshortdescribe On exit, \var{V_sub = V(i:i+len)}
 
 \item \describefun{void}{pnl_vect_free}{\refstruct{PnlVect} \ptr\ptr v}
   \sshortdescribe Frees a \refstruct{PnlVect} pointer and set the data pointer to NULL  
@@ -673,6 +681,12 @@ the above table.
   const \refstruct{PnlVectInt} \ptr indj}
   \sshortdescribe On exit, \var{V_sub = M(indi(:), indj(:))}. \var{indi} and
   \var{indj} must be of the same size.
+
+\item \describefun{void}{pnl_vect_extract_subblock}{\refstruct{PnlVect} \ptr
+    M_sub, const \refstruct{PnlMat} \ptr M, int i, int len_i, int j, int
+    len_j}
+  \sshortdescribe \var{M_sub = M(i:i+len_i, j:j+len_j)};
+  
 \end{itemize}  
 
 
