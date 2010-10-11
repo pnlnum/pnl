@@ -238,7 +238,7 @@ void FUNCTION(pnl_vect,extract_subvect_with_ind)(TYPE(PnlVect) *V_sub, const TYP
  * Extracts a sub vector from a vector V. The components to be extracted are
  * (i:i+len)
  * 
- * @param V_sub (output) V(i:i+len)
+ * @param V_sub (output) V(i:i+len-1)
  * @param V a vector 
  * @param i starting point of extraction
  * @param len length of extraction
@@ -274,7 +274,7 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_subvect_with_ind) (const TYPE(PnlVect) *
  * Extracts a sub vector from a vector V. The components to be extracted are
  * (i:i+len)
  * 
- * @param V_sub (output) V(i:i+len)
+ * @param V_sub (output) V(i:i+len-1)
  * @param V a vector 
  * @param i starting point of extraction
  * @param len length of extraction

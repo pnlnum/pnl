@@ -870,8 +870,9 @@ double pnl_basis_eval_D2 (PnlBasis *basis, PnlVect *coef, double *x, int i, int 
 }
 
 /**
- * Evaluates the second derivative with respect to x[i] and x[j] of a linear
- * combination of basis functions at x
+ * Evaluates the function, its gradient and Hessian matrix at x. The function is
+ * defined by  linear combination sum (coef .* f(x))
+
  *
  * @param coef a vector typically computed by pnl_basis_fit_ls
  * @param x the coordinates of the point at which to evaluate the function
@@ -880,7 +881,6 @@ double pnl_basis_eval_D2 (PnlBasis *basis, PnlVect *coef, double *x, int i, int 
  * @param grad contains the value of sum (coef .* Df(x)) on exit
  * @param hes contains the value of sum (coef .* D2 f(x)) on exit
  *
- * @return sum (coef .* D2_{i,j} f(x))
  */
 void pnl_basis_eval_derivs (PnlBasis *basis, PnlVect *coef, double *x,
                             double *val, PnlVect *grad, PnlMat *hes)

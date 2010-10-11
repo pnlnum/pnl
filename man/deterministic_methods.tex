@@ -346,7 +346,9 @@ $\alpha^\star \in \R^N$ which solves
     \sshortdescribe Computes the function, the gradient and the Hessian matrix
     of $\sum_{k=0}^n \var{coef}_k  P_k(\cdot)$ at the point \var{x}.
     On output, \var{fx} contains the value of the function, \var{Dfx} its
-    gradient and \var{D2fx} its Hessian matrix.
+    gradient and \var{D2fx} its Hessian matrix. This function is optimized and
+    performs much better than calling \reffun{pnl_basis_eval},
+    \reffun{pnl_basis_eval_D} and \reffun{pnl_basis_eval_D2} sequentially.
     
   \item \describefun{double}{pnl_basis_eval}{\refstruct{PnlBasis} \ptr
     P, \refstruct{PnlVect}\ptr  coef, double \ptr x}
