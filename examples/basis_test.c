@@ -228,7 +228,7 @@ static void pnl_basis_eval_test ()
   PnlMat *X;
   PnlVect *V,*x,*t,*D, *alpha;
   PnlBasis *basis;
-  int j,m,n;
+  int j,m,n,gen;
   double t0,x0;
 
   printf ("\n\n** Differentation of the regression **\n\n");
@@ -239,10 +239,12 @@ static void pnl_basis_eval_test ()
   t=pnl_vect_create(n);
   t0=0.5;
   x0=2.5;
+  gen = PNL_RNG_MERSENNE;
+  pnl_rand_init (gen, 1, 1);
   //on tire aléatoirement les points auxquels on va évaluer la fonction à
   //retrouver
-  pnl_vect_rand_uni(x,n,-5,4,7);
-  pnl_vect_rand_uni(t,n,0,1,7);
+  pnl_vect_rand_uni(x,n,-5,4,gen);
+  pnl_vect_rand_uni(t,n,0,1,gen);
   basis = pnl_basis_create (HERMITIAN, m, 2);
   alpha = pnl_vect_create (m);
   X = pnl_mat_create (n, 2);
