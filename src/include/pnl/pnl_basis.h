@@ -55,8 +55,12 @@ extern double pnl_basis_i ( PnlBasis *b, double *x, int i );
 extern double pnl_basis_eval (PnlBasis *basis, PnlVect *coef, double *x);
 extern double pnl_basis_eval_D (PnlBasis *basis, PnlVect *coef, double *x, int i);
 extern double pnl_basis_eval_D2 (PnlBasis *basis, PnlVect *coef, double *x, int i, int j);
+extern void pnl_basis_eval_derivs (PnlBasis *basis, PnlVect *coef, double *x,
+                                   double *val, PnlVect *grad, PnlMat *hes);
+
 
 /*@}*/
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

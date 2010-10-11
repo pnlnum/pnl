@@ -185,6 +185,11 @@ static double derive_x_fonction_a_retrouver(double t, double x)
   return (1-t)*2*x/5;
 }
 
+static double derive_xt_fonction_a_retrouver(double t, double x)
+{
+  return -2*x/5;
+}
+
 static double derive_xx_fonction_a_retrouver(double t, double x)
 {
   return (1-t)*2/5;
@@ -206,21 +211,31 @@ static void derive_approx_fonction(PnlBasis *B, PnlVect *D, PnlVect *alpha, doub
 {
   double sum0, sum1, sum2, sum3;
   double arg[2];
+  PnlMat *Hes = pnl_mat_new();
+  PnlVect *grad = pnl_vect_new();
   arg[0] = t; arg[1] = x;
   sum0=0.0;//calcule la valeur de la fonction
   sum1=0.0;//calcule la valeur de sa derivee en x
   sum2=0.0;//calcule la valeur de sa derivee seconde en x
   sum3=0.0;//calcule la valeur de sa derivee en t
 
-  sum0 = pnl_basis_eval (B, alpha, arg);
-  sum1 = pnl_basis_eval_D (B, alpha, arg, 1);
-  sum2 = pnl_basis_eval_D2 (B, alpha, arg, 1, 1);
-  sum3 = pnl_basis_eval_D (B, alpha, arg, 0);
+  /* sum0 = pnl_basis_eval (B, alpha, arg);
+   * sum1 = pnl_basis_eval_D (B, alpha, arg, 1);
+   * sum2 = pnl_basis_eval_D2 (B, alpha, arg, 1, 1);
+   * sum3 = pnl_basis_eval_D (B, alpha, arg, 0);
+   * 
+   * LET(D,0)=sum0;
+   * LET(D,1)=sum1;
+   * LET(D,2)=sum2;
+   * LET(D,3)=sum3; */
 
-  LET(D,0)=sum0;
-  LET(D,1)=sum1;
-  LET(D,2)=sum2;
-  LET(D,3)=sum3;
+  pnl_basis_eval_derivs (B, alpha, arg, &sum0, grad, Hes);
+  LET(D,3) = GET(grad,0);
+  LET(D,1) = GET(grad,1);
+  LET(D,0) = sum0;
+  LET(D,2) = PNL_MGET(Hes, 1, 1);
+  LET(D,4) = PNL_MGET(Hes, 0, 1);
+  
 }
 
 static void pnl_basis_eval_test ()
@@ -234,7 +249,7 @@ static void pnl_basis_eval_test ()
   printf ("\n\n** Differentation of the regression **\n\n");
   m=19;//nombre de polynomes
   n=50;
-  D=pnl_vect_create(4);
+  D=pnl_vect_create(5);
   x=pnl_vect_create(n);
   t=pnl_vect_create(n);
   t0=0.5;
@@ -278,6 +293,11 @@ static void pnl_basis_eval_test ()
          derive_xx_fonction_a_retrouver(t0,x0));
   printf("valeur approchee de la derivee seconde en espace de la fonction  :%f \n\n",
          pnl_vect_get(D,2));
+
+  printf("valeur exacte de la derivee seconde croisee : %f\n",
+         derive_xt_fonction_a_retrouver(t0,x0));
+  printf("valeur approchee de la derivee seconde croisee :%f \n\n",
+         pnl_vect_get(D,4));
 
   printf("valeur exacte de la derivee en temps fonction :%f\n",
          derive_t_fonction_a_retrouver(t0,x0));

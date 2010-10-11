@@ -340,14 +340,21 @@ $\alpha^\star \in \R^N$ which solves
     by the data \var{y} which is the vector of the values taken by the function
     at the points \var{x}.
 
-
+  \item \describefun{double}{pnl_basis_eval_derivs}{\refstruct{PnlBasis} \ptr
+      P, \refstruct{PnlVect}\ptr coef, double \ptr x, double \ptr fx,
+      \refstruct{PnlVect} \ptr Dfx, \refstruct{PnlMat} \ptr D2fx}
+    \sshortdescribe Computes the function, the gradient and the Hessian matrix
+    of $\sum_{k=0}^n \var{coef}_k  P_k(\cdot)$ at the point \var{x}.
+    On output, \var{fx} contains the value of the function, \var{Dfx} its
+    gradient and \var{D2fx} its Hessian matrix.
+    
   \item \describefun{double}{pnl_basis_eval}{\refstruct{PnlBasis} \ptr
     P, \refstruct{PnlVect}\ptr  coef, double \ptr x}
     \sshortdescribe Computes the linear combination of \var{P_k(x)} defined by
     \var{coef}. Given the coefficients computed by the function
     \reffun{pnl_basis_fit_ls}, this function returns $\sum_{k=0}^n
     \var{coef}_k  P_k(\var{x})$ where \var{x} is a C array of length
-    \var{nb_variates}.
+    \var{P->nb_variates}.
 
   \item \describefun{double}{pnl_basis_eval_D}{\refstruct{PnlBasis} \ptr
     P, \refstruct{PnlVect} \ptr  coef, double \ptr x, int i}

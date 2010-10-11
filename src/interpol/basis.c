@@ -28,11 +28,11 @@
 #include "pnl/pnl_mathtools.h"
 
 #ifndef PNL_RANGE_CHECK_OFF
-#define CHECK_NB_FUNC(coef, basis)                             \
-if ( coef->size != basis->nb_func )                             \
-{                                                               \
-  PNL_ERROR("Wrong number of coefficients", "pnl_basis_eval"); \
-}
+#define CHECK_NB_FUNC(coef, basis)                                  \
+  if ( coef->size != basis->nb_func )                               \
+    {                                                               \
+      PNL_ERROR("Wrong number of coefficients", "pnl_basis_eval");  \
+    }
 #else
 #define CHECK_NB_FUNC(coef, basis)
 #endif
@@ -235,68 +235,6 @@ static PnlMatInt* compute_tensor_from_degree (int degree, int nb_variates)
     }
 }
 
-/**
- * First order derivative
- *
- * @param b a basis
- * @param x the point at which to evaluate the first derivative
- * @param i the index of the basis element to differentiate
- * @param j the index of the variable w.r.t which we differentiate
- *
- * @return (D(b_i)/Dj)(x)
- */
-static double D_basis_i ( PnlBasis *b, double *x, int i, int j )
-{
-    int k;
-    double aux = 1;
-    for ( k=0 ; k < b->nb_variates ; k++ )
-      {
-        if ( k == j )
-          aux *= (b->Df) (x + k, PNL_MGET(b->T, i, k));
-        else
-          aux *= (b->f) (x + k, PNL_MGET(b->T, i, k));
-      }
-    return aux;
-}
-
-/**
- * Second order derivative
- *
- * @param b a basis
- * @param x the point at which to evaluate the first derivative
- * @param i the index of the basis element to differentiate
- * @param j1 the index of the first variable w.r.t which we differentiate
- * @param j2 the index of the second variable w.r.t which we differentiate
- *
- * @return (D(b_i)/(Dj1 Dj2))(x)
- */
-static double D2_basis_i (PnlBasis *b, double *x, int i, int j1, int j2)
-{
-  int k;
-  double aux = 1;
-  if (j1 == j2)
-    {
-      for ( k = 0 ; k < b->nb_variates ; k++ )
-        {
-          if ( k == j1 )
-            aux *= (b->D2f) (x + k, PNL_MGET(b->T, i, k));
-          else
-            aux *= (b->f) (x + k, PNL_MGET(b->T, i, k));
-        }
-    }
-  else
-    {
-      for ( k = 0 ; k < b->nb_variates ; k++ )
-        {
-          if ( k == j1 || k == j2 )
-            aux *= (b->Df) (x + k, PNL_MGET(b->T, i, k));
-          else
-            aux *= (b->f) (x + k, PNL_MGET(b->T, i, k));
-        }
-
-    }
-  return aux;
-}
 
 
 /**
@@ -609,12 +547,12 @@ static double D2TchebychevD1(double *x, int n)
  */
 
 enum_member _reg_basis [] =
-{
+  {
     { "Canonical", CANONICAL},
     { "Hermite", HERMITIAN},
     { "Tchebychev", TCHEBYCHEV},
     { NULL, NULLINT},
-};
+  };
 
 DEFINE_ENUM(PnlBases, _reg_basis);
 
@@ -673,23 +611,23 @@ void  pnl_basis_set_from_tensor (PnlBasis *b, int index, PnlMatInt *T)
 
   switch ( index )
     {
-      case CANONICAL:
-        b->f = CanonicalD1;
-        b->Df = DCanonicalD1;
-        b->D2f = D2CanonicalD1;
-        break;
-      case HERMITIAN:
-        b->f = HermiteD1;
-        b->Df = DHermiteD1;
-        b->D2f = D2HermiteD1;
-        break;
-      case TCHEBYCHEV:
-        b->f = TchebychevD1;
-        b->Df = DTchebychevD1;
-        b->D2f = D2TchebychevD1;
-        break;
-      default:
-        PNL_ERROR ("unknow basis", "pnl_basis_create");
+    case CANONICAL:
+      b->f = CanonicalD1;
+      b->Df = DCanonicalD1;
+      b->D2f = D2CanonicalD1;
+      break;
+    case HERMITIAN:
+      b->f = HermiteD1;
+      b->Df = DHermiteD1;
+      b->D2f = D2HermiteD1;
+      break;
+    case TCHEBYCHEV:
+      b->f = TchebychevD1;
+      b->Df = DTchebychevD1;
+      b->D2f = D2TchebychevD1;
+      break;
+    default:
+      PNL_ERROR ("unknow basis", "pnl_basis_create");
     }
 }
 
@@ -792,6 +730,69 @@ double pnl_basis_i ( PnlBasis *b, double *x, int i )
 }
 
 /**
+ * First order derivative
+ *
+ * @param b a basis
+ * @param x the point at which to evaluate the first derivative
+ * @param i the index of the basis element to differentiate
+ * @param j the index of the variable w.r.t which we differentiate
+ *
+ * @return (D(b_i)/Dj)(x)
+ */
+static double D_basis_i ( PnlBasis *b, double *x, int i, int j )
+{
+  int k;
+  double aux = 1;
+  for ( k=0 ; k < b->nb_variates ; k++ )
+    {
+      if ( k == j )
+        aux *= (b->Df) (x + k, PNL_MGET(b->T, i, k));
+      else
+        aux *= (b->f) (x + k, PNL_MGET(b->T, i, k));
+    }
+  return aux;
+}
+
+/**
+ * Second order derivative
+ *
+ * @param b a basis
+ * @param x the point at which to evaluate the first derivative
+ * @param i the index of the basis element to differentiate
+ * @param j1 the index of the first variable w.r.t which we differentiate
+ * @param j2 the index of the second variable w.r.t which we differentiate
+ *
+ * @return (D(b_i)/(Dj1 Dj2))(x)
+ */
+static double D2_basis_i (PnlBasis *b, double *x, int i, int j1, int j2)
+{
+  int k;
+  double aux = 1;
+  if (j1 == j2)
+    {
+      for ( k = 0 ; k < b->nb_variates ; k++ )
+        {
+          if ( k == j1 )
+            aux *= (b->D2f) (x + k, PNL_MGET(b->T, i, k));
+          else
+            aux *= (b->f) (x + k, PNL_MGET(b->T, i, k));
+        }
+    }
+  else
+    {
+      for ( k = 0 ; k < b->nb_variates ; k++ )
+        {
+          if ( k == j1 || k == j2 )
+            aux *= (b->Df) (x + k, PNL_MGET(b->T, i, k));
+          else
+            aux *= (b->f) (x + k, PNL_MGET(b->T, i, k));
+        }
+    }
+  return aux;
+}
+
+
+/**
  * Evaluates a linear combination of basis functions at x
  *
  * @param coef a vector typically computed by pnl_basis_fit_ls
@@ -806,10 +807,11 @@ double pnl_basis_eval (PnlBasis *basis, PnlVect *coef, double *x)
   double y;
 
   CHECK_NB_FUNC (coef, basis);
-  y = 0;
-  for (i=0; i<coef->size; i++)
+  y = 0.;
+  for ( i=0 ; i<coef->size ; i++ )
     {
-      y += pnl_vect_get (coef, i) * pnl_basis_i (basis, x, i);
+      const double a = pnl_vect_get (coef, i);
+      if ( a != 0 ) { y += a * pnl_basis_i (basis, x, i); }
     }
   return y;
 }
@@ -831,10 +833,11 @@ double pnl_basis_eval_D (PnlBasis *basis, PnlVect *coef, double *x, int i)
   double y;
 
   CHECK_NB_FUNC (coef, basis);
-  y = 0;
-  for (k=0; k<coef->size; k++)
+  y = 0.;
+  for ( k=0 ; k<coef->size ; k++ )
     {
-      y += pnl_vect_get (coef, k) * D_basis_i (basis, x, k, i);
+      const double a = pnl_vect_get (coef, k);
+      if ( a != 0. ) { y += a * D_basis_i (basis, x, k, i); }
     }
   return y;
 }
@@ -857,13 +860,93 @@ double pnl_basis_eval_D2 (PnlBasis *basis, PnlVect *coef, double *x, int i, int 
   double y;
 
   CHECK_NB_FUNC (coef, basis);
-  y = 0;
-  for (k=0; k<coef->size; k++)
+  y = 0.;
+  for ( k=0 ; k<coef->size ; k++ )
     {
-      y += pnl_vect_get (coef, k) * D2_basis_i (basis, x, k, i, j);
+      const double a = pnl_vect_get (coef, k);
+      if ( a != 0. ) { y += a * D2_basis_i (basis, x, k, i, j); }
     }
   return y;
 }
+
+/**
+ * Evaluates the second derivative with respect to x[i] and x[j] of a linear
+ * combination of basis functions at x
+ *
+ * @param coef a vector typically computed by pnl_basis_fit_ls
+ * @param x the coordinates of the point at which to evaluate the function
+ * @param basis a PnlBasis
+ * @param val contains the value of sum (coef .* f(x)) on exit
+ * @param grad contains the value of sum (coef .* Df(x)) on exit
+ * @param hes contains the value of sum (coef .* D2 f(x)) on exit
+ *
+ * @return sum (coef .* D2_{i,j} f(x))
+ */
+void pnl_basis_eval_derivs (PnlBasis *basis, PnlVect *coef, double *x,
+                            double *val, PnlVect *grad, PnlMat *hes)
+{
+  int i,k,j,l,n;
+  double y, *f, *Df, *D2f;
+
+  CHECK_NB_FUNC (coef, basis);
+  y = 0.;
+  n = basis->nb_variates;
+  f = malloc(sizeof(double) * n);
+  Df = malloc(sizeof(double) * n);
+  pnl_vect_resize (grad, n);
+  pnl_mat_resize (hes, n,n);
+  pnl_vect_set_double (grad, 0.);
+  pnl_mat_set_double (hes, 0.);
+  for ( i=0 ; i<coef->size ; i++ )
+    {
+      const double a = pnl_vect_get (coef, i);
+      if ( a == 0. ) continue;
+      {
+        double auxf = 1;
+        /*
+         * computation of val
+         */
+        for ( k=0 ; k<n ; k++ )
+          {
+            f[k] = (basis->f)(x+k, PNL_MGET(basis->T, i, k));
+            auxf *= f[k];
+          }
+        y += a * auxf;
+      }
+      /*
+       * computation of the gradient and the Hessian matrix
+       */
+      for ( j=0 ; j<n ; j++)
+        {
+          double aux = 1;
+          /* gradient */
+          for ( k=0 ; k<j ; k++ ) aux *= f[k];
+          for ( k=k+1 ; k<n ; k++ ) aux *= f[k];
+          Df[j] = (basis->Df) (x + j, PNL_MGET(basis->T, i, j));
+          PNL_LET(grad,j) = PNL_GET(grad, j) + a * aux * Df[j];
+        
+          /* diagonal terms of the Hessian matrix */
+          PNL_MLET(hes,j,j) = PNL_MLET(hes,j,j) + a * aux * (basis->D2f) (x + k, PNL_MGET(basis->T, i, j));
+
+          /* non diagonal terms of the Hessian matrix */
+          aux = 1;
+          for ( l=0 ; l<j ; l++)
+            {
+              for ( k=0 ; k<l ; k++ ) aux *= f[k];
+              for ( k=k+1 ; k<j ; k++ ) aux *= f[k];
+              for ( k=k+1 ; k<n ; k++ ) aux *= f[k];
+              
+              aux *= Df[j] * Df[l];
+              PNL_MLET(hes,j,l) = PNL_MLET(hes,j,l) + a * aux;
+              PNL_MLET(hes,l,j) = PNL_MLET(hes,j,l);
+            }
+        }
+    }
+  *val = y;
+  free(f);
+  free(D2f);
+}
+
 
 /**
  * Finds the best approximation of the function defined by f(x(i,:)) = y(i)
@@ -894,7 +977,7 @@ int pnl_basis_fit_ls (PnlBasis *basis, PnlVect *coef, PnlMat *x, PnlVect *y)
     {
       for ( k=0 ; k<basis->nb_func ; k++ )
         {
-          double tmp = pnl_basis_i (basis, &(PNL_MGET(x, i, 0)), k);
+          const double tmp = pnl_basis_i (basis, &(PNL_MGET(x, i, 0)), k);
           b_k =  pnl_vect_get(coef, k);
           b_k += tmp * pnl_vect_get (y, i);
           pnl_vect_set (coef, k, b_k);
@@ -904,9 +987,6 @@ int pnl_basis_fit_ls (PnlBasis *basis, PnlVect *coef, PnlMat *x, PnlVect *y)
       pnl_mat_dger(1., phi_k, phi_k, A);
     }
 
-  /* Solve A x = b, with A >0 symmetric */
-  /* pnl_mat_chol (A);
-     pnl_mat_chol_syslin_inplace (A, coef); */
   /* Because A often comes from simulation, A is not >0. So we use a QR
      approach */
   pnl_mat_ls (A, coef);
