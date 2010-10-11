@@ -886,7 +886,7 @@ void pnl_basis_eval_derivs (PnlBasis *basis, PnlVect *coef, double *x,
                             double *val, PnlVect *grad, PnlMat *hes)
 {
   int i,k,j,l,n;
-  double y, *f, *Df, *D2f;
+  double y, *f, *Df, D2f;
 
   CHECK_NB_FUNC (coef, basis);
   y = 0.;
@@ -924,9 +924,10 @@ void pnl_basis_eval_derivs (PnlBasis *basis, PnlVect *coef, double *x,
           for ( k=k+1 ; k<n ; k++ ) aux *= f[k];
           Df[j] = (basis->Df) (x + j, PNL_MGET(basis->T, i, j));
           PNL_LET(grad,j) = PNL_GET(grad, j) + a * aux * Df[j];
-        
+
           /* diagonal terms of the Hessian matrix */
-          PNL_MLET(hes,j,j) = PNL_MLET(hes,j,j) + a * aux * (basis->D2f) (x + k, PNL_MGET(basis->T, i, j));
+          D2f = (basis->D2f) (x + k, PNL_MGET(basis->T, i, j));
+          PNL_MLET(hes,j,j) = PNL_MLET(hes,j,j) + a * aux * D2f;
 
           /* non diagonal terms of the Hessian matrix */
           aux = 1;
@@ -944,7 +945,7 @@ void pnl_basis_eval_derivs (PnlBasis *basis, PnlVect *coef, double *x,
     }
   *val = y;
   free(f);
-  free(D2f);
+  free(Df);
 }
 
 
