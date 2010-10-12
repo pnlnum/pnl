@@ -1104,8 +1104,8 @@ int FUNCTION(pnl_mat,find) (PnlVectInt *indi, PnlVectInt *indj, char* type, int(
 void FUNCTION(pnl_mat,extract_subblock)(TYPE(PnlMat) *M_sub, const TYPE(PnlMat) *M, int i, int len_i, int j, int len_j)
 {
   int k, l;
-  PNL_CHECK (i+len_i <= M->m, "size exceeded", "pnl_mat_extract_subblock");
-  PNL_CHECK (j+len_j <= M->n, "size exceeded", "pnl_mat_extract_subblock");
+  PNL_CHECK (i+len_i < M->m, "size exceeded", "pnl_mat_extract_subblock");
+  PNL_CHECK (j+len_j < M->n, "size exceeded", "pnl_mat_extract_subblock");
   FUNCTION(pnl_mat,resize)(M_sub, len_i, len_j);
 
   for ( k=0 ; k<len_i ; k++ )
