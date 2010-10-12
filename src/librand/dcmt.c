@@ -1457,6 +1457,67 @@ dcmt_state** pnl_dcmt_create_array(int n, ulong seed, int *count)
 }
 
 /**
+ * Creates an array of PnlRng filled with DCMT
+ *
+ * @param n number of generators to be created
+ * @param seed the seed used to initialise the standard MT used to find new
+ * DCMT
+ * @param count (output) contains the number of generators actually created
+ */
+PnlRng** pnl_rng_dcmt_create_array (int n, ulong seed, int *count)
+{
+  PnlRng **rngtab;
+  dcmt_state *template_mts;
+  int i;
+  prescr_t pre;
+  mt_state org;
+  check32_t ck;
+
+  if ( n >  0xffff)
+    {
+      perror ("Too many generators required\n");
+      *count = 0;
+      return NULL;
+    }
+  pnl_mt_sseed(&org, seed);
+  if ( (rngtab = malloc (n * sizeof(PnlRng *))) == NULL)  return NULL;
+  if ((template_mts = init_mt_search(&ck, &pre)) == NULL)
+    {
+      free(rngtab);
+      return NULL;
+    }
+  *count = 0;
+  for ( i=0 ; i<n ; i++ ) 
+    {
+      dcmt_state *mts;
+      rngtab[i] = pnl_rng_create (PNL_RNG_DCMT);
+      mts = (dcmt_state *)(rngtab[i]->state);
+      copy_params_of_dcmt_state(template_mts, mts);
+      if ( NOT_FOUND == get_irred_param(&ck, &pre, &org, mts, i,DEFAULT_ID_SIZE) )
+        {
+          pnl_rng_free(&(rngtab[i]));
+          break;
+        }
+      _get_tempering_parameter_hard_dc(mts);
+      ++(*count);
+    }
+
+  pnl_dcmt_free(&template_mts);
+  end_mt_search(&pre);
+  if (*count > 0) 
+    {
+      return rngtab;
+    }
+  else 
+    {
+      free(rngtab);
+      return NULL;
+    }
+}
+
+
+
+/**
  * Sets the seed of a DCMT
  *
  * @param s an unsigned integer used as seed

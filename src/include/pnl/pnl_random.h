@@ -98,14 +98,13 @@ extern enum_members RNGs;
 extern enum_members MC_RNGs;
 
 
+/*
+ * Rand functions
+ */
 extern int pnl_rand_init(int type_generator, int simulation_dim,long samples);
 extern void pnl_rand_sseed (int type_generator, ulong seed);
 extern int pnl_rand_or_quasi(int type_generator);
-PnlRng* pnl_rng_get_from_id (int type_generator);
-
-/*
- * Generation functions
- */
+extern PnlRng* pnl_rng_get_from_id (int type_generator);
 extern double pnl_rand_gauss(int, int, int, int);
 extern int pnl_rand_bernoulli(double p, int generator);
 extern long pnl_rand_poisson(double lambda, int type_generator);
@@ -125,6 +124,16 @@ extern void pnl_mat_rand_uni2(PnlMat *M, int samples, int dimension,
 extern void pnl_mat_rand_normal(PnlMat *M, int samples, int dimension, int type_generator);
 extern double pnl_rand_gamma (double a, double b, int gen);
 extern double pnl_rand_chi2  (double nu, int gen);
+
+/*
+ * Rng interface
+ */
+extern void pnl_rng_free(PnlRng **);
+extern PnlRng* pnl_rng_new ();
+extern PnlRng* pnl_rng_create (int type);
+extern PnlRng** pnl_rng_dcmt_create_array (int n, ulong seed, int *count);
+extern void pnl_rng_init (PnlRng *rng, int type);
+extern void pnl_rng_sseed(PnlRng *rng, unsigned long int s);
 
 extern double pnl_rng_gauss(int, int, int, PnlRng *rng);
 extern int pnl_rng_bernoulli(double p, PnlRng *rng);
@@ -230,15 +239,6 @@ extern void pnl_dcmt_free(dcmt_state **mts);
 extern void pnl_dcmt_free_array(dcmt_state **mts, int count);
 
 
-/*
- * PnlRng interface
- */
-extern void pnl_rng_free(PnlRng **);
-extern PnlRng* pnl_rng_new ();
-extern PnlRng* pnl_rng_create (int type);
-extern PnlRng** pnl_rng_dcmt_create_array (int n, ulong seed, int *count);
-extern void pnl_rng_init (PnlRng *rng, int type);
-extern void pnl_rng_sseed(PnlRng *rng, unsigned long int s);
 
 /*@}*/
 

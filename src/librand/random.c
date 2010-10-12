@@ -1,13 +1,3 @@
-/* 
- * This file contains two parts.  The first one gathers the random generator
- * functions which must never be called directly. These codes are provided by
- * Premia. The second part is an interface to these generators to easily
- * create vectors and matrices of random numbers according to different
- * laws. 
- */
-
-
-
 /************************************************************************/
 /* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
 /*                                                                      */
@@ -72,8 +62,7 @@ static void KNUTH(PnlRng *rng,double *sample)
                             nonrandomness problems */
           state->t_alea[ii]= y_k;
           y_k= X_n - y_k;
-          if(y_k < 0) 
-            y_k+= M;
+          if(y_k < 0) y_k+= M;
           X_n= state->t_alea[ii];
         }
 
@@ -83,8 +72,7 @@ static void KNUTH(PnlRng *rng,double *sample)
           for(i= 1; i<= 55; i++)
             {
               state->t_alea[i]-= state->t_alea[1+(i+30)%55];
-              if(state->t_alea[i] < 0) 
-                state->t_alea[i]+= M;
+              if(state->t_alea[i] < 0) state->t_alea[i]+= M;
             }
         }
       state->inc1= 0;
@@ -94,15 +82,12 @@ static void KNUTH(PnlRng *rng,double *sample)
   rng->counter++;
 
   /* For each call to the sequence, computation of a new point */
-  if(++(state->inc1) == 56) 
-    state->inc1= 1;
-  if(++(state->inc2) == 56) 
-    state->inc2= 1;
+  if(++(state->inc1) == 56) state->inc1= 1;
+  if(++(state->inc2) == 56) state->inc2= 1;
   /* Substractive method*/
   X_n= state->t_alea[state->inc1] - state->t_alea[state->inc2];
 
-  if(X_n < 0) 
-    X_n+= M;
+  if(X_n < 0) X_n+= M;
   state->t_alea[state->inc1]= X_n;
   /* Normalized value */
   *sample = (double) X_n / (double) M;
@@ -222,6 +207,7 @@ static void MRGK5(PnlRng *rng,double *sample)
 
   return;
 }
+
 /* ------------------------------------------------------------------------ */
 /* Random numbers generator of  Park & Miller with Bayes & Durham shuffling
    procedure : the next random number is not obtained from the previous one 
@@ -321,14 +307,12 @@ static void LECUYER(PnlRng *rng,double *sample)
   /* First generator */
   hi= s->x/Q1;
   s->x= A1*(s->x-hi*Q1) - R1*hi;
-  if (s->x < 0) 
-    s->x+= M1;
+  if (s->x < 0) s->x+= M1;
 
   /* Second generator */
   hi= s->y/Q2;
   s->y= A2*(s->y-hi*Q2) - R2*hi;
-  if (s->y < 0) 
-    s->y+= M2;
+  if (s->y < 0) s->y+= M2;
 
   /* Shuffling procedure of Bayes & Durham */
   /* Indes->x j dependent on the last point */
@@ -339,8 +323,7 @@ static void LECUYER(PnlRng *rng,double *sample)
 
 
   /* To avoid 0 value */
-  if (s->z < 1) 
-    s->z+= M1-1;
+  if (s->z < 1) s->z+= M1-1;
 
   *sample = (double) s->z / (double) M1; 
   return;
@@ -1242,89 +1225,6 @@ void pnl_rand_sseed (int type_generator, ulong seed)
   pnl_rng_sseed (rng, seed);
 }
 
-
-/**
- * Initialises a rng of the given type.
- * Note that the fields size_State and state are set to zero, which implies
- * that the created generator is unusable. It is only usefull to receive an
- * already workin generator.
- *
- * @param rng is a rng returned by pnl_rng_new
- * @param type the type of generator to create
- */
-void pnl_rng_init (PnlRng *rng, int type)
-{
-
-  rng->type = type;
-  rng->dimension = 0;
-  rng->counter = 0;
-  rng->has_gauss = 0;
-  rng->gauss = 0;
-  rng->size_state = 0;
-  rng->state = NULL;
-  switch (type)
-    {
-    case PNL_RNG_KNUTH:
-      rng->Compute = KNUTH;
-      rng->rand_or_quasi = MC;
-      break;
-    case PNL_RNG_MRGK3:
-      rng->Compute = MRGK3;
-      rng->rand_or_quasi = MC;
-      break;
-    case PNL_RNG_MRGK5:
-      rng->Compute = MRGK5;
-      rng->rand_or_quasi = MC;
-      break;
-    case PNL_RNG_SHUFL:
-      rng->Compute = SHUFL;
-      rng->rand_or_quasi = MC;
-      break;
-    case PNL_RNG_LECUYER:
-      rng->Compute = LECUYER;
-      rng->rand_or_quasi = MC;
-      break;
-    case PNL_RNG_TAUSWORTHE:
-      rng->Compute = TAUS;
-      rng->rand_or_quasi = MC;
-      break;
-    case PNL_RNG_MERSENNE:
-    case PNL_RNG_MERSENNE_RANDOM_SEED:
-      rng->Compute = MERSENNE;
-      rng->rand_or_quasi = MC;
-      break;
-    case PNL_RNG_DCMT:
-      rng->Compute = DYNAMIC_MT;
-      rng->rand_or_quasi = MC;
-      break;
-    case PNL_RNG_SQRT:
-      rng->Compute = SQRT;
-      rng->rand_or_quasi = QMC;
-      break;
-    case PNL_RNG_HALTON:
-      rng->Compute = HALTON;
-      rng->rand_or_quasi = QMC;
-      break;
-    case PNL_RNG_FAURE:
-      rng->Compute = FAURE;
-      rng->rand_or_quasi = QMC;
-      break;
-    case PNL_RNG_SOBOL:
-      rng->Compute = SOBOL;
-      rng->rand_or_quasi = QMC;
-      break;
-    case PNL_RNG_SOBOL2:
-      rng->Compute = SOBOL2;
-      rng->rand_or_quasi = QMC;
-      break;
-    case PNL_RNG_NIEDERREITER:
-      rng->Compute = NIEDERREITER;
-      rng->rand_or_quasi = QMC;
-      break;
-    }
-}
-
-
 /**
  * Determines the type of a generator
  * @param type_generator index of the generator
@@ -1376,20 +1276,17 @@ PnlRng* pnl_rng_new ()
   return rng;
 }
 
-
 /**
- * Creates a rng of the given type.
- * Note that the fields size_state and state are set to zero, which implies
+ * Initialises a rng of the given type.
+ * Note that the fields size_State and state are set to zero, which implies
  * that the created generator is unusable. It is only usefull to receive an
  * already workin generator.
  *
+ * @param rng is a rng returned by pnl_rng_new
  * @param type the type of generator to create
- * @return a PnlRng or NULL if an error occurred
  */
-PnlRng* pnl_rng_create (int type)
+void pnl_rng_init (PnlRng *rng, int type)
 {
-  PnlRng *rng;
-  if ((rng = pnl_rng_new()) == NULL) return NULL;
 
   rng->type = type;
   rng->dimension = 0;
@@ -1449,39 +1346,34 @@ PnlRng* pnl_rng_create (int type)
       rng->state = pnl_dcmt_create ();
       break;
     default:
-      free (rng); rng = NULL;
+      rng->type = PNL_RNG_NULL;
       printf("Unknown generator type\n");
+    }
+}
+
+
+/**
+ * Creates a rng of the given type.
+ * Note that the fields size_state and state are set to zero, which implies
+ * that the created generator is unusable. It is only usefull to receive an
+ * already workin generator.
+ *
+ * @param type the type of generator to create
+ * @return a PnlRng or NULL if an error occurred
+ */
+PnlRng* pnl_rng_create (int type)
+{
+  PnlRng *rng;
+  if ((rng = pnl_rng_new()) == NULL) return NULL;
+
+  pnl_rng_init (rng, type);
+  if ( rng->type == PNL_RNG_NULL )
+    {
+      free (rng); rng = NULL;
     }
   return rng;
 }
 
-
-PnlRng** pnl_rng_dcmt_create_array (int n, ulong seed, int *count)
-{
-  PnlRng **rngtab;
-  dcmt_state **mts;
-  int i;
-
-  mts = pnl_dcmt_create_array (n, seed, count);
-  if (n != *count)
-    {
-      perror ("Not all generators could be created\n");
-      abort ();
-    }
-  if ( (rngtab = malloc (n * sizeof(PnlRng *))) == NULL)
-    {
-      pnl_dcmt_free_array (mts, n); return NULL;
-    }
-  for ( i=0 ; i<n ; i++ )
-    {
-      rngtab[i] = pnl_rng_new ();
-      pnl_rng_init (rngtab[i], PNL_RNG_DCMT);
-      rngtab[i]->size_state = sizeof (dcmt_state);
-      rngtab[i]->state = mts[i];
-    }
-  free (mts);
-  return rngtab;
-}
 
 static void pnl_knuth_sseed (knuth_state *s, ulong seed)
 {

@@ -306,15 +306,9 @@ static int size_rng (const PnlObject *Obj, MPI_Comm comm, int *size)
       if((info=MPI_Pack_size(1, MPI_DOUBLE, comm, &count))) return(info);
       *size += count;
     }
-  /* rng->size_state */
-  if((info=MPI_Pack_size(1, MPI_INT, comm, &count))) return(info);
+  /* rng->state */
+  if((info=pnl_rng_state_mpi_pack_size(rng, comm, &count))) return(info);
   *size += count;
-  if (rng->size_state > 0)
-    {
-      /* rng->state */
-      if((info=pnl_rng_state_mpi_pack_size(rng, comm, &count))) return(info);
-      *size += count;
-    }
   return (info);
 }
 
@@ -562,11 +556,7 @@ static int pack_rng (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI
     {
       if ((info=MPI_Pack(&rng->gauss, 1, MPI_DOUBLE, buf, bufsize, pos, comm))) return info;
     }
-  if ((info=MPI_Pack(&rng->size_state, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
-  if (rng->size_state > 0)
-    {
-      if ((info=pnl_rng_state_mpi_pack(rng, buf, bufsize, pos, comm))) return info;
-    }
+  if ((info=pnl_rng_state_mpi_pack(rng, buf, bufsize, pos, comm))) return info;
   return (info);
 }
 
@@ -827,6 +817,18 @@ static int unpack_rng (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Com
   if ((info=MPI_Unpack(buf,bufsize,pos,&id,1,MPI_INT,comm))) return info;
   
   if ((info=MPI_Unpack(buf,bufsize,pos,&type,1,MPI_INT,comm))) return info;
+  /*
+   * If rng has already been initialized to store a different type of
+   * generator, we must free the state variable because the size_state may be
+   * different
+   */
+  if (type != rng->type)
+    {
+      if ( rng->state != NULL )
+        {
+          free (rng->state); rng->state = NULL;
+        }
+    }
   pnl_rng_init (rng, type);
   
   if ((info=MPI_Unpack(buf,bufsize,pos,&rng->dimension,1,MPI_INT,comm))) return info;
@@ -836,12 +838,8 @@ static int unpack_rng (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Com
     {
       if ((info=MPI_Unpack(buf,bufsize,pos,&rng->gauss,1,MPI_DOUBLE,comm))) return info;
     }
-  if ((info=MPI_Unpack(buf,bufsize,pos,&rng->size_state,1,MPI_INT,comm))) return info;
-  if (rng->size_state > 0)
-    {
-      if ((rng->state = malloc (rng->size_state)) == NULL) return MPI_ERR_BUFFER;
-      if ((info=pnl_rng_state_mpi_unpack(rng,buf,bufsize,pos,comm))) return info;
-    }
+  if ((rng->state = malloc (rng->size_state)) == NULL) return MPI_ERR_BUFFER;
+  if ((info=pnl_rng_state_mpi_unpack(rng,buf,bufsize,pos,comm))) return info;
   return (info);
 }
 
