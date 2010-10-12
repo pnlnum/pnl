@@ -13,7 +13,8 @@ laplace_test.c lapack_test.c tridiag_test.c optim_intpoints_bfgs_test.c \
 list_test.c
 
 testpnl_LDADD=../src/libpnl.la
-testpnl_LDFLAGS=@GSL_LIBS@ 
+testpnl_LDFLAGS=@GSL_LIBS@
+testpnl_CPPFLAGS=@HAVE_GSL@ $(AM_CPPFLAGS)
 
 if HAVE_MPI
 bin_PROGRAMS+=pnl-mpi rng-mpi

@@ -28,7 +28,7 @@ AM_MAINTAINER_MODE
 
 
 AC_ARG_ENABLE(debug,
-   [  --enable-debug          compile with "-g" option, default behaviour is to optimize], 
+   [  --enable-debug          compile with "-g" option, default behaviour is to optimize],
    [enable_debug="yes"], [enable_debug="no"])
 AC_ARG_ENABLE(optimize,
    [  --disable-optimize      disable "-0" option off gcc], [enable_optimize="no"], [enable_optimize="yes"])
@@ -40,7 +40,7 @@ AC_ARG_WITH(gsl,
     [  --without-gsl           do not compile with GSL library ])
 
 
-if test "$enable_verbose" = no; then  
+if test "$enable_verbose" = no; then
    LIBTOOL="$LIBTOOL --silent"
 fi
 
@@ -64,7 +64,7 @@ LIBPNLDIR=`pwd`
 
 
 AC_PROG_CC
-AM_PROG_CC_C_O 
+AM_PROG_CC_C_O
 AC_PROG_CXX
 AC_PROG_F77
 AC_PROG_MAKE_SET
@@ -84,18 +84,18 @@ CC_OPTIONS="`echo $CFLAGS | sed -e 's/-ansi//g'`"
 CXX_OPTIONS=$CXXFLAGS
 if test "x$GCC" = xyes ; then
    if test "x$enable_debug" = xyes || test "x$enable_optimize" = xno ; then
-      CC_OPTIONS=`echo $CC_OPTIONS | sed -e 's/-O[[0-9]]*//g'`   
-      CC_OPTIONS=`echo $CC_OPTIONS | sed -e 's/-g[[0-9]]*$//g'`          
-      CC_OPTIONS=`echo $CC_OPTIONS | sed -e 's/-g[[0-9]]* //g'`           
+      CC_OPTIONS=`echo $CC_OPTIONS | sed -e 's/-O[[0-9]]*//g'`
+      CC_OPTIONS=`echo $CC_OPTIONS | sed -e 's/-g[[0-9]]*$//g'`
+      CC_OPTIONS=`echo $CC_OPTIONS | sed -e 's/-g[[0-9]]* //g'`
       CC_OPTIONS="${CC_OPTIONS} -Wall -g"
-      CXX_OPTIONS=`echo $CXX_OPTIONS | sed -e 's/-O[[0-9]]*//g'`   
-      CXX_OPTIONS=`echo $CXX_OPTIONS | sed -e 's/-g[[0-9]]*$//g'`          
-      CXX_OPTIONS=`echo $CXX_OPTIONS | sed -e 's/-g[[0-9]]* //g'`           
+      CXX_OPTIONS=`echo $CXX_OPTIONS | sed -e 's/-O[[0-9]]*//g'`
+      CXX_OPTIONS=`echo $CXX_OPTIONS | sed -e 's/-g[[0-9]]*$//g'`
+      CXX_OPTIONS=`echo $CXX_OPTIONS | sed -e 's/-g[[0-9]]* //g'`
       CXX_OPTIONS="${CXX_OPTIONS} -Wall -g -fno-inline"
    else
       CC_OPTIONS="${CC_OPTIONS} -Wall"
    fi
-   #The -mno-cygwin flag to gcc makes gcc link against standard Microsoft DLLs instead of Cygwin. 
+   #The -mno-cygwin flag to gcc makes gcc link against standard Microsoft DLLs instead of Cygwin.
    #This is desirable for native Windows programs that don't need a UNIX emulation layer.
    case "$host" in
         *-*-cygwin*)
@@ -118,7 +118,7 @@ if test X$user_set_cxxflags != Xyes; then
 fi
 if test X$user_set_cflags != Xyes; then
    CXXFLAGS=""
-fi  
+fi
 
 
 
@@ -136,7 +136,7 @@ AC_CACHE_CHECK([for extern inline], ac_cv_c_extern_inline,
                     [[  foo(1.0)  ]])],[ac_cv_c_extern_inline="yes"],[])])
 
 if test "$ac_cv_c_extern_inline" != no ; then
-   AC_DEFINE(HAVE_INLINE,[],[Define if you have inline])
+   AM_CFLAGS="${AM_CFLAGS} -DHAVE_INLINE"
 fi
 
 
@@ -184,15 +184,15 @@ case "$host" in
     ;;
 
     *)
-    if test "x$F77" = "x"; then 
-       with_internal_blas=yes   
+    if test "x$F77" = "x"; then
+       with_internal_blas=yes
     fi
 
     if test "x$with_internal_blas" != "xyes"; then
        builtin(include,config/acx_blas.m4)
        ACX_BLAS([HAVE_BLAS=yes])
 
-       if test "$HAVE_BLAS" = yes; then 
+       if test "$HAVE_BLAS" = yes; then
          AM_CFLAGS="$AM_CFLAGS"
        else
          with_internal_blas=yes
@@ -201,7 +201,7 @@ case "$host" in
        builtin(include,config/acx_lapack.m4)
        ACX_LAPACK([HAVE_LAPACK=yes])
 
-       if test "$HAVE_LAPACK" = yes; then 
+       if test "$HAVE_LAPACK" = yes; then
          AM_CFLAGS="$AM_CFLAGS"
        else
          with_internal_blas=yes
@@ -221,8 +221,8 @@ AM_CONDITIONAL([HAVE_BLASLAPACK], [test $use_internal_blas == 0])
 LDFLAGS="$LDFLAGS $BLAS_LIBS $LAPACK_LIBS"
 #######################
 ## test for underscores
-## note that trailing underscores is already checked 
-## elsewhere 
+## note that trailing underscores is already checked
+## elsewhere
 #######################
 
 FC_TRAILING_UNDERSCORE=no
@@ -271,13 +271,14 @@ AC_TRY_COMPILE([#define C2F(name) name##_],
 ###################
 USE_GSL=no
 GSL_LIBS=""
+HAVE_GSL=""
 
 if test "x$with_gsl" != "xno"; then
    builtin(include,config/gsl.m4)
    AX_PATH_GSL(1.10,[USE_GSL=yes])
 
-   if test "$USE_GSL" = yes; then 
-      AM_CFLAGS="$AM_CFLAGS -DHAVE_GSL"
+   if test "$USE_GSL" = yes; then
+      HAVE_GSL="-DHAVE_GSL"
    fi
 fi
 
@@ -306,7 +307,7 @@ AM_CONDITIONAL([HAVE_MPI], [test $have_mpi == 1])
 
 
 ####################
-### checking host 
+### checking host
 ####################
 
 
@@ -320,7 +321,7 @@ case "$host" in
 	 AC_DEFINE_UNQUOTED(
 			[_CYGWIN], [1],
 			[Runnning on Cygwin])
-			
+
 	 AC_DEFINE_UNQUOTED(
 			[_WIN32], [1],
 			[Running on Cygwin and using Windows Acrobat])
@@ -331,7 +332,7 @@ case "$host" in
     AC_DEFINE_UNQUOTED(
 			[_WIN32], [1],
 			[Running on a Win32 system])
-			
+
     ;;
 
 
@@ -354,6 +355,8 @@ AC_SUBST(MKDIR_P)
 AC_SUBST(BLAS_LIBS)
 AC_SUBST(LAPACK_LIBS)
 AC_SUBST(LIBPNLDIR)
+AC_SUBST(HAVE_GSL)
+
 
 AC_SUBST(MPI_DIR)
 AC_SUBST(LIBPNLMPI_LA)
@@ -396,15 +399,15 @@ echo
 echo "C compiler.............:" $CC
 echo "C options..............:" $AM_CFLAGS $CFLAGS
 echo "$user_set_cflags"
-echo "linker flags...........:" $LDFLAGS 
+echo "linker flags...........:" $LDFLAGS
 echo "installation prefix....:" $prefix
 if test $have_mpi = 1; then
   echo "MPI detected..........:"
   echo "   MPICC..............:" $MPICC
   echo "   MPI_CFLAGS.........:" $MPI_CFLAGS
-  echo "   MPI_LIBS...........:" $MPI_LIBS 
+  echo "   MPI_LIBS...........:" $MPI_LIBS
 fi
-if test $use_internal_blas = 1; then 
+if test $use_internal_blas = 1; then
     echo "using internal Blas & Lapack"
 fi
 echo
