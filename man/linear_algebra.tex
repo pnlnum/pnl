@@ -666,7 +666,8 @@ the above table.
   the other.
 
 
-\item \describefun{void}{pnl_mat_clone}{\refstruct{PnlMat} \ptr clone, const \refstruct{PnlMat} \ptr M}
+\item \describefun{void}{pnl_mat_clone}{\refstruct{PnlMat} \ptr clone, const
+    \refstruct{PnlMat} \ptr M}
   \sshortdescribe Clones \var{M} into \var{clone}. No no new
   \refstruct{PnlMat} is created.
 
@@ -688,7 +689,8 @@ the above table.
 \item \describefun{void}{pnl_mat_extract_subblock}{\refstruct{PnlMat} \ptr
     M_sub, const \refstruct{PnlMat} \ptr M, int i, int len_i, int j, int
     len_j}
-  \sshortdescribe \var{M_sub = M(i:i+len_i, j:j+len_j)};
+  \sshortdescribe \var{M_sub = M(i:i+len_i-1, j:j+len_j-1)}. \var{len_i}
+  (resp. \var{len_j}) is the number of columns (resp. rows) to be extracted.
   
 \end{itemize}  
 

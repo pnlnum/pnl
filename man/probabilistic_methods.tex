@@ -9,7 +9,7 @@ For various distribution functions, we provide functions named
 \var{pnl_cdf_xxx} where \var{xxx} is the abbreviation of the distribution
 name. All these functions are based on the same prototype
 \begin{equation*}
-  p = 1-q; \quad p = \int^x density(u) du 
+  p = 1-q; \quad p = \int^x density(u) du
 \end{equation*}
 
 \begin{itemize}
@@ -32,9 +32,9 @@ name. All these functions are based on the same prototype
 
 \begin{itemize}
 \item \describefun{void}{pnl_cdf_bet}{int \ptr which, double \ptr p, double
-    \ptr q, double \ptr x, double \ptr y, double \ptr a, double \ptr b, 
+    \ptr q, double \ptr x, double \ptr y, double \ptr a, double \ptr b,
     int \ptr status, double \ptr bound}
-  \sshortdescribe Cumulative Distribution Function BETA distribution.  
+  \sshortdescribe Cumulative Distribution Function BETA distribution.
 
 \item \describefun{void}{pnl_cdf_bin}{int \ptr which, double \ptr p, double
     \ptr q, double \ptr x, double \ptr xn, double \ptr pr, double
@@ -44,47 +44,47 @@ name. All these functions are based on the same prototype
 \item \describefun{void}{pnl_cdf_chi}{int \ptr which, double \ptr p, double
     \ptr q, double \ptr x, double \ptr df, int \ptr status, double
     \ptr bound}
-  \sshortdescribe Cumulative Distribution Function CHI-Square distribution.  
+  \sshortdescribe Cumulative Distribution Function CHI-Square distribution.
 
 \item \describefun{void}{pnl_cdf_chn}{int \ptr which, double \ptr p, double
     \ptr q, double \ptr x, double \ptr df, double \ptr pnonc, int
     \ptr status, double \ptr bound}
-  \sshortdescribe Cumulative Distribution Function Non-central Chi-Square distribution.  
+  \sshortdescribe Cumulative Distribution Function Non-central Chi-Square distribution.
 
 \item \describefun{void}{pnl_cdf_f}{int \ptr which, double \ptr p, double
     \ptr q, double \ptr x, double \ptr dfn, double \ptr dfd, int
     \ptr status, double \ptr bound}
-  \sshortdescribe Cumulative Distribution Function F distribution.  
+  \sshortdescribe Cumulative Distribution Function F distribution.
 
 \item \describefun{void}{pnl_cdf_fnc}{int \ptr which, double \ptr p, double
     \ptr q, double \ptr x, double \ptr dfn, double \ptr dfd, double
     \ptr pnonc, int \ptr status, double \ptr bound}
-  \sshortdescribe Cumulative Distribution Function Non-central F distribution.  
+  \sshortdescribe Cumulative Distribution Function Non-central F distribution.
 
 \item \describefun{void}{pnl_cdf_gam}{int \ptr which, double \ptr p, double
     \ptr q, double \ptr x, double \ptr shape, double \ptr scale, int
     \ptr status, double \ptr bound}
-  \sshortdescribe Cumulative Distribution Function GAMma distribution.  
+  \sshortdescribe Cumulative Distribution Function GAMma distribution.
 
 \item \describefun{void}{pnl_cdf_nbn}{int \ptr which, double \ptr p, double
     \ptr q, double \ptr x, double \ptr xn, double \ptr pr, double
     \ptr ompr, int \ptr status, double \ptr bound}
-  \sshortdescribe Cumulative Distribution Function Negative BiNomial distribution.  
+  \sshortdescribe Cumulative Distribution Function Negative BiNomial distribution.
 
 \item \describefun{void}{pnl_cdf_nor}{int \ptr which, double \ptr p, double
     \ptr q, double \ptr x, double \ptr mean, double \ptr sd, int
     \ptr status, double \ptr bound}
-  \sshortdescribe Cumulative Distribution Function NORmal distribution.  
+  \sshortdescribe Cumulative Distribution Function NORmal distribution.
 
 \item \describefun{void}{pnl_cdf_poi}{int \ptr which, double \ptr p, double
     \ptr q, double \ptr x, double \ptr xlam, int \ptr status, double
     \ptr bound}
-  \sshortdescribe Cumulative Distribution Function POIsson distribution.  
+  \sshortdescribe Cumulative Distribution Function POIsson distribution.
 
 \item \describefun{void}{pnl_cdf_t}{int \ptr which, double \ptr p, double
     \ptr q, double \ptr x, double \ptr df, int \ptr status, double
     \ptr bound}
-  \sshortdescribe Cumulative Distribution Function T distribution.  
+  \sshortdescribe Cumulative Distribution Function T distribution.
 
 \item \describefun{double}{pnl_cdfchi2n}{double x, double df, double ncparam}
   \sshortdescribe Computes the cumulative density function at \var{x} of the
@@ -109,19 +109,20 @@ name. All these functions are based on the same prototype
   \sshortdescribe Cumulative bivariate normal distribution function, returns
   $\frac{1} {2\pi \sqrt{1-r^2}} \int_{- \infty}^a\int_{- \infty}^b e^{-
     \frac{x^2 - 2 r xy+y^2} {2(1-r^2)} } dxdy.$
-  
+
 \item \describefun{double}{pnl_inv_cdfnor}{double x}
   \sshortdescribe Inverse of the cumulative normal distribution function.
 \end{itemize}
+
 
 \subsection{Random Number Generators}
-\subsubsection{Short Description}
 
-At the moment, there are $14$ random number generators implemented. Each of them is
-identified by a macro, actually an integer. One must {\bf NOT} refer to a generator
-using directly the value of the macro \var{PNL_RNG_XXX} because there is no warranty
-that the order used to store the generators will remain the same in future releases.
-Instead, one should call generators directly using their macro names.
+Random number generators can be accessed using two different interfaces : the
+new {\em rng} interface based on the \refstruct{PnlRng} object and the older
+{\em rand} interface. We will keep the {\em rand} interface for compatibility
+issues but we highly encourage to use the new {\rm rng} interface which is far
+more flexible and uses reentrant functions suitable for multi-threaded
+applications.
 
 \begin{table}[h!]
   \begin{tabular}{l|l|l}
@@ -143,45 +144,206 @@ Instead, one should call generators directly using their macro names.
     NIEDERREITER & PNL_RNG_NIEDERREITER & quasi
   \end{tabular}
   \caption{Indices of the random generators}
-  \label{rng_indices}
+  \label{rng-indices}
 \end{table}
 
-The initial seed of all the generators is fixed except for the generator
+
+\subsubsection{The rng interface}
+\label{rng-int}
+
+It is possible to create random number generators each with its own state
+variable so that they can evolve independently in a shared memory
+environment. These generators are suitable for use in multi-threaded programms. For the
+moment, only pseudo random number generators can be created. The quasi random
+number generators can only be accessed using the older {\em rand} interface
+(see Section~\ref{rand-int})
+
+\begin{verbatim}
+typedef struct _PnlRng PnlRng;
+struct _PnlRng
+{
+  PnlObject object;
+  int type; /*!< generator type *
+  void (*Compute)(PnlRng *g, double *sample); /*!< the function to compute the
+                                                next number in the sequence *
+  int rand_or_quasi; /*!< can be MC or QMC *
+  int dimension; /*!< dimension of the space in which we draw the samples *
+  int counter; /*!< counter = number of samples already drawn *
+  int has_gauss; /*!< Is a gaussian deviate available? *
+  double gauss; /*!< If has_gauss==1, gauss a gaussian sample *
+  int size_state; /*!< size in bytes of the state variable *
+  void *state; /*!< state of the random generator *
+};
+\end{verbatim}
+
+
+\begin{itemize}
+\item \describefun{\refstruct{PnlRng}\ptr }{pnl_rng_new}{}
+  \sshortdescribe Creates an empty \refstruct{PnlRng}\ptr.
+\item \describefun{void}{pnl_rng_free}{\refstruct{PnlRng} \ptr \ptr }
+  \sshortdescribe Frees a \refstruct{PnlRng}.
+\item \describefun{\refstruct{PnlRng}\ptr }{pnl_rng_create}{int type}
+  \sshortdescribe Creates a \refstruct{PnlRng} corresponding to \var{type}
+  which can be any of the values \var{PNL_RNG_XXX} listed in
+  Table~\ref{rng-indices} which correspond to {\bf pseudo} random number generators.
+  Once a generator has been created, you {\bf must} call
+  \reffun{pnl_rng_sseed} before using it. To create several PNL_RNG_DCMT type
+  generators it is better to use \reffun{pnl_rng_dcmt_create_array} because the
+  function \reffun{pnl_rng_create} produces a memory leak.
+\item \describefun{\refstruct{PnlRng} \ptr \ptr}{pnl_rng_dcmt_create_array}
+  {int n, ulong seed, int \ptr count}
+  \sshortdescribe Creates an array of \var{n} independent DCMT. \var{seed} is
+  the seed used to initialize the Mersenne Twister generator internally used to
+  find new DCMT. On exit, \var{count} contains the number of generators actually
+  created. Same function as \reffun{pnl_dcmt_create_array} instead that it
+  directly returns an array of \refstruct{PnlRng}.
+\item \describefun{void}{pnl_rng_init}{\refstruct{PnlRng} \ptr rng, int type}
+  \sshortdescribe Initializes an empty \refstruct{PnlRng} as returned by
+  \reffun{pnl_rng_new} to become a generator of type \var{type} which can be
+  any of the values \var{PNL_RNG_XXX} listed in Table~\ref{rng-indices} which
+  correspond to {\bf pseudo} random number generators.
+  Calling \reffun{pnl_rng_create} is equivalent to calling first
+  \reffun{pnl_rng_new} and then \reffun{pnl_rng_init}. 
+\item \describefun{void}{pnl_rng_sseed}{\refstruct{PnlRng} \ptr rng, unsigned
+    long int s}
+  \sshortdescribe Sets the seed of the genrator \var{rng} using \var{s}.
+\end{itemize}
+
+
+The following functions return one sample from a specified law.
+\begin{itemize}
+\item \describefun{int}{pnl_rng_bernoulli}{double p, \refstruct{PnlRng} \ptr rng}
+  \sshortdescribe Generates a sample from the Bernouilli law on $\{0, 1\}$ with
+  parameter \var{p}.
+
+\item \describefun{long}{pnl_rng_poisson}{double lambda, \refstruct{PnlRng} \ptr rng}
+  \sshortdescribe Generates a sample from the Poisson law with
+  parameter \var{lambda}.
+
+\item \describefun{double}{pnl_rng_exp}{double lambda, \refstruct{PnlRng} \ptr rng}
+  \sshortdescribe Generates a sample from the Exponential law with
+  parameter \var{lambda}.
+
+\item \describefun{double}{pnl_rng_uni} {\refstruct{PnlRng} \ptr rng}
+  \sshortdescribe Generates a sample from the Uniform law on $[0, 1]$.
+
+\item \describefun{double}{pnl_rng_uni_ab} {double a, double b,
+    \refstruct{PnlRng} \ptr rng}
+  \sshortdescribe Generates a sample from the Uniform law on $[a, b]$.
+
+\item \describefun{double}{pnl_rng_normal} {\refstruct{PnlRng} \ptr rng}
+  \sshortdescribe Generates a sample from the standard normal distribution.
+
+\item \describefun{long}{pnl_rng_poisson1}{double lambda, double
+    t,\refstruct{PnlRng} \ptr rng}
+  \sshortdescribe Generates a sample from a Poisson process with intensity
+  \var{lambda} at time \var{t}.
+
+\item \describefun{double}{pnl_rng_gamma} {double a, double b, \refstruct{PnlRng} \ptr rng}
+  \sshortdescribe Generates a sample from the $\Gamma(a, b)$ distribution.
+
+\item \describefun{double}{pnl_rng_chi2} {double n, \refstruct{PnlRng} \ptr rng}
+  \sshortdescribe Generates a sample from the centered $\chi^2(n)$ distribution.
+\end{itemize}
+
+The following functions take an already existing \refstruct{PnlVect}\ptr  as
+its first argument and fill each entry of the vector with a sample from the
+specified law. All the entries are independent. The difference between
+$n-$samples from a distribution in dimension $1$, and one sample from the same
+distribution in dimension $n$ only matters when using a {\bf Quasi} random
+number generator.
+\begin{itemize}
+\item \describefun{void}{pnl_vect_rng_uni}{\refstruct{PnlVect} \ptr G, int
+    samples, double a, double b, \refstruct{PnlRng} \ptr rng}
+  \sshortdescribe \var{G} is a vector of independent and identically distributed
+  samples from the uniform distribution on $[a, b]$.
+
+\item \describefun{void}{pnl_vect_rng_normal}{\refstruct{PnlVect} \ptr G,
+    int samples, \refstruct{PnlRng} \ptr rng}
+  \sshortdescribe \var{G} is a vector of independent and identically distributed
+  samples from the standard normal distribution.
+
+\item \describefun{void}{pnl_vect_rng_uni_d}{\refstruct{PnlVect} \ptr G, int
+    d, double a, double b, \refstruct{PnlRng} \ptr rng}
+  \sshortdescribe \var{G} is a sample from the uniform distribution on $[a,
+  b]^{\text{d}}$.
+
+\item \describefun{void}{pnl_vect_rng_normal_d}{\refstruct{PnlVect} \ptr G,
+    int d, \refstruct{PnlRng} \ptr rng}
+  \sshortdescribe \var{G} is a sample from the \var{d}-dimensional
+  standard normal distribution.
+
+\end{itemize}
+
+The following functions take an already existing \refstruct{PnlMat}\ptr  as
+first argument and fill each entry of the vector with a sample from the
+specified law. All the entries are in-dependant. On return, the matrix \var{M}
+is of size \verb!samples x dimension!. The rows of \var{M} are independently
+and identically distributed. Each row is a sample from the given law in
+dimension \var{dimension}.
+\begin{itemize}
+\item \describefun{void}{pnl_mat_rng_uni}{\refstruct{PnlMat} \ptr M, int
+    samples, int d, const PnlVect \ptr a, const PnlVect \ptr b,
+    \refstruct{PnlRng} \ptr rng}
+  \sshortdescribe \var{M} contains \var{samples} samples from the uniform
+  distribution on $\prod_{i=1}^d [a_i, b_i]$.
+
+\item \describefun{void}{pnl_mat_rng_uni2}{\refstruct{PnlMat} \ptr M, int
+    samples, int d, double a, double b, \refstruct{PnlRng} \ptr rng}
+  \sshortdescribe \var{M} contains \var{samples} samples from the uniform
+  distribution on $[a, b]^{\text{d}}$.
+
+\item \describefun{void}{pnl_mat_rng_normal}{\refstruct{PnlMat} \ptr M, int
+    samples, int d, \refstruct{PnlRng} \ptr rng}
+  \sshortdescribe \var{M} contains \var{samples} samples from the
+  \var{d}-dimensional standard normal distribution.
+\end{itemize}
+
+
+
+\subsubsection{The {\em rand} interface}
+\label{rand-int}
+
+At the moment, there are $14$ random number generators implemented. Each of them is
+identified by a macro, actually an integer. One must {\bf NOT} refer to a generator
+using directly the value of the macro \var{PNL_RNG_XXX} because there is no warranty
+that the order used to store the generators will remain the same in future releases.
+Instead, one should call generators directly using their macro names.
+
+The initial seed of all the generators is fixed (by the function
+\reffun{pnl_rand_init}) except for the generator
 PNL_RNG_MERSENNE_RANDOM_SEED, which is a Mersenne Twister generator with a
-random initial seed, read from {\tt /dev/urandom/} on Unix platforms.
+``random'' initial seed set using \verb!time(NULL)!.
 
-\subsubsection{Functions}
-\label{std-rng}
-
-Before starting to use random number generators, you must initialize them by
-calling 
+Before starting to use random number generators, you {\bf must} initialize them by
+calling
 \begin{itemize}
 \item \describefun{int}{pnl_rand_init}{int type_generator, int
     simulation_dim, long samples}
   \sshortdescribe It resets the sample counter to $0$ and checks that the
   generator described by \var{type_generator} can actually generate
-  \var{samples} in dimension \var{simulation_dim}.
+  \var{samples} in dimension \var{simulation_dim} and fixes the seed.
 \end{itemize}
 
 \begin{itemize}
-  
-\item \describefun{int}{pnl_rand_or_quasi}{int generator}
-  \sshortdescribe Returns the type the generator of index \var{type_generator}, 
+
+\item \describefun{int}{pnl_rand_or_quasi}{int type_generator}
+  \sshortdescribe Returns the type the generator of index \var{type_generator},
   \var{MC} or \var{QMC}
-  
+
 \item \describefun{const char \ptr }{pnl_rand_name}{int type_generator}
   \sshortdescribe Returns the name of the generator of index \var{type_generator}
 \end{itemize}
 
 Once a generator is chosen, there are several functions available in the
-library to draw samples according to a given law. 
+library to draw samples according to a given law.
 
 The following functions return one sample from a specified law.
 \begin{itemize}
 \item \describefun{int}{pnl_rand_bernoulli}{double p, int type_generator}
   \sshortdescribe Generates a sample from the Bernouilli law on $\{0, 1\}$ with
   parameter \var{p}.
-  
+
 \item \describefun{long}{pnl_rand_poisson}{double lambda, int type_generator}
   \sshortdescribe Generates a sample from the Poisson law with
   parameter \var{lambda}.
@@ -206,8 +368,8 @@ The following functions return one sample from a specified law.
   \var{lambda} at time \var{t}.
 
 \item \describefun{double}{pnl_rand_gamma} {double a, double b, int type_generator}
-  \sshortdescribe Generates a sample from the $\Gamma(a, b)$ distribution.  
-  
+  \sshortdescribe Generates a sample from the $\Gamma(a, b)$ distribution.
+
 \item \describefun{double}{pnl_rand_chi2} {double n, int type_generator}
   \sshortdescribe Generates a sample from the centered $\chi^2(n)$ distribution.
 \end{itemize}
@@ -224,17 +386,17 @@ number generator.
   \sshortdescribe \var{G} is a vector of independent and identically distributed
   samples from the uniform distribution on $[a, b]$.
 
-\item \describefun{void}{pnl_vect_rand_normal}{\refstruct{PnlVect} \ptr G, 
+\item \describefun{void}{pnl_vect_rand_normal}{\refstruct{PnlVect} \ptr G,
     int samples, int generator}
   \sshortdescribe \var{G} is a vector of independent and identically distributed
   samples from the standard normal distribution.
 
 \item \describefun{void}{pnl_vect_rand_uni_d}{\refstruct{PnlVect} \ptr G, int
     d, double a, double b, int type_generator}
-  \sshortdescribe \var{G} is a sample from the uniform distribution on $[a, 
+  \sshortdescribe \var{G} is a sample from the uniform distribution on $[a,
   b]^{\text{d}}$.
 
-\item \describefun{void}{pnl_vect_rand_normal_d}{\refstruct{PnlVect} \ptr G, 
+\item \describefun{void}{pnl_vect_rand_normal_d}{\refstruct{PnlVect} \ptr G,
     int d, int generator}
   \sshortdescribe \var{G} is a sample from the \var{d}-dimensional
   standard normal distribution.
@@ -258,18 +420,18 @@ dimension \var{dimension}.
     samples, int d, double a, double b, int type_generator}
   \sshortdescribe \var{M} contains \var{samples} samples from the uniform
   distribution on $[a, b]^{\text{d}}$.
-  
+
 \item \describefun{void}{pnl_mat_rand_normal}{\refstruct{PnlMat} \ptr M, int
     samples, int d, int type_generator}
   \sshortdescribe \var{M} contains \var{samples} samples from the
   \var{d}-dimensional standard normal distribution.
 \end{itemize}
 
-Because of the use of {\bf Quasi} random number generators, you may need draw
-a set of samples at once because they represent one sample from a distribution
-in high dimension. The following function enables to draw one sample from  the
-\var{dimension}-dimensional standard normal distribution and store it so
-that you can access the elements individually afterwards.
+Because of the use of {\bf Quasi} random number generators, you may need to
+draw a set of samples at once because they represent one sample from a
+multi-dimensional distribution. The following function enables to draw one
+sample from the \var{dimension}-dimensional standard normal distribution and
+store it so that you can access the elements individually afterwards.
 \begin{itemize}
 \item \describefun{double}{pnl_rand_gauss}{int d, int
     create_or_retrieve, int index, int type_generator}
@@ -280,158 +442,20 @@ that you can access the elements individually afterwards.
   with the index of the number to be retrieved.
 \end{itemize}
 
-\subsubsection{The rng interface}
+
 
-It is possible to create random number generators each with its own state
-variable so that they can evolve independently in a shared memory
-environment. These generators are suitable for use with OpenMP. For the
-moment, it is only possible to create Mersenne Twister générators this way.
+\subsubsection{Advanced usage}
 
-\begin{verbatim}
-typedef struct _PnlRng PnlRng;
-struct _PnlRng
-{
-  PnlObject object;
-  int type; /*!< generator type */
-  void (*Compute)(PnlRng *g, double *sample); /*!< the function to compute the
-                                                next number in the sequence */
-  int rand_or_quasi; /*!< can be MC or QMC */
-  int dimension; /*!< dimension of the space in which we draw the samples */
-  int counter; /*!< counter = number of samples already drawn */
-  int has_gauss; /*!< Is a gaussian deviate available? */
-  double gauss; /*!< If has_gauss==1, gauss a gaussian sample */
-  int size_state; /*!< size in bytes of the state variable */
-  void *state; /*!< state of the random generator */
-};
-\end{verbatim}
-
-
-\begin{itemize}
-\item \describefun{\refstruct{PnlRng}\ptr }{pnl_rng_new}{}
-  \sshortdescribe Creates an empty \refstruct{PnlRng}\ptr.
-\item \describefun{void}{pnl_rng_free}{\refstruct{PnlRng} \ptr \ptr }
-  \sshortdescribe Frees a \refstruct{PnlRng}.
-\item \describefun{\refstruct{PnlRng}\ptr }{pnl_rng_create}{int type}
-  \sshortdescribe Creates a \refstruct{PnlRng} corresponding to \var{type}
-  which can be any of the values PNL_RNG_KNUTH, PNL_RNG_MRGK3, PNL_RNG_MRGK5,
-  PNL_RNG_LECUYER, PNL_RNG_SHUFL, PNL_RNG_MERSENNE or PNL_RNG_DCMT.
-  Once a generator has been created, you {\bf must} call
-  \reffun{pnl_rng_sseed} before using it. To create several PNL_RNG_DCMT type
-  generators it is better to use \reffun{pnl_rng_dcmt_create_array} because the
-  function \reffun{pnl_rng_create} produces a memory leak.
-\item \describefun{\refstruct{PnlRng} \ptr
-    \ptr}{pnl_rng_dcmt_create_array}{int n, ulong seed, int \ptr count} 
-  \sshortdescribe Creates an array of \var{n} independent DCMT. \var{seed} is
-  the seed used to initialize the Mersenne Twister generator internally used to
-  find new DCMT. On exit, \var{count} contains the number of generators actually
-  created. Same function as \reffun{pnl_dcmt_create_array} instead that it
-  directly returns an array of \refstruct{PnlRng}.
-\item \describefun{void}{pnl_rng_init}{\refstruct{PnlRng} \ptr rng, int type}
-  \sshortdescribe Initializes an empty \refstruct{PnlRng} as returned by
-  \reffun{pnl_rng_new} using \var{type} which must be PNL_RNG_MERSENNE or
-  PNL_RNG_DCMT. Calling \reffun{pnl_rng_create} is equivalent to calling first
-  \reffun{pnl_rng_new} and then \reffun{pnl_rng_init}.
-\item \describefun{void}{pnl_rng_sseed}{\refstruct{PnlRng} \ptr rng, unsigned
-    long int s}
-  \sshortdescribe Sets the seed of the genrator \var{rng} using \var{s}.
-\end{itemize}
-
-
-The following functions return one sample from a specified law.
-\begin{itemize}
-\item \describefun{int}{pnl_rng_bernoulli}{double p, \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Generates a sample from the Bernouilli law on $\{0, 1\}$ with
-  parameter \var{p}.
-  
-\item \describefun{long}{pnl_rng_poisson}{double lambda, \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Generates a sample from the Poisson law with
-  parameter \var{lambda}.
-
-\item \describefun{double}{pnl_rng_exp}{double lambda, \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Generates a sample from the Exponential law with
-  parameter \var{lambda}.
-
-\item \describefun{double}{pnl_rng_uni} {\refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Generates a sample from the Uniform law on $[0, 1]$.
-
-\item \describefun{double}{pnl_rng_uni_ab} {double a, double b, \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Generates a sample from the Uniform law on $[a, b]$.
-
-\item \describefun{double}{pnl_rng_normal} {\refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Generates a sample from the standard normal distribution.
-
-\item \describefun{long}{pnl_rng_poisson1}{double lambda, double t,\refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Generates a sample from a Poisson process with intensity
-  \var{lambda} at time \var{t}.
-
-\item \describefun{double}{pnl_rng_gamma} {double a, double b, \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Generates a sample from the $\Gamma(a, b)$ distribution.  
-  
-\item \describefun{double}{pnl_rng_chi2} {double n, \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Generates a sample from the centered $\chi^2(n)$ distribution.
-\end{itemize}
-
-The following functions take an already existing \refstruct{PnlVect}\ptr  as
-its first argument and fill each entry of the vector with a sample from the
-specified law. All the entries are independent. The difference between
-$n-$samples from a distribution in dimension $1$, and one sample from the same
-distribution in dimension $n$ only matters when using a {\bf Quasi} random
-number generator.
-\begin{itemize}
-\item \describefun{void}{pnl_vect_rng_uni}{\refstruct{PnlVect} \ptr G, int
-    samples, double a, double b, \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe \var{G} is a vector of independent and identically distributed
-  samples from the uniform distribution on $[a, b]$.
-
-\item \describefun{void}{pnl_vect_rng_normal}{\refstruct{PnlVect} \ptr G, 
-    int samples, \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe \var{G} is a vector of independent and identically distributed
-  samples from the standard normal distribution.
-
-\item \describefun{void}{pnl_vect_rng_uni_d}{\refstruct{PnlVect} \ptr G, int
-    d, double a, double b, \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe \var{G} is a sample from the uniform distribution on $[a, 
-  b]^{\text{d}}$.
-
-\item \describefun{void}{pnl_vect_rng_normal_d}{\refstruct{PnlVect} \ptr G, 
-    int d, \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe \var{G} is a sample from the \var{d}-dimensional
-  standard normal distribution.
-
-\end{itemize}
-
-The following functions take an already existing \refstruct{PnlMat}\ptr  as
-first argument and fill each entry of the vector with a sample from the
-specified law. All the entries are in-dependant. On return, the matrix \var{M}
-is of size \verb!samples x dimension!. The rows of \var{M} are independently
-and identically distributed. Each row is a sample from the given law in
-dimension \var{dimension}.
-\begin{itemize}
-\item \describefun{void}{pnl_mat_rng_uni}{\refstruct{PnlMat} \ptr M, int
-    samples, int d, const PnlVect \ptr a, const PnlVect \ptr b, \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe \var{M} contains \var{samples} samples from the uniform
-  distribution on $\prod_{i=1}^d [a_i, b_i]$.
-
-\item \describefun{void}{pnl_mat_rng_uni2}{\refstruct{PnlMat} \ptr M, int
-    samples, int d, double a, double b, \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe \var{M} contains \var{samples} samples from the uniform
-  distribution on $[a, b]^{\text{d}}$.
-  
-\item \describefun{void}{pnl_mat_rng_normal}{\refstruct{PnlMat} \ptr M, int
-    samples, int d, \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe \var{M} contains \var{samples} samples from the
-  \var{d}-dimensional standard normal distribution.
-\end{itemize}
-
-
+We also provide functions for directly manipulating Mersenne Twister and
+``Dynamically created Mersenne Twister'' random number generators, although we
+believe one should rather use the new {\em rng} interface.
 
 \paragraph{Mersenne Twister}
 
 It is possible to create Mersenne Twister random number generators each with
-its state variable so that they can evolve independently in a shared memory
-environment. These generators are suitable for use with OpenMP
+its state variable.
 \begin{verbatim}
-typedef struct 
+typedef struct
 {
   unsigned long mt[624];
   int mti;
