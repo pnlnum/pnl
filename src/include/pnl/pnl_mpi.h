@@ -28,6 +28,13 @@ extern int pnl_rng_state_mpi_pack_size (const PnlRng *rng, MPI_Comm comm, int *s
 extern int pnl_rng_state_mpi_pack (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 extern int pnl_rng_state_mpi_unpack (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 
+/*
+ * Save load of objects
+ */
+extern PnlRng ** pnl_rng_create_from_file (char *str, int n);
+extern int pnl_rng_save_to_file (PnlRng **rngtab, int n, char *str);
+
+
 /* @} */
 
 #endif /* __PNL_MPI_ */

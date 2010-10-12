@@ -75,6 +75,23 @@ For more expect users, we provide the following nonblocking functions.
   is the same as for {\it MPI_Iprobe}).
 \end{itemize}
 
+\subsection{The save/load interface}
+
+The interface is only accessible when the MPI bindings are compiled since it
+is based on the Packing/Unpacking facilities of MPI.
+
+For the moment, we can only save load random number generators
+\begin{itemize}
+\item \describefun{\refstruct{PnlRng}\ptr \ptr}
+  {pnl_rng_create_from_file}{char \ptr str, int n}
+  \sshortdescribe Loads \var{n} rng from the file of name \var{str} and
+  returns an array of \var{n} \refstruct{PnlRng}.
+\item \describefun{int}{pnl_rng_save_to_file}{\refstruct{PnlRng} \ptr \ptr
+    rngtab, int n, char \ptr str}
+    \sshortdescribe Saves \var{n} rng stored in \var{rngtab} into the file of
+  name \var{str}.
+\end{itemize}
+
 
 %%% Local Variables: 
 %%% mode: latex
