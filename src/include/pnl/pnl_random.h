@@ -1,5 +1,5 @@
-#ifndef _PNL_RANDOM_H 
-#define _PNL_RANDOM_H 
+#ifndef _PNL_RANDOM_H
+#define _PNL_RANDOM_H
 
 
 #ifdef __cplusplus
@@ -13,39 +13,39 @@ extern "C" {
 #include "pnl/pnl_matrix.h"
 
 /**
- * \defgroup PnlRandom Random generators 
+ * \defgroup PnlRandom Random generators
  */
 /*@{*/
 
-#define MC 0    
-#define QMC 1   
-#define CREATE 0 
-#define RETRIEVE 1 
+#define MC 0
+#define QMC 1
+#define CREATE 0
+#define RETRIEVE 1
 
-/* indices of random generators 
+/* indices of random generators
  * The first generators must be true MC generators and the last ones are QMC
  * Do NOT mix them otherwise the arrays  pnl_random and pnl_random_MC will be
  * wrong */
-#define PNL_RNG_NULL -1
-enum {
-  PNL_RNG_KNUTH,
-  PNL_RNG_MRGK3,
-  PNL_RNG_MRGK5,
-  PNL_RNG_SHUFL,
-  PNL_RNG_LECUYER,
-  PNL_RNG_TAUSWORTHE,
-  PNL_RNG_MERSENNE,
-  PNL_RNG_MERSENNE_RANDOM_SEED,
+typedef enum {
+  PNL_RNG_NULL                 = -1,
+  PNL_RNG_KNUTH                = 0,
+  PNL_RNG_MRGK3                = 1,
+  PNL_RNG_MRGK5                = 2,
+  PNL_RNG_SHUFL                = 3,
+  PNL_RNG_LECUYER              = 4,
+  PNL_RNG_TAUSWORTHE           = 5,
+  PNL_RNG_MERSENNE             = 6,
+  PNL_RNG_MERSENNE_RANDOM_SEED = 7,
   /* beginning of QMC sequences */
-  PNL_RNG_SQRT,
-  PNL_RNG_HALTON,
-  PNL_RNG_FAURE,
-  PNL_RNG_SOBOL,
-  PNL_RNG_SOBOL2,
-  PNL_RNG_NIEDERREITER,
+  PNL_RNG_SQRT                 = 8,
+  PNL_RNG_HALTON               = 9,
+  PNL_RNG_FAURE                = 10,
+  PNL_RNG_SOBOL                = 11,
+  PNL_RNG_SOBOL2               = 12,
+  PNL_RNG_NIEDERREITER         = 13,
   /* end of static rng */
-  PNL_RNG_DCMT
-};
+  PNL_RNG_DCMT                 = 14
+} PnlRngType;
 
 /**
  * RandomGenerators
@@ -56,7 +56,7 @@ typedef struct _PnlRng PnlRng;
 struct _PnlRng
 {
   PnlObject object;
-  int type; /*!< generator type */
+  PnlRngType type; /*!< generator type */
   void (*Compute)(PnlRng *g, double *sample); /*!< the function to compute the
                                                 next number in the sequence */
   int rand_or_quasi; /*!< can be MC or QMC */
@@ -71,8 +71,8 @@ struct _PnlRng
 /*
  * This type is only for building a proper enumeration for Premia's list
  */
-typedef struct _PnlRngTypes PnlRngTypes;
-struct _PnlRngTypes
+typedef struct _PnlRngEnum PnlRngEnum;
+struct _PnlRngEnum
 {
   enum_member base; /* {label, key} */
   PnlRng *rng;
@@ -93,9 +93,18 @@ extern PnlRng PnlRngSobol;
 extern PnlRng PnlRngSobol2;
 extern PnlRng PnlRngNiederreiter;
 
-extern PnlRngTypes PnlRngArray[];
+extern PnlRngEnum PnlRngArray[];
 extern enum_members RNGs;
 extern enum_members MC_RNGs;
+
+
+#ifdef HAVE_INLINE
+extern inline PnlRng* pnl_rng_get_from_id (PnlRngType t)
+{
+  return PnlRngArray[t].rng;
+}
+#endif
+extern PnlRng* pnl_rng_get_from_id (PnlRngType t);
 
 
 /*
@@ -104,7 +113,6 @@ extern enum_members MC_RNGs;
 extern int pnl_rand_init(int type_generator, int simulation_dim,long samples);
 extern void pnl_rand_sseed (int type_generator, ulong seed);
 extern int pnl_rand_or_quasi(int type_generator);
-extern PnlRng* pnl_rng_get_from_id (int type_generator);
 extern double pnl_rand_gauss(int, int, int, int);
 extern int pnl_rand_bernoulli(double p, int generator);
 extern long pnl_rand_poisson(double lambda, int type_generator);
@@ -202,7 +210,7 @@ typedef struct
  */
 #define MT_N 624
 
-typedef struct 
+typedef struct
 {
   unsigned long mt[MT_N];
   int mti;
@@ -251,4 +259,4 @@ static char pnl_rng_label[] = "PnlRng";
 #endif /* __cplusplus */
 
 
-#endif /* _PNL_RANDOM_H */ 
+#endif /* _PNL_RANDOM_H */

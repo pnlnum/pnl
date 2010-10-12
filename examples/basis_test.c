@@ -64,7 +64,7 @@ static void exp_regression2()
     }
 
 
-  basis_name = HERMITIAN; /* TCHEBYCHEV; */
+  basis_name = PNL_BASIS_HERMITIAN; /* PNL_BASIS_TCHEBYCHEV; */
   space_dim = 1; /* real valued basis */
   basis_dim = 5; /* number of elements in the basis */
 
@@ -126,7 +126,7 @@ static void regression_multid()
         }
     }
 
-  basis_name = HERMITIAN;
+  basis_name = PNL_BASIS_HERMITIAN;
   nb_variates = 2; /* functions with values in R^2 */
   printf ("Creating basis by specifying the number of functions\n");
   nb_func = 15; /* number of elements in the basis */
@@ -204,7 +204,7 @@ static double derive_x_approx_fonction(PnlBasis *B, PnlVect *alpha, double t, do
 {
   double arg[2];
   arg[0] = t; arg[1] = x;
-  return pnl_basis_eval_D (B, alpha, arg, 1); 
+  return pnl_basis_eval_D (B, alpha, arg, 1);
 }
 
 static void derive_approx_fonction(PnlBasis *B, PnlVect *D, PnlVect *alpha, double t, double x)
@@ -223,7 +223,7 @@ static void derive_approx_fonction(PnlBasis *B, PnlVect *D, PnlVect *alpha, doub
    * sum1 = pnl_basis_eval_D (B, alpha, arg, 1);
    * sum2 = pnl_basis_eval_D2 (B, alpha, arg, 1, 1);
    * sum3 = pnl_basis_eval_D (B, alpha, arg, 0);
-   * 
+   *
    * LET(D,0)=sum0;
    * LET(D,1)=sum1;
    * LET(D,2)=sum2;
@@ -238,7 +238,7 @@ static void derive_approx_fonction(PnlBasis *B, PnlVect *D, PnlVect *alpha, doub
 
   pnl_mat_free (&Hes);
   pnl_vect_free (&grad);
-  
+
 }
 
 static void pnl_basis_eval_test ()
@@ -263,7 +263,7 @@ static void pnl_basis_eval_test ()
   //retrouver
   pnl_vect_rand_uni(x,n,-5,4,gen);
   pnl_vect_rand_uni(t,n,0,1,gen);
-  basis = pnl_basis_create (HERMITIAN, m, 2);
+  basis = pnl_basis_create (PNL_BASIS_HERMITIAN, m, 2);
   alpha = pnl_vect_create (m);
   X = pnl_mat_create (n, 2);
   for(j=0;j<n;j++)
@@ -315,10 +315,27 @@ static void pnl_basis_eval_test ()
   pnl_mat_free(&X);
 }
 
+static void hyperbolic_basis_test ()
+{
+  int dim, degree;
+  double q;
+  PnlBasis *B;
+
+  dim = 3;
+  degree = 3;
+  q = 0.8;
+
+  B = pnl_basis_create_from_hyperbolic_degree (PNL_BASIS_CANONICAL, degree, q, dim);
+  pnl_basis_print (B);
+  pnl_basis_free (&B);
+
+}
+
 
 void basis_test ()
 {
   exp_regression2 ();
   regression_multid ();
   pnl_basis_eval_test ();
+  hyperbolic_basis_test ();
 }

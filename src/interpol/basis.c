@@ -38,7 +38,7 @@
 #endif
 
 /**
- * Returns the total degree of the polynomials represented by
+ * Returns the total degree of the polynomial represented by
  * line i of T
  *
  * @param T a matrix of integers representing the decomposition of the mutli-d
@@ -55,6 +55,30 @@ static int count_degree (const PnlMatInt *T, int i)
 
   for ( j=0 ; j<T->n ; j++ ) { deg += PNL_MGET (T, i, j); }
   return deg;
+}
+
+/**
+ * Returns the total hyperbolic degree at the power q of the polynomial
+ * represented by line i of T
+ *
+ * @param T a matrix of integers representing the decomposition of the mutli-d
+ * polynomials
+ * @param i the index of the element to be considered in the basis (i.e. the row
+ * of T to consider)
+ * @param q the hyperbolic index
+ * @return  the total degree of the polynomials represented by
+ * line i of T
+ */
+static double count_hyperbolic_degree (const PnlMatInt *T, int i, double q)
+{
+  int j;
+  double deg_q;
+
+  for ( j=0, deg_q=0. ; j<T->n ; j++ )
+    {
+      deg_q += pow(PNL_MGET (T, i, j), q);
+    }
+  return deg_q;
 }
 
 
@@ -157,7 +181,7 @@ static int compute_nb_elements (const PnlMatInt *T, int degree)
   while ( i<T->m )
     {
       elements_in_degree = 0;
-      /* search for the numbers of elements with exact degree "current_degree" */
+      /* search for the number of elements with exact degree "current_degree" */
       while ( i + elements_in_degree < T->m && count_degree (T, elements_in_degree + i) < current_degree + 1)
         {
           elements_in_degree++;
@@ -235,7 +259,36 @@ static PnlMatInt* compute_tensor_from_degree (int degree, int nb_variates)
     }
 }
 
-
+/**
+ * Computes the tensor matrix of the n-variate basis with a
+ * hyperbolic degree of order q less or equal than degree
+ *
+ * @param n the number of variates of the basis.
+ * @param q the hyperbolic index
+ * @param degree the total hyperbolic degree
+ *
+ * @return the tensor matrix of the n-variate basis with a total degree less or
+ * equal than degree
+ */
+static PnlMatInt* compute_tensor_from_hyperbolic_degree (double degree, double q, int n)
+{
+  int i, i_sparse;
+  double degree_q;
+  PnlMatInt *T;
+  T = compute_tensor_from_degree (ceil(degree), n);
+  degree_q = pow (degree, q);
+  for ( i=0, i_sparse=0 ; i<T->m ; i++ )
+    {
+      if ( count_hyperbolic_degree (T, i, q) > degree_q ) continue;
+      if ( i_sparse < i )
+        {
+          memcpy ( T->array + i_sparse * n, T->array + i * n, n * sizeof(int));
+        }
+      i_sparse++;
+    }
+  pnl_mat_int_resize (T, i_sparse, n);
+  return T;
+}
 
 /**
  *  Canonical polynomials
@@ -548,9 +601,9 @@ static double D2TchebychevD1(double *x, int n)
 
 enum_member _reg_basis [] =
   {
-    { "Canonical", CANONICAL},
-    { "Hermite", HERMITIAN},
-    { "Tchebychev", TCHEBYCHEV},
+    { "Canonical", PNL_BASIS_CANONICAL},
+    { "Hermite", PNL_BASIS_HERMITIAN},
+    { "Tchebychev", PNL_BASIS_TCHEBYCHEV},
     { NULL, NULLINT},
   };
 
@@ -611,17 +664,17 @@ void  pnl_basis_set_from_tensor (PnlBasis *b, int index, PnlMatInt *T)
 
   switch ( index )
     {
-    case CANONICAL:
+    case PNL_BASIS_CANONICAL:
       b->f = CanonicalD1;
       b->Df = DCanonicalD1;
       b->D2f = D2CanonicalD1;
       break;
-    case HERMITIAN:
+    case PNL_BASIS_HERMITIAN:
       b->f = HermiteD1;
       b->Df = DHermiteD1;
       b->D2f = D2HermiteD1;
       break;
-    case TCHEBYCHEV:
+    case PNL_BASIS_TCHEBYCHEV:
       b->f = TchebychevD1;
       b->Df = DTchebychevD1;
       b->D2f = D2TchebychevD1;
@@ -630,7 +683,6 @@ void  pnl_basis_set_from_tensor (PnlBasis *b, int index, PnlMatInt *T)
       PNL_ERROR ("unknow basis", "pnl_basis_create");
     }
 }
-
 
 /**
  * Returns a  PnlBasis
@@ -680,6 +732,24 @@ PnlBasis*  pnl_basis_create_from_degree (int index, int degree, int nb_variates)
   return pnl_basis_create_from_tensor (index, T);
 }
 
+/**
+ * Returns a  PnlBasis built using an hyperbolic set of indices
+ *
+ * @param index the index of the family to be used
+ * @param degree the hyperbolic maximum degree of the
+ * elements in the basis
+ * @param q the hyperbolic exponent (0 < q <= 1)
+ * @param n the size of the space in which the basis functions are
+ * defined
+ * @return a PnlBasis  such that every element prod_{i=1}^n f_i^(a_i) sastifies
+ * (sum_{i=1}^n (a_i^q))^(1/q) <= degree
+ */
+PnlBasis*  pnl_basis_create_from_hyperbolic_degree (int index, double degree, double q, int n)
+{
+  PnlMatInt *T;
+  T = compute_tensor_from_hyperbolic_degree (degree, q, n);
+  return pnl_basis_create_from_tensor (index, T);
+}
 
 /**
  * Frees a PnlBasis
@@ -739,7 +809,7 @@ double pnl_basis_i ( PnlBasis *b, double *x, int i )
  *
  * @return (D(b_i)/Dj)(x)
  */
-static double D_basis_i ( PnlBasis *b, double *x, int i, int j )
+double pnl_basis_i_D ( PnlBasis *b, double *x, int i, int j )
 {
   int k;
   double aux = 1;
@@ -764,7 +834,7 @@ static double D_basis_i ( PnlBasis *b, double *x, int i, int j )
  *
  * @return (D(b_i)/(Dj1 Dj2))(x)
  */
-static double D2_basis_i (PnlBasis *b, double *x, int i, int j1, int j2)
+double pnl_basis_i_D2 (PnlBasis *b, double *x, int i, int j1, int j2)
 {
   int k;
   double aux = 1;
@@ -790,7 +860,6 @@ static double D2_basis_i (PnlBasis *b, double *x, int i, int j1, int j2)
     }
   return aux;
 }
-
 
 /**
  * Evaluates a linear combination of basis functions at x
@@ -837,7 +906,7 @@ double pnl_basis_eval_D (PnlBasis *basis, PnlVect *coef, double *x, int i)
   for ( k=0 ; k<coef->size ; k++ )
     {
       const double a = pnl_vect_get (coef, k);
-      if ( a != 0. ) { y += a * D_basis_i (basis, x, k, i); }
+      if ( a != 0. ) { y += a * pnl_basis_i_D (basis, x, k, i); }
     }
   return y;
 }
@@ -864,7 +933,7 @@ double pnl_basis_eval_D2 (PnlBasis *basis, PnlVect *coef, double *x, int i, int 
   for ( k=0 ; k<coef->size ; k++ )
     {
       const double a = pnl_vect_get (coef, k);
-      if ( a != 0. ) { y += a * D2_basis_i (basis, x, k, i, j); }
+      if ( a != 0. ) { y += a * pnl_basis_i_D2 (basis, x, k, i, j); }
     }
   return y;
 }
@@ -936,7 +1005,7 @@ void pnl_basis_eval_derivs (PnlBasis *basis, PnlVect *coef, double *x,
               for ( k=0 ; k<l ; k++ ) auxf *= f[k];
               for ( k=k+1 ; k<j ; k++ ) auxf *= f[k];
               for ( k=k+1 ; k<n ; k++ ) auxf *= f[k];
-              
+
               PNL_MLET(hes,j,l) = PNL_MGET(hes,j,l) + a * auxf * Df[j] * Df[l];
               PNL_MLET(hes,l,j) = PNL_MGET(hes,j,l);
             }
@@ -946,7 +1015,6 @@ void pnl_basis_eval_derivs (PnlBasis *basis, PnlVect *coef, double *x,
   free(f);
   free(Df);
 }
-
 
 /**
  * Finds the best approximation of the function defined by f(x(i,:)) = y(i)
@@ -987,8 +1055,9 @@ int pnl_basis_fit_ls (PnlBasis *basis, PnlVect *coef, PnlMat *x, PnlVect *y)
       pnl_mat_dger(1., phi_k, phi_k, A);
     }
 
-  /* Because A often comes from simulation, A is not >0. So we use a QR
-     approach */
+  /* Because A often comes from simulation, A is not >0. So we use a
+   * least-square approach
+   */
   pnl_mat_ls (A, coef);
 
   pnl_vect_free (&phi_k);

@@ -59,7 +59,7 @@ typedef int(unpack_func)(PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm
 
 typedef struct
 {
-  PnlType t;
+  PnlRngType t;
   pack_size_func *pack_size;
   pack_func      *pack;
   unpack_func    *unpack;
@@ -81,7 +81,7 @@ PnlRngMPIFunc rng_pack_func[] =
   };
 
 
-static PnlRngMPIFunc* lookup (PnlType t)
+static PnlRngMPIFunc* lookup (PnlRngType t)
 {
   int i = 0;
   while ( rng_pack_func[i].t != PNL_RNG_NULL )
@@ -91,7 +91,7 @@ static PnlRngMPIFunc* lookup (PnlType t)
     }
   return NULL;
 }
-  
+
 
 int pnl_rng_state_mpi_pack_size (const PnlRng *rng, MPI_Comm comm, int *size)
 {
@@ -114,7 +114,7 @@ int pnl_rng_state_mpi_unpack (PnlRng *rng, void *buf, int bufsize, int *pos, MPI
   return (*(property->unpack)) (rng, buf, bufsize, pos, comm);
 }
 
-  
+
 static int size_knuth_state (const PnlRng *rng, MPI_Comm comm, int *size)
 {
   int info, count;
@@ -275,14 +275,14 @@ static int pack_dcmt_state (const PnlRng *rng, void *buf, int bufsize, int *pos,
   if ((info=MPI_Pack(&(s->mm),1,MPI_INT,buf,bufsize,pos,comm))) return info;
   if ((info=MPI_Pack(&(s->nn),1,MPI_INT,buf,bufsize,pos,comm))) return info;
   if ((info=MPI_Pack(&(s->rr),1,MPI_INT,buf,bufsize,pos,comm))) return info;
-  if ((info=MPI_Pack(&(s->ww),1,MPI_INT,buf,bufsize,pos,comm))) return info; 
+  if ((info=MPI_Pack(&(s->ww),1,MPI_INT,buf,bufsize,pos,comm))) return info;
   if ((info=MPI_Pack(&(s->wmask),1,MPI_UNSIGNED_LONG,buf,bufsize,pos,comm))) return info;
   if ((info=MPI_Pack(&(s->umask),1,MPI_UNSIGNED_LONG,buf,bufsize,pos,comm))) return info;
   if ((info=MPI_Pack(&(s->lmask),1,MPI_UNSIGNED_LONG,buf,bufsize,pos,comm))) return info;
   if ((info=MPI_Pack(&(s->shift0),1,MPI_INT,buf,bufsize,pos,comm))) return info;
   if ((info=MPI_Pack(&(s->shift1),1,MPI_INT,buf,bufsize,pos,comm))) return info;
   if ((info=MPI_Pack(&(s->shiftB),1,MPI_INT,buf,bufsize,pos,comm))) return info;
-  if ((info=MPI_Pack(&(s->shiftC),1,MPI_INT,buf,bufsize,pos,comm))) return info; 
+  if ((info=MPI_Pack(&(s->shiftC),1,MPI_INT,buf,bufsize,pos,comm))) return info;
   if ((info=MPI_Pack(&(s->maskB),1,MPI_UNSIGNED_LONG,buf,bufsize,pos,comm))) return info;
   if ((info=MPI_Pack(&(s->maskC),1,MPI_UNSIGNED_LONG,buf,bufsize,pos,comm))) return info;
   if ((info=MPI_Pack(&(s->i),1,MPI_INT,buf,bufsize,pos,comm))) return info;
@@ -359,14 +359,14 @@ static int unpack_dcmt_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI
   if ((info=MPI_Unpack(buf,bufsize,pos,&(s->mm),1,MPI_INT,comm))) return info;
   if ((info=MPI_Unpack(buf,bufsize,pos,&(s->nn),1,MPI_INT,comm))) return info;
   if ((info=MPI_Unpack(buf,bufsize,pos,&(s->rr),1,MPI_INT,comm))) return info;
-  if ((info=MPI_Unpack(buf,bufsize,pos,&(s->ww),1,MPI_INT,comm))) return info; 
+  if ((info=MPI_Unpack(buf,bufsize,pos,&(s->ww),1,MPI_INT,comm))) return info;
   if ((info=MPI_Unpack(buf,bufsize,pos,&(s->wmask),1,MPI_UNSIGNED_LONG,comm))) return info;
   if ((info=MPI_Unpack(buf,bufsize,pos,&(s->umask),1,MPI_UNSIGNED_LONG,comm))) return info;
   if ((info=MPI_Unpack(buf,bufsize,pos,&(s->lmask),1,MPI_UNSIGNED_LONG,comm))) return info;
   if ((info=MPI_Unpack(buf,bufsize,pos,&(s->shift0),1,MPI_INT,comm))) return info;
   if ((info=MPI_Unpack(buf,bufsize,pos,&(s->shift1),1,MPI_INT,comm))) return info;
   if ((info=MPI_Unpack(buf,bufsize,pos,&(s->shiftB),1,MPI_INT,comm))) return info;
-  if ((info=MPI_Unpack(buf,bufsize,pos,&(s->shiftC),1,MPI_INT,comm))) return info; 
+  if ((info=MPI_Unpack(buf,bufsize,pos,&(s->shiftC),1,MPI_INT,comm))) return info;
   if ((info=MPI_Unpack(buf,bufsize,pos,&(s->maskB),1,MPI_UNSIGNED_LONG,comm))) return info;
   if ((info=MPI_Unpack(buf,bufsize,pos,&(s->maskC),1,MPI_UNSIGNED_LONG,comm))) return info;
   if ((info=MPI_Unpack(buf,bufsize,pos,&(s->i),1,MPI_INT,comm))) return info;

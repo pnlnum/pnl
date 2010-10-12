@@ -23,6 +23,7 @@
 
 #define _PNL_PRIVATE 1
 
+#include "config.h"
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_cdf.h"
@@ -44,10 +45,10 @@ static void KNUTH(PnlRng *rng,double *sample)
   knuth_state *state;
 
   static const long M    = 1000000000L;
-  static const long alea = 1L; 
+  static const long alea = 1L;
 
   state = (knuth_state *) rng->state;
-  
+
   /* First call to the sequence */
   if(rng->counter == 1)
     {
@@ -66,7 +67,7 @@ static void KNUTH(PnlRng *rng,double *sample)
           X_n= state->t_alea[ii];
         }
 
-      /* Randomization of the elements of the table */   
+      /* Randomization of the elements of the table */
       for(l=  1; l<= 4; l++)
         {
           for(i= 1; i<= 55; i++)
@@ -112,11 +113,11 @@ static void MRGK3(PnlRng *rng, double *sample)
 
 
   s = (mrgk3_state *) (rng->state);
-  rng->counter++; 
+  rng->counter++;
 
   /* First generator */
   p1 = A12*s->x11 - A13N*s->x10;
-  k = p1 / M1; 
+  k = p1 / M1;
   p1 -= k*M1;
   if(p1 < 0) p1 += M1;
 
@@ -136,9 +137,9 @@ static void MRGK3(PnlRng *rng, double *sample)
 
 
   /* Combination of the two generators */
-  if (p1< p2) 
+  if (p1< p2)
     *sample= (p1- p2+ M1) / (double) M1;
-  else 
+  else
     *sample=(p1- p2) / (double) M1;
   return;
 }
@@ -164,7 +165,7 @@ static void MRGK5(PnlRng *rng,double *sample)
   static const double A25N = 1641052.;
 
   s = (mrgk5_state *)(rng->state);
-  
+
   rng->counter++;
 
   /* For each call to the sequence, computation of a new point */
@@ -179,7 +180,7 @@ static void MRGK5(PnlRng *rng,double *sample)
 
   s->x10= s->x11;
   s->x11= s->x12;
-  s->x12= s->x13; 
+  s->x12= s->x13;
   s->x13= s->x14;
   s->x14= p1;
 
@@ -200,9 +201,9 @@ static void MRGK5(PnlRng *rng,double *sample)
 
 
   /*Combination of the two generators */
-  if (p1 <= p2) 
+  if (p1 <= p2)
     *sample = (p1 - p2 + M1) / (double) M1;
-  else 
+  else
     *sample = (p1 - p2) / (double) M1;
 
   return;
@@ -210,8 +211,8 @@ static void MRGK5(PnlRng *rng,double *sample)
 
 /* ------------------------------------------------------------------------ */
 /* Random numbers generator of  Park & Miller with Bayes & Durham shuffling
-   procedure : the next random number is not obtained from the previous one 
-   but we use an intermediate table which contains the 32 precedent random 
+   procedure : the next random number is not obtained from the previous one
+   but we use an intermediate table which contains the 32 precedent random
    numbers and we choose one of them randomly.  */
 /* ----------------------------------------------------------------------- */
 static void SHUFL(PnlRng *rng,double *sample)
@@ -223,7 +224,7 @@ static void SHUFL(PnlRng *rng,double *sample)
 
   static const long A = 16807;        /* multiplier */
   static const long M = 2147483647;   /* 2**31 - 1  */
-  static const long Q = 127773;       /*   M div A  */  
+  static const long Q = 127773;       /*   M div A  */
   static const long R = 2836;         /*   M mod A  */
 
 
@@ -237,11 +238,11 @@ static void SHUFL(PnlRng *rng,double *sample)
         {
           /*Schrage's method to avoid overflows */
           hi = s->x/Q;
-          s->x = A*(s->x- hi*Q)- R*hi; 
+          s->x = A*(s->x- hi*Q)- R*hi;
           if (s->x < 0) s->x += M;
           if (j< 32) s->t[j] = s->x;
         }
-      s->y= s->t[0];                    
+      s->y= s->t[0];
     }
   rng->counter++;
 
@@ -256,20 +257,20 @@ static void SHUFL(PnlRng *rng,double *sample)
   s->y = s->t[j];
 
   s->t[j] = s->x;
-  *sample = (double) s->y / (double) M; 
+  *sample = (double) s->y / (double) M;
 }
 
 
 
 /* ------------------------------------------------------------------------- */
 /* Random numbers generator of L'Ecuyer with Bayes & Durham shuffling
-   procedure : 
+   procedure :
    Combination of two short periods LCG to obtain a longer period generator.
    The period is the least common multiple of the 2 others.  */
 /* ------------------------------------------------------------------------- */
 
 static void LECUYER(PnlRng *rng,double *sample)
-{ 
+{
   long N1;
   int j;
   long hi;               /* high order bit */
@@ -277,10 +278,10 @@ static void LECUYER(PnlRng *rng,double *sample)
 
   static const long A1 = 40014;        /* multiplier of the 1st generator */
   static const long A2 = 40692;        /* multiplier of the 2nd generator */
-  static const long M1 = 2147483647;   /* 2**31 - 1   */ 
+  static const long M1 = 2147483647;   /* 2**31 - 1   */
   static const long M2 = 2147483399;   /* 2**31 - 249 */
-  static const long Q1 = 53668;        /* m1 div a1   */  
-  static const long Q2 = 52774;        /* m2 div a2   */ 
+  static const long Q1 = 53668;        /* m1 div a1   */
+  static const long Q2 = 52774;        /* m2 div a2   */
   static const long R1 = 12221;        /* m1 mod a1   */
   static const long R2 = 3791;         /* m2 mod a2   */
 
@@ -293,16 +294,16 @@ static void LECUYER(PnlRng *rng,double *sample)
       for (j= 39; j>= 0; j--)
         {
           /* Park & Miller's generator */
-          hi= s->x/Q1;  
+          hi= s->x/Q1;
           s->x= A1*(s->x-hi*Q1) - R1*hi;
-          if (s->x < 0) 
+          if (s->x < 0)
             s->x+= M1;
           if (j < 32)
             s->t[j]= s->x;
         }
       s->z= s->t[0];
     }
-  rng->counter++;              
+  rng->counter++;
 
   /* First generator */
   hi= s->x/Q1;
@@ -318,14 +319,14 @@ static void LECUYER(PnlRng *rng,double *sample)
   /* Indes->x j dependent on the last point */
   j= s->z/N1;
   /* Next point dependent on j */
-  s->z= s->t[j]- s->y; 
+  s->z= s->t[j]- s->y;
   s->t[j]= s->x;
 
 
   /* To avoid 0 value */
   if (s->z < 1) s->z+= M1-1;
 
-  *sample = (double) s->z / (double) M1; 
+  *sample = (double) s->z / (double) M1;
   return;
 }
 
@@ -339,7 +340,7 @@ static void LECUYER(PnlRng *rng,double *sample)
 
 /* ---------------------------------------------------- */
 /* Generation of a random bit
-   Algorithm based on a prime polynomial : 
+   Algorithm based on a prime polynomial :
    here we choose x^18 + x^5 + x^2 + x + 1 . */
 /* ---------------------------------------------------- */
 static int bit_random(tausworthe_state *s)
@@ -382,16 +383,16 @@ static unsigned long random_word(int k, tausworthe_state *s)
 
 /* ---------------------------------------------------------------- */
 /*  Tausworthe  Algorithm
-    Combination  of 3 Tausworthe generators 
+    Combination  of 3 Tausworthe generators
     u(n)[j]= u(n-r)[j] ^ u(n-k)[j], j=1,..,3
     with parameters k, q, r, s and t.
     Generator :
-    v= =(u[0] ^ u[1] ^ u[2])/2^32.    
+    v= =(u[0] ^ u[1] ^ u[2])/2^32.
 
     L= 32 length of a word.
-    We use a mask to make the generator 
-    (originally designed for 32-bit unsigned int) 
-    work on 64 bit machines : this mask enables to drop 
+    We use a mask to make the generator
+    (originally designed for 32-bit unsigned int)
+    work on 64 bit machines : this mask enables to drop
     the 32 highest bits on 64 bit machines*/
 /* ---------------------------------------------------------------- */
 
@@ -414,7 +415,7 @@ static void TAUS(PnlRng *rng,double *sample)
   st = (tausworthe_state *)(rng->state);
 
   /* First call to the sequence. Initialisation */
-  if (rng->counter == 1) 
+  if (rng->counter == 1)
     {
       /* initialisation of each generator */
       for(i= 0; i< 3; i++)
@@ -422,7 +423,7 @@ static void TAUS(PnlRng *rng,double *sample)
           /* The first k bits are chosen randomly */
           st->u[i]= random_word(k[i], st);
           /* The next L-k bits are initially fixed to zero */
-          st->u[i] = (st->u[i] << (L- k[i])) & BIT32_MASK;  
+          st->u[i] = (st->u[i] << (L- k[i])) & BIT32_MASK;
           /* Now they are computed with the recurrence on u */
           b= (((st->u[i] << q[i]) & BIT32_MASK) ^ st->u[i]) >> k[i];
           st->u[i] ^= b;
@@ -431,17 +432,17 @@ static void TAUS(PnlRng *rng,double *sample)
 
   /* For each call to the sequence, computation of a new point */
   for(i= 0; i< 3; i++)
-    { 
+    {
       /* Calculus of the next points for the 3 generators */
       /* 6 steps explained by L'Ecuyer */
-      b = (((st->u[i]<<q[i]) & BIT32_MASK) ^ st->u[i]) >> t[i]; 
+      b = (((st->u[i]<<q[i]) & BIT32_MASK) ^ st->u[i]) >> t[i];
       st->u[i] = (((st->u[i] & c[i]) << s[i]) & BIT32_MASK ) ^ b;
       v ^= st->u[i];       /* Combination : XOR between the J generators */
     }
 
   /* Normalization by 2^32 */
   *sample = v / 4294967296.0;
-  rng->counter++; 
+  rng->counter++;
 }
 
 static void MERSENNE(PnlRng *rng,double *sample)
@@ -545,7 +546,7 @@ static void binomial(int Max)
   int n, p, i;
 
   Comb[0][0]= 1;
-  for (n= 1; n< Max; n++) 
+  for (n= 1; n< Max; n++)
     {
       Comb[n][0]= 1;
       Comb[n][n]= 1;
@@ -586,12 +587,12 @@ static void SQRT(PnlRng *rng, double X_m[])
     X_m[i]= ((rng->counter*alpha[i])-floor(rng->counter*alpha[i]));
 
   rng->counter++;
-}  
+}
 
 
 /* ------------------------------------------------------------- */
-/* Halton sequence. Bases p={p1, p2, ..., pd} of prime numbers ; 
-   Computation of the next element of the sequence X_n 
+/* Halton sequence. Bases p={p1, p2, ..., pd} of prime numbers ;
+   Computation of the next element of the sequence X_n
    (index 0 to d-1) */
 /* ------------------------------------------------------------- */
 static void HALTON(PnlRng *rng, double X_n[])
@@ -620,7 +621,7 @@ static void HALTON(PnlRng *rng, double X_n[])
       puissance= 1;
       x= 0; y= 0;
       /* radical inverse function */
-      while ((rng->counter-x)>0) 
+      while ((rng->counter-x)>0)
         {
           coeff= ((rng->counter-x)/puissance)%prime[i];
           x += coeff*puissance;
@@ -670,7 +671,7 @@ static void FAURE(PnlRng *rng, double U_n[])
     }
 
   /* Initialization */
-  for (i=0; i< rng->dimension; i++) 
+  for (i=0; i< rng->dimension; i++)
     {
       U_n[i]= 0.;
     }
@@ -691,17 +692,17 @@ static void FAURE(PnlRng *rng, double U_n[])
 
   /* Other terms of the sequence */
   /* Successive transformations of the r-digit expansion.*/
-  for (k=1; k< rng->dimension; k++) 
+  for (k=1; k< rng->dimension; k++)
     {
       puissance2= r;
-      for (j=0; j< indice; j++) 
+      for (j=0; j< indice; j++)
         {
           somm= 0;
-          for (i=j; i< indice; i++) 
+          for (i=j; i< indice; i++)
             somm += Comb[i][j]*coeff[i];
           b[j]= somm%r;
         }
-      for (j=0; j< indice; j++) 
+      for (j=0; j< indice; j++)
         {
           coeff[j]= b[j];
           U_n[k] += (double)coeff[j]/(double)puissance2;
@@ -789,29 +790,29 @@ static void SOBOL(PnlRng *rng, double X_n[])
   if(rng->counter == 1)
     {
       /* Initialization of the full array C[i][j] */
-      for (j=1; j<=DIM_MAX_SOBOL; j++) 
+      for (j=1; j<=DIM_MAX_SOBOL; j++)
         initialX_n[j]= 0;
 
       facteur=1.0/(1L << BIT_MAX_SOBOL);
 
-      for (j=1; j<=DIM_MAX_SOBOL; j++) 
+      for (j=1; j<=DIM_MAX_SOBOL; j++)
         {
           deg_j = deg[j];
           /* Values of C_init in C */
-          for (i= 0; i<= deg_j; i++) 
+          for (i= 0; i<= deg_j; i++)
             {
               C[j][i]= C_init[j][i];
             }
           /* Recurrence relation to compute the other C[i][j] */
-          for (i= deg_j+1; i<= BIT_MAX_SOBOL; i++) 
+          for (i= deg_j+1; i<= BIT_MAX_SOBOL; i++)
             {
               P_j= P[j];
               aux= C[j][i-deg_j];
               aux ^= (C[j][i-deg_j] << deg_j);
-              for (k= deg_j-1; k>=1; k--) 
+              for (k= deg_j-1; k>=1; k--)
                 {
                   /* Test for the coefficient b(k) */
-                  if (P_j & 1) 
+                  if (P_j & 1)
                     aux ^= (C[j][i-k] << k);
                   P_j >>= 1;
                 }
@@ -819,19 +820,19 @@ static void SOBOL(PnlRng *rng, double X_n[])
               C[j][i]= aux;
             }
         }
-    } 
+    }
 
   /* Calculation of a new quasi-random vector on each call */
   dim= rng->counter;
   /* Research of the rightmost 0 bit */
-  for (i=1; i<=BIT_MAX_SOBOL; i++) 
+  for (i=1; i<=BIT_MAX_SOBOL; i++)
     {
-      if ((dim & 1) == 0) 
+      if ((dim & 1) == 0)
         break;
       dim >>= 1;
     }
   /* Computation of the term n from the term (n-1) */
-  for (j=1; j<= rng->dimension; j++) 
+  for (j=1; j<= rng->dimension; j++)
     {
       initialX_n[j] = (initialX_n[j])^ (C[j][i]<< (BIT_MAX_SOBOL-i));
       /* normalization */
@@ -863,10 +864,10 @@ static void SOBOL2(PnlRng *rng, double X_n[])
 
 
 
-/* 
- * NIEDERREITER SEQUENCE in dimension d, in base 2 
- * X_n[] contains the terms of the n-th element 
- * The algorithm is based on a relation between X(n) and X(n-1) 
+/*
+ * NIEDERREITER SEQUENCE in dimension d, in base 2
+ * X_n[] contains the terms of the n-th element
+ * The algorithm is based on a relation between X(n) and X(n-1)
  * ------------------------------------------------ */
 
 /* maximal dimension for the NIEDERREITER sequence */
@@ -949,11 +950,11 @@ static void NIEDERREITER(PnlRng *rng, double X_n[])
 
 
   /* First call to the sequence */
-  if (rng->counter == 1) 
+  if (rng->counter == 1)
     {
 
       /* Initialization of initX_n[] */
-      for (i=1; i<=DIM_MAX_NIED; i++) 
+      for (i=1; i<=DIM_MAX_NIED; i++)
         initialX_n[i]= 0;
 
       facteur= 1.0/(double)(1UL << (BIT_MAX_NIED+1));
@@ -961,14 +962,14 @@ static void NIEDERREITER(PnlRng *rng, double X_n[])
       initial_d = saut;
 
       /* Gray code of saut */
-      gray = saut^(saut >> 1); 
-      for (i=0; i<=BIT_MAX_NIED; i++) 
+      gray = saut^(saut >> 1);
+      for (i=0; i<=BIT_MAX_NIED; i++)
         {
-          if (gray == 0) 
+          if (gray == 0)
             break;
-          for (j= 1; j<= DIM_MAX_NIED; j++) 
+          for (j= 1; j<= DIM_MAX_NIED; j++)
             {
-              if ((gray & 1) == 0) 
+              if ((gray & 1) == 0)
                 break;
               /* XOR sum */
               initialX_n[j] ^= C[i][j];
@@ -982,14 +983,14 @@ static void NIEDERREITER(PnlRng *rng, double X_n[])
   dim= initial_d++;
 
   /* Research of the rightmost 0 bit */
-  for (i=0; i<=BIT_MAX_NIED; i++) 
+  for (i=0; i<=BIT_MAX_NIED; i++)
     {
-      if ((dim & 1) == 0) 
+      if ((dim & 1) == 0)
         break;
       dim >>= 1;
     }
   /* Computation of the term n from the term n-1 */
-  for (j=1; j<= rng->dimension; j++) 
+  for (j=1; j<= rng->dimension; j++)
     {
       X_n[j-1]= (double)initialX_n[j]*facteur;
       initialX_n[j] ^= C[i][j];
@@ -1011,25 +1012,25 @@ static tausworthe_state tausworthe_st;
 static mt_state mt_st1;
 static mt_state mt_st2;
 
-PnlRng PnlRngKnuth = 
+PnlRng PnlRngKnuth =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_KNUTH,&KNUTH,
     MC,0, 0,0,0,sizeof(knuth_state), &knuth_st
   };
-PnlRng PnlRngMrgk3 = 
+PnlRng PnlRngMrgk3 =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_MRGK3,&MRGK3,
     MC,0,0,0,0,sizeof(mrgk3_state),&mrgk3_st
   };
-PnlRng PnlRngMrgk5 = 
+PnlRng PnlRngMrgk5 =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_MRGK5,&MRGK5,
     MC,0,0,0,0,sizeof(mrgk5_state),&mrgk5_st
   };
-PnlRng PnlRngShufl = 
+PnlRng PnlRngShufl =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_SHUFL,&SHUFL,
@@ -1041,55 +1042,55 @@ PnlRng PnlRngLecuyer =
     PNL_RNG_LECUYER,&LECUYER,
     MC,0, 0,0,0,sizeof(lecuyer_state),&lecuyer_st
   };
-PnlRng PnlRngTausworthe = 
+PnlRng PnlRngTausworthe =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_TAUSWORTHE,&TAUS,
     MC,0, 0,0,0,sizeof(tausworthe_state),&tausworthe_st
   };
-PnlRng PnlRngMersenne = 
+PnlRng PnlRngMersenne =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_MERSENNE,&MERSENNE,
     MC,0,0, 0,0,sizeof(mt_state),&mt_st1
   };
-PnlRng PnlRngMersenneRandomSeed = 
+PnlRng PnlRngMersenneRandomSeed =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_MERSENNE_RANDOM_SEED,&MERSENNE,
     MC,0,0, 0,0,sizeof(mt_state),&mt_st2
   };
-PnlRng PnlRngSqrt = 
+PnlRng PnlRngSqrt =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_SQRT,&SQRT,
     QMC,0, 0,0,0,0,NULL
   };
-PnlRng PnlRngHalton = 
+PnlRng PnlRngHalton =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_HALTON,&HALTON,
     QMC,0, 0,0,0,0,NULL
   };
-PnlRng PnlRngFaure = 
+PnlRng PnlRngFaure =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_FAURE,&FAURE,
     QMC,0, 0,0,0,0,NULL
   };
-PnlRng PnlRngSobol = 
+PnlRng PnlRngSobol =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_SOBOL,&SOBOL,
     QMC,0, 0,0,0,0,NULL
   };
-PnlRng PnlRngSobol2 = 
+PnlRng PnlRngSobol2 =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_SOBOL2,&SOBOL2,
     QMC,0, 0,0,0,0,NULL
   };
-PnlRng PnlRngNiederreiter = 
+PnlRng PnlRngNiederreiter =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_NIEDERREITER,&NIEDERREITER,
@@ -1099,7 +1100,7 @@ PnlRng PnlRngNiederreiter =
 /*
  * Random Number Generator Array
  */
-PnlRngTypes PnlRngArray[]= 
+PnlRngEnum PnlRngArray[]=
   {
     {{"KNUTH", PNL_RNG_KNUTH},&PnlRngKnuth},
     {{"MRGK3", PNL_RNG_MRGK3},&PnlRngMrgk3},
@@ -1122,7 +1123,7 @@ PnlRngTypes PnlRngArray[]=
  * True MC generators do not take into account the parameter dimension in the
  * Compute function.
  */
-PnlRngTypes PnlRngMCArray[]= 
+PnlRngEnum PnlRngMCArray[]=
   {
     {{"KNUTH", PNL_RNG_KNUTH},&PnlRngKnuth},
     {{"MRGK3", PNL_RNG_MRGK3},&PnlRngMrgk3},
@@ -1135,11 +1136,11 @@ PnlRngTypes PnlRngMCArray[]=
     {{NULL, NULLINT}, NULL}
   };
 
-enum_members RNGs = { sizeof(PnlRngArray[0]), (enum_member*)&PnlRngArray[0], sizeof(PnlRngArray)/sizeof(PnlRngTypes) };
-enum_members MC_RNGs = { sizeof(PnlRngMCArray[0]), (enum_member*)&PnlRngMCArray[0], sizeof(PnlRngMCArray)/sizeof(PnlRngTypes) };
+enum_members RNGs = { sizeof(PnlRngArray[0]), (enum_member*)&PnlRngArray[0], sizeof(PnlRngArray)/sizeof(PnlRngEnum) };
+enum_members MC_RNGs = { sizeof(PnlRngMCArray[0]), (enum_member*)&PnlRngMCArray[0], sizeof(PnlRngMCArray)/sizeof(PnlRngEnum) };
 
 
-PnlRng* pnl_rng_get_from_id (int id)
+PnlRng* pnl_rng_get_from_id (PnlRngType id)
 {
   return PnlRngArray[id].rng;
 }
@@ -1155,7 +1156,7 @@ PnlRng* pnl_rng_get_from_id (int id)
 int pnl_rand_init (int type_generator, int dimension, long samples)
 {
   PnlRng *rng;
-  rng = pnl_rng_get_from_id(type_generator); 
+  rng = pnl_rng_get_from_id(type_generator);
 
   switch (rng->type)
     {
@@ -1192,7 +1193,7 @@ int pnl_rand_init (int type_generator, int dimension, long samples)
       /*
        * Check if dimension > max_dim for QMC
        */
-    case PNL_RNG_FAURE : 
+    case PNL_RNG_FAURE :
       if (dimension > DIM_MAX_FAURE || samples>MAX_SAMPLE_FAURE) return FAIL;
       binomial(MAXI);
       break;
@@ -1258,7 +1259,7 @@ PnlRng* pnl_rng_new ()
 {
   PnlRng *rng;
   if ((rng = malloc (sizeof(PnlRng))) == NULL) return NULL;
-  
+
   rng->object.type = PNL_TYPE_RNG;
   rng->object.label = pnl_rng_label;
   rng->object.parent_type = PNL_TYPE_RNG;
@@ -1389,7 +1390,7 @@ static void pnl_mrgk3_sseed (mrgk3_state *s, ulong seed)
   s->x10=231458761.;
   s->x11=34125679.;
   s->x12=45678213.;
-  
+
   s->x20=57964412.;
   s->x21=12365487.;
   s->x22=77221456.;
@@ -1422,7 +1423,7 @@ static void pnl_shufl_sseed (shufl_state *s, ulong seed)
 
 static void pnl_lecuyer_sseed (lecuyer_state *s, ulong seed)
 {
-  s->x= seed % 2147483647;   /* 2**31 - 1   */ 
+  s->x= seed % 2147483647;   /* 2**31 - 1   */
   s->y= seed % 2147483399;   /* 2**31 - 249 */
   s->z = 0;
 }
@@ -1438,7 +1439,7 @@ static void pnl_tausworthe_sseed (tausworthe_state *s, ulong seed)
 
 /**
  * Sets the seed of a Random Number Generator
- * 
+ *
  * @param rng a PnlRng
  * @param seed an unsigned lon integer used to initialize the generator
  */
@@ -1470,6 +1471,8 @@ void pnl_rng_sseed (PnlRng *rng, ulong seed)
       break;
     case PNL_RNG_DCMT :
       pnl_dcmt_sseed ((dcmt_state *)(rng->state), seed);
+      break;
+    default:
       break;
     }
   rng->counter=1;

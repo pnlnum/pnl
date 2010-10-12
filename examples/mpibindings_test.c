@@ -56,7 +56,7 @@ static void init_int_array ()
 static int send_vector ()
 {
   PnlVect *v;
-  int info, n =5; 
+  int info, n =5;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
   v = pnl_vect_new ();
   pnl_rand_init (gen, n, 1);
@@ -83,7 +83,7 @@ static int recv_vector ()
 static int send_int_vector ()
 {
   PnlVectInt *v;
-  int info, n =5; 
+  int info, n =5;
   v = pnl_vect_int_create_from_ptr (n, IntArray);
   printf ("Original vector \n"); pnl_vect_int_print (v); printf ("\n");
   info = pnl_object_mpi_send (PNL_OBJECT(v), 1, SENDTAG, MPI_COMM_WORLD);
@@ -137,7 +137,7 @@ static int recv_complex_vector ()
 static int send_matrix ()
 {
   PnlMat *M;
-  int info, m = 4, n =5; 
+  int info, m = 4, n =5;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
   M = pnl_mat_new ();
   pnl_rand_init (gen, m, n);
@@ -163,7 +163,7 @@ static int recv_matrix ()
 static int send_int_matrix ()
 {
   PnlMatInt *M;
-  int info, n =5, m=4; 
+  int info, n =5, m=4;
   M = pnl_mat_int_create_from_ptr (m, n, IntArray);
   printf ("Original matrix \n"); pnl_mat_int_print (M); printf ("\n");
   info = pnl_object_mpi_send (PNL_OBJECT(M), 1, SENDTAG, MPI_COMM_WORLD);
@@ -218,7 +218,7 @@ static int send_bandmatrix ()
 {
   PnlMat *M;
   PnlBandMat *BM;
-  int info, m = 4, n =5; 
+  int info, m = 4, n =5;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
   M = pnl_mat_new ();
   pnl_rand_init (gen, m, n);
@@ -247,7 +247,7 @@ static int send_tridiagmatrix ()
 {
   PnlMat *M;
   PnlTridiagMat *TM;
-  int info, m = 5; 
+  int info, m = 5;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
   M = pnl_mat_new ();
   pnl_rand_init (gen, m, m);
@@ -264,7 +264,7 @@ static int send_basis ()
 {
   PnlBasis *B;
   int info, index, degree, spaced;
-  index = CANONICAL;
+  index = PNL_BASIS_CANONICAL;
   degree = 4;
   spaced =3;
   B = pnl_basis_create_from_degree (index, degree, spaced);
@@ -279,7 +279,7 @@ static int ssend_basis ()
 {
   PnlBasis *B;
   int info, index, degree, spaced;
-  index = CANONICAL;
+  index = PNL_BASIS_CANONICAL;
   degree = 4;
   spaced =3;
   B = pnl_basis_create_from_degree (index, degree, spaced);
@@ -387,14 +387,14 @@ static int isend_matrix ()
   MPI_Request request;
   MPI_Status status;
   PnlMat *M;
-  int info, m = 4, n =5; 
+  int info, m = 4, n =5;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
   M = pnl_mat_new ();
   pnl_rand_init (gen, m, n);
   pnl_mat_rand_normal (M, m, n, gen);
   printf ("Original matrix (Isend)\n"); pnl_mat_print (M); printf ("\n");
   info = pnl_object_mpi_isend (PNL_OBJECT(M), 1, SENDTAG, MPI_COMM_WORLD, &request);
-  info = MPI_Wait (&request, &status);  
+  info = MPI_Wait (&request, &status);
   pnl_mat_free (&M);
   return info;
 }
@@ -446,7 +446,7 @@ static int irecv_matrix ()
 
 static int bcast_matrix (PnlMat *M)
 {
-  int rank, info, m = 4, n =5; 
+  int rank, info, m = 4, n =5;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
   MPI_Comm_rank (MPI_COMM_WORLD, &rank);
 
@@ -523,7 +523,7 @@ int main(int argc, char *argv[])
   bcast_matrix (M);
   pnl_mat_free (&M);
   MPI_Barrier (MPI_COMM_WORLD);
-  
+
   MPI_Finalize ();
   exit (0);
 }
