@@ -1,7 +1,7 @@
 /*
  * This code was originally written for matrices of doubles and has been
  * translated using a template system by
- *    David Pommier <pommier.david@gmail.com>             
+ *    David Pommier <pommier.david@gmail.com>
  *    Jérôme Lelong <jerome.lelong@gmail.com>
  */
 
@@ -29,7 +29,7 @@
 /***************************
  *** PnlMat functions ***
  ***************************/
- 
+
 /**
  * Initializes a PnlMat
  */
@@ -38,6 +38,13 @@ void FUNCTION(pnl_mat,init)(TYPE(PnlMat) *o)
   o->object.parent_type = PNL_TYPE_MATRIX;
   o->object.type = CONCAT2(PNL_TYPE_MATRIX_, BASE_TYPE);
   o->object.label = FUNCTION(pnl_mat,label);
+  o->object.destroy = (destroy_func *) pnl_mat_object_free;
+  o->m = 0;
+  o->n = 0;
+  o->mn = 0;
+  o->mem_size = 0;
+  o->owner = 1;
+  o->array = NULL;
 }
 
 /**
@@ -91,7 +98,7 @@ TYPE(PnlMat) * FUNCTION(pnl_mat,create)(int m, int n)
       M->mem_size = M->mn;
       M->owner = 1;
     }
-  return M;  
+  return M;
 }
 
 /**
@@ -105,7 +112,7 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,CONCAT2(create_from_,BASE))(int m, int n, BASE x)
 {
   TYPE(PnlMat) *M;
   int i;
-  
+
   if ((M=FUNCTION(pnl_mat,create)(m, n))==NULL) return NULL;
 
   for (i=0; i<M->mn; i++) { M->array[i] = x; }
@@ -123,9 +130,9 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,CONCAT2(create_from_,BASE))(int m, int n, BASE x)
 TYPE(PnlMat)* FUNCTION(pnl_mat,create_from_ptr)(int m, int n, const BASE* x)
 {
   TYPE(PnlMat) *M;
-  
+
   if ((M=FUNCTION(pnl_mat,create)(m, n))==NULL) return NULL;
-  
+
   memcpy(M->array, x, M->mn*sizeof(BASE));
   return M;
 }
@@ -193,7 +200,7 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,create_from_file )(const char * file)
   int m, n, count, mn;
   ATOMIC *atomic_data;
   FILE *FIC = NULL;
-  
+
   if ((FIC = fopen( file, "r")) == NULL )
     {
       PNL_ERROR("Cannot open file", "FUNCTION(pnl_mat,create_from_file)");
@@ -263,7 +270,7 @@ void FUNCTION(pnl_mat,free)(TYPE(PnlMat) **v)
 }
 
 /**
- * copies a TYPE(PnlMat) 
+ * copies a TYPE(PnlMat)
  *
  * @param v : a constant TYPE(PnlMat) pointer
  * @return a TYPE(PnlMat) pointer initialised with v
@@ -296,11 +303,11 @@ void FUNCTION(pnl_mat,clone)(TYPE(PnlMat) *clone, const TYPE(PnlMat) *M)
  * memory is freed. If the new size is larger than the current mem_size, a new
  * pointer is allocated. The old data are kept.
  *
- * @param M : a pointer to an already existing TYPE(PnlMat) 
+ * @param M : a pointer to an already existing TYPE(PnlMat)
  * @param m : new nb rows
  * @param n : new nb columns
  *
- * @return OK or FAIL. When returns OK, the matrix is changed. 
+ * @return OK or FAIL. When returns OK, the matrix is changed.
  */
 int FUNCTION(pnl_mat,resize)(TYPE(PnlMat) *M, int m, int n)
 {
@@ -312,7 +319,7 @@ int FUNCTION(pnl_mat,resize)(TYPE(PnlMat) *M, int m, int n)
  *
  * @param self : a TYPE(PnlMat)
  * @param i : index of line
- * @param j : index of col 
+ * @param j : index of col
  * @param x : self[i,j]=x
  */
 void FUNCTION(pnl_mat,set)(TYPE(PnlMat) *self, int i, int j, BASE x)
@@ -326,7 +333,7 @@ void FUNCTION(pnl_mat,set)(TYPE(PnlMat) *self, int i, int j, BASE x)
  *
  * @param self : a TYPE(PnlMat)
  * @param i : index of line
- * @param j : index of col 
+ * @param j : index of col
  * @return  self[i,j]
  */
 BASE FUNCTION(pnl_mat,get)(const TYPE(PnlMat) *self, int i, int j)
@@ -340,7 +347,7 @@ BASE FUNCTION(pnl_mat,get)(const TYPE(PnlMat) *self, int i, int j)
  *
  * @param self : a TYPE(PnlMat)
  * @param i : index of line
- * @param j : index of col 
+ * @param j : index of col
  * @return  &(self[i,j])
  */
 BASE* FUNCTION(pnl_mat,lget)(TYPE(PnlMat) *self, int i, int j)
@@ -350,7 +357,7 @@ BASE* FUNCTION(pnl_mat,lget)(TYPE(PnlMat) *self, int i, int j)
 }
 
 /**
- * in-place set matrix constant 
+ * in-place set matrix constant
  *
  * @param lhs : left hand side matrix
  * @param x : scalar
@@ -386,7 +393,7 @@ void FUNCTION(pnl_mat,set_id)(TYPE(PnlMat) *lhs)
  * @param x the value used to fill the diagonal
  * @param d the index of the diagonal (if d>0, we consider the d-th upper
  * diagonal, if d<0, we consider the (-d)-th lower diagonal)
- * 
+ *
  */
 void FUNCTION(pnl_mat,set_diag)(TYPE(PnlMat) *M, BASE x, int d)
 {
@@ -412,7 +419,7 @@ void FUNCTION(pnl_mat,tr)(TYPE(PnlMat)*tM, const TYPE(PnlMat) *M)
   int i,j;
   FUNCTION(pnl_mat,resize)(tM, M->n,M->m);
   rptr=tM->array;
-  
+
   for (i=0;i<tM->m;i++)
     {
       mptr=M->array+i;
@@ -456,7 +463,7 @@ void FUNCTION(pnl_mat,sq_transpose) (TYPE(PnlMat) *M)
           PNL_MLET (M, i, j) = *b;
           *b = a;
         }
-    }  
+    }
 }
 
 
@@ -484,7 +491,7 @@ void FUNCTION(pnl_mat,fprint )(FILE *fic, const TYPE(PnlMat) *M)
  *
  * @param M a TYPE(PnlMat) pointer.
  */
-void FUNCTION(pnl_mat,print )(const TYPE(PnlMat) *M) 
+void FUNCTION(pnl_mat,print )(const TYPE(PnlMat) *M)
 { FUNCTION(pnl_mat,fprint)(stdout, M);}
 
 /**
@@ -497,7 +504,7 @@ void FUNCTION(pnl_mat, fprint_nsp)(FILE *fic, const TYPE(PnlMat) * M)
 {
   int i, j;
   fprintf(fic,"[ ");
-  for (i=0; i<M->m; i++) 
+  for (i=0; i<M->m; i++)
     {
       for (j=0;j<M->n;j++)
         {
@@ -521,7 +528,7 @@ void FUNCTION(pnl_mat, print_nsp)(const TYPE(PnlMat) * M)
 /**
  * Creates a square matrix by specifying its diagonal terms.
  *
- *@param V : a TYPE(PnlVect) 
+ *@param V : a TYPE(PnlVect)
  *@return a squared matrix whose diagonal is the vector V
  *and null elsewhere
  */
@@ -531,7 +538,7 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,create_diag)(const TYPE(PnlVect) *V)
 }
 
 /**
- * @param x a double array 
+ * @param x a double array
  * @param d size of the square matrix to create
  * @return a squared matrix whose diagonal is the array x
  * and 0 anywhereelse
@@ -559,7 +566,7 @@ void FUNCTION(pnl_mat,set_row)(TYPE(PnlMat) *M, const TYPE(PnlVect) *V, int i)
 {
   PNL_CHECK(i>M->m,"index out of range", "pnl_mat_set_row");
   PNL_CHECK(M->n != V->size,"incompatible data", "pnl_mat_set_row");
-  memcpy (&(M->array[i*M->n]), V->array, V->size*sizeof(BASE)); 
+  memcpy (&(M->array[i*M->n]), V->array, V->size*sizeof(BASE));
 }
 
 /**
@@ -589,12 +596,12 @@ void FUNCTION(pnl_mat,swap_rows )(TYPE(PnlMat) *M, int i, int j)
       Mjk = FUNCTION(pnl_mat,get )(M,j, k);
       FUNCTION(pnl_mat,set )(M, i, k, Mjk);
       FUNCTION(pnl_mat,set )(M, j, k, Mik);
-  
+
       Mik = FUNCTION(pnl_mat,get )(M, i, k+1);
       Mjk = FUNCTION(pnl_mat,get )(M,j, k+1);
       FUNCTION(pnl_mat,set )(M, i, k+1, Mjk);
       FUNCTION(pnl_mat,set )(M, j, k+1, Mik);
-  
+
       Mik = FUNCTION(pnl_mat,get )(M, i, k+2);
       Mjk = FUNCTION(pnl_mat,get )(M,j, k+2);
       FUNCTION(pnl_mat,set )(M, i, k+2, Mjk);
@@ -634,7 +641,7 @@ void FUNCTION(pnl_mat,get_row)(TYPE(PnlVect) *V, const TYPE(PnlMat) *M, int i)
 {
   PNL_CHECK(i>=M->m,"index out of range", "pnl_mat_get_row");
   FUNCTION(pnl_vect,resize)(V, M->n);
-  memcpy (V->array,&(M->array[i*M->n]),M->n*sizeof(BASE)); 
+  memcpy (V->array,&(M->array[i*M->n]),M->n*sizeof(BASE));
 }
 
 /**
@@ -652,12 +659,12 @@ TYPE(PnlVect) FUNCTION(pnl_vect,wrap_mat_row)(const TYPE(PnlMat) *M, int i)
   V.size = M->n;
   V.mem_size = 0;
   V.owner = 0;
-  V.array = &(M->array[i*M->n]); 
+  V.array = &(M->array[i*M->n]);
   return V;
 }
 
 /**
- * Wraps a vector into a PnlMat 
+ * Wraps a vector into a PnlMat
  * @param V a vector
  * @return a matrix (not a pointer) whose array pointer is the address of the
  * first element of the vector V. No copying is done.
@@ -671,7 +678,7 @@ TYPE(PnlMat) FUNCTION(pnl_mat,wrap_vect)(const TYPE(PnlVect) *V)
   M.mn = V->size;
   M.mem_size = 0;
   M.owner = 0;
-  M.array = V->array; 
+  M.array = V->array;
   return M;
 }
 
@@ -718,7 +725,7 @@ void FUNCTION(pnl_mat, map_inplace)(TYPE(PnlMat) *x, BASE(*f)(BASE))
  *
  * @param lhs : each component lhs(i) contains f(rhs(i))
  * @param rhs : right hand side vector
- * @param f   : BASE function 
+ * @param f   : BASE function
  */
 void FUNCTION(pnl_mat,map)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs, BASE(*f)(BASE))
 {
@@ -754,7 +761,7 @@ static void FUNCTION(__pnl_mat,apply_op)(TYPE(PnlMat) *lhs, BASE x, BASE (*op)(B
  *
  * @param lhs  each component lhs(i) contains f(lhs(i),rhs(i))
  * @param rhs  a matrix
- * @param f a function taking two real numbers and returning a real number 
+ * @param f a function taking two real numbers and returning a real number
  */
 void FUNCTION(pnl_mat,map_mat_inplace)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs, BASE(*f)(BASE,BASE))
 {
@@ -772,12 +779,12 @@ void FUNCTION(pnl_mat,map_mat_inplace)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rh
  * @param lhs : each component lhs(i) contains f(rhs1(i),rhs2(i))
  * @param rhs1 a matrix
  * @param rhs2 a matrix
- * @param f a function taking two real numbers and returning a real number 
+ * @param f a function taking two real numbers and returning a real number
  */
 void FUNCTION(pnl_mat,map_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs1, const TYPE(PnlMat) *rhs2, BASE(*f)(BASE,BASE))
 {
   FUNCTION(pnl_mat,clone) (lhs, rhs1);
-  FUNCTION(pnl_mat,map_mat_inplace) (lhs, rhs2, f); 
+  FUNCTION(pnl_mat,map_mat_inplace) (lhs, rhs2, f);
 }
 
 
@@ -785,9 +792,9 @@ typedef struct {
   union {BASE x; TYPE(PnlMat) *V ;};
   char type;
 } TYPE(cell);
-/** 
+/**
  * Finds the indices (i, j) for which f(M(i,j)) == 1
- * 
+ *
  * @param indi (output) a vector of integers
  * @param indj (output) a vector of integers
  * @param type is a string composed of the letters 'r' (real) and 'm' (matrix)
@@ -813,15 +820,15 @@ int FUNCTION(pnl_mat,find) (PnlVectInt *indi, PnlVectInt *indj, char* type, int(
     {
       switch (type[k])
         {
-          case 'r' : 
-            val = va_arg (ap, BASE); 
+          case 'r' :
+            val = va_arg (ap, BASE);
             args[k].x = val; args[k].type = 'r';
             break;
-          case 'm' : 
+          case 'm' :
             args[k].V= va_arg (ap, TYPE(PnlMat) *);
             args[k].type = 'm';
             if ( m == -1 ) { m = args[k].V->m; n = args[k].V->n; }
-            else { PNL_CHECK ( (m != args[k].V->m) || (n != args[k].V->n) , 
+            else { PNL_CHECK ( (m != args[k].V->m) || (n != args[k].V->n) ,
                                "incompatible size", "pnl_mat_find"); }
             break;
           default:
@@ -832,7 +839,7 @@ int FUNCTION(pnl_mat,find) (PnlVectInt *indi, PnlVectInt *indj, char* type, int(
 
   /*
    * 2 passes are needed.
-   * The first one to determine the size of index 
+   * The first one to determine the size of index
    */
   for ( i=0, count=0 ; i<m ; i++ )
     {
@@ -876,10 +883,10 @@ int FUNCTION(pnl_mat,find) (PnlVectInt *indi, PnlVectInt *indj, char* type, int(
                   if ( args[k].type == 'r' ) t[k] = args[k].x;
                   else t[k] = PNL_MGET(args[k].V, i, j);
                 }
-              if ( f(t) == 1 ) 
-                { 
+              if ( f(t) == 1 )
+                {
                   PNL_LET(indi, count) = i; PNL_LET(indj, count) = j;
-                  count++; 
+                  count++;
                 }
             }
         }
@@ -1140,7 +1147,7 @@ void FUNCTION(pnl_mat,minus_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
 {
   FUNCTION(pnl_mat,map_mat_inplace)(lhs, rhs, CONCAT2(__op_minus_,BASE));
 }
-  
+
 /**
  * in-place matrix scalar addition
  *
@@ -1232,7 +1239,7 @@ void FUNCTION(pnl_mat,dgemv) (char trans, BASE alpha, const TYPE(PnlMat) *A,
 {
   BASE yi, temp;
   int i,j;
-  
+
   if ( EQ(beta,ZERO) )
     {
       if (trans=='N' || trans=='n') FUNCTION(pnl_vect,resize) (y, A->m);
@@ -1241,7 +1248,7 @@ void FUNCTION(pnl_mat,dgemv) (char trans, BASE alpha, const TYPE(PnlMat) *A,
     }
   else if ( NEQ(beta, ONE) ) FUNCTION(pnl_vect,CONCAT2(mult_,BASE)) (y, beta);
   if ( EQ(alpha, ZERO) ) return;
-  
+
 
   /* Form alpha * A * x + beta * y */
   if (trans=='N' || trans=='n')
@@ -1252,11 +1259,11 @@ void FUNCTION(pnl_mat,dgemv) (char trans, BASE alpha, const TYPE(PnlMat) *A,
           temp = ZERO;
           for ( j=0 ; j<A->n ; j++)
             {
-              temp = PLUS (temp, MULT(PNL_MGET (A, i, j), 
-                                      FUNCTION(pnl_vect,get) (x, j) ) );  
-            } 
+              temp = PLUS (temp, MULT(PNL_MGET (A, i, j),
+                                      FUNCTION(pnl_vect,get) (x, j) ) );
+            }
           yi = FUNCTION(pnl_vect,get) (y, i);
-          yi = PLUS( yi, MULT(alpha, temp)); 
+          yi = PLUS( yi, MULT(alpha, temp));
           FUNCTION(pnl_vect,set) (y, i, yi);
         }
     }
@@ -1482,7 +1489,7 @@ BASE FUNCTION(pnl_mat,prod)(const TYPE(PnlMat) *lhs)
  */
 void FUNCTION(pnl_mat,sum_vect)(TYPE(PnlVect) *y, const TYPE(PnlMat) *A, char a)
 {
-  
+
   BASE sum, yj;
   int i,j;
   if (a=='r')
@@ -1533,7 +1540,7 @@ void FUNCTION(pnl_mat,sum_vect)(TYPE(PnlVect) *y, const TYPE(PnlMat) *A, char a)
  */
 void FUNCTION(pnl_mat,prod_vect)(TYPE(PnlVect) *y, const TYPE(PnlMat) *A, char a)
 {
-  
+
   BASE prod, yj;
   int i,j;
   if (a=='r')
@@ -1584,7 +1591,7 @@ void FUNCTION(pnl_mat,prod_vect)(TYPE(PnlVect) *y, const TYPE(PnlMat) *A, char a
  */
 void FUNCTION(pnl_mat,cumsum)(TYPE(PnlMat) *A, char a)
 {
-  
+
   BASE sum, Aij, Ai1j;
   int i, i1, j;
   if (a=='r')
@@ -1631,7 +1638,7 @@ void FUNCTION(pnl_mat,cumsum)(TYPE(PnlMat) *A, char a)
  */
 void FUNCTION(pnl_mat,cumprod)(TYPE(PnlMat) *A, char a)
 {
-  
+
   BASE prod, Aij, Ai1j;
   int i, i1, j;
   if (a=='r')
@@ -1683,7 +1690,7 @@ extern void FUNCTION(pnl_array, minmax_index)(const BASE *a, int n, int incr,
  * @param d can be 'c' (out(i) = max(A(i,:)) or 'r' (out(i) = max(A(:,i))
  * @param out a vector containing on exit the maxima
  * @param index a vector of integers containing on exit the indices of the
- * maxima. if NULL, no index is computed. 
+ * maxima. if NULL, no index is computed.
  */
 void FUNCTION(pnl_mat, max_index)(const TYPE(PnlMat) *A, TYPE(PnlVect) *out, PnlVectInt *index, char d)
 {
@@ -1711,7 +1718,7 @@ void FUNCTION(pnl_mat, max_index)(const TYPE(PnlMat) *A, TYPE(PnlVect) *out, Pnl
  * @param d can be 'c' (out(i) = min(A(i,:)) or 'r' (out(i) = min(A(:,i))
  * @param out a vector containing on exit the minima
  * @param index a vector of integers containing on exit the indices of the
- * minima. if NULL, no index is computed. 
+ * minima. if NULL, no index is computed.
  */
 void FUNCTION(pnl_mat, min_index)(const TYPE(PnlMat) *A, TYPE(PnlVect) *out, PnlVectInt *index, char d)
 {
@@ -1750,7 +1757,7 @@ void FUNCTION(pnl_mat, minmax_index)(const TYPE(PnlMat) *A, TYPE(PnlVect) *out_m
   switch (d)
     {
     case 'c' : n = A->m; length = A->n; lda = A->n; incr = 1; break;
-    case 'r' : length = A->m; n = A->n; lda = 1; incr = A->n; break; 
+    case 'r' : length = A->m; n = A->n; lda = 1; incr = A->n; break;
     default : PNL_ERROR("unknow direction", "pnl_mat_min_index"); break;
     }
   if (index_min != NULL) pnl_vect_int_resize (index_min, n);
@@ -1825,7 +1832,7 @@ static void FUNCTION(pnl_mat, qsort_aux)(TYPE(PnlMat) * A, PnlMatInt *t, int use
   cmp_func f;
 
   lda = incr = loops = n = 0;   /* avoid warnings */
-  
+
   if (use_index == TRUE) { pnl_mat_int_resize (t, A->m, A->n); index=t->array; }
 
   switch (order)
@@ -1834,7 +1841,7 @@ static void FUNCTION(pnl_mat, qsort_aux)(TYPE(PnlMat) * A, PnlMatInt *t, int use
     case 'd' : f = FUNCTION(__pnl, cmp_d); break;
     default : PNL_ERROR ("unknow order", "pnl_mat_qsort"); break;
     }
-  
+
   switch (dir)
     {
     case 'r' : lda = A->n; incr = 1; n = A->m; loops = A->n;
@@ -1860,7 +1867,7 @@ static void FUNCTION(pnl_mat, qsort_aux)(TYPE(PnlMat) * A, PnlMatInt *t, int use
  *
  * @param A a TYPE(PnlMat), contains the sorted matrix on exit
  * @param order can be 'i' or 'd' for increasing or decreasing order.
- * @param dir can be 'r' or 'c' 
+ * @param dir can be 'r' or 'c'
  */
 void FUNCTION(pnl_mat, qsort)(TYPE(PnlMat) * A, char dir, char order)
 {
@@ -1873,7 +1880,7 @@ void FUNCTION(pnl_mat, qsort)(TYPE(PnlMat) * A, char dir, char order)
  * @param A a TYPE(PnlMat), contains the sorted matrix on exit
  * @param t a PnlMatInt, on exit contains the permutation used to sort A
  * @param order can be 'i' or 'd' for increasing or decreasing order.
- * @param dir can be 'r' or 'c' 
+ * @param dir can be 'r' or 'c'
  */
 void FUNCTION(pnl_mat, qsort_index)(TYPE(PnlMat) * A, PnlMatInt *t, char dir, char order)
 {
@@ -1917,7 +1924,7 @@ TYPE(PnlHmat)* FUNCTION(pnl_hmat,create)(int ndim, const int *dims)
       H->mn=0;
       H->array = (BASE*)NULL;
     }
-  return H;  
+  return H;
 }
 
 TYPE(PnlHmat)* FUNCTION(pnl_hmat,CONCAT2(create_from_,BASE))(int ndim, const int *dims, BASE x)
@@ -1925,7 +1932,7 @@ TYPE(PnlHmat)* FUNCTION(pnl_hmat,CONCAT2(create_from_,BASE))(int ndim, const int
   TYPE(PnlHmat) *H;
   int i=0;
   BASE *ptr;
-  
+
   if ((H=FUNCTION(pnl_hmat,create)(ndim,dims))==NULL)
     return NULL;
 
@@ -1942,10 +1949,10 @@ TYPE(PnlHmat)* FUNCTION(pnl_hmat,CONCAT2(create_from_,BASE))(int ndim, const int
 TYPE(PnlHmat)* FUNCTION(pnl_hmat,create_from_ptr)(int ndim, const int *dims, const BASE *x)
 {
   TYPE(PnlHmat) *H;
-  
+
   if ((H=FUNCTION(pnl_hmat,create)(ndim,dims))==NULL)
     return NULL;
-  
+
   memcpy(H->array, x, H->mn*sizeof(BASE));
   return H;
 }
@@ -1961,7 +1968,7 @@ void FUNCTION(pnl_hmat,free)(TYPE(PnlHmat) **H)
 
 
 /**
- * copies a TYPE(PnlHmat) 
+ * copies a TYPE(PnlHmat)
  *
  * @param H : a constant TYPE(PnlHmat) pointer
  * @return a TYPE(PnlHmat) pointer initialised with H
@@ -2000,7 +2007,7 @@ void FUNCTION(pnl_hmat,clone)(TYPE(PnlHmat) *clone, const TYPE(PnlHmat) *H)
  * @param ndim : new nb dimensions
  * @param dims : new pointer to the dimensions array
  *
- * @return OK or FAIL. When returns OK, the hmatrix is changed. 
+ * @return OK or FAIL. When returns OK, the hmatrix is changed.
  */
 int FUNCTION(pnl_hmat,resize)(TYPE(PnlHmat) *H, int ndim, const int *dims)
 {
@@ -2012,7 +2019,7 @@ int FUNCTION(pnl_hmat,resize)(TYPE(PnlHmat) *H, int ndim, const int *dims)
  * sets the value of self[tab]=x
  *
  * @param self : a TYPE(PnlHmat)
- * @param tab : coordinates array 
+ * @param tab : coordinates array
  * @param x : self[tab]=x
  */
 void FUNCTION(pnl_hmat,set)(TYPE(PnlHmat) *self, int *tab, BASE x)
@@ -2023,8 +2030,8 @@ void FUNCTION(pnl_hmat,set)(TYPE(PnlHmat) *self, int *tab, BASE x)
   int p;
   int d=self->ndim;
   CheckIndexHmat(self,tab);
-  
- 
+
+
   for(i=0;i<d;i++)
     {
       ptr=self->dims;
@@ -2042,7 +2049,7 @@ void FUNCTION(pnl_hmat,set)(TYPE(PnlHmat) *self, int *tab, BASE x)
  * gets the value of self[tab]
  *
  * @param self : a TYPE(PnlHmat)
- * @param tab : coordinates array; 
+ * @param tab : coordinates array;
  * @return  self[tab]
  */
 BASE FUNCTION(pnl_hmat,get)(const TYPE(PnlHmat) *self, int *tab)
@@ -2053,8 +2060,8 @@ BASE FUNCTION(pnl_hmat,get)(const TYPE(PnlHmat) *self, int *tab)
   int p;
   int d=self->ndim;
   CheckIndexHmat(self,tab);
-  
- 
+
+
   for(i=0;i<d;i++)
     {
       ptr=self->dims;
@@ -2072,7 +2079,7 @@ BASE FUNCTION(pnl_hmat,get)(const TYPE(PnlHmat) *self, int *tab)
  * returns the address of self[tab] for use as a lvalue.
  *
  * @param self : a TYPE(PnlHmat)
- * @param tab : coordinates array 
+ * @param tab : coordinates array
  * @return  &(self[i,j])
  */
 BASE* FUNCTION(pnl_hmat,lget)(TYPE(PnlHmat) *self, int *tab)
@@ -2083,8 +2090,8 @@ BASE* FUNCTION(pnl_hmat,lget)(TYPE(PnlHmat) *self, int *tab)
   int p;
   int d=self->ndim;
   CheckIndexHmat(self,tab);
-  
- 
+
+
   for(i=0;i<d;i++)
     {
       ptr=self->dims;
