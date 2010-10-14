@@ -1,22 +1,23 @@
 # -*- mode: Makefile -*-
-# terminer la compilation en creant le dll a la main 
-# creation du dll 
+# terminer la compilation en creant le dll a la main
+# creation du dll
 
-all:  shared-win32 
+all:  shared-win32
 
 ARGS=libamos/.libs/libamos.a librand/.libs/librand.a\
-	 math/.libs/libmath.a linalg/.libs/liblinalg.a sort/.libs/libsort.a \
-	 fft/.libs/libfft.a specfun/.libs/libspecfun.a libcephes/.libs/libcephes.a \
-	 libinteg/.libs/libinteg.a interpol/.libs/libinterpol.a optim/.libs/liboptim.a\
-	 roots/.libs/libroots.a libminpack/.libs/libminpack.a \
+	math/.libs/libmath.a linalg/.libs/liblinalg.a sort/.libs/libsort.a \
+	fft/.libs/libfft.a specfun/.libs/libspecfun.a libcephes/.libs/libcephes.a \
+	libinteg/.libs/libinteg.a interpol/.libs/libinterpol.a optim/.libs/liboptim.a\
+	roots/.libs/libroots.a libminpack/.libs/libminpack.a \
+	objects/.libs/libobjects.a \
 	 ../lib/libblas.dll ../lib/liblapack.dll
 
-OBJS = cumulfunc.o  finance_function.o  object.o
+OBJS = cumulfunc.o  finance_function.o
 
-shared-win32:: $(OBJS) 
+shared-win32:: $(OBJS)
 	gcc -mno-cygwin -shared -o ../lib/libpnl.dll $(OBJS) \
 		-Wl,--export-all-symbols -Wl,--allow-multiple-definition \
 		-Wl,--enable-auto-import -Wl,--whole-archive $(ARGS)  \
-		-Wl,--no-whole-archive -Xlinker --out-implib -Xlinker ../lib/libpnl.dll.a 
+		-Wl,--no-whole-archive -Xlinker --out-implib -Xlinker ../lib/libpnl.dll.a
 
 
