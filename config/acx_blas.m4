@@ -44,7 +44,8 @@ AC_ARG_WITH(blas,
 case $with_blas in
 	yes | "") ;;
 	no) acx_blas_ok=disable ;;
-	-* | */* | *.a | *.so | *.so.* | *.o) BLAS_LIBS="$with_blas" ;;
+    *.a) BLAS_STATIC_LIBS="$with_blas"; BLAS_LIBS="$with_blas" ;;
+	-* | */* | *.so | *.so.* | *.o) BLAS_LIBS="$with_blas" ;;
 	*) BLAS_LIBS="-l$with_blas" ;;
 esac
 
@@ -60,7 +61,10 @@ if test $acx_blas_ok = no; then
 if test "x$BLAS_LIBS" != x; then
 	save_LIBS="$LIBS"; LIBS="$BLAS_LIBS $LIBS"
 	AC_MSG_CHECKING([for $sgemm in $BLAS_LIBS])
-	AC_TRY_LINK_FUNC($sgemm, [acx_blas_ok=yes], [BLAS_LIBS=""])
+	AC_TRY_LINK_FUNC($sgemm, [acx_blas_ok=yes], [BLAS_LIBS="", BLAS_STATIC_LIBS=""])
+    if test $acx_blas_ok = yes && test "x$BLAS_STATIC_LIBS" != "x" ; then
+       BLAS_LIBS="";
+    fi
 	AC_MSG_RESULT($acx_blas_ok)
 	LIBS="$save_LIBS"
 fi

@@ -80,7 +80,8 @@ AC_ARG_WITH(lapack,
 case $with_lapack in
         yes | "") ;;
         no) acx_lapack_ok=disable ;;
-        -* | */* | *.a | *.so | *.so.* | *.o) LAPACK_LIBS="$with_lapack" ;;
+        *.a) LAPACK_STATIC_LIBS="$with_lapack"; LAPACK_LIBS="$with_lapack" ;;
+        -* | */* | *.so | *.so.* | *.o) LAPACK_LIBS="$with_lapack" ;;
         *) LAPACK_LIBS="-l$with_lapack" ;;
 esac
 
@@ -94,9 +95,12 @@ fi
 
 # First, check LAPACK_LIBS environment variable
 if test "x$LAPACK_LIBS" != x; then
-        save_LIBS="$LIBS"; LIBS="$LAPACK_LIBS $BLAS_LIBS $LIBS $FLIBS"
+        save_LIBS="$LIBS"; LIBS="$LAPACK_LIBS $BLAS_LIBS $BLAS_STATIC_LIBS $LIBS $FLIBS"
         AC_MSG_CHECKING([for $cheev in $LAPACK_LIBS])
         AC_TRY_LINK_FUNC($cheev, [acx_lapack_ok=yes], [LAPACK_LIBS=""])
+        if test $acx_lapack_ok = yes && test "x$LAPACK_STATIC_LIBS" != "x" ; then
+           LAPACK_LIBS="";
+        fi
         AC_MSG_RESULT($acx_lapack_ok)
         LIBS="$save_LIBS"
         if test acx_lapack_ok = no; then
