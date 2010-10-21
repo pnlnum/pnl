@@ -18,7 +18,7 @@ extern "C" {
 
 /* basis indices */
 enum {PNL_BASIS_CANONICAL, PNL_BASIS_HERMITIAN, PNL_BASIS_TCHEBYCHEV };
-/* synonymous for compatibility */
+/* synonymous for compatibility purposes */
 enum {CANONICAL, HERMITIAN, TCHEBYCHEV };
 
 typedef struct _PnlBasis PnlBasis;

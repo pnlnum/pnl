@@ -8,34 +8,59 @@ installation differs. We describe here the different procedures.
 
 0. Dependencies
 
-    There are no required dependencies to compile PNL. However, the user
+    There are no required dependencies to compile PNL. However, users
     should know that :
-    - The Linear Algebra routines mainly rely on Blas & Lapack. If these
+    - Linear Algebra routines mainly rely on Blas & Lapack. If these
     two libraries are not found on the machine, the versions shipped with
-    PNL are used. For better performances, one should consider to use
+    PNL are used. For better performances, one should consider using
     Atlas.
     - When an MPI implementation is detected on the computer, some MPI
     bindings are available which enable to natively handle PnlObjects.
 
 1. Official Releases
 
-    Just extract the tarball and change to the newly create directory named
-    pnl-XXX where XXX is the version number. Then, run the following
-    command
-    > ./configure
-    > make
-    > make install
+    A. Under Unix
 
-    Per default, the make install command installs the library where it has
-    been extracted. You can specify an other directory where to install the
-    library by specifying the option --prefix=/new/path/. The default
-    behaviour corresponds to --prefix=`pwd`
+        Extract the tarball and change to the newly create directory named
+        pnl-XXX where XXX is the version number. Then, run the following
+        command
+        > ./configure
+        > make
+        > make install
 
-    The configure script accepts several options, just run
-    > ./configure --help
-    to get a complete lists of options.
+        Per default, the make install command installs the library where it
+        has been extracted. You can specify an other directory where to
+        install the library by specifying the option --prefix=/new/path/ to
+        the configure script. The default behaviour corresponds to
+        --prefix=`pwd`
+
+        The configure script accepts several options, just run
+        > ./configure --help
+        to get a complete lists of options.
+
+
+    B. Under Windows
+
+        1. Extract the zip file, this will create a directory named pnl-XXX
+           where XXX is the version number.
+        2. Launch Visual C++ command prompt and change to directory
+        pnl-XXX/lib. In this directory, run
+            lib.exe /def:libpnl.def /out:libpnl.lib
+        This command creates the .lib file needed by Visual to link a
+        project to an external library.
+        3. Copy the files libpnl.dll libblas.dll liblapack.dll from
+        pnl-XXX/lib to the Release and Debug directories of your Visual
+        project.
+        4. Add the directory /path/to/pnl-XXX/include to the list of
+        directories where to search for header files.
+        5. Add the directory /path/to/pnl-XXX/lib to the list of
+        directories where to search for libraries when linking
+
 
 2. Development version
+
+    Actually no Visual Studio project is provided, so to compile PNL under
+    Windows you need to create the project yourself.
 
     We assume you have a complete checkout of the subversion trunk
     repository. To compile this version, you need the following tools:
@@ -57,12 +82,16 @@ installation differs. We describe here the different procedures.
 
 3. Building the documentation
 
+    If you downloaded an official release, the documentation is already
+    built in. This section is only devoted to users working with the
+    development version.
+
     Two different types of documentation are available :
 
     - The user manual available both in PDF and HTML format, change to
     directory man and issue
         > make (to compile the PDF version, you need a latex compiler)
-        > make html (to compile ht html version, you need tex4ht)
+        > make html (to compile the html version, you need tex4ht)
 
     - The internal documentation generated using Doxygen, go to directory
     doc and run

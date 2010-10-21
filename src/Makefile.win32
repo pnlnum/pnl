@@ -18,6 +18,8 @@ shared-win32:: $(OBJS)
 	gcc -mno-cygwin -shared -o ../lib/libpnl.dll $(OBJS) \
 		-Wl,--export-all-symbols -Wl,--allow-multiple-definition \
 		-Wl,--enable-auto-import -Wl,--whole-archive $(ARGS)  \
-		-Wl,--no-whole-archive -Xlinker --out-implib -Xlinker ../lib/libpnl.dll.a
+		-Wl,--no-whole-archive -Xlinker --out-implib -Xlinker \
+		../lib/libpnl.dll.a -Xlinker --output-def -Xlinker ../lib/libpnl.def
+
 
 

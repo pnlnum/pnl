@@ -11,7 +11,7 @@
           (line-start (line-number-at-pos start))
           (line-end (line-number-at-pos end)))
     (replace-regexp 
-      "extern +\\([a-zA-Z0-9_\\*]+\\) +\\([a-zA-Z0-9_]+\\) *(\\(.*\\));"
+      "extern +\\([a-zA-Z0-9_ \\*]+\\) +\\([a-zA-Z0-9_]+\\) *(\\(.*\\));"
       "\\\\item \\\\describefun{\\1}{\\2}{\\3}"
       nil start end)
     (goto-char (point-min))
