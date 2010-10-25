@@ -13,6 +13,8 @@
 
 
 LIBPNLDIR = @LIBPNLDIR@
+includedir=@includedir@
+libdir=@libdir@
 top_builddir = $(LIBPNLDIR)/@top_builddir@
 top_srcdir = $(LIBPNLDIR)/@top_srcdir@
 CC = @CC@
@@ -21,8 +23,8 @@ SHELL = @SHELL@
 LIBTOOL = @LIBTOOL@
 MPI_CFLAGS=@MPI_CFLAGS@
 LN_S = @LN_S@
-INCLUDES = -I$(top_builddir)/include/pnl  -I$(top_builddir)/include $(MPI_CFLAGS)
-OTHERLIBS = -L$(top_builddir)/lib -lpnl -lm @LDFLAGS@ @BLAS_LIBS@ @LAPACK_LIBS@ @LAPACK_STATIC_LIBS@ @BLAS_STATIC_LIBS@
+INCLUDES = -I$(includedir)/pnl  -I$(includedir) $(MPI_CFLAGS)
+OTHERLIBS = -L$(libdir) -lpnl -lm @LDFLAGS@ @BLAS_LIBS@ @LAPACK_LIBS@ @LAPACK_STATIC_LIBS@ @BLAS_STATIC_LIBS@
 
 QUIET=--quiet
 
