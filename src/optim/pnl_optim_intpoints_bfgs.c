@@ -340,7 +340,7 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm *grad_func, Pn
     int nbr_nl_constraints, nbr_lower_bounds, nbr_upper_bounds, nbr_constraints; // nbr of constraints.
     int nbr_iterations=0; // Current number of iterations
     int TestInfeasibility=0; // Test of feasibility of (x, lambda)
-    int OptimalityCriterion=0., inner_iter=0, inner_iter_max=10;
+    int OptimalityCriterion=0., inner_iter=0, inner_iter_max=5;
 
     double f;     // Current value of objective function
     double f_min=0.; // Minimum value reached during the algorithm
@@ -420,8 +420,8 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm *grad_func, Pn
     // with some max and min values
     mu=0.;
     for (j=0; j<nbr_constraints; j++) mu += (log(GET(vect_constraints,j)));
-    mu = MAX(fabs(f/mu), 10.);
-    mu = MIN(mu, 1e4);
+    mu = MAX(fabs(f/mu), 1e-1);
+    mu = MIN(mu, 1e1);
 
     // Initialization of lagrange variable lambda
     for (j=0; j<nbr_constraints; j++) LET(lambda,j) = mu / GET(vect_constraints,j);
