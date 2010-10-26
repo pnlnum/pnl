@@ -142,6 +142,7 @@ extern PnlRng* pnl_rng_create (int type);
 extern PnlRng** pnl_rng_dcmt_create_array (int n, ulong seed, int *count);
 extern void pnl_rng_init (PnlRng *rng, int type);
 extern void pnl_rng_sseed(PnlRng *rng, unsigned long int s);
+extern void pnl_rng_sdim (PnlRng *rng, int dim);
 
 extern double pnl_rng_gauss(int, int, int, PnlRng *rng);
 extern int pnl_rng_bernoulli(double p, PnlRng *rng);
@@ -204,6 +205,31 @@ typedef struct
   ulong u[3];
   ulong a;
 } tausworthe_state;
+
+#define PNL_DIM_MAX_QMC 300
+typedef struct
+{
+  int prime[PNL_DIM_MAX_QMC];
+  double alpha[PNL_DIM_MAX_QMC];
+} sqrt_state;
+
+typedef struct
+{
+  int prime[PNL_DIM_MAX_QMC];
+} halton_state;
+
+typedef struct
+{
+  int r;
+} faure_state;
+
+#define PNL_DIM_MAX_NIED 12
+typedef struct
+{
+  long saut, gray;
+  double facteur;
+  unsigned long initial_d, initialX_n[PNL_DIM_MAX_NIED+1];
+} nied_state;
 
 /*
  * MT

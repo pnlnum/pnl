@@ -1,3 +1,22 @@
+26-10-2010 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* All QMC random number generators, except SOBOL, are now reentrant
+
+14-10-2010 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* Detection of static versions of Blas & Lapack added to the configure
+	script
+
+12-10-2010 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* Bases can be built using an hyperbolic set of indices, useful for
+	polynoms living in a high dimensional space.
+
+11-10-2010 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* pnl_basis_eval_derivs : Improvement of the computation of the
+	derivatives of a multivariate polynom 
+
 08-10-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* All true random number generators are now reentrant

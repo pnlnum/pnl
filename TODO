@@ -1,3 +1,9 @@
+- Seed for MRGK3 and MRGK5
+
+- Polynomial bases : add a reduction facility
+
+- Recode Sobol for copyright issues and make it thread-safe
+
 - List structure
        * Add a pnl_list_copy function. It implies to add a
          copy function to PnlObject

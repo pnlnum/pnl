@@ -116,7 +116,7 @@ static void MRGK3(PnlRng *rng, double *sample)
   rng->counter++;
 
   /* First generator */
-  p1 = A12*s->x11 - A13N*s->x10;
+  p1 = A12*s->x12 - A13N*s->x10;
   k = p1 / M1;
   p1 -= k*M1;
   if(p1 < 0) p1 += M1;
@@ -471,14 +471,13 @@ static void DYNAMIC_MT (PnlRng *rng,double *sample)
    Niederreiter */
 /* ----------------------------------------------------------------*/
 
-#define DIM_MAX_QMC 300
 
 #define MAXI 33
 static long Comb[MAXI][MAXI];/*Binomial Coefficients*/
 
-/* -----------------------------------------*/
-/* Table for the n first prime numbers */
-/* -----------------------------------------*/
+/**
+ * Table for the n first prime numbers 
+ */
 static void prime_number(int n, int prime[])
 {
   int i, bool_prime;
@@ -511,11 +510,11 @@ static void prime_number(int n, int prime[])
 
 
 
-/* --------------------------------------------------------------------- */
-/* Search the smallest element of a sorted table greater than a given
+/**
+ * Search the smallest element of a sorted table greater than a given
  * threshold.
- * Used for the prime numbers */
-/* --------------------------------------------------------------------- */
+ * Used for the prime numbers
+ */
 static int search_value(int seuil, int tab[], int dim)
 {
   int min, max, indice;
@@ -537,9 +536,9 @@ static int search_value(int seuil, int tab[], int dim)
 
 
 
-/* -------------------------------------------*/
-/* Computation of the binomial coefficients.  */
-/* -------------------------------------------*/
+/**
+ * Computation of the binomial coefficients.  
+ */ 
 static void binomial(int Max)
 /*Max should be less than 33 otherwise C[n][p] could exceed LONG_MAX*/
 {
@@ -563,28 +562,12 @@ static void binomial(int Max)
 
 static void SQRT(PnlRng *rng, double X_m[])
 {
-  static int dimension=0;
   int i;
-  static int prime[DIM_MAX_QMC];
-  static double alpha[DIM_MAX_QMC];
-
-  /* Verification of the dimension. It must not change without reinitializing */
-  if(dimension != rng->dimension) rng->counter=1;
-
-  /* First call : initialisation */
-  if(rng->counter == 1)
-    {
-      dimension= rng->dimension;
-      prime_number(rng->dimension, prime);
-      for(i=0; i<rng->dimension; i++)
-        {
-          alpha[i]= sqrt((double) prime[i]);
-        }
-    }
+  sqrt_state *state = (sqrt_state *) (rng->state);
 
   /* For each call to the sequence, computation of a new point */
   for(i= 0; i< rng->dimension; i++)
-    X_m[i]= ((rng->counter*alpha[i])-floor(rng->counter*alpha[i]));
+    X_m[i]= (rng->counter*state->alpha[i])-floor(rng->counter*state->alpha[i]);
 
   rng->counter++;
 }
@@ -597,23 +580,10 @@ static void SQRT(PnlRng *rng, double X_m[])
 /* ------------------------------------------------------------- */
 static void HALTON(PnlRng *rng, double X_n[])
 {
-  static int dimension=0;
   int i;
-  static int prime[DIM_MAX_QMC];
-  int coeff;
   double y;
-  int x, puissance;
-
-  /* Verification of the dimension. It must not change without reinitializing */
-  if(dimension != rng->dimension)
-    rng->counter= 1;
-
-  /* First call : initialization */
-  if( rng->counter == 1)
-    {
-      dimension= rng->dimension;
-      prime_number(rng->dimension, prime);
-    }
+  int coeff, x, puissance;
+  halton_state *state = (halton_state *) (rng->state);
 
   /* For each call to the sequence, computation of a new point */
   for(i = 0; i< rng->dimension; i++)
@@ -623,9 +593,9 @@ static void HALTON(PnlRng *rng, double X_n[])
       /* radical inverse function */
       while ((rng->counter-x)>0)
         {
-          coeff= ((rng->counter-x)/puissance)%prime[i];
+          coeff= ((rng->counter-x)/puissance) % state->prime[i];
           x += coeff*puissance;
-          puissance *= prime[i];
+          puissance *= state->prime[i];
           y += coeff*1.0/puissance;
         }
       X_n[i]= y;
@@ -647,45 +617,23 @@ static void FAURE(PnlRng *rng, double U_n[])
 {
   int coeff[MAXI];
   int b[MAXI];
-  static int dimension=0, r;
-  int prime[DIM_MAX_QMC];
   int x= 0, puissance1= 1, puissance2;
   int indice, i, j, k, somm;
+  faure_state *state = (faure_state *)(rng->state);
 
-
-  /* Verification of the dimension. It must not change without reinitializing */
-  if(dimension != rng->dimension)
-    rng->counter= 1;
-
-  /*First call to the sequence */
-  if(rng->counter == 1)
-    {
-      dimension=rng->dimension;
-      if((rng->dimension == 2)||(rng->dimension == 1))
-        r= 3;
-      else
-        {
-          prime_number(rng->dimension, prime);
-          r=search_value(rng->dimension,prime,rng->dimension);
-        }
-    }
 
   /* Initialization */
-  for (i=0; i< rng->dimension; i++)
-    {
-      U_n[i]= 0.;
-    }
+  for (i=0; i< rng->dimension; i++) U_n[i]= 0.;
 
   indice= 0;
   /* For each call to the sequence, computation of a new point */
 
   /* r-digit expansion of n --> first term of the sequence */
   while ((rng->counter-x) > 0)
-
     {
-      coeff[indice]= ((rng->counter-x)/puissance1)%r;
+      coeff[indice]= ((rng->counter-x)/puissance1) % state->r;
       x += coeff[indice]*puissance1;
-      puissance1 *= r;
+      puissance1 *= state->r;
       U_n[0] +=(double)coeff[indice]/(double)puissance1;
       indice +=1;
     }
@@ -694,19 +642,19 @@ static void FAURE(PnlRng *rng, double U_n[])
   /* Successive transformations of the r-digit expansion.*/
   for (k=1; k< rng->dimension; k++)
     {
-      puissance2= r;
+      puissance2= state->r;
       for (j=0; j< indice; j++)
         {
           somm= 0;
           for (i=j; i< indice; i++)
             somm += Comb[i][j]*coeff[i];
-          b[j]= somm%r;
+          b[j]= somm % state->r;
         }
       for (j=0; j< indice; j++)
         {
           coeff[j]= b[j];
           U_n[k] += (double)coeff[j]/(double)puissance2;
-          puissance2 *= r;
+          puissance2 *= state->r;
         }
     }
   rng->counter++;
@@ -864,123 +812,88 @@ static void SOBOL2(PnlRng *rng, double X_n[])
 
 
 
-/*
- * NIEDERREITER SEQUENCE in dimension d, in base 2
- * X_n[] contains the terms of the n-th element
- * The algorithm is based on a relation between X(n) and X(n-1)
- * ------------------------------------------------ */
-
-/* maximal dimension for the NIEDERREITER sequence */
-#define DIM_MAX_NIED 12
 /* maximal length of bits for the NIEDERREITER sequence */
 #define BIT_MAX_NIED 30
 
+  /* Niederreiter's constants */
+  /* Une fonction de calcul de ces coefficients est donnee dans Owen.c */
+static unsigned long NiedC[BIT_MAX_NIED+1][PNL_DIM_MAX_NIED+1]={
+{0,1073741824,1073741824,1610612736,1879048192,1879048192,2013265920,
+ 2013265920,2013265920,2080374784,2080374784,2080374784,2080374784},
+{0,536870912,1610612736,1207959552,1644167168,1644167168,1887436800,
+ 1887436800,1887436800,2015363072,2015363072,2015363072,2015363072},
+{0,268435456,1342177280,939524096,1174405120,1442840576,1635778560,
+ 1769996288,1769996288,1885339648,1885339648,1885339648,1952448512},
+{0,134217728,2013265920,2046820352,503316480,771751936,1132462080,
+ 1400897536,1535115264,1625292800,1692401664,1692401664,1759510528},
+{0,67108864,1140850688,1577058304,742391808,1312817152,260046848,
+ 796917760,1065353216,1172307968,1306525696,1239416832,1373634560},
+{0,33554432,1711276032,914358272,1522532352,515899392,386400256,
+ 1602748416,2131230720,266338304,467664896,333447168,601882624},
+{0,16777216,1426063360,1702887424,935329792,1069547520,639107072,
+ 932708352,1981284352,465633280,937492480,669057024,1205927936},
+{0,8388608,2139095040,1260388352,2106064896,2106064896,1287127040,
+ 1740111872,1815609344,933429248,1810038784,1338179584,197328896},
+{0,4194304,1077936128,1046478848,1800929280,1767374848,435683328,
+ 1341652992,1484259328,1869021184,1407647744,461832192,327614464},
+{0,2097152,1616904192,2127036416,1152909312,1387790336,863010816,
+ 393248768,946896896,1592721408,669974528,858718208,655294464},
+{0,1048576,1347420160,1572339712,456196096,661716992,1851883520,
+ 644448256,2020179968,973012992,1275002880,1652490240,1243545600},
+{0,524288,2021130240,827981824,639827968,1286275072,1422622720,
+ 1154711552,1893433344,2011039744,333383680,1090455552,339675136},
+{0,262144,1145307136,1614675968,1548156928,425656320,697794560,
+ 162496512,1774157824,1807554560,597563392,100603904,679417856},
+{0,131072,1717960704,1216249856,952508416,817766400,1537673216,
+ 458721280,1543473152,1465595904,1125922816,201209856,1426012160},
+{0,655336,1431633920,945651712,1908695040,1903452160,1069946880,
+ 1043306496,1073190912,714504192,102332416,402487296,771651584},
+{0,32768,2147450880,2050039808,1669980160,1655300096,2139371520,
+ 2094512128,2137503744,1359804416,137558016,804976640,1541273600},
+{0,16384,1073758208,1583374336,1192936448,1461445632,2004908032,
+ 1907357696,1984428032,574156864,342224960,1542844480,865859648},
+{0,8192,1610637312,919095296,511552512,780127232,1736994944,
+ 1809315968,1812428928,1081139392,686547136,938205376,1664612544},
+{0,4096,1342197760,1706571776,754088960,1320655872,1201168768,
+ 1471148416,1476817280,79806912,1442300352,1811333568,1114634688},
+{0,2048,2013296640,1264220672,1538054272,522598528,255345536,
+ 794291072,939811712,161711040,802130880,1473022912,83819456},
+{0,1024,1140868096,1044274688,924431744,1044738432,376967040,
+ 1580193664,2013284224,325519296,1604198336,731389888,234684352},
+{0,512,1711302144,2130622080,2088397696,2093148032,611882760,
+ 878683912,1887440776,651102082,993804162,1393639298,536412034},
+{0,256,1426085120,1574823296,1794429712,1774512912,1215931928,
+ 1614267928,1770004376,1235158790,1987673862,570654470,1005715270},
+{0,128,2139127680,823225120,1168671280,1401549360,410242232,
+ 1223658552,1535129528,389942798,1825766990,1143404110,1944254158},
+{0,64,1077952576,1610636896,458752112,656139376,812620280,
+ 299341944,1065379832,777854046,1501951134,208530654,1743054302},
+{0,32,1616928864,1207973576,649592930,1283443810,1758968688,
+ 590295160,2131249016,1488664830,856416638,484104702,1340654590},
+{0,16,1347440720,939550136,1563492422,414686294,1369962081,
+ 1180590193,1981288049,827816380,1645658814,966114238,468813820},
+{0,8,2021161080,2046839642,941817886,824588462,726658251,
+ 205277419,1815616739,1722809210,1143770494,1997176636,935528440},
+{0,4,1145324612,1577074238,1879506988,1879405006,1578619287,
+ 410522071,1484272071,1298134710,209263358,1846933048,1871120370},
+{0,2,1717986918,914390782,1644568666,1644357534,1009722151,
+ 947430191,946922383,513795374,483606012,1546380400,1596917668},
+{0,1,1431655765,1702911453,1174691895,1443162927,2019444294,
+ 2020722270,2020198302,1027523167,1032223673,1014481121,1048512329}};
+
+/**
+ * NIEDERREITER SEQUENCE in dimension d, in base 2
+ * X_n[] contains the terms of the n-th element
+ * The algorithm is based on a relation between X(n) and X(n-1)
+ */
 static void NIEDERREITER(PnlRng *rng, double X_n[])
 {
   int i, j;
-  unsigned long saut, gray, dim;
-  static double facteur;
-  static unsigned long initial_d, initialX_n[DIM_MAX_NIED+1];
-
-  /* Niederreiter's constants */
-  /* Une fonction de calcul de ces coefficients est donnee dans Owen.c */
-  static unsigned long C[BIT_MAX_NIED+1][DIM_MAX_NIED+1]={
-    {0,1073741824,1073741824,1610612736,1879048192,1879048192,2013265920,
-     2013265920,2013265920,2080374784,2080374784,2080374784,2080374784},
-    {0,536870912,1610612736,1207959552,1644167168,1644167168,1887436800,
-     1887436800,1887436800,2015363072,2015363072,2015363072,2015363072},
-    {0,268435456,1342177280,939524096,1174405120,1442840576,1635778560,
-     1769996288,1769996288,1885339648,1885339648,1885339648,1952448512},
-    {0,134217728,2013265920,2046820352,503316480,771751936,1132462080,
-     1400897536,1535115264,1625292800,1692401664,1692401664,1759510528},
-    {0,67108864,1140850688,1577058304,742391808,1312817152,260046848,
-     796917760,1065353216,1172307968,1306525696,1239416832,1373634560},
-    {0,33554432,1711276032,914358272,1522532352,515899392,386400256,
-     1602748416,2131230720,266338304,467664896,333447168,601882624},
-    {0,16777216,1426063360,1702887424,935329792,1069547520,639107072,
-     932708352,1981284352,465633280,937492480,669057024,1205927936},
-    {0,8388608,2139095040,1260388352,2106064896,2106064896,1287127040,
-     1740111872,1815609344,933429248,1810038784,1338179584,197328896},
-    {0,4194304,1077936128,1046478848,1800929280,1767374848,435683328,
-     1341652992,1484259328,1869021184,1407647744,461832192,327614464},
-    {0,2097152,1616904192,2127036416,1152909312,1387790336,863010816,
-     393248768,946896896,1592721408,669974528,858718208,655294464},
-    {0,1048576,1347420160,1572339712,456196096,661716992,1851883520,
-     644448256,2020179968,973012992,1275002880,1652490240,1243545600},
-    {0,524288,2021130240,827981824,639827968,1286275072,1422622720,
-     1154711552,1893433344,2011039744,333383680,1090455552,339675136},
-    {0,262144,1145307136,1614675968,1548156928,425656320,697794560,
-     162496512,1774157824,1807554560,597563392,100603904,679417856},
-    {0,131072,1717960704,1216249856,952508416,817766400,1537673216,
-     458721280,1543473152,1465595904,1125922816,201209856,1426012160},
-    {0,655336,1431633920,945651712,1908695040,1903452160,1069946880,
-     1043306496,1073190912,714504192,102332416,402487296,771651584},
-    {0,32768,2147450880,2050039808,1669980160,1655300096,2139371520,
-     2094512128,2137503744,1359804416,137558016,804976640,1541273600},
-    {0,16384,1073758208,1583374336,1192936448,1461445632,2004908032,
-     1907357696,1984428032,574156864,342224960,1542844480,865859648},
-    {0,8192,1610637312,919095296,511552512,780127232,1736994944,
-     1809315968,1812428928,1081139392,686547136,938205376,1664612544},
-    {0,4096,1342197760,1706571776,754088960,1320655872,1201168768,
-     1471148416,1476817280,79806912,1442300352,1811333568,1114634688},
-    {0,2048,2013296640,1264220672,1538054272,522598528,255345536,
-     794291072,939811712,161711040,802130880,1473022912,83819456},
-    {0,1024,1140868096,1044274688,924431744,1044738432,376967040,
-     1580193664,2013284224,325519296,1604198336,731389888,234684352},
-    {0,512,1711302144,2130622080,2088397696,2093148032,611882760,
-     878683912,1887440776,651102082,993804162,1393639298,536412034},
-    {0,256,1426085120,1574823296,1794429712,1774512912,1215931928,
-     1614267928,1770004376,1235158790,1987673862,570654470,1005715270},
-    {0,128,2139127680,823225120,1168671280,1401549360,410242232,
-     1223658552,1535129528,389942798,1825766990,1143404110,1944254158},
-    {0,64,1077952576,1610636896,458752112,656139376,812620280,
-     299341944,1065379832,777854046,1501951134,208530654,1743054302},
-    {0,32,1616928864,1207973576,649592930,1283443810,1758968688,
-     590295160,2131249016,1488664830,856416638,484104702,1340654590},
-    {0,16,1347440720,939550136,1563492422,414686294,1369962081,
-     1180590193,1981288049,827816380,1645658814,966114238,468813820},
-    {0,8,2021161080,2046839642,941817886,824588462,726658251,
-     205277419,1815616739,1722809210,1143770494,1997176636,935528440},
-    {0,4,1145324612,1577074238,1879506988,1879405006,1578619287,
-     410522071,1484272071,1298134710,209263358,1846933048,1871120370},
-    {0,2,1717986918,914390782,1644568666,1644357534,1009722151,
-     947430191,946922383,513795374,483606012,1546380400,1596917668},
-    {0,1,1431655765,1702911453,1174691895,1443162927,2019444294,
-     2020722270,2020198302,1027523167,1032223673,1014481121,1048512329}};
-
-
-  /* First call to the sequence */
-  if (rng->counter == 1)
-    {
-
-      /* Initialization of initX_n[] */
-      for (i=1; i<=DIM_MAX_NIED; i++)
-        initialX_n[i]= 0;
-
-      facteur= 1.0/(double)(1UL << (BIT_MAX_NIED+1));
-      saut = 1L << 12;
-      initial_d = saut;
-
-      /* Gray code of saut */
-      gray = saut^(saut >> 1);
-      for (i=0; i<=BIT_MAX_NIED; i++)
-        {
-          if (gray == 0)
-            break;
-          for (j= 1; j<= DIM_MAX_NIED; j++)
-            {
-              if ((gray & 1) == 0)
-                break;
-              /* XOR sum */
-              initialX_n[j] ^= C[i][j];
-
-            }
-          gray >>= 1;
-        }
-    }
+  long dim;
+  nied_state *state = (nied_state *)(rng->state);
 
   /* Calculation of a new quasi-random vector on each call */
-  dim= initial_d++;
+  dim= state->initial_d++;
 
   /* Research of the rightmost 0 bit */
   for (i=0; i<=BIT_MAX_NIED; i++)
@@ -992,8 +905,8 @@ static void NIEDERREITER(PnlRng *rng, double X_n[])
   /* Computation of the term n from the term n-1 */
   for (j=1; j<= rng->dimension; j++)
     {
-      X_n[j-1]= (double)initialX_n[j]*facteur;
-      initialX_n[j] ^= C[i][j];
+      X_n[j-1]= (double)state->initialX_n[j]*state->facteur;
+      state->initialX_n[j] ^= NiedC[i][j];
     }
   rng->counter++;
 }
@@ -1011,6 +924,10 @@ static lecuyer_state lecuyer_st;
 static tausworthe_state tausworthe_st;
 static mt_state mt_st1;
 static mt_state mt_st2;
+static sqrt_state sqrt_st;
+static halton_state halton_st;
+static faure_state faure_st;
+static nied_state nied_st;
 
 PnlRng PnlRngKnuth =
   {
@@ -1064,19 +981,19 @@ PnlRng PnlRngSqrt =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_SQRT,&SQRT,
-    QMC,0, 0,0,0,0,NULL
+    QMC,0, 0,0,0,sizeof(sqrt_state),&sqrt_st
   };
 PnlRng PnlRngHalton =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_HALTON,&HALTON,
-    QMC,0, 0,0,0,0,NULL
+    QMC,0, 0,0,0,sizeof(halton_state),&halton_st
   };
 PnlRng PnlRngFaure =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_FAURE,&FAURE,
-    QMC,0, 0,0,0,0,NULL
+    QMC,0, 0,0,0,sizeof(faure_state),&faure_st
   };
 PnlRng PnlRngSobol =
   {
@@ -1094,7 +1011,7 @@ PnlRng PnlRngNiederreiter =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_NIEDERREITER,&NIEDERREITER,
-    QMC,0, 0,0,0,0,NULL
+    QMC,0, 0,0,0,sizeof(nied_state),&nied_st
   };
 
 /*
@@ -1196,16 +1113,22 @@ int pnl_rand_init (int type_generator, int dimension, long samples)
     case PNL_RNG_FAURE :
       if (dimension > DIM_MAX_FAURE || samples>MAX_SAMPLE_FAURE) return FAIL;
       binomial(MAXI);
+      pnl_rng_sdim (rng, dimension);
       break;
     case PNL_RNG_SQRT:
+      if ( dimension  > PNL_DIM_MAX_QMC ) return FAIL;
+      pnl_rng_sdim (rng, dimension);
+      break;
     case PNL_RNG_HALTON:
-      if ( dimension  > DIM_MAX_QMC ) return FAIL;
+      if ( dimension  > PNL_DIM_MAX_QMC ) return FAIL;
+      pnl_rng_sdim (rng, dimension);
       break;
     case PNL_RNG_SOBOL:
       if ( dimension  > DIM_MAX_SOBOL ) return FAIL;
       break;
     case PNL_RNG_NIEDERREITER:
-      if ( dimension  > DIM_MAX_NIED ) return FAIL;
+      if ( dimension  > PNL_DIM_MAX_NIED ) return FAIL;
+      pnl_rng_sdim (rng, dimension);
       break;
     default:
       break;
@@ -1346,6 +1269,30 @@ void pnl_rng_init (PnlRng *rng, int type)
       rng->size_state = sizeof(dcmt_state);
       rng->state = pnl_dcmt_create ();
       break;
+    case PNL_RNG_SQRT:
+      rng->Compute = SQRT;
+      rng->rand_or_quasi = QMC;
+      rng->size_state = sizeof(sqrt_state);
+      rng->state = malloc (rng->size_state);
+      break;
+    case PNL_RNG_HALTON:
+      rng->Compute = HALTON;
+      rng->rand_or_quasi = QMC;
+      rng->size_state = sizeof(halton_state);
+      rng->state = malloc (rng->size_state);
+      break;
+    case PNL_RNG_FAURE:
+      rng->Compute = FAURE;
+      rng->rand_or_quasi = QMC;
+      rng->size_state = sizeof(faure_state);
+      rng->state = malloc (rng->size_state);
+      break;
+    case PNL_RNG_NIEDERREITER:
+      rng->Compute = NIEDERREITER;
+      rng->rand_or_quasi = QMC;
+      rng->size_state = sizeof(nied_state);
+      rng->state = malloc (rng->size_state);
+      break;
     default:
       rng->type = PNL_RNG_NULL;
       printf("Unknown generator type\n");
@@ -1385,7 +1332,7 @@ static void pnl_mrgk3_sseed (mrgk3_state *s, ulong seed)
 {
   /*
    * Il n'est pas clair comment on peut utiliser seed
-   * pour fixer les valeurs initiales ddes 2 générateurs
+   * pour fixer les valeurs initiales des 2 générateurs
    */
   s->x10=231458761.;
   s->x11=34125679.;
@@ -1400,7 +1347,7 @@ static void pnl_mrgk5_sseed (mrgk5_state *s, ulong seed)
 {
   /*
    * Il n'est pas clair comment on peut utiliser seed
-   * pour fixer les valeurs initiales ddes 2 générateurs
+   * pour fixer les valeurs initiales des 2 générateurs
    */
   s->x10= 231458761.;
   s->x11= 34125679.;
@@ -1438,7 +1385,7 @@ static void pnl_tausworthe_sseed (tausworthe_state *s, ulong seed)
 
 
 /**
- * Sets the seed of a Random Number Generator
+ * Sets the seed of a Pseudo Random Number Generator
  *
  * @param rng a PnlRng
  * @param seed an unsigned lon integer used to initialize the generator
@@ -1473,9 +1420,89 @@ void pnl_rng_sseed (PnlRng *rng, ulong seed)
       pnl_dcmt_sseed ((dcmt_state *)(rng->state), seed);
       break;
     default:
+      printf ("For QMC rng, You should use pnl_rng_sdim instead of pnl_rng_sseed\n");
       break;
     }
   rng->counter=1;
   rng->has_gauss=0;
   rng->gauss=0.;
 }
+
+/** 
+ * Sets the dimension of the state space for a QMC rng
+ * 
+ * @param rng a PnlRng
+ * @param dim the dimension of the state space
+ */
+void pnl_rng_sdim (PnlRng *rng, int dim)
+{
+  rng->counter=1;
+  rng->has_gauss=0;
+  rng->gauss=0.;
+  rng->dimension = dim;
+  switch (rng->type)
+    {
+      case PNL_RNG_SQRT:
+      {
+        int i;
+        sqrt_state *state = (sqrt_state *)(rng->state);
+        prime_number(rng->dimension, state->prime);
+        for(i=0; i<rng->dimension; i++)
+          {
+            state->alpha[i]= sqrt((double) state->prime[i]);
+          }
+      }
+      break;
+      case PNL_RNG_HALTON:
+        prime_number(rng->dimension, ((halton_state *)(rng->state))->prime);
+        break;
+      case PNL_RNG_FAURE:
+      {
+        faure_state *state = (faure_state *)(rng->state);
+        int prime[PNL_DIM_MAX_QMC];
+        if((rng->dimension == 2)||(rng->dimension == 1))
+          state->r= 3;
+        else
+          {
+            prime_number(rng->dimension, prime);
+            state->r=search_value(rng->dimension,prime,rng->dimension);
+          }
+      }
+      break;
+      case PNL_RNG_NIEDERREITER:
+      {
+        int i, j;
+        nied_state *state = (nied_state *)(rng->state);
+        /* Initialization of initX_n[] */
+        for (i=1; i<=PNL_DIM_MAX_NIED; i++)
+          state->initialX_n[i]= 0;
+
+        state->facteur= 1.0/(double)(1UL << (BIT_MAX_NIED+1));
+        state->saut = 1L << 12;
+        state->initial_d = state->saut;
+
+        /* Gray code of saut */
+        state->gray = state->saut^(state->saut >> 1);
+        for (i=0; i<=BIT_MAX_NIED; i++)
+          {
+            if (state->gray == 0)
+              break;
+            for (j= 1; j<= PNL_DIM_MAX_NIED; j++)
+              {
+                if ((state->gray & 1) == 0)
+                  break;
+                /* XOR sum */
+                state->initialX_n[j] ^= NiedC[i][j];
+
+              }
+            state->gray >>= 1;
+          }
+      }
+      break;
+
+      default:
+            printf ("For MC rng, you shoud use pnl_rng_sseed instead of pnl_rng_sdim\n");
+            break;
+    }
+}
+

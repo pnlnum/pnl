@@ -16,10 +16,10 @@ extern int pnl_dqelg(int *, double *, double *, double *, double *, int *);
 extern int pnl_dqpsrt(int *, int *, int *, double *, double *, int *, int *);
 
 int pnl_dqagpe(PnlFunc * f, double *a, double *b, int *
-	npts2, double *points, double *epsabs, double *epsrel, 
+	npts2, double *points, double *epsabs, double *epsrel,
 	int *limit, double *result, double *abserr, int *
-	neval, int *ier, double *alist__, double *blist, 
-	double *rlist, double *elist, double *pts, int *iord, 
+	neval, int *ier, double *alist__, double *blist,
+	double *rlist, double *elist, double *pts, int *iord,
 	int *level, int *ndin, int *last)
 {
     /* System generated locals */
@@ -41,7 +41,7 @@ int pnl_dqagpe(PnlFunc * f, double *a, double *b, int *
     double defab1, defab2;
     int ktMIN, nrMAX;
     double oflow, uflow;
-    
+
     int noext;
     int iroff1, iroff2, iroff3;
     double res3la[3];
@@ -310,6 +310,7 @@ int pnl_dqagpe(PnlFunc * f, double *a, double *b, int *
     --rlist;
     --blist;
     --alist__;
+    k = 0 ; /* avoid warning */
 
     /* Function Body */
     epmach = pnl_d1mach(4);
@@ -565,7 +566,7 @@ L95:
 
 /* Computing MAX */
 	d__1 = ABS(a1), d__2 = ABS(b2);
-	if (MAX(d__1,d__2) <= (epmach * 100. + 1.) * (ABS(a2) + uflow * 1e3)) 
+	if (MAX(d__1,d__2) <= (epmach * 100. + 1.) * (ABS(a2) + uflow * 1e3))
 		{
 	    *ier = 4;
 	}

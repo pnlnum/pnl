@@ -28,9 +28,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-static char const rcsid[] =
-  "@(#) $Jeannot: rk_sobol.c,v 1.6 2005/12/28 23:20:10 js Exp $";
-
 #include <stdlib.h>
 #include <time.h>
 #include "rk_sobol.h"
@@ -46,15 +43,6 @@ static char const rcsid[] =
 #define LONG_BIT 64
 #endif
 #endif
-
-char *rk_sobol_strerror[] =
-  {
-    "no error",
-    "invalid dimension",
-    "too many numbers generated",
-    "not enough memory"
-  };
-
 
 /*
  * Sobol/Levitan coefficients of the free direction integers as given
@@ -834,21 +822,6 @@ void pnl_rk_sobol_reinit(rk_sobol_state *s)
   s->gcount = 0;
 }
 
-/* void rk_sobol_randomshift(rk_sobol_state *s, rk_state *rs_num) */
-/* { */
-/*   mt_state rs_num_temp; */
-/*   int k; */
-
-/*   if (rs_num == NULL) */
-/*     { */
-/*       rs_num = &rs_num_temp; */
-/*       pnl_rk_randomseed(rs_num); */
-/*     } */
-
-/*   |+ Initialize numerator +| */
-/*   for (k=0; k<s->dimension; k++) */
-/*     s->numerator[k] = pnl_rk_ulong(rs_num); */
-/* } */
 
 rk_sobol_error pnl_rk_sobol_copy(rk_sobol_state *copy, rk_sobol_state *orig)
 {
@@ -901,10 +874,6 @@ rk_sobol_error pnl_rk_sobol_double(rk_sobol_state *s, double *x)
   return RK_SOBOL_OK;
 }
 
-/* void rk_sobol_setcount(rk_sobol_state *s, unsigned long count) */
-/* { */
-/*   s->count = count; */
-/* } */
 
 void pnl_rk_sobol_free(rk_sobol_state *s)
 {
@@ -912,13 +881,3 @@ void pnl_rk_sobol_free(rk_sobol_state *s)
   free(s->numerator);
 }
 
-/* rk_sobol_error rk_sobol_gauss(rk_sobol_state *s, double *x) */
-/* { */
-/*   int k; */
-/*   rk_sobol_error rc = pnl_rk_sobol_double(s, x); */
-/*   */
-/*   for (k=0; k<s->dimension; k++) */
-/*     x[k] = inverse_normal(x[k]); */
-
-/*   return rc; */
-/* } */
