@@ -47,10 +47,7 @@
   double i;
   }dcomplex;
 */
-int polrt( xcof, cof, m, root )
-     double xcof[], cof[];
-     int m;
-     dcomplex root[];
+int polrt(double *xcof, double *cof, int m, dcomplex *root)
 {
   register double *p, *q;
   int i, j, nsav, n, n1, n2, nroot, iter, retry;
@@ -58,6 +55,7 @@ int polrt( xcof, cof, m, root )
   double mag, cofj;
   dcomplex x0, x, xsav, dx, t, t1, u, ud;
 
+  xsav = CZERO; /* avoir warning */
   final = 0;
   n = m;
   if( n <= 0 )

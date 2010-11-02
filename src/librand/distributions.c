@@ -530,8 +530,8 @@ double pnl_rng_normal (PnlRng *rng)
 {
   if (rng->rand_or_quasi == QMC)
     {
-      CheckQMCDim(rng, 1);
       double u;
+      CheckQMCDim(rng, 1);
       rng->Compute(rng,&u);
       return pnl_inv_cdfnor(u);
     }
