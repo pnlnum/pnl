@@ -4,5 +4,5 @@
 " Add the content of this file to ~/.vim/after/syntax/c.vim
 " or create it if it does not exist
 
-syn keyword cType PnlRng PnlType  PnlVect PnlVectInt PnlVectComplex PnlMat PnlMatInt PnlMatComplex PnlTridiagMat PnlBandMat PnlHmat PnlHmatInt PnlHmatComplex PnlRng PnlBasis PnlList PnlObject
+syn keyword cType PnlRng PnlType  PnlVect PnlVectInt PnlVectComplex PnlMat PnlMatInt PnlMatComplex PnlTridiagMat PnlBandMat PnlHmat PnlHmatInt PnlHmatComplex PnlRng PnlBasis PnlList PnlObject dcomplex
 syn match cType 'Pnl[a-zA-Z]*Object'
