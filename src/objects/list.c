@@ -54,6 +54,28 @@ PnlCell* pnl_cell_new ()
   return o;
 }
 
+
+/** 
+ * Returns the adress of the i-th element of a list. No copy is made
+ * 
+ * @param L a PnlList
+ * @param i an interger index
+ * 
+ * @return a PnlObject* 
+ */
+PnlObject* pnl_list_get (PnlList *L, int i)
+{
+  int j;
+  PnlCell *C;
+  PNL_CHECK (i >= L->len, "index exceeded", "pnl_list_get");
+  C = L->first;
+  for ( j=0 ; j<i ; j++ )
+    {
+      C = C->next;
+    }
+  return C->self;
+}
+
 /**
  * Inserts a new object in the first position of a List
  *

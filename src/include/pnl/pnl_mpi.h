@@ -3,6 +3,7 @@
 
 #include <mpi.h>
 #include "pnl/pnl_object.h"
+#include <pnl/pnl_list.h>
 #include "pnl/pnl_random.h"
 
 /**
@@ -33,7 +34,9 @@ extern int pnl_rng_state_mpi_unpack (PnlRng *rng, void *buf, int bufsize, int *p
  */
 extern PnlRng ** pnl_rng_create_from_file (char *str, int n);
 extern int pnl_rng_save_to_file (PnlRng **rngtab, int n, char *str);
-
+extern int pnl_object_save (PnlObject *obj, FILE *stream);
+extern PnlObject* pnl_object_load (FILE *stream);
+extern PnlList* pnl_object_load_into_list (FILE *stream);
 
 /* @} */
 

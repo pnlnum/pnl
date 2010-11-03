@@ -133,7 +133,10 @@ static int send_rng (PnlType t)
   int i;
 
   rng = pnl_rng_create (t);
-  pnl_rng_sseed (rng, 1273);
+  if (rng->rand_or_quasi == QMC)
+    pnl_rng_sdim(rng, 1);
+  else
+    pnl_rng_sseed (rng, 1273);
   PNL_MPI_MESSAGE(pnl_object_mpi_send (PNL_OBJECT(rng), 1, SENDTAG, MPI_COMM_WORLD), "error in sending rng");
 
   for ( i=0 ; i<NB_INT ; i++ )
@@ -198,10 +201,22 @@ int main(int argc, char *argv[])
       send_rng (PNL_RNG_LECUYER); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
       printf ("--> TAUSWORTHE\n"); fflush(stdout);
       send_rng (PNL_RNG_TAUSWORTHE); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      printf ("--> SQRT\n"); fflush(stdout);
+      send_rng (PNL_RNG_SQRT); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      printf ("--> HALTON\n"); fflush(stdout);
+      send_rng (PNL_RNG_HALTON); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      printf ("--> FAURE\n"); fflush(stdout);
+      send_rng (PNL_RNG_FAURE); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      printf ("--> NIEDERREITER\n"); fflush(stdout);
+      send_rng (PNL_RNG_NIEDERREITER); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
     }
   else
     {
       recv_dcmt (); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
       recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
       recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
       recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);

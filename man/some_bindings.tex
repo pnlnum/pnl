@@ -90,6 +90,20 @@ For the moment, we can only save load random number generators
     rngtab, int n, char \ptr str}
     \sshortdescribe Saves \var{n} rng stored in \var{rngtab} into the file of
   name \var{str}.
+\item \describefun{int}{pnl_object_save}{PnlObject \ptr O, FILE *stream}
+  \sshortdescribe Saves the object \var{O} into the stream \var{stream}. \var{stream}
+  is typically created by calling fopen with \var{mode="wb"}. This function can be
+  called several times to save several objects in the same stream.
+\item \describefun{PnlObject\ptr}{pnl_object_load}{FILE *stream}
+  \sshortdescribe Loads an object from the stream \var{stream}. \var{stream}
+  is typically created by calling fopen with \var{mode="rb"}.  This function can be
+  called several times to load several objects from the same stream. If \var{stream}
+  was empty or it did not contain any PnlObjects, the function returns \var{NULL}.
+\item \describefun{PnlList\ptr}{pnl_object_load_into_list}{FILE *stream}
+  \sshortdescribe Loads as many objects as possible from the stream \var{stream} and
+  stores them into a \refstruct{PnlList}. \var{stream} is typically created by
+  calling fopen with \var{mode="rb"}. If \var{stream} was empty or it did not contain
+  any PnlObjects, the function returns \var{NULL}.
 \end{itemize}
 
 

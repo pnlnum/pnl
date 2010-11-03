@@ -47,6 +47,7 @@ sub update_ignore {
         my @ignore_list            = `svn propget svn:ignore $dir`;
         my $have_found_makefile    = 0;
         my $have_found_makefile_in = 0;
+        my $have_found_tags         = 0;
 
         foreach (@ignore_list) {
             chomp if (m/^[ ]*\n$/);
@@ -54,14 +55,19 @@ sub update_ignore {
               if ( $have_found_makefile == 0 && m/Makefile[ ]*/ );
             $have_found_makefile_in = 1
               if ( $have_found_makefile_in == 0 && m/Makefile\.in/ );
+              $have_found_tags = 1
+              if ( $have_found_tags == 0 && m/tags/ );
             last
-              if ( $have_found_makefile == 1 && $have_found_makefile_in == 1 );
+              if ( $have_found_makefile == 1 && $have_found_makefile_in == 1 
+                    && $have_found_tags);
         }
 
         # svn propset svn:ignore expect a newline separated list.
         push( @ignore_list, "Makefile\n" )    unless ($have_found_makefile);
         push( @ignore_list, "Makefile.in\n" ) unless ($have_found_makefile_in);
-        if ( $have_found_makefile == 0 || $have_found_makefile_in == 0 ) {
+        push( @ignore_list, "tags\n" ) unless ($have_found_tags);
+        if ( $have_found_makefile == 0 || $have_found_makefile_in == 0
+            || $have_found_tags == 0 ) {
 
             # Joining the list avoids addind useless leading spaces
             my $ignore_list = join( '', @ignore_list );

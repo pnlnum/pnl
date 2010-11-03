@@ -513,7 +513,7 @@ static int unpack_nied_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI
   if ((info=MPI_Unpack(buf,bufsize,pos,&(s->gray),1,MPI_LONG,comm))) return info;
   if ((info=MPI_Unpack(buf,bufsize,pos,&(s->facteur),1,MPI_DOUBLE,comm))) return info;
   if ((info=MPI_Unpack(buf,bufsize,pos,&(s->initial_d),1,MPI_UNSIGNED_LONG,comm))) return info;
-  if ((info=MPI_Unpack(buf,bufsize,pos,&(s->initialX_n),1,MPI_UNSIGNED_LONG,comm))) return info;
+  if ((info=MPI_Unpack(buf,bufsize,pos,&(s->initialX_n),PNL_DIM_MAX_NIED+1,MPI_UNSIGNED_LONG,comm))) return info;
   return info;
 }
 

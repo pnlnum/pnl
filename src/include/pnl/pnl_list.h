@@ -34,6 +34,7 @@ extern PnlList* pnl_list_new ();
 extern PnlCell* pnl_cell_new ();
 extern void pnl_list_free (PnlList **L);
 extern void pnl_cell_free (PnlCell **c);
+extern PnlObject* pnl_list_get (PnlList *L, int i);
 extern void pnl_list_insert_first (PnlList *L, PnlObject *o);
 extern void pnl_list_insert_last (PnlList *L, PnlObject *o);
 extern void pnl_list_remove_last (PnlList *L);

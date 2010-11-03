@@ -293,7 +293,7 @@ static PnlMatInt* compute_tensor_from_hyperbolic_degree (double degree, double q
 /**
  *  Canonical polynomials
  *  @param x the address of a real number
- *  @param ind the index of the polynom to be evaluated
+ *  @param ind the index of the polynomial to be evaluated
  */
 static double CanonicalD1(double *x, int ind)
 {
@@ -303,7 +303,7 @@ static double CanonicalD1(double *x, int ind)
 /**
  *  First derivative of the Canonical polynomials
  *  @param x the address of a real number
- *  @param ind the index of the polynom whose first derivative is to be evaluated
+ *  @param ind the index of the polynomial whose first derivative is to be evaluated
  */
 static double DCanonicalD1(double *x, int ind)
 {
@@ -314,7 +314,7 @@ static double DCanonicalD1(double *x, int ind)
 /**
  *  Second derivative of the Canonical polynomials
  *  @param x the address of a real number
- *  @param ind the index of the polynom whose second derivative is to be evaluated
+ *  @param ind the index of the polynomial whose second derivative is to be evaluated
  */
 static double D2CanonicalD1(double *x, int ind)
 {
@@ -326,7 +326,7 @@ static double D2CanonicalD1(double *x, int ind)
  * The terminal recursive function to compute Hermite polynomials of any
  * order. This function is only used for order > 7
  *  @param x the address of a real number
- *  @param n the order of the polynom to be evaluated
+ *  @param n the order of the polynomial to be evaluated
  *  @param n0 7 on input
  *  @param f_n used to store the polynomial of order n. On input is P(7)
  *  @param f_n_1 used to store the polynomial of order n-1. On input is P(6)
@@ -349,7 +349,7 @@ static double Hermite_rec (double *x, int n, int n0, double *f_n, double *f_n_1)
 /**
  *  Hermite polynomials
  *  @param x the address of a real number
- *  @param n the index of the polynom to be evaluated
+ *  @param n the index of the polynomial to be evaluated
  */
 static double HermiteD1(double *x, int n)
 {
@@ -380,7 +380,7 @@ static double HermiteD1(double *x, int n)
 /**
  *  First derivative of the Hermite polynomials
  *  @param x the address of a real number
- *  @param n the index of the polynom whose derivative is to be evaluated
+ *  @param n the index of the polynomial whose derivative is to be evaluated
  */
 static double DHermiteD1(double *x, int n)
 {
@@ -392,7 +392,7 @@ static double DHermiteD1(double *x, int n)
 /**
  *  Second derivative of the Hermite polynomials
  *  @param x the address of a real number
- *  @param n the index of the polynom whose second derivative is to be evaluated
+ *  @param n the index of the polynomial whose second derivative is to be evaluated
  */
 static double D2HermiteD1(double *x, int n)
 {
@@ -404,7 +404,7 @@ static double D2HermiteD1(double *x, int n)
  * The terminal recursive function to compute Tchebychev polynomials of any
  * order. This function is only used for order > 7
  *  @param x the address of a real number
- *  @param n the order of the polynom to be evaluated
+ *  @param n the order of the polynomial to be evaluated
  *  @param f_n used to store the polynomial of order n. On input is P(7)
  *  @param f_n_1 used to store the polynomial of order n-1. On input is P(6)
  */
@@ -426,7 +426,7 @@ static double Tchebychev_rec (double *x, int n, double *f_n, double *f_n_1)
 /**
  *  Tchebytchev polynomials of any order
  *  @param x the address of a real number
- *  @param n the order of the polynom to be evaluated
+ *  @param n the order of the polynomial to be evaluated
  */
 static double TchebychevD1(double *x, int n)
 {
@@ -494,7 +494,7 @@ static double DTchebychev_rec (double *x, int n, int n0, double *f_n, double *f_
 /**
  *  First derivative of the Tchebytchev polynomials
  *  @param x the address of a real number
- *  @param n the index of the polynom whose first derivative is to be evaluated
+ *  @param n the index of the polynomial whose first derivative is to be evaluated
  */
 static double DTchebychevD1(double *x, int n)
 {
@@ -560,7 +560,7 @@ static double D2Tchebychev_rec (double *x, int n, int n0, double *f_n, double *f
 /**
  *  Second derivative of the Tchebytchev polynomials
  *  @param x the address of a real number
- *  @param n the index of the polynom whose second derivative is to be evaluated
+ *  @param n the index of the polynomial whose second derivative is to be evaluated
  */
 static double D2TchebychevD1(double *x, int n)
 {

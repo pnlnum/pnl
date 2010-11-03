@@ -1,3 +1,8 @@
+03-11-2010 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* saveload.c: interface for saving and loading objects to and from
+	files
+
 26-10-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* All QMC random number generators, except SOBOL, are now reentrant
@@ -15,7 +20,7 @@
 11-10-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* pnl_basis_eval_derivs : Improvement of the computation of the
-	derivatives of a multivariate polynom 
+	derivatives of a multivariate polynomial
 
 08-10-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 

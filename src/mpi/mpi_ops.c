@@ -817,17 +817,9 @@ static int unpack_rng (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Com
   if ((info=MPI_Unpack(buf,bufsize,pos,&id,1,MPI_INT,comm))) return info;
   
   if ((info=MPI_Unpack(buf,bufsize,pos,&type,1,MPI_INT,comm))) return info;
-  /*
-   * If rng has already been initialized to store a different type of
-   * generator, we must free the state variable because the size_state may be
-   * different
-   */
-  if (type != rng->type)
+  if ( rng->state != NULL )
     {
-      if ( rng->state != NULL )
-        {
-          free (rng->state); rng->state = NULL;
-        }
+      free (rng->state); rng->state = NULL;
     }
   pnl_rng_init (rng, type);
   
@@ -838,7 +830,6 @@ static int unpack_rng (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Com
     {
       if ((info=MPI_Unpack(buf,bufsize,pos,&rng->gauss,1,MPI_DOUBLE,comm))) return info;
     }
-  if ((rng->state = malloc (rng->size_state)) == NULL) return MPI_ERR_BUFFER;
   if ((info=pnl_rng_state_mpi_unpack(rng,buf,bufsize,pos,comm))) return info;
   return (info);
 }

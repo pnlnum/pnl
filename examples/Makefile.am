@@ -18,7 +18,7 @@ testpnl_LDFLAGS=@GSL_LIBS@ @BLAS_LIBS@ @LAPACK_LIBS@
 testpnl_CPPFLAGS=@HAVE_GSL@ $(AM_CPPFLAGS)
 
 if HAVE_MPI
-bin_PROGRAMS+=pnl-mpi rng-mpi
+bin_PROGRAMS+=pnl-mpi rng-mpi saveload_test
 
 pnl_mpi_SOURCES=mpibindings_test.c
 pnl_mpi_CFLAGS=@MPI_CFLAGS@ $(AM_CFLAGS)
@@ -29,5 +29,11 @@ rng_mpi_SOURCES=rng-mpi.c
 rng_mpi_CFLAGS=@MPI_CFLAGS@ $(AM_CFLAGS)
 rng_mpi_LDADD=../src/libpnl.la ${some_extra_libs}
 rng_mpi_LDFLAGS=@BLAS_LIBS@ @LAPACK_LIBS@
+
+saveload_test_SOURCES=saveload_test.c
+saveload_test_CFLAGS=@MPI_CFLAGS@ $(AM_CFLAGS)
+saveload_test_LDADD=../src/libpnl.la ${some_extra_libs}
+saveload_test_LDFLAGS=@BLAS_LIBS@ @LAPACK_LIBS@
+
 endif
 
