@@ -1225,86 +1225,73 @@ void pnl_rng_init (PnlRng *rng, int type)
       rng->Compute = KNUTH;
       rng->rand_or_quasi = MC;
       rng->size_state = sizeof(knuth_state);
-      rng->state = malloc(rng->size_state);
       break;
     case PNL_RNG_MRGK3:
       rng->Compute = MRGK3;
       rng->rand_or_quasi = MC;
       rng->size_state = sizeof(mrgk3_state);
-      rng->state = malloc(rng->size_state);
       break;
     case PNL_RNG_MRGK5:
       rng->Compute = MRGK5;
       rng->rand_or_quasi = MC;
       rng->size_state = sizeof(mrgk5_state);
-      rng->state = malloc(rng->size_state);
       break;
     case PNL_RNG_SHUFL:
       rng->Compute = SHUFL;
       rng->rand_or_quasi = MC;
       rng->size_state = sizeof(shufl_state);
-      rng->state = malloc(rng->size_state);
       break;
     case PNL_RNG_LECUYER:
       rng->Compute = LECUYER;
       rng->rand_or_quasi = MC;
       rng->size_state = sizeof(lecuyer_state);
-      rng->state = malloc(rng->size_state);
       break;
     case PNL_RNG_TAUSWORTHE:
       rng->Compute = TAUS;
       rng->rand_or_quasi = MC;
       rng->size_state = sizeof(tausworthe_state);
-      rng->state = malloc(rng->size_state);
       break;
     case PNL_RNG_MERSENNE:
       rng->Compute = MERSENNE;
       rng->rand_or_quasi = MC;
       rng->size_state = sizeof(mt_state);
-      rng->state = malloc(rng->size_state);
       break;
     case PNL_RNG_DCMT:
       rng->Compute = DYNAMIC_MT;
       rng->rand_or_quasi = MC;
       rng->size_state = sizeof(dcmt_state);
-      rng->state = pnl_dcmt_create ();
       break;
     case PNL_RNG_SQRT:
       rng->Compute = SQRT;
       rng->rand_or_quasi = QMC;
       rng->size_state = sizeof(sqrt_state);
-      rng->state = malloc (rng->size_state);
       break;
     case PNL_RNG_HALTON:
       rng->Compute = HALTON;
       rng->rand_or_quasi = QMC;
       rng->size_state = sizeof(halton_state);
-      rng->state = malloc (rng->size_state);
       break;
     case PNL_RNG_FAURE:
       rng->Compute = FAURE;
       rng->rand_or_quasi = QMC;
       rng->size_state = sizeof(faure_state);
-      rng->state = malloc (rng->size_state);
       break;
     case PNL_RNG_NIEDERREITER:
       rng->Compute = NIEDERREITER;
       rng->rand_or_quasi = QMC;
       rng->size_state = sizeof(nied_state);
-      rng->state = malloc (rng->size_state);
       break;
     default:
       rng->type = PNL_RNG_NULL;
       printf("Unknown generator type\n");
+      return;
     }
+  rng->state = calloc (rng->size_state,1);
 }
 
 
 /**
  * Creates a rng of the given type.
- * Note that the fields size_state and state are set to zero, which implies
- * that the created generator is unusable. It is only usefull to receive an
- * already workin generator.
  *
  * @param type the type of generator to create
  * @return a PnlRng or NULL if an error occurred
@@ -1417,7 +1404,18 @@ void pnl_rng_sseed (PnlRng *rng, ulong seed)
       pnl_mt_sseed((mt_state *)(rng->state), seed);
       break;
     case PNL_RNG_DCMT :
-      pnl_dcmt_sseed ((dcmt_state *)(rng->state), seed);
+      {
+        int i, iszero=1;
+        for ( i=0 ; i<rng->size_state ; i++ )
+          {
+            if ( ((char *)rng->state)[i] != 0 )
+              {
+                iszero = 0; break;
+              }
+          }
+        if (iszero == 1) pnl_dcmt_create ((dcmt_state *)(rng->state));
+        pnl_dcmt_sseed ((dcmt_state *)(rng->state), seed);
+      }
       break;
     default:
       printf ("For QMC rng, You should use pnl_rng_sdim instead of pnl_rng_sseed\n");

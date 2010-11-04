@@ -1359,9 +1359,8 @@ static void copy_params_of_dcmt_state(dcmt_state *src, dcmt_state *dst)
  * Creates a MT generator. When called several times, the returned generators
  * are independent
  */
-dcmt_state* pnl_dcmt_create ()
+int pnl_dcmt_create (dcmt_state *mts)
 {
-  dcmt_state *mts;
   static dcmt_state *template_mts;
   static prescr_t pre;
   static mt_state org;
@@ -1372,15 +1371,14 @@ dcmt_state* pnl_dcmt_create ()
     {
       pnl_mt_sseed(&org, 4172);
       if ( (template_mts = init_mt_search(&ck, &pre)) == NULL )
-        return NULL;
+        return FAIL;
     }
 
-  if ( (mts = malloc(sizeof(dcmt_state))) == NULL ) return NULL;
   copy_params_of_dcmt_state(template_mts, mts);
   if ( NOT_FOUND == get_irred_param(&ck, &pre, &org, mts,id,DEFAULT_ID_SIZE) )
     {
       pnl_dcmt_free(&mts);
-      return NULL;
+      return FAIL;
     }
   _get_tempering_parameter_hard_dc(mts);
   id++;
@@ -1390,8 +1388,7 @@ dcmt_state* pnl_dcmt_create ()
    * pnl_dcmt_create.
    * But how to know?
    */
-  
-  return mts;
+  return OK;
 }
 
 

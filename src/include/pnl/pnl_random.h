@@ -265,7 +265,7 @@ typedef struct
 } dcmt_state;
 
 extern dcmt_state* pnl_dcmt_get_parameter(ulong seed);
-extern dcmt_state* pnl_dcmt_create ();
+extern int pnl_dcmt_create (dcmt_state*);
 extern dcmt_state** pnl_dcmt_create_array(int n, ulong seed, int *count);
 extern void pnl_dcmt_sseed (dcmt_state *mts, ulong s);
 extern double pnl_dcmt_genrand_double(dcmt_state *mts);

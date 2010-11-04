@@ -19,11 +19,55 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
+#include <unistd.h>
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_mpi.h"
 
 #define NB_INT 5
+#define NB_GEN 3
 static char *binfile = "_tmp_poo.bin";
+
+static void save_rng_array ()
+{
+  int i, j, n, count;
+  PnlRng **rngtab;
+  n = NB_GEN;
+  rngtab = pnl_rng_dcmt_create_array (n, 4172, &count);
+  if ( n != count )
+    {
+      perror ("Wrong number of generator created\n");
+    }
+
+  for ( i=0 ; i<n ; i++ )
+    pnl_rng_sseed (rngtab[i], time(NULL));
+
+  pnl_rng_save_to_file (rngtab, n, binfile);
+  for ( i=0 ; i<n ; i++ )
+    {
+      for ( j=0 ; j<NB_INT ; j++ )
+        printf ("%f ",pnl_rng_uni (rngtab[i]));
+      printf("\n");
+      pnl_rng_free (&(rngtab[i]));
+    }
+  free(rngtab);
+}
+
+static void load_rng_array ()
+{
+  int i, j;
+  PnlRng **rngtab;
+  rngtab = pnl_rng_create_from_file (binfile, NB_GEN);
+  for ( i=0 ; i<NB_GEN ; i++ )
+    {
+      for ( j=0 ; j<NB_INT ; j++ )
+        printf ("%f ",pnl_rng_uni (rngtab[i]));
+      printf("\n");
+      pnl_rng_free (&(rngtab[i]));
+    }
+  free(rngtab);
+  unlink(binfile);
+}
 
 static int save_rng (PnlType t)
 {
@@ -94,6 +138,7 @@ static int load_rng ()
   printf("\n");
 
   pnl_list_free (&L);
+  unlink(binfile);
   return MPI_SUCCESS;
 }
 
@@ -103,8 +148,12 @@ int main (int argc, char **argv)
   PnlRngType t;
   MPI_Init (&argc, &argv);
   t = PNL_RNG_MERSENNE;
+  printf ("--> save/load interface\n");
   save_rng(t);
   load_rng();
+  printf ("--> save/load for array of rngs\n");
+  save_rng_array();
+  load_rng_array();
   MPI_Finalize();
   exit(0);
 }

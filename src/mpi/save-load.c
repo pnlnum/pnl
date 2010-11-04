@@ -24,22 +24,22 @@
 
 /**
  * Creates an array of PnlRng from a file
- * 
+ *
  * @param str The name of the file containing the generators
  * @param n the number of generators to be read
- * 
+ *
  * @return an array of n rng
  */
 PnlRng** pnl_rng_create_from_file (char *str, int n)
 {
   PnlRng **rngtab;
-  int i, count, size, pos;
+  int i, size, pos;
   FILE *xdr;
   char *buf;
 
 
   rngtab = malloc (n * sizeof(PnlRng *));
-  
+
   size = 0;
   xdr = fopen (str, "rb");
   while (fgetc(xdr) != EOF) { size++; }
@@ -49,18 +49,14 @@ PnlRng** pnl_rng_create_from_file (char *str, int n)
   fclose (xdr);
   pos = 0;
 
-  /*
-   * Read  the total number of generators in the file
-   */
-  MPI_Unpack (buf, size, &pos, &count, 1, MPI_INT, MPI_COMM_WORLD);
-  if ( n > count )
-    {
-      printf ("File %s only contains %d generators\n", str, count);
-      free (buf); return NULL;
-    }
   for ( i=0 ; i<n ; i++ )
     {
-      rngtab[i] = pnl_rng_new();      
+      if ( pos >= size )
+        {
+          printf ("File %s only contains %d generators\n", str, i);
+          break;
+        }
+      rngtab[i] = pnl_rng_new();
       pnl_object_mpi_unpack (PNL_OBJECT(rngtab[i]), buf, size, &pos, MPI_COMM_WORLD);
     }
   free (buf);
@@ -69,54 +65,37 @@ PnlRng** pnl_rng_create_from_file (char *str, int n)
 
 /**
  * Save an array of rng to a file
- * 
+ *
  * @param rngtab an array of rng
  * @param n the number of rng to save, must be less or equal than the number
  * of elements of rngtab
  * @param str the name of the file to which saving rngtab
- * 
+ *
  * @return an MPI error code
  */
 int pnl_rng_save_to_file (PnlRng **rngtab, int n, char *str)
 {
-  int i, size, pos, info;
-  char *buf;
-  FILE *xdr;
+  int i;
+  FILE *stream;
 
-  /*
-   * Writes the total number of generators
-   */
-  xdr = fopen (str, "wb");
-  size = 0; pos = 0;
-  if ((info = MPI_Pack_size (1, MPI_INT, MPI_COMM_WORLD, &size))) return info;
-  if ((buf = malloc (size)) == NULL) return MPI_ERR_BUFFER;
-  if ((info = MPI_Pack (&n, 1, MPI_INT, buf, size, &pos, MPI_COMM_WORLD))) return info;
-  fwrite (buf, sizeof(char), pos, xdr);
-  free (buf);
+  stream = fopen (str, "wb");
 
-  /*
-   * Writes each generator
-   */
   for ( i=0 ; i<n ; i++ )
     {
-      pos = 0;
-      if ((info = pnl_object_mpi_pack_size (PNL_OBJECT(rngtab[i]), MPI_COMM_WORLD, &size))) return info;
-      if ((buf = malloc (size)) == NULL) return MPI_ERR_BUFFER;
-      if ((info = pnl_object_mpi_pack (PNL_OBJECT(rngtab[i]), buf, size, &pos, MPI_COMM_WORLD))) return info;
-      fwrite (buf, sizeof(char), pos, xdr);
-      free (buf);
+      int info;
+      if ((info = pnl_object_save (PNL_OBJECT(rngtab[i]), stream))) return info;
     }
-  fclose (xdr);
+  fclose (stream);
   return MPI_SUCCESS;
 }
 
-/** 
+/**
  * Saves a PnlObject into a stream
- * 
+ *
  * @param obj a PnlObject
  * @param stream the stream obtained when opening a file. The file should
  * opened as a binary file
- * 
+ *
  * @return an error code equal to MPI_SUCCESS when the function succeeds
  */
 int pnl_object_save (PnlObject *obj, FILE *stream)
@@ -127,7 +106,7 @@ int pnl_object_save (PnlObject *obj, FILE *stream)
   pos = 0; size = 0;
   if ((info = pnl_object_mpi_pack_size (PNL_OBJECT(obj), MPI_COMM_WORLD, &size))) return info;
   if ((buf = malloc (size)) == NULL) return MPI_ERR_BUFFER;
-  if ((info = pnl_object_mpi_pack (PNL_OBJECT(obj), buf, size, &pos, MPI_COMM_WORLD))) 
+  if ((info = pnl_object_mpi_pack (PNL_OBJECT(obj), buf, size, &pos, MPI_COMM_WORLD)))
     {
       free (buf); return info;
     }
@@ -137,13 +116,12 @@ int pnl_object_save (PnlObject *obj, FILE *stream)
   return MPI_SUCCESS;
 }
 
-
-/** 
+/**
  * Loads an object from a string buffer
- * 
+ *
  * @param buf a string buffer
  * @param bufsize the size of the buffer in bytes
- * @param pos (input/output) current position in buf 
+ * @param pos (input/output) current position in buf
  * @return a PnlObject
  */
 static PnlObject* load_from_buf (char *buf, int bufsize, int *pos)
@@ -152,7 +130,7 @@ static PnlObject* load_from_buf (char *buf, int bufsize, int *pos)
   int parent_id, id, savepos;
 
   savepos = *pos;
-  if (MPI_Unpack(buf, bufsize, pos, &parent_id, 1, MPI_INT, MPI_COMM_WORLD) 
+  if (MPI_Unpack(buf, bufsize, pos, &parent_id, 1, MPI_INT, MPI_COMM_WORLD)
       || MPI_Unpack(buf, bufsize, pos, &id, 1, MPI_INT, MPI_COMM_WORLD))
     {
       printf ("Cannot read any correct PnlTypes in pnl_object_load\n");
@@ -164,12 +142,12 @@ static PnlObject* load_from_buf (char *buf, int bufsize, int *pos)
   return O;
 }
 
-/** 
+/**
  * Loads a object from a file
- * 
+ *
  * @param stream the stream obtained when opening a file. The file should
  * opened as a binary file
- * 
+ *
  * @return a PnlObject or NULL if the stream was empty or it did not
  * contain any PnlObject
  */
@@ -195,12 +173,12 @@ PnlObject* pnl_object_load (FILE *stream)
   return O;
 }
 
-/** 
+/**
  * Loads objects from a file and stores them into a PnlList
- * 
+ *
  * @param stream the stream obtained when opening a file. The file should
  * opened as a binary file
- * 
+ *
  * @return a PnlList or NULL if the stream was empty or it did not
  * contain any PnlObjects
  */
@@ -226,7 +204,7 @@ PnlList* pnl_object_load_into_list (FILE *stream)
   while ( pos < bufsize )
     {
       PnlObject *O;
-      if ((O = load_from_buf (buf, bufsize, &pos)) == NULL) 
+      if ((O = load_from_buf (buf, bufsize, &pos)) == NULL)
         {
           free (buf); break;
         }
