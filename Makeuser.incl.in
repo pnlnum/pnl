@@ -39,12 +39,14 @@ LINK = $(LIBTOOL) --mode=link $(QUIET) $(CC) $(CFLAGS) $(LDFLAGS) $(OTHERLIBS)
 OBJECTS = $(OBJS:.o=.lo)
 #*******************************************************************
 
+ALL_OBJECTS=
 ## Creates targets. A target is created by linking the objects listed in
 ## $(target_OBJS)
 define new_target
 local_bin=$(subst -,_,$(1))
 LOBJS=$$($$(local_bin)_OBJS)
 LOBJS2=$${LOBJS:%.o=%.lo}
+ALL_OBJECTS+=$${LOBJS} $${LOBJS2}
 $(1) : $$(LOBJS2)
 	$(LINK) -o $(1) $$^
 endef
@@ -64,6 +66,7 @@ clean::
 
 cleanall:: clean
 	$(RM) $(TARGET) $(BINS)
+	$(RM) $(ALL_OBJECTS)
 
 .c.o:
 	$(COMPILE)  -o $@ -c $<
