@@ -51,8 +51,8 @@ double pnl_d1mach (int i)
     case 4: return pnl_dlamch("p");
     case 5: return log(pnl_dlamch("b"))/log(10.0);
     default :
-      printf("dimach called with wrong argument\n");
-      return 0;
+            printf("dimach called with wrong argument\n");
+            return 0;
     }
 }
 
@@ -115,11 +115,11 @@ static int largestint(void)
   if ( first == 0) 
     {
       if (sizeof(int)==sizeof(long))
-	large = LONG_MAX ;
+        large = (int) LONG_MAX ;
       else if (sizeof(int)==sizeof(short))
-	large = SHRT_MAX;
+        large = SHRT_MAX;
       else 
-	large = 2147483647 ; /** using default value **/
+        large = 2147483647 ; /** using default value **/
       first++;
       return large ;
     }
@@ -137,8 +137,8 @@ int amos_i1mach (int i)
     case 15: return pnl_dlamch("m");
     case 16: return pnl_dlamch("l");
     default :
-      printf("1imach called with wrong argument\n");
-      return 0;
+             printf("1imach called with wrong argument\n");
+             return 0;
     }
   return 0;
 }
@@ -152,8 +152,8 @@ int pnl_ipmpar(int i)
     case 9: return (int) pnl_dlamch("m");
     case 10: return (int) pnl_dlamch("l");
     default :
-      printf("ipmpar called with wrong argument\n");
-      return 0;
+             printf("ipmpar called with wrong argument\n");
+             return 0;
     }
   return 0;
 }
