@@ -91,7 +91,7 @@ static double count_hyperbolic_degree (const PnlMatInt *T, int i, double q)
  * @param T_previ the index of the line to consider in T_prev
  *
  */
-static void copy_previous_basis (PnlMatInt *T, PnlMatInt *T_prev, int Ti, int T_previ)
+static void copy_previous_tensor (PnlMatInt *T, PnlMatInt *T_prev, int Ti, int T_previ)
 {
   int j;
   for ( j=0 ; j<T_prev->n ; j++ )
@@ -148,7 +148,7 @@ static PnlMatInt* compute_tensor (int nb_func, int nb_variates)
               for ( block=block_start ; block<=k ; block++ , i++ )
                 {
                   if ( i==nb_func ) { pnl_mat_int_free (&T_prev); return T; }
-                  copy_previous_basis (T, T_prev, i, block);
+                  copy_previous_tensor (T, T_prev, i, block);
                   PNL_MLET (T, i, nb_variates-1) = current_degree - deg;
                 }
               /* Consider the previous block */
@@ -247,7 +247,7 @@ static PnlMatInt* compute_tensor_from_degree (int degree, int nb_variates)
               /* Loop in an incresing order over the block of global degree deg */
               for ( block=block_start ; block<=k ; block++ , i++ )
                 {
-                  copy_previous_basis (T, T_prev, i, block);
+                  copy_previous_tensor (T, T_prev, i, block);
                   PNL_MLET (T, i, nb_variates-1) = current_degree - deg;
                 }
               /* Consider the previous block  */
@@ -295,9 +295,9 @@ static PnlMatInt* compute_tensor_from_hyperbolic_degree (double degree, double q
  *  @param x the address of a real number
  *  @param ind the index of the polynomial to be evaluated
  */
-static double CanonicalD1(double *x, int ind)
+static double CanonicalD1(double x, int ind)
 {
-  return pnl_pow_i (*x, ind);
+  return pnl_pow_i (x, ind);
 }
 
 /**
@@ -305,10 +305,10 @@ static double CanonicalD1(double *x, int ind)
  *  @param x the address of a real number
  *  @param ind the index of the polynomial whose first derivative is to be evaluated
  */
-static double DCanonicalD1(double *x, int ind)
+static double DCanonicalD1(double x, int ind)
 {
   if (ind == 0) return 0.;
-  return ind * pnl_pow_i (*x, ind - 1);
+  return ind * pnl_pow_i (x, ind - 1);
 }
 
 /**
@@ -316,10 +316,10 @@ static double DCanonicalD1(double *x, int ind)
  *  @param x the address of a real number
  *  @param ind the index of the polynomial whose second derivative is to be evaluated
  */
-static double D2CanonicalD1(double *x, int ind)
+static double D2CanonicalD1(double x, int ind)
 {
   if (ind <= 1) return 0.;
-  return ind * (ind - 1) * pnl_pow_i (*x, ind - 2);
+  return ind * (ind - 1) * pnl_pow_i (x, ind - 2);
 }
 
 /**
@@ -331,7 +331,7 @@ static double D2CanonicalD1(double *x, int ind)
  *  @param f_n used to store the polynomial of order n. On input is P(7)
  *  @param f_n_1 used to store the polynomial of order n-1. On input is P(6)
  */
-static double Hermite_rec (double *x, int n, int n0, double *f_n, double *f_n_1)
+static double Hermite_rec (double x, int n, int n0, double *f_n, double *f_n_1)
 {
   if (n == 7)
     {
@@ -340,7 +340,7 @@ static double Hermite_rec (double *x, int n, int n0, double *f_n, double *f_n_1)
   else
     {
       double save = *f_n;
-      *f_n = (*x) * (*f_n) - n0 * (*f_n_1);
+      *f_n = (x) * (*f_n) - n0 * (*f_n_1);
       *f_n_1 = save;
       return Hermite_rec (x, n-1, n0 + 1, f_n, f_n_1);
     }
@@ -351,9 +351,9 @@ static double Hermite_rec (double *x, int n, int n0, double *f_n, double *f_n_1)
  *  @param x the address of a real number
  *  @param n the index of the polynomial to be evaluated
  */
-static double HermiteD1(double *x, int n)
+static double HermiteD1(double x, int n)
 {
-  double val = *x;
+  double val = x;
   double val2;
   double f_n, f_n_1;
   switch (n)
@@ -382,7 +382,7 @@ static double HermiteD1(double *x, int n)
  *  @param x the address of a real number
  *  @param n the index of the polynomial whose derivative is to be evaluated
  */
-static double DHermiteD1(double *x, int n)
+static double DHermiteD1(double x, int n)
 {
   if (n == 0) return 0.;
   else return n * HermiteD1 (x, n-1);
@@ -394,7 +394,7 @@ static double DHermiteD1(double *x, int n)
  *  @param x the address of a real number
  *  @param n the index of the polynomial whose second derivative is to be evaluated
  */
-static double D2HermiteD1(double *x, int n)
+static double D2HermiteD1(double x, int n)
 {
   if (n == 0 || n==1) return 0.;
   return n * (n-1) * HermiteD1 (x, n-2);
@@ -408,7 +408,7 @@ static double D2HermiteD1(double *x, int n)
  *  @param f_n used to store the polynomial of order n. On input is P(7)
  *  @param f_n_1 used to store the polynomial of order n-1. On input is P(6)
  */
-static double Tchebychev_rec (double *x, int n, double *f_n, double *f_n_1)
+static double Tchebychev_rec (double x, int n, double *f_n, double *f_n_1)
 {
   if (n == 7)
     {
@@ -417,7 +417,7 @@ static double Tchebychev_rec (double *x, int n, double *f_n, double *f_n_1)
   else
     {
       double save = *f_n;
-      *f_n = 2 * (*x) * (*f_n) - (*f_n_1);
+      *f_n = 2 * (x) * (*f_n) - (*f_n_1);
       *f_n_1 = save;
       return Tchebychev_rec (x, n-1, f_n, f_n_1);
     }
@@ -428,9 +428,9 @@ static double Tchebychev_rec (double *x, int n, double *f_n, double *f_n_1)
  *  @param x the address of a real number
  *  @param n the order of the polynomial to be evaluated
  */
-static double TchebychevD1(double *x, int n)
+static double TchebychevD1(double x, int n)
 {
-  double val = *x;
+  double val = x;
   double val2, val3, val4;
   double f_n, f_n_1;
   switch (n)
@@ -476,7 +476,7 @@ static double TchebychevD1(double *x, int n)
  *  @param f_n_1 used to store the derivative of  the polynomial of order
  *  n-1. On input is P'(6)
  */
-static double DTchebychev_rec (double *x, int n, int n0, double *f_n, double *f_n_1)
+static double DTchebychev_rec (double x, int n, int n0, double *f_n, double *f_n_1)
 {
   if (n == 7)
     {
@@ -485,7 +485,7 @@ static double DTchebychev_rec (double *x, int n, int n0, double *f_n, double *f_
   else
     {
       double save = *f_n;
-      *f_n = 2 * (*x) * (*f_n) - (*f_n_1) + 2 * TchebychevD1 (x, n0);
+      *f_n = 2 * (x) * (*f_n) - (*f_n_1) + 2 * TchebychevD1 (x, n0);
       *f_n_1 = save;
       return DTchebychev_rec (x, n-1, n0+1, f_n, f_n_1);
     }
@@ -496,9 +496,9 @@ static double DTchebychev_rec (double *x, int n, int n0, double *f_n, double *f_
  *  @param x the address of a real number
  *  @param n the index of the polynomial whose first derivative is to be evaluated
  */
-static double DTchebychevD1(double *x, int n)
+static double DTchebychevD1(double x, int n)
 {
-  double val = *x;
+  double val = x;
   double val2, val3, val4;
   double f_n, f_n_1;
   switch (n)
@@ -542,7 +542,7 @@ static double DTchebychevD1(double *x, int n)
  *  @param f_n_1 used to store the derivative of  the polynomial of order
  *  n-1. On input is P''(6)
  */
-static double D2Tchebychev_rec (double *x, int n, int n0, double *f_n, double *f_n_1)
+static double D2Tchebychev_rec (double x, int n, int n0, double *f_n, double *f_n_1)
 {
   if (n == 7)
     {
@@ -551,7 +551,7 @@ static double D2Tchebychev_rec (double *x, int n, int n0, double *f_n, double *f
   else
     {
       double save = *f_n;
-      *f_n = 2 * (*x) * (*f_n) - (*f_n_1) + 4 * DTchebychevD1 (x, n0);
+      *f_n = 2 * (x) * (*f_n) - (*f_n_1) + 4 * DTchebychevD1 (x, n0);
       *f_n_1 = save;
       return D2Tchebychev_rec (x, n-1, n0+1, f_n, f_n_1);
     }
@@ -562,9 +562,9 @@ static double D2Tchebychev_rec (double *x, int n, int n0, double *f_n, double *f
  *  @param x the address of a real number
  *  @param n the index of the polynomial whose second derivative is to be evaluated
  */
-static double D2TchebychevD1(double *x, int n)
+static double D2TchebychevD1(double x, int n)
 {
-  double val = *x;
+  double val = x;
   double val2, val3, val4;
   double f_n, f_n_1;
   switch (n)
@@ -626,6 +626,9 @@ PnlBasis*  pnl_basis_new ()
   o->label = "";
   o->nb_variates = 0;
   o->T = NULL;
+  o->isreduced = 0;
+  o->center = NULL;
+  o->scale = NULL;
   o->object.type = PNL_TYPE_BASIS;
   o->object.parent_type = PNL_TYPE_BASIS;
   o->object.label = pnl_basis_label;
@@ -751,16 +754,74 @@ PnlBasis*  pnl_basis_create_from_hyperbolic_degree (int index, double degree, do
   return pnl_basis_create_from_tensor (index, T);
 }
 
+/** 
+ * Sets the center and scale field of a PnlBasis using the domain on which
+ * the basis will be used
+ * 
+ * @param xmin lower bounds of the domain
+ * @param xmax upper bounds of the domain
+ */
+void pnl_basis_set_domain (PnlBasis *B, const PnlVect *xmin, const PnlVect *xmax)
+{
+  int i, n;
+  PNL_CHECK (xmin->size != xmax->size || xmin->size != B->nb_variates,
+             "size mismatch", "pnl_basis_set_domain");
+
+  if ( B->center != NULL ) free (B->center);
+  if ( B->scale != NULL ) free (B->scale);
+  n = B->nb_variates;
+  B->center = malloc (n * sizeof(double));
+  B->scale = malloc (n * sizeof(double));
+  B->isreduced = 1;
+  for ( i=0 ; i<n ; i++ )
+    {
+      const double low = PNL_GET(xmin, i);
+      const double high = PNL_GET(xmax, i);
+      B->center[i] = (low + high) / 2.;
+      B->scale[i] = 2. / (high - low);
+    }
+}
+
+/** 
+ * Sets the center and scale field of a PnlBasis
+ *
+ * @param center
+ * @param scale
+ */
+void pnl_basis_set_reduced (PnlBasis *B, const PnlVect *center, const PnlVect *scale)
+{
+  int i, n;
+  PNL_CHECK (center->size != scale->size || center->size != B->nb_variates,
+             "size mismatch", "pnl_basis_set_reduced");
+
+  if ( B->center != NULL ) free (B->center);
+  if ( B->scale != NULL ) free (B->scale);
+  n = B->nb_variates;
+  B->center = malloc (n * sizeof(double));
+  B->scale = malloc (n * sizeof(double));
+  B->isreduced = 1;
+  memcpy (B->center, center->array, n * sizeof(double));
+  for ( i=0 ; i<n ; i++ )
+    {
+      B->scale[i] = 1. / PNL_GET(scale, i);
+    }
+}
+
 /**
  * Frees a PnlBasis
  *
- * @param basis
+ * @param B
  */
-void pnl_basis_free (PnlBasis **basis)
+void pnl_basis_free (PnlBasis **B)
 {
-  if (*basis == NULL) return;
-  pnl_mat_int_free ( &((*basis)->T) );
-  free (*basis); basis = NULL;
+  if (*B == NULL) return;
+  pnl_mat_int_free ( &((*B)->T) );
+  if ( (*B)->isreduced == 1 )
+    {
+      free ((*B)->center); (*B)->center = NULL;
+      free ((*B)->scale); (*B)->scale = NULL;
+    }
+  free (*B); *B = NULL;
 }
 
 /**
@@ -792,9 +853,19 @@ double pnl_basis_i ( PnlBasis *b, double *x, int i )
 {
   int k;
   double aux = 1.;
-  for ( k=0 ; k<b->nb_variates ; k++ )
+  if ( b->isreduced == 1)
     {
-      aux *= (b->f)(x+k, PNL_MGET (b->T, i, k));
+      for ( k=0 ; k<b->nb_variates ; k++ )
+        {
+          aux *= (b->f)((x[k] - b->center[k]) * b->scale[k], PNL_MGET (b->T, i, k));
+        }
+    }
+  else
+    {
+      for ( k=0 ; k<b->nb_variates ; k++ )
+        {
+          aux *= (b->f)(x[k], PNL_MGET (b->T, i, k));
+        }
     }
   return aux;
 }
@@ -813,12 +884,27 @@ double pnl_basis_i_D ( PnlBasis *b, double *x, int i, int j )
 {
   int k;
   double aux = 1;
-  for ( k=0 ; k < b->nb_variates ; k++ )
+  if ( b->isreduced == 1)
     {
-      if ( k == j )
-        aux *= (b->Df) (x + k, PNL_MGET(b->T, i, k));
-      else
-        aux *= (b->f) (x + k, PNL_MGET(b->T, i, k));
+      for ( k=0 ; k < b->nb_variates ; k++ )
+        {
+          if ( k == j )
+            aux *= b->scale[k] * (b->Df) ( (x[k] - b->center[k]) * b->scale[k], 
+                                           PNL_MGET(b->T, i, k));
+          else
+            aux *= (b->f) ((x[k] - b->center[k]) * b->scale[k], PNL_MGET(b->T, i, k));
+        }
+    }
+  else
+    {
+      for ( k=0 ; k < b->nb_variates ; k++ )
+        {
+          if ( k == j )
+            aux *= (b->Df) (x[k], PNL_MGET(b->T, i, k));
+          else
+            aux *= (b->f) (x[k], PNL_MGET(b->T, i, k));
+        }
+
     }
   return aux;
 }
@@ -838,27 +924,58 @@ double pnl_basis_i_D2 (PnlBasis *b, double *x, int i, int j1, int j2)
 {
   int k;
   double aux = 1;
-  if (j1 == j2)
+  if ( b->isreduced == 1)
     {
-      for ( k = 0 ; k < b->nb_variates ; k++ )
+      if (j1 == j2)
         {
-          if ( k == j1 )
-            aux *= (b->D2f) (x + k, PNL_MGET(b->T, i, k));
-          else
-            aux *= (b->f) (x + k, PNL_MGET(b->T, i, k));
+          for ( k = 0 ; k < b->nb_variates ; k++ )
+            {
+              if ( k == j1 )
+                aux *= b->scale[k] * b->scale[k] * 
+                        (b->D2f) ((x[k] - b->center[k]) * b->scale[k], 
+                                  PNL_MGET(b->T, i, k));
+              else
+                aux *= (b->f) (x[k], PNL_MGET(b->T, i, k));
+            }
+        }
+      else
+        {
+          for ( k = 0 ; k < b->nb_variates ; k++ )
+            {
+              if ( k == j1 || k == j2 )
+                aux *= b->scale[k] * (b->Df) ((x[k] - b->center[k]) * b->scale[k],
+                                              PNL_MGET(b->T, i, k));
+              else
+                aux *= (b->f) ((x[k] - b->center[k]) * b->scale[k], PNL_MGET(b->T, i, k));
+            }
         }
     }
   else
     {
-      for ( k = 0 ; k < b->nb_variates ; k++ )
+      if (j1 == j2)
         {
-          if ( k == j1 || k == j2 )
-            aux *= (b->Df) (x + k, PNL_MGET(b->T, i, k));
-          else
-            aux *= (b->f) (x + k, PNL_MGET(b->T, i, k));
+          for ( k = 0 ; k < b->nb_variates ; k++ )
+            {
+              if ( k == j1 )
+                aux *= (b->D2f) (x[k], PNL_MGET(b->T, i, k));
+              else
+                aux *= (b->f) (x[k], PNL_MGET(b->T, i, k));
+            }
         }
+      else
+        {
+          for ( k = 0 ; k < b->nb_variates ; k++ )
+            {
+              if ( k == j1 || k == j2 )
+                aux *= (b->Df) (x[k], PNL_MGET(b->T, i, k));
+              else
+                aux *= (b->f) (x[k], PNL_MGET(b->T, i, k));
+            }
+        }
+
     }
   return aux;
+
 }
 
 /**
@@ -945,21 +1062,21 @@ double pnl_basis_eval_D2 (PnlBasis *basis, PnlVect *coef, double *x, int i, int 
  *
  * @param coef a vector typically computed by pnl_basis_fit_ls
  * @param x the coordinates of the point at which to evaluate the function
- * @param basis a PnlBasis
+ * @param b PnlBasis
  * @param val contains the value of sum (coef .* f(x)) on exit
  * @param grad contains the value of sum (coef .* Df(x)) on exit
  * @param hes contains the value of sum (coef .* D2 f(x)) on exit
  *
  */
-void pnl_basis_eval_derivs (PnlBasis *basis, PnlVect *coef, double *x,
+void pnl_basis_eval_derivs (PnlBasis *b, PnlVect *coef, double *x,
                             double *val, PnlVect *grad, PnlMat *hes)
 {
   int i,k,j,l,n;
   double y, *f, *Df, D2f;
 
-  CHECK_NB_FUNC (coef, basis);
+  CHECK_NB_FUNC (coef, b);
   y = 0.;
-  n = basis->nb_variates;
+  n = b->nb_variates;
   f = malloc(sizeof(double) * n);
   Df = malloc(sizeof(double) * n);
   pnl_vect_resize (grad, n);
@@ -970,33 +1087,58 @@ void pnl_basis_eval_derivs (PnlBasis *basis, PnlVect *coef, double *x,
     {
       const double a = pnl_vect_get (coef, i);
       if ( a == 0. ) continue;
-      {
-        double auxf = 1;
-        /*
-         * computation of val
-         */
-        for ( k=0 ; k<n ; k++ )
-          {
-            f[k] = (basis->f)(x+k, PNL_MGET(basis->T, i, k));
-            auxf *= f[k];
-          }
-        y += a * auxf;
-      }
+      double auxf = 1;
+      /*
+       * computation of val
+       */
+      if ( b->isreduced == 1 )
+        {
+          for ( k=0 ; k<n ; k++ )
+            {
+              f[k] = (b->f)((x[k] - b->center[k]) * b->scale[k],
+                                PNL_MGET(b->T, i, k));
+              auxf *= f[k];
+            }
+        }
+      else
+        {
+          for ( k=0 ; k<n ; k++ )
+            {
+              f[k] = (b->f)(x[k], PNL_MGET(b->T, i, k));
+              auxf *= f[k];
+            }
+        }
+      y += a * auxf;
       /*
        * computation of the gradient and the Hessian matrix
        */
       for ( j=0 ; j<n ; j++)
         {
-          double auxf = 1;
-          /* gradient */
+          auxf = 1;
           for ( k=0 ; k<j ; k++ ) auxf *= f[k];
           for ( k=k+1 ; k<n ; k++ ) auxf *= f[k];
-          Df[j] = (basis->Df) (x + j, PNL_MGET(basis->T, i, j));
-          PNL_LET(grad,j) = PNL_GET(grad, j) + a * auxf * Df[j];
+          if ( b->isreduced == 1 )
+            {
+              /* gradient */
+              Df[j] = b->scale[j] * (b->Df) ((x[j] - b->center[j]) * b->scale[j],
+                                                 PNL_MGET(b->T, i, j));
+              PNL_LET(grad,j) = PNL_GET(grad, j) + a * auxf * Df[j];
 
-          /* diagonal terms of the Hessian matrix */
-          D2f = (basis->D2f) (x + j, PNL_MGET(basis->T, i, j));
-          PNL_MLET(hes,j,j) = PNL_MGET(hes,j,j) + a * auxf * D2f;
+              /* diagonal terms of the Hessian matrix */
+              D2f = b->scale[j] *b->scale[j] *  
+                    (b->D2f) ((x[j] - b->center[j]) * b->scale[j], 
+                                  PNL_MGET(b->T, i, j));
+              PNL_MLET(hes,j,j) = PNL_MGET(hes,j,j) + a * auxf * D2f;
+            }
+          else
+            {
+              /* gradient */
+              Df[j] = (b->Df) (x[j], PNL_MGET(b->T, i, j));
+              PNL_LET(grad,j) = PNL_GET(grad, j) + a * auxf * Df[j];
+              /* diagonal terms of the Hessian matrix */
+              D2f = (b->D2f) (x[j], PNL_MGET(b->T, i, j));
+              PNL_MLET(hes,j,j) = PNL_MGET(hes,j,j) + a * auxf * D2f;
+            }
 
           /* non diagonal terms of the Hessian matrix */
           for ( l=0 ; l<j ; l++)

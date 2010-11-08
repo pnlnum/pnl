@@ -1,3 +1,8 @@
+08-11-2010 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* basis.c: bases can be centered and normalized
+
+
 03-11-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* saveload.c: interface for saving and loading objects to and from
@@ -5,17 +10,17 @@
 
 26-10-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
-	* All QMC random number generators, except SOBOL, are now reentrant
+	* random.c: All QMC random number generators, except SOBOL, are now reentrant
 
 14-10-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
-	* Detection of static versions of Blas & Lapack added to the configure
-	script
+	* configure.in: Detection of static versions of Blas & Lapack added to
+	the configure script
 
 12-10-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
-	* Bases can be built using an hyperbolic set of indices, useful for
-	polynoms living in a high dimensional space.
+	* basis.c: Bases can be built using an hyperbolic set of indices,
+	useful for polynoms living in a high dimensional space.
 
 11-10-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
@@ -24,13 +29,13 @@
 
 08-10-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
-	* All true random number generators are now reentrant
+	* random.c: All true random number generators are now reentrant
 
 06-10-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
-	* PNL_RNG_KNUTH is now reentrant
-	* Packing of PnlRng is portable
-	* PnlList is now supported by MPI bindings
+	* random.c: PNL_RNG_KNUTH is now reentrant
+	* rng-state.c: Packing of PnlRng is portable
+	* list.c: PnlList is now supported by MPI bindings
 
 20-09-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 

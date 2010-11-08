@@ -270,13 +270,21 @@ static int size_basis (const PnlObject *Obj, MPI_Comm comm, int *size)
   /* B->T */
   if((info=pnl_object_mpi_pack_size(PNL_OBJECT(B->T),comm,&count))) return info;
   *size += count;
+  /* B->isreduced */
+  if((info=MPI_Pack_size(1, MPI_INT, comm, &count))) return(info);
+  *size += count;
+  if (B->isreduced == 1)
+    {
+      if((info=MPI_Pack_size(B->nb_variates, MPI_DOUBLE, comm, &count))) return(info);
+      *size += 2*count;
+    }
   return (info);
 }
 
 /**
  * Computes the length of the buffer needed to pack the PnlObject
  *
- * @param Obj a PnlObject actually containing a PnlBasis
+ * @param Obj a PnlObject actually containing a PnlRng
  * @param comm an MPI Communicator
  * @param size the upper bound on the number of bytes needed to pack Obj
  *
@@ -346,8 +354,6 @@ static int size_list (const PnlObject *Obj, MPI_Comm comm, int *size)
     }
   return (info);
 }
-
-
 
 /**
  * Packs a PnlVectObject
@@ -528,6 +534,13 @@ static int pack_basis (const PnlObject *Obj, void *buf, int bufsize, int *pos, M
   PnlBasis *B = PNL_BASIS_OBJECT(Obj);
   if ((info=MPI_Pack(&B->id, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
   if ((info=pnl_object_mpi_pack(PNL_OBJECT(B->T), buf, bufsize, pos, comm))) return info;
+  if ((info=MPI_Pack(&B->isreduced, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
+  if (B->isreduced == 1)
+    {
+      const int n = B->nb_variates;
+      if ((info=MPI_Pack(&B->center, n, MPI_DOUBLE, buf, bufsize, pos, comm))) return info;
+      if ((info=MPI_Pack(&B->scale, n, MPI_DOUBLE, buf, bufsize, pos, comm))) return info;
+    }
   return(info);
 }
 
@@ -588,7 +601,6 @@ static int pack_list (const PnlObject *Obj, void *buf, int bufsize, int *pos, MP
     }
   return (info);
 }
-
 
 /**
  * Unpacks a PnlVectObject
@@ -770,7 +782,6 @@ static int unpack_hmatrix (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI
   return(info);
 }
 
-
 /**
  * Unpacks a PnlBasis
  *
@@ -793,6 +804,15 @@ static int unpack_basis (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_C
   if ((info=pnl_object_mpi_unpack(PNL_OBJECT(T),buf,bufsize,pos,comm))) return info;
   pnl_basis_set_from_tensor (B, basis_id, T);
   /* do not free T, it will be done by pnl_basis_free later */
+  if ((info=MPI_Unpack(buf,bufsize,pos,&B->isreduced,1,MPI_INT,comm))) return info;
+  if (B->isreduced == 1)
+    {
+      const int n = T->n;
+      B->center = malloc (n * sizeof(double));
+      if ((info=MPI_Unpack(buf,bufsize,pos,B->center,n,MPI_DOUBLE,comm))) return info;
+      B->scale = malloc (n * sizeof(double));
+      if ((info=MPI_Unpack(buf,bufsize,pos,B->scale,n,MPI_DOUBLE,comm))) return info;
+    }
   return (MPI_SUCCESS);
 }
 

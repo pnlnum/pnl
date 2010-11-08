@@ -225,6 +225,10 @@ struct PnlBasis_t {
                    of the i-th element of the one dimensional basis *
   double    (*D2f)(double  *x, int i); /*!< Computes the second derivative
                       of the i-th element of the one dimensional basis *
+  int         isreduced; /* TRUE if the basis is reduced */
+  double     *center; /*!< center of the domain */
+  double     *scale; /*<! inverse of the scaling factor to map the domain 
+                          to [-1, 1]^nb_variates */
 };
 \end{verbatim}
 
@@ -326,6 +330,36 @@ $\alpha^\star \in \R^N$ which solves
   hyperbolic set of indices gives priority to polynomials associated to low
   order interaction.
 
+\end{itemize}
+
+
+Polynomial regression based on a least square approach often leads to ill
+conditionned linear systems. One way of improving the stability of the system is to
+use centered and renormalised polynomials so that the original domain of interest
+$\cD$ (a subset of $\R^d$) is mapped to $[-1,1]^d$. If the domain $\cD$ is
+rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by 
+\begin{equation}
+  \label{basis_reduced}
+  x \in \cD \longmapsto \left(\frac{x_i - (b_i+a_i)/2}{(b_i - a_i)/2}\right)_{i=1,\cdots,d}
+\end{equation}
+\begin{itemize}
+\item \describefun{void}{pnl_basis_set_domain}{\refstruct{PnlBasis} \ptr B, 
+  const \refstruct{PnlVect} \ptr a, const \refstruct{PnlVect} \ptr b}
+  \sshortdescribe This function declares \var{B} as a centered and normalised basis
+  as defined by Equation~\ref{basis_reduced}. Calling this function is equivalent to
+  calling \reffun{pnl_basis_set_reduced} with \var{center=(b+a)/2} and
+  \var{scale=(b-a)/2}.
+\item \describefun{void}{pnl_basis_set_reduced}{\refstruct{PnlBasis} \ptr B,
+  const \refstruct{PnlVect} \ptr center, const \refstruct{PnlVect} \ptr scale}
+  \sshortdescribe This function declares \var{B} as a centered and normalised basis
+  using the mapping
+  \begin{equation*}
+    x \in \cD \longmapsto \left(\frac{x_i - \var{center}_i }{\var{scale}_i}\right)_{i=1,\cdots,d}
+  \end{equation*}
+\end{itemize}
+
+
+\begin{itemize}
 \item  \describefun{void}{pnl_basis_free}{\refstruct{PnlBasis} \ptr\ptr basis}
   \sshortdescribe Frees a \refstruct{PnlBasis} created by
   \reffun{pnl_basis_create}. Beware that \var{basis} is the address of a

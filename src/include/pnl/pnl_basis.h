@@ -35,12 +35,16 @@ struct _PnlBasis
   int         nb_variates;  /*!< number of variates */
   int         nb_func; /*!< number of elements in the basis */
   PnlMatInt  *T; /*!< Tensor matrix */
-  double    (*f)(double    *x, int i); /*!< Computes the i-th element of the one
+  double    (*f)(double x, int i); /*!< Computes the i-th element of the one
                                             dimensional basis */
-  double    (*Df)(double   *x, int i); /*!< Computes the first derivative of i-th element
+  double    (*Df)(double x, int i); /*!< Computes the first derivative of i-th element
                                             of the one dimensional basis */
-  double    (*D2f)(double  *x, int i); /*!< Computes the second derivative of the i-th element
-                                            of the one dimensional basis */
+  double    (*D2f)(double x, int i); /*!< Computes the second derivative of the i-th 
+                                           element of the one dimensional basis */
+  int         isreduced; /* TRUE if the basis is reduced */
+  double     *center; /*!< center of the domain */
+  double     *scale; /*<! inverse of the scaling factor to map the domain 
+                          to [-1, 1]^nb_variates */
 };
 
 extern enum_members PnlBases ;
@@ -51,6 +55,8 @@ extern PnlBasis*  pnl_basis_create_from_hyperbolic_degree (int index, double deg
 extern void  pnl_basis_set_from_tensor (PnlBasis *b, int index, PnlMatInt *T);
 extern PnlBasis* pnl_basis_create_from_tensor ( int index, PnlMatInt *T);
 extern PnlBasis* pnl_basis_init ( int index, int nb_func, int space_dim);
+extern void pnl_basis_set_domain (PnlBasis *B, const PnlVect *xmin, const PnlVect *xmax);
+extern void pnl_basis_set_reduced (PnlBasis *B, const PnlVect *center, const PnlVect *scale);
 extern void pnl_basis_free (PnlBasis **basis);
 extern void pnl_basis_print (const PnlBasis *B);
 extern int pnl_basis_fit_ls (PnlBasis *f, PnlVect *coef, PnlMat *x, PnlVect *y);

@@ -44,7 +44,7 @@ static void exp_regression2()
 
   PnlBasis *basis;
 
-  printf("\n\n** Regression of the exponential function on [0:0.05:5] ** \n\n");
+  printf("\n\n--> Regression of the exponential function on [0:0.05:5] ** \n\n");
 
   alpha = pnl_vect_create (0);
 
@@ -105,7 +105,7 @@ static void regression_multid()
   PnlVect *alpha;
 
   PnlBasis *basis;
-  printf("\n\n** Multi dimensional regression on log (1+x[0]*x[0] + x[1]*x[1]) **\n\n");
+  printf("\n\n--> Multi dimensional regression on log (1+x[0]*x[0] + x[1]*x[1]) \n\n");
   alpha = pnl_vect_create (0);
 
   /* creating the grid */
@@ -244,12 +244,12 @@ static void derive_approx_fonction(PnlBasis *B, PnlVect *D, PnlVect *alpha, doub
 static void pnl_basis_eval_test ()
 {
   PnlMat *X;
-  PnlVect *V,*x,*t,*D, *alpha;
+  PnlVect *V,*x,*t,*D, *alpha, *lower, *upper;
   PnlBasis *basis;
   int j,m,n,gen;
   double t0,x0;
 
-  printf ("\n\n** Differentation of the regression **\n\n");
+  printf ("\n\n--> Differentation of the regression (not normalised)\n\n");
   m=19;//nombre de polynomes
   n=50;
   D=pnl_vect_create(5);
@@ -282,6 +282,7 @@ static void pnl_basis_eval_test ()
   /* calcul des valeurs approchées des dérivées de la fonction à retrouver (1
      en temps et 2 en espace) */
   derive_approx_fonction(basis, D, alpha,t0,x0);
+  printf ("\n\n--> Differentation of the regression (normalised)\n\n");
   printf("valeur exacte de la fonction : %f\n",
          fonction_a_retrouver(t0,x0));
   printf("valeur approchee de la fonction :%f \n\n",
@@ -307,11 +308,49 @@ static void pnl_basis_eval_test ()
   printf("valeur approchee de la derivee en temps de la fonction  :%f \n",
          pnl_vect_get(D,3));
   pnl_basis_free (&basis);
+
+  /* reduced basis */
+  basis = pnl_basis_create (PNL_BASIS_HERMITIAN, m, 2);
+  lower = pnl_vect_create_from_list (2, 0., -5.);
+  upper = pnl_vect_create_from_list (2, 1., 4.);
+  pnl_basis_set_domain (basis, lower, upper);
+  pnl_basis_fit_ls (basis, alpha, X, V);
+  /* calcul des valeurs approchées des dérivées de la fonction à retrouver (1
+     en temps et 2 en espace) */
+  derive_approx_fonction(basis, D, alpha,t0,x0);
+  printf("valeur exacte de la fonction : %f\n",
+         fonction_a_retrouver(t0,x0));
+  printf("valeur approchee de la fonction :%f \n\n",
+         pnl_vect_get(D,0));
+
+  printf("valeur exacte de la derivee de la fonction : %f\n",
+         derive_x_fonction_a_retrouver(t0,x0));
+  printf("valeur approchee de la derivee de la fonction :%f \n\n",
+         derive_x_approx_fonction(basis, alpha, t0, x0));
+
+  printf("valeur exacte de la derivee seconde en espace fonction : %f\n",
+         derive_xx_fonction_a_retrouver(t0,x0));
+  printf("valeur approchee de la derivee seconde en espace de la fonction  :%f \n\n",
+         pnl_vect_get(D,2));
+
+  printf("valeur exacte de la derivee seconde croisee : %f\n",
+         derive_xt_fonction_a_retrouver(t0,x0));
+  printf("valeur approchee de la derivee seconde croisee :%f \n\n",
+         pnl_vect_get(D,4));
+
+  printf("valeur exacte de la derivee en temps fonction :%f\n",
+         derive_t_fonction_a_retrouver(t0,x0));
+  printf("valeur approchee de la derivee en temps de la fonction  :%f \n",
+         pnl_vect_get(D,3));
+
+  pnl_basis_free (&basis);
   pnl_vect_free(&alpha);
   pnl_vect_free(&x);
   pnl_vect_free(&t);
   pnl_vect_free(&V);
   pnl_vect_free(&D);
+  pnl_vect_free(&lower);
+  pnl_vect_free(&upper);
   pnl_mat_free(&X);
 }
 

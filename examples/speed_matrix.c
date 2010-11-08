@@ -209,10 +209,6 @@ void dgemm2 (double alpha, const PnlMat *A,
     }
 }
 
-     
-
-
-
 void speed_dgemm ()
 {
   clock_t  start, end;
@@ -557,7 +553,7 @@ static void speed_syslin_mat ()
 
 }
 
-void speed_test ()
+void speed_matrix_test ()
 {
   speed_access ();
   speed_copy ();
