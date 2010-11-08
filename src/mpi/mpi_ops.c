@@ -538,8 +538,8 @@ static int pack_basis (const PnlObject *Obj, void *buf, int bufsize, int *pos, M
   if (B->isreduced == 1)
     {
       const int n = B->nb_variates;
-      if ((info=MPI_Pack(&B->center, n, MPI_DOUBLE, buf, bufsize, pos, comm))) return info;
-      if ((info=MPI_Pack(&B->scale, n, MPI_DOUBLE, buf, bufsize, pos, comm))) return info;
+      if ((info=MPI_Pack(B->center, n, MPI_DOUBLE, buf, bufsize, pos, comm))) return info;
+      if ((info=MPI_Pack(B->scale, n, MPI_DOUBLE, buf, bufsize, pos, comm))) return info;
     }
   return(info);
 }
@@ -807,7 +807,7 @@ static int unpack_basis (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_C
   if ((info=MPI_Unpack(buf,bufsize,pos,&B->isreduced,1,MPI_INT,comm))) return info;
   if (B->isreduced == 1)
     {
-      const int n = T->n;
+      const int n = B->nb_variates;
       B->center = malloc (n * sizeof(double));
       if ((info=MPI_Unpack(buf,bufsize,pos,B->center,n,MPI_DOUBLE,comm))) return info;
       B->scale = malloc (n * sizeof(double));

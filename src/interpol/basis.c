@@ -849,7 +849,7 @@ void pnl_basis_print (const PnlBasis *B)
       printf ("\tcenter = ");
       for ( i=0 ; i<B->nb_variates ; i++ ) printf ("%f ", B->center[i]);
       printf ("\n\tscale = ");
-      for ( i=0 ; i<B->nb_variates ; i++ ) printf ("%f ", B->center[i]);
+      for ( i=0 ; i<B->nb_variates ; i++ ) printf ("%f ", B->scale[i]);
       printf("\n");
     }
   printf ("\tTensor matrix : \n");
