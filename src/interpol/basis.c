@@ -644,7 +644,7 @@ PnlBasis*  pnl_basis_new ()
  * @param T the tensor of the multi-dimensionnal basis. No copy of T is done, so
  * do not free T. It will be freed transparently by pnl_basis_free
  */
-void  pnl_basis_set_from_tensor (PnlBasis *b, int index, PnlMatInt *T)
+void  pnl_basis_set_from_tensor (PnlBasis *b, int index, const PnlMatInt *T)
 {
   enum_member *e;
 
@@ -663,7 +663,7 @@ void  pnl_basis_set_from_tensor (PnlBasis *b, int index, PnlMatInt *T)
 
   /* Not sure this is the right place to put it */
   pnl_mat_int_free (&(b->T));
-  b->T = T;
+  b->T = (PnlMatInt *) T;
 
   switch ( index )
     {
@@ -695,7 +695,7 @@ void  pnl_basis_set_from_tensor (PnlBasis *b, int index, PnlMatInt *T)
  * do not free T. It will be freed transparently by pnl_basis_free
  * @return a PnlBasis
  */
-PnlBasis*  pnl_basis_create_from_tensor (int index, PnlMatInt *T)
+PnlBasis*  pnl_basis_create_from_tensor (int index, const PnlMatInt *T)
 {
   PnlBasis *b;
   if ((b = pnl_basis_new ()) == NULL) return NULL;
@@ -849,7 +849,7 @@ void pnl_basis_print (const PnlBasis *B)
  *
  * @return f_i(x) where f is the i-th basis function
  */
-double pnl_basis_i ( PnlBasis *b, double *x, int i )
+double pnl_basis_i (const PnlBasis *b, const double *x, int i )
 {
   int k;
   double aux = 1.;
@@ -880,7 +880,7 @@ double pnl_basis_i ( PnlBasis *b, double *x, int i )
  *
  * @return (D(b_i)/Dj)(x)
  */
-double pnl_basis_i_D ( PnlBasis *b, double *x, int i, int j )
+double pnl_basis_i_D (const PnlBasis *b, const double *x, int i, int j )
 {
   int k;
   double aux = 1;
@@ -920,7 +920,7 @@ double pnl_basis_i_D ( PnlBasis *b, double *x, int i, int j )
  *
  * @return (D(b_i)/(Dj1 Dj2))(x)
  */
-double pnl_basis_i_D2 (PnlBasis *b, double *x, int i, int j1, int j2)
+double pnl_basis_i_D2 (const PnlBasis *b, const double *x, int i, int j1, int j2)
 {
   int k;
   double aux = 1;
@@ -987,7 +987,7 @@ double pnl_basis_i_D2 (PnlBasis *b, double *x, int i, int j1, int j2)
  *
  * @return sum (coef .* f(x))
  */
-double pnl_basis_eval (PnlBasis *basis, PnlVect *coef, double *x)
+double pnl_basis_eval (const PnlBasis *basis, const PnlVect *coef, const double *x)
 {
   int i;
   double y;
@@ -1013,7 +1013,7 @@ double pnl_basis_eval (PnlBasis *basis, PnlVect *coef, double *x)
  *
  * @return sum (coef .* D_i f(x))
  */
-double pnl_basis_eval_D (PnlBasis *basis, PnlVect *coef, double *x, int i)
+double pnl_basis_eval_D (const PnlBasis *basis, const PnlVect *coef, const double *x, int i)
 {
   int k;
   double y;
@@ -1040,7 +1040,7 @@ double pnl_basis_eval_D (PnlBasis *basis, PnlVect *coef, double *x, int i)
  *
  * @return sum (coef .* D2_{i,j} f(x))
  */
-double pnl_basis_eval_D2 (PnlBasis *basis, PnlVect *coef, double *x, int i, int j)
+double pnl_basis_eval_D2 (const PnlBasis *basis, const PnlVect *coef, const double *x, int i, int j)
 {
   int k;
   double y;
@@ -1068,7 +1068,7 @@ double pnl_basis_eval_D2 (PnlBasis *basis, PnlVect *coef, double *x, int i, int 
  * @param hes contains the value of sum (coef .* D2 f(x)) on exit
  *
  */
-void pnl_basis_eval_derivs (PnlBasis *b, PnlVect *coef, double *x,
+void pnl_basis_eval_derivs (const PnlBasis *b, const PnlVect *coef, const double *x,
                             double *val, PnlVect *grad, PnlMat *hes)
 {
   int i,k,j,l,n;
@@ -1169,7 +1169,7 @@ void pnl_basis_eval_derivs (PnlBasis *b, PnlVect *coef, double *x,
  *
  * @return OK or FAIL
  */
-int pnl_basis_fit_ls (PnlBasis *basis, PnlVect *coef, PnlMat *x, PnlVect *y)
+int pnl_basis_fit_ls (const PnlBasis *basis, PnlVect *coef, const PnlMat *x, const PnlVect *y)
 {
   int N, i, k;
   double b_k;

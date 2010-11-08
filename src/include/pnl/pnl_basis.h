@@ -52,21 +52,21 @@ extern PnlBasis* pnl_basis_new ();
 extern PnlBasis* pnl_basis_create ( int index, int nb_func, int space_dim);
 extern PnlBasis* pnl_basis_create_from_degree ( int index, int degree, int space_dim);
 extern PnlBasis*  pnl_basis_create_from_hyperbolic_degree (int index, double degree, double q, int n);
-extern void  pnl_basis_set_from_tensor (PnlBasis *b, int index, PnlMatInt *T);
-extern PnlBasis* pnl_basis_create_from_tensor ( int index, PnlMatInt *T);
+extern void  pnl_basis_set_from_tensor (PnlBasis *b, int index, const PnlMatInt *T);
+extern PnlBasis* pnl_basis_create_from_tensor ( int index, const PnlMatInt *T);
 extern PnlBasis* pnl_basis_init ( int index, int nb_func, int space_dim);
 extern void pnl_basis_set_domain (PnlBasis *B, const PnlVect *xmin, const PnlVect *xmax);
 extern void pnl_basis_set_reduced (PnlBasis *B, const PnlVect *center, const PnlVect *scale);
 extern void pnl_basis_free (PnlBasis **basis);
 extern void pnl_basis_print (const PnlBasis *B);
-extern int pnl_basis_fit_ls (PnlBasis *f, PnlVect *coef, PnlMat *x, PnlVect *y);
-extern double pnl_basis_i ( PnlBasis *b, double *x, int i );
-extern double pnl_basis_i_D ( PnlBasis *b, double *x, int i, int j );
-extern double pnl_basis_i_D2 (PnlBasis *b, double *x, int i, int j1, int j2);
-extern double pnl_basis_eval (PnlBasis *basis, PnlVect *coef, double *x);
-extern double pnl_basis_eval_D (PnlBasis *basis, PnlVect *coef, double *x, int i);
-extern double pnl_basis_eval_D2 (PnlBasis *basis, PnlVect *coef, double *x, int i, int j);
-extern void pnl_basis_eval_derivs (PnlBasis *basis, PnlVect *coef, double *x,
+extern int pnl_basis_fit_ls (const PnlBasis *f, PnlVect *coef, const PnlMat *x, const PnlVect *y);
+extern double pnl_basis_i ( const PnlBasis *b, const double *x, int i );
+extern double pnl_basis_i_D ( const PnlBasis *b, const double *x, int i, int j );
+extern double pnl_basis_i_D2 (const PnlBasis *b, const double *x, int i, int j1, int j2);
+extern double pnl_basis_eval (const PnlBasis *basis, const PnlVect *coef, const double *x);
+extern double pnl_basis_eval_D (const PnlBasis *basis, const PnlVect *coef, const double *x, int i);
+extern double pnl_basis_eval_D2 (const PnlBasis *basis, const PnlVect *coef, const double *x, int i, int j);
+extern void pnl_basis_eval_derivs (const PnlBasis *basis, const PnlVect *coef, const double *x,
                                    double *val, PnlVect *grad, PnlMat *hes);
 
 
