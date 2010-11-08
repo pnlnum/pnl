@@ -663,6 +663,13 @@ void  pnl_basis_set_from_tensor (PnlBasis *b, int index, const PnlMatInt *T)
 
   /* Not sure this is the right place to put it */
   pnl_mat_int_free (&(b->T));
+  if ( b->isreduced == 1 )
+    {
+      b->isreduced = 0;
+      free (b->center); b->center = NULL;
+      free (b->scale); b->scale = NULL;
+    }
+
   b->T = (PnlMatInt *) T;
 
   switch ( index )
@@ -758,6 +765,7 @@ PnlBasis*  pnl_basis_create_from_hyperbolic_degree (int index, double degree, do
  * Sets the center and scale field of a PnlBasis using the domain on which
  * the basis will be used
  * 
+ * @param B
  * @param xmin lower bounds of the domain
  * @param xmax upper bounds of the domain
  */
@@ -785,8 +793,9 @@ void pnl_basis_set_domain (PnlBasis *B, const PnlVect *xmin, const PnlVect *xmax
 /** 
  * Sets the center and scale field of a PnlBasis
  *
- * @param center
- * @param scale
+ * @param B
+ * @param center center of the domain
+ * @param scale width of the domain in each direction
  */
 void pnl_basis_set_reduced (PnlBasis *B, const PnlVect *center, const PnlVect *scale)
 {
