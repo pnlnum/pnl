@@ -1092,7 +1092,6 @@ void pnl_basis_eval_derivs (const PnlBasis *b, const PnlVect *coef, const double
 {
   int i,k,j,l,n;
   double y, *f, *Df, D2f;
-  double auxf = 1;
 
   CHECK_NB_FUNC (coef, b);
   y = 0.;
@@ -1105,8 +1104,10 @@ void pnl_basis_eval_derivs (const PnlBasis *b, const PnlVect *coef, const double
   pnl_mat_set_double (hes, 0.);
   for ( i=0 ; i<coef->size ; i++ )
     {
+      double auxf;
       const double a = pnl_vect_get (coef, i);
       if ( a == 0. ) continue;
+      auxf = 1;
       /*
        * computation of val
        */
