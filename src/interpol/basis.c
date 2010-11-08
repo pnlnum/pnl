@@ -842,6 +842,16 @@ void pnl_basis_print (const PnlBasis *B)
   printf ("Basis Name : %s\n", B->label);
   printf ("\tNumber of variates : %d\n", B->nb_variates);
   printf ("\tNumber of functions : %d\n", B->nb_func);
+  printf ("\tisreduced = %d\n", B->isreduced);
+  if ( B->isreduced )
+    {
+      int i;
+      printf ("\tcenter = ");
+      for ( i=0 ; i<B->nb_variates ; i++ ) printf ("%f ", B->center[i]);
+      printf ("\n\tscale = ");
+      for ( i=0 ; i<B->nb_variates ; i++ ) printf ("%f ", B->center[i]);
+      printf("\n");
+    }
   printf ("\tTensor matrix : \n");
   pnl_mat_int_print (B->T);
   printf("\n");
