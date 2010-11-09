@@ -528,7 +528,6 @@ double pnl_rng_uni_ab (double a, double b, PnlRng *rng)
  */
 double pnl_rng_normal (PnlRng *rng)
 {
-  double u;
   if (rng->rand_or_quasi == QMC)
     {
       double u;
