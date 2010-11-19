@@ -268,6 +268,9 @@ possible use with a C++ compiler. The header files must be include using
   \item All objects are measured using integers \verb!int! and not
     \verb!size_t!. Hence, iterations over vectors, matrices, \dots should use an
     index of type \verb!int!.
+
+  \item In fonctions ending in \verb!inplace!, the output parameter must be different
+    from any of the input parameters.
 \end{itemize}
 
 

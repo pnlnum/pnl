@@ -975,7 +975,8 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 \item \describefun{void}{pnl_mat_mult_vect_inplace}{\refstruct{PnlVect}
     \ptr y, const \refstruct{PnlMat} \ptr A, const \refstruct{PnlVect}
     \ptr x} 
-  \sshortdescribe In place matrix vector multiplication  \var{y = A * x}
+    \sshortdescribe In place matrix vector multiplication  \var{y = A * x}. You
+    cannot use the same vector for \var{x} and \var{y}.
 
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_mat_mult_vect_transpose}{const
     \refstruct{PnlMat} \ptr A, const \refstruct{PnlVect} \ptr x} 
@@ -984,20 +985,24 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 \item \describefun{void}{pnl_mat_mult_vect_transpose_inplace}{\refstruct{PnlVect}
     \ptr y, const \refstruct{PnlMat} \ptr A, const \refstruct{PnlVect}
     \ptr x} 
-  \sshortdescribe In place matrix vector multiplication  \var{y = A' * x}
+  \sshortdescribe In place matrix vector multiplication  \var{y = A' * x}.  You
+  cannot use the same vector for \var{x} and \var{y}. The vectors \var{x} and \var{y}
+  must be different.
+
   
 \item \describefun{void}{pnl_mat_lAxpby}{double lambda, const \refstruct{PnlMat}
     \ptr A, const \refstruct{PnlVect} \ptr x, double mu, \refstruct{PnlVect} \ptr b} 
   \sshortdescribe Computes \var{b := lambda A x + mu b}. When \var{mu==0}, the
   content of \var{b} is not used on input and instead \var{b} is resized to
-  match \var{A*x}
+  match \var{A*x}. The vectors \var{x} and \var{b} must be different.
+
 
 \item \describefun{void}{pnl_mat_dgemv}{char trans, double lambda, const
     \refstruct{PnlMat} \ptr A, const \refstruct{PnlVect} \ptr x, double mu, 
     \refstruct{PnlVect} \ptr b} \sshortdescribe Computes \var{b := lambda
     op(A) x + mu b}, where \var{op (X) = X} or \var{op (X) = X'}. When
   \var{mu==0}, the content of \var{b} is not used and instead \var{b} is resized
-  to match \var{op(A)*x}
+  to match \var{op(A)*x}. The vectors \var{x} and \var{b} must be different.
 
 \item \describefun{void}{pnl_mat_dgemm}{char transA, char transB, double
     alpha, const \refstruct{PnlMat} \ptr A, const \refstruct{PnlMat} \ptr B, 
@@ -1006,7 +1011,8 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
     C}. When beta=0, the content of \var{C} is unused and instead \var{C}
   is resized to store \var{alpha A \ptr B}. If \var{transA='N'} or
   \var{transA='n'}, \var{op (A) = A}, whereas If \var{transA='T'} or
-  \var{transA='t'}, \var{op (A) = A'}. The same holds for \var{transB}.
+  \var{transA='t'}, \var{op (A) = A'}. The same holds for \var{transB}. The matrix
+  \var{C} must be different from \var{A} and \var{B}.
   
 \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_mult_mat}{const
     \refstruct{PnlMat} \ptr rhs1, const \refstruct{PnlMat} \ptr rhs2} 
@@ -1015,7 +1021,9 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 \item \describefun{void}{pnl_mat_mult_mat_inplace}{\refstruct{PnlMat}
     \ptr lhs, const \refstruct{PnlMat} \ptr rhs1, const \refstruct{PnlMat}
     \ptr rhs2} 
-  \sshortdescribe In-place matrix multiplication  \var{lhs = rhs1 * rhs2}
+    \sshortdescribe In-place matrix multiplication  \var{lhs = rhs1 * rhs2}. The
+    matrix \var{lhs} must be different from \var{rhs1} and \var{rhs2}.
+
 \end{itemize}
 
 \subsubsection{Functions specific to base type {\tt double}}
@@ -1353,16 +1361,21 @@ diagonal ($M_{i, i+1}$) and the lower diagonal ($M_{i-1, i}$).
 
 \paragraph{Standard matrix operations \& Linear systems}
 \begin{itemize}
-  \item \describefun{void}{pnl_tridiag_mat_mult_vect_inplace}{\refstruct{PnlVect} \ptr lhs, const \refstruct{PnlTridiagMat} \ptr mat, const \refstruct{PnlVect} \ptr rhs}
-    \sshortdescribe In place matrix multiplication  
-  \item \describefun{\refstruct{PnlVect} \ptr }{pnl_tridiag_mat_mult_vect}{const \refstruct{PnlTridiagMat} \ptr mat, const \refstruct{PnlVect} \ptr vec}
+  \item \describefun{void}{pnl_tridiag_mat_mult_vect_inplace}{\refstruct{PnlVect}
+    \ptr lhs, const \refstruct{PnlTridiagMat} \ptr mat, const \refstruct{PnlVect}
+    \ptr rhs}
+    \sshortdescribe In place matrix multiplication. The vector \var{lhs} must be
+    different from \var{rhs}.
+  \item \describefun{\refstruct{PnlVect} \ptr }{pnl_tridiag_mat_mult_vect}{const
+    \refstruct{PnlTridiagMat} \ptr mat, const \refstruct{PnlVect} \ptr vec}
     \sshortdescribe Matrix multiplication  
   \item \describefun{void}{pnl_tridiag_mat_lAxpby}{double lambda, const \refstruct{PnlTridiagMat}
       \ptr A, const \refstruct{PnlVect} \ptr x, double mu, \refstruct{PnlVect} \ptr b} 
     \sshortdescribe Computes \var{b := lambda A x + mu b}. When \var{mu==0}, the
     content of \var{b} is not used on input and instead \var{b} is resized to
-    match \var{A*x}
-  \item \describefun{double}{pnl_tridiag_mat_scalar_prod}{const \refstruct{PnlVect} \ptr x,const \refstruct{PnlTridiagMat} \ptr A, const \refstruct{PnlVect} \ptr y}
+    match \var{A*x}. Note that the vectors \var{x} and \var{b} must be different.
+  \item \describefun{double}{pnl_tridiag_mat_scalar_prod}{const \refstruct{PnlVect}
+    \ptr x,const \refstruct{PnlTridiagMat} \ptr A, const \refstruct{PnlVect} \ptr y}
     \sshortdescribe Computes \var{x' * A * y}
   \item \describefun{void}{pnl_tridiag_mat_syslin_inplace}{const
       \refstruct{PnlTridiagMat} \ptr M, \refstruct{PnlVect} \ptr b}
