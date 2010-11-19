@@ -1,6 +1,11 @@
 #ifndef __PNL_MPI_
 #define __PNL_MPI_
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include <mpi.h>
 #include "pnl/pnl_object.h"
 #include <pnl/pnl_list.h>
@@ -39,5 +44,9 @@ extern PnlObject* pnl_object_load (FILE *stream);
 extern PnlList* pnl_object_load_into_list (FILE *stream);
 
 /* @} */
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* __PNL_MPI_ */

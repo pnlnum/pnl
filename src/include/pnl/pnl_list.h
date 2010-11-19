@@ -1,6 +1,10 @@
 #ifndef _PNL_LIST_H_
 #define _PNL_LIST_H_
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 #include "pnl/pnl_object.h"
 
 /**
@@ -44,5 +48,9 @@ extern void pnl_list_concat (PnlList *L1, PnlList *L2);
 extern void pnl_list_print (const PnlList *L);
 
 /*@}*/
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* _PNL_LIST_H_ */

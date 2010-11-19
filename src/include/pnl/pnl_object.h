@@ -1,6 +1,11 @@
 #ifndef _PNL_OBJECT_H
 #define _PNL_OBJECT_H
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 /**
  * \defgroup PnlObject The top level object
  *
@@ -131,5 +136,9 @@ extern int pnl_message_is_on ();
 
 
 /*@}*/
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* _PNL_OBJECT_H */

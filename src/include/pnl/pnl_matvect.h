@@ -1,6 +1,11 @@
 #ifndef _PNL_MATVECT_H
 #define _PNL_MATVECT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+
 #include "pnl/pnl_object.h"
 #include "pnl/pnl_complex.h"
 
@@ -263,6 +268,9 @@ struct _PnlHmatComplex
 /*@}*/
 /*@}*/
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 
 #endif /* _PNL_MATVECT_H */
