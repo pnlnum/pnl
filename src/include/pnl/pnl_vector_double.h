@@ -142,6 +142,7 @@ typedef struct PnlVectCompact {
 } PnlVectCompact;
 
 extern PnlVectCompact* pnl_vect_compact_new ();
+extern PnlVectCompact* pnl_vect_compact_create_from_ptr (int n, double const *x);
 extern PnlVectCompact* pnl_vect_compact_create (int n, double x);
 extern int pnl_vect_compact_resize (PnlVectCompact *v, int size, double x);
 extern PnlVectCompact* pnl_vect_compact_copy(const PnlVectCompact *v);

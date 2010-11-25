@@ -64,6 +64,24 @@ PnlVectCompact* pnl_vect_compact_create (int n, double x)
 }
 
 /**
+* allocates a PnlVectCompact from a vector of doubles. By default type='a'.
+* @param n size
+* @param x pointer to a vector of doubles to fill the PnlVectCompact
+* @return a pointeur to PnlVectCompact
+*/
+PnlVectCompact* pnl_vect_compact_create_from_ptr(int n, double const *x) 
+{
+	PnlVectCompact *v; int i;
+	if ((v=malloc (sizeof(PnlVectCompact)))==NULL) return NULL;
+	v->size = n;
+	v->convert = 'a';
+	if ((v->array = (double*)malloc(sizeof (double) * n)) == NULL) { free(v); return NULL;};
+	for (i = 0; i != n; ++i)
+		v->array[i] = x[i];
+	return v;
+}
+
+/**
  * resize a PnlVectCompact.
  * @param v the PvlVectCompact to be resized
  * @param size new size

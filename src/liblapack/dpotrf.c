@@ -93,7 +93,7 @@
     a_offset = 1 + a_dim1 * 1;
     a -= a_offset;
 
-    printf ("lda = %d; n = %d.\n", *lda, *n);
+    //printf ("lda = %d; n = %d.\n", *lda, *n);
     /* Function Body */
     *info = 0;
     upper = lsame_(uplo, "U");
