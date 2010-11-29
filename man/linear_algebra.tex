@@ -78,6 +78,10 @@ which exist for all types. To deduce the prototypes of these functions for
 other basic types, one must replace {\tt pnl_vect} and {\tt double} according
 the above table. 
 \subparagraph{Constructors and destructors}
+
+There are no special functions to access the size of a vector, instead the field
+\verb!size! should be accessed directly.
+
 \begin{itemize}
   \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_new}{}
   \sshortdescribe Creates a new \refstruct{PnlVect} of size 0.  
@@ -606,6 +610,12 @@ other basic types, one must replace {\tt pnl_mat} and {\tt double} according
 the above table.
 
 \paragraph{Constructors and destructors}
+
+
+There are no special functions to access the sizes of a matrix, instead the fields
+\verb!m!, \verb!n! and \verb!mn! give direct access to the number of rows, columns
+and the size of the matrix.
+
 \begin{itemize}
   \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_new}{}
   \sshortdescribe Creates a \refstruct{PnlMat} of size 0
