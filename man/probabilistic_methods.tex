@@ -196,7 +196,9 @@ struct _PnlRng
   the seed used to initialize the Mersenne Twister generator internally used to
   find new DCMT. On exit, \var{count} contains the number of generators actually
   created. Same function as \reffun{pnl_dcmt_create_array} instead that it
-  directly returns an array of \refstruct{PnlRng}.
+  directly returns an array of \refstruct{PnlRng}. Before using the generators, you
+  must initialize each of them by calling the function \reffun{pnl_rng_sseed}
+  \var{count} times.
 \item \describefun{void}{pnl_rng_init}{\refstruct{PnlRng} \ptr rng, int type}
   \sshortdescribe Initializes an empty \refstruct{PnlRng} as returned by
   \reffun{pnl_rng_new} to become a generator of type \var{type} which can be

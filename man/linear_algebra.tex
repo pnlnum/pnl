@@ -661,13 +661,6 @@ and the size of the matrix.
     int m, int n}
     \sshortdescribe Creates a \refstruct{PnlMat} of size \var{m x n} 
     which contains \var{x}. No copy is made. It is just a container.
-\item \describefun{\refstruct{PnlVect}}{pnl_vect_wrap_mat_row}
-  {const \refstruct{PnlMat} \ptr M, int i}
-  \sshortdescribe Returns a \refstruct{PnlVect} (not a pointer) whose array is
-  the \var{i}-th row of \var{M}. The new vector shares its data with the
-  matrix \var{M}, which means that any modification to one of them will affect
-  the other.
-  
 \item \describefun{\refstruct{PnlMat}}{pnl_mat_wrap_vect}
   {const \refstruct{PnlVect} \ptr V}
   \sshortdescribe Returns a \refstruct{PnlMat} (not a pointer) whose array is
@@ -737,6 +730,13 @@ and the size of the matrix.
 \item \describefun{void}{pnl_mat_get_col}{\refstruct{PnlVect} \ptr V, 
     const \refstruct{PnlMat} \ptr M, int j}
   \sshortdescribe Extracts and copies the \var{j}-th column of \var{M} into \var{V}.
+  
+\item \describefun{\refstruct{PnlVect}}{pnl_vect_wrap_mat_row}
+  {const \refstruct{PnlMat} \ptr M, int i}
+  \sshortdescribe Returns a \refstruct{PnlVect} (not a pointer) whose array is
+  the \var{i}-th row of \var{M}. The new vector shares its data with the
+  matrix \var{M}, which means that any modification to one of them will affect
+  the other.
   
 \item \describefun{void}{pnl_mat_swap_rows}{\refstruct{PnlMat} \ptr M, int i, int j}
   \sshortdescribe Swaps two rows of a matrix.  
