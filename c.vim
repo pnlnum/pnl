@@ -6,3 +6,4 @@
 
 syn keyword cType PnlRng PnlType  PnlVect PnlVectInt PnlVectComplex PnlMat PnlMatInt PnlMatComplex PnlTridiagMat PnlBandMat PnlHmat PnlHmatInt PnlHmatComplex PnlRng PnlBasis PnlList PnlObject dcomplex
 syn match cType 'Pnl[a-zA-Z]*Object'
+syn match cType 'Pnl[0-9a-zA-Z]*Func[0-9a-zA-Z]*'
