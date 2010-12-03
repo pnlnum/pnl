@@ -1,12 +1,11 @@
 #ifndef _PNL_VECTOR_H
 #define _PNL_VECTOR_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 #include <stdio.h>
 #include <string.h>
+
+
+
 
 #ifndef PNL_RANGE_CHECK_OFF
 #define CheckIndexVect(v,i) {                                           \
@@ -18,7 +17,6 @@ extern "C" {
 #define CheckVectMatch(lhs, rhs){}
 #endif /* PNL_RANGE_CHECK_OFF */
 
-#include "pnl/pnl_matvect.h"
 
 /**
  * \defgroup PnlVectors  a Vector object
@@ -28,14 +26,18 @@ extern "C" {
 #define PNL_LET(v,i) (v)->array[i]
 #define PNL_SET(v,i,x) (v)->array[i]=(x)
 
-  
-extern PnlVectObject* pnl_vect_object_new ();
-extern void pnl_vect_object_free (PnlVectObject **);
-extern int pnl_vect_object_resize(PnlVectObject * v, int size);
-
+#include "pnl/pnl_matvect.h"
 #include "pnl/pnl_vector_double.h"
 #include "pnl/pnl_vector_complex.h"
 #include "pnl/pnl_vector_int.h"
+  
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+extern PnlVectObject* pnl_vect_object_new ();
+extern void pnl_vect_object_free (PnlVectObject **);
+extern int pnl_vect_object_resize(PnlVectObject * v, int size);
 
 #ifdef __cplusplus
 }

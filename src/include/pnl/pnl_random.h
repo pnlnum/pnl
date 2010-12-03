@@ -1,16 +1,16 @@
 #ifndef _PNL_RANDOM_H
 #define _PNL_RANDOM_H
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 #include "pnl/pnl_object.h"
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_types.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 /**
  * \defgroup PnlRandom Random generators
@@ -26,7 +26,8 @@ extern "C" {
  * The first generators must be true MC generators and the last ones are QMC
  * Do NOT mix them otherwise the arrays  pnl_random and pnl_random_MC will be
  * wrong */
-typedef enum {
+typedef enum 
+{
   PNL_RNG_NULL                 = -1,
   PNL_RNG_KNUTH                = 0,
   PNL_RNG_MRGK3                = 1,

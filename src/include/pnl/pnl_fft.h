@@ -1,14 +1,14 @@
 #ifndef _PNL_FFT_H
 #define _PNL_FFT_H
 
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_complex.h"
+#include "pnl/pnl_vector.h"
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-#include "pnl/pnl_mathtools.h"
-#include "pnl/pnl_complex.h"
-#include "pnl/pnl_vector.h"
 
 /**
  * \defgroup FFT Discrete Fourier Transform

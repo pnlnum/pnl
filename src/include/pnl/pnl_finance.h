@@ -2,12 +2,12 @@
 #define _PNL_FINANCE_H
 
 
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_cdf.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-#include "pnl/pnl_matrix.h"
-#include "pnl/pnl_cdf.h"
 
 /**
  * \defgroup Finance A few financial functions

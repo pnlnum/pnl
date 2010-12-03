@@ -1,14 +1,15 @@
 #ifndef _PNL_SPECFUN_H 
 #define _PNL_SPECFUN_H 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 #include <math.h>
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "pnl/pnl_complex.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 /**
  * \defgroup PnlSpecFun  Special Functions
@@ -32,7 +33,6 @@ extern void pnl_activate_mtherr (void);
  */
 /*@{*/
 
-#include "pnl/pnl_complex.h"
 /* complex Bessel functions from libamos */
 
 extern dcomplex pnl_complex_bessel_i ( double v, dcomplex z );

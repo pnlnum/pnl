@@ -1,14 +1,14 @@
 #ifndef _PNL_BASIS_H
 #define _PNL_BASIS_H
 
+#include "pnl/pnl_types.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_object.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-
-#include "pnl/pnl_types.h"
-#include "pnl/pnl_matrix.h"
-#include "pnl/pnl_object.h"
 
 /**
  * \defgroup reg_basis Polynomial Bases

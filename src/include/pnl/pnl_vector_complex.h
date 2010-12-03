@@ -1,6 +1,9 @@
 #ifndef _PNL_VECTOR_COMPLEX_H
 #define _PNL_VECTOR_COMPLEX_H
 
+#include "pnl/pnl_object.h"
+#include "pnl/pnl_complex.h"
+
 
 #ifndef _PNL_VECTOR_H
 #error "Do not include this file directly. Include pnl_vector.h"
@@ -9,9 +12,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-#include "pnl/pnl_object.h"
-#include "pnl/pnl_complex.h"
 
 /**
  * \ingroup PnlVectors

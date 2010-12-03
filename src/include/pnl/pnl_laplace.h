@@ -2,13 +2,13 @@
 #define _PNL_LAPLACE_H
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_complex.h"
 #include "pnl/pnl_vector.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 /**
  * \defgroup Laplace Laplace transforms

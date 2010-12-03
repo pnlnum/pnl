@@ -1,6 +1,9 @@
 #ifndef _PNL_VECTOR_INT_H
 #define _PNL_VECTOR_INT_H
 
+#include <stdio.h>
+#include "pnl/pnl_object.h"
+
 #ifndef _PNL_VECTOR_H
 #error "Do not include this file directly. Include pnl_matrix.h"
 #endif
@@ -8,9 +11,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-#include <stdio.h>
-#include "pnl/pnl_object.h"
 
 /**
  * \ingroup PnlVectors

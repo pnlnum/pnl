@@ -1,15 +1,15 @@
 #ifndef __PNL_MPI_
 #define __PNL_MPI_
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 #include <mpi.h>
 #include "pnl/pnl_object.h"
 #include <pnl/pnl_list.h>
 #include "pnl/pnl_random.h"
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 /**
  * \defgroup PnlMpi MPI bindings

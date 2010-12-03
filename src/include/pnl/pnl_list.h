@@ -1,11 +1,11 @@
 #ifndef _PNL_LIST_H_
 #define _PNL_LIST_H_
 
+#include "pnl/pnl_object.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-#include "pnl/pnl_object.h"
 
 /**
  * \defgroup PnlList a List object

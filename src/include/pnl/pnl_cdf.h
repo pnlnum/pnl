@@ -1,12 +1,12 @@
 #ifndef _PNL_CDF_H
 #define _PNL_CDF_H
 
+#include "pnl/pnl_mathtools.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-
-#include "pnl/pnl_mathtools.h"
 /**
  * \defgroup PnlCDF Cumulative Distribution Functions
  */

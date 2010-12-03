@@ -1,6 +1,9 @@
 #ifndef _PNL_VECTOR_DOUBLE_H
 #define _PNL_VECTOR_DOUBLE_H
 
+#include <stdlib.h>
+#include "pnl/pnl_object.h"
+
 #ifndef _PNL_VECTOR_H
 #error "Do not include this file directly. Include pnl_vector.h"
 #endif
@@ -8,9 +11,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-#include <stdlib.h>
-#include "pnl/pnl_object.h"
 
 /**
  * \ingroup PnlVectors
@@ -131,13 +131,15 @@ extern void pnl_vect_reverse(PnlVect * v);
   * number or a PnlVect.
   * vectors likes x*ones(n,1) are simply stored as a double x 
   */
-typedef struct PnlVectCompact {
+typedef struct PnlVectCompact 
+{
   PnlObject object;
   int size; /*!< size of the vector */
-  union {
-    double val; /*!< single value */
-    double *array; /*!< Pointer to double values */
-  };
+  union 
+    {
+      double val; /*!< single value */
+      double *array; /*!< Pointer to double values */
+    };
   char convert; /*!< 'a', 'd' : array, double */
 } PnlVectCompact;
 

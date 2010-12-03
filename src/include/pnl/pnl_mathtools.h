@@ -2,10 +2,6 @@
 #define _PNL_MATHTOOLS_H 
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 #include <math.h>
 #include <float.h>
 #include <limits.h>
@@ -13,6 +9,10 @@ extern "C" {
 #include <stdlib.h>
 
 #include "pnl/pnl_vector.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 extern int intapprox (double s);
 extern double trunc(double x);
@@ -210,7 +210,8 @@ extern int pnl_isinf (double x);
  * f: R --> R
  * The function  pointer returns f(x)
  */
-typedef struct {
+typedef struct
+{
   double (*function) (double x, void *params);
   void *params;
 } PnlFunc ;
@@ -220,7 +221,8 @@ typedef struct {
  * f: R^2 --> R
  * The function pointer returns f(x)
  */
-typedef struct {
+typedef struct 
+{
   double (*function) (double x, double y, void *params);
   void *params;
 } PnlFunc2D ;
@@ -231,7 +233,8 @@ typedef struct {
  * The function pointer computes f(x) and Df(x) and stores them in fx
  * and dfx respectively
  */
-typedef struct {
+typedef struct 
+{
   void (*function) (double x, double *fx, double *dfx, void *params);
   void *params;
 } PnlFuncDFunc ;
@@ -241,7 +244,8 @@ typedef struct {
  * f: R^n --> R
  * The function pointer returns f(x)
  */
-typedef struct {
+typedef struct 
+{
   double (*function) (const PnlVect *x, void *params);
   void *params;
 } PnlRnFuncR ;
@@ -252,7 +256,8 @@ typedef struct {
  * The function pointer computes the vector f(x) and stores it in
  * fx (vector of size m)
  */
-typedef struct {
+typedef struct 
+{
   void (*function) (const PnlVect *x, PnlVect *fx, void *params);
   void *params;
 } PnlRnFuncRm ;
@@ -272,7 +277,8 @@ typedef PnlRnFuncRm PnlRnFuncRn;
  * The Dfunction pointer computes the matrix Df(x) and stores it in dfx
  * (matrix of size m x n) 
  */
-typedef struct {
+typedef struct 
+{
   void (*function) (const PnlVect *x, PnlVect *fx, void *params);
   void (*Dfunction) (const PnlVect *x, PnlMat *dfx, void *params);
   void *params;

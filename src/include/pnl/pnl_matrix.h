@@ -2,10 +2,6 @@
 #define _PNL_MATRIX_H
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 
 #ifndef PNL_RANGE_CHECK_OFF
 #define CheckIndexHmat(H,index) {{int l;                \
@@ -47,7 +43,6 @@ extern "C" {
 
 #endif /* PNL_RANGE_CHECK_OFF */
 
-#include "pnl/pnl_matvect.h"
 
 
 /**
@@ -60,6 +55,15 @@ extern "C" {
 #define PNL_MGET(v,i,j) (v)->array[(i)*(v)->n+(j)]
 #define PNL_MSET(v,i,j, x) (v)->array[(i)*(v)->n+(j)] = (x)
 #define PNL_MLET(v,i,j) (v)->array[(i)*(v)->n+(j)]
+
+#include "pnl/pnl_matvect.h"
+#include "pnl/pnl_matrix_double.h"
+#include "pnl/pnl_matrix_complex.h"
+#include "pnl/pnl_matrix_int.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 extern PnlMatObject* pnl_mat_object_new ();
 extern void pnl_mat_object_free (PnlMatObject **);
@@ -75,9 +79,6 @@ extern void pnl_hmat_object_free (PnlHmatObject **);
 extern int pnl_hmat_object_resize(PnlHmatObject *H, int ndim, const int *dims);
 /*@}*/
 
-#include "pnl/pnl_matrix_double.h"
-#include "pnl/pnl_matrix_complex.h"
-#include "pnl/pnl_matrix_int.h"
 
 #ifdef __cplusplus
 }

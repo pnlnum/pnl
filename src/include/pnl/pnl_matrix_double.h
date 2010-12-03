@@ -5,11 +5,11 @@
 #error "Do not include this file directly. Include pnl_matrix.h"
 #endif
 
+#include "pnl/pnl_perm.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-#include "pnl/pnl_perm.h"
 
 
 #ifndef PNL_RANGE_CHECK_OFF

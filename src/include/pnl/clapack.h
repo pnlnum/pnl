@@ -7,12 +7,13 @@
  * for a better integration into Pnl
  */
 
+#include "pnl/pnl_complex.h"
+#include "pnl/pnl_internals.h"
+
 #ifdef __cplusplus 	
 extern "C" {	
 #endif		
 
-#include "pnl/pnl_complex.h"
-#include "pnl/pnl_internals.h"
 
 typedef int (*L_fp)(void);
 
@@ -384,11 +385,11 @@ extern int C2F(zaxpy)(int *n, dcomplex *za, dcomplex *zx,
 extern int C2F(zcopy)(int *n, dcomplex *zx, int *incx, 
                       dcomplex *zy, int *incy);
 
-/* Double dcomplex */ void C2F(zdotc)(dcomplex * ret_val, int *n, 
-                                      dcomplex *zx, int *incx, dcomplex *zy, int *incy);
+void C2F(zdotc)(dcomplex * ret_val, int *n, 
+                dcomplex *zx, int *incx, dcomplex *zy, int *incy);
 
-/* Double dcomplex */ void C2F(zdotu)(dcomplex * ret_val, int *n, 
-                                      dcomplex *zx, int *incx, dcomplex *zy, int *incy);
+void C2F(zdotu)(dcomplex * ret_val, int *n, 
+                dcomplex *zx, int *incx, dcomplex *zy, int *incy);
 
 extern int C2F(zdrot)(int *n, dcomplex *cx, int *incx, 
                       dcomplex *cy, int *incy, double *c__, double *s);

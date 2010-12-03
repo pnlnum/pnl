@@ -12,7 +12,8 @@ extern "C" {
  */
 /*@{*/
 
-typedef struct {
+typedef struct
+{
     double r; /*!< real part */
     double i; /*!< imaginary part */
 } dcomplex;
@@ -88,7 +89,8 @@ extern dcomplex C_op_idamcb(double d,dcomplex a, dcomplex b);
 
 /*@}*/
 
-typedef struct {
+typedef struct
+{
   dcomplex (*function) (dcomplex x, void *params);
   void *params;
 } PnlCmplxFunc;

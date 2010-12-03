@@ -2,13 +2,14 @@
 #define _PNL_LINALGSOLVER_H 
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_object.h"
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 #ifndef MAX_RESTART 
 #define MAX_RESTART   50 
@@ -25,7 +26,8 @@ typedef struct _PnlCgSolver PnlCgSolver;
 typedef struct _PnlBicgSolver PnlBicgSolver;
 typedef struct _PnlGmresSolver PnlGmresSolver;
 
-struct _PnlIterationBase{
+struct _PnlIterationBase
+{
   /** 
    * Must be the first element in order for the object mechanism to work
    * properly. This allows any PnlVectXXX pointer to be cast to a PnlObject
@@ -41,7 +43,8 @@ struct _PnlIterationBase{
 };
 
 /* When you repeatedly use iterative solvers, do not malloc each time */
-struct _PnlCgSolver {
+struct _PnlCgSolver 
+{
   /** 
    * Must be the first element in order for the object mechanism to work
    * properly. This allows any PnlCgSolver  pointer to be cast to a PnlObject
@@ -58,7 +61,8 @@ struct _PnlCgSolver {
   PnlIterationBase * iter;
 } ;
 
-struct _PnlBicgSolver { 
+struct _PnlBicgSolver 
+{ 
   /** 
    * Must be the first element in order for the object mechanism to work
    * properly. This allows any PnlBicgSolver pointer to be cast to a PnlObject
@@ -76,7 +80,8 @@ struct _PnlBicgSolver {
   PnlIterationBase * iter;
 } ;
 
-struct _PnlGmresSolver{ 
+struct _PnlGmresSolver
+{ 
   /** 
    * Must be the first element in order for the object mechanism to work
    * properly. This allows any PnlGmresSolver pointer to be cast to a PnlObject

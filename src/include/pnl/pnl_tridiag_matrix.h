@@ -1,11 +1,12 @@
 #ifndef _PNL_TRIDIAG_MATRIX_H 
 #define _PNL_TRIDIAG_MATRIX_H 
 
+#include "pnl/pnl_matrix.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-#include "pnl/pnl_matrix.h"
 
 #ifndef PNL_RANGE_CHECK_OFF
 #define CheckIndexTridiagMat(v,i,j)                                                     \

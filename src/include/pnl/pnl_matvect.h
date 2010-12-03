@@ -1,13 +1,13 @@
 #ifndef _PNL_MATVECT_H
 #define _PNL_MATVECT_H
 
+#include "pnl/pnl_object.h"
+#include "pnl/pnl_complex.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-
-#include "pnl/pnl_object.h"
-#include "pnl/pnl_complex.h"
 
 /**
  * \ingroup PnlVectors

@@ -1,12 +1,12 @@
 #ifndef _PNL_PERM_H
 #define _PNL_PERM_H
 
+#include "pnl/pnl_vector.h"
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-#include "pnl/pnl_vector.h"
 
 /**
  * \defgroup PnlPermutation  Permutation 
