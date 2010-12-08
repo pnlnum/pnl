@@ -26,52 +26,52 @@ typedef struct _PnlObject PnlObject;
 /**
  * Casts any object into a PnlObject
  */
-#define PNL_OBJECT(o) ((PnlObject *) o)
+#define PNL_OBJECT(o) ((PnlObject *) (o))
 /**
  * Casts any object into a PnlVectObject
  */
-#define PNL_VECT_OBJECT(o) ((PnlVectObject *) o)
+#define PNL_VECT_OBJECT(o) ((PnlVectObject *) (o))
 /**
  * Casts any object into a PnlMatObject
  */
-#define PNL_MAT_OBJECT(o) ((PnlMatObject *) o)
+#define PNL_MAT_OBJECT(o) ((PnlMatObject *) (o))
 /**
  * Casts any object into a PnlHmatObject
  */
-#define PNL_HMAT_OBJECT(o) ((PnlHmatObject *) o)
+#define PNL_HMAT_OBJECT(o) ((PnlHmatObject *) (o))
 /**
  * Casts any object into a PnlBandMatObject
  */
-#define PNL_BAND_MAT_OBJECT(o) ((PnlBandMatObject *) o)
+#define PNL_BAND_MAT_OBJECT(o) ((PnlBandMatObject *) (o))
 /**
  * Casts any object into a PnlTridiagMatObject
  */
-#define PNL_TRIDIAGMAT_OBJECT(o) ((PnlTridiagMatObject *) o)
+#define PNL_TRIDIAGMAT_OBJECT(o) ((PnlTridiagMatObject *) (o))
 /**
  * Casts any object into a PnlBasis
  */
-#define PNL_BASIS_OBJECT(o) ((PnlBasis *) o)
+#define PNL_BASIS_OBJECT(o) ((PnlBasis *) (o))
 /**
  * Casts any object into a PnlRng
  */
-#define PNL_RNG_OBJECT(o) ((PnlRng *) o)
+#define PNL_RNG_OBJECT(o) ((PnlRng *) (o))
 /**
  * Casts any object into a PnlList
  */
-#define PNL_LIST_OBJECT(o) ((PnlList *) o)
+#define PNL_LIST_OBJECT(o) ((PnlList *) (o))
 
 /**
  * Returns the name of the type of any object inheriting from PnlObject
  */
-#define PNL_GET_TYPENAME(o) (((PnlObject *) o)->label)
+#define PNL_GET_TYPENAME(o) (((PnlObject *) (o))->label)
 /**
  * Returns the type of any object inheriting from PnlObject
  */
-#define PNL_GET_TYPE(o) (((PnlObject *) o)->type)
+#define PNL_GET_TYPE(o) (((PnlObject *) (o))->type)
 /**
  * Returns the parent type of any object inheriting from PnlObject
  */
-#define PNL_GET_PARENT_TYPE(o) (((PnlObject *) o)->parent_type)
+#define PNL_GET_PARENT_TYPE(o) (((PnlObject *) (o))->parent_type)
 
 /**
  * PnlType is used to store the id of all the objects existing in Pnl 
