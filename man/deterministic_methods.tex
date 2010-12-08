@@ -788,8 +788,10 @@ To solve an inequality constrained optimization problem, ie $m_E=0$, we provide 
   \item \var{func} is the function to minimize $f$.
   \item \var{grad} is the gradient of $f$. If this gradient is not available, then enter \var{grad}=NULL. In this case, finite difference will be used to estimate the gradient.
   \item \var{nl_constraints} is the function $g(x)$, ie the non linear inequality constraints.
-  \item \var{lower_bounds} are the lower bounds on $x$.
-  \item \var{upper_bounds} are the upper bounds on $x$.
+  \item \var{lower_bounds} are the lower bounds on $x$. Can be NULL if there is no
+    lower bound.
+  \item \var{upper_bounds} are the upper bounds on $x$. Can be NULL if there is no
+    upper bound.
   \item \var{x_input} is the initial point where the algorithm starts.
   \item \var{tolerance} is the precision required in solving (P).
   \item \var{iter_max} is the maximum number of iterations in the algorithm.
