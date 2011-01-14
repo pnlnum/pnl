@@ -48,14 +48,12 @@ installation differs. We describe here the different procedures.
                 lib.exe /def:libpnl.def /out:libpnl.lib
             This command creates the .lib file needed by Visual to link a
             project to an external library.
-        3. Copy the files libpnl.dll libblas.dll liblapack.dll from
-            pnl-XXX/lib to the Release and Debug directories of your Visual
-            project.
         4. Add the directory /path/to/pnl-XXX/include to the list of
             directories where to search for header files.
         5. Add the directory /path/to/pnl-XXX/lib to the list of
-            directories where to search for libraries when linking
+            directories where to search for external dlls.
         6. Add libpnl.lib as an additional dependency of your project
+            (Properties -> Linking -> Input)
 
 
 2. Development version
@@ -112,4 +110,4 @@ installation differs. We describe here the different procedures.
 If you encounter any problem or want to report some bug, contact 
 Jerome Lelong <jerome.lelong@gmail.com>
 
-:vim set ft=txt:
+vim: set ft=txt:

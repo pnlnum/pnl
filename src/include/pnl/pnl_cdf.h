@@ -43,6 +43,7 @@ void pnl_cdf_t(int *which,double *p,double *q,double *t,double *df,
 double pnl_cdfchi2n(double x, double df, double ncparam);
 void pnl_cdfbchi2n(double x, double nu, double lambda, double beta, double *P);
 double cdf_nor(double);
+double pnl_cdfnor(double);
 double pnl_cdf2nor( double a, double b, double r);
 double pnl_normal_density(double x);
 double pnl_inv_cdfnor (double u);

@@ -9292,7 +9292,7 @@ void pnl_cdfbchi2n(double x, double nu, double lambda, double beta, double *P)
  * @param x upper bound of the integral
  * @return the cumulative distribution function at x
  */
-double cdf_nor(double x)
+double pnl_cdfnor(double x)
 {
   const double p= 0.2316419;
   const double b1= 0.319381530;
@@ -9316,6 +9316,11 @@ double cdf_nor(double x)
       return ( one_over_twopi * exp( -x * x / 2.0 ) * t *
                ( t *( t * ( t * ( t * b5 + b4 ) + b3 ) + b2 ) + b1 ));
     }
+}
+
+double cdf_nor(double x)
+{
+  return pnl_cdfnor(x);
 }
 
 /*Two-Dimensional Normal Law. Cumulative distribution function.
