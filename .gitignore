@@ -29,4 +29,5 @@ pnl-manual.out
 pnl-manual.pdf
 main.cpp
 stamp-h1
-
+man/pnl-man.html/pnl-manual*
+man/pnl-man.html/*.png
