@@ -37,11 +37,11 @@ PnlRng** pnl_rng_create_from_file (char *str, int n)
   FILE *xdr;
   char *buf;
 
-
-  rngtab = malloc (n * sizeof(PnlRng *));
-
   size = 0;
-  xdr = fopen (str, "rb");
+  
+  if ( (xdr = fopen (str, "rb")) == NULL ) { return NULL; }
+
+  
   while (fgetc(xdr) != EOF) { size++; }
   buf = malloc (size);
   rewind (xdr);
@@ -49,6 +49,7 @@ PnlRng** pnl_rng_create_from_file (char *str, int n)
   fclose (xdr);
   pos = 0;
 
+  rngtab = malloc (n * sizeof(PnlRng *));
   for ( i=0 ; i<n ; i++ )
     {
       if ( pos >= size )
@@ -78,7 +79,7 @@ int pnl_rng_save_to_file (PnlRng **rngtab, int n, char *str)
   int i;
   FILE *stream;
 
-  stream = fopen (str, "wb");
+  if ( (stream = fopen (str, "wb")) == NULL ) return MPI_ERR_BUFFER;
 
   for ( i=0 ; i<n ; i++ )
     {
@@ -143,7 +144,7 @@ static PnlObject* load_from_buf (char *buf, int bufsize, int *pos)
 }
 
 /**
- * Loads a object from a file
+ * Loads a object from a stream
  *
  * @param stream the stream obtained when opening a file. The file should
  * opened as a binary file
@@ -174,7 +175,7 @@ PnlObject* pnl_object_load (FILE *stream)
 }
 
 /**
- * Loads objects from a file and stores them into a PnlList
+ * Loads objects from a stream and stores them into a PnlList
  *
  * @param stream the stream obtained when opening a file. The file should
  * opened as a binary file
