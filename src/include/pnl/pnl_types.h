@@ -20,6 +20,7 @@ typedef struct
   unsigned      size;     /*!< size in bytes of an enum member */
   enum_member * members;  /*!< a pointer to the first member of the enum */
   unsigned      count;    /*!< number of members in the array */
+  const char  * label;    /*!< printable label for the enumeration */
 } enum_members;
 
 typedef struct 
@@ -28,7 +29,7 @@ typedef struct
   enum_members * members;
 } enumeration;
 
-#define DEFINE_ENUM(Name, Members)  enum_members Name = { sizeof(Members[0]), &Members[0], sizeof(Members)/sizeof(Members[0])-1 };
+#define DEFINE_ENUM(Name, Members)  enum_members Name = { sizeof(Members[0]), &Members[0], sizeof(Members)/sizeof(Members[0])-1, #Name };
 
 #ifdef __cplusplus
 }

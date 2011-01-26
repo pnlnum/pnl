@@ -1053,8 +1053,8 @@ PnlRngEnum PnlRngMCArray[]=
     {{NULL, NULLINT}, NULL}
   };
 
-enum_members RNGs = { sizeof(PnlRngArray[0]), (enum_member*)&PnlRngArray[0], sizeof(PnlRngArray)/sizeof(PnlRngEnum) };
-enum_members MC_RNGs = { sizeof(PnlRngMCArray[0]), (enum_member*)&PnlRngMCArray[0], sizeof(PnlRngMCArray)/sizeof(PnlRngEnum) };
+DEFINE_ENUM(RNGs, PnlRngArray);
+DEFINE_ENUM(MC_RNGs, PnlRngMCArray);
 
 
 PnlRng* pnl_rng_get_from_id (PnlRngType id)
