@@ -24,7 +24,7 @@ cleanhtml:
 	(cd pnl-man.html; make clean)
 
 proto:
-	grep extern ../src/include/pnl/*.h | awk '{ printf $$3 "\n"; }' | grep -v '^Pnl' | grep -v '^{' | sed 's/(.*$$//g'  | grep -v '\(hmat\|mat\|vect\)_\(complex\|int\|uint\)' | grep -v '^\*' | grep -v C2F | grep -v '.*;$$' > protos.h
+	grep extern `ls ../src/include/pnl/*.h | grep -v pnl_f2c` | awk '{ printf $$3 "\n"; }' | grep -v '^Pnl' | grep -v '^{' | sed 's/(.*$$//g'  | grep -v '\(hmat\|mat\|vect\)_\(complex\|int\|uint\)' | grep -v '^\*' | grep -v C2F | grep -v '.*;$$' > protos.h
 	for f in `cat protos.h`; \
 		do \
 		`egrep -q $$f *.tex` || echo $$f; \
