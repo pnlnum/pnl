@@ -23,6 +23,8 @@
 extern double pnl_d1mach (int i);
 extern double pnl_dlamch (char *);
 
+#define NULLINT -1
+
 /*@}*/
 
 #endif /* _PNL_INTERNALS_H */

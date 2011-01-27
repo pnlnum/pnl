@@ -31,6 +31,8 @@ struct _PnlList
   PnlObject object; 
   PnlCell *first; /*!< first element of the list */
   PnlCell *last; /*!< last element of the list */
+  PnlCell *curcell; /*!< last accessed element, if never accessed is NULL */
+  int icurcell; /*!< index of the last accessed element, if never accessed is NULLINT */
   int len; /*!< length of the list */
 };
 
@@ -45,7 +47,7 @@ extern void pnl_list_remove_last (PnlList *L);
 extern void pnl_list_remove_first (PnlList *L);
 extern void pnl_list_remove_i (PnlList *L, int i);
 extern void pnl_list_concat (PnlList *L1, PnlList *L2);
-extern void pnl_list_print (const PnlList *L);
+extern void pnl_list_print (PnlList *L);
 
 /*@}*/
 

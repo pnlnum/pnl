@@ -128,6 +128,10 @@ struct _PnlList
   PnlObject object; 
   PnlCell *first; /*!< first element of the list */
   PnlCell *last; /*!< last element of the list */
+  PnlCell *curcell; /*!< last accessed element,
+                         if never accessed is NULL */
+  int icurcell; /*!< index of the last accessed element,
+                     if never accessed is NULLINT */
   int len; /*!< length of the list */
 };
 \end{verbatim}
@@ -143,6 +147,11 @@ struct _PnlList
   \sshortdescribe Frees a list
 \item \describefun{void}{pnl_cell_free}{\refstruct{PnlCell}  \ptr \ptr c}
   \sshortdescribe Frees a list
+\item \describefun{\refstruct{PnlObject}\ptr}{pnl_list_get}{
+    \refstruct{PnlList} \ptr L, int i}
+  \sshortdescribe This function returns the content of the \var{i}--th cell of
+  the list \var{L}. This function is optimized for linearly accessing all the
+  elements, so it can be used inside a for loop for instance.
 \item \describefun{void}{pnl_list_insert_first}{\refstruct{PnlList}  \ptr L,
     \refstruct{PnlObject}  \ptr o}
   \sshortdescribe Insert the object \var{o} on top of the list \var{L}. Note that
@@ -165,7 +174,7 @@ struct _PnlList
   resulting list is store in \var{L1} on exit. Do {\bf not} free \var{L2}
   since concatenation does not actually copy objects but only manipulates
   addresses.
-\item \describefun{void}{pnl_list_print}{const \refstruct{PnlList}  \ptr L}
+\item \describefun{void}{pnl_list_print}{\refstruct{PnlList}  \ptr L}
   \sshortdescribe Not yet implemented because it would require that the
   structure \refstruct{PnlObject} has a field copy.
 \end{itemize}

@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "pnl/pnl_list.h"
+#include "pnl/pnl_internals.h"
 #include "pnl/pnl_mathtools.h"
 
 static char pnl_list_label[] = "PnlList";
@@ -33,6 +34,8 @@ PnlList* pnl_list_new ()
   if ( (o = malloc (sizeof(PnlList))) == NULL ) return NULL;
   o->first = NULL;
   o->last = NULL;
+  o->curcell = NULL;
+  o->icurcell = NULLINT;
   o->len = 0;
   o->object.type = PNL_TYPE_LIST;
   o->object.parent_type = PNL_TYPE_LIST;
@@ -55,25 +58,41 @@ PnlCell* pnl_cell_new ()
 }
 
 
-/** 
+/**
  * Returns the adress of the i-th element of a list. No copy is made
- * 
+ *
  * @param L a PnlList
  * @param i an interger index
- * 
- * @return a PnlObject* 
+ *
+ * @return a PnlObject*
  */
 PnlObject* pnl_list_get (PnlList *L, int i)
 {
   int j;
   PnlCell *C;
   PNL_CHECK (i >= L->len, "index exceeded", "pnl_list_get");
-  C = L->first;
-  for ( j=0 ; j<i ; j++ )
+
+  /*
+   * First, we chek if we are linearly going through the list. If yes, rather
+   * than starting at the beginning of the list, we use the curcell member to
+   * speed up the access
+   */
+  if ( L->icurcell != NULLINT  && i == L->icurcell + 1 )
     {
-      C = C->next;
+      L->curcell = L->curcell->next;
+      L->icurcell ++;
     }
-  return C->self;
+  else
+    {
+      C = L->first;
+      for ( j=0 ; j<i ; j++ )
+        {
+          C = C->next;
+        }
+      L->curcell = C;
+      L->icurcell = i;
+    }
+  return L->curcell->self;
 }
 
 /**
@@ -86,7 +105,7 @@ void pnl_list_insert_first (PnlList *L, PnlObject *o)
 {
   PnlCell *C;
   PnlList *Lold;
-  
+
   C = pnl_cell_new ();
   Lold = L;
 
@@ -107,7 +126,7 @@ void pnl_list_insert_first (PnlList *L, PnlObject *o)
   if (L->len == 0) L->last = C;
   L->len++;
   L->first = C;
-  
+
 }
 
 
@@ -167,7 +186,7 @@ void pnl_list_free (PnlList **L)
 /**
  * Frees a PnlCell
  *
- * @param c the address of a PnlCell 
+ * @param c the address of a PnlCell
  */
 void pnl_cell_free (PnlCell **c)
 {
@@ -209,12 +228,12 @@ void pnl_list_remove_last (PnlList *L)
       L->len = 0;
       return;
     }
-  
+
   last = L->last;
   last_but = last->prev;
 
   last_but->next = NULL;
-  
+
   L->len--;
   L->last = last_but;
 
@@ -278,23 +297,22 @@ void pnl_list_concat (PnlList *L1, PnlList *L2)
  *
  * @param L a list
  */
-void pnl_list_print (const PnlList *L)
+void pnl_list_print (PnlList *L)
 {
   int i;
-  PnlCell *C;
-  C = L->first;
   for ( i=0 ; i<L->len ; i++ )
     {
+      const PnlObject *C;
       const char *name;
-      name =  PNL_GET_TYPENAME(C->self);
+      C = pnl_list_get (L, i);
+      name =  PNL_GET_TYPENAME(C);
       printf ("L[%d] : %s\n", i, name);
-      C = C->next;
     }
 }
 
 /**
  * Removes and frees cell i of a list
- * 
+ *
  * @param L a PnlList
  * @param i the index of the cell to be removed
  */
@@ -306,12 +324,9 @@ void pnl_list_remove_i (PnlList *L, int i)
 
   if ( i==0 ) { pnl_list_remove_first (L); return; }
   if ( i==L->len ) { pnl_list_remove_last (L); return; }
-  
+
   C = L->first;
-  for ( k=0 ; k<i ; k++ )
-    {
-      C = C->next;
-    }
+  for ( k=0 ; k<i ; k++ ) { C = C->next; }
   pnl_cell_free (&C);
   L->len--;
 }
