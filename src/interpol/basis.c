@@ -595,11 +595,8 @@ static double D2TchebychevD1(double x, int n)
     }
 }
 
-/*
- * Interface for the PnlBasis object
- */
-
-enum_member _reg_basis [] =
+
+PnlEnum PnlEnumBasis [] =
   {
     { "Canonical", PNL_BASIS_CANONICAL},
     { "Hermite", PNL_BASIS_HERMITIAN},
@@ -607,7 +604,7 @@ enum_member _reg_basis [] =
     { NULL, NULLINT},
   };
 
-DEFINE_ENUM(PnlBases, _reg_basis);
+
 
 static char pnl_basis_label[] = "PnlBasis";
 
@@ -646,9 +643,9 @@ PnlBasis*  pnl_basis_new ()
  */
 void  pnl_basis_set_from_tensor (PnlBasis *b, int index, const PnlMatInt *T)
 {
-  enum_member *e;
+  PnlEnum *e;
 
-  e = _reg_basis;
+  e = PnlEnumBasis;
 
   while (e->label != NULL && e->key != index) { e++; }
   if (e->label == NULL )

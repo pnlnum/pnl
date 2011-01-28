@@ -1019,21 +1019,21 @@ PnlRng PnlRngNiederreiter =
  */
 PnlRngEnum PnlRngArray[]=
   {
-    {{"KNUTH", PNL_RNG_KNUTH},&PnlRngKnuth},
-    {{"MRGK3", PNL_RNG_MRGK3},&PnlRngMrgk3},
-    {{"MRGK5", PNL_RNG_MRGK5},&PnlRngMrgk5},
-    {{"SHUFL", PNL_RNG_SHUFL},&PnlRngShufl},
-    {{"L'ECUYER", PNL_RNG_LECUYER},&PnlRngLecuyer},
-    {{"TAUSWORTHE", PNL_RNG_TAUSWORTHE},&PnlRngTausworthe},
-    {{"MERSENNE", PNL_RNG_MERSENNE},&PnlRngMersenne},
-    {{"MERSENNE (Random Seed)", PNL_RNG_MERSENNE_RANDOM_SEED},&PnlRngMersenneRandomSeed},
-    {{"SQRT", PNL_RNG_SQRT},&PnlRngSqrt},
-    {{"HALTON", PNL_RNG_HALTON},&PnlRngHalton},
-    {{"FAURE", PNL_RNG_FAURE},&PnlRngFaure},
-    {{"SOBOL", PNL_RNG_SOBOL},&PnlRngSobol},
-    {{"SOBOL2", PNL_RNG_SOBOL2},&PnlRngSobol2},
-    {{"NIEDERREITER", PNL_RNG_NIEDERREITER},&PnlRngNiederreiter},
-    {{NULL, NULLINT}, NULL}
+    {"KNUTH", PNL_RNG_KNUTH, &PnlRngKnuth},
+    {"MRGK3", PNL_RNG_MRGK3, &PnlRngMrgk3},
+    {"MRGK5", PNL_RNG_MRGK5, &PnlRngMrgk5},
+    {"SHUFL", PNL_RNG_SHUFL, &PnlRngShufl},
+    {"L'ECUYER", PNL_RNG_LECUYER, &PnlRngLecuyer},
+    {"TAUSWORTHE", PNL_RNG_TAUSWORTHE, &PnlRngTausworthe},
+    {"MERSENNE", PNL_RNG_MERSENNE, &PnlRngMersenne},
+    {"MERSENNE (Random Seed)", PNL_RNG_MERSENNE_RANDOM_SEED, &PnlRngMersenneRandomSeed},
+    {"SQRT", PNL_RNG_SQRT, &PnlRngSqrt},
+    {"HALTON", PNL_RNG_HALTON, &PnlRngHalton},
+    {"FAURE", PNL_RNG_FAURE, &PnlRngFaure},
+    {"SOBOL", PNL_RNG_SOBOL, &PnlRngSobol},
+    {"SOBOL2", PNL_RNG_SOBOL2, &PnlRngSobol2},
+    {"NIEDERREITER", PNL_RNG_NIEDERREITER, &PnlRngNiederreiter},
+    {NULL, NULLINT, NULL}
   };
 
 /*
@@ -1042,19 +1042,17 @@ PnlRngEnum PnlRngArray[]=
  */
 PnlRngEnum PnlRngMCArray[]=
   {
-    {{"KNUTH", PNL_RNG_KNUTH},&PnlRngKnuth},
-    {{"MRGK3", PNL_RNG_MRGK3},&PnlRngMrgk3},
-    {{"MRGK5", PNL_RNG_MRGK5},&PnlRngMrgk5},
-    {{"SHUFL", PNL_RNG_SHUFL},&PnlRngShufl},
-    {{"L'ECUYER", PNL_RNG_LECUYER},&PnlRngLecuyer},
-    {{"TAUSWORTHE", PNL_RNG_TAUSWORTHE},&PnlRngTausworthe},
-    {{"MERSENNE", PNL_RNG_MERSENNE},&PnlRngMersenne},
-    {{"MERSENNE (Random Seed)", PNL_RNG_MERSENNE_RANDOM_SEED},&PnlRngMersenneRandomSeed},
-    {{NULL, NULLINT}, NULL}
+    {"KNUTH", PNL_RNG_KNUTH, &PnlRngKnuth},
+    {"MRGK3", PNL_RNG_MRGK3, &PnlRngMrgk3},
+    {"MRGK5", PNL_RNG_MRGK5, &PnlRngMrgk5},
+    {"SHUFL", PNL_RNG_SHUFL, &PnlRngShufl},
+    {"L'ECUYER", PNL_RNG_LECUYER, &PnlRngLecuyer},
+    {"TAUSWORTHE", PNL_RNG_TAUSWORTHE, &PnlRngTausworthe},
+    {"MERSENNE", PNL_RNG_MERSENNE, &PnlRngMersenne},
+    {"MERSENNE (Random Seed)", PNL_RNG_MERSENNE_RANDOM_SEED, &PnlRngMersenneRandomSeed},
+    {NULL, NULLINT, NULL}
   };
 
-DEFINE_ENUM(RNGs, PnlRngArray);
-DEFINE_ENUM(MC_RNGs, PnlRngMCArray);
 
 
 PnlRng* pnl_rng_get_from_id (PnlRngType id)

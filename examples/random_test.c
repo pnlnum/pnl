@@ -118,7 +118,7 @@ static void test_rng ()
     {
       rng = PnlRngArray[i].rng;
       type_gen = rng->type;
-      printf ("--> Generator %s\n", PnlRngArray[i].base.label);
+      printf ("--> Generator %s\n", PnlRngArray[i].label);
       test_pnl_vect_rand(type_gen);
       test_pnl_mat_rand(type_gen);
       test_pnl_rand_gauss(type_gen);

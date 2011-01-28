@@ -75,8 +75,9 @@ struct _PnlRng
 typedef struct _PnlRngEnum PnlRngEnum;
 struct _PnlRngEnum
 {
-  enum_member base; /* {label, key} */
-  PnlRng *rng;
+  const char *label;
+  int         key;
+  PnlRng     *rng;
 };
 
 extern PnlRng PnlRngKnuth;
@@ -95,9 +96,7 @@ extern PnlRng PnlRngSobol2;
 extern PnlRng PnlRngNiederreiter;
 
 extern PnlRngEnum PnlRngArray[];
-extern enum_members RNGs;
-extern enum_members MC_RNGs;
-
+extern PnlRngEnum PnlRngMCArray[];
 
 #ifdef HAVE_INLINE
 extern inline PnlRng* pnl_rng_get_from_id (PnlRngType t)

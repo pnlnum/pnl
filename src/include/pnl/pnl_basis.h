@@ -47,7 +47,7 @@ struct _PnlBasis
                           to [-1, 1]^nb_variates */
 };
 
-extern enum_members PnlBases ;
+extern PnlEnum PnlEnumBasis[];
 extern PnlBasis* pnl_basis_new ();
 extern PnlBasis* pnl_basis_create ( int index, int nb_func, int space_dim);
 extern PnlBasis* pnl_basis_create_from_degree ( int index, int degree, int space_dim);
