@@ -144,7 +144,6 @@ extern void pnl_rng_init (PnlRng *rng, int type);
 extern void pnl_rng_sseed(PnlRng *rng, unsigned long int s);
 extern void pnl_rng_sdim (PnlRng *rng, int dim);
 
-extern double pnl_rng_gauss(int, int, int, PnlRng *rng);
 extern int pnl_rng_bernoulli(double p, PnlRng *rng);
 extern long pnl_rng_poisson(double lambda, PnlRng *rng);
 extern long pnl_rng_poisson1(double lambda,double t, PnlRng *rng);

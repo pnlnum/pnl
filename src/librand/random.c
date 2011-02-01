@@ -476,7 +476,7 @@ static void DYNAMIC_MT (PnlRng *rng,double *sample)
 static long Comb[MAXI][MAXI];/*Binomial Coefficients*/
 
 /**
- * Table for the n first prime numbers 
+ * Table for the n first prime numbers
  */
 static void prime_number(int n, int prime[])
 {
@@ -537,8 +537,8 @@ static int search_value(int seuil, int tab[], int dim)
 
 
 /**
- * Computation of the binomial coefficients.  
- */ 
+ * Computation of the binomial coefficients.
+ */
 static void binomial(int Max)
 /*Max should be less than 33 otherwise C[n][p] could exceed LONG_MAX*/
 {
@@ -1054,7 +1054,13 @@ PnlRngEnum PnlRngMCArray[]=
   };
 
 
-
+/**
+ * Retuns the global generator described by its macro name
+ * 
+ * @param id the index of a generator
+ * 
+ * @return a pointer to the global generator with index id
+ */
 PnlRng* pnl_rng_get_from_id (PnlRngType id)
 {
   return PnlRngArray[id].rng;
@@ -1424,9 +1430,9 @@ void pnl_rng_sseed (PnlRng *rng, ulong seed)
   rng->gauss=0.;
 }
 
-/** 
+/**
  * Sets the dimension of the state space for a QMC rng
- * 
+ *
  * @param rng a PnlRng
  * @param dim the dimension of the state space
  */

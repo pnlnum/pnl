@@ -209,6 +209,11 @@ struct _PnlRng
 \item \describefun{void}{pnl_rng_sseed}{\refstruct{PnlRng} \ptr rng, unsigned
     long int s}
   \sshortdescribe Sets the seed of the genrator \var{rng} using \var{s}.
+\item \describefun{void}{pnl_rng_sdim}{\refstruct{PnlRng} \ptr rng, int dim}
+  \sshortdescribe Sets the dimension of the state space for a QMC generator.
+\item \describefun{\refstruct{PnlRng}\ptr }{pnl_rng_get_from_id}
+  {\refstruct{PnlRngType} id}
+  \sshortdescribe Retuns the global generator described by its macro name.
 \end{itemize}
 
 
