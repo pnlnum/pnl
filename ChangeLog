@@ -1,3 +1,8 @@
+29-01-2011 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* list.c: PnlList structure changed to remember the index of the
+	last accessed element for more efficiently lopping on a list.
+
 08-11-2010 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* basis.c: bases can be centered and normalized
