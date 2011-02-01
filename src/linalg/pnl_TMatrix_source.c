@@ -85,12 +85,12 @@ int FUNCTION(pnl_mat,eq)(const TYPE(PnlMat) *M1, const TYPE(PnlMat) *M2)
  * @param x a BASE type element
  * @return  TRUE or FALSE
  */
-int FUNCTION(pnl_mat,CONCAT2(eq_,BASE))(const TYPE(PnlMat) *M1, BASE x)
+int FUNCTION(pnl_mat,CONCAT2(eq_,BASE))(const TYPE(PnlMat) *M, BASE x)
 {
   int i;
-  for ( i=0 ; i<M1->mn ; i++ )
+  for ( i=0 ; i<M->mn ; i++ )
     {
-      if ( NEQ(M1->array[i],x) ) return FALSE;
+      if ( NEQ(M->array[i],x) ) return FALSE;
     }
   return TRUE;
 }

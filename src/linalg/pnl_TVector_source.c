@@ -114,8 +114,8 @@ int FUNCTION(pnl_vect,eq)(const TYPE(PnlVect) *v1, const TYPE(PnlVect) *v2)
 /**
  * Test if 2 vectors are equal
  *
- * @param v1 a vector
- * @param v2 a vector
+ * @param v a vector
+ * @param x a BASE element
  * @return  TRUE or FALSE
  */
 int FUNCTION(pnl_vect,CONCAT2(eq_,BASE))(const TYPE(PnlVect) *v, BASE x)
