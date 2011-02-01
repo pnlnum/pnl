@@ -39,6 +39,7 @@ extern "C" {
 extern void pnl_mat_init(PnlMat *); 
 extern PnlMat* pnl_mat_new(); 
 extern int pnl_mat_eq (const PnlMat *, const PnlMat *);
+extern int pnl_mat_eq_double (const PnlMat *, double);
 extern PnlMat* pnl_mat_create(int m, int n); 
 extern PnlMat* pnl_mat_create_from_double(int m, int n, double x);
 extern PnlMat* pnl_mat_create_from_ptr(int m, int n, const double* x);

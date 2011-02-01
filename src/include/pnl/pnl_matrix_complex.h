@@ -28,6 +28,7 @@ extern "C" {
 extern void pnl_mat_complex_init(PnlMatComplex *); 
 extern PnlMatComplex* pnl_mat_complex_new(); 
 extern int pnl_mat_complex_eq (const PnlMatComplex *, const PnlMatComplex *);
+extern int pnl_mat_complex_eq_domplex (const PnlMatComplex *, dcomplex);
 extern PnlMatComplex* pnl_mat_complex_create(int m, int n); 
 extern PnlMatComplex* pnl_mat_complex_create_from_dcomplex(int m, int n, dcomplex x);
 extern PnlMatComplex* pnl_mat_complex_create_from_ptr(int m, int n, const dcomplex* x);

@@ -106,10 +106,28 @@ int FUNCTION(pnl_vect,eq)(const TYPE(PnlVect) *v1, const TYPE(PnlVect) *v2)
   if (v1->size != v2->size) return FAIL;
   for ( i=0 ; i<v1->size ; i++ )
     {
-      if ( NEQ(PNL_GET(v1, i), PNL_GET(v2, i)) ) return FAIL;
+      if ( NEQ(PNL_GET(v1, i), PNL_GET(v2, i)) ) return FALSE;
     }
-  return OK;
+  return TRUE;
 }
+
+/**
+ * Test if 2 vectors are equal
+ *
+ * @param v1 a vector
+ * @param v2 a vector
+ * @return  TRUE or FALSE
+ */
+int FUNCTION(pnl_vect,CONCAT2(eq_,BASE))(const TYPE(PnlVect) *v, BASE x)
+{
+  int i;
+  for ( i=0 ; i<v->size ; i++ )
+    {
+      if ( NEQ(PNL_GET(v, i), x) ) return FALSE;
+    }
+  return TRUE;
+}
+
 
 /**
  * creates a new TYPE(PnlVect) pointer.

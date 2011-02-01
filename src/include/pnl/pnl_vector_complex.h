@@ -109,6 +109,7 @@ extern void pnl_vect_complex_free(PnlVectComplex **v);
 extern void pnl_vect_complex_init(PnlVectComplex *v);
 extern PnlVectComplex* pnl_vect_complex_new();
 extern int pnl_vect_complex_eq (const PnlVectComplex *, const PnlVectComplex *);
+extern int pnl_vect_complex_eq_dcomplex (const PnlVectComplex *, dcomplex);
 extern PnlVectComplex* pnl_vect_complex_create(int size);
 extern PnlVectComplex pnl_vect_complex_wrap_array(const dcomplex *x, int size);
 extern PnlVectComplex* pnl_vect_complex_create_from_dcomplex(int size, dcomplex x);

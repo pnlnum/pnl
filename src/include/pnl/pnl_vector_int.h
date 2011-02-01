@@ -5,7 +5,7 @@
 #include "pnl/pnl_object.h"
 
 #ifndef _PNL_VECTOR_H
-#error "Do not include this file directly. Include pnl_matrix.h"
+#error "Do not include this file directly. Include pnl_vector.h"
 #endif
 
 #ifdef __cplusplus
@@ -51,6 +51,7 @@ extern void pnl_vect_int_free(PnlVectInt **v);
 extern void pnl_vect_int_init(PnlVectInt *v);
 extern PnlVectInt* pnl_vect_int_new();
 extern int pnl_vect_int_eq (const PnlVectInt *, const PnlVectInt *);
+extern int pnl_vect_int_eq_int (const PnlVectInt *, int);
 extern PnlVectInt* pnl_vect_int_create(int size);
 extern PnlVectInt pnl_vect_int_wrap_array(const int *x, int size);
 extern PnlVectInt* pnl_vect_int_create_from_int(int size, int x);

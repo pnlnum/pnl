@@ -70,12 +70,29 @@ TYPE(PnlMat) * FUNCTION(pnl_mat,new)()
 int FUNCTION(pnl_mat,eq)(const TYPE(PnlMat) *M1, const TYPE(PnlMat) *M2)
 {
   int i;
-  if ( (M1->m != M2->m) || (M1->n != M2->n) ) return FAIL;
+  if ( (M1->m != M2->m) || (M1->n != M2->n) ) return FALSE;
   for ( i=0 ; i<M1->mn ; i++ )
     {
-      if ( NEQ(M1->array[i],M2->array[i]) ) return FAIL;
+      if ( NEQ(M1->array[i],M2->array[i]) ) return FALSE;
     }
-  return OK;
+  return TRUE;
+}
+
+/**
+ * Test if all entries of a  matrix are equal to a given BASE element
+ *
+ * @param M a matrix
+ * @param x a BASE type element
+ * @return  TRUE or FALSE
+ */
+int FUNCTION(pnl_mat,CONCAT2(eq_,BASE))(const TYPE(PnlMat) *M1, BASE x)
+{
+  int i;
+  for ( i=0 ; i<M1->mn ; i++ )
+    {
+      if ( NEQ(M1->array[i],x) ) return FALSE;
+    }
+  return TRUE;
 }
 
 

@@ -293,6 +293,19 @@ Equivalently to these functions, there exist macros for {\bf \refstruct{PnlVect}
   vector. The original vector is modified
 \end{itemize}
 
+\subparagraph{Test functions}
+
+\begin{itemize}
+\item \describefun{int}{pnl_vect_eq}{const \refstruct{PnlVect} \ptr V1,
+    const \refstruct{PnlVect} \ptr V2}
+  \sshortdescribe Tests if two vectors are equal. Returns \var{TRUE} or
+  \var{FALSE}.
+\item \describefun{int}{pnl_vect_eq_double}{const \refstruct{PnlVect} \ptr v,
+    double x}
+  \sshortdescribe Tests if all the components of \var{v} are equal to
+  \var{x}. Returns \var{TRUE} or \var{FALSE}.
+\end{itemize}
+
 \subparagraph{Ordering functions}
 The following functions are not defined for PnlVectComplex because there is
 no total ordering on Complex numbers
@@ -857,6 +870,20 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
   \var{c='r'}, $A_{ij} = \prod_{1 \le k \le i} A_{kj}$ and when \var{c='rc}, 
   $A_{ij} = \prod_{1 \le k \le j} A_{ik}$.
 \end{itemize}
+
+\subparagraph{Test functions}
+
+\begin{itemize}
+\item \describefun{int}{pnl_mat_eq}{const \refstruct{PnlMat} \ptr M1,
+    const \refstruct{PnlMat} \ptr M2}
+  \sshortdescribe Tests if two matrices are equal. Returns \var{TRUE} or
+  \var{FALSE}.
+\item \describefun{int}{pnl_mat_eq_double}{const \refstruct{PnlMat} \ptr M,
+    double x}
+  \sshortdescribe Tests if all the components of \var{M} are equal to
+  \var{x}. Returns \var{TRUE} or \var{FALSE}.
+\end{itemize}
+
 
 \paragraph{Ordering operations}
 
