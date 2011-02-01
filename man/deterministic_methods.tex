@@ -166,7 +166,7 @@ two wrappers for calling minpack routines.
   \item On output, \var{fx} contains \var{f(x)}.
   \end{itemize}
 
-\item \describefun {int}{pnl_root_lsq}{\refstruct{PnlRnFuncRmDFunc}
+\item \describefun {int}{pnl_root_fsolve_lsq}{\refstruct{PnlRnFuncRmDFunc}
     \ptr f, \refstruct{PnlVect} \ptr x, int m, \refstruct{PnlVect} \ptr fx,
     double xtol, double ftol, double gtol, int maxfev, int \ptr nfev,
     \refstruct{PnlVect} \ptr scale, int error_msg}

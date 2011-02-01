@@ -173,7 +173,7 @@ static int lmder_fcn (void *pnl_func, int m, int n, const double *x, double *fve
 }
 
 /**
- * 
+ * Computes the root of a function 
  * 
  * @param f a pointer to a PnlRnFuncRnDFunc. This an object for storing a
  * fonction f:R^n -> R^n and its Jacobian.
@@ -191,7 +191,7 @@ static int lmder_fcn (void *pnl_func, int m, int n, const double *x, double *fve
  * @param error_msg a boolean TRUE or FALSE. If TRUE, a message is printed
  * if the hybrd function did not return properly
  *
- * @return OK or FAIL (if FAIL, use error_msg=TRUEto know what happened)
+ * @return OK or FAIL (if FAIL, use error_msg=TRUE to know what happened)
  */
 int pnl_root_fsolve (PnlRnFuncRnDFunc *f, PnlVect *x, PnlVect *fx,  double xtol, 
                 int maxfev, int *nfev, PnlVect *scale, int error_msg)
@@ -306,7 +306,7 @@ int pnl_root_fsolve (PnlRnFuncRnDFunc *f, PnlVect *x, PnlVect *fx,  double xtol,
 }
 
 /**
- * Minimizes a sum of squares
+ * Computes the root of  a sum of squares
  * 
  * @param f a pointer to a PnlRnFuncRmDFunc. This an object for storing a
  * fonction f:R^n -> R^m and its Jacobian.
