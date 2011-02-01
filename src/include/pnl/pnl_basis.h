@@ -54,7 +54,6 @@ extern PnlBasis* pnl_basis_create_from_degree ( int index, int degree, int space
 extern PnlBasis*  pnl_basis_create_from_hyperbolic_degree (int index, double degree, double q, int n);
 extern void  pnl_basis_set_from_tensor (PnlBasis *b, int index, const PnlMatInt *T);
 extern PnlBasis* pnl_basis_create_from_tensor ( int index, const PnlMatInt *T);
-extern PnlBasis* pnl_basis_init ( int index, int nb_func, int space_dim);
 extern void pnl_basis_set_domain (PnlBasis *B, const PnlVect *xmin, const PnlVect *xmax);
 extern void pnl_basis_set_reduced (PnlBasis *B, const PnlVect *center, const PnlVect *scale);
 extern void pnl_basis_free (PnlBasis **basis);

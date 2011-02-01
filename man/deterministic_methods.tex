@@ -258,6 +258,10 @@ $\alpha^\star \in \R^N$ which solves
 \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_new}{}
   \sshortdescribe Creates an empty \refstruct{PnlBasis}.
 
+\item \describefun{void}{pnl_basis_print}{const \refstruct{PnlBasis} \ptr B}
+  \sshortdescribe Prints a basis
+  
+  
 \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create}{int index, int
     nb_func, int nb_variates}
   \sshortdescribe Creates a \refstruct{PnlBasis} for the polynomial family
@@ -320,6 +324,16 @@ $\alpha^\star \in \R^N$ which solves
     \end{array}
   \right) \]
 
+\item \describefun{void }{pnl_basis_set_from_tensor}{\refstruct{PnlBasis} \ptr
+    b, int index, const \refstruct{PnlMatInt} \ptr T}
+  \sshortdescribe Sets an alredy existing basis \var{b} to a polynomial family
+  defined by \var{index} (see Table~\ref{basis_index}) using the basis
+  described by the tensor matrix \var{T}. The number of lines of \var{T} is
+  the number of functions of the basis whereas the numbers of columns of
+  \var{T} is the number of variates of the functions. \\
+  Same function as \reffun{pnl_basis_create_from_tensor} except that it
+  operates on an already existing basis.
+
 \item  \describefun{\refstruct{PnlBasis}\ptr}{pnl_basis_create_from_hyperbolic_degree}
   {int index, double degree, double q, int n}
   \sshortdescribe Creates a sparse basis of polynomial with \var{n}
@@ -340,7 +354,8 @@ $\cD$ (a subset of $\R^d$) is mapped to $[-1,1]^d$. If the domain $\cD$ is
 rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by 
 \begin{equation}
   \label{basis_reduced}
-  x \in \cD \longmapsto \left(\frac{x_i - (b_i+a_i)/2}{(b_i - a_i)/2}\right)_{i=1,\cdots,d}
+  x \in \cD \longmapsto \left(\frac{x_i - (b_i+a_i)/2}{(b_i - a_i)/2}
+  \right)_{i=1,\cdots,d}
 \end{equation}
 \begin{itemize}
 \item \describefun{void}{pnl_basis_set_domain}{\refstruct{PnlBasis} \ptr B, 
@@ -354,7 +369,8 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
   \sshortdescribe This function declares \var{B} as a centered and normalised basis
   using the mapping
   \begin{equation*}
-    x \in \cD \longmapsto \left(\frac{x_i - \var{center}_i }{\var{scale}_i}\right)_{i=1,\cdots,d}
+    x \in \cD \longmapsto \left(\frac{x_i - \var{center}_i }{\var{scale}_i}
+    \right)_{i=1,\cdots,d}
   \end{equation*}
 \end{itemize}
 
@@ -365,11 +381,25 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
   \reffun{pnl_basis_create}. Beware that \var{basis} is the address of a
   \refstruct{PnlBasis}\ptr.
 
-\item  \describefun{void}{pnl_basis_i}{\refstruct{PnlBasis }\ptr basis,
+\item  \describefun{void}{pnl_basis_i}{\refstruct{PnlBasis }\ptr b,
     double \ptr x, int i}
-  \sshortdescribe If \var{basis} is composed of $f_0, \dots, f_{\var{nb\_func}}$,
+  \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}}$,
   then this function returns $f_i(x)$. \var{x} must be a C array of length
   \var{nb_variates}.
+
+\item \describefun{double}{pnl_basis_i_D}{ const \refstruct{PnlBasis} \ptr b,
+    const double \ptr x, int i, int j }
+  \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}}$,
+  then this function returns $\partial_{x_{\var{j}}} f_i(x)$. \var{x} must be a C array
+  of length \var{nb_variates}.
+
+  
+\item \describefun{double}{pnl_basis_i_D2}{const \refstruct{PnlBasis} \ptr b,
+    const double \ptr x, int i, int j1, int j2}
+  \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}}$,
+  then this function returns $\partial^2_{x_{\var{j1}}, x_{\var{j2}}}
+  f_i(x)$. \var{x} must be a C array of length \var{nb_variates}.
+
 
 \item \describefun{int}{pnl_basis_fit_ls}{\refstruct{PnlBasis} \ptr
     P, \refstruct{PnlVect} \ptr  coef, \refstruct{PnlMat} \ptr  x,
@@ -822,3 +852,8 @@ To solve an inequality constrained optimization problem, ie $m_E=0$, we provide 
 
 \end{itemize}
 
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "pnl-manual"
+%%% End: 
