@@ -1,3 +1,8 @@
+11-02-2011 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* amos_wrappers.c : Add wrapper to zrati (Ratio of modified Bessel
+	functions of the first kind)
+
 29-01-2011 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* list.c: PnlList structure changed to remember the index of the

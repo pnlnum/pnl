@@ -47,6 +47,7 @@ extern dcomplex pnl_complex_bessel_h1( double v, dcomplex z );
 extern dcomplex pnl_complex_bessel_h1_scaled( double v, dcomplex z );
 extern dcomplex pnl_complex_bessel_h2( double v, dcomplex z );
 extern dcomplex pnl_complex_bessel_h2_scaled( double v, dcomplex z );
+extern dcomplex pnl_complex_bessel_rati (double v, dcomplex x);
 
 
 /* real Bessel functions from libamos */
@@ -63,6 +64,7 @@ extern dcomplex pnl_bessel_h1( double v, double x );
 extern dcomplex pnl_bessel_h1_scaled( double v, double x );
 extern dcomplex pnl_bessel_h2( double v, double x );
 extern dcomplex pnl_bessel_h2_scaled( double v, double x );
+extern double pnl_bessel_rati (double v, double x);
 
 /* @} */
 

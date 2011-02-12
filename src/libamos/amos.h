@@ -67,7 +67,7 @@ extern int amos_zmlri (double *zr, double *zi, double *fnu, const int *kode,cons
 		       double *yr, double *yi, int *nz, double *tol);
 extern int amos_zmlt (double *ar, double *ai, double *br, double *bi,
 		      double *cr, double *ci);
-extern int amos_zrati (double *zr, double *zi, double *fnu,const  int *n,
+extern int pnl_zrati (double *zr, double *zi, double *fnu,const  int *n,
 		       double *cyr, double *cyi, double *tol);
 extern int amos_zs1s2 (double *zrr, double *zri, double *s1r, double *s1i,
 		       double *s2r, double *s2i, int *nz, double *ascle,

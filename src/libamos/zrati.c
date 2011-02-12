@@ -30,11 +30,17 @@
  *    bessel functions i and j of complex argument and int order, 
  *    by d. j. sookne. 
  *
+ *        input      zr,zi,fnu are double precision 
+ *          zr,zi  - z=cmplx(zr,zi),  -pi.lt.arg(z).le.pi 
+ *          fnu    - order of initial j function, fnu.ge.0.0d0 
+ *          n      - number of members of the sequence, n.ge.1 
+ * 
+ *        output     cyr,cyi are double precision 
+ *          cyr,cyi- double precision vectors whose first n components 
+ *                   contain real and imaginary parts for the sequence 
+ *                   cy(i)=R(fnu+i-1,z)  i=1,...,n 
  */
-
-
-/* Subroutine */ int
-amos_zrati (double *zr, double *zi, double *fnu,const int *n, double *cyr,
+int pnl_zrati (double *zr, double *zi, double *fnu,const int *n, double *cyr,
 	    double *cyi, double *tol)
 {
   /* Initialized data */
@@ -206,4 +212,4 @@ amos_zrati (double *zr, double *zi, double *fnu,const int *n, double *cyr,
       /* L60: */
     }
   return 0;
-}				/* zrati_ */
+}

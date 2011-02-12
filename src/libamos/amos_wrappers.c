@@ -447,6 +447,29 @@ dcomplex pnl_complex_bessel_h2_scaled( double v, dcomplex z )
   return cy;
 }
 
+/**
+ * Computes the ratio of modified Bessel functions of the first kind
+ * I_{v+1} / I_v
+ * 
+ * @param v a real number, the order of the Bessel function
+ * @param x a complex number
+ * 
+ * @return I_{v+1}(x) / I_v(x)
+ */
+dcomplex pnl_complex_bessel_rati (double v, dcomplex x)
+{
+  int n;
+  double d__1, tol;
+  dcomplex cy;
+  n = 1;
+  d__1 = pnl_d1mach (4);
+  tol = MAX (d__1, 1e-18);
+
+  pnl_zrati (CADDR(x), &v, &n, CADDR(cy), &tol);
+  return cy;
+}
+
+
 /* real Bessel functions */
 /**
  *  Modified Bessel function of the first kind
@@ -765,4 +788,27 @@ dcomplex pnl_bessel_h2_scaled( double v, double x )
       cy = Cmul (cy, CIexp (M_PI * v) );
     }
   return cy;
+}
+
+/**
+ * Computes the ratio of modified Bessel functions of the first kind
+ * I_{v+1} / I_v
+ * 
+ * @param v a real number, the order of the Bessel function
+ * @param x a real number
+ * 
+ * @return I_{v+1}(x) / I_v(x)
+ */
+double pnl_bessel_rati (double v, double x)
+{
+  double d__1, tol;
+  int  n;
+  dcomplex cy, z;
+  n = 1;
+  z = Complex (x, 0.);
+  d__1 = pnl_d1mach (4);
+  tol = MAX (d__1, 1e-18);
+
+  pnl_zrati (CADDR(z), &v, &n, CADDR(cy), &tol);
+  return cy.r;
 }

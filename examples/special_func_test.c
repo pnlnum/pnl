@@ -149,6 +149,8 @@ static void complex_bessel_test ()
   printf("bessel_i(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
   c = pnl_complex_bessel_i_scaled (v, z);
   printf("bessel_i_scaled(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
+  c = pnl_complex_bessel_rati (v, z);
+  printf("bessel_rati(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
   c = pnl_complex_bessel_j (v, z);
   printf("bessel_j(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
   c = pnl_complex_bessel_j_scaled (v, z);
@@ -183,6 +185,8 @@ static void real_bessel_test ()
   printf("bessel_i(%f, %f) = %f\n", v, z, c);
   c = pnl_bessel_i_scaled (v, z);
   printf("bessel_i_scaled(%f, %f) = %f\n", v, z, c);
+  c = pnl_bessel_rati (v, z);
+  printf("bessel_i_ratio(%f, %f) = %f\n", v, z, c);
   c = pnl_bessel_j (v, z);
   printf("bessel_j(%f, %f) = %f\n", v, z, c);
   c = pnl_bessel_j_scaled (v, z);
