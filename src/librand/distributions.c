@@ -19,6 +19,7 @@
 
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_random.h"
+#include "pnl/pnl_specfun.h"
 #include "pnl/pnl_cdf.h"
 #include "randomkit.h"
 
@@ -415,6 +416,23 @@ double pnl_rand_chi2  (double nu, int gen)
   PnlRng *rng;
   rng = pnl_rng_get_from_id(gen);
   return pnl_rng_chi2 (nu, rng);
+}
+
+/** 
+ * Generates a random variable with Bessel distribution with parameters nu
+ * and a
+ * 
+ * @param nu a real number > -1
+ * @param a a real number > 0
+ * @param rng a PnlRng
+ * 
+ * @return an integer number
+ */
+int pnl_rand_bessel (double nu, double a, int gen)
+{
+  PnlRng *rng;
+  rng = pnl_rng_get_from_id(gen);
+  return pnl_rng_bessel (nu, a, rng);
 }
 
 /*
@@ -860,4 +878,49 @@ double pnl_rng_chi2  (double nu, PnlRng *rng)
   return 2. * pnl_rng_gamma ( nu / 2, 1.0, rng);
 }
 
+
+
+/** 
+ * Generates a random variable with Bessel distribution with parameters nu
+ * and a. We refer to 
+ * 
+ * @article{Devroye2002249,
+ * title = "Simulating Bessel random variables",
+ * journal = "Statistics & Probability Letters",
+ * volume = "57",
+ * number = "3",
+ * year = "2002",
+ * doi = "DOI: 10.1016/S0167-7152(02)00055-X",
+ * author = "Luc Devroye"}
+ *
+ * for a detailed review of the different algorithms to simulate Bessel
+ * random variables. We are using the most naive which also turns to be the
+ * fastest (probably because we are relying on libamis for evaluating
+ * Bessel functions).
+ * 
+ * @param nu a real number > -1
+ * @param a a real number > 0
+ * @param rng a PnlRng
+ * 
+ * @return an integer number
+ */
+int pnl_rng_bessel (double nu, double a, PnlRng *rng)
+{
+  double p0;
+  double tmp,u;
+  int n;
+
+  p0 = pow (a * 0.5, nu) / ( pnl_bessel_i (nu, a) * pnl_sf_gamma (nu + 1.) );
+  u = pnl_rng_uni (rng);
+  tmp = 0;
+  n = 0;
+  if ( u <= p0 ) return 0;
+  do
+    {                                                                        
+      tmp += p0;
+      p0 = p0 * a * a / (4. * (n + 1) * (n + 1 + nu));
+      n++;
+    } while ( u> tmp + p0 );
+  return n;
+}
 

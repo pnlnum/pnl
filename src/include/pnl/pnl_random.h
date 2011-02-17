@@ -132,6 +132,7 @@ extern void pnl_mat_rand_uni2(PnlMat *M, int samples, int dimension,
 extern void pnl_mat_rand_normal(PnlMat *M, int samples, int dimension, int type_generator);
 extern double pnl_rand_gamma (double a, double b, int gen);
 extern double pnl_rand_chi2  (double nu, int gen);
+extern int pnl_rand_bessel (double nu, double a, int gen);
 
 /*
  * Rng interface
@@ -162,6 +163,7 @@ extern void pnl_mat_rng_uni2(PnlMat *M, int samples, int dimension,
 extern void pnl_mat_rng_normal(PnlMat *M, int samples, int dimension, PnlRng *rng);
 extern double pnl_rng_gamma (double a, double b, PnlRng *rng);
 extern double pnl_rng_chi2  (double nu, PnlRng *rng);
+extern int pnl_rng_bessel (double nu, double a, PnlRng *rng);
 
 
 /*
