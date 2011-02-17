@@ -58,7 +58,7 @@ int amos_zwrsk (double *zrr, double *zri, double *fnu, int *kode,const int *n,
     {
       goto L50;
     }
-  amos_zrati (zrr, zri, fnu, n, &yr[1], &yi[1], tol);
+  pnl_zrati (zrr, zri, fnu, n, &yr[1], &yi[1], tol);
   /*----------------------------------------------------------------------- 
    *    RECUR FORWARD ON I(FNU+1,Z) = R(FNU,Z)*I(FNU,Z), 
    *    R(FNU+J-1,Z)=Y(J),  J=1,...,N 
