@@ -38,7 +38,7 @@ static doublereal c_b26 = 0.;
     extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *, 
 	    doublereal *, integer *);
     static integer ktemp;
-    extern doublereal dlamc3_(doublereal *, doublereal *);
+    extern doublereal pnl_dlamc3(doublereal *, doublereal *);
     extern /* Subroutine */ int dlasd4_(integer *, integer *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, integer *);
@@ -275,7 +275,7 @@ static doublereal c_b26 = 0.;
 
     i__1 = *k;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dsigma[i__] = dlamc3_(&dsigma[i__], &dsigma[i__]) - dsigma[i__];
+	dsigma[i__] = pnl_dlamc3(&dsigma[i__], &dsigma[i__]) - dsigma[i__];
 /* L20: */
     }
 

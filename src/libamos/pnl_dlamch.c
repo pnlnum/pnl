@@ -13,7 +13,7 @@
 static int pnl_lsame (const char *ca,const  char *cb);
 static int pnl_dlamc1 (int *beta, int *t, int *rnd, int *ieee1);
 static int pnl_dlamc2 (int *beta, int *t, int *rnd, double *eps,int *emin, double *rmin,int *emax, double *rmax);
-static double pnl_dlamc3 (double *a, double *b);
+double pnl_dlamc3 (double *a, double *b);
 static  int pnl_dlamc4 (int *emin, double *start, int *base);
 static  int pnl_dlamc5 (int *beta, int *p, int *emin, int *ieee, int *emax, double *rmax);
 
@@ -582,7 +582,7 @@ static int pnl_dlamc2 (int *beta, int *t, int *rnd, double *eps,
  */
 
 
-static double pnl_dlamc3 (double *a, double *b)
+double pnl_dlamc3 (double *a, double *b)
 {
   double ret_val;
   ret_val = *a + *b;

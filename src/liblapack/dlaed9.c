@@ -101,7 +101,7 @@
 	    doublereal *, integer *), dlaed4_(integer *, integer *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, integer *);
-    extern doublereal dlamc3_(doublereal *, doublereal *);
+    extern doublereal pnl_dlamc3(doublereal *, doublereal *);
     extern /* Subroutine */ int xerbla_(char *, integer *);
 #define q_ref(a_1,a_2) q[(a_2)*q_dim1 + a_1]
 #define s_ref(a_1,a_2) s[(a_2)*s_dim1 + a_1]
@@ -164,7 +164,7 @@
 
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dlamda[i__] = dlamc3_(&dlamda[i__], &dlamda[i__]) - dlamda[i__];
+	dlamda[i__] = pnl_dlamc3(&dlamda[i__], &dlamda[i__]) - dlamda[i__];
 /* L10: */
     }
 

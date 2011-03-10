@@ -187,7 +187,7 @@
 	    doublereal *, doublereal *, integer *, doublereal *, integer *, 
 	    doublereal *, doublereal *, integer *), dcopy_(integer *, 
 	    doublereal *, integer *, doublereal *, integer *);
-    extern doublereal dlamc3_(doublereal *, doublereal *);
+    extern doublereal pnl_dlamc3(doublereal *, doublereal *);
     static doublereal dj;
     extern /* Subroutine */ int dlascl_(char *, integer *, integer *, 
 	    doublereal *, doublereal *, integer *, integer *, doublereal *, 
@@ -318,7 +318,7 @@
 		    if (z__[i__] == 0. || poles_ref(i__, 2) == 0.) {
 			work[i__] = 0.;
 		    } else {
-			work[i__] = poles_ref(i__, 2) * z__[i__] / (dlamc3_(&
+			work[i__] = poles_ref(i__, 2) * z__[i__] / (pnl_dlamc3(&
 				poles_ref(i__, 2), &dsigj) - diflj) / (
 				poles_ref(i__, 2) + dj);
 		    }
@@ -329,7 +329,7 @@
 		    if (z__[i__] == 0. || poles_ref(i__, 2) == 0.) {
 			work[i__] = 0.;
 		    } else {
-			work[i__] = poles_ref(i__, 2) * z__[i__] / (dlamc3_(&
+			work[i__] = poles_ref(i__, 2) * z__[i__] / (pnl_dlamc3(&
 				poles_ref(i__, 2), &dsigjp) + difrj) / (
 				poles_ref(i__, 2) + dj);
 		    }
@@ -377,7 +377,7 @@
 			work[i__] = 0.;
 		    } else {
 			d__1 = -poles_ref(i__ + 1, 2);
-			work[i__] = z__[j] / (dlamc3_(&dsigj, &d__1) - 
+			work[i__] = z__[j] / (pnl_dlamc3(&dsigj, &d__1) - 
 				difr_ref(i__, 1)) / (dsigj + poles_ref(i__, 1)
 				) / difr_ref(i__, 2);
 		    }
@@ -389,7 +389,7 @@
 			work[i__] = 0.;
 		    } else {
 			d__1 = -poles_ref(i__, 2);
-			work[i__] = z__[j] / (dlamc3_(&dsigj, &d__1) - difl[
+			work[i__] = z__[j] / (pnl_dlamc3(&dsigj, &d__1) - difl[
 				i__]) / (dsigj + poles_ref(i__, 1)) / 
 				difr_ref(i__, 2);
 		    }

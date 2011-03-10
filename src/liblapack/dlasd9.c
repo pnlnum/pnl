@@ -116,7 +116,7 @@
     static doublereal diflj, difrj, dsigj;
     extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *, 
 	    doublereal *, integer *);
-    extern doublereal dlamc3_(doublereal *, doublereal *);
+    extern doublereal pnl_dlamc3(doublereal *, doublereal *);
     extern /* Subroutine */ int dlasd4_(integer *, integer *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, integer *);
@@ -189,7 +189,7 @@
 
     i__1 = *k;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dsigma[i__] = dlamc3_(&dsigma[i__], &dsigma[i__]) - dsigma[i__];
+	dsigma[i__] = pnl_dlamc3(&dsigma[i__], &dsigma[i__]) - dsigma[i__];
 /* L10: */
     }
 
@@ -268,13 +268,13 @@
 	work[j] = -z__[j] / diflj / (dsigma[j] + dj);
 	i__2 = j - 1;
 	for (i__ = 1; i__ <= i__2; ++i__) {
-	    work[i__] = z__[i__] / (dlamc3_(&dsigma[i__], &dsigj) - diflj) / (
+	    work[i__] = z__[i__] / (pnl_dlamc3(&dsigma[i__], &dsigj) - diflj) / (
 		    dsigma[i__] + dj);
 /* L60: */
 	}
 	i__2 = *k;
 	for (i__ = j + 1; i__ <= i__2; ++i__) {
-	    work[i__] = z__[i__] / (dlamc3_(&dsigma[i__], &dsigjp) + difrj) / 
+	    work[i__] = z__[i__] / (pnl_dlamc3(&dsigma[i__], &dsigjp) + difrj) / 
 		    (dsigma[i__] + dj);
 /* L70: */
 	}

@@ -7209,8 +7209,6 @@ extern int C2F(zupmtr)(char *side, char *uplo, char *trans, int *m,
                        int *n, dcomplex *ap, dcomplex *tau, dcomplex *c__, 
                        int *ldc, dcomplex *work, int *info);
 
-extern int C2F(dlamc1)(int *beta, int *t, int *rnd, int *ieee1);
-
 double C2F(dsecnd)(void);
 
 extern int C2F(ilaver)(int *vers_major__, int *vers_minor__, int *vers_patch__);
@@ -7236,19 +7234,7 @@ extern int C2F(slamc5)(int *beta, int *p, int *emin,
 
 extern double C2F(dlamch)(char *cmach);
 
-extern int C2F(dlamc1)(int *beta, int *t, int *rnd, int
-                       *ieee1);
-
-extern int C2F(dlamc2)(int *beta, int *t, int *rnd,
-                       double *eps, int *emin, double *rmin, int *emax,
-                       double *rmax);
-
-double C2F(dlamc3)(double *a, double *b);
-
-extern int C2F(dlamc4)(int *emin, double *start, int *base);
-
-extern int C2F(dlamc5)(int *beta, int *p, int *emin,
-                       int *ieee, int *emax, double *rmax);
+double pnl_dlamc3(double *a, double *b);
 
 extern int C2F(ilaenv)(int *ispec, char *name__, char *opts, int *n1, 
                        int *n2, int *n3, int *n4);

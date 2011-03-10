@@ -135,7 +135,7 @@
 	    *), dlaed4_(integer *, integer *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, integer *);
     static integer n2;
-    extern doublereal dlamc3_(doublereal *, doublereal *);
+    extern doublereal pnl_dlamc3(doublereal *, doublereal *);
     static integer n12, ii, n23;
     extern /* Subroutine */ int dlacpy_(char *, integer *, integer *, 
 	    doublereal *, integer *, doublereal *, integer *), 
@@ -197,7 +197,7 @@
 
     i__1 = *k;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dlamda[i__] = dlamc3_(&dlamda[i__], &dlamda[i__]) - dlamda[i__];
+	dlamda[i__] = pnl_dlamc3(&dlamda[i__], &dlamda[i__]) - dlamda[i__];
 /* L10: */
     }
 
