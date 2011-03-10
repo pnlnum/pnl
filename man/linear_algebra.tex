@@ -107,7 +107,8 @@ There are no special functions to access the size of a vector, instead the field
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_from_file}
   {const char \ptr file}
   \sshortdescribe Reads a vector from a file and creates the corresponding
-  \refstruct{PnlVect}.  
+  \refstruct{PnlVect}. The data might be stored as a single blank separated line
+  or as a one column file with one element per line.
 
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_copy}{const
     \refstruct{PnlVect} \ptr v}
@@ -214,10 +215,11 @@ Equivalently to these functions, there exist macros for {\bf \refstruct{PnlVect}
 \item \describefun{void}{pnl_vect_print_nsp}{const \refstruct{PnlVect} \ptr V}
   \sshortdescribe Prints a vector to the standard output in a format
   compatible with Nsp.  
-
 \item \describefun{void}{pnl_vect_fprint_nsp}{FILE \ptr fic, const
     \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Prints a vector to a file in a format compatible with Nsp.
+  \sshortdescribe Prints a vector to a file in a format compatible with Nsp. The
+  saved vector can be reloaded by the function
+  \reffun{pnl_vect_create_from_file}.
 \end{itemize}
 
 \subparagraph{Applying external operation to vectors}
@@ -666,7 +668,14 @@ and the size of the matrix.
   terms in a \refstruct{PnlVect}.
 
 \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_create_from_file}{const char \ptr file}
-  \sshortdescribe Reads a matrix from a file and creates the corresponding \refstruct{PnlMat}.  
+  \sshortdescribe Reads a matrix from a file and creates the corresponding
+  \refstruct{PnlMat}. The following conventions are used for the storage in a
+  file:
+  \begin{itemize}
+  \item one row of the matrix corresponds to one line of the file
+  \item the elemnts of a row should be separated by blanks (spaces or tabs) and
+    nothing else (no comma or semi-colon separators are detected).
+  \end{itemize}
 
 \item \describefun{void}{pnl_mat_free}{\refstruct{PnlMat} \ptr \ptr M}
   \sshortdescribe Frees a \refstruct{PnlMat} and sets \var{\ptr M} to \var{NULL} 
@@ -789,7 +798,9 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 
 \item \describefun{void}{pnl_mat_fprint_nsp}{FILE \ptr fic, const
     \refstruct{PnlMat} \ptr M}
-  \sshortdescribe Prints a matrix to a file in a format compatible with Nsp.
+  \sshortdescribe Prints a matrix to a file in a format compatible with Nsp. The
+  saved matrix can be reloaded by the function
+  \reffun{pnl_mat_create_from_file}.
 \end{itemize}
 
 \paragraph{Applying external operations}
