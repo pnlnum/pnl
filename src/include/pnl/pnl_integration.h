@@ -42,7 +42,7 @@ extern int pnl_integration_qagp (PnlFunc *f, double a, double b, const
                                  double *abserr, int *neval);
 
 extern int pnl_ode_rkf45 (PnlODEFunc *f, double *y, double t,
-                          double tout, double *relerr, double abserr, int
+                          double tout, double relerr, double abserr, int
                           *flag);
 extern int pnl_ode_rkf45_step (PnlODEFunc *f, double *y, double
                                *t, double tout, double *relerr, double

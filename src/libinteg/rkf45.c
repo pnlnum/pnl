@@ -222,7 +222,7 @@ static int fehl (PnlODEFunc *f,  double *y, double *t, double *h,
  */
 
 int pnl_ode_rkf45 (PnlODEFunc *f, double *y, double t, double tout, 
-                   double *relerr, double abserr, int *flag)
+                   double relerr, double abserr, int *flag)
 {
   int k1, k2, k3, k4, k5, k6, k1m, neqn;
   double *work; int *iwork;
@@ -241,7 +241,7 @@ int pnl_ode_rkf45 (PnlODEFunc *f, double *y, double t, double tout,
   k5 = k4 + neqn;
   k6 = k5 + neqn;
 
-  rkfs (f, y, &t, &tout, relerr, &abserr, flag, &work[0],
+  rkfs (f, y, &t, &tout, &relerr, &abserr, flag, &work[0],
         &work[k1m], &work[k1], &work[k2], &work[k3], &work[k4],
         &work[k5], &work[k6], &work[k6 + 1], &iwork[0], &iwork[1],
         &iwork[2], &iwork[3], &iwork[4]);
@@ -257,6 +257,7 @@ int pnl_ode_rkf45_step (PnlODEFunc *f, double *y, double *t,
 {
   int k1, k2, k3, k4, k5, k6, k1m, neqn;
   neqn = f->neqn;
+  *iflag = - 2;
   /* Compute indices for the splitting of the work array */
   k1m = neqn;
   k1 = k1m + 1;
