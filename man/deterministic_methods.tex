@@ -579,6 +579,92 @@ We provide the following two macros to evaluate a \refstruct{PnlFunc} or
 
 
 %% FFT function
+
+\subsection{Ordinary differential equations}
+\subsubsection{Short Description}
+
+To use these functionalities, you should include \verb!pnl_integration.h!.
+
+These functions are designed for numerically solving $n-$dimensional first order
+ordinary differential equation of the general form
+\begin{equation*}
+  \frac{dy_i}{dt}(t) = f_i(t, y_1(t), \cdots, y_n(t)) 
+\end{equation*}
+The system of equations is defined by the following structure
+\begin{verbatim}
+typedef struct
+{
+  void (*function) (int neqn, double t, const double *y, double *yp, void *params);
+  int neqn; 
+  void *params;
+} PnlODEFunc ;
+\end{verbatim}
+
+\begin{itemize}
+\item \describevar{int}{neqn} 
+  \sshortdescribe Number of equations
+\item \describevar{void \ptr}{params} 
+  \sshortdescribe An untyped structure used to pass extra
+  arguments to the function \var{f} defining the system
+\item \describefun*{void}{(\ptr\ function)}{int neqn, double t, const double \ptr
+    y, double \ptr yp, void \ptr params}
+  \sshortdescribe After calling the fuction, \var{yp} should be defined as
+  follows \var{yp_i = f_i(neqn, t, y, params)}. \var{y} and \var{yp} should be
+  both of size \var{neqn}
+\end{itemize}
+We provide the following macro to evaluate a \refstruct{PnlODEFunc}
+at a given point
+\begin{verbatim}
+#define PNL_EVAL_ODEFUNC(F, t, y, yp) \
+        (*((F)->function))((F)->neqn, t, y, yp, (F)->params)
+\end{verbatim}
+
+\subsubsection{Functions}
+
+\begin{itemize}
+\item \describefun{int}{pnl_ode_rkf45}{\refstruct{PnlODEFunc} \ptr f, double
+    \ptr y, double t, double t_out, double relerr, double abserr, int \ptr flag}
+  \sshortdescribe This function computes the solution of the system defined by
+  the \refstruct{PnlODEFunc} \var{f} at the point \var{t_out}. On input,
+  $\var{(t,y)}$ should be the initial condition, \var{abserr,relerr} are the
+  maximum absolute and relative errors for local error tests (at each step,
+    \var{abs(local error)} should be less that \var{relerr * abs(y) + abserr}).
+  The function returns an error \var{OK} or \var{FAIL}. In case of an \var{OK}
+  code, the \var{y} contains the solution computed at \var{t_out}, in case of a
+  \var{FAIL} code, \var{flag} should be examine to determine the reason of the
+  error. Here are the different possible values for \var{flag}
+  \begin{itemize}
+  \item \var{flag = 2} : integration reached \var{t_out}, it indicates
+    successful return and is the normal mode for continuing integration.
+ \item \var{flag = 3} : integration was not completed because relative error
+   tolerance was too small. relerr has been increased appropriately for
+   continuing.
+ \item \var{flag = 4} : integration was not completed because more than 3000
+   derivative evaluations were needed. this is approximately 500 steps.
+ \item \var{flag = 5} : integration was not completed because solution vanished
+   making a pure relative error test impossible. must use non-zero abserr to
+   continue.  using the one-step integration mode for one step is a good way to
+   proceed.
+ \item \var{flag = 6} : integration was not completed because requested accuracy
+   could not be achieved using smallest allowable stepsize. user must increase
+   the error tolerance before continued integration can be attempted.
+ \item \var{flag = 7} : it is likely that rkf45 is inefficient for solving this
+   problem. too much output is restricting the natural stepsize choice. use the
+   one-step integrator mode. see \reffun{pnl_ode_rkf45_step}.
+ \item \var{flag = 8} : invalid input parameters this indicator occurs if any of
+   the following is satisfied -   neqn <= 0, t=tout,  relerr or abserr <= 0.
+  \end{itemize}
+\item \describefun{int}{pnl_ode_rkf45_step}{\refstruct{PnlODEFunc} \ptr f,
+    double \ptr y, double \ptr t, double t_out, double \ptr relerr, double
+    abserr, double \ptr work, int \ptr iwork, int \ptr flag} 
+  \sshortdescribe Same as \reffun{pnl_ode_rkf45} but it only computes one step
+  of integration in the direction of \var{t_out}. \var{work} and \var{iwork} are
+  working arrays of size \var{3 + 6 * neqn} and \var{5} respectively and should
+  remain untouched between successive calls to the function. 
+  On output \var{t} holds the point at which integration stopped and \var{y} the
+  value of the solution at that point.
+\end{itemize}
+
 \subsection{Fast Fourier Transform}
 \subsubsection{Short Description}
 

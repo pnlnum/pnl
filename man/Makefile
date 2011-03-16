@@ -1,4 +1,6 @@
-do: manual
+all: pdf
+
+pdf: manual
 
 TEXFILES=$(wildcard *.tex)
 
