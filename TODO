@@ -20,4 +20,10 @@
 
 - interface dgesvd
 
-- Runge Kutta
+- Tests should be refactored.
+
+- Recode Sobol
+
+- Integrate the latest version of DCMT
+
+- Linear algebra decomposition methods should return FAIL or OK
