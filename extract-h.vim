@@ -4,7 +4,8 @@
 
 function! JLExtractHeader ()
     let l:line = getline(".")
-    let l:line = substitute(l:line, 'extern \+\([a-zA-Z0-9_ \*]\+\) \+\([a-zA-Z0-9_]\+\) *(\(.*\));', '\\item \\describefun{\1}{\2}{\3}', 'eI')
+    let l:line = substitute(l:line, 'extern \+', '', 'eI')
+    let l:line = substitute(l:line, '\([a-zA-Z0-9_ \*]\+\) \+\([a-zA-Z0-9_]\+\) *(\(.*\));', '\\item \\describefun{\1}{\2}{\3}', 'eI')
     let l:line = substitute(l:line, '*', '\\ptr ', 'ge')
     let l:line = substitute(l:line, '\(Pnl[a-zA-Z]\+\)', '\\refstruct{\1}', 'geI')
     call setline(".",l:line)
