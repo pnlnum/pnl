@@ -41,6 +41,13 @@ extern int pnl_integration_qagp (PnlFunc *f, double a, double b, const
                                  double epsrel, int limit, double *result,
                                  double *abserr, int *neval);
 
+extern int pnl_ode_rkf45 (PnlODEFunc *f, double *y, double t,
+                          double tout, double *relerr, double abserr, int
+                          *flag);
+extern int pnl_ode_rkf45_step (PnlODEFunc *f, double *y, double
+                               *t, double tout, double *relerr, double
+                               abserr, double *work, int *iwork, int
+                               *iflag);
 
 #ifdef __cplusplus
 }

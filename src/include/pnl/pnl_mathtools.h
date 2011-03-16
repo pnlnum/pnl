@@ -211,7 +211,7 @@ extern int pnl_isinf (double x);
 #define WRONG 1
 #define FAIL 1 /* synonym of WRONG (more menaningful) */
 
-/*
+/**
  * f: R --> R
  * The function  pointer returns f(x)
  */
@@ -222,7 +222,7 @@ typedef struct
 } PnlFunc ;
 #define PNL_EVAL_FUNC(F, x) (*((F)->function))(x, (F)->params)
 
-/*
+/**
  * f: R^2 --> R
  * The function pointer returns f(x)
  */
@@ -233,7 +233,7 @@ typedef struct
 } PnlFunc2D ;
 #define PNL_EVAL_FUNC2D(F, x, y) (*((F)->function))(x, y, (F)->params)
 
-/*
+/**
  * f: R --> R
  * The function pointer computes f(x) and Df(x) and stores them in fx
  * and dfx respectively
@@ -245,7 +245,7 @@ typedef struct
 } PnlFuncDFunc ;
 #define PNL_EVAL_FUNC_DFUNC(F, x, fx, dfx) (*((F)->function))(x, fx, dfx, (F)->params)
 
-/*
+/**
  * f: R^n --> R
  * The function pointer returns f(x)
  */
@@ -256,7 +256,7 @@ typedef struct
 } PnlRnFuncR ;
 #define PNL_EVAL_RNFUNCR(F, x) (*((F)->function))(x, (F)->params)
 
-/*
+/**
  * f: R^n --> R^m
  * The function pointer computes the vector f(x) and stores it in
  * fx (vector of size m)
@@ -268,14 +268,14 @@ typedef struct
 } PnlRnFuncRm ;
 #define PNL_EVAL_RNFUNCRM(F, x, fx) (*((F)->function))(x, fx, (F)->params)
 
-/*
+/**
  * Synonymous of PnlRnFuncRm for f:R^n --> R^n 
  */
 typedef PnlRnFuncRm PnlRnFuncRn;
 #define PNL_EVAL_RNFUNCRN  PNL_EVAL_RNFUNCRM
 
 
-/*
+/**
  * f: R^n --> R^m
  * The function pointer computes the vector f(x) and stores it in fx
  * (vector of size m) 
@@ -290,12 +290,35 @@ typedef struct
 } PnlRnFuncRmDFunc ;
 #define PNL_EVAL_RNFUNCRM_DFUNC(F, x, dfx) (*((F)->Dfunction))(x, dfx, (F)->params)
 
-/*
+/**
  * Synonymous of PnlRnFuncRmDFunc for f:R^n --> R^m
  */
 typedef PnlRnFuncRmDFunc PnlRnFuncRnDFunc;
 #define PNL_EVAL_RNFUNCRN_DFUNC PNL_EVAL_RNFUNCRM_DFUNC
 
+/**
+ * ODE functions
+ * yp_i (t) = dy_i(t)/dt
+ *
+ */
+typedef struct
+{
+  /** 
+   * yp_i (t) = dy_i(t)/dt
+   * 
+   * @param[in] neqn number of equations
+   * @param[in] t the point at which to evaluate the function
+   * @param[in] y a C array of size neqn
+   * @param[out] yp a C array of size neqn (must be already allocated).
+   * Contains on output dy(t)/dt
+   * @param[in] params a generic pointer containing extra parameters involved
+   * in the equation
+   */
+  void (*function) (int neqn, double t, const double *y, double *yp, void *params);
+  int neqn; /*!< number of equations of the system */
+  void *params;
+} PnlODEFunc ;
+#define PNL_EVAL_ODEFUNC(F, t, y, yp) (*((F)->function))((F)->neqn, t, y, yp, (F)->params)
 
 extern void pnl_qsort (void *a, int n, int es, int lda, int *t, int ldt, int use_index, int (*cmp)(void const *, void const *));
 
