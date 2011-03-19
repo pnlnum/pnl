@@ -17,6 +17,7 @@ pnl-mpi_test
 random_test
 rng-mpi_test
 root_test
+saveload_test
 solver_iterativ_test
 special_func_test
 speed_test
