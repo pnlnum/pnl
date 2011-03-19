@@ -15,10 +15,8 @@ bin
 config.h
 config.status
 configure
-pnl-mpi
-rng-mpi
-saveload_test
-testpnl
+doc/html
+doc/latex
 include
 lib
 libtool
