@@ -19,6 +19,10 @@ extern int verbose;
 extern int pnl_test_eq (double x, double y, double relerr, const char *label, const char *fmt, ...);
 extern int pnl_test_eq_rel (double x, double y, double relerr, const char *label, const char *fmt, ...);
 extern int pnl_test_eq_abs (double x, double y, double abserr, const char *label, const char *fmt, ...);
+extern int pnl_test_mat_eq(const PnlMat *X, const PnlMat *Y, double relerr, const char *str, const char *fmt, ...);
+extern int pnl_test_mat_eq_rel(const PnlMat *X, const PnlMat *Y, double relerr, const char *str, const char *fmt, ...);
+extern int pnl_test_mat_eq_abs(const PnlMat *X, const PnlMat *Y, double relerr, const char *str, const char *fmt, ...);
+
 extern void pnl_test_init();
 extern int pnl_test_finalize();
 
