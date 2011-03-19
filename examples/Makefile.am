@@ -13,7 +13,7 @@ solver_iterativ_test    special_func_test   speed_test     \
 tridiag_test            vector_test
 
 TESTS=$(check_PROGRAMS) 
-
+build-tests: $(TESTS)
 
 band_matrix_test_SOURCES=band_matrix_test.c
 band_matrix_test_LDADD=../src/libpnl.la ${some_extra_libs}
