@@ -46,7 +46,7 @@ int main (int argc, char *argv[])
 {
   int i;
   double tol  = 1E6 * DBL_EPSILON;
-  pnl_init_tests ();
+  pnl_test_init ();
   if ( argc == 2 && strcmp (argv[1], "-v") == 0 )
     {
       verbose = 1;
@@ -56,11 +56,11 @@ int main (int argc, char *argv[])
       struct complex_tests t = list_tst[i];
       dcomplex arg = Complex(t.arg_r, t.arg_i);
       dcomplex res = (t.f)(arg);
-      pnl_eq_rel (res.r, t.res_r, tol, t.label, 
+      pnl_test_eq (res.r, t.res_r, tol, t.label, 
                   "computed at (%g,%g)", t.arg_r, t.arg_i);
-      pnl_eq_abs (res.i, t.res_i, tol, t.label, 
+      pnl_test_eq (res.i, t.res_i, tol, t.label, 
                   "computed at (%g,%g)", t.arg_r, t.arg_i);
     }
-  pnl_finalize_tests ("Complex Functions");
+  pnl_test_finalize("Complex Functions");
   return OK;
 }
