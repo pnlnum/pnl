@@ -19,6 +19,9 @@
 
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_laplace.h"
+#include "tests_utils.h"
+
+const double tol = 1E-4;
 
 static double exp_law_density (double x, void *p)
 {
@@ -68,13 +71,13 @@ static void euler_test()
   M = N = 15;
   mu = 2;
   t = .5;
-  printf ("inverse laplace density Euler %f (true value %f)\n",
-          pnl_ilap_euler (&lap, t, N, M), PNL_EVAL_FUNC (&density, t));
+  pnl_test_eq(pnl_ilap_euler (&lap, t, N, M), PNL_EVAL_FUNC (&density, t),
+              tol, "pnl_ilap_euler", "");
   pnl_ilap_fft (res, &lap, t, 1E-6);
-  printf ("inverse laplace density FFT %f (true value %f)\n",
-          pnl_vect_get (res, res->size - 1), PNL_EVAL_FUNC (&density, t));
-  printf ("inverse laplace CDF %f (true value %f)\n",
-          pnl_ilap_cdf_euler (&lap, t, 0.05, 10000, 1), PNL_EVAL_FUNC (&cdf, t));
+  pnl_test_eq (pnl_vect_get (res, res->size - 1), PNL_EVAL_FUNC (&density, t),
+               tol, "pnl_ilap_ftt", "");
+  pnl_test_eq (pnl_ilap_cdf_euler (&lap, t, 0.05, 10000, 1), PNL_EVAL_FUNC (&cdf, t),
+               tol, "pnl_ilap_cdf_euler", "");
   pnl_vect_free (&res);
 }
 
@@ -95,17 +98,18 @@ static void gs_test ()
   n = 10;
   mu = 2;
   t = .5;
-  printf ("inverse laplace density Gaver Stehfest %f (true value %f)\n",
-          pnl_ilap_gs_basic (&lap, t, n), PNL_EVAL_FUNC (&density, t));
-  printf ("inverse laplace density optimal Gaver Stehfest %f (true value %f)\n",
-          pnl_ilap_gs (&lap, t, n), PNL_EVAL_FUNC (&density, t));
+  pnl_test_eq (pnl_ilap_gs_basic (&lap, t, n), PNL_EVAL_FUNC (&density, t),
+               1E-1, "pnl_ilap_gs_basic", "");
+  pnl_test_eq (pnl_ilap_gs (&lap, t, n), PNL_EVAL_FUNC (&density, t),
+               tol, "pnl_ilap_gs", "");
 
 }
 
 
 int main ()
 {
+  pnl_test_init ();
   euler_test ();
   gs_test ();
-  return OK;
+  exit(pnl_test_finalize ("Laplace transform"));
 }

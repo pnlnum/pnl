@@ -39,7 +39,7 @@ integration_test_LDADD=../src/libpnl.la ${some_extra_libs}
 lapack_test_SOURCES=lapack_test.c
 lapack_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
-laplace_test_SOURCES=laplace_test.c
+laplace_test_SOURCES=laplace_test.c tests_utils.c
 laplace_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
 list_test_SOURCES=list_test.c
