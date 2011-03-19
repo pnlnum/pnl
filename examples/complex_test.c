@@ -23,104 +23,44 @@
 #include <math.h>
 #include "pnl/pnl_complex.h"
 #include "pnl/pnl_random.h"
+#include "tests_utils.h"
 
-static void Csqrt_test ()
+struct complex_tests
 {
-  dcomplex z, c;
-  z = Complex (3., 5.);
-  c = Csqrt (z);
-  printf("Csqrt(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
-  z = Complex (5., 3.);
-  c = Csqrt (z);
-  printf("Csqrt(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
-}
+  char *label;
+  dcomplex (*f) (dcomplex);
+  double arg_r;
+  double arg_i;
+  double res_r;
+  double res_i;
+};
 
-static void Clog_test ()
+struct complex_tests list_tst [] =
 {
-  dcomplex z, c;
-  z = Complex (3., 5.);
-  c = Clog (z);
-  printf("Clog(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
-  z = Complex (-5., 3.);
-  c = Clog (z);
-  printf("Clog(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
-}
+#include "complex_test.dat"
+    { NULL, NULL, 0, 0, 0, 0}
+};
 
-static void Cpow_test ()
+
+int main (int argc, char *argv[])
 {
-  dcomplex a, b, c, d;
-  a = Complex (3., 5.);
-  b = Complex (2., -1.5);
-  c = Cpow (a, b);
-  d = Cpow_real (a, Creal(b));
-  printf("Cpow(%f + %f i, %f + %f i) = %f + %f i\n", CMPLX(a), CMPLX(b), CMPLX(c));
-  printf("Cpow(%f + %f i, %f ) = %f + %f i\n", CMPLX(a), Creal(b), CMPLX(d));
-  a = Complex (-3., 5.);
-  b = Complex (2., -1.5);
-  c = Cpow (a, b);
-  c = Cpow (a, b);
-  printf("Cpow(%f + %f i, %f + %f i) = %f + %f i\n", CMPLX(a), CMPLX(b), CMPLX(c));
-  printf("Cpow(%f + %f i, %f ) = %f + %f i\n", CMPLX(a), Creal(b), CMPLX(d));
-}
-
-static void Ctrigo_test ()
-{
-  dcomplex z, c;
-  z = Complex (3., 5.);
-  c = Ccos (z);
-  printf("Ccos(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
-  c = Csin (z);
-  printf("Csin(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
-  c = Ctan (z);
-  printf("Ctan(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
-  c = Ccotan (z);
-  printf("Ccotan(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
-  c = Ccosh (z);
-  printf("Ccosh(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
-  c = Csinh (z);
-  printf("Csinh(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
-  c = Ctanh (z);
-  printf("Ctanh(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
-  c = Ccotanh (z);
-  printf("Ccotanh(%f + %f i) = %f + %f i\n", z.r, z.i, c.r, c.i);
-}
-
-static void Cgamma_test ()
-{
-  dcomplex z, c1, c2;
-  z = Complex (3., 2.);
-  c1 = Ctgamma (z);
-  c2 = Clgamma (z);
-  printf("Cgamma(%f + %f i) = %f + %f i\n", CMPLX(z), CMPLX(c1));
-  printf("Clgamma(%f + %f i) = %f + %f i\n", CMPLX(z), CMPLX(c2));
-  z = Complex (-3., 2.);
-  c1 = Ctgamma (z);
-  c2 = Clgamma (z);
-  printf("Cgamma(%f + %f i) = %f + %f i\n", CMPLX(z), CMPLX(c1));
-  printf("Clgamma(%f + %f i) = %f + %f i\n", CMPLX(z), CMPLX(c2));
-} 
-
-static void Cdiv_test ()
-{
-  dcomplex z1, z2;
-  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  pnl_rand_init (gen, 1, 1);
-  z1 = Complex (pnl_rand_uni (gen), pnl_rand_uni (gen));
-  z2 = Complex (pnl_rand_uni (gen), pnl_rand_uni (gen));
-
-  printf ("(%.12f + %.12f * %%i) / (%.12f + %.12f * %%i) = (%.12f + %.12f * %%i)\n", CMPLX(z1), CMPLX(z2), CMPLX(Cdiv(z1,z2)));
-  printf ("%.12f / (%.12f + %.12f * %%i) = (%.12f + %.12f * %%i)\n", z1.r, CMPLX(z2), CMPLX(RCdiv(z1.r,z2)));
-  printf ("(%.12f + %.12f * %%i) / %.12f = (%.12f + %.12f * %%i)\n", CMPLX(z1), z2.r, CMPLX(CRdiv(z1,z2.r)));
-} 
-
-
-int main ()
-{
-  Csqrt_test ();
-  Clog_test ();
-  Cpow_test ();
-  Ctrigo_test ();
-  Cgamma_test ();
-  Cdiv_test ();
+  int i;
+  double tol  = 1E6 * DBL_EPSILON;
+  pnl_init_tests ();
+  if ( argc == 2 && strcmp (argv[1], "-v") == 0 )
+    {
+      verbose = 1;
+    }
+  for ( i=0 ; list_tst[i].f != NULL ; i++ )
+    {
+      struct complex_tests t = list_tst[i];
+      dcomplex arg = Complex(t.arg_r, t.arg_i);
+      dcomplex res = (t.f)(arg);
+      pnl_eq_rel (res.r, t.res_r, tol, t.label, 
+                  "computed at (%g,%g)", t.arg_r, t.arg_i);
+      pnl_eq_abs (res.i, t.res_i, tol, t.label, 
+                  "computed at (%g,%g)", t.arg_r, t.arg_i);
+    }
+  pnl_finalize_tests ("Complex Functions");
   return OK;
 }

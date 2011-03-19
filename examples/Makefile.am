@@ -21,7 +21,7 @@ band_matrix_test_LDADD=../src/libpnl.la ${some_extra_libs}
 basis_test_SOURCES=basis_test.c
 basis_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
-complex_test_SOURCES=complex_test.c
+complex_test_SOURCES=complex_test.c tests_utils.c
 complex_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
 cumulfunc_test_SOURCES=cumulfunc_test.c
@@ -94,4 +94,5 @@ saveload_test_CFLAGS=@MPI_CFLAGS@ $(AM_CFLAGS)
 saveload_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
 endif
+
 
