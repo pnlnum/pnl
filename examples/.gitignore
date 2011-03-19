@@ -11,7 +11,6 @@ list_test
 mathtools_test
 matrix_test
 ode_test
-ode_test.c
 optim_test
 pnl-mpi_test
 random_test

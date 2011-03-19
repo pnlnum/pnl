@@ -8,7 +8,6 @@ AM_CPPFLAGS = $(PNL_INCLUDES)
 AM_ETAGSFLAGS=--declarations
 
 pkginclude_HEADERS=                                   \
-pnl_templates_on.h               pnl_templates_off.h  \
 pnl_finance.h                    pnl_specfun.h        \
 pnl_linalgsolver.h               pnl_fft.h            \
 pnl_root.h                       pnl_complex.h        \
