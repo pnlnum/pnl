@@ -134,9 +134,9 @@ int pnl_test_eq_rel (double x, double y, double relerr, const char *str, const c
         {
           va_list ap;
           va_start (ap, fmt);
+          va_end (ap);
           printf (" (");
           vprintf (fmt, ap);
-          va_end (ap);
           printf ("  expected %.18g observed %.18g)", y, x);
         }
       printf ("\n");
@@ -177,9 +177,9 @@ int pnl_test_eq_abs (double x, double y, double abserr, const char *str, const c
         {
           va_list ap;
           va_start (ap, fmt);
+          va_end (ap);
           printf (" (");
           vprintf (fmt, ap);
-          va_end (ap);
           printf ("  expected %.18g observed %.18g)", y, x);
         }
       printf ("\n");
