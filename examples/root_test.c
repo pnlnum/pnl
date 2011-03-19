@@ -25,7 +25,7 @@
 #include "pnl/pnl_root.h"
 #include "pnl/pnl_matrix.h"
 
-#include "tests.h"
+#include "tests_utils.h"
 
 static double epsabs = 0.0001;
 static double epsrel = 0.00001;

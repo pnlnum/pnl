@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include "tests.h"
+#include "tests_utils.h"
 
 static void all_test();
 extern void random_test();

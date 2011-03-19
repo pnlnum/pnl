@@ -27,7 +27,7 @@
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_fft.h"
-#include "tests.h"
+#include "tests_utils.h"
 
 
 static void fftpack(void )

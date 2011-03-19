@@ -22,7 +22,7 @@
 #include <math.h>
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_linalgsolver.h"
-#include "tests.h"
+#include "tests_utils.h"
 
 
 /*TEST DES FONCTIONS PREMIAVECT// */

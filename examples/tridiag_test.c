@@ -23,7 +23,7 @@
 
 #include "pnl/pnl_tridiag_matrix.h"
 #include "pnl/pnl_random.h"
-#include "tests.h"
+#include "tests_utils.h"
 
 static void pnl_tridiag_mat_print_as_full (const PnlTridiagMat *T)
 {

@@ -23,7 +23,7 @@
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_band_matrix.h"
 #include "pnl/pnl_random.h"
-#include "tests.h"
+#include "tests_utils.h"
 
 /** 
  * Creates an invertible matrix of size nxn using the exponential function

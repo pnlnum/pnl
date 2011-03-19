@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "tests.h"
+#include "tests_utils.h"
 
 void run_all_test (tst_list *l)
 {

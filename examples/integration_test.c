@@ -23,7 +23,7 @@
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_integration.h"
 
-#include "tests.h"
+#include "tests_utils.h"
 
 static double x_square(double x, void *p)
 { return tan(x) ;}
