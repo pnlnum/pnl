@@ -124,6 +124,10 @@ extern int pnl_isinf (double x);
 #endif
 #define DOUBLE_MAX DBL_MAX
 
+#ifndef DBL_MIN
+#define DBL_MIN        2.2250738585072014e-308
+#endif
+
 #ifndef DBL_EPSILON
 #define DBL_EPSILON        2.2204460492503131e-16
 #endif
