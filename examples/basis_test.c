@@ -25,6 +25,7 @@
 #include "pnl/pnl_basis.h"
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_random.h"
+#include "tests_utils.h"
 
 #define function exp
 
@@ -44,7 +45,6 @@ static void exp_regression2()
 
   PnlBasis *basis;
 
-  printf("\n\n--> Regression of the exponential function on [0:0.05:5] ** \n\n");
 
   alpha = pnl_vect_create (0);
 
@@ -71,8 +71,11 @@ static void exp_regression2()
   basis = pnl_basis_create (basis_name, basis_dim, space_dim);
 
   pnl_basis_fit_ls (basis, alpha, t, y);
-  printf("coefficients of the decomposition : ");
-  pnl_vect_print (alpha);
+  if ( verbose )
+    {
+      printf("coefficients of the decomposition : ");
+      pnl_vect_print (alpha);
+    }
   /* computing the infinity norm of the error */
   err = 0.;
   for (i=0; i<t->m; i++)
@@ -81,7 +84,8 @@ static void exp_regression2()
         pnl_basis_eval (basis,alpha, pnl_mat_lget(t, i, 0));
       if (fabs(tmp) > err) err = fabs(tmp);
     }
-  printf ("L^infty error : %f \n", err);
+
+  pnl_test_eq_abs (err, 1.812972, 1E-5, "pnl_basis_eval", "exponential function on [0:0.05:5]");
 
   pnl_basis_free (&basis);
   pnl_mat_free (&t);
@@ -105,7 +109,6 @@ static void regression_multid()
   PnlVect *alpha;
 
   PnlBasis *basis;
-  printf("\n\n--> Multi dimensional regression on log (1+x[0]*x[0] + x[1]*x[1]) \n\n");
   alpha = pnl_vect_create (0);
 
   /* creating the grid */
@@ -128,14 +131,16 @@ static void regression_multid()
 
   basis_name = PNL_BASIS_HERMITIAN;
   nb_variates = 2; /* functions with values in R^2 */
-  printf ("Creating basis by specifying the number of functions\n");
   nb_func = 15; /* number of elements in the basis */
 
   basis = pnl_basis_create (basis_name, nb_func, nb_variates);
 
   pnl_basis_fit_ls (basis, alpha, t, y);
-  printf("coefficients of the decomposition : ");
-  pnl_vect_print (alpha);
+  if ( verbose )
+    {
+      printf("coefficients of the decomposition : ");
+      pnl_vect_print (alpha);
+    }
 
   /* computing the infinity norm of the error */
   err = 0.;
@@ -146,16 +151,18 @@ static void regression_multid()
       if (fabs(tmp) > err) err = fabs(tmp);
     }
 
-  printf ("L^infty error : %f \n", err);
+  pnl_test_eq_abs (err, 0.263175, 1E-5, "pnl_basis_eval", "log (1+x[0]*x[0] + x[1]*x[1]) on [-2,2]^2");
   pnl_basis_free (&basis);
 
-  printf ("\nCreating basis by specifying the total degree\n");
   degree = 4; /* total degree */
   basis = pnl_basis_create_from_degree (basis_name, degree, nb_variates);
 
   pnl_basis_fit_ls (basis, alpha, t, y);
-  printf("coefficients of the decomposition : ");
-  pnl_vect_print (alpha);
+  if ( verbose )
+    {
+      printf("coefficients of the decomposition : ");
+      pnl_vect_print (alpha);
+    }
 
   /* computing the infinity norm of the error */
   err = 0.;
@@ -166,7 +173,7 @@ static void regression_multid()
       if (fabs(tmp) > err) err = fabs(tmp);
     }
 
-  printf ("L^infty error : %f \n", err);
+  pnl_test_eq_abs (err, 0.263175, 1E-5, "pnl_basis_eval", "log (1+x[0]*x[0] + x[1]*x[1]) on [-2,2]^2");
   pnl_basis_free (&basis);
 
   pnl_mat_free (&t);
@@ -247,9 +254,9 @@ static void pnl_basis_eval_test ()
   PnlVect *V,*x,*t,*D, *alpha, *lower, *upper;
   PnlBasis *basis;
   int j,m,n,gen;
-  double t0,x0;
+  double t0,x0,tol;
 
-  printf ("\n\n--> Differentation of the regression (not normalised)\n\n");
+  tol = 1E-8;
   m=19;//nombre de polynomes
   n=50;
   D=pnl_vect_create(5);
@@ -282,31 +289,18 @@ static void pnl_basis_eval_test ()
   /* calcul des valeurs approchées des dérivées de la fonction à retrouver (1
      en temps et 2 en espace) */
   derive_approx_fonction(basis, D, alpha,t0,x0);
-  printf ("\n\n--> Differentation of the regression (normalised)\n\n");
-  printf("valeur exacte de la fonction : %f\n",
-         fonction_a_retrouver(t0,x0));
-  printf("valeur approchee de la fonction :%f \n\n",
-         pnl_vect_get(D,0));
+  pnl_test_eq_abs (pnl_vect_get(D,0), fonction_a_retrouver(t0,x0), tol,
+                   "deriv_approx_fonction", "derivative 0");
+  pnl_test_eq_abs (derive_x_approx_fonction(basis, alpha, t0, x0), 
+                   derive_x_fonction_a_retrouver(t0,x0), tol, 
+                   "deriv_approx_fonction", "derivative %% x");
+  pnl_test_eq_abs (pnl_vect_get(D,2), derive_xx_fonction_a_retrouver(t0,x0), 
+                   tol, "deriv_approx_fonction", "derivative %% xx");
+  pnl_test_eq_abs (pnl_vect_get(D,3), derive_t_fonction_a_retrouver(t0,x0),
+                   tol, "deriv_approx_fonction", "derivative %% t");
+  pnl_test_eq_abs (pnl_vect_get(D,4), derive_xt_fonction_a_retrouver(t0,x0),
+                   tol, "deriv_approx_fonction", "derivative %% tx");
 
-  printf("valeur exacte de la derivee de la fonction : %f\n",
-         derive_x_fonction_a_retrouver(t0,x0));
-  printf("valeur approchee de la derivee de la fonction :%f \n\n",
-         derive_x_approx_fonction(basis, alpha, t0, x0));
-
-  printf("valeur exacte de la derivee seconde en espace fonction : %f\n",
-         derive_xx_fonction_a_retrouver(t0,x0));
-  printf("valeur approchee de la derivee seconde en espace de la fonction  :%f \n\n",
-         pnl_vect_get(D,2));
-
-  printf("valeur exacte de la derivee seconde croisee : %f\n",
-         derive_xt_fonction_a_retrouver(t0,x0));
-  printf("valeur approchee de la derivee seconde croisee :%f \n\n",
-         pnl_vect_get(D,4));
-
-  printf("valeur exacte de la derivee en temps fonction :%f\n",
-         derive_t_fonction_a_retrouver(t0,x0));
-  printf("valeur approchee de la derivee en temps de la fonction  :%f \n",
-         pnl_vect_get(D,3));
   pnl_basis_free (&basis);
 
   /* reduced basis */
@@ -318,30 +312,17 @@ static void pnl_basis_eval_test ()
   /* calcul des valeurs approchées des dérivées de la fonction à retrouver (1
      en temps et 2 en espace) */
   derive_approx_fonction(basis, D, alpha,t0,x0);
-  printf("valeur exacte de la fonction : %f\n",
-         fonction_a_retrouver(t0,x0));
-  printf("valeur approchee de la fonction :%f \n\n",
-         pnl_vect_get(D,0));
-
-  printf("valeur exacte de la derivee de la fonction : %f\n",
-         derive_x_fonction_a_retrouver(t0,x0));
-  printf("valeur approchee de la derivee de la fonction :%f \n\n",
-         derive_x_approx_fonction(basis, alpha, t0, x0));
-
-  printf("valeur exacte de la derivee seconde en espace fonction : %f\n",
-         derive_xx_fonction_a_retrouver(t0,x0));
-  printf("valeur approchee de la derivee seconde en espace de la fonction  :%f \n\n",
-         pnl_vect_get(D,2));
-
-  printf("valeur exacte de la derivee seconde croisee : %f\n",
-         derive_xt_fonction_a_retrouver(t0,x0));
-  printf("valeur approchee de la derivee seconde croisee :%f \n\n",
-         pnl_vect_get(D,4));
-
-  printf("valeur exacte de la derivee en temps fonction :%f\n",
-         derive_t_fonction_a_retrouver(t0,x0));
-  printf("valeur approchee de la derivee en temps de la fonction  :%f \n",
-         pnl_vect_get(D,3));
+  pnl_test_eq_abs (pnl_vect_get(D,0), fonction_a_retrouver(t0,x0), tol,
+                   "deriv_approx_fonction (reduced)", "derivative 0");
+  pnl_test_eq_abs (derive_x_approx_fonction(basis, alpha, t0, x0), 
+                   derive_x_fonction_a_retrouver(t0,x0), tol, 
+                   "deriv_approx_fonction (reduced)", "derivative %% x");
+  pnl_test_eq_abs (pnl_vect_get(D,2), derive_xx_fonction_a_retrouver(t0,x0), 
+                   tol, "deriv_approx_fonction (reduced)",  "derivative %% xx");
+  pnl_test_eq_abs (pnl_vect_get(D,3), derive_t_fonction_a_retrouver(t0,x0),
+                   tol, "deriv_approx_fonction (reduced)", "derivative %% t");
+  pnl_test_eq_abs (pnl_vect_get(D,4), derive_xt_fonction_a_retrouver(t0,x0),
+                   tol, "deriv_approx_fonction (reduced)",  "derivative %% tx");
 
   pnl_basis_free (&basis);
   pnl_vect_free(&alpha);
@@ -354,28 +335,29 @@ static void pnl_basis_eval_test ()
   pnl_mat_free(&X);
 }
 
-static void hyperbolic_basis_test ()
-{
-  int dim, degree;
-  double q;
-  PnlBasis *B;
+/* static void hyperbolic_basis_test () */
+/* { */
+/*   int dim, degree; */
+/*   double q; */
+/*   PnlBasis *B; */
 
-  dim = 3;
-  degree = 3;
-  q = 0.8;
+/*   dim = 3; */
+/*   degree = 3; */
+/*   q = 0.8; */
 
-  B = pnl_basis_create_from_hyperbolic_degree (PNL_BASIS_CANONICAL, degree, q, dim);
-  pnl_basis_print (B);
-  pnl_basis_free (&B);
+/*   B = pnl_basis_create_from_hyperbolic_degree (PNL_BASIS_CANONICAL, degree, q, dim); */
+/*   pnl_basis_print (B); */
+/*   pnl_basis_free (&B); */
 
-}
+/* } */
 
 
 int main ()
 {
+  pnl_test_init ();
   exp_regression2 ();
   regression_multid ();
   pnl_basis_eval_test ();
-  hyperbolic_basis_test ();
+  pnl_test_finalize ("Basis functions");
   return OK;
 }

@@ -18,7 +18,7 @@ build-tests: $(TESTS)
 band_matrix_test_SOURCES=band_matrix_test.c
 band_matrix_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
-basis_test_SOURCES=basis_test.c
+basis_test_SOURCES=basis_test.c tests_utils.c
 basis_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
 complex_test_SOURCES=complex_test.c tests_utils.c
