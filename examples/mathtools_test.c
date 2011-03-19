@@ -34,7 +34,9 @@ static void pow_i_test ()
   x = 2.; y = pnl_pow_i (x, n);
 } 
 
-void mathtools_test ()
+
+int main ()
 {
   pow_i_test ();
+  return OK;
 } 

@@ -385,7 +385,7 @@ static void pnl_fft_real_inplace_test(void )
 }
 
 
-void dft_test()
+int main ()
 {
   /*  dft(); */
   fftpack();
@@ -394,4 +394,5 @@ void dft_test()
   pnl_fft_real2_test();
   pnl_fft_real_inplace_test();
   /*  dft_real(); */
+  return OK;
 }

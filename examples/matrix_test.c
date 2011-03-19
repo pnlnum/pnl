@@ -61,7 +61,6 @@ static void set_triangular_to_zero (PnlMat *A, char uplo)
     }
 }
 
-
 /** 
  * Creates an invertible matrix of size nxn using the exponential function
  * 
@@ -69,7 +68,7 @@ static void set_triangular_to_zero (PnlMat *A, char uplo)
  * @param n size of the matrix
  * @param gen index of the generator
  */
-void create_invertible_matrix (PnlMat *A, int n, int gen)
+static void create_invertible_matrix (PnlMat *A, int n, int gen)
 {
   PnlMat *B;
 
@@ -87,7 +86,7 @@ void create_invertible_matrix (PnlMat *A, int n, int gen)
  * @param n size of the matrix
  * @param gen index of the generator
  */
-void create_sym_pos_matrix (PnlMat *S, int n, int gen)
+static void create_sym_pos_matrix (PnlMat *S, int n, int gen)
 {
   PnlVect *b;
   double g;
@@ -1193,7 +1192,9 @@ static void all_test ()
   run_all_test (mat_tests);
 }
 
-void matrix_test()
+
+int main ()
 {
   menu_test (mat_tests);
+  return OK;
 }

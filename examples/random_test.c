@@ -223,10 +223,12 @@ static void rand_call_dcmt ()
 }  
 
 
-void random_test(void)
+
+int main ()
 {
   test_rng();
   rng_call ();
   std_call_dcmt ();
   rand_call_dcmt ();
+  return OK;
 }

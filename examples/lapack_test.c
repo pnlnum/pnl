@@ -84,7 +84,7 @@ static void pnl_mat_eigen_test ()
   printf ("v = "); pnl_vect_print_nsp (v);
   pnl_mat_free(&A);
   pnl_mat_free (&B);
-  
+
   A = pnl_mat_create_diagonalizable (n);
   printf ("A = "); pnl_mat_print_nsp (A);
   pnl_mat_eigen (v, P, A, TRUE);
@@ -170,24 +170,20 @@ static void pnl_mat_qr_test ()
   printf ("Q = "); pnl_mat_print_nsp (Q);
   printf ("R = "); pnl_mat_print_nsp (R);
   printf ("P = "); pnl_permutation_print (p);
-  
+
   pnl_mat_free (&A);
   pnl_mat_free (&Q);
   pnl_mat_free (&R);
   pnl_permutation_free (&p);
 }
 
-static tst_list lapack_tests[] =
-  {
-    MAKE_ENUM(pnl_mat_eigen_test),
-    MAKE_ENUM(pnl_mat_log_test),
-    MAKE_ENUM(pnl_mat_ls_test),
-    MAKE_ENUM(pnl_mat_qr_test),
-    MAKE_ENUM(NULL)
-  };
 
-void lapack_test()
+int main ()
 {
-  run_all_test (lapack_tests);
+  pnl_mat_eigen_test ();
+  pnl_mat_log_test ();
+  pnl_mat_ls_test ();
+  pnl_mat_qr_test ();
+  return OK;
 }
 

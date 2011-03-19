@@ -128,8 +128,9 @@ static void test_pnl_finance_function_vol_impli()
 }
 
 
-void finance_function_test(void)
+int main ()
 {
   test_pnl_finance_function_call_put();
   test_pnl_finance_function_vol_impli();
+  return OK;
 }

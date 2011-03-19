@@ -114,15 +114,13 @@ static void Cdiv_test ()
 } 
 
 
-void complex_test()
+int main ()
 {
-  printf("\n");
-  printf("TEST DES FONCTIONS PNL_COMPLEX \n");
-  printf("\n");
   Csqrt_test ();
   Clog_test ();
   Cpow_test ();
   Ctrigo_test ();
   Cgamma_test ();
   Cdiv_test ();
+  return OK;
 }

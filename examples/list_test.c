@@ -17,6 +17,7 @@
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
 
+#include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_list.h"
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_tridiag_matrix.h"
@@ -89,7 +90,9 @@ static void list_ops ()
 }
 
 
-void list_test ()
+
+int main ()
 {
   list_ops ();
+  return OK;
 }

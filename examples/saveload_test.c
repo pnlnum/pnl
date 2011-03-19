@@ -155,5 +155,5 @@ int main (int argc, char **argv)
   save_rng_array();
   load_rng_array();
   MPI_Finalize();
-  exit(0);
+  return OK;
 }

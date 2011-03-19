@@ -209,7 +209,8 @@ static void real_bessel_test ()
   printf("bessel_h2_scaled(%f, %f) = %f + %f i\n", v, z, CMPLX(zc));
 }
 
-void special_func_test ()
+
+int main ()
 {
   printf("\n");
   printf("Special function tests.\n");
@@ -219,4 +220,5 @@ void special_func_test ()
   exp_int_test();
   gamma_test ();
   hyperg_test ();
+  return OK;
 }

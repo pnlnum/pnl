@@ -146,7 +146,7 @@ static void integ_2d_test()
   printf("integration 2D (simpson rule) : %f, iter %d \n", result, nx *ny); 
 }
 
-void integration_test()
+int main ()
 {
   integration_qag_test();
   integration_qagp_test();
@@ -154,4 +154,5 @@ void integration_test()
   integration_qng_2d_test();
   integ_test();
   integ_2d_test();
+  return OK;
 }

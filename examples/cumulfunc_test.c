@@ -265,11 +265,8 @@ static void pnl_cdf_t_test()
   if (status != 0) printf("status=%d \n",status); 
 }
 
-void cumulfunc_test()
+int main ()
 {
-  printf("\n");
-  printf("TEST DES FONCTIONS DU FICHIER CUMULFUNC.C \n");
-  printf("\n");
   pnl_cdf_bet_test();
   pnl_cdf_bin_test();
   pnl_cdf_chi_test();
@@ -281,4 +278,5 @@ void cumulfunc_test()
   pnl_cdf_nor_test();
   pnl_cdf_poi_test();
   pnl_cdf_t_test();
+  return OK;
 }

@@ -253,7 +253,7 @@ static void tridiag_mat_op_tridiag_mat_test ()
 
 
 
-void tridiag_matrix_test()
+int main ()
 {
   tridiag_create_test ();
   tridiag_get_test ();
@@ -263,4 +263,5 @@ void tridiag_matrix_test()
   tridiag_syslin_test ();
   triadiag_scalar_prod_test ();
   tridiag_mat_op_tridiag_mat_test ();
+  return OK;
 }

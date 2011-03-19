@@ -107,8 +107,10 @@ void Test_Solver_no_sym(void )
   pnl_vect_free(&b);
 }
 
-void solver_iterativ_test()
+
+int main ()
 {
   Test_Solver_sym ();
   Test_Solver_no_sym ();
+  return OK;
 }

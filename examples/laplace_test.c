@@ -102,8 +102,10 @@ static void gs_test ()
 
 }
 
-void laplace_test ()
+
+int main ()
 {
   euler_test ();
   gs_test ();
+  return OK;
 }

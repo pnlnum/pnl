@@ -713,7 +713,9 @@ static void all_test ()
   run_all_test (vect_tests);
 }
 
-void vector_test()
+
+int main ()
 {
   menu_test (vect_tests);
+  return OK;
 }

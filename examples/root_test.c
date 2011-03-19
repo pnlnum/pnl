@@ -302,7 +302,8 @@ static void test_lmdif ()
   pnl_vect_free (&fvec);
 }
 
-void root_test()
+
+int main ()
 {
   brent_test () ;
   bisection_test ();
@@ -310,4 +311,5 @@ void root_test()
   find_root_test ();
   test_hybrX ();
   test_lmdif ();
+  return OK;
 }

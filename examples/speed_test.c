@@ -39,9 +39,10 @@ tst_list speed_tests[] =
   MAKE_ENUM(NULL)
 };
 
-void speed_test ()
+int main ()
 {
   menu_test(speed_tests); 
+  return OK;
 }
 
 

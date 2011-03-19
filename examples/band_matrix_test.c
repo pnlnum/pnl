@@ -25,8 +25,55 @@
 #include "pnl/pnl_random.h"
 #include "tests.h"
 
-extern void create_sym_pos_matrix (PnlMat *S, int n, int gen);
-extern void create_invertible_matrix (PnlMat *A, int n, int gen);
+/** 
+ * Creates an invertible matrix of size nxn using the exponential function
+ * 
+ * @param A Output parameter, contains a n x n intervible matrix.
+ * @param n size of the matrix
+ * @param gen index of the generator
+ */
+static void create_invertible_matrix (PnlMat *A, int n, int gen)
+{
+  PnlMat *B;
+
+  B = pnl_mat_create (n, n);
+  pnl_mat_rand_uni2 (B, n, n, 0., 1., gen);
+
+  pnl_mat_exp (A, B);
+  pnl_mat_free (&B);
+}
+
+/** 
+ * Creates a symmetric positive definite matrix of size nxn
+ * 
+ * @param S Output parameter, contains a n x n symmetric positive definite matrix.
+ * @param n size of the matrix
+ * @param gen index of the generator
+ */
+static void create_sym_pos_matrix (PnlMat *S, int n, int gen)
+{
+  PnlVect *b;
+  double g;
+  int i;
+
+  b = pnl_vect_create (n);
+  pnl_vect_rand_uni (b, n, 0., 1., gen);
+
+  /* S is set to a diagonal matrix with positive eigenvalues */
+  pnl_mat_set_double (S, 0.);
+  for ( i=0 ; i<S->n ; i++ )
+    {
+      do
+        {
+          g = fabs (pnl_rand_normal (gen));
+        }
+      while (g < 1E-4);
+      pnl_mat_set (S, i, i, g);
+    }
+
+  pnl_mat_dger (1., b, b, S);
+  pnl_vect_free (&b);
+}
 
 
 /** 
@@ -215,9 +262,10 @@ static void band_mat_syslin_test ()
   pnl_vect_free (&x);
 }
 
-void band_matrix_test()
+int main ()
 {
   basic_band_mat_test ();
   band_mat_ops_test ();
   band_mat_syslin_test ();
+  return OK;
 }

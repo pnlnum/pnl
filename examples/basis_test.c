@@ -371,10 +371,11 @@ static void hyperbolic_basis_test ()
 }
 
 
-void basis_test ()
+int main ()
 {
   exp_regression2 ();
   regression_multid ();
   pnl_basis_eval_test ();
   hyperbolic_basis_test ();
+  return OK;
 }
