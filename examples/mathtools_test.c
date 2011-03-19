@@ -38,7 +38,6 @@ int main (int argc, char *argv[])
       pnl_test_eq (res, t.res, tol, t.label, 
                   "computed at (%g,%d)", t.arg_x, t.arg_y);
     }
-  pnl_test_finalize("Mathtools Functions");
-  return OK;
+  exit(pnl_test_finalize("Mathtools Functions"));
 }
 

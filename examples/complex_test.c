@@ -61,6 +61,5 @@ int main (int argc, char *argv[])
       pnl_test_eq (res.i, t.res_i, tol, t.label, 
                   "computed at (%g,%g)", t.arg_r, t.arg_i);
     }
-  pnl_test_finalize("Complex Functions");
-  return OK;
+  exit(pnl_test_finalize("Complex Functions"));
 }
