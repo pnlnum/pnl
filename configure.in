@@ -36,8 +36,6 @@ AC_ARG_ENABLE(verbose,
    [  --disable-silent         tell libtool not to be silent], [], [enable_verbose="no"])
 AC_ARG_WITH(internal_blas,
     [  --with-internal-blas    use the internal Blas and Lapack libraries ])
-AC_ARG_WITH(gsl,
-    [  --without-gsl           do not compile with GSL library ])
 
 
 if test "$enable_verbose" = no; then
@@ -268,22 +266,6 @@ AC_TRY_COMPILE([#define C2F(name) name##_],
   AC_MSG_RESULT(no))
 
 
-###################
-## check for GSL
-###################
-USE_GSL=no
-GSL_LIBS=""
-HAVE_GSL=""
-
-if test "x$with_gsl" != "xno"; then
-   builtin(include,config/gsl.m4)
-   AX_PATH_GSL(1.10,[USE_GSL=yes])
-
-   if test "$USE_GSL" = yes; then
-      HAVE_GSL="-DHAVE_GSL"
-   fi
-fi
-
 #################
 # check for MPI
 #################
@@ -360,7 +342,6 @@ AC_SUBST(BLAS_STATIC_LIBS)
 AC_SUBST(LAPACK_STATIC_LIBS)
 AC_SUBST(STATIC_FLAG)
 AC_SUBST(LIBPNLDIR)
-AC_SUBST(HAVE_GSL)
 
 
 AC_SUBST(MPI_DIR)
