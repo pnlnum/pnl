@@ -19,14 +19,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 
-#include "pnl/pnl_vector.h"
-#include "pnl/pnl_matrix.h"
 #include "pnl/pnl_cdf.h"
 #include "pnl/pnl_finance.h"
+#include "tests_utils.h"
 
-/* Old version of premia close formula  */
+/* Old version of premia closed formula  */
 int CF_Call_BS(double s,double k,double t,double r,double divid,double sigma,double *ptprice,double *ptdelta){
   double sigmasqrt,d1,d2,delta;
   
@@ -66,16 +64,13 @@ static void test_pnl_finance_function_call_put()
   double r=0.05;
   double divid=0.01;
   double sigma=0.2;
-  double sigma2=0;
   double ptprice;
   double ptdelta;
   int error;
   CF_Put_BS(s,k,t,r,divid,sigma,&ptprice,&ptdelta);
-  printf(" old price = %f ",ptprice);
-  printf(" new price = %f ",pnl_bs_put(s,k,t,r,divid,sigma));
-  printf(" implied volatility expected = %f ",sigma);
-  sigma2 = pnl_bs_implicit_vol (0, ptprice, s, k, t, r, divid, &error);
-  printf(" computed = %f \n",sigma2);
+  pnl_test_eq (pnl_bs_put(s,k,t,r,divid,sigma), ptprice, 1E-12, "pnl_bs_put", "");
+  pnl_test_eq (pnl_bs_implicit_vol (0, ptprice, s, k, t, r, divid, &error), sigma,
+               1E-12, "pnl_bs_implicit_vol", "");
 
 }
 
@@ -88,12 +83,12 @@ static void test_pnl_finance_function_vol_impli()
   double r=0.05;
   double divid=0.01;
   double sigma0=0.2;
-  PnlVect * Strike;
-  PnlVect * Matu;
-  PnlMatInt * IsCall;
-  PnlMat * Price;
-  PnlMat * Vol;
-  PnlMat * VolImpli;
+  PnlVect *Strike;
+  PnlVect *Matu;
+  PnlMatInt *IsCall;
+  PnlMat *Price;
+  PnlMat *Vol;
+  PnlMat *VolImpli;
   
   Strike = pnl_vect_create_from_double(N, k0);
   Matu = pnl_vect_create_from_double(N, tmax);
@@ -101,23 +96,21 @@ static void test_pnl_finance_function_vol_impli()
   Price = pnl_mat_create_from_double(N, N, 0.0);
   Vol = pnl_mat_create_from_double(N, N, 0.0);
   VolImpli = pnl_mat_create_from_double(N, N, 0.0);
+  for(i=0;i<Strike->size;i++)  LET(Strike,i)-=(-N/2+i)*k0/N;
+  for(j=0;j<Matu->size;j++) LET(Matu,j)*=(double)(j+1)/(double)(N);
   for(i=0;i<Strike->size;i++)  
-    LET(Strike,i)-=(-N/2+i)*k0/N;
-  for(j=0;j<Matu->size;j++)
-    LET(Matu,j)*=(double)(j+1)/(double)(N);
-  for(i=0;i<Strike->size;i++)  
+    {
     for(j=0;j<Matu->size;j++)
       {
         *(pnl_mat_int_lget(IsCall, i, j)) = (GET(Strike, i)<s)?1:0;
         MLET(Vol, i, j) = sigma0*(1+(GET(Strike, i)-s)/s) *exp(-0.1*GET(Matu, j));
         MLET(Price, i, j) = pnl_bs_call_put (pnl_mat_int_get(IsCall, i, j), s, 
-                                             GET(Strike,i),GET(Matu,j), r, divid,MGET(Vol,i,j));
+                                             GET(Strike,i),GET(Matu,j), 
+                                             r, divid,MGET(Vol,i,j));
       }
-  /* pnl_mat_print (Price); */
+    }
   pnl_bs_matrix_implicit_vol(IsCall,Price,s,r,divid,Strike,Matu,VolImpli);
-  pnl_mat_print(VolImpli);
-  printf("\n");
-  pnl_mat_print(Vol);
+  pnl_test_mat_eq (VolImpli,Vol, 1E-5, "pnl_bs_matrix_implicit_vol", "");
   
   pnl_mat_free(&VolImpli);
   pnl_mat_free(&Vol);
@@ -130,7 +123,8 @@ static void test_pnl_finance_function_vol_impli()
 
 int main ()
 {
+  pnl_test_init ();
   test_pnl_finance_function_call_put();
   test_pnl_finance_function_vol_impli();
-  return OK;
+  exit(pnl_test_finalize("Financial functions"));
 }

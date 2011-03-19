@@ -30,7 +30,7 @@ cumulfunc_test_LDADD=../src/libpnl.la ${some_extra_libs}
 dft_test_SOURCES=dft_test.c
 dft_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
-finance_function_test_SOURCES=finance_function_test.c
+finance_function_test_SOURCES=finance_function_test.c tests_utils.c
 finance_function_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
 integration_test_SOURCES=integration_test.c
