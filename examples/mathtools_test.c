@@ -3,40 +3,42 @@
 #include <math.h>
 
 #include "pnl/pnl_mathtools.h"
+#include "tests_utils.h"
 
-static void pow_i_test ()
+struct mathtools_tests
 {
-  int n;
-  double y, x;
-  printf("Test of the integer power function.\n");
-  n = 0;
-  x = 0.; y = pnl_pow_i (x, n);
-  printf ("%f = %f^%i\n", y, x , n);
-  n = 1;
-  x = 0.; y = pnl_pow_i (x, n);
-  printf ("%f = %f^%i\n", y, x , n);
-  n = 4;
-  x = 2.; y = pnl_pow_i (x, n);
-  printf ("%f = %f^%i\n", y, x , n);
-  n = 5;
-  x = 2.; y = pnl_pow_i (x, n);
-  printf ("%f = %f^%i\n", y, x , n);
-  n = 4;
-  x = -2.; y = pnl_pow_i (x, n);
-  printf ("%f = %f^%i\n", y, x , n);
-  n = 5;
-  x = -2.; y = pnl_pow_i (x, n);
-  printf ("%f = %f^%i\n", y, x , n);
-  n = -4;
-  x = 2.; y = pnl_pow_i (x, n);
-  printf ("%f = %f^%i\n", y, x , n);
-  n = -5;
-  x = 2.; y = pnl_pow_i (x, n);
-} 
+  char *label;
+  double (*f) (double, int);
+  double arg_x;
+  int arg_y;
+  double res;
+};
 
-
-int main ()
+struct mathtools_tests list_tst [] =
 {
-  pow_i_test ();
+#include "mathtools_test.dat"
+    { NULL, NULL, 0, 0, 0}
+};
+
+
+int main (int argc, char *argv[])
+{
+  int i;
+  double tol  = 1E6 * DBL_EPSILON;
+  pnl_test_init ();
+  if ( argc == 2 && strcmp (argv[1], "-v") == 0 )
+    {
+      verbose = 1;
+    }
+  for ( i=0 ; list_tst[i].f != NULL ; i++ )
+    {
+      struct mathtools_tests t = list_tst[i];
+      /* double res = (t.f)(t.arg_x, t.arg_y); */
+      double res = pow(t.arg_x, t.arg_y);
+      pnl_test_eq (res, t.res, tol, t.label, 
+                  "computed at (%g,%d)", t.arg_x, t.arg_y);
+    }
+  pnl_test_finalize("Mathtools Functions");
   return OK;
-} 
+}
+

@@ -45,7 +45,7 @@ laplace_test_LDADD=../src/libpnl.la ${some_extra_libs}
 list_test_SOURCES=list_test.c
 list_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
-mathtools_test_SOURCES=mathtools_test.c
+mathtools_test_SOURCES=mathtools_test.c tests_utils.c
 mathtools_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
 matrix_test_SOURCES=matrix_test.c tests_utils.c
