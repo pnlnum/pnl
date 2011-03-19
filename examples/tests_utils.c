@@ -32,7 +32,7 @@ int count_fail;
 /** 
  * Initializes test counting system
  */
-void pnl_init_tests ()
+void pnl_test_init ()
 {
   count_tests = 0;
   count_ok = 0;
@@ -64,10 +64,38 @@ static void update_count_tests (int status)
  * 
  * @return 0 if all tests were succeddful and 1 otherwise
  */
-int pnl_finalize_tests (const char *str)
+int pnl_test_finalize(const char *str)
 {
   printf ("%s : %s (TOTAL : %d, PASSED : %d, FAILED %d)\n", str, (count_fail == 0) ? "OK" : "FAIL", count_tests, count_ok, count_fail);
   return ( count_fail >0 );
+}
+
+/** 
+ * Checks if |x - y| / (max(1, |y|)) < relerr
+ * 
+ * @param x computed result
+ * @param y expected result
+ * @param relerr relative error (note that when |y| < 1, it is an abolute
+ * error)
+ * @param str the name of the tested function
+ * @param fmt a format string to be passed to printf
+ * @param ... extra arguments for printf
+ * 
+ * @return FALSE or TRUE
+ */
+int pnl_test_eq(double x, double y, double relerr, const char *str, const char *fmt, ...)
+{
+  va_list ap;
+  va_start (ap, fmt);
+  va_end (ap);
+  if ( y >= 1 )
+    {
+      return pnl_test_eq_rel (x, y, relerr, str, fmt, ap);
+    }
+  else
+    {
+      return pnl_test_eq_abs (x, y, relerr, str, fmt, ap);
+    }
 }
 
 /** 
@@ -77,10 +105,12 @@ int pnl_finalize_tests (const char *str)
  * @param y exepcted value
  * @param relerr maximum relative error
  * @param str the fonctionnality tested
+ * @param fmt a format string to be passed to printf
+ * @param ... extra arguments for printf
  * 
  * @return FALSE or TRUE
  */
-int pnl_eq_rel (double x, double y, double relerr, const char *str, const char *fmt, ...)
+int pnl_test_eq_rel (double x, double y, double relerr, const char *str, const char *fmt, ...)
 {
   int status = 0;
   if ( (pnl_isnan (x) && !pnl_isnan(y)) ||
@@ -122,10 +152,12 @@ int pnl_eq_rel (double x, double y, double relerr, const char *str, const char *
  * @param y exepcted value
  * @param abserr maximum absolute error
  * @param str the fonctionnality tested
+ * @param fmt a format string to be passed to printf
+ * @param ... extra arguments for printf
  * 
  * @return FALSE or TRUE
  */
-int pnl_eq_abs (double x, double y, double abserr, const char *str, const char *fmt, ...)
+int pnl_test_eq_abs (double x, double y, double abserr, const char *str, const char *fmt, ...)
 {
   int status = 0;
   if ( (pnl_isnan (x) && !pnl_isnan(y)) ||
