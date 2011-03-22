@@ -53,24 +53,24 @@ static double indefinite (double x, void *p)
 
 static void integration_qag_test()
 {
-  double result,abserr;
+  double result,abserr,expected;
   int neval;
   PnlFunc func;
   func.function = x_square;
   func.params = NULL;
+  expected = - log(cos(1));
   pnl_integration_qag(&func,0.0,1.0,0.00001,0.000001,0,&result,&abserr,&neval);
-  printf("integration (QAGS finite interval with no singularity )\n\tres %f error %f , iter %d \n",result,abserr,neval); 
+  pnl_test_eq_abs (result, expected, abserr, "QAGS (finite interval with no singularity)", ""); 
 
   func.function = indefinite;
   func.params = NULL;
   pnl_integration_qag(&func,0,PNL_POSINF,0.00001,0.000001,0,&result,&abserr,&neval);
-  printf("integration (QAGI infinite interval) \n\tres %f true value %f , iter %d \n",result,M_EULER,neval); 
+  pnl_test_eq_abs (result, M_EULER, abserr, "QAGS (infinite interval)", ""); 
 
   func.function = singular;
   func.params = NULL;
   pnl_integration_qag(&func,0.0,10,0.00001,0.000001,0,&result,&abserr,&neval);
-  printf("integration (QAGS with singularities) \n\tres %f true value %f , iter %d \n",
-         result, 1 - cos(2.5) + exp(-2.5) - exp(-5.0),neval); 
+  pnl_test_eq_abs (result, 1 - cos(2.5) + exp(-2.5) - exp(-5.0), abserr, "QAGS (with singularities)", ""); 
 }
 
 /*
@@ -87,72 +87,76 @@ static void integration_qagp_test()
   func.function = singular;
   func.params = NULL;
   pnl_integration_qagp(&func,0.0,10,pts,0.00001,0.000001,0,&result,&abserr,&neval);
-  printf("integration (QAGP known singularities) \n\tres %f true value %f , iter %d \n",
-         result, 1 - cos(2.5) + exp(-2.5) - exp(-5.0),neval); 
-  pnl_vect_free (&pts);
+  pnl_test_eq_abs (result, 1 - cos(2.5) + exp(-2.5) - exp(-5.0), abserr, "QAGP (with known singularities)", ""); 
 }
+
 static void integration_qng_test()
 {
-  double result,abserr;
+  double result,abserr,expected;
   int neval;
   PnlFunc func;
   func.function = x_square;
   func.params = NULL;
+  expected= - log(cos(1));
   pnl_integration_qng(&func,0.0,1.0,0.00001,0.000001,&result,&abserr,&neval);
-  printf("integration (qng) res %f error %f , iter %d \n",result,abserr,neval); 
+  pnl_test_eq_abs (result, expected, abserr, "QNG", ""); 
 }
 
 static void integration_qng_2d_test()
 {
-  double result,abserr;
+  double result,abserr,expected;
   int neval;
   PnlFunc2D func;
   func.function = test_xy;
   func.params = NULL;
+  expected= - 2 * (cos(2) - 1);
   pnl_integration_qng_2d(&func,-1.0,1.0,-1.0,1.0,0.00001,0.000001,&result,&abserr,&neval);
-  printf("integration 2D (qng) res %f error %f , iter %d \n",result,abserr,neval); 
+  pnl_test_eq_abs (result, expected, abserr, "QNG 2d", ""); 
 }
 
 
 static void integ_test()
 {
-  double result;
+  double result, expected;
   PnlFunc func;
   int n = 50;
   func.function = x_square;
   func.params = NULL;
+  expected = -log(cos(1));
   result = pnl_integration(&func,0.0,1.0,n, "rect");
-  printf("integration (rectangle rule) : %f, iter %d \n", result, n); 
+  pnl_test_eq_abs (result, expected, 0.05, "Integration rect", ""); 
   result = pnl_integration(&func,0.0,1.0,n, "trap");
-  printf("integration (trapezoidal rule) : %f, iter %d \n", result, n); 
+  pnl_test_eq_abs (result, expected, 0.001, "Integration trap", ""); 
   result = pnl_integration(&func,0.0,1.0,n, "simpson");
-  printf("integration (simpson rule) : %f, iter %d \n", result, n); 
+  pnl_test_eq_abs (result, expected, 0.001, "Integration Simpson", ""); 
 }
 
 static void integ_2d_test()
 {
-  double result;
+  double result, expected;
   int nx, ny;
   PnlFunc2D func;
   nx = 50;
   ny = 50;
   func.function = test_xy;
   func.params = NULL;
+  expected= - 2 * (cos(2) - 1);
   result = pnl_integration_2d(&func,-1.0,1.0,-1.0,1.0,nx, ny, "rect");
-  printf("integration 2D (rectangle rule) : %f, iter %d \n", result, nx * ny); 
+  pnl_test_eq_abs (result, expected, 0.01, "Integration rect 2d", ""); 
   result = pnl_integration_2d(&func,-1.0,1.0,-1.0,1.0,nx, ny, "trap");
-  printf("integration 2D (trapezoidal rule) : %f, iter %d \n", result, nx *ny); 
+  pnl_test_eq_abs (result, expected, 0.01, "Integration trap 2d", ""); 
   result = pnl_integration_2d(&func,-1.0,1.0,-1.0,1.0,nx, ny, "simpson");
-  printf("integration 2D (simpson rule) : %f, iter %d \n", result, nx *ny); 
+  pnl_test_eq_abs (result, expected, 0.01, "Integration Simpson 2d", ""); 
 }
 
 int main ()
 {
+  pnl_test_init ();
   integration_qag_test();
   integration_qagp_test();
   integration_qng_test();
   integration_qng_2d_test();
   integ_test();
   integ_2d_test();
-  return OK;
+  exit(pnl_test_finalize ("Integration"));
 }

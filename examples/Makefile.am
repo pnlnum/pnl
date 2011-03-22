@@ -33,7 +33,7 @@ dft_test_LDADD=../src/libpnl.la ${some_extra_libs}
 finance_function_test_SOURCES=finance_function_test.c tests_utils.c
 finance_function_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
-integration_test_SOURCES=integration_test.c
+integration_test_SOURCES=integration_test.c tests_utils.c
 integration_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
 lapack_test_SOURCES=lapack_test.c
