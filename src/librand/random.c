@@ -472,8 +472,8 @@ static void DYNAMIC_MT (PnlRng *rng,double *sample)
 /* ----------------------------------------------------------------*/
 
 
-#define MAXI 33
-static long Comb[MAXI][MAXI];/*Binomial Coefficients*/
+#define FAURE_MAXI 33
+static long Comb[FAURE_MAXI][FAURE_MAXI];/*Binomial Coefficients*/
 
 /**
  * Table for the n first prime numbers
@@ -615,8 +615,8 @@ static void HALTON(PnlRng *rng, double X_n[])
 
 static void FAURE(PnlRng *rng, double U_n[])
 {
-  int coeff[MAXI];
-  int b[MAXI];
+  int coeff[FAURE_MAXI];
+  int b[FAURE_MAXI];
   int x= 0, puissance1= 1, puissance2;
   int indice, i, j, k, somm;
   faure_state *state = (faure_state *)(rng->state);
@@ -1116,7 +1116,6 @@ int pnl_rand_init (int type_generator, int dimension, long samples)
        */
     case PNL_RNG_FAURE :
       if (dimension > DIM_MAX_FAURE || samples>MAX_SAMPLE_FAURE) return FAIL;
-      binomial(MAXI);
       pnl_rng_sdim (rng, dimension);
       break;
     case PNL_RNG_SQRT:
@@ -1460,8 +1459,9 @@ void pnl_rng_sdim (PnlRng *rng, int dim)
         break;
       case PNL_RNG_FAURE:
       {
-        faure_state *state = (faure_state *)(rng->state);
         int prime[PNL_DIM_MAX_QMC];
+        faure_state *state = (faure_state *)(rng->state);
+        binomial(FAURE_MAXI);
         if((rng->dimension == 2)||(rng->dimension == 1))
           state->r= 3;
         else
