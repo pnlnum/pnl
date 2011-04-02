@@ -27,7 +27,7 @@ complex_test_LDADD=../src/libpnl.la ${some_extra_libs}
 cumulfunc_test_SOURCES=cumulfunc_test.c
 cumulfunc_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
-dft_test_SOURCES=dft_test.c
+dft_test_SOURCES=dft_test.c tests_utils.c
 dft_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
 finance_function_test_SOURCES=finance_function_test.c tests_utils.c
