@@ -77,11 +77,8 @@ static double Gauss_BoxMuller(PnlRng *rng)
  * @param index (unused when calling with CREATE)
  * @param type_generator index of the generator
  */
-static double GaussMC(int dimension, int create_or_retrieve, int index, int type_generator)
+static double GaussMC(int dimension, int create_or_retrieve, int index, PnlRng *rng)
 {
-  PnlRng *rng;
-  rng = pnl_rng_get_from_id(type_generator);
-
   if (create_or_retrieve == CREATE)
     {
       int i;
@@ -104,10 +101,8 @@ static double GaussMC(int dimension, int create_or_retrieve, int index, int type
  * @param index index to be returned
  * @param type_generator index of the generator
  */
-static double GaussQMC(int dimension, int create_or_retrieve, int index, int type_generator)
+static double GaussQMC(int dimension, int create_or_retrieve, int index,PnlRng *rng)
 {
-  PnlRng *rng;
-  rng = pnl_rng_get_from_id(type_generator);
   CheckQMCDim(rng, dimension);
   if (create_or_retrieve == CREATE)
     rng->Compute(rng,ArrayOfRandomNumbers);
@@ -119,6 +114,23 @@ static double GaussQMC(int dimension, int create_or_retrieve, int index, int typ
 /*
  * Random number generation interface using the array PnlRngArray[]
  */
+/**
+ * Simulation of a Gaussian standard variable in dimension d
+ * @param d size od the vector we are simulating
+ * @param create_or_retrieve boolean can be CREATE or
+ * RETRIEVE. if it is CREATE, draw all the dimensions and returns the fisrt
+ * one. If it s RETRIEVE, returns the dimension corresponding to index
+ * @param index index to be returned
+ * @param rng a generator
+ */
+double pnl_rng_gauss(int d, int create_or_retrieve, int index, PnlRng *rng)
+{
+  if (rng->rand_or_quasi == QMC)
+    return GaussQMC(d, create_or_retrieve, index, rng);
+  else
+    return GaussMC(d, create_or_retrieve, index, rng);
+
+}
 
 /**
  * Simulation of a Gaussian standard variable in dimension d
@@ -131,10 +143,9 @@ static double GaussQMC(int dimension, int create_or_retrieve, int index, int typ
  */
 double pnl_rand_gauss(int d, int create_or_retrieve, int index, int type_generator)
 {
-  if (pnl_rand_or_quasi (type_generator) == QMC)
-    return GaussQMC(d, create_or_retrieve, index, type_generator);
-  else
-    return GaussMC(d, create_or_retrieve, index, type_generator);
+  PnlRng *rng;
+  rng = pnl_rng_get_from_id(type_generator);
+  pnl_rng_gauss (d, create_or_retrieve, index, rng);
 
 }
 

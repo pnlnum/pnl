@@ -113,6 +113,7 @@ extern PnlRng* pnl_rng_get_from_id (PnlRngType t);
 extern int pnl_rand_init(int type_generator, int simulation_dim,long samples);
 extern void pnl_rand_sseed (int type_generator, ulong seed);
 extern int pnl_rand_or_quasi(int type_generator);
+extern double pnl_rng_gauss(int, int, int, PnlRng*);
 extern double pnl_rand_gauss(int, int, int, int);
 extern int pnl_rand_bernoulli(double p, int generator);
 extern long pnl_rand_poisson(double lambda, int type_generator);
