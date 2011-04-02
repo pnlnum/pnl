@@ -22,44 +22,61 @@
 #include <math.h>
 
 #include "pnl/pnl_random.h"
+#include  "tests_utils.h"
 
 static double square (double x) { return x*x;}
 
-static void test_pnl_vect_rand(int type_generator)
+static void reset_rng (PnlRng *rng, int s)
 {
-  int samples = 10000;
+  if ( rng->rand_or_quasi == MC )
+    {
+      pnl_rng_sseed (rng, 123456);
+    }
+  else
+    {
+      pnl_rng_sdim (rng, s);
+    }
+}
+
+static void test_pnl_vect_rng(PnlRng *rng, const char *name)
+{
+  int samples = 100000;
   double sum;
   int i;
   PnlVect *G;
+  char str[256];
   G = pnl_vect_create(0);
-  pnl_rand_init(type_generator, 1, samples);
 
-  pnl_vect_rand_uni(G, samples, 0, 1, type_generator);
+  reset_rng (rng, 1);
+  pnl_vect_rng_uni(G, samples, 0, 1, rng);
   pnl_vect_map_inplace(G, square);
   sum = pnl_vect_sum(G)/samples;
-  printf("E (U^2) = %f (should be 1/3)\n", sum);
+  sprintf (str, "E(U^2) with %s", name);
+  pnl_test_eq_abs (sum, 1. / 3., 1E-2, str, "");
 
-  /* Calling pnl_rand_init again ensures that the next samples will be drawn
+  /* Calling pnl_rng_init again ensures that the next samples will be drawn
      from the beginning of the sequence. Very important for QMC */
-  pnl_rand_init(type_generator, 1, samples);    
+  reset_rng (rng, 1);
   sum=0.0;
   for (i=0; i<samples; i++)
     {
-      sum += square(pnl_rand_normal(type_generator));
+      sum += square(pnl_rng_normal(rng));
     }
-  printf("E (G^2) = %f (should be 1)\n", sum/samples);
+  sprintf (str, "E(G^2) with %s", name);
+  pnl_test_eq_abs (sum/samples, 1., 1E-2, str, "" );
 
   /* equivalently as above */
-  pnl_rand_init(type_generator, 1, samples);    
-  pnl_vect_rand_normal(G, samples, type_generator);
+  reset_rng(rng, 1);
+  pnl_vect_rng_normal(G, samples, rng);
   pnl_vect_map_inplace(G, square);
   sum = pnl_vect_sum(G)/samples;
-  printf("E (G^2) = %f (should be 1)\n", sum);
+  sprintf (str, "E(G^2) with %s (vectorized version)", name);
+  pnl_test_eq_abs (sum, 1., 1E-2, str, "");
 
   pnl_vect_free(&G);
 }
 
-static void test_pnl_mat_rand(int type_generator)
+static void test_pnl_mat_rng(PnlRng *rng, const char *name)
 {
   PnlMat *M;
   PnlVect *inf, *sup, *Vsum;
@@ -67,87 +84,65 @@ static void test_pnl_mat_rand(int type_generator)
   int dim = 10;
   int i;
   double sum;
+  char str[256];
   inf = pnl_vect_create_from_double(dim, 0.0);
   sup = pnl_vect_create_from_double(dim, 1.0);
   M = pnl_mat_create(0,0);
   Vsum = pnl_vect_create (0);
-  pnl_rand_init(type_generator, dim, samples);
-  pnl_mat_rand_uni(M, samples, dim, inf, sup, type_generator);
+  reset_rng (rng, dim);
+  pnl_mat_rng_uni(M, samples, dim, inf, sup, rng);
   pnl_mat_sum_vect(Vsum, M, 'r');
   pnl_vect_div_double(Vsum, samples);
-  pnl_vect_print(Vsum);
-  printf("(should be 0.5)\n");
+  /* we should ckeck that Vsum is full of 0.5 */
   pnl_vect_free(&Vsum);
   pnl_vect_free(&inf);
   pnl_vect_free(&sup);
     
     
-  pnl_rand_init(type_generator, dim, samples);
-  pnl_mat_rand_normal(M, samples, dim, type_generator);
+  reset_rng (rng, dim);
+  pnl_mat_rng_normal(M, samples, dim, rng);
   sum = 0.0;
   for (i=0; i<samples; i++)
     {
       sum += MGET(M,i,0)*MGET(M,i,8);
     }
-  printf("Cov = %f (should be 0)\n", sum/samples);
+  sprintf (str, "Covariance %s", name);
+  pnl_test_eq_abs (sum/samples, 0., 1E-2, str, "");
 
   pnl_mat_free(&M);
 }
 
-static void test_pnl_rand_gauss(int type_generator)
+static void test_pnl_rng_gauss(PnlRng *rng, const char *name)
 {
   int dimension=10, samples=100000;
   int i;
   double g1,g2,sum=0.0;
-  pnl_rand_init(type_generator, dimension, samples);
+  char str[256];
+  reset_rng (rng, dimension);
   for (i=0; i<samples; i++)
     {
-      g1=pnl_rand_gauss(dimension, CREATE, 0, type_generator);
-      g2=pnl_rand_gauss(dimension, RETRIEVE, 8, type_generator);
+      g1=pnl_rng_gauss(dimension, CREATE, 0, rng);
+      g2=pnl_rng_gauss(dimension, RETRIEVE, 8, rng);
       sum += g1*g2;
     }
-  printf("Cov = %f (should be 0)\n", sum/samples);
+  sprintf (str, "Covariance %s Gaussian case", name);
+  pnl_test_eq_abs (sum/samples, 0., 1E-2, str, "");
 }
 
 static void test_rng ()
 {
-  int i, type_gen;
+  int i;
   PnlRng *rng;
   i = 0;
   while (PnlRngArray[i].rng != NULL)
     {
       rng = PnlRngArray[i].rng;
-      type_gen = rng->type;
-      printf ("--> Generator %s\n", PnlRngArray[i].label);
-      test_pnl_vect_rand(type_gen);
-      test_pnl_mat_rand(type_gen);
-      test_pnl_rand_gauss(type_gen);
+      test_pnl_vect_rng(rng, PnlRngArray[i].label);
+      test_pnl_mat_rng(rng, PnlRngArray[i].label);
+      test_pnl_rng_gauss(rng, PnlRngArray[i].label);
       i++;
     }
 }
-
-static void rng_call ()
-{
-  int j, N=10000;
-  double sum, var;
-  PnlRng *rng;
-
-  printf ("\n--> Test of the rng interface\n");
-  rng = pnl_rng_create (PNL_RNG_MERSENNE);
-  pnl_rng_sseed (rng, 4172);
-  var = sum = 0.;
-  
-  for ( j=0 ; j<N ; j++ )
-    {
-      double tmp;
-      tmp = pnl_rng_normal(rng);
-      sum += tmp; var += tmp * tmp;
-    }
-  
-    printf ("mean = %f (sould be 0.) \tvar = %f (souble be 1)\n", sum/N, var/N);
-    pnl_rng_free (&rng);
-}
-
 
 #define NGEN 3
 static void std_call_dcmt ()
@@ -157,7 +152,6 @@ static void std_call_dcmt ()
   double sum[NGEN], var[NGEN];
 
   
-  printf ("\n--> Test of direct call to DCMT\n");
   mts = pnl_dcmt_create_array(NGEN,4172,&count);
   if (count != NGEN)
     {
@@ -180,7 +174,8 @@ static void std_call_dcmt ()
     }
   for ( j=0 ; j<count ; j++ )
     {
-      printf ("mean = %f (sould be 0.5) \tvar = %f (souble be 1/3)\n", sum[j]/N, var[j]/N);
+      pnl_test_eq_abs (sum[j]/N, 0.5, 1E-2, "DCMT E(U)", "");
+      pnl_test_eq_abs (var[j]/N, 1. / 3., 1E-2,  "DCMT E(U^2)", "");
     }
   pnl_dcmt_free_array(mts, count);
 }  
@@ -192,7 +187,6 @@ static void rand_call_dcmt ()
   PnlRng **rng;
   double sum[NGEN], var[NGEN];
 
-  printf ("\n--> Test of call to DCMT through pnl_rng_xxx\n");
   rng = malloc (NGEN * sizeof(PnlRng *));
   
   for ( j=0 ; j<NGEN ; j++ )
@@ -216,7 +210,8 @@ static void rand_call_dcmt ()
     }
   for ( j=0 ; j<NGEN ; j++ )
     {
-      printf ("mean = %f (sould be 0.5) \tvar = %f (souble be 1/3)\n", sum[j]/N, var[j]/N);
+      pnl_test_eq_abs (sum[j]/N, 0.5, 1E-2, "rng_dcmt E(U)", "");
+      pnl_test_eq_abs (var[j]/N, 1. / 3., 1E-2,  "rng_dcmt E(U^2)", "");
       pnl_rng_free(&(rng[j]));
     }
   free (rng);
@@ -224,11 +219,11 @@ static void rand_call_dcmt ()
 
 
 
-int main ()
+int main (int argc, char **argv)
 {
+  pnl_test_init (argc, argv);
   test_rng();
-  rng_call ();
   std_call_dcmt ();
   rand_call_dcmt ();
-  return OK;
+  exit (pnl_test_finalize("Random generators"));
 }
