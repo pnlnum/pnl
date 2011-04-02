@@ -145,8 +145,7 @@ double pnl_rand_gauss(int d, int create_or_retrieve, int index, int type_generat
 {
   PnlRng *rng;
   rng = pnl_rng_get_from_id(type_generator);
-  pnl_rng_gauss (d, create_or_retrieve, index, rng);
-
+  return pnl_rng_gauss (d, create_or_retrieve, index, rng);
 }
 
 /**
