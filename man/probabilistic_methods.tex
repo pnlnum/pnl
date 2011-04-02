@@ -254,6 +254,13 @@ The following functions return one sample from a specified law.
 \item \describefun{double}{pnl_rng_bessel} {double v, double a,\refstruct{PnlRng} \ptr rng}
   \sshortdescribe Generates a sample from the Bessel distribution with parameters
   \var{v > -1} and \var{a > 0}.
+\item \describefun{double}{pnl_rng_gauss}{int d, int
+    create_or_retrieve, int index, PnlRng \ptr rng}
+  \sshortdescribe The second argument can be either \var{CREATE} (to actually
+  draw the sample) or \var{RETRIEVE} (to retrieve that element of index
+  \var{index}). With \var{CREATE}, it draws \var{d} random normal variables
+  and stores them for future usage. They can be withdrawn using \var{RETRIEVE}
+  with the index of the number to be retrieved.
 \end{itemize}
 
 The following functions take an already existing \refstruct{PnlVect}\ptr  as
