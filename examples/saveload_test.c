@@ -23,17 +23,19 @@
 #include <unistd.h>
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_mpi.h"
+#include "tests_utils.h"
 
 #define NB_INT 5
 #define NB_GEN 3
 static char *binfile = "_tmp_poo.bin";
 
-static void save_rng_array ()
+static void save_rng_array (PnlMat *orig)
 {
   int i, j, n, count;
   PnlRng **rngtab;
   n = NB_GEN;
   rngtab = pnl_rng_dcmt_create_array (n, 4172, &count);
+  pnl_mat_resize (orig, n, NB_INT);
   if ( n != count )
     {
       perror ("Wrong number of generator created\n");
@@ -46,43 +48,45 @@ static void save_rng_array ()
   for ( i=0 ; i<n ; i++ )
     {
       for ( j=0 ; j<NB_INT ; j++ )
-        printf ("%f ",pnl_rng_uni (rngtab[i]));
-      printf("\n");
+        MLET(orig, i, j) = pnl_rng_uni (rngtab[i]);
       pnl_rng_free (&(rngtab[i]));
     }
   free(rngtab);
 }
 
-static void load_rng_array ()
+static void load_rng_array (PnlMat *orig)
 {
   int i, j;
   PnlRng **rngtab;
+  PnlMat *res;
   rngtab = pnl_rng_create_from_file (binfile, NB_GEN);
+  res = pnl_mat_create (NB_GEN, NB_INT);
   for ( i=0 ; i<NB_GEN ; i++ )
     {
       for ( j=0 ; j<NB_INT ; j++ )
-        printf ("%f ",pnl_rng_uni (rngtab[i]));
-      printf("\n");
+        MLET(res, i, j) = pnl_rng_uni (rngtab[i]);
       pnl_rng_free (&(rngtab[i]));
     }
+  pnl_test_mat_eq_abs (res, orig, 1E-10, "Save / Load (rng array)", "");
+  pnl_mat_free (&res);
   free(rngtab);
   unlink(binfile);
 }
 
-static int save_rng (PnlType t)
+static int save_rng (PnlType t, PnlMat *orig)
 {
   PnlRng *rng1, *rng2;
   FILE *stream;
   int i;
 
   stream = fopen (binfile, "wb");
+  pnl_mat_resize (orig, 2, NB_INT);
 
   rng1 = pnl_rng_create (t);
   pnl_rng_sseed (rng1, 1273);
   pnl_object_save (PNL_OBJECT(rng1), stream); 
   for ( i=0 ; i<NB_INT ; i++ )
-    printf ("%f ",pnl_rng_uni (rng1));
-  printf("\n");
+    MLET(orig, 0, i) = pnl_rng_uni (rng1);
   pnl_rng_free (&rng1);
 
 
@@ -90,37 +94,37 @@ static int save_rng (PnlType t)
   pnl_rng_sseed (rng2, 2273);
   pnl_object_save (PNL_OBJECT(rng2), stream); 
   for ( i=0 ; i<NB_INT ; i++ )
-    printf ("%f ",pnl_rng_uni (rng2));
-  printf("\n");
+    MLET(orig, 1, i) = pnl_rng_uni (rng2);
   pnl_rng_free (&rng2);
 
   fclose (stream);
   return MPI_SUCCESS;
 }
 
-static int load_rng ()
+static int load_rng (PnlMat *orig)
 {
 
   PnlRng *rng1, *rng2;
   PnlList *L;
+  PnlMat *res;
   FILE *stream;
   int i;
 
+  res = pnl_mat_create (2, NB_INT);
   stream = fopen (binfile, "rb");
   rng1 = PNL_RNG_OBJECT(pnl_object_load (stream)); 
   rng2 = PNL_RNG_OBJECT(pnl_object_load (stream)); 
   fclose (stream);
 
   for ( i=0 ; i<NB_INT ; i++ )
-    printf ("%f ",pnl_rng_uni (rng1));
-  printf("\n");
+    MLET(res, 0, i) = pnl_rng_uni (rng1);
   pnl_rng_free (&rng1);
 
 
   for ( i=0 ; i<NB_INT ; i++ )
-    printf ("%f ",pnl_rng_uni (rng2));
-  printf("\n");
+    MLET(res, 1, i) = pnl_rng_uni (rng2);
   pnl_rng_free (&rng2);
+  pnl_test_mat_eq_abs (res, orig, 1E-10, "Save / Load (object)", "");
 
   stream = fopen (binfile, "rb");
   L = pnl_object_load_into_list (stream); 
@@ -130,13 +134,13 @@ static int load_rng ()
   rng2 = PNL_RNG_OBJECT(pnl_list_get (L, 1));
 
   for ( i=0 ; i<NB_INT ; i++ )
-    printf ("%f ",pnl_rng_uni (rng1));
-  printf("\n");
+    MLET(res, 0, i) = pnl_rng_uni (rng1);
 
   for ( i=0 ; i<NB_INT ; i++ )
-    printf ("%f ",pnl_rng_uni (rng2));
-  printf("\n");
+    MLET(res, 1, i) = pnl_rng_uni (rng2);
 
+  pnl_test_mat_eq_abs (res, orig, 1E-10, "Save / Load (into list)", "");
+  pnl_mat_free (&res);
   pnl_list_free (&L);
   unlink(binfile);
   return MPI_SUCCESS;
@@ -146,14 +150,20 @@ static int load_rng ()
 int main (int argc, char **argv)
 {
   PnlRngType t;
+  PnlMat *orig, *res;
+  pnl_test_init (argc, argv);
+  orig = pnl_mat_new();
+  res = pnl_mat_new();
   MPI_Init (&argc, &argv);
   t = PNL_RNG_MERSENNE;
-  printf ("--> save/load interface\n");
-  save_rng(t);
-  load_rng();
-  printf ("--> save/load for array of rngs\n");
-  save_rng_array();
-  load_rng_array();
+
+  save_rng(t, orig);
+  load_rng(orig);
+  
+  save_rng_array(orig);
+  load_rng_array(orig);
+
   MPI_Finalize();
-  return OK;
+  pnl_mat_free (&orig);
+  exit (pnl_test_finalize("Save/Load interface"));
 }
