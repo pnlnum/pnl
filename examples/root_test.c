@@ -57,7 +57,7 @@ static void bisection_test ()
   func.params = NULL;
 
   status = pnl_root_bisection(&func, x1, x2, epsrel, epsabs, N_max, &r);
-  printf("bisection : root is %f, status==OK %d\n", r, status==OK);
+  pnl_test_eq_abs ( r, M_PI_2, epsabs, "root_bisection (cosine)", "");
 
 }
 
@@ -72,7 +72,7 @@ static void newton_test ()
   func.params = NULL;
 
   status = pnl_root_newton(&func, x0, epsrel, epsabs, N_max, &r);
-  printf("newton : root is %f, status==OK %d\n", r, status==OK);
+  pnl_test_eq_abs ( r, M_PI_2, epsabs, "root_newton (cosine)", "");
 }
 
 static void brent_test()
@@ -87,7 +87,7 @@ static void brent_test()
   func.params = NULL;
 
   r = pnl_root_brent(&func, x1, x2, &tol);
-  printf("brent : root is %f (tol = %f) \n", r, tol);
+  pnl_test_eq_abs ( r, M_PI_2, tol, "root_brent (cosine)", "");
 }
 
 static void find_root_test ()
@@ -103,7 +103,7 @@ static void find_root_test ()
   func.params = NULL;
 
   status = pnl_find_root(&func, x1, x2, tol, N_max, &r);
-  printf("find_root : root is %f, status==OK %d\n", r, status==OK);
+  pnl_test_eq_abs ( r, M_PI_2, epsabs, "find_root (cosine)", "");
 }
 
 /*
@@ -187,7 +187,7 @@ static void Dfcn_lsq(const PnlVect *x, PnlMat *fjac, void *p)
 
 static void test_hybrX ()
 {
-  int j, n, maxfev, info, nfev;
+  int n, maxfev, info, nfev;
   double xtol, fnorm;
   PnlVect *x, *fvec, *diag;
   PnlRnFuncRnDFunc f;
@@ -206,38 +206,27 @@ static void test_hybrX ()
   maxfev = 2000;
   pnl_vect_set_double (diag, 1);
 
-
   /*
    * Test without Jacobian
    */
-  printf ("Test of pnl_root_fsolve without user supplied Jacobian.\n\n");
   f.function = fcn_fsolve;
   f.Dfunction = NULL;
   f.params = NULL;
   info = pnl_root_fsolve (&f, x, fvec, xtol, maxfev, &nfev, diag, FALSE);
   fnorm = pnl_vect_norm_two(fvec);
-  printf("     final l2 norm of the residuals %15.7g\n\n", fnorm);
-  printf("     number of function evaluations  %10i\n\n", nfev);
-  printf("     exit parameter                  %10i\n\n", info);
-  printf("     final approximate solution\n");
-  for (j=1; j<=n; j++) printf("%s%15.7g", j%3==1?"\n     ":"", GET(x,j-1));
-  printf("\n\n");
+  /* Test residuals */
+  pnl_test_eq_abs (fnorm, 0., 1E-7, "root_fsolve (without Jacobian)", "");
   
   /*
    * Test with Jacobian
    */
-  printf ("Test of pnl_root_fsolve without user supplied Jacobian.\n\n");
   f.function = fcn_fsolve;
   f.Dfunction = Dfcn_fsolve;
   f.params = NULL;
   info = pnl_root_fsolve (&f, x, fvec, xtol, maxfev, &nfev, diag, FALSE);
   fnorm = pnl_vect_norm_two(fvec);
-  printf("     final l2 norm of the residuals %15.7g\n\n", fnorm);
-  printf("     number of function evaluations  %10i\n\n", nfev);
-  printf("     exit parameter                  %10i\n\n", info);
-  printf("     final approximate solution\n");
-  for (j=1; j<=n; j++) printf("%s%15.7g", j%3==1?"\n     ":"", GET(x,j-1));
-  printf("\n\n");
+  /* Test residuals */
+  pnl_test_eq_abs (fnorm, 0., 1E-7, "root_fsolve (with Jacobian)", "");
 
   pnl_vect_free (&x);
   pnl_vect_free (&fvec);
@@ -248,8 +237,8 @@ static void test_hybrX ()
 static void test_lmdif ()
 {
   int m, n, info, nfev, maxfev;
-  double tol, fnorm;
-  PnlVect *x, *fvec;
+  double tol;
+  PnlVect *x, *fvec, *sol;
   PnlRnFuncRmDFunc f;
 
   m = 15;
@@ -265,51 +254,40 @@ static void test_lmdif ()
   tol = 0;
   maxfev = 0;
 
+  sol = pnl_vect_create_from_list (3, 0.0824106, 1.1330367, 2.3436946);
   /*
    * Test without user supplied Jacobian
    */
-  printf ("Test of pnl_root_fsolve_lsq without user supplied Jacobian.\n\n");
   f.function = fcn_lsq;
   f.Dfunction = NULL;
   f.params = NULL;
-  info = pnl_root_fsolve_lsq(&f, x, m, fvec, tol, tol, 0., maxfev, &nfev, NULL, TRUE);
-
-  fnorm = pnl_vect_norm_two(fvec);
-
-  printf("      final l2 norm of the residuals%15.7f\n\n",fnorm);
-  printf("      exit parameter                %10i\n\n", info);
-  printf("      final approximate solution\n\n %15.7f%15.7f%15.7f\n\n",
-	 GET(x,0), GET(x,1), GET(x,2));
+  info = pnl_root_fsolve_lsq(&f, x, m, fvec, tol, tol, 0., maxfev, &nfev, NULL, FALSE);
+  pnl_test_vect_eq_abs (x, sol, 1E-6, "root_fsolve_lsq (without Jacobian)", "");
 
   /*
    * Test with user supplied Jacobian
    */
-  printf ("Test of pnl_root_fsolve_lsq with user supplied Jacobian.\n\n");
   f.function = fcn_lsq;
   f.Dfunction = Dfcn_lsq;
   f.params = NULL;
-  info = pnl_root_fsolve_lsq(&f, x, m, fvec, tol, tol, 0., maxfev, &nfev, NULL, TRUE);
-
-  fnorm = pnl_vect_norm_two(fvec);
-
-  printf("      final l2 norm of the residuals%15.7f\n\n",fnorm);
-  printf("      exit parameter                %10i\n\n", info);
-  printf("      final approximate solution\n\n %15.7f%15.7f%15.7f\n\n",
-	 GET(x,0), GET(x,1), GET(x,2));
+  info = pnl_root_fsolve_lsq(&f, x, m, fvec, tol, tol, 0., maxfev, &nfev, NULL, FALSE);
+  pnl_test_vect_eq_abs (x, sol, 1E-6, "root_fsolve_lsq (without Jacobian)", "");
 
 
   pnl_vect_free (&x);
   pnl_vect_free (&fvec);
+  pnl_vect_free (&sol);
 }
 
 
-int main ()
+int main (int argc, char **argv)
 {
+  pnl_test_init (argc, argv);
   brent_test () ;
   bisection_test ();
   newton_test ();
   find_root_test ();
   test_hybrX ();
   test_lmdif ();
-  return OK;
+  exit(pnl_test_finalize ("ROOT"));
 }
