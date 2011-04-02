@@ -1285,6 +1285,12 @@ decomposition, row \verb!i! of \verb!A! was interchanged with row \verb!p(i)!.
     const \refstruct{PnlPermutation} \ptr p} 
   \sshortdescribe Applies a \refstruct{PnlPermutation} to a
   \refstruct{PnlVect} in-place.  
+
+\item \describefun{void}{pnl_mat_col_permute}{\refstruct{PnlMat} \ptr pX, const
+    \refstruct{PnlMat} \ptr X, const
+    \refstruct{PnlPermutation} \ptr p}
+  \sshortdescribe Applies a \refstruct{PnlPermutation} to the columns of a
+  matrix. \var{pX} contains the result of the permutation applied to \var{X}. 
   
 \item \describefun{void}{pnl_permutation_fprint}{FILE \ptr fic, const \refstruct{PnlPermutation} \ptr p}
   \sshortdescribe Prints a permutation to a file.  

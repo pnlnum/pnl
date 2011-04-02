@@ -24,6 +24,7 @@
 #include <math.h>
 
 #include "pnl/pnl_vector.h"
+#include "pnl/pnl_matrix.h"
 #include "pnl/pnl_perm.h"
 #include "config.h"
 #include "pnl/pnl_mathtools.h"
@@ -65,7 +66,7 @@ void pnl_permutation_free (PnlPermutation **p)
  * Applies a PnlPermutation to a PnlVect
  * px[i] = x[p[i]]
  *
- * @param px at exit contains the permutated vector
+ * @param px on exit contains the permuted vector
  * @param x the vector to permute
  * @param p a permutation
  */
@@ -142,6 +143,29 @@ void pnl_vect_permute_inplace (PnlVect *x, const PnlPermutation *p)
   pnl_permute_inplace (x->array, p->array, x->size);
 }
   
+/**
+ * Applies a PnlPermutation to the columns of a matrix
+ * pX[] = x[:,p]
+ *
+ * @param pX on exit contains the permuted matrix
+ * @param x the matrix to permute
+ * @param p a permutation
+ */
+void pnl_mat_col_permute (PnlMat *pX, const PnlMat *X, const PnlPermutation *p)
+{
+  int i, j, k;
+  PNL_CHECK (X->n != p->size, "incompatible permutation size", "pnl_mat_col_permute");
+  pnl_mat_resize (pX, X->m, X->n);
+  for ( j=0 ; j<X->n ; j++ )
+    {
+      k = p->array[j];
+      for ( i=0 ; i<X->m ; i++ )
+        {
+          MLET (pX, i, j) = MGET(X, i, k);
+        }
+    }
+}
+
 /**
  * Prints a permutation to a file
  *
