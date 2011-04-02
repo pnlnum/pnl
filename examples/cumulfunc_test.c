@@ -17,58 +17,63 @@
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
 
+/*
+ * The expected values for the different tests have been computed using Nsp
+ * with format (20,20)
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include "pnl/pnl_cdf.h"
+#include "tests_utils.h"
 
-/*test des fonctions pnl_cdf_ */
-
+static double abserr = 1E-8;
 
 static void pnl_cdf_bet_test()
 {
   int which;
-  double p;
-  double q;
+  double p, pe;
+  double q, qe;
   double x;
   double y;
   double a;
   double b;
   int status;
   double bound;
-  printf("test de la fonction 'pnl_cdf_bet' : ");
   which=1;
   x=0.6;
   y=0.4;
   a=2.0;
   b=3.0;
+  pe = 0.820799999999999974;
+  qe = 0.179200000000000081;
   pnl_cdf_bet(&which,&p,&q,&x,&y,&a,&b,&status,&bound);
-  printf("p=%f ",p);
-  printf("q=%f \n",q);
-  if (status != 0) printf("status=%d \n",status); 
+  pnl_test_eq_abs (p, pe, abserr, "cdf_bet p", "");
+  pnl_test_eq_abs (q, qe, abserr, "cdf_bet q", "");
 }
 
 static void pnl_cdf_bin_test()
 {
   int which;
-  double p;
-  double q;
+  double p, pe;
+  double q, qe;
   double s;
   double xn;
   double pr;
   double ompr;
   int status;
   double bound;
-  printf("test de la fonction 'pnl_cdf_bin' : ");
   which=1;
   s=2;
   xn=5;
   pr=0.7;
   ompr=0.3;
+  pe = 0.163079999999999919;
+  qe = 0.836920000000000108;
   pnl_cdf_bin(&which,&p,&q,&s,&xn,&pr,&ompr,&status,&bound);
-  printf("p=%f ",p);
-  printf("q=%f\n",q);
-  if (status != 0) printf("status=%d \n",status); 
+  pnl_test_eq_abs (p, pe, abserr, "cdf_bin p", "");
+  pnl_test_eq_abs (q, qe, abserr, "cdf_bin q", "");
 }
 
 static void pnl_cdf_chi_test()
@@ -76,23 +81,22 @@ static void pnl_cdf_chi_test()
   int which;
   double p;
   double q;
-  double x;
-  double df;
+  double x, xe;
+  double df, dfe;
   int status;
   double bound;
-  printf("test de la fonction 'pnl_cdf_chi' : ");
   which=3;
   p=0.7;
   q=0.3;
   x=2;
+  dfe = 1.686206763411698173;
   pnl_cdf_chi(&which,&p,&q,&x,&df,&status,&bound);
-  printf("df=%f ",df); /* 1.6862067645 */
-  if (status != 0) printf("status=%d \n",status);
+  pnl_test_eq_abs (df, dfe, abserr, "cdf_chi df", "");
   which = 2;
   df = 6;
+  xe = 7.231135331731981530;
   pnl_cdf_chi(&which,&p,&q,&x,&df,&status,&bound);
-  printf("x=%f \n",x); /* 7.2311353317 */
-  if (status != 0) printf("status=%d \n",status);
+  pnl_test_eq_abs (x, xe, abserr, "cdf_chi x", "");
 }
 
 static void pnl_cdf_chn_test()
@@ -102,18 +106,17 @@ static void pnl_cdf_chn_test()
   double q;
   double x;
   double df;
-  double pnonc;
+  double pnonc, pnonce;
   int status;
   double bound;
-  printf("test de la fonction 'pnl_cdf_chn' : ");
   which=4;
   p=0.1;
   q=0.9;
   x=2;
   df=2;
+  pnonce = 5.812580072894205863;
   pnl_cdf_chn(&which,&p,&q,&x,&df,&pnonc,&status,&bound);
-  printf("pnonc=%f \n",pnonc);
-  if (status != 0) printf("status=%d \n",status);
+  pnl_test_eq_abs (pnonc, pnonce, abserr, "cdf_chn pnonc", "");
 }
 
 static void pnl_cdf_f_test()
@@ -123,18 +126,17 @@ static void pnl_cdf_f_test()
   double q;
   double f;
   double dfn;
-  double dfd;
+  double dfd, dfde;
   int status;
   double bound;
-  printf("test de la fonction 'pnl_cdf_f' : ");
   which=4;
   p=0.1;
   q=0.9;
   f=2;
   dfn=3;
+  dfde = 0.050304795796988773;
   pnl_cdf_f(&which,&p,&q,&f,&dfn,&dfd,&status,&bound);
-  printf("dfd=%f \n",dfd);  /* 05030479580 */
-  if (status != 0) printf("status=%d \n",status);
+  pnl_test_eq_abs (dfd, dfde, abserr, "cdf_f dfd", "");
 }
 
 static void pnl_cdf_fnc_test()
@@ -145,19 +147,18 @@ static void pnl_cdf_fnc_test()
   double f;
   double dfn;
   double dfd;
-  double pnonc;
+  double pnonc, pnonce;
   int status;
   double bound;
-  printf("test de la fonction 'pnl_cdf_fnc' : ");
   which=5;
   p=0.1;
   q=0.9;
   f=2;
   dfn=3;
   dfd=5;
+  pnonce = 13.178876207328151793;
   pnl_cdf_fnc(&which,&p,&q,&f,&dfn,&dfd,&pnonc,&status,&bound);
-  printf("pnonc=%f \n",pnonc); /* 13.1787447557 */
-  if (status != 0) printf("status=%d \n",status); 
+  pnl_test_eq_abs (pnonc, pnonce, abserr, "cdf_fnc pnonc", "");
 }
 
 static void pnl_cdf_gam_test()
@@ -167,18 +168,17 @@ static void pnl_cdf_gam_test()
   double q;
   double x;
   double shape;
-  double scale;
+  double scale, scalee;
   int status;
   double bound;
-  printf("test de la fonction 'pnl_cdf_gam' : ");
   which=4;
   p=0.1;
   q=0.9;
   x=2;
   shape=3;
+  scalee = 0.551032664124660565;
   pnl_cdf_gam(&which,&p,&q,&x,&shape,&scale,&status,&bound);
-  printf("scale=%f \n",scale); /* 0.5510326641 */
-  if (status != 0) printf("status=%d \n",status); 
+  pnl_test_eq_abs (scale, scalee, abserr, "cdf_gam scale", "");
 }
 
 
@@ -186,45 +186,45 @@ static void pnl_cdf_gam_test()
 static void pnl_cdf_nbn_test()
 {
   int which;
-  double p;
-  double q;
+  double p, pe;
+  double q, qe;
   double s;
   double xn;
   double pr;
   double ompr;
   int status;
   double bound;
-  printf("test de la fonction 'pnl_cdf_nbn' : ");
   which=1;
   s=2.0;
   xn=3.0;
   pr=0.7;
   ompr=0.3;
+  pe = 0.836920000000000108;
+  qe = 0.163079999999999919;
   pnl_cdf_nbn(&which,&p,&q,&s,&xn,&pr,&ompr,&status,&bound);
-  printf("p=%f ",p);
-  printf("q=%f \n",q);
-  if (status != 0) printf("status=%d \n",status); 
+  pnl_test_eq_abs (p, pe, abserr, "cdf_nbn p", "");
+  pnl_test_eq_abs (q, qe, abserr, "cdf_nbn q", "");
 }
 
 static void pnl_cdf_nor_test()
 {
   int which;
-  double p;
-  double q;
+  double p, pe;
+  double q, qe;
   double x;
   double mean;
   double sd;
   int status;
   double bound;
-  printf("test de la fonction 'pnl_cdf_nor' : ");
   which=1;
   x=2.0;
   mean=0.0;
   sd=1.0;
+  pe = 0.977249868051820791;
+  qe = 0.022750131948179212;
   pnl_cdf_nor(&which,&p,&q,&x,&mean,&sd,&status,&bound);
-  printf("p=%f ",p);
-  printf("q=%f \n",q);
-  if (status != 0) printf("status=%d \n",status); 
+  pnl_test_eq_abs (p, pe, abserr, "cdf_nor p", "");
+  pnl_test_eq_abs (q, qe, abserr, "cdf_nor q", "");
 }
 
 static void pnl_cdf_poi_test()
@@ -233,17 +233,16 @@ static void pnl_cdf_poi_test()
   double p;
   double q;
   double s;
-  double xlam;
+  double xlam, xlame;
   int status;
   double bound;
-  printf("test de la fonction 'pnl_cdf_poi' : ");
   which=3;
   p=0.4;
   q=0.6;
   s=5.0;
+  xlame = 6.291918983308751656;
   pnl_cdf_poi(&which,&p,&q,&s,&xlam,&status,&bound);
-  printf("xlam=%f \n",xlam);
-  if (status != 0) printf("status=%d \n",status); 
+  pnl_test_eq_abs (xlam, xlame, abserr, "cdf_poi xlam", "");
 }
 
 static void pnl_cdf_t_test()
@@ -252,21 +251,21 @@ static void pnl_cdf_t_test()
   double p;
   double q;
   double t;
-  double df;
+  double df, dfe;
   int status;
   double bound;
-  printf("test de la fonction 'pnl_cdf_t' : ");
   which=3;
   p=0.4;
   q=0.6;
   t=-5.0;
+  dfe = 0.060622362518168812;
   pnl_cdf_t(&which,&p,&q,&t,&df,&status,&bound);
-  printf("df=%f \n",df);
-  if (status != 0) printf("status=%d \n",status); 
+  pnl_test_eq_abs (df, dfe, abserr, "cdf_t df", "");
 }
 
-int main ()
+int main (int argc, char **argv)
 {
+  pnl_test_init (argc, argv);
   pnl_cdf_bet_test();
   pnl_cdf_bin_test();
   pnl_cdf_chi_test();
@@ -278,5 +277,5 @@ int main ()
   pnl_cdf_nor_test();
   pnl_cdf_poi_test();
   pnl_cdf_t_test();
-  return OK;
+  exit (pnl_test_finalize ("CDF"));
 }
