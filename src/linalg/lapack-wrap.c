@@ -185,6 +185,7 @@ void pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
         {
           PNL_ERROR ("QR decomposition cannot be computed", "pnl_mat_qr");
         }
+      for (i = 0; i < m ; i++) p->array[i]--;
     }
 
   /* extract Q */
