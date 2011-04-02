@@ -352,9 +352,9 @@ static void pnl_basis_eval_test ()
 /* } */
 
 
-int main ()
+int main (int argc, char **argv)
 {
-  pnl_test_init ();
+  pnl_test_init (argc, argv);
   exp_regression2 ();
   regression_multid ();
   pnl_basis_eval_test ();

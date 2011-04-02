@@ -121,9 +121,9 @@ static void test_pnl_finance_function_vol_impli()
 }
 
 
-int main ()
+int main (int argc, char **argv)
 {
-  pnl_test_init ();
+  pnl_test_init (argc, argv);
   test_pnl_finance_function_call_put();
   test_pnl_finance_function_vol_impli();
   exit(pnl_test_finalize("Financial functions"));

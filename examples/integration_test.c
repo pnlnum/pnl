@@ -149,9 +149,9 @@ static void integ_2d_test()
   pnl_test_eq_abs (result, expected, 0.01, "Integration Simpson 2d", ""); 
 }
 
-int main ()
+int main (int argc, char **argv)
 {
-  pnl_test_init ();
+  pnl_test_init (argc, argv);
   integration_qag_test();
   integration_qagp_test();
   integration_qng_test();

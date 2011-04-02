@@ -106,9 +106,9 @@ static void gs_test ()
 }
 
 
-int main ()
+int main (int argc, char **argv)
 {
-  pnl_test_init ();
+  pnl_test_init (argc, argv);
   euler_test ();
   gs_test ();
   exit(pnl_test_finalize ("Laplace transform"));

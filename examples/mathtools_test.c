@@ -25,11 +25,7 @@ int main (int argc, char *argv[])
 {
   int i;
   double tol  = 1E6 * DBL_EPSILON;
-  pnl_test_init ();
-  if ( argc == 2 && strcmp (argv[1], "-v") == 0 )
-    {
-      verbose = 1;
-    }
+  pnl_test_init (argc, argv);
   for ( i=0 ; list_tst[i].f != NULL ; i++ )
     {
       struct mathtools_tests t = list_tst[i];

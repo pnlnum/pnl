@@ -46,7 +46,7 @@ int main (int argc, char *argv[])
 {
   int i;
   double tol  = 1E6 * DBL_EPSILON;
-  pnl_test_init ();
+  pnl_test_init (argc, argv);
   if ( argc == 2 && strcmp (argv[1], "-v") == 0 )
     {
       verbose = 1;
