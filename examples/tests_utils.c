@@ -32,8 +32,12 @@ int count_fail;
 /** 
  * Initializes test counting system
  */
-void pnl_test_init ()
+void pnl_test_init (int argc, char **argv)
 {
+  if ( argc == 2 && strcmp (argv[1], "-v") == 0 )
+    {
+      verbose = 1;
+    }
   count_tests = 0;
   count_ok = 0;
   count_fail = 0;
@@ -70,6 +74,36 @@ int pnl_test_finalize(const char *str)
   return ( count_fail >0 );
 }
 
+
+static int test_eq_rel (double x, double y, double relerr)
+{
+  int status;
+  if ( y != 0 )
+    {
+      status = (fabs (x -y) / fabs(y) > relerr);
+    }
+  else
+    {
+      status = (fabs(x) > relerr);
+    }
+  return status;
+}
+
+static int test_eq_abs (double x, double y, double abserr)
+{
+  int status;
+  status = (fabs (x -y) > abserr);
+  return status;
+}
+
+static int test_eq (double x, double y, double abserr)
+{
+  int status;
+  status = (fabs (x -y) / MAX(1, fabs (y)) > abserr);
+  return status;
+}
+
+
 /** 
  * Checks if |x - y| / (max(1, |y|)) < relerr
  * 
@@ -98,6 +132,38 @@ int pnl_test_eq(double x, double y, double relerr, const char *str, const char *
     }
 }
 
+static int pnl_test_eq_aux (double x, double y, double relerr, int(*cmp)(double, double, double), const char *str, const char *fmt, ...)
+{
+  int status = 0;
+  if ( (pnl_isnan (x) && !pnl_isnan(y)) ||
+       (pnl_isinf (x) && !pnl_isinf(y)) )
+    {
+      status = 1;
+    }
+  else
+    {
+      status = (*cmp)(x, y, relerr);
+    }
+  if ( status || verbose )
+    {
+      printf ("\t%s : ", str);
+      printf ( status ? "FAIL" : "OK");
+      if ( status ) 
+        {
+          va_list ap;
+          va_start (ap, fmt);
+          va_end (ap);
+          printf (" (");
+          vprintf (fmt, ap);
+          printf (" expected %.18g observed %.18g)", y, x);
+        }
+      printf ("\n");
+    }
+  update_count_tests (status);
+  return (status ? FALSE : TRUE);
+
+}
+
 /** 
  * Checks if |x -y| / |y| < relerr
  * 
@@ -112,37 +178,10 @@ int pnl_test_eq(double x, double y, double relerr, const char *str, const char *
  */
 int pnl_test_eq_rel (double x, double y, double relerr, const char *str, const char *fmt, ...)
 {
-  int status = 0;
-  if ( (pnl_isnan (x) && !pnl_isnan(y)) ||
-       (pnl_isinf (x) && !pnl_isinf(y)) )
-    {
-      status = 1;
-    }
-  else if ( y != 0 )
-    {
-      status = (fabs (x -y) / fabs(y) > relerr);
-    }
-  else
-    {
-      status = (fabs(x) > relerr);
-    }
-  if ( status || verbose )
-    {
-      printf ("%s : ", str);
-      printf ( status ? "FAIL" : "OK");
-      if ( status ) 
-        {
-          va_list ap;
-          va_start (ap, fmt);
-          va_end (ap);
-          printf (" (");
-          vprintf (fmt, ap);
-          printf ("  expected %.18g observed %.18g)", y, x);
-        }
-      printf ("\n");
-    }
-  update_count_tests (status);
-  return (status ? FALSE : TRUE);
+  va_list ap;
+  va_start (ap, fmt);
+  va_end (ap);
+  return pnl_test_eq_aux (x, y, relerr, test_eq_rel, str, fmt, ap);
 }
 
 /** 
@@ -159,34 +198,42 @@ int pnl_test_eq_rel (double x, double y, double relerr, const char *str, const c
  */
 int pnl_test_eq_abs (double x, double y, double abserr, const char *str, const char *fmt, ...)
 {
-  int status = 0;
-  if ( (pnl_isnan (x) && !pnl_isnan(y)) ||
-       (pnl_isinf (x) && !pnl_isinf(y)) )
+  va_list ap;
+  va_start (ap, fmt);
+  va_end (ap);
+  return pnl_test_eq_aux (x, y, abserr, test_eq_abs, str, fmt, ap);
+}
+
+static int pnl_test_array (const double *X, const double *Y, int n, double relerr, int(*cmp)(double, double, double), const char *str, const char *fmt, ...)
+{
+  int i, status;
+  for ( i=0 ; i<n ; i++ )
     {
-      status = 1;
-    }
-  else 
-    {
-      status = (fabs (x -y) > abserr);
+      const double x = X[i];
+      const double y = Y[i];
+      status = (*cmp)(x, y, relerr);
+      if ( status ) break;
     }
   if ( status || verbose )
     {
-      printf ("%s : ", str);
+      printf ("\t%s : ", str);
       printf ( status ? "FAIL" : "OK");
       if ( status ) 
         {
           va_list ap;
           va_start (ap, fmt);
-          va_end (ap);
           printf (" (");
           vprintf (fmt, ap);
-          printf ("  expected %.18g observed %.18g)", y, x);
+          va_end (ap);
+          printf (" expected %.18g observed %.18g)", Y[i], X[i]);
         }
       printf ("\n");
     }
   update_count_tests (status);
   return (status ? FALSE : TRUE);
+
 }
+
 
 /** 
  * Checks if |x(i,j) - y(i,j)| / |y(i,j)| < relerr
@@ -203,11 +250,9 @@ int pnl_test_eq_abs (double x, double y, double abserr, const char *str, const c
  */
 int pnl_test_mat_eq_rel (const PnlMat *X, const PnlMat *Y, double relerr, const char *str, const char *fmt, ...)
 {
-  int i, status;
   va_list ap;
   va_start (ap, fmt);
   va_end (ap);
-  status = 0;
   if ( X->m != Y->m || X->n != Y->n )
     {
       printf ("%s : ", str);
@@ -215,42 +260,7 @@ int pnl_test_mat_eq_rel (const PnlMat *X, const PnlMat *Y, double relerr, const 
       printf (fmt, ap); printf (")\n");
       return FALSE;
     }
-  for ( i=0 ; i<X->mn ; i++ )
-    {
-      const double x = X->array[i];
-      const double y = Y->array[i];
-      if ( (pnl_isnan (x) && !pnl_isnan(y)) ||
-           (pnl_isinf (x) && !pnl_isinf(y)) )
-        {
-          status = 1;
-        }
-      else if ( y != 0 )
-        {
-          status = (fabs (x -y) / fabs(y) > relerr);
-        }
-      else
-        {
-          status = (fabs(x) > relerr);
-        }
-      if ( status ) break;
-    }
-  if ( status || verbose )
-    {
-      printf ("%s : ", str);
-      printf ( status ? "FAIL" : "OK");
-      if ( status ) 
-        {
-          va_list ap;
-          va_start (ap, fmt);
-          printf (" (");
-          vprintf (fmt, ap);
-          va_end (ap);
-          printf ("  expected %.18g observed %.18g)", Y->array[i], X->array[i]);
-        }
-      printf ("\n");
-    }
-  update_count_tests (status);
-  return (status ? FALSE : TRUE);
+  return pnl_test_array (X->array, Y->array, X->mn, relerr, test_eq_rel, str, fmt, ap);
 }
 
 /** 
@@ -268,50 +278,17 @@ int pnl_test_mat_eq_rel (const PnlMat *X, const PnlMat *Y, double relerr, const 
  */
 int pnl_test_mat_eq_abs (const PnlMat *X, const PnlMat *Y, double abserr, const char *str, const char *fmt, ...)
 {
-  int i, status;
   va_list ap;
   va_start (ap, fmt);
   va_end (ap);
-  status = 0;
   if ( X->m != Y->m || X->n != Y->n )
     {
       printf ("%s : ", str);
-      printf (" : FAIL (size mismatch");
+      printf ("FAIL (size mismatch");
       printf (fmt, ap); printf (")\n");
       return FALSE;
     }
-  for ( i=0 ; i<X->mn ; i++ )
-    {
-      const double x = X->array[i];
-      const double y = Y->array[i];
-      if ( (pnl_isnan (x) && !pnl_isnan(y)) ||
-           (pnl_isinf (x) && !pnl_isinf(y)) )
-        {
-          status = 1;
-        }
-      else 
-        {
-          status = (fabs (x -y)  > abserr);
-        }
-      if ( status ) break;
-    }
-  if ( status || verbose )
-    {
-      printf ("%s : ", str);
-      printf ( status ? "FAIL" : "OK");
-      if ( status ) 
-        {
-          va_list ap;
-          va_start (ap, fmt);
-          printf (" (");
-          vprintf (fmt, ap);
-          va_end (ap);
-          printf ("  expected %.18g observed %.18g)", Y->array[i], X->array[i]);
-        }
-      printf ("\n");
-    }
-  update_count_tests (status);
-  return (status ? FALSE : TRUE);
+  return pnl_test_array (X->array, Y->array, X->mn, abserr, test_eq_abs, str, fmt, ap);
 }
 
 /** 
@@ -329,52 +306,102 @@ int pnl_test_mat_eq_abs (const PnlMat *X, const PnlMat *Y, double abserr, const 
  */
 int pnl_test_mat_eq(const PnlMat *X, const PnlMat *Y, double relerr, const char *str, const char *fmt, ...)
 {
-  int i, status;
   va_list ap;
   va_start (ap, fmt);
   va_end (ap);
-  status = 0;
   if ( X->m != Y->m || X->n != Y->n )
     {
       printf ("%s : ", str);
-      printf (" : FAIL (size mismatch");
+      printf ("FAIL (size mismatch");
       printf (fmt, ap); printf (")\n");
       return FALSE;
     }
-  for ( i=0 ; i<X->mn ; i++ )
-    {
-      const double x = X->array[i];
-      const double y = Y->array[i];
-      if ( (pnl_isnan (x) && !pnl_isnan(y)) ||
-           (pnl_isinf (x) && !pnl_isinf(y)) )
-        {
-          status = 1;
-        }
-      else 
-        {
-        status = (fabs (x -y) / MAX(1, fabs(y)) > relerr);
-        }
-      if ( status ) break;
-    }
-  if ( status || verbose )
-    {
-      printf ("%s : ", str);
-      printf ( status ? "FAIL" : "OK");
-      if ( status ) 
-        {
-          va_list ap;
-          va_start (ap, fmt);
-          printf (" (");
-          vprintf (fmt, ap);
-          va_end (ap);
-          printf ("  expected %.18g observed %.18g)", Y->array[i], X->array[i]);
-        }
-      printf ("\n");
-    }
-  update_count_tests (status);
-  return (status ? FALSE : TRUE);
+  return pnl_test_array (X->array, Y->array, X->mn, relerr, test_eq, str, fmt, ap);
 }
 
+/** 
+ * Checks if |x(i,j) - y(i,j)| / |y(i,j)| < relerr
+ * 
+ * @param X computed result (vector)
+ * @param Y expected result (vector)
+ * @param relerr relative error (note that when |y| < 1, it is an abolute
+ * error)
+ * @param str the name of the tested function
+ * @param fmt a format string to be passed to printf
+ * @param ... extra arguments for printf
+ * 
+ * @return FALSE or TRUE
+ */
+int pnl_test_vect_eq_rel (const PnlVect *X, const PnlVect *Y, double relerr, const char *str, const char *fmt, ...)
+{
+  va_list ap;
+  va_start (ap, fmt);
+  va_end (ap);
+  if ( X->size != Y->size )
+    {
+      printf ("%s : ", str);
+      printf ("FAIL (size mismatch");
+      printf (fmt, ap); printf (")\n");
+      return FALSE;
+    }
+  return pnl_test_array (X->array, Y->array, X->size, relerr, test_eq_rel, str, fmt, ap);
+}
+
+/** 
+ * Checks if |x(i,j) - y(i,j)| < abserr
+ * 
+ * @param X computed result (vector)
+ * @param Y expected result (vector)
+ * @param relerr relative error (note that when |y| < 1, it is an abolute
+ * error)
+ * @param str the name of the tested function
+ * @param fmt a format string to be passed to printf
+ * @param ... extra arguments for printf
+ * 
+ * @return FALSE or TRUE
+ */
+int pnl_test_vect_eq_abs (const PnlVect *X, const PnlVect *Y, double abserr, const char *str, const char *fmt, ...)
+{
+  va_list ap;
+  va_start (ap, fmt);
+  va_end (ap);
+  if ( X->size != Y->size )
+    {
+      printf ("%s : ", str);
+      printf ("FAIL (size mismatch");
+      printf (fmt, ap); printf (")\n");
+      return FALSE;
+    }
+  return pnl_test_array (X->array, Y->array, X->size, abserr, test_eq_abs, str, fmt, ap);
+}
+
+/** 
+ * Checks if |x(i,j) - y(i,j)| / (max(1, |y(i,j)|)) < relerr for all (i,j)
+ * 
+ * @param X computed result (vector)
+ * @param Y expected result (vector)
+ * @param relerr relative error (note that when |y| < 1, it is an abolute
+ * error)
+ * @param str the name of the tested function
+ * @param fmt a format string to be passed to printf
+ * @param ... extra arguments for printf
+ * 
+ * @return FALSE or TRUE
+ */
+int pnl_test_vect_eq(const PnlVect *X, const PnlVect *Y, double relerr, const char *str, const char *fmt, ...)
+{
+  va_list ap;
+  va_start (ap, fmt);
+  va_end (ap);
+  if ( X->size != Y->size )
+    {
+      printf ("%s : ", str);
+      printf ("FAIL (size mismatch");
+      printf (fmt, ap); printf (")\n");
+      return FALSE;
+    }
+  return pnl_test_array (X->array, Y->array, X->size, relerr, test_eq, str, fmt, ap);
+}
 
 
 
