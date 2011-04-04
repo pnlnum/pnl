@@ -10,7 +10,7 @@ laplace_test            list_test           mathtools_test \
 ode_test                optim_test          random_test    \
 root_test               saveload_test       matrix_test    \
 solver_iterativ_test    special_func_test   speed_test     \
-tridiag_test            vector_test
+tridiag_test            vector_test         vector_complex_test
 
 TESTS=$(check_PROGRAMS) 
 build-tests: $(TESTS)
@@ -77,6 +77,9 @@ tridiag_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
 vector_test_SOURCES=vector_test.c tests_utils.c
 vector_test_LDADD=../src/libpnl.la ${some_extra_libs}
+
+vector_complex_test_SOURCES=vector_complex_test.c tests_utils.c
+vector_complex_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
 if HAVE_MPI
 check_PROGRAMS+=pnl-mpi_test rng-mpi_test saveload_test
