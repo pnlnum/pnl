@@ -23,8 +23,8 @@
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_random.h"
-
 #include "pnl/pnl_optim.h"
+#include "tests_utils.h"
 
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  *  This file contains routines to implement test problem HS15 from
@@ -69,10 +69,9 @@ static void grad_func_HS15(const PnlVect *x, PnlVect *grad, void *pt)
 
 // In order to test the algorithm, the starting point is chosen randomly.
 // Of course, in practical cases, one chooses a starting point in accordance with the problem.
-static void choose_random_input_point(int type_generator, PnlVect* x_input, PnlVect*lower_bounds, PnlVect* upper_bounds)
+static void choose_random_input_point(int type_generator, PnlVect* x_input)
 {
   double theta, x_min, x_max;
-
   theta = pnl_rand_uni(type_generator);
   x_min = 0;
   x_max = 0.5;
@@ -99,11 +98,14 @@ static void minimize_func_HS15()
   type_generator = PNL_RNG_MERSENNE_RANDOM_SEED;
   pnl_rand_init(type_generator, 2, 1);
 
-  tolerance = 1e-6; // Optimality termination tolerance
+  tolerance = 1e-9; // Optimality termination tolerance
   iter_max = 500; // Maximum number of iteration
 
+  if ( pnl_test_is_verbose () )
+    print_algo_steps = 2; 
+  else
+    print_algo_steps = 0; 
 
-  print_algo_steps = 2; // flag to decide to print information.
   /*print_algo_steps=0 : we print no information
     print_algo_steps=1 : we print final results
     print_algo_steps>1 : we print information at each iteration*/
@@ -112,8 +114,6 @@ static void minimize_func_HS15()
   x_output = pnl_vect_create(2); //Output point
 
   // Lower and upper bound of the variable x
-  // lower_bounds[i]=PNL_NEGINF means there is no lower bound on varialbes x[i]
-  // upper_bounds[i]=PNL_POSINF means there is no upper bound on varialbes x[i]
   lower_bounds = pnl_vect_create_from_list(2, PNL_NEGINF, PNL_NEGINF);
   upper_bounds = pnl_vect_create_from_list(2, 0.5, PNL_POSINF);
 
@@ -132,7 +132,7 @@ static void minimize_func_HS15()
   // We use a random starting point
   // Of course, in practical cases, one chooses a starting point in accordance with the problem.
   // !! Initial point must be strictly admissible. ie constraint(x) > 0. !!
-  choose_random_input_point(type_generator, x_input, lower_bounds, upper_bounds);
+  choose_random_input_point(type_generator, x_input);
 
   // Call of the optimization routine.
   CONVERGENCE = pnl_optim_intpoints_bfgs_solve(&FuncToMinimize, &GradFuncToMinimize, &NL_Constraints, lower_bounds, upper_bounds, x_input, tolerance, iter_max, print_algo_steps, x_output);
@@ -140,8 +140,12 @@ static void minimize_func_HS15()
 
   if (CONVERGENCE!=0)
     {
-      printf("\n\nThe standard minimum is (%f, %f), Sometimes the solver converges to another local minimum at (-0.79212, -1.26243)\n", 0.5, 2.0);
-      printf("The algorithme stops at (%f, %f) \n\n\n", GET(x_output,0), GET(x_output, 1));
+    /* "\n\nThe standard minimum is (%f, %f), Sometimes the solver
+     * converges to another local minimum at (-0.79212, -1.26243)\n", 0.5,
+     * 2.0 */
+      PnlVect *res = pnl_vect_create_from_list (2, 0.5, 2.0);
+      pnl_test_vect_eq_abs (x_output, res, 1E-8, "intpoints_bfgs", "An other solution may be (-0.79212, -1.26243)");
+      pnl_vect_free (&res);
     }
 
   pnl_vect_free(&x_input);
@@ -151,8 +155,9 @@ static void minimize_func_HS15()
 }
 
 
-int main ()
+int main (int argc, char **argv)
 {
+  pnl_test_init (argc, argv);
   minimize_func_HS15();
-  return OK;
+  exit (pnl_test_finalize ("Optim"));
 }
