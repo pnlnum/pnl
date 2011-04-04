@@ -43,7 +43,6 @@ void pnl_test_init (int argc, char **argv)
   count_fail = 0;
 }
 
-
 /** 
  * Update test counter according to status
  * 
@@ -74,6 +73,30 @@ int pnl_test_finalize(const char *str)
   return ( count_fail >0 );
 }
 
+/** 
+ * Declares a test as passed
+ * 
+ * @param str a string
+ */
+void pnl_test_set_ok (const char *str)
+{
+  update_count_tests (0);
+  if ( verbose ) 
+    {
+      printf ("\t%s : OK\n", str);
+    }
+}
+
+/** 
+ * Declares a test as failed
+ * 
+ * @param str a string
+ */
+void pnl_test_set_fail (const char *str, double res, double expected)
+{
+  update_count_tests (1);
+  printf ("\t%s : FAIL (observed %.18f expected %.18f)\n", str, res, expected);
+}
 
 static int test_eq_rel (double x, double y, double relerr)
 {

@@ -28,6 +28,9 @@ extern int pnl_test_mat_eq_abs(const PnlMat *X, const PnlMat *Y, double relerr, 
 
 extern void pnl_test_init(int argc, char **argv);
 extern int pnl_test_finalize();
+extern void pnl_test_set_ok (const char *str);
+extern void pnl_test_set_fail (const char *str, double res, double expected);
+
 
 
 #endif /* TESTS_H */
