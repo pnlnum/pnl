@@ -80,7 +80,7 @@ extern void pnl_mat_mult_vect_transpose_inplace(PnlVect *lhs, const PnlMat *mat,
 extern  void pnl_mat_lAxpby(double l, const PnlMat *A, const PnlVect *x, double b, PnlVect * y);
 extern void pnl_mat_dgemv (char trans, double alpha, const PnlMat *A,
                            const PnlVect *x , double beta, PnlVect * y);
-extern double pnl_mat_scalar_prod_A(const PnlMat *A, const PnlVect *x , const PnlVect * y);
+extern double pnl_mat_scalar_prod(const PnlMat *A, const PnlVect *x , const PnlVect * y);
 
 extern void pnl_mat_set_double(PnlMat *lhs, double x);
 extern void pnl_mat_set_id(PnlMat *lhs);

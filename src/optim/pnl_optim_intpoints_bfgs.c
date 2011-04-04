@@ -660,7 +660,7 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
               norm_gamma += SQR(GET(gamma, i)); // norm_gamma=norm(gamma)^2
             }
 
-          delta_M_delta=pnl_mat_scalar_prod_A(M_old,delta,delta); //transpose(delta)*M*delta
+          delta_M_delta=pnl_mat_scalar_prod(M_old,delta,delta); //transpose(delta)*M*delta
           // Up date of M only if BFGS formula is well defined.
           if ((fabs(delta_gamma) > eta) && (fabs(delta_M_delta) > eta))
             {

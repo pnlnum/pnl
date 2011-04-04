@@ -592,7 +592,7 @@ and \var{beta} are real numbers, \var{A} and \var{B} are matrices and \var{x}
 and \var{y} are vectors.
 \begin{tabular}{ll}
   \reffun{pnl_mat_axpy} & \var{B := alpha * A + B} \\
-  \reffun{pnl_mat_scalar_prod_A} & \var{y' A x} \\
+  \reffun{pnl_mat_scalar_prod} & \var{x' A y} \\
   \reffun{pnl_mat_dgemm} & \var{C := alpha * op (A) * op (B) + beta * C}\\
   \reffun{pnl_mat_mult_vect_transpose_inplace} & \var{y = A' * x}\\
   \reffun{pnl_mat_mult_vect_inplace} & \var{y = A * x}\\
@@ -1079,7 +1079,7 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 \paragraph{Standard matrix operations}
 \begin{itemize}
 
-\item \describefun{double}{pnl_mat_scalar_prod_A}{const \refstruct{PnlMat}
+\item \describefun{double}{pnl_mat_scalar_prod}{const \refstruct{PnlMat}
     \ptr A, const \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr y}
   \sshortdescribe Computes \var{x' * A * y}
 
@@ -1431,13 +1431,13 @@ diagonal ($M_{i, i+1}$) and the lower diagonal ($M_{i-1, i}$).
   \item \describefun{double}{pnl_tridiag_mat_scalar_prod}{const \refstruct{PnlVect}
     \ptr x,const \refstruct{PnlTridiagMat} \ptr A, const \refstruct{PnlVect} \ptr y}
     \sshortdescribe Computes \var{x' * A * y}
-  \item \describefun{void}{pnl_tridiag_mat_syslin_inplace}{const
+  \item \describefun{void}{pnl_tridiag_mat_syslin_inplace}{
       \refstruct{PnlTridiagMat} \ptr M, \refstruct{PnlVect} \ptr b}
     \sshortdescribe Solves the linear system M x = b. The solution is written into
-    \var{b} on exit.
+    \var{b} on exit. On exit, \var{M} is modified and becomes unusable.
   \item \describefun{void}{pnl_tridiag_mat_syslin}{\refstruct{PnlVect}
-      \ptr x, const \refstruct{PnlTridiagMat} \ptr M, const \refstruct{PnlVect} \ptr b}
-    \sshortdescribe Solves the linear system M x = b. 
+      \ptr x, \refstruct{PnlTridiagMat} \ptr M, const \refstruct{PnlVect} \ptr b}
+    \sshortdescribe Solves the linear system M x = b. On exit, \var{M} is modified and becomes unusable.
 \end{itemize}
 
 

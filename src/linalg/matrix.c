@@ -214,40 +214,40 @@ void pnl_mat_exp (PnlMat *B, const PnlMat *A)
 /************************************************************************/
 
 /**
- * Computes y' A x 
+ * Computes x' A y 
 
  * @param A : matrix
  * @param x : vector
  * @param y : vector
- * @return y' A x 
+ * @return x' A y 
  */
-double pnl_mat_scalar_prod_A(const PnlMat *A, const PnlVect *x , const PnlVect * y)
+double pnl_mat_scalar_prod(const PnlMat *A, const PnlVect *x , const PnlVect * y)
 {
   double *yarray,*Aarray,*xarray;
   double temp,sum;
   int i,j;
   
 #ifndef PNL_RANGE_CHECK_OFF
-  if (A->n != x->size || A->m != y->size)
+  if (A->n != y->size || A->m != x->size)
     {
       PNL_ERROR ("size mismatch", "pnl_mat_scalar_prod_A");
     }
 #endif
 
-  yarray = y->array;
+  xarray=x->array;
   Aarray = A->array;
   sum=0;
-  for (i=0; i<y->size; i++)
+  for (i=0; i<x->size; i++)
     {
       temp = 0.;
-      xarray=x->array;
+      yarray = y->array;
       for (j=0; j<A->n; j++) 
         {
-          temp += (*Aarray)*(*xarray);
-          Aarray++; xarray++;
+          temp += (*Aarray)*(*yarray);
+          Aarray++; yarray++;
         }
-      sum += (*yarray)*temp;
-      yarray ++;
+      sum += (*xarray)*temp;
+      xarray ++;
     }
   return sum;
 }
