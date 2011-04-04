@@ -105,9 +105,9 @@ extern void pnl_tridiag_mat_div_tridiag_mat_term(PnlTridiagMat *lhs, const PnlTr
 extern PnlVect* pnl_tridiag_mat_mult_vect(const PnlTridiagMat *mat,const PnlVect *vec);
 extern void pnl_tridiag_mat_mult_vect_inplace(PnlVect *lhs, const PnlTridiagMat *mat, const PnlVect *rhs);
 extern void pnl_tridiag_mat_lAxpby(double l, const PnlTridiagMat *A, const PnlVect *x, double b, PnlVect * y);
-extern double pnl_tridiag_mat_scalar_prod(const PnlVect *lhs, const PnlTridiagMat *mat,const PnlVect *rhs);
-extern int pnl_tridiag_mat_syslin (PnlVect *lhs, const PnlTridiagMat *M,const PnlVect *rhs);
-extern int pnl_tridiag_mat_syslin_inplace (const PnlTridiagMat *M, PnlVect *rhs);
+extern double pnl_tridiag_mat_scalar_prod(const PnlTridiagMat *mat, const PnlVect *lhs, const PnlVect *rhs);
+extern int pnl_tridiag_mat_syslin (PnlVect *lhs, PnlTridiagMat *M,const PnlVect *rhs);
+extern int pnl_tridiag_mat_syslin_inplace (PnlTridiagMat *M, PnlVect *rhs);
 
 
 extern void pnl_tridiag_mat_set(PnlTridiagMat *v, int d, int up, double x);

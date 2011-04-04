@@ -627,11 +627,11 @@ void pnl_tridiag_mat_print (const PnlTridiagMat *M)
 /**
  * solves the linear system A x = b
  *
- * @param A a PnlTridiagMat
+ * @param A a PnlTridiagMat. On exit, A is modified and becomes unusable.
  * @param b right hand side member. On exit b contains the solution x
  * @return FAIL or OK
  */
-int pnl_tridiag_mat_syslin_inplace (const PnlTridiagMat *A, PnlVect *b)
+int pnl_tridiag_mat_syslin_inplace (PnlTridiagMat *A, PnlVect *b)
 {
   int n, nrhs, info, ldb;
   n = A->size;
@@ -648,12 +648,12 @@ int pnl_tridiag_mat_syslin_inplace (const PnlTridiagMat *A, PnlVect *b)
 /**
  * solves the linear system A x = b
  *
- * @param A a PnlTridiagMat
+ * @param A a PnlTridiagMat. On exit, A is modified and becomes unusable.
  * @param x contains the solution on exit
  * @param b right hand side member.
  * @return FAIL or OK
  */
-int pnl_tridiag_mat_syslin (PnlVect *x, const PnlTridiagMat *A, const PnlVect *b)
+int pnl_tridiag_mat_syslin (PnlVect *x, PnlTridiagMat *A, const PnlVect *b)
 {
   pnl_vect_clone (x, b);
   return pnl_tridiag_mat_syslin_inplace (A, x);
@@ -664,11 +664,11 @@ int pnl_tridiag_mat_syslin (PnlVect *x, const PnlTridiagMat *A, const PnlVect *b
  * Computes the scalar product <x,A * y>
  *
  * @param x a real vector
- * @param T a tridiagonal matrix
+ * @param A a tridiagonal matrix
  * @param y a real vector
  * @return  x' * A * y
  */
-double pnl_tridiag_mat_scalar_prod (const PnlVect *x, const PnlTridiagMat *T,const PnlVect *y)
+double pnl_tridiag_mat_scalar_prod (const PnlTridiagMat *T, const PnlVect *x, const PnlVect *y)
 {
   int n, k;
   double sum;
