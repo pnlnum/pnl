@@ -25,20 +25,14 @@
 #include "tests_utils.h"
 
 
-/*TEST DES FONCTIONS PREMIAVECT// */
 void Test_Solver_sym(void )
 {  
-  /*
-    Short program to test solver CG & shown how to use it...
-  */
-
   int Size;
   PnlVect *x1,*x2,*x3, *b;
   PnlMat *M,*PC;
   PnlCgSolver* Solver;
   PnlBicgSolver* Solver2;
   PnlGmresSolver* Solver3;
-  printf(">>>>>> Test iterativ Solver  Symetric matrix \n");
   Size=10;
   b=pnl_vect_create_from_double(Size,1);
   b->array[2]=2.0;
@@ -55,10 +49,9 @@ void Test_Solver_sym(void )
   pnl_mat_cg_solver_solve(M,PC,x1,b,Solver);
   pnl_mat_bicg_solver_solve(M,PC,x2,b,Solver2);
   pnl_mat_gmres_solver_solve(M,PC,x3,b,Solver3);
-  pnl_vect_axpby(-1.0, x1, 1.0, x2);
-  pnl_vect_axpby(-1.0, x1, 1.0, x3);
-  printf("==> Error BICG-CG %e \n",pnl_vect_norm_two(x2));
-  printf("==> Error GMRES-CG %e \n",pnl_vect_norm_two(x3));
+
+  pnl_test_vect_eq_abs (x2, x1, 1E-5, "BICG - CG (symmetric)", "");
+  pnl_test_vect_eq_abs (x3, x1, 1E-5, "GMRES - CG (symmetric)", "");
   pnl_cg_solver_free(&Solver);
   pnl_bicg_solver_free(&Solver2);
   pnl_gmres_solver_free(&Solver3);
@@ -72,15 +65,11 @@ void Test_Solver_sym(void )
 }
 void Test_Solver_no_sym(void )
 {  
-  /*
-    Short program to test solver CG & shown how to use it...
-  */
   int Size;
   PnlVect *b,*res, *x1,*x2;
   PnlMat *Q,*PC;
   PnlBicgSolver* Solver2;
   PnlGmresSolver* Solver3;
-  printf(">>>>>> Test iterativ Solver Non Symetric matrix \n");
   Size=20;
   b   = pnl_vect_create_from_file ("Data/Test_vect_rhs.dat");
   res = pnl_vect_create_from_file ("Data/Test_res.dat");
@@ -93,10 +82,14 @@ void Test_Solver_no_sym(void )
   Solver3=pnl_gmres_solver_create(b->size,100,20,1e-6);
   pnl_mat_bicg_solver_solve(Q,PC,x1,b,Solver2);
   pnl_mat_gmres_solver_solve(Q,PC,x2,b,Solver3);
+
+  /*
+   * Computes the error for each method
+   */
+  pnl_test_vect_eq_abs (x1, res, 1E-3, "BICG", "");
+  pnl_test_vect_eq_abs (x2, res, 1E-3, "GMRES", "");
   pnl_vect_axpby(-1.0, res, 1.0, x1);
   pnl_vect_axpby(-1.0, res, 1.0, x2);
-  printf("==> Error BICG %g \n",pnl_vect_norm_two(x1));
-  printf("==> Error GMRES %g \n",pnl_vect_norm_two(x2));
   pnl_bicg_solver_free(&Solver2);
   pnl_gmres_solver_free(&Solver3);
   pnl_mat_free(&Q);
@@ -108,9 +101,10 @@ void Test_Solver_no_sym(void )
 }
 
 
-int main ()
+int main (int argc, char **argv)
 {
+  pnl_test_init (argc, argv);
   Test_Solver_sym ();
   Test_Solver_no_sym ();
-  return OK;
+  exit (pnl_test_finalize ("Iterative Solver"));
 }
