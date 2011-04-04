@@ -1467,7 +1467,7 @@ TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect)(const TYPE(PnlVect) *V, int i,int
 #ifndef PNL_RANGE_CHECK_OFF
   if ( (i+s-1 >= V->size) || (s<=0) || (i<0) )
     {
-      PNL_ERROR ("index out of range", "pnl_vect_extract_with_size");
+      PNL_ERROR ("index out of range", "pnl_vect_wrap_subvect");
     }
 #endif
   FUNCTION(pnl_vect,init)(&ret);
