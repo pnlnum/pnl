@@ -301,6 +301,7 @@ int pnl_test_mat_eq_rel (const PnlMat *X, const PnlMat *Y, double relerr, const 
       printf ("%s : ", str);
       printf ("FAIL (size mismatch");
       printf (fmt, ap); printf (")\n");
+      update_count_tests (1);
       return FALSE;
     }
   return pnl_test_array (X->array, Y->array, X->mn, relerr, test_eq_rel, str, fmt, ap);
@@ -329,6 +330,7 @@ int pnl_test_mat_eq_abs (const PnlMat *X, const PnlMat *Y, double abserr, const 
       printf ("%s : ", str);
       printf ("FAIL (size mismatch");
       printf (fmt, ap); printf (")\n");
+      update_count_tests (1);
       return FALSE;
     }
   return pnl_test_array (X->array, Y->array, X->mn, abserr, test_eq_abs, str, fmt, ap);
@@ -357,6 +359,7 @@ int pnl_test_mat_eq(const PnlMat *X, const PnlMat *Y, double relerr, const char 
       printf ("%s : ", str);
       printf ("FAIL (size mismatch");
       printf (fmt, ap); printf (")\n");
+      update_count_tests (1);
       return FALSE;
     }
   return pnl_test_array (X->array, Y->array, X->mn, relerr, test_eq, str, fmt, ap);
@@ -385,6 +388,7 @@ int pnl_test_vect_eq_rel (const PnlVect *X, const PnlVect *Y, double relerr, con
       printf ("%s : ", str);
       printf ("FAIL (size mismatch");
       printf (fmt, ap); printf (")\n");
+      update_count_tests (1);
       return FALSE;
     }
   return pnl_test_array (X->array, Y->array, X->size, relerr, test_eq_rel, str, fmt, ap);
@@ -413,6 +417,7 @@ int pnl_test_vect_eq_abs (const PnlVect *X, const PnlVect *Y, double abserr, con
       printf ("%s : ", str);
       printf ("FAIL (size mismatch");
       printf (fmt, ap); printf (")\n");
+      update_count_tests (1);
       return FALSE;
     }
   return pnl_test_array (X->array, Y->array, X->size, abserr, test_eq_abs, str, fmt, ap);
@@ -441,6 +446,7 @@ int pnl_test_vect_eq(const PnlVect *X, const PnlVect *Y, double relerr, const ch
       printf ("%s : ", str);
       printf ("FAIL (size mismatch");
       printf (fmt, ap); printf (")\n");
+      update_count_tests (1);
       return FALSE;
     }
   return pnl_test_array (X->array, Y->array, X->size, relerr, test_eq, str, fmt, ap);
