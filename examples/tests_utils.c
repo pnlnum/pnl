@@ -73,6 +73,11 @@ int pnl_test_finalize(const char *str)
   return ( count_fail >0 );
 }
 
+int pnl_test_is_verbose ()
+{
+  return verbose;
+}
+
 /** 
  * Declares a test as passed
  * 
@@ -227,6 +232,21 @@ int pnl_test_eq_abs (double x, double y, double abserr, const char *str, const c
   return pnl_test_eq_aux (x, y, abserr, test_eq_abs, str, fmt, ap);
 }
 
+/** 
+ * Compares two vectors component-wise using the comparison function
+ * specified b cmp
+ * 
+ * @param X a vector (computed result)
+ * @param Y a vector (expected result)
+ * @param n size of the expected result
+ * @param relerr maximum admissible error in the comparison
+ * @param cmp the comparison function
+ * @param str name of the tested functionnality
+ * @param fmt a format string
+ * @param ... extra arguments
+ * 
+ * @return TRUE or FALSE
+ */
 static int pnl_test_array (const double *X, const double *Y, int n, double relerr, int(*cmp)(double, double, double), const char *str, const char *fmt, ...)
 {
   int i, status;

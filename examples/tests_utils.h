@@ -30,6 +30,7 @@ extern void pnl_test_init(int argc, char **argv);
 extern int pnl_test_finalize();
 extern void pnl_test_set_ok (const char *str);
 extern void pnl_test_set_fail (const char *str, double res, double expected);
+extern int pnl_test_is_verbose ();
 
 
 
