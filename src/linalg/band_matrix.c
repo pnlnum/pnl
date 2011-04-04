@@ -294,7 +294,6 @@ void pnl_band_mat_map_band_mat_inplace(PnlBandMat *BA, const PnlBandMat *BB,
     }
 }
 
-
 /**
  * in-place matrix operator application
  * BM = BM op x
@@ -314,7 +313,6 @@ static void __pnl_band_mat_apply_op(PnlBandMat *BM, double x, double (*op)(doubl
         }
     }
 }
-
 
 /**
  * in-place PnlBandMat scalar addition
@@ -352,7 +350,6 @@ void pnl_band_mat_mult_double(PnlBandMat *BM , double x)
   __pnl_band_mat_apply_op (BM, x, __op_mult);
 }
 
-
 /**
  * in-place PnlBandMat scalar division
  *
@@ -364,7 +361,6 @@ void pnl_band_mat_div_double(PnlBandMat *BM , double x)
 {
   __pnl_band_mat_apply_op (BM, x, __op_div);
 }
-
 
 /**
  * map PnlBandMat componentwise
@@ -431,8 +427,9 @@ void pnl_band_mat_mult_band_mat_term(PnlBandMat *BA, const PnlBandMat *BB)
  */
 double pnl_band_mat_get(PnlBandMat *BM,int i,int j)
 {
-  PNL_CHECK ( j<0 || j>BM->n || i<MAX(0, j - BM->nu) || i>=MIN(BM->m, j+BM->nl+1),
+  PNL_CHECK ( j<0 || j>=BM->n || i<0 || i>=BM->m,
               "index out of range", "band_mat_get");
+  if (i<MAX(0, j - BM->nu) || i>=MIN(BM->m, j+BM->nl+1)) return 0.;
   return PNL_BMGET(BM, i, j);
 }
 
@@ -467,7 +464,6 @@ void pnl_band_mat_set(PnlBandMat * BM,int i,int j,double x)
   PNL_BMLET(BM, i, j) = x;
 }
 
-
 /**
  * pnl_band_mat_set_double
  * put value x for all entries of M,
@@ -486,7 +482,6 @@ void pnl_band_mat_set_double(PnlBandMat*  BM,double x)
         }
     }
 }
-
 
 /**
  *  in place matrix vector multiplication
