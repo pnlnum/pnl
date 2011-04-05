@@ -1,3 +1,8 @@
+04-04-2011 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* examples : design of a new unit test framework and backport of all
+	the previous tests.
+
 16-03-2011 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* rkf45.c : Runge Kutta Fehler 45 integrator for n dimensional ODEs
