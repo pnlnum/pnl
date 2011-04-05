@@ -22,3 +22,4 @@ special_func_test
 speed_test
 tridiag_test
 vector_test
+vector_complex_test
