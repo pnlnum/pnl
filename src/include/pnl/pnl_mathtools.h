@@ -157,10 +157,7 @@ extern int pnl_isinf (double x);
 #endif
 #define ABS(x) ( ((x) >= 0) ? (x) : -(x) )
 
-#ifdef SIGN
-#undef SIGN
-#endif
-#define SIGN(x) ( ((x) < 0) ? (-1) : (1))
+#define PNL_SIGN(x) ( ((x) < 0) ? (-1) : (1))
 
 /* MAX and MIN already defined in <sys/param.h>  */
 /* if we are compiling for Windows (Visual or mingw32

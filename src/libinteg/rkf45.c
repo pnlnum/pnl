@@ -501,13 +501,13 @@ L50:
       d__3 = ABS (*t), d__4 = ABS (dt);
       d__1 = *h, d__2 = u26 * MAX (d__3, d__4);
       *h = MAX (d__1, d__2);
-      *jflag = 2 * SIGN (*iflag);
+      *jflag = 2 * PNL_SIGN (*iflag);
 
     }
 
 
   /*     set stepsize for integration in the direction from t to tout */
-  *h = ABS (*h) * SIGN (dt);
+  *h = ABS (*h) * PNL_SIGN (dt);
 
   /*     test to see if rkf45 is being severely impacted by too many */
   /*     output points */
@@ -713,7 +713,7 @@ L260:
   /* Computing MAX */
   d__2 = s * ABS (*h);
   d__1 = MAX (d__2, hmin);
-  *h = ABS (d__1) * SIGN (*h);
+  *h = ABS (d__1) * PNL_SIGN (*h);
 
   /* end of core integrator */
 
