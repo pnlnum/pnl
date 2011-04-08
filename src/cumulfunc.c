@@ -314,6 +314,8 @@
 #include "pnl/pnl_cdf.h"
 #include "libamos/amos.h"
 
+#define PRECISION 1.0e-7
+
 static double algdiv(double *a,double *b);
 static double alngam(double *x);
 static double alnrel(double *a);

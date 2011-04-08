@@ -132,9 +132,9 @@ extern int pnl_isinf (double x);
 #define DBL_EPSILON        2.2204460492503131e-16
 #endif
 
-#define BIG_DOUBLE 1.0e6
-#define PRECISION 1.0e-7 /*Precision for the localization of FD methods*/
-#define INC 1.0e-5 /*Relative Increment for Delta-Hedging*/
+/* #define BIG_DOUBLE 1.0e6 */
+/* #define PRECISION 1.0e-7 |+Precision for the localization of FD methods+| */
+/* #define INC 1.0e-5 |+Relative Increment for Delta-Hedging+| */
 
 #define MAXLOOPS 5000
 #ifdef POW
