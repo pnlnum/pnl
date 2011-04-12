@@ -111,67 +111,58 @@ static void create_sym_pos_matrix (PnlMat *S, int n, int gen)
   pnl_vect_free (&b);
 }
 
-
-/* Test of the PnlMat functions */
-
-static void pnl_mat_set_test()
-{
-  PnlMat *M;
-  printf("test de la fonction 'set' : \n");
-  M=pnl_mat_create_from_double(4,2,2.0);
-  MLET (M,3,1) = 3.0;
-  pnl_mat_print(M);
-  pnl_mat_free(&M);
-}
-
-static void pnl_mat_get_test()
-{
-  PnlMat *M;
-  printf("test de la fonction 'get' : ");
-  M=pnl_mat_create_from_double(4,2,2.0);
-  printf("M[3,1]=%f \n",MGET(M,3,1));
-  pnl_mat_free(&M);
-}
-
-static void pnl_mat_lget_test()
-{
-  PnlMat *M;
-  printf("test de la fonction 'lget' : ");
-  M=pnl_mat_create_from_double(4,2,2.0);
-  printf("M[3,1]=%f \n",*(pnl_mat_lget(M,3,1)));
-  pnl_mat_free(&M);
-}
-
 static void pnl_mat_create_from_double_test()
 {
   PnlMat *M;
-  int rows;
-  int cols;
+  int rows, cols, i;
   double x;
-  printf("test de la fonction 'pnl_mat_create_from_double' : \n");
   rows=4;
   cols=2;
   x=2.5;
   M=pnl_mat_create_from_double(rows,cols,x);
-  pnl_mat_print(M);
+  for ( i=0 ; i<M->mn ; i++ )
+    {
+      if ( M->array[i] != 2.5 )
+        {
+          pnl_test_set_fail ( "mat_create_from_double", M->array[i], 2.5);
+          goto J1;
+        }
+    }
+  pnl_test_set_ok ("mat_create_from_double");
+J1:
   pnl_mat_free(&M);
 }
 
 static void pnl_mat_create_from_ptr_test()
 {
   PnlMat *M;
-  int rows;
-  int cols;
+  int rows, cols, i;
   double x[8]={1.0, 5.0, 3.0, 8.0, 3.0, 7.0, 6.0, 9.0};
-  printf("test de la fonction 'pnl_mat_create_from_ptr' : \n");
   rows=4;
   cols=2;
   M=pnl_mat_create_from_ptr(rows,cols,x);
-  pnl_mat_print(M);
+  for ( i=0 ; i<M->mn ; i++ )
+    {
+      if ( M->array[i] != x[i] )
+        {
+          pnl_test_set_fail ( "mat_create_from_ptr", M->array[i], x[i]);
+          goto J1;
+        }
+    }
+  pnl_test_set_ok ("mat_create_from_ptr");
+J1:
   pnl_mat_free(&M);
   M=pnl_mat_create_from_list(rows,cols,1.0, 5.0, 3.0, 8.0, 3.0, 7.0, 6.0, 9.0);
-  printf("test de la fonction 'pnl_mat_create_from_list' : \n");
-  pnl_mat_print(M);
+  for ( i=0 ; i<M->mn ; i++ )
+    {
+      if ( M->array[i] != x[i] )
+        {
+          pnl_test_set_fail ( "mat_create_from_ptr", M->array[i], x[i]);
+          goto J2;
+        }
+    }
+  pnl_test_set_ok ("mat_create_from_ptr");
+J2:
   pnl_mat_free(&M);
 }
 
@@ -194,7 +185,7 @@ static void pnl_mat_submat_test ()
   pnl_mat_rand_normal(M2, m, n, gen);
   indi = pnl_vect_int_create (0);
   indj = pnl_vect_int_create (0);
-  
+
   if ( pnl_mat_find (indi, indj, "m", ispos, M1) == FAIL ) 
     {
       printf ("Error in pnl_mat_find\n");
@@ -248,44 +239,13 @@ static void pnl_mat_submat_test ()
   pnl_mat_free (&M2);
 }
 
-static void pnl_mat_set_diag_test ()
-{
-  int d, n;
-  double x;
-  PnlMat *M;
-
-  n = 8;
-  x = 5.;
-  M = pnl_mat_create (n, n);
-
-  d = 0;
-  pnl_mat_set_double (M, 0.);
-  pnl_mat_set_diag (M, x, d);
-  pnl_mat_print (M);
-  printf ("\n");
-
-  d = 3;
-  pnl_mat_set_double (M, 0.);
-  pnl_mat_set_diag (M, x, d);
-  pnl_mat_print (M);
-  printf ("\n");
-
-  d = -2;
-  pnl_mat_set_double (M, 0.);
-  pnl_mat_set_diag (M, x, d);
-  pnl_mat_print (M);
-  pnl_mat_free (&M);
-  printf ("\n");
-}
-
 static void pnl_mat_copy_test()
 {
   PnlMat *M1;
   PnlMat *M2;
-  printf("test de la fonction 'pnl_mat_copy' : \n");
   M2=pnl_mat_create_from_double(4,2,3.0);
   M1=pnl_mat_copy(M2);
-  pnl_mat_print(M1);
+  pnl_test_mat_eq_abs (M1, M2, 1E-18, "mat_copy", "");
   pnl_mat_free(&M1);
   pnl_mat_free(&M2);
 }
@@ -294,73 +254,83 @@ static void pnl_mat_clone_test()
 {
   PnlMat *M1;
   PnlMat *M2;
-  printf("test de la fonction 'pnl_mat_clone' : \n");
   M2=pnl_mat_create_from_double(4,2,3.0);
   M1=pnl_mat_create(0,0);
   pnl_mat_clone(M1,M2);
-  pnl_mat_print(M1);
+  pnl_test_mat_eq_abs (M1, M2, 1E-18, "mat_clone", "");
   pnl_mat_free(&M1);
   pnl_mat_free(&M2); 
 }
 
 
-static void pnl_mat_resize_test ()
-{
-  PnlMat *v;
-  printf ("Test of function pnl_mat_resize : \n");
-  v = pnl_mat_create (0, 0);
-  printf ("resize 5x3 : ");
-  pnl_mat_resize (v, 5, 3);
-  pnl_mat_set_double (v, 0.2);
-  pnl_mat_print (v);
-  printf ("resize 3x5 : ");
-  pnl_mat_resize (v, 3, 5);
-  pnl_mat_print (v);
-  printf ("resize 2x3 : ");
-  pnl_mat_resize (v, 2, 3);
-  pnl_mat_print (v);
-  printf ("resize 3x4 : ");
-  pnl_mat_resize (v, 3, 4);
-  pnl_mat_print (v);
-  pnl_mat_free (&v);
-}
-
 static void pnl_mat_map_inplace_test()
 {
+  int i;
   PnlMat *M;
-  printf("test de la fonction 'pnl_mat_map_inplace' : \n");
   M=pnl_mat_create_from_double(4,2,3.0);
   pnl_mat_map_inplace(M,exp);
-  pnl_mat_print(M);
+  for ( i=0 ; i<M->mn ; i++ )
+    {
+      if ( M->array[i] != exp(3.) )
+        {
+          pnl_test_set_fail ( "mat_map_inplace", M->array[i], exp(3.));
+          goto J1;
+        }
+    }
+  pnl_test_set_ok ("mat_map_inplace");
+J1:
   pnl_mat_free(&M);
 }
 
 static void pnl_mat_plus_mat_test()
 {
-  PnlMat *M1;
-  PnlMat *M2;
+  PnlMat *M1, *M2, *M1copy;
+  int i;
   double rows;
   double cols;
   double x[8]={1.0, 5.0, 3.0, 8.0, 3.0, 7.0, 6.0, 9.0};
-  printf("test de la fonction 'pnl_mat_plus_mat' : \n");
   rows=4;
   cols=2;
   M1=pnl_mat_create_from_ptr(rows,cols,x);
+  M1copy = pnl_mat_copy (M1);
   M2=pnl_mat_create_from_double(4,2,3.0);
   pnl_mat_plus_mat(M1,M2);
-  pnl_mat_print(M1);
+  for ( i=0 ; i<M1->mn ; i++ )
+    {
+      double expected = M1copy->array[i] + M2->array[i];
+      if ( M1->array[i] != expected )
+        {
+          pnl_test_set_fail ( "mat_plus_mat", M1->array[i], expected);
+          goto J1;
+        }
+    }
+  pnl_test_set_ok ("mat_plus_mat");
+J1:
   pnl_mat_free(&M1);
+  pnl_mat_free(&M1copy);
   pnl_mat_free(&M2); 
 }
 
 static void pnl_mat_plus_double_test()
 {
-  PnlMat *M;
-  printf("test de la fonction 'pnl_mat_plus_double' : \n");
+  int i;
+  PnlMat *M, *Mcopy;
   M=pnl_mat_create_from_double(4,2,3.0);
+  Mcopy = pnl_mat_copy (M);
   pnl_mat_plus_double(M,0.5);
-  pnl_mat_print(M);
+  for ( i=0 ; i<M->mn ; i++ )
+    {
+      double expected = Mcopy->array[i] + 0.5;
+      if ( M->array[i] != expected )
+        {
+          pnl_test_set_fail ( "mat_plus_double", M->array[i], expected);
+          goto J1;
+        }
+    }
+  pnl_test_set_ok ("mat_plus_double");
+J1:
   pnl_mat_free(&M);
+  pnl_mat_free(&Mcopy);
 }
 
 static void pnl_mat_mult_mat_test()
@@ -373,9 +343,8 @@ static void pnl_mat_mult_mat_test()
   M2 = pnl_mat_create (4, 5);
   pnl_mat_rand_normal (M1, 5, 4, gen);
   pnl_mat_rand_normal (M2, 4, 5, gen);
-  printf ("A = "); pnl_mat_print_nsp (M1);
-  printf ("B = "); pnl_mat_print_nsp (M2);
   M=pnl_mat_mult_mat(M1,M2);
+
   pnl_mat_print(M);
   pnl_mat_free(&M);
   pnl_mat_free(&M1);
@@ -393,8 +362,6 @@ static void pnl_mat_mult_mat_inplace_test()
   M = pnl_mat_create (0, 0);
   pnl_mat_rand_normal (M1, 5, 4, gen);
   pnl_mat_rand_normal (M2, 4, 5, gen);
-  printf ("A = "); pnl_mat_print_nsp (M1);
-  printf ("B = "); pnl_mat_print_nsp (M2);
   pnl_mat_mult_mat_inplace(M,M1,M2);
   pnl_mat_print(M);
   pnl_mat_free(&M);
@@ -418,7 +385,7 @@ static void pnl_mat_mult_vect_test()
   printf ("x = "); pnl_vect_print_nsp (x);
   printf("\n");
 
-  
+
   y = pnl_vect_create (0);
   pnl_mat_mult_vect_inplace (y, A, x);
   pnl_vect_print_nsp (y);
@@ -435,95 +402,150 @@ static void pnl_mat_mult_vect_test()
 
 static void pnl_mat_mult_double_test()
 {
-  PnlMat *M;
+  int i;
+  PnlMat *M, *Mcopy;
   printf("test de la fonction 'pnl_mat_mult_double' : \n");
   M=pnl_mat_create_from_double(4,2,3.0);
+  Mcopy = pnl_mat_copy (M);
   pnl_mat_mult_double(M,0.5);
-  pnl_mat_print(M);
+  for ( i=0 ; i<M->mn ; i++ )
+    {
+      double expected = Mcopy->array[i] * 0.5;
+      if ( M->array[i] != expected )
+        {
+          pnl_test_set_fail ( "mat_mult_double", M->array[i], expected);
+          goto J1;
+        }
+    }
+  pnl_test_set_ok ("mat_mult_double");
+J1:
   pnl_mat_free(&M);
+  pnl_mat_free(&Mcopy);
 }
-
-static void pnl_mat_set_double_test()
-{
-  PnlMat *M;
-  printf("test de la fonction 'pnl_mat_set_double' : \n");
-  M=pnl_mat_create_from_double(4,2,3.0);
-  pnl_mat_set_double(M,2.0);
-  pnl_mat_print(M);
-  pnl_mat_free(&M);
-}
-
 
 static void pnl_mat_mult_mat_term_test()
 {
-  PnlMat *M1, *M2;
+  int i;
+  PnlMat *M1, *M2, *M;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  printf("test de la fonction 'pnl_mat_mult_mat_term' : \n");
   pnl_rand_init (gen, 5, 5);
   M1 = pnl_mat_create (5, 4);
   M2 = pnl_mat_create (5, 4);
   pnl_mat_rand_normal (M1, 5, 4, gen);
   pnl_mat_rand_normal (M2, 5, 4, gen);
-  printf ("A = "); pnl_mat_print_nsp (M1);
-  printf ("B = "); pnl_mat_print_nsp (M2);
-  pnl_mat_mult_mat_term(M1,M2);
-  printf ("A .* B = "); pnl_mat_print_nsp (M1);
+  M = pnl_mat_copy (M1);
+  pnl_mat_mult_mat_term(M,M2);
+  for ( i=0 ; i<M->mn ; i++ )
+    {
+      double expected = M1->array[i] * M2->array[i];
+      if ( M->array[i] != expected )
+        {
+          pnl_test_set_fail ( "mat_mutl_mat_term", M->array[i], expected);
+          goto J1;
+        }
+    }
+  pnl_test_set_ok ("mat_mutl_mat_term");
+J1:
+  pnl_mat_free(&M);
   pnl_mat_free(&M1);
   pnl_mat_free(&M2);
 }
 
 static void pnl_mat_chol_test()
 {
-  PnlMat *S;
+  PnlMat *S, *Scopy, *Sres;
   PnlVect *x;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  printf("test de la fonction 'pnl_mat_chol' : \n");
   pnl_rand_init (gen, 5, 5);
   x = pnl_vect_create (5);
   S = pnl_mat_create (5, 5);
   pnl_mat_set_id (S);
   pnl_vect_rand_normal (x, 5, gen);
   pnl_mat_dger (1., x, x, S);
-  printf ("S = "); pnl_mat_print_nsp (S);
+  Scopy = pnl_mat_copy (S);
   pnl_mat_chol(S);
-  printf ("\nchol (S) = "); pnl_mat_print_nsp (S);
-  printf ("\n");
+
+  Sres = pnl_mat_new ();
+  pnl_mat_dgemm ('N', 'T', 1, S, S, 0, Sres);
+  pnl_test_mat_eq_abs (Sres, Scopy, 1E-12, "mat_chol", "");
+  
   pnl_vect_free(&x);
+  pnl_mat_free(&Sres);
+  pnl_mat_free(&Scopy);
   pnl_mat_free(&S);
 }
 
 static void pnl_mat_sq_transpose_test()
 {
-  PnlMat *M;
+  PnlMat *M, *Mcopy;
+  int i, j;
   double x[9]={3.0, 1.0, 4.0, 5.0, 3.0, 6.0, 2.0, 9.0, 3.0};
-  printf("test de la fonction 'pnl_mat_sq_transpose' : \n");
   M=pnl_mat_create_from_ptr(3,3,x);
+  Mcopy = pnl_mat_copy (M);
   pnl_mat_sq_transpose(M);
-  pnl_mat_print(M);
+  for ( i=0 ; i<M->m ; i++ )
+    {
+      for ( j=0 ; j<M->n ; j++ )
+        {
+          double Mij = MGET(Mcopy, i, j);
+          double tMji = MGET(M, j, i);
+          if ( Mij != tMji ) 
+            {
+              pnl_test_set_fail ("mat_sq_transpose", 0, 0);
+              goto J1;
+            }
+        }
+    }
+  pnl_test_set_ok ("mat_sq_transpose");
+J1:
   pnl_mat_free(&M);
+  pnl_mat_free(&Mcopy);
 }
 
 static void pnl_mat_transpose_test()
 {
   PnlMat *M,*M1;
+  int i, j;
   double x[8]={1.0, 5.0, 3.0, 8.0, 3.0, 7.0, 6.0, 9.0};
-  printf("test de la fonction 'pnl_mat_transpose' : \n");
   M=pnl_mat_create_from_ptr(4,2,x);
   M1=pnl_mat_transpose(M);
-  pnl_mat_print(M1);
+  for ( i=0 ; i<M->m ; i++ )
+    {
+      for ( j=0 ; j<M->n ; j++ )
+        {
+          double Mij = MGET(M, i, j);
+          double tMji = MGET(M1, j, i);
+          if ( Mij != tMji ) 
+            {
+              pnl_test_set_fail ("mat_transpose", 0, 0);
+              goto J1;
+            }
+        }
+    }
+  pnl_test_set_ok ("mat_transpose");
+J1:
   pnl_mat_free(&M);
   pnl_mat_free(&M1);
 }
 
 static void pnl_vect_wrap_mat_row_test()
 {
+  int i;
   PnlMat *M;
   PnlVect V;
   double x[8]={1.0, 5.0, 3.0, 8.0, 3.0, 7.0, 6.0, 9.0};
-  printf("test de la fonction 'pnl_vect_wrap_mat_row : \n");
   M=pnl_mat_create_from_ptr(4,2,x);
   V=pnl_vect_wrap_mat_row(M,2);
-  pnl_vect_print(&V);
+  for ( i=0 ; i<V.size ; i++ )
+    {
+      if ( GET(&V,i) != MGET(M, 2, i) )
+        {
+          pnl_test_set_fail ("vect_wrap_mat_row", GET(&V,i), MGET(M, 2, i));
+          goto J1;
+        }
+    }
+  pnl_test_set_ok ("vect_wrap_mat_row");
+J1:
   pnl_mat_free(&M);
 }
 
@@ -533,41 +555,44 @@ static void pnl_mat_get_row_test()
 {
   PnlMat *M;
   PnlVect *V;
+  int i;
   double x[8]={1.0, 5.0, 3.0, 8.0, 3.0, 7.0, 6.0, 9.0};
-  printf("test de la fonction 'pnl_mat_row_to_vect_inplace : \n");
   M=pnl_mat_create_from_ptr(4,2,x);
   V=pnl_vect_create(0);
   pnl_mat_get_row(V,M,2);
-  pnl_vect_print(V);
-  pnl_vect_free(&V);
-  pnl_mat_free(&M);
-}
-
-static void pnl_mat_create_diag_test()
-{
-  PnlMat *M;
-  PnlVect *V;
-  printf("test de la fonction 'pnl_mat_create_diag : \n");
-  V=pnl_vect_create_from_double(3,1.0);
-  M=pnl_mat_create_diag(V);
-  pnl_mat_print(M);
+  for ( i=0 ; i<V->size ; i++ )
+    {
+      if ( GET(V,i) != MGET(M, 2, i) )
+        {
+          pnl_test_set_fail ("mat_row_to_vect", GET(V,i), MGET(M, 2, i));
+          goto J1;
+        }
+    }
+  pnl_test_set_ok ("mat_row_to_vect");
+J1:
   pnl_vect_free(&V);
   pnl_mat_free(&M);
 }
 
 static void pnl_mat_sum_test()
 {
-  PnlMat *M, *Mcopy;
+  PnlMat *M, *Mcopy, *Mcumsum;
+  int i, j;
+  double sum;
+
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  printf("test de la fonction 'pnl_mat_sum : ");
   pnl_rand_init (gen, 5, 5);
+
   M = pnl_mat_create (5, 4);
   pnl_mat_rand_normal (M, 5, 4, gen);
-  printf ("M = "); pnl_mat_print_nsp (M);
-  printf("la somme des elements de la matrice est %f \n", pnl_mat_sum(M));
+  sum = 0.;
+  for ( i=0 ; i<M->mn ; i++ )
+    {
+      sum += M->array[i];
+    }
+  pnl_test_eq_abs ( sum, pnl_mat_sum(M), 1E-12, "mat_sum", "");
   pnl_mat_free(&M);
 
-  printf("test de la fonction 'pnl_mat_cumsum : \n");
   M = pnl_mat_create (5, 4);
   pnl_mat_rand_normal (M, 5, 4, gen);
   Mcopy = pnl_mat_copy (M);
@@ -583,13 +608,19 @@ static void pnl_mat_sum_test()
 static void pnl_mat_prod_test()
 {
   PnlMat *M, *Mcopy;
+  double prod;
+  int i, j;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
   printf("test de la fonction 'pnl_mat_prod : ");
   pnl_rand_init (gen, 5, 5);
   M = pnl_mat_create (5, 4);
   pnl_mat_rand_normal (M, 5, 4, gen);
-  printf ("M = "); pnl_mat_print_nsp (M);
-  printf("prod = %f \n", pnl_mat_prod(M));
+  prod = 1.;
+  for ( i=0 ; i<M->mn ; i++ )
+    {
+      prod *= M->array[i];
+    }
+  pnl_test_eq_abs ( prod, pnl_mat_prod(M), 1E-12, "mat_prod", "");
   pnl_mat_free(&M);
 
   printf("test de la fonction 'pnl_mat_cumprod : \n");
@@ -652,8 +683,8 @@ static void pnl_mat_minmax_test()
   PnlVectInt *imin, *imax;
   int m, n;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  
-  
+
+
   printf("test de la fonction 'pnl_vect_minmax' : ");
   m = 5; n = 6;
   pnl_rand_init (gen, 1, m*n);
@@ -662,7 +693,7 @@ static void pnl_mat_minmax_test()
   max = pnl_vect_create (0);
   imin = pnl_vect_int_create (0);
   imax = pnl_vect_int_create (0);
-  
+
   printf ("A = \n");  pnl_mat_rand_normal (A, m, n, gen);
   pnl_mat_print_nsp (A);
   printf ("--> pnl_mat_min \n");
@@ -756,205 +787,201 @@ static void pnl_mat_qsort_test ()
 
 static void pnl_mat_map_test()
 {
+  int i;
   PnlMat *M1,*M2;
   double x[8]={1.0, 5.0, 3.0, 8.0, 3.0, 7.0, 6.0, 9.0};
-  printf("test de la fonction 'pnl_mat_map': \n ");
   M1=pnl_mat_create(0,0);
   M2=pnl_mat_create_from_ptr(4,2,x);
   pnl_mat_map(M1,M2,exp);
-  pnl_mat_print(M1);
+  for ( i=0; i<M1->mn; i++ )
+    {
+      if ( M1->array[i] != exp(M2->array[i]) )
+        {
+          pnl_test_set_fail ("mat_map", M1->array[i],  exp(M2->array[i]) );
+          goto J1;
+        }
+    }
+  pnl_test_set_ok ("mat_map");
+J1:
   pnl_mat_free(&M1);
   pnl_mat_free(&M2);
 }
 
-static void pnl_mat_set_row_test()
-{
-  PnlMat *M;
-  PnlVect *V;
-  double x[8]={1.0, 5.0, 3.0, 8.0, 3.0, 7.0, 6.0, 9.0};
-  printf("test de la fonction 'pnl_mat_set_row': \n ");
-  M=pnl_mat_create_from_ptr(4,2,x);
-  V=pnl_vect_create_from_double(2,0.0);
-  pnl_mat_set_row(M,V,2);
-  pnl_mat_print(M);
-  pnl_vect_free(&V);
-  pnl_mat_free(&M);
-}
-
 static void pnl_mat_triangular_inverse_test ()
 {
-  PnlMat *A, *B;
+  PnlMat *A, *B, *AB, *Id;
+  PnlVect *d;
   int gen;
   int n = 5;
 
   gen = PNL_RNG_MERSENNE_RANDOM_SEED;
   pnl_rand_init (gen, n, n);
+  d = pnl_vect_create_from_double (n, 1.);
+  Id = pnl_mat_create_diag (d);
   A = pnl_mat_create (n, n);
   B = pnl_mat_create (n, n);
+  AB = pnl_mat_create (n, n);
   create_invertible_matrix (B, n, gen);
 
   set_triangular_to_zero (B, 'L');
-  printf("test de la fonction 'pnl_mat_upper_inverse' : \n");
-  printf ("B = "); pnl_mat_print_nsp (B); printf ("\n");
   pnl_mat_upper_inverse(A,B);
-  printf ("invB = "); pnl_mat_print_nsp (A); printf ("\n");
+  pnl_mat_mult_mat_inplace (AB, A, B);
+  pnl_test_mat_eq_abs (AB, Id, 1E-8, "mat_upper_inverse", "");
 
-  printf("test de la fonction 'pnl_mat_lower_inverse' : \n");
   create_invertible_matrix (B, n, gen);
   set_triangular_to_zero (B, 'U');
-  printf ("B = "); pnl_mat_print_nsp (B); printf ("\n");
   pnl_mat_lower_inverse(A,B);
-  printf ("invB = "); pnl_mat_print_nsp (A); printf ("\n");
+  pnl_mat_mult_mat_inplace (AB, A, B);
+  pnl_test_mat_eq_abs (AB, Id, 1E-8, "mat_upper_inverse", "");
+
+
   pnl_mat_free(&A);
   pnl_mat_free(&B);
+  pnl_mat_free(&AB);
+  pnl_mat_free(&Id);
+  pnl_vect_free (&d);
 }
 
 static void pnl_mat_inverse_test ()
 {
-  PnlMat *A, *invA;
+  PnlMat *A, *invA, *invAA, *Id;
+  PnlVect *d;
   int gen;
   int n = 5;
 
   gen = PNL_RNG_MERSENNE_RANDOM_SEED;
   pnl_rand_init (gen, n, n);
+  d = pnl_vect_create_from_double (n, 1.);
+  Id = pnl_mat_create_diag (d);
   A = pnl_mat_create (n, n);
   invA = pnl_mat_create (n, n);
+  invAA = pnl_mat_create (n, n);
 
-  printf("test de la fonction 'pnl_mat_inverse_with_chol' : \n");
   create_sym_pos_matrix (A, n, gen);
   pnl_mat_inverse_with_chol (invA, A);
-  printf ("A = "); pnl_mat_print_nsp (A);
-  printf ("invA = "); pnl_mat_print_nsp (invA);
+  pnl_mat_mult_mat_inplace (invAA, A, invA);
+  pnl_test_mat_eq_abs (invAA, Id, 1E-8, "mat_inverse_with_chol", "");
 
-  printf("test de la fonction 'pnl_mat_inverse' : \n");
   create_invertible_matrix (A, n, gen);
   pnl_mat_inverse (invA, A);
-  printf ("A = "); pnl_mat_print_nsp (A);
-  printf ("invA = "); pnl_mat_print_nsp (invA);
+  pnl_mat_mult_mat_inplace (invAA, A, invA);
+  pnl_test_mat_eq_abs (invAA, Id, 1E-8, "mat_inverse", "");
 
   pnl_mat_free (&A);
   pnl_mat_free (&invA);
+  pnl_mat_free (&invAA);
+  pnl_mat_free (&Id);
+  pnl_vect_free (&d);
 }
 
 static void pnl_mat_syslin_test ()
 {
-  PnlMat *S, *Scopy, *B, *Bcopy;
-  PnlVect *b, *x;
+  PnlMat *S, *Scopy, *B, *Bcopy, *SB;
+  PnlVect *b, *x, *Sx;
   PnlVectInt *p;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  printf("test de la fonction 'pnl_mat_chol' : \n");
   pnl_rand_init (gen, 5, 5);
   b = pnl_vect_create (5);
+  Sx = pnl_vect_new ();
   S = pnl_mat_create (5, 5);
+  SB = pnl_mat_new ();
   pnl_vect_rand_normal (b, 5, gen);
   create_sym_pos_matrix (S, 5, gen);
 
   Scopy = pnl_mat_copy (S);
-  printf ("S = "); pnl_mat_print_nsp (S);
-  printf ("\nb = "); pnl_vect_print_nsp (b);
-  printf ("\n");
-  x = pnl_vect_create(0);
-  printf("test de la fonction 'pnl_mat_upper_syslin' : \n");
-  pnl_mat_upper_syslin(x,S,b);
-  pnl_vect_print(x);
-    
-  printf("test de la fonction 'pnl_mat_lower_syslin' : \n");
-  pnl_mat_lower_syslin(x,S,b);
-  pnl_vect_print(x);
+  x = pnl_vect_new ();
+  /* pnl_mat_upper_syslin(x,S,b); */
+  /* pnl_mat_mult_vect_inplace (Sx, Scopy, x); */
+  /* pnl_test_vect_eq_abs (Sx, b, 1E-8, "mat_upper_syslin", ""); */
 
-  printf("test de la fonction 'pnl_mat_chol_syslin' : \n");
+  /* printf("test de la fonction 'pnl_mat_lower_syslin' : \n"); */
+  /* pnl_mat_lower_syslin(x,S,b); */
+  /* pnl_vect_print(x); */
+
   pnl_mat_chol (S);
   pnl_mat_chol_syslin(x, S, b);
-  pnl_vect_print(x);
+  pnl_mat_mult_vect_inplace (Sx, Scopy, x);
+  pnl_test_vect_eq_abs (Sx, b, 1E-8, "mat_chol_syslin", "");
 
-  printf("test de la fonction 'pnl_mat_lu_syslin' (symmetric matrix) : \n");
   pnl_mat_clone (S, Scopy);
   p = pnl_vect_int_create (5);
   pnl_mat_lu (S, p);
   pnl_mat_lu_syslin (x, S, p, b);
-  pnl_vect_print(x);
+  pnl_mat_mult_vect_inplace (Sx, Scopy, x);
+  pnl_test_vect_eq_abs (Sx, b, 1E-8, "mat_lu_syslin (symmetric)", "");
 
-  printf("test de la fonction 'pnl_mat_syslin' (symmetric matrix) : \n");
   pnl_mat_clone (S, Scopy);
   pnl_mat_syslin (x, S, b);
-  pnl_vect_print(x);
+  pnl_mat_mult_vect_inplace (Sx, Scopy, x);
+  pnl_test_vect_eq_abs (Sx, b, 1E-8, "mat_syslin (symmetric)", "");
 
   B = pnl_mat_create (5,5);
   pnl_mat_rand_normal (B, 5, 5, gen);
   Bcopy = pnl_mat_copy (B);
-  printf("test de la fonction 'pnl_mat_chol_syslin_mat' : \n");
   pnl_mat_clone (S, Scopy);
-  printf ("B = "); pnl_mat_print_nsp (B); printf ("\n");
   pnl_mat_chol (S);
   pnl_mat_chol_syslin_mat (S, B);
-  printf ("X = "); pnl_mat_print_nsp (B); printf ("\n");
+  pnl_mat_mult_mat_inplace (SB, Scopy, B);
+  pnl_test_mat_eq_abs (SB, Bcopy, 1E-8, "mat_chol_syslin_mat (symmetric)", "");
 
-  printf("test de la fonction 'pnl_mat_lu_syslin_mat' (symmetric matrix): \n");
   pnl_mat_clone (S, Scopy);
   pnl_mat_clone (B, Bcopy);
-  printf ("B = "); pnl_mat_print_nsp (B); printf ("\n");
   pnl_mat_lu (S, p);
   pnl_mat_lu_syslin_mat (S, p, B);
-  printf ("X = "); pnl_mat_print_nsp (B); printf ("\n");
+  pnl_mat_mult_mat_inplace (SB, Scopy, B);
+  pnl_test_mat_eq_abs (SB, Bcopy, 1E-8, "mat_lu_syslin_mat (symmetric)", "");
 
-  printf("test de la fonction 'pnl_mat_syslin_mat' (symmetric matrix): \n");
   pnl_mat_clone (S, Scopy);
   pnl_mat_clone (B, Bcopy);
-  printf ("B = "); pnl_mat_print_nsp (B); printf ("\n");
   pnl_mat_syslin_mat (S, B);
-  printf ("X = "); pnl_mat_print_nsp (B); printf ("\n");
+  pnl_mat_mult_mat_inplace (SB, Scopy, B);
+  pnl_test_mat_eq_abs (SB, Bcopy, 1E-8, "mat_syslin_mat (symmetric)", "");
 
 
-  printf("test de la fonction 'pnl_mat_lu_syslin' : \n");
   create_invertible_matrix (S, 5, gen);
   pnl_mat_clone (Scopy, S);
-  printf ("A = "); pnl_mat_print_nsp (S);
   pnl_mat_lu (S, p);
   pnl_mat_lu_syslin (x, S, p, b);
-  printf("x = "); pnl_vect_print_nsp(x); printf("\n");
+  pnl_mat_mult_vect_inplace (Sx, Scopy, x);
+  pnl_test_vect_eq_abs (Sx, b, 1E-8, "mat_lu_syslin", "");
 
-  printf("test de la fonction 'pnl_mat_syslin' : \n");
   pnl_mat_clone (S, Scopy);
   pnl_mat_syslin (x, S, b);
-  printf("x = "); pnl_vect_print_nsp(x); printf("\n");
+  pnl_mat_mult_vect_inplace (Sx, Scopy, x);
+  pnl_test_vect_eq_abs (Sx, b, 1E-8, "mat_syslin", "");
 
-  printf("test de la fonction 'pnl_mat_syslin_mat' : \n");
   pnl_mat_clone (S, Scopy);
   pnl_mat_clone (B, Bcopy);
-  printf ("B = "); pnl_mat_print_nsp (B); printf ("\n");
   pnl_mat_lu (S, p);
   pnl_mat_lu_syslin_mat (S, p, B);
-  printf ("X = "); pnl_mat_print_nsp (B); printf ("\n");
+  pnl_mat_mult_mat_inplace (SB, Scopy, B);
+  pnl_test_mat_eq_abs (SB, Bcopy, 1E-8, "mat_lu_syslin_mat", "");
 
-  printf("test de la fonction 'pnl_mat_syslin_mat' : \n");
   pnl_mat_clone (S, Scopy);
   pnl_mat_clone (B, Bcopy);
-  printf ("B = "); pnl_mat_print_nsp (B); printf ("\n");
   pnl_mat_syslin_mat (S, B);
-  printf ("X = "); pnl_mat_print_nsp (B); printf ("\n");
+  pnl_test_mat_eq_abs (SB, Bcopy, 1E-8, "mat_syslin_mat", "");
 
   pnl_mat_free (&B);
+  pnl_mat_free (&SB);
   pnl_mat_free (&Bcopy);
   pnl_mat_free (&S);
   pnl_mat_free (&Scopy);
   pnl_vect_free (&b);
+  pnl_vect_free (&Sx);
   pnl_vect_free (&x);
   pnl_vect_int_free (&p);
 }
 
 static void pnl_mat_create_from_file_test ()
 {
-  PnlMat *M;
-  PnlMatComplex *C;
-  printf("test de la fonction 'pnl_mat_create_from_file' : \n");
+  PnlMat *M, *res;
   M = pnl_mat_create_from_file ("Data/Test_read_mat.dat");
-  pnl_mat_print (M);
+  res = pnl_mat_create_from_list (4, 6, 1.,2.,3.,4.,5.,6., 7.,8.,9.,10.,11.,12., 13.,14.,15.,16.,17.,18., 19.,20.,21.,22.,23.,24.);
+  pnl_test_mat_eq_abs (M, res, 1E-18, "mat_create_from_file", "");
   pnl_mat_free (&M);
+  pnl_mat_free (&res);
 
-  C = pnl_mat_complex_create_from_file ("Data/Test_read_mat.dat");
-  pnl_mat_complex_print (C);
-  pnl_mat_complex_free (&C);
-  
 }
 
 static void pnl_mat_dgemm_test()
@@ -1068,133 +1095,90 @@ static void pnl_mat_dgemv_test ()
 
 static void pnl_mat_mult_vect_transpose_test ()
 {
-  PnlMat *A;
-  PnlVect *x, *y;
+  PnlMat *A, *tA;
+  PnlVect *x, *y1, *y2;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  printf("test de la fonction pnl_mat_mult_vect_transpose : \n");
-  pnl_rand_init (gen, 5, 4);
-  A = pnl_mat_create (5, 4);
-  printf ("A = ");  pnl_mat_rand_normal (A, 5, 4, gen);
-  pnl_mat_print_nsp (A);
-  printf("\n");
-  x = pnl_vect_create (5);
-  pnl_vect_rand_normal(x, 5, gen);
-  printf ("x = "); pnl_vect_print_nsp (x);
-  printf("\n");
-
-  y = pnl_vect_create (0);
-  pnl_mat_mult_vect_transpose_inplace (y, A, x);
-  pnl_vect_print_nsp (y);
-  printf("\n");
-
-  pnl_vect_free (&x);
-  pnl_vect_free (&y);
-  pnl_mat_free (&A);
-}
-
-static void pnl_mat_scalar_prod_A_test ()
-{
-  PnlMat *A;
-  PnlVect *x, *y;
-  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  printf("test de la fonction pnl_mat_scalar_prod_A : \n");
   pnl_rand_init (gen, 5, 4);
   A = pnl_mat_create (5, 4);
   pnl_mat_rand_normal (A, 5, 4, gen);
-  printf ("A = "); pnl_mat_print_nsp (A);
-  printf("\n");
-  x = pnl_vect_create (4);
-  pnl_vect_rand_normal(x, 4, gen);
-  printf ("x = "); pnl_vect_print_nsp (x);
-  printf("\n");
+  pnl_mat_print_nsp (A);
+  x = pnl_vect_create (5);
+  pnl_vect_rand_normal(x, 5, gen);
 
-  y = pnl_vect_create (5);
-  pnl_vect_rand_normal(y, 5, gen);
-  printf ("y = "); pnl_vect_print_nsp (y);
-  printf("\n");
-  printf ("y' A x = %f\n", pnl_mat_scalar_prod_A(A, x, y));
+  y1 = pnl_vect_create (0);
+  pnl_mat_mult_vect_transpose_inplace (y1, A, x);
+
+  tA = pnl_mat_transpose (A);
+  y2 = pnl_vect_create (0);
+  pnl_mat_mult_vect_inplace (y2, tA, x);
+  pnl_test_vect_eq_abs (y1, y2, 1E-12, "mat_mult_vect_transpose", "");
+
+
+  pnl_vect_free (&x);
+  pnl_vect_free (&y1);
+  pnl_vect_free (&y2);
+  pnl_mat_free (&tA);
+  pnl_mat_free (&A);
+}
+
+static void pnl_mat_scalar_prod_test ()
+{
+  PnlMat *A;
+  PnlVect *x, *y, *Ay;
+  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
+  pnl_rand_init (gen, 5, 4);
+  A = pnl_mat_create (5, 4);
+  pnl_mat_rand_normal (A, 5, 4, gen);
+  y = pnl_vect_create (4);
+  pnl_vect_rand_normal(y, 4, gen);
+  Ay = pnl_mat_mult_vect (A, y);
+
+  x = pnl_vect_create (5);
+  pnl_vect_rand_normal(x, 5, gen);
+  pnl_test_eq (pnl_mat_scalar_prod (A, x, y), pnl_vect_scalar_prod (x, Ay),
+               1E-12, "mat_scalar_prod", "");
 
   pnl_vect_free (&x);
   pnl_vect_free (&y);
+  pnl_vect_free (&Ay);
   pnl_mat_free (&A);
 }
 
-static void pnl_mat_exp_test ()
+int main (int argc, char **argv)
 {
-  PnlMat *A, *B;
-  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  printf("test de la fonction exp : \n");
-  pnl_rand_init (gen, 4, 4);
-  A = pnl_mat_create (4, 4);
-  pnl_mat_rand_normal (A, 4, 4, gen);
-  B = pnl_mat_create (0, 0);
-  pnl_mat_exp (B, A);
-  printf ("Computing B = exp (A) with A =\n");
-  pnl_mat_print_nsp (A);
-  printf("and B =\n");
-  pnl_mat_print (B);
-  pnl_mat_free (&B);
-  pnl_mat_free (&A);
-}
-
-
-static void all_test ();
-static tst_list mat_tests[] =
-  {
-    MAKE_ENUM(all_test),
-    MAKE_ENUM(pnl_mat_set_test),
-    MAKE_ENUM(pnl_mat_get_test),
-    MAKE_ENUM(pnl_mat_lget_test),
-    MAKE_ENUM(pnl_mat_create_from_double_test),
-    MAKE_ENUM(pnl_mat_create_from_ptr_test),
-    MAKE_ENUM(pnl_mat_submat_test),
-    MAKE_ENUM(pnl_mat_set_diag_test),
-    MAKE_ENUM(pnl_mat_copy_test),
-    MAKE_ENUM(pnl_mat_clone_test),
-    MAKE_ENUM(pnl_mat_resize_test),
-    MAKE_ENUM(pnl_mat_map_inplace_test),
-    MAKE_ENUM(pnl_mat_plus_mat_test),
-    MAKE_ENUM(pnl_mat_plus_double_test),
-    MAKE_ENUM(pnl_mat_mult_mat_test),
-    MAKE_ENUM(pnl_mat_mult_mat_inplace_test),
-    MAKE_ENUM(pnl_mat_mult_vect_test),
-    MAKE_ENUM(pnl_mat_mult_double_test),
-    MAKE_ENUM(pnl_mat_set_double_test),
-    MAKE_ENUM(pnl_mat_mult_mat_term_test),
-    MAKE_ENUM(pnl_mat_chol_test),
-    MAKE_ENUM(pnl_mat_sq_transpose_test),
-    MAKE_ENUM(pnl_mat_transpose_test),
-    MAKE_ENUM(pnl_vect_wrap_mat_row_test),
-    MAKE_ENUM(pnl_mat_get_row_test),
-    MAKE_ENUM(pnl_mat_create_diag_test),
-    MAKE_ENUM(pnl_mat_sum_test),
-    MAKE_ENUM(pnl_mat_sum_vect_test),
-    MAKE_ENUM(pnl_mat_prod_test),
-    MAKE_ENUM(pnl_mat_prod_vect_test),
-    MAKE_ENUM(pnl_mat_minmax_test),
-    MAKE_ENUM(pnl_mat_qsort_test),
-    MAKE_ENUM(pnl_mat_map_test),
-    MAKE_ENUM(pnl_mat_set_row_test),
-    MAKE_ENUM(pnl_mat_triangular_inverse_test),
-    MAKE_ENUM(pnl_mat_inverse_test),
-    MAKE_ENUM(pnl_mat_syslin_test),
-    MAKE_ENUM(pnl_mat_create_from_file_test),
-    MAKE_ENUM(pnl_mat_dgemm_test),
-    MAKE_ENUM(pnl_mat_exp_test),
-    MAKE_ENUM(pnl_mat_mult_vect_transpose_test),
-    MAKE_ENUM(pnl_mat_scalar_prod_A_test),
-    MAKE_ENUM(pnl_mat_dgemv_test),
-    MAKE_ENUM(NULL)
-  };
-
-static void all_test ()
-{
-  run_all_test (mat_tests);
-}
-
-
-int main ()
-{
-  menu_test (mat_tests);
-  return OK;
+  pnl_test_init (argc, argv);
+  pnl_mat_create_from_double_test();
+  pnl_mat_create_from_ptr_test();
+  pnl_mat_submat_test();
+  pnl_mat_copy_test();
+  pnl_mat_clone_test();
+  pnl_mat_map_inplace_test();
+  pnl_mat_plus_mat_test();
+  pnl_mat_plus_double_test();
+  pnl_mat_mult_mat_test();
+  pnl_mat_mult_mat_inplace_test();
+  pnl_mat_mult_vect_test();
+  pnl_mat_mult_double_test();
+  pnl_mat_mult_mat_term_test();
+  pnl_mat_chol_test();
+  pnl_mat_sq_transpose_test();
+  pnl_mat_transpose_test();
+  pnl_vect_wrap_mat_row_test();
+  pnl_mat_get_row_test();
+  pnl_mat_sum_test();
+  pnl_mat_sum_vect_test();
+  pnl_mat_prod_test();
+  pnl_mat_prod_vect_test();
+  pnl_mat_minmax_test();
+  pnl_mat_qsort_test();
+  pnl_mat_map_test();
+  pnl_mat_triangular_inverse_test();
+  pnl_mat_inverse_test();
+  pnl_mat_syslin_test();
+  pnl_mat_create_from_file_test();
+  pnl_mat_dgemm_test();
+  pnl_mat_mult_vect_transpose_test();
+  pnl_mat_scalar_prod_test();
+  pnl_mat_dgemv_test();
+  exit (pnl_test_finalize ("Matrix"));
 }
