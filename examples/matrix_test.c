@@ -262,7 +262,6 @@ static void pnl_mat_clone_test()
   pnl_mat_free(&M2); 
 }
 
-
 static void pnl_mat_map_inplace_test()
 {
   int i;
@@ -562,9 +561,9 @@ J1:
 
 static void pnl_mat_sum_test()
 {
-  PnlMat *M, *Mcopy;
-  int i;
+  PnlMat *M, *Mcopy, *M_cumsum_r, *M_cumsum_c;
   double sum;
+  int i;
 
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
   pnl_rand_init (gen, 5, 5);
@@ -579,25 +578,31 @@ static void pnl_mat_sum_test()
   pnl_test_eq_abs ( sum, pnl_mat_sum(M), 1E-12, "mat_sum", "");
   pnl_mat_free(&M);
 
-  M = pnl_mat_create (5, 4);
-  pnl_mat_rand_normal (M, 5, 4, gen);
-  Mcopy = pnl_mat_copy (M);
-  printf ("M = "); pnl_mat_print_nsp (M);
+  M_cumsum_c = pnl_mat_create_from_file("Data/cumsum_A_c.txt");
+  M_cumsum_r = pnl_mat_create_from_file("Data/cumsum_A_r.txt");
+
+  Mcopy = pnl_mat_create_from_file ("Data/A.txt");
+  M = pnl_mat_new ();
+
+  pnl_mat_clone (M, Mcopy);
   pnl_mat_cumsum (M, 'r');
-  printf("\ncumsum (M, 'r') = \n"); pnl_mat_print_nsp (M);
-  pnl_mat_cumsum (Mcopy, 'c');
-  printf("\ncumsum (M, 'c') = \n"); pnl_mat_print_nsp (Mcopy);
+  pnl_test_mat_eq_abs (M, M_cumsum_r, 1E-12, "cumsum 'r'", "");
+  pnl_mat_clone (M, Mcopy);
+  pnl_mat_cumsum (M, 'c');
+  pnl_test_mat_eq_abs (M, M_cumsum_c, 1E-12, "cumsum 'c'", "");
+
   pnl_mat_free(&M);
+  pnl_mat_free(&M_cumsum_c);
+  pnl_mat_free(&M_cumsum_r);
   pnl_mat_free(&Mcopy);
 }
 
 static void pnl_mat_prod_test()
 {
-  PnlMat *M, *Mcopy;
+  PnlMat *M, *Mcopy, *M_cumprod_r, *M_cumprod_c;
   double prod;
   int i;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  printf("test de la fonction 'pnl_mat_prod : ");
   pnl_rand_init (gen, 5, 5);
   M = pnl_mat_create (5, 4);
   pnl_mat_rand_normal (M, 5, 4, gen);
@@ -609,121 +614,126 @@ static void pnl_mat_prod_test()
   pnl_test_eq_abs ( prod, pnl_mat_prod(M), 1E-12, "mat_prod", "");
   pnl_mat_free(&M);
 
-  printf("test de la fonction 'pnl_mat_cumprod : \n");
-  M = pnl_mat_create (5, 4);
-  pnl_mat_rand_normal (M, 5, 4, gen);
-  Mcopy = pnl_mat_copy (M);
-  printf ("M = "); pnl_mat_print_nsp (M);
-  pnl_mat_cumprod (M, 'r');
-  printf("\ncumprod (M, 'r') = \n"); pnl_mat_print_nsp (M);
-  pnl_mat_cumprod (Mcopy, 'c');
-  printf("\ncumprod (M, 'c') = \n"); pnl_mat_print_nsp (Mcopy);
-  pnl_mat_free(&M);
-  pnl_mat_free(&Mcopy);
+  M_cumprod_c = pnl_mat_create_from_file("Data/cumprod_A_c.txt");
+  M_cumprod_r = pnl_mat_create_from_file("Data/cumprod_A_r.txt");
 
+  Mcopy = pnl_mat_create_from_file ("Data/A.txt");
+  M = pnl_mat_new ();
+
+  pnl_mat_clone (M, Mcopy);
+  pnl_mat_cumprod (M, 'r');
+  pnl_test_mat_eq_abs (M, M_cumprod_r, 1E-12, "cumprod 'r'", "");
+  pnl_mat_clone (M, Mcopy);
+  pnl_mat_cumprod (M, 'c');
+  pnl_test_mat_eq_abs (M, M_cumprod_c, 1E-12, "cumprod 'c'", "");
+
+  pnl_mat_free(&M);
+  pnl_mat_free(&M_cumprod_c);
+  pnl_mat_free(&M_cumprod_r);
+  pnl_mat_free(&Mcopy);
 }
 
 static void pnl_mat_sum_vect_test()
 {
   PnlMat *M;
-  PnlVect *V;
-  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  printf("test de la fonction 'pnl_mat_sum_test : \n");
-  pnl_rand_init (gen, 5, 5);
-  M = pnl_mat_create (5, 4);
-  V = pnl_vect_create (0);
-  pnl_mat_rand_normal (M, 5, 4, gen);
-  printf ("A = "); pnl_mat_print_nsp (M);
-  pnl_mat_sum_vect(V, M,'c');
-  printf("\nsum (A, 'c') = "); pnl_vect_print(V);
-  pnl_mat_sum_vect(V, M,'r');
-  printf("\nsum (A, 'r') = "); pnl_vect_print(V);
-  pnl_vect_free(&V);
+  PnlVect *V, *M_sum_r, *M_sum_c;
+  M_sum_c = pnl_vect_create_from_file("Data/sum_A_c.txt");
+  M_sum_r = pnl_vect_create_from_file("Data/sum_A_r.txt");
+
+  M = pnl_mat_create_from_file ("Data/A.txt");
+  V = pnl_vect_new ();
+
+  pnl_mat_sum_vect (V, M, 'r');
+  pnl_test_vect_eq_abs (V, M_sum_r, 1E-12, "mat_sum 'r'", "");
+
+  pnl_mat_sum_vect (V, M, 'c');
+  pnl_test_vect_eq_abs (V, M_sum_c, 1E-12, "mat_sum 'c'", "");
+
   pnl_mat_free(&M);
+  pnl_vect_free(&M_sum_c);
+  pnl_vect_free(&M_sum_r);
+  pnl_vect_free(&V);
 }
 
 static void pnl_mat_prod_vect_test()
 {
   PnlMat *M;
-  PnlVect *V;
-  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  printf("test de la fonction 'pnl_mat_prod_test : \n");
-  pnl_rand_init (gen, 5, 5);
-  M = pnl_mat_create (5, 4);
-  V = pnl_vect_create (0);
-  pnl_mat_rand_normal (M, 5, 4, gen);
-  printf ("A = "); pnl_mat_print_nsp (M);
-  pnl_mat_prod_vect(V, M,'c');
-  printf("\nprod (A, 'c') = "); pnl_vect_print(V);
-  pnl_mat_prod_vect(V, M,'r');
-  printf("\nprod (A, 'r') = "); pnl_vect_print(V);
-  pnl_vect_free(&V);
+  PnlVect *V, *M_prod_r, *M_prod_c;
+  M_prod_c = pnl_vect_create_from_file("Data/prod_A_c.txt");
+  M_prod_r = pnl_vect_create_from_file("Data/prod_A_r.txt");
+
+  M = pnl_mat_create_from_file ("Data/A.txt");
+  V = pnl_vect_new ();
+
+  pnl_mat_prod_vect (V, M, 'r');
+  pnl_test_vect_eq_abs (V, M_prod_r, 1E-12, "mat_prod 'r'", "");
+
+  pnl_mat_prod_vect (V, M, 'c');
+  pnl_test_vect_eq_abs (V, M_prod_c, 1E-12, "mat_prod 'c'", "");
+
   pnl_mat_free(&M);
+  pnl_vect_free(&M_prod_c);
+  pnl_vect_free(&M_prod_r);
+  pnl_vect_free(&V);
 }
 
 static void pnl_mat_minmax_test()
 {
-  PnlMat *A;
-  PnlVect *min, *max;
-  PnlVectInt *imin, *imax;
-  int m, n;
-  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
+  PnlMat *M;
+  PnlVect *V, *M_max_r, *M_max_c, *M_min_r, *M_min_c;
+  M_max_c = pnl_vect_create_from_file("Data/max_A_c.txt");
+  M_max_r = pnl_vect_create_from_file("Data/max_A_r.txt");
+  M_min_c = pnl_vect_create_from_file("Data/min_A_c.txt");
+  M_min_r = pnl_vect_create_from_file("Data/min_A_r.txt");
 
+  M = pnl_mat_create_from_file ("Data/A.txt");
+  V = pnl_vect_new ();
 
-  printf("test de la fonction 'pnl_vect_minmax' : ");
-  m = 5; n = 6;
-  pnl_rand_init (gen, 1, m*n);
-  A = pnl_mat_create (m, n);
-  min = pnl_vect_create (0);
-  max = pnl_vect_create (0);
-  imin = pnl_vect_int_create (0);
-  imax = pnl_vect_int_create (0);
+  pnl_mat_max (V, M, 'r');
+  pnl_test_vect_eq_abs (V, M_max_r, 1E-12, "mat_max 'r'", "");
+  pnl_mat_max (V, M, 'c');
+  pnl_test_vect_eq_abs (V, M_max_c, 1E-12, "mat_max 'c'", "");
 
-  printf ("A = \n");  pnl_mat_rand_normal (A, m, n, gen);
-  pnl_mat_print_nsp (A);
-  printf ("--> pnl_mat_min \n");
-  pnl_mat_min(A, min, 'c');
-  printf("min(A, 'c') = "); pnl_vect_print_nsp (min);
-  pnl_mat_min(A, min, 'r');
-  printf("min(A, 'r') = "); pnl_vect_print_nsp (min);
+  pnl_mat_min (V, M, 'r');
+  pnl_test_vect_eq_abs (V, M_min_r, 1E-12, "mat_min 'r'", "");
+  pnl_mat_min (V, M, 'c');
+  pnl_test_vect_eq_abs (V, M_min_c, 1E-12, "mat_min 'c'", "");
 
-  printf ("--> pnl_mat_max \n");
-  pnl_mat_max(A, max, 'c');
-  printf("max(A, 'c') = "); pnl_vect_print_nsp (max);
-  pnl_mat_max(A, max, 'r');
-  printf("max(A, 'r') = "); pnl_vect_print_nsp (max);
+  pnl_mat_free(&M);
+  pnl_vect_free(&M_max_c);
+  pnl_vect_free(&M_min_c);
+  pnl_vect_free(&M_max_r);
+  pnl_vect_free(&M_min_r);
+  pnl_vect_free(&V);
 
-  printf ("--> pnl_mat_minmax \n");
-  pnl_mat_minmax (A, min, max, 'r');
-  printf("min(A, 'r') = "); pnl_vect_print_nsp (min);
-  printf("max(A, 'r') = "); pnl_vect_print_nsp (max);
+  /* printf ("--> pnl_mat_minmax \n"); */
+  /* pnl_mat_minmax (A, min, max, 'r'); */
+  /* printf("min(A, 'r') = "); pnl_vect_print_nsp (min); */
+  /* printf("max(A, 'r') = "); pnl_vect_print_nsp (max); */
 
-  printf ("--> pnl_mat_min_index \n");
-  pnl_mat_min_index(A, min, imin, 'c');
-  printf("min(A, 'c') = "); pnl_vect_print_nsp (min);
-  printf("\tindex = "); pnl_vect_int_print_nsp (imin);
-  pnl_mat_min_index(A, min, imin, 'r');
-  printf("min(A, 'r') = "); pnl_vect_print_nsp (min);
-  printf("\tindex = "); pnl_vect_int_print_nsp (imin);
+  /* printf ("--> pnl_mat_min_index \n"); */
+  /* pnl_mat_min_index(A, min, imin, 'c'); */
+  /* printf("min(A, 'c') = "); pnl_vect_print_nsp (min); */
+  /* printf("\tindex = "); pnl_vect_int_print_nsp (imin); */
+  /* pnl_mat_min_index(A, min, imin, 'r'); */
+  /* printf("min(A, 'r') = "); pnl_vect_print_nsp (min); */
+  /* printf("\tindex = "); pnl_vect_int_print_nsp (imin); */
 
-  printf ("--> pnl_mat_max_index \n");
-  pnl_mat_max_index(A, max, imax, 'c');
-  printf("max(A, 'c') = "); pnl_vect_print_nsp (max);
-  printf("\tindex = "); pnl_vect_int_print_nsp (imax);
-  pnl_mat_max_index(A, max, imax, 'r');
-  printf("max(A, 'r') = "); pnl_vect_print_nsp (max);
-  printf("\tindex = "); pnl_vect_int_print_nsp (imax);
+  /* printf ("--> pnl_mat_max_index \n"); */
+  /* pnl_mat_max_index(A, max, imax, 'c'); */
+  /* printf("max(A, 'c') = "); pnl_vect_print_nsp (max); */
+  /* printf("\tindex = "); pnl_vect_int_print_nsp (imax); */
+  /* pnl_mat_max_index(A, max, imax, 'r'); */
+  /* printf("max(A, 'r') = "); pnl_vect_print_nsp (max); */
+  /* printf("\tindex = "); pnl_vect_int_print_nsp (imax); */
 
-  printf ("--> pnl_mat_minmax_index \n");
-  pnl_mat_minmax_index (A, min, max, imin, imax, 'r');
-  printf("max(A, 'r') = "); pnl_vect_print_nsp (max);
-  printf("\tindex = "); pnl_vect_int_print_nsp (imax);
-  printf("min(A, 'r') = "); pnl_vect_print_nsp (min);
-  printf("\tindex = "); pnl_vect_int_print_nsp (imin);
+  /* printf ("--> pnl_mat_minmax_index \n"); */
+  /* pnl_mat_minmax_index (A, min, max, imin, imax, 'r'); */
+  /* printf("max(A, 'r') = "); pnl_vect_print_nsp (max); */
+  /* printf("\tindex = "); pnl_vect_int_print_nsp (imax); */
+  /* printf("min(A, 'r') = "); pnl_vect_print_nsp (min); */
+  /* printf("\tindex = "); pnl_vect_int_print_nsp (imin); */
 
-  pnl_mat_free(&A);
-  pnl_vect_free (&min);   pnl_vect_free (&max);
-  pnl_vect_int_free (&imin);   pnl_vect_int_free (&imax);
 }
 
 static void pnl_mat_qsort_test ()
@@ -1016,7 +1026,6 @@ static void pnl_mat_dgemv_test ()
   double   alpha, beta;
   PnlMat  *A, *tA;
   PnlVect *x, *y, *yclone, *expec;
-  int      N, m, n;
   alpha = 1.3;
   beta = 0.5;
 

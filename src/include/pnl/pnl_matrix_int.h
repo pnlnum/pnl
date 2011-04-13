@@ -100,12 +100,12 @@ extern void pnl_mat_int_sum_vect (PnlVectInt *y, const PnlMatInt *M, char a);
 extern void pnl_mat_int_cumsum(PnlMatInt *lhs, char a);
 extern void pnl_mat_int_prod_vect (PnlVectInt *y, const PnlMatInt *M, char a);
 extern void pnl_mat_int_cumprod(PnlMatInt *lhs, char a);
-extern void pnl_mat_int_min (const PnlMatInt *A, PnlVectInt *out, char d);
-extern void pnl_mat_int_max (const PnlMatInt *A, PnlVectInt *out, char d);
-extern void pnl_mat_int_minmax (const PnlMatInt *A, PnlVectInt *m, PnlVectInt *M, char d);
-extern void pnl_mat_int_min_index (const PnlMatInt *A, PnlVectInt *out, PnlVectInt *i, char d);
-extern void pnl_mat_int_max_index (const PnlMatInt *A, PnlVectInt *out, PnlVectInt *i, char d);
-extern void pnl_mat_int_minmax_index (const PnlMatInt *A, PnlVectInt *m, PnlVectInt *M, PnlVectInt *im, PnlVectInt *iM, char d);
+extern void pnl_mat_int_min (PnlVectInt *out, const PnlMatInt *A, char d);
+extern void pnl_mat_int_max (PnlVectInt *out, const PnlMatInt *A, char d);
+extern void pnl_mat_int_minmax (PnlVectInt *m, PnlVectInt *M, const PnlMatInt *A, char d);
+extern void pnl_mat_int_min_index (PnlVectInt *out, PnlVectInt *i, const PnlMatInt *A, char d);
+extern void pnl_mat_int_max_index (PnlVectInt *out, PnlVectInt *i, const PnlMatInt *A, char d);
+extern void pnl_mat_int_minmax_index (PnlVectInt *m, PnlVectInt *M, PnlVectInt *im, PnlVectInt *iM, const PnlMatInt *A, char d);
 extern void pnl_mat_int_qsort_index (PnlMatInt *A, PnlMatInt *t, char dir, char order);
 extern void pnl_mat_int_qsort (PnlMatInt *A, char dir, char order);
 

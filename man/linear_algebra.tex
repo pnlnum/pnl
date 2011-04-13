@@ -899,35 +899,35 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 \paragraph{Ordering operations}
 
 \begin{itemize}
-\item \describefun{void}{pnl_mat_max}{const \refstruct{PnlMat} \ptr A,
-    \refstruct{PnlVect} \ptr M, char d}
+\item \describefun{void}{pnl_mat_max}{ \refstruct{PnlVect} \ptr M, const
+    \refstruct{PnlMat} \ptr A, char d}
   \sshortdescribe On exit, $\var{M}(i) = \max_{j}(\var{A}(i, j))$ when \var{d='c'}
   and $\var{M}(i) = \max_{j}(\var{A}(j, i))$ when \var{d='r'}.
 
-\item \describefun{void}{pnl_mat_min}{const \refstruct{PnlMat} \ptr A,
-    \refstruct{PnlVect} \ptr m, char d}
+\item \describefun{void}{pnl_mat_min}{ \refstruct{PnlVect} \ptr m,const
+    \refstruct{PnlMat} \ptr A, char d}
   \sshortdescribe On exit, $\var{m}(i) = \min_{j}(\var{A}(i, j))$ when \var{d='c'}
   and $\var{m}(i) = \min_{j}(\var{A}(j, i))$ when \var{d='r'}.
 
-\item \describefun{void}{pnl_mat_minmax}{const \refstruct{PnlMat} \ptr A, 
-    \refstruct{PnlVect} \ptr m, \refstruct{PnlVect} \ptr M, char d}
+\item \describefun{void}{pnl_mat_minmax}{ \refstruct{PnlVect} \ptr m,
+    \refstruct{PnlVect} \ptr M, const \refstruct{PnlMat} \ptr A, char d}
   \sshortdescribe On exit, $\var{m}(i) = \min_{j}(\var{A}(i, j))$ and $\var{M}(i) =
   \max_{j}(\var{A}(i, j))$ when \var{d='c'} and $\var{m}(i) = \min_{j}(\var{A}(j, i))$
   and $\var{M}(i) = \min_{j}(\var{A}(j, i))$ when \var{d='r'}.
   
-\item \describefun{void}{pnl_mat_min_index}{const \refstruct{PnlMat} \ptr  A, 
-    \refstruct{PnlVect} \ptr m, \refstruct{PnlVectInt} \ptr im, char d}
+\item \describefun{void}{pnl_mat_min_index}{ \refstruct{PnlVect} \ptr m,
+    \refstruct{PnlVectInt} \ptr im, const \refstruct{PnlMat} \ptr  A, char d}
   \sshortdescribe Idem as \reffun{pnl_mat_min} and \var{index} contains the
   indices of the minima. If \var{index==NULL}, the indices are not computed.
 
-\item \describefun{void}{pnl_mat_max_index}{const \refstruct{PnlMat} \ptr  A, 
-    \refstruct{PnlVect} \ptr M, \refstruct{PnlVectInt} \ptr iM, char d}
+\item \describefun{void}{pnl_mat_max_index}{ \refstruct{PnlVect} \ptr M,
+    \refstruct{PnlVectInt} \ptr iM, const \refstruct{PnlMat} \ptr  A, char d}
   \sshortdescribe Idem as \reffun{pnl_mat_max} and \var{index} contains the
   indices of the maxima. If \var{index==NULL}, the indices are not computed.
 
-\item \describefun{void}{pnl_mat_minmax_index}{const \refstruct{PnlMat} \ptr 
-    A, \refstruct{PnlVect} \ptr m, \refstruct{PnlVect} \ptr M,
-    \refstruct{PnlVectInt} \ptr im, \refstruct{PnlVectInt} \ptr iM, char d}
+\item \describefun{void}{pnl_mat_minmax_index}{ \refstruct{PnlVect} \ptr m,
+    \refstruct{PnlVect} \ptr M, \refstruct{PnlVectInt} \ptr im,
+    \refstruct{PnlVectInt} \ptr iM, const \refstruct{PnlMat} \ptr A, char d}
   \sshortdescribe Idem as \reffun{pnl_mat_minmax} and \var{im} contains the
   indices of the minima and \var{iM} contains the indices of the minima. If
   \var{im==NULL} (resp. \var{iM==NULL}, the indices of the minima

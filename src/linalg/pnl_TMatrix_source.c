@@ -1709,7 +1709,7 @@ extern void FUNCTION(pnl_array, minmax_index)(const BASE *a, int n, int incr,
  * @param index a vector of integers containing on exit the indices of the
  * maxima. if NULL, no index is computed.
  */
-void FUNCTION(pnl_mat, max_index)(const TYPE(PnlMat) *A, TYPE(PnlVect) *out, PnlVectInt *index, char d)
+void FUNCTION(pnl_mat, max_index)(TYPE(PnlVect) *out, PnlVectInt *index, const TYPE(PnlMat) *A, char d)
 {
   int length, n, incr, i, lda, fake;
   switch (d)
@@ -1737,7 +1737,7 @@ void FUNCTION(pnl_mat, max_index)(const TYPE(PnlMat) *A, TYPE(PnlVect) *out, Pnl
  * @param index a vector of integers containing on exit the indices of the
  * minima. if NULL, no index is computed.
  */
-void FUNCTION(pnl_mat, min_index)(const TYPE(PnlMat) *A, TYPE(PnlVect) *out, PnlVectInt *index, char d)
+void FUNCTION(pnl_mat, min_index)(TYPE(PnlVect) *out, PnlVectInt *index, const TYPE(PnlMat) *A,  char d)
 {
   int length, n, incr, i, fake, lda;
   switch (d)
@@ -1768,7 +1768,7 @@ void FUNCTION(pnl_mat, min_index)(const TYPE(PnlMat) *A, TYPE(PnlVect) *out, Pnl
  * @param index_max a vector of integers containing on exit the indices of the
  * maxima. if NULL, no index is computed.
  */
-void FUNCTION(pnl_mat, minmax_index)(const TYPE(PnlMat) *A, TYPE(PnlVect) *out_min, TYPE(PnlVect) *out_max, PnlVectInt *index_min, PnlVectInt *index_max, char d)
+void FUNCTION(pnl_mat, minmax_index)(TYPE(PnlVect) *out_min, TYPE(PnlVect) *out_max, PnlVectInt *index_min, PnlVectInt *index_max, const TYPE(PnlMat) *A, char d)
 {
   int length, n, incr, i, lda, fake_min, fake_max;
   switch (d)
@@ -1798,9 +1798,9 @@ void FUNCTION(pnl_mat, minmax_index)(const TYPE(PnlMat) *A, TYPE(PnlVect) *out_m
  * @param d can be 'c' (out(i) = max(A(i,:)) or 'r' (out(i) = max(A(:,i))
  * @param out a vector containing on exit the maxima
  */
-void FUNCTION(pnl_mat,max)(const TYPE(PnlMat) *A, TYPE(PnlVect) *out, char d)
+void FUNCTION(pnl_mat,max)(TYPE(PnlVect) *out, const TYPE(PnlMat) *A,  char d)
 {
-  FUNCTION (pnl_mat, max_index)(A, out, NULL, d);
+  FUNCTION (pnl_mat, max_index)(out, NULL, A, d);
 }
 
 /**
@@ -1810,9 +1810,9 @@ void FUNCTION(pnl_mat,max)(const TYPE(PnlMat) *A, TYPE(PnlVect) *out, char d)
  * @param d can be 'c' (out(i) = min(A(i,:)) or 'r' (out(i) = min(A(:,i))
  * @param out a vector containing on exit the minima
  */
-void FUNCTION(pnl_mat,min)(const TYPE(PnlMat) *A, TYPE(PnlVect) *out, char d)
+void FUNCTION(pnl_mat,min)(TYPE(PnlVect) *out, const TYPE(PnlMat) *A, char d)
 {
-  FUNCTION (pnl_mat, min_index)(A, out, NULL, d);
+  FUNCTION (pnl_mat, min_index)(out, NULL, A, d);
 }
 
 /**
@@ -1823,10 +1823,10 @@ void FUNCTION(pnl_mat,min)(const TYPE(PnlMat) *A, TYPE(PnlVect) *out, char d)
  * @param min_out a vector containing on exit the minima
  * @param max_out a vector containing on exit the maxima
  */
-void FUNCTION(pnl_mat,minmax)(const TYPE(PnlMat) *A, TYPE(PnlVect) *min_out,
-                              TYPE(PnlVect) *max_out, char d)
+void FUNCTION(pnl_mat,minmax)( TYPE(PnlVect) *min_out,
+                              TYPE(PnlVect) *max_out, const TYPE(PnlMat) *A, char d)
 {
-  FUNCTION (pnl_mat, minmax_index)(A, min_out, max_out, NULL, NULL, d);
+  FUNCTION (pnl_mat, minmax_index)(min_out, max_out, NULL, NULL, A, d);
 }
 
 static int FUNCTION(__pnl, cmp_i) ( const void *a, const void *b)
