@@ -738,42 +738,57 @@ static void pnl_mat_minmax_test()
 
 static void pnl_mat_qsort_test ()
 {
-  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  PnlMat *M = pnl_mat_create (0, 0);
-  PnlMat *Mclone = pnl_mat_create (0, 0);
-  PnlMatInt *t = pnl_mat_int_create (0, 0);
-  printf("test de la fonction 'pnl_mat_qsort' : \n");
-  pnl_rand_init (gen, 1, 1);
-  pnl_mat_rand_normal (M, 11, 9, gen);
-  pnl_mat_print_nsp (M);
-  pnl_mat_clone (Mclone, M);
+  PnlMat *M, *Mclone, *res;
+  PnlMatInt *t, *res_t;
 
+  Mclone = pnl_mat_create_from_file("Data/A.txt");
+  t = pnl_mat_int_new();
+  M = pnl_mat_new ();
+
+  /*
+   * For each sort, we compare the result with those from Nsp stored onto
+   * files. Note that because indexing starts at 0 in PNL, the index matrix
+   * from Nsp should be unshifted
+   */
+  pnl_mat_clone (M, Mclone);
   pnl_mat_qsort_index (M, t, 'r', 'i');
-  printf("sort(M, 'r', 'i') \n");
-  pnl_mat_print_nsp (M);
-  pnl_mat_int_print_nsp (t);
-  printf("\n");
+  res = pnl_mat_create_from_file ("Data/sort_A_r_i.txt");
+  res_t = pnl_mat_int_create_from_file ("Data/sort_A_r_i_index.txt");
+  pnl_mat_int_plus_int( res_t, -1);
+  pnl_test_mat_eq_abs ( M, res, 1E-12, "mat_qsort r i", ""); 
+  pnl_test_mat_int_eq ( t, res_t,  "mat_qsort r i (index)", ""); 
+  pnl_mat_free (&res);
+  pnl_mat_int_free (&res_t);
 
   pnl_mat_clone (M, Mclone);
   pnl_mat_qsort_index (M, t, 'r', 'd');
-  printf("sort(M, 'r', 'd') \n");
-  pnl_mat_print_nsp (M);
-  pnl_mat_int_print_nsp (t);
-  printf("\n");
-
-  pnl_mat_clone (M, Mclone);
-  pnl_mat_qsort_index (M, t, 'c', 'd');
-  printf("sort(M, 'c', 'd') \n");
-  pnl_mat_print_nsp (M);
-  pnl_mat_int_print_nsp (t);
-  printf("\n");
+  res = pnl_mat_create_from_file ("Data/sort_A_r_d.txt");
+  res_t = pnl_mat_int_create_from_file ("Data/sort_A_r_d_index.txt");
+  pnl_mat_int_plus_int( res_t, -1);
+  pnl_test_mat_eq_abs ( M, res, 1E-12, "mat_qsort r d", ""); 
+  pnl_test_mat_int_eq ( t, res_t,  "mat_qsort r d (index)", ""); 
+  pnl_mat_free (&res);
+  pnl_mat_int_free (&res_t);
 
   pnl_mat_clone (M, Mclone);
   pnl_mat_qsort_index (M, t, 'c', 'i');
-  printf("sort(M, 'c', 'i') \n");
-  pnl_mat_print_nsp (M);
-  pnl_mat_int_print_nsp (t);
-  printf("\n");
+  res = pnl_mat_create_from_file ("Data/sort_A_c_i.txt");
+  res_t = pnl_mat_int_create_from_file ("Data/sort_A_c_i_index.txt");
+  pnl_mat_int_plus_int( res_t, -1);
+  pnl_test_mat_eq_abs ( M, res, 1E-12, "mat_qsort c i", ""); 
+  pnl_test_mat_int_eq ( t, res_t,  "mat_qsort c i (index)", ""); 
+  pnl_mat_free (&res);
+  pnl_mat_int_free (&res_t);
+
+  pnl_mat_clone (M, Mclone);
+  pnl_mat_qsort_index (M, t, 'c', 'd');
+  res = pnl_mat_create_from_file ("Data/sort_A_c_d.txt");
+  res_t = pnl_mat_int_create_from_file ("Data/sort_A_c_d_index.txt");
+  pnl_mat_int_plus_int( res_t, -1);
+  pnl_test_mat_eq_abs ( M, res, 1E-12, "mat_qsort c d", ""); 
+  pnl_test_mat_int_eq ( t, res_t,  "mat_qsort c d (index)", ""); 
+  pnl_mat_free (&res);
+  pnl_mat_int_free (&res_t);
 
   pnl_mat_free (&M);
   pnl_mat_free (&Mclone);

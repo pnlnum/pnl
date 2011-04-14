@@ -40,3 +40,18 @@ fprintfMat("Data/min_A_c.txt", min(A, 'c'), format="%.18f");
 fprintfMat("Data/max_A_r.txt", max(A, 'r')', format="%.18f");
 fprintfMat("Data/max_A_c.txt", max(A, 'c'), format="%.18f");
 
+[ A_sort, ind ] = sort(A, 'c', 'd');
+fprintfMat("Data/sort_A_c_d.txt", A_sort, format="%.18f");
+fprintfMat("Data/sort_A_c_d_index.txt", ind, format="%.0f");
+
+[ A_sort, ind ] = sort(A, 'c', 'i');
+fprintfMat("Data/sort_A_c_i.txt", A_sort, format="%.18f");
+fprintfMat("Data/sort_A_c_i_index.txt", ind, format="%.0f");
+
+[ A_sort, ind ] = sort(A, 'r', 'd');
+fprintfMat("Data/sort_A_r_d.txt", A_sort, format="%.18f");
+fprintfMat("Data/sort_A_r_d_index.txt", ind, format="%.0f");
+
+[ A_sort, ind ] = sort(A, 'r', 'i');
+fprintfMat("Data/sort_A_r_i.txt", A_sort, format="%.18f");
+fprintfMat("Data/sort_A_r_i_index.txt", ind, format="%.0f");
