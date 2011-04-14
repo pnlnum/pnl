@@ -25,6 +25,7 @@ extern int pnl_test_vect_eq_abs(const PnlVect *X, const PnlVect *Y, double reler
 extern int pnl_test_mat_eq(const PnlMat *X, const PnlMat *Y, double relerr, const char *str, const char *fmt, ...);
 extern int pnl_test_mat_eq_rel(const PnlMat *X, const PnlMat *Y, double relerr, const char *str, const char *fmt, ...);
 extern int pnl_test_mat_eq_abs(const PnlMat *X, const PnlMat *Y, double relerr, const char *str, const char *fmt, ...);
+extern int pnl_test_mat_int_eq(const PnlMatInt *X, const PnlMatInt *Y, const char *str, const char *fmt, ...);
 
 extern void pnl_test_init(int argc, char **argv);
 extern int pnl_test_finalize();

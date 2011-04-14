@@ -277,7 +277,6 @@ static int pnl_test_array (const double *X, const double *Y, int n, double reler
 
 }
 
-
 /** 
  * Checks if |x(i,j) - y(i,j)| / |y(i,j)| < relerr
  * 
@@ -334,6 +333,55 @@ int pnl_test_mat_eq_abs (const PnlMat *X, const PnlMat *Y, double abserr, const 
       return FALSE;
     }
   return pnl_test_array (X->array, Y->array, X->mn, abserr, test_eq_abs, str, fmt, ap);
+}
+
+/** 
+ * Checks if x(i,j) = y(i,j) for integer matrices
+ * 
+ * @param X computed result (matrix)
+ * @param Y expected result (matrix)
+ * @param str the name of the tested function
+ * @param fmt a format string to be passed to printf
+ * @param ... extra arguments for printf
+ * 
+ * @return FALSE or TRUE
+ */
+int pnl_test_mat_int_eq(const PnlMatInt *X, const PnlMatInt *Y, const char *str, const char *fmt, ...)
+{
+  int i, status;
+  va_list ap;
+  va_start (ap, fmt);
+  va_end (ap);
+  if ( X->m != Y->m || X->n != Y->n )
+    {
+      printf ("%s : ", str);
+      printf ("FAIL (size mismatch");
+      printf (fmt, ap); printf (")\n");
+      update_count_tests (1);
+      return FALSE;
+    }
+  for ( i=0 ; i<X->mn ; i++ )
+    {
+      const int x = X->array[i];
+      const int y = Y->array[i];
+      status  = (x != y);
+      if ( status ) break;
+    }
+  if ( status || verbose )
+    {
+      printf ("\t%s : ", str);
+      printf ( status ? "FAIL" : "OK");
+      if ( status ) 
+        {
+          printf (" (");
+          vprintf (fmt, ap);
+          va_end (ap);
+          printf (" expected %d observed %d)", Y->array[i], X->array[i]);
+        }
+      printf ("\n");
+    }
+  update_count_tests (status);
+  return (status ? FALSE : TRUE);
 }
 
 /** 
@@ -451,8 +499,6 @@ int pnl_test_vect_eq(const PnlVect *X, const PnlVect *Y, double relerr, const ch
     }
   return pnl_test_array (X->array, Y->array, X->size, relerr, test_eq, str, fmt, ap);
 }
-
-
 
 void run_all_test (tst_list *l)
 {
