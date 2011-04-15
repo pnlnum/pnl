@@ -28,14 +28,16 @@ AM_MAINTAINER_MODE
 
 
 AC_ARG_ENABLE(debug,
-   [  --enable-debug          compile with "-g" option, default behaviour is to optimize],
-   [enable_debug="yes"], [enable_debug="no"])
+    [  --enable-debug          compile with "-g" option, default behaviour is to optimize],
+    [enable_debug="yes"], [enable_debug="no"])
 AC_ARG_ENABLE(optimize,
-   [  --disable-optimize      disable "-0" option off gcc], [enable_optimize="no"], [enable_optimize="yes"])
+    [  --disable-optimize      disable "-0" option off gcc], [enable_optimize="no"], [enable_optimize="yes"])
 AC_ARG_ENABLE(verbose,
-   [  --disable-silent         tell libtool not to be silent], [], [enable_verbose="no"])
+    [  --disable-silent         tell libtool not to be silent], [], [enable_verbose="no"])
 AC_ARG_WITH(internal_blas,
     [  --with-internal-blas    use the internal Blas and Lapack libraries ])
+AC_ARG_ENABLE(mpi,
+    [  --disable-mpi      do not check for MPI], [enable_mpi="no"], [enable_mpi="yes"])
 
 
 if test "$enable_verbose" = no; then
@@ -274,18 +276,23 @@ MPI_LIBS=""
 MPI_CFLAGS=""
 MPICC=""
 MPICXX=""
-builtin(include,config/ax_mpi.m4)
-AX_MPI([have_mpi=1], [have_mpi=0])
 
-# We will use CC and not MPICC to compile and link, so we need
-# to tweak MPI_LIBS
-if test $have_mpi = 1; then
-   MPI_CFLAGS=`$MPICC --showme:compile`
-   if test "x " = x"$MPILIBS"; then
-      MPI_LIBS=`$MPICC --showme:link`
-    else
-      MPI_LIBS="$MPILIBS"
-   fi
+if test "x$enable_mpi" = xyes; then
+    builtin(include,config/ax_mpi.m4)
+    AX_MPI([have_mpi=1], [have_mpi=0])
+
+    # We will use CC and not MPICC to compile and link, so we need
+    # to tweak MPI_LIBS
+    if test $have_mpi = 1; then
+        MPI_CFLAGS=`$MPICC --showme:compile`
+        if test "x " = x"$MPILIBS"; then
+            MPI_LIBS=`$MPICC --showme:link`
+        else
+            MPI_LIBS="$MPILIBS"
+        fi
+    fi
+else
+    have_mpi=0
 fi
 AM_CONDITIONAL([HAVE_MPI], [test $have_mpi == 1])
 
