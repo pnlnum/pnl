@@ -24,25 +24,7 @@
 
 #include "pnl/pnl_specfun.h"
 #include "pnl/pnl_random.h"
-
-#ifdef HAVE_GSL
-extern double gsl_sf_expint_Ei (double x);
-extern double gsl_sf_expint_En (int n,double x);
-extern double gsl_sf_gamma_inc(double a,double x);
-extern double gsl_sf_gamma_inc_Q (double a,double x);
-extern double gsl_sf_gamma_inc_P (double a,double x);
-extern double gsl_sf_gamma (double);
-extern double gsl_sf_lngamma (double);
-extern double gsl_sf_log_erfc (double x);
-extern double gsl_sf_erf (double x);
-extern double gsl_sf_erfc (double x);
-extern double gsl_sf_hyperg_2F1 (double a, double b, double c, double x);
-extern double gsl_sf_hyperg_1F1 (double a, double b, double x);
-extern double gsl_sf_hyperg_2F0 (double a, double b, double x);
-extern double gsl_sf_hyperg_U (double a, double b, double x);
-extern double gsl_sf_hyperg_0F1 (double c, double x);
-#endif
-
+#include "tests_utils.h"
 
 static void exp_int_test ()
 {
@@ -87,23 +69,126 @@ static void exp_int_test ()
 }
 
 
-void gamma_test ()
+struct d2d_test
 {
-#ifdef HAVE_GSL
-  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  double x;
-  pnl_rand_init (1, 1, gen);
-  x = fabs (pnl_rand_normal (gen));
-  printf( "\nTest error of Gamma functions\n");
-  printf ("error on gamma     : %f\n", gsl_sf_gamma (x) - pnl_sf_gamma (x));
-  printf ("error on log_gamma : %f\n", gsl_sf_lngamma (x) - pnl_sf_log_gamma (x));
-  printf ("error on erf       : %f\n", gsl_sf_erf (x) - pnl_sf_erf (x));
-  printf ("error on erfc      : %f\n", gsl_sf_erfc (x) - pnl_sf_erfc (x));
-  printf ("error on log_erfc  : %f\n", gsl_sf_log_erfc (x) - pnl_sf_log_erfc (x));
-#else
-  printf( "Test error of Gamma functions only available with GSL\n");  
-#endif
+  char *label;
+  double (*f)(double);
+  double arg;
+  double res;
+};
+
+struct dd2d_test
+{
+  char *label;
+  double (*f)(double, double);
+  double arg;
+  double nu;
+  double res;
+};
+
+struct dd2c_test
+{
+  char *label;
+  dcomplex (*f)(double, double);
+  double arg;
+  double nu;
+  double res_r, res_i;
+};
+
+struct dc2c_test
+{
+  char *label;
+  dcomplex (*f)(double, dcomplex);
+  double arg_r, arg_i;
+  double nu;
+  double res_r, res_i;
+};
+
+
+struct d2d_test list_gamma_tst [] =
+{
+#include "gamma_test.dat"
+    { NULL, NULL, 0, 0}
+};
+
+struct dd2d_test list_real_bessel_tst [] =
+{
+#include "real_bessel_test.dat"
+    { NULL, NULL, 0, 0}
+};
+
+struct dd2c_test list_real_besselh_tst [] =
+{
+#include "real_besselh_test.dat"
+    { NULL, NULL, 0, 0}
+};
+
+struct dc2c_test list_complex_bessel_tst [] =
+{
+#include "complex_bessel_test.dat"
+    { NULL, NULL, 0, 0, 0, 0, 0}
+};
+
+
+void d2d_funcs_test (struct d2d_test *tst)
+{
+  int i;
+  double tol  = 1E-5;
+  for ( i=0 ; tst[i].f != NULL ; i++ )
+    {
+      struct d2d_test t = tst[i];
+      double res = (t.f)(t.arg);
+      pnl_test_eq (res, t.res, tol, t.label, 
+                  "computed at %g", t.arg);
+    }
 }
+
+void dd2d_funcs_test (struct dd2d_test *tst)
+{
+  int i;
+  double tol  = 1E-5;
+  for ( i=0 ; tst[i].f != NULL ; i++ )
+    {
+      struct dd2d_test t = tst[i];
+      double res = (t.f)(t.nu, t.arg);
+      pnl_test_eq (res, t.res, tol, t.label, 
+                  "computed at (%g, %g)", t.nu, t.arg);
+    }
+}
+
+void dd2c_funcs_test (struct dd2c_test *tst)
+{
+  int i;
+  double tol  = 1E-5;
+  for ( i=0 ; tst[i].f != NULL ; i++ )
+    {
+      struct dd2c_test t = tst[i];
+      dcomplex res = (t.f)(t.nu, t.arg);
+      pnl_test_eq (res.r, t.res_r, tol, t.label, 
+                  "computed at (%g,%g+i %g)", t.nu, t.arg);
+      pnl_test_eq (res.i, t.res_i, tol, t.label, 
+                  "computed at (%g,%g+i %g)", t.nu, t.arg);
+    }
+}
+
+
+void dc2c_funcs_test (struct dc2c_test *tst)
+{
+  int i;
+  double tol  = 1E-4;
+  for ( i=0 ; tst[i].f != NULL ; i++ )
+    {
+      struct dc2c_test t = tst[i];
+      dcomplex arg = Complex(t.arg_r, t.arg_i);
+      dcomplex res = (t.f)(t.nu, arg);
+      pnl_test_eq (res.r, t.res_r, tol, t.label, 
+                  "computed at (%g,%g+i %g)", t.nu, t.arg_r, t.arg_i);
+      pnl_test_eq (res.i, t.res_i, tol, t.label, 
+                  "computed at (%g,%g+i %g)", t.nu, t.arg_r, t.arg_i);
+    }
+}
+
+
 
 void hyperg_test ()
 {
@@ -139,86 +224,15 @@ void hyperg_test ()
 #endif
 }
 
-static void complex_bessel_test ()
+int main (int argc, char **argv)
 {
-  dcomplex z, c;
-  double v = -1.5;
-  z = Complex (5., 3.);
-  printf("Test des fonctions de bessel complexes \n");
-  c = pnl_complex_bessel_i (v, z);
-  printf("bessel_i(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
-  c = pnl_complex_bessel_i_scaled (v, z);
-  printf("bessel_i_scaled(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
-  c = pnl_complex_bessel_rati (v, z);
-  printf("bessel_rati(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
-  c = pnl_complex_bessel_j (v, z);
-  printf("bessel_j(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
-  c = pnl_complex_bessel_j_scaled (v, z);
-  printf("bessel_j_scaled(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
-  c = pnl_complex_bessel_y (v, z);
-  printf("bessel_y(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
-  c = pnl_complex_bessel_y_scaled (v, z);
-  printf("bessel_y_scaled(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
-  c = pnl_complex_bessel_k (v, z);
-  printf("bessel_k(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
-  c = pnl_complex_bessel_k_scaled (v, z);
-  printf("bessel_k_scaled(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
-  c = pnl_complex_bessel_h1 (v, z);
-  printf("bessel_h1(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
-  c = pnl_complex_bessel_h1_scaled (v, z);
-  printf("bessel_h1_scaled(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
-  c = pnl_complex_bessel_h2 (v, z);
-  printf("bessel_h2(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
-  c = pnl_complex_bessel_h2_scaled (v, z);
-  printf("bessel_h2_scaled(%f, %f + i %f) = %f + %f i\n", v, z.r, z.i, c.r, c.i);
+  pnl_test_init (argc, argv);
+  d2d_funcs_test (list_gamma_tst);
+  dd2d_funcs_test (list_real_bessel_tst);
+  dd2c_funcs_test (list_real_besselh_tst);
+  dc2c_funcs_test (list_complex_bessel_tst);
 
-}
-
-static void real_bessel_test ()
-{
-  double z, c;
-  dcomplex zc;
-  double v = -1.5;
-  z = 5.;
-  printf("Test des fonctions de bessel reelles \n");
-  c = pnl_bessel_i (v, z);
-  printf("bessel_i(%f, %f) = %f\n", v, z, c);
-  c = pnl_bessel_i_scaled (v, z);
-  printf("bessel_i_scaled(%f, %f) = %f\n", v, z, c);
-  c = pnl_bessel_rati (v, z);
-  printf("bessel_i_ratio(%f, %f) = %f\n", v, z, c);
-  c = pnl_bessel_j (v, z);
-  printf("bessel_j(%f, %f) = %f\n", v, z, c);
-  c = pnl_bessel_j_scaled (v, z);
-  printf("bessel_j_scaled(%f, %f) = %f\n", v, z, c);
-  c = pnl_bessel_y (v, z);
-  printf("bessel_y(%f, %f) = %f\n", v, z, c);
-  c = pnl_bessel_y_scaled (v, z);
-  printf("bessel_y_scaled(%f, %f) = %f\n", v, z, c);
-  c = pnl_bessel_k (v, z);
-  printf("bessel_k(%f, %f) = %f\n", v, z, c);
-  c = pnl_bessel_k_scaled (v, z);
-  printf("bessel_k_scaled(%f, %f) = %f\n", v, z, c);
-  zc = pnl_bessel_h1 (v, z);
-  printf("bessel_h1(%f, %f) = %f + %f i\n", v, z, CMPLX(zc));
-  zc = pnl_bessel_h1_scaled (v, z);
-  printf("bessel_h1_scaled(%f, %f) = %f + %f i\n", v, z, CMPLX(zc));
-  zc = pnl_bessel_h2 (v, z);
-  printf("bessel_h2(%f, %f) = %f + %f i\n", v, z, CMPLX(zc));
-  zc = pnl_bessel_h2_scaled (v, z);
-  printf("bessel_h2_scaled(%f, %f) = %f + %f i\n", v, z, CMPLX(zc));
-}
-
-
-int main ()
-{
-  printf("\n");
-  printf("Special function tests.\n");
-  printf("\n");
-  complex_bessel_test ();
-  real_bessel_test ();
   exp_int_test();
-  gamma_test ();
   hyperg_test ();
-  return OK;
+  exit (pnl_test_finalize("Special functions"));
 }
