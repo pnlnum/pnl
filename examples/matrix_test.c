@@ -22,7 +22,6 @@
 #include <math.h>
 
 #include "pnl/pnl_matrix.h"
-#include "pnl/pnl_matrix_complex.h"
 #include "pnl/pnl_random.h"
 #include "tests_utils.h"
 
@@ -172,12 +171,11 @@ static int cmp (double x[]) { return (x[0] >= x[1]) && (x[1] < x[2]); }
 
 static void pnl_mat_submat_test ()
 {
-  double gen=PNL_RNG_MERSENNE_RANDOM_SEED;
-  int m = 5, n = 7;
+  int gen=PNL_RNG_MERSENNE_RANDOM_SEED;
+  int i, m = 5, n = 7;
   PnlMat *M1, *M2;
   PnlVect *v1;
   PnlVectInt *indi, *indj;
-  printf ("\nTest of extract_submat function : \n");
   pnl_rand_init (gen, m, n);
   M1 = pnl_mat_create (m ,n);
   M2 = pnl_mat_create (m, n);
@@ -186,53 +184,70 @@ static void pnl_mat_submat_test ()
   indi = pnl_vect_int_create (0);
   indj = pnl_vect_int_create (0);
 
-  if ( pnl_mat_find (indi, indj, "m", ispos, M1) == FAIL ) 
-    {
-      printf ("Error in pnl_mat_find\n");
-    }
+  /*
+   * Finds all the components s.t. M1(i, j) >= 0
+   * extracts the indices for which the test is true
+   */
+  if ( pnl_mat_find (indi, indj, "m", ispos, M1) == FAIL ) printf ("Error in pnl_mat_find\n");
   v1 = pnl_vect_create_submat (M1, indi, indj);
-  printf ("M1 = "); pnl_mat_print_nsp (M1);
-  printf ("[i, j] = find (M1 >= 0)\n");
-  printf ("indi = "); pnl_vect_int_print_nsp (indi);
-  printf ("indj = "); pnl_vect_int_print_nsp (indj);
-  printf ("sub = "); pnl_vect_print_nsp (v1);
-  printf ("\n");
+  for ( i=0 ; i<v1->size ; i++ )
+    {
+      if ( ! ispos (&(v1->array[i])) ) 
+        {
+          pnl_test_set_fail ("mat_find >=0", v1->array[i], 0.);
+          break;
+        }
+    }
+  if ( i == v1->size ) pnl_test_set_ok ("mat_find >=0");
   pnl_vect_free (&v1);
 
-  if ( pnl_mat_find (indi, NULL, "m", ispos, M1) == FAIL )
+  /*
+   * Finds all the components s.t. M1(i, j) >= 0
+   * extracts the linear index for which the test is true
+   */
+  if ( pnl_mat_find (indi, NULL, "m", ispos, M1) == FAIL ) printf ("Error in pnl_mat_find\n");
+  for ( i=0 ; i<indi->size ; i++ )
     {
-      printf ("Error in pnl_mat_find\n");
+      if ( ! ispos ( &(PNL_GET(M1,indi->array[i])) ) ) 
+        {
+          pnl_test_set_fail ("mat_find >=0 indj", v1->array[i], 0.);
+          break;
+        }
     }
-  printf ("M1 = "); pnl_mat_print_nsp (M1);
-  printf ("[i] = find (M1 >= 0)\n");
-  printf ("indi = "); pnl_vect_int_print_nsp (indi);
-  printf ("\n");
+  if ( i == indi->size ) pnl_test_set_ok ("mat_find >=0 indj");
 
-  if ( pnl_mat_find (indi, indj, "mm", islarger, M1, M2) == FAIL ) 
+  /*
+   * Finds the components s.t. M1(i,j) >= M2(i,j)
+   */
+  if ( pnl_mat_find (indi, indj, "mm", islarger, M1, M2) == FAIL ) printf ("Error in pnl_mat_find\n");
+  for ( i=0 ; i<indi->size ; i++ )
     {
-      printf ("Error in pnl_mat_find\n");
+      double M1_ij = PNL_MGET(M1, PNL_GET(indi,i), PNL_GET(indj,i));
+      double M2_ij = PNL_MGET(M2, PNL_GET(indi,i), PNL_GET(indj,i));
+      if ( ! (M1_ij >= M2_ij) )
+        {
+          pnl_test_set_fail ("mat_find islarger", M1_ij - M2_ij, 0.);
+          break;
+        }
     }
-  v1 = pnl_vect_create_submat (M1, indi, indj);
-  printf ("M1 = "); pnl_mat_print_nsp (M1);
-  printf ("M2 = "); pnl_mat_print_nsp (M2);
-  printf ("[i, j] = find (M1 >= M2)\n");
-  printf ("indi = "); pnl_vect_int_print_nsp (indi);
-  printf ("indj = "); pnl_vect_int_print_nsp (indj);
-  printf ("sub = "); pnl_vect_print_nsp (v1);
-  printf ("\n");
-  pnl_vect_free (&v1);
+  if ( i == indi->size ) pnl_test_set_ok ("mat_find islarger");
 
+  /*
+   * Finds the components s.t. M1 >= M2 && M2 < 0
+   */
   pnl_mat_find (indi, indj, "mmr", cmp, M1, M2, 0.);
-  v1 = pnl_vect_create_submat (M1, indi, indj);
-  printf ("M1 = "); pnl_mat_print_nsp (M1);
-  printf ("M2 = "); pnl_mat_print_nsp (M2);
-  printf ("[i, j] = find ((M1 >= M2) && (M2 < 0))\n");
-  printf ("indi = "); pnl_vect_int_print_nsp (indi);
-  printf ("indj = "); pnl_vect_int_print_nsp (indj);
-  printf ("sub = "); pnl_vect_print_nsp (v1);
-  printf ("\n");
+  for ( i=0 ; i<indi->size ; i++ )
+    {
+      double M1_ij = PNL_MGET(M1, PNL_GET(indi,i), PNL_GET(indj,i));
+      double M2_ij = PNL_MGET(M2, PNL_GET(indi,i), PNL_GET(indj,i));
+      if ( ! (M1_ij >= M2_ij && M2_ij < 0) )
+        {
+          pnl_test_set_fail ("mat_find cmp", M1_ij - M2_ij, 0.);
+          break;
+        }
+    }
+  if ( i == indi->size ) pnl_test_set_ok ("mat_find islarger");
 
-  pnl_vect_free (&v1);
   pnl_vect_int_free (&indi);
   pnl_vect_int_free (&indj);
   pnl_mat_free (&M1);
