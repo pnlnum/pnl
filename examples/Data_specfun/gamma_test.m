@@ -34,3 +34,38 @@ for j=1:size(Lfunc,2)
 end
 
 fclose(dat)
+
+% Incomplete Gamma function tests
+dat = fopen ("gammainc_test.dat", mode="w");
+
+function y = gammainc2 (x, a)
+    y = gammainc (x, a, "upper") * gamma(a);
+end
+
+function y = gammaincP (x, a)
+    y = (1 - gammainc (x, a, "upper"));
+end
+
+function y = gammaincQ (x, a)
+    y = gammainc (x, a, "upper");
+end
+
+
+
+Lfunc = { {"gammainc2", "pnl_sf_gamma_inc"},...
+    {"gammaincP", "pnl_sf_gamma_inc_P"}, ...
+    {"gammaincQ", "pnl_sf_gamma_inc_Q"}, ...
+    };
+
+for j=1:size(Lfunc,2)
+    func = Lfunc{j};
+    for i=(1:10)
+        arg = rand(1) * 10;
+        alpha = rand(1) * 10;
+        res = feval(func{1}, arg, alpha);
+        fprintf(dat,"{ ""%s"", %s, %.18f, %.18f, %.18f },\n", func{2}, func{2}, arg, alpha, res)
+    end
+end
+
+fclose(dat)
+

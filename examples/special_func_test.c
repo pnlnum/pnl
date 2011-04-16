@@ -30,35 +30,17 @@ static void exp_int_test ()
 {
 #ifdef HAVE_GSL
   int      n;
-  double Gamma_gsl,IP_gsl,IQ_gsl,En_gsl,Gamma_neg_gsl;
+  double En, En_gsl
   double a,x;
-  double Gamma,IP,IQ,En,Gamma_neg;
 
-  a=0.2;
   x=5.0;
   
-  Gamma = pnl_sf_gamma_inc(a,0);
-  IP = pnl_sf_gamma_inc_P(a,x);
-  IQ = pnl_sf_gamma_inc_Q(a,x);
-  Gamma_neg=pnl_sf_gamma_inc(-a,x);
-
-  printf( "\nTest of Exponential Integrals\n");
-
-  Gamma_gsl=gsl_sf_gamma_inc(a,0);
-  Gamma_neg_gsl=gsl_sf_gamma_inc(-a,x);
-  IQ_gsl=gsl_sf_gamma_inc_Q (a,x);
-  IP_gsl=gsl_sf_gamma_inc_P (a,x);
-
   for(n=1;n<10;n++)
     {
       En=pnl_sf_expint_En(n,x);
       En_gsl=gsl_sf_expint_En (n,x);
       printf( "  E_%d      = %f - %f = %f \n",n,En,En_gsl,En-En_gsl);
     }
-  printf( "Gamma     = %f - %f = %f \n",Gamma,Gamma_gsl,Gamma-Gamma_gsl);
-  printf( "Gamma_neg = %f - %f = %f \n",Gamma_neg,Gamma_neg_gsl,Gamma_neg-Gamma_neg_gsl);
-  printf( "  IQ      = %f - %f = %f \n",IQ,IQ_gsl,IQ-IQ_gsl);
-  printf( "  IP      = %f - %f = %f \n",IP,IP_gsl,IP-IP_gsl);
 #else
   printf("Tests for Exponential Integrals only available with GSL\n");
 #endif
@@ -105,16 +87,22 @@ struct d2d_test list_gamma_tst [] =
     { NULL, NULL, 0, 0}
 };
 
+struct dd2d_test list_gammainc_tst [] =
+{
+#include "Data_specfun/gammainc_test.dat"
+    { NULL, NULL, 0, 0, 0}
+};
+
 struct dd2d_test list_real_bessel_tst [] =
 {
 #include "Data_specfun/real_bessel_test.dat"
-    { NULL, NULL, 0, 0}
+    { NULL, NULL, 0, 0, 0}
 };
 
 struct dd2c_test list_real_besselh_tst [] =
 {
 #include "Data_specfun/real_besselh_test.dat"
-    { NULL, NULL, 0, 0}
+    { NULL, NULL, 0, 0, 0, 0}
 };
 
 struct dc2c_test list_complex_bessel_tst [] =
@@ -218,6 +206,7 @@ int main (int argc, char **argv)
 {
   pnl_test_init (argc, argv);
   d2d_funcs_test (list_gamma_tst);
+  dd2d_funcs_test (list_gammainc_tst);
   dd2d_funcs_test (list_real_bessel_tst);
   dd2c_funcs_test (list_real_besselh_tst);
   dc2c_funcs_test (list_complex_bessel_tst);
