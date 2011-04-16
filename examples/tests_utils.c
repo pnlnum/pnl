@@ -150,7 +150,7 @@ int pnl_test_eq(double x, double y, double relerr, const char *str, const char *
   va_list ap;
   va_start (ap, fmt);
   va_end (ap);
-  if ( y >= 1 )
+  if ( fabs(y) >= 1 )
     {
       return pnl_test_eq_rel (x, y, relerr, str, fmt, ap);
     }
