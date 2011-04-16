@@ -40,7 +40,6 @@ static void exp_int_test ()
   Gamma = pnl_sf_gamma_inc(a,0);
   IP = pnl_sf_gamma_inc_P(a,x);
   IQ = pnl_sf_gamma_inc_Q(a,x);
-  /* Ei=pnl_sf_expint_Ei(x); */
   Gamma_neg=pnl_sf_gamma_inc(-a,x);
 
   printf( "\nTest of Exponential Integrals\n");
@@ -49,7 +48,6 @@ static void exp_int_test ()
   Gamma_neg_gsl=gsl_sf_gamma_inc(-a,x);
   IQ_gsl=gsl_sf_gamma_inc_Q (a,x);
   IP_gsl=gsl_sf_gamma_inc_P (a,x);
-  /* Ei_gsl=gsl_sf_expint_Ei (x); */
 
   for(n=1;n<10;n++)
     {
@@ -61,13 +59,10 @@ static void exp_int_test ()
   printf( "Gamma_neg = %f - %f = %f \n",Gamma_neg,Gamma_neg_gsl,Gamma_neg-Gamma_neg_gsl);
   printf( "  IQ      = %f - %f = %f \n",IQ,IQ_gsl,IQ-IQ_gsl);
   printf( "  IP      = %f - %f = %f \n",IP,IP_gsl,IP-IP_gsl);
-  /* printf( "  Ei      = %f - %f = %f \n",Ei,Ei_gsl,Ei-Ei_gsl); */
-  printf( "  En      = %f - %f = %f \n",En,En_gsl,En-En_gsl);
 #else
   printf("Tests for Exponential Integrals only available with GSL\n");
 #endif
 }
-
 
 struct d2d_test
 {
@@ -104,31 +99,29 @@ struct dc2c_test
   double res_r, res_i;
 };
 
-
 struct d2d_test list_gamma_tst [] =
 {
-#include "gamma_test.dat"
+#include "Data_specfun/gamma_test.dat"
     { NULL, NULL, 0, 0}
 };
 
 struct dd2d_test list_real_bessel_tst [] =
 {
-#include "real_bessel_test.dat"
+#include "Data_specfun/real_bessel_test.dat"
     { NULL, NULL, 0, 0}
 };
 
 struct dd2c_test list_real_besselh_tst [] =
 {
-#include "real_besselh_test.dat"
+#include "Data_specfun/real_besselh_test.dat"
     { NULL, NULL, 0, 0}
 };
 
 struct dc2c_test list_complex_bessel_tst [] =
 {
-#include "complex_bessel_test.dat"
+#include "Data_specfun/complex_bessel_test.dat"
     { NULL, NULL, 0, 0, 0, 0, 0}
 };
-
 
 void d2d_funcs_test (struct d2d_test *tst)
 {
@@ -171,7 +164,6 @@ void dd2c_funcs_test (struct dd2c_test *tst)
     }
 }
 
-
 void dc2c_funcs_test (struct dc2c_test *tst)
 {
   int i;
@@ -187,8 +179,6 @@ void dc2c_funcs_test (struct dc2c_test *tst)
                   "computed at (%g,%g+i %g)", t.nu, t.arg_r, t.arg_i);
     }
 }
-
-
 
 void hyperg_test ()
 {
