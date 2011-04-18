@@ -27,3 +27,5 @@
 - Integrate the latest version of DCMT
 
 - Linear algebra decomposition methods should return FAIL or OK
+
+- Global variable sgngam to be remove from libcephes
