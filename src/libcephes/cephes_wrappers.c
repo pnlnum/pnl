@@ -47,7 +47,7 @@ double pnl_sf_gamma_inc (double a, double x)
     }
   else
     {
-    return  pnl_sf_gamma_inc_Q (a, x) * pnl_sf_gamma (a);      
+      return  pnl_sf_gamma_inc_Q (a, x) * pnl_sf_gamma (a);      
     }
 }
 
@@ -101,13 +101,26 @@ double pnl_sf_hyperg_2F0 (double a, double b, double x)
 
 double pnl_sf_hyperg_0F1 (double v, double x)
 {
-  double num, den;
 
-  if (x==0) return 1.0;
-  
-  num = pnl_bessel_i (v-1,2*sqrt(x));
-  den = pow (x, ((v-1.0)/2.0));
-  num *= pnl_sf_gamma(v);
-  return num / (den);
+  if ( x==0 ) return 1.0;
+
+  if ( x < 0 )
+    {
+      double lgam, bes, m;
+      int sign;
+      pnl_sf_log_gamma_sgn(v, &lgam, &sign);
+      bes = pnl_bessel_j (v-1,2*sqrt(-x));
+      m = log(-x) * 0.5 * (1.0 - v);
+      return sign * bes * exp (lgam + m); 
+
+    }
+  else
+    {
+  double num, den;
+      num = pnl_bessel_i (v-1,2*sqrt(x));
+      den = pow (x, ((1.0-v)/2.0));
+      num *= pnl_sf_gamma(v);
+      return num * (den);
+    }
 }
 
