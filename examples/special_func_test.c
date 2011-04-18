@@ -75,6 +75,30 @@ struct dd2c_test
 };
 
 /* 
+ * struct for double(*f)(double, double, double)
+ */
+struct ddd2d_test
+{
+  char *label;
+  double (*f)(double, double, double);
+  double a, b, x;
+  double res;
+};
+
+/* 
+ * struct for double(*f)(double, double, double, double)
+ */
+struct dddd2d_test
+{
+  char *label;
+  double (*f)(double, double, double, double);
+  double a, b, c, x;
+  double res;
+};
+
+
+
+/* 
  * struct for dcomplex(*f)(doubla, dcomplex)
  */
 struct dc2c_test
@@ -123,6 +147,36 @@ struct dc2c_test list_complex_bessel_tst [] =
     { NULL, NULL, 0, 0, 0, 0, 0}
 };
 
+struct dd2d_test list_hyper0F1_tst [] =
+{
+#include "Data_specfun/hyperg0F1_test.dat"
+    { NULL, NULL, 0, 0, 0}
+};
+
+struct ddd2d_test list_hyper1F1_tst [] =
+{
+#include "Data_specfun/hyperg1F1_test.dat"
+    { NULL, NULL, 0, 0, 0, 0}
+};
+
+struct ddd2d_test list_hyperU_tst [] =
+{
+#include "Data_specfun/hypergU_test.dat"
+    { NULL, NULL, 0, 0, 0, 0}
+};
+
+struct ddd2d_test list_hyper2F0_tst [] =
+{
+#include "Data_specfun/hyperg2F0_test.dat"
+    { NULL, NULL, 0, 0, 0, 0}
+};
+
+struct dddd2d_test list_hyper2F1_tst [] =
+{
+#include "Data_specfun/hyperg2F1_test.dat"
+    { NULL, NULL, 0, 0, 0, 0}
+};
+
 void d2d_funcs_test (struct d2d_test *tst)
 {
   int i;
@@ -158,9 +212,36 @@ void dd2d_funcs_test (struct dd2d_test *tst)
       struct dd2d_test t = tst[i];
       double res = (t.f)(t.nu, t.arg);
       pnl_test_eq (res, t.res, tol, t.label, 
-                  "computed at (%g, %g)", t.nu, t.arg);
+                  "computed at (%.18g, %.18g)", t.nu, t.arg);
     }
 }
+
+void ddd2d_funcs_test (struct ddd2d_test *tst)
+{
+  int i;
+  double tol  = 1E-5;
+  for ( i=0 ; tst[i].f != NULL ; i++ )
+    {
+      struct ddd2d_test t = tst[i];
+      double res = (t.f)(t.a, t.b, t.x);
+      pnl_test_eq (res, t.res, tol, t.label, 
+                   "computed at (%g, %g, %g)", t.a, t.b, t.x);
+    }
+}
+
+void dddd2d_funcs_test (struct dddd2d_test *tst)
+{
+  int i;
+  double tol  = 1E-5;
+  for ( i=0 ; tst[i].f != NULL ; i++ )
+    {
+      struct dddd2d_test t = tst[i];
+      double res = (t.f)(t.a, t.b, t.c, t.x);
+      pnl_test_eq (res, t.res, tol, t.label, 
+                   "computed at (%g, %g, %g, %g)", t.a, t.b, t.c, t.x);
+    }
+}
+
 
 void dd2c_funcs_test (struct dd2c_test *tst)
 {
@@ -193,50 +274,23 @@ void dc2c_funcs_test (struct dc2c_test *tst)
     }
 }
 
-void hyperg_test ()
-{
-#ifdef HAVE_GSL
-  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  double x, a, b, c, r, r_gsl;
-  pnl_rand_init (1, 1, gen);
-  x = fabs (pnl_rand_normal (gen));
-  a = fabs (pnl_rand_normal (gen));
-  b = fabs (pnl_rand_normal (gen));
-  c = fabs (pnl_rand_normal (gen));
-  printf( "\nTest error of Hypergeometric functions\n");
-  printf ("a = %f; b = %f; c = %f; x = %f\n", a,b,c,x);
-  r_gsl = gsl_sf_hyperg_0F1(c,x);
-  r = pnl_sf_hyperg_0F1(c,x);
-  printf ("error on 0F1 %f - %f = %f\n", r, r_gsl, r-r_gsl);
-  r_gsl = gsl_sf_hyperg_1F1(a,b,x);
-  r = pnl_sf_hyperg_1F1(a,b,x);
-  printf ("error on 1F1 %f - %f = %f\n", r, r_gsl, r-r_gsl);
-  r = pnl_sf_hyperg_2F0(a,b,-x);
-  r_gsl = gsl_sf_hyperg_2F0(a,b,-x);
-  printf ("error on 2F0 %f - %f = %f\n", r, r_gsl, r-r_gsl);
-
-  x = pnl_rand_uni (gen);
-  r_gsl = gsl_sf_hyperg_2F1(a,b,c,x);
-  r = pnl_sf_hyperg_2F1(a,b,c,x);
-  printf ("error on 2F1 %f - %f = %f\n", r, r_gsl, r-r_gsl);
-  r_gsl = gsl_sf_hyperg_U(a,b,x);
-  r = pnl_sf_hyperg_U(a,b,x);
-  printf ("error on U %f - %f = %f\n", r, r_gsl, r-r_gsl);
-#else
-  printf( "Test error of Hypergoemtric functions only available with GSL\n");  
-#endif
-}
-
 int main (int argc, char **argv)
 {
   pnl_test_init (argc, argv);
   d2d_funcs_test (list_gamma_tst);
   id2d_funcs_test (list_expint_tst);
   dd2d_funcs_test (list_gammainc_tst);
+
   dd2d_funcs_test (list_real_bessel_tst);
   dd2c_funcs_test (list_real_besselh_tst);
   dc2c_funcs_test (list_complex_bessel_tst);
 
-  hyperg_test ();
+
+  dd2d_funcs_test (list_hyper0F1_tst);
+  ddd2d_funcs_test (list_hyper1F1_tst);
+  ddd2d_funcs_test (list_hyperU_tst);
+  ddd2d_funcs_test (list_hyper2F0_tst);
+  dddd2d_funcs_test (list_hyper2F1_tst);
+
   exit (pnl_test_finalize("Special functions"));
 }
