@@ -26,26 +26,10 @@
 #include "pnl/pnl_random.h"
 #include "tests_utils.h"
 
-static void exp_int_test ()
-{
-#ifdef HAVE_GSL
-  int      n;
-  double En, En_gsl
-  double a,x;
 
-  x=5.0;
-  
-  for(n=1;n<10;n++)
-    {
-      En=pnl_sf_expint_En(n,x);
-      En_gsl=gsl_sf_expint_En (n,x);
-      printf( "  E_%d      = %f - %f = %f \n",n,En,En_gsl,En-En_gsl);
-    }
-#else
-  printf("Tests for Exponential Integrals only available with GSL\n");
-#endif
-}
-
+/* 
+ * struct for double(*f)(double)
+ */
 struct d2d_test
 {
   char *label;
@@ -54,6 +38,9 @@ struct d2d_test
   double res;
 };
 
+/* 
+ * struct for double(*f)(double, double)
+ */
 struct dd2d_test
 {
   char *label;
@@ -63,6 +50,21 @@ struct dd2d_test
   double res;
 };
 
+/* 
+ * struct for double(*f)(int, double)
+ */
+struct id2d_test
+{
+  char *label;
+  double (*f)(int, double);
+  int n;
+  double arg;
+  double res;
+};
+
+/* 
+ * struct for dcomplex(*f)(double, double)
+ */
 struct dd2c_test
 {
   char *label;
@@ -72,6 +74,9 @@ struct dd2c_test
   double res_r, res_i;
 };
 
+/* 
+ * struct for dcomplex(*f)(doubla, dcomplex)
+ */
 struct dc2c_test
 {
   char *label;
@@ -84,7 +89,14 @@ struct dc2c_test
 struct d2d_test list_gamma_tst [] =
 {
 #include "Data_specfun/gamma_test.dat"
+/* #include "Data_specfun/expintEi_test.dat" */
     { NULL, NULL, 0, 0}
+};
+
+struct id2d_test list_expint_tst [] =
+{
+#include "Data_specfun/expint_test.dat"
+    { NULL, NULL, 0, 0, 0}
 };
 
 struct dd2d_test list_gammainc_tst [] =
@@ -121,6 +133,19 @@ void d2d_funcs_test (struct d2d_test *tst)
       double res = (t.f)(t.arg);
       pnl_test_eq (res, t.res, tol, t.label, 
                   "computed at %g", t.arg);
+    }
+}
+
+void id2d_funcs_test (struct id2d_test *tst)
+{
+  int i;
+  double tol  = 1E-5;
+  for ( i=0 ; tst[i].f != NULL ; i++ )
+    {
+      struct id2d_test t = tst[i];
+      double res = (t.f)(t.n, t.arg);
+      pnl_test_eq (res, t.res, tol, t.label, 
+                  "computed at (%d, %g)", t.n, t.arg);
     }
 }
 
@@ -206,12 +231,12 @@ int main (int argc, char **argv)
 {
   pnl_test_init (argc, argv);
   d2d_funcs_test (list_gamma_tst);
+  id2d_funcs_test (list_expint_tst);
   dd2d_funcs_test (list_gammainc_tst);
   dd2d_funcs_test (list_real_bessel_tst);
   dd2c_funcs_test (list_real_besselh_tst);
   dc2c_funcs_test (list_complex_bessel_tst);
 
-  exp_int_test();
   hyperg_test ();
   exit (pnl_test_finalize("Special functions"));
 }
