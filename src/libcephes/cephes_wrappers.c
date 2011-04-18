@@ -109,18 +109,19 @@ double pnl_sf_hyperg_0F1 (double v, double x)
       double lgam, bes, m;
       int sign;
       pnl_sf_log_gamma_sgn(v, &lgam, &sign);
-      bes = pnl_bessel_j (v-1,2*sqrt(-x));
+      bes = pnl_bessel_j (v-1, 2*sqrt(-x));
       m = log(-x) * 0.5 * (1.0 - v);
       return sign * bes * exp (lgam + m); 
 
     }
   else
     {
-  double num, den;
-      num = pnl_bessel_i (v-1,2*sqrt(x));
-      den = pow (x, ((1.0-v)/2.0));
-      num *= pnl_sf_gamma(v);
-      return num * (den);
+      double lgam, bes, m;
+      int sign;
+      pnl_sf_log_gamma_sgn(v, &lgam, &sign);
+      bes = pnl_bessel_i (v-1, 2*sqrt(x));
+      m = log(x) * 0.5 * (1.0 - v);
+      return sign * bes * exp (lgam + m); 
     }
 }
 
