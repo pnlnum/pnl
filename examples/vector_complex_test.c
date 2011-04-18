@@ -25,95 +25,8 @@
 #include "pnl/pnl_random.h"
 #include "tests_utils.h"
 
-static void pnl_vect_complex_set_test()
-{
-  PnlVectComplex *v;
-  printf("test de la fonction 'set' : ");
-  v=pnl_vect_complex_create_from_dcomplex(4,Complex(2.0,1.0));
-  pnl_vect_complex_set(v,1,Complex(3.0,4.0));
-  pnl_vect_complex_print(v);
-  pnl_vect_complex_free(&v);
-
-  printf("test de la fonction 'set_{real,imag}' : ");
-  v=pnl_vect_complex_create_from_dcomplex(4,Complex(2.0,1.0));
-  pnl_vect_complex_set_real (v,1,3.0);
-  pnl_vect_complex_set_imag (v,1,4.0);
-  pnl_vect_complex_print(v);
-  pnl_vect_complex_free(&v);
-}
-
-
-static void pnl_vect_complex_get_test()
-{
-  PnlVectComplex *v;
-  dcomplex x=Complex(2.0,1.0);
-  printf("test de la fonction 'get' : ");
-  v=pnl_vect_complex_create_from_dcomplex(4,x);
-  printf("v[1]=%f +i %f\n",Creal(pnl_vect_complex_get(v,1)),Cimag(pnl_vect_complex_get(v,1)));
-  printf("test de la fonction 'get_{real,imag}' : ");
-  printf("v[1]=%f +i %f\n",pnl_vect_complex_get_real(v,1),pnl_vect_complex_get_imag(v,1));
-  pnl_vect_complex_free(&v);
-}
-
-static void pnl_vect_complex_lget_test()
-{
-  PnlVectComplex *v;
-  printf("test de la fonction 'lget' : ");
-  v=pnl_vect_complex_create_from_dcomplex(4,Complex(2.0,1.0));
-  printf("v[1]=%f +i %f \n",Creal(*(pnl_vect_complex_lget(v,1))),Cimag(*(pnl_vect_complex_lget(v,1))));
-  pnl_vect_complex_free(&v);
-}
-
-
-static void pnl_vect_complex_create_from_dcomplex_test()
-{
-  PnlVectComplex *v;
-  int size;
-  dcomplex x;
-  printf("test de la fonction 'pnl_vect_complex_create_from_dcomplex' : ");
-  size=4;
-  x=Complex(2.0,1.0);
-  v=pnl_vect_complex_create_from_dcomplex(size,x);
-  pnl_vect_complex_print(v);
-  pnl_vect_complex_free(&v);
-}
-
-static void pnl_vect_complex_create_from_ptr_test()
-{
-  PnlVectComplex *v;
-  int size;
-  dcomplex x[4]={{1.0,4.0}, {5.0,3.0}, {6.0,-1.0}, {8.0,2.0}};
-  printf("test de la fonction 'pnl_vect_complex_create_from_ptr' : ");
-  size=4;
-  v=pnl_vect_complex_create_from_ptr(size,x);
-  pnl_vect_complex_print(v);
-  pnl_vect_complex_free(&v);
-}
-
-static void pnl_vect_complex_copy_test()
-{
-  PnlVectComplex *v1;
-  PnlVectComplex *v2;
-  printf("test de la fonction 'pnl_vect_complex_copy' : ");
-  v2=pnl_vect_complex_create_from_dcomplex(4,Complex(3.0,1.0));
-  v1=pnl_vect_complex_copy(v2);
-  pnl_vect_complex_print(v1);
-  pnl_vect_complex_free(&v1);
-  pnl_vect_complex_free(&v2);
-}
-
-static void pnl_vect_complex_clone_test()
-{
-  PnlVectComplex *v1;
-  PnlVectComplex *v2;
-  printf("test de la fonction 'pnl_vect_complex_clone' : ");
-  v2=pnl_vect_complex_create_from_dcomplex(4,Complex(3.0,1.0));
-  v1=pnl_vect_complex_create(0);
-  pnl_vect_complex_clone(v1,v2);
-  pnl_vect_complex_print(v1);
-  pnl_vect_complex_free(&v1);
-  pnl_vect_complex_free(&v2); 
-}
+#define CMPLX_EQ(x,y, tol, str) pnl_test_eq (x.r, y.r, tol, str, "") && \
+                                pnl_test_eq (x.i, y.i, tol, str, "") 
 
 static void pnl_vect_complex_plus_vect_test()
 {
@@ -231,20 +144,6 @@ static void pnl_vect_complex_map_test()
   pnl_vect_complex_free(&v2);
 }
 
-/* static void pnl_vect_complex_map_vect_test()
- * {
- *   printf("test de la fonction 'pnl_vect_complex_map_vect' : ");
- *   PnlVectComplex *v1;
- *   PnlVectComplex *v2;
- *   dcomplex x[4]={Complex(1.0,4.0), Complex(5.0,3.0), Complex(6.0,-1.0), Complex(8.0,2.0)};
- *   v1=pnl_vect_complex_create_from_ptr(4,x);
- *   v2=pnl_vect_complex_create_from_dcomplex(4,Complex(3.0,2.0));
- *   pnl_vect_complex_map_vect(v1,v2,Cmul);
- *   pnl_vect_complex_print(v1);
- *   pnl_vect_complex_free(&v1);
- *   pnl_vect_complex_free(&v2);
- * } */
-
 static void pnl_vect_complex_scalar_prod_test()
 {
   PnlVectComplex *v1;
@@ -275,13 +174,6 @@ static void pnl_vect_complex_prod_test()
 int main (int argc, char *argv[])
 {
   pnl_test_init (argc, argv);
-  pnl_vect_complex_set_test();
-  pnl_vect_complex_get_test();
-  pnl_vect_complex_lget_test();
-  pnl_vect_complex_create_from_dcomplex_test();
-  pnl_vect_complex_create_from_ptr_test();
-  pnl_vect_complex_copy_test();
-  pnl_vect_complex_clone_test();
   pnl_vect_complex_plus_vect_test();
   pnl_vect_complex_map_inplace_test();
   pnl_vect_complex_plus_complex_test();
