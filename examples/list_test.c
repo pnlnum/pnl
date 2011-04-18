@@ -21,78 +21,119 @@
 #include "pnl/pnl_list.h"
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_tridiag_matrix.h"
+#include "tests_utils.h"
 
 
 static void list_ops ()
 {
   PnlList *L, *L1, *L2;
-  PnlMat *M;
-  PnlTridiagMat *T;
+  PnlMat *M, *M1, *M2;
+  PnlTridiagMat *T, *T1, *T2;
 
-  printf ("--> List operations : insert first\n");
-  
   L = pnl_list_new ();
   M = pnl_mat_create_from_double (2, 3, 3.5);
   T = pnl_tridiag_mat_create_from_double (4, 0.5);
   pnl_list_insert_first (L, PNL_OBJECT(M));
   pnl_list_insert_first (L, PNL_OBJECT(T));
+
+  if ( pnl_list_get (L, 0) != PNL_OBJECT(T)  || 
+       pnl_list_get (L, 1) != PNL_OBJECT(M)  )
+    {
+      pnl_test_set_fail ("pnl_list_insert_firt", 0., 0.);
+    }
+  else
+    {
+      pnl_test_set_ok ("pnl_list_insert_firt");
+    }
   pnl_list_free (&L);
 
-  printf ("--> List operations : insert last\n");
-  
   L = pnl_list_new ();
   M = pnl_mat_create_from_double (2, 3, 3.5);
   T = pnl_tridiag_mat_create_from_double (4, 0.5);
   pnl_list_insert_last (L, PNL_OBJECT(M));
   pnl_list_insert_last (L, PNL_OBJECT(T));
+  if ( pnl_list_get (L, 0) != PNL_OBJECT(M)  || 
+       pnl_list_get (L, 1) != PNL_OBJECT(T)  )
+    {
+      pnl_test_set_fail ("pnl_list_insert_last", 0., 0.);
+    }
+  else
+    {
+      pnl_test_set_ok ("pnl_list_insert_last");
+    }
   pnl_list_free (&L);
 
-  printf ("--> List operations : remove last\n");
-  
+
   L = pnl_list_new ();
   M = pnl_mat_create_from_double (2, 3, 3.5);
   T = pnl_tridiag_mat_create_from_double (4, 0.5);
   pnl_list_insert_last (L, PNL_OBJECT(M));
   pnl_list_insert_last (L, PNL_OBJECT(T));
   pnl_list_remove_last (L);
+  if ( pnl_list_get (L, 0) != PNL_OBJECT(M)  || 
+       L->len != 1)
+    {
+      pnl_test_set_fail ("pnl_list_remove_last", 0., 0.);
+    }
+  else
+    {
+      pnl_test_set_ok ("pnl_list_remove_last");
+    }
   pnl_list_free (&L);
 
-  printf ("--> List operations : remove first\n");
-  
+
   L = pnl_list_new ();
   M = pnl_mat_create_from_double (2, 3, 3.5);
   T = pnl_tridiag_mat_create_from_double (4, 0.5);
   pnl_list_insert_last (L, PNL_OBJECT(M));
   pnl_list_insert_last (L, PNL_OBJECT(T));
-  pnl_list_print (L);
   pnl_list_remove_first (L);
-  pnl_list_remove_last (L);
+  if ( pnl_list_get (L, 0) != PNL_OBJECT(T)  || 
+       L->len != 1)
+    {
+      pnl_test_set_fail ("pnl_list_remove_first", 0., 0.);
+    }
+  else
+    {
+      pnl_test_set_ok ("pnl_list_remove_first");
+    }
   pnl_list_free (&L);
 
   printf ("--> List operations : concat\n");
 
   L1 = pnl_list_new ();
   L2 = pnl_list_new ();
-  M = pnl_mat_create_from_double (2, 3, 3.5);
-  T = pnl_tridiag_mat_create_from_double (4, 0.5);
-  pnl_list_insert_last (L1, PNL_OBJECT(M));
-  pnl_list_insert_last (L1, PNL_OBJECT(T));
-  pnl_list_print (L1);
-  M = pnl_mat_create_from_double (2, 3, 3.5);
-  T = pnl_tridiag_mat_create_from_double (4, 0.5);
-  pnl_list_insert_first (L2, PNL_OBJECT(M));
-  pnl_list_insert_first (L2, PNL_OBJECT(T));
-  pnl_list_print (L2);
+  M1 = pnl_mat_create_from_double (2, 3, 3.5);
+  T1 = pnl_tridiag_mat_create_from_double (4, 0.5);
+  pnl_list_insert_last (L1, PNL_OBJECT(M1));
+  pnl_list_insert_last (L1, PNL_OBJECT(T1));
+  M2 = pnl_mat_create_from_double (2, 3, 3.5);
+  T2 = pnl_tridiag_mat_create_from_double (4, 0.5);
+  pnl_list_insert_first (L2, PNL_OBJECT(M2));
+  pnl_list_insert_first (L2, PNL_OBJECT(T2));
 
   pnl_list_concat(L1, L2);
-  pnl_list_print(L1);
+  if  (L1->len != 4 ||
+       pnl_list_get (L1, 0) != PNL_OBJECT(M1)  || 
+       pnl_list_get (L1, 1) != PNL_OBJECT(T1)  || 
+       pnl_list_get (L1, 2) != PNL_OBJECT(T2)  || 
+       pnl_list_get (L1, 3) != PNL_OBJECT(M2)  )
+       
+    {
+      pnl_test_set_fail ("pnl_list_concat", 0., 0.);
+    }
+  else
+    {
+      pnl_test_set_ok ("pnl_list_concat");
+    }
   pnl_list_free (&L1);
 }
 
 
 
-int main ()
+int main (int argc, char **argv)
 {
+  pnl_test_init (argc, argv);
   list_ops ();
-  return OK;
+  exit (pnl_test_finalize ("List operations"));
 }
