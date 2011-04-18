@@ -131,6 +131,34 @@ static int test_eq (double x, double y, double abserr)
   return status;
 }
 
+static int pnl_test_eq_aux (double x, double y, double relerr, int(*cmp)(double, double, double), const char *str, const char *fmt, va_list ap)
+{
+  int status = 0;
+  if ( (pnl_isnan (x) && !pnl_isnan(y)) ||
+       (pnl_isinf (x) && !pnl_isinf(y)) )
+    {
+      status = 1;
+    }
+  else
+    {
+      status = (*cmp)(x, y, relerr);
+    }
+  if ( status || verbose )
+    {
+      printf ("\t%s : ", str);
+      printf ( status ? "FAIL" : "OK");
+      if ( status ) 
+        {
+          printf (" (");
+          vprintf (fmt, ap);
+          printf (" expected %.18g observed %.18g)", y, x);
+        }
+      printf ("\n");
+    }
+  update_count_tests (status);
+  return (status ? FALSE : TRUE);
+
+}
 
 /** 
  * Checks if |x - y| / (max(1, |y|)) < relerr
@@ -152,45 +180,14 @@ int pnl_test_eq(double x, double y, double relerr, const char *str, const char *
   va_end (ap);
   if ( fabs(y) >= 1 )
     {
-      return pnl_test_eq_rel (x, y, relerr, str, fmt, ap);
+      return pnl_test_eq_aux (x, y, relerr, test_eq_rel, str, fmt, ap);
     }
   else
     {
-      return pnl_test_eq_abs (x, y, relerr, str, fmt, ap);
-    }
+      return pnl_test_eq_aux (x, y, relerr, test_eq_abs, str, fmt, ap);
+   }
 }
 
-static int pnl_test_eq_aux (double x, double y, double relerr, int(*cmp)(double, double, double), const char *str, const char *fmt, ...)
-{
-  int status = 0;
-  if ( (pnl_isnan (x) && !pnl_isnan(y)) ||
-       (pnl_isinf (x) && !pnl_isinf(y)) )
-    {
-      status = 1;
-    }
-  else
-    {
-      status = (*cmp)(x, y, relerr);
-    }
-  if ( status || verbose )
-    {
-      printf ("\t%s : ", str);
-      printf ( status ? "FAIL" : "OK");
-      if ( status ) 
-        {
-          va_list ap;
-          va_start (ap, fmt);
-          va_end (ap);
-          printf (" (");
-          vprintf (fmt, ap);
-          printf (" expected %.18g observed %.18g)", y, x);
-        }
-      printf ("\n");
-    }
-  update_count_tests (status);
-  return (status ? FALSE : TRUE);
-
-}
 
 /** 
  * Checks if |x -y| / |y| < relerr
@@ -247,7 +244,7 @@ int pnl_test_eq_abs (double x, double y, double abserr, const char *str, const c
  * 
  * @return TRUE or FALSE
  */
-static int pnl_test_array (const double *X, const double *Y, int n, double relerr, int(*cmp)(double, double, double), const char *str, const char *fmt, ...)
+static int pnl_test_array (const double *X, const double *Y, int n, double relerr, int(*cmp)(double, double, double), const char *str, const char *fmt, va_list ap)
 {
   int i, status;
   for ( i=0 ; i<n ; i++ )
@@ -263,11 +260,8 @@ static int pnl_test_array (const double *X, const double *Y, int n, double reler
       printf ( status ? "FAIL" : "OK");
       if ( status ) 
         {
-          va_list ap;
-          va_start (ap, fmt);
           printf (" (");
           vprintf (fmt, ap);
-          va_end (ap);
           printf (" expected %.18g observed %.18g)", Y[i], X[i]);
         }
       printf ("\n");
