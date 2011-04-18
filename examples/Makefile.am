@@ -4,16 +4,19 @@ AM_CPPFLAGS = $(PNL_INCLUDES)
 some_extra_libs=@LAPACK_STATIC_LIBS@ @BLAS_STATIC_LIBS@
 
 check_PROGRAMS=         band_matrix_test    basis_test     \
-complex_test            cumulfunc_test      dft_test       \
+cumulfunc_test          complex_test        dft_test       \
 finance_function_test   integration_test    lapack_test    \
 laplace_test            list_test           mathtools_test \
 ode_test                optim_test          random_test    \
 root_test               saveload_test       matrix_test    \
-solver_iterativ_test    special_func_test   speed_test     \
-tridiag_test            vector_test         vector_complex_test
+solver_iterativ_test    special_func_test                  \
+tridiag_test            vector_test         
 
 TESTS=$(check_PROGRAMS) 
 build-tests: $(TESTS)
+
+
+noinst_PROGRAMS = speed_test
 
 band_matrix_test_SOURCES=band_matrix_test.c tests_utils.c
 band_matrix_test_LDADD=../src/libpnl.la ${some_extra_libs}
@@ -78,11 +81,12 @@ tridiag_test_LDADD=../src/libpnl.la ${some_extra_libs}
 vector_test_SOURCES=vector_test.c tests_utils.c
 vector_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
-vector_complex_test_SOURCES=vector_complex_test.c tests_utils.c
-vector_complex_test_LDADD=../src/libpnl.la ${some_extra_libs}
+#  vector_complex_test_SOURCES=vector_complex_test.c tests_utils.c
+#  vector_complex_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
 if HAVE_MPI
-check_PROGRAMS+=pnl-mpi_test rng-mpi_test saveload_test
+
+noinst_PROGRAMS+=pnl_mpi_test rng_mpi_test saveload_test
 
 pnl_mpi_test_SOURCES=mpibindings_test.c tests_utils.c
 pnl_mpi_test_CFLAGS=@MPI_CFLAGS@ $(AM_CFLAGS)
