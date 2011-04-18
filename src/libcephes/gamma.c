@@ -615,3 +615,15 @@ double lgam(double x)
     q += polevl( p, A, 4 ) / x;
   return( q );
 }
+
+
+/*
+ * Wrappers added by Jérôme Lelong
+ */
+
+int pnl_sf_log_gamma_sgn(double x, double *res, int *sgn)
+{
+  *res = lgam (x);
+  *sgn = sgngam;
+  return OK;
+}

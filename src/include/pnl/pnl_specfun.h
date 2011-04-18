@@ -76,6 +76,7 @@ extern double pnl_sf_expint_En(int n,double x);
 
 extern double pnl_sf_gamma (double);
 extern double pnl_sf_log_gamma (double);
+extern int pnl_sf_log_gamma_sgn(double x, double *res, int *sgn);
 extern double pnl_sf_log_erf (double x);
 extern double pnl_sf_log_erfc (double x);
 extern double pnl_sf_erf (double x);

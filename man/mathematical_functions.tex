@@ -455,6 +455,10 @@ For $x>0$, the Gamma Function is defined by
   \sshortdescribe   Computes $\Gamma(x), x \geq 0$
 \item \describefun{double}{pnl_sf_log_gamma}{double x}
   \sshortdescribe   Computes $\log(\Gamma(x)), x \geq 0$
+\item \describefun{int}{pnl_sf_log_gamma_sgn}{double x, double \ptr y, int \ptr
+    sgn}
+  \sshortdescribe   Computes $y = \log(|\Gamma(x)|)$ for \var{x > 0} \var{sgn}
+  contains the sign of $\Gamma(x)$ (-1 or +1).
 \end{itemize}
 
 \subsubsection{Incomplete Gamma functions}
@@ -567,16 +571,19 @@ For $x \in \R$
 \begin{itemize}
 \item \describefun{double}{pnl_sf_hyperg_2F1}{double a, double b, double c,
     double x}
-\sshortdescribe Computes the Gauss hypergeometric function $2F1(a,b,c,x)$. 
+  \sshortdescribe Computes the Gauss hypergeometric function \var{2F1(a,b,c,x)}
+  for \var{|x| < 1} and for \var{x < -1} when \var{b,a,c,(b-a),(c-a),(c-b)} are
+  not integers
 \item \describefun{double}{pnl_sf_hyperg_1F1}{double a, double b, double x}
-  \sshortdescribe Computes the hypergeometric function $1F1(a,b,x) = M(a,b,x)$
+  \sshortdescribe Computes the hypergeometric function \var{1F1(a,b,x)}
 \item \describefun{double}{pnl_sf_hyperg_2F0}{double a, double b, double x}
-  \sshortdescribe Computes the hypergeometric function $2F0(a,b,x)$. For
-  $x<0$, $2F0 (a,b,x) = (-x)^{-a} U(a,1+a-b,-\frac{1}{x})$.
+  \sshortdescribe Computes the hypergeometric function \var{2F0(a,b,x)}  for
+  \var{x<0} using the relation $2F0 (a,b,x) = (-x)^{-a} U(a,1+a-b,-\frac{1}{x})$.
 \item \describefun{double}{pnl_sf_hyperg_0F1}{double c, double x}
-  \sshortdescribe Computes the hypergeometric function $0F1(c,x)$
+  \sshortdescribe Computes the hypergeometric function \var{0F1(c,x)}
 \item \describefun{double}{pnl_sf_hyperg_U}{double a, double b, double x}
-    \sshortdescribe Computes the confluent hypergeometric function $U(a,b,x)$
+  \sshortdescribe Computes the confluent hypergeometric function \var{U(a,b,x)}
+  with \var{x > 0}
 \end{itemize}
 
 %% --------------------------------------------------------------------- %%
