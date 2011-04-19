@@ -902,18 +902,21 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 \item \describefun{void}{pnl_mat_max}{ \refstruct{PnlVect} \ptr M, const
     \refstruct{PnlMat} \ptr A, char d}
   \sshortdescribe On exit, $\var{M}(i) = \max_{j}(\var{A}(i, j))$ when \var{d='c'}
-  and $\var{M}(i) = \max_{j}(\var{A}(j, i))$ when \var{d='r'}.
+  and $\var{M}(i) = \max_{j}(\var{A}(j, i))$ when \var{d='r'} and $\var{M(0)} =
+  \min_{i,j} = \var{A}(i, j)$ when \var{d='*'}.
 
 \item \describefun{void}{pnl_mat_min}{ \refstruct{PnlVect} \ptr m,const
     \refstruct{PnlMat} \ptr A, char d}
   \sshortdescribe On exit, $\var{m}(i) = \min_{j}(\var{A}(i, j))$ when \var{d='c'}
-  and $\var{m}(i) = \min_{j}(\var{A}(j, i))$ when \var{d='r'}.
+  and $\var{m}(i) = \min_{j}(\var{A}(j, i))$ when \var{d='r'} and $\var{M(0)} =
+  \max_{i,j} = \var{A}(i, j)$ when \var{d='*'}.
 
 \item \describefun{void}{pnl_mat_minmax}{ \refstruct{PnlVect} \ptr m,
     \refstruct{PnlVect} \ptr M, const \refstruct{PnlMat} \ptr A, char d}
   \sshortdescribe On exit, $\var{m}(i) = \min_{j}(\var{A}(i, j))$ and $\var{M}(i) =
   \max_{j}(\var{A}(i, j))$ when \var{d='c'} and $\var{m}(i) = \min_{j}(\var{A}(j, i))$
-  and $\var{M}(i) = \min_{j}(\var{A}(j, i))$ when \var{d='r'}.
+  and $\var{M}(i) = \min_{j}(\var{A}(j, i))$ when \var{d='r'} and $\var{M(0)} =
+  \max_{i,j} = \var{A}(i, j)$ and  $\var{m(0)} =\min_{i,j} = \var{A}(i, j)$ when \var{d='*'}.
   
 \item \describefun{void}{pnl_mat_min_index}{ \refstruct{PnlVect} \ptr m,
     \refstruct{PnlVectInt} \ptr im, const \refstruct{PnlMat} \ptr  A, char d}

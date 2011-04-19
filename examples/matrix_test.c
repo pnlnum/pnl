@@ -695,11 +695,13 @@ static void pnl_mat_prod_vect_test()
 static void pnl_mat_minmax_test()
 {
   PnlMat *M;
-  PnlVect *V, *M_max_r, *M_max_c, *M_min_r, *M_min_c;
+  PnlVect *V, *M_max_r, *M_max_c, *M_min_r, *M_min_c, *M_min_star, *M_max_star;
   M_max_c = pnl_vect_create_from_file("Data/max_A_c.txt");
   M_max_r = pnl_vect_create_from_file("Data/max_A_r.txt");
+  M_max_star = pnl_vect_create_from_file("Data/max_A_star.txt");
   M_min_c = pnl_vect_create_from_file("Data/min_A_c.txt");
   M_min_r = pnl_vect_create_from_file("Data/min_A_r.txt");
+  M_min_star = pnl_vect_create_from_file("Data/min_A_star.txt");
 
   M = pnl_mat_create_from_file ("Data/A.txt");
   V = pnl_vect_new ();
@@ -708,17 +710,23 @@ static void pnl_mat_minmax_test()
   pnl_test_vect_eq_abs (V, M_max_r, 1E-12, "mat_max 'r'", "");
   pnl_mat_max (V, M, 'c');
   pnl_test_vect_eq_abs (V, M_max_c, 1E-12, "mat_max 'c'", "");
+  pnl_mat_max (V, M, '*');
+  pnl_test_vect_eq_abs (V, M_max_star, 1E-12, "mat_max '*'", "");
 
   pnl_mat_min (V, M, 'r');
   pnl_test_vect_eq_abs (V, M_min_r, 1E-12, "mat_min 'r'", "");
   pnl_mat_min (V, M, 'c');
   pnl_test_vect_eq_abs (V, M_min_c, 1E-12, "mat_min 'c'", "");
+  pnl_mat_min (V, M, '*');
+  pnl_test_vect_eq_abs (V, M_min_star, 1E-12, "mat_min '*'", "");
 
   pnl_mat_free(&M);
   pnl_vect_free(&M_max_c);
   pnl_vect_free(&M_min_c);
   pnl_vect_free(&M_max_r);
   pnl_vect_free(&M_min_r);
+  pnl_vect_free(&M_max_star);
+  pnl_vect_free(&M_min_star);
   pnl_vect_free(&V);
 
   /* printf ("--> pnl_mat_minmax \n"); */

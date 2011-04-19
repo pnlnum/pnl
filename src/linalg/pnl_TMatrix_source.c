@@ -1716,6 +1716,7 @@ void FUNCTION(pnl_mat, max_index)(TYPE(PnlVect) *out, PnlVectInt *index, const T
     {
     case 'c' : n = A->m; length = A->n; lda = A->n;  incr = 1; break;
     case 'r' : length = A->m; n = A->n, lda = 1; incr = A->n; break;
+    case '*' : length = A->mn; n = 1, lda = 1; incr = 1; break;
     default : PNL_ERROR("unknow direction", "pnl_mat_max_index"); break;
     }
   if (index!=NULL) pnl_vect_int_resize (index, n);
@@ -1744,6 +1745,7 @@ void FUNCTION(pnl_mat, min_index)(TYPE(PnlVect) *out, PnlVectInt *index, const T
     {
     case 'c' : n = A->m; length = A->n; lda = A->n; incr = 1; break;
     case 'r' : length = A->m; n = A->n; lda = 1; incr = A->n; break;
+    case '*' : length = A->mn; n = 1, lda = 1; incr = 1; break;
     default : PNL_ERROR("unknow direction", "pnl_mat_min_index"); break;
     }
   if (index!=NULL) pnl_vect_int_resize (index, n);
@@ -1775,7 +1777,8 @@ void FUNCTION(pnl_mat, minmax_index)(TYPE(PnlVect) *out_min, TYPE(PnlVect) *out_
     {
     case 'c' : n = A->m; length = A->n; lda = A->n; incr = 1; break;
     case 'r' : length = A->m; n = A->n; lda = 1; incr = A->n; break;
-    default : PNL_ERROR("unknow direction", "pnl_mat_min_index"); break;
+    case '*' : length = A->mn; n = 1, lda = 1; incr = 1; break;
+    default : PNL_ERROR("unknow direction", "pnl_mat_minmax_index"); break;
     }
   if (index_min != NULL) pnl_vect_int_resize (index_min, n);
   if (index_max != NULL) pnl_vect_int_resize (index_max, n);
