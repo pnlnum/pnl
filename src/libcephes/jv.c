@@ -44,6 +44,9 @@
 /*
   Cephes Math Library Release 2.8:  June, 2000
   Copyright 1984, 1987, 1989, 1992, 2000 by Stephen L. Moshier
+
+  Modified by Jérôme Lelong <jerome.lelong@gmail.com> April, 2011
+  to make the code thread-safe (global variable sgngam removed)
 */
 
 
@@ -60,21 +63,13 @@
 #define MAXGAM 171.624376956302725
 #endif
 
+extern int pnl_sf_log_gamma_sgn(double x, double *res, int *sgn);
 extern int airy(double, double *, double *, double *, double *);
-extern double fabs(double);
-extern double floor(double);
 extern double frexp(double, int *);
 extern double polevl(double, double *, int);
 extern double j0(double);
 extern double j1(double);
-extern double sqrt(double);
 extern double cbrt(double);
-extern double exp(double);
-extern double log(double);
-extern double sin(double);
-extern double cos(double);
-extern double acos(double);
-extern double pow(double, double);
 extern double gamma(double);
 extern double lgam(double);
 static double recur(double *, double, double *, int);
@@ -82,6 +77,7 @@ static double jvs(double, double);
 static double hankel(double, double);
 static double jnx(double, double);
 static double jnt(double, double);
+
 
 extern double MAXNUM, MACHEP, MINLOG, MAXLOG;
 #define BIG  1.44115188075855872E+17
@@ -406,9 +402,6 @@ static double recur(double *n, double x, double *newn, int cancel)
  * AMS55 #9.1.10.
  */
 
-extern double PI;
-extern int sgngam;
-
 static double jvs(double n, double x)
 {
   double t, u, y, z, k;
@@ -442,16 +435,15 @@ static double jvs(double n, double x)
 #endif
     y *= t;
   } else {
-#if CEPHES_DEBUG
+    int sgn;
     z = n * log(0.5 * x);
-    k = lgam(n + 1.0);
+    pnl_sf_log_gamma_sgn (n + 1.0, &k, &sgn);
     t = z - k;
+#if CEPHES_DEBUG
     printf("log pow=%.5e, lgam(%.4e)=%.5e\n", z, n + 1.0, k);
-#else
-    t = n * log(0.5 * x) - lgam(n + 1.0);
 #endif
     if (y < 0) {
-      sgngam = -sgngam;
+      sgn= -sgn;
       y = -y;
     }
     t += log(y);
@@ -465,7 +457,7 @@ static double jvs(double n, double x)
       mtherr("Jv", OVERFLOW);
       return (MAXNUM);
     }
-    y = sgngam * exp(t);
+    y = sgn* exp(t);
   }
   return (y);
 }
@@ -522,8 +514,8 @@ static double hankel(double n, double x)
   }
 
  hank1:
-  u = x - (0.5 * n + 0.25) * PI;
-  t = sqrt(2.0 / (PI * x)) * (pp * cos(u) - qq * sin(u));
+  u = x - (0.5 * n + 0.25) * M_PI;
+  t = sqrt(2.0 / (M_PI * x)) * (pp * cos(u) - qq * sin(u));
 #if CEPHES_DEBUG
   printf("hank: %.6e\n", t);
 #endif

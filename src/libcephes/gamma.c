@@ -102,6 +102,9 @@
   Cephes Math Library Release 2.2:  July, 1992
   Copyright 1984, 1987, 1989, 1992 by Stephen L. Moshier
   Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+ 
+  Modified by Jérôme Lelong <jerome.lelong@gmail.com> April, 2011
+  to make the code thread-safe (global variable sgngam removed)
 */
 
 
@@ -267,9 +270,7 @@ static unsigned short SQT[4] = {
 #define SQTPI *(double *)SQT
 #endif
 
-int sgngam = 0;
-extern int sgngam;
-extern double MAXLOG, MAXNUM, PI;
+extern double MAXLOG, MAXNUM;
 
 /* Gamma function computed by Stirling's formula.
  * The polynomial STIR is valid for 33 <= x <= 172.
@@ -303,12 +304,12 @@ static double stirf(double x)
 
 
 
-double Gamma(double x)
+int pnl_sf_gamma_sgn(double x, double *res, int *sgn)
 {
   double p, q, z;
   int i;
 
-  sgngam = 1;
+  *sgn= 1;
   if( isnan(x) )  return(x);
   if( !isfinite(x) ) return(x);
   q = fabs(x);
@@ -322,30 +323,33 @@ double Gamma(double x)
             {
             gamnan:
               mtherr( "Gamma", OVERFLOW );
-              return (MAXNUM);
+              *res = MAXNUM;
+              return FAIL;
             }
           i = p;
           if( (i & 1) == 0 )
-            sgngam = -1;
+            *sgn= -1;
           z = q - p;
           if( z > 0.5 )
             {
               p += 1.0;
               z = q - p;
             }
-          z = q * sin( PI * z );
+          z = q * sin( M_PI * z );
           if( z == 0.0 )
             {
-              return( sgngam * INFINITY);
+              *res = *sgn * INFINITY;
+              return( OK );
             }
           z = fabs(z);
-          z = PI/(z * stirf(q) );
+          z = M_PI/(z * stirf(q) );
         }
       else
         {
           z = stirf(x);
         }
-      return( sgngam * z );
+      *res =  *sgn * z;
+      return OK;
     }
 
   z = 1.0;
@@ -372,12 +376,16 @@ double Gamma(double x)
     }
 
   if( x == 2.0 )
-    return(z);
+    {
+      *res = z;
+      return OK;
+    }
 
   x -= 2.0;
   p = polevl( x, P, 6 );
   q = polevl( x, Q, 7 );
-  return( z * p / q );
+  *res  = z * p / q;
+  return OK;
 
  small:
   if( x == 0.0 )
@@ -385,7 +393,10 @@ double Gamma(double x)
       goto gamnan;
     }
   else
-    return( z/((1.0 + 0.5772156649015329 * x) * x) );
+    {
+      *res = z/((1.0 + 0.5772156649015329 * x) * x);
+    }
+  return OK;    
 }
 
 
@@ -523,44 +534,53 @@ static unsigned short LS2P[] = {
 /* Logarithm of Gamma function */
 
 
-double lgam(double x)
+int pnl_sf_log_gamma_sgn(double x, double *res, int *sgn)
 {
   double p, q, u, w, z;
   int i;
 
-  sgngam = 1;
-  if( isnan(x) ) return(x);
+  *sgn = 1;
+  if( isnan(x) ) 
+    {
+      *res = x;
+      return FAIL;
+    }
 
-  if( !isfinite(x) ) return(INFINITY);
+  if( !isfinite(x) ) 
+    {
+      *res = INFINITY;
+      return FAIL;
+    }
 
   if( x < -34.0 )
     {
       q = -x;
-      w = lgam(q); /* note this modifies sgngam! */
+      pnl_sf_log_gamma_sgn (q, &w, sgn); /* note this modifies sgn */
       p = floor(q);
       if( p == q )
         {
         lgsing:
           mtherr( "lgam", SING );
-          return (INFINITY);
+          *res = INFINITY;
+          return (FAIL);
         }
       i = p;
       if( (i & 1) == 0 )
-        sgngam = -1;
+        *sgn = -1;
       else
-        sgngam = 1;
+        *sgn = 1;
       z = q - p;
       if( z > 0.5 )
         {
           p += 1.0;
           z = p - q;
         }
-      z = q * sin( PI * z );
+      z = q * sin( M_PI * z );
       if( z == 0.0 )
         goto lgsing;
-      /*      z = log(PI) - log( z ) - w;*/
-      z = LOGPI - log( z ) - w;
-      return( z );
+      /*      z = log(M_PI) - log( z ) - w;*/
+      *res = LOGPI - log( z ) - w;
+      return( OK );
     }
 
   if( x < 13.0 )
@@ -584,27 +604,35 @@ double lgam(double x)
         }
       if( z < 0.0 )
         {
-          sgngam = -1;
+          *sgn= -1;
           z = -z;
         }
       else
-        sgngam = 1;
+        *sgn= 1;
       if( u == 2.0 )
-        return( log(z) );
+        {
+          *res = log(z);
+          return OK;
+        }
       p -= 2.0;
       x = x + p;
       p = x * polevl( x, B, 5 ) / p1evl( x, C, 6);
-      return( log(z) + p );
+      *res = ( log(z) + p );
+      return OK;
     }
 
   if( x > MAXLGM )
     {
-      return( sgngam * INFINITY );
+      *res = *sgn * INFINITY;
+      return OK;
     }
 
   q = ( x - 0.5 ) * log(x) - x + LS2PI;
   if( x > 1.0e8 )
-    return( q );
+    {
+      *res = q;
+      return OK;
+    }
 
   p = 1.0/(x*x);
   if( x >= 1000.0 )
@@ -613,17 +641,24 @@ double lgam(double x)
           + 0.0833333333333333333333) / x;
   else
     q += polevl( p, A, 4 ) / x;
-  return( q );
-}
-
-
-/*
- * Wrappers added by Jérôme Lelong
- */
-
-int pnl_sf_log_gamma_sgn(double x, double *res, int *sgn)
-{
-  *res = lgam (x);
-  *sgn = sgngam;
+  *res = q;
   return OK;
 }
+
+
+double Gamma (double x)
+{
+  double res;
+  int sgn;
+  pnl_sf_gamma_sgn (x, &res, &sgn);
+  return res;
+}
+
+double lgam (double x)
+{
+  double res;
+  int sgn;
+  pnl_sf_log_gamma_sgn (x, &res, &sgn);
+  return res;
+}
+

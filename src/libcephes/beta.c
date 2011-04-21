@@ -47,6 +47,9 @@
   Cephes Math Library Release 2.0:  April, 1987
   Copyright 1984, 1987 by Stephen L. Moshier
   Direct inquiries to 30 Frost Street, Cambridge, MA 02140
+
+  Modified by Jérôme Lelong <jerome.lelong@gmail.com> April, 2011
+  to make the code thread-safe (global variable sgngam removed)
 */
 
 #include "mconf.h"
@@ -65,10 +68,9 @@
 #endif
 
 extern double MAXLOG, MAXNUM;
-extern int sgngam;
+extern int pnl_sf_log_gamma_sgn(double, double *, int *);
 
-double beta( a, b )
-     double a, b;
+double beta( double a, double b )
 {
   double y;
   int sign;
@@ -90,11 +92,16 @@ double beta( a, b )
   y = a + b;
   if( fabs(y) > MAXGAM )
     {
-      y = lgam(y);
+      double lg;
+      int sgngam;
+      pnl_sf_log_gamma_sgn(y, &lg, &sgngam);
+      y = lg;
       sign *= sgngam; /* keep track of the sign */
-      y = lgam(b) - y;
+      pnl_sf_log_gamma_sgn(b, &lg, &sgngam);
+      y = lg - y;
       sign *= sgngam;
-      y = lgam(a) + y;
+      pnl_sf_log_gamma_sgn(a, &lg, &sgngam);
+      y = lg + y;
       sign *= sgngam;
       if( y > MAXLOG )
         {
@@ -127,8 +134,7 @@ double beta( a, b )
 
 /* Natural log of |beta|.  Return the sign of beta in sgngam.  */
 
-double lbeta( a, b )
-     double a, b;
+int pnl_sf_lbeta (double a, double b, double *res, int *sgn)
 {
   double y;
   int sign;
@@ -150,14 +156,19 @@ double lbeta( a, b )
   y = a + b;
   if( fabs(y) > MAXGAM )
     {
-      y = lgam(y);
-      sign *= sgngam; /* keep track of the sign */
-      y = lgam(b) - y;
-      sign *= sgngam;
-      y = lgam(a) + y;
-      sign *= sgngam;
-      sgngam = sign;
-      return( y );
+      double lg;
+      pnl_sf_log_gamma_sgn (y, &lg, sgn);
+      y = lg;
+      sign *= *sgn; /* keep track of the sign */
+      pnl_sf_log_gamma_sgn (b, &lg, sgn);
+      y = lg - y;
+      sign *= *sgn;
+      pnl_sf_log_gamma_sgn (a, &lg, sgn);
+      y = lg + y;
+      sign *= *sgn;
+      *sgn = sign;
+      *res = y;
+      return OK;
     }
 
   y = Gamma(y);
@@ -181,11 +192,23 @@ double lbeta( a, b )
 
   if( y < 0 )
     {
-      sgngam = -1;
-      y = -y;
+      *sgn = -1;
+      *res = log (-y);
     }
   else
-    sgngam = 1;
-
-  return( log(y) );
+    {
+      *sgn = 1;
+      *res = log (y);
+    }
+  return OK;
 }
+
+double lbeta( double a, double b )
+{
+  double res;
+  int sgn;
+  pnl_sf_lbeta (a, b, &res, &sgn);
+  return res;
+}
+
+
