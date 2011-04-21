@@ -4,7 +4,7 @@ AM_CPPFLAGS = $(PNL_INCLUDES)
 some_extra_libs=@LAPACK_STATIC_LIBS@ @BLAS_STATIC_LIBS@
 
 check_PROGRAMS=         band_matrix_test    basis_test     \
-cumulfunc_test          complex_test        dft_test       \
+cumulfunc_test          complex_test        fft_test       \
 finance_function_test   integration_test    lapack_test    \
 laplace_test            list_test           mathtools_test \
 ode_test                optim_test          random_test    \
@@ -30,8 +30,8 @@ complex_test_LDADD=../src/libpnl.la ${some_extra_libs}
 cumulfunc_test_SOURCES=cumulfunc_test.c tests_utils.c
 cumulfunc_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
-dft_test_SOURCES=dft_test.c tests_utils.c
-dft_test_LDADD=../src/libpnl.la ${some_extra_libs}
+fft_test_SOURCES=fft_test.c tests_utils.c
+fft_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
 finance_function_test_SOURCES=finance_function_test.c tests_utils.c
 finance_function_test_LDADD=../src/libpnl.la ${some_extra_libs}
