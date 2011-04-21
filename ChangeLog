@@ -1,3 +1,8 @@
+20-04-2011 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* libcephes: global variable sgngam removed to make gamma related code
+	thread-safe
+
 04-04-2011 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* examples : design of a new unit test framework and backport of all
