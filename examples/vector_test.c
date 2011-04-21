@@ -380,21 +380,21 @@ static void pnl_vect_minmax_test()
   pnl_rand_init (gen, 1, 5);
   v = pnl_vect_create (0);
   pnl_vect_rand_normal (v, 5, gen);
-  pnl_vect_minmax (v, &min, &max);
+  pnl_vect_minmax (&min, &max, v);
   vmin = pnl_vect_min (v);
   vmax = pnl_vect_max (v);
   pnl_test_eq_abs (min, vmin, abserr, "vect_min", "");
   pnl_test_eq_abs (max, vmax, abserr, "vect_max", "");
 
-  pnl_vect_min_index (v, &min, &imin);
+  pnl_vect_min_index (&min, &imin, v);
   pnl_test_eq_abs (GET(v,imin), vmin, abserr, "vect_min_index (imin)", "");
   pnl_test_eq_abs (min, vmin, abserr, "vect_min_index (min)", "");
 
-  pnl_vect_max_index (v, &max, &imax);
+  pnl_vect_max_index (&max, &imax, v);
   pnl_test_eq_abs (GET(v,imax), vmax, abserr, "vect_max_index (imax)", "");
   pnl_test_eq_abs (max, vmax, abserr, "vect_max_index (max)", "");
 
-  pnl_vect_minmax_index (v, &min, &max, &imin, &imax);
+  pnl_vect_minmax_index (&min, &max, &imin, &imax, v);
   pnl_test_eq_abs (GET(v,imin), vmin, abserr, "vect_minmax_index (imin)", "");
   pnl_test_eq_abs (min, vmin, abserr, "vect_minmax_index (min)", "");
   pnl_test_eq_abs (GET(v,imax), vmax, abserr, "vect_minmax_index (imax)", "");

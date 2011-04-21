@@ -1,3 +1,9 @@
+21-04-2011 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* pnl_Tvector_source.c: Change of signature for pnl_vector_min & co to
+	place output arguments first as specified in the library conventions.
+	Note that it breaks backward compatibility.
+
 20-04-2011 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* libcephes: global variable sgngam removed to make gamma related code

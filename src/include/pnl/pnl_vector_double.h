@@ -97,32 +97,32 @@ extern void pnl_vect_minus(PnlVect *lhs);
 extern void pnl_vect_plus_double(PnlVect *lhs, double x); 
 extern void pnl_vect_minus_double(PnlVect *lhs, double x);
 extern void pnl_vect_axpby(double a, const PnlVect *x, double b, PnlVect *y); 
-extern void pnl_vect_mult_double(PnlVect *lhs, double x); /*lhs*=x*/
-extern void pnl_vect_div_double(PnlVect *lhs, double x); /*lhs*=x*/
-extern void pnl_vect_inv_term(PnlVect *lhs); /* lhs = 1 ./ lhs*/
+extern void pnl_vect_mult_double(PnlVect *lhs, double x);
+extern void pnl_vect_div_double(PnlVect *lhs, double x); 
+extern void pnl_vect_inv_term(PnlVect *lhs); 
 extern void
-pnl_vect_div_vect_term(PnlVect *lhs, const PnlVect *rhs);/* lhs = lhs ./ rhs*/
+pnl_vect_div_vect_term(PnlVect *lhs, const PnlVect *rhs);
 extern void
-pnl_vect_mult_vect_term(PnlVect *lhs, const PnlVect *rhs); /* lhs= lhs.*rhs */ 
-extern void pnl_vect_set_double(PnlVect *v, double x);/* v[j]= x */
-extern void pnl_vect_set_zero(PnlVect * v); /* v[j]= 0 */
-extern double pnl_vect_sum(const PnlVect *lhs);/* sum(x) */
+pnl_vect_mult_vect_term(PnlVect *lhs, const PnlVect *rhs);
+extern void pnl_vect_set_double(PnlVect *v, double x);
+extern void pnl_vect_set_zero(PnlVect * v);
+extern double pnl_vect_sum(const PnlVect *lhs);
 extern void pnl_vect_cumsum(PnlVect *lhs);
-extern double pnl_vect_scalar_prod(const PnlVect *rhs1, const PnlVect *rhs2); /*rhs1.rhs2*/
-extern double pnl_vect_prod(const PnlVect *V); /*res=prod(V(i))*/
-extern void pnl_vect_cumprod(PnlVect *V); /*res=prod(V(i))*/
-extern double pnl_vect_max(const PnlVect *V); /*res=max(V)*/
-extern double pnl_vect_min(const PnlVect *V); /*res=min(V)*/
-extern void pnl_vect_minmax (const PnlVect *, double *, double *);
-extern void pnl_vect_min_index (const PnlVect *, double *, int *);
-extern void pnl_vect_max_index (const PnlVect *, double *, int *);
-extern void pnl_vect_minmax_index (const PnlVect *, double *, double *, int *, int *);
+extern double pnl_vect_scalar_prod(const PnlVect *rhs1, const PnlVect *rhs2);
+extern double pnl_vect_prod(const PnlVect *V); 
+extern void pnl_vect_cumprod(PnlVect *V); 
+extern double pnl_vect_max(const PnlVect *V);
+extern double pnl_vect_min(const PnlVect *V);
+extern void pnl_vect_minmax (double *, double *, const PnlVect *);
+extern void pnl_vect_min_index (double *, int *, const PnlVect *);
+extern void pnl_vect_max_index (double *, int *, const PnlVect *);
+extern void pnl_vect_minmax_index (double *, double *, int *, int *, const PnlVect *);
 extern void pnl_vect_qsort (PnlVect *, char);
 extern void pnl_vect_qsort_index (PnlVect *, PnlVectInt *, char);
 
-extern double pnl_vect_norm_two(const PnlVect *V); /*res=\Vert V \Vert_{l^2} */
-extern double pnl_vect_norm_one(const PnlVect *V); /*res=\Vert V \Vert_{l^1} */
-extern double pnl_vect_norm_infty(const PnlVect *V); /*res=\Vert V \Vert_{l^\infty} */
+extern double pnl_vect_norm_two(const PnlVect *V);
+extern double pnl_vect_norm_one(const PnlVect *V);
+extern double pnl_vect_norm_infty(const PnlVect *V);
 extern void pnl_vect_swap_elements(PnlVect * v, int i, int j); 
 extern void pnl_vect_reverse(PnlVect * v);
 

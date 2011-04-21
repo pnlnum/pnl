@@ -319,23 +319,20 @@ no total ordering on Complex numbers
 \item \describefun{double}{pnl_vect_min}{const \refstruct{PnlVect} \ptr V}
   \sshortdescribe Returns the minimum of a vector  
 
-\item \describefun{void}{pnl_vect_minmax}{const \refstruct{PnlVect} \ptr , 
-    double \ptr m, double \ptr M}
+\item \describefun{void}{pnl_vect_minmax}{double \ptr m, double \ptr M, const \refstruct{PnlVect} \ptr}
   \sshortdescribe Computes the minimum and maximum of a vector which are
   returned in  \var{m} and \var{M} respectively.
   
-\item \describefun{void}{pnl_vect_min_index}{const \refstruct{PnlVect} \ptr , 
-    double \ptr m, int \ptr im}
+\item \describefun{void}{pnl_vect_min_index}{double \ptr m, int \ptr im, const \refstruct{PnlVect} \ptr}
   \sshortdescribe Computes the minimum of a vector and its index stored in 
   sets \var{m} and \var{im} respectively.
 
-\item \describefun{void}{pnl_vect_max_index}{const \refstruct{PnlVect} \ptr , 
-    double \ptr M, int \ptr iM}
+\item \describefun{void}{pnl_vect_max_index}{double \ptr M, int \ptr iM, const \refstruct{PnlVect} \ptr}
   \sshortdescribe Computes the maximum of a vector and its index stored in 
   sets \var{m} and \var{im} respectively.
 
-\item \describefun{void}{pnl_vect_minmax_index}{const \refstruct{PnlVect}
-    \ptr , double \ptr m, double \ptr M, int \ptr im, int \ptr iM}
+\item \describefun{void}{pnl_vect_minmax_index}{double \ptr m, double \ptr M,
+    int \ptr im, int \ptr iM, const \refstruct{PnlVect} \ptr}
   \sshortdescribe Computes the minimum and maximum of a vector and the
   corresponding indices stored respectively in \var{m}, \var{M}, \var{im} and
   \var{iM}.
@@ -408,7 +405,7 @@ no total ordering on Complex numbers
   \sshortdescribe Exchanges \var{v[i]} and \var{v[j]}.
 \item \describefun{void}{pnl_vect_reverse}{\refstruct{PnlVect} \ptr v}
   \sshortdescribe Performs a mirror operation on v. On output \var{v[i]
-    = v[n-i]} where \var{n} is the length of the vector.
+    = v[n-1-i]} for \var{i=0,\ldots,n-1} where \var{n} is the length of the vector.
 \end{itemize}
 
 

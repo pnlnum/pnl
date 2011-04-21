@@ -103,10 +103,10 @@ extern int pnl_vect_int_prod(const PnlVectInt *V); /*res=prod(V(i))*/
 extern void pnl_vect_int_cumprod(PnlVectInt *V); /*res=prod(V(i))*/
 extern int pnl_vect_int_max(const PnlVectInt *V); /*res=max(V)*/
 extern int pnl_vect_int_min(const PnlVectInt *V); /*res=min(V)*/
-extern void pnl_vect_int_minmax (const PnlVectInt *, int *, int *);
-extern void pnl_vect_int_min_index (const PnlVectInt *, int *, int *);
-extern void pnl_vect_int_max_index (const PnlVectInt *, int *, int *);
-extern void pnl_vect_int_minmax_index (const PnlVectInt *, int *, int *, int *, int *);
+extern void pnl_vect_int_minmax (int *, int *,const PnlVectInt *);
+extern void pnl_vect_int_min_index (int *, int *, const PnlVectInt *);
+extern void pnl_vect_int_max_index (int *, int *,const PnlVectInt *);
+extern void pnl_vect_int_minmax_index (int *, int *, int *, int *,const PnlVectInt *);
 extern void pnl_vect_int_qsort (PnlVectInt *, char);
 extern void pnl_vect_int_qsort_index (PnlVectInt *, PnlVectInt *, char);
 

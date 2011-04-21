@@ -1197,7 +1197,7 @@ BASE FUNCTION(pnl_vect,max)(const TYPE(PnlVect) *V)
   BASE m;
   int i;
 
-  FUNCTION (pnl_vect, max_index)(V, &m, &i);
+  FUNCTION (pnl_vect, max_index)(&m, &i, V);
   return m;
 }
 
@@ -1212,7 +1212,7 @@ BASE FUNCTION(pnl_vect,min)(const TYPE(PnlVect) *V)
   BASE m;
   int i;
 
-  FUNCTION (pnl_vect, min_index)(V, &m, &i);
+  FUNCTION (pnl_vect, min_index)(&m, &i, V);
   return m;
 }
 
@@ -1225,10 +1225,10 @@ BASE FUNCTION(pnl_vect,min)(const TYPE(PnlVect) *V)
  * @param min_out is a pointer to BASE, contains the minimum on exit
  * @param max_out is a pointer to BASE, contains the maximum on exit
  */
-void FUNCTION(pnl_vect, minmax)(const TYPE(PnlVect) *V, BASE *min_out, BASE *max_out)
+void FUNCTION(pnl_vect, minmax)(BASE *min_out, BASE *max_out, const TYPE(PnlVect) *V)
 {
   int im, iM;
-  FUNCTION(pnl_vect, minmax_index)(V, min_out, max_out, &im, &iM);
+  FUNCTION(pnl_vect, minmax_index)(min_out, max_out, &im, &iM, V);
 }
 
 
@@ -1239,7 +1239,7 @@ void FUNCTION(pnl_vect, minmax)(const TYPE(PnlVect) *V, BASE *min_out, BASE *max
  * @param imax_out is a pointer to int, contains the index of the maximum on exit
  * @param max_out contains the the maximum on exit
  */
-void FUNCTION(pnl_vect, max_index)(const TYPE(PnlVect) *m, BASE *max_out, int *imax_out)
+void FUNCTION(pnl_vect, max_index)(BASE *max_out, int *imax_out, const TYPE(PnlVect) *m)
 {
   FUNCTION(pnl_array, max_index)(m->array, m->size, 1, max_out, imax_out);
 }
@@ -1252,7 +1252,7 @@ void FUNCTION(pnl_vect, max_index)(const TYPE(PnlVect) *m, BASE *max_out, int *i
  * exit
  * @param min_out contains the the minimum on exit
  */
-void FUNCTION(pnl_vect, min_index)(const TYPE(PnlVect) *m, BASE *min_out, int *imin_out)
+void FUNCTION(pnl_vect, min_index)(BASE *min_out, int *imin_out, const TYPE(PnlVect) *m)
 {
   FUNCTION(pnl_array, min_index)(m->array, m->size, 1, min_out, imin_out);
 }
@@ -1267,9 +1267,9 @@ void FUNCTION(pnl_vect, min_index)(const TYPE(PnlVect) *m, BASE *min_out, int *i
  * @param min_out contains the minimum on exit
  * @param max_out contains the maximum on exit
  */
-void FUNCTION(pnl_vect, minmax_index)(const TYPE(PnlVect) *m,
-                                      BASE *min_out, BASE *max_out,
-                                      int *imin_out, int *imax_out)
+void FUNCTION(pnl_vect, minmax_index)(BASE *min_out, BASE *max_out,
+                                      int *imin_out, int *imax_out,
+                                      const TYPE(PnlVect) *m)
 {
   FUNCTION(pnl_array, minmax_index)(m->array, m->size, 1, min_out, max_out,
                                     imin_out, imax_out);
