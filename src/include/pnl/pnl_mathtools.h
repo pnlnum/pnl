@@ -199,6 +199,7 @@ extern int pnl_isinf (double x);
 
 
 #define PNL_ERROR(msg, func) {fprintf(stderr, "%s in function %s \n", msg, func); abort();}
+#define PNL_MESSAGE_ERROR(msg, func) { if (pnl_message_is_on()) fprintf(stderr, "%s in function %s \n", msg, func); }
 #ifdef PNL_RANGE_CHECK_OFF
 #define PNL_CHECK(eq, msg, func)
 #else
