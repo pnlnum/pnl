@@ -1109,14 +1109,18 @@ The following functions are designed to solve linear system of the from \var{A x
 matrix too. Whenever the vector \var{b} is not needed once the system is solved,
 you should consider using ``inplace'' functions.
 
+
+All the functions described in this paragraph return \var{OK} if the
+computations have been carried out successfully and \var{FAIL} otherwise.
+
 \begin{itemize}
-\item \describefun{void}{pnl_mat_chol}{\refstruct{PnlMat} \ptr M}
+\item \describefun{int}{pnl_mat_chol}{\refstruct{PnlMat} \ptr M}
   \sshortdescribe Computes the Cholesky decomposition of \var{M}. \var{M} must
   be symmetric, the positivity is tested in the algorithm. On exist, the lower
   part of \var{M} contains the Cholesky decomposition and the upper part is
   set to zero.
 
-\item \describefun{void}{pnl_mat_lu}{\refstruct{PnlMat} \ptr A, 
+\item \describefun{int}{pnl_mat_lu}{\refstruct{PnlMat} \ptr A, 
     \refstruct{PnlPermutation} \ptr p} 
   \sshortdescribe Computes a P A = LU factorization. \var{P} must be an
   already allocated  \refstruct{PnlPermutation}. On exit the decomposition is
@@ -1125,7 +1129,7 @@ you should consider using ``inplace'' functions.
   elements of \var{L} are all 1. Row \var{i} of \var{A} was interchanged with
   row \var{p(i)}.
   
-\item \describefun{void}{pnl_mat_qr}{\refstruct{PnlMat} \ptr Q,
+\item \describefun{int}{pnl_mat_qr}{\refstruct{PnlMat} \ptr Q,
   \refstruct{PnlMat} \ptr R, \refstruct{PnlPermutation} \ptr p,
   const \refstruct{PnlMat} \ptr A} 
   \sshortdescribe Computes a \var{A P = QR} decomposition. If on entry
@@ -1136,28 +1140,28 @@ you should consider using ``inplace'' functions.
   use of pivoting improves the numerical stability when \var{A} is almost rank
   deficient, i.e when the smallest eigenvalue of \var{A} is very close to $0$.
 
-\item \describefun{void}{pnl_mat_upper_syslin}{\refstruct{PnlVect}
+\item \describefun{int}{pnl_mat_upper_syslin}{\refstruct{PnlVect}
     \ptr x, const \refstruct{PnlMat} \ptr U, const \refstruct{PnlVect}\ptr b}
   \sshortdescribe Solves an upper triangular linear system \var{U x = b}
 
-\item \describefun{void}{pnl_mat_lower_syslin}{\refstruct{PnlVect}
+\item \describefun{int}{pnl_mat_lower_syslin}{\refstruct{PnlVect}
     \ptr x, const \refstruct{PnlMat} \ptr L, const \refstruct{PnlVect}\ptr b}
   \sshortdescribe Solves a lower triangular linear system  \var{L x = b}
   
-\item \describefun{void}{pnl_mat_chol_syslin}{\refstruct{PnlVect} \ptr x, 
+\item \describefun{int}{pnl_mat_chol_syslin}{\refstruct{PnlVect} \ptr x, 
     const \refstruct{PnlMat} \ptr chol, const \refstruct{PnlVect} \ptr b} 
   \sshortdescribe Solves a symmetric definite positive linear system A x = b, 
   in which \var{chol} is assumed to be the Cholesky decomposition of A
   computed by \reffun{pnl_mat_chol}
 
-\item \describefun{void}{pnl_mat_chol_syslin_inplace}{
+\item \describefun{int}{pnl_mat_chol_syslin_inplace}{
     const \refstruct{PnlMat} \ptr chol, \refstruct{PnlVect} \ptr b} 
   \sshortdescribe Solves a symmetric definite positive linear system A x = b, 
   in which \var{chol} is assumed to be the Cholesky decomposition of A
   computed by \reffun{pnl_mat_chol}. The solution of the system is stored in
   \var{b} on exit.
 
-\item \describefun{void}{pnl_mat_lu_syslin}{\refstruct{PnlVect} \ptr x, const
+\item \describefun{int}{pnl_mat_lu_syslin}{\refstruct{PnlVect} \ptr x, const
     \refstruct{PnlMat} \ptr LU, const \refstruct{PnlPermutation} \ptr p, 
     const \refstruct{PnlVect} \ptr b} 
   \sshortdescribe Solves a linear system A x = b using a LU decomposition.
@@ -1167,7 +1171,7 @@ you should consider using ``inplace'' functions.
   (including the diagonal terms) contains U. Remember that the diagonal
   elements of \var{L} are all 1.
 
-\item \describefun{void}{pnl_mat_lu_syslin_inplace}{const
+\item \describefun{int}{pnl_mat_lu_syslin_inplace}{const
     \refstruct{PnlMat} \ptr LU, const \refstruct{PnlPermutation} \ptr p, 
     \refstruct{PnlVect} \ptr b} 
   \sshortdescribe Solves a linear system A x = b using a LU decomposition.
@@ -1178,18 +1182,18 @@ you should consider using ``inplace'' functions.
   elements of \var{L} are all 1. The solution of the system is stored in \var{b}
   on exit.
   
-\item \describefun{void}{pnl_mat_syslin}{\refstruct{PnlVect} \ptr x, const
+\item \describefun{int}{pnl_mat_syslin}{\refstruct{PnlVect} \ptr x, const
     \refstruct{PnlMat} \ptr A, const \refstruct{PnlVect} \ptr b} 
   \sshortdescribe Solves a linear system A x = b using a LU factorization
   which is computed inside this function.
 
-\item \describefun{void}{pnl_mat_syslin_inplace}{\refstruct{PnlMat} \ptr A, 
+\item \describefun{int}{pnl_mat_syslin_inplace}{\refstruct{PnlMat} \ptr A, 
     \refstruct{PnlVect} \ptr b} 
   \sshortdescribe Solves a linear system A x = b using a LU factorization
   which is computed inside this function. The solution of the system is stored
   in \var{b} and \var{A} is overwritten by its LU decomposition.
 
-\item \describefun{void}{pnl_mat_syslin_mat}{\refstruct{PnlMat}\ptr A, 
+\item \describefun{int}{pnl_mat_syslin_mat}{\refstruct{PnlMat}\ptr A, 
     \refstruct{PnlMat} \ptr B} 
   \sshortdescribe Solves a linear system A X = B using a LU factorization
   which is computed inside this function. \var{A} and  \var{B} are
@@ -1197,14 +1201,14 @@ you should consider using ``inplace'' functions.
   \var{B} on exit. On exit, \var{A} contains the LU decomposition of the input
   matrix which is lost.
 
-\item \describefun{void}{pnl_mat_chol_syslin_mat}{const \refstruct{PnlMat}\ptr A, \refstruct{PnlMat} \ptr B}
+\item \describefun{int}{pnl_mat_chol_syslin_mat}{const \refstruct{PnlMat}\ptr A, \refstruct{PnlMat} \ptr B}
   \sshortdescribe Solves a linear system A X = B using a Cholesky factorization
   of the symmetric positive defnite matrix \var{A}.  \var{A} contains the
   Cholesky decomposition as computed by \reffun{pnl_mat_chol}. \var{B} is matrix
   with the same number of rows as \var{A}. The solution of
   the system is stored in \var{B} on exit. 
 
-\item \describefun{void}{pnl_mat_lu_syslin_mat}{const \refstruct{PnlMat}\ptr A,
+\item \describefun{int}{pnl_mat_lu_syslin_mat}{const \refstruct{PnlMat}\ptr A,
   const \refstruct{PnlPermutation} \ptr p, \refstruct{PnlMat} \ptr B}
   \sshortdescribe Solves a linear system A X = B using a \var{P A = L U} factorization.
   \var{A} contains the \var{L U} factors and \var{p} the associated permutation.
@@ -1212,12 +1216,12 @@ you should consider using ``inplace'' functions.
   with the same number of rows as \var{A}.
   The solution of the system is stored in \var{B} on exit. 
 
-\item \describefun{void}{pnl_mat_ls}{\refstruct{PnlMat}\ptr A, \refstruct{PnlVect} \ptr b}
+\item \describefun{int}{pnl_mat_ls}{\refstruct{PnlMat}\ptr A, \refstruct{PnlVect} \ptr b}
   \sshortdescribe Solves a linear system A x = b in the least square sense,
   i.e. $\var{x} = \arg\min_U \| A * u - b\|^2$. The solution is stored into
   \var{b} on exit. It internally uses a \var{AP = QR} decomposition.
 
-\item \describefun{void}{pnl_mat_ls_mat}{\refstruct{PnlMat}\ptr A,
+\item \describefun{int}{pnl_mat_ls_mat}{\refstruct{PnlMat}\ptr A,
     \refstruct{PnlMat} \ptr B}
   \sshortdescribe Solves a linear system A X = B with \var{A} and \var{B} two
   matrices in the least square sense, i.e. $\var{X} = \arg\min_U \| A * U -
@@ -1233,20 +1237,20 @@ these functions although they cannot find good reasons to use them. Note that
 to solve a linear system, one must used the \var{syslin} functions and not
 invert the system matrix because it is much longer.
 \begin{itemize}
-\item \describefun{void}{pnl_mat_upper_inverse}{\refstruct{PnlMat} \ptr A, 
+\item \describefun{int}{pnl_mat_upper_inverse}{\refstruct{PnlMat} \ptr A, 
     const \refstruct{PnlMat} \ptr B}
   \sshortdescribe Inversion of an upper triangular matrix  
 
-\item \describefun{void}{pnl_mat_lower_inverse}{\refstruct{PnlMat} \ptr A, 
+\item \describefun{int}{pnl_mat_lower_inverse}{\refstruct{PnlMat} \ptr A, 
     const \refstruct{PnlMat} \ptr B}
   \sshortdescribe Inversion of a lower triangular matrix  
 
-\item \describefun{void}{pnl_mat_inverse}{\refstruct{PnlMat}
+\item \describefun{int}{pnl_mat_inverse}{\refstruct{PnlMat}
   \ptr inverse, const \refstruct{PnlMat} \ptr A}
   \sshortdescribe Computes the inverse of a matrix A and stores the result
   into \var{inverse}. A LU factorisation of the matrix \var{A} is computed
   inside this function.
-\item \describefun{void}{pnl_mat_inverse_with_chol}{\refstruct{PnlMat}
+\item \describefun{int}{pnl_mat_inverse_with_chol}{\refstruct{PnlMat}
   \ptr inverse, const \refstruct{PnlMat} \ptr A}
   \sshortdescribe Computes the inverse of a symmetric positive definite matrix
   A and stores the result into \var{inverse}. The Cholesky factorisation of

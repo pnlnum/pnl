@@ -81,8 +81,9 @@ static void pnl_mat_make_upper (PnlMat *A)
  * set to 0.
  *
  * @param M : a PnlMat pointer.
+ * @return OK or FAIL
  */
-void pnl_mat_chol(PnlMat *M)
+int pnl_mat_chol(PnlMat *M)
 {
   int n, lda, info, i, j;
   CheckIsSquare(M);
@@ -93,7 +94,8 @@ void pnl_mat_chol(PnlMat *M)
   C2F(dpotrf)("U", &n, M->array, &lda, &info);
   if (info != 0)
     {
-      PNL_ERROR ("matrix is singular", "pnl_mat_chol");
+      PNL_MESSAGE_ERROR ("matrix is singular", "pnl_mat_chol");
+      return FAIL;
     }
   /* Sets the upper part to 0 */
   for ( i=0 ; i<M->m ; i++ )
@@ -103,6 +105,7 @@ void pnl_mat_chol(PnlMat *M)
           PNL_MLET (M, i, j) = 0.;
         }
     }
+  return OK;
 }
 
 /**
@@ -111,8 +114,9 @@ void pnl_mat_chol(PnlMat *M)
  *
  * @param A the matrix to decompose.
  * @param p a PnlPermutation.
+ * @return OK or FAIL
  */
-void pnl_mat_lu (PnlMat *A, PnlPermutation *p)
+int pnl_mat_lu (PnlMat *A, PnlPermutation *p)
 {
   int info, N = A->n;
   
@@ -122,11 +126,13 @@ void pnl_mat_lu (PnlMat *A, PnlPermutation *p)
   C2F(dgetrf) (&N, &N, A->array, &N, p->array, &info);
   if ( info != 0 )
     {
-      PNL_ERROR ("LU decomposition cannot be computed", "pnl_mat_lu");
+      PNL_MESSAGE_ERROR ("LU decomposition cannot be computed", "pnl_mat_lu");
+      return FAIL;
     }
   pnl_mat_sq_transpose (A);
   /* C indices start at 0 */
   pnl_vect_int_minus_int (p, 1);
+  return OK;
 }
 
 /**
@@ -137,9 +143,10 @@ void pnl_mat_lu (PnlMat *A, PnlPermutation *p)
  * @param R an upper triangular matrix on exit
  * @param p a PnlPermutation. If p is NULL no permutation is computed.
  * @param A the matrix to decompose. PA = QR
+ * @return OK or FAIL
  *
  */
-void pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
+int pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
 {
   double *tau, *work, qlwork;
   int     lwork, info, m, i;
@@ -159,14 +166,16 @@ void pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
       C2F(dgeqrf) (&m, &m, R->array, &m, tau, &qlwork, &lwork, &info);
       if ( info != 0 )
         {
-          PNL_ERROR ("QR decomposition cannot be computed", "pnl_mat_qr");
+          PNL_MESSAGE_ERROR ("QR decomposition cannot be computed", "pnl_mat_qr");
+          return FAIL;
         }
       lwork = (int) qlwork;
       work=MALLOC_DOUBLE(lwork);
       C2F(dgeqrf) (&m, &m, R->array, &m, tau, work, &lwork, &info);
       if ( info != 0 )
         {
-          PNL_ERROR ("QR decomposition cannot be computed", "pnl_mat_qr");
+          PNL_MESSAGE_ERROR ("QR decomposition cannot be computed", "pnl_mat_qr");
+          return FAIL;
         }
     }
   else
@@ -176,14 +185,16 @@ void pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
       C2F(dgeqp3)(&m, &m, R->array, &m, p->array, tau, &qlwork, &lwork, &info);
       if ( info != 0 )
         {
-          PNL_ERROR ("QR decomposition cannot be computed", "pnl_mat_qr");
+          PNL_MESSAGE_ERROR ("QR decomposition cannot be computed", "pnl_mat_qr");
+          return FAIL;
         }
       lwork = (int) qlwork;
       work=MALLOC_DOUBLE(lwork);
       C2F(dgeqp3)(&m, &m, R->array, &m, p->array, tau, work, &lwork, &info);
       if ( info != 0 )
         {
-          PNL_ERROR ("QR decomposition cannot be computed", "pnl_mat_qr");
+          PNL_MESSAGE_ERROR ("QR decomposition cannot be computed", "pnl_mat_qr");
+          return FAIL;
         }
       for (i = 0; i < m ; i++) p->array[i]--;
     }
@@ -193,7 +204,8 @@ void pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
   C2F(dorgqr)(&m, &m, &m, Q->array, &m, tau, work, &lwork, &info);
   if ( info != 0 )
     {
-      PNL_ERROR ("QR decomposition cannot be computed", "pnl_mat_qr");
+      PNL_MESSAGE_ERROR ("QR decomposition cannot be computed", "pnl_mat_qr");
+      return FAIL;
     }
 
 
@@ -207,6 +219,7 @@ void pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
   
   FREE (work);
   FREE (tau);
+  return OK;
 }
 
 /**
@@ -215,8 +228,9 @@ void pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
  * @param x already existing PnlVect that contains the solution on exit
  * @param A an upper triangular matric
  * @param b right hand side member
+ * @return OK or FAIL
  */
-void pnl_mat_upper_syslin (PnlVect *x, const PnlMat *A, const  PnlVect *b)
+int pnl_mat_upper_syslin (PnlVect *x, const PnlMat *A, const  PnlVect *b)
 {
   int n, nrhs, lda, ldb, info;
   
@@ -230,8 +244,10 @@ void pnl_mat_upper_syslin (PnlVect *x, const PnlMat *A, const  PnlVect *b)
   C2F(dtrtrs)("U","T","N",&n,&nrhs,A->array,&lda,x->array,&ldb,&info);
   if (info != 0)
     {
-      PNL_ERROR ("Matrix is singular", "pnl_mat_upper_syslin");
+      PNL_MESSAGE_ERROR ("Matrix is singular", "pnl_mat_upper_syslin");
+      return FAIL;
     }
+  return OK;
 }
 
 /**
@@ -240,8 +256,9 @@ void pnl_mat_upper_syslin (PnlVect *x, const PnlMat *A, const  PnlVect *b)
  * @param x already existing PnlVect that contains the solution on exit
  * @param A a lower triangular matrix
  * @param b right hand side member
+ * @return OK or FAIL
  */
-void pnl_mat_lower_syslin (PnlVect *x, const PnlMat *A, const  PnlVect *b)
+int pnl_mat_lower_syslin (PnlVect *x, const PnlMat *A, const  PnlVect *b)
 {
   int n, nrhs, lda, ldb, info;
   
@@ -255,8 +272,10 @@ void pnl_mat_lower_syslin (PnlVect *x, const PnlMat *A, const  PnlVect *b)
   C2F(dtrtrs)("L","T","N",&n,&nrhs,A->array,&lda,x->array,&ldb,&info);
   if (info != 0)
     {
-      PNL_ERROR ("Matrix is singular", "pnl_mat_lower_syslin");
+      PNL_MESSAGE_ERROR ("Matrix is singular", "pnl_mat_lower_syslin");
+      return FAIL;
     }
+  return OK;
 }
 
 /**
@@ -265,8 +284,9 @@ void pnl_mat_lower_syslin (PnlVect *x, const PnlMat *A, const  PnlVect *b)
  *
  * @param chol the Cholesky decomposition of the system as computed by pnl_mat_chol
  * @param b right hand side member. On exit, b contains the solution of the system.
+ * @return OK or FAIL
  */
-void pnl_mat_chol_syslin_inplace (const PnlMat *chol, PnlVect *b)
+int pnl_mat_chol_syslin_inplace (const PnlMat *chol, PnlVect *b)
 {
   int n, nrhs, lda, ldb, info;
   CheckIsSquare(chol);
@@ -279,8 +299,10 @@ void pnl_mat_chol_syslin_inplace (const PnlMat *chol, PnlVect *b)
   C2F(dpotrs)("U", &n, &nrhs, chol->array, &lda, b->array, &ldb, &info);
   if (info != 0)
     {
-      PNL_ERROR ("illegal value", "pnl_mat_chol_syslin");
+      PNL_MESSAGE_ERROR ("illegal value", "pnl_mat_chol_syslin");
+      return FAIL;
     }
+  return OK;
 }
 
 /**
@@ -290,11 +312,12 @@ void pnl_mat_chol_syslin_inplace (const PnlMat *chol, PnlVect *b)
  * @param x already existing PnlVect that contains the solution on exit
  * @param chol the Cholesky decomposition of the system as computed by pnl_mat_chol
  * @param b right hand side member
+ * @return OK or FAIL
  */
-void pnl_mat_chol_syslin (PnlVect *x, const PnlMat *chol, const  PnlVect *b)
+int pnl_mat_chol_syslin (PnlVect *x, const PnlMat *chol, const  PnlVect *b)
 {
   pnl_vect_clone (x,b);
-  pnl_mat_chol_syslin_inplace (chol, x);
+  return pnl_mat_chol_syslin_inplace (chol, x);
 }
 
 /**
@@ -305,8 +328,9 @@ void pnl_mat_chol_syslin (PnlVect *x, const PnlMat *chol, const  PnlVect *b)
  * pnl_mat_chol
  * @param B the r.h.s. matrix of the system of size n x m. On exit B contains
  * the solution X
+ * @return OK or FAIL
  */
-void pnl_mat_chol_syslin_mat (const PnlMat *A,  PnlMat *B)
+int pnl_mat_chol_syslin_mat (const PnlMat *A,  PnlMat *B)
 {
   int n, nrhs, lda, ldb, info;
   PnlMat *tB;
@@ -324,11 +348,13 @@ void pnl_mat_chol_syslin_mat (const PnlMat *A,  PnlMat *B)
   C2F(dpotrs)("U", &n, &nrhs, A->array, &lda, tB->array, &ldb, &info);
   if (info != 0)
     {
-      PNL_ERROR ("illegal value", "pnl_mat_chol_syslin");
+      PNL_MESSAGE_ERROR ("illegal value", "pnl_mat_chol_syslin");
+      return FAIL;
     }
   /* Revert to row wise storage */
   pnl_mat_tr (B, tB);
   pnl_mat_free (&tB);
+  return OK;
 }
 
 /**
@@ -338,8 +364,9 @@ void pnl_mat_chol_syslin_mat (const PnlMat *A,  PnlMat *B)
  * @param A a PnlMat containing the LU decomposition of A
  * @param p a PnlVectInt.
  * @param b right hand side member. Contains the solution x on exit
+ * @return OK or FAIL
  */
-void pnl_mat_lu_syslin_inplace (PnlMat *A, const PnlVectInt *p, PnlVect *b)
+int pnl_mat_lu_syslin_inplace (PnlMat *A, const PnlVectInt *p, PnlVect *b)
 {
   int i, n, nrhs, lda, ldb, info;
   CheckIsSquare(A);
@@ -361,8 +388,10 @@ void pnl_mat_lu_syslin_inplace (PnlMat *A, const PnlVectInt *p, PnlVect *b)
   for ( i=0 ; i<p->size ; i++ ) (p->array[i])--;
   if (info != 0)
     {
-      PNL_ERROR ("Matrix is singular", "pnl_lu_syslin");
+      PNL_MESSAGE_ERROR ("Matrix is singular", "pnl_lu_syslin");
+      return FAIL;
     }
+  return OK;
 }
 
 /**
@@ -373,11 +402,12 @@ void pnl_mat_lu_syslin_inplace (PnlMat *A, const PnlVectInt *p, PnlVect *b)
  * @param LU a PnlMat containing the LU decomposition of A
  * @param b right hand side member
  * @param p a PnlVectInt.
+ * @return OK or FAIL
  */
-void pnl_mat_lu_syslin (PnlVect *x, PnlMat *LU, const PnlVectInt *p, const PnlVect *b)
+int pnl_mat_lu_syslin (PnlVect *x, PnlMat *LU, const PnlVectInt *p, const PnlVect *b)
 {
   pnl_vect_clone (x, b);
-  pnl_mat_lu_syslin_inplace (LU, p, x);
+  return pnl_mat_lu_syslin_inplace (LU, p, x);
 }
 
 /**
@@ -386,29 +416,36 @@ void pnl_mat_lu_syslin (PnlVect *x, PnlMat *LU, const PnlVectInt *p, const PnlVe
  * been created )
  * @param A the matrix of the system
  * @param b the r.h.s. member
+ * @return OK or FAIL
  */
-void pnl_mat_syslin (PnlVect *x, const PnlMat *A, const PnlVect *b)
+int pnl_mat_syslin (PnlVect *x, const PnlMat *A, const PnlVect *b)
 {
   PnlMat *LU;
+  int status;
   LU = pnl_mat_copy (A);
   pnl_vect_clone (x, b);
-  pnl_mat_syslin_inplace (LU, x);
+  status = pnl_mat_syslin_inplace (LU, x);
   pnl_mat_free (&LU);
+  return status;
 }
 
 /**
  * solves a linear system A x = b using a LU factorization
  * @param A the matrix of the system. On exit contains the LU decomposition of A.
  * @param b the r.h.s. member
+ * @return OK or FAIL
  */
-void pnl_mat_syslin_inplace (PnlMat *A, PnlVect *b)
+int pnl_mat_syslin_inplace (PnlMat *A, PnlVect *b)
 {
   PnlVectInt *p;
+  int status;
   CheckIsSquare(A);
   p = pnl_vect_int_create (A->m);
-  pnl_mat_lu (A, p);
-  pnl_mat_lu_syslin_inplace (A, p, b);
+  status = pnl_mat_lu (A, p);
+  if ( status != OK ) return FAIL;
+  status = pnl_mat_lu_syslin_inplace (A, p, b);
   pnl_vect_int_free (&p);
+  return status;
 }
 
 /**
@@ -418,8 +455,9 @@ void pnl_mat_syslin_inplace (PnlMat *A, PnlVect *b)
  * @param p the permutation associated to the PA = LU factotisation
  * @param B the r.h.s. matrix of the system of size n x m. On exit B contains
  * the solution X
+ * @return OK or FAIL
  */
-void pnl_mat_lu_syslin_mat (const PnlMat *A,  const PnlPermutation *p, PnlMat *B)
+int pnl_mat_lu_syslin_mat (const PnlMat *A,  const PnlPermutation *p, PnlMat *B)
 {
   int i, n, nrhs, lda, ldb, info;
   PnlMat *tB;
@@ -448,9 +486,11 @@ void pnl_mat_lu_syslin_mat (const PnlMat *A,  const PnlPermutation *p, PnlMat *B
   for ( i=0 ; i<p->size ; i++ ) (p->array[i])--;
   if (info != 0)
     {
-      PNL_ERROR ("Matrix is singular", "pnl_lu_syslin");
+      PNL_MESSAGE_ERROR ("Matrix is singular", "pnl_lu_syslin");
+      return FAIL;
     }
   pnl_mat_free (&tB);
+  return OK;
 }
 
 /**
@@ -458,16 +498,19 @@ void pnl_mat_lu_syslin_mat (const PnlMat *A,  const PnlPermutation *p, PnlMat *B
  * @param A the matrix of the system of size n x n. On exit contains the LU decomposition
  * @param B the r.h.s. matrix of the system of size n x m. On exit B contains
  * the solution X
+ * @return OK or FAIL
  */
-void pnl_mat_syslin_mat (PnlMat *A,  PnlMat *B)
+int pnl_mat_syslin_mat (PnlMat *A,  PnlMat *B)
 {
   PnlVectInt *p;
+  int status;
   CheckIsSquare(A);
   p = pnl_vect_int_create (A->m);
   pnl_mat_lu (A, p);
 
-  pnl_mat_lu_syslin_mat (A, p , B);
+  status = pnl_mat_lu_syslin_mat (A, p , B);
   pnl_vect_int_free (&p);
+  return status;
 }
 
 /**
@@ -475,8 +518,9 @@ void pnl_mat_syslin_mat (PnlMat *A,  PnlMat *B)
  *
  * @param A on exit, contains the inverse of B. A must be an already allocated PnlMat
  * @param B an upper triangular matrix
+ * @return OK or FAIL
  */
-void pnl_mat_upper_inverse(PnlMat *A, const PnlMat *B)
+int pnl_mat_upper_inverse(PnlMat *A, const PnlMat *B)
 {
   int n, lda, info;
   
@@ -488,8 +532,10 @@ void pnl_mat_upper_inverse(PnlMat *A, const PnlMat *B)
   C2F(dtrtri)("L","N",&n,A->array,&lda,&info);
   if (info != 0)
     {
-      PNL_ERROR ("Matrix is singular", "pnl_mat_upper_inverse");
+      PNL_MESSAGE_ERROR ("Matrix is singular", "pnl_mat_upper_inverse");
+      return FAIL;
     }
+  return OK;
 }
 
 /**
@@ -497,8 +543,9 @@ void pnl_mat_upper_inverse(PnlMat *A, const PnlMat *B)
  *
  * @param A on exit, contains the inverse of B. A must be an already allocated PnlMat
  * @param B a lower triangular matrix
+ * @return OK or FAIL
  */
-void pnl_mat_lower_inverse (PnlMat *A, const PnlMat *B)
+int pnl_mat_lower_inverse (PnlMat *A, const PnlMat *B)
 {
   int n, lda, info;
   
@@ -510,8 +557,10 @@ void pnl_mat_lower_inverse (PnlMat *A, const PnlMat *B)
   C2F(dtrtri)("U","N",&n,A->array,&lda,&info);
   if (info != 0)
     {
-      PNL_ERROR ("Matrix is singular", "pnl_mat_upper_inverse");
+      PNL_MESSAGE_ERROR ("Matrix is singular", "pnl_mat_upper_inverse");
+      return FAIL;
     }
+  return OK;
 }
 
 /**
@@ -519,10 +568,10 @@ void pnl_mat_lower_inverse (PnlMat *A, const PnlMat *B)
  * decomposition
  *
  * @param A a matrix.
- * @param inv a PnlMat (already allocated). contains
- * \verbatim A^-1 \endverbatim on exit.
+ * @param inv a PnlMat (already allocated). contains A^-1 on exit.
+ * @return OK or FAIL
  */
-void pnl_mat_inverse_with_chol (PnlMat *inv, const PnlMat *A)
+int pnl_mat_inverse_with_chol (PnlMat *inv, const PnlMat *A)
 {
   int i, j, n, lda, info;
   pnl_mat_clone (inv, A);
@@ -533,7 +582,8 @@ void pnl_mat_inverse_with_chol (PnlMat *inv, const PnlMat *A)
   C2F(dpotri)("U", &n, inv->array, &lda, &info);
   if (info != 0)
     {
-      PNL_ERROR ("illegal values", "pnl_mat_inverse_with_chol");
+      PNL_MESSAGE_ERROR ("illegal values", "pnl_mat_inverse_with_chol");
+      return FAIL;
     }
   /* Now we need to symmetrise inv because the upper part is 0 */
   for ( i=0 ; i<inv->m ; i++ )
@@ -543,6 +593,7 @@ void pnl_mat_inverse_with_chol (PnlMat *inv, const PnlMat *A)
           PNL_MLET (inv, j, i) = PNL_MGET (inv, i, j);
         }
     }
+  return OK;
 }
 
 /**
@@ -551,8 +602,9 @@ void pnl_mat_inverse_with_chol (PnlMat *inv, const PnlMat *A)
  * @param A a matrix.
  * @param inv a PnlMat (already allocated). contains
  * \verbatim A^-1 \endverbatim on exit.
+ * @return OK or FAIL
  */
-void pnl_mat_inverse (PnlMat *inv, const PnlMat *A)
+int pnl_mat_inverse (PnlMat *inv, const PnlMat *A)
 {
   int n, lda, lwork, info, *ipiv;
   double *work, qwork;
@@ -564,13 +616,15 @@ void pnl_mat_inverse (PnlMat *inv, const PnlMat *A)
   if (info != 0)
     {
       free (ipiv); 
-      PNL_ERROR ("matrix is singular", "pnl_mat_inverse");
+      PNL_MESSAGE_ERROR ("matrix is singular", "pnl_mat_inverse");
+      return FAIL;
     }
   lwork = -1;
   C2F(dgetri)(&n,inv->array,&lda,ipiv,&qwork,&lwork,&info);
   if (info != 0)
     {
-      PNL_ERROR ("Cannot query workspace", "pnl_mat_inverse");
+      PNL_MESSAGE_ERROR ("Cannot query workspace", "pnl_mat_inverse");
+      return FAIL;
     }
   lwork = (int) qwork;
   work = MALLOC_DOUBLE (lwork);
@@ -578,10 +632,12 @@ void pnl_mat_inverse (PnlMat *inv, const PnlMat *A)
   if (info != 0)
     {
       free (ipiv); free (work);
-      PNL_ERROR ("matrix is singular", "pnl_mat_inverse");
+      PNL_MESSAGE_ERROR ("matrix is singular", "pnl_mat_inverse");
+      return FAIL;
     }
   pnl_mat_sq_transpose (inv);
   free (ipiv); free (work);
+  return OK;
 }
 
 /**
@@ -592,8 +648,9 @@ void pnl_mat_inverse (PnlMat *inv, const PnlMat *A)
  * @param A a matrix
  * @param with_eigenvectors can be TRUE to compute the eigenvectors or FALSE
  * if they are not required, in this latter case P can be NULL
+ * @return OK or FAIL
  */
-void pnl_mat_eigen (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors)
+int pnl_mat_eigen (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors)
 {
   int is_sym;
   int info;
@@ -604,8 +661,10 @@ void pnl_mat_eigen (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvector
 
   if (info == FAIL)
     {
-      PNL_ERROR ("Error", "pnl_mat_eigen");
+      PNL_MESSAGE_ERROR ("Error", "pnl_mat_eigen");
+      return FAIL;
     }
+  return OK;
 }
 
 /**
@@ -617,6 +676,7 @@ void pnl_mat_eigen (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvector
  * @param A a real symmetric matrix
  * @param with_eigenvectors can be TRUE to compute the eigenvectors or FALSE
  * if they are not required, in this latter case P can be NULL
+ * @return OK or FAIL
  */
 static int pnl_dsyev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors)
 {
@@ -663,6 +723,7 @@ static int pnl_dsyev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvect
  * @param A a real non symmetric matrix
  * @param with_eigenvectors can be TRUE to compute the eigenvectors or FALSE
  * if they are not required, in this latter case P can be NULL
+ * @return OK or FAIL
  */
 static int pnl_dgeev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors)
 {
@@ -720,8 +781,9 @@ static int pnl_dgeev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvect
  *
  * @param A a real diagonalizable matrix
  * @param B contains log(A) on return
+ * @return OK or FAIL
  */
-void pnl_mat_log (PnlMat *B, const PnlMat *A)
+int pnl_mat_log (PnlMat *B, const PnlMat *A)
 {
   int n, i, j;
   PnlMat *P, *invP;
@@ -730,23 +792,33 @@ void pnl_mat_log (PnlMat *B, const PnlMat *A)
   n = A->n;
 
   P = pnl_mat_create(n,n);
-  invP = pnl_mat_create(n,n);
   D = pnl_vect_create(n);
 
-  pnl_mat_eigen(D, P, A, TRUE);
+  if ( pnl_mat_eigen(D, P, A, TRUE) != OK )
+    {
+      pnl_mat_free (&P);
+      pnl_vect_free (&D);
+      return FAIL;
+    }
 
   for ( i=0 ; i<n ; i++ )
     {
       if (pnl_vect_get(D, i) <= 0)
         {
-          PNL_ERROR ("Negative eigenvalues", "pnl_mat_log");
+          PNL_MESSAGE_ERROR ("Negative eigenvalues", "pnl_mat_log");
+          return FAIL;
         }
     }
 
   /* Compute inv(P). If P is not invertible, it means that the matrix A is
      not diagonalizable.
   */
-  pnl_mat_inverse (invP, P);
+  invP = pnl_mat_create(n,n);
+  if ( pnl_mat_inverse (invP, P) != OK )
+    {
+      PNL_MESSAGE_ERROR ("matrix is not diagonalizable", "pnl_mat_log");
+      return FAIL;
+    }
   
   /* compute P = P * diag(log(D)) */
   for ( i=0 ; i<n ; i++ )
@@ -763,6 +835,7 @@ void pnl_mat_log (PnlMat *B, const PnlMat *A)
   pnl_mat_free (&P);
   pnl_mat_free (&invP);
   pnl_vect_free (&D);
+  return OK;
 }
 
 /**

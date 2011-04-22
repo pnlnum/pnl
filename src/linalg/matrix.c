@@ -57,7 +57,7 @@
  * }
  * \endverbatim
  */
-void pnl_mat_exp (PnlMat *B, const PnlMat *A)
+int pnl_mat_exp (PnlMat *B, const PnlMat *A)
 {
   int i,j,k,ih2,ip,iq,iused,ifree,iodd,icoef,ideg,iput,iget,lwork, ns;
   double *work;
@@ -98,7 +98,7 @@ void pnl_mat_exp (PnlMat *B, const PnlMat *A)
     {
       pnl_mat_set_id (B);
       free (work); work = NULL;
-      return;
+      return FAIL;
     }
   ns = MAX( 0, (int)(log(hnorm)/log(2.)) + 2 );
   scale = 1. / pnl_pow_i (2., ns);
@@ -192,6 +192,7 @@ void pnl_mat_exp (PnlMat *B, const PnlMat *A)
   memcpy (B->array, &(work[iput]), A->mn * sizeof(double));
   
   free (work); work = NULL;
+  return OK;
 }
 
 
