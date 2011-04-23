@@ -1,5 +1,11 @@
 - Seed for MRGK3 and MRGK5
 
+- random.c : SOBOL and SOBOL2 are not handled by pnl_rng_sdim
+
+- Recode Sobol
+
+- Integrate the latest version of DCMT
+
 - List structure
        * Add a pnl_list_copy function. It implies to add a
          copy function to PnlObject
@@ -19,10 +25,4 @@
     be worth it.
 
 - interface dgesvd
-
-- Recode Sobol
-
-- Integrate the latest version of DCMT
-
-- Linear algebra decomposition methods should return FAIL or OK
 
