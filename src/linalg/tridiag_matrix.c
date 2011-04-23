@@ -661,10 +661,10 @@ int pnl_tridiag_mat_syslin (PnlVect *x, PnlTridiagMat *A, const PnlVect *b)
 
 
 /**
- * Computes the scalar product <x,A * y>
+ * Computes the scalar product <x,T * y>
  *
  * @param x a real vector
- * @param A a tridiagonal matrix
+ * @param T a tridiagonal matrix
  * @param y a real vector
  * @return  x' * A * y
  */

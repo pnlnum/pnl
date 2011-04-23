@@ -75,7 +75,7 @@ static double Gauss_BoxMuller(PnlRng *rng)
  * @param dimension size of the vector to simulate
  * @param create_or_retrieve boolean can be CREATE or RETRIEVE.
  * @param index (unused when calling with CREATE)
- * @param type_generator index of the generator
+ * @param rng a generator
  */
 static double GaussMC(int dimension, int create_or_retrieve, int index, PnlRng *rng)
 {
@@ -99,7 +99,7 @@ static double GaussMC(int dimension, int create_or_retrieve, int index, PnlRng *
  * RETRIEVE. if it is CREATE, draw all the dimensions and returns the fisrt
  * one. If it s RETRIEVE, returns the dimension corresponding to index
  * @param index index to be returned
- * @param type_generator index of the generator
+ * @param rng a generator
  */
 static double GaussQMC(int dimension, int create_or_retrieve, int index,PnlRng *rng)
 {
@@ -434,7 +434,7 @@ double pnl_rand_chi2  (double nu, int gen)
  * 
  * @param nu a real number > -1
  * @param a a real number > 0
- * @param rng a PnlRng
+ * @param gen the index of the generator to be used
  * 
  * @return an integer number
  */
@@ -894,7 +894,7 @@ double pnl_rng_chi2  (double nu, PnlRng *rng)
  * Generates a random variable with Bessel distribution with parameters nu
  * and a. We refer to 
  * 
- * @article{Devroye2002249,
+ * article{Devroye2002249,
  * title = "Simulating Bessel random variables",
  * journal = "Statistics & Probability Letters",
  * volume = "57",

@@ -148,7 +148,7 @@ void pnl_vect_permute_inplace (PnlVect *x, const PnlPermutation *p)
  * pX[] = x[:,p]
  *
  * @param pX on exit contains the permuted matrix
- * @param x the matrix to permute
+ * @param X the matrix to permute
  * @param p a permutation
  */
 void pnl_mat_col_permute (PnlMat *pX, const PnlMat *X, const PnlPermutation *p)
