@@ -1,7 +1,7 @@
 include $(top_srcdir)/Make.incl
 
 AM_CPPFLAGS = $(PNL_INCLUDES)
-some_extra_libs=@LAPACK_STATIC_LIBS@ @BLAS_STATIC_LIBS@
+some_extra_libs=@LAPACK_STATIC_LIBS@ @BLAS_STATIC_LIBS@ @BLAS_LIBS@ @LAPACK_LIBS@
 
 check_PROGRAMS=         band_matrix_test    basis_test     \
 cumulfunc_test          complex_test        fft_test       \
@@ -90,15 +90,15 @@ noinst_PROGRAMS+=pnl_mpi_test rng_mpi_test saveload_test
 
 pnl_mpi_test_SOURCES=mpibindings_test.c tests_utils.c
 pnl_mpi_test_CFLAGS=@MPI_CFLAGS@ $(AM_CFLAGS)
-pnl_mpi_test_LDADD=../src/libpnl.la ${some_extra_libs}
+pnl_mpi_test_LDADD=../src/libpnl.la ${some_extra_libs} @MPI_LIBS@
 
 rng_mpi_test_SOURCES=rng-mpi.c tests_utils.c
 rng_mpi_test_CFLAGS=@MPI_CFLAGS@ $(AM_CFLAGS)
-rng_mpi_test_LDADD=../src/libpnl.la ${some_extra_libs}
+rng_mpi_test_LDADD=../src/libpnl.la ${some_extra_libs} @MPI_LIBS@
 
 saveload_test_SOURCES=saveload_test.c tests_utils.c
 saveload_test_CFLAGS=@MPI_CFLAGS@ $(AM_CFLAGS)
-saveload_test_LDADD=../src/libpnl.la ${some_extra_libs}
+saveload_test_LDADD=../src/libpnl.la ${some_extra_libs} @MPI_LIBS@
 
 endif
 
