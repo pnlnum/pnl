@@ -26,8 +26,68 @@
 #include "tests_utils.h"
 
 
-
-int main ()
+/*
+ * Computes  0.25 * Y * ( 1 - Y / 20 )
+ */
+static void r4_f1 (int neqn, double t, const double *y, double *yp, void *param)
 {
-  return OK;
+  yp[0] = 0.25 * y[0] * ( 1.0 - y[0] / 20.0 );
+}
+
+/*
+ * Computes the exact solution to the ODE associated to r4_f1
+ */
+static double r4_y1x (double t)
+{
+  double value;
+  value = 20.0 / ( 1.0 + 19.0 * exp ( -0.25 * t ) );
+  return value;
+}
+
+void test01 ( )
+{
+# define NEQN 1
+  int flag, i, n_step;
+  double abserr, relerr;
+  double t, t_out, t_start, t_stop;
+  double y[NEQN], yp[NEQN];
+  PnlODEFunc f;
+
+  abserr = sqrt ( 1E-9 );
+  relerr = sqrt ( 1E-9 );
+
+  t_start = 0.0;
+  t_stop = 20.0;
+
+  n_step = 10;
+
+  t = 0.0;
+  t_out = 0.0;
+  y[0] = 1.0;
+  r4_f1 ( 1, t, y, yp, NULL );
+
+  f.function = r4_f1;
+  f.neqn = 1;
+  f.params = NULL;
+
+  for ( i = 0; i < n_step; i++ )
+    {
+      t = ((n_step - i) * t_start + i * t_stop) / ( double ) n_step;
+      t_out = ((n_step - (i + 1) ) * t_start + (i + 1) * t_stop)  / ( double ) n_step;
+      if ( pnl_ode_rkf45 ( &f, y, t, t_out, relerr, abserr, &flag ) == FAIL )
+        {
+          pnl_test_set_fail ("pnl_ode_rkf45 failed", 0., 0.);
+        }
+      pnl_test_eq_abs (y[0], r4_y1x (t_out), abserr, "pnl_ode_rkf45", "at time %t", t_out);
+    }
+# undef NEQN
+}
+
+
+
+int main (int argc, char **argv)
+{
+  pnl_test_init (argc, argv);
+  test01 ();
+  exit (pnl_test_finalize ("ODE"));
 }
