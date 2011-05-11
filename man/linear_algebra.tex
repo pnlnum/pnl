@@ -166,12 +166,8 @@ There are no special functions to access the size of a vector, instead the field
 \subparagraph{Resizing vectors}
 \begin{itemize}
 \item \describefun{int}{pnl_vect_resize}{\refstruct{PnlVect} \ptr \refstruct{v}, int size}
-  \sshortdescribe Resizes a \refstruct{PnlVect}. The old data are kept up to
-  the new size.
-\item \describefun{int}{pnl_vect_resize_from_double}{\refstruct{PnlVect}
-    \ptr \refstruct{v}, int size, double x} 
-  \sshortdescribe Resizes a \refstruct{PnlVect}.  The old data are kept. If
-  the new size is larger than the old one, the new cells are set to \var{x}.
+  \sshortdescribe Resizes a \refstruct{PnlVect}. It copies as much of the old
+  data to fit in the resized object.
 \item \describefun{int}{pnl_vect_resize_from_ptr}{\refstruct{PnlVect}
     \ptr \refstruct{v}, int size, double \ptr t} 
   \sshortdescribe Resizes a \refstruct{PnlVect} and uses \var{t} to fill the
@@ -695,7 +691,7 @@ and the size of the matrix.
 
 \item \describefun{int}{pnl_mat_resize}{\refstruct{PnlMat} \ptr M, int m, int n}
   \sshortdescribe Resizes a \refstruct{PnlMat}. The new matrix is of size
-  \var{m x n}.  
+  \var{m x n}. It copies as much of the old data to fit in the resized matrix. 
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_submat}{const
   \refstruct{PnlMat} \ptr M, const \refstruct{PnlVectInt} \ptr indi, const
   \refstruct{PnlVectInt} \ptr indj}
