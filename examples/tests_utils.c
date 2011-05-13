@@ -247,6 +247,7 @@ int pnl_test_eq_abs (double x, double y, double abserr, const char *str, const c
 static int pnl_test_array (const double *X, const double *Y, int n, double relerr, int(*cmp)(double, double, double), const char *str, const char *fmt, va_list ap)
 {
   int i, status;
+  status = 0;
   for ( i=0 ; i<n ; i++ )
     {
       const double x = X[i];
@@ -346,6 +347,7 @@ int pnl_test_mat_int_eq(const PnlMatInt *X, const PnlMatInt *Y, const char *str,
   va_list ap;
   va_start (ap, fmt);
   va_end (ap);
+  status = 0;
   if ( X->m != Y->m || X->n != Y->n )
     {
       printf ("%s : ", str);
