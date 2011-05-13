@@ -1523,6 +1523,13 @@ PnlRng** pnl_rng_dcmt_create_array (int n, ulong seed, int *count)
 void pnl_dcmt_sseed(dcmt_state *mts, ulong s) 
 {
   int i;
+
+  /* when s==0, we fix an arbitrary seed but always the same */
+  if ( s == 0 )
+    {
+      s = 4357;
+    }
+
   mts->state[0] = s & BIT32_MASK;
 
   for ( i=1 ; i<mts->nn ; i++ ) 

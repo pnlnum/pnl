@@ -1,3 +1,13 @@
+11-05-2011 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* random.c: Seeding of MRGK3 and MRGK5 + implementation of the
+	following convention for pnl_rng_sseed: if seed == 0 then the default
+	seed is used
+
+11-05-2011 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* ode_test.c: Simple test (1d) of routine pnl_ode_rkf45
+
 23-04-2011 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* lapack-wrap.c: all functions now return an error code (OK or FAIL)

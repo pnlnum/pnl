@@ -1,4 +1,3 @@
-- Seed for MRGK3 and MRGK5
 
 - random.c : SOBOL and SOBOL2 are not handled by pnl_rng_sdim
 

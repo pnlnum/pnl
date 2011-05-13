@@ -178,8 +178,6 @@ struct _PnlRng
 
 
 \begin{itemize}
-\item \describefun{\refstruct{PnlRng}\ptr }{pnl_rng_new}{}
-  \sshortdescribe Creates an empty \refstruct{PnlRng}\ptr.
 \item \describefun{void}{pnl_rng_free}{\refstruct{PnlRng} \ptr \ptr }
   \sshortdescribe Frees a \refstruct{PnlRng}.
 \item \describefun{\refstruct{PnlRng}\ptr }{pnl_rng_create}{int type}
@@ -199,6 +197,19 @@ struct _PnlRng
   directly returns an array of \refstruct{PnlRng}. Before using the generators, you
   must initialize each of them by calling the function \reffun{pnl_rng_sseed}
   \var{count} times.
+\item \describefun{void}{pnl_rng_sseed}{\refstruct{PnlRng} \ptr rng, unsigned
+    long int s}
+  \sshortdescribe Sets the seed of the genrator \var{rng} using \var{s}. If
+  \var{s=0}, then a default seed (depending on the generator) is used.
+\item \describefun{void}{pnl_rng_sdim}{\refstruct{PnlRng} \ptr rng, int dim}
+  \sshortdescribe Sets the dimension of the state space for a QMC generator.
+\end{itemize}
+
+Some auxiliary functions internally used but we should only be used with high
+caution.
+\begin{itemize}
+\item \describefun{\refstruct{PnlRng}\ptr }{pnl_rng_new}{}
+  \sshortdescribe Creates an empty \refstruct{PnlRng}.
 \item \describefun{void}{pnl_rng_init}{\refstruct{PnlRng} \ptr rng, int type}
   \sshortdescribe Initializes an empty \refstruct{PnlRng} as returned by
   \reffun{pnl_rng_new} to become a generator of type \var{type} which can be
@@ -206,11 +217,6 @@ struct _PnlRng
   correspond to {\bf pseudo} random number generators.
   Calling \reffun{pnl_rng_create} is equivalent to calling first
   \reffun{pnl_rng_new} and then \reffun{pnl_rng_init}. 
-\item \describefun{void}{pnl_rng_sseed}{\refstruct{PnlRng} \ptr rng, unsigned
-    long int s}
-  \sshortdescribe Sets the seed of the genrator \var{rng} using \var{s}.
-\item \describefun{void}{pnl_rng_sdim}{\refstruct{PnlRng} \ptr rng, int dim}
-  \sshortdescribe Sets the dimension of the state space for a QMC generator.
 \item \describefun{\refstruct{PnlRng}\ptr }{pnl_rng_get_from_id}
   {\refstruct{PnlRngType} id}
   \sshortdescribe Retuns the global generator described by its macro name.

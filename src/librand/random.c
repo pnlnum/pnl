@@ -242,7 +242,7 @@ static void SHUFL(PnlRng *rng,double *sample)
           if (s->x < 0) s->x += M;
           if (j< 32) s->t[j] = s->x;
         }
-      s->y= s->t[0];
+      s->y= s->x;
     }
   rng->counter++;
 
@@ -278,7 +278,7 @@ static void LECUYER(PnlRng *rng,double *sample)
 
   static const long A1 = 40014;        /* multiplier of the 1st generator */
   static const long A2 = 40692;        /* multiplier of the 2nd generator */
-  static const long M1 = 2147483647;   /* 2**31 - 1   */
+  static const long M1 = 2147483563;   /* 2**31 - 1   */
   static const long M2 = 2147483399;   /* 2**31 - 249 */
   static const long Q1 = 53668;        /* m1 div a1   */
   static const long Q2 = 52774;        /* m2 div a2   */
@@ -301,7 +301,7 @@ static void LECUYER(PnlRng *rng,double *sample)
           if (j < 32)
             s->t[j]= s->x;
         }
-      s->z= s->t[0];
+      s->z= s->x;
     }
   rng->counter++;
 
@@ -1085,31 +1085,17 @@ int pnl_rand_init (int type_generator, int dimension, long samples)
        * some MC generators which must be initialized
        */
     case PNL_RNG_KNUTH:
-      pnl_rand_sseed (type_generator, 161803398L);
-      break;
     case PNL_RNG_MRGK3:
-      pnl_rand_sseed (type_generator, 0);
-      break;
     case PNL_RNG_MRGK5:
-      pnl_rand_sseed (type_generator, 0);
-      break;
     case PNL_RNG_SHUFL:
-      pnl_rand_sseed (type_generator, 1043618065);
-      break;
     case PNL_RNG_LECUYER:
-      pnl_rand_sseed (type_generator, 437651926);
-      break;
     case PNL_RNG_TAUSWORTHE:
-      pnl_rand_sseed (type_generator, 176355);
-      break;
     case PNL_RNG_MERSENNE:
+    case PNL_RNG_DCMT:
       pnl_rand_sseed (type_generator, 0);
       break;
     case PNL_RNG_MERSENNE_RANDOM_SEED:
       pnl_rand_sseed (type_generator, time(NULL));
-      break;
-    case PNL_RNG_DCMT:
-      pnl_rand_sseed (type_generator, 1234);
       break;
       /*
        * Check if dimension > max_dim for QMC
@@ -1207,7 +1193,7 @@ PnlRng* pnl_rng_new ()
  * Initialises a rng of the given type.
  * Note that the fields size_State and state are set to zero, which implies
  * that the created generator is unusable. It is only usefull to receive an
- * already workin generator.
+ * already working generator.
  *
  * @param rng is a rng returned by pnl_rng_new
  * @param type the type of generator to create
@@ -1313,65 +1299,143 @@ PnlRng* pnl_rng_create (int type)
 }
 
 
+/*
+ * some auxiliary LCG used for fixing several seeds with a unique long int
+ * The idea comes from the GSL
+ */
+#define LCG(n) ((69069 * n) & 0xffffffffUL)
 static void pnl_knuth_sseed (knuth_state *s, ulong seed)
 {
-  s->SEED = seed;
+  if ( seed == 0 )
+    s->SEED = 161803398L;
+  else
+    s->SEED = seed;
 }
 
 static void pnl_mrgk3_sseed (mrgk3_state *s, ulong seed)
 {
-  /*
-   * Il n'est pas clair comment on peut utiliser seed
-   * pour fixer les valeurs initiales des 2 générateurs
-   */
-  s->x10=231458761.;
-  s->x11=34125679.;
-  s->x12=45678213.;
+  if ( seed == 0 )
+    {
+      s->x10=231458761.;
+      s->x11=34125679.;
+      s->x12=45678213.;
 
-  s->x20=57964412.;
-  s->x21=12365487.;
-  s->x22=77221456.;
+      s->x20=57964412.;
+      s->x21=12365487.;
+      s->x22=77221456.;
+    }
+  else
+    {
+      const ulong M1   = 4294967087UL;
+      const ulong M2   = 4294944443UL;
+      ulong n = seed;
+      n = LCG(n);
+      s->x10 = n % M1;
+      n = LCG(n);
+      s->x11 = n % M1;
+      n = LCG(n);
+      s->x12 = n % M1;
+
+      n = LCG(n);
+      s->x20 = n % M2;
+      n = LCG(n);
+      s->x21 = n % M2;
+      n = LCG(n);
+      s->x22 = n % M2;
+
+      /*
+       * We should run the generator a few times to warm it up, but it
+       * requires to change the header of sseed functions to pas them rng
+       * object and not only the states
+       */
+    }
 }
 
 static void pnl_mrgk5_sseed (mrgk5_state *s, ulong seed)
 {
-  /*
-   * Il n'est pas clair comment on peut utiliser seed
-   * pour fixer les valeurs initiales des 2 générateurs
-   */
-  s->x10= 231458761.;
-  s->x11= 34125679.;
-  s->x12= 45678213.;
-  s->x13= 7438902.;
-  s->x14= 957345.;
+  if ( seed == 0 )
+    {
+      s->x10= 231458761.;
+      s->x11= 34125679.;
+      s->x12= 45678213.;
+      s->x13= 7438902.;
+      s->x14= 957345.;
 
-  s->x20= 57964412.;
-  s->x21= 12365487.;
-  s->x22= 77221456.;
-  s->x23= 816403.;
-  s->x24= 8488912.;
+      s->x20= 57964412.;
+      s->x21= 12365487.;
+      s->x22= 77221456.;
+      s->x23= 816403.;
+      s->x24= 8488912.;
+    }
+  else
+    {
+      static const ulong M   = 4294949027UL;
+      ulong n = seed;
+      n = LCG(n);
+      s->x10 = n % M;
+      n = LCG(n);
+      s->x11 = n % M;
+      n = LCG(n);
+      s->x12 = n % M;
+      n = LCG(n);
+      s->x13 = n % M;
+      n = LCG(n);
+      s->x14 = n % M;
+
+      n = LCG(n);
+      s->x20 = n % M;
+      n = LCG(n);
+      s->x21 = n % M;
+      n = LCG(n);
+      s->x22 = n % M;
+      n = LCG(n);
+      s->x23 = n % M;
+      n = LCG(n);
+      s->x24 = n % M;
+
+      /*
+       * We should run the generator a few times to warm it up, but it
+       * requires to change the header of sseed functions to pas them rng
+       * object and not only the states
+       */
+    }
 }
 
 static void pnl_shufl_sseed (shufl_state *s, ulong seed)
 {
+  if ( seed == 0 )
+    {
+      seed = 1043618065;
+    }
   s->x= seed % 2147483647; /* 2**31 - 1 */
   s->y = 0;
 }
 
 static void pnl_lecuyer_sseed (lecuyer_state *s, ulong seed)
 {
-  s->x= seed % 2147483647;   /* 2**31 - 1   */
-  s->y= seed % 2147483399;   /* 2**31 - 249 */
-  s->z = 0;
+  if ( seed == 0 )
+    {
+      seed = 437651926;
+    }
+  s->x = s->y = seed;
+  /* 
+   * the rest of the seeding procedure ("warm-up") is included in the
+   * computation function LECUYER
+   */
 }
 
 static void pnl_tausworthe_sseed (tausworthe_state *s, ulong seed)
 {
   /* Initialisation for the n first values */
   /* random number over [1, 2^18] ; 2^18= 262144 */
+  if ( seed == 0 )
+    {
+      seed = 176355;
+    }
   s->a = seed % 262144;
   if ( s->a == 0 ) s->a = 1;
 }
+#undef LCG
 
 
 /**
