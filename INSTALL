@@ -102,7 +102,7 @@ installation differs. We describe here the different procedures.
     of the library into prefix/include/pnl and the dynamic and static
     versions of the library in prefix/lib.
 
-    An executable to test the features of the library can found in
+    An executable to test the features of the library can be found in
     prefix/bin
 
 
