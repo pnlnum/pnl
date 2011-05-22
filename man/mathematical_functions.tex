@@ -4,7 +4,7 @@
 %% Mathtools
 \subsection{General tools}
 
-The macros and functions of this paragraph are defined in \verb!pnl_mathtools.h!.
+The macros and functions of this paragraph are defined in \verb!pnl/pnl_mathtools.h!.
 
 \subsubsection{Constants} A few mathematical constants are provided by the
 library. Most of them are actually already defined in {\tt math.h}, {\tt
@@ -126,7 +126,7 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
 \subsubsection{Short Description}
 
 The complex type and related functions are defined in the header
-\verb!pnl_complex.h!.\\
+\verb!pnl/pnl_complex.h!.\\
 
 The first native implementation of complex numbers in the C language appeared in
 C99, which is unfortunately not available on all platforms. For this reason, we
@@ -327,9 +327,9 @@ functions are :
 
 
 
-\subsection{Special functions}
+\section{Special functions}
 
-The special function approximations are defined in the header \verb!pnl_specfun.h!.\\
+The special function approximations are defined in the header \verb!pnl/pnl_specfun.h!.\\
 
 Most of these functions rely on the {\it Cephes} library which uses its own
 error mechanism which can be activated or deactivated using the two following
@@ -342,7 +342,7 @@ functions
 \end{itemize}
 
 
-\subsubsection{Real Bessel functions}
+\subsection{Real Bessel functions}
 
 \begin{itemize}
 \item \describefun{double}{pnl_bessel_i}{double v, double x}
@@ -386,7 +386,7 @@ functions
   order \var{v}  and multiplied by $e^{I x}$.
 \end{itemize}
 
-\subsubsection{Complex Bessel functions}
+\subsection{Complex Bessel functions}
 
 \begin{itemize}
 \item \describefun{dcomplex}{pnl_complex_bessel_i}{double v, dcomplex z}
@@ -430,7 +430,7 @@ functions
   order \var{v}  and multiplied by $e^{I z}$.
 \end{itemize}
 
-\subsubsection{Error functions}
+\subsection{Error functions}
 
 \begin{itemize}
 \item \describefun{double}{pnl_sf_erf}{double x}
@@ -443,7 +443,7 @@ functions
   \sshortdescribe Computes $\log$ \reffun{pnl_sf_erfc}$(x)$
 \end{itemize}
 
-\subsubsection{Gamma functions}
+\subsection{Gamma functions}
 
 For $x>0$, the Gamma Function is defined by
 \begin{equation*}
@@ -461,7 +461,7 @@ For $x>0$, the Gamma Function is defined by
   contains the sign of $\Gamma(x)$ (-1 or +1).
 \end{itemize}
 
-\subsubsection{Incomplete Gamma functions}
+\subsection{Incomplete Gamma functions}
 
 For $a \in \R$ and $x>0$, the Incomplete Gamma Function is defined by
 \begin{equation*}
@@ -488,7 +488,7 @@ A relation similar to the one existing for the standard Gamma function holds
   \sshortdescribe  Computes $Q(a, x), \quad a > 0 , x \geq 0$
 \end{itemize}
 
-\subsubsection{Exponential integrals}
+\subsection{Exponential integrals}
 For $x>0$ and $n \in \N$, the  function $E_n$ is defined by
 \begin{equation*}
   E_n\paren{x}=\int_{1}^{\infty} \expp{-x u} u^{-n} du
@@ -566,7 +566,7 @@ For $x \in \R$
 %   \end{equation*}
 \end{itemize}
 
-\subsubsection{Hypergeometric functions}
+\subsection{Hypergeometric functions}
 
 \begin{itemize}
 \item \describefun{double}{pnl_sf_hyperg_2F1}{double a, double b, double c,
@@ -589,13 +589,9 @@ For $x \in \R$
 %% --------------------------------------------------------------------- %%
 %% financial functions
 
-\subsection{Financial functions}
-\subsubsection{Short Description}
+\section{Financial functions}
 
-The financial functions are defined in the header \verb!pnl_finance.h!.\\
-
-\subsubsection{Functions}
-
+The financial functions are defined in the header \verb!pnl/pnl_finance.h!.\\
 
 \begin{itemize}
 \item

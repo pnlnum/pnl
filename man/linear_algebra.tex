@@ -5,7 +5,7 @@
 \subsubsection{Short Description}
 
 The structures and functions related to vectors are declared in
-\verb!pnl_vector.h!.
+\verb!pnl/pnl_vector.h!.
 
 
 Vectors are declared for several basic types : double, int, and
@@ -528,7 +528,7 @@ typedef struct PnlVectCompact {
 \subsubsection{Short Description}
 
 The structures and functions related to matrices are declared in
-\verb!pnl_matrix.h!.
+\verb!pnl/pnl_matrix.h!.
 
 \begin{verbatim}
 typedef struct _PnlMat{
@@ -1306,7 +1306,7 @@ decomposition, row \verb!i! of \verb!A! was interchanged with row \verb!p(i)!.
 \subsubsection{Short Description}
 
 The structures and functions related to tridiagonal matrices are declared in
-\verb!pnl_tridiag_matrix.h!. 
+\verb!pnl/pnl_tridiag_matrix.h!. 
 
 We only store the three main diagonals as three vectors.
 
@@ -1465,7 +1465,7 @@ typedef struct
 
 
 The structures and functions related to band matrices are declared in
-\verb!pnl_band_matrix.h!. 
+\verb!pnl/pnl_band_matrix.h!. 
 
 
 \subsubsection{Functions}
@@ -1618,7 +1618,7 @@ The structures and functions related to band matrices are declared in
 \subsection{Hyper Matrices}
 \subsubsection{Short description}
 
-The Hyper matrix types and related functions are defined in the header \verb!pnl_matrix.h!.
+The Hyper matrix types and related functions are defined in the header \verb!pnl/pnl_matrix.h!.
 
 \begin{verbatim}
 typedef struct PnlHmat{
@@ -1966,11 +1966,11 @@ the above table.
 
 %% solver
 
-\subsection{Solver Functions}
+\subsection{Iterative Solvers}
 \subsubsection{Short Description}
 
 The structures and functions related to solvers are declared in
-\verb!pnl_linalgsolver.h!. 
+\verb!pnl/pnl_linalgsolver.h!. 
 
 A Left preconditioner solves the problem :
 $$ P M x = P b, $$

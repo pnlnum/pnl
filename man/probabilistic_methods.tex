@@ -1,9 +1,6 @@
-\section{Probabilistic methods}
-\subsection{Cumulative distribution Functions}
-\subsubsection{Short Description}
-\subsubsection*{Functions}
+\section{Cumulative distribution Functions}
 
-The functions related to this chapter are declared in \verb!pnl_cdf.h!.
+The functions related to this chapter are declared in \verb!pnl/pnl_cdf.h!.
 
 For various distribution functions, we provide functions named
 \var{pnl_cdf_xxx} where \var{xxx} is the abbreviation of the distribution
@@ -115,10 +112,10 @@ name. All these functions are based on the same prototype
 \end{itemize}
 
 
-\subsection{Random Number Generators}
+\section{Random Number Generators}
 
 The functionnalities described in this chapter are declared in
-\verb!pnl_random.h!.
+\verb!pnl/pnl_random.h!.
 
 Random number generators can be accessed using two different interfaces : the
 new {\em rng} interface based on the \refstruct{PnlRng} object and the older
@@ -151,7 +148,7 @@ applications.
 \end{table}
 
 
-\subsubsection{The rng interface}
+\subsection{The rng interface}
 \label{rng-int}
 
 It is possible to create random number generators each with its own state
@@ -325,9 +322,25 @@ dimension \var{dimension}.
   \var{d}-dimensional standard normal distribution.
 \end{itemize}
 
+Some examples
+\example
+\begin{verbatim}
+PnlRng *rng = pnl_rng_create (PNL_RNG_MERSENNE);
+PnlVect *v = pnl_vect_new ();
+
+/* rng must be initialized. When sseed=0, a default value depending on the
+generator is used */
+rng = pnl_rng_sseed (0);
+/* simulates a normal random vector in R^{10} */
+pnl_vect_rng_normal (v, 10, rng);
+
+pnl_vect_free (&v);
+pnl_rng_free (&rng);
+\end{verbatim}
+
 
 
-\subsubsection{The {\em rand} interface}
+\subsection{The {\em rand} interface}
 \label{rand-int}
 
 For backward compatibility with older versions of the PNL, we still provide the old

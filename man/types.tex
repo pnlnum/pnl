@@ -90,8 +90,6 @@ We provide several macros for manipulating PnlObejcts.
   \sshortdescribe Returns the parent type of any object inheriting from PnlObject
 \end{itemize}
 
-\subsubsection{Functions}
-
 \begin{itemize}
 \item \describefun{\refstruct{PnlObject}\ptr }{pnl_object_create}{PnlType t}
   \sshortdescribe Creates an empty PnlObject of type \var{t} which can any of
@@ -103,10 +101,8 @@ We provide several macros for manipulating PnlObejcts.
 This section describes functions for creating an manipulating lists. Lists are
 internally stored as doubly linked lists.
 
-\subsubsection{Short Description}
-
 The structures and functions related to lists are declared in
-\verb!pnl_list.h!.
+\verb!pnl/pnl_list.h!.
 
 \begin{verbatim}
 typedef struct _PnlCell PnlCell;
@@ -135,8 +131,6 @@ struct _PnlList
   int len; /*!< length of the list */
 };
 \end{verbatim}
-
-\subsubsection{Functions}
 
 \begin{itemize}
 \item \describefun{\refstruct{PnlList} \ptr }{pnl_list_new}{}

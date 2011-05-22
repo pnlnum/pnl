@@ -2,8 +2,8 @@
 
 % --------------------------------------------------------------------- %%
 % Roots
-\subsection{Root finding}
-\subsubsection{Short Description}
+\section{Root finding}
+\subsection{Short Description}
 
 To provide a uniformed framework to root finding functions, we use several
 structures for storing different kind of functions. The pointer
@@ -91,9 +91,9 @@ typedef PnlRnFuncRmDFunc PnlRnFuncRnDFunc;
 #define PNL_EVAL_RNFUNCRN_DFUNC PNL_EVAL_RNFUNCRM_DFUNC
 \end{verbatim}
 
-\subsubsection{Functions}
+\subsection{Functions}
 
-To use the following functions, you should include \verb!pnl_root.h!.
+To use the following functions, you should include \verb!pnl/pnl_root.h!.
 
 For finding the zero of a real valued function we provide the following
 functions.
@@ -209,10 +209,10 @@ two wrappers for calling minpack routines.
 
 
 % --------------------------------------------------------------------- %
-\subsection{Polynomial bases and regression}
-\subsubsection{Short Description}
+\section{Polynomial bases and regression}
+\subsection{Short Description}
 
-To use these functionalities, you should include \verb!pnl_basis.h!.
+To use these functionalities, you should include \verb!pnl/pnl_basis.h!.
 
 \begin{verbatim}
 struct PnlBasis_t {
@@ -254,7 +254,7 @@ $\alpha^\star \in \R^N$ which solves
   \left(\sum_{j=0}^N \alpha_j f_j(x_i) - y_i\right)^2
 \end{equation*}
 
-\subsubsection{Functions}
+\subsection{Functions}
 
 \begin{itemize}
 \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_new}{}
@@ -457,10 +457,10 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
 \end{itemize}
 
 
-\subsection{Numerical integration}
-\subsubsection{Short Description}
+\section{Numerical integration}
+\subsection{Short Description}
 
-To use these functionalities, you should include \verb!pnl_integration.h!.
+To use these functionalities, you should include \verb!pnl/pnl_integration.h!.
 
 Numerical integration methods are designed to numerically evaluate the integral
 over a finite or non finite interval (resp. over a square) of real valued
@@ -487,7 +487,7 @@ We provide the following two macros to evaluate a \refstruct{PnlFunc} or
 
 
 
-\subsubsection{Functions}
+\subsection{Functions}
 
 \begin{itemize}
 \item \describefun{double}{pnl_integration}{\refstruct{PnlFunc} \ptr F,
@@ -580,10 +580,10 @@ We provide the following two macros to evaluate a \refstruct{PnlFunc} or
 
 %% FFT function
 
-\subsection{Ordinary differential equations}
-\subsubsection{Short Description}
+\section{Ordinary differential equations}
+\subsection{Short Description}
 
-To use these functionalities, you should include \verb!pnl_integration.h!.
+To use these functionalities, you should include \verb!pnl/pnl_integration.h!.
 
 These functions are designed for numerically solving $n-$dimensional first order
 ordinary differential equation of the general form
@@ -619,7 +619,7 @@ at a given point
         (*((F)->function))((F)->neqn, t, y, yp, (F)->params)
 \end{verbatim}
 
-\subsubsection{Functions}
+\subsection{Functions}
 
 \begin{itemize}
 \item \describefun{int}{pnl_ode_rkf45}{\refstruct{PnlODEFunc} \ptr f, double
@@ -665,10 +665,10 @@ at a given point
   value of the solution at that point.
 \end{itemize}
 
-\subsection{Fast Fourier Transform}
-\subsubsection{Short Description}
+\section{Fast Fourier Transform}
+\subsection{Short Description}
 
-In the case of Real Fourier transform, the Fourier coefficients satisfy the
+The coefficients of the Fourier transform of a rela function satisfy the
 following relation
 \begin{equation}
   \label{eq:fft-sym}
@@ -676,11 +676,11 @@ following relation
 \end{equation}
 where $N$ is the number of discretization points.
 
-A few remarks on the FFT of real functions and its inverse transformation :
+A few remarks on the FFT of real functions and its inverse transform:
 \begin{itemize}
 \item We only need half of the coefficients.
-\item When a value is known to be real the imaginary part is not stored.
-  So the imaginary part of the zero-frequency component is never stored. It is
+\item When a value is known to be real, its imaginary part is not stored.
+  So the imaginary part of the zero-frequency component is never stored as it is
   known to be zero.
 \item For a sequence of even length the imaginary part of the frequency
   $n/2$ is not stored either, since the symmetry (\ref{eq:fft-sym}) implies
@@ -729,9 +729,9 @@ In the even case there are two values which are purely real,
 \end{equation}
 
 
-\subsubsection{Functions}
+\subsection{Functions}
 
-To use the following functions, you should include \verb!pnl_fft.h!.
+To use the following functions, you should include \verb!pnl/pnl_fft.h!.
 
 The following functions comes from a C version of the Fortran FFTPack library
 available on \url{http://www.netlib.org/fftpack}.
@@ -796,8 +796,7 @@ available on \url{http://www.netlib.org/fftpack}.
 \end{itemize}
 
 %% Laplace transform
-\subsection{Inverse Laplace Transform}
-\subsubsection{Short Description}
+\section{Inverse Laplace Transform}
 
 For a real valued function $f$ such that $t \longmapsto f(t) \expp{- \sigma_c
   t}$ is integrable over $\R^+$, we can define its Laplace transform
@@ -806,9 +805,7 @@ For a real valued function $f$ such that $t \longmapsto f(t) \expp{- \sigma_c
   \mbox{for $\lambda \in \C$ with $\real{\lambda} \ge \sigma_c$}.
 \end{equation*}
 
-\subsubsection{Functions}
-
-To use the following functions, you should include \verb!pnl_laplace.h!.
+To use the following functions, you should include \verb!pnl/pnl_laplace.h!.
 
 \begin{itemize}
 \item \describefun{double}{pnl_ilap_euler}{\refstruct{PnlCmplxFunc}
@@ -856,8 +853,8 @@ To use the following functions, you should include \verb!pnl_laplace.h!.
   the function \reffun{pnl_ilap_gs} gives far more accurate results.
 \end{itemize}
 
-\subsection{Nonlinear Constrained Optimization}
-\subsubsection{Short Description}
+\section{Nonlinear Constrained Optimization}
+\subsection{Short Description}
 
 A standard Constrained Nonlinear Optimization problem can be written as:
 
@@ -893,9 +890,9 @@ Under some conditions, if $x \in \mathbb{R}^n$ is a solution of problem ($O$), t
 
 $l$ is known as the lagrangian of the problem $(O)$, $\lambda^I$ and $\lambda^E$ as the dual variables while $x$ is the primal variable.
 
-\subsubsection{Functions}
+\subsection{Functions}
 
-To use the following functions, you should include \verb!pnl_optim.h!.
+To use the following functions, you should include \verb!pnl/pnl_optim.h!.
 
 To solve an inequality constrained optimization problem, ie $m_E=0$, we provide the following function.
 \begin{itemize}
