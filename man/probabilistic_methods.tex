@@ -323,24 +323,66 @@ dimension \var{dimension}.
 \end{itemize}
 
 Some examples
-\example
 \begin{verbatim}
-PnlRng *rng = pnl_rng_create (PNL_RNG_MERSENNE);
-PnlVect *v = pnl_vect_new ();
+#include <stdlib.h>
+#include "pnl/pnl_random.h"
 
-/* rng must be initialized. When sseed=0, a default value depending on the
-generator is used */
-rng = pnl_rng_sseed (0);
-/* simulates a normal random vector in R^{10} */
-pnl_vect_rng_normal (v, 10, rng);
+int main ()
+{
+  int i, M;
+  PnlRng *rng = pnl_rng_create (PNL_RNG_MERSENNE);
+  PnlVect *v = pnl_vect_new ();
+  M = 10000;
 
-pnl_vect_free (&v);
-pnl_rng_free (&rng);
+  /* rng must be initialized. When sseed=0, a default 
+     value depending on the generator is used */
+  rng = pnl_rng_sseed (0);
+
+  for ( i=0 ; i<M ; i++ )
+  {
+    /* Simulates a normal random vector in R^{10} */
+    pnl_vect_rng_normal (v, 10, rng);
+    /* Do something with v */
+  }
+
+  pnl_vect_free (&v);
+  pnl_rng_free (&rng); /* Frees the generator */
+  exit (0);
+}
 \end{verbatim}
+
+\begin{verbatim}
+#include <stdlib.h>
+#include <time.h>
+#include "pnl/pnl_random.h"
+
+int main ()
+{
+  int i, M;
+  double E;
+  PnlRng *rng = pnl_rng_create (PNL_RNG_MERSENNE);
+  M = 10000;
+
+  /* rng must be initialized. */
+  rng = pnl_rng_sseed (time (NULL));
+
+  for ( i=0 ; i<M ; i++ )
+  {
+    /* Simulates an exponential random variable */
+    E = pnl_rng_exp (1, rng);
+    /* Do something with E */
+  }
+
+  pnl_rng_free (&rng); /* Frees the generator */
+  exit (0);
+}
+\end{verbatim}
+
+
 
 
 
-\subsection{The {\em rand} interface}
+\subsection{The {\em rand} interface (deprecated)}
 \label{rand-int}
 
 For backward compatibility with older versions of the PNL, we still provide the old

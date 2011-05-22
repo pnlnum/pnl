@@ -32,3 +32,4 @@ proto:
 		`egrep -q $$f *.tex` || `egrep -q $$f exclude-protos.txt` || echo $$f; \
 		done
 
+.PHONY: html pdf all manual
