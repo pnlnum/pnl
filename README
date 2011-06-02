@@ -47,7 +47,7 @@ password is anonsvn
     To define your target just add the executable name, say my-exec, to the BINS
     list and create an entry
     my_exec_OBJS 
-    carrying the list .o files file needed to create your executable by.
+    carrying the list of .o files needed to create your executable.
     Note that the '-' in executable names are placed by '_' to create the
     corresponding _OBJS variable
    

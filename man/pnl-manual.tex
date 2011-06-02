@@ -120,7 +120,8 @@
 \maketitle
 \tableofcontents
 
-\section{What is Pnl}
+\section{Introduction}
+\subsection{What is Pnl}
 
 Pnl is a scientific library written in C and distributed under
 the Gnu Lesser General Public License (LGPL). This manual is divided into four
@@ -136,7 +137,7 @@ parts.
   multivariate polynomial regression, $\dots$
 \end{itemize}
 
-\section{A few helpful conventions}
+\subsection{A few helpful conventions}
 
 \begin{itemize}
   \item All header file names are prefixed by \verb!pnl_! and are surrounded by
@@ -294,7 +295,88 @@ possible use with a C++ compiler. The header files must be include using
 \end{itemize}
 
 
+\subsection{Using Pnl}
 
+In this section, we assume that the library is installed in the directory
+\verb!$HOME/pnl-xxx!.
+
+Once the library has been installed, the libraries can be found in the
+\verb!$HOME/pnl-xxx/lib!  directory and the headers in the
+\verb!$HOME/pnl-xxx/include! directory. 
+
+\subsubsection{Compiling and Linking}
+
+The header files of the library are installed in a root \verb!pnl! directory and
+should always be included with this \verb!pnl/! prefix. So, for instance to use
+random number generators you should include 
+\begin{verbatim}
+#include <pnl/pnl_random.h>
+\end{verbatim}
+
+\paragraph{Compiling and linking by hand}
+
+If \verb!gcc! is used, you should pass the following options
+\begin{itemize}
+\item \verb!-I$HOME/pnl-xxx/include! for compiling
+\item \verb!-L$HOME/pnl-xxx/lib -lpnl! for linking
+\end{itemize}
+
+On some systems, you may need to add to the linker flags the dependencies of the
+library, which can become very tedious. Therefore, we provide a second automatic
+mechanism which takes care of the dependencies on its own.
+
+\paragraph{Compiling and linking using an automatic Makefile}
+
+This mechanism only works under Unix (it has been tested under various Linux
+  distributions and Mac OS X).
+
+Fisrt, you need to create a new directory at the top level of the library
+\begin{verbatim}
+$ mkdir -p $HOME/pnl-xxx/mydir 
+\end{verbatim}
+
+Then copy the Makefile located in perso/ to your new directory and
+edit it according to your needs. 
+\begin{verbatim}
+$ cp $HOME/pnl-xxx/perso/Makefile $HOME/pnl-xxx/mydir 
+\end{verbatim}
+
+To define your target just add the executable name, say \verb!my-exec!, to the
+\verb!BINS!  list and create an entry \verb!my_exec_OBJS! carrying the list .o files
+needed to create your executable.  Note that if dashes '-' may appear in an
+executable name, the name of the associated variable holding the list of object
+files is obtained by replacing dashes with underscores '_' and addind the _OBJS
+suffix.
+
+
+To create an executable \verb!my-exec! based on the three following C files
+\verb!file1.c! and \verb!file2.c!, the Makefile may look like
+\begin{verbatim}
+## list of extra linker flags
+LDFLAGS=
+
+## Flags to be passed to the compiler
+CFLAGS=
+
+## list of executables to create
+BINS=my-exec
+
+my_exec_OBJS=file1.o file2.o 
+
+## This line must be the last one
+include ../Makeuser.incl
+\end{verbatim}
+
+The compilations flags ca be adjusted with the help of the \verb!CFLAGS!
+variable for C code (resp. \verb!CXXFLAGS! variables for C++ code) whereas the
+linking flags are set using the \verb!LDFLAGS! variable.  \\
+
+\textbf{Important Note to C++ users}: the linking procedure is carried out by a
+C linker so if you are using C++ code you should consider adding 
+\begin{verbatim}
+LDFLAGS=-lstdc++
+\end{verbatim}
+to the previous Makefile to add the C++ standard library to the linker.
 
 \input{types.tex}
 \input{mathematical_functions.tex}
@@ -305,5 +387,7 @@ possible use with a C++ compiler. The header files must be include using
 
 
 \printindex
+
+
 
 \end{document}
