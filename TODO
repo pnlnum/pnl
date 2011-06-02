@@ -19,9 +19,10 @@
     I am not sure these storages are so meaningful for complex data
 
 - Should dgemm use Blas ?
-    Probably yes, if we can differentiate between Blas & Atlas, because
-    using Fortran style storage induces several temporary copies so it must
-    be worth it.
+    Probably yes, we should have a look at CBlas
 
 - interface dgesvd
+
+- Optim toolbox but it is GPL and not LPGL so I  have to recode
+  everything from the articles : tough work to come
 

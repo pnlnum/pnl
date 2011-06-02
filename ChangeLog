@@ -1,3 +1,7 @@
+22-05-2011 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* man: new organisation of the manual.
+
 11-05-2011 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* random.c: Seeding of MRGK3 and MRGK5 + implementation of the
