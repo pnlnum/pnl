@@ -629,10 +629,12 @@ at a given point
   $\var{(t,y)}$ should be the initial condition, \var{abserr,relerr} are the
   maximum absolute and relative errors for local error tests (at each step,
     \var{abs(local error)} should be less that \var{relerr * abs(y) + abserr}).
-  The function returns an error \var{OK} or \var{FAIL}. In case of an \var{OK}
-  code, the \var{y} contains the solution computed at \var{t_out}, in case of a
-  \var{FAIL} code, \var{flag} should be examined to determine the reason of the
-  error. Here are the different possible values for \var{flag}
+  Note that if \var{abserr = 0} or \var{relerr = 0}  on input, an optimal value
+  for these variables is computed inside the function The function returns an
+  error \var{OK} or \var{FAIL}. In case of an \var{OK} code, the \var{y}
+  contains the solution computed at \var{t_out}, in case of a \var{FAIL} code,
+  \var{flag} should be examined to determine the reason of the error. Here are
+  the different possible values for \var{flag}
   \begin{itemize}
   \item \var{flag = 2} : integration reached \var{t_out}, it indicates
     successful return and is the normal mode for continuing integration.

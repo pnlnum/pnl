@@ -44,6 +44,48 @@ static int fehl (PnlODEFunc *f,  double *y, double *t, double *h,
                  *f4, double *f5, double *s);
 
 
+
+/*
+ * r4_epsilon returns the roundoff unit for the double type.
+ * 
+ * Discussion:
+ * 
+ *     The roundoff unit is a number R which is a power of 2 with the
+ *     property that, to the precision of the computer's arithmetic,
+ *       1 < 1 + R
+ *     but
+ *       1 = ( 1 + R / 2 )
+ * 
+ * Licensing: This code is distributed under the GNU LGPL license.
+ * 
+ * Modified: 01 July 2004
+ * 
+ * Author: John Burkardt
+ * 
+ * Parameters:
+ * 
+ *     Output, the double round-off unit.
+ */
+static double r4_epsilon ( void )
+{
+  double value = 1.0;
+  while ( 1.0 < 1.0 + value )
+  {
+    value /= 2.0;
+  }
+  value *= 2.0;
+  return value;
+}
+
+
+static void init_err (double *err)
+{
+  if ( *err == 0. )
+    {
+      *err = sqrt (r4_epsilon ());
+    }
+}
+
 /* 
  *      fehlberg fourth-fifth order runge-kutta method
  * 
@@ -229,6 +271,10 @@ int pnl_ode_rkf45 (PnlODEFunc *f, double *y, double t, double tout,
   neqn = f->neqn;
   *flag = 1;
 
+  /* init errors */
+  init_err (&relerr);
+  init_err (&abserr);
+
   if ( (work = malloc ((3 + 6 * neqn) * sizeof(double))) == NULL ) return FAIL; 
   if ( (iwork = malloc (5 * sizeof(int))) == NULL ) return FAIL; 
 
@@ -267,6 +313,10 @@ int pnl_ode_rkf45_step (PnlODEFunc *f, double *y, double *t,
   k5 = k4 + neqn;
   k6 = k5 + neqn;
 
+  /* init errors */
+  init_err (relerr);
+  init_err (&abserr);
+
   rkfs (f, y, t, &tout, relerr, &abserr, iflag, &work[0],
         &work[k1m], &work[k1], &work[k2], &work[k3], &work[k4],
         &work[k5], &work[k6], &work[k6 + 1], &iwork[0], &iwork[1],
@@ -287,7 +337,7 @@ int pnl_ode_rkf45_step (PnlODEFunc *f, double *y, double *t,
  * h  - an appropriate stepsize to be used for the next ste p
  * nfe- counter on the number of derivative function evaluations    
  */
-int rkfs (PnlODEFunc *f,  double *y, double *t, double *tout,
+static int rkfs (PnlODEFunc *f,  double *y, double *t, double *tout,
           double *relerr, double *abserr, int *iflag, double *yp,
           double *h, double *f1, double *f2, double *f3, double *f4,
           double *f5, double *savre, double *savae, int *nfe, int *kop,

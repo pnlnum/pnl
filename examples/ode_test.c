@@ -53,8 +53,8 @@ void test01 ( )
   double y[NEQN], yp[NEQN];
   PnlODEFunc f;
 
-  abserr = sqrt ( 1E-9 );
-  relerr = sqrt ( 1E-9 );
+  abserr = 0.;
+  relerr = 0.;
 
   t_start = 0.0;
   t_stop = 20.0;
@@ -78,7 +78,7 @@ void test01 ( )
         {
           pnl_test_set_fail ("pnl_ode_rkf45 failed", 0., 0.);
         }
-      pnl_test_eq_abs (y[0], r4_y1x (t_out), abserr, "pnl_ode_rkf45", "at time %t", t_out);
+      pnl_test_eq_abs (y[0], r4_y1x (t_out), 1E-5, "pnl_ode_rkf45", "at time %t", t_out);
     }
 # undef NEQN
 }
