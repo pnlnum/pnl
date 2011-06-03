@@ -9,8 +9,6 @@
        * Add a pnl_list_copy function. It implies to add a
          copy function to PnlObject
 
-- Some code can be factorized in libminpack
-
 - splines 
     CMlib 
     in scilab routines/callelm/somespline.f
