@@ -234,7 +234,7 @@ static void test_hybrX ()
 }
 
 
-static void test_lmdif ()
+static void test_lmdif_and_lmder ()
 {
   int m, n, info, nfev, maxfev;
   double tol;
@@ -288,6 +288,6 @@ int main (int argc, char **argv)
   newton_test ();
   find_root_test ();
   test_hybrX ();
-  test_lmdif ();
+  test_lmdif_and_lmder ();
   exit(pnl_test_finalize ("ROOT"));
 }
