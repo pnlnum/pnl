@@ -1,0 +1,119 @@
+
+\subsection{General tools}
+
+The macros and functions of this paragraph are defined in \verb!pnl/pnl_mathtools.h!.
+
+\subsubsection{Constants} A few mathematical constants are provided by the
+library. Most of them are actually already defined in {\tt math.h}, {\tt
+  values.h} or {\tt limits.h} and a few others have been added.
+\begin{describeconst}
+  \constentry{M_E}{$e^1$}
+  \constentry{M_LOG2E}{$\log_2 e$}
+  \constentry{M_LOG10E}{$\log_{10} e$}
+  \constentry{M_LN2}{$\log_e 2$}
+  \constentry{M_LN10}{$\log_e 10$}
+  \constentry{M_PI}{$\pi$}
+  \constentry{M_2PI}{$2 \pi$}
+  \constentry{M_PI_2}{$\pi/2$}
+  \constentry{M_PI_4}{$\pi/4$}
+  \constentry{M_1_PI}{$1/\pi$}
+  \constentry{M_2_PI}{$2/\pi$}
+  \constentry{M_2_SQRTPI}{$2/\sqrt{\pi}$}
+  \constentry{M_SQRT2PI}{$sqrt{2\pi}$}
+  \constentry{M_SQRT2}{$\sqrt{2}$}
+  \constentry{M_EULER}{$\gamma = \lim_{n \rightarrow \infty } \left( \sum_{k=1}^{n} \frac {1}{k} - \ln(n) \right)$}
+  \constentry{M_SQRT1_2}{$1/\sqrt{2}$}
+  \constentry{M_1_SQRT2PI}{$1/\sqrt{2 \pi}$}
+  \constentry{M_SQRT2_PI}{$\sqrt{2/\pi}$}
+  \constentry{INT_MAX}{$2147483647$}
+  \constentry{MAX_INT}{INT_MAX}
+  \constentry{DBL_MAX}{$1.79769313486231470e+308$}
+  \constentry{DOUBLE_MAX}{DBL_MAX}
+  \constentry{DBL_EPSILON}{$2.2204460492503131e-16$}
+  \constentry{PNL_NEGINF}{$-\infty$}
+  \constentry{PNL_POSINF}{$+\infty$}
+  \constentry{PNL_INF}{$+\infty$}
+  \constentry{NAN}{Not a Number}
+\end{describeconst}
+
+\subsubsection{A few macros}
+\begin{itemize}
+\item \describemacro{PNL_IS_ODD}{int n}
+  \sshortdescribe Returns $1$ if \var{n} is odd and $0$ otherwise.
+\item \describemacro{PNL_IS_EVEN}{int n}
+  \sshortdescribe Returns $1$ if \var{n} is even and $0$ otherwise.
+\item \describemacro{PNL_ALTERNATE}{int n}
+  \sshortdescribe Returns $(-1)^{\var{n}}$.
+\item \describemacro{MIN}{x,y}
+  \sshortdescribe Returns the minimum of \var{x} and \var{y}.
+\item \describemacro{MAX}{x,y}
+  \sshortdescribe Returns the maximum of \var{x} and \var{y}.
+\item \describemacro{ABS}{x}
+  \sshortdescribe Returns the absolute value of \var{x}.
+\item \describemacro{PNL_SIGN}{x}
+  \sshortdescribe Returns the sign of \var{x} (-1 if x < 0, 0 otheriwse).
+\item \describemacro{SQR}{x}
+  \sshortdescribe Returns \var{$x^2$}.
+\item \describemacro{CUB}{x}
+  \sshortdescribe Returns \var{$x^3$}.
+\end{itemize}
+
+\subsubsection{Functions}
+\begin{itemize}
+\item \describefun{int}{intapprox}{double s}
+  \sshortdescribe Returns the nearest integer with the convention ({\tt
+  intapprox(1.5)=1}). This function is similar to the \var{round} function
+  (provided by the C library) but the result is typed as an integer instead of a
+  double.
+
+\item \describefun{double}{trunc}{double s}
+  \sshortdescribe Returns the nearest integer not greater than the absolute
+  value of \var{s}. This function is part of C99.
+
+\item \describefun{double}{Cnp}{int n, int p}
+  \sshortdescribe Computes the binomial coefficient $\binom{n}{p}$ in double
+  precision.
+
+\item \describefun{double}{pnl_fact}{int n}
+  \sshortdescribe Computes $n! = \Gamma(n+1)$ in double precision.
+
+\item \describefun{double}{pnl_pow_i}{double x, int n}
+  \sshortdescribe Computes $x^n$ for $n \in \N$ using a squaring method.
+
+\item \describefun{double}{lgamma}{double x}
+  \sshortdescribe Computes $\log(\Gamma(x))$. This function is part of C99.
+
+\item \describefun{double}{tgamma}{double x}
+  \sshortdescribe Computes $\Gamma(x)$. This function is part of C99.
+
+\item \describefun{void}{pnl_qsort}{void *a, int n, int es, int lda, int *t,
+  int ldt, int use_index, int (*cmp)(void const *, void const *)}
+  \sshortdescribe Sorts the array \var{a} using the comparison function
+  \var{cmp}. \var{n} is the number of elements in \var{a}, each element being of
+  size \var{es}. \var{t} is an array of integers of length \var{n} used to store
+  the permutation when \var{use_index=TRUE}. \var{lda} and \var{ldt} are the
+  leading dimensions of the arrays \var{a} and \var{t} and are used to sort
+  matrices column-wise. 
+
+\item \describefun{double}{pnl_nan}{}
+  \sshortdescribe Returns \var{Nan}
+
+\item \describefun{double}{pnl_posinf}{}
+  \sshortdescribe Returns \var{+ infinity} 
+
+\item \describefun{double}{pnl_neginf}{}
+  \sshortdescribe Returns \var{- infinity} 
+
+\item \describefun{int}{pnl_isnan}{double x}
+  \sshortdescribe Returns \var{1} if \var{x = Nan}
+
+\item \describefun{int}{pnl_isfinite}{}
+  \sshortdescribe Returns \var{1} if \var{x != Inf}
+
+\item \describefun{int}{pnl_isinf}{}
+  \sshortdescribe Returns \var{+1} if \var{x = +Inf}, \var{-1} if \var{x = -Inf},
+  \var{0} otherwise.
+\end{itemize}
+
+
+% vim:spelllang=en:spell:

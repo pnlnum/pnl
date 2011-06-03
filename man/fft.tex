@@ -1,0 +1,132 @@
+\section{Fast Fourier Transform}
+\subsection{Overview}
+
+The coefficients of the Fourier transform of a rela function satisfy the
+following relation
+\begin{equation}
+  \label{eq:fft-sym}
+  z_k = \overline{z_{N-k}},
+\end{equation}
+where $N$ is the number of discretization points.
+
+A few remarks on the FFT of real functions and its inverse transform:
+\begin{itemize}
+\item We only need half of the coefficients.
+\item When a value is known to be real, its imaginary part is not stored.
+  So the imaginary part of the zero-frequency component is never stored as it is
+  known to be zero.
+\item For a sequence of even length the imaginary part of the frequency
+  $n/2$ is not stored either, since the symmetry (\ref{eq:fft-sym}) implies
+  that this is purely real too.
+\end{itemize}
+
+
+\paragraph{FFTPack storage}
+\label{sec:fftpack-storage}
+
+The functions use the fftpack storage convention for half-complex sequences.
+In this convention, the half-complex transform of a real sequence is stored
+with frequencies in increasing order, starting from zero, with the real and
+imaginary parts of each frequency in neighboring locations.
+
+The storage scheme is best shown by some examples. The table below shows the
+output for an odd-length sequence, $n=5$.  The two columns give the
+correspondence between the $5$ values in the half-complex sequence (stored in
+a PnlVect $V$) and the values (PnlVectComplex $C$) that would be returned if
+the same real input sequence were passed to pnl_dft_complex as a complex
+sequence (with imaginary parts set to 0),
+\begin{equation}
+  \begin{array}{l}
+    C(0) =  V(0) + \imath 0, \\
+    C(1) =  V(1) + \imath V(2), \\
+    C(2) =  V(3) + \imath V(4), \\
+    C(3) = V(3) - \imath V(4)=  \overline{C(2)} , \\
+    C(4) = V(1) + \imath V(2)=  \overline{C(1)}
+  \end{array}
+\end{equation}
+
+The elements of index greater than $N/2$ of the complex array, as $C(3)$
+$C(4)$, are filled in using the symmetry condition.
+
+The next table shows the output for an even-length sequence, $n=6$.
+In the even case there are two values which are purely real,
+\begin{equation}
+  \begin{array}{l}
+    C(0) =  V(0) + \imath 0, \\
+    C(1) =  V(1) + \imath V(2), \\
+    C(2) =  V(3) + \imath V(4), \\
+    C(3) = V(5) - \imath 0    =  \overline{C(0)} , \\
+    C(4) = V(3) - \imath V(4) =  \overline{C(2)} , \\
+    C(5) = V(1) + \imath V(2) =  \overline{C(1)}
+  \end{array}
+\end{equation}
+
+
+\subsection{Functions}
+
+To use the following functions, you should include \verb!pnl/pnl_fft.h!.
+
+The following functions comes from a C version of the Fortran FFTPack library
+available on \url{http://www.netlib.org/fftpack}.
+\begin{itemize}
+\item \describefun{int}{pnl_fft_inplace}{\refstruct{PnlVectComplex} \ptr data}
+  \sshortdescribe Computes the FFT of \var{data} in place. The original content
+  of \var{data} is lost.
+
+\item \describefun{int}{pnl_ifft_inplace}{\refstruct{PnlVectComplex} \ptr data}
+  \sshortdescribe Computes the inverse FFT of \var{data} in place. The
+  original content of \var{data} is lost.
+
+\item \describefun{int}{pnl_fft}{const \refstruct{PnlVectComplex} \ptr in,
+    \refstruct{PnlVectComplex} \ptr out}
+  \sshortdescribe Computes the FFT of \var{in} and stores it into \var{out}.
+
+\item \describefun{int}{pnl_ifft}{const \refstruct{PnlVectComplex} \ptr in,
+    \refstruct{PnlVectComplex} \ptr out}
+  \sshortdescribe Computes the inverse FFT of \var{in} and stores it into \var{out}.
+
+\item \describefun{int}{pnl_fft2}{double \ptr re, double \ptr im, int n}
+  \sshortdescribe Computes the FFT of the vector of length \var{n} whose real
+  (resp. imaginary) parts are given by the arrays \var{re}
+  (resp. \var{im}). The real and imaginary parts of the FFT are respectively
+  stored in \var{re} and \var{im} on output.
+
+\item \describefun{int}{pnl_ifft2}{double \ptr re, double \ptr im, int n}
+  \sshortdescribe Computes the inverse FFT of the vector of length \var{n}
+  whose real (resp. imaginary) parts are given by the arrays \var{re}
+  (resp. \var{im}). The real and imaginary parts of the inverse FFT are
+  respectively stored in \var{re} and \var{im} on output.
+
+\item \describefun{int}{pnl_real_fft}{const \refstruct{PnlVect} \ptr in,
+    \refstruct{PnlVectComplex} \ptr out}
+  \sshortdescribe Computes the FFT of the real valued sequence \var{in} and
+  stores it into \var{out}.
+
+\item \describefun{int}{pnl_real_ifft}{const \refstruct{PnlVect} \ptr in,
+    \refstruct{PnlVectComplex} \ptr out}
+  \sshortdescribe Computes the inverse FFT of \var{in} and stores it into \var{out}.
+
+\item \describefun{int}{pnl_real_fft_inplace}{double \ptr data, int n}
+  \sshortdescribe Computes the FFT of the real valued vector \var{data} of
+  length \var{n}. The result is stored in \var{data} using the FFTPack storage
+  described above, see~\ref{sec:fftpack-storage}.
+
+\item \describefun{int}{pnl_real_ifft_inplace}{double \ptr data, int n}
+  \sshortdescribe Computes the inverse FFT of the vector \var{data} of length
+  \var{n}. \var{data} is supposed to be the FFT coefficients a real valued
+  sequence stored using the FFTPack storage. On output, \var{data} contains
+  the inverse FFT.
+
+\item \describefun{int}{pnl_real_fft2}{double \ptr re, double \ptr im, int n}
+  \sshortdescribe Computes the FFT of the real vector \var{re} of length \var{n}.
+  \var{im} is only used on output to store the imaginary part the FFT. The
+  real part is stored into \var{re}
+
+\item \describefun{int}{pnl_real_ifft2}{double \ptr re, double \ptr im, int n}
+  \sshortdescribe Computes the inverse FFT of the vector \var{re + i * im} of
+  length \var{n}, which is supposed to be the FFT of a real valued
+  sequence. On exit, \var{im} is unused.
+\end{itemize}
+
+% vim:spelllang=en:spell:
+

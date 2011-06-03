@@ -1,0 +1,262 @@
+
+\section{Special functions}
+
+The special function approximations are defined in the header \verb!pnl/pnl_specfun.h!.\\
+
+Most of these functions rely on the {\it Cephes} library which uses its own
+error mechanism which can be activated or deactivated using the two following
+functions
+\begin{itemize}
+  \item \describefun{void}{pnl_deactivate_mtherr}{}
+    \sshortdescribe Deactivates Cephes error mechanism
+  \item \describefun{void}{pnl_activate_mtherr}{}
+    \sshortdescribe Activates Cephes error mechanism
+\end{itemize}
+
+
+\subsection{Real Bessel functions}
+
+\begin{itemize}
+\item \describefun{double}{pnl_bessel_i}{double v, double x}
+  \sshortdescribe   Modified Bessel function of the first
+  kind of order \var{v}.
+\item \describefun{double}{pnl_bessel_i_scaled}{double v, double x}
+  \sshortdescribe   Modified Bessel function of the first
+  kind of order \var{v} divided by $e^{|x|}$.
+\item \describefun{double}{pnl_bessel_rati}{double v, double x}
+  \sshortdescribe Ratio of modified Bessel functions of the first kind : $I_{v+1}(x) /
+  I_v (x)$.
+\item \describefun{double}{pnl_bessel_j}{double v, double x}
+  \sshortdescribe    Bessel function of the first
+  kind of order \var{v}.
+\item \describefun{double}{pnl_bessel_j_scaled}{double v, double x}
+  \sshortdescribe    Bessel function of the first
+  kind of order \var{v}. Same function as \reffun{pnl_bessel_j}.
+\item \describefun{double}{pnl_bessel_y}{double v, double x}
+  \sshortdescribe   Modified Bessel function of the second
+  kind of order \var{v}.
+\item \describefun{double}{pnl_bessel_y_scaled}{double v, double x}
+  \sshortdescribe   Modified Bessel function of the second
+  kind of order \var{v}. Same function as \reffun{pnl_bessel_y}.
+\item \describefun{double}{pnl_bessel_k}{double v, double x}
+  \sshortdescribe   Bessel function of the third
+  kind of order \var{v}.
+\item \describefun{double}{pnl_bessel_k_scaled}{double v, double x}
+  \sshortdescribe   Bessel function of the third
+  kind of order \var{v} multiplied by $e^{x}$.
+\item \describefun{dcomplex}{pnl_bessel_h1}{double v, double x}
+  \sshortdescribe   Hankel function of the first kind of
+  order \var{v}. 
+\item \describefun{dcomplex}{pnl_bessel_h1_scaled}{double v, double x}
+  \sshortdescribe  Hankel function of the first kind of order
+  \var{v}  and divided by $e^{I x}$.
+\item \describefun{dcomplex}{pnl_bessel_h2}{double v, double x}
+  \sshortdescribe  Hankel function of the second kind of
+  order \var{v}. 
+\item \describefun{dcomplex}{pnl_bessel_h2_scaled}{double v, double x}
+  \sshortdescribe  Hankel function of the second kind of
+  order \var{v}  and multiplied by $e^{I x}$.
+\end{itemize}
+
+\subsection{Complex Bessel functions}
+
+\begin{itemize}
+\item \describefun{dcomplex}{pnl_complex_bessel_i}{double v, dcomplex z}
+  \sshortdescribe  Complex Modified Bessel function of the first
+  kind of order \var{v}.
+\item \describefun{dcomplex}{pnl_complex_bessel_i_scaled}{double v, dcomplex z}
+  \sshortdescribe  Complex Modified Bessel function of the first
+  kind of order \var{v} divided by $e^{|Creal(z)|}$.
+\item \describefun{dcomplex}{pnl_complex_bessel_rati}{double v, dcomplex x}
+  \sshortdescribe Ratio of complex modified Bessel functions of the first kind : $I_{v+1}(x) /
+  I_v (x)$.
+\item \describefun{dcomplex}{pnl_complex_bessel_j}{double v, dcomplex z}
+  \sshortdescribe  Complex  Bessel function of the first
+  kind of order \var{v}.
+\item \describefun{dcomplex}{pnl_complex_bessel_j_scaled}{double v, dcomplex z}
+  \sshortdescribe  Complex  Bessel function of the first
+  kind of order \var{v} divided by $e^{|Cimag(z)|}$.
+\item \describefun{dcomplex}{pnl_complex_bessel_y}{double v, dcomplex z}
+  \sshortdescribe  Complex Modified Bessel function of the second
+  kind of order \var{v}.
+\item \describefun{dcomplex}{pnl_complex_bessel_y_scaled}{double v, dcomplex z}
+  \sshortdescribe  Complex Modified Bessel function of the second
+  kind of order \var{v} divided by $e^{|Cimag(z)|}$.
+\item \describefun{dcomplex}{pnl_complex_bessel_k}{double v, dcomplex z}
+  \sshortdescribe  Complex Bessel function of the third
+  kind of order \var{v}.
+\item \describefun{dcomplex}{pnl_complex_bessel_k_scaled}{double v, dcomplex z}
+  \sshortdescribe  Complex Bessel function of the third
+  kind of order \var{v} multiplied by $e^{z}$.
+\item \describefun{dcomplex}{pnl_complex_bessel_h1}{double v, dcomplex z}
+  \sshortdescribe  Complex Hankel function of the first kind of
+  order \var{v}. 
+\item \describefun{dcomplex}{pnl_complex_bessel_h1_scaled}{double v, dcomplex z}
+  \sshortdescribe  Complex  Hankel function of the first kind of order
+  \var{v}  and divided by $e^{I z}$.
+\item \describefun{dcomplex}{pnl_complex_bessel_h2}{double v, dcomplex z}
+  \sshortdescribe  Complex  Hankel function of the second kind of
+  order \var{v}. 
+\item \describefun{dcomplex}{pnl_complex_bessel_h2_scaled}{double v, dcomplex z}
+  \sshortdescribe  Complex  Hankel function of the second kind of
+  order \var{v}  and multiplied by $e^{I z}$.
+\end{itemize}
+
+\subsection{Error functions}
+
+\begin{itemize}
+\item \describefun{double}{pnl_sf_erf}{double x}
+  \sshortdescribe Computes $\frac{2}{\pi}\int_0^\infty \expp{-t^2} dt$
+\item \describefun{double}{pnl_sf_erfc}{double x}
+  \sshortdescribe Computes $1. - \frac{2}{\pi}\int_0^\infty \expp{-t^2} dt$
+\item \describefun{double}{pnl_sf_log_erf}{double x}
+  \sshortdescribe Computes $\log$ \reffun{pnl_sf_erf}$(x)$
+\item \describefun{double}{pnl_sf_log_erfc}{double x}
+  \sshortdescribe Computes $\log$ \reffun{pnl_sf_erfc}$(x)$
+\end{itemize}
+
+\subsection{Gamma functions}
+
+For $x>0$, the Gamma Function is defined by
+\begin{equation*}
+  \Gamma(x)=\int_0^{\infty} \expp{-u} u^{x-1} du.
+\end{equation*}
+
+\begin{itemize}
+\item \describefun{double}{pnl_sf_gamma}{double x}
+  \sshortdescribe   Computes $\Gamma(x), x \geq 0$
+\item \describefun{double}{pnl_sf_log_gamma}{double x}
+  \sshortdescribe   Computes $\log(\Gamma(x)), x \geq 0$
+\item \describefun{int}{pnl_sf_log_gamma_sgn}{double x, double \ptr y, int \ptr
+    sgn}
+  \sshortdescribe   Computes $y = \log(|\Gamma(x)|)$ for \var{x > 0} \var{sgn}
+  contains the sign of $\Gamma(x)$ (-1 or +1).
+\end{itemize}
+
+\subsection{Incomplete Gamma functions}
+
+For $a \in \R$ and $x>0$, the Incomplete Gamma Function is defined by
+\begin{equation*}
+  \Gamma(a, x)=\int_x^{\infty} \expp{-u} u^{a-1} du.
+\end{equation*}
+A relation similar to the one existing for the standard Gamma function holds
+\begin{equation*}
+  \Gamma\paren{a, x}= \frac{- x^{a} \expp{-x} + \Gamma (a+1, x)}{a}.
+\end{equation*}
+\begin{align*}
+  \Gamma(a)&=\int_0^{\infty} u^{a-1} \expp{-u}du\\ 
+  P(a, x) &= \frac{\Gamma(a) - \Gamma(a, x)}{\Gamma(a)} =
+  \frac{1}{\Gamma(a)} \int_0^x u^{a-1} \expp{-u}  du\\ 
+  Q(a, x) &= 1-P(a, x) =\frac{\Gamma(a, x)}{\Gamma(a)} =
+  \frac{1}{\Gamma(a)} \int_x^{\infty} \expp{-u} u^{a-1} du. 
+\end{align*}
+
+\begin{itemize}
+\item \describefun{double}{pnl_sf_gamma_inc}{double a, double x}
+  \sshortdescribe   Computes $\Gamma(a, x), \quad a \in \R , x \geq 0$
+\item \describefun{void}{pnl_sf_gamma_inc_P}{double a, double x}
+  \sshortdescribe  Computes $P(a, x), \quad a > 0 , x \geq 0$
+\item \describefun{void}{pnl_sf_gamma_inc_Q}{double a, double x}
+  \sshortdescribe  Computes $Q(a, x), \quad a > 0 , x \geq 0$
+\end{itemize}
+
+\subsection{Exponential integrals}
+For $x>0$ and $n \in \N$, the  function $E_n$ is defined by
+\begin{equation*}
+  E_n\paren{x}=\int_{1}^{\infty} \expp{-x u} u^{-n} du
+\end{equation*}
+
+This function is linked to the Incomplete Gamma function by 
+\begin{equation*}
+  E_n\paren{x}=\int_{x}^{\infty}
+  \expp{-xu} (xu)^{-n} x^{n-1} d(xu)=x^{n-1} \int_{x}^{\infty}
+  \expp{-t} t^{-n} dt =  x^{n-1}  \Gamma\paren{1-n, x}, 
+\end{equation*}
+from which we can deduce
+\begin{equation*}
+  n E_{n+1}(x)  =   \expp{-x} - x E_n(x).
+\end{equation*}
+For $n>1$, the series expansion is given by
+\begin{equation*}
+  E_n(x)=x^{n-1}
+  \Gamma(1-n)+\recaco{-\frac{1}{1-n}+\frac{x}{2-n}-\frac{x^2}{2(3-n)}
+    +\frac{x^3}{6(4-n)}-\dots}.     
+\end{equation*}
+The asymptotic behaviour is given by
+\begin{equation*}
+  E_n(x)=\frac{\expp{-x}}{x}\recaco{1-\frac{n}{x}+\frac{n(n+1)}{x^2}+\dots}. 
+\end{equation*}
+The special case $n=1$ gives 
+\begin{equation*}
+  E_1(x) = \int_x^\infty \frac{e^{-u}}{u}\, du, \quad |\mathrm{Arg}(x)| \ge \pi. 
+\end{equation*}
+For any complex number $x$ with positive real part, this can be written
+\begin{equation*}
+  E_1(x) = \int_1^\infty \frac{e^{-ux}}{u}\, du, \quad \Re(x) \ge 0. 
+\end{equation*}
+By integrating the Taylor expansion of $\expp{-t}/t$, and extracting the
+logarithmic singularity, we can derive the following series representation for
+$E_1(x)$, 
+\begin{equation*}
+  {E_1}(x) =-\gamma-\ln x-\sum_{k=1}^{\infty}\frac{(-1)^k x^k}{k\; k!}
+  \qquad |\mathrm{Arg}(x)| < \pi. 
+\end{equation*}
+The function $E_1$ is linked to the exponential integral $Ei$
+\begin{equation*}
+  Ei(x)=\int_{-\infty}^x\frac{e^u}u\, du=-\int_{-x}^{\infty}
+  \frac{e^{-u}}{u}\, du \quad \forall x \neq 0. 
+\end{equation*}
+The above definition  can be used for positive values of $x$, but the integral
+has to be understood in terms of its Cauchy principal value, due to the
+singularity of the integrand at zero.
+\begin{equation*}
+  {Ei}(-x) = -{E}_1(x) , \quad \Re(x) \ge 0.
+\end{equation*}
+We deduce, 
+\begin{equation*}
+  Ei(x) = \gamma + \ln x+ \sum_{k=1}^{\infty} \frac{x^k}{k\; k!}, \quad x>0.
+\end{equation*}
+For $x \in \R$ 
+\begin{equation*}
+  \Gamma(0, x)=\left\{
+    \begin{array}{l}
+      -Ei(-x)-\imath \pi  \quad  x<0, \\
+      -Ei(-x) \quad x>0. 
+    \end{array}\right.
+\end{equation*}
+
+\begin{itemize}
+\item \describefun{double}{pnl_sf_expint_En}{int n, double x}
+  \sshortdescribe   Computes for  $ n\geq 0, x \geq 0$ and $x>0$ if $n=0$ or $1$.
+  \begin{equation*}
+    E_n(x)= \int_1^{\infty} u^{-n} \expp{-x u} du.
+  \end{equation*}
+% \item \describefun{double}{pnl_sf_expint_Ei}{double x}
+%   \sshortdescribe   Computes for  $x>0$  the principal value of
+%   \begin{equation*}
+%     Ei(x)= \int_{-\infty}^x \frac{\expp{t}}{t}  du.
+%   \end{equation*}
+\end{itemize}
+
+\subsection{Hypergeometric functions}
+
+\begin{itemize}
+\item \describefun{double}{pnl_sf_hyperg_2F1}{double a, double b, double c,
+    double x}
+  \sshortdescribe Computes the Gauss hypergeometric function \var{2F1(a,b,c,x)}
+  for \var{|x| < 1} and for \var{x < -1} when \var{b,a,c,(b-a),(c-a),(c-b)} are
+  not integers
+\item \describefun{double}{pnl_sf_hyperg_1F1}{double a, double b, double x}
+  \sshortdescribe Computes the hypergeometric function \var{1F1(a,b,x)}
+\item \describefun{double}{pnl_sf_hyperg_2F0}{double a, double b, double x}
+  \sshortdescribe Computes the hypergeometric function \var{2F0(a,b,x)}  for
+  \var{x<0} using the relation $2F0 (a,b,x) = (-x)^{-a} U(a,1+a-b,-\frac{1}{x})$.
+\item \describefun{double}{pnl_sf_hyperg_0F1}{double c, double x}
+  \sshortdescribe Computes the hypergeometric function \var{0F1(c,x)}
+\item \describefun{double}{pnl_sf_hyperg_U}{double a, double b, double x}
+  \sshortdescribe Computes the confluent hypergeometric function \var{U(a,b,x)}
+  with \var{x > 0}
+\end{itemize}
+
+
+% vim:spelllang=en:spell:

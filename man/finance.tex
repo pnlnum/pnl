@@ -1,0 +1,101 @@
+
+\section{Financial functions}
+
+The financial functions are defined in the header \verb!pnl/pnl_finance.h!.\\
+
+\begin{itemize}
+\item
+  \describefun{int}{pnl_cf_call_bs}{double s, double k, double T, double r, 
+    double divid, double sigma, double \ptr ptprice, double \ptr ptdelta}
+  \sshortdescribe Computes the price and delta of a call option $(\var{s} -
+  \var{k})_+$ in the Black-Scholes model with volatility \var{sigma},
+  instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
+  \var{divid}. The parameters \var{ptprice} and \var{ptdelta} are respectively
+  set to the price and delta on output.
+
+\item
+  \describefun{int}{pnl_cf_put_bs}{double s, double k, double T, double r, 
+    double divid, double sigma, double \ptr ptprice, double \ptr ptdelta}
+  \sshortdescribe Computes the price and delta of a put option $(\var{k} - 
+  \var{s})_+$ in the Black-Scholes model with volatility \var{sigma},
+  instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
+  \var{divid}.  The parameters \var{ptprice} and \var{ptdelta} are respectively
+  set to the price and delta on output.
+
+\end{itemize}
+
+
+\begin{itemize}
+\item 
+  \describefun{double}{pnl_bs_call}{double s, double k, double T,
+    double r, double divid, double sigma}
+  \sshortdescribe Computes the price of a call option with spot \var{s}
+  and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
+  instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
+  \var{divid}.
+
+\item 
+  \describefun{double}{pnl_bs_put}{double s, double k, double T,
+    double r, double divid, double sigma}
+  \sshortdescribe Computes the price a put option with spot \var{s}
+  and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
+  instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
+  \var{divid}.
+
+\item 
+  \describefun{double}{pnl_bs_call_put}{int iscall, double s, double k,
+    double T, double r, double divid, double sigma}
+  \sshortdescribe Computes the price of a put option if \var{iscall=0} or a
+  call option if \var{iscall=1} with spot \var{s} and strike \var{k} in the
+  Black-Scholes model with volatility \var{sigma}, instantaneous interest rate
+  \var{r}, maturity \var{T} and dividend rate \var{divid}.
+
+\item 
+  \describefun{double}{pnl_bs_vega}{double s, double k, double T,
+    double r, double divid, double sigma}
+  \sshortdescribe Computes the vega of a put or call option with spot \var{s}
+  and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
+  instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
+  \var{divid}.
+
+\item 
+  \describefun{double}{pnl_bs_gamma}{double s, double k, double T, double r,
+    double divid, double sigma}
+  \sshortdescribe Computes the gamma of a put or call option with spot \var{s}
+  and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
+  instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
+  \var{divid}.
+\end{itemize}
+
+Practitioners do not speak in terms of option prices, but rather compare
+prices in terms of their implied Black \& Scholes volatilities. So this
+parameter is very useful in practice. Here, we propose two functions to
+compute $\sigma_{impl}$ : the first one is for one up-let, maturity,
+strike, option price.  the second function is for a list of strikes and
+maturities, a matrix of prices (with strikes varying row-wise).
+
+\begin{itemize}
+\item 
+  \describefun{double}{pnl_bs_implicit_vol}{int is_call, double Price, double s,
+    double K, double T, double r, double divid, int *error}
+  \sshortdescribe Computes the implied volatility of a put option if
+  \var{iscall=0} or a call option if \var{iscall=1} with spot \var{s} and
+  strike \var{K} in the Black-Scholes model with instantaneous interest rate
+  \var{r}, maturity \var{T} and dividend rate \var{divid}. On output
+  \var{error} is \var{OK} if the computation of the implied volatility succeeded
+  or \var{FAIL} if it failed.
+
+\item 
+  \describefun{int}{pnl_bs_matrix_implicit_vol}{const \refstruct{PnlMatInt}
+    \ptr iscall, const \refstruct{PnlMat} \ptr Price, double s, 
+    double r, double divid, const \refstruct{PnlVect} \ptr K, 
+    const \refstruct{PnlVect} \ptr T, \refstruct{PnlMat} \ptr Vol}
+  \sshortdescribe Computes the matrix of implied volatilities \var{Vol(i,j)}
+  of a put option if \var{iscall(i,j)=0} or a call option if
+  \var{iscall(i,j)=1} with spot \var{s} and strike \var{K(j)} in the
+  Black-Scholes model with instantaneous interest rate \var{r}, maturity
+  \var{T(j)} and dividend rate \var{divid}. This function returns the number
+  of failures, when everything succeeded it returns $0$.
+\end{itemize}
+
+% vim:spelllang=en:spell:

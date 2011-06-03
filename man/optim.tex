@@ -1,0 +1,89 @@
+\section{Nonlinear Constrained Optimization}
+\subsection{Overview}
+
+A standard Constrained Nonlinear Optimization problem can be written as:
+
+\begin{equation*}
+  (O)\;
+  \left\{
+    \begin{tabular}{l}
+      $\displaystyle   \min \; f(x)$ \\
+      $\displaystyle c^I(x) \geq 0$ \\
+      $\displaystyle c^E(x) = 0$
+    \end{tabular}
+  \right.
+\end{equation*}
+
+where the function $f : \mathbb{R}^n \rightarrow  \mathbb{R}$ is the objective function, $c^I : \mathbb{R}^n \rightarrow  \mathbb{R}^{m_I} $ are the inequality constraints and $c^E : \mathbb{R}^n \rightarrow  \mathbb{R}^{m_E} $ are the equality constraints. These functions are supposed to be smooth.
+
+In general, the inequality constraints are of the form $c^I(x) = \left (g(x), \; x-l, \; u-x \right )$. The vector $l$ and $u$ are the lower and upper bounds on the variables $x$ and $g(x)$ and the non linear inequality constraints.
+
+Under some conditions, if $x \in \mathbb{R}^n$ is a solution of problem ($O$), then there exist a vector $\lambda=(\lambda^I,\lambda^E) \in \mathbb{R}^{m_I} \times \mathbb{R}^{m_E}$, such that the well known Karush-Kuhn-Tucker (KKT) optimality conditions are satisfied:
+
+\begin{equation*}
+  (P)\;
+  \left\{
+    \begin{tabular}{c}
+      $\nabla \ell(x,\lambda^I, \lambda^E) = \nabla f(x) - \nabla c^I(x) \lambda^I - \nabla c^E(x) \lambda^E= 0$ \\
+      $c^E(x) = 0 $ \\
+      $c^I(x) \geq 0 $ \\
+      $\lambda^I \geq 0 $\\
+      $c^I_i(x) \lambda^I_i =0, \; i=1...m_I$ \\
+    \end{tabular}
+  \right.
+\end{equation*}
+
+$l$ is known as the lagrangian of the problem $(O)$, $\lambda^I$ and $\lambda^E$ as the dual variables while $x$ is the primal variable.
+
+\subsection{Functions}
+
+To use the following functions, you should include \verb!pnl/pnl_optim.h!.
+
+To solve an inequality constrained optimization problem, ie $m_E=0$, we provide the following function.
+\begin{itemize}
+\item \describefun{int}{pnl_optim_intpoints_bfgs_solve}{\refstruct{PnlRnFuncR}\ptr func, \refstruct{PnlRnFuncRm}\ptr grad_func, \refstruct{PnlRnFuncRm}\ptr nl_constraints, \refstruct{PnlVect}\ptr lower_bounds, \refstruct{PnlVect}\ptr upper_bounds, \refstruct{PnlVect}\ptr x_input, double tolerance, int iter_max, int print_inner_steps, \refstruct{PnlVect}\ptr output}
+  \sshortdescribe This function has the following arguments:
+
+  \begin{itemize}
+  \item \var{func} is the function to minimize $f$.
+  \item \var{grad} is the gradient of $f$. If this gradient is not available, then enter \var{grad}=NULL. In this case, finite difference will be used to estimate the gradient.
+  \item \var{nl_constraints} is the function $g(x)$, ie the non linear inequality constraints.
+  \item \var{lower_bounds} are the lower bounds on $x$. Can be NULL if there is no
+    lower bound.
+  \item \var{upper_bounds} are the upper bounds on $x$. Can be NULL if there is no
+    upper bound.
+  \item \var{x_input} is the initial point where the algorithm starts.
+  \item \var{tolerance} is the precision required in solving (P).
+  \item \var{iter_max} is the maximum number of iterations in the algorithm.
+  \item \var{print_algo_steps} is a flag to decide to print information.
+  \item \var{x_output} is the point where the algorithm stops.
+  \end{itemize}
+
+  The algorithm returns an $int$, its value depends on the output status of the algorithm. We have 4 cases:
+
+  \begin{itemize}
+  \item 0: Failure: Initial point is not strictly feasible.
+  \item 1: Step too small, we stop the algorithm.
+  \item 2: Maximum iteration reached.
+  \item 3: A solution has been found up to the required accuracy.
+  \end{itemize}
+
+  The last case is equivalent to the two inequalities:
+
+  $$ || \nabla \ell(x,\lambda^I)||_{\infty} = ||\nabla f(x) - \nabla c^I(x) \lambda^I ||_{\infty} < \var{tolerance} $$
+  $$ || c^I(x) \lambda^I ||_{\infty} < \var{tolerance} $$
+
+  where $c^I(x) \lambda^I$ is a vector of term by term multiplication of $c^I(x)$ and $\lambda^I$.
+
+  The first inequality is known as the optimality condition, the second one as the complementarity condition.\\
+
+  \textbf{Important Remark 1}: The algorithm we implement requires that the initial point $x_0$, given as an input to the algorithm, to be strictly feasible, ie: $c(x_0)>0$.\\
+  \textbf{Important Remark 2}: The algorithm try to find a pair ($x$, $\lambda$) that solves the equations ($P$), but this does not guarantee that $x$ is a global minimum of $f$ on the set $\{c(x)\geq0\}$.
+
+\end{itemize}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "pnl-manual"
+%%% End: 

@@ -1,0 +1,206 @@
+
+\subsection{Complex numbers}
+\subsubsection{Overview}
+
+The complex type and related functions are defined in the header
+\verb!pnl/pnl_complex.h!.\\
+
+The first native implementation of complex numbers in the C language appeared in
+C99, which is unfortunately not available on all platforms. For this reason, we
+provide here an implementation of complex numbers.
+
+\begin{verbatim}
+typedef struct {
+    double r; /*!< real part */
+    double i; /*!< imaginary part */
+} dcomplex;
+\end{verbatim}
+
+
+\subsubsection{Constants}
+
+\begin{describeconst}
+  \constentry{CZERO}{$0$ as a complex number}
+  \constentry{CONE}{$1$ as a complex number}
+  \constentry{CI}{$I$ the unit complex number}
+\end{describeconst}
+
+\subsubsection{Functions}
+\begin{itemize}
+\item \describefun{double}{Creal}{\refstruct{dcomplex} z}
+  \sshortdescribe $ \mathrm{R}(z) $ 
+
+\item \describefun{double}{Cimag}{\refstruct{dcomplex} z}
+  \sshortdescribe  $ \mathrm{Im}(z) $  
+
+\item \describefun{dcomplex}{Cadd}{\refstruct{dcomplex} z, \refstruct{dcomplex} b}
+  \sshortdescribe \var{ z+b }  
+
+\item \describefun{dcomplex}{CRadd}{\refstruct{dcomplex} z, double b}
+  \sshortdescribe \var{ z+b }  
+
+\item \describefun{dcomplex}{RCadd}{double b, \refstruct{dcomplex} z}
+  \sshortdescribe \var{ b+z }  
+
+\item \describefun{dcomplex}{Csub}{\refstruct{dcomplex} z, \refstruct{dcomplex} b}
+  \sshortdescribe \var{ z-b }
+
+\item \describefun{dcomplex}{CRsub}{\refstruct{dcomplex} z, double b}
+  \sshortdescribe \var{ z-b }
+
+\item \describefun{dcomplex}{RCsub}{double b, \refstruct{dcomplex} z}
+  \sshortdescribe \var{ b-z }
+
+\item \describefun{dcomplex}{Cminus}{\refstruct{dcomplex} z}
+  \sshortdescribe \var{ -z }  
+
+\item \describefun{dcomplex}{Cmul}{\refstruct{dcomplex} z, \refstruct{dcomplex} b}
+  \sshortdescribe \var{ z*b }  
+
+\item \describefun{dcomplex}{RCmul}{double x, \refstruct{dcomplex} z}
+  \sshortdescribe \var{ x*z }
+
+\item \describefun{dcomplex}{CRmul}{\refstruct{dcomplex} z, double x}
+  \sshortdescribe \var{ z * x }
+
+\item \describefun{dcomplex}{CRdiv}{\refstruct{dcomplex} z, double x}
+  \sshortdescribe \var{ z/x }
+
+\item \describefun{dcomplex}{RCdiv}{double x, \refstruct{dcomplex} z}
+  \sshortdescribe \var{ x/z }
+
+\item \describefun{dcomplex}{Complex}{double x, double y}
+  \sshortdescribe \var{x + i y}  
+
+\item \describefun{dcomplex}{Complex_polar}{double r, double theta}
+  \sshortdescribe  \var{ r exp(i theta) }  
+
+\item \describefun{dcomplex}{Conj}{\refstruct{dcomplex} z}
+  \sshortdescribe $\overline{z}$  
+
+\item \describefun{dcomplex}{Cinv}{\refstruct{dcomplex} z}
+  \sshortdescribe \var{ 1/z }  
+
+\item \describefun{dcomplex}{Cdiv}{\refstruct{dcomplex} z, \refstruct{dcomplex} w}
+  \sshortdescribe \var{ z/w }  
+
+\item \describefun{double}{Csqr_norm}{\refstruct{dcomplex} z}
+  \sshortdescribe $ \mathrm{Re}(z)^2 + \mathrm{im}(z)^2 $  
+
+\item \describefun{double}{Cabs}{\refstruct{dcomplex} z}
+  \sshortdescribe \var{|z|}  
+
+\item \describefun{dcomplex}{Csqrt}{\refstruct{dcomplex} z}
+  \sshortdescribe \var{ sqrt(z) },  square root (with positive real part)  
+
+\item \describefun{dcomplex}{Clog}{\refstruct{dcomplex} z}
+  \sshortdescribe \var{log(z)}  
+
+\item \describefun{dcomplex}{Cexp}{\refstruct{dcomplex} z}
+  \sshortdescribe \var{ exp(z) }  
+
+\item \describefun{dcomplex}{CIexp}{double t}
+  \sshortdescribe \var{ exp( it ) }
+
+\item \describefun{dcomplex}{Cpow}{\refstruct{dcomplex} z, \refstruct{dcomplex} w}
+  \sshortdescribe $ z^w$, power function  
+
+\item \describefun{dcomplex}{Cpow_real}{\refstruct{dcomplex} z, double x}
+  \sshortdescribe $ z^x$, power function  
+
+\item \describefun{dcomplex}{Ccos}{\refstruct{dcomplex} z}
+  \sshortdescribe \var{ cos(g)}  
+
+\item \describefun{dcomplex}{Csin}{\refstruct{dcomplex} z}
+  \sshortdescribe \var{sin(g)}  
+
+\item \describefun{dcomplex}{Ctan}{\refstruct{dcomplex} z}
+  \sshortdescribe \var{tan(z)}
+
+\item \describefun{dcomplex}{Ccotan}{\refstruct{dcomplex} z}
+  \sshortdescribe \var{cotan(z)}
+
+\item \describefun{dcomplex}{Ccosh}{\refstruct{dcomplex} z}
+  \sshortdescribe \var{ cosh(g)}  
+
+\item \describefun{dcomplex}{Csinh}{\refstruct{dcomplex} z}
+  \sshortdescribe \var{sinh(g)}  
+
+\item \describefun{dcomplex}{Ctanh}{\refstruct{dcomplex} z}
+  \sshortdescribe $\tanh(z) = \frac{1 - \expp{-2z} }{1 + \expp{-2z} }$  
+
+\item \describefun{dcomplex}{Ccotanh}{\refstruct{dcomplex} z}
+  \sshortdescribe $\cotanh(z) = \frac{1 + \expp{-2z} }{1 - \expp{-2z} }$  
+
+\item \describefun{double}{Carg}{\refstruct{dcomplex} z}
+  \sshortdescribe \var{arg(z) }
+
+\item \describefun{dcomplex}{Ctgamma}{\refstruct{dcomplex} z}
+  \sshortdescribe \var{ Gamma(z)}, the Gamma function  
+
+\item \describefun{dcomplex}{Clgamma}{\refstruct{dcomplex} z}
+  \sshortdescribe \var{ log(Gamma (z))}, the logarithm of the Gamma function
+
+\item \describefun{void}{Cprintf}{\refstruct{dcomplex} z}
+  \sshortdescribe Prints a complex number on the standard output
+\end{itemize}
+
+Most algebraic operations on complex numbers are implemented using the
+following naming for the functions
+\begin{itemize}
+\item All these function names begin in {\tt C_op_}, 
+\item The small letters {\tt a, b} denote two complex numbers whereas {\tt d} is a real number, 
+\item The letter {\tt i} denotes the multiplication by the pure imagniary
+  number $\imath$, 
+\item The letter {\tt c} indicates that the next coming number is conjugated.
+\item The letters {\tt p, m} denote the two standard operations {\it plus} and
+  {\it minus} respectively.
+\end{itemize}
+For example C_op_idamcb is $\imath d \left( a - \overline{b} \right)$. So
+functions are :
+\begin{itemize}
+\item \describefun{dcomplex}{C_op_apib}{\refstruct{dcomplex} a, \refstruct{dcomplex} b}
+  \sshortdescribe $ a+\imath b  $.
+\item \describefun{dcomplex}{C_op_apcb}{\refstruct{dcomplex} a, \refstruct{dcomplex} b}
+  \sshortdescribe $ a+\overline{ b}  $.
+\item \describefun{dcomplex}{C_op_amcb}{\refstruct{dcomplex} a, \refstruct{dcomplex} b}
+  \sshortdescribe $ a-\overline{b}  $.
+\item \describefun{dcomplex}{C_op_amib}{\refstruct{dcomplex} a, 
+    \refstruct{dcomplex} b}
+    \sshortdescribe \var{a - i b}
+\item \describefun{dcomplex}{C_op_dapb}{double d, \refstruct{dcomplex} a, 
+    \refstruct{dcomplex} b}
+  \sshortdescribe $ d(a+ b)  $.
+\item \describefun{dcomplex}{C_op_damb}{double d, \refstruct{dcomplex} a, 
+    \refstruct{dcomplex} b}
+  \sshortdescribe $ d(a-b)  $.
+\item \describefun{dcomplex}{C_op_dapib}{double d, \refstruct{dcomplex} a, 
+    \refstruct{dcomplex} b}
+  \sshortdescribe $ d(a+\imath b)  $.
+\item \describefun{dcomplex}{C_op_damib}{double d, \refstruct{dcomplex} a, 
+    \refstruct{dcomplex} b}
+  \sshortdescribe $ d(a-\imath b)  $.
+\item \describefun{dcomplex}{C_op_dapcb}{double d, \refstruct{dcomplex} a, 
+    \refstruct{dcomplex} b}
+  \sshortdescribe $ d\left(a+\overline{b}\right)  $.
+\item \describefun{dcomplex}{C_op_damcb}{double d, \refstruct{dcomplex} a, 
+    \refstruct{dcomplex} b}
+  \sshortdescribe $ d\left(a-\overline{b}\right)  $.
+\item \describefun{dcomplex}{C_op_idapb}{double d, \refstruct{dcomplex} a, 
+    \refstruct{dcomplex} b}
+  \sshortdescribe $\imath d\left(a+b\right) $.
+\item \describefun{dcomplex}{C_op_idamb}{double d, \refstruct{dcomplex} a, 
+    \refstruct{dcomplex} b}
+  \sshortdescribe $\imath  d\left(a-b\right) $.
+\item \describefun{dcomplex}{C_op_idapcb}{double d, \refstruct{dcomplex} a, 
+    \refstruct{dcomplex} b}
+  \sshortdescribe $ \imath d\left(a+\overline{b}\right) $.
+\item \describefun{dcomplex}{C_op_idamcb}{double d, \refstruct{dcomplex} a, 
+    \refstruct{dcomplex} b}
+  \sshortdescribe $ \imath  d\left(a-\overline{b}\right) $.
+\end{itemize}
+
+% vim:spelllang=en:spell:
+
+
+

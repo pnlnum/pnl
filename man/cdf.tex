@@ -1,0 +1,113 @@
+\section{Cumulative distribution Functions}
+
+The functions related to this chapter are declared in \verb!pnl/pnl_cdf.h!.
+
+For various distribution functions, we provide functions named
+\var{pnl_cdf_xxx} where \var{xxx} is the abbreviation of the distribution
+name. All these functions are based on the same prototype
+\begin{equation*}
+  p = 1-q; \quad p = \int^x density(u) du
+\end{equation*}
+
+\begin{itemize}
+\item \var{which} If \var{which=1}, it computes \var{p} and \var{q}. If
+  \var{which=2}, it computes \var{x}. For higher values of \var{which} it
+  computes one the parameters characterizing the distribution using all the
+  others, \var{p, q, x}.
+\item \var{p} the probability $\int^x density(u) du $
+\item \var{q} $= 1 - p$
+\item \var{x} the upper bound of the integral
+\item \var{status} an integer which indicates on exit the success of the
+  computation. (0) if calculation completed correctly. (-I) if the input
+  parameter number I was out of range. (1) if the answer appears to be lower
+  than the lowest search bound.  (2) if the answer appears to be higher than
+  the greatest search bound.  (3) if $p + q \ne 1$.
+\item \var{bound} is undefined if STATUS is 0.  Bound exceeded by parameter
+  number I if STATUS is negative. Lower search bound if STATUS is 1.  Upper
+  search bound if STATUS is 2.
+\end{itemize}
+
+\begin{itemize}
+\item \describefun{void}{pnl_cdf_bet}{int \ptr which, double \ptr p, double
+    \ptr q, double \ptr x, double \ptr y, double \ptr a, double \ptr b,
+    int \ptr status, double \ptr bound}
+  \sshortdescribe Cumulative Distribution Function BETA distribution.
+
+\item \describefun{void}{pnl_cdf_bin}{int \ptr which, double \ptr p, double
+    \ptr q, double \ptr x, double \ptr xn, double \ptr pr, double
+    \ptr ompr, int \ptr status, double \ptr bound}
+  \sshortdescribe Cumulative Distribution Function BINa distribution.
+
+\item \describefun{void}{pnl_cdf_chi}{int \ptr which, double \ptr p, double
+    \ptr q, double \ptr x, double \ptr df, int \ptr status, double
+    \ptr bound}
+  \sshortdescribe Cumulative Distribution Function CHI-Square distribution.
+
+\item \describefun{void}{pnl_cdf_chn}{int \ptr which, double \ptr p, double
+    \ptr q, double \ptr x, double \ptr df, double \ptr pnonc, int
+    \ptr status, double \ptr bound}
+  \sshortdescribe Cumulative Distribution Function Non-central Chi-Square distribution.
+
+\item \describefun{void}{pnl_cdf_f}{int \ptr which, double \ptr p, double
+    \ptr q, double \ptr x, double \ptr dfn, double \ptr dfd, int
+    \ptr status, double \ptr bound}
+  \sshortdescribe Cumulative Distribution Function F distribution.
+
+\item \describefun{void}{pnl_cdf_fnc}{int \ptr which, double \ptr p, double
+    \ptr q, double \ptr x, double \ptr dfn, double \ptr dfd, double
+    \ptr pnonc, int \ptr status, double \ptr bound}
+  \sshortdescribe Cumulative Distribution Function Non-central F distribution.
+
+\item \describefun{void}{pnl_cdf_gam}{int \ptr which, double \ptr p, double
+    \ptr q, double \ptr x, double \ptr shape, double \ptr scale, int
+    \ptr status, double \ptr bound}
+  \sshortdescribe Cumulative Distribution Function GAMma distribution.
+
+\item \describefun{void}{pnl_cdf_nbn}{int \ptr which, double \ptr p, double
+    \ptr q, double \ptr x, double \ptr xn, double \ptr pr, double
+    \ptr ompr, int \ptr status, double \ptr bound}
+  \sshortdescribe Cumulative Distribution Function Negative BiNomial distribution.
+
+\item \describefun{void}{pnl_cdf_nor}{int \ptr which, double \ptr p, double
+    \ptr q, double \ptr x, double \ptr mean, double \ptr sd, int
+    \ptr status, double \ptr bound}
+  \sshortdescribe Cumulative Distribution Function NORmal distribution.
+
+\item \describefun{void}{pnl_cdf_poi}{int \ptr which, double \ptr p, double
+    \ptr q, double \ptr x, double \ptr xlam, int \ptr status, double
+    \ptr bound}
+  \sshortdescribe Cumulative Distribution Function POIsson distribution.
+
+\item \describefun{void}{pnl_cdf_t}{int \ptr which, double \ptr p, double
+    \ptr q, double \ptr x, double \ptr df, int \ptr status, double
+    \ptr bound}
+  \sshortdescribe Cumulative Distribution Function T distribution.
+
+\item \describefun{double}{pnl_cdfchi2n}{double x, double df, double ncparam}
+  \sshortdescribe Computes the cumulative density function at \var{x} of the
+  non central $\chi^2$ distribution with \var{df} degrees of freedom and non
+  centrality parameter \var{ncparam}.
+
+\item \describefun{void}{pnl_cdfbchi2n}{double x, double df, double ncparam, double
+    beta, double \ptr P}
+  \sshortdescribe Stores in \var{P} the cumulative density function at \var{x}
+  of the random variable \var{beta \ptr X} where \var{X} is non central $\chi^2$
+  random variable with \var{df} degrees of freedom and non
+  centrality parameter \var{ncparam}.
+
+
+\item \describefun{double}{pnl_normal_density}{double x}
+  \sshortdescribe Normal density function.
+
+\item \describefun{double}{pnl_cdfnor}{double x}
+  \sshortdescribe Cumulative normal distribution function.
+
+\item \describefun{double}{pnl_cdf2nor}{double a, double b, double r}
+  \sshortdescribe Cumulative bivariate normal distribution function, returns
+  $\frac{1} {2\pi \sqrt{1-r^2}} \int_{- \infty}^a\int_{- \infty}^b e^{-
+    \frac{x^2 - 2 r xy+y^2} {2(1-r^2)} } dxdy.$
+
+\item \describefun{double}{pnl_inv_cdfnor}{double x}
+  \sshortdescribe Inverse of the cumulative normal distribution function.
+\end{itemize}
+

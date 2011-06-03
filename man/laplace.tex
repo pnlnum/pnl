@@ -1,0 +1,59 @@
+
+\section{Inverse Laplace Transform}
+
+For a real valued function $f$ such that $t \longmapsto f(t) \expp{- \sigma_c
+  t}$ is integrable over $\R^+$, we can define its Laplace transform
+\begin{equation*}
+  \hat{f}(\lambda) = \int_0^\infty f(t) \expp{- \lambda t} dt \qquad
+  \mbox{for $\lambda \in \C$ with $\real{\lambda} \ge \sigma_c$}.
+\end{equation*}
+
+To use the following functions, you should include \verb!pnl/pnl_laplace.h!.
+
+\begin{itemize}
+\item \describefun{double}{pnl_ilap_euler}{\refstruct{PnlCmplxFunc}
+    \ptr fhat, double t, int N, int M}
+  \sshortdescribe Computes $f(\var{t})$ where $f$ is given by its Laplace
+  transform \var{fhat} by numerically inverting the Laplace transform using
+  Euler's summation. The values \var{N = M = 15} usually give a very good
+  accuracy. For more details on the accuracy of the method.
+
+\item \describefun{double}{pnl_ilap_cdf_euler}{\refstruct{PnlCmplxFunc}
+    \ptr fhat, double t, double h, int N, int M}
+  \sshortdescribe Computes the cumulative distribution function $F(\var{t})$
+  where $F(x) = \int_0^x f(t) dt$ and $f$ is a density function with values on
+  the positive real linegiven by its Laplace transform \var{fhat}. The
+  computation is carried out by numerical inversion of the Laplace transform
+  using Euler's summation. The values \var{N = M = 15} usually give a very
+  good accuracy. The parameter \var{h} is the discretization step, the
+  algorithm is very sensitive to the choice of \var{h}.
+
+\item \describefun{double}{pnl_ilap_fft}{\refstruct{PnlVect} \ptr res,
+    \refstruct{PnlCmplxFunc} \ptr fhat, double T, double eps}
+  \sshortdescribe Computes $f(t)$ for $t \in [h, \var{T}]$ on a regular grid
+  and stores the values in \var{res}, where $h = T / {\mathrm size}(res)$. The
+  function $f$ is defined by its Laplace transform \var{fhat}, which is
+  numerically inverted using a Fast Fourier Transform algorithm. The size of
+  \var{res} is related to the choice of the relative precision \var{eps}
+  required on the value of $f(t)$ for all $t \le T$.
+
+\item \describefun{double}{pnl_ilap_gs}{\refstruct{PnlFunc} \ptr fhat, double
+    t, int n}
+  \sshortdescribe Computes $f(\var{t})$ where $f$ is given by its Laplace
+  transform \var{fhat} by numerically inverting the Laplace transform using a
+  weighted combination of different Gaver Stehfest's algorithms. Note that
+  this function does not need the complex valued Laplace transform but only the
+  real valued one. \var{n} is the number of terms used in the weighted combination.
+
+\item \describefun{double}{pnl_ilap_gs_basic}{\refstruct{PnlFunc}
+    \ptr fhat, double t, int n}
+  \sshortdescribe Computes $f(\var{t})$ where $f$ is given by its Laplace
+  transform \var{fhat} by numerically inverting the Laplace transform using
+  Gaver Stehfest's method. Note that this function does not
+  need the comple valued Laplace transform but only the real valued
+  one. \var{n} is the number of iterations of the algorithm.
+  {\bf Note : }~This function is provided only for test purposes, even though
+  the function \reffun{pnl_ilap_gs} gives far more accurate results.
+\end{itemize}
+
+% vim:spelllang=en:spell:

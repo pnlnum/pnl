@@ -1,0 +1,250 @@
+\section{Polynomial bases and regression}
+\subsection{Overview}
+
+To use these functionalities, you should include \verb!pnl/pnl_basis.h!.
+
+\begin{verbatim}
+struct PnlBasis_t {
+  int         id;
+  const char *label; /*!< string to label the basis *
+  int         nb_variates;  /*!< number of variates *
+  int         nb_func; /*!< number of elements in the basis *
+  PnlMatInt  *T; /*!< Tensor matrix *
+  double    (*f)(double    *x, int i); /*!< Computes the i-th element
+                                        of the one dimensional basis *
+  double    (*Df)(double   *x, int i); /*!< Computes the first derivative
+                   of the i-th element of the one dimensional basis *
+  double    (*D2f)(double  *x, int i); /*!< Computes the second derivative
+                      of the i-th element of the one dimensional basis *
+  int         isreduced; /* TRUE if the basis is reduced */
+  double     *center; /*!< center of the domain */
+  double     *scale; /*<! inverse of the scaling factor to map the domain 
+                          to [-1, 1]^nb_variates */
+};
+\end{verbatim}
+
+\begin{table}[h!]
+  \begin{describeconst}
+    \constentry{PNL_BASIS_CANONICAL}{for the Canonical polynomials}
+    \constentry{PNL_BASIS_HERMITIAN}{for the Hermite polynomials}
+    \constentry{PNL_BASIS_TCHEBYCHEV}{for the Tchebychev polynomials}
+  \end{describeconst}
+  \caption{Names of the bases}
+  \label{basis_index}
+\end{table}
+
+In this section, we provide functions to solve regression problems on
+polynomial functions. Let $(x_i, i=1 \dots n)$ be $n$ points in $\R^d$ and a
+function $g$ defined by the data $(y_i = g(x_i), i=1 \dots n)$. Assume you
+want to approximate the function $g$ by its decomposition on a family of $N$
+polynomial functions $(f_j, j=1\dots N)$. Then, we want to compute the vector
+$\alpha^\star \in \R^N$ which solves
+\begin{equation*} \alpha^\star = \arg\min_\alpha \sum_{i=1}^{n}
+  \left(\sum_{j=0}^N \alpha_j f_j(x_i) - y_i\right)^2
+\end{equation*}
+
+\subsection{Functions}
+
+\begin{itemize}
+\item \describefun{\refstruct{PnlBasis} *}{pnl_basis_new}{}
+  \sshortdescribe Creates an empty \refstruct{PnlBasis}.
+
+\item \describefun{void}{pnl_basis_print}{const \refstruct{PnlBasis} \ptr B}
+  \sshortdescribe Prints a basis
+  
+  
+\item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create}{int index, int
+    nb_func, int nb_variates}
+  \sshortdescribe Creates a \refstruct{PnlBasis} for the polynomial family
+  defined by \var{index} (see Table~\ref{basis_index}) with \var{nb_variates}
+  variates. The basis will contain \var{nb_func}.
+
+\item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create_from_degree}{int
+    index, int degree, int nb_variates}
+  \sshortdescribe Creates a \refstruct{PnlBasis} for the polynomial family
+  defined by \var{index} (see Table~\ref{basis_index}) with total degree less
+  or equal than \var{degree} and \var{nb_variates} variates.\\
+  For instance, calling \verb!pnl_basis_create_from_degree (index, 2, 4)! is
+  equivalent to calling \verb!pnl_basis_create_from_tensor (index, T)! where
+  \var{T} is given by
+  \[ \left(
+    \begin{array}{cccc}
+      0 & 0 & 0 & 0\\
+      1 & 0 & 0 & 0\\
+      0 & 1 & 0 & 0\\
+      0 & 0 & 1 & 0\\
+      0 & 0 & 0 & 1\\
+      1 & 1 & 0 & 0\\
+      1 & 0 & 1 & 0\\
+      1 & 0 & 0 & 1\\
+      0 & 1 & 1 & 0\\
+      0 & 1 & 0 & 1\\
+      0 & 0 & 1 & 1\\
+      2 & 0 & 0 & 0\\
+      0 & 2 & 0 & 0\\
+      0 & 0 & 2 & 0\\
+      0 & 0 & 0 & 2\\
+    \end{array}
+  \right) \]
+
+
+\item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create_from_tensor}{int
+    index, PnlMatInt \ptr T}
+  \sshortdescribe Creates a \refstruct{PnlBasis} for the polynomial family
+  defined by \var{index} (see Table~\ref{basis_index}) using the basis
+  described by the tensor matrix \var{T}. The number of lines of \var{T} is
+  the number of functions of the basis whereas the numbers of columns of
+  \var{T} is the number of variates of the functions.
+  Note that \var{T} is not copied inside this function but only its address is
+  stored, so {\bf never} free \var{T}. It will be freed when calling
+  \reffun{pnl_basis_free} on the returned object. i\\
+  Here is an example of a tensor matrix. Assume you are working with three
+  variate functions, the basis \verb!{ 1, x, y, z, x^2, xy, yz, z^3}! is
+  decomposed in the one dimensional canonical basis using the following tensor
+  matrix
+  \[ \left(
+    \begin{array}{ccc}
+      0 & 0 & 0 \\
+      1 & 0 & 0 \\
+      0 & 1 & 0 \\
+      0 & 0 & 1 \\
+      2 & 0 & 0 \\
+      1 & 1 & 0 \\
+      0 & 1 & 1\\
+      0 & 0 & 3
+    \end{array}
+  \right) \]
+
+\item \describefun{void }{pnl_basis_set_from_tensor}{\refstruct{PnlBasis} \ptr
+    b, int index, const \refstruct{PnlMatInt} \ptr T}
+  \sshortdescribe Sets an alredy existing basis \var{b} to a polynomial family
+  defined by \var{index} (see Table~\ref{basis_index}) using the basis
+  described by the tensor matrix \var{T}. The number of lines of \var{T} is
+  the number of functions of the basis whereas the numbers of columns of
+  \var{T} is the number of variates of the functions. \\
+  Same function as \reffun{pnl_basis_create_from_tensor} except that it
+  operates on an already existing basis.
+
+\item  \describefun{\refstruct{PnlBasis}\ptr}{pnl_basis_create_from_hyperbolic_degree}
+  {int index, double degree, double q, int n}
+  \sshortdescribe Creates a sparse basis of polynomial with \var{n}
+  variates. We give the example of the Canonical basis. A canonical polynomial
+  with \var{n} variates writes $X_1^{\alpha_1} X_2^{\alpha_2} \dots
+  X_n^{\alpha_n}$. To be a member of the basis, it must satisfy $\left(\sum_{i=1}^n
+    {\alpha_i}^q \right)^{1/q} \leq degree$. This kind of basis based on an
+  hyperbolic set of indices gives priority to polynomials associated to low
+  order interaction.
+
+\end{itemize}
+
+
+Polynomial regression based on a least square approach often leads to ill
+conditionned linear systems. One way of improving the stability of the system is to
+use centered and renormalised polynomials so that the original domain of interest
+$\cD$ (a subset of $\R^d$) is mapped to $[-1,1]^d$. If the domain $\cD$ is
+rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by 
+\begin{equation}
+  \label{basis_reduced}
+  x \in \cD \longmapsto \left(\frac{x_i - (b_i+a_i)/2}{(b_i - a_i)/2}
+  \right)_{i=1,\cdots,d}
+\end{equation}
+\begin{itemize}
+\item \describefun{void}{pnl_basis_set_domain}{\refstruct{PnlBasis} \ptr B, 
+  const \refstruct{PnlVect} \ptr a, const \refstruct{PnlVect} \ptr b}
+  \sshortdescribe This function declares \var{B} as a centered and normalised basis
+  as defined by Equation~\ref{basis_reduced}. Calling this function is equivalent to
+  calling \reffun{pnl_basis_set_reduced} with \var{center=(b+a)/2} and
+  \var{scale=(b-a)/2}.
+\item \describefun{void}{pnl_basis_set_reduced}{\refstruct{PnlBasis} \ptr B,
+  const \refstruct{PnlVect} \ptr center, const \refstruct{PnlVect} \ptr scale}
+  \sshortdescribe This function declares \var{B} as a centered and normalised basis
+  using the mapping
+  \begin{equation*}
+    x \in \cD \longmapsto \left(\frac{x_i - \var{center}_i }{\var{scale}_i}
+    \right)_{i=1,\cdots,d}
+  \end{equation*}
+\end{itemize}
+
+
+\begin{itemize}
+\item  \describefun{void}{pnl_basis_free}{\refstruct{PnlBasis} \ptr\ptr basis}
+  \sshortdescribe Frees a \refstruct{PnlBasis} created by
+  \reffun{pnl_basis_create}. Beware that \var{basis} is the address of a
+  \refstruct{PnlBasis}\ptr.
+
+\item  \describefun{void}{pnl_basis_i}{\refstruct{PnlBasis }\ptr b,
+    double \ptr x, int i}
+  \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}}$,
+  then this function returns $f_i(x)$. \var{x} must be a C array of length
+  \var{nb_variates}.
+
+\item \describefun{double}{pnl_basis_i_D}{ const \refstruct{PnlBasis} \ptr b,
+    const double \ptr x, int i, int j }
+  \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}}$,
+  then this function returns $\partial_{x_{\var{j}}} f_i(x)$. \var{x} must be a C array
+  of length \var{nb_variates}.
+
+  
+\item \describefun{double}{pnl_basis_i_D2}{const \refstruct{PnlBasis} \ptr b,
+    const double \ptr x, int i, int j1, int j2}
+  \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}}$,
+  then this function returns $\partial^2_{x_{\var{j1}}, x_{\var{j2}}}
+  f_i(x)$. \var{x} must be a C array of length \var{nb_variates}.
+
+
+\item \describefun{int}{pnl_basis_fit_ls}{\refstruct{PnlBasis} \ptr
+    P, \refstruct{PnlVect} \ptr  coef, \refstruct{PnlMat} \ptr  x,
+    \refstruct{PnlVect} \ptr  y}
+  \sshortdescribe Computes the coefficients \var{coef} defined by
+  \begin{equation*}
+    \var{coef} = \arg\min_\alpha \sum_{i=1}^n
+    \left( \sum_{j=0}^{\var{N}} \alpha_j  P_j(x_i) - y_i\right)^2
+  \end{equation*}
+  where \var{N} is the number of functions to regress upon and $n$ is the
+  number of points at which we know the value of the original function. $P_j$
+  is the $j-th$ basis function. Each row of the matrix \var{x} defines the
+  coordinates of one point $x_i$. The function to be approximated is defined
+  by the data \var{y} which is the vector of the values taken by the function
+  at the points \var{x}.
+
+\item \describefun{double}{pnl_basis_eval_derivs}{\refstruct{PnlBasis} \ptr
+    P, \refstruct{PnlVect}\ptr coef, double \ptr x, double \ptr fx,
+    \refstruct{PnlVect} \ptr Dfx, \refstruct{PnlMat} \ptr D2fx}
+  \sshortdescribe Computes the function, the gradient and the Hessian matrix
+  of $\sum_{k=0}^n \var{coef}_k  P_k(\cdot)$ at the point \var{x}.
+  On output, \var{fx} contains the value of the function, \var{Dfx} its
+  gradient and \var{D2fx} its Hessian matrix. This function is optimized and
+  performs much better than calling \reffun{pnl_basis_eval},
+  \reffun{pnl_basis_eval_D} and \reffun{pnl_basis_eval_D2} sequentially.
+
+\item \describefun{double}{pnl_basis_eval}{\refstruct{PnlBasis} \ptr
+    P, \refstruct{PnlVect}\ptr  coef, double \ptr x}
+  \sshortdescribe Computes the linear combination of \var{P_k(x)} defined by
+  \var{coef}. Given the coefficients computed by the function
+  \reffun{pnl_basis_fit_ls}, this function returns $\sum_{k=0}^n
+  \var{coef}_k  P_k(\var{x})$ where \var{x} is a C array of length
+  \var{P->nb_variates}.
+
+\item \describefun{double}{pnl_basis_eval_D}{\refstruct{PnlBasis} \ptr
+    P, \refstruct{PnlVect} \ptr  coef, double \ptr x, int i}
+  \sshortdescribe Computes the derivative with respect to \var{x_i} of the
+  linear combination of \var{P_k(x)} defined by \var{coef}. Given the
+  coefficients computed by the function \reffun{pnl_basis_fit_ls}, this
+  function returns $\partial_{x_i} \sum_{k=0}^n \var{coef}_k  P_k(\var{x})$
+  where \var{x} is a C array of length \var{nb_variates}. The index \var{i}
+  may vary between \var{0} and \var{P->nb_variates - 1}.
+
+
+\item \describefun{double}{pnl_basis_eval_D2}{\refstruct{PnlBasis} \ptr  P,
+    \refstruct{PnlVect} \ptr  coef, double \ptr x,  int i, int j}
+  \sshortdescribe Computes the derivative with respect to \var{x_i} of the
+  linear combination of \var{P_k(x)} defined by \var{coef}. Given the
+  coefficients computed by the function \reffun{pnl_basis_fit_ls}, this
+  function returns $\partial_{x_i} \partial_{x_j} \sum_{k=0}^n \var{coef}_k  P_k(\var{x})$
+  where \var{x} is a C array of length \var{nb_variates}. The indices \var{i}
+  and \var{j} may vary between \var{0} and \var{P->nb_variates - 1}.
+\end{itemize}
+
+
+% vim:spelllang=en:spell:
+
