@@ -150,21 +150,11 @@ AC_CHECK_LIB(m,main)
 AC_CHECK_FUNCS(tgamma)
 AC_CHECK_FUNCS(lgamma)
 AC_CHECK_FUNCS(exp10)
-AC_CHECK_FUNCS(erfl)
 AC_CHECK_FUNCS(trunc)
 AC_CHECK_FUNCS(isfinite)
 AC_CHECK_FUNCS(finite)
 AC_CHECK_FUNCS(isnan)
 AC_CHECK_FUNCS(isinf)
-
-##########################
-## Check for headers
-##########################
-AC_CHECK_HEADERS(time.h)
-AC_CHECK_HEADERS(limits.h)
-AC_CHECK_HEADERS(errno.h)
-
-
 
 ########################################################
 ## check for blas

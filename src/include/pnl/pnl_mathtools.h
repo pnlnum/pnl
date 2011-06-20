@@ -142,6 +142,11 @@ extern int pnl_isinf (double x);
 #endif
 #define POW(x,y) pow( (double) (x), (double) (y))
 
+#ifndef HAVE_EXP10
+#define exp10(x) exp(10.0, x)
+#endif
+
+
 #ifdef SQR
 #undef SQR
 #endif
