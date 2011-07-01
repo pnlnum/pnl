@@ -13,6 +13,8 @@
     CMlib 
     in scilab routines/callelm/somespline.f
 
+- tridiag : solve a linear system from the P-LU decomposition
+
 - Complex tridiag and band matrices
     I am not sure these storages are so meaningful for complex data
 
