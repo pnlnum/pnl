@@ -10,11 +10,11 @@ c_sqrt.c cabs.c close.c d_abs.c d_acos.c d_asin.c d_atan.c d_atn2.c d_cnjg.c\
 d_cos.c d_cosh.c d_dim.c d_exp.c d_imag.c d_int.c d_lg10.c d_log.c d_mod.c\
 d_nint.c d_prod.c d_sign.c d_sin.c d_sinh.c d_sqrt.c d_tan.c d_tanh.c derf_.c\
 derfc_.c dfe.c dolio.c dtime_.c due.c ef1asc_.c ef1cmc_.c endfile.c erf_.c\
-erfc_.c err.c etime_.c exit_.c fmt.c fmtlib.c ftell_.c getarg_.c getenv_.c\
+erfc_.c err.c etime_.c exit_.c fmt.c fmtlib.c ftell_.c getenv_.c\
 h_abs.c h_dim.c h_dnnt.c h_indx.c h_len.c h_mod.c h_nint.c h_sign.c hl_ge.c\
 hl_gt.c hl_le.c hl_lt.c i_abs.c i_dim.c i_dnnt.c i_indx.c i_len.c i_mod.c\
-i_nint.c i_sign.c iargc_.c iio.c ilnw.c inquire.c l_ge.c l_gt.c l_le.c l_lt.c\
-lbitbits.c lbitshft.c lread.c lwrite.c main.c open.c pow_ci.c pow_dd.c pow_di.c\
+i_nint.c i_sign.c iio.c ilnw.c inquire.c l_ge.c l_gt.c l_le.c l_lt.c\
+lbitbits.c lbitshft.c lread.c lwrite.c open.c pow_ci.c pow_dd.c pow_di.c\
 pow_hh.c pow_ii.c pow_ri.c pow_zi.c pow_zz.c \
 r_abs.c r_acos.c r_asin.c r_atan.c r_atn2.c r_cnjg.c r_cos.c r_cosh.c r_dim.c\
 r_exp.c r_imag.c r_int.c r_lg10.c r_log.c r_mod.c r_nint.c r_sign.c r_sin.c\

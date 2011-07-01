@@ -200,7 +200,7 @@ case "$host" in
 
     if test "x$with_internal_blas" == "xyes"; then
         use_internal_blas=1
-        LDFLAGS="$LDFLAGS -u MAIN__"
+        # LDFLAGS="$LDFLAGS -u MAIN__"
     fi
 
     if test "x$BLAS_STATIC_LIBS" != "x" || test "x$LAPACK_STATIC_LIBS" != "x"; then
