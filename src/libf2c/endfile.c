@@ -27,8 +27,8 @@ integer f_end(alist *a)
 	b = &f__units[a->aunit];
 	if(b->ufd==NULL) {
 		char nbuf[10];
-		sprintf(nbuf,"fort.%ld",a->aunit);
-		if (tf = fopen(nbuf, f__w_mode[0]))
+		sprintf(nbuf,"fort.%d",a->aunit);
+		if ((tf = fopen(nbuf, f__w_mode[0])))
 			fclose(tf);
 		return(0);
 		}

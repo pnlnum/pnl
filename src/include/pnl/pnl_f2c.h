@@ -11,6 +11,8 @@
 #ifndef F2C_INCLUDE
 #define F2C_INCLUDE
 
+#include "pnl/pnl_mathtools.h"
+
 #ifdef _WIN32 
 #include <io.h>				/* for real isatty() */
 #define _COMPLEX_DEFINED

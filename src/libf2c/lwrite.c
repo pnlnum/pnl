@@ -131,7 +131,7 @@ l_g(char *buf, double n)
 	switch(*b) {
 #ifndef WANT_LEAD_0
 		case '0':
-			while(b[0] = b[1])
+			while((b[0] = b[1]))
 				b++;
 			break;
 #endif
@@ -156,7 +156,7 @@ l_g(char *buf, double n)
 				while(*++b);
 				goto f__ret;
 			case 'E':
-				for(c1 = '.', c = 'E';  *b = c1;
+				for(c1 = '.', c = 'E';  (*b = c1);
 					c1 = c, c = *++b);
 				goto f__ret;
 			}
@@ -180,7 +180,7 @@ l_put(register char *s)
 #endif
 	register int c;
 
-	while(c = *s++)
+	while((c = *s++))
 		(*pn)(c);
 	}
 
@@ -232,9 +232,9 @@ lwrt_C(double a, double b)
 	PUT(')');
 }
 #ifdef KR_headers
-l_write(number,ptr,len,type) ftnint *number,type; char *ptr; ftnlen len;
+int l_write(number,ptr,len,type) ftnint *number,type; char *ptr; ftnlen len;
 #else
-l_write(ftnint *number, char *ptr, ftnlen len, ftnint type)
+int l_write(ftnint *number, char *ptr, ftnlen len, ftnint type)
 #endif
 {
 #define Ptr ((flex *)ptr)

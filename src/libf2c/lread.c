@@ -78,7 +78,7 @@ extern int ungetc(int, FILE*);	/* for systems with a buggy stdio.h */
 #endif //!defined _WIN32
 #endif
 
-t_getc(Void)
+int t_getc(Void)
 {	int ch;
 	if(f__curunit->uend) return(EOF);
 	if((ch=getc(f__cf))!=EOF) return(ch);
@@ -103,7 +103,7 @@ flag f__lquit;
 int f__lcount,f__ltype,nml_read;
 char *f__lchar;
 double f__lx,f__ly;
-#define ERR(x) if(n=(x)) return(n)
+#define ERR(x) if((n=(x))) return(n)
 #define GETC(x) (x=(*l_getc)())
 #define Ungetc(x,y) (*l_ungetc)(x,y)
 
@@ -288,11 +288,12 @@ l_C(Void)
 			f__lquit = 2;
 			return 0;
 			}
-		if (rd_count(ch))
+		if (rd_count(ch)) {
 			if(!f__cf || !feof(f__cf))
 				errfl(f__elist->cierr,112,"complex format");
 			else
 				err(f__elist->cierr,(EOF),"lread");
+    }
 		if(GETC(ch)!='*')
 		{
 			if(!f__cf || !feof(f__cf))
@@ -311,7 +312,7 @@ l_C(Void)
 	Ungetc(ch,f__cf);
 	nml_save = nml_read;
 	nml_read = 0;
-	if (ch = l_R(1,0))
+	if ((ch = l_R(1,0)))
 		return ch;
 	if (!f__ltype)
 		errfl(f__elist->cierr,112,"no real part");
@@ -323,7 +324,7 @@ l_C(Void)
 	}
 	while(iswhit(GETC(ch)));
 	(void) Ungetc(ch,f__cf);
-	if (ch = l_R(1,0))
+	if ((ch = l_R(1,0)))
 		return ch;
 	if (!f__ltype)
 		errfl(f__elist->cierr,112,"no imaginary part");
@@ -349,11 +350,12 @@ l_L(Void)
 	if(isdigit(ch))
 	{
 		rd_count(ch);
-		if(GETC(ch)!='*')
+		if((GETC(ch)!='*')) {
 			if(!f__cf || !feof(f__cf))
 				errfl(f__elist->cierr,112,"no star");
 			else
 				err(f__elist->cierr,(EOF),"lread");
+    }
 		GETC(ch);
 	}
 	if(ch == '.') GETC(ch);
@@ -528,9 +530,9 @@ l_CHAR(Void)
 	}
 }
 #ifdef KR_headers
-c_le(a) cilist *a;
+int c_le(a) cilist *a;
 #else
-c_le(cilist *a)
+int c_le(cilist *a)
 #endif
 {
 	if(!f__init)
@@ -548,9 +550,9 @@ c_le(cilist *a)
 	return(0);
 }
 #ifdef KR_headers
-l_read(number,ptr,len,type) ftnint *number,type; char *ptr; ftnlen len;
+int l_read(number,ptr,len,type) ftnint *number,type; char *ptr; ftnlen len;
 #else
-l_read(ftnint *number, char *ptr, ftnlen len, ftnint type)
+int l_read(ftnint *number, char *ptr, ftnlen len, ftnint type)
 #endif
 {
 #define Ptr ((flex *)ptr)
@@ -689,7 +691,7 @@ integer s_rsle(cilist *a)
 	f__reading=1;
 	f__external=1;
 	f__formatted=1;
-	if(n=c_le(a)) return(n);
+	if((n=c_le(a))) return(n);
 	f__lioproc = l_read;
 	f__lquit = 0;
 	f__lcount = 0;

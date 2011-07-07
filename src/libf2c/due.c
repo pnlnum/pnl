@@ -2,9 +2,9 @@
 #include "fio.h"
 
 #ifdef KR_headers
-c_due(a) cilist *a;
+int c_due(a) cilist *a;
 #else
-c_due(cilist *a)
+int c_due(cilist *a)
 #endif
 {
 	if(!f__init) f_init();
@@ -33,7 +33,7 @@ integer s_rdue(cilist *a)
 {
 	int n;
 	f__reading=1;
-	if(n=c_due(a)) return(n);
+	if((n=c_due(a))) return(n);
 	if(f__curunit->uwrt && f__nowreading(f__curunit))
 		err(a->cierr,errno,"read start");
 	return(0);
@@ -46,7 +46,7 @@ integer s_wdue(cilist *a)
 {
 	int n;
 	f__reading=0;
-	if(n=c_due(a)) return(n);
+	if((n=c_due(a))) return(n);
 	if(f__curunit->uwrt != 1 && f__nowwriting(f__curunit))
 		err(a->cierr,errno,"write start");
 	return(0);
