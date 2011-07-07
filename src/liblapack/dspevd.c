@@ -1,159 +1,188 @@
+/* dspevd.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dspevd_(char *jobz, char *uplo, integer *n, doublereal *
-	ap, doublereal *w, doublereal *z__, integer *ldz, doublereal *work, 
-	integer *lwork, integer *iwork, integer *liwork, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int dspevd_(char *jobz, char *uplo, int *n, double *
+	ap, double *w, double *z__, int *ldz, double *work, 
+	int *lwork, int *iwork, int *liwork, int *info)
 {
-/*  -- LAPACK driver routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    DSPEVD computes all the eigenvalues and, optionally, eigenvectors   
-    of a real symmetric matrix A in packed storage. If eigenvectors are   
-    desired, it uses a divide and conquer algorithm.   
-
-    The divide and conquer algorithm makes very mild assumptions about   
-    floating point arithmetic. It will work on machines with a guard   
-    digit in add/subtract, or on those binary machines without guard   
-    digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or   
-    Cray-2. It could conceivably fail on hexadecimal or decimal machines   
-    without guard digits, but we know of none.   
-
-    Arguments   
-    =========   
-
-    JOBZ    (input) CHARACTER*1   
-            = 'N':  Compute eigenvalues only;   
-            = 'V':  Compute eigenvalues and eigenvectors.   
-
-    UPLO    (input) CHARACTER*1   
-            = 'U':  Upper triangle of A is stored;   
-            = 'L':  Lower triangle of A is stored.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    AP      (input/output) DOUBLE PRECISION array, dimension (N*(N+1)/2)   
-            On entry, the upper or lower triangle of the symmetric matrix   
-            A, packed columnwise in a linear array.  The j-th column of A   
-            is stored in the array AP as follows:   
-            if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;   
-            if UPLO = 'L', AP(i + (j-1)*(2*n-j)/2) = A(i,j) for j<=i<=n.   
-
-            On exit, AP is overwritten by values generated during the   
-            reduction to tridiagonal form.  If UPLO = 'U', the diagonal   
-            and first superdiagonal of the tridiagonal matrix T overwrite   
-            the corresponding elements of A, and if UPLO = 'L', the   
-            diagonal and first subdiagonal of T overwrite the   
-            corresponding elements of A.   
-
-    W       (output) DOUBLE PRECISION array, dimension (N)   
-            If INFO = 0, the eigenvalues in ascending order.   
-
-    Z       (output) DOUBLE PRECISION array, dimension (LDZ, N)   
-            If JOBZ = 'V', then if INFO = 0, Z contains the orthonormal   
-            eigenvectors of the matrix A, with the i-th column of Z   
-            holding the eigenvector associated with W(i).   
-            If JOBZ = 'N', then Z is not referenced.   
-
-    LDZ     (input) INTEGER   
-            The leading dimension of the array Z.  LDZ >= 1, and if   
-            JOBZ = 'V', LDZ >= max(1,N).   
-
-    WORK    (workspace/output) DOUBLE PRECISION array,   
-                                           dimension (LWORK)   
-            On exit, if INFO = 0, WORK(1) returns the optimal LWORK.   
-
-    LWORK   (input) INTEGER   
-            The dimension of the array WORK.   
-            If N <= 1,               LWORK must be at least 1.   
-            If JOBZ = 'N' and N > 1, LWORK must be at least 2*N.   
-            If JOBZ = 'V' and N > 1, LWORK must be at least   
-                                                   1 + 6*N + N**2.   
-
-            If LWORK = -1, then a workspace query is assumed; the routine   
-            only calculates the optimal size of the WORK array, returns   
-            this value as the first entry of the WORK array, and no error   
-            message related to LWORK is issued by XERBLA.   
-
-    IWORK   (workspace/output) INTEGER array, dimension (LIWORK)   
-            On exit, if INFO = 0, IWORK(1) returns the optimal LIWORK.   
-
-    LIWORK  (input) INTEGER   
-            The dimension of the array IWORK.   
-            If JOBZ  = 'N' or N <= 1, LIWORK must be at least 1.   
-            If JOBZ  = 'V' and N > 1, LIWORK must be at least 3 + 5*N.   
-
-            If LIWORK = -1, then a workspace query is assumed; the   
-            routine only calculates the optimal size of the IWORK array,   
-            returns this value as the first entry of the IWORK array, and   
-            no error message related to LIWORK is issued by XERBLA.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value.   
-            > 0:  if INFO = i, the algorithm failed to converge; i   
-                  off-diagonal elements of an intermediate tridiagonal   
-                  form did not converge to zero.   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer z_dim1, z_offset, i__1;
-    doublereal d__1;
+    int z_dim1, z_offset, i__1;
+    double d__1;
+
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
+
     /* Local variables */
-    static integer inde;
-    static doublereal anrm, rmin, rmax;
-    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *);
-    static doublereal sigma;
-    extern logical lsame_(char *, char *);
-    static integer iinfo, lwmin;
-    static logical wantz;
-    extern doublereal dlamch_(char *);
-    static integer iscale;
-    extern /* Subroutine */ int dstedc_(char *, integer *, doublereal *, 
-	    doublereal *, doublereal *, integer *, doublereal *, integer *, 
-	    integer *, integer *, integer *);
-    static doublereal safmin;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static doublereal bignum;
-    extern doublereal dlansp_(char *, char *, integer *, doublereal *, 
-	    doublereal *);
-    static integer indtau;
-    extern /* Subroutine */ int dsterf_(integer *, doublereal *, doublereal *,
-	     integer *);
-    static integer indwrk, liwmin;
-    extern /* Subroutine */ int dsptrd_(char *, integer *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, integer *), 
-	    dopmtr_(char *, char *, char *, integer *, integer *, doublereal *
-	    , doublereal *, doublereal *, integer *, doublereal *, integer *);
-    static integer llwork;
-    static doublereal smlnum;
-    static logical lquery;
-    static doublereal eps;
-#define z___ref(a_1,a_2) z__[(a_2)*z_dim1 + a_1]
+    double eps;
+    int inde;
+    double anrm, rmin, rmax;
+    extern  int dscal_(int *, double *, double *, 
+	    int *);
+    double sigma;
+    extern int lsame_(char *, char *);
+    int iinfo, lwmin;
+    int wantz;
+    extern double dlamch_(char *);
+    int iscale;
+    extern  int dstedc_(char *, int *, double *, 
+	    double *, double *, int *, double *, int *, 
+	    int *, int *, int *);
+    double safmin;
+    extern  int xerbla_(char *, int *);
+    double bignum;
+    extern double dlansp_(char *, char *, int *, double *, 
+	    double *);
+    int indtau;
+    extern  int dsterf_(int *, double *, double *, 
+	     int *);
+    int indwrk, liwmin;
+    extern  int dsptrd_(char *, int *, double *, 
+	    double *, double *, double *, int *), 
+	    dopmtr_(char *, char *, char *, int *, int *, double *
+, double *, double *, int *, double *, int *);
+    int llwork;
+    double smlnum;
+    int lquery;
 
 
+/*  -- LAPACK driver routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  DSPEVD computes all the eigenvalues and, optionally, eigenvectors */
+/*  of a float symmetric matrix A in packed storage. If eigenvectors are */
+/*  desired, it uses a divide and conquer algorithm. */
+
+/*  The divide and conquer algorithm makes very mild assumptions about */
+/*  floating point arithmetic. It will work on machines with a guard */
+/*  digit in add/subtract, or on those binary machines without guard */
+/*  digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or */
+/*  Cray-2. It could conceivably fail on hexadecimal or decimal machines */
+/*  without guard digits, but we know of none. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  JOBZ    (input) CHARACTER*1 */
+/*          = 'N':  Compute eigenvalues only; */
+/*          = 'V':  Compute eigenvalues and eigenvectors. */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U':  Upper triangle of A is stored; */
+/*          = 'L':  Lower triangle of A is stored. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  AP      (input/output) DOUBLE PRECISION array, dimension (N*(N+1)/2) */
+/*          On entry, the upper or lower triangle of the symmetric matrix */
+/*          A, packed columnwise in a linear array.  The j-th column of A */
+/*          is stored in the array AP as follows: */
+/*          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j; */
+/*          if UPLO = 'L', AP(i + (j-1)*(2*n-j)/2) = A(i,j) for j<=i<=n. */
+
+/*          On exit, AP is overwritten by values generated during the */
+/*          reduction to tridiagonal form.  If UPLO = 'U', the diagonal */
+/*          and first superdiagonal of the tridiagonal matrix T overwrite */
+/*          the corresponding elements of A, and if UPLO = 'L', the */
+/*          diagonal and first subdiagonal of T overwrite the */
+/*          corresponding elements of A. */
+
+/*  W       (output) DOUBLE PRECISION array, dimension (N) */
+/*          If INFO = 0, the eigenvalues in ascending order. */
+
+/*  Z       (output) DOUBLE PRECISION array, dimension (LDZ, N) */
+/*          If JOBZ = 'V', then if INFO = 0, Z contains the orthonormal */
+/*          eigenvectors of the matrix A, with the i-th column of Z */
+/*          holding the eigenvector associated with W(i). */
+/*          If JOBZ = 'N', then Z is not referenced. */
+
+/*  LDZ     (input) INTEGER */
+/*          The leading dimension of the array Z.  LDZ >= 1, and if */
+/*          JOBZ = 'V', LDZ >= MAX(1,N). */
+
+/*  WORK    (workspace/output) DOUBLE PRECISION array, */
+/*                                         dimension (LWORK) */
+/*          On exit, if INFO = 0, WORK(1) returns the required LWORK. */
+
+/*  LWORK   (input) INTEGER */
+/*          The dimension of the array WORK. */
+/*          If N <= 1,               LWORK must be at least 1. */
+/*          If JOBZ = 'N' and N > 1, LWORK must be at least 2*N. */
+/*          If JOBZ = 'V' and N > 1, LWORK must be at least */
+/*                                                 1 + 6*N + N**2. */
+
+/*          If LWORK = -1, then a workspace query is assumed; the routine */
+/*          only calculates the required sizes of the WORK and IWORK */
+/*          arrays, returns these values as the first entries of the WORK */
+/*          and IWORK arrays, and no error message related to LWORK or */
+/*          LIWORK is issued by XERBLA. */
+
+/*  IWORK   (workspace/output) INTEGER array, dimension (MAX(1,LIWORK)) */
+/*          On exit, if INFO = 0, IWORK(1) returns the required LIWORK. */
+
+/*  LIWORK  (input) INTEGER */
+/*          The dimension of the array IWORK. */
+/*          If JOBZ  = 'N' or N <= 1, LIWORK must be at least 1. */
+/*          If JOBZ  = 'V' and N > 1, LIWORK must be at least 3 + 5*N. */
+
+/*          If LIWORK = -1, then a workspace query is assumed; the */
+/*          routine only calculates the required sizes of the WORK and */
+/*          IWORK arrays, returns these values as the first entries of */
+/*          the WORK and IWORK arrays, and no error message related to */
+/*          LWORK or LIWORK is issued by XERBLA. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value. */
+/*          > 0:  if INFO = i, the algorithm failed to converge; i */
+/*                off-diagonal elements of an intermediate tridiagonal */
+/*                form did not converge to zero. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --ap;
     --w;
     z_dim1 = *ldz;
-    z_offset = 1 + z_dim1 * 1;
+    z_offset = 1 + z_dim1;
     z__ -= z_offset;
     --work;
     --iwork;
@@ -163,20 +192,6 @@
     lquery = *lwork == -1 || *liwork == -1;
 
     *info = 0;
-    if (*n <= 1) {
-	liwmin = 1;
-	lwmin = 1;
-    } else {
-	if (wantz) {
-	    liwmin = *n * 5 + 3;
-/* Computing 2nd power */
-	    i__1 = *n;
-	    lwmin = *n * 6 + 1 + i__1 * i__1;
-	} else {
-	    liwmin = 1;
-	    lwmin = *n << 1;
-	}
-    }
     if (! (wantz || lsame_(jobz, "N"))) {
 	*info = -1;
     } else if (! (lsame_(uplo, "U") || lsame_(uplo, 
@@ -186,15 +201,31 @@
 	*info = -3;
     } else if (*ldz < 1 || wantz && *ldz < *n) {
 	*info = -7;
-    } else if (*lwork < lwmin && ! lquery) {
-	*info = -9;
-    } else if (*liwork < liwmin && ! lquery) {
-	*info = -11;
     }
 
     if (*info == 0) {
-	work[1] = (doublereal) lwmin;
+	if (*n <= 1) {
+	    liwmin = 1;
+	    lwmin = 1;
+	} else {
+	    if (wantz) {
+		liwmin = *n * 5 + 3;
+/* Computing 2nd power */
+		i__1 = *n;
+		lwmin = *n * 6 + 1 + i__1 * i__1;
+	    } else {
+		liwmin = 1;
+		lwmin = *n << 1;
+	    }
+	}
 	iwork[1] = liwmin;
+	work[1] = (double) lwmin;
+
+	if (*lwork < lwmin && ! lquery) {
+	    *info = -9;
+	} else if (*liwork < liwmin && ! lquery) {
+	    *info = -11;
+	}
     }
 
     if (*info != 0) {
@@ -214,7 +245,7 @@
     if (*n == 1) {
 	w[1] = ap[1];
 	if (wantz) {
-	    z___ref(1, 1) = 1.;
+	    z__[z_dim1 + 1] = 1.;
 	}
 	return 0;
     }
@@ -250,10 +281,10 @@
     indtau = inde + *n;
     dsptrd_(uplo, n, &ap[1], &w[1], &work[inde], &work[indtau], &iinfo);
 
-/*     For eigenvalues only, call DSTERF.  For eigenvectors, first call   
-       DSTEDC to generate the eigenvector matrix, WORK(INDWRK), of the   
-       tridiagonal matrix, then call DOPMTR to multiply it by the   
-       Householder transformations represented in AP. */
+/*     For eigenvalues only, call DSTERF.  For eigenvectors, first call */
+/*     DSTEDC to generate the eigenvector matrix, WORK(INDWRK), of the */
+/*     tridiagonal matrix, then call DOPMTR to multiply it by the */
+/*     Householder transformations represented in AP. */
 
     if (! wantz) {
 	dsterf_(n, &w[1], &work[inde], info);
@@ -261,7 +292,7 @@
 	indwrk = indtau + *n;
 	llwork = *lwork - indwrk + 1;
 	dstedc_("I", n, &w[1], &work[inde], &z__[z_offset], ldz, &work[indwrk]
-		, &llwork, &iwork[1], liwork, info);
+, &llwork, &iwork[1], liwork, info);
 	dopmtr_("L", uplo, "N", n, n, &ap[1], &work[indtau], &z__[z_offset], 
 		ldz, &work[indwrk], &iinfo);
     }
@@ -273,14 +304,10 @@
 	dscal_(n, &d__1, &w[1], &c__1);
     }
 
-    work[1] = (doublereal) lwmin;
+    work[1] = (double) lwmin;
     iwork[1] = liwmin;
     return 0;
 
 /*     End of DSPEVD */
 
 } /* dspevd_ */
-
-#undef z___ref
-
-

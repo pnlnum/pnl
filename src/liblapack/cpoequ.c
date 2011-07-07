@@ -1,79 +1,103 @@
+/* cpoequ.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int cpoequ_(integer *n, complex *a, integer *lda, real *s, 
-	real *scond, real *amax, integer *info)
+ int cpoequ_(int *n, complex *a, int *lda, float *s, 
+	float *scond, float *amax, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       March 31, 1993   
-
-
-    Purpose   
-    =======   
-
-    CPOEQU computes row and column scalings intended to equilibrate a   
-    Hermitian positive definite matrix A and reduce its condition number   
-    (with respect to the two-norm).  S contains the scale factors,   
-    S(i) = 1/sqrt(A(i,i)), chosen so that the scaled matrix B with   
-    elements B(i,j) = S(i)*A(i,j)*S(j) has ones on the diagonal.  This   
-    choice of S puts the condition number of B within a factor N of the   
-    smallest possible condition number over all possible diagonal   
-    scalings.   
-
-    Arguments   
-    =========   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    A       (input) COMPLEX array, dimension (LDA,N)   
-            The N-by-N Hermitian positive definite matrix whose scaling   
-            factors are to be computed.  Only the diagonal elements of A   
-            are referenced.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.  LDA >= max(1,N).   
-
-    S       (output) REAL array, dimension (N)   
-            If INFO = 0, S contains the scale factors for A.   
-
-    SCOND   (output) REAL   
-            If INFO = 0, S contains the ratio of the smallest S(i) to   
-            the largest S(i).  If SCOND >= 0.1 and AMAX is neither too   
-            large nor too small, it is not worth scaling by S.   
-
-    AMAX    (output) REAL   
-            Absolute value of largest matrix element.  If AMAX is very   
-            close to overflow or very close to underflow, the matrix   
-            should be scaled.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-            > 0:  if INFO = i, the i-th diagonal element is nonpositive.   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
-    real r__1, r__2;
-    /* Builtin functions */
-    double sqrt(doublereal);
-    /* Local variables */
-    static real smin;
-    static integer i__;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-#define a_subscr(a_1,a_2) (a_2)*a_dim1 + a_1
-#define a_ref(a_1,a_2) a[a_subscr(a_1,a_2)]
+    int a_dim1, a_offset, i__1, i__2;
+    float r__1, r__2;
 
+    /* Builtin functions */
+    double sqrt(double);
+
+    /* Local variables */
+    int i__;
+    float smin;
+    extern  int xerbla_(char *, int *);
+
+
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CPOEQU computes row and column scalings intended to equilibrate a */
+/*  Hermitian positive definite matrix A and reduce its condition number */
+/*  (with respect to the two-norm).  S contains the scale factors, */
+/*  S(i) = 1/sqrt(A(i,i)), chosen so that the scaled matrix B with */
+/*  elements B(i,j) = S(i)*A(i,j)*S(j) has ones on the diagonal.  This */
+/*  choice of S puts the condition number of B within a factor N of the */
+/*  smallest possible condition number over all possible diagonal */
+/*  scalings. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  A       (input) COMPLEX array, dimension (LDA,N) */
+/*          The N-by-N Hermitian positive definite matrix whose scaling */
+/*          factors are to be computed.  Only the diagonal elements of A */
+/*          are referenced. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A.  LDA >= MAX(1,N). */
+
+/*  S       (output) REAL array, dimension (N) */
+/*          If INFO = 0, S contains the scale factors for A. */
+
+/*  SCOND   (output) REAL */
+/*          If INFO = 0, S contains the ratio of the smallest S(i) to */
+/*          the largest S(i).  If SCOND >= 0.1 and AMAX is neither too */
+/*          large nor too small, it is not worth scaling by S. */
+
+/*  AMAX    (output) REAL */
+/*          Absolute value of largest matrix element.  If AMAX is very */
+/*          close to overflow or very close to underflow, the matrix */
+/*          should be scaled. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+/*          > 0:  if INFO = i, the i-th diagonal element is nonpositive. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     --s;
 
@@ -81,7 +105,7 @@
     *info = 0;
     if (*n < 0) {
 	*info = -1;
-    } else if (*lda < max(1,*n)) {
+    } else if (*lda < MAX(1,*n)) {
 	*info = -3;
     }
     if (*info != 0) {
@@ -100,20 +124,20 @@
 
 /*     Find the minimum and maximum diagonal elements. */
 
-    i__1 = a_subscr(1, 1);
+    i__1 = a_dim1 + 1;
     s[1] = a[i__1].r;
     smin = s[1];
     *amax = s[1];
     i__1 = *n;
     for (i__ = 2; i__ <= i__1; ++i__) {
-	i__2 = a_subscr(i__, i__);
+	i__2 = i__ + i__ * a_dim1;
 	s[i__] = a[i__2].r;
 /* Computing MIN */
 	r__1 = smin, r__2 = s[i__];
-	smin = dmin(r__1,r__2);
+	smin = MIN(r__1,r__2);
 /* Computing MAX */
 	r__1 = *amax, r__2 = s[i__];
-	*amax = dmax(r__1,r__2);
+	*amax = MAX(r__1,r__2);
 /* L10: */
     }
 
@@ -131,8 +155,8 @@
 	}
     } else {
 
-/*        Set the scale factors to the reciprocals   
-          of the diagonal elements. */
+/*        Set the scale factors to the reciprocals */
+/*        of the diagonal elements. */
 
 	i__1 = *n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
@@ -140,7 +164,7 @@
 /* L30: */
 	}
 
-/*        Compute SCOND = min(S(I)) / max(S(I)) */
+/*        Compute SCOND = MIN(S(I)) / MAX(S(I)) */
 
 	*scond = sqrt(smin) / sqrt(*amax);
     }
@@ -149,8 +173,3 @@
 /*     End of CPOEQU */
 
 } /* cpoequ_ */
-
-#undef a_ref
-#undef a_subscr
-
-

@@ -1,50 +1,64 @@
+/* xerbla.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
+#include "stdio.h"
 
-/*
- * stdio.h for the printf()
- */
-#if defined _WIN32
-#include <stdio.h>
-#endif
+/* Table of constant values */
 
-/* Subroutine */ int xerbla_(char *srname, integer *info)
+static int c__1 = 1;
+
+ int xerbla_(char *srname, int *info)
 {
-/*  -- LAPACK auxiliary routine (version 2.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
+    
 
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
 
-    Purpose   
-    =======   
+/*     .. Scalar Arguments .. */
+/*     .. */
 
-    XERBLA  is an error handler for the LAPACK routines.   
-    It is called by an LAPACK routine if an input parameter has an   
-    invalid value.  A message is printed and execution stops.   
+/*  Purpose */
+/*  ======= */
 
-    Installers may consider modifying the STOP statement in order to   
-    call system-specific exception-handling facilities.   
+/*  XERBLA  is an error handler for the LAPACK routines. */
+/*  It is called by an LAPACK routine if an input parameter has an */
+/*  invalid value.  A message is printed and execution stops. */
 
-    Arguments   
-    =========   
+/*  Installers may consider modifying the STOP statement in order to */
+/*  call system-specific exception-handling facilities. */
 
-    SRNAME  (input) CHARACTER*6   
-            The name of the routine which called XERBLA.   
+/*  Arguments */
+/*  ========= */
 
-    INFO    (input) INTEGER   
-            The position of the invalid parameter in the parameter list   
+/*  SRNAME  (input) CHARACTER*(*) */
+/*          The name of the routine which called XERBLA. */
 
-            of the calling routine.   
+/*  INFO    (input) INTEGER */
+/*          The position of the invalid parameter in the parameter list */
+/*          of the calling routine. */
 
-   ===================================================================== 
-*/
+/* ===================================================================== */
+
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
 
     printf("** On entry to %6s, parameter number %2i had an illegal value\n",
 		srname, *info);
+
 
 /*     End of XERBLA */
 
     return 0;
 } /* xerbla_ */
-

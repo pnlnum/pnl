@@ -1,92 +1,110 @@
+/* dlarfx.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dlarfx_(char *side, integer *m, integer *n, doublereal *
-	v, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int dlarfx_(char *side, int *m, int *n, double *
+	v, double *tau, double *c__, int *ldc, double *work)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       February 29, 1992   
-
-
-    Purpose   
-    =======   
-
-    DLARFX applies a real elementary reflector H to a real m by n   
-    matrix C, from either the left or the right. H is represented in the   
-    form   
-
-          H = I - tau * v * v'   
-
-    where tau is a real scalar and v is a real vector.   
-
-    If tau = 0, then H is taken to be the unit matrix   
-
-    This version uses inline code if H has order < 11.   
-
-    Arguments   
-    =========   
-
-    SIDE    (input) CHARACTER*1   
-            = 'L': form  H * C   
-            = 'R': form  C * H   
-
-    M       (input) INTEGER   
-            The number of rows of the matrix C.   
-
-    N       (input) INTEGER   
-            The number of columns of the matrix C.   
-
-    V       (input) DOUBLE PRECISION array, dimension (M) if SIDE = 'L'   
-                                       or (N) if SIDE = 'R'   
-            The vector v in the representation of H.   
-
-    TAU     (input) DOUBLE PRECISION   
-            The value tau in the representation of H.   
-
-    C       (input/output) DOUBLE PRECISION array, dimension (LDC,N)   
-            On entry, the m by n matrix C.   
-            On exit, C is overwritten by the matrix H * C if SIDE = 'L',   
-            or C * H if SIDE = 'R'.   
-
-    LDC     (input) INTEGER   
-            The leading dimension of the array C. LDA >= (1,M).   
-
-    WORK    (workspace) DOUBLE PRECISION array, dimension   
-                        (N) if SIDE = 'L'   
-                        or (M) if SIDE = 'R'   
-            WORK is not referenced if H has order < 11.   
-
-    =====================================================================   
-
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static doublereal c_b14 = 1.;
-    static integer c__1 = 1;
-    static doublereal c_b16 = 0.;
-    
     /* System generated locals */
-    integer c_dim1, c_offset, i__1;
-    doublereal d__1;
+    int c_dim1, c_offset, i__1;
+
     /* Local variables */
-    extern /* Subroutine */ int dger_(integer *, integer *, doublereal *, 
-	    doublereal *, integer *, doublereal *, integer *, doublereal *, 
-	    integer *);
-    static integer j;
-    extern logical lsame_(char *, char *);
-    extern /* Subroutine */ int dgemv_(char *, integer *, integer *, 
-	    doublereal *, doublereal *, integer *, doublereal *, integer *, 
-	    doublereal *, doublereal *, integer *);
-    static doublereal t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, 
-	    v6, v7, v8, v9, t10, v10, sum;
-#define c___ref(a_1,a_2) c__[(a_2)*c_dim1 + a_1]
+    int j;
+    double t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7,
+	     v8, v9, t10, v10, sum;
+    extern  int dlarf_(char *, int *, int *, 
+	    double *, int *, double *, double *, int *, 
+	    double *);
+    extern int lsame_(char *, char *);
 
 
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  DLARFX applies a float elementary reflector H to a float m by n */
+/*  matrix C, from either the left or the right. H is represented in the */
+/*  form */
+
+/*        H = I - tau * v * v' */
+
+/*  where tau is a float scalar and v is a float vector. */
+
+/*  If tau = 0, then H is taken to be the unit matrix */
+
+/*  This version uses inline code if H has order < 11. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  SIDE    (input) CHARACTER*1 */
+/*          = 'L': form  H * C */
+/*          = 'R': form  C * H */
+
+/*  M       (input) INTEGER */
+/*          The number of rows of the matrix C. */
+
+/*  N       (input) INTEGER */
+/*          The number of columns of the matrix C. */
+
+/*  V       (input) DOUBLE PRECISION array, dimension (M) if SIDE = 'L' */
+/*                                     or (N) if SIDE = 'R' */
+/*          The vector v in the representation of H. */
+
+/*  TAU     (input) DOUBLE PRECISION */
+/*          The value tau in the representation of H. */
+
+/*  C       (input/output) DOUBLE PRECISION array, dimension (LDC,N) */
+/*          On entry, the m by n matrix C. */
+/*          On exit, C is overwritten by the matrix H * C if SIDE = 'L', */
+/*          or C * H if SIDE = 'R'. */
+
+/*  LDC     (input) INTEGER */
+/*          The leading dimension of the array C. LDA >= (1,M). */
+
+/*  WORK    (workspace) DOUBLE PRECISION array, dimension */
+/*                      (N) if SIDE = 'L' */
+/*                      or (M) if SIDE = 'R' */
+/*          WORK is not referenced if H has order < 11. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     --v;
     c_dim1 = *ldc;
-    c_offset = 1 + c_dim1 * 1;
+    c_offset = 1 + c_dim1;
     c__ -= c_offset;
     --work;
 
@@ -111,18 +129,9 @@
 	    case 10:  goto L190;
 	}
 
-/*        Code for general M   
+/*        Code for general M */
 
-          w := C'*v */
-
-	dgemv_("Transpose", m, n, &c_b14, &c__[c_offset], ldc, &v[1], &c__1, &
-		c_b16, &work[1], &c__1);
-
-/*        C := C - tau * v * w' */
-
-	d__1 = -(*tau);
-	dger_(m, n, &d__1, &v[1], &c__1, &work[1], &c__1, &c__[c_offset], ldc)
-		;
+	dlarf_(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
 	goto L410;
 L10:
 
@@ -131,7 +140,7 @@ L10:
 	t1 = 1. - *tau * v[1] * v[1];
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    c___ref(1, j) = t1 * c___ref(1, j);
+	    c__[j * c_dim1 + 1] = t1 * c__[j * c_dim1 + 1];
 /* L20: */
 	}
 	goto L410;
@@ -145,9 +154,9 @@ L30:
 	t2 = *tau * v2;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    sum = v1 * c___ref(1, j) + v2 * c___ref(2, j);
-	    c___ref(1, j) = c___ref(1, j) - sum * t1;
-	    c___ref(2, j) = c___ref(2, j) - sum * t2;
+	    sum = v1 * c__[j * c_dim1 + 1] + v2 * c__[j * c_dim1 + 2];
+	    c__[j * c_dim1 + 1] -= sum * t1;
+	    c__[j * c_dim1 + 2] -= sum * t2;
 /* L40: */
 	}
 	goto L410;
@@ -163,11 +172,11 @@ L50:
 	t3 = *tau * v3;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    sum = v1 * c___ref(1, j) + v2 * c___ref(2, j) + v3 * c___ref(3, j)
-		    ;
-	    c___ref(1, j) = c___ref(1, j) - sum * t1;
-	    c___ref(2, j) = c___ref(2, j) - sum * t2;
-	    c___ref(3, j) = c___ref(3, j) - sum * t3;
+	    sum = v1 * c__[j * c_dim1 + 1] + v2 * c__[j * c_dim1 + 2] + v3 * 
+		    c__[j * c_dim1 + 3];
+	    c__[j * c_dim1 + 1] -= sum * t1;
+	    c__[j * c_dim1 + 2] -= sum * t2;
+	    c__[j * c_dim1 + 3] -= sum * t3;
 /* L60: */
 	}
 	goto L410;
@@ -185,12 +194,12 @@ L70:
 	t4 = *tau * v4;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    sum = v1 * c___ref(1, j) + v2 * c___ref(2, j) + v3 * c___ref(3, j)
-		     + v4 * c___ref(4, j);
-	    c___ref(1, j) = c___ref(1, j) - sum * t1;
-	    c___ref(2, j) = c___ref(2, j) - sum * t2;
-	    c___ref(3, j) = c___ref(3, j) - sum * t3;
-	    c___ref(4, j) = c___ref(4, j) - sum * t4;
+	    sum = v1 * c__[j * c_dim1 + 1] + v2 * c__[j * c_dim1 + 2] + v3 * 
+		    c__[j * c_dim1 + 3] + v4 * c__[j * c_dim1 + 4];
+	    c__[j * c_dim1 + 1] -= sum * t1;
+	    c__[j * c_dim1 + 2] -= sum * t2;
+	    c__[j * c_dim1 + 3] -= sum * t3;
+	    c__[j * c_dim1 + 4] -= sum * t4;
 /* L80: */
 	}
 	goto L410;
@@ -210,13 +219,14 @@ L90:
 	t5 = *tau * v5;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    sum = v1 * c___ref(1, j) + v2 * c___ref(2, j) + v3 * c___ref(3, j)
-		     + v4 * c___ref(4, j) + v5 * c___ref(5, j);
-	    c___ref(1, j) = c___ref(1, j) - sum * t1;
-	    c___ref(2, j) = c___ref(2, j) - sum * t2;
-	    c___ref(3, j) = c___ref(3, j) - sum * t3;
-	    c___ref(4, j) = c___ref(4, j) - sum * t4;
-	    c___ref(5, j) = c___ref(5, j) - sum * t5;
+	    sum = v1 * c__[j * c_dim1 + 1] + v2 * c__[j * c_dim1 + 2] + v3 * 
+		    c__[j * c_dim1 + 3] + v4 * c__[j * c_dim1 + 4] + v5 * c__[
+		    j * c_dim1 + 5];
+	    c__[j * c_dim1 + 1] -= sum * t1;
+	    c__[j * c_dim1 + 2] -= sum * t2;
+	    c__[j * c_dim1 + 3] -= sum * t3;
+	    c__[j * c_dim1 + 4] -= sum * t4;
+	    c__[j * c_dim1 + 5] -= sum * t5;
 /* L100: */
 	}
 	goto L410;
@@ -238,15 +248,15 @@ L110:
 	t6 = *tau * v6;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    sum = v1 * c___ref(1, j) + v2 * c___ref(2, j) + v3 * c___ref(3, j)
-		     + v4 * c___ref(4, j) + v5 * c___ref(5, j) + v6 * c___ref(
-		    6, j);
-	    c___ref(1, j) = c___ref(1, j) - sum * t1;
-	    c___ref(2, j) = c___ref(2, j) - sum * t2;
-	    c___ref(3, j) = c___ref(3, j) - sum * t3;
-	    c___ref(4, j) = c___ref(4, j) - sum * t4;
-	    c___ref(5, j) = c___ref(5, j) - sum * t5;
-	    c___ref(6, j) = c___ref(6, j) - sum * t6;
+	    sum = v1 * c__[j * c_dim1 + 1] + v2 * c__[j * c_dim1 + 2] + v3 * 
+		    c__[j * c_dim1 + 3] + v4 * c__[j * c_dim1 + 4] + v5 * c__[
+		    j * c_dim1 + 5] + v6 * c__[j * c_dim1 + 6];
+	    c__[j * c_dim1 + 1] -= sum * t1;
+	    c__[j * c_dim1 + 2] -= sum * t2;
+	    c__[j * c_dim1 + 3] -= sum * t3;
+	    c__[j * c_dim1 + 4] -= sum * t4;
+	    c__[j * c_dim1 + 5] -= sum * t5;
+	    c__[j * c_dim1 + 6] -= sum * t6;
 /* L120: */
 	}
 	goto L410;
@@ -270,16 +280,17 @@ L130:
 	t7 = *tau * v7;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    sum = v1 * c___ref(1, j) + v2 * c___ref(2, j) + v3 * c___ref(3, j)
-		     + v4 * c___ref(4, j) + v5 * c___ref(5, j) + v6 * c___ref(
-		    6, j) + v7 * c___ref(7, j);
-	    c___ref(1, j) = c___ref(1, j) - sum * t1;
-	    c___ref(2, j) = c___ref(2, j) - sum * t2;
-	    c___ref(3, j) = c___ref(3, j) - sum * t3;
-	    c___ref(4, j) = c___ref(4, j) - sum * t4;
-	    c___ref(5, j) = c___ref(5, j) - sum * t5;
-	    c___ref(6, j) = c___ref(6, j) - sum * t6;
-	    c___ref(7, j) = c___ref(7, j) - sum * t7;
+	    sum = v1 * c__[j * c_dim1 + 1] + v2 * c__[j * c_dim1 + 2] + v3 * 
+		    c__[j * c_dim1 + 3] + v4 * c__[j * c_dim1 + 4] + v5 * c__[
+		    j * c_dim1 + 5] + v6 * c__[j * c_dim1 + 6] + v7 * c__[j * 
+		    c_dim1 + 7];
+	    c__[j * c_dim1 + 1] -= sum * t1;
+	    c__[j * c_dim1 + 2] -= sum * t2;
+	    c__[j * c_dim1 + 3] -= sum * t3;
+	    c__[j * c_dim1 + 4] -= sum * t4;
+	    c__[j * c_dim1 + 5] -= sum * t5;
+	    c__[j * c_dim1 + 6] -= sum * t6;
+	    c__[j * c_dim1 + 7] -= sum * t7;
 /* L140: */
 	}
 	goto L410;
@@ -305,17 +316,18 @@ L150:
 	t8 = *tau * v8;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    sum = v1 * c___ref(1, j) + v2 * c___ref(2, j) + v3 * c___ref(3, j)
-		     + v4 * c___ref(4, j) + v5 * c___ref(5, j) + v6 * c___ref(
-		    6, j) + v7 * c___ref(7, j) + v8 * c___ref(8, j);
-	    c___ref(1, j) = c___ref(1, j) - sum * t1;
-	    c___ref(2, j) = c___ref(2, j) - sum * t2;
-	    c___ref(3, j) = c___ref(3, j) - sum * t3;
-	    c___ref(4, j) = c___ref(4, j) - sum * t4;
-	    c___ref(5, j) = c___ref(5, j) - sum * t5;
-	    c___ref(6, j) = c___ref(6, j) - sum * t6;
-	    c___ref(7, j) = c___ref(7, j) - sum * t7;
-	    c___ref(8, j) = c___ref(8, j) - sum * t8;
+	    sum = v1 * c__[j * c_dim1 + 1] + v2 * c__[j * c_dim1 + 2] + v3 * 
+		    c__[j * c_dim1 + 3] + v4 * c__[j * c_dim1 + 4] + v5 * c__[
+		    j * c_dim1 + 5] + v6 * c__[j * c_dim1 + 6] + v7 * c__[j * 
+		    c_dim1 + 7] + v8 * c__[j * c_dim1 + 8];
+	    c__[j * c_dim1 + 1] -= sum * t1;
+	    c__[j * c_dim1 + 2] -= sum * t2;
+	    c__[j * c_dim1 + 3] -= sum * t3;
+	    c__[j * c_dim1 + 4] -= sum * t4;
+	    c__[j * c_dim1 + 5] -= sum * t5;
+	    c__[j * c_dim1 + 6] -= sum * t6;
+	    c__[j * c_dim1 + 7] -= sum * t7;
+	    c__[j * c_dim1 + 8] -= sum * t8;
 /* L160: */
 	}
 	goto L410;
@@ -343,19 +355,20 @@ L170:
 	t9 = *tau * v9;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    sum = v1 * c___ref(1, j) + v2 * c___ref(2, j) + v3 * c___ref(3, j)
-		     + v4 * c___ref(4, j) + v5 * c___ref(5, j) + v6 * c___ref(
-		    6, j) + v7 * c___ref(7, j) + v8 * c___ref(8, j) + v9 * 
-		    c___ref(9, j);
-	    c___ref(1, j) = c___ref(1, j) - sum * t1;
-	    c___ref(2, j) = c___ref(2, j) - sum * t2;
-	    c___ref(3, j) = c___ref(3, j) - sum * t3;
-	    c___ref(4, j) = c___ref(4, j) - sum * t4;
-	    c___ref(5, j) = c___ref(5, j) - sum * t5;
-	    c___ref(6, j) = c___ref(6, j) - sum * t6;
-	    c___ref(7, j) = c___ref(7, j) - sum * t7;
-	    c___ref(8, j) = c___ref(8, j) - sum * t8;
-	    c___ref(9, j) = c___ref(9, j) - sum * t9;
+	    sum = v1 * c__[j * c_dim1 + 1] + v2 * c__[j * c_dim1 + 2] + v3 * 
+		    c__[j * c_dim1 + 3] + v4 * c__[j * c_dim1 + 4] + v5 * c__[
+		    j * c_dim1 + 5] + v6 * c__[j * c_dim1 + 6] + v7 * c__[j * 
+		    c_dim1 + 7] + v8 * c__[j * c_dim1 + 8] + v9 * c__[j * 
+		    c_dim1 + 9];
+	    c__[j * c_dim1 + 1] -= sum * t1;
+	    c__[j * c_dim1 + 2] -= sum * t2;
+	    c__[j * c_dim1 + 3] -= sum * t3;
+	    c__[j * c_dim1 + 4] -= sum * t4;
+	    c__[j * c_dim1 + 5] -= sum * t5;
+	    c__[j * c_dim1 + 6] -= sum * t6;
+	    c__[j * c_dim1 + 7] -= sum * t7;
+	    c__[j * c_dim1 + 8] -= sum * t8;
+	    c__[j * c_dim1 + 9] -= sum * t9;
 /* L180: */
 	}
 	goto L410;
@@ -385,20 +398,21 @@ L190:
 	t10 = *tau * v10;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    sum = v1 * c___ref(1, j) + v2 * c___ref(2, j) + v3 * c___ref(3, j)
-		     + v4 * c___ref(4, j) + v5 * c___ref(5, j) + v6 * c___ref(
-		    6, j) + v7 * c___ref(7, j) + v8 * c___ref(8, j) + v9 * 
-		    c___ref(9, j) + v10 * c___ref(10, j);
-	    c___ref(1, j) = c___ref(1, j) - sum * t1;
-	    c___ref(2, j) = c___ref(2, j) - sum * t2;
-	    c___ref(3, j) = c___ref(3, j) - sum * t3;
-	    c___ref(4, j) = c___ref(4, j) - sum * t4;
-	    c___ref(5, j) = c___ref(5, j) - sum * t5;
-	    c___ref(6, j) = c___ref(6, j) - sum * t6;
-	    c___ref(7, j) = c___ref(7, j) - sum * t7;
-	    c___ref(8, j) = c___ref(8, j) - sum * t8;
-	    c___ref(9, j) = c___ref(9, j) - sum * t9;
-	    c___ref(10, j) = c___ref(10, j) - sum * t10;
+	    sum = v1 * c__[j * c_dim1 + 1] + v2 * c__[j * c_dim1 + 2] + v3 * 
+		    c__[j * c_dim1 + 3] + v4 * c__[j * c_dim1 + 4] + v5 * c__[
+		    j * c_dim1 + 5] + v6 * c__[j * c_dim1 + 6] + v7 * c__[j * 
+		    c_dim1 + 7] + v8 * c__[j * c_dim1 + 8] + v9 * c__[j * 
+		    c_dim1 + 9] + v10 * c__[j * c_dim1 + 10];
+	    c__[j * c_dim1 + 1] -= sum * t1;
+	    c__[j * c_dim1 + 2] -= sum * t2;
+	    c__[j * c_dim1 + 3] -= sum * t3;
+	    c__[j * c_dim1 + 4] -= sum * t4;
+	    c__[j * c_dim1 + 5] -= sum * t5;
+	    c__[j * c_dim1 + 6] -= sum * t6;
+	    c__[j * c_dim1 + 7] -= sum * t7;
+	    c__[j * c_dim1 + 8] -= sum * t8;
+	    c__[j * c_dim1 + 9] -= sum * t9;
+	    c__[j * c_dim1 + 10] -= sum * t10;
 /* L200: */
 	}
 	goto L410;
@@ -419,18 +433,9 @@ L190:
 	    case 10:  goto L390;
 	}
 
-/*        Code for general N   
+/*        Code for general N */
 
-          w := C * v */
-
-	dgemv_("No transpose", m, n, &c_b14, &c__[c_offset], ldc, &v[1], &
-		c__1, &c_b16, &work[1], &c__1);
-
-/*        C := C - tau * w * v' */
-
-	d__1 = -(*tau);
-	dger_(m, n, &d__1, &work[1], &c__1, &v[1], &c__1, &c__[c_offset], ldc)
-		;
+	dlarf_(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
 	goto L410;
 L210:
 
@@ -439,7 +444,7 @@ L210:
 	t1 = 1. - *tau * v[1] * v[1];
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    c___ref(j, 1) = t1 * c___ref(j, 1);
+	    c__[j + c_dim1] = t1 * c__[j + c_dim1];
 /* L220: */
 	}
 	goto L410;
@@ -453,9 +458,9 @@ L230:
 	t2 = *tau * v2;
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    sum = v1 * c___ref(j, 1) + v2 * c___ref(j, 2);
-	    c___ref(j, 1) = c___ref(j, 1) - sum * t1;
-	    c___ref(j, 2) = c___ref(j, 2) - sum * t2;
+	    sum = v1 * c__[j + c_dim1] + v2 * c__[j + (c_dim1 << 1)];
+	    c__[j + c_dim1] -= sum * t1;
+	    c__[j + (c_dim1 << 1)] -= sum * t2;
 /* L240: */
 	}
 	goto L410;
@@ -471,11 +476,11 @@ L250:
 	t3 = *tau * v3;
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    sum = v1 * c___ref(j, 1) + v2 * c___ref(j, 2) + v3 * c___ref(j, 3)
-		    ;
-	    c___ref(j, 1) = c___ref(j, 1) - sum * t1;
-	    c___ref(j, 2) = c___ref(j, 2) - sum * t2;
-	    c___ref(j, 3) = c___ref(j, 3) - sum * t3;
+	    sum = v1 * c__[j + c_dim1] + v2 * c__[j + (c_dim1 << 1)] + v3 * 
+		    c__[j + c_dim1 * 3];
+	    c__[j + c_dim1] -= sum * t1;
+	    c__[j + (c_dim1 << 1)] -= sum * t2;
+	    c__[j + c_dim1 * 3] -= sum * t3;
 /* L260: */
 	}
 	goto L410;
@@ -493,12 +498,12 @@ L270:
 	t4 = *tau * v4;
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    sum = v1 * c___ref(j, 1) + v2 * c___ref(j, 2) + v3 * c___ref(j, 3)
-		     + v4 * c___ref(j, 4);
-	    c___ref(j, 1) = c___ref(j, 1) - sum * t1;
-	    c___ref(j, 2) = c___ref(j, 2) - sum * t2;
-	    c___ref(j, 3) = c___ref(j, 3) - sum * t3;
-	    c___ref(j, 4) = c___ref(j, 4) - sum * t4;
+	    sum = v1 * c__[j + c_dim1] + v2 * c__[j + (c_dim1 << 1)] + v3 * 
+		    c__[j + c_dim1 * 3] + v4 * c__[j + (c_dim1 << 2)];
+	    c__[j + c_dim1] -= sum * t1;
+	    c__[j + (c_dim1 << 1)] -= sum * t2;
+	    c__[j + c_dim1 * 3] -= sum * t3;
+	    c__[j + (c_dim1 << 2)] -= sum * t4;
 /* L280: */
 	}
 	goto L410;
@@ -518,13 +523,14 @@ L290:
 	t5 = *tau * v5;
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    sum = v1 * c___ref(j, 1) + v2 * c___ref(j, 2) + v3 * c___ref(j, 3)
-		     + v4 * c___ref(j, 4) + v5 * c___ref(j, 5);
-	    c___ref(j, 1) = c___ref(j, 1) - sum * t1;
-	    c___ref(j, 2) = c___ref(j, 2) - sum * t2;
-	    c___ref(j, 3) = c___ref(j, 3) - sum * t3;
-	    c___ref(j, 4) = c___ref(j, 4) - sum * t4;
-	    c___ref(j, 5) = c___ref(j, 5) - sum * t5;
+	    sum = v1 * c__[j + c_dim1] + v2 * c__[j + (c_dim1 << 1)] + v3 * 
+		    c__[j + c_dim1 * 3] + v4 * c__[j + (c_dim1 << 2)] + v5 * 
+		    c__[j + c_dim1 * 5];
+	    c__[j + c_dim1] -= sum * t1;
+	    c__[j + (c_dim1 << 1)] -= sum * t2;
+	    c__[j + c_dim1 * 3] -= sum * t3;
+	    c__[j + (c_dim1 << 2)] -= sum * t4;
+	    c__[j + c_dim1 * 5] -= sum * t5;
 /* L300: */
 	}
 	goto L410;
@@ -546,15 +552,15 @@ L310:
 	t6 = *tau * v6;
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    sum = v1 * c___ref(j, 1) + v2 * c___ref(j, 2) + v3 * c___ref(j, 3)
-		     + v4 * c___ref(j, 4) + v5 * c___ref(j, 5) + v6 * c___ref(
-		    j, 6);
-	    c___ref(j, 1) = c___ref(j, 1) - sum * t1;
-	    c___ref(j, 2) = c___ref(j, 2) - sum * t2;
-	    c___ref(j, 3) = c___ref(j, 3) - sum * t3;
-	    c___ref(j, 4) = c___ref(j, 4) - sum * t4;
-	    c___ref(j, 5) = c___ref(j, 5) - sum * t5;
-	    c___ref(j, 6) = c___ref(j, 6) - sum * t6;
+	    sum = v1 * c__[j + c_dim1] + v2 * c__[j + (c_dim1 << 1)] + v3 * 
+		    c__[j + c_dim1 * 3] + v4 * c__[j + (c_dim1 << 2)] + v5 * 
+		    c__[j + c_dim1 * 5] + v6 * c__[j + c_dim1 * 6];
+	    c__[j + c_dim1] -= sum * t1;
+	    c__[j + (c_dim1 << 1)] -= sum * t2;
+	    c__[j + c_dim1 * 3] -= sum * t3;
+	    c__[j + (c_dim1 << 2)] -= sum * t4;
+	    c__[j + c_dim1 * 5] -= sum * t5;
+	    c__[j + c_dim1 * 6] -= sum * t6;
 /* L320: */
 	}
 	goto L410;
@@ -578,16 +584,17 @@ L330:
 	t7 = *tau * v7;
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    sum = v1 * c___ref(j, 1) + v2 * c___ref(j, 2) + v3 * c___ref(j, 3)
-		     + v4 * c___ref(j, 4) + v5 * c___ref(j, 5) + v6 * c___ref(
-		    j, 6) + v7 * c___ref(j, 7);
-	    c___ref(j, 1) = c___ref(j, 1) - sum * t1;
-	    c___ref(j, 2) = c___ref(j, 2) - sum * t2;
-	    c___ref(j, 3) = c___ref(j, 3) - sum * t3;
-	    c___ref(j, 4) = c___ref(j, 4) - sum * t4;
-	    c___ref(j, 5) = c___ref(j, 5) - sum * t5;
-	    c___ref(j, 6) = c___ref(j, 6) - sum * t6;
-	    c___ref(j, 7) = c___ref(j, 7) - sum * t7;
+	    sum = v1 * c__[j + c_dim1] + v2 * c__[j + (c_dim1 << 1)] + v3 * 
+		    c__[j + c_dim1 * 3] + v4 * c__[j + (c_dim1 << 2)] + v5 * 
+		    c__[j + c_dim1 * 5] + v6 * c__[j + c_dim1 * 6] + v7 * c__[
+		    j + c_dim1 * 7];
+	    c__[j + c_dim1] -= sum * t1;
+	    c__[j + (c_dim1 << 1)] -= sum * t2;
+	    c__[j + c_dim1 * 3] -= sum * t3;
+	    c__[j + (c_dim1 << 2)] -= sum * t4;
+	    c__[j + c_dim1 * 5] -= sum * t5;
+	    c__[j + c_dim1 * 6] -= sum * t6;
+	    c__[j + c_dim1 * 7] -= sum * t7;
 /* L340: */
 	}
 	goto L410;
@@ -613,17 +620,18 @@ L350:
 	t8 = *tau * v8;
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    sum = v1 * c___ref(j, 1) + v2 * c___ref(j, 2) + v3 * c___ref(j, 3)
-		     + v4 * c___ref(j, 4) + v5 * c___ref(j, 5) + v6 * c___ref(
-		    j, 6) + v7 * c___ref(j, 7) + v8 * c___ref(j, 8);
-	    c___ref(j, 1) = c___ref(j, 1) - sum * t1;
-	    c___ref(j, 2) = c___ref(j, 2) - sum * t2;
-	    c___ref(j, 3) = c___ref(j, 3) - sum * t3;
-	    c___ref(j, 4) = c___ref(j, 4) - sum * t4;
-	    c___ref(j, 5) = c___ref(j, 5) - sum * t5;
-	    c___ref(j, 6) = c___ref(j, 6) - sum * t6;
-	    c___ref(j, 7) = c___ref(j, 7) - sum * t7;
-	    c___ref(j, 8) = c___ref(j, 8) - sum * t8;
+	    sum = v1 * c__[j + c_dim1] + v2 * c__[j + (c_dim1 << 1)] + v3 * 
+		    c__[j + c_dim1 * 3] + v4 * c__[j + (c_dim1 << 2)] + v5 * 
+		    c__[j + c_dim1 * 5] + v6 * c__[j + c_dim1 * 6] + v7 * c__[
+		    j + c_dim1 * 7] + v8 * c__[j + (c_dim1 << 3)];
+	    c__[j + c_dim1] -= sum * t1;
+	    c__[j + (c_dim1 << 1)] -= sum * t2;
+	    c__[j + c_dim1 * 3] -= sum * t3;
+	    c__[j + (c_dim1 << 2)] -= sum * t4;
+	    c__[j + c_dim1 * 5] -= sum * t5;
+	    c__[j + c_dim1 * 6] -= sum * t6;
+	    c__[j + c_dim1 * 7] -= sum * t7;
+	    c__[j + (c_dim1 << 3)] -= sum * t8;
 /* L360: */
 	}
 	goto L410;
@@ -651,19 +659,20 @@ L370:
 	t9 = *tau * v9;
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    sum = v1 * c___ref(j, 1) + v2 * c___ref(j, 2) + v3 * c___ref(j, 3)
-		     + v4 * c___ref(j, 4) + v5 * c___ref(j, 5) + v6 * c___ref(
-		    j, 6) + v7 * c___ref(j, 7) + v8 * c___ref(j, 8) + v9 * 
-		    c___ref(j, 9);
-	    c___ref(j, 1) = c___ref(j, 1) - sum * t1;
-	    c___ref(j, 2) = c___ref(j, 2) - sum * t2;
-	    c___ref(j, 3) = c___ref(j, 3) - sum * t3;
-	    c___ref(j, 4) = c___ref(j, 4) - sum * t4;
-	    c___ref(j, 5) = c___ref(j, 5) - sum * t5;
-	    c___ref(j, 6) = c___ref(j, 6) - sum * t6;
-	    c___ref(j, 7) = c___ref(j, 7) - sum * t7;
-	    c___ref(j, 8) = c___ref(j, 8) - sum * t8;
-	    c___ref(j, 9) = c___ref(j, 9) - sum * t9;
+	    sum = v1 * c__[j + c_dim1] + v2 * c__[j + (c_dim1 << 1)] + v3 * 
+		    c__[j + c_dim1 * 3] + v4 * c__[j + (c_dim1 << 2)] + v5 * 
+		    c__[j + c_dim1 * 5] + v6 * c__[j + c_dim1 * 6] + v7 * c__[
+		    j + c_dim1 * 7] + v8 * c__[j + (c_dim1 << 3)] + v9 * c__[
+		    j + c_dim1 * 9];
+	    c__[j + c_dim1] -= sum * t1;
+	    c__[j + (c_dim1 << 1)] -= sum * t2;
+	    c__[j + c_dim1 * 3] -= sum * t3;
+	    c__[j + (c_dim1 << 2)] -= sum * t4;
+	    c__[j + c_dim1 * 5] -= sum * t5;
+	    c__[j + c_dim1 * 6] -= sum * t6;
+	    c__[j + c_dim1 * 7] -= sum * t7;
+	    c__[j + (c_dim1 << 3)] -= sum * t8;
+	    c__[j + c_dim1 * 9] -= sum * t9;
 /* L380: */
 	}
 	goto L410;
@@ -693,20 +702,21 @@ L390:
 	t10 = *tau * v10;
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    sum = v1 * c___ref(j, 1) + v2 * c___ref(j, 2) + v3 * c___ref(j, 3)
-		     + v4 * c___ref(j, 4) + v5 * c___ref(j, 5) + v6 * c___ref(
-		    j, 6) + v7 * c___ref(j, 7) + v8 * c___ref(j, 8) + v9 * 
-		    c___ref(j, 9) + v10 * c___ref(j, 10);
-	    c___ref(j, 1) = c___ref(j, 1) - sum * t1;
-	    c___ref(j, 2) = c___ref(j, 2) - sum * t2;
-	    c___ref(j, 3) = c___ref(j, 3) - sum * t3;
-	    c___ref(j, 4) = c___ref(j, 4) - sum * t4;
-	    c___ref(j, 5) = c___ref(j, 5) - sum * t5;
-	    c___ref(j, 6) = c___ref(j, 6) - sum * t6;
-	    c___ref(j, 7) = c___ref(j, 7) - sum * t7;
-	    c___ref(j, 8) = c___ref(j, 8) - sum * t8;
-	    c___ref(j, 9) = c___ref(j, 9) - sum * t9;
-	    c___ref(j, 10) = c___ref(j, 10) - sum * t10;
+	    sum = v1 * c__[j + c_dim1] + v2 * c__[j + (c_dim1 << 1)] + v3 * 
+		    c__[j + c_dim1 * 3] + v4 * c__[j + (c_dim1 << 2)] + v5 * 
+		    c__[j + c_dim1 * 5] + v6 * c__[j + c_dim1 * 6] + v7 * c__[
+		    j + c_dim1 * 7] + v8 * c__[j + (c_dim1 << 3)] + v9 * c__[
+		    j + c_dim1 * 9] + v10 * c__[j + c_dim1 * 10];
+	    c__[j + c_dim1] -= sum * t1;
+	    c__[j + (c_dim1 << 1)] -= sum * t2;
+	    c__[j + c_dim1 * 3] -= sum * t3;
+	    c__[j + (c_dim1 << 2)] -= sum * t4;
+	    c__[j + c_dim1 * 5] -= sum * t5;
+	    c__[j + c_dim1 * 6] -= sum * t6;
+	    c__[j + c_dim1 * 7] -= sum * t7;
+	    c__[j + (c_dim1 << 3)] -= sum * t8;
+	    c__[j + c_dim1 * 9] -= sum * t9;
+	    c__[j + c_dim1 * 10] -= sum * t10;
 /* L400: */
 	}
 	goto L410;
@@ -717,7 +727,3 @@ L410:
 /*     End of DLARFX */
 
 } /* dlarfx_ */
-
-#undef c___ref
-
-

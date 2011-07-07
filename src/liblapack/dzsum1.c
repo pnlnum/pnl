@@ -1,50 +1,72 @@
+/* dzsum1.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-doublereal dzsum1_(integer *n, doublecomplex *cx, integer *incx)
+double dzsum1_(int *n, doublecomplex *cx, int *incx)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1992   
-
-
-    Purpose   
-    =======   
-
-    DZSUM1 takes the sum of the absolute values of a complex   
-    vector and returns a double precision result.   
-
-    Based on DZASUM from the Level 1 BLAS.   
-    The change is to use the 'genuine' absolute value.   
-
-    Contributed by Nick Higham for use with ZLACON.   
-
-    Arguments   
-    =========   
-
-    N       (input) INTEGER   
-            The number of elements in the vector CX.   
-
-    CX      (input) COMPLEX*16 array, dimension (N)   
-            The vector whose elements will be summed.   
-
-    INCX    (input) INTEGER   
-            The spacing between successive values of CX.  INCX > 0.   
-
-    =====================================================================   
-
-
-       Parameter adjustments */
     /* System generated locals */
-    integer i__1, i__2;
-    doublereal ret_val;
-    /* Builtin functions */
-    double z_abs(doublecomplex *);
-    /* Local variables */
-    static integer i__, nincx;
-    static doublereal stemp;
+    int i__1, i__2;
+    double ret_val;
 
+    /* Builtin functions */
+    double z_ABS(doublecomplex *);
+
+    /* Local variables */
+    int i__, nincx;
+    double stemp;
+
+
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  DZSUM1 takes the sum of the absolute values of a complex */
+/*  vector and returns a double precision result. */
+
+/*  Based on DZASUM from the Level 1 BLAS. */
+/*  The change is to use the 'genuine' absolute value. */
+
+/*  Contributed by Nick Higham for use with ZLACON. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  N       (input) INTEGER */
+/*          The number of elements in the vector CX. */
+
+/*  CX      (input) COMPLEX*16 array, dimension (N) */
+/*          The vector whose elements will be summed. */
+
+/*  INCX    (input) INTEGER */
+/*          The spacing between successive values of CX.  INCX > 0. */
+
+/*  ===================================================================== */
+
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     --cx;
 
     /* Function Body */
@@ -66,7 +88,7 @@ doublereal dzsum1_(integer *n, doublecomplex *cx, integer *incx)
 
 /*        NEXT LINE MODIFIED. */
 
-	stemp += z_abs(&cx[i__]);
+	stemp += z_ABS(&cx[i__]);
 /* L10: */
     }
     ret_val = stemp;
@@ -80,7 +102,7 @@ L20:
 
 /*        NEXT LINE MODIFIED. */
 
-	stemp += z_abs(&cx[i__]);
+	stemp += z_ABS(&cx[i__]);
 /* L30: */
     }
     ret_val = stemp;
@@ -89,4 +111,3 @@ L20:
 /*     End of DZSUM1 */
 
 } /* dzsum1_ */
-

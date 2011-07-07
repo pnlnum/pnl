@@ -1,91 +1,113 @@
+/* clarcm.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int clarcm_(integer *m, integer *n, real *a, integer *lda, 
-	complex *b, integer *ldb, complex *c__, integer *ldc, real *rwork)
+/* Table of constant values */
+
+static float c_b6 = 1.f;
+static float c_b7 = 0.f;
+
+ int clarcm_(int *m, int *n, float *a, int *lda, 
+	complex *b, int *ldb, complex *c__, int *ldc, float *rwork)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    CLARCM performs a very simple matrix-matrix multiplication:   
-             C := A * B,   
-    where A is M by M and real; B is M by N and complex;   
-    C is M by N and complex.   
-
-    Arguments   
-    =========   
-
-    M       (input) INTEGER   
-            The number of rows of the matrix A and of the matrix C.   
-            M >= 0.   
-
-    N       (input) INTEGER   
-            The number of columns and rows of the matrix B and   
-            the number of columns of the matrix C.   
-            N >= 0.   
-
-    A       (input) REAL array, dimension (LDA, M)   
-            A contains the M by M matrix A.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A. LDA >=max(1,M).   
-
-    B       (input) REAL array, dimension (LDB, N)   
-            B contains the M by N matrix B.   
-
-    LDB     (input) INTEGER   
-            The leading dimension of the array B. LDB >=max(1,M).   
-
-    C       (input) COMPLEX array, dimension (LDC, N)   
-            C contains the M by N matrix C.   
-
-    LDC     (input) INTEGER   
-            The leading dimension of the array C. LDC >=max(1,M).   
-
-    RWORK   (workspace) REAL array, dimension (2*M*N)   
-
-    =====================================================================   
-
-
-       Quick return if possible.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static real c_b6 = 1.f;
-    static real c_b7 = 0.f;
-    
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, i__1, i__2, 
+    int a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, i__1, i__2, 
 	    i__3, i__4, i__5;
-    real r__1;
+    float r__1;
     complex q__1;
+
     /* Builtin functions */
     double r_imag(complex *);
+
     /* Local variables */
-    static integer i__, j, l;
-    extern /* Subroutine */ int sgemm_(char *, char *, integer *, integer *, 
-	    integer *, real *, real *, integer *, real *, integer *, real *, 
-	    real *, integer *);
-#define b_subscr(a_1,a_2) (a_2)*b_dim1 + a_1
-#define b_ref(a_1,a_2) b[b_subscr(a_1,a_2)]
-#define c___subscr(a_1,a_2) (a_2)*c_dim1 + a_1
-#define c___ref(a_1,a_2) c__[c___subscr(a_1,a_2)]
+    int i__, j, l;
+    extern  int sgemm_(char *, char *, int *, int *, 
+	    int *, float *, float *, int *, float *, int *, float *, 
+	    float *, int *);
 
 
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CLARCM performs a very simple matrix-matrix multiplication: */
+/*           C := A * B, */
+/*  where A is M by M and float; B is M by N and complex; */
+/*  C is M by N and complex. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  M       (input) INTEGER */
+/*          The number of rows of the matrix A and of the matrix C. */
+/*          M >= 0. */
+
+/*  N       (input) INTEGER */
+/*          The number of columns and rows of the matrix B and */
+/*          the number of columns of the matrix C. */
+/*          N >= 0. */
+
+/*  A       (input) REAL array, dimension (LDA, M) */
+/*          A contains the M by M matrix A. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A. LDA >=MAX(1,M). */
+
+/*  B       (input) REAL array, dimension (LDB, N) */
+/*          B contains the M by N matrix B. */
+
+/*  LDB     (input) INTEGER */
+/*          The leading dimension of the array B. LDB >=MAX(1,M). */
+
+/*  C       (input) COMPLEX array, dimension (LDC, N) */
+/*          C contains the M by N matrix C. */
+
+/*  LDC     (input) INTEGER */
+/*          The leading dimension of the array C. LDC >=MAX(1,M). */
+
+/*  RWORK   (workspace) REAL array, dimension (2*M*N) */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Quick return if possible. */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     b_dim1 = *ldb;
-    b_offset = 1 + b_dim1 * 1;
+    b_offset = 1 + b_dim1;
     b -= b_offset;
     c_dim1 = *ldc;
-    c_offset = 1 + c_dim1 * 1;
+    c_offset = 1 + c_dim1;
     c__ -= c_offset;
     --rwork;
 
@@ -98,7 +120,7 @@
     for (j = 1; j <= i__1; ++j) {
 	i__2 = *m;
 	for (i__ = 1; i__ <= i__2; ++i__) {
-	    i__3 = b_subscr(i__, j);
+	    i__3 = i__ + j * b_dim1;
 	    rwork[(j - 1) * *m + i__] = b[i__3].r;
 /* L10: */
 	}
@@ -112,7 +134,7 @@
     for (j = 1; j <= i__1; ++j) {
 	i__2 = *m;
 	for (i__ = 1; i__ <= i__2; ++i__) {
-	    i__3 = c___subscr(i__, j);
+	    i__3 = i__ + j * c_dim1;
 	    i__4 = l + (j - 1) * *m + i__ - 1;
 	    c__[i__3].r = rwork[i__4], c__[i__3].i = 0.f;
 /* L30: */
@@ -124,7 +146,7 @@
     for (j = 1; j <= i__1; ++j) {
 	i__2 = *m;
 	for (i__ = 1; i__ <= i__2; ++i__) {
-	    rwork[(j - 1) * *m + i__] = r_imag(&b_ref(i__, j));
+	    rwork[(j - 1) * *m + i__] = r_imag(&b[i__ + j * b_dim1]);
 /* L50: */
 	}
 /* L60: */
@@ -135,8 +157,8 @@
     for (j = 1; j <= i__1; ++j) {
 	i__2 = *m;
 	for (i__ = 1; i__ <= i__2; ++i__) {
-	    i__3 = c___subscr(i__, j);
-	    i__4 = c___subscr(i__, j);
+	    i__3 = i__ + j * c_dim1;
+	    i__4 = i__ + j * c_dim1;
 	    r__1 = c__[i__4].r;
 	    i__5 = l + (j - 1) * *m + i__ - 1;
 	    q__1.r = r__1, q__1.i = rwork[i__5];
@@ -151,10 +173,3 @@
 /*     End of CLARCM */
 
 } /* clarcm_ */
-
-#undef c___ref
-#undef c___subscr
-#undef b_ref
-#undef b_subscr
-
-

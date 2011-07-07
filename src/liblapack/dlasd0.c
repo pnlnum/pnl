@@ -1,126 +1,145 @@
+/* dlasd0.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dlasd0_(integer *n, integer *sqre, doublereal *d__, 
-	doublereal *e, doublereal *u, integer *ldu, doublereal *vt, integer *
-	ldvt, integer *smlsiz, integer *iwork, doublereal *work, integer *
+/* Table of constant values */
+
+static int c__0 = 0;
+static int c__2 = 2;
+
+ int dlasd0_(int *n, int *sqre, double *d__, 
+	double *e, double *u, int *ldu, double *vt, int *
+	ldvt, int *smlsiz, int *iwork, double *work, int *
 	info)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    Using a divide and conquer approach, DLASD0 computes the singular   
-    value decomposition (SVD) of a real upper bidiagonal N-by-M   
-    matrix B with diagonal D and offdiagonal E, where M = N + SQRE.   
-    The algorithm computes orthogonal matrices U and VT such that   
-    B = U * S * VT. The singular values S are overwritten on D.   
-
-    A related subroutine, DLASDA, computes only the singular values,   
-    and optionally, the singular vectors in compact form.   
-
-    Arguments   
-    =========   
-
-    N      (input) INTEGER   
-           On entry, the row dimension of the upper bidiagonal matrix.   
-           This is also the dimension of the main diagonal array D.   
-
-    SQRE   (input) INTEGER   
-           Specifies the column dimension of the bidiagonal matrix.   
-           = 0: The bidiagonal matrix has column dimension M = N;   
-           = 1: The bidiagonal matrix has column dimension M = N+1;   
-
-    D      (input/output) DOUBLE PRECISION array, dimension (N)   
-           On entry D contains the main diagonal of the bidiagonal   
-           matrix.   
-           On exit D, if INFO = 0, contains its singular values.   
-
-    E      (input) DOUBLE PRECISION array, dimension (M-1)   
-           Contains the subdiagonal entries of the bidiagonal matrix.   
-           On exit, E has been destroyed.   
-
-    U      (output) DOUBLE PRECISION array, dimension at least (LDQ, N)   
-           On exit, U contains the left singular vectors.   
-
-    LDU    (input) INTEGER   
-           On entry, leading dimension of U.   
-
-    VT     (output) DOUBLE PRECISION array, dimension at least (LDVT, M)   
-           On exit, VT' contains the right singular vectors.   
-
-    LDVT   (input) INTEGER   
-           On entry, leading dimension of VT.   
-
-    SMLSIZ (input) INTEGER   
-           On entry, maximum size of the subproblems at the   
-           bottom of the computation tree.   
-
-    IWORK  INTEGER work array.   
-           Dimension must be at least (8 * N)   
-
-    WORK   DOUBLE PRECISION work array.   
-           Dimension must be at least (3 * M**2 + 2 * M)   
-
-    INFO   (output) INTEGER   
-            = 0:  successful exit.   
-            < 0:  if INFO = -i, the i-th argument had an illegal value.   
-            > 0:  if INFO = 1, an singular value did not converge   
-
-    Further Details   
-    ===============   
-
-    Based on contributions by   
-       Ming Gu and Huan Ren, Computer Science Division, University of   
-       California at Berkeley, USA   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__0 = 0;
-    static integer c__2 = 2;
-    
     /* System generated locals */
-    integer u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
+    int u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
+
     /* Builtin functions */
-    integer pow_ii(integer *, integer *);
+    int pow_ii(int *, int *);
+
     /* Local variables */
-    static doublereal beta;
-    static integer idxq, nlvl, i__, j, m;
-    static doublereal alpha;
-    static integer inode, ndiml, idxqc, ndimr, itemp, sqrei, i1;
-    extern /* Subroutine */ int dlasd1_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, integer *,
-	     doublereal *, integer *, integer *, integer *, doublereal *, 
-	    integer *);
-    static integer ic, lf, nd, ll, nl, nr;
-    extern /* Subroutine */ int dlasdq_(char *, integer *, integer *, integer 
-	    *, integer *, integer *, doublereal *, doublereal *, doublereal *,
-	     integer *, doublereal *, integer *, doublereal *, integer *, 
-	    doublereal *, integer *), dlasdt_(integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *), xerbla_(
-	    char *, integer *);
-    static integer im1, ncc, nlf, nrf, iwk, lvl, ndb1, nlp1, nrp1;
-#define u_ref(a_1,a_2) u[(a_2)*u_dim1 + a_1]
-#define vt_ref(a_1,a_2) vt[(a_2)*vt_dim1 + a_1]
+    int i__, j, m, i1, ic, lf, nd, ll, nl, nr, im1, ncc, nlf, nrf, iwk, 
+	    lvl, ndb1, nlp1, nrp1;
+    double beta;
+    int idxq, nlvl;
+    double alpha;
+    int inode, ndiml, idxqc, ndimr, itemp, sqrei;
+    extern  int dlasd1_(int *, int *, int *, 
+	    double *, double *, double *, double *, int *, 
+	     double *, int *, int *, int *, double *, 
+	    int *), dlasdq_(char *, int *, int *, int *, 
+	    int *, int *, double *, double *, double *, 
+	    int *, double *, int *, double *, int *, 
+	    double *, int *), dlasdt_(int *, int *, 
+	    int *, int *, int *, int *, int *), xerbla_(
+	    char *, int *);
 
 
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  Using a divide and conquer approach, DLASD0 computes the singular */
+/*  value decomposition (SVD) of a float upper bidiagonal N-by-M */
+/*  matrix B with diagonal D and offdiagonal E, where M = N + SQRE. */
+/*  The algorithm computes orthogonal matrices U and VT such that */
+/*  B = U * S * VT. The singular values S are overwritten on D. */
+
+/*  A related subroutine, DLASDA, computes only the singular values, */
+/*  and optionally, the singular vectors in compact form. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  N      (input) INTEGER */
+/*         On entry, the row dimension of the upper bidiagonal matrix. */
+/*         This is also the dimension of the main diagonal array D. */
+
+/*  SQRE   (input) INTEGER */
+/*         Specifies the column dimension of the bidiagonal matrix. */
+/*         = 0: The bidiagonal matrix has column dimension M = N; */
+/*         = 1: The bidiagonal matrix has column dimension M = N+1; */
+
+/*  D      (input/output) DOUBLE PRECISION array, dimension (N) */
+/*         On entry D contains the main diagonal of the bidiagonal */
+/*         matrix. */
+/*         On exit D, if INFO = 0, contains its singular values. */
+
+/*  E      (input) DOUBLE PRECISION array, dimension (M-1) */
+/*         Contains the subdiagonal entries of the bidiagonal matrix. */
+/*         On exit, E has been destroyed. */
+
+/*  U      (output) DOUBLE PRECISION array, dimension at least (LDQ, N) */
+/*         On exit, U contains the left singular vectors. */
+
+/*  LDU    (input) INTEGER */
+/*         On entry, leading dimension of U. */
+
+/*  VT     (output) DOUBLE PRECISION array, dimension at least (LDVT, M) */
+/*         On exit, VT' contains the right singular vectors. */
+
+/*  LDVT   (input) INTEGER */
+/*         On entry, leading dimension of VT. */
+
+/*  SMLSIZ (input) INTEGER */
+/*         On entry, maximum size of the subproblems at the */
+/*         bottom of the computation tree. */
+
+/*  IWORK  (workspace) INTEGER work array. */
+/*         Dimension must be at least (8 * N) */
+
+/*  WORK   (workspace) DOUBLE PRECISION work array. */
+/*         Dimension must be at least (3 * M**2 + 2 * M) */
+
+/*  INFO   (output) INTEGER */
+/*          = 0:  successful exit. */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value. */
+/*          > 0:  if INFO = 1, an singular value did not converge */
+
+/*  Further Details */
+/*  =============== */
+
+/*  Based on contributions by */
+/*     Ming Gu and Huan Ren, Computer Science Division, University of */
+/*     California at Berkeley, USA */
+
+/*  ===================================================================== */
+
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --d__;
     --e;
     u_dim1 = *ldu;
-    u_offset = 1 + u_dim1 * 1;
+    u_offset = 1 + u_dim1;
     u -= u_offset;
     vt_dim1 = *ldvt;
-    vt_offset = 1 + vt_dim1 * 1;
+    vt_offset = 1 + vt_dim1;
     vt -= vt_offset;
     --iwork;
     --work;
@@ -167,19 +186,19 @@
     dlasdt_(n, &nlvl, &nd, &iwork[inode], &iwork[ndiml], &iwork[ndimr], 
 	    smlsiz);
 
-/*     For the nodes on bottom level of the tree, solve   
-       their subproblems by DLASDQ. */
+/*     For the nodes on bottom level of the tree, solve */
+/*     their subproblems by DLASDQ. */
 
     ndb1 = (nd + 1) / 2;
     ncc = 0;
     i__1 = nd;
     for (i__ = ndb1; i__ <= i__1; ++i__) {
 
-/*     IC : center row of each node   
-       NL : number of rows of left  subproblem   
-       NR : number of rows of right subproblem   
-       NLF: starting row of the left   subproblem   
-       NRF: starting row of the right  subproblem */
+/*     IC : center row of each node */
+/*     NL : number of rows of left  subproblem */
+/*     NR : number of rows of right subproblem */
+/*     NLF: starting row of the left   subproblem */
+/*     NRF: starting row of the right  subproblem */
 
 	i1 = i__ - 1;
 	ic = iwork[inode + i1];
@@ -190,9 +209,9 @@
 	nlf = ic - nl;
 	nrf = ic + 1;
 	sqrei = 1;
-	dlasdq_("U", &sqrei, &nl, &nlp1, &nl, &ncc, &d__[nlf], &e[nlf], &
-		vt_ref(nlf, nlf), ldvt, &u_ref(nlf, nlf), ldu, &u_ref(nlf, 
-		nlf), ldu, &work[1], info);
+	dlasdq_("U", &sqrei, &nl, &nlp1, &nl, &ncc, &d__[nlf], &e[nlf], &vt[
+		nlf + nlf * vt_dim1], ldvt, &u[nlf + nlf * u_dim1], ldu, &u[
+		nlf + nlf * u_dim1], ldu, &work[1], info);
 	if (*info != 0) {
 	    return 0;
 	}
@@ -208,9 +227,9 @@
 	    sqrei = 1;
 	}
 	nrp1 = nr + sqrei;
-	dlasdq_("U", &sqrei, &nr, &nrp1, &nr, &ncc, &d__[nrf], &e[nrf], &
-		vt_ref(nrf, nrf), ldvt, &u_ref(nrf, nrf), ldu, &u_ref(nrf, 
-		nrf), ldu, &work[1], info);
+	dlasdq_("U", &sqrei, &nr, &nrp1, &nr, &ncc, &d__[nrf], &e[nrf], &vt[
+		nrf + nrf * vt_dim1], ldvt, &u[nrf + nrf * u_dim1], ldu, &u[
+		nrf + nrf * u_dim1], ldu, &work[1], info);
 	if (*info != 0) {
 	    return 0;
 	}
@@ -227,8 +246,8 @@
 
     for (lvl = nlvl; lvl >= 1; --lvl) {
 
-/*        Find the first node LF and last node LL on the   
-          current level LVL. */
+/*        Find the first node LF and last node LL on the */
+/*        current level LVL. */
 
 	if (lvl == 1) {
 	    lf = 1;
@@ -253,9 +272,9 @@
 	    idxqc = idxq + nlf - 1;
 	    alpha = d__[ic];
 	    beta = e[ic];
-	    dlasd1_(&nl, &nr, &sqrei, &d__[nlf], &alpha, &beta, &u_ref(nlf, 
-		    nlf), ldu, &vt_ref(nlf, nlf), ldvt, &iwork[idxqc], &iwork[
-		    iwk], &work[1], info);
+	    dlasd1_(&nl, &nr, &sqrei, &d__[nlf], &alpha, &beta, &u[nlf + nlf *
+		     u_dim1], ldu, &vt[nlf + nlf * vt_dim1], ldvt, &iwork[
+		    idxqc], &iwork[iwk], &work[1], info);
 	    if (*info != 0) {
 		return 0;
 	    }
@@ -269,8 +288,3 @@
 /*     End of DLASD0 */
 
 } /* dlasd0_ */
-
-#undef vt_ref
-#undef u_ref
-
-

@@ -1,140 +1,169 @@
+/* slasd8.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int slasd8_(integer *icompq, integer *k, real *d__, real *
-	z__, real *vf, real *vl, real *difl, real *difr, integer *lddifr, 
-	real *dsigma, real *work, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+static int c__0 = 0;
+static float c_b8 = 1.f;
+
+ int slasd8_(int *icompq, int *k, float *d__, float *
+	z__, float *vf, float *vl, float *difl, float *difr, int *lddifr, 
+	float *dsigma, float *work, int *info)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Oak Ridge National Lab, Argonne National Lab,   
-       Courant Institute, NAG Ltd., and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    SLASD8 finds the square roots of the roots of the secular equation,   
-    as defined by the values in DSIGMA and Z. It makes the appropriate   
-    calls to SLASD4, and stores, for each  element in D, the distance   
-    to its two nearest poles (elements in DSIGMA). It also updates   
-    the arrays VF and VL, the first and last components of all the   
-    right singular vectors of the original bidiagonal matrix.   
-
-    SLASD8 is called from SLASD6.   
-
-    Arguments   
-    =========   
-
-    ICOMPQ  (input) INTEGER   
-            Specifies whether singular vectors are to be computed in   
-            factored form in the calling routine:   
-            = 0: Compute singular values only.   
-            = 1: Compute singular vectors in factored form as well.   
-
-    K       (input) INTEGER   
-            The number of terms in the rational function to be solved   
-            by SLASD4.  K >= 1.   
-
-    D       (output) REAL array, dimension ( K )   
-            On output, D contains the updated singular values.   
-
-    Z       (input) REAL array, dimension ( K )   
-            The first K elements of this array contain the components   
-            of the deflation-adjusted updating row vector.   
-
-    VF      (input/output) REAL array, dimension ( K )   
-            On entry, VF contains  information passed through DBEDE8.   
-            On exit, VF contains the first K components of the first   
-            components of all right singular vectors of the bidiagonal   
-            matrix.   
-
-    VL      (input/output) REAL array, dimension ( K )   
-            On entry, VL contains  information passed through DBEDE8.   
-            On exit, VL contains the first K components of the last   
-            components of all right singular vectors of the bidiagonal   
-            matrix.   
-
-    DIFL    (output) REAL array, dimension ( K )   
-            On exit, DIFL(I) = D(I) - DSIGMA(I).   
-
-    DIFR    (output) REAL array,   
-                     dimension ( LDDIFR, 2 ) if ICOMPQ = 1 and   
-                     dimension ( K ) if ICOMPQ = 0.   
-            On exit, DIFR(I,1) = D(I) - DSIGMA(I+1), DIFR(K,1) is not   
-            defined and will not be referenced.   
-
-            If ICOMPQ = 1, DIFR(1:K,2) is an array containing the   
-            normalizing factors for the right singular vector matrix.   
-
-    LDDIFR  (input) INTEGER   
-            The leading dimension of DIFR, must be at least K.   
-
-    DSIGMA  (input) REAL array, dimension ( K )   
-            The first K elements of this array contain the old roots   
-            of the deflated updating problem.  These are the poles   
-            of the secular equation.   
-
-    WORK    (workspace) REAL array, dimension at least 3 * K   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit.   
-            < 0:  if INFO = -i, the i-th argument had an illegal value.   
-            > 0:  if INFO = 1, an singular value did not converge   
-
-    Further Details   
-    ===============   
-
-    Based on contributions by   
-       Ming Gu and Huan Ren, Computer Science Division, University of   
-       California at Berkeley, USA   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    static integer c__0 = 0;
-    static real c_b8 = 1.f;
-    
     /* System generated locals */
-    integer difr_dim1, difr_offset, i__1, i__2;
-    real r__1, r__2;
+    int difr_dim1, difr_offset, i__1, i__2;
+    float r__1, r__2;
+
     /* Builtin functions */
-    double sqrt(doublereal), r_sign(real *, real *);
+    double sqrt(double), r_sign(float *, float *);
+
     /* Local variables */
-    static real temp;
-    extern doublereal sdot_(integer *, real *, integer *, real *, integer *);
-    static integer iwk2i, iwk3i;
-    extern doublereal snrm2_(integer *, real *, integer *);
-    static integer i__, j;
-    static real diflj, difrj, dsigj;
-    extern /* Subroutine */ int scopy_(integer *, real *, integer *, real *, 
-	    integer *);
-    extern doublereal slamc3_(real *, real *);
-    extern /* Subroutine */ int slasd4_(integer *, integer *, real *, real *, 
-	    real *, real *, real *, real *, integer *);
-    static real dj;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static real dsigjp;
-    extern /* Subroutine */ int slascl_(char *, integer *, integer *, real *, 
-	    real *, integer *, integer *, real *, integer *, integer *), slaset_(char *, integer *, integer *, real *, real *, 
-	    real *, integer *);
-    static real rho;
-    static integer iwk1, iwk2, iwk3;
-#define difr_ref(a_1,a_2) difr[(a_2)*difr_dim1 + a_1]
+    int i__, j;
+    float dj, rho;
+    int iwk1, iwk2, iwk3;
+    float temp;
+    extern double sdot_(int *, float *, int *, float *, int *);
+    int iwk2i, iwk3i;
+    extern double snrm2_(int *, float *, int *);
+    float diflj, difrj, dsigj;
+    extern  int scopy_(int *, float *, int *, float *, 
+	    int *);
+    extern double slamc3_(float *, float *);
+    extern  int slasd4_(int *, int *, float *, float *, 
+	    float *, float *, float *, float *, int *), xerbla_(char *, 
+	    int *);
+    float dsigjp;
+    extern  int slascl_(char *, int *, int *, float *, 
+	    float *, int *, int *, float *, int *, int *), slaset_(char *, int *, int *, float *, float *, 
+	    float *, int *);
 
 
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     October 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  SLASD8 finds the square roots of the roots of the secular equation, */
+/*  as defined by the values in DSIGMA and Z. It makes the appropriate */
+/*  calls to SLASD4, and stores, for each  element in D, the distance */
+/*  to its two nearest poles (elements in DSIGMA). It also updates */
+/*  the arrays VF and VL, the first and last components of all the */
+/*  right singular vectors of the original bidiagonal matrix. */
+
+/*  SLASD8 is called from SLASD6. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  ICOMPQ  (input) INTEGER */
+/*          Specifies whether singular vectors are to be computed in */
+/*          factored form in the calling routine: */
+/*          = 0: Compute singular values only. */
+/*          = 1: Compute singular vectors in factored form as well. */
+
+/*  K       (input) INTEGER */
+/*          The number of terms in the rational function to be solved */
+/*          by SLASD4.  K >= 1. */
+
+/*  D       (output) REAL array, dimension ( K ) */
+/*          On output, D contains the updated singular values. */
+
+/*  Z       (input/output) REAL array, dimension ( K ) */
+/*          On entry, the first K elements of this array contain the */
+/*          components of the deflation-adjusted updating row vector. */
+/*          On exit, Z is updated. */
+
+/*  VF      (input/output) REAL array, dimension ( K ) */
+/*          On entry, VF contains  information passed through DBEDE8. */
+/*          On exit, VF contains the first K components of the first */
+/*          components of all right singular vectors of the bidiagonal */
+/*          matrix. */
+
+/*  VL      (input/output) REAL array, dimension ( K ) */
+/*          On entry, VL contains  information passed through DBEDE8. */
+/*          On exit, VL contains the first K components of the last */
+/*          components of all right singular vectors of the bidiagonal */
+/*          matrix. */
+
+/*  DIFL    (output) REAL array, dimension ( K ) */
+/*          On exit, DIFL(I) = D(I) - DSIGMA(I). */
+
+/*  DIFR    (output) REAL array, */
+/*                   dimension ( LDDIFR, 2 ) if ICOMPQ = 1 and */
+/*                   dimension ( K ) if ICOMPQ = 0. */
+/*          On exit, DIFR(I,1) = D(I) - DSIGMA(I+1), DIFR(K,1) is not */
+/*          defined and will not be referenced. */
+
+/*          If ICOMPQ = 1, DIFR(1:K,2) is an array containing the */
+/*          normalizing factors for the right singular vector matrix. */
+
+/*  LDDIFR  (input) INTEGER */
+/*          The leading dimension of DIFR, must be at least K. */
+
+/*  DSIGMA  (input/output) REAL array, dimension ( K ) */
+/*          On entry, the first K elements of this array contain the old */
+/*          roots of the deflated updating problem.  These are the poles */
+/*          of the secular equation. */
+/*          On exit, the elements of DSIGMA may be very slightly altered */
+/*          in value. */
+
+/*  WORK    (workspace) REAL array, dimension at least 3 * K */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit. */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value. */
+/*          > 0:  if INFO = 1, an singular value did not converge */
+
+/*  Further Details */
+/*  =============== */
+
+/*  Based on contributions by */
+/*     Ming Gu and Huan Ren, Computer Science Division, University of */
+/*     California at Berkeley, USA */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --d__;
     --z__;
     --vf;
     --vl;
     --difl;
     difr_dim1 = *lddifr;
-    difr_offset = 1 + difr_dim1 * 1;
+    difr_offset = 1 + difr_dim1;
     difr -= difr_offset;
     --dsigma;
     --work;
@@ -158,31 +187,31 @@
 /*     Quick return if possible */
 
     if (*k == 1) {
-	d__[1] = dabs(z__[1]);
+	d__[1] = ABS(z__[1]);
 	difl[1] = d__[1];
 	if (*icompq == 1) {
 	    difl[2] = 1.f;
-	    difr_ref(1, 2) = 1.f;
+	    difr[(difr_dim1 << 1) + 1] = 1.f;
 	}
 	return 0;
     }
 
-/*     Modify values DSIGMA(i) to make sure all DSIGMA(i)-DSIGMA(j) can   
-       be computed with high relative accuracy (barring over/underflow).   
-       This is a problem on machines without a guard digit in   
-       add/subtract (Cray XMP, Cray YMP, Cray C 90 and Cray 2).   
-       The following code replaces DSIGMA(I) by 2*DSIGMA(I)-DSIGMA(I),   
-       which on any of these machines zeros out the bottommost   
-       bit of DSIGMA(I) if it is 1; this makes the subsequent   
-       subtractions DSIGMA(I)-DSIGMA(J) unproblematic when cancellation   
-       occurs. On binary machines with a guard digit (almost all   
-       machines) it does not change DSIGMA(I) at all. On hexadecimal   
-       and decimal machines with a guard digit, it slightly   
-       changes the bottommost bits of DSIGMA(I). It does not account   
-       for hexadecimal or decimal machines without guard digits   
-       (we know of none). We use a subroutine call to compute   
-       2*DLAMBDA(I) to prevent optimizing compilers from eliminating   
-       this code. */
+/*     Modify values DSIGMA(i) to make sure all DSIGMA(i)-DSIGMA(j) can */
+/*     be computed with high relative accuracy (barring over/underflow). */
+/*     This is a problem on machines without a guard digit in */
+/*     add/subtract (Cray XMP, Cray YMP, Cray C 90 and Cray 2). */
+/*     The following code replaces DSIGMA(I) by 2*DSIGMA(I)-DSIGMA(I), */
+/*     which on any of these machines zeros out the bottommost */
+/*     bit of DSIGMA(I) if it is 1; this makes the subsequent */
+/*     subtractions DSIGMA(I)-DSIGMA(J) unproblematic when cancellation */
+/*     occurs. On binary machines with a guard digit (almost all */
+/*     machines) it does not change DSIGMA(I) at all. On hexadecimal */
+/*     and decimal machines with a guard digit, it slightly */
+/*     changes the bottommost bits of DSIGMA(I). It does not account */
+/*     for hexadecimal or decimal machines without guard digits */
+/*     (we know of none). We use a subroutine call to compute */
+/*     2*DLAMBDA(I) to prevent optimizing compilers from eliminating */
+/*     this code. */
 
     i__1 = *k;
     for (i__ = 1; i__ <= i__1; ++i__) {
@@ -208,8 +237,8 @@
 
     slaset_("A", k, &c__1, &c_b8, &c_b8, &work[iwk3], k);
 
-/*     Compute the updated singular values, the arrays DIFL, DIFR,   
-       and the updated Z. */
+/*     Compute the updated singular values, the arrays DIFL, DIFR, */
+/*     and the updated Z. */
 
     i__1 = *k;
     for (j = 1; j <= i__1; ++j) {
@@ -223,7 +252,7 @@
 	}
 	work[iwk3i + j] = work[iwk3i + j] * work[j] * work[iwk2i + j];
 	difl[j] = -work[j];
-	difr_ref(j, 1) = -work[j + 1];
+	difr[j + difr_dim1] = -work[j + 1];
 	i__2 = j - 1;
 	for (i__ = 1; i__ <= i__2; ++i__) {
 	    work[iwk3i + i__] = work[iwk3i + i__] * work[i__] * work[iwk2i + 
@@ -245,7 +274,7 @@
 
     i__1 = *k;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	r__2 = sqrt((r__1 = work[iwk3i + i__], dabs(r__1)));
+	r__2 = sqrt((r__1 = work[iwk3i + i__], ABS(r__1)));
 	z__[i__] = r_sign(&r__2, &z__[i__]);
 /* L50: */
     }
@@ -258,7 +287,7 @@
 	dj = d__[j];
 	dsigj = -dsigma[j];
 	if (j < *k) {
-	    difrj = -difr_ref(j, 1);
+	    difrj = -difr[j + difr_dim1];
 	    dsigjp = -dsigma[j + 1];
 	}
 	work[j] = -z__[j] / diflj / (dsigma[j] + dj);
@@ -278,7 +307,7 @@
 	work[iwk2i + j] = sdot_(k, &work[1], &c__1, &vf[1], &c__1) / temp;
 	work[iwk3i + j] = sdot_(k, &work[1], &c__1, &vl[1], &c__1) / temp;
 	if (*icompq == 1) {
-	    difr_ref(j, 2) = temp;
+	    difr[j + (difr_dim1 << 1)] = temp;
 	}
 /* L80: */
     }
@@ -291,7 +320,3 @@
 /*     End of SLASD8 */
 
 } /* slasd8_ */
-
-#undef difr_ref
-
-

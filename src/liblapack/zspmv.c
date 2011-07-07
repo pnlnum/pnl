@@ -1,109 +1,132 @@
+/* zspmv.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zspmv_(char *uplo, integer *n, doublecomplex *alpha, 
-	doublecomplex *ap, doublecomplex *x, integer *incx, doublecomplex *
-	beta, doublecomplex *y, integer *incy)
+ int zspmv_(char *uplo, int *n, doublecomplex *alpha, 
+	doublecomplex *ap, doublecomplex *x, int *incx, doublecomplex *
+	beta, doublecomplex *y, int *incy)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1992   
-
-
-    Purpose   
-    =======   
-
-    ZSPMV  performs the matrix-vector operation   
-
-       y := alpha*A*x + beta*y,   
-
-    where alpha and beta are scalars, x and y are n element vectors and   
-    A is an n by n symmetric matrix, supplied in packed form.   
-
-    Arguments   
-    ==========   
-
-    UPLO   - CHARACTER*1   
-             On entry, UPLO specifies whether the upper or lower   
-             triangular part of the matrix A is supplied in the packed   
-             array AP as follows:   
-
-                UPLO = 'U' or 'u'   The upper triangular part of A is   
-                                    supplied in AP.   
-
-                UPLO = 'L' or 'l'   The lower triangular part of A is   
-                                    supplied in AP.   
-
-             Unchanged on exit.   
-
-    N      - INTEGER   
-             On entry, N specifies the order of the matrix A.   
-             N must be at least zero.   
-             Unchanged on exit.   
-
-    ALPHA  - COMPLEX*16   
-             On entry, ALPHA specifies the scalar alpha.   
-             Unchanged on exit.   
-
-    AP     - COMPLEX*16 array, dimension at least   
-             ( ( N*( N + 1 ) )/2 ).   
-             Before entry, with UPLO = 'U' or 'u', the array AP must   
-             contain the upper triangular part of the symmetric matrix   
-             packed sequentially, column by column, so that AP( 1 )   
-             contains a( 1, 1 ), AP( 2 ) and AP( 3 ) contain a( 1, 2 )   
-             and a( 2, 2 ) respectively, and so on.   
-             Before entry, with UPLO = 'L' or 'l', the array AP must   
-             contain the lower triangular part of the symmetric matrix   
-             packed sequentially, column by column, so that AP( 1 )   
-             contains a( 1, 1 ), AP( 2 ) and AP( 3 ) contain a( 2, 1 )   
-             and a( 3, 1 ) respectively, and so on.   
-             Unchanged on exit.   
-
-    X      - COMPLEX*16 array, dimension at least   
-             ( 1 + ( N - 1 )*abs( INCX ) ).   
-             Before entry, the incremented array X must contain the N-   
-             element vector x.   
-             Unchanged on exit.   
-
-    INCX   - INTEGER   
-             On entry, INCX specifies the increment for the elements of   
-             X. INCX must not be zero.   
-             Unchanged on exit.   
-
-    BETA   - COMPLEX*16   
-             On entry, BETA specifies the scalar beta. When BETA is   
-             supplied as zero then Y need not be set on input.   
-             Unchanged on exit.   
-
-    Y      - COMPLEX*16 array, dimension at least   
-             ( 1 + ( N - 1 )*abs( INCY ) ).   
-             Before entry, the incremented array Y must contain the n   
-             element vector y. On exit, Y is overwritten by the updated   
-             vector y.   
-
-    INCY   - INTEGER   
-             On entry, INCY specifies the increment for the elements of   
-             Y. INCY must not be zero.   
-             Unchanged on exit.   
-
-   =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4, i__5;
+    int i__1, i__2, i__3, i__4, i__5;
     doublecomplex z__1, z__2, z__3, z__4;
-    /* Local variables */
-    static integer info;
-    static doublecomplex temp1, temp2;
-    static integer i__, j, k;
-    extern logical lsame_(char *, char *);
-    static integer kk, ix, iy, jx, jy, kx, ky;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
 
+    /* Local variables */
+    int i__, j, k, kk, ix, iy, jx, jy, kx, ky, info;
+    doublecomplex temp1, temp2;
+    extern int lsame_(char *, char *);
+    extern  int xerbla_(char *, int *);
+
+
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZSPMV  performs the matrix-vector operation */
+
+/*     y := alpha*A*x + beta*y, */
+
+/*  where alpha and beta are scalars, x and y are n element vectors and */
+/*  A is an n by n symmetric matrix, supplied in packed form. */
+
+/*  Arguments */
+/*  ========== */
+
+/*  UPLO     (input) CHARACTER*1 */
+/*           On entry, UPLO specifies whether the upper or lower */
+/*           triangular part of the matrix A is supplied in the packed */
+/*           array AP as follows: */
+
+/*              UPLO = 'U' or 'u'   The upper triangular part of A is */
+/*                                  supplied in AP. */
+
+/*              UPLO = 'L' or 'l'   The lower triangular part of A is */
+/*                                  supplied in AP. */
+
+/*           Unchanged on exit. */
+
+/*  N        (input) INTEGER */
+/*           On entry, N specifies the order of the matrix A. */
+/*           N must be at least zero. */
+/*           Unchanged on exit. */
+
+/*  ALPHA    (input) COMPLEX*16 */
+/*           On entry, ALPHA specifies the scalar alpha. */
+/*           Unchanged on exit. */
+
+/*  AP       (input) COMPLEX*16 array, dimension at least */
+/*           ( ( N*( N + 1 ) )/2 ). */
+/*           Before entry, with UPLO = 'U' or 'u', the array AP must */
+/*           contain the upper triangular part of the symmetric matrix */
+/*           packed sequentially, column by column, so that AP( 1 ) */
+/*           contains a( 1, 1 ), AP( 2 ) and AP( 3 ) contain a( 1, 2 ) */
+/*           and a( 2, 2 ) respectively, and so on. */
+/*           Before entry, with UPLO = 'L' or 'l', the array AP must */
+/*           contain the lower triangular part of the symmetric matrix */
+/*           packed sequentially, column by column, so that AP( 1 ) */
+/*           contains a( 1, 1 ), AP( 2 ) and AP( 3 ) contain a( 2, 1 ) */
+/*           and a( 3, 1 ) respectively, and so on. */
+/*           Unchanged on exit. */
+
+/*  X        (input) COMPLEX*16 array, dimension at least */
+/*           ( 1 + ( N - 1 )*ABS( INCX ) ). */
+/*           Before entry, the incremented array X must contain the N- */
+/*           element vector x. */
+/*           Unchanged on exit. */
+
+/*  INCX     (input) INTEGER */
+/*           On entry, INCX specifies the increment for the elements of */
+/*           X. INCX must not be zero. */
+/*           Unchanged on exit. */
+
+/*  BETA     (input) COMPLEX*16 */
+/*           On entry, BETA specifies the scalar beta. When BETA is */
+/*           supplied as zero then Y need not be set on input. */
+/*           Unchanged on exit. */
+
+/*  Y        (input/output) COMPLEX*16 array, dimension at least */
+/*           ( 1 + ( N - 1 )*ABS( INCY ) ). */
+/*           Before entry, the incremented array Y must contain the n */
+/*           element vector y. On exit, Y is overwritten by the updated */
+/*           vector y. */
+
+/*  INCY     (input) INTEGER */
+/*           On entry, INCY specifies the increment for the elements of */
+/*           Y. INCY must not be zero. */
+/*           Unchanged on exit. */
+
+/* ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --y;
     --x;
     --ap;
@@ -144,10 +167,10 @@
 	ky = 1 - (*n - 1) * *incy;
     }
 
-/*     Start the operations. In this version the elements of the array AP   
-       are accessed sequentially with one pass through AP.   
+/*     Start the operations. In this version the elements of the array AP */
+/*     are accessed sequentially with one pass through AP. */
 
-       First form  y := beta*y. */
+/*     First form  y := beta*y. */
 
     if (beta->r != 1. || beta->i != 0.) {
 	if (*incy == 1) {
@@ -402,4 +425,3 @@
 /*     End of ZSPMV */
 
 } /* zspmv_ */
-

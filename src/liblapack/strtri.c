@@ -1,100 +1,124 @@
+/* strtri.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int strtri_(char *uplo, char *diag, integer *n, real *a, 
-	integer *lda, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+static int c_n1 = -1;
+static int c__2 = 2;
+static float c_b18 = 1.f;
+static float c_b22 = -1.f;
+
+ int strtri_(char *uplo, char *diag, int *n, float *a, 
+	int *lda, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       March 31, 1993   
-
-
-    Purpose   
-    =======   
-
-    STRTRI computes the inverse of a real upper or lower triangular   
-    matrix A.   
-
-    This is the Level 3 BLAS version of the algorithm.   
-
-    Arguments   
-    =========   
-
-    UPLO    (input) CHARACTER*1   
-            = 'U':  A is upper triangular;   
-            = 'L':  A is lower triangular.   
-
-    DIAG    (input) CHARACTER*1   
-            = 'N':  A is non-unit triangular;   
-            = 'U':  A is unit triangular.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    A       (input/output) REAL array, dimension (LDA,N)   
-            On entry, the triangular matrix A.  If UPLO = 'U', the   
-            leading N-by-N upper triangular part of the array A contains   
-            the upper triangular matrix, and the strictly lower   
-            triangular part of A is not referenced.  If UPLO = 'L', the   
-            leading N-by-N lower triangular part of the array A contains   
-            the lower triangular matrix, and the strictly upper   
-            triangular part of A is not referenced.  If DIAG = 'U', the   
-            diagonal elements of A are also not referenced and are   
-            assumed to be 1.   
-            On exit, the (triangular) inverse of the original matrix, in   
-            the same storage format.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.  LDA >= max(1,N).   
-
-    INFO    (output) INTEGER   
-            = 0: successful exit   
-            < 0: if INFO = -i, the i-th argument had an illegal value   
-            > 0: if INFO = i, A(i,i) is exactly zero.  The triangular   
-                 matrix is singular and its inverse can not be computed.   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    static integer c_n1 = -1;
-    static integer c__2 = 2;
-    static real c_b18 = 1.f;
-    static real c_b22 = -1.f;
-    
     /* System generated locals */
     address a__1[2];
-    integer a_dim1, a_offset, i__1, i__2[2], i__3, i__4, i__5;
+    int a_dim1, a_offset, i__1, i__2[2], i__3, i__4, i__5;
     char ch__1[2];
-    /* Builtin functions   
-       Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
+
+    /* Builtin functions */
+     int s_cat(char *, char **, int *, int *, unsigned long);
+
     /* Local variables */
-    static integer j;
-    extern logical lsame_(char *, char *);
-    static logical upper;
-    extern /* Subroutine */ int strmm_(char *, char *, char *, char *, 
-	    integer *, integer *, real *, real *, integer *, real *, integer *
-	    ), strsm_(char *, char *, char *, 
-	    char *, integer *, integer *, real *, real *, integer *, real *, 
-	    integer *);
-    static integer jb, nb;
-    extern /* Subroutine */ int strti2_(char *, char *, integer *, real *, 
-	    integer *, integer *);
-    static integer nn;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
-    static logical nounit;
-#define a_ref(a_1,a_2) a[(a_2)*a_dim1 + a_1]
+    int j, jb, nb, nn;
+    extern int lsame_(char *, char *);
+    int upper;
+    extern  int strmm_(char *, char *, char *, char *, 
+	    int *, int *, float *, float *, int *, float *, int *
+), strsm_(char *, char *, char *, 
+	    char *, int *, int *, float *, float *, int *, float *, 
+	    int *), strti2_(char *, char *
+, int *, float *, int *, int *), 
+	    xerbla_(char *, int *);
+    extern int ilaenv_(int *, char *, char *, int *, int *, 
+	    int *, int *);
+    int nounit;
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  STRTRI computes the inverse of a float upper or lower triangular */
+/*  matrix A. */
+
+/*  This is the Level 3 BLAS version of the algorithm. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U':  A is upper triangular; */
+/*          = 'L':  A is lower triangular. */
+
+/*  DIAG    (input) CHARACTER*1 */
+/*          = 'N':  A is non-unit triangular; */
+/*          = 'U':  A is unit triangular. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  A       (input/output) REAL array, dimension (LDA,N) */
+/*          On entry, the triangular matrix A.  If UPLO = 'U', the */
+/*          leading N-by-N upper triangular part of the array A contains */
+/*          the upper triangular matrix, and the strictly lower */
+/*          triangular part of A is not referenced.  If UPLO = 'L', the */
+/*          leading N-by-N lower triangular part of the array A contains */
+/*          the lower triangular matrix, and the strictly upper */
+/*          triangular part of A is not referenced.  If DIAG = 'U', the */
+/*          diagonal elements of A are also not referenced and are */
+/*          assumed to be 1. */
+/*          On exit, the (triangular) inverse of the original matrix, in */
+/*          the same storage format. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A.  LDA >= MAX(1,N). */
+
+/*  INFO    (output) INTEGER */
+/*          = 0: successful exit */
+/*          < 0: if INFO = -i, the i-th argument had an illegal value */
+/*          > 0: if INFO = i, A(i,i) is exactly zero.  The triangular */
+/*               matrix is singular and its inverse can not be computed. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
 
     /* Function Body */
@@ -107,7 +131,7 @@
 	*info = -2;
     } else if (*n < 0) {
 	*info = -3;
-    } else if (*lda < max(1,*n)) {
+    } else if (*lda < MAX(1,*n)) {
 	*info = -5;
     }
     if (*info != 0) {
@@ -127,7 +151,7 @@
     if (nounit) {
 	i__1 = *n;
 	for (*info = 1; *info <= i__1; ++(*info)) {
-	    if (a_ref(*info, *info) == 0.f) {
+	    if (a[*info + *info * a_dim1] == 0.f) {
 		return 0;
 	    }
 /* L10: */
@@ -135,14 +159,13 @@
 	*info = 0;
     }
 
-/*     Determine the block size for this environment.   
+/*     Determine the block size for this environment. */
 
-   Writing concatenation */
+/* Writing concatenation */
     i__2[0] = 1, a__1[0] = uplo;
     i__2[1] = 1, a__1[1] = diag;
-    s_cat(ch__1, a__1, i__2, &c__2, (ftnlen)2);
-    nb = ilaenv_(&c__1, "STRTRI", ch__1, n, &c_n1, &c_n1, &c_n1, (ftnlen)6, (
-	    ftnlen)2);
+    s_cat(ch__1, a__1, i__2, &c__2, (unsigned long)2);
+    nb = ilaenv_(&c__1, "STRTRI", ch__1, n, &c_n1, &c_n1, &c_n1);
     if (nb <= 1 || nb >= *n) {
 
 /*        Use unblocked code */
@@ -161,20 +184,21 @@
 	    for (j = 1; i__3 < 0 ? j >= i__1 : j <= i__1; j += i__3) {
 /* Computing MIN */
 		i__4 = nb, i__5 = *n - j + 1;
-		jb = min(i__4,i__5);
+		jb = MIN(i__4,i__5);
 
 /*              Compute rows 1:j-1 of current block column */
 
 		i__4 = j - 1;
 		strmm_("Left", "Upper", "No transpose", diag, &i__4, &jb, &
-			c_b18, &a[a_offset], lda, &a_ref(1, j), lda);
+			c_b18, &a[a_offset], lda, &a[j * a_dim1 + 1], lda);
 		i__4 = j - 1;
 		strsm_("Right", "Upper", "No transpose", diag, &i__4, &jb, &
-			c_b22, &a_ref(j, j), lda, &a_ref(1, j), lda);
+			c_b22, &a[j + j * a_dim1], lda, &a[j * a_dim1 + 1], 
+			lda);
 
 /*              Compute inverse of current diagonal block */
 
-		strti2_("Upper", diag, &jb, &a_ref(j, j), lda, info);
+		strti2_("Upper", diag, &jb, &a[j + j * a_dim1], lda, info);
 /* L20: */
 	    }
 	} else {
@@ -186,24 +210,24 @@
 	    for (j = nn; i__3 < 0 ? j >= 1 : j <= 1; j += i__3) {
 /* Computing MIN */
 		i__1 = nb, i__4 = *n - j + 1;
-		jb = min(i__1,i__4);
+		jb = MIN(i__1,i__4);
 		if (j + jb <= *n) {
 
 /*                 Compute rows j+jb:n of current block column */
 
 		    i__1 = *n - j - jb + 1;
 		    strmm_("Left", "Lower", "No transpose", diag, &i__1, &jb, 
-			    &c_b18, &a_ref(j + jb, j + jb), lda, &a_ref(j + 
-			    jb, j), lda);
+			    &c_b18, &a[j + jb + (j + jb) * a_dim1], lda, &a[j 
+			    + jb + j * a_dim1], lda);
 		    i__1 = *n - j - jb + 1;
-		    strsm_("Right", "Lower", "No transpose", diag, &i__1, &jb,
-			     &c_b22, &a_ref(j, j), lda, &a_ref(j + jb, j), 
-			    lda);
+		    strsm_("Right", "Lower", "No transpose", diag, &i__1, &jb, 
+			     &c_b22, &a[j + j * a_dim1], lda, &a[j + jb + j * 
+			    a_dim1], lda);
 		}
 
 /*              Compute inverse of current diagonal block */
 
-		strti2_("Lower", diag, &jb, &a_ref(j, j), lda, info);
+		strti2_("Lower", diag, &jb, &a[j + j * a_dim1], lda, info);
 /* L30: */
 	    }
 	}
@@ -214,7 +238,3 @@
 /*     End of STRTRI */
 
 } /* strtri_ */
-
-#undef a_ref
-
-

@@ -1,179 +1,207 @@
+/* zgels.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zgels_(char *trans, integer *m, integer *n, integer *
-	nrhs, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, 
-	doublecomplex *work, integer *lwork, integer *info)
+/* Table of constant values */
+
+static doublecomplex c_b1 = {0.,0.};
+static int c__1 = 1;
+static int c_n1 = -1;
+static int c__0 = 0;
+
+ int zgels_(char *trans, int *m, int *n, int *
+	nrhs, doublecomplex *a, int *lda, doublecomplex *b, int *ldb, 
+	doublecomplex *work, int *lwork, int *info)
 {
-/*  -- LAPACK driver routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    ZGELS solves overdetermined or underdetermined complex linear systems   
-    involving an M-by-N matrix A, or its conjugate-transpose, using a QR   
-    or LQ factorization of A.  It is assumed that A has full rank.   
-
-    The following options are provided:   
-
-    1. If TRANS = 'N' and m >= n:  find the least squares solution of   
-       an overdetermined system, i.e., solve the least squares problem   
-                    minimize || B - A*X ||.   
-
-    2. If TRANS = 'N' and m < n:  find the minimum norm solution of   
-       an underdetermined system A * X = B.   
-
-    3. If TRANS = 'C' and m >= n:  find the minimum norm solution of   
-       an undetermined system A**H * X = B.   
-
-    4. If TRANS = 'C' and m < n:  find the least squares solution of   
-       an overdetermined system, i.e., solve the least squares problem   
-                    minimize || B - A**H * X ||.   
-
-    Several right hand side vectors b and solution vectors x can be   
-    handled in a single call; they are stored as the columns of the   
-    M-by-NRHS right hand side matrix B and the N-by-NRHS solution   
-    matrix X.   
-
-    Arguments   
-    =========   
-
-    TRANS   (input) CHARACTER   
-            = 'N': the linear system involves A;   
-            = 'C': the linear system involves A**H.   
-
-    M       (input) INTEGER   
-            The number of rows of the matrix A.  M >= 0.   
-
-    N       (input) INTEGER   
-            The number of columns of the matrix A.  N >= 0.   
-
-    NRHS    (input) INTEGER   
-            The number of right hand sides, i.e., the number of   
-            columns of the matrices B and X. NRHS >= 0.   
-
-    A       (input/output) COMPLEX*16 array, dimension (LDA,N)   
-            On entry, the M-by-N matrix A.   
-              if M >= N, A is overwritten by details of its QR   
-                         factorization as returned by ZGEQRF;   
-              if M <  N, A is overwritten by details of its LQ   
-                         factorization as returned by ZGELQF.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.  LDA >= max(1,M).   
-
-    B       (input/output) COMPLEX*16 array, dimension (LDB,NRHS)   
-            On entry, the matrix B of right hand side vectors, stored   
-            columnwise; B is M-by-NRHS if TRANS = 'N', or N-by-NRHS   
-            if TRANS = 'C'.   
-            On exit, B is overwritten by the solution vectors, stored   
-            columnwise:   
-            if TRANS = 'N' and m >= n, rows 1 to n of B contain the least   
-            squares solution vectors; the residual sum of squares for the   
-            solution in each column is given by the sum of squares of   
-            elements N+1 to M in that column;   
-            if TRANS = 'N' and m < n, rows 1 to N of B contain the   
-            minimum norm solution vectors;   
-            if TRANS = 'C' and m >= n, rows 1 to M of B contain the   
-            minimum norm solution vectors;   
-            if TRANS = 'C' and m < n, rows 1 to M of B contain the   
-            least squares solution vectors; the residual sum of squares   
-            for the solution in each column is given by the sum of   
-            squares of elements M+1 to N in that column.   
-
-    LDB     (input) INTEGER   
-            The leading dimension of the array B. LDB >= MAX(1,M,N).   
-
-    WORK    (workspace/output) COMPLEX*16 array, dimension (LWORK)   
-            On exit, if INFO = 0, WORK(1) returns the optimal LWORK.   
-
-    LWORK   (input) INTEGER   
-            The dimension of the array WORK.   
-            LWORK >= max( 1, MN + max( MN, NRHS ) ).   
-            For optimal performance,   
-            LWORK >= max( 1, MN + max( MN, NRHS )*NB ).   
-            where MN = min(M,N) and NB is the optimum block size.   
-
-            If LWORK = -1, then a workspace query is assumed; the routine   
-            only calculates the optimal size of the WORK array, returns   
-            this value as the first entry of the WORK array, and no error   
-            message related to LWORK is issued by XERBLA.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-
-    =====================================================================   
-
-
-       Test the input arguments.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static doublecomplex c_b1 = {0.,0.};
-    static doublecomplex c_b2 = {1.,0.};
-    static integer c__1 = 1;
-    static integer c_n1 = -1;
-    static integer c__0 = 0;
-    
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
-    doublereal d__1;
+    int a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
+    double d__1;
+
     /* Local variables */
-    static doublereal anrm, bnrm;
-    static integer brow;
-    static logical tpsd;
-    static integer i__, j, iascl, ibscl;
-    extern logical lsame_(char *, char *);
-    static integer wsize;
-    static doublereal rwork[1];
-    extern /* Subroutine */ int ztrsm_(char *, char *, char *, char *, 
-	    integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-	     doublecomplex *, integer *), 
-	    dlabad_(doublereal *, doublereal *);
-    static integer nb;
-    extern doublereal dlamch_(char *);
-    static integer mn;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
-    static integer scllen;
-    static doublereal bignum;
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, 
-	    integer *, doublereal *);
-    extern /* Subroutine */ int zgelqf_(integer *, integer *, doublecomplex *,
-	     integer *, doublecomplex *, doublecomplex *, integer *, integer *
-	    ), zlascl_(char *, integer *, integer *, doublereal *, doublereal 
-	    *, integer *, integer *, doublecomplex *, integer *, integer *), zgeqrf_(integer *, integer *, doublecomplex *, integer *,
-	     doublecomplex *, doublecomplex *, integer *, integer *), zlaset_(
-	    char *, integer *, integer *, doublecomplex *, doublecomplex *, 
-	    doublecomplex *, integer *);
-    static doublereal smlnum;
-    static logical lquery;
-    extern /* Subroutine */ int zunmlq_(char *, char *, integer *, integer *, 
-	    integer *, doublecomplex *, integer *, doublecomplex *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, integer *), zunmqr_(char *, char *, integer *, integer *, 
-	    integer *, doublecomplex *, integer *, doublecomplex *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, integer *);
-#define b_subscr(a_1,a_2) (a_2)*b_dim1 + a_1
-#define b_ref(a_1,a_2) b[b_subscr(a_1,a_2)]
+    int i__, j, nb, mn;
+    double anrm, bnrm;
+    int brow;
+    int tpsd;
+    int iascl, ibscl;
+    extern int lsame_(char *, char *);
+    int wsize;
+    double rwork[1];
+    extern  int dlabad_(double *, double *);
+    extern double dlamch_(char *);
+    extern  int xerbla_(char *, int *);
+    extern int ilaenv_(int *, char *, char *, int *, int *, 
+	    int *, int *);
+    int scllen;
+    double bignum;
+    extern double zlange_(char *, int *, int *, doublecomplex *, 
+	    int *, double *);
+    extern  int zgelqf_(int *, int *, doublecomplex *, 
+	     int *, doublecomplex *, doublecomplex *, int *, int *
+), zlascl_(char *, int *, int *, double *, double 
+	    *, int *, int *, doublecomplex *, int *, int *), zgeqrf_(int *, int *, doublecomplex *, int *, 
+	     doublecomplex *, doublecomplex *, int *, int *), zlaset_(
+	    char *, int *, int *, doublecomplex *, doublecomplex *, 
+	    doublecomplex *, int *);
+    double smlnum;
+    int lquery;
+    extern  int zunmlq_(char *, char *, int *, int *, 
+	    int *, doublecomplex *, int *, doublecomplex *, 
+	    doublecomplex *, int *, doublecomplex *, int *, int *), zunmqr_(char *, char *, int *, int *, 
+	    int *, doublecomplex *, int *, doublecomplex *, 
+	    doublecomplex *, int *, doublecomplex *, int *, int *), ztrtrs_(char *, char *, char *, int *, 
+	    int *, doublecomplex *, int *, doublecomplex *, int *, 
+	     int *);
 
 
+/*  -- LAPACK driver routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZGELS solves overdetermined or underdetermined complex linear systems */
+/*  involving an M-by-N matrix A, or its conjugate-transpose, using a QR */
+/*  or LQ factorization of A.  It is assumed that A has full rank. */
+
+/*  The following options are provided: */
+
+/*  1. If TRANS = 'N' and m >= n:  find the least squares solution of */
+/*     an overdetermined system, i.e., solve the least squares problem */
+/*                  minimize || B - A*X ||. */
+
+/*  2. If TRANS = 'N' and m < n:  find the minimum norm solution of */
+/*     an underdetermined system A * X = B. */
+
+/*  3. If TRANS = 'C' and m >= n:  find the minimum norm solution of */
+/*     an undetermined system A**H * X = B. */
+
+/*  4. If TRANS = 'C' and m < n:  find the least squares solution of */
+/*     an overdetermined system, i.e., solve the least squares problem */
+/*                  minimize || B - A**H * X ||. */
+
+/*  Several right hand side vectors b and solution vectors x can be */
+/*  handled in a single call; they are stored as the columns of the */
+/*  M-by-NRHS right hand side matrix B and the N-by-NRHS solution */
+/*  matrix X. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  TRANS   (input) CHARACTER*1 */
+/*          = 'N': the linear system involves A; */
+/*          = 'C': the linear system involves A**H. */
+
+/*  M       (input) INTEGER */
+/*          The number of rows of the matrix A.  M >= 0. */
+
+/*  N       (input) INTEGER */
+/*          The number of columns of the matrix A.  N >= 0. */
+
+/*  NRHS    (input) INTEGER */
+/*          The number of right hand sides, i.e., the number of */
+/*          columns of the matrices B and X. NRHS >= 0. */
+
+/*  A       (input/output) COMPLEX*16 array, dimension (LDA,N) */
+/*          On entry, the M-by-N matrix A. */
+/*            if M >= N, A is overwritten by details of its QR */
+/*                       factorization as returned by ZGEQRF; */
+/*            if M <  N, A is overwritten by details of its LQ */
+/*                       factorization as returned by ZGELQF. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A.  LDA >= MAX(1,M). */
+
+/*  B       (input/output) COMPLEX*16 array, dimension (LDB,NRHS) */
+/*          On entry, the matrix B of right hand side vectors, stored */
+/*          columnwise; B is M-by-NRHS if TRANS = 'N', or N-by-NRHS */
+/*          if TRANS = 'C'. */
+/*          On exit, if INFO = 0, B is overwritten by the solution */
+/*          vectors, stored columnwise: */
+/*          if TRANS = 'N' and m >= n, rows 1 to n of B contain the least */
+/*          squares solution vectors; the residual sum of squares for the */
+/*          solution in each column is given by the sum of squares of the */
+/*          modulus of elements N+1 to M in that column; */
+/*          if TRANS = 'N' and m < n, rows 1 to N of B contain the */
+/*          minimum norm solution vectors; */
+/*          if TRANS = 'C' and m >= n, rows 1 to M of B contain the */
+/*          minimum norm solution vectors; */
+/*          if TRANS = 'C' and m < n, rows 1 to M of B contain the */
+/*          least squares solution vectors; the residual sum of squares */
+/*          for the solution in each column is given by the sum of */
+/*          squares of the modulus of elements M+1 to N in that column. */
+
+/*  LDB     (input) INTEGER */
+/*          The leading dimension of the array B. LDB >= MAX(1,M,N). */
+
+/*  WORK    (workspace/output) COMPLEX*16 array, dimension (MAX(1,LWORK)) */
+/*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK. */
+
+/*  LWORK   (input) INTEGER */
+/*          The dimension of the array WORK. */
+/*          LWORK >= MAX( 1, MN + MAX( MN, NRHS ) ). */
+/*          For optimal performance, */
+/*          LWORK >= MAX( 1, MN + MAX( MN, NRHS )*NB ). */
+/*          where MN = MIN(M,N) and NB is the optimum block size. */
+
+/*          If LWORK = -1, then a workspace query is assumed; the routine */
+/*          only calculates the optimal size of the WORK array, returns */
+/*          this value as the first entry of the WORK array, and no error */
+/*          message related to LWORK is issued by XERBLA. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+/*          > 0:  if INFO =  i, the i-th diagonal element of the */
+/*                triangular factor of A is zero, so that A does not have */
+/*                full rank; the least squares solution could not be */
+/*                computed. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Local Arrays .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input arguments. */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     b_dim1 = *ldb;
-    b_offset = 1 + b_dim1 * 1;
+    b_offset = 1 + b_dim1;
     b -= b_offset;
     --work;
 
     /* Function Body */
     *info = 0;
-    mn = min(*m,*n);
+    mn = MIN(*m,*n);
     lquery = *lwork == -1;
     if (! (lsame_(trans, "N") || lsame_(trans, "C"))) {
 	*info = -1;
@@ -183,17 +211,17 @@
 	*info = -3;
     } else if (*nrhs < 0) {
 	*info = -4;
-    } else if (*lda < max(1,*m)) {
+    } else if (*lda < MAX(1,*m)) {
 	*info = -6;
     } else /* if(complicated condition) */ {
 /* Computing MAX */
-	i__1 = max(1,*m);
-	if (*ldb < max(i__1,*n)) {
+	i__1 = MAX(1,*m);
+	if (*ldb < MAX(i__1,*n)) {
 	    *info = -8;
 	} else /* if(complicated condition) */ {
 /* Computing MAX */
-	    i__1 = 1, i__2 = mn + max(mn,*nrhs);
-	    if (*lwork < max(i__1,i__2) && ! lquery) {
+	    i__1 = 1, i__2 = mn + MAX(mn,*nrhs);
+	    if (*lwork < MAX(i__1,i__2) && ! lquery) {
 		*info = -10;
 	    }
 	}
@@ -203,45 +231,43 @@
 
     if (*info == 0 || *info == -10) {
 
-	tpsd = TRUE_;
+	tpsd = TRUE;
 	if (lsame_(trans, "N")) {
-	    tpsd = FALSE_;
+	    tpsd = FALSE;
 	}
 
 	if (*m >= *n) {
-	    nb = ilaenv_(&c__1, "ZGEQRF", " ", m, n, &c_n1, &c_n1, (ftnlen)6, 
-		    (ftnlen)1);
+	    nb = ilaenv_(&c__1, "ZGEQRF", " ", m, n, &c_n1, &c_n1);
 	    if (tpsd) {
 /* Computing MAX */
 		i__1 = nb, i__2 = ilaenv_(&c__1, "ZUNMQR", "LN", m, nrhs, n, &
-			c_n1, (ftnlen)6, (ftnlen)2);
-		nb = max(i__1,i__2);
+			c_n1);
+		nb = MAX(i__1,i__2);
 	    } else {
 /* Computing MAX */
 		i__1 = nb, i__2 = ilaenv_(&c__1, "ZUNMQR", "LC", m, nrhs, n, &
-			c_n1, (ftnlen)6, (ftnlen)2);
-		nb = max(i__1,i__2);
+			c_n1);
+		nb = MAX(i__1,i__2);
 	    }
 	} else {
-	    nb = ilaenv_(&c__1, "ZGELQF", " ", m, n, &c_n1, &c_n1, (ftnlen)6, 
-		    (ftnlen)1);
+	    nb = ilaenv_(&c__1, "ZGELQF", " ", m, n, &c_n1, &c_n1);
 	    if (tpsd) {
 /* Computing MAX */
 		i__1 = nb, i__2 = ilaenv_(&c__1, "ZUNMLQ", "LC", n, nrhs, m, &
-			c_n1, (ftnlen)6, (ftnlen)2);
-		nb = max(i__1,i__2);
+			c_n1);
+		nb = MAX(i__1,i__2);
 	    } else {
 /* Computing MAX */
 		i__1 = nb, i__2 = ilaenv_(&c__1, "ZUNMLQ", "LN", n, nrhs, m, &
-			c_n1, (ftnlen)6, (ftnlen)2);
-		nb = max(i__1,i__2);
+			c_n1);
+		nb = MAX(i__1,i__2);
 	    }
 	}
 
 /* Computing MAX */
-	i__1 = 1, i__2 = mn + max(mn,*nrhs) * nb;
-	wsize = max(i__1,i__2);
-	d__1 = (doublereal) wsize;
+	i__1 = 1, i__2 = mn + MAX(mn,*nrhs) * nb;
+	wsize = MAX(i__1,i__2);
+	d__1 = (double) wsize;
 	work[1].r = d__1, work[1].i = 0.;
 
     }
@@ -254,12 +280,12 @@
 	return 0;
     }
 
-/*     Quick return if possible   
+/*     Quick return if possible */
 
-   Computing MIN */
-    i__1 = min(*m,*n);
-    if (min(i__1,*nrhs) == 0) {
-	i__1 = max(*m,*n);
+/* Computing MIN */
+    i__1 = MIN(*m,*n);
+    if (MIN(i__1,*nrhs) == 0) {
+	i__1 = MAX(*m,*n);
 	zlaset_("Full", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
 	return 0;
     }
@@ -292,7 +318,7 @@
 
 /*        Matrix all zero. Return zero solution. */
 
-	i__1 = max(*m,*n);
+	i__1 = MAX(*m,*n);
 	zlaset_("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
 	goto L50;
     }
@@ -331,32 +357,40 @@
 
 	if (! tpsd) {
 
-/*           Least-Squares Problem min || A * X - B ||   
+/*           Least-Squares Problem min || A * X - B || */
 
-             B(1:M,1:NRHS) := Q' * B(1:M,1:NRHS) */
+/*           B(1:M,1:NRHS) := Q' * B(1:M,1:NRHS) */
 
 	    i__1 = *lwork - mn;
 	    zunmqr_("Left", "Conjugate transpose", m, nrhs, n, &a[a_offset], 
 		    lda, &work[1], &b[b_offset], ldb, &work[mn + 1], &i__1, 
 		    info);
 
-/*           workspace at least NRHS, optimally NRHS*NB   
+/*           workspace at least NRHS, optimally NRHS*NB */
 
-             B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS) */
+/*           B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS) */
 
-	    ztrsm_("Left", "Upper", "No transpose", "Non-unit", n, nrhs, &
-		    c_b2, &a[a_offset], lda, &b[b_offset], ldb);
+	    ztrtrs_("Upper", "No transpose", "Non-unit", n, nrhs, &a[a_offset]
+, lda, &b[b_offset], ldb, info);
+
+	    if (*info > 0) {
+		return 0;
+	    }
 
 	    scllen = *n;
 
 	} else {
 
-/*           Overdetermined system of equations A' * X = B   
+/*           Overdetermined system of equations A' * X = B */
 
-             B(1:N,1:NRHS) := inv(R') * B(1:N,1:NRHS) */
+/*           B(1:N,1:NRHS) := inv(R') * B(1:N,1:NRHS) */
 
-	    ztrsm_("Left", "Upper", "Conjugate transpose", "Non-unit", n, 
-		    nrhs, &c_b2, &a[a_offset], lda, &b[b_offset], ldb);
+	    ztrtrs_("Upper", "Conjugate transpose", "Non-unit", n, nrhs, &a[
+		    a_offset], lda, &b[b_offset], ldb, info);
+
+	    if (*info > 0) {
+		return 0;
+	    }
 
 /*           B(N+1:M,1:NRHS) = ZERO */
 
@@ -364,7 +398,7 @@
 	    for (j = 1; j <= i__1; ++j) {
 		i__2 = *m;
 		for (i__ = *n + 1; i__ <= i__2; ++i__) {
-		    i__3 = b_subscr(i__, j);
+		    i__3 = i__ + j * b_dim1;
 		    b[i__3].r = 0., b[i__3].i = 0.;
 /* L10: */
 		}
@@ -395,12 +429,16 @@
 
 	if (! tpsd) {
 
-/*           underdetermined system of equations A * X = B   
+/*           underdetermined system of equations A * X = B */
 
-             B(1:M,1:NRHS) := inv(L) * B(1:M,1:NRHS) */
+/*           B(1:M,1:NRHS) := inv(L) * B(1:M,1:NRHS) */
 
-	    ztrsm_("Left", "Lower", "No transpose", "Non-unit", m, nrhs, &
-		    c_b2, &a[a_offset], lda, &b[b_offset], ldb);
+	    ztrtrs_("Lower", "No transpose", "Non-unit", m, nrhs, &a[a_offset]
+, lda, &b[b_offset], ldb, info);
+
+	    if (*info > 0) {
+		return 0;
+	    }
 
 /*           B(M+1:N,1:NRHS) = 0 */
 
@@ -408,7 +446,7 @@
 	    for (j = 1; j <= i__1; ++j) {
 		i__2 = *n;
 		for (i__ = *m + 1; i__ <= i__2; ++i__) {
-		    i__3 = b_subscr(i__, j);
+		    i__3 = i__ + j * b_dim1;
 		    b[i__3].r = 0., b[i__3].i = 0.;
 /* L30: */
 		}
@@ -428,20 +466,24 @@
 
 	} else {
 
-/*           overdetermined system min || A' * X - B ||   
+/*           overdetermined system min || A' * X - B || */
 
-             B(1:N,1:NRHS) := Q * B(1:N,1:NRHS) */
+/*           B(1:N,1:NRHS) := Q * B(1:N,1:NRHS) */
 
 	    i__1 = *lwork - mn;
 	    zunmlq_("Left", "No transpose", n, nrhs, m, &a[a_offset], lda, &
 		    work[1], &b[b_offset], ldb, &work[mn + 1], &i__1, info);
 
-/*           workspace at least NRHS, optimally NRHS*NB   
+/*           workspace at least NRHS, optimally NRHS*NB */
 
-             B(1:M,1:NRHS) := inv(L') * B(1:M,1:NRHS) */
+/*           B(1:M,1:NRHS) := inv(L') * B(1:M,1:NRHS) */
 
-	    ztrsm_("Left", "Lower", "Conjugate transpose", "Non-unit", m, 
-		    nrhs, &c_b2, &a[a_offset], lda, &b[b_offset], ldb);
+	    ztrtrs_("Lower", "Conjugate transpose", "Non-unit", m, nrhs, &a[
+		    a_offset], lda, &b[b_offset], ldb, info);
+
+	    if (*info > 0) {
+		return 0;
+	    }
 
 	    scllen = *m;
 
@@ -453,21 +495,21 @@
 
     if (iascl == 1) {
 	zlascl_("G", &c__0, &c__0, &anrm, &smlnum, &scllen, nrhs, &b[b_offset]
-		, ldb, info);
+, ldb, info);
     } else if (iascl == 2) {
 	zlascl_("G", &c__0, &c__0, &anrm, &bignum, &scllen, nrhs, &b[b_offset]
-		, ldb, info);
+, ldb, info);
     }
     if (ibscl == 1) {
 	zlascl_("G", &c__0, &c__0, &smlnum, &bnrm, &scllen, nrhs, &b[b_offset]
-		, ldb, info);
+, ldb, info);
     } else if (ibscl == 2) {
 	zlascl_("G", &c__0, &c__0, &bignum, &bnrm, &scllen, nrhs, &b[b_offset]
-		, ldb, info);
+, ldb, info);
     }
 
 L50:
-    d__1 = (doublereal) wsize;
+    d__1 = (double) wsize;
     work[1].r = d__1, work[1].i = 0.;
 
     return 0;
@@ -475,8 +517,3 @@ L50:
 /*     End of ZGELS */
 
 } /* zgels_ */
-
-#undef b_ref
-#undef b_subscr
-
-

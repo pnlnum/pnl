@@ -1,17 +1,17 @@
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int csrot_(integer *n, complex *cx, integer *incx, complex *
-	cy, integer *incy, real *c__, real *s)
+ int csrot_(int *n, complex *cx, int *incx, complex *
+	cy, int *incy, float *c__, float *s)
 {
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4;
+    int i__1, i__2, i__3, i__4;
     complex q__1, q__2, q__3;
     /* Local variables */
-    static integer i__;
+    static int i__;
     static complex ctemp;
-    static integer ix, iy;
-/*     applies a plane rotation, where the cos and sin (c and s) are real   
+    static int ix, iy;
+/*     applies a plane rotation, where the cos and sin (c and s) are float   
        and the vectors cx and cy are complex.   
        jack dongarra, linpack, 3/11/78.   
     =====================================================================   

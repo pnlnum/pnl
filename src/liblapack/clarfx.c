@@ -1,95 +1,116 @@
+/* clarfx.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int clarfx_(char *side, integer *m, integer *n, complex *v, 
-	complex *tau, complex *c__, integer *ldc, complex *work)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int clarfx_(char *side, int *m, int *n, complex *v, 
+	complex *tau, complex *c__, int *ldc, complex *work)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
-
-
-    Purpose   
-    =======   
-
-    CLARFX applies a complex elementary reflector H to a complex m by n   
-    matrix C, from either the left or the right. H is represented in the   
-    form   
-
-          H = I - tau * v * v'   
-
-    where tau is a complex scalar and v is a complex vector.   
-
-    If tau = 0, then H is taken to be the unit matrix   
-
-    This version uses inline code if H has order < 11.   
-
-    Arguments   
-    =========   
-
-    SIDE    (input) CHARACTER*1   
-            = 'L': form  H * C   
-            = 'R': form  C * H   
-
-    M       (input) INTEGER   
-            The number of rows of the matrix C.   
-
-    N       (input) INTEGER   
-            The number of columns of the matrix C.   
-
-    V       (input) COMPLEX array, dimension (M) if SIDE = 'L'   
-                                          or (N) if SIDE = 'R'   
-            The vector v in the representation of H.   
-
-    TAU     (input) COMPLEX   
-            The value tau in the representation of H.   
-
-    C       (input/output) COMPLEX array, dimension (LDC,N)   
-            On entry, the m by n matrix C.   
-            On exit, C is overwritten by the matrix H * C if SIDE = 'L',   
-            or C * H if SIDE = 'R'.   
-
-    LDC     (input) INTEGER   
-            The leading dimension of the array C. LDA >= max(1,M).   
-
-    WORK    (workspace) COMPLEX array, dimension (N) if SIDE = 'L'   
-                                              or (M) if SIDE = 'R'   
-            WORK is not referenced if H has order < 11.   
-
-    =====================================================================   
-
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static complex c_b1 = {0.f,0.f};
-    static complex c_b2 = {1.f,0.f};
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, 
+    int c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, 
 	    i__9, i__10, i__11;
     complex q__1, q__2, q__3, q__4, q__5, q__6, q__7, q__8, q__9, q__10, 
 	    q__11, q__12, q__13, q__14, q__15, q__16, q__17, q__18, q__19;
+
     /* Builtin functions */
     void r_cnjg(complex *, complex *);
+
     /* Local variables */
-    static integer j;
-    extern /* Subroutine */ int cgerc_(integer *, integer *, complex *, 
-	    complex *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *);
-    extern /* Subroutine */ int cgemv_(char *, integer *, integer *, complex *
-	    , complex *, integer *, complex *, integer *, complex *, complex *
-	    , integer *);
-    static complex t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6,
-	     v7, v8, v9, t10, v10, sum;
-#define c___subscr(a_1,a_2) (a_2)*c_dim1 + a_1
-#define c___ref(a_1,a_2) c__[c___subscr(a_1,a_2)]
+    int j;
+    complex t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, 
+	    v8, v9, t10, v10, sum;
+    extern  int clarf_(char *, int *, int *, complex *
+, int *, complex *, complex *, int *, complex *);
+    extern int lsame_(char *, char *);
 
 
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CLARFX applies a complex elementary reflector H to a complex m by n */
+/*  matrix C, from either the left or the right. H is represented in the */
+/*  form */
+
+/*        H = I - tau * v * v' */
+
+/*  where tau is a complex scalar and v is a complex vector. */
+
+/*  If tau = 0, then H is taken to be the unit matrix */
+
+/*  This version uses inline code if H has order < 11. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  SIDE    (input) CHARACTER*1 */
+/*          = 'L': form  H * C */
+/*          = 'R': form  C * H */
+
+/*  M       (input) INTEGER */
+/*          The number of rows of the matrix C. */
+
+/*  N       (input) INTEGER */
+/*          The number of columns of the matrix C. */
+
+/*  V       (input) COMPLEX array, dimension (M) if SIDE = 'L' */
+/*                                        or (N) if SIDE = 'R' */
+/*          The vector v in the representation of H. */
+
+/*  TAU     (input) COMPLEX */
+/*          The value tau in the representation of H. */
+
+/*  C       (input/output) COMPLEX array, dimension (LDC,N) */
+/*          On entry, the m by n matrix C. */
+/*          On exit, C is overwritten by the matrix H * C if SIDE = 'L', */
+/*          or C * H if SIDE = 'R'. */
+
+/*  LDC     (input) INTEGER */
+/*          The leading dimension of the array C. LDA >= MAX(1,M). */
+
+/*  WORK    (workspace) COMPLEX array, dimension (N) if SIDE = 'L' */
+/*                                            or (M) if SIDE = 'R' */
+/*          WORK is not referenced if H has order < 11. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     --v;
     c_dim1 = *ldc;
-    c_offset = 1 + c_dim1 * 1;
+    c_offset = 1 + c_dim1;
     c__ -= c_offset;
     --work;
 
@@ -114,18 +135,9 @@
 	    case 10:  goto L190;
 	}
 
-/*        Code for general M   
+/*        Code for general M */
 
-          w := C'*v */
-
-	cgemv_("Conjugate transpose", m, n, &c_b2, &c__[c_offset], ldc, &v[1],
-		 &c__1, &c_b1, &work[1], &c__1);
-
-/*        C := C - tau * v * w' */
-
-	q__1.r = -tau->r, q__1.i = -tau->i;
-	cgerc_(m, n, &q__1, &v[1], &c__1, &work[1], &c__1, &c__[c_offset], 
-		ldc);
+	clarf_(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
 	goto L410;
 L10:
 
@@ -140,8 +152,8 @@ L10:
 	t1.r = q__1.r, t1.i = q__1.i;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(1, j);
-	    i__3 = c___subscr(1, j);
+	    i__2 = j * c_dim1 + 1;
+	    i__3 = j * c_dim1 + 1;
 	    q__1.r = t1.r * c__[i__3].r - t1.i * c__[i__3].i, q__1.i = t1.r * 
 		    c__[i__3].i + t1.i * c__[i__3].r;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
@@ -166,22 +178,22 @@ L30:
 	t2.r = q__1.r, t2.i = q__1.i;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(1, j);
+	    i__2 = j * c_dim1 + 1;
 	    q__2.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i, q__2.i = v1.r * 
 		    c__[i__2].i + v1.i * c__[i__2].r;
-	    i__3 = c___subscr(2, j);
+	    i__3 = j * c_dim1 + 2;
 	    q__3.r = v2.r * c__[i__3].r - v2.i * c__[i__3].i, q__3.i = v2.r * 
 		    c__[i__3].i + v2.i * c__[i__3].r;
 	    q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
 	    sum.r = q__1.r, sum.i = q__1.i;
-	    i__2 = c___subscr(1, j);
-	    i__3 = c___subscr(1, j);
+	    i__2 = j * c_dim1 + 1;
+	    i__3 = j * c_dim1 + 1;
 	    q__2.r = sum.r * t1.r - sum.i * t1.i, q__2.i = sum.r * t1.i + 
 		    sum.i * t1.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(2, j);
-	    i__3 = c___subscr(2, j);
+	    i__2 = j * c_dim1 + 2;
+	    i__3 = j * c_dim1 + 2;
 	    q__2.r = sum.r * t2.r - sum.i * t2.i, q__2.i = sum.r * t2.i + 
 		    sum.i * t2.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
@@ -213,32 +225,32 @@ L50:
 	t3.r = q__1.r, t3.i = q__1.i;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(1, j);
+	    i__2 = j * c_dim1 + 1;
 	    q__3.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i, q__3.i = v1.r * 
 		    c__[i__2].i + v1.i * c__[i__2].r;
-	    i__3 = c___subscr(2, j);
+	    i__3 = j * c_dim1 + 2;
 	    q__4.r = v2.r * c__[i__3].r - v2.i * c__[i__3].i, q__4.i = v2.r * 
 		    c__[i__3].i + v2.i * c__[i__3].r;
 	    q__2.r = q__3.r + q__4.r, q__2.i = q__3.i + q__4.i;
-	    i__4 = c___subscr(3, j);
+	    i__4 = j * c_dim1 + 3;
 	    q__5.r = v3.r * c__[i__4].r - v3.i * c__[i__4].i, q__5.i = v3.r * 
 		    c__[i__4].i + v3.i * c__[i__4].r;
 	    q__1.r = q__2.r + q__5.r, q__1.i = q__2.i + q__5.i;
 	    sum.r = q__1.r, sum.i = q__1.i;
-	    i__2 = c___subscr(1, j);
-	    i__3 = c___subscr(1, j);
+	    i__2 = j * c_dim1 + 1;
+	    i__3 = j * c_dim1 + 1;
 	    q__2.r = sum.r * t1.r - sum.i * t1.i, q__2.i = sum.r * t1.i + 
 		    sum.i * t1.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(2, j);
-	    i__3 = c___subscr(2, j);
+	    i__2 = j * c_dim1 + 2;
+	    i__3 = j * c_dim1 + 2;
 	    q__2.r = sum.r * t2.r - sum.i * t2.i, q__2.i = sum.r * t2.i + 
 		    sum.i * t2.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(3, j);
-	    i__3 = c___subscr(3, j);
+	    i__2 = j * c_dim1 + 3;
+	    i__3 = j * c_dim1 + 3;
 	    q__2.r = sum.r * t3.r - sum.i * t3.i, q__2.i = sum.r * t3.i + 
 		    sum.i * t3.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
@@ -276,42 +288,42 @@ L70:
 	t4.r = q__1.r, t4.i = q__1.i;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(1, j);
+	    i__2 = j * c_dim1 + 1;
 	    q__4.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i, q__4.i = v1.r * 
 		    c__[i__2].i + v1.i * c__[i__2].r;
-	    i__3 = c___subscr(2, j);
+	    i__3 = j * c_dim1 + 2;
 	    q__5.r = v2.r * c__[i__3].r - v2.i * c__[i__3].i, q__5.i = v2.r * 
 		    c__[i__3].i + v2.i * c__[i__3].r;
 	    q__3.r = q__4.r + q__5.r, q__3.i = q__4.i + q__5.i;
-	    i__4 = c___subscr(3, j);
+	    i__4 = j * c_dim1 + 3;
 	    q__6.r = v3.r * c__[i__4].r - v3.i * c__[i__4].i, q__6.i = v3.r * 
 		    c__[i__4].i + v3.i * c__[i__4].r;
 	    q__2.r = q__3.r + q__6.r, q__2.i = q__3.i + q__6.i;
-	    i__5 = c___subscr(4, j);
+	    i__5 = j * c_dim1 + 4;
 	    q__7.r = v4.r * c__[i__5].r - v4.i * c__[i__5].i, q__7.i = v4.r * 
 		    c__[i__5].i + v4.i * c__[i__5].r;
 	    q__1.r = q__2.r + q__7.r, q__1.i = q__2.i + q__7.i;
 	    sum.r = q__1.r, sum.i = q__1.i;
-	    i__2 = c___subscr(1, j);
-	    i__3 = c___subscr(1, j);
+	    i__2 = j * c_dim1 + 1;
+	    i__3 = j * c_dim1 + 1;
 	    q__2.r = sum.r * t1.r - sum.i * t1.i, q__2.i = sum.r * t1.i + 
 		    sum.i * t1.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(2, j);
-	    i__3 = c___subscr(2, j);
+	    i__2 = j * c_dim1 + 2;
+	    i__3 = j * c_dim1 + 2;
 	    q__2.r = sum.r * t2.r - sum.i * t2.i, q__2.i = sum.r * t2.i + 
 		    sum.i * t2.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(3, j);
-	    i__3 = c___subscr(3, j);
+	    i__2 = j * c_dim1 + 3;
+	    i__3 = j * c_dim1 + 3;
 	    q__2.r = sum.r * t3.r - sum.i * t3.i, q__2.i = sum.r * t3.i + 
 		    sum.i * t3.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(4, j);
-	    i__3 = c___subscr(4, j);
+	    i__2 = j * c_dim1 + 4;
+	    i__3 = j * c_dim1 + 4;
 	    q__2.r = sum.r * t4.r - sum.i * t4.i, q__2.i = sum.r * t4.i + 
 		    sum.i * t4.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
@@ -355,52 +367,52 @@ L90:
 	t5.r = q__1.r, t5.i = q__1.i;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(1, j);
+	    i__2 = j * c_dim1 + 1;
 	    q__5.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i, q__5.i = v1.r * 
 		    c__[i__2].i + v1.i * c__[i__2].r;
-	    i__3 = c___subscr(2, j);
+	    i__3 = j * c_dim1 + 2;
 	    q__6.r = v2.r * c__[i__3].r - v2.i * c__[i__3].i, q__6.i = v2.r * 
 		    c__[i__3].i + v2.i * c__[i__3].r;
 	    q__4.r = q__5.r + q__6.r, q__4.i = q__5.i + q__6.i;
-	    i__4 = c___subscr(3, j);
+	    i__4 = j * c_dim1 + 3;
 	    q__7.r = v3.r * c__[i__4].r - v3.i * c__[i__4].i, q__7.i = v3.r * 
 		    c__[i__4].i + v3.i * c__[i__4].r;
 	    q__3.r = q__4.r + q__7.r, q__3.i = q__4.i + q__7.i;
-	    i__5 = c___subscr(4, j);
+	    i__5 = j * c_dim1 + 4;
 	    q__8.r = v4.r * c__[i__5].r - v4.i * c__[i__5].i, q__8.i = v4.r * 
 		    c__[i__5].i + v4.i * c__[i__5].r;
 	    q__2.r = q__3.r + q__8.r, q__2.i = q__3.i + q__8.i;
-	    i__6 = c___subscr(5, j);
+	    i__6 = j * c_dim1 + 5;
 	    q__9.r = v5.r * c__[i__6].r - v5.i * c__[i__6].i, q__9.i = v5.r * 
 		    c__[i__6].i + v5.i * c__[i__6].r;
 	    q__1.r = q__2.r + q__9.r, q__1.i = q__2.i + q__9.i;
 	    sum.r = q__1.r, sum.i = q__1.i;
-	    i__2 = c___subscr(1, j);
-	    i__3 = c___subscr(1, j);
+	    i__2 = j * c_dim1 + 1;
+	    i__3 = j * c_dim1 + 1;
 	    q__2.r = sum.r * t1.r - sum.i * t1.i, q__2.i = sum.r * t1.i + 
 		    sum.i * t1.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(2, j);
-	    i__3 = c___subscr(2, j);
+	    i__2 = j * c_dim1 + 2;
+	    i__3 = j * c_dim1 + 2;
 	    q__2.r = sum.r * t2.r - sum.i * t2.i, q__2.i = sum.r * t2.i + 
 		    sum.i * t2.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(3, j);
-	    i__3 = c___subscr(3, j);
+	    i__2 = j * c_dim1 + 3;
+	    i__3 = j * c_dim1 + 3;
 	    q__2.r = sum.r * t3.r - sum.i * t3.i, q__2.i = sum.r * t3.i + 
 		    sum.i * t3.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(4, j);
-	    i__3 = c___subscr(4, j);
+	    i__2 = j * c_dim1 + 4;
+	    i__3 = j * c_dim1 + 4;
 	    q__2.r = sum.r * t4.r - sum.i * t4.i, q__2.i = sum.r * t4.i + 
 		    sum.i * t4.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(5, j);
-	    i__3 = c___subscr(5, j);
+	    i__2 = j * c_dim1 + 5;
+	    i__3 = j * c_dim1 + 5;
 	    q__2.r = sum.r * t5.r - sum.i * t5.i, q__2.i = sum.r * t5.i + 
 		    sum.i * t5.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
@@ -450,62 +462,62 @@ L110:
 	t6.r = q__1.r, t6.i = q__1.i;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(1, j);
+	    i__2 = j * c_dim1 + 1;
 	    q__6.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i, q__6.i = v1.r * 
 		    c__[i__2].i + v1.i * c__[i__2].r;
-	    i__3 = c___subscr(2, j);
+	    i__3 = j * c_dim1 + 2;
 	    q__7.r = v2.r * c__[i__3].r - v2.i * c__[i__3].i, q__7.i = v2.r * 
 		    c__[i__3].i + v2.i * c__[i__3].r;
 	    q__5.r = q__6.r + q__7.r, q__5.i = q__6.i + q__7.i;
-	    i__4 = c___subscr(3, j);
+	    i__4 = j * c_dim1 + 3;
 	    q__8.r = v3.r * c__[i__4].r - v3.i * c__[i__4].i, q__8.i = v3.r * 
 		    c__[i__4].i + v3.i * c__[i__4].r;
 	    q__4.r = q__5.r + q__8.r, q__4.i = q__5.i + q__8.i;
-	    i__5 = c___subscr(4, j);
+	    i__5 = j * c_dim1 + 4;
 	    q__9.r = v4.r * c__[i__5].r - v4.i * c__[i__5].i, q__9.i = v4.r * 
 		    c__[i__5].i + v4.i * c__[i__5].r;
 	    q__3.r = q__4.r + q__9.r, q__3.i = q__4.i + q__9.i;
-	    i__6 = c___subscr(5, j);
+	    i__6 = j * c_dim1 + 5;
 	    q__10.r = v5.r * c__[i__6].r - v5.i * c__[i__6].i, q__10.i = v5.r 
 		    * c__[i__6].i + v5.i * c__[i__6].r;
 	    q__2.r = q__3.r + q__10.r, q__2.i = q__3.i + q__10.i;
-	    i__7 = c___subscr(6, j);
+	    i__7 = j * c_dim1 + 6;
 	    q__11.r = v6.r * c__[i__7].r - v6.i * c__[i__7].i, q__11.i = v6.r 
 		    * c__[i__7].i + v6.i * c__[i__7].r;
 	    q__1.r = q__2.r + q__11.r, q__1.i = q__2.i + q__11.i;
 	    sum.r = q__1.r, sum.i = q__1.i;
-	    i__2 = c___subscr(1, j);
-	    i__3 = c___subscr(1, j);
+	    i__2 = j * c_dim1 + 1;
+	    i__3 = j * c_dim1 + 1;
 	    q__2.r = sum.r * t1.r - sum.i * t1.i, q__2.i = sum.r * t1.i + 
 		    sum.i * t1.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(2, j);
-	    i__3 = c___subscr(2, j);
+	    i__2 = j * c_dim1 + 2;
+	    i__3 = j * c_dim1 + 2;
 	    q__2.r = sum.r * t2.r - sum.i * t2.i, q__2.i = sum.r * t2.i + 
 		    sum.i * t2.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(3, j);
-	    i__3 = c___subscr(3, j);
+	    i__2 = j * c_dim1 + 3;
+	    i__3 = j * c_dim1 + 3;
 	    q__2.r = sum.r * t3.r - sum.i * t3.i, q__2.i = sum.r * t3.i + 
 		    sum.i * t3.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(4, j);
-	    i__3 = c___subscr(4, j);
+	    i__2 = j * c_dim1 + 4;
+	    i__3 = j * c_dim1 + 4;
 	    q__2.r = sum.r * t4.r - sum.i * t4.i, q__2.i = sum.r * t4.i + 
 		    sum.i * t4.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(5, j);
-	    i__3 = c___subscr(5, j);
+	    i__2 = j * c_dim1 + 5;
+	    i__3 = j * c_dim1 + 5;
 	    q__2.r = sum.r * t5.r - sum.i * t5.i, q__2.i = sum.r * t5.i + 
 		    sum.i * t5.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(6, j);
-	    i__3 = c___subscr(6, j);
+	    i__2 = j * c_dim1 + 6;
+	    i__3 = j * c_dim1 + 6;
 	    q__2.r = sum.r * t6.r - sum.i * t6.i, q__2.i = sum.r * t6.i + 
 		    sum.i * t6.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
@@ -561,72 +573,72 @@ L130:
 	t7.r = q__1.r, t7.i = q__1.i;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(1, j);
+	    i__2 = j * c_dim1 + 1;
 	    q__7.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i, q__7.i = v1.r * 
 		    c__[i__2].i + v1.i * c__[i__2].r;
-	    i__3 = c___subscr(2, j);
+	    i__3 = j * c_dim1 + 2;
 	    q__8.r = v2.r * c__[i__3].r - v2.i * c__[i__3].i, q__8.i = v2.r * 
 		    c__[i__3].i + v2.i * c__[i__3].r;
 	    q__6.r = q__7.r + q__8.r, q__6.i = q__7.i + q__8.i;
-	    i__4 = c___subscr(3, j);
+	    i__4 = j * c_dim1 + 3;
 	    q__9.r = v3.r * c__[i__4].r - v3.i * c__[i__4].i, q__9.i = v3.r * 
 		    c__[i__4].i + v3.i * c__[i__4].r;
 	    q__5.r = q__6.r + q__9.r, q__5.i = q__6.i + q__9.i;
-	    i__5 = c___subscr(4, j);
+	    i__5 = j * c_dim1 + 4;
 	    q__10.r = v4.r * c__[i__5].r - v4.i * c__[i__5].i, q__10.i = v4.r 
 		    * c__[i__5].i + v4.i * c__[i__5].r;
 	    q__4.r = q__5.r + q__10.r, q__4.i = q__5.i + q__10.i;
-	    i__6 = c___subscr(5, j);
+	    i__6 = j * c_dim1 + 5;
 	    q__11.r = v5.r * c__[i__6].r - v5.i * c__[i__6].i, q__11.i = v5.r 
 		    * c__[i__6].i + v5.i * c__[i__6].r;
 	    q__3.r = q__4.r + q__11.r, q__3.i = q__4.i + q__11.i;
-	    i__7 = c___subscr(6, j);
+	    i__7 = j * c_dim1 + 6;
 	    q__12.r = v6.r * c__[i__7].r - v6.i * c__[i__7].i, q__12.i = v6.r 
 		    * c__[i__7].i + v6.i * c__[i__7].r;
 	    q__2.r = q__3.r + q__12.r, q__2.i = q__3.i + q__12.i;
-	    i__8 = c___subscr(7, j);
+	    i__8 = j * c_dim1 + 7;
 	    q__13.r = v7.r * c__[i__8].r - v7.i * c__[i__8].i, q__13.i = v7.r 
 		    * c__[i__8].i + v7.i * c__[i__8].r;
 	    q__1.r = q__2.r + q__13.r, q__1.i = q__2.i + q__13.i;
 	    sum.r = q__1.r, sum.i = q__1.i;
-	    i__2 = c___subscr(1, j);
-	    i__3 = c___subscr(1, j);
+	    i__2 = j * c_dim1 + 1;
+	    i__3 = j * c_dim1 + 1;
 	    q__2.r = sum.r * t1.r - sum.i * t1.i, q__2.i = sum.r * t1.i + 
 		    sum.i * t1.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(2, j);
-	    i__3 = c___subscr(2, j);
+	    i__2 = j * c_dim1 + 2;
+	    i__3 = j * c_dim1 + 2;
 	    q__2.r = sum.r * t2.r - sum.i * t2.i, q__2.i = sum.r * t2.i + 
 		    sum.i * t2.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(3, j);
-	    i__3 = c___subscr(3, j);
+	    i__2 = j * c_dim1 + 3;
+	    i__3 = j * c_dim1 + 3;
 	    q__2.r = sum.r * t3.r - sum.i * t3.i, q__2.i = sum.r * t3.i + 
 		    sum.i * t3.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(4, j);
-	    i__3 = c___subscr(4, j);
+	    i__2 = j * c_dim1 + 4;
+	    i__3 = j * c_dim1 + 4;
 	    q__2.r = sum.r * t4.r - sum.i * t4.i, q__2.i = sum.r * t4.i + 
 		    sum.i * t4.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(5, j);
-	    i__3 = c___subscr(5, j);
+	    i__2 = j * c_dim1 + 5;
+	    i__3 = j * c_dim1 + 5;
 	    q__2.r = sum.r * t5.r - sum.i * t5.i, q__2.i = sum.r * t5.i + 
 		    sum.i * t5.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(6, j);
-	    i__3 = c___subscr(6, j);
+	    i__2 = j * c_dim1 + 6;
+	    i__3 = j * c_dim1 + 6;
 	    q__2.r = sum.r * t6.r - sum.i * t6.i, q__2.i = sum.r * t6.i + 
 		    sum.i * t6.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(7, j);
-	    i__3 = c___subscr(7, j);
+	    i__2 = j * c_dim1 + 7;
+	    i__3 = j * c_dim1 + 7;
 	    q__2.r = sum.r * t7.r - sum.i * t7.i, q__2.i = sum.r * t7.i + 
 		    sum.i * t7.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
@@ -688,82 +700,82 @@ L150:
 	t8.r = q__1.r, t8.i = q__1.i;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(1, j);
+	    i__2 = j * c_dim1 + 1;
 	    q__8.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i, q__8.i = v1.r * 
 		    c__[i__2].i + v1.i * c__[i__2].r;
-	    i__3 = c___subscr(2, j);
+	    i__3 = j * c_dim1 + 2;
 	    q__9.r = v2.r * c__[i__3].r - v2.i * c__[i__3].i, q__9.i = v2.r * 
 		    c__[i__3].i + v2.i * c__[i__3].r;
 	    q__7.r = q__8.r + q__9.r, q__7.i = q__8.i + q__9.i;
-	    i__4 = c___subscr(3, j);
+	    i__4 = j * c_dim1 + 3;
 	    q__10.r = v3.r * c__[i__4].r - v3.i * c__[i__4].i, q__10.i = v3.r 
 		    * c__[i__4].i + v3.i * c__[i__4].r;
 	    q__6.r = q__7.r + q__10.r, q__6.i = q__7.i + q__10.i;
-	    i__5 = c___subscr(4, j);
+	    i__5 = j * c_dim1 + 4;
 	    q__11.r = v4.r * c__[i__5].r - v4.i * c__[i__5].i, q__11.i = v4.r 
 		    * c__[i__5].i + v4.i * c__[i__5].r;
 	    q__5.r = q__6.r + q__11.r, q__5.i = q__6.i + q__11.i;
-	    i__6 = c___subscr(5, j);
+	    i__6 = j * c_dim1 + 5;
 	    q__12.r = v5.r * c__[i__6].r - v5.i * c__[i__6].i, q__12.i = v5.r 
 		    * c__[i__6].i + v5.i * c__[i__6].r;
 	    q__4.r = q__5.r + q__12.r, q__4.i = q__5.i + q__12.i;
-	    i__7 = c___subscr(6, j);
+	    i__7 = j * c_dim1 + 6;
 	    q__13.r = v6.r * c__[i__7].r - v6.i * c__[i__7].i, q__13.i = v6.r 
 		    * c__[i__7].i + v6.i * c__[i__7].r;
 	    q__3.r = q__4.r + q__13.r, q__3.i = q__4.i + q__13.i;
-	    i__8 = c___subscr(7, j);
+	    i__8 = j * c_dim1 + 7;
 	    q__14.r = v7.r * c__[i__8].r - v7.i * c__[i__8].i, q__14.i = v7.r 
 		    * c__[i__8].i + v7.i * c__[i__8].r;
 	    q__2.r = q__3.r + q__14.r, q__2.i = q__3.i + q__14.i;
-	    i__9 = c___subscr(8, j);
+	    i__9 = j * c_dim1 + 8;
 	    q__15.r = v8.r * c__[i__9].r - v8.i * c__[i__9].i, q__15.i = v8.r 
 		    * c__[i__9].i + v8.i * c__[i__9].r;
 	    q__1.r = q__2.r + q__15.r, q__1.i = q__2.i + q__15.i;
 	    sum.r = q__1.r, sum.i = q__1.i;
-	    i__2 = c___subscr(1, j);
-	    i__3 = c___subscr(1, j);
+	    i__2 = j * c_dim1 + 1;
+	    i__3 = j * c_dim1 + 1;
 	    q__2.r = sum.r * t1.r - sum.i * t1.i, q__2.i = sum.r * t1.i + 
 		    sum.i * t1.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(2, j);
-	    i__3 = c___subscr(2, j);
+	    i__2 = j * c_dim1 + 2;
+	    i__3 = j * c_dim1 + 2;
 	    q__2.r = sum.r * t2.r - sum.i * t2.i, q__2.i = sum.r * t2.i + 
 		    sum.i * t2.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(3, j);
-	    i__3 = c___subscr(3, j);
+	    i__2 = j * c_dim1 + 3;
+	    i__3 = j * c_dim1 + 3;
 	    q__2.r = sum.r * t3.r - sum.i * t3.i, q__2.i = sum.r * t3.i + 
 		    sum.i * t3.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(4, j);
-	    i__3 = c___subscr(4, j);
+	    i__2 = j * c_dim1 + 4;
+	    i__3 = j * c_dim1 + 4;
 	    q__2.r = sum.r * t4.r - sum.i * t4.i, q__2.i = sum.r * t4.i + 
 		    sum.i * t4.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(5, j);
-	    i__3 = c___subscr(5, j);
+	    i__2 = j * c_dim1 + 5;
+	    i__3 = j * c_dim1 + 5;
 	    q__2.r = sum.r * t5.r - sum.i * t5.i, q__2.i = sum.r * t5.i + 
 		    sum.i * t5.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(6, j);
-	    i__3 = c___subscr(6, j);
+	    i__2 = j * c_dim1 + 6;
+	    i__3 = j * c_dim1 + 6;
 	    q__2.r = sum.r * t6.r - sum.i * t6.i, q__2.i = sum.r * t6.i + 
 		    sum.i * t6.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(7, j);
-	    i__3 = c___subscr(7, j);
+	    i__2 = j * c_dim1 + 7;
+	    i__3 = j * c_dim1 + 7;
 	    q__2.r = sum.r * t7.r - sum.i * t7.i, q__2.i = sum.r * t7.i + 
 		    sum.i * t7.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(8, j);
-	    i__3 = c___subscr(8, j);
+	    i__2 = j * c_dim1 + 8;
+	    i__3 = j * c_dim1 + 8;
 	    q__2.r = sum.r * t8.r - sum.i * t8.i, q__2.i = sum.r * t8.i + 
 		    sum.i * t8.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
@@ -831,92 +843,92 @@ L170:
 	t9.r = q__1.r, t9.i = q__1.i;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(1, j);
+	    i__2 = j * c_dim1 + 1;
 	    q__9.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i, q__9.i = v1.r * 
 		    c__[i__2].i + v1.i * c__[i__2].r;
-	    i__3 = c___subscr(2, j);
+	    i__3 = j * c_dim1 + 2;
 	    q__10.r = v2.r * c__[i__3].r - v2.i * c__[i__3].i, q__10.i = v2.r 
 		    * c__[i__3].i + v2.i * c__[i__3].r;
 	    q__8.r = q__9.r + q__10.r, q__8.i = q__9.i + q__10.i;
-	    i__4 = c___subscr(3, j);
+	    i__4 = j * c_dim1 + 3;
 	    q__11.r = v3.r * c__[i__4].r - v3.i * c__[i__4].i, q__11.i = v3.r 
 		    * c__[i__4].i + v3.i * c__[i__4].r;
 	    q__7.r = q__8.r + q__11.r, q__7.i = q__8.i + q__11.i;
-	    i__5 = c___subscr(4, j);
+	    i__5 = j * c_dim1 + 4;
 	    q__12.r = v4.r * c__[i__5].r - v4.i * c__[i__5].i, q__12.i = v4.r 
 		    * c__[i__5].i + v4.i * c__[i__5].r;
 	    q__6.r = q__7.r + q__12.r, q__6.i = q__7.i + q__12.i;
-	    i__6 = c___subscr(5, j);
+	    i__6 = j * c_dim1 + 5;
 	    q__13.r = v5.r * c__[i__6].r - v5.i * c__[i__6].i, q__13.i = v5.r 
 		    * c__[i__6].i + v5.i * c__[i__6].r;
 	    q__5.r = q__6.r + q__13.r, q__5.i = q__6.i + q__13.i;
-	    i__7 = c___subscr(6, j);
+	    i__7 = j * c_dim1 + 6;
 	    q__14.r = v6.r * c__[i__7].r - v6.i * c__[i__7].i, q__14.i = v6.r 
 		    * c__[i__7].i + v6.i * c__[i__7].r;
 	    q__4.r = q__5.r + q__14.r, q__4.i = q__5.i + q__14.i;
-	    i__8 = c___subscr(7, j);
+	    i__8 = j * c_dim1 + 7;
 	    q__15.r = v7.r * c__[i__8].r - v7.i * c__[i__8].i, q__15.i = v7.r 
 		    * c__[i__8].i + v7.i * c__[i__8].r;
 	    q__3.r = q__4.r + q__15.r, q__3.i = q__4.i + q__15.i;
-	    i__9 = c___subscr(8, j);
+	    i__9 = j * c_dim1 + 8;
 	    q__16.r = v8.r * c__[i__9].r - v8.i * c__[i__9].i, q__16.i = v8.r 
 		    * c__[i__9].i + v8.i * c__[i__9].r;
 	    q__2.r = q__3.r + q__16.r, q__2.i = q__3.i + q__16.i;
-	    i__10 = c___subscr(9, j);
+	    i__10 = j * c_dim1 + 9;
 	    q__17.r = v9.r * c__[i__10].r - v9.i * c__[i__10].i, q__17.i = 
 		    v9.r * c__[i__10].i + v9.i * c__[i__10].r;
 	    q__1.r = q__2.r + q__17.r, q__1.i = q__2.i + q__17.i;
 	    sum.r = q__1.r, sum.i = q__1.i;
-	    i__2 = c___subscr(1, j);
-	    i__3 = c___subscr(1, j);
+	    i__2 = j * c_dim1 + 1;
+	    i__3 = j * c_dim1 + 1;
 	    q__2.r = sum.r * t1.r - sum.i * t1.i, q__2.i = sum.r * t1.i + 
 		    sum.i * t1.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(2, j);
-	    i__3 = c___subscr(2, j);
+	    i__2 = j * c_dim1 + 2;
+	    i__3 = j * c_dim1 + 2;
 	    q__2.r = sum.r * t2.r - sum.i * t2.i, q__2.i = sum.r * t2.i + 
 		    sum.i * t2.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(3, j);
-	    i__3 = c___subscr(3, j);
+	    i__2 = j * c_dim1 + 3;
+	    i__3 = j * c_dim1 + 3;
 	    q__2.r = sum.r * t3.r - sum.i * t3.i, q__2.i = sum.r * t3.i + 
 		    sum.i * t3.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(4, j);
-	    i__3 = c___subscr(4, j);
+	    i__2 = j * c_dim1 + 4;
+	    i__3 = j * c_dim1 + 4;
 	    q__2.r = sum.r * t4.r - sum.i * t4.i, q__2.i = sum.r * t4.i + 
 		    sum.i * t4.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(5, j);
-	    i__3 = c___subscr(5, j);
+	    i__2 = j * c_dim1 + 5;
+	    i__3 = j * c_dim1 + 5;
 	    q__2.r = sum.r * t5.r - sum.i * t5.i, q__2.i = sum.r * t5.i + 
 		    sum.i * t5.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(6, j);
-	    i__3 = c___subscr(6, j);
+	    i__2 = j * c_dim1 + 6;
+	    i__3 = j * c_dim1 + 6;
 	    q__2.r = sum.r * t6.r - sum.i * t6.i, q__2.i = sum.r * t6.i + 
 		    sum.i * t6.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(7, j);
-	    i__3 = c___subscr(7, j);
+	    i__2 = j * c_dim1 + 7;
+	    i__3 = j * c_dim1 + 7;
 	    q__2.r = sum.r * t7.r - sum.i * t7.i, q__2.i = sum.r * t7.i + 
 		    sum.i * t7.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(8, j);
-	    i__3 = c___subscr(8, j);
+	    i__2 = j * c_dim1 + 8;
+	    i__3 = j * c_dim1 + 8;
 	    q__2.r = sum.r * t8.r - sum.i * t8.i, q__2.i = sum.r * t8.i + 
 		    sum.i * t8.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(9, j);
-	    i__3 = c___subscr(9, j);
+	    i__2 = j * c_dim1 + 9;
+	    i__3 = j * c_dim1 + 9;
 	    q__2.r = sum.r * t9.r - sum.i * t9.i, q__2.i = sum.r * t9.i + 
 		    sum.i * t9.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
@@ -990,102 +1002,102 @@ L190:
 	t10.r = q__1.r, t10.i = q__1.i;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(1, j);
+	    i__2 = j * c_dim1 + 1;
 	    q__10.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i, q__10.i = v1.r 
 		    * c__[i__2].i + v1.i * c__[i__2].r;
-	    i__3 = c___subscr(2, j);
+	    i__3 = j * c_dim1 + 2;
 	    q__11.r = v2.r * c__[i__3].r - v2.i * c__[i__3].i, q__11.i = v2.r 
 		    * c__[i__3].i + v2.i * c__[i__3].r;
 	    q__9.r = q__10.r + q__11.r, q__9.i = q__10.i + q__11.i;
-	    i__4 = c___subscr(3, j);
+	    i__4 = j * c_dim1 + 3;
 	    q__12.r = v3.r * c__[i__4].r - v3.i * c__[i__4].i, q__12.i = v3.r 
 		    * c__[i__4].i + v3.i * c__[i__4].r;
 	    q__8.r = q__9.r + q__12.r, q__8.i = q__9.i + q__12.i;
-	    i__5 = c___subscr(4, j);
+	    i__5 = j * c_dim1 + 4;
 	    q__13.r = v4.r * c__[i__5].r - v4.i * c__[i__5].i, q__13.i = v4.r 
 		    * c__[i__5].i + v4.i * c__[i__5].r;
 	    q__7.r = q__8.r + q__13.r, q__7.i = q__8.i + q__13.i;
-	    i__6 = c___subscr(5, j);
+	    i__6 = j * c_dim1 + 5;
 	    q__14.r = v5.r * c__[i__6].r - v5.i * c__[i__6].i, q__14.i = v5.r 
 		    * c__[i__6].i + v5.i * c__[i__6].r;
 	    q__6.r = q__7.r + q__14.r, q__6.i = q__7.i + q__14.i;
-	    i__7 = c___subscr(6, j);
+	    i__7 = j * c_dim1 + 6;
 	    q__15.r = v6.r * c__[i__7].r - v6.i * c__[i__7].i, q__15.i = v6.r 
 		    * c__[i__7].i + v6.i * c__[i__7].r;
 	    q__5.r = q__6.r + q__15.r, q__5.i = q__6.i + q__15.i;
-	    i__8 = c___subscr(7, j);
+	    i__8 = j * c_dim1 + 7;
 	    q__16.r = v7.r * c__[i__8].r - v7.i * c__[i__8].i, q__16.i = v7.r 
 		    * c__[i__8].i + v7.i * c__[i__8].r;
 	    q__4.r = q__5.r + q__16.r, q__4.i = q__5.i + q__16.i;
-	    i__9 = c___subscr(8, j);
+	    i__9 = j * c_dim1 + 8;
 	    q__17.r = v8.r * c__[i__9].r - v8.i * c__[i__9].i, q__17.i = v8.r 
 		    * c__[i__9].i + v8.i * c__[i__9].r;
 	    q__3.r = q__4.r + q__17.r, q__3.i = q__4.i + q__17.i;
-	    i__10 = c___subscr(9, j);
+	    i__10 = j * c_dim1 + 9;
 	    q__18.r = v9.r * c__[i__10].r - v9.i * c__[i__10].i, q__18.i = 
 		    v9.r * c__[i__10].i + v9.i * c__[i__10].r;
 	    q__2.r = q__3.r + q__18.r, q__2.i = q__3.i + q__18.i;
-	    i__11 = c___subscr(10, j);
+	    i__11 = j * c_dim1 + 10;
 	    q__19.r = v10.r * c__[i__11].r - v10.i * c__[i__11].i, q__19.i = 
 		    v10.r * c__[i__11].i + v10.i * c__[i__11].r;
 	    q__1.r = q__2.r + q__19.r, q__1.i = q__2.i + q__19.i;
 	    sum.r = q__1.r, sum.i = q__1.i;
-	    i__2 = c___subscr(1, j);
-	    i__3 = c___subscr(1, j);
+	    i__2 = j * c_dim1 + 1;
+	    i__3 = j * c_dim1 + 1;
 	    q__2.r = sum.r * t1.r - sum.i * t1.i, q__2.i = sum.r * t1.i + 
 		    sum.i * t1.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(2, j);
-	    i__3 = c___subscr(2, j);
+	    i__2 = j * c_dim1 + 2;
+	    i__3 = j * c_dim1 + 2;
 	    q__2.r = sum.r * t2.r - sum.i * t2.i, q__2.i = sum.r * t2.i + 
 		    sum.i * t2.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(3, j);
-	    i__3 = c___subscr(3, j);
+	    i__2 = j * c_dim1 + 3;
+	    i__3 = j * c_dim1 + 3;
 	    q__2.r = sum.r * t3.r - sum.i * t3.i, q__2.i = sum.r * t3.i + 
 		    sum.i * t3.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(4, j);
-	    i__3 = c___subscr(4, j);
+	    i__2 = j * c_dim1 + 4;
+	    i__3 = j * c_dim1 + 4;
 	    q__2.r = sum.r * t4.r - sum.i * t4.i, q__2.i = sum.r * t4.i + 
 		    sum.i * t4.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(5, j);
-	    i__3 = c___subscr(5, j);
+	    i__2 = j * c_dim1 + 5;
+	    i__3 = j * c_dim1 + 5;
 	    q__2.r = sum.r * t5.r - sum.i * t5.i, q__2.i = sum.r * t5.i + 
 		    sum.i * t5.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(6, j);
-	    i__3 = c___subscr(6, j);
+	    i__2 = j * c_dim1 + 6;
+	    i__3 = j * c_dim1 + 6;
 	    q__2.r = sum.r * t6.r - sum.i * t6.i, q__2.i = sum.r * t6.i + 
 		    sum.i * t6.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(7, j);
-	    i__3 = c___subscr(7, j);
+	    i__2 = j * c_dim1 + 7;
+	    i__3 = j * c_dim1 + 7;
 	    q__2.r = sum.r * t7.r - sum.i * t7.i, q__2.i = sum.r * t7.i + 
 		    sum.i * t7.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(8, j);
-	    i__3 = c___subscr(8, j);
+	    i__2 = j * c_dim1 + 8;
+	    i__3 = j * c_dim1 + 8;
 	    q__2.r = sum.r * t8.r - sum.i * t8.i, q__2.i = sum.r * t8.i + 
 		    sum.i * t8.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(9, j);
-	    i__3 = c___subscr(9, j);
+	    i__2 = j * c_dim1 + 9;
+	    i__3 = j * c_dim1 + 9;
 	    q__2.r = sum.r * t9.r - sum.i * t9.i, q__2.i = sum.r * t9.i + 
 		    sum.i * t9.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(10, j);
-	    i__3 = c___subscr(10, j);
+	    i__2 = j * c_dim1 + 10;
+	    i__3 = j * c_dim1 + 10;
 	    q__2.r = sum.r * t10.r - sum.i * t10.i, q__2.i = sum.r * t10.i + 
 		    sum.i * t10.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
@@ -1110,18 +1122,9 @@ L190:
 	    case 10:  goto L390;
 	}
 
-/*        Code for general N   
+/*        Code for general N */
 
-          w := C * v */
-
-	cgemv_("No transpose", m, n, &c_b2, &c__[c_offset], ldc, &v[1], &c__1,
-		 &c_b1, &work[1], &c__1);
-
-/*        C := C - tau * w * v' */
-
-	q__1.r = -tau->r, q__1.i = -tau->i;
-	cgerc_(m, n, &q__1, &work[1], &c__1, &v[1], &c__1, &c__[c_offset], 
-		ldc);
+	clarf_(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
 	goto L410;
 L210:
 
@@ -1136,8 +1139,8 @@ L210:
 	t1.r = q__1.r, t1.i = q__1.i;
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(j, 1);
-	    i__3 = c___subscr(j, 1);
+	    i__2 = j + c_dim1;
+	    i__3 = j + c_dim1;
 	    q__1.r = t1.r * c__[i__3].r - t1.i * c__[i__3].i, q__1.i = t1.r * 
 		    c__[i__3].i + t1.i * c__[i__3].r;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
@@ -1160,22 +1163,22 @@ L230:
 	t2.r = q__1.r, t2.i = q__1.i;
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(j, 1);
+	    i__2 = j + c_dim1;
 	    q__2.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i, q__2.i = v1.r * 
 		    c__[i__2].i + v1.i * c__[i__2].r;
-	    i__3 = c___subscr(j, 2);
+	    i__3 = j + (c_dim1 << 1);
 	    q__3.r = v2.r * c__[i__3].r - v2.i * c__[i__3].i, q__3.i = v2.r * 
 		    c__[i__3].i + v2.i * c__[i__3].r;
 	    q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
 	    sum.r = q__1.r, sum.i = q__1.i;
-	    i__2 = c___subscr(j, 1);
-	    i__3 = c___subscr(j, 1);
+	    i__2 = j + c_dim1;
+	    i__3 = j + c_dim1;
 	    q__2.r = sum.r * t1.r - sum.i * t1.i, q__2.i = sum.r * t1.i + 
 		    sum.i * t1.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 2);
-	    i__3 = c___subscr(j, 2);
+	    i__2 = j + (c_dim1 << 1);
+	    i__3 = j + (c_dim1 << 1);
 	    q__2.r = sum.r * t2.r - sum.i * t2.i, q__2.i = sum.r * t2.i + 
 		    sum.i * t2.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
@@ -1204,32 +1207,32 @@ L250:
 	t3.r = q__1.r, t3.i = q__1.i;
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(j, 1);
+	    i__2 = j + c_dim1;
 	    q__3.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i, q__3.i = v1.r * 
 		    c__[i__2].i + v1.i * c__[i__2].r;
-	    i__3 = c___subscr(j, 2);
+	    i__3 = j + (c_dim1 << 1);
 	    q__4.r = v2.r * c__[i__3].r - v2.i * c__[i__3].i, q__4.i = v2.r * 
 		    c__[i__3].i + v2.i * c__[i__3].r;
 	    q__2.r = q__3.r + q__4.r, q__2.i = q__3.i + q__4.i;
-	    i__4 = c___subscr(j, 3);
+	    i__4 = j + c_dim1 * 3;
 	    q__5.r = v3.r * c__[i__4].r - v3.i * c__[i__4].i, q__5.i = v3.r * 
 		    c__[i__4].i + v3.i * c__[i__4].r;
 	    q__1.r = q__2.r + q__5.r, q__1.i = q__2.i + q__5.i;
 	    sum.r = q__1.r, sum.i = q__1.i;
-	    i__2 = c___subscr(j, 1);
-	    i__3 = c___subscr(j, 1);
+	    i__2 = j + c_dim1;
+	    i__3 = j + c_dim1;
 	    q__2.r = sum.r * t1.r - sum.i * t1.i, q__2.i = sum.r * t1.i + 
 		    sum.i * t1.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 2);
-	    i__3 = c___subscr(j, 2);
+	    i__2 = j + (c_dim1 << 1);
+	    i__3 = j + (c_dim1 << 1);
 	    q__2.r = sum.r * t2.r - sum.i * t2.i, q__2.i = sum.r * t2.i + 
 		    sum.i * t2.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 3);
-	    i__3 = c___subscr(j, 3);
+	    i__2 = j + c_dim1 * 3;
+	    i__3 = j + c_dim1 * 3;
 	    q__2.r = sum.r * t3.r - sum.i * t3.i, q__2.i = sum.r * t3.i + 
 		    sum.i * t3.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
@@ -1263,42 +1266,42 @@ L270:
 	t4.r = q__1.r, t4.i = q__1.i;
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(j, 1);
+	    i__2 = j + c_dim1;
 	    q__4.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i, q__4.i = v1.r * 
 		    c__[i__2].i + v1.i * c__[i__2].r;
-	    i__3 = c___subscr(j, 2);
+	    i__3 = j + (c_dim1 << 1);
 	    q__5.r = v2.r * c__[i__3].r - v2.i * c__[i__3].i, q__5.i = v2.r * 
 		    c__[i__3].i + v2.i * c__[i__3].r;
 	    q__3.r = q__4.r + q__5.r, q__3.i = q__4.i + q__5.i;
-	    i__4 = c___subscr(j, 3);
+	    i__4 = j + c_dim1 * 3;
 	    q__6.r = v3.r * c__[i__4].r - v3.i * c__[i__4].i, q__6.i = v3.r * 
 		    c__[i__4].i + v3.i * c__[i__4].r;
 	    q__2.r = q__3.r + q__6.r, q__2.i = q__3.i + q__6.i;
-	    i__5 = c___subscr(j, 4);
+	    i__5 = j + (c_dim1 << 2);
 	    q__7.r = v4.r * c__[i__5].r - v4.i * c__[i__5].i, q__7.i = v4.r * 
 		    c__[i__5].i + v4.i * c__[i__5].r;
 	    q__1.r = q__2.r + q__7.r, q__1.i = q__2.i + q__7.i;
 	    sum.r = q__1.r, sum.i = q__1.i;
-	    i__2 = c___subscr(j, 1);
-	    i__3 = c___subscr(j, 1);
+	    i__2 = j + c_dim1;
+	    i__3 = j + c_dim1;
 	    q__2.r = sum.r * t1.r - sum.i * t1.i, q__2.i = sum.r * t1.i + 
 		    sum.i * t1.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 2);
-	    i__3 = c___subscr(j, 2);
+	    i__2 = j + (c_dim1 << 1);
+	    i__3 = j + (c_dim1 << 1);
 	    q__2.r = sum.r * t2.r - sum.i * t2.i, q__2.i = sum.r * t2.i + 
 		    sum.i * t2.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 3);
-	    i__3 = c___subscr(j, 3);
+	    i__2 = j + c_dim1 * 3;
+	    i__3 = j + c_dim1 * 3;
 	    q__2.r = sum.r * t3.r - sum.i * t3.i, q__2.i = sum.r * t3.i + 
 		    sum.i * t3.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 4);
-	    i__3 = c___subscr(j, 4);
+	    i__2 = j + (c_dim1 << 2);
+	    i__3 = j + (c_dim1 << 2);
 	    q__2.r = sum.r * t4.r - sum.i * t4.i, q__2.i = sum.r * t4.i + 
 		    sum.i * t4.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
@@ -1337,52 +1340,52 @@ L290:
 	t5.r = q__1.r, t5.i = q__1.i;
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(j, 1);
+	    i__2 = j + c_dim1;
 	    q__5.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i, q__5.i = v1.r * 
 		    c__[i__2].i + v1.i * c__[i__2].r;
-	    i__3 = c___subscr(j, 2);
+	    i__3 = j + (c_dim1 << 1);
 	    q__6.r = v2.r * c__[i__3].r - v2.i * c__[i__3].i, q__6.i = v2.r * 
 		    c__[i__3].i + v2.i * c__[i__3].r;
 	    q__4.r = q__5.r + q__6.r, q__4.i = q__5.i + q__6.i;
-	    i__4 = c___subscr(j, 3);
+	    i__4 = j + c_dim1 * 3;
 	    q__7.r = v3.r * c__[i__4].r - v3.i * c__[i__4].i, q__7.i = v3.r * 
 		    c__[i__4].i + v3.i * c__[i__4].r;
 	    q__3.r = q__4.r + q__7.r, q__3.i = q__4.i + q__7.i;
-	    i__5 = c___subscr(j, 4);
+	    i__5 = j + (c_dim1 << 2);
 	    q__8.r = v4.r * c__[i__5].r - v4.i * c__[i__5].i, q__8.i = v4.r * 
 		    c__[i__5].i + v4.i * c__[i__5].r;
 	    q__2.r = q__3.r + q__8.r, q__2.i = q__3.i + q__8.i;
-	    i__6 = c___subscr(j, 5);
+	    i__6 = j + c_dim1 * 5;
 	    q__9.r = v5.r * c__[i__6].r - v5.i * c__[i__6].i, q__9.i = v5.r * 
 		    c__[i__6].i + v5.i * c__[i__6].r;
 	    q__1.r = q__2.r + q__9.r, q__1.i = q__2.i + q__9.i;
 	    sum.r = q__1.r, sum.i = q__1.i;
-	    i__2 = c___subscr(j, 1);
-	    i__3 = c___subscr(j, 1);
+	    i__2 = j + c_dim1;
+	    i__3 = j + c_dim1;
 	    q__2.r = sum.r * t1.r - sum.i * t1.i, q__2.i = sum.r * t1.i + 
 		    sum.i * t1.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 2);
-	    i__3 = c___subscr(j, 2);
+	    i__2 = j + (c_dim1 << 1);
+	    i__3 = j + (c_dim1 << 1);
 	    q__2.r = sum.r * t2.r - sum.i * t2.i, q__2.i = sum.r * t2.i + 
 		    sum.i * t2.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 3);
-	    i__3 = c___subscr(j, 3);
+	    i__2 = j + c_dim1 * 3;
+	    i__3 = j + c_dim1 * 3;
 	    q__2.r = sum.r * t3.r - sum.i * t3.i, q__2.i = sum.r * t3.i + 
 		    sum.i * t3.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 4);
-	    i__3 = c___subscr(j, 4);
+	    i__2 = j + (c_dim1 << 2);
+	    i__3 = j + (c_dim1 << 2);
 	    q__2.r = sum.r * t4.r - sum.i * t4.i, q__2.i = sum.r * t4.i + 
 		    sum.i * t4.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 5);
-	    i__3 = c___subscr(j, 5);
+	    i__2 = j + c_dim1 * 5;
+	    i__3 = j + c_dim1 * 5;
 	    q__2.r = sum.r * t5.r - sum.i * t5.i, q__2.i = sum.r * t5.i + 
 		    sum.i * t5.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
@@ -1426,62 +1429,62 @@ L310:
 	t6.r = q__1.r, t6.i = q__1.i;
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(j, 1);
+	    i__2 = j + c_dim1;
 	    q__6.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i, q__6.i = v1.r * 
 		    c__[i__2].i + v1.i * c__[i__2].r;
-	    i__3 = c___subscr(j, 2);
+	    i__3 = j + (c_dim1 << 1);
 	    q__7.r = v2.r * c__[i__3].r - v2.i * c__[i__3].i, q__7.i = v2.r * 
 		    c__[i__3].i + v2.i * c__[i__3].r;
 	    q__5.r = q__6.r + q__7.r, q__5.i = q__6.i + q__7.i;
-	    i__4 = c___subscr(j, 3);
+	    i__4 = j + c_dim1 * 3;
 	    q__8.r = v3.r * c__[i__4].r - v3.i * c__[i__4].i, q__8.i = v3.r * 
 		    c__[i__4].i + v3.i * c__[i__4].r;
 	    q__4.r = q__5.r + q__8.r, q__4.i = q__5.i + q__8.i;
-	    i__5 = c___subscr(j, 4);
+	    i__5 = j + (c_dim1 << 2);
 	    q__9.r = v4.r * c__[i__5].r - v4.i * c__[i__5].i, q__9.i = v4.r * 
 		    c__[i__5].i + v4.i * c__[i__5].r;
 	    q__3.r = q__4.r + q__9.r, q__3.i = q__4.i + q__9.i;
-	    i__6 = c___subscr(j, 5);
+	    i__6 = j + c_dim1 * 5;
 	    q__10.r = v5.r * c__[i__6].r - v5.i * c__[i__6].i, q__10.i = v5.r 
 		    * c__[i__6].i + v5.i * c__[i__6].r;
 	    q__2.r = q__3.r + q__10.r, q__2.i = q__3.i + q__10.i;
-	    i__7 = c___subscr(j, 6);
+	    i__7 = j + c_dim1 * 6;
 	    q__11.r = v6.r * c__[i__7].r - v6.i * c__[i__7].i, q__11.i = v6.r 
 		    * c__[i__7].i + v6.i * c__[i__7].r;
 	    q__1.r = q__2.r + q__11.r, q__1.i = q__2.i + q__11.i;
 	    sum.r = q__1.r, sum.i = q__1.i;
-	    i__2 = c___subscr(j, 1);
-	    i__3 = c___subscr(j, 1);
+	    i__2 = j + c_dim1;
+	    i__3 = j + c_dim1;
 	    q__2.r = sum.r * t1.r - sum.i * t1.i, q__2.i = sum.r * t1.i + 
 		    sum.i * t1.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 2);
-	    i__3 = c___subscr(j, 2);
+	    i__2 = j + (c_dim1 << 1);
+	    i__3 = j + (c_dim1 << 1);
 	    q__2.r = sum.r * t2.r - sum.i * t2.i, q__2.i = sum.r * t2.i + 
 		    sum.i * t2.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 3);
-	    i__3 = c___subscr(j, 3);
+	    i__2 = j + c_dim1 * 3;
+	    i__3 = j + c_dim1 * 3;
 	    q__2.r = sum.r * t3.r - sum.i * t3.i, q__2.i = sum.r * t3.i + 
 		    sum.i * t3.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 4);
-	    i__3 = c___subscr(j, 4);
+	    i__2 = j + (c_dim1 << 2);
+	    i__3 = j + (c_dim1 << 2);
 	    q__2.r = sum.r * t4.r - sum.i * t4.i, q__2.i = sum.r * t4.i + 
 		    sum.i * t4.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 5);
-	    i__3 = c___subscr(j, 5);
+	    i__2 = j + c_dim1 * 5;
+	    i__3 = j + c_dim1 * 5;
 	    q__2.r = sum.r * t5.r - sum.i * t5.i, q__2.i = sum.r * t5.i + 
 		    sum.i * t5.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 6);
-	    i__3 = c___subscr(j, 6);
+	    i__2 = j + c_dim1 * 6;
+	    i__3 = j + c_dim1 * 6;
 	    q__2.r = sum.r * t6.r - sum.i * t6.i, q__2.i = sum.r * t6.i + 
 		    sum.i * t6.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
@@ -1530,72 +1533,72 @@ L330:
 	t7.r = q__1.r, t7.i = q__1.i;
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(j, 1);
+	    i__2 = j + c_dim1;
 	    q__7.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i, q__7.i = v1.r * 
 		    c__[i__2].i + v1.i * c__[i__2].r;
-	    i__3 = c___subscr(j, 2);
+	    i__3 = j + (c_dim1 << 1);
 	    q__8.r = v2.r * c__[i__3].r - v2.i * c__[i__3].i, q__8.i = v2.r * 
 		    c__[i__3].i + v2.i * c__[i__3].r;
 	    q__6.r = q__7.r + q__8.r, q__6.i = q__7.i + q__8.i;
-	    i__4 = c___subscr(j, 3);
+	    i__4 = j + c_dim1 * 3;
 	    q__9.r = v3.r * c__[i__4].r - v3.i * c__[i__4].i, q__9.i = v3.r * 
 		    c__[i__4].i + v3.i * c__[i__4].r;
 	    q__5.r = q__6.r + q__9.r, q__5.i = q__6.i + q__9.i;
-	    i__5 = c___subscr(j, 4);
+	    i__5 = j + (c_dim1 << 2);
 	    q__10.r = v4.r * c__[i__5].r - v4.i * c__[i__5].i, q__10.i = v4.r 
 		    * c__[i__5].i + v4.i * c__[i__5].r;
 	    q__4.r = q__5.r + q__10.r, q__4.i = q__5.i + q__10.i;
-	    i__6 = c___subscr(j, 5);
+	    i__6 = j + c_dim1 * 5;
 	    q__11.r = v5.r * c__[i__6].r - v5.i * c__[i__6].i, q__11.i = v5.r 
 		    * c__[i__6].i + v5.i * c__[i__6].r;
 	    q__3.r = q__4.r + q__11.r, q__3.i = q__4.i + q__11.i;
-	    i__7 = c___subscr(j, 6);
+	    i__7 = j + c_dim1 * 6;
 	    q__12.r = v6.r * c__[i__7].r - v6.i * c__[i__7].i, q__12.i = v6.r 
 		    * c__[i__7].i + v6.i * c__[i__7].r;
 	    q__2.r = q__3.r + q__12.r, q__2.i = q__3.i + q__12.i;
-	    i__8 = c___subscr(j, 7);
+	    i__8 = j + c_dim1 * 7;
 	    q__13.r = v7.r * c__[i__8].r - v7.i * c__[i__8].i, q__13.i = v7.r 
 		    * c__[i__8].i + v7.i * c__[i__8].r;
 	    q__1.r = q__2.r + q__13.r, q__1.i = q__2.i + q__13.i;
 	    sum.r = q__1.r, sum.i = q__1.i;
-	    i__2 = c___subscr(j, 1);
-	    i__3 = c___subscr(j, 1);
+	    i__2 = j + c_dim1;
+	    i__3 = j + c_dim1;
 	    q__2.r = sum.r * t1.r - sum.i * t1.i, q__2.i = sum.r * t1.i + 
 		    sum.i * t1.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 2);
-	    i__3 = c___subscr(j, 2);
+	    i__2 = j + (c_dim1 << 1);
+	    i__3 = j + (c_dim1 << 1);
 	    q__2.r = sum.r * t2.r - sum.i * t2.i, q__2.i = sum.r * t2.i + 
 		    sum.i * t2.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 3);
-	    i__3 = c___subscr(j, 3);
+	    i__2 = j + c_dim1 * 3;
+	    i__3 = j + c_dim1 * 3;
 	    q__2.r = sum.r * t3.r - sum.i * t3.i, q__2.i = sum.r * t3.i + 
 		    sum.i * t3.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 4);
-	    i__3 = c___subscr(j, 4);
+	    i__2 = j + (c_dim1 << 2);
+	    i__3 = j + (c_dim1 << 2);
 	    q__2.r = sum.r * t4.r - sum.i * t4.i, q__2.i = sum.r * t4.i + 
 		    sum.i * t4.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 5);
-	    i__3 = c___subscr(j, 5);
+	    i__2 = j + c_dim1 * 5;
+	    i__3 = j + c_dim1 * 5;
 	    q__2.r = sum.r * t5.r - sum.i * t5.i, q__2.i = sum.r * t5.i + 
 		    sum.i * t5.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 6);
-	    i__3 = c___subscr(j, 6);
+	    i__2 = j + c_dim1 * 6;
+	    i__3 = j + c_dim1 * 6;
 	    q__2.r = sum.r * t6.r - sum.i * t6.i, q__2.i = sum.r * t6.i + 
 		    sum.i * t6.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 7);
-	    i__3 = c___subscr(j, 7);
+	    i__2 = j + c_dim1 * 7;
+	    i__3 = j + c_dim1 * 7;
 	    q__2.r = sum.r * t7.r - sum.i * t7.i, q__2.i = sum.r * t7.i + 
 		    sum.i * t7.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
@@ -1649,82 +1652,82 @@ L350:
 	t8.r = q__1.r, t8.i = q__1.i;
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(j, 1);
+	    i__2 = j + c_dim1;
 	    q__8.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i, q__8.i = v1.r * 
 		    c__[i__2].i + v1.i * c__[i__2].r;
-	    i__3 = c___subscr(j, 2);
+	    i__3 = j + (c_dim1 << 1);
 	    q__9.r = v2.r * c__[i__3].r - v2.i * c__[i__3].i, q__9.i = v2.r * 
 		    c__[i__3].i + v2.i * c__[i__3].r;
 	    q__7.r = q__8.r + q__9.r, q__7.i = q__8.i + q__9.i;
-	    i__4 = c___subscr(j, 3);
+	    i__4 = j + c_dim1 * 3;
 	    q__10.r = v3.r * c__[i__4].r - v3.i * c__[i__4].i, q__10.i = v3.r 
 		    * c__[i__4].i + v3.i * c__[i__4].r;
 	    q__6.r = q__7.r + q__10.r, q__6.i = q__7.i + q__10.i;
-	    i__5 = c___subscr(j, 4);
+	    i__5 = j + (c_dim1 << 2);
 	    q__11.r = v4.r * c__[i__5].r - v4.i * c__[i__5].i, q__11.i = v4.r 
 		    * c__[i__5].i + v4.i * c__[i__5].r;
 	    q__5.r = q__6.r + q__11.r, q__5.i = q__6.i + q__11.i;
-	    i__6 = c___subscr(j, 5);
+	    i__6 = j + c_dim1 * 5;
 	    q__12.r = v5.r * c__[i__6].r - v5.i * c__[i__6].i, q__12.i = v5.r 
 		    * c__[i__6].i + v5.i * c__[i__6].r;
 	    q__4.r = q__5.r + q__12.r, q__4.i = q__5.i + q__12.i;
-	    i__7 = c___subscr(j, 6);
+	    i__7 = j + c_dim1 * 6;
 	    q__13.r = v6.r * c__[i__7].r - v6.i * c__[i__7].i, q__13.i = v6.r 
 		    * c__[i__7].i + v6.i * c__[i__7].r;
 	    q__3.r = q__4.r + q__13.r, q__3.i = q__4.i + q__13.i;
-	    i__8 = c___subscr(j, 7);
+	    i__8 = j + c_dim1 * 7;
 	    q__14.r = v7.r * c__[i__8].r - v7.i * c__[i__8].i, q__14.i = v7.r 
 		    * c__[i__8].i + v7.i * c__[i__8].r;
 	    q__2.r = q__3.r + q__14.r, q__2.i = q__3.i + q__14.i;
-	    i__9 = c___subscr(j, 8);
+	    i__9 = j + (c_dim1 << 3);
 	    q__15.r = v8.r * c__[i__9].r - v8.i * c__[i__9].i, q__15.i = v8.r 
 		    * c__[i__9].i + v8.i * c__[i__9].r;
 	    q__1.r = q__2.r + q__15.r, q__1.i = q__2.i + q__15.i;
 	    sum.r = q__1.r, sum.i = q__1.i;
-	    i__2 = c___subscr(j, 1);
-	    i__3 = c___subscr(j, 1);
+	    i__2 = j + c_dim1;
+	    i__3 = j + c_dim1;
 	    q__2.r = sum.r * t1.r - sum.i * t1.i, q__2.i = sum.r * t1.i + 
 		    sum.i * t1.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 2);
-	    i__3 = c___subscr(j, 2);
+	    i__2 = j + (c_dim1 << 1);
+	    i__3 = j + (c_dim1 << 1);
 	    q__2.r = sum.r * t2.r - sum.i * t2.i, q__2.i = sum.r * t2.i + 
 		    sum.i * t2.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 3);
-	    i__3 = c___subscr(j, 3);
+	    i__2 = j + c_dim1 * 3;
+	    i__3 = j + c_dim1 * 3;
 	    q__2.r = sum.r * t3.r - sum.i * t3.i, q__2.i = sum.r * t3.i + 
 		    sum.i * t3.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 4);
-	    i__3 = c___subscr(j, 4);
+	    i__2 = j + (c_dim1 << 2);
+	    i__3 = j + (c_dim1 << 2);
 	    q__2.r = sum.r * t4.r - sum.i * t4.i, q__2.i = sum.r * t4.i + 
 		    sum.i * t4.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 5);
-	    i__3 = c___subscr(j, 5);
+	    i__2 = j + c_dim1 * 5;
+	    i__3 = j + c_dim1 * 5;
 	    q__2.r = sum.r * t5.r - sum.i * t5.i, q__2.i = sum.r * t5.i + 
 		    sum.i * t5.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 6);
-	    i__3 = c___subscr(j, 6);
+	    i__2 = j + c_dim1 * 6;
+	    i__3 = j + c_dim1 * 6;
 	    q__2.r = sum.r * t6.r - sum.i * t6.i, q__2.i = sum.r * t6.i + 
 		    sum.i * t6.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 7);
-	    i__3 = c___subscr(j, 7);
+	    i__2 = j + c_dim1 * 7;
+	    i__3 = j + c_dim1 * 7;
 	    q__2.r = sum.r * t7.r - sum.i * t7.i, q__2.i = sum.r * t7.i + 
 		    sum.i * t7.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 8);
-	    i__3 = c___subscr(j, 8);
+	    i__2 = j + (c_dim1 << 3);
+	    i__3 = j + (c_dim1 << 3);
 	    q__2.r = sum.r * t8.r - sum.i * t8.i, q__2.i = sum.r * t8.i + 
 		    sum.i * t8.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
@@ -1783,92 +1786,92 @@ L370:
 	t9.r = q__1.r, t9.i = q__1.i;
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(j, 1);
+	    i__2 = j + c_dim1;
 	    q__9.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i, q__9.i = v1.r * 
 		    c__[i__2].i + v1.i * c__[i__2].r;
-	    i__3 = c___subscr(j, 2);
+	    i__3 = j + (c_dim1 << 1);
 	    q__10.r = v2.r * c__[i__3].r - v2.i * c__[i__3].i, q__10.i = v2.r 
 		    * c__[i__3].i + v2.i * c__[i__3].r;
 	    q__8.r = q__9.r + q__10.r, q__8.i = q__9.i + q__10.i;
-	    i__4 = c___subscr(j, 3);
+	    i__4 = j + c_dim1 * 3;
 	    q__11.r = v3.r * c__[i__4].r - v3.i * c__[i__4].i, q__11.i = v3.r 
 		    * c__[i__4].i + v3.i * c__[i__4].r;
 	    q__7.r = q__8.r + q__11.r, q__7.i = q__8.i + q__11.i;
-	    i__5 = c___subscr(j, 4);
+	    i__5 = j + (c_dim1 << 2);
 	    q__12.r = v4.r * c__[i__5].r - v4.i * c__[i__5].i, q__12.i = v4.r 
 		    * c__[i__5].i + v4.i * c__[i__5].r;
 	    q__6.r = q__7.r + q__12.r, q__6.i = q__7.i + q__12.i;
-	    i__6 = c___subscr(j, 5);
+	    i__6 = j + c_dim1 * 5;
 	    q__13.r = v5.r * c__[i__6].r - v5.i * c__[i__6].i, q__13.i = v5.r 
 		    * c__[i__6].i + v5.i * c__[i__6].r;
 	    q__5.r = q__6.r + q__13.r, q__5.i = q__6.i + q__13.i;
-	    i__7 = c___subscr(j, 6);
+	    i__7 = j + c_dim1 * 6;
 	    q__14.r = v6.r * c__[i__7].r - v6.i * c__[i__7].i, q__14.i = v6.r 
 		    * c__[i__7].i + v6.i * c__[i__7].r;
 	    q__4.r = q__5.r + q__14.r, q__4.i = q__5.i + q__14.i;
-	    i__8 = c___subscr(j, 7);
+	    i__8 = j + c_dim1 * 7;
 	    q__15.r = v7.r * c__[i__8].r - v7.i * c__[i__8].i, q__15.i = v7.r 
 		    * c__[i__8].i + v7.i * c__[i__8].r;
 	    q__3.r = q__4.r + q__15.r, q__3.i = q__4.i + q__15.i;
-	    i__9 = c___subscr(j, 8);
+	    i__9 = j + (c_dim1 << 3);
 	    q__16.r = v8.r * c__[i__9].r - v8.i * c__[i__9].i, q__16.i = v8.r 
 		    * c__[i__9].i + v8.i * c__[i__9].r;
 	    q__2.r = q__3.r + q__16.r, q__2.i = q__3.i + q__16.i;
-	    i__10 = c___subscr(j, 9);
+	    i__10 = j + c_dim1 * 9;
 	    q__17.r = v9.r * c__[i__10].r - v9.i * c__[i__10].i, q__17.i = 
 		    v9.r * c__[i__10].i + v9.i * c__[i__10].r;
 	    q__1.r = q__2.r + q__17.r, q__1.i = q__2.i + q__17.i;
 	    sum.r = q__1.r, sum.i = q__1.i;
-	    i__2 = c___subscr(j, 1);
-	    i__3 = c___subscr(j, 1);
+	    i__2 = j + c_dim1;
+	    i__3 = j + c_dim1;
 	    q__2.r = sum.r * t1.r - sum.i * t1.i, q__2.i = sum.r * t1.i + 
 		    sum.i * t1.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 2);
-	    i__3 = c___subscr(j, 2);
+	    i__2 = j + (c_dim1 << 1);
+	    i__3 = j + (c_dim1 << 1);
 	    q__2.r = sum.r * t2.r - sum.i * t2.i, q__2.i = sum.r * t2.i + 
 		    sum.i * t2.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 3);
-	    i__3 = c___subscr(j, 3);
+	    i__2 = j + c_dim1 * 3;
+	    i__3 = j + c_dim1 * 3;
 	    q__2.r = sum.r * t3.r - sum.i * t3.i, q__2.i = sum.r * t3.i + 
 		    sum.i * t3.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 4);
-	    i__3 = c___subscr(j, 4);
+	    i__2 = j + (c_dim1 << 2);
+	    i__3 = j + (c_dim1 << 2);
 	    q__2.r = sum.r * t4.r - sum.i * t4.i, q__2.i = sum.r * t4.i + 
 		    sum.i * t4.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 5);
-	    i__3 = c___subscr(j, 5);
+	    i__2 = j + c_dim1 * 5;
+	    i__3 = j + c_dim1 * 5;
 	    q__2.r = sum.r * t5.r - sum.i * t5.i, q__2.i = sum.r * t5.i + 
 		    sum.i * t5.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 6);
-	    i__3 = c___subscr(j, 6);
+	    i__2 = j + c_dim1 * 6;
+	    i__3 = j + c_dim1 * 6;
 	    q__2.r = sum.r * t6.r - sum.i * t6.i, q__2.i = sum.r * t6.i + 
 		    sum.i * t6.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 7);
-	    i__3 = c___subscr(j, 7);
+	    i__2 = j + c_dim1 * 7;
+	    i__3 = j + c_dim1 * 7;
 	    q__2.r = sum.r * t7.r - sum.i * t7.i, q__2.i = sum.r * t7.i + 
 		    sum.i * t7.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 8);
-	    i__3 = c___subscr(j, 8);
+	    i__2 = j + (c_dim1 << 3);
+	    i__3 = j + (c_dim1 << 3);
 	    q__2.r = sum.r * t8.r - sum.i * t8.i, q__2.i = sum.r * t8.i + 
 		    sum.i * t8.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 9);
-	    i__3 = c___subscr(j, 9);
+	    i__2 = j + c_dim1 * 9;
+	    i__3 = j + c_dim1 * 9;
 	    q__2.r = sum.r * t9.r - sum.i * t9.i, q__2.i = sum.r * t9.i + 
 		    sum.i * t9.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
@@ -1932,102 +1935,102 @@ L390:
 	t10.r = q__1.r, t10.i = q__1.i;
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = c___subscr(j, 1);
+	    i__2 = j + c_dim1;
 	    q__10.r = v1.r * c__[i__2].r - v1.i * c__[i__2].i, q__10.i = v1.r 
 		    * c__[i__2].i + v1.i * c__[i__2].r;
-	    i__3 = c___subscr(j, 2);
+	    i__3 = j + (c_dim1 << 1);
 	    q__11.r = v2.r * c__[i__3].r - v2.i * c__[i__3].i, q__11.i = v2.r 
 		    * c__[i__3].i + v2.i * c__[i__3].r;
 	    q__9.r = q__10.r + q__11.r, q__9.i = q__10.i + q__11.i;
-	    i__4 = c___subscr(j, 3);
+	    i__4 = j + c_dim1 * 3;
 	    q__12.r = v3.r * c__[i__4].r - v3.i * c__[i__4].i, q__12.i = v3.r 
 		    * c__[i__4].i + v3.i * c__[i__4].r;
 	    q__8.r = q__9.r + q__12.r, q__8.i = q__9.i + q__12.i;
-	    i__5 = c___subscr(j, 4);
+	    i__5 = j + (c_dim1 << 2);
 	    q__13.r = v4.r * c__[i__5].r - v4.i * c__[i__5].i, q__13.i = v4.r 
 		    * c__[i__5].i + v4.i * c__[i__5].r;
 	    q__7.r = q__8.r + q__13.r, q__7.i = q__8.i + q__13.i;
-	    i__6 = c___subscr(j, 5);
+	    i__6 = j + c_dim1 * 5;
 	    q__14.r = v5.r * c__[i__6].r - v5.i * c__[i__6].i, q__14.i = v5.r 
 		    * c__[i__6].i + v5.i * c__[i__6].r;
 	    q__6.r = q__7.r + q__14.r, q__6.i = q__7.i + q__14.i;
-	    i__7 = c___subscr(j, 6);
+	    i__7 = j + c_dim1 * 6;
 	    q__15.r = v6.r * c__[i__7].r - v6.i * c__[i__7].i, q__15.i = v6.r 
 		    * c__[i__7].i + v6.i * c__[i__7].r;
 	    q__5.r = q__6.r + q__15.r, q__5.i = q__6.i + q__15.i;
-	    i__8 = c___subscr(j, 7);
+	    i__8 = j + c_dim1 * 7;
 	    q__16.r = v7.r * c__[i__8].r - v7.i * c__[i__8].i, q__16.i = v7.r 
 		    * c__[i__8].i + v7.i * c__[i__8].r;
 	    q__4.r = q__5.r + q__16.r, q__4.i = q__5.i + q__16.i;
-	    i__9 = c___subscr(j, 8);
+	    i__9 = j + (c_dim1 << 3);
 	    q__17.r = v8.r * c__[i__9].r - v8.i * c__[i__9].i, q__17.i = v8.r 
 		    * c__[i__9].i + v8.i * c__[i__9].r;
 	    q__3.r = q__4.r + q__17.r, q__3.i = q__4.i + q__17.i;
-	    i__10 = c___subscr(j, 9);
+	    i__10 = j + c_dim1 * 9;
 	    q__18.r = v9.r * c__[i__10].r - v9.i * c__[i__10].i, q__18.i = 
 		    v9.r * c__[i__10].i + v9.i * c__[i__10].r;
 	    q__2.r = q__3.r + q__18.r, q__2.i = q__3.i + q__18.i;
-	    i__11 = c___subscr(j, 10);
+	    i__11 = j + c_dim1 * 10;
 	    q__19.r = v10.r * c__[i__11].r - v10.i * c__[i__11].i, q__19.i = 
 		    v10.r * c__[i__11].i + v10.i * c__[i__11].r;
 	    q__1.r = q__2.r + q__19.r, q__1.i = q__2.i + q__19.i;
 	    sum.r = q__1.r, sum.i = q__1.i;
-	    i__2 = c___subscr(j, 1);
-	    i__3 = c___subscr(j, 1);
+	    i__2 = j + c_dim1;
+	    i__3 = j + c_dim1;
 	    q__2.r = sum.r * t1.r - sum.i * t1.i, q__2.i = sum.r * t1.i + 
 		    sum.i * t1.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 2);
-	    i__3 = c___subscr(j, 2);
+	    i__2 = j + (c_dim1 << 1);
+	    i__3 = j + (c_dim1 << 1);
 	    q__2.r = sum.r * t2.r - sum.i * t2.i, q__2.i = sum.r * t2.i + 
 		    sum.i * t2.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 3);
-	    i__3 = c___subscr(j, 3);
+	    i__2 = j + c_dim1 * 3;
+	    i__3 = j + c_dim1 * 3;
 	    q__2.r = sum.r * t3.r - sum.i * t3.i, q__2.i = sum.r * t3.i + 
 		    sum.i * t3.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 4);
-	    i__3 = c___subscr(j, 4);
+	    i__2 = j + (c_dim1 << 2);
+	    i__3 = j + (c_dim1 << 2);
 	    q__2.r = sum.r * t4.r - sum.i * t4.i, q__2.i = sum.r * t4.i + 
 		    sum.i * t4.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 5);
-	    i__3 = c___subscr(j, 5);
+	    i__2 = j + c_dim1 * 5;
+	    i__3 = j + c_dim1 * 5;
 	    q__2.r = sum.r * t5.r - sum.i * t5.i, q__2.i = sum.r * t5.i + 
 		    sum.i * t5.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 6);
-	    i__3 = c___subscr(j, 6);
+	    i__2 = j + c_dim1 * 6;
+	    i__3 = j + c_dim1 * 6;
 	    q__2.r = sum.r * t6.r - sum.i * t6.i, q__2.i = sum.r * t6.i + 
 		    sum.i * t6.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 7);
-	    i__3 = c___subscr(j, 7);
+	    i__2 = j + c_dim1 * 7;
+	    i__3 = j + c_dim1 * 7;
 	    q__2.r = sum.r * t7.r - sum.i * t7.i, q__2.i = sum.r * t7.i + 
 		    sum.i * t7.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 8);
-	    i__3 = c___subscr(j, 8);
+	    i__2 = j + (c_dim1 << 3);
+	    i__3 = j + (c_dim1 << 3);
 	    q__2.r = sum.r * t8.r - sum.i * t8.i, q__2.i = sum.r * t8.i + 
 		    sum.i * t8.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 9);
-	    i__3 = c___subscr(j, 9);
+	    i__2 = j + c_dim1 * 9;
+	    i__3 = j + c_dim1 * 9;
 	    q__2.r = sum.r * t9.r - sum.i * t9.i, q__2.i = sum.r * t9.i + 
 		    sum.i * t9.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
 	    c__[i__2].r = q__1.r, c__[i__2].i = q__1.i;
-	    i__2 = c___subscr(j, 10);
-	    i__3 = c___subscr(j, 10);
+	    i__2 = j + c_dim1 * 10;
+	    i__3 = j + c_dim1 * 10;
 	    q__2.r = sum.r * t10.r - sum.i * t10.i, q__2.i = sum.r * t10.i + 
 		    sum.i * t10.r;
 	    q__1.r = c__[i__3].r - q__2.r, q__1.i = c__[i__3].i - q__2.i;
@@ -2042,8 +2045,3 @@ L410:
 /*     End of CLARFX */
 
 } /* clarfx_ */
-
-#undef c___ref
-#undef c___subscr
-
-

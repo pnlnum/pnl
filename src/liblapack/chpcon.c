@@ -1,83 +1,112 @@
+/* chpcon.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int chpcon_(char *uplo, integer *n, complex *ap, integer *
-	ipiv, real *anorm, real *rcond, complex *work, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int chpcon_(char *uplo, int *n, complex *ap, int *
+	ipiv, float *anorm, float *rcond, complex *work, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       March 31, 1993   
-
-
-    Purpose   
-    =======   
-
-    CHPCON estimates the reciprocal of the condition number of a complex   
-    Hermitian packed matrix A using the factorization A = U*D*U**H or   
-    A = L*D*L**H computed by CHPTRF.   
-
-    An estimate is obtained for norm(inv(A)), and the reciprocal of the   
-    condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).   
-
-    Arguments   
-    =========   
-
-    UPLO    (input) CHARACTER*1   
-            Specifies whether the details of the factorization are stored   
-            as an upper or lower triangular matrix.   
-            = 'U':  Upper triangular, form is A = U*D*U**H;   
-            = 'L':  Lower triangular, form is A = L*D*L**H.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    AP      (input) COMPLEX array, dimension (N*(N+1)/2)   
-            The block diagonal matrix D and the multipliers used to   
-            obtain the factor U or L as computed by CHPTRF, stored as a   
-            packed triangular matrix.   
-
-    IPIV    (input) INTEGER array, dimension (N)   
-            Details of the interchanges and the block structure of D   
-            as determined by CHPTRF.   
-
-    ANORM   (input) REAL   
-            The 1-norm of the original matrix A.   
-
-    RCOND   (output) REAL   
-            The reciprocal of the condition number of the matrix A,   
-            computed as RCOND = 1/(ANORM * AINVNM), where AINVNM is an   
-            estimate of the 1-norm of inv(A) computed in this routine.   
-
-    WORK    (workspace) COMPLEX array, dimension (2*N)   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer i__1, i__2;
+    int i__1, i__2;
+
     /* Local variables */
-    static integer kase, i__;
-    extern logical lsame_(char *, char *);
-    static logical upper;
-    static integer ip;
-    extern /* Subroutine */ int clacon_(integer *, complex *, complex *, real 
-	    *, integer *), xerbla_(char *, integer *);
-    static real ainvnm;
-    extern /* Subroutine */ int chptrs_(char *, integer *, integer *, complex 
-	    *, integer *, complex *, integer *, integer *);
+    int i__, ip, kase;
+    extern int lsame_(char *, char *);
+    int isave[3];
+    int upper;
+    extern  int clacn2_(int *, complex *, complex *, float 
+	    *, int *, int *), xerbla_(char *, int *);
+    float ainvnm;
+    extern  int chptrs_(char *, int *, int *, complex 
+	    *, int *, complex *, int *, int *);
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     Modified to call CLACN2 in place of CLACON, 10 Feb 03, SJH. */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CHPCON estimates the reciprocal of the condition number of a complex */
+/*  Hermitian packed matrix A using the factorization A = U*D*U**H or */
+/*  A = L*D*L**H computed by CHPTRF. */
+
+/*  An estimate is obtained for norm(inv(A)), and the reciprocal of the */
+/*  condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))). */
+
+/*  Arguments */
+/*  ========= */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          Specifies whether the details of the factorization are stored */
+/*          as an upper or lower triangular matrix. */
+/*          = 'U':  Upper triangular, form is A = U*D*U**H; */
+/*          = 'L':  Lower triangular, form is A = L*D*L**H. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  AP      (input) COMPLEX array, dimension (N*(N+1)/2) */
+/*          The block diagonal matrix D and the multipliers used to */
+/*          obtain the factor U or L as computed by CHPTRF, stored as a */
+/*          packed triangular matrix. */
+
+/*  IPIV    (input) INTEGER array, dimension (N) */
+/*          Details of the interchanges and the block structure of D */
+/*          as determined by CHPTRF. */
+
+/*  ANORM   (input) REAL */
+/*          The 1-norm of the original matrix A. */
+
+/*  RCOND   (output) REAL */
+/*          The reciprocal of the condition number of the matrix A, */
+/*          computed as RCOND = 1/(ANORM * AINVNM), where AINVNM is an */
+/*          estimate of the 1-norm of inv(A) computed in this routine. */
+
+/*  WORK    (workspace) COMPLEX array, dimension (2*N) */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Local Arrays .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --work;
     --ipiv;
     --ap;
@@ -143,7 +172,7 @@
 
     kase = 0;
 L30:
-    clacon_(n, &work[*n + 1], &work[1], &ainvnm, &kase);
+    clacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if (kase != 0) {
 
 /*        Multiply by inv(L*D*L') or inv(U*D*U'). */
@@ -163,4 +192,3 @@ L30:
 /*     End of CHPCON */
 
 } /* chpcon_ */
-

@@ -1,50 +1,72 @@
+/* scsum1.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-doublereal scsum1_(integer *n, complex *cx, integer *incx)
+double scsum1_(int *n, complex *cx, int *incx)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1992   
-
-
-    Purpose   
-    =======   
-
-    SCSUM1 takes the sum of the absolute values of a complex   
-    vector and returns a single precision result.   
-
-    Based on SCASUM from the Level 1 BLAS.   
-    The change is to use the 'genuine' absolute value.   
-
-    Contributed by Nick Higham for use with CLACON.   
-
-    Arguments   
-    =========   
-
-    N       (input) INTEGER   
-            The number of elements in the vector CX.   
-
-    CX      (input) COMPLEX array, dimension (N)   
-            The vector whose elements will be summed.   
-
-    INCX    (input) INTEGER   
-            The spacing between successive values of CX.  INCX > 0.   
-
-    =====================================================================   
-
-
-       Parameter adjustments */
     /* System generated locals */
-    integer i__1, i__2;
-    real ret_val;
-    /* Builtin functions */
-    double c_abs(complex *);
-    /* Local variables */
-    static integer i__, nincx;
-    static real stemp;
+    int i__1, i__2;
+    float ret_val;
 
+    /* Builtin functions */
+    double c_ABS(complex *);
+
+    /* Local variables */
+    int i__, nincx;
+    float stemp;
+
+
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  SCSUM1 takes the sum of the absolute values of a complex */
+/*  vector and returns a single precision result. */
+
+/*  Based on SCASUM from the Level 1 BLAS. */
+/*  The change is to use the 'genuine' absolute value. */
+
+/*  Contributed by Nick Higham for use with CLACON. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  N       (input) INTEGER */
+/*          The number of elements in the vector CX. */
+
+/*  CX      (input) COMPLEX array, dimension (N) */
+/*          The vector whose elements will be summed. */
+
+/*  INCX    (input) INTEGER */
+/*          The spacing between successive values of CX.  INCX > 0. */
+
+/*  ===================================================================== */
+
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     --cx;
 
     /* Function Body */
@@ -66,7 +88,7 @@ doublereal scsum1_(integer *n, complex *cx, integer *incx)
 
 /*        NEXT LINE MODIFIED. */
 
-	stemp += c_abs(&cx[i__]);
+	stemp += c_ABS(&cx[i__]);
 /* L10: */
     }
     ret_val = stemp;
@@ -80,7 +102,7 @@ L20:
 
 /*        NEXT LINE MODIFIED. */
 
-	stemp += c_abs(&cx[i__]);
+	stemp += c_ABS(&cx[i__]);
 /* L30: */
     }
     ret_val = stemp;
@@ -89,4 +111,3 @@ L20:
 /*     End of SCSUM1 */
 
 } /* scsum1_ */
-

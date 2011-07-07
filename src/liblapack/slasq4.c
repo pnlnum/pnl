@@ -1,97 +1,119 @@
+/* slasq4.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-/*  -- translated by f2c (version 19990503).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
+		http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int slasq4_(integer *i0, integer *n0, real *z__, integer *pp,
-	 integer *n0in, real *dmin__, real *dmin1, real *dmin2, real *dn, 
-	real *dn1, real *dn2, real *tau, integer *ttype)
+ int slasq4_(int *i0, int *n0, float *z__, int *pp, 
+	 int *n0in, float *dmin__, float *dmin1, float *dmin2, float *dn, 
+	float *dn1, float *dn2, float *tau, int *ttype, float *g)
 {
-    /* Initialized data */
-
-    static real g = 0.f;
-
     /* System generated locals */
-    integer i__1;
-    real r__1, r__2;
+    int i__1;
+    float r__1, r__2;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
 
     /* Local variables */
-    static real s, a2, b1, b2;
-    static integer i4, nn, np;
-    static real gam, gap1, gap2;
+    float s, a2, b1, b2;
+    int i4, nn, np;
+    float gam, gap1, gap2;
 
 
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1999   
+/*  -- LAPACK routine (version 3.2)                                    -- */
 
+/*  -- Contributed by Osni Marques of the Lawrence Berkeley National   -- */
+/*  -- Laboratory and Beresford Parlett of the Univ. of California at  -- */
+/*  -- Berkeley                                                        -- */
+/*  -- November 2008                                                   -- */
 
-    Purpose   
-    =======   
+/*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */
+/*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
 
-    SLASQ4 computes an approximation TAU to the smallest eigenvalue   
-    using values of d from the previous transform.   
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
 
-    I0    (input) INTEGER   
-          First index.   
+/*  Purpose */
+/*  ======= */
 
-    N0    (input) INTEGER   
-          Last index.   
+/*  SLASQ4 computes an approximation TAU to the smallest eigenvalue */
+/*  using values of d from the previous transform. */
 
-    Z     (input) REAL array, dimension ( 4*N )   
-          Z holds the qd array.   
+/*  I0    (input) INTEGER */
+/*        First index. */
 
-    PP    (input) INTEGER   
-          PP=0 for ping, PP=1 for pong.   
+/*  N0    (input) INTEGER */
+/*        Last index. */
 
-    NOIN  (input) INTEGER   
-          The value of N0 at start of EIGTEST.   
+/*  Z     (input) REAL array, dimension ( 4*N ) */
+/*        Z holds the qd array. */
 
-    DMIN  (input) REAL   
-          Minimum value of d.   
+/*  PP    (input) INTEGER */
+/*        PP=0 for ping, PP=1 for pong. */
 
-    DMIN1 (input) REAL   
-          Minimum value of d, excluding D( N0 ).   
+/*  NOIN  (input) INTEGER */
+/*        The value of N0 at start of EIGTEST. */
 
-    DMIN2 (input) REAL   
-          Minimum value of d, excluding D( N0 ) and D( N0-1 ).   
+/*  DMIN  (input) REAL */
+/*        Minimum value of d. */
 
-    DN    (input) REAL   
-          d(N)   
+/*  DMIN1 (input) REAL */
+/*        Minimum value of d, excluding D( N0 ). */
 
-    DN1   (input) REAL   
-          d(N-1)   
+/*  DMIN2 (input) REAL */
+/*        Minimum value of d, excluding D( N0 ) and D( N0-1 ). */
 
-    DN2   (input) REAL   
-          d(N-2)   
+/*  DN    (input) REAL */
+/*        d(N) */
 
-    TAU   (output) REAL   
-          This is the shift.   
+/*  DN1   (input) REAL */
+/*        d(N-1) */
 
-    TTYPE (output) INTEGER   
-          Shift type.   
+/*  DN2   (input) REAL */
+/*        d(N-2) */
 
-    Further Details   
-    ===============   
-    CNST1 = 9/16   
+/*  TAU   (output) REAL */
+/*        This is the shift. */
 
-    =====================================================================   
+/*  TTYPE (output) INTEGER */
+/*        Shift type. */
 
-       Parameter adjustments */
+/*  G     (input/output) REAL */
+/*        G is passed as an argument in order to save its value between */
+/*        calls to SLASQ4. */
+
+/*  Further Details */
+/*  =============== */
+/*  CNST1 = 9/16 */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     A negative DMIN forces the shift to take that absolute value */
+/*     TTYPE records the type of shift. */
+
+    /* Parameter adjustments */
     --z__;
 
-    /* Function Body   
-
-       A negative DMIN forces the shift to take that absolute value   
-       TTYPE records the type of shift. */
-
+    /* Function Body */
     if (*dmin__ <= 0.f) {
 	*tau = -(*dmin__);
 	*ttype = -1;
@@ -121,7 +143,7 @@
 		if (gap1 > 0.f && gap1 > b1) {
 /* Computing MAX */
 		    r__1 = *dn - b1 / gap1 * b1, r__2 = *dmin__ * .5f;
-		    s = dmax(r__1,r__2);
+		    s = MAX(r__1,r__2);
 		    *ttype = -2;
 		} else {
 		    s = 0.f;
@@ -131,11 +153,11 @@
 		    if (a2 > b1 + b2) {
 /* Computing MIN */
 			r__1 = s, r__2 = a2 - (b1 + b2);
-			s = dmin(r__1,r__2);
+			s = MIN(r__1,r__2);
 		    }
 /* Computing MAX */
 		    r__1 = s, r__2 = *dmin__ * .333f;
-		    s = dmax(r__1,r__2);
+		    s = MAX(r__1,r__2);
 		    *ttype = -3;
 		}
 	    } else {
@@ -181,7 +203,7 @@
 		    }
 		    b2 *= z__[i4] / z__[i4 - 2];
 		    a2 += b2;
-		    if (dmax(b2,b1) * 100.f < a2 || .563f < a2) {
+		    if (MAX(b2,b1) * 100.f < a2 || .563f < a2) {
 			goto L20;
 		    }
 /* L10: */
@@ -229,7 +251,7 @@ L20:
 		    }
 		    b2 *= z__[i4] / z__[i4 - 2];
 		    a2 += b2;
-		    if (dmax(b2,b1) * 100.f < a2 || .563f < a2) {
+		    if (MAX(b2,b1) * 100.f < a2 || .563f < a2) {
 			goto L40;
 		    }
 /* L30: */
@@ -246,13 +268,13 @@ L40:
 /*           Case 6, no information to guide us. */
 
 	    if (*ttype == -6) {
-		g += (1.f - g) * .333f;
+		*g += (1.f - *g) * .333f;
 	    } else if (*ttype == -18) {
-		g = .083250000000000005f;
+		*g = .083250000000000005f;
 	    } else {
-		g = .25f;
+		*g = .25f;
 	    }
-	    s = g * *dmin__;
+	    s = *g * *dmin__;
 	    *ttype = -6;
 	}
 
@@ -282,7 +304,7 @@ L40:
 		}
 		b1 *= z__[i4] / z__[i4 - 2];
 		b2 += b1;
-		if (dmax(b1,a2) * 100.f < b2) {
+		if (MAX(b1,a2) * 100.f < b2) {
 		    goto L60;
 		}
 /* L50: */
@@ -296,11 +318,11 @@ L60:
 	    if (gap2 > 0.f && gap2 > b2 * a2) {
 /* Computing MAX */
 		r__1 = s, r__2 = a2 * (1.f - a2 * 1.01f * (b2 / gap2) * b2);
-		s = dmax(r__1,r__2);
+		s = MAX(r__1,r__2);
 	    } else {
 /* Computing MAX */
 		r__1 = s, r__2 = a2 * (1.f - b2 * 1.01f);
-		s = dmax(r__1,r__2);
+		s = MAX(r__1,r__2);
 		*ttype = -8;
 	    }
 	} else {
@@ -316,9 +338,9 @@ L60:
 
     } else if (*n0in == *n0 + 2) {
 
-/*        Two eigenvalues deflated. Use DMIN2, DN2 for DMIN and DN.   
+/*        Two eigenvalues deflated. Use DMIN2, DN2 for DMIN and DN. */
 
-          Cases 10 and 11. */
+/*        Cases 10 and 11. */
 
 	if (*dmin2 == *dn2 && z__[nn - 5] * 2.f < z__[nn - 7]) {
 	    *ttype = -10;
@@ -353,11 +375,11 @@ L80:
 	    if (gap2 > 0.f && gap2 > b2 * a2) {
 /* Computing MAX */
 		r__1 = s, r__2 = a2 * (1.f - a2 * 1.01f * (b2 / gap2) * b2);
-		s = dmax(r__1,r__2);
+		s = MAX(r__1,r__2);
 	    } else {
 /* Computing MAX */
 		r__1 = s, r__2 = a2 * (1.f - b2 * 1.01f);
-		s = dmax(r__1,r__2);
+		s = MAX(r__1,r__2);
 	    }
 	} else {
 	    s = *dmin2 * .25f;
@@ -377,4 +399,3 @@ L80:
 /*     End of SLASQ4 */
 
 } /* slasq4_ */
-

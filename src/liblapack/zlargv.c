@@ -1,112 +1,150 @@
+/* zlargv.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zlargv_(integer *n, doublecomplex *x, integer *incx, 
-	doublecomplex *y, integer *incy, doublereal *c__, integer *incc)
+ int zlargv_(int *n, doublecomplex *x, int *incx, 
+	doublecomplex *y, int *incy, double *c__, int *incc)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    ZLARGV generates a vector of complex plane rotations with real   
-    cosines, determined by elements of the complex vectors x and y.   
-    For i = 1,2,...,n   
-
-       (        c(i)   s(i) ) ( x(i) ) = ( r(i) )   
-       ( -conjg(s(i))  c(i) ) ( y(i) ) = (   0  )   
-
-       where c(i)**2 + ABS(s(i))**2 = 1   
-
-    The following conventions are used (these are the same as in ZLARTG,   
-    but differ from the BLAS1 routine ZROTG):   
-       If y(i)=0, then c(i)=1 and s(i)=0.   
-       If x(i)=0, then c(i)=0 and s(i) is chosen so that r(i) is real.   
-
-    Arguments   
-    =========   
-
-    N       (input) INTEGER   
-            The number of plane rotations to be generated.   
-
-    X       (input/output) COMPLEX*16 array, dimension (1+(N-1)*INCX)   
-            On entry, the vector x.   
-            On exit, x(i) is overwritten by r(i), for i = 1,...,n.   
-
-    INCX    (input) INTEGER   
-            The increment between elements of X. INCX > 0.   
-
-    Y       (input/output) COMPLEX*16 array, dimension (1+(N-1)*INCY)   
-            On entry, the vector y.   
-            On exit, the sines of the plane rotations.   
-
-    INCY    (input) INTEGER   
-            The increment between elements of Y. INCY > 0.   
-
-    C       (output) DOUBLE PRECISION array, dimension (1+(N-1)*INCC)   
-            The cosines of the plane rotations.   
-
-    INCC    (input) INTEGER   
-            The increment between elements of C. INCC > 0.   
-
-    Further Details   
-    ======= =======   
-
-    6-6-96 - Modified with a new algorithm by W. Kahan and J. Demmel   
-
-    =====================================================================   
-
-       Parameter adjustments */
-    /* Initialized data */
-    static logical first = TRUE_;
     /* System generated locals */
-    integer i__1, i__2;
-    doublereal d__1, d__2, d__3, d__4, d__5, d__6, d__7, d__8, d__9, d__10;
+    int i__1, i__2;
+    double d__1, d__2, d__3, d__4, d__5, d__6, d__7, d__8, d__9, d__10;
     doublecomplex z__1, z__2, z__3;
-    /* Builtin functions */
-    double log(doublereal), pow_di(doublereal *, integer *), d_imag(
-	    doublecomplex *), sqrt(doublereal);
-    void d_cnjg(doublecomplex *, doublecomplex *);
-    /* Local variables */
-    static doublereal d__;
-    static doublecomplex f, g;
-    static integer i__, j;
-    static doublecomplex r__;
-    static doublereal scale;
-    static integer count;
-    static doublereal f2, g2, safmn2;
-    extern doublereal dlapy2_(doublereal *, doublereal *);
-    static doublereal safmx2;
-    static integer ic;
-    static doublereal di;
-    static doublecomplex ff;
-    static doublereal cs, dr;
-    extern doublereal dlamch_(char *);
-    static doublecomplex fs, gs;
-    static integer ix, iy;
-    static doublecomplex sn;
-    static doublereal safmin, f2s, g2s, eps;
 
+    /* Builtin functions */
+    double log(double), pow_di(double *, int *), d_imag(
+	    doublecomplex *), sqrt(double);
+    void d_cnjg(doublecomplex *, doublecomplex *);
+
+    /* Local variables */
+    double d__;
+    doublecomplex f, g;
+    int i__, j;
+    doublecomplex r__;
+    double f2, g2;
+    int ic;
+    double di;
+    doublecomplex ff;
+    double cs, dr;
+    doublecomplex fs, gs;
+    int ix, iy;
+    doublecomplex sn;
+    double f2s, g2s, eps, scale;
+    int count;
+    double safmn2;
+    extern double dlapy2_(double *, double *);
+    double safmx2;
+    extern double dlamch_(char *);
+    double safmin;
+
+
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZLARGV generates a vector of complex plane rotations with float */
+/*  cosines, determined by elements of the complex vectors x and y. */
+/*  For i = 1,2,...,n */
+
+/*     (        c(i)   s(i) ) ( x(i) ) = ( r(i) ) */
+/*     ( -conjg(s(i))  c(i) ) ( y(i) ) = (   0  ) */
+
+/*     where c(i)**2 + ABS(s(i))**2 = 1 */
+
+/*  The following conventions are used (these are the same as in ZLARTG, */
+/*  but differ from the BLAS1 routine ZROTG): */
+/*     If y(i)=0, then c(i)=1 and s(i)=0. */
+/*     If x(i)=0, then c(i)=0 and s(i) is chosen so that r(i) is float. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  N       (input) INTEGER */
+/*          The number of plane rotations to be generated. */
+
+/*  X       (input/output) COMPLEX*16 array, dimension (1+(N-1)*INCX) */
+/*          On entry, the vector x. */
+/*          On exit, x(i) is overwritten by r(i), for i = 1,...,n. */
+
+/*  INCX    (input) INTEGER */
+/*          The increment between elements of X. INCX > 0. */
+
+/*  Y       (input/output) COMPLEX*16 array, dimension (1+(N-1)*INCY) */
+/*          On entry, the vector y. */
+/*          On exit, the sines of the plane rotations. */
+
+/*  INCY    (input) INTEGER */
+/*          The increment between elements of Y. INCY > 0. */
+
+/*  C       (output) DOUBLE PRECISION array, dimension (1+(N-1)*INCC) */
+/*          The cosines of the plane rotations. */
+
+/*  INCC    (input) INTEGER */
+/*          The increment between elements of C. INCC > 0. */
+
+/*  Further Details */
+/*  ======= ======= */
+
+/*  6-6-96 - Modified with a new algorithm by W. Kahan and J. Demmel */
+
+/*  This version has a few statements commented out for thread safety */
+/*  (machine parameters are computed on each entry). 10 feb 03, SJH. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     LOGICAL            FIRST */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Statement Functions .. */
+/*     .. */
+/*     .. Save statement .. */
+/*     SAVE               FIRST, SAFMX2, SAFMIN, SAFMN2 */
+/*     .. */
+/*     .. Data statements .. */
+/*     DATA               FIRST / .TRUE. / */
+/*     .. */
+/*     .. Statement Function definitions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     IF( FIRST ) THEN */
+/*        FIRST = .FALSE. */
+    /* Parameter adjustments */
     --c__;
     --y;
     --x;
 
     /* Function Body */
-
-    if (first) {
-	first = FALSE_;
-	safmin = dlamch_("S");
-	eps = dlamch_("E");
-	d__1 = dlamch_("B");
-	i__1 = (integer) (log(safmin / eps) / log(dlamch_("B")) / 
-		2.);
-	safmn2 = pow_di(&d__1, &i__1);
-	safmx2 = 1. / safmn2;
-    }
+    safmin = dlamch_("S");
+    eps = dlamch_("E");
+    d__1 = dlamch_("B");
+    i__1 = (int) (log(safmin / eps) / log(dlamch_("B")) / 2.);
+    safmn2 = pow_di(&d__1, &i__1);
+    safmx2 = 1. / safmn2;
+/*     END IF */
     ix = 1;
     iy = 1;
     ic = 1;
@@ -117,16 +155,16 @@
 	i__2 = iy;
 	g.r = y[i__2].r, g.i = y[i__2].i;
 
-/*        Use identical algorithm as in ZLARTG   
+/*        Use identical algorithm as in ZLARTG */
 
-   Computing MAX   
-   Computing MAX */
-	d__7 = (d__1 = f.r, abs(d__1)), d__8 = (d__2 = d_imag(&f), abs(d__2));
 /* Computing MAX */
-	d__9 = (d__3 = g.r, abs(d__3)), d__10 = (d__4 = d_imag(&g), abs(d__4))
+/* Computing MAX */
+	d__7 = (d__1 = f.r, ABS(d__1)), d__8 = (d__2 = d_imag(&f), ABS(d__2));
+/* Computing MAX */
+	d__9 = (d__3 = g.r, ABS(d__3)), d__10 = (d__4 = d_imag(&g), ABS(d__4))
 		;
-	d__5 = max(d__7,d__8), d__6 = max(d__9,d__10);
-	scale = max(d__5,d__6);
+	d__5 = MAX(d__7,d__8), d__6 = MAX(d__9,d__10);
+	scale = MAX(d__5,d__6);
 	fs.r = f.r, fs.i = f.i;
 	gs.r = g.r, gs.i = g.i;
 	count = 0;
@@ -169,7 +207,7 @@ L20:
 /* Computing 2nd power */
 	d__2 = d_imag(&gs);
 	g2 = d__1 * d__1 + d__2 * d__2;
-	if (f2 <= max(g2,1.) * safmin) {
+	if (f2 <= MAX(g2,1.) * safmin) {
 
 /*           This is a rare case: F is very small. */
 
@@ -179,8 +217,8 @@ L20:
 		d__3 = d_imag(&g);
 		d__1 = dlapy2_(&d__2, &d__3);
 		r__.r = d__1, r__.i = 0.;
-/*              Do complex/real division explicitly with two real   
-                divisions */
+/*              Do complex/float division explicitly with two float */
+/*              divisions */
 		d__1 = gs.r;
 		d__2 = d_imag(&gs);
 		d__ = dlapy2_(&d__1, &d__2);
@@ -193,23 +231,23 @@ L20:
 	    d__1 = fs.r;
 	    d__2 = d_imag(&fs);
 	    f2s = dlapy2_(&d__1, &d__2);
-/*           G2 and G2S are accurate   
-             G2 is at least SAFMIN, and G2S is at least SAFMN2 */
+/*           G2 and G2S are accurate */
+/*           G2 is at least SAFMIN, and G2S is at least SAFMN2 */
 	    g2s = sqrt(g2);
-/*           Error in CS from underflow in F2S is at most   
-             UNFL / SAFMN2 .lt. sqrt(UNFL*EPS) .lt. EPS   
-             If MAX(G2,ONE)=G2, then F2 .lt. G2*SAFMIN,   
-             and so CS .lt. sqrt(SAFMIN)   
-             If MAX(G2,ONE)=ONE, then F2 .lt. SAFMIN   
-             and so CS .lt. sqrt(SAFMIN)/SAFMN2 = sqrt(EPS)   
-             Therefore, CS = F2S/G2S / sqrt( 1 + (F2S/G2S)**2 ) = F2S/G2S */
+/*           Error in CS from underflow in F2S is at most */
+/*           UNFL / SAFMN2 .lt. sqrt(UNFL*EPS) .lt. EPS */
+/*           If MAX(G2,ONE)=G2, then F2 .lt. G2*SAFMIN, */
+/*           and so CS .lt. sqrt(SAFMIN) */
+/*           If MAX(G2,ONE)=ONE, then F2 .lt. SAFMIN */
+/*           and so CS .lt. sqrt(SAFMIN)/SAFMN2 = sqrt(EPS) */
+/*           Therefore, CS = F2S/G2S / sqrt( 1 + (F2S/G2S)**2 ) = F2S/G2S */
 	    cs = f2s / g2s;
-/*           Make sure abs(FF) = 1   
-             Do complex/real division explicitly with 2 real divisions   
-   Computing MAX */
-	    d__3 = (d__1 = f.r, abs(d__1)), d__4 = (d__2 = d_imag(&f), abs(
+/*           Make sure ABS(FF) = 1 */
+/*           Do complex/float division explicitly with 2 float divisions */
+/* Computing MAX */
+	    d__3 = (d__1 = f.r, ABS(d__1)), d__4 = (d__2 = d_imag(&f), ABS(
 		    d__2));
-	    if (max(d__3,d__4) > 1.) {
+	    if (MAX(d__3,d__4) > 1.) {
 		d__1 = f.r;
 		d__2 = d_imag(&f);
 		d__ = dlapy2_(&d__1, &d__2);
@@ -239,20 +277,20 @@ L20:
 	    r__.r = z__1.r, r__.i = z__1.i;
 	} else {
 
-/*           This is the most common case.   
-             Neither F2 nor F2/G2 are less than SAFMIN   
-             F2S cannot overflow, and it is accurate */
+/*           This is the most common case. */
+/*           Neither F2 nor F2/G2 are less than SAFMIN */
+/*           F2S cannot overflow, and it is accurate */
 
 	    f2s = sqrt(g2 / f2 + 1.);
-/*           Do the F2S(real)*FS(complex) multiply with two real   
-             multiplies */
+/*           Do the F2S(float)*FS(complex) multiply with two float */
+/*           multiplies */
 	    d__1 = f2s * fs.r;
 	    d__2 = f2s * d_imag(&fs);
 	    z__1.r = d__1, z__1.i = d__2;
 	    r__.r = z__1.r, r__.i = z__1.i;
 	    cs = 1. / f2s;
 	    d__ = f2 + g2;
-/*           Do complex/real division explicitly with two real divisions */
+/*           Do complex/float division explicitly with two float divisions */
 	    d__1 = r__.r / d__;
 	    d__2 = d_imag(&r__) / d__;
 	    z__1.r = d__1, z__1.i = d__2;
@@ -295,4 +333,3 @@ L50:
 /*     End of ZLARGV */
 
 } /* zlargv_ */
-

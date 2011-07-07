@@ -1,294 +1,337 @@
+/* zggesx.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp 
-	delctg, char *sense, integer *n, doublecomplex *a, integer *lda, 
-	doublecomplex *b, integer *ldb, integer *sdim, doublecomplex *alpha, 
-	doublecomplex *beta, doublecomplex *vsl, integer *ldvsl, 
-	doublecomplex *vsr, integer *ldvsr, doublereal *rconde, doublereal *
-	rcondv, doublecomplex *work, integer *lwork, doublereal *rwork, 
-	integer *iwork, integer *liwork, logical *bwork, integer *info)
+/* Table of constant values */
+
+static doublecomplex c_b1 = {0.,0.};
+static doublecomplex c_b2 = {1.,0.};
+static int c__1 = 1;
+static int c__0 = 0;
+static int c_n1 = -1;
+
+ int zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp 
+	selctg, char *sense, int *n, doublecomplex *a, int *lda, 
+	doublecomplex *b, int *ldb, int *sdim, doublecomplex *alpha, 
+	doublecomplex *beta, doublecomplex *vsl, int *ldvsl, 
+	doublecomplex *vsr, int *ldvsr, double *rconde, double *
+	rcondv, doublecomplex *work, int *lwork, double *rwork, 
+	int *iwork, int *liwork, int *bwork, int *info)
 {
-/*  -- LAPACK driver routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    ZGGESX computes for a pair of N-by-N complex nonsymmetric matrices   
-    (A,B), the generalized eigenvalues, the complex Schur form (S,T),   
-    and, optionally, the left and/or right matrices of Schur vectors (VSL   
-    and VSR).  This gives the generalized Schur factorization   
-
-         (A,B) = ( (VSL) S (VSR)**H, (VSL) T (VSR)**H )   
-
-    where (VSR)**H is the conjugate-transpose of VSR.   
-
-    Optionally, it also orders the eigenvalues so that a selected cluster   
-    of eigenvalues appears in the leading diagonal blocks of the upper   
-    triangular matrix S and the upper triangular matrix T; computes   
-    a reciprocal condition number for the average of the selected   
-    eigenvalues (RCONDE); and computes a reciprocal condition number for   
-    the right and left deflating subspaces corresponding to the selected   
-    eigenvalues (RCONDV). The leading columns of VSL and VSR then form   
-    an orthonormal basis for the corresponding left and right eigenspaces   
-    (deflating subspaces).   
-
-    A generalized eigenvalue for a pair of matrices (A,B) is a scalar w   
-    or a ratio alpha/beta = w, such that  A - w*B is singular.  It is   
-    usually represented as the pair (alpha,beta), as there is a   
-    reasonable interpretation for beta=0 or for both being zero.   
-
-    A pair of matrices (S,T) is in generalized complex Schur form if T is   
-    upper triangular with non-negative diagonal and S is upper   
-    triangular.   
-
-    Arguments   
-    =========   
-
-    JOBVSL  (input) CHARACTER*1   
-            = 'N':  do not compute the left Schur vectors;   
-            = 'V':  compute the left Schur vectors.   
-
-    JOBVSR  (input) CHARACTER*1   
-            = 'N':  do not compute the right Schur vectors;   
-            = 'V':  compute the right Schur vectors.   
-
-    SORT    (input) CHARACTER*1   
-            Specifies whether or not to order the eigenvalues on the   
-            diagonal of the generalized Schur form.   
-            = 'N':  Eigenvalues are not ordered;   
-            = 'S':  Eigenvalues are ordered (see DELZTG).   
-
-    DELZTG  (input) LOGICAL FUNCTION of two COMPLEX*16 arguments   
-            DELZTG must be declared EXTERNAL in the calling subroutine.   
-            If SORT = 'N', DELZTG is not referenced.   
-            If SORT = 'S', DELZTG is used to select eigenvalues to sort   
-            to the top left of the Schur form.   
-            Note that a selected complex eigenvalue may no longer satisfy   
-            DELZTG(ALPHA(j),BETA(j)) = .TRUE. after ordering, since   
-            ordering may change the value of complex eigenvalues   
-            (especially if the eigenvalue is ill-conditioned), in this   
-            case INFO is set to N+3 see INFO below).   
-
-    SENSE   (input) CHARACTER   
-            Determines which reciprocal condition numbers are computed.   
-            = 'N' : None are computed;   
-            = 'E' : Computed for average of selected eigenvalues only;   
-            = 'V' : Computed for selected deflating subspaces only;   
-            = 'B' : Computed for both.   
-            If SENSE = 'E', 'V', or 'B', SORT must equal 'S'.   
-
-    N       (input) INTEGER   
-            The order of the matrices A, B, VSL, and VSR.  N >= 0.   
-
-    A       (input/output) COMPLEX*16 array, dimension (LDA, N)   
-            On entry, the first of the pair of matrices.   
-            On exit, A has been overwritten by its generalized Schur   
-            form S.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of A.  LDA >= max(1,N).   
-
-    B       (input/output) COMPLEX*16 array, dimension (LDB, N)   
-            On entry, the second of the pair of matrices.   
-            On exit, B has been overwritten by its generalized Schur   
-            form T.   
-
-    LDB     (input) INTEGER   
-            The leading dimension of B.  LDB >= max(1,N).   
-
-    SDIM    (output) INTEGER   
-            If SORT = 'N', SDIM = 0.   
-            If SORT = 'S', SDIM = number of eigenvalues (after sorting)   
-            for which DELZTG is true.   
-
-    ALPHA   (output) COMPLEX*16 array, dimension (N)   
-    BETA    (output) COMPLEX*16 array, dimension (N)   
-            On exit, ALPHA(j)/BETA(j), j=1,...,N, will be the   
-            generalized eigenvalues.  ALPHA(j) and BETA(j),j=1,...,N  are   
-            the diagonals of the complex Schur form (S,T).  BETA(j) will   
-            be non-negative real.   
-
-            Note: the quotients ALPHA(j)/BETA(j) may easily over- or   
-            underflow, and BETA(j) may even be zero.  Thus, the user   
-            should avoid naively computing the ratio alpha/beta.   
-            However, ALPHA will be always less than and usually   
-            comparable with norm(A) in magnitude, and BETA always less   
-            than and usually comparable with norm(B).   
-
-    VSL     (output) COMPLEX*16 array, dimension (LDVSL,N)   
-            If JOBVSL = 'V', VSL will contain the left Schur vectors.   
-            Not referenced if JOBVSL = 'N'.   
-
-    LDVSL   (input) INTEGER   
-            The leading dimension of the matrix VSL. LDVSL >=1, and   
-            if JOBVSL = 'V', LDVSL >= N.   
-
-    VSR     (output) COMPLEX*16 array, dimension (LDVSR,N)   
-            If JOBVSR = 'V', VSR will contain the right Schur vectors.   
-            Not referenced if JOBVSR = 'N'.   
-
-    LDVSR   (input) INTEGER   
-            The leading dimension of the matrix VSR. LDVSR >= 1, and   
-            if JOBVSR = 'V', LDVSR >= N.   
-
-    RCONDE  (output) DOUBLE PRECISION array, dimension ( 2 )   
-            If SENSE = 'E' or 'B', RCONDE(1) and RCONDE(2) contain the   
-            reciprocal condition numbers for the average of the selected   
-            eigenvalues.   
-            Not referenced if SENSE = 'N' or 'V'.   
-
-    RCONDV  (output) DOUBLE PRECISION array, dimension ( 2 )   
-            If SENSE = 'V' or 'B', RCONDV(1) and RCONDV(2) contain the   
-            reciprocal condition number for the selected deflating   
-            subspaces.   
-            Not referenced if SENSE = 'N' or 'E'.   
-
-    WORK    (workspace/output) COMPLEX*16 array, dimension (LWORK)   
-            On exit, if INFO = 0, WORK(1) returns the optimal LWORK.   
-
-    LWORK   (input) INTEGER   
-            The dimension of the array WORK.  LWORK >= 2*N.   
-            If SENSE = 'E', 'V', or 'B',   
-            LWORK >= MAX(2*N, 2*SDIM*(N-SDIM)).   
-
-    RWORK   (workspace) DOUBLE PRECISION array, dimension ( 8*N )   
-            Real workspace.   
-
-    IWORK   (workspace/output) INTEGER array, dimension (LIWORK)   
-            Not referenced if SENSE = 'N'.   
-            On exit, if INFO = 0, IWORK(1) returns the optimal LIWORK.   
-
-    LIWORK  (input) INTEGER   
-            The dimension of the array WORK. LIWORK >= N+2.   
-
-    BWORK   (workspace) LOGICAL array, dimension (N)   
-            Not referenced if SORT = 'N'.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value.   
-            = 1,...,N:   
-                  The QZ iteration failed.  (A,B) are not in Schur   
-                  form, but ALPHA(j) and BETA(j) should be correct for   
-                  j=INFO+1,...,N.   
-            > N:  =N+1: other than QZ iteration failed in ZHGEQZ   
-                  =N+2: after reordering, roundoff changed values of   
-                        some complex eigenvalues so that leading   
-                        eigenvalues in the Generalized Schur form no   
-                        longer satisfy DELZTG=.TRUE.  This could also   
-                        be caused due to scaling.   
-                  =N+3: reordering failed in ZTGSEN.   
-
-    =====================================================================   
-
-
-       Decode the input arguments   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static doublecomplex c_b1 = {0.,0.};
-    static doublecomplex c_b2 = {1.,0.};
-    static integer c__1 = 1;
-    static integer c__0 = 0;
-    static integer c_n1 = -1;
-    
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset, 
+    int a_dim1, a_offset, b_dim1, b_offset, vsl_dim1, vsl_offset, 
 	    vsr_dim1, vsr_offset, i__1, i__2;
+
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
+
     /* Local variables */
-    static integer ijob;
-    static doublereal anrm, bnrm;
-    static integer ierr, itau, iwrk, i__;
-    extern logical lsame_(char *, char *);
-    static integer ileft, icols;
-    static logical cursl, ilvsl, ilvsr;
-    static integer irwrk, irows;
-    extern /* Subroutine */ int dlabad_(doublereal *, doublereal *);
-    extern doublereal dlamch_(char *);
-    static doublereal pl, pr;
-    extern /* Subroutine */ int zggbak_(char *, char *, integer *, integer *, 
-	    integer *, doublereal *, doublereal *, integer *, doublecomplex *,
-	     integer *, integer *), zggbal_(char *, integer *,
-	     doublecomplex *, integer *, doublecomplex *, integer *, integer *
-	    , integer *, doublereal *, doublereal *, doublereal *, integer *);
-    static logical ilascl, ilbscl;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, 
-	    integer *, doublereal *);
-    static doublereal bignum;
-    static integer ijobvl, iright;
-    extern /* Subroutine */ int zgghrd_(char *, char *, integer *, integer *, 
-	    integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-	     doublecomplex *, integer *, doublecomplex *, integer *, integer *
-	    ), zlascl_(char *, integer *, integer *, 
-	    doublereal *, doublereal *, integer *, integer *, doublecomplex *,
-	     integer *, integer *);
-    static integer ijobvr;
-    static logical wantsb;
-    static integer liwmin;
-    static logical wantse, lastsl;
-    static doublereal anrmto, bnrmto;
-    extern /* Subroutine */ int zgeqrf_(integer *, integer *, doublecomplex *,
-	     integer *, doublecomplex *, doublecomplex *, integer *, integer *
-	    );
-    static integer maxwrk;
-    static logical wantsn;
-    static integer minwrk;
-    static doublereal smlnum;
-    extern /* Subroutine */ int zhgeqz_(char *, char *, char *, integer *, 
-	    integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-	     integer *, doublecomplex *, doublecomplex *, doublecomplex *, 
-	    integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-	     doublereal *, integer *), zlacpy_(char *,
-	     integer *, integer *, doublecomplex *, integer *, doublecomplex *
-	    , integer *), zlaset_(char *, integer *, integer *, 
-	    doublecomplex *, doublecomplex *, doublecomplex *, integer *);
-    static logical wantst;
-    extern /* Subroutine */ int ztgsen_(integer *, logical *, logical *, 
-	    logical *, integer *, doublecomplex *, integer *, doublecomplex *,
-	     integer *, doublecomplex *, doublecomplex *, doublecomplex *, 
-	    integer *, doublecomplex *, integer *, integer *, doublereal *, 
-	    doublereal *, doublereal *, doublecomplex *, integer *, integer *,
-	     integer *, integer *);
-    static logical wantsv;
-    extern /* Subroutine */ int zungqr_(integer *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *, integer *), zunmqr_(char *, char *, integer *, integer 
-	    *, integer *, doublecomplex *, integer *, doublecomplex *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, integer *);
-    static doublereal dif[2];
-    static integer ihi, ilo;
-    static doublereal eps;
-#define a_subscr(a_1,a_2) (a_2)*a_dim1 + a_1
-#define a_ref(a_1,a_2) a[a_subscr(a_1,a_2)]
-#define b_subscr(a_1,a_2) (a_2)*b_dim1 + a_1
-#define b_ref(a_1,a_2) b[b_subscr(a_1,a_2)]
-#define vsl_subscr(a_1,a_2) (a_2)*vsl_dim1 + a_1
-#define vsl_ref(a_1,a_2) vsl[vsl_subscr(a_1,a_2)]
+    int i__;
+    double pl, pr, dif[2];
+    int ihi, ilo;
+    double eps;
+    int ijob;
+    double anrm, bnrm;
+    int ierr, itau, iwrk, lwrk;
+    extern int lsame_(char *, char *);
+    int ileft, icols;
+    int cursl, ilvsl, ilvsr;
+    int irwrk, irows;
+    extern  int dlabad_(double *, double *);
+    extern double dlamch_(char *);
+    extern  int zggbak_(char *, char *, int *, int *, 
+	    int *, double *, double *, int *, doublecomplex *, 
+	     int *, int *), zggbal_(char *, int *, 
+	     doublecomplex *, int *, doublecomplex *, int *, int *
+, int *, double *, double *, double *, int *);
+    int ilascl, ilbscl;
+    extern  int xerbla_(char *, int *);
+    extern int ilaenv_(int *, char *, char *, int *, int *, 
+	    int *, int *);
+    extern double zlange_(char *, int *, int *, doublecomplex *, 
+	    int *, double *);
+    double bignum;
+    int ijobvl, iright;
+    extern  int zgghrd_(char *, char *, int *, int *, 
+	    int *, doublecomplex *, int *, doublecomplex *, int *, 
+	     doublecomplex *, int *, doublecomplex *, int *, int *
+), zlascl_(char *, int *, int *, 
+	    double *, double *, int *, int *, doublecomplex *, 
+	     int *, int *);
+    int ijobvr;
+    int wantsb;
+    int liwmin;
+    int wantse, lastsl;
+    double anrmto, bnrmto;
+    extern  int zgeqrf_(int *, int *, doublecomplex *, 
+	     int *, doublecomplex *, doublecomplex *, int *, int *
+);
+    int maxwrk;
+    int wantsn;
+    int minwrk;
+    double smlnum;
+    extern  int zhgeqz_(char *, char *, char *, int *, 
+	    int *, int *, doublecomplex *, int *, doublecomplex *, 
+	     int *, doublecomplex *, doublecomplex *, doublecomplex *, 
+	    int *, doublecomplex *, int *, doublecomplex *, int *, 
+	     double *, int *), zlacpy_(char *, 
+	     int *, int *, doublecomplex *, int *, doublecomplex *
+, int *), zlaset_(char *, int *, int *, 
+	    doublecomplex *, doublecomplex *, doublecomplex *, int *);
+    int wantst, lquery, wantsv;
+    extern  int ztgsen_(int *, int *, int *, 
+	    int *, int *, doublecomplex *, int *, doublecomplex *, 
+	     int *, doublecomplex *, doublecomplex *, doublecomplex *, 
+	    int *, doublecomplex *, int *, int *, double *, 
+	    double *, double *, doublecomplex *, int *, int *, 
+	     int *, int *), zungqr_(int *, int *, int *, 
+	    doublecomplex *, int *, doublecomplex *, doublecomplex *, 
+	    int *, int *), zunmqr_(char *, char *, int *, int 
+	    *, int *, doublecomplex *, int *, doublecomplex *, 
+	    doublecomplex *, int *, doublecomplex *, int *, int *);
 
 
+/*  -- LAPACK driver routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+/*     .. Function Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZGGESX computes for a pair of N-by-N complex nonsymmetric matrices */
+/*  (A,B), the generalized eigenvalues, the complex Schur form (S,T), */
+/*  and, optionally, the left and/or right matrices of Schur vectors (VSL */
+/*  and VSR).  This gives the generalized Schur factorization */
+
+/*       (A,B) = ( (VSL) S (VSR)**H, (VSL) T (VSR)**H ) */
+
+/*  where (VSR)**H is the conjugate-transpose of VSR. */
+
+/*  Optionally, it also orders the eigenvalues so that a selected cluster */
+/*  of eigenvalues appears in the leading diagonal blocks of the upper */
+/*  triangular matrix S and the upper triangular matrix T; computes */
+/*  a reciprocal condition number for the average of the selected */
+/*  eigenvalues (RCONDE); and computes a reciprocal condition number for */
+/*  the right and left deflating subspaces corresponding to the selected */
+/*  eigenvalues (RCONDV). The leading columns of VSL and VSR then form */
+/*  an orthonormal basis for the corresponding left and right eigenspaces */
+/*  (deflating subspaces). */
+
+/*  A generalized eigenvalue for a pair of matrices (A,B) is a scalar w */
+/*  or a ratio alpha/beta = w, such that  A - w*B is singular.  It is */
+/*  usually represented as the pair (alpha,beta), as there is a */
+/*  reasonable interpretation for beta=0 or for both being zero. */
+
+/*  A pair of matrices (S,T) is in generalized complex Schur form if T is */
+/*  upper triangular with non-negative diagonal and S is upper */
+/*  triangular. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  JOBVSL  (input) CHARACTER*1 */
+/*          = 'N':  do not compute the left Schur vectors; */
+/*          = 'V':  compute the left Schur vectors. */
+
+/*  JOBVSR  (input) CHARACTER*1 */
+/*          = 'N':  do not compute the right Schur vectors; */
+/*          = 'V':  compute the right Schur vectors. */
+
+/*  SORT    (input) CHARACTER*1 */
+/*          Specifies whether or not to order the eigenvalues on the */
+/*          diagonal of the generalized Schur form. */
+/*          = 'N':  Eigenvalues are not ordered; */
+/*          = 'S':  Eigenvalues are ordered (see SELCTG). */
+
+/*  SELCTG  (external procedure) LOGICAL FUNCTION of two COMPLEX*16 arguments */
+/*          SELCTG must be declared EXTERNAL in the calling subroutine. */
+/*          If SORT = 'N', SELCTG is not referenced. */
+/*          If SORT = 'S', SELCTG is used to select eigenvalues to sort */
+/*          to the top left of the Schur form. */
+/*          Note that a selected complex eigenvalue may no longer satisfy */
+/*          SELCTG(ALPHA(j),BETA(j)) = .TRUE. after ordering, since */
+/*          ordering may change the value of complex eigenvalues */
+/*          (especially if the eigenvalue is ill-conditioned), in this */
+/*          case INFO is set to N+3 see INFO below). */
+
+/*  SENSE   (input) CHARACTER*1 */
+/*          Determines which reciprocal condition numbers are computed. */
+/*          = 'N' : None are computed; */
+/*          = 'E' : Computed for average of selected eigenvalues only; */
+/*          = 'V' : Computed for selected deflating subspaces only; */
+/*          = 'B' : Computed for both. */
+/*          If SENSE = 'E', 'V', or 'B', SORT must equal 'S'. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrices A, B, VSL, and VSR.  N >= 0. */
+
+/*  A       (input/output) COMPLEX*16 array, dimension (LDA, N) */
+/*          On entry, the first of the pair of matrices. */
+/*          On exit, A has been overwritten by its generalized Schur */
+/*          form S. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of A.  LDA >= MAX(1,N). */
+
+/*  B       (input/output) COMPLEX*16 array, dimension (LDB, N) */
+/*          On entry, the second of the pair of matrices. */
+/*          On exit, B has been overwritten by its generalized Schur */
+/*          form T. */
+
+/*  LDB     (input) INTEGER */
+/*          The leading dimension of B.  LDB >= MAX(1,N). */
+
+/*  SDIM    (output) INTEGER */
+/*          If SORT = 'N', SDIM = 0. */
+/*          If SORT = 'S', SDIM = number of eigenvalues (after sorting) */
+/*          for which SELCTG is true. */
+
+/*  ALPHA   (output) COMPLEX*16 array, dimension (N) */
+/*  BETA    (output) COMPLEX*16 array, dimension (N) */
+/*          On exit, ALPHA(j)/BETA(j), j=1,...,N, will be the */
+/*          generalized eigenvalues.  ALPHA(j) and BETA(j),j=1,...,N  are */
+/*          the diagonals of the complex Schur form (S,T).  BETA(j) will */
+/*          be non-negative float. */
+
+/*          Note: the quotients ALPHA(j)/BETA(j) may easily over- or */
+/*          underflow, and BETA(j) may even be zero.  Thus, the user */
+/*          should avoid naively computing the ratio alpha/beta. */
+/*          However, ALPHA will be always less than and usually */
+/*          comparable with norm(A) in magnitude, and BETA always less */
+/*          than and usually comparable with norm(B). */
+
+/*  VSL     (output) COMPLEX*16 array, dimension (LDVSL,N) */
+/*          If JOBVSL = 'V', VSL will contain the left Schur vectors. */
+/*          Not referenced if JOBVSL = 'N'. */
+
+/*  LDVSL   (input) INTEGER */
+/*          The leading dimension of the matrix VSL. LDVSL >=1, and */
+/*          if JOBVSL = 'V', LDVSL >= N. */
+
+/*  VSR     (output) COMPLEX*16 array, dimension (LDVSR,N) */
+/*          If JOBVSR = 'V', VSR will contain the right Schur vectors. */
+/*          Not referenced if JOBVSR = 'N'. */
+
+/*  LDVSR   (input) INTEGER */
+/*          The leading dimension of the matrix VSR. LDVSR >= 1, and */
+/*          if JOBVSR = 'V', LDVSR >= N. */
+
+/*  RCONDE  (output) DOUBLE PRECISION array, dimension ( 2 ) */
+/*          If SENSE = 'E' or 'B', RCONDE(1) and RCONDE(2) contain the */
+/*          reciprocal condition numbers for the average of the selected */
+/*          eigenvalues. */
+/*          Not referenced if SENSE = 'N' or 'V'. */
+
+/*  RCONDV  (output) DOUBLE PRECISION array, dimension ( 2 ) */
+/*          If SENSE = 'V' or 'B', RCONDV(1) and RCONDV(2) contain the */
+/*          reciprocal condition number for the selected deflating */
+/*          subspaces. */
+/*          Not referenced if SENSE = 'N' or 'E'. */
+
+/*  WORK    (workspace/output) COMPLEX*16 array, dimension (MAX(1,LWORK)) */
+/*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK. */
+
+/*  LWORK   (input) INTEGER */
+/*          The dimension of the array WORK. */
+/*          If N = 0, LWORK >= 1, else if SENSE = 'E', 'V', or 'B', */
+/*          LWORK >= MAX(1,2*N,2*SDIM*(N-SDIM)), else */
+/*          LWORK >= MAX(1,2*N).  Note that 2*SDIM*(N-SDIM) <= N*N/2. */
+/*          Note also that an error is only returned if */
+/*          LWORK < MAX(1,2*N), but if SENSE = 'E' or 'V' or 'B' this may */
+/*          not be large enough. */
+
+/*          If LWORK = -1, then a workspace query is assumed; the routine */
+/*          only calculates the bound on the optimal size of the WORK */
+/*          array and the minimum size of the IWORK array, returns these */
+/*          values as the first entries of the WORK and IWORK arrays, and */
+/*          no error message related to LWORK or LIWORK is issued by */
+/*          XERBLA. */
+
+/*  RWORK   (workspace) DOUBLE PRECISION array, dimension ( 8*N ) */
+/*          Real workspace. */
+
+/*  IWORK   (workspace/output) INTEGER array, dimension (MAX(1,LIWORK)) */
+/*          On exit, if INFO = 0, IWORK(1) returns the minimum LIWORK. */
+
+/*  LIWORK  (input) INTEGER */
+/*          The dimension of the array IWORK. */
+/*          If SENSE = 'N' or N = 0, LIWORK >= 1, otherwise */
+/*          LIWORK >= N+2. */
+
+/*          If LIWORK = -1, then a workspace query is assumed; the */
+/*          routine only calculates the bound on the optimal size of the */
+/*          WORK array and the minimum size of the IWORK array, returns */
+/*          these values as the first entries of the WORK and IWORK */
+/*          arrays, and no error message related to LWORK or LIWORK is */
+/*          issued by XERBLA. */
+
+/*  BWORK   (workspace) LOGICAL array, dimension (N) */
+/*          Not referenced if SORT = 'N'. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value. */
+/*          = 1,...,N: */
+/*                The QZ iteration failed.  (A,B) are not in Schur */
+/*                form, but ALPHA(j) and BETA(j) should be correct for */
+/*                j=INFO+1,...,N. */
+/*          > N:  =N+1: other than QZ iteration failed in ZHGEQZ */
+/*                =N+2: after reordering, roundoff changed values of */
+/*                      some complex eigenvalues so that leading */
+/*                      eigenvalues in the Generalized Schur form no */
+/*                      longer satisfy SELCTG=.TRUE.  This could also */
+/*                      be caused due to scaling. */
+/*                =N+3: reordering failed in ZTGSEN. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Local Arrays .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Decode the input arguments */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     b_dim1 = *ldb;
-    b_offset = 1 + b_dim1 * 1;
+    b_offset = 1 + b_dim1;
     b -= b_offset;
     --alpha;
     --beta;
     vsl_dim1 = *ldvsl;
-    vsl_offset = 1 + vsl_dim1 * 1;
+    vsl_offset = 1 + vsl_dim1;
     vsl -= vsl_offset;
     vsr_dim1 = *ldvsr;
-    vsr_offset = 1 + vsr_dim1 * 1;
+    vsr_offset = 1 + vsr_dim1;
     vsr -= vsr_offset;
     --rconde;
     --rcondv;
@@ -300,24 +343,24 @@
     /* Function Body */
     if (lsame_(jobvsl, "N")) {
 	ijobvl = 1;
-	ilvsl = FALSE_;
+	ilvsl = FALSE;
     } else if (lsame_(jobvsl, "V")) {
 	ijobvl = 2;
-	ilvsl = TRUE_;
+	ilvsl = TRUE;
     } else {
 	ijobvl = -1;
-	ilvsl = FALSE_;
+	ilvsl = FALSE;
     }
 
     if (lsame_(jobvsr, "N")) {
 	ijobvr = 1;
-	ilvsr = FALSE_;
+	ilvsr = FALSE;
     } else if (lsame_(jobvsr, "V")) {
 	ijobvr = 2;
-	ilvsr = TRUE_;
+	ilvsr = TRUE;
     } else {
 	ijobvr = -1;
-	ilvsr = FALSE_;
+	ilvsr = FALSE;
     }
 
     wantst = lsame_(sort, "S");
@@ -325,9 +368,9 @@
     wantse = lsame_(sense, "E");
     wantsv = lsame_(sense, "V");
     wantsb = lsame_(sense, "B");
+    lquery = *lwork == -1 || *liwork == -1;
     if (wantsn) {
 	ijob = 0;
-	iwork[1] = 1;
     } else if (wantse) {
 	ijob = 1;
     } else if (wantsv) {
@@ -350,9 +393,9 @@
 	*info = -5;
     } else if (*n < 0) {
 	*info = -6;
-    } else if (*lda < max(1,*n)) {
+    } else if (*lda < MAX(1,*n)) {
 	*info = -8;
-    } else if (*ldb < max(1,*n)) {
+    } else if (*ldb < MAX(1,*n)) {
 	*info = -10;
     } else if (*ldvsl < 1 || ilvsl && *ldvsl < *n) {
 	*info = -15;
@@ -360,39 +403,49 @@
 	*info = -17;
     }
 
-/*     Compute workspace   
-        (Note: Comments in the code beginning "Workspace:" describe the   
-         minimal amount of workspace needed at that point in the code,   
-         as well as the preferred amount for good performance.   
-         NB refers to the optimal block size for the immediately   
-         following subroutine, as returned by ILAENV.) */
+/*     Compute workspace */
+/*      (Note: Comments in the code beginning "Workspace:" describe the */
+/*       minimal amount of workspace needed at that point in the code, */
+/*       as well as the preferred amount for good performance. */
+/*       NB refers to the optimal block size for the immediately */
+/*       following subroutine, as returned by ILAENV.) */
 
-    minwrk = 1;
-    if (*info == 0 && *lwork >= 1) {
+    if (*info == 0) {
+	if (*n > 0) {
+	    minwrk = *n << 1;
+	    maxwrk = *n * (ilaenv_(&c__1, "ZGEQRF", " ", n, &c__1, n, &c__0) + 1);
 /* Computing MAX */
-	i__1 = 1, i__2 = *n << 1;
-	minwrk = max(i__1,i__2);
-	maxwrk = *n + *n * ilaenv_(&c__1, "ZGEQRF", " ", n, &c__1, n, &c__0, (
-		ftnlen)6, (ftnlen)1);
-	if (ilvsl) {
+	    i__1 = maxwrk, i__2 = *n * (ilaenv_(&c__1, "ZUNMQR", " ", n, &
+		    c__1, n, &c_n1) + 1);
+	    maxwrk = MAX(i__1,i__2);
+	    if (ilvsl) {
 /* Computing MAX */
-	    i__1 = maxwrk, i__2 = *n + *n * ilaenv_(&c__1, "ZUNGQR", " ", n, &
-		    c__1, n, &c_n1, (ftnlen)6, (ftnlen)1);
-	    maxwrk = max(i__1,i__2);
+		i__1 = maxwrk, i__2 = *n * (ilaenv_(&c__1, "ZUNGQR", " ", n, &
+			c__1, n, &c_n1) + 1);
+		maxwrk = MAX(i__1,i__2);
+	    }
+	    lwrk = maxwrk;
+	    if (ijob >= 1) {
+/* Computing MAX */
+		i__1 = lwrk, i__2 = *n * *n / 2;
+		lwrk = MAX(i__1,i__2);
+	    }
+	} else {
+	    minwrk = 1;
+	    maxwrk = 1;
+	    lwrk = 1;
 	}
-	work[1].r = (doublereal) maxwrk, work[1].i = 0.;
-    }
-    if (! wantsn) {
-	liwmin = *n + 2;
-    } else {
-	liwmin = 1;
-    }
-    iwork[1] = liwmin;
+	work[1].r = (double) lwrk, work[1].i = 0.;
+	if (wantsn || *n == 0) {
+	    liwmin = 1;
+	} else {
+	    liwmin = *n + 2;
+	}
+	iwork[1] = liwmin;
 
-    if (*info == 0 && *lwork < minwrk) {
-	*info = -21;
-    } else if (*info == 0 && ijob >= 1) {
-	if (*liwork < liwmin) {
+	if (*lwork < minwrk && ! lquery) {
+	    *info = -21;
+	} else if (*liwork < liwmin && ! lquery) {
 	    *info = -24;
 	}
     }
@@ -400,6 +453,8 @@
     if (*info != 0) {
 	i__1 = -(*info);
 	xerbla_("ZGGESX", &i__1);
+	return 0;
+    } else if (lquery) {
 	return 0;
     }
 
@@ -422,13 +477,13 @@
 /*     Scale A if max element outside range [SMLNUM,BIGNUM] */
 
     anrm = zlange_("M", n, n, &a[a_offset], lda, &rwork[1]);
-    ilascl = FALSE_;
+    ilascl = FALSE;
     if (anrm > 0. && anrm < smlnum) {
 	anrmto = smlnum;
-	ilascl = TRUE_;
+	ilascl = TRUE;
     } else if (anrm > bignum) {
 	anrmto = bignum;
-	ilascl = TRUE_;
+	ilascl = TRUE;
     }
     if (ilascl) {
 	zlascl_("G", &c__0, &c__0, &anrm, &anrmto, n, n, &a[a_offset], lda, &
@@ -438,21 +493,21 @@
 /*     Scale B if max element outside range [SMLNUM,BIGNUM] */
 
     bnrm = zlange_("M", n, n, &b[b_offset], ldb, &rwork[1]);
-    ilbscl = FALSE_;
+    ilbscl = FALSE;
     if (bnrm > 0. && bnrm < smlnum) {
 	bnrmto = smlnum;
-	ilbscl = TRUE_;
+	ilbscl = TRUE;
     } else if (bnrm > bignum) {
 	bnrmto = bignum;
-	ilbscl = TRUE_;
+	ilbscl = TRUE;
     }
     if (ilbscl) {
 	zlascl_("G", &c__0, &c__0, &bnrm, &bnrmto, n, n, &b[b_offset], ldb, &
 		ierr);
     }
 
-/*     Permute the matrix to make it more nearly triangular   
-       (Real Workspace: need 6*N) */
+/*     Permute the matrix to make it more nearly triangular */
+/*     (Real Workspace: need 6*N) */
 
     ileft = 1;
     iright = *n + 1;
@@ -460,36 +515,39 @@
     zggbal_("P", n, &a[a_offset], lda, &b[b_offset], ldb, &ilo, &ihi, &rwork[
 	    ileft], &rwork[iright], &rwork[irwrk], &ierr);
 
-/*     Reduce B to triangular form (QR decomposition of B)   
-       (Complex Workspace: need N, prefer N*NB) */
+/*     Reduce B to triangular form (QR decomposition of B) */
+/*     (Complex Workspace: need N, prefer N*NB) */
 
     irows = ihi + 1 - ilo;
     icols = *n + 1 - ilo;
     itau = 1;
     iwrk = itau + irows;
     i__1 = *lwork + 1 - iwrk;
-    zgeqrf_(&irows, &icols, &b_ref(ilo, ilo), ldb, &work[itau], &work[iwrk], &
-	    i__1, &ierr);
+    zgeqrf_(&irows, &icols, &b[ilo + ilo * b_dim1], ldb, &work[itau], &work[
+	    iwrk], &i__1, &ierr);
 
-/*     Apply the unitary transformation to matrix A   
-       (Complex Workspace: need N, prefer N*NB) */
+/*     Apply the unitary transformation to matrix A */
+/*     (Complex Workspace: need N, prefer N*NB) */
 
     i__1 = *lwork + 1 - iwrk;
-    zunmqr_("L", "C", &irows, &icols, &irows, &b_ref(ilo, ilo), ldb, &work[
-	    itau], &a_ref(ilo, ilo), lda, &work[iwrk], &i__1, &ierr);
+    zunmqr_("L", "C", &irows, &icols, &irows, &b[ilo + ilo * b_dim1], ldb, &
+	    work[itau], &a[ilo + ilo * a_dim1], lda, &work[iwrk], &i__1, &
+	    ierr);
 
-/*     Initialize VSL   
-       (Complex Workspace: need N, prefer N*NB) */
+/*     Initialize VSL */
+/*     (Complex Workspace: need N, prefer N*NB) */
 
     if (ilvsl) {
 	zlaset_("Full", n, n, &c_b1, &c_b2, &vsl[vsl_offset], ldvsl);
-	i__1 = irows - 1;
-	i__2 = irows - 1;
-	zlacpy_("L", &i__1, &i__2, &b_ref(ilo + 1, ilo), ldb, &vsl_ref(ilo + 
-		1, ilo), ldvsl);
+	if (irows > 1) {
+	    i__1 = irows - 1;
+	    i__2 = irows - 1;
+	    zlacpy_("L", &i__1, &i__2, &b[ilo + 1 + ilo * b_dim1], ldb, &vsl[
+		    ilo + 1 + ilo * vsl_dim1], ldvsl);
+	}
 	i__1 = *lwork + 1 - iwrk;
-	zungqr_(&irows, &irows, &irows, &vsl_ref(ilo, ilo), ldvsl, &work[itau]
-		, &work[iwrk], &i__1, &ierr);
+	zungqr_(&irows, &irows, &irows, &vsl[ilo + ilo * vsl_dim1], ldvsl, &
+		work[itau], &work[iwrk], &i__1, &ierr);
     }
 
 /*     Initialize VSR */
@@ -498,17 +556,17 @@
 	zlaset_("Full", n, n, &c_b1, &c_b2, &vsr[vsr_offset], ldvsr);
     }
 
-/*     Reduce to generalized Hessenberg form   
-       (Workspace: none needed) */
+/*     Reduce to generalized Hessenberg form */
+/*     (Workspace: none needed) */
 
     zgghrd_(jobvsl, jobvsr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], 
 	    ldb, &vsl[vsl_offset], ldvsl, &vsr[vsr_offset], ldvsr, &ierr);
 
     *sdim = 0;
 
-/*     Perform QZ algorithm, computing Schur vectors if desired   
-       (Complex Workspace: need N)   
-       (Real Workspace:    need N) */
+/*     Perform QZ algorithm, computing Schur vectors if desired */
+/*     (Complex Workspace: need N) */
+/*     (Real Workspace:    need N) */
 
     iwrk = itau;
     i__1 = *lwork + 1 - iwrk;
@@ -526,15 +584,15 @@
 	goto L40;
     }
 
-/*     Sort eigenvalues ALPHA/BETA and compute the reciprocal of   
-       condition number(s) */
+/*     Sort eigenvalues ALPHA/BETA and compute the reciprocal of */
+/*     condition number(s) */
 
     if (wantst) {
 
-/*        Undo scaling on eigenvalues before DELZTGing */
+/*        Undo scaling on eigenvalues before SELCTGing */
 
 	if (ilascl) {
-	    zlascl_("G", &c__0, &c__0, &anrmto, &anrm, n, &c__1, &alpha[1], n,
+	    zlascl_("G", &c__0, &c__0, &anrmto, &anrm, n, &c__1, &alpha[1], n, 
 		     &ierr);
 	}
 	if (ilbscl) {
@@ -546,14 +604,14 @@
 
 	i__1 = *n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    bwork[i__] = (*delctg)(&alpha[i__], &beta[i__]);
+	    bwork[i__] = (*selctg)(&alpha[i__], &beta[i__]);
 /* L10: */
 	}
 
-/*        Reorder eigenvalues, transform Generalized Schur vectors, and   
-          compute reciprocal condition numbers   
-          (Complex Workspace: If IJOB >= 1, need MAX(1, 2*SDIM*(N-SDIM))   
-                              otherwise, need 1 ) */
+/*        Reorder eigenvalues, transform Generalized Schur vectors, and */
+/*        compute reciprocal condition numbers */
+/*        (Complex Workspace: If IJOB >= 1, need MAX(1, 2*SDIM*(N-SDIM)) */
+/*                            otherwise, need 1 ) */
 
 	i__1 = *lwork - iwrk + 1;
 	ztgsen_(&ijob, &ilvsl, &ilvsr, &bwork[1], n, &a[a_offset], lda, &b[
@@ -564,7 +622,7 @@
 	if (ijob >= 1) {
 /* Computing MAX */
 	    i__1 = maxwrk, i__2 = (*sdim << 1) * (*n - *sdim);
-	    maxwrk = max(i__1,i__2);
+	    maxwrk = MAX(i__1,i__2);
 	}
 	if (ierr == -21) {
 
@@ -572,10 +630,14 @@
 
 	    *info = -21;
 	} else {
-	    rconde[1] = pl;
-	    rconde[2] = pl;
-	    rcondv[1] = dif[0];
-	    rcondv[2] = dif[1];
+	    if (ijob == 1 || ijob == 4) {
+		rconde[1] = pl;
+		rconde[2] = pr;
+	    }
+	    if (ijob == 2 || ijob == 4) {
+		rcondv[1] = dif[0];
+		rcondv[2] = dif[1];
+	    }
 	    if (ierr == 1) {
 		*info = *n + 3;
 	    }
@@ -583,8 +645,8 @@
 
     }
 
-/*     Apply permutation to VSL and VSR   
-       (Workspace: none needed) */
+/*     Apply permutation to VSL and VSR */
+/*     (Workspace: none needed) */
 
     if (ilvsl) {
 	zggbak_("P", "L", n, &ilo, &ihi, &rwork[ileft], &rwork[iright], n, &
@@ -612,17 +674,15 @@
 		ierr);
     }
 
-/* L20: */
-
     if (wantst) {
 
 /*        Check if reordering is correct */
 
-	lastsl = TRUE_;
+	lastsl = TRUE;
 	*sdim = 0;
 	i__1 = *n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    cursl = (*delctg)(&alpha[i__], &beta[i__]);
+	    cursl = (*selctg)(&alpha[i__], &beta[i__]);
 	    if (cursl) {
 		++(*sdim);
 	    }
@@ -637,7 +697,7 @@
 
 L40:
 
-    work[1].r = (doublereal) maxwrk, work[1].i = 0.;
+    work[1].r = (double) maxwrk, work[1].i = 0.;
     iwork[1] = liwmin;
 
     return 0;
@@ -645,12 +705,3 @@ L40:
 /*     End of ZGGESX */
 
 } /* zggesx_ */
-
-#undef vsl_ref
-#undef vsl_subscr
-#undef b_ref
-#undef b_subscr
-#undef a_ref
-#undef a_subscr
-
-

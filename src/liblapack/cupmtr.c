@@ -1,119 +1,143 @@
+/* cupmtr.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int cupmtr_(char *side, char *uplo, char *trans, integer *m, 
-	integer *n, complex *ap, complex *tau, complex *c__, integer *ldc, 
-	complex *work, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int cupmtr_(char *side, char *uplo, char *trans, int *m, 
+	int *n, complex *ap, complex *tau, complex *c__, int *ldc, 
+	complex *work, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
-
-
-    Purpose   
-    =======   
-
-    CUPMTR overwrites the general complex M-by-N matrix C with   
-
-                    SIDE = 'L'     SIDE = 'R'   
-    TRANS = 'N':      Q * C          C * Q   
-    TRANS = 'C':      Q**H * C       C * Q**H   
-
-    where Q is a complex unitary matrix of order nq, with nq = m if   
-    SIDE = 'L' and nq = n if SIDE = 'R'. Q is defined as the product of   
-    nq-1 elementary reflectors, as returned by CHPTRD using packed   
-    storage:   
-
-    if UPLO = 'U', Q = H(nq-1) . . . H(2) H(1);   
-
-    if UPLO = 'L', Q = H(1) H(2) . . . H(nq-1).   
-
-    Arguments   
-    =========   
-
-    SIDE    (input) CHARACTER*1   
-            = 'L': apply Q or Q**H from the Left;   
-            = 'R': apply Q or Q**H from the Right.   
-
-    UPLO    (input) CHARACTER*1   
-            = 'U': Upper triangular packed storage used in previous   
-                   call to CHPTRD;   
-            = 'L': Lower triangular packed storage used in previous   
-                   call to CHPTRD.   
-
-    TRANS   (input) CHARACTER*1   
-            = 'N':  No transpose, apply Q;   
-            = 'C':  Conjugate transpose, apply Q**H.   
-
-    M       (input) INTEGER   
-            The number of rows of the matrix C. M >= 0.   
-
-    N       (input) INTEGER   
-            The number of columns of the matrix C. N >= 0.   
-
-    AP      (input) COMPLEX array, dimension   
-                                 (M*(M+1)/2) if SIDE = 'L'   
-                                 (N*(N+1)/2) if SIDE = 'R'   
-            The vectors which define the elementary reflectors, as   
-            returned by CHPTRD.  AP is modified by the routine but   
-            restored on exit.   
-
-    TAU     (input) COMPLEX array, dimension (M-1) if SIDE = 'L'   
-                                       or (N-1) if SIDE = 'R'   
-            TAU(i) must contain the scalar factor of the elementary   
-            reflector H(i), as returned by CHPTRD.   
-
-    C       (input/output) COMPLEX array, dimension (LDC,N)   
-            On entry, the M-by-N matrix C.   
-            On exit, C is overwritten by Q*C or Q**H*C or C*Q**H or C*Q.   
-
-    LDC     (input) INTEGER   
-            The leading dimension of the array C. LDC >= max(1,M).   
-
-    WORK    (workspace) COMPLEX array, dimension   
-                                     (N) if SIDE = 'L'   
-                                     (M) if SIDE = 'R'   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-
-    =====================================================================   
-
-
-       Test the input arguments   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer c_dim1, c_offset, i__1, i__2, i__3;
+    int c_dim1, c_offset, i__1, i__2, i__3;
     complex q__1;
+
     /* Builtin functions */
     void r_cnjg(complex *, complex *);
+
     /* Local variables */
-    static logical left;
-    static complex taui;
-    static integer i__;
-    extern /* Subroutine */ int clarf_(char *, integer *, integer *, complex *
-	    , integer *, complex *, complex *, integer *, complex *);
-    extern logical lsame_(char *, char *);
-    static integer i1;
-    static logical upper;
-    static integer i2, i3, ic, jc, ii, mi, ni, nq;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static logical notran, forwrd;
-    static complex aii;
-#define c___subscr(a_1,a_2) (a_2)*c_dim1 + a_1
-#define c___ref(a_1,a_2) c__[c___subscr(a_1,a_2)]
+    int i__, i1, i2, i3, ic, jc, ii, mi, ni, nq;
+    complex aii;
+    int left;
+    complex taui;
+    extern  int clarf_(char *, int *, int *, complex *
+, int *, complex *, complex *, int *, complex *);
+    extern int lsame_(char *, char *);
+    int upper;
+    extern  int xerbla_(char *, int *);
+    int notran, forwrd;
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CUPMTR overwrites the general complex M-by-N matrix C with */
+
+/*                  SIDE = 'L'     SIDE = 'R' */
+/*  TRANS = 'N':      Q * C          C * Q */
+/*  TRANS = 'C':      Q**H * C       C * Q**H */
+
+/*  where Q is a complex unitary matrix of order nq, with nq = m if */
+/*  SIDE = 'L' and nq = n if SIDE = 'R'. Q is defined as the product of */
+/*  nq-1 elementary reflectors, as returned by CHPTRD using packed */
+/*  storage: */
+
+/*  if UPLO = 'U', Q = H(nq-1) . . . H(2) H(1); */
+
+/*  if UPLO = 'L', Q = H(1) H(2) . . . H(nq-1). */
+
+/*  Arguments */
+/*  ========= */
+
+/*  SIDE    (input) CHARACTER*1 */
+/*          = 'L': apply Q or Q**H from the Left; */
+/*          = 'R': apply Q or Q**H from the Right. */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U': Upper triangular packed storage used in previous */
+/*                 call to CHPTRD; */
+/*          = 'L': Lower triangular packed storage used in previous */
+/*                 call to CHPTRD. */
+
+/*  TRANS   (input) CHARACTER*1 */
+/*          = 'N':  No transpose, apply Q; */
+/*          = 'C':  Conjugate transpose, apply Q**H. */
+
+/*  M       (input) INTEGER */
+/*          The number of rows of the matrix C. M >= 0. */
+
+/*  N       (input) INTEGER */
+/*          The number of columns of the matrix C. N >= 0. */
+
+/*  AP      (input) COMPLEX array, dimension */
+/*                               (M*(M+1)/2) if SIDE = 'L' */
+/*                               (N*(N+1)/2) if SIDE = 'R' */
+/*          The vectors which define the elementary reflectors, as */
+/*          returned by CHPTRD.  AP is modified by the routine but */
+/*          restored on exit. */
+
+/*  TAU     (input) COMPLEX array, dimension (M-1) if SIDE = 'L' */
+/*                                     or (N-1) if SIDE = 'R' */
+/*          TAU(i) must contain the scalar factor of the elementary */
+/*          reflector H(i), as returned by CHPTRD. */
+
+/*  C       (input/output) COMPLEX array, dimension (LDC,N) */
+/*          On entry, the M-by-N matrix C. */
+/*          On exit, C is overwritten by Q*C or Q**H*C or C*Q**H or C*Q. */
+
+/*  LDC     (input) INTEGER */
+/*          The leading dimension of the array C. LDC >= MAX(1,M). */
+
+/*  WORK    (workspace) COMPLEX array, dimension */
+/*                                   (N) if SIDE = 'L' */
+/*                                   (M) if SIDE = 'R' */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input arguments */
+
+    /* Parameter adjustments */
     --ap;
     --tau;
     c_dim1 = *ldc;
-    c_offset = 1 + c_dim1 * 1;
+    c_offset = 1 + c_dim1;
     c__ -= c_offset;
     --work;
 
@@ -140,7 +164,7 @@
 	*info = -4;
     } else if (*n < 0) {
 	*info = -5;
-    } else if (*ldc < max(1,*m)) {
+    } else if (*ldc < MAX(1,*m)) {
 	*info = -9;
     }
     if (*info != 0) {
@@ -275,8 +299,8 @@
 		r_cnjg(&q__1, &tau[i__]);
 		taui.r = q__1.r, taui.i = q__1.i;
 	    }
-	    clarf_(side, &mi, &ni, &ap[ii], &c__1, &taui, &c___ref(ic, jc), 
-		    ldc, &work[1]);
+	    clarf_(side, &mi, &ni, &ap[ii], &c__1, &taui, &c__[ic + jc * 
+		    c_dim1], ldc, &work[1]);
 	    i__3 = ii;
 	    ap[i__3].r = aii.r, ap[i__3].i = aii.i;
 
@@ -293,8 +317,3 @@
 /*     End of CUPMTR */
 
 } /* cupmtr_ */
-
-#undef c___ref
-#undef c___subscr
-
-

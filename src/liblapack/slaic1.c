@@ -1,96 +1,121 @@
+/* slaic1.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int slaic1_(integer *job, integer *j, real *x, real *sest, 
-	real *w, real *gamma, real *sestpr, real *s, real *c__)
+/* Table of constant values */
+
+static int c__1 = 1;
+static float c_b5 = 1.f;
+
+ int slaic1_(int *job, int *j, float *x, float *sest, 
+	float *w, float *gamma, float *sestpr, float *s, float *c__)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1992   
-
-
-    Purpose   
-    =======   
-
-    SLAIC1 applies one step of incremental condition estimation in   
-    its simplest version:   
-
-    Let x, twonorm(x) = 1, be an approximate singular vector of an j-by-j   
-    lower triangular matrix L, such that   
-             twonorm(L*x) = sest   
-    Then SLAIC1 computes sestpr, s, c such that   
-    the vector   
-                    [ s*x ]   
-             xhat = [  c  ]   
-    is an approximate singular vector of   
-                    [ L     0  ]   
-             Lhat = [ w' gamma ]   
-    in the sense that   
-             twonorm(Lhat*xhat) = sestpr.   
-
-    Depending on JOB, an estimate for the largest or smallest singular   
-    value is computed.   
-
-    Note that [s c]' and sestpr**2 is an eigenpair of the system   
-
-        diag(sest*sest, 0) + [alpha  gamma] * [ alpha ]   
-                                              [ gamma ]   
-
-    where  alpha =  x'*w.   
-
-    Arguments   
-    =========   
-
-    JOB     (input) INTEGER   
-            = 1: an estimate for the largest singular value is computed.   
-            = 2: an estimate for the smallest singular value is computed.   
-
-    J       (input) INTEGER   
-            Length of X and W   
-
-    X       (input) REAL array, dimension (J)   
-            The j-vector x.   
-
-    SEST    (input) REAL   
-            Estimated singular value of j by j matrix L   
-
-    W       (input) REAL array, dimension (J)   
-            The j-vector w.   
-
-    GAMMA   (input) REAL   
-            The diagonal element gamma.   
-
-    SESTPR  (output) REAL   
-            Estimated singular value of (j+1) by (j+1) matrix Lhat.   
-
-    S       (output) REAL   
-            Sine needed in forming xhat.   
-
-    C       (output) REAL   
-            Cosine needed in forming xhat.   
-
-    =====================================================================   
-
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    static real c_b5 = 1.f;
-    
     /* System generated locals */
-    real r__1, r__2, r__3, r__4;
+    float r__1, r__2, r__3, r__4;
+
     /* Builtin functions */
-    double sqrt(doublereal), r_sign(real *, real *);
+    double sqrt(double), r_sign(float *, float *);
+
     /* Local variables */
-    static real sine;
-    extern doublereal sdot_(integer *, real *, integer *, real *, integer *);
-    static real test, zeta1, zeta2, b, t, alpha, norma, s1, s2, absgam, 
-	    absalp;
-    extern doublereal slamch_(char *);
-    static real cosine, absest, eps, tmp;
+    float b, t, s1, s2, eps, tmp, sine;
+    extern double sdot_(int *, float *, int *, float *, int *);
+    float test, zeta1, zeta2, alpha, norma, absgam, absalp;
+    extern double slamch_(char *);
+    float cosine, absest;
 
 
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  SLAIC1 applies one step of incremental condition estimation in */
+/*  its simplest version: */
+
+/*  Let x, twonorm(x) = 1, be an approximate singular vector of an j-by-j */
+/*  lower triangular matrix L, such that */
+/*           twonorm(L*x) = sest */
+/*  Then SLAIC1 computes sestpr, s, c such that */
+/*  the vector */
+/*                  [ s*x ] */
+/*           xhat = [  c  ] */
+/*  is an approximate singular vector of */
+/*                  [ L     0  ] */
+/*           Lhat = [ w' gamma ] */
+/*  in the sense that */
+/*           twonorm(Lhat*xhat) = sestpr. */
+
+/*  Depending on JOB, an estimate for the largest or smallest singular */
+/*  value is computed. */
+
+/*  Note that [s c]' and sestpr**2 is an eigenpair of the system */
+
+/*      diag(sest*sest, 0) + [alpha  gamma] * [ alpha ] */
+/*                                            [ gamma ] */
+
+/*  where  alpha =  x'*w. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  JOB     (input) INTEGER */
+/*          = 1: an estimate for the largest singular value is computed. */
+/*          = 2: an estimate for the smallest singular value is computed. */
+
+/*  J       (input) INTEGER */
+/*          Length of X and W */
+
+/*  X       (input) REAL array, dimension (J) */
+/*          The j-vector x. */
+
+/*  SEST    (input) REAL */
+/*          Estimated singular value of j by j matrix L */
+
+/*  W       (input) REAL array, dimension (J) */
+/*          The j-vector w. */
+
+/*  GAMMA   (input) REAL */
+/*          The diagonal element gamma. */
+
+/*  SESTPR  (output) REAL */
+/*          Estimated singular value of (j+1) by (j+1) matrix Lhat. */
+
+/*  S       (output) REAL */
+/*          Sine needed in forming xhat. */
+
+/*  C       (output) REAL */
+/*          Cosine needed in forming xhat. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     --w;
     --x;
 
@@ -98,18 +123,18 @@
     eps = slamch_("Epsilon");
     alpha = sdot_(j, &x[1], &c__1, &w[1], &c__1);
 
-    absalp = dabs(alpha);
-    absgam = dabs(*gamma);
-    absest = dabs(*sest);
+    absalp = ABS(alpha);
+    absgam = ABS(*gamma);
+    absest = ABS(*sest);
 
     if (*job == 1) {
 
-/*        Estimating largest singular value   
+/*        Estimating largest singular value */
 
-          special cases */
+/*        special cases */
 
 	if (*sest == 0.f) {
-	    s1 = dmax(absgam,absalp);
+	    s1 = MAX(absgam,absalp);
 	    if (s1 == 0.f) {
 		*s = 0.f;
 		*c__ = 1.f;
@@ -126,7 +151,7 @@
 	} else if (absgam <= eps * absest) {
 	    *s = 1.f;
 	    *c__ = 0.f;
-	    tmp = dmax(absest,absalp);
+	    tmp = MAX(absest,absalp);
 	    s1 = absest / tmp;
 	    s2 = absalp / tmp;
 	    *sestpr = tmp * sqrt(s1 * s1 + s2 * s2);
@@ -187,13 +212,13 @@
 
     } else if (*job == 2) {
 
-/*        Estimating smallest singular value   
+/*        Estimating smallest singular value */
 
-          special cases */
+/*        special cases */
 
 	if (*sest == 0.f) {
 	    *sestpr = 0.f;
-	    if (dmax(absgam,absalp) == 0.f) {
+	    if (MAX(absgam,absalp) == 0.f) {
 		sine = 1.f;
 		cosine = 0.f;
 	    } else {
@@ -201,8 +226,8 @@
 		cosine = alpha;
 	    }
 /* Computing MAX */
-	    r__1 = dabs(sine), r__2 = dabs(cosine);
-	    s1 = dmax(r__1,r__2);
+	    r__1 = ABS(sine), r__2 = ABS(cosine);
+	    s1 = MAX(r__1,r__2);
 	    *s = sine / s1;
 	    *c__ = cosine / s1;
 	    tmp = sqrt(*s * *s + *c__ * *c__);
@@ -252,9 +277,9 @@
 	    zeta2 = *gamma / absest;
 
 /* Computing MAX */
-	    r__3 = zeta1 * zeta1 + 1.f + (r__1 = zeta1 * zeta2, dabs(r__1)), 
-		    r__4 = (r__2 = zeta1 * zeta2, dabs(r__2)) + zeta2 * zeta2;
-	    norma = dmax(r__3,r__4);
+	    r__3 = zeta1 * zeta1 + 1.f + (r__1 = zeta1 * zeta2, ABS(r__1)), 
+		    r__4 = (r__2 = zeta1 * zeta2, ABS(r__2)) + zeta2 * zeta2;
+	    norma = MAX(r__3,r__4);
 
 /*           See if root is closer to zero or to ONE */
 
@@ -265,7 +290,7 @@
 
 		b = (zeta1 * zeta1 + zeta2 * zeta2 + 1.f) * .5f;
 		*c__ = zeta2 * zeta2;
-		t = *c__ / (b + sqrt((r__1 = b * b - *c__, dabs(r__1))));
+		t = *c__ / (b + sqrt((r__1 = b * b - *c__, ABS(r__1))));
 		sine = zeta1 / (1.f - t);
 		cosine = -zeta2 / t;
 		*sestpr = sqrt(t + eps * 4.f * eps * norma) * absest;
@@ -296,4 +321,3 @@
 /*     End of SLAIC1 */
 
 } /* slaic1_ */
-

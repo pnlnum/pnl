@@ -1,391 +1,414 @@
+/* ztgsen.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int ztgsen_(integer *ijob, logical *wantq, logical *wantz, 
-	logical *select, integer *n, doublecomplex *a, integer *lda, 
-	doublecomplex *b, integer *ldb, doublecomplex *alpha, doublecomplex *
-	beta, doublecomplex *q, integer *ldq, doublecomplex *z__, integer *
-	ldz, integer *m, doublereal *pl, doublereal *pr, doublereal *dif, 
-	doublecomplex *work, integer *lwork, integer *iwork, integer *liwork, 
-	integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int ztgsen_(int *ijob, int *wantq, int *wantz, 
+	int *select, int *n, doublecomplex *a, int *lda, 
+	doublecomplex *b, int *ldb, doublecomplex *alpha, doublecomplex *
+	beta, doublecomplex *q, int *ldq, doublecomplex *z__, int *
+	ldz, int *m, double *pl, double *pr, double *dif, 
+	doublecomplex *work, int *lwork, int *iwork, int *liwork, 
+	int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    ZTGSEN reorders the generalized Schur decomposition of a complex   
-    matrix pair (A, B) (in terms of an unitary equivalence trans-   
-    formation Q' * (A, B) * Z), so that a selected cluster of eigenvalues   
-    appears in the leading diagonal blocks of the pair (A,B). The leading   
-    columns of Q and Z form unitary bases of the corresponding left and   
-    right eigenspaces (deflating subspaces). (A, B) must be in   
-    generalized Schur canonical form, that is, A and B are both upper   
-    triangular.   
-
-    ZTGSEN also computes the generalized eigenvalues   
-
-             w(j)= ALPHA(j) / BETA(j)   
-
-    of the reordered matrix pair (A, B).   
-
-    Optionally, the routine computes estimates of reciprocal condition   
-    numbers for eigenvalues and eigenspaces. These are Difu[(A11,B11),   
-    (A22,B22)] and Difl[(A11,B11), (A22,B22)], i.e. the separation(s)   
-    between the matrix pairs (A11, B11) and (A22,B22) that correspond to   
-    the selected cluster and the eigenvalues outside the cluster, resp.,   
-    and norms of "projections" onto left and right eigenspaces w.r.t.   
-    the selected cluster in the (1,1)-block.   
-
-
-    Arguments   
-    =========   
-
-    IJOB    (input) integer   
-            Specifies whether condition numbers are required for the   
-            cluster of eigenvalues (PL and PR) or the deflating subspaces   
-            (Difu and Difl):   
-             =0: Only reorder w.r.t. SELECT. No extras.   
-             =1: Reciprocal of norms of "projections" onto left and right   
-                 eigenspaces w.r.t. the selected cluster (PL and PR).   
-             =2: Upper bounds on Difu and Difl. F-norm-based estimate   
-                 (DIF(1:2)).   
-             =3: Estimate of Difu and Difl. 1-norm-based estimate   
-                 (DIF(1:2)).   
-                 About 5 times as expensive as IJOB = 2.   
-             =4: Compute PL, PR and DIF (i.e. 0, 1 and 2 above): Economic   
-                 version to get it all.   
-             =5: Compute PL, PR and DIF (i.e. 0, 1 and 3 above)   
-
-    WANTQ   (input) LOGICAL   
-            .TRUE. : update the left transformation matrix Q;   
-            .FALSE.: do not update Q.   
-
-    WANTZ   (input) LOGICAL   
-            .TRUE. : update the right transformation matrix Z;   
-            .FALSE.: do not update Z.   
-
-    SELECT  (input) LOGICAL array, dimension (N)   
-            SELECT specifies the eigenvalues in the selected cluster. To   
-            select an eigenvalue w(j), SELECT(j) must be set to   
-            .TRUE..   
-
-    N       (input) INTEGER   
-            The order of the matrices A and B. N >= 0.   
-
-    A       (input/output) COMPLEX*16 array, dimension(LDA,N)   
-            On entry, the upper triangular matrix A, in generalized   
-            Schur canonical form.   
-            On exit, A is overwritten by the reordered matrix A.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A. LDA >= max(1,N).   
-
-    B       (input/output) COMPLEX*16 array, dimension(LDB,N)   
-            On entry, the upper triangular matrix B, in generalized   
-            Schur canonical form.   
-            On exit, B is overwritten by the reordered matrix B.   
-
-    LDB     (input) INTEGER   
-            The leading dimension of the array B. LDB >= max(1,N).   
-
-    ALPHA   (output) COMPLEX*16 array, dimension (N)   
-    BETA    (output) COMPLEX*16 array, dimension (N)   
-            The diagonal elements of A and B, respectively,   
-            when the pair (A,B) has been reduced to generalized Schur   
-            form.  ALPHA(i)/BETA(i) i=1,...,N are the generalized   
-            eigenvalues.   
-
-    Q       (input/output) COMPLEX*16 array, dimension (LDQ,N)   
-            On entry, if WANTQ = .TRUE., Q is an N-by-N matrix.   
-            On exit, Q has been postmultiplied by the left unitary   
-            transformation matrix which reorder (A, B); The leading M   
-            columns of Q form orthonormal bases for the specified pair of   
-            left eigenspaces (deflating subspaces).   
-            If WANTQ = .FALSE., Q is not referenced.   
-
-    LDQ     (input) INTEGER   
-            The leading dimension of the array Q. LDQ >= 1.   
-            If WANTQ = .TRUE., LDQ >= N.   
-
-    Z       (input/output) COMPLEX*16 array, dimension (LDZ,N)   
-            On entry, if WANTZ = .TRUE., Z is an N-by-N matrix.   
-            On exit, Z has been postmultiplied by the left unitary   
-            transformation matrix which reorder (A, B); The leading M   
-            columns of Z form orthonormal bases for the specified pair of   
-            left eigenspaces (deflating subspaces).   
-            If WANTZ = .FALSE., Z is not referenced.   
-
-    LDZ     (input) INTEGER   
-            The leading dimension of the array Z. LDZ >= 1.   
-            If WANTZ = .TRUE., LDZ >= N.   
-
-    M       (output) INTEGER   
-            The dimension of the specified pair of left and right   
-            eigenspaces, (deflating subspaces) 0 <= M <= N.   
-
-    PL, PR  (output) DOUBLE PRECISION   
-            If IJOB = 1, 4 or 5, PL, PR are lower bounds on the   
-            reciprocal  of the norm of "projections" onto left and right   
-            eigenspace with respect to the selected cluster.   
-            0 < PL, PR <= 1.   
-            If M = 0 or M = N, PL = PR  = 1.   
-            If IJOB = 0, 2 or 3 PL, PR are not referenced.   
-
-    DIF     (output) DOUBLE PRECISION array, dimension (2).   
-            If IJOB >= 2, DIF(1:2) store the estimates of Difu and Difl.   
-            If IJOB = 2 or 4, DIF(1:2) are F-norm-based upper bounds on   
-            Difu and Difl. If IJOB = 3 or 5, DIF(1:2) are 1-norm-based   
-            estimates of Difu and Difl, computed using reversed   
-            communication with ZLACON.   
-            If M = 0 or N, DIF(1:2) = F-norm([A, B]).   
-            If IJOB = 0 or 1, DIF is not referenced.   
-
-    WORK    (workspace/output) COMPLEX*16 array, dimension (LWORK)   
-            IF IJOB = 0, WORK is not referenced.  Otherwise,   
-            on exit, if INFO = 0, WORK(1) returns the optimal LWORK.   
-
-    LWORK   (input) INTEGER   
-            The dimension of the array WORK. LWORK >=  1   
-            If IJOB = 1, 2 or 4, LWORK >=  2*M*(N-M)   
-            If IJOB = 3 or 5, LWORK >=  4*M*(N-M)   
-
-            If LWORK = -1, then a workspace query is assumed; the routine   
-            only calculates the optimal size of the WORK array, returns   
-            this value as the first entry of the WORK array, and no error   
-            message related to LWORK is issued by XERBLA.   
-
-    IWORK   (workspace/output) INTEGER, dimension (LIWORK)   
-            IF IJOB = 0, IWORK is not referenced.  Otherwise,   
-            on exit, if INFO = 0, IWORK(1) returns the optimal LIWORK.   
-
-    LIWORK  (input) INTEGER   
-            The dimension of the array IWORK. LIWORK >= 1.   
-            If IJOB = 1, 2 or 4, LIWORK >=  N+2;   
-            If IJOB = 3 or 5, LIWORK >= MAX(N+2, 2*M*(N-M));   
-
-            If LIWORK = -1, then a workspace query is assumed; the   
-            routine only calculates the optimal size of the IWORK array,   
-            returns this value as the first entry of the IWORK array, and   
-            no error message related to LIWORK is issued by XERBLA.   
-
-    INFO    (output) INTEGER   
-              =0: Successful exit.   
-              <0: If INFO = -i, the i-th argument had an illegal value.   
-              =1: Reordering of (A, B) failed because the transformed   
-                  matrix pair (A, B) would be too far from generalized   
-                  Schur form; the problem is very ill-conditioned.   
-                  (A, B) may have been partially reordered.   
-                  If requested, 0 is returned in DIF(*), PL and PR.   
-
-
-    Further Details   
-    ===============   
-
-    ZTGSEN first collects the selected eigenvalues by computing unitary   
-    U and W that move them to the top left corner of (A, B). In other   
-    words, the selected eigenvalues are the eigenvalues of (A11, B11) in   
-
-                  U'*(A, B)*W = (A11 A12) (B11 B12) n1   
-                                ( 0  A22),( 0  B22) n2   
-                                  n1  n2    n1  n2   
-
-    where N = n1+n2 and U' means the conjugate transpose of U. The first   
-    n1 columns of U and W span the specified pair of left and right   
-    eigenspaces (deflating subspaces) of (A, B).   
-
-    If (A, B) has been obtained from the generalized real Schur   
-    decomposition of a matrix pair (C, D) = Q*(A, B)*Z', then the   
-    reordered generalized Schur form of (C, D) is given by   
-
-             (C, D) = (Q*U)*(U'*(A, B)*W)*(Z*W)',   
-
-    and the first n1 columns of Q*U and Z*W span the corresponding   
-    deflating subspaces of (C, D) (Q and Z store Q*U and Z*W, resp.).   
-
-    Note that if the selected eigenvalue is sufficiently ill-conditioned,   
-    then its value may differ significantly from its value before   
-    reordering.   
-
-    The reciprocal condition numbers of the left and right eigenspaces   
-    spanned by the first n1 columns of U and W (or Q*U and Z*W) may   
-    be returned in DIF(1:2), corresponding to Difu and Difl, resp.   
-
-    The Difu and Difl are defined as:   
-
-         Difu[(A11, B11), (A22, B22)] = sigma-min( Zu )   
-    and   
-         Difl[(A11, B11), (A22, B22)] = Difu[(A22, B22), (A11, B11)],   
-
-    where sigma-min(Zu) is the smallest singular value of the   
-    (2*n1*n2)-by-(2*n1*n2) matrix   
-
-         Zu = [ kron(In2, A11)  -kron(A22', In1) ]   
-              [ kron(In2, B11)  -kron(B22', In1) ].   
-
-    Here, Inx is the identity matrix of size nx and A22' is the   
-    transpose of A22. kron(X, Y) is the Kronecker product between   
-    the matrices X and Y.   
-
-    When DIF(2) is small, small changes in (A, B) can cause large changes   
-    in the deflating subspace. An approximate (asymptotic) bound on the   
-    maximum angular error in the computed deflating subspaces is   
-
-         EPS * norm((A, B)) / DIF(2),   
-
-    where EPS is the machine precision.   
-
-    The reciprocal norm of the projectors on the left and right   
-    eigenspaces associated with (A11, B11) may be returned in PL and PR.   
-    They are computed as follows. First we compute L and R so that   
-    P*(A, B)*Q is block diagonal, where   
-
-         P = ( I -L ) n1           Q = ( I R ) n1   
-             ( 0  I ) n2    and        ( 0 I ) n2   
-               n1 n2                    n1 n2   
-
-    and (L, R) is the solution to the generalized Sylvester equation   
-
-         A11*R - L*A22 = -A12   
-         B11*R - L*B22 = -B12   
-
-    Then PL = (F-norm(L)**2+1)**(-1/2) and PR = (F-norm(R)**2+1)**(-1/2).   
-    An approximate (asymptotic) bound on the average absolute error of   
-    the selected eigenvalues is   
-
-         EPS * norm((A, B)) / PL.   
-
-    There are also global error bounds which valid for perturbations up   
-    to a certain restriction:  A lower bound (x) on the smallest   
-    F-norm(E,F) for which an eigenvalue of (A11, B11) may move and   
-    coalesce with an eigenvalue of (A22, B22) under perturbation (E,F),   
-    (i.e. (A + E, B + F), is   
-
-     x = min(Difu,Difl)/((1/(PL*PL)+1/(PR*PR))**(1/2)+2*max(1/PL,1/PR)).   
-
-    An approximate bound on x can be computed from DIF(1:2), PL and PR.   
-
-    If y = ( F-norm(E,F) / x) <= 1, the angles between the perturbed   
-    (L', R') and unperturbed (L, R) left and right deflating subspaces   
-    associated with the selected cluster in the (1,1)-blocks can be   
-    bounded as   
-
-     max-angle(L, L') <= arctan( y * PL / (1 - y * (1 - PL * PL)**(1/2))   
-     max-angle(R, R') <= arctan( y * PR / (1 - y * (1 - PR * PR)**(1/2))   
-
-    See LAPACK User's Guide section 4.11 or the following references   
-    for more information.   
-
-    Note that if the default method for computing the Frobenius-norm-   
-    based estimate DIF is not wanted (see ZLATDF), then the parameter   
-    IDIFJB (see below) should be changed from 3 to 4 (routine ZLATDF   
-    (IJOB = 2 will be used)). See ZTGSYL for more details.   
-
-    Based on contributions by   
-       Bo Kagstrom and Peter Poromaa, Department of Computing Science,   
-       Umea University, S-901 87 Umea, Sweden.   
-
-    References   
-    ==========   
-
-    [1] B. Kagstrom; A Direct Method for Reordering Eigenvalues in the   
-        Generalized Real Schur Form of a Regular Matrix Pair (A, B), in   
-        M.S. Moonen et al (eds), Linear Algebra for Large Scale and   
-        Real-Time Applications, Kluwer Academic Publ. 1993, pp 195-218.   
-
-    [2] B. Kagstrom and P. Poromaa; Computing Eigenspaces with Specified   
-        Eigenvalues of a Regular Matrix Pair (A, B) and Condition   
-        Estimation: Theory, Algorithms and Software, Report   
-        UMINF - 94.04, Department of Computing Science, Umea University,   
-        S-901 87 Umea, Sweden, 1994. Also as LAPACK Working Note 87.   
-        To appear in Numerical Algorithms, 1996.   
-
-    [3] B. Kagstrom and P. Poromaa, LAPACK-Style Algorithms and Software   
-        for Solving the Generalized Sylvester Equation and Estimating the   
-        Separation between Regular Matrix Pairs, Report UMINF - 93.23,   
-        Department of Computing Science, Umea University, S-901 87 Umea,   
-        Sweden, December 1993, Revised April 1994, Also as LAPACK working   
-        Note 75. To appear in ACM Trans. on Math. Software, Vol 22, No 1,   
-        1996.   
-
-    =====================================================================   
-
-
-       Decode and test the input parameters   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, 
+    int a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, 
 	    z_offset, i__1, i__2, i__3;
     doublecomplex z__1, z__2;
+
     /* Builtin functions */
-    double sqrt(doublereal), z_abs(doublecomplex *);
+    double sqrt(double), z_ABS(doublecomplex *);
     void d_cnjg(doublecomplex *, doublecomplex *);
+
     /* Local variables */
-    static integer kase, ierr;
-    static doublereal dsum;
-    static logical swap;
-    static integer i__, k;
-    extern /* Subroutine */ int zscal_(integer *, doublecomplex *, 
-	    doublecomplex *, integer *);
-    static logical wantd;
-    static integer lwmin;
-    static logical wantp;
-    static integer n1, n2;
-    static logical wantd1, wantd2;
-    extern doublereal dlamch_(char *);
-    static doublereal dscale;
-    static integer ks;
-    static doublereal rdscal, safmin;
-    extern /* Subroutine */ int xerbla_(char *, integer *), zlacon_(
-	    integer *, doublecomplex *, doublecomplex *, doublereal *, 
-	    integer *);
-    static integer liwmin;
-    extern /* Subroutine */ int zlacpy_(char *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *), 
-	    ztgexc_(logical *, logical *, integer *, doublecomplex *, integer 
-	    *, doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, integer *, integer *, integer *);
-    static integer mn2;
-    extern /* Subroutine */ int zlassq_(integer *, doublecomplex *, integer *,
-	     doublereal *, doublereal *);
-    static logical lquery;
-    extern /* Subroutine */ int ztgsyl_(char *, integer *, integer *, integer 
-	    *, doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublereal *, doublereal *, doublecomplex *, integer *, integer *,
-	     integer *);
-    static integer ijb;
-#define a_subscr(a_1,a_2) (a_2)*a_dim1 + a_1
-#define a_ref(a_1,a_2) a[a_subscr(a_1,a_2)]
-#define b_subscr(a_1,a_2) (a_2)*b_dim1 + a_1
-#define b_ref(a_1,a_2) b[b_subscr(a_1,a_2)]
-#define q_subscr(a_1,a_2) (a_2)*q_dim1 + a_1
-#define q_ref(a_1,a_2) q[q_subscr(a_1,a_2)]
+    int i__, k, n1, n2, ks, mn2, ijb, kase, ierr;
+    double dsum;
+    int swap;
+    doublecomplex temp1, temp2;
+    int isave[3];
+    extern  int zscal_(int *, doublecomplex *, 
+	    doublecomplex *, int *);
+    int wantd;
+    int lwmin;
+    int wantp;
+    extern  int zlacn2_(int *, doublecomplex *, 
+	    doublecomplex *, double *, int *, int *);
+    int wantd1, wantd2;
+    extern double dlamch_(char *);
+    double dscale, rdscal, safmin;
+    extern  int xerbla_(char *, int *);
+    int liwmin;
+    extern  int zlacpy_(char *, int *, int *, 
+	    doublecomplex *, int *, doublecomplex *, int *), 
+	    ztgexc_(int *, int *, int *, doublecomplex *, int 
+	    *, doublecomplex *, int *, doublecomplex *, int *, 
+	    doublecomplex *, int *, int *, int *, int *), 
+	    zlassq_(int *, doublecomplex *, int *, double *, 
+	    double *);
+    int lquery;
+    extern  int ztgsyl_(char *, int *, int *, int 
+	    *, doublecomplex *, int *, doublecomplex *, int *, 
+	    doublecomplex *, int *, doublecomplex *, int *, 
+	    doublecomplex *, int *, doublecomplex *, int *, 
+	    double *, double *, doublecomplex *, int *, int *, 
+	     int *);
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     January 2007 */
+
+/*     Modified to call ZLACN2 in place of ZLACON, 10 Feb 03, SJH. */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZTGSEN reorders the generalized Schur decomposition of a complex */
+/*  matrix pair (A, B) (in terms of an unitary equivalence trans- */
+/*  formation Q' * (A, B) * Z), so that a selected cluster of eigenvalues */
+/*  appears in the leading diagonal blocks of the pair (A,B). The leading */
+/*  columns of Q and Z form unitary bases of the corresponding left and */
+/*  right eigenspaces (deflating subspaces). (A, B) must be in */
+/*  generalized Schur canonical form, that is, A and B are both upper */
+/*  triangular. */
+
+/*  ZTGSEN also computes the generalized eigenvalues */
+
+/*           w(j)= ALPHA(j) / BETA(j) */
+
+/*  of the reordered matrix pair (A, B). */
+
+/*  Optionally, the routine computes estimates of reciprocal condition */
+/*  numbers for eigenvalues and eigenspaces. These are Difu[(A11,B11), */
+/*  (A22,B22)] and Difl[(A11,B11), (A22,B22)], i.e. the separation(s) */
+/*  between the matrix pairs (A11, B11) and (A22,B22) that correspond to */
+/*  the selected cluster and the eigenvalues outside the cluster, resp., */
+/*  and norms of "projections" onto left and right eigenspaces w.r.t. */
+/*  the selected cluster in the (1,1)-block. */
+
+
+/*  Arguments */
+/*  ========= */
+
+/*  IJOB    (input) int */
+/*          Specifies whether condition numbers are required for the */
+/*          cluster of eigenvalues (PL and PR) or the deflating subspaces */
+/*          (Difu and Difl): */
+/*           =0: Only reorder w.r.t. SELECT. No extras. */
+/*           =1: Reciprocal of norms of "projections" onto left and right */
+/*               eigenspaces w.r.t. the selected cluster (PL and PR). */
+/*           =2: Upper bounds on Difu and Difl. F-norm-based estimate */
+/*               (DIF(1:2)). */
+/*           =3: Estimate of Difu and Difl. 1-norm-based estimate */
+/*               (DIF(1:2)). */
+/*               About 5 times as expensive as IJOB = 2. */
+/*           =4: Compute PL, PR and DIF (i.e. 0, 1 and 2 above): Economic */
+/*               version to get it all. */
+/*           =5: Compute PL, PR and DIF (i.e. 0, 1 and 3 above) */
+
+/*  WANTQ   (input) LOGICAL */
+/*          .TRUE. : update the left transformation matrix Q; */
+/*          .FALSE.: do not update Q. */
+
+/*  WANTZ   (input) LOGICAL */
+/*          .TRUE. : update the right transformation matrix Z; */
+/*          .FALSE.: do not update Z. */
+
+/*  SELECT  (input) LOGICAL array, dimension (N) */
+/*          SELECT specifies the eigenvalues in the selected cluster. To */
+/*          select an eigenvalue w(j), SELECT(j) must be set to */
+/*          .TRUE.. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrices A and B. N >= 0. */
+
+/*  A       (input/output) COMPLEX*16 array, dimension(LDA,N) */
+/*          On entry, the upper triangular matrix A, in generalized */
+/*          Schur canonical form. */
+/*          On exit, A is overwritten by the reordered matrix A. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A. LDA >= MAX(1,N). */
+
+/*  B       (input/output) COMPLEX*16 array, dimension(LDB,N) */
+/*          On entry, the upper triangular matrix B, in generalized */
+/*          Schur canonical form. */
+/*          On exit, B is overwritten by the reordered matrix B. */
+
+/*  LDB     (input) INTEGER */
+/*          The leading dimension of the array B. LDB >= MAX(1,N). */
+
+/*  ALPHA   (output) COMPLEX*16 array, dimension (N) */
+/*  BETA    (output) COMPLEX*16 array, dimension (N) */
+/*          The diagonal elements of A and B, respectively, */
+/*          when the pair (A,B) has been reduced to generalized Schur */
+/*          form.  ALPHA(i)/BETA(i) i=1,...,N are the generalized */
+/*          eigenvalues. */
+
+/*  Q       (input/output) COMPLEX*16 array, dimension (LDQ,N) */
+/*          On entry, if WANTQ = .TRUE., Q is an N-by-N matrix. */
+/*          On exit, Q has been postmultiplied by the left unitary */
+/*          transformation matrix which reorder (A, B); The leading M */
+/*          columns of Q form orthonormal bases for the specified pair of */
+/*          left eigenspaces (deflating subspaces). */
+/*          If WANTQ = .FALSE., Q is not referenced. */
+
+/*  LDQ     (input) INTEGER */
+/*          The leading dimension of the array Q. LDQ >= 1. */
+/*          If WANTQ = .TRUE., LDQ >= N. */
+
+/*  Z       (input/output) COMPLEX*16 array, dimension (LDZ,N) */
+/*          On entry, if WANTZ = .TRUE., Z is an N-by-N matrix. */
+/*          On exit, Z has been postmultiplied by the left unitary */
+/*          transformation matrix which reorder (A, B); The leading M */
+/*          columns of Z form orthonormal bases for the specified pair of */
+/*          left eigenspaces (deflating subspaces). */
+/*          If WANTZ = .FALSE., Z is not referenced. */
+
+/*  LDZ     (input) INTEGER */
+/*          The leading dimension of the array Z. LDZ >= 1. */
+/*          If WANTZ = .TRUE., LDZ >= N. */
+
+/*  M       (output) INTEGER */
+/*          The dimension of the specified pair of left and right */
+/*          eigenspaces, (deflating subspaces) 0 <= M <= N. */
+
+/*  PL      (output) DOUBLE PRECISION */
+/*  PR      (output) DOUBLE PRECISION */
+/*          If IJOB = 1, 4 or 5, PL, PR are lower bounds on the */
+/*          reciprocal  of the norm of "projections" onto left and right */
+/*          eigenspace with respect to the selected cluster. */
+/*          0 < PL, PR <= 1. */
+/*          If M = 0 or M = N, PL = PR  = 1. */
+/*          If IJOB = 0, 2 or 3 PL, PR are not referenced. */
+
+/*  DIF     (output) DOUBLE PRECISION array, dimension (2). */
+/*          If IJOB >= 2, DIF(1:2) store the estimates of Difu and Difl. */
+/*          If IJOB = 2 or 4, DIF(1:2) are F-norm-based upper bounds on */
+/*          Difu and Difl. If IJOB = 3 or 5, DIF(1:2) are 1-norm-based */
+/*          estimates of Difu and Difl, computed using reversed */
+/*          communication with ZLACN2. */
+/*          If M = 0 or N, DIF(1:2) = F-norm([A, B]). */
+/*          If IJOB = 0 or 1, DIF is not referenced. */
+
+/*  WORK    (workspace/output) COMPLEX*16 array, dimension (MAX(1,LWORK)) */
+/*          IF IJOB = 0, WORK is not referenced.  Otherwise, */
+/*          on exit, if INFO = 0, WORK(1) returns the optimal LWORK. */
+
+/*  LWORK   (input) INTEGER */
+/*          The dimension of the array WORK. LWORK >=  1 */
+/*          If IJOB = 1, 2 or 4, LWORK >=  2*M*(N-M) */
+/*          If IJOB = 3 or 5, LWORK >=  4*M*(N-M) */
+
+/*          If LWORK = -1, then a workspace query is assumed; the routine */
+/*          only calculates the optimal size of the WORK array, returns */
+/*          this value as the first entry of the WORK array, and no error */
+/*          message related to LWORK is issued by XERBLA. */
+
+/*  IWORK   (workspace/output) INTEGER array, dimension (MAX(1,LIWORK)) */
+/*          IF IJOB = 0, IWORK is not referenced.  Otherwise, */
+/*          on exit, if INFO = 0, IWORK(1) returns the optimal LIWORK. */
+
+/*  LIWORK  (input) INTEGER */
+/*          The dimension of the array IWORK. LIWORK >= 1. */
+/*          If IJOB = 1, 2 or 4, LIWORK >=  N+2; */
+/*          If IJOB = 3 or 5, LIWORK >= MAX(N+2, 2*M*(N-M)); */
+
+/*          If LIWORK = -1, then a workspace query is assumed; the */
+/*          routine only calculates the optimal size of the IWORK array, */
+/*          returns this value as the first entry of the IWORK array, and */
+/*          no error message related to LIWORK is issued by XERBLA. */
+
+/*  INFO    (output) INTEGER */
+/*            =0: Successful exit. */
+/*            <0: If INFO = -i, the i-th argument had an illegal value. */
+/*            =1: Reordering of (A, B) failed because the transformed */
+/*                matrix pair (A, B) would be too far from generalized */
+/*                Schur form; the problem is very ill-conditioned. */
+/*                (A, B) may have been partially reordered. */
+/*                If requested, 0 is returned in DIF(*), PL and PR. */
+
+
+/*  Further Details */
+/*  =============== */
+
+/*  ZTGSEN first collects the selected eigenvalues by computing unitary */
+/*  U and W that move them to the top left corner of (A, B). In other */
+/*  words, the selected eigenvalues are the eigenvalues of (A11, B11) in */
+
+/*                U'*(A, B)*W = (A11 A12) (B11 B12) n1 */
+/*                              ( 0  A22),( 0  B22) n2 */
+/*                                n1  n2    n1  n2 */
+
+/*  where N = n1+n2 and U' means the conjugate transpose of U. The first */
+/*  n1 columns of U and W span the specified pair of left and right */
+/*  eigenspaces (deflating subspaces) of (A, B). */
+
+/*  If (A, B) has been obtained from the generalized float Schur */
+/*  decomposition of a matrix pair (C, D) = Q*(A, B)*Z', then the */
+/*  reordered generalized Schur form of (C, D) is given by */
+
+/*           (C, D) = (Q*U)*(U'*(A, B)*W)*(Z*W)', */
+
+/*  and the first n1 columns of Q*U and Z*W span the corresponding */
+/*  deflating subspaces of (C, D) (Q and Z store Q*U and Z*W, resp.). */
+
+/*  Note that if the selected eigenvalue is sufficiently ill-conditioned, */
+/*  then its value may differ significantly from its value before */
+/*  reordering. */
+
+/*  The reciprocal condition numbers of the left and right eigenspaces */
+/*  spanned by the first n1 columns of U and W (or Q*U and Z*W) may */
+/*  be returned in DIF(1:2), corresponding to Difu and Difl, resp. */
+
+/*  The Difu and Difl are defined as: */
+
+/*       Difu[(A11, B11), (A22, B22)] = sigma-MIN( Zu ) */
+/*  and */
+/*       Difl[(A11, B11), (A22, B22)] = Difu[(A22, B22), (A11, B11)], */
+
+/*  where sigma-MIN(Zu) is the smallest singular value of the */
+/*  (2*n1*n2)-by-(2*n1*n2) matrix */
+
+/*       Zu = [ kron(In2, A11)  -kron(A22', In1) ] */
+/*            [ kron(In2, B11)  -kron(B22', In1) ]. */
+
+/*  Here, Inx is the identity matrix of size nx and A22' is the */
+/*  transpose of A22. kron(X, Y) is the Kronecker product between */
+/*  the matrices X and Y. */
+
+/*  When DIF(2) is small, small changes in (A, B) can cause large changes */
+/*  in the deflating subspace. An approximate (asymptotic) bound on the */
+/*  maximum angular error in the computed deflating subspaces is */
+
+/*       EPS * norm((A, B)) / DIF(2), */
+
+/*  where EPS is the machine precision. */
+
+/*  The reciprocal norm of the projectors on the left and right */
+/*  eigenspaces associated with (A11, B11) may be returned in PL and PR. */
+/*  They are computed as follows. First we compute L and R so that */
+/*  P*(A, B)*Q is block diagonal, where */
+
+/*       P = ( I -L ) n1           Q = ( I R ) n1 */
+/*           ( 0  I ) n2    and        ( 0 I ) n2 */
+/*             n1 n2                    n1 n2 */
+
+/*  and (L, R) is the solution to the generalized Sylvester equation */
+
+/*       A11*R - L*A22 = -A12 */
+/*       B11*R - L*B22 = -B12 */
+
+/*  Then PL = (F-norm(L)**2+1)**(-1/2) and PR = (F-norm(R)**2+1)**(-1/2). */
+/*  An approximate (asymptotic) bound on the average absolute error of */
+/*  the selected eigenvalues is */
+
+/*       EPS * norm((A, B)) / PL. */
+
+/*  There are also global error bounds which valid for perturbations up */
+/*  to a certain restriction:  A lower bound (x) on the smallest */
+/*  F-norm(E,F) for which an eigenvalue of (A11, B11) may move and */
+/*  coalesce with an eigenvalue of (A22, B22) under perturbation (E,F), */
+/*  (i.e. (A + E, B + F), is */
+
+/*   x = MIN(Difu,Difl)/((1/(PL*PL)+1/(PR*PR))**(1/2)+2*MAX(1/PL,1/PR)). */
+
+/*  An approximate bound on x can be computed from DIF(1:2), PL and PR. */
+
+/*  If y = ( F-norm(E,F) / x) <= 1, the angles between the perturbed */
+/*  (L', R') and unperturbed (L, R) left and right deflating subspaces */
+/*  associated with the selected cluster in the (1,1)-blocks can be */
+/*  bounded as */
+
+/*   max-angle(L, L') <= arctan( y * PL / (1 - y * (1 - PL * PL)**(1/2)) */
+/*   max-angle(R, R') <= arctan( y * PR / (1 - y * (1 - PR * PR)**(1/2)) */
+
+/*  See LAPACK User's Guide section 4.11 or the following references */
+/*  for more information. */
+
+/*  Note that if the default method for computing the Frobenius-norm- */
+/*  based estimate DIF is not wanted (see ZLATDF), then the parameter */
+/*  IDIFJB (see below) should be changed from 3 to 4 (routine ZLATDF */
+/*  (IJOB = 2 will be used)). See ZTGSYL for more details. */
+
+/*  Based on contributions by */
+/*     Bo Kagstrom and Peter Poromaa, Department of Computing Science, */
+/*     Umea University, S-901 87 Umea, Sweden. */
+
+/*  References */
+/*  ========== */
+
+/*  [1] B. Kagstrom; A Direct Method for Reordering Eigenvalues in the */
+/*      Generalized Real Schur Form of a Regular Matrix Pair (A, B), in */
+/*      M.S. Moonen et al (eds), Linear Algebra for Large Scale and */
+/*      Real-Time Applications, Kluwer Academic Publ. 1993, pp 195-218. */
+
+/*  [2] B. Kagstrom and P. Poromaa; Computing Eigenspaces with Specified */
+/*      Eigenvalues of a Regular Matrix Pair (A, B) and Condition */
+/*      Estimation: Theory, Algorithms and Software, Report */
+/*      UMINF - 94.04, Department of Computing Science, Umea University, */
+/*      S-901 87 Umea, Sweden, 1994. Also as LAPACK Working Note 87. */
+/*      To appear in Numerical Algorithms, 1996. */
+
+/*  [3] B. Kagstrom and P. Poromaa, LAPACK-Style Algorithms and Software */
+/*      for Solving the Generalized Sylvester Equation and Estimating the */
+/*      Separation between Regular Matrix Pairs, Report UMINF - 93.23, */
+/*      Department of Computing Science, Umea University, S-901 87 Umea, */
+/*      Sweden, December 1993, Revised April 1994, Also as LAPACK working */
+/*      Note 75. To appear in ACM Trans. on Math. Software, Vol 22, No 1, */
+/*      1996. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Local Arrays .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Decode and test the input parameters */
+
+    /* Parameter adjustments */
     --select;
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     b_dim1 = *ldb;
-    b_offset = 1 + b_dim1 * 1;
+    b_offset = 1 + b_dim1;
     b -= b_offset;
     --alpha;
     --beta;
     q_dim1 = *ldq;
-    q_offset = 1 + q_dim1 * 1;
+    q_offset = 1 + q_dim1;
     q -= q_offset;
     z_dim1 = *ldz;
-    z_offset = 1 + z_dim1 * 1;
+    z_offset = 1 + z_dim1;
     z__ -= z_offset;
     --dif;
     --work;
@@ -399,9 +422,9 @@
 	*info = -1;
     } else if (*n < 0) {
 	*info = -5;
-    } else if (*lda < max(1,*n)) {
+    } else if (*lda < MAX(1,*n)) {
 	*info = -7;
-    } else if (*ldb < max(1,*n)) {
+    } else if (*ldb < MAX(1,*n)) {
 	*info = -9;
     } else if (*ldq < 1 || *wantq && *ldq < *n) {
 	*info = -13;
@@ -422,17 +445,17 @@
     wantd2 = *ijob == 3 || *ijob == 5;
     wantd = wantd1 || wantd2;
 
-/*     Set M to the dimension of the specified pair of deflating   
-       subspaces. */
+/*     Set M to the dimension of the specified pair of deflating */
+/*     subspaces. */
 
     *m = 0;
     i__1 = *n;
     for (k = 1; k <= i__1; ++k) {
 	i__2 = k;
-	i__3 = a_subscr(k, k);
+	i__3 = k + k * a_dim1;
 	alpha[i__2].r = a[i__3].r, alpha[i__2].i = a[i__3].i;
 	i__2 = k;
-	i__3 = b_subscr(k, k);
+	i__3 = k + k * b_dim1;
 	beta[i__2].r = b[i__3].r, beta[i__2].i = b[i__3].i;
 	if (k < *n) {
 	    if (select[k]) {
@@ -449,24 +472,24 @@
     if (*ijob == 1 || *ijob == 2 || *ijob == 4) {
 /* Computing MAX */
 	i__1 = 1, i__2 = (*m << 1) * (*n - *m);
-	lwmin = max(i__1,i__2);
+	lwmin = MAX(i__1,i__2);
 /* Computing MAX */
 	i__1 = 1, i__2 = *n + 2;
-	liwmin = max(i__1,i__2);
+	liwmin = MAX(i__1,i__2);
     } else if (*ijob == 3 || *ijob == 5) {
 /* Computing MAX */
 	i__1 = 1, i__2 = (*m << 2) * (*n - *m);
-	lwmin = max(i__1,i__2);
+	lwmin = MAX(i__1,i__2);
 /* Computing MAX */
-	i__1 = 1, i__2 = (*m << 1) * (*n - *m), i__1 = max(i__1,i__2), i__2 = 
+	i__1 = 1, i__2 = (*m << 1) * (*n - *m), i__1 = MAX(i__1,i__2), i__2 = 
 		*n + 2;
-	liwmin = max(i__1,i__2);
+	liwmin = MAX(i__1,i__2);
     } else {
 	lwmin = 1;
 	liwmin = 1;
     }
 
-    work[1].r = (doublereal) lwmin, work[1].i = 0.;
+    work[1].r = (double) lwmin, work[1].i = 0.;
     iwork[1] = liwmin;
 
     if (*lwork < lwmin && ! lquery) {
@@ -495,8 +518,8 @@
 	    dsum = 1.;
 	    i__1 = *n;
 	    for (i__ = 1; i__ <= i__1; ++i__) {
-		zlassq_(n, &a_ref(1, i__), &c__1, &dscale, &dsum);
-		zlassq_(n, &b_ref(1, i__), &c__1, &dscale, &dsum);
+		zlassq_(n, &a[i__ * a_dim1 + 1], &c__1, &dscale, &dsum);
+		zlassq_(n, &b[i__ * b_dim1 + 1], &c__1, &dscale, &dsum);
 /* L20: */
 	    }
 	    dif[1] = dscale * sqrt(dsum);
@@ -518,11 +541,11 @@
 	if (swap) {
 	    ++ks;
 
-/*           Swap the K-th block to position KS. Compute unitary Q   
-             and Z that will swap adjacent diagonal blocks in (A, B). */
+/*           Swap the K-th block to position KS. Compute unitary Q */
+/*           and Z that will swap adjacent diagonal blocks in (A, B). */
 
 	    if (k != ks) {
-		ztgexc_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
+		ztgexc_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, 
 			 &q[q_offset], ldq, &z__[z_offset], ldz, &k, &ks, &
 			ierr);
 	    }
@@ -547,25 +570,25 @@
     }
     if (wantp) {
 
-/*        Solve generalized Sylvester equation for R and L:   
-                     A11 * R - L * A22 = A12   
-                     B11 * R - L * B22 = B12 */
+/*        Solve generalized Sylvester equation for R and L: */
+/*                   A11 * R - L * A22 = A12 */
+/*                   B11 * R - L * B22 = B12 */
 
 	n1 = *m;
 	n2 = *n - *m;
 	i__ = n1 + 1;
-	zlacpy_("Full", &n1, &n2, &a_ref(1, i__), lda, &work[1], &n1);
-	zlacpy_("Full", &n1, &n2, &b_ref(1, i__), ldb, &work[n1 * n2 + 1], &
-		n1);
+	zlacpy_("Full", &n1, &n2, &a[i__ * a_dim1 + 1], lda, &work[1], &n1);
+	zlacpy_("Full", &n1, &n2, &b[i__ * b_dim1 + 1], ldb, &work[n1 * n2 + 
+		1], &n1);
 	ijb = 0;
 	i__1 = *lwork - (n1 << 1) * n2;
-	ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a_ref(i__, i__), lda,
-		 &work[1], &n1, &b[b_offset], ldb, &b_ref(i__, i__), ldb, &
-		work[n1 * n2 + 1], &n1, &dscale, &dif[1], &work[(n1 * n2 << 1)
-		 + 1], &i__1, &iwork[1], &ierr);
+	ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1]
+, lda, &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * 
+		b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &
+		work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
 
-/*        Estimate the reciprocal of norms of "projections" onto   
-          left and right eigenspaces */
+/*        Estimate the reciprocal of norms of "projections" onto */
+/*        left and right eigenspaces */
 
 	rdscal = 0.;
 	dsum = 1.;
@@ -601,24 +624,26 @@
 /*           Frobenius norm-based Difu estimate. */
 
 	    i__1 = *lwork - (n1 << 1) * n2;
-	    ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a_ref(i__, i__), 
-		    lda, &work[1], &n1, &b[b_offset], ldb, &b_ref(i__, i__), 
-		    ldb, &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &work[(n1 
-		    * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
+	    ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * 
+		    a_dim1], lda, &work[1], &n1, &b[b_offset], ldb, &b[i__ + 
+		    i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale, &
+		    dif[1], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &
+		    ierr);
 
 /*           Frobenius norm-based Difl estimate. */
 
 	    i__1 = *lwork - (n1 << 1) * n2;
-	    ztgsyl_("N", &ijb, &n2, &n1, &a_ref(i__, i__), lda, &a[a_offset], 
-		    lda, &work[1], &n2, &b_ref(i__, i__), ldb, &b[b_offset], 
-		    ldb, &work[n1 * n2 + 1], &n2, &dscale, &dif[2], &work[(n1 
-		    * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
+	    ztgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[
+		    a_offset], lda, &work[1], &n2, &b[i__ + i__ * b_dim1], 
+		    ldb, &b[b_offset], ldb, &work[n1 * n2 + 1], &n2, &dscale, 
+		    &dif[2], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &
+		    ierr);
 	} else {
 
-/*           Compute 1-norm-based estimates of Difu and Difl using   
-             reversed communication with ZLACON. In each step a   
-             generalized Sylvester equation or a transposed variant   
-             is solved. */
+/*           Compute 1-norm-based estimates of Difu and Difl using */
+/*           reversed communication with ZLACN2. In each step a */
+/*           generalized Sylvester equation or a transposed variant */
+/*           is solved. */
 
 	    kase = 0;
 	    n1 = *m;
@@ -630,28 +655,28 @@
 /*           1-norm-based estimate of Difu. */
 
 L40:
-	    zlacon_(&mn2, &work[mn2 + 1], &work[1], &dif[1], &kase);
+	    zlacn2_(&mn2, &work[mn2 + 1], &work[1], &dif[1], &kase, isave);
 	    if (kase != 0) {
 		if (kase == 1) {
 
 /*                 Solve generalized Sylvester equation */
 
 		    i__1 = *lwork - (n1 << 1) * n2;
-		    ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a_ref(
-			    i__, i__), lda, &work[1], &n1, &b[b_offset], ldb, 
-			    &b_ref(i__, i__), ldb, &work[n1 * n2 + 1], &n1, &
-			    dscale, &dif[1], &work[(n1 * n2 << 1) + 1], &i__1,
-			     &iwork[1], &ierr);
+		    ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + 
+			    i__ * a_dim1], lda, &work[1], &n1, &b[b_offset], 
+			    ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 
+			    1], &n1, &dscale, &dif[1], &work[(n1 * n2 << 1) + 
+			    1], &i__1, &iwork[1], &ierr);
 		} else {
 
 /*                 Solve the transposed variant. */
 
 		    i__1 = *lwork - (n1 << 1) * n2;
-		    ztgsyl_("C", &ijb, &n1, &n2, &a[a_offset], lda, &a_ref(
-			    i__, i__), lda, &work[1], &n1, &b[b_offset], ldb, 
-			    &b_ref(i__, i__), ldb, &work[n1 * n2 + 1], &n1, &
-			    dscale, &dif[1], &work[(n1 * n2 << 1) + 1], &i__1,
-			     &iwork[1], &ierr);
+		    ztgsyl_("C", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + 
+			    i__ * a_dim1], lda, &work[1], &n1, &b[b_offset], 
+			    ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 
+			    1], &n1, &dscale, &dif[1], &work[(n1 * n2 << 1) + 
+			    1], &i__1, &iwork[1], &ierr);
 		}
 		goto L40;
 	    }
@@ -660,28 +685,28 @@ L40:
 /*           1-norm-based estimate of Difl. */
 
 L50:
-	    zlacon_(&mn2, &work[mn2 + 1], &work[1], &dif[2], &kase);
+	    zlacn2_(&mn2, &work[mn2 + 1], &work[1], &dif[2], &kase, isave);
 	    if (kase != 0) {
 		if (kase == 1) {
 
 /*                 Solve generalized Sylvester equation */
 
 		    i__1 = *lwork - (n1 << 1) * n2;
-		    ztgsyl_("N", &ijb, &n2, &n1, &a_ref(i__, i__), lda, &a[
-			    a_offset], lda, &work[1], &n2, &b_ref(i__, i__), 
-			    ldb, &b[b_offset], ldb, &work[n1 * n2 + 1], &n2, &
-			    dscale, &dif[2], &work[(n1 * n2 << 1) + 1], &i__1,
-			     &iwork[1], &ierr);
+		    ztgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, 
+			    &a[a_offset], lda, &work[1], &n2, &b[i__ + i__ * 
+			    b_dim1], ldb, &b[b_offset], ldb, &work[n1 * n2 + 
+			    1], &n2, &dscale, &dif[2], &work[(n1 * n2 << 1) + 
+			    1], &i__1, &iwork[1], &ierr);
 		} else {
 
 /*                 Solve the transposed variant. */
 
 		    i__1 = *lwork - (n1 << 1) * n2;
-		    ztgsyl_("C", &ijb, &n2, &n1, &a_ref(i__, i__), lda, &a[
-			    a_offset], lda, &work[1], &n2, &b[b_offset], ldb, 
-			    &b_ref(i__, i__), ldb, &work[n1 * n2 + 1], &n2, &
-			    dscale, &dif[2], &work[(n1 * n2 << 1) + 1], &i__1,
-			     &iwork[1], &ierr);
+		    ztgsyl_("C", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, 
+			    &a[a_offset], lda, &work[1], &n2, &b[b_offset], 
+			    ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 
+			    1], &n2, &dscale, &dif[2], &work[(n1 * n2 << 1) + 
+			    1], &i__1, &iwork[1], &ierr);
 		}
 		goto L50;
 	    }
@@ -689,40 +714,40 @@ L50:
 	}
     }
 
-/*     If B(K,K) is complex, make it real and positive (normalization   
-       of the generalized Schur form) and Store the generalized   
-       eigenvalues of reordered pair (A, B) */
+/*     If B(K,K) is complex, make it float and positive (normalization */
+/*     of the generalized Schur form) and Store the generalized */
+/*     eigenvalues of reordered pair (A, B) */
 
     i__1 = *n;
     for (k = 1; k <= i__1; ++k) {
-	dscale = z_abs(&b_ref(k, k));
+	dscale = z_ABS(&b[k + k * b_dim1]);
 	if (dscale > safmin) {
-	    i__2 = b_subscr(k, k);
+	    i__2 = k + k * b_dim1;
 	    z__2.r = b[i__2].r / dscale, z__2.i = b[i__2].i / dscale;
 	    d_cnjg(&z__1, &z__2);
-	    work[1].r = z__1.r, work[1].i = z__1.i;
-	    i__2 = b_subscr(k, k);
+	    temp1.r = z__1.r, temp1.i = z__1.i;
+	    i__2 = k + k * b_dim1;
 	    z__1.r = b[i__2].r / dscale, z__1.i = b[i__2].i / dscale;
-	    work[2].r = z__1.r, work[2].i = z__1.i;
-	    i__2 = b_subscr(k, k);
+	    temp2.r = z__1.r, temp2.i = z__1.i;
+	    i__2 = k + k * b_dim1;
 	    b[i__2].r = dscale, b[i__2].i = 0.;
 	    i__2 = *n - k;
-	    zscal_(&i__2, &work[1], &b_ref(k, k + 1), ldb);
+	    zscal_(&i__2, &temp1, &b[k + (k + 1) * b_dim1], ldb);
 	    i__2 = *n - k + 1;
-	    zscal_(&i__2, &work[1], &a_ref(k, k), lda);
+	    zscal_(&i__2, &temp1, &a[k + k * a_dim1], lda);
 	    if (*wantq) {
-		zscal_(n, &work[2], &q_ref(1, k), &c__1);
+		zscal_(n, &temp2, &q[k * q_dim1 + 1], &c__1);
 	    }
 	} else {
-	    i__2 = b_subscr(k, k);
+	    i__2 = k + k * b_dim1;
 	    b[i__2].r = 0., b[i__2].i = 0.;
 	}
 
 	i__2 = k;
-	i__3 = a_subscr(k, k);
+	i__3 = k + k * a_dim1;
 	alpha[i__2].r = a[i__3].r, alpha[i__2].i = a[i__3].i;
 	i__2 = k;
-	i__3 = b_subscr(k, k);
+	i__3 = k + k * b_dim1;
 	beta[i__2].r = b[i__3].r, beta[i__2].i = b[i__3].i;
 
 /* L60: */
@@ -730,7 +755,7 @@ L50:
 
 L70:
 
-    work[1].r = (doublereal) lwmin, work[1].i = 0.;
+    work[1].r = (double) lwmin, work[1].i = 0.;
     iwork[1] = liwmin;
 
     return 0;
@@ -738,12 +763,3 @@ L70:
 /*     End of ZTGSEN */
 
 } /* ztgsen_ */
-
-#undef q_ref
-#undef q_subscr
-#undef b_ref
-#undef b_subscr
-#undef a_ref
-#undef a_subscr
-
-

@@ -1,77 +1,101 @@
+/* dlasq6.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-/*  -- translated by f2c (version 19990503).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
+		http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dlasq6_(integer *i0, integer *n0, doublereal *z__, 
-	integer *pp, doublereal *dmin__, doublereal *dmin1, doublereal *dmin2,
-	 doublereal *dn, doublereal *dnm1, doublereal *dnm2)
+ int dlasq6_(int *i0, int *n0, double *z__, 
+	int *pp, double *dmin__, double *dmin1, double *dmin2, 
+	 double *dn, double *dnm1, double *dnm2)
 {
     /* System generated locals */
-    integer i__1;
-    doublereal d__1, d__2;
+    int i__1;
+    double d__1, d__2;
 
     /* Local variables */
-    static doublereal emin, temp, d__;
-    static integer j4;
-    extern doublereal dlamch_(char *);
-    static doublereal safmin;
-    static integer j4p2;
+    double d__;
+    int j4, j4p2;
+    double emin, temp;
+    extern double dlamch_(char *);
+    double safmin;
 
 
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1999   
+/*  -- LAPACK routine (version 3.2)                                    -- */
 
+/*  -- Contributed by Osni Marques of the Lawrence Berkeley National   -- */
+/*  -- Laboratory and Beresford Parlett of the Univ. of California at  -- */
+/*  -- Berkeley                                                        -- */
+/*  -- November 2008                                                   -- */
 
-    Purpose   
-    =======   
+/*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */
+/*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
 
-    DLASQ6 computes one dqd (shift equal to zero) transform in   
-    ping-pong form, with protection against underflow and overflow.   
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
 
-    Arguments   
-    =========   
+/*  Purpose */
+/*  ======= */
 
-    I0    (input) INTEGER   
-          First index.   
+/*  DLASQ6 computes one dqd (shift equal to zero) transform in */
+/*  ping-pong form, with protection against underflow and overflow. */
 
-    N0    (input) INTEGER   
-          Last index.   
+/*  Arguments */
+/*  ========= */
 
-    Z     (input) DOUBLE PRECISION array, dimension ( 4*N )   
-          Z holds the qd array. EMIN is stored in Z(4*N0) to avoid   
-          an extra argument.   
+/*  I0    (input) INTEGER */
+/*        First index. */
 
-    PP    (input) INTEGER   
-          PP=0 for ping, PP=1 for pong.   
+/*  N0    (input) INTEGER */
+/*        Last index. */
 
-    DMIN  (output) DOUBLE PRECISION   
-          Minimum value of d.   
+/*  Z     (input) DOUBLE PRECISION array, dimension ( 4*N ) */
+/*        Z holds the qd array. EMIN is stored in Z(4*N0) to avoid */
+/*        an extra argument. */
 
-    DMIN1 (output) DOUBLE PRECISION   
-          Minimum value of d, excluding D( N0 ).   
+/*  PP    (input) INTEGER */
+/*        PP=0 for ping, PP=1 for pong. */
 
-    DMIN2 (output) DOUBLE PRECISION   
-          Minimum value of d, excluding D( N0 ) and D( N0-1 ).   
+/*  DMIN  (output) DOUBLE PRECISION */
+/*        Minimum value of d. */
 
-    DN    (output) DOUBLE PRECISION   
-          d(N0), the last value of d.   
+/*  DMIN1 (output) DOUBLE PRECISION */
+/*        Minimum value of d, excluding D( N0 ). */
 
-    DNM1  (output) DOUBLE PRECISION   
-          d(N0-1).   
+/*  DMIN2 (output) DOUBLE PRECISION */
+/*        Minimum value of d, excluding D( N0 ) and D( N0-1 ). */
 
-    DNM2  (output) DOUBLE PRECISION   
-          d(N0-2).   
+/*  DN    (output) DOUBLE PRECISION */
+/*        d(N0), the last value of d. */
 
-    =====================================================================   
+/*  DNM1  (output) DOUBLE PRECISION */
+/*        d(N0-1). */
 
+/*  DNM2  (output) DOUBLE PRECISION */
+/*        d(N0-2). */
 
-       Parameter adjustments */
+/*  ===================================================================== */
+
+/*     .. Parameter .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Function .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     --z__;
 
     /* Function Body */
@@ -103,10 +127,10 @@
 		z__[j4] = z__[j4 + 1] * (z__[j4 - 1] / z__[j4 - 2]);
 		d__ = z__[j4 + 1] * (d__ / z__[j4 - 2]);
 	    }
-	    *dmin__ = min(*dmin__,d__);
+	    *dmin__ = MIN(*dmin__,d__);
 /* Computing MIN */
 	    d__1 = emin, d__2 = z__[j4];
-	    emin = min(d__1,d__2);
+	    emin = MIN(d__1,d__2);
 /* L10: */
 	}
     } else {
@@ -127,10 +151,10 @@
 		z__[j4 - 1] = z__[j4 + 2] * (z__[j4] / z__[j4 - 3]);
 		d__ = z__[j4 + 2] * (d__ / z__[j4 - 3]);
 	    }
-	    *dmin__ = min(*dmin__,d__);
+	    *dmin__ = MIN(*dmin__,d__);
 /* Computing MIN */
 	    d__1 = emin, d__2 = z__[j4 - 1];
-	    emin = min(d__1,d__2);
+	    emin = MIN(d__1,d__2);
 /* L20: */
 	}
     }
@@ -156,7 +180,7 @@
 	z__[j4] = z__[j4p2 + 2] * (z__[j4p2] / z__[j4 - 2]);
 	*dnm1 = z__[j4p2 + 2] * (*dnm2 / z__[j4 - 2]);
     }
-    *dmin__ = min(*dmin__,*dnm1);
+    *dmin__ = MIN(*dmin__,*dnm1);
 
     *dmin1 = *dmin__;
     j4 += 4;
@@ -176,7 +200,7 @@
 	z__[j4] = z__[j4p2 + 2] * (z__[j4p2] / z__[j4 - 2]);
 	*dn = z__[j4p2 + 2] * (*dnm1 / z__[j4 - 2]);
     }
-    *dmin__ = min(*dmin__,*dn);
+    *dmin__ = MIN(*dmin__,*dn);
 
     z__[j4 + 2] = *dn;
     z__[(*n0 << 2) - *pp] = emin;
@@ -185,4 +209,3 @@
 /*     End of DLASQ6 */
 
 } /* dlasq6_ */
-

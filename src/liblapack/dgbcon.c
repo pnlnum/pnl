@@ -1,117 +1,148 @@
+/* dgbcon.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dgbcon_(char *norm, integer *n, integer *kl, integer *ku,
-	 doublereal *ab, integer *ldab, integer *ipiv, doublereal *anorm, 
-	doublereal *rcond, doublereal *work, integer *iwork, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int dgbcon_(char *norm, int *n, int *kl, int *ku, 
+	 double *ab, int *ldab, int *ipiv, double *anorm, 
+	double *rcond, double *work, int *iwork, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
-
-
-    Purpose   
-    =======   
-
-    DGBCON estimates the reciprocal of the condition number of a real   
-    general band matrix A, in either the 1-norm or the infinity-norm,   
-    using the LU factorization computed by DGBTRF.   
-
-    An estimate is obtained for norm(inv(A)), and the reciprocal of the   
-    condition number is computed as   
-       RCOND = 1 / ( norm(A) * norm(inv(A)) ).   
-
-    Arguments   
-    =========   
-
-    NORM    (input) CHARACTER*1   
-            Specifies whether the 1-norm condition number or the   
-            infinity-norm condition number is required:   
-            = '1' or 'O':  1-norm;   
-            = 'I':         Infinity-norm.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    KL      (input) INTEGER   
-            The number of subdiagonals within the band of A.  KL >= 0.   
-
-    KU      (input) INTEGER   
-            The number of superdiagonals within the band of A.  KU >= 0.   
-
-    AB      (input) DOUBLE PRECISION array, dimension (LDAB,N)   
-            Details of the LU factorization of the band matrix A, as   
-            computed by DGBTRF.  U is stored as an upper triangular band   
-            matrix with KL+KU superdiagonals in rows 1 to KL+KU+1, and   
-            the multipliers used during the factorization are stored in   
-            rows KL+KU+2 to 2*KL+KU+1.   
-
-    LDAB    (input) INTEGER   
-            The leading dimension of the array AB.  LDAB >= 2*KL+KU+1.   
-
-    IPIV    (input) INTEGER array, dimension (N)   
-            The pivot indices; for 1 <= i <= N, row i of the matrix was   
-            interchanged with row IPIV(i).   
-
-    ANORM   (input) DOUBLE PRECISION   
-            If NORM = '1' or 'O', the 1-norm of the original matrix A.   
-            If NORM = 'I', the infinity-norm of the original matrix A.   
-
-    RCOND   (output) DOUBLE PRECISION   
-            The reciprocal of the condition number of the matrix A,   
-            computed as RCOND = 1/(norm(A) * norm(inv(A))).   
-
-    WORK    (workspace) DOUBLE PRECISION array, dimension (3*N)   
-
-    IWORK   (workspace) INTEGER array, dimension (N)   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0: if INFO = -i, the i-th argument had an illegal value   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3;
-    doublereal d__1;
+    int ab_dim1, ab_offset, i__1, i__2, i__3;
+    double d__1;
+
     /* Local variables */
-    static integer kase;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, 
-	    integer *);
-    static integer kase1, j;
-    static doublereal t, scale;
-    extern logical lsame_(char *, char *);
-    extern /* Subroutine */ int drscl_(integer *, doublereal *, doublereal *, 
-	    integer *);
-    static logical lnoti;
-    extern /* Subroutine */ int daxpy_(integer *, doublereal *, doublereal *, 
-	    integer *, doublereal *, integer *);
-    static integer kd;
-    extern doublereal dlamch_(char *);
-    static integer lm, jp, ix;
-    extern /* Subroutine */ int dlacon_(integer *, doublereal *, doublereal *,
-	     integer *, doublereal *, integer *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */ int dlatbs_(char *, char *, char *, char *, 
-	    integer *, integer *, doublereal *, integer *, doublereal *, 
-	    doublereal *, doublereal *, integer *), xerbla_(char *, integer *);
-    static doublereal ainvnm;
-    static logical onenrm;
-    static char normin[1];
-    static doublereal smlnum;
-#define ab_ref(a_1,a_2) ab[(a_2)*ab_dim1 + a_1]
+    int j;
+    double t;
+    int kd, lm, jp, ix, kase;
+    extern double ddot_(int *, double *, int *, double *, 
+	    int *);
+    int kase1;
+    double scale;
+    extern int lsame_(char *, char *);
+    int isave[3];
+    extern  int drscl_(int *, double *, double *, 
+	    int *);
+    int lnoti;
+    extern  int daxpy_(int *, double *, double *, 
+	    int *, double *, int *), dlacn2_(int *, 
+	    double *, double *, int *, double *, int *, 
+	    int *);
+    extern double dlamch_(char *);
+    extern int idamax_(int *, double *, int *);
+    extern  int dlatbs_(char *, char *, char *, char *, 
+	    int *, int *, double *, int *, double *, 
+	    double *, double *, int *), xerbla_(char *, int *);
+    double ainvnm;
+    int onenrm;
+    char normin[1];
+    double smlnum;
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     Modified to call DLACN2 in place of DLACON, 5 Feb 03, SJH. */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  DGBCON estimates the reciprocal of the condition number of a float */
+/*  general band matrix A, in either the 1-norm or the infinity-norm, */
+/*  using the LU factorization computed by DGBTRF. */
+
+/*  An estimate is obtained for norm(inv(A)), and the reciprocal of the */
+/*  condition number is computed as */
+/*     RCOND = 1 / ( norm(A) * norm(inv(A)) ). */
+
+/*  Arguments */
+/*  ========= */
+
+/*  NORM    (input) CHARACTER*1 */
+/*          Specifies whether the 1-norm condition number or the */
+/*          infinity-norm condition number is required: */
+/*          = '1' or 'O':  1-norm; */
+/*          = 'I':         Infinity-norm. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  KL      (input) INTEGER */
+/*          The number of subdiagonals within the band of A.  KL >= 0. */
+
+/*  KU      (input) INTEGER */
+/*          The number of superdiagonals within the band of A.  KU >= 0. */
+
+/*  AB      (input) DOUBLE PRECISION array, dimension (LDAB,N) */
+/*          Details of the LU factorization of the band matrix A, as */
+/*          computed by DGBTRF.  U is stored as an upper triangular band */
+/*          matrix with KL+KU superdiagonals in rows 1 to KL+KU+1, and */
+/*          the multipliers used during the factorization are stored in */
+/*          rows KL+KU+2 to 2*KL+KU+1. */
+
+/*  LDAB    (input) INTEGER */
+/*          The leading dimension of the array AB.  LDAB >= 2*KL+KU+1. */
+
+/*  IPIV    (input) INTEGER array, dimension (N) */
+/*          The pivot indices; for 1 <= i <= N, row i of the matrix was */
+/*          interchanged with row IPIV(i). */
+
+/*  ANORM   (input) DOUBLE PRECISION */
+/*          If NORM = '1' or 'O', the 1-norm of the original matrix A. */
+/*          If NORM = 'I', the infinity-norm of the original matrix A. */
+
+/*  RCOND   (output) DOUBLE PRECISION */
+/*          The reciprocal of the condition number of the matrix A, */
+/*          computed as RCOND = 1/(norm(A) * norm(inv(A))). */
+
+/*  WORK    (workspace) DOUBLE PRECISION array, dimension (3*N) */
+
+/*  IWORK   (workspace) INTEGER array, dimension (N) */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0: if INFO = -i, the i-th argument had an illegal value */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Local Arrays .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     ab_dim1 = *ldab;
-    ab_offset = 1 + ab_dim1 * 1;
+    ab_offset = 1 + ab_dim1;
     ab -= ab_offset;
     --ipiv;
     --work;
@@ -164,7 +195,7 @@
     lnoti = *kl > 0;
     kase = 0;
 L10:
-    dlacon_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase);
+    dlacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if (kase != 0) {
 	if (kase == kase1) {
 
@@ -175,7 +206,7 @@ L10:
 		for (j = 1; j <= i__1; ++j) {
 /* Computing MIN */
 		    i__2 = *kl, i__3 = *n - j;
-		    lm = min(i__2,i__3);
+		    lm = MIN(i__2,i__3);
 		    jp = ipiv[j];
 		    t = work[jp];
 		    if (jp != j) {
@@ -183,8 +214,8 @@ L10:
 			work[j] = t;
 		    }
 		    d__1 = -t;
-		    daxpy_(&lm, &d__1, &ab_ref(kd + 1, j), &c__1, &work[j + 1]
-			    , &c__1);
+		    daxpy_(&lm, &d__1, &ab[kd + 1 + j * ab_dim1], &c__1, &
+			    work[j + 1], &c__1);
 /* L20: */
 		}
 	    }
@@ -210,9 +241,9 @@ L10:
 		for (j = *n - 1; j >= 1; --j) {
 /* Computing MIN */
 		    i__1 = *kl, i__2 = *n - j;
-		    lm = min(i__1,i__2);
-		    work[j] -= ddot_(&lm, &ab_ref(kd + 1, j), &c__1, &work[j 
-			    + 1], &c__1);
+		    lm = MIN(i__1,i__2);
+		    work[j] -= ddot_(&lm, &ab[kd + 1 + j * ab_dim1], &c__1, &
+			    work[j + 1], &c__1);
 		    jp = ipiv[j];
 		    if (jp != j) {
 			t = work[jp];
@@ -229,7 +260,7 @@ L10:
 	*(unsigned char *)normin = 'Y';
 	if (scale != 1.) {
 	    ix = idamax_(n, &work[1], &c__1);
-	    if (scale < (d__1 = work[ix], abs(d__1)) * smlnum || scale == 0.) 
+	    if (scale < (d__1 = work[ix], ABS(d__1)) * smlnum || scale == 0.) 
 		    {
 		goto L40;
 	    }
@@ -250,7 +281,3 @@ L40:
 /*     End of DGBCON */
 
 } /* dgbcon_ */
-
-#undef ab_ref
-
-

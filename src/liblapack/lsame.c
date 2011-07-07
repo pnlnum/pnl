@@ -1,6 +1,6 @@
 #include "pnl/pnl_f2c.h"
 
-logical lsame_(char *ca, char *cb)
+int lsame_(char *ca, char *cb)
 {
 /*  -- LAPACK auxiliary routine (version 3.0) --   
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
@@ -27,9 +27,9 @@ logical lsame_(char *ca, char *cb)
 
        Test if the characters are equal */
     /* System generated locals */
-    logical ret_val;
+    int ret_val;
     /* Local variables */
-    static integer inta, intb, zcode;
+    static int inta, intb, zcode;
 
 
     ret_val = *(unsigned char *)ca == *(unsigned char *)cb;

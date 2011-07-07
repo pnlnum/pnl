@@ -1,78 +1,100 @@
+/* clar2v.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int clar2v_(integer *n, complex *x, complex *y, complex *z__,
-	 integer *incx, real *c__, complex *s, integer *incc)
+ int clar2v_(int *n, complex *x, complex *y, complex *z__, 
+	 int *incx, float *c__, complex *s, int *incc)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       February 29, 1992   
-
-
-    Purpose   
-    =======   
-
-    CLAR2V applies a vector of complex plane rotations with real cosines   
-    from both sides to a sequence of 2-by-2 complex Hermitian matrices,   
-    defined by the elements of the vectors x, y and z. For i = 1,2,...,n   
-
-       (       x(i)  z(i) ) :=   
-       ( conjg(z(i)) y(i) )   
-
-         (  c(i) conjg(s(i)) ) (       x(i)  z(i) ) ( c(i) -conjg(s(i)) )   
-         ( -s(i)       c(i)  ) ( conjg(z(i)) y(i) ) ( s(i)        c(i)  )   
-
-    Arguments   
-    =========   
-
-    N       (input) INTEGER   
-            The number of plane rotations to be applied.   
-
-    X       (input/output) COMPLEX array, dimension (1+(N-1)*INCX)   
-            The vector x; the elements of x are assumed to be real.   
-
-    Y       (input/output) COMPLEX array, dimension (1+(N-1)*INCX)   
-            The vector y; the elements of y are assumed to be real.   
-
-    Z       (input/output) COMPLEX array, dimension (1+(N-1)*INCX)   
-            The vector z.   
-
-    INCX    (input) INTEGER   
-            The increment between elements of X, Y and Z. INCX > 0.   
-
-    C       (input) REAL array, dimension (1+(N-1)*INCC)   
-            The cosines of the plane rotations.   
-
-    S       (input) COMPLEX array, dimension (1+(N-1)*INCC)   
-            The sines of the plane rotations.   
-
-    INCC    (input) INTEGER   
-            The increment between elements of C and S. INCC > 0.   
-
-    =====================================================================   
-
-
-       Parameter adjustments */
     /* System generated locals */
-    integer i__1, i__2;
-    real r__1;
+    int i__1, i__2;
+    float r__1;
     complex q__1, q__2, q__3, q__4, q__5;
+
     /* Builtin functions */
     double r_imag(complex *);
     void r_cnjg(complex *, complex *);
-    /* Local variables */
-    static integer i__;
-    static complex t2, t3, t4;
-    static real t5, t6;
-    static integer ic;
-    static real ci;
-    static complex si;
-    static integer ix;
-    static real xi, yi;
-    static complex zi;
-    static real t1i, t1r, sii, zii, sir, zir;
 
+    /* Local variables */
+    int i__;
+    complex t2, t3, t4;
+    float t5, t6;
+    int ic;
+    float ci;
+    complex si;
+    int ix;
+    float xi, yi;
+    complex zi;
+    float t1i, t1r, sii, zii, sir, zir;
+
+
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CLAR2V applies a vector of complex plane rotations with float cosines */
+/*  from both sides to a sequence of 2-by-2 complex Hermitian matrices, */
+/*  defined by the elements of the vectors x, y and z. For i = 1,2,...,n */
+
+/*     (       x(i)  z(i) ) := */
+/*     ( conjg(z(i)) y(i) ) */
+
+/*       (  c(i) conjg(s(i)) ) (       x(i)  z(i) ) ( c(i) -conjg(s(i)) ) */
+/*       ( -s(i)       c(i)  ) ( conjg(z(i)) y(i) ) ( s(i)        c(i)  ) */
+
+/*  Arguments */
+/*  ========= */
+
+/*  N       (input) INTEGER */
+/*          The number of plane rotations to be applied. */
+
+/*  X       (input/output) COMPLEX array, dimension (1+(N-1)*INCX) */
+/*          The vector x; the elements of x are assumed to be float. */
+
+/*  Y       (input/output) COMPLEX array, dimension (1+(N-1)*INCX) */
+/*          The vector y; the elements of y are assumed to be float. */
+
+/*  Z       (input/output) COMPLEX array, dimension (1+(N-1)*INCX) */
+/*          The vector z. */
+
+/*  INCX    (input) INTEGER */
+/*          The increment between elements of X, Y and Z. INCX > 0. */
+
+/*  C       (input) REAL array, dimension (1+(N-1)*INCC) */
+/*          The cosines of the plane rotations. */
+
+/*  S       (input) COMPLEX array, dimension (1+(N-1)*INCC) */
+/*          The sines of the plane rotations. */
+
+/*  INCC    (input) INTEGER */
+/*          The increment between elements of C and S. INCC > 0. */
+
+/*  ===================================================================== */
+
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     --s;
     --c__;
     --z__;
@@ -134,4 +156,3 @@
 /*     End of CLAR2V */
 
 } /* clar2v_ */
-

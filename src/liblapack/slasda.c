@@ -1,258 +1,263 @@
+/* slasda.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-/*  -- translated by f2c (version 19990503).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
+		http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "pnl/pnl_f2c.h"
 
 /* Table of constant values */
 
-static integer c__0 = 0;
-static real c_b11 = 0.f;
-static real c_b12 = 1.f;
-static integer c__1 = 1;
-static integer c__2 = 2;
+static int c__0 = 0;
+static float c_b11 = 0.f;
+static float c_b12 = 1.f;
+static int c__1 = 1;
+static int c__2 = 2;
 
-/* Subroutine */ int slasda_(integer *icompq, integer *smlsiz, integer *n, 
-	integer *sqre, real *d__, real *e, real *u, integer *ldu, real *vt, 
-	integer *k, real *difl, real *difr, real *z__, real *poles, integer *
-	givptr, integer *givcol, integer *ldgcol, integer *perm, real *givnum,
-	 real *c__, real *s, real *work, integer *iwork, integer *info)
+ int slasda_(int *icompq, int *smlsiz, int *n, 
+	int *sqre, float *d__, float *e, float *u, int *ldu, float *vt, 
+	int *k, float *difl, float *difr, float *z__, float *poles, int *
+	givptr, int *givcol, int *ldgcol, int *perm, float *givnum, 
+	 float *c__, float *s, float *work, int *iwork, int *info)
 {
     /* System generated locals */
-    integer givcol_dim1, givcol_offset, perm_dim1, perm_offset, difl_dim1, 
+    int givcol_dim1, givcol_offset, perm_dim1, perm_offset, difl_dim1, 
 	    difl_offset, difr_dim1, difr_offset, givnum_dim1, givnum_offset, 
 	    poles_dim1, poles_offset, u_dim1, u_offset, vt_dim1, vt_offset, 
 	    z_dim1, z_offset, i__1, i__2;
 
     /* Builtin functions */
-    integer pow_ii(integer *, integer *);
+    int pow_ii(int *, int *);
 
     /* Local variables */
-    static real beta;
-    static integer idxq, nlvl, i__, j, m;
-    static real alpha;
-    static integer inode, ndiml, ndimr, idxqi, itemp, sqrei, i1;
-    extern /* Subroutine */ int scopy_(integer *, real *, integer *, real *, 
-	    integer *), slasd6_(integer *, integer *, integer *, integer *, 
-	    real *, real *, real *, real *, real *, integer *, integer *, 
-	    integer *, integer *, integer *, real *, integer *, real *, real *
-	    , real *, real *, integer *, real *, real *, real *, integer *, 
-	    integer *);
-    static integer ic, nwork1, lf, nd, nwork2, ll, nl, vf, nr, vl;
-    extern /* Subroutine */ int xerbla_(char *, integer *), slasdq_(
-	    char *, integer *, integer *, integer *, integer *, integer *, 
-	    real *, real *, real *, integer *, real *, integer *, real *, 
-	    integer *, real *, integer *), slasdt_(integer *, integer 
-	    *, integer *, integer *, integer *, integer *, integer *), 
-	    slaset_(char *, integer *, integer *, real *, real *, real *, 
-	    integer *);
-    static integer im1, smlszp, ncc, nlf, nrf, vfi, iwk, vli, lvl, nru, ndb1, 
-	    nlp1, lvl2, nrp1;
+    int i__, j, m, i1, ic, lf, nd, ll, nl, vf, nr, vl, im1, ncc, nlf, nrf,
+	     vfi, iwk, vli, lvl, nru, ndb1, nlp1, lvl2, nrp1;
+    float beta;
+    int idxq, nlvl;
+    float alpha;
+    int inode, ndiml, ndimr, idxqi, itemp, sqrei;
+    extern  int scopy_(int *, float *, int *, float *, 
+	    int *), slasd6_(int *, int *, int *, int *, 
+	    float *, float *, float *, float *, float *, int *, int *, 
+	    int *, int *, int *, float *, int *, float *, float *
+, float *, float *, int *, float *, float *, float *, int *, 
+	    int *);
+    int nwork1, nwork2;
+    extern  int xerbla_(char *, int *), slasdq_(
+	    char *, int *, int *, int *, int *, int *, 
+	    float *, float *, float *, int *, float *, int *, float *, 
+	    int *, float *, int *), slasdt_(int *, int 
+	    *, int *, int *, int *, int *, int *), 
+	    slaset_(char *, int *, int *, float *, float *, float *, 
+	    int *);
+    int smlszp;
 
 
-#define difl_ref(a_1,a_2) difl[(a_2)*difl_dim1 + a_1]
-#define difr_ref(a_1,a_2) difr[(a_2)*difr_dim1 + a_1]
-#define perm_ref(a_1,a_2) perm[(a_2)*perm_dim1 + a_1]
-#define u_ref(a_1,a_2) u[(a_2)*u_dim1 + a_1]
-#define z___ref(a_1,a_2) z__[(a_2)*z_dim1 + a_1]
-#define poles_ref(a_1,a_2) poles[(a_2)*poles_dim1 + a_1]
-#define vt_ref(a_1,a_2) vt[(a_2)*vt_dim1 + a_1]
-#define givcol_ref(a_1,a_2) givcol[(a_2)*givcol_dim1 + a_1]
-#define givnum_ref(a_1,a_2) givnum[(a_2)*givnum_dim1 + a_1]
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
 
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
 
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1999   
+/*  Purpose */
+/*  ======= */
 
+/*  Using a divide and conquer approach, SLASDA computes the singular */
+/*  value decomposition (SVD) of a float upper bidiagonal N-by-M matrix */
+/*  B with diagonal D and offdiagonal E, where M = N + SQRE. The */
+/*  algorithm computes the singular values in the SVD B = U * S * VT. */
+/*  The orthogonal matrices U and VT are optionally computed in */
+/*  compact form. */
 
-    Purpose   
-    =======   
+/*  A related subroutine, SLASD0, computes the singular values and */
+/*  the singular vectors in explicit form. */
 
-    Using a divide and conquer approach, SLASDA computes the singular   
-    value decomposition (SVD) of a real upper bidiagonal N-by-M matrix   
-    B with diagonal D and offdiagonal E, where M = N + SQRE. The   
-    algorithm computes the singular values in the SVD B = U * S * VT.   
-    The orthogonal matrices U and VT are optionally computed in   
-    compact form.   
+/*  Arguments */
+/*  ========= */
 
-    A related subroutine, SLASD0, computes the singular values and   
-    the singular vectors in explicit form.   
+/*  ICOMPQ (input) INTEGER */
+/*         Specifies whether singular vectors are to be computed */
+/*         in compact form, as follows */
+/*         = 0: Compute singular values only. */
+/*         = 1: Compute singular vectors of upper bidiagonal */
+/*              matrix in compact form. */
 
-    Arguments   
-    =========   
+/*  SMLSIZ (input) INTEGER */
+/*         The maximum size of the subproblems at the bottom of the */
+/*         computation tree. */
 
-    ICOMPQ (input) INTEGER   
-           Specifies whether singular vectors are to be computed   
-           in compact form, as follows   
-           = 0: Compute singular values only.   
-           = 1: Compute singular vectors of upper bidiagonal   
-                matrix in compact form.   
+/*  N      (input) INTEGER */
+/*         The row dimension of the upper bidiagonal matrix. This is */
+/*         also the dimension of the main diagonal array D. */
 
-    SMLSIZ (input) INTEGER   
-           The maximum size of the subproblems at the bottom of the   
-           computation tree.   
+/*  SQRE   (input) INTEGER */
+/*         Specifies the column dimension of the bidiagonal matrix. */
+/*         = 0: The bidiagonal matrix has column dimension M = N; */
+/*         = 1: The bidiagonal matrix has column dimension M = N + 1. */
 
-    N      (input) INTEGER   
-           The row dimension of the upper bidiagonal matrix. This is   
-           also the dimension of the main diagonal array D.   
+/*  D      (input/output) REAL array, dimension ( N ) */
+/*         On entry D contains the main diagonal of the bidiagonal */
+/*         matrix. On exit D, if INFO = 0, contains its singular values. */
 
-    SQRE   (input) INTEGER   
-           Specifies the column dimension of the bidiagonal matrix.   
-           = 0: The bidiagonal matrix has column dimension M = N;   
-           = 1: The bidiagonal matrix has column dimension M = N + 1.   
+/*  E      (input) REAL array, dimension ( M-1 ) */
+/*         Contains the subdiagonal entries of the bidiagonal matrix. */
+/*         On exit, E has been destroyed. */
 
-    D      (input/output) REAL array, dimension ( N )   
-           On entry D contains the main diagonal of the bidiagonal   
-           matrix. On exit D, if INFO = 0, contains its singular values.   
+/*  U      (output) REAL array, */
+/*         dimension ( LDU, SMLSIZ ) if ICOMPQ = 1, and not referenced */
+/*         if ICOMPQ = 0. If ICOMPQ = 1, on exit, U contains the left */
+/*         singular vector matrices of all subproblems at the bottom */
+/*         level. */
 
-    E      (input) REAL array, dimension ( M-1 )   
-           Contains the subdiagonal entries of the bidiagonal matrix.   
-           On exit, E has been destroyed.   
+/*  LDU    (input) INTEGER, LDU = > N. */
+/*         The leading dimension of arrays U, VT, DIFL, DIFR, POLES, */
+/*         GIVNUM, and Z. */
 
-    U      (output) REAL array,   
-           dimension ( LDU, SMLSIZ ) if ICOMPQ = 1, and not referenced   
-           if ICOMPQ = 0. If ICOMPQ = 1, on exit, U contains the left   
-           singular vector matrices of all subproblems at the bottom   
-           level.   
+/*  VT     (output) REAL array, */
+/*         dimension ( LDU, SMLSIZ+1 ) if ICOMPQ = 1, and not referenced */
+/*         if ICOMPQ = 0. If ICOMPQ = 1, on exit, VT' contains the right */
+/*         singular vector matrices of all subproblems at the bottom */
+/*         level. */
 
-    LDU    (input) INTEGER, LDU = > N.   
-           The leading dimension of arrays U, VT, DIFL, DIFR, POLES,   
-           GIVNUM, and Z.   
+/*  K      (output) INTEGER array, dimension ( N ) */
+/*         if ICOMPQ = 1 and dimension 1 if ICOMPQ = 0. */
+/*         If ICOMPQ = 1, on exit, K(I) is the dimension of the I-th */
+/*         secular equation on the computation tree. */
 
-    VT     (output) REAL array,   
-           dimension ( LDU, SMLSIZ+1 ) if ICOMPQ = 1, and not referenced   
-           if ICOMPQ = 0. If ICOMPQ = 1, on exit, VT' contains the right   
-           singular vector matrices of all subproblems at the bottom   
-           level.   
+/*  DIFL   (output) REAL array, dimension ( LDU, NLVL ), */
+/*         where NLVL = floor(log_2 (N/SMLSIZ))). */
 
-    K      (output) INTEGER array,   
-           dimension ( N ) if ICOMPQ = 1 and dimension 1 if ICOMPQ = 0.   
-           If ICOMPQ = 1, on exit, K(I) is the dimension of the I-th   
-           secular equation on the computation tree.   
+/*  DIFR   (output) REAL array, */
+/*                  dimension ( LDU, 2 * NLVL ) if ICOMPQ = 1 and */
+/*                  dimension ( N ) if ICOMPQ = 0. */
+/*         If ICOMPQ = 1, on exit, DIFL(1:N, I) and DIFR(1:N, 2 * I - 1) */
+/*         record distances between singular values on the I-th */
+/*         level and singular values on the (I -1)-th level, and */
+/*         DIFR(1:N, 2 * I ) contains the normalizing factors for */
+/*         the right singular vector matrix. See SLASD8 for details. */
 
-    DIFL   (output) REAL array, dimension ( LDU, NLVL ),   
-           where NLVL = floor(log_2 (N/SMLSIZ))).   
+/*  Z      (output) REAL array, */
+/*                  dimension ( LDU, NLVL ) if ICOMPQ = 1 and */
+/*                  dimension ( N ) if ICOMPQ = 0. */
+/*         The first K elements of Z(1, I) contain the components of */
+/*         the deflation-adjusted updating row vector for subproblems */
+/*         on the I-th level. */
 
-    DIFR   (output) REAL array,   
-                    dimension ( LDU, 2 * NLVL ) if ICOMPQ = 1 and   
-                    dimension ( N ) if ICOMPQ = 0.   
-           If ICOMPQ = 1, on exit, DIFL(1:N, I) and DIFR(1:N, 2 * I - 1)   
-           record distances between singular values on the I-th   
-           level and singular values on the (I -1)-th level, and   
-           DIFR(1:N, 2 * I ) contains the normalizing factors for   
-           the right singular vector matrix. See SLASD8 for details.   
+/*  POLES  (output) REAL array, */
+/*         dimension ( LDU, 2 * NLVL ) if ICOMPQ = 1, and not referenced */
+/*         if ICOMPQ = 0. If ICOMPQ = 1, on exit, POLES(1, 2*I - 1) and */
+/*         POLES(1, 2*I) contain  the new and old singular values */
+/*         involved in the secular equations on the I-th level. */
 
-    Z      (output) REAL array,   
-                    dimension ( LDU, NLVL ) if ICOMPQ = 1 and   
-                    dimension ( N ) if ICOMPQ = 0.   
-           The first K elements of Z(1, I) contain the components of   
-           the deflation-adjusted updating row vector for subproblems   
-           on the I-th level.   
+/*  GIVPTR (output) INTEGER array, */
+/*         dimension ( N ) if ICOMPQ = 1, and not referenced if */
+/*         ICOMPQ = 0. If ICOMPQ = 1, on exit, GIVPTR( I ) records */
+/*         the number of Givens rotations performed on the I-th */
+/*         problem on the computation tree. */
 
-    POLES  (output) REAL array,   
-           dimension ( LDU, 2 * NLVL ) if ICOMPQ = 1, and not referenced   
-           if ICOMPQ = 0. If ICOMPQ = 1, on exit, POLES(1, 2*I - 1) and   
-           POLES(1, 2*I) contain  the new and old singular values   
-           involved in the secular equations on the I-th level.   
+/*  GIVCOL (output) INTEGER array, */
+/*         dimension ( LDGCOL, 2 * NLVL ) if ICOMPQ = 1, and not */
+/*         referenced if ICOMPQ = 0. If ICOMPQ = 1, on exit, for each I, */
+/*         GIVCOL(1, 2 *I - 1) and GIVCOL(1, 2 *I) record the locations */
+/*         of Givens rotations performed on the I-th level on the */
+/*         computation tree. */
 
-    GIVPTR (output) INTEGER array,   
-           dimension ( N ) if ICOMPQ = 1, and not referenced if   
-           ICOMPQ = 0. If ICOMPQ = 1, on exit, GIVPTR( I ) records   
-           the number of Givens rotations performed on the I-th   
-           problem on the computation tree.   
+/*  LDGCOL (input) INTEGER, LDGCOL = > N. */
+/*         The leading dimension of arrays GIVCOL and PERM. */
 
-    GIVCOL (output) INTEGER array,   
-           dimension ( LDGCOL, 2 * NLVL ) if ICOMPQ = 1, and not   
-           referenced if ICOMPQ = 0. If ICOMPQ = 1, on exit, for each I,   
-           GIVCOL(1, 2 *I - 1) and GIVCOL(1, 2 *I) record the locations   
-           of Givens rotations performed on the I-th level on the   
-           computation tree.   
+/*  PERM   (output) INTEGER array, dimension ( LDGCOL, NLVL ) */
+/*         if ICOMPQ = 1, and not referenced */
+/*         if ICOMPQ = 0. If ICOMPQ = 1, on exit, PERM(1, I) records */
+/*         permutations done on the I-th level of the computation tree. */
 
-    LDGCOL (input) INTEGER, LDGCOL = > N.   
-           The leading dimension of arrays GIVCOL and PERM.   
+/*  GIVNUM (output) REAL array, */
+/*         dimension ( LDU,  2 * NLVL ) if ICOMPQ = 1, and not */
+/*         referenced if ICOMPQ = 0. If ICOMPQ = 1, on exit, for each I, */
+/*         GIVNUM(1, 2 *I - 1) and GIVNUM(1, 2 *I) record the C- and S- */
+/*         values of Givens rotations performed on the I-th level on */
+/*         the computation tree. */
 
-    PERM   (output) INTEGER array,   
-           dimension ( LDGCOL, NLVL ) if ICOMPQ = 1, and not referenced   
-           if ICOMPQ = 0. If ICOMPQ = 1, on exit, PERM(1, I) records   
-           permutations done on the I-th level of the computation tree.   
+/*  C      (output) REAL array, */
+/*         dimension ( N ) if ICOMPQ = 1, and dimension 1 if ICOMPQ = 0. */
+/*         If ICOMPQ = 1 and the I-th subproblem is not square, on exit, */
+/*         C( I ) contains the C-value of a Givens rotation related to */
+/*         the right null space of the I-th subproblem. */
 
-    GIVNUM (output) REAL array,   
-           dimension ( LDU,  2 * NLVL ) if ICOMPQ = 1, and not   
-           referenced if ICOMPQ = 0. If ICOMPQ = 1, on exit, for each I,   
-           GIVNUM(1, 2 *I - 1) and GIVNUM(1, 2 *I) record the C- and S-   
-           values of Givens rotations performed on the I-th level on   
-           the computation tree.   
+/*  S      (output) REAL array, dimension ( N ) if */
+/*         ICOMPQ = 1, and dimension 1 if ICOMPQ = 0. If ICOMPQ = 1 */
+/*         and the I-th subproblem is not square, on exit, S( I ) */
+/*         contains the S-value of a Givens rotation related to */
+/*         the right null space of the I-th subproblem. */
 
-    C      (output) REAL array,   
-           dimension ( N ) if ICOMPQ = 1, and dimension 1 if ICOMPQ = 0.   
-           If ICOMPQ = 1 and the I-th subproblem is not square, on exit,   
-           C( I ) contains the C-value of a Givens rotation related to   
-           the right null space of the I-th subproblem.   
+/*  WORK   (workspace) REAL array, dimension */
+/*         (6 * N + (SMLSIZ + 1)*(SMLSIZ + 1)). */
 
-    S      (output) REAL array, dimension ( N ) if   
-           ICOMPQ = 1, and dimension 1 if ICOMPQ = 0. If ICOMPQ = 1   
-           and the I-th subproblem is not square, on exit, S( I )   
-           contains the S-value of a Givens rotation related to   
-           the right null space of the I-th subproblem.   
+/*  IWORK  (workspace) INTEGER array, dimension (7*N). */
 
-    WORK   (workspace) REAL array, dimension   
-           (6 * N + (SMLSIZ + 1)*(SMLSIZ + 1)).   
+/*  INFO   (output) INTEGER */
+/*          = 0:  successful exit. */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value. */
+/*          > 0:  if INFO = 1, an singular value did not converge */
 
-    IWORK  (workspace) INTEGER array.   
-           Dimension must be at least (7 * N).   
+/*  Further Details */
+/*  =============== */
 
-    INFO   (output) INTEGER   
-            = 0:  successful exit.   
-            < 0:  if INFO = -i, the i-th argument had an illegal value.   
-            > 0:  if INFO = 1, an singular value did not converge   
+/*  Based on contributions by */
+/*     Ming Gu and Huan Ren, Computer Science Division, University of */
+/*     California at Berkeley, USA */
 
-    Further Details   
-    ===============   
+/*  ===================================================================== */
 
-    Based on contributions by   
-       Ming Gu and Huan Ren, Computer Science Division, University of   
-       California at Berkeley, USA   
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Executable Statements .. */
 
-    =====================================================================   
+/*     Test the input parameters. */
 
-
-       Test the input parameters.   
-
-       Parameter adjustments */
+    /* Parameter adjustments */
     --d__;
     --e;
     givnum_dim1 = *ldu;
-    givnum_offset = 1 + givnum_dim1 * 1;
+    givnum_offset = 1 + givnum_dim1;
     givnum -= givnum_offset;
     poles_dim1 = *ldu;
-    poles_offset = 1 + poles_dim1 * 1;
+    poles_offset = 1 + poles_dim1;
     poles -= poles_offset;
     z_dim1 = *ldu;
-    z_offset = 1 + z_dim1 * 1;
+    z_offset = 1 + z_dim1;
     z__ -= z_offset;
     difr_dim1 = *ldu;
-    difr_offset = 1 + difr_dim1 * 1;
+    difr_offset = 1 + difr_dim1;
     difr -= difr_offset;
     difl_dim1 = *ldu;
-    difl_offset = 1 + difl_dim1 * 1;
+    difl_offset = 1 + difl_dim1;
     difl -= difl_offset;
     vt_dim1 = *ldu;
-    vt_offset = 1 + vt_dim1 * 1;
+    vt_offset = 1 + vt_dim1;
     vt -= vt_offset;
     u_dim1 = *ldu;
-    u_offset = 1 + u_dim1 * 1;
+    u_offset = 1 + u_dim1;
     u -= u_offset;
     --k;
     --givptr;
     perm_dim1 = *ldgcol;
-    perm_offset = 1 + perm_dim1 * 1;
+    perm_offset = 1 + perm_dim1;
     perm -= perm_offset;
     givcol_dim1 = *ldgcol;
-    givcol_offset = 1 + givcol_dim1 * 1;
+    givcol_offset = 1 + givcol_dim1;
     givcol -= givcol_offset;
     --c__;
     --s;
@@ -292,7 +297,7 @@ static integer c__2 = 2;
 		    work[1], info);
 	} else {
 	    slasdq_("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset]
-		    , ldu, &u[u_offset], ldu, &u[u_offset], ldu, &work[1], 
+, ldu, &u[u_offset], ldu, &u[u_offset], ldu, &work[1], 
 		    info);
 	}
 	return 0;
@@ -318,18 +323,18 @@ static integer c__2 = 2;
     slasdt_(n, &nlvl, &nd, &iwork[inode], &iwork[ndiml], &iwork[ndimr], 
 	    smlsiz);
 
-/*     for the nodes on bottom level of the tree, solve   
-       their subproblems by SLASDQ. */
+/*     for the nodes on bottom level of the tree, solve */
+/*     their subproblems by SLASDQ. */
 
     ndb1 = (nd + 1) / 2;
     i__1 = nd;
     for (i__ = ndb1; i__ <= i__1; ++i__) {
 
-/*        IC : center row of each node   
-          NL : number of rows of left  subproblem   
-          NR : number of rows of right subproblem   
-          NLF: starting row of the left   subproblem   
-          NRF: starting row of the right  subproblem */
+/*        IC : center row of each node */
+/*        NL : number of rows of left  subproblem */
+/*        NR : number of rows of right subproblem */
+/*        NLF: starting row of the left   subproblem */
+/*        NRF: starting row of the right  subproblem */
 
 	i1 = i__ - 1;
 	ic = iwork[inode + i1];
@@ -351,13 +356,15 @@ static integer c__2 = 2;
 	    scopy_(&nlp1, &work[nwork1], &c__1, &work[vfi], &c__1);
 	    scopy_(&nlp1, &work[itemp], &c__1, &work[vli], &c__1);
 	} else {
-	    slaset_("A", &nl, &nl, &c_b11, &c_b12, &u_ref(nlf, 1), ldu);
-	    slaset_("A", &nlp1, &nlp1, &c_b11, &c_b12, &vt_ref(nlf, 1), ldu);
+	    slaset_("A", &nl, &nl, &c_b11, &c_b12, &u[nlf + u_dim1], ldu);
+	    slaset_("A", &nlp1, &nlp1, &c_b11, &c_b12, &vt[nlf + vt_dim1], 
+		    ldu);
 	    slasdq_("U", &sqrei, &nl, &nlp1, &nl, &ncc, &d__[nlf], &e[nlf], &
-		    vt_ref(nlf, 1), ldu, &u_ref(nlf, 1), ldu, &u_ref(nlf, 1), 
-		    ldu, &work[nwork1], info);
-	    scopy_(&nlp1, &vt_ref(nlf, 1), &c__1, &work[vfi], &c__1);
-	    scopy_(&nlp1, &vt_ref(nlf, nlp1), &c__1, &work[vli], &c__1);
+		    vt[nlf + vt_dim1], ldu, &u[nlf + u_dim1], ldu, &u[nlf + 
+		    u_dim1], ldu, &work[nwork1], info);
+	    scopy_(&nlp1, &vt[nlf + vt_dim1], &c__1, &work[vfi], &c__1);
+	    scopy_(&nlp1, &vt[nlf + nlp1 * vt_dim1], &c__1, &work[vli], &c__1)
+		    ;
 	}
 	if (*info != 0) {
 	    return 0;
@@ -385,13 +392,15 @@ static integer c__2 = 2;
 	    scopy_(&nrp1, &work[nwork1], &c__1, &work[vfi], &c__1);
 	    scopy_(&nrp1, &work[itemp], &c__1, &work[vli], &c__1);
 	} else {
-	    slaset_("A", &nr, &nr, &c_b11, &c_b12, &u_ref(nrf, 1), ldu);
-	    slaset_("A", &nrp1, &nrp1, &c_b11, &c_b12, &vt_ref(nrf, 1), ldu);
+	    slaset_("A", &nr, &nr, &c_b11, &c_b12, &u[nrf + u_dim1], ldu);
+	    slaset_("A", &nrp1, &nrp1, &c_b11, &c_b12, &vt[nrf + vt_dim1], 
+		    ldu);
 	    slasdq_("U", &sqrei, &nr, &nrp1, &nr, &ncc, &d__[nrf], &e[nrf], &
-		    vt_ref(nrf, 1), ldu, &u_ref(nrf, 1), ldu, &u_ref(nrf, 1), 
-		    ldu, &work[nwork1], info);
-	    scopy_(&nrp1, &vt_ref(nrf, 1), &c__1, &work[vfi], &c__1);
-	    scopy_(&nrp1, &vt_ref(nrf, nrp1), &c__1, &work[vli], &c__1);
+		    vt[nrf + vt_dim1], ldu, &u[nrf + u_dim1], ldu, &u[nrf + 
+		    u_dim1], ldu, &work[nwork1], info);
+	    scopy_(&nrp1, &vt[nrf + vt_dim1], &c__1, &work[vfi], &c__1);
+	    scopy_(&nrp1, &vt[nrf + nrp1 * vt_dim1], &c__1, &work[vli], &c__1)
+		    ;
 	}
 	if (*info != 0) {
 	    return 0;
@@ -410,8 +419,8 @@ static integer c__2 = 2;
     for (lvl = nlvl; lvl >= 1; --lvl) {
 	lvl2 = (lvl << 1) - 1;
 
-/*        Find the first node LF and last node LL on   
-          the current level LVL. */
+/*        Find the first node LF and last node LL on */
+/*        the current level LVL. */
 
 	if (lvl == 1) {
 	    lf = 1;
@@ -444,18 +453,19 @@ static integer c__2 = 2;
 			work[vli], &alpha, &beta, &iwork[idxqi], &perm[
 			perm_offset], &givptr[1], &givcol[givcol_offset], 
 			ldgcol, &givnum[givnum_offset], ldu, &poles[
-			poles_offset], &difl[difl_offset], &difr[difr_offset],
-			 &z__[z_offset], &k[1], &c__[1], &s[1], &work[nwork1],
+			poles_offset], &difl[difl_offset], &difr[difr_offset], 
+			 &z__[z_offset], &k[1], &c__[1], &s[1], &work[nwork1], 
 			 &iwork[iwk], info);
 	    } else {
 		--j;
 		slasd6_(icompq, &nl, &nr, &sqrei, &d__[nlf], &work[vfi], &
-			work[vli], &alpha, &beta, &iwork[idxqi], &perm_ref(
-			nlf, lvl), &givptr[j], &givcol_ref(nlf, lvl2), ldgcol,
-			 &givnum_ref(nlf, lvl2), ldu, &poles_ref(nlf, lvl2), &
-			difl_ref(nlf, lvl), &difr_ref(nlf, lvl2), &z___ref(
-			nlf, lvl), &k[j], &c__[j], &s[j], &work[nwork1], &
-			iwork[iwk], info);
+			work[vli], &alpha, &beta, &iwork[idxqi], &perm[nlf + 
+			lvl * perm_dim1], &givptr[j], &givcol[nlf + lvl2 * 
+			givcol_dim1], ldgcol, &givnum[nlf + lvl2 * 
+			givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1], &
+			difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * 
+			difr_dim1], &z__[nlf + lvl * z_dim1], &k[j], &c__[j], 
+			&s[j], &work[nwork1], &iwork[iwk], info);
 	    }
 	    if (*info != 0) {
 		return 0;
@@ -470,15 +480,3 @@ static integer c__2 = 2;
 /*     End of SLASDA */
 
 } /* slasda_ */
-
-#undef givnum_ref
-#undef givcol_ref
-#undef vt_ref
-#undef poles_ref
-#undef z___ref
-#undef u_ref
-#undef perm_ref
-#undef difr_ref
-#undef difl_ref
-
-

@@ -1,99 +1,125 @@
+/* slasq1.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-/*  -- translated by f2c (version 19990503).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
+		http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "pnl/pnl_f2c.h"
 
 /* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__2 = 2;
-static integer c__0 = 0;
+static int c__1 = 1;
+static int c__2 = 2;
+static int c__0 = 0;
 
-/* Subroutine */ int slasq1_(integer *n, real *d__, real *e, real *work, 
-	integer *info)
+ int slasq1_(int *n, float *d__, float *e, float *work, 
+	int *info)
 {
     /* System generated locals */
-    integer i__1, i__2;
-    real r__1, r__2, r__3;
+    int i__1, i__2;
+    float r__1, r__2, r__3;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
 
     /* Local variables */
-    extern /* Subroutine */ int slas2_(real *, real *, real *, real *, real *)
+    int i__;
+    float eps;
+    extern  int slas2_(float *, float *, float *, float *, float *)
 	    ;
-    static integer i__;
-    static real scale;
-    static integer iinfo;
-    static real sigmn, sigmx;
-    extern /* Subroutine */ int scopy_(integer *, real *, integer *, real *, 
-	    integer *), slasq2_(integer *, real *, integer *);
-    extern doublereal slamch_(char *);
-    static real safmin;
-    extern /* Subroutine */ int xerbla_(char *, integer *), slascl_(
-	    char *, integer *, integer *, real *, real *, integer *, integer *
-	    , real *, integer *, integer *), slasrt_(char *, integer *
-	    , real *, integer *);
-    static real eps;
+    float scale;
+    int iinfo;
+    float sigmn, sigmx;
+    extern  int scopy_(int *, float *, int *, float *, 
+	    int *), slasq2_(int *, float *, int *);
+    extern double slamch_(char *);
+    float safmin;
+    extern  int xerbla_(char *, int *), slascl_(
+	    char *, int *, int *, float *, float *, int *, int *
+, float *, int *, int *), slasrt_(char *, int *
+, float *, int *);
 
 
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1999   
+/*  -- LAPACK routine (version 3.2)                                    -- */
 
+/*  -- Contributed by Osni Marques of the Lawrence Berkeley National   -- */
+/*  -- Laboratory and Beresford Parlett of the Univ. of California at  -- */
+/*  -- Berkeley                                                        -- */
+/*  -- November 2008                                                   -- */
 
-    Purpose   
-    =======   
+/*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */
+/*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
 
-    SLASQ1 computes the singular values of a real N-by-N bidiagonal   
-    matrix with diagonal D and off-diagonal E. The singular values   
-    are computed to high relative accuracy, in the absence of   
-    denormalization, underflow and overflow. The algorithm was first   
-    presented in   
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
 
-    "Accurate singular values and differential qd algorithms" by K. V.   
-    Fernando and B. N. Parlett, Numer. Math., Vol-67, No. 2, pp. 191-230,   
-    1994,   
+/*  Purpose */
+/*  ======= */
 
-    and the present implementation is described in "An implementation of   
-    the dqds Algorithm (Positive Case)", LAPACK Working Note.   
+/*  SLASQ1 computes the singular values of a float N-by-N bidiagonal */
+/*  matrix with diagonal D and off-diagonal E. The singular values */
+/*  are computed to high relative accuracy, in the absence of */
+/*  denormalization, underflow and overflow. The algorithm was first */
+/*  presented in */
 
-    Arguments   
-    =========   
+/*  "Accurate singular values and differential qd algorithms" by K. V. */
+/*  Fernando and B. N. Parlett, Numer. Math., Vol-67, No. 2, pp. 191-230, */
+/*  1994, */
 
-    N     (input) INTEGER   
-          The number of rows and columns in the matrix. N >= 0.   
+/*  and the present implementation is described in "An implementation of */
+/*  the dqds Algorithm (Positive Case)", LAPACK Working Note. */
 
-    D     (input/output) REAL array, dimension (N)   
-          On entry, D contains the diagonal elements of the   
-          bidiagonal matrix whose SVD is desired. On normal exit,   
-          D contains the singular values in decreasing order.   
+/*  Arguments */
+/*  ========= */
 
-    E     (input/output) REAL array, dimension (N)   
-          On entry, elements E(1:N-1) contain the off-diagonal elements   
-          of the bidiagonal matrix whose SVD is desired.   
-          On exit, E is overwritten.   
+/*  N     (input) INTEGER */
+/*        The number of rows and columns in the matrix. N >= 0. */
 
-    WORK  (workspace) REAL array, dimension (4*N)   
+/*  D     (input/output) REAL array, dimension (N) */
+/*        On entry, D contains the diagonal elements of the */
+/*        bidiagonal matrix whose SVD is desired. On normal exit, */
+/*        D contains the singular values in decreasing order. */
 
-    INFO  (output) INTEGER   
-          = 0: successful exit   
-          < 0: if INFO = -i, the i-th argument had an illegal value   
-          > 0: the algorithm failed   
-               = 1, a split was marked by a positive value in E   
-               = 2, current block of Z not diagonalized after 30*N   
-                    iterations (in inner while loop)   
-               = 3, termination criterion of outer while loop not met   
-                    (program created more than N unreduced blocks)   
+/*  E     (input/output) REAL array, dimension (N) */
+/*        On entry, elements E(1:N-1) contain the off-diagonal elements */
+/*        of the bidiagonal matrix whose SVD is desired. */
+/*        On exit, E is overwritten. */
 
-    =====================================================================   
+/*  WORK  (workspace) REAL array, dimension (4*N) */
 
+/*  INFO  (output) INTEGER */
+/*        = 0: successful exit */
+/*        < 0: if INFO = -i, the i-th argument had an illegal value */
+/*        > 0: the algorithm failed */
+/*             = 1, a split was marked by a positive value in E */
+/*             = 2, current block of Z not diagonalized after 30*N */
+/*                  iterations (in inner while loop) */
+/*             = 3, termination criterion of outer while loop not met */
+/*                  (program created more than N unreduced blocks) */
 
-       Parameter adjustments */
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     --work;
     --e;
     --d__;
@@ -108,7 +134,7 @@ static integer c__0 = 0;
     } else if (*n == 0) {
 	return 0;
     } else if (*n == 1) {
-	d__[1] = dabs(d__[1]);
+	d__[1] = ABS(d__[1]);
 	return 0;
     } else if (*n == 2) {
 	slas2_(&d__[1], &e[1], &d__[2], &sigmn, &sigmx);
@@ -122,13 +148,13 @@ static integer c__0 = 0;
     sigmx = 0.f;
     i__1 = *n - 1;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	d__[i__] = (r__1 = d__[i__], dabs(r__1));
+	d__[i__] = (r__1 = d__[i__], ABS(r__1));
 /* Computing MAX */
-	r__2 = sigmx, r__3 = (r__1 = e[i__], dabs(r__1));
-	sigmx = dmax(r__2,r__3);
+	r__2 = sigmx, r__3 = (r__1 = e[i__], ABS(r__1));
+	sigmx = MAX(r__2,r__3);
 /* L10: */
     }
-    d__[*n] = (r__1 = d__[*n], dabs(r__1));
+    d__[*n] = (r__1 = d__[*n], ABS(r__1));
 
 /*     Early return if SIGMX is zero (matrix is already diagonal). */
 
@@ -141,12 +167,12 @@ static integer c__0 = 0;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /* Computing MAX */
 	r__1 = sigmx, r__2 = d__[i__];
-	sigmx = dmax(r__1,r__2);
+	sigmx = MAX(r__1,r__2);
 /* L20: */
     }
 
-/*     Copy D and E into WORK (in the Z format) and scale (squaring the   
-       input data makes scaling by a power of the radix pointless). */
+/*     Copy D and E into WORK (in the Z format) and scale (squaring the */
+/*     input data makes scaling by a power of the radix pointless). */
 
     eps = slamch_("Precision");
     safmin = slamch_("Safe minimum");
@@ -187,4 +213,3 @@ static integer c__0 = 0;
 /*     End of SLASQ1 */
 
 } /* slasq1_ */
-

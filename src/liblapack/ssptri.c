@@ -1,92 +1,117 @@
+/* ssptri.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int ssptri_(char *uplo, integer *n, real *ap, integer *ipiv, 
-	real *work, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+static float c_b11 = -1.f;
+static float c_b13 = 0.f;
+
+ int ssptri_(char *uplo, int *n, float *ap, int *ipiv, 
+	float *work, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       March 31, 1993   
-
-
-    Purpose   
-    =======   
-
-    SSPTRI computes the inverse of a real symmetric indefinite matrix   
-    A in packed storage using the factorization A = U*D*U**T or   
-    A = L*D*L**T computed by SSPTRF.   
-
-    Arguments   
-    =========   
-
-    UPLO    (input) CHARACTER*1   
-            Specifies whether the details of the factorization are stored   
-            as an upper or lower triangular matrix.   
-            = 'U':  Upper triangular, form is A = U*D*U**T;   
-            = 'L':  Lower triangular, form is A = L*D*L**T.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    AP      (input/output) REAL array, dimension (N*(N+1)/2)   
-            On entry, the block diagonal matrix D and the multipliers   
-            used to obtain the factor U or L as computed by SSPTRF,   
-            stored as a packed triangular matrix.   
-
-            On exit, if INFO = 0, the (symmetric) inverse of the original   
-            matrix, stored as a packed triangular matrix. The j-th column   
-            of inv(A) is stored in the array AP as follows:   
-            if UPLO = 'U', AP(i + (j-1)*j/2) = inv(A)(i,j) for 1<=i<=j;   
-            if UPLO = 'L',   
-               AP(i + (j-1)*(2n-j)/2) = inv(A)(i,j) for j<=i<=n.   
-
-    IPIV    (input) INTEGER array, dimension (N)   
-            Details of the interchanges and the block structure of D   
-            as determined by SSPTRF.   
-
-    WORK    (workspace) REAL array, dimension (N)   
-
-    INFO    (output) INTEGER   
-            = 0: successful exit   
-            < 0: if INFO = -i, the i-th argument had an illegal value   
-            > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its   
-                 inverse could not be computed.   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    static real c_b11 = -1.f;
-    static real c_b13 = 0.f;
-    
     /* System generated locals */
-    integer i__1;
-    real r__1;
+    int i__1;
+    float r__1;
+
     /* Local variables */
-    static real temp;
-    extern doublereal sdot_(integer *, real *, integer *, real *, integer *);
-    static real akkp1, d__;
-    static integer j, k;
-    static real t;
-    extern logical lsame_(char *, char *);
-    static integer kstep;
-    static logical upper;
-    extern /* Subroutine */ int scopy_(integer *, real *, integer *, real *, 
-	    integer *), sswap_(integer *, real *, integer *, real *, integer *
-	    ), sspmv_(char *, integer *, real *, real *, real *, integer *, 
-	    real *, real *, integer *);
-    static real ak;
-    static integer kc, kp, kx;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static integer kcnext, kpc, npp;
-    static real akp1;
+    float d__;
+    int j, k;
+    float t, ak;
+    int kc, kp, kx, kpc, npp;
+    float akp1, temp;
+    extern double sdot_(int *, float *, int *, float *, int *);
+    float akkp1;
+    extern int lsame_(char *, char *);
+    int kstep;
+    int upper;
+    extern  int scopy_(int *, float *, int *, float *, 
+	    int *), sswap_(int *, float *, int *, float *, int *
+), sspmv_(char *, int *, float *, float *, float *, int *, 
+	    float *, float *, int *), xerbla_(char *, int *);
+    int kcnext;
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  SSPTRI computes the inverse of a float symmetric indefinite matrix */
+/*  A in packed storage using the factorization A = U*D*U**T or */
+/*  A = L*D*L**T computed by SSPTRF. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          Specifies whether the details of the factorization are stored */
+/*          as an upper or lower triangular matrix. */
+/*          = 'U':  Upper triangular, form is A = U*D*U**T; */
+/*          = 'L':  Lower triangular, form is A = L*D*L**T. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  AP      (input/output) REAL array, dimension (N*(N+1)/2) */
+/*          On entry, the block diagonal matrix D and the multipliers */
+/*          used to obtain the factor U or L as computed by SSPTRF, */
+/*          stored as a packed triangular matrix. */
+
+/*          On exit, if INFO = 0, the (symmetric) inverse of the original */
+/*          matrix, stored as a packed triangular matrix. The j-th column */
+/*          of inv(A) is stored in the array AP as follows: */
+/*          if UPLO = 'U', AP(i + (j-1)*j/2) = inv(A)(i,j) for 1<=i<=j; */
+/*          if UPLO = 'L', */
+/*             AP(i + (j-1)*(2n-j)/2) = inv(A)(i,j) for j<=i<=n. */
+
+/*  IPIV    (input) INTEGER array, dimension (N) */
+/*          Details of the interchanges and the block structure of D */
+/*          as determined by SSPTRF. */
+
+/*  WORK    (workspace) REAL array, dimension (N) */
+
+/*  INFO    (output) INTEGER */
+/*          = 0: successful exit */
+/*          < 0: if INFO = -i, the i-th argument had an illegal value */
+/*          > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its */
+/*               inverse could not be computed. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --work;
     --ipiv;
     --ap;
@@ -143,10 +168,10 @@
 
     if (upper) {
 
-/*        Compute inv(A) from the factorization A = U*D*U'.   
+/*        Compute inv(A) from the factorization A = U*D*U'. */
 
-          K is the main loop index, increasing from 1 to N in steps of   
-          1 or 2, depending on the size of the diagonal blocks. */
+/*        K is the main loop index, increasing from 1 to N in steps of */
+/*        1 or 2, depending on the size of the diagonal blocks. */
 
 	k = 1;
 	kc = 1;
@@ -161,9 +186,9 @@ L30:
 	kcnext = kc + k;
 	if (ipiv[k] > 0) {
 
-/*           1 x 1 diagonal block   
+/*           1 x 1 diagonal block */
 
-             Invert the diagonal block. */
+/*           Invert the diagonal block. */
 
 	    ap[kc + k - 1] = 1.f / ap[kc + k - 1];
 
@@ -182,11 +207,11 @@ L30:
 	    kstep = 1;
 	} else {
 
-/*           2 x 2 diagonal block   
+/*           2 x 2 diagonal block */
 
-             Invert the diagonal block. */
+/*           Invert the diagonal block. */
 
-	    t = (r__1 = ap[kcnext + k - 1], dabs(r__1));
+	    t = (r__1 = ap[kcnext + k - 1], ABS(r__1));
 	    ak = ap[kc + k - 1] / t;
 	    akp1 = ap[kcnext + k] / t;
 	    akkp1 = ap[kcnext + k - 1] / t;
@@ -208,7 +233,7 @@ L30:
 			c__1);
 		i__1 = k - 1;
 		ap[kcnext + k - 1] -= sdot_(&i__1, &ap[kc], &c__1, &ap[kcnext]
-			, &c__1);
+, &c__1);
 		i__1 = k - 1;
 		scopy_(&i__1, &ap[kcnext], &c__1, &work[1], &c__1);
 		i__1 = k - 1;
@@ -222,11 +247,11 @@ L30:
 	    kcnext = kcnext + k + 1;
 	}
 
-	kp = (i__1 = ipiv[k], abs(i__1));
+	kp = (i__1 = ipiv[k], ABS(i__1));
 	if (kp != k) {
 
-/*           Interchange rows and columns K and KP in the leading   
-             submatrix A(1:k+1,1:k+1) */
+/*           Interchange rows and columns K and KP in the leading */
+/*           submatrix A(1:k+1,1:k+1) */
 
 	    kpc = (kp - 1) * kp / 2 + 1;
 	    i__1 = kp - 1;
@@ -258,10 +283,10 @@ L50:
 	;
     } else {
 
-/*        Compute inv(A) from the factorization A = L*D*L'.   
+/*        Compute inv(A) from the factorization A = L*D*L'. */
 
-          K is the main loop index, increasing from 1 to N in steps of   
-          1 or 2, depending on the size of the diagonal blocks. */
+/*        K is the main loop index, increasing from 1 to N in steps of */
+/*        1 or 2, depending on the size of the diagonal blocks. */
 
 	npp = *n * (*n + 1) / 2;
 	k = *n;
@@ -277,9 +302,9 @@ L60:
 	kcnext = kc - (*n - k + 2);
 	if (ipiv[k] > 0) {
 
-/*           1 x 1 diagonal block   
+/*           1 x 1 diagonal block */
 
-             Invert the diagonal block. */
+/*           Invert the diagonal block. */
 
 	    ap[kc] = 1.f / ap[kc];
 
@@ -297,11 +322,11 @@ L60:
 	    kstep = 1;
 	} else {
 
-/*           2 x 2 diagonal block   
+/*           2 x 2 diagonal block */
 
-             Invert the diagonal block. */
+/*           Invert the diagonal block. */
 
-	    t = (r__1 = ap[kcnext + 1], dabs(r__1));
+	    t = (r__1 = ap[kcnext + 1], ABS(r__1));
 	    ak = ap[kcnext] / t;
 	    akp1 = ap[kc] / t;
 	    akkp1 = ap[kcnext + 1] / t;
@@ -336,11 +361,11 @@ L60:
 	    kcnext -= *n - k + 3;
 	}
 
-	kp = (i__1 = ipiv[k], abs(i__1));
+	kp = (i__1 = ipiv[k], ABS(i__1));
 	if (kp != k) {
 
-/*           Interchange rows and columns K and KP in the trailing   
-             submatrix A(k-1:n,k-1:n) */
+/*           Interchange rows and columns K and KP in the trailing */
+/*           submatrix A(k-1:n,k-1:n) */
 
 	    kpc = npp - (*n - kp + 1) * (*n - kp + 2) / 2 + 1;
 	    if (kp < *n) {
@@ -379,4 +404,3 @@ L80:
 /*     End of SSPTRI */
 
 } /* ssptri_ */
-

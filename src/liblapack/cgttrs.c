@@ -1,103 +1,124 @@
+/* cgttrs.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int cgttrs_(char *trans, integer *n, integer *nrhs, complex *
-	dl, complex *d__, complex *du, complex *du2, integer *ipiv, complex *
-	b, integer *ldb, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+static int c_n1 = -1;
+
+ int cgttrs_(char *trans, int *n, int *nrhs, complex *
+	dl, complex *d__, complex *du, complex *du2, int *ipiv, complex *
+	b, int *ldb, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    CGTTRS solves one of the systems of equations   
-       A * X = B,  A**T * X = B,  or  A**H * X = B,   
-    with a tridiagonal matrix A using the LU factorization computed   
-    by CGTTRF.   
-
-    Arguments   
-    =========   
-
-    TRANS   (input) CHARACTER   
-            Specifies the form of the system of equations.   
-            = 'N':  A * X = B     (No transpose)   
-            = 'T':  A**T * X = B  (Transpose)   
-            = 'C':  A**H * X = B  (Conjugate transpose)   
-
-    N       (input) INTEGER   
-            The order of the matrix A.   
-
-    NRHS    (input) INTEGER   
-            The number of right hand sides, i.e., the number of columns   
-            of the matrix B.  NRHS >= 0.   
-
-    DL      (input) COMPLEX array, dimension (N-1)   
-            The (n-1) multipliers that define the matrix L from the   
-            LU factorization of A.   
-
-    D       (input) COMPLEX array, dimension (N)   
-            The n diagonal elements of the upper triangular matrix U from   
-            the LU factorization of A.   
-
-    DU      (input) COMPLEX array, dimension (N-1)   
-            The (n-1) elements of the first super-diagonal of U.   
-
-    DU2     (input) COMPLEX array, dimension (N-2)   
-            The (n-2) elements of the second super-diagonal of U.   
-
-    IPIV    (input) INTEGER array, dimension (N)   
-            The pivot indices; for 1 <= i <= n, row i of the matrix was   
-            interchanged with row IPIV(i).  IPIV(i) will always be either   
-            i or i+1; IPIV(i) = i indicates a row interchange was not   
-            required.   
-
-    B       (input/output) COMPLEX array, dimension (LDB,NRHS)   
-            On entry, the matrix of right hand side vectors B.   
-            On exit, B is overwritten by the solution vectors X.   
-
-    LDB     (input) INTEGER   
-            The leading dimension of the array B.  LDB >= max(1,N).   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -k, the k-th argument had an illegal value   
-
-    =====================================================================   
-
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    static integer c_n1 = -1;
-    
     /* System generated locals */
-    integer b_dim1, b_offset, i__1, i__2, i__3;
+    int b_dim1, b_offset, i__1, i__2, i__3;
+
     /* Local variables */
-    static integer j;
-    extern /* Subroutine */ int cgtts2_(integer *, integer *, integer *, 
-	    complex *, complex *, complex *, complex *, integer *, complex *, 
-	    integer *);
-    static integer jb, nb;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
-    static integer itrans;
-    static logical notran;
-#define b_subscr(a_1,a_2) (a_2)*b_dim1 + a_1
-#define b_ref(a_1,a_2) b[b_subscr(a_1,a_2)]
+    int j, jb, nb;
+    extern  int cgtts2_(int *, int *, int *, 
+	    complex *, complex *, complex *, complex *, int *, complex *, 
+	    int *), xerbla_(char *, int *);
+    extern int ilaenv_(int *, char *, char *, int *, int *, 
+	    int *, int *);
+    int itrans;
+    int notran;
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CGTTRS solves one of the systems of equations */
+/*     A * X = B,  A**T * X = B,  or  A**H * X = B, */
+/*  with a tridiagonal matrix A using the LU factorization computed */
+/*  by CGTTRF. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  TRANS   (input) CHARACTER*1 */
+/*          Specifies the form of the system of equations. */
+/*          = 'N':  A * X = B     (No transpose) */
+/*          = 'T':  A**T * X = B  (Transpose) */
+/*          = 'C':  A**H * X = B  (Conjugate transpose) */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A. */
+
+/*  NRHS    (input) INTEGER */
+/*          The number of right hand sides, i.e., the number of columns */
+/*          of the matrix B.  NRHS >= 0. */
+
+/*  DL      (input) COMPLEX array, dimension (N-1) */
+/*          The (n-1) multipliers that define the matrix L from the */
+/*          LU factorization of A. */
+
+/*  D       (input) COMPLEX array, dimension (N) */
+/*          The n diagonal elements of the upper triangular matrix U from */
+/*          the LU factorization of A. */
+
+/*  DU      (input) COMPLEX array, dimension (N-1) */
+/*          The (n-1) elements of the first super-diagonal of U. */
+
+/*  DU2     (input) COMPLEX array, dimension (N-2) */
+/*          The (n-2) elements of the second super-diagonal of U. */
+
+/*  IPIV    (input) INTEGER array, dimension (N) */
+/*          The pivot indices; for 1 <= i <= n, row i of the matrix was */
+/*          interchanged with row IPIV(i).  IPIV(i) will always be either */
+/*          i or i+1; IPIV(i) = i indicates a row interchange was not */
+/*          required. */
+
+/*  B       (input/output) COMPLEX array, dimension (LDB,NRHS) */
+/*          On entry, the matrix of right hand side vectors B. */
+/*          On exit, B is overwritten by the solution vectors X. */
+
+/*  LDB     (input) INTEGER */
+/*          The leading dimension of the array B.  LDB >= MAX(1,N). */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -k, the k-th argument had an illegal value */
+
+/*  ===================================================================== */
+
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     --dl;
     --d__;
     --du;
     --du2;
     --ipiv;
     b_dim1 = *ldb;
-    b_offset = 1 + b_dim1 * 1;
+    b_offset = 1 + b_dim1;
     b -= b_offset;
 
     /* Function Body */
@@ -111,7 +132,7 @@
 	*info = -2;
     } else if (*nrhs < 0) {
 	*info = -3;
-    } else if (*ldb < max(*n,1)) {
+    } else if (*ldb < MAX(*n,1)) {
 	*info = -10;
     }
     if (*info != 0) {
@@ -144,8 +165,8 @@
     } else {
 /* Computing MAX */
 	i__1 = 1, i__2 = ilaenv_(&c__1, "CGTTRS", trans, n, nrhs, &c_n1, &
-		c_n1, (ftnlen)6, (ftnlen)1);
-	nb = max(i__1,i__2);
+		c_n1);
+	nb = MAX(i__1,i__2);
     }
 
     if (nb >= *nrhs) {
@@ -157,9 +178,9 @@
 	for (j = 1; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2) {
 /* Computing MIN */
 	    i__3 = *nrhs - j + 1;
-	    jb = min(i__3,nb);
+	    jb = MIN(i__3,nb);
 	    cgtts2_(&itrans, n, &jb, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[
-		    1], &b_ref(1, j), ldb);
+		    1], &b[j * b_dim1 + 1], ldb);
 /* L10: */
 	}
     }
@@ -168,8 +189,3 @@
 
     return 0;
 } /* cgttrs_ */
-
-#undef b_ref
-#undef b_subscr
-
-

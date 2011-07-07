@@ -11,7 +11,7 @@
 /*
  * The code of Lapack's dlamch is already in libamos, so we it if needed 
  */
-doublereal dlamch_(char *cmach)
+double dlamch_(char *cmach)
 {
   return pnl_dlamch(cmach);
 }

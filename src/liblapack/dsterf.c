@@ -1,89 +1,116 @@
+/* dsterf.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dsterf_(integer *n, doublereal *d__, doublereal *e, 
-	integer *info)
+/* Table of constant values */
+
+static int c__0 = 0;
+static int c__1 = 1;
+static double c_b32 = 1.;
+
+ int dsterf_(int *n, double *d__, double *e, 
+	int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    DSTERF computes all eigenvalues of a symmetric tridiagonal matrix   
-    using the Pal-Walker-Kahan variant of the QL or QR algorithm.   
-
-    Arguments   
-    =========   
-
-    N       (input) INTEGER   
-            The order of the matrix.  N >= 0.   
-
-    D       (input/output) DOUBLE PRECISION array, dimension (N)   
-            On entry, the n diagonal elements of the tridiagonal matrix.   
-            On exit, if INFO = 0, the eigenvalues in ascending order.   
-
-    E       (input/output) DOUBLE PRECISION array, dimension (N-1)   
-            On entry, the (n-1) subdiagonal elements of the tridiagonal   
-            matrix.   
-            On exit, E has been destroyed.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-            > 0:  the algorithm failed to find all of the eigenvalues in   
-                  a total of 30*N iterations; if INFO = i, then i   
-                  elements of E have not converged to zero.   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__0 = 0;
-    static integer c__1 = 1;
-    static doublereal c_b32 = 1.;
-    
     /* System generated locals */
-    integer i__1;
-    doublereal d__1, d__2, d__3;
+    int i__1;
+    double d__1, d__2, d__3;
+
     /* Builtin functions */
-    double sqrt(doublereal), d_sign(doublereal *, doublereal *);
+    double sqrt(double), d_sign(double *, double *);
+
     /* Local variables */
-    static doublereal oldc;
-    static integer lend, jtot;
-    extern /* Subroutine */ int dlae2_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
-    static doublereal c__;
-    static integer i__, l, m;
-    static doublereal p, gamma, r__, s, alpha, sigma, anorm;
-    static integer l1;
-    extern doublereal dlapy2_(doublereal *, doublereal *);
-    static doublereal bb;
-    extern doublereal dlamch_(char *);
-    static integer iscale;
-    extern /* Subroutine */ int dlascl_(char *, integer *, integer *, 
-	    doublereal *, doublereal *, integer *, integer *, doublereal *, 
-	    integer *, integer *);
-    static doublereal oldgam, safmin;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static doublereal safmax;
-    extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
-    extern /* Subroutine */ int dlasrt_(char *, integer *, doublereal *, 
-	    integer *);
-    static integer lendsv;
-    static doublereal ssfmin;
-    static integer nmaxit;
-    static doublereal ssfmax, rt1, rt2, eps, rte;
-    static integer lsv;
-    static doublereal eps2;
+    double c__;
+    int i__, l, m;
+    double p, r__, s;
+    int l1;
+    double bb, rt1, rt2, eps, rte;
+    int lsv;
+    double eps2, oldc;
+    int lend, jtot;
+    extern  int dlae2_(double *, double *, double 
+	    *, double *, double *);
+    double gamma, alpha, sigma, anorm;
+    extern double dlapy2_(double *, double *), dlamch_(char *);
+    int iscale;
+    extern  int dlascl_(char *, int *, int *, 
+	    double *, double *, int *, int *, double *, 
+	    int *, int *);
+    double oldgam, safmin;
+    extern  int xerbla_(char *, int *);
+    double safmax;
+    extern double dlanst_(char *, int *, double *, double *);
+    extern  int dlasrt_(char *, int *, double *, 
+	    int *);
+    int lendsv;
+    double ssfmin;
+    int nmaxit;
+    double ssfmax;
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  DSTERF computes all eigenvalues of a symmetric tridiagonal matrix */
+/*  using the Pal-Walker-Kahan variant of the QL or QR algorithm. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix.  N >= 0. */
+
+/*  D       (input/output) DOUBLE PRECISION array, dimension (N) */
+/*          On entry, the n diagonal elements of the tridiagonal matrix. */
+/*          On exit, if INFO = 0, the eigenvalues in ascending order. */
+
+/*  E       (input/output) DOUBLE PRECISION array, dimension (N-1) */
+/*          On entry, the (n-1) subdiagonal elements of the tridiagonal */
+/*          matrix. */
+/*          On exit, E has been destroyed. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+/*          > 0:  the algorithm failed to find all of the eigenvalues in */
+/*                a total of 30*N iterations; if INFO = i, then i */
+/*                elements of E have not converged to zero. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --e;
     --d__;
 
@@ -119,9 +146,9 @@
     sigma = 0.;
     jtot = 0;
 
-/*     Determine where the matrix splits and choose QL or QR iteration   
-       for each block, according to whether top or bottom diagonal   
-       element is smaller. */
+/*     Determine where the matrix splits and choose QL or QR iteration */
+/*     for each block, according to whether top or bottom diagonal */
+/*     element is smaller. */
 
     l1 = 1;
 
@@ -134,8 +161,8 @@ L10:
     }
     i__1 = *n - 1;
     for (m = l1; m <= i__1; ++m) {
-	if ((d__3 = e[m], abs(d__3)) <= sqrt((d__1 = d__[m], abs(d__1))) * 
-		sqrt((d__2 = d__[m + 1], abs(d__2))) * eps) {
+	if ((d__3 = e[m], ABS(d__3)) <= sqrt((d__1 = d__[m], ABS(d__1))) * 
+		sqrt((d__2 = d__[m + 1], ABS(d__2))) * eps) {
 	    e[m] = 0.;
 	    goto L30;
 	}
@@ -186,23 +213,23 @@ L30:
 
 /*     Choose between QL and QR iteration */
 
-    if ((d__1 = d__[lend], abs(d__1)) < (d__2 = d__[l], abs(d__2))) {
+    if ((d__1 = d__[lend], ABS(d__1)) < (d__2 = d__[l], ABS(d__2))) {
 	lend = lsv;
 	l = lendsv;
     }
 
     if (lend >= l) {
 
-/*        QL Iteration   
+/*        QL Iteration */
 
-          Look for small subdiagonal element. */
+/*        Look for small subdiagonal element. */
 
 L50:
 	if (l != lend) {
 	    i__1 = lend - 1;
 	    for (m = l; m <= i__1; ++m) {
-		if ((d__2 = e[m], abs(d__2)) <= eps2 * (d__1 = d__[m] * d__[m 
-			+ 1], abs(d__1))) {
+		if ((d__2 = e[m], ABS(d__2)) <= eps2 * (d__1 = d__[m] * d__[m 
+			+ 1], ABS(d__1))) {
 		    goto L70;
 		}
 /* L60: */
@@ -219,8 +246,8 @@ L70:
 	    goto L90;
 	}
 
-/*        If remaining matrix is 2 by 2, use DLAE2 to compute its   
-          eigenvalues. */
+/*        If remaining matrix is 2 by 2, use DLAE2 to compute its */
+/*        eigenvalues. */
 
 	if (m == l + 1) {
 	    rte = sqrt(e[l]);
@@ -293,15 +320,15 @@ L90:
 
     } else {
 
-/*        QR Iteration   
+/*        QR Iteration */
 
-          Look for small superdiagonal element. */
+/*        Look for small superdiagonal element. */
 
 L100:
 	i__1 = lend + 1;
 	for (m = l; m >= i__1; --m) {
-	    if ((d__2 = e[m - 1], abs(d__2)) <= eps2 * (d__1 = d__[m] * d__[m 
-		    - 1], abs(d__1))) {
+	    if ((d__2 = e[m - 1], ABS(d__2)) <= eps2 * (d__1 = d__[m] * d__[m 
+		    - 1], ABS(d__1))) {
 		goto L120;
 	    }
 /* L110: */
@@ -317,8 +344,8 @@ L120:
 	    goto L140;
 	}
 
-/*        If remaining matrix is 2 by 2, use DLAE2 to compute its   
-          eigenvalues. */
+/*        If remaining matrix is 2 by 2, use DLAE2 to compute its */
+/*        eigenvalues. */
 
 	if (m == l - 1) {
 	    rte = sqrt(e[l - 1]);
@@ -405,8 +432,8 @@ L150:
 		n, info);
     }
 
-/*     Check for no convergence to an eigenvalue after a total   
-       of N*MAXIT iterations. */
+/*     Check for no convergence to an eigenvalue after a total */
+/*     of N*MAXIT iterations. */
 
     if (jtot < nmaxit) {
 	goto L10;
@@ -431,4 +458,3 @@ L180:
 /*     End of DSTERF */
 
 } /* dsterf_ */
-

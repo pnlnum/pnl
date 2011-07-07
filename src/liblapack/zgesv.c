@@ -1,87 +1,108 @@
+/* zgesv.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zgesv_(integer *n, integer *nrhs, doublecomplex *a, 
-	integer *lda, integer *ipiv, doublecomplex *b, integer *ldb, integer *
+ int zgesv_(int *n, int *nrhs, doublecomplex *a, 
+	int *lda, int *ipiv, doublecomplex *b, int *ldb, int *
 	info)
 {
-/*  -- LAPACK driver routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       March 31, 1993   
-
-
-    Purpose   
-    =======   
-
-    ZGESV computes the solution to a complex system of linear equations   
-       A * X = B,   
-    where A is an N-by-N matrix and X and B are N-by-NRHS matrices.   
-
-    The LU decomposition with partial pivoting and row interchanges is   
-    used to factor A as   
-       A = P * L * U,   
-    where P is a permutation matrix, L is unit lower triangular, and U is   
-    upper triangular.  The factored form of A is then used to solve the   
-    system of equations A * X = B.   
-
-    Arguments   
-    =========   
-
-    N       (input) INTEGER   
-            The number of linear equations, i.e., the order of the   
-            matrix A.  N >= 0.   
-
-    NRHS    (input) INTEGER   
-            The number of right hand sides, i.e., the number of columns   
-            of the matrix B.  NRHS >= 0.   
-
-    A       (input/output) COMPLEX*16 array, dimension (LDA,N)   
-            On entry, the N-by-N coefficient matrix A.   
-            On exit, the factors L and U from the factorization   
-            A = P*L*U; the unit diagonal elements of L are not stored.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.  LDA >= max(1,N).   
-
-    IPIV    (output) INTEGER array, dimension (N)   
-            The pivot indices that define the permutation matrix P;   
-            row i of the matrix was interchanged with row IPIV(i).   
-
-    B       (input/output) COMPLEX*16 array, dimension (LDB,NRHS)   
-            On entry, the N-by-NRHS matrix of right hand side matrix B.   
-            On exit, if INFO = 0, the N-by-NRHS solution matrix X.   
-
-    LDB     (input) INTEGER   
-            The leading dimension of the array B.  LDB >= max(1,N).   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-            > 0:  if INFO = i, U(i,i) is exactly zero.  The factorization   
-                  has been completed, but the factor U is exactly   
-                  singular, so the solution could not be computed.   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1;
-    /* Local variables */
-    extern /* Subroutine */ int xerbla_(char *, integer *), zgetrf_(
-	    integer *, integer *, doublecomplex *, integer *, integer *, 
-	    integer *), zgetrs_(char *, integer *, integer *, doublecomplex *,
-	     integer *, integer *, doublecomplex *, integer *, integer *);
+    int a_dim1, a_offset, b_dim1, b_offset, i__1;
 
+    /* Local variables */
+    extern  int xerbla_(char *, int *), zgetrf_(
+	    int *, int *, doublecomplex *, int *, int *, 
+	    int *), zgetrs_(char *, int *, int *, doublecomplex *, 
+	     int *, int *, doublecomplex *, int *, int *);
+
+
+/*  -- LAPACK driver routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZGESV computes the solution to a complex system of linear equations */
+/*     A * X = B, */
+/*  where A is an N-by-N matrix and X and B are N-by-NRHS matrices. */
+
+/*  The LU decomposition with partial pivoting and row interchanges is */
+/*  used to factor A as */
+/*     A = P * L * U, */
+/*  where P is a permutation matrix, L is unit lower triangular, and U is */
+/*  upper triangular.  The factored form of A is then used to solve the */
+/*  system of equations A * X = B. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  N       (input) INTEGER */
+/*          The number of linear equations, i.e., the order of the */
+/*          matrix A.  N >= 0. */
+
+/*  NRHS    (input) INTEGER */
+/*          The number of right hand sides, i.e., the number of columns */
+/*          of the matrix B.  NRHS >= 0. */
+
+/*  A       (input/output) COMPLEX*16 array, dimension (LDA,N) */
+/*          On entry, the N-by-N coefficient matrix A. */
+/*          On exit, the factors L and U from the factorization */
+/*          A = P*L*U; the unit diagonal elements of L are not stored. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A.  LDA >= MAX(1,N). */
+
+/*  IPIV    (output) INTEGER array, dimension (N) */
+/*          The pivot indices that define the permutation matrix P; */
+/*          row i of the matrix was interchanged with row IPIV(i). */
+
+/*  B       (input/output) COMPLEX*16 array, dimension (LDB,NRHS) */
+/*          On entry, the N-by-NRHS matrix of right hand side matrix B. */
+/*          On exit, if INFO = 0, the N-by-NRHS solution matrix X. */
+
+/*  LDB     (input) INTEGER */
+/*          The leading dimension of the array B.  LDB >= MAX(1,N). */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+/*          > 0:  if INFO = i, U(i,i) is exactly zero.  The factorization */
+/*                has been completed, but the factor U is exactly */
+/*                singular, so the solution could not be computed. */
+
+/*  ===================================================================== */
+
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     --ipiv;
     b_dim1 = *ldb;
-    b_offset = 1 + b_dim1 * 1;
+    b_offset = 1 + b_dim1;
     b -= b_offset;
 
     /* Function Body */
@@ -90,9 +111,9 @@
 	*info = -1;
     } else if (*nrhs < 0) {
 	*info = -2;
-    } else if (*lda < max(1,*n)) {
+    } else if (*lda < MAX(1,*n)) {
 	*info = -4;
-    } else if (*ldb < max(1,*n)) {
+    } else if (*ldb < MAX(1,*n)) {
 	*info = -7;
     }
     if (*info != 0) {
@@ -116,4 +137,3 @@
 /*     End of ZGESV */
 
 } /* zgesv_ */
-

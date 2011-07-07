@@ -8,7 +8,7 @@
 #pragma optimize ( "", off )
 #endif
 
-doublereal slamch_(char *cmach)
+double slamch_(char *cmach)
 {
 /*  -- LAPACK auxiliary routine (version 3.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
@@ -54,33 +54,33 @@ doublereal slamch_(char *cmach)
 */
 /* >>Start of File<<   
        Initialized data */
-    static logical first = TRUE_;
+    static int first = TRUE;
     /* System generated locals */
-    integer i__1;
-    real ret_val;
+    int i__1;
+    float ret_val;
     /* Builtin functions */
-    double pow_ri(real *, integer *);
+    double pow_ri(float *, int *);
     /* Local variables */
-    static real base;
-    static integer beta;
-    static real emin, prec, emax;
-    static integer imin, imax;
-    static logical lrnd;
-    static real rmin, rmax, t, rmach;
-    extern logical lsame_(char *, char *);
-    static real small, sfmin;
-    extern /* Subroutine */ int slamc2_(integer *, integer *, logical *, real 
-	    *, integer *, real *, integer *, real *);
-    static integer it;
-    static real rnd, eps;
+    static float base;
+    static int beta;
+    static float emin, prec, emax;
+    static int imin, imax;
+    static int lrnd;
+    static float rmin, rmax, t, rmach;
+    extern int lsame_(char *, char *);
+    static float small, sfmin;
+    extern  int slamc2_(int *, int *, int *, float 
+	    *, int *, float *, int *, float *);
+    static int it;
+    static float rnd, eps;
 
 
 
     if (first) {
-	first = FALSE_;
+	first = FALSE;
 	slamc2_(&beta, &it, &lrnd, &eps, &imin, &rmin, &imax, &rmax);
-	base = (real) beta;
-	t = (real) it;
+	base = (float) beta;
+	t = (float) it;
 	if (lrnd) {
 	    rnd = 1.f;
 	    i__1 = 1 - it;
@@ -91,8 +91,8 @@ doublereal slamch_(char *cmach)
 	    eps = pow_ri(&base, &i__1);
 	}
 	prec = eps * base;
-	emin = (real) imin;
-	emax = (real) imax;
+	emin = (float) imin;
+	emax = (float) imax;
 	sfmin = rmin;
 	small = 1.f / rmax;
 	if (small >= sfmin) {
@@ -136,7 +136,7 @@ nding
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int slamc1_(integer *beta, integer *t, logical *rnd, logical 
+ int slamc1_(int *beta, int *t, int *rnd, int 
 	*ieee1)
 {
 /*  -- LAPACK auxiliary routine (version 3.0) --
@@ -188,24 +188,24 @@ nding
    ===================================================================== 
 */
     /* Initialized data */
-    static logical first = TRUE_;
+    static int first = TRUE;
     /* System generated locals */
-    real r__1, r__2;
+    float r__1, r__2;
     /* Local variables */
-    static logical lrnd;
-    static real a, b, c, f;
-    static integer lbeta;
-    static real savec;
-    static logical lieee1;
-    static real t1, t2;
-    extern doublereal slamc3_(real *, real *);
-    static integer lt;
-    static real one, qtr;
+    static int lrnd;
+    static float a, b, c, f;
+    static int lbeta;
+    static float savec;
+    static int lieee1;
+    static float t1, t2;
+    extern double slamc3_(float *, float *);
+    static int lt;
+    static float one, qtr;
 
 
 
     if (first) {
-	first = FALSE_;
+	first = FALSE;
 	one = 1.f;
 
 /*        LBETA,  LIEEE1,  LT and  LRND  are the  local values  of  BE
@@ -218,7 +218,7 @@ ure
  or   
           are not affected by optimizers.   
 
-          Compute  a = 2.0**m  with the  smallest positive integer m s
+          Compute  a = 2.0**m  with the  smallest positive int m s
 uch   
           that   
 
@@ -232,13 +232,13 @@ L10:
 	if (c == one) {
 	    a *= 2;
 	    c = slamc3_(&a, &one);
-	    r__1 = -(doublereal)a;
+	    r__1 = -(double)a;
 	    c = slamc3_(&c, &r__1);
 	    goto L10;
 	}
 /* +       END WHILE   
 
-          Now compute  b = 2.0**m  with the smallest positive integer 
+          Now compute  b = 2.0**m  with the smallest positive int 
 m   
           such that   
 
@@ -266,7 +266,7 @@ int
 
 	qtr = one / 4;
 	savec = c;
-	r__1 = -(doublereal)a;
+	r__1 = -(double)a;
 	c = slamc3_(&c, &r__1);
 	lbeta = c + qtr;
 
@@ -275,22 +275,22 @@ g a
           bit  less  than  beta/2  and a  bit  more  than  beta/2  to 
  a. */
 
-	b = (real) lbeta;
+	b = (float) lbeta;
 	r__1 = b / 2;
-	r__2 = -(doublereal)b / 100;
+	r__2 = -(double)b / 100;
 	f = slamc3_(&r__1, &r__2);
 	c = slamc3_(&f, &a);
 	if (c == a) {
-	    lrnd = TRUE_;
+	    lrnd = TRUE;
 	} else {
-	    lrnd = FALSE_;
+	    lrnd = FALSE;
 	}
 	r__1 = b / 2;
 	r__2 = b / 100;
 	f = slamc3_(&r__1, &r__2);
 	c = slamc3_(&f, &a);
 	if (lrnd && c == a) {
-	    lrnd = FALSE_;
+	    lrnd = FALSE;
 	}
 
 /*        Try and decide whether rounding is done in the  IEEE  'round
@@ -309,11 +309,11 @@ nge
 	t2 = slamc3_(&r__1, &savec);
 	lieee1 = t1 == a && t2 > savec && lrnd;
 
-/*        Now find  the  mantissa, t.  It should  be the  integer part
+/*        Now find  the  mantissa, t.  It should  be the  int part
  of   
           log to the base beta of a,  however it is safer to determine
   t   
-          by powering.  So we find t as the smallest positive integer 
+          by powering.  So we find t as the smallest positive int 
 for   
           which   
 
@@ -329,7 +329,7 @@ L30:
 	    ++lt;
 	    a *= lbeta;
 	    c = slamc3_(&a, &one);
-	    r__1 = -(doublereal)a;
+	    r__1 = -(double)a;
 	    c = slamc3_(&c, &r__1);
 	    goto L30;
 	}
@@ -349,8 +349,8 @@ L30:
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int slamc2_(integer *beta, integer *t, logical *rnd, real *
-	eps, integer *emin, real *rmin, integer *emax, real *rmax)
+ int slamc2_(int *beta, int *t, int *rnd, float *
+	eps, int *emin, float *rmin, int *emax, float *rmax)
 {
 /*  -- LAPACK auxiliary routine (version 3.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
@@ -415,41 +415,41 @@ L30:
    ===================================================================== 
 */
     /* Table of constant values */
-    static integer c__1 = 1;
+    static int c__1 = 1;
     
     /* Initialized data */
-    static logical first = TRUE_;
-    static logical iwarn = FALSE_;
+    static int first = TRUE;
+    static int iwarn = FALSE;
     /* System generated locals */
-    integer i__1;
-    real r__1, r__2, r__3, r__4, r__5;
+    int i__1;
+    float r__1, r__2, r__3, r__4, r__5;
     /* Builtin functions */
-    double pow_ri(real *, integer *);
+    double pow_ri(float *, int *);
     /* Local variables */
-    static logical ieee;
-    static real half;
-    static logical lrnd;
-    static real leps, zero, a, b, c;
-    static integer i, lbeta;
-    static real rbase;
-    static integer lemin, lemax, gnmin;
-    static real small;
-    static integer gpmin;
-    static real third, lrmin, lrmax, sixth;
-    static logical lieee1;
-    extern /* Subroutine */ int slamc1_(integer *, integer *, logical *, 
-	    logical *);
-    extern doublereal slamc3_(real *, real *);
-    extern /* Subroutine */ int slamc4_(integer *, real *, integer *), 
-	    slamc5_(integer *, integer *, integer *, logical *, integer *, 
-	    real *);
-    static integer lt, ngnmin, ngpmin;
-    static real one, two;
+    static int ieee;
+    static float half;
+    static int lrnd;
+    static float leps, zero, a, b, c;
+    static int i, lbeta;
+    static float rbase;
+    static int lemin, lemax, gnmin;
+    static float small;
+    static int gpmin;
+    static float third, lrmin, lrmax, sixth;
+    static int lieee1;
+    extern  int slamc1_(int *, int *, int *, 
+	    int *);
+    extern double slamc3_(float *, float *);
+    extern  int slamc4_(int *, float *, int *), 
+	    slamc5_(int *, int *, int *, int *, int *, 
+	    float *);
+    static int lt, ngnmin, ngpmin;
+    static float one, two;
 
 
 
     if (first) {
-	first = FALSE_;
+	first = FALSE;
 	zero = 0.f;
 	one = 1.f;
 	two = 2.f;
@@ -471,7 +471,7 @@ ure
 
 /*        Start to find EPS. */
 
-	b = (real) lbeta;
+	b = (float) lbeta;
 	i__1 = -lt;
 	a = pow_ri(&b, &i__1);
 	leps = a;
@@ -481,13 +481,13 @@ PS. */
 
 	b = two / 3;
 	half = one / 2;
-	r__1 = -(doublereal)half;
+	r__1 = -(double)half;
 	sixth = slamc3_(&b, &r__1);
 	third = slamc3_(&sixth, &sixth);
-	r__1 = -(doublereal)half;
+	r__1 = -(double)half;
 	b = slamc3_(&third, &r__1);
 	b = slamc3_(&b, &sixth);
-	b = dabs(b);
+	b = dABS(b);
 	if (b < leps) {
 	    b = leps;
 	}
@@ -505,10 +505,10 @@ L10:
 	    r__5 = leps;
 	    r__2 = r__4 * (r__3 * r__3) * (r__5 * r__5);
 	    c = slamc3_(&r__1, &r__2);
-	    r__1 = -(doublereal)c;
+	    r__1 = -(double)c;
 	    c = slamc3_(&half, &r__1);
 	    b = slamc3_(&half, &c);
-	    r__1 = -(doublereal)b;
+	    r__1 = -(double)b;
 	    c = slamc3_(&half, &r__1);
 	    b = slamc3_(&half, &c);
 	    goto L10;
@@ -536,12 +536,12 @@ his
 	}
 	a = slamc3_(&one, &small);
 	slamc4_(&ngpmin, &one, &lbeta);
-	r__1 = -(doublereal)one;
+	r__1 = -(double)one;
 	slamc4_(&ngnmin, &r__1, &lbeta);
 	slamc4_(&gpmin, &a, &lbeta);
-	r__1 = -(doublereal)a;
+	r__1 = -(double)a;
 	slamc4_(&gnmin, &r__1, &lbeta);
-	ieee = FALSE_;
+	ieee = FALSE;
 
 	if (ngpmin == ngnmin && gpmin == gnmin) {
 	    if (ngpmin == gpmin) {
@@ -551,52 +551,52 @@ flow;
                 e.g.,  VAX ) */
 	    } else if (gpmin - ngpmin == 3) {
 		lemin = ngpmin - 1 + lt;
-		ieee = TRUE_;
+		ieee = TRUE;
 /*            ( Non twos-complement machines, with gradual und
 erflow;   
                 e.g., IEEE standard followers ) */
 	    } else {
-		lemin = min(ngpmin,gpmin);
+		lemin = MIN(ngpmin,gpmin);
 /*            ( A guess; no known machine ) */
-		iwarn = TRUE_;
+		iwarn = TRUE;
 	    }
 
 	} else if (ngpmin == gpmin && ngnmin == gnmin) {
-	    if ((i__1 = ngpmin - ngnmin, abs(i__1)) == 1) {
-		lemin = max(ngpmin,ngnmin);
+	    if ((i__1 = ngpmin - ngnmin, ABS(i__1)) == 1) {
+		lemin = MAX(ngpmin,ngnmin);
 /*            ( Twos-complement machines, no gradual underflow
 ;   
                 e.g., CYBER 205 ) */
 	    } else {
-		lemin = min(ngpmin,ngnmin);
+		lemin = MIN(ngpmin,ngnmin);
 /*            ( A guess; no known machine ) */
-		iwarn = TRUE_;
+		iwarn = TRUE;
 	    }
 
-	} else if ((i__1 = ngpmin - ngnmin, abs(i__1)) == 1 && gpmin == gnmin)
+	} else if ((i__1 = ngpmin - ngnmin, ABS(i__1)) == 1 && gpmin == gnmin)
 		 {
-	    if (gpmin - min(ngpmin,ngnmin) == 3) {
-		lemin = max(ngpmin,ngnmin) - 1 + lt;
+	    if (gpmin - MIN(ngpmin,ngnmin) == 3) {
+		lemin = MAX(ngpmin,ngnmin) - 1 + lt;
 /*            ( Twos-complement machines with gradual underflo
 w;   
                 no known machine ) */
 	    } else {
-		lemin = min(ngpmin,ngnmin);
+		lemin = MIN(ngpmin,ngnmin);
 /*            ( A guess; no known machine ) */
-		iwarn = TRUE_;
+		iwarn = TRUE;
 	    }
 
 	} else {
 /* Computing MIN */
-	    i__1 = min(ngpmin,ngnmin), i__1 = min(i__1,gpmin);
-	    lemin = min(i__1,gnmin);
+	    i__1 = MIN(ngpmin,ngnmin), i__1 = MIN(i__1,gpmin);
+	    lemin = MIN(i__1,gnmin);
 /*         ( A guess; no known machine ) */
-	    iwarn = TRUE_;
+	    iwarn = TRUE;
 	}
 /* **   
    Comment out this if block if EMIN is ok */
 	if (iwarn) {
-	    first = TRUE_;
+	    first = TRUE;
 	    printf("\n\n WARNING. The value EMIN may be incorrect:- ");
 	    printf("EMIN = %8i\n",lemin);
 	    printf("If, after inspection, the value EMIN looks acceptable");
@@ -653,7 +653,7 @@ ing
 
 #include "pnl/pnl_f2c.h"
 
-doublereal slamc3_(real *a, real *b)
+double slamc3_(float *a, float *b)
 {
 /*  -- LAPACK auxiliary routine (version 3.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
@@ -680,7 +680,7 @@ doublereal slamc3_(real *a, real *b)
 */
 /* >>Start of File<<   
        System generated locals */
-    real ret_val;
+    float ret_val;
 
 
 
@@ -694,7 +694,7 @@ doublereal slamc3_(real *a, real *b)
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int slamc4_(integer *emin, real *start, integer *base)
+ int slamc4_(int *emin, float *start, int *base)
 {
 /*  -- LAPACK auxiliary routine (version 3.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
@@ -725,14 +725,14 @@ doublereal slamc3_(real *a, real *b)
    ===================================================================== 
 */
     /* System generated locals */
-    integer i__1;
-    real r__1;
+    int i__1;
+    float r__1;
     /* Local variables */
-    static real zero, a;
-    static integer i;
-    static real rbase, b1, b2, c1, c2, d1, d2;
-    extern doublereal slamc3_(real *, real *);
-    static real one;
+    static float zero, a;
+    static int i;
+    static float rbase, b1, b2, c1, c2, d1, d2;
+    extern double slamc3_(float *, float *);
+    static float one;
 
 
 
@@ -785,8 +785,8 @@ L10:
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int slamc5_(integer *beta, integer *p, integer *emin, 
-	logical *ieee, integer *emax, real *rmax)
+ int slamc5_(int *beta, int *p, int *emin, 
+	int *ieee, int *emax, float *rmax)
 {
 /*  -- LAPACK auxiliary routine (version 3.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
@@ -798,7 +798,7 @@ L10:
     =======   
 
     SLAMC5 attempts to compute RMAX, the largest machine floating-point   
-    number, without overflow.  It assumes that EMAX + abs(EMIN) sum   
+    number, without overflow.  It assumes that EMAX + ABS(EMIN) sum   
     approximately to a power of 2.  It will fail on machines where this   
     assumption does not hold, for example, the Cyber 205 (EMIN = -28625, 
   
@@ -819,7 +819,7 @@ L10:
             The minimum exponent before (gradual) underflow.   
 
     IEEE    (input) LOGICAL   
-            A logical flag specifying whether or not the arithmetic   
+            A int flag specifying whether or not the arithmetic   
             system is thought to comply with the IEEE standard.   
 
     EMAX    (output) INTEGER   
@@ -833,24 +833,24 @@ L10:
 
 
        First compute LEXP and UEXP, two powers of 2 that bound   
-       abs(EMIN). We then assume that EMAX + abs(EMIN) will sum   
-       approximately to the bound that is closest to abs(EMIN).   
+       ABS(EMIN). We then assume that EMAX + ABS(EMIN) will sum   
+       approximately to the bound that is closest to ABS(EMIN).   
        (EMAX is the exponent of the required number RMAX). */
     /* Table of constant values */
-    static real c_b5 = 0.f;
+    static float c_b5 = 0.f;
     
     /* System generated locals */
-    integer i__1;
-    real r__1;
+    int i__1;
+    float r__1;
     /* Local variables */
-    static integer lexp;
-    static real oldy;
-    static integer uexp, i;
-    static real y, z;
-    static integer nbits;
-    extern doublereal slamc3_(real *, real *);
-    static real recbas;
-    static integer exbits, expsum, try__;
+    static int lexp;
+    static float oldy;
+    static int uexp, i;
+    static float y, z;
+    static int nbits;
+    extern double slamc3_(float *, float *);
+    static float recbas;
+    static int exbits, expsum, try__;
 
 
 

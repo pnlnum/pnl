@@ -1,237 +1,265 @@
+/* dsbevx.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dsbevx_(char *jobz, char *range, char *uplo, integer *n, 
-	integer *kd, doublereal *ab, integer *ldab, doublereal *q, integer *
-	ldq, doublereal *vl, doublereal *vu, integer *il, integer *iu, 
-	doublereal *abstol, integer *m, doublereal *w, doublereal *z__, 
-	integer *ldz, doublereal *work, integer *iwork, integer *ifail, 
-	integer *info)
+/* Table of constant values */
+
+static double c_b14 = 1.;
+static int c__1 = 1;
+static double c_b34 = 0.;
+
+ int dsbevx_(char *jobz, char *range, char *uplo, int *n, 
+	int *kd, double *ab, int *ldab, double *q, int *
+	ldq, double *vl, double *vu, int *il, int *iu, 
+	double *abstol, int *m, double *w, double *z__, 
+	int *ldz, double *work, int *iwork, int *ifail, 
+	int *info)
 {
-/*  -- LAPACK driver routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    DSBEVX computes selected eigenvalues and, optionally, eigenvectors   
-    of a real symmetric band matrix A.  Eigenvalues and eigenvectors can   
-    be selected by specifying either a range of values or a range of   
-    indices for the desired eigenvalues.   
-
-    Arguments   
-    =========   
-
-    JOBZ    (input) CHARACTER*1   
-            = 'N':  Compute eigenvalues only;   
-            = 'V':  Compute eigenvalues and eigenvectors.   
-
-    RANGE   (input) CHARACTER*1   
-            = 'A': all eigenvalues will be found;   
-            = 'V': all eigenvalues in the half-open interval (VL,VU]   
-                   will be found;   
-            = 'I': the IL-th through IU-th eigenvalues will be found.   
-
-    UPLO    (input) CHARACTER*1   
-            = 'U':  Upper triangle of A is stored;   
-            = 'L':  Lower triangle of A is stored.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    KD      (input) INTEGER   
-            The number of superdiagonals of the matrix A if UPLO = 'U',   
-            or the number of subdiagonals if UPLO = 'L'.  KD >= 0.   
-
-    AB      (input/output) DOUBLE PRECISION array, dimension (LDAB, N)   
-            On entry, the upper or lower triangle of the symmetric band   
-            matrix A, stored in the first KD+1 rows of the array.  The   
-            j-th column of A is stored in the j-th column of the array AB   
-            as follows:   
-            if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;   
-            if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).   
-
-            On exit, AB is overwritten by values generated during the   
-            reduction to tridiagonal form.  If UPLO = 'U', the first   
-            superdiagonal and the diagonal of the tridiagonal matrix T   
-            are returned in rows KD and KD+1 of AB, and if UPLO = 'L',   
-            the diagonal and first subdiagonal of T are returned in the   
-            first two rows of AB.   
-
-    LDAB    (input) INTEGER   
-            The leading dimension of the array AB.  LDAB >= KD + 1.   
-
-    Q       (output) DOUBLE PRECISION array, dimension (LDQ, N)   
-            If JOBZ = 'V', the N-by-N orthogonal matrix used in the   
-                           reduction to tridiagonal form.   
-            If JOBZ = 'N', the array Q is not referenced.   
-
-    LDQ     (input) INTEGER   
-            The leading dimension of the array Q.  If JOBZ = 'V', then   
-            LDQ >= max(1,N).   
-
-    VL      (input) DOUBLE PRECISION   
-    VU      (input) DOUBLE PRECISION   
-            If RANGE='V', the lower and upper bounds of the interval to   
-            be searched for eigenvalues. VL < VU.   
-            Not referenced if RANGE = 'A' or 'I'.   
-
-    IL      (input) INTEGER   
-    IU      (input) INTEGER   
-            If RANGE='I', the indices (in ascending order) of the   
-            smallest and largest eigenvalues to be returned.   
-            1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0.   
-            Not referenced if RANGE = 'A' or 'V'.   
-
-    ABSTOL  (input) DOUBLE PRECISION   
-            The absolute error tolerance for the eigenvalues.   
-            An approximate eigenvalue is accepted as converged   
-            when it is determined to lie in an interval [a,b]   
-            of width less than or equal to   
-
-                    ABSTOL + EPS *   max( |a|,|b| ) ,   
-
-            where EPS is the machine precision.  If ABSTOL is less than   
-            or equal to zero, then  EPS*|T|  will be used in its place,   
-            where |T| is the 1-norm of the tridiagonal matrix obtained   
-            by reducing AB to tridiagonal form.   
-
-            Eigenvalues will be computed most accurately when ABSTOL is   
-            set to twice the underflow threshold 2*DLAMCH('S'), not zero.   
-            If this routine returns with INFO>0, indicating that some   
-            eigenvectors did not converge, try setting ABSTOL to   
-            2*DLAMCH('S').   
-
-            See "Computing Small Singular Values of Bidiagonal Matrices   
-            with Guaranteed High Relative Accuracy," by Demmel and   
-            Kahan, LAPACK Working Note #3.   
-
-    M       (output) INTEGER   
-            The total number of eigenvalues found.  0 <= M <= N.   
-            If RANGE = 'A', M = N, and if RANGE = 'I', M = IU-IL+1.   
-
-    W       (output) DOUBLE PRECISION array, dimension (N)   
-            The first M elements contain the selected eigenvalues in   
-            ascending order.   
-
-    Z       (output) DOUBLE PRECISION array, dimension (LDZ, max(1,M))   
-            If JOBZ = 'V', then if INFO = 0, the first M columns of Z   
-            contain the orthonormal eigenvectors of the matrix A   
-            corresponding to the selected eigenvalues, with the i-th   
-            column of Z holding the eigenvector associated with W(i).   
-            If an eigenvector fails to converge, then that column of Z   
-            contains the latest approximation to the eigenvector, and the   
-            index of the eigenvector is returned in IFAIL.   
-            If JOBZ = 'N', then Z is not referenced.   
-            Note: the user must ensure that at least max(1,M) columns are   
-            supplied in the array Z; if RANGE = 'V', the exact value of M   
-            is not known in advance and an upper bound must be used.   
-
-    LDZ     (input) INTEGER   
-            The leading dimension of the array Z.  LDZ >= 1, and if   
-            JOBZ = 'V', LDZ >= max(1,N).   
-
-    WORK    (workspace) DOUBLE PRECISION array, dimension (7*N)   
-
-    IWORK   (workspace) INTEGER array, dimension (5*N)   
-
-    IFAIL   (output) INTEGER array, dimension (N)   
-            If JOBZ = 'V', then if INFO = 0, the first M elements of   
-            IFAIL are zero.  If INFO > 0, then IFAIL contains the   
-            indices of the eigenvectors that failed to converge.   
-            If JOBZ = 'N', then IFAIL is not referenced.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit.   
-            < 0:  if INFO = -i, the i-th argument had an illegal value.   
-            > 0:  if INFO = i, then i eigenvectors failed to converge.   
-                  Their indices are stored in array IFAIL.   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static doublereal c_b14 = 1.;
-    static integer c__1 = 1;
-    static doublereal c_b34 = 0.;
-    
     /* System generated locals */
-    integer ab_dim1, ab_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, 
+    int ab_dim1, ab_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, 
 	    i__2;
-    doublereal d__1, d__2;
+    double d__1, d__2;
+
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
+
     /* Local variables */
-    static integer indd, inde;
-    static doublereal anrm;
-    static integer imax;
-    static doublereal rmin, rmax;
-    static integer itmp1, i__, j, indee;
-    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *);
-    static doublereal sigma;
-    extern logical lsame_(char *, char *);
-    extern /* Subroutine */ int dgemv_(char *, integer *, integer *, 
-	    doublereal *, doublereal *, integer *, doublereal *, integer *, 
-	    doublereal *, doublereal *, integer *);
-    static integer iinfo;
-    static char order[1];
-    extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *), dswap_(integer *, doublereal *, integer 
-	    *, doublereal *, integer *);
-    static logical lower, wantz;
-    static integer jj;
-    extern doublereal dlamch_(char *);
-    static logical alleig, indeig;
-    static integer iscale, indibl;
-    extern doublereal dlansb_(char *, char *, integer *, integer *, 
-	    doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int dlascl_(char *, integer *, integer *, 
-	    doublereal *, doublereal *, integer *, integer *, doublereal *, 
-	    integer *, integer *);
-    static logical valeig;
-    extern /* Subroutine */ int dlacpy_(char *, integer *, integer *, 
-	    doublereal *, integer *, doublereal *, integer *);
-    static doublereal safmin;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static doublereal abstll, bignum;
-    extern /* Subroutine */ int dsbtrd_(char *, char *, integer *, integer *, 
-	    doublereal *, integer *, doublereal *, doublereal *, doublereal *,
-	     integer *, doublereal *, integer *);
-    static integer indisp;
-    extern /* Subroutine */ int dstein_(integer *, doublereal *, doublereal *,
-	     integer *, doublereal *, integer *, integer *, doublereal *, 
-	    integer *, doublereal *, integer *, integer *, integer *), 
-	    dsterf_(integer *, doublereal *, doublereal *, integer *);
-    static integer indiwo;
-    extern /* Subroutine */ int dstebz_(char *, char *, integer *, doublereal 
-	    *, doublereal *, integer *, integer *, doublereal *, doublereal *,
-	     doublereal *, integer *, integer *, doublereal *, integer *, 
-	    integer *, doublereal *, integer *, integer *);
-    static integer indwrk;
-    extern /* Subroutine */ int dsteqr_(char *, integer *, doublereal *, 
-	    doublereal *, doublereal *, integer *, doublereal *, integer *);
-    static integer nsplit;
-    static doublereal smlnum, eps, vll, vuu, tmp1;
-#define z___ref(a_1,a_2) z__[(a_2)*z_dim1 + a_1]
-#define ab_ref(a_1,a_2) ab[(a_2)*ab_dim1 + a_1]
+    int i__, j, jj;
+    double eps, vll, vuu, tmp1;
+    int indd, inde;
+    double anrm;
+    int imax;
+    double rmin, rmax;
+    int test;
+    int itmp1, indee;
+    extern  int dscal_(int *, double *, double *, 
+	    int *);
+    double sigma;
+    extern int lsame_(char *, char *);
+    extern  int dgemv_(char *, int *, int *, 
+	    double *, double *, int *, double *, int *, 
+	    double *, double *, int *);
+    int iinfo;
+    char order[1];
+    extern  int dcopy_(int *, double *, int *, 
+	    double *, int *), dswap_(int *, double *, int 
+	    *, double *, int *);
+    int lower, wantz;
+    extern double dlamch_(char *);
+    int alleig, indeig;
+    int iscale, indibl;
+    extern  int dlascl_(char *, int *, int *, 
+	    double *, double *, int *, int *, double *, 
+	    int *, int *);
+    extern double dlansb_(char *, char *, int *, int *, 
+	    double *, int *, double *);
+    int valeig;
+    extern  int dlacpy_(char *, int *, int *, 
+	    double *, int *, double *, int *);
+    double safmin;
+    extern  int xerbla_(char *, int *);
+    double abstll, bignum;
+    extern  int dsbtrd_(char *, char *, int *, int *, 
+	    double *, int *, double *, double *, double *, 
+	     int *, double *, int *);
+    int indisp;
+    extern  int dstein_(int *, double *, double *, 
+	     int *, double *, int *, int *, double *, 
+	    int *, double *, int *, int *, int *), 
+	    dsterf_(int *, double *, double *, int *);
+    int indiwo;
+    extern  int dstebz_(char *, char *, int *, double 
+	    *, double *, int *, int *, double *, double *, 
+	     double *, int *, int *, double *, int *, 
+	    int *, double *, int *, int *);
+    int indwrk;
+    extern  int dsteqr_(char *, int *, double *, 
+	    double *, double *, int *, double *, int *);
+    int nsplit;
+    double smlnum;
 
 
+/*  -- LAPACK driver routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  DSBEVX computes selected eigenvalues and, optionally, eigenvectors */
+/*  of a float symmetric band matrix A.  Eigenvalues and eigenvectors can */
+/*  be selected by specifying either a range of values or a range of */
+/*  indices for the desired eigenvalues. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  JOBZ    (input) CHARACTER*1 */
+/*          = 'N':  Compute eigenvalues only; */
+/*          = 'V':  Compute eigenvalues and eigenvectors. */
+
+/*  RANGE   (input) CHARACTER*1 */
+/*          = 'A': all eigenvalues will be found; */
+/*          = 'V': all eigenvalues in the half-open interval (VL,VU] */
+/*                 will be found; */
+/*          = 'I': the IL-th through IU-th eigenvalues will be found. */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U':  Upper triangle of A is stored; */
+/*          = 'L':  Lower triangle of A is stored. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  KD      (input) INTEGER */
+/*          The number of superdiagonals of the matrix A if UPLO = 'U', */
+/*          or the number of subdiagonals if UPLO = 'L'.  KD >= 0. */
+
+/*  AB      (input/output) DOUBLE PRECISION array, dimension (LDAB, N) */
+/*          On entry, the upper or lower triangle of the symmetric band */
+/*          matrix A, stored in the first KD+1 rows of the array.  The */
+/*          j-th column of A is stored in the j-th column of the array AB */
+/*          as follows: */
+/*          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for MAX(1,j-kd)<=i<=j; */
+/*          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=MIN(n,j+kd). */
+
+/*          On exit, AB is overwritten by values generated during the */
+/*          reduction to tridiagonal form.  If UPLO = 'U', the first */
+/*          superdiagonal and the diagonal of the tridiagonal matrix T */
+/*          are returned in rows KD and KD+1 of AB, and if UPLO = 'L', */
+/*          the diagonal and first subdiagonal of T are returned in the */
+/*          first two rows of AB. */
+
+/*  LDAB    (input) INTEGER */
+/*          The leading dimension of the array AB.  LDAB >= KD + 1. */
+
+/*  Q       (output) DOUBLE PRECISION array, dimension (LDQ, N) */
+/*          If JOBZ = 'V', the N-by-N orthogonal matrix used in the */
+/*                         reduction to tridiagonal form. */
+/*          If JOBZ = 'N', the array Q is not referenced. */
+
+/*  LDQ     (input) INTEGER */
+/*          The leading dimension of the array Q.  If JOBZ = 'V', then */
+/*          LDQ >= MAX(1,N). */
+
+/*  VL      (input) DOUBLE PRECISION */
+/*  VU      (input) DOUBLE PRECISION */
+/*          If RANGE='V', the lower and upper bounds of the interval to */
+/*          be searched for eigenvalues. VL < VU. */
+/*          Not referenced if RANGE = 'A' or 'I'. */
+
+/*  IL      (input) INTEGER */
+/*  IU      (input) INTEGER */
+/*          If RANGE='I', the indices (in ascending order) of the */
+/*          smallest and largest eigenvalues to be returned. */
+/*          1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0. */
+/*          Not referenced if RANGE = 'A' or 'V'. */
+
+/*  ABSTOL  (input) DOUBLE PRECISION */
+/*          The absolute error tolerance for the eigenvalues. */
+/*          An approximate eigenvalue is accepted as converged */
+/*          when it is determined to lie in an interval [a,b] */
+/*          of width less than or equal to */
+
+/*                  ABSTOL + EPS *   MAX( |a|,|b| ) , */
+
+/*          where EPS is the machine precision.  If ABSTOL is less than */
+/*          or equal to zero, then  EPS*|T|  will be used in its place, */
+/*          where |T| is the 1-norm of the tridiagonal matrix obtained */
+/*          by reducing AB to tridiagonal form. */
+
+/*          Eigenvalues will be computed most accurately when ABSTOL is */
+/*          set to twice the underflow threshold 2*DLAMCH('S'), not zero. */
+/*          If this routine returns with INFO>0, indicating that some */
+/*          eigenvectors did not converge, try setting ABSTOL to */
+/*          2*DLAMCH('S'). */
+
+/*          See "Computing Small Singular Values of Bidiagonal Matrices */
+/*          with Guaranteed High Relative Accuracy," by Demmel and */
+/*          Kahan, LAPACK Working Note #3. */
+
+/*  M       (output) INTEGER */
+/*          The total number of eigenvalues found.  0 <= M <= N. */
+/*          If RANGE = 'A', M = N, and if RANGE = 'I', M = IU-IL+1. */
+
+/*  W       (output) DOUBLE PRECISION array, dimension (N) */
+/*          The first M elements contain the selected eigenvalues in */
+/*          ascending order. */
+
+/*  Z       (output) DOUBLE PRECISION array, dimension (LDZ, MAX(1,M)) */
+/*          If JOBZ = 'V', then if INFO = 0, the first M columns of Z */
+/*          contain the orthonormal eigenvectors of the matrix A */
+/*          corresponding to the selected eigenvalues, with the i-th */
+/*          column of Z holding the eigenvector associated with W(i). */
+/*          If an eigenvector fails to converge, then that column of Z */
+/*          contains the latest approximation to the eigenvector, and the */
+/*          index of the eigenvector is returned in IFAIL. */
+/*          If JOBZ = 'N', then Z is not referenced. */
+/*          Note: the user must ensure that at least MAX(1,M) columns are */
+/*          supplied in the array Z; if RANGE = 'V', the exact value of M */
+/*          is not known in advance and an upper bound must be used. */
+
+/*  LDZ     (input) INTEGER */
+/*          The leading dimension of the array Z.  LDZ >= 1, and if */
+/*          JOBZ = 'V', LDZ >= MAX(1,N). */
+
+/*  WORK    (workspace) DOUBLE PRECISION array, dimension (7*N) */
+
+/*  IWORK   (workspace) INTEGER array, dimension (5*N) */
+
+/*  IFAIL   (output) INTEGER array, dimension (N) */
+/*          If JOBZ = 'V', then if INFO = 0, the first M elements of */
+/*          IFAIL are zero.  If INFO > 0, then IFAIL contains the */
+/*          indices of the eigenvectors that failed to converge. */
+/*          If JOBZ = 'N', then IFAIL is not referenced. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit. */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value. */
+/*          > 0:  if INFO = i, then i eigenvectors failed to converge. */
+/*                Their indices are stored in array IFAIL. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     ab_dim1 = *ldab;
-    ab_offset = 1 + ab_dim1 * 1;
+    ab_offset = 1 + ab_dim1;
     ab -= ab_offset;
     q_dim1 = *ldq;
-    q_offset = 1 + q_dim1 * 1;
+    q_offset = 1 + q_dim1;
     q -= q_offset;
     --w;
     z_dim1 = *ldz;
-    z_offset = 1 + z_dim1 * 1;
+    z_offset = 1 + z_dim1;
     z__ -= z_offset;
     --work;
     --iwork;
@@ -257,7 +285,7 @@
 	*info = -5;
     } else if (*ldab < *kd + 1) {
 	*info = -7;
-    } else if (wantz && *ldq < max(1,*n)) {
+    } else if (wantz && *ldq < MAX(1,*n)) {
 	*info = -9;
     } else {
 	if (valeig) {
@@ -265,9 +293,9 @@
 		*info = -11;
 	    }
 	} else if (indeig) {
-	    if (*il < 1 || *il > max(1,*n)) {
+	    if (*il < 1 || *il > MAX(1,*n)) {
 		*info = -12;
-	    } else if (*iu < min(*n,*il) || *iu > *n) {
+	    } else if (*iu < MIN(*n,*il) || *iu > *n) {
 		*info = -13;
 	    }
 	}
@@ -294,9 +322,9 @@
     if (*n == 1) {
 	*m = 1;
 	if (lower) {
-	    tmp1 = ab_ref(1, 1);
+	    tmp1 = ab[ab_dim1 + 1];
 	} else {
-	    tmp1 = ab_ref(*kd + 1, 1);
+	    tmp1 = ab[*kd + 1 + ab_dim1];
 	}
 	if (valeig) {
 	    if (! (*vl < tmp1 && *vu >= tmp1)) {
@@ -306,7 +334,7 @@
 	if (*m == 1) {
 	    w[1] = tmp1;
 	    if (wantz) {
-		z___ref(1, 1) = 1.;
+		z__[z_dim1 + 1] = 1.;
 	    }
 	}
 	return 0;
@@ -321,7 +349,7 @@
     rmin = sqrt(smlnum);
 /* Computing MIN */
     d__1 = sqrt(bignum), d__2 = 1. / sqrt(sqrt(safmin));
-    rmax = min(d__1,d__2);
+    rmax = MIN(d__1,d__2);
 
 /*     Scale matrix to allowable range, if necessary. */
 
@@ -364,14 +392,20 @@
     indd = 1;
     inde = indd + *n;
     indwrk = inde + *n;
-    dsbtrd_(jobz, uplo, n, kd, &ab[ab_offset], ldab, &work[indd], &work[inde],
+    dsbtrd_(jobz, uplo, n, kd, &ab[ab_offset], ldab, &work[indd], &work[inde], 
 	     &q[q_offset], ldq, &work[indwrk], &iinfo);
 
-/*     If all eigenvalues are desired and ABSTOL is less than or equal   
-       to zero, then call DSTERF or SSTEQR.  If this fails for some   
-       eigenvalue, then try DSTEBZ. */
+/*     If all eigenvalues are desired and ABSTOL is less than or equal */
+/*     to zero, then call DSTERF or SSTEQR.  If this fails for some */
+/*     eigenvalue, then try DSTEBZ. */
 
-    if ((alleig || indeig && *il == 1 && *iu == *n) && *abstol <= 0.) {
+    test = FALSE;
+    if (indeig) {
+	if (*il == 1 && *iu == *n) {
+	    test = TRUE;
+	}
+    }
+    if ((alleig || test) && *abstol <= 0.) {
 	dcopy_(n, &work[indd], &c__1, &w[1], &c__1);
 	indee = indwrk + (*n << 1);
 	if (! wantz) {
@@ -418,14 +452,14 @@
 		indisp], &z__[z_offset], ldz, &work[indwrk], &iwork[indiwo], &
 		ifail[1], info);
 
-/*        Apply orthogonal matrix used in reduction to tridiagonal   
-          form to eigenvectors returned by DSTEIN. */
+/*        Apply orthogonal matrix used in reduction to tridiagonal */
+/*        form to eigenvectors returned by DSTEIN. */
 
 	i__1 = *m;
 	for (j = 1; j <= i__1; ++j) {
-	    dcopy_(n, &z___ref(1, j), &c__1, &work[1], &c__1);
+	    dcopy_(n, &z__[j * z_dim1 + 1], &c__1, &work[1], &c__1);
 	    dgemv_("N", n, n, &c_b14, &q[q_offset], ldq, &work[1], &c__1, &
-		    c_b34, &z___ref(1, j), &c__1);
+		    c_b34, &z__[j * z_dim1 + 1], &c__1);
 /* L20: */
 	}
     }
@@ -443,8 +477,8 @@ L30:
 	dscal_(&imax, &d__1, &w[1], &c__1);
     }
 
-/*     If eigenvalues are not in order, then sort them, along with   
-       eigenvectors. */
+/*     If eigenvalues are not in order, then sort them, along with */
+/*     eigenvectors. */
 
     if (wantz) {
 	i__1 = *m - 1;
@@ -466,7 +500,8 @@ L30:
 		iwork[indibl + i__ - 1] = iwork[indibl + j - 1];
 		w[j] = tmp1;
 		iwork[indibl + j - 1] = itmp1;
-		dswap_(n, &z___ref(1, i__), &c__1, &z___ref(1, j), &c__1);
+		dswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], 
+			 &c__1);
 		if (*info != 0) {
 		    itmp1 = ifail[i__];
 		    ifail[i__] = ifail[j];
@@ -482,8 +517,3 @@ L30:
 /*     End of DSBEVX */
 
 } /* dsbevx_ */
-
-#undef ab_ref
-#undef z___ref
-
-

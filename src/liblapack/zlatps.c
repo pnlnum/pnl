@@ -1,221 +1,251 @@
+/* zlatps.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zlatps_(char *uplo, char *trans, char *diag, char *
-	normin, integer *n, doublecomplex *ap, doublecomplex *x, doublereal *
-	scale, doublereal *cnorm, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+static double c_b36 = .5;
+
+ int zlatps_(char *uplo, char *trans, char *diag, char *
+	normin, int *n, doublecomplex *ap, doublecomplex *x, double *
+	scale, double *cnorm, int *info)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1992   
-
-
-    Purpose   
-    =======   
-
-    ZLATPS solves one of the triangular systems   
-
-       A * x = s*b,  A**T * x = s*b,  or  A**H * x = s*b,   
-
-    with scaling to prevent overflow, where A is an upper or lower   
-    triangular matrix stored in packed form.  Here A**T denotes the   
-    transpose of A, A**H denotes the conjugate transpose of A, x and b   
-    are n-element vectors, and s is a scaling factor, usually less than   
-    or equal to 1, chosen so that the components of x will be less than   
-    the overflow threshold.  If the unscaled problem will not cause   
-    overflow, the Level 2 BLAS routine ZTPSV is called. If the matrix A   
-    is singular (A(j,j) = 0 for some j), then s is set to 0 and a   
-    non-trivial solution to A*x = 0 is returned.   
-
-    Arguments   
-    =========   
-
-    UPLO    (input) CHARACTER*1   
-            Specifies whether the matrix A is upper or lower triangular.   
-            = 'U':  Upper triangular   
-            = 'L':  Lower triangular   
-
-    TRANS   (input) CHARACTER*1   
-            Specifies the operation applied to A.   
-            = 'N':  Solve A * x = s*b     (No transpose)   
-            = 'T':  Solve A**T * x = s*b  (Transpose)   
-            = 'C':  Solve A**H * x = s*b  (Conjugate transpose)   
-
-    DIAG    (input) CHARACTER*1   
-            Specifies whether or not the matrix A is unit triangular.   
-            = 'N':  Non-unit triangular   
-            = 'U':  Unit triangular   
-
-    NORMIN  (input) CHARACTER*1   
-            Specifies whether CNORM has been set or not.   
-            = 'Y':  CNORM contains the column norms on entry   
-            = 'N':  CNORM is not set on entry.  On exit, the norms will   
-                    be computed and stored in CNORM.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    AP      (input) COMPLEX*16 array, dimension (N*(N+1)/2)   
-            The upper or lower triangular matrix A, packed columnwise in   
-            a linear array.  The j-th column of A is stored in the array   
-            AP as follows:   
-            if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;   
-            if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.   
-
-    X       (input/output) COMPLEX*16 array, dimension (N)   
-            On entry, the right hand side b of the triangular system.   
-            On exit, X is overwritten by the solution vector x.   
-
-    SCALE   (output) DOUBLE PRECISION   
-            The scaling factor s for the triangular system   
-               A * x = s*b,  A**T * x = s*b,  or  A**H * x = s*b.   
-            If SCALE = 0, the matrix A is singular or badly scaled, and   
-            the vector x is an exact or approximate solution to A*x = 0.   
-
-    CNORM   (input or output) DOUBLE PRECISION array, dimension (N)   
-
-            If NORMIN = 'Y', CNORM is an input argument and CNORM(j)   
-            contains the norm of the off-diagonal part of the j-th column   
-            of A.  If TRANS = 'N', CNORM(j) must be greater than or equal   
-            to the infinity-norm, and if TRANS = 'T' or 'C', CNORM(j)   
-            must be greater than or equal to the 1-norm.   
-
-            If NORMIN = 'N', CNORM is an output argument and CNORM(j)   
-            returns the 1-norm of the offdiagonal part of the j-th column   
-            of A.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -k, the k-th argument had an illegal value   
-
-    Further Details   
-    ======= =======   
-
-    A rough bound on x is computed; if that is less than overflow, ZTPSV   
-    is called, otherwise, specific code is used which checks for possible   
-    overflow or divide-by-zero at every operation.   
-
-    A columnwise scheme is used for solving A*x = b.  The basic algorithm   
-    if A is lower triangular is   
-
-         x[1:n] := b[1:n]   
-         for j = 1, ..., n   
-              x(j) := x(j) / A(j,j)   
-              x[j+1:n] := x[j+1:n] - x(j) * A[j+1:n,j]   
-         end   
-
-    Define bounds on the components of x after j iterations of the loop:   
-       M(j) = bound on x[1:j]   
-       G(j) = bound on x[j+1:n]   
-    Initially, let M(0) = 0 and G(0) = max{x(i), i=1,...,n}.   
-
-    Then for iteration j+1 we have   
-       M(j+1) <= G(j) / | A(j+1,j+1) |   
-       G(j+1) <= G(j) + M(j+1) * | A[j+2:n,j+1] |   
-              <= G(j) ( 1 + CNORM(j+1) / | A(j+1,j+1) | )   
-
-    where CNORM(j+1) is greater than or equal to the infinity-norm of   
-    column j+1 of A, not counting the diagonal.  Hence   
-
-       G(j) <= G(0) product ( 1 + CNORM(i) / | A(i,i) | )   
-                    1<=i<=j   
-    and   
-
-       |x(j)| <= ( G(0) / |A(j,j)| ) product ( 1 + CNORM(i) / |A(i,i)| )   
-                                     1<=i< j   
-
-    Since |x(j)| <= M(j), we use the Level 2 BLAS routine ZTPSV if the   
-    reciprocal of the largest M(j), j=1,..,n, is larger than   
-    max(underflow, 1/overflow).   
-
-    The bound on x(j) is also used to determine when a step in the   
-    columnwise method can be performed without fear of overflow.  If   
-    the computed bound is greater than a large constant, x is scaled to   
-    prevent overflow, but if the bound overflows, x is set to 0, x(j) to   
-    1, and scale to 0, and a non-trivial solution to A*x = 0 is found.   
-
-    Similarly, a row-wise scheme is used to solve A**T *x = b  or   
-    A**H *x = b.  The basic algorithm for A upper triangular is   
-
-         for j = 1, ..., n   
-              x(j) := ( b(j) - A[1:j-1,j]' * x[1:j-1] ) / A(j,j)   
-         end   
-
-    We simultaneously compute two bounds   
-         G(j) = bound on ( b(i) - A[1:i-1,i]' * x[1:i-1] ), 1<=i<=j   
-         M(j) = bound on x(i), 1<=i<=j   
-
-    The initial values are G(0) = 0, M(0) = max{b(i), i=1,..,n}, and we   
-    add the constraint G(j) >= G(j-1) and M(j) >= M(j-1) for j >= 1.   
-    Then the bound on x(j) is   
-
-         M(j) <= M(j-1) * ( 1 + CNORM(j) ) / | A(j,j) |   
-
-              <= M(0) * product ( ( 1 + CNORM(i) ) / |A(i,i)| )   
-                        1<=i<=j   
-
-    and we can safely call ZTPSV if 1/M(n) and 1/G(n) are both greater   
-    than max(underflow, 1/overflow).   
-
-    =====================================================================   
-
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    static doublereal c_b36 = .5;
-    
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4, i__5;
-    doublereal d__1, d__2, d__3, d__4;
+    int i__1, i__2, i__3, i__4, i__5;
+    double d__1, d__2, d__3, d__4;
     doublecomplex z__1, z__2, z__3, z__4;
+
     /* Builtin functions */
     double d_imag(doublecomplex *);
     void d_cnjg(doublecomplex *, doublecomplex *);
+
     /* Local variables */
-    static integer jinc, jlen;
-    static doublereal xbnd;
-    static integer imax;
-    static doublereal tmax;
-    static doublecomplex tjjs;
-    static doublereal xmax, grow;
-    static integer i__, j;
-    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *);
-    extern logical lsame_(char *, char *);
-    static doublereal tscal;
-    static doublecomplex uscal;
-    static integer jlast;
-    static doublecomplex csumj;
-    extern /* Double Complex */ VOID zdotc_(doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *);
-    static logical upper;
-    extern /* Double Complex */ VOID zdotu_(doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *);
-    extern /* Subroutine */ int zaxpy_(integer *, doublecomplex *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *), ztpsv_(
-	    char *, char *, char *, integer *, doublecomplex *, doublecomplex 
-	    *, integer *), dlabad_(doublereal *, 
-	    doublereal *);
-    extern doublereal dlamch_(char *);
-    static integer ip;
-    static doublereal xj;
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */ int xerbla_(char *, integer *), zdscal_(
-	    integer *, doublereal *, doublecomplex *, integer *);
-    static doublereal bignum;
-    extern integer izamax_(integer *, doublecomplex *, integer *);
-    extern /* Double Complex */ VOID zladiv_(doublecomplex *, doublecomplex *,
+    int i__, j, ip;
+    double xj, rec, tjj;
+    int jinc, jlen;
+    double xbnd;
+    int imax;
+    double tmax;
+    doublecomplex tjjs;
+    double xmax, grow;
+    extern  int dscal_(int *, double *, double *, 
+	    int *);
+    extern int lsame_(char *, char *);
+    double tscal;
+    doublecomplex uscal;
+    int jlast;
+    doublecomplex csumj;
+    extern /* Double Complex */ VOID zdotc_(doublecomplex *, int *, 
+	    doublecomplex *, int *, doublecomplex *, int *);
+    int upper;
+    extern /* Double Complex */ VOID zdotu_(doublecomplex *, int *, 
+	    doublecomplex *, int *, doublecomplex *, int *);
+    extern  int zaxpy_(int *, doublecomplex *, 
+	    doublecomplex *, int *, doublecomplex *, int *), ztpsv_(
+	    char *, char *, char *, int *, doublecomplex *, doublecomplex 
+	    *, int *), dlabad_(double *, 
+	    double *);
+    extern double dlamch_(char *);
+    extern int idamax_(int *, double *, int *);
+    extern  int xerbla_(char *, int *), zdscal_(
+	    int *, double *, doublecomplex *, int *);
+    double bignum;
+    extern int izamax_(int *, doublecomplex *, int *);
+    extern /* Double Complex */ VOID zladiv_(doublecomplex *, doublecomplex *, 
 	     doublecomplex *);
-    static logical notran;
-    static integer jfirst;
-    extern doublereal dzasum_(integer *, doublecomplex *, integer *);
-    static doublereal smlnum;
-    static logical nounit;
-    static doublereal rec, tjj;
+    int notran;
+    int jfirst;
+    extern double dzasum_(int *, doublecomplex *, int *);
+    double smlnum;
+    int nounit;
 
 
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZLATPS solves one of the triangular systems */
+
+/*     A * x = s*b,  A**T * x = s*b,  or  A**H * x = s*b, */
+
+/*  with scaling to prevent overflow, where A is an upper or lower */
+/*  triangular matrix stored in packed form.  Here A**T denotes the */
+/*  transpose of A, A**H denotes the conjugate transpose of A, x and b */
+/*  are n-element vectors, and s is a scaling factor, usually less than */
+/*  or equal to 1, chosen so that the components of x will be less than */
+/*  the overflow threshold.  If the unscaled problem will not cause */
+/*  overflow, the Level 2 BLAS routine ZTPSV is called. If the matrix A */
+/*  is singular (A(j,j) = 0 for some j), then s is set to 0 and a */
+/*  non-trivial solution to A*x = 0 is returned. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          Specifies whether the matrix A is upper or lower triangular. */
+/*          = 'U':  Upper triangular */
+/*          = 'L':  Lower triangular */
+
+/*  TRANS   (input) CHARACTER*1 */
+/*          Specifies the operation applied to A. */
+/*          = 'N':  Solve A * x = s*b     (No transpose) */
+/*          = 'T':  Solve A**T * x = s*b  (Transpose) */
+/*          = 'C':  Solve A**H * x = s*b  (Conjugate transpose) */
+
+/*  DIAG    (input) CHARACTER*1 */
+/*          Specifies whether or not the matrix A is unit triangular. */
+/*          = 'N':  Non-unit triangular */
+/*          = 'U':  Unit triangular */
+
+/*  NORMIN  (input) CHARACTER*1 */
+/*          Specifies whether CNORM has been set or not. */
+/*          = 'Y':  CNORM contains the column norms on entry */
+/*          = 'N':  CNORM is not set on entry.  On exit, the norms will */
+/*                  be computed and stored in CNORM. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  AP      (input) COMPLEX*16 array, dimension (N*(N+1)/2) */
+/*          The upper or lower triangular matrix A, packed columnwise in */
+/*          a linear array.  The j-th column of A is stored in the array */
+/*          AP as follows: */
+/*          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j; */
+/*          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n. */
+
+/*  X       (input/output) COMPLEX*16 array, dimension (N) */
+/*          On entry, the right hand side b of the triangular system. */
+/*          On exit, X is overwritten by the solution vector x. */
+
+/*  SCALE   (output) DOUBLE PRECISION */
+/*          The scaling factor s for the triangular system */
+/*             A * x = s*b,  A**T * x = s*b,  or  A**H * x = s*b. */
+/*          If SCALE = 0, the matrix A is singular or badly scaled, and */
+/*          the vector x is an exact or approximate solution to A*x = 0. */
+
+/*  CNORM   (input or output) DOUBLE PRECISION array, dimension (N) */
+
+/*          If NORMIN = 'Y', CNORM is an input argument and CNORM(j) */
+/*          contains the norm of the off-diagonal part of the j-th column */
+/*          of A.  If TRANS = 'N', CNORM(j) must be greater than or equal */
+/*          to the infinity-norm, and if TRANS = 'T' or 'C', CNORM(j) */
+/*          must be greater than or equal to the 1-norm. */
+
+/*          If NORMIN = 'N', CNORM is an output argument and CNORM(j) */
+/*          returns the 1-norm of the offdiagonal part of the j-th column */
+/*          of A. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -k, the k-th argument had an illegal value */
+
+/*  Further Details */
+/*  ======= ======= */
+
+/*  A rough bound on x is computed; if that is less than overflow, ZTPSV */
+/*  is called, otherwise, specific code is used which checks for possible */
+/*  overflow or divide-by-zero at every operation. */
+
+/*  A columnwise scheme is used for solving A*x = b.  The basic algorithm */
+/*  if A is lower triangular is */
+
+/*       x[1:n] := b[1:n] */
+/*       for j = 1, ..., n */
+/*            x(j) := x(j) / A(j,j) */
+/*            x[j+1:n] := x[j+1:n] - x(j) * A[j+1:n,j] */
+/*       end */
+
+/*  Define bounds on the components of x after j iterations of the loop: */
+/*     M(j) = bound on x[1:j] */
+/*     G(j) = bound on x[j+1:n] */
+/*  Initially, let M(0) = 0 and G(0) = max{x(i), i=1,...,n}. */
+
+/*  Then for iteration j+1 we have */
+/*     M(j+1) <= G(j) / | A(j+1,j+1) | */
+/*     G(j+1) <= G(j) + M(j+1) * | A[j+2:n,j+1] | */
+/*            <= G(j) ( 1 + CNORM(j+1) / | A(j+1,j+1) | ) */
+
+/*  where CNORM(j+1) is greater than or equal to the infinity-norm of */
+/*  column j+1 of A, not counting the diagonal.  Hence */
+
+/*     G(j) <= G(0) product ( 1 + CNORM(i) / | A(i,i) | ) */
+/*                  1<=i<=j */
+/*  and */
+
+/*     |x(j)| <= ( G(0) / |A(j,j)| ) product ( 1 + CNORM(i) / |A(i,i)| ) */
+/*                                   1<=i< j */
+
+/*  Since |x(j)| <= M(j), we use the Level 2 BLAS routine ZTPSV if the */
+/*  reciprocal of the largest M(j), j=1,..,n, is larger than */
+/*  MAX(underflow, 1/overflow). */
+
+/*  The bound on x(j) is also used to determine when a step in the */
+/*  columnwise method can be performed without fear of overflow.  If */
+/*  the computed bound is greater than a large constant, x is scaled to */
+/*  prevent overflow, but if the bound overflows, x is set to 0, x(j) to */
+/*  1, and scale to 0, and a non-trivial solution to A*x = 0 is found. */
+
+/*  Similarly, a row-wise scheme is used to solve A**T *x = b  or */
+/*  A**H *x = b.  The basic algorithm for A upper triangular is */
+
+/*       for j = 1, ..., n */
+/*            x(j) := ( b(j) - A[1:j-1,j]' * x[1:j-1] ) / A(j,j) */
+/*       end */
+
+/*  We simultaneously compute two bounds */
+/*       G(j) = bound on ( b(i) - A[1:i-1,i]' * x[1:i-1] ), 1<=i<=j */
+/*       M(j) = bound on x(i), 1<=i<=j */
+
+/*  The initial values are G(0) = 0, M(0) = max{b(i), i=1,..,n}, and we */
+/*  add the constraint G(j) >= G(j-1) and M(j) >= M(j-1) for j >= 1. */
+/*  Then the bound on x(j) is */
+
+/*       M(j) <= M(j-1) * ( 1 + CNORM(j) ) / | A(j,j) | */
+
+/*            <= M(0) * product ( ( 1 + CNORM(i) ) / |A(i,i)| ) */
+/*                      1<=i<=j */
+
+/*  and we can safely call ZTPSV if 1/M(n) and 1/G(n) are both greater */
+/*  than MAX(underflow, 1/overflow). */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Statement Functions .. */
+/*     .. */
+/*     .. Statement Function definitions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     --cnorm;
     --x;
     --ap;
@@ -235,7 +265,7 @@
 	*info = -2;
     } else if (! nounit && ! lsame_(diag, "U")) {
 	*info = -3;
-    } else if (! lsame_(normin, "Y") && ! lsame_(normin,
+    } else if (! lsame_(normin, "Y") && ! lsame_(normin, 
 	     "N")) {
 	*info = -4;
     } else if (*n < 0) {
@@ -294,8 +324,8 @@
 	}
     }
 
-/*     Scale the column norms by TSCAL if the maximum element in CNORM is   
-       greater than BIGNUM/2. */
+/*     Scale the column norms by TSCAL if the maximum element in CNORM is */
+/*     greater than BIGNUM/2. */
 
     imax = idamax_(n, &cnorm[1], &c__1);
     tmax = cnorm[imax];
@@ -306,17 +336,17 @@
 	dscal_(n, &tscal, &cnorm[1], &c__1);
     }
 
-/*     Compute a bound on the computed solution vector to see if the   
-       Level 2 BLAS routine ZTPSV can be used. */
+/*     Compute a bound on the computed solution vector to see if the */
+/*     Level 2 BLAS routine ZTPSV can be used. */
 
     xmax = 0.;
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 /* Computing MAX */
 	i__2 = j;
-	d__3 = xmax, d__4 = (d__1 = x[i__2].r / 2., abs(d__1)) + (d__2 = 
-		d_imag(&x[j]) / 2., abs(d__2));
-	xmax = max(d__3,d__4);
+	d__3 = xmax, d__4 = (d__1 = x[i__2].r / 2., ABS(d__1)) + (d__2 = 
+		d_imag(&x[j]) / 2., ABS(d__2));
+	xmax = MAX(d__3,d__4);
 /* L30: */
     }
     xbnd = xmax;
@@ -341,12 +371,12 @@
 
 	if (nounit) {
 
-/*           A is non-unit triangular.   
+/*           A is non-unit triangular. */
 
-             Compute GROW = 1/G(j) and XBND = 1/M(j).   
-             Initially, G(0) = max{x(i), i=1,...,n}. */
+/*           Compute GROW = 1/G(j) and XBND = 1/M(j). */
+/*           Initially, G(0) = max{x(i), i=1,...,n}. */
 
-	    grow = .5 / max(xbnd,smlnum);
+	    grow = .5 / MAX(xbnd,smlnum);
 	    xbnd = grow;
 	    ip = jfirst * (jfirst + 1) / 2;
 	    jlen = *n;
@@ -362,16 +392,16 @@
 
 		i__3 = ip;
 		tjjs.r = ap[i__3].r, tjjs.i = ap[i__3].i;
-		tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), abs(
+		tjj = (d__1 = tjjs.r, ABS(d__1)) + (d__2 = d_imag(&tjjs), ABS(
 			d__2));
 
 		if (tjj >= smlnum) {
 
-/*                 M(j) = G(j-1) / abs(A(j,j))   
+/*                 M(j) = G(j-1) / ABS(A(j,j)) */
 
-   Computing MIN */
-		    d__1 = xbnd, d__2 = min(1.,tjj) * grow;
-		    xbnd = min(d__1,d__2);
+/* Computing MIN */
+		    d__1 = xbnd, d__2 = MIN(1.,tjj) * grow;
+		    xbnd = MIN(d__1,d__2);
 		} else {
 
 /*                 M(j) could overflow, set XBND to 0. */
@@ -381,7 +411,7 @@
 
 		if (tjj + cnorm[j] >= smlnum) {
 
-/*                 G(j) = G(j-1)*( 1 + CNORM(j) / abs(A(j,j)) ) */
+/*                 G(j) = G(j-1)*( 1 + CNORM(j) / ABS(A(j,j)) ) */
 
 		    grow *= tjj / (tjj + cnorm[j]);
 		} else {
@@ -397,13 +427,13 @@
 	    grow = xbnd;
 	} else {
 
-/*           A is unit triangular.   
+/*           A is unit triangular. */
 
-             Compute GROW = 1/G(j), where G(0) = max{x(i), i=1,...,n}.   
+/*           Compute GROW = 1/G(j), where G(0) = max{x(i), i=1,...,n}. */
 
-   Computing MIN */
-	    d__1 = 1., d__2 = .5 / max(xbnd,smlnum);
-	    grow = min(d__1,d__2);
+/* Computing MIN */
+	    d__1 = 1., d__2 = .5 / MAX(xbnd,smlnum);
+	    grow = MIN(d__1,d__2);
 	    i__2 = jlast;
 	    i__1 = jinc;
 	    for (j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1) {
@@ -444,12 +474,12 @@ L60:
 
 	if (nounit) {
 
-/*           A is non-unit triangular.   
+/*           A is non-unit triangular. */
 
-             Compute GROW = 1/G(j) and XBND = 1/M(j).   
-             Initially, M(0) = max{x(i), i=1,...,n}. */
+/*           Compute GROW = 1/G(j) and XBND = 1/M(j). */
+/*           Initially, M(0) = max{x(i), i=1,...,n}. */
 
-	    grow = .5 / max(xbnd,smlnum);
+	    grow = .5 / MAX(xbnd,smlnum);
 	    xbnd = grow;
 	    ip = jfirst * (jfirst + 1) / 2;
 	    jlen = 1;
@@ -463,21 +493,21 @@ L60:
 		    goto L90;
 		}
 
-/*              G(j) = max( G(j-1), M(j-1)*( 1 + CNORM(j) ) ) */
+/*              G(j) = MAX( G(j-1), M(j-1)*( 1 + CNORM(j) ) ) */
 
 		xj = cnorm[j] + 1.;
 /* Computing MIN */
 		d__1 = grow, d__2 = xbnd / xj;
-		grow = min(d__1,d__2);
+		grow = MIN(d__1,d__2);
 
 		i__3 = ip;
 		tjjs.r = ap[i__3].r, tjjs.i = ap[i__3].i;
-		tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), abs(
+		tjj = (d__1 = tjjs.r, ABS(d__1)) + (d__2 = d_imag(&tjjs), ABS(
 			d__2));
 
 		if (tjj >= smlnum) {
 
-/*                 M(j) = M(j-1)*( 1 + CNORM(j) ) / abs(A(j,j)) */
+/*                 M(j) = M(j-1)*( 1 + CNORM(j) ) / ABS(A(j,j)) */
 
 		    if (xj > tjj) {
 			xbnd *= tjj / xj;
@@ -492,16 +522,16 @@ L60:
 		ip += jinc * jlen;
 /* L70: */
 	    }
-	    grow = min(grow,xbnd);
+	    grow = MIN(grow,xbnd);
 	} else {
 
-/*           A is unit triangular.   
+/*           A is unit triangular. */
 
-             Compute GROW = 1/G(j), where G(0) = max{x(i), i=1,...,n}.   
+/*           Compute GROW = 1/G(j), where G(0) = max{x(i), i=1,...,n}. */
 
-   Computing MIN */
-	    d__1 = 1., d__2 = .5 / max(xbnd,smlnum);
-	    grow = min(d__1,d__2);
+/* Computing MIN */
+	    d__1 = 1., d__2 = .5 / MAX(xbnd,smlnum);
+	    grow = MIN(d__1,d__2);
 	    i__2 = jlast;
 	    i__1 = jinc;
 	    for (j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1) {
@@ -525,8 +555,8 @@ L90:
 
     if (grow * tscal > smlnum) {
 
-/*        Use the Level 2 BLAS solve if the reciprocal of the bound on   
-          elements of X is not too small. */
+/*        Use the Level 2 BLAS solve if the reciprocal of the bound on */
+/*        elements of X is not too small. */
 
 	ztpsv_(uplo, trans, diag, n, &ap[1], &x[1], &c__1);
     } else {
@@ -535,8 +565,8 @@ L90:
 
 	if (xmax > bignum * .5) {
 
-/*           Scale X so that its components are less than or equal to   
-             BIGNUM in absolute value. */
+/*           Scale X so that its components are less than or equal to */
+/*           BIGNUM in absolute value. */
 
 	    *scale = bignum * .5 / xmax;
 	    zdscal_(n, scale, &x[1], &c__1);
@@ -557,8 +587,8 @@ L90:
 /*              Compute x(j) = b(j) / A(j,j), scaling x if necessary. */
 
 		i__3 = j;
-		xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j]), 
-			abs(d__2));
+		xj = (d__1 = x[i__3].r, ABS(d__1)) + (d__2 = d_imag(&x[j]), 
+			ABS(d__2));
 		if (nounit) {
 		    i__3 = ip;
 		    z__1.r = tscal * ap[i__3].r, z__1.i = tscal * ap[i__3].i;
@@ -569,11 +599,11 @@ L90:
 			goto L110;
 		    }
 		}
-		tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), abs(
+		tjj = (d__1 = tjjs.r, ABS(d__1)) + (d__2 = d_imag(&tjjs), ABS(
 			d__2));
 		if (tjj > smlnum) {
 
-/*                    abs(A(j,j)) > SMLNUM: */
+/*                    ABS(A(j,j)) > SMLNUM: */
 
 		    if (tjj < 1.) {
 			if (xj > tjj * bignum) {
@@ -590,22 +620,22 @@ L90:
 		    zladiv_(&z__1, &x[j], &tjjs);
 		    x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 		    i__3 = j;
-		    xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j])
-			    , abs(d__2));
+		    xj = (d__1 = x[i__3].r, ABS(d__1)) + (d__2 = d_imag(&x[j])
+			    , ABS(d__2));
 		} else if (tjj > 0.) {
 
-/*                    0 < abs(A(j,j)) <= SMLNUM: */
+/*                    0 < ABS(A(j,j)) <= SMLNUM: */
 
 		    if (xj > tjj * bignum) {
 
-/*                       Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM   
-                         to avoid overflow when dividing by A(j,j). */
+/*                       Scale x by (1/ABS(x(j)))*ABS(A(j,j))*BIGNUM */
+/*                       to avoid overflow when dividing by A(j,j). */
 
 			rec = tjj * bignum / xj;
 			if (cnorm[j] > 1.) {
 
-/*                          Scale by 1/CNORM(j) to avoid overflow when   
-                            multiplying x(j) times column j. */
+/*                          Scale by 1/CNORM(j) to avoid overflow when */
+/*                          multiplying x(j) times column j. */
 
 			    rec /= cnorm[j];
 			}
@@ -617,12 +647,12 @@ L90:
 		    zladiv_(&z__1, &x[j], &tjjs);
 		    x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 		    i__3 = j;
-		    xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j])
-			    , abs(d__2));
+		    xj = (d__1 = x[i__3].r, ABS(d__1)) + (d__2 = d_imag(&x[j])
+			    , ABS(d__2));
 		} else {
 
-/*                    A(j,j) = 0:  Set x(1:n) = 0, x(j) = 1, and   
-                      scale = 0, and compute a solution to A*x = 0. */
+/*                    A(j,j) = 0:  Set x(1:n) = 0, x(j) = 1, and */
+/*                    scale = 0, and compute a solution to A*x = 0. */
 
 		    i__3 = *n;
 		    for (i__ = 1; i__ <= i__3; ++i__) {
@@ -638,14 +668,14 @@ L90:
 		}
 L110:
 
-/*              Scale x if necessary to avoid overflow when adding a   
-                multiple of column j of A. */
+/*              Scale x if necessary to avoid overflow when adding a */
+/*              multiple of column j of A. */
 
 		if (xj > 1.) {
 		    rec = 1. / xj;
 		    if (cnorm[j] > (bignum - xmax) * rec) {
 
-/*                    Scale x by 1/(2*abs(x(j))). */
+/*                    Scale x by 1/(2*ABS(x(j))). */
 
 			rec *= .5;
 			zdscal_(n, &rec, &x[1], &c__1);
@@ -662,8 +692,8 @@ L110:
 		if (upper) {
 		    if (j > 1) {
 
-/*                    Compute the update   
-                         x(1:j-1) := x(1:j-1) - x(j) * A(1:j-1,j) */
+/*                    Compute the update */
+/*                       x(1:j-1) := x(1:j-1) - x(j) * A(1:j-1,j) */
 
 			i__3 = j - 1;
 			i__4 = j;
@@ -674,15 +704,15 @@ L110:
 			i__3 = j - 1;
 			i__ = izamax_(&i__3, &x[1], &c__1);
 			i__3 = i__;
-			xmax = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(
-				&x[i__]), abs(d__2));
+			xmax = (d__1 = x[i__3].r, ABS(d__1)) + (d__2 = d_imag(
+				&x[i__]), ABS(d__2));
 		    }
 		    ip -= j;
 		} else {
 		    if (j < *n) {
 
-/*                    Compute the update   
-                         x(j+1:n) := x(j+1:n) - x(j) * A(j+1:n,j) */
+/*                    Compute the update */
+/*                       x(j+1:n) := x(j+1:n) - x(j) * A(j+1:n,j) */
 
 			i__3 = *n - j;
 			i__4 = j;
@@ -693,8 +723,8 @@ L110:
 			i__3 = *n - j;
 			i__ = j + izamax_(&i__3, &x[j + 1], &c__1);
 			i__3 = i__;
-			xmax = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(
-				&x[i__]), abs(d__2));
+			xmax = (d__1 = x[i__3].r, ABS(d__1)) + (d__2 = d_imag(
+				&x[i__]), ABS(d__2));
 		    }
 		    ip = ip + *n - j + 1;
 		}
@@ -711,14 +741,14 @@ L110:
 	    i__1 = jinc;
 	    for (j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1) {
 
-/*              Compute x(j) = b(j) - sum A(k,j)*x(k).   
-                                      k<>j */
+/*              Compute x(j) = b(j) - sum A(k,j)*x(k). */
+/*                                    k<>j */
 
 		i__3 = j;
-		xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j]), 
-			abs(d__2));
+		xj = (d__1 = x[i__3].r, ABS(d__1)) + (d__2 = d_imag(&x[j]), 
+			ABS(d__2));
 		uscal.r = tscal, uscal.i = 0.;
-		rec = 1. / max(xmax,1.);
+		rec = 1. / MAX(xmax,1.);
 		if (cnorm[j] > (bignum - xj) * rec) {
 
 /*                 If x(j) could overflow, scale x by 1/(2*XMAX). */
@@ -732,15 +762,15 @@ L110:
 		    } else {
 			tjjs.r = tscal, tjjs.i = 0.;
 		    }
-		    tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), 
-			    abs(d__2));
+		    tjj = (d__1 = tjjs.r, ABS(d__1)) + (d__2 = d_imag(&tjjs), 
+			    ABS(d__2));
 		    if (tjj > 1.) {
 
-/*                       Divide by A(j,j) when scaling x if A(j,j) > 1.   
+/*                       Divide by A(j,j) when scaling x if A(j,j) > 1. */
 
-   Computing MIN */
+/* Computing MIN */
 			d__1 = 1., d__2 = rec * tjj;
-			rec = min(d__1,d__2);
+			rec = MIN(d__1,d__2);
 			zladiv_(&z__1, &uscal, &tjjs);
 			uscal.r = z__1.r, uscal.i = z__1.i;
 		    }
@@ -754,8 +784,8 @@ L110:
 		csumj.r = 0., csumj.i = 0.;
 		if (uscal.r == 1. && uscal.i == 0.) {
 
-/*                 If the scaling needed for A in the dot product is 1,   
-                   call ZDOTU to perform the dot product. */
+/*                 If the scaling needed for A in the dot product is 1, */
+/*                 call ZDOTU to perform the dot product. */
 
 		    if (upper) {
 			i__3 = j - 1;
@@ -810,8 +840,8 @@ L110:
 		z__1.r = tscal, z__1.i = 0.;
 		if (uscal.r == z__1.r && uscal.i == z__1.i) {
 
-/*                 Compute x(j) := ( x(j) - CSUMJ ) / A(j,j) if 1/A(j,j)   
-                   was not used to scale the dotproduct. */
+/*                 Compute x(j) := ( x(j) - CSUMJ ) / A(j,j) if 1/A(j,j) */
+/*                 was not used to scale the dotproduct. */
 
 		    i__3 = j;
 		    i__4 = j;
@@ -819,8 +849,8 @@ L110:
 			    csumj.i;
 		    x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 		    i__3 = j;
-		    xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j])
-			    , abs(d__2));
+		    xj = (d__1 = x[i__3].r, ABS(d__1)) + (d__2 = d_imag(&x[j])
+			    , ABS(d__2));
 		    if (nounit) {
 
 /*                    Compute x(j) = x(j) / A(j,j), scaling if necessary. */
@@ -835,16 +865,16 @@ L110:
 			    goto L160;
 			}
 		    }
-		    tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), 
-			    abs(d__2));
+		    tjj = (d__1 = tjjs.r, ABS(d__1)) + (d__2 = d_imag(&tjjs), 
+			    ABS(d__2));
 		    if (tjj > smlnum) {
 
-/*                       abs(A(j,j)) > SMLNUM: */
+/*                       ABS(A(j,j)) > SMLNUM: */
 
 			if (tjj < 1.) {
 			    if (xj > tjj * bignum) {
 
-/*                             Scale X by 1/abs(x(j)). */
+/*                             Scale X by 1/ABS(x(j)). */
 
 				rec = 1. / xj;
 				zdscal_(n, &rec, &x[1], &c__1);
@@ -857,11 +887,11 @@ L110:
 			x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 		    } else if (tjj > 0.) {
 
-/*                       0 < abs(A(j,j)) <= SMLNUM: */
+/*                       0 < ABS(A(j,j)) <= SMLNUM: */
 
 			if (xj > tjj * bignum) {
 
-/*                          Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM. */
+/*                          Scale x by (1/ABS(x(j)))*ABS(A(j,j))*BIGNUM. */
 
 			    rec = tjj * bignum / xj;
 			    zdscal_(n, &rec, &x[1], &c__1);
@@ -873,8 +903,8 @@ L110:
 			x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 		    } else {
 
-/*                       A(j,j) = 0:  Set x(1:n) = 0, x(j) = 1, and   
-                         scale = 0 and compute a solution to A**T *x = 0. */
+/*                       A(j,j) = 0:  Set x(1:n) = 0, x(j) = 1, and */
+/*                       scale = 0 and compute a solution to A**T *x = 0. */
 
 			i__3 = *n;
 			for (i__ = 1; i__ <= i__3; ++i__) {
@@ -891,8 +921,8 @@ L160:
 		    ;
 		} else {
 
-/*                 Compute x(j) := x(j) / A(j,j) - CSUMJ if the dot   
-                   product has already been divided by 1/A(j,j). */
+/*                 Compute x(j) := x(j) / A(j,j) - CSUMJ if the dot */
+/*                 product has already been divided by 1/A(j,j). */
 
 		    i__3 = j;
 		    zladiv_(&z__2, &x[j], &tjjs);
@@ -901,9 +931,9 @@ L160:
 		}
 /* Computing MAX */
 		i__3 = j;
-		d__3 = xmax, d__4 = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = 
-			d_imag(&x[j]), abs(d__2));
-		xmax = max(d__3,d__4);
+		d__3 = xmax, d__4 = (d__1 = x[i__3].r, ABS(d__1)) + (d__2 = 
+			d_imag(&x[j]), ABS(d__2));
+		xmax = MAX(d__3,d__4);
 		++jlen;
 		ip += jinc * jlen;
 /* L170: */
@@ -919,14 +949,14 @@ L160:
 	    i__2 = jinc;
 	    for (j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2) {
 
-/*              Compute x(j) = b(j) - sum A(k,j)*x(k).   
-                                      k<>j */
+/*              Compute x(j) = b(j) - sum A(k,j)*x(k). */
+/*                                    k<>j */
 
 		i__3 = j;
-		xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j]), 
-			abs(d__2));
+		xj = (d__1 = x[i__3].r, ABS(d__1)) + (d__2 = d_imag(&x[j]), 
+			ABS(d__2));
 		uscal.r = tscal, uscal.i = 0.;
-		rec = 1. / max(xmax,1.);
+		rec = 1. / MAX(xmax,1.);
 		if (cnorm[j] > (bignum - xj) * rec) {
 
 /*                 If x(j) could overflow, scale x by 1/(2*XMAX). */
@@ -939,15 +969,15 @@ L160:
 		    } else {
 			tjjs.r = tscal, tjjs.i = 0.;
 		    }
-		    tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), 
-			    abs(d__2));
+		    tjj = (d__1 = tjjs.r, ABS(d__1)) + (d__2 = d_imag(&tjjs), 
+			    ABS(d__2));
 		    if (tjj > 1.) {
 
-/*                       Divide by A(j,j) when scaling x if A(j,j) > 1.   
+/*                       Divide by A(j,j) when scaling x if A(j,j) > 1. */
 
-   Computing MIN */
+/* Computing MIN */
 			d__1 = 1., d__2 = rec * tjj;
-			rec = min(d__1,d__2);
+			rec = MIN(d__1,d__2);
 			zladiv_(&z__1, &uscal, &tjjs);
 			uscal.r = z__1.r, uscal.i = z__1.i;
 		    }
@@ -961,8 +991,8 @@ L160:
 		csumj.r = 0., csumj.i = 0.;
 		if (uscal.r == 1. && uscal.i == 0.) {
 
-/*                 If the scaling needed for A in the dot product is 1,   
-                   call ZDOTC to perform the dot product. */
+/*                 If the scaling needed for A in the dot product is 1, */
+/*                 call ZDOTC to perform the dot product. */
 
 		    if (upper) {
 			i__3 = j - 1;
@@ -1017,8 +1047,8 @@ L160:
 		z__1.r = tscal, z__1.i = 0.;
 		if (uscal.r == z__1.r && uscal.i == z__1.i) {
 
-/*                 Compute x(j) := ( x(j) - CSUMJ ) / A(j,j) if 1/A(j,j)   
-                   was not used to scale the dotproduct. */
+/*                 Compute x(j) := ( x(j) - CSUMJ ) / A(j,j) if 1/A(j,j) */
+/*                 was not used to scale the dotproduct. */
 
 		    i__3 = j;
 		    i__4 = j;
@@ -1026,8 +1056,8 @@ L160:
 			    csumj.i;
 		    x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 		    i__3 = j;
-		    xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j])
-			    , abs(d__2));
+		    xj = (d__1 = x[i__3].r, ABS(d__1)) + (d__2 = d_imag(&x[j])
+			    , ABS(d__2));
 		    if (nounit) {
 
 /*                    Compute x(j) = x(j) / A(j,j), scaling if necessary. */
@@ -1041,16 +1071,16 @@ L160:
 			    goto L210;
 			}
 		    }
-		    tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), 
-			    abs(d__2));
+		    tjj = (d__1 = tjjs.r, ABS(d__1)) + (d__2 = d_imag(&tjjs), 
+			    ABS(d__2));
 		    if (tjj > smlnum) {
 
-/*                       abs(A(j,j)) > SMLNUM: */
+/*                       ABS(A(j,j)) > SMLNUM: */
 
 			if (tjj < 1.) {
 			    if (xj > tjj * bignum) {
 
-/*                             Scale X by 1/abs(x(j)). */
+/*                             Scale X by 1/ABS(x(j)). */
 
 				rec = 1. / xj;
 				zdscal_(n, &rec, &x[1], &c__1);
@@ -1063,11 +1093,11 @@ L160:
 			x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 		    } else if (tjj > 0.) {
 
-/*                       0 < abs(A(j,j)) <= SMLNUM: */
+/*                       0 < ABS(A(j,j)) <= SMLNUM: */
 
 			if (xj > tjj * bignum) {
 
-/*                          Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM. */
+/*                          Scale x by (1/ABS(x(j)))*ABS(A(j,j))*BIGNUM. */
 
 			    rec = tjj * bignum / xj;
 			    zdscal_(n, &rec, &x[1], &c__1);
@@ -1079,8 +1109,8 @@ L160:
 			x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 		    } else {
 
-/*                       A(j,j) = 0:  Set x(1:n) = 0, x(j) = 1, and   
-                         scale = 0 and compute a solution to A**H *x = 0. */
+/*                       A(j,j) = 0:  Set x(1:n) = 0, x(j) = 1, and */
+/*                       scale = 0 and compute a solution to A**H *x = 0. */
 
 			i__3 = *n;
 			for (i__ = 1; i__ <= i__3; ++i__) {
@@ -1097,8 +1127,8 @@ L210:
 		    ;
 		} else {
 
-/*                 Compute x(j) := x(j) / A(j,j) - CSUMJ if the dot   
-                   product has already been divided by 1/A(j,j). */
+/*                 Compute x(j) := x(j) / A(j,j) - CSUMJ if the dot */
+/*                 product has already been divided by 1/A(j,j). */
 
 		    i__3 = j;
 		    zladiv_(&z__2, &x[j], &tjjs);
@@ -1107,9 +1137,9 @@ L210:
 		}
 /* Computing MAX */
 		i__3 = j;
-		d__3 = xmax, d__4 = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = 
-			d_imag(&x[j]), abs(d__2));
-		xmax = max(d__3,d__4);
+		d__3 = xmax, d__4 = (d__1 = x[i__3].r, ABS(d__1)) + (d__2 = 
+			d_imag(&x[j]), ABS(d__2));
+		xmax = MAX(d__3,d__4);
 		++jlen;
 		ip += jinc * jlen;
 /* L220: */
@@ -1130,4 +1160,3 @@ L210:
 /*     End of ZLATPS */
 
 } /* zlatps_ */
-

@@ -1,49 +1,65 @@
+/* ieeeck.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-integer ieeeck_(integer *ispec, real *zero, real *one)
+int ieeeck_(int *ispec, float *zero, float *one)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1998   
-
-
-    Purpose   
-    =======   
-
-    IEEECK is called from the ILAENV to verify that Infinity and   
-    possibly NaN arithmetic is safe (i.e. will not trap).   
-
-    Arguments   
-    =========   
-
-    ISPEC   (input) INTEGER   
-            Specifies whether to test just for inifinity arithmetic   
-            or whether to test for infinity and NaN arithmetic.   
-            = 0: Verify infinity arithmetic only.   
-            = 1: Verify infinity and NaN arithmetic.   
-
-    ZERO    (input) REAL   
-            Must contain the value 0.0   
-            This is passed to prevent the compiler from optimizing   
-            away this code.   
-
-    ONE     (input) REAL   
-            Must contain the value 1.0   
-            This is passed to prevent the compiler from optimizing   
-            away this code.   
-
-    RETURN VALUE:  INTEGER   
-            = 0:  Arithmetic failed to produce the correct answers   
-            = 1:  Arithmetic produced the correct answers */
     /* System generated locals */
-    integer ret_val;
+    int ret_val;
+
     /* Local variables */
-    static real neginf, posinf, negzro, newzro, nan1, nan2, nan3, nan4, nan5, 
-	    nan6;
+    float nan1, nan2, nan3, nan4, nan5, nan6, neginf, posinf, negzro, newzro;
 
 
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  IEEECK is called from the ILAENV to verify that Infinity and */
+/*  possibly NaN arithmetic is safe (i.e. will not trap). */
+
+/*  Arguments */
+/*  ========= */
+
+/*  ISPEC   (input) INTEGER */
+/*          Specifies whether to test just for inifinity arithmetic */
+/*          or whether to test for infinity and NaN arithmetic. */
+/*          = 0: Verify infinity arithmetic only. */
+/*          = 1: Verify infinity and NaN arithmetic. */
+
+/*  ZERO    (input) REAL */
+/*          Must contain the value 0.0 */
+/*          This is passed to prevent the compiler from optimizing */
+/*          away this code. */
+
+/*  ONE     (input) REAL */
+/*          Must contain the value 1.0 */
+/*          This is passed to prevent the compiler from optimizing */
+/*          away this code. */
+
+/*  RETURN VALUE:  INTEGER */
+/*          = 0:  Arithmetic failed to produce the correct answers */
+/*          = 1:  Arithmetic produced the correct answers */
+
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Executable Statements .. */
     ret_val = 1;
 
     posinf = *one / *zero;
@@ -147,4 +163,3 @@ integer ieeeck_(integer *ispec, real *zero, real *one)
 
     return ret_val;
 } /* ieeeck_ */
-

@@ -1,98 +1,128 @@
+/* cgeequ.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int cgeequ_(integer *m, integer *n, complex *a, integer *lda,
-	 real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, 
-	integer *info)
+ int cgeequ_(int *m, int *n, complex *a, int *lda, 
+	 float *r__, float *c__, float *rowcnd, float *colcnd, float *amax, 
+	int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       March 31, 1993   
-
-
-    Purpose   
-    =======   
-
-    CGEEQU computes row and column scalings intended to equilibrate an   
-    M-by-N matrix A and reduce its condition number.  R returns the row   
-    scale factors and C the column scale factors, chosen to try to make   
-    the largest element in each row and column of the matrix B with   
-    elements B(i,j)=R(i)*A(i,j)*C(j) have absolute value 1.   
-
-    R(i) and C(j) are restricted to be between SMLNUM = smallest safe   
-    number and BIGNUM = largest safe number.  Use of these scaling   
-    factors is not guaranteed to reduce the condition number of A but   
-    works well in practice.   
-
-    Arguments   
-    =========   
-
-    M       (input) INTEGER   
-            The number of rows of the matrix A.  M >= 0.   
-
-    N       (input) INTEGER   
-            The number of columns of the matrix A.  N >= 0.   
-
-    A       (input) COMPLEX array, dimension (LDA,N)   
-            The M-by-N matrix whose equilibration factors are   
-            to be computed.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.  LDA >= max(1,M).   
-
-    R       (output) REAL array, dimension (M)   
-            If INFO = 0 or INFO > M, R contains the row scale factors   
-            for A.   
-
-    C       (output) REAL array, dimension (N)   
-            If INFO = 0,  C contains the column scale factors for A.   
-
-    ROWCND  (output) REAL   
-            If INFO = 0 or INFO > M, ROWCND contains the ratio of the   
-            smallest R(i) to the largest R(i).  If ROWCND >= 0.1 and   
-            AMAX is neither too large nor too small, it is not worth   
-            scaling by R.   
-
-    COLCND  (output) REAL   
-            If INFO = 0, COLCND contains the ratio of the smallest   
-            C(i) to the largest C(i).  If COLCND >= 0.1, it is not   
-            worth scaling by C.   
-
-    AMAX    (output) REAL   
-            Absolute value of largest matrix element.  If AMAX is very   
-            close to overflow or very close to underflow, the matrix   
-            should be scaled.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-            > 0:  if INFO = i,  and i is   
-                  <= M:  the i-th row of A is exactly zero   
-                  >  M:  the (i-M)-th column of A is exactly zero   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
-    real r__1, r__2, r__3, r__4;
+    int a_dim1, a_offset, i__1, i__2, i__3;
+    float r__1, r__2, r__3, r__4;
+
     /* Builtin functions */
     double r_imag(complex *);
-    /* Local variables */
-    static integer i__, j;
-    static real rcmin, rcmax;
-    extern doublereal slamch_(char *);
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static real bignum, smlnum;
-#define a_subscr(a_1,a_2) (a_2)*a_dim1 + a_1
-#define a_ref(a_1,a_2) a[a_subscr(a_1,a_2)]
 
+    /* Local variables */
+    int i__, j;
+    float rcmin, rcmax;
+    extern double slamch_(char *);
+    extern  int xerbla_(char *, int *);
+    float bignum, smlnum;
+
+
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CGEEQU computes row and column scalings intended to equilibrate an */
+/*  M-by-N matrix A and reduce its condition number.  R returns the row */
+/*  scale factors and C the column scale factors, chosen to try to make */
+/*  the largest element in each row and column of the matrix B with */
+/*  elements B(i,j)=R(i)*A(i,j)*C(j) have absolute value 1. */
+
+/*  R(i) and C(j) are restricted to be between SMLNUM = smallest safe */
+/*  number and BIGNUM = largest safe number.  Use of these scaling */
+/*  factors is not guaranteed to reduce the condition number of A but */
+/*  works well in practice. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  M       (input) INTEGER */
+/*          The number of rows of the matrix A.  M >= 0. */
+
+/*  N       (input) INTEGER */
+/*          The number of columns of the matrix A.  N >= 0. */
+
+/*  A       (input) COMPLEX array, dimension (LDA,N) */
+/*          The M-by-N matrix whose equilibration factors are */
+/*          to be computed. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A.  LDA >= MAX(1,M). */
+
+/*  R       (output) REAL array, dimension (M) */
+/*          If INFO = 0 or INFO > M, R contains the row scale factors */
+/*          for A. */
+
+/*  C       (output) REAL array, dimension (N) */
+/*          If INFO = 0,  C contains the column scale factors for A. */
+
+/*  ROWCND  (output) REAL */
+/*          If INFO = 0 or INFO > M, ROWCND contains the ratio of the */
+/*          smallest R(i) to the largest R(i).  If ROWCND >= 0.1 and */
+/*          AMAX is neither too large nor too small, it is not worth */
+/*          scaling by R. */
+
+/*  COLCND  (output) REAL */
+/*          If INFO = 0, COLCND contains the ratio of the smallest */
+/*          C(i) to the largest C(i).  If COLCND >= 0.1, it is not */
+/*          worth scaling by C. */
+
+/*  AMAX    (output) REAL */
+/*          Absolute value of largest matrix element.  If AMAX is very */
+/*          close to overflow or very close to underflow, the matrix */
+/*          should be scaled. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+/*          > 0:  if INFO = i,  and i is */
+/*                <= M:  the i-th row of A is exactly zero */
+/*                >  M:  the (i-M)-th column of A is exactly zero */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Statement Functions .. */
+/*     .. */
+/*     .. Statement Function definitions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     --r__;
     --c__;
@@ -103,7 +133,7 @@
 	*info = -1;
     } else if (*n < 0) {
 	*info = -2;
-    } else if (*lda < max(1,*m)) {
+    } else if (*lda < MAX(1,*m)) {
 	*info = -4;
     }
     if (*info != 0) {
@@ -141,10 +171,10 @@
 	i__2 = *m;
 	for (i__ = 1; i__ <= i__2; ++i__) {
 /* Computing MAX */
-	    i__3 = a_subscr(i__, j);
-	    r__3 = r__[i__], r__4 = (r__1 = a[i__3].r, dabs(r__1)) + (r__2 = 
-		    r_imag(&a_ref(i__, j)), dabs(r__2));
-	    r__[i__] = dmax(r__3,r__4);
+	    i__3 = i__ + j * a_dim1;
+	    r__3 = r__[i__], r__4 = (r__1 = a[i__3].r, ABS(r__1)) + (r__2 = 
+		    r_imag(&a[i__ + j * a_dim1]), ABS(r__2));
+	    r__[i__] = MAX(r__3,r__4);
 /* L20: */
 	}
 /* L30: */
@@ -158,10 +188,10 @@
     for (i__ = 1; i__ <= i__1; ++i__) {
 /* Computing MAX */
 	r__1 = rcmax, r__2 = r__[i__];
-	rcmax = dmax(r__1,r__2);
+	rcmax = MAX(r__1,r__2);
 /* Computing MIN */
 	r__1 = rcmin, r__2 = r__[i__];
-	rcmin = dmin(r__1,r__2);
+	rcmin = MIN(r__1,r__2);
 /* L40: */
     }
     *amax = rcmax;
@@ -184,17 +214,17 @@
 
 	i__1 = *m;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-/* Computing MIN   
-   Computing MAX */
+/* Computing MIN */
+/* Computing MAX */
 	    r__2 = r__[i__];
-	    r__1 = dmax(r__2,smlnum);
-	    r__[i__] = 1.f / dmin(r__1,bignum);
+	    r__1 = MAX(r__2,smlnum);
+	    r__[i__] = 1.f / MIN(r__1,bignum);
 /* L60: */
 	}
 
-/*        Compute ROWCND = min(R(I)) / max(R(I)) */
+/*        Compute ROWCND = MIN(R(I)) / MAX(R(I)) */
 
-	*rowcnd = dmax(rcmin,smlnum) / dmin(rcmax,bignum);
+	*rowcnd = MAX(rcmin,smlnum) / MIN(rcmax,bignum);
     }
 
 /*     Compute column scale factors */
@@ -205,18 +235,18 @@
 /* L70: */
     }
 
-/*     Find the maximum element in each column,   
-       assuming the row scaling computed above. */
+/*     Find the maximum element in each column, */
+/*     assuming the row scaling computed above. */
 
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 	i__2 = *m;
 	for (i__ = 1; i__ <= i__2; ++i__) {
 /* Computing MAX */
-	    i__3 = a_subscr(i__, j);
-	    r__3 = c__[j], r__4 = ((r__1 = a[i__3].r, dabs(r__1)) + (r__2 = 
-		    r_imag(&a_ref(i__, j)), dabs(r__2))) * r__[i__];
-	    c__[j] = dmax(r__3,r__4);
+	    i__3 = i__ + j * a_dim1;
+	    r__3 = c__[j], r__4 = ((r__1 = a[i__3].r, ABS(r__1)) + (r__2 = 
+		    r_imag(&a[i__ + j * a_dim1]), ABS(r__2))) * r__[i__];
+	    c__[j] = MAX(r__3,r__4);
 /* L80: */
 	}
 /* L90: */
@@ -230,10 +260,10 @@
     for (j = 1; j <= i__1; ++j) {
 /* Computing MIN */
 	r__1 = rcmin, r__2 = c__[j];
-	rcmin = dmin(r__1,r__2);
+	rcmin = MIN(r__1,r__2);
 /* Computing MAX */
 	r__1 = rcmax, r__2 = c__[j];
-	rcmax = dmax(r__1,r__2);
+	rcmax = MAX(r__1,r__2);
 /* L100: */
     }
 
@@ -255,17 +285,17 @@
 
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-/* Computing MIN   
-   Computing MAX */
+/* Computing MIN */
+/* Computing MAX */
 	    r__2 = c__[j];
-	    r__1 = dmax(r__2,smlnum);
-	    c__[j] = 1.f / dmin(r__1,bignum);
+	    r__1 = MAX(r__2,smlnum);
+	    c__[j] = 1.f / MIN(r__1,bignum);
 /* L120: */
 	}
 
-/*        Compute COLCND = min(C(J)) / max(C(J)) */
+/*        Compute COLCND = MIN(C(J)) / MAX(C(J)) */
 
-	*colcnd = dmax(rcmin,smlnum) / dmin(rcmax,bignum);
+	*colcnd = MAX(rcmin,smlnum) / MIN(rcmax,bignum);
     }
 
     return 0;
@@ -273,8 +303,3 @@
 /*     End of CGEEQU */
 
 } /* cgeequ_ */
-
-#undef a_ref
-#undef a_subscr
-
-

@@ -1,102 +1,129 @@
+/* claic1.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int claic1_(integer *job, integer *j, complex *x, real *sest,
-	 complex *w, complex *gamma, real *sestpr, complex *s, complex *c__)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int claic1_(int *job, int *j, complex *x, float *sest, 
+	 complex *w, complex *gamma, float *sestpr, complex *s, complex *c__)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1992   
-
-
-    Purpose   
-    =======   
-
-    CLAIC1 applies one step of incremental condition estimation in   
-    its simplest version:   
-
-    Let x, twonorm(x) = 1, be an approximate singular vector of an j-by-j   
-    lower triangular matrix L, such that   
-             twonorm(L*x) = sest   
-    Then CLAIC1 computes sestpr, s, c such that   
-    the vector   
-                    [ s*x ]   
-             xhat = [  c  ]   
-    is an approximate singular vector of   
-                    [ L     0  ]   
-             Lhat = [ w' gamma ]   
-    in the sense that   
-             twonorm(Lhat*xhat) = sestpr.   
-
-    Depending on JOB, an estimate for the largest or smallest singular   
-    value is computed.   
-
-    Note that [s c]' and sestpr**2 is an eigenpair of the system   
-
-        diag(sest*sest, 0) + [alpha  gamma] * [ conjg(alpha) ]   
-                                              [ conjg(gamma) ]   
-
-    where  alpha =  conjg(x)'*w.   
-
-    Arguments   
-    =========   
-
-    JOB     (input) INTEGER   
-            = 1: an estimate for the largest singular value is computed.   
-            = 2: an estimate for the smallest singular value is computed.   
-
-    J       (input) INTEGER   
-            Length of X and W   
-
-    X       (input) COMPLEX array, dimension (J)   
-            The j-vector x.   
-
-    SEST    (input) REAL   
-            Estimated singular value of j by j matrix L   
-
-    W       (input) COMPLEX array, dimension (J)   
-            The j-vector w.   
-
-    GAMMA   (input) COMPLEX   
-            The diagonal element gamma.   
-
-    SESTPR  (output) REAL   
-            Estimated singular value of (j+1) by (j+1) matrix Lhat.   
-
-    S       (output) COMPLEX   
-            Sine needed in forming xhat.   
-
-    C       (output) COMPLEX   
-            Cosine needed in forming xhat.   
-
-    =====================================================================   
-
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    real r__1, r__2;
+    float r__1, r__2;
     complex q__1, q__2, q__3, q__4, q__5, q__6;
+
     /* Builtin functions */
-    double c_abs(complex *);
+    double c_ABS(complex *);
     void r_cnjg(complex *, complex *), c_sqrt(complex *, complex *);
-    double sqrt(doublereal);
+    double sqrt(double);
     void c_div(complex *, complex *, complex *);
+
     /* Local variables */
-    static complex sine;
-    static real test, zeta1, zeta2, b, t;
-    static complex alpha;
-    extern /* Complex */ VOID cdotc_(complex *, integer *, complex *, integer 
-	    *, complex *, integer *);
-    static real norma, s1, s2, absgam, absalp;
-    extern doublereal slamch_(char *);
-    static complex cosine;
-    static real absest, scl, eps, tmp;
+    float b, t, s1, s2, scl, eps, tmp;
+    complex sine;
+    float test, zeta1, zeta2;
+    complex alpha;
+    extern /* Complex */ VOID cdotc_(complex *, int *, complex *, int 
+	    *, complex *, int *);
+    float norma, absgam, absalp;
+    extern double slamch_(char *);
+    complex cosine;
+    float absest;
 
 
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CLAIC1 applies one step of incremental condition estimation in */
+/*  its simplest version: */
+
+/*  Let x, twonorm(x) = 1, be an approximate singular vector of an j-by-j */
+/*  lower triangular matrix L, such that */
+/*           twonorm(L*x) = sest */
+/*  Then CLAIC1 computes sestpr, s, c such that */
+/*  the vector */
+/*                  [ s*x ] */
+/*           xhat = [  c  ] */
+/*  is an approximate singular vector of */
+/*                  [ L     0  ] */
+/*           Lhat = [ w' gamma ] */
+/*  in the sense that */
+/*           twonorm(Lhat*xhat) = sestpr. */
+
+/*  Depending on JOB, an estimate for the largest or smallest singular */
+/*  value is computed. */
+
+/*  Note that [s c]' and sestpr**2 is an eigenpair of the system */
+
+/*      diag(sest*sest, 0) + [alpha  gamma] * [ conjg(alpha) ] */
+/*                                            [ conjg(gamma) ] */
+
+/*  where  alpha =  conjg(x)'*w. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  JOB     (input) INTEGER */
+/*          = 1: an estimate for the largest singular value is computed. */
+/*          = 2: an estimate for the smallest singular value is computed. */
+
+/*  J       (input) INTEGER */
+/*          Length of X and W */
+
+/*  X       (input) COMPLEX array, dimension (J) */
+/*          The j-vector x. */
+
+/*  SEST    (input) REAL */
+/*          Estimated singular value of j by j matrix L */
+
+/*  W       (input) COMPLEX array, dimension (J) */
+/*          The j-vector w. */
+
+/*  GAMMA   (input) COMPLEX */
+/*          The diagonal element gamma. */
+
+/*  SESTPR  (output) REAL */
+/*          Estimated singular value of (j+1) by (j+1) matrix Lhat. */
+
+/*  S       (output) COMPLEX */
+/*          Sine needed in forming xhat. */
+
+/*  C       (output) COMPLEX */
+/*          Cosine needed in forming xhat. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     --w;
     --x;
 
@@ -105,18 +132,18 @@
     cdotc_(&q__1, j, &x[1], &c__1, &w[1], &c__1);
     alpha.r = q__1.r, alpha.i = q__1.i;
 
-    absalp = c_abs(&alpha);
-    absgam = c_abs(gamma);
-    absest = dabs(*sest);
+    absalp = c_ABS(&alpha);
+    absgam = c_ABS(gamma);
+    absest = ABS(*sest);
 
     if (*job == 1) {
 
-/*        Estimating largest singular value   
+/*        Estimating largest singular value */
 
-          special cases */
+/*        special cases */
 
 	if (*sest == 0.f) {
-	    s1 = dmax(absgam,absalp);
+	    s1 = MAX(absgam,absalp);
 	    if (s1 == 0.f) {
 		s->r = 0.f, s->i = 0.f;
 		c__->r = 1.f, c__->i = 0.f;
@@ -145,7 +172,7 @@
 	} else if (absgam <= eps * absest) {
 	    s->r = 1.f, s->i = 0.f;
 	    c__->r = 0.f, c__->i = 0.f;
-	    tmp = dmax(absest,absalp);
+	    tmp = MAX(absest,absalp);
 	    s1 = absest / tmp;
 	    s2 = absalp / tmp;
 	    *sestpr = tmp * sqrt(s1 * s1 + s2 * s2);
@@ -241,13 +268,13 @@
 
     } else if (*job == 2) {
 
-/*        Estimating smallest singular value   
+/*        Estimating smallest singular value */
 
-          special cases */
+/*        special cases */
 
 	if (*sest == 0.f) {
 	    *sestpr = 0.f;
-	    if (dmax(absgam,absalp) == 0.f) {
+	    if (MAX(absgam,absalp) == 0.f) {
 		sine.r = 1.f, sine.i = 0.f;
 		cosine.r = 0.f, cosine.i = 0.f;
 	    } else {
@@ -258,8 +285,8 @@
 		cosine.r = q__1.r, cosine.i = q__1.i;
 	    }
 /* Computing MAX */
-	    r__1 = c_abs(&sine), r__2 = c_abs(&cosine);
-	    s1 = dmax(r__1,r__2);
+	    r__1 = c_ABS(&sine), r__2 = c_ABS(&cosine);
+	    s1 = MAX(r__1,r__2);
 	    q__1.r = sine.r / s1, q__1.i = sine.i / s1;
 	    s->r = q__1.r, s->i = q__1.i;
 	    q__1.r = cosine.r / s1, q__1.i = cosine.i / s1;
@@ -337,7 +364,7 @@
 /* Computing MAX */
 	    r__1 = zeta1 * zeta1 + 1.f + zeta1 * zeta2, r__2 = zeta1 * zeta2 
 		    + zeta2 * zeta2;
-	    norma = dmax(r__1,r__2);
+	    norma = MAX(r__1,r__2);
 
 /*           See if root is closer to zero or to ONE */
 
@@ -351,7 +378,7 @@
 		c__->r = r__1, c__->i = 0.f;
 		r__2 = b * b;
 		q__2.r = r__2 - c__->r, q__2.i = -c__->i;
-		r__1 = b + sqrt(c_abs(&q__2));
+		r__1 = b + sqrt(c_ABS(&q__2));
 		q__1.r = c__->r / r__1, q__1.i = c__->i / r__1;
 		t = q__1.r;
 		q__2.r = alpha.r / absest, q__2.i = alpha.i / absest;
@@ -418,4 +445,3 @@
 /*     End of CLAIC1 */
 
 } /* claic1_ */
-

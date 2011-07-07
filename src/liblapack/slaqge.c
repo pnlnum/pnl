@@ -1,92 +1,114 @@
+/* slaqge.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int slaqge_(integer *m, integer *n, real *a, integer *lda, 
-	real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, char *
+ int slaqge_(int *m, int *n, float *a, int *lda, 
+	float *r__, float *c__, float *rowcnd, float *colcnd, float *amax, char *
 	equed)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       February 29, 1992   
-
-
-    Purpose   
-    =======   
-
-    SLAQGE equilibrates a general M by N matrix A using the row and   
-    scaling factors in the vectors R and C.   
-
-    Arguments   
-    =========   
-
-    M       (input) INTEGER   
-            The number of rows of the matrix A.  M >= 0.   
-
-    N       (input) INTEGER   
-            The number of columns of the matrix A.  N >= 0.   
-
-    A       (input/output) REAL array, dimension (LDA,N)   
-            On entry, the M by N matrix A.   
-            On exit, the equilibrated matrix.  See EQUED for the form of   
-            the equilibrated matrix.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.  LDA >= max(M,1).   
-
-    R       (input) REAL array, dimension (M)   
-            The row scale factors for A.   
-
-    C       (input) REAL array, dimension (N)   
-            The column scale factors for A.   
-
-    ROWCND  (input) REAL   
-            Ratio of the smallest R(i) to the largest R(i).   
-
-    COLCND  (input) REAL   
-            Ratio of the smallest C(i) to the largest C(i).   
-
-    AMAX    (input) REAL   
-            Absolute value of largest matrix entry.   
-
-    EQUED   (output) CHARACTER*1   
-            Specifies the form of equilibration that was done.   
-            = 'N':  No equilibration   
-            = 'R':  Row equilibration, i.e., A has been premultiplied by   
-                    diag(R).   
-            = 'C':  Column equilibration, i.e., A has been postmultiplied   
-                    by diag(C).   
-            = 'B':  Both row and column equilibration, i.e., A has been   
-                    replaced by diag(R) * A * diag(C).   
-
-    Internal Parameters   
-    ===================   
-
-    THRESH is a threshold value used to decide if row or column scaling   
-    should be done based on the ratio of the row or column scaling   
-    factors.  If ROWCND < THRESH, row scaling is done, and if   
-    COLCND < THRESH, column scaling is done.   
-
-    LARGE and SMALL are threshold values used to decide if row scaling   
-    should be done based on the absolute size of the largest matrix   
-    element.  If AMAX > LARGE or AMAX < SMALL, row scaling is done.   
-
-    =====================================================================   
-
-
-       Quick return if possible   
-
-       Parameter adjustments */
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
-    /* Local variables */
-    static integer i__, j;
-    static real large, small, cj;
-    extern doublereal slamch_(char *);
-#define a_ref(a_1,a_2) a[(a_2)*a_dim1 + a_1]
+    int a_dim1, a_offset, i__1, i__2;
 
+    /* Local variables */
+    int i__, j;
+    float cj, large, small;
+    extern double slamch_(char *);
+
+
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  SLAQGE equilibrates a general M by N matrix A using the row and */
+/*  column scaling factors in the vectors R and C. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  M       (input) INTEGER */
+/*          The number of rows of the matrix A.  M >= 0. */
+
+/*  N       (input) INTEGER */
+/*          The number of columns of the matrix A.  N >= 0. */
+
+/*  A       (input/output) REAL array, dimension (LDA,N) */
+/*          On entry, the M by N matrix A. */
+/*          On exit, the equilibrated matrix.  See EQUED for the form of */
+/*          the equilibrated matrix. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A.  LDA >= MAX(M,1). */
+
+/*  R       (input) REAL array, dimension (M) */
+/*          The row scale factors for A. */
+
+/*  C       (input) REAL array, dimension (N) */
+/*          The column scale factors for A. */
+
+/*  ROWCND  (input) REAL */
+/*          Ratio of the smallest R(i) to the largest R(i). */
+
+/*  COLCND  (input) REAL */
+/*          Ratio of the smallest C(i) to the largest C(i). */
+
+/*  AMAX    (input) REAL */
+/*          Absolute value of largest matrix entry. */
+
+/*  EQUED   (output) CHARACTER*1 */
+/*          Specifies the form of equilibration that was done. */
+/*          = 'N':  No equilibration */
+/*          = 'R':  Row equilibration, i.e., A has been premultiplied by */
+/*                  diag(R). */
+/*          = 'C':  Column equilibration, i.e., A has been postmultiplied */
+/*                  by diag(C). */
+/*          = 'B':  Both row and column equilibration, i.e., A has been */
+/*                  replaced by diag(R) * A * diag(C). */
+
+/*  Internal Parameters */
+/*  =================== */
+
+/*  THRESH is a threshold value used to decide if row or column scaling */
+/*  should be done based on the ratio of the row or column scaling */
+/*  factors.  If ROWCND < THRESH, row scaling is done, and if */
+/*  COLCND < THRESH, column scaling is done. */
+
+/*  LARGE and SMALL are threshold values used to decide if row scaling */
+/*  should be done based on the absolute size of the largest matrix */
+/*  element.  If AMAX > LARGE or AMAX < SMALL, row scaling is done. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Quick return if possible */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     --r__;
     --c__;
@@ -120,7 +142,7 @@
 		cj = c__[j];
 		i__2 = *m;
 		for (i__ = 1; i__ <= i__2; ++i__) {
-		    a_ref(i__, j) = cj * a_ref(i__, j);
+		    a[i__ + j * a_dim1] = cj * a[i__ + j * a_dim1];
 /* L10: */
 		}
 /* L20: */
@@ -135,7 +157,7 @@
 	for (j = 1; j <= i__1; ++j) {
 	    i__2 = *m;
 	    for (i__ = 1; i__ <= i__2; ++i__) {
-		a_ref(i__, j) = r__[i__] * a_ref(i__, j);
+		a[i__ + j * a_dim1] = r__[i__] * a[i__ + j * a_dim1];
 /* L30: */
 	    }
 /* L40: */
@@ -150,7 +172,7 @@
 	    cj = c__[j];
 	    i__2 = *m;
 	    for (i__ = 1; i__ <= i__2; ++i__) {
-		a_ref(i__, j) = cj * r__[i__] * a_ref(i__, j);
+		a[i__ + j * a_dim1] = cj * r__[i__] * a[i__ + j * a_dim1];
 /* L50: */
 	    }
 /* L60: */
@@ -163,7 +185,3 @@
 /*     End of SLAQGE */
 
 } /* slaqge_ */
-
-#undef a_ref
-
-

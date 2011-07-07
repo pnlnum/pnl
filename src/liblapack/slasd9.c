@@ -1,9 +1,9 @@
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int slasd9_(integer *icompq, integer *ldu, integer *k, real *
-	d__, real *z__, real *vf, real *vl, real *difl, real *difr, real *
-	dsigma, real *work, integer *info)
+ int slasd9_(int *icompq, int *ldu, int *k, float *
+	d__, float *z__, float *vf, float *vl, float *difl, float *difr, float *
+	dsigma, float *work, int *info)
 {
 /*  -- LAPACK auxiliary routine (version 3.0) --   
        Univ. of Tennessee, Oak Ridge National Lab, Argonne National Lab,   
@@ -97,35 +97,35 @@
 
        Parameter adjustments */
     /* Table of constant values */
-    static integer c__1 = 1;
-    static integer c__0 = 0;
-    static real c_b8 = 1.f;
+    static int c__1 = 1;
+    static int c__0 = 0;
+    static float c_b8 = 1.f;
     
     /* System generated locals */
-    integer difr_dim1, difr_offset, i__1, i__2;
-    real r__1, r__2;
+    int difr_dim1, difr_offset, i__1, i__2;
+    float r__1, r__2;
     /* Builtin functions */
-    double sqrt(doublereal), r_sign(real *, real *);
+    double sqrt(double), r_sign(float *, float *);
     /* Local variables */
-    static real temp;
-    extern doublereal sdot_(integer *, real *, integer *, real *, integer *);
-    static integer iwk2i, iwk3i;
-    extern doublereal snrm2_(integer *, real *, integer *);
-    static integer i__, j;
-    static real diflj, difrj, dsigj;
-    extern /* Subroutine */ int scopy_(integer *, real *, integer *, real *, 
-	    integer *);
-    extern doublereal slamc3_(real *, real *);
-    extern /* Subroutine */ int slasd4_(integer *, integer *, real *, real *, 
-	    real *, real *, real *, real *, integer *);
-    static real dj;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static real dsigjp;
-    extern /* Subroutine */ int slascl_(char *, integer *, integer *, real *, 
-	    real *, integer *, integer *, real *, integer *, integer *), slaset_(char *, integer *, integer *, real *, real *, 
-	    real *, integer *);
-    static real rho, djp1;
-    static integer iwk1, iwk2, iwk3;
+    static float temp;
+    extern double sdot_(int *, float *, int *, float *, int *);
+    static int iwk2i, iwk3i;
+    extern double snrm2_(int *, float *, int *);
+    static int i__, j;
+    static float diflj, difrj, dsigj;
+    extern  int scopy_(int *, float *, int *, float *, 
+	    int *);
+    extern double slamc3_(float *, float *);
+    extern  int slasd4_(int *, int *, float *, float *, 
+	    float *, float *, float *, float *, int *);
+    static float dj;
+    extern  int xerbla_(char *, int *);
+    static float dsigjp;
+    extern  int slascl_(char *, int *, int *, float *, 
+	    float *, int *, int *, float *, int *, int *), slaset_(char *, int *, int *, float *, float *, 
+	    float *, int *);
+    static float rho, djp1;
+    static int iwk1, iwk2, iwk3;
 #define difr_ref(a_1,a_2) difr[(a_2)*difr_dim1 + a_1]
 
 
@@ -159,7 +159,7 @@
 /*     Quick return if possible */
 
     if (*k == 1) {
-	d__[1] = dabs(z__[1]);
+	d__[1] = dABS(z__[1]);
 	difl[1] = d__[1];
 	if (*icompq == 1) {
 	    difl[2] = 1.f;
@@ -246,7 +246,7 @@
 
     i__1 = *k;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	r__2 = sqrt((r__1 = work[iwk3i + i__], dabs(r__1)));
+	r__2 = sqrt((r__1 = work[iwk3i + i__], dABS(r__1)));
 	z__[i__] = r_sign(&r__2, &z__[i__]);
 /* L50: */
     }

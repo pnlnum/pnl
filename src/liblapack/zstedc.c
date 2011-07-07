@@ -1,196 +1,233 @@
+/* zstedc.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zstedc_(char *compz, integer *n, doublereal *d__, 
-	doublereal *e, doublecomplex *z__, integer *ldz, doublecomplex *work, 
-	integer *lwork, doublereal *rwork, integer *lrwork, integer *iwork, 
-	integer *liwork, integer *info)
+/* Table of constant values */
+
+static int c__9 = 9;
+static int c__0 = 0;
+static int c__2 = 2;
+static double c_b17 = 0.;
+static double c_b18 = 1.;
+static int c__1 = 1;
+
+ int zstedc_(char *compz, int *n, double *d__, 
+	double *e, doublecomplex *z__, int *ldz, doublecomplex *work, 
+	int *lwork, double *rwork, int *lrwork, int *iwork, 
+	int *liwork, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    ZSTEDC computes all eigenvalues and, optionally, eigenvectors of a   
-    symmetric tridiagonal matrix using the divide and conquer method.   
-    The eigenvectors of a full or band complex Hermitian matrix can also   
-    be found if ZHETRD or ZHPTRD or ZHBTRD has been used to reduce this   
-    matrix to tridiagonal form.   
-
-    This code makes very mild assumptions about floating point   
-    arithmetic. It will work on machines with a guard digit in   
-    add/subtract, or on those binary machines without guard digits   
-    which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or Cray-2.   
-    It could conceivably fail on hexadecimal or decimal machines   
-    without guard digits, but we know of none.  See DLAED3 for details.   
-
-    Arguments   
-    =========   
-
-    COMPZ   (input) CHARACTER*1   
-            = 'N':  Compute eigenvalues only.   
-            = 'I':  Compute eigenvectors of tridiagonal matrix also.   
-            = 'V':  Compute eigenvectors of original Hermitian matrix   
-                    also.  On entry, Z contains the unitary matrix used   
-                    to reduce the original matrix to tridiagonal form.   
-
-    N       (input) INTEGER   
-            The dimension of the symmetric tridiagonal matrix.  N >= 0.   
-
-    D       (input/output) DOUBLE PRECISION array, dimension (N)   
-            On entry, the diagonal elements of the tridiagonal matrix.   
-            On exit, if INFO = 0, the eigenvalues in ascending order.   
-
-    E       (input/output) DOUBLE PRECISION array, dimension (N-1)   
-            On entry, the subdiagonal elements of the tridiagonal matrix.   
-            On exit, E has been destroyed.   
-
-    Z       (input/output) COMPLEX*16 array, dimension (LDZ,N)   
-            On entry, if COMPZ = 'V', then Z contains the unitary   
-            matrix used in the reduction to tridiagonal form.   
-            On exit, if INFO = 0, then if COMPZ = 'V', Z contains the   
-            orthonormal eigenvectors of the original Hermitian matrix,   
-            and if COMPZ = 'I', Z contains the orthonormal eigenvectors   
-            of the symmetric tridiagonal matrix.   
-            If  COMPZ = 'N', then Z is not referenced.   
-
-    LDZ     (input) INTEGER   
-            The leading dimension of the array Z.  LDZ >= 1.   
-            If eigenvectors are desired, then LDZ >= max(1,N).   
-
-    WORK    (workspace/output) COMPLEX*16 array, dimension (LWORK)   
-            On exit, if INFO = 0, WORK(1) returns the optimal LWORK.   
-
-    LWORK   (input) INTEGER   
-            The dimension of the array WORK.   
-            If COMPZ = 'N' or 'I', or N <= 1, LWORK must be at least 1.   
-            If COMPZ = 'V' and N > 1, LWORK must be at least N*N.   
-
-            If LWORK = -1, then a workspace query is assumed; the routine   
-            only calculates the optimal size of the WORK array, returns   
-            this value as the first entry of the WORK array, and no error   
-            message related to LWORK is issued by XERBLA.   
-
-    RWORK   (workspace/output) DOUBLE PRECISION array,   
-                                           dimension (LRWORK)   
-            On exit, if INFO = 0, RWORK(1) returns the optimal LRWORK.   
-
-    LRWORK  (input) INTEGER   
-            The dimension of the array RWORK.   
-            If COMPZ = 'N' or N <= 1, LRWORK must be at least 1.   
-            If COMPZ = 'V' and N > 1, LRWORK must be at least   
-                           1 + 3*N + 2*N*lg N + 3*N**2 ,   
-                           where lg( N ) = smallest integer k such   
-                           that 2**k >= N.   
-            If COMPZ = 'I' and N > 1, LRWORK must be at least   
-                           1 + 4*N + 2*N**2 .   
-
-            If LRWORK = -1, then a workspace query is assumed; the   
-            routine only calculates the optimal size of the RWORK array,   
-            returns this value as the first entry of the RWORK array, and   
-            no error message related to LRWORK is issued by XERBLA.   
-
-    IWORK   (workspace/output) INTEGER array, dimension (LIWORK)   
-            On exit, if INFO = 0, IWORK(1) returns the optimal LIWORK.   
-
-    LIWORK  (input) INTEGER   
-            The dimension of the array IWORK.   
-            If COMPZ = 'N' or N <= 1, LIWORK must be at least 1.   
-            If COMPZ = 'V' or N > 1,  LIWORK must be at least   
-                                      6 + 6*N + 5*N*lg N.   
-            If COMPZ = 'I' or N > 1,  LIWORK must be at least   
-                                      3 + 5*N .   
-
-            If LIWORK = -1, then a workspace query is assumed; the   
-            routine only calculates the optimal size of the IWORK array,   
-            returns this value as the first entry of the IWORK array, and   
-            no error message related to LIWORK is issued by XERBLA.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit.   
-            < 0:  if INFO = -i, the i-th argument had an illegal value.   
-            > 0:  The algorithm failed to compute an eigenvalue while   
-                  working on the submatrix lying in rows and columns   
-                  INFO/(N+1) through mod(INFO,N+1).   
-
-    Further Details   
-    ===============   
-
-    Based on contributions by   
-       Jeff Rutter, Computer Science Division, University of California   
-       at Berkeley, USA   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__2 = 2;
-    static integer c__9 = 9;
-    static integer c__0 = 0;
-    static doublereal c_b18 = 0.;
-    static doublereal c_b19 = 1.;
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer z_dim1, z_offset, i__1, i__2, i__3, i__4;
-    doublereal d__1, d__2;
+    int z_dim1, z_offset, i__1, i__2, i__3, i__4;
+    double d__1, d__2;
+
     /* Builtin functions */
-    double log(doublereal);
-    integer pow_ii(integer *, integer *);
-    double sqrt(doublereal);
+    double log(double);
+    int pow_ii(int *, int *);
+    double sqrt(double);
+
     /* Local variables */
-    static doublereal tiny;
-    static integer i__, j, k, m;
-    static doublereal p;
-    extern logical lsame_(char *, char *);
-    static integer lwmin, start;
-    extern /* Subroutine */ int zswap_(integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *), zlaed0_(integer *, integer *, 
-	    doublereal *, doublereal *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublereal *, integer *, integer *);
-    static integer ii, ll;
-    extern doublereal dlamch_(char *);
-    extern /* Subroutine */ int dlascl_(char *, integer *, integer *, 
-	    doublereal *, doublereal *, integer *, integer *, doublereal *, 
-	    integer *, integer *), dstedc_(char *, integer *, 
-	    doublereal *, doublereal *, doublereal *, integer *, doublereal *,
-	     integer *, integer *, integer *, integer *), dlaset_(
-	    char *, integer *, integer *, doublereal *, doublereal *, 
-	    doublereal *, integer *), xerbla_(char *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
-    extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
-    extern /* Subroutine */ int dsterf_(integer *, doublereal *, doublereal *,
-	     integer *), zlacrm_(integer *, integer *, doublecomplex *, 
-	    integer *, doublereal *, integer *, doublecomplex *, integer *, 
-	    doublereal *);
-    static integer liwmin, icompz;
-    extern /* Subroutine */ int dsteqr_(char *, integer *, doublereal *, 
-	    doublereal *, doublereal *, integer *, doublereal *, integer *), zlacpy_(char *, integer *, integer *, doublecomplex *, 
-	    integer *, doublecomplex *, integer *);
-    static doublereal orgnrm;
-    static integer lrwmin;
-    static logical lquery;
-    static integer smlsiz;
-    extern /* Subroutine */ int zsteqr_(char *, integer *, doublereal *, 
-	    doublereal *, doublecomplex *, integer *, doublereal *, integer *);
-    static integer end, lgn;
-    static doublereal eps;
-#define z___subscr(a_1,a_2) (a_2)*z_dim1 + a_1
-#define z___ref(a_1,a_2) z__[z___subscr(a_1,a_2)]
+    int i__, j, k, m;
+    double p;
+    int ii, ll, lgn;
+    double eps, tiny;
+    extern int lsame_(char *, char *);
+    int lwmin, start;
+    extern  int zswap_(int *, doublecomplex *, int *, 
+	    doublecomplex *, int *), zlaed0_(int *, int *, 
+	    double *, double *, doublecomplex *, int *, 
+	    doublecomplex *, int *, double *, int *, int *);
+    extern double dlamch_(char *);
+    extern  int dlascl_(char *, int *, int *, 
+	    double *, double *, int *, int *, double *, 
+	    int *, int *), dstedc_(char *, int *, 
+	    double *, double *, double *, int *, double *, 
+	     int *, int *, int *, int *), dlaset_(
+	    char *, int *, int *, double *, double *, 
+	    double *, int *), xerbla_(char *, int *);
+    extern int ilaenv_(int *, char *, char *, int *, int *, 
+	    int *, int *);
+    int finish;
+    extern double dlanst_(char *, int *, double *, double *);
+    extern  int dsterf_(int *, double *, double *, 
+	     int *), zlacrm_(int *, int *, doublecomplex *, 
+	    int *, double *, int *, doublecomplex *, int *, 
+	    double *);
+    int liwmin, icompz;
+    extern  int dsteqr_(char *, int *, double *, 
+	    double *, double *, int *, double *, int *), zlacpy_(char *, int *, int *, doublecomplex *, 
+	    int *, doublecomplex *, int *);
+    double orgnrm;
+    int lrwmin;
+    int lquery;
+    int smlsiz;
+    extern  int zsteqr_(char *, int *, double *, 
+	    double *, doublecomplex *, int *, double *, int *);
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZSTEDC computes all eigenvalues and, optionally, eigenvectors of a */
+/*  symmetric tridiagonal matrix using the divide and conquer method. */
+/*  The eigenvectors of a full or band complex Hermitian matrix can also */
+/*  be found if ZHETRD or ZHPTRD or ZHBTRD has been used to reduce this */
+/*  matrix to tridiagonal form. */
+
+/*  This code makes very mild assumptions about floating point */
+/*  arithmetic. It will work on machines with a guard digit in */
+/*  add/subtract, or on those binary machines without guard digits */
+/*  which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or Cray-2. */
+/*  It could conceivably fail on hexadecimal or decimal machines */
+/*  without guard digits, but we know of none.  See DLAED3 for details. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  COMPZ   (input) CHARACTER*1 */
+/*          = 'N':  Compute eigenvalues only. */
+/*          = 'I':  Compute eigenvectors of tridiagonal matrix also. */
+/*          = 'V':  Compute eigenvectors of original Hermitian matrix */
+/*                  also.  On entry, Z contains the unitary matrix used */
+/*                  to reduce the original matrix to tridiagonal form. */
+
+/*  N       (input) INTEGER */
+/*          The dimension of the symmetric tridiagonal matrix.  N >= 0. */
+
+/*  D       (input/output) DOUBLE PRECISION array, dimension (N) */
+/*          On entry, the diagonal elements of the tridiagonal matrix. */
+/*          On exit, if INFO = 0, the eigenvalues in ascending order. */
+
+/*  E       (input/output) DOUBLE PRECISION array, dimension (N-1) */
+/*          On entry, the subdiagonal elements of the tridiagonal matrix. */
+/*          On exit, E has been destroyed. */
+
+/*  Z       (input/output) COMPLEX*16 array, dimension (LDZ,N) */
+/*          On entry, if COMPZ = 'V', then Z contains the unitary */
+/*          matrix used in the reduction to tridiagonal form. */
+/*          On exit, if INFO = 0, then if COMPZ = 'V', Z contains the */
+/*          orthonormal eigenvectors of the original Hermitian matrix, */
+/*          and if COMPZ = 'I', Z contains the orthonormal eigenvectors */
+/*          of the symmetric tridiagonal matrix. */
+/*          If  COMPZ = 'N', then Z is not referenced. */
+
+/*  LDZ     (input) INTEGER */
+/*          The leading dimension of the array Z.  LDZ >= 1. */
+/*          If eigenvectors are desired, then LDZ >= MAX(1,N). */
+
+/*  WORK    (workspace/output) COMPLEX*16 array, dimension (MAX(1,LWORK)) */
+/*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK. */
+
+/*  LWORK   (input) INTEGER */
+/*          The dimension of the array WORK. */
+/*          If COMPZ = 'N' or 'I', or N <= 1, LWORK must be at least 1. */
+/*          If COMPZ = 'V' and N > 1, LWORK must be at least N*N. */
+/*          Note that for COMPZ = 'V', then if N is less than or */
+/*          equal to the minimum divide size, usually 25, then LWORK need */
+/*          only be 1. */
+
+/*          If LWORK = -1, then a workspace query is assumed; the routine */
+/*          only calculates the optimal sizes of the WORK, RWORK and */
+/*          IWORK arrays, returns these values as the first entries of */
+/*          the WORK, RWORK and IWORK arrays, and no error message */
+/*          related to LWORK or LRWORK or LIWORK is issued by XERBLA. */
+
+/*  RWORK   (workspace/output) DOUBLE PRECISION array, */
+/*                                         dimension (LRWORK) */
+/*          On exit, if INFO = 0, RWORK(1) returns the optimal LRWORK. */
+
+/*  LRWORK  (input) INTEGER */
+/*          The dimension of the array RWORK. */
+/*          If COMPZ = 'N' or N <= 1, LRWORK must be at least 1. */
+/*          If COMPZ = 'V' and N > 1, LRWORK must be at least */
+/*                         1 + 3*N + 2*N*lg N + 3*N**2 , */
+/*                         where lg( N ) = smallest int k such */
+/*                         that 2**k >= N. */
+/*          If COMPZ = 'I' and N > 1, LRWORK must be at least */
+/*                         1 + 4*N + 2*N**2 . */
+/*          Note that for COMPZ = 'I' or 'V', then if N is less than or */
+/*          equal to the minimum divide size, usually 25, then LRWORK */
+/*          need only be MAX(1,2*(N-1)). */
+
+/*          If LRWORK = -1, then a workspace query is assumed; the */
+/*          routine only calculates the optimal sizes of the WORK, RWORK */
+/*          and IWORK arrays, returns these values as the first entries */
+/*          of the WORK, RWORK and IWORK arrays, and no error message */
+/*          related to LWORK or LRWORK or LIWORK is issued by XERBLA. */
+
+/*  IWORK   (workspace/output) INTEGER array, dimension (MAX(1,LIWORK)) */
+/*          On exit, if INFO = 0, IWORK(1) returns the optimal LIWORK. */
+
+/*  LIWORK  (input) INTEGER */
+/*          The dimension of the array IWORK. */
+/*          If COMPZ = 'N' or N <= 1, LIWORK must be at least 1. */
+/*          If COMPZ = 'V' or N > 1,  LIWORK must be at least */
+/*                                    6 + 6*N + 5*N*lg N. */
+/*          If COMPZ = 'I' or N > 1,  LIWORK must be at least */
+/*                                    3 + 5*N . */
+/*          Note that for COMPZ = 'I' or 'V', then if N is less than or */
+/*          equal to the minimum divide size, usually 25, then LIWORK */
+/*          need only be 1. */
+
+/*          If LIWORK = -1, then a workspace query is assumed; the */
+/*          routine only calculates the optimal sizes of the WORK, RWORK */
+/*          and IWORK arrays, returns these values as the first entries */
+/*          of the WORK, RWORK and IWORK arrays, and no error message */
+/*          related to LWORK or LRWORK or LIWORK is issued by XERBLA. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit. */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value. */
+/*          > 0:  The algorithm failed to compute an eigenvalue while */
+/*                working on the submatrix lying in rows and columns */
+/*                INFO/(N+1) through mod(INFO,N+1). */
+
+/*  Further Details */
+/*  =============== */
+
+/*  Based on contributions by */
+/*     Jeff Rutter, Computer Science Division, University of California */
+/*     at Berkeley, USA */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --d__;
     --e;
     z_dim1 = *ldz;
-    z_offset = 1 + z_dim1 * 1;
+    z_offset = 1 + z_dim1;
     z__ -= z_offset;
     --work;
     --rwork;
@@ -209,19 +246,35 @@
     } else {
 	icompz = -1;
     }
-    if (*n <= 1 || icompz <= 0) {
-	lwmin = 1;
-	liwmin = 1;
-	lrwmin = 1;
-    } else {
-	lgn = (integer) (log((doublereal) (*n)) / log(2.));
-	if (pow_ii(&c__2, &lgn) < *n) {
-	    ++lgn;
-	}
-	if (pow_ii(&c__2, &lgn) < *n) {
-	    ++lgn;
-	}
-	if (icompz == 1) {
+    if (icompz < 0) {
+	*info = -1;
+    } else if (*n < 0) {
+	*info = -2;
+    } else if (*ldz < 1 || icompz > 0 && *ldz < MAX(1,*n)) {
+	*info = -6;
+    }
+
+    if (*info == 0) {
+
+/*        Compute the workspace requirements */
+
+	smlsiz = ilaenv_(&c__9, "ZSTEDC", " ", &c__0, &c__0, &c__0, &c__0);
+	if (*n <= 1 || icompz == 0) {
+	    lwmin = 1;
+	    liwmin = 1;
+	    lrwmin = 1;
+	} else if (*n <= smlsiz) {
+	    lwmin = 1;
+	    liwmin = 1;
+	    lrwmin = *n - 1 << 1;
+	} else if (icompz == 1) {
+	    lgn = (int) (log((double) (*n)) / log(2.));
+	    if (pow_ii(&c__2, &lgn) < *n) {
+		++lgn;
+	    }
+	    if (pow_ii(&c__2, &lgn) < *n) {
+		++lgn;
+	    }
 	    lwmin = *n * *n;
 /* Computing 2nd power */
 	    i__1 = *n;
@@ -234,25 +287,17 @@
 	    lrwmin = (*n << 2) + 1 + (i__1 * i__1 << 1);
 	    liwmin = *n * 5 + 3;
 	}
-    }
-    if (icompz < 0) {
-	*info = -1;
-    } else if (*n < 0) {
-	*info = -2;
-    } else if (*ldz < 1 || icompz > 0 && *ldz < max(1,*n)) {
-	*info = -6;
-    } else if (*lwork < lwmin && ! lquery) {
-	*info = -8;
-    } else if (*lrwork < lrwmin && ! lquery) {
-	*info = -10;
-    } else if (*liwork < liwmin && ! lquery) {
-	*info = -12;
-    }
-
-    if (*info == 0) {
-	work[1].r = (doublereal) lwmin, work[1].i = 0.;
-	rwork[1] = (doublereal) lrwmin;
+	work[1].r = (double) lwmin, work[1].i = 0.;
+	rwork[1] = (double) lrwmin;
 	iwork[1] = liwmin;
+
+	if (*lwork < lwmin && ! lquery) {
+	    *info = -8;
+	} else if (*lrwork < lrwmin && ! lquery) {
+	    *info = -10;
+	} else if (*liwork < liwmin && ! lquery) {
+	    *info = -12;
+	}
     }
 
     if (*info != 0) {
@@ -270,184 +315,178 @@
     }
     if (*n == 1) {
 	if (icompz != 0) {
-	    i__1 = z___subscr(1, 1);
+	    i__1 = z_dim1 + 1;
 	    z__[i__1].r = 1., z__[i__1].i = 0.;
 	}
 	return 0;
     }
 
-    smlsiz = ilaenv_(&c__9, "ZSTEDC", " ", &c__0, &c__0, &c__0, &c__0, (
-	    ftnlen)6, (ftnlen)1);
+/*     If the following conditional clause is removed, then the routine */
+/*     will use the Divide and Conquer routine to compute only the */
+/*     eigenvalues, which requires (3N + 3N**2) float workspace and */
+/*     (2 + 5N + 2N lg(N)) int workspace. */
+/*     Since on many architectures DSTERF is much faster than any other */
+/*     algorithm for finding eigenvalues only, it is used here */
+/*     as the default. If the conditional clause is removed, then */
+/*     information on the size of workspace needs to be changed. */
 
-/*     If the following conditional clause is removed, then the routine   
-       will use the Divide and Conquer routine to compute only the   
-       eigenvalues, which requires (3N + 3N**2) real workspace and   
-       (2 + 5N + 2N lg(N)) integer workspace.   
-       Since on many architectures DSTERF is much faster than any other   
-       algorithm for finding eigenvalues only, it is used here   
-       as the default.   
-
-       If COMPZ = 'N', use DSTERF to compute the eigenvalues. */
+/*     If COMPZ = 'N', use DSTERF to compute the eigenvalues. */
 
     if (icompz == 0) {
 	dsterf_(n, &d__[1], &e[1], info);
-	return 0;
+	goto L70;
     }
 
-/*     If N is smaller than the minimum divide size (SMLSIZ+1), then   
-       solve the problem with another solver. */
+/*     If N is smaller than the minimum divide size (SMLSIZ+1), then */
+/*     solve the problem with another solver. */
 
     if (*n <= smlsiz) {
-	if (icompz == 0) {
-	    dsterf_(n, &d__[1], &e[1], info);
-	    return 0;
-	} else if (icompz == 2) {
-	    zsteqr_("I", n, &d__[1], &e[1], &z__[z_offset], ldz, &rwork[1], 
-		    info);
-	    return 0;
-	} else {
-	    zsteqr_("V", n, &d__[1], &e[1], &z__[z_offset], ldz, &rwork[1], 
-		    info);
-	    return 0;
-	}
-    }
 
-/*     If COMPZ = 'I', we simply call DSTEDC instead. */
+	zsteqr_(compz, n, &d__[1], &e[1], &z__[z_offset], ldz, &rwork[1], 
+		info);
 
-    if (icompz == 2) {
-	dlaset_("Full", n, n, &c_b18, &c_b19, &rwork[1], n);
-	ll = *n * *n + 1;
-	i__1 = *lrwork - ll + 1;
-	dstedc_("I", n, &d__[1], &e[1], &rwork[1], n, &rwork[ll], &i__1, &
-		iwork[1], liwork, info);
-	i__1 = *n;
-	for (j = 1; j <= i__1; ++j) {
-	    i__2 = *n;
-	    for (i__ = 1; i__ <= i__2; ++i__) {
-		i__3 = z___subscr(i__, j);
-		i__4 = (j - 1) * *n + i__;
-		z__[i__3].r = rwork[i__4], z__[i__3].i = 0.;
+    } else {
+
+/*        If COMPZ = 'I', we simply call DSTEDC instead. */
+
+	if (icompz == 2) {
+	    dlaset_("Full", n, n, &c_b17, &c_b18, &rwork[1], n);
+	    ll = *n * *n + 1;
+	    i__1 = *lrwork - ll + 1;
+	    dstedc_("I", n, &d__[1], &e[1], &rwork[1], n, &rwork[ll], &i__1, &
+		    iwork[1], liwork, info);
+	    i__1 = *n;
+	    for (j = 1; j <= i__1; ++j) {
+		i__2 = *n;
+		for (i__ = 1; i__ <= i__2; ++i__) {
+		    i__3 = i__ + j * z_dim1;
+		    i__4 = (j - 1) * *n + i__;
+		    z__[i__3].r = rwork[i__4], z__[i__3].i = 0.;
 /* L10: */
-	    }
+		}
 /* L20: */
+	    }
+	    goto L70;
 	}
-	return 0;
-    }
 
-/*     From now on, only option left to be handled is COMPZ = 'V',   
-       i.e. ICOMPZ = 1.   
+/*        From now on, only option left to be handled is COMPZ = 'V', */
+/*        i.e. ICOMPZ = 1. */
 
-       Scale. */
+/*        Scale. */
 
-    orgnrm = dlanst_("M", n, &d__[1], &e[1]);
-    if (orgnrm == 0.) {
-	return 0;
-    }
+	orgnrm = dlanst_("M", n, &d__[1], &e[1]);
+	if (orgnrm == 0.) {
+	    goto L70;
+	}
 
-    eps = dlamch_("Epsilon");
+	eps = dlamch_("Epsilon");
 
-    start = 1;
+	start = 1;
 
-/*     while ( START <= N ) */
+/*        while ( START <= N ) */
 
 L30:
-    if (start <= *n) {
+	if (start <= *n) {
 
-/*     Let END be the position of the next subdiagonal entry such that   
-       E( END ) <= TINY or END = N if no such subdiagonal exists.  The   
-       matrix identified by the elements between START and END   
-       constitutes an independent sub-problem. */
+/*           Let FINISH be the position of the next subdiagonal entry */
+/*           such that E( FINISH ) <= TINY or FINISH = N if no such */
+/*           subdiagonal exists.  The matrix identified by the elements */
+/*           between START and FINISH constitutes an independent */
+/*           sub-problem. */
 
-	end = start;
+	    finish = start;
 L40:
-	if (end < *n) {
-	    tiny = eps * sqrt((d__1 = d__[end], abs(d__1))) * sqrt((d__2 = 
-		    d__[end + 1], abs(d__2)));
-	    if ((d__1 = e[end], abs(d__1)) > tiny) {
-		++end;
-		goto L40;
-	    }
-	}
-
-/*        (Sub) Problem determined.  Compute its size and solve it. */
-
-	m = end - start + 1;
-	if (m > smlsiz) {
-	    *info = smlsiz;
-
-/*           Scale. */
-
-	    orgnrm = dlanst_("M", &m, &d__[start], &e[start]);
-	    dlascl_("G", &c__0, &c__0, &orgnrm, &c_b19, &m, &c__1, &d__[start]
-		    , &m, info);
-	    i__1 = m - 1;
-	    i__2 = m - 1;
-	    dlascl_("G", &c__0, &c__0, &orgnrm, &c_b19, &i__1, &c__1, &e[
-		    start], &i__2, info);
-
-	    zlaed0_(n, &m, &d__[start], &e[start], &z___ref(1, start), ldz, &
-		    work[1], n, &rwork[1], &iwork[1], info);
-	    if (*info > 0) {
-		*info = (*info / (m + 1) + start - 1) * (*n + 1) + *info % (m 
-			+ 1) + start - 1;
-		return 0;
-	    }
-
-/*           Scale back. */
-
-	    dlascl_("G", &c__0, &c__0, &c_b19, &orgnrm, &m, &c__1, &d__[start]
-		    , &m, info);
-
-	} else {
-	    dsteqr_("I", &m, &d__[start], &e[start], &rwork[1], &m, &rwork[m *
-		     m + 1], info);
-	    zlacrm_(n, &m, &z___ref(1, start), ldz, &rwork[1], &m, &work[1], 
-		    n, &rwork[m * m + 1]);
-	    zlacpy_("A", n, &m, &work[1], n, &z___ref(1, start), ldz);
-	    if (*info > 0) {
-		*info = start * (*n + 1) + end;
-		return 0;
-	    }
-	}
-
-	start = end + 1;
-	goto L30;
-    }
-
-/*     endwhile   
-
-       If the problem split any number of times, then the eigenvalues   
-       will not be properly ordered.  Here we permute the eigenvalues   
-       (and the associated eigenvectors) into ascending order. */
-
-    if (m != *n) {
-
-/*        Use Selection Sort to minimize swaps of eigenvectors */
-
-	i__1 = *n;
-	for (ii = 2; ii <= i__1; ++ii) {
-	    i__ = ii - 1;
-	    k = i__;
-	    p = d__[i__];
-	    i__2 = *n;
-	    for (j = ii; j <= i__2; ++j) {
-		if (d__[j] < p) {
-		    k = j;
-		    p = d__[j];
+	    if (finish < *n) {
+		tiny = eps * sqrt((d__1 = d__[finish], ABS(d__1))) * sqrt((
+			d__2 = d__[finish + 1], ABS(d__2)));
+		if ((d__1 = e[finish], ABS(d__1)) > tiny) {
+		    ++finish;
+		    goto L40;
 		}
+	    }
+
+/*           (Sub) Problem determined.  Compute its size and solve it. */
+
+	    m = finish - start + 1;
+	    if (m > smlsiz) {
+
+/*              Scale. */
+
+		orgnrm = dlanst_("M", &m, &d__[start], &e[start]);
+		dlascl_("G", &c__0, &c__0, &orgnrm, &c_b18, &m, &c__1, &d__[
+			start], &m, info);
+		i__1 = m - 1;
+		i__2 = m - 1;
+		dlascl_("G", &c__0, &c__0, &orgnrm, &c_b18, &i__1, &c__1, &e[
+			start], &i__2, info);
+
+		zlaed0_(n, &m, &d__[start], &e[start], &z__[start * z_dim1 + 
+			1], ldz, &work[1], n, &rwork[1], &iwork[1], info);
+		if (*info > 0) {
+		    *info = (*info / (m + 1) + start - 1) * (*n + 1) + *info %
+			     (m + 1) + start - 1;
+		    goto L70;
+		}
+
+/*              Scale back. */
+
+		dlascl_("G", &c__0, &c__0, &c_b18, &orgnrm, &m, &c__1, &d__[
+			start], &m, info);
+
+	    } else {
+		dsteqr_("I", &m, &d__[start], &e[start], &rwork[1], &m, &
+			rwork[m * m + 1], info);
+		zlacrm_(n, &m, &z__[start * z_dim1 + 1], ldz, &rwork[1], &m, &
+			work[1], n, &rwork[m * m + 1]);
+		zlacpy_("A", n, &m, &work[1], n, &z__[start * z_dim1 + 1], 
+			ldz);
+		if (*info > 0) {
+		    *info = start * (*n + 1) + finish;
+		    goto L70;
+		}
+	    }
+
+	    start = finish + 1;
+	    goto L30;
+	}
+
+/*        endwhile */
+
+/*        If the problem split any number of times, then the eigenvalues */
+/*        will not be properly ordered.  Here we permute the eigenvalues */
+/*        (and the associated eigenvectors) into ascending order. */
+
+	if (m != *n) {
+
+/*           Use Selection Sort to minimize swaps of eigenvectors */
+
+	    i__1 = *n;
+	    for (ii = 2; ii <= i__1; ++ii) {
+		i__ = ii - 1;
+		k = i__;
+		p = d__[i__];
+		i__2 = *n;
+		for (j = ii; j <= i__2; ++j) {
+		    if (d__[j] < p) {
+			k = j;
+			p = d__[j];
+		    }
 /* L50: */
-	    }
-	    if (k != i__) {
-		d__[k] = d__[i__];
-		d__[i__] = p;
-		zswap_(n, &z___ref(1, i__), &c__1, &z___ref(1, k), &c__1);
-	    }
+		}
+		if (k != i__) {
+		    d__[k] = d__[i__];
+		    d__[i__] = p;
+		    zswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[k * z_dim1 
+			    + 1], &c__1);
+		}
 /* L60: */
+	    }
 	}
     }
 
-    work[1].r = (doublereal) lwmin, work[1].i = 0.;
-    rwork[1] = (doublereal) lrwmin;
+L70:
+    work[1].r = (double) lwmin, work[1].i = 0.;
+    rwork[1] = (double) lrwmin;
     iwork[1] = liwmin;
 
     return 0;
@@ -455,8 +494,3 @@ L40:
 /*     End of ZSTEDC */
 
 } /* zstedc_ */
-
-#undef z___ref
-#undef z___subscr
-
-

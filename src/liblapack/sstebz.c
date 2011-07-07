@@ -1,221 +1,252 @@
+/* sstebz.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int sstebz_(char *range, char *order, integer *n, real *vl, 
-	real *vu, integer *il, integer *iu, real *abstol, real *d__, real *e, 
-	integer *m, integer *nsplit, real *w, integer *iblock, integer *
-	isplit, real *work, integer *iwork, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+static int c_n1 = -1;
+static int c__3 = 3;
+static int c__2 = 2;
+static int c__0 = 0;
+
+ int sstebz_(char *range, char *order, int *n, float *vl, 
+	float *vu, int *il, int *iu, float *abstol, float *d__, float *e, 
+	int *m, int *nsplit, float *w, int *iblock, int *
+	isplit, float *work, int *iwork, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    SSTEBZ computes the eigenvalues of a symmetric tridiagonal   
-    matrix T.  The user may ask for all eigenvalues, all eigenvalues   
-    in the half-open interval (VL, VU], or the IL-th through IU-th   
-    eigenvalues.   
-
-    To avoid overflow, the matrix must be scaled so that its   
-    largest element is no greater than overflow**(1/2) *   
-    underflow**(1/4) in absolute value, and for greatest   
-    accuracy, it should not be much smaller than that.   
-
-    See W. Kahan "Accurate Eigenvalues of a Symmetric Tridiagonal   
-    Matrix", Report CS41, Computer Science Dept., Stanford   
-    University, July 21, 1966.   
-
-    Arguments   
-    =========   
-
-    RANGE   (input) CHARACTER   
-            = 'A': ("All")   all eigenvalues will be found.   
-            = 'V': ("Value") all eigenvalues in the half-open interval   
-                             (VL, VU] will be found.   
-            = 'I': ("Index") the IL-th through IU-th eigenvalues (of the   
-                             entire matrix) will be found.   
-
-    ORDER   (input) CHARACTER   
-            = 'B': ("By Block") the eigenvalues will be grouped by   
-                                split-off block (see IBLOCK, ISPLIT) and   
-                                ordered from smallest to largest within   
-                                the block.   
-            = 'E': ("Entire matrix")   
-                                the eigenvalues for the entire matrix   
-                                will be ordered from smallest to   
-                                largest.   
-
-    N       (input) INTEGER   
-            The order of the tridiagonal matrix T.  N >= 0.   
-
-    VL      (input) REAL   
-    VU      (input) REAL   
-            If RANGE='V', the lower and upper bounds of the interval to   
-            be searched for eigenvalues.  Eigenvalues less than or equal   
-            to VL, or greater than VU, will not be returned.  VL < VU.   
-            Not referenced if RANGE = 'A' or 'I'.   
-
-    IL      (input) INTEGER   
-    IU      (input) INTEGER   
-            If RANGE='I', the indices (in ascending order) of the   
-            smallest and largest eigenvalues to be returned.   
-            1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0.   
-            Not referenced if RANGE = 'A' or 'V'.   
-
-    ABSTOL  (input) REAL   
-            The absolute tolerance for the eigenvalues.  An eigenvalue   
-            (or cluster) is considered to be located if it has been   
-            determined to lie in an interval whose width is ABSTOL or   
-            less.  If ABSTOL is less than or equal to zero, then ULP*|T|   
-            will be used, where |T| means the 1-norm of T.   
-
-            Eigenvalues will be computed most accurately when ABSTOL is   
-            set to twice the underflow threshold 2*SLAMCH('S'), not zero.   
-
-    D       (input) REAL array, dimension (N)   
-            The n diagonal elements of the tridiagonal matrix T.   
-
-    E       (input) REAL array, dimension (N-1)   
-            The (n-1) off-diagonal elements of the tridiagonal matrix T.   
-
-    M       (output) INTEGER   
-            The actual number of eigenvalues found. 0 <= M <= N.   
-            (See also the description of INFO=2,3.)   
-
-    NSPLIT  (output) INTEGER   
-            The number of diagonal blocks in the matrix T.   
-            1 <= NSPLIT <= N.   
-
-    W       (output) REAL array, dimension (N)   
-            On exit, the first M elements of W will contain the   
-            eigenvalues.  (SSTEBZ may use the remaining N-M elements as   
-            workspace.)   
-
-    IBLOCK  (output) INTEGER array, dimension (N)   
-            At each row/column j where E(j) is zero or small, the   
-            matrix T is considered to split into a block diagonal   
-            matrix.  On exit, if INFO = 0, IBLOCK(i) specifies to which   
-            block (from 1 to the number of blocks) the eigenvalue W(i)   
-            belongs.  (SSTEBZ may use the remaining N-M elements as   
-            workspace.)   
-
-    ISPLIT  (output) INTEGER array, dimension (N)   
-            The splitting points, at which T breaks up into submatrices.   
-            The first submatrix consists of rows/columns 1 to ISPLIT(1),   
-            the second of rows/columns ISPLIT(1)+1 through ISPLIT(2),   
-            etc., and the NSPLIT-th consists of rows/columns   
-            ISPLIT(NSPLIT-1)+1 through ISPLIT(NSPLIT)=N.   
-            (Only the first NSPLIT elements will actually be used, but   
-            since the user cannot know a priori what value NSPLIT will   
-            have, N words must be reserved for ISPLIT.)   
-
-    WORK    (workspace) REAL array, dimension (4*N)   
-
-    IWORK   (workspace) INTEGER array, dimension (3*N)   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-            > 0:  some or all of the eigenvalues failed to converge or   
-                  were not computed:   
-                  =1 or 3: Bisection failed to converge for some   
-                          eigenvalues; these eigenvalues are flagged by a   
-                          negative block number.  The effect is that the   
-                          eigenvalues may not be as accurate as the   
-                          absolute and relative tolerances.  This is   
-                          generally caused by unexpectedly inaccurate   
-                          arithmetic.   
-                  =2 or 3: RANGE='I' only: Not all of the eigenvalues   
-                          IL:IU were found.   
-                          Effect: M < IU+1-IL   
-                          Cause:  non-monotonic arithmetic, causing the   
-                                  Sturm sequence to be non-monotonic.   
-                          Cure:   recalculate, using RANGE='A', and pick   
-                                  out eigenvalues IL:IU.  In some cases,   
-                                  increasing the PARAMETER "FUDGE" may   
-                                  make things work.   
-                  = 4:    RANGE='I', and the Gershgorin interval   
-                          initially used was too small.  No eigenvalues   
-                          were computed.   
-                          Probable cause: your machine has sloppy   
-                                          floating-point arithmetic.   
-                          Cure: Increase the PARAMETER "FUDGE",   
-                                recompile, and try again.   
-
-    Internal Parameters   
-    ===================   
-
-    RELFAC  REAL, default = 2.0e0   
-            The relative tolerance.  An interval (a,b] lies within   
-            "relative tolerance" if  b-a < RELFAC*ulp*max(|a|,|b|),   
-            where "ulp" is the machine precision (distance from 1 to   
-            the next larger floating point number.)   
-
-    FUDGE   REAL, default = 2   
-            A "fudge factor" to widen the Gershgorin intervals.  Ideally,   
-            a value of 1 should work, but on machines with sloppy   
-            arithmetic, this needs to be larger.  The default for   
-            publicly released versions should be large enough to handle   
-            the worst machine around.  Note that this has no effect   
-            on accuracy of the solution.   
-
-    =====================================================================   
-
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    static integer c_n1 = -1;
-    static integer c__3 = 3;
-    static integer c__2 = 2;
-    static integer c__0 = 0;
-    
     /* System generated locals */
-    integer i__1, i__2, i__3;
-    real r__1, r__2, r__3, r__4, r__5;
+    int i__1, i__2, i__3;
+    float r__1, r__2, r__3, r__4, r__5;
+
     /* Builtin functions */
-    double sqrt(doublereal), log(doublereal);
+    double sqrt(double), log(double);
+
     /* Local variables */
-    static integer iend, ioff, iout, itmp1, j, jdisc;
-    extern logical lsame_(char *, char *);
-    static integer iinfo;
-    static real atoli;
-    static integer iwoff;
-    static real bnorm;
-    static integer itmax;
-    static real wkill, rtoli, tnorm;
-    static integer ib, jb, ie, je, nb;
-    static real gl;
-    static integer im, in, ibegin;
-    static real gu;
-    static integer iw;
-    static real wl;
-    static integer irange, idiscl;
-    extern doublereal slamch_(char *);
-    static real safemn, wu;
-    static integer idumma[1];
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static integer idiscu;
-    extern /* Subroutine */ int slaebz_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, real *, real *, real *, real *, 
-	    real *, real *, integer *, real *, real *, integer *, integer *, 
-	    real *, integer *, integer *);
-    static integer iorder;
-    static logical ncnvrg;
-    static real pivmin;
-    static logical toofew;
-    static integer nwl;
-    static real ulp, wlu, wul;
-    static integer nwu;
-    static real tmp1, tmp2;
+    int j, ib, jb, ie, je, nb;
+    float gl;
+    int im, in;
+    float gu;
+    int iw;
+    float wl, wu;
+    int nwl;
+    float ulp, wlu, wul;
+    int nwu;
+    float tmp1, tmp2;
+    int iend, ioff, iout, itmp1, jdisc;
+    extern int lsame_(char *, char *);
+    int iinfo;
+    float atoli;
+    int iwoff;
+    float bnorm;
+    int itmax;
+    float wkill, rtoli, tnorm;
+    int ibegin, irange, idiscl;
+    extern double slamch_(char *);
+    float safemn;
+    int idumma[1];
+    extern  int xerbla_(char *, int *);
+    extern int ilaenv_(int *, char *, char *, int *, int *, 
+	    int *, int *);
+    int idiscu;
+    extern  int slaebz_(int *, int *, int *, 
+	    int *, int *, int *, float *, float *, float *, float *, 
+	    float *, float *, int *, float *, float *, int *, int *, 
+	    float *, int *, int *);
+    int iorder;
+    int ncnvrg;
+    float pivmin;
+    int toofew;
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+/*     8-18-00:  Increase FUDGE factor for T3E (eca) */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  SSTEBZ computes the eigenvalues of a symmetric tridiagonal */
+/*  matrix T.  The user may ask for all eigenvalues, all eigenvalues */
+/*  in the half-open interval (VL, VU], or the IL-th through IU-th */
+/*  eigenvalues. */
+
+/*  To avoid overflow, the matrix must be scaled so that its */
+/*  largest element is no greater than overflow**(1/2) * */
+/*  underflow**(1/4) in absolute value, and for greatest */
+/*  accuracy, it should not be much smaller than that. */
+
+/*  See W. Kahan "Accurate Eigenvalues of a Symmetric Tridiagonal */
+/*  Matrix", Report CS41, Computer Science Dept., Stanford */
+/*  University, July 21, 1966. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  RANGE   (input) CHARACTER*1 */
+/*          = 'A': ("All")   all eigenvalues will be found. */
+/*          = 'V': ("Value") all eigenvalues in the half-open interval */
+/*                           (VL, VU] will be found. */
+/*          = 'I': ("Index") the IL-th through IU-th eigenvalues (of the */
+/*                           entire matrix) will be found. */
+
+/*  ORDER   (input) CHARACTER*1 */
+/*          = 'B': ("By Block") the eigenvalues will be grouped by */
+/*                              split-off block (see IBLOCK, ISPLIT) and */
+/*                              ordered from smallest to largest within */
+/*                              the block. */
+/*          = 'E': ("Entire matrix") */
+/*                              the eigenvalues for the entire matrix */
+/*                              will be ordered from smallest to */
+/*                              largest. */
+
+/*  N       (input) INTEGER */
+/*          The order of the tridiagonal matrix T.  N >= 0. */
+
+/*  VL      (input) REAL */
+/*  VU      (input) REAL */
+/*          If RANGE='V', the lower and upper bounds of the interval to */
+/*          be searched for eigenvalues.  Eigenvalues less than or equal */
+/*          to VL, or greater than VU, will not be returned.  VL < VU. */
+/*          Not referenced if RANGE = 'A' or 'I'. */
+
+/*  IL      (input) INTEGER */
+/*  IU      (input) INTEGER */
+/*          If RANGE='I', the indices (in ascending order) of the */
+/*          smallest and largest eigenvalues to be returned. */
+/*          1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0. */
+/*          Not referenced if RANGE = 'A' or 'V'. */
+
+/*  ABSTOL  (input) REAL */
+/*          The absolute tolerance for the eigenvalues.  An eigenvalue */
+/*          (or cluster) is considered to be located if it has been */
+/*          determined to lie in an interval whose width is ABSTOL or */
+/*          less.  If ABSTOL is less than or equal to zero, then ULP*|T| */
+/*          will be used, where |T| means the 1-norm of T. */
+
+/*          Eigenvalues will be computed most accurately when ABSTOL is */
+/*          set to twice the underflow threshold 2*SLAMCH('S'), not zero. */
+
+/*  D       (input) REAL array, dimension (N) */
+/*          The n diagonal elements of the tridiagonal matrix T. */
+
+/*  E       (input) REAL array, dimension (N-1) */
+/*          The (n-1) off-diagonal elements of the tridiagonal matrix T. */
+
+/*  M       (output) INTEGER */
+/*          The actual number of eigenvalues found. 0 <= M <= N. */
+/*          (See also the description of INFO=2,3.) */
+
+/*  NSPLIT  (output) INTEGER */
+/*          The number of diagonal blocks in the matrix T. */
+/*          1 <= NSPLIT <= N. */
+
+/*  W       (output) REAL array, dimension (N) */
+/*          On exit, the first M elements of W will contain the */
+/*          eigenvalues.  (SSTEBZ may use the remaining N-M elements as */
+/*          workspace.) */
+
+/*  IBLOCK  (output) INTEGER array, dimension (N) */
+/*          At each row/column j where E(j) is zero or small, the */
+/*          matrix T is considered to split into a block diagonal */
+/*          matrix.  On exit, if INFO = 0, IBLOCK(i) specifies to which */
+/*          block (from 1 to the number of blocks) the eigenvalue W(i) */
+/*          belongs.  (SSTEBZ may use the remaining N-M elements as */
+/*          workspace.) */
+
+/*  ISPLIT  (output) INTEGER array, dimension (N) */
+/*          The splitting points, at which T breaks up into submatrices. */
+/*          The first submatrix consists of rows/columns 1 to ISPLIT(1), */
+/*          the second of rows/columns ISPLIT(1)+1 through ISPLIT(2), */
+/*          etc., and the NSPLIT-th consists of rows/columns */
+/*          ISPLIT(NSPLIT-1)+1 through ISPLIT(NSPLIT)=N. */
+/*          (Only the first NSPLIT elements will actually be used, but */
+/*          since the user cannot know a priori what value NSPLIT will */
+/*          have, N words must be reserved for ISPLIT.) */
+
+/*  WORK    (workspace) REAL array, dimension (4*N) */
+
+/*  IWORK   (workspace) INTEGER array, dimension (3*N) */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+/*          > 0:  some or all of the eigenvalues failed to converge or */
+/*                were not computed: */
+/*                =1 or 3: Bisection failed to converge for some */
+/*                        eigenvalues; these eigenvalues are flagged by a */
+/*                        negative block number.  The effect is that the */
+/*                        eigenvalues may not be as accurate as the */
+/*                        absolute and relative tolerances.  This is */
+/*                        generally caused by unexpectedly inaccurate */
+/*                        arithmetic. */
+/*                =2 or 3: RANGE='I' only: Not all of the eigenvalues */
+/*                        IL:IU were found. */
+/*                        Effect: M < IU+1-IL */
+/*                        Cause:  non-monotonic arithmetic, causing the */
+/*                                Sturm sequence to be non-monotonic. */
+/*                        Cure:   recalculate, using RANGE='A', and pick */
+/*                                out eigenvalues IL:IU.  In some cases, */
+/*                                increasing the PARAMETER "FUDGE" may */
+/*                                make things work. */
+/*                = 4:    RANGE='I', and the Gershgorin interval */
+/*                        initially used was too small.  No eigenvalues */
+/*                        were computed. */
+/*                        Probable cause: your machine has sloppy */
+/*                                        floating-point arithmetic. */
+/*                        Cure: Increase the PARAMETER "FUDGE", */
+/*                              recompile, and try again. */
+
+/*  Internal Parameters */
+/*  =================== */
+
+/*  RELFAC  REAL, default = 2.0e0 */
+/*          The relative tolerance.  An interval (a,b] lies within */
+/*          "relative tolerance" if  b-a < RELFAC*ulp*MAX(|a|,|b|), */
+/*          where "ulp" is the machine precision (distance from 1 to */
+/*          the next larger floating point number.) */
+
+/*  FUDGE   REAL, default = 2 */
+/*          A "fudge factor" to widen the Gershgorin intervals.  Ideally, */
+/*          a value of 1 should work, but on machines with sloppy */
+/*          arithmetic, this needs to be larger.  The default for */
+/*          publicly released versions should be large enough to handle */
+/*          the worst machine around.  Note that this has no effect */
+/*          on accuracy of the solution. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Local Arrays .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     --iwork;
     --work;
     --isplit;
@@ -261,9 +292,9 @@
 	if (*vl >= *vu) {
 	    *info = -5;
 	}
-    } else if (irange == 3 && (*il < 1 || *il > max(1,*n))) {
+    } else if (irange == 3 && (*il < 1 || *il > MAX(1,*n))) {
 	*info = -6;
-    } else if (irange == 3 && (*iu < min(*n,*il) || *iu > *n)) {
+    } else if (irange == 3 && (*iu < MIN(*n,*il) || *iu > *n)) {
 	*info = -7;
     }
 
@@ -276,8 +307,8 @@
 /*     Initialize error flags */
 
     *info = 0;
-    ncnvrg = FALSE_;
-    toofew = FALSE_;
+    ncnvrg = FALSE;
+    toofew = FALSE;
 
 /*     Quick return if possible */
 
@@ -292,15 +323,14 @@
 	irange = 1;
     }
 
-/*     Get machine constants   
-       NB is the minimum vector length for vector bisection, or 0   
-       if only scalar is to be done. */
+/*     Get machine constants */
+/*     NB is the minimum vector length for vector bisection, or 0 */
+/*     if only scalar is to be done. */
 
     safemn = slamch_("S");
     ulp = slamch_("P");
     rtoli = ulp * 2.f;
-    nb = ilaenv_(&c__1, "SSTEBZ", " ", n, &c_n1, &c_n1, &c_n1, (ftnlen)6, (
-	    ftnlen)1);
+    nb = ilaenv_(&c__1, "SSTEBZ", " ", n, &c_n1, &c_n1, &c_n1);
     if (nb <= 1) {
 	nb = 0;
     }
@@ -334,14 +364,14 @@
 	tmp1 = r__1 * r__1;
 /* Computing 2nd power */
 	r__2 = ulp;
-	if ((r__1 = d__[j] * d__[j - 1], dabs(r__1)) * (r__2 * r__2) + safemn 
+	if ((r__1 = d__[j] * d__[j - 1], ABS(r__1)) * (r__2 * r__2) + safemn 
 		> tmp1) {
 	    isplit[*nsplit] = j - 1;
 	    ++(*nsplit);
 	    work[j - 1] = 0.f;
 	} else {
 	    work[j - 1] = tmp1;
-	    pivmin = dmax(pivmin,tmp1);
+	    pivmin = MAX(pivmin,tmp1);
 	}
 /* L10: */
     }
@@ -352,11 +382,11 @@
 
     if (irange == 3) {
 
-/*        RANGE='I': Compute the interval containing eigenvalues   
-                     IL through IU.   
+/*        RANGE='I': Compute the interval containing eigenvalues */
+/*                   IL through IU. */
 
-          Compute Gershgorin interval for entire (split) matrix   
-          and use it as the initial interval */
+/*        Compute Gershgorin interval for entire (split) matrix */
+/*        and use it as the initial interval */
 
 	gu = d__[1];
 	gl = d__[1];
@@ -367,29 +397,29 @@
 	    tmp2 = sqrt(work[j]);
 /* Computing MAX */
 	    r__1 = gu, r__2 = d__[j] + tmp1 + tmp2;
-	    gu = dmax(r__1,r__2);
+	    gu = MAX(r__1,r__2);
 /* Computing MIN */
 	    r__1 = gl, r__2 = d__[j] - tmp1 - tmp2;
-	    gl = dmin(r__1,r__2);
+	    gl = MIN(r__1,r__2);
 	    tmp1 = tmp2;
 /* L20: */
 	}
 
 /* Computing MAX */
 	r__1 = gu, r__2 = d__[*n] + tmp1;
-	gu = dmax(r__1,r__2);
+	gu = MAX(r__1,r__2);
 /* Computing MIN */
 	r__1 = gl, r__2 = d__[*n] - tmp1;
-	gl = dmin(r__1,r__2);
+	gl = MIN(r__1,r__2);
 /* Computing MAX */
-	r__1 = dabs(gl), r__2 = dabs(gu);
-	tnorm = dmax(r__1,r__2);
-	gl = gl - tnorm * 2.f * ulp * *n - pivmin * 4.f;
-	gu = gu + tnorm * 2.f * ulp * *n + pivmin * 2.f;
+	r__1 = ABS(gl), r__2 = ABS(gu);
+	tnorm = MAX(r__1,r__2);
+	gl = gl - tnorm * 2.1f * ulp * *n - pivmin * 4.2000000000000002f;
+	gu = gu + tnorm * 2.1f * ulp * *n + pivmin * 2.1f;
 
 /*        Compute Iteration parameters */
 
-	itmax = (integer) ((log(tnorm + pivmin) - log(pivmin)) / log(2.f)) + 
+	itmax = (int) ((log(tnorm + pivmin) - log(pivmin)) / log(2.f)) + 
 		2;
 	if (*abstol <= 0.f) {
 	    atoli = ulp * tnorm;
@@ -436,19 +466,19 @@
 	}
     } else {
 
-/*        RANGE='A' or 'V' -- Set ATOLI   
+/*        RANGE='A' or 'V' -- Set ATOLI */
 
-   Computing MAX */
-	r__3 = dabs(d__[1]) + dabs(e[1]), r__4 = (r__1 = d__[*n], dabs(r__1)) 
-		+ (r__2 = e[*n - 1], dabs(r__2));
-	tnorm = dmax(r__3,r__4);
+/* Computing MAX */
+	r__3 = ABS(d__[1]) + ABS(e[1]), r__4 = (r__1 = d__[*n], ABS(r__1)) 
+		+ (r__2 = e[*n - 1], ABS(r__2));
+	tnorm = MAX(r__3,r__4);
 
 	i__1 = *n - 1;
 	for (j = 2; j <= i__1; ++j) {
 /* Computing MAX */
-	    r__4 = tnorm, r__5 = (r__1 = d__[j], dabs(r__1)) + (r__2 = e[j - 
-		    1], dabs(r__2)) + (r__3 = e[j], dabs(r__3));
-	    tnorm = dmax(r__4,r__5);
+	    r__4 = tnorm, r__5 = (r__1 = d__[j], ABS(r__1)) + (r__2 = e[j - 
+		    1], ABS(r__2)) + (r__3 = e[j], ABS(r__3));
+	    tnorm = MAX(r__4,r__5);
 /* L30: */
 	}
 
@@ -467,9 +497,9 @@
 	}
     }
 
-/*     Find Eigenvalues -- Loop Over Blocks and recompute NWL and NWU.   
-       NWL accumulates the number of eigenvalues .le. WL,   
-       NWU accumulates the number of eigenvalues .le. WU */
+/*     Find Eigenvalues -- Loop Over Blocks and recompute NWL and NWU. */
+/*     NWL accumulates the number of eigenvalues .le. WL, */
+/*     NWU accumulates the number of eigenvalues .le. WU */
 
     *m = 0;
     iend = 0;
@@ -502,10 +532,10 @@
 	    }
 	} else {
 
-/*           General Case -- IN > 1   
+/*           General Case -- IN > 1 */
 
-             Compute Gershgorin Interval   
-             and use it as the initial interval */
+/*           Compute Gershgorin Interval */
+/*           and use it as the initial interval */
 
 	    gu = d__[ibegin];
 	    gl = d__[ibegin];
@@ -513,35 +543,35 @@
 
 	    i__2 = iend - 1;
 	    for (j = ibegin; j <= i__2; ++j) {
-		tmp2 = (r__1 = e[j], dabs(r__1));
+		tmp2 = (r__1 = e[j], ABS(r__1));
 /* Computing MAX */
 		r__1 = gu, r__2 = d__[j] + tmp1 + tmp2;
-		gu = dmax(r__1,r__2);
+		gu = MAX(r__1,r__2);
 /* Computing MIN */
 		r__1 = gl, r__2 = d__[j] - tmp1 - tmp2;
-		gl = dmin(r__1,r__2);
+		gl = MIN(r__1,r__2);
 		tmp1 = tmp2;
 /* L40: */
 	    }
 
 /* Computing MAX */
 	    r__1 = gu, r__2 = d__[iend] + tmp1;
-	    gu = dmax(r__1,r__2);
+	    gu = MAX(r__1,r__2);
 /* Computing MIN */
 	    r__1 = gl, r__2 = d__[iend] - tmp1;
-	    gl = dmin(r__1,r__2);
+	    gl = MIN(r__1,r__2);
 /* Computing MAX */
-	    r__1 = dabs(gl), r__2 = dabs(gu);
-	    bnorm = dmax(r__1,r__2);
-	    gl = gl - bnorm * 2.f * ulp * in - pivmin * 2.f;
-	    gu = gu + bnorm * 2.f * ulp * in + pivmin * 2.f;
+	    r__1 = ABS(gl), r__2 = ABS(gu);
+	    bnorm = MAX(r__1,r__2);
+	    gl = gl - bnorm * 2.1f * ulp * in - pivmin * 2.1f;
+	    gu = gu + bnorm * 2.1f * ulp * in + pivmin * 2.1f;
 
 /*           Compute ATOLI for the current submatrix */
 
 	    if (*abstol <= 0.f) {
 /* Computing MAX */
-		r__1 = dabs(gl), r__2 = dabs(gu);
-		atoli = ulp * dmax(r__1,r__2);
+		r__1 = ABS(gl), r__2 = ABS(gu);
+		atoli = ulp * MAX(r__1,r__2);
 	    } else {
 		atoli = *abstol;
 	    }
@@ -552,8 +582,8 @@
 		    nwu += in;
 		    goto L70;
 		}
-		gl = dmax(gl,wl);
-		gu = dmin(gu,wu);
+		gl = MAX(gl,wl);
+		gu = MIN(gu,wu);
 		if (gl >= gu) {
 		    goto L70;
 		}
@@ -574,15 +604,15 @@
 
 /*           Compute Eigenvalues */
 
-	    itmax = (integer) ((log(gu - gl + pivmin) - log(pivmin)) / log(
+	    itmax = (int) ((log(gu - gl + pivmin) - log(pivmin)) / log(
 		    2.f)) + 2;
 	    slaebz_(&c__2, &itmax, &in, &in, &c__1, &nb, &atoli, &rtoli, &
 		    pivmin, &d__[ibegin], &e[ibegin], &work[ibegin], idumma, &
-		    work[*n + 1], &work[*n + (in << 1) + 1], &iout, &iwork[1],
+		    work[*n + 1], &work[*n + (in << 1) + 1], &iout, &iwork[1], 
 		     &w[*m + 1], &iblock[*m + 1], &iinfo);
 
-/*           Copy Eigenvalues Into W and IBLOCK   
-             Use -JB for block number for unconverged eigenvalues. */
+/*           Copy Eigenvalues Into W and IBLOCK */
+/*           Use -JB for block number for unconverged eigenvalues. */
 
 	    i__2 = iout;
 	    for (j = 1; j <= i__2; ++j) {
@@ -591,7 +621,7 @@
 /*              Flag non-convergence. */
 
 		if (j > iout - iinfo) {
-		    ncnvrg = TRUE_;
+		    ncnvrg = TRUE;
 		    ib = -jb;
 		} else {
 		    ib = jb;
@@ -611,8 +641,8 @@ L70:
 	;
     }
 
-/*     If RANGE='I', then (WL,WU) contains eigenvalues NWL+1,...,NWU   
-       If NWL+1 < IL or NWU > IU, discard extra eigenvalues. */
+/*     If RANGE='I', then (WL,WU) contains eigenvalues NWL+1,...,NWU */
+/*     If NWL+1 < IL or NWU > IU, discard extra eigenvalues. */
 
     if (irange == 3) {
 	im = 0;
@@ -637,15 +667,15 @@ L70:
 	}
 	if (idiscl > 0 || idiscu > 0) {
 
-/*           Code to deal with effects of bad arithmetic:   
-             Some low eigenvalues to be discarded are not in (WL,WLU],   
-             or high eigenvalues to be discarded are not in (WUL,WU]   
-             so just kill off the smallest IDISCL/largest IDISCU   
-             eigenvalues, by simply finding the smallest/largest   
-             eigenvalue(s).   
+/*           Code to deal with effects of bad arithmetic: */
+/*           Some low eigenvalues to be discarded are not in (WL,WLU], */
+/*           or high eigenvalues to be discarded are not in (WUL,WU] */
+/*           so just kill off the smallest IDISCL/largest IDISCU */
+/*           eigenvalues, by simply finding the smallest/largest */
+/*           eigenvalue(s). */
 
-             (If N(w) is monotone non-decreasing, this should never   
-                 happen.) */
+/*           (If N(w) is monotone non-decreasing, this should never */
+/*               happen.) */
 
 	    if (idiscl > 0) {
 		wkill = wu;
@@ -695,13 +725,13 @@ L70:
 	    *m = im;
 	}
 	if (idiscl < 0 || idiscu < 0) {
-	    toofew = TRUE_;
+	    toofew = TRUE;
 	}
     }
 
-/*     If ORDER='B', do nothing -- the eigenvalues are already sorted   
-          by block.   
-       If ORDER='E', sort the eigenvalues from smallest to largest */
+/*     If ORDER='B', do nothing -- the eigenvalues are already sorted */
+/*        by block. */
+/*     If ORDER='E', sort the eigenvalues from smallest to largest */
 
     if (iorder == 1 && *nsplit > 1) {
 	i__1 = *m - 1;
@@ -740,4 +770,3 @@ L70:
 /*     End of SSTEBZ */
 
 } /* sstebz_ */
-

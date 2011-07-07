@@ -1,115 +1,139 @@
+/* dopmtr.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dopmtr_(char *side, char *uplo, char *trans, integer *m, 
-	integer *n, doublereal *ap, doublereal *tau, doublereal *c__, integer 
-	*ldc, doublereal *work, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int dopmtr_(char *side, char *uplo, char *trans, int *m, 
+	int *n, double *ap, double *tau, double *c__, int 
+	*ldc, double *work, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
-
-
-    Purpose   
-    =======   
-
-    DOPMTR overwrites the general real M-by-N matrix C with   
-
-                    SIDE = 'L'     SIDE = 'R'   
-    TRANS = 'N':      Q * C          C * Q   
-    TRANS = 'T':      Q**T * C       C * Q**T   
-
-    where Q is a real orthogonal matrix of order nq, with nq = m if   
-    SIDE = 'L' and nq = n if SIDE = 'R'. Q is defined as the product of   
-    nq-1 elementary reflectors, as returned by DSPTRD using packed   
-    storage:   
-
-    if UPLO = 'U', Q = H(nq-1) . . . H(2) H(1);   
-
-    if UPLO = 'L', Q = H(1) H(2) . . . H(nq-1).   
-
-    Arguments   
-    =========   
-
-    SIDE    (input) CHARACTER*1   
-            = 'L': apply Q or Q**T from the Left;   
-            = 'R': apply Q or Q**T from the Right.   
-
-    UPLO    (input) CHARACTER*1   
-            = 'U': Upper triangular packed storage used in previous   
-                   call to DSPTRD;   
-            = 'L': Lower triangular packed storage used in previous   
-                   call to DSPTRD.   
-
-    TRANS   (input) CHARACTER*1   
-            = 'N':  No transpose, apply Q;   
-            = 'T':  Transpose, apply Q**T.   
-
-    M       (input) INTEGER   
-            The number of rows of the matrix C. M >= 0.   
-
-    N       (input) INTEGER   
-            The number of columns of the matrix C. N >= 0.   
-
-    AP      (input) DOUBLE PRECISION array, dimension   
-                                 (M*(M+1)/2) if SIDE = 'L'   
-                                 (N*(N+1)/2) if SIDE = 'R'   
-            The vectors which define the elementary reflectors, as   
-            returned by DSPTRD.  AP is modified by the routine but   
-            restored on exit.   
-
-    TAU     (input) DOUBLE PRECISION array, dimension (M-1) if SIDE = 'L'   
-                                       or (N-1) if SIDE = 'R'   
-            TAU(i) must contain the scalar factor of the elementary   
-            reflector H(i), as returned by DSPTRD.   
-
-    C       (input/output) DOUBLE PRECISION array, dimension (LDC,N)   
-            On entry, the M-by-N matrix C.   
-            On exit, C is overwritten by Q*C or Q**T*C or C*Q**T or C*Q.   
-
-    LDC     (input) INTEGER   
-            The leading dimension of the array C. LDC >= max(1,M).   
-
-    WORK    (workspace) DOUBLE PRECISION array, dimension   
-                                     (N) if SIDE = 'L'   
-                                     (M) if SIDE = 'R'   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-
-    =====================================================================   
-
-
-       Test the input arguments   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer c_dim1, c_offset, i__1, i__2;
+    int c_dim1, c_offset, i__1, i__2;
+
     /* Local variables */
-    static logical left;
-    static integer i__;
-    extern /* Subroutine */ int dlarf_(char *, integer *, integer *, 
-	    doublereal *, integer *, doublereal *, doublereal *, integer *, 
-	    doublereal *);
-    extern logical lsame_(char *, char *);
-    static integer i1;
-    static logical upper;
-    static integer i2, i3, ic, jc, ii, mi, ni, nq;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static logical notran, forwrd;
-    static doublereal aii;
-#define c___ref(a_1,a_2) c__[(a_2)*c_dim1 + a_1]
+    int i__, i1, i2, i3, ic, jc, ii, mi, ni, nq;
+    double aii;
+    int left;
+    extern  int dlarf_(char *, int *, int *, 
+	    double *, int *, double *, double *, int *, 
+	    double *);
+    extern int lsame_(char *, char *);
+    int upper;
+    extern  int xerbla_(char *, int *);
+    int notran, forwrd;
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  DOPMTR overwrites the general float M-by-N matrix C with */
+
+/*                  SIDE = 'L'     SIDE = 'R' */
+/*  TRANS = 'N':      Q * C          C * Q */
+/*  TRANS = 'T':      Q**T * C       C * Q**T */
+
+/*  where Q is a float orthogonal matrix of order nq, with nq = m if */
+/*  SIDE = 'L' and nq = n if SIDE = 'R'. Q is defined as the product of */
+/*  nq-1 elementary reflectors, as returned by DSPTRD using packed */
+/*  storage: */
+
+/*  if UPLO = 'U', Q = H(nq-1) . . . H(2) H(1); */
+
+/*  if UPLO = 'L', Q = H(1) H(2) . . . H(nq-1). */
+
+/*  Arguments */
+/*  ========= */
+
+/*  SIDE    (input) CHARACTER*1 */
+/*          = 'L': apply Q or Q**T from the Left; */
+/*          = 'R': apply Q or Q**T from the Right. */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U': Upper triangular packed storage used in previous */
+/*                 call to DSPTRD; */
+/*          = 'L': Lower triangular packed storage used in previous */
+/*                 call to DSPTRD. */
+
+/*  TRANS   (input) CHARACTER*1 */
+/*          = 'N':  No transpose, apply Q; */
+/*          = 'T':  Transpose, apply Q**T. */
+
+/*  M       (input) INTEGER */
+/*          The number of rows of the matrix C. M >= 0. */
+
+/*  N       (input) INTEGER */
+/*          The number of columns of the matrix C. N >= 0. */
+
+/*  AP      (input) DOUBLE PRECISION array, dimension */
+/*                               (M*(M+1)/2) if SIDE = 'L' */
+/*                               (N*(N+1)/2) if SIDE = 'R' */
+/*          The vectors which define the elementary reflectors, as */
+/*          returned by DSPTRD.  AP is modified by the routine but */
+/*          restored on exit. */
+
+/*  TAU     (input) DOUBLE PRECISION array, dimension (M-1) if SIDE = 'L' */
+/*                                     or (N-1) if SIDE = 'R' */
+/*          TAU(i) must contain the scalar factor of the elementary */
+/*          reflector H(i), as returned by DSPTRD. */
+
+/*  C       (input/output) DOUBLE PRECISION array, dimension (LDC,N) */
+/*          On entry, the M-by-N matrix C. */
+/*          On exit, C is overwritten by Q*C or Q**T*C or C*Q**T or C*Q. */
+
+/*  LDC     (input) INTEGER */
+/*          The leading dimension of the array C. LDC >= MAX(1,M). */
+
+/*  WORK    (workspace) DOUBLE PRECISION array, dimension */
+/*                                   (N) if SIDE = 'L' */
+/*                                   (M) if SIDE = 'R' */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input arguments */
+
+    /* Parameter adjustments */
     --ap;
     --tau;
     c_dim1 = *ldc;
-    c_offset = 1 + c_dim1 * 1;
+    c_offset = 1 + c_dim1;
     c__ -= c_offset;
     --work;
 
@@ -136,7 +160,7 @@
 	*info = -4;
     } else if (*n < 0) {
 	*info = -5;
-    } else if (*ldc < max(1,*m)) {
+    } else if (*ldc < MAX(1,*m)) {
 	*info = -9;
     }
     if (*info != 0) {
@@ -252,8 +276,8 @@
 
 /*           Apply H(i) */
 
-	    dlarf_(side, &mi, &ni, &ap[ii], &c__1, &tau[i__], &c___ref(ic, jc)
-		    , ldc, &work[1]);
+	    dlarf_(side, &mi, &ni, &ap[ii], &c__1, &tau[i__], &c__[ic + jc * 
+		    c_dim1], ldc, &work[1]);
 	    ap[ii] = aii;
 
 	    if (forwrd) {
@@ -269,7 +293,3 @@
 /*     End of DOPMTR */
 
 } /* dopmtr_ */
-
-#undef c___ref
-
-

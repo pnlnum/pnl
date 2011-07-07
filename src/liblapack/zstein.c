@@ -1,165 +1,191 @@
+/* zstein.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zstein_(integer *n, doublereal *d__, doublereal *e, 
-	integer *m, doublereal *w, integer *iblock, integer *isplit, 
-	doublecomplex *z__, integer *ldz, doublereal *work, integer *iwork, 
-	integer *ifail, integer *info)
+/* Table of constant values */
+
+static int c__2 = 2;
+static int c__1 = 1;
+static int c_n1 = -1;
+
+ int zstein_(int *n, double *d__, double *e, 
+	int *m, double *w, int *iblock, int *isplit, 
+	doublecomplex *z__, int *ldz, double *work, int *iwork, 
+	int *ifail, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
-
-
-    Purpose   
-    =======   
-
-    ZSTEIN computes the eigenvectors of a real symmetric tridiagonal   
-    matrix T corresponding to specified eigenvalues, using inverse   
-    iteration.   
-
-    The maximum number of iterations allowed for each eigenvector is   
-    specified by an internal parameter MAXITS (currently set to 5).   
-
-    Although the eigenvectors are real, they are stored in a complex   
-    array, which may be passed to ZUNMTR or ZUPMTR for back   
-    transformation to the eigenvectors of a complex Hermitian matrix   
-    which was reduced to tridiagonal form.   
-
-
-    Arguments   
-    =========   
-
-    N       (input) INTEGER   
-            The order of the matrix.  N >= 0.   
-
-    D       (input) DOUBLE PRECISION array, dimension (N)   
-            The n diagonal elements of the tridiagonal matrix T.   
-
-    E       (input) DOUBLE PRECISION array, dimension (N)   
-            The (n-1) subdiagonal elements of the tridiagonal matrix   
-            T, stored in elements 1 to N-1; E(N) need not be set.   
-
-    M       (input) INTEGER   
-            The number of eigenvectors to be found.  0 <= M <= N.   
-
-    W       (input) DOUBLE PRECISION array, dimension (N)   
-            The first M elements of W contain the eigenvalues for   
-            which eigenvectors are to be computed.  The eigenvalues   
-            should be grouped by split-off block and ordered from   
-            smallest to largest within the block.  ( The output array   
-            W from DSTEBZ with ORDER = 'B' is expected here. )   
-
-    IBLOCK  (input) INTEGER array, dimension (N)   
-            The submatrix indices associated with the corresponding   
-            eigenvalues in W; IBLOCK(i)=1 if eigenvalue W(i) belongs to   
-            the first submatrix from the top, =2 if W(i) belongs to   
-            the second submatrix, etc.  ( The output array IBLOCK   
-            from DSTEBZ is expected here. )   
-
-    ISPLIT  (input) INTEGER array, dimension (N)   
-            The splitting points, at which T breaks up into submatrices.   
-            The first submatrix consists of rows/columns 1 to   
-            ISPLIT( 1 ), the second of rows/columns ISPLIT( 1 )+1   
-            through ISPLIT( 2 ), etc.   
-            ( The output array ISPLIT from DSTEBZ is expected here. )   
-
-    Z       (output) COMPLEX*16 array, dimension (LDZ, M)   
-            The computed eigenvectors.  The eigenvector associated   
-            with the eigenvalue W(i) is stored in the i-th column of   
-            Z.  Any vector which fails to converge is set to its current   
-            iterate after MAXITS iterations.   
-            The imaginary parts of the eigenvectors are set to zero.   
-
-    LDZ     (input) INTEGER   
-            The leading dimension of the array Z.  LDZ >= max(1,N).   
-
-    WORK    (workspace) DOUBLE PRECISION array, dimension (5*N)   
-
-    IWORK   (workspace) INTEGER array, dimension (N)   
-
-    IFAIL   (output) INTEGER array, dimension (M)   
-            On normal exit, all elements of IFAIL are zero.   
-            If one or more eigenvectors fail to converge after   
-            MAXITS iterations, then their indices are stored in   
-            array IFAIL.   
-
-    INFO    (output) INTEGER   
-            = 0: successful exit   
-            < 0: if INFO = -i, the i-th argument had an illegal value   
-            > 0: if INFO = i, then i eigenvectors failed to converge   
-                 in MAXITS iterations.  Their indices are stored in   
-                 array IFAIL.   
-
-    Internal Parameters   
-    ===================   
-
-    MAXITS  INTEGER, default = 5   
-            The maximum number of iterations performed.   
-
-    EXTRA   INTEGER, default = 2   
-            The number of iterations performed after norm growth   
-            criterion is satisfied, should be at least 1.   
-
-   =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__2 = 2;
-    static integer c__1 = 1;
-    static integer c_n1 = -1;
-    
     /* System generated locals */
-    integer z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
-    doublereal d__1, d__2, d__3, d__4, d__5;
+    int z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
+    double d__1, d__2, d__3, d__4, d__5;
     doublecomplex z__1;
+
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
+
     /* Local variables */
-    static integer jblk, nblk, jmax;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    static integer i__, j;
-    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *);
-    static integer iseed[4], gpind, iinfo;
-    extern doublereal dasum_(integer *, doublereal *, integer *);
-    extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *);
-    static integer b1, j1;
-    static doublereal ortol;
-    static integer indrv1, indrv2, indrv3, indrv4, indrv5, bn;
-    extern doublereal dlamch_(char *);
-    static integer jr;
-    extern /* Subroutine */ int dlagtf_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *, doublereal *, doublereal *, integer *
-	    , integer *);
-    static doublereal xj;
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */ int xerbla_(char *, integer *), dlagts_(
-	    integer *, integer *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, integer *, doublereal *, doublereal *, integer *);
-    static integer nrmchk;
-    extern /* Subroutine */ int dlarnv_(integer *, integer *, integer *, 
-	    doublereal *);
-    static integer blksiz;
-    static doublereal onenrm, dtpcrt, pertol, scl, eps, sep, nrm, tol;
-    static integer its;
-    static doublereal xjm, ztr, eps1;
-#define z___subscr(a_1,a_2) (a_2)*z_dim1 + a_1
-#define z___ref(a_1,a_2) z__[z___subscr(a_1,a_2)]
+    int i__, j, b1, j1, bn, jr;
+    double xj, scl, eps, sep, nrm, tol;
+    int its;
+    double xjm, ztr, eps1;
+    int jblk, nblk, jmax;
+    extern double dnrm2_(int *, double *, int *);
+    extern  int dscal_(int *, double *, double *, 
+	    int *);
+    int iseed[4], gpind, iinfo;
+    extern double dasum_(int *, double *, int *);
+    extern  int dcopy_(int *, double *, int *, 
+	    double *, int *);
+    double ortol;
+    int indrv1, indrv2, indrv3, indrv4, indrv5;
+    extern double dlamch_(char *);
+    extern  int dlagtf_(int *, double *, double *, 
+	     double *, double *, double *, double *, int *
+, int *);
+    extern int idamax_(int *, double *, int *);
+    extern  int xerbla_(char *, int *), dlagts_(
+	    int *, int *, double *, double *, double *, 
+	    double *, int *, double *, double *, int *);
+    int nrmchk;
+    extern  int dlarnv_(int *, int *, int *, 
+	    double *);
+    int blksiz;
+    double onenrm, dtpcrt, pertol;
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZSTEIN computes the eigenvectors of a float symmetric tridiagonal */
+/*  matrix T corresponding to specified eigenvalues, using inverse */
+/*  iteration. */
+
+/*  The maximum number of iterations allowed for each eigenvector is */
+/*  specified by an internal parameter MAXITS (currently set to 5). */
+
+/*  Although the eigenvectors are float, they are stored in a complex */
+/*  array, which may be passed to ZUNMTR or ZUPMTR for back */
+/*  transformation to the eigenvectors of a complex Hermitian matrix */
+/*  which was reduced to tridiagonal form. */
+
+
+/*  Arguments */
+/*  ========= */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix.  N >= 0. */
+
+/*  D       (input) DOUBLE PRECISION array, dimension (N) */
+/*          The n diagonal elements of the tridiagonal matrix T. */
+
+/*  E       (input) DOUBLE PRECISION array, dimension (N-1) */
+/*          The (n-1) subdiagonal elements of the tridiagonal matrix */
+/*          T, stored in elements 1 to N-1. */
+
+/*  M       (input) INTEGER */
+/*          The number of eigenvectors to be found.  0 <= M <= N. */
+
+/*  W       (input) DOUBLE PRECISION array, dimension (N) */
+/*          The first M elements of W contain the eigenvalues for */
+/*          which eigenvectors are to be computed.  The eigenvalues */
+/*          should be grouped by split-off block and ordered from */
+/*          smallest to largest within the block.  ( The output array */
+/*          W from DSTEBZ with ORDER = 'B' is expected here. ) */
+
+/*  IBLOCK  (input) INTEGER array, dimension (N) */
+/*          The submatrix indices associated with the corresponding */
+/*          eigenvalues in W; IBLOCK(i)=1 if eigenvalue W(i) belongs to */
+/*          the first submatrix from the top, =2 if W(i) belongs to */
+/*          the second submatrix, etc.  ( The output array IBLOCK */
+/*          from DSTEBZ is expected here. ) */
+
+/*  ISPLIT  (input) INTEGER array, dimension (N) */
+/*          The splitting points, at which T breaks up into submatrices. */
+/*          The first submatrix consists of rows/columns 1 to */
+/*          ISPLIT( 1 ), the second of rows/columns ISPLIT( 1 )+1 */
+/*          through ISPLIT( 2 ), etc. */
+/*          ( The output array ISPLIT from DSTEBZ is expected here. ) */
+
+/*  Z       (output) COMPLEX*16 array, dimension (LDZ, M) */
+/*          The computed eigenvectors.  The eigenvector associated */
+/*          with the eigenvalue W(i) is stored in the i-th column of */
+/*          Z.  Any vector which fails to converge is set to its current */
+/*          iterate after MAXITS iterations. */
+/*          The imaginary parts of the eigenvectors are set to zero. */
+
+/*  LDZ     (input) INTEGER */
+/*          The leading dimension of the array Z.  LDZ >= MAX(1,N). */
+
+/*  WORK    (workspace) DOUBLE PRECISION array, dimension (5*N) */
+
+/*  IWORK   (workspace) INTEGER array, dimension (N) */
+
+/*  IFAIL   (output) INTEGER array, dimension (M) */
+/*          On normal exit, all elements of IFAIL are zero. */
+/*          If one or more eigenvectors fail to converge after */
+/*          MAXITS iterations, then their indices are stored in */
+/*          array IFAIL. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0: successful exit */
+/*          < 0: if INFO = -i, the i-th argument had an illegal value */
+/*          > 0: if INFO = i, then i eigenvectors failed to converge */
+/*               in MAXITS iterations.  Their indices are stored in */
+/*               array IFAIL. */
+
+/*  Internal Parameters */
+/*  =================== */
+
+/*  MAXITS  INTEGER, default = 5 */
+/*          The maximum number of iterations performed. */
+
+/*  EXTRA   INTEGER, default = 2 */
+/*          The number of iterations performed after norm growth */
+/*          criterion is satisfied, should be at least 1. */
+
+/* ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Local Arrays .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --d__;
     --e;
     --w;
     --iblock;
     --isplit;
     z_dim1 = *ldz;
-    z_offset = 1 + z_dim1 * 1;
+    z_offset = 1 + z_dim1;
     z__ -= z_offset;
     --work;
     --iwork;
@@ -177,7 +203,7 @@
 	*info = -1;
     } else if (*m < 0 || *m > *n) {
 	*info = -4;
-    } else if (*ldz < max(1,*n)) {
+    } else if (*ldz < MAX(1,*n)) {
 	*info = -9;
     } else {
 	i__1 = *m;
@@ -207,7 +233,7 @@ L30:
     if (*n == 0 || *m == 0) {
 	return 0;
     } else if (*n == 1) {
-	i__1 = z___subscr(1, 1);
+	i__1 = z_dim1 + 1;
 	z__[i__1].r = 1., z__[i__1].i = 0.;
 	return 0;
     }
@@ -253,17 +279,17 @@ L30:
 
 /*        Compute reorthogonalization criterion and stopping criterion. */
 
-	onenrm = (d__1 = d__[b1], abs(d__1)) + (d__2 = e[b1], abs(d__2));
+	onenrm = (d__1 = d__[b1], ABS(d__1)) + (d__2 = e[b1], ABS(d__2));
 /* Computing MAX */
-	d__3 = onenrm, d__4 = (d__1 = d__[bn], abs(d__1)) + (d__2 = e[bn - 1],
-		 abs(d__2));
-	onenrm = max(d__3,d__4);
+	d__3 = onenrm, d__4 = (d__1 = d__[bn], ABS(d__1)) + (d__2 = e[bn - 1],
+		 ABS(d__2));
+	onenrm = MAX(d__3,d__4);
 	i__2 = bn - 1;
 	for (i__ = b1 + 1; i__ <= i__2; ++i__) {
 /* Computing MAX */
-	    d__4 = onenrm, d__5 = (d__1 = d__[i__], abs(d__1)) + (d__2 = e[
-		    i__ - 1], abs(d__2)) + (d__3 = e[i__], abs(d__3));
-	    onenrm = max(d__4,d__5);
+	    d__4 = onenrm, d__5 = (d__1 = d__[i__], ABS(d__1)) + (d__2 = e[
+		    i__ - 1], ABS(d__2)) + (d__3 = e[i__], ABS(d__3));
+	    onenrm = MAX(d__4,d__5);
 /* L50: */
 	}
 	ortol = onenrm * .001;
@@ -290,11 +316,11 @@ L60:
 		goto L140;
 	    }
 
-/*           If eigenvalues j and j-1 are too close, add a relatively   
-             small perturbation. */
+/*           If eigenvalues j and j-1 are too close, add a relatively */
+/*           small perturbation. */
 
 	    if (jblk > 1) {
-		eps1 = (d__1 = eps * xj, abs(d__1));
+		eps1 = (d__1 = eps * xj, ABS(d__1));
 		pertol = eps1 * 10.;
 		sep = xj - xjm;
 		if (sep < pertol) {
@@ -331,11 +357,11 @@ L70:
 		goto L120;
 	    }
 
-/*           Normalize and scale the righthand side vector Pb.   
+/*           Normalize and scale the righthand side vector Pb. */
 
-   Computing MAX */
-	    d__2 = eps, d__3 = (d__1 = work[indrv4 + blksiz], abs(d__1));
-	    scl = blksiz * onenrm * max(d__2,d__3) / dasum_(&blksiz, &work[
+/* Computing MAX */
+	    d__2 = eps, d__3 = (d__1 = work[indrv4 + blksiz], ABS(d__1));
+	    scl = blksiz * onenrm * MAX(d__2,d__3) / dasum_(&blksiz, &work[
 		    indrv1 + 1], &c__1);
 	    dscal_(&blksiz, &scl, &work[indrv1 + 1], &c__1);
 
@@ -345,13 +371,13 @@ L70:
 		    work[indrv3 + 1], &work[indrv5 + 1], &iwork[1], &work[
 		    indrv1 + 1], &tol, &iinfo);
 
-/*           Reorthogonalize by modified Gram-Schmidt if eigenvalues are   
-             close enough. */
+/*           Reorthogonalize by modified Gram-Schmidt if eigenvalues are */
+/*           close enough. */
 
 	    if (jblk == 1) {
 		goto L110;
 	    }
-	    if ((d__1 = xj - xjm, abs(d__1)) > ortol) {
+	    if ((d__1 = xj - xjm, ABS(d__1)) > ortol) {
 		gpind = j;
 	    }
 	    if (gpind != j) {
@@ -360,13 +386,13 @@ L70:
 		    ztr = 0.;
 		    i__4 = blksiz;
 		    for (jr = 1; jr <= i__4; ++jr) {
-			i__5 = z___subscr(b1 - 1 + jr, i__);
+			i__5 = b1 - 1 + jr + i__ * z_dim1;
 			ztr += work[indrv1 + jr] * z__[i__5].r;
 /* L80: */
 		    }
 		    i__4 = blksiz;
 		    for (jr = 1; jr <= i__4; ++jr) {
-			i__5 = z___subscr(b1 - 1 + jr, i__);
+			i__5 = b1 - 1 + jr + i__ * z_dim1;
 			work[indrv1 + jr] -= ztr * z__[i__5].r;
 /* L90: */
 		    }
@@ -378,10 +404,10 @@ L70:
 
 L110:
 	    jmax = idamax_(&blksiz, &work[indrv1 + 1], &c__1);
-	    nrm = (d__1 = work[indrv1 + jmax], abs(d__1));
+	    nrm = (d__1 = work[indrv1 + jmax], ABS(d__1));
 
-/*           Continue for additional iterations after norm reaches   
-             stopping criterion. */
+/*           Continue for additional iterations after norm reaches */
+/*           stopping criterion. */
 
 	    if (nrm < dtpcrt) {
 		goto L70;
@@ -393,8 +419,8 @@ L110:
 
 	    goto L130;
 
-/*           If stopping criterion was not satisfied, update info and   
-             store eigenvector number in array ifail. */
+/*           If stopping criterion was not satisfied, update info and */
+/*           store eigenvector number in array ifail. */
 
 L120:
 	    ++(*info);
@@ -412,21 +438,21 @@ L130:
 L140:
 	    i__3 = *n;
 	    for (i__ = 1; i__ <= i__3; ++i__) {
-		i__4 = z___subscr(i__, j);
+		i__4 = i__ + j * z_dim1;
 		z__[i__4].r = 0., z__[i__4].i = 0.;
 /* L150: */
 	    }
 	    i__3 = blksiz;
 	    for (i__ = 1; i__ <= i__3; ++i__) {
-		i__4 = z___subscr(b1 + i__ - 1, j);
+		i__4 = b1 + i__ - 1 + j * z_dim1;
 		i__5 = indrv1 + i__;
 		z__1.r = work[i__5], z__1.i = 0.;
 		z__[i__4].r = z__1.r, z__[i__4].i = z__1.i;
 /* L160: */
 	    }
 
-/*           Save the shift to check eigenvalue spacing at next   
-             iteration. */
+/*           Save the shift to check eigenvalue spacing at next */
+/*           iteration. */
 
 	    xjm = xj;
 
@@ -441,8 +467,3 @@ L180:
 /*     End of ZSTEIN */
 
 } /* zstein_ */
-
-#undef z___ref
-#undef z___subscr
-
-

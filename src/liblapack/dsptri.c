@@ -1,94 +1,121 @@
+/* dsptri.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dsptri_(char *uplo, integer *n, doublereal *ap, integer *
-	ipiv, doublereal *work, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+static double c_b11 = -1.;
+static double c_b13 = 0.;
+
+ int dsptri_(char *uplo, int *n, double *ap, int *
+	ipiv, double *work, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       March 31, 1993   
-
-
-    Purpose   
-    =======   
-
-    DSPTRI computes the inverse of a real symmetric indefinite matrix   
-    A in packed storage using the factorization A = U*D*U**T or   
-    A = L*D*L**T computed by DSPTRF.   
-
-    Arguments   
-    =========   
-
-    UPLO    (input) CHARACTER*1   
-            Specifies whether the details of the factorization are stored   
-            as an upper or lower triangular matrix.   
-            = 'U':  Upper triangular, form is A = U*D*U**T;   
-            = 'L':  Lower triangular, form is A = L*D*L**T.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    AP      (input/output) DOUBLE PRECISION array, dimension (N*(N+1)/2)   
-            On entry, the block diagonal matrix D and the multipliers   
-            used to obtain the factor U or L as computed by DSPTRF,   
-            stored as a packed triangular matrix.   
-
-            On exit, if INFO = 0, the (symmetric) inverse of the original   
-            matrix, stored as a packed triangular matrix. The j-th column   
-            of inv(A) is stored in the array AP as follows:   
-            if UPLO = 'U', AP(i + (j-1)*j/2) = inv(A)(i,j) for 1<=i<=j;   
-            if UPLO = 'L',   
-               AP(i + (j-1)*(2n-j)/2) = inv(A)(i,j) for j<=i<=n.   
-
-    IPIV    (input) INTEGER array, dimension (N)   
-            Details of the interchanges and the block structure of D   
-            as determined by DSPTRF.   
-
-    WORK    (workspace) DOUBLE PRECISION array, dimension (N)   
-
-    INFO    (output) INTEGER   
-            = 0: successful exit   
-            < 0: if INFO = -i, the i-th argument had an illegal value   
-            > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its   
-                 inverse could not be computed.   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    static doublereal c_b11 = -1.;
-    static doublereal c_b13 = 0.;
-    
     /* System generated locals */
-    integer i__1;
-    doublereal d__1;
+    int i__1;
+    double d__1;
+
     /* Local variables */
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, 
-	    integer *);
-    static doublereal temp, akkp1, d__;
-    static integer j, k;
-    static doublereal t;
-    extern logical lsame_(char *, char *);
-    extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *), dswap_(integer *, doublereal *, integer 
-	    *, doublereal *, integer *);
-    static integer kstep;
-    extern /* Subroutine */ int dspmv_(char *, integer *, doublereal *, 
-	    doublereal *, doublereal *, integer *, doublereal *, doublereal *,
-	     integer *);
-    static logical upper;
-    static doublereal ak;
-    static integer kc, kp, kx;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static integer kcnext, kpc, npp;
-    static doublereal akp1;
+    double d__;
+    int j, k;
+    double t, ak;
+    int kc, kp, kx, kpc, npp;
+    double akp1;
+    extern double ddot_(int *, double *, int *, double *, 
+	    int *);
+    double temp, akkp1;
+    extern int lsame_(char *, char *);
+    extern  int dcopy_(int *, double *, int *, 
+	    double *, int *), dswap_(int *, double *, int 
+	    *, double *, int *);
+    int kstep;
+    extern  int dspmv_(char *, int *, double *, 
+	    double *, double *, int *, double *, double *, 
+	     int *);
+    int upper;
+    extern  int xerbla_(char *, int *);
+    int kcnext;
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  DSPTRI computes the inverse of a float symmetric indefinite matrix */
+/*  A in packed storage using the factorization A = U*D*U**T or */
+/*  A = L*D*L**T computed by DSPTRF. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          Specifies whether the details of the factorization are stored */
+/*          as an upper or lower triangular matrix. */
+/*          = 'U':  Upper triangular, form is A = U*D*U**T; */
+/*          = 'L':  Lower triangular, form is A = L*D*L**T. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  AP      (input/output) DOUBLE PRECISION array, dimension (N*(N+1)/2) */
+/*          On entry, the block diagonal matrix D and the multipliers */
+/*          used to obtain the factor U or L as computed by DSPTRF, */
+/*          stored as a packed triangular matrix. */
+
+/*          On exit, if INFO = 0, the (symmetric) inverse of the original */
+/*          matrix, stored as a packed triangular matrix. The j-th column */
+/*          of inv(A) is stored in the array AP as follows: */
+/*          if UPLO = 'U', AP(i + (j-1)*j/2) = inv(A)(i,j) for 1<=i<=j; */
+/*          if UPLO = 'L', */
+/*             AP(i + (j-1)*(2n-j)/2) = inv(A)(i,j) for j<=i<=n. */
+
+/*  IPIV    (input) INTEGER array, dimension (N) */
+/*          Details of the interchanges and the block structure of D */
+/*          as determined by DSPTRF. */
+
+/*  WORK    (workspace) DOUBLE PRECISION array, dimension (N) */
+
+/*  INFO    (output) INTEGER */
+/*          = 0: successful exit */
+/*          < 0: if INFO = -i, the i-th argument had an illegal value */
+/*          > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its */
+/*               inverse could not be computed. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --work;
     --ipiv;
     --ap;
@@ -145,10 +172,10 @@
 
     if (upper) {
 
-/*        Compute inv(A) from the factorization A = U*D*U'.   
+/*        Compute inv(A) from the factorization A = U*D*U'. */
 
-          K is the main loop index, increasing from 1 to N in steps of   
-          1 or 2, depending on the size of the diagonal blocks. */
+/*        K is the main loop index, increasing from 1 to N in steps of */
+/*        1 or 2, depending on the size of the diagonal blocks. */
 
 	k = 1;
 	kc = 1;
@@ -163,9 +190,9 @@ L30:
 	kcnext = kc + k;
 	if (ipiv[k] > 0) {
 
-/*           1 x 1 diagonal block   
+/*           1 x 1 diagonal block */
 
-             Invert the diagonal block. */
+/*           Invert the diagonal block. */
 
 	    ap[kc + k - 1] = 1. / ap[kc + k - 1];
 
@@ -184,11 +211,11 @@ L30:
 	    kstep = 1;
 	} else {
 
-/*           2 x 2 diagonal block   
+/*           2 x 2 diagonal block */
 
-             Invert the diagonal block. */
+/*           Invert the diagonal block. */
 
-	    t = (d__1 = ap[kcnext + k - 1], abs(d__1));
+	    t = (d__1 = ap[kcnext + k - 1], ABS(d__1));
 	    ak = ap[kc + k - 1] / t;
 	    akp1 = ap[kcnext + k] / t;
 	    akkp1 = ap[kcnext + k - 1] / t;
@@ -210,7 +237,7 @@ L30:
 			c__1);
 		i__1 = k - 1;
 		ap[kcnext + k - 1] -= ddot_(&i__1, &ap[kc], &c__1, &ap[kcnext]
-			, &c__1);
+, &c__1);
 		i__1 = k - 1;
 		dcopy_(&i__1, &ap[kcnext], &c__1, &work[1], &c__1);
 		i__1 = k - 1;
@@ -224,11 +251,11 @@ L30:
 	    kcnext = kcnext + k + 1;
 	}
 
-	kp = (i__1 = ipiv[k], abs(i__1));
+	kp = (i__1 = ipiv[k], ABS(i__1));
 	if (kp != k) {
 
-/*           Interchange rows and columns K and KP in the leading   
-             submatrix A(1:k+1,1:k+1) */
+/*           Interchange rows and columns K and KP in the leading */
+/*           submatrix A(1:k+1,1:k+1) */
 
 	    kpc = (kp - 1) * kp / 2 + 1;
 	    i__1 = kp - 1;
@@ -260,10 +287,10 @@ L50:
 	;
     } else {
 
-/*        Compute inv(A) from the factorization A = L*D*L'.   
+/*        Compute inv(A) from the factorization A = L*D*L'. */
 
-          K is the main loop index, increasing from 1 to N in steps of   
-          1 or 2, depending on the size of the diagonal blocks. */
+/*        K is the main loop index, increasing from 1 to N in steps of */
+/*        1 or 2, depending on the size of the diagonal blocks. */
 
 	npp = *n * (*n + 1) / 2;
 	k = *n;
@@ -279,9 +306,9 @@ L60:
 	kcnext = kc - (*n - k + 2);
 	if (ipiv[k] > 0) {
 
-/*           1 x 1 diagonal block   
+/*           1 x 1 diagonal block */
 
-             Invert the diagonal block. */
+/*           Invert the diagonal block. */
 
 	    ap[kc] = 1. / ap[kc];
 
@@ -299,11 +326,11 @@ L60:
 	    kstep = 1;
 	} else {
 
-/*           2 x 2 diagonal block   
+/*           2 x 2 diagonal block */
 
-             Invert the diagonal block. */
+/*           Invert the diagonal block. */
 
-	    t = (d__1 = ap[kcnext + 1], abs(d__1));
+	    t = (d__1 = ap[kcnext + 1], ABS(d__1));
 	    ak = ap[kcnext] / t;
 	    akp1 = ap[kc] / t;
 	    akkp1 = ap[kcnext + 1] / t;
@@ -338,11 +365,11 @@ L60:
 	    kcnext -= *n - k + 3;
 	}
 
-	kp = (i__1 = ipiv[k], abs(i__1));
+	kp = (i__1 = ipiv[k], ABS(i__1));
 	if (kp != k) {
 
-/*           Interchange rows and columns K and KP in the trailing   
-             submatrix A(k-1:n,k-1:n) */
+/*           Interchange rows and columns K and KP in the trailing */
+/*           submatrix A(k-1:n,k-1:n) */
 
 	    kpc = npp - (*n - kp + 1) * (*n - kp + 2) / 2 + 1;
 	    if (kp < *n) {
@@ -381,4 +408,3 @@ L80:
 /*     End of DSPTRI */
 
 } /* dsptri_ */
-

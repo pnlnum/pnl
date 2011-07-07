@@ -1,205 +1,231 @@
+/* chpevx.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int chpevx_(char *jobz, char *range, char *uplo, integer *n, 
-	complex *ap, real *vl, real *vu, integer *il, integer *iu, real *
-	abstol, integer *m, real *w, complex *z__, integer *ldz, complex *
-	work, real *rwork, integer *iwork, integer *ifail, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int chpevx_(char *jobz, char *range, char *uplo, int *n, 
+	complex *ap, float *vl, float *vu, int *il, int *iu, float *
+	abstol, int *m, float *w, complex *z__, int *ldz, complex *
+	work, float *rwork, int *iwork, int *ifail, int *info)
 {
-/*  -- LAPACK driver routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    CHPEVX computes selected eigenvalues and, optionally, eigenvectors   
-    of a complex Hermitian matrix A in packed storage.   
-    Eigenvalues/vectors can be selected by specifying either a range of   
-    values or a range of indices for the desired eigenvalues.   
-
-    Arguments   
-    =========   
-
-    JOBZ    (input) CHARACTER*1   
-            = 'N':  Compute eigenvalues only;   
-            = 'V':  Compute eigenvalues and eigenvectors.   
-
-    RANGE   (input) CHARACTER*1   
-            = 'A': all eigenvalues will be found;   
-            = 'V': all eigenvalues in the half-open interval (VL,VU]   
-                   will be found;   
-            = 'I': the IL-th through IU-th eigenvalues will be found.   
-
-    UPLO    (input) CHARACTER*1   
-            = 'U':  Upper triangle of A is stored;   
-            = 'L':  Lower triangle of A is stored.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    AP      (input/output) COMPLEX array, dimension (N*(N+1)/2)   
-            On entry, the upper or lower triangle of the Hermitian matrix   
-            A, packed columnwise in a linear array.  The j-th column of A   
-            is stored in the array AP as follows:   
-            if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;   
-            if UPLO = 'L', AP(i + (j-1)*(2*n-j)/2) = A(i,j) for j<=i<=n.   
-
-            On exit, AP is overwritten by values generated during the   
-            reduction to tridiagonal form.  If UPLO = 'U', the diagonal   
-            and first superdiagonal of the tridiagonal matrix T overwrite   
-            the corresponding elements of A, and if UPLO = 'L', the   
-            diagonal and first subdiagonal of T overwrite the   
-            corresponding elements of A.   
-
-    VL      (input) REAL   
-    VU      (input) REAL   
-            If RANGE='V', the lower and upper bounds of the interval to   
-            be searched for eigenvalues. VL < VU.   
-            Not referenced if RANGE = 'A' or 'I'.   
-
-    IL      (input) INTEGER   
-    IU      (input) INTEGER   
-            If RANGE='I', the indices (in ascending order) of the   
-            smallest and largest eigenvalues to be returned.   
-            1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0.   
-            Not referenced if RANGE = 'A' or 'V'.   
-
-    ABSTOL  (input) REAL   
-            The absolute error tolerance for the eigenvalues.   
-            An approximate eigenvalue is accepted as converged   
-            when it is determined to lie in an interval [a,b]   
-            of width less than or equal to   
-
-                    ABSTOL + EPS *   max( |a|,|b| ) ,   
-
-            where EPS is the machine precision.  If ABSTOL is less than   
-            or equal to zero, then  EPS*|T|  will be used in its place,   
-            where |T| is the 1-norm of the tridiagonal matrix obtained   
-            by reducing AP to tridiagonal form.   
-
-            Eigenvalues will be computed most accurately when ABSTOL is   
-            set to twice the underflow threshold 2*SLAMCH('S'), not zero.   
-            If this routine returns with INFO>0, indicating that some   
-            eigenvectors did not converge, try setting ABSTOL to   
-            2*SLAMCH('S').   
-
-            See "Computing Small Singular Values of Bidiagonal Matrices   
-            with Guaranteed High Relative Accuracy," by Demmel and   
-            Kahan, LAPACK Working Note #3.   
-
-    M       (output) INTEGER   
-            The total number of eigenvalues found.  0 <= M <= N.   
-            If RANGE = 'A', M = N, and if RANGE = 'I', M = IU-IL+1.   
-
-    W       (output) REAL array, dimension (N)   
-            If INFO = 0, the selected eigenvalues in ascending order.   
-
-    Z       (output) COMPLEX array, dimension (LDZ, max(1,M))   
-            If JOBZ = 'V', then if INFO = 0, the first M columns of Z   
-            contain the orthonormal eigenvectors of the matrix A   
-            corresponding to the selected eigenvalues, with the i-th   
-            column of Z holding the eigenvector associated with W(i).   
-            If an eigenvector fails to converge, then that column of Z   
-            contains the latest approximation to the eigenvector, and   
-            the index of the eigenvector is returned in IFAIL.   
-            If JOBZ = 'N', then Z is not referenced.   
-            Note: the user must ensure that at least max(1,M) columns are   
-            supplied in the array Z; if RANGE = 'V', the exact value of M   
-            is not known in advance and an upper bound must be used.   
-
-    LDZ     (input) INTEGER   
-            The leading dimension of the array Z.  LDZ >= 1, and if   
-            JOBZ = 'V', LDZ >= max(1,N).   
-
-    WORK    (workspace) COMPLEX array, dimension (2*N)   
-
-    RWORK   (workspace) REAL array, dimension (7*N)   
-
-    IWORK   (workspace) INTEGER array, dimension (5*N)   
-
-    IFAIL   (output) INTEGER array, dimension (N)   
-            If JOBZ = 'V', then if INFO = 0, the first M elements of   
-            IFAIL are zero.  If INFO > 0, then IFAIL contains the   
-            indices of the eigenvectors that failed to converge.   
-            If JOBZ = 'N', then IFAIL is not referenced.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-            > 0:  if INFO = i, then i eigenvectors failed to converge.   
-                  Their indices are stored in array IFAIL.   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer z_dim1, z_offset, i__1, i__2;
-    real r__1, r__2;
+    int z_dim1, z_offset, i__1, i__2;
+    float r__1, r__2;
+
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
+
     /* Local variables */
-    static integer indd, inde;
-    static real anrm;
-    static integer imax;
-    static real rmin, rmax;
-    static integer itmp1, i__, j, indee;
-    static real sigma;
-    extern logical lsame_(char *, char *);
-    static integer iinfo;
-    extern /* Subroutine */ int sscal_(integer *, real *, real *, integer *);
-    static char order[1];
-    extern /* Subroutine */ int cswap_(integer *, complex *, integer *, 
-	    complex *, integer *), scopy_(integer *, real *, integer *, real *
-	    , integer *);
-    static logical wantz;
-    static integer jj;
-    static logical alleig, indeig;
-    static integer iscale, indibl;
-    extern doublereal clanhp_(char *, char *, integer *, complex *, real *);
-    static logical valeig;
-    extern doublereal slamch_(char *);
-    extern /* Subroutine */ int csscal_(integer *, real *, complex *, integer 
+    int i__, j, jj;
+    float eps, vll, vuu, tmp1;
+    int indd, inde;
+    float anrm;
+    int imax;
+    float rmin, rmax;
+    int test;
+    int itmp1, indee;
+    float sigma;
+    extern int lsame_(char *, char *);
+    int iinfo;
+    extern  int sscal_(int *, float *, float *, int *);
+    char order[1];
+    extern  int cswap_(int *, complex *, int *, 
+	    complex *, int *), scopy_(int *, float *, int *, float *
+, int *);
+    int wantz, alleig, indeig;
+    int iscale, indibl;
+    extern double clanhp_(char *, char *, int *, complex *, float *);
+    int valeig;
+    extern double slamch_(char *);
+    extern  int csscal_(int *, float *, complex *, int 
 	    *);
-    static real safmin;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static real abstll, bignum;
-    static integer indiwk, indisp, indtau;
-    extern /* Subroutine */ int chptrd_(char *, integer *, complex *, real *, 
-	    real *, complex *, integer *), cstein_(integer *, real *, 
-	    real *, integer *, real *, integer *, integer *, complex *, 
-	    integer *, real *, integer *, integer *, integer *);
-    static integer indrwk, indwrk;
-    extern /* Subroutine */ int csteqr_(char *, integer *, real *, real *, 
-	    complex *, integer *, real *, integer *), cupgtr_(char *, 
-	    integer *, complex *, complex *, complex *, integer *, complex *, 
-	    integer *), ssterf_(integer *, real *, real *, integer *);
-    static integer nsplit;
-    extern /* Subroutine */ int cupmtr_(char *, char *, char *, integer *, 
-	    integer *, complex *, complex *, complex *, integer *, complex *, 
-	    integer *);
-    static real smlnum;
-    extern /* Subroutine */ int sstebz_(char *, char *, integer *, real *, 
-	    real *, integer *, integer *, real *, real *, real *, integer *, 
-	    integer *, real *, integer *, integer *, real *, integer *, 
-	    integer *);
-    static real eps, vll, vuu, tmp1;
-#define z___subscr(a_1,a_2) (a_2)*z_dim1 + a_1
-#define z___ref(a_1,a_2) z__[z___subscr(a_1,a_2)]
+    float safmin;
+    extern  int xerbla_(char *, int *);
+    float abstll, bignum;
+    int indiwk, indisp, indtau;
+    extern  int chptrd_(char *, int *, complex *, float *, 
+	    float *, complex *, int *), cstein_(int *, float *, 
+	    float *, int *, float *, int *, int *, complex *, 
+	    int *, float *, int *, int *, int *);
+    int indrwk, indwrk;
+    extern  int csteqr_(char *, int *, float *, float *, 
+	    complex *, int *, float *, int *), cupgtr_(char *, 
+	    int *, complex *, complex *, complex *, int *, complex *, 
+	    int *), ssterf_(int *, float *, float *, int *);
+    int nsplit;
+    extern  int cupmtr_(char *, char *, char *, int *, 
+	    int *, complex *, complex *, complex *, int *, complex *, 
+	    int *);
+    float smlnum;
+    extern  int sstebz_(char *, char *, int *, float *, 
+	    float *, int *, int *, float *, float *, float *, int *, 
+	    int *, float *, int *, int *, float *, int *, 
+	    int *);
 
 
+/*  -- LAPACK driver routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CHPEVX computes selected eigenvalues and, optionally, eigenvectors */
+/*  of a complex Hermitian matrix A in packed storage. */
+/*  Eigenvalues/vectors can be selected by specifying either a range of */
+/*  values or a range of indices for the desired eigenvalues. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  JOBZ    (input) CHARACTER*1 */
+/*          = 'N':  Compute eigenvalues only; */
+/*          = 'V':  Compute eigenvalues and eigenvectors. */
+
+/*  RANGE   (input) CHARACTER*1 */
+/*          = 'A': all eigenvalues will be found; */
+/*          = 'V': all eigenvalues in the half-open interval (VL,VU] */
+/*                 will be found; */
+/*          = 'I': the IL-th through IU-th eigenvalues will be found. */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U':  Upper triangle of A is stored; */
+/*          = 'L':  Lower triangle of A is stored. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  AP      (input/output) COMPLEX array, dimension (N*(N+1)/2) */
+/*          On entry, the upper or lower triangle of the Hermitian matrix */
+/*          A, packed columnwise in a linear array.  The j-th column of A */
+/*          is stored in the array AP as follows: */
+/*          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j; */
+/*          if UPLO = 'L', AP(i + (j-1)*(2*n-j)/2) = A(i,j) for j<=i<=n. */
+
+/*          On exit, AP is overwritten by values generated during the */
+/*          reduction to tridiagonal form.  If UPLO = 'U', the diagonal */
+/*          and first superdiagonal of the tridiagonal matrix T overwrite */
+/*          the corresponding elements of A, and if UPLO = 'L', the */
+/*          diagonal and first subdiagonal of T overwrite the */
+/*          corresponding elements of A. */
+
+/*  VL      (input) REAL */
+/*  VU      (input) REAL */
+/*          If RANGE='V', the lower and upper bounds of the interval to */
+/*          be searched for eigenvalues. VL < VU. */
+/*          Not referenced if RANGE = 'A' or 'I'. */
+
+/*  IL      (input) INTEGER */
+/*  IU      (input) INTEGER */
+/*          If RANGE='I', the indices (in ascending order) of the */
+/*          smallest and largest eigenvalues to be returned. */
+/*          1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0. */
+/*          Not referenced if RANGE = 'A' or 'V'. */
+
+/*  ABSTOL  (input) REAL */
+/*          The absolute error tolerance for the eigenvalues. */
+/*          An approximate eigenvalue is accepted as converged */
+/*          when it is determined to lie in an interval [a,b] */
+/*          of width less than or equal to */
+
+/*                  ABSTOL + EPS *   MAX( |a|,|b| ) , */
+
+/*          where EPS is the machine precision.  If ABSTOL is less than */
+/*          or equal to zero, then  EPS*|T|  will be used in its place, */
+/*          where |T| is the 1-norm of the tridiagonal matrix obtained */
+/*          by reducing AP to tridiagonal form. */
+
+/*          Eigenvalues will be computed most accurately when ABSTOL is */
+/*          set to twice the underflow threshold 2*SLAMCH('S'), not zero. */
+/*          If this routine returns with INFO>0, indicating that some */
+/*          eigenvectors did not converge, try setting ABSTOL to */
+/*          2*SLAMCH('S'). */
+
+/*          See "Computing Small Singular Values of Bidiagonal Matrices */
+/*          with Guaranteed High Relative Accuracy," by Demmel and */
+/*          Kahan, LAPACK Working Note #3. */
+
+/*  M       (output) INTEGER */
+/*          The total number of eigenvalues found.  0 <= M <= N. */
+/*          If RANGE = 'A', M = N, and if RANGE = 'I', M = IU-IL+1. */
+
+/*  W       (output) REAL array, dimension (N) */
+/*          If INFO = 0, the selected eigenvalues in ascending order. */
+
+/*  Z       (output) COMPLEX array, dimension (LDZ, MAX(1,M)) */
+/*          If JOBZ = 'V', then if INFO = 0, the first M columns of Z */
+/*          contain the orthonormal eigenvectors of the matrix A */
+/*          corresponding to the selected eigenvalues, with the i-th */
+/*          column of Z holding the eigenvector associated with W(i). */
+/*          If an eigenvector fails to converge, then that column of Z */
+/*          contains the latest approximation to the eigenvector, and */
+/*          the index of the eigenvector is returned in IFAIL. */
+/*          If JOBZ = 'N', then Z is not referenced. */
+/*          Note: the user must ensure that at least MAX(1,M) columns are */
+/*          supplied in the array Z; if RANGE = 'V', the exact value of M */
+/*          is not known in advance and an upper bound must be used. */
+
+/*  LDZ     (input) INTEGER */
+/*          The leading dimension of the array Z.  LDZ >= 1, and if */
+/*          JOBZ = 'V', LDZ >= MAX(1,N). */
+
+/*  WORK    (workspace) COMPLEX array, dimension (2*N) */
+
+/*  RWORK   (workspace) REAL array, dimension (7*N) */
+
+/*  IWORK   (workspace) INTEGER array, dimension (5*N) */
+
+/*  IFAIL   (output) INTEGER array, dimension (N) */
+/*          If JOBZ = 'V', then if INFO = 0, the first M elements of */
+/*          IFAIL are zero.  If INFO > 0, then IFAIL contains the */
+/*          indices of the eigenvectors that failed to converge. */
+/*          If JOBZ = 'N', then IFAIL is not referenced. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+/*          > 0:  if INFO = i, then i eigenvectors failed to converge. */
+/*                Their indices are stored in array IFAIL. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --ap;
     --w;
     z_dim1 = *ldz;
-    z_offset = 1 + z_dim1 * 1;
+    z_offset = 1 + z_dim1;
     z__ -= z_offset;
     --work;
     --rwork;
@@ -228,9 +254,9 @@
 		*info = -7;
 	    }
 	} else if (indeig) {
-	    if (*il < 1 || *il > max(1,*n)) {
+	    if (*il < 1 || *il > MAX(1,*n)) {
 		*info = -8;
-	    } else if (*iu < min(*n,*il) || *iu > *n) {
+	    } else if (*iu < MIN(*n,*il) || *iu > *n) {
 		*info = -9;
 	    }
 	}
@@ -265,7 +291,7 @@
 	    }
 	}
 	if (wantz) {
-	    i__1 = z___subscr(1, 1);
+	    i__1 = z_dim1 + 1;
 	    z__[i__1].r = 1.f, z__[i__1].i = 0.f;
 	}
 	return 0;
@@ -280,7 +306,7 @@
     rmin = sqrt(smlnum);
 /* Computing MIN */
     r__1 = sqrt(bignum), r__2 = 1.f / sqrt(sqrt(safmin));
-    rmax = dmin(r__1,r__2);
+    rmax = MIN(r__1,r__2);
 
 /*     Scale matrix to allowable range, if necessary. */
 
@@ -323,11 +349,17 @@
     chptrd_(uplo, n, &ap[1], &rwork[indd], &rwork[inde], &work[indtau], &
 	    iinfo);
 
-/*     If all eigenvalues are desired and ABSTOL is less than or equal   
-       to zero, then call SSTERF or CUPGTR and CSTEQR.  If this fails   
-       for some eigenvalue, then try SSTEBZ. */
+/*     If all eigenvalues are desired and ABSTOL is less than or equal */
+/*     to zero, then call SSTERF or CUPGTR and CSTEQR.  If this fails */
+/*     for some eigenvalue, then try SSTEBZ. */
 
-    if ((alleig || indeig && *il == 1 && *iu == *n) && *abstol <= 0.f) {
+    test = FALSE;
+    if (indeig) {
+	if (*il == 1 && *iu == *n) {
+	    test = TRUE;
+	}
+    }
+    if ((alleig || test) && *abstol <= 0.f) {
 	scopy_(n, &rwork[indd], &c__1, &w[1], &c__1);
 	indee = indrwk + (*n << 1);
 	if (! wantz) {
@@ -375,12 +407,12 @@
 		iwork[indisp], &z__[z_offset], ldz, &rwork[indrwk], &iwork[
 		indiwk], &ifail[1], info);
 
-/*        Apply unitary matrix used in reduction to tridiagonal   
-          form to eigenvectors returned by CSTEIN. */
+/*        Apply unitary matrix used in reduction to tridiagonal */
+/*        form to eigenvectors returned by CSTEIN. */
 
 	indwrk = indtau + *n;
 	cupmtr_("L", uplo, "N", n, m, &ap[1], &work[indtau], &z__[z_offset], 
-		ldz, &work[indwrk], info);
+		ldz, &work[indwrk], &iinfo);
     }
 
 /*     If matrix was scaled, then rescale eigenvalues appropriately. */
@@ -396,8 +428,8 @@ L20:
 	sscal_(&imax, &r__1, &w[1], &c__1);
     }
 
-/*     If eigenvalues are not in order, then sort them, along with   
-       eigenvectors. */
+/*     If eigenvalues are not in order, then sort them, along with */
+/*     eigenvectors. */
 
     if (wantz) {
 	i__1 = *m - 1;
@@ -419,7 +451,8 @@ L20:
 		iwork[indibl + i__ - 1] = iwork[indibl + j - 1];
 		w[j] = tmp1;
 		iwork[indibl + j - 1] = itmp1;
-		cswap_(n, &z___ref(1, i__), &c__1, &z___ref(1, j), &c__1);
+		cswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], 
+			 &c__1);
 		if (*info != 0) {
 		    itmp1 = ifail[i__];
 		    ifail[i__] = ifail[j];
@@ -435,8 +468,3 @@ L20:
 /*     End of CHPEVX */
 
 } /* chpevx_ */
-
-#undef z___ref
-#undef z___subscr
-
-

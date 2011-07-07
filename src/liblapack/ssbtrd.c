@@ -1,135 +1,157 @@
+/* ssbtrd.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, 
-	real *ab, integer *ldab, real *d__, real *e, real *q, integer *ldq, 
-	real *work, integer *info)
+/* Table of constant values */
+
+static float c_b9 = 0.f;
+static float c_b10 = 1.f;
+static int c__1 = 1;
+
+ int ssbtrd_(char *vect, char *uplo, int *n, int *kd, 
+	float *ab, int *ldab, float *d__, float *e, float *q, int *ldq, 
+	float *work, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    SSBTRD reduces a real symmetric band matrix A to symmetric   
-    tridiagonal form T by an orthogonal similarity transformation:   
-    Q**T * A * Q = T.   
-
-    Arguments   
-    =========   
-
-    VECT    (input) CHARACTER*1   
-            = 'N':  do not form Q;   
-            = 'V':  form Q;   
-            = 'U':  update a matrix X, by forming X*Q.   
-
-    UPLO    (input) CHARACTER*1   
-            = 'U':  Upper triangle of A is stored;   
-            = 'L':  Lower triangle of A is stored.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    KD      (input) INTEGER   
-            The number of superdiagonals of the matrix A if UPLO = 'U',   
-            or the number of subdiagonals if UPLO = 'L'.  KD >= 0.   
-
-    AB      (input/output) REAL array, dimension (LDAB,N)   
-            On entry, the upper or lower triangle of the symmetric band   
-            matrix A, stored in the first KD+1 rows of the array.  The   
-            j-th column of A is stored in the j-th column of the array AB   
-            as follows:   
-            if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;   
-            if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).   
-            On exit, the diagonal elements of AB are overwritten by the   
-            diagonal elements of the tridiagonal matrix T; if KD > 0, the   
-            elements on the first superdiagonal (if UPLO = 'U') or the   
-            first subdiagonal (if UPLO = 'L') are overwritten by the   
-            off-diagonal elements of T; the rest of AB is overwritten by   
-            values generated during the reduction.   
-
-    LDAB    (input) INTEGER   
-            The leading dimension of the array AB.  LDAB >= KD+1.   
-
-    D       (output) REAL array, dimension (N)   
-            The diagonal elements of the tridiagonal matrix T.   
-
-    E       (output) REAL array, dimension (N-1)   
-            The off-diagonal elements of the tridiagonal matrix T:   
-            E(i) = T(i,i+1) if UPLO = 'U'; E(i) = T(i+1,i) if UPLO = 'L'.   
-
-    Q       (input/output) REAL array, dimension (LDQ,N)   
-            On entry, if VECT = 'U', then Q must contain an N-by-N   
-            matrix X; if VECT = 'N' or 'V', then Q need not be set.   
-
-            On exit:   
-            if VECT = 'V', Q contains the N-by-N orthogonal matrix Q;   
-            if VECT = 'U', Q contains the product X*Q;   
-            if VECT = 'N', the array Q is not referenced.   
-
-    LDQ     (input) INTEGER   
-            The leading dimension of the array Q.   
-            LDQ >= 1, and LDQ >= N if VECT = 'V' or 'U'.   
-
-    WORK    (workspace) REAL array, dimension (N)   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-
-    Further Details   
-    ===============   
-
-    Modified by Linda Kaufman, Bell Labs.   
-
-    =====================================================================   
-
-
-       Test the input parameters   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static real c_b9 = 0.f;
-    static real c_b10 = 1.f;
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer ab_dim1, ab_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, 
+    int ab_dim1, ab_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, 
 	    i__5;
+
     /* Local variables */
-    static integer inca, jend, lend, jinc, incx, last;
-    static real temp;
-    extern /* Subroutine */ int srot_(integer *, real *, integer *, real *, 
-	    integer *, real *, real *);
-    static integer j1end, j1inc, i__, j, k, l, iqend;
-    extern logical lsame_(char *, char *);
-    static logical initq, wantq, upper;
-    static integer i2, j1, j2;
-    extern /* Subroutine */ int slar2v_(integer *, real *, real *, real *, 
-	    integer *, real *, real *, integer *);
-    static integer nq, nr, iqaend;
-    extern /* Subroutine */ int xerbla_(char *, integer *), slaset_(
-	    char *, integer *, integer *, real *, real *, real *, integer *), slartg_(real *, real *, real *, real *, real *), slargv_(
-	    integer *, real *, integer *, real *, integer *, real *, integer *
-	    );
-    static integer kd1;
-    extern /* Subroutine */ int slartv_(integer *, real *, integer *, real *, 
-	    integer *, real *, real *, integer *);
-    static integer ibl, iqb, kdn, jin, nrt, kdm1;
-#define q_ref(a_1,a_2) q[(a_2)*q_dim1 + a_1]
-#define ab_ref(a_1,a_2) ab[(a_2)*ab_dim1 + a_1]
+    int i__, j, k, l, i2, j1, j2, nq, nr, kd1, ibl, iqb, kdn, jin, nrt, 
+	    kdm1, inca, jend, lend, jinc, incx, last;
+    float temp;
+    extern  int srot_(int *, float *, int *, float *, 
+	    int *, float *, float *);
+    int j1end, j1inc, iqend;
+    extern int lsame_(char *, char *);
+    int initq, wantq, upper;
+    extern  int slar2v_(int *, float *, float *, float *, 
+	    int *, float *, float *, int *);
+    int iqaend;
+    extern  int xerbla_(char *, int *), slaset_(
+	    char *, int *, int *, float *, float *, float *, int *), slartg_(float *, float *, float *, float *, float *), slargv_(
+	    int *, float *, int *, float *, int *, float *, int *
+), slartv_(int *, float *, int *, float *, int *, float *
+, float *, int *);
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  SSBTRD reduces a float symmetric band matrix A to symmetric */
+/*  tridiagonal form T by an orthogonal similarity transformation: */
+/*  Q**T * A * Q = T. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  VECT    (input) CHARACTER*1 */
+/*          = 'N':  do not form Q; */
+/*          = 'V':  form Q; */
+/*          = 'U':  update a matrix X, by forming X*Q. */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U':  Upper triangle of A is stored; */
+/*          = 'L':  Lower triangle of A is stored. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  KD      (input) INTEGER */
+/*          The number of superdiagonals of the matrix A if UPLO = 'U', */
+/*          or the number of subdiagonals if UPLO = 'L'.  KD >= 0. */
+
+/*  AB      (input/output) REAL array, dimension (LDAB,N) */
+/*          On entry, the upper or lower triangle of the symmetric band */
+/*          matrix A, stored in the first KD+1 rows of the array.  The */
+/*          j-th column of A is stored in the j-th column of the array AB */
+/*          as follows: */
+/*          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for MAX(1,j-kd)<=i<=j; */
+/*          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=MIN(n,j+kd). */
+/*          On exit, the diagonal elements of AB are overwritten by the */
+/*          diagonal elements of the tridiagonal matrix T; if KD > 0, the */
+/*          elements on the first superdiagonal (if UPLO = 'U') or the */
+/*          first subdiagonal (if UPLO = 'L') are overwritten by the */
+/*          off-diagonal elements of T; the rest of AB is overwritten by */
+/*          values generated during the reduction. */
+
+/*  LDAB    (input) INTEGER */
+/*          The leading dimension of the array AB.  LDAB >= KD+1. */
+
+/*  D       (output) REAL array, dimension (N) */
+/*          The diagonal elements of the tridiagonal matrix T. */
+
+/*  E       (output) REAL array, dimension (N-1) */
+/*          The off-diagonal elements of the tridiagonal matrix T: */
+/*          E(i) = T(i,i+1) if UPLO = 'U'; E(i) = T(i+1,i) if UPLO = 'L'. */
+
+/*  Q       (input/output) REAL array, dimension (LDQ,N) */
+/*          On entry, if VECT = 'U', then Q must contain an N-by-N */
+/*          matrix X; if VECT = 'N' or 'V', then Q need not be set. */
+
+/*          On exit: */
+/*          if VECT = 'V', Q contains the N-by-N orthogonal matrix Q; */
+/*          if VECT = 'U', Q contains the product X*Q; */
+/*          if VECT = 'N', the array Q is not referenced. */
+
+/*  LDQ     (input) INTEGER */
+/*          The leading dimension of the array Q. */
+/*          LDQ >= 1, and LDQ >= N if VECT = 'V' or 'U'. */
+
+/*  WORK    (workspace) REAL array, dimension (N) */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+
+/*  Further Details */
+/*  =============== */
+
+/*  Modified by Linda Kaufman, Bell Labs. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters */
+
+    /* Parameter adjustments */
     ab_dim1 = *ldab;
-    ab_offset = 1 + ab_dim1 * 1;
+    ab_offset = 1 + ab_dim1;
     ab -= ab_offset;
     --d__;
     --e;
     q_dim1 = *ldq;
-    q_offset = 1 + q_dim1 * 1;
+    q_offset = 1 + q_dim1;
     q -= q_offset;
     --work;
 
@@ -153,7 +175,7 @@
 	*info = -4;
     } else if (*ldab < kd1) {
 	*info = -6;
-    } else if (*ldq < max(1,*n) && wantq) {
+    } else if (*ldq < MAX(1,*n) && wantq) {
 	*info = -10;
     }
     if (*info != 0) {
@@ -174,16 +196,16 @@
 	slaset_("Full", n, n, &c_b9, &c_b10, &q[q_offset], ldq);
     }
 
-/*     Wherever possible, plane rotations are generated and applied in   
-       vector operations of length NR over the index set J1:J2:KD1.   
+/*     Wherever possible, plane rotations are generated and applied in */
+/*     vector operations of length NR over the index set J1:J2:KD1. */
 
-       The cosines and sines of the plane rotations are stored in the   
-       arrays D and WORK. */
+/*     The cosines and sines of the plane rotations are stored in the */
+/*     arrays D and WORK. */
 
     inca = kd1 * *ldab;
 /* Computing MIN */
     i__1 = *n - 1;
-    kdn = min(i__1,*kd);
+    kdn = MIN(i__1,*kd);
     if (upper) {
 
 	if (*kd > 1) {
@@ -205,24 +227,24 @@
 
 		    if (nr > 0) {
 
-/*                    generate plane rotations to annihilate nonzero   
-                      elements which have been created outside the band */
+/*                    generate plane rotations to annihilate nonzero */
+/*                    elements which have been created outside the band */
 
-			slargv_(&nr, &ab_ref(1, j1 - 1), &inca, &work[j1], &
-				kd1, &d__[j1], &kd1);
+			slargv_(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &inca, &
+				work[j1], &kd1, &d__[j1], &kd1);
 
-/*                    apply rotations from the right   
+/*                    apply rotations from the right */
 
 
-                      Dependent on the the number of diagonals either   
-                      SLARTV or SROT is used */
+/*                    Dependent on the the number of diagonals either */
+/*                    SLARTV or SROT is used */
 
 			if (nr >= (*kd << 1) - 1) {
 			    i__2 = *kd - 1;
 			    for (l = 1; l <= i__2; ++l) {
-				slartv_(&nr, &ab_ref(l + 1, j1 - 1), &inca, &
-					ab_ref(l, j1), &inca, &d__[j1], &work[
-					j1], &kd1);
+				slartv_(&nr, &ab[l + 1 + (j1 - 1) * ab_dim1], 
+					&inca, &ab[l + j1 * ab_dim1], &inca, &
+					d__[j1], &work[j1], &kd1);
 /* L10: */
 			    }
 
@@ -232,9 +254,9 @@
 			    i__3 = kd1;
 			    for (jinc = j1; i__3 < 0 ? jinc >= i__2 : jinc <= 
 				    i__2; jinc += i__3) {
-				srot_(&kdm1, &ab_ref(2, jinc - 1), &c__1, &
-					ab_ref(1, jinc), &c__1, &d__[jinc], &
-					work[jinc]);
+				srot_(&kdm1, &ab[(jinc - 1) * ab_dim1 + 2], &
+					c__1, &ab[jinc * ab_dim1 + 1], &c__1, 
+					&d__[jinc], &work[jinc]);
 /* L20: */
 			    }
 			}
@@ -244,33 +266,34 @@
 		    if (k > 2) {
 			if (k <= *n - i__ + 1) {
 
-/*                       generate plane rotation to annihilate a(i,i+k-1)   
-                         within the band */
+/*                       generate plane rotation to annihilate a(i,i+k-1) */
+/*                       within the band */
 
-			    slartg_(&ab_ref(*kd - k + 3, i__ + k - 2), &
-				    ab_ref(*kd - k + 2, i__ + k - 1), &d__[
-				    i__ + k - 1], &work[i__ + k - 1], &temp);
-			    ab_ref(*kd - k + 3, i__ + k - 2) = temp;
+			    slartg_(&ab[*kd - k + 3 + (i__ + k - 2) * ab_dim1]
+, &ab[*kd - k + 2 + (i__ + k - 1) * 
+				    ab_dim1], &d__[i__ + k - 1], &work[i__ + 
+				    k - 1], &temp);
+			    ab[*kd - k + 3 + (i__ + k - 2) * ab_dim1] = temp;
 
 /*                       apply rotation from the right */
 
 			    i__3 = k - 3;
-			    srot_(&i__3, &ab_ref(*kd - k + 4, i__ + k - 2), &
-				    c__1, &ab_ref(*kd - k + 3, i__ + k - 1), &
-				    c__1, &d__[i__ + k - 1], &work[i__ + k - 
-				    1]);
+			    srot_(&i__3, &ab[*kd - k + 4 + (i__ + k - 2) * 
+				    ab_dim1], &c__1, &ab[*kd - k + 3 + (i__ + 
+				    k - 1) * ab_dim1], &c__1, &d__[i__ + k - 
+				    1], &work[i__ + k - 1]);
 			}
 			++nr;
 			j1 = j1 - kdn - 1;
 		    }
 
-/*                 apply plane rotations from both sides to diagonal   
-                   blocks */
+/*                 apply plane rotations from both sides to diagonal */
+/*                 blocks */
 
 		    if (nr > 0) {
-			slar2v_(&nr, &ab_ref(kd1, j1 - 1), &ab_ref(kd1, j1), &
-				ab_ref(*kd, j1), &inca, &d__[j1], &work[j1], &
-				kd1);
+			slar2v_(&nr, &ab[kd1 + (j1 - 1) * ab_dim1], &ab[kd1 + 
+				j1 * ab_dim1], &ab[*kd + j1 * ab_dim1], &inca, 
+				 &d__[j1], &work[j1], &kd1);
 		    }
 
 /*                 apply plane rotations from the left */
@@ -278,8 +301,8 @@
 		    if (nr > 0) {
 			if ((*kd << 1) - 1 < nr) {
 
-/*                    Dependent on the the number of diagonals either   
-                      SLARTV or SROT is used */
+/*                    Dependent on the the number of diagonals either */
+/*                    SLARTV or SROT is used */
 
 			    i__3 = *kd - 1;
 			    for (l = 1; l <= i__3; ++l) {
@@ -289,10 +312,10 @@
 				    nrt = nr;
 				}
 				if (nrt > 0) {
-				    slartv_(&nrt, &ab_ref(*kd - l, j1 + l), &
-					    inca, &ab_ref(*kd - l + 1, j1 + l)
-					    , &inca, &d__[j1], &work[j1], &
-					    kd1);
+				    slartv_(&nrt, &ab[*kd - l + (j1 + l) * 
+					    ab_dim1], &inca, &ab[*kd - l + 1 
+					    + (j1 + l) * ab_dim1], &inca, &
+					    d__[j1], &work[j1], &kd1);
 				}
 /* L30: */
 			    }
@@ -304,20 +327,22 @@
 				for (jin = j1; i__2 < 0 ? jin >= i__3 : jin <=
 					 i__3; jin += i__2) {
 				    i__4 = *kd - 1;
-				    srot_(&i__4, &ab_ref(*kd - 1, jin + 1), &
-					    incx, &ab_ref(*kd, jin + 1), &
-					    incx, &d__[jin], &work[jin]);
+				    srot_(&i__4, &ab[*kd - 1 + (jin + 1) * 
+					    ab_dim1], &incx, &ab[*kd + (jin + 
+					    1) * ab_dim1], &incx, &d__[jin], &
+					    work[jin]);
 /* L40: */
 				}
 			    }
 /* Computing MIN */
 			    i__2 = kdm1, i__3 = *n - j2;
-			    lend = min(i__2,i__3);
+			    lend = MIN(i__2,i__3);
 			    last = j1end + kd1;
 			    if (lend > 0) {
-				srot_(&lend, &ab_ref(*kd - 1, last + 1), &
-					incx, &ab_ref(*kd, last + 1), &incx, &
-					d__[last], &work[last]);
+				srot_(&lend, &ab[*kd - 1 + (last + 1) * 
+					ab_dim1], &incx, &ab[*kd + (last + 1) 
+					* ab_dim1], &incx, &d__[last], &work[
+					last]);
 			    }
 			}
 		    }
@@ -328,18 +353,18 @@
 
 			if (initq) {
 
-/*                 take advantage of the fact that Q was   
-                   initially the Identity matrix */
+/*                 take advantage of the fact that Q was */
+/*                 initially the Identity matrix */
 
-			    iqend = max(iqend,j2);
+			    iqend = MAX(iqend,j2);
 /* Computing MAX */
 			    i__2 = 0, i__3 = k - 3;
-			    i2 = max(i__2,i__3);
+			    i2 = MAX(i__2,i__3);
 			    iqaend = i__ * *kd + 1;
 			    if (k == 2) {
 				iqaend += *kd;
 			    }
-			    iqaend = min(iqaend,iqend);
+			    iqaend = MIN(iqaend,iqend);
 			    i__2 = j2;
 			    i__3 = kd1;
 			    for (j = j1; i__3 < 0 ? j >= i__2 : j <= i__2; j 
@@ -348,13 +373,14 @@
 				++i2;
 /* Computing MAX */
 				i__4 = 1, i__5 = j - ibl;
-				iqb = max(i__4,i__5);
+				iqb = MAX(i__4,i__5);
 				nq = iqaend + 1 - iqb;
 /* Computing MIN */
 				i__4 = iqaend + *kd;
-				iqaend = min(i__4,iqend);
-				srot_(&nq, &q_ref(iqb, j - 1), &c__1, &q_ref(
-					iqb, j), &c__1, &d__[j], &work[j]);
+				iqaend = MIN(i__4,iqend);
+				srot_(&nq, &q[iqb + (j - 1) * q_dim1], &c__1, 
+					&q[iqb + j * q_dim1], &c__1, &d__[j], 
+					&work[j]);
 /* L50: */
 			    }
 			} else {
@@ -363,8 +389,9 @@
 			    i__2 = kd1;
 			    for (j = j1; i__2 < 0 ? j >= i__3 : j <= i__3; j 
 				    += i__2) {
-				srot_(n, &q_ref(1, j - 1), &c__1, &q_ref(1, j)
-					, &c__1, &d__[j], &work[j]);
+				srot_(n, &q[(j - 1) * q_dim1 + 1], &c__1, &q[
+					j * q_dim1 + 1], &c__1, &d__[j], &
+					work[j]);
 /* L60: */
 			    }
 			}
@@ -384,11 +411,12 @@
 		    for (j = j1; i__3 < 0 ? j >= i__2 : j <= i__2; j += i__3) 
 			    {
 
-/*                    create nonzero element a(j-1,j+kd) outside the band   
-                      and store it in WORK */
+/*                    create nonzero element a(j-1,j+kd) outside the band */
+/*                    and store it in WORK */
 
-			work[j + *kd] = work[j] * ab_ref(1, j + *kd);
-			ab_ref(1, j + *kd) = d__[j] * ab_ref(1, j + *kd);
+			work[j + *kd] = work[j] * ab[(j + *kd) * ab_dim1 + 1];
+			ab[(j + *kd) * ab_dim1 + 1] = d__[j] * ab[(j + *kd) * 
+				ab_dim1 + 1];
 /* L70: */
 		    }
 /* L80: */
@@ -403,7 +431,7 @@
 
 	    i__1 = *n - 1;
 	    for (i__ = 1; i__ <= i__1; ++i__) {
-		e[i__] = ab_ref(*kd, i__ + 1);
+		e[i__] = ab[*kd + (i__ + 1) * ab_dim1];
 /* L100: */
 	    }
 	} else {
@@ -421,7 +449,7 @@
 
 	i__1 = *n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    d__[i__] = ab_ref(kd1, i__);
+	    d__[i__] = ab[kd1 + i__ * ab_dim1];
 /* L120: */
 	}
 
@@ -446,24 +474,25 @@
 
 		    if (nr > 0) {
 
-/*                    generate plane rotations to annihilate nonzero   
-                      elements which have been created outside the band */
+/*                    generate plane rotations to annihilate nonzero */
+/*                    elements which have been created outside the band */
 
-			slargv_(&nr, &ab_ref(kd1, j1 - kd1), &inca, &work[j1],
-				 &kd1, &d__[j1], &kd1);
+			slargv_(&nr, &ab[kd1 + (j1 - kd1) * ab_dim1], &inca, &
+				work[j1], &kd1, &d__[j1], &kd1);
 
-/*                    apply plane rotations from one side   
+/*                    apply plane rotations from one side */
 
 
-                      Dependent on the the number of diagonals either   
-                      SLARTV or SROT is used */
+/*                    Dependent on the the number of diagonals either */
+/*                    SLARTV or SROT is used */
 
 			if (nr > (*kd << 1) - 1) {
 			    i__3 = *kd - 1;
 			    for (l = 1; l <= i__3; ++l) {
-				slartv_(&nr, &ab_ref(kd1 - l, j1 - kd1 + l), &
-					inca, &ab_ref(kd1 - l + 1, j1 - kd1 + 
-					l), &inca, &d__[j1], &work[j1], &kd1);
+				slartv_(&nr, &ab[kd1 - l + (j1 - kd1 + l) * 
+					ab_dim1], &inca, &ab[kd1 - l + 1 + (
+					j1 - kd1 + l) * ab_dim1], &inca, &d__[
+					j1], &work[j1], &kd1);
 /* L130: */
 			    }
 			} else {
@@ -472,9 +501,10 @@
 			    i__2 = kd1;
 			    for (jinc = j1; i__2 < 0 ? jinc >= i__3 : jinc <= 
 				    i__3; jinc += i__2) {
-				srot_(&kdm1, &ab_ref(*kd, jinc - *kd), &incx, 
-					&ab_ref(kd1, jinc - *kd), &incx, &d__[
-					jinc], &work[jinc]);
+				srot_(&kdm1, &ab[*kd + (jinc - *kd) * ab_dim1]
+, &incx, &ab[kd1 + (jinc - *kd) * 
+					ab_dim1], &incx, &d__[jinc], &work[
+					jinc]);
 /* L140: */
 			    }
 			}
@@ -484,41 +514,42 @@
 		    if (k > 2) {
 			if (k <= *n - i__ + 1) {
 
-/*                       generate plane rotation to annihilate a(i+k-1,i)   
-                         within the band */
+/*                       generate plane rotation to annihilate a(i+k-1,i) */
+/*                       within the band */
 
-			    slartg_(&ab_ref(k - 1, i__), &ab_ref(k, i__), &
-				    d__[i__ + k - 1], &work[i__ + k - 1], &
-				    temp);
-			    ab_ref(k - 1, i__) = temp;
+			    slartg_(&ab[k - 1 + i__ * ab_dim1], &ab[k + i__ * 
+				    ab_dim1], &d__[i__ + k - 1], &work[i__ + 
+				    k - 1], &temp);
+			    ab[k - 1 + i__ * ab_dim1] = temp;
 
 /*                       apply rotation from the left */
 
 			    i__2 = k - 3;
 			    i__3 = *ldab - 1;
 			    i__4 = *ldab - 1;
-			    srot_(&i__2, &ab_ref(k - 2, i__ + 1), &i__3, &
-				    ab_ref(k - 1, i__ + 1), &i__4, &d__[i__ + 
-				    k - 1], &work[i__ + k - 1]);
+			    srot_(&i__2, &ab[k - 2 + (i__ + 1) * ab_dim1], &
+				    i__3, &ab[k - 1 + (i__ + 1) * ab_dim1], &
+				    i__4, &d__[i__ + k - 1], &work[i__ + k - 
+				    1]);
 			}
 			++nr;
 			j1 = j1 - kdn - 1;
 		    }
 
-/*                 apply plane rotations from both sides to diagonal   
-                   blocks */
+/*                 apply plane rotations from both sides to diagonal */
+/*                 blocks */
 
 		    if (nr > 0) {
-			slar2v_(&nr, &ab_ref(1, j1 - 1), &ab_ref(1, j1), &
-				ab_ref(2, j1 - 1), &inca, &d__[j1], &work[j1],
-				 &kd1);
+			slar2v_(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &ab[j1 * 
+				ab_dim1 + 1], &ab[(j1 - 1) * ab_dim1 + 2], &
+				inca, &d__[j1], &work[j1], &kd1);
 		    }
 
-/*                 apply plane rotations from the right   
+/*                 apply plane rotations from the right */
 
 
-                      Dependent on the the number of diagonals either   
-                      SLARTV or SROT is used */
+/*                    Dependent on the the number of diagonals either */
+/*                    SLARTV or SROT is used */
 
 		    if (nr > 0) {
 			if (nr > (*kd << 1) - 1) {
@@ -530,9 +561,10 @@
 				    nrt = nr;
 				}
 				if (nrt > 0) {
-				    slartv_(&nrt, &ab_ref(l + 2, j1 - 1), &
-					    inca, &ab_ref(l + 1, j1), &inca, &
-					    d__[j1], &work[j1], &kd1);
+				    slartv_(&nrt, &ab[l + 2 + (j1 - 1) * 
+					    ab_dim1], &inca, &ab[l + 1 + j1 * 
+					    ab_dim1], &inca, &d__[j1], &work[
+					    j1], &kd1);
 				}
 /* L150: */
 			    }
@@ -543,20 +575,21 @@
 				i__3 = kd1;
 				for (j1inc = j1; i__3 < 0 ? j1inc >= i__2 : 
 					j1inc <= i__2; j1inc += i__3) {
-				    srot_(&kdm1, &ab_ref(3, j1inc - 1), &c__1,
-					     &ab_ref(2, j1inc), &c__1, &d__[
-					    j1inc], &work[j1inc]);
+				    srot_(&kdm1, &ab[(j1inc - 1) * ab_dim1 + 
+					    3], &c__1, &ab[j1inc * ab_dim1 + 
+					    2], &c__1, &d__[j1inc], &work[
+					    j1inc]);
 /* L160: */
 				}
 			    }
 /* Computing MIN */
 			    i__3 = kdm1, i__2 = *n - j2;
-			    lend = min(i__3,i__2);
+			    lend = MIN(i__3,i__2);
 			    last = j1end + kd1;
 			    if (lend > 0) {
-				srot_(&lend, &ab_ref(3, last - 1), &c__1, &
-					ab_ref(2, last), &c__1, &d__[last], &
-					work[last]);
+				srot_(&lend, &ab[(last - 1) * ab_dim1 + 3], &
+					c__1, &ab[last * ab_dim1 + 2], &c__1, 
+					&d__[last], &work[last]);
 			    }
 			}
 		    }
@@ -569,18 +602,18 @@
 
 			if (initq) {
 
-/*                 take advantage of the fact that Q was   
-                   initially the Identity matrix */
+/*                 take advantage of the fact that Q was */
+/*                 initially the Identity matrix */
 
-			    iqend = max(iqend,j2);
+			    iqend = MAX(iqend,j2);
 /* Computing MAX */
 			    i__3 = 0, i__2 = k - 3;
-			    i2 = max(i__3,i__2);
+			    i2 = MAX(i__3,i__2);
 			    iqaend = i__ * *kd + 1;
 			    if (k == 2) {
 				iqaend += *kd;
 			    }
-			    iqaend = min(iqaend,iqend);
+			    iqaend = MIN(iqaend,iqend);
 			    i__3 = j2;
 			    i__2 = kd1;
 			    for (j = j1; i__2 < 0 ? j >= i__3 : j <= i__3; j 
@@ -589,13 +622,14 @@
 				++i2;
 /* Computing MAX */
 				i__4 = 1, i__5 = j - ibl;
-				iqb = max(i__4,i__5);
+				iqb = MAX(i__4,i__5);
 				nq = iqaend + 1 - iqb;
 /* Computing MIN */
 				i__4 = iqaend + *kd;
-				iqaend = min(i__4,iqend);
-				srot_(&nq, &q_ref(iqb, j - 1), &c__1, &q_ref(
-					iqb, j), &c__1, &d__[j], &work[j]);
+				iqaend = MIN(i__4,iqend);
+				srot_(&nq, &q[iqb + (j - 1) * q_dim1], &c__1, 
+					&q[iqb + j * q_dim1], &c__1, &d__[j], 
+					&work[j]);
 /* L170: */
 			    }
 			} else {
@@ -604,8 +638,9 @@
 			    i__3 = kd1;
 			    for (j = j1; i__3 < 0 ? j >= i__2 : j <= i__2; j 
 				    += i__3) {
-				srot_(n, &q_ref(1, j - 1), &c__1, &q_ref(1, j)
-					, &c__1, &d__[j], &work[j]);
+				srot_(n, &q[(j - 1) * q_dim1 + 1], &c__1, &q[
+					j * q_dim1 + 1], &c__1, &d__[j], &
+					work[j]);
 /* L180: */
 			    }
 			}
@@ -624,11 +659,12 @@
 		    for (j = j1; i__2 < 0 ? j >= i__3 : j <= i__3; j += i__2) 
 			    {
 
-/*                    create nonzero element a(j+kd,j-1) outside the   
-                      band and store it in WORK */
+/*                    create nonzero element a(j+kd,j-1) outside the */
+/*                    band and store it in WORK */
 
-			work[j + *kd] = work[j] * ab_ref(kd1, j);
-			ab_ref(kd1, j) = d__[j] * ab_ref(kd1, j);
+			work[j + *kd] = work[j] * ab[kd1 + j * ab_dim1];
+			ab[kd1 + j * ab_dim1] = d__[j] * ab[kd1 + j * ab_dim1]
+				;
 /* L190: */
 		    }
 /* L200: */
@@ -643,7 +679,7 @@
 
 	    i__1 = *n - 1;
 	    for (i__ = 1; i__ <= i__1; ++i__) {
-		e[i__] = ab_ref(2, i__);
+		e[i__] = ab[i__ * ab_dim1 + 2];
 /* L220: */
 	    }
 	} else {
@@ -661,7 +697,7 @@
 
 	i__1 = *n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    d__[i__] = ab_ref(1, i__);
+	    d__[i__] = ab[i__ * ab_dim1 + 1];
 /* L240: */
 	}
     }
@@ -671,8 +707,3 @@
 /*     End of SSBTRD */
 
 } /* ssbtrd_ */
-
-#undef ab_ref
-#undef q_ref
-
-

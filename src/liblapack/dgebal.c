@@ -1,134 +1,159 @@
+/* dgebal.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dgebal_(char *job, integer *n, doublereal *a, integer *
-	lda, integer *ilo, integer *ihi, doublereal *scale, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int dgebal_(char *job, int *n, double *a, int *
+	lda, int *ilo, int *ihi, double *scale, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    DGEBAL balances a general real matrix A.  This involves, first,   
-    permuting A by a similarity transformation to isolate eigenvalues   
-    in the first 1 to ILO-1 and last IHI+1 to N elements on the   
-    diagonal; and second, applying a diagonal similarity transformation   
-    to rows and columns ILO to IHI to make the rows and columns as   
-    close in norm as possible.  Both steps are optional.   
-
-    Balancing may reduce the 1-norm of the matrix, and improve the   
-    accuracy of the computed eigenvalues and/or eigenvectors.   
-
-    Arguments   
-    =========   
-
-    JOB     (input) CHARACTER*1   
-            Specifies the operations to be performed on A:   
-            = 'N':  none:  simply set ILO = 1, IHI = N, SCALE(I) = 1.0   
-                    for i = 1,...,N;   
-            = 'P':  permute only;   
-            = 'S':  scale only;   
-            = 'B':  both permute and scale.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    A       (input/output) DOUBLE PRECISION array, dimension (LDA,N)   
-            On entry, the input matrix A.   
-            On exit,  A is overwritten by the balanced matrix.   
-            If JOB = 'N', A is not referenced.   
-            See Further Details.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.  LDA >= max(1,N).   
-
-    ILO     (output) INTEGER   
-    IHI     (output) INTEGER   
-            ILO and IHI are set to integers such that on exit   
-            A(i,j) = 0 if i > j and j = 1,...,ILO-1 or I = IHI+1,...,N.   
-            If JOB = 'N' or 'S', ILO = 1 and IHI = N.   
-
-    SCALE   (output) DOUBLE PRECISION array, dimension (N)   
-            Details of the permutations and scaling factors applied to   
-            A.  If P(j) is the index of the row and column interchanged   
-            with row and column j and D(j) is the scaling factor   
-            applied to row and column j, then   
-            SCALE(j) = P(j)    for j = 1,...,ILO-1   
-                     = D(j)    for j = ILO,...,IHI   
-                     = P(j)    for j = IHI+1,...,N.   
-            The order in which the interchanges are made is N to IHI+1,   
-            then 1 to ILO-1.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit.   
-            < 0:  if INFO = -i, the i-th argument had an illegal value.   
-
-    Further Details   
-    ===============   
-
-    The permutations consist of row and column interchanges which put   
-    the matrix in the form   
-
-               ( T1   X   Y  )   
-       P A P = (  0   B   Z  )   
-               (  0   0   T2 )   
-
-    where T1 and T2 are upper triangular matrices whose eigenvalues lie   
-    along the diagonal.  The column indices ILO and IHI mark the starting   
-    and ending columns of the submatrix B. Balancing consists of applying   
-    a diagonal similarity transformation inv(D) * B * D to make the   
-    1-norms of each row of B and its corresponding column nearly equal.   
-    The output matrix is   
-
-       ( T1     X*D          Y    )   
-       (  0  inv(D)*B*D  inv(D)*Z ).   
-       (  0      0           T2   )   
-
-    Information about the permutations P and the diagonal matrix D is   
-    returned in the vector SCALE.   
-
-    This subroutine is based on the EISPACK routine BALANC.   
-
-    Modified by Tzu-Yi Chen, Computer Science Division, University of   
-      California at Berkeley, USA   
-
-    =====================================================================   
-
-
-       Test the input parameters   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
-    doublereal d__1, d__2;
+    int a_dim1, a_offset, i__1, i__2;
+    double d__1, d__2;
+
     /* Local variables */
-    static integer iexc;
-    static doublereal c__, f, g;
-    static integer i__, j, k, l, m;
-    static doublereal r__, s;
-    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *);
-    extern logical lsame_(char *, char *);
-    extern /* Subroutine */ int dswap_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *);
-    static doublereal sfmin1, sfmin2, sfmax1, sfmax2, ca, ra;
-    extern doublereal dlamch_(char *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static logical noconv;
-    static integer ica, ira;
-#define a_ref(a_1,a_2) a[(a_2)*a_dim1 + a_1]
+    double c__, f, g;
+    int i__, j, k, l, m;
+    double r__, s, ca, ra;
+    int ica, ira, iexc;
+    extern  int dscal_(int *, double *, double *, 
+	    int *);
+    extern int lsame_(char *, char *);
+    extern  int dswap_(int *, double *, int *, 
+	    double *, int *);
+    double sfmin1, sfmin2, sfmax1, sfmax2;
+    extern double dlamch_(char *);
+    extern int idamax_(int *, double *, int *);
+    extern  int xerbla_(char *, int *);
+    int noconv;
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  DGEBAL balances a general float matrix A.  This involves, first, */
+/*  permuting A by a similarity transformation to isolate eigenvalues */
+/*  in the first 1 to ILO-1 and last IHI+1 to N elements on the */
+/*  diagonal; and second, applying a diagonal similarity transformation */
+/*  to rows and columns ILO to IHI to make the rows and columns as */
+/*  close in norm as possible.  Both steps are optional. */
+
+/*  Balancing may reduce the 1-norm of the matrix, and improve the */
+/*  accuracy of the computed eigenvalues and/or eigenvectors. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  JOB     (input) CHARACTER*1 */
+/*          Specifies the operations to be performed on A: */
+/*          = 'N':  none:  simply set ILO = 1, IHI = N, SCALE(I) = 1.0 */
+/*                  for i = 1,...,N; */
+/*          = 'P':  permute only; */
+/*          = 'S':  scale only; */
+/*          = 'B':  both permute and scale. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  A       (input/output) DOUBLE PRECISION array, dimension (LDA,N) */
+/*          On entry, the input matrix A. */
+/*          On exit,  A is overwritten by the balanced matrix. */
+/*          If JOB = 'N', A is not referenced. */
+/*          See Further Details. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A.  LDA >= MAX(1,N). */
+
+/*  ILO     (output) INTEGER */
+/*  IHI     (output) INTEGER */
+/*          ILO and IHI are set to ints such that on exit */
+/*          A(i,j) = 0 if i > j and j = 1,...,ILO-1 or I = IHI+1,...,N. */
+/*          If JOB = 'N' or 'S', ILO = 1 and IHI = N. */
+
+/*  SCALE   (output) DOUBLE PRECISION array, dimension (N) */
+/*          Details of the permutations and scaling factors applied to */
+/*          A.  If P(j) is the index of the row and column interchanged */
+/*          with row and column j and D(j) is the scaling factor */
+/*          applied to row and column j, then */
+/*          SCALE(j) = P(j)    for j = 1,...,ILO-1 */
+/*                   = D(j)    for j = ILO,...,IHI */
+/*                   = P(j)    for j = IHI+1,...,N. */
+/*          The order in which the interchanges are made is N to IHI+1, */
+/*          then 1 to ILO-1. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit. */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value. */
+
+/*  Further Details */
+/*  =============== */
+
+/*  The permutations consist of row and column interchanges which put */
+/*  the matrix in the form */
+
+/*             ( T1   X   Y  ) */
+/*     P A P = (  0   B   Z  ) */
+/*             (  0   0   T2 ) */
+
+/*  where T1 and T2 are upper triangular matrices whose eigenvalues lie */
+/*  along the diagonal.  The column indices ILO and IHI mark the starting */
+/*  and ending columns of the submatrix B. Balancing consists of applying */
+/*  a diagonal similarity transformation inv(D) * B * D to make the */
+/*  1-norms of each row of B and its corresponding column nearly equal. */
+/*  The output matrix is */
+
+/*     ( T1     X*D          Y    ) */
+/*     (  0  inv(D)*B*D  inv(D)*Z ). */
+/*     (  0      0           T2   ) */
+
+/*  Information about the permutations P and the diagonal matrix D is */
+/*  returned in the vector SCALE. */
+
+/*  This subroutine is based on the EISPACK routine BALANC. */
+
+/*  Modified by Tzu-Yi Chen, Computer Science Division, University of */
+/*    California at Berkeley, USA */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     --scale;
 
@@ -139,7 +164,7 @@
 	*info = -1;
     } else if (*n < 0) {
 	*info = -2;
-    } else if (*lda < max(1,*n)) {
+    } else if (*lda < MAX(1,*n)) {
 	*info = -4;
     }
     if (*info != 0) {
@@ -175,14 +200,14 @@
 /*     Row and column exchange. */
 
 L20:
-    scale[m] = (doublereal) j;
+    scale[m] = (double) j;
     if (j == m) {
 	goto L30;
     }
 
-    dswap_(&l, &a_ref(1, j), &c__1, &a_ref(1, m), &c__1);
+    dswap_(&l, &a[j * a_dim1 + 1], &c__1, &a[m * a_dim1 + 1], &c__1);
     i__1 = *n - k + 1;
-    dswap_(&i__1, &a_ref(j, k), lda, &a_ref(m, k), lda);
+    dswap_(&i__1, &a[j + k * a_dim1], lda, &a[m + k * a_dim1], lda);
 
 L30:
     switch (iexc) {
@@ -206,7 +231,7 @@ L50:
 	    if (i__ == j) {
 		goto L60;
 	    }
-	    if (a_ref(j, i__) != 0.) {
+	    if (a[j + i__ * a_dim1] != 0.) {
 		goto L70;
 	    }
 L60:
@@ -236,7 +261,7 @@ L90:
 	    if (i__ == j) {
 		goto L100;
 	    }
-	    if (a_ref(i__, j) != 0.) {
+	    if (a[i__ + j * a_dim1] != 0.) {
 		goto L110;
 	    }
 L100:
@@ -261,16 +286,16 @@ L120:
 	goto L210;
     }
 
-/*     Balance the submatrix in rows K to L.   
+/*     Balance the submatrix in rows K to L. */
 
-       Iterative loop for norm reduction */
+/*     Iterative loop for norm reduction */
 
     sfmin1 = dlamch_("S") / dlamch_("P");
     sfmax1 = 1. / sfmin1;
-    sfmin2 = sfmin1 * 8.;
+    sfmin2 = sfmin1 * 2.;
     sfmax2 = 1. / sfmin2;
 L140:
-    noconv = FALSE_;
+    noconv = FALSE;
 
     i__1 = l;
     for (i__ = k; i__ <= i__1; ++i__) {
@@ -282,55 +307,55 @@ L140:
 	    if (j == i__) {
 		goto L150;
 	    }
-	    c__ += (d__1 = a_ref(j, i__), abs(d__1));
-	    r__ += (d__1 = a_ref(i__, j), abs(d__1));
+	    c__ += (d__1 = a[j + i__ * a_dim1], ABS(d__1));
+	    r__ += (d__1 = a[i__ + j * a_dim1], ABS(d__1));
 L150:
 	    ;
 	}
-	ica = idamax_(&l, &a_ref(1, i__), &c__1);
-	ca = (d__1 = a_ref(ica, i__), abs(d__1));
+	ica = idamax_(&l, &a[i__ * a_dim1 + 1], &c__1);
+	ca = (d__1 = a[ica + i__ * a_dim1], ABS(d__1));
 	i__2 = *n - k + 1;
-	ira = idamax_(&i__2, &a_ref(i__, k), lda);
-	ra = (d__1 = a_ref(i__, ira + k - 1), abs(d__1));
+	ira = idamax_(&i__2, &a[i__ + k * a_dim1], lda);
+	ra = (d__1 = a[i__ + (ira + k - 1) * a_dim1], ABS(d__1));
 
 /*        Guard against zero C or R due to underflow. */
 
 	if (c__ == 0. || r__ == 0.) {
 	    goto L200;
 	}
-	g = r__ / 8.;
+	g = r__ / 2.;
 	f = 1.;
 	s = c__ + r__;
 L160:
 /* Computing MAX */
-	d__1 = max(f,c__);
+	d__1 = MAX(f,c__);
 /* Computing MIN */
-	d__2 = min(r__,g);
-	if (c__ >= g || max(d__1,ca) >= sfmax2 || min(d__2,ra) <= sfmin2) {
+	d__2 = MIN(r__,g);
+	if (c__ >= g || MAX(d__1,ca) >= sfmax2 || MIN(d__2,ra) <= sfmin2) {
 	    goto L170;
 	}
-	f *= 8.;
-	c__ *= 8.;
-	ca *= 8.;
-	r__ /= 8.;
-	g /= 8.;
-	ra /= 8.;
+	f *= 2.;
+	c__ *= 2.;
+	ca *= 2.;
+	r__ /= 2.;
+	g /= 2.;
+	ra /= 2.;
 	goto L160;
 
 L170:
-	g = c__ / 8.;
+	g = c__ / 2.;
 L180:
 /* Computing MIN */
-	d__1 = min(f,c__), d__1 = min(d__1,g);
-	if (g < r__ || max(r__,ra) >= sfmax2 || min(d__1,ca) <= sfmin2) {
+	d__1 = MIN(f,c__), d__1 = MIN(d__1,g);
+	if (g < r__ || MAX(r__,ra) >= sfmax2 || MIN(d__1,ca) <= sfmin2) {
 	    goto L190;
 	}
-	f /= 8.;
-	c__ /= 8.;
-	g /= 8.;
-	ca /= 8.;
-	r__ *= 8.;
-	ra *= 8.;
+	f /= 2.;
+	c__ /= 2.;
+	g /= 2.;
+	ca /= 2.;
+	r__ *= 2.;
+	ra *= 2.;
 	goto L180;
 
 /*        Now balance. */
@@ -351,11 +376,11 @@ L190:
 	}
 	g = 1. / f;
 	scale[i__] *= f;
-	noconv = TRUE_;
+	noconv = TRUE;
 
 	i__2 = *n - k + 1;
-	dscal_(&i__2, &g, &a_ref(i__, k), lda);
-	dscal_(&l, &f, &a_ref(1, i__), &c__1);
+	dscal_(&i__2, &g, &a[i__ + k * a_dim1], lda);
+	dscal_(&l, &f, &a[i__ * a_dim1 + 1], &c__1);
 
 L200:
 	;
@@ -374,7 +399,3 @@ L210:
 /*     End of DGEBAL */
 
 } /* dgebal_ */
-
-#undef a_ref
-
-

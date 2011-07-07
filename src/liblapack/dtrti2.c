@@ -1,86 +1,112 @@
+/* dtrti2.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dtrti2_(char *uplo, char *diag, integer *n, doublereal *
-	a, integer *lda, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int dtrti2_(char *uplo, char *diag, int *n, double *
+	a, int *lda, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       February 29, 1992   
-
-
-    Purpose   
-    =======   
-
-    DTRTI2 computes the inverse of a real upper or lower triangular   
-    matrix.   
-
-    This is the Level 2 BLAS version of the algorithm.   
-
-    Arguments   
-    =========   
-
-    UPLO    (input) CHARACTER*1   
-            Specifies whether the matrix A is upper or lower triangular.   
-            = 'U':  Upper triangular   
-            = 'L':  Lower triangular   
-
-    DIAG    (input) CHARACTER*1   
-            Specifies whether or not the matrix A is unit triangular.   
-            = 'N':  Non-unit triangular   
-            = 'U':  Unit triangular   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    A       (input/output) DOUBLE PRECISION array, dimension (LDA,N)   
-            On entry, the triangular matrix A.  If UPLO = 'U', the   
-            leading n by n upper triangular part of the array A contains   
-            the upper triangular matrix, and the strictly lower   
-            triangular part of A is not referenced.  If UPLO = 'L', the   
-            leading n by n lower triangular part of the array A contains   
-            the lower triangular matrix, and the strictly upper   
-            triangular part of A is not referenced.  If DIAG = 'U', the   
-            diagonal elements of A are also not referenced and are   
-            assumed to be 1.   
-
-            On exit, the (triangular) inverse of the original matrix, in   
-            the same storage format.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.  LDA >= max(1,N).   
-
-    INFO    (output) INTEGER   
-            = 0: successful exit   
-            < 0: if INFO = -k, the k-th argument had an illegal value   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    int a_dim1, a_offset, i__1, i__2;
+
     /* Local variables */
-    static integer j;
-    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *);
-    extern logical lsame_(char *, char *);
-    static logical upper;
-    extern /* Subroutine */ int dtrmv_(char *, char *, char *, integer *, 
-	    doublereal *, integer *, doublereal *, integer *), xerbla_(char *, integer *);
-    static logical nounit;
-    static doublereal ajj;
-#define a_ref(a_1,a_2) a[(a_2)*a_dim1 + a_1]
+    int j;
+    double ajj;
+    extern  int dscal_(int *, double *, double *, 
+	    int *);
+    extern int lsame_(char *, char *);
+    int upper;
+    extern  int dtrmv_(char *, char *, char *, int *, 
+	    double *, int *, double *, int *), xerbla_(char *, int *);
+    int nounit;
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  DTRTI2 computes the inverse of a float upper or lower triangular */
+/*  matrix. */
+
+/*  This is the Level 2 BLAS version of the algorithm. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          Specifies whether the matrix A is upper or lower triangular. */
+/*          = 'U':  Upper triangular */
+/*          = 'L':  Lower triangular */
+
+/*  DIAG    (input) CHARACTER*1 */
+/*          Specifies whether or not the matrix A is unit triangular. */
+/*          = 'N':  Non-unit triangular */
+/*          = 'U':  Unit triangular */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  A       (input/output) DOUBLE PRECISION array, dimension (LDA,N) */
+/*          On entry, the triangular matrix A.  If UPLO = 'U', the */
+/*          leading n by n upper triangular part of the array A contains */
+/*          the upper triangular matrix, and the strictly lower */
+/*          triangular part of A is not referenced.  If UPLO = 'L', the */
+/*          leading n by n lower triangular part of the array A contains */
+/*          the lower triangular matrix, and the strictly upper */
+/*          triangular part of A is not referenced.  If DIAG = 'U', the */
+/*          diagonal elements of A are also not referenced and are */
+/*          assumed to be 1. */
+
+/*          On exit, the (triangular) inverse of the original matrix, in */
+/*          the same storage format. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A.  LDA >= MAX(1,N). */
+
+/*  INFO    (output) INTEGER */
+/*          = 0: successful exit */
+/*          < 0: if INFO = -k, the k-th argument had an illegal value */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
 
     /* Function Body */
@@ -93,7 +119,7 @@
 	*info = -2;
     } else if (*n < 0) {
 	*info = -3;
-    } else if (*lda < max(1,*n)) {
+    } else if (*lda < MAX(1,*n)) {
 	*info = -5;
     }
     if (*info != 0) {
@@ -109,8 +135,8 @@
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
 	    if (nounit) {
-		a_ref(j, j) = 1. / a_ref(j, j);
-		ajj = -a_ref(j, j);
+		a[j + j * a_dim1] = 1. / a[j + j * a_dim1];
+		ajj = -a[j + j * a_dim1];
 	    } else {
 		ajj = -1.;
 	    }
@@ -119,9 +145,9 @@
 
 	    i__2 = j - 1;
 	    dtrmv_("Upper", "No transpose", diag, &i__2, &a[a_offset], lda, &
-		    a_ref(1, j), &c__1);
+		    a[j * a_dim1 + 1], &c__1);
 	    i__2 = j - 1;
-	    dscal_(&i__2, &ajj, &a_ref(1, j), &c__1);
+	    dscal_(&i__2, &ajj, &a[j * a_dim1 + 1], &c__1);
 /* L10: */
 	}
     } else {
@@ -130,8 +156,8 @@
 
 	for (j = *n; j >= 1; --j) {
 	    if (nounit) {
-		a_ref(j, j) = 1. / a_ref(j, j);
-		ajj = -a_ref(j, j);
+		a[j + j * a_dim1] = 1. / a[j + j * a_dim1];
+		ajj = -a[j + j * a_dim1];
 	    } else {
 		ajj = -1.;
 	    }
@@ -140,10 +166,10 @@
 /*              Compute elements j+1:n of j-th column. */
 
 		i__1 = *n - j;
-		dtrmv_("Lower", "No transpose", diag, &i__1, &a_ref(j + 1, j 
-			+ 1), lda, &a_ref(j + 1, j), &c__1);
+		dtrmv_("Lower", "No transpose", diag, &i__1, &a[j + 1 + (j + 
+			1) * a_dim1], lda, &a[j + 1 + j * a_dim1], &c__1);
 		i__1 = *n - j;
-		dscal_(&i__1, &ajj, &a_ref(j + 1, j), &c__1);
+		dscal_(&i__1, &ajj, &a[j + 1 + j * a_dim1], &c__1);
 	    }
 /* L20: */
 	}
@@ -154,7 +180,3 @@
 /*     End of DTRTI2 */
 
 } /* dtrti2_ */
-
-#undef a_ref
-
-

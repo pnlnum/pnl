@@ -1,213 +1,229 @@
+/* sgelsd.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-/*  -- translated by f2c (version 19990503).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
+		http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "pnl/pnl_f2c.h"
 
 /* Table of constant values */
 
-static integer c__6 = 6;
-static integer c_n1 = -1;
-static integer c__9 = 9;
-static integer c__0 = 0;
-static integer c__1 = 1;
-static real c_b82 = 0.f;
+static int c__9 = 9;
+static int c__0 = 0;
+static int c__6 = 6;
+static int c_n1 = -1;
+static int c__1 = 1;
+static float c_b81 = 0.f;
 
-/* Subroutine */ int sgelsd_(integer *m, integer *n, integer *nrhs, real *a, 
-	integer *lda, real *b, integer *ldb, real *s, real *rcond, integer *
-	rank, real *work, integer *lwork, integer *iwork, integer *info)
+ int sgelsd_(int *m, int *n, int *nrhs, float *a, 
+	int *lda, float *b, int *ldb, float *s, float *rcond, int *
+	rank, float *work, int *lwork, int *iwork, int *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
+    int a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
 
     /* Builtin functions */
-    double log(doublereal);
+    double log(double);
 
     /* Local variables */
-    static real anrm, bnrm;
-    static integer itau, nlvl, iascl, ibscl;
-    static real sfmin;
-    static integer minmn, maxmn, itaup, itauq, mnthr, nwork, ie, il;
-    extern /* Subroutine */ int slabad_(real *, real *);
-    static integer mm;
-    extern /* Subroutine */ int sgebrd_(integer *, integer *, real *, integer 
-	    *, real *, real *, real *, real *, real *, integer *, integer *);
-    extern doublereal slamch_(char *), slange_(char *, integer *, 
-	    integer *, real *, integer *, real *);
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
-    static real bignum;
-    extern /* Subroutine */ int sgelqf_(integer *, integer *, real *, integer 
-	    *, real *, real *, integer *, integer *), slalsd_(char *, integer 
-	    *, integer *, integer *, real *, real *, real *, integer *, real *
-	    , integer *, real *, integer *, integer *), slascl_(char *
-	    , integer *, integer *, real *, real *, integer *, integer *, 
-	    real *, integer *, integer *);
-    static integer wlalsd;
-    extern /* Subroutine */ int sgeqrf_(integer *, integer *, real *, integer 
-	    *, real *, real *, integer *, integer *), slacpy_(char *, integer 
-	    *, integer *, real *, integer *, real *, integer *), 
-	    slaset_(char *, integer *, integer *, real *, real *, real *, 
-	    integer *);
-    static integer ldwork;
-    extern /* Subroutine */ int sormbr_(char *, char *, char *, integer *, 
-	    integer *, integer *, real *, integer *, real *, real *, integer *
-	    , real *, integer *, integer *);
-    static integer minwrk, maxwrk;
-    static real smlnum;
-    extern /* Subroutine */ int sormlq_(char *, char *, integer *, integer *, 
-	    integer *, real *, integer *, real *, real *, integer *, real *, 
-	    integer *, integer *);
-    static logical lquery;
-    static integer smlsiz;
-    extern /* Subroutine */ int sormqr_(char *, char *, integer *, integer *, 
-	    integer *, real *, integer *, real *, real *, integer *, real *, 
-	    integer *, integer *);
-    static real eps;
+    int ie, il, mm;
+    float eps, anrm, bnrm;
+    int itau, nlvl, iascl, ibscl;
+    float sfmin;
+    int minmn, maxmn, itaup, itauq, mnthr, nwork;
+    extern  int slabad_(float *, float *), sgebrd_(int *, 
+	    int *, float *, int *, float *, float *, float *, float *, 
+	    float *, int *, int *);
+    extern double slamch_(char *), slange_(char *, int *, 
+	    int *, float *, int *, float *);
+    extern  int xerbla_(char *, int *);
+    extern int ilaenv_(int *, char *, char *, int *, int *, 
+	    int *, int *);
+    float bignum;
+    extern  int sgelqf_(int *, int *, float *, int 
+	    *, float *, float *, int *, int *), slalsd_(char *, int 
+	    *, int *, int *, float *, float *, float *, int *, float *
+, int *, float *, int *, int *), slascl_(char *
+, int *, int *, float *, float *, int *, int *, 
+	    float *, int *, int *);
+    int wlalsd;
+    extern  int sgeqrf_(int *, int *, float *, int 
+	    *, float *, float *, int *, int *), slacpy_(char *, int 
+	    *, int *, float *, int *, float *, int *), 
+	    slaset_(char *, int *, int *, float *, float *, float *, 
+	    int *);
+    int ldwork;
+    extern  int sormbr_(char *, char *, char *, int *, 
+	    int *, int *, float *, int *, float *, float *, int *
+, float *, int *, int *);
+    int liwork, minwrk, maxwrk;
+    float smlnum;
+    extern  int sormlq_(char *, char *, int *, int *, 
+	    int *, float *, int *, float *, float *, int *, float *, 
+	    int *, int *);
+    int lquery;
+    int smlsiz;
+    extern  int sormqr_(char *, char *, int *, int *, 
+	    int *, float *, int *, float *, float *, int *, float *, 
+	    int *, int *);
 
 
-#define a_ref(a_1,a_2) a[(a_2)*a_dim1 + a_1]
-#define b_ref(a_1,a_2) b[(a_2)*b_dim1 + a_1]
+/*  -- LAPACK driver routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
 
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
 
-/*  -- LAPACK driver routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1999   
+/*  Purpose */
+/*  ======= */
 
+/*  SGELSD computes the minimum-norm solution to a float linear least */
+/*  squares problem: */
+/*      minimize 2-norm(| b - A*x |) */
+/*  using the singular value decomposition (SVD) of A. A is an M-by-N */
+/*  matrix which may be rank-deficient. */
 
-    Purpose   
-    =======   
+/*  Several right hand side vectors b and solution vectors x can be */
+/*  handled in a single call; they are stored as the columns of the */
+/*  M-by-NRHS right hand side matrix B and the N-by-NRHS solution */
+/*  matrix X. */
 
-    SGELSD computes the minimum-norm solution to a real linear least   
-    squares problem:   
-        minimize 2-norm(| b - A*x |)   
-    using the singular value decomposition (SVD) of A. A is an M-by-N   
-    matrix which may be rank-deficient.   
+/*  The problem is solved in three steps: */
+/*  (1) Reduce the coefficient matrix A to bidiagonal form with */
+/*      Householder transformations, reducing the original problem */
+/*      into a "bidiagonal least squares problem" (BLS) */
+/*  (2) Solve the BLS using a divide and conquer approach. */
+/*  (3) Apply back all the Householder tranformations to solve */
+/*      the original least squares problem. */
 
-    Several right hand side vectors b and solution vectors x can be   
-    handled in a single call; they are stored as the columns of the   
-    M-by-NRHS right hand side matrix B and the N-by-NRHS solution   
-    matrix X.   
+/*  The effective rank of A is determined by treating as zero those */
+/*  singular values which are less than RCOND times the largest singular */
+/*  value. */
 
-    The problem is solved in three steps:   
-    (1) Reduce the coefficient matrix A to bidiagonal form with   
-        Householder transformations, reducing the original problem   
-        into a "bidiagonal least squares problem" (BLS)   
-    (2) Solve the BLS using a divide and conquer approach.   
-    (3) Apply back all the Householder tranformations to solve   
-        the original least squares problem.   
+/*  The divide and conquer algorithm makes very mild assumptions about */
+/*  floating point arithmetic. It will work on machines with a guard */
+/*  digit in add/subtract, or on those binary machines without guard */
+/*  digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or */
+/*  Cray-2. It could conceivably fail on hexadecimal or decimal machines */
+/*  without guard digits, but we know of none. */
 
-    The effective rank of A is determined by treating as zero those   
-    singular values which are less than RCOND times the largest singular   
-    value.   
+/*  Arguments */
+/*  ========= */
 
-    The divide and conquer algorithm makes very mild assumptions about   
-    floating point arithmetic. It will work on machines with a guard   
-    digit in add/subtract, or on those binary machines without guard   
-    digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or   
-    Cray-2. It could conceivably fail on hexadecimal or decimal machines   
-    without guard digits, but we know of none.   
+/*  M       (input) INTEGER */
+/*          The number of rows of A. M >= 0. */
 
-    Arguments   
-    =========   
+/*  N       (input) INTEGER */
+/*          The number of columns of A. N >= 0. */
 
-    M       (input) INTEGER   
-            The number of rows of A. M >= 0.   
+/*  NRHS    (input) INTEGER */
+/*          The number of right hand sides, i.e., the number of columns */
+/*          of the matrices B and X. NRHS >= 0. */
 
-    N       (input) INTEGER   
-            The number of columns of A. N >= 0.   
+/*  A       (input) REAL array, dimension (LDA,N) */
+/*          On entry, the M-by-N matrix A. */
+/*          On exit, A has been destroyed. */
 
-    NRHS    (input) INTEGER   
-            The number of right hand sides, i.e., the number of columns   
-            of the matrices B and X. NRHS >= 0.   
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A.  LDA >= MAX(1,M). */
 
-    A       (input) REAL array, dimension (LDA,N)   
-            On entry, the M-by-N matrix A.   
-            On exit, A has been destroyed.   
+/*  B       (input/output) REAL array, dimension (LDB,NRHS) */
+/*          On entry, the M-by-NRHS right hand side matrix B. */
+/*          On exit, B is overwritten by the N-by-NRHS solution */
+/*          matrix X.  If m >= n and RANK = n, the residual */
+/*          sum-of-squares for the solution in the i-th column is given */
+/*          by the sum of squares of elements n+1:m in that column. */
 
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.  LDA >= max(1,M).   
+/*  LDB     (input) INTEGER */
+/*          The leading dimension of the array B. LDB >= MAX(1,MAX(M,N)). */
 
-    B       (input/output) REAL array, dimension (LDB,NRHS)   
-            On entry, the M-by-NRHS right hand side matrix B.   
-            On exit, B is overwritten by the N-by-NRHS solution   
-            matrix X.  If m >= n and RANK = n, the residual   
-            sum-of-squares for the solution in the i-th column is given   
-            by the sum of squares of elements n+1:m in that column.   
+/*  S       (output) REAL array, dimension (MIN(M,N)) */
+/*          The singular values of A in decreasing order. */
+/*          The condition number of A in the 2-norm = S(1)/S(MIN(m,n)). */
 
-    LDB     (input) INTEGER   
-            The leading dimension of the array B. LDB >= max(1,max(M,N)).   
+/*  RCOND   (input) REAL */
+/*          RCOND is used to determine the effective rank of A. */
+/*          Singular values S(i) <= RCOND*S(1) are treated as zero. */
+/*          If RCOND < 0, machine precision is used instead. */
 
-    S       (output) REAL array, dimension (min(M,N))   
-            The singular values of A in decreasing order.   
-            The condition number of A in the 2-norm = S(1)/S(min(m,n)).   
+/*  RANK    (output) INTEGER */
+/*          The effective rank of A, i.e., the number of singular values */
+/*          which are greater than RCOND*S(1). */
 
-    RCOND   (input) REAL   
-            RCOND is used to determine the effective rank of A.   
-            Singular values S(i) <= RCOND*S(1) are treated as zero.   
-            If RCOND < 0, machine precision is used instead.   
+/*  WORK    (workspace/output) REAL array, dimension (MAX(1,LWORK)) */
+/*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK. */
 
-    RANK    (output) INTEGER   
-            The effective rank of A, i.e., the number of singular values   
-            which are greater than RCOND*S(1).   
+/*  LWORK   (input) INTEGER */
+/*          The dimension of the array WORK. LWORK must be at least 1. */
+/*          The exact minimum amount of workspace needed depends on M, */
+/*          N and NRHS. As long as LWORK is at least */
+/*              12*N + 2*N*SMLSIZ + 8*N*NLVL + N*NRHS + (SMLSIZ+1)**2, */
+/*          if M is greater than or equal to N or */
+/*              12*M + 2*M*SMLSIZ + 8*M*NLVL + M*NRHS + (SMLSIZ+1)**2, */
+/*          if M is less than N, the code will execute correctly. */
+/*          SMLSIZ is returned by ILAENV and is equal to the maximum */
+/*          size of the subproblems at the bottom of the computation */
+/*          tree (usually about 25), and */
+/*             NLVL = MAX( 0, INT( LOG_2( MIN( M,N )/(SMLSIZ+1) ) ) + 1 ) */
+/*          For good performance, LWORK should generally be larger. */
 
-    WORK    (workspace/output) REAL array, dimension (LWORK)   
-            On exit, if INFO = 0, WORK(1) returns the optimal LWORK.   
+/*          If LWORK = -1, then a workspace query is assumed; the routine */
+/*          only calculates the optimal size of the array WORK and the */
+/*          minimum size of the array IWORK, and returns these values as */
+/*          the first entries of the WORK and IWORK arrays, and no error */
+/*          message related to LWORK is issued by XERBLA. */
 
-    LWORK   (input) INTEGER   
-            The dimension of the array WORK. LWORK must be at least 1.   
-            The exact minimum amount of workspace needed depends on M,   
-            N and NRHS. As long as LWORK is at least   
-                12*N + 2*N*SMLSIZ + 8*N*NLVL + N*NRHS + (SMLSIZ+1)**2,   
-            if M is greater than or equal to N or   
-                12*M + 2*M*SMLSIZ + 8*M*NLVL + M*NRHS + (SMLSIZ+1)**2,   
-            if M is less than N, the code will execute correctly.   
-            SMLSIZ is returned by ILAENV and is equal to the maximum   
-            size of the subproblems at the bottom of the computation   
-            tree (usually about 25), and   
-               NLVL = MAX( 0, INT( LOG_2( MIN( M,N )/(SMLSIZ+1) ) ) + 1 )   
-            For good performance, LWORK should generally be larger.   
+/*  IWORK   (workspace) INTEGER array, dimension (MAX(1,LIWORK)) */
+/*          LIWORK >= MAX(1, 3*MINMN*NLVL + 11*MINMN), */
+/*          where MINMN = MIN( M,N ). */
+/*          On exit, if INFO = 0, IWORK(1) returns the minimum LIWORK. */
 
-            If LWORK = -1, then a workspace query is assumed; the routine   
-            only calculates the optimal size of the WORK array, returns   
-            this value as the first entry of the WORK array, and no error   
-            message related to LWORK is issued by XERBLA.   
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value. */
+/*          > 0:  the algorithm for computing the SVD failed to converge; */
+/*                if INFO = i, i off-diagonal elements of an intermediate */
+/*                bidiagonal form did not converge to zero. */
 
+/*  Further Details */
+/*  =============== */
 
-    IWORK   (workspace) INTEGER array, dimension (LIWORK)   
-            LIWORK >= 3 * MINMN * NLVL + 11 * MINMN,   
-            where MINMN = MIN( M,N ).   
+/*  Based on contributions by */
+/*     Ming Gu and Ren-Cang Li, Computer Science Division, University of */
+/*       California at Berkeley, USA */
+/*     Osni Marques, LBNL/NERSC, USA */
 
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value.   
-            > 0:  the algorithm for computing the SVD failed to converge;   
-                  if INFO = i, i off-diagonal elements of an intermediate   
-                  bidiagonal form did not converge to zero.   
+/*  ===================================================================== */
 
-    Further Details   
-    ===============   
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
 
-    Based on contributions by   
-       Ming Gu and Ren-Cang Li, Computer Science Division, University of   
-         California at Berkeley, USA   
-       Osni Marques, LBNL/NERSC, USA   
+/*     Test the input arguments. */
 
-    =====================================================================   
-
-
-       Test the input arguments.   
-
-       Parameter adjustments */
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     b_dim1 = *ldb;
-    b_offset = 1 + b_dim1 * 1;
+    b_offset = 1 + b_dim1;
     b -= b_offset;
     --s;
     --work;
@@ -215,10 +231,8 @@ static real c_b82 = 0.f;
 
     /* Function Body */
     *info = 0;
-    minmn = min(*m,*n);
-    maxmn = max(*m,*n);
-    mnthr = ilaenv_(&c__6, "SGELSD", " ", m, n, nrhs, &c_n1, (ftnlen)6, (
-	    ftnlen)1);
+    minmn = MIN(*m,*n);
+    maxmn = MAX(*m,*n);
     lquery = *lwork == -1;
     if (*m < 0) {
 	*info = -1;
@@ -226,141 +240,152 @@ static real c_b82 = 0.f;
 	*info = -2;
     } else if (*nrhs < 0) {
 	*info = -3;
-    } else if (*lda < max(1,*m)) {
+    } else if (*lda < MAX(1,*m)) {
 	*info = -5;
-    } else if (*ldb < max(1,maxmn)) {
+    } else if (*ldb < MAX(1,maxmn)) {
 	*info = -7;
     }
 
-    smlsiz = ilaenv_(&c__9, "SGELSD", " ", &c__0, &c__0, &c__0, &c__0, (
-	    ftnlen)6, (ftnlen)1);
-
-/*     Compute workspace.   
-       (Note: Comments in the code beginning "Workspace:" describe the   
-       minimal amount of workspace needed at that point in the code,   
-       as well as the preferred amount for good performance.   
-       NB refers to the optimal block size for the immediately   
-       following subroutine, as returned by ILAENV.) */
-
-    minwrk = 1;
-    minmn = max(1,minmn);
-/* Computing MAX */
-    i__1 = (integer) (log((real) minmn / (real) (smlsiz + 1)) / log(2.f)) + 1;
-    nlvl = max(i__1,0);
+/*     Compute workspace. */
+/*     (Note: Comments in the code beginning "Workspace:" describe the */
+/*     minimal amount of workspace needed at that point in the code, */
+/*     as well as the preferred amount for good performance. */
+/*     NB refers to the optimal block size for the immediately */
+/*     following subroutine, as returned by ILAENV.) */
 
     if (*info == 0) {
-	maxwrk = 0;
-	mm = *m;
-	if (*m >= *n && *m >= mnthr) {
-
-/*           Path 1a - overdetermined, with many more rows than columns. */
-
-	    mm = *n;
+	minwrk = 1;
+	maxwrk = 1;
+	liwork = 1;
+	if (minmn > 0) {
+	    smlsiz = ilaenv_(&c__9, "SGELSD", " ", &c__0, &c__0, &c__0, &c__0);
+	    mnthr = ilaenv_(&c__6, "SGELSD", " ", m, n, nrhs, &c_n1);
 /* Computing MAX */
-	    i__1 = maxwrk, i__2 = *n + *n * ilaenv_(&c__1, "SGEQRF", " ", m, 
-		    n, &c_n1, &c_n1, (ftnlen)6, (ftnlen)1);
-	    maxwrk = max(i__1,i__2);
-/* Computing MAX */
-	    i__1 = maxwrk, i__2 = *n + *nrhs * ilaenv_(&c__1, "SORMQR", "LT", 
-		    m, nrhs, n, &c_n1, (ftnlen)6, (ftnlen)2);
-	    maxwrk = max(i__1,i__2);
-	}
-	if (*m >= *n) {
+	    i__1 = (int) (log((float) minmn / (float) (smlsiz + 1)) / log(
+		    2.f)) + 1;
+	    nlvl = MAX(i__1,0);
+	    liwork = minmn * 3 * nlvl + minmn * 11;
+	    mm = *m;
+	    if (*m >= *n && *m >= mnthr) {
 
-/*           Path 1 - overdetermined or exactly determined.   
+/*              Path 1a - overdetermined, with many more rows than */
+/*                        columns. */
 
-   Computing MAX */
-	    i__1 = maxwrk, i__2 = *n * 3 + (mm + *n) * ilaenv_(&c__1, "SGEBRD"
-		    , " ", &mm, n, &c_n1, &c_n1, (ftnlen)6, (ftnlen)1);
-	    maxwrk = max(i__1,i__2);
+		mm = *n;
 /* Computing MAX */
-	    i__1 = maxwrk, i__2 = *n * 3 + *nrhs * ilaenv_(&c__1, "SORMBR", 
-		    "QLT", &mm, nrhs, n, &c_n1, (ftnlen)6, (ftnlen)3);
-	    maxwrk = max(i__1,i__2);
+		i__1 = maxwrk, i__2 = *n + *n * ilaenv_(&c__1, "SGEQRF", 
+			" ", m, n, &c_n1, &c_n1);
+		maxwrk = MAX(i__1,i__2);
 /* Computing MAX */
-	    i__1 = maxwrk, i__2 = *n * 3 + (*n - 1) * ilaenv_(&c__1, "SORMBR",
-		     "PLN", n, nrhs, n, &c_n1, (ftnlen)6, (ftnlen)3);
-	    maxwrk = max(i__1,i__2);
+		i__1 = maxwrk, i__2 = *n + *nrhs * ilaenv_(&c__1, "SORMQR", 
+			"LT", m, nrhs, n, &c_n1);
+		maxwrk = MAX(i__1,i__2);
+	    }
+	    if (*m >= *n) {
+
+/*              Path 1 - overdetermined or exactly determined. */
+
+/* Computing MAX */
+		i__1 = maxwrk, i__2 = *n * 3 + (mm + *n) * ilaenv_(&c__1, 
+			"SGEBRD", " ", &mm, n, &c_n1, &c_n1);
+		maxwrk = MAX(i__1,i__2);
+/* Computing MAX */
+		i__1 = maxwrk, i__2 = *n * 3 + *nrhs * ilaenv_(&c__1, "SORMBR"
+, "QLT", &mm, nrhs, n, &c_n1);
+		maxwrk = MAX(i__1,i__2);
+/* Computing MAX */
+		i__1 = maxwrk, i__2 = *n * 3 + (*n - 1) * ilaenv_(&c__1, 
+			"SORMBR", "PLN", n, nrhs, n, &c_n1);
+		maxwrk = MAX(i__1,i__2);
 /* Computing 2nd power */
-	    i__1 = smlsiz + 1;
-	    wlalsd = *n * 9 + (*n << 1) * smlsiz + (*n << 3) * nlvl + *n * *
-		    nrhs + i__1 * i__1;
+		i__1 = smlsiz + 1;
+		wlalsd = *n * 9 + (*n << 1) * smlsiz + (*n << 3) * nlvl + *n *
+			 *nrhs + i__1 * i__1;
 /* Computing MAX */
-	    i__1 = maxwrk, i__2 = *n * 3 + wlalsd;
-	    maxwrk = max(i__1,i__2);
+		i__1 = maxwrk, i__2 = *n * 3 + wlalsd;
+		maxwrk = MAX(i__1,i__2);
 /* Computing MAX */
-	    i__1 = *n * 3 + mm, i__2 = *n * 3 + *nrhs, i__1 = max(i__1,i__2), 
-		    i__2 = *n * 3 + wlalsd;
-	    minwrk = max(i__1,i__2);
-	}
-	if (*n > *m) {
+		i__1 = *n * 3 + mm, i__2 = *n * 3 + *nrhs, i__1 = MAX(i__1,
+			i__2), i__2 = *n * 3 + wlalsd;
+		minwrk = MAX(i__1,i__2);
+	    }
+	    if (*n > *m) {
 /* Computing 2nd power */
-	    i__1 = smlsiz + 1;
-	    wlalsd = *m * 9 + (*m << 1) * smlsiz + (*m << 3) * nlvl + *m * *
-		    nrhs + i__1 * i__1;
-	    if (*n >= mnthr) {
+		i__1 = smlsiz + 1;
+		wlalsd = *m * 9 + (*m << 1) * smlsiz + (*m << 3) * nlvl + *m *
+			 *nrhs + i__1 * i__1;
+		if (*n >= mnthr) {
 
-/*              Path 2a - underdetermined, with many more columns   
-                than rows. */
+/*                 Path 2a - underdetermined, with many more columns */
+/*                           than rows. */
 
-		maxwrk = *m + *m * ilaenv_(&c__1, "SGELQF", " ", m, n, &c_n1, 
-			&c_n1, (ftnlen)6, (ftnlen)1);
+		    maxwrk = *m + *m * ilaenv_(&c__1, "SGELQF", " ", m, n, &
+			    c_n1, &c_n1);
 /* Computing MAX */
-		i__1 = maxwrk, i__2 = *m * *m + (*m << 2) + (*m << 1) * 
-			ilaenv_(&c__1, "SGEBRD", " ", m, m, &c_n1, &c_n1, (
-			ftnlen)6, (ftnlen)1);
-		maxwrk = max(i__1,i__2);
+		    i__1 = maxwrk, i__2 = *m * *m + (*m << 2) + (*m << 1) * 
+			    ilaenv_(&c__1, "SGEBRD", " ", m, m, &c_n1, &c_n1);
+		    maxwrk = MAX(i__1,i__2);
 /* Computing MAX */
-		i__1 = maxwrk, i__2 = *m * *m + (*m << 2) + *nrhs * ilaenv_(&
-			c__1, "SORMBR", "QLT", m, nrhs, m, &c_n1, (ftnlen)6, (
-			ftnlen)3);
-		maxwrk = max(i__1,i__2);
+		    i__1 = maxwrk, i__2 = *m * *m + (*m << 2) + *nrhs * 
+			    ilaenv_(&c__1, "SORMBR", "QLT", m, nrhs, m, &c_n1);
+		    maxwrk = MAX(i__1,i__2);
 /* Computing MAX */
-		i__1 = maxwrk, i__2 = *m * *m + (*m << 2) + (*m - 1) * 
-			ilaenv_(&c__1, "SORMBR", "PLN", m, nrhs, m, &c_n1, (
-			ftnlen)6, (ftnlen)3);
-		maxwrk = max(i__1,i__2);
-		if (*nrhs > 1) {
+		    i__1 = maxwrk, i__2 = *m * *m + (*m << 2) + (*m - 1) * 
+			    ilaenv_(&c__1, "SORMBR", "PLN", m, nrhs, m, &c_n1);
+		    maxwrk = MAX(i__1,i__2);
+		    if (*nrhs > 1) {
 /* Computing MAX */
-		    i__1 = maxwrk, i__2 = *m * *m + *m + *m * *nrhs;
-		    maxwrk = max(i__1,i__2);
+			i__1 = maxwrk, i__2 = *m * *m + *m + *m * *nrhs;
+			maxwrk = MAX(i__1,i__2);
+		    } else {
+/* Computing MAX */
+			i__1 = maxwrk, i__2 = *m * *m + (*m << 1);
+			maxwrk = MAX(i__1,i__2);
+		    }
+/* Computing MAX */
+		    i__1 = maxwrk, i__2 = *m + *nrhs * ilaenv_(&c__1, "SORMLQ"
+, "LT", n, nrhs, m, &c_n1);
+		    maxwrk = MAX(i__1,i__2);
+/* Computing MAX */
+		    i__1 = maxwrk, i__2 = *m * *m + (*m << 2) + wlalsd;
+		    maxwrk = MAX(i__1,i__2);
+/*     XXX: Ensure the Path 2a case below is triggered.  The workspace */
+/*     calculation should use queries for all routines eventually. */
+/* Computing MAX */
+/* Computing MAX */
+		    i__3 = *m, i__4 = (*m << 1) - 4, i__3 = MAX(i__3,i__4), 
+			    i__3 = MAX(i__3,*nrhs), i__4 = *n - *m * 3;
+		    i__1 = maxwrk, i__2 = (*m << 2) + *m * *m + MAX(i__3,i__4)
+			    ;
+		    maxwrk = MAX(i__1,i__2);
 		} else {
+
+/*                 Path 2 - remaining underdetermined cases. */
+
+		    maxwrk = *m * 3 + (*n + *m) * ilaenv_(&c__1, "SGEBRD", 
+			    " ", m, n, &c_n1, &c_n1);
 /* Computing MAX */
-		    i__1 = maxwrk, i__2 = *m * *m + (*m << 1);
-		    maxwrk = max(i__1,i__2);
+		    i__1 = maxwrk, i__2 = *m * 3 + *nrhs * ilaenv_(&c__1, 
+			    "SORMBR", "QLT", m, nrhs, n, &c_n1);
+		    maxwrk = MAX(i__1,i__2);
+/* Computing MAX */
+		    i__1 = maxwrk, i__2 = *m * 3 + *m * ilaenv_(&c__1, "SORM"
+			    "BR", "PLN", n, nrhs, m, &c_n1);
+		    maxwrk = MAX(i__1,i__2);
+/* Computing MAX */
+		    i__1 = maxwrk, i__2 = *m * 3 + wlalsd;
+		    maxwrk = MAX(i__1,i__2);
 		}
 /* Computing MAX */
-		i__1 = maxwrk, i__2 = *m + *nrhs * ilaenv_(&c__1, "SORMLQ", 
-			"LT", n, nrhs, m, &c_n1, (ftnlen)6, (ftnlen)2);
-		maxwrk = max(i__1,i__2);
-/* Computing MAX */
-		i__1 = maxwrk, i__2 = *m * *m + (*m << 2) + wlalsd;
-		maxwrk = max(i__1,i__2);
-	    } else {
-
-/*              Path 2 - remaining underdetermined cases. */
-
-		maxwrk = *m * 3 + (*n + *m) * ilaenv_(&c__1, "SGEBRD", " ", m,
-			 n, &c_n1, &c_n1, (ftnlen)6, (ftnlen)1);
-/* Computing MAX */
-		i__1 = maxwrk, i__2 = *m * 3 + *nrhs * ilaenv_(&c__1, "SORMBR"
-			, "QLT", m, nrhs, n, &c_n1, (ftnlen)6, (ftnlen)3);
-		maxwrk = max(i__1,i__2);
-/* Computing MAX */
-		i__1 = maxwrk, i__2 = *m * 3 + *m * ilaenv_(&c__1, "SORMBR", 
-			"PLN", n, nrhs, m, &c_n1, (ftnlen)6, (ftnlen)3);
-		maxwrk = max(i__1,i__2);
-/* Computing MAX */
-		i__1 = maxwrk, i__2 = *m * 3 + wlalsd;
-		maxwrk = max(i__1,i__2);
+		i__1 = *m * 3 + *nrhs, i__2 = *m * 3 + *m, i__1 = MAX(i__1,
+			i__2), i__2 = *m * 3 + wlalsd;
+		minwrk = MAX(i__1,i__2);
 	    }
-/* Computing MAX */
-	    i__1 = *m * 3 + *nrhs, i__2 = *m * 3 + *m, i__1 = max(i__1,i__2), 
-		    i__2 = *m * 3 + wlalsd;
-	    minwrk = max(i__1,i__2);
 	}
-	minwrk = min(minwrk,maxwrk);
-	work[1] = (real) maxwrk;
+	minwrk = MIN(minwrk,maxwrk);
+	work[1] = (float) maxwrk;
+	iwork[1] = liwork;
+
 	if (*lwork < minwrk && ! lquery) {
 	    *info = -12;
 	}
@@ -371,7 +396,7 @@ static real c_b82 = 0.f;
 	xerbla_("SGELSD", &i__1);
 	return 0;
     } else if (lquery) {
-	goto L10;
+	return 0;
     }
 
 /*     Quick return if possible. */
@@ -411,9 +436,9 @@ static real c_b82 = 0.f;
 
 /*        Matrix all zero. Return zero solution. */
 
-	i__1 = max(*m,*n);
-	slaset_("F", &i__1, nrhs, &c_b82, &c_b82, &b[b_offset], ldb);
-	slaset_("F", &minmn, &c__1, &c_b82, &c_b82, &s[1], &c__1);
+	i__1 = MAX(*m,*n);
+	slaset_("F", &i__1, nrhs, &c_b81, &c_b81, &b[b_offset], ldb);
+	slaset_("F", &minmn, &c__1, &c_b81, &c_b81, &s[1], &c__1);
 	*rank = 0;
 	goto L10;
     }
@@ -426,14 +451,14 @@ static real c_b82 = 0.f;
 
 /*        Scale matrix norm up to SMLNUM. */
 
-	slascl_("G", &c__0, &c__0, &bnrm, &smlnum, m, nrhs, &b[b_offset], ldb,
+	slascl_("G", &c__0, &c__0, &bnrm, &smlnum, m, nrhs, &b[b_offset], ldb, 
 		 info);
 	ibscl = 1;
     } else if (bnrm > bignum) {
 
 /*        Scale matrix norm down to BIGNUM. */
 
-	slascl_("G", &c__0, &c__0, &bnrm, &bignum, m, nrhs, &b[b_offset], ldb,
+	slascl_("G", &c__0, &c__0, &bnrm, &bignum, m, nrhs, &b[b_offset], ldb, 
 		 info);
 	ibscl = 2;
     }
@@ -442,7 +467,7 @@ static real c_b82 = 0.f;
 
     if (*m < *n) {
 	i__1 = *n - *m;
-	slaset_("F", &i__1, nrhs, &c_b82, &c_b82, &b_ref(*m + 1, 1), ldb);
+	slaset_("F", &i__1, nrhs, &c_b81, &c_b81, &b[*m + 1 + b_dim1], ldb);
     }
 
 /*     Overdetermined case. */
@@ -460,15 +485,15 @@ static real c_b82 = 0.f;
 	    itau = 1;
 	    nwork = itau + *n;
 
-/*           Compute A=Q*R.   
-             (Workspace: need 2*N, prefer N+N*NB) */
+/*           Compute A=Q*R. */
+/*           (Workspace: need 2*N, prefer N+N*NB) */
 
 	    i__1 = *lwork - nwork + 1;
-	    sgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1,
+	    sgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1, 
 		     info);
 
-/*           Multiply B by transpose(Q).   
-             (Workspace: need N+NRHS, prefer N+NRHS*NB) */
+/*           Multiply B by transpose(Q). */
+/*           (Workspace: need N+NRHS, prefer N+NRHS*NB) */
 
 	    i__1 = *lwork - nwork + 1;
 	    sormqr_("L", "T", m, nrhs, n, &a[a_offset], lda, &work[itau], &b[
@@ -479,7 +504,8 @@ static real c_b82 = 0.f;
 	    if (*n > 1) {
 		i__1 = *n - 1;
 		i__2 = *n - 1;
-		slaset_("L", &i__1, &i__2, &c_b82, &c_b82, &a_ref(2, 1), lda);
+		slaset_("L", &i__1, &i__2, &c_b81, &c_b81, &a[a_dim1 + 2], 
+			lda);
 	    }
 	}
 
@@ -488,15 +514,15 @@ static real c_b82 = 0.f;
 	itaup = itauq + *n;
 	nwork = itaup + *n;
 
-/*        Bidiagonalize R in A.   
-          (Workspace: need 3*N+MM, prefer 3*N+(MM+N)*NB) */
+/*        Bidiagonalize R in A. */
+/*        (Workspace: need 3*N+MM, prefer 3*N+(MM+N)*NB) */
 
 	i__1 = *lwork - nwork + 1;
 	sgebrd_(&mm, n, &a[a_offset], lda, &s[1], &work[ie], &work[itauq], &
 		work[itaup], &work[nwork], &i__1, info);
 
-/*        Multiply B by transpose of left bidiagonalizing vectors of R.   
-          (Workspace: need 3*N+NRHS, prefer 3*N+NRHS*NB) */
+/*        Multiply B by transpose of left bidiagonalizing vectors of R. */
+/*        (Workspace: need 3*N+NRHS, prefer 3*N+NRHS*NB) */
 
 	i__1 = *lwork - nwork + 1;
 	sormbr_("Q", "L", "T", &mm, nrhs, n, &a[a_offset], lda, &work[itauq], 
@@ -518,31 +544,32 @@ static real c_b82 = 0.f;
 
     } else /* if(complicated condition) */ {
 /* Computing MAX */
-	i__1 = *m, i__2 = (*m << 1) - 4, i__1 = max(i__1,i__2), i__1 = max(
-		i__1,*nrhs), i__2 = *n - *m * 3;
-	if (*n >= mnthr && *lwork >= (*m << 2) + *m * *m + max(i__1,i__2)) {
+	i__1 = *m, i__2 = (*m << 1) - 4, i__1 = MAX(i__1,i__2), i__1 = MAX(
+		i__1,*nrhs), i__2 = *n - *m * 3, i__1 = MAX(i__1,i__2);
+	if (*n >= mnthr && *lwork >= (*m << 2) + *m * *m + MAX(i__1,wlalsd)) {
 
-/*        Path 2a - underdetermined, with many more columns than rows   
-          and sufficient workspace for an efficient algorithm. */
+/*        Path 2a - underdetermined, with many more columns than rows */
+/*        and sufficient workspace for an efficient algorithm. */
 
 	    ldwork = *m;
-/* Computing MAX   
-   Computing MAX */
-	    i__3 = *m, i__4 = (*m << 1) - 4, i__3 = max(i__3,i__4), i__3 = 
-		    max(i__3,*nrhs), i__4 = *n - *m * 3;
-	    i__1 = (*m << 2) + *m * *lda + max(i__3,i__4), i__2 = *m * *lda + 
-		    *m + *m * *nrhs;
-	    if (*lwork >= max(i__1,i__2)) {
+/* Computing MAX */
+/* Computing MAX */
+	    i__3 = *m, i__4 = (*m << 1) - 4, i__3 = MAX(i__3,i__4), i__3 = 
+		    MAX(i__3,*nrhs), i__4 = *n - *m * 3;
+	    i__1 = (*m << 2) + *m * *lda + MAX(i__3,i__4), i__2 = *m * *lda + 
+		    *m + *m * *nrhs, i__1 = MAX(i__1,i__2), i__2 = (*m << 2) 
+		    + *m * *lda + wlalsd;
+	    if (*lwork >= MAX(i__1,i__2)) {
 		ldwork = *lda;
 	    }
 	    itau = 1;
 	    nwork = *m + 1;
 
-/*        Compute A=L*Q.   
-          (Workspace: need 2*M, prefer M+M*NB) */
+/*        Compute A=L*Q. */
+/*        (Workspace: need 2*M, prefer M+M*NB) */
 
 	    i__1 = *lwork - nwork + 1;
-	    sgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1,
+	    sgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1, 
 		     info);
 	    il = nwork;
 
@@ -551,22 +578,22 @@ static real c_b82 = 0.f;
 	    slacpy_("L", m, m, &a[a_offset], lda, &work[il], &ldwork);
 	    i__1 = *m - 1;
 	    i__2 = *m - 1;
-	    slaset_("U", &i__1, &i__2, &c_b82, &c_b82, &work[il + ldwork], &
+	    slaset_("U", &i__1, &i__2, &c_b81, &c_b81, &work[il + ldwork], &
 		    ldwork);
 	    ie = il + ldwork * *m;
 	    itauq = ie + *m;
 	    itaup = itauq + *m;
 	    nwork = itaup + *m;
 
-/*        Bidiagonalize L in WORK(IL).   
-          (Workspace: need M*M+5*M, prefer M*M+4*M+2*M*NB) */
+/*        Bidiagonalize L in WORK(IL). */
+/*        (Workspace: need M*M+5*M, prefer M*M+4*M+2*M*NB) */
 
 	    i__1 = *lwork - nwork + 1;
 	    sgebrd_(m, m, &work[il], &ldwork, &s[1], &work[ie], &work[itauq], 
 		    &work[itaup], &work[nwork], &i__1, info);
 
-/*        Multiply B by transpose of left bidiagonalizing vectors of L.   
-          (Workspace: need M*M+4*M+NRHS, prefer M*M+4*M+NRHS*NB) */
+/*        Multiply B by transpose of left bidiagonalizing vectors of L. */
+/*        (Workspace: need M*M+4*M+NRHS, prefer M*M+4*M+NRHS*NB) */
 
 	    i__1 = *lwork - nwork + 1;
 	    sormbr_("Q", "L", "T", m, nrhs, m, &work[il], &ldwork, &work[
@@ -589,11 +616,12 @@ static real c_b82 = 0.f;
 /*        Zero out below first M rows of B. */
 
 	    i__1 = *n - *m;
-	    slaset_("F", &i__1, nrhs, &c_b82, &c_b82, &b_ref(*m + 1, 1), ldb);
+	    slaset_("F", &i__1, nrhs, &c_b81, &c_b81, &b[*m + 1 + b_dim1], 
+		    ldb);
 	    nwork = itau + *m;
 
-/*        Multiply transpose(Q) by B.   
-          (Workspace: need M+NRHS, prefer M+NRHS*NB) */
+/*        Multiply transpose(Q) by B. */
+/*        (Workspace: need M+NRHS, prefer M+NRHS*NB) */
 
 	    i__1 = *lwork - nwork + 1;
 	    sormlq_("L", "T", n, nrhs, m, &a[a_offset], lda, &work[itau], &b[
@@ -608,19 +636,19 @@ static real c_b82 = 0.f;
 	    itaup = itauq + *m;
 	    nwork = itaup + *m;
 
-/*        Bidiagonalize A.   
-          (Workspace: need 3*M+N, prefer 3*M+(M+N)*NB) */
+/*        Bidiagonalize A. */
+/*        (Workspace: need 3*M+N, prefer 3*M+(M+N)*NB) */
 
 	    i__1 = *lwork - nwork + 1;
 	    sgebrd_(m, n, &a[a_offset], lda, &s[1], &work[ie], &work[itauq], &
 		    work[itaup], &work[nwork], &i__1, info);
 
-/*        Multiply B by transpose of left bidiagonalizing vectors.   
-          (Workspace: need 3*M+NRHS, prefer 3*M+NRHS*NB) */
+/*        Multiply B by transpose of left bidiagonalizing vectors. */
+/*        (Workspace: need 3*M+NRHS, prefer 3*M+NRHS*NB) */
 
 	    i__1 = *lwork - nwork + 1;
 	    sormbr_("Q", "L", "T", m, nrhs, n, &a[a_offset], lda, &work[itauq]
-		    , &b[b_offset], ldb, &work[nwork], &i__1, info);
+, &b[b_offset], ldb, &work[nwork], &i__1, info);
 
 /*        Solve the bidiagonal least squares problem. */
 
@@ -634,7 +662,7 @@ static real c_b82 = 0.f;
 
 	    i__1 = *lwork - nwork + 1;
 	    sormbr_("P", "L", "N", n, nrhs, m, &a[a_offset], lda, &work[itaup]
-		    , &b[b_offset], ldb, &work[nwork], &i__1, info);
+, &b[b_offset], ldb, &work[nwork], &i__1, info);
 
 	}
     }
@@ -642,33 +670,29 @@ static real c_b82 = 0.f;
 /*     Undo scaling. */
 
     if (iascl == 1) {
-	slascl_("G", &c__0, &c__0, &anrm, &smlnum, n, nrhs, &b[b_offset], ldb,
+	slascl_("G", &c__0, &c__0, &anrm, &smlnum, n, nrhs, &b[b_offset], ldb, 
 		 info);
 	slascl_("G", &c__0, &c__0, &smlnum, &anrm, &minmn, &c__1, &s[1], &
 		minmn, info);
     } else if (iascl == 2) {
-	slascl_("G", &c__0, &c__0, &anrm, &bignum, n, nrhs, &b[b_offset], ldb,
+	slascl_("G", &c__0, &c__0, &anrm, &bignum, n, nrhs, &b[b_offset], ldb, 
 		 info);
 	slascl_("G", &c__0, &c__0, &bignum, &anrm, &minmn, &c__1, &s[1], &
 		minmn, info);
     }
     if (ibscl == 1) {
-	slascl_("G", &c__0, &c__0, &smlnum, &bnrm, n, nrhs, &b[b_offset], ldb,
+	slascl_("G", &c__0, &c__0, &smlnum, &bnrm, n, nrhs, &b[b_offset], ldb, 
 		 info);
     } else if (ibscl == 2) {
-	slascl_("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb,
+	slascl_("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, 
 		 info);
     }
 
 L10:
-    work[1] = (real) maxwrk;
+    work[1] = (float) maxwrk;
+    iwork[1] = liwork;
     return 0;
 
 /*     End of SGELSD */
 
 } /* sgelsd_ */
-
-#undef b_ref
-#undef a_ref
-
-

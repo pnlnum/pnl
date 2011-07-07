@@ -1,102 +1,128 @@
+/* strtrs.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int strtrs_(char *uplo, char *trans, char *diag, integer *n, 
-	integer *nrhs, real *a, integer *lda, real *b, integer *ldb, integer *
+/* Table of constant values */
+
+static float c_b12 = 1.f;
+
+ int strtrs_(char *uplo, char *trans, char *diag, int *n, 
+	int *nrhs, float *a, int *lda, float *b, int *ldb, int *
 	info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       March 31, 1993   
-
-
-    Purpose   
-    =======   
-
-    STRTRS solves a triangular system of the form   
-
-       A * X = B  or  A**T * X = B,   
-
-    where A is a triangular matrix of order N, and B is an N-by-NRHS   
-    matrix.  A check is made to verify that A is nonsingular.   
-
-    Arguments   
-    =========   
-
-    UPLO    (input) CHARACTER*1   
-            = 'U':  A is upper triangular;   
-            = 'L':  A is lower triangular.   
-
-    TRANS   (input) CHARACTER*1   
-            Specifies the form of the system of equations:   
-            = 'N':  A * X = B  (No transpose)   
-            = 'T':  A**T * X = B  (Transpose)   
-            = 'C':  A**H * X = B  (Conjugate transpose = Transpose)   
-
-    DIAG    (input) CHARACTER*1   
-            = 'N':  A is non-unit triangular;   
-            = 'U':  A is unit triangular.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    NRHS    (input) INTEGER   
-            The number of right hand sides, i.e., the number of columns   
-            of the matrix B.  NRHS >= 0.   
-
-    A       (input) REAL array, dimension (LDA,N)   
-            The triangular matrix A.  If UPLO = 'U', the leading N-by-N   
-            upper triangular part of the array A contains the upper   
-            triangular matrix, and the strictly lower triangular part of   
-            A is not referenced.  If UPLO = 'L', the leading N-by-N lower   
-            triangular part of the array A contains the lower triangular   
-            matrix, and the strictly upper triangular part of A is not   
-            referenced.  If DIAG = 'U', the diagonal elements of A are   
-            also not referenced and are assumed to be 1.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.  LDA >= max(1,N).   
-
-    B       (input/output) REAL array, dimension (LDB,NRHS)   
-            On entry, the right hand side matrix B.   
-            On exit, if INFO = 0, the solution matrix X.   
-
-    LDB     (input) INTEGER   
-            The leading dimension of the array B.  LDB >= max(1,N).   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0: if INFO = -i, the i-th argument had an illegal value   
-            > 0: if INFO = i, the i-th diagonal element of A is zero,   
-                 indicating that the matrix is singular and the solutions   
-                 X have not been computed.   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static real c_b12 = 1.f;
-    
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1;
+    int a_dim1, a_offset, b_dim1, b_offset, i__1;
+
     /* Local variables */
-    extern logical lsame_(char *, char *);
-    extern /* Subroutine */ int strsm_(char *, char *, char *, char *, 
-	    integer *, integer *, real *, real *, integer *, real *, integer *
-	    ), xerbla_(char *, integer *);
-    static logical nounit;
-#define a_ref(a_1,a_2) a[(a_2)*a_dim1 + a_1]
+    extern int lsame_(char *, char *);
+    extern  int strsm_(char *, char *, char *, char *, 
+	    int *, int *, float *, float *, int *, float *, int *
+), xerbla_(char *, int *);
+    int nounit;
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  STRTRS solves a triangular system of the form */
+
+/*     A * X = B  or  A**T * X = B, */
+
+/*  where A is a triangular matrix of order N, and B is an N-by-NRHS */
+/*  matrix.  A check is made to verify that A is nonsingular. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U':  A is upper triangular; */
+/*          = 'L':  A is lower triangular. */
+
+/*  TRANS   (input) CHARACTER*1 */
+/*          Specifies the form of the system of equations: */
+/*          = 'N':  A * X = B  (No transpose) */
+/*          = 'T':  A**T * X = B  (Transpose) */
+/*          = 'C':  A**H * X = B  (Conjugate transpose = Transpose) */
+
+/*  DIAG    (input) CHARACTER*1 */
+/*          = 'N':  A is non-unit triangular; */
+/*          = 'U':  A is unit triangular. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  NRHS    (input) INTEGER */
+/*          The number of right hand sides, i.e., the number of columns */
+/*          of the matrix B.  NRHS >= 0. */
+
+/*  A       (input) REAL array, dimension (LDA,N) */
+/*          The triangular matrix A.  If UPLO = 'U', the leading N-by-N */
+/*          upper triangular part of the array A contains the upper */
+/*          triangular matrix, and the strictly lower triangular part of */
+/*          A is not referenced.  If UPLO = 'L', the leading N-by-N lower */
+/*          triangular part of the array A contains the lower triangular */
+/*          matrix, and the strictly upper triangular part of A is not */
+/*          referenced.  If DIAG = 'U', the diagonal elements of A are */
+/*          also not referenced and are assumed to be 1. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A.  LDA >= MAX(1,N). */
+
+/*  B       (input/output) REAL array, dimension (LDB,NRHS) */
+/*          On entry, the right hand side matrix B. */
+/*          On exit, if INFO = 0, the solution matrix X. */
+
+/*  LDB     (input) INTEGER */
+/*          The leading dimension of the array B.  LDB >= MAX(1,N). */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0: if INFO = -i, the i-th argument had an illegal value */
+/*          > 0: if INFO = i, the i-th diagonal element of A is zero, */
+/*               indicating that the matrix is singular and the solutions */
+/*               X have not been computed. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     b_dim1 = *ldb;
-    b_offset = 1 + b_dim1 * 1;
+    b_offset = 1 + b_dim1;
     b -= b_offset;
 
     /* Function Body */
@@ -113,9 +139,9 @@
 	*info = -4;
     } else if (*nrhs < 0) {
 	*info = -5;
-    } else if (*lda < max(1,*n)) {
+    } else if (*lda < MAX(1,*n)) {
 	*info = -7;
-    } else if (*ldb < max(1,*n)) {
+    } else if (*ldb < MAX(1,*n)) {
 	*info = -9;
     }
     if (*info != 0) {
@@ -135,7 +161,7 @@
     if (nounit) {
 	i__1 = *n;
 	for (*info = 1; *info <= i__1; ++(*info)) {
-	    if (a_ref(*info, *info) == 0.f) {
+	    if (a[*info + *info * a_dim1] == 0.f) {
 		return 0;
 	    }
 /* L10: */
@@ -153,7 +179,3 @@
 /*     End of STRTRS */
 
 } /* strtrs_ */
-
-#undef a_ref
-
-

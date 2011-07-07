@@ -1,199 +1,227 @@
+/* sbdsdc.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int sbdsdc_(char *uplo, char *compq, integer *n, real *d__, 
-	real *e, real *u, integer *ldu, real *vt, integer *ldvt, real *q, 
-	integer *iq, real *work, integer *iwork, integer *info)
+/* Table of constant values */
+
+static int c__9 = 9;
+static int c__0 = 0;
+static float c_b15 = 1.f;
+static int c__1 = 1;
+static float c_b29 = 0.f;
+
+ int sbdsdc_(char *uplo, char *compq, int *n, float *d__, 
+	float *e, float *u, int *ldu, float *vt, int *ldvt, float *q, 
+	int *iq, float *work, int *iwork, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       December 1, 1999   
-
-
-    Purpose   
-    =======   
-
-    SBDSDC computes the singular value decomposition (SVD) of a real   
-    N-by-N (upper or lower) bidiagonal matrix B:  B = U * S * VT,   
-    using a divide and conquer method, where S is a diagonal matrix   
-    with non-negative diagonal elements (the singular values of B), and   
-    U and VT are orthogonal matrices of left and right singular vectors,   
-    respectively. SBDSDC can be used to compute all singular values,   
-    and optionally, singular vectors or singular vectors in compact form.   
-
-    This code makes very mild assumptions about floating point   
-    arithmetic. It will work on machines with a guard digit in   
-    add/subtract, or on those binary machines without guard digits   
-    which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or Cray-2.   
-    It could conceivably fail on hexadecimal or decimal machines   
-    without guard digits, but we know of none.  See SLASD3 for details.   
-
-    The code currently call SLASDQ if singular values only are desired.   
-    However, it can be slightly modified to compute singular values   
-    using the divide and conquer method.   
-
-    Arguments   
-    =========   
-
-    UPLO    (input) CHARACTER*1   
-            = 'U':  B is upper bidiagonal.   
-            = 'L':  B is lower bidiagonal.   
-
-    COMPQ   (input) CHARACTER*1   
-            Specifies whether singular vectors are to be computed   
-            as follows:   
-            = 'N':  Compute singular values only;   
-            = 'P':  Compute singular values and compute singular   
-                    vectors in compact form;   
-            = 'I':  Compute singular values and singular vectors.   
-
-    N       (input) INTEGER   
-            The order of the matrix B.  N >= 0.   
-
-    D       (input/output) REAL array, dimension (N)   
-            On entry, the n diagonal elements of the bidiagonal matrix B.   
-            On exit, if INFO=0, the singular values of B.   
-
-    E       (input/output) REAL array, dimension (N)   
-            On entry, the elements of E contain the offdiagonal   
-            elements of the bidiagonal matrix whose SVD is desired.   
-            On exit, E has been destroyed.   
-
-    U       (output) REAL array, dimension (LDU,N)   
-            If  COMPQ = 'I', then:   
-               On exit, if INFO = 0, U contains the left singular vectors   
-               of the bidiagonal matrix.   
-            For other values of COMPQ, U is not referenced.   
-
-    LDU     (input) INTEGER   
-            The leading dimension of the array U.  LDU >= 1.   
-            If singular vectors are desired, then LDU >= max( 1, N ).   
-
-    VT      (output) REAL array, dimension (LDVT,N)   
-            If  COMPQ = 'I', then:   
-               On exit, if INFO = 0, VT' contains the right singular   
-               vectors of the bidiagonal matrix.   
-            For other values of COMPQ, VT is not referenced.   
-
-    LDVT    (input) INTEGER   
-            The leading dimension of the array VT.  LDVT >= 1.   
-            If singular vectors are desired, then LDVT >= max( 1, N ).   
-
-    Q       (output) REAL array, dimension (LDQ)   
-            If  COMPQ = 'P', then:   
-               On exit, if INFO = 0, Q and IQ contain the left   
-               and right singular vectors in a compact form,   
-               requiring O(N log N) space instead of 2*N**2.   
-               In particular, Q contains all the REAL data in   
-               LDQ >= N*(11 + 2*SMLSIZ + 8*INT(LOG_2(N/(SMLSIZ+1))))   
-               words of memory, where SMLSIZ is returned by ILAENV and   
-               is equal to the maximum size of the subproblems at the   
-               bottom of the computation tree (usually about 25).   
-            For other values of COMPQ, Q is not referenced.   
-
-    IQ      (output) INTEGER array, dimension (LDIQ)   
-            If  COMPQ = 'P', then:   
-               On exit, if INFO = 0, Q and IQ contain the left   
-               and right singular vectors in a compact form,   
-               requiring O(N log N) space instead of 2*N**2.   
-               In particular, IQ contains all INTEGER data in   
-               LDIQ >= N*(3 + 3*INT(LOG_2(N/(SMLSIZ+1))))   
-               words of memory, where SMLSIZ is returned by ILAENV and   
-               is equal to the maximum size of the subproblems at the   
-               bottom of the computation tree (usually about 25).   
-            For other values of COMPQ, IQ is not referenced.   
-
-    WORK    (workspace) REAL array, dimension (LWORK)   
-            If COMPQ = 'N' then LWORK >= (4 * N).   
-            If COMPQ = 'P' then LWORK >= (6 * N).   
-            If COMPQ = 'I' then LWORK >= (3 * N**2 + 4 * N).   
-
-    IWORK   (workspace) INTEGER array, dimension (8*N)   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit.   
-            < 0:  if INFO = -i, the i-th argument had an illegal value.   
-            > 0:  The algorithm failed to compute an singular value.   
-                  The update process of divide and conquer failed.   
-
-    Further Details   
-    ===============   
-
-    Based on contributions by   
-       Ming Gu and Huan Ren, Computer Science Division, University of   
-       California at Berkeley, USA   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__9 = 9;
-    static integer c__0 = 0;
-    static real c_b15 = 1.f;
-    static integer c__1 = 1;
-    static real c_b29 = 0.f;
-    
     /* System generated locals */
-    integer u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
-    real r__1;
+    int u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
+    float r__1;
+
     /* Builtin functions */
-    double r_sign(real *, real *), log(doublereal);
+    double r_sign(float *, float *), log(double);
+
     /* Local variables */
-    static integer difl, difr, ierr, perm, mlvl, sqre, i__, j, k;
-    static real p, r__;
-    static integer z__;
-    extern logical lsame_(char *, char *);
-    static integer poles;
-    extern /* Subroutine */ int slasr_(char *, char *, char *, integer *, 
-	    integer *, real *, real *, real *, integer *);
-    static integer iuplo, nsize, start;
-    extern /* Subroutine */ int scopy_(integer *, real *, integer *, real *, 
-	    integer *), sswap_(integer *, real *, integer *, real *, integer *
-	    ), slasd0_(integer *, integer *, real *, real *, real *, integer *
-	    , real *, integer *, integer *, integer *, real *, integer *);
-    static integer ic, ii, kk;
-    static real cs;
-    static integer is, iu;
-    static real sn;
-    extern doublereal slamch_(char *);
-    extern /* Subroutine */ int slasda_(integer *, integer *, integer *, 
-	    integer *, real *, real *, real *, integer *, real *, integer *, 
-	    real *, real *, real *, real *, integer *, integer *, integer *, 
-	    integer *, real *, real *, real *, real *, integer *, integer *), 
-	    xerbla_(char *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int slascl_(char *, integer *, integer *, real *, 
-	    real *, integer *, integer *, real *, integer *, integer *);
-    static integer givcol;
-    extern /* Subroutine */ int slasdq_(char *, integer *, integer *, integer 
-	    *, integer *, integer *, real *, real *, real *, integer *, real *
-	    , integer *, real *, integer *, real *, integer *);
-    static integer icompq;
-    extern /* Subroutine */ int slaset_(char *, integer *, integer *, real *, 
-	    real *, real *, integer *), slartg_(real *, real *, real *
-	    , real *, real *);
-    static real orgnrm;
-    static integer givnum;
-    extern doublereal slanst_(char *, integer *, real *, real *);
-    static integer givptr, nm1, qstart, smlsiz, wstart, smlszp;
-    static real eps;
-    static integer ivt;
-#define u_ref(a_1,a_2) u[(a_2)*u_dim1 + a_1]
-#define vt_ref(a_1,a_2) vt[(a_2)*vt_dim1 + a_1]
+    int i__, j, k;
+    float p, r__;
+    int z__, ic, ii, kk;
+    float cs;
+    int is, iu;
+    float sn;
+    int nm1;
+    float eps;
+    int ivt, difl, difr, ierr, perm, mlvl, sqre;
+    extern int lsame_(char *, char *);
+    int poles;
+    extern  int slasr_(char *, char *, char *, int *, 
+	    int *, float *, float *, float *, int *);
+    int iuplo, nsize, start;
+    extern  int scopy_(int *, float *, int *, float *, 
+	    int *), sswap_(int *, float *, int *, float *, int *
+), slasd0_(int *, int *, float *, float *, float *, int *
+, float *, int *, int *, int *, float *, int *);
+    extern double slamch_(char *);
+    extern  int slasda_(int *, int *, int *, 
+	    int *, float *, float *, float *, int *, float *, int *, 
+	    float *, float *, float *, float *, int *, int *, int *, 
+	    int *, float *, float *, float *, float *, int *, int *), 
+	    xerbla_(char *, int *);
+    extern int ilaenv_(int *, char *, char *, int *, int *, 
+	    int *, int *);
+    extern  int slascl_(char *, int *, int *, float *, 
+	    float *, int *, int *, float *, int *, int *);
+    int givcol;
+    extern  int slasdq_(char *, int *, int *, int 
+	    *, int *, int *, float *, float *, float *, int *, float *
+, int *, float *, int *, float *, int *);
+    int icompq;
+    extern  int slaset_(char *, int *, int *, float *, 
+	    float *, float *, int *), slartg_(float *, float *, float *
+, float *, float *);
+    float orgnrm;
+    int givnum;
+    extern double slanst_(char *, int *, float *, float *);
+    int givptr, qstart, smlsiz, wstart, smlszp;
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  SBDSDC computes the singular value decomposition (SVD) of a float */
+/*  N-by-N (upper or lower) bidiagonal matrix B:  B = U * S * VT, */
+/*  using a divide and conquer method, where S is a diagonal matrix */
+/*  with non-negative diagonal elements (the singular values of B), and */
+/*  U and VT are orthogonal matrices of left and right singular vectors, */
+/*  respectively. SBDSDC can be used to compute all singular values, */
+/*  and optionally, singular vectors or singular vectors in compact form. */
+
+/*  This code makes very mild assumptions about floating point */
+/*  arithmetic. It will work on machines with a guard digit in */
+/*  add/subtract, or on those binary machines without guard digits */
+/*  which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or Cray-2. */
+/*  It could conceivably fail on hexadecimal or decimal machines */
+/*  without guard digits, but we know of none.  See SLASD3 for details. */
+
+/*  The code currently calls SLASDQ if singular values only are desired. */
+/*  However, it can be slightly modified to compute singular values */
+/*  using the divide and conquer method. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U':  B is upper bidiagonal. */
+/*          = 'L':  B is lower bidiagonal. */
+
+/*  COMPQ   (input) CHARACTER*1 */
+/*          Specifies whether singular vectors are to be computed */
+/*          as follows: */
+/*          = 'N':  Compute singular values only; */
+/*          = 'P':  Compute singular values and compute singular */
+/*                  vectors in compact form; */
+/*          = 'I':  Compute singular values and singular vectors. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix B.  N >= 0. */
+
+/*  D       (input/output) REAL array, dimension (N) */
+/*          On entry, the n diagonal elements of the bidiagonal matrix B. */
+/*          On exit, if INFO=0, the singular values of B. */
+
+/*  E       (input/output) REAL array, dimension (N-1) */
+/*          On entry, the elements of E contain the offdiagonal */
+/*          elements of the bidiagonal matrix whose SVD is desired. */
+/*          On exit, E has been destroyed. */
+
+/*  U       (output) REAL array, dimension (LDU,N) */
+/*          If  COMPQ = 'I', then: */
+/*             On exit, if INFO = 0, U contains the left singular vectors */
+/*             of the bidiagonal matrix. */
+/*          For other values of COMPQ, U is not referenced. */
+
+/*  LDU     (input) INTEGER */
+/*          The leading dimension of the array U.  LDU >= 1. */
+/*          If singular vectors are desired, then LDU >= MAX( 1, N ). */
+
+/*  VT      (output) REAL array, dimension (LDVT,N) */
+/*          If  COMPQ = 'I', then: */
+/*             On exit, if INFO = 0, VT' contains the right singular */
+/*             vectors of the bidiagonal matrix. */
+/*          For other values of COMPQ, VT is not referenced. */
+
+/*  LDVT    (input) INTEGER */
+/*          The leading dimension of the array VT.  LDVT >= 1. */
+/*          If singular vectors are desired, then LDVT >= MAX( 1, N ). */
+
+/*  Q       (output) REAL array, dimension (LDQ) */
+/*          If  COMPQ = 'P', then: */
+/*             On exit, if INFO = 0, Q and IQ contain the left */
+/*             and right singular vectors in a compact form, */
+/*             requiring O(N log N) space instead of 2*N**2. */
+/*             In particular, Q contains all the REAL data in */
+/*             LDQ >= N*(11 + 2*SMLSIZ + 8*INT(LOG_2(N/(SMLSIZ+1)))) */
+/*             words of memory, where SMLSIZ is returned by ILAENV and */
+/*             is equal to the maximum size of the subproblems at the */
+/*             bottom of the computation tree (usually about 25). */
+/*          For other values of COMPQ, Q is not referenced. */
+
+/*  IQ      (output) INTEGER array, dimension (LDIQ) */
+/*          If  COMPQ = 'P', then: */
+/*             On exit, if INFO = 0, Q and IQ contain the left */
+/*             and right singular vectors in a compact form, */
+/*             requiring O(N log N) space instead of 2*N**2. */
+/*             In particular, IQ contains all INTEGER data in */
+/*             LDIQ >= N*(3 + 3*INT(LOG_2(N/(SMLSIZ+1)))) */
+/*             words of memory, where SMLSIZ is returned by ILAENV and */
+/*             is equal to the maximum size of the subproblems at the */
+/*             bottom of the computation tree (usually about 25). */
+/*          For other values of COMPQ, IQ is not referenced. */
+
+/*  WORK    (workspace) REAL array, dimension (MAX(1,LWORK)) */
+/*          If COMPQ = 'N' then LWORK >= (4 * N). */
+/*          If COMPQ = 'P' then LWORK >= (6 * N). */
+/*          If COMPQ = 'I' then LWORK >= (3 * N**2 + 4 * N). */
+
+/*  IWORK   (workspace) INTEGER array, dimension (8*N) */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit. */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value. */
+/*          > 0:  The algorithm failed to compute an singular value. */
+/*                The update process of divide and conquer failed. */
+
+/*  Further Details */
+/*  =============== */
+
+/*  Based on contributions by */
+/*     Ming Gu and Huan Ren, Computer Science Division, University of */
+/*     California at Berkeley, USA */
+/*  ===================================================================== */
+/*  Changed dimension statement in comment describing E from (N) to */
+/*  (N-1).  Sven, 17 Feb 05. */
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --d__;
     --e;
     u_dim1 = *ldu;
-    u_offset = 1 + u_dim1 * 1;
+    u_offset = 1 + u_dim1;
     u -= u_offset;
     vt_dim1 = *ldvt;
-    vt_offset = 1 + vt_dim1 * 1;
+    vt_offset = 1 + vt_dim1;
     vt -= vt_offset;
     --q;
     --iq;
@@ -241,23 +269,22 @@
     if (*n == 0) {
 	return 0;
     }
-    smlsiz = ilaenv_(&c__9, "SBDSDC", " ", &c__0, &c__0, &c__0, &c__0, (
-	    ftnlen)6, (ftnlen)1);
+    smlsiz = ilaenv_(&c__9, "SBDSDC", " ", &c__0, &c__0, &c__0, &c__0);
     if (*n == 1) {
 	if (icompq == 1) {
 	    q[1] = r_sign(&c_b15, &d__[1]);
 	    q[smlsiz * *n + 1] = 1.f;
 	} else if (icompq == 2) {
-	    u_ref(1, 1) = r_sign(&c_b15, &d__[1]);
-	    vt_ref(1, 1) = 1.f;
+	    u[u_dim1 + 1] = r_sign(&c_b15, &d__[1]);
+	    vt[vt_dim1 + 1] = 1.f;
 	}
-	d__[1] = dabs(d__[1]);
+	d__[1] = ABS(d__[1]);
 	return 0;
     }
     nm1 = *n - 1;
 
-/*     If matrix lower bidiagonal, rotate to be upper bidiagonal   
-       by applying Givens rotations on the left */
+/*     If matrix lower bidiagonal, rotate to be upper bidiagonal */
+/*     by applying Givens rotations on the left */
 
     wstart = 1;
     qstart = 3;
@@ -295,15 +322,15 @@
 	goto L40;
     }
 
-/*     If N is smaller than the minimum divide size SMLSIZ, then solve   
-       the problem with another solver. */
+/*     If N is smaller than the minimum divide size SMLSIZ, then solve */
+/*     the problem with another solver. */
 
     if (*n <= smlsiz) {
 	if (icompq == 2) {
 	    slaset_("A", n, n, &c_b29, &c_b15, &u[u_offset], ldu);
 	    slaset_("A", n, n, &c_b29, &c_b15, &vt[vt_offset], ldvt);
 	    slasdq_("U", &c__0, n, n, n, &c__0, &d__[1], &e[1], &vt[vt_offset]
-		    , ldvt, &u[u_offset], ldu, &u[u_offset], ldu, &work[
+, ldvt, &u[u_offset], ldu, &u[u_offset], ldu, &work[
 		    wstart], info);
 	} else if (icompq == 1) {
 	    iu = 1;
@@ -334,7 +361,7 @@
 
     eps = slamch_("Epsilon");
 
-    mlvl = (integer) (log((real) (*n) / (real) (smlsiz + 1)) / log(2.f)) + 1;
+    mlvl = (int) (log((float) (*n) / (float) (smlsiz + 1)) / log(2.f)) + 1;
     smlszp = smlsiz + 1;
 
     if (icompq == 1) {
@@ -356,7 +383,7 @@
 
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	if ((r__1 = d__[i__], dabs(r__1)) < eps) {
+	if ((r__1 = d__[i__], ABS(r__1)) < eps) {
 	    d__[i__] = r_sign(&eps, &d__[i__]);
 	}
 /* L20: */
@@ -367,45 +394,45 @@
 
     i__1 = nm1;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	if ((r__1 = e[i__], dabs(r__1)) < eps || i__ == nm1) {
+	if ((r__1 = e[i__], ABS(r__1)) < eps || i__ == nm1) {
 
-/*        Subproblem found. First determine its size and then   
-          apply divide and conquer on it. */
+/*        Subproblem found. First determine its size and then */
+/*        apply divide and conquer on it. */
 
 	    if (i__ < nm1) {
 
 /*        A subproblem with E(I) small for I < NM1. */
 
 		nsize = i__ - start + 1;
-	    } else if ((r__1 = e[i__], dabs(r__1)) >= eps) {
+	    } else if ((r__1 = e[i__], ABS(r__1)) >= eps) {
 
 /*        A subproblem with E(NM1) not too small but I = NM1. */
 
 		nsize = *n - start + 1;
 	    } else {
 
-/*        A subproblem with E(NM1) small. This implies an   
-          1-by-1 subproblem at D(N). Solve this 1-by-1 problem   
-          first. */
+/*        A subproblem with E(NM1) small. This implies an */
+/*        1-by-1 subproblem at D(N). Solve this 1-by-1 problem */
+/*        first. */
 
 		nsize = i__ - start + 1;
 		if (icompq == 2) {
-		    u_ref(*n, *n) = r_sign(&c_b15, &d__[*n]);
-		    vt_ref(*n, *n) = 1.f;
+		    u[*n + *n * u_dim1] = r_sign(&c_b15, &d__[*n]);
+		    vt[*n + *n * vt_dim1] = 1.f;
 		} else if (icompq == 1) {
 		    q[*n + (qstart - 1) * *n] = r_sign(&c_b15, &d__[*n]);
 		    q[*n + (smlsiz + qstart - 1) * *n] = 1.f;
 		}
-		d__[*n] = (r__1 = d__[*n], dabs(r__1));
+		d__[*n] = (r__1 = d__[*n], ABS(r__1));
 	    }
 	    if (icompq == 2) {
-		slasd0_(&nsize, &sqre, &d__[start], &e[start], &u_ref(start, 
-			start), ldu, &vt_ref(start, start), ldvt, &smlsiz, &
-			iwork[1], &work[wstart], info);
+		slasd0_(&nsize, &sqre, &d__[start], &e[start], &u[start + 
+			start * u_dim1], ldu, &vt[start + start * vt_dim1], 
+			ldvt, &smlsiz, &iwork[1], &work[wstart], info);
 	    } else {
 		slasda_(&icompq, &smlsiz, &nsize, &sqre, &d__[start], &e[
 			start], &q[start + (iu + qstart - 2) * *n], n, &q[
-			start + (ivt + qstart - 2) * *n], &iq[start + k * *n],
+			start + (ivt + qstart - 2) * *n], &iq[start + k * *n], 
 			 &q[start + (difl + qstart - 2) * *n], &q[start + (
 			difr + qstart - 2) * *n], &q[start + (z__ + qstart - 
 			2) * *n], &q[start + (poles + qstart - 2) * *n], &iq[
@@ -449,8 +476,9 @@ L40:
 	    if (icompq == 1) {
 		iq[i__] = kk;
 	    } else if (icompq == 2) {
-		sswap_(n, &u_ref(1, i__), &c__1, &u_ref(1, kk), &c__1);
-		sswap_(n, &vt_ref(i__, 1), ldvt, &vt_ref(kk, 1), ldvt);
+		sswap_(n, &u[i__ * u_dim1 + 1], &c__1, &u[kk * u_dim1 + 1], &
+			c__1);
+		sswap_(n, &vt[i__ + vt_dim1], ldvt, &vt[kk + vt_dim1], ldvt);
 	    }
 	} else if (icompq == 1) {
 	    iq[i__] = i__;
@@ -468,8 +496,8 @@ L40:
 	}
     }
 
-/*     If B is lower bidiagonal, update U by those Givens rotations   
-       which rotated B to be upper bidiagonal */
+/*     If B is lower bidiagonal, update U by those Givens rotations */
+/*     which rotated B to be upper bidiagonal */
 
     if (iuplo == 2 && icompq == 2) {
 	slasr_("L", "V", "B", n, n, &work[1], &work[*n], &u[u_offset], ldu);
@@ -480,8 +508,3 @@ L40:
 /*     End of SBDSDC */
 
 } /* sbdsdc_ */
-
-#undef vt_ref
-#undef u_ref
-
-

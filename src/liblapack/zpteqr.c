@@ -1,7 +1,13 @@
+/* zpteqr.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-/*  -- translated by f2c (version 19990503).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
+		http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "pnl/pnl_f2c.h"
@@ -10,128 +16,140 @@
 
 static doublecomplex c_b1 = {0.,0.};
 static doublecomplex c_b2 = {1.,0.};
-static integer c__0 = 0;
-static integer c__1 = 1;
+static int c__0 = 0;
+static int c__1 = 1;
 
-/* Subroutine */ int zpteqr_(char *compz, integer *n, doublereal *d__, 
-	doublereal *e, doublecomplex *z__, integer *ldz, doublereal *work, 
-	integer *info)
+ int zpteqr_(char *compz, int *n, double *d__, 
+	double *e, doublecomplex *z__, int *ldz, double *work, 
+	int *info)
 {
     /* System generated locals */
-    integer z_dim1, z_offset, i__1;
+    int z_dim1, z_offset, i__1;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
 
     /* Local variables */
-    static doublecomplex c__[1]	/* was [1][1] */;
-    static integer i__;
-    extern logical lsame_(char *, char *);
-    static doublecomplex vt[1]	/* was [1][1] */;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static integer icompz;
-    extern /* Subroutine */ int zlaset_(char *, integer *, integer *, 
-	    doublecomplex *, doublecomplex *, doublecomplex *, integer *), dpttrf_(integer *, doublereal *, doublereal *, integer *)
-	    , zbdsqr_(char *, integer *, integer *, integer *, integer *, 
-	    doublereal *, doublereal *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublereal *, integer *);
-    static integer nru;
+    doublecomplex c__[1]	/* was [1][1] */;
+    int i__;
+    doublecomplex vt[1]	/* was [1][1] */;
+    int nru;
+    extern int lsame_(char *, char *);
+    extern  int xerbla_(char *, int *);
+    int icompz;
+    extern  int zlaset_(char *, int *, int *, 
+	    doublecomplex *, doublecomplex *, doublecomplex *, int *), dpttrf_(int *, double *, double *, int *)
+	    , zbdsqr_(char *, int *, int *, int *, int *, 
+	    double *, double *, doublecomplex *, int *, 
+	    doublecomplex *, int *, doublecomplex *, int *, 
+	    double *, int *);
 
 
-#define z___subscr(a_1,a_2) (a_2)*z_dim1 + a_1
-#define z___ref(a_1,a_2) z__[z___subscr(a_1,a_2)]
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
 
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
 
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1999   
+/*  Purpose */
+/*  ======= */
 
+/*  ZPTEQR computes all eigenvalues and, optionally, eigenvectors of a */
+/*  symmetric positive definite tridiagonal matrix by first factoring the */
+/*  matrix using DPTTRF and then calling ZBDSQR to compute the singular */
+/*  values of the bidiagonal factor. */
 
-    Purpose   
-    =======   
+/*  This routine computes the eigenvalues of the positive definite */
+/*  tridiagonal matrix to high relative accuracy.  This means that if the */
+/*  eigenvalues range over many orders of magnitude in size, then the */
+/*  small eigenvalues and corresponding eigenvectors will be computed */
+/*  more accurately than, for example, with the standard QR method. */
 
-    ZPTEQR computes all eigenvalues and, optionally, eigenvectors of a   
-    symmetric positive definite tridiagonal matrix by first factoring the   
-    matrix using DPTTRF and then calling ZBDSQR to compute the singular   
-    values of the bidiagonal factor.   
+/*  The eigenvectors of a full or band positive definite Hermitian matrix */
+/*  can also be found if ZHETRD, ZHPTRD, or ZHBTRD has been used to */
+/*  reduce this matrix to tridiagonal form.  (The reduction to */
+/*  tridiagonal form, however, may preclude the possibility of obtaining */
+/*  high relative accuracy in the small eigenvalues of the original */
+/*  matrix, if these eigenvalues range over many orders of magnitude.) */
 
-    This routine computes the eigenvalues of the positive definite   
-    tridiagonal matrix to high relative accuracy.  This means that if the   
-    eigenvalues range over many orders of magnitude in size, then the   
-    small eigenvalues and corresponding eigenvectors will be computed   
-    more accurately than, for example, with the standard QR method.   
+/*  Arguments */
+/*  ========= */
 
-    The eigenvectors of a full or band positive definite Hermitian matrix   
-    can also be found if ZHETRD, ZHPTRD, or ZHBTRD has been used to   
-    reduce this matrix to tridiagonal form.  (The reduction to   
-    tridiagonal form, however, may preclude the possibility of obtaining   
-    high relative accuracy in the small eigenvalues of the original   
-    matrix, if these eigenvalues range over many orders of magnitude.)   
+/*  COMPZ   (input) CHARACTER*1 */
+/*          = 'N':  Compute eigenvalues only. */
+/*          = 'V':  Compute eigenvectors of original Hermitian */
+/*                  matrix also.  Array Z contains the unitary matrix */
+/*                  used to reduce the original matrix to tridiagonal */
+/*                  form. */
+/*          = 'I':  Compute eigenvectors of tridiagonal matrix also. */
 
-    Arguments   
-    =========   
+/*  N       (input) INTEGER */
+/*          The order of the matrix.  N >= 0. */
 
-    COMPZ   (input) CHARACTER*1   
-            = 'N':  Compute eigenvalues only.   
-            = 'V':  Compute eigenvectors of original Hermitian   
-                    matrix also.  Array Z contains the unitary matrix   
-                    used to reduce the original matrix to tridiagonal   
-                    form.   
-            = 'I':  Compute eigenvectors of tridiagonal matrix also.   
+/*  D       (input/output) DOUBLE PRECISION array, dimension (N) */
+/*          On entry, the n diagonal elements of the tridiagonal matrix. */
+/*          On normal exit, D contains the eigenvalues, in descending */
+/*          order. */
 
-    N       (input) INTEGER   
-            The order of the matrix.  N >= 0.   
+/*  E       (input/output) DOUBLE PRECISION array, dimension (N-1) */
+/*          On entry, the (n-1) subdiagonal elements of the tridiagonal */
+/*          matrix. */
+/*          On exit, E has been destroyed. */
 
-    D       (input/output) DOUBLE PRECISION array, dimension (N)   
-            On entry, the n diagonal elements of the tridiagonal matrix.   
-            On normal exit, D contains the eigenvalues, in descending   
-            order.   
+/*  Z       (input/output) COMPLEX*16 array, dimension (LDZ, N) */
+/*          On entry, if COMPZ = 'V', the unitary matrix used in the */
+/*          reduction to tridiagonal form. */
+/*          On exit, if COMPZ = 'V', the orthonormal eigenvectors of the */
+/*          original Hermitian matrix; */
+/*          if COMPZ = 'I', the orthonormal eigenvectors of the */
+/*          tridiagonal matrix. */
+/*          If INFO > 0 on exit, Z contains the eigenvectors associated */
+/*          with only the stored eigenvalues. */
+/*          If  COMPZ = 'N', then Z is not referenced. */
 
-    E       (input/output) DOUBLE PRECISION array, dimension (N-1)   
-            On entry, the (n-1) subdiagonal elements of the tridiagonal   
-            matrix.   
-            On exit, E has been destroyed.   
+/*  LDZ     (input) INTEGER */
+/*          The leading dimension of the array Z.  LDZ >= 1, and if */
+/*          COMPZ = 'V' or 'I', LDZ >= MAX(1,N). */
 
-    Z       (input/output) COMPLEX*16 array, dimension (LDZ, N)   
-            On entry, if COMPZ = 'V', the unitary matrix used in the   
-            reduction to tridiagonal form.   
-            On exit, if COMPZ = 'V', the orthonormal eigenvectors of the   
-            original Hermitian matrix;   
-            if COMPZ = 'I', the orthonormal eigenvectors of the   
-            tridiagonal matrix.   
-            If INFO > 0 on exit, Z contains the eigenvectors associated   
-            with only the stored eigenvalues.   
-            If  COMPZ = 'N', then Z is not referenced.   
+/*  WORK    (workspace) DOUBLE PRECISION array, dimension (4*N) */
 
-    LDZ     (input) INTEGER   
-            The leading dimension of the array Z.  LDZ >= 1, and if   
-            COMPZ = 'V' or 'I', LDZ >= max(1,N).   
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit. */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value. */
+/*          > 0:  if INFO = i, and i is: */
+/*                <= N  the Cholesky factorization of the matrix could */
+/*                      not be performed because the i-th principal minor */
+/*                      was not positive definite. */
+/*                > N   the SVD algorithm failed to converge; */
+/*                      if INFO = N+i, i off-diagonal elements of the */
+/*                      bidiagonal factor did not converge to zero. */
 
-    WORK    (workspace) DOUBLE PRECISION array, dimension (4*N)   
+/*  ==================================================================== */
 
-    INFO    (output) INTEGER   
-            = 0:  successful exit.   
-            < 0:  if INFO = -i, the i-th argument had an illegal value.   
-            > 0:  if INFO = i, and i is:   
-                  <= N  the Cholesky factorization of the matrix could   
-                        not be performed because the i-th principal minor   
-                        was not positive definite.   
-                  > N   the SVD algorithm failed to converge;   
-                        if INFO = N+i, i off-diagonal elements of the   
-                        bidiagonal factor did not converge to zero.   
+/*     .. Parameters .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Local Arrays .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
 
-    ====================================================================   
+/*     Test the input parameters. */
 
-
-       Test the input parameters.   
-
-       Parameter adjustments */
+    /* Parameter adjustments */
     --d__;
     --e;
     z_dim1 = *ldz;
-    z_offset = 1 + z_dim1 * 1;
+    z_offset = 1 + z_dim1;
     z__ -= z_offset;
     --work;
 
@@ -151,7 +169,7 @@ static integer c__1 = 1;
 	*info = -1;
     } else if (*n < 0) {
 	*info = -2;
-    } else if (*ldz < 1 || icompz > 0 && *ldz < max(1,*n)) {
+    } else if (*ldz < 1 || icompz > 0 && *ldz < MAX(1,*n)) {
 	*info = -6;
     }
     if (*info != 0) {
@@ -168,7 +186,7 @@ static integer c__1 = 1;
 
     if (*n == 1) {
 	if (icompz > 0) {
-	    i__1 = z___subscr(1, 1);
+	    i__1 = z_dim1 + 1;
 	    z__[i__1].r = 1., z__[i__1].i = 0.;
 	}
 	return 0;
@@ -194,8 +212,8 @@ static integer c__1 = 1;
 /* L20: */
     }
 
-/*     Call ZBDSQR to compute the singular values/vectors of the   
-       bidiagonal factor. */
+/*     Call ZBDSQR to compute the singular values/vectors of the */
+/*     bidiagonal factor. */
 
     if (icompz > 0) {
 	nru = *n;
@@ -222,8 +240,3 @@ static integer c__1 = 1;
 /*     End of ZPTEQR */
 
 } /* zpteqr_ */
-
-#undef z___ref
-#undef z___subscr
-
-

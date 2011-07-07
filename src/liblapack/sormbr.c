@@ -1,164 +1,189 @@
+/* sormbr.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int sormbr_(char *vect, char *side, char *trans, integer *m, 
-	integer *n, integer *k, real *a, integer *lda, real *tau, real *c__, 
-	integer *ldc, real *work, integer *lwork, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+static int c_n1 = -1;
+static int c__2 = 2;
+
+ int sormbr_(char *vect, char *side, char *trans, int *m, 
+	int *n, int *k, float *a, int *lda, float *tau, float *c__, 
+	int *ldc, float *work, int *lwork, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    If VECT = 'Q', SORMBR overwrites the general real M-by-N matrix C   
-    with   
-                    SIDE = 'L'     SIDE = 'R'   
-    TRANS = 'N':      Q * C          C * Q   
-    TRANS = 'T':      Q**T * C       C * Q**T   
-
-    If VECT = 'P', SORMBR overwrites the general real M-by-N matrix C   
-    with   
-                    SIDE = 'L'     SIDE = 'R'   
-    TRANS = 'N':      P * C          C * P   
-    TRANS = 'T':      P**T * C       C * P**T   
-
-    Here Q and P**T are the orthogonal matrices determined by SGEBRD when   
-    reducing a real matrix A to bidiagonal form: A = Q * B * P**T. Q and   
-    P**T are defined as products of elementary reflectors H(i) and G(i)   
-    respectively.   
-
-    Let nq = m if SIDE = 'L' and nq = n if SIDE = 'R'. Thus nq is the   
-    order of the orthogonal matrix Q or P**T that is applied.   
-
-    If VECT = 'Q', A is assumed to have been an NQ-by-K matrix:   
-    if nq >= k, Q = H(1) H(2) . . . H(k);   
-    if nq < k, Q = H(1) H(2) . . . H(nq-1).   
-
-    If VECT = 'P', A is assumed to have been a K-by-NQ matrix:   
-    if k < nq, P = G(1) G(2) . . . G(k);   
-    if k >= nq, P = G(1) G(2) . . . G(nq-1).   
-
-    Arguments   
-    =========   
-
-    VECT    (input) CHARACTER*1   
-            = 'Q': apply Q or Q**T;   
-            = 'P': apply P or P**T.   
-
-    SIDE    (input) CHARACTER*1   
-            = 'L': apply Q, Q**T, P or P**T from the Left;   
-            = 'R': apply Q, Q**T, P or P**T from the Right.   
-
-    TRANS   (input) CHARACTER*1   
-            = 'N':  No transpose, apply Q  or P;   
-            = 'T':  Transpose, apply Q**T or P**T.   
-
-    M       (input) INTEGER   
-            The number of rows of the matrix C. M >= 0.   
-
-    N       (input) INTEGER   
-            The number of columns of the matrix C. N >= 0.   
-
-    K       (input) INTEGER   
-            If VECT = 'Q', the number of columns in the original   
-            matrix reduced by SGEBRD.   
-            If VECT = 'P', the number of rows in the original   
-            matrix reduced by SGEBRD.   
-            K >= 0.   
-
-    A       (input) REAL array, dimension   
-                                  (LDA,min(nq,K)) if VECT = 'Q'   
-                                  (LDA,nq)        if VECT = 'P'   
-            The vectors which define the elementary reflectors H(i) and   
-            G(i), whose products determine the matrices Q and P, as   
-            returned by SGEBRD.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.   
-            If VECT = 'Q', LDA >= max(1,nq);   
-            if VECT = 'P', LDA >= max(1,min(nq,K)).   
-
-    TAU     (input) REAL array, dimension (min(nq,K))   
-            TAU(i) must contain the scalar factor of the elementary   
-            reflector H(i) or G(i) which determines Q or P, as returned   
-            by SGEBRD in the array argument TAUQ or TAUP.   
-
-    C       (input/output) REAL array, dimension (LDC,N)   
-            On entry, the M-by-N matrix C.   
-            On exit, C is overwritten by Q*C or Q**T*C or C*Q**T or C*Q   
-            or P*C or P**T*C or C*P or C*P**T.   
-
-    LDC     (input) INTEGER   
-            The leading dimension of the array C. LDC >= max(1,M).   
-
-    WORK    (workspace/output) REAL array, dimension (LWORK)   
-            On exit, if INFO = 0, WORK(1) returns the optimal LWORK.   
-
-    LWORK   (input) INTEGER   
-            The dimension of the array WORK.   
-            If SIDE = 'L', LWORK >= max(1,N);   
-            if SIDE = 'R', LWORK >= max(1,M).   
-            For optimum performance LWORK >= N*NB if SIDE = 'L', and   
-            LWORK >= M*NB if SIDE = 'R', where NB is the optimal   
-            blocksize.   
-
-            If LWORK = -1, then a workspace query is assumed; the routine   
-            only calculates the optimal size of the WORK array, returns   
-            this value as the first entry of the WORK array, and no error   
-            message related to LWORK is issued by XERBLA.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-
-    =====================================================================   
-
-
-       Test the input arguments   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    static integer c_n1 = -1;
-    static integer c__2 = 2;
-    
     /* System generated locals */
     address a__1[2];
-    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3[2];
+    int a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3[2];
     char ch__1[2];
-    /* Builtin functions   
-       Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
+
+    /* Builtin functions */
+     int s_cat(char *, char **, int *, int *, unsigned long);
+
     /* Local variables */
-    static logical left;
-    extern logical lsame_(char *, char *);
-    static integer iinfo, i1, i2, nb, mi, ni, nq, nw;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
-    static logical notran, applyq;
-    static char transt[1];
-    extern /* Subroutine */ int sormlq_(char *, char *, integer *, integer *, 
-	    integer *, real *, integer *, real *, real *, integer *, real *, 
-	    integer *, integer *);
-    static integer lwkopt;
-    static logical lquery;
-    extern /* Subroutine */ int sormqr_(char *, char *, integer *, integer *, 
-	    integer *, real *, integer *, real *, real *, integer *, real *, 
-	    integer *, integer *);
-#define a_ref(a_1,a_2) a[(a_2)*a_dim1 + a_1]
-#define c___ref(a_1,a_2) c__[(a_2)*c_dim1 + a_1]
+    int i1, i2, nb, mi, ni, nq, nw;
+    int left;
+    extern int lsame_(char *, char *);
+    int iinfo;
+    extern  int xerbla_(char *, int *);
+    extern int ilaenv_(int *, char *, char *, int *, int *, 
+	    int *, int *);
+    int notran, applyq;
+    char transt[1];
+    extern  int sormlq_(char *, char *, int *, int *, 
+	    int *, float *, int *, float *, float *, int *, float *, 
+	    int *, int *);
+    int lwkopt;
+    int lquery;
+    extern  int sormqr_(char *, char *, int *, int *, 
+	    int *, float *, int *, float *, float *, int *, float *, 
+	    int *, int *);
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  If VECT = 'Q', SORMBR overwrites the general float M-by-N matrix C */
+/*  with */
+/*                  SIDE = 'L'     SIDE = 'R' */
+/*  TRANS = 'N':      Q * C          C * Q */
+/*  TRANS = 'T':      Q**T * C       C * Q**T */
+
+/*  If VECT = 'P', SORMBR overwrites the general float M-by-N matrix C */
+/*  with */
+/*                  SIDE = 'L'     SIDE = 'R' */
+/*  TRANS = 'N':      P * C          C * P */
+/*  TRANS = 'T':      P**T * C       C * P**T */
+
+/*  Here Q and P**T are the orthogonal matrices determined by SGEBRD when */
+/*  reducing a float matrix A to bidiagonal form: A = Q * B * P**T. Q and */
+/*  P**T are defined as products of elementary reflectors H(i) and G(i) */
+/*  respectively. */
+
+/*  Let nq = m if SIDE = 'L' and nq = n if SIDE = 'R'. Thus nq is the */
+/*  order of the orthogonal matrix Q or P**T that is applied. */
+
+/*  If VECT = 'Q', A is assumed to have been an NQ-by-K matrix: */
+/*  if nq >= k, Q = H(1) H(2) . . . H(k); */
+/*  if nq < k, Q = H(1) H(2) . . . H(nq-1). */
+
+/*  If VECT = 'P', A is assumed to have been a K-by-NQ matrix: */
+/*  if k < nq, P = G(1) G(2) . . . G(k); */
+/*  if k >= nq, P = G(1) G(2) . . . G(nq-1). */
+
+/*  Arguments */
+/*  ========= */
+
+/*  VECT    (input) CHARACTER*1 */
+/*          = 'Q': apply Q or Q**T; */
+/*          = 'P': apply P or P**T. */
+
+/*  SIDE    (input) CHARACTER*1 */
+/*          = 'L': apply Q, Q**T, P or P**T from the Left; */
+/*          = 'R': apply Q, Q**T, P or P**T from the Right. */
+
+/*  TRANS   (input) CHARACTER*1 */
+/*          = 'N':  No transpose, apply Q  or P; */
+/*          = 'T':  Transpose, apply Q**T or P**T. */
+
+/*  M       (input) INTEGER */
+/*          The number of rows of the matrix C. M >= 0. */
+
+/*  N       (input) INTEGER */
+/*          The number of columns of the matrix C. N >= 0. */
+
+/*  K       (input) INTEGER */
+/*          If VECT = 'Q', the number of columns in the original */
+/*          matrix reduced by SGEBRD. */
+/*          If VECT = 'P', the number of rows in the original */
+/*          matrix reduced by SGEBRD. */
+/*          K >= 0. */
+
+/*  A       (input) REAL array, dimension */
+/*                                (LDA,MIN(nq,K)) if VECT = 'Q' */
+/*                                (LDA,nq)        if VECT = 'P' */
+/*          The vectors which define the elementary reflectors H(i) and */
+/*          G(i), whose products determine the matrices Q and P, as */
+/*          returned by SGEBRD. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A. */
+/*          If VECT = 'Q', LDA >= MAX(1,nq); */
+/*          if VECT = 'P', LDA >= MAX(1,MIN(nq,K)). */
+
+/*  TAU     (input) REAL array, dimension (MIN(nq,K)) */
+/*          TAU(i) must contain the scalar factor of the elementary */
+/*          reflector H(i) or G(i) which determines Q or P, as returned */
+/*          by SGEBRD in the array argument TAUQ or TAUP. */
+
+/*  C       (input/output) REAL array, dimension (LDC,N) */
+/*          On entry, the M-by-N matrix C. */
+/*          On exit, C is overwritten by Q*C or Q**T*C or C*Q**T or C*Q */
+/*          or P*C or P**T*C or C*P or C*P**T. */
+
+/*  LDC     (input) INTEGER */
+/*          The leading dimension of the array C. LDC >= MAX(1,M). */
+
+/*  WORK    (workspace/output) REAL array, dimension (MAX(1,LWORK)) */
+/*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK. */
+
+/*  LWORK   (input) INTEGER */
+/*          The dimension of the array WORK. */
+/*          If SIDE = 'L', LWORK >= MAX(1,N); */
+/*          if SIDE = 'R', LWORK >= MAX(1,M). */
+/*          For optimum performance LWORK >= N*NB if SIDE = 'L', and */
+/*          LWORK >= M*NB if SIDE = 'R', where NB is the optimal */
+/*          blocksize. */
+
+/*          If LWORK = -1, then a workspace query is assumed; the routine */
+/*          only calculates the optimal size of the WORK array, returns */
+/*          this value as the first entry of the WORK array, and no error */
+/*          message related to LWORK is issued by XERBLA. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+
+/*  ===================================================================== */
+
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input arguments */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     --tau;
     c_dim1 = *ldc;
-    c_offset = 1 + c_dim1 * 1;
+    c_offset = 1 + c_dim1;
     c__ -= c_offset;
     --work;
 
@@ -192,12 +217,12 @@
 	*info = -6;
     } else /* if(complicated condition) */ {
 /* Computing MAX */
-	i__1 = 1, i__2 = min(nq,*k);
-	if (applyq && *lda < max(1,nq) || ! applyq && *lda < max(i__1,i__2)) {
+	i__1 = 1, i__2 = MIN(nq,*k);
+	if (applyq && *lda < MAX(1,nq) || ! applyq && *lda < MAX(i__1,i__2)) {
 	    *info = -8;
-	} else if (*ldc < max(1,*m)) {
+	} else if (*ldc < MAX(1,*m)) {
 	    *info = -11;
-	} else if (*lwork < max(1,nw) && ! lquery) {
+	} else if (*lwork < MAX(1,nw) && ! lquery) {
 	    *info = -13;
 	}
     }
@@ -208,44 +233,40 @@
 /* Writing concatenation */
 		i__3[0] = 1, a__1[0] = side;
 		i__3[1] = 1, a__1[1] = trans;
-		s_cat(ch__1, a__1, i__3, &c__2, (ftnlen)2);
+		s_cat(ch__1, a__1, i__3, &c__2, (unsigned long)2);
 		i__1 = *m - 1;
 		i__2 = *m - 1;
-		nb = ilaenv_(&c__1, "SORMQR", ch__1, &i__1, n, &i__2, &c_n1, (
-			ftnlen)6, (ftnlen)2);
+		nb = ilaenv_(&c__1, "SORMQR", ch__1, &i__1, n, &i__2, &c_n1);
 	    } else {
 /* Writing concatenation */
 		i__3[0] = 1, a__1[0] = side;
 		i__3[1] = 1, a__1[1] = trans;
-		s_cat(ch__1, a__1, i__3, &c__2, (ftnlen)2);
+		s_cat(ch__1, a__1, i__3, &c__2, (unsigned long)2);
 		i__1 = *n - 1;
 		i__2 = *n - 1;
-		nb = ilaenv_(&c__1, "SORMQR", ch__1, m, &i__1, &i__2, &c_n1, (
-			ftnlen)6, (ftnlen)2);
+		nb = ilaenv_(&c__1, "SORMQR", ch__1, m, &i__1, &i__2, &c_n1);
 	    }
 	} else {
 	    if (left) {
 /* Writing concatenation */
 		i__3[0] = 1, a__1[0] = side;
 		i__3[1] = 1, a__1[1] = trans;
-		s_cat(ch__1, a__1, i__3, &c__2, (ftnlen)2);
+		s_cat(ch__1, a__1, i__3, &c__2, (unsigned long)2);
 		i__1 = *m - 1;
 		i__2 = *m - 1;
-		nb = ilaenv_(&c__1, "SORMLQ", ch__1, &i__1, n, &i__2, &c_n1, (
-			ftnlen)6, (ftnlen)2);
+		nb = ilaenv_(&c__1, "SORMLQ", ch__1, &i__1, n, &i__2, &c_n1);
 	    } else {
 /* Writing concatenation */
 		i__3[0] = 1, a__1[0] = side;
 		i__3[1] = 1, a__1[1] = trans;
-		s_cat(ch__1, a__1, i__3, &c__2, (ftnlen)2);
+		s_cat(ch__1, a__1, i__3, &c__2, (unsigned long)2);
 		i__1 = *n - 1;
 		i__2 = *n - 1;
-		nb = ilaenv_(&c__1, "SORMLQ", ch__1, m, &i__1, &i__2, &c_n1, (
-			ftnlen)6, (ftnlen)2);
+		nb = ilaenv_(&c__1, "SORMLQ", ch__1, m, &i__1, &i__2, &c_n1);
 	    }
 	}
-	lwkopt = max(1,nw) * nb;
-	work[1] = (real) lwkopt;
+	lwkopt = MAX(1,nw) * nb;
+	work[1] = (float) lwkopt;
     }
 
     if (*info != 0) {
@@ -289,8 +310,8 @@
 		i2 = 2;
 	    }
 	    i__1 = nq - 1;
-	    sormqr_(side, trans, &mi, &ni, &i__1, &a_ref(2, 1), lda, &tau[1], 
-		    &c___ref(i1, i2), ldc, &work[1], lwork, &iinfo);
+	    sormqr_(side, trans, &mi, &ni, &i__1, &a[a_dim1 + 2], lda, &tau[1]
+, &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
 	}
     } else {
 
@@ -323,18 +344,14 @@
 		i2 = 2;
 	    }
 	    i__1 = nq - 1;
-	    sormlq_(side, transt, &mi, &ni, &i__1, &a_ref(1, 2), lda, &tau[1],
-		     &c___ref(i1, i2), ldc, &work[1], lwork, &iinfo);
+	    sormlq_(side, transt, &mi, &ni, &i__1, &a[(a_dim1 << 1) + 1], lda, 
+		     &tau[1], &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &
+		    iinfo);
 	}
     }
-    work[1] = (real) lwkopt;
+    work[1] = (float) lwkopt;
     return 0;
 
 /*     End of SORMBR */
 
 } /* sormbr_ */
-
-#undef c___ref
-#undef a_ref
-
-

@@ -1,98 +1,120 @@
+/* dlasq4.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-/*  -- translated by f2c (version 19990503).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
+		http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dlasq4_(integer *i0, integer *n0, doublereal *z__, 
-	integer *pp, integer *n0in, doublereal *dmin__, doublereal *dmin1, 
-	doublereal *dmin2, doublereal *dn, doublereal *dn1, doublereal *dn2, 
-	doublereal *tau, integer *ttype)
+ int dlasq4_(int *i0, int *n0, double *z__, 
+	int *pp, int *n0in, double *dmin__, double *dmin1, 
+	double *dmin2, double *dn, double *dn1, double *dn2, 
+	double *tau, int *ttype, double *g)
 {
-    /* Initialized data */
-
-    static doublereal g = 0.;
-
     /* System generated locals */
-    integer i__1;
-    doublereal d__1, d__2;
+    int i__1;
+    double d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
 
     /* Local variables */
-    static doublereal s, a2, b1, b2;
-    static integer i4, nn, np;
-    static doublereal gam, gap1, gap2;
+    double s, a2, b1, b2;
+    int i4, nn, np;
+    double gam, gap1, gap2;
 
 
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1999   
+/*  -- LAPACK routine (version 3.2)                                    -- */
 
+/*  -- Contributed by Osni Marques of the Lawrence Berkeley National   -- */
+/*  -- Laboratory and Beresford Parlett of the Univ. of California at  -- */
+/*  -- Berkeley                                                        -- */
+/*  -- November 2008                                                   -- */
 
-    Purpose   
-    =======   
+/*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */
+/*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
 
-    DLASQ4 computes an approximation TAU to the smallest eigenvalue   
-    using values of d from the previous transform.   
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
 
-    I0    (input) INTEGER   
-          First index.   
+/*  Purpose */
+/*  ======= */
 
-    N0    (input) INTEGER   
-          Last index.   
+/*  DLASQ4 computes an approximation TAU to the smallest eigenvalue */
+/*  using values of d from the previous transform. */
 
-    Z     (input) DOUBLE PRECISION array, dimension ( 4*N )   
-          Z holds the qd array.   
+/*  I0    (input) INTEGER */
+/*        First index. */
 
-    PP    (input) INTEGER   
-          PP=0 for ping, PP=1 for pong.   
+/*  N0    (input) INTEGER */
+/*        Last index. */
 
-    NOIN  (input) INTEGER   
-          The value of N0 at start of EIGTEST.   
+/*  Z     (input) DOUBLE PRECISION array, dimension ( 4*N ) */
+/*        Z holds the qd array. */
 
-    DMIN  (input) DOUBLE PRECISION   
-          Minimum value of d.   
+/*  PP    (input) INTEGER */
+/*        PP=0 for ping, PP=1 for pong. */
 
-    DMIN1 (input) DOUBLE PRECISION   
-          Minimum value of d, excluding D( N0 ).   
+/*  NOIN  (input) INTEGER */
+/*        The value of N0 at start of EIGTEST. */
 
-    DMIN2 (input) DOUBLE PRECISION   
-          Minimum value of d, excluding D( N0 ) and D( N0-1 ).   
+/*  DMIN  (input) DOUBLE PRECISION */
+/*        Minimum value of d. */
 
-    DN    (input) DOUBLE PRECISION   
-          d(N)   
+/*  DMIN1 (input) DOUBLE PRECISION */
+/*        Minimum value of d, excluding D( N0 ). */
 
-    DN1   (input) DOUBLE PRECISION   
-          d(N-1)   
+/*  DMIN2 (input) DOUBLE PRECISION */
+/*        Minimum value of d, excluding D( N0 ) and D( N0-1 ). */
 
-    DN2   (input) DOUBLE PRECISION   
-          d(N-2)   
+/*  DN    (input) DOUBLE PRECISION */
+/*        d(N) */
 
-    TAU   (output) DOUBLE PRECISION   
-          This is the shift.   
+/*  DN1   (input) DOUBLE PRECISION */
+/*        d(N-1) */
 
-    TTYPE (output) INTEGER   
-          Shift type.   
+/*  DN2   (input) DOUBLE PRECISION */
+/*        d(N-2) */
 
-    Further Details   
-    ===============   
-    CNST1 = 9/16   
+/*  TAU   (output) DOUBLE PRECISION */
+/*        This is the shift. */
 
-    =====================================================================   
+/*  TTYPE (output) INTEGER */
+/*        Shift type. */
 
-       Parameter adjustments */
+/*  G     (input/output) REAL */
+/*        G is passed as an argument in order to save its value between */
+/*        calls to DLASQ4. */
+
+/*  Further Details */
+/*  =============== */
+/*  CNST1 = 9/16 */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     A negative DMIN forces the shift to take that absolute value */
+/*     TTYPE records the type of shift. */
+
+    /* Parameter adjustments */
     --z__;
 
-    /* Function Body   
-
-       A negative DMIN forces the shift to take that absolute value   
-       TTYPE records the type of shift. */
-
+    /* Function Body */
     if (*dmin__ <= 0.) {
 	*tau = -(*dmin__);
 	*ttype = -1;
@@ -122,7 +144,7 @@
 		if (gap1 > 0. && gap1 > b1) {
 /* Computing MAX */
 		    d__1 = *dn - b1 / gap1 * b1, d__2 = *dmin__ * .5;
-		    s = max(d__1,d__2);
+		    s = MAX(d__1,d__2);
 		    *ttype = -2;
 		} else {
 		    s = 0.;
@@ -132,11 +154,11 @@
 		    if (a2 > b1 + b2) {
 /* Computing MIN */
 			d__1 = s, d__2 = a2 - (b1 + b2);
-			s = min(d__1,d__2);
+			s = MIN(d__1,d__2);
 		    }
 /* Computing MAX */
 		    d__1 = s, d__2 = *dmin__ * .333;
-		    s = max(d__1,d__2);
+		    s = MAX(d__1,d__2);
 		    *ttype = -3;
 		}
 	    } else {
@@ -182,7 +204,7 @@
 		    }
 		    b2 *= z__[i4] / z__[i4 - 2];
 		    a2 += b2;
-		    if (max(b2,b1) * 100. < a2 || .563 < a2) {
+		    if (MAX(b2,b1) * 100. < a2 || .563 < a2) {
 			goto L20;
 		    }
 /* L10: */
@@ -230,7 +252,7 @@ L20:
 		    }
 		    b2 *= z__[i4] / z__[i4 - 2];
 		    a2 += b2;
-		    if (max(b2,b1) * 100. < a2 || .563 < a2) {
+		    if (MAX(b2,b1) * 100. < a2 || .563 < a2) {
 			goto L40;
 		    }
 /* L30: */
@@ -247,13 +269,13 @@ L40:
 /*           Case 6, no information to guide us. */
 
 	    if (*ttype == -6) {
-		g += (1. - g) * .333;
+		*g += (1. - *g) * .333;
 	    } else if (*ttype == -18) {
-		g = .083250000000000005;
+		*g = .083250000000000005;
 	    } else {
-		g = .25;
+		*g = .25;
 	    }
-	    s = g * *dmin__;
+	    s = *g * *dmin__;
 	    *ttype = -6;
 	}
 
@@ -283,7 +305,7 @@ L40:
 		}
 		b1 *= z__[i4] / z__[i4 - 2];
 		b2 += b1;
-		if (max(b1,a2) * 100. < b2) {
+		if (MAX(b1,a2) * 100. < b2) {
 		    goto L60;
 		}
 /* L50: */
@@ -297,11 +319,11 @@ L60:
 	    if (gap2 > 0. && gap2 > b2 * a2) {
 /* Computing MAX */
 		d__1 = s, d__2 = a2 * (1. - a2 * 1.01 * (b2 / gap2) * b2);
-		s = max(d__1,d__2);
+		s = MAX(d__1,d__2);
 	    } else {
 /* Computing MAX */
 		d__1 = s, d__2 = a2 * (1. - b2 * 1.01);
-		s = max(d__1,d__2);
+		s = MAX(d__1,d__2);
 		*ttype = -8;
 	    }
 	} else {
@@ -317,9 +339,9 @@ L60:
 
     } else if (*n0in == *n0 + 2) {
 
-/*        Two eigenvalues deflated. Use DMIN2, DN2 for DMIN and DN.   
+/*        Two eigenvalues deflated. Use DMIN2, DN2 for DMIN and DN. */
 
-          Cases 10 and 11. */
+/*        Cases 10 and 11. */
 
 	if (*dmin2 == *dn2 && z__[nn - 5] * 2. < z__[nn - 7]) {
 	    *ttype = -10;
@@ -354,11 +376,11 @@ L80:
 	    if (gap2 > 0. && gap2 > b2 * a2) {
 /* Computing MAX */
 		d__1 = s, d__2 = a2 * (1. - a2 * 1.01 * (b2 / gap2) * b2);
-		s = max(d__1,d__2);
+		s = MAX(d__1,d__2);
 	    } else {
 /* Computing MAX */
 		d__1 = s, d__2 = a2 * (1. - b2 * 1.01);
-		s = max(d__1,d__2);
+		s = MAX(d__1,d__2);
 	    }
 	} else {
 	    s = *dmin2 * .25;
@@ -378,4 +400,3 @@ L80:
 /*     End of DLASQ4 */
 
 } /* dlasq4_ */
-

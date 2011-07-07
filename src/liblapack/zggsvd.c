@@ -1,282 +1,307 @@
+/* zggsvd.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zggsvd_(char *jobu, char *jobv, char *jobq, integer *m, 
-	integer *n, integer *p, integer *k, integer *l, doublecomplex *a, 
-	integer *lda, doublecomplex *b, integer *ldb, doublereal *alpha, 
-	doublereal *beta, doublecomplex *u, integer *ldu, doublecomplex *v, 
-	integer *ldv, doublecomplex *q, integer *ldq, doublecomplex *work, 
-	doublereal *rwork, integer *iwork, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int zggsvd_(char *jobu, char *jobv, char *jobq, int *m, 
+	int *n, int *p, int *k, int *l, doublecomplex *a, 
+	int *lda, doublecomplex *b, int *ldb, double *alpha, 
+	double *beta, doublecomplex *u, int *ldu, doublecomplex *v, 
+	int *ldv, doublecomplex *q, int *ldq, doublecomplex *work, 
+	double *rwork, int *iwork, int *info)
 {
-/*  -- LAPACK driver routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    ZGGSVD computes the generalized singular value decomposition (GSVD)   
-    of an M-by-N complex matrix A and P-by-N complex matrix B:   
-
-          U'*A*Q = D1*( 0 R ),    V'*B*Q = D2*( 0 R )   
-
-    where U, V and Q are unitary matrices, and Z' means the conjugate   
-    transpose of Z.  Let K+L = the effective numerical rank of the   
-    matrix (A',B')', then R is a (K+L)-by-(K+L) nonsingular upper   
-    triangular matrix, D1 and D2 are M-by-(K+L) and P-by-(K+L) "diagonal"   
-    matrices and of the following structures, respectively:   
-
-    If M-K-L >= 0,   
-
-                        K  L   
-           D1 =     K ( I  0 )   
-                    L ( 0  C )   
-                M-K-L ( 0  0 )   
-
-                      K  L   
-           D2 =   L ( 0  S )   
-                P-L ( 0  0 )   
-
-                    N-K-L  K    L   
-      ( 0 R ) = K (  0   R11  R12 )   
-                L (  0    0   R22 )   
-    where   
-
-      C = diag( ALPHA(K+1), ... , ALPHA(K+L) ),   
-      S = diag( BETA(K+1),  ... , BETA(K+L) ),   
-      C**2 + S**2 = I.   
-
-      R is stored in A(1:K+L,N-K-L+1:N) on exit.   
-
-    If M-K-L < 0,   
-
-                      K M-K K+L-M   
-           D1 =   K ( I  0    0   )   
-                M-K ( 0  C    0   )   
-
-                        K M-K K+L-M   
-           D2 =   M-K ( 0  S    0  )   
-                K+L-M ( 0  0    I  )   
-                  P-L ( 0  0    0  )   
-
-                       N-K-L  K   M-K  K+L-M   
-      ( 0 R ) =     K ( 0    R11  R12  R13  )   
-                  M-K ( 0     0   R22  R23  )   
-                K+L-M ( 0     0    0   R33  )   
-
-    where   
-
-      C = diag( ALPHA(K+1), ... , ALPHA(M) ),   
-      S = diag( BETA(K+1),  ... , BETA(M) ),   
-      C**2 + S**2 = I.   
-
-      (R11 R12 R13 ) is stored in A(1:M, N-K-L+1:N), and R33 is stored   
-      ( 0  R22 R23 )   
-      in B(M-K+1:L,N+M-K-L+1:N) on exit.   
-
-    The routine computes C, S, R, and optionally the unitary   
-    transformation matrices U, V and Q.   
-
-    In particular, if B is an N-by-N nonsingular matrix, then the GSVD of   
-    A and B implicitly gives the SVD of A*inv(B):   
-                         A*inv(B) = U*(D1*inv(D2))*V'.   
-    If ( A',B')' has orthnormal columns, then the GSVD of A and B is also   
-    equal to the CS decomposition of A and B. Furthermore, the GSVD can   
-    be used to derive the solution of the eigenvalue problem:   
-                         A'*A x = lambda* B'*B x.   
-    In some literature, the GSVD of A and B is presented in the form   
-                     U'*A*X = ( 0 D1 ),   V'*B*X = ( 0 D2 )   
-    where U and V are orthogonal and X is nonsingular, and D1 and D2 are   
-    ``diagonal''.  The former GSVD form can be converted to the latter   
-    form by taking the nonsingular matrix X as   
-
-                          X = Q*(  I   0    )   
-                                (  0 inv(R) )   
-
-    Arguments   
-    =========   
-
-    JOBU    (input) CHARACTER*1   
-            = 'U':  Unitary matrix U is computed;   
-            = 'N':  U is not computed.   
-
-    JOBV    (input) CHARACTER*1   
-            = 'V':  Unitary matrix V is computed;   
-            = 'N':  V is not computed.   
-
-    JOBQ    (input) CHARACTER*1   
-            = 'Q':  Unitary matrix Q is computed;   
-            = 'N':  Q is not computed.   
-
-    M       (input) INTEGER   
-            The number of rows of the matrix A.  M >= 0.   
-
-    N       (input) INTEGER   
-            The number of columns of the matrices A and B.  N >= 0.   
-
-    P       (input) INTEGER   
-            The number of rows of the matrix B.  P >= 0.   
-
-    K       (output) INTEGER   
-    L       (output) INTEGER   
-            On exit, K and L specify the dimension of the subblocks   
-            described in Purpose.   
-            K + L = effective numerical rank of (A',B')'.   
-
-    A       (input/output) COMPLEX*16 array, dimension (LDA,N)   
-            On entry, the M-by-N matrix A.   
-            On exit, A contains the triangular matrix R, or part of R.   
-            See Purpose for details.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A. LDA >= max(1,M).   
-
-    B       (input/output) COMPLEX*16 array, dimension (LDB,N)   
-            On entry, the P-by-N matrix B.   
-            On exit, B contains part of the triangular matrix R if   
-            M-K-L < 0.  See Purpose for details.   
-
-    LDB     (input) INTEGER   
-            The leading dimension of the array B. LDB >= max(1,P).   
-
-    ALPHA   (output) DOUBLE PRECISION array, dimension (N)   
-    BETA    (output) DOUBLE PRECISION array, dimension (N)   
-            On exit, ALPHA and BETA contain the generalized singular   
-            value pairs of A and B;   
-              ALPHA(1:K) = 1,   
-              BETA(1:K)  = 0,   
-            and if M-K-L >= 0,   
-              ALPHA(K+1:K+L) = C,   
-              BETA(K+1:K+L)  = S,   
-            or if M-K-L < 0,   
-              ALPHA(K+1:M)= C, ALPHA(M+1:K+L)= 0   
-              BETA(K+1:M) = S, BETA(M+1:K+L) = 1   
-            and   
-              ALPHA(K+L+1:N) = 0   
-              BETA(K+L+1:N)  = 0   
-
-    U       (output) COMPLEX*16 array, dimension (LDU,M)   
-            If JOBU = 'U', U contains the M-by-M unitary matrix U.   
-            If JOBU = 'N', U is not referenced.   
-
-    LDU     (input) INTEGER   
-            The leading dimension of the array U. LDU >= max(1,M) if   
-            JOBU = 'U'; LDU >= 1 otherwise.   
-
-    V       (output) COMPLEX*16 array, dimension (LDV,P)   
-            If JOBV = 'V', V contains the P-by-P unitary matrix V.   
-            If JOBV = 'N', V is not referenced.   
-
-    LDV     (input) INTEGER   
-            The leading dimension of the array V. LDV >= max(1,P) if   
-            JOBV = 'V'; LDV >= 1 otherwise.   
-
-    Q       (output) COMPLEX*16 array, dimension (LDQ,N)   
-            If JOBQ = 'Q', Q contains the N-by-N unitary matrix Q.   
-            If JOBQ = 'N', Q is not referenced.   
-
-    LDQ     (input) INTEGER   
-            The leading dimension of the array Q. LDQ >= max(1,N) if   
-            JOBQ = 'Q'; LDQ >= 1 otherwise.   
-
-    WORK    (workspace) COMPLEX*16 array, dimension (max(3*N,M,P)+N)   
-
-    RWORK   (workspace) DOUBLE PRECISION array, dimension (2*N)   
-
-    IWORK   (workspace/output) INTEGER array, dimension (N)   
-            On exit, IWORK stores the sorting information. More   
-            precisely, the following loop will sort ALPHA   
-               for I = K+1, min(M,K+L)   
-                   swap ALPHA(I) and ALPHA(IWORK(I))   
-               endfor   
-            such that ALPHA(1) >= ALPHA(2) >= ... >= ALPHA(N).   
-
-    INFO    (output)INTEGER   
-            = 0:  successful exit.   
-            < 0:  if INFO = -i, the i-th argument had an illegal value.   
-            > 0:  if INFO = 1, the Jacobi-type procedure failed to   
-                  converge.  For further details, see subroutine ZTGSJA.   
-
-    Internal Parameters   
-    ===================   
-
-    TOLA    DOUBLE PRECISION   
-    TOLB    DOUBLE PRECISION   
-            TOLA and TOLB are the thresholds to determine the effective   
-            rank of (A',B')'. Generally, they are set to   
-                     TOLA = MAX(M,N)*norm(A)*MAZHEPS,   
-                     TOLB = MAX(P,N)*norm(B)*MAZHEPS.   
-            The size of TOLA and TOLB may affect the size of backward   
-            errors of the decomposition.   
-
-    Further Details   
-    ===============   
-
-    2-96 Based on modifications by   
-       Ming Gu and Huan Ren, Computer Science Division, University of   
-       California at Berkeley, USA   
-
-    =====================================================================   
-
-
-       Decode and test the input parameters   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, 
+    int a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, 
 	    u_offset, v_dim1, v_offset, i__1, i__2;
+
     /* Local variables */
-    static integer ibnd;
-    static doublereal tola;
-    static integer isub;
-    static doublereal tolb, unfl, temp, smax;
-    static integer i__, j;
-    extern logical lsame_(char *, char *);
-    static doublereal anorm, bnorm;
-    extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *);
-    static logical wantq, wantu, wantv;
-    extern doublereal dlamch_(char *);
-    static integer ncycle;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, 
-	    integer *, doublereal *);
-    extern /* Subroutine */ int ztgsja_(char *, char *, char *, integer *, 
-	    integer *, integer *, integer *, integer *, doublecomplex *, 
-	    integer *, doublecomplex *, integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, integer *), 
-	    zggsvp_(char *, char *, char *, integer *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublereal *, doublereal *, integer *, integer *, doublecomplex *,
-	     integer *, doublecomplex *, integer *, doublecomplex *, integer *
-	    , integer *, doublereal *, doublecomplex *, doublecomplex *, 
-	    integer *);
-    static doublereal ulp;
+    int i__, j;
+    double ulp;
+    int ibnd;
+    double tola;
+    int isub;
+    double tolb, unfl, temp, smax;
+    extern int lsame_(char *, char *);
+    double anorm, bnorm;
+    extern  int dcopy_(int *, double *, int *, 
+	    double *, int *);
+    int wantq, wantu, wantv;
+    extern double dlamch_(char *);
+    int ncycle;
+    extern  int xerbla_(char *, int *);
+    extern double zlange_(char *, int *, int *, doublecomplex *, 
+	    int *, double *);
+    extern  int ztgsja_(char *, char *, char *, int *, 
+	    int *, int *, int *, int *, doublecomplex *, 
+	    int *, doublecomplex *, int *, double *, double *, 
+	     double *, double *, doublecomplex *, int *, 
+	    doublecomplex *, int *, doublecomplex *, int *, 
+	    doublecomplex *, int *, int *), 
+	    zggsvp_(char *, char *, char *, int *, int *, int *, 
+	    doublecomplex *, int *, doublecomplex *, int *, 
+	    double *, double *, int *, int *, doublecomplex *, 
+	     int *, doublecomplex *, int *, doublecomplex *, int *
+, int *, double *, doublecomplex *, doublecomplex *, 
+	    int *);
 
 
+/*  -- LAPACK driver routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZGGSVD computes the generalized singular value decomposition (GSVD) */
+/*  of an M-by-N complex matrix A and P-by-N complex matrix B: */
+
+/*        U'*A*Q = D1*( 0 R ),    V'*B*Q = D2*( 0 R ) */
+
+/*  where U, V and Q are unitary matrices, and Z' means the conjugate */
+/*  transpose of Z.  Let K+L = the effective numerical rank of the */
+/*  matrix (A',B')', then R is a (K+L)-by-(K+L) nonsingular upper */
+/*  triangular matrix, D1 and D2 are M-by-(K+L) and P-by-(K+L) "diagonal" */
+/*  matrices and of the following structures, respectively: */
+
+/*  If M-K-L >= 0, */
+
+/*                      K  L */
+/*         D1 =     K ( I  0 ) */
+/*                  L ( 0  C ) */
+/*              M-K-L ( 0  0 ) */
+
+/*                    K  L */
+/*         D2 =   L ( 0  S ) */
+/*              P-L ( 0  0 ) */
+
+/*                  N-K-L  K    L */
+/*    ( 0 R ) = K (  0   R11  R12 ) */
+/*              L (  0    0   R22 ) */
+/*  where */
+
+/*    C = diag( ALPHA(K+1), ... , ALPHA(K+L) ), */
+/*    S = diag( BETA(K+1),  ... , BETA(K+L) ), */
+/*    C**2 + S**2 = I. */
+
+/*    R is stored in A(1:K+L,N-K-L+1:N) on exit. */
+
+/*  If M-K-L < 0, */
+
+/*                    K M-K K+L-M */
+/*         D1 =   K ( I  0    0   ) */
+/*              M-K ( 0  C    0   ) */
+
+/*                      K M-K K+L-M */
+/*         D2 =   M-K ( 0  S    0  ) */
+/*              K+L-M ( 0  0    I  ) */
+/*                P-L ( 0  0    0  ) */
+
+/*                     N-K-L  K   M-K  K+L-M */
+/*    ( 0 R ) =     K ( 0    R11  R12  R13  ) */
+/*                M-K ( 0     0   R22  R23  ) */
+/*              K+L-M ( 0     0    0   R33  ) */
+
+/*  where */
+
+/*    C = diag( ALPHA(K+1), ... , ALPHA(M) ), */
+/*    S = diag( BETA(K+1),  ... , BETA(M) ), */
+/*    C**2 + S**2 = I. */
+
+/*    (R11 R12 R13 ) is stored in A(1:M, N-K-L+1:N), and R33 is stored */
+/*    ( 0  R22 R23 ) */
+/*    in B(M-K+1:L,N+M-K-L+1:N) on exit. */
+
+/*  The routine computes C, S, R, and optionally the unitary */
+/*  transformation matrices U, V and Q. */
+
+/*  In particular, if B is an N-by-N nonsingular matrix, then the GSVD of */
+/*  A and B implicitly gives the SVD of A*inv(B): */
+/*                       A*inv(B) = U*(D1*inv(D2))*V'. */
+/*  If ( A',B')' has orthnormal columns, then the GSVD of A and B is also */
+/*  equal to the CS decomposition of A and B. Furthermore, the GSVD can */
+/*  be used to derive the solution of the eigenvalue problem: */
+/*                       A'*A x = lambda* B'*B x. */
+/*  In some literature, the GSVD of A and B is presented in the form */
+/*                   U'*A*X = ( 0 D1 ),   V'*B*X = ( 0 D2 ) */
+/*  where U and V are orthogonal and X is nonsingular, and D1 and D2 are */
+/*  ``diagonal''.  The former GSVD form can be converted to the latter */
+/*  form by taking the nonsingular matrix X as */
+
+/*                        X = Q*(  I   0    ) */
+/*                              (  0 inv(R) ) */
+
+/*  Arguments */
+/*  ========= */
+
+/*  JOBU    (input) CHARACTER*1 */
+/*          = 'U':  Unitary matrix U is computed; */
+/*          = 'N':  U is not computed. */
+
+/*  JOBV    (input) CHARACTER*1 */
+/*          = 'V':  Unitary matrix V is computed; */
+/*          = 'N':  V is not computed. */
+
+/*  JOBQ    (input) CHARACTER*1 */
+/*          = 'Q':  Unitary matrix Q is computed; */
+/*          = 'N':  Q is not computed. */
+
+/*  M       (input) INTEGER */
+/*          The number of rows of the matrix A.  M >= 0. */
+
+/*  N       (input) INTEGER */
+/*          The number of columns of the matrices A and B.  N >= 0. */
+
+/*  P       (input) INTEGER */
+/*          The number of rows of the matrix B.  P >= 0. */
+
+/*  K       (output) INTEGER */
+/*  L       (output) INTEGER */
+/*          On exit, K and L specify the dimension of the subblocks */
+/*          described in Purpose. */
+/*          K + L = effective numerical rank of (A',B')'. */
+
+/*  A       (input/output) COMPLEX*16 array, dimension (LDA,N) */
+/*          On entry, the M-by-N matrix A. */
+/*          On exit, A contains the triangular matrix R, or part of R. */
+/*          See Purpose for details. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A. LDA >= MAX(1,M). */
+
+/*  B       (input/output) COMPLEX*16 array, dimension (LDB,N) */
+/*          On entry, the P-by-N matrix B. */
+/*          On exit, B contains part of the triangular matrix R if */
+/*          M-K-L < 0.  See Purpose for details. */
+
+/*  LDB     (input) INTEGER */
+/*          The leading dimension of the array B. LDB >= MAX(1,P). */
+
+/*  ALPHA   (output) DOUBLE PRECISION array, dimension (N) */
+/*  BETA    (output) DOUBLE PRECISION array, dimension (N) */
+/*          On exit, ALPHA and BETA contain the generalized singular */
+/*          value pairs of A and B; */
+/*            ALPHA(1:K) = 1, */
+/*            BETA(1:K)  = 0, */
+/*          and if M-K-L >= 0, */
+/*            ALPHA(K+1:K+L) = C, */
+/*            BETA(K+1:K+L)  = S, */
+/*          or if M-K-L < 0, */
+/*            ALPHA(K+1:M)= C, ALPHA(M+1:K+L)= 0 */
+/*            BETA(K+1:M) = S, BETA(M+1:K+L) = 1 */
+/*          and */
+/*            ALPHA(K+L+1:N) = 0 */
+/*            BETA(K+L+1:N)  = 0 */
+
+/*  U       (output) COMPLEX*16 array, dimension (LDU,M) */
+/*          If JOBU = 'U', U contains the M-by-M unitary matrix U. */
+/*          If JOBU = 'N', U is not referenced. */
+
+/*  LDU     (input) INTEGER */
+/*          The leading dimension of the array U. LDU >= MAX(1,M) if */
+/*          JOBU = 'U'; LDU >= 1 otherwise. */
+
+/*  V       (output) COMPLEX*16 array, dimension (LDV,P) */
+/*          If JOBV = 'V', V contains the P-by-P unitary matrix V. */
+/*          If JOBV = 'N', V is not referenced. */
+
+/*  LDV     (input) INTEGER */
+/*          The leading dimension of the array V. LDV >= MAX(1,P) if */
+/*          JOBV = 'V'; LDV >= 1 otherwise. */
+
+/*  Q       (output) COMPLEX*16 array, dimension (LDQ,N) */
+/*          If JOBQ = 'Q', Q contains the N-by-N unitary matrix Q. */
+/*          If JOBQ = 'N', Q is not referenced. */
+
+/*  LDQ     (input) INTEGER */
+/*          The leading dimension of the array Q. LDQ >= MAX(1,N) if */
+/*          JOBQ = 'Q'; LDQ >= 1 otherwise. */
+
+/*  WORK    (workspace) COMPLEX*16 array, dimension (MAX(3*N,M,P)+N) */
+
+/*  RWORK   (workspace) DOUBLE PRECISION array, dimension (2*N) */
+
+/*  IWORK   (workspace/output) INTEGER array, dimension (N) */
+/*          On exit, IWORK stores the sorting information. More */
+/*          precisely, the following loop will sort ALPHA */
+/*             for I = K+1, MIN(M,K+L) */
+/*                 swap ALPHA(I) and ALPHA(IWORK(I)) */
+/*             endfor */
+/*          such that ALPHA(1) >= ALPHA(2) >= ... >= ALPHA(N). */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit. */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value. */
+/*          > 0:  if INFO = 1, the Jacobi-type procedure failed to */
+/*                converge.  For further details, see subroutine ZTGSJA. */
+
+/*  Internal Parameters */
+/*  =================== */
+
+/*  TOLA    DOUBLE PRECISION */
+/*  TOLB    DOUBLE PRECISION */
+/*          TOLA and TOLB are the thresholds to determine the effective */
+/*          rank of (A',B')'. Generally, they are set to */
+/*                   TOLA = MAX(M,N)*norm(A)*MAZHEPS, */
+/*                   TOLB = MAX(P,N)*norm(B)*MAZHEPS. */
+/*          The size of TOLA and TOLB may affect the size of backward */
+/*          errors of the decomposition. */
+
+/*  Further Details */
+/*  =============== */
+
+/*  2-96 Based on modifications by */
+/*     Ming Gu and Huan Ren, Computer Science Division, University of */
+/*     California at Berkeley, USA */
+
+/*  ===================================================================== */
+
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Decode and test the input parameters */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     b_dim1 = *ldb;
-    b_offset = 1 + b_dim1 * 1;
+    b_offset = 1 + b_dim1;
     b -= b_offset;
     --alpha;
     --beta;
     u_dim1 = *ldu;
-    u_offset = 1 + u_dim1 * 1;
+    u_offset = 1 + u_dim1;
     u -= u_offset;
     v_dim1 = *ldv;
-    v_offset = 1 + v_dim1 * 1;
+    v_offset = 1 + v_dim1;
     v -= v_offset;
     q_dim1 = *ldq;
-    q_offset = 1 + q_dim1 * 1;
+    q_offset = 1 + q_dim1;
     q -= q_offset;
     --work;
     --rwork;
@@ -300,9 +325,9 @@
 	*info = -5;
     } else if (*p < 0) {
 	*info = -6;
-    } else if (*lda < max(1,*m)) {
+    } else if (*lda < MAX(1,*m)) {
 	*info = -10;
-    } else if (*ldb < max(1,*p)) {
+    } else if (*ldb < MAX(1,*p)) {
 	*info = -12;
     } else if (*ldu < 1 || wantu && *ldu < *m) {
 	*info = -16;
@@ -322,13 +347,13 @@
     anorm = zlange_("1", m, n, &a[a_offset], lda, &rwork[1]);
     bnorm = zlange_("1", p, n, &b[b_offset], ldb, &rwork[1]);
 
-/*     Get machine precision and set up threshold for determining   
-       the effective numerical rank of the matrices A and B. */
+/*     Get machine precision and set up threshold for determining */
+/*     the effective numerical rank of the matrices A and B. */
 
     ulp = dlamch_("Precision");
     unfl = dlamch_("Safe Minimum");
-    tola = max(*m,*n) * max(anorm,unfl) * ulp;
-    tolb = max(*p,*n) * max(bnorm,unfl) * ulp;
+    tola = MAX(*m,*n) * MAX(anorm,unfl) * ulp;
+    tolb = MAX(*p,*n) * MAX(bnorm,unfl) * ulp;
 
     zggsvp_(jobu, jobv, jobq, m, p, n, &a[a_offset], lda, &b[b_offset], ldb, &
 	    tola, &tolb, k, l, &u[u_offset], ldu, &v[v_offset], ldv, &q[
@@ -341,13 +366,13 @@
 	    ldb, &tola, &tolb, &alpha[1], &beta[1], &u[u_offset], ldu, &v[
 	    v_offset], ldv, &q[q_offset], ldq, &work[1], &ncycle, info);
 
-/*     Sort the singular values and store the pivot indices in IWORK   
-       Copy ALPHA to RWORK, then sort ALPHA in RWORK */
+/*     Sort the singular values and store the pivot indices in IWORK */
+/*     Copy ALPHA to RWORK, then sort ALPHA in RWORK */
 
     dcopy_(n, &alpha[1], &c__1, &rwork[1], &c__1);
 /* Computing MIN */
     i__1 = *l, i__2 = *m - *k;
-    ibnd = min(i__1,i__2);
+    ibnd = MIN(i__1,i__2);
     i__1 = ibnd;
     for (i__ = 1; i__ <= i__1; ++i__) {
 
@@ -379,4 +404,3 @@
 /*     End of ZGGSVD */
 
 } /* zggsvd_ */
-

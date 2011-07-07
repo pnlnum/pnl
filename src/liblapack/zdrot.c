@@ -1,17 +1,17 @@
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zdrot_(integer *n, doublecomplex *cx, integer *incx, 
-	doublecomplex *cy, integer *incy, doublereal *c__, doublereal *s)
+ int zdrot_(int *n, doublecomplex *cx, int *incx, 
+	doublecomplex *cy, int *incy, double *c__, double *s)
 {
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4;
+    int i__1, i__2, i__3, i__4;
     doublecomplex z__1, z__2, z__3;
     /* Local variables */
-    static integer i__;
+    static int i__;
     static doublecomplex ctemp;
-    static integer ix, iy;
-/*     applies a plane rotation, where the cos and sin (c and s) are real   
+    static int ix, iy;
+/*     applies a plane rotation, where the cos and sin (c and s) are float   
        and the vectors cx and cy are complex.   
        jack dongarra, linpack, 3/11/78.   
    =====================================================================   

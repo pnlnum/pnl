@@ -1,10 +1,10 @@
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dlasd9_(integer *icompq, integer *ldu, integer *k, 
-	doublereal *d__, doublereal *z__, doublereal *vf, doublereal *vl, 
-	doublereal *difl, doublereal *difr, doublereal *dsigma, doublereal *
-	work, integer *info)
+ int dlasd9_(int *icompq, int *ldu, int *k, 
+	double *d__, double *z__, double *vf, double *vl, 
+	double *difl, double *difr, double *dsigma, double *
+	work, int *info)
 {
 /*  -- LAPACK auxiliary routine (version 3.0) --   
        Univ. of Tennessee, Oak Ridge National Lab, Argonne National Lab,   
@@ -98,36 +98,36 @@
 
        Parameter adjustments */
     /* Table of constant values */
-    static integer c__1 = 1;
-    static integer c__0 = 0;
-    static doublereal c_b8 = 1.;
+    static int c__1 = 1;
+    static int c__0 = 0;
+    static double c_b8 = 1.;
     
     /* System generated locals */
-    integer difr_dim1, difr_offset, i__1, i__2;
-    doublereal d__1, d__2;
+    int difr_dim1, difr_offset, i__1, i__2;
+    double d__1, d__2;
     /* Builtin functions */
-    double sqrt(doublereal), d_sign(doublereal *, doublereal *);
+    double sqrt(double), d_sign(double *, double *);
     /* Local variables */
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, 
-	    integer *);
-    static doublereal temp;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    static integer iwk2i, iwk3i, i__, j;
-    static doublereal diflj, difrj, dsigj;
-    extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *);
-    extern doublereal pnl_dlamc3(doublereal *, doublereal *);
-    extern /* Subroutine */ int dlasd4_(integer *, integer *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, integer *);
-    static doublereal dj;
-    extern /* Subroutine */ int dlascl_(char *, integer *, integer *, 
-	    doublereal *, doublereal *, integer *, integer *, doublereal *, 
-	    integer *, integer *), dlaset_(char *, integer *, integer 
-	    *, doublereal *, doublereal *, doublereal *, integer *), 
-	    xerbla_(char *, integer *);
-    static doublereal dsigjp, rho, djp1;
-    static integer iwk1, iwk2, iwk3;
+    extern double ddot_(int *, double *, int *, double *, 
+	    int *);
+    static double temp;
+    extern double dnrm2_(int *, double *, int *);
+    static int iwk2i, iwk3i, i__, j;
+    static double diflj, difrj, dsigj;
+    extern  int dcopy_(int *, double *, int *, 
+	    double *, int *);
+    extern double pnl_dlamc3(double *, double *);
+    extern  int dlasd4_(int *, int *, double *, 
+	    double *, double *, double *, double *, 
+	    double *, int *);
+    static double dj;
+    extern  int dlascl_(char *, int *, int *, 
+	    double *, double *, int *, int *, double *, 
+	    int *, int *), dlaset_(char *, int *, int 
+	    *, double *, double *, double *, int *), 
+	    xerbla_(char *, int *);
+    static double dsigjp, rho, djp1;
+    static int iwk1, iwk2, iwk3;
 #define difr_ref(a_1,a_2) difr[(a_2)*difr_dim1 + a_1]
 
 
@@ -161,7 +161,7 @@
 /*     Quick return if possible */
 
     if (*k == 1) {
-	d__[1] = abs(z__[1]);
+	d__[1] = ABS(z__[1]);
 	difl[1] = d__[1];
 	if (*icompq == 1) {
 	    difl[2] = 1.;
@@ -248,7 +248,7 @@
 
     i__1 = *k;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	d__2 = sqrt((d__1 = work[iwk3i + i__], abs(d__1)));
+	d__2 = sqrt((d__1 = work[iwk3i + i__], ABS(d__1)));
 	z__[i__] = d_sign(&d__2, &z__[i__]);
 /* L50: */
     }

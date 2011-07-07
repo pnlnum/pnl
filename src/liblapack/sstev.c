@@ -1,99 +1,125 @@
+/* sstev.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int sstev_(char *jobz, integer *n, real *d__, real *e, real *
-	z__, integer *ldz, real *work, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int sstev_(char *jobz, int *n, float *d__, float *e, float *
+	z__, int *ldz, float *work, int *info)
 {
-/*  -- LAPACK driver routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
-
-
-    Purpose   
-    =======   
-
-    SSTEV computes all eigenvalues and, optionally, eigenvectors of a   
-    real symmetric tridiagonal matrix A.   
-
-    Arguments   
-    =========   
-
-    JOBZ    (input) CHARACTER*1   
-            = 'N':  Compute eigenvalues only;   
-            = 'V':  Compute eigenvalues and eigenvectors.   
-
-    N       (input) INTEGER   
-            The order of the matrix.  N >= 0.   
-
-    D       (input/output) REAL array, dimension (N)   
-            On entry, the n diagonal elements of the tridiagonal matrix   
-            A.   
-            On exit, if INFO = 0, the eigenvalues in ascending order.   
-
-    E       (input/output) REAL array, dimension (N)   
-            On entry, the (n-1) subdiagonal elements of the tridiagonal   
-            matrix A, stored in elements 1 to N-1 of E; E(N) need not   
-            be set, but is used by the routine.   
-            On exit, the contents of E are destroyed.   
-
-    Z       (output) REAL array, dimension (LDZ, N)   
-            If JOBZ = 'V', then if INFO = 0, Z contains the orthonormal   
-            eigenvectors of the matrix A, with the i-th column of Z   
-            holding the eigenvector associated with D(i).   
-            If JOBZ = 'N', then Z is not referenced.   
-
-    LDZ     (input) INTEGER   
-            The leading dimension of the array Z.  LDZ >= 1, and if   
-            JOBZ = 'V', LDZ >= max(1,N).   
-
-    WORK    (workspace) REAL array, dimension (max(1,2*N-2))   
-            If JOBZ = 'N', WORK is not referenced.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-            > 0:  if INFO = i, the algorithm failed to converge; i   
-                  off-diagonal elements of E did not converge to zero.   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer z_dim1, z_offset, i__1;
-    real r__1;
+    int z_dim1, z_offset, i__1;
+    float r__1;
+
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
+
     /* Local variables */
-    static integer imax;
-    static real rmin, rmax, tnrm, sigma;
-    extern logical lsame_(char *, char *);
-    extern /* Subroutine */ int sscal_(integer *, real *, real *, integer *);
-    static logical wantz;
-    static integer iscale;
-    extern doublereal slamch_(char *);
-    static real safmin;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static real bignum;
-    extern doublereal slanst_(char *, integer *, real *, real *);
-    extern /* Subroutine */ int ssterf_(integer *, real *, real *, integer *);
-    static real smlnum;
-    extern /* Subroutine */ int ssteqr_(char *, integer *, real *, real *, 
-	    real *, integer *, real *, integer *);
-    static real eps;
-#define z___ref(a_1,a_2) z__[(a_2)*z_dim1 + a_1]
+    float eps;
+    int imax;
+    float rmin, rmax, tnrm, sigma;
+    extern int lsame_(char *, char *);
+    extern  int sscal_(int *, float *, float *, int *);
+    int wantz;
+    int iscale;
+    extern double slamch_(char *);
+    float safmin;
+    extern  int xerbla_(char *, int *);
+    float bignum;
+    extern double slanst_(char *, int *, float *, float *);
+    extern  int ssterf_(int *, float *, float *, int *);
+    float smlnum;
+    extern  int ssteqr_(char *, int *, float *, float *, 
+	    float *, int *, float *, int *);
 
 
+/*  -- LAPACK driver routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  SSTEV computes all eigenvalues and, optionally, eigenvectors of a */
+/*  float symmetric tridiagonal matrix A. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  JOBZ    (input) CHARACTER*1 */
+/*          = 'N':  Compute eigenvalues only; */
+/*          = 'V':  Compute eigenvalues and eigenvectors. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix.  N >= 0. */
+
+/*  D       (input/output) REAL array, dimension (N) */
+/*          On entry, the n diagonal elements of the tridiagonal matrix */
+/*          A. */
+/*          On exit, if INFO = 0, the eigenvalues in ascending order. */
+
+/*  E       (input/output) REAL array, dimension (N-1) */
+/*          On entry, the (n-1) subdiagonal elements of the tridiagonal */
+/*          matrix A, stored in elements 1 to N-1 of E. */
+/*          On exit, the contents of E are destroyed. */
+
+/*  Z       (output) REAL array, dimension (LDZ, N) */
+/*          If JOBZ = 'V', then if INFO = 0, Z contains the orthonormal */
+/*          eigenvectors of the matrix A, with the i-th column of Z */
+/*          holding the eigenvector associated with D(i). */
+/*          If JOBZ = 'N', then Z is not referenced. */
+
+/*  LDZ     (input) INTEGER */
+/*          The leading dimension of the array Z.  LDZ >= 1, and if */
+/*          JOBZ = 'V', LDZ >= MAX(1,N). */
+
+/*  WORK    (workspace) REAL array, dimension (MAX(1,2*N-2)) */
+/*          If JOBZ = 'N', WORK is not referenced. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+/*          > 0:  if INFO = i, the algorithm failed to converge; i */
+/*                off-diagonal elements of E did not converge to zero. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --d__;
     --e;
     z_dim1 = *ldz;
-    z_offset = 1 + z_dim1 * 1;
+    z_offset = 1 + z_dim1;
     z__ -= z_offset;
     --work;
 
@@ -123,7 +149,7 @@
 
     if (*n == 1) {
 	if (wantz) {
-	    z___ref(1, 1) = 1.f;
+	    z__[z_dim1 + 1] = 1.f;
 	}
 	return 0;
     }
@@ -154,8 +180,8 @@
 	sscal_(&i__1, &sigma, &e[1], &c__1);
     }
 
-/*     For eigenvalues only, call SSTERF.  For eigenvalues and   
-       eigenvectors, call SSTEQR. */
+/*     For eigenvalues only, call SSTERF.  For eigenvalues and */
+/*     eigenvectors, call SSTEQR. */
 
     if (! wantz) {
 	ssterf_(n, &d__[1], &e[1], info);
@@ -180,7 +206,3 @@
 /*     End of SSTEV */
 
 } /* sstev_ */
-
-#undef z___ref
-
-

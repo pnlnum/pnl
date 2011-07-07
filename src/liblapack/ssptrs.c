@@ -1,94 +1,119 @@
+/* ssptrs.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int ssptrs_(char *uplo, integer *n, integer *nrhs, real *ap, 
-	integer *ipiv, real *b, integer *ldb, integer *info)
+/* Table of constant values */
+
+static float c_b7 = -1.f;
+static int c__1 = 1;
+static float c_b19 = 1.f;
+
+ int ssptrs_(char *uplo, int *n, int *nrhs, float *ap, 
+	int *ipiv, float *b, int *ldb, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       March 31, 1993   
-
-
-    Purpose   
-    =======   
-
-    SSPTRS solves a system of linear equations A*X = B with a real   
-    symmetric matrix A stored in packed format using the factorization   
-    A = U*D*U**T or A = L*D*L**T computed by SSPTRF.   
-
-    Arguments   
-    =========   
-
-    UPLO    (input) CHARACTER*1   
-            Specifies whether the details of the factorization are stored   
-            as an upper or lower triangular matrix.   
-            = 'U':  Upper triangular, form is A = U*D*U**T;   
-            = 'L':  Lower triangular, form is A = L*D*L**T.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    NRHS    (input) INTEGER   
-            The number of right hand sides, i.e., the number of columns   
-            of the matrix B.  NRHS >= 0.   
-
-    AP      (input) REAL array, dimension (N*(N+1)/2)   
-            The block diagonal matrix D and the multipliers used to   
-            obtain the factor U or L as computed by SSPTRF, stored as a   
-            packed triangular matrix.   
-
-    IPIV    (input) INTEGER array, dimension (N)   
-            Details of the interchanges and the block structure of D   
-            as determined by SSPTRF.   
-
-    B       (input/output) REAL array, dimension (LDB,NRHS)   
-            On entry, the right hand side matrix B.   
-            On exit, the solution matrix X.   
-
-    LDB     (input) INTEGER   
-            The leading dimension of the array B.  LDB >= max(1,N).   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0: if INFO = -i, the i-th argument had an illegal value   
-
-    =====================================================================   
-
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static real c_b7 = -1.f;
-    static integer c__1 = 1;
-    static real c_b19 = 1.f;
-    
     /* System generated locals */
-    integer b_dim1, b_offset, i__1;
-    real r__1;
+    int b_dim1, b_offset, i__1;
+    float r__1;
+
     /* Local variables */
-    extern /* Subroutine */ int sger_(integer *, integer *, real *, real *, 
-	    integer *, real *, integer *, real *, integer *);
-    static real akm1k;
-    static integer j, k;
-    extern logical lsame_(char *, char *);
-    static real denom;
-    extern /* Subroutine */ int sscal_(integer *, real *, real *, integer *), 
-	    sgemv_(char *, integer *, integer *, real *, real *, integer *, 
-	    real *, integer *, real *, real *, integer *);
-    static logical upper;
-    extern /* Subroutine */ int sswap_(integer *, real *, integer *, real *, 
-	    integer *);
-    static real ak, bk;
-    static integer kc, kp;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static real akm1, bkm1;
-#define b_ref(a_1,a_2) b[(a_2)*b_dim1 + a_1]
+    int j, k;
+    float ak, bk;
+    int kc, kp;
+    float akm1, bkm1;
+    extern  int sger_(int *, int *, float *, float *, 
+	    int *, float *, int *, float *, int *);
+    float akm1k;
+    extern int lsame_(char *, char *);
+    float denom;
+    extern  int sscal_(int *, float *, float *, int *), 
+	    sgemv_(char *, int *, int *, float *, float *, int *, 
+	    float *, int *, float *, float *, int *);
+    int upper;
+    extern  int sswap_(int *, float *, int *, float *, 
+	    int *), xerbla_(char *, int *);
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  SSPTRS solves a system of linear equations A*X = B with a float */
+/*  symmetric matrix A stored in packed format using the factorization */
+/*  A = U*D*U**T or A = L*D*L**T computed by SSPTRF. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          Specifies whether the details of the factorization are stored */
+/*          as an upper or lower triangular matrix. */
+/*          = 'U':  Upper triangular, form is A = U*D*U**T; */
+/*          = 'L':  Lower triangular, form is A = L*D*L**T. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  NRHS    (input) INTEGER */
+/*          The number of right hand sides, i.e., the number of columns */
+/*          of the matrix B.  NRHS >= 0. */
+
+/*  AP      (input) REAL array, dimension (N*(N+1)/2) */
+/*          The block diagonal matrix D and the multipliers used to */
+/*          obtain the factor U or L as computed by SSPTRF, stored as a */
+/*          packed triangular matrix. */
+
+/*  IPIV    (input) INTEGER array, dimension (N) */
+/*          Details of the interchanges and the block structure of D */
+/*          as determined by SSPTRF. */
+
+/*  B       (input/output) REAL array, dimension (LDB,NRHS) */
+/*          On entry, the right hand side matrix B. */
+/*          On exit, the solution matrix X. */
+
+/*  LDB     (input) INTEGER */
+/*          The leading dimension of the array B.  LDB >= MAX(1,N). */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0: if INFO = -i, the i-th argument had an illegal value */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     --ap;
     --ipiv;
     b_dim1 = *ldb;
-    b_offset = 1 + b_dim1 * 1;
+    b_offset = 1 + b_dim1;
     b -= b_offset;
 
     /* Function Body */
@@ -100,7 +125,7 @@
 	*info = -2;
     } else if (*nrhs < 0) {
 	*info = -3;
-    } else if (*ldb < max(1,*n)) {
+    } else if (*ldb < MAX(1,*n)) {
 	*info = -7;
     }
     if (*info != 0) {
@@ -117,12 +142,12 @@
 
     if (upper) {
 
-/*        Solve A*X = B, where A = U*D*U'.   
+/*        Solve A*X = B, where A = U*D*U'. */
 
-          First solve U*D*X = B, overwriting B with X.   
+/*        First solve U*D*X = B, overwriting B with X. */
 
-          K is the main loop index, decreasing from N to 1 in steps of   
-          1 or 2, depending on the size of the diagonal blocks. */
+/*        K is the main loop index, decreasing from N to 1 in steps of */
+/*        1 or 2, depending on the size of the diagonal blocks. */
 
 	k = *n;
 	kc = *n * (*n + 1) / 2 + 1;
@@ -137,47 +162,47 @@ L10:
 	kc -= k;
 	if (ipiv[k] > 0) {
 
-/*           1 x 1 diagonal block   
+/*           1 x 1 diagonal block */
 
-             Interchange rows K and IPIV(K). */
+/*           Interchange rows K and IPIV(K). */
 
 	    kp = ipiv[k];
 	    if (kp != k) {
-		sswap_(nrhs, &b_ref(k, 1), ldb, &b_ref(kp, 1), ldb);
+		sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
 	    }
 
-/*           Multiply by inv(U(K)), where U(K) is the transformation   
-             stored in column K of A. */
+/*           Multiply by inv(U(K)), where U(K) is the transformation */
+/*           stored in column K of A. */
 
 	    i__1 = k - 1;
-	    sger_(&i__1, nrhs, &c_b7, &ap[kc], &c__1, &b_ref(k, 1), ldb, &
-		    b_ref(1, 1), ldb);
+	    sger_(&i__1, nrhs, &c_b7, &ap[kc], &c__1, &b[k + b_dim1], ldb, &b[
+		    b_dim1 + 1], ldb);
 
 /*           Multiply by the inverse of the diagonal block. */
 
 	    r__1 = 1.f / ap[kc + k - 1];
-	    sscal_(nrhs, &r__1, &b_ref(k, 1), ldb);
+	    sscal_(nrhs, &r__1, &b[k + b_dim1], ldb);
 	    --k;
 	} else {
 
-/*           2 x 2 diagonal block   
+/*           2 x 2 diagonal block */
 
-             Interchange rows K-1 and -IPIV(K). */
+/*           Interchange rows K-1 and -IPIV(K). */
 
 	    kp = -ipiv[k];
 	    if (kp != k - 1) {
-		sswap_(nrhs, &b_ref(k - 1, 1), ldb, &b_ref(kp, 1), ldb);
+		sswap_(nrhs, &b[k - 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
 	    }
 
-/*           Multiply by inv(U(K)), where U(K) is the transformation   
-             stored in columns K-1 and K of A. */
+/*           Multiply by inv(U(K)), where U(K) is the transformation */
+/*           stored in columns K-1 and K of A. */
 
 	    i__1 = k - 2;
-	    sger_(&i__1, nrhs, &c_b7, &ap[kc], &c__1, &b_ref(k, 1), ldb, &
-		    b_ref(1, 1), ldb);
+	    sger_(&i__1, nrhs, &c_b7, &ap[kc], &c__1, &b[k + b_dim1], ldb, &b[
+		    b_dim1 + 1], ldb);
 	    i__1 = k - 2;
-	    sger_(&i__1, nrhs, &c_b7, &ap[kc - (k - 1)], &c__1, &b_ref(k - 1, 
-		    1), ldb, &b_ref(1, 1), ldb);
+	    sger_(&i__1, nrhs, &c_b7, &ap[kc - (k - 1)], &c__1, &b[k - 1 + 
+		    b_dim1], ldb, &b[b_dim1 + 1], ldb);
 
 /*           Multiply by the inverse of the diagonal block. */
 
@@ -187,10 +212,10 @@ L10:
 	    denom = akm1 * ak - 1.f;
 	    i__1 = *nrhs;
 	    for (j = 1; j <= i__1; ++j) {
-		bkm1 = b_ref(k - 1, j) / akm1k;
-		bk = b_ref(k, j) / akm1k;
-		b_ref(k - 1, j) = (ak * bkm1 - bk) / denom;
-		b_ref(k, j) = (akm1 * bk - bkm1) / denom;
+		bkm1 = b[k - 1 + j * b_dim1] / akm1k;
+		bk = b[k + j * b_dim1] / akm1k;
+		b[k - 1 + j * b_dim1] = (ak * bkm1 - bk) / denom;
+		b[k + j * b_dim1] = (akm1 * bk - bkm1) / denom;
 /* L20: */
 	    }
 	    kc = kc - k + 1;
@@ -200,10 +225,10 @@ L10:
 	goto L10;
 L30:
 
-/*        Next solve U'*X = B, overwriting B with X.   
+/*        Next solve U'*X = B, overwriting B with X. */
 
-          K is the main loop index, increasing from 1 to N in steps of   
-          1 or 2, depending on the size of the diagonal blocks. */
+/*        K is the main loop index, increasing from 1 to N in steps of */
+/*        1 or 2, depending on the size of the diagonal blocks. */
 
 	k = 1;
 	kc = 1;
@@ -217,42 +242,42 @@ L40:
 
 	if (ipiv[k] > 0) {
 
-/*           1 x 1 diagonal block   
+/*           1 x 1 diagonal block */
 
-             Multiply by inv(U'(K)), where U(K) is the transformation   
-             stored in column K of A. */
+/*           Multiply by inv(U'(K)), where U(K) is the transformation */
+/*           stored in column K of A. */
 
 	    i__1 = k - 1;
 	    sgemv_("Transpose", &i__1, nrhs, &c_b7, &b[b_offset], ldb, &ap[kc]
-		    , &c__1, &c_b19, &b_ref(k, 1), ldb);
+, &c__1, &c_b19, &b[k + b_dim1], ldb);
 
 /*           Interchange rows K and IPIV(K). */
 
 	    kp = ipiv[k];
 	    if (kp != k) {
-		sswap_(nrhs, &b_ref(k, 1), ldb, &b_ref(kp, 1), ldb);
+		sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
 	    }
 	    kc += k;
 	    ++k;
 	} else {
 
-/*           2 x 2 diagonal block   
+/*           2 x 2 diagonal block */
 
-             Multiply by inv(U'(K+1)), where U(K+1) is the transformation   
-             stored in columns K and K+1 of A. */
+/*           Multiply by inv(U'(K+1)), where U(K+1) is the transformation */
+/*           stored in columns K and K+1 of A. */
 
 	    i__1 = k - 1;
 	    sgemv_("Transpose", &i__1, nrhs, &c_b7, &b[b_offset], ldb, &ap[kc]
-		    , &c__1, &c_b19, &b_ref(k, 1), ldb);
+, &c__1, &c_b19, &b[k + b_dim1], ldb);
 	    i__1 = k - 1;
 	    sgemv_("Transpose", &i__1, nrhs, &c_b7, &b[b_offset], ldb, &ap[kc 
-		    + k], &c__1, &c_b19, &b_ref(k + 1, 1), ldb);
+		    + k], &c__1, &c_b19, &b[k + 1 + b_dim1], ldb);
 
 /*           Interchange rows K and -IPIV(K). */
 
 	    kp = -ipiv[k];
 	    if (kp != k) {
-		sswap_(nrhs, &b_ref(k, 1), ldb, &b_ref(kp, 1), ldb);
+		sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
 	    }
 	    kc = kc + (k << 1) + 1;
 	    k += 2;
@@ -264,12 +289,12 @@ L50:
 	;
     } else {
 
-/*        Solve A*X = B, where A = L*D*L'.   
+/*        Solve A*X = B, where A = L*D*L'. */
 
-          First solve L*D*X = B, overwriting B with X.   
+/*        First solve L*D*X = B, overwriting B with X. */
 
-          K is the main loop index, increasing from 1 to N in steps of   
-          1 or 2, depending on the size of the diagonal blocks. */
+/*        K is the main loop index, increasing from 1 to N in steps of */
+/*        1 or 2, depending on the size of the diagonal blocks. */
 
 	k = 1;
 	kc = 1;
@@ -283,51 +308,51 @@ L60:
 
 	if (ipiv[k] > 0) {
 
-/*           1 x 1 diagonal block   
+/*           1 x 1 diagonal block */
 
-             Interchange rows K and IPIV(K). */
+/*           Interchange rows K and IPIV(K). */
 
 	    kp = ipiv[k];
 	    if (kp != k) {
-		sswap_(nrhs, &b_ref(k, 1), ldb, &b_ref(kp, 1), ldb);
+		sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
 	    }
 
-/*           Multiply by inv(L(K)), where L(K) is the transformation   
-             stored in column K of A. */
+/*           Multiply by inv(L(K)), where L(K) is the transformation */
+/*           stored in column K of A. */
 
 	    if (k < *n) {
 		i__1 = *n - k;
-		sger_(&i__1, nrhs, &c_b7, &ap[kc + 1], &c__1, &b_ref(k, 1), 
-			ldb, &b_ref(k + 1, 1), ldb);
+		sger_(&i__1, nrhs, &c_b7, &ap[kc + 1], &c__1, &b[k + b_dim1], 
+			ldb, &b[k + 1 + b_dim1], ldb);
 	    }
 
 /*           Multiply by the inverse of the diagonal block. */
 
 	    r__1 = 1.f / ap[kc];
-	    sscal_(nrhs, &r__1, &b_ref(k, 1), ldb);
+	    sscal_(nrhs, &r__1, &b[k + b_dim1], ldb);
 	    kc = kc + *n - k + 1;
 	    ++k;
 	} else {
 
-/*           2 x 2 diagonal block   
+/*           2 x 2 diagonal block */
 
-             Interchange rows K+1 and -IPIV(K). */
+/*           Interchange rows K+1 and -IPIV(K). */
 
 	    kp = -ipiv[k];
 	    if (kp != k + 1) {
-		sswap_(nrhs, &b_ref(k + 1, 1), ldb, &b_ref(kp, 1), ldb);
+		sswap_(nrhs, &b[k + 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
 	    }
 
-/*           Multiply by inv(L(K)), where L(K) is the transformation   
-             stored in columns K and K+1 of A. */
+/*           Multiply by inv(L(K)), where L(K) is the transformation */
+/*           stored in columns K and K+1 of A. */
 
 	    if (k < *n - 1) {
 		i__1 = *n - k - 1;
-		sger_(&i__1, nrhs, &c_b7, &ap[kc + 2], &c__1, &b_ref(k, 1), 
-			ldb, &b_ref(k + 2, 1), ldb);
+		sger_(&i__1, nrhs, &c_b7, &ap[kc + 2], &c__1, &b[k + b_dim1], 
+			ldb, &b[k + 2 + b_dim1], ldb);
 		i__1 = *n - k - 1;
-		sger_(&i__1, nrhs, &c_b7, &ap[kc + *n - k + 2], &c__1, &b_ref(
-			k + 1, 1), ldb, &b_ref(k + 2, 1), ldb);
+		sger_(&i__1, nrhs, &c_b7, &ap[kc + *n - k + 2], &c__1, &b[k + 
+			1 + b_dim1], ldb, &b[k + 2 + b_dim1], ldb);
 	    }
 
 /*           Multiply by the inverse of the diagonal block. */
@@ -338,10 +363,10 @@ L60:
 	    denom = akm1 * ak - 1.f;
 	    i__1 = *nrhs;
 	    for (j = 1; j <= i__1; ++j) {
-		bkm1 = b_ref(k, j) / akm1k;
-		bk = b_ref(k + 1, j) / akm1k;
-		b_ref(k, j) = (ak * bkm1 - bk) / denom;
-		b_ref(k + 1, j) = (akm1 * bk - bkm1) / denom;
+		bkm1 = b[k + j * b_dim1] / akm1k;
+		bk = b[k + 1 + j * b_dim1] / akm1k;
+		b[k + j * b_dim1] = (ak * bkm1 - bk) / denom;
+		b[k + 1 + j * b_dim1] = (akm1 * bk - bkm1) / denom;
 /* L70: */
 	    }
 	    kc = kc + (*n - k << 1) + 1;
@@ -351,10 +376,10 @@ L60:
 	goto L60;
 L80:
 
-/*        Next solve L'*X = B, overwriting B with X.   
+/*        Next solve L'*X = B, overwriting B with X. */
 
-          K is the main loop index, decreasing from N to 1 in steps of   
-          1 or 2, depending on the size of the diagonal blocks. */
+/*        K is the main loop index, decreasing from N to 1 in steps of */
+/*        1 or 2, depending on the size of the diagonal blocks. */
 
 	k = *n;
 	kc = *n * (*n + 1) / 2 + 1;
@@ -369,46 +394,46 @@ L90:
 	kc -= *n - k + 1;
 	if (ipiv[k] > 0) {
 
-/*           1 x 1 diagonal block   
+/*           1 x 1 diagonal block */
 
-             Multiply by inv(L'(K)), where L(K) is the transformation   
-             stored in column K of A. */
+/*           Multiply by inv(L'(K)), where L(K) is the transformation */
+/*           stored in column K of A. */
 
 	    if (k < *n) {
 		i__1 = *n - k;
-		sgemv_("Transpose", &i__1, nrhs, &c_b7, &b_ref(k + 1, 1), ldb,
-			 &ap[kc + 1], &c__1, &c_b19, &b_ref(k, 1), ldb);
+		sgemv_("Transpose", &i__1, nrhs, &c_b7, &b[k + 1 + b_dim1], 
+			ldb, &ap[kc + 1], &c__1, &c_b19, &b[k + b_dim1], ldb);
 	    }
 
 /*           Interchange rows K and IPIV(K). */
 
 	    kp = ipiv[k];
 	    if (kp != k) {
-		sswap_(nrhs, &b_ref(k, 1), ldb, &b_ref(kp, 1), ldb);
+		sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
 	    }
 	    --k;
 	} else {
 
-/*           2 x 2 diagonal block   
+/*           2 x 2 diagonal block */
 
-             Multiply by inv(L'(K-1)), where L(K-1) is the transformation   
-             stored in columns K-1 and K of A. */
+/*           Multiply by inv(L'(K-1)), where L(K-1) is the transformation */
+/*           stored in columns K-1 and K of A. */
 
 	    if (k < *n) {
 		i__1 = *n - k;
-		sgemv_("Transpose", &i__1, nrhs, &c_b7, &b_ref(k + 1, 1), ldb,
-			 &ap[kc + 1], &c__1, &c_b19, &b_ref(k, 1), ldb);
+		sgemv_("Transpose", &i__1, nrhs, &c_b7, &b[k + 1 + b_dim1], 
+			ldb, &ap[kc + 1], &c__1, &c_b19, &b[k + b_dim1], ldb);
 		i__1 = *n - k;
-		sgemv_("Transpose", &i__1, nrhs, &c_b7, &b_ref(k + 1, 1), ldb,
-			 &ap[kc - (*n - k)], &c__1, &c_b19, &b_ref(k - 1, 1), 
-			ldb);
+		sgemv_("Transpose", &i__1, nrhs, &c_b7, &b[k + 1 + b_dim1], 
+			ldb, &ap[kc - (*n - k)], &c__1, &c_b19, &b[k - 1 + 
+			b_dim1], ldb);
 	    }
 
 /*           Interchange rows K and -IPIV(K). */
 
 	    kp = -ipiv[k];
 	    if (kp != k) {
-		sswap_(nrhs, &b_ref(k, 1), ldb, &b_ref(kp, 1), ldb);
+		sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
 	    }
 	    kc -= *n - k + 2;
 	    k += -2;
@@ -424,7 +449,3 @@ L100:
 /*     End of SSPTRS */
 
 } /* ssptrs_ */
-
-#undef b_ref
-
-

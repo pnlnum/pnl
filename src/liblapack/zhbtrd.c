@@ -1,152 +1,174 @@
+/* zhbtrd.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zhbtrd_(char *vect, char *uplo, integer *n, integer *kd, 
-	doublecomplex *ab, integer *ldab, doublereal *d__, doublereal *e, 
-	doublecomplex *q, integer *ldq, doublecomplex *work, integer *info)
+/* Table of constant values */
+
+static doublecomplex c_b1 = {0.,0.};
+static doublecomplex c_b2 = {1.,0.};
+static int c__1 = 1;
+
+ int zhbtrd_(char *vect, char *uplo, int *n, int *kd, 
+	doublecomplex *ab, int *ldab, double *d__, double *e, 
+	doublecomplex *q, int *ldq, doublecomplex *work, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    ZHBTRD reduces a complex Hermitian band matrix A to real symmetric   
-    tridiagonal form T by a unitary similarity transformation:   
-    Q**H * A * Q = T.   
-
-    Arguments   
-    =========   
-
-    VECT    (input) CHARACTER*1   
-            = 'N':  do not form Q;   
-            = 'V':  form Q;   
-            = 'U':  update a matrix X, by forming X*Q.   
-
-    UPLO    (input) CHARACTER*1   
-            = 'U':  Upper triangle of A is stored;   
-            = 'L':  Lower triangle of A is stored.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    KD      (input) INTEGER   
-            The number of superdiagonals of the matrix A if UPLO = 'U',   
-            or the number of subdiagonals if UPLO = 'L'.  KD >= 0.   
-
-    AB      (input/output) COMPLEX*16 array, dimension (LDAB,N)   
-            On entry, the upper or lower triangle of the Hermitian band   
-            matrix A, stored in the first KD+1 rows of the array.  The   
-            j-th column of A is stored in the j-th column of the array AB   
-            as follows:   
-            if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;   
-            if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).   
-            On exit, the diagonal elements of AB are overwritten by the   
-            diagonal elements of the tridiagonal matrix T; if KD > 0, the   
-            elements on the first superdiagonal (if UPLO = 'U') or the   
-            first subdiagonal (if UPLO = 'L') are overwritten by the   
-            off-diagonal elements of T; the rest of AB is overwritten by   
-            values generated during the reduction.   
-
-    LDAB    (input) INTEGER   
-            The leading dimension of the array AB.  LDAB >= KD+1.   
-
-    D       (output) DOUBLE PRECISION array, dimension (N)   
-            The diagonal elements of the tridiagonal matrix T.   
-
-    E       (output) DOUBLE PRECISION array, dimension (N-1)   
-            The off-diagonal elements of the tridiagonal matrix T:   
-            E(i) = T(i,i+1) if UPLO = 'U'; E(i) = T(i+1,i) if UPLO = 'L'.   
-
-    Q       (input/output) COMPLEX*16 array, dimension (LDQ,N)   
-            On entry, if VECT = 'U', then Q must contain an N-by-N   
-            matrix X; if VECT = 'N' or 'V', then Q need not be set.   
-
-            On exit:   
-            if VECT = 'V', Q contains the N-by-N unitary matrix Q;   
-            if VECT = 'U', Q contains the product X*Q;   
-            if VECT = 'N', the array Q is not referenced.   
-
-    LDQ     (input) INTEGER   
-            The leading dimension of the array Q.   
-            LDQ >= 1, and LDQ >= N if VECT = 'V' or 'U'.   
-
-    WORK    (workspace) COMPLEX*16 array, dimension (N)   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-
-    Further Details   
-    ===============   
-
-    Modified by Linda Kaufman, Bell Labs.   
-
-    =====================================================================   
-
-
-       Test the input parameters   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static doublecomplex c_b1 = {0.,0.};
-    static doublecomplex c_b2 = {1.,0.};
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer ab_dim1, ab_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, 
+    int ab_dim1, ab_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, 
 	    i__5, i__6;
-    doublereal d__1;
+    double d__1;
     doublecomplex z__1;
+
     /* Builtin functions */
     void d_cnjg(doublecomplex *, doublecomplex *);
-    double z_abs(doublecomplex *);
+    double z_ABS(doublecomplex *);
+
     /* Local variables */
-    static integer inca, jend, lend, jinc;
-    static doublereal abst;
-    static integer incx, last;
-    static doublecomplex temp;
-    extern /* Subroutine */ int zrot_(integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublereal *, doublecomplex *);
-    static integer j1end, j1inc, i__, j, k, l;
-    static doublecomplex t;
-    static integer iqend;
-    extern logical lsame_(char *, char *);
-    extern /* Subroutine */ int zscal_(integer *, doublecomplex *, 
-	    doublecomplex *, integer *);
-    static logical initq, wantq, upper;
-    static integer i2, j1, j2;
-    extern /* Subroutine */ int zlar2v_(integer *, doublecomplex *, 
-	    doublecomplex *, doublecomplex *, integer *, doublereal *, 
-	    doublecomplex *, integer *);
-    static integer nq, nr, iqaend;
-    extern /* Subroutine */ int xerbla_(char *, integer *), zlacgv_(
-	    integer *, doublecomplex *, integer *);
-    static integer kd1;
-    extern /* Subroutine */ int zlaset_(char *, integer *, integer *, 
-	    doublecomplex *, doublecomplex *, doublecomplex *, integer *), zlartg_(doublecomplex *, doublecomplex *, doublereal *, 
-	    doublecomplex *, doublecomplex *), zlargv_(integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublereal *, integer *), zlartv_(integer *, doublecomplex *, 
-	    integer *, doublecomplex *, integer *, doublereal *, 
-	    doublecomplex *, integer *);
-    static integer ibl, iqb, kdn, jin, nrt, kdm1;
-#define q_subscr(a_1,a_2) (a_2)*q_dim1 + a_1
-#define q_ref(a_1,a_2) q[q_subscr(a_1,a_2)]
-#define ab_subscr(a_1,a_2) (a_2)*ab_dim1 + a_1
-#define ab_ref(a_1,a_2) ab[ab_subscr(a_1,a_2)]
+    int i__, j, k, l;
+    doublecomplex t;
+    int i2, j1, j2, nq, nr, kd1, ibl, iqb, kdn, jin, nrt, kdm1, inca, 
+	    jend, lend, jinc;
+    double abst;
+    int incx, last;
+    doublecomplex temp;
+    extern  int zrot_(int *, doublecomplex *, int *, 
+	    doublecomplex *, int *, double *, doublecomplex *);
+    int j1end, j1inc, iqend;
+    extern int lsame_(char *, char *);
+    extern  int zscal_(int *, doublecomplex *, 
+	    doublecomplex *, int *);
+    int initq, wantq, upper;
+    extern  int zlar2v_(int *, doublecomplex *, 
+	    doublecomplex *, doublecomplex *, int *, double *, 
+	    doublecomplex *, int *);
+    int iqaend;
+    extern  int xerbla_(char *, int *), zlacgv_(
+	    int *, doublecomplex *, int *), zlaset_(char *, int *, 
+	     int *, doublecomplex *, doublecomplex *, doublecomplex *, 
+	    int *), zlartg_(doublecomplex *, doublecomplex *, 
+	    double *, doublecomplex *, doublecomplex *), zlargv_(int *
+, doublecomplex *, int *, doublecomplex *, int *, 
+	    double *, int *), zlartv_(int *, doublecomplex *, 
+	    int *, doublecomplex *, int *, double *, 
+	    doublecomplex *, int *);
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZHBTRD reduces a complex Hermitian band matrix A to float symmetric */
+/*  tridiagonal form T by a unitary similarity transformation: */
+/*  Q**H * A * Q = T. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  VECT    (input) CHARACTER*1 */
+/*          = 'N':  do not form Q; */
+/*          = 'V':  form Q; */
+/*          = 'U':  update a matrix X, by forming X*Q. */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U':  Upper triangle of A is stored; */
+/*          = 'L':  Lower triangle of A is stored. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  KD      (input) INTEGER */
+/*          The number of superdiagonals of the matrix A if UPLO = 'U', */
+/*          or the number of subdiagonals if UPLO = 'L'.  KD >= 0. */
+
+/*  AB      (input/output) COMPLEX*16 array, dimension (LDAB,N) */
+/*          On entry, the upper or lower triangle of the Hermitian band */
+/*          matrix A, stored in the first KD+1 rows of the array.  The */
+/*          j-th column of A is stored in the j-th column of the array AB */
+/*          as follows: */
+/*          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for MAX(1,j-kd)<=i<=j; */
+/*          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=MIN(n,j+kd). */
+/*          On exit, the diagonal elements of AB are overwritten by the */
+/*          diagonal elements of the tridiagonal matrix T; if KD > 0, the */
+/*          elements on the first superdiagonal (if UPLO = 'U') or the */
+/*          first subdiagonal (if UPLO = 'L') are overwritten by the */
+/*          off-diagonal elements of T; the rest of AB is overwritten by */
+/*          values generated during the reduction. */
+
+/*  LDAB    (input) INTEGER */
+/*          The leading dimension of the array AB.  LDAB >= KD+1. */
+
+/*  D       (output) DOUBLE PRECISION array, dimension (N) */
+/*          The diagonal elements of the tridiagonal matrix T. */
+
+/*  E       (output) DOUBLE PRECISION array, dimension (N-1) */
+/*          The off-diagonal elements of the tridiagonal matrix T: */
+/*          E(i) = T(i,i+1) if UPLO = 'U'; E(i) = T(i+1,i) if UPLO = 'L'. */
+
+/*  Q       (input/output) COMPLEX*16 array, dimension (LDQ,N) */
+/*          On entry, if VECT = 'U', then Q must contain an N-by-N */
+/*          matrix X; if VECT = 'N' or 'V', then Q need not be set. */
+
+/*          On exit: */
+/*          if VECT = 'V', Q contains the N-by-N unitary matrix Q; */
+/*          if VECT = 'U', Q contains the product X*Q; */
+/*          if VECT = 'N', the array Q is not referenced. */
+
+/*  LDQ     (input) INTEGER */
+/*          The leading dimension of the array Q. */
+/*          LDQ >= 1, and LDQ >= N if VECT = 'V' or 'U'. */
+
+/*  WORK    (workspace) COMPLEX*16 array, dimension (N) */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+
+/*  Further Details */
+/*  =============== */
+
+/*  Modified by Linda Kaufman, Bell Labs. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters */
+
+    /* Parameter adjustments */
     ab_dim1 = *ldab;
-    ab_offset = 1 + ab_dim1 * 1;
+    ab_offset = 1 + ab_dim1;
     ab -= ab_offset;
     --d__;
     --e;
     q_dim1 = *ldq;
-    q_offset = 1 + q_dim1 * 1;
+    q_offset = 1 + q_dim1;
     q -= q_offset;
     --work;
 
@@ -170,7 +192,7 @@
 	*info = -4;
     } else if (*ldab < kd1) {
 	*info = -6;
-    } else if (*ldq < max(1,*n) && wantq) {
+    } else if (*ldq < MAX(1,*n) && wantq) {
 	*info = -10;
     }
     if (*info != 0) {
@@ -191,29 +213,29 @@
 	zlaset_("Full", n, n, &c_b1, &c_b2, &q[q_offset], ldq);
     }
 
-/*     Wherever possible, plane rotations are generated and applied in   
-       vector operations of length NR over the index set J1:J2:KD1.   
+/*     Wherever possible, plane rotations are generated and applied in */
+/*     vector operations of length NR over the index set J1:J2:KD1. */
 
-       The real cosines and complex sines of the plane rotations are   
-       stored in the arrays D and WORK. */
+/*     The float cosines and complex sines of the plane rotations are */
+/*     stored in the arrays D and WORK. */
 
     inca = kd1 * *ldab;
 /* Computing MIN */
     i__1 = *n - 1;
-    kdn = min(i__1,*kd);
+    kdn = MIN(i__1,*kd);
     if (upper) {
 
 	if (*kd > 1) {
 
-/*           Reduce to complex Hermitian tridiagonal form, working with   
-             the upper triangle */
+/*           Reduce to complex Hermitian tridiagonal form, working with */
+/*           the upper triangle */
 
 	    nr = 0;
 	    j1 = kdn + 2;
 	    j2 = 1;
 
-	    i__1 = ab_subscr(kd1, 1);
-	    i__2 = ab_subscr(kd1, 1);
+	    i__1 = kd1 + ab_dim1;
+	    i__2 = kd1 + ab_dim1;
 	    d__1 = ab[i__2].r;
 	    ab[i__1].r = d__1, ab[i__1].i = 0.;
 	    i__1 = *n - 2;
@@ -227,24 +249,24 @@
 
 		    if (nr > 0) {
 
-/*                    generate plane rotations to annihilate nonzero   
-                      elements which have been created outside the band */
+/*                    generate plane rotations to annihilate nonzero */
+/*                    elements which have been created outside the band */
 
-			zlargv_(&nr, &ab_ref(1, j1 - 1), &inca, &work[j1], &
-				kd1, &d__[j1], &kd1);
+			zlargv_(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &inca, &
+				work[j1], &kd1, &d__[j1], &kd1);
 
-/*                    apply rotations from the right   
+/*                    apply rotations from the right */
 
 
-                      Dependent on the the number of diagonals either   
-                      ZLARTV or ZROT is used */
+/*                    Dependent on the the number of diagonals either */
+/*                    ZLARTV or ZROT is used */
 
 			if (nr >= (*kd << 1) - 1) {
 			    i__2 = *kd - 1;
 			    for (l = 1; l <= i__2; ++l) {
-				zlartv_(&nr, &ab_ref(l + 1, j1 - 1), &inca, &
-					ab_ref(l, j1), &inca, &d__[j1], &work[
-					j1], &kd1);
+				zlartv_(&nr, &ab[l + 1 + (j1 - 1) * ab_dim1], 
+					&inca, &ab[l + j1 * ab_dim1], &inca, &
+					d__[j1], &work[j1], &kd1);
 /* L10: */
 			    }
 
@@ -254,9 +276,9 @@
 			    i__3 = kd1;
 			    for (jinc = j1; i__3 < 0 ? jinc >= i__2 : jinc <= 
 				    i__2; jinc += i__3) {
-				zrot_(&kdm1, &ab_ref(2, jinc - 1), &c__1, &
-					ab_ref(1, jinc), &c__1, &d__[jinc], &
-					work[jinc]);
+				zrot_(&kdm1, &ab[(jinc - 1) * ab_dim1 + 2], &
+					c__1, &ab[jinc * ab_dim1 + 1], &c__1, 
+					&d__[jinc], &work[jinc]);
 /* L20: */
 			    }
 			}
@@ -266,44 +288,45 @@
 		    if (k > 2) {
 			if (k <= *n - i__ + 1) {
 
-/*                       generate plane rotation to annihilate a(i,i+k-1)   
-                         within the band */
+/*                       generate plane rotation to annihilate a(i,i+k-1) */
+/*                       within the band */
 
-			    zlartg_(&ab_ref(*kd - k + 3, i__ + k - 2), &
-				    ab_ref(*kd - k + 2, i__ + k - 1), &d__[
-				    i__ + k - 1], &work[i__ + k - 1], &temp);
-			    i__3 = ab_subscr(*kd - k + 3, i__ + k - 2);
+			    zlartg_(&ab[*kd - k + 3 + (i__ + k - 2) * ab_dim1]
+, &ab[*kd - k + 2 + (i__ + k - 1) * 
+				    ab_dim1], &d__[i__ + k - 1], &work[i__ + 
+				    k - 1], &temp);
+			    i__3 = *kd - k + 3 + (i__ + k - 2) * ab_dim1;
 			    ab[i__3].r = temp.r, ab[i__3].i = temp.i;
 
 /*                       apply rotation from the right */
 
 			    i__3 = k - 3;
-			    zrot_(&i__3, &ab_ref(*kd - k + 4, i__ + k - 2), &
-				    c__1, &ab_ref(*kd - k + 3, i__ + k - 1), &
-				    c__1, &d__[i__ + k - 1], &work[i__ + k - 
-				    1]);
+			    zrot_(&i__3, &ab[*kd - k + 4 + (i__ + k - 2) * 
+				    ab_dim1], &c__1, &ab[*kd - k + 3 + (i__ + 
+				    k - 1) * ab_dim1], &c__1, &d__[i__ + k - 
+				    1], &work[i__ + k - 1]);
 			}
 			++nr;
 			j1 = j1 - kdn - 1;
 		    }
 
-/*                 apply plane rotations from both sides to diagonal   
-                   blocks */
+/*                 apply plane rotations from both sides to diagonal */
+/*                 blocks */
 
 		    if (nr > 0) {
-			zlar2v_(&nr, &ab_ref(kd1, j1 - 1), &ab_ref(kd1, j1), &
-				ab_ref(*kd, j1), &inca, &d__[j1], &work[j1], &
-				kd1);
+			zlar2v_(&nr, &ab[kd1 + (j1 - 1) * ab_dim1], &ab[kd1 + 
+				j1 * ab_dim1], &ab[*kd + j1 * ab_dim1], &inca, 
+				 &d__[j1], &work[j1], &kd1);
 		    }
 
 /*                 apply plane rotations from the left */
 
-		    zlacgv_(&nr, &work[j1], &kd1);
 		    if (nr > 0) {
+			zlacgv_(&nr, &work[j1], &kd1);
 			if ((*kd << 1) - 1 < nr) {
 
-/*                    Dependent on the the number of diagonals either   
-                      ZLARTV or ZROT is used */
+/*                    Dependent on the the number of diagonals either */
+/*                    ZLARTV or ZROT is used */
 
 			    i__3 = *kd - 1;
 			    for (l = 1; l <= i__3; ++l) {
@@ -313,10 +336,10 @@
 				    nrt = nr;
 				}
 				if (nrt > 0) {
-				    zlartv_(&nrt, &ab_ref(*kd - l, j1 + l), &
-					    inca, &ab_ref(*kd - l + 1, j1 + l)
-					    , &inca, &d__[j1], &work[j1], &
-					    kd1);
+				    zlartv_(&nrt, &ab[*kd - l + (j1 + l) * 
+					    ab_dim1], &inca, &ab[*kd - l + 1 
+					    + (j1 + l) * ab_dim1], &inca, &
+					    d__[j1], &work[j1], &kd1);
 				}
 /* L30: */
 			    }
@@ -328,20 +351,22 @@
 				for (jin = j1; i__2 < 0 ? jin >= i__3 : jin <=
 					 i__3; jin += i__2) {
 				    i__4 = *kd - 1;
-				    zrot_(&i__4, &ab_ref(*kd - 1, jin + 1), &
-					    incx, &ab_ref(*kd, jin + 1), &
-					    incx, &d__[jin], &work[jin]);
+				    zrot_(&i__4, &ab[*kd - 1 + (jin + 1) * 
+					    ab_dim1], &incx, &ab[*kd + (jin + 
+					    1) * ab_dim1], &incx, &d__[jin], &
+					    work[jin]);
 /* L40: */
 				}
 			    }
 /* Computing MIN */
 			    i__2 = kdm1, i__3 = *n - j2;
-			    lend = min(i__2,i__3);
+			    lend = MIN(i__2,i__3);
 			    last = j1end + kd1;
 			    if (lend > 0) {
-				zrot_(&lend, &ab_ref(*kd - 1, last + 1), &
-					incx, &ab_ref(*kd, last + 1), &incx, &
-					d__[last], &work[last]);
+				zrot_(&lend, &ab[*kd - 1 + (last + 1) * 
+					ab_dim1], &incx, &ab[*kd + (last + 1) 
+					* ab_dim1], &incx, &d__[last], &work[
+					last]);
 			    }
 			}
 		    }
@@ -352,18 +377,18 @@
 
 			if (initq) {
 
-/*                 take advantage of the fact that Q was   
-                   initially the Identity matrix */
+/*                 take advantage of the fact that Q was */
+/*                 initially the Identity matrix */
 
-			    iqend = max(iqend,j2);
+			    iqend = MAX(iqend,j2);
 /* Computing MAX */
 			    i__2 = 0, i__3 = k - 3;
-			    i2 = max(i__2,i__3);
+			    i2 = MAX(i__2,i__3);
 			    iqaend = i__ * *kd + 1;
 			    if (k == 2) {
 				iqaend += *kd;
 			    }
-			    iqaend = min(iqaend,iqend);
+			    iqaend = MIN(iqaend,iqend);
 			    i__2 = j2;
 			    i__3 = kd1;
 			    for (j = j1; i__3 < 0 ? j >= i__2 : j <= i__2; j 
@@ -372,14 +397,15 @@
 				++i2;
 /* Computing MAX */
 				i__4 = 1, i__5 = j - ibl;
-				iqb = max(i__4,i__5);
+				iqb = MAX(i__4,i__5);
 				nq = iqaend + 1 - iqb;
 /* Computing MIN */
 				i__4 = iqaend + *kd;
-				iqaend = min(i__4,iqend);
+				iqaend = MIN(i__4,iqend);
 				d_cnjg(&z__1, &work[j]);
-				zrot_(&nq, &q_ref(iqb, j - 1), &c__1, &q_ref(
-					iqb, j), &c__1, &d__[j], &z__1);
+				zrot_(&nq, &q[iqb + (j - 1) * q_dim1], &c__1, 
+					&q[iqb + j * q_dim1], &c__1, &d__[j], 
+					&z__1);
 /* L50: */
 			    }
 			} else {
@@ -389,8 +415,9 @@
 			    for (j = j1; i__2 < 0 ? j >= i__3 : j <= i__3; j 
 				    += i__2) {
 				d_cnjg(&z__1, &work[j]);
-				zrot_(n, &q_ref(1, j - 1), &c__1, &q_ref(1, j)
-					, &c__1, &d__[j], &z__1);
+				zrot_(n, &q[(j - 1) * q_dim1 + 1], &c__1, &q[
+					j * q_dim1 + 1], &c__1, &d__[j], &
+					z__1);
 /* L60: */
 			    }
 			}
@@ -410,19 +437,19 @@
 		    for (j = j1; i__3 < 0 ? j >= i__2 : j <= i__2; j += i__3) 
 			    {
 
-/*                    create nonzero element a(j-1,j+kd) outside the band   
-                      and store it in WORK */
+/*                    create nonzero element a(j-1,j+kd) outside the band */
+/*                    and store it in WORK */
 
 			i__4 = j + *kd;
 			i__5 = j;
-			i__6 = ab_subscr(1, j + *kd);
+			i__6 = (j + *kd) * ab_dim1 + 1;
 			z__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * 
 				ab[i__6].i, z__1.i = work[i__5].r * ab[i__6]
 				.i + work[i__5].i * ab[i__6].r;
 			work[i__4].r = z__1.r, work[i__4].i = z__1.i;
-			i__4 = ab_subscr(1, j + *kd);
+			i__4 = (j + *kd) * ab_dim1 + 1;
 			i__5 = j;
-			i__6 = ab_subscr(1, j + *kd);
+			i__6 = (j + *kd) * ab_dim1 + 1;
 			z__1.r = d__[i__5] * ab[i__6].r, z__1.i = d__[i__5] * 
 				ab[i__6].i;
 			ab[i__4].r = z__1.r, ab[i__4].i = z__1.i;
@@ -436,14 +463,14 @@
 
 	if (*kd > 0) {
 
-/*           make off-diagonal elements real and copy them to E */
+/*           make off-diagonal elements float and copy them to E */
 
 	    i__1 = *n - 1;
 	    for (i__ = 1; i__ <= i__1; ++i__) {
-		i__3 = ab_subscr(*kd, i__ + 1);
+		i__3 = *kd + (i__ + 1) * ab_dim1;
 		t.r = ab[i__3].r, t.i = ab[i__3].i;
-		abst = z_abs(&t);
-		i__3 = ab_subscr(*kd, i__ + 1);
+		abst = z_ABS(&t);
+		i__3 = *kd + (i__ + 1) * ab_dim1;
 		ab[i__3].r = abst, ab[i__3].i = 0.;
 		e[i__] = abst;
 		if (abst != 0.) {
@@ -453,15 +480,15 @@
 		    t.r = 1., t.i = 0.;
 		}
 		if (i__ < *n - 1) {
-		    i__3 = ab_subscr(*kd, i__ + 2);
-		    i__2 = ab_subscr(*kd, i__ + 2);
+		    i__3 = *kd + (i__ + 2) * ab_dim1;
+		    i__2 = *kd + (i__ + 2) * ab_dim1;
 		    z__1.r = ab[i__2].r * t.r - ab[i__2].i * t.i, z__1.i = ab[
 			    i__2].r * t.i + ab[i__2].i * t.r;
 		    ab[i__3].r = z__1.r, ab[i__3].i = z__1.i;
 		}
 		if (wantq) {
 		    d_cnjg(&z__1, &t);
-		    zscal_(n, &z__1, &q_ref(1, i__ + 1), &c__1);
+		    zscal_(n, &z__1, &q[(i__ + 1) * q_dim1 + 1], &c__1);
 		}
 /* L100: */
 	    }
@@ -481,7 +508,7 @@
 	i__1 = *n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    i__3 = i__;
-	    i__2 = ab_subscr(kd1, i__);
+	    i__2 = kd1 + i__ * ab_dim1;
 	    d__[i__3] = ab[i__2].r;
 /* L120: */
 	}
@@ -490,15 +517,15 @@
 
 	if (*kd > 1) {
 
-/*           Reduce to complex Hermitian tridiagonal form, working with   
-             the lower triangle */
+/*           Reduce to complex Hermitian tridiagonal form, working with */
+/*           the lower triangle */
 
 	    nr = 0;
 	    j1 = kdn + 2;
 	    j2 = 1;
 
-	    i__1 = ab_subscr(1, 1);
-	    i__3 = ab_subscr(1, 1);
+	    i__1 = ab_dim1 + 1;
+	    i__3 = ab_dim1 + 1;
 	    d__1 = ab[i__3].r;
 	    ab[i__1].r = d__1, ab[i__1].i = 0.;
 	    i__1 = *n - 2;
@@ -512,24 +539,25 @@
 
 		    if (nr > 0) {
 
-/*                    generate plane rotations to annihilate nonzero   
-                      elements which have been created outside the band */
+/*                    generate plane rotations to annihilate nonzero */
+/*                    elements which have been created outside the band */
 
-			zlargv_(&nr, &ab_ref(kd1, j1 - kd1), &inca, &work[j1],
-				 &kd1, &d__[j1], &kd1);
+			zlargv_(&nr, &ab[kd1 + (j1 - kd1) * ab_dim1], &inca, &
+				work[j1], &kd1, &d__[j1], &kd1);
 
-/*                    apply plane rotations from one side   
+/*                    apply plane rotations from one side */
 
 
-                      Dependent on the the number of diagonals either   
-                      ZLARTV or ZROT is used */
+/*                    Dependent on the the number of diagonals either */
+/*                    ZLARTV or ZROT is used */
 
 			if (nr > (*kd << 1) - 1) {
 			    i__3 = *kd - 1;
 			    for (l = 1; l <= i__3; ++l) {
-				zlartv_(&nr, &ab_ref(kd1 - l, j1 - kd1 + l), &
-					inca, &ab_ref(kd1 - l + 1, j1 - kd1 + 
-					l), &inca, &d__[j1], &work[j1], &kd1);
+				zlartv_(&nr, &ab[kd1 - l + (j1 - kd1 + l) * 
+					ab_dim1], &inca, &ab[kd1 - l + 1 + (
+					j1 - kd1 + l) * ab_dim1], &inca, &d__[
+					j1], &work[j1], &kd1);
 /* L130: */
 			    }
 			} else {
@@ -538,9 +566,10 @@
 			    i__2 = kd1;
 			    for (jinc = j1; i__2 < 0 ? jinc >= i__3 : jinc <= 
 				    i__3; jinc += i__2) {
-				zrot_(&kdm1, &ab_ref(*kd, jinc - *kd), &incx, 
-					&ab_ref(kd1, jinc - *kd), &incx, &d__[
-					jinc], &work[jinc]);
+				zrot_(&kdm1, &ab[*kd + (jinc - *kd) * ab_dim1]
+, &incx, &ab[kd1 + (jinc - *kd) * 
+					ab_dim1], &incx, &d__[jinc], &work[
+					jinc]);
 /* L140: */
 			    }
 			}
@@ -550,13 +579,13 @@
 		    if (k > 2) {
 			if (k <= *n - i__ + 1) {
 
-/*                       generate plane rotation to annihilate a(i+k-1,i)   
-                         within the band */
+/*                       generate plane rotation to annihilate a(i+k-1,i) */
+/*                       within the band */
 
-			    zlartg_(&ab_ref(k - 1, i__), &ab_ref(k, i__), &
-				    d__[i__ + k - 1], &work[i__ + k - 1], &
-				    temp);
-			    i__2 = ab_subscr(k - 1, i__);
+			    zlartg_(&ab[k - 1 + i__ * ab_dim1], &ab[k + i__ * 
+				    ab_dim1], &d__[i__ + k - 1], &work[i__ + 
+				    k - 1], &temp);
+			    i__2 = k - 1 + i__ * ab_dim1;
 			    ab[i__2].r = temp.r, ab[i__2].i = temp.i;
 
 /*                       apply rotation from the left */
@@ -564,31 +593,32 @@
 			    i__2 = k - 3;
 			    i__3 = *ldab - 1;
 			    i__4 = *ldab - 1;
-			    zrot_(&i__2, &ab_ref(k - 2, i__ + 1), &i__3, &
-				    ab_ref(k - 1, i__ + 1), &i__4, &d__[i__ + 
-				    k - 1], &work[i__ + k - 1]);
+			    zrot_(&i__2, &ab[k - 2 + (i__ + 1) * ab_dim1], &
+				    i__3, &ab[k - 1 + (i__ + 1) * ab_dim1], &
+				    i__4, &d__[i__ + k - 1], &work[i__ + k - 
+				    1]);
 			}
 			++nr;
 			j1 = j1 - kdn - 1;
 		    }
 
-/*                 apply plane rotations from both sides to diagonal   
-                   blocks */
+/*                 apply plane rotations from both sides to diagonal */
+/*                 blocks */
 
 		    if (nr > 0) {
-			zlar2v_(&nr, &ab_ref(1, j1 - 1), &ab_ref(1, j1), &
-				ab_ref(2, j1 - 1), &inca, &d__[j1], &work[j1],
-				 &kd1);
+			zlar2v_(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &ab[j1 * 
+				ab_dim1 + 1], &ab[(j1 - 1) * ab_dim1 + 2], &
+				inca, &d__[j1], &work[j1], &kd1);
 		    }
 
-/*                 apply plane rotations from the right   
+/*                 apply plane rotations from the right */
 
 
-                      Dependent on the the number of diagonals either   
-                      ZLARTV or ZROT is used */
+/*                    Dependent on the the number of diagonals either */
+/*                    ZLARTV or ZROT is used */
 
-		    zlacgv_(&nr, &work[j1], &kd1);
 		    if (nr > 0) {
+			zlacgv_(&nr, &work[j1], &kd1);
 			if (nr > (*kd << 1) - 1) {
 			    i__2 = *kd - 1;
 			    for (l = 1; l <= i__2; ++l) {
@@ -598,9 +628,10 @@
 				    nrt = nr;
 				}
 				if (nrt > 0) {
-				    zlartv_(&nrt, &ab_ref(l + 2, j1 - 1), &
-					    inca, &ab_ref(l + 1, j1), &inca, &
-					    d__[j1], &work[j1], &kd1);
+				    zlartv_(&nrt, &ab[l + 2 + (j1 - 1) * 
+					    ab_dim1], &inca, &ab[l + 1 + j1 * 
+					    ab_dim1], &inca, &d__[j1], &work[
+					    j1], &kd1);
 				}
 /* L150: */
 			    }
@@ -611,20 +642,21 @@
 				i__3 = kd1;
 				for (j1inc = j1; i__3 < 0 ? j1inc >= i__2 : 
 					j1inc <= i__2; j1inc += i__3) {
-				    zrot_(&kdm1, &ab_ref(3, j1inc - 1), &c__1,
-					     &ab_ref(2, j1inc), &c__1, &d__[
-					    j1inc], &work[j1inc]);
+				    zrot_(&kdm1, &ab[(j1inc - 1) * ab_dim1 + 
+					    3], &c__1, &ab[j1inc * ab_dim1 + 
+					    2], &c__1, &d__[j1inc], &work[
+					    j1inc]);
 /* L160: */
 				}
 			    }
 /* Computing MIN */
 			    i__3 = kdm1, i__2 = *n - j2;
-			    lend = min(i__3,i__2);
+			    lend = MIN(i__3,i__2);
 			    last = j1end + kd1;
 			    if (lend > 0) {
-				zrot_(&lend, &ab_ref(3, last - 1), &c__1, &
-					ab_ref(2, last), &c__1, &d__[last], &
-					work[last]);
+				zrot_(&lend, &ab[(last - 1) * ab_dim1 + 3], &
+					c__1, &ab[last * ab_dim1 + 2], &c__1, 
+					&d__[last], &work[last]);
 			    }
 			}
 		    }
@@ -637,18 +669,18 @@
 
 			if (initq) {
 
-/*                 take advantage of the fact that Q was   
-                   initially the Identity matrix */
+/*                 take advantage of the fact that Q was */
+/*                 initially the Identity matrix */
 
-			    iqend = max(iqend,j2);
+			    iqend = MAX(iqend,j2);
 /* Computing MAX */
 			    i__3 = 0, i__2 = k - 3;
-			    i2 = max(i__3,i__2);
+			    i2 = MAX(i__3,i__2);
 			    iqaend = i__ * *kd + 1;
 			    if (k == 2) {
 				iqaend += *kd;
 			    }
-			    iqaend = min(iqaend,iqend);
+			    iqaend = MIN(iqaend,iqend);
 			    i__3 = j2;
 			    i__2 = kd1;
 			    for (j = j1; i__2 < 0 ? j >= i__3 : j <= i__3; j 
@@ -657,13 +689,14 @@
 				++i2;
 /* Computing MAX */
 				i__4 = 1, i__5 = j - ibl;
-				iqb = max(i__4,i__5);
+				iqb = MAX(i__4,i__5);
 				nq = iqaend + 1 - iqb;
 /* Computing MIN */
 				i__4 = iqaend + *kd;
-				iqaend = min(i__4,iqend);
-				zrot_(&nq, &q_ref(iqb, j - 1), &c__1, &q_ref(
-					iqb, j), &c__1, &d__[j], &work[j]);
+				iqaend = MIN(i__4,iqend);
+				zrot_(&nq, &q[iqb + (j - 1) * q_dim1], &c__1, 
+					&q[iqb + j * q_dim1], &c__1, &d__[j], 
+					&work[j]);
 /* L170: */
 			    }
 			} else {
@@ -672,8 +705,9 @@
 			    i__3 = kd1;
 			    for (j = j1; i__3 < 0 ? j >= i__2 : j <= i__2; j 
 				    += i__3) {
-				zrot_(n, &q_ref(1, j - 1), &c__1, &q_ref(1, j)
-					, &c__1, &d__[j], &work[j]);
+				zrot_(n, &q[(j - 1) * q_dim1 + 1], &c__1, &q[
+					j * q_dim1 + 1], &c__1, &d__[j], &
+					work[j]);
 /* L180: */
 			    }
 			}
@@ -692,19 +726,19 @@
 		    for (j = j1; i__2 < 0 ? j >= i__3 : j <= i__3; j += i__2) 
 			    {
 
-/*                    create nonzero element a(j+kd,j-1) outside the   
-                      band and store it in WORK */
+/*                    create nonzero element a(j+kd,j-1) outside the */
+/*                    band and store it in WORK */
 
 			i__4 = j + *kd;
 			i__5 = j;
-			i__6 = ab_subscr(kd1, j);
+			i__6 = kd1 + j * ab_dim1;
 			z__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * 
 				ab[i__6].i, z__1.i = work[i__5].r * ab[i__6]
 				.i + work[i__5].i * ab[i__6].r;
 			work[i__4].r = z__1.r, work[i__4].i = z__1.i;
-			i__4 = ab_subscr(kd1, j);
+			i__4 = kd1 + j * ab_dim1;
 			i__5 = j;
-			i__6 = ab_subscr(kd1, j);
+			i__6 = kd1 + j * ab_dim1;
 			z__1.r = d__[i__5] * ab[i__6].r, z__1.i = d__[i__5] * 
 				ab[i__6].i;
 			ab[i__4].r = z__1.r, ab[i__4].i = z__1.i;
@@ -718,14 +752,14 @@
 
 	if (*kd > 0) {
 
-/*           make off-diagonal elements real and copy them to E */
+/*           make off-diagonal elements float and copy them to E */
 
 	    i__1 = *n - 1;
 	    for (i__ = 1; i__ <= i__1; ++i__) {
-		i__2 = ab_subscr(2, i__);
+		i__2 = i__ * ab_dim1 + 2;
 		t.r = ab[i__2].r, t.i = ab[i__2].i;
-		abst = z_abs(&t);
-		i__2 = ab_subscr(2, i__);
+		abst = z_ABS(&t);
+		i__2 = i__ * ab_dim1 + 2;
 		ab[i__2].r = abst, ab[i__2].i = 0.;
 		e[i__] = abst;
 		if (abst != 0.) {
@@ -735,14 +769,14 @@
 		    t.r = 1., t.i = 0.;
 		}
 		if (i__ < *n - 1) {
-		    i__2 = ab_subscr(2, i__ + 1);
-		    i__3 = ab_subscr(2, i__ + 1);
+		    i__2 = (i__ + 1) * ab_dim1 + 2;
+		    i__3 = (i__ + 1) * ab_dim1 + 2;
 		    z__1.r = ab[i__3].r * t.r - ab[i__3].i * t.i, z__1.i = ab[
 			    i__3].r * t.i + ab[i__3].i * t.r;
 		    ab[i__2].r = z__1.r, ab[i__2].i = z__1.i;
 		}
 		if (wantq) {
-		    zscal_(n, &t, &q_ref(1, i__ + 1), &c__1);
+		    zscal_(n, &t, &q[(i__ + 1) * q_dim1 + 1], &c__1);
 		}
 /* L220: */
 	    }
@@ -762,7 +796,7 @@
 	i__1 = *n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    i__2 = i__;
-	    i__3 = ab_subscr(1, i__);
+	    i__3 = i__ * ab_dim1 + 1;
 	    d__[i__2] = ab[i__3].r;
 /* L240: */
 	}
@@ -773,10 +807,3 @@
 /*     End of ZHBTRD */
 
 } /* zhbtrd_ */
-
-#undef ab_ref
-#undef ab_subscr
-#undef q_ref
-#undef q_subscr
-
-

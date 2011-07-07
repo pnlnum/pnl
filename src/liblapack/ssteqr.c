@@ -1,138 +1,162 @@
+/* ssteqr.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int ssteqr_(char *compz, integer *n, real *d__, real *e, 
-	real *z__, integer *ldz, real *work, integer *info)
+/* Table of constant values */
+
+static float c_b9 = 0.f;
+static float c_b10 = 1.f;
+static int c__0 = 0;
+static int c__1 = 1;
+static int c__2 = 2;
+
+ int ssteqr_(char *compz, int *n, float *d__, float *e, 
+	float *z__, int *ldz, float *work, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
-
-
-    Purpose   
-    =======   
-
-    SSTEQR computes all eigenvalues and, optionally, eigenvectors of a   
-    symmetric tridiagonal matrix using the implicit QL or QR method.   
-    The eigenvectors of a full or band symmetric matrix can also be found   
-    if SSYTRD or SSPTRD or SSBTRD has been used to reduce this matrix to   
-    tridiagonal form.   
-
-    Arguments   
-    =========   
-
-    COMPZ   (input) CHARACTER*1   
-            = 'N':  Compute eigenvalues only.   
-            = 'V':  Compute eigenvalues and eigenvectors of the original   
-                    symmetric matrix.  On entry, Z must contain the   
-                    orthogonal matrix used to reduce the original matrix   
-                    to tridiagonal form.   
-            = 'I':  Compute eigenvalues and eigenvectors of the   
-                    tridiagonal matrix.  Z is initialized to the identity   
-                    matrix.   
-
-    N       (input) INTEGER   
-            The order of the matrix.  N >= 0.   
-
-    D       (input/output) REAL array, dimension (N)   
-            On entry, the diagonal elements of the tridiagonal matrix.   
-            On exit, if INFO = 0, the eigenvalues in ascending order.   
-
-    E       (input/output) REAL array, dimension (N-1)   
-            On entry, the (n-1) subdiagonal elements of the tridiagonal   
-            matrix.   
-            On exit, E has been destroyed.   
-
-    Z       (input/output) REAL array, dimension (LDZ, N)   
-            On entry, if  COMPZ = 'V', then Z contains the orthogonal   
-            matrix used in the reduction to tridiagonal form.   
-            On exit, if INFO = 0, then if  COMPZ = 'V', Z contains the   
-            orthonormal eigenvectors of the original symmetric matrix,   
-            and if COMPZ = 'I', Z contains the orthonormal eigenvectors   
-            of the symmetric tridiagonal matrix.   
-            If COMPZ = 'N', then Z is not referenced.   
-
-    LDZ     (input) INTEGER   
-            The leading dimension of the array Z.  LDZ >= 1, and if   
-            eigenvectors are desired, then  LDZ >= max(1,N).   
-
-    WORK    (workspace) REAL array, dimension (max(1,2*N-2))   
-            If COMPZ = 'N', then WORK is not referenced.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-            > 0:  the algorithm has failed to find all the eigenvalues in   
-                  a total of 30*N iterations; if INFO = i, then i   
-                  elements of E have not converged to zero; on exit, D   
-                  and E contain the elements of a symmetric tridiagonal   
-                  matrix which is orthogonally similar to the original   
-                  matrix.   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static real c_b9 = 0.f;
-    static real c_b10 = 1.f;
-    static integer c__0 = 0;
-    static integer c__1 = 1;
-    static integer c__2 = 2;
-    
     /* System generated locals */
-    integer z_dim1, z_offset, i__1, i__2;
-    real r__1, r__2;
+    int z_dim1, z_offset, i__1, i__2;
+    float r__1, r__2;
+
     /* Builtin functions */
-    double sqrt(doublereal), r_sign(real *, real *);
+    double sqrt(double), r_sign(float *, float *);
+
     /* Local variables */
-    static integer lend, jtot;
-    extern /* Subroutine */ int slae2_(real *, real *, real *, real *, real *)
+    float b, c__, f, g;
+    int i__, j, k, l, m;
+    float p, r__, s;
+    int l1, ii, mm, lm1, mm1, nm1;
+    float rt1, rt2, eps;
+    int lsv;
+    float tst, eps2;
+    int lend, jtot;
+    extern  int slae2_(float *, float *, float *, float *, float *)
 	    ;
-    static real b, c__, f, g;
-    static integer i__, j, k, l, m;
-    static real p, r__, s;
-    extern logical lsame_(char *, char *);
-    static real anorm;
-    extern /* Subroutine */ int slasr_(char *, char *, char *, integer *, 
-	    integer *, real *, real *, real *, integer *);
-    static integer l1;
-    extern /* Subroutine */ int sswap_(integer *, real *, integer *, real *, 
-	    integer *);
-    static integer lendm1, lendp1;
-    extern /* Subroutine */ int slaev2_(real *, real *, real *, real *, real *
-	    , real *, real *);
-    extern doublereal slapy2_(real *, real *);
-    static integer ii, mm, iscale;
-    extern doublereal slamch_(char *);
-    static real safmin;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static real safmax;
-    extern /* Subroutine */ int slascl_(char *, integer *, integer *, real *, 
-	    real *, integer *, integer *, real *, integer *, integer *);
-    static integer lendsv;
-    extern /* Subroutine */ int slartg_(real *, real *, real *, real *, real *
-	    ), slaset_(char *, integer *, integer *, real *, real *, real *, 
-	    integer *);
-    static real ssfmin;
-    static integer nmaxit, icompz;
-    static real ssfmax;
-    extern doublereal slanst_(char *, integer *, real *, real *);
-    extern /* Subroutine */ int slasrt_(char *, integer *, real *, integer *);
-    static integer lm1, mm1, nm1;
-    static real rt1, rt2, eps;
-    static integer lsv;
-    static real tst, eps2;
-#define z___ref(a_1,a_2) z__[(a_2)*z_dim1 + a_1]
+    extern int lsame_(char *, char *);
+    float anorm;
+    extern  int slasr_(char *, char *, char *, int *, 
+	    int *, float *, float *, float *, int *), sswap_(int *, float *, int *, float *, int *);
+    int lendm1, lendp1;
+    extern  int slaev2_(float *, float *, float *, float *, float *
+, float *, float *);
+    extern double slapy2_(float *, float *);
+    int iscale;
+    extern double slamch_(char *);
+    float safmin;
+    extern  int xerbla_(char *, int *);
+    float safmax;
+    extern  int slascl_(char *, int *, int *, float *, 
+	    float *, int *, int *, float *, int *, int *);
+    int lendsv;
+    extern  int slartg_(float *, float *, float *, float *, float *
+), slaset_(char *, int *, int *, float *, float *, float *, 
+	    int *);
+    float ssfmin;
+    int nmaxit, icompz;
+    float ssfmax;
+    extern double slanst_(char *, int *, float *, float *);
+    extern  int slasrt_(char *, int *, float *, int *);
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  SSTEQR computes all eigenvalues and, optionally, eigenvectors of a */
+/*  symmetric tridiagonal matrix using the implicit QL or QR method. */
+/*  The eigenvectors of a full or band symmetric matrix can also be found */
+/*  if SSYTRD or SSPTRD or SSBTRD has been used to reduce this matrix to */
+/*  tridiagonal form. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  COMPZ   (input) CHARACTER*1 */
+/*          = 'N':  Compute eigenvalues only. */
+/*          = 'V':  Compute eigenvalues and eigenvectors of the original */
+/*                  symmetric matrix.  On entry, Z must contain the */
+/*                  orthogonal matrix used to reduce the original matrix */
+/*                  to tridiagonal form. */
+/*          = 'I':  Compute eigenvalues and eigenvectors of the */
+/*                  tridiagonal matrix.  Z is initialized to the identity */
+/*                  matrix. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix.  N >= 0. */
+
+/*  D       (input/output) REAL array, dimension (N) */
+/*          On entry, the diagonal elements of the tridiagonal matrix. */
+/*          On exit, if INFO = 0, the eigenvalues in ascending order. */
+
+/*  E       (input/output) REAL array, dimension (N-1) */
+/*          On entry, the (n-1) subdiagonal elements of the tridiagonal */
+/*          matrix. */
+/*          On exit, E has been destroyed. */
+
+/*  Z       (input/output) REAL array, dimension (LDZ, N) */
+/*          On entry, if  COMPZ = 'V', then Z contains the orthogonal */
+/*          matrix used in the reduction to tridiagonal form. */
+/*          On exit, if INFO = 0, then if  COMPZ = 'V', Z contains the */
+/*          orthonormal eigenvectors of the original symmetric matrix, */
+/*          and if COMPZ = 'I', Z contains the orthonormal eigenvectors */
+/*          of the symmetric tridiagonal matrix. */
+/*          If COMPZ = 'N', then Z is not referenced. */
+
+/*  LDZ     (input) INTEGER */
+/*          The leading dimension of the array Z.  LDZ >= 1, and if */
+/*          eigenvectors are desired, then  LDZ >= MAX(1,N). */
+
+/*  WORK    (workspace) REAL array, dimension (MAX(1,2*N-2)) */
+/*          If COMPZ = 'N', then WORK is not referenced. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+/*          > 0:  the algorithm has failed to find all the eigenvalues in */
+/*                a total of 30*N iterations; if INFO = i, then i */
+/*                elements of E have not converged to zero; on exit, D */
+/*                and E contain the elements of a symmetric tridiagonal */
+/*                matrix which is orthogonally similar to the original */
+/*                matrix. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --d__;
     --e;
     z_dim1 = *ldz;
-    z_offset = 1 + z_dim1 * 1;
+    z_offset = 1 + z_dim1;
     z__ -= z_offset;
     --work;
 
@@ -152,7 +176,7 @@
 	*info = -1;
     } else if (*n < 0) {
 	*info = -2;
-    } else if (*ldz < 1 || icompz > 0 && *ldz < max(1,*n)) {
+    } else if (*ldz < 1 || icompz > 0 && *ldz < MAX(1,*n)) {
 	*info = -6;
     }
     if (*info != 0) {
@@ -169,7 +193,7 @@
 
     if (*n == 1) {
 	if (icompz == 2) {
-	    z___ref(1, 1) = 1.f;
+	    z__[z_dim1 + 1] = 1.f;
 	}
 	return 0;
     }
@@ -185,8 +209,8 @@
     ssfmax = sqrt(safmax) / 3.f;
     ssfmin = sqrt(safmin) / eps2;
 
-/*     Compute the eigenvalues and eigenvectors of the tridiagonal   
-       matrix. */
+/*     Compute the eigenvalues and eigenvectors of the tridiagonal */
+/*     matrix. */
 
     if (icompz == 2) {
 	slaset_("Full", n, n, &c_b9, &c_b10, &z__[z_offset], ldz);
@@ -195,9 +219,9 @@
     nmaxit = *n * 30;
     jtot = 0;
 
-/*     Determine where the matrix splits and choose QL or QR iteration   
-       for each block, according to whether top or bottom diagonal   
-       element is smaller. */
+/*     Determine where the matrix splits and choose QL or QR iteration */
+/*     for each block, according to whether top or bottom diagonal */
+/*     element is smaller. */
 
     l1 = 1;
     nm1 = *n - 1;
@@ -212,12 +236,12 @@ L10:
     if (l1 <= nm1) {
 	i__1 = nm1;
 	for (m = l1; m <= i__1; ++m) {
-	    tst = (r__1 = e[m], dabs(r__1));
+	    tst = (r__1 = e[m], ABS(r__1));
 	    if (tst == 0.f) {
 		goto L30;
 	    }
-	    if (tst <= sqrt((r__1 = d__[m], dabs(r__1))) * sqrt((r__2 = d__[m 
-		    + 1], dabs(r__2))) * eps) {
+	    if (tst <= sqrt((r__1 = d__[m], ABS(r__1))) * sqrt((r__2 = d__[m 
+		    + 1], ABS(r__2))) * eps) {
 		e[m] = 0.f;
 		goto L30;
 	    }
@@ -264,16 +288,16 @@ L30:
 
 /*     Choose between QL and QR iteration */
 
-    if ((r__1 = d__[lend], dabs(r__1)) < (r__2 = d__[l], dabs(r__2))) {
+    if ((r__1 = d__[lend], ABS(r__1)) < (r__2 = d__[l], ABS(r__2))) {
 	lend = lsv;
 	l = lendsv;
     }
 
     if (lend > l) {
 
-/*        QL Iteration   
+/*        QL Iteration */
 
-          Look for small subdiagonal element. */
+/*        Look for small subdiagonal element. */
 
 L40:
 	if (l != lend) {
@@ -281,10 +305,10 @@ L40:
 	    i__1 = lendm1;
 	    for (m = l; m <= i__1; ++m) {
 /* Computing 2nd power */
-		r__2 = (r__1 = e[m], dabs(r__1));
+		r__2 = (r__1 = e[m], ABS(r__1));
 		tst = r__2 * r__2;
-		if (tst <= eps2 * (r__1 = d__[m], dabs(r__1)) * (r__2 = d__[m 
-			+ 1], dabs(r__2)) + safmin) {
+		if (tst <= eps2 * (r__1 = d__[m], ABS(r__1)) * (r__2 = d__[m 
+			+ 1], ABS(r__2)) + safmin) {
 		    goto L60;
 		}
 /* L50: */
@@ -302,8 +326,8 @@ L60:
 	    goto L80;
 	}
 
-/*        If remaining matrix is 2-by-2, use SLAE2 or SLAEV2   
-          to compute its eigensystem. */
+/*        If remaining matrix is 2-by-2, use SLAE2 or SLAEV2 */
+/*        to compute its eigensystem. */
 
 	if (m == l + 1) {
 	    if (icompz > 0) {
@@ -311,7 +335,7 @@ L60:
 		work[l] = c__;
 		work[*n - 1 + l] = s;
 		slasr_("R", "V", "B", n, &c__2, &work[l], &work[*n - 1 + l], &
-			z___ref(1, l), ldz);
+			z__[l * z_dim1 + 1], ldz);
 	    } else {
 		slae2_(&d__[l], &e[l], &d__[l + 1], &rt1, &rt2);
 	    }
@@ -371,8 +395,8 @@ L60:
 
 	if (icompz > 0) {
 	    mm = m - l + 1;
-	    slasr_("R", "V", "B", n, &mm, &work[l], &work[*n - 1 + l], &
-		    z___ref(1, l), ldz);
+	    slasr_("R", "V", "B", n, &mm, &work[l], &work[*n - 1 + l], &z__[l 
+		    * z_dim1 + 1], ldz);
 	}
 
 	d__[l] -= p;
@@ -392,9 +416,9 @@ L80:
 
     } else {
 
-/*        QR Iteration   
+/*        QR Iteration */
 
-          Look for small superdiagonal element. */
+/*        Look for small superdiagonal element. */
 
 L90:
 	if (l != lend) {
@@ -402,10 +426,10 @@ L90:
 	    i__1 = lendp1;
 	    for (m = l; m >= i__1; --m) {
 /* Computing 2nd power */
-		r__2 = (r__1 = e[m - 1], dabs(r__1));
+		r__2 = (r__1 = e[m - 1], ABS(r__1));
 		tst = r__2 * r__2;
-		if (tst <= eps2 * (r__1 = d__[m], dabs(r__1)) * (r__2 = d__[m 
-			- 1], dabs(r__2)) + safmin) {
+		if (tst <= eps2 * (r__1 = d__[m], ABS(r__1)) * (r__2 = d__[m 
+			- 1], ABS(r__2)) + safmin) {
 		    goto L110;
 		}
 /* L100: */
@@ -423,8 +447,8 @@ L110:
 	    goto L130;
 	}
 
-/*        If remaining matrix is 2-by-2, use SLAE2 or SLAEV2   
-          to compute its eigensystem. */
+/*        If remaining matrix is 2-by-2, use SLAE2 or SLAEV2 */
+/*        to compute its eigensystem. */
 
 	if (m == l - 1) {
 	    if (icompz > 0) {
@@ -433,7 +457,7 @@ L110:
 		work[m] = c__;
 		work[*n - 1 + m] = s;
 		slasr_("R", "V", "F", n, &c__2, &work[m], &work[*n - 1 + m], &
-			z___ref(1, l - 1), ldz);
+			z__[(l - 1) * z_dim1 + 1], ldz);
 	    } else {
 		slae2_(&d__[l - 1], &e[l - 1], &d__[l], &rt1, &rt2);
 	    }
@@ -493,8 +517,8 @@ L110:
 
 	if (icompz > 0) {
 	    mm = l - m + 1;
-	    slasr_("R", "V", "F", n, &mm, &work[m], &work[*n - 1 + m], &
-		    z___ref(1, m), ldz);
+	    slasr_("R", "V", "F", n, &mm, &work[m], &work[*n - 1 + m], &z__[m 
+		    * z_dim1 + 1], ldz);
 	}
 
 	d__[l] -= p;
@@ -533,8 +557,8 @@ L140:
 		info);
     }
 
-/*     Check for no convergence to an eigenvalue after a total   
-       of N*MAXIT iterations. */
+/*     Check for no convergence to an eigenvalue after a total */
+/*     of N*MAXIT iterations. */
 
     if (jtot < nmaxit) {
 	goto L10;
@@ -577,7 +601,8 @@ L160:
 	    if (k != i__) {
 		d__[k] = d__[i__];
 		d__[i__] = p;
-		sswap_(n, &z___ref(1, i__), &c__1, &z___ref(1, k), &c__1);
+		sswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[k * z_dim1 + 1], 
+			 &c__1);
 	    }
 /* L180: */
 	}
@@ -589,7 +614,3 @@ L190:
 /*     End of SSTEQR */
 
 } /* ssteqr_ */
-
-#undef z___ref
-
-

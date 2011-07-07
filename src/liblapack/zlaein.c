@@ -1,152 +1,178 @@
+/* zlaein.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zlaein_(logical *rightv, logical *noinit, integer *n, 
-	doublecomplex *h__, integer *ldh, doublecomplex *w, doublecomplex *v, 
-	doublecomplex *b, integer *ldb, doublereal *rwork, doublereal *eps3, 
-	doublereal *smlnum, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int zlaein_(int *rightv, int *noinit, int *n, 
+	doublecomplex *h__, int *ldh, doublecomplex *w, doublecomplex *v, 
+	doublecomplex *b, int *ldb, double *rwork, double *eps3, 
+	double *smlnum, int *info)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
-
-
-    Purpose   
-    =======   
-
-    ZLAEIN uses inverse iteration to find a right or left eigenvector   
-    corresponding to the eigenvalue W of a complex upper Hessenberg   
-    matrix H.   
-
-    Arguments   
-    =========   
-
-    RIGHTV   (input) LOGICAL   
-            = .TRUE. : compute right eigenvector;   
-            = .FALSE.: compute left eigenvector.   
-
-    NOINIT   (input) LOGICAL   
-            = .TRUE. : no initial vector supplied in V   
-            = .FALSE.: initial vector supplied in V.   
-
-    N       (input) INTEGER   
-            The order of the matrix H.  N >= 0.   
-
-    H       (input) COMPLEX*16 array, dimension (LDH,N)   
-            The upper Hessenberg matrix H.   
-
-    LDH     (input) INTEGER   
-            The leading dimension of the array H.  LDH >= max(1,N).   
-
-    W       (input) COMPLEX*16   
-            The eigenvalue of H whose corresponding right or left   
-            eigenvector is to be computed.   
-
-    V       (input/output) COMPLEX*16 array, dimension (N)   
-            On entry, if NOINIT = .FALSE., V must contain a starting   
-            vector for inverse iteration; otherwise V need not be set.   
-            On exit, V contains the computed eigenvector, normalized so   
-            that the component of largest magnitude has magnitude 1; here   
-            the magnitude of a complex number (x,y) is taken to be   
-            |x| + |y|.   
-
-    B       (workspace) COMPLEX*16 array, dimension (LDB,N)   
-
-    LDB     (input) INTEGER   
-            The leading dimension of the array B.  LDB >= max(1,N).   
-
-    RWORK   (workspace) DOUBLE PRECISION array, dimension (N)   
-
-    EPS3    (input) DOUBLE PRECISION   
-            A small machine-dependent value which is used to perturb   
-            close eigenvalues, and to replace zero pivots.   
-
-    SMLNUM  (input) DOUBLE PRECISION   
-            A machine-dependent value close to the underflow threshold.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            = 1:  inverse iteration did not converge; V is set to the   
-                  last iterate.   
-
-    =====================================================================   
-
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer b_dim1, b_offset, h_dim1, h_offset, i__1, i__2, i__3, i__4, i__5;
-    doublereal d__1, d__2, d__3, d__4;
+    int b_dim1, b_offset, h_dim1, h_offset, i__1, i__2, i__3, i__4, i__5;
+    double d__1, d__2, d__3, d__4;
     doublecomplex z__1, z__2;
+
     /* Builtin functions */
-    double sqrt(doublereal), d_imag(doublecomplex *);
+    double sqrt(double), d_imag(doublecomplex *);
+
     /* Local variables */
-    static integer ierr;
-    static doublecomplex temp;
-    static integer i__, j;
-    static doublereal scale;
-    static doublecomplex x;
-    static char trans[1];
-    static doublereal rtemp, rootn, vnorm;
-    extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
-    static doublecomplex ei, ej;
-    extern /* Subroutine */ int zdscal_(integer *, doublereal *, 
-	    doublecomplex *, integer *);
-    extern integer izamax_(integer *, doublecomplex *, integer *);
-    extern /* Double Complex */ VOID zladiv_(doublecomplex *, doublecomplex *,
+    int i__, j;
+    doublecomplex x, ei, ej;
+    int its, ierr;
+    doublecomplex temp;
+    double scale;
+    char trans[1];
+    double rtemp, rootn, vnorm;
+    extern double dznrm2_(int *, doublecomplex *, int *);
+    extern  int zdscal_(int *, double *, 
+	    doublecomplex *, int *);
+    extern int izamax_(int *, doublecomplex *, int *);
+    extern /* Double Complex */ VOID zladiv_(doublecomplex *, doublecomplex *, 
 	     doublecomplex *);
-    static char normin[1];
-    extern doublereal dzasum_(integer *, doublecomplex *, integer *);
-    static doublereal nrmsml;
-    extern /* Subroutine */ int zlatrs_(char *, char *, char *, char *, 
-	    integer *, doublecomplex *, integer *, doublecomplex *, 
-	    doublereal *, doublereal *, integer *);
-    static doublereal growto;
-    static integer its;
-#define b_subscr(a_1,a_2) (a_2)*b_dim1 + a_1
-#define b_ref(a_1,a_2) b[b_subscr(a_1,a_2)]
-#define h___subscr(a_1,a_2) (a_2)*h_dim1 + a_1
-#define h___ref(a_1,a_2) h__[h___subscr(a_1,a_2)]
+    char normin[1];
+    extern double dzasum_(int *, doublecomplex *, int *);
+    double nrmsml;
+    extern  int zlatrs_(char *, char *, char *, char *, 
+	    int *, doublecomplex *, int *, doublecomplex *, 
+	    double *, double *, int *);
+    double growto;
 
 
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZLAEIN uses inverse iteration to find a right or left eigenvector */
+/*  corresponding to the eigenvalue W of a complex upper Hessenberg */
+/*  matrix H. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  RIGHTV   (input) LOGICAL */
+/*          = .TRUE. : compute right eigenvector; */
+/*          = .FALSE.: compute left eigenvector. */
+
+/*  NOINIT   (input) LOGICAL */
+/*          = .TRUE. : no initial vector supplied in V */
+/*          = .FALSE.: initial vector supplied in V. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix H.  N >= 0. */
+
+/*  H       (input) COMPLEX*16 array, dimension (LDH,N) */
+/*          The upper Hessenberg matrix H. */
+
+/*  LDH     (input) INTEGER */
+/*          The leading dimension of the array H.  LDH >= MAX(1,N). */
+
+/*  W       (input) COMPLEX*16 */
+/*          The eigenvalue of H whose corresponding right or left */
+/*          eigenvector is to be computed. */
+
+/*  V       (input/output) COMPLEX*16 array, dimension (N) */
+/*          On entry, if NOINIT = .FALSE., V must contain a starting */
+/*          vector for inverse iteration; otherwise V need not be set. */
+/*          On exit, V contains the computed eigenvector, normalized so */
+/*          that the component of largest magnitude has magnitude 1; here */
+/*          the magnitude of a complex number (x,y) is taken to be */
+/*          |x| + |y|. */
+
+/*  B       (workspace) COMPLEX*16 array, dimension (LDB,N) */
+
+/*  LDB     (input) INTEGER */
+/*          The leading dimension of the array B.  LDB >= MAX(1,N). */
+
+/*  RWORK   (workspace) DOUBLE PRECISION array, dimension (N) */
+
+/*  EPS3    (input) DOUBLE PRECISION */
+/*          A small machine-dependent value which is used to perturb */
+/*          close eigenvalues, and to replace zero pivots. */
+
+/*  SMLNUM  (input) DOUBLE PRECISION */
+/*          A machine-dependent value close to the underflow threshold. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          = 1:  inverse iteration did not converge; V is set to the */
+/*                last iterate. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Statement Functions .. */
+/*     .. */
+/*     .. Statement Function definitions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     h_dim1 = *ldh;
-    h_offset = 1 + h_dim1 * 1;
+    h_offset = 1 + h_dim1;
     h__ -= h_offset;
     --v;
     b_dim1 = *ldb;
-    b_offset = 1 + b_dim1 * 1;
+    b_offset = 1 + b_dim1;
     b -= b_offset;
     --rwork;
 
     /* Function Body */
     *info = 0;
 
-/*     GROWTO is the threshold used in the acceptance test for an   
-       eigenvector. */
+/*     GROWTO is the threshold used in the acceptance test for an */
+/*     eigenvector. */
 
-    rootn = sqrt((doublereal) (*n));
+    rootn = sqrt((double) (*n));
     growto = .1 / rootn;
 /* Computing MAX */
     d__1 = 1., d__2 = *eps3 * rootn;
-    nrmsml = max(d__1,d__2) * *smlnum;
+    nrmsml = MAX(d__1,d__2) * *smlnum;
 
-/*     Form B = H - W*I (except that the subdiagonal elements are not   
-       stored). */
+/*     Form B = H - W*I (except that the subdiagonal elements are not */
+/*     stored). */
 
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 	i__2 = j - 1;
 	for (i__ = 1; i__ <= i__2; ++i__) {
-	    i__3 = b_subscr(i__, j);
-	    i__4 = h___subscr(i__, j);
+	    i__3 = i__ + j * b_dim1;
+	    i__4 = i__ + j * h_dim1;
 	    b[i__3].r = h__[i__4].r, b[i__3].i = h__[i__4].i;
 /* L10: */
 	}
-	i__2 = b_subscr(j, j);
-	i__3 = h___subscr(j, j);
+	i__2 = j + j * b_dim1;
+	i__3 = j + j * h_dim1;
 	z__1.r = h__[i__3].r - w->r, z__1.i = h__[i__3].i - w->i;
 	b[i__2].r = z__1.r, b[i__2].i = z__1.i;
 /* L20: */
@@ -167,41 +193,41 @@
 /*        Scale supplied initial vector. */
 
 	vnorm = dznrm2_(n, &v[1], &c__1);
-	d__1 = *eps3 * rootn / max(vnorm,nrmsml);
+	d__1 = *eps3 * rootn / MAX(vnorm,nrmsml);
 	zdscal_(n, &d__1, &v[1], &c__1);
     }
 
     if (*rightv) {
 
-/*        LU decomposition with partial pivoting of B, replacing zero   
-          pivots by EPS3. */
+/*        LU decomposition with partial pivoting of B, replacing zero */
+/*        pivots by EPS3. */
 
 	i__1 = *n - 1;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    i__2 = h___subscr(i__ + 1, i__);
+	    i__2 = i__ + 1 + i__ * h_dim1;
 	    ei.r = h__[i__2].r, ei.i = h__[i__2].i;
-	    i__2 = b_subscr(i__, i__);
-	    if ((d__1 = b[i__2].r, abs(d__1)) + (d__2 = d_imag(&b_ref(i__, 
-		    i__)), abs(d__2)) < (d__3 = ei.r, abs(d__3)) + (d__4 = 
-		    d_imag(&ei), abs(d__4))) {
+	    i__2 = i__ + i__ * b_dim1;
+	    if ((d__1 = b[i__2].r, ABS(d__1)) + (d__2 = d_imag(&b[i__ + i__ * 
+		    b_dim1]), ABS(d__2)) < (d__3 = ei.r, ABS(d__3)) + (d__4 = 
+		    d_imag(&ei), ABS(d__4))) {
 
 /*              Interchange rows and eliminate. */
 
-		zladiv_(&z__1, &b_ref(i__, i__), &ei);
+		zladiv_(&z__1, &b[i__ + i__ * b_dim1], &ei);
 		x.r = z__1.r, x.i = z__1.i;
-		i__2 = b_subscr(i__, i__);
+		i__2 = i__ + i__ * b_dim1;
 		b[i__2].r = ei.r, b[i__2].i = ei.i;
 		i__2 = *n;
 		for (j = i__ + 1; j <= i__2; ++j) {
-		    i__3 = b_subscr(i__ + 1, j);
+		    i__3 = i__ + 1 + j * b_dim1;
 		    temp.r = b[i__3].r, temp.i = b[i__3].i;
-		    i__3 = b_subscr(i__ + 1, j);
-		    i__4 = b_subscr(i__, j);
+		    i__3 = i__ + 1 + j * b_dim1;
+		    i__4 = i__ + j * b_dim1;
 		    z__2.r = x.r * temp.r - x.i * temp.i, z__2.i = x.r * 
 			    temp.i + x.i * temp.r;
 		    z__1.r = b[i__4].r - z__2.r, z__1.i = b[i__4].i - z__2.i;
 		    b[i__3].r = z__1.r, b[i__3].i = z__1.i;
-		    i__3 = b_subscr(i__, j);
+		    i__3 = i__ + j * b_dim1;
 		    b[i__3].r = temp.r, b[i__3].i = temp.i;
 /* L40: */
 		}
@@ -209,19 +235,19 @@
 
 /*              Eliminate without interchange. */
 
-		i__2 = b_subscr(i__, i__);
+		i__2 = i__ + i__ * b_dim1;
 		if (b[i__2].r == 0. && b[i__2].i == 0.) {
-		    i__3 = b_subscr(i__, i__);
+		    i__3 = i__ + i__ * b_dim1;
 		    b[i__3].r = *eps3, b[i__3].i = 0.;
 		}
-		zladiv_(&z__1, &ei, &b_ref(i__, i__));
+		zladiv_(&z__1, &ei, &b[i__ + i__ * b_dim1]);
 		x.r = z__1.r, x.i = z__1.i;
 		if (x.r != 0. || x.i != 0.) {
 		    i__2 = *n;
 		    for (j = i__ + 1; j <= i__2; ++j) {
-			i__3 = b_subscr(i__ + 1, j);
-			i__4 = b_subscr(i__ + 1, j);
-			i__5 = b_subscr(i__, j);
+			i__3 = i__ + 1 + j * b_dim1;
+			i__4 = i__ + 1 + j * b_dim1;
+			i__5 = i__ + j * b_dim1;
 			z__2.r = x.r * b[i__5].r - x.i * b[i__5].i, z__2.i = 
 				x.r * b[i__5].i + x.i * b[i__5].r;
 			z__1.r = b[i__4].r - z__2.r, z__1.i = b[i__4].i - 
@@ -233,9 +259,9 @@
 	    }
 /* L60: */
 	}
-	i__1 = b_subscr(*n, *n);
+	i__1 = *n + *n * b_dim1;
 	if (b[i__1].r == 0. && b[i__1].i == 0.) {
-	    i__2 = b_subscr(*n, *n);
+	    i__2 = *n + *n * b_dim1;
 	    b[i__2].r = *eps3, b[i__2].i = 0.;
 	}
 
@@ -243,34 +269,34 @@
 
     } else {
 
-/*        UL decomposition with partial pivoting of B, replacing zero   
-          pivots by EPS3. */
+/*        UL decomposition with partial pivoting of B, replacing zero */
+/*        pivots by EPS3. */
 
 	for (j = *n; j >= 2; --j) {
-	    i__1 = h___subscr(j, j - 1);
+	    i__1 = j + (j - 1) * h_dim1;
 	    ej.r = h__[i__1].r, ej.i = h__[i__1].i;
-	    i__1 = b_subscr(j, j);
-	    if ((d__1 = b[i__1].r, abs(d__1)) + (d__2 = d_imag(&b_ref(j, j)), 
-		    abs(d__2)) < (d__3 = ej.r, abs(d__3)) + (d__4 = d_imag(&
-		    ej), abs(d__4))) {
+	    i__1 = j + j * b_dim1;
+	    if ((d__1 = b[i__1].r, ABS(d__1)) + (d__2 = d_imag(&b[j + j * 
+		    b_dim1]), ABS(d__2)) < (d__3 = ej.r, ABS(d__3)) + (d__4 = 
+		    d_imag(&ej), ABS(d__4))) {
 
 /*              Interchange columns and eliminate. */
 
-		zladiv_(&z__1, &b_ref(j, j), &ej);
+		zladiv_(&z__1, &b[j + j * b_dim1], &ej);
 		x.r = z__1.r, x.i = z__1.i;
-		i__1 = b_subscr(j, j);
+		i__1 = j + j * b_dim1;
 		b[i__1].r = ej.r, b[i__1].i = ej.i;
 		i__1 = j - 1;
 		for (i__ = 1; i__ <= i__1; ++i__) {
-		    i__2 = b_subscr(i__, j - 1);
+		    i__2 = i__ + (j - 1) * b_dim1;
 		    temp.r = b[i__2].r, temp.i = b[i__2].i;
-		    i__2 = b_subscr(i__, j - 1);
-		    i__3 = b_subscr(i__, j);
+		    i__2 = i__ + (j - 1) * b_dim1;
+		    i__3 = i__ + j * b_dim1;
 		    z__2.r = x.r * temp.r - x.i * temp.i, z__2.i = x.r * 
 			    temp.i + x.i * temp.r;
 		    z__1.r = b[i__3].r - z__2.r, z__1.i = b[i__3].i - z__2.i;
 		    b[i__2].r = z__1.r, b[i__2].i = z__1.i;
-		    i__2 = b_subscr(i__, j);
+		    i__2 = i__ + j * b_dim1;
 		    b[i__2].r = temp.r, b[i__2].i = temp.i;
 /* L70: */
 		}
@@ -278,19 +304,19 @@
 
 /*              Eliminate without interchange. */
 
-		i__1 = b_subscr(j, j);
+		i__1 = j + j * b_dim1;
 		if (b[i__1].r == 0. && b[i__1].i == 0.) {
-		    i__2 = b_subscr(j, j);
+		    i__2 = j + j * b_dim1;
 		    b[i__2].r = *eps3, b[i__2].i = 0.;
 		}
-		zladiv_(&z__1, &ej, &b_ref(j, j));
+		zladiv_(&z__1, &ej, &b[j + j * b_dim1]);
 		x.r = z__1.r, x.i = z__1.i;
 		if (x.r != 0. || x.i != 0.) {
 		    i__1 = j - 1;
 		    for (i__ = 1; i__ <= i__1; ++i__) {
-			i__2 = b_subscr(i__, j - 1);
-			i__3 = b_subscr(i__, j - 1);
-			i__4 = b_subscr(i__, j);
+			i__2 = i__ + (j - 1) * b_dim1;
+			i__3 = i__ + (j - 1) * b_dim1;
+			i__4 = i__ + j * b_dim1;
 			z__2.r = x.r * b[i__4].r - x.i * b[i__4].i, z__2.i = 
 				x.r * b[i__4].i + x.i * b[i__4].r;
 			z__1.r = b[i__3].r - z__2.r, z__1.i = b[i__3].i - 
@@ -302,9 +328,9 @@
 	    }
 /* L90: */
 	}
-	i__1 = b_subscr(1, 1);
+	i__1 = b_dim1 + 1;
 	if (b[i__1].r == 0. && b[i__1].i == 0.) {
-	    i__2 = b_subscr(1, 1);
+	    i__2 = b_dim1 + 1;
 	    b[i__2].r = *eps3, b[i__2].i = 0.;
 	}
 
@@ -316,12 +342,12 @@
     i__1 = *n;
     for (its = 1; its <= i__1; ++its) {
 
-/*        Solve U*x = scale*v for a right eigenvector   
-            or U'*x = scale*v for a left eigenvector,   
-          overwriting x on v. */
+/*        Solve U*x = scale*v for a right eigenvector */
+/*          or U'*x = scale*v for a left eigenvector, */
+/*        overwriting x on v. */
 
 	zlatrs_("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &v[1]
-		, &scale, &rwork[1], &ierr);
+, &scale, &rwork[1], &ierr);
 	*(unsigned char *)normin = 'Y';
 
 /*        Test for sufficient growth in the norm of v. */
@@ -359,7 +385,7 @@ L120:
 
     i__ = izamax_(n, &v[1], &c__1);
     i__1 = i__;
-    d__3 = 1. / ((d__1 = v[i__1].r, abs(d__1)) + (d__2 = d_imag(&v[i__]), abs(
+    d__3 = 1. / ((d__1 = v[i__1].r, ABS(d__1)) + (d__2 = d_imag(&v[i__]), ABS(
 	    d__2)));
     zdscal_(n, &d__3, &v[1], &c__1);
 
@@ -368,10 +394,3 @@ L120:
 /*     End of ZLAEIN */
 
 } /* zlaein_ */
-
-#undef h___ref
-#undef h___subscr
-#undef b_ref
-#undef b_subscr
-
-

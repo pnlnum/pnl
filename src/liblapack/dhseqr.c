@@ -1,200 +1,321 @@
+/* dhseqr.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dhseqr_(char *job, char *compz, integer *n, integer *ilo,
-	 integer *ihi, doublereal *h__, integer *ldh, doublereal *wr, 
-	doublereal *wi, doublereal *z__, integer *ldz, doublereal *work, 
-	integer *lwork, integer *info)
+/* Table of constant values */
+
+static double c_b11 = 0.;
+static double c_b12 = 1.;
+static int c__12 = 12;
+static int c__2 = 2;
+static int c__49 = 49;
+
+ int dhseqr_(char *job, char *compz, int *n, int *ilo, 
+	 int *ihi, double *h__, int *ldh, double *wr, 
+	double *wi, double *z__, int *ldz, double *work, 
+	int *lwork, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    DHSEQR computes the eigenvalues of a real upper Hessenberg matrix H   
-    and, optionally, the matrices T and Z from the Schur decomposition   
-    H = Z T Z**T, where T is an upper quasi-triangular matrix (the Schur   
-    form), and Z is the orthogonal matrix of Schur vectors.   
-
-    Optionally Z may be postmultiplied into an input orthogonal matrix Q,   
-    so that this routine can give the Schur factorization of a matrix A   
-    which has been reduced to the Hessenberg form H by the orthogonal   
-    matrix Q:  A = Q*H*Q**T = (QZ)*T*(QZ)**T.   
-
-    Arguments   
-    =========   
-
-    JOB     (input) CHARACTER*1   
-            = 'E':  compute eigenvalues only;   
-            = 'S':  compute eigenvalues and the Schur form T.   
-
-    COMPZ   (input) CHARACTER*1   
-            = 'N':  no Schur vectors are computed;   
-            = 'I':  Z is initialized to the unit matrix and the matrix Z   
-                    of Schur vectors of H is returned;   
-            = 'V':  Z must contain an orthogonal matrix Q on entry, and   
-                    the product Q*Z is returned.   
-
-    N       (input) INTEGER   
-            The order of the matrix H.  N >= 0.   
-
-    ILO     (input) INTEGER   
-    IHI     (input) INTEGER   
-            It is assumed that H is already upper triangular in rows   
-            and columns 1:ILO-1 and IHI+1:N. ILO and IHI are normally   
-            set by a previous call to DGEBAL, and then passed to SGEHRD   
-            when the matrix output by DGEBAL is reduced to Hessenberg   
-            form. Otherwise ILO and IHI should be set to 1 and N   
-            respectively.   
-            1 <= ILO <= IHI <= N, if N > 0; ILO=1 and IHI=0, if N=0.   
-
-    H       (input/output) DOUBLE PRECISION array, dimension (LDH,N)   
-            On entry, the upper Hessenberg matrix H.   
-            On exit, if JOB = 'S', H contains the upper quasi-triangular   
-            matrix T from the Schur decomposition (the Schur form);   
-            2-by-2 diagonal blocks (corresponding to complex conjugate   
-            pairs of eigenvalues) are returned in standard form, with   
-            H(i,i) = H(i+1,i+1) and H(i+1,i)*H(i,i+1) < 0. If JOB = 'E',   
-            the contents of H are unspecified on exit.   
-
-    LDH     (input) INTEGER   
-            The leading dimension of the array H. LDH >= max(1,N).   
-
-    WR      (output) DOUBLE PRECISION array, dimension (N)   
-    WI      (output) DOUBLE PRECISION array, dimension (N)   
-            The real and imaginary parts, respectively, of the computed   
-            eigenvalues. If two eigenvalues are computed as a complex   
-            conjugate pair, they are stored in consecutive elements of   
-            WR and WI, say the i-th and (i+1)th, with WI(i) > 0 and   
-            WI(i+1) < 0. If JOB = 'S', the eigenvalues are stored in the   
-            same order as on the diagonal of the Schur form returned in   
-            H, with WR(i) = H(i,i) and, if H(i:i+1,i:i+1) is a 2-by-2   
-            diagonal block, WI(i) = sqrt(H(i+1,i)*H(i,i+1)) and   
-            WI(i+1) = -WI(i).   
-
-    Z       (input/output) DOUBLE PRECISION array, dimension (LDZ,N)   
-            If COMPZ = 'N': Z is not referenced.   
-            If COMPZ = 'I': on entry, Z need not be set, and on exit, Z   
-            contains the orthogonal matrix Z of the Schur vectors of H.   
-            If COMPZ = 'V': on entry Z must contain an N-by-N matrix Q,   
-            which is assumed to be equal to the unit matrix except for   
-            the submatrix Z(ILO:IHI,ILO:IHI); on exit Z contains Q*Z.   
-            Normally Q is the orthogonal matrix generated by DORGHR after   
-            the call to DGEHRD which formed the Hessenberg matrix H.   
-
-    LDZ     (input) INTEGER   
-            The leading dimension of the array Z.   
-            LDZ >= max(1,N) if COMPZ = 'I' or 'V'; LDZ >= 1 otherwise.   
-
-    WORK    (workspace/output) DOUBLE PRECISION array, dimension (LWORK)   
-            On exit, if INFO = 0, WORK(1) returns the optimal LWORK.   
-
-    LWORK   (input) INTEGER   
-            The dimension of the array WORK.  LWORK >= max(1,N).   
-
-            If LWORK = -1, then a workspace query is assumed; the routine   
-            only calculates the optimal size of the WORK array, returns   
-            this value as the first entry of the WORK array, and no error   
-            message related to LWORK is issued by XERBLA.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-            > 0:  if INFO = i, DHSEQR failed to compute all of the   
-                  eigenvalues in a total of 30*(IHI-ILO+1) iterations;   
-                  elements 1:ilo-1 and i+1:n of WR and WI contain those   
-                  eigenvalues which have been successfully computed.   
-
-    =====================================================================   
-
-
-       Decode and test the input parameters   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static doublereal c_b9 = 0.;
-    static doublereal c_b10 = 1.;
-    static integer c__4 = 4;
-    static integer c_n1 = -1;
-    static integer c__2 = 2;
-    static integer c__8 = 8;
-    static integer c__15 = 15;
-    static logical c_false = FALSE_;
-    static integer c__1 = 1;
-    
     /* System generated locals */
     address a__1[2];
-    integer h_dim1, h_offset, z_dim1, z_offset, i__1, i__2, i__3[2], i__4, 
-	    i__5;
-    doublereal d__1, d__2;
+    int h_dim1, h_offset, z_dim1, z_offset, i__1, i__2[2], i__3;
+    double d__1;
     char ch__1[2];
-    /* Builtin functions   
-       Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
+
+    /* Builtin functions */
+     int s_cat(char *, char **, int *, int *, unsigned long);
+
     /* Local variables */
-    static integer maxb;
-    static doublereal absw;
-    static integer ierr;
-    static doublereal unfl, temp, ovfl;
-    static integer i__, j, k, l;
-    static doublereal s[225]	/* was [15][15] */, v[16];
-    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *);
-    extern logical lsame_(char *, char *);
-    extern /* Subroutine */ int dgemv_(char *, integer *, integer *, 
-	    doublereal *, doublereal *, integer *, doublereal *, integer *, 
-	    doublereal *, doublereal *, integer *);
-    static integer itemp;
-    extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *);
-    static integer i1, i2;
-    static logical initz, wantt, wantz;
-    extern doublereal dlapy2_(doublereal *, doublereal *);
-    extern /* Subroutine */ int dlabad_(doublereal *, doublereal *);
-    static integer ii, nh;
-    extern doublereal dlamch_(char *);
-    extern /* Subroutine */ int dlarfg_(integer *, doublereal *, doublereal *,
-	     integer *, doublereal *);
-    static integer nr, ns;
-    extern integer idamax_(integer *, doublereal *, integer *);
-    static integer nv;
-    extern doublereal dlanhs_(char *, integer *, doublereal *, integer *, 
-	    doublereal *);
-    extern /* Subroutine */ int dlahqr_(logical *, logical *, integer *, 
-	    integer *, integer *, doublereal *, integer *, doublereal *, 
-	    doublereal *, integer *, integer *, doublereal *, integer *, 
-	    integer *);
-    static doublereal vv[16];
-    extern /* Subroutine */ int dlacpy_(char *, integer *, integer *, 
-	    doublereal *, integer *, doublereal *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int dlaset_(char *, integer *, integer *, 
-	    doublereal *, doublereal *, doublereal *, integer *), 
-	    dlarfx_(char *, integer *, integer *, doublereal *, doublereal *, 
-	    doublereal *, integer *, doublereal *), xerbla_(char *, 
-	    integer *);
-    static doublereal smlnum;
-    static logical lquery;
-    static integer itn;
-    static doublereal tau;
-    static integer its;
-    static doublereal ulp, tst1;
-#define h___ref(a_1,a_2) h__[(a_2)*h_dim1 + a_1]
-#define s_ref(a_1,a_2) s[(a_2)*15 + a_1 - 16]
-#define z___ref(a_1,a_2) z__[(a_2)*z_dim1 + a_1]
+    int i__;
+    double hl[2401]	/* was [49][49] */;
+    int kbot, nmin;
+    extern int lsame_(char *, char *);
+    int initz;
+    double workl[49];
+    int wantt, wantz;
+    extern  int dlaqr0_(int *, int *, int *, 
+	    int *, int *, double *, int *, double *, 
+	    double *, int *, int *, double *, int *, 
+	    double *, int *, int *), dlahqr_(int *, int *, 
+	     int *, int *, int *, double *, int *, 
+	    double *, double *, int *, int *, double *, 
+	    int *, int *), dlacpy_(char *, int *, int *, 
+	    double *, int *, double *, int *), 
+	    dlaset_(char *, int *, int *, double *, double *, 
+	    double *, int *);
+    extern int ilaenv_(int *, char *, char *, int *, int *, 
+	    int *, int *);
+    extern  int xerbla_(char *, int *);
+    int lquery;
 
 
+/*  -- LAPACK driver routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+/*     Purpose */
+/*     ======= */
+
+/*     DHSEQR computes the eigenvalues of a Hessenberg matrix H */
+/*     and, optionally, the matrices T and Z from the Schur decomposition */
+/*     H = Z T Z**T, where T is an upper quasi-triangular matrix (the */
+/*     Schur form), and Z is the orthogonal matrix of Schur vectors. */
+
+/*     Optionally Z may be postmultiplied into an input orthogonal */
+/*     matrix Q so that this routine can give the Schur factorization */
+/*     of a matrix A which has been reduced to the Hessenberg form H */
+/*     by the orthogonal matrix Q:  A = Q*H*Q**T = (QZ)*T*(QZ)**T. */
+
+/*     Arguments */
+/*     ========= */
+
+/*     JOB   (input) CHARACTER*1 */
+/*           = 'E':  compute eigenvalues only; */
+/*           = 'S':  compute eigenvalues and the Schur form T. */
+
+/*     COMPZ (input) CHARACTER*1 */
+/*           = 'N':  no Schur vectors are computed; */
+/*           = 'I':  Z is initialized to the unit matrix and the matrix Z */
+/*                   of Schur vectors of H is returned; */
+/*           = 'V':  Z must contain an orthogonal matrix Q on entry, and */
+/*                   the product Q*Z is returned. */
+
+/*     N     (input) INTEGER */
+/*           The order of the matrix H.  N .GE. 0. */
+
+/*     ILO   (input) INTEGER */
+/*     IHI   (input) INTEGER */
+/*           It is assumed that H is already upper triangular in rows */
+/*           and columns 1:ILO-1 and IHI+1:N. ILO and IHI are normally */
+/*           set by a previous call to DGEBAL, and then passed to DGEHRD */
+/*           when the matrix output by DGEBAL is reduced to Hessenberg */
+/*           form. Otherwise ILO and IHI should be set to 1 and N */
+/*           respectively.  If N.GT.0, then 1.LE.ILO.LE.IHI.LE.N. */
+/*           If N = 0, then ILO = 1 and IHI = 0. */
+
+/*     H     (input/output) DOUBLE PRECISION array, dimension (LDH,N) */
+/*           On entry, the upper Hessenberg matrix H. */
+/*           On exit, if INFO = 0 and JOB = 'S', then H contains the */
+/*           upper quasi-triangular matrix T from the Schur decomposition */
+/*           (the Schur form); 2-by-2 diagonal blocks (corresponding to */
+/*           complex conjugate pairs of eigenvalues) are returned in */
+/*           standard form, with H(i,i) = H(i+1,i+1) and */
+/*           H(i+1,i)*H(i,i+1).LT.0. If INFO = 0 and JOB = 'E', the */
+/*           contents of H are unspecified on exit.  (The output value of */
+/*           H when INFO.GT.0 is given under the description of INFO */
+/*           below.) */
+
+/*           Unlike earlier versions of DHSEQR, this subroutine may */
+/*           explicitly H(i,j) = 0 for i.GT.j and j = 1, 2, ... ILO-1 */
+/*           or j = IHI+1, IHI+2, ... N. */
+
+/*     LDH   (input) INTEGER */
+/*           The leading dimension of the array H. LDH .GE. MAX(1,N). */
+
+/*     WR    (output) DOUBLE PRECISION array, dimension (N) */
+/*     WI    (output) DOUBLE PRECISION array, dimension (N) */
+/*           The float and imaginary parts, respectively, of the computed */
+/*           eigenvalues. If two eigenvalues are computed as a complex */
+/*           conjugate pair, they are stored in consecutive elements of */
+/*           WR and WI, say the i-th and (i+1)th, with WI(i) .GT. 0 and */
+/*           WI(i+1) .LT. 0. If JOB = 'S', the eigenvalues are stored in */
+/*           the same order as on the diagonal of the Schur form returned */
+/*           in H, with WR(i) = H(i,i) and, if H(i:i+1,i:i+1) is a 2-by-2 */
+/*           diagonal block, WI(i) = sqrt(-H(i+1,i)*H(i,i+1)) and */
+/*           WI(i+1) = -WI(i). */
+
+/*     Z     (input/output) DOUBLE PRECISION array, dimension (LDZ,N) */
+/*           If COMPZ = 'N', Z is not referenced. */
+/*           If COMPZ = 'I', on entry Z need not be set and on exit, */
+/*           if INFO = 0, Z contains the orthogonal matrix Z of the Schur */
+/*           vectors of H.  If COMPZ = 'V', on entry Z must contain an */
+/*           N-by-N matrix Q, which is assumed to be equal to the unit */
+/*           matrix except for the submatrix Z(ILO:IHI,ILO:IHI). On exit, */
+/*           if INFO = 0, Z contains Q*Z. */
+/*           Normally Q is the orthogonal matrix generated by DORGHR */
+/*           after the call to DGEHRD which formed the Hessenberg matrix */
+/*           H. (The output value of Z when INFO.GT.0 is given under */
+/*           the description of INFO below.) */
+
+/*     LDZ   (input) INTEGER */
+/*           The leading dimension of the array Z.  if COMPZ = 'I' or */
+/*           COMPZ = 'V', then LDZ.GE.MAX(1,N).  Otherwize, LDZ.GE.1. */
+
+/*     WORK  (workspace/output) DOUBLE PRECISION array, dimension (LWORK) */
+/*           On exit, if INFO = 0, WORK(1) returns an estimate of */
+/*           the optimal value for LWORK. */
+
+/*     LWORK (input) INTEGER */
+/*           The dimension of the array WORK.  LWORK .GE. MAX(1,N) */
+/*           is sufficient and delivers very good and sometimes */
+/*           optimal performance.  However, LWORK as large as 11*N */
+/*           may be required for optimal performance.  A workspace */
+/*           query is recommended to determine the optimal workspace */
+/*           size. */
+
+/*           If LWORK = -1, then DHSEQR does a workspace query. */
+/*           In this case, DHSEQR checks the input parameters and */
+/*           estimates the optimal workspace size for the given */
+/*           values of N, ILO and IHI.  The estimate is returned */
+/*           in WORK(1).  No error message related to LWORK is */
+/*           issued by XERBLA.  Neither H nor Z are accessed. */
+
+
+/*     INFO  (output) INTEGER */
+/*             =  0:  successful exit */
+/*           .LT. 0:  if INFO = -i, the i-th argument had an illegal */
+/*                    value */
+/*           .GT. 0:  if INFO = i, DHSEQR failed to compute all of */
+/*                the eigenvalues.  Elements 1:ilo-1 and i+1:n of WR */
+/*                and WI contain those eigenvalues which have been */
+/*                successfully computed.  (Failures are rare.) */
+
+/*                If INFO .GT. 0 and JOB = 'E', then on exit, the */
+/*                remaining unconverged eigenvalues are the eigen- */
+/*                values of the upper Hessenberg matrix rows and */
+/*                columns ILO through INFO of the final, output */
+/*                value of H. */
+
+/*                If INFO .GT. 0 and JOB   = 'S', then on exit */
+
+/*           (*)  (initial value of H)*U  = U*(final value of H) */
+
+/*                where U is an orthogonal matrix.  The final */
+/*                value of H is upper Hessenberg and quasi-triangular */
+/*                in rows and columns INFO+1 through IHI. */
+
+/*                If INFO .GT. 0 and COMPZ = 'V', then on exit */
+
+/*                  (final value of Z)  =  (initial value of Z)*U */
+
+/*                where U is the orthogonal matrix in (*) (regard- */
+/*                less of the value of JOB.) */
+
+/*                If INFO .GT. 0 and COMPZ = 'I', then on exit */
+/*                      (final value of Z)  = U */
+/*                where U is the orthogonal matrix in (*) (regard- */
+/*                less of the value of JOB.) */
+
+/*                If INFO .GT. 0 and COMPZ = 'N', then Z is not */
+/*                accessed. */
+
+/*     ================================================================ */
+/*             Default values supplied by */
+/*             ILAENV(ISPEC,'DHSEQR',JOB(:1)//COMPZ(:1),N,ILO,IHI,LWORK). */
+/*             It is suggested that these defaults be adjusted in order */
+/*             to attain best performance in each particular */
+/*             computational environment. */
+
+/*            ISPEC=12: The DLAHQR vs DLAQR0 crossover point. */
+/*                      Default: 75. (Must be at least 11.) */
+
+/*            ISPEC=13: Recommended deflation window size. */
+/*                      This depends on ILO, IHI and NS.  NS is the */
+/*                      number of simultaneous shifts returned */
+/*                      by ILAENV(ISPEC=15).  (See ISPEC=15 below.) */
+/*                      The default for (IHI-ILO+1).LE.500 is NS. */
+/*                      The default for (IHI-ILO+1).GT.500 is 3*NS/2. */
+
+/*            ISPEC=14: Nibble crossover point. (See IPARMQ for */
+/*                      details.)  Default: 14% of deflation window */
+/*                      size. */
+
+/*            ISPEC=15: Number of simultaneous shifts in a multishift */
+/*                      QR iteration. */
+
+/*                      If IHI-ILO+1 is ... */
+
+/*                      greater than      ...but less    ... the */
+/*                      or equal to ...      than        default is */
+
+/*                           1               30          NS =   2(+) */
+/*                          30               60          NS =   4(+) */
+/*                          60              150          NS =  10(+) */
+/*                         150              590          NS =  ** */
+/*                         590             3000          NS =  64 */
+/*                        3000             6000          NS = 128 */
+/*                        6000             infinity      NS = 256 */
+
+/*                  (+)  By default some or all matrices of this order */
+/*                       are passed to the implicit double shift routine */
+/*                       DLAHQR and this parameter is ignored.  See */
+/*                       ISPEC=12 above and comments in IPARMQ for */
+/*                       details. */
+
+/*                 (**)  The asterisks (**) indicate an ad-hoc */
+/*                       function of N increasing from 10 to 64. */
+
+/*            ISPEC=16: Select structured matrix multiply. */
+/*                      If the number of simultaneous shifts (specified */
+/*                      by ISPEC=15) is less than 14, then the default */
+/*                      for ISPEC=16 is 0.  Otherwise the default for */
+/*                      ISPEC=16 is 2. */
+
+/*     ================================================================ */
+/*     Based on contributions by */
+/*        Karen Braman and Ralph Byers, Department of Mathematics, */
+/*        University of Kansas, USA */
+
+/*     ================================================================ */
+/*     References: */
+/*       K. Braman, R. Byers and R. Mathias, The Multi-Shift QR */
+/*       Algorithm Part I: Maintaining Well Focused Shifts, and Level 3 */
+/*       Performance, SIAM Journal of Matrix Analysis, volume 23, pages */
+/*       929--947, 2002. */
+
+/*       K. Braman, R. Byers and R. Mathias, The Multi-Shift QR */
+/*       Algorithm Part II: Aggressive Early Deflation, SIAM Journal */
+/*       of Matrix Analysis, volume 23, pages 948--973, 2002. */
+
+/*     ================================================================ */
+/*     .. Parameters .. */
+
+/*     ==== Matrices of order NTINY or smaller must be processed by */
+/*     .    DLAHQR because of insufficient subdiagonal scratch space. */
+/*     .    (This is a hard limit.) ==== */
+
+/*     ==== NL allocates some local workspace to help small matrices */
+/*     .    through a rare DLAHQR failure.  NL .GT. NTINY = 11 is */
+/*     .    required and NL .LE. NMIN = ILAENV(ISPEC=12,...) is recom- */
+/*     .    mended.  (The default value of NMIN is 75.)  Using NL = 49 */
+/*     .    allows up to six simultaneous shifts and a 16-by-16 */
+/*     .    deflation window.  ==== */
+/*     .. */
+/*     .. Local Arrays .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     ==== Decode and check the input parameters. ==== */
+
+    /* Parameter adjustments */
     h_dim1 = *ldh;
-    h_offset = 1 + h_dim1 * 1;
+    h_offset = 1 + h_dim1;
     h__ -= h_offset;
     --wr;
     --wi;
     z_dim1 = *ldz;
-    z_offset = 1 + z_dim1 * 1;
+    z_offset = 1 + z_dim1;
     z__ -= z_offset;
     --work;
 
@@ -202,393 +323,164 @@
     wantt = lsame_(job, "S");
     initz = lsame_(compz, "I");
     wantz = initz || lsame_(compz, "V");
+    work[1] = (double) MAX(1,*n);
+    lquery = *lwork == -1;
 
     *info = 0;
-    work[1] = (doublereal) max(1,*n);
-    lquery = *lwork == -1;
     if (! lsame_(job, "E") && ! wantt) {
 	*info = -1;
     } else if (! lsame_(compz, "N") && ! wantz) {
 	*info = -2;
     } else if (*n < 0) {
 	*info = -3;
-    } else if (*ilo < 1 || *ilo > max(1,*n)) {
+    } else if (*ilo < 1 || *ilo > MAX(1,*n)) {
 	*info = -4;
-    } else if (*ihi < min(*ilo,*n) || *ihi > *n) {
+    } else if (*ihi < MIN(*ilo,*n) || *ihi > *n) {
 	*info = -5;
-    } else if (*ldh < max(1,*n)) {
+    } else if (*ldh < MAX(1,*n)) {
 	*info = -7;
-    } else if (*ldz < 1 || wantz && *ldz < max(1,*n)) {
+    } else if (*ldz < 1 || wantz && *ldz < MAX(1,*n)) {
 	*info = -11;
-    } else if (*lwork < max(1,*n) && ! lquery) {
+    } else if (*lwork < MAX(1,*n) && ! lquery) {
 	*info = -13;
     }
+
     if (*info != 0) {
+
+/*        ==== Quick return in case of invalid argument. ==== */
+
 	i__1 = -(*info);
 	xerbla_("DHSEQR", &i__1);
 	return 0;
+
+    } else if (*n == 0) {
+
+/*        ==== Quick return in case N = 0; nothing to do. ==== */
+
+	return 0;
+
     } else if (lquery) {
-	return 0;
-    }
 
-/*     Initialize Z, if necessary */
+/*        ==== Quick return in case of a workspace query ==== */
 
-    if (initz) {
-	dlaset_("Full", n, n, &c_b9, &c_b10, &z__[z_offset], ldz);
-    }
-
-/*     Store the eigenvalues isolated by DGEBAL. */
-
-    i__1 = *ilo - 1;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	wr[i__] = h___ref(i__, i__);
-	wi[i__] = 0.;
-/* L10: */
-    }
-    i__1 = *n;
-    for (i__ = *ihi + 1; i__ <= i__1; ++i__) {
-	wr[i__] = h___ref(i__, i__);
-	wi[i__] = 0.;
-/* L20: */
-    }
-
-/*     Quick return if possible. */
-
-    if (*n == 0) {
-	return 0;
-    }
-    if (*ilo == *ihi) {
-	wr[*ilo] = h___ref(*ilo, *ilo);
-	wi[*ilo] = 0.;
-	return 0;
-    }
-
-/*     Set rows and columns ILO to IHI to zero below the first   
-       subdiagonal. */
-
-    i__1 = *ihi - 2;
-    for (j = *ilo; j <= i__1; ++j) {
-	i__2 = *n;
-	for (i__ = j + 2; i__ <= i__2; ++i__) {
-	    h___ref(i__, j) = 0.;
-/* L30: */
-	}
-/* L40: */
-    }
-    nh = *ihi - *ilo + 1;
-
-/*     Determine the order of the multi-shift QR algorithm to be used.   
-
-   Writing concatenation */
-    i__3[0] = 1, a__1[0] = job;
-    i__3[1] = 1, a__1[1] = compz;
-    s_cat(ch__1, a__1, i__3, &c__2, (ftnlen)2);
-    ns = ilaenv_(&c__4, "DHSEQR", ch__1, n, ilo, ihi, &c_n1, (ftnlen)6, (
-	    ftnlen)2);
-/* Writing concatenation */
-    i__3[0] = 1, a__1[0] = job;
-    i__3[1] = 1, a__1[1] = compz;
-    s_cat(ch__1, a__1, i__3, &c__2, (ftnlen)2);
-    maxb = ilaenv_(&c__8, "DHSEQR", ch__1, n, ilo, ihi, &c_n1, (ftnlen)6, (
-	    ftnlen)2);
-    if (ns <= 2 || ns > nh || maxb >= nh) {
-
-/*        Use the standard double-shift algorithm */
-
-	dlahqr_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[
-		1], ilo, ihi, &z__[z_offset], ldz, info);
-	return 0;
-    }
-    maxb = max(3,maxb);
-/* Computing MIN */
-    i__1 = min(ns,maxb);
-    ns = min(i__1,15);
-
-/*     Now 2 < NS <= MAXB < NH.   
-
-       Set machine-dependent constants for the stopping criterion.   
-       If norm(H) <= sqrt(OVFL), overflow should not occur. */
-
-    unfl = dlamch_("Safe minimum");
-    ovfl = 1. / unfl;
-    dlabad_(&unfl, &ovfl);
-    ulp = dlamch_("Precision");
-    smlnum = unfl * (nh / ulp);
-
-/*     I1 and I2 are the indices of the first row and last column of H   
-       to which transformations must be applied. If eigenvalues only are   
-       being computed, I1 and I2 are set inside the main loop. */
-
-    if (wantt) {
-	i1 = 1;
-	i2 = *n;
-    }
-
-/*     ITN is the total number of multiple-shift QR iterations allowed. */
-
-    itn = nh * 30;
-
-/*     The main loop begins here. I is the loop index and decreases from   
-       IHI to ILO in steps of at most MAXB. Each iteration of the loop   
-       works with the active submatrix in rows and columns L to I.   
-       Eigenvalues I+1 to IHI have already converged. Either L = ILO or   
-       H(L,L-1) is negligible so that the matrix splits. */
-
-    i__ = *ihi;
-L50:
-    l = *ilo;
-    if (i__ < *ilo) {
-	goto L170;
-    }
-
-/*     Perform multiple-shift QR iterations on rows and columns ILO to I   
-       until a submatrix of order at most MAXB splits off at the bottom   
-       because a subdiagonal element has become negligible. */
-
-    i__1 = itn;
-    for (its = 0; its <= i__1; ++its) {
-
-/*        Look for a single small subdiagonal element. */
-
-	i__2 = l + 1;
-	for (k = i__; k >= i__2; --k) {
-	    tst1 = (d__1 = h___ref(k - 1, k - 1), abs(d__1)) + (d__2 = 
-		    h___ref(k, k), abs(d__2));
-	    if (tst1 == 0.) {
-		i__4 = i__ - l + 1;
-		tst1 = dlanhs_("1", &i__4, &h___ref(l, l), ldh, &work[1]);
-	    }
+	dlaqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[
+		1], ilo, ihi, &z__[z_offset], ldz, &work[1], lwork, info);
+/*        ==== Ensure reported workspace size is backward-compatible with */
+/*        .    previous LAPACK versions. ==== */
 /* Computing MAX */
-	    d__2 = ulp * tst1;
-	    if ((d__1 = h___ref(k, k - 1), abs(d__1)) <= max(d__2,smlnum)) {
-		goto L70;
-	    }
-/* L60: */
+	d__1 = (double) MAX(1,*n);
+	work[1] = MAX(d__1,work[1]);
+	return 0;
+
+    } else {
+
+/*        ==== copy eigenvalues isolated by DGEBAL ==== */
+
+	i__1 = *ilo - 1;
+	for (i__ = 1; i__ <= i__1; ++i__) {
+	    wr[i__] = h__[i__ + i__ * h_dim1];
+	    wi[i__] = 0.;
+/* L10: */
 	}
-L70:
-	l = k;
-	if (l > *ilo) {
-
-/*           H(L,L-1) is negligible. */
-
-	    h___ref(l, l - 1) = 0.;
-	}
-
-/*        Exit from loop if a submatrix of order <= MAXB has split off. */
-
-	if (l >= i__ - maxb + 1) {
-	    goto L160;
-	}
-
-/*        Now the active submatrix is in rows and columns L to I. If   
-          eigenvalues only are being computed, only the active submatrix   
-          need be transformed. */
-
-	if (! wantt) {
-	    i1 = l;
-	    i2 = i__;
+	i__1 = *n;
+	for (i__ = *ihi + 1; i__ <= i__1; ++i__) {
+	    wr[i__] = h__[i__ + i__ * h_dim1];
+	    wi[i__] = 0.;
+/* L20: */
 	}
 
-	if (its == 20 || its == 30) {
+/*        ==== Initialize Z, if requested ==== */
 
-/*           Exceptional shifts. */
+	if (initz) {
+	    dlaset_("A", n, n, &c_b11, &c_b12, &z__[z_offset], ldz)
+		    ;
+	}
 
-	    i__2 = i__;
-	    for (ii = i__ - ns + 1; ii <= i__2; ++ii) {
-		wr[ii] = ((d__1 = h___ref(ii, ii - 1), abs(d__1)) + (d__2 = 
-			h___ref(ii, ii), abs(d__2))) * 1.5;
-		wi[ii] = 0.;
-/* L80: */
-	    }
+/*        ==== Quick return if possible ==== */
+
+	if (*ilo == *ihi) {
+	    wr[*ilo] = h__[*ilo + *ilo * h_dim1];
+	    wi[*ilo] = 0.;
+	    return 0;
+	}
+
+/*        ==== DLAHQR/DLAQR0 crossover point ==== */
+
+/* Writing concatenation */
+	i__2[0] = 1, a__1[0] = job;
+	i__2[1] = 1, a__1[1] = compz;
+	s_cat(ch__1, a__1, i__2, &c__2, (unsigned long)2);
+	nmin = ilaenv_(&c__12, "DHSEQR", ch__1, n, ilo, ihi, lwork);
+	nmin = MAX(11,nmin);
+
+/*        ==== DLAQR0 for big matrices; DLAHQR for small ones ==== */
+
+	if (*n > nmin) {
+	    dlaqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], 
+		    &wi[1], ilo, ihi, &z__[z_offset], ldz, &work[1], lwork, 
+		    info);
 	} else {
 
-/*           Use eigenvalues of trailing submatrix of order NS as shifts. */
+/*           ==== Small matrix ==== */
 
-	    dlacpy_("Full", &ns, &ns, &h___ref(i__ - ns + 1, i__ - ns + 1), 
-		    ldh, s, &c__15);
-	    dlahqr_(&c_false, &c_false, &ns, &c__1, &ns, s, &c__15, &wr[i__ - 
-		    ns + 1], &wi[i__ - ns + 1], &c__1, &ns, &z__[z_offset], 
-		    ldz, &ierr);
-	    if (ierr > 0) {
+	    dlahqr_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], 
+		    &wi[1], ilo, ihi, &z__[z_offset], ldz, info);
 
-/*              If DLAHQR failed to compute all NS eigenvalues, use the   
-                unconverged diagonal elements as the remaining shifts. */
+	    if (*info > 0) {
 
-		i__2 = ierr;
-		for (ii = 1; ii <= i__2; ++ii) {
-		    wr[i__ - ns + ii] = s_ref(ii, ii);
-		    wi[i__ - ns + ii] = 0.;
-/* L90: */
-		}
-	    }
-	}
+/*              ==== A rare DLAHQR failure!  DLAQR0 sometimes succeeds */
+/*              .    when DLAHQR fails. ==== */
 
-/*        Form the first column of (G-w(1)) (G-w(2)) . . . (G-w(ns))   
-          where G is the Hessenberg submatrix H(L:I,L:I) and w is   
-          the vector of shifts (stored in WR and WI). The result is   
-          stored in the local array V. */
+		kbot = *info;
 
-	v[0] = 1.;
-	i__2 = ns + 1;
-	for (ii = 2; ii <= i__2; ++ii) {
-	    v[ii - 1] = 0.;
-/* L100: */
-	}
-	nv = 1;
-	i__2 = i__;
-	for (j = i__ - ns + 1; j <= i__2; ++j) {
-	    if (wi[j] >= 0.) {
-		if (wi[j] == 0.) {
+		if (*n >= 49) {
 
-/*                 real shift */
+/*                 ==== Larger matrices have enough subdiagonal scratch */
+/*                 .    space to call DLAQR0 directly. ==== */
 
-		    i__4 = nv + 1;
-		    dcopy_(&i__4, v, &c__1, vv, &c__1);
-		    i__4 = nv + 1;
-		    d__1 = -wr[j];
-		    dgemv_("No transpose", &i__4, &nv, &c_b10, &h___ref(l, l),
-			     ldh, vv, &c__1, &d__1, v, &c__1);
-		    ++nv;
-		} else if (wi[j] > 0.) {
+		    dlaqr0_(&wantt, &wantz, n, ilo, &kbot, &h__[h_offset], 
+			    ldh, &wr[1], &wi[1], ilo, ihi, &z__[z_offset], 
+			    ldz, &work[1], lwork, info);
 
-/*                 complex conjugate pair of shifts */
-
-		    i__4 = nv + 1;
-		    dcopy_(&i__4, v, &c__1, vv, &c__1);
-		    i__4 = nv + 1;
-		    d__1 = wr[j] * -2.;
-		    dgemv_("No transpose", &i__4, &nv, &c_b10, &h___ref(l, l),
-			     ldh, v, &c__1, &d__1, vv, &c__1);
-		    i__4 = nv + 1;
-		    itemp = idamax_(&i__4, vv, &c__1);
-/* Computing MAX */
-		    d__2 = (d__1 = vv[itemp - 1], abs(d__1));
-		    temp = 1. / max(d__2,smlnum);
-		    i__4 = nv + 1;
-		    dscal_(&i__4, &temp, vv, &c__1);
-		    absw = dlapy2_(&wr[j], &wi[j]);
-		    temp = temp * absw * absw;
-		    i__4 = nv + 2;
-		    i__5 = nv + 1;
-		    dgemv_("No transpose", &i__4, &i__5, &c_b10, &h___ref(l, 
-			    l), ldh, vv, &c__1, &temp, v, &c__1);
-		    nv += 2;
-		}
-
-/*              Scale V(1:NV) so that max(abs(V(i))) = 1. If V is zero,   
-                reset it to the unit vector. */
-
-		itemp = idamax_(&nv, v, &c__1);
-		temp = (d__1 = v[itemp - 1], abs(d__1));
-		if (temp == 0.) {
-		    v[0] = 1.;
-		    i__4 = nv;
-		    for (ii = 2; ii <= i__4; ++ii) {
-			v[ii - 1] = 0.;
-/* L110: */
-		    }
 		} else {
-		    temp = max(temp,smlnum);
-		    d__1 = 1. / temp;
-		    dscal_(&nv, &d__1, v, &c__1);
+
+/*                 ==== Tiny matrices don't have enough subdiagonal */
+/*                 .    scratch space to benefit from DLAQR0.  Hence, */
+/*                 .    tiny matrices must be copied into a larger */
+/*                 .    array before calling DLAQR0. ==== */
+
+		    dlacpy_("A", n, n, &h__[h_offset], ldh, hl, &c__49);
+		    hl[*n + 1 + *n * 49 - 50] = 0.;
+		    i__1 = 49 - *n;
+		    dlaset_("A", &c__49, &i__1, &c_b11, &c_b11, &hl[(*n + 1) *
+			     49 - 49], &c__49);
+		    dlaqr0_(&wantt, &wantz, &c__49, ilo, &kbot, hl, &c__49, &
+			    wr[1], &wi[1], ilo, ihi, &z__[z_offset], ldz, 
+			    workl, &c__49, info);
+		    if (wantt || *info != 0) {
+			dlacpy_("A", n, n, hl, &c__49, &h__[h_offset], ldh);
+		    }
 		}
 	    }
-/* L120: */
 	}
 
-/*        Multiple-shift QR step */
+/*        ==== Clear out the trash, if necessary. ==== */
 
-	i__2 = i__ - 1;
-	for (k = l; k <= i__2; ++k) {
-
-/*           The first iteration of this loop determines a reflection G   
-             from the vector V and applies it from left and right to H,   
-             thus creating a nonzero bulge below the subdiagonal.   
-
-             Each subsequent iteration determines a reflection G to   
-             restore the Hessenberg form in the (K-1)th column, and thus   
-             chases the bulge one step toward the bottom of the active   
-             submatrix. NR is the order of G.   
-
-   Computing MIN */
-	    i__4 = ns + 1, i__5 = i__ - k + 1;
-	    nr = min(i__4,i__5);
-	    if (k > l) {
-		dcopy_(&nr, &h___ref(k, k - 1), &c__1, v, &c__1);
-	    }
-	    dlarfg_(&nr, v, &v[1], &c__1, &tau);
-	    if (k > l) {
-		h___ref(k, k - 1) = v[0];
-		i__4 = i__;
-		for (ii = k + 1; ii <= i__4; ++ii) {
-		    h___ref(ii, k - 1) = 0.;
-/* L130: */
-		}
-	    }
-	    v[0] = 1.;
-
-/*           Apply G from the left to transform the rows of the matrix in   
-             columns K to I2. */
-
-	    i__4 = i2 - k + 1;
-	    dlarfx_("Left", &nr, &i__4, v, &tau, &h___ref(k, k), ldh, &work[1]
-		    );
-
-/*           Apply G from the right to transform the columns of the   
-             matrix in rows I1 to min(K+NR,I).   
-
-   Computing MIN */
-	    i__5 = k + nr;
-	    i__4 = min(i__5,i__) - i1 + 1;
-	    dlarfx_("Right", &i__4, &nr, v, &tau, &h___ref(i1, k), ldh, &work[
-		    1]);
-
-	    if (wantz) {
-
-/*              Accumulate transformations in the matrix Z */
-
-		dlarfx_("Right", &nh, &nr, v, &tau, &z___ref(*ilo, k), ldz, &
-			work[1]);
-	    }
-/* L140: */
+	if ((wantt || *info != 0) && *n > 2) {
+	    i__1 = *n - 2;
+	    i__3 = *n - 2;
+	    dlaset_("L", &i__1, &i__3, &c_b11, &c_b11, &h__[h_dim1 + 3], ldh);
 	}
 
-/* L150: */
+/*        ==== Ensure reported workspace size is backward-compatible with */
+/*        .    previous LAPACK versions. ==== */
+
+/* Computing MAX */
+	d__1 = (double) MAX(1,*n);
+	work[1] = MAX(d__1,work[1]);
     }
 
-/*     Failure to converge in remaining number of iterations */
+/*     ==== End of DHSEQR ==== */
 
-    *info = i__;
     return 0;
-
-L160:
-
-/*     A submatrix of order <= MAXB in rows and columns L to I has split   
-       off. Use the double-shift QR algorithm to handle it. */
-
-    dlahqr_(&wantt, &wantz, n, &l, &i__, &h__[h_offset], ldh, &wr[1], &wi[1], 
-	    ilo, ihi, &z__[z_offset], ldz, info);
-    if (*info > 0) {
-	return 0;
-    }
-
-/*     Decrement number of remaining iterations, and return to start of   
-       the main loop with a new value of I. */
-
-    itn -= its;
-    i__ = l - 1;
-    goto L50;
-
-L170:
-    work[1] = (doublereal) max(1,*n);
-    return 0;
-
-/*     End of DHSEQR */
-
 } /* dhseqr_ */
-
-#undef z___ref
-#undef s_ref
-#undef h___ref
-
-

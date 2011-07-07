@@ -1,77 +1,103 @@
+/* zlapll.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zlapll_(integer *n, doublecomplex *x, integer *incx, 
-	doublecomplex *y, integer *incy, doublereal *ssmin)
+ int zlapll_(int *n, doublecomplex *x, int *incx, 
+	doublecomplex *y, int *incy, double *ssmin)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
-
-
-    Purpose   
-    =======   
-
-    Given two column vectors X and Y, let   
-
-                         A = ( X Y ).   
-
-    The subroutine first computes the QR factorization of A = Q*R,   
-    and then computes the SVD of the 2-by-2 upper triangular matrix R.   
-    The smaller singular value of R is returned in SSMIN, which is used   
-    as the measurement of the linear dependency of the vectors X and Y.   
-
-    Arguments   
-    =========   
-
-    N       (input) INTEGER   
-            The length of the vectors X and Y.   
-
-    X       (input/output) COMPLEX*16 array, dimension (1+(N-1)*INCX)   
-            On entry, X contains the N-vector X.   
-            On exit, X is overwritten.   
-
-    INCX    (input) INTEGER   
-            The increment between successive elements of X. INCX > 0.   
-
-    Y       (input/output) COMPLEX*16 array, dimension (1+(N-1)*INCY)   
-            On entry, Y contains the N-vector Y.   
-            On exit, Y is overwritten.   
-
-    INCY    (input) INTEGER   
-            The increment between successive elements of Y. INCY > 0.   
-
-    SSMIN   (output) DOUBLE PRECISION   
-            The smallest singular value of the N-by-2 matrix A = ( X Y ).   
-
-    =====================================================================   
-
-
-       Quick return if possible   
-
-       Parameter adjustments */
     /* System generated locals */
-    integer i__1;
-    doublereal d__1, d__2, d__3;
+    int i__1;
+    double d__1, d__2, d__3;
     doublecomplex z__1, z__2, z__3, z__4;
+
     /* Builtin functions */
     void d_cnjg(doublecomplex *, doublecomplex *);
-    double z_abs(doublecomplex *);
-    /* Local variables */
-    extern /* Subroutine */ int dlas2_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
-    static doublecomplex c__;
-    extern /* Double Complex */ VOID zdotc_(doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *);
-    static doublereal ssmax;
-    extern /* Subroutine */ int zaxpy_(integer *, doublecomplex *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *);
-    static doublecomplex a11, a12, a22;
-    extern /* Subroutine */ int zlarfg_(integer *, doublecomplex *, 
-	    doublecomplex *, integer *, doublecomplex *);
-    static doublecomplex tau;
+    double z_ABS(doublecomplex *);
 
+    /* Local variables */
+    doublecomplex c__, a11, a12, a22, tau;
+    extern  int dlas2_(double *, double *, double 
+	    *, double *, double *);
+    extern /* Double Complex */ VOID zdotc_(doublecomplex *, int *, 
+	    doublecomplex *, int *, doublecomplex *, int *);
+    double ssmax;
+    extern  int zaxpy_(int *, doublecomplex *, 
+	    doublecomplex *, int *, doublecomplex *, int *), zlarfg_(
+	    int *, doublecomplex *, doublecomplex *, int *, 
+	    doublecomplex *);
+
+
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  Given two column vectors X and Y, let */
+
+/*                       A = ( X Y ). */
+
+/*  The subroutine first computes the QR factorization of A = Q*R, */
+/*  and then computes the SVD of the 2-by-2 upper triangular matrix R. */
+/*  The smaller singular value of R is returned in SSMIN, which is used */
+/*  as the measurement of the linear dependency of the vectors X and Y. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  N       (input) INTEGER */
+/*          The length of the vectors X and Y. */
+
+/*  X       (input/output) COMPLEX*16 array, dimension (1+(N-1)*INCX) */
+/*          On entry, X contains the N-vector X. */
+/*          On exit, X is overwritten. */
+
+/*  INCX    (input) INTEGER */
+/*          The increment between successive elements of X. INCX > 0. */
+
+/*  Y       (input/output) COMPLEX*16 array, dimension (1+(N-1)*INCY) */
+/*          On entry, Y contains the N-vector Y. */
+/*          On exit, Y is overwritten. */
+
+/*  INCY    (input) INTEGER */
+/*          The increment between successive elements of Y. INCY > 0. */
+
+/*  SSMIN   (output) DOUBLE PRECISION */
+/*          The smallest singular value of the N-by-2 matrix A = ( X Y ). */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Quick return if possible */
+
+    /* Parameter adjustments */
     --y;
     --x;
 
@@ -104,9 +130,9 @@
 
 /*     Compute the SVD of 2-by-2 Upper triangular matrix. */
 
-    d__1 = z_abs(&a11);
-    d__2 = z_abs(&a12);
-    d__3 = z_abs(&a22);
+    d__1 = z_ABS(&a11);
+    d__2 = z_ABS(&a12);
+    d__3 = z_ABS(&a22);
     dlas2_(&d__1, &d__2, &d__3, ssmin, &ssmax);
 
     return 0;
@@ -114,4 +140,3 @@
 /*     End of ZLAPLL */
 
 } /* zlapll_ */
-

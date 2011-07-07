@@ -1,224 +1,251 @@
+/* ssyevx.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int ssyevx_(char *jobz, char *range, char *uplo, integer *n, 
-	real *a, integer *lda, real *vl, real *vu, integer *il, integer *iu, 
-	real *abstol, integer *m, real *w, real *z__, integer *ldz, real *
-	work, integer *lwork, integer *iwork, integer *ifail, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+static int c_n1 = -1;
+
+ int ssyevx_(char *jobz, char *range, char *uplo, int *n, 
+	float *a, int *lda, float *vl, float *vu, int *il, int *iu, 
+	float *abstol, int *m, float *w, float *z__, int *ldz, float *
+	work, int *lwork, int *iwork, int *ifail, int *info)
 {
-/*  -- LAPACK driver routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    SSYEVX computes selected eigenvalues and, optionally, eigenvectors   
-    of a real symmetric matrix A.  Eigenvalues and eigenvectors can be   
-    selected by specifying either a range of values or a range of indices   
-    for the desired eigenvalues.   
-
-    Arguments   
-    =========   
-
-    JOBZ    (input) CHARACTER*1   
-            = 'N':  Compute eigenvalues only;   
-            = 'V':  Compute eigenvalues and eigenvectors.   
-
-    RANGE   (input) CHARACTER*1   
-            = 'A': all eigenvalues will be found.   
-            = 'V': all eigenvalues in the half-open interval (VL,VU]   
-                   will be found.   
-            = 'I': the IL-th through IU-th eigenvalues will be found.   
-
-    UPLO    (input) CHARACTER*1   
-            = 'U':  Upper triangle of A is stored;   
-            = 'L':  Lower triangle of A is stored.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    A       (input/output) REAL array, dimension (LDA, N)   
-            On entry, the symmetric matrix A.  If UPLO = 'U', the   
-            leading N-by-N upper triangular part of A contains the   
-            upper triangular part of the matrix A.  If UPLO = 'L',   
-            the leading N-by-N lower triangular part of A contains   
-            the lower triangular part of the matrix A.   
-            On exit, the lower triangle (if UPLO='L') or the upper   
-            triangle (if UPLO='U') of A, including the diagonal, is   
-            destroyed.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.  LDA >= max(1,N).   
-
-    VL      (input) REAL   
-    VU      (input) REAL   
-            If RANGE='V', the lower and upper bounds of the interval to   
-            be searched for eigenvalues. VL < VU.   
-            Not referenced if RANGE = 'A' or 'I'.   
-
-    IL      (input) INTEGER   
-    IU      (input) INTEGER   
-            If RANGE='I', the indices (in ascending order) of the   
-            smallest and largest eigenvalues to be returned.   
-            1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0.   
-            Not referenced if RANGE = 'A' or 'V'.   
-
-    ABSTOL  (input) REAL   
-            The absolute error tolerance for the eigenvalues.   
-            An approximate eigenvalue is accepted as converged   
-            when it is determined to lie in an interval [a,b]   
-            of width less than or equal to   
-
-                    ABSTOL + EPS *   max( |a|,|b| ) ,   
-
-            where EPS is the machine precision.  If ABSTOL is less than   
-            or equal to zero, then  EPS*|T|  will be used in its place,   
-            where |T| is the 1-norm of the tridiagonal matrix obtained   
-            by reducing A to tridiagonal form.   
-
-            Eigenvalues will be computed most accurately when ABSTOL is   
-            set to twice the underflow threshold 2*SLAMCH('S'), not zero.   
-            If this routine returns with INFO>0, indicating that some   
-            eigenvectors did not converge, try setting ABSTOL to   
-            2*SLAMCH('S').   
-
-            See "Computing Small Singular Values of Bidiagonal Matrices   
-            with Guaranteed High Relative Accuracy," by Demmel and   
-            Kahan, LAPACK Working Note #3.   
-
-    M       (output) INTEGER   
-            The total number of eigenvalues found.  0 <= M <= N.   
-            If RANGE = 'A', M = N, and if RANGE = 'I', M = IU-IL+1.   
-
-    W       (output) REAL array, dimension (N)   
-            On normal exit, the first M elements contain the selected   
-            eigenvalues in ascending order.   
-
-    Z       (output) REAL array, dimension (LDZ, max(1,M))   
-            If JOBZ = 'V', then if INFO = 0, the first M columns of Z   
-            contain the orthonormal eigenvectors of the matrix A   
-            corresponding to the selected eigenvalues, with the i-th   
-            column of Z holding the eigenvector associated with W(i).   
-            If an eigenvector fails to converge, then that column of Z   
-            contains the latest approximation to the eigenvector, and the   
-            index of the eigenvector is returned in IFAIL.   
-            If JOBZ = 'N', then Z is not referenced.   
-            Note: the user must ensure that at least max(1,M) columns are   
-            supplied in the array Z; if RANGE = 'V', the exact value of M   
-            is not known in advance and an upper bound must be used.   
-
-    LDZ     (input) INTEGER   
-            The leading dimension of the array Z.  LDZ >= 1, and if   
-            JOBZ = 'V', LDZ >= max(1,N).   
-
-    WORK    (workspace/output) REAL array, dimension (LWORK)   
-            On exit, if INFO = 0, WORK(1) returns the optimal LWORK.   
-
-    LWORK   (input) INTEGER   
-            The length of the array WORK.  LWORK >= max(1,8*N).   
-            For optimal efficiency, LWORK >= (NB+3)*N,   
-            where NB is the max of the blocksize for SSYTRD and SORMTR   
-            returned by ILAENV.   
-
-            If LWORK = -1, then a workspace query is assumed; the routine   
-            only calculates the optimal size of the WORK array, returns   
-            this value as the first entry of the WORK array, and no error   
-            message related to LWORK is issued by XERBLA.   
-
-    IWORK   (workspace) INTEGER array, dimension (5*N)   
-
-    IFAIL   (output) INTEGER array, dimension (N)   
-            If JOBZ = 'V', then if INFO = 0, the first M elements of   
-            IFAIL are zero.  If INFO > 0, then IFAIL contains the   
-            indices of the eigenvectors that failed to converge.   
-            If JOBZ = 'N', then IFAIL is not referenced.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-            > 0:  if INFO = i, then i eigenvectors failed to converge.   
-                  Their indices are stored in array IFAIL.   
-
-   =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    static integer c_n1 = -1;
-    
     /* System generated locals */
-    integer a_dim1, a_offset, z_dim1, z_offset, i__1, i__2;
-    real r__1, r__2;
+    int a_dim1, a_offset, z_dim1, z_offset, i__1, i__2;
+    float r__1, r__2;
+
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
+
     /* Local variables */
-    static integer indd, inde;
-    static real anrm;
-    static integer imax;
-    static real rmin, rmax;
-    static integer lopt, itmp1, i__, j, indee;
-    static real sigma;
-    extern logical lsame_(char *, char *);
-    static integer iinfo;
-    extern /* Subroutine */ int sscal_(integer *, real *, real *, integer *);
-    static char order[1];
-    static logical lower;
-    extern /* Subroutine */ int scopy_(integer *, real *, integer *, real *, 
-	    integer *), sswap_(integer *, real *, integer *, real *, integer *
-	    );
-    static logical wantz;
-    static integer nb, jj;
-    static logical alleig, indeig;
-    static integer iscale, indibl;
-    static logical valeig;
-    extern doublereal slamch_(char *);
-    static real safmin;
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static real abstll, bignum;
-    static integer indtau, indisp, indiwo, indwkn;
-    extern /* Subroutine */ int slacpy_(char *, integer *, integer *, real *, 
-	    integer *, real *, integer *);
-    static integer indwrk;
-    extern /* Subroutine */ int sstein_(integer *, real *, real *, integer *, 
-	    real *, integer *, integer *, real *, integer *, real *, integer *
-	    , integer *, integer *), ssterf_(integer *, real *, real *, 
-	    integer *);
-    static integer llwrkn, llwork, nsplit;
-    static real smlnum;
-    extern doublereal slansy_(char *, char *, integer *, real *, integer *, 
-	    real *);
-    extern /* Subroutine */ int sstebz_(char *, char *, integer *, real *, 
-	    real *, integer *, integer *, real *, real *, real *, integer *, 
-	    integer *, real *, integer *, integer *, real *, integer *, 
-	    integer *);
-    static integer lwkopt;
-    static logical lquery;
-    extern /* Subroutine */ int sorgtr_(char *, integer *, real *, integer *, 
-	    real *, real *, integer *, integer *), ssteqr_(char *, 
-	    integer *, real *, real *, real *, integer *, real *, integer *), sormtr_(char *, char *, char *, integer *, integer *, 
-	    real *, integer *, real *, real *, integer *, real *, integer *, 
-	    integer *), ssytrd_(char *, integer *, 
-	    real *, integer *, real *, real *, real *, real *, integer *, 
-	    integer *);
-    static real eps, vll, vuu, tmp1;
-#define a_ref(a_1,a_2) a[(a_2)*a_dim1 + a_1]
-#define z___ref(a_1,a_2) z__[(a_2)*z_dim1 + a_1]
+    int i__, j, nb, jj;
+    float eps, vll, vuu, tmp1;
+    int indd, inde;
+    float anrm;
+    int imax;
+    float rmin, rmax;
+    int test;
+    int itmp1, indee;
+    float sigma;
+    extern int lsame_(char *, char *);
+    int iinfo;
+    extern  int sscal_(int *, float *, float *, int *);
+    char order[1];
+    int lower;
+    extern  int scopy_(int *, float *, int *, float *, 
+	    int *), sswap_(int *, float *, int *, float *, int *
+);
+    int wantz, alleig, indeig;
+    int iscale, indibl;
+    int valeig;
+    extern double slamch_(char *);
+    float safmin;
+    extern int ilaenv_(int *, char *, char *, int *, int *, 
+	    int *, int *);
+    extern  int xerbla_(char *, int *);
+    float abstll, bignum;
+    int indtau, indisp, indiwo, indwkn;
+    extern  int slacpy_(char *, int *, int *, float *, 
+	    int *, float *, int *);
+    int indwrk, lwkmin;
+    extern  int sstein_(int *, float *, float *, int *, 
+	    float *, int *, int *, float *, int *, float *, int *
+, int *, int *), ssterf_(int *, float *, float *, 
+	    int *);
+    int llwrkn, llwork, nsplit;
+    float smlnum;
+    extern double slansy_(char *, char *, int *, float *, int *, 
+	    float *);
+    extern  int sstebz_(char *, char *, int *, float *, 
+	    float *, int *, int *, float *, float *, float *, int *, 
+	    int *, float *, int *, int *, float *, int *, 
+	    int *);
+    int lwkopt;
+    int lquery;
+    extern  int sorgtr_(char *, int *, float *, int *, 
+	    float *, float *, int *, int *), ssteqr_(char *, 
+	    int *, float *, float *, float *, int *, float *, int *), sormtr_(char *, char *, char *, int *, int *, 
+	    float *, int *, float *, float *, int *, float *, int *, 
+	    int *), ssytrd_(char *, int *, 
+	    float *, int *, float *, float *, float *, float *, int *, 
+	    int *);
 
 
+/*  -- LAPACK driver routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  SSYEVX computes selected eigenvalues and, optionally, eigenvectors */
+/*  of a float symmetric matrix A.  Eigenvalues and eigenvectors can be */
+/*  selected by specifying either a range of values or a range of indices */
+/*  for the desired eigenvalues. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  JOBZ    (input) CHARACTER*1 */
+/*          = 'N':  Compute eigenvalues only; */
+/*          = 'V':  Compute eigenvalues and eigenvectors. */
+
+/*  RANGE   (input) CHARACTER*1 */
+/*          = 'A': all eigenvalues will be found. */
+/*          = 'V': all eigenvalues in the half-open interval (VL,VU] */
+/*                 will be found. */
+/*          = 'I': the IL-th through IU-th eigenvalues will be found. */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U':  Upper triangle of A is stored; */
+/*          = 'L':  Lower triangle of A is stored. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  A       (input/output) REAL array, dimension (LDA, N) */
+/*          On entry, the symmetric matrix A.  If UPLO = 'U', the */
+/*          leading N-by-N upper triangular part of A contains the */
+/*          upper triangular part of the matrix A.  If UPLO = 'L', */
+/*          the leading N-by-N lower triangular part of A contains */
+/*          the lower triangular part of the matrix A. */
+/*          On exit, the lower triangle (if UPLO='L') or the upper */
+/*          triangle (if UPLO='U') of A, including the diagonal, is */
+/*          destroyed. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A.  LDA >= MAX(1,N). */
+
+/*  VL      (input) REAL */
+/*  VU      (input) REAL */
+/*          If RANGE='V', the lower and upper bounds of the interval to */
+/*          be searched for eigenvalues. VL < VU. */
+/*          Not referenced if RANGE = 'A' or 'I'. */
+
+/*  IL      (input) INTEGER */
+/*  IU      (input) INTEGER */
+/*          If RANGE='I', the indices (in ascending order) of the */
+/*          smallest and largest eigenvalues to be returned. */
+/*          1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0. */
+/*          Not referenced if RANGE = 'A' or 'V'. */
+
+/*  ABSTOL  (input) REAL */
+/*          The absolute error tolerance for the eigenvalues. */
+/*          An approximate eigenvalue is accepted as converged */
+/*          when it is determined to lie in an interval [a,b] */
+/*          of width less than or equal to */
+
+/*                  ABSTOL + EPS *   MAX( |a|,|b| ) , */
+
+/*          where EPS is the machine precision.  If ABSTOL is less than */
+/*          or equal to zero, then  EPS*|T|  will be used in its place, */
+/*          where |T| is the 1-norm of the tridiagonal matrix obtained */
+/*          by reducing A to tridiagonal form. */
+
+/*          Eigenvalues will be computed most accurately when ABSTOL is */
+/*          set to twice the underflow threshold 2*SLAMCH('S'), not zero. */
+/*          If this routine returns with INFO>0, indicating that some */
+/*          eigenvectors did not converge, try setting ABSTOL to */
+/*          2*SLAMCH('S'). */
+
+/*          See "Computing Small Singular Values of Bidiagonal Matrices */
+/*          with Guaranteed High Relative Accuracy," by Demmel and */
+/*          Kahan, LAPACK Working Note #3. */
+
+/*  M       (output) INTEGER */
+/*          The total number of eigenvalues found.  0 <= M <= N. */
+/*          If RANGE = 'A', M = N, and if RANGE = 'I', M = IU-IL+1. */
+
+/*  W       (output) REAL array, dimension (N) */
+/*          On normal exit, the first M elements contain the selected */
+/*          eigenvalues in ascending order. */
+
+/*  Z       (output) REAL array, dimension (LDZ, MAX(1,M)) */
+/*          If JOBZ = 'V', then if INFO = 0, the first M columns of Z */
+/*          contain the orthonormal eigenvectors of the matrix A */
+/*          corresponding to the selected eigenvalues, with the i-th */
+/*          column of Z holding the eigenvector associated with W(i). */
+/*          If an eigenvector fails to converge, then that column of Z */
+/*          contains the latest approximation to the eigenvector, and the */
+/*          index of the eigenvector is returned in IFAIL. */
+/*          If JOBZ = 'N', then Z is not referenced. */
+/*          Note: the user must ensure that at least MAX(1,M) columns are */
+/*          supplied in the array Z; if RANGE = 'V', the exact value of M */
+/*          is not known in advance and an upper bound must be used. */
+
+/*  LDZ     (input) INTEGER */
+/*          The leading dimension of the array Z.  LDZ >= 1, and if */
+/*          JOBZ = 'V', LDZ >= MAX(1,N). */
+
+/*  WORK    (workspace/output) REAL array, dimension (MAX(1,LWORK)) */
+/*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK. */
+
+/*  LWORK   (input) INTEGER */
+/*          The length of the array WORK.  LWORK >= 1, when N <= 1; */
+/*          otherwise 8*N. */
+/*          For optimal efficiency, LWORK >= (NB+3)*N, */
+/*          where NB is the max of the blocksize for SSYTRD and SORMTR */
+/*          returned by ILAENV. */
+
+/*          If LWORK = -1, then a workspace query is assumed; the routine */
+/*          only calculates the optimal size of the WORK array, returns */
+/*          this value as the first entry of the WORK array, and no error */
+/*          message related to LWORK is issued by XERBLA. */
+
+/*  IWORK   (workspace) INTEGER array, dimension (5*N) */
+
+/*  IFAIL   (output) INTEGER array, dimension (N) */
+/*          If JOBZ = 'V', then if INFO = 0, the first M elements of */
+/*          IFAIL are zero.  If INFO > 0, then IFAIL contains the */
+/*          indices of the eigenvectors that failed to converge. */
+/*          If JOBZ = 'N', then IFAIL is not referenced. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+/*          > 0:  if INFO = i, then i eigenvectors failed to converge. */
+/*                Their indices are stored in array IFAIL. */
+
+/* ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     --w;
     z_dim1 = *ldz;
-    z_offset = 1 + z_dim1 * 1;
+    z_offset = 1 + z_dim1;
     z__ -= z_offset;
     --work;
     --iwork;
@@ -241,7 +268,7 @@
 	*info = -3;
     } else if (*n < 0) {
 	*info = -4;
-    } else if (*lda < max(1,*n)) {
+    } else if (*lda < MAX(1,*n)) {
 	*info = -6;
     } else {
 	if (valeig) {
@@ -249,9 +276,9 @@
 		*info = -8;
 	    }
 	} else if (indeig) {
-	    if (*il < 1 || *il > max(1,*n)) {
+	    if (*il < 1 || *il > MAX(1,*n)) {
 		*info = -9;
-	    } else if (*iu < min(*n,*il) || *iu > *n) {
+	    } else if (*iu < MIN(*n,*il) || *iu > *n) {
 		*info = -10;
 	    }
 	}
@@ -259,24 +286,29 @@
     if (*info == 0) {
 	if (*ldz < 1 || wantz && *ldz < *n) {
 	    *info = -15;
-	} else /* if(complicated condition) */ {
-/* Computing MAX */
-	    i__1 = 1, i__2 = *n << 3;
-	    if (*lwork < max(i__1,i__2) && ! lquery) {
-		*info = -17;
-	    }
 	}
     }
 
     if (*info == 0) {
-	nb = ilaenv_(&c__1, "SSYTRD", uplo, n, &c_n1, &c_n1, &c_n1, (ftnlen)6,
-		 (ftnlen)1);
+	if (*n <= 1) {
+	    lwkmin = 1;
+	    work[1] = (float) lwkmin;
+	} else {
+	    lwkmin = *n << 3;
+	    nb = ilaenv_(&c__1, "SSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
 /* Computing MAX */
-	i__1 = nb, i__2 = ilaenv_(&c__1, "SORMTR", uplo, n, &c_n1, &c_n1, &
-		c_n1, (ftnlen)6, (ftnlen)1);
-	nb = max(i__1,i__2);
-	lwkopt = (nb + 3) * *n;
-	work[1] = (real) lwkopt;
+	    i__1 = nb, i__2 = ilaenv_(&c__1, "SORMTR", uplo, n, &c_n1, &c_n1, 
+		    &c_n1);
+	    nb = MAX(i__1,i__2);
+/* Computing MAX */
+	    i__1 = lwkmin, i__2 = (nb + 3) * *n;
+	    lwkopt = MAX(i__1,i__2);
+	    work[1] = (float) lwkopt;
+	}
+
+	if (*lwork < lwkmin && ! lquery) {
+	    *info = -17;
+	}
     }
 
     if (*info != 0) {
@@ -291,23 +323,21 @@
 
     *m = 0;
     if (*n == 0) {
-	work[1] = 1.f;
 	return 0;
     }
 
     if (*n == 1) {
-	work[1] = 7.f;
 	if (alleig || indeig) {
 	    *m = 1;
-	    w[1] = a_ref(1, 1);
+	    w[1] = a[a_dim1 + 1];
 	} else {
-	    if (*vl < a_ref(1, 1) && *vu >= a_ref(1, 1)) {
+	    if (*vl < a[a_dim1 + 1] && *vu >= a[a_dim1 + 1]) {
 		*m = 1;
-		w[1] = a_ref(1, 1);
+		w[1] = a[a_dim1 + 1];
 	    }
 	}
 	if (wantz) {
-	    z___ref(1, 1) = 1.f;
+	    z__[z_dim1 + 1] = 1.f;
 	}
 	return 0;
     }
@@ -321,14 +351,16 @@
     rmin = sqrt(smlnum);
 /* Computing MIN */
     r__1 = sqrt(bignum), r__2 = 1.f / sqrt(sqrt(safmin));
-    rmax = dmin(r__1,r__2);
+    rmax = MIN(r__1,r__2);
 
 /*     Scale matrix to allowable range, if necessary. */
 
     iscale = 0;
     abstll = *abstol;
-    vll = *vl;
-    vuu = *vu;
+    if (valeig) {
+	vll = *vl;
+	vuu = *vu;
+    }
     anrm = slansy_("M", uplo, n, &a[a_offset], lda, &work[1]);
     if (anrm > 0.f && anrm < rmin) {
 	iscale = 1;
@@ -342,13 +374,13 @@
 	    i__1 = *n;
 	    for (j = 1; j <= i__1; ++j) {
 		i__2 = *n - j + 1;
-		sscal_(&i__2, &sigma, &a_ref(j, j), &c__1);
+		sscal_(&i__2, &sigma, &a[j + j * a_dim1], &c__1);
 /* L10: */
 	    }
 	} else {
 	    i__1 = *n;
 	    for (j = 1; j <= i__1; ++j) {
-		sscal_(&j, &sigma, &a_ref(1, j), &c__1);
+		sscal_(&j, &sigma, &a[j * a_dim1 + 1], &c__1);
 /* L20: */
 	    }
 	}
@@ -370,13 +402,18 @@
     llwork = *lwork - indwrk + 1;
     ssytrd_(uplo, n, &a[a_offset], lda, &work[indd], &work[inde], &work[
 	    indtau], &work[indwrk], &llwork, &iinfo);
-    lopt = *n * 3 + work[indwrk];
 
-/*     If all eigenvalues are desired and ABSTOL is less than or equal to   
-       zero, then call SSTERF or SORGTR and SSTEQR.  If this fails for   
-       some eigenvalue, then try SSTEBZ. */
+/*     If all eigenvalues are desired and ABSTOL is less than or equal to */
+/*     zero, then call SSTERF or SORGTR and SSTEQR.  If this fails for */
+/*     some eigenvalue, then try SSTEBZ. */
 
-    if ((alleig || indeig && *il == 1 && *iu == *n) && *abstol <= 0.f) {
+    test = FALSE;
+    if (indeig) {
+	if (*il == 1 && *iu == *n) {
+	    test = TRUE;
+	}
+    }
+    if ((alleig || test) && *abstol <= 0.f) {
 	scopy_(n, &work[indd], &c__1, &w[1], &c__1);
 	indee = indwrk + (*n << 1);
 	if (! wantz) {
@@ -386,7 +423,7 @@
 	} else {
 	    slacpy_("A", n, n, &a[a_offset], lda, &z__[z_offset], ldz);
 	    sorgtr_(uplo, n, &z__[z_offset], ldz, &work[indtau], &work[indwrk]
-		    , &llwork, &iinfo);
+, &llwork, &iinfo);
 	    i__1 = *n - 1;
 	    scopy_(&i__1, &work[inde], &c__1, &work[indee], &c__1);
 	    ssteqr_(jobz, n, &w[1], &work[indee], &z__[z_offset], ldz, &work[
@@ -425,8 +462,8 @@
 		indisp], &z__[z_offset], ldz, &work[indwrk], &iwork[indiwo], &
 		ifail[1], info);
 
-/*        Apply orthogonal matrix used in reduction to tridiagonal   
-          form to eigenvectors returned by SSTEIN. */
+/*        Apply orthogonal matrix used in reduction to tridiagonal */
+/*        form to eigenvectors returned by SSTEIN. */
 
 	indwkn = inde;
 	llwrkn = *lwork - indwkn + 1;
@@ -447,8 +484,8 @@ L40:
 	sscal_(&imax, &r__1, &w[1], &c__1);
     }
 
-/*     If eigenvalues are not in order, then sort them, along with   
-       eigenvectors. */
+/*     If eigenvalues are not in order, then sort them, along with */
+/*     eigenvectors. */
 
     if (wantz) {
 	i__1 = *m - 1;
@@ -470,7 +507,8 @@ L40:
 		iwork[indibl + i__ - 1] = iwork[indibl + j - 1];
 		w[j] = tmp1;
 		iwork[indibl + j - 1] = itmp1;
-		sswap_(n, &z___ref(1, i__), &c__1, &z___ref(1, j), &c__1);
+		sswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], 
+			 &c__1);
 		if (*info != 0) {
 		    itmp1 = ifail[i__];
 		    ifail[i__] = ifail[j];
@@ -483,15 +521,10 @@ L40:
 
 /*     Set WORK(1) to optimal workspace size. */
 
-    work[1] = (real) lwkopt;
+    work[1] = (float) lwkopt;
 
     return 0;
 
 /*     End of SSYEVX */
 
 } /* ssyevx_ */
-
-#undef z___ref
-#undef a_ref
-
-

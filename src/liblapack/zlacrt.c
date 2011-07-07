@@ -1,64 +1,82 @@
+/* zlacrt.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zlacrt_(integer *n, doublecomplex *cx, integer *incx, 
-	doublecomplex *cy, integer *incy, doublecomplex *c__, doublecomplex *
+ int zlacrt_(int *n, doublecomplex *cx, int *incx, 
+	doublecomplex *cy, int *incy, doublecomplex *c__, doublecomplex *
 	s)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1992   
-
-
-    Purpose   
-    =======   
-
-    ZLACRT performs the operation   
-
-       (  c  s )( x )  ==> ( x )   
-       ( -s  c )( y )      ( y )   
-
-    where c and s are complex and the vectors x and y are complex.   
-
-    Arguments   
-    =========   
-
-    N       (input) INTEGER   
-            The number of elements in the vectors CX and CY.   
-
-    CX      (input/output) COMPLEX*16 array, dimension (N)   
-            On input, the vector x.   
-            On output, CX is overwritten with c*x + s*y.   
-
-    INCX    (input) INTEGER   
-            The increment between successive values of CX.  INCX <> 0.   
-
-    CY      (input/output) COMPLEX*16 array, dimension (N)   
-            On input, the vector y.   
-            On output, CY is overwritten with -s*x + c*y.   
-
-    INCY    (input) INTEGER   
-            The increment between successive values of CY.  INCY <> 0.   
-
-    C       (input) COMPLEX*16   
-    S       (input) COMPLEX*16   
-            C and S define the matrix   
-               [  C   S  ].   
-               [ -S   C  ]   
-
-   =====================================================================   
-
-
-       Parameter adjustments */
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4;
+    int i__1, i__2, i__3, i__4;
     doublecomplex z__1, z__2, z__3;
-    /* Local variables */
-    static integer i__;
-    static doublecomplex ctemp;
-    static integer ix, iy;
 
+    /* Local variables */
+    int i__, ix, iy;
+    doublecomplex ctemp;
+
+
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZLACRT performs the operation */
+
+/*     (  c  s )( x )  ==> ( x ) */
+/*     ( -s  c )( y )      ( y ) */
+
+/*  where c and s are complex and the vectors x and y are complex. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  N       (input) INTEGER */
+/*          The number of elements in the vectors CX and CY. */
+
+/*  CX      (input/output) COMPLEX*16 array, dimension (N) */
+/*          On input, the vector x. */
+/*          On output, CX is overwritten with c*x + s*y. */
+
+/*  INCX    (input) INTEGER */
+/*          The increment between successive values of CX.  INCX <> 0. */
+
+/*  CY      (input/output) COMPLEX*16 array, dimension (N) */
+/*          On input, the vector y. */
+/*          On output, CY is overwritten with -s*x + c*y. */
+
+/*  INCY    (input) INTEGER */
+/*          The increment between successive values of CY.  INCY <> 0. */
+
+/*  C       (input) COMPLEX*16 */
+/*  S       (input) COMPLEX*16 */
+/*          C and S define the matrix */
+/*             [  C   S  ]. */
+/*             [ -S   C  ] */
+
+/* ===================================================================== */
+
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     --cy;
     --cx;
 
@@ -135,4 +153,3 @@ L20:
     }
     return 0;
 } /* zlacrt_ */
-

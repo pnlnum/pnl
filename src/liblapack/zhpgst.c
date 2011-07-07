@@ -1,105 +1,130 @@
+/* zhpgst.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zhpgst_(integer *itype, char *uplo, integer *n, 
-	doublecomplex *ap, doublecomplex *bp, integer *info)
+/* Table of constant values */
+
+static doublecomplex c_b1 = {1.,0.};
+static int c__1 = 1;
+
+ int zhpgst_(int *itype, char *uplo, int *n, 
+	doublecomplex *ap, doublecomplex *bp, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
-
-
-    Purpose   
-    =======   
-
-    ZHPGST reduces a complex Hermitian-definite generalized   
-    eigenproblem to standard form, using packed storage.   
-
-    If ITYPE = 1, the problem is A*x = lambda*B*x,   
-    and A is overwritten by inv(U**H)*A*inv(U) or inv(L)*A*inv(L**H)   
-
-    If ITYPE = 2 or 3, the problem is A*B*x = lambda*x or   
-    B*A*x = lambda*x, and A is overwritten by U*A*U**H or L**H*A*L.   
-
-    B must have been previously factorized as U**H*U or L*L**H by ZPPTRF.   
-
-    Arguments   
-    =========   
-
-    ITYPE   (input) INTEGER   
-            = 1: compute inv(U**H)*A*inv(U) or inv(L)*A*inv(L**H);   
-            = 2 or 3: compute U*A*U**H or L**H*A*L.   
-
-    UPLO    (input) CHARACTER   
-            = 'U':  Upper triangle of A is stored and B is factored as   
-                    U**H*U;   
-            = 'L':  Lower triangle of A is stored and B is factored as   
-                    L*L**H.   
-
-    N       (input) INTEGER   
-            The order of the matrices A and B.  N >= 0.   
-
-    AP      (input/output) COMPLEX*16 array, dimension (N*(N+1)/2)   
-            On entry, the upper or lower triangle of the Hermitian matrix   
-            A, packed columnwise in a linear array.  The j-th column of A   
-            is stored in the array AP as follows:   
-            if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;   
-            if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.   
-
-            On exit, if INFO = 0, the transformed matrix, stored in the   
-            same format as A.   
-
-    BP      (input) COMPLEX*16 array, dimension (N*(N+1)/2)   
-            The triangular factor from the Cholesky factorization of B,   
-            stored in the same format as A, as returned by ZPPTRF.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static doublecomplex c_b1 = {1.,0.};
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4;
-    doublereal d__1, d__2;
+    int i__1, i__2, i__3, i__4;
+    double d__1, d__2;
     doublecomplex z__1, z__2, z__3;
+
     /* Local variables */
-    extern /* Subroutine */ int zhpr2_(char *, integer *, doublecomplex *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, 
+    int j, k, j1, k1, jj, kk;
+    doublecomplex ct;
+    double ajj;
+    int j1j1;
+    double akk;
+    int k1k1;
+    double bjj, bkk;
+    extern  int zhpr2_(char *, int *, doublecomplex *, 
+	    doublecomplex *, int *, doublecomplex *, int *, 
 	    doublecomplex *);
-    static integer j, k;
-    extern logical lsame_(char *, char *);
-    extern /* Double Complex */ VOID zdotc_(doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *);
-    static logical upper;
-    static integer j1, k1;
-    extern /* Subroutine */ int zhpmv_(char *, integer *, doublecomplex *, 
-	    doublecomplex *, doublecomplex *, integer *, doublecomplex *, 
-	    doublecomplex *, integer *), zaxpy_(integer *, 
-	    doublecomplex *, doublecomplex *, integer *, doublecomplex *, 
-	    integer *), ztpmv_(char *, char *, char *, integer *, 
-	    doublecomplex *, doublecomplex *, integer *), ztpsv_(char *, char *, char *, integer *, doublecomplex *
-	    , doublecomplex *, integer *);
-    static integer jj, kk;
-    static doublecomplex ct;
-    extern /* Subroutine */ int xerbla_(char *, integer *), zdscal_(
-	    integer *, doublereal *, doublecomplex *, integer *);
-    static doublereal ajj;
-    static integer j1j1;
-    static doublereal akk;
-    static integer k1k1;
-    static doublereal bjj, bkk;
+    extern int lsame_(char *, char *);
+    extern /* Double Complex */ VOID zdotc_(doublecomplex *, int *, 
+	    doublecomplex *, int *, doublecomplex *, int *);
+    int upper;
+    extern  int zhpmv_(char *, int *, doublecomplex *, 
+	    doublecomplex *, doublecomplex *, int *, doublecomplex *, 
+	    doublecomplex *, int *), zaxpy_(int *, 
+	    doublecomplex *, doublecomplex *, int *, doublecomplex *, 
+	    int *), ztpmv_(char *, char *, char *, int *, 
+	    doublecomplex *, doublecomplex *, int *), ztpsv_(char *, char *, char *, int *, doublecomplex *
+, doublecomplex *, int *), xerbla_(
+	    char *, int *), zdscal_(int *, double *, 
+	    doublecomplex *, int *);
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZHPGST reduces a complex Hermitian-definite generalized */
+/*  eigenproblem to standard form, using packed storage. */
+
+/*  If ITYPE = 1, the problem is A*x = lambda*B*x, */
+/*  and A is overwritten by inv(U**H)*A*inv(U) or inv(L)*A*inv(L**H) */
+
+/*  If ITYPE = 2 or 3, the problem is A*B*x = lambda*x or */
+/*  B*A*x = lambda*x, and A is overwritten by U*A*U**H or L**H*A*L. */
+
+/*  B must have been previously factorized as U**H*U or L*L**H by ZPPTRF. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  ITYPE   (input) INTEGER */
+/*          = 1: compute inv(U**H)*A*inv(U) or inv(L)*A*inv(L**H); */
+/*          = 2 or 3: compute U*A*U**H or L**H*A*L. */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U':  Upper triangle of A is stored and B is factored as */
+/*                  U**H*U; */
+/*          = 'L':  Lower triangle of A is stored and B is factored as */
+/*                  L*L**H. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrices A and B.  N >= 0. */
+
+/*  AP      (input/output) COMPLEX*16 array, dimension (N*(N+1)/2) */
+/*          On entry, the upper or lower triangle of the Hermitian matrix */
+/*          A, packed columnwise in a linear array.  The j-th column of A */
+/*          is stored in the array AP as follows: */
+/*          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j; */
+/*          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n. */
+
+/*          On exit, if INFO = 0, the transformed matrix, stored in the */
+/*          same format as A. */
+
+/*  BP      (input) COMPLEX*16 array, dimension (N*(N+1)/2) */
+/*          The triangular factor from the Cholesky factorization of B, */
+/*          stored in the same format as A, as returned by ZPPTRF. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --bp;
     --ap;
 
@@ -122,9 +147,9 @@
     if (*itype == 1) {
 	if (upper) {
 
-/*           Compute inv(U')*A*inv(U)   
+/*           Compute inv(U')*A*inv(U) */
 
-             J1 and JJ are the indices of A(1,j) and A(j,j) */
+/*           J1 and JJ are the indices of A(1,j) and A(j,j) */
 
 	    jj = 0;
 	    i__1 = *n;
@@ -143,7 +168,7 @@
 		ztpsv_(uplo, "Conjugate transpose", "Non-unit", &j, &bp[1], &
 			ap[j1], &c__1);
 		i__2 = j - 1;
-		z__1.r = -1., z__1.i = 0.;
+		z__1.r = -1., z__1.i = -0.;
 		zhpmv_(uplo, &i__2, &z__1, &ap[1], &bp[j1], &c__1, &c_b1, &ap[
 			j1], &c__1);
 		i__2 = j - 1;
@@ -160,9 +185,9 @@
 	    }
 	} else {
 
-/*           Compute inv(L)*A*inv(L')   
+/*           Compute inv(L)*A*inv(L') */
 
-             KK and K1K1 are the indices of A(k,k) and A(k+1,k+1) */
+/*           KK and K1K1 are the indices of A(k,k) and A(k+1,k+1) */
 
 	    kk = 1;
 	    i__1 = *n;
@@ -190,14 +215,14 @@
 		    zaxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1)
 			    ;
 		    i__2 = *n - k;
-		    z__1.r = -1., z__1.i = 0.;
+		    z__1.r = -1., z__1.i = -0.;
 		    zhpr2_(uplo, &i__2, &z__1, &ap[kk + 1], &c__1, &bp[kk + 1]
-			    , &c__1, &ap[k1k1]);
+, &c__1, &ap[k1k1]);
 		    i__2 = *n - k;
 		    zaxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1)
 			    ;
 		    i__2 = *n - k;
-		    ztpsv_(uplo, "No transpose", "Non-unit", &i__2, &bp[k1k1],
+		    ztpsv_(uplo, "No transpose", "Non-unit", &i__2, &bp[k1k1], 
 			     &ap[kk + 1], &c__1);
 		}
 		kk = k1k1;
@@ -207,9 +232,9 @@
     } else {
 	if (upper) {
 
-/*           Compute U*A*U'   
+/*           Compute U*A*U' */
 
-             K1 and KK are the indices of A(1,k) and A(k,k) */
+/*           K1 and KK are the indices of A(1,k) and A(k,k) */
 
 	    kk = 0;
 	    i__1 = *n;
@@ -246,9 +271,9 @@
 	    }
 	} else {
 
-/*           Compute L'*A*L   
+/*           Compute L'*A*L */
 
-             JJ and J1J1 are the indices of A(j,j) and A(j+1,j+1) */
+/*           JJ and J1J1 are the indices of A(j,j) and A(j+1,j+1) */
 
 	    jj = 1;
 	    i__1 = *n;
@@ -274,7 +299,7 @@
 			c_b1, &ap[jj + 1], &c__1);
 		i__2 = *n - j + 1;
 		ztpmv_(uplo, "Conjugate transpose", "Non-unit", &i__2, &bp[jj]
-			, &ap[jj], &c__1);
+, &ap[jj], &c__1);
 		jj = j1j1;
 /* L40: */
 	    }
@@ -285,4 +310,3 @@
 /*     End of ZHPGST */
 
 } /* zhpgst_ */
-

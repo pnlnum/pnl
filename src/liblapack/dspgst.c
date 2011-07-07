@@ -1,106 +1,126 @@
+/* dspgst.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dspgst_(integer *itype, char *uplo, integer *n, 
-	doublereal *ap, doublereal *bp, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+static double c_b9 = -1.;
+static double c_b11 = 1.;
+
+ int dspgst_(int *itype, char *uplo, int *n, 
+	double *ap, double *bp, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       March 31, 1993   
-
-
-    Purpose   
-    =======   
-
-    DSPGST reduces a real symmetric-definite generalized eigenproblem   
-    to standard form, using packed storage.   
-
-    If ITYPE = 1, the problem is A*x = lambda*B*x,   
-    and A is overwritten by inv(U**T)*A*inv(U) or inv(L)*A*inv(L**T)   
-
-    If ITYPE = 2 or 3, the problem is A*B*x = lambda*x or   
-    B*A*x = lambda*x, and A is overwritten by U*A*U**T or L**T*A*L.   
-
-    B must have been previously factorized as U**T*U or L*L**T by DPPTRF.   
-
-    Arguments   
-    =========   
-
-    ITYPE   (input) INTEGER   
-            = 1: compute inv(U**T)*A*inv(U) or inv(L)*A*inv(L**T);   
-            = 2 or 3: compute U*A*U**T or L**T*A*L.   
-
-    UPLO    (input) CHARACTER   
-            = 'U':  Upper triangle of A is stored and B is factored as   
-                    U**T*U;   
-            = 'L':  Lower triangle of A is stored and B is factored as   
-                    L*L**T.   
-
-    N       (input) INTEGER   
-            The order of the matrices A and B.  N >= 0.   
-
-    AP      (input/output) DOUBLE PRECISION array, dimension (N*(N+1)/2)   
-            On entry, the upper or lower triangle of the symmetric matrix   
-            A, packed columnwise in a linear array.  The j-th column of A   
-            is stored in the array AP as follows:   
-            if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;   
-            if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.   
-
-            On exit, if INFO = 0, the transformed matrix, stored in the   
-            same format as A.   
-
-    BP      (input) DOUBLE PRECISION array, dimension (N*(N+1)/2)   
-            The triangular factor from the Cholesky factorization of B,   
-            stored in the same format as A, as returned by DPPTRF.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    static doublereal c_b9 = -1.;
-    static doublereal c_b11 = 1.;
-    
     /* System generated locals */
-    integer i__1, i__2;
-    doublereal d__1;
+    int i__1, i__2;
+    double d__1;
+
     /* Local variables */
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, 
-	    integer *);
-    extern /* Subroutine */ int dspr2_(char *, integer *, doublereal *, 
-	    doublereal *, integer *, doublereal *, integer *, doublereal *);
-    static integer j, k;
-    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *);
-    extern logical lsame_(char *, char *);
-    extern /* Subroutine */ int daxpy_(integer *, doublereal *, doublereal *, 
-	    integer *, doublereal *, integer *), dspmv_(char *, integer *, 
-	    doublereal *, doublereal *, doublereal *, integer *, doublereal *,
-	     doublereal *, integer *);
-    static logical upper;
-    static integer j1, k1;
-    extern /* Subroutine */ int dtpmv_(char *, char *, char *, integer *, 
-	    doublereal *, doublereal *, integer *), 
-	    dtpsv_(char *, char *, char *, integer *, doublereal *, 
-	    doublereal *, integer *);
-    static integer jj, kk;
-    static doublereal ct;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static doublereal ajj;
-    static integer j1j1;
-    static doublereal akk;
-    static integer k1k1;
-    static doublereal bjj, bkk;
+    int j, k, j1, k1, jj, kk;
+    double ct, ajj;
+    int j1j1;
+    double akk;
+    int k1k1;
+    double bjj, bkk;
+    extern double ddot_(int *, double *, int *, double *, 
+	    int *);
+    extern  int dspr2_(char *, int *, double *, 
+	    double *, int *, double *, int *, double *), dscal_(int *, double *, double *, int *);
+    extern int lsame_(char *, char *);
+    extern  int daxpy_(int *, double *, double *, 
+	    int *, double *, int *), dspmv_(char *, int *, 
+	    double *, double *, double *, int *, double *, 
+	     double *, int *);
+    int upper;
+    extern  int dtpmv_(char *, char *, char *, int *, 
+	    double *, double *, int *), 
+	    dtpsv_(char *, char *, char *, int *, double *, 
+	    double *, int *), xerbla_(char *, 
+	    int *);
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  DSPGST reduces a float symmetric-definite generalized eigenproblem */
+/*  to standard form, using packed storage. */
+
+/*  If ITYPE = 1, the problem is A*x = lambda*B*x, */
+/*  and A is overwritten by inv(U**T)*A*inv(U) or inv(L)*A*inv(L**T) */
+
+/*  If ITYPE = 2 or 3, the problem is A*B*x = lambda*x or */
+/*  B*A*x = lambda*x, and A is overwritten by U*A*U**T or L**T*A*L. */
+
+/*  B must have been previously factorized as U**T*U or L*L**T by DPPTRF. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  ITYPE   (input) INTEGER */
+/*          = 1: compute inv(U**T)*A*inv(U) or inv(L)*A*inv(L**T); */
+/*          = 2 or 3: compute U*A*U**T or L**T*A*L. */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U':  Upper triangle of A is stored and B is factored as */
+/*                  U**T*U; */
+/*          = 'L':  Lower triangle of A is stored and B is factored as */
+/*                  L*L**T. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrices A and B.  N >= 0. */
+
+/*  AP      (input/output) DOUBLE PRECISION array, dimension (N*(N+1)/2) */
+/*          On entry, the upper or lower triangle of the symmetric matrix */
+/*          A, packed columnwise in a linear array.  The j-th column of A */
+/*          is stored in the array AP as follows: */
+/*          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j; */
+/*          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n. */
+
+/*          On exit, if INFO = 0, the transformed matrix, stored in the */
+/*          same format as A. */
+
+/*  BP      (input) DOUBLE PRECISION array, dimension (N*(N+1)/2) */
+/*          The triangular factor from the Cholesky factorization of B, */
+/*          stored in the same format as A, as returned by DPPTRF. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --bp;
     --ap;
 
@@ -123,9 +143,9 @@
     if (*itype == 1) {
 	if (upper) {
 
-/*           Compute inv(U')*A*inv(U)   
+/*           Compute inv(U')*A*inv(U) */
 
-             J1 and JJ are the indices of A(1,j) and A(j,j) */
+/*           J1 and JJ are the indices of A(1,j) and A(j,j) */
 
 	    jj = 0;
 	    i__1 = *n;
@@ -151,9 +171,9 @@
 	    }
 	} else {
 
-/*           Compute inv(L)*A*inv(L')   
+/*           Compute inv(L)*A*inv(L') */
 
-             KK and K1K1 are the indices of A(k,k) and A(k+1,k+1) */
+/*           KK and K1K1 are the indices of A(k,k) and A(k+1,k+1) */
 
 	    kk = 1;
 	    i__1 = *n;
@@ -178,12 +198,12 @@
 			    ;
 		    i__2 = *n - k;
 		    dspr2_(uplo, &i__2, &c_b9, &ap[kk + 1], &c__1, &bp[kk + 1]
-			    , &c__1, &ap[k1k1]);
+, &c__1, &ap[k1k1]);
 		    i__2 = *n - k;
 		    daxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1)
 			    ;
 		    i__2 = *n - k;
-		    dtpsv_(uplo, "No transpose", "Non-unit", &i__2, &bp[k1k1],
+		    dtpsv_(uplo, "No transpose", "Non-unit", &i__2, &bp[k1k1], 
 			     &ap[kk + 1], &c__1);
 		}
 		kk = k1k1;
@@ -193,9 +213,9 @@
     } else {
 	if (upper) {
 
-/*           Compute U*A*U'   
+/*           Compute U*A*U' */
 
-             K1 and KK are the indices of A(1,k) and A(k,k) */
+/*           K1 and KK are the indices of A(1,k) and A(k,k) */
 
 	    kk = 0;
 	    i__1 = *n;
@@ -227,9 +247,9 @@
 	    }
 	} else {
 
-/*           Compute L'*A*L   
+/*           Compute L'*A*L */
 
-             JJ and J1J1 are the indices of A(j,j) and A(j+1,j+1) */
+/*           JJ and J1J1 are the indices of A(j,j) and A(j+1,j+1) */
 
 	    jj = 1;
 	    i__1 = *n;
@@ -249,7 +269,7 @@
 		dspmv_(uplo, &i__2, &c_b11, &ap[j1j1], &bp[jj + 1], &c__1, &
 			c_b11, &ap[jj + 1], &c__1);
 		i__2 = *n - j + 1;
-		dtpmv_(uplo, "Transpose", "Non-unit", &i__2, &bp[jj], &ap[jj],
+		dtpmv_(uplo, "Transpose", "Non-unit", &i__2, &bp[jj], &ap[jj], 
 			 &c__1);
 		jj = j1j1;
 /* L40: */
@@ -261,4 +281,3 @@
 /*     End of DSPGST */
 
 } /* dspgst_ */
-

@@ -1,134 +1,161 @@
+/* dsbev.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dsbev_(char *jobz, char *uplo, integer *n, integer *kd, 
-	doublereal *ab, integer *ldab, doublereal *w, doublereal *z__, 
-	integer *ldz, doublereal *work, integer *info)
+/* Table of constant values */
+
+static double c_b11 = 1.;
+static int c__1 = 1;
+
+ int dsbev_(char *jobz, char *uplo, int *n, int *kd, 
+	double *ab, int *ldab, double *w, double *z__, 
+	int *ldz, double *work, int *info)
 {
-/*  -- LAPACK driver routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    DSBEV computes all the eigenvalues and, optionally, eigenvectors of   
-    a real symmetric band matrix A.   
-
-    Arguments   
-    =========   
-
-    JOBZ    (input) CHARACTER*1   
-            = 'N':  Compute eigenvalues only;   
-            = 'V':  Compute eigenvalues and eigenvectors.   
-
-    UPLO    (input) CHARACTER*1   
-            = 'U':  Upper triangle of A is stored;   
-            = 'L':  Lower triangle of A is stored.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    KD      (input) INTEGER   
-            The number of superdiagonals of the matrix A if UPLO = 'U',   
-            or the number of subdiagonals if UPLO = 'L'.  KD >= 0.   
-
-    AB      (input/output) DOUBLE PRECISION array, dimension (LDAB, N)   
-            On entry, the upper or lower triangle of the symmetric band   
-            matrix A, stored in the first KD+1 rows of the array.  The   
-            j-th column of A is stored in the j-th column of the array AB   
-            as follows:   
-            if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;   
-            if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).   
-
-            On exit, AB is overwritten by values generated during the   
-            reduction to tridiagonal form.  If UPLO = 'U', the first   
-            superdiagonal and the diagonal of the tridiagonal matrix T   
-            are returned in rows KD and KD+1 of AB, and if UPLO = 'L',   
-            the diagonal and first subdiagonal of T are returned in the   
-            first two rows of AB.   
-
-    LDAB    (input) INTEGER   
-            The leading dimension of the array AB.  LDAB >= KD + 1.   
-
-    W       (output) DOUBLE PRECISION array, dimension (N)   
-            If INFO = 0, the eigenvalues in ascending order.   
-
-    Z       (output) DOUBLE PRECISION array, dimension (LDZ, N)   
-            If JOBZ = 'V', then if INFO = 0, Z contains the orthonormal   
-            eigenvectors of the matrix A, with the i-th column of Z   
-            holding the eigenvector associated with W(i).   
-            If JOBZ = 'N', then Z is not referenced.   
-
-    LDZ     (input) INTEGER   
-            The leading dimension of the array Z.  LDZ >= 1, and if   
-            JOBZ = 'V', LDZ >= max(1,N).   
-
-    WORK    (workspace) DOUBLE PRECISION array, dimension (max(1,3*N-2))   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-            > 0:  if INFO = i, the algorithm failed to converge; i   
-                  off-diagonal elements of an intermediate tridiagonal   
-                  form did not converge to zero.   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static doublereal c_b11 = 1.;
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer ab_dim1, ab_offset, z_dim1, z_offset, i__1;
-    doublereal d__1;
+    int ab_dim1, ab_offset, z_dim1, z_offset, i__1;
+    double d__1;
+
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
+
     /* Local variables */
-    static integer inde;
-    static doublereal anrm;
-    static integer imax;
-    static doublereal rmin, rmax;
-    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *);
-    static doublereal sigma;
-    extern logical lsame_(char *, char *);
-    static integer iinfo;
-    static logical lower, wantz;
-    extern doublereal dlamch_(char *);
-    static integer iscale;
-    extern /* Subroutine */ int dlascl_(char *, integer *, integer *, 
-	    doublereal *, doublereal *, integer *, integer *, doublereal *, 
-	    integer *, integer *);
-    extern doublereal dlansb_(char *, char *, integer *, integer *, 
-	    doublereal *, integer *, doublereal *);
-    static doublereal safmin;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static doublereal bignum;
-    extern /* Subroutine */ int dsbtrd_(char *, char *, integer *, integer *, 
-	    doublereal *, integer *, doublereal *, doublereal *, doublereal *,
-	     integer *, doublereal *, integer *), dsterf_(
-	    integer *, doublereal *, doublereal *, integer *);
-    static integer indwrk;
-    extern /* Subroutine */ int dsteqr_(char *, integer *, doublereal *, 
-	    doublereal *, doublereal *, integer *, doublereal *, integer *);
-    static doublereal smlnum, eps;
-#define z___ref(a_1,a_2) z__[(a_2)*z_dim1 + a_1]
-#define ab_ref(a_1,a_2) ab[(a_2)*ab_dim1 + a_1]
+    double eps;
+    int inde;
+    double anrm;
+    int imax;
+    double rmin, rmax;
+    extern  int dscal_(int *, double *, double *, 
+	    int *);
+    double sigma;
+    extern int lsame_(char *, char *);
+    int iinfo;
+    int lower, wantz;
+    extern double dlamch_(char *);
+    int iscale;
+    extern  int dlascl_(char *, int *, int *, 
+	    double *, double *, int *, int *, double *, 
+	    int *, int *);
+    extern double dlansb_(char *, char *, int *, int *, 
+	    double *, int *, double *);
+    double safmin;
+    extern  int xerbla_(char *, int *);
+    double bignum;
+    extern  int dsbtrd_(char *, char *, int *, int *, 
+	    double *, int *, double *, double *, double *, 
+	     int *, double *, int *), dsterf_(
+	    int *, double *, double *, int *);
+    int indwrk;
+    extern  int dsteqr_(char *, int *, double *, 
+	    double *, double *, int *, double *, int *);
+    double smlnum;
 
 
+/*  -- LAPACK driver routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  DSBEV computes all the eigenvalues and, optionally, eigenvectors of */
+/*  a float symmetric band matrix A. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  JOBZ    (input) CHARACTER*1 */
+/*          = 'N':  Compute eigenvalues only; */
+/*          = 'V':  Compute eigenvalues and eigenvectors. */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U':  Upper triangle of A is stored; */
+/*          = 'L':  Lower triangle of A is stored. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  KD      (input) INTEGER */
+/*          The number of superdiagonals of the matrix A if UPLO = 'U', */
+/*          or the number of subdiagonals if UPLO = 'L'.  KD >= 0. */
+
+/*  AB      (input/output) DOUBLE PRECISION array, dimension (LDAB, N) */
+/*          On entry, the upper or lower triangle of the symmetric band */
+/*          matrix A, stored in the first KD+1 rows of the array.  The */
+/*          j-th column of A is stored in the j-th column of the array AB */
+/*          as follows: */
+/*          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for MAX(1,j-kd)<=i<=j; */
+/*          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=MIN(n,j+kd). */
+
+/*          On exit, AB is overwritten by values generated during the */
+/*          reduction to tridiagonal form.  If UPLO = 'U', the first */
+/*          superdiagonal and the diagonal of the tridiagonal matrix T */
+/*          are returned in rows KD and KD+1 of AB, and if UPLO = 'L', */
+/*          the diagonal and first subdiagonal of T are returned in the */
+/*          first two rows of AB. */
+
+/*  LDAB    (input) INTEGER */
+/*          The leading dimension of the array AB.  LDAB >= KD + 1. */
+
+/*  W       (output) DOUBLE PRECISION array, dimension (N) */
+/*          If INFO = 0, the eigenvalues in ascending order. */
+
+/*  Z       (output) DOUBLE PRECISION array, dimension (LDZ, N) */
+/*          If JOBZ = 'V', then if INFO = 0, Z contains the orthonormal */
+/*          eigenvectors of the matrix A, with the i-th column of Z */
+/*          holding the eigenvector associated with W(i). */
+/*          If JOBZ = 'N', then Z is not referenced. */
+
+/*  LDZ     (input) INTEGER */
+/*          The leading dimension of the array Z.  LDZ >= 1, and if */
+/*          JOBZ = 'V', LDZ >= MAX(1,N). */
+
+/*  WORK    (workspace) DOUBLE PRECISION array, dimension (MAX(1,3*N-2)) */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+/*          > 0:  if INFO = i, the algorithm failed to converge; i */
+/*                off-diagonal elements of an intermediate tridiagonal */
+/*                form did not converge to zero. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     ab_dim1 = *ldab;
-    ab_offset = 1 + ab_dim1 * 1;
+    ab_offset = 1 + ab_dim1;
     ab -= ab_offset;
     --w;
     z_dim1 = *ldz;
-    z_offset = 1 + z_dim1 * 1;
+    z_offset = 1 + z_dim1;
     z__ -= z_offset;
     --work;
 
@@ -165,12 +192,12 @@
 
     if (*n == 1) {
 	if (lower) {
-	    w[1] = ab_ref(1, 1);
+	    w[1] = ab[ab_dim1 + 1];
 	} else {
-	    w[1] = ab_ref(*kd + 1, 1);
+	    w[1] = ab[*kd + 1 + ab_dim1];
 	}
 	if (wantz) {
-	    z___ref(1, 1) = 1.;
+	    z__[z_dim1 + 1] = 1.;
 	}
 	return 0;
     }
@@ -238,8 +265,3 @@
 /*     End of DSBEV */
 
 } /* dsbev_ */
-
-#undef ab_ref
-#undef z___ref
-
-

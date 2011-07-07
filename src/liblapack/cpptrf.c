@@ -1,104 +1,131 @@
+/* cpptrf.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int cpptrf_(char *uplo, integer *n, complex *ap, integer *
+/* Table of constant values */
+
+static int c__1 = 1;
+static float c_b16 = -1.f;
+
+ int cpptrf_(char *uplo, int *n, complex *ap, int *
 	info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
-
-
-    Purpose   
-    =======   
-
-    CPPTRF computes the Cholesky factorization of a complex Hermitian   
-    positive definite matrix A stored in packed format.   
-
-    The factorization has the form   
-       A = U**H * U,  if UPLO = 'U', or   
-       A = L  * L**H,  if UPLO = 'L',   
-    where U is an upper triangular matrix and L is lower triangular.   
-
-    Arguments   
-    =========   
-
-    UPLO    (input) CHARACTER*1   
-            = 'U':  Upper triangle of A is stored;   
-            = 'L':  Lower triangle of A is stored.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    AP      (input/output) COMPLEX array, dimension (N*(N+1)/2)   
-            On entry, the upper or lower triangle of the Hermitian matrix   
-            A, packed columnwise in a linear array.  The j-th column of A   
-            is stored in the array AP as follows:   
-            if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;   
-            if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.   
-            See below for further details.   
-
-            On exit, if INFO = 0, the triangular factor U or L from the   
-            Cholesky factorization A = U**H*U or A = L*L**H, in the same   
-            storage format as A.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-            > 0:  if INFO = i, the leading minor of order i is not   
-                  positive definite, and the factorization could not be   
-                  completed.   
-
-    Further Details   
-    ===============   
-
-    The packed storage scheme is illustrated by the following example   
-    when N = 4, UPLO = 'U':   
-
-    Two-dimensional storage of the Hermitian matrix A:   
-
-       a11 a12 a13 a14   
-           a22 a23 a24   
-               a33 a34     (aij = conjg(aji))   
-                   a44   
-
-    Packed storage of the upper triangle of A:   
-
-    AP = [ a11, a12, a22, a13, a23, a33, a14, a24, a34, a44 ]   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    static real c_b16 = -1.f;
-    
     /* System generated locals */
-    integer i__1, i__2, i__3;
-    real r__1;
+    int i__1, i__2, i__3;
+    float r__1;
     complex q__1, q__2;
+
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
+
     /* Local variables */
-    extern /* Subroutine */ int chpr_(char *, integer *, real *, complex *, 
-	    integer *, complex *);
-    static integer j;
-    extern /* Complex */ VOID cdotc_(complex *, integer *, complex *, integer 
-	    *, complex *, integer *);
-    extern logical lsame_(char *, char *);
-    static logical upper;
-    extern /* Subroutine */ int ctpsv_(char *, char *, char *, integer *, 
-	    complex *, complex *, integer *);
-    static integer jc, jj;
-    extern /* Subroutine */ int csscal_(integer *, real *, complex *, integer 
-	    *), xerbla_(char *, integer *);
-    static real ajj;
+    int j, jc, jj;
+    float ajj;
+    extern  int chpr_(char *, int *, float *, complex *, 
+	    int *, complex *);
+    extern /* Complex */ VOID cdotc_(complex *, int *, complex *, int 
+	    *, complex *, int *);
+    extern int lsame_(char *, char *);
+    int upper;
+    extern  int ctpsv_(char *, char *, char *, int *, 
+	    complex *, complex *, int *), csscal_(
+	    int *, float *, complex *, int *), xerbla_(char *, int 
+	    *);
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CPPTRF computes the Cholesky factorization of a complex Hermitian */
+/*  positive definite matrix A stored in packed format. */
+
+/*  The factorization has the form */
+/*     A = U**H * U,  if UPLO = 'U', or */
+/*     A = L  * L**H,  if UPLO = 'L', */
+/*  where U is an upper triangular matrix and L is lower triangular. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U':  Upper triangle of A is stored; */
+/*          = 'L':  Lower triangle of A is stored. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  AP      (input/output) COMPLEX array, dimension (N*(N+1)/2) */
+/*          On entry, the upper or lower triangle of the Hermitian matrix */
+/*          A, packed columnwise in a linear array.  The j-th column of A */
+/*          is stored in the array AP as follows: */
+/*          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j; */
+/*          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n. */
+/*          See below for further details. */
+
+/*          On exit, if INFO = 0, the triangular factor U or L from the */
+/*          Cholesky factorization A = U**H*U or A = L*L**H, in the same */
+/*          storage format as A. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+/*          > 0:  if INFO = i, the leading minor of order i is not */
+/*                positive definite, and the factorization could not be */
+/*                completed. */
+
+/*  Further Details */
+/*  =============== */
+
+/*  The packed storage scheme is illustrated by the following example */
+/*  when N = 4, UPLO = 'U': */
+
+/*  Two-dimensional storage of the Hermitian matrix A: */
+
+/*     a11 a12 a13 a14 */
+/*         a22 a23 a24 */
+/*             a33 a34     (aij = conjg(aji)) */
+/*                 a44 */
+
+/*  Packed storage of the upper triangle of A: */
+
+/*  AP = [ a11, a12, a22, a13, a23, a33, a14, a24, a34, a44 ] */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --ap;
 
     /* Function Body */
@@ -178,8 +205,8 @@
 	    i__2 = jj;
 	    ap[i__2].r = ajj, ap[i__2].i = 0.f;
 
-/*           Compute elements J+1:N of column J and update the trailing   
-             submatrix. */
+/*           Compute elements J+1:N of column J and update the trailing */
+/*           submatrix. */
 
 	    if (j < *n) {
 		i__2 = *n - j;
@@ -204,4 +231,3 @@ L40:
 /*     End of CPPTRF */
 
 } /* cpptrf_ */
-

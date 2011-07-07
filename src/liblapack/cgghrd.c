@@ -1,178 +1,207 @@
+/* cgghrd.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int cgghrd_(char *compq, char *compz, integer *n, integer *
-	ilo, integer *ihi, complex *a, integer *lda, complex *b, integer *ldb,
-	 complex *q, integer *ldq, complex *z__, integer *ldz, integer *info)
+/* Table of constant values */
+
+static complex c_b1 = {1.f,0.f};
+static complex c_b2 = {0.f,0.f};
+static int c__1 = 1;
+
+ int cgghrd_(char *compq, char *compz, int *n, int *
+	ilo, int *ihi, complex *a, int *lda, complex *b, int *ldb, 
+	 complex *q, int *ldq, complex *z__, int *ldz, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
-
-
-    Purpose   
-    =======   
-
-    CGGHRD reduces a pair of complex matrices (A,B) to generalized upper   
-    Hessenberg form using unitary transformations, where A is a   
-    general matrix and B is upper triangular:  Q' * A * Z = H and   
-    Q' * B * Z = T, where H is upper Hessenberg, T is upper triangular,   
-    and Q and Z are unitary, and ' means conjugate transpose.   
-
-    The unitary matrices Q and Z are determined as products of Givens   
-    rotations.  They may either be formed explicitly, or they may be   
-    postmultiplied into input matrices Q1 and Z1, so that   
-
-         Q1 * A * Z1' = (Q1*Q) * H * (Z1*Z)'   
-         Q1 * B * Z1' = (Q1*Q) * T * (Z1*Z)'   
-
-    Arguments   
-    =========   
-
-    COMPQ   (input) CHARACTER*1   
-            = 'N': do not compute Q;   
-            = 'I': Q is initialized to the unit matrix, and the   
-                   unitary matrix Q is returned;   
-            = 'V': Q must contain a unitary matrix Q1 on entry,   
-                   and the product Q1*Q is returned.   
-
-    COMPZ   (input) CHARACTER*1   
-            = 'N': do not compute Q;   
-            = 'I': Q is initialized to the unit matrix, and the   
-                   unitary matrix Q is returned;   
-            = 'V': Q must contain a unitary matrix Q1 on entry,   
-                   and the product Q1*Q is returned.   
-
-    N       (input) INTEGER   
-            The order of the matrices A and B.  N >= 0.   
-
-    ILO     (input) INTEGER   
-    IHI     (input) INTEGER   
-            It is assumed that A is already upper triangular in rows and   
-            columns 1:ILO-1 and IHI+1:N.  ILO and IHI are normally set   
-            by a previous call to CGGBAL; otherwise they should be set   
-            to 1 and N respectively.   
-            1 <= ILO <= IHI <= N, if N > 0; ILO=1 and IHI=0, if N=0.   
-
-    A       (input/output) COMPLEX array, dimension (LDA, N)   
-            On entry, the N-by-N general matrix to be reduced.   
-            On exit, the upper triangle and the first subdiagonal of A   
-            are overwritten with the upper Hessenberg matrix H, and the   
-            rest is set to zero.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.  LDA >= max(1,N).   
-
-    B       (input/output) COMPLEX array, dimension (LDB, N)   
-            On entry, the N-by-N upper triangular matrix B.   
-            On exit, the upper triangular matrix T = Q' B Z.  The   
-            elements below the diagonal are set to zero.   
-
-    LDB     (input) INTEGER   
-            The leading dimension of the array B.  LDB >= max(1,N).   
-
-    Q       (input/output) COMPLEX array, dimension (LDQ, N)   
-            If COMPQ='N':  Q is not referenced.   
-            If COMPQ='I':  on entry, Q need not be set, and on exit it   
-                           contains the unitary matrix Q, where Q'   
-                           is the product of the Givens transformations   
-                           which are applied to A and B on the left.   
-            If COMPQ='V':  on entry, Q must contain a unitary matrix   
-                           Q1, and on exit this is overwritten by Q1*Q.   
-
-    LDQ     (input) INTEGER   
-            The leading dimension of the array Q.   
-            LDQ >= N if COMPQ='V' or 'I'; LDQ >= 1 otherwise.   
-
-    Z       (input/output) COMPLEX array, dimension (LDZ, N)   
-            If COMPZ='N':  Z is not referenced.   
-            If COMPZ='I':  on entry, Z need not be set, and on exit it   
-                           contains the unitary matrix Z, which is   
-                           the product of the Givens transformations   
-                           which are applied to A and B on the right.   
-            If COMPZ='V':  on entry, Z must contain a unitary matrix   
-                           Z1, and on exit this is overwritten by Z1*Z.   
-
-    LDZ     (input) INTEGER   
-            The leading dimension of the array Z.   
-            LDZ >= N if COMPZ='V' or 'I'; LDZ >= 1 otherwise.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit.   
-            < 0:  if INFO = -i, the i-th argument had an illegal value.   
-
-    Further Details   
-    ===============   
-
-    This routine reduces A to Hessenberg and B to triangular form by   
-    an unblocked reduction, as described in _Matrix_Computations_,   
-    by Golub and van Loan (Johns Hopkins Press).   
-
-    =====================================================================   
-
-
-       Decode COMPQ   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static complex c_b1 = {1.f,0.f};
-    static complex c_b2 = {0.f,0.f};
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, 
+    int a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, 
 	    z_offset, i__1, i__2, i__3;
     complex q__1;
+
     /* Builtin functions */
     void r_cnjg(complex *, complex *);
+
     /* Local variables */
-    static integer jcol;
-    extern /* Subroutine */ int crot_(integer *, complex *, integer *, 
-	    complex *, integer *, real *, complex *);
-    static integer jrow;
-    static real c__;
-    static complex s;
-    extern logical lsame_(char *, char *);
-    static complex ctemp;
-    extern /* Subroutine */ int claset_(char *, integer *, integer *, complex 
-	    *, complex *, complex *, integer *), clartg_(complex *, 
-	    complex *, real *, complex *, complex *), xerbla_(char *, integer 
+    float c__;
+    complex s;
+    int ilq, ilz;
+    int jcol;
+    extern  int crot_(int *, complex *, int *, 
+	    complex *, int *, float *, complex *);
+    int jrow;
+    extern int lsame_(char *, char *);
+    complex ctemp;
+    extern  int claset_(char *, int *, int *, complex 
+	    *, complex *, complex *, int *), clartg_(complex *, 
+	    complex *, float *, complex *, complex *), xerbla_(char *, int 
 	    *);
-    static integer icompq, icompz;
-    static logical ilq, ilz;
-#define a_subscr(a_1,a_2) (a_2)*a_dim1 + a_1
-#define a_ref(a_1,a_2) a[a_subscr(a_1,a_2)]
-#define b_subscr(a_1,a_2) (a_2)*b_dim1 + a_1
-#define b_ref(a_1,a_2) b[b_subscr(a_1,a_2)]
-#define q_subscr(a_1,a_2) (a_2)*q_dim1 + a_1
-#define q_ref(a_1,a_2) q[q_subscr(a_1,a_2)]
-#define z___subscr(a_1,a_2) (a_2)*z_dim1 + a_1
-#define z___ref(a_1,a_2) z__[z___subscr(a_1,a_2)]
+    int icompq, icompz;
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CGGHRD reduces a pair of complex matrices (A,B) to generalized upper */
+/*  Hessenberg form using unitary transformations, where A is a */
+/*  general matrix and B is upper triangular.  The form of the generalized */
+/*  eigenvalue problem is */
+/*     A*x = lambda*B*x, */
+/*  and B is typically made upper triangular by computing its QR */
+/*  factorization and moving the unitary matrix Q to the left side */
+/*  of the equation. */
+
+/*  This subroutine simultaneously reduces A to a Hessenberg matrix H: */
+/*     Q**H*A*Z = H */
+/*  and transforms B to another upper triangular matrix T: */
+/*     Q**H*B*Z = T */
+/*  in order to reduce the problem to its standard form */
+/*     H*y = lambda*T*y */
+/*  where y = Z**H*x. */
+
+/*  The unitary matrices Q and Z are determined as products of Givens */
+/*  rotations.  They may either be formed explicitly, or they may be */
+/*  postmultiplied into input matrices Q1 and Z1, so that */
+/*       Q1 * A * Z1**H = (Q1*Q) * H * (Z1*Z)**H */
+/*       Q1 * B * Z1**H = (Q1*Q) * T * (Z1*Z)**H */
+/*  If Q1 is the unitary matrix from the QR factorization of B in the */
+/*  original equation A*x = lambda*B*x, then CGGHRD reduces the original */
+/*  problem to generalized Hessenberg form. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  COMPQ   (input) CHARACTER*1 */
+/*          = 'N': do not compute Q; */
+/*          = 'I': Q is initialized to the unit matrix, and the */
+/*                 unitary matrix Q is returned; */
+/*          = 'V': Q must contain a unitary matrix Q1 on entry, */
+/*                 and the product Q1*Q is returned. */
+
+/*  COMPZ   (input) CHARACTER*1 */
+/*          = 'N': do not compute Q; */
+/*          = 'I': Q is initialized to the unit matrix, and the */
+/*                 unitary matrix Q is returned; */
+/*          = 'V': Q must contain a unitary matrix Q1 on entry, */
+/*                 and the product Q1*Q is returned. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrices A and B.  N >= 0. */
+
+/*  ILO     (input) INTEGER */
+/*  IHI     (input) INTEGER */
+/*          ILO and IHI mark the rows and columns of A which are to be */
+/*          reduced.  It is assumed that A is already upper triangular */
+/*          in rows and columns 1:ILO-1 and IHI+1:N.  ILO and IHI are */
+/*          normally set by a previous call to CGGBAL; otherwise they */
+/*          should be set to 1 and N respectively. */
+/*          1 <= ILO <= IHI <= N, if N > 0; ILO=1 and IHI=0, if N=0. */
+
+/*  A       (input/output) COMPLEX array, dimension (LDA, N) */
+/*          On entry, the N-by-N general matrix to be reduced. */
+/*          On exit, the upper triangle and the first subdiagonal of A */
+/*          are overwritten with the upper Hessenberg matrix H, and the */
+/*          rest is set to zero. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A.  LDA >= MAX(1,N). */
+
+/*  B       (input/output) COMPLEX array, dimension (LDB, N) */
+/*          On entry, the N-by-N upper triangular matrix B. */
+/*          On exit, the upper triangular matrix T = Q**H B Z.  The */
+/*          elements below the diagonal are set to zero. */
+
+/*  LDB     (input) INTEGER */
+/*          The leading dimension of the array B.  LDB >= MAX(1,N). */
+
+/*  Q       (input/output) COMPLEX array, dimension (LDQ, N) */
+/*          On entry, if COMPQ = 'V', the unitary matrix Q1, typically */
+/*          from the QR factorization of B. */
+/*          On exit, if COMPQ='I', the unitary matrix Q, and if */
+/*          COMPQ = 'V', the product Q1*Q. */
+/*          Not referenced if COMPQ='N'. */
+
+/*  LDQ     (input) INTEGER */
+/*          The leading dimension of the array Q. */
+/*          LDQ >= N if COMPQ='V' or 'I'; LDQ >= 1 otherwise. */
+
+/*  Z       (input/output) COMPLEX array, dimension (LDZ, N) */
+/*          On entry, if COMPZ = 'V', the unitary matrix Z1. */
+/*          On exit, if COMPZ='I', the unitary matrix Z, and if */
+/*          COMPZ = 'V', the product Z1*Z. */
+/*          Not referenced if COMPZ='N'. */
+
+/*  LDZ     (input) INTEGER */
+/*          The leading dimension of the array Z. */
+/*          LDZ >= N if COMPZ='V' or 'I'; LDZ >= 1 otherwise. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit. */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value. */
+
+/*  Further Details */
+/*  =============== */
+
+/*  This routine reduces A to Hessenberg and B to triangular form by */
+/*  an unblocked reduction, as described in _Matrix_Computations_, */
+/*  by Golub and van Loan (Johns Hopkins Press). */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Decode COMPQ */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     b_dim1 = *ldb;
-    b_offset = 1 + b_dim1 * 1;
+    b_offset = 1 + b_dim1;
     b -= b_offset;
     q_dim1 = *ldq;
-    q_offset = 1 + q_dim1 * 1;
+    q_offset = 1 + q_dim1;
     q -= q_offset;
     z_dim1 = *ldz;
-    z_offset = 1 + z_dim1 * 1;
+    z_offset = 1 + z_dim1;
     z__ -= z_offset;
 
     /* Function Body */
     if (lsame_(compq, "N")) {
-	ilq = FALSE_;
+	ilq = FALSE;
 	icompq = 1;
     } else if (lsame_(compq, "V")) {
-	ilq = TRUE_;
+	ilq = TRUE;
 	icompq = 2;
     } else if (lsame_(compq, "I")) {
-	ilq = TRUE_;
+	ilq = TRUE;
 	icompq = 3;
     } else {
 	icompq = 0;
@@ -181,13 +210,13 @@
 /*     Decode COMPZ */
 
     if (lsame_(compz, "N")) {
-	ilz = FALSE_;
+	ilz = FALSE;
 	icompz = 1;
     } else if (lsame_(compz, "V")) {
-	ilz = TRUE_;
+	ilz = TRUE;
 	icompz = 2;
     } else if (lsame_(compz, "I")) {
-	ilz = TRUE_;
+	ilz = TRUE;
 	icompz = 3;
     } else {
 	icompz = 0;
@@ -206,9 +235,9 @@
 	*info = -4;
     } else if (*ihi > *n || *ihi < *ilo - 1) {
 	*info = -5;
-    } else if (*lda < max(1,*n)) {
+    } else if (*lda < MAX(1,*n)) {
 	*info = -7;
-    } else if (*ldb < max(1,*n)) {
+    } else if (*ldb < MAX(1,*n)) {
 	*info = -9;
     } else if (ilq && *ldq < *n || *ldq < 1) {
 	*info = -11;
@@ -242,7 +271,7 @@
     for (jcol = 1; jcol <= i__1; ++jcol) {
 	i__2 = *n;
 	for (jrow = jcol + 1; jrow <= i__2; ++jrow) {
-	    i__3 = b_subscr(jrow, jcol);
+	    i__3 = jrow + jcol * b_dim1;
 	    b[i__3].r = 0.f, b[i__3].i = 0.f;
 /* L10: */
 	}
@@ -259,40 +288,40 @@
 
 /*           Step 1: rotate rows JROW-1, JROW to kill A(JROW,JCOL) */
 
-	    i__3 = a_subscr(jrow - 1, jcol);
+	    i__3 = jrow - 1 + jcol * a_dim1;
 	    ctemp.r = a[i__3].r, ctemp.i = a[i__3].i;
-	    clartg_(&ctemp, &a_ref(jrow, jcol), &c__, &s, &a_ref(jrow - 1, 
-		    jcol));
-	    i__3 = a_subscr(jrow, jcol);
+	    clartg_(&ctemp, &a[jrow + jcol * a_dim1], &c__, &s, &a[jrow - 1 + 
+		    jcol * a_dim1]);
+	    i__3 = jrow + jcol * a_dim1;
 	    a[i__3].r = 0.f, a[i__3].i = 0.f;
 	    i__3 = *n - jcol;
-	    crot_(&i__3, &a_ref(jrow - 1, jcol + 1), lda, &a_ref(jrow, jcol + 
-		    1), lda, &c__, &s);
+	    crot_(&i__3, &a[jrow - 1 + (jcol + 1) * a_dim1], lda, &a[jrow + (
+		    jcol + 1) * a_dim1], lda, &c__, &s);
 	    i__3 = *n + 2 - jrow;
-	    crot_(&i__3, &b_ref(jrow - 1, jrow - 1), ldb, &b_ref(jrow, jrow - 
-		    1), ldb, &c__, &s);
+	    crot_(&i__3, &b[jrow - 1 + (jrow - 1) * b_dim1], ldb, &b[jrow + (
+		    jrow - 1) * b_dim1], ldb, &c__, &s);
 	    if (ilq) {
 		r_cnjg(&q__1, &s);
-		crot_(n, &q_ref(1, jrow - 1), &c__1, &q_ref(1, jrow), &c__1, &
-			c__, &q__1);
+		crot_(n, &q[(jrow - 1) * q_dim1 + 1], &c__1, &q[jrow * q_dim1 
+			+ 1], &c__1, &c__, &q__1);
 	    }
 
 /*           Step 2: rotate columns JROW, JROW-1 to kill B(JROW,JROW-1) */
 
-	    i__3 = b_subscr(jrow, jrow);
+	    i__3 = jrow + jrow * b_dim1;
 	    ctemp.r = b[i__3].r, ctemp.i = b[i__3].i;
-	    clartg_(&ctemp, &b_ref(jrow, jrow - 1), &c__, &s, &b_ref(jrow, 
-		    jrow));
-	    i__3 = b_subscr(jrow, jrow - 1);
+	    clartg_(&ctemp, &b[jrow + (jrow - 1) * b_dim1], &c__, &s, &b[jrow 
+		    + jrow * b_dim1]);
+	    i__3 = jrow + (jrow - 1) * b_dim1;
 	    b[i__3].r = 0.f, b[i__3].i = 0.f;
-	    crot_(ihi, &a_ref(1, jrow), &c__1, &a_ref(1, jrow - 1), &c__1, &
-		    c__, &s);
+	    crot_(ihi, &a[jrow * a_dim1 + 1], &c__1, &a[(jrow - 1) * a_dim1 + 
+		    1], &c__1, &c__, &s);
 	    i__3 = jrow - 1;
-	    crot_(&i__3, &b_ref(1, jrow), &c__1, &b_ref(1, jrow - 1), &c__1, &
-		    c__, &s);
+	    crot_(&i__3, &b[jrow * b_dim1 + 1], &c__1, &b[(jrow - 1) * b_dim1 
+		    + 1], &c__1, &c__, &s);
 	    if (ilz) {
-		crot_(n, &z___ref(1, jrow), &c__1, &z___ref(1, jrow - 1), &
-			c__1, &c__, &s);
+		crot_(n, &z__[jrow * z_dim1 + 1], &c__1, &z__[(jrow - 1) * 
+			z_dim1 + 1], &c__1, &c__, &s);
 	    }
 /* L30: */
 	}
@@ -304,14 +333,3 @@
 /*     End of CGGHRD */
 
 } /* cgghrd_ */
-
-#undef z___ref
-#undef z___subscr
-#undef q_ref
-#undef q_subscr
-#undef b_ref
-#undef b_subscr
-#undef a_ref
-#undef a_subscr
-
-

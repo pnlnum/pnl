@@ -1,83 +1,108 @@
+/* sgttrf.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int sgttrf_(integer *n, real *dl, real *d__, real *du, real *
-	du2, integer *ipiv, integer *info)
+ int sgttrf_(int *n, float *dl, float *d__, float *du, float *
+	du2, int *ipiv, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    SGTTRF computes an LU factorization of a real tridiagonal matrix A   
-    using elimination with partial pivoting and row interchanges.   
-
-    The factorization has the form   
-       A = L * U   
-    where L is a product of permutation and unit lower bidiagonal   
-    matrices and U is upper triangular with nonzeros in only the main   
-    diagonal and first two superdiagonals.   
-
-    Arguments   
-    =========   
-
-    N       (input) INTEGER   
-            The order of the matrix A.   
-
-    DL      (input/output) REAL array, dimension (N-1)   
-            On entry, DL must contain the (n-1) sub-diagonal elements of   
-            A.   
-
-            On exit, DL is overwritten by the (n-1) multipliers that   
-            define the matrix L from the LU factorization of A.   
-
-    D       (input/output) REAL array, dimension (N)   
-            On entry, D must contain the diagonal elements of A.   
-
-            On exit, D is overwritten by the n diagonal elements of the   
-            upper triangular matrix U from the LU factorization of A.   
-
-    DU      (input/output) REAL array, dimension (N-1)   
-            On entry, DU must contain the (n-1) super-diagonal elements   
-            of A.   
-
-            On exit, DU is overwritten by the (n-1) elements of the first   
-            super-diagonal of U.   
-
-    DU2     (output) REAL array, dimension (N-2)   
-            On exit, DU2 is overwritten by the (n-2) elements of the   
-            second super-diagonal of U.   
-
-    IPIV    (output) INTEGER array, dimension (N)   
-            The pivot indices; for 1 <= i <= n, row i of the matrix was   
-            interchanged with row IPIV(i).  IPIV(i) will always be either   
-            i or i+1; IPIV(i) = i indicates a row interchange was not   
-            required.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -k, the k-th argument had an illegal value   
-            > 0:  if INFO = k, U(k,k) is exactly zero. The factorization   
-                  has been completed, but the factor U is exactly   
-                  singular, and division by zero will occur if it is used   
-                  to solve a system of equations.   
-
-    =====================================================================   
-
-
-       Parameter adjustments */
     /* System generated locals */
-    integer i__1;
-    real r__1, r__2;
-    /* Local variables */
-    static real fact, temp;
-    static integer i__;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
+    int i__1;
+    float r__1, r__2;
 
+    /* Local variables */
+    int i__;
+    float fact, temp;
+    extern  int xerbla_(char *, int *);
+
+
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  SGTTRF computes an LU factorization of a float tridiagonal matrix A */
+/*  using elimination with partial pivoting and row interchanges. */
+
+/*  The factorization has the form */
+/*     A = L * U */
+/*  where L is a product of permutation and unit lower bidiagonal */
+/*  matrices and U is upper triangular with nonzeros in only the main */
+/*  diagonal and first two superdiagonals. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A. */
+
+/*  DL      (input/output) REAL array, dimension (N-1) */
+/*          On entry, DL must contain the (n-1) sub-diagonal elements of */
+/*          A. */
+
+/*          On exit, DL is overwritten by the (n-1) multipliers that */
+/*          define the matrix L from the LU factorization of A. */
+
+/*  D       (input/output) REAL array, dimension (N) */
+/*          On entry, D must contain the diagonal elements of A. */
+
+/*          On exit, D is overwritten by the n diagonal elements of the */
+/*          upper triangular matrix U from the LU factorization of A. */
+
+/*  DU      (input/output) REAL array, dimension (N-1) */
+/*          On entry, DU must contain the (n-1) super-diagonal elements */
+/*          of A. */
+
+/*          On exit, DU is overwritten by the (n-1) elements of the first */
+/*          super-diagonal of U. */
+
+/*  DU2     (output) REAL array, dimension (N-2) */
+/*          On exit, DU2 is overwritten by the (n-2) elements of the */
+/*          second super-diagonal of U. */
+
+/*  IPIV    (output) INTEGER array, dimension (N) */
+/*          The pivot indices; for 1 <= i <= n, row i of the matrix was */
+/*          interchanged with row IPIV(i).  IPIV(i) will always be either */
+/*          i or i+1; IPIV(i) = i indicates a row interchange was not */
+/*          required. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -k, the k-th argument had an illegal value */
+/*          > 0:  if INFO = k, U(k,k) is exactly zero. The factorization */
+/*                has been completed, but the factor U is exactly */
+/*                singular, and division by zero will occur if it is used */
+/*                to solve a system of equations. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     --ipiv;
     --du2;
     --du;
@@ -114,7 +139,7 @@
 
     i__1 = *n - 2;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	if ((r__1 = d__[i__], dabs(r__1)) >= (r__2 = dl[i__], dabs(r__2))) {
+	if ((r__1 = d__[i__], ABS(r__1)) >= (r__2 = dl[i__], ABS(r__2))) {
 
 /*           No row interchange required, eliminate DL(I) */
 
@@ -141,7 +166,7 @@
     }
     if (*n > 1) {
 	i__ = *n - 1;
-	if ((r__1 = d__[i__], dabs(r__1)) >= (r__2 = dl[i__], dabs(r__2))) {
+	if ((r__1 = d__[i__], ABS(r__1)) >= (r__2 = dl[i__], ABS(r__2))) {
 	    if (d__[i__] != 0.f) {
 		fact = dl[i__] / d__[i__];
 		dl[i__] = fact;
@@ -175,4 +200,3 @@ L50:
 /*     End of SGTTRF */
 
 } /* sgttrf_ */
-

@@ -1,91 +1,123 @@
+/* dsycon.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dsycon_(char *uplo, integer *n, doublereal *a, integer *
-	lda, integer *ipiv, doublereal *anorm, doublereal *rcond, doublereal *
-	work, integer *iwork, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int dsycon_(char *uplo, int *n, double *a, int *
+	lda, int *ipiv, double *anorm, double *rcond, double *
+	work, int *iwork, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       March 31, 1993   
-
-
-    Purpose   
-    =======   
-
-    DSYCON estimates the reciprocal of the condition number (in the   
-    1-norm) of a real symmetric matrix A using the factorization   
-    A = U*D*U**T or A = L*D*L**T computed by DSYTRF.   
-
-    An estimate is obtained for norm(inv(A)), and the reciprocal of the   
-    condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).   
-
-    Arguments   
-    =========   
-
-    UPLO    (input) CHARACTER*1   
-            Specifies whether the details of the factorization are stored   
-            as an upper or lower triangular matrix.   
-            = 'U':  Upper triangular, form is A = U*D*U**T;   
-            = 'L':  Lower triangular, form is A = L*D*L**T.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    A       (input) DOUBLE PRECISION array, dimension (LDA,N)   
-            The block diagonal matrix D and the multipliers used to   
-            obtain the factor U or L as computed by DSYTRF.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.  LDA >= max(1,N).   
-
-    IPIV    (input) INTEGER array, dimension (N)   
-            Details of the interchanges and the block structure of D   
-            as determined by DSYTRF.   
-
-    ANORM   (input) DOUBLE PRECISION   
-            The 1-norm of the original matrix A.   
-
-    RCOND   (output) DOUBLE PRECISION   
-            The reciprocal of the condition number of the matrix A,   
-            computed as RCOND = 1/(ANORM * AINVNM), where AINVNM is an   
-            estimate of the 1-norm of inv(A) computed in this routine.   
-
-    WORK    (workspace) DOUBLE PRECISION array, dimension (2*N)   
-
-    IWORK    (workspace) INTEGER array, dimension (N)   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    int a_dim1, a_offset, i__1;
+
     /* Local variables */
-    static integer kase, i__;
-    extern logical lsame_(char *, char *);
-    static logical upper;
-    extern /* Subroutine */ int dlacon_(integer *, doublereal *, doublereal *,
-	     integer *, doublereal *, integer *), xerbla_(char *, integer *);
-    static doublereal ainvnm;
-    extern /* Subroutine */ int dsytrs_(char *, integer *, integer *, 
-	    doublereal *, integer *, integer *, doublereal *, integer *, 
-	    integer *);
-#define a_ref(a_1,a_2) a[(a_2)*a_dim1 + a_1]
+    int i__, kase;
+    extern int lsame_(char *, char *);
+    int isave[3];
+    int upper;
+    extern  int dlacn2_(int *, double *, double *, 
+	     int *, double *, int *, int *), xerbla_(char *, 
+	    int *);
+    double ainvnm;
+    extern  int dsytrs_(char *, int *, int *, 
+	    double *, int *, int *, double *, int *, 
+	    int *);
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     Modified to call DLACN2 in place of DLACON, 5 Feb 03, SJH. */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  DSYCON estimates the reciprocal of the condition number (in the */
+/*  1-norm) of a float symmetric matrix A using the factorization */
+/*  A = U*D*U**T or A = L*D*L**T computed by DSYTRF. */
+
+/*  An estimate is obtained for norm(inv(A)), and the reciprocal of the */
+/*  condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))). */
+
+/*  Arguments */
+/*  ========= */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          Specifies whether the details of the factorization are stored */
+/*          as an upper or lower triangular matrix. */
+/*          = 'U':  Upper triangular, form is A = U*D*U**T; */
+/*          = 'L':  Lower triangular, form is A = L*D*L**T. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  A       (input) DOUBLE PRECISION array, dimension (LDA,N) */
+/*          The block diagonal matrix D and the multipliers used to */
+/*          obtain the factor U or L as computed by DSYTRF. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A.  LDA >= MAX(1,N). */
+
+/*  IPIV    (input) INTEGER array, dimension (N) */
+/*          Details of the interchanges and the block structure of D */
+/*          as determined by DSYTRF. */
+
+/*  ANORM   (input) DOUBLE PRECISION */
+/*          The 1-norm of the original matrix A. */
+
+/*  RCOND   (output) DOUBLE PRECISION */
+/*          The reciprocal of the condition number of the matrix A, */
+/*          computed as RCOND = 1/(ANORM * AINVNM), where AINVNM is an */
+/*          estimate of the 1-norm of inv(A) computed in this routine. */
+
+/*  WORK    (workspace) DOUBLE PRECISION array, dimension (2*N) */
+
+/*  IWORK    (workspace) INTEGER array, dimension (N) */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Local Arrays .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     --ipiv;
     --work;
@@ -98,7 +130,7 @@
 	*info = -1;
     } else if (*n < 0) {
 	*info = -2;
-    } else if (*lda < max(1,*n)) {
+    } else if (*lda < MAX(1,*n)) {
 	*info = -4;
     } else if (*anorm < 0.) {
 	*info = -6;
@@ -126,7 +158,7 @@
 /*        Upper triangular storage: examine D from bottom to top */
 
 	for (i__ = *n; i__ >= 1; --i__) {
-	    if (ipiv[i__] > 0 && a_ref(i__, i__) == 0.) {
+	    if (ipiv[i__] > 0 && a[i__ + i__ * a_dim1] == 0.) {
 		return 0;
 	    }
 /* L10: */
@@ -137,7 +169,7 @@
 
 	i__1 = *n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    if (ipiv[i__] > 0 && a_ref(i__, i__) == 0.) {
+	    if (ipiv[i__] > 0 && a[i__ + i__ * a_dim1] == 0.) {
 		return 0;
 	    }
 /* L20: */
@@ -148,7 +180,7 @@
 
     kase = 0;
 L30:
-    dlacon_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase);
+    dlacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if (kase != 0) {
 
 /*        Multiply by inv(L*D*L') or inv(U*D*U'). */
@@ -169,7 +201,3 @@ L30:
 /*     End of DSYCON */
 
 } /* dsycon_ */
-
-#undef a_ref
-
-

@@ -1,101 +1,128 @@
+/* dstev.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dstev_(char *jobz, integer *n, doublereal *d__, 
-	doublereal *e, doublereal *z__, integer *ldz, doublereal *work, 
-	integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int dstev_(char *jobz, int *n, double *d__, 
+	double *e, double *z__, int *ldz, double *work, 
+	int *info)
 {
-/*  -- LAPACK driver routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
-
-
-    Purpose   
-    =======   
-
-    DSTEV computes all eigenvalues and, optionally, eigenvectors of a   
-    real symmetric tridiagonal matrix A.   
-
-    Arguments   
-    =========   
-
-    JOBZ    (input) CHARACTER*1   
-            = 'N':  Compute eigenvalues only;   
-            = 'V':  Compute eigenvalues and eigenvectors.   
-
-    N       (input) INTEGER   
-            The order of the matrix.  N >= 0.   
-
-    D       (input/output) DOUBLE PRECISION array, dimension (N)   
-            On entry, the n diagonal elements of the tridiagonal matrix   
-            A.   
-            On exit, if INFO = 0, the eigenvalues in ascending order.   
-
-    E       (input/output) DOUBLE PRECISION array, dimension (N)   
-            On entry, the (n-1) subdiagonal elements of the tridiagonal   
-            matrix A, stored in elements 1 to N-1 of E; E(N) need not   
-            be set, but is used by the routine.   
-            On exit, the contents of E are destroyed.   
-
-    Z       (output) DOUBLE PRECISION array, dimension (LDZ, N)   
-            If JOBZ = 'V', then if INFO = 0, Z contains the orthonormal   
-            eigenvectors of the matrix A, with the i-th column of Z   
-            holding the eigenvector associated with D(i).   
-            If JOBZ = 'N', then Z is not referenced.   
-
-    LDZ     (input) INTEGER   
-            The leading dimension of the array Z.  LDZ >= 1, and if   
-            JOBZ = 'V', LDZ >= max(1,N).   
-
-    WORK    (workspace) DOUBLE PRECISION array, dimension (max(1,2*N-2))   
-            If JOBZ = 'N', WORK is not referenced.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-            > 0:  if INFO = i, the algorithm failed to converge; i   
-                  off-diagonal elements of E did not converge to zero.   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer z_dim1, z_offset, i__1;
-    doublereal d__1;
+    int z_dim1, z_offset, i__1;
+    double d__1;
+
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
+
     /* Local variables */
-    static integer imax;
-    static doublereal rmin, rmax, tnrm;
-    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *);
-    static doublereal sigma;
-    extern logical lsame_(char *, char *);
-    static logical wantz;
-    extern doublereal dlamch_(char *);
-    static integer iscale;
-    static doublereal safmin;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static doublereal bignum;
-    extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
-    extern /* Subroutine */ int dsterf_(integer *, doublereal *, doublereal *,
-	     integer *), dsteqr_(char *, integer *, doublereal *, doublereal *
-	    , doublereal *, integer *, doublereal *, integer *);
-    static doublereal smlnum, eps;
-#define z___ref(a_1,a_2) z__[(a_2)*z_dim1 + a_1]
+    double eps;
+    int imax;
+    double rmin, rmax, tnrm;
+    extern  int dscal_(int *, double *, double *, 
+	    int *);
+    double sigma;
+    extern int lsame_(char *, char *);
+    int wantz;
+    extern double dlamch_(char *);
+    int iscale;
+    double safmin;
+    extern  int xerbla_(char *, int *);
+    double bignum;
+    extern double dlanst_(char *, int *, double *, double *);
+    extern  int dsterf_(int *, double *, double *, 
+	     int *), dsteqr_(char *, int *, double *, double *
+, double *, int *, double *, int *);
+    double smlnum;
 
 
+/*  -- LAPACK driver routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  DSTEV computes all eigenvalues and, optionally, eigenvectors of a */
+/*  float symmetric tridiagonal matrix A. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  JOBZ    (input) CHARACTER*1 */
+/*          = 'N':  Compute eigenvalues only; */
+/*          = 'V':  Compute eigenvalues and eigenvectors. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix.  N >= 0. */
+
+/*  D       (input/output) DOUBLE PRECISION array, dimension (N) */
+/*          On entry, the n diagonal elements of the tridiagonal matrix */
+/*          A. */
+/*          On exit, if INFO = 0, the eigenvalues in ascending order. */
+
+/*  E       (input/output) DOUBLE PRECISION array, dimension (N-1) */
+/*          On entry, the (n-1) subdiagonal elements of the tridiagonal */
+/*          matrix A, stored in elements 1 to N-1 of E. */
+/*          On exit, the contents of E are destroyed. */
+
+/*  Z       (output) DOUBLE PRECISION array, dimension (LDZ, N) */
+/*          If JOBZ = 'V', then if INFO = 0, Z contains the orthonormal */
+/*          eigenvectors of the matrix A, with the i-th column of Z */
+/*          holding the eigenvector associated with D(i). */
+/*          If JOBZ = 'N', then Z is not referenced. */
+
+/*  LDZ     (input) INTEGER */
+/*          The leading dimension of the array Z.  LDZ >= 1, and if */
+/*          JOBZ = 'V', LDZ >= MAX(1,N). */
+
+/*  WORK    (workspace) DOUBLE PRECISION array, dimension (MAX(1,2*N-2)) */
+/*          If JOBZ = 'N', WORK is not referenced. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+/*          > 0:  if INFO = i, the algorithm failed to converge; i */
+/*                off-diagonal elements of E did not converge to zero. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --d__;
     --e;
     z_dim1 = *ldz;
-    z_offset = 1 + z_dim1 * 1;
+    z_offset = 1 + z_dim1;
     z__ -= z_offset;
     --work;
 
@@ -125,7 +152,7 @@
 
     if (*n == 1) {
 	if (wantz) {
-	    z___ref(1, 1) = 1.;
+	    z__[z_dim1 + 1] = 1.;
 	}
 	return 0;
     }
@@ -156,8 +183,8 @@
 	dscal_(&i__1, &sigma, &e[1], &c__1);
     }
 
-/*     For eigenvalues only, call DSTERF.  For eigenvalues and   
-       eigenvectors, call DSTEQR. */
+/*     For eigenvalues only, call DSTERF.  For eigenvalues and */
+/*     eigenvectors, call DSTEQR. */
 
     if (! wantz) {
 	dsterf_(n, &d__[1], &e[1], info);
@@ -182,7 +209,3 @@
 /*     End of DSTEV */
 
 } /* dstev_ */
-
-#undef z___ref
-
-

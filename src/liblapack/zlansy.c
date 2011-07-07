@@ -1,100 +1,124 @@
+/* zlansy.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-doublereal zlansy_(char *norm, char *uplo, integer *n, doublecomplex *a, 
-	integer *lda, doublereal *work)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+double zlansy_(char *norm, char *uplo, int *n, doublecomplex *a, 
+	int *lda, double *work)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1992   
-
-
-    Purpose   
-    =======   
-
-    ZLANSY  returns the value of the one norm,  or the Frobenius norm, or   
-    the  infinity norm,  or the  element of  largest absolute value  of a   
-    complex symmetric matrix A.   
-
-    Description   
-    ===========   
-
-    ZLANSY returns the value   
-
-       ZLANSY = ( max(abs(A(i,j))), NORM = 'M' or 'm'   
-                (   
-                ( norm1(A),         NORM = '1', 'O' or 'o'   
-                (   
-                ( normI(A),         NORM = 'I' or 'i'   
-                (   
-                ( normF(A),         NORM = 'F', 'f', 'E' or 'e'   
-
-    where  norm1  denotes the  one norm of a matrix (maximum column sum),   
-    normI  denotes the  infinity norm  of a matrix  (maximum row sum) and   
-    normF  denotes the  Frobenius norm of a matrix (square root of sum of   
-    squares).  Note that  max(abs(A(i,j)))  is not a  matrix norm.   
-
-    Arguments   
-    =========   
-
-    NORM    (input) CHARACTER*1   
-            Specifies the value to be returned in ZLANSY as described   
-            above.   
-
-    UPLO    (input) CHARACTER*1   
-            Specifies whether the upper or lower triangular part of the   
-            symmetric matrix A is to be referenced.   
-            = 'U':  Upper triangular part of A is referenced   
-            = 'L':  Lower triangular part of A is referenced   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.  When N = 0, ZLANSY is   
-            set to zero.   
-
-    A       (input) COMPLEX*16 array, dimension (LDA,N)   
-            The symmetric matrix A.  If UPLO = 'U', the leading n by n   
-            upper triangular part of A contains the upper triangular part   
-            of the matrix A, and the strictly lower triangular part of A   
-            is not referenced.  If UPLO = 'L', the leading n by n lower   
-            triangular part of A contains the lower triangular part of   
-            the matrix A, and the strictly upper triangular part of A is   
-            not referenced.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.  LDA >= max(N,1).   
-
-    WORK    (workspace) DOUBLE PRECISION array, dimension (LWORK),   
-            where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,   
-            WORK is not referenced.   
-
-   =====================================================================   
-
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
-    doublereal ret_val, d__1, d__2;
+    int a_dim1, a_offset, i__1, i__2;
+    double ret_val, d__1, d__2;
+
     /* Builtin functions */
-    double z_abs(doublecomplex *), sqrt(doublereal);
+    double z_ABS(doublecomplex *), sqrt(double);
+
     /* Local variables */
-    static doublereal absa;
-    static integer i__, j;
-    static doublereal scale;
-    extern logical lsame_(char *, char *);
-    static doublereal value;
-    extern /* Subroutine */ int zlassq_(integer *, doublecomplex *, integer *,
-	     doublereal *, doublereal *);
-    static doublereal sum;
-#define a_subscr(a_1,a_2) (a_2)*a_dim1 + a_1
-#define a_ref(a_1,a_2) a[a_subscr(a_1,a_2)]
+    int i__, j;
+    double sum, absa, scale;
+    extern int lsame_(char *, char *);
+    double value;
+    extern  int zlassq_(int *, doublecomplex *, int *, 
+	     double *, double *);
 
 
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZLANSY  returns the value of the one norm,  or the Frobenius norm, or */
+/*  the  infinity norm,  or the  element of  largest absolute value  of a */
+/*  complex symmetric matrix A. */
+
+/*  Description */
+/*  =========== */
+
+/*  ZLANSY returns the value */
+
+/*     ZLANSY = ( MAX(ABS(A(i,j))), NORM = 'M' or 'm' */
+/*              ( */
+/*              ( norm1(A),         NORM = '1', 'O' or 'o' */
+/*              ( */
+/*              ( normI(A),         NORM = 'I' or 'i' */
+/*              ( */
+/*              ( normF(A),         NORM = 'F', 'f', 'E' or 'e' */
+
+/*  where  norm1  denotes the  one norm of a matrix (maximum column sum), */
+/*  normI  denotes the  infinity norm  of a matrix  (maximum row sum) and */
+/*  normF  denotes the  Frobenius norm of a matrix (square root of sum of */
+/*  squares).  Note that  MAX(ABS(A(i,j)))  is not a consistent matrix norm. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  NORM    (input) CHARACTER*1 */
+/*          Specifies the value to be returned in ZLANSY as described */
+/*          above. */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          Specifies whether the upper or lower triangular part of the */
+/*          symmetric matrix A is to be referenced. */
+/*          = 'U':  Upper triangular part of A is referenced */
+/*          = 'L':  Lower triangular part of A is referenced */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0.  When N = 0, ZLANSY is */
+/*          set to zero. */
+
+/*  A       (input) COMPLEX*16 array, dimension (LDA,N) */
+/*          The symmetric matrix A.  If UPLO = 'U', the leading n by n */
+/*          upper triangular part of A contains the upper triangular part */
+/*          of the matrix A, and the strictly lower triangular part of A */
+/*          is not referenced.  If UPLO = 'L', the leading n by n lower */
+/*          triangular part of A contains the lower triangular part of */
+/*          the matrix A, and the strictly upper triangular part of A is */
+/*          not referenced. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A.  LDA >= MAX(N,1). */
+
+/*  WORK    (workspace) DOUBLE PRECISION array, dimension (MAX(1,LWORK)), */
+/*          where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise, */
+/*          WORK is not referenced. */
+
+/* ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     --work;
 
@@ -103,7 +127,7 @@ doublereal zlansy_(char *norm, char *uplo, integer *n, doublecomplex *a,
 	value = 0.;
     } else if (lsame_(norm, "M")) {
 
-/*        Find max(abs(A(i,j))). */
+/*        Find MAX(ABS(A(i,j))). */
 
 	value = 0.;
 	if (lsame_(uplo, "U")) {
@@ -112,8 +136,8 @@ doublereal zlansy_(char *norm, char *uplo, integer *n, doublecomplex *a,
 		i__2 = j;
 		for (i__ = 1; i__ <= i__2; ++i__) {
 /* Computing MAX */
-		    d__1 = value, d__2 = z_abs(&a_ref(i__, j));
-		    value = max(d__1,d__2);
+		    d__1 = value, d__2 = z_ABS(&a[i__ + j * a_dim1]);
+		    value = MAX(d__1,d__2);
 /* L10: */
 		}
 /* L20: */
@@ -124,8 +148,8 @@ doublereal zlansy_(char *norm, char *uplo, integer *n, doublecomplex *a,
 		i__2 = *n;
 		for (i__ = j; i__ <= i__2; ++i__) {
 /* Computing MAX */
-		    d__1 = value, d__2 = z_abs(&a_ref(i__, j));
-		    value = max(d__1,d__2);
+		    d__1 = value, d__2 = z_ABS(&a[i__ + j * a_dim1]);
+		    value = MAX(d__1,d__2);
 /* L30: */
 		}
 /* L40: */
@@ -142,19 +166,19 @@ doublereal zlansy_(char *norm, char *uplo, integer *n, doublecomplex *a,
 		sum = 0.;
 		i__2 = j - 1;
 		for (i__ = 1; i__ <= i__2; ++i__) {
-		    absa = z_abs(&a_ref(i__, j));
+		    absa = z_ABS(&a[i__ + j * a_dim1]);
 		    sum += absa;
 		    work[i__] += absa;
 /* L50: */
 		}
-		work[j] = sum + z_abs(&a_ref(j, j));
+		work[j] = sum + z_ABS(&a[j + j * a_dim1]);
 /* L60: */
 	    }
 	    i__1 = *n;
 	    for (i__ = 1; i__ <= i__1; ++i__) {
 /* Computing MAX */
 		d__1 = value, d__2 = work[i__];
-		value = max(d__1,d__2);
+		value = MAX(d__1,d__2);
 /* L70: */
 	    }
 	} else {
@@ -165,15 +189,15 @@ doublereal zlansy_(char *norm, char *uplo, integer *n, doublecomplex *a,
 	    }
 	    i__1 = *n;
 	    for (j = 1; j <= i__1; ++j) {
-		sum = work[j] + z_abs(&a_ref(j, j));
+		sum = work[j] + z_ABS(&a[j + j * a_dim1]);
 		i__2 = *n;
 		for (i__ = j + 1; i__ <= i__2; ++i__) {
-		    absa = z_abs(&a_ref(i__, j));
+		    absa = z_ABS(&a[i__ + j * a_dim1]);
 		    sum += absa;
 		    work[i__] += absa;
 /* L90: */
 		}
-		value = max(value,sum);
+		value = MAX(value,sum);
 /* L100: */
 	    }
 	}
@@ -187,14 +211,14 @@ doublereal zlansy_(char *norm, char *uplo, integer *n, doublecomplex *a,
 	    i__1 = *n;
 	    for (j = 2; j <= i__1; ++j) {
 		i__2 = j - 1;
-		zlassq_(&i__2, &a_ref(1, j), &c__1, &scale, &sum);
+		zlassq_(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
 /* L110: */
 	    }
 	} else {
 	    i__1 = *n - 1;
 	    for (j = 1; j <= i__1; ++j) {
 		i__2 = *n - j;
-		zlassq_(&i__2, &a_ref(j + 1, j), &c__1, &scale, &sum);
+		zlassq_(&i__2, &a[j + 1 + j * a_dim1], &c__1, &scale, &sum);
 /* L120: */
 	    }
 	}
@@ -210,8 +234,3 @@ doublereal zlansy_(char *norm, char *uplo, integer *n, doublecomplex *a,
 /*     End of ZLANSY */
 
 } /* zlansy_ */
-
-#undef a_ref
-#undef a_subscr
-
-

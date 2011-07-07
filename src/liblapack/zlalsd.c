@@ -1,7 +1,13 @@
+/* zlalsd.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-/*  -- translated by f2c (version 19990503).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
+		http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "pnl/pnl_f2c.h"
@@ -9,198 +15,206 @@
 /* Table of constant values */
 
 static doublecomplex c_b1 = {0.,0.};
-static integer c__1 = 1;
-static integer c__0 = 0;
-static doublereal c_b10 = 1.;
-static doublereal c_b35 = 0.;
+static int c__1 = 1;
+static int c__0 = 0;
+static double c_b10 = 1.;
+static double c_b35 = 0.;
 
-/* Subroutine */ int zlalsd_(char *uplo, integer *smlsiz, integer *n, integer 
-	*nrhs, doublereal *d__, doublereal *e, doublecomplex *b, integer *ldb,
-	 doublereal *rcond, integer *rank, doublecomplex *work, doublereal *
-	rwork, integer *iwork, integer *info)
+ int zlalsd_(char *uplo, int *smlsiz, int *n, int 
+	*nrhs, double *d__, double *e, doublecomplex *b, int *ldb, 
+	 double *rcond, int *rank, doublecomplex *work, double *
+	rwork, int *iwork, int *info)
 {
     /* System generated locals */
-    integer b_dim1, b_offset, i__1, i__2, i__3, i__4, i__5, i__6;
-    doublereal d__1;
+    int b_dim1, b_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    double d__1;
     doublecomplex z__1;
 
     /* Builtin functions */
-    double d_imag(doublecomplex *), log(doublereal), d_sign(doublereal *, 
-	    doublereal *);
+    double d_imag(doublecomplex *), log(double), d_sign(double *, 
+	    double *);
 
     /* Local variables */
-    static integer difl, difr, jcol, irwb, perm, nsub, nlvl, sqre, bxst, jrow,
-	     irwu, c__, i__, j, k;
-    static doublereal r__;
-    static integer s, u, jimag;
-    extern /* Subroutine */ int dgemm_(char *, char *, integer *, integer *, 
-	    integer *, doublereal *, doublereal *, integer *, doublereal *, 
-	    integer *, doublereal *, doublereal *, integer *);
-    static integer z__, jreal, irwib, poles, sizei, irwrb, nsize;
-    extern /* Subroutine */ int zdrot_(integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublereal *, doublereal *), zcopy_(
-	    integer *, doublecomplex *, integer *, doublecomplex *, integer *)
+    int c__, i__, j, k;
+    double r__;
+    int s, u, z__;
+    double cs;
+    int bx;
+    double sn;
+    int st, vt, nm1, st1;
+    double eps;
+    int iwk;
+    double tol;
+    int difl, difr;
+    double rcnd;
+    int jcol, irwb, perm, nsub, nlvl, sqre, bxst, jrow, irwu, jimag;
+    extern  int dgemm_(char *, char *, int *, int *, 
+	    int *, double *, double *, int *, double *, 
+	    int *, double *, double *, int *);
+    int jfloat, irwib, poles, sizei, irwrb, nsize;
+    extern  int zdrot_(int *, doublecomplex *, int *, 
+	    doublecomplex *, int *, double *, double *), zcopy_(
+	    int *, doublecomplex *, int *, doublecomplex *, int *)
 	    ;
-    static integer irwvt, icmpq1, icmpq2;
-    static doublereal cs;
-    extern doublereal dlamch_(char *);
-    extern /* Subroutine */ int dlasda_(integer *, integer *, integer *, 
-	    integer *, doublereal *, doublereal *, doublereal *, integer *, 
-	    doublereal *, integer *, doublereal *, doublereal *, doublereal *,
-	     doublereal *, integer *, integer *, integer *, integer *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, integer *,
-	     integer *);
-    static integer bx;
-    static doublereal sn;
-    extern /* Subroutine */ int dlascl_(char *, integer *, integer *, 
-	    doublereal *, doublereal *, integer *, integer *, doublereal *, 
-	    integer *, integer *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    static integer st;
-    extern /* Subroutine */ int dlasdq_(char *, integer *, integer *, integer 
-	    *, integer *, integer *, doublereal *, doublereal *, doublereal *,
-	     integer *, doublereal *, integer *, doublereal *, integer *, 
-	    doublereal *, integer *);
-    static integer vt;
-    extern /* Subroutine */ int dlaset_(char *, integer *, integer *, 
-	    doublereal *, doublereal *, doublereal *, integer *), 
-	    dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *), xerbla_(char *, integer *);
-    static integer givcol;
-    extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
-    extern /* Subroutine */ int zlalsa_(integer *, integer *, integer *, 
-	    integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-	     doublereal *, integer *, doublereal *, integer *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, integer *, integer *, 
-	    integer *, integer *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, integer *, integer *), zlascl_(char *, integer *, 
-	    integer *, doublereal *, doublereal *, integer *, integer *, 
-	    doublecomplex *, integer *, integer *), dlasrt_(char *, 
-	    integer *, doublereal *, integer *), zlacpy_(char *, 
-	    integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-	     integer *), zlaset_(char *, integer *, integer *, 
-	    doublecomplex *, doublecomplex *, doublecomplex *, integer *);
-    static doublereal orgnrm;
-    static integer givnum, givptr, nm1, nrwork, irwwrk, smlszp, st1;
-    static doublereal eps;
-    static integer iwk;
-    static doublereal tol;
+    int irwvt, icmpq1, icmpq2;
+    extern double dlamch_(char *);
+    extern  int dlasda_(int *, int *, int *, 
+	    int *, double *, double *, double *, int *, 
+	    double *, int *, double *, double *, double *, 
+	     double *, int *, int *, int *, int *, 
+	    double *, double *, double *, double *, int *, 
+	     int *), dlascl_(char *, int *, int *, double *, 
+	    double *, int *, int *, double *, int *, 
+	    int *);
+    extern int idamax_(int *, double *, int *);
+    extern  int dlasdq_(char *, int *, int *, int 
+	    *, int *, int *, double *, double *, double *, 
+	     int *, double *, int *, double *, int *, 
+	    double *, int *), dlaset_(char *, int *, 
+	    int *, double *, double *, double *, int *), dlartg_(double *, double *, double *, 
+	    double *, double *), xerbla_(char *, int *);
+    int givcol;
+    extern double dlanst_(char *, int *, double *, double *);
+    extern  int zlalsa_(int *, int *, int *, 
+	    int *, doublecomplex *, int *, doublecomplex *, int *, 
+	     double *, int *, double *, int *, double *, 
+	    double *, double *, double *, int *, int *, 
+	    int *, int *, double *, double *, double *, 
+	    double *, int *, int *), zlascl_(char *, int *, 
+	    int *, double *, double *, int *, int *, 
+	    doublecomplex *, int *, int *), dlasrt_(char *, 
+	    int *, double *, int *), zlacpy_(char *, 
+	    int *, int *, doublecomplex *, int *, doublecomplex *, 
+	     int *), zlaset_(char *, int *, int *, 
+	    doublecomplex *, doublecomplex *, doublecomplex *, int *);
+    double orgnrm;
+    int givnum, givptr, nrwork, irwwrk, smlszp;
 
 
-#define b_subscr(a_1,a_2) (a_2)*b_dim1 + a_1
-#define b_ref(a_1,a_2) b[b_subscr(a_1,a_2)]
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
 
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
 
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1999   
+/*  Purpose */
+/*  ======= */
 
+/*  ZLALSD uses the singular value decomposition of A to solve the least */
+/*  squares problem of finding X to minimize the Euclidean norm of each */
+/*  column of A*X-B, where A is N-by-N upper bidiagonal, and X and B */
+/*  are N-by-NRHS. The solution X overwrites B. */
 
-    Purpose   
-    =======   
+/*  The singular values of A smaller than RCOND times the largest */
+/*  singular value are treated as zero in solving the least squares */
+/*  problem; in this case a minimum norm solution is returned. */
+/*  The actual singular values are returned in D in ascending order. */
 
-    ZLALSD uses the singular value decomposition of A to solve the least   
-    squares problem of finding X to minimize the Euclidean norm of each   
-    column of A*X-B, where A is N-by-N upper bidiagonal, and X and B   
-    are N-by-NRHS. The solution X overwrites B.   
+/*  This code makes very mild assumptions about floating point */
+/*  arithmetic. It will work on machines with a guard digit in */
+/*  add/subtract, or on those binary machines without guard digits */
+/*  which subtract like the Cray XMP, Cray YMP, Cray C 90, or Cray 2. */
+/*  It could conceivably fail on hexadecimal or decimal machines */
+/*  without guard digits, but we know of none. */
 
-    The singular values of A smaller than RCOND times the largest   
-    singular value are treated as zero in solving the least squares   
-    problem; in this case a minimum norm solution is returned.   
-    The actual singular values are returned in D in ascending order.   
+/*  Arguments */
+/*  ========= */
 
-    This code makes very mild assumptions about floating point   
-    arithmetic. It will work on machines with a guard digit in   
-    add/subtract, or on those binary machines without guard digits   
-    which subtract like the Cray XMP, Cray YMP, Cray C 90, or Cray 2.   
-    It could conceivably fail on hexadecimal or decimal machines   
-    without guard digits, but we know of none.   
+/*  UPLO   (input) CHARACTER*1 */
+/*         = 'U': D and E define an upper bidiagonal matrix. */
+/*         = 'L': D and E define a  lower bidiagonal matrix. */
 
-    Arguments   
-    =========   
+/*  SMLSIZ (input) INTEGER */
+/*         The maximum size of the subproblems at the bottom of the */
+/*         computation tree. */
 
-    UPLO   (input) CHARACTER*1   
-           = 'U': D and E define an upper bidiagonal matrix.   
-           = 'L': D and E define a  lower bidiagonal matrix.   
+/*  N      (input) INTEGER */
+/*         The dimension of the  bidiagonal matrix.  N >= 0. */
 
-    SMLSIZ (input) INTEGER   
-           The maximum size of the subproblems at the bottom of the   
-           computation tree.   
+/*  NRHS   (input) INTEGER */
+/*         The number of columns of B. NRHS must be at least 1. */
 
-    N      (input) INTEGER   
-           The dimension of the  bidiagonal matrix.  N >= 0.   
+/*  D      (input/output) DOUBLE PRECISION array, dimension (N) */
+/*         On entry D contains the main diagonal of the bidiagonal */
+/*         matrix. On exit, if INFO = 0, D contains its singular values. */
 
-    NRHS   (input) INTEGER   
-           The number of columns of B. NRHS must be at least 1.   
+/*  E      (input/output) DOUBLE PRECISION array, dimension (N-1) */
+/*         Contains the super-diagonal entries of the bidiagonal matrix. */
+/*         On exit, E has been destroyed. */
 
-    D      (input/output) DOUBLE PRECISION array, dimension (N)   
-           On entry D contains the main diagonal of the bidiagonal   
-           matrix. On exit, if INFO = 0, D contains its singular values.   
+/*  B      (input/output) COMPLEX*16 array, dimension (LDB,NRHS) */
+/*         On input, B contains the right hand sides of the least */
+/*         squares problem. On output, B contains the solution X. */
 
-    E      (input) DOUBLE PRECISION array, dimension (N-1)   
-           Contains the super-diagonal entries of the bidiagonal matrix.   
-           On exit, E has been destroyed.   
+/*  LDB    (input) INTEGER */
+/*         The leading dimension of B in the calling subprogram. */
+/*         LDB must be at least MAX(1,N). */
 
-    B      (input/output) COMPLEX*16 array, dimension (LDB,NRHS)   
-           On input, B contains the right hand sides of the least   
-           squares problem. On output, B contains the solution X.   
+/*  RCOND  (input) DOUBLE PRECISION */
+/*         The singular values of A less than or equal to RCOND times */
+/*         the largest singular value are treated as zero in solving */
+/*         the least squares problem. If RCOND is negative, */
+/*         machine precision is used instead. */
+/*         For example, if diag(S)*X=B were the least squares problem, */
+/*         where diag(S) is a diagonal matrix of singular values, the */
+/*         solution would be X(i) = B(i) / S(i) if S(i) is greater than */
+/*         RCOND*MAX(S), and X(i) = 0 if S(i) is less than or equal to */
+/*         RCOND*MAX(S). */
 
-    LDB    (input) INTEGER   
-           The leading dimension of B in the calling subprogram.   
-           LDB must be at least max(1,N).   
+/*  RANK   (output) INTEGER */
+/*         The number of singular values of A greater than RCOND times */
+/*         the largest singular value. */
 
-    RCOND  (input) DOUBLE PRECISION   
-           The singular values of A less than or equal to RCOND times   
-           the largest singular value are treated as zero in solving   
-           the least squares problem. If RCOND is negative,   
-           machine precision is used instead.   
-           For example, if diag(S)*X=B were the least squares problem,   
-           where diag(S) is a diagonal matrix of singular values, the   
-           solution would be X(i) = B(i) / S(i) if S(i) is greater than   
-           RCOND*max(S), and X(i) = 0 if S(i) is less than or equal to   
-           RCOND*max(S).   
+/*  WORK   (workspace) COMPLEX*16 array, dimension at least */
+/*         (N * NRHS). */
 
-    RANK   (output) INTEGER   
-           The number of singular values of A greater than RCOND times   
-           the largest singular value.   
+/*  RWORK  (workspace) DOUBLE PRECISION array, dimension at least */
+/*         (9*N + 2*N*SMLSIZ + 8*N*NLVL + 3*SMLSIZ*NRHS + (SMLSIZ+1)**2), */
+/*         where */
+/*         NLVL = MAX( 0, INT( LOG_2( MIN( M,N )/(SMLSIZ+1) ) ) + 1 ) */
 
-    WORK   (workspace) COMPLEX*16 array, dimension at least   
-           (N * NRHS).   
+/*  IWORK  (workspace) INTEGER array, dimension at least */
+/*         (3*N*NLVL + 11*N). */
 
-    RWORK  (workspace) DOUBLE PRECISION array, dimension at least   
-           (9*N + 2*N*SMLSIZ + 8*N*NLVL + 3*SMLSIZ*NRHS + (SMLSIZ+1)**2),   
-           where   
-           NLVL = MAX( 0, INT( LOG_2( MIN( M,N )/(SMLSIZ+1) ) ) + 1 )   
+/*  INFO   (output) INTEGER */
+/*         = 0:  successful exit. */
+/*         < 0:  if INFO = -i, the i-th argument had an illegal value. */
+/*         > 0:  The algorithm failed to compute an singular value while */
+/*               working on the submatrix lying in rows and columns */
+/*               INFO/(N+1) through MOD(INFO,N+1). */
 
-    IWORK  (workspace) INTEGER array, dimension at least   
-           (3*N*NLVL + 11*N).   
+/*  Further Details */
+/*  =============== */
 
-    INFO   (output) INTEGER   
-           = 0:  successful exit.   
-           < 0:  if INFO = -i, the i-th argument had an illegal value.   
-           > 0:  The algorithm failed to compute an singular value while   
-                 working on the submatrix lying in rows and columns   
-                 INFO/(N+1) through MOD(INFO,N+1).   
+/*  Based on contributions by */
+/*     Ming Gu and Ren-Cang Li, Computer Science Division, University of */
+/*       California at Berkeley, USA */
+/*     Osni Marques, LBNL/NERSC, USA */
 
-    Further Details   
-    ===============   
+/*  ===================================================================== */
 
-    Based on contributions by   
-       Ming Gu and Ren-Cang Li, Computer Science Division, University of   
-         California at Berkeley, USA   
-       Osni Marques, LBNL/NERSC, USA   
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
 
-    =====================================================================   
+/*     Test the input parameters. */
 
-
-       Test the input parameters.   
-
-       Parameter adjustments */
+    /* Parameter adjustments */
     --d__;
     --e;
     b_dim1 = *ldb;
-    b_offset = 1 + b_dim1 * 1;
+    b_offset = 1 + b_dim1;
     b -= b_offset;
     --work;
     --rwork;
@@ -227,7 +241,9 @@ static doublereal c_b35 = 0.;
 /*     Set up the tolerance. */
 
     if (*rcond <= 0. || *rcond >= 1.) {
-	*rcond = eps;
+	rcnd = eps;
+    } else {
+	rcnd = *rcond;
     }
 
     *rank = 0;
@@ -243,7 +259,7 @@ static doublereal c_b35 = 0.;
 	    *rank = 1;
 	    zlascl_("G", &c__0, &c__0, &d__[1], &c_b10, &c__1, nrhs, &b[
 		    b_offset], ldb, info);
-	    d__[1] = abs(d__[1]);
+	    d__[1] = ABS(d__[1]);
 	}
 	return 0;
     }
@@ -258,7 +274,7 @@ static doublereal c_b35 = 0.;
 	    e[i__] = sn * d__[i__ + 1];
 	    d__[i__ + 1] = cs * d__[i__ + 1];
 	    if (*nrhs == 1) {
-		zdrot_(&c__1, &b_ref(i__, 1), &c__1, &b_ref(i__ + 1, 1), &
+		zdrot_(&c__1, &b[i__ + b_dim1], &c__1, &b[i__ + 1 + b_dim1], &
 			c__1, &cs, &sn);
 	    } else {
 		rwork[(i__ << 1) - 1] = cs;
@@ -273,8 +289,8 @@ static doublereal c_b35 = 0.;
 		for (j = 1; j <= i__2; ++j) {
 		    cs = rwork[(j << 1) - 1];
 		    sn = rwork[j * 2];
-		    zdrot_(&c__1, &b_ref(j, i__), &c__1, &b_ref(j + 1, i__), &
-			    c__1, &cs, &sn);
+		    zdrot_(&c__1, &b[j + i__ * b_dim1], &c__1, &b[j + 1 + i__ 
+			    * b_dim1], &c__1, &cs, &sn);
 /* L20: */
 		}
 /* L30: */
@@ -295,8 +311,8 @@ static doublereal c_b35 = 0.;
     dlascl_("G", &c__0, &c__0, &orgnrm, &c_b10, &nm1, &c__1, &e[1], &nm1, 
 	    info);
 
-/*     If N is smaller than the minimum divide size SMLSIZ, then solve   
-       the problem with another solver. */
+/*     If N is smaller than the minimum divide size SMLSIZ, then solve */
+/*     the problem with another solver. */
 
     if (*n <= *smlsiz) {
 	irwu = 1;
@@ -313,9 +329,9 @@ static doublereal c_b35 = 0.;
 	    return 0;
 	}
 
-/*        In the real version, B is passed to DLASDQ and multiplied   
-          internally by Q'. Here B is complex and that product is   
-          computed below in two steps (real and imaginary parts). */
+/*        In the float version, B is passed to DLASDQ and multiplied */
+/*        internally by Q'. Here B is complex and that product is */
+/*        computed below in two steps (float and imaginary parts). */
 
 	j = irwb - 1;
 	i__1 = *nrhs;
@@ -323,13 +339,13 @@ static doublereal c_b35 = 0.;
 	    i__2 = *n;
 	    for (jrow = 1; jrow <= i__2; ++jrow) {
 		++j;
-		i__3 = b_subscr(jrow, jcol);
+		i__3 = jrow + jcol * b_dim1;
 		rwork[j] = b[i__3].r;
 /* L40: */
 	    }
 /* L50: */
 	}
-	dgemm_("T", "N", n, nrhs, n, &c_b10, &rwork[irwu], n, &rwork[irwb], n,
+	dgemm_("T", "N", n, nrhs, n, &c_b10, &rwork[irwu], n, &rwork[irwb], n, 
 		 &c_b35, &rwork[irwrb], n);
 	j = irwb - 1;
 	i__1 = *nrhs;
@@ -337,23 +353,23 @@ static doublereal c_b35 = 0.;
 	    i__2 = *n;
 	    for (jrow = 1; jrow <= i__2; ++jrow) {
 		++j;
-		rwork[j] = d_imag(&b_ref(jrow, jcol));
+		rwork[j] = d_imag(&b[jrow + jcol * b_dim1]);
 /* L60: */
 	    }
 /* L70: */
 	}
-	dgemm_("T", "N", n, nrhs, n, &c_b10, &rwork[irwu], n, &rwork[irwb], n,
+	dgemm_("T", "N", n, nrhs, n, &c_b10, &rwork[irwu], n, &rwork[irwb], n, 
 		 &c_b35, &rwork[irwib], n);
-	jreal = irwrb - 1;
+	jfloat = irwrb - 1;
 	jimag = irwib - 1;
 	i__1 = *nrhs;
 	for (jcol = 1; jcol <= i__1; ++jcol) {
 	    i__2 = *n;
 	    for (jrow = 1; jrow <= i__2; ++jrow) {
-		++jreal;
+		++jfloat;
 		++jimag;
-		i__3 = b_subscr(jrow, jcol);
-		i__4 = jreal;
+		i__3 = jrow + jcol * b_dim1;
+		i__4 = jfloat;
 		i__5 = jimag;
 		z__1.r = rwork[i__4], z__1.i = rwork[i__5];
 		b[i__3].r = z__1.r, b[i__3].i = z__1.i;
@@ -362,25 +378,25 @@ static doublereal c_b35 = 0.;
 /* L90: */
 	}
 
-	tol = *rcond * (d__1 = d__[idamax_(n, &d__[1], &c__1)], abs(d__1));
+	tol = rcnd * (d__1 = d__[idamax_(n, &d__[1], &c__1)], ABS(d__1));
 	i__1 = *n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    if (d__[i__] <= tol) {
-		zlaset_("A", &c__1, nrhs, &c_b1, &c_b1, &b_ref(i__, 1), ldb);
+		zlaset_("A", &c__1, nrhs, &c_b1, &c_b1, &b[i__ + b_dim1], ldb);
 	    } else {
-		zlascl_("G", &c__0, &c__0, &d__[i__], &c_b10, &c__1, nrhs, &
-			b_ref(i__, 1), ldb, info);
+		zlascl_("G", &c__0, &c__0, &d__[i__], &c_b10, &c__1, nrhs, &b[
+			i__ + b_dim1], ldb, info);
 		++(*rank);
 	    }
 /* L100: */
 	}
 
-/*        Since B is complex, the following call to DGEMM is performed   
-          in two steps (real and imaginary parts). That is for V * B   
-          (in the real version of the code V' is stored in WORK).   
+/*        Since B is complex, the following call to DGEMM is performed */
+/*        in two steps (float and imaginary parts). That is for V * B */
+/*        (in the float version of the code V' is stored in WORK). */
 
-          CALL DGEMM( 'T', 'N', N, NRHS, N, ONE, WORK, N, B, LDB, ZERO,   
-      $               WORK( NWORK ), N ) */
+/*        CALL DGEMM( 'T', 'N', N, NRHS, N, ONE, WORK, N, B, LDB, ZERO, */
+/*    $               WORK( NWORK ), N ) */
 
 	j = irwb - 1;
 	i__1 = *nrhs;
@@ -388,7 +404,7 @@ static doublereal c_b35 = 0.;
 	    i__2 = *n;
 	    for (jrow = 1; jrow <= i__2; ++jrow) {
 		++j;
-		i__3 = b_subscr(jrow, jcol);
+		i__3 = jrow + jcol * b_dim1;
 		rwork[j] = b[i__3].r;
 /* L110: */
 	    }
@@ -402,23 +418,23 @@ static doublereal c_b35 = 0.;
 	    i__2 = *n;
 	    for (jrow = 1; jrow <= i__2; ++jrow) {
 		++j;
-		rwork[j] = d_imag(&b_ref(jrow, jcol));
+		rwork[j] = d_imag(&b[jrow + jcol * b_dim1]);
 /* L130: */
 	    }
 /* L140: */
 	}
 	dgemm_("T", "N", n, nrhs, n, &c_b10, &rwork[irwvt], n, &rwork[irwb], 
 		n, &c_b35, &rwork[irwib], n);
-	jreal = irwrb - 1;
+	jfloat = irwrb - 1;
 	jimag = irwib - 1;
 	i__1 = *nrhs;
 	for (jcol = 1; jcol <= i__1; ++jcol) {
 	    i__2 = *n;
 	    for (jrow = 1; jrow <= i__2; ++jrow) {
-		++jreal;
+		++jfloat;
 		++jimag;
-		i__3 = b_subscr(jrow, jcol);
-		i__4 = jreal;
+		i__3 = jrow + jcol * b_dim1;
+		i__4 = jfloat;
 		i__5 = jimag;
 		z__1.r = rwork[i__4], z__1.i = rwork[i__5];
 		b[i__3].r = z__1.r, b[i__3].i = z__1.i;
@@ -440,7 +456,7 @@ static doublereal c_b35 = 0.;
 
 /*     Book-keeping and setting up some constants. */
 
-    nlvl = (integer) (log((doublereal) (*n) / (doublereal) (*smlsiz + 1)) / 
+    nlvl = (int) (log((double) (*n) / (double) (*smlsiz + 1)) / 
 	    log(2.)) + 1;
 
     smlszp = *smlsiz + 1;
@@ -476,7 +492,7 @@ static doublereal c_b35 = 0.;
 
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	if ((d__1 = d__[i__], abs(d__1)) < eps) {
+	if ((d__1 = d__[i__], ABS(d__1)) < eps) {
 	    d__[i__] = d_sign(&eps, &d__[i__]);
 	}
 /* L170: */
@@ -484,12 +500,12 @@ static doublereal c_b35 = 0.;
 
     i__1 = nm1;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	if ((d__1 = e[i__], abs(d__1)) < eps || i__ == nm1) {
+	if ((d__1 = e[i__], ABS(d__1)) < eps || i__ == nm1) {
 	    ++nsub;
 	    iwork[nsub] = st;
 
-/*           Subproblem found. First determine its size and then   
-             apply divide and conquer on it. */
+/*           Subproblem found. First determine its size and then */
+/*           apply divide and conquer on it. */
 
 	    if (i__ < nm1) {
 
@@ -497,7 +513,7 @@ static doublereal c_b35 = 0.;
 
 		nsize = i__ - st + 1;
 		iwork[sizei + nsub - 1] = nsize;
-	    } else if ((d__1 = e[i__], abs(d__1)) >= eps) {
+	    } else if ((d__1 = e[i__], ABS(d__1)) >= eps) {
 
 /*              A subproblem with E(NM1) not too small but I = NM1. */
 
@@ -505,29 +521,29 @@ static doublereal c_b35 = 0.;
 		iwork[sizei + nsub - 1] = nsize;
 	    } else {
 
-/*              A subproblem with E(NM1) small. This implies an   
-                1-by-1 subproblem at D(N), which is not solved   
-                explicitly. */
+/*              A subproblem with E(NM1) small. This implies an */
+/*              1-by-1 subproblem at D(N), which is not solved */
+/*              explicitly. */
 
 		nsize = i__ - st + 1;
 		iwork[sizei + nsub - 1] = nsize;
 		++nsub;
 		iwork[nsub] = *n;
 		iwork[sizei + nsub - 1] = 1;
-		zcopy_(nrhs, &b_ref(*n, 1), ldb, &work[bx + nm1], n);
+		zcopy_(nrhs, &b[*n + b_dim1], ldb, &work[bx + nm1], n);
 	    }
 	    st1 = st - 1;
 	    if (nsize == 1) {
 
-/*              This is a 1-by-1 subproblem and is not solved   
-                explicitly. */
+/*              This is a 1-by-1 subproblem and is not solved */
+/*              explicitly. */
 
-		zcopy_(nrhs, &b_ref(st, 1), ldb, &work[bx + st1], n);
+		zcopy_(nrhs, &b[st + b_dim1], ldb, &work[bx + st1], n);
 	    } else if (nsize <= *smlsiz) {
 
 /*              This is a small subproblem and is solved by DLASDQ. */
 
-		dlaset_("A", &nsize, &nsize, &c_b35, &c_b10, &rwork[vt + st1],
+		dlaset_("A", &nsize, &nsize, &c_b35, &c_b10, &rwork[vt + st1], 
 			 n);
 		dlaset_("A", &nsize, &nsize, &c_b35, &c_b10, &rwork[u + st1], 
 			n);
@@ -539,9 +555,9 @@ static doublereal c_b35 = 0.;
 		    return 0;
 		}
 
-/*              In the real version, B is passed to DLASDQ and multiplied   
-                internally by Q'. Here B is complex and that product is   
-                computed below in two steps (real and imaginary parts). */
+/*              In the float version, B is passed to DLASDQ and multiplied */
+/*              internally by Q'. Here B is complex and that product is */
+/*              computed below in two steps (float and imaginary parts). */
 
 		j = irwb - 1;
 		i__2 = *nrhs;
@@ -549,14 +565,14 @@ static doublereal c_b35 = 0.;
 		    i__3 = st + nsize - 1;
 		    for (jrow = st; jrow <= i__3; ++jrow) {
 			++j;
-			i__4 = b_subscr(jrow, jcol);
+			i__4 = jrow + jcol * b_dim1;
 			rwork[j] = b[i__4].r;
 /* L180: */
 		    }
 /* L190: */
 		}
 		dgemm_("T", "N", &nsize, nrhs, &nsize, &c_b10, &rwork[u + st1]
-			, n, &rwork[irwb], &nsize, &c_b35, &rwork[irwrb], &
+, n, &rwork[irwb], &nsize, &c_b35, &rwork[irwrb], &
 			nsize);
 		j = irwb - 1;
 		i__2 = *nrhs;
@@ -564,24 +580,24 @@ static doublereal c_b35 = 0.;
 		    i__3 = st + nsize - 1;
 		    for (jrow = st; jrow <= i__3; ++jrow) {
 			++j;
-			rwork[j] = d_imag(&b_ref(jrow, jcol));
+			rwork[j] = d_imag(&b[jrow + jcol * b_dim1]);
 /* L200: */
 		    }
 /* L210: */
 		}
 		dgemm_("T", "N", &nsize, nrhs, &nsize, &c_b10, &rwork[u + st1]
-			, n, &rwork[irwb], &nsize, &c_b35, &rwork[irwib], &
+, n, &rwork[irwb], &nsize, &c_b35, &rwork[irwib], &
 			nsize);
-		jreal = irwrb - 1;
+		jfloat = irwrb - 1;
 		jimag = irwib - 1;
 		i__2 = *nrhs;
 		for (jcol = 1; jcol <= i__2; ++jcol) {
 		    i__3 = st + nsize - 1;
 		    for (jrow = st; jrow <= i__3; ++jrow) {
-			++jreal;
+			++jfloat;
 			++jimag;
-			i__4 = b_subscr(jrow, jcol);
-			i__5 = jreal;
+			i__4 = jrow + jcol * b_dim1;
+			i__5 = jfloat;
 			i__6 = jimag;
 			z__1.r = rwork[i__5], z__1.i = rwork[i__6];
 			b[i__4].r = z__1.r, b[i__4].i = z__1.i;
@@ -590,8 +606,8 @@ static doublereal c_b35 = 0.;
 /* L230: */
 		}
 
-		zlacpy_("A", &nsize, nrhs, &b_ref(st, 1), ldb, &work[bx + st1]
-			, n);
+		zlacpy_("A", &nsize, nrhs, &b[st + b_dim1], ldb, &work[bx + 
+			st1], n);
 	    } else {
 
 /*              A large problem. Solve it using divide and conquer. */
@@ -607,10 +623,10 @@ static doublereal c_b35 = 0.;
 		    return 0;
 		}
 		bxst = bx + st1;
-		zlalsa_(&icmpq2, smlsiz, &nsize, nrhs, &b_ref(st, 1), ldb, &
+		zlalsa_(&icmpq2, smlsiz, &nsize, nrhs, &b[st + b_dim1], ldb, &
 			work[bxst], n, &rwork[u + st1], n, &rwork[vt + st1], &
 			iwork[k + st1], &rwork[difl + st1], &rwork[difr + st1]
-			, &rwork[z__ + st1], &rwork[poles + st1], &iwork[
+, &rwork[z__ + st1], &rwork[poles + st1], &iwork[
 			givptr + st1], &iwork[givcol + st1], n, &iwork[perm + 
 			st1], &rwork[givnum + st1], &rwork[c__ + st1], &rwork[
 			s + st1], &rwork[nrwork], &iwork[iwk], info);
@@ -625,22 +641,22 @@ static doublereal c_b35 = 0.;
 
 /*     Apply the singular values and treat the tiny ones as zero. */
 
-    tol = *rcond * (d__1 = d__[idamax_(n, &d__[1], &c__1)], abs(d__1));
+    tol = rcnd * (d__1 = d__[idamax_(n, &d__[1], &c__1)], ABS(d__1));
 
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 
-/*        Some of the elements in D can be negative because 1-by-1   
-          subproblems were not solved explicitly. */
+/*        Some of the elements in D can be negative because 1-by-1 */
+/*        subproblems were not solved explicitly. */
 
-	if ((d__1 = d__[i__], abs(d__1)) <= tol) {
+	if ((d__1 = d__[i__], ABS(d__1)) <= tol) {
 	    zlaset_("A", &c__1, nrhs, &c_b1, &c_b1, &work[bx + i__ - 1], n);
 	} else {
 	    ++(*rank);
 	    zlascl_("G", &c__0, &c__0, &d__[i__], &c_b10, &c__1, nrhs, &work[
 		    bx + i__ - 1], n, info);
 	}
-	d__[i__] = (d__1 = d__[i__], abs(d__1));
+	d__[i__] = (d__1 = d__[i__], ABS(d__1));
 /* L250: */
     }
 
@@ -654,26 +670,26 @@ static doublereal c_b35 = 0.;
 	nsize = iwork[sizei + i__ - 1];
 	bxst = bx + st1;
 	if (nsize == 1) {
-	    zcopy_(nrhs, &work[bxst], n, &b_ref(st, 1), ldb);
+	    zcopy_(nrhs, &work[bxst], n, &b[st + b_dim1], ldb);
 	} else if (nsize <= *smlsiz) {
 
-/*           Since B and BX are complex, the following call to DGEMM   
-             is performed in two steps (real and imaginary parts).   
+/*           Since B and BX are complex, the following call to DGEMM */
+/*           is performed in two steps (float and imaginary parts). */
 
-             CALL DGEMM( 'T', 'N', NSIZE, NRHS, NSIZE, ONE,   
-      $                  RWORK( VT+ST1 ), N, RWORK( BXST ), N, ZERO,   
-      $                  B( ST, 1 ), LDB ) */
+/*           CALL DGEMM( 'T', 'N', NSIZE, NRHS, NSIZE, ONE, */
+/*    $                  RWORK( VT+ST1 ), N, RWORK( BXST ), N, ZERO, */
+/*    $                  B( ST, 1 ), LDB ) */
 
 	    j = bxst - *n - 1;
-	    jreal = irwb - 1;
+	    jfloat = irwb - 1;
 	    i__2 = *nrhs;
 	    for (jcol = 1; jcol <= i__2; ++jcol) {
 		j += *n;
 		i__3 = nsize;
 		for (jrow = 1; jrow <= i__3; ++jrow) {
-		    ++jreal;
+		    ++jfloat;
 		    i__4 = j + jrow;
-		    rwork[jreal] = work[i__4].r;
+		    rwork[jfloat] = work[i__4].r;
 /* L260: */
 		}
 /* L270: */
@@ -695,16 +711,16 @@ static doublereal c_b35 = 0.;
 	    }
 	    dgemm_("T", "N", &nsize, nrhs, &nsize, &c_b10, &rwork[vt + st1], 
 		    n, &rwork[irwb], &nsize, &c_b35, &rwork[irwib], &nsize);
-	    jreal = irwrb - 1;
+	    jfloat = irwrb - 1;
 	    jimag = irwib - 1;
 	    i__2 = *nrhs;
 	    for (jcol = 1; jcol <= i__2; ++jcol) {
 		i__3 = st + nsize - 1;
 		for (jrow = st; jrow <= i__3; ++jrow) {
-		    ++jreal;
+		    ++jfloat;
 		    ++jimag;
-		    i__4 = b_subscr(jrow, jcol);
-		    i__5 = jreal;
+		    i__4 = jrow + jcol * b_dim1;
+		    i__5 = jfloat;
 		    i__6 = jimag;
 		    z__1.r = rwork[i__5], z__1.i = rwork[i__6];
 		    b[i__4].r = z__1.r, b[i__4].i = z__1.i;
@@ -713,13 +729,13 @@ static doublereal c_b35 = 0.;
 /* L310: */
 	    }
 	} else {
-	    zlalsa_(&icmpq2, smlsiz, &nsize, nrhs, &work[bxst], n, &b_ref(st, 
-		    1), ldb, &rwork[u + st1], n, &rwork[vt + st1], &iwork[k + 
-		    st1], &rwork[difl + st1], &rwork[difr + st1], &rwork[z__ 
-		    + st1], &rwork[poles + st1], &iwork[givptr + st1], &iwork[
-		    givcol + st1], n, &iwork[perm + st1], &rwork[givnum + st1]
-		    , &rwork[c__ + st1], &rwork[s + st1], &rwork[nrwork], &
-		    iwork[iwk], info);
+	    zlalsa_(&icmpq2, smlsiz, &nsize, nrhs, &work[bxst], n, &b[st + 
+		    b_dim1], ldb, &rwork[u + st1], n, &rwork[vt + st1], &
+		    iwork[k + st1], &rwork[difl + st1], &rwork[difr + st1], &
+		    rwork[z__ + st1], &rwork[poles + st1], &iwork[givptr + 
+		    st1], &iwork[givcol + st1], n, &iwork[perm + st1], &rwork[
+		    givnum + st1], &rwork[c__ + st1], &rwork[s + st1], &rwork[
+		    nrwork], &iwork[iwk], info);
 	    if (*info != 0) {
 		return 0;
 	    }
@@ -739,8 +755,3 @@ static doublereal c_b35 = 0.;
 /*     End of ZLALSD */
 
 } /* zlalsd_ */
-
-#undef b_ref
-#undef b_subscr
-
-

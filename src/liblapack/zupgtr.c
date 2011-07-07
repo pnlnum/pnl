@@ -1,86 +1,109 @@
+/* zupgtr.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zupgtr_(char *uplo, integer *n, doublecomplex *ap, 
-	doublecomplex *tau, doublecomplex *q, integer *ldq, doublecomplex *
-	work, integer *info)
+ int zupgtr_(char *uplo, int *n, doublecomplex *ap, 
+	doublecomplex *tau, doublecomplex *q, int *ldq, doublecomplex *
+	work, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
-
-
-    Purpose   
-    =======   
-
-    ZUPGTR generates a complex unitary matrix Q which is defined as the   
-    product of n-1 elementary reflectors H(i) of order n, as returned by   
-    ZHPTRD using packed storage:   
-
-    if UPLO = 'U', Q = H(n-1) . . . H(2) H(1),   
-
-    if UPLO = 'L', Q = H(1) H(2) . . . H(n-1).   
-
-    Arguments   
-    =========   
-
-    UPLO    (input) CHARACTER*1   
-            = 'U': Upper triangular packed storage used in previous   
-                   call to ZHPTRD;   
-            = 'L': Lower triangular packed storage used in previous   
-                   call to ZHPTRD.   
-
-    N       (input) INTEGER   
-            The order of the matrix Q. N >= 0.   
-
-    AP      (input) COMPLEX*16 array, dimension (N*(N+1)/2)   
-            The vectors which define the elementary reflectors, as   
-            returned by ZHPTRD.   
-
-    TAU     (input) COMPLEX*16 array, dimension (N-1)   
-            TAU(i) must contain the scalar factor of the elementary   
-            reflector H(i), as returned by ZHPTRD.   
-
-    Q       (output) COMPLEX*16 array, dimension (LDQ,N)   
-            The N-by-N unitary matrix Q.   
-
-    LDQ     (input) INTEGER   
-            The leading dimension of the array Q. LDQ >= max(1,N).   
-
-    WORK    (workspace) COMPLEX*16 array, dimension (N-1)   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-
-    =====================================================================   
-
-
-       Test the input arguments   
-
-       Parameter adjustments */
     /* System generated locals */
-    integer q_dim1, q_offset, i__1, i__2, i__3, i__4;
-    /* Local variables */
-    static integer i__, j;
-    extern logical lsame_(char *, char *);
-    static integer iinfo;
-    static logical upper;
-    extern /* Subroutine */ int zung2l_(integer *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *);
-    static integer ij;
-    extern /* Subroutine */ int zung2r_(integer *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *), xerbla_(char *, integer *);
-#define q_subscr(a_1,a_2) (a_2)*q_dim1 + a_1
-#define q_ref(a_1,a_2) q[q_subscr(a_1,a_2)]
+    int q_dim1, q_offset, i__1, i__2, i__3, i__4;
 
+    /* Local variables */
+    int i__, j, ij;
+    extern int lsame_(char *, char *);
+    int iinfo;
+    int upper;
+    extern  int zung2l_(int *, int *, int *, 
+	    doublecomplex *, int *, doublecomplex *, doublecomplex *, 
+	    int *), zung2r_(int *, int *, int *, 
+	    doublecomplex *, int *, doublecomplex *, doublecomplex *, 
+	    int *), xerbla_(char *, int *);
+
+
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZUPGTR generates a complex unitary matrix Q which is defined as the */
+/*  product of n-1 elementary reflectors H(i) of order n, as returned by */
+/*  ZHPTRD using packed storage: */
+
+/*  if UPLO = 'U', Q = H(n-1) . . . H(2) H(1), */
+
+/*  if UPLO = 'L', Q = H(1) H(2) . . . H(n-1). */
+
+/*  Arguments */
+/*  ========= */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U': Upper triangular packed storage used in previous */
+/*                 call to ZHPTRD; */
+/*          = 'L': Lower triangular packed storage used in previous */
+/*                 call to ZHPTRD. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix Q. N >= 0. */
+
+/*  AP      (input) COMPLEX*16 array, dimension (N*(N+1)/2) */
+/*          The vectors which define the elementary reflectors, as */
+/*          returned by ZHPTRD. */
+
+/*  TAU     (input) COMPLEX*16 array, dimension (N-1) */
+/*          TAU(i) must contain the scalar factor of the elementary */
+/*          reflector H(i), as returned by ZHPTRD. */
+
+/*  Q       (output) COMPLEX*16 array, dimension (LDQ,N) */
+/*          The N-by-N unitary matrix Q. */
+
+/*  LDQ     (input) INTEGER */
+/*          The leading dimension of the array Q. LDQ >= MAX(1,N). */
+
+/*  WORK    (workspace) COMPLEX*16 array, dimension (N-1) */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input arguments */
+
+    /* Parameter adjustments */
     --ap;
     --tau;
     q_dim1 = *ldq;
-    q_offset = 1 + q_dim1 * 1;
+    q_offset = 1 + q_dim1;
     q -= q_offset;
     --work;
 
@@ -91,7 +114,7 @@
 	*info = -1;
     } else if (*n < 0) {
 	*info = -2;
-    } else if (*ldq < max(1,*n)) {
+    } else if (*ldq < MAX(1,*n)) {
 	*info = -6;
     }
     if (*info != 0) {
@@ -108,35 +131,35 @@
 
     if (upper) {
 
-/*        Q was determined by a call to ZHPTRD with UPLO = 'U'   
+/*        Q was determined by a call to ZHPTRD with UPLO = 'U' */
 
-          Unpack the vectors which define the elementary reflectors and   
-          set the last row and column of Q equal to those of the unit   
-          matrix */
+/*        Unpack the vectors which define the elementary reflectors and */
+/*        set the last row and column of Q equal to those of the unit */
+/*        matrix */
 
 	ij = 2;
 	i__1 = *n - 1;
 	for (j = 1; j <= i__1; ++j) {
 	    i__2 = j - 1;
 	    for (i__ = 1; i__ <= i__2; ++i__) {
-		i__3 = q_subscr(i__, j);
+		i__3 = i__ + j * q_dim1;
 		i__4 = ij;
 		q[i__3].r = ap[i__4].r, q[i__3].i = ap[i__4].i;
 		++ij;
 /* L10: */
 	    }
 	    ij += 2;
-	    i__2 = q_subscr(*n, j);
+	    i__2 = *n + j * q_dim1;
 	    q[i__2].r = 0., q[i__2].i = 0.;
 /* L20: */
 	}
 	i__1 = *n - 1;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    i__2 = q_subscr(i__, *n);
+	    i__2 = i__ + *n * q_dim1;
 	    q[i__2].r = 0., q[i__2].i = 0.;
 /* L30: */
 	}
-	i__1 = q_subscr(*n, *n);
+	i__1 = *n + *n * q_dim1;
 	q[i__1].r = 1., q[i__1].i = 0.;
 
 /*        Generate Q(1:n-1,1:n-1) */
@@ -149,28 +172,28 @@
 
     } else {
 
-/*        Q was determined by a call to ZHPTRD with UPLO = 'L'.   
+/*        Q was determined by a call to ZHPTRD with UPLO = 'L'. */
 
-          Unpack the vectors which define the elementary reflectors and   
-          set the first row and column of Q equal to those of the unit   
-          matrix */
+/*        Unpack the vectors which define the elementary reflectors and */
+/*        set the first row and column of Q equal to those of the unit */
+/*        matrix */
 
-	i__1 = q_subscr(1, 1);
+	i__1 = q_dim1 + 1;
 	q[i__1].r = 1., q[i__1].i = 0.;
 	i__1 = *n;
 	for (i__ = 2; i__ <= i__1; ++i__) {
-	    i__2 = q_subscr(i__, 1);
+	    i__2 = i__ + q_dim1;
 	    q[i__2].r = 0., q[i__2].i = 0.;
 /* L40: */
 	}
 	ij = 3;
 	i__1 = *n;
 	for (j = 2; j <= i__1; ++j) {
-	    i__2 = q_subscr(1, j);
+	    i__2 = j * q_dim1 + 1;
 	    q[i__2].r = 0., q[i__2].i = 0.;
 	    i__2 = *n;
 	    for (i__ = j + 1; i__ <= i__2; ++i__) {
-		i__3 = q_subscr(i__, j);
+		i__3 = i__ + j * q_dim1;
 		i__4 = ij;
 		q[i__3].r = ap[i__4].r, q[i__3].i = ap[i__4].i;
 		++ij;
@@ -186,8 +209,8 @@
 	    i__1 = *n - 1;
 	    i__2 = *n - 1;
 	    i__3 = *n - 1;
-	    zung2r_(&i__1, &i__2, &i__3, &q_ref(2, 2), ldq, &tau[1], &work[1],
-		     &iinfo);
+	    zung2r_(&i__1, &i__2, &i__3, &q[(q_dim1 << 1) + 2], ldq, &tau[1], 
+		    &work[1], &iinfo);
 	}
     }
     return 0;
@@ -195,8 +218,3 @@
 /*     End of ZUPGTR */
 
 } /* zupgtr_ */
-
-#undef q_ref
-#undef q_subscr
-
-

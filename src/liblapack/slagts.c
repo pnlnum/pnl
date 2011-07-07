@@ -1,115 +1,142 @@
+/* slagts.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int slagts_(integer *job, integer *n, real *a, real *b, real 
-	*c__, real *d__, integer *in, real *y, real *tol, integer *info)
+ int slagts_(int *job, int *n, float *a, float *b, float 
+	*c__, float *d__, int *in, float *y, float *tol, int *info)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1992   
-
-
-    Purpose   
-    =======   
-
-    SLAGTS may be used to solve one of the systems of equations   
-
-       (T - lambda*I)*x = y   or   (T - lambda*I)'*x = y,   
-
-    where T is an n by n tridiagonal matrix, for x, following the   
-    factorization of (T - lambda*I) as   
-
-       (T - lambda*I) = P*L*U ,   
-
-    by routine SLAGTF. The choice of equation to be solved is   
-    controlled by the argument JOB, and in each case there is an option   
-    to perturb zero or very small diagonal elements of U, this option   
-    being intended for use in applications such as inverse iteration.   
-
-    Arguments   
-    =========   
-
-    JOB     (input) INTEGER   
-            Specifies the job to be performed by SLAGTS as follows:   
-            =  1: The equations  (T - lambda*I)x = y  are to be solved,   
-                  but diagonal elements of U are not to be perturbed.   
-            = -1: The equations  (T - lambda*I)x = y  are to be solved   
-                  and, if overflow would otherwise occur, the diagonal   
-                  elements of U are to be perturbed. See argument TOL   
-                  below.   
-            =  2: The equations  (T - lambda*I)'x = y  are to be solved,   
-                  but diagonal elements of U are not to be perturbed.   
-            = -2: The equations  (T - lambda*I)'x = y  are to be solved   
-                  and, if overflow would otherwise occur, the diagonal   
-                  elements of U are to be perturbed. See argument TOL   
-                  below.   
-
-    N       (input) INTEGER   
-            The order of the matrix T.   
-
-    A       (input) REAL array, dimension (N)   
-            On entry, A must contain the diagonal elements of U as   
-            returned from SLAGTF.   
-
-    B       (input) REAL array, dimension (N-1)   
-            On entry, B must contain the first super-diagonal elements of   
-            U as returned from SLAGTF.   
-
-    C       (input) REAL array, dimension (N-1)   
-            On entry, C must contain the sub-diagonal elements of L as   
-            returned from SLAGTF.   
-
-    D       (input) REAL array, dimension (N-2)   
-            On entry, D must contain the second super-diagonal elements   
-            of U as returned from SLAGTF.   
-
-    IN      (input) INTEGER array, dimension (N)   
-            On entry, IN must contain details of the matrix P as returned   
-            from SLAGTF.   
-
-    Y       (input/output) REAL array, dimension (N)   
-            On entry, the right hand side vector y.   
-            On exit, Y is overwritten by the solution vector x.   
-
-    TOL     (input/output) REAL   
-            On entry, with  JOB .lt. 0, TOL should be the minimum   
-            perturbation to be made to very small diagonal elements of U.   
-            TOL should normally be chosen as about eps*norm(U), where eps   
-            is the relative machine precision, but if TOL is supplied as   
-            non-positive, then it is reset to eps*max( abs( u(i,j) ) ).   
-            If  JOB .gt. 0  then TOL is not referenced.   
-
-            On exit, TOL is changed as described above, only if TOL is   
-            non-positive on entry. Otherwise TOL is unchanged.   
-
-    INFO    (output) INTEGER   
-            = 0   : successful exit   
-            .lt. 0: if INFO = -i, the i-th argument had an illegal value   
-            .gt. 0: overflow would occur when computing the INFO(th)   
-                    element of the solution vector x. This can only occur   
-                    when JOB is supplied as positive and either means   
-                    that a diagonal element of U is very small, or that   
-                    the elements of the right-hand side vector y are very   
-                    large.   
-
-    =====================================================================   
-
-
-       Parameter adjustments */
     /* System generated locals */
-    integer i__1;
-    real r__1, r__2, r__3, r__4, r__5;
-    /* Builtin functions */
-    double r_sign(real *, real *);
-    /* Local variables */
-    static real temp, pert;
-    static integer k;
-    static real absak, sfmin, ak;
-    extern doublereal slamch_(char *);
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static real bignum, eps;
+    int i__1;
+    float r__1, r__2, r__3, r__4, r__5;
 
+    /* Builtin functions */
+    double r_sign(float *, float *);
+
+    /* Local variables */
+    int k;
+    float ak, eps, temp, pert, absak, sfmin;
+    extern double slamch_(char *);
+    extern  int xerbla_(char *, int *);
+    float bignum;
+
+
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  SLAGTS may be used to solve one of the systems of equations */
+
+/*     (T - lambda*I)*x = y   or   (T - lambda*I)'*x = y, */
+
+/*  where T is an n by n tridiagonal matrix, for x, following the */
+/*  factorization of (T - lambda*I) as */
+
+/*     (T - lambda*I) = P*L*U , */
+
+/*  by routine SLAGTF. The choice of equation to be solved is */
+/*  controlled by the argument JOB, and in each case there is an option */
+/*  to perturb zero or very small diagonal elements of U, this option */
+/*  being intended for use in applications such as inverse iteration. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  JOB     (input) INTEGER */
+/*          Specifies the job to be performed by SLAGTS as follows: */
+/*          =  1: The equations  (T - lambda*I)x = y  are to be solved, */
+/*                but diagonal elements of U are not to be perturbed. */
+/*          = -1: The equations  (T - lambda*I)x = y  are to be solved */
+/*                and, if overflow would otherwise occur, the diagonal */
+/*                elements of U are to be perturbed. See argument TOL */
+/*                below. */
+/*          =  2: The equations  (T - lambda*I)'x = y  are to be solved, */
+/*                but diagonal elements of U are not to be perturbed. */
+/*          = -2: The equations  (T - lambda*I)'x = y  are to be solved */
+/*                and, if overflow would otherwise occur, the diagonal */
+/*                elements of U are to be perturbed. See argument TOL */
+/*                below. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix T. */
+
+/*  A       (input) REAL array, dimension (N) */
+/*          On entry, A must contain the diagonal elements of U as */
+/*          returned from SLAGTF. */
+
+/*  B       (input) REAL array, dimension (N-1) */
+/*          On entry, B must contain the first super-diagonal elements of */
+/*          U as returned from SLAGTF. */
+
+/*  C       (input) REAL array, dimension (N-1) */
+/*          On entry, C must contain the sub-diagonal elements of L as */
+/*          returned from SLAGTF. */
+
+/*  D       (input) REAL array, dimension (N-2) */
+/*          On entry, D must contain the second super-diagonal elements */
+/*          of U as returned from SLAGTF. */
+
+/*  IN      (input) INTEGER array, dimension (N) */
+/*          On entry, IN must contain details of the matrix P as returned */
+/*          from SLAGTF. */
+
+/*  Y       (input/output) REAL array, dimension (N) */
+/*          On entry, the right hand side vector y. */
+/*          On exit, Y is overwritten by the solution vector x. */
+
+/*  TOL     (input/output) REAL */
+/*          On entry, with  JOB .lt. 0, TOL should be the minimum */
+/*          perturbation to be made to very small diagonal elements of U. */
+/*          TOL should normally be chosen as about eps*norm(U), where eps */
+/*          is the relative machine precision, but if TOL is supplied as */
+/*          non-positive, then it is reset to eps*MAX( ABS( u(i,j) ) ). */
+/*          If  JOB .gt. 0  then TOL is not referenced. */
+
+/*          On exit, TOL is changed as described above, only if TOL is */
+/*          non-positive on entry. Otherwise TOL is unchanged. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0   : successful exit */
+/*          .lt. 0: if INFO = -i, the i-th argument had an illegal value */
+/*          .gt. 0: overflow would occur when computing the INFO(th) */
+/*                  element of the solution vector x. This can only occur */
+/*                  when JOB is supplied as positive and either means */
+/*                  that a diagonal element of U is very small, or that */
+/*                  the elements of the right-hand side vector y are very */
+/*                  large. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     --y;
     --in;
     --d__;
@@ -119,7 +146,7 @@
 
     /* Function Body */
     *info = 0;
-    if (abs(*job) > 2 || *job == 0) {
+    if (ABS(*job) > 2 || *job == 0) {
 	*info = -1;
     } else if (*n < 0) {
 	*info = -2;
@@ -140,21 +167,21 @@
 
     if (*job < 0) {
 	if (*tol <= 0.f) {
-	    *tol = dabs(a[1]);
+	    *tol = ABS(a[1]);
 	    if (*n > 1) {
 /* Computing MAX */
-		r__1 = *tol, r__2 = dabs(a[2]), r__1 = max(r__1,r__2), r__2 = 
-			dabs(b[1]);
-		*tol = dmax(r__1,r__2);
+		r__1 = *tol, r__2 = ABS(a[2]), r__1 = MAX(r__1,r__2), r__2 = 
+			ABS(b[1]);
+		*tol = MAX(r__1,r__2);
 	    }
 	    i__1 = *n;
 	    for (k = 3; k <= i__1; ++k) {
 /* Computing MAX */
-		r__4 = *tol, r__5 = (r__1 = a[k], dabs(r__1)), r__4 = max(
-			r__4,r__5), r__5 = (r__2 = b[k - 1], dabs(r__2)), 
-			r__4 = max(r__4,r__5), r__5 = (r__3 = d__[k - 2], 
-			dabs(r__3));
-		*tol = dmax(r__4,r__5);
+		r__4 = *tol, r__5 = (r__1 = a[k], ABS(r__1)), r__4 = MAX(
+			r__4,r__5), r__5 = (r__2 = b[k - 1], ABS(r__2)), 
+			r__4 = MAX(r__4,r__5), r__5 = (r__3 = d__[k - 2], 
+			ABS(r__3));
+		*tol = MAX(r__4,r__5);
 /* L10: */
 	    }
 	    *tol *= eps;
@@ -164,7 +191,7 @@
 	}
     }
 
-    if (abs(*job) == 1) {
+    if (ABS(*job) == 1) {
 	i__1 = *n;
 	for (k = 2; k <= i__1; ++k) {
 	    if (in[k - 1] == 0) {
@@ -186,17 +213,17 @@
 		    temp = y[k];
 		}
 		ak = a[k];
-		absak = dabs(ak);
+		absak = ABS(ak);
 		if (absak < 1.f) {
 		    if (absak < sfmin) {
-			if (absak == 0.f || dabs(temp) * sfmin > absak) {
+			if (absak == 0.f || ABS(temp) * sfmin > absak) {
 			    *info = k;
 			    return 0;
 			} else {
 			    temp *= bignum;
 			    ak *= bignum;
 			}
-		    } else if (dabs(temp) > absak * bignum) {
+		    } else if (ABS(temp) > absak * bignum) {
 			*info = k;
 			return 0;
 		    }
@@ -216,10 +243,10 @@
 		ak = a[k];
 		pert = r_sign(tol, &ak);
 L40:
-		absak = dabs(ak);
+		absak = ABS(ak);
 		if (absak < 1.f) {
 		    if (absak < sfmin) {
-			if (absak == 0.f || dabs(temp) * sfmin > absak) {
+			if (absak == 0.f || ABS(temp) * sfmin > absak) {
 			    ak += pert;
 			    pert *= 2;
 			    goto L40;
@@ -227,7 +254,7 @@ L40:
 			    temp *= bignum;
 			    ak *= bignum;
 			}
-		    } else if (dabs(temp) > absak * bignum) {
+		    } else if (ABS(temp) > absak * bignum) {
 			ak += pert;
 			pert *= 2;
 			goto L40;
@@ -252,17 +279,17 @@ L40:
 		    temp = y[k];
 		}
 		ak = a[k];
-		absak = dabs(ak);
+		absak = ABS(ak);
 		if (absak < 1.f) {
 		    if (absak < sfmin) {
-			if (absak == 0.f || dabs(temp) * sfmin > absak) {
+			if (absak == 0.f || ABS(temp) * sfmin > absak) {
 			    *info = k;
 			    return 0;
 			} else {
 			    temp *= bignum;
 			    ak *= bignum;
 			}
-		    } else if (dabs(temp) > absak * bignum) {
+		    } else if (ABS(temp) > absak * bignum) {
 			*info = k;
 			return 0;
 		    }
@@ -283,10 +310,10 @@ L40:
 		ak = a[k];
 		pert = r_sign(tol, &ak);
 L70:
-		absak = dabs(ak);
+		absak = ABS(ak);
 		if (absak < 1.f) {
 		    if (absak < sfmin) {
-			if (absak == 0.f || dabs(temp) * sfmin > absak) {
+			if (absak == 0.f || ABS(temp) * sfmin > absak) {
 			    ak += pert;
 			    pert *= 2;
 			    goto L70;
@@ -294,7 +321,7 @@ L70:
 			    temp *= bignum;
 			    ak *= bignum;
 			}
-		    } else if (dabs(temp) > absak * bignum) {
+		    } else if (ABS(temp) > absak * bignum) {
 			ak += pert;
 			pert *= 2;
 			goto L70;
@@ -321,4 +348,3 @@ L70:
 
     return 0;
 } /* slagts_ */
-

@@ -1,82 +1,109 @@
+/* clangt.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-doublereal clangt_(char *norm, integer *n, complex *dl, complex *d__, complex 
+/* Table of constant values */
+
+static int c__1 = 1;
+
+double clangt_(char *norm, int *n, complex *dl, complex *d__, complex 
 	*du)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       February 29, 1992   
-
-
-    Purpose   
-    =======   
-
-    CLANGT  returns the value of the one norm,  or the Frobenius norm, or   
-    the  infinity norm,  or the  element of  largest absolute value  of a   
-    complex tridiagonal matrix A.   
-
-    Description   
-    ===========   
-
-    CLANGT returns the value   
-
-       CLANGT = ( max(abs(A(i,j))), NORM = 'M' or 'm'   
-                (   
-                ( norm1(A),         NORM = '1', 'O' or 'o'   
-                (   
-                ( normI(A),         NORM = 'I' or 'i'   
-                (   
-                ( normF(A),         NORM = 'F', 'f', 'E' or 'e'   
-
-    where  norm1  denotes the  one norm of a matrix (maximum column sum),   
-    normI  denotes the  infinity norm  of a matrix  (maximum row sum) and   
-    normF  denotes the  Frobenius norm of a matrix (square root of sum of   
-    squares).  Note that  max(abs(A(i,j)))  is not a  matrix norm.   
-
-    Arguments   
-    =========   
-
-    NORM    (input) CHARACTER*1   
-            Specifies the value to be returned in CLANGT as described   
-            above.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.  When N = 0, CLANGT is   
-            set to zero.   
-
-    DL      (input) COMPLEX array, dimension (N-1)   
-            The (n-1) sub-diagonal elements of A.   
-
-    D       (input) COMPLEX array, dimension (N)   
-            The diagonal elements of A.   
-
-    DU      (input) COMPLEX array, dimension (N-1)   
-            The (n-1) super-diagonal elements of A.   
-
-    =====================================================================   
-
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer i__1;
-    real ret_val, r__1, r__2;
+    int i__1;
+    float ret_val, r__1, r__2;
+
     /* Builtin functions */
-    double c_abs(complex *), sqrt(doublereal);
+    double c_ABS(complex *), sqrt(double);
+
     /* Local variables */
-    static integer i__;
-    static real scale;
-    extern logical lsame_(char *, char *);
-    static real anorm;
-    extern /* Subroutine */ int classq_(integer *, complex *, integer *, real 
-	    *, real *);
-    static real sum;
+    int i__;
+    float sum, scale;
+    extern int lsame_(char *, char *);
+    float anorm;
+    extern  int classq_(int *, complex *, int *, float 
+	    *, float *);
 
 
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CLANGT  returns the value of the one norm,  or the Frobenius norm, or */
+/*  the  infinity norm,  or the  element of  largest absolute value  of a */
+/*  complex tridiagonal matrix A. */
+
+/*  Description */
+/*  =========== */
+
+/*  CLANGT returns the value */
+
+/*     CLANGT = ( MAX(ABS(A(i,j))), NORM = 'M' or 'm' */
+/*              ( */
+/*              ( norm1(A),         NORM = '1', 'O' or 'o' */
+/*              ( */
+/*              ( normI(A),         NORM = 'I' or 'i' */
+/*              ( */
+/*              ( normF(A),         NORM = 'F', 'f', 'E' or 'e' */
+
+/*  where  norm1  denotes the  one norm of a matrix (maximum column sum), */
+/*  normI  denotes the  infinity norm  of a matrix  (maximum row sum) and */
+/*  normF  denotes the  Frobenius norm of a matrix (square root of sum of */
+/*  squares).  Note that  MAX(ABS(A(i,j)))  is not a consistent matrix norm. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  NORM    (input) CHARACTER*1 */
+/*          Specifies the value to be returned in CLANGT as described */
+/*          above. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0.  When N = 0, CLANGT is */
+/*          set to zero. */
+
+/*  DL      (input) COMPLEX array, dimension (N-1) */
+/*          The (n-1) sub-diagonal elements of A. */
+
+/*  D       (input) COMPLEX array, dimension (N) */
+/*          The diagonal elements of A. */
+
+/*  DU      (input) COMPLEX array, dimension (N-1) */
+/*          The (n-1) super-diagonal elements of A. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     --du;
     --d__;
     --dl;
@@ -86,20 +113,20 @@ doublereal clangt_(char *norm, integer *n, complex *dl, complex *d__, complex
 	anorm = 0.f;
     } else if (lsame_(norm, "M")) {
 
-/*        Find max(abs(A(i,j))). */
+/*        Find MAX(ABS(A(i,j))). */
 
-	anorm = c_abs(&d__[*n]);
+	anorm = c_ABS(&d__[*n]);
 	i__1 = *n - 1;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 /* Computing MAX */
-	    r__1 = anorm, r__2 = c_abs(&dl[i__]);
-	    anorm = dmax(r__1,r__2);
+	    r__1 = anorm, r__2 = c_ABS(&dl[i__]);
+	    anorm = MAX(r__1,r__2);
 /* Computing MAX */
-	    r__1 = anorm, r__2 = c_abs(&d__[i__]);
-	    anorm = dmax(r__1,r__2);
+	    r__1 = anorm, r__2 = c_ABS(&d__[i__]);
+	    anorm = MAX(r__1,r__2);
 /* Computing MAX */
-	    r__1 = anorm, r__2 = c_abs(&du[i__]);
-	    anorm = dmax(r__1,r__2);
+	    r__1 = anorm, r__2 = c_ABS(&du[i__]);
+	    anorm = MAX(r__1,r__2);
 /* L10: */
 	}
     } else if (lsame_(norm, "O") || *(unsigned char *)
@@ -108,18 +135,18 @@ doublereal clangt_(char *norm, integer *n, complex *dl, complex *d__, complex
 /*        Find norm1(A). */
 
 	if (*n == 1) {
-	    anorm = c_abs(&d__[1]);
+	    anorm = c_ABS(&d__[1]);
 	} else {
 /* Computing MAX */
-	    r__1 = c_abs(&d__[1]) + c_abs(&dl[1]), r__2 = c_abs(&d__[*n]) + 
-		    c_abs(&du[*n - 1]);
-	    anorm = dmax(r__1,r__2);
+	    r__1 = c_ABS(&d__[1]) + c_ABS(&dl[1]), r__2 = c_ABS(&d__[*n]) + 
+		    c_ABS(&du[*n - 1]);
+	    anorm = MAX(r__1,r__2);
 	    i__1 = *n - 1;
 	    for (i__ = 2; i__ <= i__1; ++i__) {
 /* Computing MAX */
-		r__1 = anorm, r__2 = c_abs(&d__[i__]) + c_abs(&dl[i__]) + 
-			c_abs(&du[i__ - 1]);
-		anorm = dmax(r__1,r__2);
+		r__1 = anorm, r__2 = c_ABS(&d__[i__]) + c_ABS(&dl[i__]) + 
+			c_ABS(&du[i__ - 1]);
+		anorm = MAX(r__1,r__2);
 /* L20: */
 	    }
 	}
@@ -128,18 +155,18 @@ doublereal clangt_(char *norm, integer *n, complex *dl, complex *d__, complex
 /*        Find normI(A). */
 
 	if (*n == 1) {
-	    anorm = c_abs(&d__[1]);
+	    anorm = c_ABS(&d__[1]);
 	} else {
 /* Computing MAX */
-	    r__1 = c_abs(&d__[1]) + c_abs(&du[1]), r__2 = c_abs(&d__[*n]) + 
-		    c_abs(&dl[*n - 1]);
-	    anorm = dmax(r__1,r__2);
+	    r__1 = c_ABS(&d__[1]) + c_ABS(&du[1]), r__2 = c_ABS(&d__[*n]) + 
+		    c_ABS(&dl[*n - 1]);
+	    anorm = MAX(r__1,r__2);
 	    i__1 = *n - 1;
 	    for (i__ = 2; i__ <= i__1; ++i__) {
 /* Computing MAX */
-		r__1 = anorm, r__2 = c_abs(&d__[i__]) + c_abs(&du[i__]) + 
-			c_abs(&dl[i__ - 1]);
-		anorm = dmax(r__1,r__2);
+		r__1 = anorm, r__2 = c_ABS(&d__[i__]) + c_ABS(&du[i__]) + 
+			c_ABS(&dl[i__ - 1]);
+		anorm = MAX(r__1,r__2);
 /* L30: */
 	    }
 	}
@@ -165,4 +192,3 @@ doublereal clangt_(char *norm, integer *n, complex *dl, complex *d__, complex
 /*     End of CLANGT */
 
 } /* clangt_ */
-

@@ -1,94 +1,117 @@
+/* zgetrf.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zgetrf_(integer *m, integer *n, doublecomplex *a, 
-	integer *lda, integer *ipiv, integer *info)
+/* Table of constant values */
+
+static doublecomplex c_b1 = {1.,0.};
+static int c__1 = 1;
+static int c_n1 = -1;
+
+ int zgetrf_(int *m, int *n, doublecomplex *a, 
+	int *lda, int *ipiv, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
-
-
-    Purpose   
-    =======   
-
-    ZGETRF computes an LU factorization of a general M-by-N matrix A   
-    using partial pivoting with row interchanges.   
-
-    The factorization has the form   
-       A = P * L * U   
-    where P is a permutation matrix, L is lower triangular with unit   
-    diagonal elements (lower trapezoidal if m > n), and U is upper   
-    triangular (upper trapezoidal if m < n).   
-
-    This is the right-looking Level 3 BLAS version of the algorithm.   
-
-    Arguments   
-    =========   
-
-    M       (input) INTEGER   
-            The number of rows of the matrix A.  M >= 0.   
-
-    N       (input) INTEGER   
-            The number of columns of the matrix A.  N >= 0.   
-
-    A       (input/output) COMPLEX*16 array, dimension (LDA,N)   
-            On entry, the M-by-N matrix to be factored.   
-            On exit, the factors L and U from the factorization   
-            A = P*L*U; the unit diagonal elements of L are not stored.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.  LDA >= max(1,M).   
-
-    IPIV    (output) INTEGER array, dimension (min(M,N))   
-            The pivot indices; for 1 <= i <= min(M,N), row i of the   
-            matrix was interchanged with row IPIV(i).   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-            > 0:  if INFO = i, U(i,i) is exactly zero. The factorization   
-                  has been completed, but the factor U is exactly   
-                  singular, and division by zero will occur if it is used   
-                  to solve a system of equations.   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static doublecomplex c_b1 = {1.,0.};
-    static integer c__1 = 1;
-    static integer c_n1 = -1;
-    
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    int a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     doublecomplex z__1;
+
     /* Local variables */
-    static integer i__, j, iinfo;
-    extern /* Subroutine */ int zgemm_(char *, char *, integer *, integer *, 
-	    integer *, doublecomplex *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *), ztrsm_(char *, char *, char *, char *,
-	     integer *, integer *, doublecomplex *, doublecomplex *, integer *
-	    , doublecomplex *, integer *), 
-	    zgetf2_(integer *, integer *, doublecomplex *, integer *, integer 
-	    *, integer *);
-    static integer jb, nb;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zlaswp_(integer *, doublecomplex *, integer *,
-	     integer *, integer *, integer *, integer *);
-#define a_subscr(a_1,a_2) (a_2)*a_dim1 + a_1
-#define a_ref(a_1,a_2) a[a_subscr(a_1,a_2)]
+    int i__, j, jb, nb, iinfo;
+    extern  int zgemm_(char *, char *, int *, int *, 
+	    int *, doublecomplex *, doublecomplex *, int *, 
+	    doublecomplex *, int *, doublecomplex *, doublecomplex *, 
+	    int *), ztrsm_(char *, char *, char *, char *, 
+	     int *, int *, doublecomplex *, doublecomplex *, int *
+, doublecomplex *, int *), 
+	    zgetf2_(int *, int *, doublecomplex *, int *, int 
+	    *, int *), xerbla_(char *, int *);
+    extern int ilaenv_(int *, char *, char *, int *, int *, 
+	    int *, int *);
+    extern  int zlaswp_(int *, doublecomplex *, int *, 
+	     int *, int *, int *, int *);
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZGETRF computes an LU factorization of a general M-by-N matrix A */
+/*  using partial pivoting with row interchanges. */
+
+/*  The factorization has the form */
+/*     A = P * L * U */
+/*  where P is a permutation matrix, L is lower triangular with unit */
+/*  diagonal elements (lower trapezoidal if m > n), and U is upper */
+/*  triangular (upper trapezoidal if m < n). */
+
+/*  This is the right-looking Level 3 BLAS version of the algorithm. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  M       (input) INTEGER */
+/*          The number of rows of the matrix A.  M >= 0. */
+
+/*  N       (input) INTEGER */
+/*          The number of columns of the matrix A.  N >= 0. */
+
+/*  A       (input/output) COMPLEX*16 array, dimension (LDA,N) */
+/*          On entry, the M-by-N matrix to be factored. */
+/*          On exit, the factors L and U from the factorization */
+/*          A = P*L*U; the unit diagonal elements of L are not stored. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A.  LDA >= MAX(1,M). */
+
+/*  IPIV    (output) INTEGER array, dimension (MIN(M,N)) */
+/*          The pivot indices; for 1 <= i <= MIN(M,N), row i of the */
+/*          matrix was interchanged with row IPIV(i). */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+/*          > 0:  if INFO = i, U(i,i) is exactly zero. The factorization */
+/*                has been completed, but the factor U is exactly */
+/*                singular, and division by zero will occur if it is used */
+/*                to solve a system of equations. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     --ipiv;
 
@@ -98,7 +121,7 @@
 	*info = -1;
     } else if (*n < 0) {
 	*info = -2;
-    } else if (*lda < max(1,*m)) {
+    } else if (*lda < MAX(1,*m)) {
 	*info = -4;
     }
     if (*info != 0) {
@@ -115,9 +138,8 @@
 
 /*     Determine the block size for this environment. */
 
-    nb = ilaenv_(&c__1, "ZGETRF", " ", m, n, &c_n1, &c_n1, (ftnlen)6, (ftnlen)
-	    1);
-    if (nb <= 1 || nb >= min(*m,*n)) {
+    nb = ilaenv_(&c__1, "ZGETRF", " ", m, n, &c_n1, &c_n1);
+    if (nb <= 1 || nb >= MIN(*m,*n)) {
 
 /*        Use unblocked code. */
 
@@ -126,18 +148,18 @@
 
 /*        Use blocked code. */
 
-	i__1 = min(*m,*n);
+	i__1 = MIN(*m,*n);
 	i__2 = nb;
 	for (j = 1; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2) {
 /* Computing MIN */
-	    i__3 = min(*m,*n) - j + 1;
-	    jb = min(i__3,nb);
+	    i__3 = MIN(*m,*n) - j + 1;
+	    jb = MIN(i__3,nb);
 
-/*           Factor diagonal and subdiagonal blocks and test for exact   
-             singularity. */
+/*           Factor diagonal and subdiagonal blocks and test for exact */
+/*           singularity. */
 
 	    i__3 = *m - j + 1;
-	    zgetf2_(&i__3, &jb, &a_ref(j, j), lda, &ipiv[j], &iinfo);
+	    zgetf2_(&i__3, &jb, &a[j + j * a_dim1], lda, &ipiv[j], &iinfo);
 
 /*           Adjust INFO and the pivot indices. */
 
@@ -146,7 +168,7 @@
 	    }
 /* Computing MIN */
 	    i__4 = *m, i__5 = j + jb - 1;
-	    i__3 = min(i__4,i__5);
+	    i__3 = MIN(i__4,i__5);
 	    for (i__ = j; i__ <= i__3; ++i__) {
 		ipiv[i__] = j - 1 + ipiv[i__];
 /* L10: */
@@ -164,24 +186,26 @@
 
 		i__3 = *n - j - jb + 1;
 		i__4 = j + jb - 1;
-		zlaswp_(&i__3, &a_ref(1, j + jb), lda, &j, &i__4, &ipiv[1], &
-			c__1);
+		zlaswp_(&i__3, &a[(j + jb) * a_dim1 + 1], lda, &j, &i__4, &
+			ipiv[1], &c__1);
 
 /*              Compute block row of U. */
 
 		i__3 = *n - j - jb + 1;
 		ztrsm_("Left", "Lower", "No transpose", "Unit", &jb, &i__3, &
-			c_b1, &a_ref(j, j), lda, &a_ref(j, j + jb), lda);
+			c_b1, &a[j + j * a_dim1], lda, &a[j + (j + jb) * 
+			a_dim1], lda);
 		if (j + jb <= *m) {
 
 /*                 Update trailing submatrix. */
 
 		    i__3 = *m - j - jb + 1;
 		    i__4 = *n - j - jb + 1;
-		    z__1.r = -1., z__1.i = 0.;
+		    z__1.r = -1., z__1.i = -0.;
 		    zgemm_("No transpose", "No transpose", &i__3, &i__4, &jb, 
-			    &z__1, &a_ref(j + jb, j), lda, &a_ref(j, j + jb), 
-			    lda, &c_b1, &a_ref(j + jb, j + jb), lda);
+			    &z__1, &a[j + jb + j * a_dim1], lda, &a[j + (j + 
+			    jb) * a_dim1], lda, &c_b1, &a[j + jb + (j + jb) * 
+			    a_dim1], lda);
 		}
 	    }
 /* L20: */
@@ -192,8 +216,3 @@
 /*     End of ZGETRF */
 
 } /* zgetrf_ */
-
-#undef a_ref
-#undef a_subscr
-
-

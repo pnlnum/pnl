@@ -1,80 +1,103 @@
+/* dpptri.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dpptri_(char *uplo, integer *n, doublereal *ap, integer *
+/* Table of constant values */
+
+static double c_b8 = 1.;
+static int c__1 = 1;
+
+ int dpptri_(char *uplo, int *n, double *ap, int *
 	info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       March 31, 1993   
-
-
-    Purpose   
-    =======   
-
-    DPPTRI computes the inverse of a real symmetric positive definite   
-    matrix A using the Cholesky factorization A = U**T*U or A = L*L**T   
-    computed by DPPTRF.   
-
-    Arguments   
-    =========   
-
-    UPLO    (input) CHARACTER*1   
-            = 'U':  Upper triangular factor is stored in AP;   
-            = 'L':  Lower triangular factor is stored in AP.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    AP      (input/output) DOUBLE PRECISION array, dimension (N*(N+1)/2)   
-            On entry, the triangular factor U or L from the Cholesky   
-            factorization A = U**T*U or A = L*L**T, packed columnwise as   
-            a linear array.  The j-th column of U or L is stored in the   
-            array AP as follows:   
-            if UPLO = 'U', AP(i + (j-1)*j/2) = U(i,j) for 1<=i<=j;   
-            if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = L(i,j) for j<=i<=n.   
-
-            On exit, the upper or lower triangle of the (symmetric)   
-            inverse of A, overwriting the input factor U or L.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-            > 0:  if INFO = i, the (i,i) element of the factor U or L is   
-                  zero, and the inverse could not be computed.   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static doublereal c_b8 = 1.;
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer i__1, i__2;
+    int i__1, i__2;
+
     /* Local variables */
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, 
-	    integer *);
-    extern /* Subroutine */ int dspr_(char *, integer *, doublereal *, 
-	    doublereal *, integer *, doublereal *);
-    static integer j;
-    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *);
-    extern logical lsame_(char *, char *);
-    extern /* Subroutine */ int dtpmv_(char *, char *, char *, integer *, 
-	    doublereal *, doublereal *, integer *);
-    static logical upper;
-    static integer jc, jj;
-    extern /* Subroutine */ int xerbla_(char *, integer *), dtptri_(
-	    char *, char *, integer *, doublereal *, integer *);
-    static doublereal ajj;
-    static integer jjn;
+    int j, jc, jj;
+    double ajj;
+    int jjn;
+    extern double ddot_(int *, double *, int *, double *, 
+	    int *);
+    extern  int dspr_(char *, int *, double *, 
+	    double *, int *, double *), dscal_(int *, 
+	    double *, double *, int *);
+    extern int lsame_(char *, char *);
+    extern  int dtpmv_(char *, char *, char *, int *, 
+	    double *, double *, int *);
+    int upper;
+    extern  int xerbla_(char *, int *), dtptri_(
+	    char *, char *, int *, double *, int *);
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  DPPTRI computes the inverse of a float symmetric positive definite */
+/*  matrix A using the Cholesky factorization A = U**T*U or A = L*L**T */
+/*  computed by DPPTRF. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U':  Upper triangular factor is stored in AP; */
+/*          = 'L':  Lower triangular factor is stored in AP. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  AP      (input/output) DOUBLE PRECISION array, dimension (N*(N+1)/2) */
+/*          On entry, the triangular factor U or L from the Cholesky */
+/*          factorization A = U**T*U or A = L*L**T, packed columnwise as */
+/*          a linear array.  The j-th column of U or L is stored in the */
+/*          array AP as follows: */
+/*          if UPLO = 'U', AP(i + (j-1)*j/2) = U(i,j) for 1<=i<=j; */
+/*          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = L(i,j) for j<=i<=n. */
+
+/*          On exit, the upper or lower triangle of the (symmetric) */
+/*          inverse of A, overwriting the input factor U or L. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+/*          > 0:  if INFO = i, the (i,i) element of the factor U or L is */
+/*                zero, and the inverse could not be computed. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --ap;
 
     /* Function Body */
@@ -147,4 +170,3 @@
 /*     End of DPPTRI */
 
 } /* dpptri_ */
-

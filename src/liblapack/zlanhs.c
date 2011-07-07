@@ -1,88 +1,113 @@
+/* zlanhs.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-doublereal zlanhs_(char *norm, integer *n, doublecomplex *a, integer *lda, 
-	doublereal *work)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+double zlanhs_(char *norm, int *n, doublecomplex *a, int *lda, 
+	double *work)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1992   
-
-
-    Purpose   
-    =======   
-
-    ZLANHS  returns the value of the one norm,  or the Frobenius norm, or   
-    the  infinity norm,  or the  element of  largest absolute value  of a   
-    Hessenberg matrix A.   
-
-    Description   
-    ===========   
-
-    ZLANHS returns the value   
-
-       ZLANHS = ( max(abs(A(i,j))), NORM = 'M' or 'm'   
-                (   
-                ( norm1(A),         NORM = '1', 'O' or 'o'   
-                (   
-                ( normI(A),         NORM = 'I' or 'i'   
-                (   
-                ( normF(A),         NORM = 'F', 'f', 'E' or 'e'   
-
-    where  norm1  denotes the  one norm of a matrix (maximum column sum),   
-    normI  denotes the  infinity norm  of a matrix  (maximum row sum) and   
-    normF  denotes the  Frobenius norm of a matrix (square root of sum of   
-    squares).  Note that  max(abs(A(i,j)))  is not a  matrix norm.   
-
-    Arguments   
-    =========   
-
-    NORM    (input) CHARACTER*1   
-            Specifies the value to be returned in ZLANHS as described   
-            above.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.  When N = 0, ZLANHS is   
-            set to zero.   
-
-    A       (input) COMPLEX*16 array, dimension (LDA,N)   
-            The n by n upper Hessenberg matrix A; the part of A below the   
-            first sub-diagonal is not referenced.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.  LDA >= max(N,1).   
-
-    WORK    (workspace) DOUBLE PRECISION array, dimension (LWORK),   
-            where LWORK >= N when NORM = 'I'; otherwise, WORK is not   
-            referenced.   
-
-   =====================================================================   
-
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
-    doublereal ret_val, d__1, d__2;
+    int a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    double ret_val, d__1, d__2;
+
     /* Builtin functions */
-    double z_abs(doublecomplex *), sqrt(doublereal);
+    double z_ABS(doublecomplex *), sqrt(double);
+
     /* Local variables */
-    static integer i__, j;
-    static doublereal scale;
-    extern logical lsame_(char *, char *);
-    static doublereal value;
-    extern /* Subroutine */ int zlassq_(integer *, doublecomplex *, integer *,
-	     doublereal *, doublereal *);
-    static doublereal sum;
-#define a_subscr(a_1,a_2) (a_2)*a_dim1 + a_1
-#define a_ref(a_1,a_2) a[a_subscr(a_1,a_2)]
+    int i__, j;
+    double sum, scale;
+    extern int lsame_(char *, char *);
+    double value;
+    extern  int zlassq_(int *, doublecomplex *, int *, 
+	     double *, double *);
 
 
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZLANHS  returns the value of the one norm,  or the Frobenius norm, or */
+/*  the  infinity norm,  or the  element of  largest absolute value  of a */
+/*  Hessenberg matrix A. */
+
+/*  Description */
+/*  =========== */
+
+/*  ZLANHS returns the value */
+
+/*     ZLANHS = ( MAX(ABS(A(i,j))), NORM = 'M' or 'm' */
+/*              ( */
+/*              ( norm1(A),         NORM = '1', 'O' or 'o' */
+/*              ( */
+/*              ( normI(A),         NORM = 'I' or 'i' */
+/*              ( */
+/*              ( normF(A),         NORM = 'F', 'f', 'E' or 'e' */
+
+/*  where  norm1  denotes the  one norm of a matrix (maximum column sum), */
+/*  normI  denotes the  infinity norm  of a matrix  (maximum row sum) and */
+/*  normF  denotes the  Frobenius norm of a matrix (square root of sum of */
+/*  squares).  Note that  MAX(ABS(A(i,j)))  is not a consistent matrix norm. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  NORM    (input) CHARACTER*1 */
+/*          Specifies the value to be returned in ZLANHS as described */
+/*          above. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0.  When N = 0, ZLANHS is */
+/*          set to zero. */
+
+/*  A       (input) COMPLEX*16 array, dimension (LDA,N) */
+/*          The n by n upper Hessenberg matrix A; the part of A below the */
+/*          first sub-diagonal is not referenced. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A.  LDA >= MAX(N,1). */
+
+/*  WORK    (workspace) DOUBLE PRECISION array, dimension (MAX(1,LWORK)), */
+/*          where LWORK >= N when NORM = 'I'; otherwise, WORK is not */
+/*          referenced. */
+
+/* ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     --work;
 
@@ -91,18 +116,18 @@ doublereal zlanhs_(char *norm, integer *n, doublecomplex *a, integer *lda,
 	value = 0.;
     } else if (lsame_(norm, "M")) {
 
-/*        Find max(abs(A(i,j))). */
+/*        Find MAX(ABS(A(i,j))). */
 
 	value = 0.;
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
 /* Computing MIN */
 	    i__3 = *n, i__4 = j + 1;
-	    i__2 = min(i__3,i__4);
+	    i__2 = MIN(i__3,i__4);
 	    for (i__ = 1; i__ <= i__2; ++i__) {
 /* Computing MAX */
-		d__1 = value, d__2 = z_abs(&a_ref(i__, j));
-		value = max(d__1,d__2);
+		d__1 = value, d__2 = z_ABS(&a[i__ + j * a_dim1]);
+		value = MAX(d__1,d__2);
 /* L10: */
 	    }
 /* L20: */
@@ -118,12 +143,12 @@ doublereal zlanhs_(char *norm, integer *n, doublecomplex *a, integer *lda,
 	    sum = 0.;
 /* Computing MIN */
 	    i__3 = *n, i__4 = j + 1;
-	    i__2 = min(i__3,i__4);
+	    i__2 = MIN(i__3,i__4);
 	    for (i__ = 1; i__ <= i__2; ++i__) {
-		sum += z_abs(&a_ref(i__, j));
+		sum += z_ABS(&a[i__ + j * a_dim1]);
 /* L30: */
 	    }
-	    value = max(value,sum);
+	    value = MAX(value,sum);
 /* L40: */
 	}
     } else if (lsame_(norm, "I")) {
@@ -139,9 +164,9 @@ doublereal zlanhs_(char *norm, integer *n, doublecomplex *a, integer *lda,
 	for (j = 1; j <= i__1; ++j) {
 /* Computing MIN */
 	    i__3 = *n, i__4 = j + 1;
-	    i__2 = min(i__3,i__4);
+	    i__2 = MIN(i__3,i__4);
 	    for (i__ = 1; i__ <= i__2; ++i__) {
-		work[i__] += z_abs(&a_ref(i__, j));
+		work[i__] += z_ABS(&a[i__ + j * a_dim1]);
 /* L60: */
 	    }
 /* L70: */
@@ -151,7 +176,7 @@ doublereal zlanhs_(char *norm, integer *n, doublecomplex *a, integer *lda,
 	for (i__ = 1; i__ <= i__1; ++i__) {
 /* Computing MAX */
 	    d__1 = value, d__2 = work[i__];
-	    value = max(d__1,d__2);
+	    value = MAX(d__1,d__2);
 /* L80: */
 	}
     } else if (lsame_(norm, "F") || lsame_(norm, "E")) {
@@ -164,8 +189,8 @@ doublereal zlanhs_(char *norm, integer *n, doublecomplex *a, integer *lda,
 	for (j = 1; j <= i__1; ++j) {
 /* Computing MIN */
 	    i__3 = *n, i__4 = j + 1;
-	    i__2 = min(i__3,i__4);
-	    zlassq_(&i__2, &a_ref(1, j), &c__1, &scale, &sum);
+	    i__2 = MIN(i__3,i__4);
+	    zlassq_(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
 /* L90: */
 	}
 	value = scale * sqrt(sum);
@@ -177,8 +202,3 @@ doublereal zlanhs_(char *norm, integer *n, doublecomplex *a, integer *lda,
 /*     End of ZLANHS */
 
 } /* zlanhs_ */
-
-#undef a_ref
-#undef a_subscr
-
-

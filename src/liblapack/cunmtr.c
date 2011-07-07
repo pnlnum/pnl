@@ -1,144 +1,166 @@
+/* cunmtr.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int cunmtr_(char *side, char *uplo, char *trans, integer *m, 
-	integer *n, complex *a, integer *lda, complex *tau, complex *c__, 
-	integer *ldc, complex *work, integer *lwork, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+static int c_n1 = -1;
+static int c__2 = 2;
+
+ int cunmtr_(char *side, char *uplo, char *trans, int *m, 
+	int *n, complex *a, int *lda, complex *tau, complex *c__, 
+	int *ldc, complex *work, int *lwork, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    CUNMTR overwrites the general complex M-by-N matrix C with   
-
-                    SIDE = 'L'     SIDE = 'R'   
-    TRANS = 'N':      Q * C          C * Q   
-    TRANS = 'C':      Q**H * C       C * Q**H   
-
-    where Q is a complex unitary matrix of order nq, with nq = m if   
-    SIDE = 'L' and nq = n if SIDE = 'R'. Q is defined as the product of   
-    nq-1 elementary reflectors, as returned by CHETRD:   
-
-    if UPLO = 'U', Q = H(nq-1) . . . H(2) H(1);   
-
-    if UPLO = 'L', Q = H(1) H(2) . . . H(nq-1).   
-
-    Arguments   
-    =========   
-
-    SIDE    (input) CHARACTER*1   
-            = 'L': apply Q or Q**H from the Left;   
-            = 'R': apply Q or Q**H from the Right.   
-
-    UPLO    (input) CHARACTER*1   
-            = 'U': Upper triangle of A contains elementary reflectors   
-                   from CHETRD;   
-            = 'L': Lower triangle of A contains elementary reflectors   
-                   from CHETRD.   
-
-    TRANS   (input) CHARACTER*1   
-            = 'N':  No transpose, apply Q;   
-            = 'C':  Conjugate transpose, apply Q**H.   
-
-    M       (input) INTEGER   
-            The number of rows of the matrix C. M >= 0.   
-
-    N       (input) INTEGER   
-            The number of columns of the matrix C. N >= 0.   
-
-    A       (input) COMPLEX array, dimension   
-                                 (LDA,M) if SIDE = 'L'   
-                                 (LDA,N) if SIDE = 'R'   
-            The vectors which define the elementary reflectors, as   
-            returned by CHETRD.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.   
-            LDA >= max(1,M) if SIDE = 'L'; LDA >= max(1,N) if SIDE = 'R'.   
-
-    TAU     (input) COMPLEX array, dimension   
-                                 (M-1) if SIDE = 'L'   
-                                 (N-1) if SIDE = 'R'   
-            TAU(i) must contain the scalar factor of the elementary   
-            reflector H(i), as returned by CHETRD.   
-
-    C       (input/output) COMPLEX array, dimension (LDC,N)   
-            On entry, the M-by-N matrix C.   
-            On exit, C is overwritten by Q*C or Q**H*C or C*Q**H or C*Q.   
-
-    LDC     (input) INTEGER   
-            The leading dimension of the array C. LDC >= max(1,M).   
-
-    WORK    (workspace/output) COMPLEX array, dimension (LWORK)   
-            On exit, if INFO = 0, WORK(1) returns the optimal LWORK.   
-
-    LWORK   (input) INTEGER   
-            The dimension of the array WORK.   
-            If SIDE = 'L', LWORK >= max(1,N);   
-            if SIDE = 'R', LWORK >= max(1,M).   
-            For optimum performance LWORK >= N*NB if SIDE = 'L', and   
-            LWORK >=M*NB if SIDE = 'R', where NB is the optimal   
-            blocksize.   
-
-            If LWORK = -1, then a workspace query is assumed; the routine   
-            only calculates the optimal size of the WORK array, returns   
-            this value as the first entry of the WORK array, and no error   
-            message related to LWORK is issued by XERBLA.   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-
-    =====================================================================   
-
-
-       Test the input arguments   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    static integer c_n1 = -1;
-    static integer c__2 = 2;
-    
     /* System generated locals */
     address a__1[2];
-    integer a_dim1, a_offset, c_dim1, c_offset, i__1[2], i__2, i__3;
+    int a_dim1, a_offset, c_dim1, c_offset, i__1[2], i__2, i__3;
     char ch__1[2];
-    /* Builtin functions   
-       Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
+
+    /* Builtin functions */
+     int s_cat(char *, char **, int *, int *, unsigned long);
+
     /* Local variables */
-    static logical left;
-    extern logical lsame_(char *, char *);
-    static integer iinfo, i1;
-    static logical upper;
-    static integer i2, nb, mi, ni, nq, nw;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int cunmql_(char *, char *, integer *, integer *, 
-	    integer *, complex *, integer *, complex *, complex *, integer *, 
-	    complex *, integer *, integer *), cunmqr_(char *, 
-	    char *, integer *, integer *, integer *, complex *, integer *, 
-	    complex *, complex *, integer *, complex *, integer *, integer *);
-    static integer lwkopt;
-    static logical lquery;
-#define a_subscr(a_1,a_2) (a_2)*a_dim1 + a_1
-#define a_ref(a_1,a_2) a[a_subscr(a_1,a_2)]
-#define c___subscr(a_1,a_2) (a_2)*c_dim1 + a_1
-#define c___ref(a_1,a_2) c__[c___subscr(a_1,a_2)]
+    int i1, i2, nb, mi, ni, nq, nw;
+    int left;
+    extern int lsame_(char *, char *);
+    int iinfo;
+    int upper;
+    extern  int xerbla_(char *, int *);
+    extern int ilaenv_(int *, char *, char *, int *, int *, 
+	    int *, int *);
+    extern  int cunmql_(char *, char *, int *, int *, 
+	    int *, complex *, int *, complex *, complex *, int *, 
+	    complex *, int *, int *), cunmqr_(char *, 
+	    char *, int *, int *, int *, complex *, int *, 
+	    complex *, complex *, int *, complex *, int *, int *);
+    int lwkopt;
+    int lquery;
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CUNMTR overwrites the general complex M-by-N matrix C with */
+
+/*                  SIDE = 'L'     SIDE = 'R' */
+/*  TRANS = 'N':      Q * C          C * Q */
+/*  TRANS = 'C':      Q**H * C       C * Q**H */
+
+/*  where Q is a complex unitary matrix of order nq, with nq = m if */
+/*  SIDE = 'L' and nq = n if SIDE = 'R'. Q is defined as the product of */
+/*  nq-1 elementary reflectors, as returned by CHETRD: */
+
+/*  if UPLO = 'U', Q = H(nq-1) . . . H(2) H(1); */
+
+/*  if UPLO = 'L', Q = H(1) H(2) . . . H(nq-1). */
+
+/*  Arguments */
+/*  ========= */
+
+/*  SIDE    (input) CHARACTER*1 */
+/*          = 'L': apply Q or Q**H from the Left; */
+/*          = 'R': apply Q or Q**H from the Right. */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U': Upper triangle of A contains elementary reflectors */
+/*                 from CHETRD; */
+/*          = 'L': Lower triangle of A contains elementary reflectors */
+/*                 from CHETRD. */
+
+/*  TRANS   (input) CHARACTER*1 */
+/*          = 'N':  No transpose, apply Q; */
+/*          = 'C':  Conjugate transpose, apply Q**H. */
+
+/*  M       (input) INTEGER */
+/*          The number of rows of the matrix C. M >= 0. */
+
+/*  N       (input) INTEGER */
+/*          The number of columns of the matrix C. N >= 0. */
+
+/*  A       (input) COMPLEX array, dimension */
+/*                               (LDA,M) if SIDE = 'L' */
+/*                               (LDA,N) if SIDE = 'R' */
+/*          The vectors which define the elementary reflectors, as */
+/*          returned by CHETRD. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A. */
+/*          LDA >= MAX(1,M) if SIDE = 'L'; LDA >= MAX(1,N) if SIDE = 'R'. */
+
+/*  TAU     (input) COMPLEX array, dimension */
+/*                               (M-1) if SIDE = 'L' */
+/*                               (N-1) if SIDE = 'R' */
+/*          TAU(i) must contain the scalar factor of the elementary */
+/*          reflector H(i), as returned by CHETRD. */
+
+/*  C       (input/output) COMPLEX array, dimension (LDC,N) */
+/*          On entry, the M-by-N matrix C. */
+/*          On exit, C is overwritten by Q*C or Q**H*C or C*Q**H or C*Q. */
+
+/*  LDC     (input) INTEGER */
+/*          The leading dimension of the array C. LDC >= MAX(1,M). */
+
+/*  WORK    (workspace/output) COMPLEX array, dimension (MAX(1,LWORK)) */
+/*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK. */
+
+/*  LWORK   (input) INTEGER */
+/*          The dimension of the array WORK. */
+/*          If SIDE = 'L', LWORK >= MAX(1,N); */
+/*          if SIDE = 'R', LWORK >= MAX(1,M). */
+/*          For optimum performance LWORK >= N*NB if SIDE = 'L', and */
+/*          LWORK >=M*NB if SIDE = 'R', where NB is the optimal */
+/*          blocksize. */
+
+/*          If LWORK = -1, then a workspace query is assumed; the routine */
+/*          only calculates the optimal size of the WORK array, returns */
+/*          this value as the first entry of the WORK array, and no error */
+/*          message related to LWORK is issued by XERBLA. */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+
+/*  ===================================================================== */
+
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input arguments */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     --tau;
     c_dim1 = *ldc;
-    c_offset = 1 + c_dim1 * 1;
+    c_offset = 1 + c_dim1;
     c__ -= c_offset;
     --work;
 
@@ -168,11 +190,11 @@
 	*info = -4;
     } else if (*n < 0) {
 	*info = -5;
-    } else if (*lda < max(1,nq)) {
+    } else if (*lda < MAX(1,nq)) {
 	*info = -7;
-    } else if (*ldc < max(1,*m)) {
+    } else if (*ldc < MAX(1,*m)) {
 	*info = -10;
-    } else if (*lwork < max(1,nw) && ! lquery) {
+    } else if (*lwork < MAX(1,nw) && ! lquery) {
 	*info = -12;
     }
 
@@ -182,44 +204,40 @@
 /* Writing concatenation */
 		i__1[0] = 1, a__1[0] = side;
 		i__1[1] = 1, a__1[1] = trans;
-		s_cat(ch__1, a__1, i__1, &c__2, (ftnlen)2);
+		s_cat(ch__1, a__1, i__1, &c__2, (unsigned long)2);
 		i__2 = *m - 1;
 		i__3 = *m - 1;
-		nb = ilaenv_(&c__1, "CUNMQL", ch__1, &i__2, n, &i__3, &c_n1, (
-			ftnlen)6, (ftnlen)2);
+		nb = ilaenv_(&c__1, "CUNMQL", ch__1, &i__2, n, &i__3, &c_n1);
 	    } else {
 /* Writing concatenation */
 		i__1[0] = 1, a__1[0] = side;
 		i__1[1] = 1, a__1[1] = trans;
-		s_cat(ch__1, a__1, i__1, &c__2, (ftnlen)2);
+		s_cat(ch__1, a__1, i__1, &c__2, (unsigned long)2);
 		i__2 = *n - 1;
 		i__3 = *n - 1;
-		nb = ilaenv_(&c__1, "CUNMQL", ch__1, m, &i__2, &i__3, &c_n1, (
-			ftnlen)6, (ftnlen)2);
+		nb = ilaenv_(&c__1, "CUNMQL", ch__1, m, &i__2, &i__3, &c_n1);
 	    }
 	} else {
 	    if (left) {
 /* Writing concatenation */
 		i__1[0] = 1, a__1[0] = side;
 		i__1[1] = 1, a__1[1] = trans;
-		s_cat(ch__1, a__1, i__1, &c__2, (ftnlen)2);
+		s_cat(ch__1, a__1, i__1, &c__2, (unsigned long)2);
 		i__2 = *m - 1;
 		i__3 = *m - 1;
-		nb = ilaenv_(&c__1, "CUNMQR", ch__1, &i__2, n, &i__3, &c_n1, (
-			ftnlen)6, (ftnlen)2);
+		nb = ilaenv_(&c__1, "CUNMQR", ch__1, &i__2, n, &i__3, &c_n1);
 	    } else {
 /* Writing concatenation */
 		i__1[0] = 1, a__1[0] = side;
 		i__1[1] = 1, a__1[1] = trans;
-		s_cat(ch__1, a__1, i__1, &c__2, (ftnlen)2);
+		s_cat(ch__1, a__1, i__1, &c__2, (unsigned long)2);
 		i__2 = *n - 1;
 		i__3 = *n - 1;
-		nb = ilaenv_(&c__1, "CUNMQR", ch__1, m, &i__2, &i__3, &c_n1, (
-			ftnlen)6, (ftnlen)2);
+		nb = ilaenv_(&c__1, "CUNMQR", ch__1, m, &i__2, &i__3, &c_n1);
 	    }
 	}
-	lwkopt = max(1,nw) * nb;
-	work[1].r = (real) lwkopt, work[1].i = 0.f;
+	lwkopt = MAX(1,nw) * nb;
+	work[1].r = (float) lwkopt, work[1].i = 0.f;
     }
 
     if (*info != 0) {
@@ -250,8 +268,8 @@
 /*        Q was determined by a call to CHETRD with UPLO = 'U' */
 
 	i__2 = nq - 1;
-	cunmql_(side, trans, &mi, &ni, &i__2, &a_ref(1, 2), lda, &tau[1], &
-		c__[c_offset], ldc, &work[1], lwork, &iinfo);
+	cunmql_(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &
+		tau[1], &c__[c_offset], ldc, &work[1], lwork, &iinfo);
     } else {
 
 /*        Q was determined by a call to CHETRD with UPLO = 'L' */
@@ -264,19 +282,12 @@
 	    i2 = 2;
 	}
 	i__2 = nq - 1;
-	cunmqr_(side, trans, &mi, &ni, &i__2, &a_ref(2, 1), lda, &tau[1], &
-		c___ref(i1, i2), ldc, &work[1], lwork, &iinfo);
+	cunmqr_(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1], &
+		c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
     }
-    work[1].r = (real) lwkopt, work[1].i = 0.f;
+    work[1].r = (float) lwkopt, work[1].i = 0.f;
     return 0;
 
 /*     End of CUNMTR */
 
 } /* cunmtr_ */
-
-#undef c___ref
-#undef c___subscr
-#undef a_ref
-#undef a_subscr
-
-

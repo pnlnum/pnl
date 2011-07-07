@@ -1,74 +1,91 @@
+/* zlaswp.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zlaswp_(integer *n, doublecomplex *a, integer *lda, 
-	integer *k1, integer *k2, integer *ipiv, integer *incx)
+ int zlaswp_(int *n, doublecomplex *a, int *lda, 
+	int *k1, int *k2, int *ipiv, int *incx)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    ZLASWP performs a series of row interchanges on the matrix A.   
-    One row interchange is initiated for each of rows K1 through K2 of A.   
-
-    Arguments   
-    =========   
-
-    N       (input) INTEGER   
-            The number of columns of the matrix A.   
-
-    A       (input/output) COMPLEX*16 array, dimension (LDA,N)   
-            On entry, the matrix of column dimension N to which the row   
-            interchanges will be applied.   
-            On exit, the permuted matrix.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.   
-
-    K1      (input) INTEGER   
-            The first element of IPIV for which a row interchange will   
-            be done.   
-
-    K2      (input) INTEGER   
-            The last element of IPIV for which a row interchange will   
-            be done.   
-
-    IPIV    (input) INTEGER array, dimension (M*abs(INCX))   
-            The vector of pivot indices.  Only the elements in positions   
-            K1 through K2 of IPIV are accessed.   
-            IPIV(K) = L implies rows K and L are to be interchanged.   
-
-    INCX    (input) INTEGER   
-            The increment between successive values of IPIV.  If IPIV   
-            is negative, the pivots are applied in reverse order.   
-
-    Further Details   
-    ===============   
-
-    Modified by   
-     R. C. Whaley, Computer Science Dept., Univ. of Tenn., Knoxville, USA   
-
-   =====================================================================   
-
-
-       Interchange row I with row IPIV(I) for each of rows K1 through K2.   
-
-       Parameter adjustments */
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6;
-    /* Local variables */
-    static doublecomplex temp;
-    static integer i__, j, k, i1, i2, n32, ip, ix, ix0, inc;
-#define a_subscr(a_1,a_2) (a_2)*a_dim1 + a_1
-#define a_ref(a_1,a_2) a[a_subscr(a_1,a_2)]
+    int a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6;
 
+    /* Local variables */
+    int i__, j, k, i1, i2, n32, ip, ix, ix0, inc;
+    doublecomplex temp;
+
+
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZLASWP performs a series of row interchanges on the matrix A. */
+/*  One row interchange is initiated for each of rows K1 through K2 of A. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  N       (input) INTEGER */
+/*          The number of columns of the matrix A. */
+
+/*  A       (input/output) COMPLEX*16 array, dimension (LDA,N) */
+/*          On entry, the matrix of column dimension N to which the row */
+/*          interchanges will be applied. */
+/*          On exit, the permuted matrix. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A. */
+
+/*  K1      (input) INTEGER */
+/*          The first element of IPIV for which a row interchange will */
+/*          be done. */
+
+/*  K2      (input) INTEGER */
+/*          The last element of IPIV for which a row interchange will */
+/*          be done. */
+
+/*  IPIV    (input) INTEGER array, dimension (K2*ABS(INCX)) */
+/*          The vector of pivot indices.  Only the elements in positions */
+/*          K1 through K2 of IPIV are accessed. */
+/*          IPIV(K) = L implies rows K and L are to be interchanged. */
+
+/*  INCX    (input) INTEGER */
+/*          The increment between successive values of IPIV.  If IPIV */
+/*          is negative, the pivots are applied in reverse order. */
+
+/*  Further Details */
+/*  =============== */
+
+/*  Modified by */
+/*   R. C. Whaley, Computer Science Dept., Univ. of Tenn., Knoxville, USA */
+
+/* ===================================================================== */
+
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Interchange row I with row IPIV(I) for each of rows K1 through K2. */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     --ipiv;
 
@@ -100,12 +117,12 @@
 		if (ip != i__) {
 		    i__4 = j + 31;
 		    for (k = j; k <= i__4; ++k) {
-			i__5 = a_subscr(i__, k);
+			i__5 = i__ + k * a_dim1;
 			temp.r = a[i__5].r, temp.i = a[i__5].i;
-			i__5 = a_subscr(i__, k);
-			i__6 = a_subscr(ip, k);
+			i__5 = i__ + k * a_dim1;
+			i__6 = ip + k * a_dim1;
 			a[i__5].r = a[i__6].r, a[i__5].i = a[i__6].i;
-			i__5 = a_subscr(ip, k);
+			i__5 = ip + k * a_dim1;
 			a[i__5].r = temp.r, a[i__5].i = temp.i;
 /* L10: */
 		    }
@@ -126,12 +143,12 @@
 	    if (ip != i__) {
 		i__2 = *n;
 		for (k = n32; k <= i__2; ++k) {
-		    i__4 = a_subscr(i__, k);
+		    i__4 = i__ + k * a_dim1;
 		    temp.r = a[i__4].r, temp.i = a[i__4].i;
-		    i__4 = a_subscr(i__, k);
-		    i__5 = a_subscr(ip, k);
+		    i__4 = i__ + k * a_dim1;
+		    i__5 = ip + k * a_dim1;
 		    a[i__4].r = a[i__5].r, a[i__4].i = a[i__5].i;
-		    i__4 = a_subscr(ip, k);
+		    i__4 = ip + k * a_dim1;
 		    a[i__4].r = temp.r, a[i__4].i = temp.i;
 /* L40: */
 		}
@@ -146,8 +163,3 @@
 /*     End of ZLASWP */
 
 } /* zlaswp_ */
-
-#undef a_ref
-#undef a_subscr
-
-

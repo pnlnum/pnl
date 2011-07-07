@@ -1,91 +1,117 @@
+/* clansp.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-doublereal clansp_(char *norm, char *uplo, integer *n, complex *ap, real *
+/* Table of constant values */
+
+static int c__1 = 1;
+
+double clansp_(char *norm, char *uplo, int *n, complex *ap, float *
 	work)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1992   
-
-
-    Purpose   
-    =======   
-
-    CLANSP  returns the value of the one norm,  or the Frobenius norm, or   
-    the  infinity norm,  or the  element of  largest absolute value  of a   
-    complex symmetric matrix A,  supplied in packed form.   
-
-    Description   
-    ===========   
-
-    CLANSP returns the value   
-
-       CLANSP = ( max(abs(A(i,j))), NORM = 'M' or 'm'   
-                (   
-                ( norm1(A),         NORM = '1', 'O' or 'o'   
-                (   
-                ( normI(A),         NORM = 'I' or 'i'   
-                (   
-                ( normF(A),         NORM = 'F', 'f', 'E' or 'e'   
-
-    where  norm1  denotes the  one norm of a matrix (maximum column sum),   
-    normI  denotes the  infinity norm  of a matrix  (maximum row sum) and   
-    normF  denotes the  Frobenius norm of a matrix (square root of sum of   
-    squares).  Note that  max(abs(A(i,j)))  is not a  matrix norm.   
-
-    Arguments   
-    =========   
-
-    NORM    (input) CHARACTER*1   
-            Specifies the value to be returned in CLANSP as described   
-            above.   
-
-    UPLO    (input) CHARACTER*1   
-            Specifies whether the upper or lower triangular part of the   
-            symmetric matrix A is supplied.   
-            = 'U':  Upper triangular part of A is supplied   
-            = 'L':  Lower triangular part of A is supplied   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.  When N = 0, CLANSP is   
-            set to zero.   
-
-    AP      (input) COMPLEX array, dimension (N*(N+1)/2)   
-            The upper or lower triangle of the symmetric matrix A, packed   
-            columnwise in a linear array.  The j-th column of A is stored   
-            in the array AP as follows:   
-            if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;   
-            if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.   
-
-    WORK    (workspace) REAL array, dimension (LWORK),   
-            where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,   
-            WORK is not referenced.   
-
-   =====================================================================   
-
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer i__1, i__2;
-    real ret_val, r__1, r__2;
+    int i__1, i__2;
+    float ret_val, r__1, r__2;
+
     /* Builtin functions */
-    double c_abs(complex *), r_imag(complex *), sqrt(doublereal);
+    double c_ABS(complex *), r_imag(complex *), sqrt(double);
+
     /* Local variables */
-    static real absa;
-    static integer i__, j, k;
-    static real scale;
-    extern logical lsame_(char *, char *);
-    static real value;
-    extern /* Subroutine */ int classq_(integer *, complex *, integer *, real 
-	    *, real *);
-    static real sum;
+    int i__, j, k;
+    float sum, absa, scale;
+    extern int lsame_(char *, char *);
+    float value;
+    extern  int classq_(int *, complex *, int *, float 
+	    *, float *);
 
 
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CLANSP  returns the value of the one norm,  or the Frobenius norm, or */
+/*  the  infinity norm,  or the  element of  largest absolute value  of a */
+/*  complex symmetric matrix A,  supplied in packed form. */
+
+/*  Description */
+/*  =========== */
+
+/*  CLANSP returns the value */
+
+/*     CLANSP = ( MAX(ABS(A(i,j))), NORM = 'M' or 'm' */
+/*              ( */
+/*              ( norm1(A),         NORM = '1', 'O' or 'o' */
+/*              ( */
+/*              ( normI(A),         NORM = 'I' or 'i' */
+/*              ( */
+/*              ( normF(A),         NORM = 'F', 'f', 'E' or 'e' */
+
+/*  where  norm1  denotes the  one norm of a matrix (maximum column sum), */
+/*  normI  denotes the  infinity norm  of a matrix  (maximum row sum) and */
+/*  normF  denotes the  Frobenius norm of a matrix (square root of sum of */
+/*  squares).  Note that  MAX(ABS(A(i,j)))  is not a consistent matrix norm. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  NORM    (input) CHARACTER*1 */
+/*          Specifies the value to be returned in CLANSP as described */
+/*          above. */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          Specifies whether the upper or lower triangular part of the */
+/*          symmetric matrix A is supplied. */
+/*          = 'U':  Upper triangular part of A is supplied */
+/*          = 'L':  Lower triangular part of A is supplied */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0.  When N = 0, CLANSP is */
+/*          set to zero. */
+
+/*  AP      (input) COMPLEX array, dimension (N*(N+1)/2) */
+/*          The upper or lower triangle of the symmetric matrix A, packed */
+/*          columnwise in a linear array.  The j-th column of A is stored */
+/*          in the array AP as follows: */
+/*          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j; */
+/*          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n. */
+
+/*  WORK    (workspace) REAL array, dimension (MAX(1,LWORK)), */
+/*          where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise, */
+/*          WORK is not referenced. */
+
+/* ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     --work;
     --ap;
 
@@ -94,7 +120,7 @@ doublereal clansp_(char *norm, char *uplo, integer *n, complex *ap, real *
 	value = 0.f;
     } else if (lsame_(norm, "M")) {
 
-/*        Find max(abs(A(i,j))). */
+/*        Find MAX(ABS(A(i,j))). */
 
 	value = 0.f;
 	if (lsame_(uplo, "U")) {
@@ -104,8 +130,8 @@ doublereal clansp_(char *norm, char *uplo, integer *n, complex *ap, real *
 		i__2 = k + j - 1;
 		for (i__ = k; i__ <= i__2; ++i__) {
 /* Computing MAX */
-		    r__1 = value, r__2 = c_abs(&ap[i__]);
-		    value = dmax(r__1,r__2);
+		    r__1 = value, r__2 = c_ABS(&ap[i__]);
+		    value = MAX(r__1,r__2);
 /* L10: */
 		}
 		k += j;
@@ -118,8 +144,8 @@ doublereal clansp_(char *norm, char *uplo, integer *n, complex *ap, real *
 		i__2 = k + *n - j;
 		for (i__ = k; i__ <= i__2; ++i__) {
 /* Computing MAX */
-		    r__1 = value, r__2 = c_abs(&ap[i__]);
-		    value = dmax(r__1,r__2);
+		    r__1 = value, r__2 = c_ABS(&ap[i__]);
+		    value = MAX(r__1,r__2);
 /* L30: */
 		}
 		k = k + *n - j + 1;
@@ -138,13 +164,13 @@ doublereal clansp_(char *norm, char *uplo, integer *n, complex *ap, real *
 		sum = 0.f;
 		i__2 = j - 1;
 		for (i__ = 1; i__ <= i__2; ++i__) {
-		    absa = c_abs(&ap[k]);
+		    absa = c_ABS(&ap[k]);
 		    sum += absa;
 		    work[i__] += absa;
 		    ++k;
 /* L50: */
 		}
-		work[j] = sum + c_abs(&ap[k]);
+		work[j] = sum + c_ABS(&ap[k]);
 		++k;
 /* L60: */
 	    }
@@ -152,7 +178,7 @@ doublereal clansp_(char *norm, char *uplo, integer *n, complex *ap, real *
 	    for (i__ = 1; i__ <= i__1; ++i__) {
 /* Computing MAX */
 		r__1 = value, r__2 = work[i__];
-		value = dmax(r__1,r__2);
+		value = MAX(r__1,r__2);
 /* L70: */
 	    }
 	} else {
@@ -163,17 +189,17 @@ doublereal clansp_(char *norm, char *uplo, integer *n, complex *ap, real *
 	    }
 	    i__1 = *n;
 	    for (j = 1; j <= i__1; ++j) {
-		sum = work[j] + c_abs(&ap[k]);
+		sum = work[j] + c_ABS(&ap[k]);
 		++k;
 		i__2 = *n;
 		for (i__ = j + 1; i__ <= i__2; ++i__) {
-		    absa = c_abs(&ap[k]);
+		    absa = c_ABS(&ap[k]);
 		    sum += absa;
 		    work[i__] += absa;
 		    ++k;
 /* L90: */
 		}
-		value = dmax(value,sum);
+		value = MAX(value,sum);
 /* L100: */
 	    }
 	}
@@ -208,7 +234,7 @@ doublereal clansp_(char *norm, char *uplo, integer *n, complex *ap, real *
 	    i__2 = k;
 	    if (ap[i__2].r != 0.f) {
 		i__2 = k;
-		absa = (r__1 = ap[i__2].r, dabs(r__1));
+		absa = (r__1 = ap[i__2].r, ABS(r__1));
 		if (scale < absa) {
 /* Computing 2nd power */
 		    r__1 = scale / absa;
@@ -221,7 +247,7 @@ doublereal clansp_(char *norm, char *uplo, integer *n, complex *ap, real *
 		}
 	    }
 	    if (r_imag(&ap[k]) != 0.f) {
-		absa = (r__1 = r_imag(&ap[k]), dabs(r__1));
+		absa = (r__1 = r_imag(&ap[k]), ABS(r__1));
 		if (scale < absa) {
 /* Computing 2nd power */
 		    r__1 = scale / absa;
@@ -249,4 +275,3 @@ doublereal clansp_(char *norm, char *uplo, integer *n, complex *ap, real *
 /*     End of CLANSP */
 
 } /* clansp_ */
-

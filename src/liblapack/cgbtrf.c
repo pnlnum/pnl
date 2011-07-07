@@ -1,139 +1,161 @@
+/* cgbtrf.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int cgbtrf_(integer *m, integer *n, integer *kl, integer *ku,
-	 complex *ab, integer *ldab, integer *ipiv, integer *info)
+/* Table of constant values */
+
+static complex c_b1 = {1.f,0.f};
+static int c__1 = 1;
+static int c__65 = 65;
+
+ int cgbtrf_(int *m, int *n, int *kl, int *ku, 
+	 complex *ab, int *ldab, int *ipiv, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
-
-
-    Purpose   
-    =======   
-
-    CGBTRF computes an LU factorization of a complex m-by-n band matrix A   
-    using partial pivoting with row interchanges.   
-
-    This is the blocked version of the algorithm, calling Level 3 BLAS.   
-
-    Arguments   
-    =========   
-
-    M       (input) INTEGER   
-            The number of rows of the matrix A.  M >= 0.   
-
-    N       (input) INTEGER   
-            The number of columns of the matrix A.  N >= 0.   
-
-    KL      (input) INTEGER   
-            The number of subdiagonals within the band of A.  KL >= 0.   
-
-    KU      (input) INTEGER   
-            The number of superdiagonals within the band of A.  KU >= 0.   
-
-    AB      (input/output) COMPLEX array, dimension (LDAB,N)   
-            On entry, the matrix A in band storage, in rows KL+1 to   
-            2*KL+KU+1; rows 1 to KL of the array need not be set.   
-            The j-th column of A is stored in the j-th column of the   
-            array AB as follows:   
-            AB(kl+ku+1+i-j,j) = A(i,j) for max(1,j-ku)<=i<=min(m,j+kl)   
-
-            On exit, details of the factorization: U is stored as an   
-            upper triangular band matrix with KL+KU superdiagonals in   
-            rows 1 to KL+KU+1, and the multipliers used during the   
-            factorization are stored in rows KL+KU+2 to 2*KL+KU+1.   
-            See below for further details.   
-
-    LDAB    (input) INTEGER   
-            The leading dimension of the array AB.  LDAB >= 2*KL+KU+1.   
-
-    IPIV    (output) INTEGER array, dimension (min(M,N))   
-            The pivot indices; for 1 <= i <= min(M,N), row i of the   
-            matrix was interchanged with row IPIV(i).   
-
-    INFO    (output) INTEGER   
-            = 0: successful exit   
-            < 0: if INFO = -i, the i-th argument had an illegal value   
-            > 0: if INFO = +i, U(i,i) is exactly zero. The factorization   
-                 has been completed, but the factor U is exactly   
-                 singular, and division by zero will occur if it is used   
-                 to solve a system of equations.   
-
-    Further Details   
-    ===============   
-
-    The band storage scheme is illustrated by the following example, when   
-    M = N = 6, KL = 2, KU = 1:   
-
-    On entry:                       On exit:   
-
-        *    *    *    +    +    +       *    *    *   u14  u25  u36   
-        *    *    +    +    +    +       *    *   u13  u24  u35  u46   
-        *   a12  a23  a34  a45  a56      *   u12  u23  u34  u45  u56   
-       a11  a22  a33  a44  a55  a66     u11  u22  u33  u44  u55  u66   
-       a21  a32  a43  a54  a65   *      m21  m32  m43  m54  m65   *   
-       a31  a42  a53  a64   *    *      m31  m42  m53  m64   *    *   
-
-    Array elements marked * are not used by the routine; elements marked   
-    + need not be set on entry, but are required by the routine to store   
-    elements of U because of fill-in resulting from the row interchanges.   
-
-    =====================================================================   
-
-
-       KV is the number of superdiagonals in the factor U, allowing for   
-       fill-in   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static complex c_b1 = {1.f,0.f};
-    static integer c__1 = 1;
-    static integer c__65 = 65;
-    
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    int ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     complex q__1;
+
     /* Builtin functions */
     void c_div(complex *, complex *, complex *);
+
     /* Local variables */
-    static complex temp;
-    static integer i__, j;
-    extern /* Subroutine */ int cscal_(integer *, complex *, complex *, 
-	    integer *), cgemm_(char *, char *, integer *, integer *, integer *
-	    , complex *, complex *, integer *, complex *, integer *, complex *
-	    , complex *, integer *), cgeru_(integer *, 
-	    integer *, complex *, complex *, integer *, complex *, integer *, 
-	    complex *, integer *), ccopy_(integer *, complex *, integer *, 
-	    complex *, integer *), cswap_(integer *, complex *, integer *, 
-	    complex *, integer *);
-    static complex work13[4160]	/* was [65][64] */, work31[4160]	/* 
+    int i__, j, i2, i3, j2, j3, k2, jb, nb, ii, jj, jm, ip, jp, km, ju, 
+	    kv, nw;
+    complex temp;
+    extern  int cscal_(int *, complex *, complex *, 
+	    int *), cgemm_(char *, char *, int *, int *, int *
+, complex *, complex *, int *, complex *, int *, complex *
+, complex *, int *), cgeru_(int *, 
+	    int *, complex *, complex *, int *, complex *, int *, 
+	    complex *, int *), ccopy_(int *, complex *, int *, 
+	    complex *, int *), cswap_(int *, complex *, int *, 
+	    complex *, int *);
+    complex work13[4160]	/* was [65][64] */, work31[4160]	/* 
 	    was [65][64] */;
-    extern /* Subroutine */ int ctrsm_(char *, char *, char *, char *, 
-	    integer *, integer *, complex *, complex *, integer *, complex *, 
-	    integer *);
-    static integer i2, i3, j2, j3, k2;
-    extern /* Subroutine */ int cgbtf2_(integer *, integer *, integer *, 
-	    integer *, complex *, integer *, integer *, integer *);
-    static integer jb, nb, ii, jj, jm, ip, jp, km, ju, kv;
-    extern integer icamax_(integer *, complex *, integer *);
-    static integer nw;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int claswp_(integer *, complex *, integer *, 
-	    integer *, integer *, integer *, integer *);
-#define work13_subscr(a_1,a_2) (a_2)*65 + a_1 - 66
-#define work13_ref(a_1,a_2) work13[work13_subscr(a_1,a_2)]
-#define work31_subscr(a_1,a_2) (a_2)*65 + a_1 - 66
-#define work31_ref(a_1,a_2) work31[work31_subscr(a_1,a_2)]
-#define ab_subscr(a_1,a_2) (a_2)*ab_dim1 + a_1
-#define ab_ref(a_1,a_2) ab[ab_subscr(a_1,a_2)]
+    extern  int ctrsm_(char *, char *, char *, char *, 
+	    int *, int *, complex *, complex *, int *, complex *, 
+	    int *), cgbtf2_(int *, 
+	    int *, int *, int *, complex *, int *, int *, 
+	    int *);
+    extern int icamax_(int *, complex *, int *);
+    extern  int xerbla_(char *, int *);
+    extern int ilaenv_(int *, char *, char *, int *, int *, 
+	    int *, int *);
+    extern  int claswp_(int *, complex *, int *, 
+	    int *, int *, int *, int *);
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CGBTRF computes an LU factorization of a complex m-by-n band matrix A */
+/*  using partial pivoting with row interchanges. */
+
+/*  This is the blocked version of the algorithm, calling Level 3 BLAS. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  M       (input) INTEGER */
+/*          The number of rows of the matrix A.  M >= 0. */
+
+/*  N       (input) INTEGER */
+/*          The number of columns of the matrix A.  N >= 0. */
+
+/*  KL      (input) INTEGER */
+/*          The number of subdiagonals within the band of A.  KL >= 0. */
+
+/*  KU      (input) INTEGER */
+/*          The number of superdiagonals within the band of A.  KU >= 0. */
+
+/*  AB      (input/output) COMPLEX array, dimension (LDAB,N) */
+/*          On entry, the matrix A in band storage, in rows KL+1 to */
+/*          2*KL+KU+1; rows 1 to KL of the array need not be set. */
+/*          The j-th column of A is stored in the j-th column of the */
+/*          array AB as follows: */
+/*          AB(kl+ku+1+i-j,j) = A(i,j) for MAX(1,j-ku)<=i<=MIN(m,j+kl) */
+
+/*          On exit, details of the factorization: U is stored as an */
+/*          upper triangular band matrix with KL+KU superdiagonals in */
+/*          rows 1 to KL+KU+1, and the multipliers used during the */
+/*          factorization are stored in rows KL+KU+2 to 2*KL+KU+1. */
+/*          See below for further details. */
+
+/*  LDAB    (input) INTEGER */
+/*          The leading dimension of the array AB.  LDAB >= 2*KL+KU+1. */
+
+/*  IPIV    (output) INTEGER array, dimension (MIN(M,N)) */
+/*          The pivot indices; for 1 <= i <= MIN(M,N), row i of the */
+/*          matrix was interchanged with row IPIV(i). */
+
+/*  INFO    (output) INTEGER */
+/*          = 0: successful exit */
+/*          < 0: if INFO = -i, the i-th argument had an illegal value */
+/*          > 0: if INFO = +i, U(i,i) is exactly zero. The factorization */
+/*               has been completed, but the factor U is exactly */
+/*               singular, and division by zero will occur if it is used */
+/*               to solve a system of equations. */
+
+/*  Further Details */
+/*  =============== */
+
+/*  The band storage scheme is illustrated by the following example, when */
+/*  M = N = 6, KL = 2, KU = 1: */
+
+/*  On entry:                       On exit: */
+
+/*      *    *    *    +    +    +       *    *    *   u14  u25  u36 */
+/*      *    *    +    +    +    +       *    *   u13  u24  u35  u46 */
+/*      *   a12  a23  a34  a45  a56      *   u12  u23  u34  u45  u56 */
+/*     a11  a22  a33  a44  a55  a66     u11  u22  u33  u44  u55  u66 */
+/*     a21  a32  a43  a54  a65   *      m21  m32  m43  m54  m65   * */
+/*     a31  a42  a53  a64   *    *      m31  m42  m53  m64   *    * */
+
+/*  Array elements marked * are not used by the routine; elements marked */
+/*  + need not be set on entry, but are required by the routine to store */
+/*  elements of U because of fill-in resulting from the row interchanges. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Local Arrays .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     KV is the number of superdiagonals in the factor U, allowing for */
+/*     fill-in */
+
+    /* Parameter adjustments */
     ab_dim1 = *ldab;
-    ab_offset = 1 + ab_dim1 * 1;
+    ab_offset = 1 + ab_dim1;
     ab -= ab_offset;
     --ipiv;
 
@@ -168,12 +190,12 @@
 
 /*     Determine the block size for this environment */
 
-    nb = ilaenv_(&c__1, "CGBTRF", " ", m, n, kl, ku, (ftnlen)6, (ftnlen)1);
+    nb = ilaenv_(&c__1, "CGBTRF", " ", m, n, kl, ku);
 
-/*     The block size must not exceed the limit set by the size of the   
-       local arrays WORK13 and WORK31. */
+/*     The block size must not exceed the limit set by the size of the */
+/*     local arrays WORK13 and WORK31. */
 
-    nb = min(nb,64);
+    nb = MIN(nb,64);
 
     if (nb <= 1 || nb > *kl) {
 
@@ -182,15 +204,15 @@
 	cgbtf2_(m, n, kl, ku, &ab[ab_offset], ldab, &ipiv[1], info);
     } else {
 
-/*        Use blocked code   
+/*        Use blocked code */
 
-          Zero the superdiagonal elements of the work array WORK13 */
+/*        Zero the superdiagonal elements of the work array WORK13 */
 
 	i__1 = nb;
 	for (j = 1; j <= i__1; ++j) {
 	    i__2 = j - 1;
 	    for (i__ = 1; i__ <= i__2; ++i__) {
-		i__3 = work13_subscr(i__, j);
+		i__3 = i__ + j * 65 - 66;
 		work13[i__3].r = 0.f, work13[i__3].i = 0.f;
 /* L10: */
 	    }
@@ -203,62 +225,62 @@
 	for (j = 1; j <= i__1; ++j) {
 	    i__2 = nb;
 	    for (i__ = j + 1; i__ <= i__2; ++i__) {
-		i__3 = work31_subscr(i__, j);
+		i__3 = i__ + j * 65 - 66;
 		work31[i__3].r = 0.f, work31[i__3].i = 0.f;
 /* L30: */
 	    }
 /* L40: */
 	}
 
-/*        Gaussian elimination with partial pivoting   
+/*        Gaussian elimination with partial pivoting */
 
-          Set fill-in elements in columns KU+2 to KV to zero */
+/*        Set fill-in elements in columns KU+2 to KV to zero */
 
-	i__1 = min(kv,*n);
+	i__1 = MIN(kv,*n);
 	for (j = *ku + 2; j <= i__1; ++j) {
 	    i__2 = *kl;
 	    for (i__ = kv - j + 2; i__ <= i__2; ++i__) {
-		i__3 = ab_subscr(i__, j);
+		i__3 = i__ + j * ab_dim1;
 		ab[i__3].r = 0.f, ab[i__3].i = 0.f;
 /* L50: */
 	    }
 /* L60: */
 	}
 
-/*        JU is the index of the last column affected by the current   
-          stage of the factorization */
+/*        JU is the index of the last column affected by the current */
+/*        stage of the factorization */
 
 	ju = 1;
 
-	i__1 = min(*m,*n);
+	i__1 = MIN(*m,*n);
 	i__2 = nb;
 	for (j = 1; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2) {
 /* Computing MIN */
-	    i__3 = nb, i__4 = min(*m,*n) - j + 1;
-	    jb = min(i__3,i__4);
+	    i__3 = nb, i__4 = MIN(*m,*n) - j + 1;
+	    jb = MIN(i__3,i__4);
 
-/*           The active part of the matrix is partitioned   
+/*           The active part of the matrix is partitioned */
 
-                A11   A12   A13   
-                A21   A22   A23   
-                A31   A32   A33   
+/*              A11   A12   A13 */
+/*              A21   A22   A23 */
+/*              A31   A32   A33 */
 
-             Here A11, A21 and A31 denote the current block of JB columns   
-             which is about to be factorized. The number of rows in the   
-             partitioning are JB, I2, I3 respectively, and the numbers   
-             of columns are JB, J2, J3. The superdiagonal elements of A13   
-             and the subdiagonal elements of A31 lie outside the band.   
+/*           Here A11, A21 and A31 denote the current block of JB columns */
+/*           which is about to be factorized. The number of rows in the */
+/*           partitioning are JB, I2, I3 respectively, and the numbers */
+/*           of columns are JB, J2, J3. The superdiagonal elements of A13 */
+/*           and the subdiagonal elements of A31 lie outside the band. */
 
-   Computing MIN */
+/* Computing MIN */
 	    i__3 = *kl - jb, i__4 = *m - j - jb + 1;
-	    i2 = min(i__3,i__4);
+	    i2 = MIN(i__3,i__4);
 /* Computing MIN */
 	    i__3 = jb, i__4 = *m - j - *kl + 1;
-	    i3 = min(i__3,i__4);
+	    i3 = MIN(i__3,i__4);
 
-/*           J2 and J3 are computed after JU has been updated.   
+/*           J2 and J3 are computed after JU has been updated. */
 
-             Factorize the current block of JB columns */
+/*           Factorize the current block of JB columns */
 
 	    i__3 = j + jb - 1;
 	    for (jj = j; jj <= i__3; ++jj) {
@@ -268,28 +290,28 @@
 		if (jj + kv <= *n) {
 		    i__4 = *kl;
 		    for (i__ = 1; i__ <= i__4; ++i__) {
-			i__5 = ab_subscr(i__, jj + kv);
+			i__5 = i__ + (jj + kv) * ab_dim1;
 			ab[i__5].r = 0.f, ab[i__5].i = 0.f;
 /* L70: */
 		    }
 		}
 
-/*              Find pivot and test for singularity. KM is the number of   
-                subdiagonal elements in the current column.   
+/*              Find pivot and test for singularity. KM is the number of */
+/*              subdiagonal elements in the current column. */
 
-   Computing MIN */
+/* Computing MIN */
 		i__4 = *kl, i__5 = *m - jj;
-		km = min(i__4,i__5);
+		km = MIN(i__4,i__5);
 		i__4 = km + 1;
-		jp = icamax_(&i__4, &ab_ref(kv + 1, jj), &c__1);
+		jp = icamax_(&i__4, &ab[kv + 1 + jj * ab_dim1], &c__1);
 		ipiv[jj] = jp + jj - j;
-		i__4 = ab_subscr(kv + jp, jj);
+		i__4 = kv + jp + jj * ab_dim1;
 		if (ab[i__4].r != 0.f || ab[i__4].i != 0.f) {
-/* Computing MAX   
-   Computing MIN */
+/* Computing MAX */
+/* Computing MIN */
 		    i__6 = jj + *ku + jp - 1;
-		    i__4 = ju, i__5 = min(i__6,*n);
-		    ju = max(i__4,i__5);
+		    i__4 = ju, i__5 = MIN(i__6,*n);
+		    ju = MAX(i__4,i__5);
 		    if (jp != 1) {
 
 /*                    Apply interchange to columns J to J+JB-1 */
@@ -298,85 +320,86 @@
 
 			    i__4 = *ldab - 1;
 			    i__5 = *ldab - 1;
-			    cswap_(&jb, &ab_ref(kv + 1 + jj - j, j), &i__4, &
-				    ab_ref(kv + jp + jj - j, j), &i__5);
+			    cswap_(&jb, &ab[kv + 1 + jj - j + j * ab_dim1], &
+				    i__4, &ab[kv + jp + jj - j + j * ab_dim1], 
+				     &i__5);
 			} else {
 
-/*                       The interchange affects columns J to JJ-1 of A31   
-                         which are stored in the work array WORK31 */
+/*                       The interchange affects columns J to JJ-1 of A31 */
+/*                       which are stored in the work array WORK31 */
 
 			    i__4 = jj - j;
 			    i__5 = *ldab - 1;
-			    cswap_(&i__4, &ab_ref(kv + 1 + jj - j, j), &i__5, 
-				    &work31_ref(jp + jj - j - *kl, 1), &c__65)
-				    ;
+			    cswap_(&i__4, &ab[kv + 1 + jj - j + j * ab_dim1], 
+				    &i__5, &work31[jp + jj - j - *kl - 1], &
+				    c__65);
 			    i__4 = j + jb - jj;
 			    i__5 = *ldab - 1;
 			    i__6 = *ldab - 1;
-			    cswap_(&i__4, &ab_ref(kv + 1, jj), &i__5, &ab_ref(
-				    kv + jp, jj), &i__6);
+			    cswap_(&i__4, &ab[kv + 1 + jj * ab_dim1], &i__5, &
+				    ab[kv + jp + jj * ab_dim1], &i__6);
 			}
 		    }
 
 /*                 Compute multipliers */
 
-		    c_div(&q__1, &c_b1, &ab_ref(kv + 1, jj));
-		    cscal_(&km, &q__1, &ab_ref(kv + 2, jj), &c__1);
+		    c_div(&q__1, &c_b1, &ab[kv + 1 + jj * ab_dim1]);
+		    cscal_(&km, &q__1, &ab[kv + 2 + jj * ab_dim1], &c__1);
 
-/*                 Update trailing submatrix within the band and within   
-                   the current block. JM is the index of the last column   
-                   which needs to be updated.   
+/*                 Update trailing submatrix within the band and within */
+/*                 the current block. JM is the index of the last column */
+/*                 which needs to be updated. */
 
-   Computing MIN */
+/* Computing MIN */
 		    i__4 = ju, i__5 = j + jb - 1;
-		    jm = min(i__4,i__5);
+		    jm = MIN(i__4,i__5);
 		    if (jm > jj) {
 			i__4 = jm - jj;
-			q__1.r = -1.f, q__1.i = 0.f;
+			q__1.r = -1.f, q__1.i = -0.f;
 			i__5 = *ldab - 1;
 			i__6 = *ldab - 1;
-			cgeru_(&km, &i__4, &q__1, &ab_ref(kv + 2, jj), &c__1, 
-				&ab_ref(kv, jj + 1), &i__5, &ab_ref(kv + 1, 
-				jj + 1), &i__6);
+			cgeru_(&km, &i__4, &q__1, &ab[kv + 2 + jj * ab_dim1], 
+				&c__1, &ab[kv + (jj + 1) * ab_dim1], &i__5, &
+				ab[kv + 1 + (jj + 1) * ab_dim1], &i__6);
 		    }
 		} else {
 
-/*                 If pivot is zero, set INFO to the index of the pivot   
-                   unless a zero pivot has already been found. */
+/*                 If pivot is zero, set INFO to the index of the pivot */
+/*                 unless a zero pivot has already been found. */
 
 		    if (*info == 0) {
 			*info = jj;
 		    }
 		}
 
-/*              Copy current column of A31 into the work array WORK31   
+/*              Copy current column of A31 into the work array WORK31 */
 
-   Computing MIN */
+/* Computing MIN */
 		i__4 = jj - j + 1;
-		nw = min(i__4,i3);
+		nw = MIN(i__4,i3);
 		if (nw > 0) {
-		    ccopy_(&nw, &ab_ref(kv + *kl + 1 - jj + j, jj), &c__1, &
-			    work31_ref(1, jj - j + 1), &c__1);
+		    ccopy_(&nw, &ab[kv + *kl + 1 - jj + j + jj * ab_dim1], &
+			    c__1, &work31[(jj - j + 1) * 65 - 65], &c__1);
 		}
 /* L80: */
 	    }
 	    if (j + jb <= *n) {
 
-/*              Apply the row interchanges to the other blocks.   
+/*              Apply the row interchanges to the other blocks. */
 
-   Computing MIN */
+/* Computing MIN */
 		i__3 = ju - j + 1;
-		j2 = min(i__3,kv) - jb;
+		j2 = MIN(i__3,kv) - jb;
 /* Computing MAX */
 		i__3 = 0, i__4 = ju - j - kv + 1;
-		j3 = max(i__3,i__4);
+		j3 = MAX(i__3,i__4);
 
-/*              Use CLASWP to apply the row interchanges to A12, A22, and   
-                A32. */
+/*              Use CLASWP to apply the row interchanges to A12, A22, and */
+/*              A32. */
 
 		i__3 = *ldab - 1;
-		claswp_(&j2, &ab_ref(kv + 1 - jb, j + jb), &i__3, &c__1, &jb, 
-			&ipiv[j], &c__1);
+		claswp_(&j2, &ab[kv + 1 - jb + (j + jb) * ab_dim1], &i__3, &
+			c__1, &jb, &ipiv[j], &c__1);
 
 /*              Adjust the pivot indices. */
 
@@ -386,8 +409,8 @@
 /* L90: */
 		}
 
-/*              Apply the row interchanges to A13, A23, and A33   
-                columnwise. */
+/*              Apply the row interchanges to A13, A23, and A33 */
+/*              columnwise. */
 
 		k2 = j - 1 + jb + j2;
 		i__3 = j3;
@@ -397,12 +420,12 @@
 		    for (ii = j + i__ - 1; ii <= i__4; ++ii) {
 			ip = ipiv[ii];
 			if (ip != ii) {
-			    i__5 = ab_subscr(kv + 1 + ii - jj, jj);
+			    i__5 = kv + 1 + ii - jj + jj * ab_dim1;
 			    temp.r = ab[i__5].r, temp.i = ab[i__5].i;
-			    i__5 = ab_subscr(kv + 1 + ii - jj, jj);
-			    i__6 = ab_subscr(kv + 1 + ip - jj, jj);
+			    i__5 = kv + 1 + ii - jj + jj * ab_dim1;
+			    i__6 = kv + 1 + ip - jj + jj * ab_dim1;
 			    ab[i__5].r = ab[i__6].r, ab[i__5].i = ab[i__6].i;
-			    i__5 = ab_subscr(kv + 1 + ip - jj, jj);
+			    i__5 = kv + 1 + ip - jj + jj * ab_dim1;
 			    ab[i__5].r = temp.r, ab[i__5].i = temp.i;
 			}
 /* L100: */
@@ -419,48 +442,49 @@
 		    i__3 = *ldab - 1;
 		    i__4 = *ldab - 1;
 		    ctrsm_("Left", "Lower", "No transpose", "Unit", &jb, &j2, 
-			    &c_b1, &ab_ref(kv + 1, j), &i__3, &ab_ref(kv + 1 
-			    - jb, j + jb), &i__4);
+			    &c_b1, &ab[kv + 1 + j * ab_dim1], &i__3, &ab[kv + 
+			    1 - jb + (j + jb) * ab_dim1], &i__4);
 
 		    if (i2 > 0) {
 
 /*                    Update A22 */
 
-			q__1.r = -1.f, q__1.i = 0.f;
+			q__1.r = -1.f, q__1.i = -0.f;
 			i__3 = *ldab - 1;
 			i__4 = *ldab - 1;
 			i__5 = *ldab - 1;
 			cgemm_("No transpose", "No transpose", &i2, &j2, &jb, 
-				&q__1, &ab_ref(kv + 1 + jb, j), &i__3, &
-				ab_ref(kv + 1 - jb, j + jb), &i__4, &c_b1, &
-				ab_ref(kv + 1, j + jb), &i__5);
+				&q__1, &ab[kv + 1 + jb + j * ab_dim1], &i__3, 
+				&ab[kv + 1 - jb + (j + jb) * ab_dim1], &i__4, 
+				&c_b1, &ab[kv + 1 + (j + jb) * ab_dim1], &
+				i__5);
 		    }
 
 		    if (i3 > 0) {
 
 /*                    Update A32 */
 
-			q__1.r = -1.f, q__1.i = 0.f;
+			q__1.r = -1.f, q__1.i = -0.f;
 			i__3 = *ldab - 1;
 			i__4 = *ldab - 1;
 			cgemm_("No transpose", "No transpose", &i3, &j2, &jb, 
-				&q__1, work31, &c__65, &ab_ref(kv + 1 - jb, j 
-				+ jb), &i__3, &c_b1, &ab_ref(kv + *kl + 1 - 
-				jb, j + jb), &i__4);
+				&q__1, work31, &c__65, &ab[kv + 1 - jb + (j + 
+				jb) * ab_dim1], &i__3, &c_b1, &ab[kv + *kl + 
+				1 - jb + (j + jb) * ab_dim1], &i__4);
 		    }
 		}
 
 		if (j3 > 0) {
 
-/*                 Copy the lower triangle of A13 into the work array   
-                   WORK13 */
+/*                 Copy the lower triangle of A13 into the work array */
+/*                 WORK13 */
 
 		    i__3 = j3;
 		    for (jj = 1; jj <= i__3; ++jj) {
 			i__4 = jb;
 			for (ii = jj; ii <= i__4; ++ii) {
-			    i__5 = work13_subscr(ii, jj);
-			    i__6 = ab_subscr(ii - jj + 1, jj + j + kv - 1);
+			    i__5 = ii + jj * 65 - 66;
+			    i__6 = ii - jj + 1 + (jj + j + kv - 1) * ab_dim1;
 			    work13[i__5].r = ab[i__6].r, work13[i__5].i = ab[
 				    i__6].i;
 /* L120: */
@@ -472,30 +496,31 @@
 
 		    i__3 = *ldab - 1;
 		    ctrsm_("Left", "Lower", "No transpose", "Unit", &jb, &j3, 
-			    &c_b1, &ab_ref(kv + 1, j), &i__3, work13, &c__65);
+			    &c_b1, &ab[kv + 1 + j * ab_dim1], &i__3, work13, &
+			    c__65);
 
 		    if (i2 > 0) {
 
 /*                    Update A23 */
 
-			q__1.r = -1.f, q__1.i = 0.f;
+			q__1.r = -1.f, q__1.i = -0.f;
 			i__3 = *ldab - 1;
 			i__4 = *ldab - 1;
 			cgemm_("No transpose", "No transpose", &i2, &j3, &jb, 
-				&q__1, &ab_ref(kv + 1 + jb, j), &i__3, work13,
-				 &c__65, &c_b1, &ab_ref(jb + 1, j + kv), &
-				i__4);
+				&q__1, &ab[kv + 1 + jb + j * ab_dim1], &i__3, 
+				work13, &c__65, &c_b1, &ab[jb + 1 + (j + kv) *
+				 ab_dim1], &i__4);
 		    }
 
 		    if (i3 > 0) {
 
 /*                    Update A33 */
 
-			q__1.r = -1.f, q__1.i = 0.f;
+			q__1.r = -1.f, q__1.i = -0.f;
 			i__3 = *ldab - 1;
 			cgemm_("No transpose", "No transpose", &i3, &j3, &jb, 
 				&q__1, work31, &c__65, work13, &c__65, &c_b1, 
-				&ab_ref(*kl + 1, j + kv), &i__3);
+				&ab[*kl + 1 + (j + kv) * ab_dim1], &i__3);
 		    }
 
 /*                 Copy the lower triangle of A13 back into place */
@@ -504,8 +529,8 @@
 		    for (jj = 1; jj <= i__3; ++jj) {
 			i__4 = jb;
 			for (ii = jj; ii <= i__4; ++ii) {
-			    i__5 = ab_subscr(ii - jj + 1, jj + j + kv - 1);
-			    i__6 = work13_subscr(ii, jj);
+			    i__5 = ii - jj + 1 + (jj + j + kv - 1) * ab_dim1;
+			    i__6 = ii + jj * 65 - 66;
 			    ab[i__5].r = work13[i__6].r, ab[i__5].i = work13[
 				    i__6].i;
 /* L140: */
@@ -524,9 +549,9 @@
 		}
 	    }
 
-/*           Partially undo the interchanges in the current block to   
-             restore the upper triangular form of A31 and copy the upper   
-             triangle of A31 back into place */
+/*           Partially undo the interchanges in the current block to */
+/*           restore the upper triangular form of A31 and copy the upper */
+/*           triangle of A31 back into place */
 
 	    i__3 = j;
 	    for (jj = j + jb - 1; jj >= i__3; --jj) {
@@ -542,27 +567,28 @@
 			i__4 = jj - j;
 			i__5 = *ldab - 1;
 			i__6 = *ldab - 1;
-			cswap_(&i__4, &ab_ref(kv + 1 + jj - j, j), &i__5, &
-				ab_ref(kv + jp + jj - j, j), &i__6);
+			cswap_(&i__4, &ab[kv + 1 + jj - j + j * ab_dim1], &
+				i__5, &ab[kv + jp + jj - j + j * ab_dim1], &
+				i__6);
 		    } else {
 
 /*                    The interchange does affect A31 */
 
 			i__4 = jj - j;
 			i__5 = *ldab - 1;
-			cswap_(&i__4, &ab_ref(kv + 1 + jj - j, j), &i__5, &
-				work31_ref(jp + jj - j - *kl, 1), &c__65);
+			cswap_(&i__4, &ab[kv + 1 + jj - j + j * ab_dim1], &
+				i__5, &work31[jp + jj - j - *kl - 1], &c__65);
 		    }
 		}
 
-/*              Copy the current column of A31 back into place   
+/*              Copy the current column of A31 back into place */
 
-   Computing MIN */
+/* Computing MIN */
 		i__4 = i3, i__5 = jj - j + 1;
-		nw = min(i__4,i__5);
+		nw = MIN(i__4,i__5);
 		if (nw > 0) {
-		    ccopy_(&nw, &work31_ref(1, jj - j + 1), &c__1, &ab_ref(kv 
-			    + *kl + 1 - jj + j, jj), &c__1);
+		    ccopy_(&nw, &work31[(jj - j + 1) * 65 - 65], &c__1, &ab[
+			    kv + *kl + 1 - jj + j + jj * ab_dim1], &c__1);
 		}
 /* L170: */
 	    }
@@ -575,12 +601,3 @@
 /*     End of CGBTRF */
 
 } /* cgbtrf_ */
-
-#undef ab_ref
-#undef ab_subscr
-#undef work31_ref
-#undef work31_subscr
-#undef work13_ref
-#undef work13_subscr
-
-

@@ -1,85 +1,113 @@
+/* sgetf2.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int sgetf2_(integer *m, integer *n, real *a, integer *lda, 
-	integer *ipiv, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+static float c_b8 = -1.f;
+
+ int sgetf2_(int *m, int *n, float *a, int *lda, 
+	int *ipiv, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1992   
-
-
-    Purpose   
-    =======   
-
-    SGETF2 computes an LU factorization of a general m-by-n matrix A   
-    using partial pivoting with row interchanges.   
-
-    The factorization has the form   
-       A = P * L * U   
-    where P is a permutation matrix, L is lower triangular with unit   
-    diagonal elements (lower trapezoidal if m > n), and U is upper   
-    triangular (upper trapezoidal if m < n).   
-
-    This is the right-looking Level 2 BLAS version of the algorithm.   
-
-    Arguments   
-    =========   
-
-    M       (input) INTEGER   
-            The number of rows of the matrix A.  M >= 0.   
-
-    N       (input) INTEGER   
-            The number of columns of the matrix A.  N >= 0.   
-
-    A       (input/output) REAL array, dimension (LDA,N)   
-            On entry, the m by n matrix to be factored.   
-            On exit, the factors L and U from the factorization   
-            A = P*L*U; the unit diagonal elements of L are not stored.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.  LDA >= max(1,M).   
-
-    IPIV    (output) INTEGER array, dimension (min(M,N))   
-            The pivot indices; for 1 <= i <= min(M,N), row i of the   
-            matrix was interchanged with row IPIV(i).   
-
-    INFO    (output) INTEGER   
-            = 0: successful exit   
-            < 0: if INFO = -k, the k-th argument had an illegal value   
-            > 0: if INFO = k, U(k,k) is exactly zero. The factorization   
-                 has been completed, but the factor U is exactly   
-                 singular, and division by zero will occur if it is used   
-                 to solve a system of equations.   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    static real c_b6 = -1.f;
-    
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
-    real r__1;
+    int a_dim1, a_offset, i__1, i__2, i__3;
+    float r__1;
+
     /* Local variables */
-    extern /* Subroutine */ int sger_(integer *, integer *, real *, real *, 
-	    integer *, real *, integer *, real *, integer *);
-    static integer j;
-    extern /* Subroutine */ int sscal_(integer *, real *, real *, integer *), 
-	    sswap_(integer *, real *, integer *, real *, integer *);
-    static integer jp;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    extern integer isamax_(integer *, real *, integer *);
-#define a_ref(a_1,a_2) a[(a_2)*a_dim1 + a_1]
+    int i__, j, jp;
+    extern  int sger_(int *, int *, float *, float *, 
+	    int *, float *, int *, float *, int *), sscal_(int *
+, float *, float *, int *);
+    float sfmin;
+    extern  int sswap_(int *, float *, int *, float *, 
+	    int *);
+    extern double slamch_(char *);
+    extern  int xerbla_(char *, int *);
+    extern int isamax_(int *, float *, int *);
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  SGETF2 computes an LU factorization of a general m-by-n matrix A */
+/*  using partial pivoting with row interchanges. */
+
+/*  The factorization has the form */
+/*     A = P * L * U */
+/*  where P is a permutation matrix, L is lower triangular with unit */
+/*  diagonal elements (lower trapezoidal if m > n), and U is upper */
+/*  triangular (upper trapezoidal if m < n). */
+
+/*  This is the right-looking Level 2 BLAS version of the algorithm. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  M       (input) INTEGER */
+/*          The number of rows of the matrix A.  M >= 0. */
+
+/*  N       (input) INTEGER */
+/*          The number of columns of the matrix A.  N >= 0. */
+
+/*  A       (input/output) REAL array, dimension (LDA,N) */
+/*          On entry, the m by n matrix to be factored. */
+/*          On exit, the factors L and U from the factorization */
+/*          A = P*L*U; the unit diagonal elements of L are not stored. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A.  LDA >= MAX(1,M). */
+
+/*  IPIV    (output) INTEGER array, dimension (MIN(M,N)) */
+/*          The pivot indices; for 1 <= i <= MIN(M,N), row i of the */
+/*          matrix was interchanged with row IPIV(i). */
+
+/*  INFO    (output) INTEGER */
+/*          = 0: successful exit */
+/*          < 0: if INFO = -k, the k-th argument had an illegal value */
+/*          > 0: if INFO = k, U(k,k) is exactly zero. The factorization */
+/*               has been completed, but the factor U is exactly */
+/*               singular, and division by zero will occur if it is used */
+/*               to solve a system of equations. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     --ipiv;
 
@@ -89,7 +117,7 @@
 	*info = -1;
     } else if (*n < 0) {
 	*info = -2;
-    } else if (*lda < max(1,*m)) {
+    } else if (*lda < MAX(1,*m)) {
 	*info = -4;
     }
     if (*info != 0) {
@@ -104,28 +132,40 @@
 	return 0;
     }
 
-    i__1 = min(*m,*n);
+/*     Compute machine safe minimum */
+
+    sfmin = slamch_("S");
+
+    i__1 = MIN(*m,*n);
     for (j = 1; j <= i__1; ++j) {
 
 /*        Find pivot and test for singularity. */
 
 	i__2 = *m - j + 1;
-	jp = j - 1 + isamax_(&i__2, &a_ref(j, j), &c__1);
+	jp = j - 1 + isamax_(&i__2, &a[j + j * a_dim1], &c__1);
 	ipiv[j] = jp;
-	if (a_ref(jp, j) != 0.f) {
+	if (a[jp + j * a_dim1] != 0.f) {
 
 /*           Apply the interchange to columns 1:N. */
 
 	    if (jp != j) {
-		sswap_(n, &a_ref(j, 1), lda, &a_ref(jp, 1), lda);
+		sswap_(n, &a[j + a_dim1], lda, &a[jp + a_dim1], lda);
 	    }
 
 /*           Compute elements J+1:M of J-th column. */
 
 	    if (j < *m) {
-		i__2 = *m - j;
-		r__1 = 1.f / a_ref(j, j);
-		sscal_(&i__2, &r__1, &a_ref(j + 1, j), &c__1);
+		if ((r__1 = a[j + j * a_dim1], ABS(r__1)) >= sfmin) {
+		    i__2 = *m - j;
+		    r__1 = 1.f / a[j + j * a_dim1];
+		    sscal_(&i__2, &r__1, &a[j + 1 + j * a_dim1], &c__1);
+		} else {
+		    i__2 = *m - j;
+		    for (i__ = 1; i__ <= i__2; ++i__) {
+			a[j + i__ + j * a_dim1] /= a[j + j * a_dim1];
+/* L20: */
+		    }
+		}
 	    }
 
 	} else if (*info == 0) {
@@ -133,14 +173,14 @@
 	    *info = j;
 	}
 
-	if (j < min(*m,*n)) {
+	if (j < MIN(*m,*n)) {
 
 /*           Update trailing submatrix. */
 
 	    i__2 = *m - j;
 	    i__3 = *n - j;
-	    sger_(&i__2, &i__3, &c_b6, &a_ref(j + 1, j), &c__1, &a_ref(j, j + 
-		    1), lda, &a_ref(j + 1, j + 1), lda);
+	    sger_(&i__2, &i__3, &c_b8, &a[j + 1 + j * a_dim1], &c__1, &a[j + (
+		    j + 1) * a_dim1], lda, &a[j + 1 + (j + 1) * a_dim1], lda);
 	}
 /* L10: */
     }
@@ -149,7 +189,3 @@
 /*     End of SGETF2 */
 
 } /* sgetf2_ */
-
-#undef a_ref
-
-

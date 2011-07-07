@@ -1,41 +1,63 @@
+/* slapy2.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-doublereal slapy2_(real *x, real *y)
+double slapy2_(float *x, float *y)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1992   
-
-
-    Purpose   
-    =======   
-
-    SLAPY2 returns sqrt(x**2+y**2), taking care not to cause unnecessary   
-    overflow.   
-
-    Arguments   
-    =========   
-
-    X       (input) REAL   
-    Y       (input) REAL   
-            X and Y specify the values x and y.   
-
-    ===================================================================== */
     /* System generated locals */
-    real ret_val, r__1;
+    float ret_val, r__1;
+
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
+
     /* Local variables */
-    static real xabs, yabs, w, z__;
+    float w, z__, xabs, yabs;
 
 
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
 
-    xabs = dabs(*x);
-    yabs = dabs(*y);
-    w = dmax(xabs,yabs);
-    z__ = dmin(xabs,yabs);
+/*     .. Scalar Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  SLAPY2 returns sqrt(x**2+y**2), taking care not to cause unnecessary */
+/*  overflow. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  X       (input) REAL */
+/*  Y       (input) REAL */
+/*          X and Y specify the values x and y. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    xabs = ABS(*x);
+    yabs = ABS(*y);
+    w = MAX(xabs,yabs);
+    z__ = MIN(xabs,yabs);
     if (z__ == 0.f) {
 	ret_val = w;
     } else {
@@ -48,4 +70,3 @@ doublereal slapy2_(real *x, real *y)
 /*     End of SLAPY2 */
 
 } /* slapy2_ */
-

@@ -1,121 +1,148 @@
+/* chpev.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int chpev_(char *jobz, char *uplo, integer *n, complex *ap, 
-	real *w, complex *z__, integer *ldz, complex *work, real *rwork, 
-	integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int chpev_(char *jobz, char *uplo, int *n, complex *ap, 
+	float *w, complex *z__, int *ldz, complex *work, float *rwork, 
+	int *info)
 {
-/*  -- LAPACK driver routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       March 31, 1993   
-
-
-    Purpose   
-    =======   
-
-    CHPEV computes all the eigenvalues and, optionally, eigenvectors of a   
-    complex Hermitian matrix in packed storage.   
-
-    Arguments   
-    =========   
-
-    JOBZ    (input) CHARACTER*1   
-            = 'N':  Compute eigenvalues only;   
-            = 'V':  Compute eigenvalues and eigenvectors.   
-
-    UPLO    (input) CHARACTER*1   
-            = 'U':  Upper triangle of A is stored;   
-            = 'L':  Lower triangle of A is stored.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    AP      (input/output) COMPLEX array, dimension (N*(N+1)/2)   
-            On entry, the upper or lower triangle of the Hermitian matrix   
-            A, packed columnwise in a linear array.  The j-th column of A   
-            is stored in the array AP as follows:   
-            if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;   
-            if UPLO = 'L', AP(i + (j-1)*(2*n-j)/2) = A(i,j) for j<=i<=n.   
-
-            On exit, AP is overwritten by values generated during the   
-            reduction to tridiagonal form.  If UPLO = 'U', the diagonal   
-            and first superdiagonal of the tridiagonal matrix T overwrite   
-            the corresponding elements of A, and if UPLO = 'L', the   
-            diagonal and first subdiagonal of T overwrite the   
-            corresponding elements of A.   
-
-    W       (output) REAL array, dimension (N)   
-            If INFO = 0, the eigenvalues in ascending order.   
-
-    Z       (output) COMPLEX array, dimension (LDZ, N)   
-            If JOBZ = 'V', then if INFO = 0, Z contains the orthonormal   
-            eigenvectors of the matrix A, with the i-th column of Z   
-            holding the eigenvector associated with W(i).   
-            If JOBZ = 'N', then Z is not referenced.   
-
-    LDZ     (input) INTEGER   
-            The leading dimension of the array Z.  LDZ >= 1, and if   
-            JOBZ = 'V', LDZ >= max(1,N).   
-
-    WORK    (workspace) COMPLEX array, dimension (max(1, 2*N-1))   
-
-    RWORK   (workspace) REAL array, dimension (max(1, 3*N-2))   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit.   
-            < 0:  if INFO = -i, the i-th argument had an illegal value.   
-            > 0:  if INFO = i, the algorithm failed to converge; i   
-                  off-diagonal elements of an intermediate tridiagonal   
-                  form did not converge to zero.   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer z_dim1, z_offset, i__1;
-    real r__1;
+    int z_dim1, z_offset, i__1;
+    float r__1;
+
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
+
     /* Local variables */
-    static integer inde;
-    static real anrm;
-    static integer imax;
-    static real rmin, rmax, sigma;
-    extern logical lsame_(char *, char *);
-    static integer iinfo;
-    extern /* Subroutine */ int sscal_(integer *, real *, real *, integer *);
-    static logical wantz;
-    static integer iscale;
-    extern doublereal clanhp_(char *, char *, integer *, complex *, real *), slamch_(char *);
-    extern /* Subroutine */ int csscal_(integer *, real *, complex *, integer 
+    float eps;
+    int inde;
+    float anrm;
+    int imax;
+    float rmin, rmax, sigma;
+    extern int lsame_(char *, char *);
+    int iinfo;
+    extern  int sscal_(int *, float *, float *, int *);
+    int wantz;
+    int iscale;
+    extern double clanhp_(char *, char *, int *, complex *, float *), slamch_(char *);
+    extern  int csscal_(int *, float *, complex *, int 
 	    *);
-    static real safmin;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static real bignum;
-    static integer indtau;
-    extern /* Subroutine */ int chptrd_(char *, integer *, complex *, real *, 
-	    real *, complex *, integer *);
-    static integer indrwk, indwrk;
-    extern /* Subroutine */ int csteqr_(char *, integer *, real *, real *, 
-	    complex *, integer *, real *, integer *), cupgtr_(char *, 
-	    integer *, complex *, complex *, complex *, integer *, complex *, 
-	    integer *), ssterf_(integer *, real *, real *, integer *);
-    static real smlnum, eps;
-#define z___subscr(a_1,a_2) (a_2)*z_dim1 + a_1
-#define z___ref(a_1,a_2) z__[z___subscr(a_1,a_2)]
+    float safmin;
+    extern  int xerbla_(char *, int *);
+    float bignum;
+    int indtau;
+    extern  int chptrd_(char *, int *, complex *, float *, 
+	    float *, complex *, int *);
+    int indrwk, indwrk;
+    extern  int csteqr_(char *, int *, float *, float *, 
+	    complex *, int *, float *, int *), cupgtr_(char *, 
+	    int *, complex *, complex *, complex *, int *, complex *, 
+	    int *), ssterf_(int *, float *, float *, int *);
+    float smlnum;
 
 
+/*  -- LAPACK driver routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CHPEV computes all the eigenvalues and, optionally, eigenvectors of a */
+/*  complex Hermitian matrix in packed storage. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  JOBZ    (input) CHARACTER*1 */
+/*          = 'N':  Compute eigenvalues only; */
+/*          = 'V':  Compute eigenvalues and eigenvectors. */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U':  Upper triangle of A is stored; */
+/*          = 'L':  Lower triangle of A is stored. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  AP      (input/output) COMPLEX array, dimension (N*(N+1)/2) */
+/*          On entry, the upper or lower triangle of the Hermitian matrix */
+/*          A, packed columnwise in a linear array.  The j-th column of A */
+/*          is stored in the array AP as follows: */
+/*          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j; */
+/*          if UPLO = 'L', AP(i + (j-1)*(2*n-j)/2) = A(i,j) for j<=i<=n. */
+
+/*          On exit, AP is overwritten by values generated during the */
+/*          reduction to tridiagonal form.  If UPLO = 'U', the diagonal */
+/*          and first superdiagonal of the tridiagonal matrix T overwrite */
+/*          the corresponding elements of A, and if UPLO = 'L', the */
+/*          diagonal and first subdiagonal of T overwrite the */
+/*          corresponding elements of A. */
+
+/*  W       (output) REAL array, dimension (N) */
+/*          If INFO = 0, the eigenvalues in ascending order. */
+
+/*  Z       (output) COMPLEX array, dimension (LDZ, N) */
+/*          If JOBZ = 'V', then if INFO = 0, Z contains the orthonormal */
+/*          eigenvectors of the matrix A, with the i-th column of Z */
+/*          holding the eigenvector associated with W(i). */
+/*          If JOBZ = 'N', then Z is not referenced. */
+
+/*  LDZ     (input) INTEGER */
+/*          The leading dimension of the array Z.  LDZ >= 1, and if */
+/*          JOBZ = 'V', LDZ >= MAX(1,N). */
+
+/*  WORK    (workspace) COMPLEX array, dimension (MAX(1, 2*N-1)) */
+
+/*  RWORK   (workspace) REAL array, dimension (MAX(1, 3*N-2)) */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit. */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value. */
+/*          > 0:  if INFO = i, the algorithm failed to converge; i */
+/*                off-diagonal elements of an intermediate tridiagonal */
+/*                form did not converge to zero. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --ap;
     --w;
     z_dim1 = *ldz;
-    z_offset = 1 + z_dim1 * 1;
+    z_offset = 1 + z_dim1;
     z__ -= z_offset;
     --work;
     --rwork;
@@ -151,7 +178,7 @@
 	w[1] = ap[1].r;
 	rwork[1] = 1.f;
 	if (wantz) {
-	    i__1 = z___subscr(1, 1);
+	    i__1 = z_dim1 + 1;
 	    z__[i__1].r = 1.f, z__[i__1].i = 0.f;
 	}
 	return 0;
@@ -188,8 +215,8 @@
     indtau = 1;
     chptrd_(uplo, n, &ap[1], &w[1], &rwork[inde], &work[indtau], &iinfo);
 
-/*     For eigenvalues only, call SSTERF.  For eigenvectors, first call   
-       CUPGTR to generate the orthogonal matrix, then call CSTEQR. */
+/*     For eigenvalues only, call SSTERF.  For eigenvectors, first call */
+/*     CUPGTR to generate the orthogonal matrix, then call CSTEQR. */
 
     if (! wantz) {
 	ssterf_(n, &w[1], &rwork[inde], info);
@@ -219,8 +246,3 @@
 /*     End of CHPEV */
 
 } /* chpev_ */
-
-#undef z___ref
-#undef z___subscr
-
-

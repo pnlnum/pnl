@@ -1,84 +1,108 @@
+/* dopgtr.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dopgtr_(char *uplo, integer *n, doublereal *ap, 
-	doublereal *tau, doublereal *q, integer *ldq, doublereal *work, 
-	integer *info)
+ int dopgtr_(char *uplo, int *n, double *ap, 
+	double *tau, double *q, int *ldq, double *work, 
+	int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
-
-
-    Purpose   
-    =======   
-
-    DOPGTR generates a real orthogonal matrix Q which is defined as the   
-    product of n-1 elementary reflectors H(i) of order n, as returned by   
-    DSPTRD using packed storage:   
-
-    if UPLO = 'U', Q = H(n-1) . . . H(2) H(1),   
-
-    if UPLO = 'L', Q = H(1) H(2) . . . H(n-1).   
-
-    Arguments   
-    =========   
-
-    UPLO    (input) CHARACTER*1   
-            = 'U': Upper triangular packed storage used in previous   
-                   call to DSPTRD;   
-            = 'L': Lower triangular packed storage used in previous   
-                   call to DSPTRD.   
-
-    N       (input) INTEGER   
-            The order of the matrix Q. N >= 0.   
-
-    AP      (input) DOUBLE PRECISION array, dimension (N*(N+1)/2)   
-            The vectors which define the elementary reflectors, as   
-            returned by DSPTRD.   
-
-    TAU     (input) DOUBLE PRECISION array, dimension (N-1)   
-            TAU(i) must contain the scalar factor of the elementary   
-            reflector H(i), as returned by DSPTRD.   
-
-    Q       (output) DOUBLE PRECISION array, dimension (LDQ,N)   
-            The N-by-N orthogonal matrix Q.   
-
-    LDQ     (input) INTEGER   
-            The leading dimension of the array Q. LDQ >= max(1,N).   
-
-    WORK    (workspace) DOUBLE PRECISION array, dimension (N-1)   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-
-    =====================================================================   
-
-
-       Test the input arguments   
-
-       Parameter adjustments */
     /* System generated locals */
-    integer q_dim1, q_offset, i__1, i__2, i__3;
-    /* Local variables */
-    static integer i__, j;
-    extern logical lsame_(char *, char *);
-    static integer iinfo;
-    static logical upper;
-    extern /* Subroutine */ int dorg2l_(integer *, integer *, integer *, 
-	    doublereal *, integer *, doublereal *, doublereal *, integer *), 
-	    dorg2r_(integer *, integer *, integer *, doublereal *, integer *, 
-	    doublereal *, doublereal *, integer *);
-    static integer ij;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-#define q_ref(a_1,a_2) q[(a_2)*q_dim1 + a_1]
+    int q_dim1, q_offset, i__1, i__2, i__3;
 
+    /* Local variables */
+    int i__, j, ij;
+    extern int lsame_(char *, char *);
+    int iinfo;
+    int upper;
+    extern  int dorg2l_(int *, int *, int *, 
+	    double *, int *, double *, double *, int *), 
+	    dorg2r_(int *, int *, int *, double *, int *, 
+	    double *, double *, int *), xerbla_(char *, int *);
+
+
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  DOPGTR generates a float orthogonal matrix Q which is defined as the */
+/*  product of n-1 elementary reflectors H(i) of order n, as returned by */
+/*  DSPTRD using packed storage: */
+
+/*  if UPLO = 'U', Q = H(n-1) . . . H(2) H(1), */
+
+/*  if UPLO = 'L', Q = H(1) H(2) . . . H(n-1). */
+
+/*  Arguments */
+/*  ========= */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          = 'U': Upper triangular packed storage used in previous */
+/*                 call to DSPTRD; */
+/*          = 'L': Lower triangular packed storage used in previous */
+/*                 call to DSPTRD. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix Q. N >= 0. */
+
+/*  AP      (input) DOUBLE PRECISION array, dimension (N*(N+1)/2) */
+/*          The vectors which define the elementary reflectors, as */
+/*          returned by DSPTRD. */
+
+/*  TAU     (input) DOUBLE PRECISION array, dimension (N-1) */
+/*          TAU(i) must contain the scalar factor of the elementary */
+/*          reflector H(i), as returned by DSPTRD. */
+
+/*  Q       (output) DOUBLE PRECISION array, dimension (LDQ,N) */
+/*          The N-by-N orthogonal matrix Q. */
+
+/*  LDQ     (input) INTEGER */
+/*          The leading dimension of the array Q. LDQ >= MAX(1,N). */
+
+/*  WORK    (workspace) DOUBLE PRECISION array, dimension (N-1) */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input arguments */
+
+    /* Parameter adjustments */
     --ap;
     --tau;
     q_dim1 = *ldq;
-    q_offset = 1 + q_dim1 * 1;
+    q_offset = 1 + q_dim1;
     q -= q_offset;
     --work;
 
@@ -89,7 +113,7 @@
 	*info = -1;
     } else if (*n < 0) {
 	*info = -2;
-    } else if (*ldq < max(1,*n)) {
+    } else if (*ldq < MAX(1,*n)) {
 	*info = -6;
     }
     if (*info != 0) {
@@ -106,31 +130,31 @@
 
     if (upper) {
 
-/*        Q was determined by a call to DSPTRD with UPLO = 'U'   
+/*        Q was determined by a call to DSPTRD with UPLO = 'U' */
 
-          Unpack the vectors which define the elementary reflectors and   
-          set the last row and column of Q equal to those of the unit   
-          matrix */
+/*        Unpack the vectors which define the elementary reflectors and */
+/*        set the last row and column of Q equal to those of the unit */
+/*        matrix */
 
 	ij = 2;
 	i__1 = *n - 1;
 	for (j = 1; j <= i__1; ++j) {
 	    i__2 = j - 1;
 	    for (i__ = 1; i__ <= i__2; ++i__) {
-		q_ref(i__, j) = ap[ij];
+		q[i__ + j * q_dim1] = ap[ij];
 		++ij;
 /* L10: */
 	    }
 	    ij += 2;
-	    q_ref(*n, j) = 0.;
+	    q[*n + j * q_dim1] = 0.;
 /* L20: */
 	}
 	i__1 = *n - 1;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    q_ref(i__, *n) = 0.;
+	    q[i__ + *n * q_dim1] = 0.;
 /* L30: */
 	}
-	q_ref(*n, *n) = 1.;
+	q[*n + *n * q_dim1] = 1.;
 
 /*        Generate Q(1:n-1,1:n-1) */
 
@@ -142,25 +166,25 @@
 
     } else {
 
-/*        Q was determined by a call to DSPTRD with UPLO = 'L'.   
+/*        Q was determined by a call to DSPTRD with UPLO = 'L'. */
 
-          Unpack the vectors which define the elementary reflectors and   
-          set the first row and column of Q equal to those of the unit   
-          matrix */
+/*        Unpack the vectors which define the elementary reflectors and */
+/*        set the first row and column of Q equal to those of the unit */
+/*        matrix */
 
-	q_ref(1, 1) = 1.;
+	q[q_dim1 + 1] = 1.;
 	i__1 = *n;
 	for (i__ = 2; i__ <= i__1; ++i__) {
-	    q_ref(i__, 1) = 0.;
+	    q[i__ + q_dim1] = 0.;
 /* L40: */
 	}
 	ij = 3;
 	i__1 = *n;
 	for (j = 2; j <= i__1; ++j) {
-	    q_ref(1, j) = 0.;
+	    q[j * q_dim1 + 1] = 0.;
 	    i__2 = *n;
 	    for (i__ = j + 1; i__ <= i__2; ++i__) {
-		q_ref(i__, j) = ap[ij];
+		q[i__ + j * q_dim1] = ap[ij];
 		++ij;
 /* L50: */
 	    }
@@ -174,8 +198,8 @@
 	    i__1 = *n - 1;
 	    i__2 = *n - 1;
 	    i__3 = *n - 1;
-	    dorg2r_(&i__1, &i__2, &i__3, &q_ref(2, 2), ldq, &tau[1], &work[1],
-		     &iinfo);
+	    dorg2r_(&i__1, &i__2, &i__3, &q[(q_dim1 << 1) + 2], ldq, &tau[1], 
+		    &work[1], &iinfo);
 	}
     }
     return 0;
@@ -183,7 +207,3 @@
 /*     End of DOPGTR */
 
 } /* dopgtr_ */
-
-#undef q_ref
-
-

@@ -1,101 +1,126 @@
+/* slansb.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-doublereal slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab, 
-	integer *ldab, real *work)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+double slansb_(char *norm, char *uplo, int *n, int *k, float *ab, 
+	int *ldab, float *work)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1992   
-
-
-    Purpose   
-    =======   
-
-    SLANSB  returns the value of the one norm,  or the Frobenius norm, or   
-    the  infinity norm,  or the element of  largest absolute value  of an   
-    n by n symmetric band matrix A,  with k super-diagonals.   
-
-    Description   
-    ===========   
-
-    SLANSB returns the value   
-
-       SLANSB = ( max(abs(A(i,j))), NORM = 'M' or 'm'   
-                (   
-                ( norm1(A),         NORM = '1', 'O' or 'o'   
-                (   
-                ( normI(A),         NORM = 'I' or 'i'   
-                (   
-                ( normF(A),         NORM = 'F', 'f', 'E' or 'e'   
-
-    where  norm1  denotes the  one norm of a matrix (maximum column sum),   
-    normI  denotes the  infinity norm  of a matrix  (maximum row sum) and   
-    normF  denotes the  Frobenius norm of a matrix (square root of sum of   
-    squares).  Note that  max(abs(A(i,j)))  is not a  matrix norm.   
-
-    Arguments   
-    =========   
-
-    NORM    (input) CHARACTER*1   
-            Specifies the value to be returned in SLANSB as described   
-            above.   
-
-    UPLO    (input) CHARACTER*1   
-            Specifies whether the upper or lower triangular part of the   
-            band matrix A is supplied.   
-            = 'U':  Upper triangular part is supplied   
-            = 'L':  Lower triangular part is supplied   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.  When N = 0, SLANSB is   
-            set to zero.   
-
-    K       (input) INTEGER   
-            The number of super-diagonals or sub-diagonals of the   
-            band matrix A.  K >= 0.   
-
-    AB      (input) REAL array, dimension (LDAB,N)   
-            The upper or lower triangle of the symmetric band matrix A,   
-            stored in the first K+1 rows of AB.  The j-th column of A is   
-            stored in the j-th column of the array AB as follows:   
-            if UPLO = 'U', AB(k+1+i-j,j) = A(i,j) for max(1,j-k)<=i<=j;   
-            if UPLO = 'L', AB(1+i-j,j)   = A(i,j) for j<=i<=min(n,j+k).   
-
-    LDAB    (input) INTEGER   
-            The leading dimension of the array AB.  LDAB >= K+1.   
-
-    WORK    (workspace) REAL array, dimension (LWORK),   
-            where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,   
-            WORK is not referenced.   
-
-   =====================================================================   
-
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
-    real ret_val, r__1, r__2, r__3;
+    int ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
+    float ret_val, r__1, r__2, r__3;
+
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
+
     /* Local variables */
-    static real absa;
-    static integer i__, j, l;
-    static real scale;
-    extern logical lsame_(char *, char *);
-    static real value;
-    extern /* Subroutine */ int slassq_(integer *, real *, integer *, real *, 
-	    real *);
-    static real sum;
-#define ab_ref(a_1,a_2) ab[(a_2)*ab_dim1 + a_1]
+    int i__, j, l;
+    float sum, absa, scale;
+    extern int lsame_(char *, char *);
+    float value;
+    extern  int slassq_(int *, float *, int *, float *, 
+	    float *);
 
 
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  SLANSB  returns the value of the one norm,  or the Frobenius norm, or */
+/*  the  infinity norm,  or the element of  largest absolute value  of an */
+/*  n by n symmetric band matrix A,  with k super-diagonals. */
+
+/*  Description */
+/*  =========== */
+
+/*  SLANSB returns the value */
+
+/*     SLANSB = ( MAX(ABS(A(i,j))), NORM = 'M' or 'm' */
+/*              ( */
+/*              ( norm1(A),         NORM = '1', 'O' or 'o' */
+/*              ( */
+/*              ( normI(A),         NORM = 'I' or 'i' */
+/*              ( */
+/*              ( normF(A),         NORM = 'F', 'f', 'E' or 'e' */
+
+/*  where  norm1  denotes the  one norm of a matrix (maximum column sum), */
+/*  normI  denotes the  infinity norm  of a matrix  (maximum row sum) and */
+/*  normF  denotes the  Frobenius norm of a matrix (square root of sum of */
+/*  squares).  Note that  MAX(ABS(A(i,j)))  is not a consistent matrix norm. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  NORM    (input) CHARACTER*1 */
+/*          Specifies the value to be returned in SLANSB as described */
+/*          above. */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          Specifies whether the upper or lower triangular part of the */
+/*          band matrix A is supplied. */
+/*          = 'U':  Upper triangular part is supplied */
+/*          = 'L':  Lower triangular part is supplied */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0.  When N = 0, SLANSB is */
+/*          set to zero. */
+
+/*  K       (input) INTEGER */
+/*          The number of super-diagonals or sub-diagonals of the */
+/*          band matrix A.  K >= 0. */
+
+/*  AB      (input) REAL array, dimension (LDAB,N) */
+/*          The upper or lower triangle of the symmetric band matrix A, */
+/*          stored in the first K+1 rows of AB.  The j-th column of A is */
+/*          stored in the j-th column of the array AB as follows: */
+/*          if UPLO = 'U', AB(k+1+i-j,j) = A(i,j) for MAX(1,j-k)<=i<=j; */
+/*          if UPLO = 'L', AB(1+i-j,j)   = A(i,j) for j<=i<=MIN(n,j+k). */
+
+/*  LDAB    (input) INTEGER */
+/*          The leading dimension of the array AB.  LDAB >= K+1. */
+
+/*  WORK    (workspace) REAL array, dimension (MAX(1,LWORK)), */
+/*          where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise, */
+/*          WORK is not referenced. */
+
+/* ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     ab_dim1 = *ldab;
-    ab_offset = 1 + ab_dim1 * 1;
+    ab_offset = 1 + ab_dim1;
     ab -= ab_offset;
     --work;
 
@@ -104,7 +129,7 @@ doublereal slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab,
 	value = 0.f;
     } else if (lsame_(norm, "M")) {
 
-/*        Find max(abs(A(i,j))). */
+/*        Find MAX(ABS(A(i,j))). */
 
 	value = 0.f;
 	if (lsame_(uplo, "U")) {
@@ -113,10 +138,11 @@ doublereal slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab,
 /* Computing MAX */
 		i__2 = *k + 2 - j;
 		i__3 = *k + 1;
-		for (i__ = max(i__2,1); i__ <= i__3; ++i__) {
+		for (i__ = MAX(i__2,1); i__ <= i__3; ++i__) {
 /* Computing MAX */
-		    r__2 = value, r__3 = (r__1 = ab_ref(i__, j), dabs(r__1));
-		    value = dmax(r__2,r__3);
+		    r__2 = value, r__3 = (r__1 = ab[i__ + j * ab_dim1], ABS(
+			    r__1));
+		    value = MAX(r__2,r__3);
 /* L10: */
 		}
 /* L20: */
@@ -126,11 +152,12 @@ doublereal slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab,
 	    for (j = 1; j <= i__1; ++j) {
 /* Computing MIN */
 		i__2 = *n + 1 - j, i__4 = *k + 1;
-		i__3 = min(i__2,i__4);
+		i__3 = MIN(i__2,i__4);
 		for (i__ = 1; i__ <= i__3; ++i__) {
 /* Computing MAX */
-		    r__2 = value, r__3 = (r__1 = ab_ref(i__, j), dabs(r__1));
-		    value = dmax(r__2,r__3);
+		    r__2 = value, r__3 = (r__1 = ab[i__ + j * ab_dim1], ABS(
+			    r__1));
+		    value = MAX(r__2,r__3);
 /* L30: */
 		}
 /* L40: */
@@ -149,20 +176,20 @@ doublereal slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab,
 /* Computing MAX */
 		i__3 = 1, i__2 = j - *k;
 		i__4 = j - 1;
-		for (i__ = max(i__3,i__2); i__ <= i__4; ++i__) {
-		    absa = (r__1 = ab_ref(l + i__, j), dabs(r__1));
+		for (i__ = MAX(i__3,i__2); i__ <= i__4; ++i__) {
+		    absa = (r__1 = ab[l + i__ + j * ab_dim1], ABS(r__1));
 		    sum += absa;
 		    work[i__] += absa;
 /* L50: */
 		}
-		work[j] = sum + (r__1 = ab_ref(*k + 1, j), dabs(r__1));
+		work[j] = sum + (r__1 = ab[*k + 1 + j * ab_dim1], ABS(r__1));
 /* L60: */
 	    }
 	    i__1 = *n;
 	    for (i__ = 1; i__ <= i__1; ++i__) {
 /* Computing MAX */
 		r__1 = value, r__2 = work[i__];
-		value = dmax(r__1,r__2);
+		value = MAX(r__1,r__2);
 /* L70: */
 	    }
 	} else {
@@ -173,18 +200,18 @@ doublereal slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab,
 	    }
 	    i__1 = *n;
 	    for (j = 1; j <= i__1; ++j) {
-		sum = work[j] + (r__1 = ab_ref(1, j), dabs(r__1));
+		sum = work[j] + (r__1 = ab[j * ab_dim1 + 1], ABS(r__1));
 		l = 1 - j;
 /* Computing MIN */
 		i__3 = *n, i__2 = j + *k;
-		i__4 = min(i__3,i__2);
+		i__4 = MIN(i__3,i__2);
 		for (i__ = j + 1; i__ <= i__4; ++i__) {
-		    absa = (r__1 = ab_ref(l + i__, j), dabs(r__1));
+		    absa = (r__1 = ab[l + i__ + j * ab_dim1], ABS(r__1));
 		    sum += absa;
 		    work[i__] += absa;
 /* L90: */
 		}
-		value = dmax(value,sum);
+		value = MAX(value,sum);
 /* L100: */
 	    }
 	}
@@ -198,13 +225,13 @@ doublereal slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab,
 	    if (lsame_(uplo, "U")) {
 		i__1 = *n;
 		for (j = 2; j <= i__1; ++j) {
-/* Computing MAX */
-		    i__4 = *k + 2 - j;
 /* Computing MIN */
-		    i__2 = j - 1;
-		    i__3 = min(i__2,*k);
-		    slassq_(&i__3, &ab_ref(max(i__4,1), j), &c__1, &scale, &
-			    sum);
+		    i__3 = j - 1;
+		    i__4 = MIN(i__3,*k);
+/* Computing MAX */
+		    i__2 = *k + 2 - j;
+		    slassq_(&i__4, &ab[MAX(i__2, 1)+ j * ab_dim1], &c__1, &
+			    scale, &sum);
 /* L110: */
 		}
 		l = *k + 1;
@@ -213,8 +240,8 @@ doublereal slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab,
 		for (j = 1; j <= i__1; ++j) {
 /* Computing MIN */
 		    i__3 = *n - j;
-		    i__4 = min(i__3,*k);
-		    slassq_(&i__4, &ab_ref(2, j), &c__1, &scale, &sum);
+		    i__4 = MIN(i__3,*k);
+		    slassq_(&i__4, &ab[j * ab_dim1 + 2], &c__1, &scale, &sum);
 /* L120: */
 		}
 		l = 1;
@@ -223,7 +250,7 @@ doublereal slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab,
 	} else {
 	    l = 1;
 	}
-	slassq_(n, &ab_ref(l, 1), ldab, &scale, &sum);
+	slassq_(n, &ab[l + ab_dim1], ldab, &scale, &sum);
 	value = scale * sqrt(sum);
     }
 
@@ -233,7 +260,3 @@ doublereal slansb_(char *norm, char *uplo, integer *n, integer *k, real *ab,
 /*     End of SLANSB */
 
 } /* slansb_ */
-
-#undef ab_ref
-
-

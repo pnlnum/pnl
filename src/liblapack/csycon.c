@@ -1,89 +1,119 @@
+/* csycon.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int csycon_(char *uplo, integer *n, complex *a, integer *lda,
-	 integer *ipiv, real *anorm, real *rcond, complex *work, integer *
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int csycon_(char *uplo, int *n, complex *a, int *lda, 
+	 int *ipiv, float *anorm, float *rcond, complex *work, int *
 	info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       March 31, 1993   
-
-
-    Purpose   
-    =======   
-
-    CSYCON estimates the reciprocal of the condition number (in the   
-    1-norm) of a complex symmetric matrix A using the factorization   
-    A = U*D*U**T or A = L*D*L**T computed by CSYTRF.   
-
-    An estimate is obtained for norm(inv(A)), and the reciprocal of the   
-    condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).   
-
-    Arguments   
-    =========   
-
-    UPLO    (input) CHARACTER*1   
-            Specifies whether the details of the factorization are stored   
-            as an upper or lower triangular matrix.   
-            = 'U':  Upper triangular, form is A = U*D*U**T;   
-            = 'L':  Lower triangular, form is A = L*D*L**T.   
-
-    N       (input) INTEGER   
-            The order of the matrix A.  N >= 0.   
-
-    A       (input) COMPLEX array, dimension (LDA,N)   
-            The block diagonal matrix D and the multipliers used to   
-            obtain the factor U or L as computed by CSYTRF.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.  LDA >= max(1,N).   
-
-    IPIV    (input) INTEGER array, dimension (N)   
-            Details of the interchanges and the block structure of D   
-            as determined by CSYTRF.   
-
-    ANORM   (input) REAL   
-            The 1-norm of the original matrix A.   
-
-    RCOND   (output) REAL   
-            The reciprocal of the condition number of the matrix A,   
-            computed as RCOND = 1/(ANORM * AINVNM), where AINVNM is an   
-            estimate of the 1-norm of inv(A) computed in this routine.   
-
-    WORK    (workspace) COMPLEX array, dimension (2*N)   
-
-    INFO    (output) INTEGER   
-            = 0:  successful exit   
-            < 0:  if INFO = -i, the i-th argument had an illegal value   
-
-    =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    int a_dim1, a_offset, i__1, i__2;
+
     /* Local variables */
-    static integer kase, i__;
-    extern logical lsame_(char *, char *);
-    static logical upper;
-    extern /* Subroutine */ int clacon_(integer *, complex *, complex *, real 
-	    *, integer *), xerbla_(char *, integer *);
-    static real ainvnm;
-    extern /* Subroutine */ int csytrs_(char *, integer *, integer *, complex 
-	    *, integer *, integer *, complex *, integer *, integer *);
-#define a_subscr(a_1,a_2) (a_2)*a_dim1 + a_1
-#define a_ref(a_1,a_2) a[a_subscr(a_1,a_2)]
+    int i__, kase;
+    extern int lsame_(char *, char *);
+    int isave[3];
+    int upper;
+    extern  int clacn2_(int *, complex *, complex *, float 
+	    *, int *, int *), xerbla_(char *, int *);
+    float ainvnm;
+    extern  int csytrs_(char *, int *, int *, complex 
+	    *, int *, int *, complex *, int *, int *);
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     Modified to call CLACN2 in place of CLACON, 10 Feb 03, SJH. */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CSYCON estimates the reciprocal of the condition number (in the */
+/*  1-norm) of a complex symmetric matrix A using the factorization */
+/*  A = U*D*U**T or A = L*D*L**T computed by CSYTRF. */
+
+/*  An estimate is obtained for norm(inv(A)), and the reciprocal of the */
+/*  condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))). */
+
+/*  Arguments */
+/*  ========= */
+
+/*  UPLO    (input) CHARACTER*1 */
+/*          Specifies whether the details of the factorization are stored */
+/*          as an upper or lower triangular matrix. */
+/*          = 'U':  Upper triangular, form is A = U*D*U**T; */
+/*          = 'L':  Lower triangular, form is A = L*D*L**T. */
+
+/*  N       (input) INTEGER */
+/*          The order of the matrix A.  N >= 0. */
+
+/*  A       (input) COMPLEX array, dimension (LDA,N) */
+/*          The block diagonal matrix D and the multipliers used to */
+/*          obtain the factor U or L as computed by CSYTRF. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A.  LDA >= MAX(1,N). */
+
+/*  IPIV    (input) INTEGER array, dimension (N) */
+/*          Details of the interchanges and the block structure of D */
+/*          as determined by CSYTRF. */
+
+/*  ANORM   (input) REAL */
+/*          The 1-norm of the original matrix A. */
+
+/*  RCOND   (output) REAL */
+/*          The reciprocal of the condition number of the matrix A, */
+/*          computed as RCOND = 1/(ANORM * AINVNM), where AINVNM is an */
+/*          estimate of the 1-norm of inv(A) computed in this routine. */
+
+/*  WORK    (workspace) COMPLEX array, dimension (2*N) */
+
+/*  INFO    (output) INTEGER */
+/*          = 0:  successful exit */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Local Arrays .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     --ipiv;
     --work;
@@ -95,7 +125,7 @@
 	*info = -1;
     } else if (*n < 0) {
 	*info = -2;
-    } else if (*lda < max(1,*n)) {
+    } else if (*lda < MAX(1,*n)) {
 	*info = -4;
     } else if (*anorm < 0.f) {
 	*info = -6;
@@ -123,7 +153,7 @@
 /*        Upper triangular storage: examine D from bottom to top */
 
 	for (i__ = *n; i__ >= 1; --i__) {
-	    i__1 = a_subscr(i__, i__);
+	    i__1 = i__ + i__ * a_dim1;
 	    if (ipiv[i__] > 0 && (a[i__1].r == 0.f && a[i__1].i == 0.f)) {
 		return 0;
 	    }
@@ -135,7 +165,7 @@
 
 	i__1 = *n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    i__2 = a_subscr(i__, i__);
+	    i__2 = i__ + i__ * a_dim1;
 	    if (ipiv[i__] > 0 && (a[i__2].r == 0.f && a[i__2].i == 0.f)) {
 		return 0;
 	    }
@@ -147,7 +177,7 @@
 
     kase = 0;
 L30:
-    clacon_(n, &work[*n + 1], &work[1], &ainvnm, &kase);
+    clacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if (kase != 0) {
 
 /*        Multiply by inv(L*D*L') or inv(U*D*U'). */
@@ -168,8 +198,3 @@ L30:
 /*     End of CSYCON */
 
 } /* csycon_ */
-
-#undef a_ref
-#undef a_subscr
-
-

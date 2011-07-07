@@ -10,18 +10,18 @@
 #define CLK_TCK 60
 #endif
 
-doublereal second_()
+double second_()
 {
 #if defined _WIN32
   clock_t rusage;
 
   rusage = clock();
-  return (doublereal)(rusage) / CLOCKS_PER_SEC;
+  return (double)(rusage) / CLOCKS_PER_SEC;
 #else
   struct tms rusage;
 
   times(&rusage);
-  return (doublereal)(rusage.tms_utime) / CLK_TCK;
+  return (double)(rusage.tms_utime) / CLK_TCK;
 #endif
 } /* second_ */
 

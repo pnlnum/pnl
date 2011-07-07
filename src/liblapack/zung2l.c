@@ -1,86 +1,107 @@
+/* zung2l.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zung2l_(integer *m, integer *n, integer *k, 
-	doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *
-	work, integer *info)
+/* Table of constant values */
+
+static int c__1 = 1;
+
+ int zung2l_(int *m, int *n, int *k, 
+	doublecomplex *a, int *lda, doublecomplex *tau, doublecomplex *
+	work, int *info)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
-
-
-    Purpose   
-    =======   
-
-    ZUNG2L generates an m by n complex matrix Q with orthonormal columns,   
-    which is defined as the last n columns of a product of k elementary   
-    reflectors of order m   
-
-          Q  =  H(k) . . . H(2) H(1)   
-
-    as returned by ZGEQLF.   
-
-    Arguments   
-    =========   
-
-    M       (input) INTEGER   
-            The number of rows of the matrix Q. M >= 0.   
-
-    N       (input) INTEGER   
-            The number of columns of the matrix Q. M >= N >= 0.   
-
-    K       (input) INTEGER   
-            The number of elementary reflectors whose product defines the   
-            matrix Q. N >= K >= 0.   
-
-    A       (input/output) COMPLEX*16 array, dimension (LDA,N)   
-            On entry, the (n-k+i)-th column must contain the vector which   
-            defines the elementary reflector H(i), for i = 1,2,...,k, as   
-            returned by ZGEQLF in the last k columns of its array   
-            argument A.   
-            On exit, the m-by-n matrix Q.   
-
-    LDA     (input) INTEGER   
-            The first dimension of the array A. LDA >= max(1,M).   
-
-    TAU     (input) COMPLEX*16 array, dimension (K)   
-            TAU(i) must contain the scalar factor of the elementary   
-            reflector H(i), as returned by ZGEQLF.   
-
-    WORK    (workspace) COMPLEX*16 array, dimension (N)   
-
-    INFO    (output) INTEGER   
-            = 0: successful exit   
-            < 0: if INFO = -i, the i-th argument has an illegal value   
-
-    =====================================================================   
-
-
-       Test the input arguments   
-
-       Parameter adjustments */
-    /* Table of constant values */
-    static integer c__1 = 1;
-    
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    int a_dim1, a_offset, i__1, i__2, i__3;
     doublecomplex z__1;
+
     /* Local variables */
-    static integer i__, j, l;
-    extern /* Subroutine */ int zscal_(integer *, doublecomplex *, 
-	    doublecomplex *, integer *), zlarf_(char *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *, doublecomplex *);
-    static integer ii;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-#define a_subscr(a_1,a_2) (a_2)*a_dim1 + a_1
-#define a_ref(a_1,a_2) a[a_subscr(a_1,a_2)]
+    int i__, j, l, ii;
+    extern  int zscal_(int *, doublecomplex *, 
+	    doublecomplex *, int *), zlarf_(char *, int *, int *, 
+	    doublecomplex *, int *, doublecomplex *, doublecomplex *, 
+	    int *, doublecomplex *), xerbla_(char *, int *);
 
 
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZUNG2L generates an m by n complex matrix Q with orthonormal columns, */
+/*  which is defined as the last n columns of a product of k elementary */
+/*  reflectors of order m */
+
+/*        Q  =  H(k) . . . H(2) H(1) */
+
+/*  as returned by ZGEQLF. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  M       (input) INTEGER */
+/*          The number of rows of the matrix Q. M >= 0. */
+
+/*  N       (input) INTEGER */
+/*          The number of columns of the matrix Q. M >= N >= 0. */
+
+/*  K       (input) INTEGER */
+/*          The number of elementary reflectors whose product defines the */
+/*          matrix Q. N >= K >= 0. */
+
+/*  A       (input/output) COMPLEX*16 array, dimension (LDA,N) */
+/*          On entry, the (n-k+i)-th column must contain the vector which */
+/*          defines the elementary reflector H(i), for i = 1,2,...,k, as */
+/*          returned by ZGEQLF in the last k columns of its array */
+/*          argument A. */
+/*          On exit, the m-by-n matrix Q. */
+
+/*  LDA     (input) INTEGER */
+/*          The first dimension of the array A. LDA >= MAX(1,M). */
+
+/*  TAU     (input) COMPLEX*16 array, dimension (K) */
+/*          TAU(i) must contain the scalar factor of the elementary */
+/*          reflector H(i), as returned by ZGEQLF. */
+
+/*  WORK    (workspace) COMPLEX*16 array, dimension (N) */
+
+/*  INFO    (output) INTEGER */
+/*          = 0: successful exit */
+/*          < 0: if INFO = -i, the i-th argument has an illegal value */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input arguments */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
     --tau;
     --work;
@@ -93,7 +114,7 @@
 	*info = -2;
     } else if (*k < 0 || *k > *n) {
 	*info = -3;
-    } else if (*lda < max(1,*m)) {
+    } else if (*lda < MAX(1,*m)) {
 	*info = -5;
     }
     if (*info != 0) {
@@ -114,11 +135,11 @@
     for (j = 1; j <= i__1; ++j) {
 	i__2 = *m;
 	for (l = 1; l <= i__2; ++l) {
-	    i__3 = a_subscr(l, j);
+	    i__3 = l + j * a_dim1;
 	    a[i__3].r = 0., a[i__3].i = 0.;
 /* L10: */
 	}
-	i__2 = a_subscr(*m - *n + j, j);
+	i__2 = *m - *n + j + j * a_dim1;
 	a[i__2].r = 1., a[i__2].i = 0.;
 /* L20: */
     }
@@ -129,17 +150,17 @@
 
 /*        Apply H(i) to A(1:m-k+i,1:n-k+i) from the left */
 
-	i__2 = a_subscr(*m - *n + ii, ii);
+	i__2 = *m - *n + ii + ii * a_dim1;
 	a[i__2].r = 1., a[i__2].i = 0.;
 	i__2 = *m - *n + ii;
 	i__3 = ii - 1;
-	zlarf_("Left", &i__2, &i__3, &a_ref(1, ii), &c__1, &tau[i__], &a[
-		a_offset], lda, &work[1]);
+	zlarf_("Left", &i__2, &i__3, &a[ii * a_dim1 + 1], &c__1, &tau[i__], &
+		a[a_offset], lda, &work[1]);
 	i__2 = *m - *n + ii - 1;
 	i__3 = i__;
 	z__1.r = -tau[i__3].r, z__1.i = -tau[i__3].i;
-	zscal_(&i__2, &z__1, &a_ref(1, ii), &c__1);
-	i__2 = a_subscr(*m - *n + ii, ii);
+	zscal_(&i__2, &z__1, &a[ii * a_dim1 + 1], &c__1);
+	i__2 = *m - *n + ii + ii * a_dim1;
 	i__3 = i__;
 	z__1.r = 1. - tau[i__3].r, z__1.i = 0. - tau[i__3].i;
 	a[i__2].r = z__1.r, a[i__2].i = z__1.i;
@@ -148,7 +169,7 @@
 
 	i__2 = *m;
 	for (l = *m - *n + ii + 1; l <= i__2; ++l) {
-	    i__3 = a_subscr(l, ii);
+	    i__3 = l + ii * a_dim1;
 	    a[i__3].r = 0., a[i__3].i = 0.;
 /* L30: */
 	}
@@ -159,8 +180,3 @@
 /*     End of ZUNG2L */
 
 } /* zung2l_ */
-
-#undef a_ref
-#undef a_subscr
-
-

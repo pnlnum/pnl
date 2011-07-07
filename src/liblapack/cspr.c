@@ -1,98 +1,121 @@
+/* cspr.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int cspr_(char *uplo, integer *n, complex *alpha, complex *x,
-	 integer *incx, complex *ap)
+ int cspr_(char *uplo, int *n, complex *alpha, complex *x, 
+	 int *incx, complex *ap)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1992   
-
-
-    Purpose   
-    =======   
-
-    CSPR    performs the symmetric rank 1 operation   
-
-       A := alpha*x*conjg( x' ) + A,   
-
-    where alpha is a complex scalar, x is an n element vector and A is an   
-    n by n symmetric matrix, supplied in packed form.   
-
-    Arguments   
-    ==========   
-
-    UPLO   - CHARACTER*1   
-             On entry, UPLO specifies whether the upper or lower   
-             triangular part of the matrix A is supplied in the packed   
-             array AP as follows:   
-
-                UPLO = 'U' or 'u'   The upper triangular part of A is   
-                                    supplied in AP.   
-
-                UPLO = 'L' or 'l'   The lower triangular part of A is   
-                                    supplied in AP.   
-
-             Unchanged on exit.   
-
-    N      - INTEGER   
-             On entry, N specifies the order of the matrix A.   
-             N must be at least zero.   
-             Unchanged on exit.   
-
-    ALPHA  - COMPLEX   
-             On entry, ALPHA specifies the scalar alpha.   
-             Unchanged on exit.   
-
-    X      - COMPLEX array, dimension at least   
-             ( 1 + ( N - 1 )*abs( INCX ) ).   
-             Before entry, the incremented array X must contain the N-   
-             element vector x.   
-             Unchanged on exit.   
-
-    INCX   - INTEGER   
-             On entry, INCX specifies the increment for the elements of   
-             X. INCX must not be zero.   
-             Unchanged on exit.   
-
-    AP     - COMPLEX array, dimension at least   
-             ( ( N*( N + 1 ) )/2 ).   
-             Before entry, with  UPLO = 'U' or 'u', the array AP must   
-             contain the upper triangular part of the symmetric matrix   
-             packed sequentially, column by column, so that AP( 1 )   
-             contains a( 1, 1 ), AP( 2 ) and AP( 3 ) contain a( 1, 2 )   
-             and a( 2, 2 ) respectively, and so on. On exit, the array   
-             AP is overwritten by the upper triangular part of the   
-             updated matrix.   
-             Before entry, with UPLO = 'L' or 'l', the array AP must   
-             contain the lower triangular part of the symmetric matrix   
-             packed sequentially, column by column, so that AP( 1 )   
-             contains a( 1, 1 ), AP( 2 ) and AP( 3 ) contain a( 2, 1 )   
-             and a( 3, 1 ) respectively, and so on. On exit, the array   
-             AP is overwritten by the lower triangular part of the   
-             updated matrix.   
-             Note that the imaginary parts of the diagonal elements need   
-             not be set, they are assumed to be zero, and on exit they   
-             are set to zero.   
-
-   =====================================================================   
-
-
-       Test the input parameters.   
-
-       Parameter adjustments */
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4, i__5;
+    int i__1, i__2, i__3, i__4, i__5;
     complex q__1, q__2;
-    /* Local variables */
-    static integer info;
-    static complex temp;
-    static integer i__, j, k;
-    extern logical lsame_(char *, char *);
-    static integer kk, ix, jx, kx;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
 
+    /* Local variables */
+    int i__, j, k, kk, ix, jx, kx, info;
+    complex temp;
+    extern int lsame_(char *, char *);
+    extern  int xerbla_(char *, int *);
+
+
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CSPR    performs the symmetric rank 1 operation */
+
+/*     A := alpha*x*conjg( x' ) + A, */
+
+/*  where alpha is a complex scalar, x is an n element vector and A is an */
+/*  n by n symmetric matrix, supplied in packed form. */
+
+/*  Arguments */
+/*  ========== */
+
+/*  UPLO     (input) CHARACTER*1 */
+/*           On entry, UPLO specifies whether the upper or lower */
+/*           triangular part of the matrix A is supplied in the packed */
+/*           array AP as follows: */
+
+/*              UPLO = 'U' or 'u'   The upper triangular part of A is */
+/*                                  supplied in AP. */
+
+/*              UPLO = 'L' or 'l'   The lower triangular part of A is */
+/*                                  supplied in AP. */
+
+/*           Unchanged on exit. */
+
+/*  N        (input) INTEGER */
+/*           On entry, N specifies the order of the matrix A. */
+/*           N must be at least zero. */
+/*           Unchanged on exit. */
+
+/*  ALPHA    (input) COMPLEX */
+/*           On entry, ALPHA specifies the scalar alpha. */
+/*           Unchanged on exit. */
+
+/*  X        (input) COMPLEX array, dimension at least */
+/*           ( 1 + ( N - 1 )*ABS( INCX ) ). */
+/*           Before entry, the incremented array X must contain the N- */
+/*           element vector x. */
+/*           Unchanged on exit. */
+
+/*  INCX     (input) INTEGER */
+/*           On entry, INCX specifies the increment for the elements of */
+/*           X. INCX must not be zero. */
+/*           Unchanged on exit. */
+
+/*  AP       (input/output) COMPLEX array, dimension at least */
+/*           ( ( N*( N + 1 ) )/2 ). */
+/*           Before entry, with  UPLO = 'U' or 'u', the array AP must */
+/*           contain the upper triangular part of the symmetric matrix */
+/*           packed sequentially, column by column, so that AP( 1 ) */
+/*           contains a( 1, 1 ), AP( 2 ) and AP( 3 ) contain a( 1, 2 ) */
+/*           and a( 2, 2 ) respectively, and so on. On exit, the array */
+/*           AP is overwritten by the upper triangular part of the */
+/*           updated matrix. */
+/*           Before entry, with UPLO = 'L' or 'l', the array AP must */
+/*           contain the lower triangular part of the symmetric matrix */
+/*           packed sequentially, column by column, so that AP( 1 ) */
+/*           contains a( 1, 1 ), AP( 2 ) and AP( 3 ) contain a( 2, 1 ) */
+/*           and a( 3, 1 ) respectively, and so on. On exit, the array */
+/*           AP is overwritten by the lower triangular part of the */
+/*           updated matrix. */
+/*           Note that the imaginary parts of the diagonal elements need */
+/*           not be set, they are assumed to be zero, and on exit they */
+/*           are set to zero. */
+
+/* ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input parameters. */
+
+    /* Parameter adjustments */
     --ap;
     --x;
 
@@ -124,8 +147,8 @@
 	kx = 1;
     }
 
-/*     Start the operations. In this version the elements of the array AP   
-       are accessed sequentially with one pass through AP. */
+/*     Start the operations. In this version the elements of the array AP */
+/*     are accessed sequentially with one pass through AP. */
 
     kk = 1;
     if (lsame_(uplo, "U")) {
@@ -313,4 +336,3 @@
 /*     End of CSPR */
 
 } /* cspr_ */
-

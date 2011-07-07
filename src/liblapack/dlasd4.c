@@ -1,141 +1,164 @@
+/* dlasd4.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-/*  -- translated by f2c (version 19990503).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
+		http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int dlasd4_(integer *n, integer *i__, doublereal *d__, 
-	doublereal *z__, doublereal *delta, doublereal *rho, doublereal *
-	sigma, doublereal *work, integer *info)
+ int dlasd4_(int *n, int *i__, double *d__, 
+	double *z__, double *delta, double *rho, double *
+	sigma, double *work, int *info)
 {
     /* System generated locals */
-    integer i__1;
-    doublereal d__1;
+    int i__1;
+    double d__1;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
 
     /* Local variables */
-    static doublereal dphi, dpsi;
-    static integer iter;
-    static doublereal temp, prew, sg2lb, sg2ub, temp1, temp2, a, b, c__;
-    static integer j;
-    static doublereal w, dtiim, delsq, dtiip;
-    static integer niter;
-    static doublereal dtisq;
-    static logical swtch;
-    static doublereal dtnsq;
-    extern /* Subroutine */ int dlaed6_(integer *, logical *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, integer *)
-	    , dlasd5_(integer *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    static doublereal delsq2, dd[3], dtnsq1;
-    static logical swtch3;
-    static integer ii;
-    extern doublereal dlamch_(char *);
-    static doublereal dw, zz[3];
-    static logical orgati;
-    static doublereal erretm, dtipsq, rhoinv;
-    static integer ip1;
-    static doublereal eta, phi, eps, tau, psi;
-    static integer iim1, iip1;
+    double a, b, c__;
+    int j;
+    double w, dd[3];
+    int ii;
+    double dw, zz[3];
+    int ip1;
+    double eta, phi, eps, tau, psi;
+    int iim1, iip1;
+    double dphi, dpsi;
+    int iter;
+    double temp, prew, sg2lb, sg2ub, temp1, temp2, dtiim, delsq, dtiip;
+    int niter;
+    double dtisq;
+    int swtch;
+    double dtnsq;
+    extern  int dlaed6_(int *, int *, double *, 
+	    double *, double *, double *, double *, int *)
+	    , dlasd5_(int *, double *, double *, double *, 
+	    double *, double *, double *);
+    double delsq2, dtnsq1;
+    int swtch3;
+    extern double dlamch_(char *);
+    int orgati;
+    double erretm, dtipsq, rhoinv;
 
 
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Oak Ridge National Lab, Argonne National Lab,   
-       Courant Institute, NAG Ltd., and Rice University   
-       October 31, 1999   
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
 
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
 
-    Purpose   
-    =======   
+/*  Purpose */
+/*  ======= */
 
-    This subroutine computes the square root of the I-th updated   
-    eigenvalue of a positive symmetric rank-one modification to   
-    a positive diagonal matrix whose entries are given as the squares   
-    of the corresponding entries in the array d, and that   
+/*  This subroutine computes the square root of the I-th updated */
+/*  eigenvalue of a positive symmetric rank-one modification to */
+/*  a positive diagonal matrix whose entries are given as the squares */
+/*  of the corresponding entries in the array d, and that */
 
-           0 <= D(i) < D(j)  for  i < j   
+/*         0 <= D(i) < D(j)  for  i < j */
 
-    and that RHO > 0. This is arranged by the calling routine, and is   
-    no loss in generality.  The rank-one modified system is thus   
+/*  and that RHO > 0. This is arranged by the calling routine, and is */
+/*  no loss in generality.  The rank-one modified system is thus */
 
-           diag( D ) * diag( D ) +  RHO *  Z * Z_transpose.   
+/*         diag( D ) * diag( D ) +  RHO *  Z * Z_transpose. */
 
-    where we assume the Euclidean norm of Z is 1.   
+/*  where we assume the Euclidean norm of Z is 1. */
 
-    The method consists of approximating the rational functions in the   
-    secular equation by simpler interpolating rational functions.   
+/*  The method consists of approximating the rational functions in the */
+/*  secular equation by simpler interpolating rational functions. */
 
-    Arguments   
-    =========   
+/*  Arguments */
+/*  ========= */
 
-    N      (input) INTEGER   
-           The length of all arrays.   
+/*  N      (input) INTEGER */
+/*         The length of all arrays. */
 
-    I      (input) INTEGER   
-           The index of the eigenvalue to be computed.  1 <= I <= N.   
+/*  I      (input) INTEGER */
+/*         The index of the eigenvalue to be computed.  1 <= I <= N. */
 
-    D      (input) DOUBLE PRECISION array, dimension ( N )   
-           The original eigenvalues.  It is assumed that they are in   
-           order, 0 <= D(I) < D(J)  for I < J.   
+/*  D      (input) DOUBLE PRECISION array, dimension ( N ) */
+/*         The original eigenvalues.  It is assumed that they are in */
+/*         order, 0 <= D(I) < D(J)  for I < J. */
 
-    Z      (input) DOUBLE PRECISION array, dimension ( N )   
-           The components of the updating vector.   
+/*  Z      (input) DOUBLE PRECISION array, dimension ( N ) */
+/*         The components of the updating vector. */
 
-    DELTA  (output) DOUBLE PRECISION array, dimension ( N )   
-           If N .ne. 1, DELTA contains (D(j) - sigma_I) in its  j-th   
-           component.  If N = 1, then DELTA(1) = 1.  The vector DELTA   
-           contains the information necessary to construct the   
-           (singular) eigenvectors.   
+/*  DELTA  (output) DOUBLE PRECISION array, dimension ( N ) */
+/*         If N .ne. 1, DELTA contains (D(j) - sigma_I) in its  j-th */
+/*         component.  If N = 1, then DELTA(1) = 1.  The vector DELTA */
+/*         contains the information necessary to construct the */
+/*         (singular) eigenvectors. */
 
-    RHO    (input) DOUBLE PRECISION   
-           The scalar in the symmetric updating formula.   
+/*  RHO    (input) DOUBLE PRECISION */
+/*         The scalar in the symmetric updating formula. */
 
-    SIGMA  (output) DOUBLE PRECISION   
-           The computed lambda_I, the I-th updated eigenvalue.   
+/*  SIGMA  (output) DOUBLE PRECISION */
+/*         The computed sigma_I, the I-th updated eigenvalue. */
 
-    WORK   (workspace) DOUBLE PRECISION array, dimension ( N )   
-           If N .ne. 1, WORK contains (D(j) + sigma_I) in its  j-th   
-           component.  If N = 1, then WORK( 1 ) = 1.   
+/*  WORK   (workspace) DOUBLE PRECISION array, dimension ( N ) */
+/*         If N .ne. 1, WORK contains (D(j) + sigma_I) in its  j-th */
+/*         component.  If N = 1, then WORK( 1 ) = 1. */
 
-    INFO   (output) INTEGER   
-           = 0:  successful exit   
-           > 0:  if INFO = 1, the updating process failed.   
+/*  INFO   (output) INTEGER */
+/*         = 0:  successful exit */
+/*         > 0:  if INFO = 1, the updating process failed. */
 
-    Internal Parameters   
-    ===================   
+/*  Internal Parameters */
+/*  =================== */
 
-    Logical variable ORGATI (origin-at-i?) is used for distinguishing   
-    whether D(i) or D(i+1) is treated as the origin.   
+/*  Logical variable ORGATI (origin-at-i?) is used for distinguishing */
+/*  whether D(i) or D(i+1) is treated as the origin. */
 
-              ORGATI = .true.    origin at i   
-              ORGATI = .false.   origin at i+1   
+/*            ORGATI = .true.    origin at i */
+/*            ORGATI = .false.   origin at i+1 */
 
-    Logical variable SWTCH3 (switch-for-3-poles?) is for noting   
-    if we are working with THREE poles!   
+/*  Logical variable SWTCH3 (switch-for-3-poles?) is for noting */
+/*  if we are working with THREE poles! */
 
-    MAXIT is the maximum number of iterations allowed for each   
-    eigenvalue.   
+/*  MAXIT is the maximum number of iterations allowed for each */
+/*  eigenvalue. */
 
-    Further Details   
-    ===============   
+/*  Further Details */
+/*  =============== */
 
-    Based on contributions by   
-       Ren-Cang Li, Computer Science Division, University of California   
-       at Berkeley, USA   
+/*  Based on contributions by */
+/*     Ren-Cang Li, Computer Science Division, University of California */
+/*     at Berkeley, USA */
 
-    =====================================================================   
+/*  ===================================================================== */
 
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Local Arrays .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
 
-       Since this routine is called in an inner loop, we do no argument   
-       checking.   
+/*     Since this routine is called in an inner loop, we do no argument */
+/*     checking. */
 
-       Quick return for N=1 and 2.   
+/*     Quick return for N=1 and 2. */
 
-       Parameter adjustments */
+    /* Parameter adjustments */
     --work;
     --delta;
     --z__;
@@ -175,8 +198,8 @@
 
 	temp = *rho / 2.;
 
-/*        If ||Z||_2 is not one, then TEMP should be set to   
-          RHO * ||Z||_2^2 / TWO */
+/*        If ||Z||_2 is not one, then TEMP should be set to */
+/*        RHO * ||Z||_2^2 / TWO */
 
 	temp1 = temp / (d__[*n] + sqrt(d__[*n] * d__[*n] + temp));
 	i__1 = *n;
@@ -203,8 +226,8 @@
 		    n] - d__[*n - 1] + *rho / (d__[*n] + temp1))) + z__[*n] * 
 		    z__[*n] / *rho;
 
-/*           The following TAU is to approximate   
-             SIGMA_n^2 - D( N )*D( N ) */
+/*           The following TAU is to approximate */
+/*           SIGMA_n^2 - D( N )*D( N ) */
 
 	    if (c__ <= temp) {
 		tau = *rho;
@@ -220,16 +243,16 @@
 		}
 	    }
 
-/*           It can be proved that   
-                 D(N)^2+RHO/2 <= SIGMA_n^2 < D(N)^2+TAU <= D(N)^2+RHO */
+/*           It can be proved that */
+/*               D(N)^2+RHO/2 <= SIGMA_n^2 < D(N)^2+TAU <= D(N)^2+RHO */
 
 	} else {
 	    delsq = (d__[*n] - d__[*n - 1]) * (d__[*n] + d__[*n - 1]);
 	    a = -c__ * delsq + z__[*n - 1] * z__[*n - 1] + z__[*n] * z__[*n];
 	    b = z__[*n] * z__[*n] * delsq;
 
-/*           The following TAU is to approximate   
-             SIGMA_n^2 - D( N )*D( N ) */
+/*           The following TAU is to approximate */
+/*           SIGMA_n^2 - D( N )*D( N ) */
 
 	    if (a < 0.) {
 		tau = b * 2. / (sqrt(a * a + b * 4. * c__) - a);
@@ -237,8 +260,8 @@
 		tau = (a + sqrt(a * a + b * 4. * c__)) / (c__ * 2.);
 	    }
 
-/*           It can be proved that   
-             D(N)^2 < D(N)^2+TAU < SIGMA(N)^2 < D(N)^2+RHO/2 */
+/*           It can be proved that */
+/*           D(N)^2 < D(N)^2+TAU < SIGMA(N)^2 < D(N)^2+RHO/2 */
 
 	}
 
@@ -267,21 +290,21 @@
 	    erretm += psi;
 /* L40: */
 	}
-	erretm = abs(erretm);
+	erretm = ABS(erretm);
 
 /*        Evaluate PHI and the derivative DPHI */
 
 	temp = z__[*n] / (delta[*n] * work[*n]);
 	phi = z__[*n] * temp;
 	dphi = temp * temp;
-	erretm = (-phi - psi) * 8. + erretm - phi + rhoinv + abs(tau) * (dpsi 
+	erretm = (-phi - psi) * 8. + erretm - phi + rhoinv + ABS(tau) * (dpsi 
 		+ dphi);
 
 	w = rhoinv + phi + psi;
 
 /*        Test for convergence */
 
-	if (abs(w) <= eps * erretm) {
+	if (ABS(w) <= eps * erretm) {
 	    goto L240;
 	}
 
@@ -294,23 +317,23 @@
 	a = (dtnsq + dtnsq1) * w - dtnsq * dtnsq1 * (dpsi + dphi);
 	b = dtnsq * dtnsq1 * w;
 	if (c__ < 0.) {
-	    c__ = abs(c__);
+	    c__ = ABS(c__);
 	}
 	if (c__ == 0.) {
 	    eta = *rho - *sigma * *sigma;
 	} else if (a >= 0.) {
-	    eta = (a + sqrt((d__1 = a * a - b * 4. * c__, abs(d__1)))) / (c__ 
+	    eta = (a + sqrt((d__1 = a * a - b * 4. * c__, ABS(d__1)))) / (c__ 
 		    * 2.);
 	} else {
-	    eta = b * 2. / (a - sqrt((d__1 = a * a - b * 4. * c__, abs(d__1)))
+	    eta = b * 2. / (a - sqrt((d__1 = a * a - b * 4. * c__, ABS(d__1)))
 		    );
 	}
 
-/*        Note, eta should be positive if w is negative, and   
-          eta should be negative otherwise. However,   
-          if for some reason caused by roundoff, eta*w > 0,   
-          we simply use one Newton step instead. This way   
-          will guarantee eta*w < 0. */
+/*        Note, eta should be positive if w is negative, and */
+/*        eta should be negative otherwise. However, */
+/*        if for some reason caused by roundoff, eta*w > 0, */
+/*        we simply use one Newton step instead. This way */
+/*        will guarantee eta*w < 0. */
 
 	if (w * eta > 0.) {
 	    eta = -w / (dpsi + dphi);
@@ -344,14 +367,14 @@
 	    erretm += psi;
 /* L60: */
 	}
-	erretm = abs(erretm);
+	erretm = ABS(erretm);
 
 /*        Evaluate PHI and the derivative DPHI */
 
 	temp = z__[*n] / (work[*n] * delta[*n]);
 	phi = z__[*n] * temp;
 	dphi = temp * temp;
-	erretm = (-phi - psi) * 8. + erretm - phi + rhoinv + abs(tau) * (dpsi 
+	erretm = (-phi - psi) * 8. + erretm - phi + rhoinv + ABS(tau) * (dpsi 
 		+ dphi);
 
 	w = rhoinv + phi + psi;
@@ -364,7 +387,7 @@
 
 /*           Test for convergence */
 
-	    if (abs(w) <= eps * erretm) {
+	    if (ABS(w) <= eps * erretm) {
 		goto L240;
 	    }
 
@@ -376,18 +399,18 @@
 	    a = (dtnsq + dtnsq1) * w - dtnsq1 * dtnsq * (dpsi + dphi);
 	    b = dtnsq1 * dtnsq * w;
 	    if (a >= 0.) {
-		eta = (a + sqrt((d__1 = a * a - b * 4. * c__, abs(d__1)))) / (
+		eta = (a + sqrt((d__1 = a * a - b * 4. * c__, ABS(d__1)))) / (
 			c__ * 2.);
 	    } else {
-		eta = b * 2. / (a - sqrt((d__1 = a * a - b * 4. * c__, abs(
+		eta = b * 2. / (a - sqrt((d__1 = a * a - b * 4. * c__, ABS(
 			d__1))));
 	    }
 
-/*           Note, eta should be positive if w is negative, and   
-             eta should be negative otherwise. However,   
-             if for some reason caused by roundoff, eta*w > 0,   
-             we simply use one Newton step instead. This way   
-             will guarantee eta*w < 0. */
+/*           Note, eta should be positive if w is negative, and */
+/*           eta should be negative otherwise. However, */
+/*           if for some reason caused by roundoff, eta*w > 0, */
+/*           we simply use one Newton step instead. This way */
+/*           will guarantee eta*w < 0. */
 
 	    if (w * eta > 0.) {
 		eta = -w / (dpsi + dphi);
@@ -421,14 +444,14 @@
 		erretm += psi;
 /* L80: */
 	    }
-	    erretm = abs(erretm);
+	    erretm = ABS(erretm);
 
 /*           Evaluate PHI and the derivative DPHI */
 
 	    temp = z__[*n] / (work[*n] * delta[*n]);
 	    phi = z__[*n] * temp;
 	    dphi = temp * temp;
-	    erretm = (-phi - psi) * 8. + erretm - phi + rhoinv + abs(tau) * (
+	    erretm = (-phi - psi) * 8. + erretm - phi + rhoinv + ABS(tau) * (
 		    dpsi + dphi);
 
 	    w = rhoinv + phi + psi;
@@ -480,53 +503,53 @@
 
 	if (w > 0.) {
 
-/*           d(i)^2 < the ith sigma^2 < (d(i)^2+d(i+1)^2)/2   
+/*           d(i)^2 < the ith sigma^2 < (d(i)^2+d(i+1)^2)/2 */
 
-             We choose d(i) as origin. */
+/*           We choose d(i) as origin. */
 
-	    orgati = TRUE_;
+	    orgati = TRUE;
 	    sg2lb = 0.;
 	    sg2ub = delsq2;
 	    a = c__ * delsq + z__[*i__] * z__[*i__] + z__[ip1] * z__[ip1];
 	    b = z__[*i__] * z__[*i__] * delsq;
 	    if (a > 0.) {
-		tau = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, abs(
+		tau = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, ABS(
 			d__1))));
 	    } else {
-		tau = (a - sqrt((d__1 = a * a - b * 4. * c__, abs(d__1)))) / (
+		tau = (a - sqrt((d__1 = a * a - b * 4. * c__, ABS(d__1)))) / (
 			c__ * 2.);
 	    }
 
-/*           TAU now is an estimation of SIGMA^2 - D( I )^2. The   
-             following, however, is the corresponding estimation of   
-             SIGMA - D( I ). */
+/*           TAU now is an estimation of SIGMA^2 - D( I )^2. The */
+/*           following, however, is the corresponding estimation of */
+/*           SIGMA - D( I ). */
 
 	    eta = tau / (d__[*i__] + sqrt(d__[*i__] * d__[*i__] + tau));
 	} else {
 
-/*           (d(i)^2+d(i+1)^2)/2 <= the ith sigma^2 < d(i+1)^2/2   
+/*           (d(i)^2+d(i+1)^2)/2 <= the ith sigma^2 < d(i+1)^2/2 */
 
-             We choose d(i+1) as origin. */
+/*           We choose d(i+1) as origin. */
 
-	    orgati = FALSE_;
+	    orgati = FALSE;
 	    sg2lb = -delsq2;
 	    sg2ub = 0.;
 	    a = c__ * delsq - z__[*i__] * z__[*i__] - z__[ip1] * z__[ip1];
 	    b = z__[ip1] * z__[ip1] * delsq;
 	    if (a < 0.) {
-		tau = b * 2. / (a - sqrt((d__1 = a * a + b * 4. * c__, abs(
+		tau = b * 2. / (a - sqrt((d__1 = a * a + b * 4. * c__, ABS(
 			d__1))));
 	    } else {
-		tau = -(a + sqrt((d__1 = a * a + b * 4. * c__, abs(d__1)))) / 
+		tau = -(a + sqrt((d__1 = a * a + b * 4. * c__, ABS(d__1)))) / 
 			(c__ * 2.);
 	    }
 
-/*           TAU now is an estimation of SIGMA^2 - D( IP1 )^2. The   
-             following, however, is the corresponding estimation of   
-             SIGMA - D( IP1 ). */
+/*           TAU now is an estimation of SIGMA^2 - D( IP1 )^2. The */
+/*           following, however, is the corresponding estimation of */
+/*           SIGMA - D( IP1 ). */
 
 	    eta = tau / (d__[ip1] + sqrt((d__1 = d__[ip1] * d__[ip1] + tau, 
-		    abs(d__1))));
+		    ABS(d__1))));
 	}
 
 	if (orgati) {
@@ -564,7 +587,7 @@
 	    erretm += psi;
 /* L150: */
 	}
-	erretm = abs(erretm);
+	erretm = ABS(erretm);
 
 /*        Evaluate PHI and the derivative DPHI */
 
@@ -581,40 +604,40 @@
 
 	w = rhoinv + phi + psi;
 
-/*        W is the value of the secular function with   
-          its ii-th element removed. */
+/*        W is the value of the secular function with */
+/*        its ii-th element removed. */
 
-	swtch3 = FALSE_;
+	swtch3 = FALSE;
 	if (orgati) {
 	    if (w < 0.) {
-		swtch3 = TRUE_;
+		swtch3 = TRUE;
 	    }
 	} else {
 	    if (w > 0.) {
-		swtch3 = TRUE_;
+		swtch3 = TRUE;
 	    }
 	}
 	if (ii == 1 || ii == *n) {
-	    swtch3 = FALSE_;
+	    swtch3 = FALSE;
 	}
 
 	temp = z__[ii] / (work[ii] * delta[ii]);
 	dw = dpsi + dphi + temp * temp;
 	temp = z__[ii] * temp;
 	w += temp;
-	erretm = (phi - psi) * 8. + erretm + rhoinv * 2. + abs(temp) * 3. + 
-		abs(tau) * dw;
+	erretm = (phi - psi) * 8. + erretm + rhoinv * 2. + ABS(temp) * 3. + 
+		ABS(tau) * dw;
 
 /*        Test for convergence */
 
-	if (abs(w) <= eps * erretm) {
+	if (ABS(w) <= eps * erretm) {
 	    goto L240;
 	}
 
 	if (w <= 0.) {
-	    sg2lb = max(sg2lb,tau);
+	    sg2lb = MAX(sg2lb,tau);
 	} else {
-	    sg2ub = min(sg2ub,tau);
+	    sg2ub = MIN(sg2ub,tau);
 	}
 
 /*        Calculate the new step */
@@ -646,10 +669,10 @@
 		}
 		eta = b / a;
 	    } else if (a <= 0.) {
-		eta = (a - sqrt((d__1 = a * a - b * 4. * c__, abs(d__1)))) / (
+		eta = (a - sqrt((d__1 = a * a - b * 4. * c__, ABS(d__1)))) / (
 			c__ * 2.);
 	    } else {
-		eta = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, abs(
+		eta = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, ABS(
 			d__1))));
 	    }
 	} else {
@@ -692,11 +715,11 @@
 	    }
 	}
 
-/*        Note, eta should be positive if w is negative, and   
-          eta should be negative otherwise. However,   
-          if for some reason caused by roundoff, eta*w > 0,   
-          we simply use one Newton step instead. This way   
-          will guarantee eta*w < 0. */
+/*        Note, eta should be positive if w is negative, and */
+/*        eta should be negative otherwise. However, */
+/*        if for some reason caused by roundoff, eta*w > 0, */
+/*        we simply use one Newton step instead. This way */
+/*        will guarantee eta*w < 0. */
 
 	if (w * eta >= 0.) {
 	    eta = -w / dw;
@@ -742,7 +765,7 @@
 	    erretm += psi;
 /* L180: */
 	}
-	erretm = abs(erretm);
+	erretm = ABS(erretm);
 
 /*        Evaluate PHI and the derivative DPHI */
 
@@ -761,23 +784,23 @@
 	dw = dpsi + dphi + temp * temp;
 	temp = z__[ii] * temp;
 	w = rhoinv + phi + psi + temp;
-	erretm = (phi - psi) * 8. + erretm + rhoinv * 2. + abs(temp) * 3. + 
-		abs(tau) * dw;
+	erretm = (phi - psi) * 8. + erretm + rhoinv * 2. + ABS(temp) * 3. + 
+		ABS(tau) * dw;
 
 	if (w <= 0.) {
-	    sg2lb = max(sg2lb,tau);
+	    sg2lb = MAX(sg2lb,tau);
 	} else {
-	    sg2ub = min(sg2ub,tau);
+	    sg2ub = MIN(sg2ub,tau);
 	}
 
-	swtch = FALSE_;
+	swtch = FALSE;
 	if (orgati) {
-	    if (-w > abs(prew) / 10.) {
-		swtch = TRUE_;
+	    if (-w > ABS(prew) / 10.) {
+		swtch = TRUE;
 	    }
 	} else {
-	    if (w > abs(prew) / 10.) {
-		swtch = TRUE_;
+	    if (w > ABS(prew) / 10.) {
+		swtch = TRUE;
 	    }
 	}
 
@@ -789,7 +812,7 @@
 
 /*           Test for convergence */
 
-	    if (abs(w) <= eps * erretm) {
+	    if (ABS(w) <= eps * erretm) {
 		goto L240;
 	    }
 
@@ -835,11 +858,11 @@
 		    }
 		    eta = b / a;
 		} else if (a <= 0.) {
-		    eta = (a - sqrt((d__1 = a * a - b * 4. * c__, abs(d__1))))
+		    eta = (a - sqrt((d__1 = a * a - b * 4. * c__, ABS(d__1))))
 			     / (c__ * 2.);
 		} else {
 		    eta = b * 2. / (a + sqrt((d__1 = a * a - b * 4. * c__, 
-			    abs(d__1))));
+			    ABS(d__1))));
 		}
 	    } else {
 
@@ -888,11 +911,11 @@
 		}
 	    }
 
-/*           Note, eta should be positive if w is negative, and   
-             eta should be negative otherwise. However,   
-             if for some reason caused by roundoff, eta*w > 0,   
-             we simply use one Newton step instead. This way   
-             will guarantee eta*w < 0. */
+/*           Note, eta should be positive if w is negative, and */
+/*           eta should be negative otherwise. However, */
+/*           if for some reason caused by roundoff, eta*w > 0, */
+/*           we simply use one Newton step instead. This way */
+/*           will guarantee eta*w < 0. */
 
 	    if (w * eta >= 0.) {
 		eta = -w / dw;
@@ -938,7 +961,7 @@
 		erretm += psi;
 /* L210: */
 	    }
-	    erretm = abs(erretm);
+	    erretm = ABS(erretm);
 
 /*           Evaluate PHI and the derivative DPHI */
 
@@ -957,16 +980,16 @@
 	    dw = dpsi + dphi + temp * temp;
 	    temp = z__[ii] * temp;
 	    w = rhoinv + phi + psi + temp;
-	    erretm = (phi - psi) * 8. + erretm + rhoinv * 2. + abs(temp) * 3. 
-		    + abs(tau) * dw;
-	    if (w * prew > 0. && abs(w) > abs(prew) / 10.) {
+	    erretm = (phi - psi) * 8. + erretm + rhoinv * 2. + ABS(temp) * 3. 
+		    + ABS(tau) * dw;
+	    if (w * prew > 0. && ABS(w) > ABS(prew) / 10.) {
 		swtch = ! swtch;
 	    }
 
 	    if (w <= 0.) {
-		sg2lb = max(sg2lb,tau);
+		sg2lb = MAX(sg2lb,tau);
 	    } else {
-		sg2ub = min(sg2ub,tau);
+		sg2ub = MIN(sg2ub,tau);
 	    }
 
 /* L230: */
@@ -984,4 +1007,3 @@ L240:
 /*     End of DLASD4 */
 
 } /* dlasd4_ */
-

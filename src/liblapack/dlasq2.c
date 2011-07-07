@@ -1,123 +1,156 @@
+/* dlasq2.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-/*  -- translated by f2c (version 19990503).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
+		http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "pnl/pnl_f2c.h"
 
 /* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__2 = 2;
-static integer c__10 = 10;
-static integer c__3 = 3;
-static integer c__4 = 4;
-static integer c__11 = 11;
+static int c__1 = 1;
+static int c__2 = 2;
+static int c__10 = 10;
+static int c__3 = 3;
+static int c__4 = 4;
+static int c__11 = 11;
 
-/* Subroutine */ int dlasq2_(integer *n, doublereal *z__, integer *info)
+ int dlasq2_(int *n, double *z__, int *info)
 {
     /* System generated locals */
-    integer i__1, i__2, i__3;
-    doublereal d__1, d__2;
+    int i__1, i__2, i__3;
+    double d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
 
     /* Local variables */
-    static logical ieee;
-    static integer nbig;
-    static doublereal dmin__, emin, emax;
-    static integer ndiv, iter;
-    static doublereal qmin, temp, qmax, zmax;
-    static integer splt;
-    static doublereal d__, e;
-    static integer k;
-    static doublereal s, t;
-    static integer nfail;
-    static doublereal desig, trace, sigma;
-    static integer iinfo, i0, i4, n0;
-    extern /* Subroutine */ int dlasq3_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *, doublereal *, doublereal *, doublereal *,
-	     integer *, integer *, integer *, logical *);
-    extern doublereal dlamch_(char *);
-    static integer pp, iwhila, iwhilb;
-    static doublereal oldemn, safmin;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int dlasrt_(char *, integer *, doublereal *, 
-	    integer *);
-    static doublereal eps, tol;
-    static integer ipn4;
-    static doublereal tol2;
+    double d__, e, g;
+    int k;
+    double s, t;
+    int i0, i4, n0;
+    double dn;
+    int pp;
+    double dn1, dn2, dee, eps, tau, tol;
+    int ipn4;
+    double tol2;
+    int ieee;
+    int nbig;
+    double dmin__, emin, emax;
+    int kmin, ndiv, iter;
+    double qmin, temp, qmax, zmax;
+    int splt;
+    double dmin1, dmin2;
+    int nfail;
+    double desig, trace, sigma;
+    int iinfo, ttype;
+    extern  int dlasq3_(int *, int *, double *, 
+	    int *, double *, double *, double *, double *, 
+	     int *, int *, int *, int *, int *, 
+	    double *, double *, double *, double *, 
+	    double *, double *, double *);
+    extern double dlamch_(char *);
+    double deemin;
+    int iwhila, iwhilb;
+    double oldemn, safmin;
+    extern  int xerbla_(char *, int *);
+    extern int ilaenv_(int *, char *, char *, int *, int *, 
+	    int *, int *);
+    extern  int dlasrt_(char *, int *, double *, 
+	    int *);
 
 
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       October 31, 1999   
+/*  -- LAPACK routine (version 3.2)                                    -- */
 
+/*  -- Contributed by Osni Marques of the Lawrence Berkeley National   -- */
+/*  -- Laboratory and Beresford Parlett of the Univ. of California at  -- */
+/*  -- Berkeley                                                        -- */
+/*  -- November 2008                                                   -- */
 
-    Purpose   
-    =======   
+/*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */
+/*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
 
-    DLASQ2 computes all the eigenvalues of the symmetric positive   
-    definite tridiagonal matrix associated with the qd array Z to high   
-    relative accuracy are computed to high relative accuracy, in the   
-    absence of denormalization, underflow and overflow.   
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
 
-    To see the relation of Z to the tridiagonal matrix, let L be a   
-    unit lower bidiagonal matrix with subdiagonals Z(2,4,6,,..) and   
-    let U be an upper bidiagonal matrix with 1's above and diagonal   
-    Z(1,3,5,,..). The tridiagonal is L*U or, if you prefer, the   
-    symmetric tridiagonal to which it is similar.   
+/*  Purpose */
+/*  ======= */
 
-    Note : DLASQ2 defines a logical variable, IEEE, which is true   
-    on machines which follow ieee-754 floating-point standard in their   
-    handling of infinities and NaNs, and false otherwise. This variable   
-    is passed to DLASQ3.   
+/*  DLASQ2 computes all the eigenvalues of the symmetric positive */
+/*  definite tridiagonal matrix associated with the qd array Z to high */
+/*  relative accuracy are computed to high relative accuracy, in the */
+/*  absence of denormalization, underflow and overflow. */
 
-    Arguments   
-    =========   
+/*  To see the relation of Z to the tridiagonal matrix, let L be a */
+/*  unit lower bidiagonal matrix with subdiagonals Z(2,4,6,,..) and */
+/*  let U be an upper bidiagonal matrix with 1's above and diagonal */
+/*  Z(1,3,5,,..). The tridiagonal is L*U or, if you prefer, the */
+/*  symmetric tridiagonal to which it is similar. */
 
-    N     (input) INTEGER   
-          The number of rows and columns in the matrix. N >= 0.   
+/*  Note : DLASQ2 defines a int variable, IEEE, which is true */
+/*  on machines which follow ieee-754 floating-point standard in their */
+/*  handling of infinities and NaNs, and false otherwise. This variable */
+/*  is passed to DLASQ3. */
 
-    Z     (workspace) DOUBLE PRECISION array, dimension ( 4*N )   
-          On entry Z holds the qd array. On exit, entries 1 to N hold   
-          the eigenvalues in decreasing order, Z( 2*N+1 ) holds the   
-          trace, and Z( 2*N+2 ) holds the sum of the eigenvalues. If   
-          N > 2, then Z( 2*N+3 ) holds the iteration count, Z( 2*N+4 )   
-          holds NDIVS/NIN^2, and Z( 2*N+5 ) holds the percentage of   
-          shifts that failed.   
+/*  Arguments */
+/*  ========= */
 
-    INFO  (output) INTEGER   
-          = 0: successful exit   
-          < 0: if the i-th argument is a scalar and had an illegal   
-               value, then INFO = -i, if the i-th argument is an   
-               array and the j-entry had an illegal value, then   
-               INFO = -(i*100+j)   
-          > 0: the algorithm failed   
-                = 1, a split was marked by a positive value in E   
-                = 2, current block of Z not diagonalized after 30*N   
-                     iterations (in inner while loop)   
-                = 3, termination criterion of outer while loop not met   
-                     (program created more than N unreduced blocks)   
+/*  N     (input) INTEGER */
+/*        The number of rows and columns in the matrix. N >= 0. */
 
-    Further Details   
-    ===============   
-    Local Variables: I0:N0 defines a current unreduced segment of Z.   
-    The shifts are accumulated in SIGMA. Iteration count is in ITER.   
-    Ping-pong is controlled by PP (alternates between 0 and 1).   
+/*  Z     (input/output) DOUBLE PRECISION array, dimension ( 4*N ) */
+/*        On entry Z holds the qd array. On exit, entries 1 to N hold */
+/*        the eigenvalues in decreasing order, Z( 2*N+1 ) holds the */
+/*        trace, and Z( 2*N+2 ) holds the sum of the eigenvalues. If */
+/*        N > 2, then Z( 2*N+3 ) holds the iteration count, Z( 2*N+4 ) */
+/*        holds NDIVS/NIN^2, and Z( 2*N+5 ) holds the percentage of */
+/*        shifts that failed. */
 
-    =====================================================================   
+/*  INFO  (output) INTEGER */
+/*        = 0: successful exit */
+/*        < 0: if the i-th argument is a scalar and had an illegal */
+/*             value, then INFO = -i, if the i-th argument is an */
+/*             array and the j-entry had an illegal value, then */
+/*             INFO = -(i*100+j) */
+/*        > 0: the algorithm failed */
+/*              = 1, a split was marked by a positive value in E */
+/*              = 2, current block of Z not diagonalized after 30*N */
+/*                   iterations (in inner while loop) */
+/*              = 3, termination criterion of outer while loop not met */
+/*                   (program created more than N unreduced blocks) */
 
+/*  Further Details */
+/*  =============== */
+/*  Local Variables: I0:N0 defines a current unreduced segment of Z. */
+/*  The shifts are accumulated in SIGMA. Iteration count is in ITER. */
+/*  Ping-pong is controlled by PP (alternates between 0 and 1). */
 
-       Test the input arguments.   
-       (in case DLASQ2 is not called by DLASQ1)   
+/*  ===================================================================== */
 
-       Parameter adjustments */
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input arguments. */
+/*     (in case DLASQ2 is not called by DLASQ1) */
+
+    /* Parameter adjustments */
     --z__;
 
     /* Function Body */
@@ -199,13 +232,13 @@ static integer c__11 = 11;
 	e += z__[k + 1];
 /* Computing MAX */
 	d__1 = qmax, d__2 = z__[k];
-	qmax = max(d__1,d__2);
+	qmax = MAX(d__1,d__2);
 /* Computing MIN */
 	d__1 = emin, d__2 = z__[k + 1];
-	emin = min(d__1,d__2);
+	emin = MIN(d__1,d__2);
 /* Computing MAX */
-	d__1 = max(qmax,zmax), d__2 = z__[k + 1];
-	zmax = max(d__1,d__2);
+	d__1 = MAX(qmax,zmax), d__2 = z__[k + 1];
+	zmax = MAX(d__1,d__2);
 /* L10: */
     }
     if (z__[(*n << 1) - 1] < 0.) {
@@ -216,8 +249,8 @@ static integer c__11 = 11;
     d__ += z__[(*n << 1) - 1];
 /* Computing MAX */
     d__1 = qmax, d__2 = z__[(*n << 1) - 1];
-    qmax = max(d__1,d__2);
-    zmax = max(qmax,zmax);
+    qmax = MAX(d__1,d__2);
+    zmax = MAX(qmax,zmax);
 
 /*     Check for diagonality. */
 
@@ -243,9 +276,8 @@ static integer c__11 = 11;
 
 /*     Check whether the machine is IEEE conformable. */
 
-    ieee = ilaenv_(&c__10, "DLASQ2", "N", &c__1, &c__2, &c__3, &c__4, (ftnlen)
-	    6, (ftnlen)1) == 1 && ilaenv_(&c__11, "DLASQ2", "N", &c__1, &c__2,
-	     &c__3, &c__4, (ftnlen)6, (ftnlen)1) == 1;
+    ieee = ilaenv_(&c__10, "DLASQ2", "N", &c__1, &c__2, &c__3, &c__4) == 1 && ilaenv_(&c__11, "DLASQ2", "N", &c__1, &c__2, 
+	     &c__3, &c__4) == 1;
 
 /*     Rearrange data for locality: Z=(q1,qq1,e1,ee1,q2,qq2,e2,ee2,...). */
 
@@ -286,7 +318,7 @@ static integer c__11 = 11;
 	i__1 = (i0 << 2) + pp;
 	for (i4 = (n0 - 1 << 2) + pp; i4 >= i__1; i4 += -4) {
 	    if (z__[i4 - 1] <= tol2 * d__) {
-		z__[i4 - 1] = 0.;
+		z__[i4 - 1] = -0.;
 		d__ = z__[i4 - 3];
 	    } else {
 		d__ = z__[i4 - 3] * (d__ / (d__ + z__[i4 - 1]));
@@ -302,7 +334,7 @@ static integer c__11 = 11;
 	for (i4 = (i0 << 2) + pp; i4 <= i__1; i4 += 4) {
 	    z__[i4 - (pp << 1) - 2] = d__ + z__[i4 - 1];
 	    if (z__[i4 - 1] <= tol2 * d__) {
-		z__[i4 - 1] = 0.;
+		z__[i4 - 1] = -0.;
 		z__[i4 - (pp << 1) - 2] = d__;
 		z__[i4 - (pp << 1)] = 0.;
 		d__ = z__[i4 + 1];
@@ -318,7 +350,7 @@ static integer c__11 = 11;
 	    }
 /* Computing MIN */
 	    d__1 = emin, d__2 = z__[i4 - (pp << 1)];
-	    emin = min(d__1,d__2);
+	    emin = MIN(d__1,d__2);
 /* L60: */
 	}
 	z__[(n0 << 2) - pp - 2] = d__;
@@ -330,7 +362,7 @@ static integer c__11 = 11;
 	for (i4 = (i0 << 2) - pp + 2; i4 <= i__1; i4 += 4) {
 /* Computing MAX */
 	    d__1 = qmax, d__2 = z__[i4];
-	    qmax = max(d__1,d__2);
+	    qmax = MAX(d__1,d__2);
 /* L70: */
 	}
 
@@ -340,6 +372,17 @@ static integer c__11 = 11;
 /* L80: */
     }
 
+/*     Initialise variables to pass to DLASQ3. */
+
+    ttype = 0;
+    dmin1 = 0.;
+    dmin2 = 0.;
+    dn = 0.;
+    dn1 = 0.;
+    dn2 = 0.;
+    g = 0.;
+    tau = 0.;
+
     iter = 2;
     nfail = 0;
     ndiv = n0 - i0 << 1;
@@ -347,13 +390,13 @@ static integer c__11 = 11;
     i__1 = *n + 1;
     for (iwhila = 1; iwhila <= i__1; ++iwhila) {
 	if (n0 < 1) {
-	    goto L150;
+	    goto L170;
 	}
 
-/*        While array unfinished do   
+/*        While array unfinished do */
 
-          E(N0) holds the value of SIGMA when submatrix in I0:N0   
-          splits from the rest of the array, but is negated. */
+/*        E(N0) holds the value of SIGMA when submatrix in I0:N0 */
+/*        splits from the rest of the array, but is negated. */
 
 	desig = 0.;
 	if (n0 == *n) {
@@ -366,12 +409,12 @@ static integer c__11 = 11;
 	    return 0;
 	}
 
-/*        Find last unreduced submatrix's top index I0, find QMAX and   
-          EMIN. Find Gershgorin-type bound if Q's much greater than E's. */
+/*        Find last unreduced submatrix's top index I0, find QMAX and */
+/*        EMIN. Find Gershgorin-type bound if Q's much greater than E's. */
 
 	emax = 0.;
 	if (n0 > i0) {
-	    emin = (d__1 = z__[(n0 << 2) - 5], abs(d__1));
+	    emin = (d__1 = z__[(n0 << 2) - 5], ABS(d__1));
 	} else {
 	    emin = 0.;
 	}
@@ -384,49 +427,85 @@ static integer c__11 = 11;
 	    if (qmin >= emax * 4.) {
 /* Computing MIN */
 		d__1 = qmin, d__2 = z__[i4 - 3];
-		qmin = min(d__1,d__2);
+		qmin = MIN(d__1,d__2);
 /* Computing MAX */
 		d__1 = emax, d__2 = z__[i4 - 5];
-		emax = max(d__1,d__2);
+		emax = MAX(d__1,d__2);
 	    }
 /* Computing MAX */
 	    d__1 = qmax, d__2 = z__[i4 - 7] + z__[i4 - 5];
-	    qmax = max(d__1,d__2);
+	    qmax = MAX(d__1,d__2);
 /* Computing MIN */
 	    d__1 = emin, d__2 = z__[i4 - 5];
-	    emin = min(d__1,d__2);
+	    emin = MIN(d__1,d__2);
 /* L90: */
 	}
 	i4 = 4;
 
 L100:
 	i0 = i4 / 4;
-
-/*        Store EMIN for passing to DLASQ3. */
-
-	z__[(n0 << 2) - 1] = emin;
-
-/*        Put -(initial shift) into DMIN.   
-
-   Computing MAX */
-	d__1 = 0., d__2 = qmin - sqrt(qmin) * 2. * sqrt(emax);
-	dmin__ = -max(d__1,d__2);
-
-/*        Now I0:N0 is unreduced. PP = 0 for ping, PP = 1 for pong. */
-
 	pp = 0;
+
+	if (n0 - i0 > 1) {
+	    dee = z__[(i0 << 2) - 3];
+	    deemin = dee;
+	    kmin = i0;
+	    i__2 = (n0 << 2) - 3;
+	    for (i4 = (i0 << 2) + 1; i4 <= i__2; i4 += 4) {
+		dee = z__[i4] * (dee / (dee + z__[i4 - 2]));
+		if (dee <= deemin) {
+		    deemin = dee;
+		    kmin = (i4 + 3) / 4;
+		}
+/* L110: */
+	    }
+	    if (kmin - i0 << 1 < n0 - kmin && deemin <= z__[(n0 << 2) - 3] * 
+		    .5) {
+		ipn4 = i0 + n0 << 2;
+		pp = 2;
+		i__2 = i0 + n0 - 1 << 1;
+		for (i4 = i0 << 2; i4 <= i__2; i4 += 4) {
+		    temp = z__[i4 - 3];
+		    z__[i4 - 3] = z__[ipn4 - i4 - 3];
+		    z__[ipn4 - i4 - 3] = temp;
+		    temp = z__[i4 - 2];
+		    z__[i4 - 2] = z__[ipn4 - i4 - 2];
+		    z__[ipn4 - i4 - 2] = temp;
+		    temp = z__[i4 - 1];
+		    z__[i4 - 1] = z__[ipn4 - i4 - 5];
+		    z__[ipn4 - i4 - 5] = temp;
+		    temp = z__[i4];
+		    z__[i4] = z__[ipn4 - i4 - 4];
+		    z__[ipn4 - i4 - 4] = temp;
+/* L120: */
+		}
+	    }
+	}
+
+/*        Put -(initial shift) into DMIN. */
+
+/* Computing MAX */
+	d__1 = 0., d__2 = qmin - sqrt(qmin) * 2. * sqrt(emax);
+	dmin__ = -MAX(d__1,d__2);
+
+/*        Now I0:N0 is unreduced. */
+/*        PP = 0 for ping, PP = 1 for pong. */
+/*        PP = 2 indicates that flipping was applied to the Z array and */
+/*               and that the tests for deflation upon entry in DLASQ3 */
+/*               should not be performed. */
 
 	nbig = (n0 - i0 + 1) * 30;
 	i__2 = nbig;
 	for (iwhilb = 1; iwhilb <= i__2; ++iwhilb) {
 	    if (i0 > n0) {
-		goto L130;
+		goto L150;
 	    }
 
 /*           While submatrix unfinished take a good dqds step. */
 
 	    dlasq3_(&i0, &n0, &z__[1], &pp, &dmin__, &sigma, &desig, &qmax, &
-		    nfail, &iter, &ndiv, &ieee);
+		    nfail, &iter, &ndiv, &ieee, &ttype, &dmin1, &dmin2, &dn, &
+		    dn1, &dn2, &g, &tau);
 
 	    pp = 1 - pp;
 
@@ -451,15 +530,15 @@ L100:
 			} else {
 /* Computing MAX */
 			    d__1 = qmax, d__2 = z__[i4 + 1];
-			    qmax = max(d__1,d__2);
+			    qmax = MAX(d__1,d__2);
 /* Computing MIN */
 			    d__1 = emin, d__2 = z__[i4 - 1];
-			    emin = min(d__1,d__2);
+			    emin = MIN(d__1,d__2);
 /* Computing MIN */
 			    d__1 = oldemn, d__2 = z__[i4];
-			    oldemn = min(d__1,d__2);
+			    oldemn = MIN(d__1,d__2);
 			}
-/* L110: */
+/* L130: */
 		    }
 		    z__[(n0 << 2) - 1] = emin;
 		    z__[n0 * 4] = oldemn;
@@ -467,7 +546,7 @@ L100:
 		}
 	    }
 
-/* L120: */
+/* L140: */
 	}
 
 	*info = 2;
@@ -475,9 +554,9 @@ L100:
 
 /*        end IWHILB */
 
-L130:
+L150:
 
-/* L140: */
+/* L160: */
 	;
     }
 
@@ -486,14 +565,14 @@ L130:
 
 /*     end IWHILA */
 
-L150:
+L170:
 
 /*     Move q's to the front. */
 
     i__1 = *n;
     for (k = 2; k <= i__1; ++k) {
 	z__[k] = z__[(k << 2) - 3];
-/* L160: */
+/* L180: */
     }
 
 /*     Sort and compute sum of eigenvalues. */
@@ -503,21 +582,20 @@ L150:
     e = 0.;
     for (k = *n; k >= 1; --k) {
 	e += z__[k];
-/* L170: */
+/* L190: */
     }
 
 /*     Store trace, sum(eigenvalues) and information on performance. */
 
     z__[(*n << 1) + 1] = trace;
     z__[(*n << 1) + 2] = e;
-    z__[(*n << 1) + 3] = (doublereal) iter;
+    z__[(*n << 1) + 3] = (double) iter;
 /* Computing 2nd power */
     i__1 = *n;
-    z__[(*n << 1) + 4] = (doublereal) ndiv / (doublereal) (i__1 * i__1);
-    z__[(*n << 1) + 5] = nfail * 100. / (doublereal) iter;
+    z__[(*n << 1) + 4] = (double) ndiv / (double) (i__1 * i__1);
+    z__[(*n << 1) + 5] = nfail * 100. / (double) iter;
     return 0;
 
 /*     End of DLASQ2 */
 
 } /* dlasq2_ */
-

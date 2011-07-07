@@ -1,96 +1,131 @@
+/* clartg.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int clartg_(complex *f, complex *g, real *cs, complex *sn, 
+ int clartg_(complex *f, complex *g, float *cs, complex *sn, 
 	complex *r__)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       June 30, 1999   
-
-
-    Purpose   
-    =======   
-
-    CLARTG generates a plane rotation so that   
-
-       [  CS  SN  ]     [ F ]     [ R ]   
-       [  __      ]  .  [   ]  =  [   ]   where CS**2 + |SN|**2 = 1.   
-       [ -SN  CS  ]     [ G ]     [ 0 ]   
-
-    This is a faster version of the BLAS1 routine CROTG, except for   
-    the following differences:   
-       F and G are unchanged on return.   
-       If G=0, then CS=1 and SN=0.   
-       If F=0, then CS=0 and SN is chosen so that R is real.   
-
-    Arguments   
-    =========   
-
-    F       (input) COMPLEX   
-            The first component of vector to be rotated.   
-
-    G       (input) COMPLEX   
-            The second component of vector to be rotated.   
-
-    CS      (output) REAL   
-            The cosine of the rotation.   
-
-    SN      (output) COMPLEX   
-            The sine of the rotation.   
-
-    R       (output) COMPLEX   
-            The nonzero component of the rotated vector.   
-
-    Further Details   
-    ======= =======   
-
-    3-5-96 - Modified with a new algorithm by W. Kahan and J. Demmel   
-
-    ===================================================================== */
-    /* Initialized data */
-    static logical first = TRUE_;
     /* System generated locals */
-    integer i__1;
-    real r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8, r__9, r__10;
+    int i__1;
+    float r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8, r__9, r__10;
     complex q__1, q__2, q__3;
+
     /* Builtin functions */
-    double log(doublereal), pow_ri(real *, integer *), r_imag(complex *), 
-	    sqrt(doublereal);
+    double log(double), pow_ri(float *, int *), r_imag(complex *), 
+	    sqrt(double);
     void r_cnjg(complex *, complex *);
+
     /* Local variables */
-    static real d__;
-    static integer i__;
-    static real scale;
-    static integer count;
-    static real f2, g2, safmn2, safmx2;
-    extern doublereal slapy2_(real *, real *);
-    static complex ff;
-    static real di, dr;
-    static complex fs, gs;
-    extern doublereal slamch_(char *);
-    static real safmin, f2s, g2s, eps;
+    float d__;
+    int i__;
+    float f2, g2;
+    complex ff;
+    float di, dr;
+    complex fs, gs;
+    float f2s, g2s, eps, scale;
+    int count;
+    float safmn2, safmx2;
+    extern double slapy2_(float *, float *), slamch_(char *);
+    float safmin;
 
 
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
 
-    if (first) {
-	first = FALSE_;
-	safmin = slamch_("S");
-	eps = slamch_("E");
-	r__1 = slamch_("B");
-	i__1 = (integer) (log(safmin / eps) / log(slamch_("B")) / 
-		2.f);
-	safmn2 = pow_ri(&r__1, &i__1);
-	safmx2 = 1.f / safmn2;
-    }
-/* Computing MAX   
-   Computing MAX */
-    r__7 = (r__1 = f->r, dabs(r__1)), r__8 = (r__2 = r_imag(f), dabs(r__2));
+/*     .. Scalar Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CLARTG generates a plane rotation so that */
+
+/*     [  CS  SN  ]     [ F ]     [ R ] */
+/*     [  __      ]  .  [   ]  =  [   ]   where CS**2 + |SN|**2 = 1. */
+/*     [ -SN  CS  ]     [ G ]     [ 0 ] */
+
+/*  This is a faster version of the BLAS1 routine CROTG, except for */
+/*  the following differences: */
+/*     F and G are unchanged on return. */
+/*     If G=0, then CS=1 and SN=0. */
+/*     If F=0, then CS=0 and SN is chosen so that R is float. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  F       (input) COMPLEX */
+/*          The first component of vector to be rotated. */
+
+/*  G       (input) COMPLEX */
+/*          The second component of vector to be rotated. */
+
+/*  CS      (output) REAL */
+/*          The cosine of the rotation. */
+
+/*  SN      (output) COMPLEX */
+/*          The sine of the rotation. */
+
+/*  R       (output) COMPLEX */
+/*          The nonzero component of the rotated vector. */
+
+/*  Further Details */
+/*  ======= ======= */
+
+/*  3-5-96 - Modified with a new algorithm by W. Kahan and J. Demmel */
+
+/*  This version has a few statements commented out for thread safety */
+/*  (machine parameters are computed on each entry). 10 feb 03, SJH. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     LOGICAL            FIRST */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. Statement Functions .. */
+/*     .. */
+/*     .. Save statement .. */
+/*     SAVE               FIRST, SAFMX2, SAFMIN, SAFMN2 */
+/*     .. */
+/*     .. Data statements .. */
+/*     DATA               FIRST / .TRUE. / */
+/*     .. */
+/*     .. Statement Function definitions .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     IF( FIRST ) THEN */
+    safmin = slamch_("S");
+    eps = slamch_("E");
+    r__1 = slamch_("B");
+    i__1 = (int) (log(safmin / eps) / log(slamch_("B")) / 2.f);
+    safmn2 = pow_ri(&r__1, &i__1);
+    safmx2 = 1.f / safmn2;
+/*        FIRST = .FALSE. */
+/*     END IF */
 /* Computing MAX */
-    r__9 = (r__3 = g->r, dabs(r__3)), r__10 = (r__4 = r_imag(g), dabs(r__4));
-    r__5 = dmax(r__7,r__8), r__6 = dmax(r__9,r__10);
-    scale = dmax(r__5,r__6);
+/* Computing MAX */
+    r__7 = (r__1 = f->r, ABS(r__1)), r__8 = (r__2 = r_imag(f), ABS(r__2));
+/* Computing MAX */
+    r__9 = (r__3 = g->r, ABS(r__3)), r__10 = (r__4 = r_imag(g), ABS(r__4));
+    r__5 = MAX(r__7,r__8), r__6 = MAX(r__9,r__10);
+    scale = MAX(r__5,r__6);
     fs.r = f->r, fs.i = f->i;
     gs.r = g->r, gs.i = g->i;
     count = 0;
@@ -133,7 +168,7 @@ L20:
 /* Computing 2nd power */
     r__2 = r_imag(&gs);
     g2 = r__1 * r__1 + r__2 * r__2;
-    if (f2 <= dmax(g2,1.f) * safmin) {
+    if (f2 <= MAX(g2,1.f) * safmin) {
 
 /*        This is a rare case: F is very small. */
 
@@ -143,7 +178,7 @@ L20:
 	    r__3 = r_imag(g);
 	    r__1 = slapy2_(&r__2, &r__3);
 	    r__->r = r__1, r__->i = 0.f;
-/*           Do complex/real division explicitly with two real divisions */
+/*           Do complex/float division explicitly with two float divisions */
 	    r__1 = gs.r;
 	    r__2 = r_imag(&gs);
 	    d__ = slapy2_(&r__1, &r__2);
@@ -156,23 +191,23 @@ L20:
 	r__1 = fs.r;
 	r__2 = r_imag(&fs);
 	f2s = slapy2_(&r__1, &r__2);
-/*        G2 and G2S are accurate   
-          G2 is at least SAFMIN, and G2S is at least SAFMN2 */
+/*        G2 and G2S are accurate */
+/*        G2 is at least SAFMIN, and G2S is at least SAFMN2 */
 	g2s = sqrt(g2);
-/*        Error in CS from underflow in F2S is at most   
-          UNFL / SAFMN2 .lt. sqrt(UNFL*EPS) .lt. EPS   
-          If MAX(G2,ONE)=G2, then F2 .lt. G2*SAFMIN,   
-          and so CS .lt. sqrt(SAFMIN)   
-          If MAX(G2,ONE)=ONE, then F2 .lt. SAFMIN   
-          and so CS .lt. sqrt(SAFMIN)/SAFMN2 = sqrt(EPS)   
-          Therefore, CS = F2S/G2S / sqrt( 1 + (F2S/G2S)**2 ) = F2S/G2S */
+/*        Error in CS from underflow in F2S is at most */
+/*        UNFL / SAFMN2 .lt. sqrt(UNFL*EPS) .lt. EPS */
+/*        If MAX(G2,ONE)=G2, then F2 .lt. G2*SAFMIN, */
+/*        and so CS .lt. sqrt(SAFMIN) */
+/*        If MAX(G2,ONE)=ONE, then F2 .lt. SAFMIN */
+/*        and so CS .lt. sqrt(SAFMIN)/SAFMN2 = sqrt(EPS) */
+/*        Therefore, CS = F2S/G2S / sqrt( 1 + (F2S/G2S)**2 ) = F2S/G2S */
 	*cs = f2s / g2s;
-/*        Make sure abs(FF) = 1   
-          Do complex/real division explicitly with 2 real divisions   
-   Computing MAX */
-	r__3 = (r__1 = f->r, dabs(r__1)), r__4 = (r__2 = r_imag(f), dabs(r__2)
+/*        Make sure ABS(FF) = 1 */
+/*        Do complex/float division explicitly with 2 float divisions */
+/* Computing MAX */
+	r__3 = (r__1 = f->r, ABS(r__1)), r__4 = (r__2 = r_imag(f), ABS(r__2)
 		);
-	if (dmax(r__3,r__4) > 1.f) {
+	if (MAX(r__3,r__4) > 1.f) {
 	    r__1 = f->r;
 	    r__2 = r_imag(f);
 	    d__ = slapy2_(&r__1, &r__2);
@@ -202,19 +237,19 @@ L20:
 	r__->r = q__1.r, r__->i = q__1.i;
     } else {
 
-/*        This is the most common case.   
-          Neither F2 nor F2/G2 are less than SAFMIN   
-          F2S cannot overflow, and it is accurate */
+/*        This is the most common case. */
+/*        Neither F2 nor F2/G2 are less than SAFMIN */
+/*        F2S cannot overflow, and it is accurate */
 
 	f2s = sqrt(g2 / f2 + 1.f);
-/*        Do the F2S(real)*FS(complex) multiply with two real multiplies */
+/*        Do the F2S(float)*FS(complex) multiply with two float multiplies */
 	r__1 = f2s * fs.r;
 	r__2 = f2s * r_imag(&fs);
 	q__1.r = r__1, q__1.i = r__2;
 	r__->r = q__1.r, r__->i = q__1.i;
 	*cs = 1.f / f2s;
 	d__ = f2 + g2;
-/*        Do complex/real division explicitly with two real divisions */
+/*        Do complex/float division explicitly with two float divisions */
 	r__1 = r__->r / d__;
 	r__2 = r_imag(r__) / d__;
 	q__1.r = r__1, q__1.i = r__2;
@@ -246,4 +281,3 @@ L20:
 /*     End of CLARTG */
 
 } /* clartg_ */
-

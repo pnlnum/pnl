@@ -1,56 +1,75 @@
+/* slamrg.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int slamrg_(integer *n1, integer *n2, real *a, integer *
-	strd1, integer *strd2, integer *index)
+ int slamrg_(int *n1, int *n2, float *a, int *
+	strd1, int *strd2, int *index)
 {
-/*  -- LAPACK routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       September 30, 1994   
-
-
-    Purpose   
-    =======   
-
-    SLAMRG will create a permutation list which will merge the elements   
-    of A (which is composed of two independently sorted sets) into a   
-    single set which is sorted in ascending order.   
-
-    Arguments   
-    =========   
-
-    N1     (input) INTEGER   
-    N2     (input) INTEGER   
-           These arguements contain the respective lengths of the two   
-           sorted lists to be merged.   
-
-    A      (input) REAL array, dimension (N1+N2)   
-           The first N1 elements of A contain a list of numbers which   
-           are sorted in either ascending or descending order.  Likewise   
-           for the final N2 elements.   
-
-    STRD1  (input) INTEGER   
-    STRD2  (input) INTEGER   
-           These are the strides to be taken through the array A.   
-           Allowable strides are 1 and -1.  They indicate whether a   
-           subset of A is sorted in ascending (STRDx = 1) or descending   
-           (STRDx = -1) order.   
-
-    INDEX  (output) INTEGER array, dimension (N1+N2)   
-           On exit this array will contain a permutation such that   
-           if B( I ) = A( INDEX( I ) ) for I=1,N1+N2, then B will be   
-           sorted in ascending order.   
-
-    =====================================================================   
-
-
-       Parameter adjustments */
     /* System generated locals */
-    integer i__1;
-    /* Local variables */
-    static integer i__, ind1, ind2, n1sv, n2sv;
+    int i__1;
 
+    /* Local variables */
+    int i__, ind1, ind2, n1sv, n2sv;
+
+
+/*  -- LAPACK routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  SLAMRG will create a permutation list which will merge the elements */
+/*  of A (which is composed of two independently sorted sets) into a */
+/*  single set which is sorted in ascending order. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  N1     (input) INTEGER */
+/*  N2     (input) INTEGER */
+/*         These arguements contain the respective lengths of the two */
+/*         sorted lists to be merged. */
+
+/*  A      (input) REAL array, dimension (N1+N2) */
+/*         The first N1 elements of A contain a list of numbers which */
+/*         are sorted in either ascending or descending order.  Likewise */
+/*         for the final N2 elements. */
+
+/*  STRD1  (input) INTEGER */
+/*  STRD2  (input) INTEGER */
+/*         These are the strides to be taken through the array A. */
+/*         Allowable strides are 1 and -1.  They indicate whether a */
+/*         subset of A is sorted in ascending (STRDx = 1) or descending */
+/*         (STRDx = -1) order. */
+
+/*  INDEX  (output) INTEGER array, dimension (N1+N2) */
+/*         On exit this array will contain a permutation such that */
+/*         if B( I ) = A( INDEX( I ) ) for I=1,N1+N2, then B will be */
+/*         sorted in ascending order. */
+
+/*  ===================================================================== */
+
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+    /* Parameter adjustments */
     --index;
     --a;
 
@@ -109,4 +128,3 @@ L10:
 /*     End of SLAMRG */
 
 } /* slamrg_ */
-

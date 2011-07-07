@@ -1,100 +1,128 @@
+/* clascl.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int clascl_(char *type__, integer *kl, integer *ku, real *
-	cfrom, real *cto, integer *m, integer *n, complex *a, integer *lda, 
-	integer *info)
+ int clascl_(char *type__, int *kl, int *ku, float *
+	cfrom, float *cto, int *m, int *n, complex *a, int *lda, 
+	int *info)
 {
-/*  -- LAPACK auxiliary routine (version 3.0) --   
-       Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
-       Courant Institute, Argonne National Lab, and Rice University   
-       February 29, 1992   
-
-
-    Purpose   
-    =======   
-
-    CLASCL multiplies the M by N complex matrix A by the real scalar   
-    CTO/CFROM.  This is done without over/underflow as long as the final   
-    result CTO*A(I,J)/CFROM does not over/underflow. TYPE specifies that   
-    A may be full, upper triangular, lower triangular, upper Hessenberg,   
-    or banded.   
-
-    Arguments   
-    =========   
-
-    TYPE    (input) CHARACTER*1   
-            TYPE indices the storage type of the input matrix.   
-            = 'G':  A is a full matrix.   
-            = 'L':  A is a lower triangular matrix.   
-            = 'U':  A is an upper triangular matrix.   
-            = 'H':  A is an upper Hessenberg matrix.   
-            = 'B':  A is a symmetric band matrix with lower bandwidth KL   
-                    and upper bandwidth KU and with the only the lower   
-                    half stored.   
-            = 'Q':  A is a symmetric band matrix with lower bandwidth KL   
-                    and upper bandwidth KU and with the only the upper   
-                    half stored.   
-            = 'Z':  A is a band matrix with lower bandwidth KL and upper   
-                    bandwidth KU.   
-
-    KL      (input) INTEGER   
-            The lower bandwidth of A.  Referenced only if TYPE = 'B',   
-            'Q' or 'Z'.   
-
-    KU      (input) INTEGER   
-            The upper bandwidth of A.  Referenced only if TYPE = 'B',   
-            'Q' or 'Z'.   
-
-    CFROM   (input) REAL   
-    CTO     (input) REAL   
-            The matrix A is multiplied by CTO/CFROM. A(I,J) is computed   
-            without over/underflow if the final result CTO*A(I,J)/CFROM   
-            can be represented without over/underflow.  CFROM must be   
-            nonzero.   
-
-    M       (input) INTEGER   
-            The number of rows of the matrix A.  M >= 0.   
-
-    N       (input) INTEGER   
-            The number of columns of the matrix A.  N >= 0.   
-
-    A       (input/output) COMPLEX array, dimension (LDA,M)   
-            The matrix to be multiplied by CTO/CFROM.  See TYPE for the   
-            storage type.   
-
-    LDA     (input) INTEGER   
-            The leading dimension of the array A.  LDA >= max(1,M).   
-
-    INFO    (output) INTEGER   
-            0  - successful exit   
-            <0 - if INFO = -i, the i-th argument had an illegal value.   
-
-    =====================================================================   
-
-
-       Test the input arguments   
-
-       Parameter adjustments */
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    int a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     complex q__1;
-    /* Local variables */
-    static logical done;
-    static real ctoc;
-    static integer i__, j;
-    extern logical lsame_(char *, char *);
-    static integer itype, k1, k2, k3, k4;
-    static real cfrom1;
-    extern doublereal slamch_(char *);
-    static real cfromc;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
-    static real bignum, smlnum, mul, cto1;
-#define a_subscr(a_1,a_2) (a_2)*a_dim1 + a_1
-#define a_ref(a_1,a_2) a[a_subscr(a_1,a_2)]
 
+    /* Local variables */
+    int i__, j, k1, k2, k3, k4;
+    float mul, cto1;
+    int done;
+    float ctoc;
+    extern int lsame_(char *, char *);
+    int itype;
+    float cfrom1;
+    extern double slamch_(char *);
+    float cfromc;
+    extern  int xerbla_(char *, int *);
+    float bignum;
+    extern int sisnan_(float *);
+    float smlnum;
+
+
+/*  -- LAPACK auxiliary routine (version 3.2) -- */
+/*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd.. */
+/*     November 2006 */
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  CLASCL multiplies the M by N complex matrix A by the float scalar */
+/*  CTO/CFROM.  This is done without over/underflow as long as the final */
+/*  result CTO*A(I,J)/CFROM does not over/underflow. TYPE specifies that */
+/*  A may be full, upper triangular, lower triangular, upper Hessenberg, */
+/*  or banded. */
+
+/*  Arguments */
+/*  ========= */
+
+/*  TYPE    (input) CHARACTER*1 */
+/*          TYPE indices the storage type of the input matrix. */
+/*          = 'G':  A is a full matrix. */
+/*          = 'L':  A is a lower triangular matrix. */
+/*          = 'U':  A is an upper triangular matrix. */
+/*          = 'H':  A is an upper Hessenberg matrix. */
+/*          = 'B':  A is a symmetric band matrix with lower bandwidth KL */
+/*                  and upper bandwidth KU and with the only the lower */
+/*                  half stored. */
+/*          = 'Q':  A is a symmetric band matrix with lower bandwidth KL */
+/*                  and upper bandwidth KU and with the only the upper */
+/*                  half stored. */
+/*          = 'Z':  A is a band matrix with lower bandwidth KL and upper */
+/*                  bandwidth KU. */
+
+/*  KL      (input) INTEGER */
+/*          The lower bandwidth of A.  Referenced only if TYPE = 'B', */
+/*          'Q' or 'Z'. */
+
+/*  KU      (input) INTEGER */
+/*          The upper bandwidth of A.  Referenced only if TYPE = 'B', */
+/*          'Q' or 'Z'. */
+
+/*  CFROM   (input) REAL */
+/*  CTO     (input) REAL */
+/*          The matrix A is multiplied by CTO/CFROM. A(I,J) is computed */
+/*          without over/underflow if the final result CTO*A(I,J)/CFROM */
+/*          can be represented without over/underflow.  CFROM must be */
+/*          nonzero. */
+
+/*  M       (input) INTEGER */
+/*          The number of rows of the matrix A.  M >= 0. */
+
+/*  N       (input) INTEGER */
+/*          The number of columns of the matrix A.  N >= 0. */
+
+/*  A       (input/output) COMPLEX array, dimension (LDA,N) */
+/*          The matrix to be multiplied by CTO/CFROM.  See TYPE for the */
+/*          storage type. */
+
+/*  LDA     (input) INTEGER */
+/*          The leading dimension of the array A.  LDA >= MAX(1,M). */
+
+/*  INFO    (output) INTEGER */
+/*          0  - successful exit */
+/*          <0 - if INFO = -i, the i-th argument had an illegal value. */
+
+/*  ===================================================================== */
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+/*     .. External Subroutines .. */
+/*     .. */
+/*     .. Executable Statements .. */
+
+/*     Test the input arguments */
+
+    /* Parameter adjustments */
     a_dim1 = *lda;
-    a_offset = 1 + a_dim1 * 1;
+    a_offset = 1 + a_dim1;
     a -= a_offset;
 
     /* Function Body */
@@ -120,23 +148,25 @@
 
     if (itype == -1) {
 	*info = -1;
-    } else if (*cfrom == 0.f) {
+    } else if (*cfrom == 0.f || sisnan_(cfrom)) {
 	*info = -4;
+    } else if (sisnan_(cto)) {
+	*info = -5;
     } else if (*m < 0) {
 	*info = -6;
     } else if (*n < 0 || itype == 4 && *n != *m || itype == 5 && *n != *m) {
 	*info = -7;
-    } else if (itype <= 3 && *lda < max(1,*m)) {
+    } else if (itype <= 3 && *lda < MAX(1,*m)) {
 	*info = -9;
     } else if (itype >= 4) {
 /* Computing MAX */
 	i__1 = *m - 1;
-	if (*kl < 0 || *kl > max(i__1,0)) {
+	if (*kl < 0 || *kl > MAX(i__1,0)) {
 	    *info = -2;
 	} else /* if(complicated condition) */ {
 /* Computing MAX */
 	    i__1 = *n - 1;
-	    if (*ku < 0 || *ku > max(i__1,0) || (itype == 4 || itype == 5) && 
+	    if (*ku < 0 || *ku > MAX(i__1,0) || (itype == 4 || itype == 5) && 
 		    *kl != *ku) {
 		*info = -3;
 	    } else if (itype == 4 && *lda < *kl + 1 || itype == 5 && *lda < *
@@ -168,18 +198,32 @@
 
 L10:
     cfrom1 = cfromc * smlnum;
-    cto1 = ctoc / bignum;
-    if (dabs(cfrom1) > dabs(ctoc) && ctoc != 0.f) {
-	mul = smlnum;
-	done = FALSE_;
-	cfromc = cfrom1;
-    } else if (dabs(cto1) > dabs(cfromc)) {
-	mul = bignum;
-	done = FALSE_;
-	ctoc = cto1;
-    } else {
+    if (cfrom1 == cfromc) {
+/*        CFROMC is an inf.  Multiply by a correctly signed zero for */
+/*        finite CTOC, or a NaN if CTOC is infinite. */
 	mul = ctoc / cfromc;
-	done = TRUE_;
+	done = TRUE;
+	cto1 = ctoc;
+    } else {
+	cto1 = ctoc / bignum;
+	if (cto1 == ctoc) {
+/*           CTOC is either 0 or an inf.  In both cases, CTOC itself */
+/*           serves as the correct multiplication factor. */
+	    mul = ctoc;
+	    done = TRUE;
+	    cfromc = 1.f;
+	} else if (ABS(cfrom1) > ABS(ctoc) && ctoc != 0.f) {
+	    mul = smlnum;
+	    done = FALSE;
+	    cfromc = cfrom1;
+	} else if (ABS(cto1) > ABS(cfromc)) {
+	    mul = bignum;
+	    done = FALSE;
+	    ctoc = cto1;
+	} else {
+	    mul = ctoc / cfromc;
+	    done = TRUE;
+	}
     }
 
     if (itype == 0) {
@@ -190,8 +234,8 @@ L10:
 	for (j = 1; j <= i__1; ++j) {
 	    i__2 = *m;
 	    for (i__ = 1; i__ <= i__2; ++i__) {
-		i__3 = a_subscr(i__, j);
-		i__4 = a_subscr(i__, j);
+		i__3 = i__ + j * a_dim1;
+		i__4 = i__ + j * a_dim1;
 		q__1.r = mul * a[i__4].r, q__1.i = mul * a[i__4].i;
 		a[i__3].r = q__1.r, a[i__3].i = q__1.i;
 /* L20: */
@@ -207,8 +251,8 @@ L10:
 	for (j = 1; j <= i__1; ++j) {
 	    i__2 = *m;
 	    for (i__ = j; i__ <= i__2; ++i__) {
-		i__3 = a_subscr(i__, j);
-		i__4 = a_subscr(i__, j);
+		i__3 = i__ + j * a_dim1;
+		i__4 = i__ + j * a_dim1;
 		q__1.r = mul * a[i__4].r, q__1.i = mul * a[i__4].i;
 		a[i__3].r = q__1.r, a[i__3].i = q__1.i;
 /* L40: */
@@ -222,10 +266,10 @@ L10:
 
 	i__1 = *n;
 	for (j = 1; j <= i__1; ++j) {
-	    i__2 = min(j,*m);
+	    i__2 = MIN(j,*m);
 	    for (i__ = 1; i__ <= i__2; ++i__) {
-		i__3 = a_subscr(i__, j);
-		i__4 = a_subscr(i__, j);
+		i__3 = i__ + j * a_dim1;
+		i__4 = i__ + j * a_dim1;
 		q__1.r = mul * a[i__4].r, q__1.i = mul * a[i__4].i;
 		a[i__3].r = q__1.r, a[i__3].i = q__1.i;
 /* L60: */
@@ -241,10 +285,10 @@ L10:
 	for (j = 1; j <= i__1; ++j) {
 /* Computing MIN */
 	    i__3 = j + 1;
-	    i__2 = min(i__3,*m);
+	    i__2 = MIN(i__3,*m);
 	    for (i__ = 1; i__ <= i__2; ++i__) {
-		i__3 = a_subscr(i__, j);
-		i__4 = a_subscr(i__, j);
+		i__3 = i__ + j * a_dim1;
+		i__4 = i__ + j * a_dim1;
 		q__1.r = mul * a[i__4].r, q__1.i = mul * a[i__4].i;
 		a[i__3].r = q__1.r, a[i__3].i = q__1.i;
 /* L80: */
@@ -262,10 +306,10 @@ L10:
 	for (j = 1; j <= i__1; ++j) {
 /* Computing MIN */
 	    i__3 = k3, i__4 = k4 - j;
-	    i__2 = min(i__3,i__4);
+	    i__2 = MIN(i__3,i__4);
 	    for (i__ = 1; i__ <= i__2; ++i__) {
-		i__3 = a_subscr(i__, j);
-		i__4 = a_subscr(i__, j);
+		i__3 = i__ + j * a_dim1;
+		i__4 = i__ + j * a_dim1;
 		q__1.r = mul * a[i__4].r, q__1.i = mul * a[i__4].i;
 		a[i__3].r = q__1.r, a[i__3].i = q__1.i;
 /* L100: */
@@ -284,9 +328,9 @@ L10:
 /* Computing MAX */
 	    i__2 = k1 - j;
 	    i__3 = k3;
-	    for (i__ = max(i__2,1); i__ <= i__3; ++i__) {
-		i__2 = a_subscr(i__, j);
-		i__4 = a_subscr(i__, j);
+	    for (i__ = MAX(i__2,1); i__ <= i__3; ++i__) {
+		i__2 = i__ + j * a_dim1;
+		i__4 = i__ + j * a_dim1;
 		q__1.r = mul * a[i__4].r, q__1.i = mul * a[i__4].i;
 		a[i__2].r = q__1.r, a[i__2].i = q__1.i;
 /* L120: */
@@ -308,10 +352,10 @@ L10:
 	    i__3 = k1 - j;
 /* Computing MIN */
 	    i__4 = k3, i__5 = k4 - j;
-	    i__2 = min(i__4,i__5);
-	    for (i__ = max(i__3,k2); i__ <= i__2; ++i__) {
-		i__3 = a_subscr(i__, j);
-		i__4 = a_subscr(i__, j);
+	    i__2 = MIN(i__4,i__5);
+	    for (i__ = MAX(i__3,k2); i__ <= i__2; ++i__) {
+		i__3 = i__ + j * a_dim1;
+		i__4 = i__ + j * a_dim1;
 		q__1.r = mul * a[i__4].r, q__1.i = mul * a[i__4].i;
 		a[i__3].r = q__1.r, a[i__3].i = q__1.i;
 /* L140: */
@@ -330,8 +374,3 @@ L10:
 /*     End of CLASCL */
 
 } /* clascl_ */
-
-#undef a_ref
-#undef a_subscr
-
-
