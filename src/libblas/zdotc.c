@@ -1,24 +1,55 @@
+/* zdotc.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Double Complex */ VOID zdotc_(doublecomplex * ret_val, integer *n, 
-	doublecomplex *zx, integer *incx, doublecomplex *zy, integer *incy)
+/* Double Complex */ VOID zdotc_(doublecomplex * ret_val, int *n, 
+	doublecomplex *zx, int *incx, doublecomplex *zy, int *incy)
 {
     /* System generated locals */
-    integer i__1, i__2;
+    int i__1, i__2;
     doublecomplex z__1, z__2, z__3;
+
     /* Builtin functions */
     void d_cnjg(doublecomplex *, doublecomplex *);
+
     /* Local variables */
-    static integer i__;
-    static doublecomplex ztemp;
-    static integer ix, iy;
-/*     forms the dot product of a vector.   
-       jack dongarra, 3/11/78.   
-       modified 12/3/93, array(1) declarations changed to array(*)   
-       Parameter adjustments */
+    int i__, ix, iy;
+    doublecomplex ztemp;
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  ZDOTC forms the dot product of a vector. */
+
+/*  Further Details */
+/*  =============== */
+
+/*     jack dongarra, 3/11/78. */
+/*     modified 12/3/93, array(1) declarations changed to array(*) */
+
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+    /* Parameter adjustments */
     --zy;
     --zx;
+
     /* Function Body */
     ztemp.r = 0., ztemp.i = 0.;
      ret_val->r = 0.,  ret_val->i = 0.;
@@ -28,8 +59,10 @@
     if (*incx == 1 && *incy == 1) {
 	goto L20;
     }
-/*        code for unequal increments or equal increments   
-            not equal to 1 */
+
+/*        code for unequal increments or equal increments */
+/*          not equal to 1 */
+
     ix = 1;
     iy = 1;
     if (*incx < 0) {
@@ -52,7 +85,9 @@
     }
      ret_val->r = ztemp.r,  ret_val->i = ztemp.i;
     return ;
+
 /*        code for both increments equal to 1 */
+
 L20:
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
@@ -67,4 +102,3 @@ L20:
      ret_val->r = ztemp.r,  ret_val->i = ztemp.i;
     return ;
 } /* zdotc_ */
-

@@ -1,22 +1,48 @@
+/* icamax.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-integer icamax_(integer *n, complex *cx, integer *incx)
+int icamax_(int *n, complex *cx, int *incx)
 {
     /* System generated locals */
-    integer ret_val, i__1, i__2;
-    real r__1, r__2;
-    /* Builtin functions */
-    double r_imag(complex *);
+    int ret_val, i__1;
+
     /* Local variables */
-    static real smax;
-    static integer i__, ix;
-/*     finds the index of element having max. absolute value.   
-       jack dongarra, linpack, 3/11/78.   
-       modified 3/93 to return if incx .le. 0.   
-       modified 12/3/93, array(1) declarations changed to array(*)   
-       Parameter adjustments */
+    int i__, ix;
+    float smax;
+    extern double scabs1_(complex *);
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*     finds the index of element having max. absolute value. */
+/*     jack dongarra, linpack, 3/11/78. */
+/*     modified 3/93 to return if incx .le. 0. */
+/*     modified 12/3/93, array(1) declarations changed to array(*) */
+
+
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. External Functions .. */
+/*     .. */
+    /* Parameter adjustments */
     --cx;
+
     /* Function Body */
     ret_val = 0;
     if (*n < 1 || *incx <= 0) {
@@ -29,43 +55,38 @@ integer icamax_(integer *n, complex *cx, integer *incx)
     if (*incx == 1) {
 	goto L20;
     }
+
 /*        code for increment not equal to 1 */
+
     ix = 1;
-    smax = (r__1 = cx[1].r, dabs(r__1)) + (r__2 = r_imag(&cx[1]), dabs(r__2));
+    smax = scabs1_(&cx[1]);
     ix += *incx;
     i__1 = *n;
     for (i__ = 2; i__ <= i__1; ++i__) {
-	i__2 = ix;
-	if ((r__1 = cx[i__2].r, dabs(r__1)) + (r__2 = r_imag(&cx[ix]), dabs(
-		r__2)) <= smax) {
+	if (scabs1_(&cx[ix]) <= smax) {
 	    goto L5;
 	}
 	ret_val = i__;
-	i__2 = ix;
-	smax = (r__1 = cx[i__2].r, dabs(r__1)) + (r__2 = r_imag(&cx[ix]), 
-		dabs(r__2));
+	smax = scabs1_(&cx[ix]);
 L5:
 	ix += *incx;
 /* L10: */
     }
     return ret_val;
+
 /*        code for increment equal to 1 */
+
 L20:
-    smax = (r__1 = cx[1].r, dabs(r__1)) + (r__2 = r_imag(&cx[1]), dabs(r__2));
+    smax = scabs1_(&cx[1]);
     i__1 = *n;
     for (i__ = 2; i__ <= i__1; ++i__) {
-	i__2 = i__;
-	if ((r__1 = cx[i__2].r, dabs(r__1)) + (r__2 = r_imag(&cx[i__]), dabs(
-		r__2)) <= smax) {
+	if (scabs1_(&cx[i__]) <= smax) {
 	    goto L30;
 	}
 	ret_val = i__;
-	i__2 = i__;
-	smax = (r__1 = cx[i__2].r, dabs(r__1)) + (r__2 = r_imag(&cx[i__]), 
-		dabs(r__2));
+	smax = scabs1_(&cx[i__]);
 L30:
 	;
     }
     return ret_val;
 } /* icamax_ */
-

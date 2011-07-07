@@ -1,22 +1,48 @@
+/* zrotg.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int zrotg_(doublecomplex *ca, doublecomplex *cb, doublereal *
+ int zrotg_(doublecomplex *ca, doublecomplex *cb, double *
 	c__, doublecomplex *s)
 {
     /* System generated locals */
-    doublereal d__1, d__2;
+    double d__1, d__2;
     doublecomplex z__1, z__2, z__3, z__4;
+
     /* Builtin functions */
-    double z_abs(doublecomplex *);
+    double z_ABS(doublecomplex *);
     void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
-    double sqrt(doublereal);
+    double sqrt(double);
     void d_cnjg(doublecomplex *, doublecomplex *);
+
     /* Local variables */
-    static doublereal norm;
-    static doublecomplex alpha;
-    static doublereal scale;
-    if (z_abs(ca) != 0.) {
+    double norm;
+    doublecomplex alpha;
+    double scale;
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*     determines a double complex Givens rotation. */
+
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+    if (z_ABS(ca) != 0.) {
 	goto L10;
     }
     *c__ = 0.;
@@ -24,20 +50,20 @@
     ca->r = cb->r, ca->i = cb->i;
     goto L20;
 L10:
-    scale = z_abs(ca) + z_abs(cb);
+    scale = z_ABS(ca) + z_ABS(cb);
     z__2.r = scale, z__2.i = 0.;
     z_div(&z__1, ca, &z__2);
 /* Computing 2nd power */
-    d__1 = z_abs(&z__1);
+    d__1 = z_ABS(&z__1);
     z__4.r = scale, z__4.i = 0.;
     z_div(&z__3, cb, &z__4);
 /* Computing 2nd power */
-    d__2 = z_abs(&z__3);
+    d__2 = z_ABS(&z__3);
     norm = scale * sqrt(d__1 * d__1 + d__2 * d__2);
-    d__1 = z_abs(ca);
+    d__1 = z_ABS(ca);
     z__1.r = ca->r / d__1, z__1.i = ca->i / d__1;
     alpha.r = z__1.r, alpha.i = z__1.i;
-    *c__ = z_abs(ca) / norm;
+    *c__ = z_ABS(ca) / norm;
     d_cnjg(&z__3, cb);
     z__2.r = alpha.r * z__3.r - alpha.i * z__3.i, z__2.i = alpha.r * z__3.i + 
 	    alpha.i * z__3.r;
@@ -48,4 +74,3 @@ L10:
 L20:
     return 0;
 } /* zrotg_ */
-

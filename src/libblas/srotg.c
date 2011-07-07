@@ -1,24 +1,51 @@
+/* srotg.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-/* Subroutine */ int srotg_(real *sa, real *sb, real *c__, real *s)
+/* Table of constant values */
+
+static float c_b4 = 1.f;
+
+ int srotg_(float *sa, float *sb, float *c__, float *s)
 {
-    /* Table of constant values */
-    static real c_b4 = 1.f;
-    
     /* System generated locals */
-    real r__1, r__2;
+    float r__1, r__2;
+
     /* Builtin functions */
-    double sqrt(doublereal), r_sign(real *, real *);
+    double sqrt(double), r_sign(float *, float *);
+
     /* Local variables */
-    static real r__, scale, z__, roe;
-/*     construct givens plane rotation.   
-       jack dongarra, linpack, 3/11/78. */
+    float r__, z__, roe, scale;
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*     construct givens plane rotation. */
+/*     jack dongarra, linpack, 3/11/78. */
+
+
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
     roe = *sb;
-    if (dabs(*sa) > dabs(*sb)) {
+    if (ABS(*sa) > ABS(*sb)) {
 	roe = *sa;
     }
-    scale = dabs(*sa) + dabs(*sb);
+    scale = ABS(*sa) + ABS(*sb);
     if (scale != 0.f) {
 	goto L10;
     }
@@ -37,10 +64,10 @@ L10:
     *c__ = *sa / r__;
     *s = *sb / r__;
     z__ = 1.f;
-    if (dabs(*sa) > dabs(*sb)) {
+    if (ABS(*sa) > ABS(*sb)) {
 	z__ = *s;
     }
-    if (dabs(*sb) >= dabs(*sa) && *c__ != 0.f) {
+    if (ABS(*sb) >= ABS(*sa) && *c__ != 0.f) {
 	z__ = 1.f / *c__;
     }
 L20:
@@ -48,5 +75,3 @@ L20:
     *sb = z__;
     return 0;
 } /* srotg_ */
-
-

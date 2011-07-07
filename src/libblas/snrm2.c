@@ -1,43 +1,77 @@
+/* snrm2.f -- translated by f2c (version 20061008).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
 
 #include "pnl/pnl_f2c.h"
 
-doublereal snrm2_(integer *n, real *x, integer *incx)
+double snrm2_(int *n, float *x, int *incx)
 {
-/*        The following loop is equivalent to this call to the LAPACK   
-          auxiliary routine:   
-          CALL SLASSQ( N, X, INCX, SCALE, SSQ ) */
     /* System generated locals */
-    integer i__1, i__2;
-    real ret_val, r__1;
+    int i__1, i__2;
+    float ret_val, r__1;
+
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
+
     /* Local variables */
-    static real norm, scale, absxi;
-    static integer ix;
-    static real ssq;
-/*  SNRM2 returns the euclidean norm of a vector via the function   
-    name, so that   
-       SNRM2 := sqrt( x'*x )   
-    -- This version written on 25-October-1982.   
-       Modified on 14-October-1993 to inline the call to SLASSQ.   
-       Sven Hammarling, Nag Ltd.   
-       Parameter adjustments */
+    int ix;
+    float ssq, norm, scale, absxi;
+
+/*     .. Scalar Arguments .. */
+/*     .. */
+/*     .. Array Arguments .. */
+/*     .. */
+
+/*  Purpose */
+/*  ======= */
+
+/*  SNRM2 returns the euclidean norm of a vector via the function */
+/*  name, so that */
+
+/*     SNRM2 := sqrt( x'*x ). */
+
+/*  Further Details */
+/*  =============== */
+
+/*  -- This version written on 25-October-1982. */
+/*     Modified on 14-October-1993 to inline the call to SLASSQ. */
+/*     Sven Hammarling, Nag Ltd. */
+
+
+/*     .. Parameters .. */
+/*     .. */
+/*     .. Local Scalars .. */
+/*     .. */
+/*     .. Intrinsic Functions .. */
+/*     .. */
+    /* Parameter adjustments */
     --x;
+
     /* Function Body */
     if (*n < 1 || *incx < 1) {
 	norm = 0.f;
     } else if (*n == 1) {
-	norm = dabs(x[1]);
+	norm = ABS(x[1]);
     } else {
 	scale = 0.f;
 	ssq = 1.f;
-
+/*        The following loop is equivalent to this call to the LAPACK */
+/*        auxiliary routine: */
+/*        CALL SLASSQ( N, X, INCX, SCALE, SSQ ) */
 
 	i__1 = (*n - 1) * *incx + 1;
 	i__2 = *incx;
 	for (ix = 1; i__2 < 0 ? ix >= i__1 : ix <= i__1; ix += i__2) {
 	    if (x[ix] != 0.f) {
-		absxi = (r__1 = x[ix], dabs(r__1));
+		absxi = (r__1 = x[ix], ABS(r__1));
 		if (scale < absxi) {
 /* Computing 2nd power */
 		    r__1 = scale / absxi;
@@ -60,4 +94,3 @@ doublereal snrm2_(integer *n, real *x, integer *incx)
 /*     End of SNRM2. */
 
 } /* snrm2_ */
-
