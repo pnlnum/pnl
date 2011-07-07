@@ -168,9 +168,13 @@ use_internal_blas=0
 case "$host" in
     # Darwin/MacOSX
     *-*-darwin*)
-    # When Xcode is installed, Atlas and Lapack can be found in vectlib
-    BLAS_LIBS="-lblas"
-    LAPACK_LIBS="-llapack"
+    if test "x$with_internal_blas" == "xyes"; then
+        use_internal_blas=1
+    else
+        # When Xcode is installed, Atlas and Lapack can be found in vectlib
+        BLAS_LIBS="-lblas"
+        LAPACK_LIBS="-llapack"
+    fi
     ;;
 
     *)
@@ -180,7 +184,6 @@ case "$host" in
 
     if test "x$with_internal_blas" != "xyes"; then
        builtin(include,config/acx_blas.m4)
-       ACX_BLAS([HAVE_BLAS=yes])
 
        if test "$HAVE_BLAS" = yes; then
          AM_CFLAGS="$AM_CFLAGS"
@@ -200,7 +203,6 @@ case "$host" in
 
     if test "x$with_internal_blas" == "xyes"; then
         use_internal_blas=1
-        # LDFLAGS="$LDFLAGS -u MAIN__"
     fi
 
     if test "x$BLAS_STATIC_LIBS" != "x" || test "x$LAPACK_STATIC_LIBS" != "x"; then
