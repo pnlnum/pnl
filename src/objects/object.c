@@ -65,6 +65,10 @@ PnlObject* pnl_object_create (PnlType type)
       o = PNL_OBJECT(pnl_tridiag_mat_object_new ()); break;
     case PNL_TYPE_TRIDIAG_MATRIX_DOUBLE:
       o = PNL_OBJECT(pnl_tridiag_mat_new ()); break;
+    case PNL_TYPE_TRIDIAG_MATRIX_LU:
+      o = PNL_OBJECT(pnl_tridiag_mat_lu_object_new ()); break;
+    case PNL_TYPE_TRIDIAG_MATRIX_LU_DOUBLE:
+      o = PNL_OBJECT(pnl_tridiag_mat_lu_new ()); break;
     case PNL_TYPE_BAND_MATRIX:
       o = PNL_OBJECT(pnl_band_mat_object_new ()); break;
     case PNL_TYPE_BAND_MATRIX_DOUBLE:

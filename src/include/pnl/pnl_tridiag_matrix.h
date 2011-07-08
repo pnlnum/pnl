@@ -51,7 +51,7 @@ struct _PnlTridiagMat
 {
   /** 
    * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlVectXXX pointer to be cast to a PnlObject
+   * properly. This allows any PnlTridiagMat pointer to be cast to a PnlObject
    */
   PnlObject object; 
   int size; /*!< number of rows, the matrix must be square */
@@ -64,7 +64,7 @@ struct _PnlTridiagMatObject
 {
   /** 
    * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlVectXXX pointer to be cast to a PnlObject
+   * properly. This allows any PnlTridiagMat pointer to be cast to a PnlObject
    */
   PnlObject object; 
   int size; /*!< number of rows, the matrix must be square */
@@ -113,6 +113,53 @@ extern int pnl_tridiag_mat_syslin_inplace (PnlTridiagMat *M, PnlVect *rhs);
 extern void pnl_tridiag_mat_set(PnlTridiagMat *v, int d, int up, double x);
 extern double pnl_tridiag_mat_get(const PnlTridiagMat *self, int d, int up);
 extern double* pnl_tridiag_mat_lget(PnlTridiagMat *self, int d, int up);
+
+typedef struct _PnlTridiagMatLUObject PnlTridiagMatLUObject;
+typedef struct _PnlTridiagMatLU PnlTridiagMatLU;
+
+struct _PnlTridiagMatLU
+{
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows any PnlTridiagMatLU pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
+  int size; /*!< number of rows, the matrix must be square */
+  double *D; /*!< diagonal elements */
+  double *DU; /*!< upper diagonal elements */
+  double *DU2; /*!< second upper diagonal elements */
+  double *DL; /*!< lower diagonal elements */
+  int *ipiv; /*!< Permutation: row i has been interchanged with row ipiv(i) */
+};
+
+struct _PnlTridiagMatLUObject
+{
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows any PnlTridiagMatLU pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
+  int size; /*!< number of rows, the matrix must be square */
+  void *D; /*!< diagonal elements */
+  void *DU; /*!< upper diagonal elements */
+  void *DU2; /*!< second upper diagonal elements */
+  void *DL; /*!< lower diagonal elements */
+  int *ipiv; /*!< Permutation: row i has been interchanged with row ipiv(i) */
+};
+
+
+extern PnlTridiagMatLUObject* pnl_tridiag_mat_lu_object_new();
+extern void pnl_tridiag_mat_lu_object_free (PnlTridiagMatLUObject **BM);
+extern PnlTridiagMatLU* pnl_tridiag_mat_lu_new();
+extern PnlTridiagMatLU* pnl_tridiag_mat_lu_create(int size);
+extern PnlTridiagMatLU* pnl_tridiag_mat_lu_copy(const PnlTridiagMatLU  *mat);
+extern void pnl_tridiag_mat_lu_clone(PnlTridiagMatLU *clone, const PnlTridiagMatLU *mat);
+extern void pnl_tridiag_mat_lu_free(PnlTridiagMatLU **m);
+extern int pnl_tridiag_mat_lu_resize(PnlTridiagMatLU *v, int size);
+extern int pnl_tridiag_mat_lu_compute (PnlTridiagMatLU *LU, const PnlTridiagMat *A);
+extern int pnl_tridiag_mat_lu_syslin_inplace (PnlTridiagMatLU *LU, PnlVect *b);
+extern int pnl_tridiag_mat_lu_syslin (PnlVect *x, PnlTridiagMatLU *LU, const PnlVect *b);
+
 /*@}*/
 
 #ifdef __cplusplus

@@ -6,9 +6,10 @@ TEXFILES=$(wildcard *.tex)
 
 manual: pnl-manual.pdf
 
-pnl-manual.pdf: deterministic_methods.tex  pnl-manual.tex types.tex \
-		linear_algebra.tex probabilistic_methods.tex mathematical_functions.tex \
-		some_bindings.tex pnl-manual.tex
+pnl-manual.pdf: bases.tex cdf.tex complex.tex fft.tex finance.tex integ.tex laplace.tex \
+		linear_algebra.tex mathematical_functions.tex mathtools.tex ode.tex \
+		optim.tex pnl-manual.tex rng.tex roots.tex some_bindings.tex specfun.tex \
+		types.tex 
 	pdflatex pnl-manual
 	makeindex -s index.isty pnl-manual
 	pdflatex pnl-manual

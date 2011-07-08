@@ -1330,7 +1330,7 @@ We only store the three main diagonals as three vectors.
 typedef struct PnlTridiagMat{
   /**
    * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlList pointer to be cast to a PnlObject
+   * properly. This allows any PnlTridiagMat pointer to be cast to a PnlObject
    */
   PnlObject object; 
   int size; /*!< number of rows, the matrix must be square */
@@ -1339,11 +1339,28 @@ typedef struct PnlTridiagMat{
   double *DL; /*!< lower diagonal elements */
 } PnlTridiagMat;
 \end{verbatim}
-
 \var{size} is the size of the matrix, \var{D} is an array of size \var{size}
 containing the diagonal terms. \var{DU},
 \var{DL} are two arrays of size \var{size-1} containing respectively the upper
 diagonal ($M_{i, i+1}$) and the lower diagonal ($M_{i-1, i}$). 
+
+\begin{verbatim}
+typedef struct PnlTridiagMatLU{
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows any PnlTridiagMatLU pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
+  int size; /*!< number of rows, the matrix must be square */
+  double *D; /*!< diagonal elements */
+  double *DU; /*!< upper diagonal elements */
+  double *DU2; /*!< second upper diagonal elements */
+  double *DL; /*!< lower diagonal elements */
+  int *ipiv; /*!< Permutation: row i has been interchanged with row ipiv(i) */
+};
+\end{verbatim}
+This type is used to store the LU decomposition of a tridiagonal matrix. 
+
 \subsubsection{Functions}
 \paragraph{Constructors and destructors}
 \begin{itemize}
@@ -1379,7 +1396,10 @@ diagonal ($M_{i, i+1}$) and the lower diagonal ($M_{i-1, i}$).
   \item \describefun{int}{pnl_tridiag_mat_resize}{\refstruct{PnlTridiagMat} \ptr \refstruct{v}, int size}
     \sshortdescribe Resizes a \refstruct{PnlTridiagMat}.  
 \end{itemize}
+
+
 \paragraph{Accessing elements}
+
 \begin{itemize}
   \item \describefun{void}{pnl_tridiag_mat_set}{\refstruct{PnlTridiagMat} \ptr self, int d, int up, double x}
     \sshortdescribe Sets \var{self[d, d+up] = x}, \var{up} can be $\{-1, 0, 1\}$.  
@@ -1454,6 +1474,34 @@ diagonal ($M_{i, i+1}$) and the lower diagonal ($M_{i-1, i}$).
   \item \describefun{void}{pnl_tridiag_mat_syslin}{\refstruct{PnlVect}
       \ptr x, \refstruct{PnlTridiagMat} \ptr M, const \refstruct{PnlVect} \ptr b}
     \sshortdescribe Solves the linear system M x = b. On exit, \var{M} is modified and becomes unusable.
+  \item \describefun{\refstruct{PnlTridiagMatLU}\ptr }{pnl_tridiag_mat_lu_new}{}
+    \sshortdescribe Creates an empty \refstruct{PnlTridiagMatLU}
+  \item \describefun{\refstruct{PnlTridiagMatLU}\ptr }{pnl_tridiag_mat_lu_create}{int size}
+    \sshortdescribe Creates a \refstruct{PnlTridiagMatLU} with size \var{size}
+  \item \describefun{\refstruct{PnlTridiagMatLU}\ptr }{pnl_tridiag_mat_lu_copy}{const \refstruct{PnlTridiagMatLU}  \ptr mat}
+    \sshortdescribe Creates a new \refstruct{PnlTridiagMatLU} which is a copy of
+    \var{mat}.
+  \item \describefun{void}{pnl_tridiag_mat_lu_clone}{\refstruct{PnlTridiagMatLU} \ptr clone, const \refstruct{PnlTridiagMatLU} \ptr mat}
+    \sshortdescribe Clones a \refstruct{PnlTridiagMatLU}. \var{clone} must
+    already exist, no memory is allocated for the envelope. 
+  \item \describefun{void}{pnl_tridiag_mat_lu_free}{\refstruct{PnlTridiagMatLU} \ptr \ptr m}
+    \sshortdescribe Frees a \refstruct{PnlTridiagMatLU}
+  \item \describefun{int}{pnl_tridiag_mat_lu_resize}{\refstruct{PnlTridiagMatLU} \ptr v, int size}
+    \sshortdescribe Resizes a \refstruct{PnlTridiagMatLU}
+  \item \describefun{int}{pnl_tridiag_mat_lu_compute}{\refstruct{PnlTridiagMatLU} \ptr LU, const \refstruct{PnlTridiagMat} \ptr A}
+    \sshortdescribe Computes the LU factorisation of a tridiagonal matrix
+    \var{A}. \var{LU} must have already been created using
+    \reffun{pnl_tridiag_mat_lu_new}. On exit, \var{LU} contains the
+    decomposition which is suitable for use in \reffun{pnl_tridiag_mat_lu_syslin}.
+  \item \describefun{int}{pnl_tridiag_mat_lu_syslin_inplace}{\refstruct{PnlTridiagMatLU} \ptr LU, \refstruct{PnlVect} \ptr b}
+    \sshortdescribe Solves a linear system \var{A x = b} where the matrix \var{LU}
+    is given the LU decomposition of A previously computed by
+    \reffun{pnl_tridiag_mat_lu_compute}. On exit, \var{b} is overwritten by the
+    solution \var{x}. 
+  \item \describefun{int}{pnl_tridiag_mat_lu_syslin}{\refstruct{PnlVect} \ptr x, \refstruct{PnlTridiagMatLU} \ptr LU, const \refstruct{PnlVect} \ptr b}
+    \sshortdescribe Solves a linear system \var{A x = b} where the matrix \var{LU}
+    is given the LU decomposition of A previously computed by
+    \reffun{pnl_tridiag_mat_lu_compute}. 
 \end{itemize}
 
 

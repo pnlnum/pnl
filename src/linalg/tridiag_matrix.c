@@ -39,6 +39,11 @@ extern int C2F(dlagtm)(char *trans, int *n, int *nrhs, double *alpha,
                        int *ldx, double *beta, double *b, int *ldb);
 extern int C2F(dgtsv)(int *n, int *nrhs, double *dl, double *d, double *du,
                        double *b, int *ldb, int *info);
+extern int C2F(dgttrf)(int *n, double *dl, double *d, double *du, double
+                       *du2, int *ipiv, int *info);
+extern int C2F(dgttrs)(char *trans, int *n, int *nrhs, double *dl, double
+                      *d, double *du, double *du2, int *ipiv, double *b,
+                      int *ldb, int *info);
 
 /**
  * Solves a tridiagonal system defined by matrix whose three diagonals are
@@ -738,3 +743,228 @@ void pnl_tridiag_mat_lAxpby (double l, const PnlTridiagMat *A, const PnlVect *x,
       pnl_vect_mult_double (y, l);
     }
 }
+
+/*
+ * PnlTridiagMatLU
+ */
+static char pnl_tridiag_mat_lu_object_label[] = "PnlTridiagMatLUObject";
+static char pnl_tridiag_mat_lu_label[] = "PnlTridiagMatLU";
+
+PnlTridiagMatLUObject* pnl_tridiag_mat_lu_object_new ()
+{
+  PnlTridiagMatLUObject *o;
+  if ( (o = malloc (sizeof(PnlTridiagMatLUObject))) == NULL) return NULL;
+  o->size = 0;
+  o->D = o->DU = o->DL = o->DU2 = o->ipiv = NULL;
+  o->object.type = PNL_TYPE_TRIDIAG_MATRIX_LU;
+  o->object.parent_type = PNL_TYPE_TRIDIAG_MATRIX_LU;
+  o->object.label = pnl_tridiag_mat_lu_object_label;
+  o->object.destroy = (destroy_func *) pnl_tridiag_mat_lu_object_free;
+  return o;
+}
+
+/**
+ * Frees a PnlTridiagMatLUObject
+ *
+ * @param v a PnlTridiagMatLUObject**.
+ */
+void pnl_tridiag_mat_lu_object_free(PnlTridiagMatLUObject **v)
+{
+  if (*v != NULL)
+    {
+      if ((*v)->D != NULL) free((*v)->D);
+      if ((*v)->DU != NULL) free((*v)->DU);
+      if ((*v)->DU2 != NULL) free((*v)->DU2);
+      if ((*v)->DL != NULL) free((*v)->DL);
+      if ((*v)->ipiv != NULL) free((*v)->ipiv);
+      free(*v);
+      *v=NULL;
+    }
+}
+
+
+/**
+ * Creates an empty PnlTridiagMatLU
+ */
+PnlTridiagMatLU* pnl_tridiag_mat_lu_new()
+{
+  PnlTridiagMatLU *o;
+  if ( (o = (PnlTridiagMatLU *) pnl_tridiag_mat_lu_object_new ()) == NULL) return NULL;
+  o->object.type = PNL_TYPE_TRIDIAG_MATRIX_LU_DOUBLE;
+  o->object.label = pnl_tridiag_mat_lu_label;
+  return o;
+}
+
+/**
+ * creates a PnlTridiagMatLU
+ * @param size number of rows
+ * @return a PnlTridiagMatLU pointer
+ */
+PnlTridiagMatLU* pnl_tridiag_mat_lu_create(int size)
+{
+  PnlTridiagMatLU *o;
+  if ( (o = pnl_tridiag_mat_lu_new ()) == NULL) return NULL;
+  if (size>0)
+    {
+      o->size=size;
+      if((o->D=malloc(size*sizeof(double)))==NULL) return NULL;
+      if((o->DU=malloc((size-1)*sizeof(double)))==NULL) return NULL;
+      if((o->DU2=malloc((size-2)*sizeof(double)))==NULL) return NULL;
+      if((o->DL=malloc((size-1)*sizeof(double)))==NULL) return NULL;
+      if((o->ipiv=malloc(size*sizeof(int)))==NULL) return NULL;
+    }
+  return o;
+}
+
+/**
+ * Clones a PnlTridiagMatLU
+ * @param T a PnlTridiagMatLU
+ * @param clone a PnlTridiagMatLU, on exit contains a copy of T
+ */
+void pnl_tridiag_mat_lu_clone(PnlTridiagMatLU *clone, const PnlTridiagMatLU *T)
+{
+  pnl_tridiag_mat_lu_resize (clone, T->size);
+
+  memcpy(clone->D, T->D, T->size*sizeof(double));
+  memcpy(clone->DU, T->DU, (T->size-1)*sizeof(double));
+  memcpy(clone->DU2, T->DU2, (T->size-2)*sizeof(double));
+  memcpy(clone->DL, T->DL, (T->size-1)*sizeof(double));
+  memcpy(clone->ipiv, T->ipiv, T->size*sizeof(int));
+}
+
+/**
+ * Copies a PnlTridiagMatLU
+ * @param T a PnlTridiagMatLU
+ */
+PnlTridiagMatLU* pnl_tridiag_mat_lu_copy(const PnlTridiagMatLU *T)
+{
+  PnlTridiagMatLU *clone;
+  clone = pnl_tridiag_mat_lu_create (T->size);
+  pnl_tridiag_mat_lu_clone (clone, T);
+  return clone;
+}
+
+/**
+ * Frees a PnlTridiagMatLU
+ *
+ * @param v a PnlTridiagMatLU**.
+ */
+void pnl_tridiag_mat_lu_free(PnlTridiagMatLU **v)
+{
+  PnlTridiagMatLUObject *o;
+  o = PNL_TRIDIAGMATLU_OBJECT (*v);
+  pnl_tridiag_mat_lu_object_free (&o);
+}
+
+/**
+ * Resizes a PnlTridiagMatLU.
+ *
+ * If the new size is smaller than the current one, no
+ * memory is free. If the new size is larger than the
+ * current one, more space is allocated. Note that for the
+ * sake of efficiency the old data are not copied.
+ *
+ * @param v : a pointer to an already existing PnlTridiagMatLU (size
+ * must be initialised)
+ * @param size : new nb rows
+ * @return OK or FAIL. When returns OK, the matrix is changed.
+ */
+int pnl_tridiag_mat_lu_resize(PnlTridiagMatLU *v, int size)
+{
+  if (size < 0) return FAIL;
+  if (size==0) /* free array */
+    {
+      v->size = 0;
+      if (v->D != NULL) { free(v->D); v->D = NULL; }
+      if (v->DU != NULL) { free(v->DU); v->DU = NULL; }
+      if (v->DU2 != NULL) { free(v->DU2); v->DU2 = NULL; }
+      if (v->DL != NULL) { free(v->DL); v->DL = NULL; }
+      if (v->ipiv != NULL) { free(v->ipiv); v->ipiv = NULL; }
+      return OK;
+    }
+  if (v->size >= size) /*nothing to do, just adjust m and n*/
+    {
+      v->size=size;
+      return OK;
+    }
+  v->size=size;
+  if (v->size > 0)
+    {
+      free (v->D);
+      free (v->DL);
+      free (v->DU);
+      free (v->DU2);
+      free (v->ipiv);
+    }
+  if (((v->D = malloc(v->size*sizeof(double)))==NULL)
+      || ((v->DU = malloc((v->size-1)*sizeof(double)))==NULL)
+      || ((v->DU2 = malloc((v->size-2)*sizeof(double)))==NULL)
+      || ((v->DL = malloc((v->size-1)*sizeof(double)))==NULL)
+      || ((v->ipiv = malloc((v->size)*sizeof(int)))==NULL))
+    return FAIL;
+  return OK;
+}
+
+/** 
+ * Computes the LU factorisation of a tridiagonal matrix
+ * 
+ * @param LU the LU decomposition. LU must be an already existing
+ * PnlTridiagMatLU as returned by pnl_tridiag_mat_lu_new
+ * @param A the initial tridiagonal matrix
+ * 
+ * @return  OK or FAIL
+ */
+int pnl_tridiag_mat_lu_compute (PnlTridiagMatLU *LU, const PnlTridiagMat *A)
+{
+  int n, info;
+  n = A->size;
+  pnl_tridiag_mat_lu_resize (LU, A->size);
+  memcpy(LU->D, A->D, A->size*sizeof(double));
+  memcpy(LU->DU, A->DU, (A->size-1)*sizeof(double));
+  memcpy(LU->DL, A->DL, (A->size-1)*sizeof(double));
+  C2F(dgttrf)(&n, LU->DL, LU->D, LU->DU, LU->DU2, LU->ipiv, &info);
+  if ( info != 0 )
+    {
+      PNL_MESSAGE_ERROR ("LU decomposition cannot be computed", "pnl_tridiag_mat_lu_compute");
+      return FAIL;
+    }
+  return OK;
+}
+
+/**
+ * solves the linear system A x = b
+ *
+ * @param LU a PnlTridiagMatLU. A must have been computed by a previous call
+ * to pnl_mat_lu_compute
+ * @param b right hand side member. On exit b contains the solution x
+ * @return FAIL or OK
+ */
+int pnl_tridiag_mat_lu_syslin_inplace (PnlTridiagMatLU *LU, PnlVect *b)
+{
+  int n, nrhs, info, ldb;
+  n = LU->size;
+  nrhs = 1;
+  ldb = LU->size;
+
+  PNL_CHECK (LU->size != b->size, "incompatible size", "tridiag_mat_lu_syslin");
+
+  C2F(dgttrs)("N", &n, &nrhs, LU->DL, LU->D, LU->DU, LU->DU2, LU->ipiv, b->array, &ldb, &info);
+  if (info == 0) return OK;
+  else return FAIL;
+}
+
+/**
+ * solves the linear system A x = b
+ *
+ * @param LU a PnlTridiagMatLU. A must have been computed by a previous call
+ * to pnl_mat_lu_compute
+ * @param x contains the solution on exit
+ * @param b right hand side member.
+ * @return FAIL or OK
+ */
+int pnl_tridiag_mat_lu_syslin (PnlVect *x, PnlTridiagMatLU *LU, const PnlVect *b)
+{
+  pnl_vect_clone (x, b);
+  return pnl_tridiag_mat_lu_syslin_inplace (LU, x);
+}
+

@@ -5,6 +5,8 @@
 	* libf2c: lots of warnings removed
 	* lapack-wrap.c: Cholesky factorization with complete pivoting for
 	positive semidefinite matrices
+	* tridiag_matrix.c: LU decomposition for repeatedly solving linear
+	systems
 
 03-06-2011 Jérôme Lelong <jerome.lelong@gmail.com>
 

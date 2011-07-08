@@ -197,7 +197,36 @@ static void tridiag_syslin_test ()
   pnl_vect_free (&Mx);
   pnl_vect_free (&b);
   pnl_tridiag_mat_free (&M);
+  pnl_tridiag_mat_free (&Mcopy);
 }
+
+static void tridiag_lu_syslin_test ()
+{
+  PnlVect *b, *x, *Mx;
+  PnlTridiagMat *M;
+  PnlTridiagMatLU *LU;
+  int n = 5;
+  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
+
+  pnl_rand_init (gen, 1, 1);
+  x = pnl_vect_create (n);
+  b = pnl_vect_create (n);
+  pnl_vect_rand_normal (b, n, gen);
+  M = create_random_tridiag (n, gen);
+
+  LU = pnl_tridiag_mat_lu_new ();
+  pnl_tridiag_mat_lu_compute (LU, M);
+  pnl_tridiag_mat_lu_syslin (x, LU, b);
+  Mx = pnl_tridiag_mat_mult_vect (M, x);
+  pnl_test_vect_eq_abs (Mx, b, 1E-12, "tridiag_mat_syslin", "");
+
+  pnl_vect_free (&x);
+  pnl_vect_free (&Mx);
+  pnl_vect_free (&b);
+  pnl_tridiag_mat_free (&M);
+  pnl_tridiag_mat_lu_free (&LU);
+}
+
 
 static void triadiag_scalar_prod_test ()
 {
@@ -234,6 +263,7 @@ int main (int argc, char *argv[])
   tridiag_mv_test ();
   tridiag_lAxpby_test ();
   tridiag_syslin_test ();
+  tridiag_lu_syslin_test ();
   triadiag_scalar_prod_test ();
   exit (pnl_test_finalize("Tridiag matrices"));
 }
