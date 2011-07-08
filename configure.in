@@ -184,6 +184,7 @@ case "$host" in
 
     if test "x$with_internal_blas" != "xyes"; then
        builtin(include,config/acx_blas.m4)
+       ACX_BLAS([HAVE_BLAS=yes])
 
        if test "$HAVE_BLAS" = yes; then
          AM_CFLAGS="$AM_CFLAGS"
