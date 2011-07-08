@@ -31,7 +31,7 @@ static int c__1 = 1;
     doublecomplex z__1;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *);
+    double z_abs(doublecomplex *);
 
     /* Local variables */
     int i__, j, j1, j2;
@@ -556,7 +556,7 @@ static int c__1 = 1;
 		i__3 = MIN(i__4,i__5);
 		for (i__ = MAX(i__2,1); i__ <= i__3; ++i__) {
 /* Computing MAX */
-		    d__1 = anorm, d__2 = z_ABS(&ab[i__ + j * ab_dim1]);
+		    d__1 = anorm, d__2 = z_abs(&ab[i__ + j * ab_dim1]);
 		    anorm = MAX(d__1,d__2);
 /* L80: */
 		}

@@ -28,7 +28,7 @@ static int c__1 = 1;
     complex q__1, q__2, q__3;
 
     /* Builtin functions */
-    double sqrt(double), c_ABS(complex *);
+    double sqrt(double), c_abs(complex *);
     void r_cnjg(complex *, complex *);
 
     /* Local variables */
@@ -239,8 +239,8 @@ static int c__1 = 1;
 	    3].i * s[2].r;
     q__1.r = q__2.r - q__3.r, q__1.i = q__2.i - q__3.i;
     g.r = q__1.r, g.i = q__1.i;
-    sa = c_ABS(&s[3]);
-    sb = c_ABS(&t[3]);
+    sa = c_abs(&s[3]);
+    sb = c_abs(&t[3]);
     clartg_(&g, &f, &cz, &sz, &cdum);
     q__1.r = -sz.r, q__1.i = -sz.i;
     sz.r = q__1.r, sz.i = q__1.i;
@@ -258,7 +258,7 @@ static int c__1 = 1;
 
 /*     Weak stability test: |S21| + |T21| <= O(EPS F-norm((S, T))) */
 
-    ws = c_ABS(&s[1]) + c_ABS(&t[1]);
+    ws = c_abs(&s[1]) + c_abs(&t[1]);
     weak = ws <= thresh;
     if (! weak) {
 	goto L20;

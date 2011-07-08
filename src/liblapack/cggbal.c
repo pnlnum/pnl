@@ -27,7 +27,7 @@ static float c_b72 = .5f;
     float r__1, r__2, r__3;
 
     /* Builtin functions */
-    double r_lg10(float *), r_imag(complex *), c_ABS(complex *), r_sign(float *,
+    double r_lg10(float *), r_imag(complex *), c_abs(complex *), r_sign(float *,
 	     float *), pow_ri(float *, int *);
 
     /* Local variables */
@@ -595,11 +595,11 @@ L350:
     for (i__ = *ilo; i__ <= i__1; ++i__) {
 	i__2 = *n - *ilo + 1;
 	irab = icamax_(&i__2, &a[i__ + *ilo * a_dim1], lda);
-	rab = c_ABS(&a[i__ + (irab + *ilo - 1) * a_dim1]);
+	rab = c_abs(&a[i__ + (irab + *ilo - 1) * a_dim1]);
 	i__2 = *n - *ilo + 1;
 	irab = icamax_(&i__2, &b[i__ + *ilo * b_dim1], ldb);
 /* Computing MAX */
-	r__1 = rab, r__2 = c_ABS(&b[i__ + (irab + *ilo - 1) * b_dim1]);
+	r__1 = rab, r__2 = c_abs(&b[i__ + (irab + *ilo - 1) * b_dim1]);
 	rab = MAX(r__1,r__2);
 	r__1 = rab + sfmin;
 	lrab = (int) (r_lg10(&r__1) / basl + 1.f);
@@ -609,10 +609,10 @@ L350:
 	ir = MIN(i__2,i__3);
 	lscale[i__] = pow_ri(&c_b36, &ir);
 	icab = icamax_(ihi, &a[i__ * a_dim1 + 1], &c__1);
-	cab = c_ABS(&a[icab + i__ * a_dim1]);
+	cab = c_abs(&a[icab + i__ * a_dim1]);
 	icab = icamax_(ihi, &b[i__ * b_dim1 + 1], &c__1);
 /* Computing MAX */
-	r__1 = cab, r__2 = c_ABS(&b[icab + i__ * b_dim1]);
+	r__1 = cab, r__2 = c_abs(&b[icab + i__ * b_dim1]);
 	cab = MAX(r__1,r__2);
 	r__1 = cab + sfmin;
 	lcab = (int) (r_lg10(&r__1) / basl + 1.f);

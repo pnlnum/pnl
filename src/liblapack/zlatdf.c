@@ -29,7 +29,7 @@ static double c_b24 = 1.;
 
     /* Builtin functions */
     void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
-    double z_ABS(doublecomplex *);
+    double z_abs(doublecomplex *);
     void z_sqrt(doublecomplex *, doublecomplex *);
 
     /* Local variables */
@@ -303,8 +303,8 @@ static double c_b24 = 1.;
 		rhs[i__2].r = z__1.r, rhs[i__2].i = z__1.i;
 /* L20: */
 	    }
-	    splus += z_ABS(&work[i__ - 1]);
-	    sminu += z_ABS(&rhs[i__]);
+	    splus += z_abs(&work[i__ - 1]);
+	    sminu += z_abs(&rhs[i__]);
 /* L30: */
 	}
 	if (splus > sminu) {

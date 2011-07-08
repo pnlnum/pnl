@@ -23,7 +23,7 @@ double clanht_(char *norm, int *n, float *d__, complex *e)
     float ret_val, r__1, r__2, r__3;
 
     /* Builtin functions */
-    double c_ABS(complex *), sqrt(double);
+    double c_abs(complex *), sqrt(double);
 
     /* Local variables */
     int i__;
@@ -117,7 +117,7 @@ double clanht_(char *norm, int *n, float *d__, complex *e)
 	    r__2 = anorm, r__3 = (r__1 = d__[i__], ABS(r__1));
 	    anorm = MAX(r__2,r__3);
 /* Computing MAX */
-	    r__1 = anorm, r__2 = c_ABS(&e[i__]);
+	    r__1 = anorm, r__2 = c_abs(&e[i__]);
 	    anorm = MAX(r__1,r__2);
 /* L10: */
 	}
@@ -130,14 +130,14 @@ double clanht_(char *norm, int *n, float *d__, complex *e)
 	    anorm = ABS(d__[1]);
 	} else {
 /* Computing MAX */
-	    r__2 = ABS(d__[1]) + c_ABS(&e[1]), r__3 = c_ABS(&e[*n - 1]) + (
+	    r__2 = ABS(d__[1]) + c_abs(&e[1]), r__3 = c_abs(&e[*n - 1]) + (
 		    r__1 = d__[*n], ABS(r__1));
 	    anorm = MAX(r__2,r__3);
 	    i__1 = *n - 1;
 	    for (i__ = 2; i__ <= i__1; ++i__) {
 /* Computing MAX */
-		r__2 = anorm, r__3 = (r__1 = d__[i__], ABS(r__1)) + c_ABS(&e[
-			i__]) + c_ABS(&e[i__ - 1]);
+		r__2 = anorm, r__3 = (r__1 = d__[i__], ABS(r__1)) + c_abs(&e[
+			i__]) + c_abs(&e[i__ - 1]);
 		anorm = MAX(r__2,r__3);
 /* L20: */
 	    }

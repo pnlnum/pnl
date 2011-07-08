@@ -24,7 +24,7 @@ double clangb_(char *norm, int *n, int *kl, int *ku, complex *
     float ret_val, r__1, r__2;
 
     /* Builtin functions */
-    double c_ABS(complex *), sqrt(double);
+    double c_abs(complex *), sqrt(double);
 
     /* Local variables */
     int i__, j, k, l;
@@ -136,7 +136,7 @@ double clangb_(char *norm, int *n, int *kl, int *ku, complex *
 	    i__3 = MIN(i__4,i__5);
 	    for (i__ = MAX(i__2,1); i__ <= i__3; ++i__) {
 /* Computing MAX */
-		r__1 = value, r__2 = c_ABS(&ab[i__ + j * ab_dim1]);
+		r__1 = value, r__2 = c_abs(&ab[i__ + j * ab_dim1]);
 		value = MAX(r__1,r__2);
 /* L10: */
 	    }
@@ -157,7 +157,7 @@ double clangb_(char *norm, int *n, int *kl, int *ku, complex *
 	    i__4 = *n + *ku + 1 - j, i__5 = *kl + *ku + 1;
 	    i__2 = MIN(i__4,i__5);
 	    for (i__ = MAX(i__3,1); i__ <= i__2; ++i__) {
-		sum += c_ABS(&ab[i__ + j * ab_dim1]);
+		sum += c_abs(&ab[i__ + j * ab_dim1]);
 /* L30: */
 	    }
 	    value = MAX(value,sum);
@@ -181,7 +181,7 @@ double clangb_(char *norm, int *n, int *kl, int *ku, complex *
 	    i__5 = *n, i__6 = j + *kl;
 	    i__4 = MIN(i__5,i__6);
 	    for (i__ = MAX(i__2,i__3); i__ <= i__4; ++i__) {
-		work[i__] += c_ABS(&ab[k + i__ + j * ab_dim1]);
+		work[i__] += c_abs(&ab[k + i__ + j * ab_dim1]);
 /* L60: */
 	    }
 /* L70: */

@@ -29,7 +29,7 @@ static int c__1 = 1;
     complex q__1;
 
     /* Builtin functions */
-    double c_ABS(complex *);
+    double c_abs(complex *);
 
     /* Local variables */
     int i__, j, j1, j2;
@@ -553,7 +553,7 @@ static int c__1 = 1;
 		i__3 = MIN(i__4,i__5);
 		for (i__ = MAX(i__2,1); i__ <= i__3; ++i__) {
 /* Computing MAX */
-		    r__1 = anorm, r__2 = c_ABS(&ab[i__ + j * ab_dim1]);
+		    r__1 = anorm, r__2 = c_abs(&ab[i__ + j * ab_dim1]);
 		    anorm = MAX(r__1,r__2);
 /* L80: */
 		}

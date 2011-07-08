@@ -36,7 +36,7 @@ static int c__1 = 1;
 	    double *, int *), dlaed4_(int *, int *, 
 	    double *, double *, double *, double *, 
 	    double *, int *);
-    extern double dlamc3_(double *, double *);
+    extern double pnl_dlamc3(double *, double *);
     extern  int xerbla_(char *, int *);
 
 
@@ -188,7 +188,7 @@ static int c__1 = 1;
 
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dlamda[i__] = dlamc3_(&dlamda[i__], &dlamda[i__]) - dlamda[i__];
+	dlamda[i__] = pnl_dlamc3(&dlamda[i__], &dlamda[i__]) - dlamda[i__];
 /* L10: */
     }
 

@@ -24,7 +24,7 @@ static int c__1 = 1;
     complex q__1, q__2, q__3, q__4, q__5, q__6;
 
     /* Builtin functions */
-    double c_ABS(complex *);
+    double c_abs(complex *);
     void r_cnjg(complex *, complex *), c_sqrt(complex *, complex *);
     double sqrt(double);
     void c_div(complex *, complex *, complex *);
@@ -132,8 +132,8 @@ static int c__1 = 1;
     cdotc_(&q__1, j, &x[1], &c__1, &w[1], &c__1);
     alpha.r = q__1.r, alpha.i = q__1.i;
 
-    absalp = c_ABS(&alpha);
-    absgam = c_ABS(gamma);
+    absalp = c_abs(&alpha);
+    absgam = c_abs(gamma);
     absest = ABS(*sest);
 
     if (*job == 1) {
@@ -285,7 +285,7 @@ static int c__1 = 1;
 		cosine.r = q__1.r, cosine.i = q__1.i;
 	    }
 /* Computing MAX */
-	    r__1 = c_ABS(&sine), r__2 = c_ABS(&cosine);
+	    r__1 = c_abs(&sine), r__2 = c_abs(&cosine);
 	    s1 = MAX(r__1,r__2);
 	    q__1.r = sine.r / s1, q__1.i = sine.i / s1;
 	    s->r = q__1.r, s->i = q__1.i;
@@ -378,7 +378,7 @@ static int c__1 = 1;
 		c__->r = r__1, c__->i = 0.f;
 		r__2 = b * b;
 		q__2.r = r__2 - c__->r, q__2.i = -c__->i;
-		r__1 = b + sqrt(c_ABS(&q__2));
+		r__1 = b + sqrt(c_abs(&q__2));
 		q__1.r = c__->r / r__1, q__1.i = c__->i / r__1;
 		t = q__1.r;
 		q__2.r = alpha.r / absest, q__2.i = alpha.i / absest;

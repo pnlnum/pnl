@@ -27,7 +27,7 @@ static int c_n1 = -1;
     doublecomplex z__1, z__2, z__3;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *);
+    double z_abs(doublecomplex *);
     void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
 
     /* Local variables */
@@ -162,8 +162,8 @@ static int c_n1 = -1;
 /*     Check for scaling */
 
     i__ = izamax_(n, &rhs[1], &c__1);
-    if (smlnum * 2. * z_ABS(&rhs[i__]) > z_ABS(&a[*n + *n * a_dim1])) {
-	d__1 = z_ABS(&rhs[i__]);
+    if (smlnum * 2. * z_abs(&rhs[i__]) > z_abs(&a[*n + *n * a_dim1])) {
+	d__1 = z_abs(&rhs[i__]);
 	z__1.r = .5 / d__1, z__1.i = 0. / d__1;
 	temp.r = z__1.r, temp.i = z__1.i;
 	zscal_(n, &temp, &rhs[1], &c__1);

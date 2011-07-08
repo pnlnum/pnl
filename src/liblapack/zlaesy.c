@@ -26,7 +26,7 @@ static int c__2 = 2;
     doublecomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *);
+    double z_abs(doublecomplex *);
     void pow_zi(doublecomplex *, doublecomplex *, int *), z_sqrt(
 	    doublecomplex *, doublecomplex *), z_div(doublecomplex *, 
 	    doublecomplex *, doublecomplex *);
@@ -106,10 +106,10 @@ static int c__2 = 2;
 /*     Special case:  The matrix is actually diagonal. */
 /*     To avoid divide by zero later, we treat this case separately. */
 
-    if (z_ABS(b) == 0.) {
+    if (z_abs(b) == 0.) {
 	rt1->r = a->r, rt1->i = a->i;
 	rt2->r = c__->r, rt2->i = c__->i;
-	if (z_ABS(rt1) < z_ABS(rt2)) {
+	if (z_abs(rt1) < z_abs(rt2)) {
 	    tmp.r = rt1->r, tmp.i = rt1->i;
 	    rt1->r = rt2->r, rt1->i = rt2->i;
 	    rt2->r = tmp.r, rt2->i = tmp.i;
@@ -135,8 +135,8 @@ static int c__2 = 2;
 
 /*        Take the square root carefully to avoid over/under flow. */
 
-	babs = z_ABS(b);
-	tabs = z_ABS(&t);
+	babs = z_abs(b);
+	tabs = z_abs(&t);
 	z__ = MAX(babs,tabs);
 	if (z__ > 0.) {
 	    z__5.r = t.r / z__, z__5.i = t.i / z__;
@@ -156,7 +156,7 @@ static int c__2 = 2;
 	rt1->r = z__1.r, rt1->i = z__1.i;
 	z__1.r = s.r - t.r, z__1.i = s.i - t.i;
 	rt2->r = z__1.r, rt2->i = z__1.i;
-	if (z_ABS(rt1) < z_ABS(rt2)) {
+	if (z_abs(rt1) < z_abs(rt2)) {
 	    tmp.r = rt1->r, tmp.i = rt1->i;
 	    rt1->r = rt2->r, rt1->i = rt2->i;
 	    rt2->r = tmp.r, rt2->i = tmp.i;
@@ -170,7 +170,7 @@ static int c__2 = 2;
 	z__2.r = rt1->r - a->r, z__2.i = rt1->i - a->i;
 	z_div(&z__1, &z__2, b);
 	sn1->r = z__1.r, sn1->i = z__1.i;
-	tabs = z_ABS(sn1);
+	tabs = z_abs(sn1);
 	if (tabs > 1.) {
 /* Computing 2nd power */
 	    d__2 = 1. / tabs;
@@ -188,7 +188,7 @@ static int c__2 = 2;
 	    z_sqrt(&z__1, &z__2);
 	    t.r = z__1.r, t.i = z__1.i;
 	}
-	evnorm = z_ABS(&t);
+	evnorm = z_abs(&t);
 	if (evnorm >= .1) {
 	    z_div(&z__1, &c_b1, &t);
 	    evscal->r = z__1.r, evscal->i = z__1.i;

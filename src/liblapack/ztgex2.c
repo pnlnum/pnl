@@ -29,7 +29,7 @@ static int c__1 = 1;
     doublecomplex z__1, z__2, z__3;
 
     /* Builtin functions */
-    double sqrt(double), z_ABS(doublecomplex *);
+    double sqrt(double), z_abs(doublecomplex *);
     void d_cnjg(doublecomplex *, doublecomplex *);
 
     /* Local variables */
@@ -242,8 +242,8 @@ static int c__1 = 1;
 	    3].i * s[2].r;
     z__1.r = z__2.r - z__3.r, z__1.i = z__2.i - z__3.i;
     g.r = z__1.r, g.i = z__1.i;
-    sa = z_ABS(&s[3]);
-    sb = z_ABS(&t[3]);
+    sa = z_abs(&s[3]);
+    sb = z_abs(&t[3]);
     zlartg_(&g, &f, &cz, &sz, &cdum);
     z__1.r = -sz.r, z__1.i = -sz.i;
     sz.r = z__1.r, sz.i = z__1.i;
@@ -261,7 +261,7 @@ static int c__1 = 1;
 
 /*     Weak stability test: |S21| + |T21| <= O(EPS F-norm((S, T))) */
 
-    ws = z_ABS(&s[1]) + z_ABS(&t[1]);
+    ws = z_abs(&s[1]) + z_abs(&t[1]);
     weak = ws <= thresh;
     if (! weak) {
 	goto L20;

@@ -32,7 +32,7 @@ static int c__2 = 2;
     doublecomplex z__1;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *);
+    double z_abs(doublecomplex *);
 
     /* Local variables */
     int i__, j;
@@ -360,9 +360,9 @@ static int c__2 = 2;
     work[i__1].r = 1., work[i__1].i = 0.;
     i__1 = ismax;
     work[i__1].r = 1., work[i__1].i = 0.;
-    smax = z_ABS(&a[a_dim1 + 1]);
+    smax = z_abs(&a[a_dim1 + 1]);
     smin = smax;
-    if (z_ABS(&a[a_dim1 + 1]) == 0.) {
+    if (z_abs(&a[a_dim1 + 1]) == 0.) {
 	*rank = 0;
 	i__1 = MAX(*m,*n);
 	zlaset_("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);

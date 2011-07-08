@@ -24,7 +24,7 @@ double clange_(char *norm, int *m, int *n, complex *a, int *
     float ret_val, r__1, r__2;
 
     /* Builtin functions */
-    double c_ABS(complex *), sqrt(double);
+    double c_abs(complex *), sqrt(double);
 
     /* Local variables */
     int i__, j;
@@ -127,7 +127,7 @@ double clange_(char *norm, int *m, int *n, complex *a, int *
 	    i__2 = *m;
 	    for (i__ = 1; i__ <= i__2; ++i__) {
 /* Computing MAX */
-		r__1 = value, r__2 = c_ABS(&a[i__ + j * a_dim1]);
+		r__1 = value, r__2 = c_abs(&a[i__ + j * a_dim1]);
 		value = MAX(r__1,r__2);
 /* L10: */
 	    }
@@ -144,7 +144,7 @@ double clange_(char *norm, int *m, int *n, complex *a, int *
 	    sum = 0.f;
 	    i__2 = *m;
 	    for (i__ = 1; i__ <= i__2; ++i__) {
-		sum += c_ABS(&a[i__ + j * a_dim1]);
+		sum += c_abs(&a[i__ + j * a_dim1]);
 /* L30: */
 	    }
 	    value = MAX(value,sum);
@@ -163,7 +163,7 @@ double clange_(char *norm, int *m, int *n, complex *a, int *
 	for (j = 1; j <= i__1; ++j) {
 	    i__2 = *m;
 	    for (i__ = 1; i__ <= i__2; ++i__) {
-		work[i__] += c_ABS(&a[i__ + j * a_dim1]);
+		work[i__] += c_abs(&a[i__ + j * a_dim1]);
 /* L60: */
 	    }
 /* L70: */

@@ -30,7 +30,7 @@ static int c__2 = 2;
     /* Builtin functions */
     double r_imag(complex *);
     void r_cnjg(complex *, complex *);
-    double c_ABS(complex *);
+    double c_abs(complex *);
     void c_sqrt(complex *, complex *), pow_ci(complex *, complex *, int *)
 	    ;
 
@@ -255,11 +255,11 @@ static int c__2 = 2;
 	    q__1.r = h__[i__2].r / r__3, q__1.i = h__[i__2].i / r__3;
 	    sc.r = q__1.r, sc.i = q__1.i;
 	    r_cnjg(&q__2, &sc);
-	    r__1 = c_ABS(&sc);
+	    r__1 = c_abs(&sc);
 	    q__1.r = q__2.r / r__1, q__1.i = q__2.i / r__1;
 	    sc.r = q__1.r, sc.i = q__1.i;
 	    i__2 = i__ + (i__ - 1) * h_dim1;
-	    r__1 = c_ABS(&h__[i__ + (i__ - 1) * h_dim1]);
+	    r__1 = c_abs(&h__[i__ + (i__ - 1) * h_dim1]);
 	    h__[i__2].r = r__1, h__[i__2].i = 0.f;
 	    i__2 = jhi - i__ + 1;
 	    cscal_(&i__2, &sc, &h__[i__ + i__ * h_dim1], ldh);
@@ -662,7 +662,7 @@ L70:
 
 		q__1.r = 1.f - t1.r, q__1.i = 0.f - t1.i;
 		temp.r = q__1.r, temp.i = q__1.i;
-		r__1 = c_ABS(&temp);
+		r__1 = c_abs(&temp);
 		q__1.r = temp.r / r__1, q__1.i = temp.i / r__1;
 		temp.r = q__1.r, temp.i = q__1.i;
 		i__2 = m + 1 + m * h_dim1;
@@ -707,7 +707,7 @@ L70:
 	i__1 = i__ + (i__ - 1) * h_dim1;
 	temp.r = h__[i__1].r, temp.i = h__[i__1].i;
 	if (r_imag(&temp) != 0.f) {
-	    rtemp = c_ABS(&temp);
+	    rtemp = c_abs(&temp);
 	    i__1 = i__ + (i__ - 1) * h_dim1;
 	    h__[i__1].r = rtemp, h__[i__1].i = 0.f;
 	    q__1.r = temp.r / rtemp, q__1.i = temp.i / rtemp;

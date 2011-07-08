@@ -25,7 +25,7 @@ static int c__1 = 1;
     doublecomplex z__1, z__2, z__3, z__4, z__5, z__6;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *);
+    double z_abs(doublecomplex *);
     void d_cnjg(doublecomplex *, doublecomplex *), z_sqrt(doublecomplex *, 
 	    doublecomplex *);
     double sqrt(double);
@@ -135,8 +135,8 @@ static int c__1 = 1;
     zdotc_(&z__1, j, &x[1], &c__1, &w[1], &c__1);
     alpha.r = z__1.r, alpha.i = z__1.i;
 
-    absalp = z_ABS(&alpha);
-    absgam = z_ABS(gamma);
+    absalp = z_abs(&alpha);
+    absgam = z_abs(gamma);
     absest = ABS(*sest);
 
     if (*job == 1) {
@@ -288,7 +288,7 @@ static int c__1 = 1;
 		cosine.r = z__1.r, cosine.i = z__1.i;
 	    }
 /* Computing MAX */
-	    d__1 = z_ABS(&sine), d__2 = z_ABS(&cosine);
+	    d__1 = z_abs(&sine), d__2 = z_abs(&cosine);
 	    s1 = MAX(d__1,d__2);
 	    z__1.r = sine.r / s1, z__1.i = sine.i / s1;
 	    s->r = z__1.r, s->i = z__1.i;
@@ -381,7 +381,7 @@ static int c__1 = 1;
 		c__->r = d__1, c__->i = 0.;
 		d__2 = b * b;
 		z__2.r = d__2 - c__->r, z__2.i = -c__->i;
-		d__1 = b + sqrt(z_ABS(&z__2));
+		d__1 = b + sqrt(z_abs(&z__2));
 		z__1.r = c__->r / d__1, z__1.i = c__->i / d__1;
 		t = z__1.r;
 		z__2.r = alpha.r / absest, z__2.i = alpha.i / absest;

@@ -25,7 +25,7 @@ static int c__1 = 1;
     double d__1;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *);
+    double z_abs(doublecomplex *);
 
     /* Local variables */
     int i__, ix;
@@ -156,7 +156,7 @@ static int c__1 = 1;
     rwork[1] = 1.;
     i__1 = *n;
     for (i__ = 2; i__ <= i__1; ++i__) {
-	rwork[i__] = rwork[i__ - 1] * z_ABS(&e[i__ - 1]) + 1.;
+	rwork[i__] = rwork[i__ - 1] * z_abs(&e[i__ - 1]) + 1.;
 /* L20: */
     }
 
@@ -164,7 +164,7 @@ static int c__1 = 1;
 
     rwork[*n] /= d__[*n];
     for (i__ = *n - 1; i__ >= 1; --i__) {
-	rwork[i__] = rwork[i__] / d__[i__] + rwork[i__ + 1] * z_ABS(&e[i__]);
+	rwork[i__] = rwork[i__] / d__[i__] + rwork[i__ + 1] * z_abs(&e[i__]);
 /* L30: */
     }
 

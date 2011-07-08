@@ -30,7 +30,7 @@ static int c__1 = 1;
 
     /* Builtin functions */
     void r_cnjg(complex *, complex *);
-    double c_ABS(complex *);
+    double c_abs(complex *);
 
     /* Local variables */
     int i__, j, l;
@@ -585,7 +585,7 @@ static int c__1 = 1;
     t.r = ab[i__1].r, t.i = ab[i__1].i;
     i__1 = minmn;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	abst = c_ABS(&t);
+	abst = c_abs(&t);
 	d__[i__] = abst;
 	if (abst != 0.f) {
 	    q__1.r = t.r / abst, q__1.i = t.i / abst;
@@ -621,7 +621,7 @@ static int c__1 = 1;
 			    q__2.r;
 		    t.r = q__1.r, t.i = q__1.i;
 		}
-		abst = c_ABS(&t);
+		abst = c_abs(&t);
 		e[i__] = abst;
 		if (abst != 0.f) {
 		    q__1.r = t.r / abst, q__1.i = t.i / abst;

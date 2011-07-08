@@ -487,7 +487,7 @@ PS. */
 	r__1 = -(double)half;
 	b = slamc3_(&third, &r__1);
 	b = slamc3_(&b, &sixth);
-	b = dABS(b);
+	b = ABS(b);
 	if (b < leps) {
 	    b = leps;
 	}

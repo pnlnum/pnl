@@ -25,7 +25,7 @@
     doublecomplex z__1, z__2;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *), sqrt(double);
+    double z_abs(doublecomplex *), sqrt(double);
 
     /* Local variables */
     int i__;
@@ -363,7 +363,7 @@ L60:
 		    .i;
 	    z__1.r = -z__2.r, z__1.i = -z__2.i;
 	    z__[i__2].r = z__1.r, z__[i__2].i = z__1.i;
-	    if ((z_ABS(&z__[i__]) + z_ABS(&z__[i__ + 1])) * (d__1 = ld[i__], 
+	    if ((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], 
 		    ABS(d__1)) < *gaptol) {
 		i__2 = i__;
 		z__[i__2].r = 0., z__[i__2].i = 0.;
@@ -400,7 +400,7 @@ L220:
 		z__1.r = -z__2.r, z__1.i = -z__2.i;
 		z__[i__2].r = z__1.r, z__[i__2].i = z__1.i;
 	    }
-	    if ((z_ABS(&z__[i__]) + z_ABS(&z__[i__ + 1])) * (d__1 = ld[i__], 
+	    if ((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], 
 		    ABS(d__1)) < *gaptol) {
 		i__2 = i__;
 		z__[i__2].r = 0., z__[i__2].i = 0.;
@@ -429,7 +429,7 @@ L240:
 		    .i;
 	    z__1.r = -z__2.r, z__1.i = -z__2.i;
 	    z__[i__2].r = z__1.r, z__[i__2].i = z__1.i;
-	    if ((z_ABS(&z__[i__]) + z_ABS(&z__[i__ + 1])) * (d__1 = ld[i__], 
+	    if ((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], 
 		    ABS(d__1)) < *gaptol) {
 		i__2 = i__ + 1;
 		z__[i__2].r = 0., z__[i__2].i = 0.;
@@ -466,7 +466,7 @@ L260:
 		z__1.r = -z__2.r, z__1.i = -z__2.i;
 		z__[i__2].r = z__1.r, z__[i__2].i = z__1.i;
 	    }
-	    if ((z_ABS(&z__[i__]) + z_ABS(&z__[i__ + 1])) * (d__1 = ld[i__], 
+	    if ((z_abs(&z__[i__]) + z_abs(&z__[i__ + 1])) * (d__1 = ld[i__], 
 		    ABS(d__1)) < *gaptol) {
 		i__2 = i__ + 1;
 		z__[i__2].r = 0., z__[i__2].i = 0.;

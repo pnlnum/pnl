@@ -24,7 +24,7 @@ double clanhp_(char *norm, char *uplo, int *n, complex *ap, float *
     float ret_val, r__1, r__2, r__3;
 
     /* Builtin functions */
-    double c_ABS(complex *), sqrt(double);
+    double c_abs(complex *), sqrt(double);
 
     /* Local variables */
     int i__, j, k;
@@ -132,7 +132,7 @@ double clanhp_(char *norm, char *uplo, int *n, complex *ap, float *
 		i__2 = k + j - 1;
 		for (i__ = k + 1; i__ <= i__2; ++i__) {
 /* Computing MAX */
-		    r__1 = value, r__2 = c_ABS(&ap[i__]);
+		    r__1 = value, r__2 = c_abs(&ap[i__]);
 		    value = MAX(r__1,r__2);
 /* L10: */
 		}
@@ -154,7 +154,7 @@ double clanhp_(char *norm, char *uplo, int *n, complex *ap, float *
 		i__2 = k + *n - j;
 		for (i__ = k + 1; i__ <= i__2; ++i__) {
 /* Computing MAX */
-		    r__1 = value, r__2 = c_ABS(&ap[i__]);
+		    r__1 = value, r__2 = c_abs(&ap[i__]);
 		    value = MAX(r__1,r__2);
 /* L30: */
 		}
@@ -174,7 +174,7 @@ double clanhp_(char *norm, char *uplo, int *n, complex *ap, float *
 		sum = 0.f;
 		i__2 = j - 1;
 		for (i__ = 1; i__ <= i__2; ++i__) {
-		    absa = c_ABS(&ap[k]);
+		    absa = c_abs(&ap[k]);
 		    sum += absa;
 		    work[i__] += absa;
 		    ++k;
@@ -205,7 +205,7 @@ double clanhp_(char *norm, char *uplo, int *n, complex *ap, float *
 		++k;
 		i__2 = *n;
 		for (i__ = j + 1; i__ <= i__2; ++i__) {
-		    absa = c_ABS(&ap[k]);
+		    absa = c_abs(&ap[k]);
 		    sum += absa;
 		    work[i__] += absa;
 		    ++k;

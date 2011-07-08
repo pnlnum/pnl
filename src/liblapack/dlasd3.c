@@ -46,7 +46,7 @@ static double c_b26 = 0.;
     extern  int dcopy_(int *, double *, int *, 
 	    double *, int *);
     int ktemp;
-    extern double dlamc3_(double *, double *);
+    extern double pnl_dlamc3(double *, double *);
     extern  int dlasd4_(int *, int *, double *, 
 	    double *, double *, double *, double *, 
 	    double *, int *), dlascl_(char *, int *, int *, 
@@ -286,7 +286,7 @@ static double c_b26 = 0.;
 
     i__1 = *k;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dsigma[i__] = dlamc3_(&dsigma[i__], &dsigma[i__]) - dsigma[i__];
+	dsigma[i__] = pnl_dlamc3(&dsigma[i__], &dsigma[i__]) - dsigma[i__];
 /* L20: */
     }
 

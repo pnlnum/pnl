@@ -21,7 +21,7 @@
     doublecomplex z__1, z__2;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *);
+    double z_abs(doublecomplex *);
     void d_cnjg(doublecomplex *, doublecomplex *);
 
     /* Local variables */
@@ -103,16 +103,16 @@
 /*     .. */
 /*     .. Executable Statements .. */
 
-    if (z_ABS(b) == 0.) {
+    if (z_abs(b) == 0.) {
 	w.r = 1., w.i = 0.;
     } else {
 	d_cnjg(&z__2, b);
-	d__1 = z_ABS(b);
+	d__1 = z_abs(b);
 	z__1.r = z__2.r / d__1, z__1.i = z__2.i / d__1;
 	w.r = z__1.r, w.i = z__1.i;
     }
     d__1 = a->r;
-    d__2 = z_ABS(b);
+    d__2 = z_abs(b);
     d__3 = c__->r;
     dlaev2_(&d__1, &d__2, &d__3, rt1, rt2, cs1, &t);
     z__1.r = t * w.r, z__1.i = t * w.i;

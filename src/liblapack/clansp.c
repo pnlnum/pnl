@@ -24,7 +24,7 @@ double clansp_(char *norm, char *uplo, int *n, complex *ap, float *
     float ret_val, r__1, r__2;
 
     /* Builtin functions */
-    double c_ABS(complex *), r_imag(complex *), sqrt(double);
+    double c_abs(complex *), r_imag(complex *), sqrt(double);
 
     /* Local variables */
     int i__, j, k;
@@ -130,7 +130,7 @@ double clansp_(char *norm, char *uplo, int *n, complex *ap, float *
 		i__2 = k + j - 1;
 		for (i__ = k; i__ <= i__2; ++i__) {
 /* Computing MAX */
-		    r__1 = value, r__2 = c_ABS(&ap[i__]);
+		    r__1 = value, r__2 = c_abs(&ap[i__]);
 		    value = MAX(r__1,r__2);
 /* L10: */
 		}
@@ -144,7 +144,7 @@ double clansp_(char *norm, char *uplo, int *n, complex *ap, float *
 		i__2 = k + *n - j;
 		for (i__ = k; i__ <= i__2; ++i__) {
 /* Computing MAX */
-		    r__1 = value, r__2 = c_ABS(&ap[i__]);
+		    r__1 = value, r__2 = c_abs(&ap[i__]);
 		    value = MAX(r__1,r__2);
 /* L30: */
 		}
@@ -164,13 +164,13 @@ double clansp_(char *norm, char *uplo, int *n, complex *ap, float *
 		sum = 0.f;
 		i__2 = j - 1;
 		for (i__ = 1; i__ <= i__2; ++i__) {
-		    absa = c_ABS(&ap[k]);
+		    absa = c_abs(&ap[k]);
 		    sum += absa;
 		    work[i__] += absa;
 		    ++k;
 /* L50: */
 		}
-		work[j] = sum + c_ABS(&ap[k]);
+		work[j] = sum + c_abs(&ap[k]);
 		++k;
 /* L60: */
 	    }
@@ -189,11 +189,11 @@ double clansp_(char *norm, char *uplo, int *n, complex *ap, float *
 	    }
 	    i__1 = *n;
 	    for (j = 1; j <= i__1; ++j) {
-		sum = work[j] + c_ABS(&ap[k]);
+		sum = work[j] + c_abs(&ap[k]);
 		++k;
 		i__2 = *n;
 		for (i__ = j + 1; i__ <= i__2; ++i__) {
-		    absa = c_ABS(&ap[k]);
+		    absa = c_abs(&ap[k]);
 		    sum += absa;
 		    work[i__] += absa;
 		    ++k;

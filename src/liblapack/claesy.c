@@ -25,7 +25,7 @@ static int c__2 = 2;
     complex q__1, q__2, q__3, q__4, q__5, q__6, q__7;
 
     /* Builtin functions */
-    double c_ABS(complex *);
+    double c_abs(complex *);
     void pow_ci(complex *, complex *, int *), c_sqrt(complex *, complex *)
 	    , c_div(complex *, complex *, complex *);
 
@@ -104,10 +104,10 @@ static int c__2 = 2;
 /*     Special case:  The matrix is actually diagonal. */
 /*     To avoid divide by zero later, we treat this case separately. */
 
-    if (c_ABS(b) == 0.f) {
+    if (c_abs(b) == 0.f) {
 	rt1->r = a->r, rt1->i = a->i;
 	rt2->r = c__->r, rt2->i = c__->i;
-	if (c_ABS(rt1) < c_ABS(rt2)) {
+	if (c_abs(rt1) < c_abs(rt2)) {
 	    tmp.r = rt1->r, tmp.i = rt1->i;
 	    rt1->r = rt2->r, rt1->i = rt2->i;
 	    rt2->r = tmp.r, rt2->i = tmp.i;
@@ -133,8 +133,8 @@ static int c__2 = 2;
 
 /*        Take the square root carefully to avoid over/under flow. */
 
-	babs = c_ABS(b);
-	tabs = c_ABS(&t);
+	babs = c_abs(b);
+	tabs = c_abs(&t);
 	z__ = MAX(babs,tabs);
 	if (z__ > 0.f) {
 	    q__5.r = t.r / z__, q__5.i = t.i / z__;
@@ -154,7 +154,7 @@ static int c__2 = 2;
 	rt1->r = q__1.r, rt1->i = q__1.i;
 	q__1.r = s.r - t.r, q__1.i = s.i - t.i;
 	rt2->r = q__1.r, rt2->i = q__1.i;
-	if (c_ABS(rt1) < c_ABS(rt2)) {
+	if (c_abs(rt1) < c_abs(rt2)) {
 	    tmp.r = rt1->r, tmp.i = rt1->i;
 	    rt1->r = rt2->r, rt1->i = rt2->i;
 	    rt2->r = tmp.r, rt2->i = tmp.i;
@@ -168,7 +168,7 @@ static int c__2 = 2;
 	q__2.r = rt1->r - a->r, q__2.i = rt1->i - a->i;
 	c_div(&q__1, &q__2, b);
 	sn1->r = q__1.r, sn1->i = q__1.i;
-	tabs = c_ABS(sn1);
+	tabs = c_abs(sn1);
 	if (tabs > 1.f) {
 /* Computing 2nd power */
 	    r__2 = 1.f / tabs;
@@ -186,7 +186,7 @@ static int c__2 = 2;
 	    c_sqrt(&q__1, &q__2);
 	    t.r = q__1.r, t.i = q__1.i;
 	}
-	evnorm = c_ABS(&t);
+	evnorm = c_abs(&t);
 	if (evnorm >= .1f) {
 	    c_div(&q__1, &c_b1, &t);
 	    evscal->r = q__1.r, evscal->i = q__1.i;

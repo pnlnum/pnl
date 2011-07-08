@@ -32,7 +32,7 @@ static int c__2 = 2;
     complex q__1, q__2, q__3, q__4, q__5, q__6;
 
     /* Builtin functions */
-    double c_ABS(complex *);
+    double c_abs(complex *);
     void r_cnjg(complex *, complex *);
     double r_imag(complex *);
     void c_div(complex *, complex *, complex *), pow_ci(complex *, complex *, 
@@ -410,7 +410,7 @@ static int c__2 = 2;
 
     i__1 = *n;
     for (j = *ihi + 1; j <= i__1; ++j) {
-	absb = c_ABS(&t[j + j * t_dim1]);
+	absb = c_abs(&t[j + j * t_dim1]);
 	if (absb > safmin) {
 	    i__2 = j + j * t_dim1;
 	    q__2.r = t[i__2].r / absb, q__2.i = t[i__2].i / absb;
@@ -508,7 +508,7 @@ static int c__2 = 2;
 	    }
 	}
 
-	if (c_ABS(&t[ilast + ilast * t_dim1]) <= btol) {
+	if (c_abs(&t[ilast + ilast * t_dim1]) <= btol) {
 	    i__2 = ilast + ilast * t_dim1;
 	    t[i__2].r = 0.f, t[i__2].i = 0.f;
 	    goto L50;
@@ -537,7 +537,7 @@ static int c__2 = 2;
 
 /*           Test 2: for T(j,j)=0 */
 
-	    if (c_ABS(&t[j + j * t_dim1]) < btol) {
+	    if (c_abs(&t[j + j * t_dim1]) < btol) {
 		i__3 = j + j * t_dim1;
 		t[i__3].r = 0.f, t[i__3].i = 0.f;
 
@@ -702,7 +702,7 @@ L50:
 /*        H(ILAST,ILAST-1)=0 -- Standardize B, set ALPHA and BETA */
 
 L60:
-	absb = c_ABS(&t[ilast + ilast * t_dim1]);
+	absb = c_abs(&t[ilast + ilast * t_dim1]);
 	if (absb > safmin) {
 	    i__2 = ilast + ilast * t_dim1;
 	    q__2.r = t[i__2].r / absb, q__2.i = t[i__2].i / absb;
@@ -1090,7 +1090,7 @@ L190:
 
     i__1 = *ilo - 1;
     for (j = 1; j <= i__1; ++j) {
-	absb = c_ABS(&t[j + j * t_dim1]);
+	absb = c_abs(&t[j + j * t_dim1]);
 	if (absb > safmin) {
 	    i__2 = j + j * t_dim1;
 	    q__2.r = t[i__2].r / absb, q__2.i = t[i__2].i / absb;

@@ -22,7 +22,7 @@
 
     /* Builtin functions */
     void d_cnjg(doublecomplex *, doublecomplex *);
-    double z_ABS(doublecomplex *);
+    double z_abs(doublecomplex *);
 
     /* Local variables */
     doublecomplex c__, a11, a12, a22, tau;
@@ -130,9 +130,9 @@
 
 /*     Compute the SVD of 2-by-2 Upper triangular matrix. */
 
-    d__1 = z_ABS(&a11);
-    d__2 = z_ABS(&a12);
-    d__3 = z_ABS(&a22);
+    d__1 = z_abs(&a11);
+    d__2 = z_abs(&a12);
+    d__3 = z_abs(&a22);
     dlas2_(&d__1, &d__2, &d__3, ssmin, &ssmax);
 
     return 0;

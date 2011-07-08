@@ -28,7 +28,7 @@ static double c_b72 = .5;
     double d__1, d__2, d__3;
 
     /* Builtin functions */
-    double d_lg10(double *), d_imag(doublecomplex *), z_ABS(doublecomplex 
+    double d_lg10(double *), d_imag(doublecomplex *), z_abs(doublecomplex 
 	    *), d_sign(double *, double *), pow_di(double *, 
 	    int *);
 
@@ -600,11 +600,11 @@ L350:
     for (i__ = *ilo; i__ <= i__1; ++i__) {
 	i__2 = *n - *ilo + 1;
 	irab = izamax_(&i__2, &a[i__ + *ilo * a_dim1], lda);
-	rab = z_ABS(&a[i__ + (irab + *ilo - 1) * a_dim1]);
+	rab = z_abs(&a[i__ + (irab + *ilo - 1) * a_dim1]);
 	i__2 = *n - *ilo + 1;
 	irab = izamax_(&i__2, &b[i__ + *ilo * b_dim1], ldb);
 /* Computing MAX */
-	d__1 = rab, d__2 = z_ABS(&b[i__ + (irab + *ilo - 1) * b_dim1]);
+	d__1 = rab, d__2 = z_abs(&b[i__ + (irab + *ilo - 1) * b_dim1]);
 	rab = MAX(d__1,d__2);
 	d__1 = rab + sfmin;
 	lrab = (int) (d_lg10(&d__1) / basl + 1.);
@@ -614,10 +614,10 @@ L350:
 	ir = MIN(i__2,i__3);
 	lscale[i__] = pow_di(&c_b36, &ir);
 	icab = izamax_(ihi, &a[i__ * a_dim1 + 1], &c__1);
-	cab = z_ABS(&a[icab + i__ * a_dim1]);
+	cab = z_abs(&a[icab + i__ * a_dim1]);
 	icab = izamax_(ihi, &b[i__ * b_dim1 + 1], &c__1);
 /* Computing MAX */
-	d__1 = cab, d__2 = z_ABS(&b[icab + i__ * b_dim1]);
+	d__1 = cab, d__2 = z_abs(&b[icab + i__ * b_dim1]);
 	cab = MAX(d__1,d__2);
 	d__1 = cab + sfmin;
 	lcab = (int) (d_lg10(&d__1) / basl + 1.);

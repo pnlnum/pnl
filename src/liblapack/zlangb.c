@@ -24,7 +24,7 @@ double zlangb_(char *norm, int *n, int *kl, int *ku,
     double ret_val, d__1, d__2;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *), sqrt(double);
+    double z_abs(doublecomplex *), sqrt(double);
 
     /* Local variables */
     int i__, j, k, l;
@@ -136,7 +136,7 @@ double zlangb_(char *norm, int *n, int *kl, int *ku,
 	    i__3 = MIN(i__4,i__5);
 	    for (i__ = MAX(i__2,1); i__ <= i__3; ++i__) {
 /* Computing MAX */
-		d__1 = value, d__2 = z_ABS(&ab[i__ + j * ab_dim1]);
+		d__1 = value, d__2 = z_abs(&ab[i__ + j * ab_dim1]);
 		value = MAX(d__1,d__2);
 /* L10: */
 	    }
@@ -157,7 +157,7 @@ double zlangb_(char *norm, int *n, int *kl, int *ku,
 	    i__4 = *n + *ku + 1 - j, i__5 = *kl + *ku + 1;
 	    i__2 = MIN(i__4,i__5);
 	    for (i__ = MAX(i__3,1); i__ <= i__2; ++i__) {
-		sum += z_ABS(&ab[i__ + j * ab_dim1]);
+		sum += z_abs(&ab[i__ + j * ab_dim1]);
 /* L30: */
 	    }
 	    value = MAX(value,sum);
@@ -181,7 +181,7 @@ double zlangb_(char *norm, int *n, int *kl, int *ku,
 	    i__5 = *n, i__6 = j + *kl;
 	    i__4 = MIN(i__5,i__6);
 	    for (i__ = MAX(i__2,i__3); i__ <= i__4; ++i__) {
-		work[i__] += z_ABS(&ab[k + i__ + j * ab_dim1]);
+		work[i__] += z_abs(&ab[k + i__ + j * ab_dim1]);
 /* L60: */
 	    }
 /* L70: */

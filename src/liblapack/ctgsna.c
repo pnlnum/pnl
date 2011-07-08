@@ -33,7 +33,7 @@ static int c__3 = 3;
     complex q__1;
 
     /* Builtin functions */
-    double c_ABS(complex *);
+    double c_abs(complex *);
 
     /* Local variables */
     int i__, k, n1, n2, ks;
@@ -415,8 +415,8 @@ static int c__3 = 3;
 , &c__1, &c_b20, &work[1], &c__1);
 	    cdotc_(&q__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
 	    yhbx.r = q__1.r, yhbx.i = q__1.i;
-	    r__1 = c_ABS(&yhax);
-	    r__2 = c_ABS(&yhbx);
+	    r__1 = c_abs(&yhax);
+	    r__2 = c_abs(&yhbx);
 	    cond = slapy2_(&r__1, &r__2);
 	    if (cond == 0.f) {
 		s[ks] = -1.f;
@@ -427,8 +427,8 @@ static int c__3 = 3;
 
 	if (wantdf) {
 	    if (*n == 1) {
-		r__1 = c_ABS(&a[a_dim1 + 1]);
-		r__2 = c_ABS(&b[b_dim1 + 1]);
+		r__1 = c_abs(&a[a_dim1 + 1]);
+		r__2 = c_abs(&b[b_dim1 + 1]);
 		dif[ks] = slapy2_(&r__1, &r__2);
 	    } else {
 

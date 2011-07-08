@@ -42,7 +42,7 @@ static double c_b8 = 1.;
     double diflj, difrj, dsigj;
     extern  int dcopy_(int *, double *, int *, 
 	    double *, int *);
-    extern double dlamc3_(double *, double *);
+    extern double pnl_dlamc3(double *, double *);
     extern  int dlasd4_(int *, int *, double *, 
 	    double *, double *, double *, double *, 
 	    double *, int *), dlascl_(char *, int *, int *, 
@@ -218,7 +218,7 @@ static double c_b8 = 1.;
 
     i__1 = *k;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dsigma[i__] = dlamc3_(&dsigma[i__], &dsigma[i__]) - dsigma[i__];
+	dsigma[i__] = pnl_dlamc3(&dsigma[i__], &dsigma[i__]) - dsigma[i__];
 /* L10: */
     }
 
@@ -296,13 +296,13 @@ static double c_b8 = 1.;
 	work[j] = -z__[j] / diflj / (dsigma[j] + dj);
 	i__2 = j - 1;
 	for (i__ = 1; i__ <= i__2; ++i__) {
-	    work[i__] = z__[i__] / (dlamc3_(&dsigma[i__], &dsigj) - diflj) / (
+	    work[i__] = z__[i__] / (pnl_dlamc3(&dsigma[i__], &dsigj) - diflj) / (
 		    dsigma[i__] + dj);
 /* L60: */
 	}
 	i__2 = *k;
 	for (i__ = j + 1; i__ <= i__2; ++i__) {
-	    work[i__] = z__[i__] / (dlamc3_(&dsigma[i__], &dsigjp) + difrj) / 
+	    work[i__] = z__[i__] / (pnl_dlamc3(&dsigma[i__], &dsigjp) + difrj) / 
 		    (dsigma[i__] + dj);
 /* L70: */
 	}

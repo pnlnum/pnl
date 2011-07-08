@@ -24,7 +24,7 @@ static int c__1 = 1;
     double d__1, d__2;
 
     /* Builtin functions */
-    double d_imag(doublecomplex *), z_ABS(doublecomplex *);
+    double d_imag(doublecomplex *), z_abs(doublecomplex *);
 
     /* Local variables */
     double c__, f, g;
@@ -325,10 +325,10 @@ L150:
 	    ;
 	}
 	ica = izamax_(&l, &a[i__ * a_dim1 + 1], &c__1);
-	ca = z_ABS(&a[ica + i__ * a_dim1]);
+	ca = z_abs(&a[ica + i__ * a_dim1]);
 	i__2 = *n - k + 1;
 	ira = izamax_(&i__2, &a[i__ + k * a_dim1], lda);
-	ra = z_ABS(&a[i__ + (ira + k - 1) * a_dim1]);
+	ra = z_abs(&a[i__ + (ira + k - 1) * a_dim1]);
 
 /*        Guard against zero C or R due to underflow. */
 

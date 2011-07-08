@@ -30,7 +30,7 @@ static int c__1 = 1;
     /* Builtin functions */
     double sqrt(double);
     void r_cnjg(complex *, complex *);
-    double c_ABS(complex *);
+    double c_abs(complex *);
     int i_nint(float *);
 
     /* Local variables */
@@ -299,7 +299,7 @@ L10:
 /*                 NOTE: The following 4 lines follow from the analysis in */
 /*                 Lapack Working Note 176. */
 
-		    temp = c_ABS(&a[rk + j * a_dim1]) / vn1[j];
+		    temp = c_abs(&a[rk + j * a_dim1]) / vn1[j];
 /* Computing MAX */
 		    r__1 = 0.f, r__2 = (temp + 1.f) * (1.f - temp);
 		    temp = MAX(r__1,r__2);

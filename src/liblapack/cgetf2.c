@@ -25,7 +25,7 @@ static int c__1 = 1;
     complex q__1;
 
     /* Builtin functions */
-    double c_ABS(complex *);
+    double c_abs(complex *);
     void c_div(complex *, complex *, complex *);
 
     /* Local variables */
@@ -160,7 +160,7 @@ static int c__1 = 1;
 /*           Compute elements J+1:M of J-th column. */
 
 	    if (j < *m) {
-		if (c_ABS(&a[j + j * a_dim1]) >= sfmin) {
+		if (c_abs(&a[j + j * a_dim1]) >= sfmin) {
 		    i__2 = *m - j;
 		    c_div(&q__1, &c_b1, &a[j + j * a_dim1]);
 		    cscal_(&i__2, &q__1, &a[j + 1 + j * a_dim1], &c__1);

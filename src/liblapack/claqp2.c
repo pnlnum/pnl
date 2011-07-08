@@ -28,7 +28,7 @@ static int c__1 = 1;
     /* Builtin functions */
     double sqrt(double);
     void r_cnjg(complex *, complex *);
-    double c_ABS(complex *);
+    double c_abs(complex *);
 
     /* Local variables */
     int i__, j, mn;
@@ -210,7 +210,7 @@ static int c__1 = 1;
 /*              Lapack Working Note 176. */
 
 /* Computing 2nd power */
-		r__1 = c_ABS(&a[offpi + j * a_dim1]) / vn1[j];
+		r__1 = c_abs(&a[offpi + j * a_dim1]) / vn1[j];
 		temp = 1.f - r__1 * r__1;
 		temp = MAX(temp,0.f);
 /* Computing 2nd power */

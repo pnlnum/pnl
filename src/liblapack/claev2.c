@@ -20,7 +20,7 @@
     complex q__1, q__2;
 
     /* Builtin functions */
-    double c_ABS(complex *);
+    double c_abs(complex *);
     void r_cnjg(complex *, complex *);
 
     /* Local variables */
@@ -101,16 +101,16 @@
 /*     .. */
 /*     .. Executable Statements .. */
 
-    if (c_ABS(b) == 0.f) {
+    if (c_abs(b) == 0.f) {
 	w.r = 1.f, w.i = 0.f;
     } else {
 	r_cnjg(&q__2, b);
-	r__1 = c_ABS(b);
+	r__1 = c_abs(b);
 	q__1.r = q__2.r / r__1, q__1.i = q__2.i / r__1;
 	w.r = q__1.r, w.i = q__1.i;
     }
     r__1 = a->r;
-    r__2 = c_ABS(b);
+    r__2 = c_abs(b);
     r__3 = c__->r;
     slaev2_(&r__1, &r__2, &r__3, rt1, rt2, cs1, &t);
     q__1.r = t * w.r, q__1.i = t * w.i;

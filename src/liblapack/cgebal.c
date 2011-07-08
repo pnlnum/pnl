@@ -24,7 +24,7 @@ static int c__1 = 1;
     float r__1, r__2;
 
     /* Builtin functions */
-    double r_imag(complex *), c_ABS(complex *);
+    double r_imag(complex *), c_abs(complex *);
 
     /* Local variables */
     float c__, f, g;
@@ -325,10 +325,10 @@ L150:
 	    ;
 	}
 	ica = icamax_(&l, &a[i__ * a_dim1 + 1], &c__1);
-	ca = c_ABS(&a[ica + i__ * a_dim1]);
+	ca = c_abs(&a[ica + i__ * a_dim1]);
 	i__2 = *n - k + 1;
 	ira = icamax_(&i__2, &a[i__ + k * a_dim1], lda);
-	ra = c_ABS(&a[i__ + (ira + k - 1) * a_dim1]);
+	ra = c_abs(&a[i__ + (ira + k - 1) * a_dim1]);
 
 /*        Guard against zero C or R due to underflow. */
 

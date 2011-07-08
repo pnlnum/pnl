@@ -28,7 +28,7 @@ static int c__1 = 1;
     /* Builtin functions */
     double sqrt(double);
     void d_cnjg(doublecomplex *, doublecomplex *);
-    double z_ABS(doublecomplex *);
+    double z_abs(doublecomplex *);
 
     /* Local variables */
     int i__, j, mn;
@@ -208,7 +208,7 @@ static int c__1 = 1;
 /*              Lapack Working Note 176. */
 
 /* Computing 2nd power */
-		d__1 = z_ABS(&a[offpi + j * a_dim1]) / vn1[j];
+		d__1 = z_abs(&a[offpi + j * a_dim1]) / vn1[j];
 		temp = 1. - d__1 * d__1;
 		temp = MAX(temp,0.);
 /* Computing 2nd power */

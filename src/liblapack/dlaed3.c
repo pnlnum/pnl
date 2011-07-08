@@ -40,7 +40,7 @@ static double c_b23 = 0.;
 	     dcopy_(int *, double *, int *, double *, int 
 	    *), dlaed4_(int *, int *, double *, double *, 
 	    double *, double *, double *, int *);
-    extern double dlamc3_(double *, double *);
+    extern double pnl_dlamc3(double *, double *);
     extern  int dlacpy_(char *, int *, int *, 
 	    double *, int *, double *, int *), 
 	    dlaset_(char *, int *, int *, double *, double *, 
@@ -221,7 +221,7 @@ static double c_b23 = 0.;
 
     i__1 = *k;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dlamda[i__] = dlamc3_(&dlamda[i__], &dlamda[i__]) - dlamda[i__];
+	dlamda[i__] = pnl_dlamc3(&dlamda[i__], &dlamda[i__]) - dlamda[i__];
 /* L10: */
     }
 

@@ -29,7 +29,7 @@ static int c__1 = 1;
     complex q__1, q__2;
 
     /* Builtin functions */
-    double sqrt(double), c_ABS(complex *);
+    double sqrt(double), c_abs(complex *);
     void r_cnjg(complex *, complex *);
 
     /* Local variables */
@@ -716,7 +716,7 @@ L50:
 
     i__1 = *n;
     for (k = 1; k <= i__1; ++k) {
-	dscale = c_ABS(&b[k + k * b_dim1]);
+	dscale = c_abs(&b[k + k * b_dim1]);
 	if (dscale > safmin) {
 	    i__2 = k + k * b_dim1;
 	    q__2.r = b[i__2].r / dscale, q__2.i = b[i__2].i / dscale;

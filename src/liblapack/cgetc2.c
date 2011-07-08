@@ -26,7 +26,7 @@ static complex c_b10 = {-1.f,-0.f};
     complex q__1;
 
     /* Builtin functions */
-    double c_ABS(complex *);
+    double c_abs(complex *);
     void c_div(complex *, complex *, complex *);
 
     /* Local variables */
@@ -141,8 +141,8 @@ static complex c_b10 = {-1.f,-0.f};
 	for (ip = i__; ip <= i__2; ++ip) {
 	    i__3 = *n;
 	    for (jp = i__; jp <= i__3; ++jp) {
-		if (c_ABS(&a[ip + jp * a_dim1]) >= xmax) {
-		    xmax = c_ABS(&a[ip + jp * a_dim1]);
+		if (c_abs(&a[ip + jp * a_dim1]) >= xmax) {
+		    xmax = c_abs(&a[ip + jp * a_dim1]);
 		    ipv = ip;
 		    jpv = jp;
 		}
@@ -173,7 +173,7 @@ static complex c_b10 = {-1.f,-0.f};
 
 /*        Check for singularity */
 
-	if (c_ABS(&a[i__ + i__ * a_dim1]) < smin) {
+	if (c_abs(&a[i__ + i__ * a_dim1]) < smin) {
 	    *info = i__;
 	    i__2 = i__ + i__ * a_dim1;
 	    q__1.r = smin, q__1.i = 0.f;
@@ -194,7 +194,7 @@ static complex c_b10 = {-1.f,-0.f};
 /* L40: */
     }
 
-    if (c_ABS(&a[*n + *n * a_dim1]) < smin) {
+    if (c_abs(&a[*n + *n * a_dim1]) < smin) {
 	*info = *n;
 	i__1 = *n + *n * a_dim1;
 	q__1.r = smin, q__1.i = 0.f;

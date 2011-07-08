@@ -33,7 +33,7 @@ static doublecomplex c_b16 = {1.,0.};
     /* Builtin functions */
     double d_imag(doublecomplex *);
     void d_cnjg(doublecomplex *, doublecomplex *);
-    double z_ABS(doublecomplex *);
+    double z_abs(doublecomplex *);
 
     /* Local variables */
     int i__, j;
@@ -533,7 +533,7 @@ L20:
 	rwork[1] = 1.;
 	i__2 = *n;
 	for (i__ = 2; i__ <= i__2; ++i__) {
-	    rwork[i__] = rwork[i__ - 1] * z_ABS(&ef[i__ - 1]) + 1.;
+	    rwork[i__] = rwork[i__ - 1] * z_abs(&ef[i__ - 1]) + 1.;
 /* L70: */
 	}
 
@@ -541,7 +541,7 @@ L20:
 
 	rwork[*n] /= df[*n];
 	for (i__ = *n - 1; i__ >= 1; --i__) {
-	    rwork[i__] = rwork[i__] / df[i__] + rwork[i__ + 1] * z_ABS(&ef[
+	    rwork[i__] = rwork[i__] / df[i__] + rwork[i__ + 1] * z_abs(&ef[
 		    i__]);
 /* L80: */
 	}
@@ -557,7 +557,7 @@ L20:
 	i__2 = *n;
 	for (i__ = 1; i__ <= i__2; ++i__) {
 /* Computing MAX */
-	    d__1 = lstres, d__2 = z_ABS(&x[i__ + j * x_dim1]);
+	    d__1 = lstres, d__2 = z_abs(&x[i__ + j * x_dim1]);
 	    lstres = MAX(d__1,d__2);
 /* L90: */
 	}

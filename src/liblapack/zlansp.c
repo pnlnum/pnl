@@ -24,7 +24,7 @@ double zlansp_(char *norm, char *uplo, int *n, doublecomplex *ap,
     double ret_val, d__1, d__2;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *), d_imag(doublecomplex *), sqrt(double);
+    double z_abs(doublecomplex *), d_imag(doublecomplex *), sqrt(double);
 
     /* Local variables */
     int i__, j, k;
@@ -130,7 +130,7 @@ double zlansp_(char *norm, char *uplo, int *n, doublecomplex *ap,
 		i__2 = k + j - 1;
 		for (i__ = k; i__ <= i__2; ++i__) {
 /* Computing MAX */
-		    d__1 = value, d__2 = z_ABS(&ap[i__]);
+		    d__1 = value, d__2 = z_abs(&ap[i__]);
 		    value = MAX(d__1,d__2);
 /* L10: */
 		}
@@ -144,7 +144,7 @@ double zlansp_(char *norm, char *uplo, int *n, doublecomplex *ap,
 		i__2 = k + *n - j;
 		for (i__ = k; i__ <= i__2; ++i__) {
 /* Computing MAX */
-		    d__1 = value, d__2 = z_ABS(&ap[i__]);
+		    d__1 = value, d__2 = z_abs(&ap[i__]);
 		    value = MAX(d__1,d__2);
 /* L30: */
 		}
@@ -164,13 +164,13 @@ double zlansp_(char *norm, char *uplo, int *n, doublecomplex *ap,
 		sum = 0.;
 		i__2 = j - 1;
 		for (i__ = 1; i__ <= i__2; ++i__) {
-		    absa = z_ABS(&ap[k]);
+		    absa = z_abs(&ap[k]);
 		    sum += absa;
 		    work[i__] += absa;
 		    ++k;
 /* L50: */
 		}
-		work[j] = sum + z_ABS(&ap[k]);
+		work[j] = sum + z_abs(&ap[k]);
 		++k;
 /* L60: */
 	    }
@@ -189,11 +189,11 @@ double zlansp_(char *norm, char *uplo, int *n, doublecomplex *ap,
 	    }
 	    i__1 = *n;
 	    for (j = 1; j <= i__1; ++j) {
-		sum = work[j] + z_ABS(&ap[k]);
+		sum = work[j] + z_abs(&ap[k]);
 		++k;
 		i__2 = *n;
 		for (i__ = j + 1; i__ <= i__2; ++i__) {
-		    absa = z_ABS(&ap[k]);
+		    absa = z_abs(&ap[k]);
 		    sum += absa;
 		    work[i__] += absa;
 		    ++k;

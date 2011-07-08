@@ -24,7 +24,7 @@ double clangt_(char *norm, int *n, complex *dl, complex *d__, complex
     float ret_val, r__1, r__2;
 
     /* Builtin functions */
-    double c_ABS(complex *), sqrt(double);
+    double c_abs(complex *), sqrt(double);
 
     /* Local variables */
     int i__;
@@ -115,17 +115,17 @@ double clangt_(char *norm, int *n, complex *dl, complex *d__, complex
 
 /*        Find MAX(ABS(A(i,j))). */
 
-	anorm = c_ABS(&d__[*n]);
+	anorm = c_abs(&d__[*n]);
 	i__1 = *n - 1;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 /* Computing MAX */
-	    r__1 = anorm, r__2 = c_ABS(&dl[i__]);
+	    r__1 = anorm, r__2 = c_abs(&dl[i__]);
 	    anorm = MAX(r__1,r__2);
 /* Computing MAX */
-	    r__1 = anorm, r__2 = c_ABS(&d__[i__]);
+	    r__1 = anorm, r__2 = c_abs(&d__[i__]);
 	    anorm = MAX(r__1,r__2);
 /* Computing MAX */
-	    r__1 = anorm, r__2 = c_ABS(&du[i__]);
+	    r__1 = anorm, r__2 = c_abs(&du[i__]);
 	    anorm = MAX(r__1,r__2);
 /* L10: */
 	}
@@ -135,17 +135,17 @@ double clangt_(char *norm, int *n, complex *dl, complex *d__, complex
 /*        Find norm1(A). */
 
 	if (*n == 1) {
-	    anorm = c_ABS(&d__[1]);
+	    anorm = c_abs(&d__[1]);
 	} else {
 /* Computing MAX */
-	    r__1 = c_ABS(&d__[1]) + c_ABS(&dl[1]), r__2 = c_ABS(&d__[*n]) + 
-		    c_ABS(&du[*n - 1]);
+	    r__1 = c_abs(&d__[1]) + c_abs(&dl[1]), r__2 = c_abs(&d__[*n]) + 
+		    c_abs(&du[*n - 1]);
 	    anorm = MAX(r__1,r__2);
 	    i__1 = *n - 1;
 	    for (i__ = 2; i__ <= i__1; ++i__) {
 /* Computing MAX */
-		r__1 = anorm, r__2 = c_ABS(&d__[i__]) + c_ABS(&dl[i__]) + 
-			c_ABS(&du[i__ - 1]);
+		r__1 = anorm, r__2 = c_abs(&d__[i__]) + c_abs(&dl[i__]) + 
+			c_abs(&du[i__ - 1]);
 		anorm = MAX(r__1,r__2);
 /* L20: */
 	    }
@@ -155,17 +155,17 @@ double clangt_(char *norm, int *n, complex *dl, complex *d__, complex
 /*        Find normI(A). */
 
 	if (*n == 1) {
-	    anorm = c_ABS(&d__[1]);
+	    anorm = c_abs(&d__[1]);
 	} else {
 /* Computing MAX */
-	    r__1 = c_ABS(&d__[1]) + c_ABS(&du[1]), r__2 = c_ABS(&d__[*n]) + 
-		    c_ABS(&dl[*n - 1]);
+	    r__1 = c_abs(&d__[1]) + c_abs(&du[1]), r__2 = c_abs(&d__[*n]) + 
+		    c_abs(&dl[*n - 1]);
 	    anorm = MAX(r__1,r__2);
 	    i__1 = *n - 1;
 	    for (i__ = 2; i__ <= i__1; ++i__) {
 /* Computing MAX */
-		r__1 = anorm, r__2 = c_ABS(&d__[i__]) + c_ABS(&du[i__]) + 
-			c_ABS(&dl[i__ - 1]);
+		r__1 = anorm, r__2 = c_abs(&d__[i__]) + c_abs(&du[i__]) + 
+			c_abs(&dl[i__ - 1]);
 		anorm = MAX(r__1,r__2);
 /* L30: */
 	    }

@@ -21,7 +21,7 @@
     complex q__1, q__2, q__3, q__4, q__5;
 
     /* Builtin functions */
-    double c_ABS(complex *), r_imag(complex *);
+    double c_abs(complex *), r_imag(complex *);
     void r_cnjg(complex *, complex *);
 
     /* Local variables */
@@ -141,7 +141,7 @@
 	q__3.r = *a1 * b2->r, q__3.i = *a1 * b2->i;
 	q__1.r = q__2.r - q__3.r, q__1.i = q__2.i - q__3.i;
 	b.r = q__1.r, b.i = q__1.i;
-	fb = c_ABS(&b);
+	fb = c_abs(&b);
 
 /*        Transform complex 2-by-2 matrix C to float matrix by unitary */
 /*        diagonal matrix diag(1,D1). */
@@ -269,7 +269,7 @@
 		r_cnjg(&q__3, &vb22);
 		clartg_(&q__1, &q__3, csq, snq, &r__);
 	    } else if ((r__1 = vb21.r, ABS(r__1)) + (r__2 = r_imag(&vb21), 
-		    ABS(r__2)) + c_ABS(&vb22) == 0.f) {
+		    ABS(r__2)) + c_abs(&vb22) == 0.f) {
 		r_cnjg(&q__2, &ua21);
 		q__1.r = -q__2.r, q__1.i = -q__2.i;
 		r_cnjg(&q__3, &ua22);
@@ -313,7 +313,7 @@
 	q__3.r = *a3 * b2->r, q__3.i = *a3 * b2->i;
 	q__1.r = q__2.r - q__3.r, q__1.i = q__2.i - q__3.i;
 	c__.r = q__1.r, c__.i = q__1.i;
-	fc = c_ABS(&c__);
+	fc = c_abs(&c__);
 
 /*        Transform complex 2-by-2 matrix C to float matrix by unitary */
 /*        diagonal matrix diag(d1,1). */

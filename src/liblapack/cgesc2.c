@@ -27,7 +27,7 @@ static int c_n1 = -1;
     complex q__1, q__2, q__3;
 
     /* Builtin functions */
-    double c_ABS(complex *);
+    double c_abs(complex *);
     void c_div(complex *, complex *, complex *);
 
     /* Local variables */
@@ -162,8 +162,8 @@ static int c_n1 = -1;
 /*     Check for scaling */
 
     i__ = icamax_(n, &rhs[1], &c__1);
-    if (smlnum * 2.f * c_ABS(&rhs[i__]) > c_ABS(&a[*n + *n * a_dim1])) {
-	r__1 = c_ABS(&rhs[i__]);
+    if (smlnum * 2.f * c_abs(&rhs[i__]) > c_abs(&a[*n + *n * a_dim1])) {
+	r__1 = c_abs(&rhs[i__]);
 	q__1.r = .5f / r__1, q__1.i = 0.f / r__1;
 	temp.r = q__1.r, temp.i = q__1.i;
 	cscal_(n, &temp, &rhs[1], &c__1);

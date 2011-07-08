@@ -24,7 +24,7 @@ double zlange_(char *norm, int *m, int *n, doublecomplex *a,
     double ret_val, d__1, d__2;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *), sqrt(double);
+    double z_abs(doublecomplex *), sqrt(double);
 
     /* Local variables */
     int i__, j;
@@ -127,7 +127,7 @@ double zlange_(char *norm, int *m, int *n, doublecomplex *a,
 	    i__2 = *m;
 	    for (i__ = 1; i__ <= i__2; ++i__) {
 /* Computing MAX */
-		d__1 = value, d__2 = z_ABS(&a[i__ + j * a_dim1]);
+		d__1 = value, d__2 = z_abs(&a[i__ + j * a_dim1]);
 		value = MAX(d__1,d__2);
 /* L10: */
 	    }
@@ -144,7 +144,7 @@ double zlange_(char *norm, int *m, int *n, doublecomplex *a,
 	    sum = 0.;
 	    i__2 = *m;
 	    for (i__ = 1; i__ <= i__2; ++i__) {
-		sum += z_ABS(&a[i__ + j * a_dim1]);
+		sum += z_abs(&a[i__ + j * a_dim1]);
 /* L30: */
 	    }
 	    value = MAX(value,sum);
@@ -163,7 +163,7 @@ double zlange_(char *norm, int *m, int *n, doublecomplex *a,
 	for (j = 1; j <= i__1; ++j) {
 	    i__2 = *m;
 	    for (i__ = 1; i__ <= i__2; ++i__) {
-		work[i__] += z_ABS(&a[i__ + j * a_dim1]);
+		work[i__] += z_abs(&a[i__ + j * a_dim1]);
 /* L60: */
 	    }
 /* L70: */

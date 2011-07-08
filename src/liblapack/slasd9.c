@@ -159,7 +159,7 @@
 /*     Quick return if possible */
 
     if (*k == 1) {
-	d__[1] = dABS(z__[1]);
+	d__[1] = ABS(z__[1]);
 	difl[1] = d__[1];
 	if (*icompq == 1) {
 	    difl[2] = 1.f;
@@ -246,7 +246,7 @@
 
     i__1 = *k;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	r__2 = sqrt((r__1 = work[iwk3i + i__], dABS(r__1)));
+	r__2 = sqrt((r__1 = work[iwk3i + i__], ABS(r__1)));
 	z__[i__] = r_sign(&r__2, &z__[i__]);
 /* L50: */
     }

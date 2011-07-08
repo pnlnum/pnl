@@ -31,7 +31,7 @@ static int c__1 = 1;
     /* Builtin functions */
     double sqrt(double);
     void d_cnjg(doublecomplex *, doublecomplex *);
-    double z_ABS(doublecomplex *);
+    double z_abs(doublecomplex *);
     int i_dnnt(double *);
 
     /* Local variables */
@@ -296,7 +296,7 @@ L10:
 /*                 NOTE: The following 4 lines follow from the analysis in */
 /*                 Lapack Working Note 176. */
 
-		    temp = z_ABS(&a[rk + j * a_dim1]) / vn1[j];
+		    temp = z_abs(&a[rk + j * a_dim1]) / vn1[j];
 /* Computing MAX */
 		    d__1 = 0., d__2 = (temp + 1.) * (1. - temp);
 		    temp = MAX(d__1,d__2);

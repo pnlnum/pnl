@@ -22,7 +22,7 @@
     doublecomplex z__1, z__2, z__3, z__4, z__5;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *), d_imag(doublecomplex *);
+    double z_abs(doublecomplex *), d_imag(doublecomplex *);
     void d_cnjg(doublecomplex *, doublecomplex *);
 
     /* Local variables */
@@ -144,7 +144,7 @@
 	z__3.r = *a1 * b2->r, z__3.i = *a1 * b2->i;
 	z__1.r = z__2.r - z__3.r, z__1.i = z__2.i - z__3.i;
 	b.r = z__1.r, b.i = z__1.i;
-	fb = z_ABS(&b);
+	fb = z_abs(&b);
 
 /*        Transform complex 2-by-2 matrix C to float matrix by unitary */
 /*        diagonal matrix diag(1,D1). */
@@ -272,7 +272,7 @@
 		d_cnjg(&z__3, &vb22);
 		zlartg_(&z__1, &z__3, csq, snq, &r__);
 	    } else if ((d__1 = vb21.r, ABS(d__1)) + (d__2 = d_imag(&vb21), 
-		    ABS(d__2)) + z_ABS(&vb22) == 0.) {
+		    ABS(d__2)) + z_abs(&vb22) == 0.) {
 		d_cnjg(&z__2, &ua21);
 		z__1.r = -z__2.r, z__1.i = -z__2.i;
 		d_cnjg(&z__3, &ua22);
@@ -316,7 +316,7 @@
 	z__3.r = *a3 * b2->r, z__3.i = *a3 * b2->i;
 	z__1.r = z__2.r - z__3.r, z__1.i = z__2.i - z__3.i;
 	c__.r = z__1.r, c__.i = z__1.i;
-	fc = z_ABS(&c__);
+	fc = z_abs(&c__);
 
 /*        Transform complex 2-by-2 matrix C to float matrix by unitary */
 /*        diagonal matrix diag(d1,1). */

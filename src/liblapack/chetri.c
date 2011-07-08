@@ -26,7 +26,7 @@ static int c__1 = 1;
     complex q__1, q__2;
 
     /* Builtin functions */
-    double c_ABS(complex *);
+    double c_abs(complex *);
     void r_cnjg(complex *, complex *);
 
     /* Local variables */
@@ -228,7 +228,7 @@ L30:
 
 /*           Invert the diagonal block. */
 
-	    t = c_ABS(&a[k + (k + 1) * a_dim1]);
+	    t = c_abs(&a[k + (k + 1) * a_dim1]);
 	    i__1 = k + k * a_dim1;
 	    ak = a[i__1].r / t;
 	    i__1 = k + 1 + (k + 1) * a_dim1;
@@ -389,7 +389,7 @@ L60:
 
 /*           Invert the diagonal block. */
 
-	    t = c_ABS(&a[k + (k - 1) * a_dim1]);
+	    t = c_abs(&a[k + (k - 1) * a_dim1]);
 	    i__1 = k - 1 + (k - 1) * a_dim1;
 	    ak = a[i__1].r / t;
 	    i__1 = k + k * a_dim1;

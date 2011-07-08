@@ -24,7 +24,7 @@ double clantp_(char *norm, char *uplo, char *diag, int *n, complex *
     float ret_val, r__1, r__2;
 
     /* Builtin functions */
-    double c_ABS(complex *), sqrt(double);
+    double c_abs(complex *), sqrt(double);
 
     /* Local variables */
     int i__, j, k;
@@ -139,7 +139,7 @@ double clantp_(char *norm, char *uplo, char *diag, int *n, complex *
 		    i__2 = k + j - 2;
 		    for (i__ = k; i__ <= i__2; ++i__) {
 /* Computing MAX */
-			r__1 = value, r__2 = c_ABS(&ap[i__]);
+			r__1 = value, r__2 = c_abs(&ap[i__]);
 			value = MAX(r__1,r__2);
 /* L10: */
 		    }
@@ -152,7 +152,7 @@ double clantp_(char *norm, char *uplo, char *diag, int *n, complex *
 		    i__2 = k + *n - j;
 		    for (i__ = k + 1; i__ <= i__2; ++i__) {
 /* Computing MAX */
-			r__1 = value, r__2 = c_ABS(&ap[i__]);
+			r__1 = value, r__2 = c_abs(&ap[i__]);
 			value = MAX(r__1,r__2);
 /* L30: */
 		    }
@@ -168,7 +168,7 @@ double clantp_(char *norm, char *uplo, char *diag, int *n, complex *
 		    i__2 = k + j - 1;
 		    for (i__ = k; i__ <= i__2; ++i__) {
 /* Computing MAX */
-			r__1 = value, r__2 = c_ABS(&ap[i__]);
+			r__1 = value, r__2 = c_abs(&ap[i__]);
 			value = MAX(r__1,r__2);
 /* L50: */
 		    }
@@ -181,7 +181,7 @@ double clantp_(char *norm, char *uplo, char *diag, int *n, complex *
 		    i__2 = k + *n - j;
 		    for (i__ = k; i__ <= i__2; ++i__) {
 /* Computing MAX */
-			r__1 = value, r__2 = c_ABS(&ap[i__]);
+			r__1 = value, r__2 = c_abs(&ap[i__]);
 			value = MAX(r__1,r__2);
 /* L70: */
 		    }
@@ -205,14 +205,14 @@ double clantp_(char *norm, char *uplo, char *diag, int *n, complex *
 		    sum = 1.f;
 		    i__2 = k + j - 2;
 		    for (i__ = k; i__ <= i__2; ++i__) {
-			sum += c_ABS(&ap[i__]);
+			sum += c_abs(&ap[i__]);
 /* L90: */
 		    }
 		} else {
 		    sum = 0.f;
 		    i__2 = k + j - 1;
 		    for (i__ = k; i__ <= i__2; ++i__) {
-			sum += c_ABS(&ap[i__]);
+			sum += c_abs(&ap[i__]);
 /* L100: */
 		    }
 		}
@@ -227,14 +227,14 @@ double clantp_(char *norm, char *uplo, char *diag, int *n, complex *
 		    sum = 1.f;
 		    i__2 = k + *n - j;
 		    for (i__ = k + 1; i__ <= i__2; ++i__) {
-			sum += c_ABS(&ap[i__]);
+			sum += c_abs(&ap[i__]);
 /* L120: */
 		    }
 		} else {
 		    sum = 0.f;
 		    i__2 = k + *n - j;
 		    for (i__ = k; i__ <= i__2; ++i__) {
-			sum += c_ABS(&ap[i__]);
+			sum += c_abs(&ap[i__]);
 /* L130: */
 		    }
 		}
@@ -259,7 +259,7 @@ double clantp_(char *norm, char *uplo, char *diag, int *n, complex *
 		for (j = 1; j <= i__1; ++j) {
 		    i__2 = j - 1;
 		    for (i__ = 1; i__ <= i__2; ++i__) {
-			work[i__] += c_ABS(&ap[k]);
+			work[i__] += c_abs(&ap[k]);
 			++k;
 /* L160: */
 		    }
@@ -276,7 +276,7 @@ double clantp_(char *norm, char *uplo, char *diag, int *n, complex *
 		for (j = 1; j <= i__1; ++j) {
 		    i__2 = j;
 		    for (i__ = 1; i__ <= i__2; ++i__) {
-			work[i__] += c_ABS(&ap[k]);
+			work[i__] += c_abs(&ap[k]);
 			++k;
 /* L190: */
 		    }
@@ -295,7 +295,7 @@ double clantp_(char *norm, char *uplo, char *diag, int *n, complex *
 		    ++k;
 		    i__2 = *n;
 		    for (i__ = j + 1; i__ <= i__2; ++i__) {
-			work[i__] += c_ABS(&ap[k]);
+			work[i__] += c_abs(&ap[k]);
 			++k;
 /* L220: */
 		    }
@@ -311,7 +311,7 @@ double clantp_(char *norm, char *uplo, char *diag, int *n, complex *
 		for (j = 1; j <= i__1; ++j) {
 		    i__2 = *n;
 		    for (i__ = j; i__ <= i__2; ++i__) {
-			work[i__] += c_ABS(&ap[k]);
+			work[i__] += c_abs(&ap[k]);
 			++k;
 /* L250: */
 		    }

@@ -24,7 +24,7 @@ double zlangt_(char *norm, int *n, doublecomplex *dl, doublecomplex *
     double ret_val, d__1, d__2;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *), sqrt(double);
+    double z_abs(doublecomplex *), sqrt(double);
 
     /* Local variables */
     int i__;
@@ -115,17 +115,17 @@ double zlangt_(char *norm, int *n, doublecomplex *dl, doublecomplex *
 
 /*        Find MAX(ABS(A(i,j))). */
 
-	anorm = z_ABS(&d__[*n]);
+	anorm = z_abs(&d__[*n]);
 	i__1 = *n - 1;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 /* Computing MAX */
-	    d__1 = anorm, d__2 = z_ABS(&dl[i__]);
+	    d__1 = anorm, d__2 = z_abs(&dl[i__]);
 	    anorm = MAX(d__1,d__2);
 /* Computing MAX */
-	    d__1 = anorm, d__2 = z_ABS(&d__[i__]);
+	    d__1 = anorm, d__2 = z_abs(&d__[i__]);
 	    anorm = MAX(d__1,d__2);
 /* Computing MAX */
-	    d__1 = anorm, d__2 = z_ABS(&du[i__]);
+	    d__1 = anorm, d__2 = z_abs(&du[i__]);
 	    anorm = MAX(d__1,d__2);
 /* L10: */
 	}
@@ -135,17 +135,17 @@ double zlangt_(char *norm, int *n, doublecomplex *dl, doublecomplex *
 /*        Find norm1(A). */
 
 	if (*n == 1) {
-	    anorm = z_ABS(&d__[1]);
+	    anorm = z_abs(&d__[1]);
 	} else {
 /* Computing MAX */
-	    d__1 = z_ABS(&d__[1]) + z_ABS(&dl[1]), d__2 = z_ABS(&d__[*n]) + 
-		    z_ABS(&du[*n - 1]);
+	    d__1 = z_abs(&d__[1]) + z_abs(&dl[1]), d__2 = z_abs(&d__[*n]) + 
+		    z_abs(&du[*n - 1]);
 	    anorm = MAX(d__1,d__2);
 	    i__1 = *n - 1;
 	    for (i__ = 2; i__ <= i__1; ++i__) {
 /* Computing MAX */
-		d__1 = anorm, d__2 = z_ABS(&d__[i__]) + z_ABS(&dl[i__]) + 
-			z_ABS(&du[i__ - 1]);
+		d__1 = anorm, d__2 = z_abs(&d__[i__]) + z_abs(&dl[i__]) + 
+			z_abs(&du[i__ - 1]);
 		anorm = MAX(d__1,d__2);
 /* L20: */
 	    }
@@ -155,17 +155,17 @@ double zlangt_(char *norm, int *n, doublecomplex *dl, doublecomplex *
 /*        Find normI(A). */
 
 	if (*n == 1) {
-	    anorm = z_ABS(&d__[1]);
+	    anorm = z_abs(&d__[1]);
 	} else {
 /* Computing MAX */
-	    d__1 = z_ABS(&d__[1]) + z_ABS(&du[1]), d__2 = z_ABS(&d__[*n]) + 
-		    z_ABS(&dl[*n - 1]);
+	    d__1 = z_abs(&d__[1]) + z_abs(&du[1]), d__2 = z_abs(&d__[*n]) + 
+		    z_abs(&dl[*n - 1]);
 	    anorm = MAX(d__1,d__2);
 	    i__1 = *n - 1;
 	    for (i__ = 2; i__ <= i__1; ++i__) {
 /* Computing MAX */
-		d__1 = anorm, d__2 = z_ABS(&d__[i__]) + z_ABS(&du[i__]) + 
-			z_ABS(&dl[i__ - 1]);
+		d__1 = anorm, d__2 = z_abs(&d__[i__]) + z_abs(&du[i__]) + 
+			z_abs(&dl[i__ - 1]);
 		anorm = MAX(d__1,d__2);
 /* L30: */
 	    }

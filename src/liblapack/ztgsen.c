@@ -30,7 +30,7 @@ static int c__1 = 1;
     doublecomplex z__1, z__2;
 
     /* Builtin functions */
-    double sqrt(double), z_ABS(doublecomplex *);
+    double sqrt(double), z_abs(doublecomplex *);
     void d_cnjg(doublecomplex *, doublecomplex *);
 
     /* Local variables */
@@ -720,7 +720,7 @@ L50:
 
     i__1 = *n;
     for (k = 1; k <= i__1; ++k) {
-	dscale = z_ABS(&b[k + k * b_dim1]);
+	dscale = z_abs(&b[k + k * b_dim1]);
 	if (dscale > safmin) {
 	    i__2 = k + k * b_dim1;
 	    z__2.r = b[i__2].r / dscale, z__2.i = b[i__2].i / dscale;

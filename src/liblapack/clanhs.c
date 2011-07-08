@@ -24,7 +24,7 @@ double clanhs_(char *norm, int *n, complex *a, int *lda, float *
     float ret_val, r__1, r__2;
 
     /* Builtin functions */
-    double c_ABS(complex *), sqrt(double);
+    double c_abs(complex *), sqrt(double);
 
     /* Local variables */
     int i__, j;
@@ -126,7 +126,7 @@ double clanhs_(char *norm, int *n, complex *a, int *lda, float *
 	    i__2 = MIN(i__3,i__4);
 	    for (i__ = 1; i__ <= i__2; ++i__) {
 /* Computing MAX */
-		r__1 = value, r__2 = c_ABS(&a[i__ + j * a_dim1]);
+		r__1 = value, r__2 = c_abs(&a[i__ + j * a_dim1]);
 		value = MAX(r__1,r__2);
 /* L10: */
 	    }
@@ -145,7 +145,7 @@ double clanhs_(char *norm, int *n, complex *a, int *lda, float *
 	    i__3 = *n, i__4 = j + 1;
 	    i__2 = MIN(i__3,i__4);
 	    for (i__ = 1; i__ <= i__2; ++i__) {
-		sum += c_ABS(&a[i__ + j * a_dim1]);
+		sum += c_abs(&a[i__ + j * a_dim1]);
 /* L30: */
 	    }
 	    value = MAX(value,sum);
@@ -166,7 +166,7 @@ double clanhs_(char *norm, int *n, complex *a, int *lda, float *
 	    i__3 = *n, i__4 = j + 1;
 	    i__2 = MIN(i__3,i__4);
 	    for (i__ = 1; i__ <= i__2; ++i__) {
-		work[i__] += c_ABS(&a[i__ + j * a_dim1]);
+		work[i__] += c_abs(&a[i__ + j * a_dim1]);
 /* L60: */
 	    }
 /* L70: */

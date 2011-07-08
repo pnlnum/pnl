@@ -26,7 +26,7 @@ static doublecomplex c_b10 = {-1.,-0.};
     doublecomplex z__1;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *);
+    double z_abs(doublecomplex *);
     void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
 
     /* Local variables */
@@ -142,8 +142,8 @@ static doublecomplex c_b10 = {-1.,-0.};
 	for (ip = i__; ip <= i__2; ++ip) {
 	    i__3 = *n;
 	    for (jp = i__; jp <= i__3; ++jp) {
-		if (z_ABS(&a[ip + jp * a_dim1]) >= xmax) {
-		    xmax = z_ABS(&a[ip + jp * a_dim1]);
+		if (z_abs(&a[ip + jp * a_dim1]) >= xmax) {
+		    xmax = z_abs(&a[ip + jp * a_dim1]);
 		    ipv = ip;
 		    jpv = jp;
 		}
@@ -174,7 +174,7 @@ static doublecomplex c_b10 = {-1.,-0.};
 
 /*        Check for singularity */
 
-	if (z_ABS(&a[i__ + i__ * a_dim1]) < smin) {
+	if (z_abs(&a[i__ + i__ * a_dim1]) < smin) {
 	    *info = i__;
 	    i__2 = i__ + i__ * a_dim1;
 	    z__1.r = smin, z__1.i = 0.;
@@ -195,7 +195,7 @@ static doublecomplex c_b10 = {-1.,-0.};
 /* L40: */
     }
 
-    if (z_ABS(&a[*n + *n * a_dim1]) < smin) {
+    if (z_abs(&a[*n + *n * a_dim1]) < smin) {
 	*info = *n;
 	i__1 = *n + *n * a_dim1;
 	z__1.r = smin, z__1.i = 0.;

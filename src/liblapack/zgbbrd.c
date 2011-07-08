@@ -31,7 +31,7 @@ static int c__1 = 1;
 
     /* Builtin functions */
     void d_cnjg(doublecomplex *, doublecomplex *);
-    double z_ABS(doublecomplex *);
+    double z_abs(doublecomplex *);
 
     /* Local variables */
     int i__, j, l;
@@ -590,7 +590,7 @@ static int c__1 = 1;
     t.r = ab[i__1].r, t.i = ab[i__1].i;
     i__1 = minmn;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	abst = z_ABS(&t);
+	abst = z_abs(&t);
 	d__[i__] = abst;
 	if (abst != 0.) {
 	    z__1.r = t.r / abst, z__1.i = t.i / abst;
@@ -626,7 +626,7 @@ static int c__1 = 1;
 			    z__2.r;
 		    t.r = z__1.r, t.i = z__1.i;
 		}
-		abst = z_ABS(&t);
+		abst = z_abs(&t);
 		e[i__] = abst;
 		if (abst != 0.) {
 		    z__1.r = t.r / abst, z__1.i = t.i / abst;

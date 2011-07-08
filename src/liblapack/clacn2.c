@@ -25,7 +25,7 @@ static int c__1 = 1;
     complex q__1;
 
     /* Builtin functions */
-    double c_ABS(complex *), r_imag(complex *);
+    double c_abs(complex *), r_imag(complex *);
 
     /* Local variables */
     int i__;
@@ -154,7 +154,7 @@ static int c__1 = 1;
 L20:
     if (*n == 1) {
 	v[1].r = x[1].r, v[1].i = x[1].i;
-	*est = c_ABS(&v[1]);
+	*est = c_abs(&v[1]);
 /*        ... QUIT */
 	goto L130;
     }
@@ -162,7 +162,7 @@ L20:
 
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	absxi = c_ABS(&x[i__]);
+	absxi = c_abs(&x[i__]);
 	if (absxi > safmin) {
 	    i__2 = i__;
 	    i__3 = i__;
@@ -217,7 +217,7 @@ L70:
 
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	absxi = c_ABS(&x[i__]);
+	absxi = c_abs(&x[i__]);
 	if (absxi > safmin) {
 	    i__2 = i__;
 	    i__3 = i__;
@@ -241,7 +241,7 @@ L70:
 L90:
     jlast = isave[2];
     isave[2] = icmax1_(n, &x[1], &c__1);
-    if (c_ABS(&x[jlast]) != c_ABS(&x[isave[2]]) && isave[3] < 5) {
+    if (c_abs(&x[jlast]) != c_abs(&x[isave[2]]) && isave[3] < 5) {
 	++isave[3];
 	goto L50;
     }

@@ -26,7 +26,7 @@ static int c__1 = 1;
     doublecomplex z__1, z__2;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *);
+    double z_abs(doublecomplex *);
     void d_cnjg(doublecomplex *, doublecomplex *);
 
     /* Local variables */
@@ -228,7 +228,7 @@ L30:
 
 /*           Invert the diagonal block. */
 
-	    t = z_ABS(&a[k + (k + 1) * a_dim1]);
+	    t = z_abs(&a[k + (k + 1) * a_dim1]);
 	    i__1 = k + k * a_dim1;
 	    ak = a[i__1].r / t;
 	    i__1 = k + 1 + (k + 1) * a_dim1;
@@ -389,7 +389,7 @@ L60:
 
 /*           Invert the diagonal block. */
 
-	    t = z_ABS(&a[k + (k - 1) * a_dim1]);
+	    t = z_abs(&a[k + (k - 1) * a_dim1]);
 	    i__1 = k - 1 + (k - 1) * a_dim1;
 	    ak = a[i__1].r / t;
 	    i__1 = k + k * a_dim1;

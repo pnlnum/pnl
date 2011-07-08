@@ -33,7 +33,7 @@ static int c__3 = 3;
     doublecomplex z__1;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *);
+    double z_abs(doublecomplex *);
 
     /* Local variables */
     int i__, k, n1, n2, ks;
@@ -418,8 +418,8 @@ static int c__3 = 3;
 , &c__1, &c_b20, &work[1], &c__1);
 	    zdotc_(&z__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
 	    yhbx.r = z__1.r, yhbx.i = z__1.i;
-	    d__1 = z_ABS(&yhax);
-	    d__2 = z_ABS(&yhbx);
+	    d__1 = z_abs(&yhax);
+	    d__2 = z_abs(&yhbx);
 	    cond = dlapy2_(&d__1, &d__2);
 	    if (cond == 0.) {
 		s[ks] = -1.;
@@ -430,8 +430,8 @@ static int c__3 = 3;
 
 	if (wantdf) {
 	    if (*n == 1) {
-		d__1 = z_ABS(&a[a_dim1 + 1]);
-		d__2 = z_ABS(&b[b_dim1 + 1]);
+		d__1 = z_abs(&a[a_dim1 + 1]);
+		d__2 = z_abs(&b[b_dim1 + 1]);
 		dif[ks] = dlapy2_(&d__1, &d__2);
 	    } else {
 

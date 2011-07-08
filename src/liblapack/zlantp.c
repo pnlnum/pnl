@@ -24,7 +24,7 @@ double zlantp_(char *norm, char *uplo, char *diag, int *n,
     double ret_val, d__1, d__2;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *), sqrt(double);
+    double z_abs(doublecomplex *), sqrt(double);
 
     /* Local variables */
     int i__, j, k;
@@ -139,7 +139,7 @@ double zlantp_(char *norm, char *uplo, char *diag, int *n,
 		    i__2 = k + j - 2;
 		    for (i__ = k; i__ <= i__2; ++i__) {
 /* Computing MAX */
-			d__1 = value, d__2 = z_ABS(&ap[i__]);
+			d__1 = value, d__2 = z_abs(&ap[i__]);
 			value = MAX(d__1,d__2);
 /* L10: */
 		    }
@@ -152,7 +152,7 @@ double zlantp_(char *norm, char *uplo, char *diag, int *n,
 		    i__2 = k + *n - j;
 		    for (i__ = k + 1; i__ <= i__2; ++i__) {
 /* Computing MAX */
-			d__1 = value, d__2 = z_ABS(&ap[i__]);
+			d__1 = value, d__2 = z_abs(&ap[i__]);
 			value = MAX(d__1,d__2);
 /* L30: */
 		    }
@@ -168,7 +168,7 @@ double zlantp_(char *norm, char *uplo, char *diag, int *n,
 		    i__2 = k + j - 1;
 		    for (i__ = k; i__ <= i__2; ++i__) {
 /* Computing MAX */
-			d__1 = value, d__2 = z_ABS(&ap[i__]);
+			d__1 = value, d__2 = z_abs(&ap[i__]);
 			value = MAX(d__1,d__2);
 /* L50: */
 		    }
@@ -181,7 +181,7 @@ double zlantp_(char *norm, char *uplo, char *diag, int *n,
 		    i__2 = k + *n - j;
 		    for (i__ = k; i__ <= i__2; ++i__) {
 /* Computing MAX */
-			d__1 = value, d__2 = z_ABS(&ap[i__]);
+			d__1 = value, d__2 = z_abs(&ap[i__]);
 			value = MAX(d__1,d__2);
 /* L70: */
 		    }
@@ -205,14 +205,14 @@ double zlantp_(char *norm, char *uplo, char *diag, int *n,
 		    sum = 1.;
 		    i__2 = k + j - 2;
 		    for (i__ = k; i__ <= i__2; ++i__) {
-			sum += z_ABS(&ap[i__]);
+			sum += z_abs(&ap[i__]);
 /* L90: */
 		    }
 		} else {
 		    sum = 0.;
 		    i__2 = k + j - 1;
 		    for (i__ = k; i__ <= i__2; ++i__) {
-			sum += z_ABS(&ap[i__]);
+			sum += z_abs(&ap[i__]);
 /* L100: */
 		    }
 		}
@@ -227,14 +227,14 @@ double zlantp_(char *norm, char *uplo, char *diag, int *n,
 		    sum = 1.;
 		    i__2 = k + *n - j;
 		    for (i__ = k + 1; i__ <= i__2; ++i__) {
-			sum += z_ABS(&ap[i__]);
+			sum += z_abs(&ap[i__]);
 /* L120: */
 		    }
 		} else {
 		    sum = 0.;
 		    i__2 = k + *n - j;
 		    for (i__ = k; i__ <= i__2; ++i__) {
-			sum += z_ABS(&ap[i__]);
+			sum += z_abs(&ap[i__]);
 /* L130: */
 		    }
 		}
@@ -259,7 +259,7 @@ double zlantp_(char *norm, char *uplo, char *diag, int *n,
 		for (j = 1; j <= i__1; ++j) {
 		    i__2 = j - 1;
 		    for (i__ = 1; i__ <= i__2; ++i__) {
-			work[i__] += z_ABS(&ap[k]);
+			work[i__] += z_abs(&ap[k]);
 			++k;
 /* L160: */
 		    }
@@ -276,7 +276,7 @@ double zlantp_(char *norm, char *uplo, char *diag, int *n,
 		for (j = 1; j <= i__1; ++j) {
 		    i__2 = j;
 		    for (i__ = 1; i__ <= i__2; ++i__) {
-			work[i__] += z_ABS(&ap[k]);
+			work[i__] += z_abs(&ap[k]);
 			++k;
 /* L190: */
 		    }
@@ -295,7 +295,7 @@ double zlantp_(char *norm, char *uplo, char *diag, int *n,
 		    ++k;
 		    i__2 = *n;
 		    for (i__ = j + 1; i__ <= i__2; ++i__) {
-			work[i__] += z_ABS(&ap[k]);
+			work[i__] += z_abs(&ap[k]);
 			++k;
 /* L220: */
 		    }
@@ -311,7 +311,7 @@ double zlantp_(char *norm, char *uplo, char *diag, int *n,
 		for (j = 1; j <= i__1; ++j) {
 		    i__2 = *n;
 		    for (i__ = j; i__ <= i__2; ++i__) {
-			work[i__] += z_ABS(&ap[k]);
+			work[i__] += z_abs(&ap[k]);
 			++k;
 /* L250: */
 		    }

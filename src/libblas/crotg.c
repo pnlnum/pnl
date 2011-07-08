@@ -19,7 +19,7 @@
     complex q__1, q__2, q__3;
 
     /* Builtin functions */
-    double c_ABS(complex *), sqrt(double);
+    double c_abs(complex *), sqrt(double);
     void r_cnjg(complex *, complex *);
 
     /* Local variables */
@@ -39,7 +39,7 @@
 /*     .. */
 /*     .. Intrinsic Functions .. */
 /*     .. */
-    if (c_ABS(ca) != 0.f) {
+    if (c_abs(ca) != 0.f) {
 	goto L10;
     }
     *c__ = 0.f;
@@ -47,18 +47,18 @@
     ca->r = cb->r, ca->i = cb->i;
     goto L20;
 L10:
-    scale = c_ABS(ca) + c_ABS(cb);
+    scale = c_abs(ca) + c_abs(cb);
     q__1.r = ca->r / scale, q__1.i = ca->i / scale;
 /* Computing 2nd power */
-    r__1 = c_ABS(&q__1);
+    r__1 = c_abs(&q__1);
     q__2.r = cb->r / scale, q__2.i = cb->i / scale;
 /* Computing 2nd power */
-    r__2 = c_ABS(&q__2);
+    r__2 = c_abs(&q__2);
     norm = scale * sqrt(r__1 * r__1 + r__2 * r__2);
-    r__1 = c_ABS(ca);
+    r__1 = c_abs(ca);
     q__1.r = ca->r / r__1, q__1.i = ca->i / r__1;
     alpha.r = q__1.r, alpha.i = q__1.i;
-    *c__ = c_ABS(ca) / norm;
+    *c__ = c_abs(ca) / norm;
     r_cnjg(&q__3, cb);
     q__2.r = alpha.r * q__3.r - alpha.i * q__3.i, q__2.i = alpha.r * q__3.i + 
 	    alpha.i * q__3.r;

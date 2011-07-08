@@ -24,7 +24,7 @@ double zlantb_(char *norm, char *uplo, char *diag, int *n, int *k,
     double ret_val, d__1, d__2;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *), sqrt(double);
+    double z_abs(doublecomplex *), sqrt(double);
 
     /* Local variables */
     int i__, j, l;
@@ -150,7 +150,7 @@ double zlantb_(char *norm, char *uplo, char *diag, int *n, int *k,
 		    i__3 = *k;
 		    for (i__ = MAX(i__2,1); i__ <= i__3; ++i__) {
 /* Computing MAX */
-			d__1 = value, d__2 = z_ABS(&ab[i__ + j * ab_dim1]);
+			d__1 = value, d__2 = z_abs(&ab[i__ + j * ab_dim1]);
 			value = MAX(d__1,d__2);
 /* L10: */
 		    }
@@ -164,7 +164,7 @@ double zlantb_(char *norm, char *uplo, char *diag, int *n, int *k,
 		    i__3 = MIN(i__2,i__4);
 		    for (i__ = 2; i__ <= i__3; ++i__) {
 /* Computing MAX */
-			d__1 = value, d__2 = z_ABS(&ab[i__ + j * ab_dim1]);
+			d__1 = value, d__2 = z_abs(&ab[i__ + j * ab_dim1]);
 			value = MAX(d__1,d__2);
 /* L30: */
 		    }
@@ -181,7 +181,7 @@ double zlantb_(char *norm, char *uplo, char *diag, int *n, int *k,
 		    i__2 = *k + 1;
 		    for (i__ = MAX(i__3,1); i__ <= i__2; ++i__) {
 /* Computing MAX */
-			d__1 = value, d__2 = z_ABS(&ab[i__ + j * ab_dim1]);
+			d__1 = value, d__2 = z_abs(&ab[i__ + j * ab_dim1]);
 			value = MAX(d__1,d__2);
 /* L50: */
 		    }
@@ -195,7 +195,7 @@ double zlantb_(char *norm, char *uplo, char *diag, int *n, int *k,
 		    i__2 = MIN(i__3,i__4);
 		    for (i__ = 1; i__ <= i__2; ++i__) {
 /* Computing MAX */
-			d__1 = value, d__2 = z_ABS(&ab[i__ + j * ab_dim1]);
+			d__1 = value, d__2 = z_abs(&ab[i__ + j * ab_dim1]);
 			value = MAX(d__1,d__2);
 /* L70: */
 		    }
@@ -219,7 +219,7 @@ double zlantb_(char *norm, char *uplo, char *diag, int *n, int *k,
 		    i__2 = *k + 2 - j;
 		    i__3 = *k;
 		    for (i__ = MAX(i__2,1); i__ <= i__3; ++i__) {
-			sum += z_ABS(&ab[i__ + j * ab_dim1]);
+			sum += z_abs(&ab[i__ + j * ab_dim1]);
 /* L90: */
 		    }
 		} else {
@@ -228,7 +228,7 @@ double zlantb_(char *norm, char *uplo, char *diag, int *n, int *k,
 		    i__3 = *k + 2 - j;
 		    i__2 = *k + 1;
 		    for (i__ = MAX(i__3,1); i__ <= i__2; ++i__) {
-			sum += z_ABS(&ab[i__ + j * ab_dim1]);
+			sum += z_abs(&ab[i__ + j * ab_dim1]);
 /* L100: */
 		    }
 		}
@@ -244,7 +244,7 @@ double zlantb_(char *norm, char *uplo, char *diag, int *n, int *k,
 		    i__3 = *n + 1 - j, i__4 = *k + 1;
 		    i__2 = MIN(i__3,i__4);
 		    for (i__ = 2; i__ <= i__2; ++i__) {
-			sum += z_ABS(&ab[i__ + j * ab_dim1]);
+			sum += z_abs(&ab[i__ + j * ab_dim1]);
 /* L120: */
 		    }
 		} else {
@@ -253,7 +253,7 @@ double zlantb_(char *norm, char *uplo, char *diag, int *n, int *k,
 		    i__3 = *n + 1 - j, i__4 = *k + 1;
 		    i__2 = MIN(i__3,i__4);
 		    for (i__ = 1; i__ <= i__2; ++i__) {
-			sum += z_ABS(&ab[i__ + j * ab_dim1]);
+			sum += z_abs(&ab[i__ + j * ab_dim1]);
 /* L130: */
 		    }
 		}
@@ -280,7 +280,7 @@ double zlantb_(char *norm, char *uplo, char *diag, int *n, int *k,
 		    i__2 = 1, i__3 = j - *k;
 		    i__4 = j - 1;
 		    for (i__ = MAX(i__2,i__3); i__ <= i__4; ++i__) {
-			work[i__] += z_ABS(&ab[l + i__ + j * ab_dim1]);
+			work[i__] += z_abs(&ab[l + i__ + j * ab_dim1]);
 /* L160: */
 		    }
 /* L170: */
@@ -298,7 +298,7 @@ double zlantb_(char *norm, char *uplo, char *diag, int *n, int *k,
 		    i__4 = 1, i__2 = j - *k;
 		    i__3 = j;
 		    for (i__ = MAX(i__4,i__2); i__ <= i__3; ++i__) {
-			work[i__] += z_ABS(&ab[l + i__ + j * ab_dim1]);
+			work[i__] += z_abs(&ab[l + i__ + j * ab_dim1]);
 /* L190: */
 		    }
 /* L200: */
@@ -318,7 +318,7 @@ double zlantb_(char *norm, char *uplo, char *diag, int *n, int *k,
 		    i__4 = *n, i__2 = j + *k;
 		    i__3 = MIN(i__4,i__2);
 		    for (i__ = j + 1; i__ <= i__3; ++i__) {
-			work[i__] += z_ABS(&ab[l + i__ + j * ab_dim1]);
+			work[i__] += z_abs(&ab[l + i__ + j * ab_dim1]);
 /* L220: */
 		    }
 /* L230: */
@@ -336,7 +336,7 @@ double zlantb_(char *norm, char *uplo, char *diag, int *n, int *k,
 		    i__4 = *n, i__2 = j + *k;
 		    i__3 = MIN(i__4,i__2);
 		    for (i__ = j; i__ <= i__3; ++i__) {
-			work[i__] += z_ABS(&ab[l + i__ + j * ab_dim1]);
+			work[i__] += z_abs(&ab[l + i__ + j * ab_dim1]);
 /* L250: */
 		    }
 /* L260: */

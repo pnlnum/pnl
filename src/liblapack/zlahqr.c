@@ -30,7 +30,7 @@ static int c__2 = 2;
     /* Builtin functions */
     double d_imag(doublecomplex *);
     void d_cnjg(doublecomplex *, doublecomplex *);
-    double z_ABS(doublecomplex *);
+    double z_abs(doublecomplex *);
     void z_sqrt(doublecomplex *, doublecomplex *), pow_zi(doublecomplex *, 
 	    doublecomplex *, int *);
 
@@ -258,11 +258,11 @@ static int c__2 = 2;
 	    z__1.r = h__[i__2].r / d__3, z__1.i = h__[i__2].i / d__3;
 	    sc.r = z__1.r, sc.i = z__1.i;
 	    d_cnjg(&z__2, &sc);
-	    d__1 = z_ABS(&sc);
+	    d__1 = z_abs(&sc);
 	    z__1.r = z__2.r / d__1, z__1.i = z__2.i / d__1;
 	    sc.r = z__1.r, sc.i = z__1.i;
 	    i__2 = i__ + (i__ - 1) * h_dim1;
-	    d__1 = z_ABS(&h__[i__ + (i__ - 1) * h_dim1]);
+	    d__1 = z_abs(&h__[i__ + (i__ - 1) * h_dim1]);
 	    h__[i__2].r = d__1, h__[i__2].i = 0.;
 	    i__2 = jhi - i__ + 1;
 	    zscal_(&i__2, &sc, &h__[i__ + i__ * h_dim1], ldh);
@@ -663,7 +663,7 @@ L70:
 
 		z__1.r = 1. - t1.r, z__1.i = 0. - t1.i;
 		temp.r = z__1.r, temp.i = z__1.i;
-		d__1 = z_ABS(&temp);
+		d__1 = z_abs(&temp);
 		z__1.r = temp.r / d__1, z__1.i = temp.i / d__1;
 		temp.r = z__1.r, temp.i = z__1.i;
 		i__2 = m + 1 + m * h_dim1;
@@ -708,7 +708,7 @@ L70:
 	i__1 = i__ + (i__ - 1) * h_dim1;
 	temp.r = h__[i__1].r, temp.i = h__[i__1].i;
 	if (d_imag(&temp) != 0.) {
-	    rtemp = z_ABS(&temp);
+	    rtemp = z_abs(&temp);
 	    i__1 = i__ + (i__ - 1) * h_dim1;
 	    h__[i__1].r = rtemp, h__[i__1].i = 0.;
 	    z__1.r = temp.r / rtemp, z__1.i = temp.i / rtemp;

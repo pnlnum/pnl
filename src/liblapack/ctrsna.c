@@ -28,7 +28,7 @@ static int c__1 = 1;
     complex q__1;
 
     /* Builtin functions */
-    double c_ABS(complex *), r_imag(complex *);
+    double c_abs(complex *), r_imag(complex *);
 
     /* Local variables */
     int i__, j, k, ks, ix;
@@ -318,7 +318,7 @@ static int c__1 = 1;
 	    s[1] = 1.f;
 	}
 	if (wantsp) {
-	    sep[1] = c_ABS(&t[t_dim1 + 1]);
+	    sep[1] = c_abs(&t[t_dim1 + 1]);
 	}
 	return 0;
     }
@@ -350,7 +350,7 @@ static int c__1 = 1;
 	    prod.r = q__1.r, prod.i = q__1.i;
 	    rnrm = scnrm2_(n, &vr[ks * vr_dim1 + 1], &c__1);
 	    lnrm = scnrm2_(n, &vl[ks * vl_dim1 + 1], &c__1);
-	    s[ks] = c_ABS(&prod) / (rnrm * lnrm);
+	    s[ks] = c_abs(&prod) / (rnrm * lnrm);
 
 	}
 

@@ -32,7 +32,7 @@ static int c__2 = 2;
     complex q__1;
 
     /* Builtin functions */
-    double c_ABS(complex *);
+    double c_abs(complex *);
 
     /* Local variables */
     int i__, j;
@@ -360,9 +360,9 @@ static int c__2 = 2;
     work[i__1].r = 1.f, work[i__1].i = 0.f;
     i__1 = ismax;
     work[i__1].r = 1.f, work[i__1].i = 0.f;
-    smax = c_ABS(&a[a_dim1 + 1]);
+    smax = c_abs(&a[a_dim1 + 1]);
     smin = smax;
-    if (c_ABS(&a[a_dim1 + 1]) == 0.f) {
+    if (c_abs(&a[a_dim1 + 1]) == 0.f) {
 	*rank = 0;
 	i__1 = MAX(*m,*n);
 	claset_("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);

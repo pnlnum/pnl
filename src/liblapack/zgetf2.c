@@ -25,7 +25,7 @@ static int c__1 = 1;
     doublecomplex z__1;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *);
+    double z_abs(doublecomplex *);
     void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
 
     /* Local variables */
@@ -160,7 +160,7 @@ static int c__1 = 1;
 /*           Compute elements J+1:M of J-th column. */
 
 	    if (j < *m) {
-		if (z_ABS(&a[j + j * a_dim1]) >= sfmin) {
+		if (z_abs(&a[j + j * a_dim1]) >= sfmin) {
 		    i__2 = *m - j;
 		    z_div(&z__1, &c_b1, &a[j + j * a_dim1]);
 		    zscal_(&i__2, &z__1, &a[j + 1 + j * a_dim1], &c__1);

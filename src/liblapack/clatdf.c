@@ -29,7 +29,7 @@ static float c_b24 = 1.f;
 
     /* Builtin functions */
     void c_div(complex *, complex *, complex *);
-    double c_ABS(complex *);
+    double c_abs(complex *);
     void c_sqrt(complex *, complex *);
 
     /* Local variables */
@@ -301,8 +301,8 @@ static float c_b24 = 1.f;
 		rhs[i__2].r = q__1.r, rhs[i__2].i = q__1.i;
 /* L20: */
 	    }
-	    splus += c_ABS(&work[i__ - 1]);
-	    sminu += c_ABS(&rhs[i__]);
+	    splus += c_abs(&work[i__ - 1]);
+	    sminu += c_abs(&rhs[i__]);
 /* L30: */
 	}
 	if (splus > sminu) {

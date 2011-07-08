@@ -29,7 +29,7 @@ static int c__1 = 1;
     doublecomplex z__1;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *), d_imag(doublecomplex *);
+    double z_abs(doublecomplex *), d_imag(doublecomplex *);
 
     /* Local variables */
     int i__, j, k, ks, ix;
@@ -319,7 +319,7 @@ static int c__1 = 1;
 	    s[1] = 1.;
 	}
 	if (wantsp) {
-	    sep[1] = z_ABS(&t[t_dim1 + 1]);
+	    sep[1] = z_abs(&t[t_dim1 + 1]);
 	}
 	return 0;
     }
@@ -351,7 +351,7 @@ static int c__1 = 1;
 	    prod.r = z__1.r, prod.i = z__1.i;
 	    rnrm = dznrm2_(n, &vr[ks * vr_dim1 + 1], &c__1);
 	    lnrm = dznrm2_(n, &vl[ks * vl_dim1 + 1], &c__1);
-	    s[ks] = z_ABS(&prod) / (rnrm * lnrm);
+	    s[ks] = z_abs(&prod) / (rnrm * lnrm);
 
 	}
 

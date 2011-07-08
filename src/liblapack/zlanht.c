@@ -23,7 +23,7 @@ double zlanht_(char *norm, int *n, double *d__, doublecomplex *e)
     double ret_val, d__1, d__2, d__3;
 
     /* Builtin functions */
-    double z_ABS(doublecomplex *), sqrt(double);
+    double z_abs(doublecomplex *), sqrt(double);
 
     /* Local variables */
     int i__;
@@ -118,7 +118,7 @@ double zlanht_(char *norm, int *n, double *d__, doublecomplex *e)
 	    d__2 = anorm, d__3 = (d__1 = d__[i__], ABS(d__1));
 	    anorm = MAX(d__2,d__3);
 /* Computing MAX */
-	    d__1 = anorm, d__2 = z_ABS(&e[i__]);
+	    d__1 = anorm, d__2 = z_abs(&e[i__]);
 	    anorm = MAX(d__1,d__2);
 /* L10: */
 	}
@@ -131,14 +131,14 @@ double zlanht_(char *norm, int *n, double *d__, doublecomplex *e)
 	    anorm = ABS(d__[1]);
 	} else {
 /* Computing MAX */
-	    d__2 = ABS(d__[1]) + z_ABS(&e[1]), d__3 = z_ABS(&e[*n - 1]) + (
+	    d__2 = ABS(d__[1]) + z_abs(&e[1]), d__3 = z_abs(&e[*n - 1]) + (
 		    d__1 = d__[*n], ABS(d__1));
 	    anorm = MAX(d__2,d__3);
 	    i__1 = *n - 1;
 	    for (i__ = 2; i__ <= i__1; ++i__) {
 /* Computing MAX */
-		d__2 = anorm, d__3 = (d__1 = d__[i__], ABS(d__1)) + z_ABS(&e[
-			i__]) + z_ABS(&e[i__ - 1]);
+		d__2 = anorm, d__3 = (d__1 = d__[i__], ABS(d__1)) + z_abs(&e[
+			i__]) + z_abs(&e[i__ - 1]);
 		anorm = MAX(d__2,d__3);
 /* L20: */
 	    }
