@@ -1,3 +1,11 @@
+08-07-2011 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* liblapack: update to version 3.2.1
+	* libblas: update 
+	* libf2c: lots of warnings removed
+	* lapack-wrap.c: Cholesky factorization with complete pivoting for
+	positive semidefinite matrices
+
 03-06-2011 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* libminpack: Functions lmder and lmdif common code has been
