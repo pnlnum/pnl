@@ -44,6 +44,7 @@
 static int size_vector (const PnlObject *Obj, MPI_Comm comm, int *size);
 static int size_matrix (const PnlObject *Obj, MPI_Comm comm, int *size);
 static int size_tridiag_matrix (const PnlObject *Obj, MPI_Comm comm, int *size);
+static int size_tridiag_matrix_lu (const PnlObject *Obj, MPI_Comm comm, int *size);
 static int size_band_matrix (const PnlObject *Obj, MPI_Comm comm, int *size);
 static int size_hmatrix (const PnlObject *Obj, MPI_Comm comm, int *size);
 static int size_basis (const PnlObject *Obj, MPI_Comm comm, int *size);
@@ -56,6 +57,7 @@ static int size_list (const PnlObject *Obj, MPI_Comm comm, int *size);
 static int pack_vector (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_matrix (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_tridiag_matrix (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
+static int pack_tridiag_matrix_lu (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_band_matrix (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_hmatrix (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_basis (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
@@ -68,6 +70,7 @@ static int pack_list (const PnlObject *Obj, void *buf, int bufsize, int *pos, MP
 static int unpack_vector (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_matrix (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_tridiag_matrix (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
+static int unpack_tridiag_matrix_lu (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_band_matrix (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_hmatrix (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_basis (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
@@ -174,6 +177,39 @@ static int size_tridiag_matrix (const PnlObject *Obj, MPI_Comm comm, int *size)
   if((info=MPI_Pack_size(M->size-1,MPI_DOUBLE,comm,&count))) return(info);
   *size += count;
   info=MPI_Pack_size(M->size-1,MPI_DOUBLE,comm,&count);
+  *size += count;
+  return(info);
+}
+
+/**
+ * Computes the length of the buffer needed to pack the PnlObject
+ *
+ * @param Obj a PnlObject actually containing a PnlTridiagMatLUObject
+ * @param comm an MPI Communicator
+ * @param size the upper bound on the number of bytes needed to pack Obj
+ *
+ * @return an error value equal to MPI_SUCCESS when everything is OK
+ */
+static int size_tridiag_matrix_lu (const PnlObject *Obj, MPI_Comm comm, int *size)
+{
+  int info, count;
+  PnlTridiagMatLUObject *M = PNL_TRIDIAGMATLU_OBJECT(Obj);
+  *size = 0;
+  /* M->size */
+  if((info=MPI_Pack_size(1,MPI_INT,comm,&count))) return(info);
+  *size += count;
+  if (PNL_GET_TYPE(M)!=PNL_TYPE_TRIDIAG_MATRIX_DOUBLE)
+    {
+      PNL_ERROR ("Unknown type", "pack_tridiag_matrix");
+    }
+  /* M->{D,DU,DL,DU2,ipiv} */
+  if((info=MPI_Pack_size(M->size,MPI_DOUBLE,comm,&count))) return(info);
+  *size += count;
+  if((info=MPI_Pack_size(M->size-1,MPI_DOUBLE,comm,&count))) return(info);
+  *size += 2*count;
+  if((info=MPI_Pack_size(M->size-2,MPI_DOUBLE,comm,&count))) return(info);
+  *size += count;
+  info=MPI_Pack_size(M->size,MPI_INT,comm,&count);
   *size += count;
   return(info);
 }
@@ -453,6 +489,36 @@ static int pack_tridiag_matrix (const PnlObject *Obj, void *buf, int bufsize, in
 }
 
 /**
+ * Packs a PnlTridiagMatLUObject
+ *
+ * @param Obj a PnlObject containing a PnlTridiagMatLUObject
+ * @param buf an already allocated buffer of length bufsize used to store Obj
+ * @param bufsize the size of the buffer. It must be at least equal to the value
+ * computed by size_matrix
+ * @param comm an MPI Communicator
+ * @param pos (in/out) the current position in buf
+ *
+ * @return an error value equal to MPI_SUCCESS when everything is OK
+ */
+static int pack_tridiag_matrix_lu (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
+{
+  int n,info;
+  PnlTridiagMatLUObject *M = PNL_TRIDIAGMATLU_OBJECT(Obj);
+  n = M->size;
+  if ((info=MPI_Pack(&n, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
+  if (PNL_GET_TYPE(M)!=PNL_TYPE_TRIDIAG_MATRIX_LU_DOUBLE)
+    {
+      PNL_ERROR ("Unknown type", "pack_tridiag_matrix");
+    }
+  if((info=MPI_Pack(M->D,n,MPI_DOUBLE,buf,bufsize,pos,comm)))return(info);
+  if((info=MPI_Pack(M->DL,n-1,MPI_DOUBLE,buf,bufsize,pos,comm)))return(info);
+  if((info=MPI_Pack(M->DU,n-1,MPI_DOUBLE,buf,bufsize,pos,comm)))return(info);
+  if((info=MPI_Pack(M->DU2,n-2,MPI_DOUBLE,buf,bufsize,pos,comm)))return(info);
+  if((info=MPI_Pack(M->ipiv,n,MPI_INT,buf,bufsize,pos,comm)))return(info);
+  return(info);
+}
+
+/**
  * Packs a PnlBandMatObject
  *
  * @param Obj a PnlObject containing a PnlBandMatObject
@@ -715,6 +781,37 @@ static int unpack_tridiag_matrix (PnlObject *Obj, void *buf, int bufsize, int *p
 }
 
 /**
+ * Unpacks a PnlTridiagMatObject
+ *
+ * @param Obj a PnlObject containing a PnlTridiagMatObject
+ * @param buf an already allocated buffer of length bufsize used to store Obj
+ * @param bufsize the size of the buffer. It must be at least equal to the value
+ * computed by size_vector
+ * @param comm an MPI Communicator
+ * @param pos (in/out) the current position in buf
+ *
+ * @return an error value equal to MPI_SUCCESS when everything is OK
+ */
+static int unpack_tridiag_matrix_lu (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
+{
+  int id,n,info;
+  PnlTridiagMatLU *M = (PnlTridiagMatLU *) Obj;
+  if ((info=MPI_Unpack(buf,bufsize,pos,&id,1,MPI_INT,comm))) return info;
+  if (PNL_GET_TYPE(M)!=PNL_TYPE_TRIDIAG_MATRIX_LU_DOUBLE)
+    {
+      PNL_ERROR ("Unknown type", "unpack_tridiag_matrix");
+    }
+  if ((info=MPI_Unpack(buf,bufsize,pos,&n, 1, MPI_INT, comm))) return info;
+  pnl_tridiag_mat_lu_resize (M, n);
+  if((info=MPI_Unpack(buf,bufsize,pos,M->D,n,MPI_DOUBLE,comm)))return(info);
+  if((info=MPI_Unpack(buf,bufsize,pos,M->DL,n-1,MPI_DOUBLE,comm)))return(info);
+  if((info=MPI_Unpack(buf,bufsize,pos,M->DU,n-1,MPI_DOUBLE,comm)))return(info);
+  if((info=MPI_Unpack(buf,bufsize,pos,M->DU2,n-2,MPI_DOUBLE,comm)))return(info);
+  if((info=MPI_Unpack(buf,bufsize,pos,M->ipiv,n,MPI_INT,comm)))return(info);
+  return(info);
+}
+
+/**
  * Unpacks a PnlBandMatObject
  *
  * @param Obj a PnlObject containing a PnlBandMatObject
@@ -953,6 +1050,9 @@ int pnl_object_mpi_pack_size (const PnlObject *Obj, MPI_Comm comm, int *size)
     case PNL_TYPE_TRIDIAG_MATRIX:
       info = size_tridiag_matrix (Obj, comm, &count);
       break;
+    case PNL_TYPE_TRIDIAG_MATRIX_LU:
+      info = size_tridiag_matrix_lu (Obj, comm, &count);
+      break;
     case PNL_TYPE_BAND_MATRIX:
       info = size_band_matrix (Obj, comm, &count);
       break;
@@ -974,7 +1074,6 @@ int pnl_object_mpi_pack_size (const PnlObject *Obj, MPI_Comm comm, int *size)
     }
   *size += count; return info;
 }
-
 
 /**
  * Packs a PnlOject
@@ -1005,6 +1104,9 @@ int pnl_object_mpi_pack (const PnlObject *Obj, void *buf, int bufsize, int *pos,
       break;
     case PNL_TYPE_TRIDIAG_MATRIX:
       return pack_tridiag_matrix (Obj, buf, bufsize, pos, comm);
+      break;
+    case PNL_TYPE_TRIDIAG_MATRIX_LU:
+      return pack_tridiag_matrix_lu (Obj, buf, bufsize, pos, comm);
       break;
     case PNL_TYPE_BAND_MATRIX:
       return pack_band_matrix (Obj, buf, bufsize, pos, comm);
@@ -1061,6 +1163,9 @@ int pnl_object_mpi_unpack (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI
       break;
     case PNL_TYPE_TRIDIAG_MATRIX:
       return unpack_tridiag_matrix (Obj, buf, bufsize, pos, comm);
+      break;
+    case PNL_TYPE_TRIDIAG_MATRIX_LU:
+      return unpack_tridiag_matrix_lu (Obj, buf, bufsize, pos, comm);
       break;
     case PNL_TYPE_BAND_MATRIX:
       return unpack_band_matrix (Obj, buf, bufsize, pos, comm);
@@ -1131,7 +1236,6 @@ int pnl_object_mpi_ssend (const PnlObject *Obj, int dest, int tag, MPI_Comm comm
   return info;
 }
 
-
 /**
  * Performs a blocking receive of a PnlObject
  *
@@ -1160,7 +1264,6 @@ int pnl_object_mpi_recv (PnlObject *Obj, int src, int tag, MPI_Comm comm, MPI_St
   free (buf); buf=NULL;
   return info;
 }
-
 
 /**
  * Broadcasts  a PnlObject from the process with rank root to
