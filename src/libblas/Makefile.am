@@ -22,11 +22,11 @@ zaxpy.c zcopy.c zdotc.c zdotu.c zdscal.c zgbmv.c \
 zgemm.c zgemv.c zgerc.c zgeru.c zhbmv.c zhemm.c zhemv.c zher.c zher2.c \
 zher2k.c zherk.c zhpmv.c zhpr.c zhpr2.c zrotg.c zscal.c zswap.c zsymm.c \
 zsyr2k.c zsyrk.c ztbmv.c ztbsv.c ztpmv.c ztpsv.c ztrmm.c ztrmv.c ztrsm.c \
-ztrsv.c
+ztrsv.c csrot.c zdrot.c
 
 ## The following files must not be compiled because they
 ## are already included in liblapack
-## lsame.c xerbla.c csrot.c xerbla_array.c zdrot.c
+## lsame.c xerbla.c xerbla_array.c 
 
 libblas_la_LDFLAGS=-avoid-version
 
