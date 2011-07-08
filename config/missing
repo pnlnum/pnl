@@ -160,17 +160,18 @@ WARNING: \`$1' is $msg.  You should only need it if
          you modified \`acconfig.h' or \`${configure_ac}'.  You might want
          to install the \`Autoconf' and \`GNU m4' packages.  Grab them
          from any GNU archive site."
-    files=`sed -n 's/^[ ]*A[CM]_CONFIG_HEADER(\([^)]*\)).*/\1/p' ${configure_ac}`
-    test -z "$files" && files="config.h"
-    touch_files=
-    for f in $files; do
-      case "$f" in
-      *:*) touch_files="$touch_files "`echo "$f" |
-				       sed -e 's/^[^:]*://' -e 's/:.*//'`;;
-      *) touch_files="$touch_files $f.in";;
-      esac
-    done
-    touch $touch_files
+    # Deactivate autoheader
+    # files=`sed -n 's/^[ ]*A[CM]_CONFIG_HEADER(\([^)]*\)).*/\1/p' ${configure_ac}`
+    # test -z "$files" && files="config.h"
+    # touch_files=
+    # for f in $files; do
+    #   case "$f" in
+    #   *:*) touch_files="$touch_files "`echo "$f" |
+    #                    sed -e 's/^[^:]*://' -e 's/:.*//'`;;
+    #   *) touch_files="$touch_files $f.in";;
+    #   esac
+    # done
+    # touch $touch_files
     ;;
 
   automake*)
