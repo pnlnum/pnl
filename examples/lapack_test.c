@@ -150,9 +150,46 @@ static void pnl_mat_ls_test ()
   pnl_mat_free (&AB);
   pnl_mat_free (&B);
   pnl_mat_free (&Bcopy);
+  pnl_vect_free (&Ab);
   pnl_vect_free (&b);
   pnl_vect_free (&bcopy);
 }
+
+static void pnl_mat_pchol_test ()
+{
+  PnlMat *S, *L, *PS, *PSP, *LL_t;
+  PnlVectInt *p;
+  int rank;
+  double tol = 1E-9;
+  int m = 5;
+  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
+  pnl_rand_init (gen, m, m);
+  p = pnl_vect_int_create (m);
+  S = pnl_mat_create (m, m);
+  PS = pnl_mat_create (m, m);
+  PSP = pnl_mat_create (m, m);
+  pnl_mat_rand_uni2 (S, m, m, 0, 1, gen);
+  L = pnl_mat_create (m, m);
+  pnl_mat_dgemm ('T', 'N', 1, S, S, 0., L);
+  pnl_mat_clone (S, L);
+  pnl_mat_pchol (L, tol, &rank, p);
+
+  LL_t = pnl_mat_create (m,m);
+  pnl_mat_dgemm ('N', 'T', 1, L, L, 0., LL_t);
+
+  pnl_mat_row_permute (PS, S, p);
+  pnl_mat_col_permute (PSP, PS, p);
+
+  pnl_test_mat_eq_abs(PSP, LL_t, 1E-8, "Cholesky with pivoting", "");
+
+  pnl_mat_free (&S);
+  pnl_mat_free (&PS);
+  pnl_mat_free (&PSP);
+  pnl_mat_free (&LL_t);
+  pnl_mat_free (&L);
+  pnl_vect_int_free (&p);
+}
+
 
 static void pnl_mat_qr_test ()
 {
@@ -194,6 +231,7 @@ int main (int argc, char *argv[])
   pnl_mat_eigen_test ();
   pnl_mat_log_test ();
   pnl_mat_ls_test ();
+  pnl_mat_pchol_test ();
   pnl_mat_qr_test ();
   exit (pnl_test_finalize("Lapack wrappers"));
 }

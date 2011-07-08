@@ -83,7 +83,7 @@ static void pnl_mat_make_upper (PnlMat *A)
  * @param M : a PnlMat pointer.
  * @return OK or FAIL
  */
-int pnl_mat_chol(PnlMat *M)
+int pnl_mat_chol (PnlMat *M)
 {
   int n, lda, info, i, j;
   CheckIsSquare(M);
@@ -105,6 +105,54 @@ int pnl_mat_chol(PnlMat *M)
           PNL_MLET (M, i, j) = 0.;
         }
     }
+  return OK;
+}
+
+/** 
+ * Computes the Cholesky decompisition with complete pivoting. 
+ *
+ *       P' * A * P = L  * L'
+ *
+ * The input matrix must be symmetric and positive semidefinite 
+ * 
+ * @param M input matrix. On output contains L
+ * @param tol tolerance : if a pivot is smaller than this value, it is
+ * considered as zero
+ * @param rank (output) rank of the matrix
+ * @param p An integer vector representing a permutation
+ * 
+ * @return OK or FAIL
+ */
+int pnl_mat_pchol (PnlMat *M, double tol, int *rank, PnlVectInt *p)
+{
+  int n, lda, info, i, j;
+  double *work;
+  CheckIsSquare(M);
+  n = M->m;
+  lda = M->m;
+  pnl_vect_int_resize (p, n);
+  work = malloc (sizeof (double) * 2*n);
+
+
+  /* Because of Fortran column wise storage, we ask for an upper triangular
+   * matrix to actually have a lower one */
+  C2F(dpstrf)("U", &n, M->array, &lda, p->array, rank, &tol, work, &info);
+  free (work);
+  if (info < 0)
+    {
+      PNL_MESSAGE_ERROR ("matrix has illegal entries", "pnl_mat_pchol");
+      return FAIL;
+    }
+  /* Sets the upper part to 0 */
+  for ( i=0 ; i<M->m ; i++ )
+    {
+      for ( j=i+1 ; j<M->n ; j++ )
+        {
+          PNL_MLET (M, i, j) = 0.;
+        }
+    }
+  /* C indices start at 0 */
+  pnl_vect_int_minus_int (p, 1);
   return OK;
 }
 

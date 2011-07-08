@@ -1112,9 +1112,20 @@ computations have been carried out successfully and \var{FAIL} otherwise.
 \begin{itemize}
 \item \describefun{int}{pnl_mat_chol}{\refstruct{PnlMat} \ptr M}
   \sshortdescribe Computes the Cholesky decomposition of \var{M}. \var{M} must
-  be symmetric, the positivity is tested in the algorithm. On exist, the lower
-  part of \var{M} contains the Cholesky decomposition and the upper part is
-  set to zero.
+  be symmetric, the positivity is tested in the algorithm.  \var{M = L * L'}.
+  On exit, the lower part of \var{M} contains the Cholesky decomposition L and
+  the upper part is set to zero. 
+
+\item \describefun{int}{pnl_mat_pchol}{\refstruct{PnlMat} \ptr M, double tol,
+    int \ptr rank, \refstruct{PnlVectInt \ptr p}}
+    \sshortdescribe Computes the
+    Cholesky decomposition of \var{M} with complete pivoting. 
+    \var{P' * A * P = L * L'}.
+    \var{M} must be
+    symmetric positive semi-definite. On exit, the lower part of \var{M}
+    contains the Cholesky decomposition \var{L} and the upper part is set to zero. The
+    permutation matrix is stored in an integer vector \var{p} : the only non
+    zero elements of \var{P} are \var{P(p(k),k) = 1}
 
 \item \describefun{int}{pnl_mat_lu}{\refstruct{PnlMat} \ptr A, 
     \refstruct{PnlPermutation} \ptr p} 
@@ -1290,6 +1301,11 @@ decomposition, row \verb!i! of \verb!A! was interchanged with row \verb!p(i)!.
     \refstruct{PnlMat} \ptr X, const
     \refstruct{PnlPermutation} \ptr p}
   \sshortdescribe Applies a \refstruct{PnlPermutation} to the columns of a
+  matrix. \var{pX} contains the result of the permutation applied to \var{X}. 
+\item \describefun{void}{pnl_mat_row_permute}{\refstruct{PnlMat} \ptr pX, const
+    \refstruct{PnlMat} \ptr X, const
+    \refstruct{PnlPermutation} \ptr p}
+  \sshortdescribe Applies a \refstruct{PnlPermutation} to the rows of a
   matrix. \var{pX} contains the result of the permutation applied to \var{X}. 
   
 \item \describefun{void}{pnl_permutation_fprint}{FILE \ptr fic, const \refstruct{PnlPermutation} \ptr p}

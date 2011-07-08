@@ -120,6 +120,7 @@ extern void pnl_mat_swap_rows (PnlMat *M, int i, int j);
 extern int pnl_mat_upper_inverse(PnlMat *A, const PnlMat *B);
 extern int pnl_mat_lower_inverse (PnlMat *A, const PnlMat *B);
 extern int pnl_mat_chol(PnlMat *x);
+extern int pnl_mat_pchol (PnlMat *M, double tol, int *rank, PnlVectInt *p);
 extern int pnl_mat_upper_syslin (PnlVect *x, const PnlMat *U, const  PnlVect *b);
 extern int pnl_mat_lower_syslin (PnlVect *x, const PnlMat *L, const  PnlVect *b);
 extern int pnl_mat_chol_syslin (PnlVect *x, const PnlMat *chol, const  PnlVect *b);
