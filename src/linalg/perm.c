@@ -167,6 +167,29 @@ void pnl_mat_col_permute (PnlMat *pX, const PnlMat *X, const PnlPermutation *p)
 }
 
 /**
+ * Applies a PnlPermutation to the rows of a matrix
+ * pX[] = x[p,:]
+ *
+ * @param pX on exit contains the permuted matrix
+ * @param X the matrix to permute
+ * @param p a permutation
+ */
+void pnl_mat_row_permute (PnlMat *pX, const PnlMat *X, const PnlPermutation *p)
+{
+  int i, j, k;
+  PNL_CHECK (X->m != p->size, "incompatible permutation size", "pnl_mat_col_permute");
+  pnl_mat_resize (pX, X->m, X->n);
+  for ( i=0 ; i<X->m ; i++ )
+    {
+      k = p->array[i];
+      for ( j=0 ; j<X->n ; j++ )
+        {
+          MLET (pX, i, j) = MGET(X, k, j);
+        }
+    }
+}
+
+/**
  * Prints a permutation to a file
  *
  * @param fic a File decriptor
