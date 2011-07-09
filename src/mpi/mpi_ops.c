@@ -169,7 +169,7 @@ static int size_tridiag_matrix (const PnlObject *Obj, MPI_Comm comm, int *size)
   *size += count;
   if (PNL_GET_TYPE(M)!=PNL_TYPE_TRIDIAG_MATRIX_DOUBLE)
     {
-      PNL_ERROR ("Unknown type", "pack_tridiag_matrix");
+      PNL_ERROR ("Unknown type", "size_tridiag_matrix");
     }
   /* M->{D,DU,DL} */
   if((info=MPI_Pack_size(M->size,MPI_DOUBLE,comm,&count))) return(info);
@@ -198,9 +198,9 @@ static int size_tridiag_matrix_lu (const PnlObject *Obj, MPI_Comm comm, int *siz
   /* M->size */
   if((info=MPI_Pack_size(1,MPI_INT,comm,&count))) return(info);
   *size += count;
-  if (PNL_GET_TYPE(M)!=PNL_TYPE_TRIDIAG_MATRIX_DOUBLE)
+  if (PNL_GET_TYPE(M)!=PNL_TYPE_TRIDIAG_MATRIX_LU_DOUBLE)
     {
-      PNL_ERROR ("Unknown type", "pack_tridiag_matrix");
+      PNL_ERROR ("Unknown type", "size_tridiag_matrix_lu");
     }
   /* M->{D,DU,DL,DU2,ipiv} */
   if((info=MPI_Pack_size(M->size,MPI_DOUBLE,comm,&count))) return(info);
@@ -508,7 +508,7 @@ static int pack_tridiag_matrix_lu (const PnlObject *Obj, void *buf, int bufsize,
   if ((info=MPI_Pack(&n, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
   if (PNL_GET_TYPE(M)!=PNL_TYPE_TRIDIAG_MATRIX_LU_DOUBLE)
     {
-      PNL_ERROR ("Unknown type", "pack_tridiag_matrix");
+      PNL_ERROR ("Unknown type", "pack_tridiag_matrix_lu");
     }
   if((info=MPI_Pack(M->D,n,MPI_DOUBLE,buf,bufsize,pos,comm)))return(info);
   if((info=MPI_Pack(M->DL,n-1,MPI_DOUBLE,buf,bufsize,pos,comm)))return(info);
@@ -799,7 +799,7 @@ static int unpack_tridiag_matrix_lu (PnlObject *Obj, void *buf, int bufsize, int
   if ((info=MPI_Unpack(buf,bufsize,pos,&id,1,MPI_INT,comm))) return info;
   if (PNL_GET_TYPE(M)!=PNL_TYPE_TRIDIAG_MATRIX_LU_DOUBLE)
     {
-      PNL_ERROR ("Unknown type", "unpack_tridiag_matrix");
+      PNL_ERROR ("Unknown type", "unpack_tridiag_matrix_lu");
     }
   if ((info=MPI_Unpack(buf,bufsize,pos,&n, 1, MPI_INT, comm))) return info;
   pnl_tridiag_mat_lu_resize (M, n);
