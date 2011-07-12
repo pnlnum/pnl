@@ -1122,6 +1122,16 @@ void pnl_rng_init (PnlRng *rng, int type)
       rng->rand_or_quasi = QMC;
       rng->size_state = sizeof(nied_state);
       break;
+    case PNL_RNG_SOBOL_I4:
+      rng->Compute = I4_SOBOL;
+      rng->rand_or_quasi = QMC;
+      rng->size_state = sizeof(sobol_i4_state);
+      break;
+    case PNL_RNG_SOBOL_I8:
+      rng->Compute = I8_SOBOL;
+      rng->rand_or_quasi = QMC;
+      rng->size_state = sizeof(sobol_i8_state);
+      break;
     default:
       rng->type = PNL_RNG_NULL;
       printf("Unknown generator type\n");

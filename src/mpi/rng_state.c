@@ -38,6 +38,8 @@ static int size_sqrt_state (const PnlRng *rng, MPI_Comm comm, int *size);
 static int size_halton_state (const PnlRng *rng, MPI_Comm comm, int *size);
 static int size_faure_state (const PnlRng *rng, MPI_Comm comm, int *size);
 static int size_nied_state (const PnlRng *rng, MPI_Comm comm, int *size);
+static int size_sobol_i4_state (const PnlRng *rng, MPI_Comm comm, int *size);
+static int size_sobol_i8_state (const PnlRng *rng, MPI_Comm comm, int *size);
 
 static int pack_knuth_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_mt_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
@@ -51,6 +53,8 @@ static int pack_sqrt_state (const PnlRng *rng, void *buf, int bufsize, int *pos,
 static int pack_halton_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_faure_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_nied_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
+static int pack_sobol_i4_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
+static int pack_sobol_i8_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 
 static int unpack_knuth_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_mt_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
@@ -64,6 +68,8 @@ static int unpack_sqrt_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI
 static int unpack_halton_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_faure_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_nied_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
+static int unpack_sobol_i4_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
+static int unpack_sobol_i8_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
 
 typedef int(pack_size_func)(const PnlRng *rng, MPI_Comm comm, int *size);
 typedef int(pack_func)(const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm);
@@ -93,6 +99,8 @@ PnlRngMPIFunc rng_pack_func[] =
     MAKE_PROPERTY(HALTON,halton),
     MAKE_PROPERTY(FAURE,faure),
     MAKE_PROPERTY(NIEDERREITER,nied),
+    MAKE_PROPERTY(SOBOL_I4,sobol_i4),
+    MAKE_PROPERTY(SOBOL_I8,sobol_i8),
     {PNL_RNG_NULL, NULL, NULL, NULL}
   };
 
@@ -195,7 +203,6 @@ static int size_tausworthe_state (const PnlRng *rng, MPI_Comm comm, int *size)
   return info;
 }
 
-
 static int size_mt_state (const PnlRng *rng, MPI_Comm comm, int *size)
 {
   int info, count;
@@ -270,7 +277,29 @@ static int size_nied_state (const PnlRng *rng, MPI_Comm comm, int *size)
   return info;
 }
 
+static int size_sobol_i4_state (const PnlRng *rng, MPI_Comm comm, int *size)
+{
+  int info, count;
+  *size = 0;
 
+  if((info=MPI_Pack_size(1,MPI_INT, comm,&count))) return(info);
+  *size += ( PNL_SOBOL_I4_LOG_MAX * PNL_SOBOL_I4_DIM_MAX2 + PNL_SOBOL_I4_DIM_MAX2 + 1) * count;
+  if((info=MPI_Pack_size(1,MPI_FLOAT, comm,&count))) return(info);
+  *size += count;
+  return info;
+}
+
+static int size_sobol_i8_state (const PnlRng *rng, MPI_Comm comm, int *size)
+{
+  int info, count;
+  *size = 0;
+
+  if((info=MPI_Pack_size(1,MPI_LONG_LONG_INT, comm,&count))) return(info);
+  *size += ( PNL_SOBOL_I8_LOG_MAX * PNL_SOBOL_I8_DIM_MAX2 + PNL_SOBOL_I8_DIM_MAX2 + 1) * count;
+  if((info=MPI_Pack_size(1,MPI_DOUBLE, comm,&count))) return(info);
+  *size += count;
+  return info;
+}
 
 static int pack_knuth_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -322,7 +351,6 @@ static int pack_tausworthe_state (const PnlRng *rng, void *buf, int bufsize, int
   if ((info=MPI_Pack(s,4,MPI_UNSIGNED_LONG,buf,bufsize,pos,comm))) return info;
   return info;
 }
-
 
 static int pack_mt_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -393,7 +421,29 @@ static int pack_nied_state (const PnlRng *rng, void *buf, int bufsize, int *pos,
   return info;
 }
 
+static int pack_sobol_i4_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
+{
+  int info;
+  sobol_i4_state *s = (sobol_i4_state *)(rng->state);
+  if ((info=MPI_Pack(&(s->v),PNL_SOBOL_I4_DIM_MAX2*PNL_SOBOL_I4_LOG_MAX,MPI_INT,
+                     buf,bufsize,pos,comm))) return info;
+  if ((info=MPI_Pack(&(s->lastq),PNL_SOBOL_I4_DIM_MAX2,MPI_INT,buf,bufsize,pos,comm))) return info;
+  if ((info=MPI_Pack(&(s->recipd),1,MPI_FLOAT,buf,bufsize,pos,comm))) return info;
+  if ((info=MPI_Pack(&(s->maxcol),1,MPI_INT,buf,bufsize,pos,comm))) return info;
+  return info;
+}
 
+static int pack_sobol_i8_state (const PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
+{
+  int info;
+  sobol_i8_state *s = (sobol_i8_state *)(rng->state);
+  if ((info=MPI_Pack(&(s->v),PNL_SOBOL_I8_DIM_MAX2*PNL_SOBOL_I8_LOG_MAX,MPI_LONG_LONG_INT,
+                     buf,bufsize,pos,comm))) return info;
+  if ((info=MPI_Pack(&(s->lastq),PNL_SOBOL_I8_DIM_MAX2,MPI_LONG_LONG_INT,buf,bufsize,pos,comm))) return info;
+  if ((info=MPI_Pack(&(s->recipd),1,MPI_DOUBLE,buf,bufsize,pos,comm))) return info;
+  if ((info=MPI_Pack(&(s->maxcol),1,MPI_LONG_LONG_INT,buf,bufsize,pos,comm))) return info;
+  return info;
+}
 
 static int unpack_knuth_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -446,7 +496,6 @@ static int unpack_tausworthe_state (PnlRng *rng, void *buf, int bufsize, int *po
   return info;
 }
 
-
 static int unpack_mt_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
   int info;
@@ -496,7 +545,6 @@ static int unpack_halton_state (PnlRng *rng, void *buf, int bufsize, int *pos, M
   return info;
 }
 
-
 static int unpack_faure_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
   int info;
@@ -517,4 +565,26 @@ static int unpack_nied_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI
   return info;
 }
 
+static int unpack_sobol_i4_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
+{
+  int info;
+  sobol_i4_state *s = (sobol_i4_state *)(rng->state);
+  if ((info=MPI_Unpack(buf,bufsize,pos,&(s->v),PNL_SOBOL_I4_DIM_MAX2*PNL_SOBOL_I4_LOG_MAX,
+                       MPI_INT,comm))) return info;
+  if ((info=MPI_Unpack(buf,bufsize,pos,&(s->lastq),PNL_SOBOL_I4_DIM_MAX2,MPI_INT,comm))) return info;
+  if ((info=MPI_Unpack(buf,bufsize,pos,&(s->recipd),1,MPI_FLOAT,comm))) return info;
+  if ((info=MPI_Unpack(buf,bufsize,pos,&(s->maxcol),1,MPI_INT,comm))) return info;
+  return info;
+}
 
+static int unpack_sobol_i8_state (PnlRng *rng, void *buf, int bufsize, int *pos, MPI_Comm comm)
+{
+  int info;
+  sobol_i8_state *s = (sobol_i8_state *)(rng->state);
+  if ((info=MPI_Unpack(buf,bufsize,pos,&(s->v),PNL_SOBOL_I8_DIM_MAX2*PNL_SOBOL_I8_LOG_MAX,
+                       MPI_LONG_LONG_INT,comm))) return info;
+  if ((info=MPI_Unpack(buf,bufsize,pos,&(s->lastq),PNL_SOBOL_I8_DIM_MAX2,MPI_LONG_LONG_INT,comm))) return info;
+  if ((info=MPI_Unpack(buf,bufsize,pos,&(s->recipd),1,MPI_DOUBLE,comm))) return info;
+  if ((info=MPI_Unpack(buf,bufsize,pos,&(s->maxcol),1,MPI_LONG_LONG_INT,comm))) return info;
+  return info;
+}

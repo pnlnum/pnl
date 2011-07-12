@@ -209,10 +209,16 @@ int main(int argc, char *argv[])
       send_rng (PNL_RNG_FAURE); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
       printf ("--> NIEDERREITER\n"); fflush(stdout);
       send_rng (PNL_RNG_NIEDERREITER); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      printf ("--> SOBOL_I4\n"); fflush(stdout);
+      send_rng (PNL_RNG_SOBOL_I4); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      printf ("--> SOBOL_I8\n"); fflush(stdout);
+      send_rng (PNL_RNG_SOBOL_I8); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
     }
   else
     {
       recv_dcmt (); fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
+      recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
       recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
       recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
       recv_rng ();  fflush(stdout); MPI_Barrier(MPI_COMM_WORLD);
