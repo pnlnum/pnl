@@ -21,7 +21,6 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_specfun.h"
 #include "pnl/pnl_cdf.h"
-#include "randomkit.h"
 
 /* Maximum dimension for random sequences */
 #define DIM_MAX 100000
