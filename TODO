@@ -1,8 +1,4 @@
 
-- random.c : SOBOL and SOBOL2 are not handled by pnl_rng_sdim
-
-- Recode Sobol
-
 - Integrate the latest version of DCMT
 
 - List structure

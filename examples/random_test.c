@@ -24,6 +24,8 @@
 #include "pnl/pnl_random.h"
 #include  "tests_utils.h"
 
+#define N_SAMPLES 100000
+
 static double square (double x) { return x*x;}
 
 static void reset_rng (PnlRng *rng, int s)
@@ -34,13 +36,16 @@ static void reset_rng (PnlRng *rng, int s)
     }
   else
     {
-      pnl_rng_sdim (rng, s);
+      if ( pnl_rng_sdim (rng, s) == FAIL )
+        {
+          printf ("Initialization error of generator %d\n", rng->type);
+        }
     }
 }
 
 static void test_pnl_vect_rng(PnlRng *rng, const char *name)
 {
-  int samples = 100000;
+  int samples = N_SAMPLES;
   double sum;
   int i;
   PnlVect *G;
@@ -80,7 +85,7 @@ static void test_pnl_mat_rng(PnlRng *rng, const char *name)
 {
   PnlMat *M;
   PnlVect *inf, *sup, *Vsum;
-  int samples = 100000;
+  int samples = N_SAMPLES;
   int dim = 10;
   int i;
   double sum;
@@ -114,7 +119,7 @@ static void test_pnl_mat_rng(PnlRng *rng, const char *name)
 
 static void test_pnl_rng_gauss(PnlRng *rng, const char *name)
 {
-  int dimension=10, samples=100000;
+  int dimension=10, samples=N_SAMPLES;
   int i;
   double g1,g2,sum=0.0;
   char str[256];
@@ -180,7 +185,6 @@ static void std_call_dcmt ()
   pnl_dcmt_free_array(mts, count);
 }  
 
-
 static void rand_call_dcmt ()
 {
   int i, j, N=10000;
@@ -216,8 +220,6 @@ static void rand_call_dcmt ()
     }
   free (rng);
 }  
-
-
 
 int main (int argc, char **argv)
 {

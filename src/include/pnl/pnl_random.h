@@ -41,8 +41,8 @@ typedef enum
   PNL_RNG_SQRT                 = 8,
   PNL_RNG_HALTON               = 9,
   PNL_RNG_FAURE                = 10,
-  PNL_RNG_SOBOL                = 11,
-  PNL_RNG_SOBOL2               = 12,
+  PNL_RNG_SOBOL_I4             = 11,
+  PNL_RNG_SOBOL_I8             = 12,
   PNL_RNG_NIEDERREITER         = 13,
   /* end of static rng */
   PNL_RNG_DCMT                 = 14
@@ -91,8 +91,8 @@ extern PnlRng PnlRngMersenneRandomSeed;
 extern PnlRng PnlRngSqrt;
 extern PnlRng PnlRngHalton;
 extern PnlRng PnlRngFaure;
-extern PnlRng PnlRngSobol;
-extern PnlRng PnlRngSobol2;
+extern PnlRng PnlRngSobolI4;
+extern PnlRng PnlRngSobolI8;
 extern PnlRng PnlRngNiederreiter;
 
 extern PnlRngEnum PnlRngArray[];
@@ -144,7 +144,7 @@ extern PnlRng* pnl_rng_create (int type);
 extern PnlRng** pnl_rng_dcmt_create_array (int n, ulong seed, int *count);
 extern void pnl_rng_init (PnlRng *rng, int type);
 extern void pnl_rng_sseed(PnlRng *rng, unsigned long int s);
-extern void pnl_rng_sdim (PnlRng *rng, int dim);
+extern int pnl_rng_sdim (PnlRng *rng, int dim);
 
 extern int pnl_rng_bernoulli(double p, PnlRng *rng);
 extern long pnl_rng_poisson(double lambda, PnlRng *rng);
@@ -233,11 +233,30 @@ typedef struct
   unsigned long initial_d, initialX_n[PNL_DIM_MAX_NIED+1];
 } nied_state;
 
+#define PNL_SOBOL_I4_LOG_MAX 30
+#define PNL_SOBOL_I4_DIM_MAX2 1111
+typedef struct
+{
+  int v[PNL_SOBOL_I4_DIM_MAX2][PNL_SOBOL_I4_LOG_MAX];
+  int lastq[PNL_SOBOL_I4_DIM_MAX2];
+  float recipd;
+  int maxcol;
+} sobol_i4_state;
+
+#define PNL_SOBOL_I8_LOG_MAX 62
+#define PNL_SOBOL_I8_DIM_MAX2 1111
+typedef struct
+{
+  long long int v[PNL_SOBOL_I8_DIM_MAX2][PNL_SOBOL_I8_LOG_MAX];
+  long long int lastq[PNL_SOBOL_I8_DIM_MAX2];
+  double recipd;
+  long long int maxcol;
+} sobol_i8_state;
+
 /*
  * MT
  */
 #define MT_N 624
-
 typedef struct
 {
   unsigned long mt[MT_N];

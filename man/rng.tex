@@ -11,8 +11,8 @@ more flexible and uses reentrant functions suitable for multi-threaded
 applications.
 
 \begin{table}[h!]
-  \begin{tabular}{l|l|l}
-    Random generator & index & Type \\
+  \begin{tabular}{l|l|l|l}
+    Random generator & index & Type & Info\\
     \hline
     KNUTH & PNL_RNG_KNUTH & pseudo\\
     MRGK3 & PNL_RNG_MRGK3 & pseudo\\
@@ -21,12 +21,13 @@ applications.
     L'ECUYER & PNL_RNG_L_ECUYER & pseudo\\
     TAUSWORTHE & PNL_RNG_TAUSWORTHE & pseudo\\
     MERSENNE & PNL_RNG_MERSENNE & pseudo\\
-    MERSENNE (Random Seed) & PNL_RNG_MERSENNE_RANDOM_SEED & pseudo\\
+    MERSENNE & PNL_RNG_MERSENNE_RANDOM_SEED & pseudo & seed is
+    fixed using time\\
     SQRT & PNL_RNG_SQRT & quasi\\
     HALTON & PNL_RNG_HALTON & quasi\\
     FAURE & PNL_RNG_FAURE & quasi\\
-    SOBOL & PNL_RNG_SOBOL & quasi\\
-    SOBOL2 & PNL_RNG_SOBOL2 & quasi\\
+    SOBOL_I4 & PNL_RNG_SOBOL_I4 & quasi & uses 32 bit intergers\\
+    SOBOL_I8 & PNL_RNG_SOBOL2_I8 & quasi & uses 64 bit intergers\\
     NIEDERREITER & PNL_RNG_NIEDERREITER & quasi
   \end{tabular}
   \caption{Indices of the random generators}
@@ -87,8 +88,10 @@ struct _PnlRng
     long int s}
   \sshortdescribe Sets the seed of the genrator \var{rng} using \var{s}. If
   \var{s=0}, then a default seed (depending on the generator) is used.
-\item \describefun{void}{pnl_rng_sdim}{\refstruct{PnlRng} \ptr rng, int dim}
-  \sshortdescribe Sets the dimension of the state space for a QMC generator.
+\item \describefun{int}{pnl_rng_sdim}{\refstruct{PnlRng} \ptr rng, int dim}
+  \sshortdescribe Sets the dimension of the state space for a QMC generator and
+  initializes it accordingly.  Returns OK if the generator has been initialized
+  properly and FAIL otherwise.
 \end{itemize}
 
 Some auxiliary functions internally used but we should only be used with high

@@ -1,3 +1,8 @@
+12-07-2011 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* librand: new Sobol generators (from John Burkardt), older version are
+	removed. These new version are threadsafe and handled by pnl_rng_sdim.
+
 08-07-2011 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* liblapack: update to version 3.2.1
@@ -5,8 +10,8 @@
 	* libf2c: lots of warnings removed
 	* lapack-wrap.c: Cholesky factorization with complete pivoting for
 	positive semidefinite matrices
-	* tridiag_matrix.c: LU decomposition for repeatedly solving linear
-	systems
+	* tridiag_matrix.c: LU decomposition of TridiagMat for repeatedly
+	solving linear systems
 
 03-06-2011 Jérôme Lelong <jerome.lelong@gmail.com>
 

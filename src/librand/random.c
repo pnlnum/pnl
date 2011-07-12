@@ -27,7 +27,12 @@
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_cdf.h"
-#include "randomkit.h"
+
+extern void i4_sobol_init (PnlRng *rng, int dim);
+extern void I4_SOBOL (PnlRng *rng, double quasi[ ]);
+extern void i8_sobol_init (PnlRng *rng, int dim);
+extern void I8_SOBOL (PnlRng *rng, double quasi[ ]);
+
 
 /* ---------------------------------- */
 /* PSEUDO RANDOM NUMBERS GENERATORS.  */
@@ -661,157 +666,6 @@ static void FAURE(PnlRng *rng, double U_n[])
 }
 
 
-/* --------------------------------------------------------------- */
-/* SOBOL SEQUENCE in dimension d (d<=39)
-   X_n[] contains the terms of the n-th element
-   The algorithm is based on a relation between X(n) and X(n-1)    */
-/* Cf Numerical recipes in C, pages 312-313 */
-/* --------------------------------------------------------------- */
-
-/* maximal dimension for the SOBOL sequence */
-#define DIM_MAX_SOBOL 39
-/* maximal length of bits for the  SOBOL sequence */
-#define BIT_MAX_SOBOL 30
-
-static void SOBOL(PnlRng *rng, double X_n[])
-{
-  int i, j, k, P_j, deg_j;
-  unsigned long aux, dim;
-  static double facteur;
-  static unsigned long initialX_n[DIM_MAX_SOBOL+1];
-
-  /* Degree of the DIM_MAX primitive polynomials */
-  static int deg[DIM_MAX_SOBOL+1]={0, 1, 2, 3, 3, 4, 4, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8};
-
-  /* Index of each primitive polynomial. It determines the coefficients bi */
-  static int P[DIM_MAX_SOBOL+1]={0, 0, 1, 1, 2, 1, 4, 2, 13, 7, 14, 11, 4, 1, 16, 13, 22, 19, 25, 1, 32, 4, 8, 7, 56, 14, 28, 19, 50, 21, 42, 31, 62,37, 41, 55, 59, 14, 56, 21};
-
-  /* Sobol's constants C_i_(j) */
-  static unsigned long C[DIM_MAX_SOBOL+1][BIT_MAX_SOBOL+1];
-  /* Initial values for C */
-  /* The second dimension is the maximum degree of a primitive polynomial +1 */
-  static unsigned long C_init[DIM_MAX_SOBOL+1][9]={
-    {0,0, 0, 0, 0,  0,  0,  0,   0},
-    {0,1, 0, 0, 0,  0,  0,  0,   0},
-    {0,1, 1, 0, 0,  0,  0,  0,   0},
-    {0,1, 3, 7, 0,  0,  0,  0,   0},
-    {0,1, 1, 5, 0,  0,  0,  0,   0},
-    {0,1, 3, 1, 1,  0,  0,  0,   0},
-    {0,1, 1, 3, 7,  0,  0,  0,   0},
-    {0,1, 3, 3, 9,  9,  0,  0,   0},
-    {0,1, 3, 7, 13, 3 , 0,  0,   0},
-    {0,1, 1, 5, 11, 27, 0,  0,   0},
-    {0,1, 3, 5, 1,  15, 0,  0,   0},
-    {0,1, 1, 7, 3,  29, 0,  0,   0},
-    {0,1, 3, 7, 7,  21, 0,  0,   0},
-    {0,1, 1, 1, 9,  23, 37, 0,   0},
-    {0,1, 3, 3, 5,  19, 33, 0,   0},
-    {0,1, 1, 3, 13, 11, 7,  0,   0},
-    {0,1, 1, 7, 13, 25, 5,  0,   0},
-    {0,1, 3, 5, 11, 7,  11, 0,   0},
-    {0,1, 1, 1, 3,  13, 39, 0,   0},
-    {0,1, 3, 1, 15, 17, 63, 13,  0},
-    {0,1, 1, 5, 5,  1,  27, 33,  0},
-    {0,1, 3, 3, 3,  25, 17, 115, 0},
-    {0,1, 1, 3, 15, 29, 15, 41,  0},
-    {0,1, 3, 1, 7,  3,  23, 79,  0},
-    {0,1, 3, 7, 9,  31, 29, 17,  0},
-    {0,1, 1, 5, 13, 11, 3,  29,  0},
-    {0,1, 3, 1, 9,  5,  21, 119, 0},
-    {0,1, 1, 3, 1,  23, 13, 75,  0},
-    {0,1, 3, 3, 11, 27, 31, 73,  0},
-    {0,1, 1, 7, 7,  19, 25, 105, 0},
-    {0,1, 3, 5, 5,  21, 9,  7,   0},
-    {0,1, 1, 1, 15, 5,  49, 59,  0},
-    {0,1, 1, 1, 1,  1,  33, 65,  0},
-    {0,1, 3, 5, 15, 17, 19, 21,  0},
-    {0,1, 1, 7, 11, 13, 29, 3,   0},
-    {0,1, 3, 7, 5,  7,  11, 113, 0},
-    {0,1, 1, 5, 3,  15, 19, 61,  0},
-    {0,1, 3, 1, 1,  9,  27, 89,  7},
-    {0,1, 1, 3, 7,  31, 15, 45,  23},
-    {0,1, 3, 3, 9,  9,  25, 107, 39}
-  };
-
-
-  /*First call to the sequence */
-  if(rng->counter == 1)
-    {
-      /* Initialization of the full array C[i][j] */
-      for (j=1; j<=DIM_MAX_SOBOL; j++)
-        initialX_n[j]= 0;
-
-      facteur=1.0/(1L << BIT_MAX_SOBOL);
-
-      for (j=1; j<=DIM_MAX_SOBOL; j++)
-        {
-          deg_j = deg[j];
-          /* Values of C_init in C */
-          for (i= 0; i<= deg_j; i++)
-            {
-              C[j][i]= C_init[j][i];
-            }
-          /* Recurrence relation to compute the other C[i][j] */
-          for (i= deg_j+1; i<= BIT_MAX_SOBOL; i++)
-            {
-              P_j= P[j];
-              aux= C[j][i-deg_j];
-              aux ^= (C[j][i-deg_j] << deg_j);
-              for (k= deg_j-1; k>=1; k--)
-                {
-                  /* Test for the coefficient b(k) */
-                  if (P_j & 1)
-                    aux ^= (C[j][i-k] << k);
-                  P_j >>= 1;
-                }
-              /* Final value for C[i][j] */
-              C[j][i]= aux;
-            }
-        }
-    }
-
-  /* Calculation of a new quasi-random vector on each call */
-  dim= rng->counter;
-  /* Research of the rightmost 0 bit */
-  for (i=1; i<=BIT_MAX_SOBOL; i++)
-    {
-      if ((dim & 1) == 0)
-        break;
-      dim >>= 1;
-    }
-  /* Computation of the term n from the term (n-1) */
-  for (j=1; j<= rng->dimension; j++)
-    {
-      initialX_n[j] = (initialX_n[j])^ (C[j][i]<< (BIT_MAX_SOBOL-i));
-      /* normalization */
-      X_n[j-1]= initialX_n[j] *facteur;
-    }
-  rng->counter++;
-}
-
-
-static void SOBOL2(PnlRng *rng, double X_n[])
-{
-  static rk_sobol_state s;
-  static int dimension=0;
-
-  if(rng->counter == 1 || dimension != rng->dimension)
-    {
-      if (dimension)
-        pnl_rk_sobol_free(&s); /* We should free on exit too. */
-      dimension=rng->dimension;
-      pnl_rk_sobol_init(rng->dimension, &s, NULL, pnl_rk_sobol_Ldirections, NULL);
-      /* For randomized QMC, add: rk_sobol_randomshift(&s, NULL); */
-    }
-
-  pnl_rk_sobol_double(&s, X_n);
-  rng->counter ++;
-  return;
-}
-
-
-
-
 /* maximal length of bits for the NIEDERREITER sequence */
 #define BIT_MAX_NIED 30
 
@@ -928,6 +782,8 @@ static sqrt_state sqrt_st;
 static halton_state halton_st;
 static faure_state faure_st;
 static nied_state nied_st;
+static sobol_i4_state sobol_i4_st;
+static sobol_i8_state sobol_i8_st;
 
 PnlRng PnlRngKnuth =
   {
@@ -995,17 +851,17 @@ PnlRng PnlRngFaure =
     PNL_RNG_FAURE,&FAURE,
     QMC,0, 0,0,0,sizeof(faure_state),&faure_st
   };
-PnlRng PnlRngSobol =
+PnlRng PnlRngSobolI4 =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
-    PNL_RNG_SOBOL,&SOBOL,
-    QMC,0, 0,0,0,0,NULL
+    PNL_RNG_SOBOL_I4,&I4_SOBOL,
+    QMC,0, 0,0,0,sizeof(sobol_i4_state), &sobol_i4_st
   };
-PnlRng PnlRngSobol2 =
+PnlRng PnlRngSobolI8 =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
-    PNL_RNG_SOBOL2,&SOBOL2,
-    QMC,0, 0,0,0,0,NULL
+    PNL_RNG_SOBOL_I8,&I8_SOBOL,
+    QMC,0, 0,0,0,sizeof(sobol_i8_state), &sobol_i8_st
   };
 PnlRng PnlRngNiederreiter =
   {
@@ -1030,8 +886,8 @@ PnlRngEnum PnlRngArray[]=
     {"SQRT", PNL_RNG_SQRT, &PnlRngSqrt},
     {"HALTON", PNL_RNG_HALTON, &PnlRngHalton},
     {"FAURE", PNL_RNG_FAURE, &PnlRngFaure},
-    {"SOBOL", PNL_RNG_SOBOL, &PnlRngSobol},
-    {"SOBOL2", PNL_RNG_SOBOL2, &PnlRngSobol2},
+    {"SOBOL_I4", PNL_RNG_SOBOL_I4, &PnlRngSobolI4},
+    {"SOBOL_I8", PNL_RNG_SOBOL_I8, &PnlRngSobolI8},
     {"NIEDERREITER", PNL_RNG_NIEDERREITER, &PnlRngNiederreiter},
     {NULL, NULLINT, NULL}
   };
@@ -1097,26 +953,22 @@ int pnl_rand_init (int type_generator, int dimension, long samples)
     case PNL_RNG_MERSENNE_RANDOM_SEED:
       pnl_rand_sseed (type_generator, time(NULL));
       break;
-      /*
-       * Check if dimension > max_dim for QMC
-       */
     case PNL_RNG_FAURE :
-      if (dimension > DIM_MAX_FAURE || samples>MAX_SAMPLE_FAURE) return FAIL;
       pnl_rng_sdim (rng, dimension);
       break;
     case PNL_RNG_SQRT:
-      if ( dimension  > PNL_DIM_MAX_QMC ) return FAIL;
       pnl_rng_sdim (rng, dimension);
       break;
     case PNL_RNG_HALTON:
-      if ( dimension  > PNL_DIM_MAX_QMC ) return FAIL;
       pnl_rng_sdim (rng, dimension);
       break;
-    case PNL_RNG_SOBOL:
-      if ( dimension  > DIM_MAX_SOBOL ) return FAIL;
+    case PNL_RNG_SOBOL_I4:
+      pnl_rng_sdim (rng, dimension);
+      break;
+    case PNL_RNG_SOBOL_I8:
+      pnl_rng_sdim (rng, dimension);
       break;
     case PNL_RNG_NIEDERREITER:
-      if ( dimension  > PNL_DIM_MAX_NIED ) return FAIL;
       pnl_rng_sdim (rng, dimension);
       break;
     default:
@@ -1498,18 +1350,21 @@ void pnl_rng_sseed (PnlRng *rng, ulong seed)
  *
  * @param rng a PnlRng
  * @param dim the dimension of the state space
+ * @return OK or FAIL
  */
-void pnl_rng_sdim (PnlRng *rng, int dim)
+int pnl_rng_sdim (PnlRng *rng, int dim)
 {
   rng->counter=1;
   rng->has_gauss=0;
   rng->gauss=0.;
   rng->dimension = dim;
+  if ( dim < 1 ) return FAIL;
   switch (rng->type)
     {
       case PNL_RNG_SQRT:
       {
         int i;
+        if ( dim > PNL_DIM_MAX_QMC ) return FAIL;
         sqrt_state *state = (sqrt_state *)(rng->state);
         prime_number(rng->dimension, state->prime);
         for(i=0; i<rng->dimension; i++)
@@ -1519,11 +1374,13 @@ void pnl_rng_sdim (PnlRng *rng, int dim)
       }
       break;
       case PNL_RNG_HALTON:
+        if ( dim > PNL_DIM_MAX_QMC ) return FAIL;
         prime_number(rng->dimension, ((halton_state *)(rng->state))->prime);
         break;
       case PNL_RNG_FAURE:
       {
         int prime[PNL_DIM_MAX_QMC];
+        if ( dim > DIM_MAX_FAURE ) return FAIL;
         faure_state *state = (faure_state *)(rng->state);
         binomial(FAURE_MAXI);
         if((rng->dimension == 2)||(rng->dimension == 1))
@@ -1538,6 +1395,7 @@ void pnl_rng_sdim (PnlRng *rng, int dim)
       case PNL_RNG_NIEDERREITER:
       {
         int i, j;
+        if ( dim  > PNL_DIM_MAX_NIED ) return FAIL;
         nied_state *state = (nied_state *)(rng->state);
         /* Initialization of initX_n[] */
         for (i=1; i<=PNL_DIM_MAX_NIED; i++)
@@ -1565,10 +1423,19 @@ void pnl_rng_sdim (PnlRng *rng, int dim)
           }
       }
       break;
-
+      case PNL_RNG_SOBOL_I4:
+        if ( dim  > PNL_SOBOL_I4_DIM_MAX2) return FAIL;
+        i4_sobol_init (rng, dim);
+      break;
+      case PNL_RNG_SOBOL_I8:
+        if ( dim  > PNL_SOBOL_I8_DIM_MAX2) return FAIL;
+        i8_sobol_init (rng, dim);
+      break;
+      
       default:
-            printf ("For MC rng, you shoud use pnl_rng_sseed instead of pnl_rng_sdim\n");
-            break;
+        printf ("For MC rng, you shoud use pnl_rng_sseed instead of pnl_rng_sdim\n");
+      break;
     }
+  return OK;
 }
 
