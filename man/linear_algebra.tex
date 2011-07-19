@@ -16,7 +16,7 @@ named PnlVect, PnlVectInt, PnlVectComplex
 typedef struct _PnlVect {
   /**
    * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlList pointer to be cast to a PnlObject
+   * properly. This allows any PnlVect pointer to be cast to a PnlObject
    */
   PnlObject object; 
   int size; /*!< size of the vector */
@@ -28,7 +28,7 @@ typedef struct _PnlVect {
 typedef struct _PnlVectInt {
   /**
    * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlList pointer to be cast to a PnlObject
+   * properly. This allows any PnlVectInt pointer to be cast to a PnlObject
    */
   PnlObject object; 
   int size; /*!< size of the vector */ 
@@ -40,7 +40,8 @@ typedef struct _PnlVectInt {
 typedef struct _PnlVectComplex {
   /**
    * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlList pointer to be cast to a PnlObject
+   * properly. This allows any PnlVectComplex pointer to be cast 
+   * to a PnlObject
    */
   PnlObject object; 
   int size; /*!< size of the vector */ 
@@ -165,11 +166,11 @@ There are no special functions to access the size of a vector, instead the field
 
 \subparagraph{Resizing vectors}
 \begin{itemize}
-\item \describefun{int}{pnl_vect_resize}{\refstruct{PnlVect} \ptr \refstruct{v}, int size}
+\item \describefun{int}{pnl_vect_resize}{\refstruct{PnlVect} \ptr v, int size}
   \sshortdescribe Resizes a \refstruct{PnlVect}. It copies as much of the old
   data to fit in the resized object.
 \item \describefun{int}{pnl_vect_resize_from_ptr}{\refstruct{PnlVect}
-    \ptr \refstruct{v}, int size, double \ptr t} 
+    \ptr v, int size, double \ptr t} 
   \sshortdescribe Resizes a \refstruct{PnlVect} and uses \var{t} to fill the
   vector. \var{t} must be of size \var{size}.
 \end{itemize}  
@@ -181,15 +182,15 @@ inline. You just need to define the macro \verb!HAVE_INLINE! for by passing
 \verb!-DHAVE_INLINE! to gcc to use the inline versions of the following
 functions.
 \begin{itemize}
-\item \describefun{void}{pnl_vect_set}{\refstruct{PnlVect} \ptr \refstruct{v}, int i, double x}
+\item \describefun{void}{pnl_vect_set}{\refstruct{PnlVect} \ptr v, int i, double x}
   \sshortdescribe Sets v[i]=x  
-\item \describefun{double}{pnl_vect_get}{const \refstruct{PnlVect} \ptr \refstruct{v}, int i}
+\item \describefun{double}{pnl_vect_get}{const \refstruct{PnlVect} \ptr v, int i}
   \sshortdescribe Returns the value of v[i].  
-\item \describefun{void}{pnl_vect_lget}{\refstruct{PnlVect} \ptr \refstruct{v}, int i}
+\item \describefun{void}{pnl_vect_lget}{\refstruct{PnlVect} \ptr v, int i}
   \sshortdescribe Returns the address of v[i].  
-\item \describefun{void}{pnl_vect_set_double}{\refstruct{PnlVect} \ptr \refstruct{v}, double x}
+\item \describefun{void}{pnl_vect_set_double}{\refstruct{PnlVect} \ptr v, double x}
   \sshortdescribe Sets all elements to x.  
-\item \describefun{void}{pnl_vect_set_zero}{\refstruct{PnlVect} \ptr \refstruct{v}}
+\item \describefun{void}{pnl_vect_set_zero}{\refstruct{PnlVect} \ptr v}
   \sshortdescribe Sets all elements to zero.  
 \end{itemize}
 Equivalently to these functions, there exist macros for {\bf \refstruct{PnlVect} only}.
@@ -482,7 +483,7 @@ functions at least in principle.
 typedef struct PnlVectCompact {
   /**
    * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlList pointer to be cast to a PnlObject
+   * properly. This allows any PnlVectCompact pointer to be cast to a PnlObject
    */
   PnlObject object; 
   int size; /* size of the vector */
@@ -534,7 +535,7 @@ The structures and functions related to matrices are declared in
 typedef struct _PnlMat{
   /**
    * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlList pointer to be cast to a PnlObject
+   * properly. This allows any PnlMat pointer to be cast to a PnlObject
    */
   PnlObject object; 
   int m; /*!< nb rows */ 
@@ -548,7 +549,7 @@ typedef struct _PnlMat{
 typedef struct _PnlMatInt{
   /**
    * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlList pointer to be cast to a PnlObject
+   * properly. This allows any PnlMatInt pointer to be cast to a PnlObject
    */
   PnlObject object; 
   int m; /*!< nb rows */ 
@@ -562,7 +563,8 @@ typedef struct _PnlMatInt{
 typedef struct _PnlMatComplex{
   /**
    * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlList pointer to be cast to a PnlObject
+   * properly. This allows any PnlMatComplex pointer to be cast 
+   * to a PnlObject
    */
   PnlObject object; 
   int m; /*!< nb rows */ 
@@ -1514,7 +1516,7 @@ typedef struct
 {
   /**
    * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlList pointer to be cast to a PnlObject
+   * properly. This allows any PnlBandMat pointer to be cast to a PnlObject
    */
   PnlObject object; 
   int m; /*!< nb rows */ 
@@ -1688,7 +1690,7 @@ The Hyper matrix types and related functions are defined in the header \verb!pnl
 typedef struct PnlHmat{
   /**
    * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlList pointer to be cast to a PnlObject
+   * properly. This allows any PnlHmat pointer to be cast to a PnlObject
    */
   PnlObject object; 
   int ndim; /*!< nb dimensions */ 
@@ -1700,7 +1702,7 @@ typedef struct PnlHmat{
 typedef struct PnlHmatInt{
   /**
    * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlList pointer to be cast to a PnlObject
+   * properly. This allows any PnlHmatInt pointer to be cast to a PnlObject
    */
   PnlObject object; 
   int ndim; /*!< nb dimensions */ 
@@ -1712,7 +1714,7 @@ typedef struct PnlHmatInt{
 typedef struct PnlHmatComplex{
   /**
    * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlList pointer to be cast to a PnlObject
+   * properly. This allows any PnlHmatComplex pointer to be cast to a PnlObject
    */
   PnlObject object; 
   int ndim; /*!< nb dimensions */ 
