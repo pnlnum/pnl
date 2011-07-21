@@ -1,4 +1,4 @@
-Jérôme Lelong <jerome.lelong@gmail.com> (2007 - 2010)
+Jérôme Lelong <jerome.lelong@gmail.com> (2007 - 2011)
 
    - Band matrices
    - FFT
@@ -9,13 +9,14 @@ Jérôme Lelong <jerome.lelong@gmail.com> (2007 - 2010)
    - Multivariate polynomial regression
    - MPI Bindings
    - Numerical integration
+   - ODE solvers
    - Overall design
    - Random number generators
    - Sorting
    - Special functions
    - Tridiagonal matrices
-   - hyper matrices
-   - lists
+   - Hyper matrices
+   - Lists
 
 David Pommier <pommier.david@gmail.com> (2007 - April 2009)
 

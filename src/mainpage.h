@@ -2,7 +2,7 @@
 /**
    @mainpage Pnl
    @version 1.3
-   @author JÃ©rÃ´me Lelong (2007 - 2010)
+   @author Jérôme Lelong (2007 - 2011)
    @author David Pommier (2007 - Apr. 2009)
  
    @section PnlIntro Introduction
@@ -23,6 +23,7 @@
    - Multidimensional root Finding
    - Multivariate polynomial regression
    - Numerical Integration
+   - ODE solvers
    - Optimization with inequality constraints
    - Random Generators
    - Sorting
