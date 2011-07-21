@@ -141,7 +141,6 @@ extern int pnl_rand_bessel (double nu, double a, int gen);
 extern void pnl_rng_free(PnlRng **);
 extern PnlRng* pnl_rng_new ();
 extern PnlRng* pnl_rng_create (int type);
-extern PnlRng** pnl_rng_dcmt_create_array (int n, ulong seed, int *count);
 extern void pnl_rng_init (PnlRng *rng, int type);
 extern void pnl_rng_sseed(PnlRng *rng, unsigned long int s);
 extern int pnl_rng_sdim (PnlRng *rng, int dim);
@@ -292,6 +291,10 @@ extern void pnl_dcmt_sseed (dcmt_state *mts, ulong s);
 extern double pnl_dcmt_genrand_double(dcmt_state *mts);
 extern void pnl_dcmt_free(dcmt_state **mts);
 extern void pnl_dcmt_free_array(dcmt_state **mts, int count);
+
+extern PnlRng* pnl_rng_dcmt_create_id (int id, ulong seed);
+extern PnlRng** pnl_rng_dcmt_create_array (int n, ulong seed, int *count);
+extern PnlRng** pnl_rng_dcmt_create_array_id (int start_id, int max_id, ulong seed, int *count);
 
 
 

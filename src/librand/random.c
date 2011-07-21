@@ -1000,7 +1000,6 @@ int pnl_rand_or_quasi (int type_generator)
   return pnl_rng_get_from_id(type_generator)->rand_or_quasi;
 }
 
-
 /**
  * Frees an rng
  *
@@ -1140,7 +1139,6 @@ void pnl_rng_init (PnlRng *rng, int type)
   rng->state = calloc (rng->size_state,1);
 }
 
-
 /**
  * Creates a rng of the given type.
  *
@@ -1159,7 +1157,6 @@ PnlRng* pnl_rng_create (int type)
     }
   return rng;
 }
-
 
 /*
  * some auxiliary LCG used for fixing several seeds with a unique long int
@@ -1299,7 +1296,6 @@ static void pnl_tausworthe_sseed (tausworthe_state *s, ulong seed)
 }
 #undef LCG
 
-
 /**
  * Sets the seed of a Pseudo Random Number Generator
  *
@@ -1335,6 +1331,9 @@ void pnl_rng_sseed (PnlRng *rng, ulong seed)
     case PNL_RNG_DCMT :
       {
         int i, iszero=1;
+        /*
+         * Check if state is full of 0. If so, it has to be created
+         */
         for ( i=0 ; i<rng->size_state ; i++ )
           {
             if ( ((char *)rng->state)[i] != 0 )

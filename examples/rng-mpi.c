@@ -47,7 +47,7 @@ static int send_dcmt ()
   /*
    * Create
    */
-  rngtab = pnl_rng_dcmt_create_array (NB_GEN, 4172, &count);
+  rngtab = pnl_rng_dcmt_create_array_id (1,NB_GEN, 4172, &count);
   if ((gen = malloc (count * sizeof(int))) == NULL) return MPI_ERR_BUFFER;
   for ( i=0 ; i<count ; i++ )
     {

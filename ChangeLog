@@ -1,7 +1,12 @@
+21-07-2011 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* librand: update of dcmt to version 0.6.1. This version is thread-safe
+	and offers new functionnalities.
+
 12-07-2011 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* librand: new Sobol generators (from John Burkardt), older version are
-	removed. These new version are threadsafe and handled by pnl_rng_sdim.
+	removed. These new versions are threadsafe and handled by pnl_rng_sdim.
 
 08-07-2011 Jérôme Lelong <jerome.lelong@gmail.com>
 

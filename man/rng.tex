@@ -75,6 +75,29 @@ struct _PnlRng
   \reffun{pnl_rng_sseed} before using it. To create several PNL_RNG_DCMT type
   generators it is better to use \reffun{pnl_rng_dcmt_create_array} because the
   function \reffun{pnl_rng_create} produces a memory leak.
+\item \describefun{void}{pnl_rng_sseed}{\refstruct{PnlRng} \ptr rng, unsigned
+    long int s}
+  \sshortdescribe Sets the seed of the genrator \var{rng} using \var{s}. If
+  \var{s=0}, then a default seed (depending on the generator) is used.
+\item \describefun{int}{pnl_rng_sdim}{\refstruct{PnlRng} \ptr rng, int dim}
+  \sshortdescribe Sets the dimension of the state space for a QMC generator and
+  initializes it accordingly.  Returns OK if the generator has been initialized
+  properly and FAIL otherwise.
+\item \describefun{\refstruct{PnlRng}\ptr}{pnl_rng_dcmt_create_id}{int id, ulong
+    seed}
+  \sshortdescribe Creates a generator with type \var{PNL_RNG_DCMT} and identifier
+  \var{id}. Two generators with different \var{id}s are independent. Note that
+  the returned generator must be initialized with \reffun{pnl_rng_sseed} before
+  usage. The identifier \var{id} can for instance correspond to the thread
+  number or the processor rank in parallel computing.
+\item \describefun{\refstruct{PnlRng}\ptr \ptr
+  }{pnl_rng_dcmt_create_array_id}{int start_id, int max_id, ulong seed, int \ptr
+    count}
+  \sshortdescribe Creates an array of generators with types \var{PNL_RNG_DCMT}
+  and identifiers linearly varying between \var{start_id} and \var{max_id}. The
+  number of generators created is \var{max_id - start_id + 1}. All the
+  generators are independent. Note that each generator of the returned array
+  must be initialized with \reffun{pnl_rng_sseed} before usage.
 \item \describefun{\refstruct{PnlRng} \ptr \ptr}{pnl_rng_dcmt_create_array}
   {int n, ulong seed, int \ptr count}
   \sshortdescribe Creates an array of \var{n} independent DCMT. \var{seed} is
@@ -84,14 +107,6 @@ struct _PnlRng
   directly returns an array of \refstruct{PnlRng}. Before using the generators, you
   must initialize each of them by calling the function \reffun{pnl_rng_sseed}
   \var{count} times.
-\item \describefun{void}{pnl_rng_sseed}{\refstruct{PnlRng} \ptr rng, unsigned
-    long int s}
-  \sshortdescribe Sets the seed of the genrator \var{rng} using \var{s}. If
-  \var{s=0}, then a default seed (depending on the generator) is used.
-\item \describefun{int}{pnl_rng_sdim}{\refstruct{PnlRng} \ptr rng, int dim}
-  \sshortdescribe Sets the dimension of the state space for a QMC generator and
-  initializes it accordingly.  Returns OK if the generator has been initialized
-  properly and FAIL otherwise.
 \end{itemize}
 
 Some auxiliary functions internally used but we should only be used with high
@@ -454,6 +469,11 @@ typedef unsigned long ulong;
 
 \paragraph{Dynamically created Mersenne Twister}
 
+
+These are Mersenne Twister type generators with Mersenne exponent fixed to
+\var{p=521} and word length \var{w=32} bits. These choices are hard coded and
+cannot be changed without altering the code directly.
+
 \begin{verbatim}
 typedef struct
 {
@@ -478,8 +498,6 @@ generators (DCMT).
   the seed used to initialize the Mersenne Twister generator internally used to
   find new DCMT. On exit, \var{count} contains the number of generators actually
   created.
-\item \describefun{void}{pnl_dcmt_sseed}{dcmt_state \ptr mts, ulong s}
-  \sshortdescribe Generates a uniformly distributed unsigned integer
 \item \describefun{double}{pnl_dcmt_genrand_double}{dcmt_state \ptr mts}
   \sshortdescribe Generates a uniformly distributed random variable on \var{[0,1]}.
 \item \describefun{void}{pnl_dcmt_free}{dcmt_state \ptr \ptr mts}
