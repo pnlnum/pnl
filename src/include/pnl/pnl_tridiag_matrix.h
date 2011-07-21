@@ -9,8 +9,8 @@ extern "C" {
 
 
 #ifndef PNL_RANGE_CHECK_OFF
-#define CheckIndexTridiagMat(v,i,j)                                                     \
-  if (i<0 || i>=(v)->size || j<-1 || j>1 || (i==0 && j==1) || (i==(v)->size-1 && j==-1)) \
+#define CheckIndexTridiagMat(v,d,up)                                                     \
+  if (d<0 || d>=(v)->size || up<-1 || up>1 || (d==0 && up==-1) || (d==(v)->size-1 && up==1)) \
     {                                                                                   \
       perror("index out of range"); abort();                                            \
     }
