@@ -1458,6 +1458,33 @@ dcmt_state* pnl_dcmt_get_parameter_id (int id, ulong seed)
   return get_mt_parameter_id_st (521, id, seed);
 }
 
+/**
+ * Creates a MT generator. When called several times, the returned generators
+ * are independent
+ */
+int pnl_dcmt_create (dcmt_state *mts)
+{
+  dcmt_state *template_mts;
+  prescr_t pre;
+  mt_state org;
+  check32_t ck;
+  static int id = 0;
+  
+  pnl_mt_sseed(&org, 4172);
+  if ( (template_mts = init_mt_search(&ck, &pre, 521)) == NULL ) return FAIL;
+
+  copy_params_of_dcmt_state(template_mts, mts);
+  if ( NOT_FOUND == get_irred_param(&ck,&pre,&org,mts,id,DEFAULT_ID_SIZE) )
+    {
+      pnl_dcmt_free(&mts);
+      return FAIL;
+    }
+  _get_tempering_parameter_hard_dc(mts);
+  end_mt_search(&pre);
+  id++;
+
+  return OK;
+}
 
 /** 
  * Creates a DCMT generator with identifier id
