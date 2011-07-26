@@ -1,6 +1,4 @@
 
-- Integrate the latest version of DCMT
-
 - List structure
        * Add a pnl_list_copy function. It implies to add a
          copy function to PnlObject

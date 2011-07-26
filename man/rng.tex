@@ -72,9 +72,7 @@ struct _PnlRng
   which can be any of the values \var{PNL_RNG_XXX} listed in
   Table~\ref{rng-indices} which correspond to {\bf pseudo} random number generators.
   Once a generator has been created, you {\bf must} call
-  \reffun{pnl_rng_sseed} before using it. To create several PNL_RNG_DCMT type
-  generators it is better to use \reffun{pnl_rng_dcmt_create_array} because the
-  function \reffun{pnl_rng_create} produces a memory leak.
+  \reffun{pnl_rng_sseed} before using it. 
 \item \describefun{void}{pnl_rng_sseed}{\refstruct{PnlRng} \ptr rng, unsigned
     long int s}
   \sshortdescribe Sets the seed of the genrator \var{rng} using \var{s}. If
