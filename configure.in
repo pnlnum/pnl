@@ -174,6 +174,7 @@ case "$host" in
         # When Xcode is installed, Atlas and Lapack can be found in vectlib
         BLAS_LIBS="-lblas"
         LAPACK_LIBS="-llapack"
+        ac_cv_f77_mangling="lower, underscore"
     fi
     ;;
 
@@ -261,6 +262,25 @@ AC_TRY_COMPILE([#define C2F(name) name##_],
   AC_MSG_RESULT(no))
 
 
+#############################################################
+## test for dpstrf (Block Cholesky for non definite matrix)
+#############################################################
+
+ac_have_dpstrf=no
+if test $use_internal_blas == 0; then
+    libs_save="$LIBS";
+    LIBS="$LIBS $BLAS_LIBS $LAPACK_LIBS"
+    AC_F77_FUNC(dpstrf)
+    AC_MSG_CHECKING([for $dpstrf]) 
+    AC_TRY_LINK_FUNC($dpstrf, [ac_have_dpstrf=yes])
+    LIBS="$libs_save"
+    AC_MSG_RESULT($ac_have_dpstrf)
+fi
+if test "$ac_have_dpstrf" = "yes" || test $use_internal_blas == 1; then
+   AC_DEFINE(HAVE_DPSTRF, 1, [Define if dpstrf.])
+fi
+
+
 #################
 # check for MPI
 #################
@@ -293,8 +313,6 @@ AM_CONDITIONAL([HAVE_MPI], [test $have_mpi == 1])
 ####################
 ### checking host
 ####################
-
-
 case "$host" in
      *-*-cygwin*)
 
@@ -316,9 +334,7 @@ case "$host" in
     AC_DEFINE_UNQUOTED(
 			[_WIN32], [1],
 			[Running on a Win32 system])
-
     ;;
-
 
     i*86-*-linux-gnu | *-pc-linux-gnu)
 	;;

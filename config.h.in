@@ -37,6 +37,9 @@
 /* Define to 1 if you have the 'trunc' function. */
 #undef HAVE_TRUNC
 
+/* Define to 1 if you have 'dpstrf' function */
+#undef HAVE_DPSTRF
+
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
    */
 #undef LT_OBJDIR
