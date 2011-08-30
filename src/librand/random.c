@@ -1373,8 +1373,9 @@ int pnl_rng_sdim (PnlRng *rng, int dim)
       case PNL_RNG_SQRT:
       {
         int i;
+        sqrt_state *state;
         if ( dim > PNL_DIM_MAX_QMC ) return FAIL;
-        sqrt_state *state = (sqrt_state *)(rng->state);
+        state = (sqrt_state *)(rng->state);
         prime_number(rng->dimension, state->prime);
         for(i=0; i<rng->dimension; i++)
           {
@@ -1389,8 +1390,9 @@ int pnl_rng_sdim (PnlRng *rng, int dim)
       case PNL_RNG_FAURE:
       {
         int prime[PNL_DIM_MAX_QMC];
+        faure_state *state;
         if ( dim > DIM_MAX_FAURE ) return FAIL;
-        faure_state *state = (faure_state *)(rng->state);
+        state = (faure_state *)(rng->state);
         binomial(FAURE_MAXI);
         if((rng->dimension == 2)||(rng->dimension == 1))
           state->r= 3;
@@ -1404,8 +1406,9 @@ int pnl_rng_sdim (PnlRng *rng, int dim)
       case PNL_RNG_NIEDERREITER:
       {
         int i, j;
+        nied_state *state;
         if ( dim  > PNL_DIM_MAX_NIED ) return FAIL;
-        nied_state *state = (nied_state *)(rng->state);
+        state = (nied_state *)(rng->state);
         /* Initialization of initX_n[] */
         for (i=1; i<=PNL_DIM_MAX_NIED; i++)
           state->initialX_n[i]= 0;
