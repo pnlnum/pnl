@@ -2,7 +2,7 @@ band_matrix_test
 basis_test
 complex_test
 cumulfunc_test
-dft_test
+fft_test
 finance_function_test
 integration_test
 lapack_test
@@ -12,9 +12,9 @@ mathtools_test
 matrix_test
 ode_test
 optim_test
-pnl-mpi_test
+pnl_mpi_test
 random_test
-rng-mpi_test
+rng_mpi_test
 root_test
 saveload_test
 solver_iterativ_test
