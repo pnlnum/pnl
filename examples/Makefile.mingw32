@@ -1,0 +1,73 @@
+
+CPPFLAGS=-I../src/include
+CC=i686-pc-mingw32-gcc
+
+all: band_matrix_test.exe    basis_test.exe     \
+	cumulfunc_test.exe          complex_test.exe        fft_test.exe       \
+	finance_function_test.exe   integration_test.exe    lapack_test.exe    \
+	laplace_test.exe            list_test.exe           mathtools_test.exe \
+	ode_test.exe                optim_test.exe          random_test.exe    \
+	root_test.exe               matrix_test.exe         solver_iterativ_test.exe \
+	special_func_test.exe       tridiag_test.exe        vector_test.exe         
+
+
+band_matrix_test.exe: band_matrix_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
+basis_test.exe: basis_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
+complex_test.exe: complex_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
+cumulfunc_test.exe: cumulfunc_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
+fft_test.exe: fft_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
+finance_function_test.exe: finance_function_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
+integration_test.exe: integration_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
+lapack_test.exe: lapack_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
+laplace_test.exe: laplace_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
+list_test.exe: list_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
+mathtools_test.exe: mathtools_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
+matrix_test.exe: matrix_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
+ode_test.exe: ode_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
+optim_test.exe: optim_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
+random_test.exe: random_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
+root_test.exe: root_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
+solver_iterativ_test.exe: solver_iterativ_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
+special_func_test.exe: special_func_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
+tridiag_test.exe: tridiag_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
+vector_test.exe: vector_test.o tests_utils.o
+	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 
+
