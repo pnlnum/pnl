@@ -2,7 +2,7 @@
 CPPFLAGS=-I../src/include
 CC=i686-pc-mingw32-gcc
 
-all: band_matrix_test.exe    basis_test.exe     \
+EXECS= band_matrix_test.exe    basis_test.exe     \
 	cumulfunc_test.exe          complex_test.exe        fft_test.exe       \
 	finance_function_test.exe   integration_test.exe    lapack_test.exe    \
 	laplace_test.exe            list_test.exe           mathtools_test.exe \
@@ -10,6 +10,10 @@ all: band_matrix_test.exe    basis_test.exe     \
 	root_test.exe               matrix_test.exe         solver_iterativ_test.exe \
 	special_func_test.exe       tridiag_test.exe        vector_test.exe         
 
+build: $(EXECS)
+
+run: build
+	for f in $(EXECS); do wine $$f; done
 
 band_matrix_test.exe: band_matrix_test.o tests_utils.o
 	$(CC) $(CPPFLAGS) -g -O2 -Wall -DHAVE_INLINE   -lm -o $@ $^ ../lib/libpnl.dll 

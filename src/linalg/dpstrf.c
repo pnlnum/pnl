@@ -17,7 +17,7 @@
  */
 
 /*
- * This file contains two function from Lapack: 
+ * This file contains two functions from Lapack: 
  *    dpstrf and dpstf2 (and dmaxloc)
  * to compute a Block Cholesky factorization for non
  * definite matrices. It is only used if HAVE_DPSTRF is
@@ -38,6 +38,19 @@
 #include "pnl/clapack.h"
 
 #ifndef HAVE_DPSTRF
+
+
+/** 
+ * Returns TRUE if x is NaN and FALSE otherwise
+ * 
+ * @param x the address of a real number
+ * 
+ * @return  TRUE or FALSE
+ */
+static int disnan_ (double *x)
+{
+  return pnl_isnan (*x) ? TRUE : FALSE;
+}
 
 /* dpstrf.f -- translated by f2c (version 20061008).
    You must link the resulting object file with libf2c:
@@ -91,7 +104,6 @@ int C2F(dpstrf)(char *uplo, int *n, double *a, int *
   extern int dpstf2_(char *, int *, double *, int *, int *, int *,
                      double *, double *, int *);
   extern double dlamch_(char *);
-  extern int disnan_(double *);
   extern  int xerbla_(char *, int *);
   extern int ilaenv_(int *, char *, char *, int *, int *, 
                      int *, int *);
