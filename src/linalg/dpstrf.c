@@ -47,7 +47,7 @@
  * 
  * @return  TRUE or FALSE
  */
-static int disnan_ (double *x)
+int disnan_ (double *x)
 {
   return pnl_isnan (*x) ? TRUE : FALSE;
 }
