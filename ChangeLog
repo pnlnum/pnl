@@ -1,3 +1,7 @@
+16-09-2011 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* pnl_T{Vector,Matrix}_source.c: Fix wrong reading of complex data.
+
 01-08-2011 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* dpstrf: add detection of dpstrf to the configure script. If not

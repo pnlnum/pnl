@@ -17,6 +17,7 @@
 #define FP 1
 #define IN_FORMAT "%lf"
 #define OUT_FORMAT "%f"
+#define IN_PUT_FORMAT(a) (a)
 #define OUT_PUT_FORMAT(a) a
 #define ATOMIC_IO ATOMIC
 #define ZERO 0.0
@@ -46,8 +47,9 @@
 #define BASE_TYPE COMPLEX
 #define MULTIPLICITY 2
 #define FP 1
-#define IN_FORMAT "%lf"
-#define OUT_FORMAT "%f + i * %f"
+#define IN_FORMAT "%lf + %lfi"
+#define OUT_FORMAT "%f + %fi"
+#define IN_PUT_FORMAT(a) &((*(a)).r),&((*(a)).i)
 #define OUT_PUT_FORMAT(a) (a).r,(a).i
 #define ATOMIC_IO ATOMIC
 #define ZERO CZERO
@@ -77,6 +79,7 @@
 #define MULTIPLICITY 1
 #define IN_FORMAT "%u"
 #define OUT_FORMAT "%u"
+#define IN_PUT_FORMAT(a) (a)
 #define OUT_PUT_FORMAT(a) (a)
 #define ATOMIC_IO ATOMIC
 #define ZERO 0U
@@ -106,6 +109,7 @@
 #define MULTIPLICITY 1
 #define IN_FORMAT "%d"
 #define OUT_FORMAT "%d"
+#define IN_PUT_FORMAT(a) (a)
 #define OUT_PUT_FORMAT(a) (a)
 #define ATOMIC_IO ATOMIC
 #define ZERO 0

@@ -51,6 +51,7 @@
 #undef MULTIPLICITY
 #undef IN_FORMAT
 #undef OUT_FORMAT
+#undef IN_PUT_FORMAT
 #undef OUT_PUT_FORMAT
 #undef ATOMIC_IO
 #undef ZERO

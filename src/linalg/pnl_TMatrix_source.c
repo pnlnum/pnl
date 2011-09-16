@@ -215,7 +215,7 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,create_from_file )(const char * file)
   char car, prev = '\0', empty=1;
   TYPE(PnlMat) *M;
   int m, n, count, mn;
-  ATOMIC *atomic_data;
+  BASE *data;
   FILE *FIC = NULL;
 
   if ((FIC = fopen( file, "r")) == NULL )
@@ -225,7 +225,7 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,create_from_file )(const char * file)
 
   /* first pass to determine dimensions */
   m = 0; n = 1;
-  while((car=fgetc(FIC))!='\n')
+  while((car=fgetc(FIC))!='\n' && car != EOF)
     {
       if (isdigit(car) || car == '-' || car == '.')
         {
@@ -233,7 +233,8 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,create_from_file )(const char * file)
           if (prev == ' ' || prev == '\t' ) ++n;
         }
       prev = car;
-    }
+   }
+  n = n / MULTIPLICITY;
   /*if (!empty && car =='\n' && isdigit(prev)) ++n; */
   if (!empty) ++m;
   empty = 1;
@@ -246,29 +247,27 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,create_from_file )(const char * file)
         }
       else if (empty && isdigit(car)) empty=0;
     }
+  /* If no data has been read */
   if (m==0 || n==0)
     {
-      PNL_ERROR ("No matrix found in input file",  "pnl_mat_create_from_file");
+      M = FUNCTION(pnl_mat,create)(0,0);
+      fclose (FIC);
+      return M;
     }
 
-  /* need special care when MULTIPLICITY > 1 */
-  if ( MULTIPLICITY * ((double)m/MULTIPLICITY) != m)
-    {
-      PNL_ERROR ("Incorrect matrix format",  "pnl_mat_create_from_file");
-    }
   mn = m*n;
-  if ((M = FUNCTION(pnl_mat,create )(m/MULTIPLICITY,n))==NULL)
+  if ((M = FUNCTION(pnl_mat,create )(m,n))==NULL)
     {
       PNL_ERROR("Allocation error", "FUNCTION(pnl_mat,create_from_file)");
     }
 
-  atomic_data = (ATOMIC *) FUNCTION(pnl_mat,lget )(M, 0, 0);
+  data = FUNCTION(pnl_mat,lget )(M, 0, 0);
 
   /* second pass to read data */
-  rewind( FIC );
+  rewind (FIC);
   count = 0;
-  while (fscanf(FIC,IN_FORMAT, atomic_data) > 0 && count < mn) { atomic_data++; count++;}
-  fclose( FIC );
+  while ( fscanf (FIC,IN_FORMAT, IN_PUT_FORMAT(data)) > 0 && count < mn ) { data++; count++;}
+  fclose (FIC);
   return M;
 }
 

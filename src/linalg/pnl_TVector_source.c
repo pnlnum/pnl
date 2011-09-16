@@ -187,54 +187,74 @@ TYPE(PnlVect) * FUNCTION(pnl_vect,create_from_list)(const int size,...)
 }
 
 /**
- * Reads a vector from a file and creates the corresponding PnlVect
+ * Reads a vector from a file and creates the corresponding PnlVect. The
+ * data can be stored column or row wise
  * @param file  the file to be read
  * @return a PnlVect
  */
 TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_file) (const char * file)
 {
-  char car, empty=1;
+  char car, prev='\0', empty=1;
   TYPE(PnlVect) *v;
   int m, count;
-  ATOMIC *atomic_data;
+  BASE *data;
   FILE *FIC = fopen( file, "r");
   if ( FIC == NULL )
     {
       PNL_ERROR("Cannot open file", "pnl_vect_create_from_file");
     }
 
-  /* first pass to determine dimensions */
-  m = 0; empty = 1;
-  while((car=fgetc(FIC))!= EOF)
+  /*
+   * First pass to determine dimensions : need to find out if the data are
+   * stored row-wise or column-wise
+   */
+  /*
+   * Count the number of elements on the first line
+   */
+  m = 1;
+  while((car=fgetc(FIC))!='\n' && car != EOF)
     {
-      if ( car=='\n' )
+      if (isdigit(car) || car == '-' || car == '.')
         {
-          if (!empty) { ++m; empty = 1;}
-          else break;
+          empty = 0;
+          if (prev == ' ' || prev == '\t' ) ++m;
         }
-      else if (empty && isdigit(car)) empty=0;
+      prev = car;
+    }
+  if ( empty ) { m = 0; }
+  m = m / MULTIPLICITY;
+  if ( m == 1 )
+    { 
+      /* We consider it as a column vector */
+      empty = 1;
+      while((car=fgetc(FIC))!= EOF)
+        {
+          if ( car=='\n' )
+            {
+              if (!empty) { ++m; empty = 1;}
+              else break;
+            }
+          else if (empty && isdigit(car)) empty=0;
+        }
     }
   if (m==0)
     {
-      PNL_ERROR ("No matrix found in input file",  "pnl_vect_create_from_file");
+      v = FUNCTION(pnl_vect,create) (0);
+      fclose (FIC);
+      return v;
     }
 
-  /* need special care when MULTIPLICITY > 1 */
-  if ( MULTIPLICITY * ((double)m/MULTIPLICITY) != m)
-    {
-      PNL_ERROR ("Incorrect vector format",  "pnl_mat_create_from_file");
-    }
-  if ((v = FUNCTION(pnl_vect,create) (m/MULTIPLICITY)) == NULL)
+  if ((v = FUNCTION(pnl_vect,create) (m)) == NULL)
     {
       PNL_ERROR("Allocation error", "pnl_vect_create_from_file");
     }
 
   /* second pass to read data */
-  rewind( FIC );
+  rewind (FIC);
   count = 0;
-  atomic_data = (ATOMIC*) FUNCTION(pnl_vect,lget) (v, 0);
-  while( fscanf(FIC,IN_FORMAT,atomic_data) > 0 && count<m)   { atomic_data++; count++;}
-  fclose( FIC );
+  data = FUNCTION(pnl_vect,lget) (v, 0);
+  while ( fscanf(FIC,IN_FORMAT,IN_PUT_FORMAT(data)) == MULTIPLICITY && count<m )   { data++; count++;}
+  fclose (FIC);
   return v;
 }
 
@@ -518,7 +538,7 @@ void FUNCTION(pnl_vect, clone)(TYPE(PnlVect) * clone,
 
 
 /**
- * prints a TYPE(PnlVect) to a  file.
+ * Prints a TYPE(PnlVect) to a  file with one entry per line.
  *
  * @param V a(constant) TYPE(PnlVect)
  * @param fic a file descriptor.
@@ -529,10 +549,9 @@ void FUNCTION(pnl_vect, fprint)(FILE *fic, const TYPE(PnlVect) * V)
   while(i<V->size)
     {
       fprintf(fic,OUT_FORMAT,OUT_PUT_FORMAT(V->array[i]));
-      fprintf(fic, " ");
+      fprintf(fic, "\n");
       i++;
     }
-  fprintf(fic,"\n");
 }
 
 /**
