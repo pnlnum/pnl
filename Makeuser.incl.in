@@ -46,7 +46,7 @@ define new_target
 local_bin=$(subst -,_,$(1))
 LOBJS=$$($$(local_bin)_OBJS)
 LOBJS2=$${LOBJS:%.o=%.lo}
-ALL_OBJECTS+=$${LOBJS} $${LOBJS2}
+ALL_OBJECTS+=$(LOBJS) $(LOBJS2)
 $(1) : $$(LOBJS2)
 	$(LINK) -o $(1) $$^
 endef
