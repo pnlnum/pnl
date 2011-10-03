@@ -104,10 +104,8 @@ PnlObject* pnl_list_get (PnlList *L, int i)
 void pnl_list_insert_first (PnlList *L, PnlObject *o)
 {
   PnlCell *C;
-  PnlList *Lold;
 
   C = pnl_cell_new ();
-  Lold = L;
 
   /* Downward linkage */
   C->next = L->first;

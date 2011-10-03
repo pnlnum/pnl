@@ -171,8 +171,7 @@ static int AllConstraints_Init(AllConstraints *all_constraints,
 static void AllConstraints_Value(PnlVect *constraints_x, const PnlVect *x,
                                  AllConstraints *all_constraints)
 {
-  int i, index, nbr_var;
-  nbr_var = x->size;
+  int i, index;
 
   if (all_constraints->NL_Constraints!=NULL) PNL_EVAL_RNFUNCRM(all_constraints->NL_Constraints, x, constraints_x);
 

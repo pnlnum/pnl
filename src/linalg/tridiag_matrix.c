@@ -704,7 +704,7 @@ double pnl_tridiag_mat_scalar_prod (const PnlTridiagMat *T, const PnlVect *x, co
 void pnl_tridiag_mat_lAxpby (double l, const PnlTridiagMat *A, const PnlVect *x,
                             double b, PnlVect * y)
 {
-  int n, nrhs, ldb;
+  int n, nrhs;
   double alpha, beta;
   if ( b==0.0 )
     {
@@ -733,7 +733,6 @@ void pnl_tridiag_mat_lAxpby (double l, const PnlTridiagMat *A, const PnlVect *x,
     }
 
   n = A->size;
-  ldb = A->size;
   nrhs = 1;
   alpha = 1;
   C2F(dlagtm)("N", &n, &nrhs, &alpha, A->DL, A->D,

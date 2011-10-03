@@ -150,10 +150,9 @@ static int load_rng (PnlMat *orig)
 int main (int argc, char **argv)
 {
   PnlRngType t;
-  PnlMat *orig, *res;
+  PnlMat *orig;
   pnl_test_init (argc, argv);
   orig = pnl_mat_new();
-  res = pnl_mat_new();
   MPI_Init (&argc, &argv);
   t = PNL_RNG_MERSENNE;
 

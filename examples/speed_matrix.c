@@ -48,7 +48,6 @@ static void speed_access ()
   double   cpu_time_used;
   int      type_gen, i,j;
   double   sum;
-  double  *ptr;
   int      N   = 10000;
   int      dim = 500;
   PnlMat  *M   = pnl_mat_create (0,0);
@@ -70,7 +69,6 @@ static void speed_access ()
   end = clock();
   cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
   printf("%f get version : %f\n", sum, cpu_time_used);
-  ptr = M->array;
   start = clock();
   sum = 0.0;
   for (i=0; i<N; i++)

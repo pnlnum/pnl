@@ -875,7 +875,7 @@ static int unpack_hmatrix (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI
     case PNL_TYPE_HMATRIX_INT : mn = M->mn; t = MPI_INT;
       break;
     }
-  if((info=MPI_Unpack(buf,bufsize,pos,M->array,M->mn,t,comm)))return(info);
+  if((info=MPI_Unpack(buf,bufsize,pos,M->array,mn,t,comm)))return(info);
   return(info);
 }
 

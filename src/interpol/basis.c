@@ -499,7 +499,7 @@ static double DTchebychev_rec (double x, int n, int n0, double *f_n, double *f_n
 static double DTchebychevD1(double x, int n)
 {
   double val = x;
-  double val2, val3, val4;
+  double val2, val4;
   double f_n, f_n_1;
   switch (n)
     {
@@ -520,7 +520,7 @@ static double DTchebychevD1(double x, int n)
       val2 = val * val; val4 = val2 * val2;
       return (192. * val4 - 192. * val2 + 36.) * val;
     case 7 :
-      val2 = val * val; val3 = val2 * val; val4 = val2 * val2;
+      val2 = val * val; val4 = val2 * val2;
       return (448. * val4 - 560. * val2 + 168) * val2 - 7.;
     default :
       f_n = DTchebychevD1 (x, 7);
@@ -565,7 +565,7 @@ static double D2Tchebychev_rec (double x, int n, int n0, double *f_n, double *f_
 static double D2TchebychevD1(double x, int n)
 {
   double val = x;
-  double val2, val3, val4;
+  double val2, val4;
   double f_n, f_n_1;
   switch (n)
     {
@@ -586,7 +586,7 @@ static double D2TchebychevD1(double x, int n)
       val2 = val * val; val4 = val2 * val2;
       return (960. * val4 - 576. * val2 + 36.);
     case 7 :
-      val2 = val * val; val3 = val2 * val; val4 = val2 * val2;
+      val2 = val * val; val4 = val2 * val2;
       return (2688. * val4 - 2240. * val2 + 336) * val;
     default :
       f_n = D2TchebychevD1 (x, 7);

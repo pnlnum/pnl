@@ -494,7 +494,6 @@ static int test_tridiag_mat_lu ()
   if ( rank == 0 )
     {
       PnlTridiagMatLU *LU;
-      int info;
       int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
 
       pnl_rand_init (gen, 1, 1);
@@ -506,9 +505,9 @@ static int test_tridiag_mat_lu ()
       LU = pnl_tridiag_mat_lu_new ();
       pnl_tridiag_mat_lu_compute (LU, M);
       
-      info = pnl_object_mpi_send (PNL_OBJECT(LU), 1, SENDTAG, MPI_COMM_WORLD);
-      info = pnl_object_mpi_send (PNL_OBJECT(b), 1, SENDTAG, MPI_COMM_WORLD);
-      info = pnl_object_mpi_send (PNL_OBJECT(x), 1, SENDTAG, MPI_COMM_WORLD);
+      pnl_object_mpi_send (PNL_OBJECT(LU), 1, SENDTAG, MPI_COMM_WORLD);
+      pnl_object_mpi_send (PNL_OBJECT(b), 1, SENDTAG, MPI_COMM_WORLD);
+      pnl_object_mpi_send (PNL_OBJECT(x), 1, SENDTAG, MPI_COMM_WORLD);
 
       pnl_vect_free (&x);
       pnl_vect_free (&b);
@@ -519,7 +518,6 @@ static int test_tridiag_mat_lu ()
     {
       PnlVect *x_save;
       PnlTridiagMatLU *LU;
-      int info;
       MPI_Status status;
 
       x_save = pnl_vect_create (n);
@@ -527,9 +525,9 @@ static int test_tridiag_mat_lu ()
       b = pnl_vect_create (n);
       LU = pnl_tridiag_mat_lu_new ();
       
-      info = pnl_object_mpi_recv (PNL_OBJECT(LU), 0, SENDTAG, MPI_COMM_WORLD, &status);
-      info = pnl_object_mpi_recv (PNL_OBJECT(b), 0, SENDTAG, MPI_COMM_WORLD, &status);
-      info = pnl_object_mpi_recv (PNL_OBJECT(x_save), 0, SENDTAG, MPI_COMM_WORLD, &status);
+      pnl_object_mpi_recv (PNL_OBJECT(LU), 0, SENDTAG, MPI_COMM_WORLD, &status);
+      pnl_object_mpi_recv (PNL_OBJECT(b), 0, SENDTAG, MPI_COMM_WORLD, &status);
+      pnl_object_mpi_recv (PNL_OBJECT(x_save), 0, SENDTAG, MPI_COMM_WORLD, &status);
       pnl_tridiag_mat_lu_syslin (x, LU, b);
       if ( pnl_test_vect_eq_abs (x, x_save, 1E-12, "tridiag_mat_lu (MIP tests)", "") == TRUE )
         {
