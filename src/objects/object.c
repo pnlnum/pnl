@@ -26,6 +26,7 @@
 #include "pnl/pnl_basis.h"
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_list.h"
+#include "pnl/pnl_array.h"
 #include "pnl/pnl_linalgsolver.h"
 
 
@@ -87,6 +88,8 @@ PnlObject* pnl_object_create (PnlType type)
       o = PNL_OBJECT(pnl_rng_new()); break;
     case PNL_TYPE_LIST:
       o = PNL_OBJECT(pnl_list_new()); break;
+    case PNL_TYPE_ARRAY:
+      o = PNL_OBJECT(pnl_array_new()); break;
     case PNL_TYPE_CG_SOLVER:
       o = PNL_OBJECT(pnl_cg_solver_new ()); break;
     case PNL_TYPE_BICG_SOLVER:

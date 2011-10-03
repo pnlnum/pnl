@@ -4,6 +4,8 @@
 	wrappers to see part of Hmat as a vector (last dimension of the Hmat
 			only) or as a matrix (last tow dimensions)
 
+	* array.c: Add of an array type to store PnlObjects
+
 16-09-2011 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* pnl_T{Vector,Matrix}_source.c: Fix wrong reading of complex data.

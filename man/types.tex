@@ -173,6 +173,48 @@ struct _PnlList
   structure \refstruct{PnlObject} has a field copy.
 \end{itemize}
 
+\subsection{Array object}
+
+This section describes functions for creating an manipulating arrays of
+PnlObjects.
+
+The structures and functions related to arrays are declared in
+\verb!pnl/pnl_array.h!.
+
+\begin{verbatim}
+typedef struct _PnlArray PnlArray;
+struct _PnlArray
+{
+  /**
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows any PnlArray pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
+  int size;
+  PnlObject **array;
+  int mem_size;
+};
+\end{verbatim}
+
+\begin{itemize}
+\item \describefun{\refstruct{PnlArray} \ptr }{pnl_array_new}{}
+  \sshortdescribe Creates an empty array
+\item \describefun{void}{pnl_array_free}{\refstruct{PnlArray}  \ptr \ptr L}
+  \sshortdescribe Frees an array
+\item \describefun{\refstruct{PnlObject}\ptr}{pnl_array_get}{
+    \refstruct{PnlArray} \ptr , int i}
+  \sshortdescribe This function returns the content of the \var{i}--th cell of
+  the array \var{L}. No copy is made
+\item \describefun{\refstruct{PnlObject}\ptr}{pnl_array_set}{
+    \refstruct{PnlArray} \ptr T, int i, \refstruct{PnlObject}\ptr O}
+  \sshortdescribe \var{T[i] = O}. No copy is made, so the object \var{O} must
+  not be freed manually.
+\item \describefun{void}{pnl_array_print}{\refstruct{PnlArray}  \ptr L}
+  \sshortdescribe Not yet implemented because it would require that the
+  structure \refstruct{PnlObject} has a field copy.
+\end{itemize}
+
+
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: "pnl-manual"

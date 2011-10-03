@@ -63,6 +63,10 @@ typedef struct _PnlObject PnlObject;
  * Casts any object into a PnlList
  */
 #define PNL_LIST_OBJECT(o) ((PnlList *) (o))
+/**
+ * Casts any object into a PnlArray
+ */
+#define PNL_ARRAY_OBJECT(o) ((PnlArray *) (o))
 
 /**
  * Returns the name of the type of any object inheriting from PnlObject
@@ -103,6 +107,7 @@ enum {
   PNL_TYPE_HMATRIX_INT,
   PNL_TYPE_HMATRIX_COMPLEX,
   PNL_TYPE_LIST,
+  PNL_TYPE_ARRAY,
   PNL_TYPE_BASIS,
   PNL_TYPE_RNG,
   PNL_TYPE_ITERATION_BASE,

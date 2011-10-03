@@ -10,7 +10,7 @@ laplace_test            list_test           mathtools_test \
 ode_test                optim_test          random_test    \
 root_test               matrix_test         solver_iterativ_test \
 special_func_test       tridiag_test        vector_test         \
-hmat_test
+hmat_test				array_test
 
 TESTS=$(check_PROGRAMS) 
 build-tests: $(TESTS)
@@ -47,6 +47,9 @@ laplace_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
 list_test_SOURCES=list_test.c tests_utils.c
 list_test_LDADD=../src/libpnl.la ${some_extra_libs}
+
+array_test_SOURCES=array_test.c tests_utils.c
+array_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
 mathtools_test_SOURCES=mathtools_test.c tests_utils.c
 mathtools_test_LDADD=../src/libpnl.la ${some_extra_libs}
