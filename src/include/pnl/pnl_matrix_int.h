@@ -169,6 +169,8 @@ extern void pnl_hmat_int_mult_int(PnlHmatInt *lhs, int x);/* lhs *=x;*/
 extern void pnl_hmat_int_set(PnlHmatInt *H, int *tab, int x);
 extern int pnl_hmat_int_get(const PnlHmatInt *H, int *tab);
 extern int* pnl_hmat_int_lget(PnlHmatInt *H, int *tab);
+extern PnlMatInt pnl_mat_int_wrap_hmat(PnlHmatInt *H, int *t);
+extern PnlVectInt pnl_vect_int_wrap_hmat(PnlHmatInt *H, int *t);
 
 /*@}*/
 /*@}*/

@@ -24,7 +24,7 @@
 /* License along with this program.  If not, see                        */
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
-
+
 
 /***************************
  *** PnlMat functions ***
@@ -154,7 +154,6 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,create_from_ptr)(int m, int n, const BASE* x)
   return M;
 }
 
-
 /**
  * Creates a new TYPE(PnlMat) using a list of values.
  *
@@ -203,7 +202,6 @@ TYPE(PnlMat) FUNCTION(pnl_mat,wrap_array)(const BASE* x, int m, int n)
   M.array = (BASE *) x;
   return M;
 }
-
 
 /**
  * Reads a matrix from a file and creates the corresponding TYPE(PnlMat)
@@ -271,7 +269,6 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,create_from_file )(const char * file)
   return M;
 }
 
-
 /**
  * frees a TYPE(PnlMat)
  *
@@ -299,7 +296,6 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,copy)(const TYPE(PnlMat) *v)
   memcpy(ret->array, v->array, sizeof(BASE)*ret->mn);
   return ret;
 }
-
 
 /**
  * clones a TYPE(PnlMat)
@@ -421,7 +417,6 @@ void FUNCTION(pnl_mat,set_diag)(TYPE(PnlMat) *M, BASE x, int d)
     }
 }
 
-
 /**
  *  Non square matrix transposition
  *
@@ -482,7 +477,6 @@ void FUNCTION(pnl_mat,sq_transpose) (TYPE(PnlMat) *M)
     }
 }
 
-
 /**
  * Prints a matrix to a file
  *
@@ -539,7 +533,6 @@ void FUNCTION(pnl_mat, fprint_nsp)(FILE *fic, const TYPE(PnlMat) * M)
  */
 void FUNCTION(pnl_mat, print_nsp)(const TYPE(PnlMat) * M)
 { FUNCTION(pnl_mat,fprint_nsp)(stdout, M);}
-
 
 /**
  * Creates a square matrix by specifying its diagonal terms.
@@ -645,7 +638,6 @@ void FUNCTION(pnl_mat,set_col)(TYPE(PnlMat) *M, const TYPE(PnlVect) *V, int j)
     }
 }
 
-
 /**
  * Extract the ith row of M. Makes a copy.
  *
@@ -735,7 +727,6 @@ void FUNCTION(pnl_mat, map_inplace)(TYPE(PnlMat) *x, BASE(*f)(BASE))
     }
 }
 
-
 /**
  * map matrix componentwise
  *
@@ -748,7 +739,6 @@ void FUNCTION(pnl_mat,map)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs, BASE(*f)(
   FUNCTION(pnl_mat,clone)(lhs, rhs);
   FUNCTION(pnl_mat,map_inplace)(lhs, f);
 }
-
 
 static BASE CONCAT2(__op_plus_,BASE)(BASE a, BASE b) { return PLUS(a,b); }
 static BASE CONCAT2(__op_minus_,BASE)(BASE a, BASE b) { return MINUS(a,b); }
@@ -802,7 +792,6 @@ void FUNCTION(pnl_mat,map_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs1, cons
   FUNCTION(pnl_mat,clone) (lhs, rhs1);
   FUNCTION(pnl_mat,map_mat_inplace) (lhs, rhs2, f);
 }
-
 
 typedef struct {
   union {BASE x; TYPE(PnlMat) *V ;};
@@ -1196,7 +1185,6 @@ void FUNCTION(pnl_mat,CONCAT2(minus_,BASE))(TYPE(PnlMat) *lhs, BASE x)
  * @param x : scalar
  * @return  lhs = lhs*x
  */
-
 void FUNCTION(pnl_mat,CONCAT2(mult_,BASE))(TYPE(PnlMat) *lhs, BASE x)
 {
   FUNCTION(__pnl_mat,apply_op)(lhs, x, CONCAT2(__op_mult_,BASE));
@@ -1460,9 +1448,6 @@ void FUNCTION(pnl_mat,mult_mat_inplace)(TYPE(PnlMat) *lhs, const  TYPE(PnlMat) *
   FUNCTION(pnl_mat,dgemm) ('N', 'N', ONE, rhs1, rhs2, ZERO, lhs);
 }
 
-
-
-
 /**
  * sum matrix componentwise
  *
@@ -1543,7 +1528,6 @@ void FUNCTION(pnl_mat,sum_vect)(TYPE(PnlVect) *y, const TYPE(PnlMat) *A, char a)
     }
 }
 
-
 /**
  * prod rows or columns matrix componentwise
  *
@@ -1593,7 +1577,6 @@ void FUNCTION(pnl_mat,prod_vect)(TYPE(PnlVect) *y, const TYPE(PnlMat) *A, char a
       PNL_ERROR ("wrong char arg ('c' or 'r')", "pnl_mat_prod_vect");
     }
 }
-
 
 /**
  * cumulative sum rows or columns matrix componentwise
@@ -1688,7 +1671,6 @@ void FUNCTION(pnl_mat,cumprod)(TYPE(PnlMat) *A, char a)
       PNL_ERROR ("wrong char arg ('c' or 'r')", "pnl_mat_cumprod");
     }
 }
-
 
 #if defined ORDERED
 extern void FUNCTION(pnl_array, min_index)(const BASE *a, int n, int incr,
@@ -1791,7 +1773,6 @@ void FUNCTION(pnl_mat, minmax_index)(TYPE(PnlVect) *out_min, TYPE(PnlVect) *out_
       if (index_max != NULL) index_max->array[i] = fake_max;
     }
 }
-
 
 /**
  * returns the maxima of the components of a matrix row-wise or column-wise
@@ -1908,9 +1889,12 @@ void FUNCTION(pnl_mat, qsort_index)(TYPE(PnlMat) * A, PnlMatInt *t, char dir, ch
 
 #endif
 
+
 /****************************
  *** PnlHmat functions ***
  ****************************/
+extern void pnl_hmat_compute_pdims (int *pdims, int ndim, const int *dims);
+extern int pnl_hmat_compute_linear_index (PnlHmatObject *H, int *tab);
 
 
 TYPE(PnlHmat)* FUNCTION(pnl_hmat,new)()
@@ -1925,22 +1909,22 @@ TYPE(PnlHmat)* FUNCTION(pnl_hmat,new)()
 TYPE(PnlHmat)* FUNCTION(pnl_hmat,create)(int ndim, const int *dims)
 {
   TYPE(PnlHmat) *H;
-  int i;
-  int s=1;
   if ((H=FUNCTION(pnl_hmat,new)())==NULL) return NULL;
   H->ndim = ndim;
   if (ndim>0)
     {
       if ((H->dims=malloc(sizeof(int)*ndim))==NULL) return NULL;
+      if ((H->pdims=malloc(sizeof(int)*ndim))==NULL) return NULL;
       memcpy(H->dims, dims, ndim*sizeof(int));
-      for ( i=0 ; i<ndim ; i++ ) { s *= dims[i]; }
-      H->mn=s;
+      pnl_hmat_compute_pdims (H->pdims, ndim, dims);
+      H->mn = H->dims[0] * H->pdims[0];
       if((H->array=malloc(H->mn*sizeof(BASE)))==NULL) return NULL;
     }
   else
     {
-      H->dims = (int*)NULL;
-      H->mn=0;
+      H->dims = NULL;
+      H->pdims = NULL;
+      H->mn = 0;
       H->array = (BASE*)NULL;
     }
   return H;
@@ -1949,33 +1933,23 @@ TYPE(PnlHmat)* FUNCTION(pnl_hmat,create)(int ndim, const int *dims)
 TYPE(PnlHmat)* FUNCTION(pnl_hmat,CONCAT2(create_from_,BASE))(int ndim, const int *dims, BASE x)
 {
   TYPE(PnlHmat) *H;
-  int i=0;
-  BASE *ptr;
+  int i;
 
-  if ((H=FUNCTION(pnl_hmat,create)(ndim,dims))==NULL)
-    return NULL;
+  if ((H=FUNCTION(pnl_hmat,create)(ndim,dims))==NULL) return NULL;
 
-  ptr=H->array;
-  while(i<H->mn)
-    {
-      *ptr=x;
-      ptr++; i++;
-    }
+  for ( i=0 ; i<H->mn ; i++ ) { H->array[i] = x; }
   return H;
 }
-
 
 TYPE(PnlHmat)* FUNCTION(pnl_hmat,create_from_ptr)(int ndim, const int *dims, const BASE *x)
 {
   TYPE(PnlHmat) *H;
 
-  if ((H=FUNCTION(pnl_hmat,create)(ndim,dims))==NULL)
-    return NULL;
+  if ((H=FUNCTION(pnl_hmat,create)(ndim,dims))==NULL) return NULL;
 
   memcpy(H->array, x, H->mn*sizeof(BASE));
   return H;
 }
-
 
 void FUNCTION(pnl_hmat,free)(TYPE(PnlHmat) **H)
 {
@@ -1984,7 +1958,6 @@ void FUNCTION(pnl_hmat,free)(TYPE(PnlHmat) **H)
   pnl_hmat_object_free (&o);
   *H = NULL;
 }
-
 
 /**
  * copies a TYPE(PnlHmat)
@@ -1999,7 +1972,6 @@ TYPE(PnlHmat)* FUNCTION(pnl_hmat,copy)(const TYPE(PnlHmat) *H)
   memcpy(ret->array, H->array, sizeof(BASE)*ret->mn);
   return ret;
 }
-
 
 /**
  * clones a TYPE(PnlHmat)
@@ -2043,25 +2015,11 @@ int FUNCTION(pnl_hmat,resize)(TYPE(PnlHmat) *H, int ndim, const int *dims)
  */
 void FUNCTION(pnl_hmat,set)(TYPE(PnlHmat) *self, int *tab, BASE x)
 {
-  int i,j;
-  int *ptr;
-  int s=0;
-  int p;
-  int d=self->ndim;
+  int index;
   CheckIndexHmat(self,tab);
 
-
-  for(i=0;i<d;i++)
-    {
-      ptr=self->dims;
-      p=1.0; ptr+=i+1;
-      for(j=i+1;j<d;j++)
-        {
-          p*=(*ptr); ptr++;
-        }
-      s+=(*tab)*p; tab++;
-    }
-  self->array[s]=x;
+  index = pnl_hmat_compute_linear_index (PNL_HMAT_OBJECT(self), tab);
+  self->array[index]=x;
 }
 
 /**
@@ -2073,25 +2031,11 @@ void FUNCTION(pnl_hmat,set)(TYPE(PnlHmat) *self, int *tab, BASE x)
  */
 BASE FUNCTION(pnl_hmat,get)(const TYPE(PnlHmat) *self, int *tab)
 {
-  int i,j;
-  int *ptr;
-  int s=0;
-  int p;
-  int d=self->ndim;
+  int index;
   CheckIndexHmat(self,tab);
 
-
-  for(i=0;i<d;i++)
-    {
-      ptr=self->dims;
-      p=1.0; ptr+=i+1;
-      for(j=i+1;j<d;j++)
-        {
-          p*=(*ptr); ptr++;
-        }
-      s+=(*tab)*p; tab++;
-    }
-  return self->array[s];
+  index = pnl_hmat_compute_linear_index (PNL_HMAT_OBJECT(self), tab);
+  return self->array[index];
 }
 
 /**
@@ -2103,25 +2047,11 @@ BASE FUNCTION(pnl_hmat,get)(const TYPE(PnlHmat) *self, int *tab)
  */
 BASE* FUNCTION(pnl_hmat,lget)(TYPE(PnlHmat) *self, int *tab)
 {
-  int i,j;
-  int *ptr;
-  int s=0;
-  int p;
-  int d=self->ndim;
+  int index;
   CheckIndexHmat(self,tab);
 
-
-  for(i=0;i<d;i++)
-    {
-      ptr=self->dims;
-      p=1.0; ptr+=i+1;
-      for(j=i+1;j<d;j++)
-        {
-          p*=(*ptr); ptr++;
-        }
-      s+=(*tab)*p; tab++;
-    }
-  return &(self->array[s]);
+  index = pnl_hmat_compute_linear_index (PNL_HMAT_OBJECT(self), tab);
+  return &(self->array[index]);
 }
 
 /**
@@ -2188,12 +2118,11 @@ void FUNCTION(pnl_hmat,print)(const TYPE(PnlHmat) *H)
 void FUNCTION(pnl_hmat,plus_hmat)(TYPE(PnlHmat) *lhs, const TYPE(PnlHmat) *rhs)
 {
 
-  BASE *lptr=lhs->array, *rptr=rhs->array;
-  int i=0;
+  int i;
   CheckHmatMatch(lhs, rhs);
-  while (i<lhs->mn)
+  for ( i=0 ; i<lhs->mn ; i++ )
     {
-      (*lptr)=PLUS((*lptr),(*rptr)); lptr++; rptr++;  i++;
+      lhs->array[i] = PLUS(lhs->array[i], rhs->array[i]);
     }
 }
 
@@ -2206,11 +2135,48 @@ void FUNCTION(pnl_hmat,plus_hmat)(TYPE(PnlHmat) *lhs, const TYPE(PnlHmat) *rhs)
  */
 void FUNCTION(pnl_hmat,CONCAT2(mult_,BASE))(TYPE(PnlHmat) *lhs, BASE x)
 {
-  BASE *lptr=lhs->array;
-  int i=0;
-  while (i<lhs->mn)
+  int i;
+  for ( i=0 ; i<lhs->mn ; i++ )
     {
-      (*lptr)=MULT((*lptr),x); lptr++; i++;
+      lhs->array[i] = MULT(lhs->array[i], x);
     }
+}
+
+/** 
+ * 
+ * Creates a PnlMat wrapper to the block pointed by t. t must be of size
+ * M->ndim - 2
+ * 
+ * @param M
+ * @param t an array of size M->ndim - 2, this is not checked in the
+ * function
+ */
+TYPE(PnlMat) FUNCTION(pnl_mat,wrap_hmat)(TYPE(PnlHmat) *M, int *t)
+{
+  int i, leading_index;
+  TYPE(PnlMat) mat;
+  leading_index = 0;
+  for ( i=0 ; i<M->ndim-2 ; i++ ) { leading_index += t[i] * M->pdims[i]; }
+  mat = FUNCTION(pnl_mat,wrap_array) (M->array + leading_index, M->dims[M->ndim-2], M->dims[M->ndim-1]);
+  return mat;
+}
+
+/** 
+ * 
+ * Creates a PnlVect wrapper to the block pointed by t. t must be of size
+ * M->ndim - 1
+ * 
+ * @param M
+ * @param t an array of size M->ndim - 1, this is not checked in the
+ * function
+ */
+TYPE(PnlVect) FUNCTION(pnl_vect,wrap_hmat)(TYPE(PnlHmat) *M, int *t)
+{
+  int i, leading_index;
+  TYPE(PnlVect) v;
+  leading_index = 0;
+  for ( i=0 ; i<M->ndim-1 ; i++ ) { leading_index += t[i] * M->pdims[i]; }
+  v = FUNCTION(pnl_vect,wrap_array) (M->array + leading_index, M->dims[M->ndim-1]);
+  return v;
 }
 

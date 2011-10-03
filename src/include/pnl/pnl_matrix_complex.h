@@ -161,6 +161,8 @@ extern void pnl_hmat_complex_mult_dcomplex(PnlHmatComplex *lhs, dcomplex x);/* l
 extern void pnl_hmat_complex_set(PnlHmatComplex *H, int *tab, dcomplex x);
 extern dcomplex pnl_hmat_complex_get(const PnlHmatComplex *H, int *tab);
 extern dcomplex* pnl_hmat_complex_lget(PnlHmatComplex *H, int *tab);
+extern PnlMatComplex pnl_mat_complex_wrap_hmat(PnlHmatComplex *H, int *t);
+extern PnlVectComplex pnl_vect_complex_wrap_hmat(PnlHmatComplex *H, int *t);
 
 /*@}*/
 /*@}*/

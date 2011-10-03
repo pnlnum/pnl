@@ -200,6 +200,8 @@ extern void pnl_hmat_mult_double(PnlHmat *lhs, double x);/* lhs *=x;*/
 extern void pnl_hmat_set(PnlHmat *H, int *tab, double x);
 extern double pnl_hmat_get(const PnlHmat *H, int *tab);
 extern double* pnl_hmat_lget(PnlHmat *H, int *tab);
+extern PnlMat pnl_mat_wrap_hmat(PnlHmat *H, int *t);
+extern PnlVect pnl_vect_wrap_hmat(PnlHmat *H, int *t);
 
 /*@}*/
 /*@}*/

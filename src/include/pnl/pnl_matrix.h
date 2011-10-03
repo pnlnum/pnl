@@ -72,6 +72,11 @@ extern int pnl_mat_object_resize(PnlMatObject *M, int m, int n);
 
 /**
  * \defgroup PnlHmatrices Hyper Matrix object
+ *
+ * HMatrices are stored as a contiguous memory block following the same
+ * scheme as for matrices and applying it recursively. For instance, for a
+ * three dimensional Hmatrix with size n1 x n2 x n3, the element (i,j,k) is
+ * located at array[k+n1*j+n2*n3*i]
  */
 /*@{*/
 extern PnlHmatObject* pnl_hmat_object_new ();

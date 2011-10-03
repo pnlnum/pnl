@@ -128,8 +128,9 @@ PnlHmatObject* pnl_hmat_object_new ()
   if ( (o = malloc (sizeof (PnlHmatObject))) == NULL) return NULL;
   o->ndim = 0;
   o->dims = NULL;
+  o->pdims = NULL;
   o->mn = 0;
-  o->array = 0;
+  o->array = NULL;
   o->object.type = PNL_TYPE_HMATRIX;
   o->object.parent_type = PNL_TYPE_HMATRIX;
   o->object.label = pnl_hmatrix_label;
@@ -145,11 +146,47 @@ void pnl_hmat_object_free(PnlHmatObject **H)
     {
       free((*H)->array);
       free((*H)->dims);
+      free((*H)->pdims);
       free(*H);
       *H=NULL;
     }
 }
 
+/** 
+ * Compute the array of leading dimension for Hmat
+ * 
+ * @param pdims array of size ndim
+ * @param ndim number of dimensions of the Hmat
+ * @param dims array of the sizes of the Hmat
+ */
+void pnl_hmat_compute_pdims (int *pdims, int ndim, const int *dims)
+{
+  int i;
+  pdims[ndim-1] = 1.;
+  for ( i=ndim-1 ; i>0 ; i-- )
+    {
+      pdims[i-1] = dims[i] * pdims[i];
+    }
+}
+
+
+/** 
+ * Computes the value of the linear index (ie. the index in the field
+ * array) corresponding to the multi-index defined by tab
+ * 
+ * @param H a Hmat
+ * @param tab multi-index
+ * 
+ * @return an integer index
+ */
+int pnl_hmat_compute_linear_index (PnlHmatObject *H, int *tab)
+{
+  int i, index;
+  index = 0;
+
+  for ( i=0 ; i<H->ndim ; i++ ) { index += tab[i] * H->pdims[i]; }
+  return index;
+}
 
 /**
  * resizes a PnlHmatObject.
@@ -171,13 +208,18 @@ int pnl_hmat_object_resize(PnlHmatObject *H, int ndim, const int *dims)
   size_t sizeof_base = 0;
   const int *ptr;
   ptr=dims;
-  for(i=0;i<ndim;i++) { s*=(*ptr); ptr++; }
+  for ( i=0 ; i<ndim ;i++ ) { s *= dims[i]; }
 
-  if (H->mn == s) /*nothing to do, just adjust ndim and dims*/
+  if (H->mn == s) /* nothing to do, just adjust ndim, dims and pdims */
     {
       H->ndim=ndim;
-      if(H->ndim> ndim) if ((H->dims=realloc(H->dims,sizeof(int)*ndim))==NULL) return FAIL;
+      if (H->ndim > ndim) 
+        {
+          if ((H->dims=realloc(H->dims,sizeof(int)*ndim))==NULL) return FAIL;
+          if ((H->pdims=realloc(H->pdims,sizeof(int)*ndim))==NULL) return FAIL;
+        }
       memcpy(H->dims, dims, ndim*sizeof(int));
+      pnl_hmat_compute_pdims (H->pdims, ndim, dims);
       return OK;
     }
   if (s< 0) return FAIL;
@@ -185,12 +227,15 @@ int pnl_hmat_object_resize(PnlHmatObject *H, int ndim, const int *dims)
     {
       H->ndim =  H->mn = 0;
       H->dims=NULL;
+      H->pdims=NULL;
       free(H->array); H->array = NULL;
       return OK;
     }
   H->ndim=ndim; H->mn=s;
   if ((H->dims=realloc(H->dims,sizeof(int)*ndim))==NULL) return FAIL;
   memcpy(H->dims, dims, ndim*sizeof(int));
+  if ((H->pdims=realloc(H->pdims,sizeof(int)*ndim))==NULL) return FAIL;
+  pnl_hmat_compute_pdims (H->pdims, ndim, dims);
 
   switch (PNL_GET_TYPE (H))
     {

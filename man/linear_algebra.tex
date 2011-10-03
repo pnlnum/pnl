@@ -1694,8 +1694,10 @@ typedef struct PnlHmat{
    */
   PnlObject object; 
   int ndim; /*!< nb dimensions */ 
-  int *dims; /*!< pointer to store the value of the ndim dimensions */ 
+  int *dims; /*!< pointer to store the values of the ndim dimensions */ 
   int mn; /*!< product dim_1 *...*dim_ndim */
+  int *pdims; /*!< array of size ndim, s.t. pdims[i] = dims[ndim-1] x ... dims[i+1]
+                with pdims[ndim - 1] = 1 */
   double *array; /*!< pointer to store */
 } PnlHmat;
 
@@ -1708,6 +1710,8 @@ typedef struct PnlHmatInt{
   int ndim; /*!< nb dimensions */ 
   int *dims; /*!< pointer to store the value of the ndim dimensions */ 
   int mn; /*!< product dim_1 *...*dim_ndim */
+  int *pdims; /*!< array of size ndim, s.t. pdims[i] = dims[ndim-1] x ... dims[i+1]
+                with pdims[ndim - 1] = 1 */
   int *array; /*!< pointer to store */
 } PnlHmatInt;
 
@@ -1720,13 +1724,16 @@ typedef struct PnlHmatComplex{
   int ndim; /*!< nb dimensions */ 
   int *dims; /*!< pointer to store the value of the ndim dimensions */ 
   int mn; /*!< product dim_1 *...*dim_ndim */
+  int *pdims; /*!< array of size ndim, s.t. pdims[i] = dims[ndim-1] x ... dims[i+1]
+                with pdims[ndim - 1] = 1 */
   dcomplex *array; /*!< pointer to store */
 } PnlHmatComplex;
 \end{verbatim}
 \var{ndim} is the number of dimensions, \var{dim} is an array to store the
 size of each dimension and \var{nm} contains the product of the sizes of each
-dimension. \var{array} is an array of size \var{mn} containing the data of the
-matrix stored line wise.
+dimension. \var{array} is an array of size \var{mn} containing the data. The
+integer array \var{pdims} is used to create the one--to--one map between the
+natural indexing and the linear indexing used in \var{array}.
 
 
 \subsubsection{Generic Functions}
@@ -1747,9 +1754,9 @@ Here is the table of prefixes used for the different basic types.
   \end{tabular}
 \end{center}
 
-In this paragraph we present the functions operating on \refstruct{PnlMat}
+In this paragraph, we present the functions operating on \refstruct{PnlHmat}
 which exist for all types. To deduce the prototypes of these functions for
-other basic types, one must replace {\tt pnl_mat} and {\tt double} according
+other basic types, one must replace {\tt pnl_hmat} and {\tt double} according
 the above table.
 
 
@@ -1797,6 +1804,20 @@ the above table.
   
 \item \describefun{double\ptr }{pnl_hmat_lget}{\refstruct{PnlHmat} \ptr self, int \ptr tab}
   \sshortdescribe Returns the address of self[tab] for use as a lvalue.  
+
+\item \describefun{\refstruct{PnlMat}}{pnl_mat_wrap_hmat}{\refstruct{PnlHmat} \ptr H, int \ptr t}
+  \sshortdescribe Returns a true \refstruct{PnlMat} not a pointer holding the data
+  \var{H(t,:,:)}. Note that \var{t} must be of size \var{ndim-2} and that it
+  cannot be checked within the function. The returned matrix shares its data
+  with \var{H}, it is only a view not a true copy.
+
+\item \describefun{\refstruct{PnlVect}}{pnl_vect_wrap_hmat}{\refstruct{PnlHmat} \ptr H, int \ptr t}
+  \sshortdescribe Returns a true \refstruct{PnlVect} not a pointer holding the data
+  \var{H(t,:)}. Note that \var{t} must be of size \var{ndim-1} and that it
+  cannot be checked within the function. The returned vector shares its data
+  with \var{H}, it is only a view not a true copy.
+
+
 \end{itemize}  
 
 \paragraph{Printing hypermatrices}
@@ -1806,7 +1827,7 @@ the above table.
   \sshortdescribe Prints an hypermatrix.
 \end{itemize}
 
-\paragraph{Accessing elements}
+\paragraph{Term by term operations}
 
 \begin{itemize}
 \item \describefun{void}{pnl_hmat_plus_hmat}{\refstruct{PnlHmat} \ptr lhs, const \refstruct{PnlHmat} \ptr rhs}

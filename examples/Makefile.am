@@ -9,7 +9,8 @@ finance_function_test   integration_test    lapack_test    \
 laplace_test            list_test           mathtools_test \
 ode_test                optim_test          random_test    \
 root_test               matrix_test         solver_iterativ_test \
-special_func_test       tridiag_test        vector_test         
+special_func_test       tridiag_test        vector_test         \
+hmat_test
 
 TESTS=$(check_PROGRAMS) 
 build-tests: $(TESTS)
@@ -52,6 +53,9 @@ mathtools_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
 matrix_test_SOURCES=matrix_test.c tests_utils.c
 matrix_test_LDADD=../src/libpnl.la ${some_extra_libs}
+
+hmat_test_SOURCES=hmat_test.c tests_utils.c
+hmat_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
 ode_test_SOURCES=ode_test.c tests_utils.c
 ode_test_LDADD=../src/libpnl.la ${some_extra_libs}

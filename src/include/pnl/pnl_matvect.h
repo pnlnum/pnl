@@ -207,8 +207,10 @@ struct _PnlHmatObject
    */
   PnlObject object; 
   int ndim; /*!< nb dimensions */ 
-  int *dims; /*!< pointer to store the value of the ndim dimensions */ 
+  int *dims; /*!< pointer to store the values of the ndim dimensions */ 
   int mn; /*!< product dim_1 *...*dim_ndim */
+  int *pdims; /*!< array of size ndim, s.t. pdims[i] = dims[ndim-1] x ... dims[i+1]
+                with pdims[ndim - 1] = 1 */
   void *array; /*!< pointer to store */
 } ;
 
@@ -222,12 +224,14 @@ struct _PnlHmat
 {
   /** 
    * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlMatXXX pointer to be cast to a PnlObject
+   * properly. This allows any PnlHmatXXX pointer to be cast to a PnlObject
    */
   PnlObject object; 
   int ndim; /*!< nb dimensions */ 
-  int *dims; /*!< pointer to store the value of the ndim dimensions */ 
+  int *dims; /*!< pointer to store the values of the ndim dimensions */ 
   int mn; /*!< product dim_1 *...*dim_ndim */
+  int *pdims; /*!< array of size ndim, s.t. pdims[i] = dims[ndim-1] x ... dims[i+1]
+                with pdims[ndim - 1] = 1 */
   double *array; /*!< pointer to store */
 };
 
@@ -239,12 +243,14 @@ struct _PnlHmatInt
 {
   /** 
    * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlMatXXX pointer to be cast to a PnlObject
+   * properly. This allows any PnlHmatXXX pointer to be cast to a PnlObject
    */
   PnlObject object; 
   int ndim; /*!< nb dimensions */ 
-  int *dims; /*!< pointer to store the value of the ndim dimensions */ 
+  int *dims; /*!< pointer to store the values of the ndim dimensions */ 
   int mn; /*!< product dim_1 *...*dim_ndim */
+  int *pdims; /*!< array of size ndim, s.t. pdims[i] = dims[ndim-1] x ... dims[i+1]
+                with pdims[ndim - 1] = 1 */
   int *array; /*!< pointer to store */
 };
 
@@ -257,12 +263,14 @@ struct _PnlHmatComplex
 {
   /** 
    * Must be the first element in order for the object mechanism to work
-   * properly. This allows any PnlMatXXX pointer to be cast to a PnlObject
+   * properly. This allows any PnlHmatXXX pointer to be cast to a PnlObject
    */
   PnlObject object; 
   int ndim; /*!< nb dimensions */ 
-  int *dims; /*!< pointer to store the value of the ndim dimensions */ 
+  int *dims; /*!< pointer to store the values of the ndim dimensions */ 
   int mn; /*!< product dim_1 *...*dim_ndim */
+  int *pdims; /*!< array of size ndim, s.t. pdims[i] = dims[ndim-1] x ... dims[i+1]
+                with pdims[ndim - 1] = 1 */
   dcomplex *array; /*!< pointer to store */
 };
 /*@}*/
