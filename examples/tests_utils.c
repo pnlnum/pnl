@@ -69,7 +69,7 @@ static void update_count_tests (int status)
  */
 int pnl_test_finalize(const char *str)
 {
-  printf ("%s : %s (TOTAL : %d, PASSED : %d, FAILED %d)\n", str, (count_fail == 0) ? "OK" : "FAIL", count_tests, count_ok, count_fail);
+  printf ("%s : %s (TOTAL: %d, PASSED: %d, FAILED: %d)\n", str, (count_fail == 0) ? "OK" : "FAIL", count_tests, count_ok, count_fail);
   return ( count_fail >0 );
 }
 
@@ -277,8 +277,7 @@ static int pnl_test_array (const double *X, const double *Y, int n, double reler
  * 
  * @param X computed result (matrix)
  * @param Y expected result (matrix)
- * @param relerr relative error (note that when |y| < 1, it is an abolute
- * error)
+ * @param relerr relative error
  * @param str the name of the tested function
  * @param fmt a format string to be passed to printf
  * @param ... extra arguments for printf
@@ -306,8 +305,7 @@ int pnl_test_mat_eq_rel (const PnlMat *X, const PnlMat *Y, double relerr, const 
  * 
  * @param X computed result (matrix)
  * @param Y expected result (matrix)
- * @param relerr relative error (note that when |y| < 1, it is an abolute
- * error)
+ * @param relerr relative error 
  * @param str the name of the tested function
  * @param fmt a format string to be passed to printf
  * @param ... extra arguments for printf
@@ -414,8 +412,7 @@ int pnl_test_mat_eq(const PnlMat *X, const PnlMat *Y, double relerr, const char 
  * 
  * @param X computed result (vector)
  * @param Y expected result (vector)
- * @param relerr relative error (note that when |y| < 1, it is an abolute
- * error)
+ * @param relerr relative error
  * @param str the name of the tested function
  * @param fmt a format string to be passed to printf
  * @param ... extra arguments for printf
@@ -494,6 +491,108 @@ int pnl_test_vect_eq(const PnlVect *X, const PnlVect *Y, double relerr, const ch
       return FALSE;
     }
   return pnl_test_array (X->array, Y->array, X->size, relerr, test_eq, str, fmt, ap);
+}
+
+/**
+ * Checks if |x(i,j,...) - y(i,j,...)| / |y(i,j,...)| < relerr
+ * 
+ * @param X computed result (Hmatrix)
+ * @param Y expected result (Hmatrix)
+ * @param relerr relative error 
+ * @param str the name of the tested function
+ * @param fmt a forhmat string to be passed to printf
+ * @param ... extra arguments for printf
+ * 
+ * @return FALSE or TRUE
+ */
+int pnl_test_hmat_eq_rel (const PnlHmat *X, const PnlHmat *Y, double relerr, const char *str, const char *fmt, ...)
+{
+  int i;
+  va_list ap;
+  va_start (ap, fmt);
+  va_end (ap);
+
+  if ( X->ndim != Y->ndim ) goto dim_fail;
+  for ( i=0 ; i<X->ndim ; i++ )
+    {
+      if ( X->dims[i] != Y->dims[i] ) goto dim_fail;
+    }
+  return pnl_test_array (X->array, Y->array, X->mn, relerr, test_eq_rel, str, fmt, ap);
+
+dim_fail:
+  printf ("%s : ", str);
+  printf ("FAIL (size mismatch");
+  printf (fmt, ap); printf (")\n");
+  update_count_tests (1);
+  return FALSE;
+}
+
+/** 
+ * Checks if |x(i,j,...) - y(i,j,...)| < abserr
+ * 
+ * @param X computed result (Hmatrix)
+ * @param Y expected result (Hmatrix)
+ * @param relerr absolute error 
+ * @param str the name of the tested function
+ * @param fmt a forhmat string to be passed to printf
+ * @param ... extra arguments for printf
+ * 
+ * @return FALSE or TRUE
+ */
+int pnl_test_hmat_eq_abs (const PnlHmat *X, const PnlHmat *Y, double abserr, const char *str, const char *fmt, ...)
+{
+  int i;
+  va_list ap;
+  va_start (ap, fmt);
+  va_end (ap);
+
+  if ( X->ndim != Y->ndim ) goto dim_fail;
+  for ( i=0 ; i<X->ndim ; i++ )
+    {
+      if ( X->dims[i] != Y->dims[i] ) goto dim_fail;
+    }
+  return pnl_test_array (X->array, Y->array, X->mn, abserr, test_eq_abs, str, fmt, ap);
+
+dim_fail:
+  printf ("%s : ", str);
+  printf ("FAIL (size mismatch");
+  printf (fmt, ap); printf (")\n");
+  update_count_tests (1);
+  return FALSE;
+}
+
+/** 
+ * Checks if |x(i,j,...) - y(i,j,...)| / max (1, y(i,j,...) < abserr
+ * 
+ * @param X computed result (Hmatrix)
+ * @param Y expected result (Hmatrix)
+ * @param relerr  error (relative or not depending on the magnitude of y)
+ * @param str the name of the tested function
+ * @param fmt a forhmat string to be passed to printf
+ * @param ... extra arguments for printf
+ * 
+ * @return FALSE or TRUE
+ */
+int pnl_test_hmat_eq (const PnlHmat *X, const PnlHmat *Y, double abserr, const char *str, const char *fmt, ...)
+{
+  int i;
+  va_list ap;
+  va_start (ap, fmt);
+  va_end (ap);
+
+  if ( X->ndim != Y->ndim ) goto dim_fail;
+  for ( i=0 ; i<X->ndim ; i++ )
+    {
+      if ( X->dims[i] != Y->dims[i] ) goto dim_fail;
+    }
+  return pnl_test_array (X->array, Y->array, X->mn, abserr, test_eq, str, fmt, ap);
+
+dim_fail:
+  printf ("%s : ", str);
+  printf ("FAIL (size mismatch");
+  printf (fmt, ap); printf (")\n");
+  update_count_tests (1);
+  return FALSE;
 }
 
 void run_all_test (tst_list *l)
