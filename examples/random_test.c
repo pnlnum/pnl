@@ -196,7 +196,7 @@ static void rand_call_dcmt ()
   for ( j=0 ; j<NGEN ; j++ )
     {
       sum[j] = var[j] = 0.;
-      if ( (rng[j] = pnl_rng_dcmt_create_id (0, j)) == NULL)
+      if ( (rng[j] = pnl_rng_dcmt_create_id (j, 0)) == NULL)
         {
           perror ("Cannot create a DCMT.\n"); abort();
         }
