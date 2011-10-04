@@ -201,6 +201,9 @@ struct _PnlArray
   \sshortdescribe Creates an empty array
 \item \describefun{void}{pnl_array_free}{\refstruct{PnlArray}  \ptr \ptr L}
   \sshortdescribe Frees an array
+\item \describefun{int}{pnl_array_resize}{\refstruct{PnlArray} \ptr  v, int size}
+  \sshortdescribe Resizes \var{v} to be \var{size} long. As much as possible of
+  the original data is kept.
 \item \describefun{\refstruct{PnlObject}\ptr}{pnl_array_get}{
     \refstruct{PnlArray} \ptr , int i}
   \sshortdescribe This function returns the content of the \var{i}--th cell of

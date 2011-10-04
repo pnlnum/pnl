@@ -61,6 +61,44 @@ PnlArray* pnl_array_create (int n)
 }
 
 /**
+ * Resizes a PnlArray. If the new size is smaller than the
+ * current one, no memory is freed and the datas are
+ * kept. If the new size is larger than the current one, a
+ * new pointer is allocated. The old datas are kept. 
+ *
+ * @param v a pointer to an already existing PnlArray. 
+ * @param size the new size of the array
+ */
+int pnl_object_resize(PnlArray * v, int size)
+{
+
+  if (size < 0) return FAIL;
+  if (size == 0)
+    {
+      if (v->mem_size > 0) free (v->array);
+      v->size = 0;
+      v->mem_size = 0;
+      v->array=NULL;
+      return OK;
+    }
+  
+  if (v->mem_size >= size)
+    {
+      /* If the new size is smaller, we do not reduce the size of the
+         allocated block. It may change, but it allows to grow the vector
+         quicker */
+      v->size=size; return OK;
+    }
+
+  /* Now, v->mem_size < size */
+  if ((v->array=realloc(v->array,size*sizeof(PnlObject *))) == NULL) return FAIL;
+  v->size = size;
+  v->mem_size = size;
+  return OK;
+}
+
+
+/**
  * Returns the adress of the i-th element of an array. No copy is made
  *
  * @param T a PnlArray
