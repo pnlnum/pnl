@@ -1,9 +1,11 @@
+array_test
 band_matrix_test
 basis_test
 complex_test
 cumulfunc_test
 fft_test
 finance_function_test
+hmat_test
 integration_test
 lapack_test
 laplace_test
