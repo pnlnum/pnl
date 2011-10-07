@@ -262,11 +262,10 @@ static void passf(int *nac, int ido, int ip, int l1, int idl1,
                   const double wa[], int isign)
 /* isign is -1 for forward transform and +1 for backward transform */
 {
-  int idij, idlj, idot, ipph, i, j, k, l, jc, lc, ik, nt, idj, idl, inc,idp;
+  int idij, idlj, idot, ipph, i, j, k, l, jc, lc, ik, idj, idl, inc,idp;
   double wai, war;
 
   idot = ido / 2;
-  nt = ip*idl1;
   ipph = (ip + 1) / 2;
   idp = ip*ido;
   if (ido >= l1) {

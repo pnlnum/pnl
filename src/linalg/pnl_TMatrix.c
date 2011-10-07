@@ -206,8 +206,6 @@ int pnl_hmat_object_resize(PnlHmatObject *H, int ndim, const int *dims)
 {
   int i, s=1;
   size_t sizeof_base = 0;
-  const int *ptr;
-  ptr=dims;
   for ( i=0 ; i<ndim ;i++ ) { s *= dims[i]; }
 
   if (H->mn == s) /* nothing to do, just adjust ndim, dims and pdims */

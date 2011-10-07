@@ -199,20 +199,20 @@ struct _PnlArray
 \begin{itemize}
 \item \describefun{\refstruct{PnlArray} \ptr }{pnl_array_new}{}
   \sshortdescribe Creates an empty array
-\item \describefun{void}{pnl_array_free}{\refstruct{PnlArray}  \ptr \ptr L}
-  \sshortdescribe Frees an array
-\item \describefun{int}{pnl_array_resize}{\refstruct{PnlArray} \ptr  v, int size}
-  \sshortdescribe Resizes \var{v} to be \var{size} long. As much as possible of
+\item \describefun{void}{pnl_array_free}{\refstruct{PnlArray}  \ptr \ptr}
+  \sshortdescribe Frees an array and all the objects hold by the array.
+\item \describefun{int}{pnl_array_resize}{\refstruct{PnlArray} \ptr  T, int size}
+  \sshortdescribe Resizes \var{T} to be \var{size} long. As much as possible of
   the original data is kept.
 \item \describefun{\refstruct{PnlObject}\ptr}{pnl_array_get}{
-    \refstruct{PnlArray} \ptr , int i}
+    \refstruct{PnlArray} \ptr T, int i}
   \sshortdescribe This function returns the content of the \var{i}--th cell of
-  the array \var{L}. No copy is made
+  the array \var{T}. No copy is made.
 \item \describefun{\refstruct{PnlObject}\ptr}{pnl_array_set}{
     \refstruct{PnlArray} \ptr T, int i, \refstruct{PnlObject}\ptr O}
   \sshortdescribe \var{T[i] = O}. No copy is made, so the object \var{O} must
   not be freed manually.
-\item \describefun{void}{pnl_array_print}{\refstruct{PnlArray}  \ptr L}
+\item \describefun{void}{pnl_array_print}{\refstruct{PnlArray}  \ptr}
   \sshortdescribe Not yet implemented because it would require that the
   structure \refstruct{PnlObject} has a field copy.
 \end{itemize}
