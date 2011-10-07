@@ -289,7 +289,7 @@ int pnl_mat_upper_syslin (PnlVect *x, const PnlMat *A, const  PnlVect *b)
   ldb = A->m;
   pnl_vect_clone (x, b);
   /* Beware that Fortran uses a column wise store, we actually consider A^T */
-  C2F(dtrtrs)("U","T","N",&n,&nrhs,A->array,&lda,x->array,&ldb,&info);
+  C2F(dtrtrs)("L","T","N",&n,&nrhs,A->array,&lda,x->array,&ldb,&info);
   if (info != 0)
     {
       PNL_MESSAGE_ERROR ("Matrix is singular", "pnl_mat_upper_syslin");
@@ -317,7 +317,7 @@ int pnl_mat_lower_syslin (PnlVect *x, const PnlMat *A, const  PnlVect *b)
   ldb = A->m;
   pnl_vect_clone (x, b);
   /* Beware that Fortran uses a column wise store, we actually consider A^T */
-  C2F(dtrtrs)("L","T","N",&n,&nrhs,A->array,&lda,x->array,&ldb,&info);
+  C2F(dtrtrs)("U","T","N",&n,&nrhs,A->array,&lda,x->array,&ldb,&info);
   if (info != 0)
     {
       PNL_MESSAGE_ERROR ("Matrix is singular", "pnl_mat_lower_syslin");

@@ -1,3 +1,7 @@
+07-10-2011 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* lapack-wrap.c: Fix a bug in pnl_{upper,lower}_syslin.
+
 03-10-2011 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* pnl_TMatrix_source.c: Fix storage problem for Hmat. Add of two

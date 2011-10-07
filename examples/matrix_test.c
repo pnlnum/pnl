@@ -923,14 +923,25 @@ static void pnl_mat_syslin_test ()
 
   Scopy = pnl_mat_copy (S);
   x = pnl_vect_new ();
-  /* pnl_mat_upper_syslin(x,S,b); */
-  /* pnl_mat_mult_vect_inplace (Sx, Scopy, x); */
-  /* pnl_test_vect_eq_abs (Sx, b, 1E-8, "mat_upper_syslin", ""); */
 
-  /* printf("test de la fonction 'pnl_mat_lower_syslin' : \n"); */
-  /* pnl_mat_lower_syslin(x,S,b); */
-  /* pnl_vect_print(x); */
+  set_triangular_to_zero (S, 'L');
+  pnl_mat_upper_syslin(x,S,b);
+  /* check solution */
+  pnl_mat_clone (S, Scopy);
+  set_triangular_to_zero (S, 'L');
+  pnl_mat_mult_vect_inplace (Sx, S, x);
+  pnl_test_vect_eq_abs (Sx, b, 1E-8, "mat_upper_syslin", "");
 
+  pnl_mat_clone (S, Scopy);
+  set_triangular_to_zero (S, 'U');
+  pnl_mat_lower_syslin(x,S,b);
+  /* check solution */
+  pnl_mat_clone (S, Scopy);
+  set_triangular_to_zero (S, 'U');
+  pnl_mat_mult_vect_inplace (Sx, S, x);
+  pnl_test_vect_eq_abs (Sx, b, 1E-8, "mat_lower_syslin", "");
+
+  pnl_mat_clone (S, Scopy);
   pnl_mat_chol (S);
   pnl_mat_chol_syslin(x, S, b);
   pnl_mat_mult_vect_inplace (Sx, Scopy, x);
