@@ -545,17 +545,16 @@ void FUNCTION(pnl_vect, clone)(TYPE(PnlVect) * clone,
  */
 void FUNCTION(pnl_vect, fprint)(FILE *fic, const TYPE(PnlVect) * V)
 {
-  int i=0;
-  while(i<V->size)
+  int i;
+  for ( i=0 ; i<V->size ; i++ )
     {
       fprintf(fic,OUT_FORMAT,OUT_PUT_FORMAT(V->array[i]));
       fprintf(fic, "\n");
-      i++;
     }
 }
 
 /**
- * prints a TYPE(PnlVect).
+ * prints a TYPE(PnlVect) with one entry per line
  *
  * @param V a(constant) TYPE(PnlVect).
  */
@@ -563,6 +562,34 @@ void FUNCTION(pnl_vect, print)(const TYPE(PnlVect) * V)
 {
   FUNCTION(pnl_vect, fprint)(stdout, V);
 }
+
+/**
+ * Prints a TYPE(PnlVect) to a  file with as a row vector
+ *
+ * @param V a(constant) TYPE(PnlVect)
+ * @param fic a file descriptor.
+ */
+void FUNCTION(pnl_vect, fprint_asrow)(FILE *fic, const TYPE(PnlVect) * V)
+{
+  int i;
+  for ( i=0 ; i<V->size ; i++ )
+    {
+      fprintf(fic,OUT_FORMAT,OUT_PUT_FORMAT(V->array[i]));
+      fprintf(fic, " ");
+    }
+  fprintf (fic, "\n");
+}
+
+/**
+ * prints a TYPE(PnlVect) as a row vector
+ *
+ * @param V a(constant) TYPE(PnlVect).
+ */
+void FUNCTION(pnl_vect, print_asrow)(const TYPE(PnlVect) * V)
+{
+  FUNCTION(pnl_vect, fprint_asrow)(stdout, V);
+}
+
 
 /**
  * prints a TYPE(PnlVect) in a format compatible with Nsp to a file

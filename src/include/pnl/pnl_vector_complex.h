@@ -133,8 +133,10 @@ extern PnlVectComplex pnl_vect_complex_wrap_subvect_with_last(const PnlVectCompl
 extern PnlVectComplex pnl_vect_complex_wrap_mat(const PnlMatComplex *M);
 
 extern void pnl_vect_complex_print(const PnlVectComplex *V);
+extern void pnl_vect_complex_print_asrow(const PnlVectComplex *V);
 extern void pnl_vect_complex_print_nsp(const PnlVectComplex *V);
 extern void pnl_vect_complex_fprint(FILE *fic, const PnlVectComplex *V);
+extern void pnl_vect_complex_fprint_asrow(FILE *fic, const PnlVectComplex *V);
 extern void pnl_vect_complex_fprint_nsp(FILE *fic, const PnlVectComplex *V);
 
 extern void pnl_vect_complex_plus_vect(PnlVectComplex *lhs, const PnlVectComplex *rhs); 

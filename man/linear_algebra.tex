@@ -206,9 +206,15 @@ Equivalently to these functions, there exist macros for {\bf \refstruct{PnlVect}
 \subparagraph{Printing vector}
 \begin{itemize}
 \item \describefun{void}{pnl_vect_print}{const \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Prints a \refstruct{PnlVect}.  
+  \sshortdescribe Prints a \refstruct{PnlVect} as a column vector
 \item \describefun{void}{pnl_vect_fprint}{FILE \ptr fic, const \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Prints a \refstruct{PnlVect} in file \var{fic}.  
+  \sshortdescribe Prints a \refstruct{PnlVect} in file \var{fic} as a column
+  vector.
+\item \describefun{void}{pnl_vect_print_asrow}{const \refstruct{PnlVect} \ptr V}
+  \sshortdescribe Prints a \refstruct{PnlVect} as a row vector
+\item \describefun{void}{pnl_vect_fprint_asrow}{FILE \ptr fic, const \refstruct{PnlVect} \ptr V}
+  \sshortdescribe Prints a \refstruct{PnlVect} in file \var{fic} as a row
+  vector.
 \item \describefun{void}{pnl_vect_print_nsp}{const \refstruct{PnlVect} \ptr V}
   \sshortdescribe Prints a vector to the standard output in a format
   compatible with Nsp.  
