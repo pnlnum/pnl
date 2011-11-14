@@ -3,7 +3,6 @@
 
 #include "pnl/pnl_object.h"
 #include "pnl/pnl_mathtools.h"
-#include "pnl/pnl_types.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 
@@ -69,16 +68,6 @@ struct _PnlRng
   void *state; /*!< state of the random generator */
 };
 
-/*
- * This type is only for building a proper enumeration for Premia's list
- */
-typedef struct _PnlRngEnum PnlRngEnum;
-struct _PnlRngEnum
-{
-  const char *label;
-  int         key;
-  PnlRng     *rng;
-};
 
 extern PnlRng PnlRngKnuth;
 extern PnlRng PnlRngMrgk3;
@@ -94,14 +83,12 @@ extern PnlRng PnlRngFaure;
 extern PnlRng PnlRngSobolI4;
 extern PnlRng PnlRngSobolI8;
 extern PnlRng PnlRngNiederreiter;
-
-extern PnlRngEnum PnlRngArray[];
-extern PnlRngEnum PnlRngMCArray[];
+extern PnlRng *PnlRngArray[];
 
 #ifdef HAVE_INLINE
 extern inline PnlRng* pnl_rng_get_from_id (PnlRngType t)
 {
-  return PnlRngArray[t].rng;
+  return PnlRngArray[t];
 }
 #endif
 extern PnlRng* pnl_rng_get_from_id (PnlRngType t);

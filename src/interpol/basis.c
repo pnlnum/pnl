@@ -596,14 +596,6 @@ static double D2TchebychevD1(double x, int n)
 }
 
 
-PnlEnum PnlEnumBasis [] =
-  {
-    { "Canonical", PNL_BASIS_CANONICAL},
-    { "Hermite", PNL_BASIS_HERMITIAN},
-    { "Tchebychev", PNL_BASIS_TCHEBYCHEV},
-    { NULL, NULLINT},
-  };
-
 
 
 static char pnl_basis_label[] = "PnlBasis";
@@ -643,19 +635,8 @@ PnlBasis*  pnl_basis_new ()
  */
 void  pnl_basis_set_from_tensor (PnlBasis *b, int index, const PnlMatInt *T)
 {
-  PnlEnum *e;
-
-  e = PnlEnumBasis;
-
-  while (e->label != NULL && e->key != index) { e++; }
-  if (e->label == NULL )
-    {
-      printf ("No basis found : index exceeded\n"); abort();
-    }
-
   b->nb_func = T->m;
   b->id = index;
-  b->label = e->label;
   b->nb_variates = T->n;
 
   /* Not sure this is the right place to put it */
@@ -672,16 +653,19 @@ void  pnl_basis_set_from_tensor (PnlBasis *b, int index, const PnlMatInt *T)
   switch ( index )
     {
     case PNL_BASIS_CANONICAL:
+      b->label = "Canonical";
       b->f = CanonicalD1;
       b->Df = DCanonicalD1;
       b->D2f = D2CanonicalD1;
       break;
     case PNL_BASIS_HERMITIAN:
+      b->label = "Hermite";
       b->f = HermiteD1;
       b->Df = DHermiteD1;
       b->D2f = D2HermiteD1;
       break;
     case PNL_BASIS_TCHEBYCHEV:
+      b->label = "Tchebychev";
       b->f = TchebychevD1;
       b->Df = DTchebychevD1;
       b->D2f = D2TchebychevD1;

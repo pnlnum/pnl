@@ -870,43 +870,23 @@ PnlRng PnlRngNiederreiter =
     QMC,0, 0,0,0,sizeof(nied_state),&nied_st
   };
 
-/*
- * Random Number Generator Array
- */
-PnlRngEnum PnlRngArray[]=
+PnlRng *PnlRngArray[]=
   {
-    {"KNUTH", PNL_RNG_KNUTH, &PnlRngKnuth},
-    {"MRGK3", PNL_RNG_MRGK3, &PnlRngMrgk3},
-    {"MRGK5", PNL_RNG_MRGK5, &PnlRngMrgk5},
-    {"SHUFL", PNL_RNG_SHUFL, &PnlRngShufl},
-    {"L'ECUYER", PNL_RNG_LECUYER, &PnlRngLecuyer},
-    {"TAUSWORTHE", PNL_RNG_TAUSWORTHE, &PnlRngTausworthe},
-    {"MERSENNE", PNL_RNG_MERSENNE, &PnlRngMersenne},
-    {"MERSENNE (Random Seed)", PNL_RNG_MERSENNE_RANDOM_SEED, &PnlRngMersenneRandomSeed},
-    {"SQRT", PNL_RNG_SQRT, &PnlRngSqrt},
-    {"HALTON", PNL_RNG_HALTON, &PnlRngHalton},
-    {"FAURE", PNL_RNG_FAURE, &PnlRngFaure},
-    {"SOBOL_I4", PNL_RNG_SOBOL_I4, &PnlRngSobolI4},
-    {"SOBOL_I8", PNL_RNG_SOBOL_I8, &PnlRngSobolI8},
-    {"NIEDERREITER", PNL_RNG_NIEDERREITER, &PnlRngNiederreiter},
-    {NULL, NULLINT, NULL}
-  };
-
-/*
- * True MC generators do not take into account the parameter dimension in the
- * Compute function.
- */
-PnlRngEnum PnlRngMCArray[]=
-  {
-    {"KNUTH", PNL_RNG_KNUTH, &PnlRngKnuth},
-    {"MRGK3", PNL_RNG_MRGK3, &PnlRngMrgk3},
-    {"MRGK5", PNL_RNG_MRGK5, &PnlRngMrgk5},
-    {"SHUFL", PNL_RNG_SHUFL, &PnlRngShufl},
-    {"L'ECUYER", PNL_RNG_LECUYER, &PnlRngLecuyer},
-    {"TAUSWORTHE", PNL_RNG_TAUSWORTHE, &PnlRngTausworthe},
-    {"MERSENNE", PNL_RNG_MERSENNE, &PnlRngMersenne},
-    {"MERSENNE (Random Seed)", PNL_RNG_MERSENNE_RANDOM_SEED, &PnlRngMersenneRandomSeed},
-    {NULL, NULLINT, NULL}
+     &PnlRngKnuth,
+     &PnlRngMrgk3,
+     &PnlRngMrgk5,
+     &PnlRngShufl,
+     &PnlRngLecuyer,
+     &PnlRngTausworthe,
+     &PnlRngMersenne,
+     &PnlRngMersenneRandomSeed,
+     &PnlRngSqrt,
+     &PnlRngHalton,
+     &PnlRngFaure,
+     &PnlRngSobolI4,
+     &PnlRngSobolI8,
+     &PnlRngNiederreiter,
+     NULL
   };
 
 
@@ -919,7 +899,7 @@ PnlRngEnum PnlRngMCArray[]=
  */
 PnlRng* pnl_rng_get_from_id (PnlRngType id)
 {
-  return PnlRngArray[id].rng;
+  return PnlRngArray[id];
 }
 
 /**
