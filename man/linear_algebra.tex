@@ -1231,12 +1231,12 @@ computations have been carried out successfully and \var{FAIL} otherwise.
   with the same number of rows as \var{A}.
   The solution of the system is stored in \var{B} on exit. 
 
-\item \describefun{int}{pnl_mat_ls}{\refstruct{PnlMat}\ptr A, \refstruct{PnlVect} \ptr b}
+\item \describefun{int}{pnl_mat_ls}{const \refstruct{PnlMat}\ptr A, \refstruct{PnlVect} \ptr b}
   \sshortdescribe Solves a linear system A x = b in the least square sense,
   i.e. $\var{x} = \arg\min_U \| A * u - b\|^2$. The solution is stored into
   \var{b} on exit. It internally uses a \var{AP = QR} decomposition.
 
-\item \describefun{int}{pnl_mat_ls_mat}{\refstruct{PnlMat}\ptr A,
+\item \describefun{int}{pnl_mat_ls_mat}{const \refstruct{PnlMat}\ptr A,
     \refstruct{PnlMat} \ptr B}
   \sshortdescribe Solves a linear system A X = B with \var{A} and \var{B} two
   matrices in the least square sense, i.e. $\var{X} = \arg\min_U \| A * U -
