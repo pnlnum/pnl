@@ -51,6 +51,23 @@ PnlPermutation* pnl_permutation_create (int n)
   return p;
 }
 
+/** 
+ * Computes the inverse of a permutation vector
+ * 
+ * @param inv contains the inverse on output
+ * @param p a permutation
+ * 
+ */
+void pnl_permutation_inverse (PnlPermutation *inv, const PnlPermutation *p)
+{
+  int i;
+  pnl_vect_int_resize (inv, p->size);
+  
+  for ( i=0 ; i<p->size ; i++ )
+    {
+      inv->array[p->array[i]] = i;
+    }
+}
 
 /**
  * Frees a PnlPermutation
@@ -79,6 +96,26 @@ void pnl_vect_permute (PnlVect *px, const PnlVect *x, const PnlPermutation *p)
     {
       k = p->array[i];
       pnl_vect_set (px, i, pnl_vect_get (x, k));
+    }
+}
+
+/**
+ * Applies the inverse of a PnlPermutation to a PnlVect
+ * px[p[i]] = x[i]
+ *
+ * @param px on exit contains the permuted vector
+ * @param x the vector to permute
+ * @param p a permutation
+ */
+void pnl_vect_permute_inverse (PnlVect *px, const PnlVect *x, const PnlPermutation *p)
+{
+  int i;
+  PNL_CHECK (x->size != p->size, "incompatible permutation size", "pnl_vect_permute_inverse");
+  pnl_vect_resize (px, x->size);
+  for (i=0; i<x->size; i++)
+    {
+      const int k = p->array[i];
+      LET (px, k) = GET (x, i);
     }
 }
 
@@ -132,6 +169,57 @@ static void pnl_permute_inplace (double *x, const int *p, int n)
 }
 
 /**
+ * Applies the inverse of a Permutation to an array in place
+ * x[p[i]] = x[i]
+ *
+ * @param x a C array of real values to permute. On exit, contains the permuted data.
+ * @param p a C arary of integers representing a permutation
+ * @param n the size of the array x (it is also the size of p)
+ *
+ * This algorithm comes
+ * From Knuth "Sorting and Searching", Volume 3 (3rd ed), Section 5.2
+ *  Exercise 10 (answers), p 617
+ * It is based on the decomposition of any permutation into disjoined
+ * cycles. First we search for the cycles and then apply each of them inplace,
+ * which is much easier.
+ */
+static void pnl_permute_inverse_inplace (double *x, const int *p, int n)
+{
+  int i, k, pk;
+  double t;
+  for (i = 0; i < n; i++)
+    {
+      k = p[i];
+
+      /* we are looking for the last element of the current cycle */
+      while (k > i) k = p[k];
+
+      pk = p[k];
+      if (k == i && pk != i)
+        {
+          /* we have found the last of element of the current cycle.
+             if k <i, then i was not a cycle leader
+             if pk == 1, this is not a true cycle, but instead  i is a fixed
+             point
+             now we also have pk = p[i] 
+          */
+          
+          /* shuffle the elements of the cycle starting from k */
+          t = x[k];
+          while (pk != i)
+            {
+              const double tmp = x[pk];
+              x[pk] = t;
+              t = tmp;
+              k = pk;
+              pk = p[k];
+            }
+          x[pk] = t;
+        }
+    }
+}
+
+/**
  * Applies a Permutation to a PnlVect in place
  *
  * @param x the vector to permute. Contains the permuted vector on exit
@@ -143,6 +231,18 @@ void pnl_vect_permute_inplace (PnlVect *x, const PnlPermutation *p)
   pnl_permute_inplace (x->array, p->array, x->size);
 }
   
+/**
+ * Applies the inverse of a Permutation to a PnlVect in place
+ *
+ * @param x the vector to permute. Contains the permuted vector on exit
+ * @param p a permutation
+ */
+void pnl_vect_permute_inverse_inplace (PnlVect *x, const PnlPermutation *p)
+{
+  PNL_CHECK (x->size != p->size, "incompatible permutation size", "pnl_vect_permute_inverse");
+  pnl_permute_inverse_inplace (x->array, p->array, x->size);
+}
+
 /**
  * Applies a PnlPermutation to the columns of a matrix
  * pX[] = x[:,p]

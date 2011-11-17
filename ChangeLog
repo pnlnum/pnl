@@ -1,3 +1,10 @@
+17-11-2011 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* perm.c: Compute the inverse of a permutation. Apply the inverse of a
+	permutation in place
+	* lapack-wrap.c: Solve a linear system using a QR decomposition with
+	column pivoting
+
 07-10-2011 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* lapack-wrap.c: Fix a bug in pnl_{upper,lower}_syslin.

@@ -1051,8 +1051,10 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 
 \item \describefun{void}{pnl_mat_dgemv}{char trans, double lambda, const
     \refstruct{PnlMat} \ptr A, const \refstruct{PnlVect} \ptr x, double mu, 
-    \refstruct{PnlVect} \ptr b} \sshortdescribe Computes \var{b := lambda
-    op(A) x + mu b}, where \var{op (X) = X} or \var{op (X) = X'}. When
+    \refstruct{PnlVect} \ptr b}
+  \sshortdescribe Computes \var{b := lambda op(A) x + mu b}, where \var{op (X) =
+    X} or \var{op (X) = X'}. If \var{trans='N'} or \var{trans='n'}, \var{op (A)
+    = A}, whereas if \var{trans='T'} or \var{trans='t'}, \var{op (A) = A'}.When
   \var{mu==0}, the content of \var{b} is not used and instead \var{b} is resized
   to match \var{op(A)*x}. The vectors \var{x} and \var{b} must be different.
 
@@ -1062,7 +1064,7 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
   \sshortdescribe Computes \var{C := alpha * op(A) * op (B) + beta *
     C}. When beta=0, the content of \var{C} is unused and instead \var{C}
   is resized to store \var{alpha A \ptr B}. If \var{transA='N'} or
-  \var{transA='n'}, \var{op (A) = A}, whereas If \var{transA='T'} or
+  \var{transA='n'}, \var{op (A) = A}, whereas if \var{transA='T'} or
   \var{transA='t'}, \var{op (A) = A'}. The same holds for \var{transB}. The matrix
   \var{C} must be different from \var{A} and \var{B}.
   
@@ -1296,6 +1298,9 @@ decomposition, row \verb!i! of \verb!A! was interchanged with row \verb!p(i)!.
 \item \describefun{void}{pnl_permutation_free}{\refstruct{PnlPermutation} \ptr \ptr p}
   \sshortdescribe Frees a \refstruct{PnlPermutation}.
 
+\item \describefun{void}{pnl_permutation_inverse}{\refstruct{PnlPermutation}\ptr
+    inv, const \refstruct{PnlPermutation}\ptr p}
+  \sshortdescribe Computes in \var{inv} the inverse of the permutation \var{p}.
 \item \describefun{void}{pnl_vect_permute}{\refstruct{PnlVect} \ptr px, const
     \refstruct{PnlVect} \ptr x, const \refstruct{PnlPermutation} \ptr p} 
   \sshortdescribe Applies a \refstruct{PnlPermutation} to a \refstruct{PnlVect}.  
@@ -1305,14 +1310,22 @@ decomposition, row \verb!i! of \verb!A! was interchanged with row \verb!p(i)!.
   \sshortdescribe Applies a \refstruct{PnlPermutation} to a
   \refstruct{PnlVect} in-place.  
 
+\item \describefun{void}{pnl_vect_permute_inverse}{\refstruct{PnlVect} \ptr px, const
+    \refstruct{PnlVect} \ptr x, const \refstruct{PnlPermutation} \ptr p} 
+  \sshortdescribe Applies the inverse of \refstruct{PnlPermutation} to a \refstruct{PnlVect}.  
+
+\item \describefun{void}{pnl_vect_permute_inverse_inplace}{\refstruct{PnlVect} \ptr x, 
+    const \refstruct{PnlPermutation} \ptr p} 
+  \sshortdescribe Applies the inverse of a \refstruct{PnlPermutation} to a
+  \refstruct{PnlVect} in-place.  
+
 \item \describefun{void}{pnl_mat_col_permute}{\refstruct{PnlMat} \ptr pX, const
     \refstruct{PnlMat} \ptr X, const
     \refstruct{PnlPermutation} \ptr p}
   \sshortdescribe Applies a \refstruct{PnlPermutation} to the columns of a
   matrix. \var{pX} contains the result of the permutation applied to \var{X}. 
 \item \describefun{void}{pnl_mat_row_permute}{\refstruct{PnlMat} \ptr pX, const
-    \refstruct{PnlMat} \ptr X, const
-    \refstruct{PnlPermutation} \ptr p}
+    \refstruct{PnlMat} \ptr X, const \refstruct{PnlPermutation} \ptr p}
   \sshortdescribe Applies a \refstruct{PnlPermutation} to the rows of a
   matrix. \var{pX} contains the result of the permutation applied to \var{X}. 
   

@@ -184,10 +184,9 @@ int pnl_mat_lu (PnlMat *A, PnlPermutation *p)
 }
 
 /**
- * computes a P A = LU factorisation. On exit A contains the L and U
- * matrices. Note that the diagonal elements of L are all 1.
+ * computes a A P = QR factorisation. 
  *
- * @param Q an orthogonal matrix on exit
+ * @param Q an orthonormal matrix on exit
  * @param R an upper triangular matrix on exit
  * @param p a PnlPermutation. If p is NULL no permutation is computed.
  * @param A the matrix to decompose. PA = QR
@@ -456,6 +455,30 @@ int pnl_mat_lu_syslin (PnlVect *x, PnlMat *LU, const PnlVectInt *p, const PnlVec
 {
   pnl_vect_clone (x, b);
   return pnl_mat_lu_syslin_inplace (LU, p, x);
+}
+
+/**
+ * solves the linear system A x = b with A P = QR.  *
+ * @param x a PnlVect containing the solution on exit
+ * @param Q a orthogonal PnlMat 
+ * @param U an upper triagular PnlMat 
+ * @param p a PnlVectInt (permutation vector)
+ * @param b right hand side member
+ * @return OK or FAIL
+ */
+int pnl_mat_qr_syslin (PnlVect *x, PnlMat *Q, PnlMat *R, const PnlVectInt *p, PnlVect *b)
+{
+  PnlVect *y;
+  CheckIsSquare(Q);
+  CheckIsSquare(R);
+  CheckMatVectIsCompatible (R, b);
+  CheckVectMatch (p, b); 
+  y = pnl_vect_new ();
+
+  pnl_mat_dgemv ('T', 1., Q, b, 0., y); /* y = Q' b */
+  pnl_mat_upper_syslin (x, R, y); /* x = R^-1 Q' b */
+  pnl_vect_permute_inverse_inplace (x, p);
+  return OK;
 }
 
 /**

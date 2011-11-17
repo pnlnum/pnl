@@ -910,6 +910,7 @@ static void pnl_mat_inverse_test ()
 static void pnl_mat_syslin_test ()
 {
   PnlMat *S, *Scopy, *B, *Bcopy, *SB;
+  PnlMat *Q, *R;
   PnlVect *b, *x, *Sx;
   PnlVectInt *p;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
@@ -988,6 +989,16 @@ static void pnl_mat_syslin_test ()
   pnl_mat_lu_syslin (x, S, p, b);
   pnl_mat_mult_vect_inplace (Sx, Scopy, x);
   pnl_test_vect_eq_abs (Sx, b, 1E-8, "mat_lu_syslin", "");
+
+  pnl_mat_clone (S, Scopy);
+  Q = pnl_mat_new ();
+  R = pnl_mat_new ();
+  pnl_mat_qr (Q, R, p, S);
+  pnl_mat_qr_syslin (x, Q, R, p, b);
+  pnl_mat_mult_vect_inplace (Sx, Scopy, x);
+  pnl_test_vect_eq_abs (Sx, b, 1E-8, "mat_qr_syslin", "");
+  pnl_mat_free (&Q);
+  pnl_mat_free (&R);
 
   pnl_mat_clone (S, Scopy);
   pnl_mat_syslin (x, S, b);

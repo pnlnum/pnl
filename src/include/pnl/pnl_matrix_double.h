@@ -129,6 +129,7 @@ extern int pnl_mat_lu (PnlMat *A, PnlVectInt *p);
 extern int pnl_mat_lu_syslin (PnlVect *x, PnlMat *LU,
                                const PnlVectInt *p, const PnlVect *b);
 extern int pnl_mat_lu_syslin_inplace(PnlMat *LU, const PnlVectInt *p, PnlVect *b);
+extern int pnl_mat_qr_syslin (PnlVect *x, PnlMat *Q, PnlMat *R, const PnlVectInt *p, PnlVect *b);
 extern int pnl_mat_syslin_mat (PnlMat *A,  PnlMat *B);
 extern int pnl_mat_lu_syslin_mat (const PnlMat *A,  const PnlPermutation *p, PnlMat *B);
 extern int pnl_mat_chol_syslin_mat (const PnlMat *A,  PnlMat *B);
