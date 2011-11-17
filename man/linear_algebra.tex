@@ -1199,6 +1199,12 @@ computations have been carried out successfully and \var{FAIL} otherwise.
   elements of \var{L} are all 1. The solution of the system is stored in \var{b}
   on exit.
   
+\item \describefun{int}{pnl_mat_qr_syslin}{\refstruct{PnlVect} \ptr x,
+    const \refstruct{PnlMat} \ptr Q, const \refstruct{PnlMat} \ptr R,
+    const \refstruct{PnlVectInt} \ptr p, const \refstruct{PnlVect} \ptr b}
+  \sshortdescribe Solves a linear system \var{A x = b} where \var{A} is given by
+  its QR decomposition with column pivoting as computed by the function
+  \reffun{pnl_mat_qr}.
 \item \describefun{int}{pnl_mat_syslin}{\refstruct{PnlVect} \ptr x, const
     \refstruct{PnlMat} \ptr A, const \refstruct{PnlVect} \ptr b} 
   \sshortdescribe Solves a linear system A x = b using a LU factorization

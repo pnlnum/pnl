@@ -227,6 +227,7 @@ int pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
     }
   else
     {
+      pnl_vect_int_resize (p, m);
       for (i = 0; i < m ; i++) p->array[i]= 0;
       lwork = -1;
       C2F(dgeqp3)(&m, &m, R->array, &m, p->array, tau, &qlwork, &lwork, &info);
@@ -466,7 +467,8 @@ int pnl_mat_lu_syslin (PnlVect *x, PnlMat *LU, const PnlVectInt *p, const PnlVec
  * @param b right hand side member
  * @return OK or FAIL
  */
-int pnl_mat_qr_syslin (PnlVect *x, PnlMat *Q, PnlMat *R, const PnlVectInt *p, PnlVect *b)
+int pnl_mat_qr_syslin (PnlVect *x, const PnlMat *Q, const PnlMat *R,
+                       const PnlVectInt *p, const PnlVect *b)
 {
   PnlVect *y;
   CheckIsSquare(Q);
