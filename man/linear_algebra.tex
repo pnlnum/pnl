@@ -526,7 +526,17 @@ typedef struct PnlVectCompact {
   \sshortdescribe Converts a \refstruct{PnlVectCompact} pointer to a \refstruct{PnlVect} pointer.  
 
 \item \describefun{double}{pnl_vect_compact_get}{const \refstruct{PnlVectCompact} \ptr C, int i}
-  \sshortdescribe Access function  
+  \sshortdescribe Access function
+
+\item \describefun{void}{pnl_vect_compact_set_double}{\refstruct{PnlVectCompact}
+    \ptr C, double x}
+  \sshortdescribe Sets all elements of \var{C} to \var{x}. \var{C} is
+  converted to a compact storage.
+  
+\item \describefun{void}{pnl_vect_compact_set_ptr}{\refstruct{PnlVectCompact}
+    \ptr C, double \ptr ptr}
+  \sshortdescribe Copies the array \var{ptr} into \var{C}. We assume that the
+  sizes match. \var{C} is converted to a non compact storage.
 \end{itemize}
 
 %% matrix

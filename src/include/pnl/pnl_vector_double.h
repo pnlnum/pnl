@@ -153,6 +153,8 @@ extern PnlVectCompact* pnl_vect_compact_copy(const PnlVectCompact *v);
 extern void pnl_vect_compact_free (PnlVectCompact **v);
 extern PnlVect* pnl_vect_compact_to_pnl_vect (const PnlVectCompact *C);
 extern double pnl_vect_compact_get (const PnlVectCompact *C, int i);
+extern void pnl_vect_compact_set_double (PnlVectCompact *C, double x);
+extern void pnl_vect_compact_set_ptr (PnlVectCompact *C, double *ptr);
 
 /*@}*/
 /*@}*/

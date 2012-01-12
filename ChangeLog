@@ -25,7 +25,7 @@
 
 	* dpstrf: add detection of dpstrf to the configure script. If not
 	available in the computer's version of Lapack, it can be found in
-	linalg/dpstrf.c whose inclusion is hung up to the result of the 
+	linalg/dpstrf.c whose inclusion is hung up to the result of the
 	configure script.
 
 21-07-2011 Jérôme Lelong <jerome.lelong@gmail.com>
@@ -41,7 +41,7 @@
 08-07-2011 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* liblapack: update to version 3.2.1
-	* libblas: update 
+	* libblas: update
 	* libf2c: lots of warnings removed
 	* lapack-wrap.c: Cholesky factorization with complete pivoting for
 	positive semidefinite matrices
@@ -95,7 +95,7 @@
 
 
 10-03-2011 Jérôme Lelong <jerome.lelong@gmail.com>
-	
+
 	* liblapack : calls to dlamc3_ replaced by pnl_dlamc3 defined in
 	libamos. (Only used when Blas/Lapack libraries are available on the
 	system)

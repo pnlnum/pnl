@@ -31,7 +31,7 @@
 static char pnl_vector_compact_label[] = "PnlVectCompact";
 
 /**
- * Creates a new PnlVectCompact
+ * Create a new PnlVectCompact with size 0
  * @return a pointeur to PnlVectCompact
  */
 PnlVectCompact* pnl_vect_compact_new ()
@@ -48,7 +48,7 @@ PnlVectCompact* pnl_vect_compact_new ()
 }
 
 /**
- * allocates a PnlVectCompact. By default type='d'.
+ * Create a PnlVectCompact. By default type='d'.
  * @param n size
  * @param x value to fill the vector
  * @return a pointeur to PnlVectCompact
@@ -64,7 +64,7 @@ PnlVectCompact* pnl_vect_compact_create (int n, double x)
 }
 
 /**
-* allocates a PnlVectCompact from a vector of doubles. By default type='a'.
+* Create a PnlVectCompact from a vector of doubles. By default type='a'.
 * @param n size
 * @param x pointer to a vector of doubles to fill the PnlVectCompact
 * @return a pointeur to PnlVectCompact
@@ -82,7 +82,7 @@ PnlVectCompact* pnl_vect_compact_create_from_ptr(int n, double const *x)
 }
 
 /**
- * resize a PnlVectCompact.
+ * Resize a PnlVectCompact.
  * @param v the PvlVectCompact to be resized
  * @param size new size
  * @param x new value to set
@@ -101,9 +101,9 @@ int pnl_vect_compact_resize (PnlVectCompact *v, int size, double x)
 }
 
 /**
- * copies a PnlVectCompact
+ * Copy a PnlVectCompact
  *
- * @param v : a constant PnlVectCompact pointer
+ * @param v a constant PnlVectCompact pointer
  * @return  a PnlVectCompact  pointer initialised with v
  */
 PnlVectCompact* pnl_vect_compact_copy(const PnlVectCompact *v)
@@ -125,7 +125,7 @@ PnlVectCompact* pnl_vect_compact_copy(const PnlVectCompact *v)
 
 
 /**
- * free a PnlVectCompact
+ * Free a PnlVectCompact
  * @param v address of a PnlVectCompact
  */
 void pnl_vect_compact_free (PnlVectCompact **v)
@@ -159,15 +159,45 @@ PnlVect* pnl_vect_compact_to_pnl_vect (const PnlVectCompact *C)
 }
 
 /**
- * access function
+ * Access an element
  * @param C a PnlVectCompact
  * @param i index
  * @return C[i]
  */
 double pnl_vect_compact_get (const PnlVectCompact *C, int i)
 {
-  if (C->convert == 'd') return C->val;
   CheckIndexVect (C, i);
+  if (C->convert == 'd') return C->val;
   return C->array[i];
 }
 
+/**
+ * Fill a PnlVectCompact with a unique value.
+ * The storage is converted to the compact way
+ * 
+ * @param C a PnlVectCompact
+ * @param x a real value
+ */
+void pnl_vect_compact_set_double (PnlVectCompact *C, double x)
+{
+  if ( C->convert =='a' && C->array != NULL )
+    {
+      free (C->array); C->array = NULL;
+    }
+  C->convert = 'd'; C->val = x;
+}
+/**
+ * Copy an array into a PnlVectCompact
+ * 
+ * @param C a PnlVectCompact
+ * @param ptr an array of double. We assume it has the same size as C
+ */
+void pnl_vect_compact_set_ptr (PnlVectCompact *C, double *ptr)
+{
+  if ( C->convert == 'd' )
+    {
+      C->convert = 'a';
+      C->array = malloc (sizeof(double) * C->size);
+    }
+  memcpy (C->array, ptr, C->size * sizeof(double));
+}
