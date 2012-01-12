@@ -30,7 +30,7 @@ static double square (double x) { return x*x;}
 
 static void reset_rng (PnlRng *rng, int s)
 {
-  if ( rng->rand_or_quasi == MC )
+  if ( rng->rand_or_quasi == PNL_MC )
     {
       pnl_rng_sseed (rng, 123456);
     }

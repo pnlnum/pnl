@@ -52,14 +52,14 @@ struct _PnlRng
   PnlObject object;
   int type; /*!< generator type *
   void (*Compute)(PnlRng *g, double *sample); /*!< the function to compute the
-                                                next number in the sequence *
-  int rand_or_quasi; /*!< can be MC or QMC *
-  int dimension; /*!< dimension of the space in which we draw the samples *
-  int counter; /*!< counter = number of samples already drawn *
-  int has_gauss; /*!< Is a gaussian deviate available? *
-  double gauss; /*!< If has_gauss==1, gauss a gaussian sample *
-  int size_state; /*!< size in bytes of the state variable *
-  void *state; /*!< state of the random generator *
+                                                next number in the sequence */
+  int rand_or_quasi; /*!< can be PNL_MC or PNL_QMC */
+  int dimension; /*!< dimension of the space in which we draw the samples */
+  int counter; /*!< counter = number of samples already drawn */
+  int has_gauss; /*!< Is a gaussian deviate available? */
+  double gauss; /*!< If has_gauss==1, gauss a gaussian sample */
+  int size_state; /*!< size in bytes of the state variable */
+  void *state; /*!< state of the random generator */
 };
 \end{verbatim}
 
@@ -313,7 +313,7 @@ calling
 
 \item \describefun{int}{pnl_rand_or_quasi}{int type_generator}
   \sshortdescribe Returns the type the generator of index \var{type_generator},
-  \var{MC} or \var{QMC}
+  \var{PNL_MC} or \var{PNL_QMC}
 \item \describefun{void}{pnl_rand_sseed}{(int type_generator, unsigned long int
   seed)}
   \sshortdescribe It sets the seed of the generator \var{type_generator} with

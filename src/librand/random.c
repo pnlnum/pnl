@@ -789,85 +789,85 @@ PnlRng PnlRngKnuth =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_KNUTH,&KNUTH,
-    MC,0, 0,0,0,sizeof(knuth_state), &knuth_st
+    PNL_MC,0, 0,0,0,sizeof(knuth_state), &knuth_st
   };
 PnlRng PnlRngMrgk3 =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_MRGK3,&MRGK3,
-    MC,0,0,0,0,sizeof(mrgk3_state),&mrgk3_st
+    PNL_MC,0,0,0,0,sizeof(mrgk3_state),&mrgk3_st
   };
 PnlRng PnlRngMrgk5 =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_MRGK5,&MRGK5,
-    MC,0,0,0,0,sizeof(mrgk5_state),&mrgk5_st
+    PNL_MC,0,0,0,0,sizeof(mrgk5_state),&mrgk5_st
   };
 PnlRng PnlRngShufl =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_SHUFL,&SHUFL,
-    MC,0,0,0,0,sizeof(shufl_state),&shufl_st
+    PNL_MC,0,0,0,0,sizeof(shufl_state),&shufl_st
   };
 PnlRng PnlRngLecuyer =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_LECUYER,&LECUYER,
-    MC,0, 0,0,0,sizeof(lecuyer_state),&lecuyer_st
+    PNL_MC,0, 0,0,0,sizeof(lecuyer_state),&lecuyer_st
   };
 PnlRng PnlRngTausworthe =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_TAUSWORTHE,&TAUS,
-    MC,0, 0,0,0,sizeof(tausworthe_state),&tausworthe_st
+    PNL_MC,0, 0,0,0,sizeof(tausworthe_state),&tausworthe_st
   };
 PnlRng PnlRngMersenne =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_MERSENNE,&MERSENNE,
-    MC,0,0, 0,0,sizeof(mt_state),&mt_st1
+    PNL_MC,0,0, 0,0,sizeof(mt_state),&mt_st1
   };
 PnlRng PnlRngMersenneRandomSeed =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_MERSENNE_RANDOM_SEED,&MERSENNE,
-    MC,0,0, 0,0,sizeof(mt_state),&mt_st2
+    PNL_MC,0,0, 0,0,sizeof(mt_state),&mt_st2
   };
 PnlRng PnlRngSqrt =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_SQRT,&SQRT,
-    QMC,0, 0,0,0,sizeof(sqrt_state),&sqrt_st
+    PNL_QMC,0, 0,0,0,sizeof(sqrt_state),&sqrt_st
   };
 PnlRng PnlRngHalton =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_HALTON,&HALTON,
-    QMC,0, 0,0,0,sizeof(halton_state),&halton_st
+    PNL_QMC,0, 0,0,0,sizeof(halton_state),&halton_st
   };
 PnlRng PnlRngFaure =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_FAURE,&FAURE,
-    QMC,0, 0,0,0,sizeof(faure_state),&faure_st
+    PNL_QMC,0, 0,0,0,sizeof(faure_state),&faure_st
   };
 PnlRng PnlRngSobolI4 =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_SOBOL_I4,&I4_SOBOL,
-    QMC,0, 0,0,0,sizeof(sobol_i4_state), &sobol_i4_st
+    PNL_QMC,0, 0,0,0,sizeof(sobol_i4_state), &sobol_i4_st
   };
 PnlRng PnlRngSobolI8 =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_SOBOL_I8,&I8_SOBOL,
-    QMC,0, 0,0,0,sizeof(sobol_i8_state), &sobol_i8_st
+    PNL_QMC,0, 0,0,0,sizeof(sobol_i8_state), &sobol_i8_st
   };
 PnlRng PnlRngNiederreiter =
   {
     {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
     PNL_RNG_NIEDERREITER,&NIEDERREITER,
-    QMC,0, 0,0,0,sizeof(nied_state),&nied_st
+    PNL_QMC,0, 0,0,0,sizeof(nied_state),&nied_st
   };
 
 PnlRng *PnlRngArray[]=
@@ -937,8 +937,8 @@ char* pnl_rng_get_name (PnlRngType id)
  * Initialises a generator
  * @param type_generator index of the generator to be used
  * @param dimension dimension of the value space to simulate in. Only
- * used for QMC.
- * @param samples maximum number of samples requested. Only used for QMC.
+ * used for PNL_QMC.
+ * @param samples maximum number of samples requested. Only used for PNL_QMC.
  * @returns OK or WRONG
  */
 int pnl_rand_init (int type_generator, int dimension, long samples)
@@ -949,7 +949,7 @@ int pnl_rand_init (int type_generator, int dimension, long samples)
   switch (rng->type)
     {
       /*
-       * some MC generators which must be initialized
+       * some PNL_MC generators which must be initialized
        */
     case PNL_RNG_KNUTH:
     case PNL_RNG_MRGK3:
@@ -1004,7 +1004,7 @@ void pnl_rand_sseed (int type_generator, ulong seed)
 /**
  * Determines the type of a generator
  * @param type_generator index of the generator
- * @returns MC or QMC
+ * @returns PNL_MC or PNL_QMC
  */
 int pnl_rand_or_quasi (int type_generator)
 {
@@ -1041,7 +1041,7 @@ PnlRng* pnl_rng_new ()
 
   rng->type = PNL_RNG_NULL;
   rng->Compute = NULL;
-  rng->rand_or_quasi = MC;
+  rng->rand_or_quasi = PNL_MC;
   rng->dimension = 0;
   rng->counter = 0;
   rng->has_gauss = 0;
@@ -1074,72 +1074,72 @@ void pnl_rng_init (PnlRng *rng, int type)
     {
     case PNL_RNG_KNUTH:
       rng->Compute = KNUTH;
-      rng->rand_or_quasi = MC;
+      rng->rand_or_quasi = PNL_MC;
       rng->size_state = sizeof(knuth_state);
       break;
     case PNL_RNG_MRGK3:
       rng->Compute = MRGK3;
-      rng->rand_or_quasi = MC;
+      rng->rand_or_quasi = PNL_MC;
       rng->size_state = sizeof(mrgk3_state);
       break;
     case PNL_RNG_MRGK5:
       rng->Compute = MRGK5;
-      rng->rand_or_quasi = MC;
+      rng->rand_or_quasi = PNL_MC;
       rng->size_state = sizeof(mrgk5_state);
       break;
     case PNL_RNG_SHUFL:
       rng->Compute = SHUFL;
-      rng->rand_or_quasi = MC;
+      rng->rand_or_quasi = PNL_MC;
       rng->size_state = sizeof(shufl_state);
       break;
     case PNL_RNG_LECUYER:
       rng->Compute = LECUYER;
-      rng->rand_or_quasi = MC;
+      rng->rand_or_quasi = PNL_MC;
       rng->size_state = sizeof(lecuyer_state);
       break;
     case PNL_RNG_TAUSWORTHE:
       rng->Compute = TAUS;
-      rng->rand_or_quasi = MC;
+      rng->rand_or_quasi = PNL_MC;
       rng->size_state = sizeof(tausworthe_state);
       break;
     case PNL_RNG_MERSENNE:
       rng->Compute = MERSENNE;
-      rng->rand_or_quasi = MC;
+      rng->rand_or_quasi = PNL_MC;
       rng->size_state = sizeof(mt_state);
       break;
     case PNL_RNG_DCMT:
       rng->Compute = DYNAMIC_MT;
-      rng->rand_or_quasi = MC;
+      rng->rand_or_quasi = PNL_MC;
       rng->size_state = sizeof(dcmt_state);
       break;
     case PNL_RNG_SQRT:
       rng->Compute = SQRT;
-      rng->rand_or_quasi = QMC;
+      rng->rand_or_quasi = PNL_QMC;
       rng->size_state = sizeof(sqrt_state);
       break;
     case PNL_RNG_HALTON:
       rng->Compute = HALTON;
-      rng->rand_or_quasi = QMC;
+      rng->rand_or_quasi = PNL_QMC;
       rng->size_state = sizeof(halton_state);
       break;
     case PNL_RNG_FAURE:
       rng->Compute = FAURE;
-      rng->rand_or_quasi = QMC;
+      rng->rand_or_quasi = PNL_QMC;
       rng->size_state = sizeof(faure_state);
       break;
     case PNL_RNG_NIEDERREITER:
       rng->Compute = NIEDERREITER;
-      rng->rand_or_quasi = QMC;
+      rng->rand_or_quasi = PNL_QMC;
       rng->size_state = sizeof(nied_state);
       break;
     case PNL_RNG_SOBOL_I4:
       rng->Compute = I4_SOBOL;
-      rng->rand_or_quasi = QMC;
+      rng->rand_or_quasi = PNL_QMC;
       rng->size_state = sizeof(sobol_i4_state);
       break;
     case PNL_RNG_SOBOL_I8:
       rng->Compute = I8_SOBOL;
-      rng->rand_or_quasi = QMC;
+      rng->rand_or_quasi = PNL_QMC;
       rng->size_state = sizeof(sobol_i8_state);
       break;
     default:
@@ -1357,7 +1357,7 @@ void pnl_rng_sseed (PnlRng *rng, ulong seed)
       }
       break;
     default:
-      printf ("For QMC rng, You should use pnl_rng_sdim instead of pnl_rng_sseed\n");
+      printf ("For PNL_QMC rng, You should use pnl_rng_sdim instead of pnl_rng_sseed\n");
       break;
     }
   rng->counter=1;
@@ -1366,7 +1366,7 @@ void pnl_rng_sseed (PnlRng *rng, ulong seed)
 }
 
 /**
- * Sets the dimension of the state space for a QMC rng
+ * Sets the dimension of the state space for a PNL_QMC rng
  *
  * @param rng a PnlRng
  * @param dim the dimension of the state space
@@ -1456,7 +1456,7 @@ int pnl_rng_sdim (PnlRng *rng, int dim)
       break;
       
       default:
-        printf ("For MC rng, you shoud use pnl_rng_sseed instead of pnl_rng_sdim\n");
+        printf ("For PNL_MC rng, you shoud use pnl_rng_sseed instead of pnl_rng_sdim\n");
       break;
     }
   return OK;

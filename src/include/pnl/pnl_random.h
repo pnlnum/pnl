@@ -16,15 +16,14 @@ extern "C" {
  */
 /*@{*/
 
-#define MC 0
-#define QMC 1
+#define PNL_MC 0
+#define PNL_QMC 1
 #define CREATE 0
 #define RETRIEVE 1
 
 /* indices of random generators
- * The first generators must be true MC generators and the last ones are QMC
- * Do NOT mix them otherwise the arrays  pnl_random and pnl_random_MC will be
- * wrong */
+ * The first generators must be true PNL_MC generators and the last ones are PNL_QMC
+ * Do NOT mix them */
 typedef enum 
 {
   PNL_RNG_NULL                 = -1,
@@ -36,7 +35,7 @@ typedef enum
   PNL_RNG_TAUSWORTHE           = 5,
   PNL_RNG_MERSENNE             = 6,
   PNL_RNG_MERSENNE_RANDOM_SEED = 7,
-  /* beginning of QMC sequences */
+  /* beginning of PNL_QMC sequences */
   PNL_RNG_SQRT                 = 8,
   PNL_RNG_HALTON               = 9,
   PNL_RNG_FAURE                = 10,
@@ -59,7 +58,7 @@ struct _PnlRng
   PnlRngType type; /*!< generator type */
   void (*Compute)(PnlRng *g, double *sample); /*!< the function to compute the
                                                 next number in the sequence */
-  int rand_or_quasi; /*!< can be MC or QMC */
+  int rand_or_quasi; /*!< can be PNL_MC or PNL_QMC */
   int dimension; /*!< dimension of the space in which we draw the samples */
   int counter; /*!< counter = number of samples already drawn */
   int has_gauss; /*!< Is a gaussian deviate available? */
@@ -243,10 +242,10 @@ typedef struct
 /*
  * MT
  */
-#define MT_N 624
+#define PNL_MT_N 624
 typedef struct
 {
-  unsigned long mt[MT_N];
+  unsigned long mt[PNL_MT_N];
   int mti;
 } mt_state;
 
@@ -259,7 +258,7 @@ extern double pnl_mt_genrand_double (mt_state *state);
 /*
  * DCMT
  */
-#define DCMT_N 17 /* N = p / w + 1; p = 521; w = 32; */
+#define PNL_DCMT_N 17 /* N = p / w + 1; p = 521; w = 32; */
 
 typedef struct
 {
@@ -269,7 +268,7 @@ typedef struct
   int shift0, shift1, shiftB, shiftC;
   ulong maskB, maskC;
   int i;
-  ulong state[DCMT_N];
+  ulong state[PNL_DCMT_N];
 } dcmt_state;
 
 extern dcmt_state* pnl_dcmt_get_parameter(ulong seed);

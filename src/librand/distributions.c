@@ -29,7 +29,7 @@ static double ArrayOfRandomNumbers[DIM_MAX];
 #define CheckQMCDim(rng, dim)                                       \
   if ( rng->dimension != dim )                                      \
     {                                                               \
-      perror ("dimension cannot be changed for QMC\n"); abort ();   \
+      perror ("dimension cannot be changed for PNL_QMC\n"); abort ();   \
     }
 
 
@@ -124,7 +124,7 @@ static double GaussQMC(int dimension, int create_or_retrieve, int index,PnlRng *
  */
 double pnl_rng_gauss(int d, int create_or_retrieve, int index, PnlRng *rng)
 {
-  if (rng->rand_or_quasi == QMC)
+  if (rng->rand_or_quasi == PNL_QMC)
     return GaussQMC(d, create_or_retrieve, index, rng);
   else
     return GaussMC(d, create_or_retrieve, index, rng);
@@ -261,8 +261,8 @@ void pnl_vect_rand_uni(PnlVect *G, int samples, double a, double b, int type_gen
 /**
  * Computes a random vector uniformly distributed on [a,b]^dimension
  *
- * if the generator is a true MC generator, no difference between this
- * function and pnl_vect_rand_uni. In case of a QMC generator, this
+ * if the generator is a true PNL_MC generator, no difference between this
+ * function and pnl_vect_rand_uni. In case of a PNL_QMC generator, this
  * function generator one sample with values in [a,b]^dimension and NOT
  * dimension samples with values in [a, b].
  *
@@ -302,8 +302,8 @@ void pnl_vect_rand_normal (PnlVect *G, int samples, int type_generator)
 /**
  * Computes a random vector normally distributed on R^dimension.
  *
- * if the generator is a true MC generator, no difference between this
- * function and pnl_vect_rand_uni. In case of a QMC generator, this
+ * if the generator is a true PNL_MC generator, no difference between this
+ * function and pnl_vect_rand_uni. In case of a PNL_QMC generator, this
  * function generator one sample with values in R^dimension and NOT
  * dimension samples with values in R.
  *
@@ -333,7 +333,7 @@ void pnl_vect_rand_normal_d (PnlVect *G, int dimension, int type_generator)
  * @param type_generator : index of the generator
  *
  * WARNING : The rows of M are indenpendent. This is very
- * important if QMC is used
+ * important if PNL_QMC is used
  */
 void pnl_mat_rand_uni(PnlMat *M, int samples, int dimension,
                       const PnlVect *a, const PnlVect *b, int type_generator)
@@ -357,7 +357,7 @@ void pnl_mat_rand_uni(PnlMat *M, int samples, int dimension,
  * @param type_generator : index of the generator
  *
  * WARNING : The rows of M are indenpendent. This is very
- * important if QMC is used
+ * important if PNL_QMC is used
  */
 void pnl_mat_rand_uni2(PnlMat *M, int samples, int dimension,
                        double a, double b, int type_generator)
@@ -377,7 +377,7 @@ void pnl_mat_rand_uni2(PnlMat *M, int samples, int dimension,
  * @param dimension : dimension of the simulation (= number of columns of M)
  * @param type_generator : index of the generator
  *
- * WARNING : The rows of M are indenpendent. This is very important if QMC is
+ * WARNING : The rows of M are indenpendent. This is very important if PNL_QMC is
  * used (independent dimensions). Each row represents a sample from the one
  * dimensionnal normal distribution
  */
@@ -555,7 +555,7 @@ double pnl_rng_uni_ab (double a, double b, PnlRng *rng)
  */
 double pnl_rng_normal (PnlRng *rng)
 {
-  if (rng->rand_or_quasi == QMC)
+  if (rng->rand_or_quasi == PNL_QMC)
     {
       double u;
       CheckQMCDim(rng, 1);
@@ -591,8 +591,8 @@ void pnl_vect_rng_uni(PnlVect *G, int samples, double a, double b, PnlRng *rng)
 /**
  * Computes a random vector uniformly distributed on [a,b]^dimension
  *
- * if the generator is a true MC generator, no difference between this
- * function and pnl_vect_rng_uni. In case of a QMC generator, this
+ * if the generator is a true PNL_MC generator, no difference between this
+ * function and pnl_vect_rng_uni. In case of a PNL_QMC generator, this
  * function generator one sample with values in [a,b]^dimension and NOT
  * dimension samples with values in [a, b].
  *
@@ -609,7 +609,7 @@ void pnl_vect_rng_uni_d (PnlVect *G, int dimension, double a, double b, PnlRng *
   int i;
   double u;
   pnl_vect_resize(G,dimension);
-  if (rng->rand_or_quasi == QMC)
+  if (rng->rand_or_quasi == PNL_QMC)
     {
       CheckQMCDim(rng, dimension);
       rng->Compute(rng, G->array);
@@ -641,7 +641,7 @@ void pnl_vect_rng_normal (PnlVect *G, int samples, PnlRng *rng)
   int i;
   double u;
   pnl_vect_resize(G,samples);
-  if (rng->rand_or_quasi == QMC)
+  if (rng->rand_or_quasi == PNL_QMC)
     {
       CheckQMCDim(rng, 1);
       for (i=0; i<samples; i++)
@@ -661,8 +661,8 @@ void pnl_vect_rng_normal (PnlVect *G, int samples, PnlRng *rng)
 /**
  * Computes a random vector normally distributed on R^dimension.
  *
- * if the generator is a true MC generator, no difference between this
- * function and pnl_vect_rng_uni. In case of a QMC generator, this
+ * if the generator is a true PNL_MC generator, no difference between this
+ * function and pnl_vect_rng_uni. In case of a PNL_QMC generator, this
  * function generator one sample with values in R^dimension and NOT
  * dimension samples with values in R.
  *
@@ -676,7 +676,7 @@ void pnl_vect_rng_normal_d (PnlVect *G, int dimension, PnlRng *rng)
 {
   int i;
   pnl_vect_resize(G,dimension);
-  if (rng->rand_or_quasi == QMC)
+  if (rng->rand_or_quasi == PNL_QMC)
     {
       CheckQMCDim(rng, dimension);
       rng->Compute(rng,G->array);
@@ -706,7 +706,7 @@ void pnl_vect_rng_normal_d (PnlVect *G, int dimension, PnlRng *rng)
  * @param rng generator to use
  *
  * WARNING : The rows of M are indenpendent. This is very
- * important if QMC is used
+ * important if PNL_QMC is used
  */
 void pnl_mat_rng_uni(PnlMat *M, int samples, int dimension,
                      const PnlVect *a, const PnlVect *b, PnlRng *rng)
@@ -715,7 +715,7 @@ void pnl_mat_rng_uni(PnlMat *M, int samples, int dimension,
   double u;
   pnl_mat_resize(M,samples,dimension);
 
-  if (rng->rand_or_quasi == MC)
+  if (rng->rand_or_quasi == PNL_MC)
     {
       for(i=0;i<samples;i++)
         {
@@ -752,7 +752,7 @@ void pnl_mat_rng_uni(PnlMat *M, int samples, int dimension,
  * @param rng generator to use
  *
  * WARNING : The rows of M are indenpendent. This is very
- * important if QMC is used
+ * important if PNL_QMC is used
  */
 void pnl_mat_rng_uni2(PnlMat *M, int samples, int dimension,
                       double a, double b, PnlRng *rng)
@@ -761,7 +761,7 @@ void pnl_mat_rng_uni2(PnlMat *M, int samples, int dimension,
   double u;
   pnl_mat_resize(M,samples,dimension);
 
-  if (rng->rand_or_quasi == MC)
+  if (rng->rand_or_quasi == PNL_MC)
     {
       for(i=0;i<samples;i++)
         {
@@ -793,7 +793,7 @@ void pnl_mat_rng_uni2(PnlMat *M, int samples, int dimension,
  * @param dimension : dimension of the simulation (= number of columns of M)
  * @param rng generator to use
  *
- * WARNING : The rows of M are indenpendent. This is very important if QMC is
+ * WARNING : The rows of M are indenpendent. This is very important if PNL_QMC is
  * used (independent dimensions). Each row represents a sample from the one
  * dimensionnal normal distribution
  */
@@ -801,7 +801,7 @@ void pnl_mat_rng_normal(PnlMat *M, int samples, int dimension, PnlRng *rng)
 {
   int i, j;
   pnl_mat_resize(M,samples,dimension);
-  if (rng->rand_or_quasi == MC)
+  if (rng->rand_or_quasi == PNL_MC)
     {
       for (i=0; i<M->mn; i++)
         {
