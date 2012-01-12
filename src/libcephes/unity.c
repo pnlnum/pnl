@@ -74,7 +74,7 @@ double expm1(double x)
 {
   double r, xx;
 
-  if( isnan(x) ) return(x);
+  if( pnl_isnan(x) ) return(x);
   if( x == PNL_POSINF )
     return(PNL_POSINF);
   if( x == -PNL_NEGINF )

@@ -156,18 +156,18 @@ int pnl_integration_qag (PnlFunc *f, double a, double b, double epsabs,
    * From now, a < b
    */
 
-  if ( isfinite(b) && isfinite(a) )
+  if ( pnl_isfinite(b) && pnl_isfinite(a) )
     {
       infbounds = 0;
     }
   else 
     {
-      if ( isfinite(a) ) /* b is +Inf */
+      if ( pnl_isfinite(a) ) /* b is +Inf */
         {
           infbounds = 1; 
           bound = a;
         }
-      else if ( isfinite(b) ) /* a is -Inf */
+      else if ( pnl_isfinite(b) ) /* a is -Inf */
         {
           infbounds = -1;
           bound = b;

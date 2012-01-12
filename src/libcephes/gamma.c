@@ -310,8 +310,8 @@ int pnl_sf_gamma_sgn(double x, double *res, int *sgn)
   int i;
 
   *sgn= 1;
-  if( isnan(x) )  return(x);
-  if( !isfinite(x) ) return(x);
+  if( pnl_isnan(x) )  return(x);
+  if( !pnl_isfinite(x) ) return(x);
   q = fabs(x);
 
   if( q > 33.0 )
@@ -540,13 +540,13 @@ int pnl_sf_log_gamma_sgn(double x, double *res, int *sgn)
   int i;
 
   *sgn = 1;
-  if( isnan(x) ) 
+  if( pnl_isnan(x) ) 
     {
       *res = x;
       return FAIL;
     }
 
-  if( !isfinite(x) ) 
+  if( !pnl_isfinite(x) ) 
     {
       *res = INFINITY;
       return FAIL;

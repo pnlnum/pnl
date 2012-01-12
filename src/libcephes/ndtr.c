@@ -386,7 +386,7 @@ double ndtr(double a)
 {
   double x, y, z;
 
-  if (isnan(a)) {
+  if (pnl_isnan(a)) {
     mtherr("ndtr", DOMAIN);
     return (NAN);
   }
@@ -413,7 +413,7 @@ double erfc(double a)
 {
   double p,q,x,y,z;
 
-  if (isnan(a)) {
+  if (pnl_isnan(a)) {
     mtherr("erfc", DOMAIN);
     return (a);
   }
@@ -467,7 +467,7 @@ double erf(double x)
 {
   double y, z;
 
-  if (isnan(x)) {
+  if (pnl_isnan(x)) {
     mtherr("erf", DOMAIN);
     return (x);
   }

@@ -92,6 +92,7 @@ extern inline PnlRng* pnl_rng_get_from_id (PnlRngType t)
 }
 #endif
 extern PnlRng* pnl_rng_get_from_id (PnlRngType t);
+extern char* pnl_rng_get_name (PnlRngType t);
 
 
 /*

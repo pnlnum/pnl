@@ -139,12 +139,12 @@ static void test_rng ()
   int i;
   PnlRng *rng;
   i = 0;
-  while (PnlRngArray[i].rng != NULL)
+  while (PnlRngArray[i] != NULL)
     {
-      rng = PnlRngArray[i].rng;
-      test_pnl_vect_rng(rng, PnlRngArray[i].label);
-      test_pnl_mat_rng(rng, PnlRngArray[i].label);
-      test_pnl_rng_gauss(rng, PnlRngArray[i].label);
+      rng = PnlRngArray[i];
+      test_pnl_vect_rng(rng, pnl_rng_get_name(PnlRngArray[i]->type));
+      test_pnl_mat_rng(rng, pnl_rng_get_name(PnlRngArray[i]->type));
+      test_pnl_rng_gauss(rng, pnl_rng_get_name(PnlRngArray[i]->type));
       i++;
     }
 }

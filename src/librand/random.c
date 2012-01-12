@@ -903,6 +903,37 @@ PnlRng* pnl_rng_get_from_id (PnlRngType id)
 }
 
 /**
+ * Retuns the label of a generator 
+ * 
+ * @param id the index of a generator
+ * 
+ * @return a string
+ */
+char* pnl_rng_get_name (PnlRngType id)
+{
+  switch (id)
+    {
+    case PNL_RNG_KNUTH: return "Knuth"; break;
+    case PNL_RNG_MRGK3: return "MRGK3"; break;
+    case PNL_RNG_MRGK5: return "MRGK3"; break;
+    case PNL_RNG_SHUFL: return "SHUFL"; break;
+    case PNL_RNG_LECUYER: return "LECUYER"; break;
+    case PNL_RNG_TAUSWORTHE: return "TAUSWORTHE"; break;
+    case PNL_RNG_MERSENNE: return "MERSENNE"; break;
+    case PNL_RNG_MERSENNE_RANDOM_SEED: return "MERSENNE"; break;
+    case PNL_RNG_SQRT: return "SQTR"; break;
+    case PNL_RNG_HALTON: return "HALTON"; break;
+    case PNL_RNG_FAURE: return "FAURE"; break;
+    case PNL_RNG_SOBOL_I4: return "SOBOL_I4"; break;
+    case PNL_RNG_SOBOL_I8: return "SOBOL_I8"; break;
+    case PNL_RNG_NIEDERREITER: return "NIEDERREITER"; break;
+    case PNL_RNG_DCMT: return "DCMT"; break;
+    default: return "Undefined generator";       
+    }
+}
+
+
+/**
  * Initialises a generator
  * @param type_generator index of the generator to be used
  * @param dimension dimension of the value space to simulate in. Only

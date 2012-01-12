@@ -1143,7 +1143,7 @@ void FUNCTION(pnl_array, min_index)(const BASE *a, int n, int incr,
         {
           min = x; imin = i;
         }
-      if (isnan(x))
+      if (pnl_isnan(x))
         {
           *imin_out = i; *min_out = x;
           return;
@@ -1176,7 +1176,7 @@ void FUNCTION(pnl_array, max_index)(const BASE *a, int n, int incr,
         {
           max = x; imax = i;
         }
-      if (isnan(x))
+      if (pnl_isnan(x))
         {
           *imax_out = i; *max_out = x;
           return;
@@ -1219,7 +1219,7 @@ void FUNCTION(pnl_array, minmax_index)(const BASE *a, int n, int incr,
         {
           max = x; imax = i;
         }
-      if (isnan(x))
+      if (pnl_isnan(x))
         {
           *imin_out = *imax_out = i;
           *min_out = *max_out = x;

@@ -76,7 +76,7 @@ int ellpj( u, m, sn, cn, dn, ph )
 
   /* Check for special cases */
 
-  if( m < 0.0 || m > 1.0  || isnan(m))
+  if( m < 0.0 || m > 1.0  || pnl_isnan(m))
     {
       mtherr( "ellpj", DOMAIN );
       *sn = NAN;

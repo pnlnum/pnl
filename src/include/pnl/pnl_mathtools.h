@@ -187,17 +187,6 @@ extern int pnl_isinf (double x);
 #define PNL_POSINF INFINITY
 #define PNL_NEGINF (-INFINITY)
 
-#ifndef isinf
-#define isinf pnl_isinf
-#endif
-#ifndef isnan
-#define isnan pnl_isnan
-#endif
-#ifndef isfinite 
-#define isfinite pnl_isfinite
-#endif
-
-
 #define PNL_IS_ODD(n) ((n) & 1) /* last bit is 1 */
 #define PNL_IS_EVEN(n) ((n) ^ 1) /* last bit is 0 */
 

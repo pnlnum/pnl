@@ -57,11 +57,11 @@ double cbrt(double x)
   double z;
 
 #ifdef NANS
-  if( isnan(x) )
+  if( pnl_isnan(x) )
     return x;
 #endif
 #ifdef INFINITIES
-  if( !isfinite(x) )
+  if( !pnl_isfinite(x) )
     return x;
 #endif
   if( x == 0 )
