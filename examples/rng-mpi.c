@@ -133,7 +133,7 @@ static int send_rng (PnlType t)
   int i;
 
   rng = pnl_rng_create (t);
-  if (rng->rand_or_quasi == QMC)
+  if (rng->rand_or_quasi == PNL_QMC)
     pnl_rng_sdim(rng, 1);
   else
     pnl_rng_sseed (rng, 1273);
