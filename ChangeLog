@@ -1,3 +1,14 @@
+27-02-2012 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* mathtools.c: Add inverse of hyperbolic functions (part of C99)
+		pnl_{acosh,asinh,atanh}
+
+12-01-2012 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* vector_double.c: Add a setter for the PnlVectCompact type
+	* all: Rename some macros to avoid name clashes (MC, QMC, isinf, isnan,
+			isfinite). They are prefixed by pnl_
+	
 17-11-2011 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* perm.c: Compute the inverse of a permutation. Apply the inverse of a

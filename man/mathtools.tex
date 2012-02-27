@@ -80,11 +80,6 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
 \item \describefun{double}{pnl_pow_i}{double x, int n}
   \sshortdescribe Computes $x^n$ for $n \in \N$ using a squaring method.
 
-\item \describefun{double}{lgamma}{double x}
-  \sshortdescribe Computes $\log(\Gamma(x))$. This function is part of C99.
-
-\item \describefun{double}{tgamma}{double x}
-  \sshortdescribe Computes $\Gamma(x)$. This function is part of C99.
 
 \item \describefun{void}{pnl_qsort}{void *a, int n, int es, int lda, int *t,
   int ldt, int use_index, int (*cmp)(void const *, void const *)}
@@ -115,5 +110,18 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
   \var{0} otherwise.
 \end{itemize}
 
+We provide a few functions which are part of C99 as \verb!pnl_funcname!.
+\begin{itemize}
+\item \describefun{double}{lgamma}{double x}
+  \sshortdescribe Computes $\log(\Gamma(x))$.
+\item \describefun{double}{tgamma}{double x}
+  \sshortdescribe Computes $\Gamma(x)$.
+\item \describefun{double}{pnl_acosh}{double x}
+  \sshortdescribe Computes \var{acosh(x)}.
+\item \describefun{double}{pnl_asinh}{double x}
+\sshortdescribe Computes \var{asinh(x)}.
+\item \describefun{double}{pnl_atanh}{double x}
+\sshortdescribe Computes \var{atanh(x)}.
+\end{itemize}<++>
 
 % vim:spelllang=en:spell:

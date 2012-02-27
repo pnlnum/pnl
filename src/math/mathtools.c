@@ -155,3 +155,86 @@ double pnl_pow_i (double x, int n)
 } 
 
 
+/** 
+ * Computes the inverse of the cosh function based on its logarithmic
+ * representation. This function is alredy provided by the C99 libc as
+ * acosh
+ * 
+ * @param x a real number in the range [1, +infinity]
+ * 
+ * @return acosh(x)
+ */
+double pnl_acosh (double x)
+{
+  if ( x == 1. ) return 0.;
+  else if ( x > 1. / SQRT_DBL_EPSILON )
+    {
+      return log(x) + M_LN2;
+    }
+  else if ( x > 1 )
+    {
+      double y = sqrt(x - 1.); 
+      return log1p (y * (y + sqrt (x + 1.)));
+    }
+  else
+    {
+      return PNL_NAN;
+    }
+}
+
+/** 
+ * Computes the inverse of the asinh function based on its logarithmic
+ * representation. This function is alredy provided by the C99 libc as
+ * asinh
+ * 
+ * @param x a real number in the range [-infinity, +infinity]
+ * 
+ * @return asinh(x)
+ */
+double pnl_asinh (double x)
+{
+  double y = fabs (x);
+  double sgn = PNL_SIGN (x);
+  if ( y > 1. / SQRT_DBL_EPSILON )
+    {
+      return sgn * (log(y) + M_LN2);
+    }
+  else if ( y > SQRT_DBL_EPSILON )
+    {
+      double y_1 = 1. / y;
+      return sgn * log1p (y + y / (y_1 + sqrt (1. + y_1 * y_1)));
+    }
+  else
+    {
+      return x;
+    }
+}
+
+/** 
+ * Computes the inverse of the tanh function based on its logarithmic
+ * representation. This function is alredy provided by the C99 libc as
+ * tanh
+ * 
+ * @param x a real number in the range [-1, +1]
+ * 
+ * @return atanh(x)
+ */
+double pnl_atanh (double x)
+{
+  double y = fabs (x);
+  double sgn = PNL_SIGN (x);
+  if ( y > 1. ) return PNL_NAN;
+  else if ( y == 1. )
+    {
+      return sgn * PNL_POSINF;
+    }
+  else if ( y >= DBL_EPSILON )
+    {
+      return sgn * 0.5 * log1p (2 * y / (1 - y));
+    }
+  else
+    {
+      return x;
+    }
+}
+

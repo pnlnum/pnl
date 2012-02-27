@@ -27,7 +27,9 @@ extern double pnl_neginf (void);
 extern int pnl_isnan (double x);
 extern int pnl_isfinite (double x);
 extern int pnl_isinf (double x);
-
+extern double pnl_acosh (double x);
+extern double pnl_asinh (double x);
+extern double pnl_atanh (double x);
 
 #define false 0
 #undef FALSE
@@ -122,15 +124,27 @@ extern int pnl_isinf (double x);
 #ifndef DBL_MAX
 #define DBL_MAX		   1.79769313486231470e+308
 #endif
+#ifndef SQRT_DBL_MAX
+#define SQRT_DBL_MAX   1.3407807929942596e+154
+#endif
 #define DOUBLE_MAX DBL_MAX
 
 #ifndef DBL_MIN
 #define DBL_MIN        2.2250738585072014e-308
 #endif
+#ifndef SQRT_DBL_MIN
+#define SQRT_DBL_MIN  1.4916681462400413e-154 
+#endif
+
 
 #ifndef DBL_EPSILON
 #define DBL_EPSILON        2.2204460492503131e-16
 #endif
+
+#ifndef SQRT_DBL_EPSILON
+#define SQRT_DBL_EPSILON  1.4901161193847656e-08
+#endif
+
 
 /* #define BIG_DOUBLE 1.0e6 */
 /* #define PRECISION 1.0e-7 |+Precision for the localization of FD methods+| */
@@ -183,6 +197,7 @@ extern int pnl_isinf (double x);
 #define INFINITY (pnl_posinf ())
 #endif
 
+#define PNL_NAN (pnl_nan ())
 #define PNL_INF INFINITY
 #define PNL_POSINF INFINITY
 #define PNL_NEGINF (-INFINITY)
