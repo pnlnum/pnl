@@ -172,22 +172,22 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
   \reffun{pnl_basis_create}. Beware that \var{basis} is the address of a
   \refstruct{PnlBasis}\ptr.
 
-\item  \describefun{void}{pnl_basis_i}{\refstruct{PnlBasis }\ptr b,
+\item  \describefun{double}{pnl_basis_i}{\refstruct{PnlBasis }\ptr b,
     double \ptr x, int i}
-  \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}}$,
+  \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}-1}$,
   then this function returns $f_i(x)$. \var{x} must be a C array of length
   \var{nb_variates}.
 
 \item \describefun{double}{pnl_basis_i_D}{ const \refstruct{PnlBasis} \ptr b,
     const double \ptr x, int i, int j }
-  \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}}$,
+  \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}-1}$,
   then this function returns $\partial_{x_{\var{j}}} f_i(x)$. \var{x} must be a C array
   of length \var{nb_variates}.
 
   
 \item \describefun{double}{pnl_basis_i_D2}{const \refstruct{PnlBasis} \ptr b,
     const double \ptr x, int i, int j1, int j2}
-  \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}}$,
+  \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}-1}$,
   then this function returns $\partial^2_{x_{\var{j1}}, x_{\var{j2}}}
   f_i(x)$. \var{x} must be a C array of length \var{nb_variates}.
 
