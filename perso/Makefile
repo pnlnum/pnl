@@ -5,10 +5,11 @@ LDFLAGS=
 CFLAGS=
 
 ## list of executables to create
-BINS=pipo tensor
-
-pipo_OBJS=main.o
-tensor_OBJS=tensor.o
+BINS=pipo
+pipo_SRC=main.cxx hello.c
+pipo_LDFLAGS=
+pipo_CFLAGS=-ansi -O2 -pedantic
+pipo_CXXFLAGS=-O2 -pedantic
 
 ## This line must be the last one
 include ../Makeuser.incl
