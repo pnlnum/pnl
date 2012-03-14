@@ -48,7 +48,8 @@ CXXCOMPILE = $(CXX) $(INCLUDES) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile --tag=CC $(QUIET) $(CC) $(INCLUDES)  $(AM_CFLAGS) $(CFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile --tag=CXX $(QUIET) $(CXX) $(INCLUDES)  $(AM_CFLAGS) $(CXXFLAGS)
 
-LINK = $(LIBTOOL) --mode=link --tag=CC $(QUIET) $(CC) $(CFLAGS) $(LDFLAGS) $(OTHERLIBS)
+CLINK = $(LIBTOOL) --mode=link --tag=CC $(QUIET) $(CC) $(CFLAGS) $(LDFLAGS) $(OTHERLIBS)
+CXXLINK = $(LIBTOOL) --mode=link --tag=CXX $(QUIET) $(CXX) $(LDFLAGS) $(OTHERLIBS)
 
 #*******************************************************************
 
@@ -63,46 +64,70 @@ local_LDFLAGS=$$($$(local_bin)_LDFLAGS)
 local_CFLAGS=$$($$(local_bin)_CFLAGS)
 local_CXXFLAGS=$$($$(local_bin)_CXXFLAGS)
 ifneq ($(strip $$(LSRC)),)
-LOBJS_1=$${LSRC:%.cc=%.o}
-LOBJS_2=$${LOBJS_1:%.C=%.o}
-LOBJS_3=$${LOBJS_2:%.c=%.o}
-LOBJS_4=$${LOBJS_3:%.cpp=%.o}
-LOBJS_5=$${LOBJS_4:%.cxx=%.o}
-LOBJS=$$(LOBJS_5)
+  LOBJS_1=$${LSRC:%.cc=%.o}
+  LOBJS_2=$${LOBJS_1:%.C=%.o}
+  LOBJS_3=$${LOBJS_2:%.c=%.o}
+  LOBJS_4=$${LOBJS_3:%.cpp=%.o}
+  LOBJS_5=$${LOBJS_4:%.cxx=%.o}
+  LOBJS=$$(LOBJS_5)
+  $$(foreach src,$$(LSRC),$$(eval $$(call create_rule_lo,$$(src),$$(local_CFLAGS),$$(local_CXXFLAGS) )))
+  LOBJS_LT=$${LOBJS:%.o=%.lo}
+  # Decide between a C or C++ linker
+  ifeq ($(strip $$(filter-out %.c,$$(LSRC))),)
+    $$(eval $$(call create_rule_bin_c,$(1),$$(LOBJS_LT),$$(local_LDFLAGS)))
+  else
+    $$(eval $$(call create_rule_bin_cpp,$(1),$$(LOBJS_LT),$$(local_LDFLAGS)))
+  endif
+else
+  LOBJS_LT=$${LOBJS:%.o=%.lo}
+  $$(eval $$(call create_rule_bin_c,$(1),$$(LOBJS_LT),$$(local_LDFLAGS)))
 endif
-$$(foreach src,$$(LSRC),$$(eval $$(call create_rule_lo,$$(src),$$(local_CFLAGS),$$(local_CXXFLAGS) )))
-LOBJS_LT=$${LOBJS:%.o=%.lo}
-$$(eval $$(call create_rule_bin,$(1),$$(LOBJS_LT),$$(local_LDFLAGS)))
 endef
 
 
-# Write the rule to create a given binary
-define create_rule_bin 
+# Write the rule to create a given binary using only C objects
+define create_rule_bin_c
 		# 1: target name 
 		# 2: libtool objects 
 		# 3: per target ldflags
 $(1): $(2)
-	$(LINK) $(3) -o $$@ $$^ 
+	$(CLINK) $(3) -o $$@ $$^ 
 endef
 
-## Write the rules to create objects
+# Write the rule to create a given binary using C/C++ objects
+define create_rule_bin_cpp
+		# 1: target name 
+		# 2: libtool objects 
+		# 3: per target ldflags
+$(1): $(2)
+	$(CXXLINK) $(3) -o $$@ $$^ 
+endef
+
+
+# Write the rules to create objects
+# Each time a new rule is defined to create an object of basename base
+# the variable base_rule is defined to ensure that we won't try to redefine
+# the same rule later in case an object appears in several binaries.
 define create_rule_lo 
 		# 1: name of the src file used to generate the .o
 		# 2 : per target CFLAGS
 		# 3 : per target CXXFLAGS
 base=$(basename $(1))
-base_o=$$(base).o
-base_lo=$$(base).lo
-ifeq ($(suffix $(1)),.c)
-$$(base_lo): $(1)
-	$(LTCOMPILE) $(2)  -o $$@ -c $$<
-$$(base_o): $(deps)
-	$(COMPILE)  $(2) -o $$@ -c $$<
-else
-$$(base_lo): $(1)
-	$(LTCXXCOMPILE) $(3) -o $$@  -c $$<
-$$(base_o): $(1)
-	$(CXXCOMPILE) $(3) -o $$@  -c $$<
+ifndef $$(base)_rule
+  $$(base)_rule=1
+  base_o=$$(base).o
+  base_lo=$$(base).lo
+  ifeq ($(suffix $(1)),.c)
+    $$(base_lo): $(1)
+		$(LTCOMPILE) $(2)  -o $$@ -c $$<
+    $$(base_o): $(deps)
+		$(COMPILE)  $(2) -o $$@ -c $$<
+  else
+    $$(base_lo): $(1)
+		$(LTCXXCOMPILE) $(3) -o $$@  -c $$<
+    $$(base_o): $(1)
+		$(CXXCOMPILE) $(3) -o $$@  -c $$<
+  endif
 endif
 endef
 
