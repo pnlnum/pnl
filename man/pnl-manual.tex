@@ -11,7 +11,7 @@
 \usepackage[strings]{underscore}
 \usepackage{amsmath,amsfonts}
 
-
+\synctex=1
 
 %% --------------------------------------------
 \hbadness=10000
@@ -124,7 +124,7 @@
 \subsection{What is Pnl}
 
 Pnl is a scientific library written in C and distributed under
-the Gnu Lesser General Public License (LGPL). This manual is divided into four
+the Gnu Lesser General Public Licence (LGPL). This manual is divided into four
 parts.
 \begin{itemize}
 \item Mathematical functions: complex numbers, special functions, standard
@@ -320,7 +320,9 @@ If \verb!gcc! is used, you should pass the following options
 \item \verb!-I$HOME/pnl-xxx/include! for compiling
 \item \verb!-L$HOME/pnl-xxx/lib -lpnl! for linking
 \end{itemize}
-
+This does not work straight away on all OS especially if the library is not
+installed in a standard directory namely \verb+/usr/+ or \verb+/usr/local/+ for
+which you need a privileged writing access.
 On some systems, you may need to add to the linker flags the dependencies of the
 library, which can become very tedious. Therefore, we provide a second automatic
 mechanism which takes care of the dependencies on its own.
@@ -328,55 +330,77 @@ mechanism which takes care of the dependencies on its own.
 \paragraph{Compiling and linking using an automatic Makefile}
 
 This mechanism only works under Unix (it has been tested under various Linux
-  distributions and Mac OS X).
+distributions and Mac OS X).
 
-Fisrt, you need to create a new directory at the top level of the library
-\begin{verbatim}
-$ mkdir -p $HOME/pnl-xxx/mydir 
-\end{verbatim}
-
-Then copy the Makefile located in perso/ to your new directory and
-edit it according to your needs. 
-\begin{verbatim}
-$ cp $HOME/pnl-xxx/perso/Makefile $HOME/pnl-xxx/mydir 
-\end{verbatim}
+First, you need to create a new directory wherever you want, put in all your
+code and create a Makefile as below
 
 To define your target just add the executable name, say \verb!my-exec!, to the
-\verb!BINS!  list and create an entry \verb!my_exec_OBJS! carrying the list .o files
-needed to create your executable.  Note that if dashes '-' may appear in an
-executable name, the name of the associated variable holding the list of object
-files is obtained by replacing dashes with underscores '_' and addind the _OBJS
-suffix.
+\verb!BINS!  list and create an entry \verb!my_exec_SRC! carrying the list
+of source files needed to create your executable.  Note that if dashes '-' may
+appear in an executable name, the name of the associated variable holding the
+list of source files is obtained by replacing dashes with underscores '_' and
+adding the _SRC suffix.
 
-
-To create an executable \verb!my-exec! based on the three following C files
-\verb!file1.c! and \verb!file2.c!, the Makefile may look like
+Assume you want to create two binaries : \verb+my-exec+ based on mixed C and C++
+code (\verb+file1.c+ and \verb+file2.cpp+) and \verb+mybinary+ based on
+\verb+poo1.cxx+ and \verb+poo2.cpp+. You can use the following Makefile.
 \begin{verbatim}
-## list of extra linker flags
+## Flags passed to the linker
 LDFLAGS=
 
-## Flags to be passed to the compiler
+## Flags passed to the compiler
 CFLAGS=
 
 ## list of executables to create
-BINS=my-exec
+BINS=my-exec mybinary
 
-my_exec_OBJS=file1.o file2.o 
+my_exec_SRC=file1.c file2.cpp
+# optional flags for compiling and linking
+my_exec_CFLAGS=
+my_exec_CXXFLAGS=
+my_exec_LDFLAGS=
+
+mybinary_SRC=poo1.cxx poo2.cpp
+# optional flags for compiling and linking
+mybinary_CFLAGS=
+mybinary_CXXFLAGS=
+mybinary_LDFLAGS=
+
 
 ## This line must be the last one
-include ../Makeuser.incl
+include full_path_to_pnl/Makeuser.incl
 \end{verbatim}
+Let us comment a little the different variables
+\begin{itemize}
+  \item \verb+CFLAGS+: global flags used for creating objects based on C code
+  \item \verb+CXXFLAGS+: global flags used for creating objects based on C++ code
+  \item \verb+LDFLAGS+: gobal linker flags.
+  \item \verb+binaryname_CFLAGS+: flags used when creating the objects based on
+    C code and required by \verb+binaryname+
+  \item \verb+binaryname_CXXFLAGS+: flags used when creating the objects based on
+    C++ code and required by \verb+binaryname+
+  \item \verb+binaryname_LDFLAGS+: flags used when linking objects for creating
+    \verb+binaryname+
+\end{itemize}
+An example of such a Makefile can be found in \verb+pnl-xxx/perso+.
 
-The compilations flags ca be adjusted with the help of the \verb!CFLAGS!
-variable for C code (resp. \verb!CXXFLAGS! variables for C++ code) whereas the
-linking flags are set using the \verb!LDFLAGS! variable.  \\
-
-\textbf{Important Note to C++ users}: the linking procedure is carried out by a
-C linker so if you are using C++ code you should consider adding 
+\textbf{Warning:} if a file appears in the source list of several binairies, the
+flags used to compile this file are determined by the ones of the first binary
+involving this file. In the following example \verb+main.cpp+ will always be compiled
+with the flag \verb+-O3+ even for generating \verb+bin2+
 \begin{verbatim}
-LDFLAGS=-lstdc++
+BINS=bin1 bin2
+
+bin1_SRC=main.cpp poo1.c
+my_exec_CXXFLAGS=-O3
+
+bin2_SRC=main.cpp poo2.c
+mybinary_CXXFLAGS=-g -O0
+
+## This line must be the last one
+include full_path_to_pnl/Makeuser.incl
 \end{verbatim}
-to the previous Makefile to add the C++ standard library to the linker.
 
 \input{types.tex}
 \input{mathematical_functions.tex}
