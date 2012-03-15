@@ -177,9 +177,9 @@ double hyp2f1( a, b, c, x )
     q = hyp2f1(b, 1-c+b, 1-a+b, 1.0/x);
     p *= pow(-x, -a);
     q *= pow(-x, -b);
-    t1 = Gamma(c);
-    s = t1*Gamma(b-a)/(Gamma(b)*Gamma(c-a));
-    y = t1*Gamma(a-b)/(Gamma(a)*Gamma(c-b));
+    t1 = pnl_sf_gamma(c);
+    s = t1*pnl_sf_gamma(b-a)/(pnl_sf_gamma(b)*pnl_sf_gamma(c-a));
+    y = t1*pnl_sf_gamma(a-b)/(pnl_sf_gamma(a)*pnl_sf_gamma(c-b));
     return s*p + y*q;
   }
 
@@ -211,7 +211,7 @@ double hyp2f1( a, b, c, x )
       }
       if( d <= 0.0 )
         goto hypdiv;
-      y = Gamma(c)*Gamma(d)/(Gamma(p)*Gamma(r));
+      y = pnl_sf_gamma(c)*pnl_sf_gamma(d)/(pnl_sf_gamma(p)*pnl_sf_gamma(r));
       goto hypdon;
     }
     if( d <= -1.0 )
@@ -316,9 +316,9 @@ static double hyt2f1( a, b, c, x, loss )
             goto done;
           /* If power series fails, then apply AMS55 #15.3.6 */
           q = hys2f1( a, b, 1.0-d, s, &err );     
-          q *= Gamma(d) /(Gamma(c-a) * Gamma(c-b));
+          q *= pnl_sf_gamma(d) /(pnl_sf_gamma(c-a) * pnl_sf_gamma(c-b));
           r = pow(s,d) * hys2f1( c-a, c-b, d+1.0, s, &err1 );
-          r *= Gamma(-d)/(Gamma(a) * Gamma(b));
+          r *= pnl_sf_gamma(-d)/(pnl_sf_gamma(a) * pnl_sf_gamma(b));
           y = q + r;
 
           q = fabs(q); /* estimate cancellation error */
@@ -327,7 +327,7 @@ static double hyt2f1( a, b, c, x, loss )
             r = q;
           err += err1 + (MACHEP*r)/y;
 
-          y *= Gamma(c);
+          y *= pnl_sf_gamma(c);
           goto done;
         }
       else
@@ -352,9 +352,9 @@ static double hyt2f1( a, b, c, x, loss )
 
           /* sum for t = 0 */
           y = psi(1.0) + psi(1.0+e) - psi(a+d1) - psi(b+d1) - ax;
-          y /= Gamma(e+1.0);
+          y /= pnl_sf_gamma(e+1.0);
 
-          p = (a+d1) * (b+d1) * s / Gamma(e+2.0); /* Poch for t=1 */
+          p = (a+d1) * (b+d1) * s / pnl_sf_gamma(e+2.0); /* Poch for t=1 */
           t = 1.0;
           do
             {
@@ -371,7 +371,7 @@ static double hyt2f1( a, b, c, x, loss )
 
           if( id == 0.0 )
             {
-              y *= Gamma(c)/(Gamma(a)*Gamma(b));
+              y *= pnl_sf_gamma(c)/(pnl_sf_gamma(a)*pnl_sf_gamma(b));
               goto psidon;
             }
 
@@ -391,10 +391,10 @@ static double hyt2f1( a, b, c, x, loss )
               y1 += p;
             }
         nosum:
-          p = Gamma(c);
-          y1 *= Gamma(e) * p / (Gamma(a+d1) * Gamma(b+d1));
+          p = pnl_sf_gamma(c);
+          y1 *= pnl_sf_gamma(e) * p / (pnl_sf_gamma(a+d1) * pnl_sf_gamma(b+d1));
 
-          y *= p / (Gamma(a+d2) * Gamma(b+d2));
+          y *= p / (pnl_sf_gamma(a+d2) * pnl_sf_gamma(b+d2));
           if( (aid & 1) != 0 )
             y = -y;
 

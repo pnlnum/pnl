@@ -112,19 +112,19 @@ double beta( double a, double b )
       return( sign * exp(y) );
     }
 
-  y = Gamma(y);
+  y = pnl_sf_gamma(y);
   if( y == 0.0 )
     goto over;
 
   if( a > b )
     {
-      y = Gamma(a)/y;
-      y *= Gamma(b);
+      y = pnl_sf_gamma(a)/y;
+      y *= pnl_sf_gamma(b);
     }
   else
     {
-      y = Gamma(b)/y;
-      y *= Gamma(a);
+      y = pnl_sf_gamma(b)/y;
+      y *= pnl_sf_gamma(a);
     }
 
   return(y);
@@ -171,7 +171,7 @@ int pnl_sf_lbeta (double a, double b, double *res, int *sgn)
       return OK;
     }
 
-  y = Gamma(y);
+  y = pnl_sf_gamma(y);
   if( y == 0.0 )
     {
     over:
@@ -181,13 +181,13 @@ int pnl_sf_lbeta (double a, double b, double *res, int *sgn)
 
   if( a > b )
     {
-      y = Gamma(a)/y;
-      y *= Gamma(b);
+      y = pnl_sf_gamma(a)/y;
+      y *= pnl_sf_gamma(b);
     }
   else
     {
-      y = Gamma(b)/y;
-      y *= Gamma(a);
+      y = pnl_sf_gamma(b)/y;
+      y *= pnl_sf_gamma(a);
     }
 
   if( y < 0 )

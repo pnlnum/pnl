@@ -511,7 +511,7 @@ double zetac(x)
         }
       s = 1.0 - x;
       w = zetac( s );
-      b = sin(0.5*PI*x) * pow(2.0*PI, x) * Gamma(s) * (1.0 + w) / PI;
+      b = sin(0.5*PI*x) * pow(2.0*PI, x) * pnl_sf_gamma(s) * (1.0 + w) / PI;
       return(b - 1.0);
     }
 

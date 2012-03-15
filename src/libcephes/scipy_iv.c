@@ -69,7 +69,7 @@
 
 #include <stdlib.h>
 #include "mconf.h"
-extern double gamma(double);
+extern double pnl_tgamma(double);
 extern double MACHEP, MAXNUM, PI, EULER;
 
 static double iv_asymptotic(double v, double x);
@@ -356,8 +356,8 @@ static int temme_ik_series(double v, double x, double *K, double *K1)
   BOOST_ASSERT(fabs(x) <= 2);
   BOOST_ASSERT(fabs(v) <= 0.5f);
 
-  gp = gamma(v + 1) - 1;
-  gm = gamma(-v + 1) - 1;
+  gp = pnl_tgamma(v + 1) - 1;
+  gm = pnl_tgamma(-v + 1) - 1;
 
   a = log(x / 2);
   b = exp(v * a);

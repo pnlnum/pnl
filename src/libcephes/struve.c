@@ -36,7 +36,7 @@
 */
 #include "mconf.h"
 #define DEBUG 0
-extern double gamma ( double );
+extern double pnl_tgamma ( double );
 extern double pow ( double, double );
 extern double sqrt ( double );
 extern double yn ( int, double );
@@ -263,13 +263,13 @@ double struve( v, x )
 
   if( onef2err <= threef0err )
     {
-      g = gamma( v + 1.5 );
+      g = pnl_tgamma( v + 1.5 );
       y = y * h * t / ( 0.5 * f * g );
       return(y);
     }
   else
     {
-      g = gamma( v + 0.5 );
+      g = pnl_tgamma( v + 0.5 );
       ya = ya * h / ( f * g );
       ya = ya + yv( v, x );
       return(ya);

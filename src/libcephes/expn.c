@@ -142,7 +142,7 @@ double expn( n, x )
   k = xk;
   t = n;
   r = n - 1;
-  ans = (pow(z, r) * psi / Gamma(t)) - ans;
+  ans = (pow(z, r) * psi / pnl_sf_gamma(t)) - ans;
   goto done;
 
   /*                                                      expn.c  */

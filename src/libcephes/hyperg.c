@@ -68,7 +68,7 @@
 
 extern double exp ( double );
 extern double log ( double );
-extern double gamma ( double );
+extern double pnl_tgamma ( double );
 extern double lgam ( double );
 extern double fabs ( double );
 double hyp2f0 ( double, double, double, int, double * );
@@ -246,14 +246,14 @@ static double hy1f1a( a, b, x, err )
 
   h1 = hyp2f0( a, a-b+1, -1.0/x, 1, &err1 );
 
-  temp = exp(u) / gamma(b-a);
+  temp = exp(u) / pnl_tgamma(b-a);
   h1 *= temp;
   err1 *= temp;
 
   h2 = hyp2f0( b-a, 1.0-a, 1.0/x, 2, &err2 );
 
   if( a < 0 )
-    temp = exp(t) / gamma(a);
+    temp = exp(t) / pnl_tgamma(a);
   else
     temp = exp( t - lgam(a) );
 
@@ -269,7 +269,7 @@ static double hy1f1a( a, b, x, err )
 
   if( b < 0 )
     {
-      temp = gamma(b);
+      temp = pnl_tgamma(b);
       asum *= temp;
       acanc *= fabs(temp);
     }

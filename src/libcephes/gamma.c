@@ -646,7 +646,7 @@ int pnl_sf_log_gamma_sgn(double x, double *res, int *sgn)
 }
 
 
-double Gamma (double x)
+double pnl_sf_gamma (double x)
 {
   double res;
   int sgn;

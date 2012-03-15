@@ -110,18 +110,25 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
   \var{0} otherwise.
 \end{itemize}
 
-We provide a few functions which are part of C99 as \verb!pnl_funcname!.
+We provide a few functions mathematical functions named \verb+pnl_funcname+,
+some of which are already part of C99 as \verb+funcname+.
 \begin{itemize}
-\item \describefun{double}{lgamma}{double x}
-  \sshortdescribe Computes $\log(\Gamma(x))$.
-\item \describefun{double}{tgamma}{double x}
-  \sshortdescribe Computes $\Gamma(x)$.
-\item \describefun{double}{pnl_acosh}{double x}
-  \sshortdescribe Computes \var{acosh(x)}.
-\item \describefun{double}{pnl_asinh}{double x}
-\sshortdescribe Computes \var{asinh(x)}.
-\item \describefun{double}{pnl_atanh}{double x}
-\sshortdescribe Computes \var{atanh(x)}.
-\end{itemize}<++>
+  \item \describefun{double}{pnl_lgamma}{double x}
+    \sshortdescribe Computes $\log(\Gamma(x))$.
+  \item \describefun{double}{pnl_tgamma}{double x}
+    \sshortdescribe Computes $\Gamma(x)$.
+  \item \describefun{double}{pnl_acosh}{double x}
+    \sshortdescribe Computes \var{acosh(x)}.
+  \item \describefun{double}{pnl_asinh}{double x}
+    \sshortdescribe Computes \var{asinh(x)}.
+  \item \describefun{double}{pnl_atanh}{double x}
+    \sshortdescribe Computes \var{atanh(x)}.
+  \item \describefun{double}{pnl_log1p}{double x}
+    \sshortdescribe Computes \var{log(1+x)} accurately for small values of \var{x}
+  \item \describefun{double}{pnl_expm1}{double x}
+    \sshortdescribe Computes \var{exp(x)-1} accurately for small values of \var{x}
+  \item \describefun{double}{pnl_cosm1}{double x}
+    \sshortdescribe Computes \var{cos(x)-1} accurately for small values of \var{x}
+\end{itemize}
 
 % vim:spelllang=en:spell:

@@ -173,7 +173,7 @@ double bdtrc( k, n, p )
   if( k == 0 )
     {
       if( p < .01 )
-        dk = -expm1( dn * log1p(-p) );
+        dk = -pnl_expm1( dn * pnl_log1p(-p) );
       else
         dk = 1.0 - pow( 1.0-p, dn );
     }
@@ -238,7 +238,7 @@ double bdtri( k, n, y )
   if( k == 0 )
     {
       if( y > 0.8 )
-        p = -expm1( log1p(y-1.0) / dn );
+        p = -pnl_expm1( pnl_log1p(y-1.0) / dn );
       else
         p = 1.0 - pow( y, 1.0/dn );
     }

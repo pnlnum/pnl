@@ -70,7 +70,7 @@ extern double polevl(double, double *, int);
 extern double j0(double);
 extern double j1(double);
 extern double cbrt(double);
-extern double gamma(double);
+extern double pnl_tgamma(double);
 extern double lgam(double);
 static double recur(double *, double, double *, int);
 static double jvs(double, double);
@@ -119,7 +119,7 @@ double jv(double n, double x)
   y = fabs(x);
 
   if (y * y < fabs(n + 1) * MACHEP) {
-    return pow(0.5 * x, n) / gamma(n + 1);
+    return pow(0.5 * x, n) / pnl_tgamma(n + 1);
   }
 
   k = 3.6 * sqrt(y);
@@ -429,7 +429,7 @@ static double jvs(double n, double x)
       && (ex < 1023)
       && (n > 0.0)
       && (n < (MAXGAM - 1.0))) {
-    t = pow(0.5 * x, n) / gamma(n + 1.0);
+    t = pow(0.5 * x, n) / pnl_tgamma(n + 1.0);
 #if CEPHES_DEBUG
     printf("pow(.5*x, %.4e)/gamma(n+1)=%.5e\n", n, t);
 #endif

@@ -147,7 +147,7 @@ double incbet( aa, bb, xx )
       t *= pow(x,a);
       t /= a;
       t *= w;
-      t *= Gamma(a+b) / (Gamma(a) * Gamma(b));
+      t *= pnl_sf_gamma(a+b) / (pnl_sf_gamma(a) * pnl_sf_gamma(b));
       goto done;
     }
   /* Resort to logarithms.  */
@@ -383,7 +383,7 @@ static double pseries( a, b, x )
   u = a * log(x);
   if( (a+b) < MAXGAM && fabs(u) < MAXLOG )
     {
-      t = Gamma(a+b)/(Gamma(a)*Gamma(b));
+      t = pnl_sf_gamma(a+b)/(pnl_sf_gamma(a)*pnl_sf_gamma(b));
       s = s * t * pow(x,a);
     }
   else

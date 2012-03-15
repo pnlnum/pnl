@@ -110,6 +110,4 @@ Copyright 1984, 1987, 1989, 1995 by Stephen L. Moshier
 
 #include "cephes_protos.h"
 
-#define gamma Gamma
-
 #endif /* CEPHES_MCONF_H */
