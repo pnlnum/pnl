@@ -18,8 +18,8 @@ extern int intapprox (double s);
 extern double trunc(double x);
 extern double Cnp(int n, int p);
 extern double pnl_fact(int n);
-extern double lgamma (double x);
-extern double tgamma (double x);
+extern double pnl_lgamma (double x);
+extern double pnl_tgamma (double x);
 extern double pnl_pow_i (double x, int n);
 extern double pnl_nan (void);
 extern double pnl_posinf (void);
@@ -30,6 +30,9 @@ extern int pnl_isinf (double x);
 extern double pnl_acosh (double x);
 extern double pnl_asinh (double x);
 extern double pnl_atanh (double x);
+extern double pnl_log1p (double x);
+extern double pnl_expm1 (double x);
+extern double pnl_cosm1 (double x);
 
 #define false 0
 #undef FALSE

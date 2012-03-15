@@ -100,32 +100,26 @@ double pnl_fact(int n)
 }
 
 
-#ifndef HAVE_LGAMMA
 /**
   * Computes the natural logarithm of the Gamma function
   * @param x  a real number > 0
   * @return  log(gamma(x))
   */ 
 
-double lgamma(double x)
+double pnl_lgamma(double x)
 {
   return pnl_sf_log_gamma (x);
 }
-#endif
 
-/* the tgamma function is part of C99, not available under
- * Windows */
-#ifndef HAVE_TGAMMA
 /**
   * Computes the true Gamma function 
   * @param x  a real number > -1
   * @return  gamma(x)
   */
-double tgamma(double x)
+double pnl_tgamma(double x)
 {
   return pnl_sf_gamma (x);
 } 
-#endif
 
 /**
   * Interger power function
@@ -174,7 +168,7 @@ double pnl_acosh (double x)
   else if ( x > 1 )
     {
       double y = sqrt(x - 1.); 
-      return log1p (y * (y + sqrt (x + 1.)));
+      return pnl_log1p (y * (y + sqrt (x + 1.)));
     }
   else
     {
@@ -202,7 +196,7 @@ double pnl_asinh (double x)
   else if ( y > SQRT_DBL_EPSILON )
     {
       double y_1 = 1. / y;
-      return sgn * log1p (y + y / (y_1 + sqrt (1. + y_1 * y_1)));
+      return sgn * pnl_log1p (y + y / (y_1 + sqrt (1. + y_1 * y_1)));
     }
   else
     {
@@ -230,7 +224,7 @@ double pnl_atanh (double x)
     }
   else if ( y >= DBL_EPSILON )
     {
-      return sgn * 0.5 * log1p (2 * y / (1 - y));
+      return sgn * 0.5 * pnl_log1p (2 * y / (1 - y));
     }
   else
     {
