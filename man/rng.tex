@@ -39,11 +39,8 @@ applications.
 \label{rng-int}
 
 It is possible to create random number generators each with its own state
-variable so that they can evolve independently in a shared memory
-environment. These generators are suitable for use in multi-threaded programms. For the
-moment, only pseudo random number generators can be created. The quasi random
-number generators can only be accessed using the older {\em rand} interface
-(see Section~\ref{rand-int})
+variable so that they can evolve independently in a shared memory environment.
+These generators are suitable for use in multi-threaded programs. 
 
 \begin{verbatim}
 typedef struct _PnlRng PnlRng;

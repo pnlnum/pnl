@@ -1,3 +1,7 @@
+15-03-2012 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* cephes: Rename {l,t}gamma to pnl_{l,t}gamma
+
 27-02-2012 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* mathtools.c: Add inverse of hyperbolic functions (part of C99)
