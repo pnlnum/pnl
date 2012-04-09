@@ -175,7 +175,7 @@ struct _PnlList
 
 \subsection{Array object}
 
-This section describes functions for creating an manipulating arrays of
+This section describes functions for creating and manipulating arrays of
 PnlObjects.
 
 The structures and functions related to arrays are declared in
@@ -199,6 +199,8 @@ struct _PnlArray
 \begin{itemize}
 \item \describefun{\refstruct{PnlArray} \ptr }{pnl_array_new}{}
   \sshortdescribe Creates an empty array
+\item \describefun{\refstruct{PnlArray} \ptr }{pnl_array_create}{int n}
+  \sshortdescribe Creates an array of length \var{n}.
 \item \describefun{void}{pnl_array_free}{\refstruct{PnlArray}  \ptr \ptr}
   \sshortdescribe Frees an array and all the objects hold by the array.
 \item \describefun{int}{pnl_array_resize}{\refstruct{PnlArray} \ptr  T, int size}
