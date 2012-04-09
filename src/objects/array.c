@@ -108,6 +108,7 @@ void pnl_array_clone (PnlArray *C, const PnlArray *A)
       else if ( Ci == NULL )
         {
           Ci = Ai->copy(Ai);
+          pnl_array_set (C, i, Ci);
         }
       else
         {
