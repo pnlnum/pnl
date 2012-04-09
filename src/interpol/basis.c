@@ -207,6 +207,11 @@ static int compute_nb_elements (const PnlMatInt *T, int degree)
 static PnlMatInt* compute_tensor_from_degree (int degree, int nb_variates)
 {
   PnlMatInt *T;
+  if (nb_variates <= 0)
+    {
+      printf("Nb of variates must be stricly positive in compute_tensor_from_degree\n");
+      abort ();
+    }
   if (nb_variates == 1)
     {
       int i;
