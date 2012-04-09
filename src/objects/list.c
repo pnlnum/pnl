@@ -367,8 +367,8 @@ void pnl_list_resize (PnlList *L, int n)
  * are not of the same type, C[i] is destroyed and A[i]->copy is called to
  * re--create C[i].
 
- * @param dest destination
- * @param src source
+ * @param C destination
+ * @param A source
  */
 void pnl_list_clone (PnlList *C, const PnlList *A)
 {

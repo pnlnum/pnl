@@ -97,7 +97,7 @@ void pnl_test_set_ok (const char *str)
  * 
  * @param str a string
  * @param res computed result
- * @param exepcted expected result
+ * @param expected expected result
  */
 void pnl_test_set_fail (const char *str, double res, double expected)
 {
