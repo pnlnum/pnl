@@ -26,7 +26,7 @@
 static char pnl_list_label[] = "PnlList";
 
 /**
- * Creates an empty list
+ * Create an empty list
  */
 PnlList* pnl_list_new ()
 {
@@ -48,7 +48,7 @@ PnlList* pnl_list_new ()
 }
 
 /**
- * Creates an empty Cell
+ * Create an empty Cell
  */
 PnlCell* pnl_cell_new ()
 {
@@ -61,7 +61,7 @@ PnlCell* pnl_cell_new ()
 }
 
 /**
- * Returns the adress of the i-th element of a list. No copy is made
+ * Return the adress of the i-th element of a list. No copy is made
  *
  * @param L a PnlList
  * @param i an interger index
@@ -98,7 +98,7 @@ PnlObject* pnl_list_get (PnlList *L, int i)
 }
 
 /**
- * Inserts a new object in the first position of a List
+ * Insert a new object in the first position of a List
  *
  * @param L an already existing PnlList
  * @param o a PnlObject
@@ -130,7 +130,7 @@ void pnl_list_insert_first (PnlList *L, PnlObject *o)
 }
 
 /**
- * Inserts a new object in the last position of a List
+ * Append a new object to a List
  *
  * @param L an already existing PnlList
  * @param o a PnlObject
@@ -160,7 +160,7 @@ void pnl_list_insert_last (PnlList *L, PnlObject *o)
 }
 
 /**
- * Frees a PnlList
+ * Free a PnlList
  *
  * @param L the address of a PnlList
  */
@@ -183,7 +183,7 @@ void pnl_list_free (PnlList **L)
 }
 
 /**
- * Frees a PnlCell
+ * Free a PnlCell
  *
  * @param c the address of a PnlCell
  */
@@ -210,7 +210,7 @@ void pnl_cell_free (PnlCell **c)
 }
 
 /**
- * Removes the last cell of a List
+ * Remove the last cell of a List
  *
  * @param L an already existing PnlList
  */
@@ -240,7 +240,7 @@ void pnl_list_remove_last (PnlList *L)
 }
 
 /**
- * Removes the first cell of a List
+ * Remove the first cell of a List
  *
  * @param L an already existing PnlList
  */
@@ -290,7 +290,7 @@ void pnl_list_concat (PnlList *L1, PnlList *L2)
 }
 
 /**
- * Prints the typename of everything element stored in the list.
+ * Print the typename of ever element of the list.
  *
  * We do not use the function \a pnl_list_get to access the elements
  * because this function modifies its argument and the conventions require
