@@ -23,4 +23,5 @@ pnl_laplace.h                    pnl_integration.h    \
 pnl_object.h			 		 pnl_optim.h          \
 pnl_mpi.h						 pnl_matvect.h        \
 pnl_list.h						 pnl_interpolation.h  \
-pnl_templates_on.h               pnl_templates_off.h
+pnl_templates_on.h               pnl_templates_off.h  \
+pnl_array.h
