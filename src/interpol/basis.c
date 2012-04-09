@@ -885,6 +885,37 @@ void pnl_basis_print (const PnlBasis *B)
 }
 
 /**
+ * An element of a basis writes as a product 
+ *      p_1(x_1) p2(x_2) .... p_n(x_n)
+ * for a polynomial with n variates. Each p_k is a polynomial with only
+ * one variate.
+ * 
+ * This functions evaluates the term p_k of the i-th element of the 
+ * basis b at the point x
+ *
+ * @param b a PnlBasis
+ * @param x a C array containing the coordinates of the point at which to
+ * evaluate the basis
+ * @param i an integer describing the index of the element of the basis to
+ * consider
+ * @param k the index of the term to be evaluated with element i of the
+ * basis
+ *
+ * @return (f_i)_k (x) 
+ */
+double pnl_basis_ik (const PnlBasis *b, const double *x, int i, int k)
+{
+  if ( b->isreduced == 1)
+    {
+      return (b->f)((x[k] - b->center[k]) * b->scale[k], PNL_MGET (b->T, i, k));
+    }
+  else
+    {
+      return (b->f)(x[k], PNL_MGET (b->T, i, k));
+    }
+}
+
+/**
  * Evaluates the i-th element of the basis b at the point x
  *
  * @param b a PnlBasis

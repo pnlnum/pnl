@@ -59,6 +59,7 @@ extern void pnl_basis_set_reduced (PnlBasis *B, const PnlVect *center, const Pnl
 extern void pnl_basis_free (PnlBasis **basis);
 extern void pnl_basis_print (const PnlBasis *B);
 extern int pnl_basis_fit_ls (const PnlBasis *f, PnlVect *coef, const PnlMat *x, const PnlVect *y);
+extern double pnl_basis_ik (const PnlBasis *b, const double *x, int i, int k);
 extern double pnl_basis_i ( const PnlBasis *b, const double *x, int i );
 extern double pnl_basis_i_D ( const PnlBasis *b, const double *x, int i, int j );
 extern double pnl_basis_i_D2 (const PnlBasis *b, const double *x, int i, int j1, int j2);
