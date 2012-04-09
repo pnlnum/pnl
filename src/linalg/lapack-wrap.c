@@ -462,7 +462,7 @@ int pnl_mat_lu_syslin (PnlVect *x, PnlMat *LU, const PnlVectInt *p, const PnlVec
  * solves the linear system A x = b with A P = QR.  *
  * @param x a PnlVect containing the solution on exit
  * @param Q a orthogonal PnlMat 
- * @param U an upper triagular PnlMat 
+ * @param R an upper triagular PnlMat 
  * @param p a PnlVectInt (permutation vector)
  * @param b right hand side member
  * @return OK or FAIL

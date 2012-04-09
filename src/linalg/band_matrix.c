@@ -50,6 +50,7 @@ PnlBandMatObject* pnl_band_mat_object_new ()
   o->object.type = PNL_TYPE_BAND_MATRIX;
   o->object.parent_type = PNL_TYPE_BAND_MATRIX;
   o->object.label = pnl_band_mat_object_label;
+  o->object.destroy = (destroy_func *) pnl_band_mat_object_free;
   return o;
 }
 
@@ -68,7 +69,6 @@ void pnl_band_mat_object_free(PnlBandMatObject **BM)
   *BM = NULL;
 }
 
-
 /**
  * Creates an empty band matrix
  *
@@ -83,9 +83,11 @@ PnlBandMat* pnl_band_mat_new ()
   o->object.parent_type = PNL_TYPE_BAND_MATRIX;
   o->object.label = pnl_band_mat_label;
   o->object.destroy = (destroy_func *) pnl_band_mat_object_free;
+  o->object.clone = (clone_func *) pnl_band_mat_clone;
+  o->object.copy = (copy_func *) pnl_band_mat_copy;
+  o->object.new = (new_func *) pnl_band_mat_new;
   return o;
 }
-
 
 /**  Creates a band matrix
  *
@@ -191,7 +193,6 @@ int pnl_band_mat_resize(PnlBandMat *BM, int m, int n, int nl, int nu)
   if ((BM->array = malloc (size * sizeof (double))) == NULL) return FAIL;
   return OK;
 }
-
 
 /**
  * Clones a PnlBandMat

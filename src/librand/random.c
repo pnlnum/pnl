@@ -1038,6 +1038,9 @@ PnlRng* pnl_rng_new ()
   rng->object.label = pnl_rng_label;
   rng->object.parent_type = PNL_TYPE_RNG;
   rng->object.destroy = (destroy_func *) pnl_rng_free;
+  rng->object.clone = NULL;
+  rng->object.copy = NULL;
+  rng->object.new = (new_func *) pnl_rng_new ();
 
   rng->type = PNL_RNG_NULL;
   rng->Compute = NULL;
@@ -1167,6 +1170,37 @@ PnlRng* pnl_rng_create (int type)
       free (rng); rng = NULL;
     }
   return rng;
+}
+
+/** 
+ * Clone a PnlRng
+ * 
+ * @param dest
+ * @param src
+ */
+void pnl_rng_clone (PnlRng *dest, const PnlRng *src)
+{
+  if ( dest->state != NULL ) free(dest->state);
+  pnl_rng_init (dest, src->type);
+  dest->counter = src->counter;
+  dest->has_gauss = src->has_gauss;
+  dest->gauss = src->gauss;
+  memcpy (dest->state, src->state, dest->size_state);
+}
+
+/** 
+ * Copy a PnlRng
+ * 
+ * @param rng
+ * 
+ * @return 
+ */
+PnlRng* pnl_rng_copy (const PnlRng *rng)
+{
+  PnlRng *copy;
+  copy = pnl_rng_new ();
+  pnl_rng_clone (copy, rng);
+  return copy;
 }
 
 /*

@@ -622,6 +622,9 @@ PnlBasis*  pnl_basis_new ()
   o->object.parent_type = PNL_TYPE_BASIS;
   o->object.label = pnl_basis_label;
   o->object.destroy = (destroy_func *) pnl_basis_free;
+  o->object.new = (new_func *) pnl_basis_new;
+  o->object.clone = (clone_func *) pnl_basis_clone;
+  o->object.copy = (copy_func *) pnl_basis_copy;
   return o;
 }
 
@@ -741,6 +744,44 @@ PnlBasis*  pnl_basis_create_from_hyperbolic_degree (int index, double degree, do
   T = compute_tensor_from_hyperbolic_degree (degree, q, n);
   return pnl_basis_create_from_tensor (index, T);
 }
+
+/** 
+ * Clone a basis
+ * 
+ * @param dest destination
+ * @param src source
+ */
+void pnl_basis_clone (PnlBasis *dest, const PnlBasis *src)
+{
+  pnl_basis_set_from_tensor (dest, src->id, src->T);
+  if ( src->isreduced == 1 )
+    {
+      int n = dest->nb_variates;
+      dest->isreduced = 0;
+      /* No need to free, basis_set_from_tensor does it */
+      dest->center = malloc (n * sizeof(double));
+      dest->scale = malloc (n * sizeof(double));
+      memcpy (dest->center, src->center, n * sizeof(double));
+      memcpy (dest->scale, src->scale, n * sizeof(double));
+    }
+ 
+}
+
+/** 
+ * Create a copy of a basis
+ * 
+ * @param B a basis
+ * 
+ * @return 
+ */
+PnlBasis* pnl_basis_copy (const PnlBasis *B)
+{
+  PnlBasis *BB;
+  BB = pnl_basis_new ();
+  pnl_basis_clone (BB, B);
+  return BB;
+}
+
 
 /** 
  * Sets the center and scale field of a PnlBasis using the domain on which

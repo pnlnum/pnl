@@ -262,6 +262,9 @@ PnlCgSolver* pnl_cg_solver_new()
   o->object.type = PNL_TYPE_CG_SOLVER;
   o->object.parent_type = PNL_TYPE_OBJECT;
   o->object.label = pnl_cg_solver_label;
+  o->object.clone = NULL;
+  o->object.copy = NULL;
+  o->object.new = (new_func *) pnl_cg_solver_new;
   return o;
 }
 
@@ -405,8 +408,12 @@ PnlBicgSolver* pnl_bicg_solver_new()
   o->object.type = PNL_TYPE_CG_SOLVER;
   o->object.parent_type = PNL_TYPE_OBJECT;
   o->object.label = pnl_bicg_solver_label;
+  o->object.clone = NULL;
+  o->object.copy = NULL;
+  o->object.new = (new_func *) pnl_bicg_solver_new;
   return o;
 }
+
 /**
  * creates a new PnlBicgSolver pointer.
  *
@@ -581,6 +588,9 @@ PnlGmresSolver* pnl_gmres_solver_new()
   o->object.type = PNL_TYPE_GMRES_SOLVER;
   o->object.parent_type = PNL_TYPE_OBJECT;
   o->object.label = pnl_gmres_solver_label;
+  o->object.clone = NULL;
+  o->object.copy = NULL;
+  o->object.new = (new_func *) pnl_gmres_solver_new;
   return o;
 }
 

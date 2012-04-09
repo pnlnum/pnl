@@ -39,6 +39,9 @@ void FUNCTION(pnl_mat,init)(TYPE(PnlMat) *o)
   o->object.type = CONCAT2(PNL_TYPE_MATRIX_, BASE_TYPE);
   o->object.label = FUNCTION(pnl_mat,label);
   o->object.destroy = (destroy_func *) pnl_mat_object_free;
+  o->object.new = (new_func *) FUNCTION(pnl_mat,new);
+  o->object.clone = (clone_func *) FUNCTION(pnl_mat,clone);
+  o->object.copy = (copy_func *) FUNCTION(pnl_mat,copy);
   o->m = 0;
   o->n = 0;
   o->mn = 0;
@@ -1896,13 +1899,28 @@ void FUNCTION(pnl_mat, qsort_index)(TYPE(PnlMat) * A, PnlMatInt *t, char dir, ch
 extern void pnl_hmat_compute_pdims (int *pdims, int ndim, const int *dims);
 extern int pnl_hmat_compute_linear_index (PnlHmatObject *H, int *tab);
 
+TYPE(PnlHmat)* FUNCTION(pnl_hmat,init)(TYPE(PnlHmat) *o)
+{
+  o->object.parent_type = PNL_TYPE_HMATRIX;
+  o->object.type = CONCAT2(PNL_TYPE_HMATRIX_, BASE_TYPE);
+  o->object.label = FUNCTION(pnl_hmat,label);
+  o->object.destroy = (destroy_func *) pnl_hmat_object_free;
+  o->object.new = (new_func *) FUNCTION(pnl_hmat,new);
+  o->object.clone = (clone_func *) FUNCTION(pnl_hmat,clone);
+  o->object.copy = (copy_func *) FUNCTION(pnl_hmat,copy);
+  o->ndim = 0;
+  o->mn = 0;
+  o->dims = NULL;
+  o->pdims = NULL;
+  o->array = NULL;
+  return o;
+}
 
 TYPE(PnlHmat)* FUNCTION(pnl_hmat,new)()
 {
   TYPE(PnlHmat) *o;
   if ( (o = (TYPE(PnlHmat) *) pnl_hmat_object_new ()) == NULL) return NULL;
-  o->object.type = CONCAT2(PNL_TYPE_HMATRIX_, BASE_TYPE);
-  o->object.label = FUNCTION(pnl_hmat,label);
+  FUNCTION(pnl_hmat,init)(o);
   return o;
 }
 

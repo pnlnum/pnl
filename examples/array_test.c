@@ -24,6 +24,10 @@
 #include "tests_utils.h"
 
 
+
+/** 
+ * Test set and get for arrays
+ */
 static void array_ops ()
 {
   PnlArray *T;
@@ -47,11 +51,69 @@ J1:
   pnl_array_free (&T);
  }
 
+/** 
+ * Test the copy of an array using the copy member function of PnlObjects
+ */
+static void array_copy ()
+{
+  PnlArray *T, *C;
+  PnlMat *M;
+  PnlVect *v;
+
+  M = pnl_mat_create_from_double (2, 3, 3.5);
+  v = pnl_vect_create_from_double (5, M_SQRT2);
+  T = pnl_array_create (2);
+  pnl_array_set (T, 0, PNL_OBJECT(M));
+  pnl_array_set (T, 1, PNL_OBJECT(v));
+
+  C = pnl_array_copy (T);
+  if ( C->size != T->size ||
+       pnl_test_mat_eq ((PnlMat *) T->array[0], M, 1E-12, "", "") != TRUE ||
+       pnl_test_vect_eq ((PnlVect *) T->array[1], v, 1E-12, "", "") != TRUE )
+    {
+      pnl_test_set_fail ("pnl_array_copy", 0., 0.);
+      goto J1;
+    }
+  pnl_test_set_ok ("pnl_array_copy");
+J1:
+  pnl_array_free (&T);
+}
+
+/** 
+ * Test cloning an array using the clone member function of PnlObjects
+ */
+static void array_clone ()
+{
+  PnlArray *T, *C;
+  PnlMat *M;
+  PnlVect *v;
+
+  M = pnl_mat_create_from_double (2, 3, 3.5);
+  v = pnl_vect_create_from_double (5, M_SQRT2);
+  T = pnl_array_create (2);
+  pnl_array_set (T, 0, PNL_OBJECT(M));
+  pnl_array_set (T, 1, PNL_OBJECT(v));
+
+  C = pnl_array_new ();
+  pnl_array_clone (C, T);
+  if ( C->size != T->size ||
+       pnl_test_mat_eq ((PnlMat *) T->array[0], M, 1E-12, "", "") != TRUE ||
+       pnl_test_vect_eq ((PnlVect *) T->array[1], v, 1E-12, "", "") != TRUE )
+    {
+      pnl_test_set_fail ("pnl_array_copy", 0., 0.);
+      goto J1;
+    }
+  pnl_test_set_ok ("pnl_array_copy");
+J1:
+  pnl_array_free (&T);
+}
 
 
 int main (int argc, char **argv)
 {
   pnl_test_init (argc, argv);
   array_ops ();
+  array_copy ();
+  array_clone ();
   exit (pnl_test_finalize ("Array operations"));
 }

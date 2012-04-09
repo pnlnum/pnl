@@ -124,6 +124,9 @@ enum {
 typedef unsigned int PnlType; 
 
 typedef void (destroy_func) (void **);
+typedef PnlObject* (copy_func) (PnlObject *);
+typedef PnlObject* (new_func) (PnlObject *);
+typedef void (clone_func) (PnlObject *dest, const PnlObject *src);
 /**
  * The \a PnlObject structure is used to simulate some inheritance between the
  * ojbects of Pnl.  It must be the first element of all the objects existing in
@@ -137,6 +140,9 @@ struct _PnlObject
   PnlType parent_type; /*!< the identifier of the parent object is any,
                           otherwise parent_type=id */
   destroy_func *destroy; /*!< frees an object */
+  new_func     *new; /*!< New function */
+  copy_func    *copy; /*!< Copy function */
+  clone_func   *clone; /*!< Clone function */
 };
 
 extern PnlObject* pnl_object_create (PnlType type);

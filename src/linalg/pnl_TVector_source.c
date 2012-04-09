@@ -33,6 +33,9 @@ void FUNCTION(pnl_vect,init)(TYPE(PnlVect) *o)
   o->object.type = CONCAT2(PNL_TYPE_VECTOR_, BASE_TYPE);
   o->object.label = FUNCTION(pnl_vect,label);
   o->object.destroy = (destroy_func *) pnl_vect_object_free;
+  o->object.new = (new_func *) FUNCTION(pnl_vect,new);
+  o->object.clone = (clone_func *) FUNCTION(pnl_vect,clone);
+  o->object.copy = (copy_func *) FUNCTION(pnl_vect,copy);
   o->size = 0;
   o->mem_size = 0;
   o->owner = 1;

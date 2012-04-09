@@ -128,6 +128,8 @@ extern int pnl_rand_bessel (double nu, double a, int gen);
 extern void pnl_rng_free(PnlRng **);
 extern PnlRng* pnl_rng_new ();
 extern PnlRng* pnl_rng_create (int type);
+extern PnlRng* pnl_rng_copy (const PnlRng *);
+extern void pnl_rng_clone (PnlRng *, const PnlRng *);
 extern void pnl_rng_init (PnlRng *rng, int type);
 extern void pnl_rng_sseed(PnlRng *rng, unsigned long int s);
 extern int pnl_rng_sdim (PnlRng *rng, int dim);

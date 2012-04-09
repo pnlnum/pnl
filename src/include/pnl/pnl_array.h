@@ -28,9 +28,11 @@ struct _PnlArray
 
 extern PnlArray* pnl_array_new ();
 extern PnlArray* pnl_array_create (int n);
+extern PnlArray* pnl_array_copy (const PnlArray*);
+extern void pnl_array_clone (PnlArray *, const PnlArray*);
 extern int pnl_array_resize(PnlArray * v, int size);
 extern void pnl_array_free (PnlArray **T);
-extern PnlObject* pnl_array_get (PnlArray *T, int i);
+extern PnlObject* pnl_array_get (const PnlArray *T, int i);
 extern void pnl_array_set (PnlArray *T, int i, PnlObject *O);
 extern void pnl_array_print (PnlArray *T);
 

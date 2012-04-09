@@ -39,6 +39,9 @@ PnlArray* pnl_array_new ()
   o->object.parent_type = PNL_TYPE_ARRAY;
   o->object.label = pnl_array_label;
   o->object.destroy = (destroy_func *) pnl_array_free;
+  o->object.new = (new_func *) pnl_array_new;
+  o->object.clone = (clone_func *) NULL;
+  o->object.copy = (copy_func *) NULL;
   return o;
 }
 
@@ -51,13 +54,66 @@ PnlArray* pnl_array_new ()
  */
 PnlArray* pnl_array_create (int n)
 {
+  int i;
   PnlArray *T;
   PnlObject **A;
   if ( (A=malloc (n*sizeof (PnlObject *))) == NULL) return NULL;
+  for ( i=0 ; i<n ; i++ ) A[i] = NULL;
   T = pnl_array_new ();
   T->size = T->mem_size = n;
   T->array = A;
   return T;
+}
+
+/** 
+ * Copy an Array
+ * 
+ * @param A
+ * 
+ * @return 
+ */
+PnlArray* pnl_array_copy (const PnlArray *A)
+{
+  int i;
+  PnlArray *C;
+  C = pnl_array_create (A->size);
+  for ( i=0 ; i<C->size; i++ )
+    {
+      PnlObject *Ai = pnl_array_get (A, i);
+      PnlObject *Ci = Ai->copy(Ai);
+      pnl_array_set (C, i, Ci);
+    }
+  return C;
+}
+
+/** 
+ * Clone an Array
+ * 
+ * @param C destination
+ * @param A source
+ */
+void pnl_array_clone (PnlArray *C, const PnlArray *A)
+{
+  int i;
+  pnl_array_resize (C, A->size);
+  for ( i=0 ; i<C->size; i++ )
+    {
+      PnlObject *Ai = pnl_array_get (A, i);
+      PnlObject *Ci = pnl_array_get (C, i);
+      /* By construction, empty cells are set to NULL */
+      if ( Ci != NULL  && PNL_GET_TYPE(Ci) != PNL_GET_TYPE(Ai) )
+        {
+          Ci->destroy((void **) &Ci); Ci = NULL;
+        }
+      else if ( Ci == NULL )
+        {
+          Ci = Ai->copy(Ai);
+        }
+      else
+        {
+          Ci->clone(Ci, Ai);
+        }
+    }
 }
 
 /**
@@ -69,9 +125,10 @@ PnlArray* pnl_array_create (int n)
  * @param v a pointer to an already existing PnlArray. 
  * @param size the new size of the array
  */
-int pnl_object_resize(PnlArray * v, int size)
+int pnl_array_resize(PnlArray * v, int size)
 {
 
+  int i, old_size = v->size;
   if (size < 0) return FAIL;
   if (size == 0)
     {
@@ -92,11 +149,11 @@ int pnl_object_resize(PnlArray * v, int size)
 
   /* Now, v->mem_size < size */
   if ((v->array=realloc(v->array,size*sizeof(PnlObject *))) == NULL) return FAIL;
+  for ( i=old_size ; i<size ; i++ ) v->array[i] = NULL;
   v->size = size;
   v->mem_size = size;
   return OK;
 }
-
 
 /**
  * Returns the adress of the i-th element of an array. No copy is made
@@ -106,7 +163,7 @@ int pnl_object_resize(PnlArray * v, int size)
  *
  * @return a PnlObject*
  */
-PnlObject* pnl_array_get (PnlArray *T, int i)
+PnlObject* pnl_array_get (const PnlArray *T, int i)
 {
   PNL_CHECK (i >= T->size, "index exceeded", "pnl_array_get");
   return T->array[i];
