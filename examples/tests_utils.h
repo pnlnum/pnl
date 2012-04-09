@@ -1,6 +1,11 @@
 #ifndef _TESTS_H
 #define _TESTS_H
 
+/**
+ * \defgroup PnlTest a unit test framework
+ */
+ /* @{  */
+
 struct tst_list_t {
     char *label;
     void (*func)();
@@ -36,7 +41,7 @@ extern void pnl_test_set_ok (const char *str);
 extern void pnl_test_set_fail (const char *str, double res, double expected);
 extern int pnl_test_is_verbose ();
 
-
+/* @} */
 
 #endif /* TESTS_H */
 

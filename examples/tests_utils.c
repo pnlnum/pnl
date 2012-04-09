@@ -96,6 +96,8 @@ void pnl_test_set_ok (const char *str)
  * Declares a test as failed
  * 
  * @param str a string
+ * @param res computed result
+ * @param exepcted expected result
  */
 void pnl_test_set_fail (const char *str, double res, double expected)
 {
@@ -240,7 +242,7 @@ int pnl_test_eq_abs (double x, double y, double abserr, const char *str, const c
  * @param cmp the comparison function
  * @param str name of the tested functionnality
  * @param fmt a format string
- * @param ... extra arguments
+ * @param ap extra arguments
  * 
  * @return TRUE or FALSE
  */
@@ -305,7 +307,7 @@ int pnl_test_mat_eq_rel (const PnlMat *X, const PnlMat *Y, double relerr, const 
  * 
  * @param X computed result (matrix)
  * @param Y expected result (matrix)
- * @param relerr relative error 
+ * @param abserr absolute error 
  * @param str the name of the tested function
  * @param fmt a format string to be passed to printf
  * @param ... extra arguments for printf
@@ -440,8 +442,7 @@ int pnl_test_vect_eq_rel (const PnlVect *X, const PnlVect *Y, double relerr, con
  * 
  * @param X computed result (vector)
  * @param Y expected result (vector)
- * @param relerr relative error (note that when |y| < 1, it is an abolute
- * error)
+ * @param abserr absolute error
  * @param str the name of the tested function
  * @param fmt a format string to be passed to printf
  * @param ... extra arguments for printf
@@ -532,7 +533,7 @@ dim_fail:
  * 
  * @param X computed result (Hmatrix)
  * @param Y expected result (Hmatrix)
- * @param relerr absolute error 
+ * @param abserr absolute error 
  * @param str the name of the tested function
  * @param fmt a forhmat string to be passed to printf
  * @param ... extra arguments for printf
@@ -566,7 +567,7 @@ dim_fail:
  * 
  * @param X computed result (Hmatrix)
  * @param Y expected result (Hmatrix)
- * @param relerr  error (relative or not depending on the magnitude of y)
+ * @param abserr  error (absolute)
  * @param str the name of the tested function
  * @param fmt a forhmat string to be passed to printf
  * @param ... extra arguments for printf
