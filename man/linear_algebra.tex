@@ -710,7 +710,7 @@ and the size of the matrix.
 
 \item \describefun{int}{pnl_mat_resize}{\refstruct{PnlMat} \ptr M, int m, int n}
   \sshortdescribe Resizes a \refstruct{PnlMat}. The new matrix is of size
-  \var{m x n}. It copies as much of the old data to fit in the resized matrix. 
+  \var{m x n}. The old data are lost.
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_submat}{const
   \refstruct{PnlMat} \ptr M, const \refstruct{PnlVectInt} \ptr indi, const
   \refstruct{PnlVectInt} \ptr indj}
@@ -727,7 +727,7 @@ and the size of the matrix.
     M_sub, const \refstruct{PnlMat} \ptr M, int i, int len_i, int j, int
     len_j}
   \sshortdescribe \var{M_sub = M(i:i+len_i-1, j:j+len_j-1)}. \var{len_i}
-  (resp. \var{len_j}) is the number of columns (resp. rows) to be extracted.
+  (resp. \var{len_j}) is the number of rows (resp. columns) to be extracted.
   
 \end{itemize}  
 
