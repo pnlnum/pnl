@@ -3,6 +3,7 @@
 	* object.h: Add 3 new member functions to PnlObject: new, copy, clone
 	* array.c: Add copy and clone functions for PnlArray
 	* basis.c: Add copy and clone functions for PnlBasis
+	* list.c: Add copy and clone functions for PnlList
 	* random.c: Add copy and clone functions for PnlRng
 
 

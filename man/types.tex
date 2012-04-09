@@ -143,6 +143,14 @@ struct _PnlList
   \sshortdescribe Creates an empty list
 \item \describefun{\refstruct{PnlCell} \ptr }{pnl_cell_new}{}
   \sshortdescribe Creates an cell list
+\item \describefun{\refstruct{PnlList}\ptr }{pnl_list_copy}{const \refstruct{PnlList}\ptr A}
+  \sshortdescribe Creates a copy of a \refstruct{PnlList}. Each element of the
+  list \var{A} is copied by calling the its copy member.
+\item \describefun{void}{pnl_list_clone}{\refstruct{PnlList} \ptr dest, const
+  \refstruct{PnlList}\ptr src}
+  \sshortdescribe Copies the content of \var{src} into the already existing
+  list \var{dest}. The list \var{dest} is automatically resized. This is a
+  hard copy, the contents of both lists are independent after cloning.
 \item \describefun{void}{pnl_list_free}{\refstruct{PnlList}  \ptr \ptr L}
   \sshortdescribe Frees a list
 \item \describefun{void}{pnl_cell_free}{\refstruct{PnlCell}  \ptr \ptr c}
@@ -174,9 +182,9 @@ struct _PnlList
   resulting list is store in \var{L1} on exit. Do {\bf not} free \var{L2}
   since concatenation does not actually copy objects but only manipulates
   addresses.
-\item \describefun{void}{pnl_list_print}{\refstruct{PnlList}  \ptr L}
-  \sshortdescribe Not yet implemented because it would require that the
-  structure \refstruct{PnlObject} has a field copy.
+\item \describefun{void}{pnl_list_print}{const \refstruct{PnlList}  \ptr L}
+  \sshortdescribe Only prints the types of each element. When  the
+  \refstruct{PnlObject} object has a print member, we will use it.
 \end{itemize}
 
 \subsection{Array object}

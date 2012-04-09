@@ -42,8 +42,8 @@ PnlList* pnl_list_new ()
   o->object.label = pnl_list_label;
   o->object.destroy = (destroy_func *) pnl_list_free;
   o->object.new = (new_func *) pnl_list_new;
-  o->object.clone = (clone_func *) NULL;
-  o->object.copy = (copy_func *) NULL;
+  o->object.clone = (clone_func *) pnl_list_clone;
+  o->object.copy = (copy_func *) pnl_list_copy;
   return o;
 }
 
@@ -128,7 +128,6 @@ void pnl_list_insert_first (PnlList *L, PnlObject *o)
   L->first = C;
 
 }
-
 
 /**
  * Inserts a new object in the last position of a List
@@ -292,20 +291,24 @@ void pnl_list_concat (PnlList *L1, PnlList *L2)
 
 /**
  * Prints the typename of everything element stored in the list.
- * When the PnlObject structure has a copy_func field, we will use it to
+ *
+ * We do not use the function \a pnl_list_get to access the elements
+ * because this function modifies its argument and the conventions require
+ * that a print function takes a const argument.
+ *
+ * When the PnlObject structure has a print_func field, we will use it to
  * actually print the content of each element
  *
- * @param L a list
+ * @param L a list. 
  */
-void pnl_list_print (PnlList *L)
+void pnl_list_print (const PnlList *L)
 {
   int i;
-  for ( i=0 ; i<L->len ; i++ )
+  PnlCell *C = L->first;
+  for ( i=0 ; i<L->len ; i++, C=C->next )
     {
-      const PnlObject *C;
       const char *name;
-      C = pnl_list_get (L, i);
-      name =  PNL_GET_TYPENAME(C);
+      name =  PNL_GET_TYPENAME(C->self);
       printf ("L[%d] : %s\n", i, name);
     }
 }
@@ -330,3 +333,80 @@ void pnl_list_remove_i (PnlList *L, int i)
   pnl_cell_free (&C);
   L->len--;
 }
+
+/** 
+ * Resize a PnlList to a given length. 
+ *
+ * If the new length is shorter, the last elements are removed (ie. deleted
+ * from the list and freed) for the sizes to match.
+ *
+ * If the new length is longer, the newly added elements are toi
+ * (PnlObject*) NULL.
+ * 
+ * @param L a PnlList
+ * @param n an integer, new size
+ */
+void pnl_list_resize (PnlList *L, int n)
+{
+  int i, diff_len;
+  diff_len = L->len - n;
+  /*
+   * Remove extra elements in dest, if any
+   */
+  for ( i=0 ; i<diff_len ; i++ ) pnl_list_remove_last (L);
+  /*
+   * Create -n - L->len cells with field self set to NULL)
+   */
+  for ( i=0 ; i<-diff_len ; i++ ) pnl_list_insert_last (L, NULL);
+}
+
+/** 
+ * Clone a PnlList
+ * 
+ * For each element, it tries to call its clone member, but A[i] and C[i]
+ * are not of the same type, C[i] is destroyed and A[i]->copy is called to
+ * re--create C[i].
+
+ * @param dest destination
+ * @param src source
+ */
+void pnl_list_clone (PnlList *C, const PnlList *A)
+{
+  int i;
+  PnlCell *Ci, *Ai;
+  pnl_list_resize (C, A->len);
+  for ( i=0,Ci=C->first,Ai=A->first ; i<C->len ; i++, Ci=Ci->next, Ai=Ai->next )
+    {
+      PnlObject *COi, *AOi;
+      COi = Ci->self;
+      AOi = Ai->self;
+      if ( COi != NULL && PNL_GET_TYPE(COi) != PNL_GET_TYPE(AOi) )
+        {
+          COi->destroy((void **) &COi); COi=NULL;
+        }
+      else if ( COi == NULL )
+        {
+          COi = AOi->copy(AOi);
+          Ci->self = COi;
+        }
+      else
+        {
+          AOi->clone(COi, AOi);
+        }
+    }
+}
+
+/** 
+ * Create a copy of a PnlList
+ * 
+ * @param A a PnlList
+ * 
+ * @return  a PnlList
+ */
+PnlList* pnl_list_copy (const PnlList *A)
+{
+  PnlList *L = pnl_list_new ();
+  pnl_list_clone (L, A);
+  return L;
+}
+        

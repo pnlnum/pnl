@@ -37,6 +37,9 @@ struct _PnlList
 };
 
 extern PnlList* pnl_list_new ();
+extern PnlList* pnl_list_copy (const PnlList *A);
+extern void pnl_list_clone (PnlList *C, const PnlList *A);
+extern void pnl_list_resize (PnlList *L, int n);
 extern PnlCell* pnl_cell_new ();
 extern void pnl_list_free (PnlList **L);
 extern void pnl_cell_free (PnlCell **c);
@@ -47,7 +50,7 @@ extern void pnl_list_remove_last (PnlList *L);
 extern void pnl_list_remove_first (PnlList *L);
 extern void pnl_list_remove_i (PnlList *L, int i);
 extern void pnl_list_concat (PnlList *L1, PnlList *L2);
-extern void pnl_list_print (PnlList *L);
+extern void pnl_list_print (const PnlList *L);
 
 /*@}*/
 
