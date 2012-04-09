@@ -26,7 +26,7 @@
 static char pnl_array_label[] = "PnlArray";
 
 /**
- * Creates an empty array
+ * Create an empty array
  */
 PnlArray* pnl_array_new ()
 {
@@ -46,7 +46,7 @@ PnlArray* pnl_array_new ()
 }
 
 /** 
- * Creates an array of size n
+ * Create an array of size n. Each element is set to NULL.
  * 
  * @param n size of the array
  * 
@@ -88,6 +88,10 @@ PnlArray* pnl_array_copy (const PnlArray *A)
 
 /** 
  * Clone an Array
+ *
+ * For each element, it tries to call its clone member, but A[i] and C[i]
+ * are not of the same type, C[i] is destroyed and A[i]->copy is called to
+ * re--create C[i].
  * 
  * @param C destination
  * @param A source
@@ -118,10 +122,13 @@ void pnl_array_clone (PnlArray *C, const PnlArray *A)
 }
 
 /**
- * Resizes a PnlArray. If the new size is smaller than the
- * current one, no memory is freed and the datas are
- * kept. If the new size is larger than the current one, a
- * new pointer is allocated. The old datas are kept. 
+ * Resize a PnlArray. 
+ *
+ * If the new size is smaller than the current one, no memory is freed and
+ * the datas are kept.
+ *
+ * If the new size is larger than the current one, a new pointer is
+ * allocated. The old datas are kept and the new cells are set to NULL.
  *
  * @param v a pointer to an already existing PnlArray. 
  * @param size the new size of the array
@@ -157,7 +164,7 @@ int pnl_array_resize(PnlArray * v, int size)
 }
 
 /**
- * Returns the adress of the i-th element of an array. No copy is made
+ * Return the adress of the i-th element of an array. No copy is made
  *
  * @param T a PnlArray
  * @param i an interger index
@@ -171,7 +178,7 @@ PnlObject* pnl_array_get (const PnlArray *T, int i)
 }
 
 /**
- * Sets the i-th element of an array to the object O. No copy is made
+ * Set the i-th element of an array to the object O. No copy is made
  *
  * @param T a PnlArray
  * @param i an interger index
@@ -186,7 +193,7 @@ void pnl_array_set (PnlArray *T, int i, PnlObject *O)
 }
 
 /**
- * Frees a PnlArray
+ * Free a PnlArray
  *
  * @param T the address of a PnlArray
  */
@@ -206,7 +213,7 @@ void pnl_array_free (PnlArray **T)
 }
 
 /**
- * Prints the typename of everything element stored in the array.
+ * Print the typename of everything element stored in the array.
  * When the PnlObject structure has a copy_func field, we will use it to
  * actually print the content of each element
  *

@@ -115,6 +115,12 @@ $\alpha^\star \in \R^N$ which solves
     \end{array}
   \right) \]
 
+\item \describefun{void}{pnl_basis_clone}{\refstruct{PnlBasis} \ptr dest, const \refstruct{PnlBasis} \ptr src}
+  \sshortdescribe Clones \var{src} into \var{dest}. The basis \var{dest} must
+  already exist before calling this function. On exit, \var{dest} and \var{src}
+  are identical and independent.
+\item \describefun{\refstruct{PnlBasis}\ptr }{pnl_basis_copy}{const \refstruct{PnlBasis} \ptr B}
+  \sshortdescribe Creates a copy of \var{B}.
 \item \describefun{void }{pnl_basis_set_from_tensor}{\refstruct{PnlBasis} \ptr
     b, int index, const \refstruct{PnlMatInt} \ptr T}
   \sshortdescribe Sets an alredy existing basis \var{b} to a polynomial family
@@ -134,6 +140,11 @@ $\alpha^\star \in \R^N$ which solves
     {\alpha_i}^q \right)^{1/q} \leq degree$. This kind of basis based on an
   hyperbolic set of indices gives priority to polynomials associated to low
   order interaction.
+
+\item  \describefun{void}{pnl_basis_free}{\refstruct{PnlBasis} \ptr\ptr basis}
+  \sshortdescribe Frees a \refstruct{PnlBasis} created by
+  \reffun{pnl_basis_create}. Beware that \var{basis} is the address of a
+  \refstruct{PnlBasis}\ptr.
 
 \end{itemize}
 
@@ -167,11 +178,12 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
 
 
 \begin{itemize}
-\item  \describefun{void}{pnl_basis_free}{\refstruct{PnlBasis} \ptr\ptr basis}
-  \sshortdescribe Frees a \refstruct{PnlBasis} created by
-  \reffun{pnl_basis_create}. Beware that \var{basis} is the address of a
-  \refstruct{PnlBasis}\ptr.
-
+\item \describefun{double}{pnl_basis_ik}{const PnlBasis \ptr b, const double
+  \ptr x, int i, int k}
+  \sshortdescribe An element of a basis writes $\prod_{l=0}^{\var{nb_variates}}
+  \phi_l(x_l)$ where the $\phi$'s are one dimensional polynomials. This
+  functions computes the therm $\phi_k$ of the \var{i-th} basis function at the
+  point \var{x}.
 \item  \describefun{double}{pnl_basis_i}{\refstruct{PnlBasis }\ptr b,
     double \ptr x, int i}
   \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}-1}$,

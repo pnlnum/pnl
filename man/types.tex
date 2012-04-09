@@ -10,6 +10,9 @@ Pnl so that casting any object to a PnlObject is legal
 typedef unsigned int PnlType; 
 
 typedef void (destroy_func) (void **);
+typedef PnlObject* (copy_func) (PnlObject *);
+typedef PnlObject* (new_func) (PnlObject *);
+typedef void (clone_func) (PnlObject *dest, const PnlObject *src);
 struct _PnlObject
 {
   PnlType type; /*!< a unique integer id */
@@ -17,6 +20,9 @@ struct _PnlObject
   PnlType parent_type; /*!< the identifier of the parent object is any,
                           otherwise parent_type=id */
   destroy_func *destroy; /*!< frees an object */
+  new_func     *new; /*!< New function */
+  copy_func    *copy; /*!< Copy function */
+  clone_func   *clone; /*!< Clone function */
 };
 \end{verbatim}
 
@@ -201,6 +207,14 @@ struct _PnlArray
   \sshortdescribe Creates an empty array
 \item \describefun{\refstruct{PnlArray} \ptr }{pnl_array_create}{int n}
   \sshortdescribe Creates an array of length \var{n}.
+\item \describefun{\refstruct{PnlArray}\ptr }{pnl_array_copy}{const \refstruct{PnlArray}\ptr A}
+  \sshortdescribe Creates a copy of a \refstruct{PnlArray}. Each element of the
+  array \var{A} is copied by calling the \var{A[i].object.copy}.
+\item \describefun{void}{pnl_array_clone}{\refstruct{PnlArray} \ptr dest, const
+  \refstruct{PnlArray}\ptr src}
+  \sshortdescribe Copies the content of \var{src} into the already existing
+  array \var{dest}. The array \var{dest} is automatically resized. This is a
+  hard copy, the contents of both arrays are independent after cloning.
 \item \describefun{void}{pnl_array_free}{\refstruct{PnlArray}  \ptr \ptr}
   \sshortdescribe Frees an array and all the objects hold by the array.
 \item \describefun{int}{pnl_array_resize}{\refstruct{PnlArray} \ptr  T, int size}

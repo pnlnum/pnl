@@ -78,6 +78,14 @@ struct _PnlRng
   \sshortdescribe Sets the dimension of the state space for a QMC generator and
   initializes it accordingly.  Returns OK if the generator has been initialized
   properly and FAIL otherwise.
+\item \describefun{\refstruct{PnlRng}\ptr }{pnl_rng_copy}{const
+  \refstruct{PnlRng} \ptr rng}
+  \sshortdescribe Creates a copy of \var{rng}.
+\item \describefun{void}{pnl_rng_clone}{\refstruct{PnlRng} \ptr dest, const
+  \refstruct{PnlRng} \ptr src}
+  \sshortdescribe Copies the content of \var{src} into the already existing
+  basis \var{dest}. On exit, \var{src} and \var{dest} are identical but
+  independent. 
 \item \describefun{\refstruct{PnlRng}\ptr}{pnl_rng_dcmt_create_id}{int id, ulong
     seed}
   \sshortdescribe Creates a generator with type \var{PNL_RNG_DCMT} and identifier

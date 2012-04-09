@@ -1,3 +1,11 @@
+09-04-2012 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* object.h: Add 3 new member functions to PnlObject: new, copy, clone
+	* array.c: Add copy and clone functions for PnlArray
+	* basis.c: Add copy and clone functions for PnlBasis
+	* random.c: Add copy and clone functions for PnlRng
+
+
 15-03-2012 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* cephes: Rename {l,t}gamma to pnl_{l,t}gamma
