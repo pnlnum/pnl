@@ -1038,9 +1038,9 @@ PnlRng* pnl_rng_new ()
   rng->object.label = pnl_rng_label;
   rng->object.parent_type = PNL_TYPE_RNG;
   rng->object.destroy = (destroy_func *) pnl_rng_free;
-  rng->object.clone = NULL;
-  rng->object.copy = NULL;
-  rng->object.new = (new_func *) pnl_rng_new ();
+  rng->object.clone = (clone_func *)pnl_rng_clone;
+  rng->object.copy = (copy_func *)pnl_rng_copy;
+  rng->object.new = (new_func *) pnl_rng_new;
 
   rng->type = PNL_RNG_NULL;
   rng->Compute = NULL;
