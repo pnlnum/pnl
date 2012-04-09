@@ -7,7 +7,7 @@
 syn keyword cType PnlRng PnlType  PnlVect PnlVectInt PnlVectComplex 
             \ PnlMat PnlMatInt PnlMatComplex PnlTridiagMat PnlTridiagMatLU 
             \ PnlBandMat PnlHmat PnlHmatInt PnlHmatComplex PnlRng PnlBasis
-            \ PnlList PnlObject dcomplex PnlArray PnlPermutation
+            \ PnlList PnlObject dcomplex PnlArray PnlPermutation PnlCell
 syn match cType 'Pnl[a-zA-Z]*Object'
 syn match cType 'Pnl[0-9a-zA-Z]*Func[0-9a-zA-Z]*'
 syn keyword cConstant CONE CZERO

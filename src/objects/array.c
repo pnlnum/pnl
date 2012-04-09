@@ -116,7 +116,7 @@ void pnl_array_clone (PnlArray *C, const PnlArray *A)
         }
       else
         {
-          Ci->clone(Ci, Ai);
+          Ai->clone(Ci, Ai);
         }
     }
 }
