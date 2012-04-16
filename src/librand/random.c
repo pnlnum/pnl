@@ -1040,7 +1040,7 @@ PnlRng* pnl_rng_new ()
   rng->object.destroy = (destroy_func *) pnl_rng_free;
   rng->object.clone = (clone_func *)pnl_rng_clone;
   rng->object.copy = (copy_func *)pnl_rng_copy;
-  rng->object.new = (new_func *) pnl_rng_new;
+  rng->object.constructor = (new_func *) pnl_rng_new;
 
   rng->type = PNL_RNG_NULL;
   rng->Compute = NULL;

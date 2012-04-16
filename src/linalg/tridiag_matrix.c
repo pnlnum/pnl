@@ -136,7 +136,7 @@ PnlTridiagMat* pnl_tridiag_mat_new()
   o->object.label = pnl_tridiag_mat_label;
   o->object.clone = (clone_func *) pnl_tridiag_mat_clone;
   o->object.copy = (copy_func *) pnl_tridiag_mat_copy;
-  o->object.new = (new_func *) pnl_tridiag_mat_new;
+  o->object.constructor = (new_func *) pnl_tridiag_mat_new;
   return o;
 }
 
@@ -796,7 +796,7 @@ PnlTridiagMatLU* pnl_tridiag_mat_lu_new()
   o->object.label = pnl_tridiag_mat_lu_label;
   o->object.clone = (clone_func *) pnl_tridiag_mat_lu_clone;
   o->object.copy = (copy_func *) pnl_tridiag_mat_lu_copy;
-  o->object.new = (new_func *) pnl_tridiag_mat_lu_new;
+  o->object.constructor = (new_func *) pnl_tridiag_mat_lu_new;
   return o;
 }
 

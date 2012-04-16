@@ -51,7 +51,7 @@ PnlVectObject* pnl_vect_object_new ()
   o->object.parent_type = PNL_TYPE_VECTOR;
   o->object.label = pnl_vector_label;
   o->object.destroy = (destroy_func *) pnl_vect_object_free;
-  o->object.new = (new_func *) pnl_vect_object_new;
+  o->object.constructor = (new_func *) pnl_vect_object_new;
   o->object.clone = NULL;
   o->object.copy = NULL;
   return o;

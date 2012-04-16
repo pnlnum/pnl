@@ -85,7 +85,7 @@ PnlBandMat* pnl_band_mat_new ()
   o->object.destroy = (destroy_func *) pnl_band_mat_object_free;
   o->object.clone = (clone_func *) pnl_band_mat_clone;
   o->object.copy = (copy_func *) pnl_band_mat_copy;
-  o->object.new = (new_func *) pnl_band_mat_new;
+  o->object.constructor = (new_func *) pnl_band_mat_new;
   return o;
 }
 

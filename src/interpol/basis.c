@@ -627,7 +627,7 @@ PnlBasis*  pnl_basis_new ()
   o->object.parent_type = PNL_TYPE_BASIS;
   o->object.label = pnl_basis_label;
   o->object.destroy = (destroy_func *) pnl_basis_free;
-  o->object.new = (new_func *) pnl_basis_new;
+  o->object.constructor = (new_func *) pnl_basis_new;
   o->object.clone = (clone_func *) pnl_basis_clone;
   o->object.copy = (copy_func *) pnl_basis_copy;
   return o;

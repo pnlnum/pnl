@@ -39,7 +39,7 @@ void FUNCTION(pnl_mat,init)(TYPE(PnlMat) *o)
   o->object.type = CONCAT2(PNL_TYPE_MATRIX_, BASE_TYPE);
   o->object.label = FUNCTION(pnl_mat,label);
   o->object.destroy = (destroy_func *) pnl_mat_object_free;
-  o->object.new = (new_func *) FUNCTION(pnl_mat,new);
+  o->object.constructor = (new_func *) FUNCTION(pnl_mat,new);
   o->object.clone = (clone_func *) FUNCTION(pnl_mat,clone);
   o->object.copy = (copy_func *) FUNCTION(pnl_mat,copy);
   o->m = 0;
@@ -1905,7 +1905,7 @@ TYPE(PnlHmat)* FUNCTION(pnl_hmat,init)(TYPE(PnlHmat) *o)
   o->object.type = CONCAT2(PNL_TYPE_HMATRIX_, BASE_TYPE);
   o->object.label = FUNCTION(pnl_hmat,label);
   o->object.destroy = (destroy_func *) pnl_hmat_object_free;
-  o->object.new = (new_func *) FUNCTION(pnl_hmat,new);
+  o->object.constructor = (new_func *) FUNCTION(pnl_hmat,new);
   o->object.clone = (clone_func *) FUNCTION(pnl_hmat,clone);
   o->object.copy = (copy_func *) FUNCTION(pnl_hmat,copy);
   o->ndim = 0;

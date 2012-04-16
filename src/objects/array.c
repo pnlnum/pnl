@@ -39,7 +39,7 @@ PnlArray* pnl_array_new ()
   o->object.parent_type = PNL_TYPE_ARRAY;
   o->object.label = pnl_array_label;
   o->object.destroy = (destroy_func *) pnl_array_free;
-  o->object.new = (new_func *) pnl_array_new;
+  o->object.constructor = (new_func *) pnl_array_new;
   o->object.clone = (clone_func *) NULL;
   o->object.copy = (copy_func *) NULL;
   return o;

@@ -140,7 +140,7 @@ struct _PnlObject
   PnlType parent_type; /*!< the identifier of the parent object is any,
                           otherwise parent_type=id */
   destroy_func *destroy; /*!< frees an object */
-  new_func     *new; /*!< New function */
+  new_func     *constructor; /*!< New function */
   copy_func    *copy; /*!< Copy function */
   clone_func   *clone; /*!< Clone function */
 };
