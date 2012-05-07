@@ -6,6 +6,7 @@ structures for storing different kind of functions. The pointer
 \var{params} is used to store the extra parameters. These new types come
 with dedicated macros starting in \verb!PNL_EVAL!  to evaluate the function
 and their Jacobian.
+\describestruct{PnlFunc}
 \begin{verbatim}
 /*
  * f: R --> R
@@ -16,7 +17,10 @@ typedef struct {
   void *params;
 } PnlFunc ;
 #define PNL_EVAL_FUNC(F, x) (*((F)->function))(x, (F)->params)
+\end{verbatim}
 
+\describestruct{PnlFunc2D}
+\begin{verbatim}
 /*
  * f: R^2 --> R
  * The function pointer returns f(x)
@@ -26,7 +30,10 @@ typedef struct {
   void *params;
 } PnlFunc2D ;
 #define PNL_EVAL_FUNC2D(F, x, y) (*((F)->function))(x, y, (F)->params)
+\end{verbatim}
 
+\describestruct{PnlFuncDFunc}
+\begin{verbatim}
 /*
  * f: R --> R
  * The function pointer computes f(x) and Df(x) and stores them in fx
@@ -37,7 +44,10 @@ typedef struct {
   void *params;
 } PnlFuncDFunc ;
 #define PNL_EVAL_FUNC_DFUNC(F, x, fx, dfx) (*((F)->function))(x, fx, dfx, (F)->params)
+\end{verbatim}
 
+\describestruct{PnlRnFuncR}
+\begin{verbatim}
 /*
  * f: R^n --> R
  * The function pointer returns f(x)
@@ -47,7 +57,11 @@ typedef struct {
   void *params;
 } PnlRnFuncR ;
 #define PNL_EVAL_RNFUNCR(F, x) (*((F)->function))(x, (F)->params)
+\end{verbatim}
 
+\describestruct{PnlRnFuncRm}
+\describestruct{PnlRnFuncRn}
+\begin{verbatim}
 /*
  * f: R^n --> R^m
  * The function pointer computes the vector f(x) and stores it in
@@ -64,8 +78,11 @@ typedef struct {
  *
 typedef PnlRnFuncRm PnlRnFuncRn;
 #define PNL_EVAL_RNFUNCRN  PNL_EVAL_RNFUNCRM
+\end{verbatim}
 
-
+\describestruct{PnlRnFuncRmDFunc}
+\describestruct{PnlRnFuncRnDFunc}
+\begin{verbatim}
 /*
  * f: R^n --> R^m
  * The function pointer computes the vector f(x) and stores it in fx
@@ -115,7 +132,7 @@ functions.
   iterations \var{N_max}. On exit, the root is stored in \var{res}.Note that
   the function \var{F} must also compute the first derivative of the function.
 
-\item \describefun{int}{pnl_root_bisection}{\refstruct{PnlFunc } \ptr Func,
+\item \describefun{int}{pnl_root_bisection}{\refstruct{PnlFunc} \ptr Func,
     double xmin, double xmax, double epsrel, double espabs, int N_max, double
     \ptr res}
   \sshortdescribe Finds the root of \var{F} between \var{x1} and \var{x2} with

@@ -42,6 +42,7 @@ It is possible to create random number generators each with its own state
 variable so that they can evolve independently in a shared memory environment.
 These generators are suitable for use in multi-threaded programs. 
 
+\describestruct{PnlRng}
 \begin{verbatim}
 typedef struct _PnlRng PnlRng;
 struct _PnlRng
@@ -123,9 +124,10 @@ Some auxiliary functions internally used (to use with caution)
   correspond to {\bf pseudo} random number generators.
   Calling \reffun{pnl_rng_create} is equivalent to calling first
   \reffun{pnl_rng_new} and then \reffun{pnl_rng_init}. 
-\item \describefun{\refstruct{PnlRng}\ptr }{pnl_rng_get_from_id}
-  {\refstruct{PnlRngType} id}
+\item \describefun{\refstruct{PnlRng}\ptr }{pnl_rng_get_from_id} {int id}
   \sshortdescribe Retuns the global generator described by its macro name.
+  The variable \var{id} can be any of the values \var{PNL_RNG_XXX} listed in
+  Table~\ref{rng-indices}.
 \end{itemize}
 
 

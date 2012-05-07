@@ -52,6 +52,9 @@
   \describefunNoStar%
 }
 
+% Describing struct
+\newcommand{\describestruct}[1]{\index{Structs!#1}\label{#1}}
+
 % Describing variables
 \newcommand{\describevar}[2]{{#1~{\bf #2}}}
 
@@ -63,7 +66,7 @@
 
 \definecolor{Red}{rgb}{1,0,0}
 \definecolor{Blue}{rgb}{0,0,1}
-\def\refstruct#1{{\color{Red} #1}}
+\def\refstruct#1{\hyperref[#1]{\color{Red} #1}}
 \def\reffun#1{\hyperref[#1]{#1}}
 \def\refmacro{\reffun}
 \newenvironment{describeconst}{%
@@ -97,7 +100,10 @@
 \newcommand{\constentry}[2]{%
   \index{#1}\label{#1}\HCode{<span class='struct'>}#1\HCode{</span>} && #2 \\ }
 
-\def\refstruct#1{\HCode{<span class='struct'>}#1\HCode{</span>}}
+% Describing struct
+\newcommand{\describestruct}[1]{\index{#1}\label{#1}}
+
+\def\refstruct#1{\hyperref[#1]{\HCode{<span class='struct'>}#1\HCode{</span>}}}
 \def\reffun#1{\hyperref[#1]{#1}}
 \def\refmacro{\reffun}
 \newenvironment{describeconst}{%
@@ -423,8 +429,8 @@ include full_path_to_pnl/Makeuser.incl
 
 \input{finance.tex}
 
+\clearpage
+\addcontentsline{toc}{section}{Index}
 \printindex
-
-
 
 \end{document}

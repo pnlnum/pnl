@@ -1,4 +1,4 @@
-all: pdf
+all: pdf html
 
 pdf: manual
 

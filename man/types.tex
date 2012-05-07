@@ -6,6 +6,7 @@ The PnlObject structure is used to simulate some inheritance between the
 ojbects of Pnl.  It must be the first element of all the objects existing in
 Pnl so that casting any object to a PnlObject is legal
 
+\describestruct{PnlObject}
 \begin{verbatim}
 typedef unsigned int PnlType; 
 
@@ -110,6 +111,7 @@ internally stored as doubly linked lists.
 The structures and functions related to lists are declared in
 \verb!pnl/pnl_list.h!.
 
+\describestruct{PnlList}\describestruct{PnlCell}
 \begin{verbatim}
 typedef struct _PnlCell PnlCell;
 struct _PnlCell
@@ -195,6 +197,7 @@ PnlObjects.
 The structures and functions related to arrays are declared in
 \verb!pnl/pnl_array.h!.
 
+\describestruct{PnlArray}
 \begin{verbatim}
 typedef struct _PnlArray PnlArray;
 struct _PnlArray

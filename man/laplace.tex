@@ -10,6 +10,15 @@ For a real valued function $f$ such that $t \longmapsto f(t) \expp{- \sigma_c
 
 To use the following functions, you should include \verb!pnl/pnl_laplace.h!.
 
+\describestruct{PnlCmplxFunc}
+\begin{verbatim}
+typedef struct
+{
+  dcomplex (*function) (dcomplex x, void *params);
+  void *params;
+} PnlCmplxFunc;
+ \end{verbatim}
+
 \begin{itemize}
 \item \describefun{double}{pnl_ilap_euler}{\refstruct{PnlCmplxFunc}
     \ptr fhat, double t, int N, int M}

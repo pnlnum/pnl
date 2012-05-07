@@ -3,6 +3,7 @@
 
 To use these functionalities, you should include \verb!pnl/pnl_basis.h!.
 
+\describestruct{PnlBasis}
 \begin{verbatim}
 struct PnlBasis_t {
   int         id;
@@ -184,7 +185,7 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
   \phi_l(x_l)$ where the $\phi$'s are one dimensional polynomials. This
   functions computes the therm $\phi_k$ of the \var{i-th} basis function at the
   point \var{x}.
-\item  \describefun{double}{pnl_basis_i}{\refstruct{PnlBasis }\ptr b,
+\item  \describefun{double}{pnl_basis_i}{\refstruct{PnlBasis} \ptr b,
     double \ptr x, int i}
   \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}-1}$,
   then this function returns $f_i(x)$. \var{x} must be a C array of length
