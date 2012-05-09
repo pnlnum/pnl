@@ -11,16 +11,16 @@ struct PnlBasis_t {
   int         nb_variates;  /*!< number of variates *
   int         nb_func; /*!< number of elements in the basis *
   PnlMatInt  *T; /*!< Tensor matrix *
-  double    (*f)(double    *x, int i); /*!< Computes the i-th element
-                                        of the one dimensional basis *
-  double    (*Df)(double   *x, int i); /*!< Computes the first derivative
-                   of the i-th element of the one dimensional basis *
-  double    (*D2f)(double  *x, int i); /*!< Computes the second derivative
-                      of the i-th element of the one dimensional basis *
+  double    (*f)(double   x, int i); /*!< Computes the i-th element
+                                      of the one dimensional basis */
+  double    (*Df)(double  x, int i); /*!< Computes the first derivative
+                   of the i-th element of the one dimensional basis */
+  double    (*D2f)(double x, int i); /*!< Computes the second derivative
+                      of the i-th element of the one dimensional basis */
   int         isreduced; /* TRUE if the basis is reduced */
   double     *center; /*!< center of the domain */
-  double     *scale; /*<! inverse of the scaling factor to map the domain 
-                          to [-1, 1]^nb_variates */
+  double     *scale; /*<! inverse of the scaling factor to map the 
+                          domain to [-1, 1]^nb_variates */
 };
 \end{verbatim}
 
