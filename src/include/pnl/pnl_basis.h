@@ -15,10 +15,12 @@ extern "C" {
 
 /*@{*/
 
-/* basis indices */
-enum {PNL_BASIS_CANONICAL, PNL_BASIS_HERMITIAN, PNL_BASIS_TCHEBYCHEV };
+/* basis indices must start from 0 because they serve an index for the
+ * PnlBasisTypeTab array */
+enum {PNL_BASIS_NULL=-1, PNL_BASIS_CANONICAL=0, PNL_BASIS_HERMITE=1, PNL_BASIS_TCHEBYCHEV=2 };
 /* synonymous for compatibility purposes */
-enum {CANONICAL, HERMITIAN, TCHEBYCHEV };
+enum {CANONICAL=0, HERMITIAN=1, TCHEBYCHEV=3 };
+#define PNL_BASIS_HERMITIAN PNL_BASIS_HERMITE
 
 typedef struct _PnlBasis PnlBasis;
 
@@ -46,6 +48,8 @@ struct _PnlBasis
                           to [-1, 1]^nb_variates */
 };
 
+extern int pnl_basis_type_register (const char *name, double (*f)(double, int), 
+                             double (*Df)(double, int), double (*D2f)(double, int));
 extern PnlBasis* pnl_basis_new ();
 extern PnlBasis* pnl_basis_create ( int index, int nb_func, int space_dim);
 extern PnlBasis* pnl_basis_create_from_degree ( int index, int degree, int space_dim);

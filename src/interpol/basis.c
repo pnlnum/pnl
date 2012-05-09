@@ -602,9 +602,103 @@ static double D2TchebychevD1(double x, int n)
 
 
 
+/**
+ * Struture used to describe the type of a basis
+ */
+typedef struct PnlBasisType_t PnlBasisType;
+struct PnlBasisType_t
+{
+  int id;
+  const char *label;
+  double (*f)(double x, int n);
+  double (*Df)(double x, int n);
+  double (*D2f)(double x, int n);
+};
+
+#define PNL_BASIS_MAX_TYPE 10
+/**
+ * The array holding the different basis types registered so far
+ */
+static PnlBasisType *PnlBasisTypeTab = NULL;
+static int pnl_basis_type_next = 0; /*!< next availble id for a basis type */
+static int pnl_basis_type_tab_length = PNL_BASIS_MAX_TYPE; /*!< length of PnlBasisTypeTab */
+
+/** 
+ * Register a new type of basis with a given index
+ * 
+ * @param id index with which  the basis should be registered
+ * @param label a string identifier 
+ * @param f the generating function in dimension 1
+ * @param Df the first derivative of the generating function in dimension 1
+ * @param D2f the second derivative of the generating function in dimension 1
+ * 
+ * @return OK or FAIL
+ */
+static int pnl_basis_type_register_with_id (int id, const char *label, double (*f)(double, int),
+                                      double (*Df)(double, int), double (*D2f)(double, int))
+{
+  /*
+   * Enlarge the array if needed
+   */
+  if (id >= pnl_basis_type_tab_length)
+    {
+      pnl_basis_type_tab_length *= 2;
+      PnlBasisTypeTab = realloc (PnlBasisTypeTab, pnl_basis_type_tab_length * sizeof(PnlBasisType));
+    }
+  if ( pnl_basis_type_next != id ) return FAIL;
+
+  PnlBasisTypeTab[id].id = id;
+  PnlBasisTypeTab[id].label = label;
+  PnlBasisTypeTab[id].f = f;
+  PnlBasisTypeTab[id].Df = Df;
+  PnlBasisTypeTab[id].D2f = D2f;
+  pnl_basis_type_next++;
+
+  return OK;
+}
+
+/** 
+ * Initialize the array of basis types with
+ * 
+ * @return 
+ */
+static int pnl_basis_type_init ()
+{
+  if ( PnlBasisTypeTab != NULL )  return OK;
+  PnlBasisTypeTab = malloc (PNL_BASIS_MAX_TYPE * sizeof(PnlBasisType));
+
+  if ( pnl_basis_type_register_with_id (PNL_BASIS_CANONICAL, "Canonical", CanonicalD1, DCanonicalD1, D2CanonicalD1) != OK ) return FAIL;
+  if ( pnl_basis_type_register_with_id (PNL_BASIS_HERMITE, "Hermite", HermiteD1, DHermiteD1, D2HermiteD1) != OK ) return FAIL;
+  if ( pnl_basis_type_register_with_id (PNL_BASIS_TCHEBYCHEV, "Tchebychev", TchebychevD1, DTchebychevD1, D2TchebychevD1) != OK ) return FAIL;
+
+  return OK;
+}
+
+
+/** 
+ * Register a new type of basis
+ * 
+ * @param name a string identifier 
+ * @param f the generating function in dimension 1
+ * @param Df the first derivative of the generating function in dimension 1
+ * @param D2f the second derivative of the generating function in dimension 1
+ * 
+ * @return the next available index or PNL_BASIS_NULL if an error occurred
+ */
+int pnl_basis_type_register (const char *name, double (*f)(double, int), 
+                             double (*Df)(double, int), double (*D2f)(double, int))
+{
+  int id;
+  pnl_basis_type_init ();
+  id = pnl_basis_type_next;
+  if ( pnl_basis_type_register_with_id (id, name, f, Df, D2f) == FAIL )
+    return PNL_BASIS_NULL;
+  return id;
+}
+
+
 
 static char pnl_basis_label[] = "PnlBasis";
-
 /**
  * Creates an empty PnlBasis
  *
@@ -614,6 +708,7 @@ PnlBasis*  pnl_basis_new ()
 {
   PnlBasis *o;
 
+  pnl_basis_type_init ();
   if ( (o = malloc (sizeof(PnlBasis))) == NULL ) return NULL;
   o->nb_func = 0;
   o->id = 0;
@@ -658,29 +753,10 @@ void  pnl_basis_set_from_tensor (PnlBasis *b, int index, const PnlMatInt *T)
 
   b->T = (PnlMatInt *) T;
 
-  switch ( index )
-    {
-    case PNL_BASIS_CANONICAL:
-      b->label = "Canonical";
-      b->f = CanonicalD1;
-      b->Df = DCanonicalD1;
-      b->D2f = D2CanonicalD1;
-      break;
-    case PNL_BASIS_HERMITIAN:
-      b->label = "Hermite";
-      b->f = HermiteD1;
-      b->Df = DHermiteD1;
-      b->D2f = D2HermiteD1;
-      break;
-    case PNL_BASIS_TCHEBYCHEV:
-      b->label = "Tchebychev";
-      b->f = TchebychevD1;
-      b->Df = DTchebychevD1;
-      b->D2f = D2TchebychevD1;
-      break;
-    default:
-      PNL_ERROR ("unknow basis", "pnl_basis_create");
-    }
+  b->label = PnlBasisTypeTab[index].label;
+  b->f = PnlBasisTypeTab[index].f;
+  b->Df = PnlBasisTypeTab[index].Df;
+  b->D2f = PnlBasisTypeTab[index].D2f;
 }
 
 /**

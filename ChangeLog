@@ -1,3 +1,9 @@
+09-05-2012 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* basis.c: Add the ability to register new basis types. This mechanism
+	is based on the variable PnlBasisTypeTab and the function
+	pnl_basis_type_register.
+
 09-04-2012 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* object.h: Add 3 new member functions to PnlObject: new, copy, clone
@@ -5,7 +11,6 @@
 	* basis.c: Add copy and clone functions for PnlBasis
 	* list.c: Add copy and clone functions for PnlList
 	* random.c: Add copy and clone functions for PnlRng
-
 
 15-03-2012 Jérôme Lelong <jerome.lelong@gmail.com>
 

@@ -1,4 +1,4 @@
-\section{Polynomial bases and regression}
+\section{Function bases and regression}
 \subsection{Overview}
 
 To use these functionalities, you should include \verb!pnl/pnl_basis.h!.
@@ -27,19 +27,20 @@ struct PnlBasis_t {
 \begin{table}[h!]
   \begin{describeconst}
     \constentry{PNL_BASIS_CANONICAL}{for the Canonical polynomials}
-    \constentry{PNL_BASIS_HERMITIAN}{for the Hermite polynomials}
+    \constentry{PNL_BASIS_HERMITE}{for the Hermite polynomials}
     \constentry{PNL_BASIS_TCHEBYCHEV}{for the Tchebychev polynomials}
   \end{describeconst}
-  \caption{Names of the bases}
+  \caption{Names of the bases. See also function
+  \reffun{pnl_basis_type_register} to register more basis types.}
   \label{basis_index}
 \end{table}
 
 In this section, we provide functions to solve regression problems on
-polynomial functions. Let $(x_i, i=1 \dots n)$ be $n$ points in $\R^d$ and a
+finite dimensional bases. Let $(x_i, i=1 \dots n)$ be $n$ points in $\R^d$ and a
 function $g$ defined by the data $(y_i = g(x_i), i=1 \dots n)$. Assume you
 want to approximate the function $g$ by its decomposition on a family of $N$
-polynomial functions $(f_j, j=1\dots N)$. Then, we want to compute the vector
-$\alpha^\star \in \R^N$ which solves
+functions $(f_j, j=1\dots N)$. Then, we want to compute the vector
+$\alpha^\star \in \R^N$ solving
 \begin{equation*} \alpha^\star = \arg\min_\alpha \sum_{i=1}^{n}
   \left(\sum_{j=0}^N \alpha_j f_j(x_i) - y_i\right)^2
 \end{equation*}
@@ -47,23 +48,47 @@ $\alpha^\star \in \R^N$ which solves
 \subsection{Functions}
 
 \begin{itemize}
+\item \describefun{int}{pnl_basis_type_register}{const char *name, double (*f)(double, int), double (*Df)(double, int), double (*D2f)(double, int)}
+\sshortdescribe Register a new basis type and return the index to be passed to
+\reffun{pnl_basis_create} . The variable \var{name} is a unique
+string identifier of the family. The variables \var{f}, \var{Df}, \var{D2f} are
+the one dimensional basis functions, its first and second order derivatives.
+Each of these functions must return a \var{double} and take two arguments : the
+first one is the point at which evaluating the basis functions, the second one
+is the index of function. Here is a toy example to show how the canonical basis
+is registered (this family is actually already available with the id
+PNL_BASIS_CANONICAL, so the following example may look a little fake)
+\begin{verbatim}
+  double f(double x, int n) { return pnl_pow_i(x, n); }
+  double Df(double x, int n) { return n * pnl_pow_i(x, n-1); }
+  double f(double x, int n) { return n * (n-1) * pnl_pow_i(x, n-2); }
+
+  int id = pnl_basis_register ("Canonic", f, Df, D2f);
+  /*
+   * B is the Canonical basis of polynomials with degree less or equal than 2 in
+   * dimension 5.
+   */
+  PnlBasis *B = pnl_basis_create_from_degree (id, 2, 5);
+  \end{verbatim}
+
 \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_new}{}
   \sshortdescribe Creates an empty \refstruct{PnlBasis}.
 
 \item \describefun{void}{pnl_basis_print}{const \refstruct{PnlBasis} \ptr B}
-  \sshortdescribe Prints a basis
+  \sshortdescribe Prints the characteristics of a basis.
   
   
 \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create}{int index, int
     nb_func, int nb_variates}
-  \sshortdescribe Creates a \refstruct{PnlBasis} for the polynomial family
-  defined by \var{index} (see Table~\ref{basis_index}) with \var{nb_variates}
+  \sshortdescribe Creates a \refstruct{PnlBasis} for the family
+  defined by \var{index} (see Table~\ref{basis_index} and
+  \reffun{pnl_basis_type_register}) with \var{nb_variates}
   variates. The basis will contain \var{nb_func}.
 
 \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create_from_degree}{int
     index, int degree, int nb_variates}
-  \sshortdescribe Creates a \refstruct{PnlBasis} for the polynomial family
-  defined by \var{index} (see Table~\ref{basis_index}) with total degree less
+  \sshortdescribe Creates a \refstruct{PnlBasis} for the family
+  defined by \var{index} (see Table~\ref{basis_index} and \reffun{pnl_basis_type_register}) with total degree less
   or equal than \var{degree} and \var{nb_variates} variates.\\
   For instance, calling \verb!pnl_basis_create_from_degree (index, 2, 4)! is
   equivalent to calling \verb!pnl_basis_create_from_tensor (index, T)! where
@@ -150,8 +175,8 @@ $\alpha^\star \in \R^N$ which solves
 \end{itemize}
 
 
-Polynomial regression based on a least square approach often leads to ill
-conditionned linear systems. One way of improving the stability of the system is to
+Functional regression based on a least square approach often leads to ill
+conditioned linear systems. One way of improving the stability of the system is to
 use centered and renormalised polynomials so that the original domain of interest
 $\cD$ (a subset of $\R^d$) is mapped to $[-1,1]^d$. If the domain $\cD$ is
 rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by 
