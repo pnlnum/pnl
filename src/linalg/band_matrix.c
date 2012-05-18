@@ -50,7 +50,7 @@ PnlBandMatObject* pnl_band_mat_object_new ()
   o->object.type = PNL_TYPE_BAND_MATRIX;
   o->object.parent_type = PNL_TYPE_BAND_MATRIX;
   o->object.label = pnl_band_mat_object_label;
-  o->object.destroy = (destroy_func *) pnl_band_mat_object_free;
+  o->object.destroy = (DestroyFunc *) pnl_band_mat_object_free;
   return o;
 }
 
@@ -82,10 +82,10 @@ PnlBandMat* pnl_band_mat_new ()
   o->object.type = PNL_TYPE_BAND_MATRIX_DOUBLE;
   o->object.parent_type = PNL_TYPE_BAND_MATRIX;
   o->object.label = pnl_band_mat_label;
-  o->object.destroy = (destroy_func *) pnl_band_mat_object_free;
-  o->object.clone = (clone_func *) pnl_band_mat_clone;
-  o->object.copy = (copy_func *) pnl_band_mat_copy;
-  o->object.constructor = (new_func *) pnl_band_mat_new;
+  o->object.destroy = (DestroyFunc *) pnl_band_mat_object_free;
+  o->object.clone = (CloneFunc *) pnl_band_mat_clone;
+  o->object.copy = (CopyFunc *) pnl_band_mat_copy;
+  o->object.constructor = (NewFunc *) pnl_band_mat_new;
   return o;
 }
 

@@ -103,7 +103,7 @@ PnlTridiagMatObject* pnl_tridiag_mat_object_new ()
   o->object.type = PNL_TYPE_TRIDIAG_MATRIX;
   o->object.parent_type = PNL_TYPE_TRIDIAG_MATRIX;
   o->object.label = pnl_tridiag_mat_object_label;
-  o->object.destroy = (destroy_func *) pnl_tridiag_mat_object_free;
+  o->object.destroy = (DestroyFunc *) pnl_tridiag_mat_object_free;
   return o;
 }
 
@@ -134,9 +134,9 @@ PnlTridiagMat* pnl_tridiag_mat_new()
   if ( (o = (PnlTridiagMat *) pnl_tridiag_mat_object_new ()) == NULL) return NULL;
   o->object.type = PNL_TYPE_TRIDIAG_MATRIX_DOUBLE;
   o->object.label = pnl_tridiag_mat_label;
-  o->object.clone = (clone_func *) pnl_tridiag_mat_clone;
-  o->object.copy = (copy_func *) pnl_tridiag_mat_copy;
-  o->object.constructor = (new_func *) pnl_tridiag_mat_new;
+  o->object.clone = (CloneFunc *) pnl_tridiag_mat_clone;
+  o->object.copy = (CopyFunc *) pnl_tridiag_mat_copy;
+  o->object.constructor = (NewFunc *) pnl_tridiag_mat_new;
   return o;
 }
 
@@ -761,7 +761,7 @@ PnlTridiagMatLUObject* pnl_tridiag_mat_lu_object_new ()
   o->object.type = PNL_TYPE_TRIDIAG_MATRIX_LU;
   o->object.parent_type = PNL_TYPE_TRIDIAG_MATRIX_LU;
   o->object.label = pnl_tridiag_mat_lu_object_label;
-  o->object.destroy = (destroy_func *) pnl_tridiag_mat_lu_object_free;
+  o->object.destroy = (DestroyFunc *) pnl_tridiag_mat_lu_object_free;
   return o;
 }
 
@@ -794,9 +794,9 @@ PnlTridiagMatLU* pnl_tridiag_mat_lu_new()
   if ( (o = (PnlTridiagMatLU *) pnl_tridiag_mat_lu_object_new ()) == NULL) return NULL;
   o->object.type = PNL_TYPE_TRIDIAG_MATRIX_LU_DOUBLE;
   o->object.label = pnl_tridiag_mat_lu_label;
-  o->object.clone = (clone_func *) pnl_tridiag_mat_lu_clone;
-  o->object.copy = (copy_func *) pnl_tridiag_mat_lu_copy;
-  o->object.constructor = (new_func *) pnl_tridiag_mat_lu_new;
+  o->object.clone = (CloneFunc *) pnl_tridiag_mat_lu_clone;
+  o->object.copy = (CopyFunc *) pnl_tridiag_mat_lu_copy;
+  o->object.constructor = (NewFunc *) pnl_tridiag_mat_lu_new;
   return o;
 }
 

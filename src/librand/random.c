@@ -787,85 +787,85 @@ static sobol_i8_state sobol_i8_st;
 
 PnlRng PnlRngKnuth =
   {
-    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
+    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (DestroyFunc *) pnl_rng_free},
     PNL_RNG_KNUTH,&KNUTH,
     PNL_MC,0, 0,0,0,sizeof(knuth_state), &knuth_st
   };
 PnlRng PnlRngMrgk3 =
   {
-    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
+    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (DestroyFunc *) pnl_rng_free},
     PNL_RNG_MRGK3,&MRGK3,
     PNL_MC,0,0,0,0,sizeof(mrgk3_state),&mrgk3_st
   };
 PnlRng PnlRngMrgk5 =
   {
-    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
+    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (DestroyFunc *) pnl_rng_free},
     PNL_RNG_MRGK5,&MRGK5,
     PNL_MC,0,0,0,0,sizeof(mrgk5_state),&mrgk5_st
   };
 PnlRng PnlRngShufl =
   {
-    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
+    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (DestroyFunc *) pnl_rng_free},
     PNL_RNG_SHUFL,&SHUFL,
     PNL_MC,0,0,0,0,sizeof(shufl_state),&shufl_st
   };
 PnlRng PnlRngLecuyer =
   {
-    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
+    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (DestroyFunc *) pnl_rng_free},
     PNL_RNG_LECUYER,&LECUYER,
     PNL_MC,0, 0,0,0,sizeof(lecuyer_state),&lecuyer_st
   };
 PnlRng PnlRngTausworthe =
   {
-    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
+    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (DestroyFunc *) pnl_rng_free},
     PNL_RNG_TAUSWORTHE,&TAUS,
     PNL_MC,0, 0,0,0,sizeof(tausworthe_state),&tausworthe_st
   };
 PnlRng PnlRngMersenne =
   {
-    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
+    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (DestroyFunc *) pnl_rng_free},
     PNL_RNG_MERSENNE,&MERSENNE,
     PNL_MC,0,0, 0,0,sizeof(mt_state),&mt_st1
   };
 PnlRng PnlRngMersenneRandomSeed =
   {
-    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
+    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (DestroyFunc *) pnl_rng_free},
     PNL_RNG_MERSENNE_RANDOM_SEED,&MERSENNE,
     PNL_MC,0,0, 0,0,sizeof(mt_state),&mt_st2
   };
 PnlRng PnlRngSqrt =
   {
-    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
+    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (DestroyFunc *) pnl_rng_free},
     PNL_RNG_SQRT,&SQRT,
     PNL_QMC,0, 0,0,0,sizeof(sqrt_state),&sqrt_st
   };
 PnlRng PnlRngHalton =
   {
-    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
+    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (DestroyFunc *) pnl_rng_free},
     PNL_RNG_HALTON,&HALTON,
     PNL_QMC,0, 0,0,0,sizeof(halton_state),&halton_st
   };
 PnlRng PnlRngFaure =
   {
-    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
+    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (DestroyFunc *) pnl_rng_free},
     PNL_RNG_FAURE,&FAURE,
     PNL_QMC,0, 0,0,0,sizeof(faure_state),&faure_st
   };
 PnlRng PnlRngSobolI4 =
   {
-    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
+    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (DestroyFunc *) pnl_rng_free},
     PNL_RNG_SOBOL_I4,&I4_SOBOL,
     PNL_QMC,0, 0,0,0,sizeof(sobol_i4_state), &sobol_i4_st
   };
 PnlRng PnlRngSobolI8 =
   {
-    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
+    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (DestroyFunc *) pnl_rng_free},
     PNL_RNG_SOBOL_I8,&I8_SOBOL,
     PNL_QMC,0, 0,0,0,sizeof(sobol_i8_state), &sobol_i8_st
   };
 PnlRng PnlRngNiederreiter =
   {
-    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (destroy_func *) pnl_rng_free},
+    {PNL_TYPE_RNG,pnl_rng_label,PNL_TYPE_RNG, (DestroyFunc *) pnl_rng_free},
     PNL_RNG_NIEDERREITER,&NIEDERREITER,
     PNL_QMC,0, 0,0,0,sizeof(nied_state),&nied_st
   };
@@ -1037,10 +1037,10 @@ PnlRng* pnl_rng_new ()
   rng->object.type = PNL_TYPE_RNG;
   rng->object.label = pnl_rng_label;
   rng->object.parent_type = PNL_TYPE_RNG;
-  rng->object.destroy = (destroy_func *) pnl_rng_free;
-  rng->object.clone = (clone_func *)pnl_rng_clone;
-  rng->object.copy = (copy_func *)pnl_rng_copy;
-  rng->object.constructor = (new_func *) pnl_rng_new;
+  rng->object.destroy = (DestroyFunc *) pnl_rng_free;
+  rng->object.clone = (CloneFunc *)pnl_rng_clone;
+  rng->object.copy = (CopyFunc *)pnl_rng_copy;
+  rng->object.constructor = (NewFunc *) pnl_rng_new;
 
   rng->type = PNL_RNG_NULL;
   rng->Compute = NULL;

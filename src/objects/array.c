@@ -38,10 +38,10 @@ PnlArray* pnl_array_new ()
   o->object.type = PNL_TYPE_ARRAY;
   o->object.parent_type = PNL_TYPE_ARRAY;
   o->object.label = pnl_array_label;
-  o->object.destroy = (destroy_func *) pnl_array_free;
-  o->object.constructor = (new_func *) pnl_array_new;
-  o->object.clone = (clone_func *) NULL;
-  o->object.copy = (copy_func *) NULL;
+  o->object.destroy = (DestroyFunc *) pnl_array_free;
+  o->object.constructor = (NewFunc *) pnl_array_new;
+  o->object.clone = (CloneFunc *) NULL;
+  o->object.copy = (CopyFunc *) NULL;
   return o;
 }
 
@@ -214,7 +214,7 @@ void pnl_array_free (PnlArray **T)
 
 /**
  * Print the typename of everything element stored in the array.
- * When the PnlObject structure has a copy_func field, we will use it to
+ * When the PnlObject structure has a CopyFunc field, we will use it to
  * actually print the content of each element
  *
  * @param T a array

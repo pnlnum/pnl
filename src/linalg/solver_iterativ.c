@@ -264,7 +264,7 @@ PnlCgSolver* pnl_cg_solver_new()
   o->object.label = pnl_cg_solver_label;
   o->object.clone = NULL;
   o->object.copy = NULL;
-  o->object.constructor = (new_func *) pnl_cg_solver_new;
+  o->object.constructor = (NewFunc *) pnl_cg_solver_new;
   return o;
 }
 
@@ -410,7 +410,7 @@ PnlBicgSolver* pnl_bicg_solver_new()
   o->object.label = pnl_bicg_solver_label;
   o->object.clone = NULL;
   o->object.copy = NULL;
-  o->object.constructor = (new_func *) pnl_bicg_solver_new;
+  o->object.constructor = (NewFunc *) pnl_bicg_solver_new;
   return o;
 }
 
@@ -590,7 +590,7 @@ PnlGmresSolver* pnl_gmres_solver_new()
   o->object.label = pnl_gmres_solver_label;
   o->object.clone = NULL;
   o->object.copy = NULL;
-  o->object.constructor = (new_func *) pnl_gmres_solver_new;
+  o->object.constructor = (NewFunc *) pnl_gmres_solver_new;
   return o;
 }
 

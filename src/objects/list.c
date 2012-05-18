@@ -40,10 +40,10 @@ PnlList* pnl_list_new ()
   o->object.type = PNL_TYPE_LIST;
   o->object.parent_type = PNL_TYPE_LIST;
   o->object.label = pnl_list_label;
-  o->object.destroy = (destroy_func *) pnl_list_free;
-  o->object.constructor = (new_func *) pnl_list_new;
-  o->object.clone = (clone_func *) pnl_list_clone;
-  o->object.copy = (copy_func *) pnl_list_copy;
+  o->object.destroy = (DestroyFunc *) pnl_list_free;
+  o->object.constructor = (NewFunc *) pnl_list_new;
+  o->object.clone = (CloneFunc *) pnl_list_clone;
+  o->object.copy = (CopyFunc *) pnl_list_copy;
   return o;
 }
 
