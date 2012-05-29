@@ -1,7 +1,19 @@
 \section{Fast Fourier Transform}
 \subsection{Overview}
 
-The coefficients of the Fourier transform of a rela function satisfy the
+The forward Fourier transform of a vector $c$ is defined by
+\begin{align*}
+  z_j = \sum_{k=1}^N c_k \expp{-i (j-1) (k-1) 2 \pi / N}, \quad
+  j=1,\cdots,N
+\end{align*}
+The inverse Fourier transform enables to recover $c$ from $z$ and is defined by
+\begin{align*}
+  c_k = \sum_{j=1}^N z_j \expp{i (j-1) (k-1) 2 \pi / N}, \quad 
+  j=1,\cdots,N
+\end{align*}
+
+
+The coefficients of the Fourier transform of a real function satisfy the
 following relation
 \begin{equation}
   \label{eq:fft-sym}
