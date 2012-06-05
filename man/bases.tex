@@ -204,7 +204,7 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
 
 
 \begin{itemize}
-\item \describefun{double}{pnl_basis_ik}{const PnlBasis \ptr b, const double
+  \item \describefun{double}{pnl_basis_ik}{const \refstruct{PnlBasis} \ptr b, const double
   \ptr x, int i, int k}
   \sshortdescribe An element of a basis writes $\prod_{l=0}^{\var{nb_variates}}
   \phi_l(x_l)$ where the $\phi$'s are one dimensional polynomials. This
@@ -238,12 +238,11 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
     \var{coef} = \arg\min_\alpha \sum_{i=1}^n
     \left( \sum_{j=0}^{\var{N}} \alpha_j  P_j(x_i) - y_i\right)^2
   \end{equation*}
-  where \var{N} is the number of functions to regress upon and $n$ is the
-  number of points at which we know the value of the original function. $P_j$
-  is the $j-th$ basis function. Each row of the matrix \var{x} defines the
-  coordinates of one point $x_i$. The function to be approximated is defined
-  by the data \var{y} which is the vector of the values taken by the function
-  at the points \var{x}.
+  where \var{N} is the number of functions to regress upon and $n$ is the number
+  of points at which the values of the original function are known. $P_j$ is the
+  $j-th$ basis function. Each row of the matrix \var{x} defines the coordinates
+  of one point $x_i$. The function to be approximated is defined by the vector
+  \var{y} of the values of the function at the points \var{x}.
 
 \item \describefun{double}{pnl_basis_eval_derivs}{\refstruct{PnlBasis} \ptr
     P, \refstruct{PnlVect}\ptr coef, double \ptr x, double \ptr fx,

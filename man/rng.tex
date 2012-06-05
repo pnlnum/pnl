@@ -3,13 +3,12 @@
 The functionalities described in this chapter are declared in
 \verb!pnl/pnl_random.h!.
 
-Random number generators can be accessed using two different interfaces : the
-new {\em rng} interface based on the \refstruct{PnlRng} object and the older
-{\em rand} interface. We will keep the {\em rand} interface for compatibility
-issues but we highly encourage to use the new {\rm rng} interface which is far
-more flexible and uses reentrant functions suitable for multi-threaded
-applications.
+Random number generators should be called through the new {\em rng} interface
+based on the \refstruct{PnlRng} object. This interface uses reentrant functions
+and is suitable for multi-threaded applications.
 
+The older {\em rand} interface is kept for compatibility
+issues only and hsould not be used in newly written code.
 \begin{table}[h!]
   \begin{tabular}{l|l|l|l}
     Random generator & index & Type & Info\\
@@ -21,8 +20,6 @@ applications.
     L'ECUYER & PNL_RNG_L_ECUYER & pseudo\\
     TAUSWORTHE & PNL_RNG_TAUSWORTHE & pseudo\\
     MERSENNE & PNL_RNG_MERSENNE & pseudo\\
-    MERSENNE & PNL_RNG_MERSENNE_RANDOM_SEED & pseudo & seed is
-    fixed using time\\
     SQRT & PNL_RNG_SQRT & quasi\\
     HALTON & PNL_RNG_HALTON & quasi\\
     FAURE & PNL_RNG_FAURE & quasi\\
@@ -244,7 +241,7 @@ int main ()
 
   /* rng must be initialized. When sseed=0, a default 
      value depending on the generator is used */
-  rng = pnl_rng_sseed (0);
+     pnl_rng_sseed (rng, 0);
 
   for ( i=0 ; i<M ; i++ )
   {
@@ -293,9 +290,12 @@ int main ()
 \subsection{The {\em rand} interface (deprecated)}
 \label{rand-int}
 
+{\itshape 
+\textbf{Note}:
 For backward compatibility with older versions of the PNL, we still provide the old
 {\em rand} interface to random number generation although we strongly encourage users
 to use the new {\em rng} interface (see section~\ref{rng-int}).
+}
 
 Every generator is identified by an integer valued macro. One must {\bf NOT} refer
 to a generator using directly the value of the macro \var{PNL_RNG_XXX} because there
