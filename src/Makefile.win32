@@ -10,16 +10,16 @@ ARGS=libamos/.libs/libamos.a librand/.libs/librand.a\
 	libinteg/.libs/libinteg.a interpol/.libs/libinterpol.a optim/.libs/liboptim.a\
 	roots/.libs/libroots.a libminpack/.libs/libminpack.a \
 	objects/.libs/libobjects.a \
-	 ../lib/libblas.dll ../lib/liblapack.dll
+	 $(LIBPNLDIR)/libblas.dll $(LIBPNLDIR)/liblapack.dll
 
 OBJS = cumulfunc.o  finance_function.o
 
 shared-win32:: $(OBJS)
-	gcc -mno-cygwin -shared -o ../lib/libpnl.dll $(OBJS) \
+	gcc -mno-cygwin -shared -o $(LIBPNLDIR)/libpnl.dll $(OBJS) \
 		-Wl,--export-all-symbols -Wl,--allow-multiple-definition \
 		-Wl,--enable-auto-import -Wl,--whole-archive $(ARGS)  \
 		-Wl,--no-whole-archive -Xlinker --out-implib -Xlinker \
-		../lib/libpnl.dll.a -Xlinker --output-def -Xlinker ../lib/libpnl.def
+		$(LIBPNLDIR)/libpnl.dll.a -Xlinker --output-def -Xlinker $(LIBPNLDIR)/libpnl.def
 
 
 
