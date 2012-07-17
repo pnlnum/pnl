@@ -1422,6 +1422,40 @@ void FUNCTION(pnl_mat,dger) (BASE alpha, const TYPE(PnlVect) *x, const TYPE(PnlV
 }
 
 /**
+ * Computes x' A y 
+
+ * @param A : matrix
+ * @param x : vector
+ * @param y : vector
+ * @return x' A y 
+ */
+BASE FUNCTION(pnl_mat,scalar_prod)(const TYPE(PnlMat) *A, const TYPE(PnlVect) *x , const TYPE(PnlVect) * y)
+{
+  BASE sum;
+  int i,j;
+  
+#ifndef PNL_RANGE_CHECK_OFF
+  if (A->n != y->size || A->m != x->size)
+    {
+      PNL_ERROR ("size mismatch", "pnl_mat_scalar_prod_A");
+    }
+#endif
+
+  sum=ZERO;
+  for (i=0; i<x->size; i++)
+    {
+      BASE temp = ZERO;
+      for (j=0; j<A->n; j++) 
+        {
+          temp = PLUS(temp, MULT(FUNCTION(pnl_mat,get)(A,i,j), FUNCTION(pnl_vect,get)(y,j)));
+        }
+      sum = PLUS(sum, MULT(FUNCTION(pnl_vect,get)(x,i), temp));
+    }
+  return sum;
+}
+
+
+/**
  *  matrix multiplication
  *
  * @param rhs1 : first right hand side matrix

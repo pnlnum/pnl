@@ -196,63 +196,6 @@ int pnl_mat_exp (PnlMat *B, const PnlMat *A)
 }
 
 
-/************************************************************************/
-/* Copyright David Pommier <pommier.david@gmail.com>                    */
-/*                                                                      */
-/* This program is free software: you can redistribute it and/or modify */
-/* it under the terms of the GNU Lesser General Public License as       */
-/* published by the Free Software Foundation, either version 3 of the   */
-/* License, or (at your option) any later version.                      */
-/*                                                                      */
-/* This program is distributed in the hope that it will be useful, but  */
-/* WITHOUT ANY WARRANTY; without even the implied warranty of           */
-/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU    */
-/* Lesser General Public License for more details.                      */
-/*                                                                      */
-/* You should have received a copy of the GNU Lesser General Public     */
-/* License along with this program.  If not, see                        */
-/* <http://www.gnu.org/licenses/>.                                      */
-/************************************************************************/
-
-/**
- * Computes x' A y 
-
- * @param A : matrix
- * @param x : vector
- * @param y : vector
- * @return x' A y 
- */
-double pnl_mat_scalar_prod(const PnlMat *A, const PnlVect *x , const PnlVect * y)
-{
-  double *yarray,*Aarray,*xarray;
-  double temp,sum;
-  int i,j;
-  
-#ifndef PNL_RANGE_CHECK_OFF
-  if (A->n != y->size || A->m != x->size)
-    {
-      PNL_ERROR ("size mismatch", "pnl_mat_scalar_prod_A");
-    }
-#endif
-
-  xarray=x->array;
-  Aarray = A->array;
-  sum=0;
-  for (i=0; i<x->size; i++)
-    {
-      temp = 0.;
-      yarray = y->array;
-      for (j=0; j<A->n; j++) 
-        {
-          temp += (*Aarray)*(*yarray);
-          Aarray++; yarray++;
-        }
-      sum += (*xarray)*temp;
-      xarray ++;
-    }
-  return sum;
-}
-
 
 
 
