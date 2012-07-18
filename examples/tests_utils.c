@@ -331,6 +331,34 @@ int pnl_test_mat_eq_abs (const PnlMat *X, const PnlMat *Y, double abserr, const 
 }
 
 /** 
+ * Checks if |x(i,j) - y(i,j)| < abserr
+ * 
+ * @param X computed result (matrix)
+ * @param Y expected result (matrix)
+ * @param abserr absolute error 
+ * @param str the name of the tested function
+ * @param fmt a format string to be passed to printf
+ * @param ... extra arguments for printf
+ * 
+ * @return FALSE or TRUE
+ */
+int pnl_test_mat_complex_eq_abs (const PnlMatComplex *X, const PnlMatComplex *Y, double abserr, const char *str, const char *fmt, ...)
+{
+  va_list ap;
+  va_start (ap, fmt);
+  va_end (ap);
+  if ( X->m != Y->m || X->n != Y->n )
+    {
+      printf ("%s : ", str);
+      printf ("FAIL (size mismatch");
+      printf (fmt, ap); printf (")\n");
+      update_count_tests (1);
+      return FALSE;
+    }
+  return pnl_test_array ((double *)X->array, (double *)Y->array, 2 * X->mn, abserr, test_eq_abs, str, fmt, ap);
+}
+
+/** 
  * Checks if x(i,j) = y(i,j) for integer matrices
  * 
  * @param X computed result (matrix)
@@ -492,6 +520,34 @@ int pnl_test_vect_eq(const PnlVect *X, const PnlVect *Y, double relerr, const ch
       return FALSE;
     }
   return pnl_test_array (X->array, Y->array, X->size, relerr, test_eq, str, fmt, ap);
+}
+
+/** 
+ * Checks if |x(i,j) - y(i,j)| < abserr
+ * 
+ * @param X computed result (vector)
+ * @param Y expected result (vector)
+ * @param abserr absolute error
+ * @param str the name of the tested function
+ * @param fmt a format string to be passed to printf
+ * @param ... extra arguments for printf
+ * 
+ * @return FALSE or TRUE
+ */
+int pnl_test_vect_complex_eq_abs (const PnlVectComplex *X, const PnlVectComplex *Y, double abserr, const char *str, const char *fmt, ...)
+{
+  va_list ap;
+  va_start (ap, fmt);
+  va_end (ap);
+  if ( X->size != Y->size )
+    {
+      printf ("%s : ", str);
+      printf ("FAIL (size mismatch");
+      printf (fmt, ap); printf (")\n");
+      update_count_tests (1);
+      return FALSE;
+    }
+  return pnl_test_array ((double *)X->array, (double *)Y->array, 2 * X->size, abserr, test_eq_abs, str, fmt, ap);
 }
 
 /**

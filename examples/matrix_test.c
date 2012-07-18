@@ -1028,6 +1028,127 @@ static void pnl_mat_syslin_test ()
   pnl_vect_int_free (&p);
 }
 
+/* static void pnl_mat_complex_complex_syslin_test () */
+/* { */
+/*   PnlMatComplex *S, *Scopy, *B, *Bcopy, *SB; */
+/*   PnlMatComplex *Q, *R; */
+/*   PnlVectComplex *b, *x, *Sx; */
+/*   PnlVectInt *p; */
+/*   int gen = PNL_RNG_MERSENNE_RANDOM_SEED; */
+/*   pnl_rand_init (gen, 5, 5); */
+/*   b = pnl_vect_complex_create (5); */
+/*   Sx = pnl_vect_complex_new (); */
+/*   S = pnl_mat_complex_create (5, 5); */
+/*   SB = pnl_mat_complex_new (); */
+/*   pnl_vect_rand_normal (b, 5, gen); */
+/*   create_sym_her_matrix (S, 5, gen); */
+
+/*   Scopy = pnl_mat_complex_copy (S); */
+/*   x = pnl_vect_new (); */
+
+/*   set_triangular_to_zero (S, 'L'); */
+/*   pnl_mat_complex_upper_syslin(x,S,b); */
+/*   |+ check solution +| */
+/*   pnl_mat_complex_clone (S, Scopy); */
+/*   set_triangular_to_zero (S, 'L'); */
+/*   pnl_mat_complex_mult_vect_inplace (Sx, S, x); */
+/*   pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "mat_upper_syslin", ""); */
+
+/*   pnl_mat_complex_clone (S, Scopy); */
+/*   set_triangular_to_zero (S, 'U'); */
+/*   pnl_mat_complex_lower_syslin(x,S,b); */
+/*   |+ check solution +| */
+/*   pnl_mat_complex_clone (S, Scopy); */
+/*   set_triangular_to_zero (S, 'U'); */
+/*   pnl_mat_complex_mult_vect_inplace (Sx, S, x); */
+/*   pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "mat_lower_syslin", ""); */
+
+/*   pnl_mat_complex_clone (S, Scopy); */
+/*   pnl_mat_complex_chol (S); */
+/*   pnl_mat_complex_chol_syslin(x, S, b); */
+/*   pnl_mat_complex_mult_vect_inplace (Sx, Scopy, x); */
+/*   pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "mat_chol_syslin", ""); */
+
+/*   pnl_mat_complex_clone (S, Scopy); */
+/*   p = pnl_vect_int_create (5); */
+/*   pnl_mat_complex_lu (S, p); */
+/*   pnl_mat_complex_lu_syslin (x, S, p, b); */
+/*   pnl_mat_complex_mult_vect_inplace (Sx, Scopy, x); */
+/*   pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "mat_lu_syslin (symmetric)", ""); */
+
+/*   pnl_mat_complex_clone (S, Scopy); */
+/*   pnl_mat_complex_syslin (x, S, b); */
+/*   pnl_mat_complex_mult_vect_inplace (Sx, Scopy, x); */
+/*   pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "mat_syslin (symmetric)", ""); */
+
+/*   B = pnl_mat_complex_create (5,5); */
+/*   pnl_mat_complex_rand_normal (B, 5, 5, gen); */
+/*   Bcopy = pnl_mat_complex_copy (B); */
+/*   pnl_mat_complex_clone (S, Scopy); */
+/*   pnl_mat_complex_chol (S); */
+/*   pnl_mat_complex_chol_syslin_mat (S, B); */
+/*   pnl_mat_complex_mult_mat_inplace (SB, Scopy, B); */
+/*   pnl_test_mat_complex_eq_abs (SB, Bcopy, 1E-8, "mat_chol_syslin_mat (symmetric)", ""); */
+
+/*   pnl_mat_complex_clone (S, Scopy); */
+/*   pnl_mat_complex_clone (B, Bcopy); */
+/*   pnl_mat_complex_lu (S, p); */
+/*   pnl_mat_complex_lu_syslin_mat (S, p, B); */
+/*   pnl_mat_complex_mult_mat_inplace (SB, Scopy, B); */
+/*   pnl_test_mat_complex_eq_abs (SB, Bcopy, 1E-8, "mat_lu_syslin_mat (symmetric)", ""); */
+
+/*   pnl_mat_complex_clone (S, Scopy); */
+/*   pnl_mat_complex_clone (B, Bcopy); */
+/*   pnl_mat_complex_syslin_mat (S, B); */
+/*   pnl_mat_complex_mult_mat_inplace (SB, Scopy, B); */
+/*   pnl_test_mat_complex_eq_abs (SB, Bcopy, 1E-8, "mat_syslin_mat (symmetric)", ""); */
+
+
+/*   create_invertible_matrix (S, 5, gen); */
+/*   pnl_mat_complex_clone (Scopy, S); */
+/*   pnl_mat_complex_lu (S, p); */
+/*   pnl_mat_complex_lu_syslin (x, S, p, b); */
+/*   pnl_mat_complex_mult_vect_inplace (Sx, Scopy, x); */
+/*   pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "mat_lu_syslin", ""); */
+
+/*   pnl_mat_complex_clone (S, Scopy); */
+/*   Q = pnl_mat_complex_new (); */
+/*   R = pnl_mat_complex_new (); */
+/*   pnl_mat_complex_qr (Q, R, p, S); */
+/*   pnl_mat_complex_qr_syslin (x, Q, R, p, b); */
+/*   pnl_mat_complex_mult_vect_inplace (Sx, Scopy, x); */
+/*   pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "mat_qr_syslin", ""); */
+/*   pnl_mat_complex_free (&Q); */
+/*   pnl_mat_complex_free (&R); */
+
+/*   pnl_mat_complex_clone (S, Scopy); */
+/*   pnl_mat_complex_syslin (x, S, b); */
+/*   pnl_mat_complex_mult_vect_inplace (Sx, Scopy, x); */
+/*   pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "mat_syslin", ""); */
+
+/*   pnl_mat_complex_clone (S, Scopy); */
+/*   pnl_mat_complex_clone (B, Bcopy); */
+/*   pnl_mat_complex_lu (S, p); */
+/*   pnl_mat_complex_lu_syslin_mat (S, p, B); */
+/*   pnl_mat_complex_mult_mat_inplace (SB, Scopy, B); */
+/*   pnl_test_mat_complex_eq_abs (SB, Bcopy, 1E-8, "mat_lu_syslin_mat", ""); */
+
+/*   pnl_mat_complex_clone (S, Scopy); */
+/*   pnl_mat_complex_clone (B, Bcopy); */
+/*   pnl_mat_complex_syslin_mat (S, B); */
+/*   pnl_test_mat_complex_eq_abs (SB, Bcopy, 1E-8, "mat_syslin_mat", ""); */
+
+/*   pnl_mat_complex_free (&B); */
+/*   pnl_mat_complex_free (&SB); */
+/*   pnl_mat_complex_free (&Bcopy); */
+/*   pnl_mat_complex_free (&S); */
+/*   pnl_mat_complex_free (&Scopy); */
+/*   pnl_vect_free (&b); */
+/*   pnl_vect_free (&Sx); */
+/*   pnl_vect_free (&x); */
+/*   pnl_vect_int_free (&p); */
+/* } */
+
 static void pnl_mat_create_from_file_test ()
 {
   PnlMat *M, *res;

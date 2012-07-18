@@ -121,6 +121,23 @@ static void pnl_mat_log_test ()
   pnl_mat_free (&A);
 }
 
+static void pnl_mat_complex_exp_test ()
+{
+  PnlMatComplex *A, *expA, *sol;
+  A = pnl_mat_complex_create_from_file ("Data/Acomplex.txt");
+  sol = pnl_mat_complex_create_from_file ("Data/expAcomplex.txt");
+  expA = pnl_mat_complex_new ();
+  pnl_mat_complex_exp (expA, A);
+  pnl_mat_complex_print (expA);
+  printf ("\n");
+  pnl_mat_complex_print (sol);
+
+  pnl_test_mat_complex_eq_abs(expA, sol, 1E-8, "expm", "");
+  pnl_mat_complex_free (&A);
+  pnl_mat_complex_free (&expA);
+  pnl_mat_complex_free (&sol);
+}
+
 static void pnl_mat_ls_test ()
 {
   PnlMat *A, *B, *Bcopy, *AB;
@@ -190,7 +207,6 @@ static void pnl_mat_pchol_test ()
   pnl_vect_int_free (&p);
 }
 
-
 static void pnl_mat_qr_test ()
 {
   PnlMat *A, *Ap, *Q, *R, *QR;
@@ -224,12 +240,12 @@ static void pnl_mat_qr_test ()
   pnl_permutation_free (&p);
 }
 
-
 int main (int argc, char *argv[])
 {
   pnl_test_init(argc, argv);
   pnl_mat_eigen_test ();
   pnl_mat_log_test ();
+  pnl_mat_complex_exp_test ();
   pnl_mat_ls_test ();
   pnl_mat_pchol_test ();
   pnl_mat_qr_test ();
