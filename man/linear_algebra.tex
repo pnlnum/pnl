@@ -1098,28 +1098,11 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 \item \describefun{double}{pnl_mat_scalar_prod}{const \refstruct{PnlMat}
     \ptr A, const \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr y}
   \sshortdescribe Computes \var{x' * A * y}
-\end{itemize}
-
-\subsubsection{Functions specific to base type {\tt double}}
-
-\paragraph{Standard matrix operations}
-\begin{itemize}
-
 \item \describefun{void}{pnl_mat_exp}{\refstruct{PnlMat} \ptr B, 
     const \refstruct{PnlMat} \ptr A}
   \sshortdescribe Computes the matrix exponential \var{B = exp(A)}.
-
-\item \describefun{void}{pnl_mat_log}{\refstruct{PnlMat} \ptr B, 
-    const \refstruct{PnlMat} \ptr A}
-  \sshortdescribe Computes the matrix logarithm \var{B = log(A)}. For the
-  moment, this function only works if \var{A} is diagonalizable.
-
-\item \describefun{void}{pnl_mat_eigen}{\refstruct{PnlVect} *v, \refstruct{PnlMat} \ptr P, 
-    const \refstruct{PnlMat} \ptr A, int with_eigenvector}
-  \sshortdescribe Computes the eigenvalues (stored in \var{v}) and optionally
-  the eigenvectors stored column wise in \var{P} when
-  \var{with_eigenvector==TRUE}. If \var{A} is symmetric, \var{P} is orthonormal.
 \end{itemize}
+
 
 \paragraph{Linear systems and matrix decompositions}
 
@@ -1161,17 +1144,6 @@ computations have been carried out successfully and \var{FAIL} otherwise.
   elements of \var{L} are all 1. Row \var{i} of \var{A} was interchanged with
   row \var{p(i)}.
   
-\item \describefun{int}{pnl_mat_qr}{\refstruct{PnlMat} \ptr Q,
-  \refstruct{PnlMat} \ptr R, \refstruct{PnlPermutation} \ptr p,
-  const \refstruct{PnlMat} \ptr A} 
-  \sshortdescribe Computes a \var{A P = QR} decomposition. If on entry
-  \var{P=NULL}, then the decomposition is computed without pivoting, i.e
-  \var{A = QR}. When $P \ne NULL$, \var{P} must be an already allocated
-  \refstruct{PnlPermutation}. \var{Q} is an orthogonal matrix, i.e
-  $\var{Q}^{-1} = \var{Q}^{T}$ and \var{R} is an upper triangular matrix. The
-  use of pivoting improves the numerical stability when \var{A} is almost rank
-  deficient, i.e when the smallest eigenvalue of \var{A} is very close to $0$.
-
 \item \describefun{int}{pnl_mat_upper_syslin}{\refstruct{PnlVect}
     \ptr x, const \refstruct{PnlMat} \ptr U, const \refstruct{PnlVect}\ptr b}
   \sshortdescribe Solves an upper triangular linear system \var{U x = b}
@@ -1214,12 +1186,6 @@ computations have been carried out successfully and \var{FAIL} otherwise.
   elements of \var{L} are all 1. The solution of the system is stored in \var{b}
   on exit.
   
-\item \describefun{int}{pnl_mat_qr_syslin}{\refstruct{PnlVect} \ptr x,
-    const \refstruct{PnlMat} \ptr Q, const \refstruct{PnlMat} \ptr R,
-    const \refstruct{PnlVectInt} \ptr p, const \refstruct{PnlVect} \ptr b}
-  \sshortdescribe Solves a linear system \var{A x = b} where \var{A} is given by
-  its QR decomposition with column pivoting as computed by the function
-  \reffun{pnl_mat_qr}.
 \item \describefun{int}{pnl_mat_syslin}{\refstruct{PnlVect} \ptr x, const
     \refstruct{PnlMat} \ptr A, const \refstruct{PnlVect} \ptr b} 
   \sshortdescribe Solves a linear system A x = b using a LU factorization
@@ -1254,19 +1220,6 @@ computations have been carried out successfully and \var{FAIL} otherwise.
   with the same number of rows as \var{A}.
   The solution of the system is stored in \var{B} on exit. 
 
-\item \describefun{int}{pnl_mat_ls}{const \refstruct{PnlMat}\ptr A, \refstruct{PnlVect} \ptr b}
-  \sshortdescribe Solves a linear system A x = b in the least square sense,
-  i.e. $\var{x} = \arg\min_U \| A * u - b\|^2$. The solution is stored into
-  \var{b} on exit. It internally uses a \var{AP = QR} decomposition.
-
-\item \describefun{int}{pnl_mat_ls_mat}{const \refstruct{PnlMat}\ptr A,
-    \refstruct{PnlMat} \ptr B}
-  \sshortdescribe Solves a linear system A X = B with \var{A} and \var{B} two
-  matrices in the least square sense, i.e. $\var{X} = \arg\min_U \| A * U -
-  B\|^2$. The solution is stored into \var{B} on exit. It internally uses a
-  \var{AP = QR} decomposition. Same function as \reffun{pnl_mat_ls} but handles
-  several r.h.s.
-
 \end{itemize}
 
 
@@ -1294,6 +1247,70 @@ invert the system matrix because it is much longer.
   A and stores the result into \var{inverse}. The Cholesky factorisation of
   the matrix \var{A} is computed inside this function.
 \end{itemize}
+
+\subsubsection{Functions specific to base type {\tt double}}
+
+\paragraph{Standard matrix operations}
+\begin{itemize}
+
+\item \describefun{void}{pnl_mat_log}{\refstruct{PnlMat} \ptr B, 
+    const \refstruct{PnlMat} \ptr A}
+  \sshortdescribe Computes the matrix logarithm \var{B = log(A)}. For the
+  moment, this function only works if \var{A} is diagonalizable.
+
+\item \describefun{void}{pnl_mat_eigen}{\refstruct{PnlVect} *v, \refstruct{PnlMat} \ptr P, 
+    const \refstruct{PnlMat} \ptr A, int with_eigenvector}
+  \sshortdescribe Computes the eigenvalues (stored in \var{v}) and optionally
+  the eigenvectors stored column wise in \var{P} when
+  \var{with_eigenvector==TRUE}. If \var{A} is symmetric, \var{P} is orthonormal.
+\end{itemize}
+
+\paragraph{Linear systems and matrix decompositions}
+
+The following functions are designed to solve linear system of the from \var{A x
+= b} where \var{A} is a matrix and \var{b} is a vector except in the functions
+\reffun{pnl_mat_syslin_mat}, \reffun{pnl_mat_lu_syslin_mat} and
+\reffun{pnl_mat_chol_syslin_mat} which expect the right hand side member to be a
+matrix too. Whenever the vector \var{b} is not needed once the system is solved,
+you should consider using ``inplace'' functions.
+
+
+All the functions described in this paragraph return \var{OK} if the
+computations have been carried out successfully and \var{FAIL} otherwise.
+
+\begin{itemize}
+\item \describefun{int}{pnl_mat_qr}{\refstruct{PnlMat} \ptr Q,
+  \refstruct{PnlMat} \ptr R, \refstruct{PnlPermutation} \ptr p,
+  const \refstruct{PnlMat} \ptr A} 
+  \sshortdescribe Computes a \var{A P = QR} decomposition. If on entry
+  \var{P=NULL}, then the decomposition is computed without pivoting, i.e
+  \var{A = QR}. When $P \ne NULL$, \var{P} must be an already allocated
+  \refstruct{PnlPermutation}. \var{Q} is an orthogonal matrix, i.e
+  $\var{Q}^{-1} = \var{Q}^{T}$ and \var{R} is an upper triangular matrix. The
+  use of pivoting improves the numerical stability when \var{A} is almost rank
+  deficient, i.e when the smallest eigenvalue of \var{A} is very close to $0$.
+
+\item \describefun{int}{pnl_mat_qr_syslin}{\refstruct{PnlVect} \ptr x,
+    const \refstruct{PnlMat} \ptr Q, const \refstruct{PnlMat} \ptr R,
+    const \refstruct{PnlVectInt} \ptr p, const \refstruct{PnlVect} \ptr b}
+  \sshortdescribe Solves a linear system \var{A x = b} where \var{A} is given by
+  its QR decomposition with column pivoting as computed by the function
+  \reffun{pnl_mat_qr}.
+\item \describefun{int}{pnl_mat_ls}{const \refstruct{PnlMat}\ptr A, \refstruct{PnlVect} \ptr b}
+  \sshortdescribe Solves a linear system A x = b in the least square sense,
+  i.e. $\var{x} = \arg\min_U \| A * u - b\|^2$. The solution is stored into
+  \var{b} on exit. It internally uses a \var{AP = QR} decomposition.
+
+\item \describefun{int}{pnl_mat_ls_mat}{const \refstruct{PnlMat}\ptr A,
+    \refstruct{PnlMat} \ptr B}
+  \sshortdescribe Solves a linear system A X = B with \var{A} and \var{B} two
+  matrices in the least square sense, i.e. $\var{X} = \arg\min_U \| A * U -
+  B\|^2$. The solution is stored into \var{B} on exit. It internally uses a
+  \var{AP = QR} decomposition. Same function as \reffun{pnl_mat_ls} but handles
+  several r.h.s.
+
+\end{itemize}
+
 
 \subsubsection{Permutations}
 
