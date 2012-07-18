@@ -300,6 +300,22 @@ Equivalently to these functions, there exist macros for {\bf \refstruct{PnlVect}
   vector. The original vector is modified
 \end{itemize}
 
+\subparagraph{Scalar products and norms}
+\begin{itemize}
+\item \describefun{double}{pnl_vect_norm_two}{const \refstruct{PnlVect} \ptr V}
+  \sshortdescribe Returns the two norm of a vector  
+
+\item \describefun{double}{pnl_vect_norm_one}{const \refstruct{PnlVect} \ptr V}
+  \sshortdescribe Returns the one norm of a vector  
+
+\item \describefun{double}{pnl_vect_norm_infty}{const \refstruct{PnlVect} \ptr V}
+  \sshortdescribe Returns the infinity norm of a vector  
+
+\item \describefun{double}{pnl_vect_scalar_prod}{const \refstruct{PnlVect}
+    \ptr rhs1, const \refstruct{PnlVect} \ptr rhs2} 
+  \sshortdescribe Computes the scalar product between 2 vectors  
+\end{itemize}
+
 \subparagraph{Test functions}
 
 \begin{itemize}
@@ -386,21 +402,6 @@ no total ordering on Complex numbers
 
 \end{itemize}
 
-\subparagraph{Scalar products and norms}
-\begin{itemize}
-\item \describefun{double}{pnl_vect_norm_two}{const \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Returns the two norm of a vector  
-
-\item \describefun{double}{pnl_vect_norm_one}{const \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Returns the one norm of a vector  
-
-\item \describefun{double}{pnl_vect_norm_infty}{const \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Returns the infinity norm of a vector  
-
-\item \describefun{double}{pnl_vect_scalar_prod}{const \refstruct{PnlVect}
-    \ptr rhs1, const \refstruct{PnlVect} \ptr rhs2} 
-  \sshortdescribe Computes the scalar product between 2 vectors  
-\end{itemize}
 
 \subparagraph{Misc}
 
@@ -603,7 +604,7 @@ with another structure (\var{owner=0}). \var{mem_size} is the number of
 elements the matrix can hold at most.
 
 The following operations are implemented on matrices and vectors. \var{alpha}
-and \var{beta} are real numbers, \var{A} and \var{B} are matrices and \var{x}
+and \var{beta} are numbers, \var{A} and \var{B} are matrices and \var{x}
 and \var{y} are vectors.
 \begin{tabular}{ll}
   \reffun{pnl_mat_axpy} & \var{B := alpha * A + B} \\
@@ -1006,6 +1007,8 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 
 
 \paragraph{Standard matrix operations}
+
+  
 \begin{itemize}
 \item \describefun{void}{pnl_mat_plus_mat}{\refstruct{PnlMat} \ptr lhs, const
     \refstruct{PnlMat} \ptr rhs} 
@@ -1092,6 +1095,9 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
     \sshortdescribe In-place matrix multiplication  \var{lhs = rhs1 * rhs2}. The
     matrix \var{lhs} must be different from \var{rhs1} and \var{rhs2}.
 
+\item \describefun{double}{pnl_mat_scalar_prod}{const \refstruct{PnlMat}
+    \ptr A, const \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr y}
+  \sshortdescribe Computes \var{x' * A * y}
 \end{itemize}
 
 \subsubsection{Functions specific to base type {\tt double}}
@@ -1099,11 +1105,6 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 \paragraph{Standard matrix operations}
 \begin{itemize}
 
-\item \describefun{double}{pnl_mat_scalar_prod}{const \refstruct{PnlMat}
-    \ptr A, const \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr y}
-  \sshortdescribe Computes \var{x' * A * y}
-
-  
 \item \describefun{void}{pnl_mat_exp}{\refstruct{PnlMat} \ptr B, 
     const \refstruct{PnlMat} \ptr A}
   \sshortdescribe Computes the matrix exponential \var{B = exp(A)}.
