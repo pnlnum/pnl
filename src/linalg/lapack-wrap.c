@@ -37,6 +37,19 @@ static int pnl_mat_is_sym (const PnlMat *A);
 static int pnl_dgeev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors);
 static int pnl_dsyev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors);
 
+#define BASE_DOUBLE
+#include "pnl/pnl_templates_on.h"
+#include "lapack-wrap_source.c"
+#include "pnl/pnl_templates_off.h"
+#undef  BASE_DOUBLE
+
+
+#define BASE_PNL_COMPLEX
+#include "pnl/pnl_templates_on.h"
+#include "lapack-wrap_source.c"
+#include "pnl/pnl_templates_off.h"
+#undef  BASE_PNL_COMPLEX
+
 
 /**
  * Checks if a (real) matrix is symmetric
@@ -51,7 +64,7 @@ static int pnl_mat_is_sym (const PnlMat *A)
   for ( i=0 ; i<A->m ; i++ )
     for ( j=0 ; j<i ; j++ )
       {
-        if (MGET(A, i, j) != MGET(A, j, i)) return FALSE;
+        if (pnl_mat_get(A, i, j) != pnl_mat_get(A, j, i)) return FALSE;
       }
   return TRUE;
 }
@@ -70,117 +83,6 @@ static void pnl_mat_make_upper (PnlMat *A)
           pnl_mat_set (A, i, j, 0.);
         }
     }
-}
-
-/**
- * Cholesky decomposition. Postivity is checked during the
- * transformation, but no test of symmetry.
- *
- * Decomposition done in place. The lower part of the matrix
- * contains the cholesky decomposition. The upper part is
- * set to 0.
- *
- * @param M : a PnlMat pointer.
- * @return OK or FAIL
- */
-int pnl_mat_chol (PnlMat *M)
-{
-  int n, lda, info, i, j;
-  CheckIsSquare(M);
-  n = M->m;
-  lda = M->m;
-  /* Because of Fortran column wise storage, we ask for an upper triangular
-   * matrix to actually have a lower one */
-  C2F(dpotrf)("U", &n, M->array, &lda, &info);
-  if (info != 0)
-    {
-      PNL_MESSAGE_ERROR ("matrix is singular", "pnl_mat_chol");
-      return FAIL;
-    }
-  /* Sets the upper part to 0 */
-  for ( i=0 ; i<M->m ; i++ )
-    {
-      for ( j=i+1 ; j<M->n ; j++ )
-        {
-          PNL_MLET (M, i, j) = 0.;
-        }
-    }
-  return OK;
-}
-
-/** 
- * Computes the Cholesky decompisition with complete pivoting. 
- *
- *       P' * A * P = L  * L'
- *
- * The input matrix must be symmetric and positive semidefinite 
- * 
- * @param M input matrix. On output contains L
- * @param tol tolerance : if a pivot is smaller than this value, it is
- * considered as zero
- * @param rank (output) rank of the matrix
- * @param p An integer vector representing a permutation
- * 
- * @return OK or FAIL
- */
-int pnl_mat_pchol (PnlMat *M, double tol, int *rank, PnlVectInt *p)
-{
-  int n, lda, info, i, j;
-  double *work;
-  CheckIsSquare(M);
-  n = M->m;
-  lda = M->m;
-  pnl_vect_int_resize (p, n);
-  work = malloc (sizeof (double) * 2*n);
-
-
-  /* Because of Fortran column wise storage, we ask for an upper triangular
-   * matrix to actually have a lower one */
-  C2F(dpstrf)("U", &n, M->array, &lda, p->array, rank, &tol, work, &info);
-  free (work);
-  if (info < 0)
-    {
-      PNL_MESSAGE_ERROR ("matrix has illegal entries", "pnl_mat_pchol");
-      return FAIL;
-    }
-  /* Sets the upper part to 0 */
-  for ( i=0 ; i<M->m ; i++ )
-    {
-      for ( j=i+1 ; j<M->n ; j++ )
-        {
-          PNL_MLET (M, i, j) = 0.;
-        }
-    }
-  /* C indices start at 0 */
-  pnl_vect_int_minus_int (p, 1);
-  return OK;
-}
-
-/**
- * computes a P A = LU factorisation. On exit A contains the L and U
- * matrices. Note that the diagonal elements of L are all 1.
- *
- * @param A the matrix to decompose.
- * @param p a PnlPermutation.
- * @return OK or FAIL
- */
-int pnl_mat_lu (PnlMat *A, PnlPermutation *p)
-{
-  int info, N = A->n;
-  
-  CheckIsSquare(A);
-
-  pnl_mat_sq_transpose (A);
-  C2F(dgetrf) (&N, &N, A->array, &N, p->array, &info);
-  if ( info != 0 )
-    {
-      PNL_MESSAGE_ERROR ("LU decomposition cannot be computed", "pnl_mat_lu");
-      return FAIL;
-    }
-  pnl_mat_sq_transpose (A);
-  /* C indices start at 0 */
-  pnl_vect_int_minus_int (p, 1);
-  return OK;
 }
 
 /**
@@ -271,194 +173,6 @@ int pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
 }
 
 /**
- * solves an upper triangular linear system
- *
- * @param x already existing PnlVect that contains the solution on exit
- * @param A an upper triangular matric
- * @param b right hand side member
- * @return OK or FAIL
- */
-int pnl_mat_upper_syslin (PnlVect *x, const PnlMat *A, const  PnlVect *b)
-{
-  int n, nrhs, lda, ldb, info;
-  
-  CheckIsSquare(A);
-  n = A->n;
-  nrhs = 1;
-  lda = A->m;
-  ldb = A->m;
-  pnl_vect_clone (x, b);
-  /* Beware that Fortran uses a column wise store, we actually consider A^T */
-  C2F(dtrtrs)("L","T","N",&n,&nrhs,A->array,&lda,x->array,&ldb,&info);
-  if (info != 0)
-    {
-      PNL_MESSAGE_ERROR ("Matrix is singular", "pnl_mat_upper_syslin");
-      return FAIL;
-    }
-  return OK;
-}
-
-/**
- * solves a lower triangular linear system
- *
- * @param x already existing PnlVect that contains the solution on exit
- * @param A a lower triangular matrix
- * @param b right hand side member
- * @return OK or FAIL
- */
-int pnl_mat_lower_syslin (PnlVect *x, const PnlMat *A, const  PnlVect *b)
-{
-  int n, nrhs, lda, ldb, info;
-  
-  CheckIsSquare(A);
-  n = A->n;
-  nrhs = 1;
-  lda = A->m;
-  ldb = A->m;
-  pnl_vect_clone (x, b);
-  /* Beware that Fortran uses a column wise store, we actually consider A^T */
-  C2F(dtrtrs)("U","T","N",&n,&nrhs,A->array,&lda,x->array,&ldb,&info);
-  if (info != 0)
-    {
-      PNL_MESSAGE_ERROR ("Matrix is singular", "pnl_mat_lower_syslin");
-      return FAIL;
-    }
-  return OK;
-}
-
-/**
- * solves a symmetric DEFINITE POSITIVE linear system using the Cholesky
- * decomposition of the system A x = b
- *
- * @param chol the Cholesky decomposition of the system as computed by pnl_mat_chol
- * @param b right hand side member. On exit, b contains the solution of the system.
- * @return OK or FAIL
- */
-int pnl_mat_chol_syslin_inplace (const PnlMat *chol, PnlVect *b)
-{
-  int n, nrhs, lda, ldb, info;
-  CheckIsSquare(chol);
-  CheckMatVectIsCompatible (chol, b);
-  n = chol->m;
-  lda = chol->m;
-  ldb = b->size;
-  nrhs = 1;
-
-  C2F(dpotrs)("U", &n, &nrhs, chol->array, &lda, b->array, &ldb, &info);
-  if (info != 0)
-    {
-      PNL_MESSAGE_ERROR ("illegal value", "pnl_mat_chol_syslin");
-      return FAIL;
-    }
-  return OK;
-}
-
-/**
- * solves a symmetric DEFINITE POSITIVE linear system using the Cholesky
- * decomposition of the system A x = b
- *
- * @param x already existing PnlVect that contains the solution on exit
- * @param chol the Cholesky decomposition of the system as computed by pnl_mat_chol
- * @param b right hand side member
- * @return OK or FAIL
- */
-int pnl_mat_chol_syslin (PnlVect *x, const PnlMat *chol, const  PnlVect *b)
-{
-  pnl_vect_clone (x,b);
-  return pnl_mat_chol_syslin_inplace (chol, x);
-}
-
-/**
- * solves a linear system A X = B using a Cholesky factorization of A where B
- * is a matrix. Note that A must be symmetrix positive definite
- *
- * @param A contains the Cholesky decomposition of the matrix A as computed by
- * pnl_mat_chol
- * @param B the r.h.s. matrix of the system of size n x m. On exit B contains
- * the solution X
- * @return OK or FAIL
- */
-int pnl_mat_chol_syslin_mat (const PnlMat *A,  PnlMat *B)
-{
-  int n, nrhs, lda, ldb, info;
-  PnlMat *tB;
-  CheckIsSquare(A);
-  PNL_CHECK (A->m != B->m, "size mismatch", "pnl_mat_chol_syslin_mat");
-  n = A->m;
-  lda = A->m;
-  ldb = B->m;
-  nrhs = B->n;
-
-  /* Some tweaks are needed because of Fortran storage in Blas */
-  tB = pnl_mat_create (0,0);
-  /* Convert to column wise storage */
-  pnl_mat_tr (tB, B);
-  C2F(dpotrs)("U", &n, &nrhs, A->array, &lda, tB->array, &ldb, &info);
-  if (info != 0)
-    {
-      PNL_MESSAGE_ERROR ("illegal value", "pnl_mat_chol_syslin");
-      return FAIL;
-    }
-  /* Revert to row wise storage */
-  pnl_mat_tr (B, tB);
-  pnl_mat_free (&tB);
-  return OK;
-}
-
-/**
- * solves the linear system A x = b with P A = LU. For a symmetric definite
- * positive system, prefer pnl_mat_chol_syslin
- *
- * @param A a PnlMat containing the LU decomposition of A
- * @param p a PnlVectInt.
- * @param b right hand side member. Contains the solution x on exit
- * @return OK or FAIL
- */
-int pnl_mat_lu_syslin_inplace (PnlMat *A, const PnlVectInt *p, PnlVect *b)
-{
-  int i, n, nrhs, lda, ldb, info;
-  CheckIsSquare(A);
-  CheckMatVectIsCompatible (A, b);
-  CheckVectMatch (p, b); 
-
-  n = A->n;
-  nrhs = 1;
-  lda = A->m;
-  ldb = A->m;
-  /* Fortran indices start at 1 */
-  for ( i=0 ; i<p->size ; i++ ) (p->array[i])++;
-  /* Convert to a column wise storage */
-  pnl_mat_sq_transpose (A);
-  C2F(dgetrs)("N",&n,&nrhs,A->array,&lda,p->array,b->array,&ldb,&info);
-  /* Revert to a row wise storage */
-  pnl_mat_sq_transpose (A);
-  /* Fortran indices start at 1 */
-  for ( i=0 ; i<p->size ; i++ ) (p->array[i])--;
-  if (info != 0)
-    {
-      PNL_MESSAGE_ERROR ("Matrix is singular", "pnl_lu_syslin");
-      return FAIL;
-    }
-  return OK;
-}
-
-/**
- * solves the linear system A x = b with P A = LU. For a symmetric definite
- * positive system, prefer pnl_mat_chol_syslin
- *
- * @param x existing vector that contains the solution on exit
- * @param LU a PnlMat containing the LU decomposition of A
- * @param b right hand side member
- * @param p a PnlVectInt.
- * @return OK or FAIL
- */
-int pnl_mat_lu_syslin (PnlVect *x, PnlMat *LU, const PnlVectInt *p, const PnlVect *b)
-{
-  pnl_vect_clone (x, b);
-  return pnl_mat_lu_syslin_inplace (LU, p, x);
-}
-
-/**
  * solves the linear system A x = b with A P = QR.  *
  * @param x a PnlVect containing the solution on exit
  * @param Q a orthogonal PnlMat 
@@ -480,263 +194,6 @@ int pnl_mat_qr_syslin (PnlVect *x, const PnlMat *Q, const PnlMat *R,
   pnl_mat_dgemv ('T', 1., Q, b, 0., y); /* y = Q' b */
   pnl_mat_upper_syslin (x, R, y); /* x = R^-1 Q' b */
   pnl_vect_permute_inverse_inplace (x, p);
-  return OK;
-}
-
-/**
- * solves a linear system A x = b using a LU factorization
- * @param x a PnlVect containing the solution on exit (must have already
- * been created )
- * @param A the matrix of the system
- * @param b the r.h.s. member
- * @return OK or FAIL
- */
-int pnl_mat_syslin (PnlVect *x, const PnlMat *A, const PnlVect *b)
-{
-  PnlMat *LU;
-  int status;
-  LU = pnl_mat_copy (A);
-  pnl_vect_clone (x, b);
-  status = pnl_mat_syslin_inplace (LU, x);
-  pnl_mat_free (&LU);
-  return status;
-}
-
-/**
- * solves a linear system A x = b using a LU factorization
- * @param A the matrix of the system. On exit contains the LU decomposition of A.
- * @param b the r.h.s. member
- * @return OK or FAIL
- */
-int pnl_mat_syslin_inplace (PnlMat *A, PnlVect *b)
-{
-  PnlVectInt *p;
-  int status;
-  CheckIsSquare(A);
-  p = pnl_vect_int_create (A->m);
-  status = pnl_mat_lu (A, p);
-  if ( status != OK ) return FAIL;
-  status = pnl_mat_lu_syslin_inplace (A, p, b);
-  pnl_vect_int_free (&p);
-  return status;
-}
-
-/**
- * solves a linear system A X = B using a LU factorization where B is a matrix
- * @param A contains the L and U factors of the PA = LU factoratisation
- * previously computed by pnl_mat_lu
- * @param p the permutation associated to the PA = LU factotisation
- * @param B the r.h.s. matrix of the system of size n x m. On exit B contains
- * the solution X
- * @return OK or FAIL
- */
-int pnl_mat_lu_syslin_mat (const PnlMat *A,  const PnlPermutation *p, PnlMat *B)
-{
-  int i, n, nrhs, lda, ldb, info;
-  PnlMat *tB;
-  CheckIsSquare(A);
-  PNL_CHECK (A->m != B->m, "size mismatch", "pnl_mat_lu_syslin_mat");
-
-  n = A->n;
-  nrhs = B->n;
-  lda = A->m;
-  ldb = A->m;
-
-  /* Some tweaks are needed because of Fortran storage in Blas */
-  tB = pnl_mat_create (0,0);
-  /* Convert to column wise storage */
-  pnl_mat_sq_transpose ( (PnlMat *) A); /* drop the const because A is reverted at the end */
-  pnl_mat_tr (tB, B);
-  /* shift indices of pivoting */
-  for ( i=0 ; i<p->size ; i++ ) (p->array[i])++;
-
-  C2F(dgetrs)("N",&n,&nrhs,A->array,&lda,p->array,tB->array,&ldb,&info);
-  /* Revert to row wise storage */
-  pnl_mat_sq_transpose ( (PnlMat *) A); /* drop the const because A is reverted at the end */
-
-  pnl_mat_tr (B, tB);
-  /* unshift indices of pivoting */
-  for ( i=0 ; i<p->size ; i++ ) (p->array[i])--;
-  if (info != 0)
-    {
-      PNL_MESSAGE_ERROR ("Matrix is singular", "pnl_lu_syslin");
-      return FAIL;
-    }
-  pnl_mat_free (&tB);
-  return OK;
-}
-
-/**
- * solves a linear system A X = B using a LU factorization where B is a matrix
- * @param A the matrix of the system of size n x n. On exit contains the LU decomposition
- * @param B the r.h.s. matrix of the system of size n x m. On exit B contains
- * the solution X
- * @return OK or FAIL
- */
-int pnl_mat_syslin_mat (PnlMat *A,  PnlMat *B)
-{
-  PnlVectInt *p;
-  int status;
-  CheckIsSquare(A);
-  p = pnl_vect_int_create (A->m);
-  pnl_mat_lu (A, p);
-
-  status = pnl_mat_lu_syslin_mat (A, p , B);
-  pnl_vect_int_free (&p);
-  return status;
-}
-
-/**
- * inversion of an upper triangular matrix
- *
- * @param A on exit, contains the inverse of B. A must be an already allocated PnlMat
- * @param B an upper triangular matrix
- * @return OK or FAIL
- */
-int pnl_mat_upper_inverse(PnlMat *A, const PnlMat *B)
-{
-  int n, lda, info;
-  
-  CheckIsSquare(B);
-  pnl_mat_clone (A, B);
-  n = A->n;
-  lda = A->m;
-  /* Beware that Fortran uses a column wise storage, we actually consider A^T */
-  C2F(dtrtri)("L","N",&n,A->array,&lda,&info);
-  if (info != 0)
-    {
-      PNL_MESSAGE_ERROR ("Matrix is singular", "pnl_mat_upper_inverse");
-      return FAIL;
-    }
-  return OK;
-}
-
-/**
- * inversion of a lower triangular matrix
- *
- * @param A on exit, contains the inverse of B. A must be an already allocated PnlMat
- * @param B a lower triangular matrix
- * @return OK or FAIL
- */
-int pnl_mat_lower_inverse (PnlMat *A, const PnlMat *B)
-{
-  int n, lda, info;
-  
-  CheckIsSquare(B);
-  pnl_mat_clone (A, B);
-  n = A->n;
-  lda = A->m;
-  /* Beware that Fortran uses a column wise storage, we actually consider A^T */
-  C2F(dtrtri)("U","N",&n,A->array,&lda,&info);
-  if (info != 0)
-    {
-      PNL_MESSAGE_ERROR ("Matrix is singular", "pnl_mat_upper_inverse");
-      return FAIL;
-    }
-  return OK;
-}
-
-/**
- * Computes the inverse of a symmetric positive defnite matrix using a Cholesky
- * decomposition
- *
- * @param A a matrix.
- * @param inv a PnlMat (already allocated). contains A^-1 on exit.
- * @return OK or FAIL
- */
-int pnl_mat_inverse_with_chol (PnlMat *inv, const PnlMat *A)
-{
-  int i, j, n, lda, info;
-  pnl_mat_clone (inv, A);
-  pnl_mat_chol (inv);
-  n = A->m;
-  lda = A->m;
-
-  C2F(dpotri)("U", &n, inv->array, &lda, &info);
-  if (info != 0)
-    {
-      PNL_MESSAGE_ERROR ("illegal values", "pnl_mat_inverse_with_chol");
-      return FAIL;
-    }
-  /* Now we need to symmetrise inv because the upper part is 0 */
-  for ( i=0 ; i<inv->m ; i++ )
-    {
-      for ( j=0 ; j<i ; j++ )
-        {
-          PNL_MLET (inv, j, i) = PNL_MGET (inv, i, j);
-        }
-    }
-  return OK;
-}
-
-/**
- * Computes the inverse of a matrix using a LU decomposition
- *
- * @param A a matrix.
- * @param inv a PnlMat (already allocated). contains
- * \verbatim A^-1 \endverbatim on exit.
- * @return OK or FAIL
- */
-int pnl_mat_inverse (PnlMat *inv, const PnlMat *A)
-{
-  int n, lda, lwork, info, *ipiv;
-  double *work, qwork;
-  n = A->m;
-  lda = A->m;
-  pnl_mat_tr (inv, A);
-  ipiv = MALLOC_INT (A->m);
-  C2F(dgetrf)(&n, &n, inv->array, &lda, ipiv, &info);
-  if (info != 0)
-    {
-      free (ipiv); 
-      PNL_MESSAGE_ERROR ("matrix is singular", "pnl_mat_inverse");
-      return FAIL;
-    }
-  lwork = -1;
-  C2F(dgetri)(&n,inv->array,&lda,ipiv,&qwork,&lwork,&info);
-  if (info != 0)
-    {
-      PNL_MESSAGE_ERROR ("Cannot query workspace", "pnl_mat_inverse");
-      return FAIL;
-    }
-  lwork = (int) qwork;
-  work = MALLOC_DOUBLE (lwork);
-  C2F(dgetri)(&n,inv->array,&lda,ipiv,work,&lwork,&info);
-  if (info != 0)
-    {
-      free (ipiv); free (work);
-      PNL_MESSAGE_ERROR ("matrix is singular", "pnl_mat_inverse");
-      return FAIL;
-    }
-  pnl_mat_sq_transpose (inv);
-  free (ipiv); free (work);
-  return OK;
-}
-
-/**
- * Computes the eigenvalues and eigenvectors of a real matrix
- *
- * @param v a vector containing the eigenvalues on exit
- * @param P a matrix containing the eigenvectors on exit
- * @param A a matrix
- * @param with_eigenvectors can be TRUE to compute the eigenvectors or FALSE
- * if they are not required, in this latter case P can be NULL
- * @return OK or FAIL
- */
-int pnl_mat_eigen (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors)
-{
-  int is_sym;
-  int info;
-
-  is_sym = pnl_mat_is_sym (A);
-  if (is_sym == TRUE) info = pnl_dsyev(v, P, A, with_eigenvectors);
-  else info = pnl_dgeev(v, P, A, with_eigenvectors);
-
-  if (info == FAIL)
-    {
-      PNL_MESSAGE_ERROR ("Error", "pnl_mat_eigen");
-      return FAIL;
-    }
   return OK;
 }
 
@@ -845,6 +302,33 @@ static int pnl_dgeev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvect
  err:
   free(wi); free(work); free(input);
   return FAIL;
+}
+
+/**
+ * Computes the eigenvalues and eigenvectors of a real matrix
+ *
+ * @param v a vector containing the eigenvalues on exit
+ * @param P a matrix containing the eigenvectors on exit
+ * @param A a matrix
+ * @param with_eigenvectors can be TRUE to compute the eigenvectors or FALSE
+ * if they are not required, in this latter case P can be NULL
+ * @return OK or FAIL
+ */
+int pnl_mat_eigen (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors)
+{
+  int is_sym;
+  int info;
+
+  is_sym = pnl_mat_is_sym (A);
+  if (is_sym == TRUE) info = pnl_dsyev(v, P, A, with_eigenvectors);
+  else info = pnl_dgeev(v, P, A, with_eigenvectors);
+
+  if (info == FAIL)
+    {
+      PNL_MESSAGE_ERROR ("Error", "pnl_mat_eigen");
+      return FAIL;
+    }
+  return OK;
 }
 
 /**

@@ -102,6 +102,26 @@ extern void pnl_mat_complex_cumsum(PnlMatComplex *lhs, char a);
 extern void pnl_mat_complex_prod_vect (PnlVectComplex *y, const PnlMatComplex *M, char a);
 extern void pnl_mat_complex_cumprod(PnlMatComplex *lhs, char a);
 
+extern int pnl_mat_complex_upper_inverse(PnlMatComplex *A, const PnlMatComplex *B);
+extern int pnl_mat_complex_lower_inverse (PnlMatComplex *A, const PnlMatComplex *B);
+extern int pnl_mat_complex_chol(PnlMatComplex *x);
+extern int pnl_mat_complex_pchol (PnlMatComplex *M, double tol, int *rank, PnlVectInt *p);
+extern int pnl_mat_complex_upper_syslin (PnlVectComplex *x, const PnlMatComplex *U, const  PnlVectComplex *b);
+extern int pnl_mat_complex_lower_syslin (PnlVectComplex *x, const PnlMatComplex *L, const  PnlVectComplex *b);
+extern int pnl_mat_complex_chol_syslin (PnlVectComplex *x, const PnlMatComplex *chol, const  PnlVectComplex *b);
+extern int pnl_mat_complex_chol_syslin_inplace (const PnlMatComplex *chol, PnlVectComplex *b);
+extern int pnl_mat_complex_lu (PnlMatComplex *A, PnlVectInt *p);
+extern int pnl_mat_complex_lu_syslin (PnlVectComplex *x, PnlMatComplex *LU,
+                               const PnlVectInt *p, const PnlVectComplex *b);
+extern int pnl_mat_complex_lu_syslin_inplace(PnlMatComplex *LU, const PnlVectInt *p, PnlVectComplex *b);
+extern int pnl_mat_complex_syslin_mat (PnlMatComplex *A,  PnlMatComplex *B);
+extern int pnl_mat_complex_lu_syslin_mat (const PnlMatComplex *A,  const PnlPermutation *p, PnlMatComplex *B);
+extern int pnl_mat_complex_chol_syslin_mat (const PnlMatComplex *A,  PnlMatComplex *B);
+extern int pnl_mat_complex_syslin (PnlVectComplex *x, const PnlMatComplex *A, const PnlVectComplex *b);
+extern int pnl_mat_complex_syslin_inplace (PnlMatComplex *A, PnlVectComplex *b);
+extern int pnl_mat_complex_inverse (PnlMatComplex *inverse, const PnlMatComplex *A);
+extern int pnl_mat_complex_inverse_with_chol (PnlMatComplex *inverse, const PnlMatComplex *A);
+extern int pnl_mat_complex_exp (PnlMatComplex *expA, const PnlMatComplex *A);
 
 
 /* inline functions if you are using GCC */

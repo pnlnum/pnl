@@ -83,3 +83,11 @@
 #ifdef FP
 #undef FP
 #endif
+
+#ifdef PNL_C2F
+#undef PNL_C2F
+#endif
+
+#ifdef MALLOC_BASE
+#undef MALLOC_BASE
+#endif

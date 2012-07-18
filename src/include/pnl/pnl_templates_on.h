@@ -36,6 +36,8 @@
 #define INV(a) 1/(a)
 #define SQUARE_NORM(a) (a)*(a)
 #define NORMONE(a) fabs(a)
+#define PNL_C2F(f) C2F(d##f)
+#define MALLOC_BASE MALLOC_DOUBLE
 
 
 #elif defined BASE_PNL_COMPLEX
@@ -68,6 +70,8 @@
 #define INV(a) Cinv(a)
 #define SQUARE_NORM(a) Csqr_norm(a)
 #define NORMONE(a) Cabs(a)
+#define PNL_C2F(f) C2F(z##f)
+#define MALLOC_BASE MALLOC_COMPLEX
 
 #elif defined BASE_UINT
 #define ORDERED true

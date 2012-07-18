@@ -195,6 +195,145 @@ int pnl_mat_exp (PnlMat *B, const PnlMat *A)
   return OK;
 }
 
+int pnl_mat_complex_exp (PnlMatComplex *B, const PnlMatComplex *A)
+{
+  int i,j,k,ih2,ip,iq,iused,ifree,iodd,icoef,ideg,iput,iget,lwork, ns;
+  dcomplex *work;
+  PnlMatComplex Mwork, Mwork1, Mwork2;
+  double hnorm;
+  dcomplex scale,scale2,cp,cq;
+  
+  CheckIsSquare (A);
+  
+  /* Mwork is used as a container for pnl_mat_xxx routines */
+  pnl_mat_complex_resize (B, A->m, A->n);
+  
+  icoef = 0;
+  ideg = 6;
+  ih2 = icoef + (ideg+1);
+  ip  = ih2 + A->mn;
+  iq  = ip + A->mn;
+  ifree = iq + A->mn;
+  lwork = 4*A->m*A->m + ideg + 1;
+  if ( (work = malloc (lwork * sizeof(dcomplex))) == NULL ) abort();
+
+  /*  scaling: seek ns such that ||t*H/2^ns|| < 1/2;  */
+  /*  and set scale = t/2^ns ... */
+  for (i=0; i<A->m; i++) work[i] = CZERO;
+  for (j=0; j<A->m; j++)
+    {
+      for (i=0; i<A->m; i++)
+        work[i].r += Cabs ( PNL_MGET(A,i,j) );      
+    }
+
+  hnorm = 0.;
+  for (i=0; i<A->m; i++)
+    {
+      hnorm = MAX( hnorm, work[i].r );
+    }
+
+  if (hnorm == 0.)
+    /* matrix is full of zeros */
+    {
+      pnl_mat_complex_set_id (B);
+      free (work); work = NULL;
+      return FAIL;
+    }
+  ns = MAX( 0, (int)(log(hnorm)/log(2.)) + 2 );
+  scale = Complex(1. / pnl_pow_i (2., ns), 0.);
+  scale2 = Cmul(scale,scale);
+
+  /*  compute Pade coefficients ... */
+  i = ideg+1;
+  j = 2*ideg+1;
+  work[icoef] = CONE;
+  for (k=1; k<ideg+1; k++)
+    {
+      work[icoef+k] = CRdiv( CRmul( work[icoef+k-1], ( i-k ) ), k*(j-k) );
+    }
+
+  Mwork = pnl_mat_complex_wrap_array (&(work[ih2]), A->m, A->n);
+  pnl_mat_complex_dgemm ('N', 'N', scale2, A, A, CZERO, &Mwork);  /* H2 = scale2*H*H */
+  
+  /* initialize p (numerator) and q (denominator) */
+  cp = work[icoef+ideg-1];
+  cq = work[icoef+ideg];
+  for (j=0; j<A->m; j++)
+    {
+      for (i=0; i<A->m; i++)
+        {
+          work[ip + j*A->m + i] = CZERO;
+          work[iq + j*A->m + i] = CZERO;
+        }
+      work[ip + j*(A->m+1)] = cp; /* sets the diagonal */
+      work[iq + j*(A->m+1)] = cq; /* sets the diagonal */
+    }
+
+  /* Apply Horner rule */
+  iodd = 1;
+  k = ideg - 1;
+  while (k > 0)
+    {
+      iused = iodd*iq + (1-iodd)*ip;
+      Mwork = pnl_mat_complex_wrap_array (&(work[ifree]), A->m, A->m);
+      Mwork1 = pnl_mat_complex_wrap_array (&(work[iused]), A->m, A->m);
+      Mwork2 = pnl_mat_complex_wrap_array (&(work[ih2]), A->m, A->m);
+      pnl_mat_complex_dgemm('N', 'N', CONE, &Mwork1, &Mwork2, CZERO, &Mwork);
+      
+      for (j=0; j<A->m; j++)
+        {
+          /* add work[icoef+k-1]; to the diagonal */
+          work[ifree+j*(A->m+1)].r += work[icoef+k-1].r;
+          work[ifree+j*(A->m+1)].i += work[icoef+k-1].i;
+        }
+      ip = (1-iodd)*ifree + iodd*ip;
+      iq = iodd*ifree + (1-iodd)*iq;
+      ifree = iused;
+      iodd = 1-iodd;
+      k--;
+    }
+ 
+  /* Obtain (+-)(I + 2 * (p/q))  */
+  Mwork = pnl_mat_complex_wrap_array (&(work[ifree]), A->m, A->m);
+  Mwork1 = pnl_mat_complex_wrap_array (&(work[ip]), A->m, A->m);
+  pnl_mat_complex_dgemm ('N', 'N', scale, &Mwork1, A, CZERO, &Mwork);
+  ip = ifree;
+
+  Mwork1 = pnl_mat_complex_wrap_array (&(work[ip]), A->m, A->m);
+  Mwork2 = pnl_mat_complex_wrap_array (&(work[iq]), A->m, A->m);
+
+  pnl_mat_complex_axpy (Complex(-1.,0.), &Mwork1, &Mwork2 );
+  pnl_mat_complex_syslin_mat (&Mwork2, &Mwork1);
+
+  pnl_mat_complex_mult_dcomplex (&Mwork1, Complex(2.,0.));
+  for (j=0; j<A->m; j++) work[ip+j*(A->m+1)].r += 1.;
+  iput = ip;
+
+  if (ns == 0 && iodd == 1)
+    {
+      pnl_mat_complex_mult_dcomplex (&Mwork1, Complex(-1.,0.));
+    }
+  else
+    {
+      /* squaring : exp(t*H) = (exp(t*H))^(2^ns) */
+      iodd = 1;
+      for (k=0; k<ns; k++)
+        {
+          iget = iodd*ip + (1-iodd)*iq;
+          iput = (1-iodd)*ip + iodd*iq;
+          Mwork = pnl_mat_complex_wrap_array (&(work[iget]), A->m, A->m);
+          Mwork1 = pnl_mat_complex_wrap_array (&(work[iput]), A->m, A->m);
+          pnl_mat_complex_dgemm ('N', 'N', CONE, &Mwork, &Mwork, CZERO, &Mwork1);
+          iodd = 1-iodd;
+        }
+    }
+
+  /* the solution is located at work[iput] */
+  memcpy (B->array, &(work[iput]), A->mn * sizeof(dcomplex));
+  
+  free (work); work = NULL;
+  return OK;
+}
 
 
 
