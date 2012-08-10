@@ -1,3 +1,7 @@
+10-08-2012 Jérôme Lelong <jerome.lelong@gmail.com>
+	
+	* fftpack_wrap.c: Add 2D FFT.
+
 09-05-2012 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* basis.c: Add the ability to register new basis types. This mechanism
