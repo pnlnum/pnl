@@ -19,6 +19,7 @@
 
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_vector.h"
+#include "pnl/pnl_matrix.h"
 #include "pnl/pnl_fft.h"
 #include "fftpack.h"
 
@@ -32,7 +33,7 @@ int pnl_fft_inplace (PnlVectComplex * data)
 {
   int n;
   double *wsave;
-  
+
   n = data->size;
   if ( (wsave = malloc((4*n+15)*sizeof(double))) == NULL ) return FAIL;
 
@@ -54,14 +55,14 @@ int pnl_ifft_inplace (PnlVectComplex * data)
 {
   int n;
   double *wsave;
-  
+
   n = data->size;
   if ( (wsave = malloc((4*n+15)*sizeof(double))) == NULL ) return FAIL;
 
   cffti(n, wsave);
   cfftb(n, (double *) (data->array), wsave);
   pnl_vect_complex_mult_double (data, 1.0 / (double) n);
-  
+
   free (wsave);
   return OK;
 }
@@ -141,7 +142,6 @@ int pnl_ifft2(double *re, double *im, int n)
   return OK;
 }
 
-
 /**
  *  Forward FFT of real valued sequence
  *
@@ -152,12 +152,12 @@ int pnl_ifft2(double *re, double *im, int n)
 int pnl_real_fft_inplace(double *data, int n)
 {
   double *wsave;
-  
+
   if ( (wsave = malloc((4*n+15)*sizeof(double))) == NULL ) return FAIL;
 
   rffti(n, wsave);
   rfftf(n, data, wsave);
-  
+
   free (wsave);
   return OK;
 }
@@ -173,7 +173,7 @@ int pnl_real_ifft_inplace(double *data, int n)
 {
   double *wsave;
   int     i;
-  
+
   if ( (wsave = malloc((4*n+15)*sizeof(double))) == NULL ) return FAIL;
 
   rffti(n, wsave);
@@ -182,7 +182,6 @@ int pnl_real_ifft_inplace(double *data, int n)
   free (wsave);
   return OK;
 }
-
 
 /**
  * Forward FFT of real valued sequence
@@ -246,13 +245,11 @@ int pnl_real_ifft(const PnlVectComplex *in, PnlVect *out)
       LET (out, 2*i) = GET_IMAG (in, i);
     }
   if (PNL_IS_EVEN(n)) { LET (out, n-1) = GET_REAL (in, l); }
-  
+
   if (pnl_real_ifft_inplace (out->array, n) == FAIL) return FAIL;
 
   return OK;
 }
-
-
 
 /**
  * Forward Real FFT
@@ -311,3 +308,243 @@ int pnl_real_ifft2(double *re, double *im, int n)
   if (pnl_real_ifft_inplace (re, n) == FAIL) return FAIL;
   return OK;
 }
+
+/** 
+ * Computes the 2D FFT a matrix
+ * 
+ * @param data a complex matrix
+ * 
+ * @return OK or FAIL
+ */
+int pnl_fft2d_inplace (PnlMatComplex *data)
+{
+  int i, j, n;
+  double *wsave;
+  dcomplex *row;
+
+
+  n = MAX(data->m,data->n);
+  if ( (wsave = malloc((4*n+15)*sizeof(double))) == NULL ) return FAIL;
+  cffti(data->n, wsave);
+  /*
+   * First, compute the FFT of each row inplace
+   */
+  for ( i=0 ; i<data->m ; i++ )
+    {
+      cfftf(data->n, (double *) (data->array + i * data->n), wsave);
+    }
+
+  /*
+   * Second, compute the FFT of each column of the matrix resulting from
+   * step 1
+   */
+  cffti(data->m, wsave);
+  if ( (row = malloc (sizeof(dcomplex) * data->m)) == NULL ) return FAIL;
+  for ( j=0 ; j<data->n ; j++ )
+    {
+      for ( i=0 ; i<data->m ; i++ ) row[i] = PNL_MGET(data, i, j);
+      cfftf(data->m, (double *) (row), wsave);
+      for ( i=0 ; i<data->m ; i++ )  PNL_MLET(data, i, j) = row[i];
+    }
+
+  free (wsave); free (row);
+  return OK;
+}
+
+/**
+ * Computes the 2D FFT a matrix
+ *
+ * @param in input complex matrix
+ * @param out on output contains the FFT of the input matrix. This matrix
+ * must have already been allocated
+ * @return OK or FAIL
+ */
+int pnl_fft2d (const PnlMatComplex *in, PnlMatComplex *out)
+{
+  pnl_mat_complex_clone (out, in);
+  return pnl_fft2d_inplace (out);
+}
+
+/** 
+ * Computes the 2D inverse (backward) FFT a matrix
+ * 
+ * @param data a complex matrix
+ * 
+ * @return OK or FAIL
+ */
+int pnl_ifft2d_inplace (PnlMatComplex *data)
+{
+  int i, j, n;
+  double *wsave;
+  dcomplex *col;
+
+
+  n = MAX(data->m,data->n);
+  if ( (wsave = malloc((4*n+15)*sizeof(double))) == NULL ) return FAIL;
+  cffti(data->n, wsave);
+  /*
+   * First, compute the FFT of each col inplace
+   */
+  for ( i=0 ; i<data->m ; i++ )
+    {
+      cfftb(data->n, (double *) (data->array + i * data->n), wsave);
+    }
+
+  /*
+   * Second, compute the FFT of each column of the matrix resulting from
+   * step 1
+   */
+  cffti(data->m, wsave);
+  if ( (col = malloc (sizeof(dcomplex) * data->m)) == NULL ) return FAIL;
+  for ( j=0 ; j<data->n ; j++ )
+    {
+      /* Don't forget the renormalization from the previous step */
+      for ( i=0 ; i<data->m ; i++ ) { col[i] = CRdiv (PNL_MGET(data, i, j), (double) data->m); }
+      cfftb(data->m, (double *) (col), wsave);
+      for ( i=0 ; i<data->m ; i++ )  { PNL_MLET(data, i, j) = CRdiv (col[i], (double) data->n); }
+    }
+
+  free (wsave); free (col);
+  return OK;
+}
+
+/**
+ * Computes the inverse 2D FFT a matrix
+ *
+ * @param in input complex matrix
+ * @param out on output contains the FFT of the input matrix. This matrix
+ * must have already been allocated
+ * @return OK or FAIL
+ */
+int pnl_ifft2d (const PnlMatComplex *in, PnlMatComplex *out)
+{
+  pnl_mat_complex_clone (out, in);
+  return pnl_ifft2d_inplace (out);
+}
+
+/**
+ * Computes the 2D FFT a real matrix
+ *
+ * @param in input real matrix
+ * @param out on output contains the FFT of the input matrix. This matrix
+ * must have already been allocated
+ * @return OK or FAIL
+ */
+int pnl_real_fft2d (const PnlMat *in, PnlMatComplex *out)
+{
+
+  int i, j, n ,l;
+  double *data, *wsave;
+  dcomplex *col;
+  pnl_mat_complex_resize (out, in->m, in->n);
+
+  n = MAX(in->m, in->n);
+  if ( (wsave = malloc((4*n+15)*sizeof(double))) == NULL ) return FAIL;
+  if ( (data = malloc(n*sizeof(double))) == NULL ) return FAIL;
+
+  /*
+   * Compute the FFT of each row
+   */
+  rffti(in->n, wsave);
+  if (PNL_IS_ODD(in->n)) { l = (in->n+1)/2; } else { l = in->n/2; }
+
+  for ( i=0 ; i<in->m ; i++ )
+    {
+      memcpy (data, in->array + i * in->n, in->n * sizeof(double)); 
+      rfftf (in->n, data, wsave);
+
+      /*
+       * Copy output data
+       */
+
+      MLET_REAL( out, i, 0) = data[0];
+      MLET_IMAG( out, i, 0) = 0.;
+
+      for (j=1; j<l; j++)
+        {
+          MLET_REAL (out, i, j) = data[2*j-1];
+          MLET_IMAG (out, i, j) = data[2*j];
+          MLET_REAL (out, i, n-j) = data[2*j-1];
+          MLET_IMAG (out, i, n-j) = -data[2*j];
+        }
+      if (PNL_IS_EVEN(n))
+        {
+          MLET_REAL (out, i, l) = data[n-1];
+          MLET_IMAG (out, i, l) = 0.;
+        }
+    }
+
+  /*
+   * Second, compute the FFT of each column of the matrix resulting from
+   * step 1
+   */
+  cffti(in->m, wsave);
+  if ( (col = malloc (sizeof(dcomplex) * in->m)) == NULL ) return FAIL;
+  for ( j=0 ; j<in->n ; j++ )
+    {
+      for ( i=0 ; i<in->m ; i++ ) col[i] = PNL_MGET(out, i, j);
+      cfftf(out->m, (double *) (col), wsave);
+      for ( i=0 ; i<in->m ; i++ )  PNL_MLET(out, i, j) = col[i];
+    }
+
+  free (wsave); free (col); free (data);
+  return OK;
+}
+
+/**
+ * Computes the inverse 2D FFT a complex matrix known to be the 2D FFT of a
+ * real matrix
+ *
+ * @param in input complex matrix. This matrix is lost on output
+ * @param out real matrix on output contains the 2D FFT of the input matrix. This matrix
+ * must have already been allocated
+ * @return OK or FAIL
+ */
+int pnl_real_ifft2d (PnlMatComplex *in, PnlMat *out)
+{
+
+  int i, j, n ,l;
+  double *data, *wsave;
+  double *col;
+  pnl_mat_resize (out, in->m, in->n);
+
+  n = MAX(in->m, in->n);
+  if ( (wsave = malloc((4*n+15)*sizeof(double))) == NULL ) return FAIL;
+  if ( (data = malloc(n*sizeof(double))) == NULL ) return FAIL;
+
+  /*
+   * Compute the FFT of each row
+   */
+  cffti(in->n, wsave);
+
+  for ( i=0 ; i<in->m ; i++ )
+    {
+      cfftb(in->n, (double *) (in->array + i * in->n), wsave);
+    }
+
+  /*
+   * Second, compute the FFT of each column of the matrix resulting from
+   * step 1
+   */
+  rffti(in->m, wsave);
+  if (PNL_IS_ODD(n)) { l = (n+1)/2; } else { l = n/2; }
+  if ( (col = malloc (sizeof(double) * in->m)) == NULL ) return FAIL;
+  for ( j=0 ; j<in->n ; j++ )
+    {
+      /* Don't forget the renormalization from the previous step */
+      col[0] = MGET_REAL(in, 0, j) / in->n;
+      for (i=1; i<l; i++)
+        {
+          col[2*i-1] = MGET_REAL (in, i, j) / in->n;
+          col[2*i] = MGET_IMAG (in, i, j) / in->n;
+        }
+      if (PNL_IS_EVEN(n)) { col[n-1] = MGET_REAL (in, l, j) / in->n; }
+      rfftb(out->m, col, wsave);
+      for ( i=0 ; i<in->m ; i++ )  PNL_MLET(out, i, j) = col[i] / in->m;
+    }
+
+  free (wsave); free (col); free (data);
+  return OK;
+
+}
+

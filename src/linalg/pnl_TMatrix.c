@@ -294,3 +294,40 @@ static char pnl_hmat_int_label[] = "PnlHmatrixInt";
 #include "dgemm_source.c"
 #include "pnl/pnl_templates_off.h"
 #undef  BASE_INT
+
+double pnl_mat_complex_get_real (const PnlMatComplex *self, int i, int j)
+{
+  CheckIndexMat(self,i, j);
+  return self->array[i*self->n+j].r;
+}
+
+double* pnl_mat_complex_lget_real (PnlMatComplex *self, int i, int j)
+{
+  CheckIndexMat(self,i, j);
+  return &(self->array[i*self->n+j].r);
+}
+
+void pnl_mat_complex_set_real (PnlMatComplex *self, int i, int j, double x)
+{
+  CheckIndexMat(self,i, j);
+  self->array[i*self->n+j].r = x; 
+}
+
+double pnl_mat_complex_get_imag (const PnlMatComplex *self, int i, int j)
+{
+  CheckIndexMat(self,i, j);
+  return (self->array[i*self->n+j]).i;
+}
+
+double* pnl_mat_complex_lget_imag (PnlMatComplex *self, int i, int j)
+{
+  CheckIndexMat(self,i, j);
+  return &((self->array[i*self->n+j]).i);
+}
+
+void pnl_mat_complex_set_imag (PnlMatComplex *self, int i, int j, double x)
+{
+  CheckIndexMat(self,i, j);
+  self->array[i*self->n+j].i = x;
+}
+

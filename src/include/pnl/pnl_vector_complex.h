@@ -88,10 +88,10 @@ void pnl_vect_complex_set_imag (const PnlVectComplex *v, int i, double im)
 #define GET_IMAG(v,i) pnl_vect_complex_get_imag(v,i)
 #define LET_IMAG(v,i) *(pnl_vect_complex_lget_imag(v,i))
 #else
-#define GET_REAL(v,i) (v->array[i]).re
-#define LET_REAL(v,i) (v->array[i]).re
-#define GET_IMAG(v,i) (v->array[i]).im
-#define LET_IMAG(v,i) (v->array[i]).im
+#define GET_REAL(v,i) (v->array[i]).r
+#define LET_REAL(v,i) (v->array[i]).r
+#define GET_IMAG(v,i) (v->array[i]).i
+#define LET_IMAG(v,i) (v->array[i]).i
 #endif
 
 

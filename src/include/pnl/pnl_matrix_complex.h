@@ -146,11 +146,71 @@ void pnl_mat_complex_set (PnlMatComplex *self, int i, int j, dcomplex x)
   CheckIndexMat(self,i, j);
   self->array[i*self->n+j] = x;
 }
+
+extern inline
+double pnl_mat_complex_get_real (const PnlMatComplex *self, int i, int j)
+{
+  CheckIndexMat(self,i, j);
+  return self->array[i*self->n+j].r;
+}
+
+extern inline
+double* pnl_mat_complex_lget_real (PnlMatComplex *self, int i, int j)
+{
+  CheckIndexMat(self,i, j);
+  return &(self->array[i*self->n+j].r);
+}
+
+extern inline
+void pnl_mat_complex_set_real (PnlMatComplex *self, int i, int j, double x)
+{
+  CheckIndexMat(self,i, j);
+  self->array[i*self->n+j].r = x; 
+}
+
+extern inline
+double pnl_mat_complex_get_imag (const PnlMatComplex *self, int i, int j)
+{
+  CheckIndexMat(self,i, j);
+  return (self->array[i*self->n+j]).i;
+}
+
+extern inline
+double* pnl_mat_complex_lget_imag (PnlMatComplex *self, int i, int j)
+{
+  CheckIndexMat(self,i, j);
+  return &((self->array[i*self->n+j]).i);
+}
+
+extern inline
+void pnl_mat_complex_set_imag (PnlMatComplex *self, int i, int j, double x)
+{
+  CheckIndexMat(self,i, j);
+  self->array[i*self->n+j].i = x;
+}
 #endif
 
 extern void pnl_mat_complex_set(PnlMatComplex *v, int i, int j, dcomplex x);
 extern dcomplex pnl_mat_complex_get(const PnlMatComplex *v, int i, int j);
 extern dcomplex* pnl_mat_complex_lget(PnlMatComplex *v, int i, int j);
+extern void pnl_mat_complex_set_real(PnlMatComplex *v, int i, int j, double x);
+extern double pnl_mat_complex_get_real(const PnlMatComplex *v, int i, int j);
+extern double* pnl_mat_complex_lget_real(PnlMatComplex *v, int i, int j);
+extern void pnl_mat_complex_set_imag(PnlMatComplex *v, int i, int j, double x);
+extern double pnl_mat_complex_get_imag(const PnlMatComplex *v, int i, int j);
+extern double* pnl_mat_complex_lget_imag(PnlMatComplex *v, int i, int j);
+
+#ifndef PNL_RANGE_CHECK_OFF
+#define MGET_REAL(v,i,j) pnl_mat_complex_get_real(v,i,j)
+#define MLET_REAL(v,i,j) *(pnl_mat_complex_lget_real(v,i,j))
+#define MGET_IMAG(v,i,j) pnl_mat_complex_get_imag(v,i,j)
+#define MLET_IMAG(v,i,j) *(pnl_mat_complex_lget_imag(v,i,j))
+#else
+#define MGET_REAL(v,i,j) ((v)->array[(i)*(v)->n+(j)]).r
+#define MLET_REAL(v,i,j) ((v)->array[(i)*(v)->n+(j)]).r
+#define MGET_IMAG(v,i,j) ((v)->array[(i)*(v)->n+(j)]).i
+#define MLET_IMAG(v,i,j) ((v)->array[(i)*(v)->n+(j)]).i
+#endif
 
 /*@}*/
 /*@}*/

@@ -1,30 +1,54 @@
 /*
- * fftpack.c : A set of FFT routines in C.
- * http://w3.pppl.gov/~hammett/comp/python/LLNLDistribution11/Numerical/Src/fftpack.c
+ * This code comes from the Numpy package with the following license
  *
- * Algorithmically based on Fortran-77 FFTPACK by Paul N. Swarztrauber (Version 4, 1985).
- * The reference implementation by Paul N. Swarztrauber can be obtained at
- * http://www.netlib.org/fftpack/
+ *  Copyright © 2005-2012, NumPy Developers.
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  * 
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ * Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ * Neither the name of the NumPy Developers nor the names of any contributors
+ * may be used to endorse or promote products derived from this software
+ * without specific prior written permission.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
+
+/*
+   fftpack.c : A set of FFT routines in C.
+   Algorithmically based on Fortran-77 FFTPACK by Paul N. Swarztrauber (Version 4, 1985).
+
+*/
 
 /* isign is +1 for backward and -1 for forward transforms */
 
 #include <math.h>
 #include <stdio.h>
-#include "fftpack.h"
 
 #define ref(u,a) u[a]
 
 #define MAXFAC 13    /* maximum number of factors in factorization of n */
-
+#define NSPECIAL 4   /* number of factors for which we have special-case routines */
 
 /* ----------------------------------------------------------------------
    passf2, passf3, passf4, passf5, passf. Complex FFT passes fwd and bwd.
    ---------------------------------------------------------------------- */
 
 static void passf2(int ido, int l1, const double cc[], double ch[], const double wa1[], int isign)
-     /* isign==+1 for backward transform */
+        /* isign==+1 for backward transform */
 {
   int i, k, ah, ac;
   double ti2, tr2;
@@ -56,7 +80,7 @@ static void passf2(int ido, int l1, const double cc[], double ch[], const double
 
 static void passf3(int ido, int l1, const double cc[], double ch[],
                    const double wa1[], const double wa2[], int isign)
-/* isign==+1 for backward transform */
+        /* isign==+1 for backward transform */
 {
   static const double taur = -0.5;
   static const double taui = 0.866025403784439;
@@ -110,7 +134,7 @@ static void passf3(int ido, int l1, const double cc[], double ch[],
 
 static void passf4(int ido, int l1, const double cc[], double ch[],
                    const double wa1[], const double wa2[], const double wa3[], int isign)
-/* isign == -1 for forward transform and +1 for backward transform */
+        /* isign == -1 for forward transform and +1 for backward transform */
 {
   int i, k, ac, ah;
   double ci2, ci3, ci4, cr2, cr3, cr4, ti1, ti2, ti3, ti4, tr1, tr2, tr3, tr4;
@@ -170,7 +194,7 @@ static void passf4(int ido, int l1, const double cc[], double ch[],
 
 static void passf5(int ido, int l1, const double cc[], double ch[],
                    const double wa1[], const double wa2[], const double wa3[], const double wa4[], int isign)
-/* isign == -1 for forward transform and +1 for backward transform */
+        /* isign == -1 for forward transform and +1 for backward transform */
 {
   static const double tr11 = 0.309016994374947;
   static const double ti11 = 0.951056516295154;
@@ -178,7 +202,7 @@ static void passf5(int ido, int l1, const double cc[], double ch[],
   static const double ti12 = 0.587785252292473;
   int i, k, ac, ah;
   double ci2, ci3, ci4, ci5, di3, di4, di5, di2, cr2, cr3, cr5, cr4, ti2, ti3,
-         ti4, ti5, dr3, dr4, dr5, dr2, tr2, tr3, tr4, tr5;
+        ti4, ti5, dr3, dr4, dr5, dr2, tr2, tr3, tr4, tr5;
   if (ido == 2) {
     for (k = 1; k <= l1; ++k) {
       ac = (5*k - 4)*ido + 1;
@@ -260,12 +284,13 @@ static void passf5(int ido, int l1, const double cc[], double ch[],
 static void passf(int *nac, int ido, int ip, int l1, int idl1,
                   double cc[], double ch[],
                   const double wa[], int isign)
-/* isign is -1 for forward transform and +1 for backward transform */
+        /* isign is -1 for forward transform and +1 for backward transform */
 {
   int idij, idlj, idot, ipph, i, j, k, l, jc, lc, ik, idj, idl, inc,idp;
   double wai, war;
 
   idot = ido / 2;
+  /* nt = ip*idl1;*/
   ipph = (ip + 1) / 2;
   idp = ip*ido;
   if (ido >= l1) {
@@ -664,7 +689,7 @@ static void radf5(int ido, int l1, const double cc[], double ch[],
   static const double ti12 = 0.587785252292473;
   int i, k, ic;
   double ci2, di2, ci4, ci5, di3, di4, di5, ci3, cr2, cr3, dr2, dr3, dr4, dr5,
-         cr5, cr4, ti2, ti3, ti5, ti4, tr2, tr3, tr4, tr5;
+        cr5, cr4, ti2, ti3, ti5, ti4, tr2, tr3, tr4, tr5;
   for (k = 0; k < l1; k++) {
     cr2 = ref(cc,(k + 4*l1)*ido) + ref(cc,(k + l1)*ido);
     ci5 = ref(cc,(k + 4*l1)*ido) - ref(cc,(k + l1)*ido);
@@ -728,7 +753,7 @@ static void radb5(int ido, int l1, const double cc[], double ch[],
   static const double ti12 = 0.587785252292473;
   int i, k, ic;
   double ci2, ci3, ci4, ci5, di3, di4, di5, di2, cr2, cr3, cr5, cr4, ti2, ti3,
-         ti4, ti5, dr3, dr4, dr5, dr2, tr2, tr3, tr4, tr5;
+        ti4, ti5, dr3, dr4, dr5, dr2, tr2, tr3, tr4, tr5;
   for (k = 0; k < l1; k++) {
     ti5 = 2*ref(cc,(5*k + 2)*ido);
     ti4 = 2*ref(cc,(5*k + 4)*ido);
@@ -1121,7 +1146,7 @@ static void radbg(int ido, int ip, int l1, int idl1,
     for (j=1; j<ip; j++) {
       is += ido;
       for (k=0; k<l1; k++) {
-        idij = is;
+        idij = is - 1;
         for (i=2; i<ido; i+=2) {
           idij += 2;
           cc[i - 1 + (k + j*l1)*ido] = wa[idij-1]*ch[i - 1 + (k + j*l1)*ido] - wa[idij]*
@@ -1215,16 +1240,14 @@ void cfftb(int n, double c[], double wsave[])
 } /* cfftb */
 
 
-static void factorize(int n, int ifac[MAXFAC+2])
-     /* Factorize n in factors of 2,3,4,5 and rest. On exit,
-        ifac[0] contains n and ifac[1] contains number of factors,
-        the factors start from ifac[2]. */
+static void factorize(int n, int ifac[MAXFAC+2], const int ntryh[NSPECIAL])
+        /* Factorize n in factors in ntryh and rest. On exit,
+           ifac[0] contains n and ifac[1] contains number of factors,
+           the factors start from ifac[2]. */
 {
-  static const int ntryh[4] = {
-    3,4,2,5    };
   int ntry=3, i, j=0, ib, nf=0, nl=n, nq, nr;
 startloop:
-  if (j < 4)
+  if (j < NSPECIAL)
     ntry = ntryh[j];
   else
     ntry+= 2;
@@ -1258,7 +1281,10 @@ static void cffti1(int n, double wa[], int ifac[MAXFAC+2])
   int ld, ii, nf, ip;
   int ido, ipm;
 
-  factorize(n,ifac);
+  static const int ntryh[NSPECIAL] = {
+    3,4,2,5    }; /* Do not change the order of these. */
+
+  factorize(n,ifac,ntryh);
   nf = ifac[1];
   argh = twopi/(double)n;
   i = 1;
@@ -1368,7 +1394,7 @@ static void rfftf1(int n, double c[], double ch[], const double wa[], const int 
 } /* rfftf1 */
 
 
-static void rfftb1(int n, double c[], double ch[], const double wa[], const int ifac[MAXFAC+2])
+void rfftb1(int n, double c[], double ch[], const double wa[], const int ifac[MAXFAC+2])
 {
   int i;
   int k1, l1, l2, na, nf, ip, iw, ix2, ix3, ix4, ido, idl1;
@@ -1446,7 +1472,9 @@ static void rffti1(int n, double wa[], int ifac[MAXFAC+2])
   int k1, l1, l2;
   int ld, ii, nf, ip, is;
   int ido, ipm, nfm1;
-  factorize(n,ifac);
+  static const int ntryh[NSPECIAL] = {
+    4,2,3,5    }; /* Do not change the order of these. */
+  factorize(n,ifac,ntryh);
   nf = ifac[1];
   argh = twopi / n;
   is = 0;

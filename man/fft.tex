@@ -2,15 +2,13 @@
 \subsection{Overview}
 
 The forward Fourier transform of a vector $c$ is defined by
-\begin{align*}
-  z_j = \sum_{k=1}^N c_k \expp{-i (j-1) (k-1) 2 \pi / N}, \quad
-  j=1,\cdots,N
-\end{align*}
+\begin{equation*}
+  z_j = \sum_{k=1}^N c_k \expp{-i (j-1) (k-1) 2 \pi / N}, \quad j=1,\cdots,N
+\end{equation*}
 The inverse Fourier transform enables to recover $c$ from $z$ and is defined by
-\begin{align*}
-  c_k = \sum_{j=1}^N z_j \expp{i (j-1) (k-1) 2 \pi / N}, \quad 
-  j=1,\cdots,N
-\end{align*}
+\begin{equation*}
+  c_k = \sum_{j=1}^N z_j \expp{i (j-1) (k-1) 2 \pi / N}, \quad j=1,\cdots,N
+\end{equation*}
 
 
 The coefficients of the Fourier transform of a real function satisfy the
@@ -138,6 +136,23 @@ available on \url{http://www.netlib.org/fftpack}.
   \sshortdescribe Computes the inverse FFT of the vector \var{re + i * im} of
   length \var{n}, which is supposed to be the FFT of a real valued
   sequence. On exit, \var{im} is unused.
+\item \describefun{int}{pnl_fft2d_inplace}{\refstruct{PnlMatComplex} \ptr data}
+  \sshortdescribe Computes the 2D FFT of \var{data}. This function applies a 1D
+  FFT to each row of the matrix and then a 1D FFT to each column of the modified
+  matrix.
+\item \describefun{int}{pnl_ifft2d_inplace}{\refstruct{PnlMatComplex} \ptr data}
+  \sshortdescribe Computes the inverse 2D FFT of \var{data}. This function is
+  the inverse of the function \reffun{pnl_fft_2d_inplace}.
+\item \describefun{int}{pnl_fft2d}{const \refstruct{PnlMatComplex} \ptr in, \refstruct{PnlMatComplex} \ptr out}
+  \sshortdescribe Computes the 2D FFT of \var{in} and stores it into \var{out}.
+\item \describefun{int}{pnl_ifft2d}{const \refstruct{PnlMatComplex} \ptr in, \refstruct{PnlMatComplex} \ptr out}
+  \sshortdescribe Computes the inverse 2D FFT of \var{in} and stores it into \var{out}.
+\item \describefun{int}{pnl_real_fft2d}{const \refstruct{PnlMat} \ptr in, \refstruct{PnlMatComplex} \ptr out}
+  \sshortdescribe Computes the 2D FFT of the real matrix \var{in} and stores it into \var{out}.
+\item \describefun{int}{pnl_real_ifft2d}{const \refstruct{PnlMatComplex} \ptr in, \refstruct{PnlMatComplex} \ptr out}
+  \sshortdescribe Computes the inverse 2D FFT of the complex matrix \var{in}
+  which is known to be the forward 2D FFT a real matrix. The result id stored it
+  into \var{out}. Note that this function modifies the input matrix \var{in}.
 \end{itemize}
 
 % vim:spelllang=en:spell:

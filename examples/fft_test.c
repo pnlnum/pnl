@@ -32,7 +32,7 @@
 
 static void fftpack(void )
 {  
-  double abserr=1E-5;
+  double abserr=2E-4;
   int kmax=2048;
   int Nmax=2*kmax;
   double L=4.0;
@@ -110,7 +110,7 @@ static void fftpack(void )
 
 }
 
-static void pnl_fft_inplace_test(void )
+static void pnl_fft_inplace_test(void)
 {  
 
   int               kmax  = 32;
@@ -197,9 +197,6 @@ static void pnl_fft_real_test(void )
     }
 
   pnl_real_fft(vv, fft);
-
-  /*  printf ("res = ");
-      pnl_vect_complex_print_nsp (fft); */
 
   pnl_real_ifft(fft, inverse_fft);
   pnl_test_vect_eq_abs (inverse_fft, vv, 1E-10, "Real ifft", "");
@@ -322,6 +319,83 @@ static void pnl_fft_real_inplace_test(void )
   pnl_vect_free(&vv);
 }
 
+static void pnl_fft_2d_inplace_test(void)
+{  
+  PnlMatComplex *data, *data_fft, *data_ifft, *expected;
+  dcomplex *in , *expected_fft; 
+  double in_tmp[24] = {1, 0, 2, 0, 3, 0, 9, 0, 8, 0, 5, 0, 1, 0, 2, 0, 9, 0, 8, 0, 7, 0, 2, 0};
+  double expected_fft_tmp[24]= { 
+    57.0000000000, 0.0000000000,
+    7.0000000000, -2.0000000000,
+    1.0000000000, 0.0000000000,
+    7.0000000000, 2.0000000000,
+    -6.0000000000, 8.6602540378,
+    -3.9019237886, 7.1698729811,
+    -11.0000000000, 3.4641016151,
+    -9.0980762114, -15.8301270189,
+    -6.0000000000, - 8.6602540378,
+    -9.0980762114, 15.8301270189,
+    -11.0000000000, -3.4641016151,
+    -3.9019237886, -7.1698729811
+  };
+
+  in = (dcomplex *) in_tmp;
+  expected_fft = (dcomplex *) expected_fft_tmp;
+
+  data = pnl_mat_complex_create_from_ptr (3, 4, in);
+  expected = pnl_mat_complex_create_from_ptr (3, 4, expected_fft);
+  data_fft = pnl_mat_complex_copy (data);
+  pnl_fft2d_inplace (data_fft);
+  data_ifft = pnl_mat_complex_copy (data_fft);
+  pnl_ifft2d_inplace (data_ifft);
+
+  pnl_test_mat_complex_eq_abs (data_fft, expected, 1E-5, "pnl_fft2d", "");
+  pnl_test_mat_complex_eq_abs (data_ifft, data, 1E-5, "pnl_ifft2d", "");
+
+  pnl_mat_complex_free (&data);
+  pnl_mat_complex_free (&data_fft);
+  pnl_mat_complex_free (&data_ifft);
+  pnl_mat_complex_free (&expected);
+}
+
+static void pnl_fft_2d_real_test(void)
+{  
+  PnlMatComplex *data_fft, *expected;
+  PnlMat *data, *data_ifft;
+  dcomplex *expected_fft; 
+  double in[12] = {1, 2, 3, 9, 8, 5, 1, 2, 9, 8, 7, 2};
+  double expected_fft_tmp[24]= { 
+    57.0000000000, 0.0000000000,
+    7.0000000000, -2.0000000000,
+    1.0000000000, 0.0000000000,
+    7.0000000000, 2.0000000000,
+    -6.0000000000, 8.6602540378,
+    -3.9019237886, 7.1698729811,
+    -11.0000000000, 3.4641016151,
+    -9.0980762114, -15.8301270189,
+    -6.0000000000, - 8.6602540378,
+    -9.0980762114, 15.8301270189,
+    -11.0000000000, -3.4641016151,
+    -3.9019237886, -7.1698729811
+  };
+
+  expected_fft = (dcomplex *) expected_fft_tmp;
+  data_fft= pnl_mat_complex_new ();
+  data = pnl_mat_create_from_ptr (3, 4, in);
+  expected = pnl_mat_complex_create_from_ptr (3, 4, expected_fft);
+  pnl_real_fft2d (data, data_fft);
+  pnl_test_mat_complex_eq_abs (data_fft, expected, 1E-5, "pnl_real_fft2d", "");
+
+  data_ifft = pnl_mat_new ();
+  pnl_real_ifft2d (data_fft, data_ifft);
+  pnl_test_mat_eq_abs (data_ifft, data, 1E-5, "pnl_real_ifft2d", "");
+
+  pnl_mat_free (&data);
+  pnl_mat_complex_free (&data_fft);
+  pnl_mat_free (&data_ifft);
+  pnl_mat_complex_free (&expected);
+}
+
 int main (int argc, char **argv)
 {
   /*  dft(); */
@@ -332,5 +406,7 @@ int main (int argc, char **argv)
   pnl_fft_real2_test();
   pnl_fft_real_inplace_test();
   /*  dft_real(); */
+  pnl_fft_2d_inplace_test ();
+  pnl_fft_2d_real_test ();
   exit (pnl_test_finalize ("DFT"));
 }

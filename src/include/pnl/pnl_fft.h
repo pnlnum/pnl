@@ -29,6 +29,12 @@ extern int pnl_real_fft(const PnlVect *in, PnlVectComplex *out);
 extern int pnl_real_ifft(const PnlVectComplex *in, PnlVect *out);
 extern int pnl_real_fft2(double *re, double *im, int n);
 extern int pnl_real_ifft2(double *re, double *im, int n);
+
+extern int pnl_ifft2d_inplace (PnlMatComplex *data);
+extern int pnl_fft2d_inplace (PnlMatComplex *data);
+extern int pnl_real_fft2d(const PnlMat *in, PnlMatComplex *out);
+extern int pnl_real_ifft2d(PnlMatComplex *in, PnlMat *out);
+
 /*@}*/
 #ifdef __cplusplus
 }
