@@ -444,7 +444,7 @@ double pnl_band_mat_get(PnlBandMat *BM,int i,int j)
  */
 double* pnl_band_mat_lget(PnlBandMat *BM,int i,int j)
 {
-  PNL_CHECK ( j<0 || j>BM->n || i<MAX(0, j - BM->nu) || i>=MIN(BM->m, j+BM->nl+1),
+  PNL_CHECK ( j<0 || j>=BM->n || i<MAX(0, j - BM->nu) || i>=MIN(BM->m, j+BM->nl+1),
               "index out of range", "band_mat_get");
   return &(PNL_BMGET(BM, i, j));
 }
@@ -460,7 +460,7 @@ double* pnl_band_mat_lget(PnlBandMat *BM,int i,int j)
  */
 void pnl_band_mat_set(PnlBandMat * BM,int i,int j,double x)
 {
-  PNL_CHECK ( j<0 || j>BM->n || i<MAX(0, j - BM->nu) || i>=MIN(BM->m, j+BM->nl+1),
+  PNL_CHECK ( j<0 || j>=BM->n || i<MAX(0, j - BM->nu) || i>=MIN(BM->m, j+BM->nl+1),
               "index out of range", "band_mat_get");
   PNL_BMLET(BM, i, j) = x;
 }
