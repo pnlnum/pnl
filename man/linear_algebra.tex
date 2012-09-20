@@ -761,7 +761,10 @@ and the size of the matrix.
     double x, int d}
   \sshortdescribe Sets the $\var{d}^{\text{th}}$ diagonal terms of the matrix
   \var{M} to the value \var{x}. \var{M} must be a square matrix.
-
+\item \describefun{void}{pnl_mat_set_from_ptr}{\refstruct{PnlMat} \ptr M,
+  const double \ptr x}
+  \sshortdescribe Sets \var{M} row--wise with the values given by \var{x}. The
+  array \var{x} must be at least M->mn long.
 \item \describefun{void}{pnl_mat_get_row}{\refstruct{PnlVect}
     \ptr V, const \refstruct{PnlMat} \ptr M, int i}
   \sshortdescribe Extracts and copies the \var{i}-th row of \var{M} into

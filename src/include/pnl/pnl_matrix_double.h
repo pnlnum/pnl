@@ -86,6 +86,7 @@ extern void pnl_mat_set_double(PnlMat *lhs, double x);
 extern void pnl_mat_set_zero(PnlMat *lhs);
 extern void pnl_mat_set_id(PnlMat *lhs);
 extern void pnl_mat_set_diag(PnlMat *lhs, double x, int d);
+extern void pnl_mat_set_from_ptr(PnlMat *lhs, const double *x);
 extern void pnl_mat_mult_mat_term(PnlMat *lhs, const PnlMat *rhs); 
 extern void pnl_mat_div_mat_term(PnlMat *lhs, const PnlMat *rhs); 
 extern void pnl_mat_sq_transpose(PnlMat *M);

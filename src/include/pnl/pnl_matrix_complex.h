@@ -46,6 +46,7 @@ extern void pnl_mat_complex_set_dcomplex(PnlMatComplex *lhs, dcomplex x);/*lhs=x
 extern void pnl_mat_complex_set_zero(PnlMatComplex *lhs);
 extern void pnl_mat_complex_set_id(PnlMatComplex *lhs);
 extern void pnl_mat_complex_set_diag(PnlMatComplex *lhs, dcomplex x, int d);
+extern void pnl_mat_complex_set_from_ptr(PnlMatComplex *lhs, const dcomplex *x);
 extern PnlMatComplex* pnl_mat_complex_transpose(const PnlMatComplex *M);
 extern void pnl_mat_complex_tr(PnlMatComplex*, const PnlMatComplex *M);
 extern void pnl_mat_complex_sq_transpose(PnlMatComplex *M);

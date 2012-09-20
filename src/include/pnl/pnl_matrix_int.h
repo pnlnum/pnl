@@ -44,6 +44,7 @@ extern void pnl_mat_int_set_int(PnlMatInt *lhs, int x);/*lhs=x*/
 extern void pnl_mat_int_set_zero(PnlMatInt *lhs);
 extern void pnl_mat_int_set_id(PnlMatInt *lhs);
 extern void pnl_mat_int_set_diag(PnlMatInt *lhs, int x, int d);
+extern void pnl_mat_int_set_from_ptr(PnlMatInt *lhs, const int *x);
 extern PnlMatInt* pnl_mat_int_transpose(const PnlMatInt *M);
 extern void pnl_mat_int_tr(PnlMatInt *tM, const PnlMatInt *M);
 extern void pnl_mat_int_sq_transpose(PnlMatInt *M);
@@ -53,14 +54,10 @@ extern void pnl_mat_int_fprint(FILE *fic,const PnlMatInt *M);
 extern void pnl_mat_int_fprint_nsp(FILE *fic,const PnlMatInt *M);
 extern PnlMatInt* pnl_mat_int_create_diag_from_ptr(const int x[], int d);
 extern PnlMatInt* pnl_mat_int_create_diag(const PnlVectInt *V);
-extern void
-pnl_mat_int_set_row(PnlMatInt *M, const PnlVectInt *V, int i);/* M(i,:)=V(:) */
-extern void
-pnl_mat_int_set_col(PnlMatInt *M, const PnlVectInt *V, int j);/* M(:,j)=V(:) */
-extern void
-pnl_mat_int_swap_rows (PnlMatInt *M, int i, int j);
-extern void
-pnl_mat_int_get_row(PnlVectInt *V, const PnlMatInt *M, int i);/* V(:)=M(i,:) */
+extern void pnl_mat_int_set_row(PnlMatInt *M, const PnlVectInt *V, int i);/* M(i,:)=V(:) */
+extern void pnl_mat_int_set_col(PnlMatInt *M, const PnlVectInt *V, int j);/* M(:,j)=V(:) */
+extern void pnl_mat_int_swap_rows (PnlMatInt *M, int i, int j);
+extern void pnl_mat_int_get_row(PnlVectInt *V, const PnlMatInt *M, int i);/* V(:)=M(i,:) */
 extern void pnl_mat_int_get_col(PnlVectInt *V, const PnlMatInt *M, int j);
 extern PnlVectInt pnl_vect_int_wrap_mat_row(const PnlMatInt *M, int i);/* M(i,:)=V(:) */
 extern PnlMatInt pnl_mat_int_wrap_vect(const PnlVectInt *V);

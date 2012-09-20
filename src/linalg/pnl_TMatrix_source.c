@@ -394,7 +394,6 @@ void FUNCTION(pnl_mat, set_zero) (TYPE(PnlMat) *lhs)
   for (i=0; i<lhs->mn; i++) lhs->array[i] = ZERO;
 }
 
-
 /**
  * in-place set matrix to identity
  *
@@ -429,6 +428,19 @@ void FUNCTION(pnl_mat,set_diag)(TYPE(PnlMat) *M, BASE x, int d)
     {
       PNL_MLET (M, i, i+d) = x;
     }
+}
+
+/**
+ * Creates a TYPE(PnlMat) from a C array
+ * @param m number of rows
+ * @param n number of columns
+ * @param x an array of BASE used to fill the TYPE(PnlMat). should be of length
+ * <tt> mxn </tt>. No test can be done about it.
+ * @return a TYPE(PnlMat) pointer
+ */
+void FUNCTION(pnl_mat,set_from_ptr)(TYPE(PnlMat) *M, const BASE* x)
+{
+  memcpy(M->array, x, M->mn*sizeof(BASE));
 }
 
 /**
