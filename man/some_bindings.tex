@@ -58,6 +58,26 @@ error occurred.
     Obj, int root, MPI_Comm comm}
   \sshortdescribe Broadcasts the object \var{Obj} from the process with rank
   \var{root} to all other processes of the group \var{comm}.
+
+\item \describefun{int}{pnl_object_mpi_reduce}{\refstruct{PnlObject} \ptr Recvbuf, const
+  \refstruct{PnlObject} \ptr Sendbuf, MPI_Op op, int root, MPI_Comm comm}
+  \sshortdescribe This function performs the reduction described by \var{op} on
+  the objects \var{Sendbuf} and stores the result into \var{Recvbuf}. Note that
+  \var{Recvbuf} and \var{Sendbuf} must be of the same type. The argument
+  \var{root} is the index of the root process and \var{comm} is a communicator.
+  Not all reductions are implemented for all types. Here is the list of
+  compatible reductions
+
+  \begin{center}
+  \begin{tabular}{l@{\hskip 1em}|@{\hskip 1em}l}
+
+    MPI_SUM            & PnlVect, PnlVectInt, PnlVectComplex, \\
+                       & PnlMat, PnlMatInt, PnlMatComplex \\
+    \hline
+    MPI_PROD, MPI_MAX, & PnlVect, PnlVectInt, PnlMat, PnlMatInt \\
+    MPI_MIN            & 
+  \end{tabular}
+  \end{center}
 \end{itemize}
 
 For more expect users, we provide the following nonblocking functions.

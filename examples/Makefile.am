@@ -89,11 +89,11 @@ vector_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
 if HAVE_MPI
 
-noinst_PROGRAMS+=pnl_mpi_test rng_mpi_test saveload_test
+noinst_PROGRAMS+=mpibindings_test rng_mpi_test saveload_test
 
-pnl_mpi_test_SOURCES=mpibindings_test.c tests_utils.c
-pnl_mpi_test_CFLAGS=@MPI_CFLAGS@ $(AM_CFLAGS)
-pnl_mpi_test_LDADD=../src/libpnl.la ${some_extra_libs} @MPI_LIBS@
+mpibindings_test_SOURCES=mpibindings_test.c tests_utils.c
+mpibindings_test_CFLAGS=@MPI_CFLAGS@ $(AM_CFLAGS)
+mpibindings_test_LDADD=../src/libpnl.la ${some_extra_libs} @MPI_LIBS@
 
 rng_mpi_test_SOURCES=rng-mpi.c tests_utils.c
 rng_mpi_test_CFLAGS=@MPI_CFLAGS@ $(AM_CFLAGS)

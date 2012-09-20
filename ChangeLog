@@ -1,3 +1,8 @@
+20-09-2012 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* mpi_ops.c: Add pnl_object_mpi_reduce. For the moment, it only accepts
+	PnlVectObjects and PnlatObjects
+
 10-08-2012 Jérôme Lelong <jerome.lelong@gmail.com>
 	
 	* fftpack_wrap.c: Add 2D FFT.

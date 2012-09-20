@@ -32,10 +32,10 @@
 
 #define PNL_MPI_MESSAGE(info, msg)              \
   if ( info != MPI_SUCCESS )                    \
-    {                                           \
-      if (pnl_message_is_on ()) printf (msg);   \
-      return info;                              \
-    }
+{                                           \
+  if (pnl_message_is_on ()) printf (msg);   \
+  return info;                              \
+}
 
 
 /*
@@ -99,14 +99,14 @@ static int size_vector (const PnlObject *Obj, MPI_Comm comm, int *size)
   switch (PNL_GET_TYPE (Obj))
     {
     case PNL_TYPE_VECTOR_DOUBLE : t = MPI_DOUBLE;
-      break;
+                                  break;
     case PNL_TYPE_VECTOR_COMPLEX : t = MPI_DOUBLE; mn *= 2;
-      break;
+                                   break;
     case PNL_TYPE_VECTOR_INT : t = MPI_INT;
-      break;
+                               break;
     case PNL_TYPE_VECTOR_COMPACT :
-      PNL_ERROR ("Not implemented", "size_vector");
-      break;
+                               PNL_ERROR ("Not implemented", "size_vector");
+                               break;
     }
   info=MPI_Pack_size(mn,t,comm,&count);
   *size += count;
@@ -139,11 +139,11 @@ static int size_matrix (const PnlObject *Obj, MPI_Comm comm, int *size)
   switch (PNL_GET_TYPE (Obj))
     {
     case PNL_TYPE_MATRIX_DOUBLE : t=MPI_DOUBLE;
-      break;
+                                  break;
     case PNL_TYPE_MATRIX_COMPLEX : t=MPI_DOUBLE; mn *= 2;
-      break;
+                                   break;
     case PNL_TYPE_MATRIX_INT : t=MPI_INT;
-      break;
+                               break;
     }
   info=MPI_Pack_size(mn,t,comm,&count);
   *size += count;
@@ -275,11 +275,11 @@ static int size_hmatrix (const PnlObject *Obj, MPI_Comm comm, int *size)
   switch (PNL_GET_TYPE (Obj))
     {
     case PNL_TYPE_HMATRIX_DOUBLE : t=MPI_DOUBLE;
-      break;
+                                   break;
     case PNL_TYPE_HMATRIX_COMPLEX : t=MPI_DOUBLE; mn *= 2;
-      break;
+                                    break;
     case PNL_TYPE_HMATRIX_INT : t=MPI_INT;
-      break;
+                                break;
     }
   info=MPI_Pack_size(mn,t,comm,&count);
   *size += count;
@@ -370,7 +370,7 @@ static int size_list (const PnlObject *Obj, MPI_Comm comm, int *size)
   int info, count, i;
   PnlCell *C;
   PnlList *L = PNL_LIST_OBJECT(Obj);
-  
+
   *size = 0;
 
   /* L->len */
@@ -413,14 +413,14 @@ static int pack_vector (const PnlObject *Obj, void *buf, int bufsize, int *pos, 
   switch (PNL_GET_TYPE (V))
     {
     case PNL_TYPE_VECTOR_DOUBLE : t = MPI_DOUBLE;
-      break;
+                                  break;
     case PNL_TYPE_VECTOR_COMPLEX : mn *= 2; t = MPI_DOUBLE;
-      break;
+                                   break;
     case PNL_TYPE_VECTOR_INT : t= MPI_INT;
-      break;
+                               break;
     case PNL_TYPE_VECTOR_COMPACT :
-      PNL_ERROR ("Not implemented", "pack_vector");
-      break;
+                               PNL_ERROR ("Not implemented", "pack_vector");
+                               break;
     }
   info=MPI_Pack(V->array,mn,t,buf,bufsize,pos,comm);
   return(info);
@@ -450,11 +450,11 @@ static int pack_matrix (const PnlObject *Obj, void *buf, int bufsize, int *pos, 
   switch (PNL_GET_TYPE (M))
     {
     case PNL_TYPE_MATRIX_DOUBLE : t = MPI_DOUBLE;
-      break;
+                                  break;
     case PNL_TYPE_MATRIX_COMPLEX : mn *= 2; t = MPI_DOUBLE;
-      break;
+                                   break;
     case PNL_TYPE_MATRIX_INT : t = MPI_INT;
-      break;
+                               break;
     }
   info=MPI_Pack(M->array,mn,t,buf,bufsize,pos,comm);
   return(info);
@@ -572,11 +572,11 @@ static int pack_hmatrix (const PnlObject *Obj, void *buf, int bufsize, int *pos,
   switch (PNL_GET_TYPE (M))
     {
     case PNL_TYPE_HMATRIX_DOUBLE :  t = MPI_DOUBLE;
-      break;
+                                    break;
     case PNL_TYPE_HMATRIX_COMPLEX : mn *= 2; t = MPI_DOUBLE;
-      break;
+                                    break;
     case PNL_TYPE_HMATRIX_INT : t = MPI_INT;
-      break;
+                                break;
     }
   if((info=MPI_Pack(M->array,mn,t,buf,bufsize,pos,comm)))return(info);
   return(info);
@@ -626,7 +626,7 @@ static int pack_rng (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI
 {
   int info;
   PnlRng *rng = PNL_RNG_OBJECT(Obj);
-  
+
   if ((info=MPI_Pack(&rng->type, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
   if ((info=MPI_Pack(&rng->dimension, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
   if ((info=MPI_Pack(&rng->counter, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
@@ -656,7 +656,7 @@ static int pack_list (const PnlObject *Obj, void *buf, int bufsize, int *pos, MP
   int info, i;
   PnlCell *C;
   PnlList *L = PNL_LIST_OBJECT(Obj);
-  
+
   if ((info=MPI_Pack(&L->len, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
   C = L->first;
   for ( i=0 ; i<L->len ; i++ )
@@ -697,14 +697,14 @@ static int unpack_vector (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_
   switch (PNL_GET_TYPE (V))
     {
     case PNL_TYPE_VECTOR_DOUBLE : t = MPI_DOUBLE;
-      break;
+                                  break;
     case PNL_TYPE_VECTOR_COMPLEX : n *= 2; t = MPI_DOUBLE;
-      break;
+                                   break;
     case PNL_TYPE_VECTOR_INT : t = MPI_INT;
-      break;
+                               break;
     case PNL_TYPE_VECTOR_COMPACT :
-      printf ("Packing is not implemented for %s\n",PNL_GET_TYPENAME(V)); abort ();
-      break;
+                               printf ("Packing is not implemented for %s\n",PNL_GET_TYPENAME(V)); abort ();
+                               break;
     }
   info=MPI_Unpack(buf,bufsize,pos,V->array,n,t,comm);
   return info;
@@ -741,11 +741,11 @@ static int unpack_matrix (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_
   switch (PNL_GET_TYPE (M))
     {
     case PNL_TYPE_MATRIX_DOUBLE : t = MPI_DOUBLE;
-      break;
+                                  break;
     case PNL_TYPE_MATRIX_COMPLEX : mn *= 2; t = MPI_DOUBLE;
-      break;
+                                   break;
     case PNL_TYPE_MATRIX_INT : t = MPI_INT;
-      break;
+                               break;
     }
   if((info=MPI_Unpack(buf,bufsize,pos,M->array,mn,t,comm)))return(info);
   return info;
@@ -869,11 +869,11 @@ static int unpack_hmatrix (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI
   switch (PNL_GET_TYPE (M))
     {
     case PNL_TYPE_HMATRIX_DOUBLE : mn = M->mn; t = MPI_DOUBLE;
-      break;
+                                   break;
     case PNL_TYPE_HMATRIX_COMPLEX : mn = 2*M->mn; t = MPI_DOUBLE;
-      break;
+                                    break;
     case PNL_TYPE_HMATRIX_INT : mn = M->mn; t = MPI_INT;
-      break;
+                                break;
     }
   if((info=MPI_Unpack(buf,bufsize,pos,M->array,mn,t,comm)))return(info);
   return(info);
@@ -932,14 +932,14 @@ static int unpack_rng (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Com
 
   /* unpacking Obj->object.id */
   if ((info=MPI_Unpack(buf,bufsize,pos,&id,1,MPI_INT,comm))) return info;
-  
+
   if ((info=MPI_Unpack(buf,bufsize,pos,&type,1,MPI_INT,comm))) return info;
   if ( rng->state != NULL )
     {
       free (rng->state); rng->state = NULL;
     }
   pnl_rng_init (rng, type);
-  
+
   if ((info=MPI_Unpack(buf,bufsize,pos,&rng->dimension,1,MPI_INT,comm))) return info;
   if ((info=MPI_Unpack(buf,bufsize,pos,&rng->counter,1,MPI_INT,comm))) return info;
   if ((info=MPI_Unpack(buf,bufsize,pos,&rng->has_gauss,1,MPI_INT,comm))) return info;
@@ -1363,3 +1363,118 @@ int pnl_object_mpi_irecv (void **buf, int *size, int src, int tag, MPI_Comm comm
   return info;
 }
 
+/** 
+ * Reduction for PnlObjects. 
+ *
+ * For the moment, it is only implemented for PnlVectObject and PnlMatObject
+ * no matter what the BASE type is. List of valid operations according to the
+ * type
+ *
+ *      MPI_SUM               PnlVect, PnlVectInt, PnlVectComplex,
+ *                            PnlMat, PnlMatInt, PnlMatComplex
+ *
+ *      MPI_PROD, MPI_MAX,    PnlVect, PnlVectInt, PnlMat, PnlMatInt
+ *      MPI_MIN
+ * 
+ * @param Recvbuf (input) PnlObject where to store the result of the
+ * reduction. Only used by the root process
+ * @param Sendbuf PnlObject to be sent, must be valid for all processes
+ * @param op reduction operation
+ * @param root index of the root process
+ * @param comm MPI communicator
+ * 
+ * @return FAIL or OK
+ */
+int pnl_object_mpi_reduce (PnlObject *Recvbuf, const PnlObject *Sendbuf, MPI_Op op, int root, MPI_Comm comm)
+{
+  int rank, parent_id;
+  void *recvptr, *sendptr;
+  MPI_Datatype type;
+  int count;
+  parent_id = PNL_GET_PARENT_TYPE(Sendbuf);
+  recvptr = NULL; sendptr = NULL;
+  MPI_Comm_rank (comm, &rank);
+  if ( rank == root )
+    {
+      /*
+       * root extra stuff 
+       */
+      int recv_id, send_id;
+      recv_id = PNL_GET_TYPE(Recvbuf);
+      send_id = PNL_GET_TYPE(Sendbuf);
+      if ( recv_id != send_id )
+        {
+          if ( pnl_message_is_on () ) printf ("Send/Recv type mismatch");
+          return FAIL;
+        }
+      switch (parent_id)
+        {
+        case PNL_TYPE_VECTOR:
+          pnl_vect_object_resize (PNL_VECT_OBJECT(Recvbuf), PNL_VECT_OBJECT(Sendbuf)->size);
+          recvptr = PNL_VECT_OBJECT(Recvbuf)->array;
+          break;
+        case PNL_TYPE_MATRIX:
+          pnl_mat_object_resize (PNL_MAT_OBJECT(Recvbuf), PNL_MAT_OBJECT(Sendbuf)->m, PNL_MAT_OBJECT(Sendbuf)->n);
+          recvptr = PNL_MAT_OBJECT(Recvbuf)->array;
+          break;
+        default:
+          printf("Reduction is not implemented for type %s", Recvbuf->label);
+          return FAIL;
+        }
+    }
+  switch ( parent_id )
+    {
+    case PNL_TYPE_VECTOR:
+      sendptr = PNL_VECT_OBJECT(Sendbuf)->array;
+      count = PNL_VECT_OBJECT(Sendbuf)->size;
+      break;
+    case PNL_TYPE_MATRIX:
+      sendptr = PNL_MAT_OBJECT(Sendbuf)->array;
+      count = PNL_MAT_OBJECT(Sendbuf)->mn;
+      break;
+    default:
+      printf("Reduction is not implemented for type %s", Sendbuf->label);
+      return FAIL;
+    }
+
+  /*
+   * Check validity of reduction operation and set type according to the
+   * BASE type
+   */
+  switch ( PNL_GET_TYPE(Sendbuf) )
+    {
+    case PNL_TYPE_VECTOR_DOUBLE:
+    case PNL_TYPE_MATRIX_DOUBLE:
+      type = MPI_DOUBLE; 
+      if ( op != MPI_SUM && op != MPI_PROD && op != MPI_MIN && op != MPI_MAX )
+        {
+          printf("Reduction is not implemented for type %s", Sendbuf->label);
+          return FAIL;
+        }
+      break;
+    case PNL_TYPE_VECTOR_INT:
+    case PNL_TYPE_MATRIX_INT:
+      type = MPI_INT; 
+      if ( op != MPI_SUM && op != MPI_PROD && op != MPI_MIN && op != MPI_MAX )
+        {
+          printf("Reduction is not implemented for type %s", Sendbuf->label);
+          return FAIL;
+        }
+      break;
+    case PNL_TYPE_VECTOR_COMPLEX:
+    case PNL_TYPE_MATRIX_COMPLEX:
+      /*
+       * Complex BASE data are considered as double but twice longer
+       */
+      type = MPI_DOUBLE; count *= 2; 
+      if ( op != MPI_SUM )
+        {
+          printf("Reduction is not implemented for type %s", Sendbuf->label);
+          return FAIL;
+        }
+      break;
+    }
+
+  MPI_Reduce (sendptr, recvptr, count, type, op, root, comm);
+  return OK;
+}

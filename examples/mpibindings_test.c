@@ -68,7 +68,6 @@ static int send_vector ()
   return info;
 }
 
-
 static int recv_vector ()
 {
   MPI_Status status;
@@ -91,7 +90,6 @@ static int send_int_vector ()
   pnl_vect_int_free (&v);
   return info;
 }
-
 
 static int recv_int_vector ()
 {
@@ -134,7 +132,6 @@ static int recv_complex_vector ()
   return info;
 }
 
-
 static int send_matrix ()
 {
   PnlMat *M;
@@ -171,7 +168,6 @@ static int send_int_matrix ()
   pnl_mat_int_free (&M);
   return info;
 }
-
 
 static int recv_int_matrix ()
 {
@@ -213,7 +209,6 @@ static int recv_complex_matrix ()
   pnl_mat_complex_free (&M);
   return info;
 }
-
 
 static int send_bandmatrix ()
 {
@@ -290,7 +285,6 @@ static int ssend_basis ()
   pnl_basis_free (&B);
   return info;
 }
-
 
 static int recv_tridiagmatrix ()
 {
@@ -378,7 +372,6 @@ static int recv_list ()
   return info;
 }
 
-
 /*
  * Isend / Irecv examples
  */
@@ -439,7 +432,6 @@ static int irecv_matrix ()
   free (buf);
   return info;
 }
-
 
 /*
  * Bcast examples
@@ -545,6 +537,50 @@ static int test_tridiag_mat_lu ()
   return OK;
 }
 
+static void test_reduce (int rank)
+{
+  int n = 9;
+  if ( rank == 0 )
+    {
+      PnlVect *sum, *vect1, *vect2, *reduc;
+      PnlRng *rng = pnl_rng_create (PNL_RNG_MERSENNE);
+      pnl_rng_sseed (rng, rank + 1234);
+      reduc = pnl_vect_new ();
+      vect1 = pnl_vect_new ();
+      vect2 = pnl_vect_new ();
+
+      pnl_vect_rng_normal (vect1, n, rng);
+      pnl_vect_rng_normal (vect2, n, rng);
+
+      sum = pnl_vect_copy (vect1);
+      pnl_vect_plus_vect (sum, vect2);
+      pnl_object_mpi_send (PNL_OBJECT(vect2), 1, SENDTAG, MPI_COMM_WORLD);
+      pnl_object_mpi_reduce (PNL_OBJECT(reduc), PNL_OBJECT(vect1), MPI_SUM, 0, MPI_COMM_WORLD);
+
+      if ( pnl_test_vect_eq (sum, reduc, 1E-10, "mpi_reduce", "") == TRUE )
+        {
+          printf ("MPI_Reduce for PnlObject: OK\n");
+        }
+      else
+        {
+          printf ("MPI_Reduce for PnlObject: FAIL\n");
+        }
+      pnl_vect_free (&reduc);
+      pnl_vect_free (&sum);
+      pnl_vect_free (&vect1);
+      pnl_vect_free (&vect2);
+    }
+  else
+    {
+      MPI_Status status;
+      PnlVect *vect2 = pnl_vect_new ();
+      pnl_object_mpi_recv (PNL_OBJECT(vect2), 0, SENDTAG, MPI_COMM_WORLD, &status);
+      pnl_object_mpi_reduce (NULL, PNL_OBJECT(vect2), MPI_SUM, 0, MPI_COMM_WORLD);
+      pnl_vect_free (&vect2);
+    }
+}
+
+
 int main(int argc, char *argv[])
 {
   PnlMat *M;
@@ -606,6 +642,8 @@ int main(int argc, char *argv[])
   pnl_mat_free (&M);
   MPI_Barrier (MPI_COMM_WORLD);
   test_tridiag_mat_lu ();
+  MPI_Barrier (MPI_COMM_WORLD);
+  test_reduce (rank);
 
   MPI_Finalize ();
   exit (0);
