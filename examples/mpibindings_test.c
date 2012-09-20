@@ -555,7 +555,7 @@ static void test_reduce (int rank)
       sum = pnl_vect_copy (vect1);
       pnl_vect_plus_vect (sum, vect2);
       pnl_object_mpi_send (PNL_OBJECT(vect2), 1, SENDTAG, MPI_COMM_WORLD);
-      pnl_object_mpi_reduce (PNL_OBJECT(reduc), PNL_OBJECT(vect1), MPI_SUM, 0, MPI_COMM_WORLD);
+      pnl_object_mpi_reduce (PNL_OBJECT(vect1), PNL_OBJECT(reduc), MPI_SUM, 0, MPI_COMM_WORLD);
 
       if ( pnl_test_vect_eq (sum, reduc, 1E-10, "mpi_reduce", "") == TRUE )
         {
@@ -575,7 +575,7 @@ static void test_reduce (int rank)
       MPI_Status status;
       PnlVect *vect2 = pnl_vect_new ();
       pnl_object_mpi_recv (PNL_OBJECT(vect2), 0, SENDTAG, MPI_COMM_WORLD, &status);
-      pnl_object_mpi_reduce (NULL, PNL_OBJECT(vect2), MPI_SUM, 0, MPI_COMM_WORLD);
+      pnl_object_mpi_reduce (PNL_OBJECT(vect2), NULL, MPI_SUM, 0, MPI_COMM_WORLD);
       pnl_vect_free (&vect2);
     }
 }

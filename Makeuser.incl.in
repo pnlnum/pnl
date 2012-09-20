@@ -30,6 +30,7 @@ libdir=@libdir@
 top_builddir = $(LIBPNLDIR)/@top_builddir@
 top_srcdir = $(LIBPNLDIR)/@top_srcdir@
 CC = @CC@
+CXX = @CXX@
 AM_CFLAGS = @AM_CFLAGS@
 SHELL = @SHELL@
 LIBTOOL = @LIBTOOL@

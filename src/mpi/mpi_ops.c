@@ -1385,7 +1385,7 @@ int pnl_object_mpi_irecv (void **buf, int *size, int src, int tag, MPI_Comm comm
  * 
  * @return FAIL or OK
  */
-int pnl_object_mpi_reduce (PnlObject *Recvbuf, const PnlObject *Sendbuf, MPI_Op op, int root, MPI_Comm comm)
+int pnl_object_mpi_reduce (PnlObject *Sendbuf, const PnlObject *Recvbuf, MPI_Op op, int root, MPI_Comm comm)
 {
   int rank, parent_id;
   void *recvptr, *sendptr;
