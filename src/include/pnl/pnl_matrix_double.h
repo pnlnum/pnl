@@ -83,6 +83,7 @@ extern void pnl_mat_dgemv (char trans, double alpha, const PnlMat *A,
 extern double pnl_mat_scalar_prod(const PnlMat *A, const PnlVect *x , const PnlVect * y);
 
 extern void pnl_mat_set_double(PnlMat *lhs, double x);
+extern void pnl_mat_set_zero(PnlMat *lhs);
 extern void pnl_mat_set_id(PnlMat *lhs);
 extern void pnl_mat_set_diag(PnlMat *lhs, double x, int d);
 extern void pnl_mat_mult_mat_term(PnlMat *lhs, const PnlMat *rhs); 

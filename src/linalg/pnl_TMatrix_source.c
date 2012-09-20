@@ -383,6 +383,19 @@ void FUNCTION(pnl_mat, CONCAT2(set_,BASE)) (TYPE(PnlMat) *lhs, BASE x)
 }
 
 /**
+ * in-place set matrix to zero
+ *
+ * @param lhs : left hand side matrix
+ * @return  lhs = x
+ */
+void FUNCTION(pnl_mat, set_zero) (TYPE(PnlMat) *lhs)
+{
+  int i;
+  for (i=0; i<lhs->mn; i++) lhs->array[i] = ZERO;
+}
+
+
+/**
  * in-place set matrix to identity
  *
  * @param lhs : left hand side matrix
