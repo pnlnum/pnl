@@ -5,6 +5,7 @@ AC_INIT(PNL, 1.3, jerome.lelong@imag.fr)
 
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_HEADERS(config.h)
+AC_CONFIG_MACRO_DIR([config])
 AM_INIT_AUTOMAKE()
 
 if test "X${CXXFLAGS}" != "X"; then
