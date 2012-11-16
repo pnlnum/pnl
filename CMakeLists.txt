@@ -132,7 +132,7 @@ add_subdirectory(src)
 add_subdirectory(examples)
 
 message ("Generate configure file ${CMAKE_CURRENT_BINARY_DIR}/config.h")
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/config.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/config.h)
 
 
 
