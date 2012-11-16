@@ -137,6 +137,12 @@ install(FILES
 )
 
 
+# uninstall
+add_custom_target (uninstall
+    COMMAND echo "Uninstalling"
+    COMMAND cat ${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt
+    COMMAND xargs rm -f < ${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt)
+
 ## Output configuration stuff ##
 message("C Compiler :             ${CMAKE_C_COMPILER}")
 message("     FLAGS :             ${MY_C_FLAGS}")
