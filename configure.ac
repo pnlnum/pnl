@@ -4,7 +4,7 @@ dnl Jérôme LELONG Feb 2006
 AC_INIT(PNL, 1.3, jerome.lelong@imag.fr)
 
 AC_CONFIG_AUX_DIR(config)
-AC_CONFIG_HEADERS(src/include/pnl/config.h:config.h.in)
+AC_CONFIG_HEADERS(src/include/pnl/pnl_config.h:config.h.in)
 AC_CONFIG_MACRO_DIR([config])
 AM_INIT_AUTOMAKE()
 
@@ -133,17 +133,36 @@ AC_C_INLINE
 dnl Check for "extern inline", using a modified version of the test
 dnl for AC_C_INLINE from acspecific.mt
 dnl
+HAVE_INLINE=
+PNL_INLINE_DECL=
+PNL_INLINE_FUNC=
 AC_CACHE_CHECK([for extern inline], ac_cv_c_extern_inline,
-                    [ac_cv_c_extern_inline=no
-                    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[extern $ac_cv_c_inline double foo(double x);
-                    extern $ac_cv_c_inline double foo(double x) { return x + 1.0 ; } ;
-                    double foo (double x) { return x + 1.0 ; };]],
-                    [[  foo(1.0)  ]])],[ac_cv_c_extern_inline="yes"],[])])
+                [ac_cv_c_extern_inline=no
+                AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[extern $ac_cv_c_inline double foo(double x);
+                extern $ac_cv_c_inline double foo(double x) { return x + 1.0 ; } ;
+                double foo (double x) { return x + 1.0 ; };]],
+                [[  foo(1.0)  ]])],[ac_cv_c_extern_inline="yes"],[])])
 
 if test "$ac_cv_c_extern_inline" != no ; then
-    AC_SUBST(HAVE_INLINE)
+    HAVE_INLINE=1
+    PNL_INLINE_DECL="extern"
+    PNL_INLINE_FUNC="extern $ac_cv_c_inline"
     AM_CFLAGS="${AM_CFLAGS} -DHAVE_INLINE"
+else
+    AC_CACHE_CHECK([for C99 inline], ac_cv_c_99_inline,
+                    [ac_cv_c_99_inline=no
+                    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[extern inline void* foo() { foo(); return &foo ; };]], 
+                    [[  return foo() != 0 ]])],[ac_cv_c_c99_inline="yes"],[])])
+    if test "$ac_cv_c_99_inline" == "yes" ; then
+        PNL_INLINE_DECL="$ac_cv_c_inline"
+        PNL_INLINE_FUNC="$ac_cv_c_inline"
+        HAVE_INLINE=1
+    fi
 fi
+AC_SUBST(HAVE_INLINE)
+AC_DEFINE_UNQUOTED(HAVE_INLINE, $HAVE_INLINE, [Define if you have inline])
+AC_DEFINE_UNQUOTED(PNL_INLINE_DECL, $PNL_INLINE_DECL, [Keyword for declaring inline functions])
+AC_DEFINE_UNQUOTED(PNL_INLINE_FUNC, $PNL_INLINE_FUNC, [Keyword for defining inline functions])
 
 
 

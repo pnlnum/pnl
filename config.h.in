@@ -1,3 +1,6 @@
+#ifndef _PNL_CONFIG_H
+#define _PNL_CONFIG_H
+
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* Define to dummy `main' function (if any) required to link to the Fortran
@@ -21,6 +24,9 @@
 
 /* Define to 1 if you have the `finite' function. */
 #undef HAVE_FINITE
+
+/* Define if you have inline */
+#undef HAVE_INLINE
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
@@ -101,6 +107,12 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
+/* Keyword for declaring inline functions */
+#undef PNL_INLINE_DECL
+
+/* Keyword for defining inline functions */
+#undef PNL_INLINE_FUNC
+
 /* turn off range checking by default internally */
 #undef PNL_RANGE_CHECK_OFF
 
@@ -122,8 +134,6 @@
 /* Running on a Win32 system */
 #undef _WIN32
 
-/* Define to `__inline__' or `__inline' if that's what the C compiler
-   calls it, or to nothing if 'inline' is not supported under any name.  */
-#ifndef __cplusplus
-#undef inline
+
+
 #endif
