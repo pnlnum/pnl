@@ -140,8 +140,23 @@ install(FILES
 # uninstall
 add_custom_target (uninstall
     COMMAND echo "Uninstalling"
-    COMMAND cat ${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt
-    COMMAND xargs rm -f < ${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt)
+    COMMAND cat "${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt"
+    COMMAND xargs rm -f < "${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt")
+
+# distclean 
+add_custom_target (distclean
+    COMMAND echo "Cleaning all generated files"
+    COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/pnl_config.h"
+    COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/FC.h"
+    COMMAND find "${CMAKE_CURRENT_BINARY_DIR}/" -name 'CMakeFiles' -type d | xargs rm -rf 
+    COMMAND find "${CMAKE_CURRENT_BINARY_DIR}/" -name 'CTestTestfile.cmake' | xargs rm -f 
+    COMMAND find "${CMAKE_CURRENT_BINARY_DIR}/" -name 'Makefile' | xargs rm -f 
+    COMMAND find "${CMAKE_CURRENT_BINARY_DIR}/" -name 'cmake_install.cmake' | xargs rm -f 
+    COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/CMakeCache.txt" 
+    COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/CMakeuser.incl" 
+    COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt"
+    COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/libpnl.la"
+    )
 
 ## Output configuration stuff ##
 message("C Compiler :             ${CMAKE_C_COMPILER}")
