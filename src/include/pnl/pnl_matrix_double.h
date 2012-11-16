@@ -19,8 +19,8 @@ extern "C" {
 
 #else /* PNL_RANGE_CHECK_OFF */
 
-#define MGET(v,i,j) v->array[(i)*v->n+(j)]
-#define MLET(v,i,j) v->array[(i)*v->n+(j)]
+#define MGET(v,i,j) (v)->array[(i)*(v)->n+(j)]
+#define MLET(v,i,j) (v)->array[(i)*(v)->n+(j)]
 
 #endif /* PNL_RANGE_CHECK_OFF */
 
