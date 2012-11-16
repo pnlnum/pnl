@@ -125,8 +125,6 @@ if test X$user_set_cflags != Xyes; then
    CXXFLAGS=""
 fi
 
-
-
 LDFLAGS="${LDFLAGS} -lm"
 
 AC_C_INLINE

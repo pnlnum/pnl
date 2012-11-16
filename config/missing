@@ -49,6 +49,7 @@ case "$1" in
   # Try to run requested program, and just exit if it succeeds.
   run=
   shift
+  if test "$1" = "autoheader"; then exit 0; fi
   "$@" && exit 0
   # Exit code 63 means version mismatch.  This often happens
   # when the user try to use an ancient version of a tool on
