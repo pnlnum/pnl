@@ -11,6 +11,7 @@ set(pnl_INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib" )
 set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 set(pnl_USE_RPATH ON)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH OFF)
+set(CMAKE_FILES_DIRECTORY "/CMakeFiles")
 
 
 option(USE_MPI "Compiles the MPI bindings for PNL. Default = on" ON)
@@ -18,6 +19,7 @@ option(USE_INTERNAL_BLAS "Use internal Blas & Lapack instead of the system's one
 
 set(CMAKE_MODULE_PATH "${pnl_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
 include(CMakeMacroLibtoolFile)
+include(CMakeMacroExternInline)
 
 # Release or Debug
 if (NOT CMAKE_BUILD_TYPE)
@@ -44,11 +46,12 @@ elseif (CMAKE_BUILD_TYPE MATCHES "Release")
 endif ()
 
 # Do we have inline
-if (UNIX AND NOT APPLE)
-    set(HAVE_INLINE ON)
-else ()
-    set(HAVE_INLINE OFF)
-endif (UNIX AND NOT APPLE)
+CMAKE_CHECK_EXTERN_INLINE()
+if (HAVE_INLINE)
+    set(MY_C_FLAGS "${MY_C_FLAGS} -DHAVE_INLINE")
+    set(MY_CXX_FLAGS "${MY_CXX_FLAGS} -DHAVE_INLINE")
+endif (HAVE_INLINE)
+  
 
 # Detect Blas & Lapack
 if (NOT USE_INTERNAL_BLAS)
