@@ -141,7 +141,8 @@ AC_CACHE_CHECK([for extern inline], ac_cv_c_extern_inline,
                     [[  foo(1.0)  ]])],[ac_cv_c_extern_inline="yes"],[])])
 
 if test "$ac_cv_c_extern_inline" != no ; then
-   AM_CFLAGS="${AM_CFLAGS} -DHAVE_INLINE"
+    AC_SUBST(HAVE_INLINE)
+    AM_CFLAGS="${AM_CFLAGS} -DHAVE_INLINE"
 fi
 
 
