@@ -1,0 +1,21 @@
+SET(libminpack_SRCS
+   chkder.c
+   enorm.c
+   hybrj.c
+   qrfac.c
+   r1updt.c
+   dogleg.c
+   fdjac1.c
+   hybrd.c
+   lmdif.c
+   qrsolv.c
+   rwupdt.c
+   dpmpar.c
+   fdjac2.c
+   lmder.c
+   lmpar.c
+   qform.c
+   r1mpyq.c
+   covar.c
+   minpack-wrap.c
+)

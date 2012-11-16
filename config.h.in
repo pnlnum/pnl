@@ -1,69 +1,56 @@
-/* config.h.in.  Generated from configure.in by autoheader.  */
+/* config.h.in.  Generated from cmake */
+
+/* Define if a Fortran is detected */
+#cmakedefine HAVE_FORTRAN_COMPILER
 
 /* Define to dummy 'main' function (if any) required to link to the Fortran
    libraries. */
-#undef F77_DUMMY_MAIN
-
-/* Define if F77 and FC dummy 'main' functions are identical. */
-#undef FC_DUMMY_MAIN_EQ_F77
+#cmakedefine F77_DUMMY_MAIN
 
 /* Define to 1 if you have the 'exp10' function. */
-#undef HAVE_EXP10
+#cmakedefine HAVE_EXP10
 
 /* Define to 1 if you have the 'finite' function. */
-#undef HAVE_FINITE
+#cmakedefine HAVE_FINITE
 
 /* Define if you have inline */
-#undef HAVE_INLINE
+#cmakedefine HAVE_INLINE
 
 /* Define to 1 if you have the 'isfinite' function. */
-#undef HAVE_ISFINITE
+#cmakedefine HAVE_ISFINITE
 
 /* Define to 1 if you have the 'isinf' function. */
-#undef HAVE_ISINF
+#cmakedefine HAVE_ISINF
 
 /* Define to 1 if you have the 'isnan' function. */
-#undef HAVE_ISNAN
+#cmakedefine HAVE_ISNAN
 
 /* Define to 1 if you have the 'lgamma' function. */
-#undef HAVE_LGAMMA
-
-/* Define to 1 if you have the 'm' library (-lm). */
-#undef HAVE_LIBM
+#cmakedefine HAVE_LGAMMA
 
 /* Define to 1 if you have the 'tgamma' function. */
-#undef HAVE_TGAMMA
+#cmakedefine HAVE_TGAMMA
 
 /* Define to 1 if you have the 'trunc' function. */
-#undef HAVE_TRUNC
+#cmakedefine HAVE_TRUNC
 
 /* Define to 1 if you have 'dpstrf' function */
-#undef HAVE_DPSTRF
-
-/* Define to the sub-directory in which libtool stores uninstalled libraries.
-   */
-#undef LT_OBJDIR
-
-/* Define to 1 if your C compiler doesnt accept -c and -o together. */
-#undef NO_MINUS_C_MINUS_O
+#cmakedefine HAVE_DPSTRF
 
 /* turn off range checking by default internally */
-#undef PNL_RANGE_CHECK_OFF
-
-/* sharp sign can be used to in macros */
-#undef USE_SHARP_SIGN
-
-/* trailing underscore in fortran symbols */
-#undef WTU
+#cmakedefine PNL_RANGE_CHECK_OFF
 
 /* Runnning on Cygwin */
-#undef _CYGWIN
+#cmakedefine _CYGWIN
 
 /* Running on a Win32 system */
-#undef _WIN32
+#cmakedefine _WIN32
+
+/* Define to 1 if you use internal Blas */
+#cmakedefine USE_INTERNAL_BLAS
 
 /* Define to '__inline__' or '__inline' if that s what the C compiler
    calls it, or to nothing if 'inline' is not supported under any name.  */
 #ifndef __cplusplus
-#undef inline
+#define inline
 #endif
