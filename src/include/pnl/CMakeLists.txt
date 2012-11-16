@@ -6,7 +6,6 @@ install(FILES
     pnl_band_matrix.h 
     pnl_basis.h 
     pnl_cdf.h 
-    pnl_config.h
     pnl_complex.h 
     pnl_fft.h pnl_root.h 
     pnl_finance.h

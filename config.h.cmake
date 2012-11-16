@@ -1,3 +1,5 @@
+#ifndef _PNL_CONFIG_H
+#define _PNL_CONFIG_H
 /* config.h.in.  Generated from cmake */
 
 /* Define if a Fortran is detected */
@@ -15,6 +17,12 @@
 
 /* Define if you have inline */
 #cmakedefine HAVE_INLINE
+
+/* Define keyword for declaring inline functions */
+#define PNL_INLINE_DECL @PNL_INLINE_DECL@
+
+/* Define keyword for defining inline functions */
+#define PNL_INLINE_FUNC @PNL_INLINE_FUNC@
 
 /* Define to 1 if you have the 'isfinite' function. */
 #cmakedefine HAVE_ISFINITE
@@ -48,4 +56,6 @@
 
 /* Define to 1 if you use internal Blas */
 #cmakedefine USE_INTERNAL_BLAS
+
+#endif /* _PNL_CONFIG_H */
 

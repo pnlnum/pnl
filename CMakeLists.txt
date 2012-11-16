@@ -19,7 +19,6 @@ option(USE_INTERNAL_BLAS "Use internal Blas & Lapack instead of the system's one
 
 set(CMAKE_MODULE_PATH "${pnl_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
 include(CMakeMacroLibtoolFile)
-include(CMakeMacroExternInline)
 
 # Release or Debug
 if (NOT CMAKE_BUILD_TYPE)
@@ -46,12 +45,7 @@ elseif (CMAKE_BUILD_TYPE MATCHES "Release")
 endif ()
 
 # Do we have inline
-CMAKE_CHECK_EXTERN_INLINE()
-if (HAVE_INLINE)
-    set(MY_C_FLAGS "${MY_C_FLAGS} -DHAVE_INLINE")
-    set(MY_CXX_FLAGS "${MY_CXX_FLAGS} -DHAVE_INLINE")
-endif (HAVE_INLINE)
-  
+include(CMakeMacroExternInline)
 
 # Detect Blas & Lapack
 if (NOT USE_INTERNAL_BLAS)
@@ -134,9 +128,13 @@ enable_testing()
 add_subdirectory(src)
 add_subdirectory(examples)
 
-message ("Generate configure file ${CMAKE_CURRENT_BINARY_DIR}/config.h")
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/config.h)
-
+message ("Generate configure file ${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/pnl_config.h")
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake 
+    ${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/pnl_config.h)
+install(FILES 
+    ${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/pnl_config.h
+    DESTINATION include/pnl
+)
 
 
 ## Output configuration stuff ##
