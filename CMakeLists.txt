@@ -11,6 +11,7 @@ set(pnl_INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib" )
 set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 set(pnl_USE_RPATH ON)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH OFF)
+set(MY_CPP_FLAGS "-I${PROJECT_BINARY_DIR}/include")
 
 
 option(USE_MPI "Compiles the MPI bindings for PNL. Default = on" ON)
@@ -66,6 +67,7 @@ if (USE_MPI)
     find_package(MPI)
     set(LIBS ${LIBS} ${MPI_C_LIBRARIES})
     include_directories(${MPI_C_INCLUDE_PATH})
+    set(MY_CPP_FLAGS "${MY_CPP_FLAGS} -I${MPI_C_INCLUDE_PATH}")
 endif (USE_MPI)
 
 # Add -lm if needed
@@ -93,6 +95,9 @@ if (UNIX)
     endif (APPLE)
     set(PNL_LDFLAGS "${PNL_LDFLAGS} -lm" )
 endif (UNIX)
+
+# Stuff for CMakeuser.incl
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/CMakeuser.incl.in ${CMAKE_CURRENT_BINARY_DIR}/CMakeuser.incl @ONLY)
 
 # Check math function from the standard library
 set(CMAKE_REQUIRED_LIBRARIES ${LIBS})

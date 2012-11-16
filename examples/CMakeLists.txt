@@ -1,4 +1,4 @@
-include_directories(${PROJECT_SOURCE_DIR}/src/include)
+include_directories(${PROJECT_BINARY_DIR}/src/include ${PROJECT_SOURCE_DIR}/src/include)
 enable_testing()
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)
 

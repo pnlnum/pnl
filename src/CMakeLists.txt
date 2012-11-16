@@ -1,4 +1,4 @@
-include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/src/include)
+include_directories(${PROJECT_BINARY_DIR}/src/include ${PROJECT_SOURCE_DIR}/src/include)
 
 set(SUBDIRS 
     objects
