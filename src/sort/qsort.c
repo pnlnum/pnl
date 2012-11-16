@@ -41,7 +41,7 @@
 #include <stdlib.h>
 
 #include "pnl/pnl_mathtools.h"
-#include "config.h"
+#include "pnl/config.h"
 
 #ifdef HAVE_INLINE
 #define __inline__ inline

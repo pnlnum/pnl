@@ -23,7 +23,7 @@
 
 #define _PNL_PRIVATE 1
 
-#include "config.h"
+#include "pnl/config.h"
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_cdf.h"

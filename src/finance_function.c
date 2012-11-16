@@ -1,4 +1,4 @@
-#include "config.h"
+#include "pnl/config.h"
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_cdf.h"
 #include "pnl/pnl_finance.h"

@@ -23,7 +23,7 @@
 #include <string.h>
 #include <math.h>
 
-#include "config.h"
+#include "pnl/config.h"
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_mathtools.h"
 

@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "config.h"
+#include "pnl/config.h"
 #include "pnl/pnl_band_matrix.h"
 #include "pnl/pnl_machine.h"
 #include "pnl/pnl_matrix.h"

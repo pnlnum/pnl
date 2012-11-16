@@ -25,7 +25,7 @@
 #include <ctype.h>
 #include <stdarg.h>
 
-#include "config.h"
+#include "pnl/config.h"
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_internals.h"

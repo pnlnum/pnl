@@ -53,7 +53,7 @@
  *    
  */
 
-#include "config.h"
+#include "pnl/config.h"
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_internals.h"
 

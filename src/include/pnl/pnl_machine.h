@@ -6,14 +6,14 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include "config.h"
+#include "pnl/config.h"
 
-/* Define  C2F entry point conversion */
-#if defined(WTU)
-#  if defined(USE_SHARP_SIGN)
-#    define C2F(name) name##_
+#ifdef HAVE_FORTRAN_COMPILER
+#  include "pnl/FC.h"
+#  ifdef FC_GLOBAL
+#    define C2F(name) (FC_GLOBAL(name,name))
 #  else
-#    define C2F(name) name/**/_
+#    define C2F(name) name##_
 #  endif
 #else
 #  define C2F(name) name##_
