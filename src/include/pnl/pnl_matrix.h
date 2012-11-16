@@ -43,7 +43,7 @@
 
 #endif /* PNL_RANGE_CHECK_OFF */
 
-
+#include "pnl/pnl_config.h"
 
 /**
  * \defgroup PnlMatrices a Matrix object

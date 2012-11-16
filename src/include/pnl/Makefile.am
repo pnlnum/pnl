@@ -7,12 +7,18 @@ AM_CPPFLAGS = $(PNL_INCLUDES)
 
 AM_ETAGSFLAGS=--declarations
 
+
+noinst_LTLIBRARIES = libinline.la
+libinline_la_SOURCES = build-inline.c
+libinline_la_LDFLAGS=-avoid-version	
+
+
 pkginclude_HEADERS=                                   \
 pnl_finance.h                    pnl_specfun.h        \
 pnl_linalgsolver.h               pnl_fft.h            \
 pnl_root.h                       pnl_complex.h        \
 pnl_mathtools.h                  pnl_tridiag_matrix.h \
-pnl_matrix_complex.h                                  \
+pnl_matrix_complex.h             pnl_config.h         \
 pnl_matrix_double.h              pnl_vector_complex.h \
 pnl_band_matrix.h                pnl_matrix.h         \
 pnl_basis.h                      pnl_matrix_int.h     \

@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "pnl/config.h"
+#include "pnl/pnl_config.h"
 #include "pnl/pnl_basis.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"

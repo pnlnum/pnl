@@ -6,7 +6,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include "pnl/config.h"
+#include "pnl/pnl_config.h"
 
 #ifdef HAVE_FORTRAN_COMPILER
 #  include "pnl/FC.h"

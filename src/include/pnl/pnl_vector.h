@@ -6,7 +6,6 @@
 
 
 
-
 #ifndef PNL_RANGE_CHECK_OFF
 #define CheckIndexVect(v,i) {                                           \
     if (i>=v->size || i<0) {perror("index out of range"); abort();}}
@@ -17,6 +16,7 @@
 #define CheckVectMatch(lhs, rhs){}
 #endif /* PNL_RANGE_CHECK_OFF */
 
+#include "pnl/pnl_config.h"
 
 /**
  * \defgroup PnlVectors  a Vector object

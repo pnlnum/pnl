@@ -54,7 +54,6 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,new)()
   return o;
 }
 
-
 /**
  * creates a new TYPE(PnlVect) pointer.
  *
@@ -95,7 +94,6 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,CONCAT2(create_from_,BASE))(const int size,BASE
   return v;
 }
 
-
 /**
  * Test if 2 vectors are equal
  *
@@ -130,7 +128,6 @@ int FUNCTION(pnl_vect,CONCAT2(eq_,BASE))(const TYPE(PnlVect) *v, BASE x)
     }
   return TRUE;
 }
-
 
 /**
  * creates a new TYPE(PnlVect) pointer.
@@ -631,51 +628,6 @@ void FUNCTION(pnl_vect, print_nsp)(const TYPE(PnlVect) * V)
  * @param i index
  * @param x v[i]=x
  */
-void
-FUNCTION(pnl_vect, set)(TYPE(PnlVect) * v,
-                        const int i,    const BASE x)
-{
-#ifndef PNL_RANGE_CHECK_OFF
-  if (i>=v->size || i<0)
-    {
-      PNL_ERROR ("index out of range", "pnl_vect_set");
-    }
-#endif
-  v->array[i]=x;
-}
-
-/**
- * gets the value of v[i]. Can NOT be used as a lvalue
- *
- * @param v a TYPE(PnlVect)
- * @param i index
- * @return  v[i]
- */
-BASE FUNCTION(pnl_vect, get)(const TYPE(PnlVect) * v,
-                             const int i)
-{
-  CheckIndexVect(v,i);
-  return v->array[i];
-}
-
-
-/**
- * returns the address of v[i]. Can be used as a lvalue.
- *
- * @param v a TYPE(PnlVect)
- * @param i index
- * @return  &(v[i])
- */
-BASE * FUNCTION(pnl_vect, lget)(TYPE(PnlVect) * v ,const int i)
-{
-#ifndef PNL_RANGE_CHECK_OFF
-  if (i>=v->size || i<0)
-    {
-      PNL_ERROR ("index out of range", "pnl_vect_lget");
-    }
-#endif
-  return &(v->array[i]);
-}
 
 /**
  * in-place map function

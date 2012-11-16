@@ -128,79 +128,70 @@ extern int pnl_mat_complex_exp (PnlMatComplex *expA, const PnlMatComplex *A);
 
 /* inline functions if you are using GCC */
 #ifdef HAVE_INLINE 
-extern inline
-dcomplex pnl_mat_complex_get (const PnlMatComplex *self, int i, int j)
+PNL_INLINE_FUNC dcomplex pnl_mat_complex_get (const PnlMatComplex *self, int i, int j)
 {
   CheckIndexMat(self,i, j);
   return self->array[i*self->n+j];
 }
 
-extern inline
-dcomplex* pnl_mat_complex_lget (PnlMatComplex *self, int i, int j)
+PNL_INLINE_FUNC dcomplex* pnl_mat_complex_lget (PnlMatComplex *self, int i, int j)
 {
   CheckIndexMat(self,i, j);
   return &(self->array[i*self->n+j]);
 }
 
-extern inline
-void pnl_mat_complex_set (PnlMatComplex *self, int i, int j, dcomplex x)
+PNL_INLINE_FUNC void pnl_mat_complex_set (PnlMatComplex *self, int i, int j, dcomplex x)
 {
   CheckIndexMat(self,i, j);
   self->array[i*self->n+j] = x;
 }
 
-extern inline
-double pnl_mat_complex_get_real (const PnlMatComplex *self, int i, int j)
+PNL_INLINE_FUNC double pnl_mat_complex_get_real (const PnlMatComplex *self, int i, int j)
 {
   CheckIndexMat(self,i, j);
   return self->array[i*self->n+j].r;
 }
 
-extern inline
-double* pnl_mat_complex_lget_real (PnlMatComplex *self, int i, int j)
+PNL_INLINE_FUNC double* pnl_mat_complex_lget_real (PnlMatComplex *self, int i, int j)
 {
   CheckIndexMat(self,i, j);
   return &(self->array[i*self->n+j].r);
 }
 
-extern inline
-void pnl_mat_complex_set_real (PnlMatComplex *self, int i, int j, double x)
+PNL_INLINE_FUNC void pnl_mat_complex_set_real (PnlMatComplex *self, int i, int j, double x)
 {
   CheckIndexMat(self,i, j);
   self->array[i*self->n+j].r = x; 
 }
 
-extern inline
-double pnl_mat_complex_get_imag (const PnlMatComplex *self, int i, int j)
+PNL_INLINE_FUNC double pnl_mat_complex_get_imag (const PnlMatComplex *self, int i, int j)
 {
   CheckIndexMat(self,i, j);
   return (self->array[i*self->n+j]).i;
 }
 
-extern inline
-double* pnl_mat_complex_lget_imag (PnlMatComplex *self, int i, int j)
+PNL_INLINE_FUNC double* pnl_mat_complex_lget_imag (PnlMatComplex *self, int i, int j)
 {
   CheckIndexMat(self,i, j);
   return &((self->array[i*self->n+j]).i);
 }
 
-extern inline
-void pnl_mat_complex_set_imag (PnlMatComplex *self, int i, int j, double x)
+PNL_INLINE_FUNC void pnl_mat_complex_set_imag (PnlMatComplex *self, int i, int j, double x)
 {
   CheckIndexMat(self,i, j);
   self->array[i*self->n+j].i = x;
 }
 #endif
 
-extern void pnl_mat_complex_set(PnlMatComplex *v, int i, int j, dcomplex x);
-extern dcomplex pnl_mat_complex_get(const PnlMatComplex *v, int i, int j);
-extern dcomplex* pnl_mat_complex_lget(PnlMatComplex *v, int i, int j);
-extern void pnl_mat_complex_set_real(PnlMatComplex *v, int i, int j, double x);
-extern double pnl_mat_complex_get_real(const PnlMatComplex *v, int i, int j);
-extern double* pnl_mat_complex_lget_real(PnlMatComplex *v, int i, int j);
-extern void pnl_mat_complex_set_imag(PnlMatComplex *v, int i, int j, double x);
-extern double pnl_mat_complex_get_imag(const PnlMatComplex *v, int i, int j);
-extern double* pnl_mat_complex_lget_imag(PnlMatComplex *v, int i, int j);
+PNL_INLINE_DECL void pnl_mat_complex_set(PnlMatComplex *v, int i, int j, dcomplex x);
+PNL_INLINE_DECL dcomplex pnl_mat_complex_get(const PnlMatComplex *v, int i, int j);
+PNL_INLINE_DECL dcomplex* pnl_mat_complex_lget(PnlMatComplex *v, int i, int j);
+PNL_INLINE_DECL void pnl_mat_complex_set_real(PnlMatComplex *v, int i, int j, double x);
+PNL_INLINE_DECL double pnl_mat_complex_get_real(const PnlMatComplex *v, int i, int j);
+PNL_INLINE_DECL double* pnl_mat_complex_lget_real(PnlMatComplex *v, int i, int j);
+PNL_INLINE_DECL void pnl_mat_complex_set_imag(PnlMatComplex *v, int i, int j, double x);
+PNL_INLINE_DECL double pnl_mat_complex_get_imag(const PnlMatComplex *v, int i, int j);
+PNL_INLINE_DECL double* pnl_mat_complex_lget_imag(PnlMatComplex *v, int i, int j);
 
 #ifndef PNL_RANGE_CHECK_OFF
 #define MGET_REAL(v,i,j) pnl_mat_complex_get_real(v,i,j)

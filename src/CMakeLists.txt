@@ -40,6 +40,12 @@ foreach(subdir ${SUBDIRS})
     endforeach ()
 endforeach ()
 
+# Add build inline stuff
+include(include/pnl/CMakeLists.txt)
+foreach (srcfile ${libinclude_SRCS})
+    set (pnl_LIB_SRCS ${pnl_LIB_SRCS} include/pnl/${srcfile})
+endforeach ()
+
 
 add_library(pnl SHARED ${pnl_LIB_SRCS})
 target_link_libraries(pnl ${LIBS})

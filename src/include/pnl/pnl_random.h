@@ -1,6 +1,7 @@
 #ifndef _PNL_RANDOM_H
 #define _PNL_RANDOM_H
 
+#include "pnl/pnl_config.h"
 #include "pnl/pnl_object.h"
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_vector.h"
@@ -85,12 +86,13 @@ extern PnlRng PnlRngNiederreiter;
 extern PnlRng *PnlRngArray[];
 
 #ifdef HAVE_INLINE
-extern inline PnlRng* pnl_rng_get_from_id (PnlRngType t)
+PNL_INLINE_FUNC PnlRng* pnl_rng_get_from_id (PnlRngType t)
 {
   return PnlRngArray[t];
 }
 #endif
-extern PnlRng* pnl_rng_get_from_id (PnlRngType t);
+PNL_INLINE_DECL PnlRng* pnl_rng_get_from_id (PnlRngType t);
+
 extern char* pnl_rng_get_name (PnlRngType t);
 
 

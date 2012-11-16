@@ -328,48 +328,6 @@ int FUNCTION(pnl_mat,resize)(TYPE(PnlMat) *M, int m, int n)
 }
 
 /**
- * sets the value of self[i,j]=x
- *
- * @param self : a TYPE(PnlMat)
- * @param i : index of line
- * @param j : index of col
- * @param x : self[i,j]=x
- */
-void FUNCTION(pnl_mat,set)(TYPE(PnlMat) *self, int i, int j, BASE x)
-{
-  PNL_CHECK (i<0 || i>=self->m || j<0 || j>=self->n, "index out of range", "pnl_mat_set");
-  self->array[i*self->n+j]=x;
-}
-
-/**
- * gets the value of self[i,j]
- *
- * @param self : a TYPE(PnlMat)
- * @param i : index of line
- * @param j : index of col
- * @return  self[i,j]
- */
-BASE FUNCTION(pnl_mat,get)(const TYPE(PnlMat) *self, int i, int j)
-{
-  CheckIndexMat(self,i, j);
-  return self->array[i*self->n+j];
-}
-
-/**
- * returns the address of self[i,j] for use as a lvalue.
- *
- * @param self : a TYPE(PnlMat)
- * @param i : index of line
- * @param j : index of col
- * @return  &(self[i,j])
- */
-BASE* FUNCTION(pnl_mat,lget)(TYPE(PnlMat) *self, int i, int j)
-{
-  PNL_CHECK (i<0 || i>=self->m || j<0 || j>=self->n, "index out of range", "pnl_mat_lget");
-  return &(self->array[i*self->n+j]);
-}
-
-/**
  * in-place set matrix constant
  *
  * @param lhs : left hand side matrix

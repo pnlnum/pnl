@@ -23,7 +23,7 @@
 
 #define _PNL_PRIVATE 1
 
-#include "pnl/config.h"
+#include "pnl/pnl_config.h"
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_cdf.h"
@@ -889,19 +889,6 @@ PnlRng *PnlRngArray[]=
      NULL
   };
 
-
-/**
- * Retuns the global generator described by its macro name
- * 
- * @param id the index of a generator
- * 
- * @return a pointer to the global generator with index id
- */
-PnlRng* pnl_rng_get_from_id (PnlRngType id)
-{
-  return PnlRngArray[id];
-}
-
 /**
  * Retuns the label of a generator 
  * 
@@ -931,7 +918,6 @@ char* pnl_rng_get_name (PnlRngType id)
     default: return "Undefined generator";       
     }
 }
-
 
 /**
  * Initialises a generator

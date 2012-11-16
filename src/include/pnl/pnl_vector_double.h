@@ -24,22 +24,19 @@ extern "C" {
 
 
 #ifdef HAVE_INLINE 
-extern inline
-double pnl_vect_get (const PnlVect *self, int i)
+PNL_INLINE_FUNC double pnl_vect_get (const PnlVect *self, int i)
 {
   CheckIndexVect(self,i);
   return self->array[i];
 }
 
-extern inline
-double* pnl_vect_lget (PnlVect *self, int i)
+PNL_INLINE_FUNC double* pnl_vect_lget (PnlVect *self, int i)
 {
   CheckIndexVect(self,i);
   return &(self->array[i]);
 }
 
-extern inline
-void pnl_vect_set (PnlVect *self, int i, double x)
+PNL_INLINE_FUNC void pnl_vect_set (PnlVect *self, int i, double x)
 {
   CheckIndexVect(self,i);
   self->array[i]=x;
@@ -54,9 +51,10 @@ void pnl_vect_set (PnlVect *self, int i, double x)
 #define LET(v,i) (v)->array[i]
 #endif
 
-extern void pnl_vect_set(PnlVect *v, int i, double x);
-extern double pnl_vect_get(const PnlVect *v, int i);
-extern double* pnl_vect_lget(PnlVect *v, int i);
+PNL_INLINE_DECL void pnl_vect_set(PnlVect *v, int i, double x);
+PNL_INLINE_DECL double pnl_vect_get(const PnlVect *v, int i);
+PNL_INLINE_DECL double* pnl_vect_lget(PnlVect *v, int i);
+
 extern void pnl_vect_free(PnlVect **v);
 extern void pnl_vect_init(PnlVect *v);
 extern PnlVect* pnl_vect_new();

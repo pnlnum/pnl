@@ -34,7 +34,7 @@
  
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_specfun.h"
-#include "pnl/config.h"
+#include "pnl/pnl_config.h"
 #include "pnl/pnl_machine.h"
 
 static int c_n1 = -1;

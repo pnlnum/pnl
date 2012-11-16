@@ -16,7 +16,7 @@
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
 
-#include "pnl/config.h"
+#include "pnl/pnl_config.h"
 #include "pnl/pnl_vector.h"
 
 
@@ -66,7 +66,6 @@ void pnl_vect_complex_split_in_array(const PnlVectComplex* v, double *re, double
     }
 }
 
-
 /**
  * Stores a Complex Vector in two real valued vectors
  *
@@ -80,38 +79,6 @@ void pnl_vect_complex_split_in_vect(const PnlVectComplex* v, PnlVect *re, PnlVec
   pnl_vect_resize (im, v->size);
   pnl_vect_complex_split_in_array (v, re->array, im->array);
 }
-
-
-double pnl_vect_complex_get_real (const PnlVectComplex *v, int i)
-{
-  return ((double *)(v->array))[2*i];
-}
-
-double pnl_vect_complex_get_imag (const PnlVectComplex *v, int i)
-{
-  return ((double *)(v->array))[2*i+1];
-}
-
-double* pnl_vect_complex_lget_real (const PnlVectComplex *v, int i)
-{
-  return &(((double *)(v->array))[2*i]);
-}
-
-double* pnl_vect_complex_lget_imag (const PnlVectComplex *v, int i)
-{
-  return &(((double *)(v->array))[2*i+1]);
-}
-
-void pnl_vect_complex_set_real (const PnlVectComplex *v, int i, double re)
-{
-  ((double *)(v->array))[2*i] = re;
-}
-
-void pnl_vect_complex_set_imag (const PnlVectComplex *v, int i, double im)
-{
-  ((double *)(v->array))[2*i+1] = im;
-}
-
 
 /**
  * in-place vector scalar double multiplication

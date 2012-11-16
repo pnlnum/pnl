@@ -110,22 +110,19 @@ extern void pnl_mat_int_qsort (PnlMatInt *A, char dir, char order);
 
 /* inline functions if you are using GCC */
 #ifdef HAVE_INLINE 
-extern inline
-int pnl_mat_int_get (const PnlMatInt *self, int i, int j)
+PNL_INLINE_FUNC int pnl_mat_int_get (const PnlMatInt *self, int i, int j)
 {
   CheckIndexMat(self,i, j);
   return self->array[i*self->n+j];
 }
 
-extern inline
-int* pnl_mat_int_lget (PnlMatInt *self, int i, int j)
+PNL_INLINE_FUNC int* pnl_mat_int_lget (PnlMatInt *self, int i, int j)
 {
   CheckIndexMat(self,i, j);
   return &(self->array[i*self->n+j]);
 }
 
-extern inline
-void pnl_mat_int_set (PnlMatInt *self, int i, int j, int x)
+PNL_INLINE_FUNC void pnl_mat_int_set (PnlMatInt *self, int i, int j, int x)
 {
   CheckIndexMat(self,i, j);
   self->array[i*self->n+j] = x;
@@ -133,9 +130,9 @@ void pnl_mat_int_set (PnlMatInt *self, int i, int j, int x)
 
 #endif
 
-extern void pnl_mat_int_set(PnlMatInt *v, int i, int j, int x);
-extern int pnl_mat_int_get(const PnlMatInt *v, int i, int j);
-extern int* pnl_mat_int_lget(PnlMatInt *v, int i, int j);
+PNL_INLINE_DECL void pnl_mat_int_set(PnlMatInt *v, int i, int j, int x);
+PNL_INLINE_DECL int pnl_mat_int_get(const PnlMatInt *v, int i, int j);
+PNL_INLINE_DECL int* pnl_mat_int_lget(PnlMatInt *v, int i, int j);
 
 /*@}*/
 /*@}*/

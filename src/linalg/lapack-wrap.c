@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "pnl/config.h"
+#include "pnl/pnl_config.h"
 #include "pnl/pnl_internals.h"
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_matrix.h"

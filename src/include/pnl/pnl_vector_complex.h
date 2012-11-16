@@ -24,86 +24,77 @@ extern "C" {
 /*@{*/
 
 #ifdef HAVE_INLINE 
-extern inline
-dcomplex pnl_vect_complex_get (const PnlVectComplex *self, int i)
+PNL_INLINE_FUNC dcomplex pnl_vect_complex_get (const PnlVectComplex *self, int i)
 {
   CheckIndexVect(self,i);
   return self->array[i];
 }
 
-extern inline
-dcomplex* pnl_vect_complex_lget (PnlVectComplex *self, int i)
+PNL_INLINE_FUNC dcomplex* pnl_vect_complex_lget (PnlVectComplex *self, int i)
 {
   CheckIndexVect(self,i);
   return &(self->array[i]);
 }
 
-extern inline
-void pnl_vect_complex_set (PnlVectComplex *self, int i, dcomplex x)
+PNL_INLINE_FUNC void pnl_vect_complex_set (PnlVectComplex *self, int i, dcomplex x)
 {
   CheckIndexVect(self,i);
   self->array[i]=x;
 }
 
-extern inline
-double pnl_vect_complex_get_real (const PnlVectComplex *v, int i)
+PNL_INLINE_FUNC double pnl_vect_complex_get_real (const PnlVectComplex *v, int i)
 {
   return ((double *)(v->array))[2*i];
 }
 
-extern inline
-double pnl_vect_complex_get_imag (const PnlVectComplex *v, int i)
+PNL_INLINE_FUNC double pnl_vect_complex_get_imag (const PnlVectComplex *v, int i)
 {
   return ((double *)(v->array))[2*i+1];
 }
 
-extern inline
-double* pnl_vect_complex_lget_real (const PnlVectComplex *v, int i)
+PNL_INLINE_FUNC double* pnl_vect_complex_lget_real (const PnlVectComplex *v, int i)
 {
   return &(((double *)(v->array))[2*i]);
 }
 
-extern inline
-double* pnl_vect_complex_lget_imag (const PnlVectComplex *v, int i)
+PNL_INLINE_FUNC double* pnl_vect_complex_lget_imag (const PnlVectComplex *v, int i)
 {
   return &(((double *)(v->array))[2*i+1]);
 }
 
-extern inline
-void pnl_vect_complex_set_real (const PnlVectComplex *v, int i, double re)
+PNL_INLINE_FUNC void pnl_vect_complex_set_real (const PnlVectComplex *v, int i, double re)
 {
   ((double *)(v->array))[2*i] = re;
 }
 
-extern inline
-void pnl_vect_complex_set_imag (const PnlVectComplex *v, int i, double im)
+PNL_INLINE_FUNC void pnl_vect_complex_set_imag (const PnlVectComplex *v, int i, double im)
 {
   ((double *)(v->array))[2*i+1] = im;
 }
 #endif
 
 #ifndef PNL_RANGE_CHECK_OFF
-#define GET_REAL(v,i) pnl_vect_complex_get_real(v,i)
-#define LET_REAL(v,i) *(pnl_vect_complex_lget_real(v,i))
-#define GET_IMAG(v,i) pnl_vect_complex_get_imag(v,i)
-#define LET_IMAG(v,i) *(pnl_vect_complex_lget_imag(v,i))
+#define GET_REAL(v,index) pnl_vect_complex_get_real(v,index)
+#define LET_REAL(v,index) *(pnl_vect_complex_lget_real(v,index))
+#define GET_IMAG(v,index) pnl_vect_complex_get_imag(v,index)
+#define LET_IMAG(v,index) *(pnl_vect_complex_lget_imag(v,index))
 #else
-#define GET_REAL(v,i) (v->array[i]).r
-#define LET_REAL(v,i) (v->array[i]).r
-#define GET_IMAG(v,i) (v->array[i]).i
-#define LET_IMAG(v,i) (v->array[i]).i
+#define GET_REAL(v,index) ((v)->array[index]).r
+#define LET_REAL(v,index) ((v)->array[index]).r
+#define GET_IMAG(v,index) ((v)->array[index]).i
+#define LET_IMAG(v,index) ((v)->array[index]).i
 #endif
 
 
-extern void pnl_vect_complex_set(PnlVectComplex *v, int i, dcomplex x);
-extern dcomplex pnl_vect_complex_get(const PnlVectComplex *v, int i);
-extern dcomplex* pnl_vect_complex_lget(PnlVectComplex *v, int i);
-extern double pnl_vect_complex_get_real (const PnlVectComplex *v, int i);
-extern double pnl_vect_complex_get_imag (const PnlVectComplex *v, int i);
-extern double* pnl_vect_complex_lget_real (const PnlVectComplex *v, int i);
-extern double* pnl_vect_complex_lget_imag (const PnlVectComplex *v, int i);
-extern void pnl_vect_complex_set_real (const PnlVectComplex *v, int i, double re);
-extern void pnl_vect_complex_set_imag (const PnlVectComplex *v, int i, double im);
+PNL_INLINE_DECL void pnl_vect_complex_set(PnlVectComplex *v, int i, dcomplex x);
+PNL_INLINE_DECL dcomplex pnl_vect_complex_get(const PnlVectComplex *v, int i);
+PNL_INLINE_DECL dcomplex* pnl_vect_complex_lget(PnlVectComplex *v, int i);
+PNL_INLINE_DECL double pnl_vect_complex_get_real (const PnlVectComplex *v, int i);
+PNL_INLINE_DECL double pnl_vect_complex_get_imag (const PnlVectComplex *v, int i);
+PNL_INLINE_DECL double* pnl_vect_complex_lget_real (const PnlVectComplex *v, int i);
+PNL_INLINE_DECL double* pnl_vect_complex_lget_imag (const PnlVectComplex *v, int i);
+PNL_INLINE_DECL void pnl_vect_complex_set_real (const PnlVectComplex *v, int i, double re);
+PNL_INLINE_DECL void pnl_vect_complex_set_imag (const PnlVectComplex *v, int i, double im);
 
 extern void pnl_vect_complex_free(PnlVectComplex **v);
 extern void pnl_vect_complex_init(PnlVectComplex *v);

@@ -148,31 +148,28 @@ extern int pnl_mat_ls (const PnlMat *A, PnlVect *b);
 
 /* inline functions if you are using GCC */
 #ifdef HAVE_INLINE 
-extern inline
-double pnl_mat_get (const PnlMat *self, int i, int j)
+PNL_INLINE_FUNC double pnl_mat_get (const PnlMat *self, int i, int j)
 {
   CheckIndexMat(self,i, j);
   return self->array[i*self->n+j];
 }
 
-extern inline
-double* pnl_mat_lget (PnlMat *self, int i, int j)
+PNL_INLINE_FUNC double* pnl_mat_lget (PnlMat *self, int i, int j)
 {
   CheckIndexMat(self,i, j);
   return &(self->array[i*self->n+j]);
 }
 
-extern inline
-void pnl_mat_set (PnlMat *self, int i, int j, double x)
+PNL_INLINE_FUNC void pnl_mat_set (PnlMat *self, int i, int j, double x)
 {
   CheckIndexMat(self,i, j);
   self->array[i*self->n+j] = x;
 }
 #endif
 
-extern void pnl_mat_set(PnlMat *v, int i, int j, double x);
-extern double pnl_mat_get(const PnlMat *v, int i, int j);
-extern double* pnl_mat_lget(PnlMat *v, int i, int j);
+PNL_INLINE_DECL void pnl_mat_set(PnlMat *v, int i, int j, double x);
+PNL_INLINE_DECL double pnl_mat_get(const PnlMat *v, int i, int j);
+PNL_INLINE_DECL double* pnl_mat_lget(PnlMat *v, int i, int j);
 
 /*@}*/
 /*@}*/

@@ -15,7 +15,7 @@ math/libmath.la linalg/liblinalg.la sort/libsort.la \
 fft/libfft.la specfun/libspecfun.la libcephes/libcephes.la \
 libinteg/libinteg.la interpol/libinterpol.la optim/liboptim.la\
 roots/libroots.la libminpack/libminpack.la \
-objects/libobjects.la
+objects/libobjects.la include/pnl/libinline.la
 
 
 if HAVE_MPI
