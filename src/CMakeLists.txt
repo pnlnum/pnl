@@ -19,7 +19,7 @@ set(SUBDIRS
 add_subdirectory(include/pnl)
 
 if (NOT BLAS_FOUND OR NOT LAPACK_FOUND)
-    set(SUBDIRS ${SUBDIRS} libf2f libblas liblapack)
+    set(SUBDIRS ${SUBDIRS} libf2c libblas liblapack)
 endif (NOT BLAS_FOUND OR NOT LAPACK_FOUND)
 
 if (MPI_C_FOUND)
