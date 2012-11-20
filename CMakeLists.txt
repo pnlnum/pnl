@@ -49,8 +49,48 @@ include(CMakeMacroExternInline)
 
 # Detect Blas & Lapack
 if (NOT USE_INTERNAL_BLAS)
-    find_package(BLAS)
-    find_package(LAPACK)
+
+    # Has the user supplied a Blas Library?
+    if ( (BLAS_LIBRARIES AND (NOT LAPACK_LIBRARIES)) OR ((NOT BLAS_LIBRARIES) AND LAPACK_LIBRARIES) )
+        message (FATAL_ERROR "--> You must specify both BLAS_LIBRARIES and LAPACK_LIBRARIES or none of them.")
+    endif ()
+
+    # if ( BLAS_LIBRARIES AND LAPACK_LIBRARIES )
+    #     include(CheckFortranFunctionExists)
+    #     set(CMAKE_REQUIRED_LIBRARIES ${BLAS_LIBRARIES})
+    #     CHECK_FORTRAN_FUNCTION_EXISTS("dgemm" BLAS_FOUND)
+    #     unset( CMAKE_REQUIRED_LIBRARIES )
+    #     if(BLAS_FOUND)
+    #         message(STATUS "--> BLAS supplied by user is WORKING, will use ${BLAS_LIBRARIES}.")
+    #     else(BLAS_FOUND)
+    #         message(ERROR "--> BLAS supplied by user is not WORKING, CANNOT USE ${BLAS_LIBRARIES}.")
+    #         message(ERROR "-->     Will use REFERENCE BLAS (by default)")
+    #         message(ERROR "-->     Or Correct your BLAS_LIBRARIES entry ")
+    #     endif(BLAS_FOUND)
+
+    #     set(CMAKE_REQUIRED_LIBRARIES ${LAPACK_LIBRARIES})
+    #     CHECK_FORTRAN_FUNCTION_EXISTS("dpotrf" LAPACK_FOUND)
+    #     unset( CMAKE_REQUIRED_LIBRARIES )
+    #     if(LAPACK_FOUND)
+    #         message(STATUS "--> LAPACK supplied by user is WORKING, will use ${LAPACK_LIBRARIES}.")
+    #     else(LAPACK_FOUND)
+    #         message(ERROR "--> LAPACK supplied by user is not WORKING, CANNOT USE $LAPACK_LIBRARIES}.")
+    #         message(ERROR "-->     Will use REFERENCE LAPACK (by default)")
+    #         message(ERROR "-->     Or Correct your LAPACK_LIBRARIES entry ")
+    #     endif(LAPACK_FOUND)
+
+    # else ()
+    #     find_package (LAPACK)
+    # endif ( BLAS_LIBRARIES AND LAPACK_LIBRARIES )
+
+    if (BLAS_LIBRARIES AND LAPACK_LIBRARIES) 
+        set (BLAS_FOUND true)
+        set (LAPACK_FOUND true)
+    else ()
+        find_package(Blas)
+        find_package(Lapack)
+    endif (BLAS_LIBRARIES AND LAPACK_LIBRARIES) 
+    
     if (BLAS_FOUND AND LAPACK_FOUND)
         set(LIBS ${LIBS} ${BLAS_LIBRARIES})
         set(LIBS ${LIBS} ${LAPACK_LIBRARIES})
@@ -98,6 +138,9 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/CMakeuser.incl.in ${CMAKE_CURRENT_BIN
 
 # Check math function from the standard library
 set(CMAKE_REQUIRED_LIBRARIES ${LIBS})
+
+# Check some math functions
+include(CheckFunctionExists)
 CHECK_FUNCTION_EXISTS(tgamma HAVE_TGAMMA)
 CHECK_FUNCTION_EXISTS(lgamma HAVE_LGAMMA)
 CHECK_FUNCTION_EXISTS(exp10 HAVE_EXP10)
@@ -113,6 +156,7 @@ if (CMAKE_Fortran_COMPILER_WORKS)
     message ("Fortran compiler found ${CMAKE_Fortran_COMPILER}")
     set(HAVE_FORTRAN_COMPILER ON)
     include(FortranCInterface)
+    include(CheckFortranFunctionExists)
     FortranCInterface_HEADER(src/include/pnl/FC.h MACRO_NAMESPACE "FC_")
     # test for dpstrf (Block Cholesky for non definite matrix)
     CHECK_FORTRAN_FUNCTION_EXISTS(dpstrf HAVE_DPSTRF)

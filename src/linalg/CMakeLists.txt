@@ -11,4 +11,5 @@ SET(linalg_SRCS
    solver_iterativ.c
    lapack-wrap.c
    dpstrf.c
+   zpstrf.c
 )
