@@ -2,44 +2,23 @@
             ** Installation of PNL **
             *************************
 
-Depending on whether you are using an official release or the development
-version available using subversion from http://gforge.inria.fr/pnl, the
-installation differs. We describe here the different procedures.
-
 0. Dependencies
 
-    There are no required dependencies to compile PNL. However, users
-    should know that :
-    - Linear Algebra routines mainly rely on Blas & Lapack. If these
-    two libraries are not found on the machine, the versions shipped with
-    PNL are used. For better performances, one should consider using
-    Atlas.
-    - When an MPI implementation is detected on the computer, some MPI
-    bindings are available which enable to natively handle PnlObjects.
+    To compile PNL, you need CMake version 2.8 at least.
+        http://cmake.org/cmake/resources/software.html
+    
+    In addition, users should know that :
 
-1. Official Releases
+        - Linear Algebra routines mainly rely on Blas & Lapack. If these
+        two libraries are not found on the machine, the versions shipped with
+        PNL are used. For better performances, one should consider using
+        Atlas.
+        - When an MPI implementation is detected on the computer, some MPI
+        bindings are available which enable to natively handle PnlObjects.
 
-    A. Under Unix
+1. Windows 
 
-        Extract the tarball and change to the newly create directory named
-        pnl-XXX where XXX is the version number. Then, run the following
-        command
-        > ./configure
-        > make
-        > make install
-
-        Per default, the make install command installs the library where it
-        has been extracted. You can specify an other directory where to
-        install the library by specifying the option --prefix=/new/path/ to
-        the configure script. The default behaviour corresponds to
-        --prefix=`pwd`
-
-        The configure script accepts several options, just run
-        > ./configure --help
-        to get a complete lists of options.
-
-
-    B. Under Windows
+    A. Binary version
 
         1. Extract the zip file, this will create a directory named pnl-XXX
            where XXX is the version number.
@@ -55,29 +34,61 @@ installation differs. We describe here the different procedures.
         6. Add libpnl.lib as an additional dependency of your project
             (Properties -> Linking -> Input)
 
+    B. Source version
 
-2. Development version
 
-    Actually no Visual Studio project is provided, so to compile PNL under
-    Windows you need to create the project yourself.
+        see below.
 
-    We assume you have a complete checkout of the subversion trunk
-    repository. To compile this version, you need the following tools:
 
-        libtool
-        autoconf
-        automake
+2. Source version
 
-    Run the following commands
+    You need CMake 2.8 for installing PNL from the source version.
 
-    > ./autogen.sh
+     
+    Per default, the make install command installs the library in the build
+    directory. 
+
+    Go to the top level directory of PNL and run.
+    We advice to build the library out of the source tree.
+    > mkdir build
+    > cd build
+    
+    > cmake .. 
     > make
     > make install
 
-    Per default, the make install command installs the library where it has
-    been extracted. You can specify an other directory where to install the
-    library by specifying the option --prefix=/new/path/. The default
-    behaviour corresponds to --prefix=`pwd`
+    Some useful variables to modify the behaviour of cmake.
+
+        -DCMAKE_INSTALL_PREFIX    The path where to install the library. If
+                this variable is not specified, the library is installed in
+                the building directory.
+
+        -DCMAKE_BUILD_TYPE        Release OR Debug. Default is Debug.
+
+                Choose Debug for building a development release without
+                optimization and with debugging symbols.
+
+                Choose Release for building an optimized version.
+
+        -DLAPACK_LIBRARIES        Full path of a Lapack library (not just its
+                directory). Lapack is detected automatically but the user
+                can specify a particular library.
+
+        -DBLAS_LIBRARIES          Full path of a Blas library (not just its
+                directory). Blas is detected automatically but the user
+                can specify a particular library.
+
+
+            Note that you must specify both BLAS_LIBRARIES and
+            LAPACK_LIBRARIES or none of them.
+
+        -DUSE_MPI                 ON/OFF. Default is ON. If ON, build the MPI
+                bindings.
+
+        -DUSE_INTERNAL_BLAS       ON/OFF. Default OFF. If ON, use the
+                internal Blas & Lapack libraries shipped with the PNL
+                source code.
+
 
 3. Building the documentation
 
@@ -101,10 +112,6 @@ installation differs. We describe here the different procedures.
     Once you have run the make install command, you will find the headers
     of the library into prefix/include/pnl and the dynamic and static
     versions of the library in prefix/lib.
-
-    An executable to test the features of the library can be found in
-    prefix/bin
-
 
 
 If you encounter any problem or want to report some bug, contact 

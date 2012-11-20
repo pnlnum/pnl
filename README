@@ -48,7 +48,7 @@ password is anonsvn
     list and create an entry
     my_exec_OBJS 
     carrying the list of .o files needed to create your executable.
-    Note that the '-' in executable names are placed by '_' to create the
+    Note that the '-' in executable names are replaced by '_' to create the
     corresponding _OBJS variable
    
 

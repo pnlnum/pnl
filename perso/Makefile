@@ -12,5 +12,5 @@ pipo_CFLAGS=-ansi -O2 -pedantic
 pipo_CXXFLAGS=-O2 -pedantic
 
 ## This line must be the last one
-include ../Makeuser.incl
+include ../build/CMakeuser.incl
 
