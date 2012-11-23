@@ -8,7 +8,7 @@ extern "C" {
 
 #include "pnl/pnl_config.h"
 
-#ifdef HAVE_FORTRAN_COMPILER
+#ifdef PNL_PNL_HAVE_FORTRAN_COMPILER
 #  include "pnl/FC.h"
 #  ifdef FC_GLOBAL
 #    define C2F(name) (FC_GLOBAL(name,name))

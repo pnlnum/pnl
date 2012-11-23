@@ -159,7 +159,7 @@ extern double pnl_cosm1 (double x);
 #endif
 #define POW(x,y) pow( (double) (x), (double) (y))
 
-#ifndef HAVE_EXP10
+#ifndef PNL_PNL_HAVE_EXP10
 #undef exp10
 #define exp10(x) exp(10.0, x)
 #endif

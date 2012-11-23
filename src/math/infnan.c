@@ -84,11 +84,11 @@ int pnl_isfinite (double x)
  */
 int pnl_isfinite (double x)
 {
-#ifdef HAVE_ISFINITE
+#ifdef PNL_HAVE_ISFINITE
   return isfinite(x);
-#elif defined (HAVE_FINITE)
+#elif defined (PNL_HAVE_FINITE)
   return finite(x);
-#elif defined (HAVE_ISINF)
+#elif defined (PNL_HAVE_ISINF)
   /* isinf(3): In glibc 2.01 and earlier, isinf() returns a
      non-zero value (actually: 1) if x is an infinity (positive or
      negative).  (This is all that C99 requires.) */
@@ -108,7 +108,7 @@ int pnl_isfinite (double x)
  */
 int pnl_isnan (double x)
 {
-#ifdef HAVE_ISNAN
+#ifdef PNL_HAVE_ISNAN
   return isnan(x);
 #else
   int status = (x != x);
@@ -123,7 +123,7 @@ int pnl_isnan (double x)
  */
 int pnl_isinf (double x)
 {
-#ifdef HAVE_ISINF
+#ifdef PNL_HAVE_ISINF
   /* isinf(3): In glibc 2.01 and earlier, isinf() returns a
      non-zero value (actually: 1) if x is an infinity (positive or
      negative).  (This is all that C99 requires.) */

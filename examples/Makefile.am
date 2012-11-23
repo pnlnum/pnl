@@ -87,7 +87,7 @@ tridiag_test_LDADD=../src/libpnl.la ${some_extra_libs}
 vector_test_SOURCES=vector_test.c tests_utils.c
 vector_test_LDADD=../src/libpnl.la ${some_extra_libs}
 
-if HAVE_MPI
+if PNL_HAVE_MPI
 
 noinst_PROGRAMS+=mpibindings_test rng_mpi_test saveload_test
 

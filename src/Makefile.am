@@ -18,12 +18,12 @@ roots/libroots.la libminpack/libminpack.la \
 objects/libobjects.la include/pnl/libinline.la
 
 
-if HAVE_MPI
+if PNL_HAVE_MPI
 SUBDIRS+=mpi
 libpnl_la_LIBADD+=mpi/libpnlmpi.la
 endif
 
-if !HAVE_BLASLAPACK
+if !PNL_HAVE_BLASLAPACK
 SUBDIRS+=libf2c libblas liblapack
 libpnl_la_LIBADD+=libf2c/libf2c.la libblas/libblas.la liblapack/liblapack.la
 endif

@@ -25,6 +25,7 @@
 # A few variables fixed by cmake
 #
 INSTALL_PREFIX=@CMAKE_INSTALL_PREFIX@
+BUILD_DIR=@CMAKE_CURRENT_BINARY_DIR@
 CC=@CMAKE_C_COMPILER@
 CXX=@CMAKE_CXX_COMPILER@
 MY_CPP_FLAGS=@MY_CPP_FLAGS@
@@ -33,7 +34,7 @@ MY_CXX_FLAGS=@MY_CXX_FLAGS@
 
 includedir=$(INSTALL_PREFIX)/include
 libdir=$(INSTALL_PREFIX)/lib
-LINK_TXT=$(INSTALL_PREFIX)/examples/CMakeFiles/array_test.dir/link.txt
+LINK_TXT=$(BUILD_DIR)/examples/CMakeFiles/array_test.dir/link.txt
 # Drop the compiler name, fix after
 CMAKE_LINK_COMMAND1=$(shell cat ${LINK_TXT} | sed -e 's/^[^ ]* //' )
 # Fix libpnl path with full path

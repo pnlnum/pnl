@@ -3,20 +3,20 @@
 /* config.h.in.  Generated from cmake */
 
 /* Define if a Fortran is detected */
-#cmakedefine HAVE_FORTRAN_COMPILER
+#cmakedefine PNL_HAVE_FORTRAN_COMPILER
 
 /* Define to dummy 'main' function (if any) required to link to the Fortran
    libraries. */
 #cmakedefine F77_DUMMY_MAIN
 
 /* Define to 1 if you have the 'exp10' function. */
-#cmakedefine HAVE_EXP10
+#cmakedefine PNL_HAVE_EXP10
 
 /* Define to 1 if you have the 'finite' function. */
-#cmakedefine HAVE_FINITE
+#cmakedefine PNL_HAVE_FINITE
 
 /* Define if you have inline */
-#cmakedefine HAVE_INLINE
+#cmakedefine PNL_HAVE_INLINE
 
 /* Define keyword for declaring inline functions */
 #define PNL_INLINE_DECL @PNL_INLINE_DECL@
@@ -25,25 +25,25 @@
 #define PNL_INLINE_FUNC @PNL_INLINE_FUNC@
 
 /* Define to 1 if you have the 'isfinite' function. */
-#cmakedefine HAVE_ISFINITE
+#cmakedefine PNL_HAVE_ISFINITE
 
 /* Define to 1 if you have the 'isinf' function. */
-#cmakedefine HAVE_ISINF
+#cmakedefine PNL_HAVE_ISINF
 
 /* Define to 1 if you have the 'isnan' function. */
-#cmakedefine HAVE_ISNAN
+#cmakedefine PNL_HAVE_ISNAN
 
 /* Define to 1 if you have the 'lgamma' function. */
-#cmakedefine HAVE_LGAMMA
+#cmakedefine PNL_HAVE_LGAMMA
 
 /* Define to 1 if you have the 'tgamma' function. */
-#cmakedefine HAVE_TGAMMA
+#cmakedefine PNL_HAVE_TGAMMA
 
 /* Define to 1 if you have the 'trunc' function. */
-#cmakedefine HAVE_TRUNC
+#cmakedefine PNL_HAVE_TRUNC
 
 /* Define to 1 if you have 'dpstrf' function */
-#cmakedefine HAVE_DPSTRF
+#cmakedefine PNL_HAVE_DPSTRF
 
 /* turn off range checking by default internally */
 #cmakedefine PNL_RANGE_CHECK_OFF

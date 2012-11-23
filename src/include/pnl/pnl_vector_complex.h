@@ -23,7 +23,7 @@ extern "C" {
  */
 /*@{*/
 
-#ifdef HAVE_INLINE 
+#ifdef PNL_PNL_HAVE_INLINE 
 PNL_INLINE_FUNC dcomplex pnl_vect_complex_get (const PnlVectComplex *self, int i)
 {
   CheckIndexVect(self,i);

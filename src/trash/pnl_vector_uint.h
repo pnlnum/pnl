@@ -27,7 +27,7 @@ typedef struct PnlVectUint{
 } PnlVectUint;
 
 
-#ifdef HAVE_INLINE 
+#ifdef PNL_HAVE_INLINE 
 extern inline
 uint pnl_vect_uint_get (const PnlVectUint *self, int i)
 {

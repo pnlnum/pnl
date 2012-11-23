@@ -11,73 +11,73 @@
 #undef FC_DUMMY_MAIN_EQ_F77
 
 /* Define if you have a BLAS library. */
-#undef HAVE_BLAS
+#undef PNL_HAVE_BLAS
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
-#undef HAVE_DLFCN_H
+#undef PNL_HAVE_DLFCN_H
 
 /* Define if dpstrf. */
-#undef HAVE_DPSTRF
+#undef PNL_HAVE_DPSTRF
 
 /* Define to 1 if you have the `exp10' function. */
-#undef HAVE_EXP10
+#undef PNL_HAVE_EXP10
 
 /* Define to 1 if you have the `finite' function. */
-#undef HAVE_FINITE
+#undef PNL_HAVE_FINITE
 
 /* Define if you have inline */
-#undef HAVE_INLINE
+#undef PNL_HAVE_INLINE
 
 /* Define to 1 if you have the <inttypes.h> header file. */
-#undef HAVE_INTTYPES_H
+#undef PNL_HAVE_INTTYPES_H
 
 /* Define to 1 if you have the `isfinite' function. */
-#undef HAVE_ISFINITE
+#undef PNL_HAVE_ISFINITE
 
 /* Define to 1 if you have the `isinf' function. */
-#undef HAVE_ISINF
+#undef PNL_HAVE_ISINF
 
 /* Define to 1 if you have the `isnan' function. */
-#undef HAVE_ISNAN
+#undef PNL_HAVE_ISNAN
 
 /* Define if you have LAPACK library. */
-#undef HAVE_LAPACK
+#undef PNL_HAVE_LAPACK
 
 /* Define to 1 if you have the `lgamma' function. */
-#undef HAVE_LGAMMA
+#undef PNL_HAVE_LGAMMA
 
 /* Define to 1 if you have the `m' library (-lm). */
-#undef HAVE_LIBM
+#undef PNL_HAVE_LIBM
 
 /* Define to 1 if you have the <memory.h> header file. */
-#undef HAVE_MEMORY_H
+#undef PNL_HAVE_MEMORY_H
 
 /* Define to 1 if you have the <stdint.h> header file. */
-#undef HAVE_STDINT_H
+#undef PNL_HAVE_STDINT_H
 
 /* Define to 1 if you have the <stdlib.h> header file. */
-#undef HAVE_STDLIB_H
+#undef PNL_HAVE_STDLIB_H
 
 /* Define to 1 if you have the <strings.h> header file. */
-#undef HAVE_STRINGS_H
+#undef PNL_HAVE_STRINGS_H
 
 /* Define to 1 if you have the <string.h> header file. */
-#undef HAVE_STRING_H
+#undef PNL_HAVE_STRING_H
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
-#undef HAVE_SYS_STAT_H
+#undef PNL_HAVE_SYS_STAT_H
 
 /* Define to 1 if you have the <sys/types.h> header file. */
-#undef HAVE_SYS_TYPES_H
+#undef PNL_HAVE_SYS_TYPES_H
 
 /* Define to 1 if you have the `tgamma' function. */
-#undef HAVE_TGAMMA
+#undef PNL_HAVE_TGAMMA
 
 /* Define to 1 if you have the `trunc' function. */
-#undef HAVE_TRUNC
+#undef PNL_HAVE_TRUNC
 
 /* Define to 1 if you have the <unistd.h> header file. */
-#undef HAVE_UNISTD_H
+#undef PNL_HAVE_UNISTD_H
 
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
    */

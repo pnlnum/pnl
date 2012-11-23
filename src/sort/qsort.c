@@ -43,7 +43,7 @@
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_config.h"
 
-#ifdef HAVE_INLINE
+#ifdef PNL_HAVE_INLINE
 #define __inline__ inline
 #else
 #define __inline__

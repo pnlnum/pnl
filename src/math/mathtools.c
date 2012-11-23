@@ -38,7 +38,7 @@ int intapprox(double s)
 }
 
 
-#ifndef HAVE_TRUNC
+#ifndef PNL_HAVE_TRUNC
 double trunc(double x)
 {
   return (double) ((int) x);

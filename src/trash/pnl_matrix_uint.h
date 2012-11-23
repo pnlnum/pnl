@@ -108,7 +108,7 @@ extern void pnl_vect_uint_reverse(PnlVectUint * v);
 
 
 /* inline functions if you are using GCC */
-#ifdef HAVE_INLINE 
+#ifdef PNL_HAVE_INLINE 
 extern inline
 uint pnl_mat_uint_get (const PnlMatUint *self, int i, int j)
 {

@@ -1,14 +1,28 @@
 cmake_minimum_required(VERSION 2.8)
-project(pnl C)
 set(PROJECT_LIBRARY_NAME ${PROJECT_NAME})
 set(LT_VERSION_CURRENT 1)
 set(LT_VERSION_AGE 5)
 set(LT_VERSION_REVISION 2)
 set(BUILD_SHARED_LIBS ON)
 
-if (NOT CMAKE_INSTALL_PREFIX)
+# Prefix 
+if (NOT PREFIX)
     set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR})
-endif (NOT CMAKE_INSTALL_PREFIX)
+else ()
+    set(CMAKE_INSTALL_PREFIX ${PREFIX})
+endif (NOT PREFIX)
+
+# Compilers
+if (CC)
+    set (CMAKE_C_COMPILER ${CC})
+endif (CC)
+if (CXX)
+    set (CMAKE_CXX_COMPILER ${CXX})
+endif (CXX)
+
+project(pnl C)
+
+
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 set(pnl_INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib" )
 set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
@@ -28,6 +42,8 @@ if (NOT CMAKE_BUILD_TYPE)
     message(STATUS "Setting build type to 'Debug' as none was specified.")
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
 endif ()
+
+
 
 enable_language(CXX OPTIONAL)
 # Compiler Flags
@@ -144,29 +160,29 @@ set(CMAKE_REQUIRED_LIBRARIES ${LIBS})
 
 # Check some math functions
 include(CheckFunctionExists)
-CHECK_FUNCTION_EXISTS(tgamma HAVE_TGAMMA)
-CHECK_FUNCTION_EXISTS(lgamma HAVE_LGAMMA)
-CHECK_FUNCTION_EXISTS(exp10 HAVE_EXP10)
-CHECK_FUNCTION_EXISTS(trunc HAVE_TRUNC)
-CHECK_FUNCTION_EXISTS(isfinite HAVE_ISFINITE)
-CHECK_FUNCTION_EXISTS(finite HAVE_FINITE)
-CHECK_FUNCTION_EXISTS(isnan HAVE_ISNAN)
-CHECK_FUNCTION_EXISTS(isinf HAVE_ISINF)
+CHECK_FUNCTION_EXISTS(tgamma PNL_HAVE_TGAMMA)
+CHECK_FUNCTION_EXISTS(lgamma PNL_HAVE_LGAMMA)
+CHECK_FUNCTION_EXISTS(exp10 PNL_HAVE_EXP10)
+CHECK_FUNCTION_EXISTS(trunc PNL_HAVE_TRUNC)
+CHECK_FUNCTION_EXISTS(isfinite PNL_HAVE_ISFINITE)
+CHECK_FUNCTION_EXISTS(finite PNL_HAVE_FINITE)
+CHECK_FUNCTION_EXISTS(isnan PNL_HAVE_ISNAN)
+CHECK_FUNCTION_EXISTS(isinf PNL_HAVE_ISINF)
 
 # Fortran stuff
 enable_language(Fortran OPTIONAL)
 if (CMAKE_Fortran_COMPILER_WORKS)
     message ("Fortran compiler found ${CMAKE_Fortran_COMPILER}")
-    set(HAVE_FORTRAN_COMPILER ON)
+    set(PNL_HAVE_FORTRAN_COMPILER ON)
     include(FortranCInterface)
     include(CheckFortranFunctionExists)
     FortranCInterface_HEADER(src/include/pnl/FC.h MACRO_NAMESPACE "FC_")
     # test for dpstrf (Block Cholesky for non definite matrix)
-    CHECK_FORTRAN_FUNCTION_EXISTS(dpstrf HAVE_DPSTRF)
+    CHECK_FORTRAN_FUNCTION_EXISTS(dpstrf PNL_HAVE_DPSTRF)
 else ()
-    set(HAVE_FORTRAN_COMPILER OFF)
+    set(PNL_HAVE_FORTRAN_COMPILER OFF)
     if (APPLE) 
-        set (HAVE_DPSTRF ON)
+        set (PNL_HAVE_DPSTRF ON)
     endif (APPLE)
 endif (CMAKE_Fortran_COMPILER_WORKS)
 

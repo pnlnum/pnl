@@ -23,7 +23,7 @@ extern "C" {
 /*@{*/
 
 
-#ifdef HAVE_INLINE 
+#ifdef PNL_PNL_HAVE_INLINE 
 PNL_INLINE_FUNC double pnl_vect_get (const PnlVect *self, int i)
 {
   CheckIndexVect(self,i);

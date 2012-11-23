@@ -20,7 +20,7 @@
  * This file contains two functions from Lapack: 
  *    dpstrf and dpstf2 (and dmaxloc)
  * to compute a Block Cholesky factorization for non
- * definite matrices. It is only used if HAVE_DPSTRF is
+ * definite matrices. It is only used if PNL_HAVE_DPSTRF is
  * not defined by the configure script.
  * Note that this file is useless if the internal Blas & Lapack
  * libraries are used because these two functions are alredy
@@ -37,7 +37,7 @@
 #include "pnl/pnl_machine.h"
 #include "pnl/clapack.h"
 
-#ifndef HAVE_DPSTRF
+#ifndef PNL_HAVE_DPSTRF
 
 
 /** 
@@ -941,4 +941,4 @@ int C2F(dmaxloc)(double *a, int *dimm)
     return ret_val;
 } /* dmaxloc_ */
 
-#endif /* HAVE_DPSTRF */
+#endif /* PNL_HAVE_DPSTRF */

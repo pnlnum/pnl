@@ -109,7 +109,7 @@ extern void pnl_mat_int_qsort (PnlMatInt *A, char dir, char order);
 
 
 /* inline functions if you are using GCC */
-#ifdef HAVE_INLINE 
+#ifdef PNL_PNL_HAVE_INLINE 
 PNL_INLINE_FUNC int pnl_mat_int_get (const PnlMatInt *self, int i, int j)
 {
   CheckIndexMat(self,i, j);

@@ -131,7 +131,7 @@ AC_C_INLINE
 dnl Check for "extern inline", using a modified version of the test
 dnl for AC_C_INLINE from acspecific.mt
 dnl
-HAVE_INLINE=
+PNL_HAVE_INLINE=
 PNL_INLINE_DECL=
 PNL_INLINE_FUNC=
 AC_CACHE_CHECK([for extern inline], ac_cv_c_extern_inline,
@@ -142,10 +142,10 @@ AC_CACHE_CHECK([for extern inline], ac_cv_c_extern_inline,
                 [[  foo(1.0)  ]])],[ac_cv_c_extern_inline="yes"],[])])
 
 if test "$ac_cv_c_extern_inline" != no ; then
-    HAVE_INLINE=1
+    PNL_HAVE_INLINE=1
     PNL_INLINE_DECL="extern"
     PNL_INLINE_FUNC="extern $ac_cv_c_inline"
-    AM_CFLAGS="${AM_CFLAGS} -DHAVE_INLINE"
+    AM_CFLAGS="${AM_CFLAGS} -DPNL_HAVE_INLINE"
 else
     AC_CACHE_CHECK([for C99 inline], ac_cv_c_99_inline,
                     [ac_cv_c_99_inline=no
@@ -154,11 +154,11 @@ else
     if test "$ac_cv_c_99_inline" == "yes" ; then
         PNL_INLINE_DECL="$ac_cv_c_inline"
         PNL_INLINE_FUNC="$ac_cv_c_inline"
-        HAVE_INLINE=1
+        PNL_HAVE_INLINE=1
     fi
 fi
-AC_SUBST(HAVE_INLINE)
-AC_DEFINE_UNQUOTED(HAVE_INLINE, $HAVE_INLINE, [Define if you have inline])
+AC_SUBST(PNL_HAVE_INLINE)
+AC_DEFINE_UNQUOTED(PNL_HAVE_INLINE, $PNL_HAVE_INLINE, [Define if you have inline])
 AC_DEFINE_UNQUOTED(PNL_INLINE_DECL, $PNL_INLINE_DECL, [Keyword for declaring inline functions])
 AC_DEFINE_UNQUOTED(PNL_INLINE_FUNC, $PNL_INLINE_FUNC, [Keyword for defining inline functions])
 
@@ -182,8 +182,8 @@ AC_CHECK_FUNCS(isinf)
 ########################################################
 ## check for blas
 ########################################################
-HAVE_BLAS=no
-HAVE_LAPACK=no
+PNL_HAVE_BLAS=no
+PNL_HAVE_LAPACK=no
 BLAS_LIBS=""
 LAPACK_LIBS=""
 use_internal_blas=0
@@ -208,18 +208,18 @@ case "$host" in
 
     if test "x$with_internal_blas" != "xyes"; then
        builtin(include,config/acx_blas.m4)
-       ACX_BLAS([HAVE_BLAS=yes])
+       ACX_BLAS([PNL_HAVE_BLAS=yes])
 
-       if test "$HAVE_BLAS" = yes; then
+       if test "$PNL_HAVE_BLAS" = yes; then
          AM_CFLAGS="$AM_CFLAGS"
        else
          with_internal_blas=yes
        fi
 
        builtin(include,config/acx_lapack.m4)
-       ACX_LAPACK([HAVE_LAPACK=yes])
+       ACX_LAPACK([PNL_HAVE_LAPACK=yes])
 
-       if test "$HAVE_LAPACK" = yes; then
+       if test "$PNL_HAVE_LAPACK" = yes; then
          AM_CFLAGS="$AM_CFLAGS"
        else
          with_internal_blas=yes
@@ -239,7 +239,7 @@ esac
 if test "x$with_external_blas" = "xyes"; then
     use_internal_blas=0
 fi
-AM_CONDITIONAL([HAVE_BLASLAPACK], [test $use_internal_blas -eq  0])
+AM_CONDITIONAL([PNL_HAVE_BLASLAPACK], [test $use_internal_blas -eq  0])
 
 #######################
 ## test for underscores
@@ -304,7 +304,7 @@ if test $use_internal_blas -eq 0; then
 fi
 if test "$ac_have_dpstrf" = "yes" || test $use_internal_blas -eq 1 || 
     test "x$with_external_blas" = "xyes"; then
-   AC_DEFINE(HAVE_DPSTRF, 1, [Define if dpstrf.])
+   AC_DEFINE(PNL_HAVE_DPSTRF, 1, [Define if dpstrf.])
 fi
 
 
@@ -334,7 +334,7 @@ if test "x$enable_mpi" = xyes; then
 else
     have_mpi=0
 fi
-AM_CONDITIONAL([HAVE_MPI], [test $have_mpi -eq 1])
+AM_CONDITIONAL([PNL_HAVE_MPI], [test $have_mpi -eq 1])
 
 
 ####################

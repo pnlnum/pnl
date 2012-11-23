@@ -57,7 +57,7 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_internals.h"
 
-#ifdef HAVE_INLINE
+#ifdef PNL_HAVE_INLINE
 #define __INLINE__ inline
 #else
 #define __INLINE__
