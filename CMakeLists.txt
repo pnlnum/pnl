@@ -7,10 +7,9 @@ set(BUILD_SHARED_LIBS ON)
 
 # Prefix 
 if (NOT PREFIX)
-    set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR})
-else ()
-    set(CMAKE_INSTALL_PREFIX ${PREFIX})
+    set (PREFIX ${CMAKE_CURRENT_BINARY_DIR})
 endif (NOT PREFIX)
+set(CMAKE_INSTALL_PREFIX ${PREFIX} CACHE STRING "Installation prefix." FORCE)
 
 # Compilers
 if (CC)
@@ -120,9 +119,11 @@ endif (NOT USE_INTERNAL_BLAS)
 
 if (USE_MPI)
     find_package(MPI)
-    set(LIBS ${LIBS} ${MPI_C_LIBRARIES})
-    include_directories(${MPI_C_INCLUDE_PATH})
-    set(MY_CPP_FLAGS "${MY_CPP_FLAGS} -I${MPI_C_INCLUDE_PATH}")
+    if (MPI_C_FOUND)
+        set(LIBS ${LIBS} ${MPI_C_LIBRARIES})
+        include_directories(${MPI_C_INCLUDE_PATH})
+        set(MY_CPP_FLAGS "${MY_CPP_FLAGS} -I${MPI_C_INCLUDE_PATH}")
+    endif (MPI_C_FOUND)
 endif (USE_MPI)
 
 # Add -lm if needed
