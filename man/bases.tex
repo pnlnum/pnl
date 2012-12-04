@@ -89,7 +89,8 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
     index, int degree, int nb_variates}
   \sshortdescribe Creates a \refstruct{PnlBasis} for the family
   defined by \var{index} (see Table~\ref{basis_index} and \reffun{pnl_basis_type_register}) with total degree less
-  or equal than \var{degree} and \var{nb_variates} variates.\\
+  or equal than \var{degree} and \var{nb_variates} variates. The total degree is
+  the sum of the partial degrees.\\
   For instance, calling \verb!pnl_basis_create_from_degree (index, 2, 4)! is
   equivalent to calling \verb!pnl_basis_create_from_tensor (index, T)! where
   \var{T} is given by
@@ -112,6 +113,12 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
       0 & 0 & 0 & 2\\
     \end{array}
   \right) \]
+\item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create_from_prod_degree}{int
+    index, int degree, int nb_variates}
+  \sshortdescribe Creates a \refstruct{PnlBasis} for the family
+  defined by \var{index} (see Table~\ref{basis_index} and \reffun{pnl_basis_type_register}) with total degree less
+  or equal than \var{degree} and \var{nb_variates} variates. The total degree is
+  the product of \var{MAX(1, d_i)} where the \var{d_i} are the partial degrees.
 
 
 \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create_from_tensor}{int

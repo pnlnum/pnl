@@ -37,9 +37,44 @@
 #define CHECK_NB_FUNC(coef, basis)
 #endif
 
+
+/** 
+ * Computes the the maximum degree which can be put on the last component
+ * is the total order of the rest is partial.
+ *
+ * The total degree function is the sum of the partial degrees
+ * 
+ * @param total total degree
+ * @param partial partial degree alredy used
+ * 
+ * @return 
+ */
+static int freedom_degree_sum (int total, int partial)
+{
+  if ( partial > total ) return -1;
+  return total - partial;
+}
+
+/** 
+ * Computes the the maximum degree which can be put on the last component
+ * is the total order of the rest is partial.
+ *
+ * The total degree function is the product of the partial degrees
+ * 
+ * @param total total degree
+ * @param partial partial degree alredy used
+ * 
+ * @return 
+ */
+static int freedom_degree_prod (int total, int partial)
+{
+  if ( partial > total ) return -1;
+  return total / MAX(partial, 1);
+}
+
 /**
- * Returns the total degree of the polynomial represented by
- * line i of T
+ * Returns the total degree (sum of the partial degrees) of the polynomial
+ * represented by line i of T
  *
  * @param T a matrix of integers representing the decomposition of the mutli-d
  * polynomials
@@ -48,12 +83,41 @@
  * @return  the total degree of the polynomials represented by
  * line i of T
  */
-static int count_degree (const PnlMatInt *T, int i)
+static int count_sum_degree (const PnlMatInt *T, int i)
 {
   int j, deg;
   deg = 0;
 
   for ( j=0 ; j<T->n ; j++ ) { deg += PNL_MGET (T, i, j); }
+  return deg;
+}
+
+/**
+ * Returns the total degree (product of the partial degrees) of the polynomial
+ * represented by line i of T
+ *
+ * The total degree is the product of MAX(1, d_i) where d_i is the partial
+ * degree. If all d_i are zeros, the total degree is 0.
+ *
+ * @param T a matrix of integers representing the decomposition of the mutli-d
+ * polynomials
+ * @param i the index of the element to be considered in the basis (i.e. the row
+ * of T to consider)
+ * @return  the total degree of the polynomials represented by
+ * line i of T
+ */
+static int count_prod_degree (const PnlMatInt *T, int i)
+{
+  int j, deg, all_zero = TRUE;
+  deg = 1;
+  
+  for ( j=0 ; j<T->n ; j++ ) 
+    { 
+      const int power = PNL_MGET (T, i, j);
+      if ( all_zero == TRUE && power > 0 ) all_zero = FALSE;
+      deg *= MAX(power, 1); 
+    }
+  if ( all_zero == TRUE ) return 0;
   return deg;
 }
 
@@ -80,7 +144,6 @@ static double count_hyperbolic_degree (const PnlMatInt *T, int i, double q)
     }
   return deg_q;
 }
-
 
 /**
  * Copies T_prev(T_previ, :) into T(Ti,:)
@@ -133,7 +196,7 @@ static PnlMatInt* compute_tensor (int nb_func, int nb_variates)
         {
           /* determining the last element of global degree <= current_degree */
           j = 0;
-          while ( j<T_prev->m && count_degree (T_prev, j) < current_degree + 1) { j++; }
+          while ( j<T_prev->m && count_sum_degree (T_prev, j) < current_degree + 1) { j++; }
           j--;
           for ( k=j, deg=current_degree ; k>=0 ; deg--)
             {
@@ -141,7 +204,7 @@ static PnlMatInt* compute_tensor (int nb_func, int nb_variates)
               if (deg > 0)
                 {
                   /* Find the beginning of the block with global degree deg */
-                  while ( count_degree (T_prev, block_start) == deg ) { block_start--; }
+                  while ( count_sum_degree (T_prev, block_start) == deg ) { block_start--; }
                   block_start++;
                 }
               /* Loop in an incresing order over the block of global degree deg */
@@ -169,42 +232,37 @@ static PnlMatInt* compute_tensor (int nb_func, int nb_variates)
  * @return the number of elements with total degree less or equal than degree in
  * the basis with n variates
  */
-static int compute_nb_elements (const PnlMatInt *T, int degree)
+static int compute_nb_elements (const PnlMatInt *T, int degree, 
+                                int (*count_degree)(const PnlMatInt *, int),
+                                int (freedom_degree)(int, int))
+
 {
   int i;
-  int current_degree; /* Current total degree under investigation in the loop */
   int total_elements; /* Number of elements of total degree smaller than degree */
-  int elements_in_degree; /* Number of element of degree exactly the one under investigation */
-  i = 0;
-  current_degree = 0;
   total_elements = 0;
-  while ( i<T->m )
+  for ( i=0 ; i<T->m ; i++ )
     {
-      elements_in_degree = 0;
-      /* search for the number of elements with exact degree "current_degree" */
-      while ( i + elements_in_degree < T->m && count_degree (T, elements_in_degree + i) < current_degree + 1)
-        {
-          elements_in_degree++;
-        }
-      total_elements += elements_in_degree * (degree - current_degree + 1);
-      /* jump ahead of the number of elements of the current degree */
-      i += elements_in_degree;
-      current_degree++;
+      int deg = count_degree (T, i);
+      total_elements += freedom_degree (degree, deg) + 1;
     }
   return total_elements;
 }
 
 /**
  * Computes the tensor matrix of the nb_variates variate basis with a total degree less or
- * equal than degree
+ * equal than degree. The total degree is defined by the function
+ * count_degree
  *
  * @param nb_variates the number of variates of the basis.
  * @param degree the total degree
+ * @count_degree a function to compute the total degree
  *
  * @return the tensor matrix of the nb_variates variate basis with a total degree less or
  * equal than degree
  */
-static PnlMatInt* compute_tensor_from_degree (int degree, int nb_variates)
+static PnlMatInt* compute_tensor_from_degree_function (int degree, int nb_variates, 
+                                                       int (*count_degree)(const PnlMatInt *, int),
+                                                       int (*freedom_degree) (int total, int partial))
 {
   PnlMatInt *T;
   if (nb_variates <= 0)
@@ -223,45 +281,56 @@ static PnlMatInt* compute_tensor_from_degree (int degree, int nb_variates)
     {
       int nb_elements;
       int current_degree, deg;
-      int block, block_start;
-      int i, j, k;
+      int block_end, block_start;
+      int line, i, k;
       PnlMatInt *T_prev;
       current_degree = 0;
       /* Compute the tensor with one variate less */
-      T_prev = compute_tensor_from_degree (degree, nb_variates-1);
+      T_prev = compute_tensor_from_degree_function (degree, nb_variates-1, count_degree, freedom_degree);
       /* Compute the number of rows of T */
-      nb_elements = compute_nb_elements (T_prev, degree);
+      nb_elements = compute_nb_elements (T_prev, degree, count_degree, freedom_degree);
       T = pnl_mat_int_create (nb_elements, nb_variates);
-      i = 0;
+      line = 0;
       /* loop on global degree */
-      for ( current_degree=0 ; current_degree <= degree ; current_degree++ )
+      for ( current_degree=0 ; current_degree<=degree ; current_degree++ )
         {
-          /* Determine the last element of global degree <= current_degree */
-          j = 0;
-          while ( j<T_prev->m && count_degree (T_prev, j) < current_degree + 1 ) { j++; }
-          j--;
-          for ( k=j, deg=current_degree ; k>=0 ; deg--)
+          /* loop on  partial degree between 0 and current_degree */
+          for ( deg=0 ; deg<=current_degree ; deg++ )
             {
-              block_start = k;
-              if (deg > 0)
+              block_start = 0;
+              block_end = 0;
+              /* Determine the first element with global degree = deg */
+              while ( block_start<T_prev->m && count_degree (T_prev, block_start) < deg ) { block_start++; }
+              block_end = block_start; 
+              /* Find the last element of the block with global degree = deg */
+              while ( block_end<T_prev->m && count_degree (T_prev, block_end) == deg ) { block_end++; }
+              block_end--;
+
+              /* loop on the degree of the extra dimension */
+              for ( i=freedom_degree(current_degree-1, deg)  + 1; i<=freedom_degree (current_degree, deg) ; i++ )
                 {
-                  /* Find the beginning of the block with global degree deg */
-                  while ( count_degree (T_prev, block_start) == deg ) { block_start--; }
-                  block_start++;
-                }
-              /* Loop in an incresing order over the block of global degree deg */
-              for ( block=block_start ; block<=k ; block++ , i++ )
-                {
-                  copy_previous_tensor (T, T_prev, i, block);
-                  PNL_MLET (T, i, nb_variates-1) = current_degree - deg;
-                }
-              /* Consider the previous block  */
-              k = block_start - 1;
+
+                  for ( k=block_start ; k<=block_end ; k++, line++ )
+                    {
+                      copy_previous_tensor (T, T_prev, line, k);
+                      PNL_MLET (T, line, nb_variates-1) = i;
+                    }
+                } 
             }
         }
       pnl_mat_int_free (&T_prev);
       return T;
     }
+}
+
+static PnlMatInt* compute_tensor_from_sum_degree (int degree, int nb_variates)
+{
+  return compute_tensor_from_degree_function (degree, nb_variates, count_sum_degree, freedom_degree_sum);
+}
+
+static PnlMatInt* compute_tensor_from_prod_degree (int degree, int nb_variates)
+{
+  return compute_tensor_from_degree_function (degree, nb_variates, count_prod_degree, freedom_degree_prod);
 }
 
 /**
@@ -280,7 +349,7 @@ static PnlMatInt* compute_tensor_from_hyperbolic_degree (double degree, double q
   int i, i_sparse;
   double degree_q;
   PnlMatInt *T;
-  T = compute_tensor_from_degree (ceil(degree), n);
+  T = compute_tensor_from_sum_degree (ceil(degree), n);
   degree_q = pow (degree, q);
   for ( i=0, i_sparse=0 ; i<T->m ; i++ )
     {
@@ -600,8 +669,6 @@ static double D2TchebychevD1(double x, int n)
     }
 }
 
-
-
 /**
  * Struture used to describe the type of a basis
  */
@@ -674,7 +741,6 @@ static int pnl_basis_type_init ()
   return OK;
 }
 
-
 /** 
  * Register a new type of basis
  * 
@@ -696,15 +762,13 @@ int pnl_basis_type_register (const char *name, double (*f)(double, int),
   return id;
 }
 
-
-
 static char pnl_basis_label[] = "PnlBasis";
 /**
  * Creates an empty PnlBasis
  *
  * @return a PnlBasis
  */
-PnlBasis*  pnl_basis_new ()
+PnlBasis* pnl_basis_new ()
 {
   PnlBasis *o;
 
@@ -767,7 +831,7 @@ void  pnl_basis_set_from_tensor (PnlBasis *b, int index, const PnlMatInt *T)
  * do not free T. It will be freed transparently by pnl_basis_free
  * @return a PnlBasis
  */
-PnlBasis*  pnl_basis_create_from_tensor (int index, const PnlMatInt *T)
+PnlBasis* pnl_basis_create_from_tensor (int index, const PnlMatInt *T)
 {
   PnlBasis *b;
   if ((b = pnl_basis_new ()) == NULL) return NULL;
@@ -784,7 +848,7 @@ PnlBasis*  pnl_basis_create_from_tensor (int index, const PnlMatInt *T)
  * defined
  * @return a PnlBasis
  */
-PnlBasis*  pnl_basis_create (int index, int nb_func, int nb_variates)
+PnlBasis* pnl_basis_create (int index, int nb_func, int nb_variates)
 {
   PnlMatInt *T;
   T = compute_tensor (nb_func, nb_variates);
@@ -800,10 +864,26 @@ PnlBasis*  pnl_basis_create (int index, int nb_func, int nb_variates)
  * defined
  * @return a PnlBasis
  */
-PnlBasis*  pnl_basis_create_from_degree (int index, int degree, int nb_variates)
+PnlBasis* pnl_basis_create_from_degree (int index, int degree, int nb_variates)
 {
   PnlMatInt *T;
-  T = compute_tensor_from_degree (degree, nb_variates);
+  T = compute_tensor_from_sum_degree (degree, nb_variates);
+  return pnl_basis_create_from_tensor (index, T);
+}
+
+/**
+ * Returns a  PnlBasis
+ *
+ * @param index the index of the family to be used
+ * @param degree the maximum total degree of the elements in the basis
+ * @param nb_variates the size of the space in which the basis functions are
+ * defined
+ * @return a PnlBasis
+ */
+PnlBasis* pnl_basis_create_from_prod_degree (int index, int degree, int nb_variates)
+{
+  PnlMatInt *T;
+  T = compute_tensor_from_prod_degree (degree, nb_variates);
   return pnl_basis_create_from_tensor (index, T);
 }
 
@@ -819,7 +899,7 @@ PnlBasis*  pnl_basis_create_from_degree (int index, int degree, int nb_variates)
  * @return a PnlBasis  such that every element prod_{i=1}^n f_i^(a_i) sastifies
  * (sum_{i=1}^n (a_i^q))^(1/q) <= degree
  */
-PnlBasis*  pnl_basis_create_from_hyperbolic_degree (int index, double degree, double q, int n)
+PnlBasis* pnl_basis_create_from_hyperbolic_degree (int index, double degree, double q, int n)
 {
   PnlMatInt *T;
   T = compute_tensor_from_hyperbolic_degree (degree, q, n);
@@ -862,7 +942,6 @@ PnlBasis* pnl_basis_copy (const PnlBasis *B)
   pnl_basis_clone (BB, B);
   return BB;
 }
-
 
 /** 
  * Sets the center and scale field of a PnlBasis using the domain on which

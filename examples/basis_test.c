@@ -154,7 +154,7 @@ static void regression_multid()
   pnl_test_eq_abs (err, 0.263175, 1E-5, "pnl_basis_eval", "log (1+x[0]*x[0] + x[1]*x[1]) on [-2,2]^2");
   pnl_basis_free (&basis);
 
-  degree = 4; /* total degree */
+  degree = 4; /* total sum degree */
   basis = pnl_basis_create_from_degree (basis_name, degree, nb_variates);
 
   pnl_basis_fit_ls (basis, alpha, t, y);
@@ -173,14 +173,36 @@ static void regression_multid()
       if (fabs(tmp) > err) err = fabs(tmp);
     }
 
-  pnl_test_eq_abs (err, 0.263175, 1E-5, "pnl_basis_eval", "log (1+x[0]*x[0] + x[1]*x[1]) on [-2,2]^2");
+  pnl_test_eq_abs (err, 0.263175, 1E-5, "pnl_basis_eval (sum degree)", "log (1+x[0]*x[0] + x[1]*x[1]) on [-2,2]^2");
   pnl_basis_free (&basis);
+
+  degree = 4; /* total product degree */
+  basis = pnl_basis_create_from_prod_degree (basis_name, degree, nb_variates);
+
+  pnl_basis_fit_ls (basis, alpha, t, y);
+  if ( verbose )
+    {
+      printf("coefficients of the decomposition : ");
+      pnl_vect_print (alpha);
+    }
+
+  /* computing the infinity norm of the error */
+  err = 0.;
+  for (i=0; i<t->m; i++)
+    {
+      double tmp = function2d(pnl_mat_lget(t, i, 0)) -
+        pnl_basis_eval (basis,alpha, pnl_mat_lget(t, i, 0));
+      if (fabs(tmp) > err) err = fabs(tmp);
+    }
+
+  pnl_test_eq_abs (err, 0.263175, 1E-5, "pnl_basis_eval (prod degree)", "log (1+x[0]*x[0] + x[1]*x[1]) on [-2,2]^2");
+  pnl_basis_free (&basis);
+
 
   pnl_mat_free (&t);
   pnl_vect_free (&y);
   pnl_vect_free (&alpha);
 }
-
 
 static double fonction_a_retrouver(double t, double x)
 {
@@ -250,28 +272,31 @@ static void derive_approx_fonction(PnlBasis *B, PnlVect *D, PnlVect *alpha, doub
 
 static void pnl_basis_eval_test ()
 {
-  PnlMat *X;
-  PnlVect *V,*x,*t,*D, *alpha, *lower, *upper;
-  PnlBasis *basis;
-  int j,m,n,gen;
-  double t0,x0,tol;
+  PnlMat    *X;
+  PnlVect   *V, *x, *t, *D, *alpha, *lower, *upper;
+  PnlRng    *rng;
+  PnlBasis  *basis;
+  int        j, deg, n;
+  double     t0, x0, tol;
 
   tol = 1E-8;
-  m=19;//nombre de polynomes
+  deg=5; //total degree
   n=50;
   D=pnl_vect_create(5);
   x=pnl_vect_create(n);
   t=pnl_vect_create(n);
   t0=0.5;
   x0=2.5;
-  gen = PNL_RNG_MERSENNE;
-  pnl_rand_init (gen, 1, 1);
-  //on tire aléatoirement les points auxquels on va évaluer la fonction à
-  //retrouver
-  pnl_vect_rand_uni(x,n,-5,4,gen);
-  pnl_vect_rand_uni(t,n,0,1,gen);
-  basis = pnl_basis_create (PNL_BASIS_HERMITIAN, m, 2);
-  alpha = pnl_vect_create (m);
+  rng = pnl_rng_create (PNL_RNG_MERSENNE);
+  pnl_rng_sseed (rng, 0);
+  
+  /*
+   * Random points where the function will be evaluted
+   */
+  pnl_vect_rng_uni(x,n,-5,4,rng);
+  pnl_vect_rng_uni(t,n,0,1,rng);
+  basis = pnl_basis_create_from_degree (PNL_BASIS_HERMITIAN, deg, 2);
+  alpha = pnl_vect_create (basis->nb_func);
   X = pnl_mat_create (n, 2);
   for(j=0;j<n;j++)
     {
@@ -279,15 +304,18 @@ static void pnl_basis_eval_test ()
       MLET (X, j, 1) = GET(x,j);
     }
   V=pnl_vect_create(n);
-  //création du vecteur contenant les valeurs de la fonction à retrouver aux
-  //points t(j),x(j)
+  /*
+   * Vector of values for the function to recover
+   */
   for(j=0;j<n;j++)
     {
       LET(V,j)=fonction_a_retrouver(GET(t,j),GET(x,j));
     }
   pnl_basis_fit_ls (basis, alpha, X, V);
-  /* calcul des valeurs approchées des dérivées de la fonction à retrouver (1
-     en temps et 2 en espace) */
+  /*
+   * compute approximations of the derivatives (first order in time and
+   * second order in space )
+   */
   derive_approx_fonction(basis, D, alpha,t0,x0);
   pnl_test_eq_abs (pnl_vect_get(D,0), fonction_a_retrouver(t0,x0), tol,
                    "deriv_approx_fonction", "derivative 0");
@@ -304,13 +332,12 @@ static void pnl_basis_eval_test ()
   pnl_basis_free (&basis);
 
   /* reduced basis */
-  basis = pnl_basis_create (PNL_BASIS_HERMITIAN, m, 2);
+  basis = pnl_basis_create_from_degree (PNL_BASIS_HERMITIAN, deg, 2);
   lower = pnl_vect_create_from_list (2, 0., -5.);
   upper = pnl_vect_create_from_list (2, 1., 4.);
   pnl_basis_set_domain (basis, lower, upper);
   pnl_basis_fit_ls (basis, alpha, X, V);
-  /* calcul des valeurs approchées des dérivées de la fonction à retrouver (1
-     en temps et 2 en espace) */
+
   derive_approx_fonction(basis, D, alpha,t0,x0);
   pnl_test_eq_abs (pnl_vect_get(D,0), fonction_a_retrouver(t0,x0), tol,
                    "deriv_approx_fonction (reduced)", "derivative 0");
@@ -325,6 +352,7 @@ static void pnl_basis_eval_test ()
                    tol, "deriv_approx_fonction (reduced)",  "derivative %% tx");
 
   pnl_basis_free (&basis);
+  pnl_rng_free (&rng);
   pnl_vect_free(&alpha);
   pnl_vect_free(&x);
   pnl_vect_free(&t);
@@ -334,23 +362,6 @@ static void pnl_basis_eval_test ()
   pnl_vect_free(&upper);
   pnl_mat_free(&X);
 }
-
-/* static void hyperbolic_basis_test () */
-/* { */
-/*   int dim, degree; */
-/*   double q; */
-/*   PnlBasis *B; */
-
-/*   dim = 3; */
-/*   degree = 3; */
-/*   q = 0.8; */
-
-/*   B = pnl_basis_create_from_hyperbolic_degree (PNL_BASIS_CANONICAL, degree, q, dim); */
-/*   pnl_basis_print (B); */
-/*   pnl_basis_free (&B); */
-
-/* } */
-
 
 int main (int argc, char **argv)
 {

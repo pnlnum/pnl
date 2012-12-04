@@ -53,7 +53,8 @@ extern int pnl_basis_type_register (const char *name, double (*f)(double, int),
 extern PnlBasis* pnl_basis_new ();
 extern PnlBasis* pnl_basis_create ( int index, int nb_func, int space_dim);
 extern PnlBasis* pnl_basis_create_from_degree ( int index, int degree, int space_dim);
-extern PnlBasis*  pnl_basis_create_from_hyperbolic_degree (int index, double degree, double q, int n);
+extern PnlBasis* pnl_basis_create_from_prod_degree (int index, int degree, int nb_variates);
+extern PnlBasis* pnl_basis_create_from_hyperbolic_degree (int index, double degree, double q, int n);
 extern void pnl_basis_clone (PnlBasis *dest, const PnlBasis *src);
 extern PnlBasis* pnl_basis_copy (const PnlBasis *B);
 extern void  pnl_basis_set_from_tensor (PnlBasis *b, int index, const PnlMatInt *T);

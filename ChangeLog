@@ -1,3 +1,9 @@
+04-12-2012 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* basis.c: Add a new criterion for total degree based on the product of
+	partial degrees. This criterion can be used to build a multivariate
+	polynom.
+
 21-11-2012 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* Cmake: PNL should now be compiled using CMake 2.8. The autotools
