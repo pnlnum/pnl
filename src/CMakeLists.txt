@@ -24,6 +24,8 @@ if (MPI_C_FOUND)
     set(SUBDIRS ${SUBDIRS} mpi)
 endif (MPI_C_FOUND)
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON) 
+
 SET(pnl_LIB_SRCS
    cumulfunc.c
    finance_function.c
