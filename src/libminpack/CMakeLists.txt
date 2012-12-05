@@ -1,4 +1,4 @@
-SET(libminpack_SRCS
+add_library(libminpack OBJECT
    chkder.c
    enorm.c
    hybrj.c

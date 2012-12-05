@@ -1,31 +1,31 @@
-04-12-2012 J閞鬽e Lelong <jerome.lelong@gmail.com>
+04-12-2012 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* basis.c: Add a new criterion for total degree based on the product of
 	partial degrees. This criterion can be used to build a multivariate
 	polynom.
 
-21-11-2012 J閞鬽e Lelong <jerome.lelong@gmail.com>
+21-11-2012 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* Cmake: PNL should now be compiled using CMake 2.8. The autotools
 	chain might be removed in future releases.This has induced some side
 	changes in the way configuration files are handled.
 
-20-09-2012 J閞鬽e Lelong <jerome.lelong@gmail.com>
+20-09-2012 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* mpi_ops.c: Add pnl_object_mpi_reduce. For the moment, it only accepts
 	PnlVectObjects and PnlatObjects
 
-10-08-2012 J閞鬽e Lelong <jerome.lelong@gmail.com>
+10-08-2012 J茅r么me Lelong <jerome.lelong@gmail.com>
 	
 	* fftpack_wrap.c: Add 2D FFT.
 
-09-05-2012 J閞鬽e Lelong <jerome.lelong@gmail.com>
+09-05-2012 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* basis.c: Add the ability to register new basis types. This mechanism
 	is based on the variable PnlBasisTypeTab and the function
 	pnl_basis_type_register.
 
-09-04-2012 J閞鬽e Lelong <jerome.lelong@gmail.com>
+09-04-2012 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* object.h: Add 3 new member functions to PnlObject: new, copy, clone
 	* array.c: Add copy and clone functions for PnlArray
@@ -33,33 +33,33 @@
 	* list.c: Add copy and clone functions for PnlList
 	* random.c: Add copy and clone functions for PnlRng
 
-15-03-2012 J閞鬽e Lelong <jerome.lelong@gmail.com>
+15-03-2012 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* cephes: Rename {l,t}gamma to pnl_{l,t}gamma
 
-27-02-2012 J閞鬽e Lelong <jerome.lelong@gmail.com>
+27-02-2012 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* mathtools.c: Add inverse of hyperbolic functions (part of C99)
 		pnl_{acosh,asinh,atanh}
 
-12-01-2012 J閞鬽e Lelong <jerome.lelong@gmail.com>
+12-01-2012 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* vector_double.c: Add a setter for the PnlVectCompact type
 	* all: Rename some macros to avoid name clashes (MC, QMC, isinf, isnan,
 			isfinite). They are prefixed by pnl_
 	
-17-11-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+17-11-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* perm.c: Compute the inverse of a permutation. Apply the inverse of a
 	permutation in place
 	* lapack-wrap.c: Solve a linear system using a QR decomposition with
 	column pivoting
 
-07-10-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+07-10-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* lapack-wrap.c: Fix a bug in pnl_{upper,lower}_syslin.
 
-03-10-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+03-10-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* pnl_TMatrix_source.c: Fix storage problem for Hmat. Add of two
 	wrappers to see part of Hmat as a vector (last dimension of the Hmat
@@ -67,28 +67,28 @@
 
 	* array.c: Add of an array type to store PnlObjects
 
-16-09-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+16-09-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* pnl_T{Vector,Matrix}_source.c: Fix wrong reading of complex data.
 
-01-08-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+01-08-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* dpstrf: add detection of dpstrf to the configure script. If not
 	available in the computer's version of Lapack, it can be found in
 	linalg/dpstrf.c whose inclusion is hung up to the result of the
 	configure script.
 
-21-07-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+21-07-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* librand: update of dcmt to version 0.6.1. This version is thread-safe
 	and offers new functionnalities.
 
-12-07-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+12-07-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* librand: new Sobol generators (from John Burkardt), older version are
 	removed. These new versions are threadsafe and handled by pnl_rng_sdim.
 
-08-07-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+08-07-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* liblapack: update to version 3.2.1
 	* libblas: update
@@ -98,155 +98,155 @@
 	* tridiag_matrix.c: LU decomposition of TridiagMat for repeatedly
 	solving linear systems
 
-03-06-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+03-06-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* libminpack: Functions lmder and lmdif common code has been
 	factorized.
 
-22-05-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+22-05-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* man: new organisation of the manual.
 
-11-05-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+11-05-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* random.c: Seeding of MRGK3 and MRGK5 + implementation of the
 	following convention for pnl_rng_sseed: if seed == 0 then the default
 	seed is used
 
-11-05-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+11-05-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* ode_test.c: Simple test (1d) of routine pnl_ode_rkf45
 
-23-04-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+23-04-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* lapack-wrap.c: all functions now return an error code (OK or FAIL)
 	which should be tested by the calling function to know if the
 	computation has been carried out successfully
 
-21-04-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+21-04-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* pnl_Tvector_source.c: Change of signature for pnl_vector_min & co to
 	place output arguments first as specified in the library conventions.
 	Note that it breaks backward compatibility.
 
-20-04-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+20-04-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* libcephes: global variable sgngam removed to make gamma related code
 	thread-safe
 
-04-04-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+04-04-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* examples : design of a new unit test framework and backport of all
 	the previous tests.
 
-16-03-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+16-03-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* rkf45.c : Runge Kutta Fehler 45 integrator for n dimensional ODEs
 
 
-10-03-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+10-03-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* liblapack : calls to dlamc3_ replaced by pnl_dlamc3 defined in
 	libamos. (Only used when Blas/Lapack libraries are available on the
 	system)
 
-17-02-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+17-02-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* distributions.c: Generation of Bessel random variables.
 
-11-02-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+11-02-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* amos_wrappers.c : Add wrapper to zrati (Ratio of modified Bessel
 	functions of the first kind)
 
-29-01-2011 J閞鬽e Lelong <jerome.lelong@gmail.com>
+29-01-2011 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* list.c: PnlList structure changed to remember the index of the
 	last accessed element for more efficiently lopping on a list.
 
-08-11-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+08-11-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* basis.c: bases can be centered and normalized
 
 
-03-11-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+03-11-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* saveload.c: interface for saving and loading objects to and from
 	files
 
-26-10-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+26-10-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* random.c: All QMC random number generators, except SOBOL, are now reentrant
 
-14-10-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+14-10-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* configure.in: Detection of static versions of Blas & Lapack added to
 	the configure script
 
-12-10-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+12-10-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* basis.c: Bases can be built using an hyperbolic set of indices,
 	useful for polynoms living in a high dimensional space.
 
-11-10-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+11-10-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* pnl_basis_eval_derivs : Improvement of the computation of the
 	derivatives of a multivariate polynomial
 
-08-10-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+08-10-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* random.c: All true random number generators are now reentrant
 
-06-10-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+06-10-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* random.c: PNL_RNG_KNUTH is now reentrant
 	* rng-state.c: Packing of PnlRng is portable
 	* list.c: PnlList is now supported by MPI bindings
 
-20-09-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+20-09-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* New interface for direcly using PnlRng and not the list of
 	global generators (_rng_ functions). The dynamic list is removed.
 
-12-09-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+12-09-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* A dynamic list of rng has been added making it possible to call
 	dynamically created Mersenne Twister (DCMT) through the standard
 	set of funtions operating on rng (_rand_ functions)
 
-10-09-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+10-09-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* PnlObject has been modified to store a destroy function.
 	* PnlList : a new object to store doubly linked lists.
 
-09-09-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+09-09-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* pnl_matvect.h created to hold the definitions of all the types
 	related to Matrices and Vectors because the previous organisation
 	of the declarations was incompatible with MCVS2008 (A. Kolotaev)
 
-07-09-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+07-09-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* Integration of the Dynamically Created Mersenne Twister generator.
 
-12-07-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+12-07-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* BoxMuller modified to become thread safe. The static variable has been
 	moved into PnlRng
 	* New implementation of the Mersenne Twister random number generator.
 
-11-07-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+11-07-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* TAUS generator modified to work on 64 bit machines.
 	* A PnlRng object is created to avoid the use of global static variables
 	in random.c
 	* Tests added for all generators.
 
-28-06-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+28-06-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* MPI bindings for handling PnlObjects natively
 
-25-06-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+25-06-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* configure.in modified to use Blac & Lapack froim Vectlib on Mac OS X
 	* f2c.h modified to ensure Fortran integer type is always mapped
@@ -258,12 +258,12 @@
 	* Optimization routine for minimization problems under inequality
 	constraints
 
-17-05-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+17-05-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* Multidimensional root finding based on Minpack. It provides two new
 	functions pnl_root_fsolve and pnl_root_lsq
 
-05-05-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+05-05-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* some uniformisation in names for PnlFunc and the EVAL macro
 		PnlFunc --> PNL_EVAL_FUNC
@@ -273,14 +273,14 @@
 
 	  The order of the arguments in PnlRnFuncRm has been changed
 
-04-05-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+04-05-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* Numerical integration now relies on routines from QuadPack
 		qng, qage, qagi, qags.
 	  The former pnl_integration_GK routine is replaced by the QNG routine
 	  from QuadPack.
 
-22-03-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+22-03-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* A top level class PnlObject added to simulate some inheritance.  All
 	objects used in the Pnl now inherit from PnlObject and implement a
@@ -289,7 +289,7 @@
 	The function pnl_object_new can create any type of object returned as a
 	PnlObject *.
 
-21-03-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+21-03-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* Functions added to emulate Scilab's find function
 		pnl_vect_find, pnl_vect_find_vect
@@ -306,12 +306,12 @@
 	 use the above functions instead.
 	 Idem for tridiag_mat and band_mat
 
-08-03-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+08-03-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* Prefix pnl_iterationbase renamed pnl_iteration_base to follow the coding
 	conventions.
 
-07-03-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+07-03-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* Possibility to create bases by specifying the total degree
 		pnl_basis_create_from_degree
@@ -325,7 +325,7 @@
 		...
 		#endif /* _PNL_HEADER_NAME_H */
 
-06-03-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+06-03-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* a few functions have been renamed because their names did not follow the
 	overall conventions
@@ -345,19 +345,19 @@
 
 	* Special functions always begin in pnl_sf
 
-04-03-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+04-03-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* New PnlBasis implementation to allow mutlivariate polynomial regression
 	witohut any limitation on the numbers of basis functions used
 
-03-03-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+03-03-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* Makeuser improved to handle the compilation of several executables
 
-28-02-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+28-02-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* New implementation of band matrices compliant with Lapack
 
-24-02-2010 J閞鬽e Lelong <jerome.lelong@gmail.com>
+24-02-2010 J茅r么me Lelong <jerome.lelong@gmail.com>
 
 	* tridiag matrices recoded in a Lapack compliant format

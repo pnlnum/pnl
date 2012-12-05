@@ -1,5 +1,5 @@
 
-SET(libcephes_SRCS
+add_library(libcephes OBJECT
    airy.c
    ellie.c
    fdtr.c

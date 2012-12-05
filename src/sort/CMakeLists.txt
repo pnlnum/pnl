@@ -1,3 +1,3 @@
-SET(sort_SRCS
+add_library(sort OBJECT
    qsort.c
 )

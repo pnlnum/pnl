@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.8)
 set(PROJECT_LIBRARY_NAME ${PROJECT_NAME})
 set(LT_VERSION_CURRENT 1)
 set(LT_VERSION_AGE 5)

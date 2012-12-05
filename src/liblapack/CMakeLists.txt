@@ -265,7 +265,7 @@ set (ZLASRC
   ztfttr.c ztpttf.c ztpttr.c ztrttf.c ztrttp.c 
   zgeequb.c zgbequb.c zsyequb.c zpoequb.c zheequb.c )
 
-SET(liblapack_SRCS
+add_library(liblapack OBJECT
    ${SLASRC}
    ${DLASRC}
    ${CLASRC}

@@ -1,4 +1,4 @@
-SET(libinteg_SRCS
+add_library(libinteg OBJECT
    quadpack_dqage.c
    quadpack_dqagie.c
    quadpack_dqagpe.c

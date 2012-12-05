@@ -1,4 +1,4 @@
-SET(linalg_SRCS
+add_library(linalg OBJECT
    vector_double.c
    matrix.c
    vector_int.c

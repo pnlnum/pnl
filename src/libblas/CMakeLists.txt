@@ -1,5 +1,5 @@
 
-SET(libblas_SRCS caxpy.c ccopy.c cdotc.c cdotu.c cgbmv.c cgemm.c cgemv.c
+add_library(libblas OBJECT caxpy.c ccopy.c cdotc.c cdotu.c cgbmv.c cgemm.c cgemv.c
     cgerc.c cgeru.c chbmv.c chemm.c chemv.c cher.c cher2.c cher2k.c cherk.c
     chpmv.c chpr.c chpr2.c crotg.c cscal.c csscal.c cswap.c csymm.c csyr2k.c
     csyrk.c ctbmv.c ctbsv.c ctpmv.c ctpsv.c ctrmm.c ctrmv.c ctrsm.c ctrsv.c

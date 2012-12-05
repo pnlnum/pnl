@@ -1,4 +1,4 @@
-SET(interpol_SRCS
+add_library(interpol OBJECT
    basis.c
    interpolation.c
 )

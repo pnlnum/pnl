@@ -1,4 +1,4 @@
-SET(libamos_SRCS
+add_library(libamos OBJECT
    amos_wrappers.c
    xerror.c
    zairy.c

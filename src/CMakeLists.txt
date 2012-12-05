@@ -16,8 +16,6 @@ set(SUBDIRS
     libminpack
     optim)
 
-add_subdirectory(include/pnl)
-
 if (NOT BLAS_FOUND OR NOT LAPACK_FOUND)
     set(SUBDIRS ${SUBDIRS} libf2c libblas liblapack)
 endif (NOT BLAS_FOUND OR NOT LAPACK_FOUND)
@@ -26,18 +24,15 @@ if (MPI_C_FOUND)
     set(SUBDIRS ${SUBDIRS} mpi)
 endif (MPI_C_FOUND)
 
-
-
 SET(pnl_LIB_SRCS
    cumulfunc.c
    finance_function.c
 )
 
+add_subdirectory(include/pnl)
 foreach(subdir ${SUBDIRS})
-    include(${subdir}/CMakeLists.txt)
-    foreach (srcfile ${${subdir}_SRCS})
-        set (pnl_LIB_SRCS ${pnl_LIB_SRCS} ${subdir}/${srcfile})
-    endforeach ()
+    add_subdirectory (${subdir})
+    set (pnl_LIB_SRCS ${pnl_LIB_SRCS} $<TARGET_OBJECTS:${subdir}>)
 endforeach ()
 
 # Add build inline stuff

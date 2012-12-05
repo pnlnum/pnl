@@ -1,5 +1,5 @@
 
-SET(libf2c_SRCS
+add_library(libf2c OBJECT
    F77_aloc.c
    abort_.c
    backspace.c

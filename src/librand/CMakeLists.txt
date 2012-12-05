@@ -1,4 +1,4 @@
-SET(librand_SRCS
+add_library(librand OBJECT
    random.c
    distributions.c
    mt.c
