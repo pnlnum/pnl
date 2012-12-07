@@ -622,14 +622,6 @@ void FUNCTION(pnl_vect, print_nsp)(const TYPE(PnlVect) * V)
 }
 
 /**
- * sets the value of v[i]=x
- *
- * @param v a TYPE(PnlVect)
- * @param i index
- * @param x v[i]=x
- */
-
-/**
  * in-place map function
  *
  * @param lhs left hand side vector

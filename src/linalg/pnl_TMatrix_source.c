@@ -389,11 +389,10 @@ void FUNCTION(pnl_mat,set_diag)(TYPE(PnlMat) *M, BASE x, int d)
 }
 
 /**
- * Creates a TYPE(PnlMat) from a C array
- * @param m number of rows
- * @param n number of columns
+ * Fill in a TYPE(PnlMat) from a C array
+ * @param M an already existing TYPE(PnlMat)
  * @param x an array of BASE used to fill the TYPE(PnlMat). should be of length
- * <tt> mxn </tt>. No test can be done about it.
+ * <tt> mxn </tt>. No test can be done on this.
  * @return a TYPE(PnlMat) pointer
  */
 void FUNCTION(pnl_mat,set_from_ptr)(TYPE(PnlMat) *M, const BASE* x)
