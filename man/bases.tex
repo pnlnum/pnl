@@ -211,7 +211,21 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
 
 
 \begin{itemize}
-  \item \describefun{double}{pnl_basis_ik}{const \refstruct{PnlBasis} \ptr b, const double
+\item \describefun{int}{pnl_basis_fit_ls}{\refstruct{PnlBasis} \ptr
+    P, \refstruct{PnlVect} \ptr  coef, \refstruct{PnlMat} \ptr  x,
+    \refstruct{PnlVect} \ptr  y}
+  \sshortdescribe Computes the coefficients \var{coef} defined by
+  \begin{equation*}
+    \var{coef} = \arg\min_\alpha \sum_{i=1}^n
+    \left( \sum_{j=0}^{\var{N}} \alpha_j  P_j(x_i) - y_i\right)^2
+  \end{equation*}
+  where \var{N} is the number of functions to regress upon and $n$ is the number
+  of points at which the values of the original function are known. $P_j$ is the
+  $j-th$ basis function. Each row of the matrix \var{x} defines the coordinates
+  of one point $x_i$. The function to be approximated is defined by the vector
+  \var{y} of the values of the function at the points \var{x}.
+
+\item \describefun{double}{pnl_basis_ik}{const \refstruct{PnlBasis} \ptr b, const double
   \ptr x, int i, int k}
   \sshortdescribe An element of a basis writes $\prod_{l=0}^{\var{nb_variates}}
   \phi_l(x_l)$ where the $\phi$'s are one dimensional polynomials. This
@@ -236,20 +250,6 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
   then this function returns $\partial^2_{x_{\var{j1}}, x_{\var{j2}}}
   f_i(x)$. \var{x} must be a C array of length \var{nb_variates}.
 
-
-\item \describefun{int}{pnl_basis_fit_ls}{\refstruct{PnlBasis} \ptr
-    P, \refstruct{PnlVect} \ptr  coef, \refstruct{PnlMat} \ptr  x,
-    \refstruct{PnlVect} \ptr  y}
-  \sshortdescribe Computes the coefficients \var{coef} defined by
-  \begin{equation*}
-    \var{coef} = \arg\min_\alpha \sum_{i=1}^n
-    \left( \sum_{j=0}^{\var{N}} \alpha_j  P_j(x_i) - y_i\right)^2
-  \end{equation*}
-  where \var{N} is the number of functions to regress upon and $n$ is the number
-  of points at which the values of the original function are known. $P_j$ is the
-  $j-th$ basis function. Each row of the matrix \var{x} defines the coordinates
-  of one point $x_i$. The function to be approximated is defined by the vector
-  \var{y} of the values of the function at the points \var{x}.
 
 \item \describefun{double}{pnl_basis_eval_derivs}{\refstruct{PnlBasis} \ptr
     P, \refstruct{PnlVect}\ptr coef, double \ptr x, double \ptr fx,
@@ -287,6 +287,39 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
   function returns $\partial_{x_i} \partial_{x_j} \sum_{k=0}^n \var{coef}_k  P_k(\var{x})$
   where \var{x} is a C array of length \var{nb_variates}. The indices \var{i}
   and \var{j} may vary between \var{0} and \var{P->nb_variates - 1}.
+
+\item \describefun{double}{pnl_basis_ik_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr x, int i, int k}
+  \sshortdescribe Same as function \reffun{pnl_basis_ik} but takes a
+  \refstruct{PnlVect} as the point of evaluation which enables to check that all
+  dimensions match.
+\item \describefun{double}{pnl_basis_i_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr x, int i}
+  \sshortdescribe Same as function \reffun{pnl_basis_i} but takes a
+  \refstruct{PnlVect} as the point of evaluation which enables to check that all
+  dimensions match.
+\item \describefun{double}{pnl_basis_i_D_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr x, int i, int j}
+  \sshortdescribe Same as function \reffun{pnl_basis_i_D} but takes a
+  \refstruct{PnlVect} as the point of evaluation which enables to check that all
+  dimensions match.
+\item \describefun{double}{pnl_basis_i_D2_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr x, int i, int j1, int j2}
+  \sshortdescribe Same as function \reffun{pnl_basis_i_D2} but takes a
+  \refstruct{PnlVect} as the point of evaluation which enables to check that all
+  dimensions match.
+\item \describefun{double}{pnl_basis_eval_vect}{const \refstruct{PnlBasis} \ptr basis, const \refstruct{PnlVect} \ptr coef, const \refstruct{PnlVect} \ptr x}
+  \sshortdescribe Same as function \reffun{pnl_basis_eval} but takes a
+  \refstruct{PnlVect} as the point of evaluation which enables to check that all
+  dimensions match.
+\item \describefun{double}{pnl_basis_eval_D_vect}{const \refstruct{PnlBasis} \ptr basis, const \refstruct{PnlVect} \ptr coef, const \refstruct{PnlVect} \ptr x, int i}
+  \sshortdescribe Same as function \reffun{pnl_basis_eval_D} but takes a
+  \refstruct{PnlVect} as the point of evaluation which enables to check that all
+  dimensions match.
+\item \describefun{double}{pnl_basis_eval_D2_vect}{const \refstruct{PnlBasis} \ptr basis, const \refstruct{PnlVect} \ptr coef, const \refstruct{PnlVect} \ptr x, int i, int j}
+  \sshortdescribe Same as function \reffun{pnl_basis_eval_D2} but takes a
+  \refstruct{PnlVect} as the point of evaluation which enables to check that all
+  dimensions match.
+\item \describefun{void}{pnl_basis_eval_derivs_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr coef, const \refstruct{PnlVect} \ptr x, double \ptr val, \refstruct{PnlVect} \ptr grad, \refstruct{PnlMat} \ptr hes}
+  \sshortdescribe Same as function \reffun{pnl_basis_eval_derivs} but takes a
+  \refstruct{PnlVect} as the point of evaluation which enables to check that all
+  dimensions match.
 \end{itemize}
 
 

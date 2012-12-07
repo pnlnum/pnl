@@ -33,8 +33,14 @@
     {                                                               \
       PNL_ERROR("Wrong number of coefficients", "pnl_basis_eval");  \
     }
+#define CHECK_NB_VARIATES(x, basis)                                               \
+  if ( x->size != basis->nb_variates )                                            \
+    {                                                                             \
+      PNL_ERROR("Dimension mismatch for the evaluation point", "pnl_basis_eval"); \
+    }
 #else
 #define CHECK_NB_FUNC(coef, basis)
+#define CHECK_NB_VARIATES(x, basis) 
 #endif
 
 
@@ -228,6 +234,10 @@ static PnlMatInt* compute_tensor (int nb_func, int nb_variates)
  *
  * @param T the tensor matrix of the basis with n-1 variates
  * @param degree the maximum total degree requested
+ * @param count_degree a function to compute the total of a given line in a
+ * tensor
+ * @param freedom_degree a function to compute the number of degrees of
+ * freedom 
  *
  * @return the number of elements with total degree less or equal than degree in
  * the basis with n variates
@@ -255,7 +265,10 @@ static int compute_nb_elements (const PnlMatInt *T, int degree,
  *
  * @param nb_variates the number of variates of the basis.
  * @param degree the total degree
- * @count_degree a function to compute the total degree
+ * @param count_degree a function to compute the total of a given line in a
+ * tensor
+ * @param freedom_degree a function to compute the number of degrees of
+ * freedom 
  *
  * @return the tensor matrix of the nb_variates variate basis with a total degree less or
  * equal than degree
@@ -1420,7 +1433,8 @@ int pnl_basis_fit_ls (const PnlBasis *basis, PnlVect *coef, const PnlMat *x, con
     {
       for ( k=0 ; k<basis->nb_func ; k++ )
         {
-          const double tmp = pnl_basis_i (basis, &(PNL_MGET(x, i, 0)), k);
+          PnlVect xi = pnl_vect_wrap_mat_row (x, i);
+          const double tmp = pnl_basis_i_vect (basis, &xi, k);
           b_k =  pnl_vect_get(coef, k);
           b_k += tmp * pnl_vect_get (y, i);
           pnl_vect_set (coef, k, b_k);
@@ -1440,3 +1454,141 @@ int pnl_basis_fit_ls (const PnlBasis *basis, PnlVect *coef, const PnlMat *x, con
 
   return OK;
 }
+
+/**
+ * An element of a basis writes as a product 
+ *      p_1(x_1) p2(x_2) .... p_n(x_n)
+ * for a polynomial with n variates. Each p_k is a polynomial with only
+ * one variate.
+ * 
+ * This functions evaluates the term p_k of the i-th element of the 
+ * basis b at the point x
+ *
+ * @param b a PnlBasis
+ * @param x a PnlVect containing the coordinates of the point at which to
+ * evaluate the basis
+ * @param i an integer describing the index of the element of the basis to
+ * consider
+ * @param k the index of the term to be evaluated with element i of the
+ * basis
+ *
+ * @return (f_i)_k (x) 
+ */
+double pnl_basis_ik_vect (const PnlBasis *b, const PnlVect *x, int i, int k)
+{
+  return pnl_basis_ik (b, x->array, i, k);
+}
+
+/**
+ * Evaluates the i-th element of the basis b at the point x
+ *
+ * @param b a PnlBasis
+ * @param x a PnlVect containing the coordinates of the point at which to
+ * evaluate the basis
+ * @param i an integer describing the index of the element of the basis to
+ * considier
+ *
+ * @return f_i(x) where f is the i-th basis function
+ */
+double pnl_basis_i_vect (const PnlBasis *b, const PnlVect *x, int i )
+{
+  return pnl_basis_i (b, x->array, i);
+}
+
+/**
+ * First order derivative
+ *
+ * @param b a basis
+ * @param x the point at which to evaluate the first derivative
+ * @param i the index of the basis element to differentiate
+ * @param j the index of the variable w.r.t which we differentiate
+ *
+ * @return (D(b_i)/Dj)(x)
+ */
+double pnl_basis_i_D_vect (const PnlBasis *b, const PnlVect *x, int i, int j )
+{
+  return pnl_basis_i_D (b, x->array, i, j);
+}
+
+/**
+ * Second order derivative
+ *
+ * @param b a basis
+ * @param x the point at which to evaluate the first derivative
+ * @param i the index of the basis element to differentiate
+ * @param j1 the index of the first variable w.r.t which we differentiate
+ * @param j2 the index of the second variable w.r.t which we differentiate
+ *
+ * @return (D(b_i)/(Dj1 Dj2))(x)
+ */
+double pnl_basis_i_D2_vect (const PnlBasis *b, const PnlVect *x, int i, int j1, int j2)
+{
+  return pnl_basis_i_D2 (b, x->array, i, j1, j2);
+}
+
+/**
+ * Evaluates a linear combination of basis functions at x
+ *
+ * @param coef a vector typically computed by pnl_basis_fit_ls
+ * @param x the coordinates of the point at which to evaluate the function
+ * @param basis a PnlBasis
+ *
+ * @return sum (coef .* f(x))
+ */
+double pnl_basis_eval_vect (const PnlBasis *basis, const PnlVect *coef, const PnlVect *x)
+{
+  return pnl_basis_eval (basis, coef, x->array);
+}
+
+/**
+ * Evaluates the first derivative with respect to x[i] of a linear combination
+ * of basis functions at x
+ *
+ * @param coef a vector typically computed by pnl_basis_fit_ls
+ * @param x the coordinates of the point at which to evaluate the function
+ * @param basis a PnlBasis
+ * @param i the index with respect to which the derivative is computed
+ *
+ * @return sum (coef .* D_i f(x))
+ */
+double pnl_basis_eval_D_vect (const PnlBasis *basis, const PnlVect *coef, const PnlVect *x, int i)
+{
+  return pnl_basis_eval_D (basis, coef, x->array, i);
+}
+
+/**
+ * Evaluates the second derivative with respect to x[i] and x[j] of a linear
+ * combination of basis functions at x
+ *
+ * @param coef a vector typically computed by pnl_basis_fit_ls
+ * @param x the coordinates of the point at which to evaluate the function
+ * @param basis a PnlBasis
+ * @param i the index with respect to which the derivative is computed
+ * @param j the index with respect to which the derivative is computed
+ *
+ * @return sum (coef .* D2_{i,j} f(x))
+ */
+double pnl_basis_eval_D2_vect (const PnlBasis *basis, const PnlVect *coef, const PnlVect *x, int i, int j)
+{
+  return pnl_basis_eval_D2 (basis, coef, x->array, i, j);
+}
+
+/**
+ * Evaluates the function, its gradient and Hessian matrix at x. The function is
+ * defined by  linear combination sum (coef .* f(x))
+
+ *
+ * @param coef a vector typically computed by pnl_basis_fit_ls
+ * @param x the coordinates of the point at which to evaluate the function
+ * @param b PnlBasis
+ * @param val contains the value of sum (coef .* f(x)) on exit
+ * @param grad contains the value of sum (coef .* Df(x)) on exit
+ * @param hes contains the value of sum (coef .* D2 f(x)) on exit
+ *
+ */
+void pnl_basis_eval_derivs_vect (const PnlBasis *b, const PnlVect *coef, const PnlVect *x,
+                                 double *val, PnlVect *grad, PnlMat *hes)
+{
+  pnl_basis_eval_derivs (b, coef, x->array, val, grad, hes);
+}
+
