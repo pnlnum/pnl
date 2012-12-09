@@ -5,7 +5,9 @@
 #ifdef MSDOS
 #include "io.h"
 #else
-#include "unistd.h"	/* for access */
+#ifndef _MSC_VER
+#include "unistd.h"    /* for access */
+#endif
 #endif
 #endif
 
