@@ -143,7 +143,11 @@ clean::
 	$(RM) -r .libs
 
 cleanall:: clean
-	$(RM) $(BINS)
+	@for b in $(BINS); do \
+		echo "Remove $$b $$b.dSYM"; \
+		$(RM) $$b; \
+		$(RM) -rf "$$b.dSYM"; \
+	done
 
 
 # Add some generic rules for target usings the _OBJS mechanism
