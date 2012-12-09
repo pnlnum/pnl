@@ -225,35 +225,27 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
   of one point $x_i$. The function to be approximated is defined by the vector
   \var{y} of the values of the function at the points \var{x}.
 
-\item \describefun{double}{pnl_basis_ik}{const \refstruct{PnlBasis} \ptr b, const double
-  \ptr x, int i, int k}
+\item \describefun{double}{pnl_basis_ik_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr x, int i, int k}
   \sshortdescribe An element of a basis writes $\prod_{l=0}^{\var{nb_variates}}
   \phi_l(x_l)$ where the $\phi$'s are one dimensional polynomials. This
   functions computes the therm $\phi_k$ of the \var{i-th} basis function at the
   point \var{x}.
-\item  \describefun{double}{pnl_basis_i}{\refstruct{PnlBasis} \ptr b,
-    double \ptr x, int i}
+\item \describefun{double}{pnl_basis_i_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr x, int i}
   \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}-1}$,
-  then this function returns $f_i(x)$. \var{x} must be a C array of length
-  \var{nb_variates}.
+  then this function returns $f_i(x)$. 
 
-\item \describefun{double}{pnl_basis_i_D}{ const \refstruct{PnlBasis} \ptr b,
-    const double \ptr x, int i, int j }
+\item \describefun{double}{pnl_basis_i_D_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr x, int i, int j}
   \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}-1}$,
-  then this function returns $\partial_{x_{\var{j}}} f_i(x)$. \var{x} must be a C array
-  of length \var{nb_variates}.
+  then this function returns $\partial_{x_{\var{j}}} f_i(x)$.
 
   
-\item \describefun{double}{pnl_basis_i_D2}{const \refstruct{PnlBasis} \ptr b,
-    const double \ptr x, int i, int j1, int j2}
+\item \describefun{double}{pnl_basis_i_D2_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr x, int i, int j1, int j2}
   \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}-1}$,
   then this function returns $\partial^2_{x_{\var{j1}}, x_{\var{j2}}}
-  f_i(x)$. \var{x} must be a C array of length \var{nb_variates}.
+  f_i(x)$.
 
 
-\item \describefun{double}{pnl_basis_eval_derivs}{\refstruct{PnlBasis} \ptr
-    P, \refstruct{PnlVect}\ptr coef, double \ptr x, double \ptr fx,
-    \refstruct{PnlVect} \ptr Dfx, \refstruct{PnlMat} \ptr D2fx}
+\item \describefun{void}{pnl_basis_eval_derivs_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr coef, const \refstruct{PnlVect} \ptr x, double \ptr fx, \refstruct{PnlVect} \ptr Dfx, \refstruct{PnlMat} \ptr D2fx}
   \sshortdescribe Computes the function, the gradient and the Hessian matrix
   of $\sum_{k=0}^n \var{coef}_k  P_k(\cdot)$ at the point \var{x}.
   On output, \var{fx} contains the value of the function, \var{Dfx} its
@@ -261,65 +253,52 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
   performs much better than calling \reffun{pnl_basis_eval},
   \reffun{pnl_basis_eval_D} and \reffun{pnl_basis_eval_D2} sequentially.
 
-\item \describefun{double}{pnl_basis_eval}{\refstruct{PnlBasis} \ptr
-    P, \refstruct{PnlVect}\ptr  coef, double \ptr x}
+\item \describefun{double}{pnl_basis_eval_vect}{const \refstruct{PnlBasis} \ptr basis, const \refstruct{PnlVect} \ptr coef, const \refstruct{PnlVect} \ptr x}
   \sshortdescribe Computes the linear combination of \var{P_k(x)} defined by
   \var{coef}. Given the coefficients computed by the function
   \reffun{pnl_basis_fit_ls}, this function returns $\sum_{k=0}^n
-  \var{coef}_k  P_k(\var{x})$ where \var{x} is a C array of length
-  \var{P->nb_variates}.
+  \var{coef}_k  P_k(\var{x})$.
 
-\item \describefun{double}{pnl_basis_eval_D}{\refstruct{PnlBasis} \ptr
-    P, \refstruct{PnlVect} \ptr  coef, double \ptr x, int i}
-  \sshortdescribe Computes the derivative with respect to \var{x_i} of the
-  linear combination of \var{P_k(x)} defined by \var{coef}. Given the
-  coefficients computed by the function \reffun{pnl_basis_fit_ls}, this
-  function returns $\partial_{x_i} \sum_{k=0}^n \var{coef}_k  P_k(\var{x})$
-  where \var{x} is a C array of length \var{nb_variates}. The index \var{i}
-  may vary between \var{0} and \var{P->nb_variates - 1}.
-
-
-\item \describefun{double}{pnl_basis_eval_D2}{\refstruct{PnlBasis} \ptr  P,
-    \refstruct{PnlVect} \ptr  coef, double \ptr x,  int i, int j}
-  \sshortdescribe Computes the derivative with respect to \var{x_i} of the
-  linear combination of \var{P_k(x)} defined by \var{coef}. Given the
-  coefficients computed by the function \reffun{pnl_basis_fit_ls}, this
-  function returns $\partial_{x_i} \partial_{x_j} \sum_{k=0}^n \var{coef}_k  P_k(\var{x})$
-  where \var{x} is a C array of length \var{nb_variates}. The indices \var{i}
-  and \var{j} may vary between \var{0} and \var{P->nb_variates - 1}.
-
-\item \describefun{double}{pnl_basis_ik_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr x, int i, int k}
-  \sshortdescribe Same as function \reffun{pnl_basis_ik} but takes a
-  \refstruct{PnlVect} as the point of evaluation which enables to check that all
-  dimensions match.
-\item \describefun{double}{pnl_basis_i_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr x, int i}
-  \sshortdescribe Same as function \reffun{pnl_basis_i} but takes a
-  \refstruct{PnlVect} as the point of evaluation which enables to check that all
-  dimensions match.
-\item \describefun{double}{pnl_basis_i_D_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr x, int i, int j}
-  \sshortdescribe Same as function \reffun{pnl_basis_i_D} but takes a
-  \refstruct{PnlVect} as the point of evaluation which enables to check that all
-  dimensions match.
-\item \describefun{double}{pnl_basis_i_D2_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr x, int i, int j1, int j2}
-  \sshortdescribe Same as function \reffun{pnl_basis_i_D2} but takes a
-  \refstruct{PnlVect} as the point of evaluation which enables to check that all
-  dimensions match.
-\item \describefun{double}{pnl_basis_eval_vect}{const \refstruct{PnlBasis} \ptr basis, const \refstruct{PnlVect} \ptr coef, const \refstruct{PnlVect} \ptr x}
-  \sshortdescribe Same as function \reffun{pnl_basis_eval} but takes a
-  \refstruct{PnlVect} as the point of evaluation which enables to check that all
-  dimensions match.
 \item \describefun{double}{pnl_basis_eval_D_vect}{const \refstruct{PnlBasis} \ptr basis, const \refstruct{PnlVect} \ptr coef, const \refstruct{PnlVect} \ptr x, int i}
-  \sshortdescribe Same as function \reffun{pnl_basis_eval_D} but takes a
-  \refstruct{PnlVect} as the point of evaluation which enables to check that all
-  dimensions match.
+  \sshortdescribe Computes the derivative with respect to \var{x_i} of the
+  linear combination of \var{P_k(x)} defined by \var{coef}. Given the
+  coefficients computed by the function \reffun{pnl_basis_fit_ls}, this function
+  returns $\partial_{x_i} \sum_{k=0}^n \var{coef}_k  P_k(\var{x})$ The index
+  \var{i} may vary between \var{0} and \var{P->nb_variates - 1}.
+
+
 \item \describefun{double}{pnl_basis_eval_D2_vect}{const \refstruct{PnlBasis} \ptr basis, const \refstruct{PnlVect} \ptr coef, const \refstruct{PnlVect} \ptr x, int i, int j}
-  \sshortdescribe Same as function \reffun{pnl_basis_eval_D2} but takes a
-  \refstruct{PnlVect} as the point of evaluation which enables to check that all
-  dimensions match.
-\item \describefun{void}{pnl_basis_eval_derivs_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr coef, const \refstruct{PnlVect} \ptr x, double \ptr val, \refstruct{PnlVect} \ptr grad, \refstruct{PnlMat} \ptr hes}
-  \sshortdescribe Same as function \reffun{pnl_basis_eval_derivs} but takes a
-  \refstruct{PnlVect} as the point of evaluation which enables to check that all
-  dimensions match.
+  \sshortdescribe Computes the derivative with respect to \var{x_i} of the
+  linear combination of \var{P_k(x)} defined by \var{coef}. Given the
+  coefficients computed by the function \reffun{pnl_basis_fit_ls}, this function
+  returns $\partial_{x_i} \partial_{x_j} \sum_{k=0}^n \var{coef}_k
+  P_k(\var{x})$.  The indices \var{i} and \var{j} may vary between \var{0} and
+  \var{P->nb_variates - 1}.
+
+\item \describefun{double}{pnl_basis_ik}{const \refstruct{PnlBasis} \ptr b, const double \ptr x, int i, int k}
+  \sshortdescribe Same as function \reffun{pnl_basis_ik_vect} but takes a
+  C array as the point of evaluation.
+\item  \describefun{double}{pnl_basis_i}{\refstruct{PnlBasis} \ptr b, double \ptr x, int i}
+  \sshortdescribe Same as function \reffun{pnl_basis_i_vect} but takes a
+  C array as the point of evaluation.
+\item \describefun{double}{pnl_basis_i_D}{ const \refstruct{PnlBasis} \ptr b, const double \ptr x, int i, int j }
+  \sshortdescribe Same as function \reffun{pnl_basis_i_D_vect} but takes a
+  C array as the point of evaluation.
+\item \describefun{double}{pnl_basis_i_D2}{const \refstruct{PnlBasis} \ptr b, const double \ptr x, int i, int j1, int j2}
+  \sshortdescribe Same as function \reffun{pnl_basis_i_D2_vect} but takes a
+  C array as the point of evaluation.
+\item \describefun{double}{pnl_basis_eval}{\refstruct{PnlBasis} \ptr P, \refstruct{PnlVect}\ptr  coef, double \ptr x}
+  \sshortdescribe Same as function \reffun{pnl_basis_eval_vect} but takes a
+  C array as the point of evaluation.
+\item \describefun{double}{pnl_basis_eval_D}{\refstruct{PnlBasis} \ptr P, \refstruct{PnlVect} \ptr  coef, double \ptr x, int i}
+  \sshortdescribe Same as function \reffun{pnl_basis_eval_D_vect} but takes a
+  C array as the point of evaluation.
+\item \describefun{double}{pnl_basis_eval_D2}{\refstruct{PnlBasis} \ptr  P, \refstruct{PnlVect} \ptr  coef, double \ptr x,  int i, int j}
+  \sshortdescribe Same as function \reffun{pnl_basis_eval_D2_vect} but takes a 
+  C array as the point of evaluation.
+\item \describefun{double}{pnl_basis_eval_derivs}{\refstruct{PnlBasis} \ptr P, \refstruct{PnlVect}\ptr coef, double \ptr x, double \ptr fx, \refstruct{PnlVect} \ptr Dfx, \refstruct{PnlMat} \ptr D2fx}
+  \sshortdescribe Same as function \reffun{pnl_basis_eval_derivs_vect} but takes a
+  C array as the point of evaluation.
 \end{itemize}
 
 
