@@ -198,7 +198,8 @@ void pnl_cell_free (PnlCell **c)
   O = (*c)->self;
   if ( O != NULL )
     {
-      (*(O->destroy)) ((void **) &O);
+      void *O_void = (void *) O;
+      O->destroy (&O_void);
       O = NULL;
     }
   /*
@@ -382,7 +383,8 @@ void pnl_list_clone (PnlList *C, const PnlList *A)
       AOi = Ai->self;
       if ( COi != NULL && PNL_GET_TYPE(COi) != PNL_GET_TYPE(AOi) )
         {
-          COi->destroy((void **) &COi); COi=NULL;
+          void * COi_void = (void *) COi;
+          COi->destroy(&COi_void); COi=NULL;
         }
       else if ( COi == NULL )
         {

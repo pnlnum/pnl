@@ -107,7 +107,8 @@ void pnl_array_clone (PnlArray *C, const PnlArray *A)
       /* By construction, empty cells are set to NULL */
       if ( Ci != NULL  && PNL_GET_TYPE(Ci) != PNL_GET_TYPE(Ai) )
         {
-          Ci->destroy((void **) &Ci); Ci = NULL;
+          void *Ci_void = (void *)Ci;
+          Ci->destroy(&Ci_void); Ci = NULL;
         }
       else if ( Ci == NULL )
         {
@@ -205,7 +206,11 @@ void pnl_array_free (PnlArray **T)
   for ( i=0 ; i< (*T)->size ; i++ )
     {
       PnlObject *O = (*T)->array[i];
-      if ( O != NULL ) O->destroy ((void **) &O);
+      if ( O != NULL ) 
+        {
+          void *O_void = (void *) O;
+          O->destroy (&O_void);
+        }
     }
   if ( (*T)->array != NULL ) free ((*T)->array);
   free (*T);
