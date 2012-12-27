@@ -25,7 +25,7 @@
 
 
 /**
- * Initializes a PnlVect with size 0
+ * Initialize a PnlVect with size 0
  */
 void FUNCTION(pnl_vect,init)(TYPE(PnlVect) *o)
 {
@@ -43,7 +43,7 @@ void FUNCTION(pnl_vect,init)(TYPE(PnlVect) *o)
 }
 
 /**
- * Creates a new PnlVect with size 0 and initializes the object
+ * Create a new PnlVect with size 0 and initializes the object
  *
  */
 TYPE(PnlVect)* FUNCTION(pnl_vect,new)()
@@ -55,7 +55,7 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,new)()
 }
 
 /**
- * creates a new TYPE(PnlVect) pointer.
+ * Create a new TYPE(PnlVect) pointer.
  *
  * @param size the size of the array
  * @return  a TYPE(PnlVect) pointer
@@ -75,7 +75,7 @@ TYPE(PnlVect) * FUNCTION(pnl_vect,create)(int size)
 }
 
 /**
- * creates a new TYPE(PnlVect) pointer.
+ * Create a new TYPE(PnlVect) pointer.
  *
  * @param size the size of the array
  * @param x value of all component
@@ -130,7 +130,7 @@ int FUNCTION(pnl_vect,CONCAT2(eq_,BASE))(const TYPE(PnlVect) *v, BASE x)
 }
 
 /**
- * creates a new TYPE(PnlVect) pointer.
+ * Create a new TYPE(PnlVect) pointer.
  *
  * @param size the size of the array
  * @return  a TYPE(PnlVect)pointer all value at 0
@@ -142,7 +142,7 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_zero)(const int size)
 }
 
 /**
- * creates a new TYPE(PnlVect) pointer.
+ * Create a new TYPE(PnlVect) pointer.
  *
  * @param size the size of the array
  * @param x the values used to fill the array. Obviously
@@ -159,7 +159,7 @@ TYPE(PnlVect) * FUNCTION(pnl_vect,create_from_ptr)(const int size,const BASE  * 
 }
 
 /**
- * creates a new TYPE(PnlVect)pointer.
+ * Create a new TYPE(PnlVect)pointer.
  *
  * @param size the size of the array
  * @param ... is a list of values o type BASE used to fill the array. The list
@@ -187,7 +187,7 @@ TYPE(PnlVect) * FUNCTION(pnl_vect,create_from_list)(const int size,...)
 }
 
 /**
- * Reads a vector from a file and creates the corresponding PnlVect. The
+ * Read a vector from a file and creates the corresponding PnlVect. The
  * data can be stored column or row wise
  * @param file  the file to be read
  * @return a PnlVect
@@ -259,7 +259,7 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_file) (const char * file)
 }
 
 /**
- * Extracts a sub vector from a vector V. The components to be extracted are
+ * Extract a sub vector from a vector V. The components to be extracted are
  * sepcified by the indices listed in the vector ind
  *
  * @param V_sub (output) V(ind(:))
@@ -278,7 +278,7 @@ void FUNCTION(pnl_vect,extract_subvect_with_ind)(TYPE(PnlVect) *V_sub, const TYP
 }
 
 /**
- * Extracts a sub vector from a vector V. The components to be extracted are
+ * Extract a sub vector from a vector V. The components to be extracted are
  * (i:i+len)
  *
  * @param V_sub (output) V(i:i+len-1)
@@ -298,7 +298,7 @@ void FUNCTION(pnl_vect,extract_subvect)(TYPE(PnlVect) *V_sub, const TYPE(PnlVect
 }
 
 /**
- * Extracts a sub vector from a vector V. The components to be extracted are
+ * Extract a sub vector from a vector V. The components to be extracted are
  * sepcified by the indices listed in the vector ind
  *
  * @param V a vector
@@ -314,7 +314,7 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_subvect_with_ind) (const TYPE(PnlVect) *
 }
 
 /**
- * Extracts a sub vector from a vector V. The components to be extracted are
+ * Extract a sub vector from a vector V. The components to be extracted are
  * (i:i+len)
  *
  * @param V a vector
@@ -331,7 +331,7 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_subvect) (const TYPE(PnlVect) *V, int i,
 }
 
 /**
- * creates a TYPE(PnlVect)
+ * Create a TYPE(PnlVect)
  * @param m number of elements
  * @param x an array of BASE used to fill the TYPE(PnlVect). should be of length
  * m. No test can be done about it.
@@ -350,7 +350,7 @@ TYPE(PnlVect) FUNCTION(pnl_vect,wrap_array)(const BASE* x, int m)
 }
 
 /**
- * Creates a sub matrix from a matrix M only containing the indices present in
+ * Create a sub matrix from a matrix M only containing the indices present in
  * (indi ,indj)
  *
  * @param val (output) a vector containing M( (indi(:),indj(:)) )
@@ -376,7 +376,7 @@ void FUNCTION(pnl_vect,extract_submat) (TYPE(PnlVect) *val, const TYPE(PnlMat) *
 }
 
 /**
- * Creates a sub matrix from a matrix M only containing the indices present in
+ * Create a sub matrix from a matrix M only containing the indices present in
  * (indi ,indj)
  *
  * @param M a vector
@@ -410,7 +410,7 @@ void FUNCTION(pnl_vect,free)(TYPE(PnlVect) **v)
 }
 
 /**
- * Resizes a TYPE(PnlVect). If the new size is smaller than the
+ * Resize a TYPE(PnlVect). If the new size is smaller than the
  * current one, no memory is freed and the datas are
  * kept. If the new size is larger than the current one, a
  * new pointer is allocated. The old datas are kept.
@@ -426,7 +426,7 @@ int FUNCTION(pnl_vect,resize)(TYPE(PnlVect) * v, int size)
 
 
 /**
- * resizes a PnlVect. If the new size is smaller than the
+ * Resize a PnlVect. If the new size is smaller than the
  * current one, no memory is freed. If the new size is larger
  * than the current mem_size, a new pointer is allocated, the old
  * data are copied and the old pointer is freed.
@@ -464,7 +464,7 @@ int FUNCTION(pnl_vect,CONCAT2(resize_from_,BASE))(TYPE(PnlVect) *v, int size, BA
 }
 
 /**
- * resizes a PnlVect. If the new size is smaller than the current one, no
+ * Resize a PnlVect. If the new size is smaller than the current one, no
  * memory is freed. If the new size is larger than the current mem_size, a new
  * pointer is allocated.
  *
@@ -493,7 +493,7 @@ void FUNCTION(pnl_vect,CONCAT2(set_,BASE))(TYPE(PnlVect) * v, BASE x)
     {v->array[i] = x; }
 }
 /**
- * Sets v to zero v[i]=0 for all i
+ * Set v to zero v[i]=0 for all i
  *
  * @param v a TYPE(PnlVect)
  */
@@ -506,7 +506,7 @@ void FUNCTION(pnl_vect, set_zero)(TYPE(PnlVect) * v)
 }
 
 /**
- * copies a TYPE(PnlVect)
+ * Copie a TYPE(PnlVect)
  *
  * @param v a constant TYPE(PnlVect) pointer
  * @return a TYPE(PnlVect)
@@ -520,7 +520,7 @@ TYPE(PnlVect) * FUNCTION(pnl_vect, copy)(const TYPE(PnlVect) * v)
 }
 
 /**
- * clones a TYPE(PnlVect)
+ * Clone a TYPE(PnlVect)
  *
  * @param clone needs to be already allocated.
  * @param v a constant TYPE(PnlVect)pointer
@@ -538,7 +538,7 @@ void FUNCTION(pnl_vect, clone)(TYPE(PnlVect) * clone,
 
 
 /**
- * Prints a TYPE(PnlVect) to a  file with one entry per line.
+ * Print a TYPE(PnlVect) to a  file with one entry per line.
  *
  * @param V a(constant) TYPE(PnlVect)
  * @param fic a file descriptor.
@@ -554,7 +554,7 @@ void FUNCTION(pnl_vect, fprint)(FILE *fic, const TYPE(PnlVect) * V)
 }
 
 /**
- * prints a TYPE(PnlVect) with one entry per line
+ * Print a TYPE(PnlVect) with one entry per line
  *
  * @param V a(constant) TYPE(PnlVect).
  */
@@ -564,7 +564,7 @@ void FUNCTION(pnl_vect, print)(const TYPE(PnlVect) * V)
 }
 
 /**
- * Prints a TYPE(PnlVect) to a  file with as a row vector
+ * Print a TYPE(PnlVect) to a  file with as a row vector
  *
  * @param V a(constant) TYPE(PnlVect)
  * @param fic a file descriptor.
@@ -581,7 +581,7 @@ void FUNCTION(pnl_vect, fprint_asrow)(FILE *fic, const TYPE(PnlVect) * V)
 }
 
 /**
- * prints a TYPE(PnlVect) as a row vector
+ * Print a TYPE(PnlVect) as a row vector
  *
  * @param V a(constant) TYPE(PnlVect).
  */
@@ -592,7 +592,7 @@ void FUNCTION(pnl_vect, print_asrow)(const TYPE(PnlVect) * V)
 
 
 /**
- * prints a TYPE(PnlVect) in a format compatible with Nsp to a file
+ * Print a TYPE(PnlVect) in a format compatible with Nsp to a file
  *
  * @param V a(constant) TYPE(PnlVect).
  * @param fic a file descriptor.
@@ -612,7 +612,7 @@ void FUNCTION(pnl_vect, fprint_nsp)(FILE *fic, const TYPE(PnlVect) * V)
 
 
 /**
- * prints a TYPE(PnlVect) in a format compatible with Nsp
+ * Print a TYPE(PnlVect) in a format compatible with Nsp
  *
  * @param V a(constant) TYPE(PnlVect).
  */
@@ -776,7 +776,7 @@ typedef struct {
 } TYPE(cell);
 
 /**
- * Finds the indices i for which f == 1
+ * Find the indices i for which f == 1
  *
  * @param index (output) a vector of integers
  * @param type a string composed by the letters 'r' and 'v'.
@@ -956,7 +956,7 @@ void FUNCTION(pnl_vect,cumsum)(TYPE(PnlVect) *lhs)
 
 
 /**
- * computes the scalar product x' * y
+ * Compute the scalar product x' * y
  *
  * @param x : first right hand side  TYPE(PnlVect)
  * @param y : second right hand side TYPE(PnlVect)
@@ -985,7 +985,7 @@ BASE FUNCTION(pnl_vect,scalar_prod)(const TYPE(PnlVect) *x,
 }
 
 /**
- * computes the product of the components of a vector
+ * Compute the product of the components of a vector
  *
  * @param V a a TYPE(PnlVect)
  * @return the product of the components of V
@@ -1002,7 +1002,7 @@ BASE FUNCTION(pnl_vect,prod)(const TYPE(PnlVect) *V)
 }
 
 /**
- * computes the cumulative product of the components of a vector
+ * Compute the cumulative product of the components of a vector
  *
  * @param V a a TYPE(PnlVect)
  */
@@ -1024,7 +1024,7 @@ void FUNCTION(pnl_vect,cumprod)(TYPE(PnlVect) *V)
 /* Swap  */
 
 /**
- * Swaps two elements of a vector
+ * Swap two elements of a vector
  *
  * @param v a TYPE(PnlVect)
  * @param i first index
@@ -1068,7 +1068,7 @@ void FUNCTION(pnl_vect, reverse)(TYPE(PnlVect) * v)
 #if defined ORDERED
 
 /**
- * returns the index of the minimum of the elements of an array
+ * Return the index of the minimum of the elements of an array
  *
  * @param a a vector
  * @param n the size of the vector
@@ -1101,7 +1101,7 @@ void FUNCTION(pnl_array, min_index)(const BASE *a, int n, int incr,
 }
 
 /**
- * returns the index of the maximum of the elements of an array
+ * Return the index of the maximum of the elements of an array
  *
  * @param a a vector
  * @param n the size of the vector
@@ -1134,7 +1134,7 @@ void FUNCTION(pnl_array, max_index)(const BASE *a, int n, int incr,
 }
 
 /**
- * returns the indices of the minimum and maximum of the elements of an array
+ * Return the indices of the minimum and maximum of the elements of an array
  *
  * @param a a vector
  * @param n the size of the vector
@@ -1180,7 +1180,7 @@ void FUNCTION(pnl_array, minmax_index)(const BASE *a, int n, int incr,
 }
 
 /**
- * returns the maximum of the components of a vector
+ * Return the maximum of the components of a vector
  *
  * @param V a vector
  * @return the maximum of the components of V
@@ -1195,7 +1195,7 @@ BASE FUNCTION(pnl_vect,max)(const TYPE(PnlVect) *V)
 }
 
 /**
- * returns the minimum of the components of a vector
+ * Return the minimum of the components of a vector
  *
  * @param V a vector
  * @return the minimum of the components of V
@@ -1212,7 +1212,7 @@ BASE FUNCTION(pnl_vect,min)(const TYPE(PnlVect) *V)
 
 
 /**
- * returns the minimum and maximum of the elements of a vector
+ * Return the minimum and maximum of the elements of a vector
  *
  * @param V a vector
  * @param min_out is a pointer to BASE, contains the minimum on exit
@@ -1226,7 +1226,7 @@ void FUNCTION(pnl_vect, minmax)(BASE *min_out, BASE *max_out, const TYPE(PnlVect
 
 
 /**
- * returns the index of the maximum of the elements of a vector
+ * Return the index of the maximum of the elements of a vector
  *
  * @param m a vector
  * @param imax_out is a pointer to int, contains the index of the maximum on exit
@@ -1238,7 +1238,7 @@ void FUNCTION(pnl_vect, max_index)(BASE *max_out, int *imax_out, const TYPE(PnlV
 }
 
 /**
- * returns the index of the minimum of the elements of a vector
+ * Return the index of the minimum of the elements of a vector
  *
  * @param m a vector
  * @param imin_out is a pointer to BASE, contains the index of the minimum on
@@ -1251,7 +1251,7 @@ void FUNCTION(pnl_vect, min_index)(BASE *min_out, int *imin_out, const TYPE(PnlV
 }
 
 /**
- * returns the indices of the minimum and maximum of the elements of a vector
+ * Return the indices of the minimum and maximum of the elements of a vector
  *
  * @param m a vector
  * @param imin_out is a pointer to BASE, contains the index of the minimum on exit
@@ -1350,7 +1350,7 @@ void FUNCTION(pnl_vect, qsort_index)(TYPE(PnlVect) * m, PnlVectInt *t, char orde
 /************************************************************************/
 
 /**
- * Computes a x + b y and stores the result in y
+ * Compute a x + b y and stores the result in y
  *
  * @param a BASE
  * @param x a vector
@@ -1389,7 +1389,7 @@ void FUNCTION(pnl_vect,axpby)(BASE a, const TYPE(PnlVect) *x,  BASE b, TYPE(PnlV
 }
 
 /**
- * returns the X norm of a vector
+ * Return the X norm of a vector
  *
  * @param V a TYPE(PnlVect)
  * @param f a pointer's function on a norm function
@@ -1397,15 +1397,17 @@ void FUNCTION(pnl_vect,axpby)(BASE a, const TYPE(PnlVect) *x,  BASE b, TYPE(PnlV
  */
 static double FUNCTION(pnl_vect,norm_x)(const TYPE(PnlVect) *V,double(*f)(BASE))
 {
-  int i=0;
+  int i;
   double p=0;
-  while(i<V->size)
-    { p+=(*f)(PNL_GET(V, i)); i++;}
+  for ( i=0 ; i<V->size ; i++ )
+    { 
+      p += (*f)(PNL_GET(V, i));
+    }
   return p;
 }
 
 /**
- * returns the two norm of a vector
+ * Return the two norm of a vector
  *
  * @param V  TYPE(PnlVect)
  * @return  the square root of the sum of the square value of components of V
@@ -1416,7 +1418,7 @@ double FUNCTION(pnl_vect,norm_two)(const TYPE(PnlVect) *V)
 }
 
 /**
- * returns the one norm of a vector
+ * Return the one norm of a vector
  *
  * @param V a vector
  * @return the sum of the absolute value of components of V
@@ -1427,26 +1429,25 @@ double FUNCTION(pnl_vect,norm_one)(const TYPE(PnlVect) *V)
 }
 
 /**
- * returns the infty norm of a vector
+ * Return the infty norm of a vector
  *
  * @param V a TYPE(PnlVect)
  * @return the maximum of the absolute value of components of V
  */
 double FUNCTION(pnl_vect,norm_infty)(const TYPE(PnlVect) *V)
 {
-  int i=0;
-  double p=0.0;
-  double q=0.0;
-  while(i<V->size)
+  int i;
+  double p=0., q=0.;
+  for ( i=0 ; i<V->size ; i++ )
     {
-      q=NORMONE(PNL_GET(V,i));
-      p=((p<q)?q:p);i++;
+      q = NORMONE(PNL_GET(V,i));
+      p = MAX(p, q);
     }
   return p;
 }
 
 /**
- * Extracts a sub vector and wrap it into a vector.
+ * Extract a sub vector and wrap it into a vector.
  * @param V a vector
  * @param i the index of first element to be extracted
  * @param s the size of extracted vector
@@ -1472,7 +1473,7 @@ TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect)(const TYPE(PnlVect) *V, int i,int
 }
 
 /**
- * Extracts  a sub vector and wrap it into a vector.
+ * Extract  a sub vector and wrap it into a vector.
  * @param V a vector
  * @param i the index of first element to be extracted
  * @param j the index of last  element to be extracted
@@ -1485,7 +1486,7 @@ TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect_with_last)(const TYPE(PnlVect) *V,
 }
 
 /**
- * Wraps a matrix into a PnlVect
+ * Wrap a matrix into a PnlVect
  * @param M a matrix
  * @return a vector (not a pointer) whose array pointer is the address of the
  * first element of the matrix M. No copying is done.

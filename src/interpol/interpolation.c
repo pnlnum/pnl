@@ -111,7 +111,7 @@ static void coord_by_periodicity(double *t,const double x[], int n, int *i)
 }
 
 /**
- * computes n-dimensionnal linear interpolation.
+ * Compute n-dimensionnal linear interpolation.
  *
  *
  * @param x the grid abscissae  (x[j][] are the grid abscissae in the dimension j)
@@ -236,7 +236,7 @@ void nsp_nlinear_interp(double **x , double val[], int dim[], int n,
 
 
 /**
- * solves a linear system Ax = b where A is symetric tridiagonal
+ * Solve a linear system Ax = b where A is symetric tridiagonal
  *        (and supposed positive definite) using a LDL^t factorization
  * Caution: no zero pivot detection (A is supposed positive definite)
  *
@@ -419,7 +419,7 @@ static void nsp_derivd(double *x, double *u, double *du, int n, int inc, int typ
 
 
 /**
- * computes a cubic spline interpolation function
+ * Compute a cubic spline interpolation function
  * in Hermite form (ie computes the derivatives d(i) of the
  * spline in each interpolation point (x(i), y(i)))
  *
@@ -1056,7 +1056,7 @@ static void nsp_eval_bicubic_patch_with_grad(double xx, double yy, double xk, do
 
 
 /**
- * evaluates the bicubic defined by the triplet  (@param x @param y @param C) at the points (x_eval,y_eval). If @param dzdx_eval is
+ * Evaluate the bicubic defined by the triplet  (@param x @param y @param C) at the points (x_eval,y_eval). If @param dzdx_eval is
  * not NULL it is assumed that @param dzdx_eval and @param dzdy_eval are arrays of size @param m and the first derivatives
  * at the (x_eval,y_eval) points are also computed. The bicubic (@param x @param y @param C) could be build to interpolate
  * grid values with either #nsp_bicubic_spline or  #nsp_bicubic_subspline.
@@ -1162,7 +1162,7 @@ static void nsp_eval_bicubic(double *x, double *y, double *C, int nx, int ny, do
 /* ***********************************/
 
 /** 
- * Computes a bicubic spline s (s is twice continuously differentiable)
+ * Compute a bicubic spline s (s is twice continuously differentiable)
  * which interpolates the @param u values on the grid defined by @param x
  * and @param y. (s(x[i],y[j]) must be equal to u(i,j)=u[i*nx*j]). The
  * spline is completly defined with the triplet (@param x @param y @param
@@ -1188,7 +1188,7 @@ int pnl_bicubic_spline(PnlVect *x, PnlVect *y, PnlMat *u, double *C, int type)
 
 
 /**
- * evaluates the bicubic defined by the triplet  (x y C) at the points
+ * Evaluate the bicubic defined by the triplet  (x y C) at the points
  * (x_eval,y_eval). If  dzdx_eval is not NULL it is assumed that dzdx_eval
  * and dzdy_eval are arrays of size m and the first derivatives at the
  * (x_eval,y_eval) points are also computed. The bicubic (x y C) could be

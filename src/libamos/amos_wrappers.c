@@ -448,7 +448,7 @@ dcomplex pnl_complex_bessel_h2_scaled( double v, dcomplex z )
 }
 
 /**
- * Computes the ratio of modified Bessel functions of the first kind
+ * Compute the ratio of modified Bessel functions of the first kind
  * I_{v+1} / I_v
  * 
  * @param v a real number, the order of the Bessel function
@@ -791,7 +791,7 @@ dcomplex pnl_bessel_h2_scaled( double v, double x )
 }
 
 /**
- * Computes the ratio of modified Bessel functions of the first kind
+ * Compute the ratio of modified Bessel functions of the first kind
  * I_{v+1} / I_v
  * 
  * @param v a real number, the order of the Bessel function

@@ -31,7 +31,7 @@
 
 
 /**
- * Creates a new PnlObject from a PnlType
+ * Create a new PnlObject from a PnlType
  * 
  * @param type is one the PNL_TYPE_xxx values used to create a given specialised
  * PnlObject

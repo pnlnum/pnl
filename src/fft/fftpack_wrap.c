@@ -310,7 +310,7 @@ int pnl_real_ifft2(double *re, double *im, int n)
 }
 
 /** 
- * Computes the 2D FFT a matrix
+ * Compute the 2D FFT a matrix
  * 
  * @param data a complex matrix
  * 
@@ -352,7 +352,7 @@ int pnl_fft2d_inplace (PnlMatComplex *data)
 }
 
 /**
- * Computes the 2D FFT a matrix
+ * Compute the 2D FFT a matrix
  *
  * @param in input complex matrix
  * @param out on output contains the FFT of the input matrix. This matrix
@@ -366,7 +366,7 @@ int pnl_fft2d (const PnlMatComplex *in, PnlMatComplex *out)
 }
 
 /** 
- * Computes the 2D inverse (backward) FFT a matrix
+ * Compute the 2D inverse (backward) FFT a matrix
  * 
  * @param data a complex matrix
  * 
@@ -409,7 +409,7 @@ int pnl_ifft2d_inplace (PnlMatComplex *data)
 }
 
 /**
- * Computes the inverse 2D FFT a matrix
+ * Compute the inverse 2D FFT a matrix
  *
  * @param in input complex matrix
  * @param out on output contains the FFT of the input matrix. This matrix
@@ -423,7 +423,7 @@ int pnl_ifft2d (const PnlMatComplex *in, PnlMatComplex *out)
 }
 
 /**
- * Computes the 2D FFT a real matrix
+ * Compute the 2D FFT a real matrix
  *
  * @param in input real matrix
  * @param out on output contains the FFT of the input matrix. This matrix
@@ -492,7 +492,7 @@ int pnl_real_fft2d (const PnlMat *in, PnlMatComplex *out)
 }
 
 /**
- * Computes the inverse 2D FFT a complex matrix known to be the 2D FFT of a
+ * Compute the inverse 2D FFT a complex matrix known to be the 2D FFT of a
  * real matrix
  *
  * @param in input complex matrix. This matrix is lost on output

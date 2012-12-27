@@ -32,7 +32,7 @@
 #include "pnl/pnl_mathtools.h"
 
 /*
- * Computes the Gamma function for complex argument
+ * Compute the Gamma function for complex argument
  *
  * gr + gi i = Gamma(x + i y) if kf = 1
  * gr + gi i = log(Gamma(x + i y)) if kf = 0

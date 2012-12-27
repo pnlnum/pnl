@@ -52,7 +52,7 @@ static int pnl_dsyev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvect
 
 
 /**
- * Checks if a (real) matrix is symmetric
+ * Check if a (real) matrix is symmetric
  * @param A a real matrix
  * @return TRUE or FALSE
  */
@@ -70,7 +70,7 @@ static int pnl_mat_is_sym (const PnlMat *A)
 }
 
 /**
- * Puts 0 in the lower triangular part of a square matrix
+ * Put 0 in the lower triangular part of a square matrix
  * @param A a real matrix
  */
 static void pnl_mat_make_upper (PnlMat *A)
@@ -86,7 +86,7 @@ static void pnl_mat_make_upper (PnlMat *A)
 }
 
 /**
- * computes a A P = QR factorisation. 
+ * Compute a A P = QR factorisation. 
  *
  * @param Q an orthonormal matrix on exit
  * @param R an upper triangular matrix on exit
@@ -173,7 +173,7 @@ int pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
 }
 
 /**
- * solves the linear system A x = b with A P = QR.  *
+ * Solve the linear system A x = b with A P = QR.  *
  * @param x a PnlVect containing the solution on exit
  * @param Q a orthogonal PnlMat 
  * @param R an upper triagular PnlMat 
@@ -199,7 +199,7 @@ int pnl_mat_qr_syslin (PnlVect *x, const PnlMat *Q, const PnlMat *R,
 
 /**
  * Wrapper to dgeev
- * Computes the eigenvalues and eigenvectors of a real symmetric matrix
+ * Compute the eigenvalues and eigenvectors of a real symmetric matrix
  *
  * @param v a vector containing the eigenvalues on exit
  * @param P a matrix containing the eigenvectors on exit (P is orthonormal)
@@ -246,7 +246,7 @@ static int pnl_dsyev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvect
 
 /**
  * Wrapper to dgeev
- * Computes the eigenvalues and eigenvectors of a real non symmetric matrix
+ * Compute the eigenvalues and eigenvectors of a real non symmetric matrix
  *
  * @param v a vector containing the eigenvalues on exit
  * @param P a matrix containing the eigenvectors on exit
@@ -305,7 +305,7 @@ static int pnl_dgeev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvect
 }
 
 /**
- * Computes the eigenvalues and eigenvectors of a real matrix
+ * Compute the eigenvalues and eigenvectors of a real matrix
  *
  * @param v a vector containing the eigenvalues on exit
  * @param P a matrix containing the eigenvectors on exit
@@ -396,7 +396,7 @@ int pnl_mat_log (PnlMat *B, const PnlMat *A)
 }
 
 /**
- * Solves A * X = B in the least square sense
+ * Solve A * X = B in the least square sense
  *
  * A an m x n matrix with m >= n
  * X on exit is an n x nrhs matrix
@@ -462,7 +462,7 @@ int pnl_mat_ls_mat (const PnlMat *A, PnlMat *B)
 }
 
 /**
- * Solves A * x = b in the least square sense
+ * Solve A * x = b in the least square sense
  *
  * A an m x n matrix with m >= n
  * X on exit is an vector of size n

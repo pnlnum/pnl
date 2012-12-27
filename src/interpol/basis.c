@@ -45,7 +45,7 @@
 
 
 /** 
- * Computes the the maximum degree which can be put on the last component
+ * Compute the the maximum degree which can be put on the last component
  * is the total order of the rest is partial.
  *
  * The total degree function is the sum of the partial degrees
@@ -62,7 +62,7 @@ static int freedom_degree_sum (int total, int partial)
 }
 
 /** 
- * Computes the the maximum degree which can be put on the last component
+ * Compute the the maximum degree which can be put on the last component
  * is the total order of the rest is partial.
  *
  * The total degree function is the product of the partial degrees
@@ -79,7 +79,7 @@ static int freedom_degree_prod (int total, int partial)
 }
 
 /**
- * Returns the total degree (sum of the partial degrees) of the polynomial
+ * Return the total degree (sum of the partial degrees) of the polynomial
  * represented by line i of T
  *
  * @param T a matrix of integers representing the decomposition of the mutli-d
@@ -99,7 +99,7 @@ static int count_sum_degree (const PnlMatInt *T, int i)
 }
 
 /**
- * Returns the total degree (product of the partial degrees) of the polynomial
+ * Return the total degree (product of the partial degrees) of the polynomial
  * represented by line i of T
  *
  * The total degree is the product of MAX(1, d_i) where d_i is the partial
@@ -128,7 +128,7 @@ static int count_prod_degree (const PnlMatInt *T, int i)
 }
 
 /**
- * Returns the total hyperbolic degree at the power q of the polynomial
+ * Return the total hyperbolic degree at the power q of the polynomial
  * represented by line i of T
  *
  * @param T a matrix of integers representing the decomposition of the mutli-d
@@ -152,7 +152,7 @@ static double count_hyperbolic_degree (const PnlMatInt *T, int i, double q)
 }
 
 /**
- * Copies T_prev(T_previ, :) into T(Ti,:)
+ * Copy T_prev(T_previ, :) into T(Ti,:)
  *
  * @param T an integer matrix with more columns than that T_prev
  * @param T_prev an integer matrix containing the last tensor computed
@@ -170,7 +170,7 @@ static void copy_previous_tensor (PnlMatInt *T, PnlMatInt *T_prev, int Ti, int T
 }
 
 /**
- * Computes the integer matrix representing the decomposition as a tensor
+ * Compute the integer matrix representing the decomposition as a tensor
  * product of the elements of * the multi-b basis onto the 1-d basis
  *
  * @param nb_variates the number of variates
@@ -229,7 +229,7 @@ static PnlMatInt* compute_tensor (int nb_func, int nb_variates)
 }
 
 /**
- * Computes the number of elements with total degree less or equal than degree
+ * Compute the number of elements with total degree less or equal than degree
  * in the basis with (T->n + 1) variates
  *
  * @param T the tensor matrix of the basis with n-1 variates
@@ -259,7 +259,7 @@ static int compute_nb_elements (const PnlMatInt *T, int degree,
 }
 
 /**
- * Computes the tensor matrix of the nb_variates variate basis with a total degree less or
+ * Compute the tensor matrix of the nb_variates variate basis with a total degree less or
  * equal than degree. The total degree is defined by the function
  * count_degree
  *
@@ -347,7 +347,7 @@ static PnlMatInt* compute_tensor_from_prod_degree (int degree, int nb_variates)
 }
 
 /**
- * Computes the tensor matrix of the n-variate basis with a
+ * Compute the tensor matrix of the n-variate basis with a
  * hyperbolic degree of order q less or equal than degree
  *
  * @param n the number of variates of the basis.
@@ -777,7 +777,7 @@ int pnl_basis_type_register (const char *name, double (*f)(double, int),
 
 static char pnl_basis_label[] = "PnlBasis";
 /**
- * Creates an empty PnlBasis
+ * Create an empty PnlBasis
  *
  * @return a PnlBasis
  */
@@ -806,7 +806,7 @@ PnlBasis* pnl_basis_new ()
 }
 
 /**
- * Creates a PnlBasis and stores it into its first argument
+ * Create a PnlBasis and stores it into its first argument
  *
  * @param b an already allocated basis (as returned by pnl_basis_new for instance)
  * @param index the index of the family to be used
@@ -837,7 +837,7 @@ void  pnl_basis_set_from_tensor (PnlBasis *b, int index, const PnlMatInt *T)
 }
 
 /**
- * Returns a  PnlBasis
+ * Return a  PnlBasis
  *
  * @param index the index of the family to be used
  * @param T the tensor of the multi-dimensionnal basis. No copy of T is done, so
@@ -853,7 +853,7 @@ PnlBasis* pnl_basis_create_from_tensor (int index, const PnlMatInt *T)
 }
 
 /**
- * Returns a  PnlBasis
+ * Return a  PnlBasis
  *
  * @param index the index of the family to be used
  * @param nb_func the maximum number of functions which may be used
@@ -869,7 +869,7 @@ PnlBasis* pnl_basis_create (int index, int nb_func, int nb_variates)
 }
 
 /**
- * Returns a  PnlBasis
+ * Return a  PnlBasis
  *
  * @param index the index of the family to be used
  * @param degree the maximum total degree of the elements in the basis
@@ -885,7 +885,7 @@ PnlBasis* pnl_basis_create_from_degree (int index, int degree, int nb_variates)
 }
 
 /**
- * Returns a  PnlBasis
+ * Return a  PnlBasis
  *
  * @param index the index of the family to be used
  * @param degree the maximum total degree of the elements in the basis
@@ -901,7 +901,7 @@ PnlBasis* pnl_basis_create_from_prod_degree (int index, int degree, int nb_varia
 }
 
 /**
- * Returns a  PnlBasis built using an hyperbolic set of indices
+ * Return a  PnlBasis built using an hyperbolic set of indices
  *
  * @param index the index of the family to be used
  * @param degree the hyperbolic maximum degree of the
@@ -957,7 +957,7 @@ PnlBasis* pnl_basis_copy (const PnlBasis *B)
 }
 
 /** 
- * Sets the center and scale field of a PnlBasis using the domain on which
+ * Set the center and scale field of a PnlBasis using the domain on which
  * the basis will be used
  * 
  * @param B
@@ -986,7 +986,7 @@ void pnl_basis_set_domain (PnlBasis *B, const PnlVect *xmin, const PnlVect *xmax
 }
 
 /** 
- * Sets the center and scale field of a PnlBasis
+ * Set the center and scale field of a PnlBasis
  *
  * @param B
  * @param center center of the domain
@@ -1012,7 +1012,7 @@ void pnl_basis_set_reduced (PnlBasis *B, const PnlVect *center, const PnlVect *s
 }
 
 /**
- * Frees a PnlBasis
+ * Free a PnlBasis
  *
  * @param B
  */
@@ -1029,7 +1029,7 @@ void pnl_basis_free (PnlBasis **B)
 }
 
 /**
- * Prints a PnlBasis
+ * Print a PnlBasis
  * @param B a basis
  */
 void pnl_basis_print (const PnlBasis *B)
@@ -1084,7 +1084,7 @@ double pnl_basis_ik (const PnlBasis *b, const double *x, int i, int k)
 }
 
 /**
- * Evaluates the i-th element of the basis b at the point x
+ * Evaluate the i-th element of the basis b at the point x
  *
  * @param b a PnlBasis
  * @param x a C array containing the coordinates of the point at which to
@@ -1224,7 +1224,7 @@ double pnl_basis_i_D2 (const PnlBasis *b, const double *x, int i, int j1, int j2
 }
 
 /**
- * Evaluates a linear combination of basis functions at x
+ * Evaluate a linear combination of basis functions at x
  *
  * @param coef a vector typically computed by pnl_basis_fit_ls
  * @param x the coordinates of the point at which to evaluate the function
@@ -1248,7 +1248,7 @@ double pnl_basis_eval (const PnlBasis *basis, const PnlVect *coef, const double 
 }
 
 /**
- * Evaluates the first derivative with respect to x[i] of a linear combination
+ * Evaluate the first derivative with respect to x[i] of a linear combination
  * of basis functions at x
  *
  * @param coef a vector typically computed by pnl_basis_fit_ls
@@ -1274,7 +1274,7 @@ double pnl_basis_eval_D (const PnlBasis *basis, const PnlVect *coef, const doubl
 }
 
 /**
- * Evaluates the second derivative with respect to x[i] and x[j] of a linear
+ * Evaluate the second derivative with respect to x[i] and x[j] of a linear
  * combination of basis functions at x
  *
  * @param coef a vector typically computed by pnl_basis_fit_ls
@@ -1301,7 +1301,7 @@ double pnl_basis_eval_D2 (const PnlBasis *basis, const PnlVect *coef, const doub
 }
 
 /**
- * Evaluates the function, its gradient and Hessian matrix at x. The function is
+ * Evaluate the function, its gradient and Hessian matrix at x. The function is
  * defined by  linear combination sum (coef .* f(x))
 
  *
@@ -1405,7 +1405,7 @@ void pnl_basis_eval_derivs (const PnlBasis *b, const PnlVect *coef, const double
 }
 
 /**
- * Finds the best approximation of the function defined by f(x(i,:)) = y(i)
+ * Find the best approximation of the function defined by f(x(i,:)) = y(i)
  *
  * @param basis a PnlBasis
  * @param x the matrix of points at which we know the value of the function. One line
@@ -1480,7 +1480,7 @@ double pnl_basis_ik_vect (const PnlBasis *b, const PnlVect *x, int i, int k)
 }
 
 /**
- * Evaluates the i-th element of the basis b at the point x
+ * Evaluate the i-th element of the basis b at the point x
  *
  * @param b a PnlBasis
  * @param x a PnlVect containing the coordinates of the point at which to
@@ -1527,7 +1527,7 @@ double pnl_basis_i_D2_vect (const PnlBasis *b, const PnlVect *x, int i, int j1, 
 }
 
 /**
- * Evaluates a linear combination of basis functions at x
+ * Evaluate a linear combination of basis functions at x
  *
  * @param coef a vector typically computed by pnl_basis_fit_ls
  * @param x the coordinates of the point at which to evaluate the function
@@ -1541,7 +1541,7 @@ double pnl_basis_eval_vect (const PnlBasis *basis, const PnlVect *coef, const Pn
 }
 
 /**
- * Evaluates the first derivative with respect to x[i] of a linear combination
+ * Evaluate the first derivative with respect to x[i] of a linear combination
  * of basis functions at x
  *
  * @param coef a vector typically computed by pnl_basis_fit_ls
@@ -1557,7 +1557,7 @@ double pnl_basis_eval_D_vect (const PnlBasis *basis, const PnlVect *coef, const 
 }
 
 /**
- * Evaluates the second derivative with respect to x[i] and x[j] of a linear
+ * Evaluate the second derivative with respect to x[i] and x[j] of a linear
  * combination of basis functions at x
  *
  * @param coef a vector typically computed by pnl_basis_fit_ls
@@ -1574,7 +1574,7 @@ double pnl_basis_eval_D2_vect (const PnlBasis *basis, const PnlVect *coef, const
 }
 
 /**
- * Evaluates the function, its gradient and Hessian matrix at x. The function is
+ * Evaluate the function, its gradient and Hessian matrix at x. The function is
  * defined by  linear combination sum (coef .* f(x))
 
  *

@@ -315,7 +315,7 @@ void pnl_list_print (const PnlList *L)
 }
 
 /**
- * Removes and frees cell i of a list
+ * Remove and frees cell i of a list
  *
  * @param L a PnlList
  * @param i the index of the cell to be removed

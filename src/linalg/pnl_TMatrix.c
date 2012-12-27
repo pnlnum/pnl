@@ -34,7 +34,7 @@ static char pnl_matrix_label[] = "PnlMatObject";
 static char pnl_hmatrix_label[] = "PnlHmatObject";
 
 /**
- * Creates a PnlMatObject which is the parent type of all matrices
+ * Create a PnlMatObject which is the parent type of all matrices
  */
 PnlMatObject* pnl_mat_object_new ()
 {
@@ -57,7 +57,7 @@ PnlMatObject* pnl_mat_object_new ()
 }
 
 /**
- * Frees a PnlMatObject
+ * Free a PnlMatObject
  */
 void pnl_mat_object_free (PnlMatObject **o)
 {
@@ -70,7 +70,7 @@ void pnl_mat_object_free (PnlMatObject **o)
 }
 
 /**
- * Resizes a PnlMatObject.  If the new size is smaller than the current one, no
+ * Resize a PnlMatObject.  If the new size is smaller than the current one, no
  * memory is freed. If the new size is larger than the current mem_size, a new
  * pointer is allocated. The old data are kept.
  *
@@ -123,7 +123,7 @@ int pnl_mat_object_resize(PnlMatObject *M, int m, int n)
 
 
 /**
- * Creates a PnlHmatObject which is the parent type of all hyper-matrices
+ * Create a PnlHmatObject which is the parent type of all hyper-matrices
  */
 PnlHmatObject* pnl_hmat_object_new ()
 {
@@ -144,7 +144,7 @@ PnlHmatObject* pnl_hmat_object_new ()
 }
 
 /**
- * Frees a Hmat object
+ * Free a Hmat object
  */
 void pnl_hmat_object_free(PnlHmatObject **H)
 {
@@ -177,7 +177,7 @@ void pnl_hmat_compute_pdims (int *pdims, int ndim, const int *dims)
 
 
 /** 
- * Computes the value of the linear index (ie. the index in the field
+ * Compute the value of the linear index (ie. the index in the field
  * array) corresponding to the multi-index defined by tab
  * 
  * @param H a Hmat
@@ -195,7 +195,7 @@ int pnl_hmat_compute_linear_index (PnlHmatObject *H, int *tab)
 }
 
 /**
- * resizes a PnlHmatObject.
+ * Resize a PnlHmatObject.
  *
  * If the new size is smaller than the current one, no
  * memory is free. If the new size is larger than the

@@ -811,7 +811,7 @@ static dcmt_state *alloc_dcmt_state(int n)
 
 
 /** 
- * Frees a dcmt_state
+ * Free a dcmt_state
  * 
  * @param mts
  */
@@ -822,7 +822,7 @@ void pnl_dcmt_free(dcmt_state **mts)
 }
 
 /** 
- * Frees an array of dcmt_state
+ * Free an array of dcmt_state
  * 
  * @param mtss an array of dcmt_state
  * @param count number of elements in mtss
@@ -1433,7 +1433,7 @@ static dcmt_state **get_mt_parameters_st(int p, int start_id,
 }
 
 /**
- * Creates a MT generator. It returns the same generator upon two calls with
+ * Create a MT generator. It returns the same generator upon two calls with
  * the same value of seed
  * 
  * @param seed : seed for original mt19937 to generate parameter.
@@ -1445,7 +1445,7 @@ dcmt_state* pnl_dcmt_get_parameter(ulong seed)
 }
 
 /**
- * Creates a MT generator. It returns the same generator upon two calls with
+ * Create a MT generator. It returns the same generator upon two calls with
  * the same value of seed
  * 
  * @param id: an integer between 0 and 65536. Choosing different id ensures
@@ -1459,7 +1459,7 @@ dcmt_state* pnl_dcmt_get_parameter_id (int id, ulong seed)
 }
 
 /**
- * Creates a MT generator. When called several times, the returned generators
+ * Create a MT generator. When called several times, the returned generators
  * are independent
  */
 int pnl_dcmt_create (dcmt_state *mts)
@@ -1487,7 +1487,7 @@ int pnl_dcmt_create (dcmt_state *mts)
 }
 
 /** 
- * Creates a DCMT generator with identifier id
+ * Create a DCMT generator with identifier id
  * 
  * @param id the identifier of generator. Tow generators with different ids
  * are independent
@@ -1509,7 +1509,7 @@ PnlRng* pnl_rng_dcmt_create_id (int id, ulong seed)
 }
 
 /**
- * Creates an array of DCMT
+ * Create an array of DCMT
  *
  * @param n number of generators to be created
  * @param seed the seed used to initialise the standard MT used to find new
@@ -1527,7 +1527,7 @@ dcmt_state** pnl_dcmt_create_array(int n, ulong seed, int *count)
 }
 
 /**
- * Creates an array of PnlRng with PNL_RNG_DCMT type. Each PnlRng is
+ * Create an array of PnlRng with PNL_RNG_DCMT type. Each PnlRng is
  * associated to a different id.  Note that each generator must
  * be initialized with pnl_rng_sseed before usage.
  *
@@ -1563,7 +1563,7 @@ PnlRng** pnl_rng_dcmt_create_array_id (int start_id, int max_id, ulong seed, int
 
 
 /**
- * Creates an array of PnlRng filled with DCMT
+ * Create an array of PnlRng filled with DCMT
  *
  * @param n number of generators to be created
  * @param seed the seed used to initialise the standard MT used to find new
@@ -1576,7 +1576,7 @@ PnlRng** pnl_rng_dcmt_create_array (int n, ulong seed, int *count)
 }
 
 /**
- * Sets the seed of a DCMT
+ * Set the seed of a DCMT
  *
  * @param s an unsigned integer used as seed
  * @param mts a dcmt
@@ -1608,7 +1608,7 @@ void pnl_dcmt_sseed(dcmt_state *mts, ulong s)
 }
 
 /**
- * Generates an unsigned integer using the generator specified by @param mts
+ * Generate an unsigned integer using the generator specified by @param mts
  */
 ulong pnl_dcmt_genrand(dcmt_state *mts) 
 {
@@ -1651,7 +1651,7 @@ ulong pnl_dcmt_genrand(dcmt_state *mts)
 }
 
 /**
- * Generates a double number between 0 and 1 using the generator specified by @param mts
+ * Generate a double number between 0 and 1 using the generator specified by @param mts
  */
 double pnl_dcmt_genrand_double (dcmt_state *mts)
 {

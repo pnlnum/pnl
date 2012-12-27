@@ -215,7 +215,7 @@ dcomplex Complex_polar(double r, double theta)
 }
 
 /**
- * Prints a complex numbers
+ * Print a complex numbers
  *
  * @param z a complex number
  */
@@ -327,7 +327,7 @@ double Csqr_norm(dcomplex z)
 }
 
 /**
- * modulus function
+ * Modulus function
  * @param z a complex number
  * @return sqrt(x^2 + y^2)
  */
@@ -439,7 +439,6 @@ dcomplex Cexp(dcomplex z)
   return Complex_polar (exp(z.r), z.i);
 }
 
-
 /**
  * the unitary exponential function
  * @param t   a real number
@@ -449,7 +448,6 @@ dcomplex CIexp(double t)
 {
   return Complex ( cos ( t ), sin ( t ) );
 }
-
 
 /**
  *  z^y  the power function

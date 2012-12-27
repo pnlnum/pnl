@@ -207,8 +207,6 @@ double fdtri( a, b, y )
       return( NAN );
     }
   y = 1.0-y;
-  a = a;
-  b = b;
   /* Compute probability for x = 0.5.  */
   w = incbet( 0.5*b, 0.5*a, 0.5 );
   /* If that is greater than y, then the solution w < .5.

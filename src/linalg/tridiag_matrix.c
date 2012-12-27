@@ -46,7 +46,7 @@ extern int C2F(dgttrs)(char *trans, int *n, int *nrhs, double *dl, double
                       int *ldb, int *info);
 
 /**
- * Solves a tridiagonal system defined by matrix whose three diagonals are
+ * Solve a tridiagonal system defined by matrix whose three diagonals are
  * defined by three values.
  * @param low the double value of M(i,i-1)
  * @param diag the double value of M(i,i)
@@ -108,7 +108,7 @@ PnlTridiagMatObject* pnl_tridiag_mat_object_new ()
 }
 
 /**
- * Frees a PnlTridiagMatObject
+ * Free a PnlTridiagMatObject
  *
  * @param v a PnlTridiagMatObject**.
  */
@@ -126,7 +126,7 @@ void pnl_tridiag_mat_object_free(PnlTridiagMatObject **v)
 
 
 /**
- * Creates an empty PnlTridiagMat
+ * Create an empty PnlTridiagMat
  */
 PnlTridiagMat* pnl_tridiag_mat_new()
 {
@@ -141,7 +141,7 @@ PnlTridiagMat* pnl_tridiag_mat_new()
 }
 
 /**
- * creates a PnlTridiagMat
+ * Create a PnlTridiagMat
  * @param size number of rows
  * @return a PnlTridiagMat pointer
  */
@@ -160,7 +160,7 @@ PnlTridiagMat* pnl_tridiag_mat_create(int size)
 }
 
 /**
- * creates a PnlTridiagMat
+ * Create a PnlTridiagMat
  * @param size number of rows and colusizes
  * @param x used to fill the diagonal matrix with
  * @param y used to fill the extra diagonal matrix with
@@ -184,7 +184,7 @@ PnlTridiagMat* pnl_tridiag_mat_create_from_two_double(int size, double x, double
 }
 
 /**
- * creates a PnlTridiagMat
+ * Create a PnlTridiagMat
  * @param size number of rows
  * @param x used to fill the three diagonals
  * @return a PnlTridiagMat pointer
@@ -195,7 +195,7 @@ PnlTridiagMat* pnl_tridiag_mat_create_from_double(int size, double x)
 }
 
 /**
- * creates a PnlTridiagMat
+ * Create a PnlTridiagMat
  * @param size number of rows
  * @param D principal diagonal
  * @param DU diagonal v[i,i+1]
@@ -215,7 +215,7 @@ PnlTridiagMat* pnl_tridiag_mat_create_from_ptr(int size, const double* DL, const
 }
 
 /**
- * Clones a PnlTridiagMat
+ * Clone a PnlTridiagMat
  * @param T a PnlTridiagMat
  * @param clone a PnlTridiagMat, on exit contains a copy of T
  */
@@ -229,7 +229,7 @@ void pnl_tridiag_mat_clone(PnlTridiagMat *clone, const PnlTridiagMat *T)
 }
 
 /**
- * Copies a PnlTridiagMat
+ * Copie a PnlTridiagMat
  * @param T a PnlTridiagMat
  */
 PnlTridiagMat* pnl_tridiag_mat_copy(const PnlTridiagMat *T)
@@ -242,7 +242,7 @@ PnlTridiagMat* pnl_tridiag_mat_copy(const PnlTridiagMat *T)
 
 
 /**
- * Creates a tridiagonal matrix from a standard matrix by only taking into
+ * Create a tridiagonal matrix from a standard matrix by only taking into
  * account the three main diagonals.
  *
  * @param mat a PnlMat
@@ -266,7 +266,7 @@ PnlTridiagMat* pnl_tridiag_mat_create_from_mat (const PnlMat * mat)
 }
 
 /**
- * Creates a standard matrix from a tridiagonal matrix.
+ * Create a standard matrix from a tridiagonal matrix.
  * All elements but those of the diagonal, upper diagonal and lower diagonal are set to 0
  * @param T a PnlTridiagMat
  * @return a PnlMat
@@ -288,7 +288,7 @@ PnlMat* pnl_tridiag_mat_to_mat (const PnlTridiagMat * T)
 
 
 /**
- * Frees a PnlTridiagMat
+ * Free a PnlTridiagMat
  *
  * @param v a PnlTridiagMat**.
  */
@@ -300,7 +300,7 @@ void pnl_tridiag_mat_free(PnlTridiagMat **v)
 }
 
 /**
- * Resizes a PnlTridiagMat.
+ * Resize a PnlTridiagMat.
  *
  * If the new size is smaller than the current one, no
  * memory is free. If the new size is larger than the
@@ -351,7 +351,7 @@ int pnl_tridiag_mat_resize(PnlTridiagMat *v, int size)
 
 
 /**
- * Sets the value of self[d,d+up]=x
+ * Set the value of self[d,d+up]=x
  *
  * @param self : a PnlTridiagMat
  * @param d : index of element
@@ -367,7 +367,7 @@ void pnl_tridiag_mat_set (PnlTridiagMat *self, int d, int up, double x)
 }
 
 /**
- * gets the value of if self[d,d+up]
+ * Get the value of if self[d,d+up]
  *
  * @param self : a PnlTridiagMat
  * @param d : index of element
@@ -384,7 +384,7 @@ double pnl_tridiag_mat_get(const PnlTridiagMat *self, int d, int up)
 }
 
 /**
- * Returns the address of self[d,d+up] to be used as a lvalue
+ * Return the address of self[d,d+up] to be used as a lvalue
  *
  * @param self : a PnlTridiagMat
  * @param d : index of element
@@ -593,7 +593,7 @@ PnlVect* pnl_tridiag_mat_mult_vect(const PnlTridiagMat *mat, const PnlVect *vec)
 
 
 /**
- * Prints a tridiagonal matrix to a file
+ * Print a tridiagonal matrix to a file
  *
  * @param fic a file descriptor.
  * @param M a PnlTridiagMat pointer.
@@ -622,7 +622,7 @@ void pnl_tridiag_mat_fprint (FILE *fic, const PnlTridiagMat *M)
 }
 
 /**
- * Prints a tridiagonal matrix to the standard output
+ * Print a tridiagonal matrix to the standard output
  *
  * @param M a PnlTridiagMat pointer.
  */
@@ -633,7 +633,7 @@ void pnl_tridiag_mat_print (const PnlTridiagMat *M)
 
 
 /**
- * solves the linear system A x = b
+ * Solve the linear system A x = b
  *
  * @param A a PnlTridiagMat. On exit, A is modified and becomes unusable.
  * @param b right hand side member. On exit b contains the solution x
@@ -654,7 +654,7 @@ int pnl_tridiag_mat_syslin_inplace (PnlTridiagMat *A, PnlVect *b)
 }
 
 /**
- * solves the linear system A x = b
+ * Solve the linear system A x = b
  *
  * @param A a PnlTridiagMat. On exit, A is modified and becomes unusable.
  * @param x contains the solution on exit
@@ -669,7 +669,7 @@ int pnl_tridiag_mat_syslin (PnlVect *x, PnlTridiagMat *A, const PnlVect *b)
 
 
 /**
- * Computes the scalar product <x,T * y>
+ * Compute the scalar product <x,T * y>
  *
  * @param x a real vector
  * @param T a tridiagonal matrix
@@ -766,7 +766,7 @@ PnlTridiagMatLUObject* pnl_tridiag_mat_lu_object_new ()
 }
 
 /**
- * Frees a PnlTridiagMatLUObject
+ * Free a PnlTridiagMatLUObject
  *
  * @param v a PnlTridiagMatLUObject**.
  */
@@ -786,7 +786,7 @@ void pnl_tridiag_mat_lu_object_free(PnlTridiagMatLUObject **v)
 
 
 /**
- * Creates an empty PnlTridiagMatLU
+ * Create an empty PnlTridiagMatLU
  */
 PnlTridiagMatLU* pnl_tridiag_mat_lu_new()
 {
@@ -801,7 +801,7 @@ PnlTridiagMatLU* pnl_tridiag_mat_lu_new()
 }
 
 /**
- * creates a PnlTridiagMatLU
+ * Create a PnlTridiagMatLU
  * @param size number of rows
  * @return a PnlTridiagMatLU pointer
  */
@@ -822,7 +822,7 @@ PnlTridiagMatLU* pnl_tridiag_mat_lu_create(int size)
 }
 
 /**
- * Clones a PnlTridiagMatLU
+ * Clone a PnlTridiagMatLU
  * @param T a PnlTridiagMatLU
  * @param clone a PnlTridiagMatLU, on exit contains a copy of T
  */
@@ -838,7 +838,7 @@ void pnl_tridiag_mat_lu_clone(PnlTridiagMatLU *clone, const PnlTridiagMatLU *T)
 }
 
 /**
- * Copies a PnlTridiagMatLU
+ * Copie a PnlTridiagMatLU
  * @param T a PnlTridiagMatLU
  */
 PnlTridiagMatLU* pnl_tridiag_mat_lu_copy(const PnlTridiagMatLU *T)
@@ -850,7 +850,7 @@ PnlTridiagMatLU* pnl_tridiag_mat_lu_copy(const PnlTridiagMatLU *T)
 }
 
 /**
- * Frees a PnlTridiagMatLU
+ * Free a PnlTridiagMatLU
  *
  * @param v a PnlTridiagMatLU**.
  */
@@ -862,7 +862,7 @@ void pnl_tridiag_mat_lu_free(PnlTridiagMatLU **v)
 }
 
 /**
- * Resizes a PnlTridiagMatLU.
+ * Resize a PnlTridiagMatLU.
  *
  * If the new size is smaller than the current one, no
  * memory is free. If the new size is larger than the
@@ -911,7 +911,7 @@ int pnl_tridiag_mat_lu_resize(PnlTridiagMatLU *v, int size)
 }
 
 /** 
- * Computes the LU factorisation of a tridiagonal matrix
+ * Compute the LU factorisation of a tridiagonal matrix
  * 
  * @param LU the LU decomposition. LU must be an already existing
  * PnlTridiagMatLU as returned by pnl_tridiag_mat_lu_new
@@ -937,7 +937,7 @@ int pnl_tridiag_mat_lu_compute (PnlTridiagMatLU *LU, const PnlTridiagMat *A)
 }
 
 /**
- * solves the linear system A x = b
+ * Solve the linear system A x = b
  *
  * @param LU a PnlTridiagMatLU. A must have been computed by a previous call
  * to pnl_mat_lu_compute
@@ -959,7 +959,7 @@ int pnl_tridiag_mat_lu_syslin_inplace (PnlTridiagMatLU *LU, PnlVect *b)
 }
 
 /**
- * solves the linear system A x = b
+ * Solve the linear system A x = b
  *
  * @param LU a PnlTridiagMatLU. A must have been computed by a previous call
  * to pnl_mat_lu_compute

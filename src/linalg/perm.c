@@ -30,7 +30,7 @@
 #include "pnl/pnl_mathtools.h"
 
 /**
- * Creates an empty PnlPermutation
+ * Create an empty PnlPermutation
  */
 PnlPermutation* pnl_permutation_new ()
 {
@@ -40,7 +40,7 @@ PnlPermutation* pnl_permutation_new ()
 }
 
 /**
- * Creates a PnlPermutation
+ * Create a PnlPermutation
  *
  * @param n length of the permutation
  */
@@ -52,7 +52,7 @@ PnlPermutation* pnl_permutation_create (int n)
 }
 
 /** 
- * Computes the inverse of a permutation vector
+ * Compute the inverse of a permutation vector
  * 
  * @param inv contains the inverse on output
  * @param p a permutation
@@ -70,7 +70,7 @@ void pnl_permutation_inverse (PnlPermutation *inv, const PnlPermutation *p)
 }
 
 /**
- * Frees a PnlPermutation
+ * Free a PnlPermutation
  *
  * @param p address of a permutation
  */
@@ -80,7 +80,7 @@ void pnl_permutation_free (PnlPermutation **p)
 }
 
 /**
- * Applies a PnlPermutation to a PnlVect
+ * Apply a PnlPermutation to a PnlVect
  * px[i] = x[p[i]]
  *
  * @param px on exit contains the permuted vector
@@ -100,7 +100,7 @@ void pnl_vect_permute (PnlVect *px, const PnlVect *x, const PnlPermutation *p)
 }
 
 /**
- * Applies the inverse of a PnlPermutation to a PnlVect
+ * Apply the inverse of a PnlPermutation to a PnlVect
  * px[p[i]] = x[i]
  *
  * @param px on exit contains the permuted vector
@@ -120,7 +120,7 @@ void pnl_vect_permute_inverse (PnlVect *px, const PnlVect *x, const PnlPermutati
 }
 
 /**
- * Applies a Permutation to an array in place
+ * Apply a Permutation to an array in place
  * x[i] = x[p[i]]
  *
  * @param x a C array of real values to permute. On exit, contains the permuted data.
@@ -169,7 +169,7 @@ static void pnl_permute_inplace (double *x, const int *p, int n)
 }
 
 /**
- * Applies the inverse of a Permutation to an array in place
+ * Apply the inverse of a Permutation to an array in place
  * x[p[i]] = x[i]
  *
  * @param x a C array of real values to permute. On exit, contains the permuted data.
@@ -220,7 +220,7 @@ static void pnl_permute_inverse_inplace (double *x, const int *p, int n)
 }
 
 /**
- * Applies a Permutation to a PnlVect in place
+ * Apply a Permutation to a PnlVect in place
  *
  * @param x the vector to permute. Contains the permuted vector on exit
  * @param p a permutation
@@ -232,7 +232,7 @@ void pnl_vect_permute_inplace (PnlVect *x, const PnlPermutation *p)
 }
   
 /**
- * Applies the inverse of a Permutation to a PnlVect in place
+ * Apply the inverse of a Permutation to a PnlVect in place
  *
  * @param x the vector to permute. Contains the permuted vector on exit
  * @param p a permutation
@@ -244,7 +244,7 @@ void pnl_vect_permute_inverse_inplace (PnlVect *x, const PnlPermutation *p)
 }
 
 /**
- * Applies a PnlPermutation to the columns of a matrix
+ * Apply a PnlPermutation to the columns of a matrix
  * pX[] = x[:,p]
  *
  * @param pX on exit contains the permuted matrix
@@ -267,7 +267,7 @@ void pnl_mat_col_permute (PnlMat *pX, const PnlMat *X, const PnlPermutation *p)
 }
 
 /**
- * Applies a PnlPermutation to the rows of a matrix
+ * Apply a PnlPermutation to the rows of a matrix
  * pX[] = x[p,:]
  *
  * @param pX on exit contains the permuted matrix
@@ -290,7 +290,7 @@ void pnl_mat_row_permute (PnlMat *pX, const PnlMat *X, const PnlPermutation *p)
 }
 
 /**
- * Prints a permutation to a file
+ * Print a permutation to a file
  *
  * @param fic a File decriptor
  * @param p the permutation to print
@@ -301,7 +301,7 @@ void pnl_permutation_fprint (FILE *fic, const PnlPermutation *p)
 }
 
 /**
- * Prints a permutation to the standard output
+ * Print a permutation to the standard output
  *
  * @param p the permutation to print
  */

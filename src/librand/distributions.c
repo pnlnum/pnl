@@ -34,7 +34,7 @@ static double ArrayOfRandomNumbers[DIM_MAX];
 
 
 /**
- * Simulates a standard random normal variable using Box Muller's algorithm
+ * Simulate a standard random normal variable using Box Muller's algorithm
  * @param rng a PnlRng
  * @return a normal random variable
  */
@@ -67,7 +67,6 @@ static double Gauss_BoxMuller(PnlRng *rng)
     }
 }
 
-
 /**
  * Simulation of a Gaussian standard variable.
  *
@@ -86,7 +85,6 @@ static double GaussMC(int dimension, int create_or_retrieve, int index, PnlRng *
     }
   return (ArrayOfRandomNumbers[index]);
 }
-
 
 /**
  * Simulation of a Gaussian standard variable for Quasi Monte Carlo Simulation,
@@ -107,7 +105,6 @@ static double GaussQMC(int dimension, int create_or_retrieve, int index,PnlRng *
     rng->Compute(rng,ArrayOfRandomNumbers);
   return pnl_inv_cdfnor(ArrayOfRandomNumbers[index]);
 }
-
 
 
 /*
@@ -184,7 +181,6 @@ double pnl_rand_exp(double lambda,int type_generator)
 
 }
 
-
 /**
  * Simulation of a Poisson process
  * @param lambda parameter of the law
@@ -197,7 +193,6 @@ long pnl_rand_poisson1(double lambda, double t, int type_generator)
   rng = pnl_rng_get_from_id(type_generator);
   return pnl_rng_poisson1(lambda, t, rng);
 }
-
 
 /**
  * Generate a uniformly distributed number on ]0,1).
@@ -213,7 +208,7 @@ double pnl_rand_uni (int type_generator)
 }
 
 /**
- * Generates a uniformly distributed number on [a,b].
+ * Generate a uniformly distributed number on [a,b].
  * @param a lower bound
  * @param b upper bound
  * @param type_generator index ot the generator to be used
@@ -228,9 +223,8 @@ double pnl_rand_uni_ab (double a, double b, int type_generator)
   return pnl_rng_uni_ab (a, b, rng);
 }
 
-
 /**
- * Generates a normally distributed number.
+ * Generate a normally distributed number.
  * @param type_generator index ot the generator to be used
  */
 double pnl_rand_normal (int type_generator)
@@ -241,7 +235,7 @@ double pnl_rand_normal (int type_generator)
 }
 
 /**
- * Computes a vector of independent and uniformly distributed r.v. on [a,b]
+ * Compute a vector of independent and uniformly distributed r.v. on [a,b]
  * @param G existing PnlVect containing the random numbers on exit
  * @param samples size of G (number of independent samples requested)
  * @param a lower bound
@@ -257,9 +251,8 @@ void pnl_vect_rand_uni(PnlVect *G, int samples, double a, double b, int type_gen
   pnl_vect_rng_uni (G, samples, a, b, rng);
 }
 
-
 /**
- * Computes a random vector uniformly distributed on [a,b]^dimension
+ * Compute a random vector uniformly distributed on [a,b]^dimension
  *
  * if the generator is a true PNL_MC generator, no difference between this
  * function and pnl_vect_rand_uni. In case of a PNL_QMC generator, this
@@ -281,9 +274,8 @@ void pnl_vect_rand_uni_d (PnlVect *G, int dimension, double a, double b, int typ
   pnl_vect_rng_uni_d(G, dimension, a, b, rng);
 }
 
-
 /**
- * Computes a vector of independent and normaly distributed r.v. on R
+ * Compute a vector of independent and normaly distributed r.v. on R
  *
  * @param samples number of samples
  * @param G : the vector of gaussian numbers, must already be allocated.
@@ -298,9 +290,8 @@ void pnl_vect_rand_normal (PnlVect *G, int samples, int type_generator)
   pnl_vect_rng_normal (G, samples, rng);
 }
 
-
 /**
- * Computes a random vector normally distributed on R^dimension.
+ * Compute a random vector normally distributed on R^dimension.
  *
  * if the generator is a true PNL_MC generator, no difference between this
  * function and pnl_vect_rand_uni. In case of a PNL_QMC generator, this
@@ -321,7 +312,7 @@ void pnl_vect_rand_normal_d (PnlVect *G, int dimension, int type_generator)
 }
 
 /**
- * Computes a matrix with independent and uniformly distributed rows on [a,b]
+ * Compute a matrix with independent and uniformly distributed rows on [a,b]
  *
  * the samples have values in [a, b] (space of dimension dimension)
  *
@@ -343,9 +334,8 @@ void pnl_mat_rand_uni(PnlMat *M, int samples, int dimension,
   pnl_mat_rng_uni (M, samples, dimension, a, b, rng);
 }
 
-
 /**
- * Computes a matrix with independent and uniformly distributed rows on [a,b]^dimension.
+ * Compute a matrix with independent and uniformly distributed rows on [a,b]^dimension.
  *
  * the samples have values in [a, b] (space of dimension dimension)
  *
@@ -369,7 +359,7 @@ void pnl_mat_rand_uni2(PnlMat *M, int samples, int dimension,
 }
 
 /**
- * Computes a matrix with independent and normally distributed rows on R^dimension.
+ * Compute a matrix with independent and normally distributed rows on R^dimension.
  * The samples have values in R^dimension
  *
  * @param M : the matrix of gaussian numbers, must already be allocated
@@ -389,9 +379,8 @@ void pnl_mat_rand_normal(PnlMat *M, int samples, int dimension,
   pnl_mat_rng_normal (M, samples, dimension, rng);
 }
 
-
 /**
- * Simulates Gamma distribution
+ * Simulate Gamma distribution
  *
  * @param a
  * @param b
@@ -409,7 +398,7 @@ double pnl_rand_gamma (double a, double b, int gen)
 }
 
 /**
- * Simulates a centered Chi square
+ * Simulate a centered Chi square
  *
  * @param nu a real number, the number of degrees of freedom
  * @param gen the generator type
@@ -428,7 +417,7 @@ double pnl_rand_chi2  (double nu, int gen)
 }
 
 /** 
- * Generates a random variable with Bessel distribution with parameters nu
+ * Generate a random variable with Bessel distribution with parameters nu
  * and a
  * 
  * @param nu a real number > -1
@@ -498,7 +487,6 @@ double pnl_rng_exp(double lambda,PnlRng *rng)
   return (double) (-log(x)/lambda);
 }
 
-
 /**
  * Simulation of a Poisson process
  * @param lambda parameter of the law
@@ -518,9 +506,8 @@ long pnl_rng_poisson1(double lambda, double t, PnlRng *rng)
   return Nt-1;
 }
 
-
 /**
- * Generates a uniformly distributed number on ]0,1).
+ * Generate a uniformly distributed number on ]0,1).
  * @param rng generator to use
  *
  * @see pnl_rng_uni_ab
@@ -534,7 +521,7 @@ double pnl_rng_uni (PnlRng *rng)
 }
 
 /**
- * Generates a uniformly distributed number on [a,b].
+ * Generate a uniformly distributed number on [a,b].
  * @param a lower bound
  * @param b upper bound
  * @param rng generator to use
@@ -548,9 +535,8 @@ double pnl_rng_uni_ab (double a, double b, PnlRng *rng)
   return a+(b-a)*u;
 }
 
-
 /**
- * Generates a normally distributed number.
+ * Generate a normally distributed number.
  * @param rng generator to use
  */
 double pnl_rng_normal (PnlRng *rng)
@@ -566,7 +552,7 @@ double pnl_rng_normal (PnlRng *rng)
 }
 
 /**
- * Computes a vector of independent and uniformly distributed r.v. on [a,b]
+ * Compute a vector of independent and uniformly distributed r.v. on [a,b]
  * @param G existing PnlVect containing the random numbers on exit
  * @param samples size of G (number of independent samples requested)
  * @param a lower bound
@@ -587,9 +573,8 @@ void pnl_vect_rng_uni(PnlVect *G, int samples, double a, double b, PnlRng *rng)
     }
 }
 
-
 /**
- * Computes a random vector uniformly distributed on [a,b]^dimension
+ * Compute a random vector uniformly distributed on [a,b]^dimension
  *
  * if the generator is a true PNL_MC generator, no difference between this
  * function and pnl_vect_rng_uni. In case of a PNL_QMC generator, this
@@ -626,9 +611,8 @@ void pnl_vect_rng_uni_d (PnlVect *G, int dimension, double a, double b, PnlRng *
     }
 }
 
-
 /**
- * Computes a vector of independent and normaly distributed r.v. on R
+ * Compute a vector of independent and normaly distributed r.v. on R
  *
  * @param samples number of samples
  * @param G : the vector of gaussian numbers, must already be allocated.
@@ -657,9 +641,8 @@ void pnl_vect_rng_normal (PnlVect *G, int samples, PnlRng *rng)
     }
 }
 
-
 /**
- * Computes a random vector normally distributed on R^dimension.
+ * Compute a random vector normally distributed on R^dimension.
  *
  * if the generator is a true PNL_MC generator, no difference between this
  * function and pnl_vect_rng_uni. In case of a PNL_QMC generator, this
@@ -693,7 +676,7 @@ void pnl_vect_rng_normal_d (PnlVect *G, int dimension, PnlRng *rng)
 }
 
 /**
- * Computes a matrix with independent and uniformly distributed rows on [a,b]
+ * Compute a matrix with independent and uniformly distributed rows on [a,b]
  * ( a and b are vectors )
  *
  * the samples have values in [a, b] (space of dimension dimension)
@@ -738,9 +721,8 @@ void pnl_mat_rng_uni(PnlMat *M, int samples, int dimension,
     }
 }
 
-
 /**
- * Computes a  matrix with independent and uniformly distributed rows on [a,b]^dimension.
+ * Compute a  matrix with independent and uniformly distributed rows on [a,b]^dimension.
  *
  * the samples have values in [a, b] (space of dimension dimension)
  *
@@ -785,7 +767,7 @@ void pnl_mat_rng_uni2(PnlMat *M, int samples, int dimension,
 }
 
 /**
- * Computes a matrix with independent and normally distributed rows on R^dimension.
+ * Compute a matrix with independent and normally distributed rows on R^dimension.
  * The samples have values in R^dimension
  *
  * @param M : the matrix of gaussian numbers, must already be allocated
@@ -820,9 +802,8 @@ void pnl_mat_rng_normal(PnlMat *M, int samples, int dimension, PnlRng *rng)
     }
 }
 
-
 /**
- * Simulates Gamma distribution
+ * Simulate Gamma distribution
  *
  * @param a
  * @param b
@@ -871,7 +852,7 @@ double pnl_rng_gamma (double a, double b, PnlRng *rng)
 }
 
 /**
- * Simulates a centered Chi square
+ * Simulate a centered Chi square
  *
  * @param nu a real number, the number of degrees of freedom
  * @param rng generator to use
@@ -887,10 +868,8 @@ double pnl_rng_chi2  (double nu, PnlRng *rng)
   return 2. * pnl_rng_gamma ( nu / 2, 1.0, rng);
 }
 
-
-
 /** 
- * Generates a random variable with Bessel distribution with parameters nu
+ * Generate a random variable with Bessel distribution with parameters nu
  * and a. We refer to 
  * 
  * article{Devroye2002249,

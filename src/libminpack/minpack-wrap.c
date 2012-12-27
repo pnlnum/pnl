@@ -173,7 +173,7 @@ static int lmder_fcn (void *pnl_func, int m, int n, const double *x, double *fve
 }
 
 /**
- * Computes the root of a function 
+ * Compute the root of a function 
  * 
  * @param f a pointer to a PnlRnFuncRnDFunc. This an object for storing a
  * fonction f:R^n -> R^n and its Jacobian.
@@ -306,7 +306,7 @@ int pnl_root_fsolve (PnlRnFuncRnDFunc *f, PnlVect *x, PnlVect *fx,  double xtol,
 }
 
 /**
- * Computes the root of  a sum of squares
+ * Compute the root of  a sum of squares
  * 
  * @param f a pointer to a PnlRnFuncRmDFunc. This an object for storing a
  * fonction f:R^n -> R^m and its Jacobian.

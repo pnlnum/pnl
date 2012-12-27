@@ -78,7 +78,7 @@ static int unpack_rng (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Com
 static int unpack_list (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 
 /**
- * Computes the length of the buffer needed to pack the PnlObject
+ * Compute the length of the buffer needed to pack the PnlObject
  *
  * @param Obj a PnlObject actually containing a PnlVectorObject
  * @param comm an MPI Communicator
@@ -114,7 +114,7 @@ static int size_vector (const PnlObject *Obj, MPI_Comm comm, int *size)
 }
 
 /**
- * Computes the length of the buffer needed to pack the PnlObject
+ * Compute the length of the buffer needed to pack the PnlObject
  *
  * @param Obj a PnlObject actually containing a PnlMatObject
  * @param comm an MPI Communicator
@@ -151,7 +151,7 @@ static int size_matrix (const PnlObject *Obj, MPI_Comm comm, int *size)
 }
 
 /**
- * Computes the length of the buffer needed to pack the PnlObject
+ * Compute the length of the buffer needed to pack the PnlObject
  *
  * @param Obj a PnlObject actually containing a PnlMatObject
  * @param comm an MPI Communicator
@@ -182,7 +182,7 @@ static int size_tridiag_matrix (const PnlObject *Obj, MPI_Comm comm, int *size)
 }
 
 /**
- * Computes the length of the buffer needed to pack the PnlObject
+ * Compute the length of the buffer needed to pack the PnlObject
  *
  * @param Obj a PnlObject actually containing a PnlTridiagMatLUObject
  * @param comm an MPI Communicator
@@ -215,7 +215,7 @@ static int size_tridiag_matrix_lu (const PnlObject *Obj, MPI_Comm comm, int *siz
 }
 
 /**
- * Computes the length of the buffer needed to pack the PnlObject
+ * Compute the length of the buffer needed to pack the PnlObject
  *
  * @param Obj a PnlObject actually containing a PnlBandMatObject
  * @param comm an MPI Communicator
@@ -250,7 +250,7 @@ static int size_band_matrix (const PnlObject *Obj, MPI_Comm comm, int *size)
 }
 
 /**
- * Computes the length of the buffer needed to pack the PnlObject
+ * Compute the length of the buffer needed to pack the PnlObject
  *
  * @param Obj a PnlObject actually containing a PnlHmatObject
  * @param comm an MPI Communicator
@@ -287,7 +287,7 @@ static int size_hmatrix (const PnlObject *Obj, MPI_Comm comm, int *size)
 }
 
 /**
- * Computes the length of the buffer needed to pack the PnlObject
+ * Compute the length of the buffer needed to pack the PnlObject
  *
  * @param Obj a PnlObject actually containing a PnlBasi
  * @param comm an MPI Communicator
@@ -318,7 +318,7 @@ static int size_basis (const PnlObject *Obj, MPI_Comm comm, int *size)
 }
 
 /**
- * Computes the length of the buffer needed to pack the PnlObject
+ * Compute the length of the buffer needed to pack the PnlObject
  *
  * @param Obj a PnlObject actually containing a PnlRng
  * @param comm an MPI Communicator
@@ -357,7 +357,7 @@ static int size_rng (const PnlObject *Obj, MPI_Comm comm, int *size)
 }
 
 /**
- * Computes the length of the buffer needed to pack the PnlObject
+ * Compute the length of the buffer needed to pack the PnlObject
  *
  * @param Obj a PnlObject actually containing a PnlList
  * @param comm an MPI Communicator
@@ -392,7 +392,7 @@ static int size_list (const PnlObject *Obj, MPI_Comm comm, int *size)
 }
 
 /**
- * Packs a PnlVectObject
+ * Pack a PnlVectObject
  *
  * @param Obj a PnlObject containing a PnlVectObject
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -427,7 +427,7 @@ static int pack_vector (const PnlObject *Obj, void *buf, int bufsize, int *pos, 
 }
 
 /**
- * Packs a PnlMatObject
+ * Pack a PnlMatObject
  *
  * @param Obj a PnlObject containing a PnlMatObject
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -461,7 +461,7 @@ static int pack_matrix (const PnlObject *Obj, void *buf, int bufsize, int *pos, 
 }
 
 /**
- * Packs a PnlTridiagMatObject
+ * Pack a PnlTridiagMatObject
  *
  * @param Obj a PnlObject containing a PnlTridiagMatObject
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -489,7 +489,7 @@ static int pack_tridiag_matrix (const PnlObject *Obj, void *buf, int bufsize, in
 }
 
 /**
- * Packs a PnlTridiagMatLUObject
+ * Pack a PnlTridiagMatLUObject
  *
  * @param Obj a PnlObject containing a PnlTridiagMatLUObject
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -519,7 +519,7 @@ static int pack_tridiag_matrix_lu (const PnlObject *Obj, void *buf, int bufsize,
 }
 
 /**
- * Packs a PnlBandMatObject
+ * Pack a PnlBandMatObject
  *
  * @param Obj a PnlObject containing a PnlBandMatObject
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -549,7 +549,7 @@ static int pack_band_matrix (const PnlObject *Obj, void *buf, int bufsize, int *
 }
 
 /**
- * Packs a PnlHmatObject
+ * Pack a PnlHmatObject
  *
  * @param Obj a PnlObject containing a PnlHmatObject
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -583,7 +583,7 @@ static int pack_hmatrix (const PnlObject *Obj, void *buf, int bufsize, int *pos,
 }
 
 /**
- * Packs a PnlBasis
+ * Pack a PnlBasis
  *
  * @param Obj a PnlObject containing a PnlBasis
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -611,7 +611,7 @@ static int pack_basis (const PnlObject *Obj, void *buf, int bufsize, int *pos, M
 }
 
 /**
- * Packs a PnlRng
+ * Pack a PnlRng
  *
  * @param Obj a PnlObject containing a PnlRng
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -640,7 +640,7 @@ static int pack_rng (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI
 }
 
 /**
- * Packs a PnlList
+ * Pack a PnlList
  *
  * @param Obj a PnlObject containing a PnlList
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -669,7 +669,7 @@ static int pack_list (const PnlObject *Obj, void *buf, int bufsize, int *pos, MP
 }
 
 /**
- * Unpacks a PnlVectObject
+ * Unpack a PnlVectObject
  *
  * @param Obj a PnlObject containing a PnlVectObject
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -711,7 +711,7 @@ static int unpack_vector (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_
 }
 
 /**
- * Unpacks a PnlMatObject
+ * Unpack a PnlMatObject
  *
  * @param Obj a PnlObject containing a PnlMatObject
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -752,7 +752,7 @@ static int unpack_matrix (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_
 }
 
 /**
- * Unpacks a PnlTridiagMatObject
+ * Unpack a PnlTridiagMatObject
  *
  * @param Obj a PnlObject containing a PnlTridiagMatObject
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -781,7 +781,7 @@ static int unpack_tridiag_matrix (PnlObject *Obj, void *buf, int bufsize, int *p
 }
 
 /**
- * Unpacks a PnlTridiagMatObject
+ * Unpack a PnlTridiagMatObject
  *
  * @param Obj a PnlObject containing a PnlTridiagMatObject
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -812,7 +812,7 @@ static int unpack_tridiag_matrix_lu (PnlObject *Obj, void *buf, int bufsize, int
 }
 
 /**
- * Unpacks a PnlBandMatObject
+ * Unpack a PnlBandMatObject
  *
  * @param Obj a PnlObject containing a PnlBandMatObject
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -844,7 +844,7 @@ static int unpack_band_matrix (PnlObject *Obj, void *buf, int bufsize, int *pos,
 }
 
 /**
- * Unpacks a PnlHmatObject
+ * Unpack a PnlHmatObject
  *
  * @param Obj a PnlObject containing a PnlHmatObject
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -880,7 +880,7 @@ static int unpack_hmatrix (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI
 }
 
 /**
- * Unpacks a PnlBasis
+ * Unpack a PnlBasis
  *
  * @param Obj a PnlObject containing a PnlBasis
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -914,7 +914,7 @@ static int unpack_basis (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_C
 }
 
 /**
- * Unpacks a PnlRng
+ * Unpack a PnlRng
  *
  * @param Obj a PnlObject containing a PnlRng
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -952,7 +952,7 @@ static int unpack_rng (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Com
 }
 
 /**
- * Unpacks a PnlList
+ * Unpack a PnlList
  *
  * If the length of the list > 0, we try to unpack the buffer into the objects
  * already stored in list. An error occurs if the parent types of the stored
@@ -1019,7 +1019,7 @@ static int unpack_list (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Co
 
 
 /**
- * Computes the length of the buffer needed to pack the PnlObject and add this
+ * Compute the length of the buffer needed to pack the PnlObject and add this
  * value to size.
  *
  * @param Obj a PnlObject
@@ -1076,7 +1076,7 @@ int pnl_object_mpi_pack_size (const PnlObject *Obj, MPI_Comm comm, int *size)
 }
 
 /**
- * Packs a PnlOject
+ * Pack a PnlOject
  *
  * @param Obj a PnlObject
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -1130,7 +1130,7 @@ int pnl_object_mpi_pack (const PnlObject *Obj, void *buf, int bufsize, int *pos,
 }
 
 /**
- * Unpacks a PnlOject
+ * Unpack a PnlOject
  *
  * @param Obj a PnlObject
  * @param buf a buffer created by pnl_object_mpi_Pack of length bufsize used
@@ -1189,7 +1189,7 @@ int pnl_object_mpi_unpack (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI
 }
 
 /**
- * Performs a blocking send of a PnlObject
+ * Perform a blocking send of a PnlObject
  *
  * @param Obj a PnlObject to send
  * @param dest the rank of destination (integer)
@@ -1213,7 +1213,7 @@ int pnl_object_mpi_send (const PnlObject *Obj, int dest, int tag, MPI_Comm comm)
 }
 
 /**
- * Performs a blocking standard synchronous send of a PnlObject
+ * Perform a blocking standard synchronous send of a PnlObject
  *
  * @param Obj a PnlObject to send
  * @param dest the rank of destination (integer)
@@ -1237,7 +1237,7 @@ int pnl_object_mpi_ssend (const PnlObject *Obj, int dest, int tag, MPI_Comm comm
 }
 
 /**
- * Performs a blocking receive of a PnlObject
+ * Perform a blocking receive of a PnlObject
  *
  * @param Obj a PnlObject used to store the received object. It must have
  * already been allocated by a call to the proper pnl_xxx_new function. Note
@@ -1266,7 +1266,7 @@ int pnl_object_mpi_recv (PnlObject *Obj, int src, int tag, MPI_Comm comm, MPI_St
 }
 
 /**
- * Broadcasts  a PnlObject from the process with rank root to
+ * Broadcast  a PnlObject from the process with rank root to
  * all other processes of the group.
  * Note that this function calls MPI_Bcast twice because before receiving a
  * packed PnlObject every process must know the size of the packed object.
@@ -1303,7 +1303,7 @@ int pnl_object_mpi_bcast (PnlObject *Obj, int root, MPI_Comm comm)
 }
 
 /**
- * Performs a non-blocking send of a PnlObject
+ * Perform a non-blocking send of a PnlObject
  *
  * @param Obj a PnlObject to send
  * @param dest the rank of destination (integer)
@@ -1328,7 +1328,7 @@ int pnl_object_mpi_isend (const PnlObject *Obj, int dest, int tag, MPI_Comm comm
 }
 
 /**
- * Performs a non-blocking receive of a PnlObject. Unlike all the other
+ * Perform a non-blocking receive of a PnlObject. Unlike all the other
  * functions, this one does not unpack the object because it would require to
  * issue a call to MPI_Wait which would inhibit the effect of using Irecv
  * instead of Recv

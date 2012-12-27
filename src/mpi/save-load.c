@@ -23,7 +23,7 @@
 
 
 /**
- * Creates an array of PnlRng from a file
+ * Create an array of PnlRng from a file
  *
  * @param str The name of the file containing the generators
  * @param n the number of generators to be read
@@ -91,7 +91,7 @@ int pnl_rng_save_to_file (PnlRng **rngtab, int n, char *str)
 }
 
 /**
- * Saves a PnlObject into a stream
+ * Save a PnlObject into a stream
  *
  * @param obj a PnlObject
  * @param stream the stream obtained when opening a file. The file should
@@ -118,7 +118,7 @@ int pnl_object_save (PnlObject *obj, FILE *stream)
 }
 
 /**
- * Loads an object from a string buffer
+ * Load an object from a string buffer
  *
  * @param buf a string buffer
  * @param bufsize the size of the buffer in bytes
@@ -144,7 +144,7 @@ static PnlObject* load_from_buf (char *buf, int bufsize, int *pos)
 }
 
 /**
- * Loads a object from a stream
+ * Load a object from a stream
  *
  * @param stream the stream obtained when opening a file. The file should
  * opened as a binary file
@@ -175,7 +175,7 @@ PnlObject* pnl_object_load (FILE *stream)
 }
 
 /**
- * Loads objects from a stream and stores them into a PnlList
+ * Load objects from a stream and stores them into a PnlList
  *
  * @param stream the stream obtained when opening a file. The file should
  * opened as a binary file

@@ -81,7 +81,7 @@
 
 
 /**
- * This function searches for the root of F in the interval [x1, x2] with a
+ * Search for the root of F in the interval [x1, x2] with a
  * given tolerance
  *
  * @param F a PnlFunc wrapper for the true function under investigation

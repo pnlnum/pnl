@@ -21,7 +21,7 @@
 
 
 /**
- * Creates a Complex Vector from the arrays of its real and imaginary parts
+ * Create a Complex Vector from the arrays of its real and imaginary parts
  *
  * @param size size of the vector
  * @param re array of the real parts
@@ -45,7 +45,7 @@ PnlVectComplex* pnl_vect_complex_create_from_array(int size, const double *re, c
 }
 
 /**
- * Stores a Complex Vector in two real C arrays
+ * Store a Complex Vector in two real C arrays
  *
  * @param v a complex vector
  * @param re on exit contains the real parts of the elements of v. Must already be allocated.
@@ -67,7 +67,7 @@ void pnl_vect_complex_split_in_array(const PnlVectComplex* v, double *re, double
 }
 
 /**
- * Stores a Complex Vector in two real valued vectors
+ * Store a Complex Vector in two real valued vectors
  *
  * @param v a complex vector
  * @param re on exit contains the real parts of the elements of v. Must already be allocated.

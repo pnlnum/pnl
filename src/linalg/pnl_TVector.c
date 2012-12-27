@@ -35,7 +35,7 @@
 static char pnl_vector_label[] = "PnlVectObject";
 
 /**
- * Creates a PnlVectObject which is the parent type of all vectors
+ * Create a PnlVectObject which is the parent type of all vectors
  *
  * @return a PnlVectObject
  */
@@ -74,7 +74,7 @@ void pnl_vect_object_free(PnlVectObject **v)
 }
 
 /**
- * Resizes a PnlVectObject. If the new size is smaller than the
+ * Resize a PnlVectObject. If the new size is smaller than the
  * current one, no memory is freed and the datas are
  * kept. If the new size is larger than the current one, a
  * new pointer is allocated. The old datas are kept. 

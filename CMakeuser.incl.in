@@ -28,12 +28,12 @@ INSTALL_PREFIX=@CMAKE_INSTALL_PREFIX@
 BUILD_DIR=@CMAKE_CURRENT_BINARY_DIR@
 CC=@CMAKE_C_COMPILER@
 CXX=@CMAKE_CXX_COMPILER@
-MY_CPP_FLAGS=@MY_CPP_FLAGS@
-MY_C_FLAGS=@MY_C_FLAGS@
-MY_CXX_FLAGS=@MY_CXX_FLAGS@
+PNL_CPP_FLAGS=@PNL_CPP_FLAGS@
+PNL_C_FLAGS=@PNL_C_FLAGS@
+PNL_CXX_FLAGS=@PNL_CXX_FLAGS@
 
-includedir=$(INSTALL_PREFIX)/include
-libdir=$(INSTALL_PREFIX)/lib
+pnl_includedir=$(INSTALL_PREFIX)/include
+pnl_libdir=$(INSTALL_PREFIX)/lib
 LINK_TXT=$(BUILD_DIR)/examples/CMakeFiles/array_test.dir/link.txt
 # Drop the compiler name, fix after
 CMAKE_LINK_COMMAND1=$(shell cat ${LINK_TXT} | sed -e 's/^[^ ]* //' )
@@ -43,15 +43,15 @@ CMAKE_LINK_COMMAND=$(shell echo ${CMAKE_LINK_COMMAND1} | sed "s![^ ]*\(libpnl[^ 
 CMAKE_LINK_COMMAND_FLAGS_AFTER=$(shell echo ${CMAKE_LINK_COMMAND} | sed 's/^.*\.c\.o -o array_test//') 
 # Get flags at the beginning of the command
 CMAKE_LINK_COMMAND_FLAGS_BEFORE=$(shell echo ${CMAKE_LINK_COMMAND} | sed  -e 's/\( [^ ]*\.c\.o\)*//g' -e 's/\(.*\)-o array_test.*/\1/' ) 
-INCLUDES = -I$(includedir)
+PNL_INCLUDES = -I$(pnl_includedir)
 
 QUIET=--quiet
 
 #
 # Compiling directives
 #
-COMPILE = $(CC) $(INCLUDES) $(MY_CPP_FLAGS) $(CPPFLAGS) $(MY_C_FLAGS) $(CFLAGS)
-CXXCOMPILE = $(CXX) $(INCLUDES) $(MY_CPP_FLAGS) $(CPPFLAGS) $(MY_CXX_FLAGS) $(CXXFLAGS)
+COMPILE = $(CC) $(PNL_INCLUDES) $(PNL_CPP_FLAGS) $(CPPFLAGS) $(PNL_C_FLAGS) $(CFLAGS)
+CXXCOMPILE = $(CXX) $(PNL_INCLUDES) $(PNL_CPP_FLAGS) $(CPPFLAGS) $(PNL_CXX_FLAGS) $(CXXFLAGS)
 
 #*******************************************************************
 
@@ -165,10 +165,10 @@ __check_vars:
 	@echo "CC=$(CC)"
 	@echo "CXX=$(CXX)"
 	@echo "INSTALL_PREFIX=$(INSTALL_PREFIX)"
-	@echo "MY_C_FLAGS=$(MY_C_FLAGS)"
-	@echo "MY_CXX_FLAGS=$(MY_CXX_FLAGS)"
+	@echo "PNL_C_FLAGS=$(PNL_C_FLAGS)"
+	@echo "PNL_CXX_FLAGS=$(PNL_CXX_FLAGS)"
 	@echo "CMAKE_LINK_COMMAND=$(CMAKE_LINK_COMMAND)"
 	@echo "CMAKE_LINK_COMMAND_FLAGS_AFTER=$(CMAKE_LINK_COMMAND_FLAGS_AFTER)"
 	@echo "CMAKE_LINK_COMMAND_FLAGS_BEFORE=$(CMAKE_LINK_COMMAND_FLAGS_BEFORE)"
-	@echo "INCLUDES=$(INCLUDES)"
+	@echo "INCLUDES=$(PNL_INCLUDES)"
 	

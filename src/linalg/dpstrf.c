@@ -41,7 +41,7 @@
 
 
 /** 
- * Returns TRUE if x is NaN and FALSE otherwise
+ * Return TRUE if x is NaN and FALSE otherwise
  * 
  * @param x the address of a real number
  * 

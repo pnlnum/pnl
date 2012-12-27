@@ -25,7 +25,7 @@
 
 
 /**
- * Finds the root of a function
+ * Find the root of a function
  *
  * @param x_min a double pointer to an already existing PnlVect
  * @param x_max a double the root is suppose to be in [x_min, x_max] 
@@ -98,7 +98,7 @@ int pnl_find_root (PnlFuncDFunc *func, double x_min, double x_max, double tol, i
 
 
 /**
- * Finds the root of a function using Newton's algorithm
+ * Find the root of a function using Newton's algorithm
  *
  * @param x0 initial guess
  * @param epsrel if the relative improvement over the root is less than this value,
@@ -135,7 +135,7 @@ int pnl_root_newton (PnlFuncDFunc *func, double x0, double epsrel, double epsabs
 }
 
 /**
- * Finds the root of a function using a bisection method
+ * Find the root of a function using a bisection method
  *
  * @param xmin lower bound
  * @param xmax upper bound

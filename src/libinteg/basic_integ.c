@@ -22,7 +22,7 @@
 #include "pnl/pnl_integration.h"
 
 /**
- * Evaluates an integral over [x0, x1] with a non-adaptive method
+ * Evaluate an integral over [x0, x1] with a non-adaptive method
  *
  * @param *F a PnlFunc to be integrated 
  * @param x0 left corner of domain

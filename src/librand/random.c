@@ -890,7 +890,7 @@ PnlRng *PnlRngArray[]=
   };
 
 /**
- * Retuns the label of a generator 
+ * Retun the label of a generator 
  * 
  * @param id the index of a generator
  * 
@@ -920,7 +920,7 @@ char* pnl_rng_get_name (PnlRngType id)
 }
 
 /**
- * Initialises a generator
+ * Initialise a generator
  * @param type_generator index of the generator to be used
  * @param dimension dimension of the value space to simulate in. Only
  * used for PNL_QMC.
@@ -988,7 +988,7 @@ void pnl_rand_sseed (int type_generator, ulong seed)
 }
 
 /**
- * Determines the type of a generator
+ * Determine the type of a generator
  * @param type_generator index of the generator
  * @returns PNL_MC or PNL_QMC
  */
@@ -998,7 +998,7 @@ int pnl_rand_or_quasi (int type_generator)
 }
 
 /**
- * Frees an rng
+ * Free an rng
  *
  * @param rng the address of an rng
  */
@@ -1013,7 +1013,7 @@ void pnl_rng_free (PnlRng **rng)
 }
 
 /**
- * Creates an empty rng
+ * Create an empty rng
  */
 PnlRng* pnl_rng_new ()
 {
@@ -1041,7 +1041,7 @@ PnlRng* pnl_rng_new ()
 }
 
 /**
- * Initialises a rng of the given type.
+ * Initialise a rng of the given type.
  * Note that the fields size_State and state are set to zero, which implies
  * that the created generator is unusable. It is only usefull to receive an
  * already working generator.
@@ -1140,7 +1140,7 @@ void pnl_rng_init (PnlRng *rng, int type)
 }
 
 /**
- * Creates a rng of the given type.
+ * Create a rng of the given type.
  *
  * @param type the type of generator to create
  * @return a PnlRng or NULL if an error occurred
@@ -1328,7 +1328,7 @@ static void pnl_tausworthe_sseed (tausworthe_state *s, ulong seed)
 #undef LCG
 
 /**
- * Sets the seed of a Pseudo Random Number Generator
+ * Set the seed of a Pseudo Random Number Generator
  *
  * @param rng a PnlRng
  * @param seed an unsigned lon integer used to initialize the generator
@@ -1386,7 +1386,7 @@ void pnl_rng_sseed (PnlRng *rng, ulong seed)
 }
 
 /**
- * Sets the dimension of the state space for a PNL_QMC rng
+ * Set the dimension of the state space for a PNL_QMC rng
  *
  * @param rng a PnlRng
  * @param dim the dimension of the state space

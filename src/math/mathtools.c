@@ -24,7 +24,8 @@
 #include "pnl/pnl_specfun.h"
 
 
-/** nearest integer round off function
+/** 
+ * Compute the nearest integer 
  * @param s the value to be rounded
  * @return the rounded value casted to an integer. 1.5 is rounded to 1 and
  * -1.5 is rounded to -1
@@ -45,7 +46,8 @@ double trunc(double x)
 }
 #endif
 
-/** Computes the binomial coefficients with an error smaller than 1 for large
+/** 
+ * Compute the binomial coefficients with an error smaller than 1 for large
  * values of the parameter n
  * @param n an integer
  * @param p an integer
@@ -150,7 +152,7 @@ double pnl_pow_i (double x, int n)
 
 
 /** 
- * Computes the inverse of the cosh function based on its logarithmic
+ * Compute the inverse of the cosh function based on its logarithmic
  * representation. This function is alredy provided by the C99 libc as
  * acosh
  * 
@@ -177,7 +179,7 @@ double pnl_acosh (double x)
 }
 
 /** 
- * Computes the inverse of the asinh function based on its logarithmic
+ * Compute the inverse of the asinh function based on its logarithmic
  * representation. This function is alredy provided by the C99 libc as
  * asinh
  * 
@@ -205,7 +207,7 @@ double pnl_asinh (double x)
 }
 
 /** 
- * Computes the inverse of the tanh function based on its logarithmic
+ * Compute the inverse of the tanh function based on its logarithmic
  * representation. This function is alredy provided by the C99 libc as
  * tanh
  * 

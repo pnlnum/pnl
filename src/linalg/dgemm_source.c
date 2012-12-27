@@ -21,7 +21,7 @@
 
 
 /**
- * Computes C := alpha * A * B + C with alpha != 0
+ * Compute C := alpha * A * B + C with alpha != 0
  *
  * @param alpha a real coefficient
  * @param A a matrix
@@ -88,7 +88,7 @@ static void FUNCTION(pnl_mat,dgemmNN) (BASE alpha, const TYPE(PnlMat) *A, const 
 }
 
 /**
- * Computes C := alpha * A' * B + C with alpha != 0
+ * Compute C := alpha * A' * B + C with alpha != 0
  *
  * @param alpha a real coefficient
  * @param A a matrix
@@ -113,7 +113,7 @@ static void FUNCTION(pnl_mat,dgemmTN) (BASE alpha, const TYPE(PnlMat) *A, const 
 }
 
 /**
- * Computes C := alpha * A * B' + C with alpha != 0
+ * Compute C := alpha * A * B' + C with alpha != 0
  *
  * @param alpha a real coefficient
  * @param A a matrix
@@ -188,7 +188,7 @@ static void FUNCTION(pnl_mat,dgemmNT) (BASE alpha, const TYPE(PnlMat) *A, const 
 }
 
 /**
- * Computes C := alpha * A' * B' + C with alpha != 0
+ * Compute C := alpha * A' * B' + C with alpha != 0
  *
  * @param alpha a real coefficient
  * @param A a matrix
@@ -212,7 +212,7 @@ static void FUNCTION(pnl_mat,dgemmTT) (BASE alpha, const TYPE(PnlMat) *A, const 
 
 
 /**
- * Computes C := alpha * op (A) * op (B) + beta C
+ * Compute C := alpha * op (A) * op (B) + beta C
  *
  * @param transA a char :
  * 'N' or 'n' for op (A) = A  and 'T' or 't' for op (A) = A'

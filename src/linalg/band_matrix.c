@@ -55,7 +55,7 @@ PnlBandMatObject* pnl_band_mat_object_new ()
 }
 
 /**
- * Frees a PnlBandMatObject
+ * Free a PnlBandMatObject
  *
  * @param BM adress of a PnlBandMatObject.
  */
@@ -70,7 +70,7 @@ void pnl_band_mat_object_free(PnlBandMatObject **BM)
 }
 
 /**
- * Creates an empty band matrix
+ * Create an empty band matrix
  *
  * @return a PnlBandMat.
  */
@@ -119,7 +119,7 @@ PnlBandMat* pnl_band_mat_create (int m, int n, int nl, int nu)
 }
 
 /**
- * Creates a band matrix from a PnlMat
+ * Create a band matrix from a PnlMat
  *
  * @param M adress of a PnlMat
  * @param nl the number of lower diagonal
@@ -143,7 +143,7 @@ PnlBandMat* pnl_band_mat_create_from_mat(const PnlMat *M,int nl, int nu)
 }
 
 /**
- * Frees a PnlBandMat
+ * Free a PnlBandMat
  *
  * @param BM adress of a PnlBandMat.
  */
@@ -155,7 +155,7 @@ void pnl_band_mat_free(PnlBandMat **BM)
 }
 
 /**
- * Resizes a band matrix
+ * Resize a band matrix
  *
  * @param BM a PnlBandMat
  * @param m the new number of rows.
@@ -195,7 +195,7 @@ int pnl_band_mat_resize(PnlBandMat *BM, int m, int n, int nl, int nu)
 }
 
 /**
- * Clones a PnlBandMat
+ * Clone a PnlBandMat
  *
  * @param Bclone an already existing PnlBandMat.
  * @param BM a PnlBandMat
@@ -207,7 +207,7 @@ void pnl_band_mat_clone(PnlBandMat * Bclone, const PnlBandMat * BM)
 }
 
 /**
- * Copies a PnlBandMat
+ * Copy a PnlBandMat
  *
  * @param BM a PnlBandMat
  */
@@ -219,7 +219,7 @@ PnlBandMat* pnl_band_mat_copy(const PnlBandMat * BM)
   return Bcopy;
 }
 /**
- * Creates a PnlMat from a PnlBandMat
+ * Create a PnlMat from a PnlBandMat
  *
  * @param BM a PnlBandMat
  * @return a PnlMat
@@ -240,7 +240,7 @@ PnlMat* pnl_band_mat_to_mat(const PnlBandMat *BM)
 }
 
 /**
- * Prints a band matrix in a full format
+ * Print a band matrix in a full format
  *
  * @param BM a band matrix
  */
@@ -529,7 +529,7 @@ void pnl_band_mat_lAxpby(double l, const PnlBandMat *BM, const PnlVect *x, doubl
 
 
 /**
- * Enlarges a band matrix to store its LU decomposition
+ * Enlarge a band matrix to store its LU decomposition
  *
  * @param BM
  */
@@ -584,7 +584,7 @@ void pnl_band_mat_lu (PnlBandMat * BM, PnlVectInt *p)
 }
 
 /**
- * solves the linear system M x = b with M PnlBand Matrix.
+ * Solve the linear system M x = b with M PnlBand Matrix.
  *
  * @param BM a PnlBandMat
  * @param b right hand side member, used to the store solution on exit.
@@ -614,7 +614,7 @@ void pnl_band_mat_syslin_inplace (PnlBandMat *BM, PnlVect *b)
 }
 
 /**
- * Solves the linear system M x = b with M a PnlBand Matrix.
+ * Solve the linear system M x = b with M a PnlBand Matrix.
  *
  * @param BM a PnlBandMat
  * @param x a vector containing the solution on exit
@@ -627,7 +627,7 @@ void pnl_band_mat_syslin (PnlVect *x, PnlBandMat *BM, const PnlVect *b)
 }
 
 /**
- * solves the linear system M x = x with a M PnlBand Matrix.
+ * Solve the linear system M x = x with a M PnlBand Matrix.
  *
  * @param BM the LU decomposition of a PnlBandMat as computed by pnl_band_mat_lu
  * @param b right hand side member, used to the store solution on exit.
@@ -658,7 +658,7 @@ void pnl_band_mat_lu_syslin_inplace (const PnlBandMat *BM, const PnlVectInt *p, 
 }
 
 /**
- * Solves the linear system M x = b with M a PnlBand Matrix.
+ * Solve the linear system M x = b with M a PnlBand Matrix.
  *
  * @param BM the LU decomposition of a PnlBandMat as computed by pnl_band_mat_lu
  * @param p a vector of integers used to store the permutation

@@ -54,7 +54,7 @@ int FUNCTION(pnl_mat,chol) (TYPE(PnlMat) *M)
 }
 
 /** 
- * Computes the Cholesky decompisition with complete pivoting. 
+ * Compute the Cholesky decompisition with complete pivoting. 
  *
  *       P' * A * P = L  * L'
  *
@@ -102,7 +102,7 @@ int FUNCTION(pnl_mat,pchol) (TYPE(PnlMat) *M, double tol, int *rank, PnlVectInt 
 }
 
 /**
- * computes a P A = LU factorisation. On exit A contains the L and U
+ * Compute a P A = LU factorisation. On exit A contains the L and U
  * matrices. Note that the diagonal elements of L are all 1.
  *
  * @param A the matrix to decompose.
@@ -129,7 +129,7 @@ int FUNCTION(pnl_mat,lu) (TYPE(PnlMat) *A, PnlPermutation *p)
 }
 
 /**
- * solves an upper triangular linear system
+ * Solve an upper triangular linear system
  *
  * @param x already existing PnlVect that contains the solution on exit
  * @param A an upper triangular matric
@@ -157,7 +157,7 @@ int FUNCTION(pnl_mat,upper_syslin) (TYPE(PnlVect) *x, const TYPE(PnlMat) *A, con
 }
 
 /**
- * solves a lower triangular linear system
+ * Solve a lower triangular linear system
  *
  * @param x already existing PnlVect that contains the solution on exit
  * @param A a lower triangular matrix
@@ -185,7 +185,7 @@ int FUNCTION(pnl_mat,lower_syslin) (TYPE(PnlVect) *x, const TYPE(PnlMat) *A, con
 }
 
 /**
- * solves a symmetric DEFINITE POSITIVE linear system using the Cholesky
+ * Solve a symmetric DEFINITE POSITIVE linear system using the Cholesky
  * decomposition of the system A x = b
  *
  * @param chol the Cholesky decomposition of the system as computed by pnl_mat_chol
@@ -212,7 +212,7 @@ int FUNCTION(pnl_mat,chol_syslin_inplace) (const TYPE(PnlMat) *chol, TYPE(PnlVec
 }
 
 /**
- * solves a symmetric DEFINITE POSITIVE linear system using the Cholesky
+ * Solve a symmetric DEFINITE POSITIVE linear system using the Cholesky
  * decomposition of the system A x = b
  *
  * @param x already existing TYPE(PnlVect) that contains the solution on exit
@@ -227,7 +227,7 @@ int FUNCTION(pnl_mat,chol_syslin) (TYPE(PnlVect) *x, const TYPE(PnlMat) *chol, c
 }
 
 /**
- * solves a linear system A X = B using a Cholesky factorization of A where B
+ * Solve a linear system A X = B using a Cholesky factorization of A where B
  * is a matrix. Note that A must be symmetrix positive definite
  *
  * @param A contains the Cholesky decomposition of the matrix A as computed by
@@ -264,7 +264,7 @@ int FUNCTION(pnl_mat,chol_syslin_mat) (const TYPE(PnlMat) *A,  TYPE(PnlMat) *B)
 }
 
 /**
- * solves the linear system A x = b with P A = LU. For a symmetric definite
+ * Solve the linear system A x = b with P A = LU. For a symmetric definite
  * positive system, prefer pnl_mat_chol_syslin
  *
  * @param A a TYPE(PnlMat) containing the LU decomposition of A
@@ -301,7 +301,7 @@ int FUNCTION(pnl_mat,lu_syslin_inplace) (TYPE(PnlMat) *A, const PnlVectInt *p, T
 }
 
 /**
- * solves the linear system A x = b with P A = LU. For a symmetric definite
+ * Solve the linear system A x = b with P A = LU. For a symmetric definite
  * positive system, prefer pnl_mat_chol_syslin
  *
  * @param x existing vector that contains the solution on exit
@@ -318,7 +318,7 @@ int FUNCTION(pnl_mat,lu_syslin) (TYPE(PnlVect) *x, TYPE(PnlMat) *LU, const PnlVe
 
 
 /**
- * solves a linear system A x = b using a LU factorization
+ * Solve a linear system A x = b using a LU factorization
  * @param A the matrix of the system. On exit contains the LU decomposition of A.
  * @param b the r.h.s. member
  * @return OK or FAIL
@@ -337,7 +337,7 @@ int FUNCTION(pnl_mat,syslin_inplace) (TYPE(PnlMat) *A, TYPE(PnlVect) *b)
 }
 
 /**
- * solves a linear system A x = b using a LU factorization
+ * Solve a linear system A x = b using a LU factorization
  * @param x a TYPE(PnlVect) containing the solution on exit (must have already
  * been created )
  * @param A the matrix of the system
@@ -356,7 +356,7 @@ int FUNCTION(pnl_mat,syslin) (TYPE(PnlVect) *x, const TYPE(PnlMat) *A, const TYP
 }
 
 /**
- * solves a linear system A X = B using a LU factorization where B is a matrix
+ * Solve a linear system A X = B using a LU factorization where B is a matrix
  * @param A contains the L and U factors of the PA = LU factoratisation
  * previously computed by pnl_mat_lu
  * @param p the permutation associated to the PA = LU factotisation
@@ -401,7 +401,7 @@ int FUNCTION(pnl_mat,lu_syslin_mat) (const TYPE(PnlMat) *A,  const PnlPermutatio
 }
 
 /**
- * solves a linear system A X = B using a LU factorization where B is a matrix
+ * Solve a linear system A X = B using a LU factorization where B is a matrix
  * @param A the matrix of the system of size n x n. On exit contains the LU decomposition
  * @param B the r.h.s. matrix of the system of size n x m. On exit B contains
  * the solution X
@@ -471,7 +471,7 @@ int FUNCTION(pnl_mat,lower_inverse) (TYPE(PnlMat) *A, const TYPE(PnlMat) *B)
 }
 
 /**
- * Computes the inverse of a symmetric positive defnite matrix using a Cholesky
+ * Compute the inverse of a symmetric positive defnite matrix using a Cholesky
  * decomposition
  *
  * @param A a matrix.
@@ -504,7 +504,7 @@ int FUNCTION(pnl_mat,inverse_with_chol) (TYPE(PnlMat) *inv, const TYPE(PnlMat) *
 }
 
 /**
- * Computes the inverse of a matrix using a LU decomposition
+ * Compute the inverse of a matrix using a LU decomposition
  *
  * @param A a matrix.
  * @param inv a TYPE(PnlMat) (already allocated). contains

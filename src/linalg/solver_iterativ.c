@@ -32,7 +32,7 @@ static char pnl_bicg_solver_label[] = "PnlBicgSolver";
 static char pnl_gmres_solver_label[] = "PnlGmresSolver";
 
 /**
- * Creates an empty PnlIterationBase.
+ * Create an empty PnlIterationBase.
  *
  * @return  a PnlIterationBasepointer
  */
@@ -53,7 +53,7 @@ static PnlIterationBase* pnl_iteration_base_new()
 }
 
 /**
- * Creates a new PnlIterationBase pointer.
+ * Create a new PnlIterationBase pointer.
  *
  * @param max_iter_ : maximum number of iterations 
  * @param t : tolerance, parameter of iterative methods, ie relative error
@@ -249,7 +249,7 @@ static void pnl_iteration_base_failed(PnlIterationBase * it,int err_code,
 
 
 /**
- * Creates an empty PnlCgSolver 
+ * Create an empty PnlCgSolver 
  *
  *@return  a PnlCgSolver pointer
  */
@@ -269,7 +269,7 @@ PnlCgSolver* pnl_cg_solver_new()
 }
 
 /**
- * creates a new PnlCgSolver pointer.
+ * Create a new PnlCgSolver pointer.
  *
  * @param Size : the size of temporary vectors use in the method
  * @param max_iter_  : maximum iteration number 
@@ -388,7 +388,7 @@ int pnl_cg_solver_solve(void (* matrix_vector_product )(const void *,const PnlVe
 
 
 /**
- * Creates an empty PnlBicgSolver 
+ * Create an empty PnlBicgSolver 
  *
  *@return  a PnlBicgSolver pointer
  */
@@ -415,7 +415,7 @@ PnlBicgSolver* pnl_bicg_solver_new()
 }
 
 /**
- * creates a new PnlBicgSolver pointer.
+ * Create a new PnlBicgSolver pointer.
  *
  * @param Size : the size of temporary vectors use in the method
  * @param max_iter_  : maximum iteration number 
@@ -566,7 +566,7 @@ int pnl_bicg_solver_solve(void (* matrix_vector_product )(const void *,const Pnl
 
 
 /**
- * Creates an empty PnlGmresSolver
+ * Create an empty PnlGmresSolver
  *
  *@return  a PnlGmresSolver pointer
  */
@@ -597,7 +597,7 @@ PnlGmresSolver* pnl_gmres_solver_new()
 
 
 /**
- * Creates a new PnlGmresSolver pointer.
+ * Create a new PnlGmresSolver pointer.
  *
  * @param Size : the size of temporary vectors use in the method
  * @param max_iter_  : maximum iteration number 
