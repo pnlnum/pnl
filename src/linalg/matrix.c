@@ -27,6 +27,47 @@
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_mathtools.h"
 
+/** 
+ * Compute the cross product of the vectors in A and B.
+ * First, a row wise computation is tried; if it fails, the column wise
+ * approach is tested
+ * 
+ * @param[out] lhs Contains (A) x (B) on output
+ * @param A must be a matrix with 3 rows or columns
+ * @param B must be a matrix with the same size as A
+ * 
+ * @return FAIL in case of dimension mismatch, OK otherwise
+ */
+int pnl_mat_cross(PnlMat *lhs, const PnlMat *A, const PnlMat *B)
+{
+  CheckMatMatch (A, B)
+  pnl_mat_resize (lhs, A->m, A->n);  
+
+  if ( A->n == 3 )
+    {
+      int i;
+      for ( i=0 ; i<A->m ; i++ )
+        {
+          MLET(lhs,i,0) = MGET(A,i,1) * MGET(B,i,2) - MGET(A,i,2) * MGET(B,i,1);
+          MLET(lhs,i,1) = MGET(A,i,2) * MGET(B,i,0) - MGET(A,i,0) * MGET(B,i,2);
+          MLET(lhs,i,2) = MGET(A,i,0) * MGET(B,i,1) - MGET(A,i,1) * MGET(B,i,0);
+        }
+      return OK;
+    }
+  if ( A->m == 3 )
+    {
+      int j;
+      for ( j=0 ; j<A->n ; j++ )
+        {
+          MLET(lhs,0,j) = MGET(A,1,j) * MGET(B,2,j) - MGET(A,2,j) * MGET(B,1,j);
+          MLET(lhs,1,j) = MGET(A,2,j) * MGET(B,0,j) - MGET(A,0,j) * MGET(B,2,j);
+          MLET(lhs,2,j) = MGET(A,0,j) * MGET(B,1,j) - MGET(A,1,j) * MGET(B,0,j);
+        }
+      return OK;
+    }
+  else
+    return FAIL;
+}
 
 
 /**

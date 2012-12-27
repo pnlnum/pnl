@@ -1,3 +1,8 @@
+26-12-2012 Jérôme Lelong <jerome.lelong@gmail.com>
+	
+	* vector_double: Add pnl_vect_cross and pnl_vect_dist
+	* matrix.c: Add pnl_mat_cross
+
 04-12-2012 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* basis.c: Add a new criterion for total degree based on the product of

@@ -1,8 +1,3 @@
-/*
- * This file contains two parts, each with its own copyright.
- */
-
-
 /************************************************************************/
 /* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
 /*                                                                      */
@@ -424,7 +419,6 @@ int FUNCTION(pnl_vect,resize)(TYPE(PnlVect) * v, int size)
   return pnl_vect_object_resize (PNL_VECT_OBJECT(v), size);
 }
 
-
 /**
  * Resize a PnlVect. If the new size is smaller than the
  * current one, no memory is freed. If the new size is larger
@@ -478,7 +472,6 @@ int FUNCTION(pnl_vect,resize_from_ptr)(TYPE(PnlVect) *v, int size, const BASE *t
   memcpy (v->array, t, size*sizeof(BASE));
   return OK;
 }
-
 
 /**
  * Put all the components of v to x, v[i]=x for all i
@@ -536,7 +529,6 @@ void FUNCTION(pnl_vect, clone)(TYPE(PnlVect) * clone,
   memcpy(clone->array, v->array, sizeof(BASE)*v->size);
 }
 
-
 /**
  * Print a TYPE(PnlVect) to a  file with one entry per line.
  *
@@ -590,7 +582,6 @@ void FUNCTION(pnl_vect, print_asrow)(const TYPE(PnlVect) * V)
   FUNCTION(pnl_vect, fprint_asrow)(stdout, V);
 }
 
-
 /**
  * Print a TYPE(PnlVect) in a format compatible with Nsp to a file
  *
@@ -609,7 +600,6 @@ void FUNCTION(pnl_vect, fprint_nsp)(FILE *fic, const TYPE(PnlVect) * V)
   fprintf(fic,OUT_FORMAT,OUT_PUT_FORMAT(V->array[i]));
   fprintf(fic," ]; \n");
 }
-
 
 /**
  * Print a TYPE(PnlVect) in a format compatible with Nsp
@@ -684,8 +674,6 @@ static BASE FUNCTION(,_op_inv)(BASE a) { return INV(a); }
 static double FUNCTION(,_op_sqr_norm)(BASE a) { return SQUARE_NORM(a); }
 static double FUNCTION(,_op_abs)(BASE a) { return NORMONE(a); }
 
-
-
 /**
  * in-place vector scalar addition
  *
@@ -735,7 +723,6 @@ void FUNCTION(pnl_vect,CONCAT2(div_,BASE))(TYPE(PnlVect) *lhs , BASE x)
 {
   FUNCTION(pnl_vect,apply_op)(lhs, x, FUNCTION(,_op_div));
 }
-
 
 /**
  * map vector componentwise
@@ -884,7 +871,6 @@ void FUNCTION(pnl_vect,minus_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
   FUNCTION(pnl_vect,map_vect_inplace)(lhs, rhs, FUNCTION(,_op_minus));
 }
 
-
 /**
  * in-place term by term vector inverse
  *
@@ -920,7 +906,6 @@ void FUNCTION(pnl_vect,mult_vect_term)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *
   FUNCTION(pnl_vect,map_vect_inplace)(lhs, rhs, FUNCTION(,_op_mult));
 }
 
-
 /**
  * sum vector componentwise
  *
@@ -954,7 +939,6 @@ void FUNCTION(pnl_vect,cumsum)(TYPE(PnlVect) *lhs)
     }
 }
 
-
 /**
  * Compute the scalar product x' * y
  *
@@ -983,6 +967,7 @@ BASE FUNCTION(pnl_vect,scalar_prod)(const TYPE(PnlVect) *x,
     }
   return sum;
 }
+
 
 /**
  * Compute the product of the components of a vector
@@ -1016,12 +1001,6 @@ void FUNCTION(pnl_vect,cumprod)(TYPE(PnlVect) *V)
       FUNCTION(pnl_vect, set) (V, i, p);
     }
 }
-
-
-
-
-
-/* Swap  */
 
 /**
  * Swap two elements of a vector
@@ -1209,8 +1188,6 @@ BASE FUNCTION(pnl_vect,min)(const TYPE(PnlVect) *V)
   return m;
 }
 
-
-
 /**
  * Return the minimum and maximum of the elements of a vector
  *
@@ -1223,7 +1200,6 @@ void FUNCTION(pnl_vect, minmax)(BASE *min_out, BASE *max_out, const TYPE(PnlVect
   int im, iM;
   FUNCTION(pnl_vect, minmax_index)(min_out, max_out, &im, &iM, V);
 }
-
 
 /**
  * Return the index of the maximum of the elements of a vector
@@ -1282,7 +1258,6 @@ static int FUNCTION(__pnl, cmp_d) ( const void *a, const void *b)
   return 1;
 }
 
-
 static void FUNCTION(pnl_vect, qsort_aux)(TYPE(PnlVect) * m, PnlVectInt *t, int use_index, char order)
 {
   int i, *index = NULL;
@@ -1331,24 +1306,6 @@ void FUNCTION(pnl_vect, qsort_index)(TYPE(PnlVect) * m, PnlVectInt *t, char orde
 
 #endif
 
-/************************************************************************/
-/* Copyright David Pommier <pommier.david@gmail.com>                    */
-/*                                                                      */
-/* This program is free software: you can redistribute it and/or modify */
-/* it under the terms of the GNU Lesser General Public License as       */
-/* published by the Free Software Foundation, either version 3 of the   */
-/* License, or (at your option) any later version.                      */
-/*                                                                      */
-/* This program is distributed in the hope that it will be useful, but  */
-/* WITHOUT ANY WARRANTY; without even the implied warranty of           */
-/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU    */
-/* Lesser General Public License for more details.                      */
-/*                                                                      */
-/* You should have received a copy of the GNU Lesser General Public     */
-/* License along with this program.  If not, see                        */
-/* <http://www.gnu.org/licenses/>.                                      */
-/************************************************************************/
-
 /**
  * Compute a x + b y and stores the result in y
  *
@@ -1359,8 +1316,8 @@ void FUNCTION(pnl_vect, qsort_index)(TYPE(PnlVect) * m, PnlVectInt *t, char orde
  */
 void FUNCTION(pnl_vect,axpby)(BASE a, const TYPE(PnlVect) *x,  BASE b, TYPE(PnlVect) *y)
 {
-  BASE zero, one, xi, *yi;
   int i;
+  BASE zero, one;
   zero = ZERO;
   one = ONE;
 
@@ -1379,11 +1336,11 @@ void FUNCTION(pnl_vect,axpby)(BASE a, const TYPE(PnlVect) *x,  BASE b, TYPE(PnlV
     }
 #endif
 
-  for (i=0; i< x->size; i++)
+  for ( i=0 ; i<x->size ; i++ )
     {
-      xi =  PNL_GET(x, i);
+      BASE xi =  PNL_GET(x, i);
+      BASE *yi = FUNCTION(pnl_vect,lget)(y, i);
       xi = MULT(xi, a);
-      yi = FUNCTION(pnl_vect,lget)(y, i);
       *yi = PLUS(*yi, xi);
     }
 }

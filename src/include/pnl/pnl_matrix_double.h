@@ -81,6 +81,7 @@ extern  void pnl_mat_lAxpby(double l, const PnlMat *A, const PnlVect *x, double 
 extern void pnl_mat_dgemv (char trans, double alpha, const PnlMat *A,
                            const PnlVect *x , double beta, PnlVect * y);
 extern double pnl_mat_scalar_prod(const PnlMat *A, const PnlVect *x , const PnlVect * y);
+extern int pnl_mat_cross(PnlMat *lhs, const PnlMat *A, const PnlMat *B);
 
 extern void pnl_mat_set_double(PnlMat *lhs, double x);
 extern void pnl_mat_set_zero(PnlMat *lhs);

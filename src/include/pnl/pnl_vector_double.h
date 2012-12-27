@@ -100,15 +100,15 @@ extern void pnl_vect_axpby(double a, const PnlVect *x, double b, PnlVect *y);
 extern void pnl_vect_mult_double(PnlVect *lhs, double x);
 extern void pnl_vect_div_double(PnlVect *lhs, double x); 
 extern void pnl_vect_inv_term(PnlVect *lhs); 
-extern void
-pnl_vect_div_vect_term(PnlVect *lhs, const PnlVect *rhs);
-extern void
-pnl_vect_mult_vect_term(PnlVect *lhs, const PnlVect *rhs);
+extern void pnl_vect_div_vect_term(PnlVect *lhs, const PnlVect *rhs);
+extern void pnl_vect_mult_vect_term(PnlVect *lhs, const PnlVect *rhs);
 extern void pnl_vect_set_double(PnlVect *v, double x);
 extern void pnl_vect_set_zero(PnlVect * v);
 extern double pnl_vect_sum(const PnlVect *lhs);
 extern void pnl_vect_cumsum(PnlVect *lhs);
 extern double pnl_vect_scalar_prod(const PnlVect *rhs1, const PnlVect *rhs2);
+extern double pnl_vect_dist (const PnlVect *x, const PnlVect *y);
+extern int pnl_vect_cross(PnlVect *lhs, const PnlVect *x, const PnlVect *y);
 extern double pnl_vect_prod(const PnlVect *V); 
 extern void pnl_vect_cumprod(PnlVect *V); 
 extern double pnl_vect_max(const PnlVect *V);

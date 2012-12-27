@@ -28,6 +28,55 @@
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_mathtools.h"
 
+
+/** 
+ * Compute the cross product of two vectors of size 3
+ * 
+ * @param[out] lhs Contains (x) x (y) on output
+ * @param x must be a vector of size 3
+ * @param y must be a vector of size 3
+ * 
+ * @return FAIL in case of dimension mismatch, OK otherwise
+ */
+int pnl_vect_cross(PnlVect *lhs, const PnlVect *x, const PnlVect *y)
+{
+  int three = 3;
+  pnl_vect_resize (lhs, three);  
+  if ( x->size != 3 || y->size != 3 )
+    {
+#ifndef PNL_RANGE_CHECK_OFF
+      PNL_ERROR ("Args must be of size 3", "pnl_vect_cross");
+#endif
+      return FAIL;
+    }
+  LET(lhs,0) = GET(x,1) * GET(y,2) - GET(x,2) * GET(y,1);
+  LET(lhs,1) = GET(x,2) * GET(y,0) - GET(x,0) * GET(y,2);
+  LET(lhs,2) = GET(x,0) * GET(y,1) - GET(x,1) * GET(y,0);
+  return OK;
+}
+
+/** 
+ * Compute the distance between x and y
+ * 
+ * @param x a vector
+ * @param y a vector
+ * 
+ * @return |x - y |_2
+ */
+double pnl_vect_dist (const PnlVect *x, const PnlVect *y)
+{
+  int i;
+  double dist = 0.;
+  CheckVectMatch (x,y);
+
+  for ( i=0 ; i<x->size ; i++ )
+    {
+      double tmp = GET (x, i) - GET (y, i);
+      dist += SQR(tmp);
+    }
+  return sqrt (dist);
+}
+
 static char pnl_vector_compact_label[] = "PnlVectCompact";
 
 /**
@@ -122,7 +171,6 @@ PnlVectCompact* pnl_vect_compact_copy(const PnlVectCompact *v)
     }
   return ret;
 }
-
 
 /**
  * Free a PnlVectCompact
