@@ -7,7 +7,7 @@ The financial functions are defined in the header \verb!pnl/pnl_finance.h!.\\
 \item
   \describefun{int}{pnl_cf_call_bs}{double s, double k, double T, double r, 
     double divid, double sigma, double \ptr ptprice, double \ptr ptdelta}
-  \sshortdescribe Computes the price and delta of a call option $(\var{s} -
+  \sshortdescribe Compute the price and delta of a call option $(\var{s} -
   \var{k})_+$ in the Black-Scholes model with volatility \var{sigma},
   instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
   \var{divid}. The parameters \var{ptprice} and \var{ptdelta} are respectively
@@ -16,7 +16,7 @@ The financial functions are defined in the header \verb!pnl/pnl_finance.h!.\\
 \item
   \describefun{int}{pnl_cf_put_bs}{double s, double k, double T, double r, 
     double divid, double sigma, double \ptr ptprice, double \ptr ptdelta}
-  \sshortdescribe Computes the price and delta of a put option $(\var{k} - 
+  \sshortdescribe Compute the price and delta of a put option $(\var{k} - 
   \var{s})_+$ in the Black-Scholes model with volatility \var{sigma},
   instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
   \var{divid}.  The parameters \var{ptprice} and \var{ptdelta} are respectively
@@ -29,7 +29,7 @@ The financial functions are defined in the header \verb!pnl/pnl_finance.h!.\\
 \item 
   \describefun{double}{pnl_bs_call}{double s, double k, double T,
     double r, double divid, double sigma}
-  \sshortdescribe Computes the price of a call option with spot \var{s}
+  \sshortdescribe Compute the price of a call option with spot \var{s}
   and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
   instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
   \var{divid}.
@@ -37,7 +37,7 @@ The financial functions are defined in the header \verb!pnl/pnl_finance.h!.\\
 \item 
   \describefun{double}{pnl_bs_put}{double s, double k, double T,
     double r, double divid, double sigma}
-  \sshortdescribe Computes the price a put option with spot \var{s}
+  \sshortdescribe Compute the price a put option with spot \var{s}
   and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
   instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
   \var{divid}.
@@ -45,7 +45,7 @@ The financial functions are defined in the header \verb!pnl/pnl_finance.h!.\\
 \item 
   \describefun{double}{pnl_bs_call_put}{int iscall, double s, double k,
     double T, double r, double divid, double sigma}
-  \sshortdescribe Computes the price of a put option if \var{iscall=0} or a
+  \sshortdescribe Compute the price of a put option if \var{iscall=0} or a
   call option if \var{iscall=1} with spot \var{s} and strike \var{k} in the
   Black-Scholes model with volatility \var{sigma}, instantaneous interest rate
   \var{r}, maturity \var{T} and dividend rate \var{divid}.
@@ -53,7 +53,7 @@ The financial functions are defined in the header \verb!pnl/pnl_finance.h!.\\
 \item 
   \describefun{double}{pnl_bs_vega}{double s, double k, double T,
     double r, double divid, double sigma}
-  \sshortdescribe Computes the vega of a put or call option with spot \var{s}
+  \sshortdescribe Compute the vega of a put or call option with spot \var{s}
   and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
   instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
   \var{divid}.
@@ -61,7 +61,7 @@ The financial functions are defined in the header \verb!pnl/pnl_finance.h!.\\
 \item 
   \describefun{double}{pnl_bs_gamma}{double s, double k, double T, double r,
     double divid, double sigma}
-  \sshortdescribe Computes the gamma of a put or call option with spot \var{s}
+  \sshortdescribe Compute the gamma of a put or call option with spot \var{s}
   and strike \var{k} in the Black-Scholes model with volatility \var{sigma},
   instantaneous interest rate \var{r}, maturity \var{T} and dividend rate
   \var{divid}.
@@ -78,7 +78,7 @@ maturities, a matrix of prices (with strikes varying row-wise).
 \item 
   \describefun{double}{pnl_bs_implicit_vol}{int is_call, double Price, double s,
     double K, double T, double r, double divid, int *error}
-  \sshortdescribe Computes the implied volatility of a put option if
+  \sshortdescribe Compute the implied volatility of a put option if
   \var{iscall=0} or a call option if \var{iscall=1} with spot \var{s} and
   strike \var{K} in the Black-Scholes model with instantaneous interest rate
   \var{r}, maturity \var{T} and dividend rate \var{divid}. On output
@@ -90,7 +90,7 @@ maturities, a matrix of prices (with strikes varying row-wise).
     \ptr iscall, const \refstruct{PnlMat} \ptr Price, double s, 
     double r, double divid, const \refstruct{PnlVect} \ptr K, 
     const \refstruct{PnlVect} \ptr T, \refstruct{PnlMat} \ptr Vol}
-  \sshortdescribe Computes the matrix of implied volatilities \var{Vol(i,j)}
+  \sshortdescribe Compute the matrix of implied volatilities \var{Vol(i,j)}
   of a put option if \var{iscall(i,j)=0} or a call option if
   \var{iscall(i,j)=1} with spot \var{s} and strike \var{K(j)} in the
   Black-Scholes model with instantaneous interest rate \var{r}, maturity

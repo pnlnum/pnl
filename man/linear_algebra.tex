@@ -86,29 +86,29 @@ There are no special functions to access the size of a vector, instead the field
 
 \begin{itemize}
   \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_new}{}
-  \sshortdescribe Creates a new \refstruct{PnlVect} of size 0.  
+  \sshortdescribe Create a new \refstruct{PnlVect} of size 0.  
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create}{int size}
-  \sshortdescribe Creates a new \refstruct{PnlVect} pointer.  
+  \sshortdescribe Create a new \refstruct{PnlVect} pointer.  
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_from_zero}{int size}
-  \sshortdescribe Creates a new \refstruct{PnlVect} pointer and sets it to zero.  
+  \sshortdescribe Create a new \refstruct{PnlVect} pointer and sets it to zero.  
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_from_double}
   {int size, double x}
-  \sshortdescribe Creates a new \refstruct{PnlVect} pointer and sets all
+  \sshortdescribe Create a new \refstruct{PnlVect} pointer and sets all
   elements t \var{x}.  
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_from_ptr}{int
     size, const double \ptr x}
-  \sshortdescribe Creates a new \refstruct{PnlVect} pointer and copies \var{x}
+  \sshortdescribe Create a new \refstruct{PnlVect} pointer and copies \var{x}
   to \var{array}.  
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_from_list}{int
     size, ...}
-  \sshortdescribe Creates a new \refstruct{PnlVect} pointer of length
+  \sshortdescribe Create a new \refstruct{PnlVect} pointer of length
   \var{size} filled with the extra arguments passed to the function. The
   number of extra arguments passed must be equal to \var{size} and they must be of the type BASE.
   Example: To create a vector \{1., 2.\}, you should enter pnl_vect_create_from_list(2, 1.0, 2.0) and NOT pnl_vect_create_from_list(2, 1.0, 2) or pnl_vect_create_from_list(2, 1, 2.0).
   Be aware that this cannot be checked inside the function.
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_from_file}
   {const char \ptr file}
-  \sshortdescribe Reads a vector from a file and creates the corresponding
+  \sshortdescribe Read a vector from a file and creates the corresponding
   \refstruct{PnlVect}. The data might be stored as a single blank separated line
   or as a one column file with one element per line.
 
@@ -117,14 +117,14 @@ There are no special functions to access the size of a vector, instead the field
   \sshortdescribe This is a copying constructor. It creates a copy of a \refstruct{PnlVect}.
 \item \describefun{void}{pnl_vect_clone}{\refstruct{PnlVect} \ptr clone, 
     const \refstruct{PnlVect} \ptr v} 
-  \sshortdescribe Clones a \refstruct{PnlVect}. \var{clone} must be an
+  \sshortdescribe Clone a \refstruct{PnlVect}. \var{clone} must be an
   already existing  \refstruct{PnlVect}. It is resized to match the size of
   \var{v} and the data are copied. Future modifications to \var{v} will not
   affect \var{clone}.
 
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_subvect_with_ind}{const
   \refstruct{PnlVect} \ptr V, const \refstruct{PnlVectInt} \ptr ind}
-  \sshortdescribe Creates a new vector containing \var{V(ind(:))}.
+  \sshortdescribe Create a new vector containing \var{V(ind(:))}.
 
 \item \describefun{void}{pnl_vect_extract_subvect_with_ind}{\refstruct{PnlVect} \ptr
   V_sub, const \refstruct{PnlVect} \ptr V, const \refstruct{PnlVectInt} \ptr ind}
@@ -132,7 +132,7 @@ There are no special functions to access the size of a vector, instead the field
 
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_subvect}{const
     \refstruct{PnlVect} \ptr V, int i, int len}
-  \sshortdescribe Creates a new vector containing \var{V(i:i+len-1)}. The
+  \sshortdescribe Create a new vector containing \var{V(i:i+len-1)}. The
   elements are copied.
   
 \item \describefun{void}{pnl_vect_extract_subvect}{\refstruct{PnlVect} \ptr
@@ -141,25 +141,25 @@ There are no special functions to access the size of a vector, instead the field
   elements are copied.
 
 \item \describefun{void}{pnl_vect_free}{\refstruct{PnlVect} \ptr\ptr v}
-  \sshortdescribe Frees a \refstruct{PnlVect} pointer and set the data pointer to NULL  
+  \sshortdescribe Free a \refstruct{PnlVect} pointer and set the data pointer to NULL  
 \item \describefun{\refstruct{PnlVect}}{pnl_vect_wrap_array}{const double \ptr x, 
     int size}
-    \sshortdescribe Creates a \refstruct{PnlVect} containing the data 
+    \sshortdescribe Create a \refstruct{PnlVect} containing the data 
   \var{x}. No copy is made. It is just a container.
   
 \item \describefun{\refstruct{PnlVect}}{pnl_vect_wrap_subvect}{const
   \refstruct{PnlVect} \ptr x, int i, int s}
-  \sshortdescribe Creates a \refstruct{PnlVect} containing
+  \sshortdescribe Create a \refstruct{PnlVect} containing
   \var{x(i:i+s-1)}. No copy is made. It is just a container. The returned
   \refstruct{PnlVect} has \var{size=s} and \var{owner=0}.
 
 \item \describefun{\refstruct{PnlVect}}{pnl_vect_wrap_subvect_with_last}{const \refstruct{PnlVect} \ptr x, int i, int j}
-  \sshortdescribe Creates a \refstruct{PnlVect} containing \var{x(i:j)}. No
+  \sshortdescribe Create a \refstruct{PnlVect} containing \var{x(i:j)}. No
   copy is made. It is just a container.
 
 \item \describefun{\refstruct{PnlVect}}{pnl_vect_wrap_mat}
   {const \refstruct{PnlMat} \ptr M}
-  \sshortdescribe Returns a \refstruct{PnlVect} (not a pointer) whose array is
+  \sshortdescribe Return a \refstruct{PnlVect} (not a pointer) whose array is
   the row wise array of \var{M}. The new vector shares its data with the
   matrix \var{M}, which means that any modification to one of them will affect
   the other.
@@ -168,11 +168,11 @@ There are no special functions to access the size of a vector, instead the field
 \subparagraph{Resizing vectors}
 \begin{itemize}
 \item \describefun{int}{pnl_vect_resize}{\refstruct{PnlVect} \ptr v, int size}
-  \sshortdescribe Resizes a \refstruct{PnlVect}. It copies as much of the old
+  \sshortdescribe Resize a \refstruct{PnlVect}. It copies as much of the old
   data to fit in the resized object.
 \item \describefun{int}{pnl_vect_resize_from_ptr}{\refstruct{PnlVect}
     \ptr v, int size, double \ptr t} 
-  \sshortdescribe Resizes a \refstruct{PnlVect} and uses \var{t} to fill the
+  \sshortdescribe Resize a \refstruct{PnlVect} and uses \var{t} to fill the
   vector. \var{t} must be of size \var{size}.
 \end{itemize}  
 
@@ -184,23 +184,23 @@ inline. You just need to define the macro \verb!HAVE_INLINE! for by passing
 functions.
 \begin{itemize}
 \item \describefun{void}{pnl_vect_set}{\refstruct{PnlVect} \ptr v, int i, double x}
-  \sshortdescribe Sets v[i]=x  
+  \sshortdescribe Set v[i]=x  
 \item \describefun{double}{pnl_vect_get}{const \refstruct{PnlVect} \ptr v, int i}
-  \sshortdescribe Returns the value of v[i].  
+  \sshortdescribe Return the value of v[i].  
 \item \describefun{void}{pnl_vect_lget}{\refstruct{PnlVect} \ptr v, int i}
-  \sshortdescribe Returns the address of v[i].  
+  \sshortdescribe Return the address of v[i].  
 \item \describefun{void}{pnl_vect_set_double}{\refstruct{PnlVect} \ptr v, double x}
-  \sshortdescribe Sets all elements to x.  
+  \sshortdescribe Set all elements to x.  
 \item \describefun{void}{pnl_vect_set_zero}{\refstruct{PnlVect} \ptr v}
-  \sshortdescribe Sets all elements to zero.  
+  \sshortdescribe Set all elements to zero.  
 \end{itemize}
 Equivalently to these functions, there exist macros for {\bf \refstruct{PnlVect} only}.
 \begin{itemize}
 \item \describefun{}{GET}{v, i}
-  \sshortdescribe Returns \var{v[i]} for reading, eg. \var{x=LET(v,i)}
+  \sshortdescribe Return \var{v[i]} for reading, eg. \var{x=LET(v,i)}
   
 \item \describefun{}{LET}{v, i}
-  \sshortdescribe Returns \var{v[i]} as a lvalue for writing, eg.
+  \sshortdescribe Return \var{v[i]} as a lvalue for writing, eg.
   \var{LET(v,i)=x}
 \end{itemize}
 
@@ -208,21 +208,21 @@ Equivalently to these functions, there exist macros for {\bf \refstruct{PnlVect}
 \subparagraph{Printing vector}
 \begin{itemize}
 \item \describefun{void}{pnl_vect_print}{const \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Prints a \refstruct{PnlVect} as a column vector
+  \sshortdescribe Print a \refstruct{PnlVect} as a column vector
 \item \describefun{void}{pnl_vect_fprint}{FILE \ptr fic, const \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Prints a \refstruct{PnlVect} in file \var{fic} as a column
+  \sshortdescribe Print a \refstruct{PnlVect} in file \var{fic} as a column
   vector.
 \item \describefun{void}{pnl_vect_print_asrow}{const \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Prints a \refstruct{PnlVect} as a row vector
+  \sshortdescribe Print a \refstruct{PnlVect} as a row vector
 \item \describefun{void}{pnl_vect_fprint_asrow}{FILE \ptr fic, const \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Prints a \refstruct{PnlVect} in file \var{fic} as a row
+  \sshortdescribe Print a \refstruct{PnlVect} in file \var{fic} as a row
   vector.
 \item \describefun{void}{pnl_vect_print_nsp}{const \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Prints a vector to the standard output in a format
+  \sshortdescribe Print a vector to the standard output in a format
   compatible with Nsp.  
 \item \describefun{void}{pnl_vect_fprint_nsp}{FILE \ptr fic, const
     \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Prints a vector to a file in a format compatible with Nsp. 
+  \sshortdescribe Print a vector to a file in a format compatible with Nsp. 
 \end{itemize}
 
 \subparagraph{Applying external operation to vectors}
@@ -280,38 +280,48 @@ Equivalently to these functions, there exist macros for {\bf \refstruct{PnlVect}
 
 \item \describefun{void}{pnl_vect_axpby}{double a, const \refstruct{PnlVect} \ptr x, 
     double b, \refstruct{PnlVect} \ptr y} 
-  \sshortdescribe Computes \var{y : = a x + b y}. When \var{b==0}, the content
+  \sshortdescribe Compute \var{y : = a x + b y}. When \var{b==0}, the content
   of \var{y} is not used on input and instead \var{y} is resized to match \var{x}.
 
 \item \describefun{double}{pnl_vect_sum}{const \refstruct{PnlVect} \ptr lhs}
-  \sshortdescribe Returns the sum of all the elements of a vector  
+  \sshortdescribe Return the sum of all the elements of a vector  
 
 \item \describefun{void}{pnl_vect_cumsum}{\refstruct{PnlVect} \ptr lhs}
-  \sshortdescribe Computes the cumulative sum of all the elements of a
+  \sshortdescribe Compute the cumulative sum of all the elements of a
   vector. The original vector is modified
 
 \item \describefun{double}{pnl_vect_prod}{const \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Returns the product of all the elements of a vector  
+  \sshortdescribe Return the product of all the elements of a vector  
 
 \item \describefun{void}{pnl_vect_cumprod}{\refstruct{PnlVect} \ptr lhs}
-  \sshortdescribe Computes the cumulative product of all the elements of a
+  \sshortdescribe Compute the cumulative product of all the elements of a
   vector. The original vector is modified
 \end{itemize}
 
 \subparagraph{Scalar products and norms}
 \begin{itemize}
 \item \describefun{double}{pnl_vect_norm_two}{const \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Returns the two norm of a vector  
+  \sshortdescribe Return the two norm of a vector  
 
 \item \describefun{double}{pnl_vect_norm_one}{const \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Returns the one norm of a vector  
+  \sshortdescribe Return the one norm of a vector  
 
 \item \describefun{double}{pnl_vect_norm_infty}{const \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Returns the infinity norm of a vector  
+  \sshortdescribe Return the infinity norm of a vector  
 
 \item \describefun{double}{pnl_vect_scalar_prod}{const \refstruct{PnlVect}
     \ptr rhs1, const \refstruct{PnlVect} \ptr rhs2} 
-  \sshortdescribe Computes the scalar product between 2 vectors  
+  \sshortdescribe Compute the scalar product between 2 vectors  
+\item \describefun{int}{pnl_vect_cross}{\refstruct{PnlVect} \ptr lhs, 
+  const \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr y}
+  \sshortdescribe Compute the cross product of \var{x} and \var{y} and store the
+  result in \var{lhs}. The vectors \var{x} and \var{y} must be of size 3 and
+  FAIL is returned otherwise.
+
+\item \describefun{double}{pnl_vect_dist}{const \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr y}
+  \sshortdescribe Compute the distance between \var{x} and \var{y}, ie
+  $\sqrt{\sum_i |x_i - y_i|^2}$.
+
 \end{itemize}
 
 \subparagraph{Test functions}
@@ -319,11 +329,11 @@ Equivalently to these functions, there exist macros for {\bf \refstruct{PnlVect}
 \begin{itemize}
 \item \describefun{int}{pnl_vect_eq}{const \refstruct{PnlVect} \ptr V1,
     const \refstruct{PnlVect} \ptr V2}
-  \sshortdescribe Tests if two vectors are equal. Returns \var{TRUE} or
+  \sshortdescribe Test if two vectors are equal. Returns \var{TRUE} or
   \var{FALSE}.
 \item \describefun{int}{pnl_vect_eq_double}{const \refstruct{PnlVect} \ptr v,
     double x}
-  \sshortdescribe Tests if all the components of \var{v} are equal to
+  \sshortdescribe Test if all the components of \var{v} are equal to
   \var{x}. Returns \var{TRUE} or \var{FALSE}.
 \end{itemize}
 
@@ -333,36 +343,36 @@ no total ordering on Complex numbers
 
 \begin{itemize}
 \item \describefun{double}{pnl_vect_max}{const \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Returns the maximum of a a vector  
+  \sshortdescribe Return the maximum of a a vector  
 
 \item \describefun{double}{pnl_vect_min}{const \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Returns the minimum of a vector  
+  \sshortdescribe Return the minimum of a vector  
 
 \item \describefun{void}{pnl_vect_minmax}{double \ptr m, double \ptr M, const \refstruct{PnlVect} \ptr}
-  \sshortdescribe Computes the minimum and maximum of a vector which are
+  \sshortdescribe Compute the minimum and maximum of a vector which are
   returned in  \var{m} and \var{M} respectively.
   
 \item \describefun{void}{pnl_vect_min_index}{double \ptr m, int \ptr im, const \refstruct{PnlVect} \ptr}
-  \sshortdescribe Computes the minimum of a vector and its index stored in 
+  \sshortdescribe Compute the minimum of a vector and its index stored in 
   sets \var{m} and \var{im} respectively.
 
 \item \describefun{void}{pnl_vect_max_index}{double \ptr M, int \ptr iM, const \refstruct{PnlVect} \ptr}
-  \sshortdescribe Computes the maximum of a vector and its index stored in 
+  \sshortdescribe Compute the maximum of a vector and its index stored in 
   sets \var{m} and \var{im} respectively.
 
 \item \describefun{void}{pnl_vect_minmax_index}{double \ptr m, double \ptr M,
     int \ptr im, int \ptr iM, const \refstruct{PnlVect} \ptr}
-  \sshortdescribe Computes the minimum and maximum of a vector and the
+  \sshortdescribe Compute the minimum and maximum of a vector and the
   corresponding indices stored respectively in \var{m}, \var{M}, \var{im} and
   \var{iM}.
 
 \item \describefun{void}{pnl_vect_qsort}{\refstruct{PnlVect} \ptr , char order}
-  \sshortdescribe Sorts a vector using a quick sort algorithm according to
+  \sshortdescribe Sort a vector using a quick sort algorithm according to
   \var{order} (\verb!'i'! for increasing or \verb!'d'! for decreasing).
 
 \item \describefun{void}{pnl_vect_qsort_index}{\refstruct{PnlVect} \ptr ,
     \refstruct{PnlVectInt} *index, char order}
-  \sshortdescribe Sorts a vector using a quick sort algorithm according to
+  \sshortdescribe Sort a vector using a quick sort algorithm according to
   \var{order} (\verb!'i'! for increasing or \verb!'d'! for decreasing ). On
   output, \var{index} contains the permutation used to sort the vector.
 
@@ -406,9 +416,9 @@ no total ordering on Complex numbers
 \begin{itemize}
 \item \describefun{void}{pnl_vect_swap_elements}{\refstruct{PnlVect} \ptr v,
     int i, int j}
-  \sshortdescribe Exchanges \var{v[i]} and \var{v[j]}.
+  \sshortdescribe Exchange \var{v[i]} and \var{v[j]}.
 \item \describefun{void}{pnl_vect_reverse}{\refstruct{PnlVect} \ptr v}
-  \sshortdescribe Performs a mirror operation on v. On output \var{v[i]
+  \sshortdescribe Perform a mirror operation on v. On output \var{v[i]
     = v[n-1-i]} for \var{i=0,\ldots,n-1} where \var{n} is the length of the vector.
 \end{itemize}
 
@@ -422,16 +432,16 @@ no total ordering on Complex numbers
 
 \item \describefun{PnlVectComplex\ptr }{pnl_vect_complex_create_from_array}{int
     size, const double \ptr re, const double \ptr im}
-  \sshortdescribe Creates a \refstruct{PnlVectComplex} given the arrays of the
+  \sshortdescribe Create a \refstruct{PnlVectComplex} given the arrays of the
   real parts \var{re} and imaginary parts \var{im}.
 \item \describefun{void}{pnl_vect_complex_split_in_array}{const \refstruct{PnlVectComplex}
     \ptr v, double \ptr re, double \ptr im}
-    \sshortdescribe Splits a complex vector into two C arrays : the
+    \sshortdescribe Split a complex vector into two C arrays : the
     real parts of the elements of \var{v} are stored into \var{re} and the
     imaginary parts into \var{im}.
 \item \describefun{void}{pnl_vect_complex_split_in_vect}{const \refstruct{PnlVectComplex}
     \ptr v, \refstruct{PnlVect} \ptr re, \refstruct{PnlVect} \ptr im}
-  \sshortdescribe Splits a complex vector into two \refstruct{PnlVect}s : the
+  \sshortdescribe Split a complex vector into two \refstruct{PnlVect}s : the
   real parts of the elements of \var{v} are stored into \var{re} and the
 imaginary parts into \var{im}.
 \end{itemize}
@@ -443,27 +453,27 @@ are used if the variable \var{HAVE_INLINE} was declared at compilation time.
 \begin{itemize}
 \item \describefun{double}{pnl_vect_complex_get_real}
   {const \refstruct{PnlVectComplex} \ptr v, int i}
-  \sshortdescribe Returns the real part of \var{v[i]}.
+  \sshortdescribe Return the real part of \var{v[i]}.
   
 \item \describefun{double}{pnl_vect_complex_get_imag}
   {const \refstruct{PnlVectComplex} \ptr v, int i}
-  \sshortdescribe Returns the imaginary part of \var{v[i]}.
+  \sshortdescribe Return the imaginary part of \var{v[i]}.
 
 \item \describefun{double\ptr }{pnl_vect_complex_lget_real}
   {const \refstruct{PnlVectComplex} \ptr v, int i}
-  \sshortdescribe Returns the real part of \var{v[i]} as a lvalue.
+  \sshortdescribe Return the real part of \var{v[i]} as a lvalue.
 
 \item \describefun{double\ptr }{pnl_vect_complex_lget_imag}
   {const \refstruct{PnlVectComplex} \ptr v, int i}
-  \sshortdescribe Returns the imaginary part of \var{v[i]} as a lvalue.
+  \sshortdescribe Return the imaginary part of \var{v[i]} as a lvalue.
 
 \item \describefun{void}{pnl_vect_complex_set_real}
   {const \refstruct{PnlVectComplex} \ptr v, int i, double re}
-  \sshortdescribe Sets the real part of \var{v[i]} to \var{re}.
+  \sshortdescribe Set the real part of \var{v[i]} to \var{re}.
 
 \item \describefun{void}{pnl_vect_complex_set_imag}
   {const \refstruct{PnlVectComplex} \ptr v, int i, double im}
-  \sshortdescribe Sets the imaginary part of \var{v[i]} to \var{im}.
+  \sshortdescribe Set the imaginary part of \var{v[i]} to \var{im}.
 \end{itemize}
 
 Equivalently to these functions, there exist macros. When the compiler is able
@@ -471,16 +481,16 @@ to handle inline code, there is no gain in using macros instead of inlined
 functions at least in principle.
 \begin{itemize}
 \item \describefun{}{GET_REAL}{v, i}
-  \sshortdescribe Returns the real part of \var{v[i]}.
+  \sshortdescribe Return the real part of \var{v[i]}.
   
 \item \describefun{}{GET_IMAG}{v, i}
-  \sshortdescribe Returns the imaginary part of \var{v[i]}.
+  \sshortdescribe Return the imaginary part of \var{v[i]}.
   
 \item \describefun{}{LET_REAL}{v, i}
-  \sshortdescribe Returns the real part of \var{v[i]} as a lvalue.
+  \sshortdescribe Return the real part of \var{v[i]} as a lvalue.
   
 \item \describefun{}{LET_IMAG}{v, i}
-  \sshortdescribe Returns the imaginary part of \var{v[i]} as a lvalue.
+  \sshortdescribe Return the imaginary part of \var{v[i]} as a lvalue.
 \end{itemize}
 
 \subsection{Compact Vectors}
@@ -507,37 +517,37 @@ typedef struct PnlVectCompact {
 
 \begin{itemize}
   \item \describefun{\refstruct{PnlVectCompact} \ptr }{pnl_vect_compact_new}{}
-  \sshortdescribe Creates a \refstruct{PnlVectCompact} of size 0.  
+  \sshortdescribe Create a \refstruct{PnlVectCompact} of size 0.  
 
 \item \describefun{\refstruct{PnlVectCompact} \ptr }{pnl_vect_compact_create}{int n, double x}
-  \sshortdescribe Creates a \refstruct{PnlVectCompact}.  
+  \sshortdescribe Create a \refstruct{PnlVectCompact}.  
 
 \item \describefun{int}{pnl_vect_compact_resize}{\refstruct{PnlVectCompact}
     \ptr v, int size, double x} 
-  \sshortdescribe Resizes a \refstruct{PnlVectCompact}.  
+  \sshortdescribe Resize a \refstruct{PnlVectCompact}.  
 
 \item \describefun{\refstruct{PnlVectCompact}
     \ptr }{pnl_vect_compact_copy} {const \refstruct{PnlVectCompact}\ptr v}
-  \sshortdescribe Copies a \refstruct{PnlVectCompact}  
+  \sshortdescribe Copy a \refstruct{PnlVectCompact}  
 
 \item \describefun{void}{pnl_vect_compact_free}{\refstruct{PnlVectCompact} \ptr \ptr v}
   \sshortdescribe Free a \refstruct{PnlVectCompact}  
 
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_compact_to_pnl_vect}
   {const \refstruct{PnlVectCompact} \ptr C} 
-  \sshortdescribe Converts a \refstruct{PnlVectCompact} pointer to a \refstruct{PnlVect} pointer.  
+  \sshortdescribe Convert a \refstruct{PnlVectCompact} pointer to a \refstruct{PnlVect} pointer.  
 
 \item \describefun{double}{pnl_vect_compact_get}{const \refstruct{PnlVectCompact} \ptr C, int i}
   \sshortdescribe Access function
 
 \item \describefun{void}{pnl_vect_compact_set_double}{\refstruct{PnlVectCompact}
     \ptr C, double x}
-  \sshortdescribe Sets all elements of \var{C} to \var{x}. \var{C} is
+  \sshortdescribe Set all elements of \var{C} to \var{x}. \var{C} is
   converted to a compact storage.
   
 \item \describefun{void}{pnl_vect_compact_set_ptr}{\refstruct{PnlVectCompact}
     \ptr C, double \ptr ptr}
-  \sshortdescribe Copies the array \var{ptr} into \var{C}. We assume that the
+  \sshortdescribe Copy the array \var{ptr} into \var{C}. We assume that the
   sizes match. \var{C} is converted to a non compact storage.
 \end{itemize}
 
@@ -647,42 +657,42 @@ and the size of the matrix.
 
 \begin{itemize}
   \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_new}{}
-  \sshortdescribe Creates a \refstruct{PnlMat} of size 0
+  \sshortdescribe Create a \refstruct{PnlMat} of size 0
 
 \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_create}{int m, int n}
-  \sshortdescribe Creates a \refstruct{PnlMat}  with \var{m} rows and \var{n} columns.
+  \sshortdescribe Create a \refstruct{PnlMat}  with \var{m} rows and \var{n} columns.
 
 \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_create_from_double}{int m, int n, double x}
-  \sshortdescribe Creates a \refstruct{PnlMat} with \var{m} rows and \var{n}
+  \sshortdescribe Create a \refstruct{PnlMat} with \var{m} rows and \var{n}
   columns and sets all the elements to \var{x}
 
 \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_create_from_ptr}{int m, int n, const double \ptr x}
-  \sshortdescribe Creates a \refstruct{PnlMat} with \var{m} rows and \var{n}
+  \sshortdescribe Create a \refstruct{PnlMat} with \var{m} rows and \var{n}
   columns and copies the array \var{x} to the new vector. Be sure that \var{x}
   is long enough to fill all the vector because it cannot be checked inside the function.
 
 \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_create_from_list}{int
     m, int n, ...}
-  \sshortdescribe Creates a new \refstruct{PnlMat} pointer of size \var{m
+  \sshortdescribe Create a new \refstruct{PnlMat} pointer of size \var{m
     x n} filled with the extra arguments passed to the function. The
   number of extra arguments passed must be equal to \var{m x n}, be
   aware that this cannot be checked inside the function.
 
 \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_copy}{const \refstruct{PnlMat} \ptr M}
-  \sshortdescribe Creates a new \refstruct{PnlMat} which is a copy of \var{M}.
+  \sshortdescribe Create a new \refstruct{PnlMat} which is a copy of \var{M}.
   
 \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_create_diag_from_ptr}
   {const double \ptr x, int d}
-  \sshortdescribe Creates a new squared \refstruct{PnlMat} by specifying its size and
+  \sshortdescribe Create a new squared \refstruct{PnlMat} by specifying its size and
   diagonal terms as an array.
 
 \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_create_diag}
   {const \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Creates a new squared \refstruct{PnlMat} by specifying its diagonal
+  \sshortdescribe Create a new squared \refstruct{PnlMat} by specifying its diagonal
   terms in a \refstruct{PnlVect}.
 
 \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_create_from_file}{const char \ptr file}
-  \sshortdescribe Reads a matrix from a file and creates the corresponding
+  \sshortdescribe Read a matrix from a file and creates the corresponding
   \refstruct{PnlMat}. The following conventions are used for the storage in a
   file:
   \begin{itemize}
@@ -692,14 +702,14 @@ and the size of the matrix.
   \end{itemize}
 
 \item \describefun{void}{pnl_mat_free}{\refstruct{PnlMat} \ptr \ptr M}
-  \sshortdescribe Frees a \refstruct{PnlMat} and sets \var{\ptr M} to \var{NULL} 
+  \sshortdescribe Free a \refstruct{PnlMat} and sets \var{\ptr M} to \var{NULL} 
 \item \describefun{\refstruct{PnlMat}}{pnl_mat_wrap_array}{const double \ptr x, 
     int m, int n}
-    \sshortdescribe Creates a \refstruct{PnlMat} of size \var{m x n} 
+    \sshortdescribe Create a \refstruct{PnlMat} of size \var{m x n} 
     which contains \var{x}. No copy is made. It is just a container.
 \item \describefun{\refstruct{PnlMat}}{pnl_mat_wrap_vect}
   {const \refstruct{PnlVect} \ptr V}
-  \sshortdescribe Returns a \refstruct{PnlMat} (not a pointer) whose array is
+  \sshortdescribe Return a \refstruct{PnlMat} (not a pointer) whose array is
   the array of \var{V}. The new matrix shares its data with the
   vector \var{V}, which means that any modification to one of them will affect
   the other.
@@ -707,16 +717,16 @@ and the size of the matrix.
 
 \item \describefun{void}{pnl_mat_clone}{\refstruct{PnlMat} \ptr clone, const
     \refstruct{PnlMat} \ptr M}
-  \sshortdescribe Clones \var{M} into \var{clone}. No no new
+  \sshortdescribe Clone \var{M} into \var{clone}. No no new
   \refstruct{PnlMat} is created.
 
 \item \describefun{int}{pnl_mat_resize}{\refstruct{PnlMat} \ptr M, int m, int n}
-  \sshortdescribe Resizes a \refstruct{PnlMat}. The new matrix is of size
+  \sshortdescribe Resize a \refstruct{PnlMat}. The new matrix is of size
   \var{m x n}. The old data are lost.
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_submat}{const
   \refstruct{PnlMat} \ptr M, const \refstruct{PnlVectInt} \ptr indi, const
   \refstruct{PnlVectInt} \ptr indj}
-  \sshortdescribe Creates a new vector containing the values \var{M(indi(:),
+  \sshortdescribe Create a new vector containing the values \var{M(indi(:),
   indj(:))}. \var{indi} and \var{indj} must be of the same size.
 
 \item \describefun{void}{pnl_vect_extract_submat}{\refstruct{PnlVect} \ptr
@@ -738,67 +748,67 @@ and the size of the matrix.
 
 \begin{itemize}
 \item \describefun{void}{pnl_mat_set}{\refstruct{PnlMat} \ptr M, int i, int j, double x}
-  \sshortdescribe Sets the value of M[i, j]=x  
+  \sshortdescribe Set the value of M[i, j]=x  
 
 \item \describefun{double}{pnl_mat_get}{const \refstruct{PnlMat} \ptr M, int i, int j}
-  \sshortdescribe Gets the value of M[i, j]  
+  \sshortdescribe Get the value of M[i, j]  
 
 \item \describefun{double \ptr }{pnl_mat_lget}{\refstruct{PnlMat} \ptr M, int i, int j}
-  \sshortdescribe Returns the address of M[i, j] for use as a lvalue.
+  \sshortdescribe Return the address of M[i, j] for use as a lvalue.
 
 \item \describefun{void}{pnl_mat_set_double}{\refstruct{PnlMat} \ptr M, double x}
-  \sshortdescribe Sets all elements of \var{M} to \var{x}.
+  \sshortdescribe Set all elements of \var{M} to \var{x}.
 \item \describefun{void}{pnl_mat_set_zero}{\refstruct{PnlMat} \ptr M}
-  \sshortdescribe Sets all elements of \var{M} to \var{0}.
+  \sshortdescribe Set all elements of \var{M} to \var{0}.
   
 \item \describefun{void}{pnl_mat_set_id}{\refstruct{PnlMat} \ptr M}
-  \sshortdescribe Sets the matrix \var{M} to the identity
+  \sshortdescribe Set the matrix \var{M} to the identity
   matrix. \var{M} must be a square matrix.
 
 \item \describefun{void}{pnl_mat_set_diag}{\refstruct{PnlMat} \ptr M,
     double x, int d}
-  \sshortdescribe Sets the $\var{d}^{\text{th}}$ diagonal terms of the matrix
+  \sshortdescribe Set the $\var{d}^{\text{th}}$ diagonal terms of the matrix
   \var{M} to the value \var{x}. \var{M} must be a square matrix.
 \item \describefun{void}{pnl_mat_set_from_ptr}{\refstruct{PnlMat} \ptr M,
   const double \ptr x}
-  \sshortdescribe Sets \var{M} row--wise with the values given by \var{x}. The
+  \sshortdescribe Set \var{M} row--wise with the values given by \var{x}. The
   array \var{x} must be at least M->mn long.
 \item \describefun{void}{pnl_mat_get_row}{\refstruct{PnlVect}
     \ptr V, const \refstruct{PnlMat} \ptr M, int i}
-  \sshortdescribe Extracts and copies the \var{i}-th row of \var{M} into
+  \sshortdescribe Extract and copies the \var{i}-th row of \var{M} into
   \var{V}.
 
 \item \describefun{void}{pnl_mat_get_col}{\refstruct{PnlVect} \ptr V, 
     const \refstruct{PnlMat} \ptr M, int j}
-  \sshortdescribe Extracts and copies the \var{j}-th column of \var{M} into \var{V}.
+  \sshortdescribe Extract and copies the \var{j}-th column of \var{M} into \var{V}.
   
 \item \describefun{\refstruct{PnlVect}}{pnl_vect_wrap_mat_row}
   {const \refstruct{PnlMat} \ptr M, int i}
-  \sshortdescribe Returns a \refstruct{PnlVect} (not a pointer) whose array is
+  \sshortdescribe Return a \refstruct{PnlVect} (not a pointer) whose array is
   the \var{i}-th row of \var{M}. The new vector shares its data with the
   matrix \var{M}, which means that any modification to one of them will affect
   the other.
   
 \item \describefun{void}{pnl_mat_swap_rows}{\refstruct{PnlMat} \ptr M, int i, int j}
-  \sshortdescribe Swaps two rows of a matrix.  
+  \sshortdescribe Swap two rows of a matrix.  
 
 \item \describefun{void}{pnl_mat_set_col}{\refstruct{PnlMat} \ptr M, 
     const \refstruct{PnlVect} \ptr V, int j}
-  \sshortdescribe Replaces the \var{i}-th column of a matrix M by a vector V 
+  \sshortdescribe Replace the \var{i}-th column of a matrix M by a vector V 
 
 \item \describefun{void}{pnl_mat_set_row}{\refstruct{PnlMat} \ptr M, 
     const \refstruct{PnlVect} \ptr V, int i}
-  \sshortdescribe Replaces the \var{i}-th row of a matrix M by a vector V  
+  \sshortdescribe Replace the \var{i}-th row of a matrix M by a vector V  
 \end{itemize}
 
 Equivalently to the functions \reffun{pnl_mat_get} and \reffun{pnl_mat_set},
 there exist macros for {\bf \refstruct{PnlMat} only}.
 \begin{itemize}
 \item \describefun{}{MGET}{M, i, j}
-  \sshortdescribe Returns \var{M[i,j]} for reading, eg. \var{x=M(i,j)}
+  \sshortdescribe Return \var{M[i,j]} for reading, eg. \var{x=M(i,j)}
   
 \item \describefun{}{MLET}{M, i, j}
-  \sshortdescribe Returns \var{M[i,j]} as a lvalue for writing, eg. eg. \var{x=M(i,j)}
+  \sshortdescribe Return \var{M[i,j]} as a lvalue for writing, eg. eg. \var{x=M(i,j)}
 \end{itemize}
 
 
@@ -806,18 +816,18 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 
 \begin{itemize}
 \item \describefun{void}{pnl_mat_print}{const \refstruct{PnlMat} \ptr M}
-  \sshortdescribe Prints a matrix to the standard output.  
+  \sshortdescribe Print a matrix to the standard output.  
 
 \item \describefun{void}{pnl_mat_fprint}{FILE \ptr fic, const \refstruct{PnlMat} \ptr M}
-  \sshortdescribe Prints a matrix to a file.
+  \sshortdescribe Print a matrix to a file.
 
 \item \describefun{void}{pnl_mat_print_nsp}{const \refstruct{PnlMat} \ptr M}
-  \sshortdescribe Prints a matrix to the standard output in a format
+  \sshortdescribe Print a matrix to the standard output in a format
   compatible with Nsp.  
 
 \item \describefun{void}{pnl_mat_fprint_nsp}{FILE \ptr fic, const
     \refstruct{PnlMat} \ptr M}
-  \sshortdescribe Prints a matrix to a file in a format compatible with Nsp. The
+  \sshortdescribe Print a matrix to a file in a format compatible with Nsp. The
   saved matrix can be reloaded by the function
   \reffun{pnl_mat_create_from_file}.
 \end{itemize}
@@ -869,11 +879,11 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 
 
 \item \describefun{double}{pnl_mat_sum}{const \refstruct{PnlMat} \ptr lhs}
-  \sshortdescribe Sums matrix component-wise  
+  \sshortdescribe Sum matrix component-wise  
 
 \item \describefun{void}{pnl_mat_sum_vect}{\refstruct{PnlVect} \ptr y, const
     \refstruct{PnlMat} \ptr A, char c}
-  \sshortdescribe Sums matrix column or row wise. Argument \var{c} can be
+  \sshortdescribe Sum matrix column or row wise. Argument \var{c} can be
   either 'r' (to get a row vector) or 'c' (to get a column vector). When
   \var{c='r'}, $y(j) = \sum_i A_{ij}$ and when \var{c='rc}, $y(i) = \sum_j
   A_{ij}$.
@@ -885,11 +895,11 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
   $A_{ij} = \sum_{1 \le k \le j} A_{ik}$.
 
 \item \describefun{double}{pnl_mat_prod}{const \refstruct{PnlMat} \ptr lhs}
-  \sshortdescribe Products matrix component-wise
+  \sshortdescribe Product matrix component-wise
 
 \item \describefun{void}{pnl_mat_prod_vect}{\refstruct{PnlVect} \ptr y, const
     \refstruct{PnlMat} \ptr A, char c}
-  \sshortdescribe Prods matrix column or row wise. Argument \var{c} can be
+  \sshortdescribe Prod matrix column or row wise. Argument \var{c} can be
   either 'r' (to get a row vector) or 'c' (to get a column vector). When
   \var{c='r'}, $y(j) = \prod_i A_{ij}$ and when \var{c='rc}, $y(i) = \prod_j
   A_{ij}$.
@@ -906,11 +916,11 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 \begin{itemize}
 \item \describefun{int}{pnl_mat_eq}{const \refstruct{PnlMat} \ptr M1,
     const \refstruct{PnlMat} \ptr M2}
-  \sshortdescribe Tests if two matrices are equal. Returns \var{TRUE} or
+  \sshortdescribe Test if two matrices are equal. Returns \var{TRUE} or
   \var{FALSE}.
 \item \describefun{int}{pnl_mat_eq_double}{const \refstruct{PnlMat} \ptr M,
     double x}
-  \sshortdescribe Tests if all the components of \var{M} are equal to
+  \sshortdescribe Test if all the components of \var{M} are equal to
   \var{x}. Returns \var{TRUE} or \var{FALSE}.
 \end{itemize}
 
@@ -956,7 +966,7 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
   (resp. maxima) are not computed.
 
 \item \describefun{void}{pnl_mat_qsort}{\refstruct{PnlMat} \ptr , char dir, char order}
-  \sshortdescribe Sorts a matrix using a quick sort algorithm according to
+  \sshortdescribe Sort a matrix using a quick sort algorithm according to
   \var{order} (\verb!'i'! for increasing or \verb!'d'! for decreasing). The parameter \var{dir} determines
   whether the matrix is sorted by rows or columns. If \var{dir='c'}, each row
   is sorted independently of the others whereas if \var{dir='r'}, each column
@@ -964,7 +974,7 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 
 \item \describefun{void}{pnl_mat_qsort_index}{\refstruct{PnlMat} \ptr ,
     \refstruct{PnlMatInt} *index, char dir, char order}
-  \sshortdescribe Sorts a matrix using a quick sort algorithm according to
+  \sshortdescribe Sort a matrix using a quick sort algorithm according to
   \var{order} (\verb!'i'! for increasing or \verb!'d'! for decreasing). The
   parameter \var{dir} determines whether the matrix is sorted by rows or
   columns. If \var{dir='c'}, each row is sorted independently of the others
@@ -1026,7 +1036,7 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 
 \item \describefun{\refstruct{PnlMat} \ptr}{pnl_mat_transpose}{const
     \refstruct{PnlMat} \ptr M} 
-    \sshortdescribe Creates a new matrix which is the transposition of \var{M}
+    \sshortdescribe Create a new matrix which is the transposition of \var{M}
 
 \item \describefun{void}{pnl_mat_tr}{
   \refstruct{PnlMat} \ptr tM, const \refstruct{PnlMat} \ptr M} 
@@ -1034,11 +1044,11 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 
 \item \describefun{void}{pnl_mat_axpy}{double alpha, const \refstruct{PnlMat}
     \ptr A, \refstruct{PnlMat} \ptr B}
-  \sshortdescribe Computes \var{B := alpha * A + B}
+  \sshortdescribe Compute \var{B := alpha * A + B}
 
 \item \describefun{void}{pnl_mat_dger}{double alpha, const \refstruct{PnlVect}
     \ptr x, const \refstruct{PnlVect} \ptr y, \refstruct{PnlMat} \ptr A}
-  \sshortdescribe Computes \var{A := alpha x * y' + A}
+  \sshortdescribe Compute \var{A := alpha x * y' + A}
 
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_mat_mult_vect}{const
     \refstruct{PnlMat} \ptr A, const \refstruct{PnlVect} \ptr x} 
@@ -1061,10 +1071,17 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
   cannot use the same vector for \var{x} and \var{y}. The vectors \var{x} and \var{y}
   must be different.
 
+\item \describefun{int}{pnl_mat_cross}{\refstruct{PnlMat} \ptr lhs, const
+  \refstruct{PnlMat} \ptr A, const \refstruct{PnlMat} \ptr B}
+  \sshortdescribe Compute the cross products of the vectors given in matrices
+  \var{A} and \var{B} which must have either 3 rows or 3 columns. A row wise
+  computation is first tried, then a column wise approach is tested.
+  \var{FAIL} is returned in case no dimension equals 3.
+
   
 \item \describefun{void}{pnl_mat_lAxpby}{double lambda, const \refstruct{PnlMat}
     \ptr A, const \refstruct{PnlVect} \ptr x, double mu, \refstruct{PnlVect} \ptr b} 
-  \sshortdescribe Computes \var{b := lambda A x + mu b}. When \var{mu==0}, the
+  \sshortdescribe Compute \var{b := lambda A x + mu b}. When \var{mu==0}, the
   content of \var{b} is not used on input and instead \var{b} is resized to
   match \var{A*x}. The vectors \var{x} and \var{b} must be different.
 
@@ -1072,7 +1089,7 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 \item \describefun{void}{pnl_mat_dgemv}{char trans, double lambda, const
     \refstruct{PnlMat} \ptr A, const \refstruct{PnlVect} \ptr x, double mu, 
     \refstruct{PnlVect} \ptr b}
-  \sshortdescribe Computes \var{b := lambda op(A) x + mu b}, where \var{op (X) =
+  \sshortdescribe Compute \var{b := lambda op(A) x + mu b}, where \var{op (X) =
     X} or \var{op (X) = X'}. If \var{trans='N'} or \var{trans='n'}, \var{op (A)
     = A}, whereas if \var{trans='T'} or \var{trans='t'}, \var{op (A) = A'}.When
   \var{mu==0}, the content of \var{b} is not used and instead \var{b} is resized
@@ -1081,7 +1098,7 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 \item \describefun{void}{pnl_mat_dgemm}{char transA, char transB, double
     alpha, const \refstruct{PnlMat} \ptr A, const \refstruct{PnlMat} \ptr B, 
     double beta, \refstruct{PnlMat} \ptr C}
-  \sshortdescribe Computes \var{C := alpha * op(A) * op (B) + beta *
+  \sshortdescribe Compute \var{C := alpha * op(A) * op (B) + beta *
     C}. When beta=0, the content of \var{C} is unused and instead \var{C}
   is resized to store \var{alpha A \ptr B}. If \var{transA='N'} or
   \var{transA='n'}, \var{op (A) = A}, whereas if \var{transA='T'} or
@@ -1100,10 +1117,10 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 
 \item \describefun{double}{pnl_mat_scalar_prod}{const \refstruct{PnlMat}
     \ptr A, const \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr y}
-  \sshortdescribe Computes \var{x' * A * y}
+  \sshortdescribe Compute \var{x' * A * y}
 \item \describefun{void}{pnl_mat_exp}{\refstruct{PnlMat} \ptr B, 
     const \refstruct{PnlMat} \ptr A}
-  \sshortdescribe Computes the matrix exponential \var{B = exp(A)}.
+  \sshortdescribe Compute the matrix exponential \var{B = exp(A)}.
 \end{itemize}
 
 
@@ -1122,14 +1139,14 @@ computations have been carried out successfully and \var{FAIL} otherwise.
 
 \begin{itemize}
 \item \describefun{int}{pnl_mat_chol}{\refstruct{PnlMat} \ptr M}
-  \sshortdescribe Computes the Cholesky decomposition of \var{M}. \var{M} must
+  \sshortdescribe Compute the Cholesky decomposition of \var{M}. \var{M} must
   be symmetric, the positivity is tested in the algorithm.  \var{M = L * L'}.
   On exit, the lower part of \var{M} contains the Cholesky decomposition L and
   the upper part is set to zero. 
 
 \item \describefun{int}{pnl_mat_pchol}{\refstruct{PnlMat} \ptr M, double tol,
   int \ptr rank, \refstruct{PnlVectInt} \ptr p}
-    \sshortdescribe Computes the
+    \sshortdescribe Compute the
     Cholesky decomposition of \var{M} with complete pivoting. 
     \var{P' * A * P = L * L'}.
     \var{M} must be
@@ -1140,7 +1157,7 @@ computations have been carried out successfully and \var{FAIL} otherwise.
 
 \item \describefun{int}{pnl_mat_lu}{\refstruct{PnlMat} \ptr A, 
     \refstruct{PnlPermutation} \ptr p} 
-  \sshortdescribe Computes a P A = LU factorization. \var{P} must be an
+  \sshortdescribe Compute a P A = LU factorization. \var{P} must be an
   already allocated  \refstruct{PnlPermutation}. On exit the decomposition is
   stored in \var{A}, the lower part of \var{A} contains L while the upper part
   (including the diagonal terms) contains U. Remember that the diagonal
@@ -1149,21 +1166,21 @@ computations have been carried out successfully and \var{FAIL} otherwise.
   
 \item \describefun{int}{pnl_mat_upper_syslin}{\refstruct{PnlVect}
     \ptr x, const \refstruct{PnlMat} \ptr U, const \refstruct{PnlVect}\ptr b}
-  \sshortdescribe Solves an upper triangular linear system \var{U x = b}
+  \sshortdescribe Solve an upper triangular linear system \var{U x = b}
 
 \item \describefun{int}{pnl_mat_lower_syslin}{\refstruct{PnlVect}
     \ptr x, const \refstruct{PnlMat} \ptr L, const \refstruct{PnlVect}\ptr b}
-  \sshortdescribe Solves a lower triangular linear system  \var{L x = b}
+  \sshortdescribe Solve a lower triangular linear system  \var{L x = b}
   
 \item \describefun{int}{pnl_mat_chol_syslin}{\refstruct{PnlVect} \ptr x, 
     const \refstruct{PnlMat} \ptr chol, const \refstruct{PnlVect} \ptr b} 
-  \sshortdescribe Solves a symmetric definite positive linear system A x = b, 
+  \sshortdescribe Solve a symmetric definite positive linear system A x = b, 
   in which \var{chol} is assumed to be the Cholesky decomposition of A
   computed by \reffun{pnl_mat_chol}
 
 \item \describefun{int}{pnl_mat_chol_syslin_inplace}{
     const \refstruct{PnlMat} \ptr chol, \refstruct{PnlVect} \ptr b} 
-  \sshortdescribe Solves a symmetric definite positive linear system A x = b, 
+  \sshortdescribe Solve a symmetric definite positive linear system A x = b, 
   in which \var{chol} is assumed to be the Cholesky decomposition of A
   computed by \reffun{pnl_mat_chol}. The solution of the system is stored in
   \var{b} on exit.
@@ -1171,7 +1188,7 @@ computations have been carried out successfully and \var{FAIL} otherwise.
 \item \describefun{int}{pnl_mat_lu_syslin}{\refstruct{PnlVect} \ptr x, const
     \refstruct{PnlMat} \ptr LU, const \refstruct{PnlPermutation} \ptr p, 
     const \refstruct{PnlVect} \ptr b} 
-  \sshortdescribe Solves a linear system A x = b using a LU decomposition.
+  \sshortdescribe Solve a linear system A x = b using a LU decomposition.
   \var{LU} and \var{P} are assumed to be the PA = LU decomposition as computed
   by \reffun{pnl_mat_lu}. In particular, the structure of the matrix \var{LU}
   is the following : the lower part of \var{A} contains L while the upper part
@@ -1181,7 +1198,7 @@ computations have been carried out successfully and \var{FAIL} otherwise.
 \item \describefun{int}{pnl_mat_lu_syslin_inplace}{const
     \refstruct{PnlMat} \ptr LU, const \refstruct{PnlPermutation} \ptr p, 
     \refstruct{PnlVect} \ptr b} 
-  \sshortdescribe Solves a linear system A x = b using a LU decomposition.
+  \sshortdescribe Solve a linear system A x = b using a LU decomposition.
   \var{LU} and \var{P} are assumed to be the PA = LU decomposition as computed
   by \reffun{pnl_mat_lu}. In particular, the structure of the matrix \var{LU}
   is the following : the lower part of \var{A} contains L while the upper part
@@ -1191,25 +1208,25 @@ computations have been carried out successfully and \var{FAIL} otherwise.
   
 \item \describefun{int}{pnl_mat_syslin}{\refstruct{PnlVect} \ptr x, const
     \refstruct{PnlMat} \ptr A, const \refstruct{PnlVect} \ptr b} 
-  \sshortdescribe Solves a linear system A x = b using a LU factorization
+  \sshortdescribe Solve a linear system A x = b using a LU factorization
   which is computed inside this function.
 
 \item \describefun{int}{pnl_mat_syslin_inplace}{\refstruct{PnlMat} \ptr A, 
     \refstruct{PnlVect} \ptr b} 
-  \sshortdescribe Solves a linear system A x = b using a LU factorization
+  \sshortdescribe Solve a linear system A x = b using a LU factorization
   which is computed inside this function. The solution of the system is stored
   in \var{b} and \var{A} is overwritten by its LU decomposition.
 
 \item \describefun{int}{pnl_mat_syslin_mat}{\refstruct{PnlMat}\ptr A, 
     \refstruct{PnlMat} \ptr B} 
-  \sshortdescribe Solves a linear system A X = B using a LU factorization
+  \sshortdescribe Solve a linear system A X = B using a LU factorization
   which is computed inside this function. \var{A} and  \var{B} are
   matrices. \var{A} must be square. The solution of the system is stored in
   \var{B} on exit. On exit, \var{A} contains the LU decomposition of the input
   matrix which is lost.
 
 \item \describefun{int}{pnl_mat_chol_syslin_mat}{const \refstruct{PnlMat}\ptr A, \refstruct{PnlMat} \ptr B}
-  \sshortdescribe Solves a linear system A X = B using a Cholesky factorization
+  \sshortdescribe Solve a linear system A X = B using a Cholesky factorization
   of the symmetric positive defnite matrix \var{A}.  \var{A} contains the
   Cholesky decomposition as computed by \reffun{pnl_mat_chol}. \var{B} is matrix
   with the same number of rows as \var{A}. The solution of
@@ -1217,7 +1234,7 @@ computations have been carried out successfully and \var{FAIL} otherwise.
 
 \item \describefun{int}{pnl_mat_lu_syslin_mat}{const \refstruct{PnlMat}\ptr A,
   const \refstruct{PnlPermutation} \ptr p, \refstruct{PnlMat} \ptr B}
-  \sshortdescribe Solves a linear system A X = B using a \var{P A = L U} factorization.
+  \sshortdescribe Solve a linear system A X = B using a \var{P A = L U} factorization.
   \var{A} contains the \var{L U} factors and \var{p} the associated permutation.
   \var{A} and \var{p} must have been computed by \reffun{pnl_mat_lu}. \var{B} is matrix
   with the same number of rows as \var{A}.
@@ -1241,12 +1258,12 @@ invert the system matrix because it is much longer.
 
 \item \describefun{int}{pnl_mat_inverse}{\refstruct{PnlMat}
   \ptr inverse, const \refstruct{PnlMat} \ptr A}
-  \sshortdescribe Computes the inverse of a matrix A and stores the result
+  \sshortdescribe Compute the inverse of a matrix A and stores the result
   into \var{inverse}. A LU factorisation of the matrix \var{A} is computed
   inside this function.
 \item \describefun{int}{pnl_mat_inverse_with_chol}{\refstruct{PnlMat}
   \ptr inverse, const \refstruct{PnlMat} \ptr A}
-  \sshortdescribe Computes the inverse of a symmetric positive definite matrix
+  \sshortdescribe Compute the inverse of a symmetric positive definite matrix
   A and stores the result into \var{inverse}. The Cholesky factorisation of
   the matrix \var{A} is computed inside this function.
 \end{itemize}
@@ -1258,12 +1275,12 @@ invert the system matrix because it is much longer.
 
 \item \describefun{void}{pnl_mat_log}{\refstruct{PnlMat} \ptr B, 
     const \refstruct{PnlMat} \ptr A}
-  \sshortdescribe Computes the matrix logarithm \var{B = log(A)}. For the
+  \sshortdescribe Compute the matrix logarithm \var{B = log(A)}. For the
   moment, this function only works if \var{A} is diagonalizable.
 
 \item \describefun{void}{pnl_mat_eigen}{\refstruct{PnlVect} *v, \refstruct{PnlMat} \ptr P, 
     const \refstruct{PnlMat} \ptr A, int with_eigenvector}
-  \sshortdescribe Computes the eigenvalues (stored in \var{v}) and optionally
+  \sshortdescribe Compute the eigenvalues (stored in \var{v}) and optionally
   the eigenvectors stored column wise in \var{P} when
   \var{with_eigenvector==TRUE}. If \var{A} is symmetric, \var{P} is orthonormal.
 \end{itemize}
@@ -1285,7 +1302,7 @@ computations have been carried out successfully and \var{FAIL} otherwise.
 \item \describefun{int}{pnl_mat_qr}{\refstruct{PnlMat} \ptr Q,
   \refstruct{PnlMat} \ptr R, \refstruct{PnlPermutation} \ptr p,
   const \refstruct{PnlMat} \ptr A} 
-  \sshortdescribe Computes a \var{A P = QR} decomposition. If on entry
+  \sshortdescribe Compute a \var{A P = QR} decomposition. If on entry
   \var{P=NULL}, then the decomposition is computed without pivoting, i.e
   \var{A = QR}. When $P \ne NULL$, \var{P} must be an already allocated
   \refstruct{PnlPermutation}. \var{Q} is an orthogonal matrix, i.e
@@ -1296,17 +1313,17 @@ computations have been carried out successfully and \var{FAIL} otherwise.
 \item \describefun{int}{pnl_mat_qr_syslin}{\refstruct{PnlVect} \ptr x,
     const \refstruct{PnlMat} \ptr Q, const \refstruct{PnlMat} \ptr R,
     const \refstruct{PnlVectInt} \ptr p, const \refstruct{PnlVect} \ptr b}
-  \sshortdescribe Solves a linear system \var{A x = b} where \var{A} is given by
+  \sshortdescribe Solve a linear system \var{A x = b} where \var{A} is given by
   its QR decomposition with column pivoting as computed by the function
   \reffun{pnl_mat_qr}.
 \item \describefun{int}{pnl_mat_ls}{const \refstruct{PnlMat}\ptr A, \refstruct{PnlVect} \ptr b}
-  \sshortdescribe Solves a linear system A x = b in the least square sense,
+  \sshortdescribe Solve a linear system A x = b in the least square sense,
   i.e. $\var{x} = \arg\min_U \| A * u - b\|^2$. The solution is stored into
   \var{b} on exit. It internally uses a \var{AP = QR} decomposition.
 
 \item \describefun{int}{pnl_mat_ls_mat}{const \refstruct{PnlMat}\ptr A,
     \refstruct{PnlMat} \ptr B}
-  \sshortdescribe Solves a linear system A X = B with \var{A} and \var{B} two
+  \sshortdescribe Solve a linear system A X = B with \var{A} and \var{B} two
   matrices in the least square sense, i.e. $\var{X} = \arg\min_U \| A * U -
   B\|^2$. The solution is stored into \var{B} on exit. It internally uses a
   \var{AP = QR} decomposition. Same function as \reffun{pnl_mat_ls} but handles
@@ -1332,50 +1349,50 @@ decomposition, row \verb!i! of \verb!A! was interchanged with row \verb!p(i)!.
 
 \begin{itemize}
   \item \describefun{\refstruct{PnlPermutation} \ptr }{pnl_permutation_new}{}
-    \sshortdescribe Creates an empty \refstruct{PnlPermutation}.  
+    \sshortdescribe Create an empty \refstruct{PnlPermutation}.  
 
 \item \describefun{\refstruct{PnlPermutation} \ptr }{pnl_permutation_create}{int n}
-  \sshortdescribe Creates a \refstruct{PnlPermutation} of size \var{n}.  
+  \sshortdescribe Create a \refstruct{PnlPermutation} of size \var{n}.  
 
 \item \describefun{void}{pnl_permutation_free}{\refstruct{PnlPermutation} \ptr \ptr p}
-  \sshortdescribe Frees a \refstruct{PnlPermutation}.
+  \sshortdescribe Free a \refstruct{PnlPermutation}.
 
 \item \describefun{void}{pnl_permutation_inverse}{\refstruct{PnlPermutation}\ptr
     inv, const \refstruct{PnlPermutation}\ptr p}
-  \sshortdescribe Computes in \var{inv} the inverse of the permutation \var{p}.
+  \sshortdescribe Compute in \var{inv} the inverse of the permutation \var{p}.
 \item \describefun{void}{pnl_vect_permute}{\refstruct{PnlVect} \ptr px, const
     \refstruct{PnlVect} \ptr x, const \refstruct{PnlPermutation} \ptr p} 
-  \sshortdescribe Applies a \refstruct{PnlPermutation} to a \refstruct{PnlVect}.  
+  \sshortdescribe Apply a \refstruct{PnlPermutation} to a \refstruct{PnlVect}.  
 
 \item \describefun{void}{pnl_vect_permute_inplace}{\refstruct{PnlVect} \ptr x, 
     const \refstruct{PnlPermutation} \ptr p} 
-  \sshortdescribe Applies a \refstruct{PnlPermutation} to a
+  \sshortdescribe Apply a \refstruct{PnlPermutation} to a
   \refstruct{PnlVect} in-place.  
 
 \item \describefun{void}{pnl_vect_permute_inverse}{\refstruct{PnlVect} \ptr px, const
     \refstruct{PnlVect} \ptr x, const \refstruct{PnlPermutation} \ptr p} 
-  \sshortdescribe Applies the inverse of \refstruct{PnlPermutation} to a \refstruct{PnlVect}.  
+  \sshortdescribe Apply the inverse of \refstruct{PnlPermutation} to a \refstruct{PnlVect}.  
 
 \item \describefun{void}{pnl_vect_permute_inverse_inplace}{\refstruct{PnlVect} \ptr x, 
     const \refstruct{PnlPermutation} \ptr p} 
-  \sshortdescribe Applies the inverse of a \refstruct{PnlPermutation} to a
+  \sshortdescribe Apply the inverse of a \refstruct{PnlPermutation} to a
   \refstruct{PnlVect} in-place.  
 
 \item \describefun{void}{pnl_mat_col_permute}{\refstruct{PnlMat} \ptr pX, const
     \refstruct{PnlMat} \ptr X, const
     \refstruct{PnlPermutation} \ptr p}
-  \sshortdescribe Applies a \refstruct{PnlPermutation} to the columns of a
+  \sshortdescribe Apply a \refstruct{PnlPermutation} to the columns of a
   matrix. \var{pX} contains the result of the permutation applied to \var{X}. 
 \item \describefun{void}{pnl_mat_row_permute}{\refstruct{PnlMat} \ptr pX, const
     \refstruct{PnlMat} \ptr X, const \refstruct{PnlPermutation} \ptr p}
-  \sshortdescribe Applies a \refstruct{PnlPermutation} to the rows of a
+  \sshortdescribe Apply a \refstruct{PnlPermutation} to the rows of a
   matrix. \var{pX} contains the result of the permutation applied to \var{X}. 
   
 \item \describefun{void}{pnl_permutation_fprint}{FILE \ptr fic, const \refstruct{PnlPermutation} \ptr p}
-  \sshortdescribe Prints a permutation to a file.  
+  \sshortdescribe Print a permutation to a file.  
 
 \item \describefun{void}{pnl_permutation_print}{const \refstruct{PnlPermutation} \ptr p}
-  \sshortdescribe Prints a permutation to the standard output.  
+  \sshortdescribe Print a permutation to the standard output.  
 \end{itemize}
 
 
@@ -1430,36 +1447,36 @@ This type is used to store the LU decomposition of a tridiagonal matrix.
 \paragraph{Constructors and destructors}
 \begin{itemize}
   \item \describefun{\refstruct{PnlTridiagMat} \ptr }{pnl_tridiag_mat_new}{}
-    \sshortdescribe Creates a \refstruct{PnlTridiagMat} with size 0
+    \sshortdescribe Create a \refstruct{PnlTridiagMat} with size 0
   \item \describefun{\refstruct{PnlTridiagMat} \ptr }{pnl_tridiag_mat_create}{int size}
-    \sshortdescribe Creates a \refstruct{PnlTridiagMat} with size \var{size}
+    \sshortdescribe Create a \refstruct{PnlTridiagMat} with size \var{size}
   \item \describefun{\refstruct{PnlTridiagMat} \ptr }{pnl_tridiag_mat_create_from_double}{int size, double x}
-    \sshortdescribe Creates a \refstruct{PnlTridiagMat} with the 3 diagonals
+    \sshortdescribe Create a \refstruct{PnlTridiagMat} with the 3 diagonals
     filled with \var{x}
   \item \describefun{\refstruct{PnlTridiagMat} \ptr }{pnl_tridiag_mat_create_from_two_double}{int size, double x, double y}
-    \sshortdescribe Creates a \refstruct{PnlTridiagMat}  with the diagonal
+    \sshortdescribe Create a \refstruct{PnlTridiagMat}  with the diagonal
     filled with \var{x} and the upper and lower diagonals filled with \var{y}
   \item \describefun{\refstruct{PnlTridiagMat}
       \ptr }{pnl_tridiag_mat_create_from_ptr}{int size, const double
       \ptr lower_D, const double \ptr D, const double \ptr upper_D}
-    \sshortdescribe Creates a \refstruct{PnlTridiagMat}  
+    \sshortdescribe Create a \refstruct{PnlTridiagMat}  
   \item \describefun{\refstruct{PnlTridiagMat} \ptr }{pnl_tridiag_mat_create_from_mat}
     {const \refstruct{PnlMat} \ptr mat}
-    \sshortdescribe Creates a tridiagonal matrix from a full matrix (all the
+    \sshortdescribe Create a tridiagonal matrix from a full matrix (all the
     elements but the 3 diagonal ones are ignored).
   \item \describefun{\refstruct{PnlMat} \ptr }{pnl_tridiag_mat_to_mat}
     {const \refstruct{PnlTridiagMat} \ptr T}
-    \sshortdescribe Creates a full matrix from a tridiagonal one.
+    \sshortdescribe Create a full matrix from a tridiagonal one.
   \item \describefun{\refstruct{PnlTridiagMat} \ptr }{pnl_tridiag_mat_copy}
     {const \refstruct{PnlTridiagMat} \ptr T}
-    \sshortdescribe Copies a tridiagonal matrix.
+    \sshortdescribe Copy a tridiagonal matrix.
   \item \describefun{void}{pnl_tridiag_mat_clone}
     {\refstruct{PnlTridiagMat} \ptr clone, const \refstruct{PnlTridiagMat} \ptr T}
-    \sshortdescribe Copies the content of \var{T} into \var{clone}
+    \sshortdescribe Copy the content of \var{T} into \var{clone}
   \item \describefun{void }{pnl_tridiag_mat_free}{\refstruct{PnlTridiagMat} \ptr \ptr v}
-    \sshortdescribe Frees a \refstruct{PnlTridiagMat}  
+    \sshortdescribe Free a \refstruct{PnlTridiagMat}  
   \item \describefun{int}{pnl_tridiag_mat_resize}{\refstruct{PnlTridiagMat} \ptr v, int size}
-    \sshortdescribe Resizes a \refstruct{PnlTridiagMat}.  
+    \sshortdescribe Resize a \refstruct{PnlTridiagMat}.  
 \end{itemize}
 
 
@@ -1467,19 +1484,19 @@ This type is used to store the LU decomposition of a tridiagonal matrix.
 
 \begin{itemize}
   \item \describefun{void}{pnl_tridiag_mat_set}{\refstruct{PnlTridiagMat} \ptr self, int d, int up, double x}
-    \sshortdescribe Sets \var{self[d, d+up] = x}, \var{up} can be $\{-1, 0, 1\}$.  
+    \sshortdescribe Set \var{self[d, d+up] = x}, \var{up} can be $\{-1, 0, 1\}$.  
   \item \describefun{double}{pnl_tridiag_mat_get}{const \refstruct{PnlTridiagMat} \ptr self, int d, int up}
-    \sshortdescribe Gets \var{self[d, d+up]}, \var{up} can be $\{-1, 0, 1\}$.  
+    \sshortdescribe Get \var{self[d, d+up]}, \var{up} can be $\{-1, 0, 1\}$.  
   \item \describefun{double \ptr }{pnl_tridiag_mat_lget}{\refstruct{PnlTridiagMat} \ptr self, int d, int up}
-    \sshortdescribe Returns the address \var{self[d, d+up] = x}, \var{up} can be $\{-1, 0, 1\}$.  
+    \sshortdescribe Return the address \var{self[d, d+up] = x}, \var{up} can be $\{-1, 0, 1\}$.  
 \end{itemize}
 
 \paragraph{Printing Matrix}
 \begin{itemize}
   \item \describefun{void}{pnl_tridiag_mat_fprint}{FILE \ptr fic, const \refstruct{PnlTridiagMat} \ptr M}
-    \sshortdescribe Prints a tri-diagonal matrix to a file.  
+    \sshortdescribe Print a tri-diagonal matrix to a file.  
   \item \describefun{void}{pnl_tridiag_mat_print}{const \refstruct{PnlTridiagMat} \ptr M}
-    \sshortdescribe Prints a tridiagonal matrix to the standard output.  
+    \sshortdescribe Print a tridiagonal matrix to the standard output.  
 \end{itemize}
 
 \paragraph{Algebra operations}
@@ -1526,45 +1543,45 @@ This type is used to store the LU decomposition of a tridiagonal matrix.
     \sshortdescribe Matrix multiplication  
   \item \describefun{void}{pnl_tridiag_mat_lAxpby}{double lambda, const \refstruct{PnlTridiagMat}
       \ptr A, const \refstruct{PnlVect} \ptr x, double mu, \refstruct{PnlVect} \ptr b} 
-    \sshortdescribe Computes \var{b := lambda A x + mu b}. When \var{mu==0}, the
+    \sshortdescribe Compute \var{b := lambda A x + mu b}. When \var{mu==0}, the
     content of \var{b} is not used on input and instead \var{b} is resized to
     match \var{A*x}. Note that the vectors \var{x} and \var{b} must be different.
   \item \describefun{double}{pnl_tridiag_mat_scalar_prod}{const \refstruct{PnlVect}
     \ptr x,const \refstruct{PnlTridiagMat} \ptr A, const \refstruct{PnlVect} \ptr y}
-    \sshortdescribe Computes \var{x' * A * y}
+    \sshortdescribe Compute \var{x' * A * y}
   \item \describefun{void}{pnl_tridiag_mat_syslin_inplace}{
       \refstruct{PnlTridiagMat} \ptr M, \refstruct{PnlVect} \ptr b}
-    \sshortdescribe Solves the linear system M x = b. The solution is written into
+    \sshortdescribe Solve the linear system M x = b. The solution is written into
     \var{b} on exit. On exit, \var{M} is modified and becomes unusable.
   \item \describefun{void}{pnl_tridiag_mat_syslin}{\refstruct{PnlVect}
       \ptr x, \refstruct{PnlTridiagMat} \ptr M, const \refstruct{PnlVect} \ptr b}
-    \sshortdescribe Solves the linear system M x = b. On exit, \var{M} is modified and becomes unusable.
+    \sshortdescribe Solve the linear system M x = b. On exit, \var{M} is modified and becomes unusable.
   \item \describefun{\refstruct{PnlTridiagMatLU}\ptr }{pnl_tridiag_mat_lu_new}{}
-    \sshortdescribe Creates an empty \refstruct{PnlTridiagMatLU}
+    \sshortdescribe Create an empty \refstruct{PnlTridiagMatLU}
   \item \describefun{\refstruct{PnlTridiagMatLU}\ptr }{pnl_tridiag_mat_lu_create}{int size}
-    \sshortdescribe Creates a \refstruct{PnlTridiagMatLU} with size \var{size}
+    \sshortdescribe Create a \refstruct{PnlTridiagMatLU} with size \var{size}
   \item \describefun{\refstruct{PnlTridiagMatLU}\ptr }{pnl_tridiag_mat_lu_copy}{const \refstruct{PnlTridiagMatLU}  \ptr mat}
-    \sshortdescribe Creates a new \refstruct{PnlTridiagMatLU} which is a copy of
+    \sshortdescribe Create a new \refstruct{PnlTridiagMatLU} which is a copy of
     \var{mat}.
   \item \describefun{void}{pnl_tridiag_mat_lu_clone}{\refstruct{PnlTridiagMatLU} \ptr clone, const \refstruct{PnlTridiagMatLU} \ptr mat}
-    \sshortdescribe Clones a \refstruct{PnlTridiagMatLU}. \var{clone} must
+    \sshortdescribe Clone a \refstruct{PnlTridiagMatLU}. \var{clone} must
     already exist, no memory is allocated for the envelope. 
   \item \describefun{void}{pnl_tridiag_mat_lu_free}{\refstruct{PnlTridiagMatLU} \ptr \ptr m}
-    \sshortdescribe Frees a \refstruct{PnlTridiagMatLU}
+    \sshortdescribe Free a \refstruct{PnlTridiagMatLU}
   \item \describefun{int}{pnl_tridiag_mat_lu_resize}{\refstruct{PnlTridiagMatLU} \ptr v, int size}
-    \sshortdescribe Resizes a \refstruct{PnlTridiagMatLU}
+    \sshortdescribe Resize a \refstruct{PnlTridiagMatLU}
   \item \describefun{int}{pnl_tridiag_mat_lu_compute}{\refstruct{PnlTridiagMatLU} \ptr LU, const \refstruct{PnlTridiagMat} \ptr A}
-    \sshortdescribe Computes the LU factorisation of a tridiagonal matrix
+    \sshortdescribe Compute the LU factorisation of a tridiagonal matrix
     \var{A}. \var{LU} must have already been created using
     \reffun{pnl_tridiag_mat_lu_new}. On exit, \var{LU} contains the
     decomposition which is suitable for use in \reffun{pnl_tridiag_mat_lu_syslin}.
   \item \describefun{int}{pnl_tridiag_mat_lu_syslin_inplace}{\refstruct{PnlTridiagMatLU} \ptr LU, \refstruct{PnlVect} \ptr b}
-    \sshortdescribe Solves a linear system \var{A x = b} where the matrix \var{LU}
+    \sshortdescribe Solve a linear system \var{A x = b} where the matrix \var{LU}
     is given the LU decomposition of A previously computed by
     \reffun{pnl_tridiag_mat_lu_compute}. On exit, \var{b} is overwritten by the
     solution \var{x}. 
   \item \describefun{int}{pnl_tridiag_mat_lu_syslin}{\refstruct{PnlVect} \ptr x, \refstruct{PnlTridiagMatLU} \ptr LU, const \refstruct{PnlVect} \ptr b}
-    \sshortdescribe Solves a linear system \var{A x = b} where the matrix \var{LU}
+    \sshortdescribe Solve a linear system \var{A x = b} where the matrix \var{LU}
     is given the LU decomposition of A previously computed by
     \reffun{pnl_tridiag_mat_lu_compute}. 
 \end{itemize}
@@ -1602,35 +1619,35 @@ The structures and functions related to band matrices are declared in
 \paragraph{Constructors and destructors}
 \begin{itemize}
   \item \describefun{\refstruct{PnlBandMat}\ptr }{pnl_band_mat_new}{}
-  \sshortdescribe Creates a band matrix of size 0.
+  \sshortdescribe Create a band matrix of size 0.
 
 \item \describefun{\refstruct{PnlBandMat}\ptr }{pnl_band_mat_create}{int m, int n, int
     nl, int nu}
-  \sshortdescribe Creates a band matrix of size \var{m x n} with \var{nl} lower
+  \sshortdescribe Create a band matrix of size \var{m x n} with \var{nl} lower
   diagonals and \var{nu} upper diagonals.
 
 \item \describefun{\refstruct{PnlBandMat}\ptr }{pnl_band_mat_create_from_mat}{const
     \refstruct{PnlMat} \ptr BM, int nl, int nu}
-  \sshortdescribe Extracts a band matrix from a \refstruct{PnlMat}.
+  \sshortdescribe Extract a band matrix from a \refstruct{PnlMat}.
 
 \item \describefun{void}{pnl_band_mat_free}{\refstruct{PnlBandMat}\ptr\ptr}
-  \sshortdescribe Frees a band matrix.
+  \sshortdescribe Free a band matrix.
 
 \item \describefun{void}{pnl_band_mat_clone}{\refstruct{PnlBandMat} \ptr clone, 
   const \refstruct{PnlBandMat} \ptr M}
-  \sshortdescribe Copies the band matrix \var{M} into \var{clone}. No new
+  \sshortdescribe Copy the band matrix \var{M} into \var{clone}. No new
   \refstruct{PnlBandMat} is created.
 
 \item \describefun{\refstruct{PnlBandMat}\ptr }{pnl_band_mat_copy}{\refstruct{PnlBandMat} \ptr BM}
-  \sshortdescribe Creates a new band matrix which is a copy of \var{BM}. Each
+  \sshortdescribe Create a new band matrix which is a copy of \var{BM}. Each
   band matrix owns its data array.
 
 \item \describefun{\refstruct{PnlMat}\ptr }{pnl_band_mat_to_mat}{\refstruct{PnlBandMat} \ptr BM}
-  \sshortdescribe Creates a full matrix from a band matrix.
+  \sshortdescribe Create a full matrix from a band matrix.
 
 \item \describefun{int}{pnl_band_mat_resize}{\refstruct{PnlBandMat} \ptr BM, int
   m, int n, int nl, int nu}
-  \sshortdescribe Resizes \var{BM} to store a \var{m x n} band matrix with
+  \sshortdescribe Resize \var{BM} to store a \var{m x n} band matrix with
   \var{nu} upper diagonals and \var{nl} lower diagonals.
 \end{itemize}
 \paragraph{Accessing elements}
@@ -1641,18 +1658,18 @@ The structures and functions related to band matrices are declared in
 
 \item \describefun{void}{pnl_band_mat_get}{\refstruct{PnlBandMat}
     \ptr M, int i, int j}
-    \sshortdescribe Returns $M_{i, j}$.
+    \sshortdescribe Return $M_{i, j}$.
 
 \item \describefun{void}{pnl_band_mat_lget}{\refstruct{PnlBandMat}
     \ptr M, int i, int j}
-    \sshortdescribe Returns the address $\&(M_{i, j})$.
+    \sshortdescribe Return the address $\&(M_{i, j})$.
 \item \describefun{void}{pnl_band_mat_set_double}{\refstruct{PnlBandMat}
     \ptr M, double x}
-    \sshortdescribe Sets all the elements of \var{M} to \var{x}.
+    \sshortdescribe Set all the elements of \var{M} to \var{x}.
 
   \item \describefun{void}{pnl_band_mat_print_as_full}{\refstruct{PnlBandMat}
     \ptr M}
-    \sshortdescribe Prints a band matrix in a full format.
+    \sshortdescribe Print a band matrix in a full format.
 \end{itemize}
 
 \subparagraph{Element wise operations}
@@ -1710,7 +1727,7 @@ The structures and functions related to band matrices are declared in
 \begin{itemize}
 \item \describefun{void}{pnl_band_mat_lAxpby}{double lambda, const \refstruct{PnlBandMat}
     \ptr A, const \refstruct{PnlVect} \ptr x, double mu, \refstruct{PnlVect} \ptr b} 
-  \sshortdescribe Computes \var{b := lambda A x + mu b}. When \var{mu==0}, the
+  \sshortdescribe Compute \var{b := lambda A x + mu b}. When \var{mu==0}, the
   content of \var{b} is not used on input and instead \var{b} is resized to
   match the size of \var{A*x}.
 \item \describefun{void}{pnl_band_mat_mult_vect_inplace}{\refstruct{PnlVect} \ptr
@@ -1719,29 +1736,29 @@ The structures and functions related to band matrices are declared in
 \item 
   \describefun{void}{pnl_band_mat_syslin_inplace}{\refstruct{PnlBandMat}
     \ptr M, \refstruct{PnlVect} \ptr b}
-    \sshortdescribe Solves the linear system \var{M x = b} with \var{M} a \refstruct{PnlBandMat}.
+    \sshortdescribe Solve the linear system \var{M x = b} with \var{M} a \refstruct{PnlBandMat}.
   {\bf Note} that M is modified on output and becomes unusable. On exit, the
   solution \var{x} is stored in \var{b}.
 \item 
   \describefun{void}{pnl_band_mat_syslin}{\refstruct{PnlVect} \ptr x,\refstruct{PnlBandMat}
     \ptr M, \refstruct{PnlVect} \ptr b}
-    \sshortdescribe Solves the linear system \var{M x = b} with \var{M} a \refstruct{PnlBandMat}.
+    \sshortdescribe Solve the linear system \var{M x = b} with \var{M} a \refstruct{PnlBandMat}.
   {\bf Note} that M is modified on output and becomes unusable. 
 \item \describefun{void}{pnl_band_mat_lu}{\refstruct{PnlBandMat} \ptr BM,
   \refstruct{PnlVectInt} \ptr p}
-  \sshortdescribe Computes the LU decomposition with partial pivoting with row
+  \sshortdescribe Compute the LU decomposition with partial pivoting with row
   interchanges. On exit, \var{BM} is enlarged to store the LU decomposition. On
   exit, \var{p} stores the permutation applied to the rows. Note that the Lapack format
   is used to store \var{p}, this format differs from the one used by
   \refstruct{PnlPermutation}.
 \item  \describefun{void}{pnl_band_mat_lu_syslin_inplace}{const \refstruct{PnlBandMat} \ptr M, 
   \refstruct{PnlVectInt} \ptr p, \refstruct{PnlVect} \ptr b} 
-  \sshortdescribe Solves the band linear system \var{M x = b} where \var{M} is
+  \sshortdescribe Solve the band linear system \var{M x = b} where \var{M} is
   the LU decomposition computed by \reffun{pnl_band_mat_lu}  and \var{p} the
   associated permutation. On exit, the solution \var{x} is stored in \var{b}.
 \item  \describefun{void}{pnl_band_mat_lu_syslin}{\refstruct{PnlVect} \ptr x,
   const \refstruct{PnlBandMat} \ptr M, \refstruct{PnlVectInt} \ptr p, const \refstruct{PnlVect} \ptr b} 
-  \sshortdescribe Solves the band linear system \var{M x = b} where \var{M} is the LU
+  \sshortdescribe Solve the band linear system \var{M x = b} where \var{M} is the LU
   decomposition computed by \reffun{pnl_band_mat_lu} and \var{p} the associated permutation. 
 \end{itemize}
 
@@ -1830,54 +1847,54 @@ the above table.
 \paragraph{Constructors and destructors}
 \begin{itemize}
   \item \describefun{\refstruct{PnlHmat} \ptr }{pnl_hmat_new}{}
-    \sshortdescribe Creates an empty \refstruct{PnlHmat}.
+    \sshortdescribe Create an empty \refstruct{PnlHmat}.
 
 \item \describefun{\refstruct{PnlHmat} \ptr }{pnl_hmat_create}{int ndim, const int \ptr dims}
-  \sshortdescribe Creates a \refstruct{PnlHmat} with \var{ndim} dimensions and
+  \sshortdescribe Create a \refstruct{PnlHmat} with \var{ndim} dimensions and
   the size of each dimension is given by the entries of the integer array
   \var{dims}
   
 \item 
   \describefun{\refstruct{PnlHmat} \ptr }{pnl_hmat_create_from_double}{int ndim, const int \ptr dims, double x}
-  \sshortdescribe Creates a \refstruct{PnlHmat} with \var{ndim} dimensions given
+  \sshortdescribe Create a \refstruct{PnlHmat} with \var{ndim} dimensions given
   by $\prod_i \var{dims[i]}$ filled with \var{x}.
   
 \item 
   \describefun{\refstruct{PnlHmat} \ptr }{pnl_hmat_create_from_ptr}{int ndim, const int \ptr dims, const double \ptr x}
   
 \item \describefun{void}{pnl_hmat_free}{\refstruct{PnlHmat} \ptr \ptr H}
-  \sshortdescribe Frees a \refstruct{PnlHmat}
+  \sshortdescribe Free a \refstruct{PnlHmat}
   
 \item \describefun{\refstruct{PnlHmat} \ptr }{pnl_hmat_copy}{const \refstruct{PnlHmat} \ptr H}
-  \sshortdescribe Copies a \refstruct{PnlHmat}.
+  \sshortdescribe Copy a \refstruct{PnlHmat}.
   
 \item \describefun{void}{pnl_hmat_clone}{\refstruct{PnlHmat} \ptr clone, const \refstruct{PnlHmat} \ptr H}
-  \sshortdescribe Clones a \refstruct{PnlHmat}.
+  \sshortdescribe Clone a \refstruct{PnlHmat}.
   
 \item \describefun{int}{pnl_hmat_resize}{\refstruct{PnlHmat} \ptr H, int ndim, const int \ptr dims}
-  \sshortdescribe Resizes a \refstruct{PnlHmat}.
+  \sshortdescribe Resize a \refstruct{PnlHmat}.
 \end{itemize}  
 
 \paragraph{Accessing elements}
 
 \begin{itemize}
 \item   \describefun{void}{pnl_hmat_set}{\refstruct{PnlHmat} \ptr self, int \ptr tab, double x}
-  \sshortdescribe Sets the element of index \var{tab} to \var{x}.
+  \sshortdescribe Set the element of index \var{tab} to \var{x}.
   
 \item \describefun{double}{pnl_hmat_get}{const \refstruct{PnlHmat} \ptr self, int \ptr tab}
-  \sshortdescribe Returns the value of the element of index \var{tab} 
+  \sshortdescribe Return the value of the element of index \var{tab} 
   
 \item \describefun{double\ptr }{pnl_hmat_lget}{\refstruct{PnlHmat} \ptr self, int \ptr tab}
-  \sshortdescribe Returns the address of self[tab] for use as a lvalue.  
+  \sshortdescribe Return the address of self[tab] for use as a lvalue.  
 
 \item \describefun{\refstruct{PnlMat}}{pnl_mat_wrap_hmat}{\refstruct{PnlHmat} \ptr H, int \ptr t}
-  \sshortdescribe Returns a true \refstruct{PnlMat} not a pointer holding the data
+  \sshortdescribe Return a true \refstruct{PnlMat} not a pointer holding the data
   \var{H(t,:,:)}. Note that \var{t} must be of size \var{ndim-2} and that it
   cannot be checked within the function. The returned matrix shares its data
   with \var{H}, it is only a view not a true copy.
 
 \item \describefun{\refstruct{PnlVect}}{pnl_vect_wrap_hmat}{\refstruct{PnlHmat} \ptr H, int \ptr t}
-  \sshortdescribe Returns a true \refstruct{PnlVect} not a pointer holding the data
+  \sshortdescribe Return a true \refstruct{PnlVect} not a pointer holding the data
   \var{H(t,:)}. Note that \var{t} must be of size \var{ndim-1} and that it
   cannot be checked within the function. The returned vector shares its data
   with \var{H}, it is only a view not a true copy.
@@ -1889,17 +1906,17 @@ the above table.
 
 \begin{itemize}
 \item \describefun{void}{pnl_hmat_print}{const \refstruct{PnlHmat} \ptr H}
-  \sshortdescribe Prints an hypermatrix.
+  \sshortdescribe Print an hypermatrix.
 \end{itemize}
 
 \paragraph{Term by term operations}
 
 \begin{itemize}
 \item \describefun{void}{pnl_hmat_plus_hmat}{\refstruct{PnlHmat} \ptr lhs, const \refstruct{PnlHmat} \ptr rhs}
-  \sshortdescribe Computes \var{lhs += rhs}.
+  \sshortdescribe Compute \var{lhs += rhs}.
   
 \item \describefun{void}{pnl_hmat_mult_double}{\refstruct{PnlHmat} \ptr lhs, double x}
-  \sshortdescribe Computes \var{lhs *= x} where x is a real number.
+  \sshortdescribe Compute \var{lhs *= x} where x is a real number.
 \end{itemize}
 
 % \subsection{Morse Matrix}
@@ -1957,24 +1974,24 @@ the above table.
 % \begin{itemize}
 % \item \describefun{\refstruct{PnlMorseMat}\ptr }{pnl_morse_mat_create}{int m, 
 %     int n, int Max_size_row, int RC}
-%   \sshortdescribe Creates an empty \refstruct{PnlMorseMat} with memory
+%   \sshortdescribe Create an empty \refstruct{PnlMorseMat} with memory
 %   allocated for each component of the array. 
 % \item
 %   \describefun{\refstruct{PnlMorseMat}\ptr }{pnl_morse_mat_create_fromfull}
 %   {\refstruct{PnlMat} \ptr FM, int RC}
-%   \sshortdescribe Creates a \refstruct{PnlMorseMat} from  a \refstruct{PnlMat}
+%   \sshortdescribe Create a \refstruct{PnlMorseMat} from  a \refstruct{PnlMat}
 %   storing only its nonzero elements.
 
 % \item \describefun{void}{pnl_morse_mat_free}{\refstruct{PnlMorseMat}\ptr \ptr  M}
-%   \sshortdescribe Frees a \refstruct{PnlMorseMat}
+%   \sshortdescribe Free a \refstruct{PnlMorseMat}
 
 % \item \describefun{int}{pnl_morse_mat_freeze}{PnlMorseMat\ptr  M}
-%   \sshortdescribe Sets Max size equal to size for each SpRow and frees the extra
+%   \sshortdescribe Set Max size equal to size for each SpRow and frees the extra
 %   memory.
 
 % \item \describefun{\refstruct{PnlMat} \ptr }{pnl_morse_mat_full}
 %   {\refstruct{PnlMorseMat}\ptr  M}
-%   \sshortdescribe Creates a full matrix from a morse matrix.
+%   \sshortdescribe Create a full matrix from a morse matrix.
 % \end{itemize}
 
 
@@ -1990,7 +2007,7 @@ the above table.
 %   $array[i] \rightarrow Value$ with memory allocation if needed. 
 % \item \describefun{double\ptr }{pnl_morse_mat_lget}{PnlMorseMat\ptr  M, int
 %     i, int j}
-%   \sshortdescribe Returns the address of $M_{i, j}$. For example, 
+%   \sshortdescribe Return the address of $M_{i, j}$. For example, 
 %   if $RC=1$ and $(i, j)$ is a valid index, replace return address of
 %   $array[i]\rightarrow Value[k]$ with $k$ such that $array[i]\rightarrow
 %   Index[k]=j$.  If $(i, j)$ is not a valid index, add $j$ to
@@ -2032,22 +2049,22 @@ the above table.
 % \begin{itemize}
 % \item \describefun{\refstruct{PnlSparseMat}
 %     \ptr }{pnl_sparse_mat_create_fromfull}{\refstruct{PnlMat} \ptr M}
-%   \sshortdescribe Creates a \refstruct{PnlSparseMat} from  a
+%   \sshortdescribe Create a \refstruct{PnlSparseMat} from  a
 %   \refstruct{PnlMat} storing only nonzero elements.
 % \item \describefun{\refstruct{PnlSparseMat}
 %     \ptr }{pnl_sparse_mat_create_frommorse}{\refstruct{PnlMorseMat}\ptr  M}
-%   \sshortdescribe Creates a \refstruct{PnlSparseMat} from  a
+%   \sshortdescribe Create a \refstruct{PnlSparseMat} from  a
 %   \refstruct{PnlMorseMat} with $M\rightarrow M->RC =1$.
 % \item \describefun{void}{pnl_sparse_mat_free}{\refstruct{PnlSparseMat}
 %     \ptr \ptr M}
-%   \sshortdescribe Frees a \refstruct{PnlSparseMat}.
+%   \sshortdescribe Free a \refstruct{PnlSparseMat}.
 % \end{itemize}
 
 % \paragraph{Printing Matrix}
 % \begin{itemize}
 % \item \describefun{void}{pnl_sparse_mat_print}{\refstruct{PnlSparseMat}
 %     \ptr A}
-%   \sshortdescribe Prints a \refstruct{PnlSparseMat}.
+%   \sshortdescribe Print a \refstruct{PnlSparseMat}.
 % \end{itemize}
 
 % \subparagraph{Element wise operations}
@@ -2075,7 +2092,7 @@ the above table.
 
 
 % \item \describefun{void}{pnl_sparse_mat_map_inplace}{\refstruct{PnlSparseMat} \ptr M, double(\ptr f)(double)}
-%   \sshortdescribe Applies function \var{f} to each entry of \var{M}, which
+%   \sshortdescribe Apply function \var{f} to each entry of \var{M}, which
 %   is modified on exit.
 % \end{itemize}
 
@@ -2085,11 +2102,11 @@ the above table.
 % \item \describefun{int}{pnl_sparse_mat_gaxpby}{\refstruct{PnlVect} \ptr lhs, 
 %     const \refstruct{PnlSparseMat} \ptr M, const \refstruct{PnlVect}
 %     \ptr rhs}
-%   \sshortdescribe Computes $lhs=lhs+ M * rhs$.
+%   \sshortdescribe Compute $lhs=lhs+ M * rhs$.
 % \item \describefun{int}{pnl_sparse_mat_mult_vect_inplace}{\refstruct{PnlVect}
 %     \ptr lhs, const \refstruct{PnlSparseMat} \ptr M, const
 %     \refstruct{PnlVect} \ptr rhs}
-%   \sshortdescribe Computes $lhs= M * rhs$.
+%   \sshortdescribe Compute $lhs= M * rhs$.
 % \end{itemize}
 
 % \subsubsection{LU structure}
@@ -2099,10 +2116,10 @@ the above table.
 % \begin{itemize}
 % \item \describefun{\refstruct{PnlSparseFactorization}
 %     \ptr }{pnl_sparse_factorization_lu_create}{const \refstruct{PnlSparseMat} \ptr A, double tol}
-%   \sshortdescribe Computes the LU factorisation of \var{A}
+%   \sshortdescribe Compute the LU factorisation of \var{A}
 
 % \item \describefun{void}{pnl_sparse_factorization_free}{\refstruct{PnlSparseFactorization} \ptr \ptr  F}
-%   \sshortdescribe Frees a \refstruct{PnlSparseFactorization}.
+%   \sshortdescribe Free a \refstruct{PnlSparseFactorization}.
 % \end{itemize}
 
 % \paragraph{Solving linear systems}
@@ -2110,7 +2127,7 @@ the above table.
 % \begin{itemize}
 % \item \describefun{void}{pnl_sparse_factorization_lu_syslin}{const
 %     \refstruct{PnlSparseFactorization} \ptr N, PnlVect \ptr b}
-%   \sshortdescribe Solves the linear system \var{Nx = b} and stores the solution \var{x}
+%   \sshortdescribe Solve the linear system \var{Nx = b} and stores the solution \var{x}
 %   into \var{b} which means that the r.h.s member of the system is overwritten
 %   during the resolution of the system. \var{N} is the decomposition computed by
 %   \reffun{pnl_sparse_factorization_lu_create}.
@@ -2259,28 +2276,28 @@ matrix vector multiplication as a parameter of the solver.
 Only available for symmetric and positive matrices.
 \begin{itemize}
   \item \describefun{\refstruct{PnlCgSolver} \ptr }{pnl_cg_solver_new}{}
-    \sshortdescribe Creates an empty \refstruct{PnlCgSolver}  
+    \sshortdescribe Create an empty \refstruct{PnlCgSolver}  
 \item   \describefun{\refstruct{PnlCgSolver} \ptr }{pnl_cg_solver_create}{int Size, int max-iter, double tolerance}
-  \sshortdescribe Creates a new \refstruct{PnlCgSolver} pointer.  
+  \sshortdescribe Create a new \refstruct{PnlCgSolver} pointer.  
 \item \describefun{void}{pnl_cg_solver_initialisation}{\refstruct{PnlCgSolver} \ptr Solver, const \refstruct{PnlVect} \ptr b}
   \sshortdescribe Initialisation of the solver at the beginning of iterative method.  
 \item \describefun{void}{pnl_cg_solver_free}{\refstruct{PnlCgSolver} \ptr \ptr Solver}
   \sshortdescribe Destructor of iterative solver  
 \item \describefun{int}{pnl_cg_solver_solve}{void(\ptr matrix vector-product)(const void \ptr , const \refstruct{PnlVect} \ptr , const double, const double, \refstruct{PnlVect} \ptr ), const void \ptr Matrix-Data, void(\ptr matrix vector-product-PC)(const void \ptr , const \refstruct{PnlVect} \ptr , const double, const double, \refstruct{PnlVect} \ptr ), const void \ptr PC-Data, \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr b, \refstruct{PnlCgSolver} \ptr Solver}
-  \sshortdescribe Solves the linear system matrix vector-product is the matrix vector multiplication function matrix vector-product-PC is the preconditionner function Matrix-Data \& PC-Data is data to compute matrix vector multiplication.  
+  \sshortdescribe Solve the linear system matrix vector-product is the matrix vector multiplication function matrix vector-product-PC is the preconditionner function Matrix-Data \& PC-Data is data to compute matrix vector multiplication.  
 \end{itemize}
 \paragraph{BICG stab}
 \begin{itemize}
   \item \describefun{\refstruct{PnlBicgSolver} \ptr }{pnl_bicg_solver_new}{}
-    \sshortdescribe Creates an empty \refstruct{PnlBicgSolver}.  
+    \sshortdescribe Create an empty \refstruct{PnlBicgSolver}.  
 \item \describefun{\refstruct{PnlBicgSolver} \ptr }{pnl_bicg_solver_create}{int Size, int max-iter, double tolerance}
-  \sshortdescribe Creates a new \refstruct{PnlBicgSolver} pointer.  
+  \sshortdescribe Create a new \refstruct{PnlBicgSolver} pointer.  
 \item \describefun{void}{pnl_bicg_solver_initialisation}{\refstruct{PnlBicgSolver} \ptr Solver, const \refstruct{PnlVect} \ptr b}
   \sshortdescribe Initialisation of the solver at the beginning of iterative method.  
 \item \describefun{void}{pnl_bicg_solver_free}{\refstruct{PnlBicgSolver} \ptr \ptr Solver}
   \sshortdescribe Destructor of iterative solver  
 \item \describefun{int}{pnl_bicg_solver_solve}{void(\ptr matrix vector-product)(const void \ptr , const \refstruct{PnlVect} \ptr , const double, const double, \refstruct{PnlVect} \ptr ), const void \ptr Matrix-Data, void(\ptr matrix vector-product-PC)(const void \ptr , const \refstruct{PnlVect} \ptr , const double, const double, \refstruct{PnlVect} \ptr ), const void \ptr PC-Data, \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr b, \refstruct{PnlBicgSolver} \ptr Solver}
-  \sshortdescribe Solves the linear system matrix vector-product is the matrix vector multiplication function matrix vector-product-PC is the preconditioner function Matrix-Data \& PC-Data is data to compute matrix vector multiplication.  
+  \sshortdescribe Solve the linear system matrix vector-product is the matrix vector multiplication function matrix vector-product-PC is the preconditioner function Matrix-Data \& PC-Data is data to compute matrix vector multiplication.  
 \end{itemize}
 
 \paragraph{GMRES with restart} See {\em Saad, Yousef (2003)} for a discussion
@@ -2294,15 +2311,15 @@ Note that if restart equals $m$, we have a classical GMRES algorithm.
 
 \begin{itemize}
   \item \describefun{\refstruct{PnlGmresSolver} \ptr }{pnl_gmres_solver_new}{}
-    \sshortdescribe Creates an empty \refstruct{PnlGmresSolver}  
+    \sshortdescribe Create an empty \refstruct{PnlGmresSolver}  
 \item \describefun{\refstruct{PnlGmresSolver} \ptr }{pnl_gmres_solver_create}{int Size, int max-iter, int restart, double tolerance}
-  \sshortdescribe Creates a new \refstruct{PnlGmresSolver} pointer.  
+  \sshortdescribe Create a new \refstruct{PnlGmresSolver} pointer.  
 \item \describefun{void}{pnl_gmres_solver_initialisation}{\refstruct{PnlGmresSolver} \ptr Solver, const \refstruct{PnlVect} \ptr b}
   \sshortdescribe Initialisation of the solver at the beginning of iterative method.  
 \item \describefun{void}{pnl_gmres_solver_free}{\refstruct{PnlGmresSolver} \ptr \ptr Solver}
   \sshortdescribe Destructor of iterative solver  
 \item \describefun{int}{pnl_gmres_solver_solve}{void(\ptr matrix vector-product)(const void \ptr , const \refstruct{PnlVect} \ptr , const double, const double, \refstruct{PnlVect} \ptr ), const void \ptr Matrix-Data, void(\ptr matrix vector-product-PC)(const void \ptr , const \refstruct{PnlVect} \ptr , const double, const double, \refstruct{PnlVect} \ptr ), const void \ptr PC-Data, \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr b, \refstruct{PnlGmresSolver} \ptr Solver}
-  \sshortdescribe Solves the linear system matrix vector-product is the matrix vector multiplication function matrix vector-product-PC is the preconditionner function Matrix-Data \& PC-Data is data to compute matrix vector multiplication.  
+  \sshortdescribe Solve the linear system matrix vector-product is the matrix vector multiplication function matrix vector-product-PC is the preconditionner function Matrix-Data \& PC-Data is data to compute matrix vector multiplication.  
 \end{itemize}
 
 
@@ -2337,9 +2354,9 @@ With this implementation, the user can easily :
 
 \begin{itemize}
 \item \describefun{int}{pnl_mat_cg_solver_solve}{const \refstruct{PnlMat} \ptr M, const \refstruct{PnlMat} \ptr PC, \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr b, \refstruct{PnlCgSolver} \ptr Solver}
-  \sshortdescribe Solves the linear system \var{M x = b} with preconditionner PC.  
+  \sshortdescribe Solve the linear system \var{M x = b} with preconditionner PC.  
 \item \describefun{int}{pnl_mat_bicg_solver_solve}{const \refstruct{PnlMat} \ptr M, const \refstruct{PnlMat} \ptr PC, \refstruct{PnlVect} \ptr x, const \refstruct{PnlVect} \ptr b, \refstruct{PnlBicgSolver} \ptr Solver}
-  \sshortdescribe Solves the linear system \var{M x = b} with preconditionner PC.  
+  \sshortdescribe Solve the linear system \var{M x = b} with preconditionner PC.  
 \item \describefun{int}{pnl_mat_gmres_solver_solve}{const \refstruct{PnlMat} \ptr M, const \refstruct{PnlMat} \ptr PC, \refstruct{PnlVect} \ptr x, \refstruct{PnlVect} \ptr b, \refstruct{PnlGmresSolver} \ptr Solver}
   \sshortdescribe Solve the linear system \var{M x = b} with preconditionner PC.
 \end{itemize}

@@ -61,45 +61,45 @@ Here is the list of all the types actually defined
 We provide several macros for manipulating PnlObejcts.
 \begin{itemize}
 \item \describemacro{PNL_OBJECT}{o}
-  \sshortdescribe Casts any object into a PnlObject
+  \sshortdescribe Cast any object into a PnlObject
 
 \item \describemacro{PNL_VECT_OBJECT}{o}
-  \sshortdescribe Casts any object into a PnlVectObject
+  \sshortdescribe Cast any object into a PnlVectObject
 
 \item \describemacro{PNL_MAT_OBJECT}{o}
-  \sshortdescribe Casts any object into a PnlMatObject
+  \sshortdescribe Cast any object into a PnlMatObject
 
 \item \describemacro{PNL_HMAT_OBJECT}{o}
-  \sshortdescribe Casts any object into a PnlHmatObject
+  \sshortdescribe Cast any object into a PnlHmatObject
 
 \item \describemacro{PNL_BAND_MAT_OBJECT}{o}
-  \sshortdescribe Casts any object into a PnlBandMatObject
+  \sshortdescribe Cast any object into a PnlBandMatObject
 
 \item \describemacro{PNL_TRIDIAGMAT_OBJECT}{o}
-  \sshortdescribe Casts any object into a PnlTridiagMatObject
+  \sshortdescribe Cast any object into a PnlTridiagMatObject
 
 \item \describemacro{PNL_BASIS_OBJECT}{o}
-  \sshortdescribe Casts any object into a PnlBasis
+  \sshortdescribe Cast any object into a PnlBasis
 
 \item \describemacro{PNL_RNG_OBJECT}{o}
-  \sshortdescribe Casts any object into a PnlRng
+  \sshortdescribe Cast any object into a PnlRng
 
 \item \describemacro{PNL_LIST_OBJECT}{o}
-  \sshortdescribe Casts any object into a PnlList
+  \sshortdescribe Cast any object into a PnlList
 
 \item \describemacro{PNL_GET_TYPENAME}{o}
-  \sshortdescribe Returns the name of the type of any object inheriting from PnlObject
+  \sshortdescribe Return the name of the type of any object inheriting from PnlObject
 
 \item \describemacro{PNL_GET_TYPE}{o}
-  \sshortdescribe Returns the type of any object inheriting from PnlObject
+  \sshortdescribe Return the type of any object inheriting from PnlObject
   
 \item \describemacro{PNL_GET_PARENT_TYPE}{o}
-  \sshortdescribe Returns the parent type of any object inheriting from PnlObject
+  \sshortdescribe Return the parent type of any object inheriting from PnlObject
 \end{itemize}
 
 \begin{itemize}
 \item \describefun{\refstruct{PnlObject}\ptr }{pnl_object_create}{PnlType t}
-  \sshortdescribe Creates an empty PnlObject of type \var{t} which can any of
+  \sshortdescribe Create an empty PnlObject of type \var{t} which can any of
   the registered types, see Table~\ref{types}.
 \end{itemize}
 
@@ -142,21 +142,21 @@ struct _PnlList
 
 \begin{itemize}
 \item \describefun{\refstruct{PnlList} \ptr }{pnl_list_new}{}
-  \sshortdescribe Creates an empty list
+  \sshortdescribe Create an empty list
 \item \describefun{\refstruct{PnlCell} \ptr }{pnl_cell_new}{}
-  \sshortdescribe Creates an cell list
+  \sshortdescribe Create an cell list
 \item \describefun{\refstruct{PnlList}\ptr }{pnl_list_copy}{const \refstruct{PnlList}\ptr A}
-  \sshortdescribe Creates a copy of a \refstruct{PnlList}. Each element of the
+  \sshortdescribe Create a copy of a \refstruct{PnlList}. Each element of the
   list \var{A} is copied by calling the its copy member.
 \item \describefun{void}{pnl_list_clone}{\refstruct{PnlList} \ptr dest, const
   \refstruct{PnlList}\ptr src}
-  \sshortdescribe Copies the content of \var{src} into the already existing
+  \sshortdescribe Copy the content of \var{src} into the already existing
   list \var{dest}. The list \var{dest} is automatically resized. This is a
   hard copy, the contents of both lists are independent after cloning.
 \item \describefun{void}{pnl_list_free}{\refstruct{PnlList}  \ptr \ptr L}
-  \sshortdescribe Frees a list
+  \sshortdescribe Free a list
 \item \describefun{void}{pnl_cell_free}{\refstruct{PnlCell}  \ptr \ptr c}
-  \sshortdescribe Frees a list
+  \sshortdescribe Free a list
 \item \describefun{\refstruct{PnlObject}\ptr}{pnl_list_get}{
     \refstruct{PnlList} \ptr L, int i}
   \sshortdescribe This function returns the content of the \var{i}--th cell of
@@ -173,14 +173,14 @@ struct _PnlList
   \var{o} is not copied in \var{L}, so do  {\bf not} free \var{o} yourself, it
   will be done automatically when calling \reffun{pnl_list_free}
 \item \describefun{void}{pnl_list_remove_last}{\refstruct{PnlList}  \ptr L}
-  \sshortdescribe Removes the last element of the list \var{L} and frees it.
+  \sshortdescribe Remove the last element of the list \var{L} and frees it.
 \item \describefun{void}{pnl_list_remove_first}{\refstruct{PnlList}  \ptr L}
-  \sshortdescribe Removes the first element of the list \var{L} and frees it.
+  \sshortdescribe Remove the first element of the list \var{L} and frees it.
 \item \describefun{void}{pnl_list_remove_i}{\refstruct{PnlList}  \ptr L, int i}
-  \sshortdescribe Removes the \var{i-th} element of the list \var{L} and frees it.
+  \sshortdescribe Remove the \var{i-th} element of the list \var{L} and frees it.
 \item \describefun{void}{pnl_list_concat}{\refstruct{PnlList}  \ptr L1,
     \refstruct{PnlList}  \ptr L2}
-  \sshortdescribe Concatenates the two lists \var{L1} and \var{L2}. The
+  \sshortdescribe Concatenate the two lists \var{L1} and \var{L2}. The
   resulting list is store in \var{L1} on exit. Do {\bf not} free \var{L2}
   since concatenation does not actually copy objects but only manipulates
   addresses.
@@ -215,21 +215,21 @@ struct _PnlArray
 
 \begin{itemize}
 \item \describefun{\refstruct{PnlArray} \ptr }{pnl_array_new}{}
-  \sshortdescribe Creates an empty array
+  \sshortdescribe Create an empty array
 \item \describefun{\refstruct{PnlArray} \ptr }{pnl_array_create}{int n}
-  \sshortdescribe Creates an array of length \var{n}.
+  \sshortdescribe Create an array of length \var{n}.
 \item \describefun{\refstruct{PnlArray}\ptr }{pnl_array_copy}{const \refstruct{PnlArray}\ptr A}
-  \sshortdescribe Creates a copy of a \refstruct{PnlArray}. Each element of the
+  \sshortdescribe Create a copy of a \refstruct{PnlArray}. Each element of the
   array \var{A} is copied by calling the \var{A[i].object.copy}.
 \item \describefun{void}{pnl_array_clone}{\refstruct{PnlArray} \ptr dest, const
   \refstruct{PnlArray}\ptr src}
-  \sshortdescribe Copies the content of \var{src} into the already existing
+  \sshortdescribe Copy the content of \var{src} into the already existing
   array \var{dest}. The array \var{dest} is automatically resized. This is a
   hard copy, the contents of both arrays are independent after cloning.
 \item \describefun{void}{pnl_array_free}{\refstruct{PnlArray}  \ptr \ptr}
-  \sshortdescribe Frees an array and all the objects hold by the array.
+  \sshortdescribe Free an array and all the objects hold by the array.
 \item \describefun{int}{pnl_array_resize}{\refstruct{PnlArray} \ptr  T, int size}
-  \sshortdescribe Resizes \var{T} to be \var{size} long. As much as possible of
+  \sshortdescribe Resize \var{T} to be \var{size} long. As much as possible of
   the original data is kept.
 \item \describefun{\refstruct{PnlObject}\ptr}{pnl_array_get}{
     \refstruct{PnlArray} \ptr T, int i}

@@ -61,32 +61,32 @@ struct _PnlRng
 
 \begin{itemize}
 \item \describefun{void}{pnl_rng_free}{\refstruct{PnlRng} \ptr \ptr }
-  \sshortdescribe Frees a \refstruct{PnlRng}.
+  \sshortdescribe Free a \refstruct{PnlRng}.
 \item \describefun{\refstruct{PnlRng}\ptr }{pnl_rng_create}{int type}
-  \sshortdescribe Creates a \refstruct{PnlRng} corresponding to \var{type}
+  \sshortdescribe Create a \refstruct{PnlRng} corresponding to \var{type}
   which can be any of the values \var{PNL_RNG_XXX} listed in
   Table~\ref{rng-indices} which correspond to {\bf pseudo} random number generators.
   Once a generator has been created, you {\bf must} call
   \reffun{pnl_rng_sseed} before using it. 
 \item \describefun{void}{pnl_rng_sseed}{\refstruct{PnlRng} \ptr rng, unsigned
     long int s}
-  \sshortdescribe Sets the seed of the genrator \var{rng} using \var{s}. If
+  \sshortdescribe Set the seed of the genrator \var{rng} using \var{s}. If
   \var{s=0}, then a default seed (depending on the generator) is used.
 \item \describefun{int}{pnl_rng_sdim}{\refstruct{PnlRng} \ptr rng, int dim}
-  \sshortdescribe Sets the dimension of the state space for a QMC generator and
+  \sshortdescribe Set the dimension of the state space for a QMC generator and
   initializes it accordingly.  Returns OK if the generator has been initialized
   properly and FAIL otherwise.
 \item \describefun{\refstruct{PnlRng}\ptr }{pnl_rng_copy}{const
   \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Creates a copy of \var{rng}.
+  \sshortdescribe Create a copy of \var{rng}.
 \item \describefun{void}{pnl_rng_clone}{\refstruct{PnlRng} \ptr dest, const
   \refstruct{PnlRng} \ptr src}
-  \sshortdescribe Copies the content of \var{src} into the already existing
+  \sshortdescribe Copy the content of \var{src} into the already existing
   basis \var{dest}. On exit, \var{src} and \var{dest} are identical but
   independent. 
 \item \describefun{\refstruct{PnlRng}\ptr}{pnl_rng_dcmt_create_id}{int id, ulong
     seed}
-  \sshortdescribe Creates a generator with type \var{PNL_RNG_DCMT} and identifier
+  \sshortdescribe Create a generator with type \var{PNL_RNG_DCMT} and identifier
   \var{id}. Two generators with different \var{id}s are independent. Note that
   the returned generator must be initialized with \reffun{pnl_rng_sseed} before
   usage. The identifier \var{id} can for instance correspond to the thread
@@ -94,14 +94,14 @@ struct _PnlRng
 \item \describefun{\refstruct{PnlRng}\ptr \ptr
   }{pnl_rng_dcmt_create_array_id}{int start_id, int max_id, ulong seed, int \ptr
     count}
-  \sshortdescribe Creates an array of generators with types \var{PNL_RNG_DCMT}
+  \sshortdescribe Create an array of generators with types \var{PNL_RNG_DCMT}
   and identifiers linearly varying between \var{start_id} and \var{max_id}. The
   number of generators created is \var{max_id - start_id + 1}. All the
   generators are independent. Note that each generator of the returned array
   must be initialized with \reffun{pnl_rng_sseed} before usage.
 \item \describefun{\refstruct{PnlRng} \ptr \ptr}{pnl_rng_dcmt_create_array}
   {int n, ulong seed, int \ptr count}
-  \sshortdescribe Creates an array of \var{n} independent DCMT. \var{seed} is
+  \sshortdescribe Create an array of \var{n} independent DCMT. \var{seed} is
   the seed used to initialize the Mersenne Twister generator internally used to
   find new DCMT. On exit, \var{count} contains the number of generators actually
   created. Same function as \reffun{pnl_dcmt_create_array} instead that it
@@ -113,16 +113,16 @@ struct _PnlRng
 Some auxiliary functions internally used (to use with caution)
 \begin{itemize}
 \item \describefun{\refstruct{PnlRng}\ptr }{pnl_rng_new}{}
-  \sshortdescribe Creates an empty \refstruct{PnlRng}.
+  \sshortdescribe Create an empty \refstruct{PnlRng}.
 \item \describefun{void}{pnl_rng_init}{\refstruct{PnlRng} \ptr rng, int type}
-  \sshortdescribe Initializes an empty \refstruct{PnlRng} as returned by
+  \sshortdescribe Initialize an empty \refstruct{PnlRng} as returned by
   \reffun{pnl_rng_new} to become a generator of type \var{type} which can be
   any of the values \var{PNL_RNG_XXX} listed in Table~\ref{rng-indices} which
   correspond to {\bf pseudo} random number generators.
   Calling \reffun{pnl_rng_create} is equivalent to calling first
   \reffun{pnl_rng_new} and then \reffun{pnl_rng_init}. 
 \item \describefun{\refstruct{PnlRng}\ptr }{pnl_rng_get_from_id} {int id}
-  \sshortdescribe Retuns the global generator described by its macro name.
+  \sshortdescribe Return the global generator described by its macro name.
   The variable \var{id} can be any of the values \var{PNL_RNG_XXX} listed in
   Table~\ref{rng-indices}.
 \end{itemize}
@@ -131,39 +131,39 @@ Some auxiliary functions internally used (to use with caution)
 The following functions return one sample from a specified law.
 \begin{itemize}
 \item \describefun{int}{pnl_rng_bernoulli}{double p, \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Generates a sample from the Bernouilli law on $\{0, 1\}$ with
+  \sshortdescribe Generate a sample from the Bernouilli law on $\{0, 1\}$ with
   parameter \var{p}.
 
 \item \describefun{long}{pnl_rng_poisson}{double lambda, \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Generates a sample from the Poisson law with
+  \sshortdescribe Generate a sample from the Poisson law with
   parameter \var{lambda}.
 
 \item \describefun{double}{pnl_rng_exp}{double lambda, \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Generates a sample from the Exponential law with
+  \sshortdescribe Generate a sample from the Exponential law with
   parameter \var{lambda}.
 
 \item \describefun{double}{pnl_rng_uni} {\refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Generates a sample from the Uniform law on $[0, 1]$.
+  \sshortdescribe Generate a sample from the Uniform law on $[0, 1]$.
 
 \item \describefun{double}{pnl_rng_uni_ab} {double a, double b,
     \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Generates a sample from the Uniform law on $[a, b]$.
+  \sshortdescribe Generate a sample from the Uniform law on $[a, b]$.
 
 \item \describefun{double}{pnl_rng_normal} {\refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Generates a sample from the standard normal distribution.
+  \sshortdescribe Generate a sample from the standard normal distribution.
 
 \item \describefun{long}{pnl_rng_poisson1}{double lambda, double
     t,\refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Generates a sample from a Poisson process with intensity
+  \sshortdescribe Generate a sample from a Poisson process with intensity
   \var{lambda} at time \var{t}.
 
 \item \describefun{double}{pnl_rng_gamma} {double a, double b, \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Generates a sample from the $\Gamma(a, b)$ distribution.
+  \sshortdescribe Generate a sample from the $\Gamma(a, b)$ distribution.
 
 \item \describefun{double}{pnl_rng_chi2} {double n, \refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Generates a sample from the centered $\chi^2(n)$ distribution.
+  \sshortdescribe Generate a sample from the centered $\chi^2(n)$ distribution.
 \item \describefun{double}{pnl_rng_bessel} {double v, double a,\refstruct{PnlRng} \ptr rng}
-  \sshortdescribe Generates a sample from the Bessel distribution with parameters
+  \sshortdescribe Generate a sample from the Bessel distribution with parameters
   \var{v > -1} and \var{a > 0}.
 \item \describefun{double}{pnl_rng_gauss}{int d, int
     create_or_retrieve, int index, PnlRng \ptr rng}
@@ -319,14 +319,14 @@ calling
 \begin{itemize}
 
 \item \describefun{int}{pnl_rand_or_quasi}{int type_generator}
-  \sshortdescribe Returns the type the generator of index \var{type_generator},
+  \sshortdescribe Return the type the generator of index \var{type_generator},
   \var{PNL_MC} or \var{PNL_QMC}
 \item \describefun{void}{pnl_rand_sseed}{(int type_generator, unsigned long int
   seed)}
   \sshortdescribe It sets the seed of the generator \var{type_generator} with
   \var{seed}.
 \item \describefun{const char \ptr }{pnl_rand_name}{int type_generator}
-  \sshortdescribe Returns the name of the generator of index \var{type_generator}
+  \sshortdescribe Return the name of the generator of index \var{type_generator}
 \end{itemize}
 
 Once a generator is chosen, there are several functions available in the
@@ -335,39 +335,39 @@ library to draw samples according to a given law.
 The following functions return one sample from a specified law.
 \begin{itemize}
 \item \describefun{int}{pnl_rand_bernoulli}{double p, int type_generator}
-  \sshortdescribe Generates a sample from the Bernouilli law on $\{0, 1\}$ with
+  \sshortdescribe Generate a sample from the Bernouilli law on $\{0, 1\}$ with
   parameter \var{p}.
 
 \item \describefun{long}{pnl_rand_poisson}{double lambda, int type_generator}
-  \sshortdescribe Generates a sample from the Poisson law with
+  \sshortdescribe Generate a sample from the Poisson law with
   parameter \var{lambda}.
 
 \item \describefun{double}{pnl_rand_exp}{double lambda, int type_generator}
-  \sshortdescribe Generates a sample from the Exponential law with
+  \sshortdescribe Generate a sample from the Exponential law with
   parameter \var{lambda}.
 
 \item \describefun{double}{pnl_rand_uni} {int type_generator}
-  \sshortdescribe Generates a sample from the Uniform law on $[0, 1]$.
+  \sshortdescribe Generate a sample from the Uniform law on $[0, 1]$.
 
 \item \describefun{double}{pnl_rand_uni_ab} {double a, double b, int
     type_generator}
-  \sshortdescribe Generates a sample from the Uniform law on $[a, b]$.
+  \sshortdescribe Generate a sample from the Uniform law on $[a, b]$.
 
 \item \describefun{double}{pnl_rand_normal} {int type_generator}
-  \sshortdescribe Generates a sample from the standard normal distribution.
+  \sshortdescribe Generate a sample from the standard normal distribution.
 
 \item \describefun{long}{pnl_rand_poisson1}{double lambda, double t, int
     type_generator}
-  \sshortdescribe Generates a sample from a Poisson process with intensity
+  \sshortdescribe Generate a sample from a Poisson process with intensity
   \var{lambda} at time \var{t}.
 
 \item \describefun{double}{pnl_rand_gamma} {double a, double b, int type_generator}
-  \sshortdescribe Generates a sample from the $\Gamma(a, b)$ distribution.
+  \sshortdescribe Generate a sample from the $\Gamma(a, b)$ distribution.
 
 \item \describefun{double}{pnl_rand_chi2} {double n, int type_generator}
-  \sshortdescribe Generates a sample from the centered $\chi^2(n)$ distribution.
+  \sshortdescribe Generate a sample from the centered $\chi^2(n)$ distribution.
 \item \describefun{double}{pnl_rand_bessel} {double v, double a, int generator}
-  \sshortdescribe Generates a sample from the Bessel distribution with parameters
+  \sshortdescribe Generate a sample from the Bessel distribution with parameters
   \var{v > -1} and \var{a > 0}.
 \end{itemize}
 
@@ -462,12 +462,12 @@ typedef unsigned long ulong;
 \begin{itemize}
 \item \describefun{void}{pnl_mt_sseed}{mt_state \ptr state, unsigned long int
     s}
-  \sshortdescribe Sets the initial value of variable \var{state} using \var{s}
+  \sshortdescribe Set the initial value of variable \var{state} using \var{s}
 \item \describefun{ulong}{pnl_mt_genrand}{mt_state \ptr state}
-  \sshortdescribe Returns the following number in the sequence as an unsigned
+  \sshortdescribe Return the following number in the sequence as an unsigned
   long variable. A mask is applied so that only the lowest 32-bits are used.
 \item \describefun{double}{pnl_mt_genrand_double}{mt_state \ptr state}
-  \sshortdescribe Returns the following number in the sequence as a double.
+  \sshortdescribe Return the following number in the sequence as a double.
 \end{itemize}
 
 
@@ -495,19 +495,19 @@ Some functions to use ``Dynamically Created Mersenne Twister'' random number
 generators (DCMT).
 \begin{itemize}
 \item \describefun{dcmt_state\ptr}{pnl_dcmt_get_parameter}{ulong seed}
-  \sshortdescribe Creates a DCMT. \var{seed} is the seed used to initialize
+  \sshortdescribe Create a DCMT. \var{seed} is the seed used to initialize
   the Mersenne Twister generator internally used to find new DCMT.
 \item \describefun{dcmt_state \ptr \ptr}{pnl_dcmt_create_array}{int n, ulong seed, int \ptr count}
-  \sshortdescribe Creates an array of \var{n} independent DCMT. \var{seed} is
+  \sshortdescribe Create an array of \var{n} independent DCMT. \var{seed} is
   the seed used to initialize the Mersenne Twister generator internally used to
   find new DCMT. On exit, \var{count} contains the number of generators actually
   created.
 \item \describefun{double}{pnl_dcmt_genrand_double}{dcmt_state \ptr mts}
-  \sshortdescribe Generates a uniformly distributed random variable on \var{[0,1]}.
+  \sshortdescribe Generate a uniformly distributed random variable on \var{[0,1]}.
 \item \describefun{void}{pnl_dcmt_free}{dcmt_state \ptr \ptr mts}
-  \sshortdescribe Frees a dcmt.
+  \sshortdescribe Free a dcmt.
 \item \describefun{void}{pnl_dcmt_free_array}{dcmt_state \ptr \ptr mts, int count}
-  \sshortdescribe Frees an array of dcmt as returned by \reffun{pnl_dcmt_create_array}
+  \sshortdescribe Free an array of dcmt as returned by \reffun{pnl_dcmt_create_array}
 \end{itemize}
 
 % vim:spelllang=en:spell:

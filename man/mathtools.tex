@@ -39,51 +39,51 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
 \subsubsection{A few macros}
 \begin{itemize}
 \item \describemacro{PNL_IS_ODD}{int n}
-  \sshortdescribe Returns $1$ if \var{n} is odd and $0$ otherwise.
+  \sshortdescribe Return $1$ if \var{n} is odd and $0$ otherwise.
 \item \describemacro{PNL_IS_EVEN}{int n}
-  \sshortdescribe Returns $1$ if \var{n} is even and $0$ otherwise.
+  \sshortdescribe Return $1$ if \var{n} is even and $0$ otherwise.
 \item \describemacro{PNL_ALTERNATE}{int n}
-  \sshortdescribe Returns $(-1)^{\var{n}}$.
+  \sshortdescribe Return $(-1)^{\var{n}}$.
 \item \describemacro{MIN}{x,y}
-  \sshortdescribe Returns the minimum of \var{x} and \var{y}.
+  \sshortdescribe Return the minimum of \var{x} and \var{y}.
 \item \describemacro{MAX}{x,y}
-  \sshortdescribe Returns the maximum of \var{x} and \var{y}.
+  \sshortdescribe Return the maximum of \var{x} and \var{y}.
 \item \describemacro{ABS}{x}
-  \sshortdescribe Returns the absolute value of \var{x}.
+  \sshortdescribe Return the absolute value of \var{x}.
 \item \describemacro{PNL_SIGN}{x}
-  \sshortdescribe Returns the sign of \var{x} (-1 if x < 0, 0 otheriwse).
+  \sshortdescribe Return the sign of \var{x} (-1 if x < 0, 0 otheriwse).
 \item \describemacro{SQR}{x}
-  \sshortdescribe Returns \var{$x^2$}.
+  \sshortdescribe Return \var{$x^2$}.
 \item \describemacro{CUB}{x}
-  \sshortdescribe Returns \var{$x^3$}.
+  \sshortdescribe Return \var{$x^3$}.
 \end{itemize}
 
 \subsubsection{Functions}
 \begin{itemize}
 \item \describefun{int}{intapprox}{double s}
-  \sshortdescribe Returns the nearest integer with the convention ({\tt
+  \sshortdescribe Return the nearest integer with the convention ({\tt
   intapprox(1.5)=1}). This function is similar to the \var{round} function
   (provided by the C library) but the result is typed as an integer instead of a
   double.
 
 \item \describefun{double}{trunc}{double s}
-  \sshortdescribe Returns the nearest integer not greater than the absolute
+  \sshortdescribe Return the nearest integer not greater than the absolute
   value of \var{s}. This function is part of C99.
 
 \item \describefun{double}{Cnp}{int n, int p}
-  \sshortdescribe Computes the binomial coefficient $\binom{n}{p}$ in double
+  \sshortdescribe Compute the binomial coefficient $\binom{n}{p}$ in double
   precision.
 
 \item \describefun{double}{pnl_fact}{int n}
-  \sshortdescribe Computes $n! = \Gamma(n+1)$ in double precision.
+  \sshortdescribe Compute $n! = \Gamma(n+1)$ in double precision.
 
 \item \describefun{double}{pnl_pow_i}{double x, int n}
-  \sshortdescribe Computes $x^n$ for $n \in \N$ using a squaring method.
+  \sshortdescribe Compute $x^n$ for $n \in \N$ using a squaring method.
 
 
 \item \describefun{void}{pnl_qsort}{void *a, int n, int es, int lda, int *t,
   int ldt, int use_index, int (*cmp)(void const *, void const *)}
-  \sshortdescribe Sorts the array \var{a} using the comparison function
+  \sshortdescribe Sort the array \var{a} using the comparison function
   \var{cmp}. \var{n} is the number of elements in \var{a}, each element being of
   size \var{es}. \var{t} is an array of integers of length \var{n} used to store
   the permutation when \var{use_index=TRUE}. \var{lda} and \var{ldt} are the
@@ -91,22 +91,22 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
   matrices column-wise. 
 
 \item \describefun{double}{pnl_nan}{}
-  \sshortdescribe Returns \var{Nan}
+  \sshortdescribe Return \var{Nan}
 
 \item \describefun{double}{pnl_posinf}{}
-  \sshortdescribe Returns \var{+ infinity} 
+  \sshortdescribe Return \var{+ infinity} 
 
 \item \describefun{double}{pnl_neginf}{}
-  \sshortdescribe Returns \var{- infinity} 
+  \sshortdescribe Return \var{- infinity} 
 
 \item \describefun{int}{pnl_isnan}{double x}
-  \sshortdescribe Returns \var{1} if \var{x = Nan}
+  \sshortdescribe Return \var{1} if \var{x = Nan}
 
 \item \describefun{int}{pnl_isfinite}{}
-  \sshortdescribe Returns \var{1} if \var{x != Inf}
+  \sshortdescribe Return \var{1} if \var{x != Inf}
 
 \item \describefun{int}{pnl_isinf}{}
-  \sshortdescribe Returns \var{+1} if \var{x = +Inf}, \var{-1} if \var{x = -Inf},
+  \sshortdescribe Return \var{+1} if \var{x = +Inf}, \var{-1} if \var{x = -Inf},
   \var{0} otherwise.
 \end{itemize}
 
@@ -114,21 +114,21 @@ We provide a few functions mathematical functions named \verb+pnl_funcname+,
 some of which are already part of C99 as \verb+funcname+.
 \begin{itemize}
   \item \describefun{double}{pnl_lgamma}{double x}
-    \sshortdescribe Computes $\log(\Gamma(x))$.
+    \sshortdescribe Compute $\log(\Gamma(x))$.
   \item \describefun{double}{pnl_tgamma}{double x}
-    \sshortdescribe Computes $\Gamma(x)$.
+    \sshortdescribe Compute $\Gamma(x)$.
   \item \describefun{double}{pnl_acosh}{double x}
-    \sshortdescribe Computes \var{acosh(x)}.
+    \sshortdescribe Compute \var{acosh(x)}.
   \item \describefun{double}{pnl_asinh}{double x}
-    \sshortdescribe Computes \var{asinh(x)}.
+    \sshortdescribe Compute \var{asinh(x)}.
   \item \describefun{double}{pnl_atanh}{double x}
-    \sshortdescribe Computes \var{atanh(x)}.
+    \sshortdescribe Compute \var{atanh(x)}.
   \item \describefun{double}{pnl_log1p}{double x}
-    \sshortdescribe Computes \var{log(1+x)} accurately for small values of \var{x}
+    \sshortdescribe Compute \var{log(1+x)} accurately for small values of \var{x}
   \item \describefun{double}{pnl_expm1}{double x}
-    \sshortdescribe Computes \var{exp(x)-1} accurately for small values of \var{x}
+    \sshortdescribe Compute \var{exp(x)-1} accurately for small values of \var{x}
   \item \describefun{double}{pnl_cosm1}{double x}
-    \sshortdescribe Computes \var{cos(x)-1} accurately for small values of \var{x}
+    \sshortdescribe Compute \var{cos(x)-1} accurately for small values of \var{x}
 \end{itemize}
 
 % vim:spelllang=en:spell:

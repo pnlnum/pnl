@@ -8,9 +8,9 @@ error mechanism which can be activated or deactivated using the two following
 functions
 \begin{itemize}
   \item \describefun{void}{pnl_deactivate_mtherr}{}
-    \sshortdescribe Deactivates Cephes error mechanism
+    \sshortdescribe Deactivate Cephes error mechanism
   \item \describefun{void}{pnl_activate_mtherr}{}
-    \sshortdescribe Activates Cephes error mechanism
+    \sshortdescribe Activate Cephes error mechanism
 \end{itemize}
 
 
@@ -106,13 +106,13 @@ functions
 
 \begin{itemize}
 \item \describefun{double}{pnl_sf_erf}{double x}
-  \sshortdescribe Computes $\frac{2}{\pi}\int_0^\infty \expp{-t^2} dt$
+  \sshortdescribe Compute $\frac{2}{\pi}\int_0^\infty \expp{-t^2} dt$
 \item \describefun{double}{pnl_sf_erfc}{double x}
-  \sshortdescribe Computes $1. - \frac{2}{\pi}\int_0^\infty \expp{-t^2} dt$
+  \sshortdescribe Compute $1. - \frac{2}{\pi}\int_0^\infty \expp{-t^2} dt$
 \item \describefun{double}{pnl_sf_log_erf}{double x}
-  \sshortdescribe Computes $\log$ \reffun{pnl_sf_erf}$(x)$
+  \sshortdescribe Compute $\log$ \reffun{pnl_sf_erf}$(x)$
 \item \describefun{double}{pnl_sf_log_erfc}{double x}
-  \sshortdescribe Computes $\log$ \reffun{pnl_sf_erfc}$(x)$
+  \sshortdescribe Compute $\log$ \reffun{pnl_sf_erfc}$(x)$
 \end{itemize}
 
 \subsection{Gamma functions}
@@ -243,18 +243,18 @@ For $x \in \R$
 \begin{itemize}
 \item \describefun{double}{pnl_sf_hyperg_2F1}{double a, double b, double c,
     double x}
-  \sshortdescribe Computes the Gauss hypergeometric function \var{2F1(a,b,c,x)}
+  \sshortdescribe Compute the Gauss hypergeometric function \var{2F1(a,b,c,x)}
   for \var{|x| < 1} and for \var{x < -1} when \var{b,a,c,(b-a),(c-a),(c-b)} are
   not integers
 \item \describefun{double}{pnl_sf_hyperg_1F1}{double a, double b, double x}
-  \sshortdescribe Computes the hypergeometric function \var{1F1(a,b,x)}
+  \sshortdescribe Compute the hypergeometric function \var{1F1(a,b,x)}
 \item \describefun{double}{pnl_sf_hyperg_2F0}{double a, double b, double x}
-  \sshortdescribe Computes the hypergeometric function \var{2F0(a,b,x)}  for
+  \sshortdescribe Compute the hypergeometric function \var{2F0(a,b,x)}  for
   \var{x<0} using the relation $2F0 (a,b,x) = (-x)^{-a} U(a,1+a-b,-\frac{1}{x})$.
 \item \describefun{double}{pnl_sf_hyperg_0F1}{double c, double x}
-  \sshortdescribe Computes the hypergeometric function \var{0F1(c,x)}
+  \sshortdescribe Compute the hypergeometric function \var{0F1(c,x)}
 \item \describefun{double}{pnl_sf_hyperg_U}{double a, double b, double x}
-  \sshortdescribe Computes the confluent hypergeometric function \var{U(a,b,x)}
+  \sshortdescribe Compute the confluent hypergeometric function \var{U(a,b,x)}
   with \var{x > 0}
 \end{itemize}
 

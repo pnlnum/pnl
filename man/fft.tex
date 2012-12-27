@@ -80,77 +80,77 @@ The following functions comes from a C version of the Fortran FFTPack library
 available on \url{http://www.netlib.org/fftpack}.
 \begin{itemize}
 \item \describefun{int}{pnl_fft_inplace}{\refstruct{PnlVectComplex} \ptr data}
-  \sshortdescribe Computes the FFT of \var{data} in place. The original content
+  \sshortdescribe Compute the FFT of \var{data} in place. The original content
   of \var{data} is lost.
 
 \item \describefun{int}{pnl_ifft_inplace}{\refstruct{PnlVectComplex} \ptr data}
-  \sshortdescribe Computes the inverse FFT of \var{data} in place. The
+  \sshortdescribe Compute the inverse FFT of \var{data} in place. The
   original content of \var{data} is lost.
 
 \item \describefun{int}{pnl_fft}{const \refstruct{PnlVectComplex} \ptr in,
     \refstruct{PnlVectComplex} \ptr out}
-  \sshortdescribe Computes the FFT of \var{in} and stores it into \var{out}.
+  \sshortdescribe Compute the FFT of \var{in} and stores it into \var{out}.
 
 \item \describefun{int}{pnl_ifft}{const \refstruct{PnlVectComplex} \ptr in,
     \refstruct{PnlVectComplex} \ptr out}
-  \sshortdescribe Computes the inverse FFT of \var{in} and stores it into \var{out}.
+  \sshortdescribe Compute the inverse FFT of \var{in} and stores it into \var{out}.
 
 \item \describefun{int}{pnl_fft2}{double \ptr re, double \ptr im, int n}
-  \sshortdescribe Computes the FFT of the vector of length \var{n} whose real
+  \sshortdescribe Compute the FFT of the vector of length \var{n} whose real
   (resp. imaginary) parts are given by the arrays \var{re}
   (resp. \var{im}). The real and imaginary parts of the FFT are respectively
   stored in \var{re} and \var{im} on output.
 
 \item \describefun{int}{pnl_ifft2}{double \ptr re, double \ptr im, int n}
-  \sshortdescribe Computes the inverse FFT of the vector of length \var{n}
+  \sshortdescribe Compute the inverse FFT of the vector of length \var{n}
   whose real (resp. imaginary) parts are given by the arrays \var{re}
   (resp. \var{im}). The real and imaginary parts of the inverse FFT are
   respectively stored in \var{re} and \var{im} on output.
 
 \item \describefun{int}{pnl_real_fft}{const \refstruct{PnlVect} \ptr in,
     \refstruct{PnlVectComplex} \ptr out}
-  \sshortdescribe Computes the FFT of the real valued sequence \var{in} and
+  \sshortdescribe Compute the FFT of the real valued sequence \var{in} and
   stores it into \var{out}.
 
 \item \describefun{int}{pnl_real_ifft}{const \refstruct{PnlVect} \ptr in,
     \refstruct{PnlVectComplex} \ptr out}
-  \sshortdescribe Computes the inverse FFT of \var{in} and stores it into \var{out}.
+  \sshortdescribe Compute the inverse FFT of \var{in} and stores it into \var{out}.
 
 \item \describefun{int}{pnl_real_fft_inplace}{double \ptr data, int n}
-  \sshortdescribe Computes the FFT of the real valued vector \var{data} of
+  \sshortdescribe Compute the FFT of the real valued vector \var{data} of
   length \var{n}. The result is stored in \var{data} using the FFTPack storage
   described above, see~\ref{sec:fftpack-storage}.
 
 \item \describefun{int}{pnl_real_ifft_inplace}{double \ptr data, int n}
-  \sshortdescribe Computes the inverse FFT of the vector \var{data} of length
+  \sshortdescribe Compute the inverse FFT of the vector \var{data} of length
   \var{n}. \var{data} is supposed to be the FFT coefficients a real valued
   sequence stored using the FFTPack storage. On output, \var{data} contains
   the inverse FFT.
 
 \item \describefun{int}{pnl_real_fft2}{double \ptr re, double \ptr im, int n}
-  \sshortdescribe Computes the FFT of the real vector \var{re} of length \var{n}.
+  \sshortdescribe Compute the FFT of the real vector \var{re} of length \var{n}.
   \var{im} is only used on output to store the imaginary part the FFT. The
   real part is stored into \var{re}
 
 \item \describefun{int}{pnl_real_ifft2}{double \ptr re, double \ptr im, int n}
-  \sshortdescribe Computes the inverse FFT of the vector \var{re + i * im} of
+  \sshortdescribe Compute the inverse FFT of the vector \var{re + i * im} of
   length \var{n}, which is supposed to be the FFT of a real valued
   sequence. On exit, \var{im} is unused.
 \item \describefun{int}{pnl_fft2d_inplace}{\refstruct{PnlMatComplex} \ptr data}
-  \sshortdescribe Computes the 2D FFT of \var{data}. This function applies a 1D
+  \sshortdescribe Compute the 2D FFT of \var{data}. This function applies a 1D
   FFT to each row of the matrix and then a 1D FFT to each column of the modified
   matrix.
 \item \describefun{int}{pnl_ifft2d_inplace}{\refstruct{PnlMatComplex} \ptr data}
-  \sshortdescribe Computes the inverse 2D FFT of \var{data}. This function is
+  \sshortdescribe Compute the inverse 2D FFT of \var{data}. This function is
   the inverse of the function \reffun{pnl_fft_2d_inplace}.
 \item \describefun{int}{pnl_fft2d}{const \refstruct{PnlMatComplex} \ptr in, \refstruct{PnlMatComplex} \ptr out}
-  \sshortdescribe Computes the 2D FFT of \var{in} and stores it into \var{out}.
+  \sshortdescribe Compute the 2D FFT of \var{in} and stores it into \var{out}.
 \item \describefun{int}{pnl_ifft2d}{const \refstruct{PnlMatComplex} \ptr in, \refstruct{PnlMatComplex} \ptr out}
-  \sshortdescribe Computes the inverse 2D FFT of \var{in} and stores it into \var{out}.
+  \sshortdescribe Compute the inverse 2D FFT of \var{in} and stores it into \var{out}.
 \item \describefun{int}{pnl_real_fft2d}{const \refstruct{PnlMat} \ptr in, \refstruct{PnlMatComplex} \ptr out}
-  \sshortdescribe Computes the 2D FFT of the real matrix \var{in} and stores it into \var{out}.
+  \sshortdescribe Compute the 2D FFT of the real matrix \var{in} and stores it into \var{out}.
 \item \describefun{int}{pnl_real_ifft2d}{const \refstruct{PnlMatComplex} \ptr in, \refstruct{PnlMatComplex} \ptr out}
-  \sshortdescribe Computes the inverse 2D FFT of the complex matrix \var{in}
+  \sshortdescribe Compute the inverse 2D FFT of the complex matrix \var{in}
   which is known to be the forward 2D FFT a real matrix. The result id stored it
   into \var{out}. Note that this function modifies the input matrix \var{in}.
 \end{itemize}

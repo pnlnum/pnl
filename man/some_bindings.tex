@@ -18,15 +18,15 @@ error occurred.
 \begin{itemize}
 \item \describefun{int}{pnl_object_mpi_pack_size}{const
     \refstruct{PnlObject} \ptr Obj, MPI_Comm comm, int \ptr size}
-  \sshortdescribe Computes in \var{size} the amount of space needed to pack \var{Obj}.
+  \sshortdescribe Compute in \var{size} the amount of space needed to pack \var{Obj}.
 \item \describefun{int}{pnl_object_mpi_pack}{const \refstruct{PnlObject}
     \ptr Obj, void \ptr buf, int bufsize, int \ptr pos, MPI_Comm comm}
-  \sshortdescribe Packs \var{Obj} into \var{buf} which must be at least of
+  \sshortdescribe Pack \var{Obj} into \var{buf} which must be at least of
   length \var{size}. \var{size} must be at least equal to the value returned
   by \reffun{pnl_object_mpi_pack_size}. 
 \item \describefun{int}{pnl_object_mpi_unpack}{\refstruct{PnlObject} \ptr
     Obj, void \ptr buf, int bufsize, int \ptr pos, MPI_Comm comm}
-  \sshortdescribe Unpacks the content of \var{buf} starting at position
+  \sshortdescribe Unpack the content of \var{buf} starting at position
   \var{pos} (unless several objects have been packed contiguously, \var{\ptr
     pos} should be equal to \var{0}). \var{buf} is a contigous memery area
   of length \var{bufsize} (note that the size is counted in bytes).
@@ -37,17 +37,17 @@ error occurred.
   
 \item \describefun{int}{pnl_object_mpi_send}{const \refstruct{PnlObject}
     \ptr Obj, int dest, int tag, MPI_Comm comm}
-  \sshortdescribe Performs a standard-mode blocking send of \var{Obj}. The
+  \sshortdescribe Perform a standard-mode blocking send of \var{Obj}. The
   object is sent to the process with rank \var{dest}.
 
 \item \describefun{int}{pnl_object_mpi_ssend}{const \refstruct{PnlObject} \ptr
     Obj, int dest, int tag, MPI_Comm comm}
-  \sshortdescribe Performs a standard-mode synchronous blocking send of
+  \sshortdescribe Perform a standard-mode synchronous blocking send of
   \var{Obj}. The object is sent to the process with rank \var{dest}.
   
 \item \describefun{int}{pnl_object_mpi_recv}{\refstruct{PnlObject} \ptr Obj,
     int src, int tag, MPI_Comm comm, MPI_Status \ptr status} 
-  \sshortdescribe Performs a standard-mode blocking receive of \var{Obj}. The
+  \sshortdescribe Perform a standard-mode blocking receive of \var{Obj}. The
   object is sent to the process with rank \var{dest}. Note that \var{Obj}
   should be an already allocated object and that its type should match the
   true type of the object to be received. \var{src} is the rank of the
@@ -56,12 +56,12 @@ error occurred.
   
 \item \describefun{int}{pnl_object_mpi_bcast}{\refstruct{PnlObject} \ptr
     Obj, int root, MPI_Comm comm}
-  \sshortdescribe Broadcasts the object \var{Obj} from the process with rank
+  \sshortdescribe Broadcast the object \var{Obj} from the process with rank
   \var{root} to all other processes of the group \var{comm}.
 
 \item \describefun{int}{pnl_object_mpi_reduce}{\refstruct{PnlObject} \ptr Recvbuf, const
   \refstruct{PnlObject} \ptr Sendbuf, MPI_Op op, int root, MPI_Comm comm}
-  \sshortdescribe This function performs the reduction described by \var{op} on
+  \sshortdescribe Perform the reduction described by \var{op} on
   the objects \var{Sendbuf} and stores the result into \var{Recvbuf}. Note that
   \var{Recvbuf} and \var{Sendbuf} must be of the same type. The argument
   \var{root} is the index of the root process and \var{comm} is a communicator.
@@ -84,14 +84,14 @@ For more expect users, we provide the following nonblocking functions.
 \begin{itemize}
 \item \describefun{int}{pnl_object_mpi_isend}{const \refstruct{PnlObject}
     \ptr Obj, int dest, int tag, MPI_Comm comm, MPI_Request \ptr request}
-  \sshortdescribe Starts a standard-mode, nonblocking send of object
+  \sshortdescribe Start a standard-mode, nonblocking send of object
   \var{Obj} to the process with rank \var{dest}.
   
   
 \item \describefun{int}{pnl_object_mpi_irecv}{void \ptr \ptr buf, int \ptr
     size, int src, int tag, MPI_Comm comm, int \ptr flag, MPI_Request \ptr
     request}
-  \sshortdescribe Starts a standard-mode, nonblocking receive of object
+  \sshortdescribe Start a standard-mode, nonblocking receive of object
   \var{Obj} from the process with rank \var{root}. On output \var{flag} equals
   to \var{TRUE} if the object can be received and \var{FALSE} otherwise (this
   is the same as for {\it MPI_Iprobe}).
@@ -106,23 +106,23 @@ The functionnalities described in this chapter are declared in \verb!pnl/pnl_mpi
 \begin{itemize}
 \item \describefun{\refstruct{PnlRng}\ptr \ptr}
   {pnl_rng_create_from_file}{char \ptr str, int n}
-  \sshortdescribe Loads \var{n} rng from the file of name \var{str} and
+  \sshortdescribe Load \var{n} rng from the file of name \var{str} and
   returns an array of \var{n} \refstruct{PnlRng}.
 \item \describefun{int}{pnl_rng_save_to_file}{\refstruct{PnlRng} \ptr \ptr
     rngtab, int n, char \ptr str}
-    \sshortdescribe Saves \var{n} rng stored in \var{rngtab} into the file of
+    \sshortdescribe Save \var{n} rng stored in \var{rngtab} into the file of
   name \var{str}.
 \item \describefun{int}{pnl_object_save}{PnlObject \ptr O, FILE *stream}
-  \sshortdescribe Saves the object \var{O} into the stream \var{stream}. \var{stream}
+  \sshortdescribe Save the object \var{O} into the stream \var{stream}. \var{stream}
   is typically created by calling fopen with \var{mode="wb"}. This function can be
   called several times to save several objects in the same stream.
 \item \describefun{PnlObject\ptr}{pnl_object_load}{FILE *stream}
-  \sshortdescribe Loads an object from the stream \var{stream}. \var{stream}
+  \sshortdescribe Load an object from the stream \var{stream}. \var{stream}
   is typically created by calling fopen with \var{mode="rb"}.  This function can be
   called several times to load several objects from the same stream. If \var{stream}
   was empty or it did not contain any PnlObjects, the function returns \var{NULL}.
 \item \describefun{PnlList\ptr}{pnl_object_load_into_list}{FILE *stream}
-  \sshortdescribe Loads as many objects as possible from the stream \var{stream} and
+  \sshortdescribe Load as many objects as possible from the stream \var{stream} and
   stores them into a \refstruct{PnlList}. \var{stream} is typically created by
   calling fopen with \var{mode="rb"}. If \var{stream} was empty or it did not contain
   any PnlObjects, the function returns \var{NULL}.

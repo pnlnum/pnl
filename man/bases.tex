@@ -72,22 +72,22 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
   \end{verbatim}
 
 \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_new}{}
-  \sshortdescribe Creates an empty \refstruct{PnlBasis}.
+  \sshortdescribe Create an empty \refstruct{PnlBasis}.
 
 \item \describefun{void}{pnl_basis_print}{const \refstruct{PnlBasis} \ptr B}
-  \sshortdescribe Prints the characteristics of a basis.
+  \sshortdescribe Print the characteristics of a basis.
   
   
 \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create}{int index, int
     nb_func, int nb_variates}
-  \sshortdescribe Creates a \refstruct{PnlBasis} for the family
+  \sshortdescribe Create a \refstruct{PnlBasis} for the family
   defined by \var{index} (see Table~\ref{basis_index} and
   \reffun{pnl_basis_type_register}) with \var{nb_variates}
   variates. The basis will contain \var{nb_func}.
 
 \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create_from_degree}{int
     index, int degree, int nb_variates}
-  \sshortdescribe Creates a \refstruct{PnlBasis} for the family
+  \sshortdescribe Create a \refstruct{PnlBasis} for the family
   defined by \var{index} (see Table~\ref{basis_index} and \reffun{pnl_basis_type_register}) with total degree less
   or equal than \var{degree} and \var{nb_variates} variates. The total degree is
   the sum of the partial degrees.\\
@@ -115,7 +115,7 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
   \right) \]
 \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create_from_prod_degree}{int
     index, int degree, int nb_variates}
-  \sshortdescribe Creates a \refstruct{PnlBasis} for the family
+  \sshortdescribe Create a \refstruct{PnlBasis} for the family
   defined by \var{index} (see Table~\ref{basis_index} and \reffun{pnl_basis_type_register}) with total degree less
   or equal than \var{degree} and \var{nb_variates} variates. The total degree is
   the product of \var{MAX(1, d_i)} where the \var{d_i} are the partial degrees.
@@ -123,7 +123,7 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
 
 \item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create_from_tensor}{int
     index, PnlMatInt \ptr T}
-  \sshortdescribe Creates a \refstruct{PnlBasis} for the polynomial family
+  \sshortdescribe Create a \refstruct{PnlBasis} for the polynomial family
   defined by \var{index} (see Table~\ref{basis_index}) using the basis
   described by the tensor matrix \var{T}. The number of lines of \var{T} is
   the number of functions of the basis whereas the numbers of columns of
@@ -149,14 +149,14 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
   \right) \]
 
 \item \describefun{void}{pnl_basis_clone}{\refstruct{PnlBasis} \ptr dest, const \refstruct{PnlBasis} \ptr src}
-  \sshortdescribe Clones \var{src} into \var{dest}. The basis \var{dest} must
+  \sshortdescribe Clone \var{src} into \var{dest}. The basis \var{dest} must
   already exist before calling this function. On exit, \var{dest} and \var{src}
   are identical and independent.
 \item \describefun{\refstruct{PnlBasis}\ptr }{pnl_basis_copy}{const \refstruct{PnlBasis} \ptr B}
-  \sshortdescribe Creates a copy of \var{B}.
+  \sshortdescribe Create a copy of \var{B}.
 \item \describefun{void }{pnl_basis_set_from_tensor}{\refstruct{PnlBasis} \ptr
     b, int index, const \refstruct{PnlMatInt} \ptr T}
-  \sshortdescribe Sets an alredy existing basis \var{b} to a polynomial family
+  \sshortdescribe Set an alredy existing basis \var{b} to a polynomial family
   defined by \var{index} (see Table~\ref{basis_index}) using the basis
   described by the tensor matrix \var{T}. The number of lines of \var{T} is
   the number of functions of the basis whereas the numbers of columns of
@@ -166,7 +166,7 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
 
 \item  \describefun{\refstruct{PnlBasis}\ptr}{pnl_basis_create_from_hyperbolic_degree}
   {int index, double degree, double q, int n}
-  \sshortdescribe Creates a sparse basis of polynomial with \var{n}
+  \sshortdescribe Create a sparse basis of polynomial with \var{n}
   variates. We give the example of the Canonical basis. A canonical polynomial
   with \var{n} variates writes $X_1^{\alpha_1} X_2^{\alpha_2} \dots
   X_n^{\alpha_n}$. To be a member of the basis, it must satisfy $\left(\sum_{i=1}^n
@@ -175,7 +175,7 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
   order interaction.
 
 \item  \describefun{void}{pnl_basis_free}{\refstruct{PnlBasis} \ptr\ptr basis}
-  \sshortdescribe Frees a \refstruct{PnlBasis} created by
+  \sshortdescribe Free a \refstruct{PnlBasis} created by
   \reffun{pnl_basis_create}. Beware that \var{basis} is the address of a
   \refstruct{PnlBasis}\ptr.
 
@@ -214,7 +214,7 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
 \item \describefun{int}{pnl_basis_fit_ls}{\refstruct{PnlBasis} \ptr
     P, \refstruct{PnlVect} \ptr  coef, \refstruct{PnlMat} \ptr  x,
     \refstruct{PnlVect} \ptr  y}
-  \sshortdescribe Computes the coefficients \var{coef} defined by
+  \sshortdescribe Compute the coefficients \var{coef} defined by
   \begin{equation*}
     \var{coef} = \arg\min_\alpha \sum_{i=1}^n
     \left( \sum_{j=0}^{\var{N}} \alpha_j  P_j(x_i) - y_i\right)^2
@@ -246,7 +246,7 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
 
 
 \item \describefun{void}{pnl_basis_eval_derivs_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr coef, const \refstruct{PnlVect} \ptr x, double \ptr fx, \refstruct{PnlVect} \ptr Dfx, \refstruct{PnlMat} \ptr D2fx}
-  \sshortdescribe Computes the function, the gradient and the Hessian matrix
+  \sshortdescribe Compute the function, the gradient and the Hessian matrix
   of $\sum_{k=0}^n \var{coef}_k  P_k(\cdot)$ at the point \var{x}.
   On output, \var{fx} contains the value of the function, \var{Dfx} its
   gradient and \var{D2fx} its Hessian matrix. This function is optimized and
@@ -254,13 +254,13 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
   \reffun{pnl_basis_eval_D} and \reffun{pnl_basis_eval_D2} sequentially.
 
 \item \describefun{double}{pnl_basis_eval_vect}{const \refstruct{PnlBasis} \ptr basis, const \refstruct{PnlVect} \ptr coef, const \refstruct{PnlVect} \ptr x}
-  \sshortdescribe Computes the linear combination of \var{P_k(x)} defined by
+  \sshortdescribe Compute the linear combination of \var{P_k(x)} defined by
   \var{coef}. Given the coefficients computed by the function
   \reffun{pnl_basis_fit_ls}, this function returns $\sum_{k=0}^n
   \var{coef}_k  P_k(\var{x})$.
 
 \item \describefun{double}{pnl_basis_eval_D_vect}{const \refstruct{PnlBasis} \ptr basis, const \refstruct{PnlVect} \ptr coef, const \refstruct{PnlVect} \ptr x, int i}
-  \sshortdescribe Computes the derivative with respect to \var{x_i} of the
+  \sshortdescribe Compute the derivative with respect to \var{x_i} of the
   linear combination of \var{P_k(x)} defined by \var{coef}. Given the
   coefficients computed by the function \reffun{pnl_basis_fit_ls}, this function
   returns $\partial_{x_i} \sum_{k=0}^n \var{coef}_k  P_k(\var{x})$ The index
@@ -268,7 +268,7 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
 
 
 \item \describefun{double}{pnl_basis_eval_D2_vect}{const \refstruct{PnlBasis} \ptr basis, const \refstruct{PnlVect} \ptr coef, const \refstruct{PnlVect} \ptr x, int i, int j}
-  \sshortdescribe Computes the derivative with respect to \var{x_i} of the
+  \sshortdescribe Compute the derivative with respect to \var{x_i} of the
   linear combination of \var{P_k(x)} defined by \var{coef}. Given the
   coefficients computed by the function \reffun{pnl_basis_fit_ls}, this function
   returns $\partial_{x_i} \partial_{x_j} \sum_{k=0}^n \var{coef}_k
