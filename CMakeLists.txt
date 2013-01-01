@@ -54,12 +54,12 @@ if (UNIX)
 endif (UNIX)
 
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
-    set(MY_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG}")
-    set(MY_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG}")
+    set(PNL_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG}")
+    set(PNL_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG}")
 elseif (CMAKE_BUILD_TYPE MATCHES "Release")
     add_definitions(-DPNL_RANGE_CHECK_OFF)
-    set(MY_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_RELEASE}")
-    set(MY_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE}")
+    set(PNL_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_RELEASE}")
+    set(PNL_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE}")
 endif ()
 
 # Do we have inline
@@ -72,34 +72,6 @@ if (NOT USE_INTERNAL_BLAS)
     if ( (BLAS_LIBRARIES AND (NOT LAPACK_LIBRARIES)) OR ((NOT BLAS_LIBRARIES) AND LAPACK_LIBRARIES) )
         message (FATAL_ERROR "--> You must specify both BLAS_LIBRARIES and LAPACK_LIBRARIES or none of them.")
     endif ()
-
-    # if ( BLAS_LIBRARIES AND LAPACK_LIBRARIES )
-    #     include(CheckFortranFunctionExists)
-    #     set(CMAKE_REQUIRED_LIBRARIES ${BLAS_LIBRARIES})
-    #     CHECK_FORTRAN_FUNCTION_EXISTS("dgemm" BLAS_FOUND)
-    #     unset( CMAKE_REQUIRED_LIBRARIES )
-    #     if(BLAS_FOUND)
-    #         message(STATUS "--> BLAS supplied by user is WORKING, will use ${BLAS_LIBRARIES}.")
-    #     else(BLAS_FOUND)
-    #         message(ERROR "--> BLAS supplied by user is not WORKING, CANNOT USE ${BLAS_LIBRARIES}.")
-    #         message(ERROR "-->     Will use REFERENCE BLAS (by default)")
-    #         message(ERROR "-->     Or Correct your BLAS_LIBRARIES entry ")
-    #     endif(BLAS_FOUND)
-
-    #     set(CMAKE_REQUIRED_LIBRARIES ${LAPACK_LIBRARIES})
-    #     CHECK_FORTRAN_FUNCTION_EXISTS("dpotrf" LAPACK_FOUND)
-    #     unset( CMAKE_REQUIRED_LIBRARIES )
-    #     if(LAPACK_FOUND)
-    #         message(STATUS "--> LAPACK supplied by user is WORKING, will use ${LAPACK_LIBRARIES}.")
-    #     else(LAPACK_FOUND)
-    #         message(ERROR "--> LAPACK supplied by user is not WORKING, CANNOT USE $LAPACK_LIBRARIES}.")
-    #         message(ERROR "-->     Will use REFERENCE LAPACK (by default)")
-    #         message(ERROR "-->     Or Correct your LAPACK_LIBRARIES entry ")
-    #     endif(LAPACK_FOUND)
-
-    # else ()
-    #     find_package (LAPACK)
-    # endif ( BLAS_LIBRARIES AND LAPACK_LIBRARIES )
 
     if (BLAS_LIBRARIES AND LAPACK_LIBRARIES) 
         set (BLAS_FOUND true)
@@ -122,7 +94,7 @@ if (USE_MPI)
     if (MPI_C_FOUND)
         set(LIBS ${LIBS} ${MPI_C_LIBRARIES})
         include_directories(${MPI_C_INCLUDE_PATH})
-        set(MY_CPP_FLAGS "${MY_CPP_FLAGS} -I${MPI_C_INCLUDE_PATH}")
+        set(PNL_CPP_FLAGS "${PNL_CPP_FLAGS} -I${MPI_C_INCLUDE_PATH}")
     endif (MPI_C_FOUND)
 endif (USE_MPI)
 
@@ -153,7 +125,7 @@ if (UNIX)
 endif (UNIX)
 
 # Stuff for CMakeuser.incl
-STRING(REGEX REPLACE ";" " -I" MY_CPP_FLAGS "${MY_CPP_FLAGS}" )
+STRING(REGEX REPLACE ";" " -I" PNL_CPP_FLAGS "${PNL_CPP_FLAGS}" )
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/CMakeuser.incl.in ${CMAKE_CURRENT_BINARY_DIR}/CMakeuser.incl @ONLY)
 
 # Check math function from the standard library
@@ -201,32 +173,38 @@ install(FILES
 )
 
 
-# uninstall
-add_custom_target (uninstall
-    COMMAND echo "Uninstalling"
-    COMMAND cat "${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt"
-    COMMAND xargs rm -f < "${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt")
+
+
+# Add the uninstall target
+include(CMakeUninstallTarget)
+WRITE_UNINSTALL_TARGET_SCRIPT()
+add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 
 # distclean 
+if (UNIX AND (NOT SUB_CMAKE_CALL))
 add_custom_target (distclean
     COMMAND echo "Cleaning all generated files"
+    COMMAND make clean
     COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/pnl_config.h"
     COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/FC.h"
     COMMAND find "${CMAKE_CURRENT_BINARY_DIR}/" -name 'CMakeFiles' -type d | xargs rm -rf 
     COMMAND find "${CMAKE_CURRENT_BINARY_DIR}/" -name 'CTestTestfile.cmake' | xargs rm -f 
     COMMAND find "${CMAKE_CURRENT_BINARY_DIR}/" -name 'cmake_install.cmake' | xargs rm -f 
+    COMMAND find "${CMAKE_CURRENT_BINARY_DIR}/" -name 'cmake_uninstall.cmake' | xargs rm -f 
     COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/CMakeCache.txt" 
     COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/CMakeuser.incl" 
     COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt"
     COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/libpnl.la"
+    COMMAND find "${CMAKE_CURRENT_BINARY_DIR}/" -name 'Makefile' | xargs rm -f 
     )
+endif (UNIX AND (NOT SUB_CMAKE_CALL))
 
 ## Output configuration stuff ##
 message("C Compiler :             ${CMAKE_C_COMPILER}")
-message("     FLAGS :             ${MY_C_FLAGS}")
+message("     FLAGS :             ${PNL_C_FLAGS}")
 if (CMAKE_CXX_COMPILER_WORKS)
     message("C++ Compiler :           ${CMAKE_CXX_COMPILER}")
-    message("     FLAGS   :           ${MY_CXX_FLAGS}")
+    message("     FLAGS   :           ${PNL_CXX_FLAGS}")
 endif (CMAKE_CXX_COMPILER_WORKS)
 
 message("Installation directory : ${CMAKE_INSTALL_PREFIX}") 
