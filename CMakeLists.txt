@@ -176,9 +176,11 @@ install(FILES
 
 
 # Add the uninstall target
-include(CMakeUninstallTarget)
-WRITE_UNINSTALL_TARGET_SCRIPT()
-add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+if (NOT SUB_CMAKE_CALL)
+    include(CMakeUninstallTarget)
+    WRITE_UNINSTALL_TARGET_SCRIPT()
+    add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+endif (NOT SUB_CMAKE_CALL)
 
 # distclean 
 if (UNIX AND (NOT SUB_CMAKE_CALL))
