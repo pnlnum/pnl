@@ -1,14 +1,7 @@
 #include "pnl/pnl_f2c.h"
-
-#ifdef KR_headers
-extern double erfc();
-
-double derfc_(x) doublereal *x;
-#else
-extern double erfc(double);
+#include "pnl/pnl_specfun.h"
 
 double derfc_(doublereal *x)
-#endif
 {
-return( erfc(*x) );
+return( pnl_sf_erfc(*x) );
 }

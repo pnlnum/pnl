@@ -170,11 +170,29 @@ struct Namelist {
 	};
 typedef struct Namelist Namelist;
 
+#ifdef abs
+#undef abs
+#endif
 #define abs(x) ((x) >= 0 ? (x) : -(x))
+#ifdef dabs
+#undef dabs
+#endif
 #define dabs(x) (doublereal)abs(x)
+#ifdef min
+#undef min
+#endif
 #define min(a,b) ((a) <= (b) ? (a) : (b))
+#ifdef max
+#undef max
+#endif
 #define max(a,b) ((a) >= (b) ? (a) : (b))
+#ifdef dmin
+#undef dmin
+#endif
 #define dmin(a,b) (doublereal)min(a,b)
+#ifdef dmax
+#undef dmax
+#endif
 #define dmax(a,b) (doublereal)max(a,b)
 #define bit_test(a,b)	((a) >> (b) & 1)
 #define bit_clear(a,b)	((a) & ~((uinteger)1 << (b)))

@@ -65,9 +65,14 @@ endif ()
 # Do we have inline
 include(CMakeMacroExternInline)
 
+if (WIN32)
+    add_definitions (-DMSDOS)
+    set (USE_INTERNAL_BLAS ON)
+endif (WIN32)
+
+
 # Detect Blas & Lapack
 if (NOT USE_INTERNAL_BLAS)
-
     # Has the user supplied a Blas Library?
     if ( (BLAS_LIBRARIES AND (NOT LAPACK_LIBRARIES)) OR ((NOT BLAS_LIBRARIES) AND LAPACK_LIBRARIES) )
         message (FATAL_ERROR "--> You must specify both BLAS_LIBRARIES and LAPACK_LIBRARIES or none of them.")
@@ -87,6 +92,9 @@ if (NOT USE_INTERNAL_BLAS)
     else ()
         set(USE_INTERNAL_BLAS ON)
     endif (BLAS_FOUND AND LAPACK_FOUND)
+else (NOT USE_INTERNAL_BLAS)
+    set(PNL_HAVE_FORTRAN_COMPILER OFF)
+    set (PNL_HAVE_DPSTRF ON)
 endif (NOT USE_INTERNAL_BLAS)
 
 if (USE_MPI)
@@ -103,10 +111,9 @@ if (UNIX)
     set(LIBS ${LIBS} m)
 endif (UNIX)
 
-LIST( REMOVE_DUPLICATES LIBS )
-
 # Prepare for creating libtool .la
 if (UNIX)
+    LIST( REMOVE_DUPLICATES LIBS )
     foreach( _lib ${LIBS} )
         # Remove path to the library and suffixes. Transformation example: libXXX-2.0.(so|dylib) => XXX-2.0
         STRING(REGEX REPLACE ".*/lib(.*)\\.(dylib|so)" "\\1" _lib_no_path "${_lib}" )
@@ -143,26 +150,29 @@ CHECK_FUNCTION_EXISTS(isnan PNL_HAVE_ISNAN)
 CHECK_FUNCTION_EXISTS(isinf PNL_HAVE_ISINF)
 
 # Fortran stuff
-enable_language(Fortran OPTIONAL)
-if (CMAKE_Fortran_COMPILER_WORKS)
-    message ("Fortran compiler found ${CMAKE_Fortran_COMPILER}")
-    set(PNL_HAVE_FORTRAN_COMPILER ON)
-    include(FortranCInterface)
-    include(CheckFortranFunctionExists)
-    FortranCInterface_HEADER(src/include/pnl/FC.h MACRO_NAMESPACE "FC_")
-    # test for dpstrf (Block Cholesky for non definite matrix)
-    CHECK_FORTRAN_FUNCTION_EXISTS(dpstrf PNL_HAVE_DPSTRF)
-else ()
-    set(PNL_HAVE_FORTRAN_COMPILER OFF)
-    if (APPLE) 
-        set (PNL_HAVE_DPSTRF ON)
-    endif (APPLE)
-endif (CMAKE_Fortran_COMPILER_WORKS)
+if (NOT USE_INTERNAL_BLAS)
+    enable_language(Fortran OPTIONAL)
+    if (CMAKE_Fortran_COMPILER_WORKS)
+        message ("Fortran compiler found ${CMAKE_Fortran_COMPILER}")
+        set(PNL_HAVE_FORTRAN_COMPILER ON)
+        include(FortranCInterface)
+        include(CheckFortranFunctionExists)
+        FortranCInterface_HEADER(src/include/pnl/FC.h MACRO_NAMESPACE "FC_")
+        # test for dpstrf (Block Cholesky for non definite matrix)
+        CHECK_FORTRAN_FUNCTION_EXISTS(dpstrf PNL_HAVE_DPSTRF)
+    else ()
+        set(PNL_HAVE_FORTRAN_COMPILER OFF)
+        if (APPLE) 
+            set (PNL_HAVE_DPSTRF ON)
+        endif (APPLE)
+    endif (CMAKE_Fortran_COMPILER_WORKS)
+endif (NOT USE_INTERNAL_BLAS)
 
 
 enable_testing()
 add_subdirectory(src)
 add_subdirectory(examples)
+
 
 message ("Generate configure file ${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/pnl_config.h")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake 
