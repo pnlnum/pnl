@@ -15,12 +15,13 @@
 
 #include "pnl/pnl_complex.h" /* just for dcomplex ! */
 
-#define DOMAIN		1	/* argument domain error */
-#define SING		2	/* argument singularity */
-#define OVERFLOW	3	/* overflow range error */
-#define UNDERFLOW	4	/* underflow range error */
-#define TLOSS		5	/* total loss of precision */
-#define PLOSS		6	/* partial loss of precision */
+/* already defined in math.h */
+/* #define DOMAIN		1	|+ argument domain error +| */
+/* #define SING		2	|+ argument singularity +| */
+/* #define OVERFLOW	3	|+ overflow range error +| */
+/* #define UNDERFLOW	4	|+ underflow range error +| */
+/* #define TLOSS		5	|+ total loss of precision +| */
+/* #define PLOSS		6	|+ partial loss of precision +| */
 #define TOOMANY         7       /* too many iterations */
 #define MAXITER        500
 
