@@ -44,6 +44,12 @@ set (pnl_LIB_SRCS ${pnl_LIB_SRCS} include/pnl/build-inline.c)
 add_library(pnl SHARED ${pnl_LIB_SRCS})
 target_link_libraries(pnl ${LIBS})
 
+if (MINGW)
+    set_target_properties(pnl PROPERTIES 
+        LINK_FLAGS "-Wl,--output-def,${CMAKE_CURRENT_BINARY_DIR}/libpnl.def")
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libpnl.def DESTINATION lib)
+endif (MINGW)
+
 if (UNIX)
     set_target_properties(pnl PROPERTIES 
         LT_VERSION_CURRENT ${LT_VERSION_CURRENT}
