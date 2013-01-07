@@ -67,7 +67,9 @@ include(CMakeMacroExternInline)
 
 if (WIN32)
     add_definitions (-DMSDOS)
-    set (USE_INTERNAL_BLAS ON)
+    if (MSVC)
+        set (USE_INTERNAL_BLAS ON)
+    endif (MSVC)
 endif (WIN32)
 
 
