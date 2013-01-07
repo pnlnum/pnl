@@ -6,6 +6,10 @@ Makefile.in
 *.deps
 *.libs
 *.dylib
+*.dll
+*.lib
+*.exe
+*.dll.a
 *~
 *.swp
 Makeuser.incl
@@ -20,6 +24,7 @@ doc/latex
 include
 lib
 libtool
+config
 pnl-manual.idx
 pnl-manual.ilg
 pnl-manual.ind
@@ -29,3 +34,9 @@ main.cpp
 stamp-h1
 man/html/pnl-manual*
 man/html/*.png
+cmake_install.cmake
+CMakeFiles
+CTestTestfile.cmake
+cmake_uninstall.cmake
+install_manifest.txt
+CMakeCache.txt
