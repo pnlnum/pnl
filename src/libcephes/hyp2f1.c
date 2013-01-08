@@ -96,7 +96,6 @@ extern double psi ( double );
 static double hyt2f1(double, double, double, double, double *);
 static double hys2f1(double, double, double, double, double *);
 double hyp2f1(double, double, double, double);
-extern double MAXNUM, MACHEP;
 
 double hyp2f1( a, b, c, x )
      double a, b, c, x;

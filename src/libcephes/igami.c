@@ -51,7 +51,6 @@
 #include "mconf.h"
 #include <stdio.h>
 
-extern double MACHEP, MAXNUM, MAXLOG, MINLOG;
 
 double igami( a, y0 )
      double a, y0;

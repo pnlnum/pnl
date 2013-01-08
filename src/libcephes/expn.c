@@ -52,7 +52,6 @@
 #include "mconf.h"
 #define EUL 0.57721566490153286060
 #define BIG  1.44115188075855872E+17
-extern double MAXNUM, MACHEP, MAXLOG;
 
 double expn( n, x )
      int n;

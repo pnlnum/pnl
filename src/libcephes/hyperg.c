@@ -75,7 +75,6 @@ double hyp2f0 ( double, double, double, int, double * );
 static double hy1f1p(double, double, double, double *);
 static double hy1f1a(double, double, double, double *);
 double hyperg (double, double, double);
-extern double MAXNUM, MACHEP;
 
 double hyperg( a, b, x)
      double a, b, x;

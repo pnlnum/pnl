@@ -108,7 +108,6 @@ static unsigned short A[] = {
 
 #define EUL 0.57721566490153286061
 
-extern double MAXNUM;
 
 
 double psi(x)

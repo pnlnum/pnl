@@ -67,7 +67,6 @@
 #define MAXGAM 171.624376956302725
 #endif
 
-extern double MAXLOG, MAXNUM;
 extern int pnl_sf_log_gamma_sgn(double, double *, int *);
 
 double beta( double a, double b )

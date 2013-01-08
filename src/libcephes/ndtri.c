@@ -53,7 +53,6 @@
 */
 
 #include "mconf.h"
-extern double MAXNUM;
 
 #ifdef UNK
 /* sqrt(2pi) */

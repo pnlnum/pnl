@@ -35,9 +35,6 @@ static double LQ[] = {
   6.0118660497603843919306E1,
 };
 
-#define SQRTH 0.70710678118654752440
-#define SQRT2 1.41421356237309504880
-
 double pnl_log1p(double x)
 {
   double z;
@@ -101,7 +98,6 @@ static double coscof[7] = {
   4.1666666666666666609054E-2,
 };
 
-extern double PIO4;
 
 double pnl_cosm1(double x)
 {

@@ -111,4 +111,40 @@ Copyright 1984, 1987, 1989, 1995 by Stephen L. Moshier
 
 #include "cephes_protos.h"
 
+#define EULER  = M_EULER;        /* Euler constant */
+
+#ifdef UNK
+#if 1
+#define MACHEP   1.11022302462515654042E-16   /* 2**-53 */
+#else
+#define MACHEP   1.38777878078144567553E-17   /* 2**-56 */
+#endif
+#define UFLOWTHRESH   2.22507385850720138309E-308 /* 2**-1022 */
+#ifdef DENORMAL
+#define MAXLOG   7.09782712893383996732E2     /* log(MAXNUM) */
+/* #define MINLOG  -7.44440071921381262314E2 */     /* log(2**-1074) */
+#define MINLOG  -7.451332191019412076235E2     /* log(2**-1075) */
+#else
+#define MAXLOG   7.08396418532264106224E2     /* log 2**1022 */
+#define MINLOG  -7.08396418532264106224E2     /* log 2**-1022 */
+#endif
+#define MAXNUM   1.79769313486231570815E308    /* 2**1024*(1-MACHEP) */
+#define PI       M_PI       /* pi */
+#define PIO2     M_PI_2       /* pi/2 */
+#define PIO4     M_PI_4    /* pi/4 */
+#define SQRT2    M_SQRT2       /* sqrt(2) */
+#define SQRTH    M_SQRT1_2    /* sqrt(2)/2 */
+#define LOG2E    1.4426950408889634073599     /* 1/log(2) */
+#define SQ2OPI   M_SQRT2_PI  /* sqrt( 2/pi ) */
+#define LOGE2    M_LN2    /* log(2) */
+#define LOGSQ2   3.46573590279972654709E-1    /* log(2)/2 */
+#define THPIO4   2.35619449019234492885       /* 3*pi/4 */
+#define TWOOPI   M_2_PI /* 2/pi */
+#ifdef MINUSZERO
+#define NEGZERO  -0.0
+#else
+#define NEGZERO  0.0
+#endif
+#endif
+
 #endif /* CEPHES_MCONF_H */

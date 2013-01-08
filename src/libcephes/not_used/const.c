@@ -62,39 +62,4 @@
 #include "mconf.h"
 #include "pnl/pnl_mathtools.h"
 
-double EULER  = M_EULER;        /* Euler constant */
-
-#ifdef UNK
-#if 1
-double MACHEP =  1.11022302462515654042E-16;   /* 2**-53 */
-#else
-double MACHEP =  1.38777878078144567553E-17;   /* 2**-56 */
-#endif
-double UFLOWTHRESH =  2.22507385850720138309E-308; /* 2**-1022 */
-#ifdef DENORMAL
-double MAXLOG =  7.09782712893383996732E2;     /* log(MAXNUM) */
-/* double MINLOG = -7.44440071921381262314E2; */     /* log(2**-1074) */
-double MINLOG = -7.451332191019412076235E2;     /* log(2**-1075) */
-#else
-double MAXLOG =  7.08396418532264106224E2;     /* log 2**1022 */
-double MINLOG = -7.08396418532264106224E2;     /* log 2**-1022 */
-#endif
-double MAXNUM =  1.79769313486231570815E308;    /* 2**1024*(1-MACHEP) */
-double PI     =  M_PI;       /* pi */
-double PIO2   =  M_PI_2;       /* pi/2 */
-double PIO4   =  M_PI_4;    /* pi/4 */
-double SQRT2  =  M_SQRT2;       /* sqrt(2) */
-double SQRTH  =  M_SQRT1_2;    /* sqrt(2)/2 */
-double LOG2E  =  1.4426950408889634073599;     /* 1/log(2) */
-double SQ2OPI =  M_SQRT2_PI;  /* sqrt( 2/pi ) */
-double LOGE2  =  M_LN2;    /* log(2) */
-double LOGSQ2 =  3.46573590279972654709E-1;    /* log(2)/2 */
-double THPIO4 =  2.35619449019234492885;       /* 3*pi/4 */
-double TWOOPI =  M_2_PI; /* 2/pi */
-#ifdef MINUSZERO
-double NEGZERO = -0.0;
-#else
-double NEGZERO = 0.0;
-#endif
-#endif
 

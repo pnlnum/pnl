@@ -148,8 +148,6 @@
 #include "mconf.h"
 #include "cephes_protos.h"
 
-extern double SQRTH;
-extern double MAXLOG;
 
 #ifdef UNK
 static double P[] = {

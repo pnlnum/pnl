@@ -270,7 +270,6 @@ static unsigned short SQT[4] = {
 #define SQTPI *(double *)SQT
 #endif
 
-extern double MAXLOG, MAXNUM;
 
 /* Gamma function computed by Stirling's formula.
  * The polynomial STIR is valid for 33 <= x <= 172.
