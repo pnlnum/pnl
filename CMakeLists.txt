@@ -171,9 +171,12 @@ if (NOT USE_INTERNAL_BLAS)
 endif (NOT USE_INTERNAL_BLAS)
 
 
-enable_testing()
 add_subdirectory(src)
-add_subdirectory(examples)
+
+if (NOT SUB_CMAKE_CALL)
+    enable_testing()
+    add_subdirectory(examples)
+endif (NOT SUB_CMAKE_CALL)
 
 
 message ("Generate configure file ${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/pnl_config.h")
