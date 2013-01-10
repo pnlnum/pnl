@@ -100,6 +100,7 @@ else (NOT USE_INTERNAL_BLAS)
 endif (NOT USE_INTERNAL_BLAS)
 
 if (USE_MPI)
+    set (MPI_FIND_QUIETLY true)
     find_package(MPI)
     if (MPI_C_FOUND)
         set(LIBS ${LIBS} ${MPI_C_LIBRARIES})
