@@ -34,13 +34,13 @@ static int N_max = 1000;
 #define FUNC  f_cos
 #define FDF_FUNC fdf_cos 
 
-static double x_square(double x, void *p) { return x*x -2.; }
+/* static double x_square(double x, void *p) { return x*x -2.; } */
 
-static void x_fdf_square(double x, double *f, double *df, void *p)
-{
-  *f = x*x -2.;
-  *df = 2*x;
-}
+/* static void x_fdf_square(double x, double *f, double *df, void *p) */
+/* { */
+/*   *f = x*x -2.; */
+/*   *df = 2*x; */
+/* } */
 
 static double f_cos (double x, void *p) {return cos (x);}
 static void fdf_cos (double x, double *f, double *df, void *p) {*f = cos (x); *df = -sin(x);}
