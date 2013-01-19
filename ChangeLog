@@ -1,3 +1,7 @@
+19-01-2012 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* Autotools files are removed
+
 26-12-2012 Jérôme Lelong <jerome.lelong@gmail.com>
 	
 	* vector_double: Add pnl_vect_cross and pnl_vect_dist
@@ -12,7 +16,7 @@
 21-11-2012 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* Cmake: PNL should now be compiled using CMake 2.8. The autotools
-	chain might be removed in future releases.This has induced some side
+	chain might be removed in future releases. This has induced some side
 	changes in the way configuration files are handled.
 
 20-09-2012 Jérôme Lelong <jerome.lelong@gmail.com>
