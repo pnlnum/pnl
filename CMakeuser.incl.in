@@ -1,0 +1,174 @@
+# -*- mode: Makefile -*-
+# vim: set filetype=make:
+
+
+########################################################################
+# Written and (C) by Jérôme Lelong <jerome.lelong@gmail.com>           #
+#                                                                      #
+# This program is free software; you can redistribute it and/or modify #
+# it under the terms of the GNU Lesser General Public License as       #
+# published by  the Free Software Foundation; either version 3 of the  #
+# License, or (at your option) any later version.                      #
+#                                                                      #
+# This program is distributed in the hope that it will be useful,      #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of       #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        #
+# GNU Lesser General Public License for more details.                  #
+#                                                                      #
+# You should have received a copy of the GNU Lesser General Public     #
+# License  along with this program.  If not, see                       #
+# <http://www.gnu.org/licenses/>.                                      #
+########################################################################
+
+
+# 
+# A few variables fixed by cmake
+#
+INSTALL_PREFIX=@CMAKE_INSTALL_PREFIX@
+BUILD_DIR=@CMAKE_CURRENT_BINARY_DIR@
+CC=@CMAKE_C_COMPILER@
+CXX=@CMAKE_CXX_COMPILER@
+PNL_CPP_FLAGS=@PNL_CPP_FLAGS@
+PNL_C_FLAGS=@PNL_C_FLAGS@
+PNL_CXX_FLAGS=@PNL_CXX_FLAGS@
+
+pnl_includedir=$(INSTALL_PREFIX)/include
+pnl_libdir=$(INSTALL_PREFIX)/lib
+LINK_TXT=$(BUILD_DIR)/examples/CMakeFiles/array_test.dir/link.txt
+# Drop the compiler name, fix after
+CMAKE_LINK_COMMAND1=$(shell cat ${LINK_TXT} | sed -e 's/^[^ ]* //' )
+# Fix libpnl path with full path
+CMAKE_LINK_COMMAND=$(shell echo ${CMAKE_LINK_COMMAND1} | sed "s![^ ]*\(libpnl[^ ]*\.[^ ]*\) !${INSTALL_PREFIX}/lib/\1 !")
+# Get flags at the end of the command
+CMAKE_LINK_COMMAND_FLAGS_AFTER=$(shell echo ${CMAKE_LINK_COMMAND} | sed 's/^.*\.c\.o -o array_test//') 
+# Get flags at the beginning of the command
+CMAKE_LINK_COMMAND_FLAGS_BEFORE=$(shell echo ${CMAKE_LINK_COMMAND} | sed  -e 's/\( [^ ]*\.c\.o\)*//g' -e 's/\(.*\)-o array_test.*/\1/' ) 
+PNL_INCLUDES = -I$(pnl_includedir)
+
+QUIET=--quiet
+
+#
+# Compiling directives
+#
+COMPILE = $(CC) $(PNL_INCLUDES) $(PNL_CPP_FLAGS) $(CPPFLAGS) $(PNL_C_FLAGS) $(CFLAGS)
+CXXCOMPILE = $(CXX) $(PNL_INCLUDES) $(PNL_CPP_FLAGS) $(CPPFLAGS) $(PNL_CXX_FLAGS) $(CXXFLAGS)
+
+#*******************************************************************
+
+## Creates targets. A target is created by linking the objects defined
+## by $(target_SRC) with extensions replaced by .o
+define new_target 
+		# 1: name of the binary to be created
+local_bin=$(subst -,_,$(1))
+LOBJS=$$($$(local_bin)_OBJS)
+LSRC=$$($$(local_bin)_SRC)
+local_LDFLAGS=$$($$(local_bin)_LDFLAGS)
+local_CFLAGS=$$($$(local_bin)_CFLAGS)
+local_CXXFLAGS=$$($$(local_bin)_CXXFLAGS)
+ifneq ($(strip $$(LSRC)),)
+  LOBJS_1=$${LSRC:%.cc=%.o}
+  LOBJS_2=$${LOBJS_1:%.C=%.o}
+  LOBJS_3=$${LOBJS_2:%.c=%.o}
+  LOBJS_4=$${LOBJS_3:%.cpp=%.o}
+  LOBJS_5=$${LOBJS_4:%.cxx=%.o}
+  LOBJS=$$(LOBJS_5)
+  $$(foreach src,$$(LSRC),$$(eval $$(call create_rule_o,$$(src),$$(local_CFLAGS),$$(local_CXXFLAGS) )))
+  # Decide between a C or C++ linker
+  ifeq ($(strip $$(filter-out %.c,$$(LSRC))),)
+    $$(eval $$(call create_rule_bin_c,$(1),$$(LOBJS),$$(local_LDFLAGS)))
+  else
+    $$(eval $$(call create_rule_bin_cpp,$(1),$$(LOBJS),$$(local_LDFLAGS)))
+  endif
+else
+  $$(eval $$(call create_rule_bin_c,$(1),$$(LOBJS),$$(local_LDFLAGS)))
+endif
+endef
+
+
+# Write the rule to create a given binary using only C objects
+define create_rule_bin_c
+		# 1: target name 
+		# 2: libtool objects 
+		# 3: per target ldflags
+$(1): $(2)
+	$(CC) $(CMAKE_LINK_COMMAND_FLAGS_BEFORE) $$^ -o $$@ $(CMAKE_LINK_COMMAND_FLAGS_AFTER) $(3) $(LDFLAGS)
+endef
+
+# Write the rule to create a given binary using C/C++ objects
+define create_rule_bin_cpp
+		# 1: target name 
+		# 2: libtool objects 
+		# 3: per target ldflags
+$(1): $(2)
+	$(CXX) $(CMAKE_LINK_COMMAND_FLAGS_BEFORE) $$^ -o $$@ $(CMAKE_LINK_COMMAND_FLAGS_AFTER) $(3) $(LDFLAGS)
+endef
+
+
+# Write the rules to create objects
+# Each time a new rule is defined to create an object of basename base
+# the variable base_rule is defined to ensure that we won't try to redefine
+# the same rule later in case an object appears in several binaries.
+define create_rule_o 
+		# 1: name of the src file used to generate the .o
+		# 2 : per target CFLAGS
+		# 3 : per target CXXFLAGS
+base=$(basename $(1))
+ifndef $$(base)_rule
+  $$(base)_rule=1
+  base_o=$$(base).o
+  ifeq ($(suffix $(1)),.c)
+    $$(base_o): $(1)
+		$(COMPILE)  $(2) -o $$@ -c $$<
+  else
+    $$(base_o): $(1)
+		$(CXXCOMPILE) $(3) -o $$@  -c $$<
+  endif
+endif
+endef
+
+all: $(BINS)
+
+
+# Go through BINS and generate all the necessary rules
+$(foreach target,$(BINS),$(eval $(call new_target,$(target))))
+
+clean::
+	$(RM) *.o *.lo
+	$(RM) -r .libs
+
+cleanall:: clean
+	@for b in $(BINS); do \
+		echo "Remove $$b $$b.dSYM"; \
+		$(RM) $$b; \
+		$(RM) -rf "$$b.dSYM"; \
+	done
+
+
+# Add some generic rules for target usings the _OBJS mechanism
+# Will become deprecated 
+%.o: %.c
+	$(COMPILE)  -o $@ -c $<
+
+%.o:%.cpp
+	$(CXXCOMPILE)  -o $@ -c $<
+
+%.o:%.C
+	$(CXXCOMPILE) -o $@  -c $<
+
+%.o:%.cc
+	$(CXXCOMPILE) -o $@  -c $<
+
+%.o:%.cxx
+	$(CXXCOMPILE) -o $@  -c $<
+
+__check_vars:
+	@echo "CC=$(CC)"
+	@echo "CXX=$(CXX)"
+	@echo "INSTALL_PREFIX=$(INSTALL_PREFIX)"
+	@echo "PNL_C_FLAGS=$(PNL_C_FLAGS)"
+	@echo "PNL_CXX_FLAGS=$(PNL_CXX_FLAGS)"
+	@echo "CMAKE_LINK_COMMAND=$(CMAKE_LINK_COMMAND)"
+	@echo "CMAKE_LINK_COMMAND_FLAGS_AFTER=$(CMAKE_LINK_COMMAND_FLAGS_AFTER)"
+	@echo "CMAKE_LINK_COMMAND_FLAGS_BEFORE=$(CMAKE_LINK_COMMAND_FLAGS_BEFORE)"
+	@echo "INCLUDES=$(PNL_INCLUDES)"
+	

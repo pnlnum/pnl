@@ -213,7 +213,7 @@ add_custom_target (distclean
     COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/CMakeuser.incl" 
     COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt"
     COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/libpnl.la"
-    COMMAND find "${CMAKE_CURRENT_BINARY_DIR}/" -name 'Makefile' | xargs rm -f 
+    COMMAND find "${CMAKE_CURRENT_BINARY_DIR}/Src" -name 'Makefile' | xargs rm -f 
     )
 endif (UNIX AND (NOT SUB_CMAKE_CALL))
 
