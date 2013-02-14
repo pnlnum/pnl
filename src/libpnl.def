@@ -797,7 +797,6 @@ EXPORTS
     pnl_sf_hyperg_0F1 @797
     pnl_sf_hyperg_1F1 @798
     pnl_sf_hyperg_2F0 @799
-    pnl_sf_hyperg_2F1 @800
     pnl_sf_hyperg_U @801
     pnl_sf_lbeta @802
     pnl_sf_log_erf @803

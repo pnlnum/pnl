@@ -41,7 +41,7 @@ endforeach ()
 set (pnl_LIB_SRCS ${pnl_LIB_SRCS} include/pnl/build-inline.c)
 
 
-add_library(pnl SHARED ${pnl_LIB_SRCS})
+add_library(pnl ${LINK_TYPE} ${pnl_LIB_SRCS})
 target_link_libraries(pnl ${LIBS})
 
 if (MINGW)
