@@ -94,10 +94,33 @@ if (NOT USE_INTERNAL_BLAS)
     else ()
         set(USE_INTERNAL_BLAS ON)
     endif (BLAS_FOUND AND LAPACK_FOUND)
-else (NOT USE_INTERNAL_BLAS)
+endif (NOT USE_INTERNAL_BLAS)
+
+if (USE_INTERNAL_BLAS)
     set(PNL_HAVE_FORTRAN_COMPILER OFF)
     set (PNL_HAVE_DPSTRF ON)
-endif (NOT USE_INTERNAL_BLAS)
+else (USE_INTERNAL_BLAS)
+    # Check if Fortran is available
+    enable_language(Fortran OPTIONAL)
+    if (CMAKE_Fortran_COMPILER_WORKS)
+        message ("Fortran compiler found ${CMAKE_Fortran_COMPILER}")
+        set(PNL_HAVE_FORTRAN_COMPILER ON)
+        include(FortranCInterface)
+        FortranCInterface_HEADER(src/include/pnl/FC.h MACRO_NAMESPACE "FC_")
+    else ()
+        set(PNL_HAVE_FORTRAN_COMPILER OFF)
+    endif (CMAKE_Fortran_COMPILER_WORKS)
+    # Test if dpsrtrf is present
+    include(CheckFunctionExists)
+    CHECK_FUNCTION_EXISTS(dpstrf PNL_HAVE_DPSTRF)
+    if (NOT PNL_HAVE_DPSTRF)
+        CHECK_FUNCTION_EXISTS(dpstrf_ PNL_HAVE_DPSTRF)
+    endif (NOT PNL_HAVE_DPSTRF)
+endif (USE_INTERNAL_BLAS)
+
+
+if (USE_INTERNAL_BLAS)
+endif (USE_INTERNAL_BLAS)
 
 if (USE_MPI)
     set (MPI_FIND_QUIETLY true)
@@ -152,25 +175,6 @@ CHECK_FUNCTION_EXISTS(finite PNL_HAVE_FINITE)
 CHECK_FUNCTION_EXISTS(isnan PNL_HAVE_ISNAN)
 CHECK_FUNCTION_EXISTS(isinf PNL_HAVE_ISINF)
 
-if (NOT USE_INTERNAL_BLAS)
-    # Fortran stuff
-    enable_language(Fortran OPTIONAL)
-    if (CMAKE_Fortran_COMPILER_WORKS)
-        message ("Fortran compiler found ${CMAKE_Fortran_COMPILER}")
-        set(PNL_HAVE_FORTRAN_COMPILER ON)
-        include(FortranCInterface)
-        FortranCInterface_HEADER(src/include/pnl/FC.h MACRO_NAMESPACE "FC_")
-    else ()
-        set(PNL_HAVE_FORTRAN_COMPILER OFF)
-    endif (CMAKE_Fortran_COMPILER_WORKS)
-
-    # Test if dpsrtrf is present
-    include(CheckFunctionExists)
-    CHECK_FUNCTION_EXISTS(dpstrf PNL_HAVE_DPSTRF)
-    if (NOT PNL_HAVE_DPSTRF)
-        CHECK_FUNCTION_EXISTS(dpstrf_ PNL_HAVE_DPSTRF)
-    endif (NOT PNL_HAVE_DPSTRF)
-endif (NOT USE_INTERNAL_BLAS)
 
 
 add_subdirectory(src)
@@ -215,7 +219,7 @@ add_custom_target (distclean
     COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/CMakeuser.incl" 
     COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt"
     COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/libpnl.la"
-    COMMAND find "${CMAKE_CURRENT_BINARY_DIR}/Src" -name 'Makefile' | xargs rm -f 
+    COMMAND find "${CMAKE_CURRENT_BINARY_DIR}/src" -name 'Makefile' | xargs rm -f 
     )
 endif (UNIX AND (NOT SUB_CMAKE_CALL))
 
