@@ -152,23 +152,24 @@ CHECK_FUNCTION_EXISTS(finite PNL_HAVE_FINITE)
 CHECK_FUNCTION_EXISTS(isnan PNL_HAVE_ISNAN)
 CHECK_FUNCTION_EXISTS(isinf PNL_HAVE_ISINF)
 
-# Fortran stuff
 if (NOT USE_INTERNAL_BLAS)
+    # Fortran stuff
     enable_language(Fortran OPTIONAL)
     if (CMAKE_Fortran_COMPILER_WORKS)
         message ("Fortran compiler found ${CMAKE_Fortran_COMPILER}")
         set(PNL_HAVE_FORTRAN_COMPILER ON)
         include(FortranCInterface)
-        include(CheckFortranFunctionExists)
         FortranCInterface_HEADER(src/include/pnl/FC.h MACRO_NAMESPACE "FC_")
-        # test for dpstrf (Block Cholesky for non definite matrix)
-        CHECK_FORTRAN_FUNCTION_EXISTS(dpstrf PNL_HAVE_DPSTRF)
     else ()
         set(PNL_HAVE_FORTRAN_COMPILER OFF)
-        if (APPLE) 
-            set (PNL_HAVE_DPSTRF ON)
-        endif (APPLE)
     endif (CMAKE_Fortran_COMPILER_WORKS)
+
+    # Test if dpsrtrf is present
+    include(CheckFunctionExists)
+    CHECK_FUNCTION_EXISTS(dpstrf PNL_HAVE_DPSTRF)
+    if (NOT PNL_HAVE_DPSTRF)
+        CHECK_FUNCTION_EXISTS(dpstrf_ PNL_HAVE_DPSTRF)
+    endif (NOT PNL_HAVE_DPSTRF)
 endif (NOT USE_INTERNAL_BLAS)
 
 
@@ -177,6 +178,7 @@ add_subdirectory(src)
 if (NOT SUB_CMAKE_CALL)
     enable_testing()
     add_subdirectory(examples)
+    set(LINK_TYPE SHARED)
 endif (NOT SUB_CMAKE_CALL)
 
 
