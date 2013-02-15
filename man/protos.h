@@ -1,3 +1,12 @@
+pnl_array_new
+pnl_array_create
+pnl_array_copy
+pnl_array_clone
+pnl_array_resize
+pnl_array_free
+pnl_array_get
+pnl_array_set
+pnl_array_print
 pnl_band_mat_object_new
 pnl_band_mat_object_free
 pnl_band_mat_new
@@ -31,10 +40,14 @@ pnl_band_mat_syslin_inplace
 pnl_band_mat_syslin
 pnl_band_mat_lu_syslin_inplace
 pnl_band_mat_lu_syslin
+pnl_basis_type_register
 pnl_basis_new
 pnl_basis_create
 pnl_basis_create_from_degree
+pnl_basis_create_from_prod_degree
 pnl_basis_create_from_hyperbolic_degree
+pnl_basis_clone
+pnl_basis_copy
 pnl_basis_set_from_tensor
 pnl_basis_create_from_tensor
 pnl_basis_set_domain
@@ -42,6 +55,15 @@ pnl_basis_set_reduced
 pnl_basis_free
 pnl_basis_print
 pnl_basis_fit_ls
+pnl_basis_ik_vect
+pnl_basis_i_vect
+pnl_basis_i_D_vect
+pnl_basis_i_D2_vect
+pnl_basis_eval_vect
+pnl_basis_eval_D_vect
+pnl_basis_eval_D2_vect
+pnl_basis_eval_derivs_vect
+pnl_basis_ik
 pnl_basis_i
 pnl_basis_i_D
 pnl_basis_i_D2
@@ -114,6 +136,10 @@ pnl_real_fft
 pnl_real_ifft
 pnl_real_fft2
 pnl_real_ifft2
+pnl_ifft2d_inplace
+pnl_fft2d_inplace
+pnl_real_fft2d
+pnl_real_ifft2d
 pnl_cf_call_bs
 pnl_cf_put_bs
 pnl_bs_call
@@ -130,6 +156,8 @@ pnl_integration_qng_2d
 pnl_integration_GK2D
 pnl_integration_qag
 pnl_integration_qagp
+pnl_ode_rkf45
+pnl_ode_rkf45_step
 pnl_d1mach
 pnl_dlamch
 pnl_ilap_cdf_euler
@@ -155,6 +183,9 @@ pnl_gmres_solver_initialisation
 pnl_gmres_solver_free
 
 pnl_list_new
+pnl_list_copy
+pnl_list_clone
+pnl_list_resize
 pnl_cell_new
 pnl_list_free
 pnl_cell_free
@@ -170,8 +201,8 @@ intapprox
 trunc
 Cnp
 pnl_fact
-lgamma
-tgamma
+pnl_lgamma
+pnl_tgamma
 pnl_pow_i
 pnl_nan
 pnl_posinf
@@ -179,6 +210,12 @@ pnl_neginf
 pnl_isnan
 pnl_isfinite
 pnl_isinf
+pnl_acosh
+pnl_asinh
+pnl_atanh
+pnl_log1p
+pnl_expm1
+pnl_cosm1
 pnl_qsort
 pnl_mat_object_new
 pnl_mat_object_free
@@ -186,9 +223,6 @@ pnl_mat_object_resize
 pnl_hmat_object_new
 pnl_hmat_object_free
 pnl_hmat_object_resize
-
-
-
 
 
 
@@ -234,10 +268,13 @@ pnl_mat_mult_vect_transpose
 pnl_mat_mult_vect_transpose_inplace
 pnl_mat_lAxpby
 pnl_mat_dgemv
-pnl_mat_scalar_prod_A
+pnl_mat_scalar_prod
+pnl_mat_cross
 pnl_mat_set_double
+pnl_mat_set_zero
 pnl_mat_set_id
 pnl_mat_set_diag
+pnl_mat_set_from_ptr
 pnl_mat_mult_mat_term
 pnl_mat_div_mat_term
 pnl_mat_sq_transpose
@@ -273,6 +310,7 @@ pnl_mat_swap_rows
 pnl_mat_upper_inverse
 pnl_mat_lower_inverse
 pnl_mat_chol
+pnl_mat_pchol
 pnl_mat_upper_syslin
 pnl_mat_lower_syslin
 pnl_mat_chol_syslin
@@ -280,6 +318,7 @@ pnl_mat_chol_syslin_inplace
 pnl_mat_lu
 pnl_mat_lu_syslin
 pnl_mat_lu_syslin_inplace
+pnl_mat_qr_syslin
 pnl_mat_syslin_mat
 pnl_mat_lu_syslin_mat
 pnl_mat_chol_syslin_mat
@@ -293,12 +332,6 @@ pnl_mat_eigen
 pnl_mat_qr
 pnl_mat_ls_mat
 pnl_mat_ls
-
-
-
-pnl_mat_set
-pnl_mat_get
-pnl_mat_lget
 pnl_hmat_new
 pnl_hmat_create
 pnl_hmat_create_from_double
@@ -313,13 +346,8 @@ pnl_hmat_mult_double
 pnl_hmat_set
 pnl_hmat_get
 pnl_hmat_lget
-
-
-
-
-
-
-
+pnl_mat_wrap_hmat
+pnl_vect_wrap_hmat
 
 
 pnl_object_mpi_pack_size
@@ -331,6 +359,7 @@ pnl_object_mpi_recv
 pnl_object_mpi_bcast
 pnl_object_mpi_isend
 pnl_object_mpi_irecv
+pnl_object_mpi_reduce
 pnl_rng_state_mpi_pack_size
 pnl_rng_state_mpi_pack
 pnl_rng_state_mpi_unpack
@@ -346,14 +375,20 @@ pnl_optim_intpoints_bfgs_solve
 pnl_permutation_new
 pnl_permutation_create
 pnl_permutation_free
+pnl_permutation_inverse
 pnl_vect_permute
 pnl_vect_permute_inplace
+pnl_vect_permute_inverse
+pnl_vect_permute_inverse_inplace
+pnl_mat_col_permute
+pnl_mat_row_permute
 pnl_permutation_fprint
 pnl_permutation_print
-pnl_rng_get_from_id
+pnl_rng_get_name
 pnl_rand_init
 pnl_rand_sseed
 pnl_rand_or_quasi
+pnl_rng_gauss
 pnl_rand_gauss
 pnl_rand_bernoulli
 pnl_rand_poisson
@@ -371,10 +406,12 @@ pnl_mat_rand_uni2
 pnl_mat_rand_normal
 pnl_rand_gamma
 pnl_rand_chi2
+pnl_rand_bessel
 pnl_rng_free
 pnl_rng_new
 pnl_rng_create
-pnl_rng_dcmt_create_array
+pnl_rng_copy
+pnl_rng_clone
 pnl_rng_init
 pnl_rng_sseed
 pnl_rng_sdim
@@ -394,6 +431,7 @@ pnl_mat_rng_uni2
 pnl_mat_rng_normal
 pnl_rng_gamma
 pnl_rng_chi2
+pnl_rng_bessel
 pnl_mt_sseed
 long
 pnl_mt_genrand_double
@@ -404,6 +442,9 @@ pnl_dcmt_sseed
 pnl_dcmt_genrand_double
 pnl_dcmt_free
 pnl_dcmt_free_array
+pnl_rng_dcmt_create_id
+pnl_rng_dcmt_create_array
+pnl_rng_dcmt_create_array_id
 pnl_root_brent
 pnl_find_root
 pnl_root_newton
@@ -424,6 +465,7 @@ pnl_complex_bessel_h1
 pnl_complex_bessel_h1_scaled
 pnl_complex_bessel_h2
 pnl_complex_bessel_h2_scaled
+pnl_complex_bessel_rati
 pnl_bessel_i
 pnl_bessel_i_scaled
 pnl_bessel_j
@@ -436,6 +478,7 @@ pnl_bessel_h1
 pnl_bessel_h1_scaled
 pnl_bessel_h2
 pnl_bessel_h2_scaled
+pnl_bessel_rati
 pnl_sf_gamma_inc
 pnl_sf_gamma_inc_P
 pnl_sf_gamma_inc_Q
@@ -443,6 +486,7 @@ pnl_sf_expint_En
 double
 pnl_sf_gamma
 pnl_sf_log_gamma
+pnl_sf_log_gamma_sgn
 pnl_sf_log_erf
 pnl_sf_log_erfc
 pnl_sf_erf
@@ -487,28 +531,24 @@ pnl_tridiag_mat_syslin_inplace
 pnl_tridiag_mat_set
 pnl_tridiag_mat_get
 pnl_tridiag_mat_lget
+pnl_tridiag_mat_lu_object_new
+pnl_tridiag_mat_lu_object_free
+pnl_tridiag_mat_lu_new
+pnl_tridiag_mat_lu_create
+pnl_tridiag_mat_lu_copy
+pnl_tridiag_mat_lu_clone
+pnl_tridiag_mat_lu_free
+pnl_tridiag_mat_lu_resize
+pnl_tridiag_mat_lu_compute
+pnl_tridiag_mat_lu_syslin_inplace
+pnl_tridiag_mat_lu_syslin
 pnl_vect_object_new
 pnl_vect_object_free
 pnl_vect_object_resize
 
 
-
-
-
-
-
-
-
-
-
 pnl_vect_set_zero
 
-
-
-
-pnl_vect_set
-pnl_vect_get
-pnl_vect_lget
 pnl_vect_free
 pnl_vect_init
 pnl_vect_new
@@ -533,8 +573,10 @@ pnl_vect_wrap_subvect
 pnl_vect_wrap_subvect_with_last
 pnl_vect_wrap_mat
 pnl_vect_print
+pnl_vect_print_asrow
 pnl_vect_print_nsp
 pnl_vect_fprint
+pnl_vect_fprint_asrow
 pnl_vect_fprint_nsp
 pnl_vect_plus_vect
 pnl_vect_minus_vect
@@ -550,13 +592,15 @@ pnl_vect_axpby
 pnl_vect_mult_double
 pnl_vect_div_double
 pnl_vect_inv_term
-
-
+pnl_vect_div_vect_term
+pnl_vect_mult_vect_term
 pnl_vect_set_double
 pnl_vect_set_zero
 pnl_vect_sum
 pnl_vect_cumsum
 pnl_vect_scalar_prod
+pnl_vect_dist
+pnl_vect_cross
 pnl_vect_prod
 pnl_vect_cumprod
 pnl_vect_max
@@ -580,9 +624,8 @@ pnl_vect_compact_copy
 pnl_vect_compact_free
 pnl_vect_compact_to_pnl_vect
 pnl_vect_compact_get
-
-
-
+pnl_vect_compact_set_double
+pnl_vect_compact_set_ptr
 
 
 

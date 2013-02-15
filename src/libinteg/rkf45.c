@@ -25,7 +25,7 @@
  * albuquerque,new mexico                                             
  * 
  * It has been translated using f2c and many parts have been hand rewritten
- * by Jérôme Lelong to obtain more easily readable and maintenable code.
+ * by Jérôme Lelong to obtain a more easily readable and maintenable code.
  *
  */
 
