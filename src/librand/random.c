@@ -351,7 +351,7 @@ static void LECUYER(PnlRng *rng,double *sample)
 static int bit_random(tausworthe_state *s)
 {
   unsigned long new_bit;
-  const const int degre = 18;
+  const int degre = 18;
 
   /* Next bit calculation by the recurrence relation  */
   new_bit= (s->a & (1<<17)) >> 17
