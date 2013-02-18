@@ -21,6 +21,9 @@ endif (CXX)
 
 project(pnl C)
 
+if (NOT LINK_TYPE) 
+    set(LINK_TYPE SHARED)
+endif (NOT LINK_TYPE)
 
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 set(pnl_INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib" )
@@ -175,14 +178,11 @@ CHECK_FUNCTION_EXISTS(finite PNL_HAVE_FINITE)
 CHECK_FUNCTION_EXISTS(isnan PNL_HAVE_ISNAN)
 CHECK_FUNCTION_EXISTS(isinf PNL_HAVE_ISINF)
 
-
-
 add_subdirectory(src)
 
 if (NOT SUB_CMAKE_CALL)
     enable_testing()
     add_subdirectory(examples)
-    set(LINK_TYPE SHARED)
 endif (NOT SUB_CMAKE_CALL)
 
 

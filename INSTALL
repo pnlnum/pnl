@@ -89,6 +89,9 @@
                 internal Blas & Lapack libraries shipped with the PNL
                 source code.
 
+        -DLINK_TYPE               SHARED or STATIC. Default is SHARED.
+                                  Determine which type of library to build.
+
 
 3. Building the documentation
 
