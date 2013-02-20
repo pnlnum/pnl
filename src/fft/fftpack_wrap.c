@@ -457,8 +457,8 @@ int pnl_real_fft2d (const PnlMat *in, PnlMatComplex *out)
        * Copy output data
        */
 
-      MLET_REAL( out, i, 0) = data[0];
-      MLET_IMAG( out, i, 0) = 0.;
+      MLET_REAL (out, i, 0) = data[0];
+      MLET_IMAG (out, i, 0) = 0.;
 
       for (j=1; j<l; j++)
         {
@@ -500,26 +500,26 @@ int pnl_real_fft2d (const PnlMat *in, PnlMatComplex *out)
  * must have already been allocated
  * @return OK or FAIL
  */
-int pnl_real_ifft2d (PnlMatComplex *in, PnlMat *out)
+int pnl_real_ifft2d (const PnlMatComplex *in, PnlMat *out)
 {
 
   int i, j, n ,l;
-  double *data, *wsave;
-  double *col;
+  double *wsave, *col;
+  PnlMatComplex *data;
   pnl_mat_resize (out, in->m, in->n);
 
   n = MAX(in->m, in->n);
   if ( (wsave = malloc((4*n+15)*sizeof(double))) == NULL ) return FAIL;
-  if ( (data = malloc(n*sizeof(double))) == NULL ) return FAIL;
 
   /*
    * Compute the FFT of each row
    */
+  data = pnl_mat_complex_copy (in);
   cffti(in->n, wsave);
 
   for ( i=0 ; i<in->m ; i++ )
     {
-      cfftb(in->n, (double *) (in->array + i * in->n), wsave);
+      cfftb(in->n, (double *) (data->array + i * in->n), wsave);
     }
 
   /*
@@ -527,23 +527,25 @@ int pnl_real_ifft2d (PnlMatComplex *in, PnlMat *out)
    * step 1
    */
   rffti(in->m, wsave);
-  if (PNL_IS_ODD(n)) { l = (n+1)/2; } else { l = n/2; }
+  if (PNL_IS_ODD(in->m)) { l = (in->m+1)/2; } else { l = in->m/2; }
   if ( (col = malloc (sizeof(double) * in->m)) == NULL ) return FAIL;
   for ( j=0 ; j<in->n ; j++ )
     {
       /* Don't forget the renormalization from the previous step */
-      col[0] = MGET_REAL(in, 0, j) / in->n;
+      col[0] = MGET_REAL(data, 0, j) / in->n;
       for (i=1; i<l; i++)
         {
-          col[2*i-1] = MGET_REAL (in, i, j) / in->n;
-          col[2*i] = MGET_IMAG (in, i, j) / in->n;
+          col[2*i-1] = MGET_REAL (data, i, j) / in->n;
+          col[2*i] = MGET_IMAG (data, i, j) / in->n;
         }
-      if (PNL_IS_EVEN(n)) { col[n-1] = MGET_REAL (in, l, j) / in->n; }
+      if (PNL_IS_EVEN(in->m)) { col[in->m-1] = MGET_REAL (data, l, j) / in->n; }
       rfftb(out->m, col, wsave);
       for ( i=0 ; i<in->m ; i++ )  PNL_MLET(out, i, j) = col[i] / in->m;
     }
 
-  free (wsave); free (col); free (data);
+  free (col);
+  free (wsave);
+  pnl_mat_complex_free (&data);
   return OK;
 
 }

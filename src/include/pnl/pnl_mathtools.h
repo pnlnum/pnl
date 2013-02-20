@@ -206,7 +206,7 @@ extern double pnl_cosm1 (double x);
 #define PNL_NEGINF (-INFINITY)
 
 #define PNL_IS_ODD(n) ((n) & 1) /* last bit is 1 */
-#define PNL_IS_EVEN(n) ((n) ^ 1) /* last bit is 0 */
+#define PNL_IS_EVEN(n) (!PNL_IS_ODD(n)) /* last bit is 0 */
 
 #define PNL_ALTERNATE(n) (((n)&1) ? -1 : 1) /* (-1)^n */
 
