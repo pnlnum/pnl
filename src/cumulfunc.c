@@ -1774,11 +1774,11 @@ S70:
 void pnl_cdf_bet(int *which,double *p,double *q,double *x,double *y,
                  double *a,double *b,int *status,double *bound)
 {
-const double tol = 1.0e-8;
-const double atol = 1.0e-50;
-const double zero = 1.0e-300;
-const double inf = 1.0e300;
-const double one = 1.;
+  const double tol = 1.0e-8;
+  const double atol = 1.0e-50;
+  const double zero = 1.0e-300;
+  const double inf = 1.0e300;
+  const double one = 1.;
   int K1 = 1;
   double K2 = 0.;
   double K3 = 1.;
@@ -2168,11 +2168,11 @@ S540:
 void pnl_cdf_bin(int *which,double *p,double *q,double *s,double *xn,
                  double *pr,double *ompr,int *status,double *bound)
 {
-const double atol = 1.0e-50;
-const double tol = 1.0e-8;
-const double zero = 1.0e-300;
-const double inf = 1.0e300;
-const double one = 1.;
+  const double atol = 1.0e-50;
+  const double tol = 1.0e-8;
+  const double zero = 1.0e-300;
+  const double inf = 1.0e300;
+  const double one = 1.;
   int K1 = 1;
   double K2 = 0.;
   double K3 = 0.5e0;
@@ -2553,10 +2553,10 @@ S560:
 void pnl_cdf_chi(int *which,double *p,double *q,double *x,double *df,
                  int *status,double *bound)
 {
-const double tol = 1.0e-8;
-const double atol = 1.0e-50;
-const double zero = 1.0e-300;
-const double inf = 1.0e300;
+  const double tol = 1.0e-8;
+  const double atol = 1.0e-50;
+  const double zero = 1.0e-300;
+  const double inf = 1.0e300;
   int K1 = 1;
   double K2 = 0.;
   double K4 = 0.5e0;
@@ -2875,12 +2875,12 @@ S380:
 void pnl_cdf_chn(int *which,double *p,double *q,double *x,double *df,
                  double *pnonc,int *status,double *bound)
 {
-const double tent4 = 1.0e4;
-const double tol = 1.0e-8;
-const double atol = 1.0e-50;
-const double zero = 1.0e-300;
-const double one = 1.-1.0e-16;
-const double inf = 1.0e300;
+  const double tent4 = 1.0e4;
+  const double tol = 1.0e-8;
+  const double atol = 1.0e-50;
+  const double zero = 1.0e-300;
+  const double one = 1.-1.0e-16;
+  const double inf = 1.0e300;
   double K1 = 0.;
   double K3 = 0.5e0;
   double K4 = 5.;
@@ -3168,10 +3168,10 @@ S280:
 void pnl_cdf_f(int *which,double *p,double *q,double *f,double *dfn,
                double *dfd,int *status,double *bound)
 {
-const double tol = 1.0e-8;
-const double atol = 1.0e-50;
-const double zero = 1.0e-300;
-const double inf = 1.0e300;
+  const double tol = 1.0e-8;
+  const double atol = 1.0e-50;
+  const double zero = 1.0e-300;
+  const double inf = 1.0e300;
   int K1 = 1;
   double K2 = 0.;
   double K4 = 0.5e0;
@@ -3859,10 +3859,10 @@ S350:
 void pnl_cdf_gam(int *which,double *p,double *q,double *x,double *shape,
                  double *scale,int *status,double *bound)
 {
-const double tol = 1.0e-8;
-const double atol = 1.0e-50;
-const double zero = 1.0e-300;
-const double inf = 1.0e300;
+  const double tol = 1.0e-8;
+  const double atol = 1.0e-50;
+  const double zero = 1.0e-300;
+  const double inf = 1.0e300;
   int K1 = 1;
   double K5 = 0.5e0;
   double K6 = 5.;
@@ -4193,10 +4193,10 @@ S310:
 void pnl_cdf_nbn(int *which,double *p,double *q,double *s,double *xn,
                  double *pr,double *ompr,int *status,double *bound)
 {
-const double tol = 1.0e-8;
-const double atol = 1.0e-50;
-const double inf = 1.0e300;
-const double one = 1.;
+  const double tol = 1.0e-8;
+  const double atol = 1.0e-50;
+  const double inf = 1.0e300;
+  const double one = 1.;
   int K1 = 1;
   double K2 = 0.;
   double K4 = 0.5e0;
@@ -4717,9 +4717,9 @@ void pnl_cdf_nor(int *which,double *p,double *q,double *x,double *mean,
 void pnl_cdf_poi(int *which,double *p,double *q,double *s,double *xlam,
                  int *status,double *bound)
 {
-const double tol = 1.0e-8;
-const double atol = 1.0e-50;
-const double inf = 1.0e300;
+  const double tol = 1.0e-8;
+  const double atol = 1.0e-50;
+  const double inf = 1.0e300;
   int K1 = 1;
   double K2 = 0.;
   double K4 = 0.5e0;
@@ -6231,7 +6231,8 @@ static void E0000(int IENTRY,int *status,double *x,double *fx,
   static double absstp,abstol,big,fbig,fsmall,relstp,reltol,small,step,stpmul,xhi,
                 xlb,xlo,xsave,xub,yy;
   static int i99999;
-  static unsigned long qbdd,qcond,qdum1,qdum2,qincr,qlim,qup;
+  unsigned long qbdd,qdum1,qdum2,qlim,qup;
+  static unsigned long qcond, qincr;
   switch(IENTRY)
     {
     case 0: goto DINVR; 
@@ -6295,13 +6296,65 @@ DINVR:
       return;
 
     case 3: 
-      goto S90;
+      yy = *fx;
+      if (yy == 0.) 
+        {
+          *status = 0;
+          return;
+        }
+      qup = (qincr && yy < 0.) || (!qincr && yy > 0.);
+      /*
+       * HANDLE CASE IN WHICH WE MUST STEP HIGHER
+       */
+      if (!qup) 
+        {
+          /* HANDLE CASE IN WHICH WE MUST STEP LOWER */
+          xub = xsave;
+          xlb = fifdmax1(xub-step,small);
+          *x = xlb;
+          /* GET-FUNCTION-VALUE */
+          i99999 = 5;
+        }
+      else
+        {
+          xlb = xsave;
+          xub = fifdmin1(xlb+step,big);
+          /* YY = F(XUB) - Y */
+          *x = xub;
+          /* GET-FUNCTION-VALUE */
+          i99999 = 4;
+        }
+      *status = 1; /* TO GET-FUNCTION-VALUE */
+      return;
 
     case 4: 
-      goto S130;
+      break;
 
     case 5: 
-      goto S200;
+      yy = *fx;
+      qbdd = (qincr && yy <= 0.) || (!qincr && yy >= 0.);
+      qlim = xlb <= small;
+      qcond = qbdd || qlim;
+      if (!qcond) 
+        {
+          step = stpmul*step;
+          xub = xlb;
+          xlb = fifdmax1(xub-step,small);
+          /* YY = F(XLB) - Y */
+          *x = xlb;
+          /* GET-FUNCTION-VALUE */
+          *status = 1; /* TO GET-FUNCTION-VALUE */
+          return;
+        }
+
+      if ((qlim && !qbdd))
+        {
+          *status = -1;
+          *qleft = 1;
+          *qhi = qincr;
+          *x = small;
+          return;
+        }
 
     case 6: 
       if (!(*status == 1)) 
@@ -6310,110 +6363,58 @@ DINVR:
           *status = 0;
           return;
         }
-      goto S260;
 
-    default: break;
+    default: 
+      if ( !qcond )
+        {
+          /* YY = F(XUB) - Y */
+          *x = xub;
+          /* GET-FUNCTION-VALUE */
+          i99999 = 4;
+          *status = 1; /* TO GET-FUNCTION-VALUE */
+          return;
+        }
+      break;
     }
 
 
-S90:
-  yy = *fx;
-  if (yy == 0.) 
+  if ( (i99999 != 5) && (i99999 != 6) )
     {
+      /* Extension of case 4 and default from the above switch */
+      yy = *fx;
+      qbdd =( qincr && yy >= 0.) || ( !qincr && yy <= 0.);
+      qlim = xub >= big;
+      qcond = qbdd || qlim;
+      if (!qcond) 
+        {
+          step = stpmul*step;
+          xlb = xub;
+          xub = MIN(xlb+step,big);
+          /* YY = F(XUB) - Y */
+          *x = xub;
+          /* GET-FUNCTION-VALUE */
+          i99999 = 4;
+          *status = 1; /* TO GET-FUNCTION-VALUE */
+          return;
+        }
+
+      if ((qlim && !qbdd)) 
+        {
+          *status = -1;
+          *qleft = 0;
+          *qhi = !qincr;
+          *x = big;
+          return;
+        }
+    }
+
+  if ( i99999 != 6 )
+    {
+      dstzr(&xlb,&xub,&abstol,&reltol);
+      /* IF WE REACH HERE, XLB AND XUB BOUND THE ZERO OF F.  */
       *status = 0;
-      return;
     }
-  qup = (qincr && yy < 0.) || (!qincr && yy > 0.);
-  /*
-   * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   * HANDLE CASE IN WHICH WE MUST STEP HIGHER
-   * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   */
-  if (!qup) goto S170;
-  xlb = xsave;
-  xub = fifdmin1(xlb+step,big);
-  goto S120;
-S110:
-  if (qcond) goto S150;
-S120:
-  /*
-     YY = F(XUB) - Y
-     */
-  *x = xub;
-  /*
-     GET-FUNCTION-VALUE
-     */
-  i99999 = 4;
-  *status = 1; /* TO GET-FUNCTION-VALUE */
-  return;
-S130:
-  yy = *fx;
-  qbdd =( qincr && yy >= 0.) || ( !qincr && yy <= 0.);
-  qlim = xub >= big;
-  qcond = qbdd || qlim;
-  if (!qcond) 
-    {
-      step = stpmul*step;
-      xlb = xub;
-      xub = MIN(xlb+step,big);
-    }
-  goto S110;
-S150:
-  if ((qlim && !qbdd)) 
-    {
-      *status = -1;
-      *qleft = 0;
-      *qhi = !qincr;
-      *x = big;
-      return;
-    }
-  goto S240;
-S170:
-  /*
-     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-     HANDLE CASE IN WHICH WE MUST STEP LOWER
-     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-     */
-  xub = xsave;
-  xlb = fifdmax1(xub-step,small);
-  goto S190;
-S180:
-  if (qcond) goto S220;
-S190:
-  /* YY = F(XLB) - Y */
-  *x = xlb;
-  /* GET-FUNCTION-VALUE */
-  i99999 = 5;
-  *status = 1; /* TO GET-FUNCTION-VALUE */
-  return;
-S200:
-  yy = *fx;
-  qbdd = (qincr && yy <= 0.) || (!qincr && yy >= 0.);
-  qlim = xlb <= small;
-  qcond = qbdd || qlim;
-  if (!qcond) 
-    {
-      step = stpmul*step;
-      xub = xlb;
-      xlb = fifdmax1(xub-step,small);
-    }
-  goto S180;
-S220:
-  if ((qlim && !qbdd))
-    {
-      *status = -1;
-      *qleft = 1;
-      *qhi = qincr;
-      *x = small;
-      return;
-    }
-S240:
-  dstzr(&xlb,&xub,&abstol,&reltol);
-  /*
-   * IF WE REACH HERE, XLB AND XUB BOUND THE ZERO OF F.
-   */
-  *status = 0;
-S260:
+
   dzror(status,x,fx,&xlo,&xhi,&qdum1,&qdum2);
   if (*status == 1) 
     {
