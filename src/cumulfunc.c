@@ -6231,7 +6231,7 @@ static void E0000(int IENTRY,int *status,double *x,double *fx,
   static double absstp,abstol,big,fbig,fsmall,relstp,reltol,small,step,stpmul,xhi,
                 xlb,xlo,xsave,xub,yy;
   static int i99999;
-  unsigned long qbdd,qdum1,qdum2,qlim,qup;
+  unsigned long qbdd,qdum1,qdum2;
   static unsigned long qcond, qincr;
   switch(IENTRY)
     {
@@ -6289,10 +6289,8 @@ DINVR:
         }
       *x = xsave;
       step = MAX(absstp,relstp*fabs(*x));
-      /* * YY = F(X) - Y ; GET-FUNCTION-VALUE */
-      i99999 = 3;
-      /* TO GET-FUNCTION-VALUE */
-      *status = 1;
+      i99999 = 3; /* * YY = F(X) - Y ; GET-FUNCTION-VALUE */
+      *status = 1; /* TO GET-FUNCTION-VALUE */
       return;
 
     case 3: 
@@ -6302,27 +6300,21 @@ DINVR:
           *status = 0;
           return;
         }
-      qup = (qincr && yy < 0.) || (!qincr && yy > 0.);
-      /*
-       * HANDLE CASE IN WHICH WE MUST STEP HIGHER
-       */
-      if (!qup) 
+      /* HANDLE CASE IN WHICH WE MUST STEP HIGHER */
+      if (! ((qincr && yy < 0.) || (!qincr && yy > 0.)) ) 
         {
           /* HANDLE CASE IN WHICH WE MUST STEP LOWER */
           xub = xsave;
-          xlb = fifdmax1(xub-step,small);
+          xlb = MAX(xub-step,small);
           *x = xlb;
-          /* GET-FUNCTION-VALUE */
-          i99999 = 5;
+          i99999 = 5; /* GET-FUNCTION-VALUE */
         }
       else
         {
           xlb = xsave;
-          xub = fifdmin1(xlb+step,big);
-          /* YY = F(XUB) - Y */
-          *x = xub;
-          /* GET-FUNCTION-VALUE */
-          i99999 = 4;
+          xub = MIN(xlb+step,big);
+          *x = xub; /* YY = F(XUB) - Y */
+          i99999 = 4; /* GET-FUNCTION-VALUE */
         }
       *status = 1; /* TO GET-FUNCTION-VALUE */
       return;
@@ -6333,13 +6325,12 @@ DINVR:
     case 5: 
       yy = *fx;
       qbdd = (qincr && yy <= 0.) || (!qincr && yy >= 0.);
-      qlim = xlb <= small;
-      qcond = qbdd || qlim;
+      qcond = qbdd || (xlb <= small);
       if (!qcond) 
         {
           step = stpmul*step;
           xub = xlb;
-          xlb = fifdmax1(xub-step,small);
+          xlb = MAX(xub-step,small);
           /* YY = F(XLB) - Y */
           *x = xlb;
           /* GET-FUNCTION-VALUE */
@@ -6347,7 +6338,7 @@ DINVR:
           return;
         }
 
-      if ((qlim && !qbdd))
+      if (((xlb <= small) && !qbdd))
         {
           *status = -1;
           *qleft = 1;
@@ -6367,10 +6358,8 @@ DINVR:
     default: 
       if ( !qcond )
         {
-          /* YY = F(XUB) - Y */
-          *x = xub;
-          /* GET-FUNCTION-VALUE */
-          i99999 = 4;
+          *x = xub; 
+          i99999 = 4; /* GET-FUNCTION-VALUE */
           *status = 1; /* TO GET-FUNCTION-VALUE */
           return;
         }
@@ -6380,25 +6369,22 @@ DINVR:
 
   if ( (i99999 != 5) && (i99999 != 6) )
     {
-      /* Extension of case 4 and default from the above switch */
+      /* Extension of cases 4 and default from the above switch */
       yy = *fx;
       qbdd =( qincr && yy >= 0.) || ( !qincr && yy <= 0.);
-      qlim = xub >= big;
-      qcond = qbdd || qlim;
+      qcond = qbdd || (xub >= big);
       if (!qcond) 
         {
           step = stpmul*step;
           xlb = xub;
           xub = MIN(xlb+step,big);
-          /* YY = F(XUB) - Y */
           *x = xub;
-          /* GET-FUNCTION-VALUE */
-          i99999 = 4;
+          i99999 = 4; /* GET-FUNCTION-VALUE */
           *status = 1; /* TO GET-FUNCTION-VALUE */
           return;
         }
 
-      if ((qlim && !qbdd)) 
+      if ((xub >= big) && !qbdd) 
         {
           *status = -1;
           *qleft = 0;
