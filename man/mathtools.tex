@@ -104,13 +104,11 @@ We provide a few functions mathematical functions named \verb+pnl_funcname+,
 some of which are already part of C99 as \verb+funcname+.
 \begin{itemize}
   \item \describefun{int}{pnl_itrunc}{double s}
-    \sshortdescribe Return the nearest integer with the convention ({\tt
-    pnl_itrunc(1.5)=1}). This function is similar to the \var{round} function
+    \sshortdescribe This function is similar to the \var{trunc} function
     (provided by the C library) but the result is typed as an integer instead of a
     double. Digits may be lost if \var{s} exceeds \var{MAX_INT}.
   \item \describefun{int}{pnl_itrunc}{double s}
-    \sshortdescribe Return the nearest integer with the convention ({\tt
-    pnl_ltrunc(1.5)=1}). This function is similar to the \var{round} function
+    \sshortdescribe This function is similar to the \var{trunc} function
     (provided by the C library) but the result is typed as a long integer instead of a
     double. 
   \item \describefun{double}{pnl_trunc}{double s}
@@ -120,6 +118,14 @@ some of which are already part of C99 as \verb+funcname+.
     \sshortdescribe Return the integral value nearest to x rounding
     half-way cases away from zero, regardless of the current rounding
     direction. This function is part of C99 as \var{round}.
+  \item \describefun{int}{pnl_iround}{double s}
+    \sshortdescribe This function is similar to the \var{round} function
+    (provided by the C library) but the result is typed as an integer instead of a
+    double. Digits may be lost if \var{s} exceeds \var{MAX_INT}.
+  \item \describefun{int}{pnl_iround}{double s}
+    \sshortdescribe This function is similar to the \var{round} function
+    (provided by the C library) but the result is typed as a long integer instead of a
+    double. 
   \item \describefun{double}{pnl_lgamma}{double x}
     \sshortdescribe Compute $\log(\Gamma(x))$.
   \item \describefun{double}{pnl_tgamma}{double x}

@@ -30,8 +30,6 @@
  * lost if |x| > MAX_INT.
  *
  * @param x
- * @return the rounded value casted to an integer. 1.5 is rounded to 1 and
- * -1.5 is rounded to -1
  */
 int pnl_itrunc(double x)
 {
@@ -48,13 +46,39 @@ int pnl_itrunc(double x)
  */
 long int pnl_ltrunc(double x)
 {
-  return (int) pnl_trunc (x);
+  return (long int) pnl_trunc (x);
 }
 
 double pnl_trunc(double x)
 {
   if ( x >= 0. ) return floor (x);
   else return ceil (x);
+}
+/** 
+ * 
+ * Same as round but the result is casted as an int, digits may be
+ * lost if |x| > MAX_INT.
+ *
+ * @param x
+ * @return the rounded value casted to an integer. 1.5 is rounded to 1 and
+ * -1.5 is rounded to -1
+ */
+int pnl_iround(double x)
+{
+  return (int) pnl_round (x);
+}
+
+/** 
+ * Same as round but the result is casted as a long int, no digits may be
+ * lost.
+ * 
+ * @param x
+ * 
+ * @return 
+ */
+long int pnl_lround(double x)
+{
+  return (long int) pnl_round (x);
 }
 
 /** 

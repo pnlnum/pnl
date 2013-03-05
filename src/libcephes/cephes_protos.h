@@ -98,7 +98,7 @@ extern void polsbt ( double a[], int na, double b[], int nb, double c[] );
 extern double poleva ( double a[], int na, double x );
 extern double pnl_sf_psi ( double x );
 extern double rgamma ( double x );
-extern double round ( double x );
+extern double pnl_round ( double x );
 extern double iv ( double v, double x );
 extern void ikv_asymptotic_uniform ( double v, double x, double *i_value, double *k_value );
 extern void ikv_temme ( double v, double x, double *I, double *K );

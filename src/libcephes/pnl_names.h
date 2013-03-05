@@ -9,6 +9,7 @@
 #define expn pnl_sf_expint_En
 #define hyp2f1 pnl_sf_hyperg_2F1
 #define hyperg pnl_sf_hyperg_1F1
+#define round pnl_round
 
 
 #endif /* _PNL_NAMES_ */

@@ -35,7 +35,7 @@
 
 #include "mconf.h"
 
-double round(double x)
+double pnl_round(double x)
 {
   double y, r;
 
