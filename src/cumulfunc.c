@@ -321,17 +321,17 @@
 }
 
 
-static double algdiv(double *a,double *b);
+static double algdiv(double *a, double *b);
 static double alngam(double *x);
 static double alnrel(double *a);
 static double apser(double *a,double *b,double *x,double *eps);
 static double basym(double *a,double *b,double *lambda,double *eps);
 static double bcorr(double *a0,double *b0);
 static double betaln(double *a0,double *b0);
-static double bfrac(double *a,double *b,double *x,double *y,double *lambda,
-                    double *eps);
-static void bgrat(double *a,double *b,double *x,double *y,double *w,
-                  double *eps,int *ierr);
+static double bfrac(double *a,double *b,double *x,
+                    double *y,double *lambda, double *eps);
+static void bgrat(double *a,double *b,double *x,
+                  double *y,double *w, double *eps,int *ierr);
 static double bpser(double *a,double *b,double *x,double *eps);
 static void bratio(double *a,double *b,double *x,double *y,double *w,
                    double *w1,int *ierr);
@@ -350,7 +350,7 @@ static void dzror(int *status,double *x,double *fx,double *xlo,
                   double *xhi,unsigned long *qleft,unsigned long *qhi);
 static void dstzr(double *zxlo,double *zxhi,double *zabstl,double *zreltl);
 static double erf1(double *x);
-static double erfc1(int *ind,double *x);
+static double erfc1(int *ind, double *x);
 static double esum(int *mu,double *x);
 static double exparg(int *l);
 static double fpser(double *a,double *b,double *x,double *eps);
@@ -401,14 +401,14 @@ static void cumt(double *t,double *df,double *cum,double *ccum);
  * IN THIS ALGORITHM, DEL(X) IS THE FUNCTION DEFINED BY
  * LN(GAMMA(X)) = (X - 0.5)*LN(X) - X + 0.5*LN(2*M_PI) + DEL(X).
  */
-static double algdiv(double *a,double *b)
+static double algdiv(double *a, double *b)
 {
-  static double c0 = .833333333333333e-01;
-  static double c1 = -.277777777760991e-02;
-  static double c2 = .793650666825390e-03;
-  static double c3 = -.595202931351870e-03;
-  static double c4 = .837308034031215e-03;
-  static double c5 = -.165322962780713e-02;
+  double c0 = .833333333333333e-01;
+  double c1 = -.277777777760991e-02;
+  double c2 = .793650666825390e-03;
+  double c3 = -.595202931351870e-03;
+  double c4 = .837308034031215e-03;
+  double c5 = -.165322962780713e-02;
   static double algdiv,c,d,h,s11,s3,s5,s7,s9,t,u,v,w,x,x2,T1;
   /*
      ..
@@ -463,110 +463,10 @@ static double algdiv(double *a,double *b)
 /*
  * double alngam(double *x)
  * double precision LN of the GAMma function
- * 
- * 
- * Function
- * 
- * 
- * Returns the natural logarithm of GAMMA(X).
- * 
- * 
- * Arguments
- * 
- * 
- * X --> value at which scaled log gamma is to be returned
- * X is DOUBLE PRECISION
- * 
- * 
- * Method
- * 
- * 
- * If X .le. 6.0, then use recursion to get X below 3
- * then apply rational approximation number 5236 of
- * Hart et al, Computer Approximations, John Wiley and
- * Sons, NY, 1968.
- * 
- * If X .gt. 6.0, then use recursion to get X to at least 12 and
- * then use formula 5423 of the same source.
- * 
  */
 static double alngam(double *x)
 {
-  static double hln2pi = 0.91893853320467274178e0;
-  static double coef[5] = {
-    0.83333333333333023564e-1,-0.27777777768818808e-2,0.79365006754279e-3,
-    -0.594997310889e-3,0.8065880899e-3
-  };
-  static double scoefd[4] = {
-    0.62003838007126989331e2,0.9822521104713994894e1,-0.8906016659497461257e1,
-    0.1000000000000000000e1
-  };
-  static double scoefn[9] = {
-    0.62003838007127258804e2,0.36036772530024836321e2,0.20782472531792126786e2,
-    0.6338067999387272343e1,0.215994312846059073e1,0.3980671310203570498e0,
-    0.1093115956710439502e0,0.92381945590275995e-2,0.29737866448101651e-2
-  };
-  static int K1 = 9;
-  static int K3 = 4;
-  static int K5 = 5;
-  static double alngam,offset,prod,xx;
-  static int i,n;
-  static double T2,T4,T6;
-  /*
-     ..
-     .. Executable Statements ..
-     */
-  if (!(*x <= 6.0e0)) goto S70;
-  prod = 1.0e0;
-  xx = *x;
-  if (!(*x > 3.0e0)) goto S30;
-S10:
-  if (!(xx > 3.0e0)) goto S20;
-  xx -= 1.0e0;
-  prod *= xx;
-  goto S10;
-S30:
-S20:
-  if (!(*x < 2.0e0)) goto S60;
-S40:
-  if (!(xx < 2.0e0)) goto S50;
-  prod /= xx;
-  xx += 1.0e0;
-  goto S40;
-S60:
-S50:
-  T2 = xx-2.0e0;
-  T4 = xx-2.0e0;
-  alngam = devlpl(scoefn,&K1,&T2)/devlpl(scoefd,&K3,&T4);
-  /*
-     COMPUTE RATIONAL APPROXIMATION TO GAMMA(X)
-     */
-  alngam *= prod;
-  alngam = log(alngam);
-  goto S110;
-S70:
-  offset = hln2pi;
-  /*
-     IF NECESSARY MAKE X AT LEAST 12 AND CARRY CORRECTION IN OFFSET
-     */
-  n = fifidint(12.0e0-*x);
-  if (!(n > 0)) goto S90;
-  prod = 1.0e0;
-  for(i=1; i<=n; i++) prod *= (*x+(double)(i-1));
-  offset -= log(prod);
-  xx = *x+(double)n;
-  goto S100;
-S90:
-  xx = *x;
-S100:
-  /*
-     COMPUTE POWER SERIES
-     */
-  T6 = 1.0e0/pow(xx,2.0);
-  alngam = devlpl(coef,&K5,&T6)/xx;
-  alngam += (offset+(xx-0.5e0)*log(xx)-xx);
-S110:
-  return alngam;
+  return pnl_sf_log_gamma (*x);
 }
 
 /*
@@ -576,13 +476,13 @@ S110:
  */
 static double alnrel(double *a)
 {
-  static double p1 = -.129418923021993e+01;
-  static double p2 = .405303492862024e+00;
-  static double p3 = -.178874546012214e-01;
-  static double q1 = -.162752256355323e+01;
-  static double q2 = .747811014037616e+00;
-  static double q3 = -.845104217945565e-01;
-  static double t,t2,w,x;
+  double p1 = -.129418923021993e+01;
+  double p2 = .405303492862024e+00;
+  double p3 = -.178874546012214e-01;
+  double q1 = -.162752256355323e+01;
+  double q2 = .747811014037616e+00;
+  double q3 = -.845104217945565e-01;
+  double t,t2,w,x;
   /*
      ..
      .. Executable Statements ..
@@ -610,8 +510,8 @@ static double alnrel(double *a)
  */
 static double apser(double *a,double *b,double *x,double *eps)
 {
-  static double g = .577215664901533e0;
-  static double aj,bx,c,j,s,t,tol;
+  double g = .577215664901533e0;
+  double aj,bx,c,j,s,t,tol;
   /*
      ..
      .. Executable Statements ..
@@ -649,9 +549,9 @@ static double apser(double *a,double *b,double *x,double *eps)
  */
 static double basym(double *a,double *b,double *lambda,double *eps)
 {
-  static double e0 = 1.12837916709551e0;
-  static double e1 = .353553390593274e0;
-  static int num = 20;
+  double e0 = 1.12837916709551e0;
+  double e1 = .353553390593274e0;
+  int num = 20;
   /*
      ------------------------
    ****** NUM IS THE MAXIMUM VALUE THAT N CAN TAKE IN THE DO LOOP
@@ -662,11 +562,11 @@ static double basym(double *a,double *b,double *lambda,double *eps)
    E1 = 2**(-3/2)
    ------------------------
    */
-  static int K3 = 1;
+  int K3 = 1;
   static double basym_0,bsum,dsum,f,h,h2,hn,j0,j1,r,r0,r1,s,sum,t,t0,t1,u,w,w0,z,z0,
                 z2,zn,znm1;
-  static int i,im1,imj,j,m,mm1,mmj,n,np1;
-  static double a0[21],b0[21],c[21],d[21],T1,T2;
+  int i,im1,imj,j,m,mm1,mmj,n,np1;
+  double a0[21],b0[21],c[21],d[21],T1,T2;
   /*
      ..
      .. Executable Statements ..
@@ -764,13 +664,13 @@ static double basym(double *a,double *b,double *lambda,double *eps)
  */
 static double bcorr(double *a0,double *b0)
 {
-  static double c0 = .833333333333333e-01;
-  static double c1 = -.277777777760991e-02;
-  static double c2 = .793650666825390e-03;
-  static double c3 = -.595202931351870e-03;
-  static double c4 = .837308034031215e-03;
-  static double c5 = -.165322962780713e-02;
-  static double a,b,c,h,s11,s3,s5,s7,s9,t,w,x,x2;
+  double c0 = .833333333333333e-01;
+  double c1 = -.277777777760991e-02;
+  double c2 = .793650666825390e-03;
+  double c3 = -.595202931351870e-03;
+  double c4 = .837308034031215e-03;
+  double c5 = -.165322962780713e-02;
+  double a,b,c,h,s11,s3,s5,s7,s9,t,w,x,x2;
   /*
      ..
      .. Executable Statements ..
@@ -811,10 +711,10 @@ static double bcorr(double *a0,double *b0)
  */
 static double betaln(double *a0,double *b0)
 {
-  static double e = .918938533204673e0;
-  static double a,b,c,h,u,v,w,z;
-  static int i,n;
-  static double T1;
+  double e = .918938533204673e0;
+  double a,b,c,h,u,v,w,z;
+  int i,n;
+  double T1;
   /*
      ..
      .. Executable Statements ..
@@ -907,10 +807,9 @@ static double betaln(double *a0,double *b0)
  * IT IS ASSUMED THAT  LAMBDA = (A + B)*Y - B.
  * -----------------------------------------------------------------------
  */
-static double bfrac(double *a,double *b,double *x,double *y,double *lambda,
-                    double *eps)
+static double bfrac(double *a,double *b,double *x,double *y,double *lambda, double *eps)
 {
-  static double bfrac_0,alpha,an,anp1,beta,bn,bnp1,c,c0,c1,e,n,p,r,r0,s,t,w,yp1;
+  double bfrac_0,alpha,an,anp1,beta,bn,bnp1,c,c0,c1,e,n,p,r,r0,s,t,w,yp1;
   /*
      ..
      .. Executable Statements ..
@@ -980,9 +879,9 @@ static double bfrac(double *a,double *b,double *x,double *y,double *lambda,
 static void bgrat(double *a,double *b,double *x,double *y,double *w,
                   double *eps,int *ierr)
 {
-  static double bm1,bp2n,cn,coef,dj,j,l,lnx,n2,nu,p,q,r,s,sum,t,t2,u,v,z;
-  static int i,n,nm1;
-  static double c[30],d[30],T1;
+  double bm1,bp2n,cn,coef,dj,j,l,lnx,n2,nu,p,q,r,s,sum,t,t2,u,v,z;
+  int i,n,nm1;
+  double c[30],d[30],T1;
   /*
      ..
      .. Executable Statements ..
@@ -1057,8 +956,8 @@ static void bgrat(double *a,double *b,double *x,double *y,double *w,
  */
 static double bpser(double *a,double *b,double *x,double *eps)
 {
-  static double bpser_0,a0,apb,b0,c,n,sum,t,tol,u,w,z;
-  static int i,m;
+  double bpser_0,a0,apb,b0,c,n,sum,t,tol,u,w,z;
+  int i,m;
   /*
      ..
      .. Executable Statements ..
@@ -1192,10 +1091,10 @@ S100:
 static void bratio(double *a,double *b,double *x,double *y,double *w,
                    double *w1,int *ierr)
 {
-  static int K1 = 1;
-  static double a0,b0,eps,lambda,t,x0,y0,z;
-  static int ierr1,ind,n;
-  static double T2,T3,T4,T5;
+  int K1 = 1;
+  double a0,b0,eps,lambda,t,x0,y0,z;
+  int ierr1,ind,n;
+  double T2,T3,T4,T5;
   /*
      ..
      .. Executable Statements ..
@@ -1400,15 +1299,15 @@ S330:
  */
 static double brcmp1(int *mu,double *a,double *b,double *x,double *y)
 {
-  static double Const = .398942280401433e0;
-  static double brcmp_0,a0,apb,b0,c,e,h,lambda,lnx,lny,t,u,v,x0,y0,z;
-  static int i,n;
+  double Const = .398942280401433e0;
+  double brcmp_0,a0,apb,b0,c,e,h,lambda,lnx,lny,t,u,v,x0,y0,z;
+  int i,n;
   /*
      -----------------
-     CONST = 1/SQRT(2*M_PI)
+     = 1/SQRT(2*M_PI)
      -----------------
      */
-  static double T1,T2,T3,T4;
+  double T1,T2,T3,T4;
   /*
      ..
      .. Executable Statements ..
@@ -1537,15 +1436,15 @@ S190:
  */
 static double brcomp(double *a,double *b,double *x,double *y)
 {
-  static double Const = .398942280401433e0;
-  static double brcomp_0,a0,apb,b0,c,e,h,lambda,lnx,lny,t,u,v,x0,y0,z;
-  static int i,n;
+  double Const = .398942280401433e0;
+  double brcomp_0,a0,apb,b0,c,e,h,lambda,lnx,lny,t,u,v,x0,y0,z;
+  int i,n;
   /*
      -----------------
-     CONST = 1/SQRT(2*M_PI)
+     = 1/SQRT(2*M_PI)
      -----------------
      */
-  static double T1,T2;
+  double T1,T2;
   /*
      ..
      .. Executable Statements ..
@@ -1673,10 +1572,10 @@ S190:
  */
 static double bup(double *a,double *b,double *x,double *y,int *n,double *eps)
 {
-  static int K1 = 1;
-  static int K2 = 0;
-  static double bup_0,ap1,apb,d,l,r,t,w;
-  static int i,k,kp1,mu,nm1;
+  int K1 = 1;
+  int K2 = 0;
+  double bup_0,ap1,apb,d,l,r,t,w;
+  int i,k,kp1,mu,nm1;
   /*
      ..
      .. Executable Statements ..
@@ -1880,14 +1779,14 @@ void pnl_cdf_bet(int *which,double *p,double *q,double *x,double *y,
 #define zero (1.0e-300)
 #define inf 1.0e300
 #define one 1.0e0
-  static int K1 = 1;
-  static double K2 = 0.0e0;
-  static double K3 = 1.0e0;
-  static double K8 = 0.5e0;
-  static double K9 = 5.0e0;
-  static double fx,xhi,xlo,cum,ccum,xy,pq;
-  static unsigned long qhi,qleft,qporq;
-  static double T4,T5,T6,T7,T10,T11,T12,T13,T14,T15;
+  int K1 = 1;
+  double K2 = 0.0e0;
+  double K3 = 1.0e0;
+  double K8 = 0.5e0;
+  double K9 = 5.0e0;
+  double fx,xhi,xlo,cum,ccum,xy,pq;
+  unsigned long qhi,qleft,qporq;
+  double T4,T5,T6,T7,T10,T11,T12,T13,T14,T15;
   /*
      ..
      .. Executable Statements ..
@@ -2279,14 +2178,14 @@ void pnl_cdf_bin(int *which,double *p,double *q,double *s,double *xn,
 #define zero (1.0e-300)
 #define inf 1.0e300
 #define one 1.0e0
-  static int K1 = 1;
-  static double K2 = 0.0e0;
-  static double K3 = 0.5e0;
-  static double K4 = 5.0e0;
-  static double K11 = 1.0e0;
-  static double fx,xhi,xlo,cum,ccum,pq,prompr;
-  static unsigned long qhi,qleft,qporq;
-  static double T5,T6,T7,T8,T9,T10,T12,T13;
+  int K1 = 1;
+  double K2 = 0.0e0;
+  double K3 = 0.5e0;
+  double K4 = 5.0e0;
+  double K11 = 1.0e0;
+  double fx,xhi,xlo,cum,ccum,pq,prompr;
+  unsigned long qhi,qleft,qporq;
+  double T5,T6,T7,T8,T9,T10,T12,T13;
   /*
      ..
      .. Executable Statements ..
@@ -2668,13 +2567,13 @@ void pnl_cdf_chi(int *which,double *p,double *q,double *x,double *df,
 #define atol (1.0e-50)
 #define zero (1.0e-300)
 #define inf 1.0e300
-  static int K1 = 1;
-  static double K2 = 0.0e0;
-  static double K4 = 0.5e0;
-  static double K5 = 5.0e0;
-  static double fx,cum,ccum,pq,porq;
-  static unsigned long qhi,qleft,qporq;
-  static double T3,T6,T7,T8,T9,T10,T11;
+  int K1 = 1;
+  double K2 = 0.0e0;
+  double K4 = 0.5e0;
+  double K5 = 5.0e0;
+  double fx,cum,ccum,pq,porq;
+  unsigned long qhi,qleft,qporq;
+  double T3,T6,T7,T8,T9,T10,T11;
   /*
      ..
      .. Executable Statements ..
@@ -2996,12 +2895,12 @@ void pnl_cdf_chn(int *which,double *p,double *q,double *x,double *df,
 #define zero (1.0e-300)
 #define one (1.0e0-1.0e-16)
 #define inf 1.0e300
-  static double K1 = 0.0e0;
-  static double K3 = 0.5e0;
-  static double K4 = 5.0e0;
-  static double fx,cum,ccum;
-  static unsigned long qhi,qleft;
-  static double T2,T5,T6,T7,T8,T9,T10,T11,T12,T13;
+  double K1 = 0.0e0;
+  double K3 = 0.5e0;
+  double K4 = 5.0e0;
+  double fx,cum,ccum;
+  unsigned long qhi,qleft;
+  double T2,T5,T6,T7,T8,T9,T10,T11,T12,T13;
   /*
      ..
      .. Executable Statements ..
@@ -3293,13 +3192,13 @@ void pnl_cdf_f(int *which,double *p,double *q,double *f,double *dfn,
 #define atol (1.0e-50)
 #define zero (1.0e-300)
 #define inf 1.0e300
-  static int K1 = 1;
-  static double K2 = 0.0e0;
-  static double K4 = 0.5e0;
-  static double K5 = 5.0e0;
-  static double pq,fx,cum,ccum;
-  static unsigned long qhi,qleft,qporq;
-  static double T3,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15;
+  int K1 = 1;
+  double K2 = 0.0e0;
+  double K4 = 0.5e0;
+  double K5 = 5.0e0;
+  double pq,fx,cum,ccum;
+  unsigned long qhi,qleft,qporq;
+  double T3,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15;
   /*
      ..
      .. Executable Statements ..
@@ -3655,12 +3554,12 @@ void pnl_cdf_fnc(int *which,double *p,double *q,double *f,double *dfn,
 #define zero (1.0e-300)
 #define one (1.0e0-1.0e-16)
 #define inf 1.0e300
-  static double K1 = 0.0e0;
-  static double K3 = 0.5e0;
-  static double K4 = 5.0e0;
-  static double fx,cum,ccum;
-  static unsigned long qhi,qleft;
-  static double T2,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17;
+  double K1 = 0.0e0;
+  double K3 = 0.5e0;
+  double K4 = 5.0e0;
+  double fx,cum,ccum;
+  unsigned long qhi,qleft;
+  double T2,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17;
   /*
      ..
      .. Executable Statements ..
@@ -4001,13 +3900,13 @@ void pnl_cdf_gam(int *which,double *p,double *q,double *x,double *shape,
 #define atol (1.0e-50)
 #define zero (1.0e-300)
 #define inf 1.0e300
-  static int K1 = 1;
-  static double K5 = 0.5e0;
-  static double K6 = 5.0e0;
-  static double xx,fx,xscale,cum,ccum,pq,porq;
-  static int ierr;
-  static unsigned long qhi,qleft,qporq;
-  static double T2,T3,T4,T7,T8,T9;
+  int K1 = 1;
+  double K5 = 0.5e0;
+  double K6 = 5.0e0;
+  double xx,fx,xscale,cum,ccum,pq,porq;
+  int ierr;
+  unsigned long qhi,qleft,qporq;
+  double T2,T3,T4,T7,T8,T9;
   /*
      ..
      .. Executable Statements ..
@@ -4339,14 +4238,14 @@ void pnl_cdf_nbn(int *which,double *p,double *q,double *s,double *xn,
 #define atol (1.0e-50)
 #define inf 1.0e300
 #define one 1.0e0
-  static int K1 = 1;
-  static double K2 = 0.0e0;
-  static double K4 = 0.5e0;
-  static double K5 = 5.0e0;
-  static double K11 = 1.0e0;
-  static double fx,xhi,xlo,pq,prompr,cum,ccum;
-  static unsigned long qhi,qleft,qporq;
-  static double T3,T6,T7,T8,T9,T10,T12,T13;
+  int K1 = 1;
+  double K2 = 0.0e0;
+  double K4 = 0.5e0;
+  double K5 = 5.0e0;
+  double K11 = 1.0e0;
+  double fx,xhi,xlo,pq,prompr,cum,ccum;
+  unsigned long qhi,qleft,qporq;
+  double T3,T6,T7,T8,T9,T10,T12,T13;
   /*
      ..
      .. Executable Statements ..
@@ -4669,8 +4568,8 @@ S540:
 void pnl_cdf_nor(int *which,double *p,double *q,double *x,double *mean,
                  double *sd,int *status,double *bound)
 {
-  static int K1 = 1;
-  static double z,pq;
+  int K1 = 1;
+  double z,pq;
   /*
      Check arguments
      */
@@ -4866,13 +4765,13 @@ void pnl_cdf_poi(int *which,double *p,double *q,double *s,double *xlam,
 #define tol (1.0e-8)
 #define atol (1.0e-50)
 #define inf 1.0e300
-  static int K1 = 1;
-  static double K2 = 0.0e0;
-  static double K4 = 0.5e0;
-  static double K5 = 5.0e0;
-  static double fx,cum,ccum,pq;
-  static unsigned long qhi,qleft,qporq;
-  static double T3,T6,T7,T8,T9,T10;
+  int K1 = 1;
+  double K2 = 0.0e0;
+  double K4 = 0.5e0;
+  double K5 = 5.0e0;
+  double fx,cum,ccum,pq;
+  unsigned long qhi,qleft,qporq;
+  double T3,T6,T7,T8,T9,T10;
   /*
      ..
      .. Executable Statements ..
@@ -5151,12 +5050,12 @@ void pnl_cdf_t(int *which,double *p,double *q,double *t,double *df,
 #define zero (1.0e-300)
 #define inf 1.0e300
 #define maxdf 1.0e10
-  static int K1 = 1;
-  static double K4 = 0.5e0;
-  static double K5 = 5.0e0;
-  static double fx,cum,ccum,pq;
-  static unsigned long qhi,qleft,qporq;
-  static double T2,T3,T6,T7,T8,T9,T10,T11;
+  int K1 = 1;
+  double K4 = 0.5e0;
+  double K5 = 5.0e0;
+  double fx,cum,ccum,pq;
+  unsigned long qhi,qleft,qporq;
+  double T2,T3,T6,T7,T8,T9,T10,T11;
   /*
      ..
      .. Executable Statements ..
@@ -5370,7 +5269,7 @@ S310:
 static void cumbet(double *x,double *y,double *a,double *b,double *cum,
                    double *ccum)
 {
-  static int ierr;
+  int ierr;
   /*
      ..
      .. Executable Statements ..
@@ -5440,7 +5339,7 @@ S20:
 static void cumbin(double *s,double *xn,double *pr,double *ompr,
                    double *cum,double *ccum)
 {
-  static double T1,T2;
+  double T1,T2;
   /*
      ..
      .. Executable Statements ..
@@ -5495,7 +5394,7 @@ S20:
  */
 static void cumchi(double *x,double *df,double *cum,double *ccum)
 {
-  static double a,xx;
+  double a,xx;
   /*
      ..
      .. Executable Statements ..
@@ -5580,12 +5479,12 @@ static void cumchn(double *x,double *df,double *pnonc,double *cum,
 #define dg(i) (*df+2.0e0*(double)(i))
 #define qsmall(xx) (int)(sum < 1.0e-20 || (xx) < eps*sum)
 #define qtired(i) (int)((i) > ntired)
-  static double eps = 1.0e-5;
-  static int ntired = 1000;
+  double eps = 1.0e-5;
+  int ntired = 1000;
   static double adj,centaj,centwt,chid2,dfd2,lcntaj,lcntwt,lfact,pcent,pterm,sum,
                 sumadj,term,wt,xnonc;
-  static int i,icent,iterb,iterf;
-  static double T1,T2,T3;
+  int i,icent,iterb,iterf;
+  double T1,T2,T3;
   /*
      ..
      .. Executable Statements ..
@@ -5840,11 +5739,11 @@ static void cumfnc(double *f,double *dfn,double *dfd,double *pnonc,
 #define qsmall(x) (int)(sum < 1.0e-20 || (x) < eps*sum)
 #define half 0.5e0
 #define done 1.0e0
-  static double eps = 1.0e-4;
+  double eps = 1.0e-4;
   static double dsum,dummy,prod,xx,yy,adn,aup,b,betdn,betup,centwt,dnterm,sum,
                 upterm,xmult,xnonc;
-  static int i,icent,ierr;
-  static double T1,T2,T3,T4,T5,T6;
+  int i,icent,ierr;
+  double T1,T2,T3,T4,T5,T6;
   /*
      ..
      .. Executable Statements ..
@@ -6129,43 +6028,43 @@ static void cumnbn(double *s,double *xn,double *pr,double *ompr,
 */
 static void cumnor(double *arg,double *result,double *ccum)
 {
-  static double a[5] = {
+  double a[5] = {
     2.2352520354606839287e00,1.6102823106855587881e02,1.0676894854603709582e03,
     1.8154981253343561249e04,6.5682337918207449113e-2
   };
-  static double b[4] = {
+  double b[4] = {
     4.7202581904688241870e01,9.7609855173777669322e02,1.0260932208618978205e04,
     4.5507789335026729956e04
   };
-  static double c[9] = {
+  double c[9] = {
     3.9894151208813466764e-1,8.8831497943883759412e00,9.3506656132177855979e01,
     5.9727027639480026226e02,2.4945375852903726711e03,6.8481904505362823326e03,
     1.1602651437647350124e04,9.8427148383839780218e03,1.0765576773720192317e-8
   };
-  static double d[8] = {
+  double d[8] = {
     2.2266688044328115691e01,2.3538790178262499861e02,1.5193775994075548050e03,
     6.4855582982667607550e03,1.8615571640885098091e04,3.4900952721145977266e04,
     3.8912003286093271411e04,1.9685429676859990727e04
   };
-  static double half = 0.5e0;
-  static double p[6] = {
+  double half = 0.5e0;
+  double p[6] = {
     2.1589853405795699e-1,1.274011611602473639e-1,2.2235277870649807e-2,
     1.421619193227893466e-3,2.9112874951168792e-5,2.307344176494017303e-2
   };
-  static double one = 1.0e0;
-  static double q[5] = {
+  double one = 1.0e0;
+  double q[5] = {
     1.28426009614491121e00,4.68238212480865118e-1,6.59881378689285515e-2,
     3.78239633202758244e-3,7.29751555083966205e-5
   };
-  static double sixten = 1.60e0;
-  static double sqrpi = 3.9894228040143267794e-1;
-  static double thrsh = 0.66291e0;
-  static double root32 = 5.656854248e0;
-  static double zero = 0.0e0;
-  static int K1 = 1;
-  static int K2 = 2;
-  static int i;
-  static double del,eps,temp,x,xden,xnum,y,xsq,min;
+  double sixten = 1.60e0;
+  double sqrpi = 3.9894228040143267794e-1;
+  double thrsh = 0.66291e0;
+  double root32 = 5.656854248e0;
+  double zero = 0.0e0;
+  int K1 = 1;
+  int K2 = 2;
+  int i;
+  double del,eps,temp,x,xden,xnum,y,xsq,min;
   /*
      ------------------------------------------------------------------
      Machine dependent constants
@@ -6269,7 +6168,7 @@ static void cumnor(double *arg,double *result,double *ccum)
  */
 static void cumpoi(double *s,double *xlam,double *cum,double *ccum)
 {
-  static double chi,df;
+  double chi,df;
   df = 2. * (*s + 1.);
   chi = 2. * *xlam;
   cumchi(&chi,&df,ccum,cum);
@@ -6291,8 +6190,8 @@ static void cumpoi(double *s,double *xlam,double *cum,double *ccum)
  */
 static void cumt(double *t,double *df,double *cum,double *ccum)
 {
-  static double K2 = 0.5e0;
-  static double xx,a,oma,tt,yy,dfptt,T1;
+  double K2 = 0.5e0;
+  double xx,a,oma,tt,yy,dfptt,T1;
 
 
   tt = *t * *t;
@@ -6377,9 +6276,9 @@ static double dinvnr(double *p,double *q)
 #define r2pi 0.3989422804014326e0
 #define nhalf (-0.5e0)
 #define dennor(x) (r2pi*exp(nhalf*(x)*(x)))
-  static double dinvnr_0,strtx,xcur,cum,ccum,pp,dx;
-  static int i;
-  static unsigned long qporq;
+  double dinvnr_0,strtx,xcur,cum,ccum,pp,dx;
+  int i;
+  unsigned long qporq;
   /*
      ..
      .. Executable Statements ..
@@ -6783,16 +6682,16 @@ static double dt1(double *p,double *q,double *df)
 {
   double denpow,sum,term,x,xx;
   int i;
-  static double coef[4][5] = {
+  double coef[4][5] = {
       {1.0e0,1.0e0,0.0e0,0.0e0,0.0e0},
       {3.0e0,16.0e0,5.0e0,0.0e0,0.0e0},
       {-15.0e0,17.0e0, 19.0e0,3.0e0,0.0e0},
       {-945.0e0,-1920.0e0,1482.0e0,776.0e0,79.0e0}
   };
-  static double denom[4] = {
+  double denom[4] = {
     4.0e0,96.0e0,384.0e0,92160.0e0
   };
-  static int ideg[4] = {
+  int ideg[4] = {
     2,3,4,5
   };
 
@@ -7100,35 +6999,35 @@ static double erf1(double *x)
  * ERFC1(IND,X) = ERFC(X)            IF IND = 0
  * ERFC1(IND,X) = EXP(X*X)*ERFC(X)   OTHERWISE
  */
-static double erfc1(int *ind,double *x)
+static double erfc1(int *ind, double *x)
 {
-  static double c = .564189583547756e0;
-  static double a[5] = {
+  double c = .564189583547756e0;
+  double a[5] = {
     .771058495001320e-04,-.133733772997339e-02,.323076579225834e-01,
     .479137145607681e-01,.128379167095513e+00
   };
-  static double b[3] = {
+  double b[3] = {
     .301048631703895e-02,.538971687740286e-01,.375795757275549e+00
   };
-  static double p[8] = {
+  double p[8] = {
     -1.36864857382717e-07,5.64195517478974e-01,7.21175825088309e+00,
     4.31622272220567e+01,1.52989285046940e+02,3.39320816734344e+02,
     4.51918953711873e+02,3.00459261020162e+02
   };
-  static double q[8] = {
+  double q[8] = {
     1.00000000000000e+00,1.27827273196294e+01,7.70001529352295e+01,
     2.77585444743988e+02,6.38980264465631e+02,9.31354094850610e+02,
     7.90950925327898e+02,3.00459260956983e+02
   };
-  static double r[5] = {
+  double r[5] = {
     2.10144126479064e+00,2.62370141675169e+01,2.13688200555087e+01,
     4.65807828718470e+00,2.82094791773523e-01
   };
-  static double s[4] = {
+  double s[4] = {
     9.41537750555460e+01,1.87114811799590e+02,9.90191814623914e+01,
     1.80124575948747e+01
   };
-  static int K1 = 1;
+  int K1 = 1;
   static double erfc1_0,ax,bot,e,t,top,w;
   /*
      ABS(X) .LE. 0.5
@@ -7256,8 +7155,8 @@ static double exparg(int *l)
  */
 static double fpser(double *a,double *b,double *x,double *eps)
 {
-  static int K1 = 1;
-  static double fpser_0,an,c,s,t,tol;
+  int K1 = 1;
+  double fpser_0,an,c,s,t,tol;
 
   fpser_0 = 1.0e0;
   if (*a > 1.e-3**eps) 
@@ -7293,23 +7192,23 @@ static double fpser(double *a,double *b,double *x,double *eps)
  */
 static double gam1(double *a)
 {
-  static double s1 = .273076135303957e+00;
-  static double s2 = .559398236957378e-01;
-  static double p[7] = {
+  double s1 = .273076135303957e+00;
+  double s2 = .559398236957378e-01;
+  double p[7] = {
     .577215664901533e+00,-.409078193005776e+00,-.230975380857675e+00,
     .597275330452234e-01,.766968181649490e-02,-.514889771323592e-02,
     .589597428611429e-03
   };
-  static double q[5] = {
+  double q[5] = {
     .100000000000000e+01,.427569613095214e+00,.158451672430138e+00,
     .261132021441447e-01,.423244297896961e-02
   };
-  static double r[9] = {
+  double r[9] = {
     -.422784335098468e+00,-.771330383816272e+00,-.244757765222226e+00,
     .118378989872749e+00,.930357293360349e-03,-.118290993445146e-01,
     .223047661158249e-02,.266505979058923e-03,-.132674909766242e-03
   };
-  static double bot,d,t,top,w,T1;
+  double bot,d,t,top,w,T1;
   /*
      ..
      .. Executable Statements ..
@@ -7396,40 +7295,40 @@ static double gam1(double *a)
 static void gaminv(double *a,double *x,double *x0,double *p,double *q,
                    int *ierr)
 {
-  static double a0 = 3.31125922108741e0;
-  static double a1 = 11.6616720288968e0;
-  static double a2 = 4.28342155967104e0;
-  static double a3 = .213623493715853e0;
-  static double b1 = 6.61053765625462e0;
-  static double b2 = 6.40691597760039e0;
-  static double b3 = 1.27364489782223e0;
-  static double b4 = .036117081018842e0;
-  static double c = .577215664901533e0;
-  static double ln10 = 2.302585e0;
-  static double tol = 1.e-5;
-  static double amin[2] = {
+  double a0 = 3.31125922108741e0;
+  double a1 = 11.6616720288968e0;
+  double a2 = 4.28342155967104e0;
+  double a3 = .213623493715853e0;
+  double b1 = 6.61053765625462e0;
+  double b2 = 6.40691597760039e0;
+  double b3 = 1.27364489782223e0;
+  double b4 = .036117081018842e0;
+  double c = .577215664901533e0;
+  double ln10 = 2.302585e0;
+  double tol = 1.e-5;
+  double amin[2] = {
     500.0e0,100.0e0
   };
-  static double bmin[2] = {
+  double bmin[2] = {
     1.e-28,1.e-13
   };
-  static double dmin[2] = {
+  double dmin[2] = {
     1.e-06,1.e-04
   };
-  static double emin[2] = {
+  double emin[2] = {
     2.e-03,6.e-03
   };
-  static double eps0[2] = {
+  double eps0[2] = {
     1.e-10,1.e-08
   };
-  static int K1 = 1;
-  static int K2 = 2;
-  static int K3 = 3;
-  static int K8 = 0;
+  int K1 = 1;
+  int K2 = 2;
+  int K3 = 3;
+  int K8 = 0;
   static double am1,amax,ap1,ap2,ap3,apn,b,c1,c2,c3,c4,c5,d,e,e2,eps,g,h,pn,qg,qn,
                 r,rta,s,s2,sum,t,u,w,xmax,xmin,xn,y,z;
-  static int iop;
-  static double T4,T5,T6,T7,T9;
+  int iop;
+  double T4,T5,T6,T7,T9;
   /*
      ..
      .. Executable Statements ..
@@ -7718,31 +7617,31 @@ static double gamln(double *a)
  */
 static double gamln1(double *a)
 {
-  static double p0 = .577215664901533e+00;
-  static double p1 = .844203922187225e+00;
-  static double p2 = -.168860593646662e+00;
-  static double p3 = -.780427615533591e+00;
-  static double p4 = -.402055799310489e+00;
-  static double p5 = -.673562214325671e-01;
-  static double p6 = -.271935708322958e-02;
-  static double q1 = .288743195473681e+01;
-  static double q2 = .312755088914843e+01;
-  static double q3 = .156875193295039e+01;
-  static double q4 = .361951990101499e+00;
-  static double q5 = .325038868253937e-01;
-  static double q6 = .667465618796164e-03;
-  static double r0 = .422784335098467e+00;
-  static double r1 = .848044614534529e+00;
-  static double r2 = .565221050691933e+00;
-  static double r3 = .156513060486551e+00;
-  static double r4 = .170502484022650e-01;
-  static double r5 = .497958207639485e-03;
-  static double s1 = .124313399877507e+01;
-  static double s2 = .548042109832463e+00;
-  static double s3 = .101552187439830e+00;
-  static double s4 = .713309612391000e-02;
-  static double s5 = .116165475989616e-03;
-  static double w,x;
+  double p0 = .577215664901533e+00;
+  double p1 = .844203922187225e+00;
+  double p2 = -.168860593646662e+00;
+  double p3 = -.780427615533591e+00;
+  double p4 = -.402055799310489e+00;
+  double p5 = -.673562214325671e-01;
+  double p6 = -.271935708322958e-02;
+  double q1 = .288743195473681e+01;
+  double q2 = .312755088914843e+01;
+  double q3 = .156875193295039e+01;
+  double q4 = .361951990101499e+00;
+  double q5 = .325038868253937e-01;
+  double q6 = .667465618796164e-03;
+  double r0 = .422784335098467e+00;
+  double r1 = .848044614534529e+00;
+  double r2 = .565221050691933e+00;
+  double r3 = .156513060486551e+00;
+  double r4 = .170502484022650e-01;
+  double r5 = .497958207639485e-03;
+  double s1 = .124313399877507e+01;
+  double s2 = .548042109832463e+00;
+  double s3 = .101552187439830e+00;
+  double s4 = .713309612391000e-02;
+  double s5 = .116165475989616e-03;
+  double w,x;
 
   if (*a >= 0.6e0) 
     {
@@ -7771,8 +7670,8 @@ static double Xgamm(double *a)
 static void grat1(double *a,double *x,double *r,double *p,double *q,
                   double *eps)
 {
-  static int K2 = 0;
-  static double a2n,a2nm1,am0,an,an0,b2n,b2nm1,c,cma,g,h,j,l,sum,t,tol,w,z,T1,T3;
+  int K2 = 0;
+  double a2n,a2nm1,am0,an,an0,b2n,b2nm1,c,cma,g,h,j,l,sum,t,tol,w,z,T1,T3;
   /*
      ..
      .. Executable Statements ..
@@ -7903,72 +7802,72 @@ S120:
  */
 static void gratio(double *a,double *x,double *ans,double *qans,int *ind)
 {
-  static double alog10 = 2.30258509299405e0;
-  static double d10 = -.185185185185185e-02;
-  static double d20 = .413359788359788e-02;
-  static double d30 = .649434156378601e-03;
-  static double d40 = -.861888290916712e-03;
-  static double d50 = -.336798553366358e-03;
-  static double d60 = .531307936463992e-03;
-  static double d70 = .344367606892378e-03;
-  static double rt2pin = .398942280401433e0;
-  static double rtpi = 1.77245385090552e0;
-  static double third = .333333333333333e0;
-  static double acc0[3] = {
+  double alog10 = 2.30258509299405e0;
+  double d10 = -.185185185185185e-02;
+  double d20 = .413359788359788e-02;
+  double d30 = .649434156378601e-03;
+  double d40 = -.861888290916712e-03;
+  double d50 = -.336798553366358e-03;
+  double d60 = .531307936463992e-03;
+  double d70 = .344367606892378e-03;
+  double rt2pin = .398942280401433e0;
+  double rtpi = 1.77245385090552e0;
+  double third = .333333333333333e0;
+  double acc0[3] = {
     5.e-15,5.e-7,5.e-4
   };
-  static double big[3] = {
+  double big[3] = {
     20.0e0,14.0e0,10.0e0
   };
-  static double d0[13] = {
+  double d0[13] = {
     .833333333333333e-01,-.148148148148148e-01,.115740740740741e-02,
     .352733686067019e-03,-.178755144032922e-03,.391926317852244e-04,
     -.218544851067999e-05,-.185406221071516e-05,.829671134095309e-06,
     -.176659527368261e-06,.670785354340150e-08,.102618097842403e-07,
     -.438203601845335e-08
   };
-  static double d1[12] = {
+  double d1[12] = {
     -.347222222222222e-02,.264550264550265e-02,-.990226337448560e-03,
     .205761316872428e-03,-.401877572016461e-06,-.180985503344900e-04,
     .764916091608111e-05,-.161209008945634e-05,.464712780280743e-08,
     .137863344691572e-06,-.575254560351770e-07,.119516285997781e-07
   };
-  static double d2[10] = {
+  double d2[10] = {
     -.268132716049383e-02,.771604938271605e-03,.200938786008230e-05,
     -.107366532263652e-03,.529234488291201e-04,-.127606351886187e-04,
     .342357873409614e-07,.137219573090629e-05,-.629899213838006e-06,
     .142806142060642e-06
   };
-  static double d3[8] = {
+  double d3[8] = {
     .229472093621399e-03,-.469189494395256e-03,.267720632062839e-03,
     -.756180167188398e-04,-.239650511386730e-06,.110826541153473e-04,
     -.567495282699160e-05,.142309007324359e-05
   };
-  static double d4[6] = {
+  double d4[6] = {
     .784039221720067e-03,-.299072480303190e-03,-.146384525788434e-05,
     .664149821546512e-04,-.396836504717943e-04,.113757269706784e-04
   };
-  static double d5[4] = {
+  double d5[4] = {
     -.697281375836586e-04,.277275324495939e-03,-.199325705161888e-03,
     .679778047793721e-04
   };
-  static double d6[2] = {
+  double d6[2] = {
     -.592166437353694e-03,.270878209671804e-03
   };
-  static double e00[3] = {
+  double e00[3] = {
     .25e-3,.25e-1,.14e0
   };
-  static double x00[3] = {
+  double x00[3] = {
     31.0e0,17.0e0,9.7e0
   };
-  static int K1 = 1;
-  static int K2 = 0;
+  int K1 = 1;
+  int K2 = 0;
   static double a2n,a2nm1,acc,am0,amn,an,an0,apn,b2n,b2nm1,c,c0,c1,c2,c3,c4,c5,c6,
                 cma,e,e0,g,h,j,l,r,rta,rtx,s,sum,t,t1,tol,twoa,u,w,x0,y,z;
-  static int i,iop,m,max,n;
-  static double wk[20],T3;
-  static int T4,T5;
-  static double T6,T7;
+  int i,iop,m,max,n;
+  double wk[20],T3;
+  int T4,T5;
+  double T6,T7;
   /*
      ..
      .. Executable Statements ..
@@ -8296,7 +8195,7 @@ S430:
  */
 static double gsumln(double *a,double *b)
 {
-  static double x,T1,T2;
+  double x,T1,T2;
   x = *a+*b-2.e0;
   if (x <= 0.25e0) 
     {
@@ -8324,8 +8223,8 @@ static double psi(double *xx)
  */
 static double rcomp(double *a,double *x)
 {
-  static double rt2pin = .398942280401433e0;
-  static double rcomp_0,t,t1,u;
+  double rt2pin = .398942280401433e0;
+  double rcomp_0,t,t1,u;
   /*
      ..
      .. Executable Statements ..
@@ -8362,14 +8261,14 @@ static double rexp(double *x)
  */
 static double rlog(double *x)
 {
-  static double a = .566749439387324e-01;
-  static double b = .456512608815524e-01;
-  static double p0 = .333333333333333e+00;
-  static double p1 = -.224696413112536e+00;
-  static double p2 = .620886815375787e-02;
-  static double q1 = -.127408923933623e+01;
-  static double q2 = .354508718369557e+00;
-  static double r,t,u,w,w1;
+  double a = .566749439387324e-01;
+  double b = .456512608815524e-01;
+  double p0 = .333333333333333e+00;
+  double p1 = -.224696413112536e+00;
+  double p2 = .620886815375787e-02;
+  double q1 = -.127408923933623e+01;
+  double q2 = .354508718369557e+00;
+  double r,t,u,w,w1;
   /*
      ..
      .. Executable Statements ..
@@ -8409,14 +8308,14 @@ S40:
  */
 static double rlog1(double *x)
 {
-  static double a = .566749439387324e-01;
-  static double b = .456512608815524e-01;
-  static double p0 = .333333333333333e+00;
-  static double p1 = -.224696413112536e+00;
-  static double p2 = .620886815375787e-02;
-  static double q1 = -.127408923933623e+01;
-  static double q2 = .354508718369557e+00;
-  static double h,r,t,w,w1;
+  double a = .566749439387324e-01;
+  double b = .456512608815524e-01;
+  double p0 = .333333333333333e+00;
+  double p1 = -.224696413112536e+00;
+  double p2 = .620886815375787e-02;
+  double q1 = -.127408923933623e+01;
+  double q2 = .354508718369557e+00;
+  double h,r,t,w,w1;
   /*
      ..
      .. Executable Statements ..
@@ -8494,16 +8393,16 @@ static double spmpar (int *i)
  */
 static double stvaln(double *p)
 {
-  static double xden[5] = {
+  double xden[5] = {
     0.993484626060e-1,0.588581570495e0,0.531103462366e0,0.103537752850e0,
     0.38560700634e-2
   };
-  static double xnum[5] = {
+  double xnum[5] = {
     -0.322232431088e0,-1.000000000000e0,-0.342242088547e0,-0.204231210245e-1,
     -0.453642210148e-4
   };
-  static int K1 = 5;
-  static double stvaln_0,sign,y,z;
+  int K1 = 5;
+  double stvaln_0,sign,y,z;
 
   if ((*p <= 0.5e0))
     {
@@ -8631,13 +8530,13 @@ void pnl_cdfbchi2n(double x, double nu, double lambda, double beta, double *P)
  */
 double pnl_cdfnor(double x)
 {
-  const double p= 0.2316419;
-  const double b1= 0.319381530;
-  const double b2= -0.356563782;
-  const double b3= 1.781477937;
-  const double b4= -1.821255978;
-  const double b5= 1.330274429;
-  const double one_over_twopi= 0.39894228;
+  double p= 0.2316419;
+  double b1= 0.319381530;
+  double b2= -0.356563782;
+  double b3= 1.781477937;
+  double b4= -1.821255978;
+  double b5= 1.330274429;
+  double one_over_twopi= 0.39894228;
 
   double t;
 
@@ -8669,8 +8568,8 @@ static double ff(double x, double y, double aa, double bb, double r)
 
 static double NN1( double a, double b, double r)
 {   
-  static const double u[4] = {0.3253030,0.4211071,0.1334425,0.006374323};
-  static const double v[4] = {0.1337764,0.6243247,1.3425378,2.2626645};
+  double u[4] = {0.3253030,0.4211071,0.1334425,0.006374323};
+  double v[4] = {0.1337764,0.6243247,1.3425378,2.2626645};
   double aa,bb,m;
   int i,j;
 
@@ -8767,7 +8666,7 @@ double pnl_normal_density(double x)
   return(exp(-SQR(x)/2.) * M_1_SQRT2PI);
 }
 
-static  double InvNormal2P1[] = {
+ double InvNormal2P1[] = {
   0.160304955844066229311E2,
   -0.90784959262960326650E2,
   0.18644914861620987391E3,
@@ -8777,7 +8676,7 @@ static  double InvNormal2P1[] = {
   0.1760587821390590
 };
 
-static  double InvNormal2Q1[] = {
+ double InvNormal2Q1[] = {
   0.147806470715138316110E2,
   -0.91374167024260313396E2,
   0.21015790486205317714E3,
@@ -8787,7 +8686,7 @@ static  double InvNormal2Q1[] = {
   0.1E1
 };
 
-static  double InvNormal2P2[] = {
+ double InvNormal2P2[] = {
   -0.152389263440726128E-1,
   0.3444556924136125216,
   -0.29344398672542478687E1,
@@ -8798,7 +8697,7 @@ static  double InvNormal2P2[] = {
   0.237516689024448000
 };
 
-static  double InvNormal2Q2[] = {
+ double InvNormal2Q2[] = {
   -0.108465169602059954E-1,
   0.2610628885843078511,
   -0.24068318104393757995E1,
@@ -8809,7 +8708,7 @@ static  double InvNormal2Q2[] = {
   0.1E1
 };
 
-static  double InvNormal2P3[] = {
+ double InvNormal2P3[] = {
   0.56451977709864482298E-4,
   0.53504147487893013765E-2,
   0.12969550099727352403,
@@ -8823,7 +8722,7 @@ static  double InvNormal2P3[] = {
   0.22419563223346345828E-2
 };
 
-static  double InvNormal2Q3[] = {
+ double InvNormal2Q3[] = {
   0.56451699862760651514E-4,
   0.53505587067930653953E-2,
   0.12986615416911646934,
