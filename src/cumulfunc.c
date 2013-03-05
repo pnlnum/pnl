@@ -345,9 +345,6 @@ static void dinvr(int *status,double *x,double *fx,
 static void dstinv(double *zsmall,double *zbig,double *zabsst,
                    double *zrelst,double *zstpmu,double *zabsto,
                    double *zrelto);
-/*static double dln1px(double *a); */
-/*static double dlngam(double *a); */
-/*static double dstrem(double *z); */
 static double dt1(double *p,double *q,double *df);
 static void dzror(int *status,double *x,double *fx,double *xlo,
                   double *xhi,unsigned long *qleft,unsigned long *qhi);
@@ -1898,16 +1895,9 @@ void pnl_cdf_bet(int *which,double *p,double *q,double *x,double *y,
   /*
      Check arguments
      */
-  if (!(*which < 1 || *which > 4)) goto S30;
-  if (!(*which < 1)) goto S10;
-  *bound = 1.0e0;
-  goto S20;
-S10:
-  *bound = 4.0e0;
-S20:
-  *status = -1;
-  return;
-S30:
+  CHECK_WHICH (*which < 1, 1., -1);
+  CHECK_WHICH (*which > 4, 4., -1);
+
   if (*which == 1) goto S70;
   /*
      P
@@ -2304,16 +2294,9 @@ void pnl_cdf_bin(int *which,double *p,double *q,double *s,double *xn,
   /*
      Check arguments
      */
-  if (!(*which < 1 && *which > 4)) goto S30;
-  if (!(*which < 1)) goto S10;
-  *bound = 1.0e0;
-  goto S20;
-S10:
-  *bound = 4.0e0;
-S20:
-  *status = -1;
-  return;
-S30:
+  CHECK_WHICH (*which < 1, 1., -1);
+  CHECK_WHICH (*which > 4, 4., -1);
+
   if (*which == 1) goto S70;
   /*
      P
@@ -2699,16 +2682,9 @@ void pnl_cdf_chi(int *which,double *p,double *q,double *x,double *df,
   /*
      Check arguments
      */
-  if (!(*which < 1 || *which > 3)) goto S30;
-  if (!(*which < 1)) goto S10;
-  *bound = 1.0e0;
-  goto S20;
-S10:
-  *bound = 3.0e0;
-S20:
-  *status = -1;
-  return;
-S30:
+  CHECK_WHICH (*which < 1, 1., -1);
+  CHECK_WHICH (*which > 4, 4., -1);
+
   if (*which == 1) goto S70;
   /*
      P
@@ -3033,16 +3009,9 @@ void pnl_cdf_chn(int *which,double *p,double *q,double *x,double *df,
   /*
      Check arguments
      */
-  if (!(*which < 1 || *which > 4)) goto S30;
-  if (!(*which < 1)) goto S10;
-  *bound = 1.0e0;
-  goto S20;
-S10:
-  *bound = 4.0e0;
-S20:
-  *status = -1;
-  return;
-S30:
+  CHECK_WHICH (*which < 1, 1., -1);
+  CHECK_WHICH (*which > 4, 4., -1);
+
   if (*which == 1) goto S70;
   /*
      P
@@ -3338,16 +3307,9 @@ void pnl_cdf_f(int *which,double *p,double *q,double *f,double *dfn,
   /*
      Check arguments
      */
-  if (!(*which < 1 || *which > 4)) goto S30;
-  if (!(*which < 1)) goto S10;
-  *bound = 1.0e0;
-  goto S20;
-S10:
-  *bound = 4.0e0;
-S20:
-  *status = -1;
-  return;
-S30:
+  CHECK_WHICH (*which < 1, 1., -1);
+  CHECK_WHICH (*which > 4, 4., -1);
+
   if (*which == 1) goto S70;
   /*
      P
@@ -3706,16 +3668,9 @@ void pnl_cdf_fnc(int *which,double *p,double *q,double *f,double *dfn,
   /*
      Check arguments
      */
-  if (!(*which < 1 || *which > 5)) goto S30;
-  if (!(*which < 1)) goto S10;
-  *bound = 1.0e0;
-  goto S20;
-S10:
-  *bound = 5.0e0;
-S20:
-  *status = -1;
-  return;
-S30:
+  CHECK_WHICH (*which < 1, 1., -1);
+  CHECK_WHICH (*which > 5, 5., -1);
+
   if (*which == 1) goto S70;
   /*
      P
@@ -4060,16 +4015,9 @@ void pnl_cdf_gam(int *which,double *p,double *q,double *x,double *shape,
   /*
      Check arguments
      */
-  if (!(*which < 1 || *which > 4)) goto S30;
-  if (!(*which < 1)) goto S10;
-  *bound = 1.0e0;
-  goto S20;
-S10:
-  *bound = 4.0e0;
-S20:
-  *status = -1;
-  return;
-S30:
+  CHECK_WHICH (*which < 1, 1., -1);
+  CHECK_WHICH (*which > 4, 4., -1);
+
   if (*which == 1) goto S70;
   /*
      P
@@ -4406,16 +4354,9 @@ void pnl_cdf_nbn(int *which,double *p,double *q,double *s,double *xn,
   /*
      Check arguments
      */
-  if (!(*which < 1 || *which > 4)) goto S30;
-  if (!(*which < 1)) goto S10;
-  *bound = 1.0e0;
-  goto S20;
-S10:
-  *bound = 4.0e0;
-S20:
-  *status = -1;
-  return;
-S30:
+  CHECK_WHICH (*which < 1, 1., -1);
+  CHECK_WHICH (*which > 4, 4., -1);
+
   if (*which == 1) goto S70;
   /*
      P
@@ -4939,16 +4880,9 @@ void pnl_cdf_poi(int *which,double *p,double *q,double *s,double *xlam,
   /*
      Check arguments
      */
-  if (!(*which < 1 || *which > 3)) goto S30;
-  if (!(*which < 1)) goto S10;
-  *bound = 1.0e0;
-  goto S20;
-S10:
-  *bound = 3.0e0;
-S20:
-  *status = -1;
-  return;
-S30:
+  CHECK_WHICH (*which < 1, 1., -1);
+  CHECK_WHICH (*which > 3, 3., -1);
+
   if (*which == 1) goto S70;
   /*
      P
@@ -5230,16 +5164,9 @@ void pnl_cdf_t(int *which,double *p,double *q,double *t,double *df,
   /*
      Check arguments
      */
-  if (!(*which < 1 || *which > 3)) goto S30;
-  if (!(*which < 1)) goto S10;
-  *bound = 1.0e0;
-  goto S20;
-S10:
-  *bound = 3.0e0;
-S20:
-  *status = -1;
-  return;
-S30:
+  CHECK_WHICH (*which < 1, 1., -1);
+  CHECK_WHICH (*which > 3, 3., -1);
+
   if (*which == 1) goto S70;
   /*
      P
