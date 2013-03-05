@@ -14,8 +14,9 @@
 extern "C" {
 #endif /* __cplusplus */
 
-extern int intapprox (double s);
-extern double trunc(double x);
+extern int pnl_itrunc(double x);
+extern long int pnl_ltrunc(double x);
+extern double pnl_trunc(double x);
 extern double Cnp(int n, int p);
 extern double pnl_fact(int n);
 extern double pnl_lgamma (double x);
@@ -170,6 +171,10 @@ extern double pnl_round (double x);
 #define round(x) pnl_round(x)
 #endif
 
+#ifndef PNL_HAVE_TRUNC
+#undef trunc
+#define trunc(x) pnl_trunc(x)
+#endif
 
 #ifdef SQR
 #undef SQR

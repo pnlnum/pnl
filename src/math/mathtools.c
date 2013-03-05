@@ -25,26 +25,37 @@
 
 
 /** 
- * Compute the nearest integer 
- * @param s the value to be rounded
+ * 
+ * Same as trunc but the result is casted as an int, digits may be
+ * lost if |x| > MAX_INT.
+ *
+ * @param x
  * @return the rounded value casted to an integer. 1.5 is rounded to 1 and
  * -1.5 is rounded to -1
  */
-int intapprox(double s)
+int pnl_itrunc(double x)
 {
-  int r = (int) s;
-  if (s > r + 0.5) { r++; }
-  if (s < r - 0.5) { r--; }
-  return r;
+  return (int) pnl_trunc (x);
 }
 
-
-#ifndef PNL_HAVE_TRUNC
-double trunc(double x)
+/** 
+ * Same as trunc but the result is casted as a long int, no digits may be
+ * lost.
+ * 
+ * @param x
+ * 
+ * @return 
+ */
+long int pnl_ltrunc(double x)
 {
-  return (double) ((int) x);
+  return (int) pnl_trunc (x);
 }
-#endif
+
+double pnl_trunc(double x)
+{
+  if ( x >= 0. ) return floor (x);
+  else return ceil (x);
+}
 
 /** 
  * Compute the binomial coefficients with an error smaller than 1 for large
@@ -106,7 +117,6 @@ double pnl_fact(int n)
   * @param x  a real number > 0
   * @return  log(gamma(x))
   */ 
-
 double pnl_lgamma(double x)
 {
   return pnl_sf_log_gamma (x);
