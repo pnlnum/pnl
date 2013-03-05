@@ -3,7 +3,8 @@
 
 extern double pnl_dlamch (char *cmach);
 
-/* emulation of the needed values for d1mach and i1mach 
+/* 
+ * emulation of the needed values for d1mach and i1mach 
  * using nsp functions (jpc Dec 2007)
  */
 
@@ -51,7 +52,7 @@ double pnl_d1mach (int i)
     case 4: return pnl_dlamch("p");
     case 5: return log(pnl_dlamch("b"))/log(10.0);
     default :
-            printf("dimach called with wrong argument\n");
+            printf("d1mach called with wrong argument\n");
             return 0;
     }
 }
@@ -114,17 +115,12 @@ static int largestint(void)
   static int first=0,large;
   if ( first == 0) 
     {
-      if (sizeof(int)==sizeof(long))
-        large = (int) LONG_MAX ;
-      else if (sizeof(int)==sizeof(short))
-        large = SHRT_MAX;
-      else 
-        large = 2147483647 ; /** using default value **/
+      if (sizeof(int)==sizeof(long)) large = (int) LONG_MAX ;
+      else if (sizeof(int)==sizeof(short)) large = SHRT_MAX;
+      else large = 2147483647 ; /** using default value **/
       first++;
-      return large ;
     }
-  else 
-    return large;
+  return large;
 }
 
 
