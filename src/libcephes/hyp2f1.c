@@ -350,15 +350,15 @@ static double hyt2f1( a, b, c, x, loss )
           ax = log(s);
 
           /* sum for t = 0 */
-          y = psi(1.0) + psi(1.0+e) - psi(a+d1) - psi(b+d1) - ax;
+          y = pnl_sf_psi(1.0) + pnl_sf_psi(1.0+e) - pnl_sf_psi(a+d1) - pnl_sf_psi(b+d1) - ax;
           y /= pnl_sf_gamma(e+1.0);
 
           p = (a+d1) * (b+d1) * s / pnl_sf_gamma(e+2.0); /* Poch for t=1 */
           t = 1.0;
           do
             {
-              r = psi(1.0+t) + psi(1.0+t+e) - psi(a+t+d1)
-                - psi(b+t+d1) - ax;
+              r = pnl_sf_psi(1.0+t) + pnl_sf_psi(1.0+t+e) - pnl_sf_psi(a+t+d1)
+                - pnl_sf_psi(b+t+d1) - ax;
               q = p * r;
               y += q;
               p *= s * (a+t+d1) / (t+1.0);

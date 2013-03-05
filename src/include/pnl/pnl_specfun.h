@@ -81,6 +81,7 @@ extern double pnl_sf_log_erf (double x);
 extern double pnl_sf_log_erfc (double x);
 extern double pnl_sf_erf (double x);
 extern double pnl_sf_erfc (double x);
+extern double pnl_sf_psi (double x);
 
 extern double pnl_sf_hyperg_2F1 (double a, double b, double c, double x);
 extern double pnl_sf_hyperg_1F1 (double a, double b, double x);

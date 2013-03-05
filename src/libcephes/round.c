@@ -35,8 +35,6 @@
 
 #include "mconf.h"
 
-extern double floor(double);
-
 double round(double x)
 {
   double y, r;
@@ -47,21 +45,21 @@ double round(double x)
   /* Fractional part */
   r = x - y;
 
-  /* Round up to nearest. */
   if( r > 0.5 )
-    goto rndup;
-
-  /* Round to even */
-  if( r == 0.5 )
     {
+      /* Round up to nearest. */
+      y += 1.;
+    }
+  else if( r == 0.5 )
+    {
+      /* Round to even */
       r = y - 2.0 * floor( 0.5 * y );
       if( r == 1.0 )
         {
-        rndup:
           y += 1.0;
         }
     }
-
   /* Else round down. */
+
   return(y);
 }

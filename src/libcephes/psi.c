@@ -5,35 +5,35 @@
  *
  * SYNOPSIS:
  *
- * double x, y, psi();
+ * double x, y, pnl_sf_psi();
  *
- * y = psi( x );
+ * y = pnl_sf_psi( x );
  *
  *
  * DESCRIPTION:
  *
  *              d      -
- *   psi(x)  =  -- ln | (x)
+ *   pnl_sf_psi(x)  =  -- ln | (x)
  *              dx
  *
  * is the logarithmic derivative of the gamma function.
  * For integer x,
  *                   n-1
  *                    -
- * psi(n) = -EUL  +   >  1/k.
+ * pnl_sf_psi(n) = -EUL  +   >  1/k.
  *                    -
  *                   k=1
  *
  * This formula is used for 0 < n <= 10.  If x is negative, it
  * is transformed to a positive argument by the reflection
- * formula  psi(1-x) = psi(x) + pi cot(pi x).
+ * formula  pnl_sf_psi(1-x) = pnl_sf_psi(x) + pi cot(pi x).
  * For general positive x, the argument is made greater than 10
- * using the recurrence  psi(x+1) = psi(x) + 1/x.
+ * using the recurrence  pnl_sf_psi(x+1) = pnl_sf_psi(x) + 1/x.
  * Then the following asymptotic expansion is applied:
  *
  *                           inf.   B
  *                            -      2k
- * psi(x) = log(x) - 1/2x -   >   -------
+ * pnl_sf_psi(x) = log(x) - 1/2x -   >   -------
  *                            -        2k
  *                           k=1   2k x
  *
@@ -110,7 +110,7 @@ static unsigned short A[] = {
 
 
 
-double psi(x)
+double pnl_sf_psi(x)
      double x;
 {
   double p, q, nz, s, w, y, z;

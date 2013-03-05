@@ -33,6 +33,7 @@ extern double pnl_atanh (double x);
 extern double pnl_log1p (double x);
 extern double pnl_expm1 (double x);
 extern double pnl_cosm1 (double x);
+extern double pnl_round (double x);
 
 #define false 0
 #undef FALSE
@@ -159,9 +160,14 @@ extern double pnl_cosm1 (double x);
 #endif
 #define POW(x,y) pow( (double) (x), (double) (y))
 
-#ifndef PNL_PNL_HAVE_EXP10
+#ifndef PNL_HAVE_EXP10
 #undef exp10
 #define exp10(x) exp(10.0, x)
+#endif
+
+#ifndef PNL_HAVE_ROUND
+#undef round
+#define round(x) pnl_round(x)
 #endif
 
 

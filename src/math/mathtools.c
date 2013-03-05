@@ -101,7 +101,6 @@ double pnl_fact(int n)
   return z;
 }
 
-
 /**
   * Computes the natural logarithm of the Gamma function
   * @param x  a real number > 0
@@ -149,7 +148,6 @@ double pnl_pow_i (double x, int n)
     } 
   return y;
 } 
-
 
 /** 
  * Compute the inverse of the cosh function based on its logarithmic

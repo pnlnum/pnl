@@ -16,6 +16,7 @@ add_library(libcephes OBJECT
    polrt.c
    polyn.c
    psi.c
+   round.c
    unity.c
    cephes_wrappers.c
 )

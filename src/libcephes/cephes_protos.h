@@ -96,7 +96,7 @@ extern void polsub ( double a[], int na, double b[], int nb, double c[] );
 extern int poldiv ( double a[], int na, double b[], int nb, double c[] );
 extern void polsbt ( double a[], int na, double b[], int nb, double c[] );
 extern double poleva ( double a[], int na, double x );
-extern double psi ( double x );
+extern double pnl_sf_psi ( double x );
 extern double rgamma ( double x );
 extern double round ( double x );
 extern double iv ( double v, double x );

@@ -42,6 +42,9 @@
 /* Define to 1 if you have the 'trunc' function. */
 #cmakedefine PNL_HAVE_TRUNC
 
+/* Define to 1 if you have the 'round' function. */
+#cmakedefine PNL_HAVE_ROUND
+
 /* Define to 1 if you have 'dpstrf' function */
 #cmakedefine PNL_HAVE_DPSTRF
 
