@@ -18,8 +18,11 @@
 /************************************************************************/
 
 /*
- * The expected values for the different tests have been computed using Nsp
- * with format (20,20)
+ * The expected values for the different tests have been computed using
+ * Scilab with format (20)
+ *
+ * Nsp does not always provide exactly the same values, in particular for
+ * computations with *which==5
  */
 
 #include <stdio.h>
@@ -114,7 +117,7 @@ static void pnl_cdf_chn_test()
   q=0.9;
   x=2;
   df=2;
-  pnonce = 5.812580072894205863;
+  pnonce = 5.812579835152692276;
   pnl_cdf_chn(&which,&p,&q,&x,&df,&pnonc,&status,&bound);
   pnl_test_eq_abs (pnonc, pnonce, abserr, "cdf_chn pnonc", "");
 }
@@ -156,7 +159,7 @@ static void pnl_cdf_fnc_test()
   f=2;
   dfn=3;
   dfd=5;
-  pnonce = 13.178876207328151793;
+  pnonce = 13.17874475510091337;
   pnl_cdf_fnc(&which,&p,&q,&f,&dfn,&dfd,&pnonc,&status,&bound);
   pnl_test_eq_abs (pnonc, pnonce, abserr, "cdf_fnc pnonc", "");
 }
@@ -180,8 +183,6 @@ static void pnl_cdf_gam_test()
   pnl_cdf_gam(&which,&p,&q,&x,&shape,&scale,&status,&bound);
   pnl_test_eq_abs (scale, scalee, abserr, "cdf_gam scale", "");
 }
-
-
 
 static void pnl_cdf_nbn_test()
 {
