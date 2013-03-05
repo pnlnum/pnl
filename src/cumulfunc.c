@@ -417,30 +417,30 @@ static double algdiv(double *a, double *b)
   if (*a > *b) 
     {
       h = *b/ *a;
-      c = 1.0e0/(1.0e0+h);
-      x = h/(1.0e0+h);
+      c = 1./(1.+h);
+      x = h/(1.+h);
       d = *a+(*b-0.5e0);
     }
   else
     {
       h = *a/ *b;
-      c = h/(1.0e0+h);
-      x = 1.0e0/(1.0e0+h);
+      c = h/(1.+h);
+      x = 1./(1.+h);
       d = *b+(*a-0.5e0);
     }
   /*
      SET SN = (1 - X**N)/(1 - X)
      */
   x2 = x*x;
-  s3 = 1.0e0+(x+x2);
-  s5 = 1.0e0+(x+x2*s3);
-  s7 = 1.0e0+(x+x2*s5);
-  s9 = 1.0e0+(x+x2*s7);
-  s11 = 1.0e0+(x+x2*s9);
+  s3 = 1.+(x+x2);
+  s5 = 1.+(x+x2*s3);
+  s7 = 1.+(x+x2*s5);
+  s9 = 1.+(x+x2*s7);
+  s11 = 1.+(x+x2*s9);
   /*
      SET W = DEL(B) - DEL(A + B)
      */
-  t = pow(1.0e0/ *b,2.0);
+  t = pow(1./ *b,2.0);
   w = ((((c5*s11*t+c4*s9)*t+c3*s7)*t+c2*s5)*t+c1*s3)*t+c0;
   w *= (c/ *b);
   /*
@@ -448,7 +448,7 @@ static double algdiv(double *a, double *b)
      */
   T1 = *a/ *b;
   u = d*alnrel(&T1);
-  v = *a*(log(*b)-1.0e0);
+  v = *a*(log(*b)-1.);
   if (u > v) 
     {
       algdiv = w-v-u;
@@ -489,10 +489,10 @@ static double alnrel(double *a)
      */
   if (fabs(*a) <= 0.375e0) 
     {
-      t = *a/(*a+2.0e0);
+      t = *a/(*a+2.);
       t2 = t*t;
-      w = (((p3*t2+p2)*t2+p1)*t2+1.0e0)/(((q3*t2+q2)*t2+q1)*t2+1.0e0);
-      return 2.0e0*t*w;
+      w = (((p3*t2+p2)*t2+p1)*t2+1.)/(((q3*t2+q2)*t2+q1)*t2+1.);
+      return 2.*t*w;
     }
   else
     {
@@ -526,12 +526,12 @@ static double apser(double *a,double *b,double *x,double *eps)
     {
       c = log(bx)+g+t;
     }
-  tol = 5.0e0*(*eps)*fabs(c);
-  j = 1.0e0;
-  s = 0.0e0;
+  tol = 5.*(*eps)*fabs(c);
+  j = 1.;
+  s = 0.;
   do
     {
-      j += 1.0e0;
+      j += 1.;
       t *= (*x-bx/j);
       aj = t/j;
       s += aj;
@@ -571,55 +571,55 @@ static double basym(double *a,double *b,double *lambda,double *eps)
      ..
      .. Executable Statements ..
      */
-  basym_0 = 0.0e0;
+  basym_0 = 0.;
   if (*a < *b) 
     {
       h = *a/ *b;
-      r0 = 1.0e0/(1.0e0+h);
+      r0 = 1./(1.+h);
       r1 = (*b-*a)/ *b;
-      w0 = 1.0e0/sqrt(*a*(1.0e0+h));
+      w0 = 1./sqrt(*a*(1.+h));
     }
   else
     {
       h = *b/ *a;
-      r0 = 1.0e0/(1.0e0+h);
+      r0 = 1./(1.+h);
       r1 = (*b-*a)/ *a;
-      w0 = 1.0e0/sqrt(*b*(1.0e0+h));
+      w0 = 1./sqrt(*b*(1.+h));
     }
   T1 = -(*lambda/ *a);
   T2 = *lambda/ *b;
   f = *a*rlog1(&T1)+*b*rlog1(&T2);
   t = exp(-f);
-  if (t == 0.0e0) return basym_0;
+  if (t == 0.) return basym_0;
   z0 = sqrt(f);
   z = 0.5e0*(z0/e1);
   z2 = f+f;
-  a0[0] = 2.0e0/3.0e0*r1;
+  a0[0] = 2./3.*r1;
   c[0] = -(0.5e0*a0[0]);
   d[0] = -c[0];
   j0 = 0.5e0/e0*erfc1(&K3,&z0);
   j1 = e1;
   sum = j0+d[0]*w0*j1;
-  s = 1.0e0;
+  s = 1.;
   h2 = h*h;
-  hn = 1.0e0;
+  hn = 1.;
   w = w0;
   znm1 = z;
   zn = z2;
   for(n=2; n<=num; n+=2) 
     {
       hn = h2*hn;
-      a0[n-1] = 2.0e0*r0*(1.0e0+h*hn)/((double)n+2.0e0);
+      a0[n-1] = 2.*r0*(1.+h*hn)/((double)n+2.);
       np1 = n+1;
       s += hn;
-      a0[np1-1] = 2.0e0*r1*s/((double)n+3.0e0);
+      a0[np1-1] = 2.*r1*s/((double)n+3.);
       for(i=n; i<=np1; i++) 
         {
-          r = -(0.5e0*((double)i+1.0e0));
+          r = -(0.5e0*((double)i+1.));
           b0[0] = r*a0[0];
           for(m=2; m<=i; m++) 
             {
-              bsum = 0.0e0;
+              bsum = 0.;
               mm1 = m-1;
               for(j=1; j<=mm1; j++) 
                 {
@@ -628,8 +628,8 @@ static double basym(double *a,double *b,double *lambda,double *eps)
                 }
               b0[m-1] = r*a0[m-1]+bsum/(double)m;
             }
-          c[i-1] = b0[i-1]/((double)i+1.0e0);
-          dsum = 0.0e0;
+          c[i-1] = b0[i-1]/((double)i+1.);
+          dsum = 0.;
           im1 = i-1;
           for(j=1; j<=im1; j++) 
             {
@@ -638,7 +638,7 @@ static double basym(double *a,double *b,double *lambda,double *eps)
             }
           d[i-1] = -(dsum+c[i-1]);
         }
-      j0 = e1*znm1+((double)n-1.0e0)*j0;
+      j0 = e1*znm1+((double)n-1.)*j0;
       j1 = e1*zn+(double)n*j1;
       znm1 = z2*znm1;
       zn = z2*zn;
@@ -678,27 +678,27 @@ static double bcorr(double *a0,double *b0)
   a = fifdmin1(*a0,*b0);
   b = fifdmax1(*a0,*b0);
   h = a/b;
-  c = h/(1.0e0+h);
-  x = 1.0e0/(1.0e0+h);
+  c = h/(1.+h);
+  x = 1./(1.+h);
   x2 = x*x;
   /*
      SET SN = (1 - X**N)/(1 - X)
      */
-  s3 = 1.0e0+(x+x2);
-  s5 = 1.0e0+(x+x2*s3);
-  s7 = 1.0e0+(x+x2*s5);
-  s9 = 1.0e0+(x+x2*s7);
-  s11 = 1.0e0+(x+x2*s9);
+  s3 = 1.+(x+x2);
+  s5 = 1.+(x+x2*s3);
+  s7 = 1.+(x+x2*s5);
+  s9 = 1.+(x+x2*s7);
+  s11 = 1.+(x+x2*s9);
   /*
      SET W = DEL(B) - DEL(A + B)
      */
-  t = pow(1.0e0/b,2.0);
+  t = pow(1./b,2.0);
   w = ((((c5*s11*t+c4*s9)*t+c3*s7)*t+c2*s5)*t+c1*s3)*t+c0;
   w *= (c/b);
   /*
      COMPUTE  DEL(A) + W
      */
-  t = pow(1.0e0/a,2.0);
+  t = pow(1./a,2.0);
   return (((((c5*t+c4)*t+c3)*t+c2)*t+c1)*t+c0)/a+w;
 }
 
@@ -721,11 +721,11 @@ static double betaln(double *a0,double *b0)
      */
   a = fifdmin1(*a0,*b0);
   b = fifdmax1(*a0,*b0);
-  if (a >= 8.0e0) 
+  if (a >= 8.) 
     {
       w = bcorr(&a,&b);
       h = a/b;
-      c = h/(1.0e0+h);
+      c = h/(1.+h);
       u = -((a-0.5e0)*log(c));
       v = b*alnrel(&h);
       if (u <= v) 
@@ -733,9 +733,9 @@ static double betaln(double *a0,double *b0)
       else
         return -(0.5e0*log(b))+e+w-v-u;
     }
-  if (a < 1.0e0) 
+  if (a < 1.) 
     {
-      if (b < 8.0e0) 
+      if (b < 8.) 
         {
           T1 = a+b;
           return gamln(&a)+(gamln(&b)-gamln(&T1));
@@ -746,52 +746,52 @@ static double betaln(double *a0,double *b0)
         }
     }
 
-  if (a > 2.0e0) 
+  if (a > 2.) 
     {
       if (b > 1E3) 
         {
-          n = a-1.0e0;
-          w = 1.0e0;
+          n = a-1.;
+          w = 1.;
           for(i=1; i<=n; i++) 
             {
-              a -= 1.0e0;
-              w *= (a/(1.0e0+a/b));
+              a -= 1.;
+              w *= (a/(1.+a/b));
             }
           return log(w)-(double)n*log(b)+(gamln(&a)+algdiv(&a,&b));
         }
 
-      n = a-1.0e0;
-      w = 1.0e0;
+      n = a-1.;
+      w = 1.;
       for(i=1; i<=n; i++) 
         {
-          a -= 1.0e0;
+          a -= 1.;
           h = a/b;
-          w *= (h/(1.0e0+h));
+          w *= (h/(1.+h));
         }
       w = log(w);
-      if (b < 8.0e0)
+      if (b < 8.)
         {
-          n = b-1.0e0;
-          z = 1.0e0;
+          n = b-1.;
+          z = 1.;
           for(i=1; i<=n; i++) 
             {
-              b -= 1.0e0;
+              b -= 1.;
               z *= (b/(a+b));
             }
           return w+log(z)+(gamln(&a)+(gamln(&b)-gsumln(&a,&b)));
         }
       return w+gamln(&a)+algdiv(&a,&b);
     }
-  if (b > 2.0e0) 
+  if (b > 2.) 
     {
-      w = 0.0e0;
-      if (b < 8.0e0) 
+      w = 0.;
+      if (b < 8.) 
         {
-          n = b-1.0e0;
-          z = 1.0e0;
+          n = b-1.;
+          z = 1.;
           for(i=1; i<=n; i++)
             {
-              b -= 1.0e0;
+              b -= 1.;
               z *= (b/(a+b));
             }
           return w+log(z)+(gamln(&a)+(gamln(&b)-gsumln(&a,&b)));
@@ -815,16 +815,16 @@ static double bfrac(double *a,double *b,double *x,double *y,double *lambda, doub
      .. Executable Statements ..
      */
   bfrac_0 = brcomp(a,b,x,y);
-  if (bfrac_0 == 0.0e0) return bfrac_0;
-  c = 1.0e0+*lambda;
+  if (bfrac_0 == 0.) return bfrac_0;
+  c = 1.+*lambda;
   c0 = *b/ *a;
-  c1 = 1.0e0+1.0e0/ *a;
-  yp1 = *y+1.0e0;
-  n = 0.0e0;
-  p = 1.0e0;
-  s = *a+1.0e0;
-  an = 0.0e0;
-  bn = anp1 = 1.0e0;
+  c1 = 1.+1./ *a;
+  yp1 = *y+1.;
+  n = 0.;
+  p = 1.;
+  s = *a+1.;
+  an = 0.;
+  bn = anp1 = 1.;
   bnp1 = c/c1;
   r = c1/c;
   /*
@@ -832,15 +832,15 @@ static double bfrac(double *a,double *b,double *x,double *y,double *lambda, doub
    */
   while (1)
     {
-      n += 1.0e0;
+      n += 1.;
       t = n/ *a;
       w = n*(*b-n)**x;
       e = *a/s;
       alpha = p*(p+c0)*e*e*(w**x);
-      e = (1.0e0+t)/(c1+t+t);
+      e = (1.+t)/(c1+t+t);
       beta = n+w/s+e*(c+n*yp1);
-      p = 1.0e0+t;
-      s += 2.0e0;
+      p = 1.+t;
+      s += 2.;
       /*
        * UPDATE AN, BN, ANP1, AND BNP1
        */
@@ -864,7 +864,7 @@ static double bfrac(double *a,double *b,double *x,double *y,double *lambda, doub
       an /= bnp1;
       bn /= bnp1;
       anp1 = r;
-      bnp1 = 1.0e0;
+      bnp1 = 1.;
     }
 }
 
@@ -898,33 +898,33 @@ static void bgrat(double *a,double *b,double *x,double *y,double *w,
       lnx = alnrel(&T1);
     }
   z = -(nu*lnx);
-  if (*b*z == 0.0e0)  { *ierr = 1; return; }
+  if (*b*z == 0.)  { *ierr = 1; return; }
   /*
      COMPUTATION OF THE EXPANSION
      SET R = EXP(-Z)*Z**B/GAMMA(B)
      */
-  r = *b*(1.0e0+gam1(b))*exp(*b*log(z));
+  r = *b*(1.+gam1(b))*exp(*b*log(z));
   r *= (exp(*a*lnx)*exp(0.5e0*bm1*lnx));
   u = algdiv(b,a)+*b*log(nu);
   u = r*exp(-u);
-  if (u == 0.0e0) { *ierr = 1; return; }
+  if (u == 0.) { *ierr = 1; return; }
   grat1(b,&z,&r,&p,&q,eps);
-  v = 0.25e0*pow(1.0e0/nu,2.0);
+  v = 0.25e0*pow(1./nu,2.0);
   t2 = 0.25e0*lnx*lnx;
   l = *w/u;
   j = q/r;
   sum = j;
-  t = cn = 1.0e0;
-  n2 = 0.0e0;
+  t = cn = 1.;
+  n2 = 0.;
   for(n=1; n<=30; n++) 
     {
       bp2n = *b+n2;
-      j = (bp2n*(bp2n+1.0e0)*j+(z+bp2n+1.0e0)*t)*v;
-      n2 += 2.0e0;
+      j = (bp2n*(bp2n+1.)*j+(z+bp2n+1.)*t)*v;
+      n2 += 2.;
       t *= t2;
-      cn /= (n2*(n2+1.0e0));
+      cn /= (n2*(n2+1.));
       c[n-1] = cn;
-      s = 0.0e0;
+      s = 0.;
       if (n > 1) 
         {
           nm1 = n-1;
@@ -937,7 +937,7 @@ static void bgrat(double *a,double *b,double *x,double *y,double *w,
       d[n-1] = bm1*cn+s/(double)n;
       dj = d[n-1]*j;
       sum += dj;
-      if (sum <= 0.0e0)  { *ierr = 1; return; }
+      if (sum <= 0.)  { *ierr = 1; return; }
       if (fabs(dj) <= *eps*(sum+l))
         {
           *ierr = 0;
@@ -962,38 +962,38 @@ static double bpser(double *a,double *b,double *x,double *eps)
      ..
      .. Executable Statements ..
      */
-  bpser_0 = 0.0e0;
-  if (*x == 0.0e0) return bpser_0;
+  bpser_0 = 0.;
+  if (*x == 0.) return bpser_0;
   /*
      -----------------------------------------------------------------------
      COMPUTE THE FACTOR X**A/(A*BETA(A,B))
      -----------------------------------------------------------------------
      */
   a0 = fifdmin1(*a,*b);
-  if (a0 < 1.0e0) goto S10;
+  if (a0 < 1.) goto S10;
   z = *a*log(*x)-betaln(a,b);
   bpser_0 = exp(z)/ *a;
   goto S100;
 S10:
   b0 = fifdmax1(*a,*b);
-  if (b0 >= 8.0e0) goto S90;
-  if (b0 > 1.0e0) goto S40;
+  if (b0 >= 8.) goto S90;
+  if (b0 > 1.) goto S40;
   /*
      PROCEDURE FOR A0 .LT. 1 AND B0 .LE. 1
      */
   bpser_0 = pow(*x,*a);
-  if (bpser_0 == 0.0e0) return bpser_0;
+  if (bpser_0 == 0.) return bpser_0;
   apb = *a+*b;
-  if (apb > 1.0e0)
+  if (apb > 1.)
     {
       u = *a+*b-1.e0;
-      z = (1.0e0+gam1(&u))/apb;
+      z = (1.+gam1(&u))/apb;
     }
   else
     {
-      z = 1.0e0+gam1(&apb);
+      z = 1.+gam1(&apb);
     }
-  c = (1.0e0+gam1(a))*(1.0e0+gam1(b))/z;
+  c = (1.+gam1(a))*(1.+gam1(b))/z;
   bpser_0 *= (c*(*b/apb));
   goto S100;
 S40:
@@ -1001,29 +1001,29 @@ S40:
      PROCEDURE FOR A0 .LT. 1 AND 1 .LT. B0 .LT. 8
      */
   u = gamln1(&a0);
-  m = b0-1.0e0;
+  m = b0-1.;
   if (m >= 1) 
     {
-      c = 1.0e0;
+      c = 1.;
       for(i=1; i<=m; i++) {
-        b0 -= 1.0e0;
+        b0 -= 1.;
         c *= (b0/(a0+b0));
       }
       u = log(c)+u;
     }
   z = *a*log(*x)-u;
-  b0 -= 1.0e0;
+  b0 -= 1.;
   apb = a0+b0;
-  if (apb > 1.0e0)
+  if (apb > 1.)
     {
       u = a0+b0-1.e0;
-      t = (1.0e0+gam1(&u))/apb;
+      t = (1.+gam1(&u))/apb;
     }
   else
     {
-      t = 1.0e0+gam1(&apb);
+      t = 1.+gam1(&apb);
     }
-  bpser_0 = exp(z)*(a0/ *a)*(1.0e0+gam1(&b0))/t;
+  bpser_0 = exp(z)*(a0/ *a)*(1.+gam1(&b0))/t;
   goto S100;
 S90:
   /*
@@ -1033,24 +1033,24 @@ S90:
   z = *a*log(*x)-u;
   bpser_0 = a0/ *a*exp(z);
 S100:
-  if (bpser_0 == 0.0e0 || *a <= 0.1e0**eps) return bpser_0;
+  if (bpser_0 == 0. || *a <= 0.1e0**eps) return bpser_0;
   /*
      -----------------------------------------------------------------------
      COMPUTE THE SERIES
      -----------------------------------------------------------------------
      */
-  sum = n = 0.0e0;
-  c = 1.0e0;
+  sum = n = 0.;
+  c = 1.;
   tol = *eps/ *a;
   do
     {
-      n += 1.0e0;
+      n += 1.;
       c *= ((0.5e0+(0.5e0-*b/n))**x);
       w = c/(*a+n);
       sum += w;
     }
   while (fabs(w) > tol) ;
-  bpser_0 *= (1.0e0+*a*sum);
+  bpser_0 *= (1.+*a*sum);
   return bpser_0;
 }
 
@@ -1104,18 +1104,18 @@ static void bratio(double *a,double *b,double *x,double *y,double *w,
    FLOATING POINT NUMBER FOR WHICH 1.0 + EPS .GT. 1.0
    */
   eps = spmpar(&K1);
-  *w = *w1 = 0.0e0;
-  if (*a < 0.0e0 || *b < 0.0e0) goto S270;
-  if (*a == 0.0e0 && *b == 0.0e0) goto S280;
-  if (*x < 0.0e0 || *x > 1.0e0) goto S290;
-  if (*y < 0.0e0 || *y > 1.0e0) goto S300;
+  *w = *w1 = 0.;
+  if (*a < 0. || *b < 0.) goto S270;
+  if (*a == 0. && *b == 0.) goto S280;
+  if (*x < 0. || *x > 1.) goto S290;
+  if (*y < 0. || *y > 1.) goto S300;
   z = *x+*y-0.5e0-0.5e0;
-  if (fabs(z) > 3.0e0*eps) goto S310;
+  if (fabs(z) > 3.*eps) goto S310;
   *ierr = 0;
-  if (*x == 0.0e0) goto S210;
-  if (*y == 0.0e0) goto S230;
-  if (*a == 0.0e0) goto S240;
-  if (*b == 0.0e0) goto S220;
+  if (*x == 0.) goto S210;
+  if (*y == 0.) goto S230;
+  if (*a == 0.) goto S240;
+  if (*b == 0.) goto S220;
   eps = fifdmax1(eps,1.e-15);
   if (fifdmax1(*a,*b) < 1.e-3*eps) goto S260;
   ind = 0;
@@ -1123,7 +1123,7 @@ static void bratio(double *a,double *b,double *x,double *y,double *w,
   b0 = *b;
   x0 = *x;
   y0 = *y;
-  if (fifdmin1(a0,b0) > 1.0e0) goto S40;
+  if (fifdmin1(a0,b0) > 1.) goto S40;
   /*
      PROCEDURE FOR A0 .LE. 1 OR B0 .LE. 1
      */
@@ -1135,20 +1135,20 @@ static void bratio(double *a,double *b,double *x,double *y,double *w,
   y0 = *x;
 S10:
   if (b0 < fifdmin1(eps,eps*a0)) goto S90;
-  if (a0 < fifdmin1(eps,eps*b0) && b0*x0 <= 1.0e0) goto S100;
-  if (fifdmax1(a0,b0) > 1.0e0) goto S20;
+  if (a0 < fifdmin1(eps,eps*b0) && b0*x0 <= 1.) goto S100;
+  if (fifdmax1(a0,b0) > 1.) goto S20;
   if (a0 >= fifdmin1(0.2e0,b0)) goto S110;
   if (pow(x0,a0) <= 0.9e0) goto S110;
   if (x0 >= 0.3e0) goto S120;
   n = 20;
   goto S140;
 S20:
-  if (b0 <= 1.0e0) goto S110;
+  if (b0 <= 1.) goto S110;
   if (x0 >= 0.3e0) goto S120;
   if (x0 >= 0.1e0) goto S30;
   if (pow(x0*b0,a0) <= 0.7e0) goto S110;
 S30:
-  if (b0 > 15.0e0) goto S150;
+  if (b0 > 15.) goto S150;
   n = 20;
   goto S140;
 S40:
@@ -1161,7 +1161,7 @@ S40:
 S50:
   lambda = (*a+*b)**y-*b;
 S60:
-  if (lambda >= 0.0e0) goto S70;
+  if (lambda >= 0.) goto S70;
   ind = 1;
   a0 = *b;
   b0 = *a;
@@ -1169,14 +1169,14 @@ S60:
   y0 = *x;
   lambda = fabs(lambda);
 S70:
-  if (b0 < 40.0e0 && b0*x0 <= 0.7e0) goto S110;
-  if (b0 < 40.0e0) goto S160;
+  if (b0 < 40. && b0*x0 <= 0.7e0) goto S110;
+  if (b0 < 40.) goto S160;
   if (a0 > b0) goto S80;
-  if (a0 <= 100.0e0) goto S130;
+  if (a0 <= 100.) goto S130;
   if (lambda > 0.03e0*a0) goto S130;
   goto S200;
 S80:
-  if (b0 <= 100.0e0) goto S130;
+  if (b0 <= 100.) goto S130;
   if (lambda > 0.03e0*b0) goto S130;
   goto S200;
 S90:
@@ -1199,7 +1199,7 @@ S120:
   *w = 0.5e0+(0.5e0-*w1);
   goto S250;
 S130:
-  T2 = 15.0e0*eps;
+  T2 = 15.*eps;
   *w = bfrac(&a0,&b0,&x0,&y0,&lambda,&T2);
   *w1 = 0.5e0+(0.5e0-*w);
   goto S250;
@@ -1207,16 +1207,16 @@ S140:
   *w1 = bup(&b0,&a0,&y0,&x0,&n,&eps);
   b0 += (double)n;
 S150:
-  T3 = 15.0e0*eps;
+  T3 = 15.*eps;
   bgrat(&b0,&a0,&y0,&x0,w1,&T3,&ierr1);
   *w = 0.5e0+(0.5e0-*w1);
   goto S250;
 S160:
   n = b0;
   b0 -= (double)n;
-  if (b0 != 0.0e0) goto S170;
+  if (b0 != 0.) goto S170;
   n -= 1;
-  b0 = 1.0e0;
+  b0 = 1.;
 S170:
   *w = bup(&b0,&a0,&y0,&x0,&n,&eps);
   if (x0 > 0.7e0) goto S180;
@@ -1224,17 +1224,17 @@ S170:
   *w1 = 0.5e0+(0.5e0-*w);
   goto S250;
 S180:
-  if (a0 > 15.0e0) goto S190;
+  if (a0 > 15.) goto S190;
   n = 20;
   *w += bup(&a0,&b0,&x0,&y0,&n,&eps);
   a0 += (double)n;
 S190:
-  T4 = 15.0e0*eps;
+  T4 = 15.*eps;
   bgrat(&a0,&b0,&x0,&y0,w,&T4,&ierr1);
   *w1 = 0.5e0+(0.5e0-*w);
   goto S250;
 S200:
-  T5 = 100.0e0*eps;
+  T5 = 100.*eps;
   *w = basym(&a0,&b0,&lambda,&T5);
   *w1 = 0.5e0+(0.5e0-*w);
   goto S250;
@@ -1242,16 +1242,16 @@ S210:
   /*
      TERMINATION OF THE PROCEDURE
      */
-  if (*a == 0.0e0) goto S320;
+  if (*a == 0.) goto S320;
 S220:
-  *w = 0.0e0;
-  *w1 = 1.0e0;
+  *w = 0.;
+  *w1 = 1.;
   return;
 S230:
-  if (*b == 0.0e0) goto S330;
+  if (*b == 0.) goto S330;
 S240:
-  *w = 1.0e0;
-  *w1 = 0.0e0;
+  *w = 1.;
+  *w1 = 0.;
   return;
 S250:
   if (ind == 0) return;
@@ -1313,7 +1313,7 @@ static double brcmp1(int *mu,double *a,double *b,double *x,double *y)
      .. Executable Statements ..
      */
   a0 = fifdmin1(*a,*b);
-  if (a0 >= 8.0e0) goto S130;
+  if (a0 >= 8.) goto S130;
   if (*x > 0.375e0) goto S10;
   lnx = log(*x);
   T1 = -*x;
@@ -1330,7 +1330,7 @@ S20:
   lny = log(*y);
 S30:
   z = *a*lnx+*b*lny;
-  if (a0 < 1.0e0) goto S40;
+  if (a0 < 1.) goto S40;
   z -= betaln(a,b);
   return esum(mu,&z);
 S40:
@@ -1340,49 +1340,49 @@ S40:
      -----------------------------------------------------------------------
      */
   b0 = fifdmax1(*a,*b);
-  if (b0 >= 8.0e0) goto S120;
-  if (b0 > 1.0e0) goto S70;
+  if (b0 >= 8.) goto S120;
+  if (b0 > 1.) goto S70;
   /*
      ALGORITHM FOR B0 .LE. 1
      */
   brcmp_0 = esum(mu,&z);
-  if (brcmp_0 == 0.0e0) return brcmp_0;
+  if (brcmp_0 == 0.) return brcmp_0;
   apb = *a+*b;
-  if (apb > 1.0e0) goto S50;
-  z = 1.0e0+gam1(&apb);
+  if (apb > 1.) goto S50;
+  z = 1.+gam1(&apb);
   goto S60;
 S50:
   u = *a+*b-1.e0;
-  z = (1.0e0+gam1(&u))/apb;
+  z = (1.+gam1(&u))/apb;
 S60:
-  c = (1.0e0+gam1(a))*(1.0e0+gam1(b))/z;
-  brcmp_0 = brcmp_0*(a0*c)/(1.0e0+a0/b0);
+  c = (1.+gam1(a))*(1.+gam1(b))/z;
+  brcmp_0 = brcmp_0*(a0*c)/(1.+a0/b0);
   return brcmp_0;
 S70:
   /*
      ALGORITHM FOR 1 .LT. B0 .LT. 8
      */
   u = gamln1(&a0);
-  n = b0-1.0e0;
+  n = b0-1.;
   if (n < 1) goto S90;
-  c = 1.0e0;
+  c = 1.;
   for(i=1; i<=n; i++) {
-    b0 -= 1.0e0;
+    b0 -= 1.;
     c *= (b0/(a0+b0));
   }
   u = log(c)+u;
 S90:
   z -= u;
-  b0 -= 1.0e0;
+  b0 -= 1.;
   apb = a0+b0;
-  if (apb > 1.0e0) goto S100;
-  t = 1.0e0+gam1(&apb);
+  if (apb > 1.) goto S100;
+  t = 1.+gam1(&apb);
   goto S110;
 S100:
   u = a0+b0-1.e0;
-  t = (1.0e0+gam1(&u))/apb;
+  t = (1.+gam1(&u))/apb;
 S110:
-  brcmp_0 = a0*esum(mu,&z)*(1.0e0+gam1(&b0))/t;
+  brcmp_0 = a0*esum(mu,&z)*(1.+gam1(&b0))/t;
   return brcmp_0;
 S120:
   /*
@@ -1399,14 +1399,14 @@ S130:
      */
   if (*a > *b) goto S140;
   h = *a/ *b;
-  x0 = h/(1.0e0+h);
-  y0 = 1.0e0/(1.0e0+h);
+  x0 = h/(1.+h);
+  y0 = 1./(1.+h);
   lambda = *a-(*a+*b)**x;
   goto S150;
 S140:
   h = *b/ *a;
-  x0 = 1.0e0/(1.0e0+h);
-  y0 = h/(1.0e0+h);
+  x0 = 1./(1.+h);
+  y0 = h/(1.+h);
   lambda = (*a+*b)**y-*b;
 S150:
   e = -(lambda/ *a);
@@ -1449,10 +1449,10 @@ static double brcomp(double *a,double *b,double *x,double *y)
      ..
      .. Executable Statements ..
      */
-  brcomp_0 = 0.0e0;
-  if (*x == 0.0e0 || *y == 0.0e0) return brcomp_0;
+  brcomp_0 = 0.;
+  if (*x == 0. || *y == 0.) return brcomp_0;
   a0 = fifdmin1(*a,*b);
-  if (a0 >= 8.0e0) goto S130;
+  if (a0 >= 8.) goto S130;
   if (*x > 0.375e0) goto S10;
   lnx = log(*x);
   T1 = -*x;
@@ -1469,7 +1469,7 @@ S20:
   lny = log(*y);
 S30:
   z = *a*lnx+*b*lny;
-  if (a0 < 1.0e0) goto S40;
+  if (a0 < 1.) goto S40;
   z -= betaln(a,b);
   return exp(z);
 S40:
@@ -1479,49 +1479,49 @@ S40:
      -----------------------------------------------------------------------
      */
   b0 = fifdmax1(*a,*b);
-  if (b0 >= 8.0e0) goto S120;
-  if (b0 > 1.0e0) goto S70;
+  if (b0 >= 8.) goto S120;
+  if (b0 > 1.) goto S70;
   /*
      ALGORITHM FOR B0 .LE. 1
      */
   brcomp_0 = exp(z);
-  if (brcomp_0 == 0.0e0) return brcomp_0;
+  if (brcomp_0 == 0.) return brcomp_0;
   apb = *a+*b;
-  if (apb > 1.0e0) goto S50;
-  z = 1.0e0+gam1(&apb);
+  if (apb > 1.) goto S50;
+  z = 1.+gam1(&apb);
   goto S60;
 S50:
   u = *a+*b-1.e0;
-  z = (1.0e0+gam1(&u))/apb;
+  z = (1.+gam1(&u))/apb;
 S60:
-  c = (1.0e0+gam1(a))*(1.0e0+gam1(b))/z;
-  brcomp_0 = brcomp_0*(a0*c)/(1.0e0+a0/b0);
+  c = (1.+gam1(a))*(1.+gam1(b))/z;
+  brcomp_0 = brcomp_0*(a0*c)/(1.+a0/b0);
   return brcomp_0;
 S70:
   /*
      ALGORITHM FOR 1 .LT. B0 .LT. 8
      */
   u = gamln1(&a0);
-  n = b0-1.0e0;
+  n = b0-1.;
   if (n < 1) goto S90;
-  c = 1.0e0;
+  c = 1.;
   for(i=1; i<=n; i++) {
-    b0 -= 1.0e0;
+    b0 -= 1.;
     c *= (b0/(a0+b0));
   }
   u = log(c)+u;
 S90:
   z -= u;
-  b0 -= 1.0e0;
+  b0 -= 1.;
   apb = a0+b0;
-  if (apb > 1.0e0) goto S100;
-  t = 1.0e0+gam1(&apb);
+  if (apb > 1.) goto S100;
+  t = 1.+gam1(&apb);
   goto S110;
 S100:
   u = a0+b0-1.e0;
-  t = (1.0e0+gam1(&u))/apb;
+  t = (1.+gam1(&u))/apb;
 S110:
-  return a0*exp(z)*(1.0e0+gam1(&b0))/t;
+  return a0*exp(z)*(1.+gam1(&b0))/t;
 S120:
   /*
      ALGORITHM FOR B0 .GE. 8
@@ -1536,14 +1536,14 @@ S130:
      */
   if (*a > *b) goto S140;
   h = *a/ *b;
-  x0 = h/(1.0e0+h);
-  y0 = 1.0e0/(1.0e0+h);
+  x0 = h/(1.+h);
+  y0 = 1./(1.+h);
   lambda = *a-(*a+*b)**x;
   goto S150;
 S140:
   h = *b/ *a;
-  x0 = 1.0e0/(1.0e0+h);
-  y0 = h/(1.0e0+h);
+  x0 = 1./(1.+h);
+  y0 = h/(1.+h);
   lambda = (*a+*b)**y-*b;
 S150:
   e = -(lambda/ *a);
@@ -1585,10 +1585,10 @@ static double bup(double *a,double *b,double *x,double *y,int *n,double *eps)
      EXP(MU)*(X**A*Y**B/BETA(A,B))/A
      */
   apb = *a+*b;
-  ap1 = *a+1.0e0;
+  ap1 = *a+1.;
   mu = 0;
-  d = 1.0e0;
-  if (*n == 1 || *a < 1.0e0) goto S10;
+  d = 1.;
+  if (*n == 1 || *a < 1.) goto S10;
   if (apb < 1.1e0*ap1) goto S10;
   mu = fabs(exparg(&K1));
   k = exparg(&K2);
@@ -1597,20 +1597,20 @@ static double bup(double *a,double *b,double *x,double *y,int *n,double *eps)
   d = exp(-t);
 S10:
   bup_0 = brcmp1(&mu,a,b,x,y)/ *a;
-  if (*n == 1 || bup_0 == 0.0e0) return bup_0;
+  if (*n == 1 || bup_0 == 0.) return bup_0;
   nm1 = *n-1;
   w = d;
   /*
      LET K BE THE INDEX OF THE MAXIMUM TERM
      */
   k = 0;
-  if (*b <= 1.0e0) goto S50;
+  if (*b <= 1.) goto S50;
   if (*y > 1.e-4) goto S20;
   k = nm1;
   goto S30;
 S20:
-  r = (*b-1.0e0)**x/ *y-*a;
-  if (r < 1.0e0) goto S50;
+  r = (*b-1.)**x/ *y-*a;
+  if (r < 1.) goto S50;
   k = t = nm1;
   if (r < t) k = r;
 S30:
@@ -1774,16 +1774,16 @@ S70:
 void pnl_cdf_bet(int *which,double *p,double *q,double *x,double *y,
                  double *a,double *b,int *status,double *bound)
 {
-#define tol (1.0e-8)
-#define atol (1.0e-50)
-#define zero (1.0e-300)
-#define inf 1.0e300
-#define one 1.0e0
+const double tol = 1.0e-8;
+const double atol = 1.0e-50;
+const double zero = 1.0e-300;
+const double inf = 1.0e300;
+const double one = 1.;
   int K1 = 1;
-  double K2 = 0.0e0;
-  double K3 = 1.0e0;
+  double K2 = 0.;
+  double K3 = 1.;
   double K8 = 0.5e0;
-  double K9 = 5.0e0;
+  double K9 = 5.;
   double fx,xhi,xlo,cum,ccum,xy,pq;
   unsigned long qhi,qleft,qporq;
   double T4,T5,T6,T7,T10,T11,T12,T13,T14,T15;
@@ -1801,12 +1801,12 @@ void pnl_cdf_bet(int *which,double *p,double *q,double *x,double *y,
   /*
      P
      */
-  if (!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
-  if (!(*p < 0.0e0)) goto S40;
-  *bound = 0.0e0;
+  if (!(*p < 0. || *p > 1.)) goto S60;
+  if (!(*p < 0.)) goto S40;
+  *bound = 0.;
   goto S50;
 S40:
-  *bound = 1.0e0;
+  *bound = 1.;
 S50:
   *status = -2;
   return;
@@ -1816,12 +1816,12 @@ S60:
   /*
      Q
      */
-  if (!(*q < 0.0e0 || *q > 1.0e0)) goto S100;
-  if (!(*q < 0.0e0)) goto S80;
-  *bound = 0.0e0;
+  if (!(*q < 0. || *q > 1.)) goto S100;
+  if (!(*q < 0.)) goto S80;
+  *bound = 0.;
   goto S90;
 S80:
-  *bound = 1.0e0;
+  *bound = 1.;
 S90:
   *status = -3;
   return;
@@ -1831,12 +1831,12 @@ S100:
   /*
      X
      */
-  if (!(*x < 0.0e0 || *x > 1.0e0)) goto S140;
-  if (!(*x < 0.0e0)) goto S120;
-  *bound = 0.0e0;
+  if (!(*x < 0. || *x > 1.)) goto S140;
+  if (!(*x < 0.)) goto S120;
+  *bound = 0.;
   goto S130;
 S120:
-  *bound = 1.0e0;
+  *bound = 1.;
 S130:
   *status = -4;
   return;
@@ -1846,12 +1846,12 @@ S140:
   /*
      Y
      */
-  if (!(*y < 0.0e0 || *y > 1.0e0)) goto S180;
-  if (!(*y < 0.0e0)) goto S160;
-  *bound = 0.0e0;
+  if (!(*y < 0. || *y > 1.)) goto S180;
+  if (!(*y < 0.)) goto S160;
+  *bound = 0.;
   goto S170;
 S160:
-  *bound = 1.0e0;
+  *bound = 1.;
 S170:
   *status = -5;
   return;
@@ -1861,8 +1861,8 @@ S180:
   /*
      A
      */
-  if (!(*a <= 0.0e0)) goto S200;
-  *bound = 0.0e0;
+  if (!(*a <= 0.)) goto S200;
+  *bound = 0.;
   *status = -6;
   return;
 S210:
@@ -1871,8 +1871,8 @@ S200:
   /*
      B
      */
-  if (!(*b <= 0.0e0)) goto S220;
-  *bound = 0.0e0;
+  if (!(*b <= 0.)) goto S220;
+  *bound = 0.;
   *status = -7;
   return;
 S230:
@@ -1882,12 +1882,12 @@ S220:
      P + Q
      */
   pq = *p+*q;
-  if (!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S260;
-  if (!(pq < 0.0e0)) goto S240;
-  *bound = 0.0e0;
+  if (!(fabs(pq-0.5e0-0.5e0) > 3.*spmpar(&K1))) goto S260;
+  if (!(pq < 0.)) goto S240;
+  *bound = 0.;
   goto S250;
 S240:
-  *bound = 1.0e0;
+  *bound = 1.;
 S250:
   *status = 3;
   return;
@@ -1898,12 +1898,12 @@ S260:
      X + Y
      */
   xy = *x+*y;
-  if (!(fabs(xy-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S300;
-  if (!(xy < 0.0e0)) goto S280;
-  *bound = 0.0e0;
+  if (!(fabs(xy-0.5e0-0.5e0) > 3.*spmpar(&K1))) goto S300;
+  if (!(xy < 0.)) goto S280;
+  *bound = 0.;
   goto S290;
 S280:
-  *bound = 1.0e0;
+  *bound = 1.;
 S290:
   *status = 4;
   return;
@@ -1957,11 +1957,11 @@ S360:
     if (!(*status == -1)) goto S400;
     if (!qleft) goto S380;
     *status = 1;
-    *bound = 0.0e0;
+    *bound = 0.;
     goto S390;
 S380:
     *status = 2;
-    *bound = 1.0e0;
+    *bound = 1.;
 S400:
 S390:
     ;
@@ -1970,7 +1970,7 @@ S390:
     /*
        Computing A
        */
-    *a = 5.0e0;
+    *a = 5.;
     T6 = zero;
     T7 = inf;
     T10 = atol;
@@ -2006,7 +2006,7 @@ S460:
     /*
        Computing B
        */
-    *b = 5.0e0;
+    *b = 5.;
     T12 = zero;
     T13 = inf;
     T14 = atol;
@@ -2039,11 +2039,6 @@ S530:
   }
 S540:
   return;
-#undef tol
-#undef atol
-#undef zero
-#undef inf
-#undef one
 }
 
 
@@ -2173,16 +2168,16 @@ S540:
 void pnl_cdf_bin(int *which,double *p,double *q,double *s,double *xn,
                  double *pr,double *ompr,int *status,double *bound)
 {
-#define atol (1.0e-50)
-#define tol (1.0e-8)
-#define zero (1.0e-300)
-#define inf 1.0e300
-#define one 1.0e0
+const double atol = 1.0e-50;
+const double tol = 1.0e-8;
+const double zero = 1.0e-300;
+const double inf = 1.0e300;
+const double one = 1.;
   int K1 = 1;
-  double K2 = 0.0e0;
+  double K2 = 0.;
   double K3 = 0.5e0;
-  double K4 = 5.0e0;
-  double K11 = 1.0e0;
+  double K4 = 5.;
+  double K11 = 1.;
   double fx,xhi,xlo,cum,ccum,pq,prompr;
   unsigned long qhi,qleft,qporq;
   double T5,T6,T7,T8,T9,T10,T12,T13;
@@ -2200,12 +2195,12 @@ void pnl_cdf_bin(int *which,double *p,double *q,double *s,double *xn,
   /*
      P
      */
-  if (!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
-  if (!(*p < 0.0e0)) goto S40;
-  *bound = 0.0e0;
+  if (!(*p < 0. || *p > 1.)) goto S60;
+  if (!(*p < 0.)) goto S40;
+  *bound = 0.;
   goto S50;
 S40:
-  *bound = 1.0e0;
+  *bound = 1.;
 S50:
   *status = -2;
   return;
@@ -2215,12 +2210,12 @@ S60:
   /*
      Q
      */
-  if (!(*q < 0.0e0 || *q > 1.0e0)) goto S100;
-  if (!(*q < 0.0e0)) goto S80;
-  *bound = 0.0e0;
+  if (!(*q < 0. || *q > 1.)) goto S100;
+  if (!(*q < 0.)) goto S80;
+  *bound = 0.;
   goto S90;
 S80:
-  *bound = 1.0e0;
+  *bound = 1.;
 S90:
   *status = -3;
   return;
@@ -2230,8 +2225,8 @@ S100:
   /*
      XN
      */
-  if (!(*xn <= 0.0e0)) goto S120;
-  *bound = 0.0e0;
+  if (!(*xn <= 0.)) goto S120;
+  *bound = 0.;
   *status = -5;
   return;
 S130:
@@ -2240,9 +2235,9 @@ S120:
   /*
      S
      */
-  if (!(*s < 0.0e0 || (*which != 3 && *s > *xn))) goto S160;
-  if (!(*s < 0.0e0)) goto S140;
-  *bound = 0.0e0;
+  if (!(*s < 0. || (*which != 3 && *s > *xn))) goto S160;
+  if (!(*s < 0.)) goto S140;
+  *bound = 0.;
   goto S150;
 S140:
   *bound = *xn;
@@ -2255,12 +2250,12 @@ S160:
   /*
      PR
      */
-  if (!(*pr < 0.0e0 || *pr > 1.0e0)) goto S200;
-  if (!(*pr < 0.0e0)) goto S180;
-  *bound = 0.0e0;
+  if (!(*pr < 0. || *pr > 1.)) goto S200;
+  if (!(*pr < 0.)) goto S180;
+  *bound = 0.;
   goto S190;
 S180:
-  *bound = 1.0e0;
+  *bound = 1.;
 S190:
   *status = -6;
   return;
@@ -2270,12 +2265,12 @@ S200:
   /*
      OMPR
      */
-  if (!(*ompr < 0.0e0 || *ompr > 1.0e0)) goto S240;
-  if (!(*ompr < 0.0e0)) goto S220;
-  *bound = 0.0e0;
+  if (!(*ompr < 0. || *ompr > 1.)) goto S240;
+  if (!(*ompr < 0.)) goto S220;
+  *bound = 0.;
   goto S230;
 S220:
-  *bound = 1.0e0;
+  *bound = 1.;
 S230:
   *status = -7;
   return;
@@ -2286,12 +2281,12 @@ S240:
      P + Q
      */
   pq = *p+*q;
-  if (!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S280;
-  if (!(pq < 0.0e0)) goto S260;
-  *bound = 0.0e0;
+  if (!(fabs(pq-0.5e0-0.5e0) > 3.*spmpar(&K1))) goto S280;
+  if (!(pq < 0.)) goto S260;
+  *bound = 0.;
   goto S270;
 S260:
-  *bound = 1.0e0;
+  *bound = 1.;
 S270:
   *status = 3;
   return;
@@ -2302,12 +2297,12 @@ S280:
      PR + OMPR
      */
   prompr = *pr+*ompr;
-  if (!(fabs(prompr-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S320;
-  if (!(prompr < 0.0e0)) goto S300;
-  *bound = 0.0e0;
+  if (!(fabs(prompr-0.5e0-0.5e0) > 3.*spmpar(&K1))) goto S320;
+  if (!(prompr < 0.)) goto S300;
+  *bound = 0.;
   goto S310;
 S300:
-  *bound = 1.0e0;
+  *bound = 1.;
 S310:
   *status = 4;
   return;
@@ -2329,7 +2324,7 @@ S320:
     /*
        Calculating S
        */
-    *s = 5.0e0;
+    *s = 5.;
     T5 = atol;
     T6 = tol;
     dstinv(&K2,xn,&K3,&K3,&K4,&T5,&T6);
@@ -2350,7 +2345,7 @@ S370:
     if (!(*status == -1)) goto S400;
     if (!qleft) goto S380;
     *status = 1;
-    *bound = 0.0e0;
+    *bound = 0.;
     goto S390;
 S380:
     *status = 2;
@@ -2363,7 +2358,7 @@ S390:
     /*
        Calculating XN
        */
-    *xn = 5.0e0;
+    *xn = 5.;
     T7 = zero;
     T8 = inf;
     T9 = atol;
@@ -2431,21 +2426,16 @@ S520:
     if (!(*status == -1)) goto S560;
     if (!qleft) goto S540;
     *status = 1;
-    *bound = 0.0e0;
+    *bound = 0.;
     goto S550;
 S540:
     *status = 2;
-    *bound = 1.0e0;
+    *bound = 1.;
 S550:
     ;
   }
 S560:
   return;
-#undef atol
-#undef tol
-#undef zero
-#undef inf
-#undef one
 }
 
 /**
@@ -2563,14 +2553,14 @@ S560:
 void pnl_cdf_chi(int *which,double *p,double *q,double *x,double *df,
                  int *status,double *bound)
 {
-#define tol (1.0e-8)
-#define atol (1.0e-50)
-#define zero (1.0e-300)
-#define inf 1.0e300
+const double tol = 1.0e-8;
+const double atol = 1.0e-50;
+const double zero = 1.0e-300;
+const double inf = 1.0e300;
   int K1 = 1;
-  double K2 = 0.0e0;
+  double K2 = 0.;
   double K4 = 0.5e0;
-  double K5 = 5.0e0;
+  double K5 = 5.;
   double fx,cum,ccum,pq,porq;
   unsigned long qhi,qleft,qporq;
   double T3,T6,T7,T8,T9,T10,T11;
@@ -2588,12 +2578,12 @@ void pnl_cdf_chi(int *which,double *p,double *q,double *x,double *df,
   /*
      P
      */
-  if (!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
-  if (!(*p < 0.0e0)) goto S40;
-  *bound = 0.0e0;
+  if (!(*p < 0. || *p > 1.)) goto S60;
+  if (!(*p < 0.)) goto S40;
+  *bound = 0.;
   goto S50;
 S40:
-  *bound = 1.0e0;
+  *bound = 1.;
 S50:
   *status = -2;
   return;
@@ -2603,12 +2593,12 @@ S60:
   /*
      Q
      */
-  if (!(*q <= 0.0e0 || *q > 1.0e0)) goto S100;
-  if (!(*q <= 0.0e0)) goto S80;
-  *bound = 0.0e0;
+  if (!(*q <= 0. || *q > 1.)) goto S100;
+  if (!(*q <= 0.)) goto S80;
+  *bound = 0.;
   goto S90;
 S80:
-  *bound = 1.0e0;
+  *bound = 1.;
 S90:
   *status = -3;
   return;
@@ -2618,8 +2608,8 @@ S100:
   /*
      X
      */
-  if (!(*x < 0.0e0)) goto S120;
-  *bound = 0.0e0;
+  if (!(*x < 0.)) goto S120;
+  *bound = 0.;
   *status = -4;
   return;
 S130:
@@ -2628,8 +2618,8 @@ S120:
   /*
      DF
      */
-  if (!(*df <= 0.0e0)) goto S140;
-  *bound = 0.0e0;
+  if (!(*df <= 0.)) goto S140;
+  *bound = 0.;
   *status = -5;
   return;
 S150:
@@ -2639,12 +2629,12 @@ S140:
      P + Q
      */
   pq = *p+*q;
-  if (!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S180;
-  if (!(pq < 0.0e0)) goto S160;
-  *bound = 0.0e0;
+  if (!(fabs(pq-0.5e0-0.5e0) > 3.*spmpar(&K1))) goto S180;
+  if (!(pq < 0.)) goto S160;
+  *bound = 0.;
   goto S170;
 S160:
-  *bound = 1.0e0;
+  *bound = 1.;
 S170:
   *status = 3;
   return;
@@ -2680,7 +2670,7 @@ S210:
     /*
        Calculating X
        */
-    *x = 5.0e0;
+    *x = 5.;
     T3 = inf;
     T6 = atol;
     T7 = tol;
@@ -2706,7 +2696,7 @@ S270:
     if (!(*status == -1)) goto S300;
     if (!qleft) goto S280;
     *status = 1;
-    *bound = 0.0e0;
+    *bound = 0.;
     goto S290;
 S280:
     *status = 2;
@@ -2719,7 +2709,7 @@ S290:
     /*
        Calculating DF
        */
-    *df = 5.0e0;
+    *df = 5.;
     T8 = zero;
     T9 = inf;
     T10 = atol;
@@ -2756,10 +2746,6 @@ S370:
   }
 S380:
   return;
-#undef tol
-#undef atol
-#undef zero
-#undef inf
 }
 
 /**
@@ -2889,15 +2875,15 @@ S380:
 void pnl_cdf_chn(int *which,double *p,double *q,double *x,double *df,
                  double *pnonc,int *status,double *bound)
 {
-#define tent4 1.0e4
-#define tol (1.0e-8)
-#define atol (1.0e-50)
-#define zero (1.0e-300)
-#define one (1.0e0-1.0e-16)
-#define inf 1.0e300
-  double K1 = 0.0e0;
+const double tent4 = 1.0e4;
+const double tol = 1.0e-8;
+const double atol = 1.0e-50;
+const double zero = 1.0e-300;
+const double one = 1.-1.0e-16;
+const double inf = 1.0e300;
+  double K1 = 0.;
   double K3 = 0.5e0;
-  double K4 = 5.0e0;
+  double K4 = 5.;
   double fx,cum,ccum;
   unsigned long qhi,qleft;
   double T2,T5,T6,T7,T8,T9,T10,T11,T12,T13;
@@ -2915,9 +2901,9 @@ void pnl_cdf_chn(int *which,double *p,double *q,double *x,double *df,
   /*
      P
      */
-  if (!(*p < 0.0e0 || *p > one)) goto S60;
-  if (!(*p < 0.0e0)) goto S40;
-  *bound = 0.0e0;
+  if (!(*p < 0. || *p > one)) goto S60;
+  if (!(*p < 0.)) goto S40;
+  *bound = 0.;
   goto S50;
 S40:
   *bound = one;
@@ -2930,8 +2916,8 @@ S60:
   /*
      X
      */
-  if (!(*x < 0.0e0)) goto S80;
-  *bound = 0.0e0;
+  if (!(*x < 0.)) goto S80;
+  *bound = 0.;
   *status = -4;
   return;
 S90:
@@ -2940,8 +2926,8 @@ S80:
   /*
      DF
      */
-  if (!(*df <= 0.0e0)) goto S100;
-  *bound = 0.0e0;
+  if (!(*df <= 0.)) goto S100;
+  *bound = 0.;
   *status = -5;
   return;
 S110:
@@ -2950,8 +2936,8 @@ S100:
   /*
      PNONC
      */
-  if (!(*pnonc < 0.0e0)) goto S120;
-  *bound = 0.0e0;
+  if (!(*pnonc < 0.)) goto S120;
+  *bound = 0.;
   *status = -6;
   return;
 S130:
@@ -2970,7 +2956,7 @@ S120:
     /*
        Calculating X
        */
-    *x = 5.0e0;
+    *x = 5.;
     T2 = inf;
     T5 = atol;
     T6 = tol;
@@ -2987,7 +2973,7 @@ S150:
     if (!(*status == -1)) goto S180;
     if (!qleft) goto S160;
     *status = 1;
-    *bound = 0.0e0;
+    *bound = 0.;
     goto S170;
 S160:
     *status = 2;
@@ -3000,7 +2986,7 @@ S170:
     /*
        Calculating DF
        */
-    *df = 5.0e0;
+    *df = 5.;
     T7 = zero;
     T8 = inf;
     T9 = atol;
@@ -3031,7 +3017,7 @@ S220:
     /*
        Calculating PNONC
        */
-    *pnonc = 5.0e0;
+    *pnonc = 5.;
     T11 = tent4;
     T12 = atol;
     T13 = tol;
@@ -3058,12 +3044,6 @@ S270:
   }
 S280:
   return;
-#undef tent4
-#undef tol
-#undef atol
-#undef zero
-#undef one
-#undef inf
 }
 
 
@@ -3188,14 +3168,14 @@ S280:
 void pnl_cdf_f(int *which,double *p,double *q,double *f,double *dfn,
                double *dfd,int *status,double *bound)
 {
-#define tol (1.0e-8)
-#define atol (1.0e-50)
-#define zero (1.0e-300)
-#define inf 1.0e300
+const double tol = 1.0e-8;
+const double atol = 1.0e-50;
+const double zero = 1.0e-300;
+const double inf = 1.0e300;
   int K1 = 1;
-  double K2 = 0.0e0;
+  double K2 = 0.;
   double K4 = 0.5e0;
-  double K5 = 5.0e0;
+  double K5 = 5.;
   double pq,fx,cum,ccum;
   unsigned long qhi,qleft,qporq;
   double T3,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15;
@@ -3213,12 +3193,12 @@ void pnl_cdf_f(int *which,double *p,double *q,double *f,double *dfn,
   /*
      P
      */
-  if (!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
-  if (!(*p < 0.0e0)) goto S40;
-  *bound = 0.0e0;
+  if (!(*p < 0. || *p > 1.)) goto S60;
+  if (!(*p < 0.)) goto S40;
+  *bound = 0.;
   goto S50;
 S40:
-  *bound = 1.0e0;
+  *bound = 1.;
 S50:
   *status = -2;
   return;
@@ -3228,12 +3208,12 @@ S60:
   /*
      Q
      */
-  if (!(*q <= 0.0e0 || *q > 1.0e0)) goto S100;
-  if (!(*q <= 0.0e0)) goto S80;
-  *bound = 0.0e0;
+  if (!(*q <= 0. || *q > 1.)) goto S100;
+  if (!(*q <= 0.)) goto S80;
+  *bound = 0.;
   goto S90;
 S80:
-  *bound = 1.0e0;
+  *bound = 1.;
 S90:
   *status = -3;
   return;
@@ -3243,8 +3223,8 @@ S100:
   /*
      F
      */
-  if (!(*f < 0.0e0)) goto S120;
-  *bound = 0.0e0;
+  if (!(*f < 0.)) goto S120;
+  *bound = 0.;
   *status = -4;
   return;
 S130:
@@ -3253,8 +3233,8 @@ S120:
   /*
      DFN
      */
-  if (!(*dfn <= 0.0e0)) goto S140;
-  *bound = 0.0e0;
+  if (!(*dfn <= 0.)) goto S140;
+  *bound = 0.;
   *status = -5;
   return;
 S150:
@@ -3263,8 +3243,8 @@ S140:
   /*
      DFD
      */
-  if (!(*dfd <= 0.0e0)) goto S160;
-  *bound = 0.0e0;
+  if (!(*dfd <= 0.)) goto S160;
+  *bound = 0.;
   *status = -6;
   return;
 S170:
@@ -3274,12 +3254,12 @@ S160:
      P + Q
      */
   pq = *p+*q;
-  if (!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S200;
-  if (!(pq < 0.0e0)) goto S180;
-  *bound = 0.0e0;
+  if (!(fabs(pq-0.5e0-0.5e0) > 3.*spmpar(&K1))) goto S200;
+  if (!(pq < 0.)) goto S180;
+  *bound = 0.;
   goto S190;
 S180:
-  *bound = 1.0e0;
+  *bound = 1.;
 S190:
   *status = 3;
   return;
@@ -3301,7 +3281,7 @@ S200:
     /*
        Calculating F
        */
-    *f = 5.0e0;
+    *f = 5.;
     T3 = inf;
     T6 = atol;
     T7 = tol;
@@ -3323,7 +3303,7 @@ S250:
     if (!(*status == -1)) goto S280;
     if (!qleft) goto S260;
     *status = 1;
-    *bound = 0.0e0;
+    *bound = 0.;
     goto S270;
 S260:
     *status = 2;
@@ -3336,7 +3316,7 @@ S270:
     /*
        Calculating DFN
        */
-    *dfn = 5.0e0;
+    *dfn = 5.;
     T8 = zero;
     T9 = inf;
     T10 = atol;
@@ -3372,7 +3352,7 @@ S340:
     /*
        Calculating DFD
        */
-    *dfd = 5.0e0;
+    *dfd = 5.;
     T12 = zero;
     T13 = inf;
     T14 = atol;
@@ -3405,10 +3385,6 @@ S410:
   }
 S420:
   return;
-#undef tol
-#undef atol
-#undef zero
-#undef inf
 }
 
 
@@ -3548,35 +3524,28 @@ S420:
 void pnl_cdf_fnc(int *which,double *p,double *q,double *f,double *dfn,
                  double *dfd,double *pnonc,int *status,double *bound)
 {
-#define tent4 1.0e4
-#define tol (1.0e-8)
-#define atol (1.0e-50)
-#define zero (1.0e-300)
-#define one (1.0e0-1.0e-16)
-#define inf 1.0e300
-  double K1 = 0.0e0;
-  double K3 = 0.5e0;
-  double K4 = 5.0e0;
+  const double tent4 = 1.0e4;
+  const double tol = 1.0e-13;
+  const double atol = 1.0e-50;
+  const double  zero = 1.0e-300;
+  const double  one = 1.-1.0e-16;
+  const double inf = 1.0e300;
+  double K1 = 0.;
+  double K3 = 0.5;
+  double K4 = 5.;
   double fx,cum,ccum;
   unsigned long qhi,qleft;
   double T2,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17;
-  /*
-     ..
-     .. Executable Statements ..
-     */
-  /*
-     Check arguments
-     */
+
+  /* Check arguments */
   CHECK_WHICH (*which < 1, 1., -1);
   CHECK_WHICH (*which > 5, 5., -1);
 
   if (*which == 1) goto S70;
-  /*
-     P
-     */
-  if (!(*p < 0.0e0 || *p > one)) goto S60;
-  if (!(*p < 0.0e0)) goto S40;
-  *bound = 0.0e0;
+  /* P */
+  if (!(*p < 0. || *p > one)) goto S60;
+  if (!(*p < 0.)) goto S40;
+  *bound = 0.;
   goto S50;
 S40:
   *bound = one;
@@ -3589,8 +3558,8 @@ S60:
   /*
      F
      */
-  if (!(*f < 0.0e0)) goto S80;
-  *bound = 0.0e0;
+  if (!(*f < 0.)) goto S80;
+  *bound = 0.;
   *status = -4;
   return;
 S90:
@@ -3599,8 +3568,8 @@ S80:
   /*
      DFN
      */
-  if (!(*dfn <= 0.0e0)) goto S100;
-  *bound = 0.0e0;
+  if (!(*dfn <= 0.)) goto S100;
+  *bound = 0.;
   *status = -5;
   return;
 S110:
@@ -3609,8 +3578,8 @@ S100:
   /*
      DFD
      */
-  if (!(*dfd <= 0.0e0)) goto S120;
-  *bound = 0.0e0;
+  if (!(*dfd <= 0.)) goto S120;
+  *bound = 0.;
   *status = -6;
   return;
 S130:
@@ -3619,8 +3588,8 @@ S120:
   /*
      PHONC
      */
-  if (!(*pnonc < 0.0e0)) goto S140;
-  *bound = 0.0e0;
+  if (!(*pnonc < 0.)) goto S140;
+  *bound = 0.;
   *status = -7;
   return;
 S150:
@@ -3639,7 +3608,7 @@ S140:
     /*
        Calculating F
        */
-    *f = 5.0e0;
+    *f = 5.;
     T2 = inf;
     T5 = atol;
     T6 = tol;
@@ -3656,7 +3625,7 @@ S170:
     if (!(*status == -1)) goto S200;
     if (!qleft) goto S180;
     *status = 1;
-    *bound = 0.0e0;
+    *bound = 0.;
     goto S190;
 S180:
     *status = 2;
@@ -3669,7 +3638,7 @@ S190:
     /*
        Calculating DFN
        */
-    *dfn = 5.0e0;
+    *dfn = 5.;
     T7 = zero;
     T8 = inf;
     T9 = atol;
@@ -3700,7 +3669,7 @@ S240:
     /*
        Calculating DFD
        */
-    *dfd = 5.0e0;
+    *dfd = 5.;
     T11 = zero;
     T12 = inf;
     T13 = atol;
@@ -3731,7 +3700,7 @@ S290:
     /*
        Calculating PHONC
        */
-    *pnonc = 5.0e0;
+    *pnonc = 5.;
     T15 = tent4;
     T16 = atol;
     T17 = tol;
@@ -3748,7 +3717,7 @@ S320:
     if (!(*status == -1)) goto S350;
     if (!qleft) goto S330;
     *status = 1;
-    *bound = 0.0e0;
+    *bound = 0.;
     goto S340;
 S330:
     *status = 2;
@@ -3758,12 +3727,6 @@ S340:
   }
 S350:
   return;
-#undef tent4
-#undef tol
-#undef atol
-#undef zero
-#undef one
-#undef inf
 }
 
 /**
@@ -3896,13 +3859,13 @@ S350:
 void pnl_cdf_gam(int *which,double *p,double *q,double *x,double *shape,
                  double *scale,int *status,double *bound)
 {
-#define tol (1.0e-8)
-#define atol (1.0e-50)
-#define zero (1.0e-300)
-#define inf 1.0e300
+const double tol = 1.0e-8;
+const double atol = 1.0e-50;
+const double zero = 1.0e-300;
+const double inf = 1.0e300;
   int K1 = 1;
   double K5 = 0.5e0;
-  double K6 = 5.0e0;
+  double K6 = 5.;
   double xx,fx,xscale,cum,ccum,pq,porq;
   int ierr;
   unsigned long qhi,qleft,qporq;
@@ -3921,12 +3884,12 @@ void pnl_cdf_gam(int *which,double *p,double *q,double *x,double *shape,
   /*
      P
      */
-  if (!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
-  if (!(*p < 0.0e0)) goto S40;
-  *bound = 0.0e0;
+  if (!(*p < 0. || *p > 1.)) goto S60;
+  if (!(*p < 0.)) goto S40;
+  *bound = 0.;
   goto S50;
 S40:
-  *bound = 1.0e0;
+  *bound = 1.;
 S50:
   *status = -2;
   return;
@@ -3936,12 +3899,12 @@ S60:
   /*
      Q
      */
-  if (!(*q <= 0.0e0 || *q > 1.0e0)) goto S100;
-  if (!(*q <= 0.0e0)) goto S80;
-  *bound = 0.0e0;
+  if (!(*q <= 0. || *q > 1.)) goto S100;
+  if (!(*q <= 0.)) goto S80;
+  *bound = 0.;
   goto S90;
 S80:
-  *bound = 1.0e0;
+  *bound = 1.;
 S90:
   *status = -3;
   return;
@@ -3951,8 +3914,8 @@ S100:
   /*
      X
      */
-  if (!(*x < 0.0e0)) goto S120;
-  *bound = 0.0e0;
+  if (!(*x < 0.)) goto S120;
+  *bound = 0.;
   *status = -4;
   return;
 S130:
@@ -3961,8 +3924,8 @@ S120:
   /*
      SHAPE
      */
-  if (!(*shape <= 0.0e0)) goto S140;
-  *bound = 0.0e0;
+  if (!(*shape <= 0.)) goto S140;
+  *bound = 0.;
   *status = -5;
   return;
 S150:
@@ -3971,8 +3934,8 @@ S140:
   /*
      SCALE
      */
-  if (!(*scale <= 0.0e0)) goto S160;
-  *bound = 0.0e0;
+  if (!(*scale <= 0.)) goto S160;
+  *bound = 0.;
   *status = -6;
   return;
 S170:
@@ -3982,12 +3945,12 @@ S160:
      P + Q
      */
   pq = *p+*q;
-  if (!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S200;
-  if (!(pq < 0.0e0)) goto S180;
-  *bound = 0.0e0;
+  if (!(fabs(pq-0.5e0-0.5e0) > 3.*spmpar(&K1))) goto S200;
+  if (!(pq < 0.)) goto S180;
+  *bound = 0.;
   goto S190;
 S180:
-  *bound = 1.0e0;
+  *bound = 1.;
 S190:
   *status = 3;
   return;
@@ -4021,9 +3984,9 @@ S230:
     /*
        Computing X
        */
-    T2 = -1.0e0;
+    T2 = -1.;
     gaminv(shape,&xx,&T2,p,q,&ierr);
-    if (ierr < 0.0e0) {
+    if (ierr < 0.) {
       *status = 10;
       return;
     }
@@ -4036,7 +3999,7 @@ S230:
     /*
        Computing SHAPE
        */
-    *shape = 5.0e0;
+    *shape = 5.;
     xscale = *x**scale;
     T3 = zero;
     T4 = inf;
@@ -4077,9 +4040,9 @@ S310:
     /*
        Computing SCALE
        */
-    T9 = -1.0e0;
+    T9 = -1.;
     gaminv(shape,&xx,&T9,p,q,&ierr);
-    if (ierr < 0.0e0) {
+    if (ierr < 0.) {
       *status = 10;
       return;
     }
@@ -4089,10 +4052,6 @@ S310:
     }
   }
   return;
-#undef tol
-#undef atol
-#undef zero
-#undef inf
 }
 
 /**
@@ -4234,15 +4193,15 @@ S310:
 void pnl_cdf_nbn(int *which,double *p,double *q,double *s,double *xn,
                  double *pr,double *ompr,int *status,double *bound)
 {
-#define tol (1.0e-8)
-#define atol (1.0e-50)
-#define inf 1.0e300
-#define one 1.0e0
+const double tol = 1.0e-8;
+const double atol = 1.0e-50;
+const double inf = 1.0e300;
+const double one = 1.;
   int K1 = 1;
-  double K2 = 0.0e0;
+  double K2 = 0.;
   double K4 = 0.5e0;
-  double K5 = 5.0e0;
-  double K11 = 1.0e0;
+  double K5 = 5.;
+  double K11 = 1.;
   double fx,xhi,xlo,pq,prompr,cum,ccum;
   unsigned long qhi,qleft,qporq;
   double T3,T6,T7,T8,T9,T10,T12,T13;
@@ -4260,12 +4219,12 @@ void pnl_cdf_nbn(int *which,double *p,double *q,double *s,double *xn,
   /*
      P
      */
-  if (!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
-  if (!(*p < 0.0e0)) goto S40;
-  *bound = 0.0e0;
+  if (!(*p < 0. || *p > 1.)) goto S60;
+  if (!(*p < 0.)) goto S40;
+  *bound = 0.;
   goto S50;
 S40:
-  *bound = 1.0e0;
+  *bound = 1.;
 S50:
   *status = -2;
   return;
@@ -4275,12 +4234,12 @@ S60:
   /*
      Q
      */
-  if (!(*q <= 0.0e0 || *q > 1.0e0)) goto S100;
-  if (!(*q <= 0.0e0)) goto S80;
-  *bound = 0.0e0;
+  if (!(*q <= 0. || *q > 1.)) goto S100;
+  if (!(*q <= 0.)) goto S80;
+  *bound = 0.;
   goto S90;
 S80:
-  *bound = 1.0e0;
+  *bound = 1.;
 S90:
   *status = -3;
   return;
@@ -4290,8 +4249,8 @@ S100:
   /*
      S
      */
-  if (!(*s < 0.0e0)) goto S120;
-  *bound = 0.0e0;
+  if (!(*s < 0.)) goto S120;
+  *bound = 0.;
   *status = -4;
   return;
 S130:
@@ -4300,8 +4259,8 @@ S120:
   /*
      XN
      */
-  if (!(*xn < 0.0e0)) goto S140;
-  *bound = 0.0e0;
+  if (!(*xn < 0.)) goto S140;
+  *bound = 0.;
   *status = -5;
   return;
 S150:
@@ -4310,12 +4269,12 @@ S140:
   /*
      PR
      */
-  if (!(*pr < 0.0e0 || *pr > 1.0e0)) goto S180;
-  if (!(*pr < 0.0e0)) goto S160;
-  *bound = 0.0e0;
+  if (!(*pr < 0. || *pr > 1.)) goto S180;
+  if (!(*pr < 0.)) goto S160;
+  *bound = 0.;
   goto S170;
 S160:
-  *bound = 1.0e0;
+  *bound = 1.;
 S170:
   *status = -6;
   return;
@@ -4325,12 +4284,12 @@ S180:
   /*
      OMPR
      */
-  if (!(*ompr < 0.0e0 || *ompr > 1.0e0)) goto S220;
-  if (!(*ompr < 0.0e0)) goto S200;
-  *bound = 0.0e0;
+  if (!(*ompr < 0. || *ompr > 1.)) goto S220;
+  if (!(*ompr < 0.)) goto S200;
+  *bound = 0.;
   goto S210;
 S200:
-  *bound = 1.0e0;
+  *bound = 1.;
 S210:
   *status = -7;
   return;
@@ -4341,12 +4300,12 @@ S220:
      P + Q
      */
   pq = *p+*q;
-  if (!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S260;
-  if (!(pq < 0.0e0)) goto S240;
-  *bound = 0.0e0;
+  if (!(fabs(pq-0.5e0-0.5e0) > 3.*spmpar(&K1))) goto S260;
+  if (!(pq < 0.)) goto S240;
+  *bound = 0.;
   goto S250;
 S240:
-  *bound = 1.0e0;
+  *bound = 1.;
 S250:
   *status = 3;
   return;
@@ -4357,12 +4316,12 @@ S260:
      PR + OMPR
      */
   prompr = *pr+*ompr;
-  if (!(fabs(prompr-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S300;
-  if (!(prompr < 0.0e0)) goto S280;
-  *bound = 0.0e0;
+  if (!(fabs(prompr-0.5e0-0.5e0) > 3.*spmpar(&K1))) goto S300;
+  if (!(prompr < 0.)) goto S280;
+  *bound = 0.;
   goto S290;
 S280:
-  *bound = 1.0e0;
+  *bound = 1.;
 S290:
   *status = 4;
   return;
@@ -4384,7 +4343,7 @@ S300:
     /*
        Calculating S
        */
-    *s = 5.0e0;
+    *s = 5.;
     T3 = inf;
     T6 = atol;
     T7 = tol;
@@ -4406,7 +4365,7 @@ S350:
     if (!(*status == -1)) goto S380;
     if (!qleft) goto S360;
     *status = 1;
-    *bound = 0.0e0;
+    *bound = 0.;
     goto S370;
 S360:
     *status = 2;
@@ -4419,7 +4378,7 @@ S370:
     /*
        Calculating XN
        */
-    *xn = 5.0e0;
+    *xn = 5.;
     T8 = inf;
     T9 = atol;
     T10 = tol;
@@ -4441,7 +4400,7 @@ S420:
     if (!(*status == -1)) goto S450;
     if (!qleft) goto S430;
     *status = 1;
-    *bound = 0.0e0;
+    *bound = 0.;
     goto S440;
 S430:
     *status = 2;
@@ -4486,20 +4445,16 @@ S500:
     if (!(*status == -1)) goto S540;
     if (!qleft) goto S520;
     *status = 1;
-    *bound = 0.0e0;
+    *bound = 0.;
     goto S530;
 S520:
     *status = 2;
-    *bound = 1.0e0;
+    *bound = 1.;
 S530:
     ;
   }
 S540:
   return;
-#undef tol
-#undef atol
-#undef inf
-#undef one
 }
 
 /**
@@ -4616,9 +4571,9 @@ void pnl_cdf_nor(int *which,double *p,double *q,double *x,double *mean,
             }
         }
     }
-  if ( (*which != 4) && (*sd <= 0.0e0) )
+  if ( (*which != 4) && (*sd <= 0.) )
     {
-      *bound = 0.0e0;
+      *bound = 0.;
       *status = -6;
       return;
     }
@@ -4762,13 +4717,13 @@ void pnl_cdf_nor(int *which,double *p,double *q,double *x,double *mean,
 void pnl_cdf_poi(int *which,double *p,double *q,double *s,double *xlam,
                  int *status,double *bound)
 {
-#define tol (1.0e-8)
-#define atol (1.0e-50)
-#define inf 1.0e300
+const double tol = 1.0e-8;
+const double atol = 1.0e-50;
+const double inf = 1.0e300;
   int K1 = 1;
-  double K2 = 0.0e0;
+  double K2 = 0.;
   double K4 = 0.5e0;
-  double K5 = 5.0e0;
+  double K5 = 5.;
   double fx,cum,ccum,pq;
   unsigned long qhi,qleft,qporq;
   double T3,T6,T7,T8,T9,T10;
@@ -4786,12 +4741,12 @@ void pnl_cdf_poi(int *which,double *p,double *q,double *s,double *xlam,
   /*
      P
      */
-  if (!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
-  if (!(*p < 0.0e0)) goto S40;
-  *bound = 0.0e0;
+  if (!(*p < 0. || *p > 1.)) goto S60;
+  if (!(*p < 0.)) goto S40;
+  *bound = 0.;
   goto S50;
 S40:
-  *bound = 1.0e0;
+  *bound = 1.;
 S50:
   *status = -2;
   return;
@@ -4801,12 +4756,12 @@ S60:
   /*
      Q
      */
-  if (!(*q <= 0.0e0 || *q > 1.0e0)) goto S100;
-  if (!(*q <= 0.0e0)) goto S80;
-  *bound = 0.0e0;
+  if (!(*q <= 0. || *q > 1.)) goto S100;
+  if (!(*q <= 0.)) goto S80;
+  *bound = 0.;
   goto S90;
 S80:
-  *bound = 1.0e0;
+  *bound = 1.;
 S90:
   *status = -3;
   return;
@@ -4816,8 +4771,8 @@ S100:
   /*
      S
      */
-  if (!(*s < 0.0e0)) goto S120;
-  *bound = 0.0e0;
+  if (!(*s < 0.)) goto S120;
+  *bound = 0.;
   *status = -4;
   return;
 S130:
@@ -4826,8 +4781,8 @@ S120:
   /*
      XLAM
      */
-  if (!(*xlam < 0.0e0)) goto S140;
-  *bound = 0.0e0;
+  if (!(*xlam < 0.)) goto S140;
+  *bound = 0.;
   *status = -5;
   return;
 S150:
@@ -4837,12 +4792,12 @@ S140:
      P + Q
      */
   pq = *p+*q;
-  if (!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S180;
-  if (!(pq < 0.0e0)) goto S160;
-  *bound = 0.0e0;
+  if (!(fabs(pq-0.5e0-0.5e0) > 3.*spmpar(&K1))) goto S180;
+  if (!(pq < 0.)) goto S160;
+  *bound = 0.;
   goto S170;
 S160:
-  *bound = 1.0e0;
+  *bound = 1.;
 S170:
   *status = 3;
   return;
@@ -4864,7 +4819,7 @@ S180:
     /*
        Calculating S
        */
-    *s = 5.0e0;
+    *s = 5.;
     T3 = inf;
     T6 = atol;
     T7 = tol;
@@ -4886,7 +4841,7 @@ S230:
     if (!(*status == -1)) goto S260;
     if (!qleft) goto S240;
     *status = 1;
-    *bound = 0.0e0;
+    *bound = 0.;
     goto S250;
 S240:
     *status = 2;
@@ -4899,7 +4854,7 @@ S250:
     /*
        Calculating XLAM
        */
-    *xlam = 5.0e0;
+    *xlam = 5.;
     T8 = inf;
     T9 = atol;
     T10 = tol;
@@ -4921,7 +4876,7 @@ S300:
     if (!(*status == -1)) goto S330;
     if (!qleft) goto S310;
     *status = 1;
-    *bound = 0.0e0;
+    *bound = 0.;
     goto S320;
 S310:
     *status = 2;
@@ -4931,9 +4886,6 @@ S320:
   }
 S330:
   return;
-#undef tol
-#undef atol
-#undef inf
 }
 
 /**
@@ -5045,14 +4997,14 @@ S330:
 void pnl_cdf_t(int *which,double *p,double *q,double *t,double *df,
                int *status,double *bound)
 {
-#define tol (1.0e-8)
-#define atol (1.0e-50)
-#define zero (1.0e-300)
-#define inf 1.0e300
-#define maxdf 1.0e10
+  const double tol = 1.0e-8;
+  const double atol = 1.0e-50;
+  const double zero = 1.0e-300;
+  const double inf = 1.0e300;
+  const double maxdf = 1.0e10;
   int K1 = 1;
   double K4 = 0.5e0;
-  double K5 = 5.0e0;
+  double K5 = 5.;
   double fx,cum,ccum,pq;
   unsigned long qhi,qleft,qporq;
   double T2,T3,T6,T7,T8,T9,T10,T11;
@@ -5067,30 +5019,26 @@ void pnl_cdf_t(int *which,double *p,double *q,double *t,double *df,
   CHECK_WHICH (*which > 3, 3., -1);
 
   if (*which == 1) goto S70;
-  /*
-     P
-     */
-  if (!(*p <= 0.0e0 || *p > 1.0e0)) goto S60;
-  if (!(*p <= 0.0e0)) goto S40;
-  *bound = 0.0e0;
+  /* P */
+  if (!(*p <= 0. || *p > 1.)) goto S60;
+  if (!(*p <= 0.)) goto S40;
+  *bound = 0.;
   goto S50;
 S40:
-  *bound = 1.0e0;
+  *bound = 1.;
 S50:
   *status = -2;
   return;
 S70:
 S60:
   if (*which == 1) goto S110;
-  /*
-     Q
-     */
-  if (!(*q <= 0.0e0 || *q > 1.0e0)) goto S100;
-  if (!(*q <= 0.0e0)) goto S80;
-  *bound = 0.0e0;
+  /* Q */
+  if (!(*q <= 0. || *q > 1.)) goto S100;
+  if (!(*q <= 0.)) goto S80;
+  *bound = 0.;
   goto S90;
 S80:
-  *bound = 1.0e0;
+  *bound = 1.;
 S90:
   *status = -3;
   return;
@@ -5100,8 +5048,8 @@ S100:
   /*
      DF
      */
-  if (!(*df <= 0.0e0)) goto S120;
-  *bound = 0.0e0;
+  if (!(*df <= 0.)) goto S120;
+  *bound = 0.;
   *status = -5;
   return;
 S130:
@@ -5111,12 +5059,12 @@ S120:
      P + Q
      */
   pq = *p+*q;
-  if (!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S160;
-  if (!(pq < 0.0e0)) goto S140;
-  *bound = 0.0e0;
+  if (!(fabs(pq-0.5e0-0.5e0) > 3.*spmpar(&K1))) goto S160;
+  if (!(pq < 0.)) goto S140;
+  *bound = 0.;
   goto S150;
 S140:
-  *bound = 1.0e0;
+  *bound = 1.;
 S150:
   *status = 3;
   return;
@@ -5175,7 +5123,7 @@ S230:
     /*
        Computing DF
        */
-    *df = 5.0e0;
+    *df = 5.;
     T8 = zero;
     T9 = maxdf;
     T10 = atol;
@@ -5208,11 +5156,6 @@ S300:
   }
 S310:
   return;
-#undef tol
-#undef atol
-#undef zero
-#undef inf
-#undef maxdf
 }
 
 /*
@@ -5270,25 +5213,20 @@ static void cumbet(double *x,double *y,double *a,double *b,double *cum,
                    double *ccum)
 {
   int ierr;
-  /*
-     ..
-     .. Executable Statements ..
-     */
-  if (!(*x <= 0.0e0)) goto S10;
-  *cum = 0.0e0;
-  *ccum = 1.0e0;
-  return;
-S10:
-  if (!(*y <= 0.0e0)) goto S20;
-  *cum = 1.0e0;
-  *ccum = 0.0e0;
-  return;
-S20:
-  bratio(a,b,x,y,cum,ccum,&ierr);
-  /*
-     Call bratio routine
-     */
-  return;
+  if ((*x <= 0.)) 
+    {
+      *cum = 0.;
+      *ccum = 1.;
+    }
+  else if (*y <= 0.) 
+    {
+      *cum = 1.;
+      *ccum = 0.;
+    }
+  else
+    {
+      bratio(a,b,x,y,cum,ccum,&ierr);
+    }
 }
 
 /*
@@ -5339,21 +5277,17 @@ S20:
 static void cumbin(double *s,double *xn,double *pr,double *ompr,
                    double *cum,double *ccum)
 {
-  double T1,T2;
-  /*
-     ..
-     .. Executable Statements ..
-     */
-  if (!(*s < *xn)) goto S10;
-  T1 = *s+1.0e0;
-  T2 = *xn-*s;
-  cumbet(pr,ompr,&T1,&T2,ccum,cum);
-  goto S20;
-S10:
-  *cum = 1.0e0;
-  *ccum = 0.0e0;
-S20:
-  return;
+  if (*s < *xn) 
+    {
+      double T1 = *s+1.;
+      double T2 = *xn-*s;
+      cumbet(pr,ompr,&T1,&T2,ccum,cum);
+    }
+  else
+    {
+      *cum = 1.;
+      *ccum = 0.;
+    }
 }
 
 /*
@@ -5395,10 +5329,6 @@ S20:
 static void cumchi(double *x,double *df,double *cum,double *ccum)
 {
   double a,xx;
-  /*
-     ..
-     .. Executable Statements ..
-     */
   a = *df*0.5e0;
   xx = *x*0.5e0;
   cumgam(&xx,&a,cum,ccum);
@@ -5476,9 +5406,6 @@ static void cumchi(double *x,double *df,double *cum,double *ccum)
 static void cumchn(double *x,double *df,double *pnonc,double *cum,
                    double *ccum)
 {
-#define dg(i) (*df+2.0e0*(double)(i))
-#define qsmall(xx) (int)(sum < 1.0e-20 || (xx) < eps*sum)
-#define qtired(i) (int)((i) > ntired)
   double eps = 1.0e-5;
   int ntired = 1000;
   static double adj,centaj,centwt,chid2,dfd2,lcntaj,lcntwt,lfact,pcent,pterm,sum,
@@ -5489,20 +5416,24 @@ static void cumchn(double *x,double *df,double *pnonc,double *cum,
      ..
      .. Executable Statements ..
      */
-  if (!(*x <= 0.0e0)) goto S10;
-  *cum = 0.0e0;
-  *ccum = 1.0e0;
-  return;
-S10:
-  if (!(*pnonc <= 1.0e-10)) goto S20;
-  /*
-     When non-centrality parameter is (essentially) zero,
-     use cumulative chi-square distribution
-     */
-  cumchi(x,df,cum,ccum);
-  return;
-S20:
-  xnonc = *pnonc/2.0e0;
+  if (*x <= 0.) 
+    {
+      *cum = 0.;
+      *ccum = 1.;
+      return;
+    }
+
+  if (*pnonc <= 1.0e-10)
+    {
+      /*
+       * When non-centrality parameter is (essentially) zero,
+       * use cumulative chi-square distribution
+       */
+      cumchi(x,df,cum,ccum);
+      return;
+    }
+
+  xnonc = *pnonc/2.;
   /*
    **********************************************************************
    The following code calcualtes the weight, chi-square, and
@@ -5515,24 +5446,24 @@ S20:
    */
   icent = fifidint(xnonc);
   if (icent == 0) icent = 1;
-  chid2 = *x/2.0e0;
+  chid2 = *x/2.;
   /*
-     Calculate central weight term
-     */
+   * Calculate central weight term
+   */
   T1 = (double)(icent+1);
   lfact = alngam(&T1);
   lcntwt = -xnonc+(double)icent*log(xnonc)-lfact;
   centwt = exp(lcntwt);
   /*
-     Calculate central chi-square
-     */
-  T2 = dg(icent);
+   * Calculate central chi-square
+   */
+  T2 = *df + 2. * icent;
   cumchi(x,&T2,&pcent,ccum);
   /*
-     Calculate central adjustment term
-     */
-  dfd2 = dg(icent)/2.0e0;
-  T3 = 1.0e0+dfd2;
+   * Calculate central adjustment term
+   */
+  dfd2 = (*df + 2. * icent) / 2.;
+  T3 = 1.+dfd2;
   lfact = alngam(&T3);
   lcntaj = dfd2*log(chid2)-chid2-lfact;
   centaj = exp(lcntaj);
@@ -5547,32 +5478,31 @@ S20:
    **********************************************************************
    */
   iterb = 0;
-  sumadj = 0.0e0;
+  sumadj = 0.;
   adj = centaj;
   wt = centwt;
   i = icent;
-  goto S40;
-S30:
-  if (qtired(iterb) || qsmall(term) || i == 0) goto S50;
-S40:
-  dfd2 = dg(i)/2.0e0;
-  /*
-     Adjust chi-square for two fewer degrees of freedom.
-     The adjusted value ends up in PTERM.
-     */
-  adj = adj*dfd2/chid2;
-  sumadj += adj;
-  pterm = pcent+sumadj;
-  /*
-     Adjust poisson weight for J decreased by one
-     */
-  wt *= ((double)i/xnonc);
-  term = wt*pterm;
-  sum += term;
-  i -= 1;
-  iterb += 1;
-  goto S30;
-S50:
+  while ( 1 )
+    {
+      dfd2 = (*df + 2. * i)/2.;
+      /*
+         Adjust chi-square for two fewer degrees of freedom.
+         The adjusted value ends up in PTERM.
+         */
+      adj = adj*dfd2/chid2;
+      sumadj += adj;
+      pterm = pcent+sumadj;
+      /*
+         Adjust poisson weight for J decreased by one
+         */
+      wt *= ((double)i/xnonc);
+      term = wt*pterm;
+      sum += term;
+      i -= 1;
+      iterb += 1;
+      if ((iterb > ntired) || (sum < 1.0e-20 || term < eps*sum) || i == 0) break;
+    }
+
   iterf = 0;
   /*
    **********************************************************************
@@ -5585,36 +5515,32 @@ S50:
   sumadj = adj = centaj;
   wt = centwt;
   i = icent;
-  goto S70;
-S60:
-  if (qtired(iterf) || qsmall(term)) goto S80;
-S70:
-  /*
-     Update weights for next higher J
-     */
-  wt *= (xnonc/(double)(i+1));
-  /*
-     Calculate PTERM and add term to sum
-     */
-  pterm = pcent-sumadj;
-  term = wt*pterm;
-  sum += term;
-  /*
-     Update adjustment term for DF for next iteration
-     */
-  i += 1;
-  dfd2 = dg(i)/2.0e0;
-  adj = adj*chid2/dfd2;
-  sumadj += adj;
-  iterf += 1;
-  goto S60;
-S80:
+
+  while ( 1 )
+    {
+      /*
+       * Update weights for next higher J
+       */
+      wt *= (xnonc/(double)(i+1));
+      /*
+       * Calculate PTERM and add term to sum
+       */
+      pterm = pcent-sumadj;
+      term = wt*pterm;
+      sum += term;
+      /*
+       * Update adjustment term for DF for next iteration
+       */
+      i += 1;
+      dfd2 = (*df + 2. * i)/2.;
+      adj = adj*chid2/dfd2;
+      sumadj += adj;
+      iterf += 1;
+
+      if ((iterf > ntired) || (sum < 1.0e-20 || term < eps*sum))  break;
+    }
   *cum = sum;
   *ccum = 0.5e0+(0.5e0-*cum);
-  return;
-#undef dg
-#undef qsmall
-#undef qtired
 }
 
 
@@ -5640,7 +5566,6 @@ S80:
  * Note if F is less than or equal to 0, 0 is returned.
  */
 static void cumf(double *f,double *dfn,double *dfd,double *cum,double *ccum)
-
 {
   double dsum, prod, xx, yy, T1, T2;
   int ierr;
@@ -5736,61 +5661,58 @@ static void cumf(double *f,double *dfn,double *dfd,double *cum,double *ccum)
 static void cumfnc(double *f,double *dfn,double *dfd,double *pnonc,
                    double *cum,double *ccum)
 {
-#define qsmall(x) (int)(sum < 1.0e-20 || (x) < eps*sum)
-#define half 0.5e0
-#define done 1.0e0
   double eps = 1.0e-4;
   static double dsum,dummy,prod,xx,yy,adn,aup,b,betdn,betup,centwt,dnterm,sum,
                 upterm,xmult,xnonc;
   int i,icent,ierr;
   double T1,T2,T3,T4,T5,T6;
+
+  if ((*f <= 0.)) 
+    {
+      *cum = 0.;
+      *ccum = 1.;
+      return;
+    }
+  if ((*pnonc < 1.0e-10)) 
+    {
+      /*
+       * Handle case in which the non-centrality parameter is
+       * (essentially) zero.
+       */
+      cumf(f,dfn,dfd,cum,ccum);
+      return;
+    }
+  xnonc = *pnonc/2.;
   /*
-     ..
-     .. Executable Statements ..
-     */
-  if (!(*f <= 0.0e0)) goto S10;
-  *cum = 0.0e0;
-  *ccum = 1.0e0;
-  return;
-S10:
-  if (!(*pnonc < 1.0e-10)) goto S20;
-  /*
-     Handle case in which the non-centrality parameter is
-     (essentially) zero.
-     */
-  cumf(f,dfn,dfd,cum,ccum);
-  return;
-S20:
-  xnonc = *pnonc/2.0e0;
-  /*
-     Calculate the central term of the poisson weighting factor.
-     */
+   * Calculate the central term of the poisson weighting factor.
+   */
   icent = xnonc;
   if (icent == 0) icent = 1;
   /*
-     Compute central weight term
-     */
+   * Compute central weight term
+   */
   T1 = (double)(icent+1);
   centwt = exp(-xnonc+(double)icent*log(xnonc)-alngam(&T1));
   /*
-     Compute central incomplete beta term
-     Assure that minimum of arg to beta and 1 - arg is computed
-     accurately.
-     */
+   * Compute central incomplete beta term
+   * Assure that minimum of arg to beta and 1 - arg is computed
+   * accurately.
+   */
   prod = *dfn**f;
   dsum = *dfd+prod;
   yy = *dfd/dsum;
-  if (yy > half) {
-    xx = prod/dsum;
-    yy = done-xx;
-  }
-  else  xx = done-yy;
-  T2 = *dfn*half+(double)icent;
-  T3 = *dfd*half;
+  if (yy > 0.5) 
+    {
+      xx = prod/dsum;
+      yy = 1.-xx;
+    }
+  else  xx = 1.-yy;
+  T2 = *dfn*0.5+(double)icent;
+  T3 = *dfd*0.5;
   bratio(&T2,&T3,&xx,&yy,&betdn,&dummy,&ierr);
-  adn = *dfn/2.0e0+(double)icent;
+  adn = *dfn/2.+(double)icent;
   aup = adn;
-  b = *dfd/2.0e0;
+  b = *dfd/2.;
   betup = betdn;
   sum = centwt*betdn;
   /*
@@ -5799,48 +5721,48 @@ S20:
   xmult = centwt;
   i = icent;
   T4 = adn+b;
-  T5 = adn+1.0e0;
+  T5 = adn+1.;
   dnterm = exp(alngam(&T4)-alngam(&T5)-alngam(&b)+adn*log(xx)+b*log(yy));
-S30:
-  if (qsmall(xmult*betdn) || i <= 0) goto S40;
-  xmult *= ((double)i/xnonc);
-  i -= 1;
-  adn -= 1.0;
-  dnterm = (adn+1.0)/((adn+b)*xx)*dnterm;
-  betdn += dnterm;
-  sum += (xmult*betdn);
-  goto S30;
-S40:
+
+  while ( !((sum < 1.0e-20) || ((xmult*betdn) < eps*sum) || i <= 0) )
+    {
+      xmult *= ((double)i/xnonc);
+      i -= 1;
+      adn -= 1.0;
+      dnterm = (adn+1.0)/((adn+b)*xx)*dnterm;
+      betdn += dnterm;
+      sum += (xmult*betdn);
+    }
+
   i = icent+1;
   /*
      Now sum forwards until convergence
      */
   xmult = centwt;
-  if (aup-1.0+b == 0) upterm = exp(-alngam(&aup)-alngam(&b)+(aup-1.0)*log(xx)+
-                                   b*log(yy));
-  else  {
-    T6 = aup-1.0+b;
-    upterm = exp(alngam(&T6)-alngam(&aup)-alngam(&b)+(aup-1.0)*log(xx)+b*
-                 log(yy));
-  }
-  goto S60;
-S50:
-  if (qsmall(xmult*betup)) goto S70;
-S60:
-  xmult *= (xnonc/(double)i);
-  i += 1;
-  aup += 1.0;
-  upterm = (aup+b-2.0e0)*xx/(aup-1.0)*upterm;
-  betup -= upterm;
-  sum += (xmult*betup);
-  goto S50;
-S70:
+  if (aup-1.0+b == 0)
+    {
+      upterm = exp(-alngam(&aup)-alngam(&b)+(aup-1.0)*log(xx)+
+                   b*log(yy));
+    }
+  else 
+    {
+      T6 = aup-1.0+b;
+      upterm = exp(alngam(&T6)-alngam(&aup)-alngam(&b)+(aup-1.0)*log(xx)+b*
+                   log(yy));
+    }
+
+  while ( 1 )
+    {
+      xmult *= (xnonc/(double)i);
+      i += 1;
+      aup += 1.0;
+      upterm = (aup+b-2.)*xx/(aup-1.0)*upterm;
+      betup -= upterm;
+      sum += (xmult*betup);
+      if ( (sum < 1.0e-20) || ((xmult*betup) < eps*sum) ) break;
+    }
   *cum = sum;
   *ccum = 0.5e0+(0.5e0-*cum);
-  return;
-#undef qsmall
-#undef half
-#undef done
 }
 
 
@@ -5868,7 +5790,6 @@ S70:
  * @param ccum on output = 1-cum
  */
 static void cumgam(double *x,double *a,double *cum,double *ccum)
-
 {
   int K1 = 0;
 
@@ -6046,12 +5967,12 @@ static void cumnor(double *arg,double *result,double *ccum)
     6.4855582982667607550e03,1.8615571640885098091e04,3.4900952721145977266e04,
     3.8912003286093271411e04,1.9685429676859990727e04
   };
-  double half = 0.5e0;
+  double half = 0.5;
   double p[6] = {
     2.1589853405795699e-1,1.274011611602473639e-1,2.2235277870649807e-2,
     1.421619193227893466e-3,2.9112874951168792e-5,2.307344176494017303e-2
   };
-  double one = 1.0e0;
+  double one = 1.;
   double q[5] = {
     1.28426009614491121e00,4.68238212480865118e-1,6.59881378689285515e-2,
     3.78239633202758244e-3,7.29751555083966205e-5
@@ -6060,96 +5981,94 @@ static void cumnor(double *arg,double *result,double *ccum)
   double sqrpi = 3.9894228040143267794e-1;
   double thrsh = 0.66291e0;
   double root32 = 5.656854248e0;
-  double zero = 0.0e0;
+  double zero = 0.;
   int K1 = 1;
   int K2 = 2;
   int i;
   double del,eps,temp,x,xden,xnum,y,xsq,min;
   /*
-     ------------------------------------------------------------------
      Machine dependent constants
-     ------------------------------------------------------------------
      */
   eps = spmpar(&K1)*0.5e0;
   min = spmpar(&K2);
   x = *arg;
   y = fabs(x);
-  if (y <= thrsh) {
-    /*
-       ------------------------------------------------------------------
-       Evaluate  anorm  for  |X| <= 0.66291
-       ------------------------------------------------------------------
-       */
-    xsq = zero;
-    if (y > eps) xsq = x*x;
-    xnum = a[4]*xsq;
-    xden = xsq;
-    for(i=0; i<3; i++) {
-      xnum = (xnum+a[i])*xsq;
-      xden = (xden+b[i])*xsq;
+  if (y <= thrsh) 
+    {
+      /*
+         Evaluate  anorm  for  |X| <= 0.66291
+         */
+      xsq = zero;
+      if (y > eps) xsq = x*x;
+      xnum = a[4]*xsq;
+      xden = xsq;
+      for(i=0; i<3; i++) 
+        {
+          xnum = (xnum+a[i])*xsq;
+          xden = (xden+b[i])*xsq;
+        }
+      *result = x*(xnum+a[3])/(xden+b[3]);
+      temp = *result;
+      *result = half+temp;
+      *ccum = half-temp;
     }
-    *result = x*(xnum+a[3])/(xden+b[3]);
-    temp = *result;
-    *result = half+temp;
-    *ccum = half-temp;
-  }
   /*
-     ------------------------------------------------------------------
      Evaluate  anorm  for 0.66291 <= |X| <= sqrt(32)
-     ------------------------------------------------------------------
      */
-  else if (y <= root32) {
-    xnum = c[8]*y;
-    xden = y;
-    for(i=0; i<7; i++) {
-      xnum = (xnum+c[i])*y;
-      xden = (xden+d[i])*y;
+  else if (y <= root32) 
+    {
+      xnum = c[8]*y;
+      xden = y;
+      for(i=0; i<7; i++) 
+        {
+          xnum = (xnum+c[i])*y;
+          xden = (xden+d[i])*y;
+        }
+      *result = (xnum+c[7])/(xden+d[7]);
+      xsq = fifdint(y*sixten)/sixten;
+      del = (y-xsq)*(y+xsq);
+      *result = exp(-(xsq*xsq*half))*exp(-(del*half))**result;
+      *ccum = one-*result;
+      if (x > zero) 
+        {
+          temp = *result;
+          *result = *ccum;
+          *ccum = temp;
+        }
     }
-    *result = (xnum+c[7])/(xden+d[7]);
-    xsq = fifdint(y*sixten)/sixten;
-    del = (y-xsq)*(y+xsq);
-    *result = exp(-(xsq*xsq*half))*exp(-(del*half))**result;
-    *ccum = one-*result;
-    if (x > zero) {
-      temp = *result;
-      *result = *ccum;
-      *ccum = temp;
-    }
-  }
   /*
-     ------------------------------------------------------------------
      Evaluate  anorm  for |X| > sqrt(32)
-     ------------------------------------------------------------------
      */
-  else  {
-    *result = zero;
-    xsq = one/(x*x);
-    xnum = p[5]*xsq;
-    xden = xsq;
-    for(i=0; i<4; i++) {
-      xnum = (xnum+p[i])*xsq;
-      xden = (xden+q[i])*xsq;
+  else  
+    {
+      *result = zero;
+      xsq = one/(x*x);
+      xnum = p[5]*xsq;
+      xden = xsq;
+      for(i=0; i<4; i++) 
+        {
+          xnum = (xnum+p[i])*xsq;
+          xden = (xden+q[i])*xsq;
+        }
+      *result = xsq*(xnum+p[4])/(xden+q[4]);
+      *result = (sqrpi-*result)/y;
+      xsq = fifdint(x*sixten)/sixten;
+      del = (x-xsq)*(x+xsq);
+      *result = exp(-(xsq*xsq*half))*exp(-(del*half))**result;
+      *ccum = one-*result;
+      if (x > zero) 
+        {
+          temp = *result;
+          *result = *ccum;
+          *ccum = temp;
+        }
     }
-    *result = xsq*(xnum+p[4])/(xden+q[4]);
-    *result = (sqrpi-*result)/y;
-    xsq = fifdint(x*sixten)/sixten;
-    del = (x-xsq)*(x+xsq);
-    *result = exp(-(xsq*xsq*half))*exp(-(del*half))**result;
-    *ccum = one-*result;
-    if (x > zero) {
-      temp = *result;
-      *result = *ccum;
-      *ccum = temp;
-    }
-  }
-  if (*result < min) *result = 0.0e0;
+  if (*result < min) *result = 0.;
   /*
-     ------------------------------------------------------------------
      Fix up for negative argument, erf, etc.
-     ------------------------------------------------------------------
      ----------Last card of ANORM ----------
      */
-  if (*ccum < min) *ccum = 0.0e0;
+  if (*ccum < min) *ccum = 0.;
 }
 
 /* CUMulative POIsson distribution
@@ -6271,60 +6190,37 @@ static double devlpl(double a[],int *n,double *x)
  */
 static double dinvnr(double *p,double *q)
 {
-#define maxit 100
-#define eps (1.0e-13)
-#define r2pi 0.3989422804014326e0
-#define nhalf (-0.5e0)
-#define dennor(x) (r2pi*exp(nhalf*(x)*(x)))
+  const int maxit = 100;
+  const double eps = 1.0e-13;
+  const double r2pi = 0.3989422804014326e0;
   double dinvnr_0,strtx,xcur,cum,ccum,pp,dx;
   int i;
   unsigned long qporq;
-  /*
-     ..
-     .. Executable Statements ..
-     */
-  /*
-     FIND MINIMUM OF P AND Q
-     */
+  /* FIND MINIMUM OF P AND Q */
   qporq = *p <= *q;
-  if (!qporq) goto S10;
-  pp = *p;
-  goto S20;
-S10:
-  pp = *q;
-S20:
-  /*
-     INITIALIZATION STEP
-     */
-  strtx = stvaln(&pp);
+  if (!qporq) pp = *q; else pp = *p;
+
+  /* INITIALIZATION STEP */
+  strtx = stvaln (&pp);
   xcur = strtx;
-  /*
-     NEWTON INTERATIONS
-     */
-  for(i=1; i<=maxit; i++) {
-    cumnor(&xcur,&cum,&ccum);
-    dx = (cum-pp)/dennor(xcur);
-    xcur -= dx;
-    if (fabs(dx/xcur) < eps) goto S40;
-  }
+  /* NEWTON INTERATIONS */
+  for (i=1; i<=maxit; i++)
+    {
+      cumnor (&xcur, &cum, &ccum);
+      dx = (cum-pp) / (r2pi*exp(-0.5 * xcur * xcur));
+      xcur -= dx;
+      if (fabs(dx/xcur) < eps) 
+        {
+          /* IF WE GET HERE, NEWTON HAS SUCCEDED */
+          dinvnr_0 = xcur;
+          if (!qporq) dinvnr_0 = -dinvnr_0;
+          return dinvnr_0;
+        }
+    }
   dinvnr_0 = strtx;
-  /*
-     IF WE GET HERE, NEWTON HAS FAILED
-     */
+  /* IF WE GET HERE, NEWTON HAS FAILED */
   if (!qporq) dinvnr_0 = -dinvnr_0;
   return dinvnr_0;
-S40:
-  /*
-     IF WE GET HERE, NEWTON HAS SUCCEDED
-     */
-  dinvnr_0 = xcur;
-  if (!qporq) dinvnr_0 = -dinvnr_0;
-  return dinvnr_0;
-#undef maxit
-#undef eps
-#undef r2pi
-#undef nhalf
-#undef dennor
 }
 
 static void E0000(int IENTRY,int *status,double *x,double *fx,
@@ -6332,83 +6228,107 @@ static void E0000(int IENTRY,int *status,double *x,double *fx,
                   double *zabsto,double *zbig,double *zrelst,
                   double *zrelto,double *zsmall,double *zstpmu)
 {
-#define qxmon(zx,zy,zz) (int)((zx) <= (zy) && (zy) <= (zz))
   static double absstp,abstol,big,fbig,fsmall,relstp,reltol,small,step,stpmul,xhi,
                 xlb,xlo,xsave,xub,yy;
   static int i99999;
   static unsigned long qbdd,qcond,qdum1,qdum2,qincr,qlim,qup;
-  switch(IENTRY){case 0: goto DINVR; case 1: goto DSTINV;}
+  switch(IENTRY)
+    {
+    case 0: goto DINVR; 
+    case 1: goto DSTINV;
+    }
 DINVR:
-  if (*status > 0) goto S310;
-  qcond = !qxmon(small,*x,big);
-  if (qcond) ftnstop(" SMALL, X, BIG not monotone in INVR");
-  xsave = *x;
-  /*
-     See that SMALL and BIG bound the zero and set QINCR
-     */
-  *x = small;
-  /*
-     GET-FUNCTION-VALUE
-     */
-  i99999 = 1;
-  goto S300;
-S10:
-  fsmall = *fx;
-  *x = big;
-  /*
-     GET-FUNCTION-VALUE
-     */
-  i99999 = 2;
-  goto S300;
-S20:
-  fbig = *fx;
-  qincr = fbig > fsmall;
-  if (!qincr) goto S50;
-  if (fsmall <= 0.0e0) goto S30;
-  *status = -1;
-  *qleft = *qhi = 1;
-  return;
-S30:
-  if (fbig >= 0.0e0) goto S40;
-  *status = -1;
-  *qleft = *qhi = 0;
-  return;
-S40:
-  goto S80;
-S50:
-  if (fsmall >= 0.0e0) goto S60;
-  *status = -1;
-  *qleft = 1;
-  *qhi = 0;
-  return;
-S60:
-  if (fbig <= 0.0e0) goto S70;
-  *status = -1;
-  *qleft = 0;
-  *qhi = 1;
-  return;
-S80:
-S70:
-  *x = xsave;
-  step = fifdmax1(absstp,relstp*fabs(*x));
-  /*
-     YY = F(X) - Y
-     GET-FUNCTION-VALUE
-     */
-  i99999 = 3;
-  goto S300;
+  if ( *status == 0 )
+    {
+      if (!( (small <= *x) && (*x <= big) )) ftnstop(" SMALL, X, BIG not monotone in INVR");
+      /* See that SMALL and BIG bound the zero and set QINCR */
+      xsave = *x; *x = small;
+      i99999 = 1; /* GET-FUNCTION-VALUE */
+      *status = 1; /* TO GET-FUNCTION-VALUE */
+      return;
+    }
+
+  switch((int)i99999)
+    {
+    case 1: 
+      fsmall = *fx;
+      *x = big;
+      i99999 = 2; /* GET-FUNCTION-VALUE */
+      *status = 1; /* TO GET-FUNCTION-VALUE */
+      return;
+
+    case 2: 
+      fbig = *fx;
+      qincr = fbig > fsmall;
+      if (qincr) 
+        {
+          if (fsmall > 0.) 
+            {
+              *status = -1; *qleft = *qhi = 1;
+              return;
+            }
+          if (fbig < 0.) 
+            {
+              *status = -1; *qleft = *qhi = 0;
+              return;
+            }
+        }
+      else
+        {
+          if (fsmall < 0.) 
+            {
+              *status = -1; *qleft = 1; *qhi = 0;
+              return;
+            }
+          if (fbig > 0.) 
+            {
+              *status = -1; *qleft = 0; *qhi = 1;
+              return;
+            }
+        }
+      *x = xsave;
+      step = MAX(absstp,relstp*fabs(*x));
+      /* * YY = F(X) - Y ; GET-FUNCTION-VALUE */
+      i99999 = 3;
+      /* TO GET-FUNCTION-VALUE */
+      *status = 1;
+      return;
+
+    case 3: 
+      goto S90;
+
+    case 4: 
+      goto S130;
+
+    case 5: 
+      goto S200;
+
+    case 6: 
+      if (!(*status == 1)) 
+        {
+          *x = xlo;
+          *status = 0;
+          return;
+        }
+      goto S260;
+
+    default: break;
+    }
+
+
 S90:
   yy = *fx;
-  if (!(yy == 0.0e0)) goto S100;
-  *status = 0;
-  return;
-S100:
-  qup = (qincr && yy < 0.0e0) || (!qincr && yy > 0.0e0);
+  if (yy == 0.) 
+    {
+      *status = 0;
+      return;
+    }
+  qup = (qincr && yy < 0.) || (!qincr && yy > 0.);
   /*
-     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-     HANDLE CASE IN WHICH WE MUST STEP HIGHER
-     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-     */
+   * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   * HANDLE CASE IN WHICH WE MUST STEP HIGHER
+   * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   */
   if (!qup) goto S170;
   xlb = xsave;
   xub = fifdmin1(xlb+step,big);
@@ -6424,26 +6344,29 @@ S120:
      GET-FUNCTION-VALUE
      */
   i99999 = 4;
-  goto S300;
+  *status = 1; /* TO GET-FUNCTION-VALUE */
+  return;
 S130:
   yy = *fx;
-  qbdd =( qincr && yy >= 0.0e0) || ( !qincr && yy <= 0.0e0);
+  qbdd =( qincr && yy >= 0.) || ( !qincr && yy <= 0.);
   qlim = xub >= big;
   qcond = qbdd || qlim;
-  if (qcond) goto S140;
-  step = stpmul*step;
-  xlb = xub;
-  xub = fifdmin1(xlb+step,big);
-S140:
+  if (!qcond) 
+    {
+      step = stpmul*step;
+      xlb = xub;
+      xub = MIN(xlb+step,big);
+    }
   goto S110;
 S150:
-  if (!(qlim && !qbdd)) goto S160;
-  *status = -1;
-  *qleft = 0;
-  *qhi = !qincr;
-  *x = big;
-  return;
-S160:
+  if ((qlim && !qbdd)) 
+    {
+      *status = -1;
+      *qleft = 0;
+      *qhi = !qincr;
+      *x = big;
+      return;
+    }
   goto S240;
 S170:
   /*
@@ -6457,59 +6380,51 @@ S170:
 S180:
   if (qcond) goto S220;
 S190:
-  /*
-     YY = F(XLB) - Y
-     */
+  /* YY = F(XLB) - Y */
   *x = xlb;
-  /*
-     GET-FUNCTION-VALUE
-     */
+  /* GET-FUNCTION-VALUE */
   i99999 = 5;
-  goto S300;
+  *status = 1; /* TO GET-FUNCTION-VALUE */
+  return;
 S200:
   yy = *fx;
-  qbdd = (qincr && yy <= 0.0e0) || (!qincr && yy >= 0.0e0);
+  qbdd = (qincr && yy <= 0.) || (!qincr && yy >= 0.);
   qlim = xlb <= small;
   qcond = qbdd || qlim;
-  if (qcond) goto S210;
-  step = stpmul*step;
-  xub = xlb;
-  xlb = fifdmax1(xub-step,small);
-S210:
+  if (!qcond) 
+    {
+      step = stpmul*step;
+      xub = xlb;
+      xlb = fifdmax1(xub-step,small);
+    }
   goto S180;
 S220:
-  if (!(qlim && !qbdd)) goto S230;
-  *status = -1;
-  *qleft = 1;
-  *qhi = qincr;
-  *x = small;
-  return;
+  if ((qlim && !qbdd))
+    {
+      *status = -1;
+      *qleft = 1;
+      *qhi = qincr;
+      *x = small;
+      return;
+    }
 S240:
-S230:
   dstzr(&xlb,&xub,&abstol,&reltol);
   /*
-     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-     IF WE REACH HERE, XLB AND XUB BOUND THE ZERO OF F.
-     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-     */
+   * IF WE REACH HERE, XLB AND XUB BOUND THE ZERO OF F.
+   */
   *status = 0;
-  goto S260;
-S250:
-  if (!(*status == 1)) goto S290;
 S260:
   dzror(status,x,fx,&xlo,&xhi,&qdum1,&qdum2);
-  if (!(*status == 1)) goto S280;
-  /*
-     GET-FUNCTION-VALUE
-     */
-  i99999 = 6;
-  goto S300;
-S280:
-S270:
-  goto S250;
-S290:
-  *x = xlo;
-  *status = 0;
+  if (*status == 1) 
+    {
+      /* GET-FUNCTION-VALUE */
+      i99999 = 6;
+    }
+  else
+    {
+      *x = xlo;
+      *status = 0;
+    }
   return;
 DSTINV:
   small = *zsmall;
@@ -6520,16 +6435,6 @@ DSTINV:
   abstol = *zabsto;
   reltol = *zrelto;
   return;
-S300:
-  /*
-     TO GET-FUNCTION-VALUE
-     */
-  *status = 1;
-  return;
-S310:
-  switch((int)i99999){case 1: goto S10;case 2: goto S20;case 3: goto S90;case 
-    4: goto S130;case 5: goto S200;case 6: goto S270;default: break;}
-#undef qxmon
 }
 
 /*
@@ -6683,17 +6588,13 @@ static double dt1(double *p,double *q,double *df)
   double denpow,sum,term,x,xx;
   int i;
   double coef[4][5] = {
-      {1.0e0,1.0e0,0.0e0,0.0e0,0.0e0},
-      {3.0e0,16.0e0,5.0e0,0.0e0,0.0e0},
-      {-15.0e0,17.0e0, 19.0e0,3.0e0,0.0e0},
-      {-945.0e0,-1920.0e0,1482.0e0,776.0e0,79.0e0}
+      {1.,1.,0.,0.,0.},
+      {3.,16.,5.,0.,0.},
+      {-15.,17., 19.,3.,0.},
+      {-945.,-1920.,1482.,776.,79.}
   };
-  double denom[4] = {
-    4.0e0,96.0e0,384.0e0,92160.0e0
-  };
-  int ideg[4] = {
-    2,3,4,5
-  };
+  double denom[4] = { 4.,96.,384.,92160. };
+  int ideg[4] = { 2,3,4,5 };
 
   x = fabs (dinvnr (p, q) );
   xx = x * x;
@@ -6744,16 +6645,16 @@ S20:
      Check that F(ZXLO) < 0 < F(ZXHI)  or
      F(ZXLO) > 0 > F(ZXHI)
      */
-  if (!(fb < 0.0e0)) goto S40;
-  if (!(*fx < 0.0e0)) goto S30;
+  if (!(fb < 0.)) goto S40;
+  if (!(*fx < 0.)) goto S30;
   *status = -1;
   *qleft = *fx < fb;
   *qhi = 0;
   return;
 S40:
 S30:
-  if (!(fb > 0.0e0)) goto S60;
-  if (!(*fx > 0.0e0)) goto S50;
+  if (!(fb > 0.)) goto S60;
+  if (!(*fx > 0.)) goto S50;
   *status = -1;
   *qleft = *fx > fb;
   *qhi = 1;
@@ -6800,12 +6701,12 @@ S120:
   p = fda*p;
   q = fdb*fa-fda*fb;
 S130:
-  if (!(p < 0.0e0)) goto S140;
+  if (!(p < 0.)) goto S140;
   p = -p;
   q = -q;
 S140:
-  if (ext == 3) p *= 2.0e0;
-  if (!(p*1.0e0 == 0.0e0 || p <= q*tol)) goto S150;
+  if (ext == 3) p *= 2.;
+  if (!(p*1. == 0. || p <= q*tol)) goto S150;
   w = tol;
   goto S180;
 S150:
@@ -6831,7 +6732,7 @@ S170:
   goto S270;
 S200:
   fb = *fx;
-  if (!(fc*fb >= 0.0e0)) goto S210;
+  if (!(fc*fb >= 0.)) goto S210;
   goto S70;
 S210:
   if (!(w == mb)) goto S220;
@@ -6843,7 +6744,7 @@ S230:
   goto S80;
 S240:
   *xhi = c;
-  qrzero = ( fc >= 0.0e0 && fb <= 0.0e0) || ( fc < 0.0e0 && fb >= 0.0e0);
+  qrzero = ( fc >= 0. && fb <= 0.) || ( fc < 0. && fb >= 0.);
   if (!qrzero) goto S250;
   *status = 0;
   goto S260;
@@ -7035,8 +6936,8 @@ static double erfc1(int *ind, double *x)
   ax = fabs(*x);
   if (ax > 0.5e0) goto S10;
   t = *x**x;
-  top = (((a[0]*t+a[1])*t+a[2])*t+a[3])*t+a[4]+1.0e0;
-  bot = ((b[0]*t+b[1])*t+b[2])*t+1.0e0;
+  top = (((a[0]*t+a[1])*t+a[2])*t+a[3])*t+a[4]+1.;
+  bot = ((b[0]*t+b[1])*t+b[2])*t+1.;
   erfc1_0 = 0.5e0+(0.5e0-*x*(top/bot));
   if (*ind != 0) erfc1_0 = exp(t)*erfc1_0;
   return erfc1_0;
@@ -7044,7 +6945,7 @@ S10:
   /*
      0.5 .LT. ABS(X) .LE. 4
      */
-  if (ax > 4.0e0) goto S20;
+  if (ax > 4.) goto S20;
   top = ((((((p[0]*ax+p[1])*ax+p[2])*ax+p[3])*ax+p[4])*ax+p[5])*ax+p[6])*ax+p[
     7];
   bot = ((((((q[0]*ax+q[1])*ax+q[2])*ax+q[3])*ax+q[4])*ax+q[5])*ax+q[6])*ax+q[
@@ -7057,40 +6958,40 @@ S20:
      */
   if (*x <= -5.6e0) goto S60;
   if (*ind != 0) goto S30;
-  if (*x > 100.0e0) goto S70;
+  if (*x > 100.) goto S70;
   if (*x**x > -exparg(&K1)) goto S70;
 S30:
-  t = pow(1.0e0/ *x,2.0);
+  t = pow(1./ *x,2.0);
   top = (((r[0]*t+r[1])*t+r[2])*t+r[3])*t+r[4];
-  bot = (((s[0]*t+s[1])*t+s[2])*t+s[3])*t+1.0e0;
+  bot = (((s[0]*t+s[1])*t+s[2])*t+s[3])*t+1.;
   erfc1_0 = (c-t*top/bot)/ax;
 S40:
   /*
      FINAL ASSEMBLY
      */
   if (*ind == 0) goto S50;
-  if (*x < 0.0e0) erfc1_0 = 2.0e0*exp(*x**x)-erfc1_0;
+  if (*x < 0.) erfc1_0 = 2.*exp(*x**x)-erfc1_0;
   return erfc1_0;
 S50:
   w = *x**x;
   t = w;
   e = w-t;
   erfc1_0 = (0.5e0+(0.5e0-e))*exp(-t)*erfc1_0;
-  if (*x < 0.0e0) erfc1_0 = 2.0e0-erfc1_0;
+  if (*x < 0.) erfc1_0 = 2.-erfc1_0;
   return erfc1_0;
 S60:
   /*
      LIMIT VALUE FOR LARGE NEGATIVE X
      */
-  erfc1_0 = 2.0e0;
-  if (*ind != 0) erfc1_0 = 2.0e0*exp(*x**x);
+  erfc1_0 = 2.;
+  if (*ind != 0) erfc1_0 = 2.*exp(*x**x);
   return erfc1_0;
 S70:
   /*
      LIMIT VALUE FOR LARGE POSITIVE X
      WHEN IND = 0
      */
-  return 0.0e0;
+  return 0.;
 
 }
 
@@ -7114,7 +7015,6 @@ static double esum(int *mu,double *x)
   if (w > 0.) return exp ((double) *mu) * exp (*x); 
   return exp (w);
 }
-
 
 /*
  * if l = 0 then  exparg(l) = the largest positive w for which
@@ -7158,10 +7058,10 @@ static double fpser(double *a,double *b,double *x,double *eps)
   int K1 = 1;
   double fpser_0,an,c,s,t,tol;
 
-  fpser_0 = 1.0e0;
+  fpser_0 = 1.;
   if (*a > 1.e-3**eps) 
     {
-      fpser_0 = 0.0e0;
+      fpser_0 = 0.;
       t = *a*log(*x);
       if (t < exparg(&K1)) return fpser_0;
       fpser_0 = exp(t);
@@ -7171,19 +7071,19 @@ static double fpser(double *a,double *b,double *x,double *eps)
      */
   fpser_0 = *b/ *a*fpser_0;
   tol = *eps/ *a;
-  an = *a+1.0e0;
+  an = *a+1.;
   t = *x;
   s = t/an;
 
   do
     {
-      an += 1.0e0;
+      an += 1.;
       t = *x*t;
       c = t/an;
       s += c;
     }
   while  (fabs(c) > tol) ;
-  fpser_0 *= (1.0e0+*a*s);
+  fpser_0 *= (1.+*a*s);
   return fpser_0;
 }
 
@@ -7215,15 +7115,15 @@ static double gam1(double *a)
      */
   t = *a;
   d = *a-0.5e0;
-  if (d > 0.0e0) t = d-0.5e0;
+  if (d > 0.) t = d-0.5e0;
   T1 = t;
   if (T1 < 0) 
     {
       top = (((((((r[8]*t+r[7])*t+r[6])*t+r[5])*t+r[4])*t+r[3])*t+r[2])*t+r[1])*t+
         r[0];
-      bot = (s2*t+s1)*t+1.0e0;
+      bot = (s2*t+s1)*t+1.;
       w = top/bot;
-      if (d > 0.0e0) 
+      if (d > 0.) 
         return t*w/ *a;
       else
         return *a*(w+0.5e0+0.5e0);
@@ -7232,9 +7132,9 @@ static double gam1(double *a)
   else 
     {
       top = (((((p[6]*t+p[5])*t+p[4])*t+p[3])*t+p[2])*t+p[1])*t+p[0];
-      bot = (((q[4]*t+q[3])*t+q[2])*t+q[1])*t+1.0e0;
+      bot = (((q[4]*t+q[3])*t+q[2])*t+q[1])*t+1.;
       w = top/bot;
-      if (d > 0.0e0) 
+      if (d > 0.) 
         return t/ *a*(w-0.5e0-0.5e0);
       else
         return *a*w;
@@ -7307,7 +7207,7 @@ static void gaminv(double *a,double *x,double *x0,double *p,double *q,
   double ln10 = 2.302585e0;
   double tol = 1.e-5;
   double amin[2] = {
-    500.0e0,100.0e0
+    500.,100.
   };
   double bmin[2] = {
     1.e-28,1.e-13
@@ -7342,30 +7242,30 @@ static void gaminv(double *a,double *x,double *x0,double *p,double *q,
   e = spmpar(&K1);
   xmin = spmpar(&K2);
   xmax = spmpar(&K3);
-  *x = 0.0e0;
-  if (*a <= 0.0e0) goto S300;
+  *x = 0.;
+  if (*a <= 0.) goto S300;
   t = *p+*q-1.e0;
   if (fabs(t) > e) goto S320;
   *ierr = 0;
-  if (*p == 0.0e0) return;
-  if (*q == 0.0e0) goto S270;
-  if (*a == 1.0e0) goto S280;
-  e2 = 2.0e0*e;
+  if (*p == 0.) return;
+  if (*q == 0.) goto S270;
+  if (*a == 1.) goto S280;
+  e2 = 2.*e;
   amax = 0.4e-10/(e*e);
   iop = 1;
   if (e > 1.e-10) iop = 2;
   eps = eps0[iop-1];
   xn = *x0;
-  if (*x0 > 0.0e0) goto S160;
+  if (*x0 > 0.) goto S160;
   /*
      SELECTION OF THE INITIAL APPROXIMATION XN OF X
      WHEN A .LT. 1
      */
-  if (*a > 1.0e0) goto S80;
-  T4 = *a+1.0e0;
+  if (*a > 1.) goto S80;
+  T4 = *a+1.;
   g = Xgamm(&T4);
   qg = *q*g;
-  if (qg == 0.0e0) goto S360;
+  if (qg == 0.) goto S360;
   b = qg/ *a;
   if (qg > 0.6e0**a) goto S40;
   if (*a >= 0.30e0 || b < 0.35e0) goto S10;
@@ -7375,30 +7275,30 @@ static void gaminv(double *a,double *x,double *x0,double *p,double *q,
   goto S160;
 S10:
   if (b >= 0.45e0) goto S40;
-  if (b == 0.0e0) goto S360;
+  if (b == 0.) goto S360;
   y = -log(b);
   s = 0.5e0+(0.5e0-*a);
   z = log(y);
   t = y-s*z;
   if (b < 0.15e0) goto S20;
-  xn = y-s*log(t)-log(1.0e0+s/(t+1.0e0));
+  xn = y-s*log(t)-log(1.+s/(t+1.));
   goto S220;
 S20:
   if (b <= 0.01e0) goto S30;
-  u = ((t+2.0e0*(3.0e0-*a))*t+(2.0e0-*a)*(3.0e0-*a))/((t+(5.0e0-*a))*t+2.0e0);
+  u = ((t+2.*(3.-*a))*t+(2.-*a)*(3.-*a))/((t+(5.-*a))*t+2.);
   xn = y-s*log(t)-log(u);
   goto S220;
 S30:
   c1 = -(s*z);
-  c2 = -(s*(1.0e0+c1));
-  c3 = s*((0.5e0*c1+(2.0e0-*a))*c1+(2.5e0-1.5e0**a));
-  c4 = -(s*(((c1/3.0e0+(2.5e0-1.5e0**a))*c1+((*a-6.0e0)**a+7.0e0))*c1+(
-                                                                       (11.0e0**a-46.0)**a+47.0e0)/6.0e0));
-  c5 = -(s*((((-(c1/4.0e0)+(11.0e0**a-17.0e0)/6.0e0)*c1+((-(3.0e0**a)+13.0e0)*
-                                                         *a-13.0e0))*c1+0.5e0*(((2.0e0**a-25.0e0)**a+72.0e0)**a-61.0e0))*c1+((
-                                                                                                                              (25.0e0**a-195.0e0)**a+477.0e0)**a-379.0e0)/12.0e0));
+  c2 = -(s*(1.+c1));
+  c3 = s*((0.5e0*c1+(2.-*a))*c1+(2.5e0-1.5e0**a));
+  c4 = -(s*(((c1/3.+(2.5e0-1.5e0**a))*c1+((*a-6.)**a+7.))*c1+(
+                                                              (11.**a-46.0)**a+47.)/6.));
+  c5 = -(s*((((-(c1/4.)+(11.**a-17.)/6.)*c1+((-(3.**a)+13.)*
+                                             *a-13.))*c1+0.5e0*(((2.**a-25.)**a+72.)**a-61.))*c1+((
+                                                                                                   (25.**a-195.)**a+477.)**a-379.)/12.));
   xn = (((c5/y+c4)/y+c3)/y+c2)/y+c1+y;
-  if (*a > 1.0e0) goto S220;
+  if (*a > 1.) goto S220;
   if (b > bmin[iop-1]) goto S220;
   *x = xn;
   return;
@@ -7414,8 +7314,8 @@ S50:
 S60:
   xn = exp(log(*p*g)/ *a);
 S70:
-  if (xn == 0.0e0) goto S310;
-  t = 0.5e0+(0.5e0-xn/(*a+1.0e0));
+  if (xn == 0.) goto S310;
+  t = 0.5e0+(0.5e0-xn/(*a+1.));
   xn /= t;
   goto S160;
 S80:
@@ -7429,46 +7329,46 @@ S80:
 S90:
   w = log(*q);
 S100:
-  t = sqrt(-(2.0e0*w));
-  s = t-(((a3*t+a2)*t+a1)*t+a0)/((((b4*t+b3)*t+b2)*t+b1)*t+1.0e0);
+  t = sqrt(-(2.*w));
+  s = t-(((a3*t+a2)*t+a1)*t+a0)/((((b4*t+b3)*t+b2)*t+b1)*t+1.);
   if (*q > 0.5e0) s = -s;
   rta = sqrt(*a);
   s2 = s*s;
-  xn = *a+s*rta+(s2-1.0e0)/3.0e0+s*(s2-7.0e0)/(36.0e0*rta)-((3.0e0*s2+7.0e0)*
-                                                            s2-16.0e0)/(810.0e0**a)+s*((9.0e0*s2+256.0e0)*s2-433.0e0)/(38880.0e0**a*
-                                                                                                                       rta);
-  xn = fifdmax1(xn,0.0e0);
+  xn = *a+s*rta+(s2-1.)/3.+s*(s2-7.)/(36.*rta)-((3.*s2+7.)*
+                                                s2-16.)/(810.**a)+s*((9.*s2+256.)*s2-433.)/(38880.**a*
+                                                                                            rta);
+  xn = fifdmax1(xn,0.);
   if (*a < amin[iop-1]) goto S110;
   *x = xn;
   d = 0.5e0+(0.5e0-*x/ *a);
   if (fabs(d) <= dmin[iop-1]) return;
 S110:
   if (*p <= 0.5e0) goto S130;
-  if (xn < 3.0e0**a) goto S220;
+  if (xn < 3.**a) goto S220;
   y = -(w+gamln(a));
-  d = fifdmax1(2.0e0,*a*(*a-1.0e0));
+  d = fifdmax1(2.,*a*(*a-1.));
   if (y < ln10*d) goto S120;
-  s = 1.0e0-*a;
+  s = 1.-*a;
   z = log(y);
   goto S30;
 S120:
-  t = *a-1.0e0;
-  T6 = -(t/(xn+1.0e0));
+  t = *a-1.;
+  T6 = -(t/(xn+1.));
   xn = y+t*log(xn)-alnrel(&T6);
-  T7 = -(t/(xn+1.0e0));
+  T7 = -(t/(xn+1.));
   xn = y+t*log(xn)-alnrel(&T7);
   goto S220;
 S130:
-  ap1 = *a+1.0e0;
+  ap1 = *a+1.;
   if (xn > 0.70e0*ap1) goto S170;
   w += gamln(&ap1);
   if (xn > 0.15e0*ap1) goto S140;
-  ap2 = *a+2.0e0;
-  ap3 = *a+3.0e0;
+  ap2 = *a+2.;
+  ap3 = *a+3.;
   *x = exp((w+*x)/ *a);
-  *x = exp((w+*x-log(1.0e0+*x/ap1*(1.0e0+*x/ap2)))/ *a);
-  *x = exp((w+*x-log(1.0e0+*x/ap1*(1.0e0+*x/ap2)))/ *a);
-  *x = exp((w+*x-log(1.0e0+*x/ap1*(1.0e0+*x/ap2*(1.0e0+*x/ap3))))/ *a);
+  *x = exp((w+*x-log(1.+*x/ap1*(1.+*x/ap2)))/ *a);
+  *x = exp((w+*x-log(1.+*x/ap1*(1.+*x/ap2)))/ *a);
+  *x = exp((w+*x-log(1.+*x/ap1*(1.+*x/ap2*(1.+*x/ap3))))/ *a);
   xn = *x;
   if (xn > 1.e-2*ap1) goto S140;
   if (xn <= emin[iop-1]*ap1) return;
@@ -7476,15 +7376,15 @@ S130:
 S140:
   apn = ap1;
   t = xn/apn;
-  sum = 1.0e0+t;
+  sum = 1.+t;
 S150:
-  apn += 1.0e0;
+  apn += 1.;
   t *= (xn/apn);
   sum += t;
   if (t > 1.e-4) goto S150;
   t = w-log(sum);
   xn = exp((xn+t)/ *a);
-  xn *= (1.0e0-(*a*log(xn)-xn-t)/(*a-xn));
+  xn *= (1.-(*a*log(xn)-xn-t)/(*a-xn));
   goto S170;
 S160:
   /*
@@ -7502,21 +7402,21 @@ S190:
   if (*ierr >= 20) goto S330;
   *ierr += 1;
   gratio(a,&xn,&pn,&qn,&K8);
-  if (pn == 0.0e0 || qn == 0.0e0) goto S350;
+  if (pn == 0. || qn == 0.) goto S350;
   r = rcomp(a,&xn);
-  if (r == 0.0e0) goto S350;
+  if (r == 0.) goto S350;
   t = (pn-*p)/r;
   w = 0.5e0*(am1-xn);
   if (fabs(t) <= 0.1e0 && fabs(w*t) <= 0.1e0) goto S200;
-  *x = xn*(1.0e0-t);
-  if (*x <= 0.0e0) goto S340;
+  *x = xn*(1.-t);
+  if (*x <= 0.) goto S340;
   d = fabs(t);
   goto S210;
 S200:
-  h = t*(1.0e0+w*t);
-  *x = xn*(1.0e0-h);
-  if (*x <= 0.0e0) goto S340;
-  if (fabs(w) >= 1.0e0 && fabs(w)*t*t <= eps) return;
+  h = t*(1.+w*t);
+  *x = xn*(1.-h);
+  if (*x <= 0.) goto S340;
+  if (fabs(w) >= 1. && fabs(w)*t*t <= eps) return;
   d = fabs(h);
 S210:
   xn = *x;
@@ -7538,21 +7438,21 @@ S240:
   if (*ierr >= 20) goto S330;
   *ierr += 1;
   gratio(a,&xn,&pn,&qn,&K8);
-  if (pn == 0.0e0 || qn == 0.0e0) goto S350;
+  if (pn == 0. || qn == 0.) goto S350;
   r = rcomp(a,&xn);
-  if (r == 0.0e0) goto S350;
+  if (r == 0.) goto S350;
   t = (*q-qn)/r;
   w = 0.5e0*(am1-xn);
   if (fabs(t) <= 0.1e0 && fabs(w*t) <= 0.1e0) goto S250;
-  *x = xn*(1.0e0-t);
-  if (*x <= 0.0e0) goto S340;
+  *x = xn*(1.-t);
+  if (*x <= 0.) goto S340;
   d = fabs(t);
   goto S260;
 S250:
-  h = t*(1.0e0+w*t);
-  *x = xn*(1.0e0-h);
-  if (*x <= 0.0e0) goto S340;
-  if (fabs(w) >= 1.0e0 && fabs(w)*t*t <= eps) return;
+  h = t*(1.+w*t);
+  *x = xn*(1.-h);
+  if (*x <= 0.) goto S340;
+  if (fabs(w) >= 1. && fabs(w)*t*t <= eps) return;
   d = fabs(h);
 S260:
   xn = *x;
@@ -7647,13 +7547,13 @@ static double gamln1(double *a)
     {
       x = *a-0.5e0-0.5e0;
       w = (((((r5*x+r4)*x+r3)*x+r2)*x+r1)*x+r0)/
-        (((((s5*x+s4)*x+s3)*x+s2)*x+s1)*x +1.0e0);
+        (((((s5*x+s4)*x+s3)*x+s2)*x+s1)*x +1.);
       return x*w;
     }
   else
     {
       w = ((((((p6**a+p5)**a+p4)**a+p3)**a+p2)**a+p1)**a+p0)/
-        ((((((q6**a+q5)**a+ q4)**a+q3)**a+q2)**a+q1)**a+1.0e0);
+        ((((((q6**a+q5)**a+ q4)**a+q3)**a+q2)**a+q1)**a+1.);
       return -(*a*w);
     }
 }
@@ -7684,7 +7584,7 @@ static void grat1(double *a,double *x,double *r,double *p,double *q,
      THE INPUT ARGUMENT R HAS THE VALUE E**(-X)*X**A/GAMMA(A).
      -----------------------------------------------------------------------
      */
-  if (*a**x == 0.0e0) goto S120;
+  if (*a**x == 0.) goto S120;
   if (*a == 0.5e0) goto S100;
   if (*x < 1.1e0) goto S10;
   goto S60;
@@ -7692,20 +7592,20 @@ S10:
   /*
      TAYLOR SERIES FOR P(A,X)/X**A
      */
-  an = 3.0e0;
+  an = 3.;
   c = *x;
-  sum = *x/(*a+3.0e0);
-  tol = 0.1e0**eps/(*a+1.0e0);
+  sum = *x/(*a+3.);
+  tol = 0.1e0**eps/(*a+1.);
 S20:
-  an += 1.0e0;
+  an += 1.;
   c = -(c*(*x/an));
   t = c/(*a+an);
   sum += t;
   if (fabs(t) > tol) goto S20;
-  j = *a**x*((sum/6.0e0-0.5e0/(*a+2.0e0))**x+1.0e0/(*a+1.0e0));
+  j = *a**x*((sum/6.-0.5e0/(*a+2.))**x+1./(*a+1.));
   z = *a*log(*x);
   h = gam1(a);
-  g = 1.0e0+h;
+  g = 1.+h;
   if (*x < 0.25e0) goto S30;
   if (*a < *x/2.59e0) goto S50;
   goto S40;
@@ -7720,22 +7620,22 @@ S50:
   l = rexp(&z);
   w = 0.5e0+(0.5e0+l);
   *q = (w*j-l)*g-h;
-  if (*q < 0.0e0) goto S90;
+  if (*q < 0.) goto S90;
   *p = 0.5e0+(0.5e0-*q);
   return;
 S60:
   /*
      CONTINUED FRACTION EXPANSION
      */
-  a2nm1 = a2n = 1.0e0;
+  a2nm1 = a2n = 1.;
   b2nm1 = *x;
-  b2n = *x+(1.0e0-*a);
-  c = 1.0e0;
+  b2n = *x+(1.-*a);
+  c = 1.;
 S70:
   a2nm1 = *x*a2n+c*a2nm1;
   b2nm1 = *x*b2n+c*b2nm1;
   am0 = a2nm1/b2nm1;
-  c += 1.0e0;
+  c += 1.;
   cma = c-*a;
   a2n = a2nm1+cma*a2n;
   b2n = b2nm1+cma*b2n;
@@ -7748,12 +7648,12 @@ S80:
   /*
      SPECIAL CASES
      */
-  *p = 0.0e0;
-  *q = 1.0e0;
+  *p = 0.;
+  *q = 1.;
   return;
 S90:
-  *p = 1.0e0;
-  *q = 0.0e0;
+  *p = 1.;
+  *q = 0.;
   return;
 S100:
   if (*x >= 0.25e0) goto S110;
@@ -7817,7 +7717,7 @@ static void gratio(double *a,double *x,double *ans,double *qans,int *ind)
     5.e-15,5.e-7,5.e-4
   };
   double big[3] = {
-    20.0e0,14.0e0,10.0e0
+    20.,14.,10.
   };
   double d0[13] = {
     .833333333333333e-01,-.148148148148148e-01,.115740740740741e-02,
@@ -7858,7 +7758,7 @@ static void gratio(double *a,double *x,double *ans,double *qans,int *ind)
     .25e-3,.25e-1,.14e0
   };
   double x00[3] = {
-    31.0e0,17.0e0,9.7e0
+    31.,17.,9.7e0
   };
   int K1 = 1;
   int K2 = 0;
@@ -7878,9 +7778,9 @@ static void gratio(double *a,double *x,double *ans,double *qans,int *ind)
    FLOATING POINT NUMBER FOR WHICH 1.0 + E .GT. 1.0 .
    */
   e = spmpar(&K1);
-  if (*a < 0.0e0 || *x < 0.0e0) goto S430;
-  if (*a == 0.0e0 && *x == 0.0e0) goto S430;
-  if (*a**x == 0.0e0) goto S420;
+  if (*a < 0. || *x < 0.) goto S430;
+  if (*a == 0. && *x == 0.) goto S430;
+  if (*a**x == 0.) goto S420;
   iop = *ind+1;
   if (iop != 1 && iop != 2) iop = 3;
   acc = fifdmax1(acc0[iop-1],e);
@@ -7889,13 +7789,13 @@ static void gratio(double *a,double *x,double *ans,double *qans,int *ind)
   /*
      SELECT THE APPROPRIATE ALGORITHM
      */
-  if (*a >= 1.0e0) goto S10;
+  if (*a >= 1.) goto S10;
   if (*a == 0.5e0) goto S390;
   if (*x < 1.1e0) goto S160;
   t1 = *a*log(*x)-*x;
   u = *a*exp(t1);
-  if (u == 0.0e0) goto S380;
-  r = u*(1.0e0+gam1(a));
+  if (u == 0.) goto S380;
+  r = u*(1.+gam1(a));
   goto S250;
 S10:
   if (*a >= big[iop-1]) goto S30;
@@ -7912,20 +7812,20 @@ S20:
   goto S40;
 S30:
   l = *x/ *a;
-  if (l == 0.0e0) goto S370;
+  if (l == 0.) goto S370;
   s = 0.5e0+(0.5e0-l);
   z = rlog(&l);
-  if (z >= 700.0e0/ *a) goto S410;
+  if (z >= 700./ *a) goto S410;
   y = *a*z;
   rta = sqrt(*a);
   if (fabs(s) <= e0/rta) goto S330;
   if (fabs(s) <= 0.4e0) goto S270;
-  t = pow(1.0e0/ *a,2.0);
-  t1 = (((0.75e0*t-1.0e0)*t+3.5e0)*t-105.0e0)/(*a*1260.0e0);
+  t = pow(1./ *a,2.0);
+  t1 = (((0.75e0*t-1.)*t+3.5e0)*t-105.)/(*a*1260.);
   t1 -= y;
   r = rt2pin*rta*exp(t1);
 S40:
-  if (r == 0.0e0) goto S420;
+  if (r == 0.) goto S420;
   if (*x <= fifdmax1(*a,alog10)) goto S50;
   if (*x < x0) goto S250;
   goto S100;
@@ -7933,11 +7833,11 @@ S50:
   /*
      TAYLOR SERIES FOR P/R
      */
-  apn = *a+1.0e0;
+  apn = *a+1.;
   t = *x/apn;
   wk[0] = t;
   for(n=2; n<=20; n++) {
-    apn += 1.0e0;
+    apn += 1.;
     t *= (*x/apn);
     if (t <= 1.e-3) goto S70;
     wk[n-1] = t;
@@ -7947,7 +7847,7 @@ S70:
   sum = t;
   tol = 0.5e0*acc;
 S80:
-  apn += 1.0e0;
+  apn += 1.;
   t *= (*x/apn);
   sum += t;
   if (t > tol) goto S80;
@@ -7956,18 +7856,18 @@ S80:
     n -= 1;
     sum += wk[n-1];
   }
-  *ans = r/ *a*(1.0e0+sum);
+  *ans = r/ *a*(1.+sum);
   *qans = 0.5e0+(0.5e0-*ans);
   return;
 S100:
   /*
      ASYMPTOTIC EXPANSION
      */
-  amn = *a-1.0e0;
+  amn = *a-1.;
   t = amn/ *x;
   wk[0] = t;
   for(n=2; n<=20; n++) {
-    amn -= 1.0e0;
+    amn -= 1.;
     t *= (amn/ *x);
     if (fabs(t) <= 1.e-3) goto S120;
     wk[n-1] = t;
@@ -7977,7 +7877,7 @@ S120:
   sum = t;
 S130:
   if (fabs(t) <= acc) goto S140;
-  amn -= 1.0e0;
+  amn -= 1.;
   t *= (amn/ *x);
   sum += t;
   goto S130;
@@ -7987,27 +7887,27 @@ S140:
     n -= 1;
     sum += wk[n-1];
   }
-  *qans = r/ *x*(1.0e0+sum);
+  *qans = r/ *x*(1.+sum);
   *ans = 0.5e0+(0.5e0-*qans);
   return;
 S160:
   /*
      TAYLOR SERIES FOR P(A,X)/X**A
      */
-  an = 3.0e0;
+  an = 3.;
   c = *x;
-  sum = *x/(*a+3.0e0);
-  tol = 3.0e0*acc/(*a+1.0e0);
+  sum = *x/(*a+3.);
+  tol = 3.*acc/(*a+1.);
 S170:
-  an += 1.0e0;
+  an += 1.;
   c = -(c*(*x/an));
   t = c/(*a+an);
   sum += t;
   if (fabs(t) > tol) goto S170;
-  j = *a**x*((sum/6.0e0-0.5e0/(*a+2.0e0))**x+1.0e0/(*a+1.0e0));
+  j = *a**x*((sum/6.-0.5e0/(*a+2.))**x+1./(*a+1.));
   z = *a*log(*x);
   h = gam1(a);
-  g = 1.0e0+h;
+  g = 1.+h;
   if (*x < 0.25e0) goto S180;
   if (*a < *x/2.59e0) goto S200;
   goto S190;
@@ -8022,7 +7922,7 @@ S200:
   l = rexp(&z);
   w = 0.5e0+(0.5e0+l);
   *qans = (w*j-l)*g-h;
-  if (*qans < 0.0e0) goto S380;
+  if (*qans < 0.) goto S380;
   *ans = 0.5e0+(0.5e0-*qans);
   return;
 S210:
@@ -8033,7 +7933,7 @@ S210:
   sum = exp(-*x);
   t = sum;
   n = 1;
-  c = 0.0e0;
+  c = 0.;
   goto S230;
 S220:
   rtx = sqrt(*x);
@@ -8044,7 +7944,7 @@ S220:
 S230:
   if (n == i) goto S240;
   n += 1;
-  c += 1.0e0;
+  c += 1.;
   t = *x*t/c;
   sum += t;
   goto S230;
@@ -8056,16 +7956,16 @@ S250:
   /*
      CONTINUED FRACTION EXPANSION
      */
-  tol = fifdmax1(5.0e0*e,acc);
-  a2nm1 = a2n = 1.0e0;
+  tol = fifdmax1(5.*e,acc);
+  a2nm1 = a2n = 1.;
   b2nm1 = *x;
-  b2n = *x+(1.0e0-*a);
-  c = 1.0e0;
+  b2n = *x+(1.-*a);
+  c = 1.;
 S260:
   a2nm1 = *x*a2n+c*a2nm1;
   b2nm1 = *x*b2n+c*b2nm1;
   am0 = a2nm1/b2nm1;
-  c += 1.0e0;
+  c += 1.;
   cma = c-*a;
   a2n = a2nm1+cma*a2n;
   b2n = b2nm1+cma*b2n;
@@ -8078,13 +7978,13 @@ S270:
   /*
      GENERAL TEMME EXPANSION
      */
-  if (fabs(s) <= 2.0e0*e && *a*e*e > 3.28e-3) goto S430;
+  if (fabs(s) <= 2.*e && *a*e*e > 3.28e-3) goto S430;
   c = exp(-y);
   T3 = sqrt(y);
   w = 0.5e0*erfc1(&K1,&T3);
-  u = 1.0e0/ *a;
+  u = 1./ *a;
   z = sqrt(z+z);
-  if (l < 1.0e0) z = -z;
+  if (l < 1.) z = -z;
   T4 = iop-2;
   if (T4 < 0) goto S280;
   else if (T4 == 0) goto S290;
@@ -8113,7 +8013,7 @@ S290:
 S300:
   t = ((d0[2]*z+d0[1])*z+d0[0])*z-third;
 S310:
-  if (l < 1.0e0) goto S320;
+  if (l < 1.) goto S320;
   *qans = c*(w+rt2pin*t/rta);
   *ans = 0.5e0+(0.5e0-*qans);
   return;
@@ -8127,10 +8027,10 @@ S330:
      */
   if (*a*e*e > 3.28e-3) goto S430;
   c = 0.5e0+(0.5e0-y);
-  w = (0.5e0-sqrt(y)*(0.5e0+(0.5e0-y/3.0e0))/rtpi)/c;
-  u = 1.0e0/ *a;
+  w = (0.5e0-sqrt(y)*(0.5e0+(0.5e0-y/3.))/rtpi)/c;
+  u = 1./ *a;
   z = sqrt(z+z);
-  if (l < 1.0e0) z = -z;
+  if (l < 1.) z = -z;
   T5 = iop-2;
   if (T5 < 0) goto S340;
   else if (T5 == 0) goto S350;
@@ -8158,12 +8058,12 @@ S370:
   /*
      SPECIAL CASES
      */
-  *ans = 0.0e0;
-  *qans = 1.0e0;
+  *ans = 0.;
+  *qans = 1.;
   return;
 S380:
-  *ans = 1.0e0;
-  *qans = 0.0e0;
+  *ans = 1.;
+  *qans = 0.;
   return;
 S390:
   if (*x >= 0.25e0) goto S400;
@@ -8177,7 +8077,7 @@ S400:
   *ans = 0.5e0+(0.5e0-*qans);
   return;
 S410:
-  if (fabs(s) <= 2.0e0*e) goto S430;
+  if (fabs(s) <= 2.*e) goto S430;
 S420:
   if (*x <= *a) goto S370;
   goto S380;
@@ -8185,7 +8085,7 @@ S430:
   /*
      ERROR RETURN
      */
-  *ans = 2.0e0;
+  *ans = 2.;
   return;
 }
 
@@ -8199,13 +8099,13 @@ static double gsumln(double *a,double *b)
   x = *a+*b-2.e0;
   if (x <= 0.25e0) 
     {
-      T1 = 1.0e0+x;
+      T1 = 1.+x;
       return gamln1(&T1);
     }
   else if (x > 1.25e0)
     {
-      T2 = x-1.0e0;
-      return gamln1(&T2)+log(x*(1.0e0+x));
+      T2 = x-1.;
+      return gamln1(&T2)+log(x*(1.+x));
     }
   else
     return gamln1(&x)+alnrel(&x);
@@ -8229,20 +8129,20 @@ static double rcomp(double *a,double *x)
      ..
      .. Executable Statements ..
      */
-  rcomp_0 = 0.0e0;
-  if (*a >= 20.0e0) goto S20;
+  rcomp_0 = 0.;
+  if (*a >= 20.) goto S20;
   t = *a*log(*x)-*x;
-  if (*a >= 1.0e0) goto S10;
-  rcomp_0 = *a*exp(t)*(1.0e0+gam1(a));
+  if (*a >= 1.) goto S10;
+  rcomp_0 = *a*exp(t)*(1.+gam1(a));
   return rcomp_0;
 S10:
   return exp(t)/Xgamm(a);
 
 S20:
   u = *x/ *a;
-  if (u == 0.0e0) return rcomp_0;
-  t = pow(1.0e0/ *a,2.0);
-  t1 = (((0.75e0*t-1.0e0)*t+3.5e0)*t-105.0e0)/(*a*1260.0e0);
+  if (u == 0.) return rcomp_0;
+  t = pow(1./ *a,2.0);
+  t1 = (((0.75e0*t-1.)*t+3.5e0)*t-105.)/(*a*1260.);
   t1 -= (*a*rlog(&u));
   return rt2pin*sqrt(*a)*exp(t1);
 
@@ -8280,7 +8180,7 @@ static double rlog(double *x)
      ARGUMENT REDUCTION
      */
   u = *x-0.5e0-0.5e0;
-  w1 = 0.0e0;
+  w1 = 0.;
   goto S30;
 S10:
   u = *x-0.7e0;
@@ -8289,15 +8189,15 @@ S10:
   goto S30;
 S20:
   u = 0.75e0**x-1.e0;
-  w1 = b+u/3.0e0;
+  w1 = b+u/3.;
 S30:
   /*
      SERIES EXPANSION
      */
-  r = u/(u+2.0e0);
+  r = u/(u+2.);
   t = r*r;
-  w = ((p2*t+p1)*t+p0)/((q2*t+q1)*t+1.0e0);
-  return 2.0e0*t*(1.0e0/(1.0e0-r)-r*w)+w1;
+  w = ((p2*t+p1)*t+p0)/((q2*t+q1)*t+1.);
+  return 2.*t*(1./(1.-r)-r*w)+w1;
 S40:
   r = *x-0.5e0-0.5e0;
   return r-log(*x);
@@ -8327,7 +8227,7 @@ static double rlog1(double *x)
      ARGUMENT REDUCTION
      */
   h = *x;
-  w1 = 0.0e0;
+  w1 = 0.;
   goto S30;
 S10:
   h = *x+0.3e0;
@@ -8336,15 +8236,15 @@ S10:
   goto S30;
 S20:
   h = 0.75e0**x-0.25e0;
-  w1 = b+h/3.0e0;
+  w1 = b+h/3.;
 S30:
   /*
      SERIES EXPANSION
      */
-  r = h/(h+2.0e0);
+  r = h/(h+2.);
   t = r*r;
-  w = ((p2*t+p1)*t+p0)/((q2*t+q1)*t+1.0e0);
-  return 2.0e0*t*(1.0e0/(1.0e0-r)-r*w)+w1;
+  w = ((p2*t+p1)*t+p0)/((q2*t+q1)*t+1.);
+  return 2.*t*(1./(1.-r)-r*w)+w1;
 S40:
   w = *x+0.5e0+0.5e0;
   return *x-log(w);
@@ -8406,16 +8306,16 @@ static double stvaln(double *p)
 
   if ((*p <= 0.5e0))
     {
-      sign = -1.0e0;
+      sign = -1.;
       z = *p;
     }
   else
     {
-      sign = 1.0e0;
-      z = 1.0e0-*p;
+      sign = 1.;
+      z = 1.-*p;
     }
 
-  y = sqrt(-(2.0e0*log(z)));
+  y = sqrt(-(2.*log(z)));
   stvaln_0 = y+devlpl(xnum,&K1,&y)/devlpl(xden,&K1,&y);
   return sign*stvaln_0;
 }
@@ -8666,7 +8566,7 @@ double pnl_normal_density(double x)
   return(exp(-SQR(x)/2.) * M_1_SQRT2PI);
 }
 
- double InvNormal2P1[] = {
+double InvNormal2P1[] = {
   0.160304955844066229311E2,
   -0.90784959262960326650E2,
   0.18644914861620987391E3,
@@ -8676,7 +8576,7 @@ double pnl_normal_density(double x)
   0.1760587821390590
 };
 
- double InvNormal2Q1[] = {
+double InvNormal2Q1[] = {
   0.147806470715138316110E2,
   -0.91374167024260313396E2,
   0.21015790486205317714E3,
@@ -8686,7 +8586,7 @@ double pnl_normal_density(double x)
   0.1E1
 };
 
- double InvNormal2P2[] = {
+double InvNormal2P2[] = {
   -0.152389263440726128E-1,
   0.3444556924136125216,
   -0.29344398672542478687E1,
@@ -8697,7 +8597,7 @@ double pnl_normal_density(double x)
   0.237516689024448000
 };
 
- double InvNormal2Q2[] = {
+double InvNormal2Q2[] = {
   -0.108465169602059954E-1,
   0.2610628885843078511,
   -0.24068318104393757995E1,
@@ -8708,7 +8608,7 @@ double pnl_normal_density(double x)
   0.1E1
 };
 
- double InvNormal2P3[] = {
+double InvNormal2P3[] = {
   0.56451977709864482298E-4,
   0.53504147487893013765E-2,
   0.12969550099727352403,
@@ -8722,7 +8622,7 @@ double pnl_normal_density(double x)
   0.22419563223346345828E-2
 };
 
- double InvNormal2Q3[] = {
+double InvNormal2Q3[] = {
   0.56451699862760651514E-4,
   0.53505587067930653953E-2,
   0.12986615416911646934,
