@@ -110,8 +110,7 @@ static unsigned short A[] = {
 
 
 
-double pnl_sf_psi(x)
-     double x;
+double pnl_sf_psi(double x)
 {
   double p, q, nz, s, w, y, z;
   int i, n, negative;

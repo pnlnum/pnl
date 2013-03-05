@@ -69,243 +69,239 @@
  *                                                                                *
  * The F and  Noncentral F distribution are  not necessarily monotone  in         *
  * either degree  of  freedom argument.  Consequently,  there  may be two         *
- * degree of freedom arguments that satisfy the specified condition.  An          *
- * arbitrary one of these will be found by the cdf routines.                      *
- *                                                                                *
- * The  amount of computation  required for  the noncentral chisquare and         *
- * noncentral F  distribution    is proportional  to  the  value  of  the         *
- * noncentrality   parameter.  Very large values  of   this parameter can         *
- * require  immense   numbers of   computation.  Consequently,  when  the         *
- * noncentrality parameter is to  be calculated, the upper limit searched         *
- * is 10,000.                                                                     *
- *                                                                                *
- *         -------------------- END WARNINGS --------------------                 *
- *                                                                                *
- *                             DOCUMENTATION                                      *
- *                                                                                *
- * This  file  contains an  overview  of the library   and is the primary         *
- * documentation.                                                                 *
- *                                                                                *
- * Other documentation  is  in  directory 'doc'  on  the  distribution as         *
- * character  (ASCII) files.  A summary  of all of the available routines         *
- * is contained in dcdflib.chs (chs is an abbreviation of 'cheat sheet').         *
- * The 'chs'  file  will probably be  the  primary reference.  The  file,         *
- * dcdflib.fdoc, contains the  header comments for each  routine intended         *
- * for direct use.                                                                *
- *                                                                                *
- *                              INSTALLATION                                      *
- *                                                                                *
- * The Fortran source routines are contained in directory src.                    *
- *                                                                                *
- * A  few  routines use   machine  dependent  constants.  Lists  of  such         *
- * constants for different machines are found in ipmpar.f.  Uncomment the         *
- * ones  appropriate to your  machine.  The distributed  version uses the         *
- * IEEE arithmetic that is used by  the IBM PC,  Macintosh, and most Unix         *
- * workstations.                                                                  *
- *                                                                                *
- * Ignore compilation warnings that lines of code are  not reachable.  We         *
- * write in a Fortran structured preprocessor (FLECS)  that is similar in         *
- * spirit to  Ratfor.   Sometimes our coding  practices in  FLECS lead to         *
- * unreachable lines.   Also, FLECS inserts   lines of code:  STOP  "CODE         *
- * FLOWING  INTO   FLECS   PROCEEDURES".  All   such    lines should   be         *
- * unreachable.                                                                   *
- *                                                                                *
- *                                SOURCES                                         *
- *                                                                                *
- * The following   routines, written  by   others, are  incorporated into         *
- * DCDFLIB.                                                                       *
- *                                                                                *
- *                           Beta Distribution                                    *
- *                                                                                *
- * DiDinato, A.  R. and Morris, A.  H.   Algorithm 708: Significant Digit         *
- * Computation of the Incomplete Beta  Function Ratios.  ACM Trans. Math.         *
- * Softw. 18 (1993), 360-373.                                                     *
- *                                                                                *
- *                  Gamma Distribution and It's Inverse                           *
- *                                                                                *
- * DiDinato, A. R. and Morris, A.  H. Computation of the Incomplete Gamma         *
- * Function  Ratios and  their  Inverse.   ACM  Trans.  Math.   Softw. 12         *
- * (1986), 377-393.                                                               *
- *                                                                                *
- *                          Normal Distribution                                   *
- *                                                                                *
- * Kennedy and  Gentle, Statistical Computing,  Marcel  Dekker, NY, 1980.         *
- * The rational function approximations  from pages 90-95 are used during         *
- * the calculation of the inverse normal.                                         *
- *                                                                                *
- * Cody, W.D.  (1993).  "ALGORITHM  715:  SPECFUN  -  A Portabel  FORTRAN         *
- * Package   of  Special  Function   Routines   and  Test  Drivers",  acm         *
- * Transactions on Mathematical Software. 19, 22-32.  A slightly modified         *
- * version of Cody's function  anorm  is used for the cumultive normal.           *
- *                                                                                *
- *                              Zero Finder                                       *
- *                                                                                *
- * J.   C. P.   Bus and  T.  J.  Dekker.   Two Efficient  Algorithms with         *
- * Guaranteed Convergence  for Finding a  Zero of a Function.  ACM Trans.         *
- * Math. Softw. 4 (1975), 330.                                                    *
- *                                                                                *
- * We transliterated Algoritm R of this paper from Algol to Fortran.              *
- *                                                                                *
- *                           General Reference                                    *
- *                                                                                *
- * Abramowitz,  M. and Stegun,  I. A.  Handbook of Mathematical Functions         *
- * With  Formulas, Graphs,  and   Mathematical Tables.   (1964)  National         *
- * Bureau of Standards.                                                           *
- *                                                                                *
- * This book has been reprinted by Dover and others.                              *
- *                                                                                *
- *                                                                                *
- *                               LEGALITIES                                       *
- *                                                                                *
- * Code that appeared  in an    ACM  publication  is subject  to    their         *
- * algorithms policy:                                                             *
- *                                                                                *
- *      Submittal of  an  algorithm    for publication  in   one of   the  ACM    *
- *      Transactions implies that unrestricted use  of the algorithm within  a    *
- *      computer is permissible.   General permission  to copy and  distribute    *
- *      the algorithm without fee is granted provided that the copies  are not    *
- *      made  or   distributed for  direct   commercial  advantage.    The ACM    *
- *      copyright notice and the title of the publication and its date appear,    *
- *      and  notice is given that copying  is by permission of the Association    *
- *      for Computing Machinery.  To copy otherwise, or to republish, requires    *
- *      a fee and/or specific permission.                                         *
- *                                                                                *
- *      Krogh, F.  Algorithms  Policy.  ACM  Tran.   Math.  Softw.   13(1987),    *
- *      183-186.                                                                  *
- *                                                                                *
- * We place the DCDFLIB code that we have written in the public domain.           *
- *                                                                                *
- *                                  NO WARRANTY                                   *
- *                                                                                *
- *      WE PROVIDE ABSOLUTELY  NO WARRANTY  OF ANY  KIND  EITHER  EXPRESSED OR    *
- *      IMPLIED,  INCLUDING BUT   NOT LIMITED TO,  THE  IMPLIED  WARRANTIES OF    *
- *      MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE ENTIRE RISK    *
- *      AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS  WITH YOU.  SHOULD    *
- *      THIS PROGRAM PROVE  DEFECTIVE, YOU ASSUME  THE COST  OF  ALL NECESSARY    *
- *      SERVICING, REPAIR OR CORRECTION.                                          *
- *                                                                                *
- *      IN NO  EVENT  SHALL THE UNIVERSITY  OF TEXAS OR  ANY  OF ITS COMPONENT    *
- *      INSTITUTIONS INCLUDING M. D.   ANDERSON HOSPITAL BE LIABLE  TO YOU FOR    *
- *      DAMAGES, INCLUDING ANY  LOST PROFITS, LOST MONIES,   OR OTHER SPECIAL,    *
- *      INCIDENTAL   OR  CONSEQUENTIAL DAMAGES   ARISING   OUT  OF  THE USE OR    *
- *      INABILITY TO USE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA OR    *
- *      ITS ANALYSIS BEING  RENDERED INACCURATE OR  LOSSES SUSTAINED  BY THIRD    *
- *      PARTIES) THE PROGRAM.                                                     *
- *                                                                                *
- *      (Above NO WARRANTY modified from the GNU NO WARRANTY statement.)          *
- *                                                                              *
- *                     HOW TO USE THE ROUTINES                                    *
- *                                                                                *
- * The calling sequence for each routine is of the form:                          *
- *                                                                                *
- *   SUBROUTINE CDF<name>( WHICH, P, Q, X, <parameters>, STATUS, BOUND ).         *
- *                                                                                *
- * WHICH and STATUS are INTEGER, all other arguments are DOUBLE PRECISION.        *
- *                                                                                *
- * <name> is a one to  three character name identifying the distribution.         *
- * WHICH  is an input integer value  that identifies what parameter value         *
- * is to be calculated from the values of the other parameters.                   *
- *                                                                                *
- * P is always the cdf evaluated at X, Q is always the compliment of the          *
- * cdf evaluated at X, i.e.  1-P, and X is always the value at which the          *
- * cdf  is evaluated.   The auxiliary parameters,  <parameters>,  of the          *
- * distribution differ by distribution.                                           *
- *                                                                                *
- * If WHICH is 1, P and  Q are to be calculated, i.e., the cdf; if WHICH          *
- * is 2, X is to be calculated, i.e., the inverse cdf.  The value of one          *
- * auxiliary parameter in <parameters> can also be the value calculated.          *
- *                                                                                *
- * STATUS returns 0 if the calculation completes correctly.                       *
- *                                                                                *
- *            --------------------WARNING--------------------                     *
- *                                                                                *
- * If STATUS is not 0, no meaningful answer is returned.                          *
- *                                                                                *
- *         -------------------- END WARNING --------------------                  *
- *                                                                                *
- * STATUS returns  -I if the I'th  input parameter was  not  in the legal         *
- * range (see below).  Parameters are counted  with WHICH being the first         *
- * in these return values.                                                        *
- *                                                                                *
- * A STATUS  value of 1 indicates that  the desired answer was apparently         *
- * lower than the lower bound on the search interval.  A return code of 2         *
- * indicates that  the answer was  apparently higher than the upper bound         *
- * on the search interval.  A return code of 3 indicates that P and Q did         *
- * not sum to 1. Other positive codes are routine specific.                       *
- *                                                                                *
- * BOUND is not  set if STATUS is returned  as 0.  If  STATUS is -I  then         *
- * BOUND is   the bound illegally  exceeded by  input  parameter I, where         *
- * WHICH  is  counted as 1,  P as 2,  Q as 3,  X as 4, etc.  If STATUS is         *
- * returned as 1 or 2 then BOUND  is returned as the lower or upper bound         *
- * on the search interval respectively.                                           *
- *                                                                                *
- *                                 BOUNDS                                         *
- *                                                                                *
- * Below are  the rules that we used  in determining bounds on quantities         *
- * to be  calculated.   Those who don't care   can find a summary  of the         *
- * bounds in  dcdflib.chs.   Input bounds  are  checked for  legality  of         *
- * input.  The search  range  is  the range   of values searched  for  an         *
- * answer.                                                                        *
- *                                                                                *
- *                              Input Bounds                                      *
- *                                                                                *
- * Bounds on input parameters are  checked by the  CDF* routines.   These         *
- * bounds were set according to the following rules.                              *
- *                                                                                *
- * P: If the  domain of the cdf (X) extends to  -infinity  then P must be         *
- * greater than 0 otherwise P must be greater than or equal to 0.  P must         *
- * always be less than or equal to 1.                                             *
- *                                                                                *
- * Q: If the  domain of the cdf (X) extends to  +infinity  then Q must be         *
- * greater than 0 otherwise Q must be greater than or equal to 0.  Q must         *
- * always be less than or equal to 1.                                             *
- *                                                                                *
- * Further, P and Q must sum to 1. The smaller of the two P and Q will be         *
- * used in calculations to increase accuracy                                      *
- *                                                                                *
- * X:  If  the  domain is infinite  in   either the positive  or negative         *
- * direction, no check  is performed in  that direction.  If the left end         *
- * of the domain is 0, then X is checked to assure non-negativity.                *
- *                                                                                *
- * DF, SD, etc.:  Some auxiliary parameters must  be positive. The lowest         *
- * input values accepted for these parameters is 1E-300.                          *
- *                                                                                *
- *                                                                                *
- *                                 Search Bounds                                  *
- *                                                                                *
- * These are the  ranges searched for an  answer.   If the domain  of the         *
- * parameter in the cdf  is closed at  some  finite value, e.g., 0,  then         *
- * this value is the same endpoint of the search range.  If the domain is         *
- * open  at  some finite   endpoint (which only  occurs   for  0 --  some         *
- * parameters must be strictly positive) then  the endpoint is 1E-300. If         *
- * the  domain is infinite in either  direction then +/- 1E300 is used as         *
- * the endpoint of the search range.                                              *
- *                                                                                *
- *                         HOW THE ROUTINES WORK                                  *
- *                                                                                *
- * The cumulative  distribution   functions are computed  directly.   The         *
- * normal, gamma,  and  beta functions use the  code  from the references         *
- * cited.  Other  cdfs are calculated  by relating them  to one  of these         *
- * distributions.  For example, the  binomial and negative binomial  cdfs         *
- * can be converted  to a beta cdf.   This is how fractional observations         *
- * are handled.  The  formula from Abramowitz  and Stegun  for converting         *
- * the cdfs is cited  in the fdoc file.    (We think the formula  for the         *
- * negative binomial in A&S is wrong, but there is a correct one which we         *
- * used.)                                                                         *
- *                                                                                *
- * The inverse normal and gamma are also taken  from the references.  For         *
- * all other parameters, a search is made for the value that provides the         *
- * desired P.  Initial  values are chosen crudely  for the search  (e.g.,         *
- * 5).  If the domain  of the cdf for the  parameter being calculated  is         *
- * infinite, a step doubling strategy is  used to bound the desired value         *
- * then the  zero  finder is  employed  to refine the answer.    The zero         *
- * finder attempts to obtain the answer accurately to about eight decimal         *
- * places.                                                                        *
- **********************************************************************************/
-
-
-
- 
+* degree of freedom arguments that satisfy the specified condition.  An          *
+* arbitrary one of these will be found by the cdf routines.                      *
+*                                                                                *
+* The  amount of computation  required for  the noncentral chisquare and         *
+* noncentral F  distribution    is proportional  to  the  value  of  the         *
+* noncentrality   parameter.  Very large values  of   this parameter can         *
+* require  immense   numbers of   computation.  Consequently,  when  the         *
+* noncentrality parameter is to  be calculated, the upper limit searched         *
+* is 10,000.                                                                     *
+*                                                                                *
+*         -------------------- END WARNINGS --------------------                 *
+*                                                                                *
+*                             DOCUMENTATION                                      *
+*                                                                                *
+* This  file  contains an  overview  of the library   and is the primary         *
+* documentation.                                                                 *
+*                                                                                *
+* Other documentation  is  in  directory 'doc'  on  the  distribution as         *
+* character  (ASCII) files.  A summary  of all of the available routines         *
+* is contained in dcdflib.chs (chs is an abbreviation of 'cheat sheet').         *
+* The 'chs'  file  will probably be  the  primary reference.  The  file,         *
+* dcdflib.fdoc, contains the  header comments for each  routine intended         *
+* for direct use.                                                                *
+*                                                                                *
+*                              INSTALLATION                                      *
+*                                                                                *
+* The Fortran source routines are contained in directory src.                    *
+*                                                                                *
+* A  few  routines use   machine  dependent  constants.  Lists  of  such         *
+* constants for different machines are found in ipmpar.f.  Uncomment the         *
+* ones  appropriate to your  machine.  The distributed  version uses the         *
+* IEEE arithmetic that is used by  the IBM PC,  Macintosh, and most Unix         *
+* workstations.                                                                  *
+*                                                                                *
+* Ignore compilation warnings that lines of code are  not reachable.  We         *
+* write in a Fortran structured preprocessor (FLECS)  that is similar in         *
+* spirit to  Ratfor.   Sometimes our coding  practices in  FLECS lead to         *
+* unreachable lines.   Also, FLECS inserts   lines of code:  STOP  "CODE         *
+* FLOWING  INTO   FLECS   PROCEEDURES".  All   such    lines should   be         *
+* unreachable.                                                                   *
+*                                                                                *
+*                                SOURCES                                         *
+*                                                                                *
+* The following   routines, written  by   others, are  incorporated into         *
+* DCDFLIB.                                                                       *
+*                                                                                *
+*                           Beta Distribution                                    *
+*                                                                                *
+* DiDinato, A.  R. and Morris, A.  H.   Algorithm 708: Significant Digit         *
+* Computation of the Incomplete Beta  Function Ratios.  ACM Trans. Math.         *
+* Softw. 18 (1993), 360-373.                                                     *
+*                                                                                *
+*                  Gamma Distribution and It's Inverse                           *
+*                                                                                *
+* DiDinato, A. R. and Morris, A.  H. Computation of the Incomplete Gamma         *
+* Function  Ratios and  their  Inverse.   ACM  Trans.  Math.   Softw. 12         *
+* (1986), 377-393.                                                               *
+*                                                                                *
+*                          Normal Distribution                                   *
+*                                                                                *
+* Kennedy and  Gentle, Statistical Computing,  Marcel  Dekker, NY, 1980.         *
+* The rational function approximations  from pages 90-95 are used during         *
+* the calculation of the inverse normal.                                         *
+*                                                                                *
+* Cody, W.D.  (1993).  "ALGORITHM  715:  SPECFUN  -  A Portabel  FORTRAN         *
+* Package   of  Special  Function   Routines   and  Test  Drivers",  acm         *
+* Transactions on Mathematical Software. 19, 22-32.  A slightly modified         *
+* version of Cody's function  anorm  is used for the cumultive normal.           *
+*                                                                                *
+*                              Zero Finder                                       *
+*                                                                                *
+* J.   C. P.   Bus and  T.  J.  Dekker.   Two Efficient  Algorithms with         *
+* Guaranteed Convergence  for Finding a  Zero of a Function.  ACM Trans.         *
+* Math. Softw. 4 (1975), 330.                                                    *
+*                                                                                *
+* We transliterated Algoritm R of this paper from Algol to Fortran.              *
+*                                                                                *
+*                           General Reference                                    *
+*                                                                                *
+* Abramowitz,  M. and Stegun,  I. A.  Handbook of Mathematical Functions         *
+* With  Formulas, Graphs,  and   Mathematical Tables.   (1964)  National         *
+* Bureau of Standards.                                                           *
+*                                                                                *
+* This book has been reprinted by Dover and others.                              *
+*                                                                                *
+*                                                                                *
+*                               LEGALITIES                                       *
+*                                                                                *
+* Code that appeared  in an    ACM  publication  is subject  to    their         *
+* algorithms policy:                                                             *
+*                                                                                *
+*      Submittal of  an  algorithm    for publication  in   one of   the  ACM    *
+*      Transactions implies that unrestricted use  of the algorithm within  a    *
+*      computer is permissible.   General permission  to copy and  distribute    *
+*      the algorithm without fee is granted provided that the copies  are not    *
+*      made  or   distributed for  direct   commercial  advantage.    The ACM    *
+*      copyright notice and the title of the publication and its date appear,    *
+*      and  notice is given that copying  is by permission of the Association    *
+*      for Computing Machinery.  To copy otherwise, or to republish, requires    *
+*      a fee and/or specific permission.                                         *
+*                                                                                *
+*      Krogh, F.  Algorithms  Policy.  ACM  Tran.   Math.  Softw.   13(1987),    *
+*      183-186.                                                                  *
+*                                                                                *
+* We place the DCDFLIB code that we have written in the public domain.           *
+*                                                                                *
+*                                  NO WARRANTY                                   *
+*                                                                                *
+*      WE PROVIDE ABSOLUTELY  NO WARRANTY  OF ANY  KIND  EITHER  EXPRESSED OR    *
+*      IMPLIED,  INCLUDING BUT   NOT LIMITED TO,  THE  IMPLIED  WARRANTIES OF    *
+*      MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE ENTIRE RISK    *
+*      AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS  WITH YOU.  SHOULD    *
+*      THIS PROGRAM PROVE  DEFECTIVE, YOU ASSUME  THE COST  OF  ALL NECESSARY    *
+*      SERVICING, REPAIR OR CORRECTION.                                          *
+*                                                                                *
+*      IN NO  EVENT  SHALL THE UNIVERSITY  OF TEXAS OR  ANY  OF ITS COMPONENT    *
+*      INSTITUTIONS INCLUDING M. D.   ANDERSON HOSPITAL BE LIABLE  TO YOU FOR    *
+*      DAMAGES, INCLUDING ANY  LOST PROFITS, LOST MONIES,   OR OTHER SPECIAL,    *
+*      INCIDENTAL   OR  CONSEQUENTIAL DAMAGES   ARISING   OUT  OF  THE USE OR    *
+*      INABILITY TO USE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA OR    *
+                         *      ITS ANALYSIS BEING  RENDERED INACCURATE OR  LOSSES SUSTAINED  BY THIRD    *
+                         *      PARTIES) THE PROGRAM.                                                     *
+*                                                                                *
+*      (Above NO WARRANTY modified from the GNU NO WARRANTY statement.)          *
+*                                                                              *
+*                     HOW TO USE THE ROUTINES                                    *
+*                                                                                *
+* The calling sequence for each routine is of the form:                          *
+*                                                                                *
+*   SUBROUTINE CDF<name>( WHICH, P, Q, X, <parameters>, STATUS, BOUND ).         *
+*                                                                                *
+* WHICH and STATUS are INTEGER, all other arguments are DOUBLE PRECISION.        *
+*                                                                                *
+* <name> is a one to  three character name identifying the distribution.         *
+* WHICH  is an input integer value  that identifies what parameter value         *
+* is to be calculated from the values of the other parameters.                   *
+*                                                                                *
+* P is always the cdf evaluated at X, Q is always the compliment of the          *
+* cdf evaluated at X, i.e.  1-P, and X is always the value at which the          *
+* cdf  is evaluated.   The auxiliary parameters,  <parameters>,  of the          *
+* distribution differ by distribution.                                           *
+*                                                                                *
+* If WHICH is 1, P and  Q are to be calculated, i.e., the cdf; if WHICH          *
+* is 2, X is to be calculated, i.e., the inverse cdf.  The value of one          *
+* auxiliary parameter in <parameters> can also be the value calculated.          *
+*                                                                                *
+* STATUS returns 0 if the calculation completes correctly.                       *
+*                                                                                *
+*            --------------------WARNING--------------------                     *
+*                                                                                *
+* If STATUS is not 0, no meaningful answer is returned.                          *
+*                                                                                *
+*         -------------------- END WARNING --------------------                  *
+*                                                                                *
+* STATUS returns  -I if the I'th  input parameter was  not  in the legal         *
+* range (see below).  Parameters are counted  with WHICH being the first         *
+* in these return values.                                                        *
+*                                                                                *
+* A STATUS  value of 1 indicates that  the desired answer was apparently         *
+* lower than the lower bound on the search interval.  A return code of 2         *
+* indicates that  the answer was  apparently higher than the upper bound         *
+* on the search interval.  A return code of 3 indicates that P and Q did         *
+* not sum to 1. Other positive codes are routine specific.                       *
+*                                                                                *
+* BOUND is not  set if STATUS is returned  as 0.  If  STATUS is -I  then         *
+* BOUND is   the bound illegally  exceeded by  input  parameter I, where         *
+* WHICH  is  counted as 1,  P as 2,  Q as 3,  X as 4, etc.  If STATUS is         *
+* returned as 1 or 2 then BOUND  is returned as the lower or upper bound         *
+* on the search interval respectively.                                           *
+*                                                                                *
+*                                 BOUNDS                                         *
+*                                                                                *
+* Below are  the rules that we used  in determining bounds on quantities         *
+* to be  calculated.   Those who don't care   can find a summary  of the         *
+* bounds in  dcdflib.chs.   Input bounds  are  checked for  legality  of         *
+* input.  The search  range  is  the range   of values searched  for  an         *
+* answer.                                                                        *
+*                                                                                *
+*                              Input Bounds                                      *
+*                                                                                *
+* Bounds on input parameters are  checked by the  CDF* routines.   These         *
+* bounds were set according to the following rules.                              *
+*                                                                                *
+* P: If the  domain of the cdf (X) extends to  -infinity  then P must be         *
+* greater than 0 otherwise P must be greater than or equal to 0.  P must         *
+* always be less than or equal to 1.                                             *
+*                                                                                *
+* Q: If the  domain of the cdf (X) extends to  +infinity  then Q must be         *
+* greater than 0 otherwise Q must be greater than or equal to 0.  Q must         *
+* always be less than or equal to 1.                                             *
+*                                                                                *
+* Further, P and Q must sum to 1. The smaller of the two P and Q will be         *
+* used in calculations to increase accuracy                                      *
+*                                                                                *
+* X:  If  the  domain is infinite  in   either the positive  or negative         *
+* direction, no check  is performed in  that direction.  If the left end         *
+* of the domain is 0, then X is checked to assure non-negativity.                *
+*                                                                                *
+* DF, SD, etc.:  Some auxiliary parameters must  be positive. The lowest         *
+* input values accepted for these parameters is 1E-300.                          *
+*                                                                                *
+*                                                                                *
+*                                 Search Bounds                                  *
+*                                                                                *
+* These are the  ranges searched for an  answer.   If the domain  of the         *
+* parameter in the cdf  is closed at  some  finite value, e.g., 0,  then         *
+* this value is the same endpoint of the search range.  If the domain is         *
+* open  at  some finite   endpoint (which only  occurs   for  0 --  some         *
+                                    * parameters must be strictly positive) then  the endpoint is 1E-300. If         *
+* the  domain is infinite in either  direction then +/- 1E300 is used as         *
+* the endpoint of the search range.                                              *
+*                                                                                *
+*                         HOW THE ROUTINES WORK                                  *
+*                                                                                *
+* The cumulative  distribution   functions are computed  directly.   The         *
+* normal, gamma,  and  beta functions use the  code  from the references         *
+* cited.  Other  cdfs are calculated  by relating them  to one  of these         *
+* distributions.  For example, the  binomial and negative binomial  cdfs         *
+* can be converted  to a beta cdf.   This is how fractional observations         *
+* are handled.  The  formula from Abramowitz  and Stegun  for converting         *
+* the cdfs is cited  in the fdoc file.    (We think the formula  for the         *
+                                           * negative binomial in A&S is wrong, but there is a correct one which we         *
+                                           * used.)                                                                         *
+*                                                                                *
+* The inverse normal and gamma are also taken  from the references.  For         *
+* all other parameters, a search is made for the value that provides the         *
+* desired P.  Initial  values are chosen crudely  for the search  (e.g.,         *
+                                                                   * 5).  If the domain  of the cdf for the  parameter being calculated  is         *
+* infinite, a step doubling strategy is  used to bound the desired value         *
+* then the  zero  finder is  employed  to refine the answer.    The zero         *
+* finder attempts to obtain the answer accurately to about eight decimal         *
+* places.                                                                        *
+**********************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -313,15 +309,16 @@
 
 #include "pnl/pnl_cdf.h"
 #include "libamos/amos.h"
+#include "pnl/pnl_specfun.h"
 
 #define PRECISION 1.0e-7
 
 #define CHECK_WHICH(tst, b, s)    \
   if (tst)                         \
-    {                              \
-      *bound = b; *status = s;     \
-      return;                      \
-    }
+{                              \
+  *bound = b; *status = s;     \
+  return;                      \
+}
 
 
 static double algdiv(double *a,double *b);
@@ -382,7 +379,6 @@ static double fifdmax1(double a,double b);
 static double fifdmin1(double a,double b);
 static double fifdsign(double mag,double sign);
 static long fifidint(double a);
-static long fifmod(long a,long b);
 static void ftnstop(char* msg);
 static void cumbet(double *x,double *y,double *a,double *b,double *cum,
                    double *ccum);
@@ -403,17 +399,11 @@ static void cumt(double *t,double *df,double *cum,double *ccum);
 
 
 /*
-  -----------------------------------------------------------------------
- 
-  COMPUTATION OF LN(GAMMA(B)/GAMMA(A+B)) WHEN B .GE. 8
- 
-  --------
- 
-  IN THIS ALGORITHM, DEL(X) IS THE FUNCTION DEFINED BY
-  LN(GAMMA(X)) = (X - 0.5)*LN(X) - X + 0.5*LN(2*M_PI) + DEL(X).
- 
-  -----------------------------------------------------------------------
-*/
+ * COMPUTATION OF LN(GAMMA(B)/GAMMA(A+B)) WHEN B .GE. 8
+ * 
+ * IN THIS ALGORITHM, DEL(X) IS THE FUNCTION DEFINED BY
+ * LN(GAMMA(X)) = (X - 0.5)*LN(X) - X + 0.5*LN(2*M_PI) + DEL(X).
+ */
 static double algdiv(double *a,double *b)
 {
   static double c0 = .833333333333333e-01;
@@ -427,7 +417,7 @@ static double algdiv(double *a,double *b)
      ..
      .. Executable Statements ..
      */
-  if(*a > *b) 
+  if (*a > *b) 
     {
       h = *b/ *a;
       c = 1.0e0/(1.0e0+h);
@@ -462,7 +452,7 @@ static double algdiv(double *a,double *b)
   T1 = *a/ *b;
   u = d*alnrel(&T1);
   v = *a*(log(*b)-1.0e0);
-  if(u > v) 
+  if (u > v) 
     {
       algdiv = w-v-u;
     }
@@ -472,40 +462,38 @@ static double algdiv(double *a,double *b)
     }
   return algdiv;
 }
-static double alngam(double *x)
+
 /*
-**********************************************************************
- 
-double alngam(double *x)
-double precision LN of the GAMma function
- 
- 
-Function
- 
- 
-Returns the natural logarithm of GAMMA(X).
- 
- 
-Arguments
- 
- 
-X --> value at which scaled log gamma is to be returned
-X is DOUBLE PRECISION
- 
- 
-Method
- 
- 
-If X .le. 6.0, then use recursion to get X below 3
-then apply rational approximation number 5236 of
-Hart et al, Computer Approximations, John Wiley and
-Sons, NY, 1968.
- 
-If X .gt. 6.0, then use recursion to get X to at least 12 and
-then use formula 5423 of the same source.
- 
-**********************************************************************
-*/
+ * double alngam(double *x)
+ * double precision LN of the GAMma function
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Returns the natural logarithm of GAMMA(X).
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * X --> value at which scaled log gamma is to be returned
+ * X is DOUBLE PRECISION
+ * 
+ * 
+ * Method
+ * 
+ * 
+ * If X .le. 6.0, then use recursion to get X below 3
+ * then apply rational approximation number 5236 of
+ * Hart et al, Computer Approximations, John Wiley and
+ * Sons, NY, 1968.
+ * 
+ * If X .gt. 6.0, then use recursion to get X to at least 12 and
+ * then use formula 5423 of the same source.
+ * 
+ */
+static double alngam(double *x)
 {
   static double hln2pi = 0.91893853320467274178e0;
   static double coef[5] = {
@@ -528,68 +516,68 @@ then use formula 5423 of the same source.
   static int i,n;
   static double T2,T4,T6;
   /*
-    ..
-    .. Executable Statements ..
-  */
-  if(!(*x <= 6.0e0)) goto S70;
+     ..
+     .. Executable Statements ..
+     */
+  if (!(*x <= 6.0e0)) goto S70;
   prod = 1.0e0;
   xx = *x;
-  if(!(*x > 3.0e0)) goto S30;
- S10:
-  if(!(xx > 3.0e0)) goto S20;
+  if (!(*x > 3.0e0)) goto S30;
+S10:
+  if (!(xx > 3.0e0)) goto S20;
   xx -= 1.0e0;
   prod *= xx;
   goto S10;
- S30:
- S20:
-  if(!(*x < 2.0e0)) goto S60;
- S40:
-  if(!(xx < 2.0e0)) goto S50;
+S30:
+S20:
+  if (!(*x < 2.0e0)) goto S60;
+S40:
+  if (!(xx < 2.0e0)) goto S50;
   prod /= xx;
   xx += 1.0e0;
   goto S40;
- S60:
- S50:
+S60:
+S50:
   T2 = xx-2.0e0;
   T4 = xx-2.0e0;
   alngam = devlpl(scoefn,&K1,&T2)/devlpl(scoefd,&K3,&T4);
   /*
-    COMPUTE RATIONAL APPROXIMATION TO GAMMA(X)
-  */
+     COMPUTE RATIONAL APPROXIMATION TO GAMMA(X)
+     */
   alngam *= prod;
   alngam = log(alngam);
   goto S110;
- S70:
+S70:
   offset = hln2pi;
   /*
-    IF NECESSARY MAKE X AT LEAST 12 AND CARRY CORRECTION IN OFFSET
-  */
+     IF NECESSARY MAKE X AT LEAST 12 AND CARRY CORRECTION IN OFFSET
+     */
   n = fifidint(12.0e0-*x);
-  if(!(n > 0)) goto S90;
+  if (!(n > 0)) goto S90;
   prod = 1.0e0;
   for(i=1; i<=n; i++) prod *= (*x+(double)(i-1));
   offset -= log(prod);
   xx = *x+(double)n;
   goto S100;
- S90:
+S90:
   xx = *x;
- S100:
+S100:
   /*
-    COMPUTE POWER SERIES
-  */
+     COMPUTE POWER SERIES
+     */
   T6 = 1.0e0/pow(xx,2.0);
   alngam = devlpl(coef,&K5,&T6)/xx;
   alngam += (offset+(xx-0.5e0)*log(xx)-xx);
- S110:
+S110:
   return alngam;
 }
 
-static double alnrel(double *a)
 /*
-  -----------------------------------------------------------------------
-  EVALUATION OF THE FUNCTION LN(1 + A)
-  -----------------------------------------------------------------------
-*/
+ * -----------------------------------------------------------------------
+ * EVALUATION OF THE FUNCTION LN(1 + A)
+ * -----------------------------------------------------------------------
+ */
+static double alnrel(double *a)
 {
   static double p1 = -.129418923021993e+01;
   static double p2 = .405303492862024e+00;
@@ -602,7 +590,7 @@ static double alnrel(double *a)
      ..
      .. Executable Statements ..
      */
-  if(fabs(*a) <= 0.375e0) 
+  if (fabs(*a) <= 0.375e0) 
     {
       t = *a/(*a+2.0e0);
       t2 = t*t;
@@ -615,24 +603,25 @@ static double alnrel(double *a)
       return log(x);
     }
 }
-static double apser(double *a,double *b,double *x,double *eps)
+
 /*
-  -----------------------------------------------------------------------
-  APSER YIELDS THE INCOMPLETE BETA RATIO I(SUB(1-X))(B,A) FOR
-  A .LE. MIN(EPS,EPS*B), B*X .LE. 1, AND X .LE. 0.5. USED WHEN
-  A IS VERY SMALL. USE ONLY IF ABOVE INEQUALITIES ARE SATISFIED.
-  -----------------------------------------------------------------------
-*/
+ * -----------------------------------------------------------------------
+ * APSER YIELDS THE INCOMPLETE BETA RATIO I(SUB(1-X))(B,A) FOR
+ * A .LE. MIN(EPS,EPS*B), B*X .LE. 1, AND X .LE. 0.5. USED WHEN
+ * A IS VERY SMALL. USE ONLY IF ABOVE INEQUALITIES ARE SATISFIED.
+ * -----------------------------------------------------------------------
+ */
+static double apser(double *a,double *b,double *x,double *eps)
 {
   static double g = .577215664901533e0;
   static double aj,bx,c,j,s,t,tol;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   bx = *b**x;
   t = *x-bx;
-  if(*b**eps <= 2.e-2)
+  if (*b**eps <= 2.e-2)
     {
       c = log(*x)+psi(b)+g+t;
     }
@@ -652,40 +641,41 @@ static double apser(double *a,double *b,double *x,double *eps)
     } while (fabs(aj) > tol);
   return  -(*a*(c+s));
 }
-static double basym(double *a,double *b,double *lambda,double *eps)
+
 /*
-  -----------------------------------------------------------------------
-  ASYMPTOTIC EXPANSION FOR IX(A,B) FOR LARGE A AND B.
-  LAMBDA = (A + B)*Y - B  AND EPS IS THE TOLERANCE USED.
-  IT IS ASSUMED THAT LAMBDA IS NONNEGATIVE AND THAT
-  A AND B ARE GREATER THAN OR EQUAL TO 15.
-  -----------------------------------------------------------------------
-*/
+ * -----------------------------------------------------------------------
+ * ASYMPTOTIC EXPANSION FOR IX(A,B) FOR LARGE A AND B.
+ * LAMBDA = (A + B)*Y - B  AND EPS IS THE TOLERANCE USED.
+ * IT IS ASSUMED THAT LAMBDA IS NONNEGATIVE AND THAT
+ * A AND B ARE GREATER THAN OR EQUAL TO 15.
+ * -----------------------------------------------------------------------
+ */
+static double basym(double *a,double *b,double *lambda,double *eps)
 {
   static double e0 = 1.12837916709551e0;
   static double e1 = .353553390593274e0;
   static int num = 20;
   /*
-    ------------------------
-    ****** NUM IS THE MAXIMUM VALUE THAT N CAN TAKE IN THE DO LOOP
-    ENDING AT STATEMENT 50. IT IS REQUIRED THAT NUM BE EVEN.
-    THE ARRAYS A0, B0, C, D HAVE DIMENSION NUM + 1.
-    ------------------------
-    E0 = 2/SQRT(M_PI)
-    E1 = 2**(-3/2)
-    ------------------------
-  */
+     ------------------------
+   ****** NUM IS THE MAXIMUM VALUE THAT N CAN TAKE IN THE DO LOOP
+   ENDING AT STATEMENT 50. IT IS REQUIRED THAT NUM BE EVEN.
+   THE ARRAYS A0, B0, C, D HAVE DIMENSION NUM + 1.
+   ------------------------
+   E0 = 2/SQRT(M_PI)
+   E1 = 2**(-3/2)
+   ------------------------
+   */
   static int K3 = 1;
   static double basym_0,bsum,dsum,f,h,h2,hn,j0,j1,r,r0,r1,s,sum,t,t0,t1,u,w,w0,z,z0,
-    z2,zn,znm1;
+                z2,zn,znm1;
   static int i,im1,imj,j,m,mm1,mmj,n,np1;
   static double a0[21],b0[21],c[21],d[21],T1,T2;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   basym_0 = 0.0e0;
-  if(*a < *b) 
+  if (*a < *b) 
     {
       h = *a/ *b;
       r0 = 1.0e0/(1.0e0+h);
@@ -703,7 +693,7 @@ static double basym(double *a,double *b,double *lambda,double *eps)
   T2 = *lambda/ *b;
   f = *a*rlog1(&T1)+*b*rlog1(&T2);
   t = exp(-f);
-  if(t == 0.0e0) return basym_0;
+  if (t == 0.0e0) return basym_0;
   z0 = sqrt(f);
   z = 0.5e0*(z0/e1);
   z2 = f+f;
@@ -721,63 +711,61 @@ static double basym(double *a,double *b,double *lambda,double *eps)
   zn = z2;
   for(n=2; n<=num; n+=2) 
     {
-    hn = h2*hn;
-    a0[n-1] = 2.0e0*r0*(1.0e0+h*hn)/((double)n+2.0e0);
-    np1 = n+1;
-    s += hn;
-    a0[np1-1] = 2.0e0*r1*s/((double)n+3.0e0);
-    for(i=n; i<=np1; i++) 
-      {
-      r = -(0.5e0*((double)i+1.0e0));
-      b0[0] = r*a0[0];
-      for(m=2; m<=i; m++) 
+      hn = h2*hn;
+      a0[n-1] = 2.0e0*r0*(1.0e0+h*hn)/((double)n+2.0e0);
+      np1 = n+1;
+      s += hn;
+      a0[np1-1] = 2.0e0*r1*s/((double)n+3.0e0);
+      for(i=n; i<=np1; i++) 
         {
-        bsum = 0.0e0;
-        mm1 = m-1;
-        for(j=1; j<=mm1; j++) 
-          {
-          mmj = m-j;
-          bsum += (((double)j*r-(double)mmj)*a0[j-1]*b0[mmj-1]);
+          r = -(0.5e0*((double)i+1.0e0));
+          b0[0] = r*a0[0];
+          for(m=2; m<=i; m++) 
+            {
+              bsum = 0.0e0;
+              mm1 = m-1;
+              for(j=1; j<=mm1; j++) 
+                {
+                  mmj = m-j;
+                  bsum += (((double)j*r-(double)mmj)*a0[j-1]*b0[mmj-1]);
+                }
+              b0[m-1] = r*a0[m-1]+bsum/(double)m;
+            }
+          c[i-1] = b0[i-1]/((double)i+1.0e0);
+          dsum = 0.0e0;
+          im1 = i-1;
+          for(j=1; j<=im1; j++) 
+            {
+              imj = i-j;
+              dsum += (d[imj-1]*c[j-1]);
+            }
+          d[i-1] = -(dsum+c[i-1]);
         }
-        b0[m-1] = r*a0[m-1]+bsum/(double)m;
-      }
-      c[i-1] = b0[i-1]/((double)i+1.0e0);
-      dsum = 0.0e0;
-      im1 = i-1;
-      for(j=1; j<=im1; j++) 
-        {
-        imj = i-j;
-        dsum += (d[imj-1]*c[j-1]);
-      }
-      d[i-1] = -(dsum+c[i-1]);
+      j0 = e1*znm1+((double)n-1.0e0)*j0;
+      j1 = e1*zn+(double)n*j1;
+      znm1 = z2*znm1;
+      zn = z2*zn;
+      w = w0*w;
+      t0 = d[n-1]*w*j0;
+      w = w0*w;
+      t1 = d[np1-1]*w*j1;
+      sum += (t0+t1);
+      if (fabs(t0)+fabs(t1) <= *eps*sum) break;
     }
-    j0 = e1*znm1+((double)n-1.0e0)*j0;
-    j1 = e1*zn+(double)n*j1;
-    znm1 = z2*znm1;
-    zn = z2*zn;
-    w = w0*w;
-    t0 = d[n-1]*w*j0;
-    w = w0*w;
-    t1 = d[np1-1]*w*j1;
-    sum += (t0+t1);
-    if(fabs(t0)+fabs(t1) <= *eps*sum) break;
-  }
   u = exp(-bcorr(a,b));
   return e0*t*u*sum;
 }
 
-
-
-static double bcorr(double *a0,double *b0)
 /*
-  -----------------------------------------------------------------------
- 
-  EVALUATION OF  DEL(A0) + DEL(B0) - DEL(A0 + B0)  WHERE
-  LN(GAMMA(A)) = (A - 0.5)*LN(A) - A + 0.5*LN(2*M_PI) + DEL(A).
-  IT IS ASSUMED THAT A0 .GE. 8 AND B0 .GE. 8.
- 
-  -----------------------------------------------------------------------
-*/
+ * -----------------------------------------------------------------------
+ * 
+ * EVALUATION OF  DEL(A0) + DEL(B0) - DEL(A0 + B0)  WHERE
+ * LN(GAMMA(A)) = (A - 0.5)*LN(A) - A + 0.5*LN(2*M_PI) + DEL(A).
+ * IT IS ASSUMED THAT A0 .GE. 8 AND B0 .GE. 8.
+ * 
+ * -----------------------------------------------------------------------
+ */
+static double bcorr(double *a0,double *b0)
 {
   static double c0 = .833333333333333e-01;
   static double c1 = -.277777777760991e-02;
@@ -787,9 +775,9 @@ static double bcorr(double *a0,double *b0)
   static double c5 = -.165322962780713e-02;
   static double a,b,c,h,s11,s3,s5,s7,s9,t,w,x,x2;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   a = fifdmin1(*a0,*b0);
   b = fifdmax1(*a0,*b0);
   h = a/b;
@@ -797,36 +785,34 @@ static double bcorr(double *a0,double *b0)
   x = 1.0e0/(1.0e0+h);
   x2 = x*x;
   /*
-    SET SN = (1 - X**N)/(1 - X)
-  */
+     SET SN = (1 - X**N)/(1 - X)
+     */
   s3 = 1.0e0+(x+x2);
   s5 = 1.0e0+(x+x2*s3);
   s7 = 1.0e0+(x+x2*s5);
   s9 = 1.0e0+(x+x2*s7);
   s11 = 1.0e0+(x+x2*s9);
   /*
-    SET W = DEL(B) - DEL(A + B)
-  */
+     SET W = DEL(B) - DEL(A + B)
+     */
   t = pow(1.0e0/b,2.0);
   w = ((((c5*s11*t+c4*s9)*t+c3*s7)*t+c2*s5)*t+c1*s3)*t+c0;
   w *= (c/b);
   /*
-    COMPUTE  DEL(A) + W
-  */
+     COMPUTE  DEL(A) + W
+     */
   t = pow(1.0e0/a,2.0);
   return (((((c5*t+c4)*t+c3)*t+c2)*t+c1)*t+c0)/a+w;
 }
 
-
-
-static double betaln(double *a0,double *b0)
 /*
-  -----------------------------------------------------------------------
-  EVALUATION OF THE LOGARITHM OF THE BETA FUNCTION
-  -----------------------------------------------------------------------
-  E = 0.5*LN(2*M_PI)
-  --------------------------
-*/
+ * -----------------------------------------------------------------------
+ * EVALUATION OF THE LOGARITHM OF THE BETA FUNCTION
+ * -----------------------------------------------------------------------
+ * E = 0.5*LN(2*M_PI)
+ * --------------------------
+ */
+static double betaln(double *a0,double *b0)
 {
   static double e = .918938533204673e0;
   static double a,b,c,h,u,v,w,z;
@@ -838,21 +824,21 @@ static double betaln(double *a0,double *b0)
      */
   a = fifdmin1(*a0,*b0);
   b = fifdmax1(*a0,*b0);
-  if(a >= 8.0e0) 
+  if (a >= 8.0e0) 
     {
       w = bcorr(&a,&b);
       h = a/b;
       c = h/(1.0e0+h);
       u = -((a-0.5e0)*log(c));
       v = b*alnrel(&h);
-      if(u <= v) 
+      if (u <= v) 
         return -(0.5e0*log(b))+e+w-u-v;
       else
         return -(0.5e0*log(b))+e+w-v-u;
     }
-  if(a < 1.0e0) 
+  if (a < 1.0e0) 
     {
-      if(b < 8.0e0) 
+      if (b < 8.0e0) 
         {
           T1 = a+b;
           return gamln(&a)+(gamln(&b)-gamln(&T1));
@@ -863,9 +849,9 @@ static double betaln(double *a0,double *b0)
         }
     }
 
-  if(a > 2.0e0) 
+  if (a > 2.0e0) 
     {
-      if(b > 1E3) 
+      if (b > 1E3) 
         {
           n = a-1.0e0;
           w = 1.0e0;
@@ -886,7 +872,7 @@ static double betaln(double *a0,double *b0)
           w *= (h/(1.0e0+h));
         }
       w = log(w);
-      if(b < 8.0e0)
+      if (b < 8.0e0)
         {
           n = b-1.0e0;
           z = 1.0e0;
@@ -899,10 +885,10 @@ static double betaln(double *a0,double *b0)
         }
       return w+gamln(&a)+algdiv(&a,&b);
     }
-  if(b > 2.0e0) 
+  if (b > 2.0e0) 
     {
       w = 0.0e0;
-      if(b < 8.0e0) 
+      if (b < 8.0e0) 
         {
           n = b-1.0e0;
           z = 1.0e0;
@@ -918,16 +904,14 @@ static double betaln(double *a0,double *b0)
   return gamln(&a)+gamln(&b)-gsumln(&a,&b);
 }
 
-
-
+/*
+ * -----------------------------------------------------------------------
+ * CONTINUED FRACTION EXPANSION FOR IX(A,B) WHEN A,B .GT. 1.
+ * IT IS ASSUMED THAT  LAMBDA = (A + B)*Y - B.
+ * -----------------------------------------------------------------------
+ */
 static double bfrac(double *a,double *b,double *x,double *y,double *lambda,
                     double *eps)
-/*
-  -----------------------------------------------------------------------
-  CONTINUED FRACTION EXPANSION FOR IX(A,B) WHEN A,B .GT. 1.
-  IT IS ASSUMED THAT  LAMBDA = (A + B)*Y - B.
-  -----------------------------------------------------------------------
-*/
 {
   static double bfrac_0,alpha,an,anp1,beta,bn,bnp1,c,c0,c1,e,n,p,r,r0,s,t,w,yp1;
   /*
@@ -935,7 +919,7 @@ static double bfrac(double *a,double *b,double *x,double *y,double *lambda,
      .. Executable Statements ..
      */
   bfrac_0 = brcomp(a,b,x,y);
-  if(bfrac_0 == 0.0e0) return bfrac_0;
+  if (bfrac_0 == 0.0e0) return bfrac_0;
   c = 1.0e0+*lambda;
   c0 = *b/ *a;
   c1 = 1.0e0+1.0e0/ *a;
@@ -972,7 +956,7 @@ static double bfrac(double *a,double *b,double *x,double *y,double *lambda,
       bnp1 = t;
       r0 = r;
       r = anp1/bnp1;
-      if(fabs(r-r0) <= *eps*r) 
+      if (fabs(r-r0) <= *eps*r) 
         {
           bfrac_0 *= r;
           return bfrac_0;
@@ -988,18 +972,16 @@ static double bfrac(double *a,double *b,double *x,double *y,double *lambda,
     }
 }
 
-
-
+/*
+ * -----------------------------------------------------------------------
+ * ASYMPTOTIC EXPANSION FOR IX(A,B) WHEN A IS LARGER THAN B.
+ * THE RESULT OF THE EXPANSION IS ADDED TO W. IT IS ASSUMED
+ * THAT A .GE. 15 AND B .LE. 1.  EPS IS THE TOLERANCE USED.
+ * IERR IS A VARIABLE THAT REPORTS THE STATUS OF THE RESULTS.
+ * -----------------------------------------------------------------------
+ */
 static void bgrat(double *a,double *b,double *x,double *y,double *w,
                   double *eps,int *ierr)
-/*
-  -----------------------------------------------------------------------
-  ASYMPTOTIC EXPANSION FOR IX(A,B) WHEN A IS LARGER THAN B.
-  THE RESULT OF THE EXPANSION IS ADDED TO W. IT IS ASSUMED
-  THAT A .GE. 15 AND B .LE. 1.  EPS IS THE TOLERANCE USED.
-  IERR IS A VARIABLE THAT REPORTS THE STATUS OF THE RESULTS.
-  -----------------------------------------------------------------------
-*/
 {
   static double bm1,bp2n,cn,coef,dj,j,l,lnx,n2,nu,p,q,r,s,sum,t,t2,u,v,z;
   static int i,n,nm1;
@@ -1010,7 +992,7 @@ static void bgrat(double *a,double *b,double *x,double *y,double *w,
      */
   bm1 = *b-0.5e0-0.5e0;
   nu = *a+0.5e0*bm1;
-  if(*y > 0.375e0) 
+  if (*y > 0.375e0) 
     {
       lnx = log(*x);
     }
@@ -1020,7 +1002,7 @@ static void bgrat(double *a,double *b,double *x,double *y,double *w,
       lnx = alnrel(&T1);
     }
   z = -(nu*lnx);
-  if(*b*z == 0.0e0)  { *ierr = 1; return; }
+  if (*b*z == 0.0e0)  { *ierr = 1; return; }
   /*
      COMPUTATION OF THE EXPANSION
      SET R = EXP(-Z)*Z**B/GAMMA(B)
@@ -1029,7 +1011,7 @@ static void bgrat(double *a,double *b,double *x,double *y,double *w,
   r *= (exp(*a*lnx)*exp(0.5e0*bm1*lnx));
   u = algdiv(b,a)+*b*log(nu);
   u = r*exp(-u);
-  if(u == 0.0e0) { *ierr = 1; return; }
+  if (u == 0.0e0) { *ierr = 1; return; }
   grat1(b,&z,&r,&p,&q,eps);
   v = 0.25e0*pow(1.0e0/nu,2.0);
   t2 = 0.25e0*lnx*lnx;
@@ -1047,7 +1029,7 @@ static void bgrat(double *a,double *b,double *x,double *y,double *w,
       cn /= (n2*(n2+1.0e0));
       c[n-1] = cn;
       s = 0.0e0;
-      if(n > 1) 
+      if (n > 1) 
         {
           nm1 = n-1;
           coef = *b-(double)n;
@@ -1059,8 +1041,8 @@ static void bgrat(double *a,double *b,double *x,double *y,double *w,
       d[n-1] = bm1*cn+s/(double)n;
       dj = d[n-1]*j;
       sum += dj;
-      if(sum <= 0.0e0)  { *ierr = 1; return; }
-      if(fabs(dj) <= *eps*(sum+l))
+      if (sum <= 0.0e0)  { *ierr = 1; return; }
+      if (fabs(dj) <= *eps*(sum+l))
         {
           *ierr = 0;
           *w += (u*sum);
@@ -1070,15 +1052,13 @@ static void bgrat(double *a,double *b,double *x,double *y,double *w,
   *ierr = 1; return; 
 }
 
-
-
-static double bpser(double *a,double *b,double *x,double *eps)
 /*
-  -----------------------------------------------------------------------
-  POWER SERIES EXPANSION FOR EVALUATING IX(A,B) WHEN B .LE. 1
-  OR B*X .LE. 0.7.  EPS IS THE TOLERANCE USED.
-  -----------------------------------------------------------------------
-*/
+ * -----------------------------------------------------------------------
+ * POWER SERIES EXPANSION FOR EVALUATING IX(A,B) WHEN B .LE. 1
+ * OR B*X .LE. 0.7.  EPS IS THE TOLERANCE USED.
+ * -----------------------------------------------------------------------
+ */
+static double bpser(double *a,double *b,double *x,double *eps)
 {
   static double bpser_0,a0,apb,b0,c,n,sum,t,tol,u,w,z;
   static int i,m;
@@ -1087,28 +1067,28 @@ static double bpser(double *a,double *b,double *x,double *eps)
      .. Executable Statements ..
      */
   bpser_0 = 0.0e0;
-  if(*x == 0.0e0) return bpser_0;
+  if (*x == 0.0e0) return bpser_0;
   /*
      -----------------------------------------------------------------------
      COMPUTE THE FACTOR X**A/(A*BETA(A,B))
      -----------------------------------------------------------------------
      */
   a0 = fifdmin1(*a,*b);
-  if(a0 < 1.0e0) goto S10;
+  if (a0 < 1.0e0) goto S10;
   z = *a*log(*x)-betaln(a,b);
   bpser_0 = exp(z)/ *a;
   goto S100;
 S10:
   b0 = fifdmax1(*a,*b);
-  if(b0 >= 8.0e0) goto S90;
-  if(b0 > 1.0e0) goto S40;
+  if (b0 >= 8.0e0) goto S90;
+  if (b0 > 1.0e0) goto S40;
   /*
      PROCEDURE FOR A0 .LT. 1 AND B0 .LE. 1
      */
   bpser_0 = pow(*x,*a);
-  if(bpser_0 == 0.0e0) return bpser_0;
+  if (bpser_0 == 0.0e0) return bpser_0;
   apb = *a+*b;
-  if(apb > 1.0e0)
+  if (apb > 1.0e0)
     {
       u = *a+*b-1.e0;
       z = (1.0e0+gam1(&u))/apb;
@@ -1126,7 +1106,7 @@ S40:
      */
   u = gamln1(&a0);
   m = b0-1.0e0;
-  if(m >= 1) 
+  if (m >= 1) 
     {
       c = 1.0e0;
       for(i=1; i<=m; i++) {
@@ -1138,7 +1118,7 @@ S40:
   z = *a*log(*x)-u;
   b0 -= 1.0e0;
   apb = a0+b0;
-  if(apb > 1.0e0)
+  if (apb > 1.0e0)
     {
       u = a0+b0-1.e0;
       t = (1.0e0+gam1(&u))/apb;
@@ -1157,7 +1137,7 @@ S90:
   z = *a*log(*x)-u;
   bpser_0 = a0/ *a*exp(z);
 S100:
-  if(bpser_0 == 0.0e0 || *a <= 0.1e0**eps) return bpser_0;
+  if (bpser_0 == 0.0e0 || *a <= 0.1e0**eps) return bpser_0;
   /*
      -----------------------------------------------------------------------
      COMPUTE THE SERIES
@@ -1178,604 +1158,596 @@ S100:
   return bpser_0;
 }
 
-
-
+/*
+ * -----------------------------------------------------------------------
+ * 
+ * EVALUATION OF THE INCOMPLETE BETA FUNCTION IX(A,B)
+ * 
+ * --------------------
+ * 
+ * IT IS ASSUMED THAT A AND B ARE NONNEGATIVE, AND THAT X .LE. 1
+ * AND Y = 1 - X.  BRATIO ASSIGNS W AND W1 THE VALUES
+ * 
+ * W  = IX(A,B)
+ * W1 = 1 - IX(A,B)
+ * 
+ * IERR IS A VARIABLE THAT REPORTS THE STATUS OF THE RESULTS.
+ * IF NO INPUT ERRORS ARE DETECTED THEN IERR IS SET TO 0 AND
+ * W AND W1 ARE COMPUTED. OTHERWISE, IF AN ERROR IS DETECTED,
+ * THEN W AND W1 ARE ASSIGNED THE VALUE 0 AND IERR IS SET TO
+ * ONE OF THE FOLLOWING VALUES ...
+ * 
+ * IERR = 1  IF A OR B IS NEGATIVE
+ * IERR = 2  IF A = B = 0
+ * IERR = 3  IF X .LT. 0 OR X .GT. 1
+ * IERR = 4  IF Y .LT. 0 OR Y .GT. 1
+ * IERR = 5  IF X + Y .NE. 1
+ * IERR = 6  IF X = A = 0
+ * IERR = 7  IF Y = B = 0
+ * 
+ * --------------------
+ * WRITTEN BY ALFRED H. MORRIS, JR.
+ * NAVAL SURFACE WARFARE CENTER
+ * DAHLGREN, VIRGINIA
+ * REVISED ... NOV 1991
+ * -----------------------------------------------------------------------
+ */
 static void bratio(double *a,double *b,double *x,double *y,double *w,
                    double *w1,int *ierr)
-/*
-  -----------------------------------------------------------------------
- 
-  EVALUATION OF THE INCOMPLETE BETA FUNCTION IX(A,B)
- 
-  --------------------
- 
-  IT IS ASSUMED THAT A AND B ARE NONNEGATIVE, AND THAT X .LE. 1
-  AND Y = 1 - X.  BRATIO ASSIGNS W AND W1 THE VALUES
- 
-  W  = IX(A,B)
-  W1 = 1 - IX(A,B)
- 
-  IERR IS A VARIABLE THAT REPORTS THE STATUS OF THE RESULTS.
-  IF NO INPUT ERRORS ARE DETECTED THEN IERR IS SET TO 0 AND
-  W AND W1 ARE COMPUTED. OTHERWISE, IF AN ERROR IS DETECTED,
-  THEN W AND W1 ARE ASSIGNED THE VALUE 0 AND IERR IS SET TO
-  ONE OF THE FOLLOWING VALUES ...
- 
-  IERR = 1  IF A OR B IS NEGATIVE
-  IERR = 2  IF A = B = 0
-  IERR = 3  IF X .LT. 0 OR X .GT. 1
-  IERR = 4  IF Y .LT. 0 OR Y .GT. 1
-  IERR = 5  IF X + Y .NE. 1
-  IERR = 6  IF X = A = 0
-  IERR = 7  IF Y = B = 0
- 
-  --------------------
-  WRITTEN BY ALFRED H. MORRIS, JR.
-  NAVAL SURFACE WARFARE CENTER
-  DAHLGREN, VIRGINIA
-  REVISED ... NOV 1991
-  -----------------------------------------------------------------------
-*/
 {
   static int K1 = 1;
   static double a0,b0,eps,lambda,t,x0,y0,z;
   static int ierr1,ind,n;
   static double T2,T3,T4,T5;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   /*
-****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE SMALLEST
-FLOATING POINT NUMBER FOR WHICH 1.0 + EPS .GT. 1.0
-  */
+   ****** EPS IS A MACHINE DEPENDENT CONSTANT. EPS IS THE SMALLEST
+   FLOATING POINT NUMBER FOR WHICH 1.0 + EPS .GT. 1.0
+   */
   eps = spmpar(&K1);
   *w = *w1 = 0.0e0;
-  if(*a < 0.0e0 || *b < 0.0e0) goto S270;
-  if(*a == 0.0e0 && *b == 0.0e0) goto S280;
-  if(*x < 0.0e0 || *x > 1.0e0) goto S290;
-  if(*y < 0.0e0 || *y > 1.0e0) goto S300;
+  if (*a < 0.0e0 || *b < 0.0e0) goto S270;
+  if (*a == 0.0e0 && *b == 0.0e0) goto S280;
+  if (*x < 0.0e0 || *x > 1.0e0) goto S290;
+  if (*y < 0.0e0 || *y > 1.0e0) goto S300;
   z = *x+*y-0.5e0-0.5e0;
-  if(fabs(z) > 3.0e0*eps) goto S310;
+  if (fabs(z) > 3.0e0*eps) goto S310;
   *ierr = 0;
-  if(*x == 0.0e0) goto S210;
-  if(*y == 0.0e0) goto S230;
-  if(*a == 0.0e0) goto S240;
-  if(*b == 0.0e0) goto S220;
+  if (*x == 0.0e0) goto S210;
+  if (*y == 0.0e0) goto S230;
+  if (*a == 0.0e0) goto S240;
+  if (*b == 0.0e0) goto S220;
   eps = fifdmax1(eps,1.e-15);
-  if(fifdmax1(*a,*b) < 1.e-3*eps) goto S260;
+  if (fifdmax1(*a,*b) < 1.e-3*eps) goto S260;
   ind = 0;
   a0 = *a;
   b0 = *b;
   x0 = *x;
   y0 = *y;
-  if(fifdmin1(a0,b0) > 1.0e0) goto S40;
+  if (fifdmin1(a0,b0) > 1.0e0) goto S40;
   /*
-    PROCEDURE FOR A0 .LE. 1 OR B0 .LE. 1
-  */
-  if(*x <= 0.5e0) goto S10;
+     PROCEDURE FOR A0 .LE. 1 OR B0 .LE. 1
+     */
+  if (*x <= 0.5e0) goto S10;
   ind = 1;
   a0 = *b;
   b0 = *a;
   x0 = *y;
   y0 = *x;
- S10:
-  if(b0 < fifdmin1(eps,eps*a0)) goto S90;
-  if(a0 < fifdmin1(eps,eps*b0) && b0*x0 <= 1.0e0) goto S100;
-  if(fifdmax1(a0,b0) > 1.0e0) goto S20;
-  if(a0 >= fifdmin1(0.2e0,b0)) goto S110;
-  if(pow(x0,a0) <= 0.9e0) goto S110;
-  if(x0 >= 0.3e0) goto S120;
+S10:
+  if (b0 < fifdmin1(eps,eps*a0)) goto S90;
+  if (a0 < fifdmin1(eps,eps*b0) && b0*x0 <= 1.0e0) goto S100;
+  if (fifdmax1(a0,b0) > 1.0e0) goto S20;
+  if (a0 >= fifdmin1(0.2e0,b0)) goto S110;
+  if (pow(x0,a0) <= 0.9e0) goto S110;
+  if (x0 >= 0.3e0) goto S120;
   n = 20;
   goto S140;
- S20:
-  if(b0 <= 1.0e0) goto S110;
-  if(x0 >= 0.3e0) goto S120;
-  if(x0 >= 0.1e0) goto S30;
-  if(pow(x0*b0,a0) <= 0.7e0) goto S110;
- S30:
-  if(b0 > 15.0e0) goto S150;
+S20:
+  if (b0 <= 1.0e0) goto S110;
+  if (x0 >= 0.3e0) goto S120;
+  if (x0 >= 0.1e0) goto S30;
+  if (pow(x0*b0,a0) <= 0.7e0) goto S110;
+S30:
+  if (b0 > 15.0e0) goto S150;
   n = 20;
   goto S140;
- S40:
+S40:
   /*
-    PROCEDURE FOR A0 .GT. 1 AND B0 .GT. 1
-  */
-  if(*a > *b) goto S50;
+     PROCEDURE FOR A0 .GT. 1 AND B0 .GT. 1
+     */
+  if (*a > *b) goto S50;
   lambda = *a-(*a+*b)**x;
   goto S60;
- S50:
+S50:
   lambda = (*a+*b)**y-*b;
- S60:
-  if(lambda >= 0.0e0) goto S70;
+S60:
+  if (lambda >= 0.0e0) goto S70;
   ind = 1;
   a0 = *b;
   b0 = *a;
   x0 = *y;
   y0 = *x;
   lambda = fabs(lambda);
- S70:
-  if(b0 < 40.0e0 && b0*x0 <= 0.7e0) goto S110;
-  if(b0 < 40.0e0) goto S160;
-  if(a0 > b0) goto S80;
-  if(a0 <= 100.0e0) goto S130;
-  if(lambda > 0.03e0*a0) goto S130;
+S70:
+  if (b0 < 40.0e0 && b0*x0 <= 0.7e0) goto S110;
+  if (b0 < 40.0e0) goto S160;
+  if (a0 > b0) goto S80;
+  if (a0 <= 100.0e0) goto S130;
+  if (lambda > 0.03e0*a0) goto S130;
   goto S200;
- S80:
-  if(b0 <= 100.0e0) goto S130;
-  if(lambda > 0.03e0*b0) goto S130;
+S80:
+  if (b0 <= 100.0e0) goto S130;
+  if (lambda > 0.03e0*b0) goto S130;
   goto S200;
- S90:
+S90:
   /*
-    EVALUATION OF THE APPROPRIATE ALGORITHM
-  */
+     EVALUATION OF THE APPROPRIATE ALGORITHM
+     */
   *w = fpser(&a0,&b0,&x0,&eps);
   *w1 = 0.5e0+(0.5e0-*w);
   goto S250;
- S100:
+S100:
   *w1 = apser(&a0,&b0,&x0,&eps);
   *w = 0.5e0+(0.5e0-*w1);
   goto S250;
- S110:
+S110:
   *w = bpser(&a0,&b0,&x0,&eps);
   *w1 = 0.5e0+(0.5e0-*w);
   goto S250;
- S120:
+S120:
   *w1 = bpser(&b0,&a0,&y0,&eps);
   *w = 0.5e0+(0.5e0-*w1);
   goto S250;
- S130:
+S130:
   T2 = 15.0e0*eps;
   *w = bfrac(&a0,&b0,&x0,&y0,&lambda,&T2);
   *w1 = 0.5e0+(0.5e0-*w);
   goto S250;
- S140:
+S140:
   *w1 = bup(&b0,&a0,&y0,&x0,&n,&eps);
   b0 += (double)n;
- S150:
+S150:
   T3 = 15.0e0*eps;
   bgrat(&b0,&a0,&y0,&x0,w1,&T3,&ierr1);
   *w = 0.5e0+(0.5e0-*w1);
   goto S250;
- S160:
+S160:
   n = b0;
   b0 -= (double)n;
-  if(b0 != 0.0e0) goto S170;
+  if (b0 != 0.0e0) goto S170;
   n -= 1;
   b0 = 1.0e0;
- S170:
+S170:
   *w = bup(&b0,&a0,&y0,&x0,&n,&eps);
-  if(x0 > 0.7e0) goto S180;
+  if (x0 > 0.7e0) goto S180;
   *w += bpser(&a0,&b0,&x0,&eps);
   *w1 = 0.5e0+(0.5e0-*w);
   goto S250;
- S180:
-  if(a0 > 15.0e0) goto S190;
+S180:
+  if (a0 > 15.0e0) goto S190;
   n = 20;
   *w += bup(&a0,&b0,&x0,&y0,&n,&eps);
   a0 += (double)n;
- S190:
+S190:
   T4 = 15.0e0*eps;
   bgrat(&a0,&b0,&x0,&y0,w,&T4,&ierr1);
   *w1 = 0.5e0+(0.5e0-*w);
   goto S250;
- S200:
+S200:
   T5 = 100.0e0*eps;
   *w = basym(&a0,&b0,&lambda,&T5);
   *w1 = 0.5e0+(0.5e0-*w);
   goto S250;
- S210:
+S210:
   /*
-    TERMINATION OF THE PROCEDURE
-  */
-  if(*a == 0.0e0) goto S320;
- S220:
+     TERMINATION OF THE PROCEDURE
+     */
+  if (*a == 0.0e0) goto S320;
+S220:
   *w = 0.0e0;
   *w1 = 1.0e0;
   return;
- S230:
-  if(*b == 0.0e0) goto S330;
- S240:
+S230:
+  if (*b == 0.0e0) goto S330;
+S240:
   *w = 1.0e0;
   *w1 = 0.0e0;
   return;
- S250:
-  if(ind == 0) return;
+S250:
+  if (ind == 0) return;
   t = *w;
   *w = *w1;
   *w1 = t;
   return;
- S260:
+S260:
   /*
-    PROCEDURE FOR A AND B .LT. 1.E-3*EPS
-  */
+     PROCEDURE FOR A AND B .LT. 1.E-3*EPS
+     */
   *w = *b/(*a+*b);
   *w1 = *a/(*a+*b);
   return;
- S270:
+S270:
   /*
-    ERROR RETURN
-  */
+     ERROR RETURN
+     */
   *ierr = 1;
   return;
- S280:
+S280:
   *ierr = 2;
   return;
- S290:
+S290:
   *ierr = 3;
   return;
- S300:
+S300:
   *ierr = 4;
   return;
- S310:
+S310:
   *ierr = 5;
   return;
- S320:
+S320:
   *ierr = 6;
   return;
- S330:
+S330:
   *ierr = 7;
   return;
 }
 
-
-
-static double brcmp1(int *mu,double *a,double *b,double *x,double *y)
 /*
-  -----------------------------------------------------------------------
-  EVALUATION OF  EXP(MU) * (X**A*Y**B/BETA(A,B))
-  -----------------------------------------------------------------------
-*/
+ * -----------------------------------------------------------------------
+ * EVALUATION OF  EXP(MU) * (X**A*Y**B/BETA(A,B))
+ * -----------------------------------------------------------------------
+ */
+static double brcmp1(int *mu,double *a,double *b,double *x,double *y)
 {
   static double Const = .398942280401433e0;
   static double brcmp_0,a0,apb,b0,c,e,h,lambda,lnx,lny,t,u,v,x0,y0,z;
   static int i,n;
   /*
-    -----------------
-    CONST = 1/SQRT(2*M_PI)
-    -----------------
-  */
+     -----------------
+     CONST = 1/SQRT(2*M_PI)
+     -----------------
+     */
   static double T1,T2,T3,T4;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   a0 = fifdmin1(*a,*b);
-  if(a0 >= 8.0e0) goto S130;
-  if(*x > 0.375e0) goto S10;
+  if (a0 >= 8.0e0) goto S130;
+  if (*x > 0.375e0) goto S10;
   lnx = log(*x);
   T1 = -*x;
   lny = alnrel(&T1);
   goto S30;
- S10:
-  if(*y > 0.375e0) goto S20;
+S10:
+  if (*y > 0.375e0) goto S20;
   T2 = -*y;
   lnx = alnrel(&T2);
   lny = log(*y);
   goto S30;
- S20:
+S20:
   lnx = log(*x);
   lny = log(*y);
- S30:
+S30:
   z = *a*lnx+*b*lny;
-  if(a0 < 1.0e0) goto S40;
+  if (a0 < 1.0e0) goto S40;
   z -= betaln(a,b);
   return esum(mu,&z);
- S40:
+S40:
   /*
-    -----------------------------------------------------------------------
-    PROCEDURE FOR A .LT. 1 OR B .LT. 1
-    -----------------------------------------------------------------------
-  */
+     -----------------------------------------------------------------------
+     PROCEDURE FOR A .LT. 1 OR B .LT. 1
+     -----------------------------------------------------------------------
+     */
   b0 = fifdmax1(*a,*b);
-  if(b0 >= 8.0e0) goto S120;
-  if(b0 > 1.0e0) goto S70;
+  if (b0 >= 8.0e0) goto S120;
+  if (b0 > 1.0e0) goto S70;
   /*
-    ALGORITHM FOR B0 .LE. 1
-  */
+     ALGORITHM FOR B0 .LE. 1
+     */
   brcmp_0 = esum(mu,&z);
-  if(brcmp_0 == 0.0e0) return brcmp_0;
+  if (brcmp_0 == 0.0e0) return brcmp_0;
   apb = *a+*b;
-  if(apb > 1.0e0) goto S50;
+  if (apb > 1.0e0) goto S50;
   z = 1.0e0+gam1(&apb);
   goto S60;
- S50:
+S50:
   u = *a+*b-1.e0;
   z = (1.0e0+gam1(&u))/apb;
- S60:
+S60:
   c = (1.0e0+gam1(a))*(1.0e0+gam1(b))/z;
   brcmp_0 = brcmp_0*(a0*c)/(1.0e0+a0/b0);
   return brcmp_0;
- S70:
+S70:
   /*
-    ALGORITHM FOR 1 .LT. B0 .LT. 8
-  */
+     ALGORITHM FOR 1 .LT. B0 .LT. 8
+     */
   u = gamln1(&a0);
   n = b0-1.0e0;
-  if(n < 1) goto S90;
+  if (n < 1) goto S90;
   c = 1.0e0;
   for(i=1; i<=n; i++) {
     b0 -= 1.0e0;
     c *= (b0/(a0+b0));
   }
   u = log(c)+u;
- S90:
+S90:
   z -= u;
   b0 -= 1.0e0;
   apb = a0+b0;
-  if(apb > 1.0e0) goto S100;
+  if (apb > 1.0e0) goto S100;
   t = 1.0e0+gam1(&apb);
   goto S110;
- S100:
+S100:
   u = a0+b0-1.e0;
   t = (1.0e0+gam1(&u))/apb;
- S110:
+S110:
   brcmp_0 = a0*esum(mu,&z)*(1.0e0+gam1(&b0))/t;
   return brcmp_0;
- S120:
+S120:
   /*
-    ALGORITHM FOR B0 .GE. 8
-  */
+     ALGORITHM FOR B0 .GE. 8
+     */
   u = gamln1(&a0)+algdiv(&a0,&b0);
   T3 = z-u;
   return a0*esum(mu,&T3);
- S130:
+S130:
   /*
-    -----------------------------------------------------------------------
-    PROCEDURE FOR A .GE. 8 AND B .GE. 8
-    -----------------------------------------------------------------------
-  */
-  if(*a > *b) goto S140;
+     -----------------------------------------------------------------------
+     PROCEDURE FOR A .GE. 8 AND B .GE. 8
+     -----------------------------------------------------------------------
+     */
+  if (*a > *b) goto S140;
   h = *a/ *b;
   x0 = h/(1.0e0+h);
   y0 = 1.0e0/(1.0e0+h);
   lambda = *a-(*a+*b)**x;
   goto S150;
- S140:
+S140:
   h = *b/ *a;
   x0 = 1.0e0/(1.0e0+h);
   y0 = h/(1.0e0+h);
   lambda = (*a+*b)**y-*b;
- S150:
+S150:
   e = -(lambda/ *a);
-  if(fabs(e) > 0.6e0) goto S160;
+  if (fabs(e) > 0.6e0) goto S160;
   u = rlog1(&e);
   goto S170;
- S160:
+S160:
   u = e-log(*x/x0);
- S170:
+S170:
   e = lambda/ *b;
-  if(fabs(e) > 0.6e0) goto S180;
+  if (fabs(e) > 0.6e0) goto S180;
   v = rlog1(&e);
   goto S190;
- S180:
+S180:
   v = e-log(*y/y0);
- S190:
+S190:
   T4 = -(*a*u+*b*v);
   z = esum(mu,&T4);
   return Const*sqrt(*b*x0)*z*exp(-bcorr(a,b));
 }
 
 
-
-static double brcomp(double *a,double *b,double *x,double *y)
 /*
-  -----------------------------------------------------------------------
-  EVALUATION OF X**A*Y**B/BETA(A,B)
-  -----------------------------------------------------------------------
-*/
+ * -----------------------------------------------------------------------
+ * EVALUATION OF X**A*Y**B/BETA(A,B)
+ * -----------------------------------------------------------------------
+ */
+static double brcomp(double *a,double *b,double *x,double *y)
 {
   static double Const = .398942280401433e0;
   static double brcomp_0,a0,apb,b0,c,e,h,lambda,lnx,lny,t,u,v,x0,y0,z;
   static int i,n;
   /*
-    -----------------
-    CONST = 1/SQRT(2*M_PI)
-    -----------------
-  */
+     -----------------
+     CONST = 1/SQRT(2*M_PI)
+     -----------------
+     */
   static double T1,T2;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   brcomp_0 = 0.0e0;
-  if(*x == 0.0e0 || *y == 0.0e0) return brcomp_0;
+  if (*x == 0.0e0 || *y == 0.0e0) return brcomp_0;
   a0 = fifdmin1(*a,*b);
-  if(a0 >= 8.0e0) goto S130;
-  if(*x > 0.375e0) goto S10;
+  if (a0 >= 8.0e0) goto S130;
+  if (*x > 0.375e0) goto S10;
   lnx = log(*x);
   T1 = -*x;
   lny = alnrel(&T1);
   goto S30;
- S10:
-  if(*y > 0.375e0) goto S20;
+S10:
+  if (*y > 0.375e0) goto S20;
   T2 = -*y;
   lnx = alnrel(&T2);
   lny = log(*y);
   goto S30;
- S20:
+S20:
   lnx = log(*x);
   lny = log(*y);
- S30:
+S30:
   z = *a*lnx+*b*lny;
-  if(a0 < 1.0e0) goto S40;
+  if (a0 < 1.0e0) goto S40;
   z -= betaln(a,b);
   return exp(z);
- S40:
+S40:
   /*
-    -----------------------------------------------------------------------
-    PROCEDURE FOR A .LT. 1 OR B .LT. 1
-    -----------------------------------------------------------------------
-  */
+     -----------------------------------------------------------------------
+     PROCEDURE FOR A .LT. 1 OR B .LT. 1
+     -----------------------------------------------------------------------
+     */
   b0 = fifdmax1(*a,*b);
-  if(b0 >= 8.0e0) goto S120;
-  if(b0 > 1.0e0) goto S70;
+  if (b0 >= 8.0e0) goto S120;
+  if (b0 > 1.0e0) goto S70;
   /*
-    ALGORITHM FOR B0 .LE. 1
-  */
+     ALGORITHM FOR B0 .LE. 1
+     */
   brcomp_0 = exp(z);
-  if(brcomp_0 == 0.0e0) return brcomp_0;
+  if (brcomp_0 == 0.0e0) return brcomp_0;
   apb = *a+*b;
-  if(apb > 1.0e0) goto S50;
+  if (apb > 1.0e0) goto S50;
   z = 1.0e0+gam1(&apb);
   goto S60;
- S50:
+S50:
   u = *a+*b-1.e0;
   z = (1.0e0+gam1(&u))/apb;
- S60:
+S60:
   c = (1.0e0+gam1(a))*(1.0e0+gam1(b))/z;
   brcomp_0 = brcomp_0*(a0*c)/(1.0e0+a0/b0);
   return brcomp_0;
- S70:
+S70:
   /*
-    ALGORITHM FOR 1 .LT. B0 .LT. 8
-  */
+     ALGORITHM FOR 1 .LT. B0 .LT. 8
+     */
   u = gamln1(&a0);
   n = b0-1.0e0;
-  if(n < 1) goto S90;
+  if (n < 1) goto S90;
   c = 1.0e0;
   for(i=1; i<=n; i++) {
     b0 -= 1.0e0;
     c *= (b0/(a0+b0));
   }
   u = log(c)+u;
- S90:
+S90:
   z -= u;
   b0 -= 1.0e0;
   apb = a0+b0;
-  if(apb > 1.0e0) goto S100;
+  if (apb > 1.0e0) goto S100;
   t = 1.0e0+gam1(&apb);
   goto S110;
- S100:
+S100:
   u = a0+b0-1.e0;
   t = (1.0e0+gam1(&u))/apb;
- S110:
+S110:
   return a0*exp(z)*(1.0e0+gam1(&b0))/t;
- S120:
+S120:
   /*
-    ALGORITHM FOR B0 .GE. 8
-  */
+     ALGORITHM FOR B0 .GE. 8
+     */
   u = gamln1(&a0)+algdiv(&a0,&b0);
   return a0*exp(z-u);
- S130:
+S130:
   /*
-    -----------------------------------------------------------------------
-    PROCEDURE FOR A .GE. 8 AND B .GE. 8
-    -----------------------------------------------------------------------
-  */
-  if(*a > *b) goto S140;
+     -----------------------------------------------------------------------
+     PROCEDURE FOR A .GE. 8 AND B .GE. 8
+     -----------------------------------------------------------------------
+     */
+  if (*a > *b) goto S140;
   h = *a/ *b;
   x0 = h/(1.0e0+h);
   y0 = 1.0e0/(1.0e0+h);
   lambda = *a-(*a+*b)**x;
   goto S150;
- S140:
+S140:
   h = *b/ *a;
   x0 = 1.0e0/(1.0e0+h);
   y0 = h/(1.0e0+h);
   lambda = (*a+*b)**y-*b;
- S150:
+S150:
   e = -(lambda/ *a);
-  if(fabs(e) > 0.6e0) goto S160;
+  if (fabs(e) > 0.6e0) goto S160;
   u = rlog1(&e);
   goto S170;
- S160:
+S160:
   u = e-log(*x/x0);
- S170:
+S170:
   e = lambda/ *b;
-  if(fabs(e) > 0.6e0) goto S180;
+  if (fabs(e) > 0.6e0) goto S180;
   v = rlog1(&e);
   goto S190;
- S180:
+S180:
   v = e-log(*y/y0);
- S190:
+S190:
   z = exp(-(*a*u+*b*v));
   return Const*sqrt(*b*x0)*z*exp(-bcorr(a,b));
 }
 
-
-
-static double bup(double *a,double *b,double *x,double *y,int *n,double *eps)
 /*
-  -----------------------------------------------------------------------
-  EVALUATION OF IX(A,B) - IX(A+N,B) WHERE N IS A POSITIVE INTEGER.
-  EPS IS THE TOLERANCE USED.
-  -----------------------------------------------------------------------
-*/
+ * -----------------------------------------------------------------------
+ * EVALUATION OF IX(A,B) - IX(A+N,B) WHERE N IS A POSITIVE INTEGER.
+ * EPS IS THE TOLERANCE USED.
+ * -----------------------------------------------------------------------
+ */
+static double bup(double *a,double *b,double *x,double *y,int *n,double *eps)
 {
   static int K1 = 1;
   static int K2 = 0;
   static double bup_0,ap1,apb,d,l,r,t,w;
   static int i,k,kp1,mu,nm1;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   /*
-    OBTAIN THE SCALING FACTOR EXP(-MU) AND
-    EXP(MU)*(X**A*Y**B/BETA(A,B))/A
-  */
+     OBTAIN THE SCALING FACTOR EXP(-MU) AND
+     EXP(MU)*(X**A*Y**B/BETA(A,B))/A
+     */
   apb = *a+*b;
   ap1 = *a+1.0e0;
   mu = 0;
   d = 1.0e0;
-  if(*n == 1 || *a < 1.0e0) goto S10;
-  if(apb < 1.1e0*ap1) goto S10;
+  if (*n == 1 || *a < 1.0e0) goto S10;
+  if (apb < 1.1e0*ap1) goto S10;
   mu = fabs(exparg(&K1));
   k = exparg(&K2);
-  if(k < mu) mu = k;
+  if (k < mu) mu = k;
   t = mu;
   d = exp(-t);
- S10:
+S10:
   bup_0 = brcmp1(&mu,a,b,x,y)/ *a;
-  if(*n == 1 || bup_0 == 0.0e0) return bup_0;
+  if (*n == 1 || bup_0 == 0.0e0) return bup_0;
   nm1 = *n-1;
   w = d;
   /*
-    LET K BE THE INDEX OF THE MAXIMUM TERM
-  */
+     LET K BE THE INDEX OF THE MAXIMUM TERM
+     */
   k = 0;
-  if(*b <= 1.0e0) goto S50;
-  if(*y > 1.e-4) goto S20;
+  if (*b <= 1.0e0) goto S50;
+  if (*y > 1.e-4) goto S20;
   k = nm1;
   goto S30;
- S20:
+S20:
   r = (*b-1.0e0)**x/ *y-*a;
-  if(r < 1.0e0) goto S50;
+  if (r < 1.0e0) goto S50;
   k = t = nm1;
-  if(r < t) k = r;
- S30:
+  if (r < t) k = r;
+S30:
   /*
-    ADD THE INCREASING TERMS OF THE SERIES
-  */
+     ADD THE INCREASING TERMS OF THE SERIES
+     */
   for(i=1; i<=k; i++) {
     l = i-1;
     d = (apb+l)/(ap1+l)**x*d;
     w += d;
   }
-  if(k == nm1) goto S70;
- S50:
+  if (k == nm1) goto S70;
+S50:
   /*
-    ADD THE REMAINING TERMS OF THE SERIES
-  */
+     ADD THE REMAINING TERMS OF THE SERIES
+     */
   kp1 = k+1;
   for(i=kp1; i<=nm1; i++) {
     l = i-1;
     d = (apb+l)/(ap1+l)**x*d;
     w += d;
-    if(d <= *eps*w) goto S70;
+    if (d <= *eps*w) goto S70;
   }
- S70:
+S70:
   /*
-    TERMINATE THE PROCEDURE
-  */
+     TERMINATE THE PROCEDURE
+     */
   bup_0 *= w;
   return bup_0;
 }
 
 /**
- * Cumulative Distribution Function
- BETa distribution
+ * Cumulative Distribution Function BETa distribution
  *
  * @param which : Integer indicating  which of the  next  parameter
  values is to be calculated using values  of the others
@@ -1808,104 +1780,103 @@ static double bup(double *a,double *b,double *x,double *y,int *n,double *eps)
  bound if STATUS is 1. Upper search bound if STATUS is 2.
  * @return  any one parameter of the beta
  distribution given values for the others
+ */
+
+
+/*
+ * 
+ * void pnl_cdf_bet(int *which,double *p,double *q,double *x,double *y,
+ * double *a,double *b,int *status,double *bound)
+ * 
+ * Cumulative Distribution Function
+ * BETa Distribution
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Calculates any one parameter of the beta distribution given
+ * values for the others.
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * WHICH --> Integer indicating which of the next four argument
+ * values is to be calculated from the others.
+ * Legal range: 1..4
+ * iwhich = 1 : Calculate P and Q from X,Y,A and B
+ * iwhich = 2 : Calculate X and Y from P,Q,A and B
+ * iwhich = 3 : Calculate A from P,Q,X,Y and B
+ * iwhich = 4 : Calculate B from P,Q,X,Y and A
+ * 
+ * P <--> The integral from 0 to X of the chi-square
+ * distribution.
+ * Input range: [0, 1].
+ * 
+ * Q <--> 1-P.
+ * Input range: [0, 1].
+ * P + Q = 1.0.
+ * 
+ * X <--> Upper limit of integration of beta density.
+ * Input range: [0,1].
+ * Search range: [0,1]
+ * 
+ * Y <--> 1-X.
+ * Input range: [0,1].
+ * Search range: [0,1]
+ * X + Y = 1.0.
+ * 
+ * A <--> The first parameter of the beta density.
+ * Input range: (0, +infinity).
+ * Search range: [1D-300,1D300]
+ * 
+ * B <--> The second parameter of the beta density.
+ * Input range: (0, +infinity).
+ * Search range: [1D-300,1D300]
+ * 
+ * STATUS <-- 0 if calculation completed correctly
+ * -I if input parameter number I is out of range
+ * 1 if answer appears to be lower than lowest
+ * search bound
+ * 2 if answer appears to be higher than greatest
+ * search bound
+ * 3 if P + Q .ne. 1
+ * 4 if X + Y .ne. 1
+ * 
+ * BOUND <-- Undefined if STATUS is 0
+ * 
+ * Bound exceeded by parameter number I if STATUS
+ * is negative.
+ * 
+ * Lower search bound if STATUS is 1.
+ * 
+ * Upper search bound if STATUS is 2.
+ * 
+ * 
+* Method
+* 
+* 
+* Cumulative distribution function  (P)  is calculated directly by
+* code associated with the following reference.
+* 
+* DiDinato, A. R. and Morris,  A.   H.  Algorithm 708: Significant
+* Digit Computation of the Incomplete  Beta  Function Ratios.  ACM
+* Trans. Math.  Softw. 18 (1993), 360-373.
+* 
+* Computation of other parameters involve a seach for a value that
+* produces  the desired  value  of P.   The search relies  on  the
+* monotinicity of P with the other parameter.
+* 
+* 
+* Note
+* 
+* 
+* The beta density is proportional to
+* t^(A-1) * (1-t)^(B-1)
 */
-
-
 void pnl_cdf_bet(int *which,double *p,double *q,double *x,double *y,
                  double *a,double *b,int *status,double *bound)
-/**********************************************************************
-
-      void pnl_cdf_bet(int *which,double *p,double *q,double *x,double *y,
-            double *a,double *b,int *status,double *bound)
-
-               Cumulative Distribution Function
-                         BETa Distribution
-
-
-                              Function
-
-
-     Calculates any one parameter of the beta distribution given
-     values for the others.
-
-
-                              Arguments
-
-
-     WHICH --> Integer indicating which of the next four argument
-               values is to be calculated from the others.
-               Legal range: 1..4
-               iwhich = 1 : Calculate P and Q from X,Y,A and B
-               iwhich = 2 : Calculate X and Y from P,Q,A and B
-               iwhich = 3 : Calculate A from P,Q,X,Y and B
-               iwhich = 4 : Calculate B from P,Q,X,Y and A
-
-     P <--> The integral from 0 to X of the chi-square
-            distribution.
-            Input range: [0, 1].
-
-     Q <--> 1-P.
-            Input range: [0, 1].
-            P + Q = 1.0.
-
-     X <--> Upper limit of integration of beta density.
-            Input range: [0,1].
-            Search range: [0,1]
-
-     Y <--> 1-X.
-            Input range: [0,1].
-            Search range: [0,1]
-            X + Y = 1.0.
-
-     A <--> The first parameter of the beta density.
-            Input range: (0, +infinity).
-            Search range: [1D-300,1D300]
-
-     B <--> The second parameter of the beta density.
-            Input range: (0, +infinity).
-            Search range: [1D-300,1D300]
-
-     STATUS <-- 0 if calculation completed correctly
-               -I if input parameter number I is out of range
-                1 if answer appears to be lower than lowest
-                  search bound
-                2 if answer appears to be higher than greatest
-                  search bound
-                3 if P + Q .ne. 1
-                4 if X + Y .ne. 1
-
-     BOUND <-- Undefined if STATUS is 0
-
-               Bound exceeded by parameter number I if STATUS
-               is negative.
-
-               Lower search bound if STATUS is 1.
-
-               Upper search bound if STATUS is 2.
-
-
-                              Method
-
-
-     Cumulative distribution function  (P)  is calculated directly by
-     code associated with the following reference.
-
-     DiDinato, A. R. and Morris,  A.   H.  Algorithm 708: Significant
-     Digit Computation of the Incomplete  Beta  Function Ratios.  ACM
-     Trans. Math.  Softw. 18 (1993), 360-373.
-
-     Computation of other parameters involve a seach for a value that
-     produces  the desired  value  of P.   The search relies  on  the
-     monotinicity of P with the other parameter.
-
-
-                              Note
-
-
-     The beta density is proportional to
-               t^(A-1) * (1-t)^(B-1)
-
-**********************************************************************/
 {
 #define tol (1.0e-8)
 #define atol (1.0e-50)
@@ -1921,195 +1892,195 @@ void pnl_cdf_bet(int *which,double *p,double *q,double *x,double *y,
   static unsigned long qhi,qleft,qporq;
   static double T4,T5,T6,T7,T10,T11,T12,T13,T14,T15;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   /*
-    Check arguments
-  */
-  if(!(*which < 1 || *which > 4)) goto S30;
-  if(!(*which < 1)) goto S10;
+     Check arguments
+     */
+  if (!(*which < 1 || *which > 4)) goto S30;
+  if (!(*which < 1)) goto S10;
   *bound = 1.0e0;
   goto S20;
- S10:
+S10:
   *bound = 4.0e0;
- S20:
+S20:
   *status = -1;
   return;
- S30:
-  if(*which == 1) goto S70;
+S30:
+  if (*which == 1) goto S70;
   /*
-    P
-  */
-  if(!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
-  if(!(*p < 0.0e0)) goto S40;
+     P
+     */
+  if (!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
+  if (!(*p < 0.0e0)) goto S40;
   *bound = 0.0e0;
   goto S50;
- S40:
+S40:
   *bound = 1.0e0;
- S50:
+S50:
   *status = -2;
   return;
- S70:
- S60:
-  if(*which == 1) goto S110;
+S70:
+S60:
+  if (*which == 1) goto S110;
   /*
-    Q
-  */
-  if(!(*q < 0.0e0 || *q > 1.0e0)) goto S100;
-  if(!(*q < 0.0e0)) goto S80;
+     Q
+     */
+  if (!(*q < 0.0e0 || *q > 1.0e0)) goto S100;
+  if (!(*q < 0.0e0)) goto S80;
   *bound = 0.0e0;
   goto S90;
- S80:
+S80:
   *bound = 1.0e0;
- S90:
+S90:
   *status = -3;
   return;
- S110:
- S100:
-  if(*which == 2) goto S150;
+S110:
+S100:
+  if (*which == 2) goto S150;
   /*
-    X
-  */
-  if(!(*x < 0.0e0 || *x > 1.0e0)) goto S140;
-  if(!(*x < 0.0e0)) goto S120;
+     X
+     */
+  if (!(*x < 0.0e0 || *x > 1.0e0)) goto S140;
+  if (!(*x < 0.0e0)) goto S120;
   *bound = 0.0e0;
   goto S130;
- S120:
+S120:
   *bound = 1.0e0;
- S130:
+S130:
   *status = -4;
   return;
- S150:
- S140:
-  if(*which == 2) goto S190;
+S150:
+S140:
+  if (*which == 2) goto S190;
   /*
-    Y
-  */
-  if(!(*y < 0.0e0 || *y > 1.0e0)) goto S180;
-  if(!(*y < 0.0e0)) goto S160;
+     Y
+     */
+  if (!(*y < 0.0e0 || *y > 1.0e0)) goto S180;
+  if (!(*y < 0.0e0)) goto S160;
   *bound = 0.0e0;
   goto S170;
- S160:
+S160:
   *bound = 1.0e0;
- S170:
+S170:
   *status = -5;
   return;
- S190:
- S180:
-  if(*which == 3) goto S210;
+S190:
+S180:
+  if (*which == 3) goto S210;
   /*
-    A
-  */
-  if(!(*a <= 0.0e0)) goto S200;
+     A
+     */
+  if (!(*a <= 0.0e0)) goto S200;
   *bound = 0.0e0;
   *status = -6;
   return;
- S210:
- S200:
-  if(*which == 4) goto S230;
+S210:
+S200:
+  if (*which == 4) goto S230;
   /*
-    B
-  */
-  if(!(*b <= 0.0e0)) goto S220;
+     B
+     */
+  if (!(*b <= 0.0e0)) goto S220;
   *bound = 0.0e0;
   *status = -7;
   return;
- S230:
- S220:
-  if(*which == 1) goto S270;
+S230:
+S220:
+  if (*which == 1) goto S270;
   /*
-    P + Q
-  */
+     P + Q
+     */
   pq = *p+*q;
-  if(!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S260;
-  if(!(pq < 0.0e0)) goto S240;
+  if (!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S260;
+  if (!(pq < 0.0e0)) goto S240;
   *bound = 0.0e0;
   goto S250;
- S240:
+S240:
   *bound = 1.0e0;
- S250:
+S250:
   *status = 3;
   return;
- S270:
- S260:
-  if(*which == 2) goto S310;
+S270:
+S260:
+  if (*which == 2) goto S310;
   /*
-    X + Y
-  */
+     X + Y
+     */
   xy = *x+*y;
-  if(!(fabs(xy-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S300;
-  if(!(xy < 0.0e0)) goto S280;
+  if (!(fabs(xy-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S300;
+  if (!(xy < 0.0e0)) goto S280;
   *bound = 0.0e0;
   goto S290;
- S280:
+S280:
   *bound = 1.0e0;
- S290:
+S290:
   *status = 4;
   return;
- S310:
- S300:
-  if(!(*which == 1)) qporq = *p <= *q;
+S310:
+S300:
+  if (!(*which == 1)) qporq = *p <= *q;
   /*
-    Select the minimum of P or Q
-    Calculate ANSWERS
-  */
-  if(1 == *which) {
+     Select the minimum of P or Q
+     Calculate ANSWERS
+     */
+  if (1 == *which) {
     /*
-      Calculating P and Q
-    */
+       Calculating P and Q
+       */
     cumbet(x,y,a,b,p,q);
     *status = 0;
   }
-  else if(2 == *which) {
+  else if (2 == *which) {
     /*
-      Calculating X and Y
-    */
+       Calculating X and Y
+       */
     T4 = atol;
     T5 = tol;
     dstzr(&K2,&K3,&T4,&T5);
-    if(!qporq) goto S340;
+    if (!qporq) goto S340;
     *status = 0;
     dzror(status,x,&fx,&xlo,&xhi,&qleft,&qhi);
     *y = one-*x;
-  S320:
-    if(!(*status == 1)) goto S330;
+S320:
+    if (!(*status == 1)) goto S330;
     cumbet(x,y,a,b,&cum,&ccum);
     fx = cum-*p;
     dzror(status,x,&fx,&xlo,&xhi,&qleft,&qhi);
     *y = one-*x;
     goto S320;
-  S330:
+S330:
     goto S370;
-  S340:
+S340:
     *status = 0;
     dzror(status,y,&fx,&xlo,&xhi,&qleft,&qhi);
     *x = one-*y;
-  S350:
-    if(!(*status == 1)) goto S360;
+S350:
+    if (!(*status == 1)) goto S360;
     cumbet(x,y,a,b,&cum,&ccum);
     fx = ccum-*q;
     dzror(status,y,&fx,&xlo,&xhi,&qleft,&qhi);
     *x = one-*y;
     goto S350;
-  S370:
-  S360:
-    if(!(*status == -1)) goto S400;
-    if(!qleft) goto S380;
+S370:
+S360:
+    if (!(*status == -1)) goto S400;
+    if (!qleft) goto S380;
     *status = 1;
     *bound = 0.0e0;
     goto S390;
-  S380:
+S380:
     *status = 2;
     *bound = 1.0e0;
-  S400:
-  S390:
+S400:
+S390:
     ;
   }
-  else if(3 == *which) {
+  else if (3 == *which) {
     /*
-      Computing A
-    */
+       Computing A
+       */
     *a = 5.0e0;
     T6 = zero;
     T7 = inf;
@@ -2118,34 +2089,34 @@ void pnl_cdf_bet(int *which,double *p,double *q,double *x,double *y,
     dstinv(&T6,&T7,&K8,&K8,&K9,&T10,&T11);
     *status = 0;
     dinvr(status,a,&fx,&qleft,&qhi);
-  S410:
-    if(!(*status == 1)) goto S440;
+S410:
+    if (!(*status == 1)) goto S440;
     cumbet(x,y,a,b,&cum,&ccum);
-    if(!qporq) goto S420;
+    if (!qporq) goto S420;
     fx = cum-*p;
     goto S430;
-  S420:
+S420:
     fx = ccum-*q;
-  S430:
+S430:
     dinvr(status,a,&fx,&qleft,&qhi);
     goto S410;
-  S440:
-    if(!(*status == -1)) goto S470;
-    if(!qleft) goto S450;
+S440:
+    if (!(*status == -1)) goto S470;
+    if (!qleft) goto S450;
     *status = 1;
     *bound = zero;
     goto S460;
-  S450:
+S450:
     *status = 2;
     *bound = inf;
-  S470:
-  S460:
+S470:
+S460:
     ;
   }
-  else if(4 == *which) {
+  else if (4 == *which) {
     /*
-      Computing B
-    */
+       Computing B
+       */
     *b = 5.0e0;
     T12 = zero;
     T13 = inf;
@@ -2154,30 +2125,30 @@ void pnl_cdf_bet(int *which,double *p,double *q,double *x,double *y,
     dstinv(&T12,&T13,&K8,&K8,&K9,&T14,&T15);
     *status = 0;
     dinvr(status,b,&fx,&qleft,&qhi);
-  S480:
-    if(!(*status == 1)) goto S510;
+S480:
+    if (!(*status == 1)) goto S510;
     cumbet(x,y,a,b,&cum,&ccum);
-    if(!qporq) goto S490;
+    if (!qporq) goto S490;
     fx = cum-*p;
     goto S500;
-  S490:
+S490:
     fx = ccum-*q;
-  S500:
+S500:
     dinvr(status,b,&fx,&qleft,&qhi);
     goto S480;
-  S510:
-    if(!(*status == -1)) goto S540;
-    if(!qleft) goto S520;
+S510:
+    if (!(*status == -1)) goto S540;
+    if (!qleft) goto S520;
     *status = 1;
     *bound = zero;
     goto S530;
-  S520:
+S520:
     *status = 2;
     *bound = inf;
-  S530:
+S530:
     ;
   }
- S540:
+S540:
   return;
 #undef tol
 #undef atol
@@ -2223,98 +2194,95 @@ void pnl_cdf_bet(int *which,double *p,double *q,double *x,double *y,
  bound if STATUS is 1. Upper search bound if STATUS is 2.
  * @return  any one parameter of the binomial
  distribution given values for the others
+ */
+
+/*
+ * 
+ * void pnl_cdf_bin(int *which,double *p,double *q,double *s,double *xn,
+ * double *pr,double *ompr,int *status,double *bound)
+ * 
+ * Cumulative Distribution Function
+ * BINomial distribution
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Calculates any one parameter of the binomial
+ * distribution given values for the others.
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * WHICH --> Integer indicating which of the next four argument
+ * values is to be calculated from the others.
+ * Legal range: 1..4
+ * iwhich = 1 : Calculate P and Q from S,XN,PR and OMPR
+ * iwhich = 2 : Calculate S from P,Q,XN,PR and OMPR
+ * iwhich = 3 : Calculate XN from P,Q,S,PR and OMPR
+ * iwhich = 4 : Calculate PR and OMPR from P,Q,S and XN
+ * 
+ * P <--> The cumulation from 0 to S of the binomial distribution.
+ * (Probablility of S or fewer successes in XN trials each
+ * with probability of success PR.)
+ * Input range: [0,1].
+ * 
+ * Q <--> 1-P.
+ * Input range: [0, 1].
+ * P + Q = 1.0.
+ * 
+ * S <--> The number of successes observed.
+ * Input range: [0, XN]
+ * Search range: [0, XN]
+ * 
+ * XN  <--> The number of binomial trials.
+ * Input range: (0, +infinity).
+ * Search range: [1E-300, 1E300]
+ * 
+ * PR  <--> The probability of success in each binomial trial.
+ * Input range: [0,1].
+ * Search range: [0,1]
+ * 
+ * OMPR  <--> 1-PR
+ * Input range: [0,1].
+ * Search range: [0,1]
+ * PR + OMPR = 1.0
+ * 
+ * STATUS <-- 0 if calculation completed correctly
+ * -I if input parameter number I is out of range
+ * 1 if answer appears to be lower than lowest
+ * search bound
+ * 2 if answer appears to be higher than greatest
+ * search bound
+ * 3 if P + Q .ne. 1
+ * 4 if PR + OMPR .ne. 1
+ * 
+ * BOUND <-- Undefined if STATUS is 0
+ * 
+ * Bound exceeded by parameter number I if STATUS
+ * is negative.
+ * 
+ * Lower search bound if STATUS is 1.
+ * 
+ * Upper search bound if STATUS is 2.
+ * 
+* 
+* Method
+* 
+* 
+* Formula  26.5.24    of   Abramowitz  and    Stegun,  Handbook   of
+* Mathematical   Functions (1966) is   used  to reduce the  binomial
+* distribution  to  the  cumulative incomplete    beta distribution.
+* 
+* Computation of other parameters involve a seach for a value that
+* produces  the desired  value  of P.   The search relies  on  the
+* monotinicity of P with the other parameter.
+* 
+* 
 */
-
-
-
-
 void pnl_cdf_bin(int *which,double *p,double *q,double *s,double *xn,
                  double *pr,double *ompr,int *status,double *bound)
-/**********************************************************************
-
-      void pnl_cdf_bin(int *which,double *p,double *q,double *s,double *xn,
-            double *pr,double *ompr,int *status,double *bound)
-
-               Cumulative Distribution Function
-                         BINomial distribution
-
-
-                              Function
-
-
-     Calculates any one parameter of the binomial
-     distribution given values for the others.
-
-
-                              Arguments
-
-
-     WHICH --> Integer indicating which of the next four argument
-               values is to be calculated from the others.
-               Legal range: 1..4
-               iwhich = 1 : Calculate P and Q from S,XN,PR and OMPR
-               iwhich = 2 : Calculate S from P,Q,XN,PR and OMPR
-               iwhich = 3 : Calculate XN from P,Q,S,PR and OMPR
-               iwhich = 4 : Calculate PR and OMPR from P,Q,S and XN
-
-     P <--> The cumulation from 0 to S of the binomial distribution.
-            (Probablility of S or fewer successes in XN trials each
-            with probability of success PR.)
-            Input range: [0,1].
-
-     Q <--> 1-P.
-            Input range: [0, 1].
-            P + Q = 1.0.
-
-     S <--> The number of successes observed.
-            Input range: [0, XN]
-            Search range: [0, XN]
-
-     XN  <--> The number of binomial trials.
-              Input range: (0, +infinity).
-              Search range: [1E-300, 1E300]
-
-     PR  <--> The probability of success in each binomial trial.
-              Input range: [0,1].
-              Search range: [0,1]
-
-     OMPR  <--> 1-PR
-              Input range: [0,1].
-              Search range: [0,1]
-              PR + OMPR = 1.0
-
-     STATUS <-- 0 if calculation completed correctly
-               -I if input parameter number I is out of range
-                1 if answer appears to be lower than lowest
-                  search bound
-                2 if answer appears to be higher than greatest
-                  search bound
-                3 if P + Q .ne. 1
-                4 if PR + OMPR .ne. 1
-
-     BOUND <-- Undefined if STATUS is 0
-
-               Bound exceeded by parameter number I if STATUS
-               is negative.
-
-               Lower search bound if STATUS is 1.
-
-               Upper search bound if STATUS is 2.
-
-
-                              Method
-
-
-     Formula  26.5.24    of   Abramowitz  and    Stegun,  Handbook   of
-     Mathematical   Functions (1966) is   used  to reduce the  binomial
-     distribution  to  the  cumulative incomplete    beta distribution.
-
-     Computation of other parameters involve a seach for a value that
-     produces  the desired  value  of P.   The search relies  on  the
-     monotinicity of P with the other parameter.
-
-
-**********************************************************************/
 {
 #define atol (1.0e-50)
 #define tol (1.0e-8)
@@ -2330,189 +2298,189 @@ void pnl_cdf_bin(int *which,double *p,double *q,double *s,double *xn,
   static unsigned long qhi,qleft,qporq;
   static double T5,T6,T7,T8,T9,T10,T12,T13;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   /*
-    Check arguments
-  */
-  if(!(*which < 1 && *which > 4)) goto S30;
-  if(!(*which < 1)) goto S10;
+     Check arguments
+     */
+  if (!(*which < 1 && *which > 4)) goto S30;
+  if (!(*which < 1)) goto S10;
   *bound = 1.0e0;
   goto S20;
- S10:
+S10:
   *bound = 4.0e0;
- S20:
+S20:
   *status = -1;
   return;
- S30:
-  if(*which == 1) goto S70;
+S30:
+  if (*which == 1) goto S70;
   /*
-    P
-  */
-  if(!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
-  if(!(*p < 0.0e0)) goto S40;
+     P
+     */
+  if (!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
+  if (!(*p < 0.0e0)) goto S40;
   *bound = 0.0e0;
   goto S50;
- S40:
+S40:
   *bound = 1.0e0;
- S50:
+S50:
   *status = -2;
   return;
- S70:
- S60:
-  if(*which == 1) goto S110;
+S70:
+S60:
+  if (*which == 1) goto S110;
   /*
-    Q
-  */
-  if(!(*q < 0.0e0 || *q > 1.0e0)) goto S100;
-  if(!(*q < 0.0e0)) goto S80;
+     Q
+     */
+  if (!(*q < 0.0e0 || *q > 1.0e0)) goto S100;
+  if (!(*q < 0.0e0)) goto S80;
   *bound = 0.0e0;
   goto S90;
- S80:
+S80:
   *bound = 1.0e0;
- S90:
+S90:
   *status = -3;
   return;
- S110:
- S100:
-  if(*which == 3) goto S130;
+S110:
+S100:
+  if (*which == 3) goto S130;
   /*
-    XN
-  */
-  if(!(*xn <= 0.0e0)) goto S120;
+     XN
+     */
+  if (!(*xn <= 0.0e0)) goto S120;
   *bound = 0.0e0;
   *status = -5;
   return;
- S130:
- S120:
-  if(*which == 2) goto S170;
+S130:
+S120:
+  if (*which == 2) goto S170;
   /*
-    S
-  */
-  if(!(*s < 0.0e0 || (*which != 3 && *s > *xn))) goto S160;
-  if(!(*s < 0.0e0)) goto S140;
+     S
+     */
+  if (!(*s < 0.0e0 || (*which != 3 && *s > *xn))) goto S160;
+  if (!(*s < 0.0e0)) goto S140;
   *bound = 0.0e0;
   goto S150;
- S140:
+S140:
   *bound = *xn;
- S150:
+S150:
   *status = -4;
   return;
- S170:
- S160:
-  if(*which == 4) goto S210;
+S170:
+S160:
+  if (*which == 4) goto S210;
   /*
-    PR
-  */
-  if(!(*pr < 0.0e0 || *pr > 1.0e0)) goto S200;
-  if(!(*pr < 0.0e0)) goto S180;
+     PR
+     */
+  if (!(*pr < 0.0e0 || *pr > 1.0e0)) goto S200;
+  if (!(*pr < 0.0e0)) goto S180;
   *bound = 0.0e0;
   goto S190;
- S180:
+S180:
   *bound = 1.0e0;
- S190:
+S190:
   *status = -6;
   return;
- S210:
- S200:
-  if(*which == 4) goto S250;
+S210:
+S200:
+  if (*which == 4) goto S250;
   /*
-    OMPR
-  */
-  if(!(*ompr < 0.0e0 || *ompr > 1.0e0)) goto S240;
-  if(!(*ompr < 0.0e0)) goto S220;
+     OMPR
+     */
+  if (!(*ompr < 0.0e0 || *ompr > 1.0e0)) goto S240;
+  if (!(*ompr < 0.0e0)) goto S220;
   *bound = 0.0e0;
   goto S230;
- S220:
+S220:
   *bound = 1.0e0;
- S230:
+S230:
   *status = -7;
   return;
- S250:
- S240:
-  if(*which == 1) goto S290;
+S250:
+S240:
+  if (*which == 1) goto S290;
   /*
-    P + Q
-  */
+     P + Q
+     */
   pq = *p+*q;
-  if(!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S280;
-  if(!(pq < 0.0e0)) goto S260;
+  if (!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S280;
+  if (!(pq < 0.0e0)) goto S260;
   *bound = 0.0e0;
   goto S270;
- S260:
+S260:
   *bound = 1.0e0;
- S270:
+S270:
   *status = 3;
   return;
- S290:
- S280:
-  if(*which == 4) goto S330;
+S290:
+S280:
+  if (*which == 4) goto S330;
   /*
-    PR + OMPR
-  */
+     PR + OMPR
+     */
   prompr = *pr+*ompr;
-  if(!(fabs(prompr-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S320;
-  if(!(prompr < 0.0e0)) goto S300;
+  if (!(fabs(prompr-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S320;
+  if (!(prompr < 0.0e0)) goto S300;
   *bound = 0.0e0;
   goto S310;
- S300:
+S300:
   *bound = 1.0e0;
- S310:
+S310:
   *status = 4;
   return;
- S330:
- S320:
-  if(!(*which == 1)) qporq = *p <= *q;
+S330:
+S320:
+  if (!(*which == 1)) qporq = *p <= *q;
   /*
-    Select the minimum of P or Q
-    Calculate ANSWERS
-  */
-  if(1 == *which) {
+     Select the minimum of P or Q
+     Calculate ANSWERS
+     */
+  if (1 == *which) {
     /*
-      Calculating P
-    */
+       Calculating P
+       */
     cumbin(s,xn,pr,ompr,p,q);
     *status = 0;
   }
-  else if(2 == *which) {
+  else if (2 == *which) {
     /*
-      Calculating S
-    */
+       Calculating S
+       */
     *s = 5.0e0;
     T5 = atol;
     T6 = tol;
     dstinv(&K2,xn,&K3,&K3,&K4,&T5,&T6);
     *status = 0;
     dinvr(status,s,&fx,&qleft,&qhi);
-  S340:
-    if(!(*status == 1)) goto S370;
+S340:
+    if (!(*status == 1)) goto S370;
     cumbin(s,xn,pr,ompr,&cum,&ccum);
-    if(!qporq) goto S350;
+    if (!qporq) goto S350;
     fx = cum-*p;
     goto S360;
-  S350:
+S350:
     fx = ccum-*q;
-  S360:
+S360:
     dinvr(status,s,&fx,&qleft,&qhi);
     goto S340;
-  S370:
-    if(!(*status == -1)) goto S400;
-    if(!qleft) goto S380;
+S370:
+    if (!(*status == -1)) goto S400;
+    if (!qleft) goto S380;
     *status = 1;
     *bound = 0.0e0;
     goto S390;
-  S380:
+S380:
     *status = 2;
     *bound = *xn;
-  S400:
-  S390:
+S400:
+S390:
     ;
   }
-  else if(3 == *which) {
+  else if (3 == *which) {
     /*
-      Calculating XN
-    */
+       Calculating XN
+       */
     *xn = 5.0e0;
     T7 = zero;
     T8 = inf;
@@ -2521,75 +2489,75 @@ void pnl_cdf_bin(int *which,double *p,double *q,double *s,double *xn,
     dstinv(&T7,&T8,&K3,&K3,&K4,&T9,&T10);
     *status = 0;
     dinvr(status,xn,&fx,&qleft,&qhi);
-  S410:
-    if(!(*status == 1)) goto S440;
+S410:
+    if (!(*status == 1)) goto S440;
     cumbin(s,xn,pr,ompr,&cum,&ccum);
-    if(!qporq) goto S420;
+    if (!qporq) goto S420;
     fx = cum-*p;
     goto S430;
-  S420:
+S420:
     fx = ccum-*q;
-  S430:
+S430:
     dinvr(status,xn,&fx,&qleft,&qhi);
     goto S410;
-  S440:
-    if(!(*status == -1)) goto S470;
-    if(!qleft) goto S450;
+S440:
+    if (!(*status == -1)) goto S470;
+    if (!qleft) goto S450;
     *status = 1;
     *bound = zero;
     goto S460;
-  S450:
+S450:
     *status = 2;
     *bound = inf;
-  S470:
-  S460:
+S470:
+S460:
     ;
   }
-  else if(4 == *which) {
+  else if (4 == *which) {
     /*
-      Calculating PR and OMPR
-    */
+       Calculating PR and OMPR
+       */
     T12 = atol;
     T13 = tol;
     dstzr(&K2,&K11,&T12,&T13);
-    if(!qporq) goto S500;
+    if (!qporq) goto S500;
     *status = 0;
     dzror(status,pr,&fx,&xlo,&xhi,&qleft,&qhi);
     *ompr = one-*pr;
-  S480:
-    if(!(*status == 1)) goto S490;
+S480:
+    if (!(*status == 1)) goto S490;
     cumbin(s,xn,pr,ompr,&cum,&ccum);
     fx = cum-*p;
     dzror(status,pr,&fx,&xlo,&xhi,&qleft,&qhi);
     *ompr = one-*pr;
     goto S480;
-  S490:
+S490:
     goto S530;
-  S500:
+S500:
     *status = 0;
     dzror(status,ompr,&fx,&xlo,&xhi,&qleft,&qhi);
     *pr = one-*ompr;
-  S510:
-    if(!(*status == 1)) goto S520;
+S510:
+    if (!(*status == 1)) goto S520;
     cumbin(s,xn,pr,ompr,&cum,&ccum);
     fx = ccum-*q;
     dzror(status,ompr,&fx,&xlo,&xhi,&qleft,&qhi);
     *pr = one-*ompr;
     goto S510;
-  S530:
-  S520:
-    if(!(*status == -1)) goto S560;
-    if(!qleft) goto S540;
+S530:
+S520:
+    if (!(*status == -1)) goto S560;
+    if (!qleft) goto S540;
     *status = 1;
     *bound = 0.0e0;
     goto S550;
-  S540:
+S540:
     *status = 2;
     *bound = 1.0e0;
-  S550:
+S550:
     ;
   }
- S560:
+S560:
   return;
 #undef atol
 #undef tol
@@ -2631,87 +2599,87 @@ void pnl_cdf_bin(int *which,double *p,double *q,double *s,double *xn,
  bound if STATUS is 1. Upper search bound if STATUS is 2.
  * @return  any one parameter of the chi-square
  distribution given values for the others
+ */
+
+
+/*
+ * 
+ * void pnl_cdf_chi(int *which,double *p,double *q,double *x,double *df,
+ * int *status,double *bound)
+ * 
+ * Cumulative Distribution Function
+ * CHI-Square distribution
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Calculates any one parameter of the chi-square
+ * distribution given values for the others.
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * WHICH --> Integer indicating which of the next three argument
+ * values is to be calculated from the others.
+ * Legal range: 1..3
+ * iwhich = 1 : Calculate P and Q from X and DF
+ * iwhich = 2 : Calculate X from P,Q and DF
+ * iwhich = 3 : Calculate DF from P,Q and X
+ * 
+ * P <--> The integral from 0 to X of the chi-square
+ * distribution.
+ * Input range: [0, 1].
+ * 
+ * Q <--> 1-P.
+ * Input range: (0, 1].
+ * P + Q = 1.0.
+ * 
+ * X <--> Upper limit of integration of the non-central
+ * chi-square distribution.
+ * Input range: [0, +infinity).
+ * Search range: [0,1E300]
+ * 
+ * DF <--> Degrees of freedom of the
+ * chi-square distribution.
+ * Input range: (0, +infinity).
+ * Search range: [ 1E-300, 1E300]
+ * 
+ * STATUS <-- 0 if calculation completed correctly
+ * -I if input parameter number I is out of range
+ * 1 if answer appears to be lower than lowest
+ * search bound
+ * 2 if answer appears to be higher than greatest
+ * search bound
+ * 3 if P + Q .ne. 1
+ * 10 indicates error returned from cumgam.  See
+ * references in pnl_cdf_gam
+ * 
+ * BOUND <-- Undefined if STATUS is 0
+ * 
+ * Bound exceeded by parameter number I if STATUS
+ * is negative.
+ * 
+ * Lower search bound if STATUS is 1.
+ * 
+ * Upper search bound if STATUS is 2.
+ * 
+ * 
+ * Method
+ * 
+ * 
+ * Formula    26.4.19   of Abramowitz  and     Stegun, Handbook  of
+ * Mathematical Functions   (1966) is used   to reduce the chisqure
+ * distribution to the incomplete distribution.
+ * 
+* Computation of other parameters involve a seach for a value that
+* produces  the desired  value  of P.   The search relies  on  the
+* monotinicity of P with the other parameter.
+* 
 */
-
-
 void pnl_cdf_chi(int *which,double *p,double *q,double *x,double *df,
                  int *status,double *bound)
-/**********************************************************************
-
-      void pnl_cdf_chi(int *which,double *p,double *q,double *x,double *df,
-            int *status,double *bound)
-
-               Cumulative Distribution Function
-               CHI-Square distribution
-
-
-                              Function
-
-
-     Calculates any one parameter of the chi-square
-     distribution given values for the others.
-
-
-                              Arguments
-
-
-     WHICH --> Integer indicating which of the next three argument
-               values is to be calculated from the others.
-               Legal range: 1..3
-               iwhich = 1 : Calculate P and Q from X and DF
-               iwhich = 2 : Calculate X from P,Q and DF
-               iwhich = 3 : Calculate DF from P,Q and X
-
-     P <--> The integral from 0 to X of the chi-square
-            distribution.
-            Input range: [0, 1].
-
-     Q <--> 1-P.
-            Input range: (0, 1].
-            P + Q = 1.0.
-
-     X <--> Upper limit of integration of the non-central
-            chi-square distribution.
-            Input range: [0, +infinity).
-            Search range: [0,1E300]
-
-     DF <--> Degrees of freedom of the
-             chi-square distribution.
-             Input range: (0, +infinity).
-             Search range: [ 1E-300, 1E300]
-
-     STATUS <-- 0 if calculation completed correctly
-               -I if input parameter number I is out of range
-                1 if answer appears to be lower than lowest
-                  search bound
-                2 if answer appears to be higher than greatest
-                  search bound
-                3 if P + Q .ne. 1
-               10 indicates error returned from cumgam.  See
-                  references in pnl_cdf_gam
-
-     BOUND <-- Undefined if STATUS is 0
-
-               Bound exceeded by parameter number I if STATUS
-               is negative.
-
-               Lower search bound if STATUS is 1.
-
-               Upper search bound if STATUS is 2.
-
-
-                              Method
-
-
-     Formula    26.4.19   of Abramowitz  and     Stegun, Handbook  of
-     Mathematical Functions   (1966) is used   to reduce the chisqure
-     distribution to the incomplete distribution.
-
-     Computation of other parameters involve a seach for a value that
-     produces  the desired  value  of P.   The search relies  on  the
-     monotinicity of P with the other parameter.
-
-**********************************************************************/
 {
 #define tol (1.0e-8)
 #define atol (1.0e-50)
@@ -2725,118 +2693,118 @@ void pnl_cdf_chi(int *which,double *p,double *q,double *x,double *df,
   static unsigned long qhi,qleft,qporq;
   static double T3,T6,T7,T8,T9,T10,T11;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   /*
-    Check arguments
-  */
-  if(!(*which < 1 || *which > 3)) goto S30;
-  if(!(*which < 1)) goto S10;
+     Check arguments
+     */
+  if (!(*which < 1 || *which > 3)) goto S30;
+  if (!(*which < 1)) goto S10;
   *bound = 1.0e0;
   goto S20;
- S10:
+S10:
   *bound = 3.0e0;
- S20:
+S20:
   *status = -1;
   return;
- S30:
-  if(*which == 1) goto S70;
+S30:
+  if (*which == 1) goto S70;
   /*
-    P
-  */
-  if(!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
-  if(!(*p < 0.0e0)) goto S40;
+     P
+     */
+  if (!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
+  if (!(*p < 0.0e0)) goto S40;
   *bound = 0.0e0;
   goto S50;
- S40:
+S40:
   *bound = 1.0e0;
- S50:
+S50:
   *status = -2;
   return;
- S70:
- S60:
-  if(*which == 1) goto S110;
+S70:
+S60:
+  if (*which == 1) goto S110;
   /*
-    Q
-  */
-  if(!(*q <= 0.0e0 || *q > 1.0e0)) goto S100;
-  if(!(*q <= 0.0e0)) goto S80;
+     Q
+     */
+  if (!(*q <= 0.0e0 || *q > 1.0e0)) goto S100;
+  if (!(*q <= 0.0e0)) goto S80;
   *bound = 0.0e0;
   goto S90;
- S80:
+S80:
   *bound = 1.0e0;
- S90:
+S90:
   *status = -3;
   return;
- S110:
- S100:
-  if(*which == 2) goto S130;
+S110:
+S100:
+  if (*which == 2) goto S130;
   /*
-    X
-  */
-  if(!(*x < 0.0e0)) goto S120;
+     X
+     */
+  if (!(*x < 0.0e0)) goto S120;
   *bound = 0.0e0;
   *status = -4;
   return;
- S130:
- S120:
-  if(*which == 3) goto S150;
+S130:
+S120:
+  if (*which == 3) goto S150;
   /*
-    DF
-  */
-  if(!(*df <= 0.0e0)) goto S140;
+     DF
+     */
+  if (!(*df <= 0.0e0)) goto S140;
   *bound = 0.0e0;
   *status = -5;
   return;
- S150:
- S140:
-  if(*which == 1) goto S190;
+S150:
+S140:
+  if (*which == 1) goto S190;
   /*
-    P + Q
-  */
+     P + Q
+     */
   pq = *p+*q;
-  if(!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S180;
-  if(!(pq < 0.0e0)) goto S160;
+  if (!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S180;
+  if (!(pq < 0.0e0)) goto S160;
   *bound = 0.0e0;
   goto S170;
- S160:
+S160:
   *bound = 1.0e0;
- S170:
+S170:
   *status = 3;
   return;
- S190:
- S180:
-  if(*which == 1) goto S220;
+S190:
+S180:
+  if (*which == 1) goto S220;
   /*
-    Select the minimum of P or Q
-  */
+     Select the minimum of P or Q
+     */
   qporq = *p <= *q;
-  if(!qporq) goto S200;
+  if (!qporq) goto S200;
   porq = *p;
   goto S210;
- S200:
+S200:
   porq = *q;
- S220:
- S210:
+S220:
+S210:
   /*
-    Calculate ANSWERS
-  */
-  if(1 == *which) {
+     Calculate ANSWERS
+     */
+  if (1 == *which) {
     /*
-      Calculating P and Q
-    */
+       Calculating P and Q
+       */
     *status = 0;
     cumchi(x,df,p,q);
-    if(porq > 1.5e0) {
+    if (porq > 1.5e0) {
       *status = 10;
       return;
     }
   }
-  else if(2 == *which) {
+  else if (2 == *which) {
     /*
-      Calculating X
-    */
+       Calculating X
+       */
     *x = 5.0e0;
     T3 = inf;
     T6 = atol;
@@ -2844,38 +2812,38 @@ void pnl_cdf_chi(int *which,double *p,double *q,double *x,double *df,
     dstinv(&K2,&T3,&K4,&K4,&K5,&T6,&T7);
     *status = 0;
     dinvr(status,x,&fx,&qleft,&qhi);
-  S230:
-    if(!(*status == 1)) goto S270;
+S230:
+    if (!(*status == 1)) goto S270;
     cumchi(x,df,&cum,&ccum);
-    if(!qporq) goto S240;
+    if (!qporq) goto S240;
     fx = cum-*p;
     goto S250;
-  S240:
+S240:
     fx = ccum-*q;
-  S250:
-    if(!(fx+porq > 1.5e0)) goto S260;
+S250:
+    if (!(fx+porq > 1.5e0)) goto S260;
     *status = 10;
     return;
-  S260:
+S260:
     dinvr(status,x,&fx,&qleft,&qhi);
     goto S230;
-  S270:
-    if(!(*status == -1)) goto S300;
-    if(!qleft) goto S280;
+S270:
+    if (!(*status == -1)) goto S300;
+    if (!qleft) goto S280;
     *status = 1;
     *bound = 0.0e0;
     goto S290;
-  S280:
+S280:
     *status = 2;
     *bound = inf;
-  S300:
-  S290:
+S300:
+S290:
     ;
   }
-  else if(3 == *which) {
+  else if (3 == *which) {
     /*
-      Calculating DF
-    */
+       Calculating DF
+       */
     *df = 5.0e0;
     T8 = zero;
     T9 = inf;
@@ -2884,34 +2852,34 @@ void pnl_cdf_chi(int *which,double *p,double *q,double *x,double *df,
     dstinv(&T8,&T9,&K4,&K4,&K5,&T10,&T11);
     *status = 0;
     dinvr(status,df,&fx,&qleft,&qhi);
-  S310:
-    if(!(*status == 1)) goto S350;
+S310:
+    if (!(*status == 1)) goto S350;
     cumchi(x,df,&cum,&ccum);
-    if(!qporq) goto S320;
+    if (!qporq) goto S320;
     fx = cum-*p;
     goto S330;
-  S320:
+S320:
     fx = ccum-*q;
-  S330:
-    if(!(fx+porq > 1.5e0)) goto S340;
+S330:
+    if (!(fx+porq > 1.5e0)) goto S340;
     *status = 10;
     return;
-  S340:
+S340:
     dinvr(status,df,&fx,&qleft,&qhi);
     goto S310;
-  S350:
-    if(!(*status == -1)) goto S380;
-    if(!qleft) goto S360;
+S350:
+    if (!(*status == -1)) goto S380;
+    if (!qleft) goto S360;
     *status = 1;
     *bound = zero;
     goto S370;
-  S360:
+S360:
     *status = 2;
     *bound = inf;
-  S370:
+S370:
     ;
   }
- S380:
+S380:
   return;
 #undef tol
 #undef atol
@@ -2953,98 +2921,98 @@ void pnl_cdf_chi(int *which,double *p,double *q,double *x,double *df,
  bound if STATUS is 1. Upper search bound if STATUS is 2.
  * @return  any one parameter of the non-central chi-square
  distribution given values for the others
+ */
+
+
+/*
+ * 
+ * void pnl_cdf_chn(int *which,double *p,double *q,double *x,double *df,
+ * double *pnonc,int *status,double *bound)
+ * 
+ * Cumulative Distribution Function
+ * Non-central Chi-Square
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Calculates any one parameter of the non-central chi-square
+ * distribution given values for the others.
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * WHICH --> Integer indicating which of the next three argument
+ * values is to be calculated from the others.
+ * Input range: 1..4
+ * iwhich = 1 : Calculate P and Q from X and DF
+ * iwhich = 2 : Calculate X from P,DF and PNONC
+ * iwhich = 3 : Calculate DF from P,X and PNONC
+ * iwhich = 3 : Calculate PNONC from P,X and DF
+ * 
+ * P <--> The integral from 0 to X of the non-central chi-square
+ * distribution.
+ * Input range: [0, 1-1E-16).
+ * 
+ * Q <--> 1-P.
+ * Q is not used by this subroutine and is only included
+ * for similarity with other pnl_cdf_* routines.
+ * 
+ * X <--> Upper limit of integration of the non-central
+ * chi-square distribution.
+ * Input range: [0, +infinity).
+ * Search range: [0,1E300]
+ * 
+ * DF <--> Degrees of freedom of the non-central
+ * chi-square distribution.
+ * Input range: (0, +infinity).
+ * Search range: [ 1E-300, 1E300]
+ * 
+ * PNONC <--> Non-centrality parameter of the non-central
+ * chi-square distribution.
+ * Input range: [0, +infinity).
+ * Search range: [0,1E4]
+ * 
+ * STATUS <-- 0 if calculation completed correctly
+ * -I if input parameter number I is out of range
+ * 1 if answer appears to be lower than lowest
+ * search bound
+ * 2 if answer appears to be higher than greatest
+ * search bound
+ * 
+ * BOUND <-- Undefined if STATUS is 0
+ * 
+ * Bound exceeded by parameter number I if STATUS
+ * is negative.
+ * 
+ * Lower search bound if STATUS is 1.
+ * 
+ * Upper search bound if STATUS is 2.
+ * 
+ * 
+ * Method
+ * 
+ * 
+ * Formula  26.4.25   of   Abramowitz   and   Stegun,  Handbook  of
+* Mathematical  Functions (1966) is used to compute the cumulative
+* distribution function.
+* 
+* Computation of other parameters involve a seach for a value that
+* produces  the desired  value  of P.   The search relies  on  the
+* monotinicity of P with the other parameter.
+* 
+* 
+* WARNING
+* 
+* The computation time  required for this  routine is proportional
+* to the noncentrality  parameter  (PNONC).  Very large  values of
+* this parameter can consume immense  computer resources.  This is
+* why the search range is bounded by 10,000.
+* 
 */
-
-
 void pnl_cdf_chn(int *which,double *p,double *q,double *x,double *df,
                  double *pnonc,int *status,double *bound)
-/**********************************************************************
-
-      void pnl_cdf_chn(int *which,double *p,double *q,double *x,double *df,
-            double *pnonc,int *status,double *bound)
-
-               Cumulative Distribution Function
-               Non-central Chi-Square
-
-
-                              Function
-
-
-     Calculates any one parameter of the non-central chi-square
-     distribution given values for the others.
-
-
-                              Arguments
-
-
-     WHICH --> Integer indicating which of the next three argument
-               values is to be calculated from the others.
-               Input range: 1..4
-               iwhich = 1 : Calculate P and Q from X and DF
-               iwhich = 2 : Calculate X from P,DF and PNONC
-               iwhich = 3 : Calculate DF from P,X and PNONC
-               iwhich = 3 : Calculate PNONC from P,X and DF
-
-     P <--> The integral from 0 to X of the non-central chi-square
-            distribution.
-            Input range: [0, 1-1E-16).
-
-     Q <--> 1-P.
-            Q is not used by this subroutine and is only included
-            for similarity with other pnl_cdf_* routines.
-
-     X <--> Upper limit of integration of the non-central
-            chi-square distribution.
-            Input range: [0, +infinity).
-            Search range: [0,1E300]
-
-     DF <--> Degrees of freedom of the non-central
-             chi-square distribution.
-             Input range: (0, +infinity).
-             Search range: [ 1E-300, 1E300]
-
-     PNONC <--> Non-centrality parameter of the non-central
-                chi-square distribution.
-                Input range: [0, +infinity).
-                Search range: [0,1E4]
-
-     STATUS <-- 0 if calculation completed correctly
-               -I if input parameter number I is out of range
-                1 if answer appears to be lower than lowest
-                  search bound
-                2 if answer appears to be higher than greatest
-                  search bound
-
-     BOUND <-- Undefined if STATUS is 0
-
-               Bound exceeded by parameter number I if STATUS
-               is negative.
-
-               Lower search bound if STATUS is 1.
-
-               Upper search bound if STATUS is 2.
-
-
-                              Method
-
-
-     Formula  26.4.25   of   Abramowitz   and   Stegun,  Handbook  of
-     Mathematical  Functions (1966) is used to compute the cumulative
-     distribution function.
-
-     Computation of other parameters involve a seach for a value that
-     produces  the desired  value  of P.   The search relies  on  the
-     monotinicity of P with the other parameter.
-
-
-                            WARNING
-
-     The computation time  required for this  routine is proportional
-     to the noncentrality  parameter  (PNONC).  Very large  values of
-     this parameter can consume immense  computer resources.  This is
-     why the search range is bounded by 10,000.
-
-**********************************************************************/
 {
 #define tent4 1.0e4
 #define tol (1.0e-8)
@@ -3059,81 +3027,81 @@ void pnl_cdf_chn(int *which,double *p,double *q,double *x,double *df,
   static unsigned long qhi,qleft;
   static double T2,T5,T6,T7,T8,T9,T10,T11,T12,T13;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   /*
-    Check arguments
-  */
-  if(!(*which < 1 || *which > 4)) goto S30;
-  if(!(*which < 1)) goto S10;
+     Check arguments
+     */
+  if (!(*which < 1 || *which > 4)) goto S30;
+  if (!(*which < 1)) goto S10;
   *bound = 1.0e0;
   goto S20;
- S10:
+S10:
   *bound = 4.0e0;
- S20:
+S20:
   *status = -1;
   return;
- S30:
-  if(*which == 1) goto S70;
+S30:
+  if (*which == 1) goto S70;
   /*
-    P
-  */
-  if(!(*p < 0.0e0 || *p > one)) goto S60;
-  if(!(*p < 0.0e0)) goto S40;
+     P
+     */
+  if (!(*p < 0.0e0 || *p > one)) goto S60;
+  if (!(*p < 0.0e0)) goto S40;
   *bound = 0.0e0;
   goto S50;
- S40:
+S40:
   *bound = one;
- S50:
+S50:
   *status = -2;
   return;
- S70:
- S60:
-  if(*which == 2) goto S90;
+S70:
+S60:
+  if (*which == 2) goto S90;
   /*
-    X
-  */
-  if(!(*x < 0.0e0)) goto S80;
+     X
+     */
+  if (!(*x < 0.0e0)) goto S80;
   *bound = 0.0e0;
   *status = -4;
   return;
- S90:
- S80:
-  if(*which == 3) goto S110;
+S90:
+S80:
+  if (*which == 3) goto S110;
   /*
-    DF
-  */
-  if(!(*df <= 0.0e0)) goto S100;
+     DF
+     */
+  if (!(*df <= 0.0e0)) goto S100;
   *bound = 0.0e0;
   *status = -5;
   return;
- S110:
- S100:
-  if(*which == 4) goto S130;
+S110:
+S100:
+  if (*which == 4) goto S130;
   /*
-    PNONC
-  */
-  if(!(*pnonc < 0.0e0)) goto S120;
+     PNONC
+     */
+  if (!(*pnonc < 0.0e0)) goto S120;
   *bound = 0.0e0;
   *status = -6;
   return;
- S130:
- S120:
+S130:
+S120:
   /*
-    Calculate ANSWERS
-  */
-  if(1 == *which) {
+     Calculate ANSWERS
+     */
+  if (1 == *which) {
     /*
-      Calculating P and Q
-    */
+       Calculating P and Q
+       */
     cumchn(x,df,pnonc,p,q);
     *status = 0;
   }
-  else if(2 == *which) {
+  else if (2 == *which) {
     /*
-      Calculating X
-    */
+       Calculating X
+       */
     *x = 5.0e0;
     T2 = inf;
     T5 = atol;
@@ -3141,29 +3109,29 @@ void pnl_cdf_chn(int *which,double *p,double *q,double *x,double *df,
     dstinv(&K1,&T2,&K3,&K3,&K4,&T5,&T6);
     *status = 0;
     dinvr(status,x,&fx,&qleft,&qhi);
-  S140:
-    if(!(*status == 1)) goto S150;
+S140:
+    if (!(*status == 1)) goto S150;
     cumchn(x,df,pnonc,&cum,&ccum);
     fx = cum-*p;
     dinvr(status,x,&fx,&qleft,&qhi);
     goto S140;
-  S150:
-    if(!(*status == -1)) goto S180;
-    if(!qleft) goto S160;
+S150:
+    if (!(*status == -1)) goto S180;
+    if (!qleft) goto S160;
     *status = 1;
     *bound = 0.0e0;
     goto S170;
-  S160:
+S160:
     *status = 2;
     *bound = inf;
-  S180:
-  S170:
+S180:
+S170:
     ;
   }
-  else if(3 == *which) {
+  else if (3 == *which) {
     /*
-      Calculating DF
-    */
+       Calculating DF
+       */
     *df = 5.0e0;
     T7 = zero;
     T8 = inf;
@@ -3172,29 +3140,29 @@ void pnl_cdf_chn(int *which,double *p,double *q,double *x,double *df,
     dstinv(&T7,&T8,&K3,&K3,&K4,&T9,&T10);
     *status = 0;
     dinvr(status,df,&fx,&qleft,&qhi);
-  S190:
-    if(!(*status == 1)) goto S200;
+S190:
+    if (!(*status == 1)) goto S200;
     cumchn(x,df,pnonc,&cum,&ccum);
     fx = cum-*p;
     dinvr(status,df,&fx,&qleft,&qhi);
     goto S190;
-  S200:
-    if(!(*status == -1)) goto S230;
-    if(!qleft) goto S210;
+S200:
+    if (!(*status == -1)) goto S230;
+    if (!qleft) goto S210;
     *status = 1;
     *bound = zero;
     goto S220;
-  S210:
+S210:
     *status = 2;
     *bound = inf;
-  S230:
-  S220:
+S230:
+S220:
     ;
   }
-  else if(4 == *which) {
+  else if (4 == *which) {
     /*
-      Calculating PNONC
-    */
+       Calculating PNONC
+       */
     *pnonc = 5.0e0;
     T11 = tent4;
     T12 = atol;
@@ -3202,25 +3170,25 @@ void pnl_cdf_chn(int *which,double *p,double *q,double *x,double *df,
     dstinv(&K1,&T11,&K3,&K3,&K4,&T12,&T13);
     *status = 0;
     dinvr(status,pnonc,&fx,&qleft,&qhi);
-  S240:
-    if(!(*status == 1)) goto S250;
+S240:
+    if (!(*status == 1)) goto S250;
     cumchn(x,df,pnonc,&cum,&ccum);
     fx = cum-*p;
     dinvr(status,pnonc,&fx,&qleft,&qhi);
     goto S240;
-  S250:
-    if(!(*status == -1)) goto S280;
-    if(!qleft) goto S260;
+S250:
+    if (!(*status == -1)) goto S280;
+    if (!qleft) goto S260;
     *status = 1;
     *bound = zero;
     goto S270;
-  S260:
+S260:
     *status = 2;
     *bound = tent4;
-  S270:
+S270:
     ;
   }
- S280:
+S280:
   return;
 #undef tent4
 #undef tol
@@ -3265,92 +3233,92 @@ void pnl_cdf_chn(int *which,double *p,double *q,double *x,double *df,
  */
 
 
+/*
+ * 
+ * void pnl_cdf_f(int *which,double *p,double *q,double *f,double *dfn,
+ * double *dfd,int *status,double *bound)
+ * 
+ * Cumulative Distribution Function
+ * F distribution
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Calculates any one parameter of the F distribution
+ * given values for the others.
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * WHICH --> Integer indicating which of the next four argument
+ * values is to be calculated from the others.
+ * Legal range: 1..4
+ * iwhich = 1 : Calculate P and Q from F,DFN and DFD
+ * iwhich = 2 : Calculate F from P,Q,DFN and DFD
+ * iwhich = 3 : Calculate DFN from P,Q,F and DFD
+ * iwhich = 4 : Calculate DFD from P,Q,F and DFN
+ * 
+ * P <--> The integral from 0 to F of the f-density.
+ * Input range: [0,1].
+ * 
+ * Q <--> 1-P.
+ * Input range: (0, 1].
+ * P + Q = 1.0.
+ * 
+ * F <--> Upper limit of integration of the f-density.
+ * Input range: [0, +infinity).
+ * Search range: [0,1E300]
+ * 
+ * DFN < --> Degrees of freedom of the numerator sum of squares.
+ * Input range: (0, +infinity).
+ * Search range: [ 1E-300, 1E300]
+ * 
+ * DFD < --> Degrees of freedom of the denominator sum of squares.
+ * Input range: (0, +infinity).
+ * Search range: [ 1E-300, 1E300]
+ * 
+ * STATUS <-- 0 if calculation completed correctly
+ * -I if input parameter number I is out of range
+ * 1 if answer appears to be lower than lowest
+ * search bound
+ * 2 if answer appears to be higher than greatest
+ * search bound
+ * 3 if P + Q .ne. 1
+ * 
+ * BOUND <-- Undefined if STATUS is 0
+ * 
+ * Bound exceeded by parameter number I if STATUS
+ * is negative.
+ * 
+ * Lower search bound if STATUS is 1.
+ * 
+ * Upper search bound if STATUS is 2.
+ * 
+ * 
+ * Method
+ * 
+ * 
+ * Formula   26.6.2   of   Abramowitz   and   Stegun,  Handbook  of
+ * Mathematical  Functions (1966) is used to reduce the computation
+ * of the  cumulative  distribution function for the  F  variate to
+ * that of an incomplete beta.
+* 
+* Computation of other parameters involve a seach for a value that
+* produces  the desired  value  of P.   The search relies  on  the
+* monotinicity of P with the other parameter.
+* 
+* WARNING
+* 
+* The value of the  cumulative  F distribution is  not necessarily
+* monotone in  either degrees of freedom.  There  thus may  be two
+* values  that  provide a given CDF  value.   This routine assumes
+* monotonicity and will find an arbitrary one of the two values.
+* 
+*/
 void pnl_cdf_f(int *which,double *p,double *q,double *f,double *dfn,
                double *dfd,int *status,double *bound)
-/**********************************************************************
-
-      void pnl_cdf_f(int *which,double *p,double *q,double *f,double *dfn,
-          double *dfd,int *status,double *bound)
-
-               Cumulative Distribution Function
-               F distribution
-
-
-                              Function
-
-
-     Calculates any one parameter of the F distribution
-     given values for the others.
-
-
-                              Arguments
-
-
-     WHICH --> Integer indicating which of the next four argument
-               values is to be calculated from the others.
-               Legal range: 1..4
-               iwhich = 1 : Calculate P and Q from F,DFN and DFD
-               iwhich = 2 : Calculate F from P,Q,DFN and DFD
-               iwhich = 3 : Calculate DFN from P,Q,F and DFD
-               iwhich = 4 : Calculate DFD from P,Q,F and DFN
-
-       P <--> The integral from 0 to F of the f-density.
-              Input range: [0,1].
-
-       Q <--> 1-P.
-              Input range: (0, 1].
-              P + Q = 1.0.
-
-       F <--> Upper limit of integration of the f-density.
-              Input range: [0, +infinity).
-              Search range: [0,1E300]
-
-     DFN < --> Degrees of freedom of the numerator sum of squares.
-               Input range: (0, +infinity).
-               Search range: [ 1E-300, 1E300]
-
-     DFD < --> Degrees of freedom of the denominator sum of squares.
-               Input range: (0, +infinity).
-               Search range: [ 1E-300, 1E300]
-
-     STATUS <-- 0 if calculation completed correctly
-               -I if input parameter number I is out of range
-                1 if answer appears to be lower than lowest
-                  search bound
-                2 if answer appears to be higher than greatest
-                  search bound
-                3 if P + Q .ne. 1
-
-     BOUND <-- Undefined if STATUS is 0
-
-               Bound exceeded by parameter number I if STATUS
-               is negative.
-
-               Lower search bound if STATUS is 1.
-
-               Upper search bound if STATUS is 2.
-
-
-                              Method
-
-
-     Formula   26.6.2   of   Abramowitz   and   Stegun,  Handbook  of
-     Mathematical  Functions (1966) is used to reduce the computation
-     of the  cumulative  distribution function for the  F  variate to
-     that of an incomplete beta.
-
-     Computation of other parameters involve a seach for a value that
-     produces  the desired  value  of P.   The search relies  on  the
-     monotinicity of P with the other parameter.
-
-                              WARNING
-
-     The value of the  cumulative  F distribution is  not necessarily
-     monotone in  either degrees of freedom.  There  thus may  be two
-     values  that  provide a given CDF  value.   This routine assumes
-     monotonicity and will find an arbitrary one of the two values.
-
-**********************************************************************/
 {
 #define tol (1.0e-8)
 #define atol (1.0e-50)
@@ -3364,114 +3332,114 @@ void pnl_cdf_f(int *which,double *p,double *q,double *f,double *dfn,
   static unsigned long qhi,qleft,qporq;
   static double T3,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   /*
-    Check arguments
-  */
-  if(!(*which < 1 || *which > 4)) goto S30;
-  if(!(*which < 1)) goto S10;
+     Check arguments
+     */
+  if (!(*which < 1 || *which > 4)) goto S30;
+  if (!(*which < 1)) goto S10;
   *bound = 1.0e0;
   goto S20;
- S10:
+S10:
   *bound = 4.0e0;
- S20:
+S20:
   *status = -1;
   return;
- S30:
-  if(*which == 1) goto S70;
+S30:
+  if (*which == 1) goto S70;
   /*
-    P
-  */
-  if(!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
-  if(!(*p < 0.0e0)) goto S40;
+     P
+     */
+  if (!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
+  if (!(*p < 0.0e0)) goto S40;
   *bound = 0.0e0;
   goto S50;
- S40:
+S40:
   *bound = 1.0e0;
- S50:
+S50:
   *status = -2;
   return;
- S70:
- S60:
-  if(*which == 1) goto S110;
+S70:
+S60:
+  if (*which == 1) goto S110;
   /*
-    Q
-  */
-  if(!(*q <= 0.0e0 || *q > 1.0e0)) goto S100;
-  if(!(*q <= 0.0e0)) goto S80;
+     Q
+     */
+  if (!(*q <= 0.0e0 || *q > 1.0e0)) goto S100;
+  if (!(*q <= 0.0e0)) goto S80;
   *bound = 0.0e0;
   goto S90;
- S80:
+S80:
   *bound = 1.0e0;
- S90:
+S90:
   *status = -3;
   return;
- S110:
- S100:
-  if(*which == 2) goto S130;
+S110:
+S100:
+  if (*which == 2) goto S130;
   /*
-    F
-  */
-  if(!(*f < 0.0e0)) goto S120;
+     F
+     */
+  if (!(*f < 0.0e0)) goto S120;
   *bound = 0.0e0;
   *status = -4;
   return;
- S130:
- S120:
-  if(*which == 3) goto S150;
+S130:
+S120:
+  if (*which == 3) goto S150;
   /*
-    DFN
-  */
-  if(!(*dfn <= 0.0e0)) goto S140;
+     DFN
+     */
+  if (!(*dfn <= 0.0e0)) goto S140;
   *bound = 0.0e0;
   *status = -5;
   return;
- S150:
- S140:
-  if(*which == 4) goto S170;
+S150:
+S140:
+  if (*which == 4) goto S170;
   /*
-    DFD
-  */
-  if(!(*dfd <= 0.0e0)) goto S160;
+     DFD
+     */
+  if (!(*dfd <= 0.0e0)) goto S160;
   *bound = 0.0e0;
   *status = -6;
   return;
- S170:
- S160:
-  if(*which == 1) goto S210;
+S170:
+S160:
+  if (*which == 1) goto S210;
   /*
-    P + Q
-  */
+     P + Q
+     */
   pq = *p+*q;
-  if(!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S200;
-  if(!(pq < 0.0e0)) goto S180;
+  if (!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S200;
+  if (!(pq < 0.0e0)) goto S180;
   *bound = 0.0e0;
   goto S190;
- S180:
+S180:
   *bound = 1.0e0;
- S190:
+S190:
   *status = 3;
   return;
- S210:
- S200:
-  if(!(*which == 1)) qporq = *p <= *q;
+S210:
+S200:
+  if (!(*which == 1)) qporq = *p <= *q;
   /*
-    Select the minimum of P or Q
-    Calculate ANSWERS
-  */
-  if(1 == *which) {
+     Select the minimum of P or Q
+     Calculate ANSWERS
+     */
+  if (1 == *which) {
     /*
-      Calculating P
-    */
+       Calculating P
+       */
     cumf(f,dfn,dfd,p,q);
     *status = 0;
   }
-  else if(2 == *which) {
+  else if (2 == *which) {
     /*
-      Calculating F
-    */
+       Calculating F
+       */
     *f = 5.0e0;
     T3 = inf;
     T6 = atol;
@@ -3479,34 +3447,34 @@ void pnl_cdf_f(int *which,double *p,double *q,double *f,double *dfn,
     dstinv(&K2,&T3,&K4,&K4,&K5,&T6,&T7);
     *status = 0;
     dinvr(status,f,&fx,&qleft,&qhi);
-  S220:
-    if(!(*status == 1)) goto S250;
+S220:
+    if (!(*status == 1)) goto S250;
     cumf(f,dfn,dfd,&cum,&ccum);
-    if(!qporq) goto S230;
+    if (!qporq) goto S230;
     fx = cum-*p;
     goto S240;
-  S230:
+S230:
     fx = ccum-*q;
-  S240:
+S240:
     dinvr(status,f,&fx,&qleft,&qhi);
     goto S220;
-  S250:
-    if(!(*status == -1)) goto S280;
-    if(!qleft) goto S260;
+S250:
+    if (!(*status == -1)) goto S280;
+    if (!qleft) goto S260;
     *status = 1;
     *bound = 0.0e0;
     goto S270;
-  S260:
+S260:
     *status = 2;
     *bound = inf;
-  S280:
-  S270:
+S280:
+S270:
     ;
   }
-  else if(3 == *which) {
+  else if (3 == *which) {
     /*
-      Calculating DFN
-    */
+       Calculating DFN
+       */
     *dfn = 5.0e0;
     T8 = zero;
     T9 = inf;
@@ -3515,34 +3483,34 @@ void pnl_cdf_f(int *which,double *p,double *q,double *f,double *dfn,
     dstinv(&T8,&T9,&K4,&K4,&K5,&T10,&T11);
     *status = 0;
     dinvr(status,dfn,&fx,&qleft,&qhi);
-  S290:
-    if(!(*status == 1)) goto S320;
+S290:
+    if (!(*status == 1)) goto S320;
     cumf(f,dfn,dfd,&cum,&ccum);
-    if(!qporq) goto S300;
+    if (!qporq) goto S300;
     fx = cum-*p;
     goto S310;
-  S300:
+S300:
     fx = ccum-*q;
-  S310:
+S310:
     dinvr(status,dfn,&fx,&qleft,&qhi);
     goto S290;
-  S320:
-    if(!(*status == -1)) goto S350;
-    if(!qleft) goto S330;
+S320:
+    if (!(*status == -1)) goto S350;
+    if (!qleft) goto S330;
     *status = 1;
     *bound = zero;
     goto S340;
-  S330:
+S330:
     *status = 2;
     *bound = inf;
-  S350:
-  S340:
+S350:
+S340:
     ;
   }
-  else if(4 == *which) {
+  else if (4 == *which) {
     /*
-      Calculating DFD
-    */
+       Calculating DFD
+       */
     *dfd = 5.0e0;
     T12 = zero;
     T13 = inf;
@@ -3551,30 +3519,30 @@ void pnl_cdf_f(int *which,double *p,double *q,double *f,double *dfn,
     dstinv(&T12,&T13,&K4,&K4,&K5,&T14,&T15);
     *status = 0;
     dinvr(status,dfd,&fx,&qleft,&qhi);
-  S360:
-    if(!(*status == 1)) goto S390;
+S360:
+    if (!(*status == 1)) goto S390;
     cumf(f,dfn,dfd,&cum,&ccum);
-    if(!qporq) goto S370;
+    if (!qporq) goto S370;
     fx = cum-*p;
     goto S380;
-  S370:
+S370:
     fx = ccum-*q;
-  S380:
+S380:
     dinvr(status,dfd,&fx,&qleft,&qhi);
     goto S360;
-  S390:
-    if(!(*status == -1)) goto S420;
-    if(!qleft) goto S400;
+S390:
+    if (!(*status == -1)) goto S420;
+    if (!qleft) goto S400;
     *status = 1;
     *bound = zero;
     goto S410;
-  S400:
+S400:
     *status = 2;
     *bound = inf;
-  S410:
+S410:
     ;
   }
- S420:
+S420:
   return;
 #undef tol
 #undef atol
@@ -3619,105 +3587,105 @@ void pnl_cdf_f(int *which,double *p,double *q,double *f,double *dfn,
  * @return  any one parameter of the non-central F distribution given values for the others
  */
 
+/*
+ * 
+ * void pnl_cdf_fnc(int *which,double *p,double *q,double *f,double *dfn,
+ * double *dfd,double *phonc,int *status,double *bound)
+ * 
+ * Cumulative Distribution Function
+ * Non-central F distribution
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Calculates any one parameter of the Non-central F
+ * distribution given values for the others.
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * WHICH --> Integer indicating which of the next five argument
+ * values is to be calculated from the others.
+ * Legal range: 1..5
+ * iwhich = 1 : Calculate P and Q from F,DFN,DFD and PNONC
+ * iwhich = 2 : Calculate F from P,Q,DFN,DFD and PNONC
+ * iwhich = 3 : Calculate DFN from P,Q,F,DFD and PNONC
+ * iwhich = 4 : Calculate DFD from P,Q,F,DFN and PNONC
+ * iwhich = 5 : Calculate PNONC from P,Q,F,DFN and DFD
+ * 
+ * P <--> The integral from 0 to F of the non-central f-density.
+ * Input range: [0,1-1E-16).
+ * 
+ * Q <--> 1-P.
+ * Q is not used by this subroutine and is only included
+ * for similarity with other pnl_cdf_* routines.
+ * 
+ * F <--> Upper limit of integration of the non-central f-density.
+ * Input range: [0, +infinity).
+ * Search range: [0,1E300]
+ * 
+ * DFN < --> Degrees of freedom of the numerator sum of squares.
+ * Input range: (0, +infinity).
+ * Search range: [ 1E-300, 1E300]
+ * 
+ * DFD < --> Degrees of freedom of the denominator sum of squares.
+ * Must be in range: (0, +infinity).
+ * Input range: (0, +infinity).
+ * Search range: [ 1E-300, 1E300]
+ * 
+ * PNONC <-> The non-centrality parameter
+ * Input range: [0,infinity)
+ * Search range: [0,1E4]
+ * 
+ * STATUS <-- 0 if calculation completed correctly
+ * -I if input parameter number I is out of range
+ * 1 if answer appears to be lower than lowest
+ * search bound
+ * 2 if answer appears to be higher than greatest
+ * search bound
+ * 3 if P + Q .ne. 1
+ * 
+ * BOUND <-- Undefined if STATUS is 0
+ * 
+ * Bound exceeded by parameter number I if STATUS
+ * is negative.
+ * 
+ * Lower search bound if STATUS is 1.
+ * 
+ * Upper search bound if STATUS is 2.
+ * 
+ * 
+ * Method
+* 
+* 
+* Formula  26.6.20   of   Abramowitz   and   Stegun,  Handbook  of
+* Mathematical  Functions (1966) is used to compute the cumulative
+* distribution function.
+* 
+* Computation of other parameters involve a seach for a value that
+* produces  the desired  value  of P.   The search relies  on  the
+* monotinicity of P with the other parameter.
+* 
+* WARNING
+* 
+* The computation time  required for this  routine is proportional
+* to the noncentrality  parameter  (PNONC).  Very large  values of
+* this parameter can consume immense  computer resources.  This is
+* why the search range is bounded by 10,000.
+* 
+* WARNING
+* 
+* The  value  of the  cumulative  noncentral F distribution is not
+* necessarily monotone in either degrees  of freedom.  There  thus
+* may be two values that provide a given  CDF value.  This routine
+* assumes monotonicity  and will find  an arbitrary one of the two
+* values.
+* 
+*/
 void pnl_cdf_fnc(int *which,double *p,double *q,double *f,double *dfn,
                  double *dfd,double *pnonc,int *status,double *bound)
-/**********************************************************************
-
-      void pnl_cdf_fnc(int *which,double *p,double *q,double *f,double *dfn,
-            double *dfd,double *phonc,int *status,double *bound)
-
-               Cumulative Distribution Function
-               Non-central F distribution
-
-
-                              Function
-
-
-     Calculates any one parameter of the Non-central F
-     distribution given values for the others.
-
-
-                              Arguments
-
-
-     WHICH --> Integer indicating which of the next five argument
-               values is to be calculated from the others.
-               Legal range: 1..5
-               iwhich = 1 : Calculate P and Q from F,DFN,DFD and PNONC
-               iwhich = 2 : Calculate F from P,Q,DFN,DFD and PNONC
-               iwhich = 3 : Calculate DFN from P,Q,F,DFD and PNONC
-               iwhich = 4 : Calculate DFD from P,Q,F,DFN and PNONC
-               iwhich = 5 : Calculate PNONC from P,Q,F,DFN and DFD
-
-       P <--> The integral from 0 to F of the non-central f-density.
-              Input range: [0,1-1E-16).
-
-       Q <--> 1-P.
-              Q is not used by this subroutine and is only included
-              for similarity with other pnl_cdf_* routines.
-
-       F <--> Upper limit of integration of the non-central f-density.
-              Input range: [0, +infinity).
-              Search range: [0,1E300]
-
-     DFN < --> Degrees of freedom of the numerator sum of squares.
-               Input range: (0, +infinity).
-               Search range: [ 1E-300, 1E300]
-
-     DFD < --> Degrees of freedom of the denominator sum of squares.
-               Must be in range: (0, +infinity).
-               Input range: (0, +infinity).
-               Search range: [ 1E-300, 1E300]
-
-     PNONC <-> The non-centrality parameter
-               Input range: [0,infinity)
-               Search range: [0,1E4]
-
-     STATUS <-- 0 if calculation completed correctly
-               -I if input parameter number I is out of range
-                1 if answer appears to be lower than lowest
-                  search bound
-                2 if answer appears to be higher than greatest
-                  search bound
-                3 if P + Q .ne. 1
-
-     BOUND <-- Undefined if STATUS is 0
-
-               Bound exceeded by parameter number I if STATUS
-               is negative.
-
-               Lower search bound if STATUS is 1.
-
-               Upper search bound if STATUS is 2.
-
-
-                              Method
-
-
-     Formula  26.6.20   of   Abramowitz   and   Stegun,  Handbook  of
-     Mathematical  Functions (1966) is used to compute the cumulative
-     distribution function.
-
-     Computation of other parameters involve a seach for a value that
-     produces  the desired  value  of P.   The search relies  on  the
-     monotinicity of P with the other parameter.
-
-                            WARNING
-
-     The computation time  required for this  routine is proportional
-     to the noncentrality  parameter  (PNONC).  Very large  values of
-     this parameter can consume immense  computer resources.  This is
-     why the search range is bounded by 10,000.
-
-                              WARNING
-
-     The  value  of the  cumulative  noncentral F distribution is not
-     necessarily monotone in either degrees  of freedom.  There  thus
-     may be two values that provide a given  CDF value.  This routine
-     assumes monotonicity  and will find  an arbitrary one of the two
-     values.
-
-**********************************************************************/
 {
 #define tent4 1.0e4
 #define tol (1.0e-8)
@@ -3732,91 +3700,91 @@ void pnl_cdf_fnc(int *which,double *p,double *q,double *f,double *dfn,
   static unsigned long qhi,qleft;
   static double T2,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   /*
-    Check arguments
-  */
-  if(!(*which < 1 || *which > 5)) goto S30;
-  if(!(*which < 1)) goto S10;
+     Check arguments
+     */
+  if (!(*which < 1 || *which > 5)) goto S30;
+  if (!(*which < 1)) goto S10;
   *bound = 1.0e0;
   goto S20;
- S10:
+S10:
   *bound = 5.0e0;
- S20:
+S20:
   *status = -1;
   return;
- S30:
-  if(*which == 1) goto S70;
+S30:
+  if (*which == 1) goto S70;
   /*
-    P
-  */
-  if(!(*p < 0.0e0 || *p > one)) goto S60;
-  if(!(*p < 0.0e0)) goto S40;
+     P
+     */
+  if (!(*p < 0.0e0 || *p > one)) goto S60;
+  if (!(*p < 0.0e0)) goto S40;
   *bound = 0.0e0;
   goto S50;
- S40:
+S40:
   *bound = one;
- S50:
+S50:
   *status = -2;
   return;
- S70:
- S60:
-  if(*which == 2) goto S90;
+S70:
+S60:
+  if (*which == 2) goto S90;
   /*
-    F
-  */
-  if(!(*f < 0.0e0)) goto S80;
+     F
+     */
+  if (!(*f < 0.0e0)) goto S80;
   *bound = 0.0e0;
   *status = -4;
   return;
- S90:
- S80:
-  if(*which == 3) goto S110;
+S90:
+S80:
+  if (*which == 3) goto S110;
   /*
-    DFN
-  */
-  if(!(*dfn <= 0.0e0)) goto S100;
+     DFN
+     */
+  if (!(*dfn <= 0.0e0)) goto S100;
   *bound = 0.0e0;
   *status = -5;
   return;
- S110:
- S100:
-  if(*which == 4) goto S130;
+S110:
+S100:
+  if (*which == 4) goto S130;
   /*
-    DFD
-  */
-  if(!(*dfd <= 0.0e0)) goto S120;
+     DFD
+     */
+  if (!(*dfd <= 0.0e0)) goto S120;
   *bound = 0.0e0;
   *status = -6;
   return;
- S130:
- S120:
-  if(*which == 5) goto S150;
+S130:
+S120:
+  if (*which == 5) goto S150;
   /*
-    PHONC
-  */
-  if(!(*pnonc < 0.0e0)) goto S140;
+     PHONC
+     */
+  if (!(*pnonc < 0.0e0)) goto S140;
   *bound = 0.0e0;
   *status = -7;
   return;
- S150:
- S140:
+S150:
+S140:
   /*
-    Calculate ANSWERS
-  */
-  if(1 == *which) {
+     Calculate ANSWERS
+     */
+  if (1 == *which) {
     /*
-      Calculating P
-    */
+       Calculating P
+       */
     cumfnc(f,dfn,dfd,pnonc,p,q);
     *status = 0;
   }
-  else if(2 == *which) {
+  else if (2 == *which) {
     /*
-      Calculating F
-    */
+       Calculating F
+       */
     *f = 5.0e0;
     T2 = inf;
     T5 = atol;
@@ -3824,29 +3792,29 @@ void pnl_cdf_fnc(int *which,double *p,double *q,double *f,double *dfn,
     dstinv(&K1,&T2,&K3,&K3,&K4,&T5,&T6);
     *status = 0;
     dinvr(status,f,&fx,&qleft,&qhi);
-  S160:
-    if(!(*status == 1)) goto S170;
+S160:
+    if (!(*status == 1)) goto S170;
     cumfnc(f,dfn,dfd,pnonc,&cum,&ccum);
     fx = cum-*p;
     dinvr(status,f,&fx,&qleft,&qhi);
     goto S160;
-  S170:
-    if(!(*status == -1)) goto S200;
-    if(!qleft) goto S180;
+S170:
+    if (!(*status == -1)) goto S200;
+    if (!qleft) goto S180;
     *status = 1;
     *bound = 0.0e0;
     goto S190;
-  S180:
+S180:
     *status = 2;
     *bound = inf;
-  S200:
-  S190:
+S200:
+S190:
     ;
   }
-  else if(3 == *which) {
+  else if (3 == *which) {
     /*
-      Calculating DFN
-    */
+       Calculating DFN
+       */
     *dfn = 5.0e0;
     T7 = zero;
     T8 = inf;
@@ -3855,29 +3823,29 @@ void pnl_cdf_fnc(int *which,double *p,double *q,double *f,double *dfn,
     dstinv(&T7,&T8,&K3,&K3,&K4,&T9,&T10);
     *status = 0;
     dinvr(status,dfn,&fx,&qleft,&qhi);
-  S210:
-    if(!(*status == 1)) goto S220;
+S210:
+    if (!(*status == 1)) goto S220;
     cumfnc(f,dfn,dfd,pnonc,&cum,&ccum);
     fx = cum-*p;
     dinvr(status,dfn,&fx,&qleft,&qhi);
     goto S210;
-  S220:
-    if(!(*status == -1)) goto S250;
-    if(!qleft) goto S230;
+S220:
+    if (!(*status == -1)) goto S250;
+    if (!qleft) goto S230;
     *status = 1;
     *bound = zero;
     goto S240;
-  S230:
+S230:
     *status = 2;
     *bound = inf;
-  S250:
-  S240:
+S250:
+S240:
     ;
   }
-  else if(4 == *which) {
+  else if (4 == *which) {
     /*
-      Calculating DFD
-    */
+       Calculating DFD
+       */
     *dfd = 5.0e0;
     T11 = zero;
     T12 = inf;
@@ -3886,29 +3854,29 @@ void pnl_cdf_fnc(int *which,double *p,double *q,double *f,double *dfn,
     dstinv(&T11,&T12,&K3,&K3,&K4,&T13,&T14);
     *status = 0;
     dinvr(status,dfd,&fx,&qleft,&qhi);
-  S260:
-    if(!(*status == 1)) goto S270;
+S260:
+    if (!(*status == 1)) goto S270;
     cumfnc(f,dfn,dfd,pnonc,&cum,&ccum);
     fx = cum-*p;
     dinvr(status,dfd,&fx,&qleft,&qhi);
     goto S260;
-  S270:
-    if(!(*status == -1)) goto S300;
-    if(!qleft) goto S280;
+S270:
+    if (!(*status == -1)) goto S300;
+    if (!qleft) goto S280;
     *status = 1;
     *bound = zero;
     goto S290;
-  S280:
+S280:
     *status = 2;
     *bound = inf;
-  S300:
-  S290:
+S300:
+S290:
     ;
   }
-  else if(5 == *which) {
+  else if (5 == *which) {
     /*
-      Calculating PHONC
-    */
+       Calculating PHONC
+       */
     *pnonc = 5.0e0;
     T15 = tent4;
     T16 = atol;
@@ -3916,25 +3884,25 @@ void pnl_cdf_fnc(int *which,double *p,double *q,double *f,double *dfn,
     dstinv(&K1,&T15,&K3,&K3,&K4,&T16,&T17);
     *status = 0;
     dinvr(status,pnonc,&fx,&qleft,&qhi);
-  S310:
-    if(!(*status == 1)) goto S320;
+S310:
+    if (!(*status == 1)) goto S320;
     cumfnc(f,dfn,dfd,pnonc,&cum,&ccum);
     fx = cum-*p;
     dinvr(status,pnonc,&fx,&qleft,&qhi);
     goto S310;
-  S320:
-    if(!(*status == -1)) goto S350;
-    if(!qleft) goto S330;
+S320:
+    if (!(*status == -1)) goto S350;
+    if (!qleft) goto S330;
     *status = 1;
     *bound = 0.0e0;
     goto S340;
-  S330:
+S330:
     *status = 2;
     *bound = tent4;
-  S340:
+S340:
     ;
   }
- S350:
+S350:
   return;
 #undef tent4
 #undef tol
@@ -3981,98 +3949,98 @@ void pnl_cdf_fnc(int *which,double *p,double *q,double *f,double *dfn,
  */
 
 
+/*
+ * 
+ * void pnl_cdf_gam(int *which,double *p,double *q,double *x,double *shape,
+ * double *scale,int *status,double *bound)
+ * 
+ * Cumulative Distribution Function
+ * GAMma Distribution
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Calculates any one parameter of the gamma
+ * distribution given values for the others.
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * WHICH --> Integer indicating which of the next four argument
+ * values is to be calculated from the others.
+ * Legal range: 1..4
+ * iwhich = 1 : Calculate P and Q from X,SHAPE and SCALE
+ * iwhich = 2 : Calculate X from P,Q,SHAPE and SCALE
+ * iwhich = 3 : Calculate SHAPE from P,Q,X and SCALE
+ * iwhich = 4 : Calculate SCALE from P,Q,X and SHAPE
+ * 
+ * P <--> The integral from 0 to X of the gamma density.
+ * Input range: [0,1].
+ * 
+ * Q <--> 1-P.
+ * Input range: (0, 1].
+ * P + Q = 1.0.
+ * 
+ * X <--> The upper limit of integration of the gamma density.
+ * Input range: [0, +infinity).
+ * Search range: [0,1E300]
+ * 
+ * SHAPE <--> The shape parameter of the gamma density.
+ * Input range: (0, +infinity).
+ * Search range: [1E-300,1E300]
+ * 
+ * SCALE <--> The scale parameter of the gamma density.
+ * Input range: (0, +infinity).
+ * Search range: (1E-300,1E300]
+ * 
+ * STATUS <-- 0 if calculation completed correctly
+ * -I if input parameter number I is out of range
+ * 1 if answer appears to be lower than lowest
+ * search bound
+ * 2 if answer appears to be higher than greatest
+ * search bound
+ * 3 if P + Q .ne. 1
+ * 10 if the gamma or inverse gamma routine cannot
+ * compute the answer.  Usually happens only for
+ * X and SHAPE very large (gt 1E10 or more)
+ * 
+ * BOUND <-- Undefined if STATUS is 0
+ * 
+ * Bound exceeded by parameter number I if STATUS
+ * is negative.
+ * 
+ * Lower search bound if STATUS is 1.
+ * 
+ * Upper search bound if STATUS is 2.
+ * 
+ * 
+ * Method
+ * 
+ * 
+ * Cumulative distribution function (P) is calculated directly by
+* the code associated with:
+* 
+* DiDinato, A. R. and Morris, A. H. Computation of the  incomplete
+* gamma function  ratios  and their  inverse.   ACM  Trans.  Math.
+* Softw. 12 (1986), 377-393.
+* 
+* Computation of other parameters involve a seach for a value that
+* produces  the desired  value  of P.   The search relies  on  the
+* monotinicity of P with the other parameter.
+* 
+* 
+* Note
+* 
+* 
+* 
+* The gamma density is proportional to
+* T**(SHAPE - 1) * EXP(- SCALE * T)
+        * 
+*/
 void pnl_cdf_gam(int *which,double *p,double *q,double *x,double *shape,
                  double *scale,int *status,double *bound)
-/**********************************************************************
-
-      void pnl_cdf_gam(int *which,double *p,double *q,double *x,double *shape,
-            double *scale,int *status,double *bound)
-
-               Cumulative Distribution Function
-                         GAMma Distribution
-
-
-                              Function
-
-
-     Calculates any one parameter of the gamma
-     distribution given values for the others.
-
-
-                              Arguments
-
-
-     WHICH --> Integer indicating which of the next four argument
-               values is to be calculated from the others.
-               Legal range: 1..4
-               iwhich = 1 : Calculate P and Q from X,SHAPE and SCALE
-               iwhich = 2 : Calculate X from P,Q,SHAPE and SCALE
-               iwhich = 3 : Calculate SHAPE from P,Q,X and SCALE
-               iwhich = 4 : Calculate SCALE from P,Q,X and SHAPE
-
-     P <--> The integral from 0 to X of the gamma density.
-            Input range: [0,1].
-
-     Q <--> 1-P.
-            Input range: (0, 1].
-            P + Q = 1.0.
-
-     X <--> The upper limit of integration of the gamma density.
-            Input range: [0, +infinity).
-            Search range: [0,1E300]
-
-     SHAPE <--> The shape parameter of the gamma density.
-                Input range: (0, +infinity).
-                Search range: [1E-300,1E300]
-
-     SCALE <--> The scale parameter of the gamma density.
-                Input range: (0, +infinity).
-                Search range: (1E-300,1E300]
-
-     STATUS <-- 0 if calculation completed correctly
-               -I if input parameter number I is out of range
-                1 if answer appears to be lower than lowest
-                  search bound
-                2 if answer appears to be higher than greatest
-                  search bound
-                3 if P + Q .ne. 1
-                10 if the gamma or inverse gamma routine cannot
-                   compute the answer.  Usually happens only for
-                   X and SHAPE very large (gt 1E10 or more)
-
-     BOUND <-- Undefined if STATUS is 0
-
-               Bound exceeded by parameter number I if STATUS
-               is negative.
-
-               Lower search bound if STATUS is 1.
-
-               Upper search bound if STATUS is 2.
-
-
-                              Method
-
-
-     Cumulative distribution function (P) is calculated directly by
-     the code associated with:
-
-     DiDinato, A. R. and Morris, A. H. Computation of the  incomplete
-     gamma function  ratios  and their  inverse.   ACM  Trans.  Math.
-     Softw. 12 (1986), 377-393.
-
-     Computation of other parameters involve a seach for a value that
-     produces  the desired  value  of P.   The search relies  on  the
-     monotinicity of P with the other parameter.
-
-
-                              Note
-
-
-
-     The gamma density is proportional to
-       T**(SHAPE - 1) * EXP(- SCALE * T)
-
-**********************************************************************/
 {
 #define tol (1.0e-8)
 #define atol (1.0e-50)
@@ -4086,129 +4054,129 @@ void pnl_cdf_gam(int *which,double *p,double *q,double *x,double *shape,
   static unsigned long qhi,qleft,qporq;
   static double T2,T3,T4,T7,T8,T9;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   /*
-    Check arguments
-  */
-  if(!(*which < 1 || *which > 4)) goto S30;
-  if(!(*which < 1)) goto S10;
+     Check arguments
+     */
+  if (!(*which < 1 || *which > 4)) goto S30;
+  if (!(*which < 1)) goto S10;
   *bound = 1.0e0;
   goto S20;
- S10:
+S10:
   *bound = 4.0e0;
- S20:
+S20:
   *status = -1;
   return;
- S30:
-  if(*which == 1) goto S70;
+S30:
+  if (*which == 1) goto S70;
   /*
-    P
-  */
-  if(!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
-  if(!(*p < 0.0e0)) goto S40;
+     P
+     */
+  if (!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
+  if (!(*p < 0.0e0)) goto S40;
   *bound = 0.0e0;
   goto S50;
- S40:
+S40:
   *bound = 1.0e0;
- S50:
+S50:
   *status = -2;
   return;
- S70:
- S60:
-  if(*which == 1) goto S110;
+S70:
+S60:
+  if (*which == 1) goto S110;
   /*
-    Q
-  */
-  if(!(*q <= 0.0e0 || *q > 1.0e0)) goto S100;
-  if(!(*q <= 0.0e0)) goto S80;
+     Q
+     */
+  if (!(*q <= 0.0e0 || *q > 1.0e0)) goto S100;
+  if (!(*q <= 0.0e0)) goto S80;
   *bound = 0.0e0;
   goto S90;
- S80:
+S80:
   *bound = 1.0e0;
- S90:
+S90:
   *status = -3;
   return;
- S110:
- S100:
-  if(*which == 2) goto S130;
+S110:
+S100:
+  if (*which == 2) goto S130;
   /*
-    X
-  */
-  if(!(*x < 0.0e0)) goto S120;
+     X
+     */
+  if (!(*x < 0.0e0)) goto S120;
   *bound = 0.0e0;
   *status = -4;
   return;
- S130:
- S120:
-  if(*which == 3) goto S150;
+S130:
+S120:
+  if (*which == 3) goto S150;
   /*
-    SHAPE
-  */
-  if(!(*shape <= 0.0e0)) goto S140;
+     SHAPE
+     */
+  if (!(*shape <= 0.0e0)) goto S140;
   *bound = 0.0e0;
   *status = -5;
   return;
- S150:
- S140:
-  if(*which == 4) goto S170;
+S150:
+S140:
+  if (*which == 4) goto S170;
   /*
-    SCALE
-  */
-  if(!(*scale <= 0.0e0)) goto S160;
+     SCALE
+     */
+  if (!(*scale <= 0.0e0)) goto S160;
   *bound = 0.0e0;
   *status = -6;
   return;
- S170:
- S160:
-  if(*which == 1) goto S210;
+S170:
+S160:
+  if (*which == 1) goto S210;
   /*
-    P + Q
-  */
+     P + Q
+     */
   pq = *p+*q;
-  if(!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S200;
-  if(!(pq < 0.0e0)) goto S180;
+  if (!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S200;
+  if (!(pq < 0.0e0)) goto S180;
   *bound = 0.0e0;
   goto S190;
- S180:
+S180:
   *bound = 1.0e0;
- S190:
+S190:
   *status = 3;
   return;
- S210:
- S200:
-  if(*which == 1) goto S240;
+S210:
+S200:
+  if (*which == 1) goto S240;
   /*
-    Select the minimum of P or Q
-  */
+     Select the minimum of P or Q
+     */
   qporq = *p <= *q;
-  if(!qporq) goto S220;
+  if (!qporq) goto S220;
   porq = *p;
   goto S230;
- S220:
+S220:
   porq = *q;
- S240:
- S230:
+S240:
+S230:
   /*
-    Calculate ANSWERS
-  */
-  if(1 == *which) {
+     Calculate ANSWERS
+     */
+  if (1 == *which) {
     /*
-      Calculating P
-    */
+       Calculating P
+       */
     *status = 0;
     xscale = *x**scale;
     cumgam(&xscale,shape,p,q);
-    if(porq > 1.5e0) *status = 10;
+    if (porq > 1.5e0) *status = 10;
   }
-  else if(2 == *which) {
+  else if (2 == *which) {
     /*
-      Computing X
-    */
+       Computing X
+       */
     T2 = -1.0e0;
     gaminv(shape,&xx,&T2,p,q,&ierr);
-    if(ierr < 0.0e0) {
+    if (ierr < 0.0e0) {
       *status = 10;
       return;
     }
@@ -4217,10 +4185,10 @@ void pnl_cdf_gam(int *which,double *p,double *q,double *x,double *shape,
       *status = 0;
     }
   }
-  else if(3 == *which) {
+  else if (3 == *which) {
     /*
-      Computing SHAPE
-    */
+       Computing SHAPE
+       */
     *shape = 5.0e0;
     xscale = *x**scale;
     T3 = zero;
@@ -4230,41 +4198,41 @@ void pnl_cdf_gam(int *which,double *p,double *q,double *x,double *shape,
     dstinv(&T3,&T4,&K5,&K5,&K6,&T7,&T8);
     *status = 0;
     dinvr(status,shape,&fx,&qleft,&qhi);
-  S250:
-    if(!(*status == 1)) goto S290;
+S250:
+    if (!(*status == 1)) goto S290;
     cumgam(&xscale,shape,&cum,&ccum);
-    if(!qporq) goto S260;
+    if (!qporq) goto S260;
     fx = cum-*p;
     goto S270;
-  S260:
+S260:
     fx = ccum-*q;
-  S270:
-    if( !( (qporq && cum > 1.5e0) || (!qporq && ccum > 1.5e0))) goto S280;
+S270:
+    if ( !( (qporq && cum > 1.5e0) || (!qporq && ccum > 1.5e0))) goto S280;
     *status = 10;
     return;
-  S280:
+S280:
     dinvr(status,shape,&fx,&qleft,&qhi);
     goto S250;
-  S290:
-    if(!(*status == -1)) goto S320;
-    if(!qleft) goto S300;
+S290:
+    if (!(*status == -1)) goto S320;
+    if (!qleft) goto S300;
     *status = 1;
     *bound = zero;
     goto S310;
-  S300:
+S300:
     *status = 2;
     *bound = inf;
-  S320:
-  S310:
+S320:
+S310:
     ;
   }
-  else if(4 == *which) {
+  else if (4 == *which) {
     /*
-      Computing SCALE
-    */
+       Computing SCALE
+       */
     T9 = -1.0e0;
     gaminv(shape,&xx,&T9,p,q,&ierr);
-    if(ierr < 0.0e0) {
+    if (ierr < 0.0e0) {
       *status = 10;
       return;
     }
@@ -4319,105 +4287,105 @@ void pnl_cdf_gam(int *which,double *p,double *q,double *x,double *shape,
  bound if STATUS is 1. Upper search bound if STATUS is 2.
  * @return  any one parameter of the normal
  distribution given values for the others
+ */
+
+
+/*
+ * 
+ * void pnl_cdf_nbn(int *which,double *p,double *q,double *s,double *xn,
+ * double *pr,double *ompr,int *status,double *bound)
+ * 
+ * Cumulative Distribution Function
+ * Negative BiNomial distribution
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Calculates any one parameter of the negative binomial
+ * distribution given values for the others.
+ * 
+ * The  cumulative  negative   binomial  distribution  returns  the
+ * probability that there  will be  F or fewer failures before  the
+ * XNth success in binomial trials each of which has probability of
+ * success PR.
+ * 
+ * The individual term of the negative binomial is the probability of
+ * S failures before XN successes and is
+ * Choose( S, XN+S-1 ) * PR^(XN) * (1-PR)^S
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * WHICH --> Integer indicating which of the next four argument
+ * values is to be calculated from the others.
+ * Legal range: 1..4
+ * iwhich = 1 : Calculate P and Q from S,XN,PR and OMPR
+ * iwhich = 2 : Calculate S from P,Q,XN,PR and OMPR
+ * iwhich = 3 : Calculate XN from P,Q,S,PR and OMPR
+ * iwhich = 4 : Calculate PR and OMPR from P,Q,S and XN
+ * 
+ * P <--> The cumulation from 0 to S of the  negative
+ * binomial distribution.
+ * Input range: [0,1].
+ * 
+ * Q <--> 1-P.
+ * Input range: (0, 1].
+ * P + Q = 1.0.
+ * 
+ * S <--> The upper limit of cumulation of the binomial distribution.
+ * There are F or fewer failures before the XNth success.
+ * Input range: [0, +infinity).
+ * Search range: [0, 1E300]
+ * 
+ * XN  <--> The number of successes.
+ * Input range: [0, +infinity).
+ * Search range: [0, 1E300]
+ * 
+ * PR  <--> The probability of success in each binomial trial.
+ * Input range: [0,1].
+ * Search range: [0,1].
+ * 
+ * OMPR  <--> 1-PR
+ * Input range: [0,1].
+ * Search range: [0,1]
+ * PR + OMPR = 1.0
+ * 
+ * STATUS <-- 0 if calculation completed correctly
+ * -I if input parameter number I is out of range
+ * 1 if answer appears to be lower than lowest
+ * search bound
+ * 2 if answer appears to be higher than greatest
+ * search bound
+ * 3 if P + Q .ne. 1
+ * 4 if PR + OMPR .ne. 1
+ * 
+* BOUND <-- Undefined if STATUS is 0
+* 
+* Bound exceeded by parameter number I if STATUS
+* is negative.
+* 
+* Lower search bound if STATUS is 1.
+* 
+* Upper search bound if STATUS is 2.
+* 
+* 
+* Method
+* 
+* 
+* Formula   26.5.26   of   Abramowitz  and  Stegun,  Handbook   of
+* Mathematical Functions (1966) is used  to  reduce calculation of
+* the cumulative distribution  function to that of  an  incomplete
+* beta.
+* 
+* Computation of other parameters involve a seach for a value that
+* produces  the desired  value  of P.   The search relies  on  the
+* monotinicity of P with the other parameter.
+* 
 */
-
-
 void pnl_cdf_nbn(int *which,double *p,double *q,double *s,double *xn,
                  double *pr,double *ompr,int *status,double *bound)
-/**********************************************************************
-
-      void pnl_cdf_nbn(int *which,double *p,double *q,double *s,double *xn,
-            double *pr,double *ompr,int *status,double *bound)
-
-               Cumulative Distribution Function
-               Negative BiNomial distribution
-
-
-                              Function
-
-
-     Calculates any one parameter of the negative binomial
-     distribution given values for the others.
-
-     The  cumulative  negative   binomial  distribution  returns  the
-     probability that there  will be  F or fewer failures before  the
-     XNth success in binomial trials each of which has probability of
-     success PR.
-
-     The individual term of the negative binomial is the probability of
-     S failures before XN successes and is
-          Choose( S, XN+S-1 ) * PR^(XN) * (1-PR)^S
-
-
-                              Arguments
-
-
-     WHICH --> Integer indicating which of the next four argument
-               values is to be calculated from the others.
-               Legal range: 1..4
-               iwhich = 1 : Calculate P and Q from S,XN,PR and OMPR
-               iwhich = 2 : Calculate S from P,Q,XN,PR and OMPR
-               iwhich = 3 : Calculate XN from P,Q,S,PR and OMPR
-               iwhich = 4 : Calculate PR and OMPR from P,Q,S and XN
-
-     P <--> The cumulation from 0 to S of the  negative
-            binomial distribution.
-            Input range: [0,1].
-
-     Q <--> 1-P.
-            Input range: (0, 1].
-            P + Q = 1.0.
-
-     S <--> The upper limit of cumulation of the binomial distribution.
-            There are F or fewer failures before the XNth success.
-            Input range: [0, +infinity).
-            Search range: [0, 1E300]
-
-     XN  <--> The number of successes.
-              Input range: [0, +infinity).
-              Search range: [0, 1E300]
-
-     PR  <--> The probability of success in each binomial trial.
-              Input range: [0,1].
-              Search range: [0,1].
-
-     OMPR  <--> 1-PR
-              Input range: [0,1].
-              Search range: [0,1]
-              PR + OMPR = 1.0
-
-     STATUS <-- 0 if calculation completed correctly
-               -I if input parameter number I is out of range
-                1 if answer appears to be lower than lowest
-                  search bound
-                2 if answer appears to be higher than greatest
-                  search bound
-                3 if P + Q .ne. 1
-                4 if PR + OMPR .ne. 1
-
-     BOUND <-- Undefined if STATUS is 0
-
-               Bound exceeded by parameter number I if STATUS
-               is negative.
-
-               Lower search bound if STATUS is 1.
-
-               Upper search bound if STATUS is 2.
-
-
-                              Method
-
-
-     Formula   26.5.26   of   Abramowitz  and  Stegun,  Handbook   of
-     Mathematical Functions (1966) is used  to  reduce calculation of
-     the cumulative distribution  function to that of  an  incomplete
-     beta.
-
-     Computation of other parameters involve a seach for a value that
-     produces  the desired  value  of P.   The search relies  on  the
-     monotinicity of P with the other parameter.
-
-**********************************************************************/
 {
 #define tol (1.0e-8)
 #define atol (1.0e-50)
@@ -4432,150 +4400,150 @@ void pnl_cdf_nbn(int *which,double *p,double *q,double *s,double *xn,
   static unsigned long qhi,qleft,qporq;
   static double T3,T6,T7,T8,T9,T10,T12,T13;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   /*
-    Check arguments
-  */
-  if(!(*which < 1 || *which > 4)) goto S30;
-  if(!(*which < 1)) goto S10;
+     Check arguments
+     */
+  if (!(*which < 1 || *which > 4)) goto S30;
+  if (!(*which < 1)) goto S10;
   *bound = 1.0e0;
   goto S20;
- S10:
+S10:
   *bound = 4.0e0;
- S20:
+S20:
   *status = -1;
   return;
- S30:
-  if(*which == 1) goto S70;
+S30:
+  if (*which == 1) goto S70;
   /*
-    P
-  */
-  if(!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
-  if(!(*p < 0.0e0)) goto S40;
+     P
+     */
+  if (!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
+  if (!(*p < 0.0e0)) goto S40;
   *bound = 0.0e0;
   goto S50;
- S40:
+S40:
   *bound = 1.0e0;
- S50:
+S50:
   *status = -2;
   return;
- S70:
- S60:
-  if(*which == 1) goto S110;
+S70:
+S60:
+  if (*which == 1) goto S110;
   /*
-    Q
-  */
-  if(!(*q <= 0.0e0 || *q > 1.0e0)) goto S100;
-  if(!(*q <= 0.0e0)) goto S80;
+     Q
+     */
+  if (!(*q <= 0.0e0 || *q > 1.0e0)) goto S100;
+  if (!(*q <= 0.0e0)) goto S80;
   *bound = 0.0e0;
   goto S90;
- S80:
+S80:
   *bound = 1.0e0;
- S90:
+S90:
   *status = -3;
   return;
- S110:
- S100:
-  if(*which == 2) goto S130;
+S110:
+S100:
+  if (*which == 2) goto S130;
   /*
-    S
-  */
-  if(!(*s < 0.0e0)) goto S120;
+     S
+     */
+  if (!(*s < 0.0e0)) goto S120;
   *bound = 0.0e0;
   *status = -4;
   return;
- S130:
- S120:
-  if(*which == 3) goto S150;
+S130:
+S120:
+  if (*which == 3) goto S150;
   /*
-    XN
-  */
-  if(!(*xn < 0.0e0)) goto S140;
+     XN
+     */
+  if (!(*xn < 0.0e0)) goto S140;
   *bound = 0.0e0;
   *status = -5;
   return;
- S150:
- S140:
-  if(*which == 4) goto S190;
+S150:
+S140:
+  if (*which == 4) goto S190;
   /*
-    PR
-  */
-  if(!(*pr < 0.0e0 || *pr > 1.0e0)) goto S180;
-  if(!(*pr < 0.0e0)) goto S160;
+     PR
+     */
+  if (!(*pr < 0.0e0 || *pr > 1.0e0)) goto S180;
+  if (!(*pr < 0.0e0)) goto S160;
   *bound = 0.0e0;
   goto S170;
- S160:
+S160:
   *bound = 1.0e0;
- S170:
+S170:
   *status = -6;
   return;
- S190:
- S180:
-  if(*which == 4) goto S230;
+S190:
+S180:
+  if (*which == 4) goto S230;
   /*
-    OMPR
-  */
-  if(!(*ompr < 0.0e0 || *ompr > 1.0e0)) goto S220;
-  if(!(*ompr < 0.0e0)) goto S200;
+     OMPR
+     */
+  if (!(*ompr < 0.0e0 || *ompr > 1.0e0)) goto S220;
+  if (!(*ompr < 0.0e0)) goto S200;
   *bound = 0.0e0;
   goto S210;
- S200:
+S200:
   *bound = 1.0e0;
- S210:
+S210:
   *status = -7;
   return;
- S230:
- S220:
-  if(*which == 1) goto S270;
+S230:
+S220:
+  if (*which == 1) goto S270;
   /*
-    P + Q
-  */
+     P + Q
+     */
   pq = *p+*q;
-  if(!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S260;
-  if(!(pq < 0.0e0)) goto S240;
+  if (!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S260;
+  if (!(pq < 0.0e0)) goto S240;
   *bound = 0.0e0;
   goto S250;
- S240:
+S240:
   *bound = 1.0e0;
- S250:
+S250:
   *status = 3;
   return;
- S270:
- S260:
-  if(*which == 4) goto S310;
+S270:
+S260:
+  if (*which == 4) goto S310;
   /*
-    PR + OMPR
-  */
+     PR + OMPR
+     */
   prompr = *pr+*ompr;
-  if(!(fabs(prompr-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S300;
-  if(!(prompr < 0.0e0)) goto S280;
+  if (!(fabs(prompr-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S300;
+  if (!(prompr < 0.0e0)) goto S280;
   *bound = 0.0e0;
   goto S290;
- S280:
+S280:
   *bound = 1.0e0;
- S290:
+S290:
   *status = 4;
   return;
- S310:
- S300:
-  if(!(*which == 1)) qporq = *p <= *q;
+S310:
+S300:
+  if (!(*which == 1)) qporq = *p <= *q;
   /*
-    Select the minimum of P or Q
-    Calculate ANSWERS
-  */
-  if(1 == *which) {
+     Select the minimum of P or Q
+     Calculate ANSWERS
+     */
+  if (1 == *which) {
     /*
-      Calculating P
-    */
+       Calculating P
+       */
     cumnbn(s,xn,pr,ompr,p,q);
     *status = 0;
   }
-  else if(2 == *which) {
+  else if (2 == *which) {
     /*
-      Calculating S
-    */
+       Calculating S
+       */
     *s = 5.0e0;
     T3 = inf;
     T6 = atol;
@@ -4583,34 +4551,34 @@ void pnl_cdf_nbn(int *which,double *p,double *q,double *s,double *xn,
     dstinv(&K2,&T3,&K4,&K4,&K5,&T6,&T7);
     *status = 0;
     dinvr(status,s,&fx,&qleft,&qhi);
-  S320:
-    if(!(*status == 1)) goto S350;
+S320:
+    if (!(*status == 1)) goto S350;
     cumnbn(s,xn,pr,ompr,&cum,&ccum);
-    if(!qporq) goto S330;
+    if (!qporq) goto S330;
     fx = cum-*p;
     goto S340;
-  S330:
+S330:
     fx = ccum-*q;
-  S340:
+S340:
     dinvr(status,s,&fx,&qleft,&qhi);
     goto S320;
-  S350:
-    if(!(*status == -1)) goto S380;
-    if(!qleft) goto S360;
+S350:
+    if (!(*status == -1)) goto S380;
+    if (!qleft) goto S360;
     *status = 1;
     *bound = 0.0e0;
     goto S370;
-  S360:
+S360:
     *status = 2;
     *bound = inf;
-  S380:
-  S370:
+S380:
+S370:
     ;
   }
-  else if(3 == *which) {
+  else if (3 == *which) {
     /*
-      Calculating XN
-    */
+       Calculating XN
+       */
     *xn = 5.0e0;
     T8 = inf;
     T9 = atol;
@@ -4618,75 +4586,75 @@ void pnl_cdf_nbn(int *which,double *p,double *q,double *s,double *xn,
     dstinv(&K2,&T8,&K4,&K4,&K5,&T9,&T10);
     *status = 0;
     dinvr(status,xn,&fx,&qleft,&qhi);
-  S390:
-    if(!(*status == 1)) goto S420;
+S390:
+    if (!(*status == 1)) goto S420;
     cumnbn(s,xn,pr,ompr,&cum,&ccum);
-    if(!qporq) goto S400;
+    if (!qporq) goto S400;
     fx = cum-*p;
     goto S410;
-  S400:
+S400:
     fx = ccum-*q;
-  S410:
+S410:
     dinvr(status,xn,&fx,&qleft,&qhi);
     goto S390;
-  S420:
-    if(!(*status == -1)) goto S450;
-    if(!qleft) goto S430;
+S420:
+    if (!(*status == -1)) goto S450;
+    if (!qleft) goto S430;
     *status = 1;
     *bound = 0.0e0;
     goto S440;
-  S430:
+S430:
     *status = 2;
     *bound = inf;
-  S450:
-  S440:
+S450:
+S440:
     ;
   }
-  else if(4 == *which) {
+  else if (4 == *which) {
     /*
-      Calculating PR and OMPR
-    */
+       Calculating PR and OMPR
+       */
     T12 = atol;
     T13 = tol;
     dstzr(&K2,&K11,&T12,&T13);
-    if(!qporq) goto S480;
+    if (!qporq) goto S480;
     *status = 0;
     dzror(status,pr,&fx,&xlo,&xhi,&qleft,&qhi);
     *ompr = one-*pr;
-  S460:
-    if(!(*status == 1)) goto S470;
+S460:
+    if (!(*status == 1)) goto S470;
     cumnbn(s,xn,pr,ompr,&cum,&ccum);
     fx = cum-*p;
     dzror(status,pr,&fx,&xlo,&xhi,&qleft,&qhi);
     *ompr = one-*pr;
     goto S460;
-  S470:
+S470:
     goto S510;
-  S480:
+S480:
     *status = 0;
     dzror(status,ompr,&fx,&xlo,&xhi,&qleft,&qhi);
     *pr = one-*ompr;
-  S490:
-    if(!(*status == 1)) goto S500;
+S490:
+    if (!(*status == 1)) goto S500;
     cumnbn(s,xn,pr,ompr,&cum,&ccum);
     fx = ccum-*q;
     dzror(status,ompr,&fx,&xlo,&xhi,&qleft,&qhi);
     *pr = one-*ompr;
     goto S490;
-  S510:
-  S500:
-    if(!(*status == -1)) goto S540;
-    if(!qleft) goto S520;
+S510:
+S500:
+    if (!(*status == -1)) goto S540;
+    if (!qleft) goto S520;
     *status = 1;
     *bound = 0.0e0;
     goto S530;
-  S520:
+S520:
     *status = 2;
     *bound = 1.0e0;
-  S530:
+S530:
     ;
   }
- S540:
+S540:
   return;
 #undef tol
 #undef atol
@@ -4727,48 +4695,44 @@ void pnl_cdf_nbn(int *which,double *p,double *q,double *s,double *xn,
  bound if STATUS is 1. Upper search bound if STATUS is 2.
  * @return  any one parameter of the normal
  distribution given values for the others
-*/
+ */
 
+/*
+ * 
+ * A slightly modified version of ANORM from
+ * 
+ * Cody, W.D. (1993). "ALGORITHM 715: SPECFUN - A Portabel FORTRAN
+ * Package of Special Function Routines and Test Drivers"
+ * acm Transactions on Mathematical Software. 19, 22-32.
+ * 
+ * is used to calulate the  cumulative standard normal distribution.
+ * 
+ * The rational functions from pages  90-95  of Kennedy and Gentle,
+ * Statistical  Computing,  Marcel  Dekker, NY,  1980 are  used  as
+ * starting values to Newton's Iterations which compute the inverse
+ * standard normal.  Therefore no  searches  are necessary for  any
+ * parameter.
+ * 
+ * For X < -15, the asymptotic expansion for the normal is used  as
+ * the starting value in finding the inverse standard normal.
+ * This is formula 26.2.12 of Abramowitz and Stegun.
+ * 
+ * 
+ * Note
+ * 
+ * 
+ * The normal density is proportional to
+ * exp( - 0.5 * (( X - MEAN)/SD)**2)
+ * 
+ */
 void pnl_cdf_nor(int *which,double *p,double *q,double *x,double *mean,
                  double *sd,int *status,double *bound)
-/*********************************************************************
-                              Method
-
-
-
-
-     A slightly modified version of ANORM from
-
-     Cody, W.D. (1993). "ALGORITHM 715: SPECFUN - A Portabel FORTRAN
-     Package of Special Function Routines and Test Drivers"
-     acm Transactions on Mathematical Software. 19, 22-32.
-
-     is used to calulate the  cumulative standard normal distribution.
-
-     The rational functions from pages  90-95  of Kennedy and Gentle,
-     Statistical  Computing,  Marcel  Dekker, NY,  1980 are  used  as
-     starting values to Newton's Iterations which compute the inverse
-     standard normal.  Therefore no  searches  are necessary for  any
-     parameter.
-
-     For X < -15, the asymptotic expansion for the normal is used  as
-     the starting value in finding the inverse standard normal.
-     This is formula 26.2.12 of Abramowitz and Stegun.
-
-
-                              Note
-
-
-      The normal density is proportional to
-      exp( - 0.5 * (( X - MEAN)/SD)**2)
-
-**********************************************************************/
 {
   static int K1 = 1;
   static double z,pq;
   /*
-    Check arguments
-  */
+     Check arguments
+     */
   CHECK_WHICH(*which < 1, 1., -1);
   CHECK_WHICH(*which > 4, 4., -1);
 
@@ -4798,9 +4762,9 @@ void pnl_cdf_nor(int *which,double *p,double *q,double *x,double *mean,
           return;
         }
       pq = *p+*q;
-      if( (fabs(*p + *q - 1) > 3.0*spmpar(&K1)) )
+      if ( (fabs(*p + *q - 1) > 3.0*spmpar(&K1)) )
         {
-          if((pq < 0.0)) 
+          if ((pq < 0.0)) 
             {
               *bound = 0.0; *status = 3;
               return;
@@ -4812,15 +4776,15 @@ void pnl_cdf_nor(int *which,double *p,double *q,double *x,double *mean,
             }
         }
     }
-  if( (*which != 4) && (*sd <= 0.0e0) )
+  if ( (*which != 4) && (*sd <= 0.0e0) )
     {
       *bound = 0.0e0;
       *status = -6;
       return;
     }
   /*
-    Calculate ANSWERS
-  */
+     Calculate ANSWERS
+     */
   switch (*which)
     {
     case 1:
@@ -4880,82 +4844,83 @@ void pnl_cdf_nor(int *which,double *p,double *q,double *x,double *mean,
  bound if STATUS is 1. Upper search bound if STATUS is 2.
  * @return  any one parameter of the Poisson
  distribution given values for the others
+ */
+
+/*
+ * 
+ * void pnl_cdf_poi(int *which,double *p,double *q,double *s,double *xlam,
+ * int *status,double *bound)
+ * 
+ * Cumulative Distribution Function
+ * POIsson distribution
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Calculates any one parameter of the Poisson
+ * distribution given values for the others.
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * WHICH --> Integer indicating which  argument
+ * value is to be calculated from the others.
+ * Legal range: 1..3
+ * iwhich = 1 : Calculate P and Q from S and XLAM
+ * iwhich = 2 : Calculate A from P,Q and XLAM
+ * iwhich = 3 : Calculate XLAM from P,Q and S
+ * 
+ * P <--> The cumulation from 0 to S of the poisson density.
+ * Input range: [0,1].
+ * 
+ * Q <--> 1-P.
+ * Input range: (0, 1].
+ * P + Q = 1.0.
+ * 
+ * S <--> Upper limit of cumulation of the Poisson.
+ * Input range: [0, +infinity).
+ * Search range: [0,1E300]
+ * 
+ * XLAM <--> Mean of the Poisson distribution.
+ * Input range: [0, +infinity).
+ * Search range: [0,1E300]
+ * 
+ * STATUS <-- 0 if calculation completed correctly
+ * -I if input parameter number I is out of range
+ * 1 if answer appears to be lower than lowest
+ * search bound
+ * 2 if answer appears to be higher than greatest
+ * search bound
+ * 3 if P + Q .ne. 1
+ * 
+ * BOUND <-- Undefined if STATUS is 0
+ * 
+ * Bound exceeded by parameter number I if STATUS
+ * is negative.
+ * 
+ * Lower search bound if STATUS is 1.
+ * 
+ * Upper search bound if STATUS is 2.
+ * 
+ * 
+ * Method
+ * 
+ * 
+ * Formula   26.4.21  of   Abramowitz  and   Stegun,   Handbook  of
+ * Mathematical Functions (1966) is used  to reduce the computation
+ * of  the cumulative distribution function to that  of computing a
+ * chi-square, hence an incomplete gamma function.
+ * 
+ * Cumulative  distribution function  (P) is  calculated  directly.
+ * Computation of other parameters involve a seach for a value that
+ * produces  the desired value of  P.   The  search relies  on  the
+ * monotinicity of P with the other parameter.
+* 
 */
 void pnl_cdf_poi(int *which,double *p,double *q,double *s,double *xlam,
                  int *status,double *bound)
-/**********************************************************************
-
-      void pnl_cdf_poi(int *which,double *p,double *q,double *s,double *xlam,
-            int *status,double *bound)
-
-               Cumulative Distribution Function
-               POIsson distribution
-
-
-                              Function
-
-
-     Calculates any one parameter of the Poisson
-     distribution given values for the others.
-
-
-                              Arguments
-
-
-     WHICH --> Integer indicating which  argument
-               value is to be calculated from the others.
-               Legal range: 1..3
-               iwhich = 1 : Calculate P and Q from S and XLAM
-               iwhich = 2 : Calculate A from P,Q and XLAM
-               iwhich = 3 : Calculate XLAM from P,Q and S
-
-        P <--> The cumulation from 0 to S of the poisson density.
-               Input range: [0,1].
-
-        Q <--> 1-P.
-               Input range: (0, 1].
-               P + Q = 1.0.
-
-        S <--> Upper limit of cumulation of the Poisson.
-               Input range: [0, +infinity).
-               Search range: [0,1E300]
-
-     XLAM <--> Mean of the Poisson distribution.
-               Input range: [0, +infinity).
-               Search range: [0,1E300]
-
-     STATUS <-- 0 if calculation completed correctly
-               -I if input parameter number I is out of range
-                1 if answer appears to be lower than lowest
-                  search bound
-                2 if answer appears to be higher than greatest
-                  search bound
-                3 if P + Q .ne. 1
-
-     BOUND <-- Undefined if STATUS is 0
-
-               Bound exceeded by parameter number I if STATUS
-               is negative.
-
-               Lower search bound if STATUS is 1.
-
-               Upper search bound if STATUS is 2.
-
-
-                              Method
-
-
-     Formula   26.4.21  of   Abramowitz  and   Stegun,   Handbook  of
-     Mathematical Functions (1966) is used  to reduce the computation
-     of  the cumulative distribution function to that  of computing a
-     chi-square, hence an incomplete gamma function.
-
-     Cumulative  distribution function  (P) is  calculated  directly.
-     Computation of other parameters involve a seach for a value that
-     produces  the desired value of  P.   The  search relies  on  the
-     monotinicity of P with the other parameter.
-
-**********************************************************************/
 {
 #define tol (1.0e-8)
 #define atol (1.0e-50)
@@ -4968,104 +4933,104 @@ void pnl_cdf_poi(int *which,double *p,double *q,double *s,double *xlam,
   static unsigned long qhi,qleft,qporq;
   static double T3,T6,T7,T8,T9,T10;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   /*
-    Check arguments
-  */
-  if(!(*which < 1 || *which > 3)) goto S30;
-  if(!(*which < 1)) goto S10;
+     Check arguments
+     */
+  if (!(*which < 1 || *which > 3)) goto S30;
+  if (!(*which < 1)) goto S10;
   *bound = 1.0e0;
   goto S20;
- S10:
+S10:
   *bound = 3.0e0;
- S20:
+S20:
   *status = -1;
   return;
- S30:
-  if(*which == 1) goto S70;
+S30:
+  if (*which == 1) goto S70;
   /*
-    P
-  */
-  if(!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
-  if(!(*p < 0.0e0)) goto S40;
+     P
+     */
+  if (!(*p < 0.0e0 || *p > 1.0e0)) goto S60;
+  if (!(*p < 0.0e0)) goto S40;
   *bound = 0.0e0;
   goto S50;
- S40:
+S40:
   *bound = 1.0e0;
- S50:
+S50:
   *status = -2;
   return;
- S70:
- S60:
-  if(*which == 1) goto S110;
+S70:
+S60:
+  if (*which == 1) goto S110;
   /*
-    Q
-  */
-  if(!(*q <= 0.0e0 || *q > 1.0e0)) goto S100;
-  if(!(*q <= 0.0e0)) goto S80;
+     Q
+     */
+  if (!(*q <= 0.0e0 || *q > 1.0e0)) goto S100;
+  if (!(*q <= 0.0e0)) goto S80;
   *bound = 0.0e0;
   goto S90;
- S80:
+S80:
   *bound = 1.0e0;
- S90:
+S90:
   *status = -3;
   return;
- S110:
- S100:
-  if(*which == 2) goto S130;
+S110:
+S100:
+  if (*which == 2) goto S130;
   /*
-    S
-  */
-  if(!(*s < 0.0e0)) goto S120;
+     S
+     */
+  if (!(*s < 0.0e0)) goto S120;
   *bound = 0.0e0;
   *status = -4;
   return;
- S130:
- S120:
-  if(*which == 3) goto S150;
+S130:
+S120:
+  if (*which == 3) goto S150;
   /*
-    XLAM
-  */
-  if(!(*xlam < 0.0e0)) goto S140;
+     XLAM
+     */
+  if (!(*xlam < 0.0e0)) goto S140;
   *bound = 0.0e0;
   *status = -5;
   return;
- S150:
- S140:
-  if(*which == 1) goto S190;
+S150:
+S140:
+  if (*which == 1) goto S190;
   /*
-    P + Q
-  */
+     P + Q
+     */
   pq = *p+*q;
-  if(!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S180;
-  if(!(pq < 0.0e0)) goto S160;
+  if (!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S180;
+  if (!(pq < 0.0e0)) goto S160;
   *bound = 0.0e0;
   goto S170;
- S160:
+S160:
   *bound = 1.0e0;
- S170:
+S170:
   *status = 3;
   return;
- S190:
- S180:
-  if(!(*which == 1)) qporq = *p <= *q;
+S190:
+S180:
+  if (!(*which == 1)) qporq = *p <= *q;
   /*
-    Select the minimum of P or Q
-    Calculate ANSWERS
-  */
-  if(1 == *which) {
+     Select the minimum of P or Q
+     Calculate ANSWERS
+     */
+  if (1 == *which) {
     /*
-      Calculating P
-    */
+       Calculating P
+       */
     cumpoi(s,xlam,p,q);
     *status = 0;
   }
-  else if(2 == *which) {
+  else if (2 == *which) {
     /*
-      Calculating S
-    */
+       Calculating S
+       */
     *s = 5.0e0;
     T3 = inf;
     T6 = atol;
@@ -5073,34 +5038,34 @@ void pnl_cdf_poi(int *which,double *p,double *q,double *s,double *xlam,
     dstinv(&K2,&T3,&K4,&K4,&K5,&T6,&T7);
     *status = 0;
     dinvr(status,s,&fx,&qleft,&qhi);
-  S200:
-    if(!(*status == 1)) goto S230;
+S200:
+    if (!(*status == 1)) goto S230;
     cumpoi(s,xlam,&cum,&ccum);
-    if(!qporq) goto S210;
+    if (!qporq) goto S210;
     fx = cum-*p;
     goto S220;
-  S210:
+S210:
     fx = ccum-*q;
-  S220:
+S220:
     dinvr(status,s,&fx,&qleft,&qhi);
     goto S200;
-  S230:
-    if(!(*status == -1)) goto S260;
-    if(!qleft) goto S240;
+S230:
+    if (!(*status == -1)) goto S260;
+    if (!qleft) goto S240;
     *status = 1;
     *bound = 0.0e0;
     goto S250;
-  S240:
+S240:
     *status = 2;
     *bound = inf;
-  S260:
-  S250:
+S260:
+S250:
     ;
   }
-  else if(3 == *which) {
+  else if (3 == *which) {
     /*
-      Calculating XLAM
-    */
+       Calculating XLAM
+       */
     *xlam = 5.0e0;
     T8 = inf;
     T9 = atol;
@@ -5108,30 +5073,30 @@ void pnl_cdf_poi(int *which,double *p,double *q,double *s,double *xlam,
     dstinv(&K2,&T8,&K4,&K4,&K5,&T9,&T10);
     *status = 0;
     dinvr(status,xlam,&fx,&qleft,&qhi);
-  S270:
-    if(!(*status == 1)) goto S300;
+S270:
+    if (!(*status == 1)) goto S300;
     cumpoi(s,xlam,&cum,&ccum);
-    if(!qporq) goto S280;
+    if (!qporq) goto S280;
     fx = cum-*p;
     goto S290;
-  S280:
+S280:
     fx = ccum-*q;
-  S290:
+S290:
     dinvr(status,xlam,&fx,&qleft,&qhi);
     goto S270;
-  S300:
-    if(!(*status == -1)) goto S330;
-    if(!qleft) goto S310;
+S300:
+    if (!(*status == -1)) goto S330;
+    if (!qleft) goto S310;
     *status = 1;
     *bound = 0.0e0;
     goto S320;
-  S310:
+S310:
     *status = 2;
     *bound = inf;
-  S320:
+S320:
     ;
   }
- S330:
+S330:
   return;
 #undef tol
 #undef atol
@@ -5170,82 +5135,82 @@ void pnl_cdf_poi(int *which,double *p,double *q,double *s,double *xlam,
  bound if STATUS is 1. Upper search bound if STATUS is 2.
  * @return  any one parameter of the T
  distribution given values for the others
-*/
+ */
 
+/*
+ * 
+ * void pnl_cdf_t(int *which,double *p,double *q,double *t,double *df,
+ * int *status,double *bound)
+ * 
+ * Cumulative Distribution Function
+ * T distribution
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Calculates any one parameter of the t distribution given
+ * values for the others.
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * WHICH --> Integer indicating which  argument
+ * values is to be calculated from the others.
+ * Legal range: 1..3
+ * iwhich = 1 : Calculate P and Q from T and DF
+ * iwhich = 2 : Calculate T from P,Q and DF
+ * iwhich = 3 : Calculate DF from P,Q and T
+ * 
+ * P <--> The integral from -infinity to t of the t-density.
+ * Input range: (0,1].
+ * 
+ * Q <--> 1-P.
+ * Input range: (0, 1].
+ * P + Q = 1.0.
+ * 
+ * T <--> Upper limit of integration of the t-density.
+ * Input range: ( -infinity, +infinity).
+ * Search range: [ -1E300, 1E300 ]
+ * 
+ * DF <--> Degrees of freedom of the t-distribution.
+ * Input range: (0 , +infinity).
+ * Search range: [1e-300, 1E10]
+ * 
+ * STATUS <-- 0 if calculation completed correctly
+ * -I if input parameter number I is out of range
+ * 1 if answer appears to be lower than lowest
+ * search bound
+ * 2 if answer appears to be higher than greatest
+ * search bound
+ * 3 if P + Q .ne. 1
+ * 
+ * BOUND <-- Undefined if STATUS is 0
+ * 
+ * Bound exceeded by parameter number I if STATUS
+ * is negative.
+ * 
+ * Lower search bound if STATUS is 1.
+ * 
+ * Upper search bound if STATUS is 2.
+ * 
+ * 
+ * Method
+ * 
+ * 
+ * Formula  26.5.27  of   Abramowitz   and  Stegun,   Handbook   of
+ * Mathematical Functions  (1966) is used to reduce the computation
+ * of the cumulative distribution function to that of an incomplete
+ * beta.
+ * 
+ * Computation of other parameters involve a seach for a value that
+ * produces  the desired  value  of P.   The search relies  on  the
+ * monotinicity of P with the other parameter.
+ * 
+*/
 void pnl_cdf_t(int *which,double *p,double *q,double *t,double *df,
                int *status,double *bound)
-/**********************************************************************
-
-      void pnl_cdf_t(int *which,double *p,double *q,double *t,double *df,
-          int *status,double *bound)
-
-               Cumulative Distribution Function
-                         T distribution
-
-
-                              Function
-
-
-     Calculates any one parameter of the t distribution given
-     values for the others.
-
-
-                              Arguments
-
-
-     WHICH --> Integer indicating which  argument
-               values is to be calculated from the others.
-               Legal range: 1..3
-               iwhich = 1 : Calculate P and Q from T and DF
-               iwhich = 2 : Calculate T from P,Q and DF
-               iwhich = 3 : Calculate DF from P,Q and T
-
-        P <--> The integral from -infinity to t of the t-density.
-               Input range: (0,1].
-
-        Q <--> 1-P.
-               Input range: (0, 1].
-               P + Q = 1.0.
-
-        T <--> Upper limit of integration of the t-density.
-               Input range: ( -infinity, +infinity).
-               Search range: [ -1E300, 1E300 ]
-
-        DF <--> Degrees of freedom of the t-distribution.
-                Input range: (0 , +infinity).
-                Search range: [1e-300, 1E10]
-
-     STATUS <-- 0 if calculation completed correctly
-               -I if input parameter number I is out of range
-                1 if answer appears to be lower than lowest
-                  search bound
-                2 if answer appears to be higher than greatest
-                  search bound
-                3 if P + Q .ne. 1
-
-     BOUND <-- Undefined if STATUS is 0
-
-               Bound exceeded by parameter number I if STATUS
-               is negative.
-
-               Lower search bound if STATUS is 1.
-
-               Upper search bound if STATUS is 2.
-
-
-                              Method
-
-
-     Formula  26.5.27  of   Abramowitz   and  Stegun,   Handbook   of
-     Mathematical Functions  (1966) is used to reduce the computation
-     of the cumulative distribution function to that of an incomplete
-     beta.
-
-     Computation of other parameters involve a seach for a value that
-     produces  the desired  value  of P.   The search relies  on  the
-     monotinicity of P with the other parameter.
-
-**********************************************************************/
 {
 #define tol (1.0e-8)
 #define atol (1.0e-50)
@@ -5259,95 +5224,95 @@ void pnl_cdf_t(int *which,double *p,double *q,double *t,double *df,
   static unsigned long qhi,qleft,qporq;
   static double T2,T3,T6,T7,T8,T9,T10,T11;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   /*
-    Check arguments
-  */
-  if(!(*which < 1 || *which > 3)) goto S30;
-  if(!(*which < 1)) goto S10;
+     Check arguments
+     */
+  if (!(*which < 1 || *which > 3)) goto S30;
+  if (!(*which < 1)) goto S10;
   *bound = 1.0e0;
   goto S20;
- S10:
+S10:
   *bound = 3.0e0;
- S20:
+S20:
   *status = -1;
   return;
- S30:
-  if(*which == 1) goto S70;
+S30:
+  if (*which == 1) goto S70;
   /*
-    P
-  */
-  if(!(*p <= 0.0e0 || *p > 1.0e0)) goto S60;
-  if(!(*p <= 0.0e0)) goto S40;
+     P
+     */
+  if (!(*p <= 0.0e0 || *p > 1.0e0)) goto S60;
+  if (!(*p <= 0.0e0)) goto S40;
   *bound = 0.0e0;
   goto S50;
- S40:
+S40:
   *bound = 1.0e0;
- S50:
+S50:
   *status = -2;
   return;
- S70:
- S60:
-  if(*which == 1) goto S110;
+S70:
+S60:
+  if (*which == 1) goto S110;
   /*
-    Q
-  */
-  if(!(*q <= 0.0e0 || *q > 1.0e0)) goto S100;
-  if(!(*q <= 0.0e0)) goto S80;
+     Q
+     */
+  if (!(*q <= 0.0e0 || *q > 1.0e0)) goto S100;
+  if (!(*q <= 0.0e0)) goto S80;
   *bound = 0.0e0;
   goto S90;
- S80:
+S80:
   *bound = 1.0e0;
- S90:
+S90:
   *status = -3;
   return;
- S110:
- S100:
-  if(*which == 3) goto S130;
+S110:
+S100:
+  if (*which == 3) goto S130;
   /*
-    DF
-  */
-  if(!(*df <= 0.0e0)) goto S120;
+     DF
+     */
+  if (!(*df <= 0.0e0)) goto S120;
   *bound = 0.0e0;
   *status = -5;
   return;
- S130:
- S120:
-  if(*which == 1) goto S170;
+S130:
+S120:
+  if (*which == 1) goto S170;
   /*
-    P + Q
-  */
+     P + Q
+     */
   pq = *p+*q;
-  if(!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S160;
-  if(!(pq < 0.0e0)) goto S140;
+  if (!(fabs(pq-0.5e0-0.5e0) > 3.0e0*spmpar(&K1))) goto S160;
+  if (!(pq < 0.0e0)) goto S140;
   *bound = 0.0e0;
   goto S150;
- S140:
+S140:
   *bound = 1.0e0;
- S150:
+S150:
   *status = 3;
   return;
- S170:
- S160:
-  if(!(*which == 1)) qporq = *p <= *q;
+S170:
+S160:
+  if (!(*which == 1)) qporq = *p <= *q;
   /*
-    Select the minimum of P or Q
-    Calculate ANSWERS
-  */
-  if(1 == *which) {
+     Select the minimum of P or Q
+     Calculate ANSWERS
+     */
+  if (1 == *which) {
     /*
-      Computing P and Q
-    */
+       Computing P and Q
+       */
     cumt(t,df,p,q);
     *status = 0;
   }
-  else if(2 == *which) {
+  else if (2 == *which) {
     /*
-      Computing T
-      .. Get initial approximation for T
-    */
+       Computing T
+       .. Get initial approximation for T
+       */
     *t = dt1(p,q,df);
     T2 = -inf;
     T3 = inf;
@@ -5356,34 +5321,34 @@ void pnl_cdf_t(int *which,double *p,double *q,double *t,double *df,
     dstinv(&T2,&T3,&K4,&K4,&K5,&T6,&T7);
     *status = 0;
     dinvr(status,t,&fx,&qleft,&qhi);
-  S180:
-    if(!(*status == 1)) goto S210;
+S180:
+    if (!(*status == 1)) goto S210;
     cumt(t,df,&cum,&ccum);
-    if(!qporq) goto S190;
+    if (!qporq) goto S190;
     fx = cum-*p;
     goto S200;
-  S190:
+S190:
     fx = ccum-*q;
-  S200:
+S200:
     dinvr(status,t,&fx,&qleft,&qhi);
     goto S180;
-  S210:
-    if(!(*status == -1)) goto S240;
-    if(!qleft) goto S220;
+S210:
+    if (!(*status == -1)) goto S240;
+    if (!qleft) goto S220;
     *status = 1;
     *bound = -inf;
     goto S230;
-  S220:
+S220:
     *status = 2;
     *bound = inf;
-  S240:
-  S230:
+S240:
+S230:
     ;
   }
-  else if(3 == *which) {
+  else if (3 == *which) {
     /*
-      Computing DF
-    */
+       Computing DF
+       */
     *df = 5.0e0;
     T8 = zero;
     T9 = maxdf;
@@ -5392,30 +5357,30 @@ void pnl_cdf_t(int *which,double *p,double *q,double *t,double *df,
     dstinv(&T8,&T9,&K4,&K4,&K5,&T10,&T11);
     *status = 0;
     dinvr(status,df,&fx,&qleft,&qhi);
-  S250:
-    if(!(*status == 1)) goto S280;
+S250:
+    if (!(*status == 1)) goto S280;
     cumt(t,df,&cum,&ccum);
-    if(!qporq) goto S260;
+    if (!qporq) goto S260;
     fx = cum-*p;
     goto S270;
-  S260:
+S260:
     fx = ccum-*q;
-  S270:
+S270:
     dinvr(status,df,&fx,&qleft,&qhi);
     goto S250;
-  S280:
-    if(!(*status == -1)) goto S310;
-    if(!qleft) goto S290;
+S280:
+    if (!(*status == -1)) goto S310;
+    if (!qleft) goto S290;
     *status = 1;
     *bound = zero;
     goto S300;
-  S290:
+S290:
     *status = 2;
     *bound = maxdf;
-  S300:
+S300:
     ;
   }
- S310:
+S310:
   return;
 #undef tol
 #undef atol
@@ -5423,270 +5388,267 @@ void pnl_cdf_t(int *which,double *p,double *q,double *t,double *df,
 #undef inf
 #undef maxdf
 }
+
+/*
+ * 
+ * 
+ * void cumbet(double *x,double *y,double *a,double *b,double *cum,
+ * double *ccum)
+ * 
+ * Double precision cUMulative incomplete BETa distribution
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Calculates the pnl_cdf_ to X of the incomplete beta distribution
+ * with parameters a and b.  This is the integral from 0 to x
+ * of (1/B(a,b))*f(t)) where f(t) = t**(a-1) * (1-t)**(b-1)
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * X --> Upper limit of integration.
+ * X is DOUBLE PRECISION
+ * 
+ * Y --> 1 - X.
+ * Y is DOUBLE PRECISION
+ * 
+ * A --> First parameter of the beta distribution.
+ * A is DOUBLE PRECISION
+ * 
+ * B --> Second parameter of the beta distribution.
+ * B is DOUBLE PRECISION
+ * 
+ * CUM <-- Cumulative incomplete beta distribution.
+ * CUM is DOUBLE PRECISION
+ * 
+ * CCUM <-- Compliment of Cumulative incomplete beta distribution.
+ * CCUM is DOUBLE PRECISION
+ * 
+ * 
+ * Method
+ * 
+ * 
+ * Calls the routine BRATIO.
+ * 
+ * References
+ * 
+ * Didonato, Armido R. and Morris, Alfred H. Jr. (1992) Algorithim
+ * 708 Significant Digit Computation of the Incomplete Beta Function
+ * Ratios. ACM ToMS, Vol.18, No. 3, Sept. 1992, 360-373.
+ * 
+ */
 static void cumbet(double *x,double *y,double *a,double *b,double *cum,
                    double *ccum)
-/*
-**********************************************************************
- 
-void cumbet(double *x,double *y,double *a,double *b,double *cum,
-double *ccum)
-
-Double precision cUMulative incomplete BETa distribution
- 
- 
-Function
- 
- 
-Calculates the pnl_cdf_ to X of the incomplete beta distribution
-with parameters a and b.  This is the integral from 0 to x
-of (1/B(a,b))*f(t)) where f(t) = t**(a-1) * (1-t)**(b-1)
- 
- 
-Arguments
- 
- 
-X --> Upper limit of integration.
-X is DOUBLE PRECISION
- 
-Y --> 1 - X.
-Y is DOUBLE PRECISION
- 
-A --> First parameter of the beta distribution.
-A is DOUBLE PRECISION
- 
-B --> Second parameter of the beta distribution.
-B is DOUBLE PRECISION
- 
-CUM <-- Cumulative incomplete beta distribution.
-CUM is DOUBLE PRECISION
- 
-CCUM <-- Compliment of Cumulative incomplete beta distribution.
-CCUM is DOUBLE PRECISION
- 
- 
-Method
- 
- 
-Calls the routine BRATIO.
- 
-References
- 
-Didonato, Armido R. and Morris, Alfred H. Jr. (1992) Algorithim
-708 Significant Digit Computation of the Incomplete Beta Function
-Ratios. ACM ToMS, Vol.18, No. 3, Sept. 1992, 360-373.
- 
-**********************************************************************
-*/
 {
   static int ierr;
   /*
-    ..
-    .. Executable Statements ..
-  */
-  if(!(*x <= 0.0e0)) goto S10;
+     ..
+     .. Executable Statements ..
+     */
+  if (!(*x <= 0.0e0)) goto S10;
   *cum = 0.0e0;
   *ccum = 1.0e0;
   return;
- S10:
-  if(!(*y <= 0.0e0)) goto S20;
+S10:
+  if (!(*y <= 0.0e0)) goto S20;
   *cum = 1.0e0;
   *ccum = 0.0e0;
   return;
- S20:
+S20:
   bratio(a,b,x,y,cum,ccum,&ierr);
   /*
-    Call bratio routine
-  */
+     Call bratio routine
+     */
   return;
 }
+
+/*
+ * 
+ * void cumbin(double *s,double *xn,double *pr,double *ompr,
+ * double *cum,double *ccum)
+ * 
+ * CUmulative BINomial distribution
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Returns the probability   of 0  to  S  successes in  XN   binomial
+ * trials, each of which has a probability of success, PBIN.
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * S --> The upper limit of cumulation of the binomial distribution.
+ * S is DOUBLE PRECISION
+ * 
+ * XN --> The number of binomial trials.
+ * XN is DOUBLE PRECISIO
+ * 
+ * PBIN --> The probability of success in each binomial trial.
+ * PBIN is DOUBLE PRECIS
+ * 
+ * OMPR --> 1 - PBIN
+ * OMPR is DOUBLE PRECIS
+ * 
+ * CUM <-- Cumulative binomial distribution.
+ * CUM is DOUBLE PRECISI
+ * 
+ * CCUM <-- Compliment of Cumulative binomial distribution.
+ * CCUM is DOUBLE PRECIS
+ * 
+ * 
+ * Method
+ * 
+ * 
+ * Formula  26.5.24    of   Abramowitz  and    Stegun,  Handbook   of
+ * Mathematical   Functions (1966) is   used  to reduce the  binomial
+ * distribution  to  the  cumulative    beta distribution.
+ * 
+ */
 static void cumbin(double *s,double *xn,double *pr,double *ompr,
                    double *cum,double *ccum)
-/*
-**********************************************************************
- 
-void cumbin(double *s,double *xn,double *pr,double *ompr,
-double *cum,double *ccum)
-
-CUmulative BINomial distribution
- 
- 
-Function
- 
- 
-Returns the probability   of 0  to  S  successes in  XN   binomial
-trials, each of which has a probability of success, PBIN.
- 
- 
-Arguments
- 
- 
-S --> The upper limit of cumulation of the binomial distribution.
-S is DOUBLE PRECISION
- 
-XN --> The number of binomial trials.
-XN is DOUBLE PRECISIO
- 
-PBIN --> The probability of success in each binomial trial.
-PBIN is DOUBLE PRECIS
- 
-OMPR --> 1 - PBIN
-OMPR is DOUBLE PRECIS
- 
-CUM <-- Cumulative binomial distribution.
-CUM is DOUBLE PRECISI
- 
-CCUM <-- Compliment of Cumulative binomial distribution.
-CCUM is DOUBLE PRECIS
- 
- 
-Method
- 
- 
-Formula  26.5.24    of   Abramowitz  and    Stegun,  Handbook   of
-Mathematical   Functions (1966) is   used  to reduce the  binomial
-distribution  to  the  cumulative    beta distribution.
- 
-**********************************************************************
-*/
 {
   static double T1,T2;
   /*
-    ..
-    .. Executable Statements ..
-  */
-  if(!(*s < *xn)) goto S10;
+     ..
+     .. Executable Statements ..
+     */
+  if (!(*s < *xn)) goto S10;
   T1 = *s+1.0e0;
   T2 = *xn-*s;
   cumbet(pr,ompr,&T1,&T2,ccum,cum);
   goto S20;
- S10:
+S10:
   *cum = 1.0e0;
   *ccum = 0.0e0;
- S20:
+S20:
   return;
 }
-static void cumchi(double *x,double *df,double *cum,double *ccum)
+
 /*
-**********************************************************************
- 
-void cumchi(double *x,double *df,double *cum,double *ccum)
-CUMulative of the CHi-square distribution
- 
- 
-Function
- 
- 
-Calculates the cumulative chi-square distribution.
- 
- 
-Arguments
- 
- 
-X       --> Upper limit of integration of the
-chi-square distribution.
-X is DOUBLE PRECISION
- 
-DF      --> Degrees of freedom of the
-chi-square distribution.
-DF is DOUBLE PRECISION
- 
-CUM <-- Cumulative chi-square distribution.
-CUM is DOUBLE PRECISIO
- 
-CCUM <-- Compliment of Cumulative chi-square distribution.
-CCUM is DOUBLE PRECISI
- 
- 
-Method
- 
- 
-Calls incomplete gamma function (CUMGAM)
- 
-**********************************************************************
-*/
+ * 
+ * void cumchi(double *x,double *df,double *cum,double *ccum)
+ * CUMulative of the CHi-square distribution
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Calculates the cumulative chi-square distribution.
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * X       --> Upper limit of integration of the
+ * chi-square distribution.
+ * X is DOUBLE PRECISION
+ * 
+ * DF      --> Degrees of freedom of the
+ * chi-square distribution.
+ * DF is DOUBLE PRECISION
+ * 
+ * CUM <-- Cumulative chi-square distribution.
+ * CUM is DOUBLE PRECISIO
+ * 
+ * CCUM <-- Compliment of Cumulative chi-square distribution.
+ * CCUM is DOUBLE PRECISI
+ * 
+ * 
+ * Method
+ * 
+ * 
+ * Calls incomplete gamma function (CUMGAM)
+ * 
+ */
+static void cumchi(double *x,double *df,double *cum,double *ccum)
 {
   static double a,xx;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   a = *df*0.5e0;
   xx = *x*0.5e0;
   cumgam(&xx,&a,cum,ccum);
   return;
 }
+
+/*
+ * 
+ * void cumchn(double *x,double *df,double *pnonc,double *cum,
+ * double *ccum)
+ * 
+ * CUMulative of the Non-central CHi-square distribution
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Calculates     the       cumulative      non-central    chi-square
+ * distribution, i.e.,  the probability   that  a   random   variable
+ * which    follows  the  non-central chi-square  distribution,  with
+ * non-centrality  parameter    PNONC  and   continuous  degrees   of
+ * freedom DF, is less than or equal to X.
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * X       --> Upper limit of integration of the non-central
+ * chi-square distribution.
+ * X is DOUBLE PRECISION
+ * 
+ * DF      --> Degrees of freedom of the non-central
+ * chi-square distribution.
+ * DF is DOUBLE PRECISION
+ * 
+ * PNONC   --> Non-centrality parameter of the non-central
+ * chi-square distribution.
+ * PNONC is DOUBLE PRECIS
+ * 
+ * CUM <-- Cumulative non-central chi-square distribution.
+ * CUM is DOUBLE PRECISIO
+ * 
+ * CCUM <-- Compliment of Cumulative non-central chi-square distribut
+ * CCUM is DOUBLE PRECISI
+ * 
+ * 
+ * Method
+ * 
+ * 
+ * Uses  formula  26.4.25   of  Abramowitz  and  Stegun, Handbook  of
+ * Mathematical    Functions,  US   NBS   (1966)    to calculate  the
+ * non-central chi-square.
+ * 
+ * 
+ * Variables
+ * 
+ * 
+ * EPS     --- Convergence criterion.  The sum stops when a
+ * term is less than EPS*SUM.
+ * EPS is DOUBLE PRECISIO
+ * 
+ * NTIRED  --- Maximum number of terms to be evaluated
+ * in each sum.
+ * NTIRED is INTEGER
+ * 
+ * QCONV   --- .TRUE. if convergence achieved -
+ * i.e., program did not stop on NTIRED criterion.
+ * QCONV is LOGICAL
+ * 
+ * CCUM <-- Compliment of Cumulative non-central
+ * chi-square distribution.
+ * CCUM is DOUBLE PRECISI
+ * 
+ */
 static void cumchn(double *x,double *df,double *pnonc,double *cum,
                    double *ccum)
-/*
-**********************************************************************
- 
-void cumchn(double *x,double *df,double *pnonc,double *cum,
-double *ccum)
-
-CUMulative of the Non-central CHi-square distribution
- 
- 
-Function
- 
- 
-Calculates     the       cumulative      non-central    chi-square
-distribution, i.e.,  the probability   that  a   random   variable
-which    follows  the  non-central chi-square  distribution,  with
-non-centrality  parameter    PNONC  and   continuous  degrees   of
-freedom DF, is less than or equal to X.
- 
- 
-Arguments
- 
- 
-X       --> Upper limit of integration of the non-central
-chi-square distribution.
-X is DOUBLE PRECISION
- 
-DF      --> Degrees of freedom of the non-central
-chi-square distribution.
-DF is DOUBLE PRECISION
- 
-PNONC   --> Non-centrality parameter of the non-central
-chi-square distribution.
-PNONC is DOUBLE PRECIS
- 
-CUM <-- Cumulative non-central chi-square distribution.
-CUM is DOUBLE PRECISIO
- 
-CCUM <-- Compliment of Cumulative non-central chi-square distribut
-CCUM is DOUBLE PRECISI
- 
- 
-Method
- 
- 
-Uses  formula  26.4.25   of  Abramowitz  and  Stegun, Handbook  of
-Mathematical    Functions,  US   NBS   (1966)    to calculate  the
-non-central chi-square.
- 
- 
-Variables
- 
- 
-EPS     --- Convergence criterion.  The sum stops when a
-term is less than EPS*SUM.
-EPS is DOUBLE PRECISIO
- 
-NTIRED  --- Maximum number of terms to be evaluated
-in each sum.
-NTIRED is INTEGER
- 
-QCONV   --- .TRUE. if convergence achieved -
-i.e., program did not stop on NTIRED criterion.
-QCONV is LOGICAL
- 
-CCUM <-- Compliment of Cumulative non-central
-chi-square distribution.
-CCUM is DOUBLE PRECISI
- 
-**********************************************************************
-*/
 {
 #define dg(i) (*df+2.0e0*(double)(i))
 #define qsmall(xx) (int)(sum < 1.0e-20 || (xx) < eps*sum)
@@ -5694,55 +5656,55 @@ CCUM is DOUBLE PRECISI
   static double eps = 1.0e-5;
   static int ntired = 1000;
   static double adj,centaj,centwt,chid2,dfd2,lcntaj,lcntwt,lfact,pcent,pterm,sum,
-    sumadj,term,wt,xnonc;
+                sumadj,term,wt,xnonc;
   static int i,icent,iterb,iterf;
   static double T1,T2,T3;
   /*
-    ..
-    .. Executable Statements ..
-  */
-  if(!(*x <= 0.0e0)) goto S10;
+     ..
+     .. Executable Statements ..
+     */
+  if (!(*x <= 0.0e0)) goto S10;
   *cum = 0.0e0;
   *ccum = 1.0e0;
   return;
- S10:
-  if(!(*pnonc <= 1.0e-10)) goto S20;
+S10:
+  if (!(*pnonc <= 1.0e-10)) goto S20;
   /*
-    When non-centrality parameter is (essentially) zero,
-    use cumulative chi-square distribution
-  */
+     When non-centrality parameter is (essentially) zero,
+     use cumulative chi-square distribution
+     */
   cumchi(x,df,cum,ccum);
   return;
- S20:
+S20:
   xnonc = *pnonc/2.0e0;
   /*
-**********************************************************************
-The following code calcualtes the weight, chi-square, and
-adjustment term for the central term in the infinite series.
-The central term is the one in which the poisson weight is
-greatest.  The adjustment term is the amount that must
-be subtracted from the chi-square to move up two degrees
-of freedom.
-**********************************************************************
-*/
+   **********************************************************************
+   The following code calcualtes the weight, chi-square, and
+   adjustment term for the central term in the infinite series.
+   The central term is the one in which the poisson weight is
+   greatest.  The adjustment term is the amount that must
+   be subtracted from the chi-square to move up two degrees
+   of freedom.
+   **********************************************************************
+   */
   icent = fifidint(xnonc);
-  if(icent == 0) icent = 1;
+  if (icent == 0) icent = 1;
   chid2 = *x/2.0e0;
   /*
-    Calculate central weight term
-  */
+     Calculate central weight term
+     */
   T1 = (double)(icent+1);
   lfact = alngam(&T1);
   lcntwt = -xnonc+(double)icent*log(xnonc)-lfact;
   centwt = exp(lcntwt);
   /*
-    Calculate central chi-square
-  */
+     Calculate central chi-square
+     */
   T2 = dg(icent);
   cumchi(x,&T2,&pcent,ccum);
   /*
-    Calculate central adjustment term
-  */
+     Calculate central adjustment term
+     */
   dfd2 = dg(icent)/2.0e0;
   T3 = 1.0e0+dfd2;
   lfact = alngam(&T3);
@@ -5750,77 +5712,77 @@ of freedom.
   centaj = exp(lcntaj);
   sum = centwt*pcent;
   /*
-**********************************************************************
-Sum backwards from the central term towards zero.
-Quit whenever either
-(1) the zero term is reached, or
-(2) the term gets small relative to the sum, or
-(3) More than NTIRED terms are totaled.
-**********************************************************************
-*/
-     iterb = 0;
+   **********************************************************************
+   Sum backwards from the central term towards zero.
+   Quit whenever either
+   (1) the zero term is reached, or
+   (2) the term gets small relative to the sum, or
+   (3) More than NTIRED terms are totaled.
+   **********************************************************************
+   */
+  iterb = 0;
   sumadj = 0.0e0;
   adj = centaj;
   wt = centwt;
   i = icent;
   goto S40;
- S30:
-  if(qtired(iterb) || qsmall(term) || i == 0) goto S50;
- S40:
+S30:
+  if (qtired(iterb) || qsmall(term) || i == 0) goto S50;
+S40:
   dfd2 = dg(i)/2.0e0;
   /*
-    Adjust chi-square for two fewer degrees of freedom.
-    The adjusted value ends up in PTERM.
-  */
+     Adjust chi-square for two fewer degrees of freedom.
+     The adjusted value ends up in PTERM.
+     */
   adj = adj*dfd2/chid2;
   sumadj += adj;
   pterm = pcent+sumadj;
   /*
-    Adjust poisson weight for J decreased by one
-  */
+     Adjust poisson weight for J decreased by one
+     */
   wt *= ((double)i/xnonc);
   term = wt*pterm;
   sum += term;
   i -= 1;
   iterb += 1;
   goto S30;
- S50:
+S50:
   iterf = 0;
   /*
-**********************************************************************
-Now sum forward from the central term towards infinity.
-Quit when either
-(1) the term gets small relative to the sum, or
-(2) More than NTIRED terms are totaled.
-**********************************************************************
-*/
-     sumadj = adj = centaj;
+   **********************************************************************
+   Now sum forward from the central term towards infinity.
+   Quit when either
+   (1) the term gets small relative to the sum, or
+   (2) More than NTIRED terms are totaled.
+   **********************************************************************
+   */
+  sumadj = adj = centaj;
   wt = centwt;
   i = icent;
   goto S70;
- S60:
-  if(qtired(iterf) || qsmall(term)) goto S80;
- S70:
+S60:
+  if (qtired(iterf) || qsmall(term)) goto S80;
+S70:
   /*
-    Update weights for next higher J
-  */
+     Update weights for next higher J
+     */
   wt *= (xnonc/(double)(i+1));
   /*
-    Calculate PTERM and add term to sum
-  */
+     Calculate PTERM and add term to sum
+     */
   pterm = pcent-sumadj;
   term = wt*pterm;
   sum += term;
   /*
-    Update adjustment term for DF for next iteration
-  */
+     Update adjustment term for DF for next iteration
+     */
   i += 1;
   dfd2 = dg(i)/2.0e0;
   adj = adj*chid2/dfd2;
   sumadj += adj;
   iterf += 1;
   goto S60;
- S80:
+S80:
   *cum = sum;
   *ccum = 0.5e0+(0.5e0-*cum);
   return;
@@ -5866,14 +5828,14 @@ static void cumf(double *f,double *dfn,double *dfd,double *cum,double *ccum)
 
   prod = *dfn * *f;
   /*
-    XX is such that the incomplete beta with parameters
-    DFD/2 and DFN/2 evaluated at XX is 1 - CUM or CCUM
-    YY is 1 - XX
-    Calculate the smaller of XX and YY accurately
-  */
+     XX is such that the incomplete beta with parameters
+     DFD/2 and DFN/2 evaluated at XX is 1 - CUM or CCUM
+     YY is 1 - XX
+     Calculate the smaller of XX and YY accurately
+     */
   dsum = *dfd + prod;
   xx = *dfd / dsum;
-  if(xx > 0.5)
+  if (xx > 0.5)
     {
       yy = prod / dsum;
       xx = 1. - yy;
@@ -5885,115 +5847,114 @@ static void cumf(double *f,double *dfn,double *dfd,double *cum,double *ccum)
   bratio (&T1, &T2, &xx, &yy, ccum, cum, &ierr);
   return;
 }
+
+/*
+ * 
+ * F -NON- -C-ENTRAL F DISTRIBUTION
+ * 
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * COMPUTES NONCENTRAL F DISTRIBUTION WITH DFN AND DFD
+ * DEGREES OF FREEDOM AND NONCENTRALITY PARAMETER PNONC
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * X --> UPPER LIMIT OF INTEGRATION OF NONCENTRAL F IN EQUATION
+ * 
+ * DFN --> DEGREES OF FREEDOM OF NUMERATOR
+ * 
+ * DFD -->  DEGREES OF FREEDOM OF DENOMINATOR
+ * 
+ * PNONC --> NONCENTRALITY PARAMETER.
+ * 
+ * CUM <-- CUMULATIVE NONCENTRAL F DISTRIBUTION
+ * 
+ * CCUM <-- COMPLIMENT OF CUMMULATIVE
+ * 
+ * 
+ * Method
+ * 
+ * 
+ * USES FORMULA 26.6.20 OF REFERENCE FOR INFINITE SERIES.
+ * SERIES IS CALCULATED BACKWARD AND FORWARD FROM J = LAMBDA/2
+ * (THIS IS THE TERM WITH THE LARGEST POISSON WEIGHT) UNTIL
+ * THE CONVERGENCE CRITERION IS MET.
+ * 
+ * FOR SPEED, THE INCOMPLETE BETA FUNCTIONS ARE EVALUATED
+ * BY FORMULA 26.5.16.
+ * 
+ * 
+ * REFERENCE
+ * 
+ * 
+ * HANDBOOD OF MATHEMATICAL FUNCTIONS
+ * EDITED BY MILTON ABRAMOWITZ AND IRENE A. STEGUN
+ * NATIONAL BUREAU OF STANDARDS APPLIED MATEMATICS SERIES - 55
+ * MARCH 1965
+ * P 947, EQUATIONS 26.6.17, 26.6.18
+ * 
+ * 
+ * Note
+ * 
+ * 
+ * THE SUM CONTINUES UNTIL A SUCCEEDING TERM IS LESS THAN EPS
+ * TIMES THE SUM (OR THE SUM IS LESS THAN 1.0E-20).  EPS IS
+ * SET TO 1.0E-4 IN A DATA STATEMENT WHICH CAN BE CHANGED.
+ * 
+ */
 static void cumfnc(double *f,double *dfn,double *dfd,double *pnonc,
                    double *cum,double *ccum)
-/*
-**********************************************************************
- 
-F -NON- -C-ENTRAL F DISTRIBUTION
- 
- 
- 
-Function
- 
- 
-COMPUTES NONCENTRAL F DISTRIBUTION WITH DFN AND DFD
-DEGREES OF FREEDOM AND NONCENTRALITY PARAMETER PNONC
- 
- 
-Arguments
- 
- 
-X --> UPPER LIMIT OF INTEGRATION OF NONCENTRAL F IN EQUATION
- 
-DFN --> DEGREES OF FREEDOM OF NUMERATOR
- 
-DFD -->  DEGREES OF FREEDOM OF DENOMINATOR
- 
-PNONC --> NONCENTRALITY PARAMETER.
- 
-CUM <-- CUMULATIVE NONCENTRAL F DISTRIBUTION
- 
-CCUM <-- COMPLIMENT OF CUMMULATIVE
- 
- 
-Method
- 
- 
-USES FORMULA 26.6.20 OF REFERENCE FOR INFINITE SERIES.
-SERIES IS CALCULATED BACKWARD AND FORWARD FROM J = LAMBDA/2
-(THIS IS THE TERM WITH THE LARGEST POISSON WEIGHT) UNTIL
-THE CONVERGENCE CRITERION IS MET.
- 
-FOR SPEED, THE INCOMPLETE BETA FUNCTIONS ARE EVALUATED
-BY FORMULA 26.5.16.
- 
- 
-REFERENCE
- 
- 
-HANDBOOD OF MATHEMATICAL FUNCTIONS
-EDITED BY MILTON ABRAMOWITZ AND IRENE A. STEGUN
-NATIONAL BUREAU OF STANDARDS APPLIED MATEMATICS SERIES - 55
-MARCH 1965
-P 947, EQUATIONS 26.6.17, 26.6.18
- 
- 
-Note
- 
- 
-THE SUM CONTINUES UNTIL A SUCCEEDING TERM IS LESS THAN EPS
-TIMES THE SUM (OR THE SUM IS LESS THAN 1.0E-20).  EPS IS
-SET TO 1.0E-4 IN A DATA STATEMENT WHICH CAN BE CHANGED.
- 
-**********************************************************************
-*/
 {
 #define qsmall(x) (int)(sum < 1.0e-20 || (x) < eps*sum)
 #define half 0.5e0
 #define done 1.0e0
   static double eps = 1.0e-4;
   static double dsum,dummy,prod,xx,yy,adn,aup,b,betdn,betup,centwt,dnterm,sum,
-  upterm,xmult,xnonc;
+                upterm,xmult,xnonc;
   static int i,icent,ierr;
   static double T1,T2,T3,T4,T5,T6;
   /*
-    ..
-    .. Executable Statements ..
-  */
-  if(!(*f <= 0.0e0)) goto S10;
+     ..
+     .. Executable Statements ..
+     */
+  if (!(*f <= 0.0e0)) goto S10;
   *cum = 0.0e0;
   *ccum = 1.0e0;
   return;
- S10:
-  if(!(*pnonc < 1.0e-10)) goto S20;
+S10:
+  if (!(*pnonc < 1.0e-10)) goto S20;
   /*
-    Handle case in which the non-centrality parameter is
-    (essentially) zero.
-  */
+     Handle case in which the non-centrality parameter is
+     (essentially) zero.
+     */
   cumf(f,dfn,dfd,cum,ccum);
   return;
- S20:
+S20:
   xnonc = *pnonc/2.0e0;
   /*
-    Calculate the central term of the poisson weighting factor.
-  */
+     Calculate the central term of the poisson weighting factor.
+     */
   icent = xnonc;
-  if(icent == 0) icent = 1;
+  if (icent == 0) icent = 1;
   /*
-    Compute central weight term
-  */
+     Compute central weight term
+     */
   T1 = (double)(icent+1);
   centwt = exp(-xnonc+(double)icent*log(xnonc)-alngam(&T1));
   /*
-    Compute central incomplete beta term
-    Assure that minimum of arg to beta and 1 - arg is computed
-    accurately.
-  */
+     Compute central incomplete beta term
+     Assure that minimum of arg to beta and 1 - arg is computed
+     accurately.
+     */
   prod = *dfn**f;
   dsum = *dfd+prod;
   yy = *dfd/dsum;
-  if(yy > half) {
+  if (yy > half) {
     xx = prod/dsum;
     yy = done-xx;
   }
@@ -6007,15 +5968,15 @@ SET TO 1.0E-4 IN A DATA STATEMENT WHICH CAN BE CHANGED.
   betup = betdn;
   sum = centwt*betdn;
   /*
-    Now sum terms backward from icent until convergence or all done
-  */
+     Now sum terms backward from icent until convergence or all done
+     */
   xmult = centwt;
   i = icent;
   T4 = adn+b;
   T5 = adn+1.0e0;
   dnterm = exp(alngam(&T4)-alngam(&T5)-alngam(&b)+adn*log(xx)+b*log(yy));
- S30:
-  if(qsmall(xmult*betdn) || i <= 0) goto S40;
+S30:
+  if (qsmall(xmult*betdn) || i <= 0) goto S40;
   xmult *= ((double)i/xnonc);
   i -= 1;
   adn -= 1.0;
@@ -6023,23 +5984,23 @@ SET TO 1.0E-4 IN A DATA STATEMENT WHICH CAN BE CHANGED.
   betdn += dnterm;
   sum += (xmult*betdn);
   goto S30;
- S40:
+S40:
   i = icent+1;
   /*
-    Now sum forwards until convergence
-  */
+     Now sum forwards until convergence
+     */
   xmult = centwt;
-  if(aup-1.0+b == 0) upterm = exp(-alngam(&aup)-alngam(&b)+(aup-1.0)*log(xx)+
-                                  b*log(yy));
+  if (aup-1.0+b == 0) upterm = exp(-alngam(&aup)-alngam(&b)+(aup-1.0)*log(xx)+
+                                   b*log(yy));
   else  {
     T6 = aup-1.0+b;
     upterm = exp(alngam(&T6)-alngam(&aup)-alngam(&b)+(aup-1.0)*log(xx)+b*
                  log(yy));
   }
   goto S60;
- S50:
-  if(qsmall(xmult*betup)) goto S70;
- S60:
+S50:
+  if (qsmall(xmult*betup)) goto S70;
+S60:
   xmult *= (xnonc/(double)i);
   i += 1;
   aup += 1.0;
@@ -6047,7 +6008,7 @@ SET TO 1.0E-4 IN A DATA STATEMENT WHICH CAN BE CHANGED.
   betup -= upterm;
   sum += (xmult*betup);
   goto S50;
- S70:
+S70:
   *cum = sum;
   *ccum = 0.5e0+(0.5e0-*cum);
   return;
@@ -6055,7 +6016,6 @@ SET TO 1.0E-4 IN A DATA STATEMENT WHICH CAN BE CHANGED.
 #undef half
 #undef done
 }
-
 
 
 /* Double precision cUMulative incomplete GAMma distribution
@@ -6086,7 +6046,7 @@ static void cumgam(double *x,double *a,double *cum,double *ccum)
 {
   int K1 = 0;
 
-  if(*x <= 0)
+  if (*x <= 0)
     {
       *cum = 0.;
       *ccum = 1.;
@@ -6096,62 +6056,59 @@ static void cumgam(double *x,double *a,double *cum,double *ccum)
   return;
 }
 
-
+/*
+ * 
+ * void cumnbn(double *s,double *xn,double *pr,double *ompr,
+ * double *result,double *ccum)
+ * 
+ * CUmulative Negative BINomial distribution
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Returns the probability that it there will be S or fewer failures
+ * before there are XN successes, with each binomial trial having
+ * a probability of success PR.
+ * 
+ * Prob(# failures = S | XN successes, PR)  =
+ * ( XN + S - 1 )
+ * (            ) * PR^XN * (1-PR)^S
+ * (      S     )
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * S --> The number of failures
+ * S is DOUBLE PRECISION
+ * 
+ * XN --> The number of successes
+ * XN is DOUBLE PRECISIO
+ * 
+ * PR --> The probability of success in each binomial trial.
+ * PR is DOUBLE PRECISIO
+ * 
+ * OMPR --> 1 - PR
+ * OMPR is DOUBLE PRECIS
+ * 
+ * RESULT <-- Cumulative negative binomial distribution.
+ * RESULT is DOUBLE PRECISI
+ * 
+ * CCUM <-- Compliment of Cumulative negative binomial distribution.
+ * CCUM is DOUBLE PRECIS
+ * 
+ * 
+ * Method
+ * 
+ * 
+ * Formula  26.5.26    of   Abramowitz  and    Stegun,  Handbook   of
+ * Mathematical   Functions (1966) is   used  to reduce the  negative
+ * binomial distribution to the cumulative beta distribution.
+ * 
+ */
 static void cumnbn(double *s,double *xn,double *pr,double *ompr,
                    double *result,double *ccum)
-/*
-**********************************************************************
- 
-void cumnbn(double *s,double *xn,double *pr,double *ompr,
-double *result,double *ccum)
-
-CUmulative Negative BINomial distribution
- 
- 
-Function
- 
- 
-Returns the probability that it there will be S or fewer failures
-before there are XN successes, with each binomial trial having
-a probability of success PR.
- 
-Prob(# failures = S | XN successes, PR)  =
-( XN + S - 1 )
-(            ) * PR^XN * (1-PR)^S
-(      S     )
- 
- 
-Arguments
- 
- 
-S --> The number of failures
-S is DOUBLE PRECISION
- 
-XN --> The number of successes
-XN is DOUBLE PRECISIO
- 
-PR --> The probability of success in each binomial trial.
-PR is DOUBLE PRECISIO
- 
-OMPR --> 1 - PR
-OMPR is DOUBLE PRECIS
- 
-RESULT <-- Cumulative negative binomial distribution.
-RESULT is DOUBLE PRECISI
- 
-CCUM <-- Compliment of Cumulative negative binomial distribution.
-CCUM is DOUBLE PRECIS
- 
- 
-Method
- 
- 
-Formula  26.5.26    of   Abramowitz  and    Stegun,  Handbook   of
-Mathematical   Functions (1966) is   used  to reduce the  negative
-binomial distribution to the cumulative beta distribution.
- 
-**********************************************************************
-*/
 {
   double T1;
   T1 = *s + 1.;
@@ -6159,94 +6116,91 @@ binomial distribution to the cumulative beta distribution.
   return;
 }
 
-
-static void cumnor(double *arg,double *result,double *ccum)
 /*
-**********************************************************************
- 
-void cumnor(double *arg,double *result,double *ccum)
- 
- 
-Function
- 
- 
-Computes the cumulative  of    the  normal   distribution,   i.e.,
-the integral from -infinity to x of
-(1/sqrt(2*pi)) exp(-u*u/2) du
- 
-X --> Upper limit of integration.
-X is DOUBLE PRECISION
- 
-RESULT <-- Cumulative normal distribution.
-RESULT is DOUBLE PRECISION
- 
-CCUM <-- Compliment of Cumulative normal distribution.
-CCUM is DOUBLE PRECISION
- 
-Renaming of function ANORM from:
-
-Cody, W.D. (1993). "ALGORITHM 715: SPECFUN - A Portabel FORTRAN
-Package of Special Function Routines and Test Drivers"
-acm Transactions on Mathematical Software. 19, 22-32.
-
-with slight modifications to return ccum and to deal with
-machine constants.
- 
-**********************************************************************
-Original Comments:
-------------------------------------------------------------------
- 
-This function evaluates the normal distribution function:
- 
-/ x
-1       |       -t*t/2
-P(x) = ----------- |      e       dt
-sqrt(2 pi)  |
-/-oo
- 
-The main computation evaluates near-minimax approximations
-derived from those in "Rational Chebyshev approximations for
-the error function" by W. J. Cody, Math. Comp., 1969, 631-637.
-This transportable program uses rational functions that
-theoretically approximate the normal distribution function to
-at least 18 significant decimal digits.  The accuracy achieved
-depends on the arithmetic system, the compiler, the intrinsic
-functions, and proper selection of the machine-dependent
-constants.
- 
-*******************************************************************
-*******************************************************************
- 
-Explanation of machine-dependent constants.
- 
-MIN   = smallest machine representable number.
- 
-EPS   = argument below which anorm(x) may be represented by
-0.5  and above which  x*x  will not underflow.
-A conservative value is the largest machine number X
-such that   1.0 + X = 1.0   to machine precision.
-*******************************************************************
-*******************************************************************
- 
-Error returns
- 
-The program returns  ANORM = 0     for  ARG .LE. XLOW.
- 
- 
-Intrinsic functions required are:
- 
-ABS, AINT, EXP
- 
- 
-Author: W. J. Cody
-Mathematics and Computer Science Division
-Argonne National Laboratory
-Argonne, IL 60439
- 
-Latest modification: March 15, 1992
- 
-------------------------------------------------------------------
+ * 
+ * void cumnor(double *arg,double *result,double *ccum)
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Computes the cumulative  of    the  normal   distribution,   i.e.,
+ * the integral from -infinity to x of
+ * (1/sqrt(2*pi)) exp(-u*u/2) du
+ * 
+ * X --> Upper limit of integration.
+ * X is DOUBLE PRECISION
+ * 
+ * RESULT <-- Cumulative normal distribution.
+ * RESULT is DOUBLE PRECISION
+ * 
+ * CCUM <-- Compliment of Cumulative normal distribution.
+ * CCUM is DOUBLE PRECISION
+ * 
+ * Renaming of function ANORM from:
+ * 
+ * Cody, W.D. (1993). "ALGORITHM 715: SPECFUN - A Portabel FORTRAN
+ * Package of Special Function Routines and Test Drivers"
+ * acm Transactions on Mathematical Software. 19, 22-32.
+ * 
+ * with slight modifications to return ccum and to deal with
+ * machine constants.
+ * 
+ * **********************************************************************
+ * Original Comments:
+ * ------------------------------------------------------------------
+ * 
+ * This function evaluates the normal distribution function:
+ * 
+ * / x
+ * 1       |       -t*t/2
+ * P(x) = ----------- |      e       dt
+ * sqrt(2 pi)  |
+ * /-oo
+ * 
+ * The main computation evaluates near-minimax approximations
+ * derived from those in "Rational Chebyshev approximations for
+ * the error function" by W. J. Cody, Math. Comp., 1969, 631-637.
+ * This transportable program uses rational functions that
+ * theoretically approximate the normal distribution function to
+ * at least 18 significant decimal digits.  The accuracy achieved
+ * depends on the arithmetic system, the compiler, the intrinsic
+ * functions, and proper selection of the machine-dependent
+ * constants.
+ * 
+ * *******************************************************************
+ * *******************************************************************
+ * 
+ * Explanation of machine-dependent constants.
+ * 
+ * MIN   = smallest machine representable number.
+ * 
+ * EPS   = argument below which anorm(x) may be represented by
+ * 0.5  and above which  x*x  will not underflow.
+ * A conservative value is the largest machine number X
+ * such that   1.0 + X = 1.0   to machine precision.
+ * *******************************************************************
+ * *******************************************************************
+ * 
+ * Error returns
+ * 
+ * The program returns  ANORM = 0     for  ARG .LE. XLOW.
+ * 
+ * 
+* Intrinsic functions required are:
+* 
+* ABS, AINT, EXP
+* 
+* 
+* Author: W. J. Cody
+* Mathematics and Computer Science Division
+* Argonne National Laboratory
+* Argonne, IL 60439
+* 
+* Latest modification: March 15, 1992
+* 
 */
+static void cumnor(double *arg,double *result,double *ccum)
 {
   static double a[5] = {
     2.2352520354606839287e00,1.6102823106855587881e02,1.0676894854603709582e03,
@@ -6286,22 +6240,22 @@ Latest modification: March 15, 1992
   static int i;
   static double del,eps,temp,x,xden,xnum,y,xsq,min;
   /*
-    ------------------------------------------------------------------
-    Machine dependent constants
-    ------------------------------------------------------------------
-  */
+     ------------------------------------------------------------------
+     Machine dependent constants
+     ------------------------------------------------------------------
+     */
   eps = spmpar(&K1)*0.5e0;
   min = spmpar(&K2);
   x = *arg;
   y = fabs(x);
-  if(y <= thrsh) {
+  if (y <= thrsh) {
     /*
-      ------------------------------------------------------------------
-      Evaluate  anorm  for  |X| <= 0.66291
-      ------------------------------------------------------------------
-    */
+       ------------------------------------------------------------------
+       Evaluate  anorm  for  |X| <= 0.66291
+       ------------------------------------------------------------------
+       */
     xsq = zero;
-    if(y > eps) xsq = x*x;
+    if (y > eps) xsq = x*x;
     xnum = a[4]*xsq;
     xden = xsq;
     for(i=0; i<3; i++) {
@@ -6314,11 +6268,11 @@ Latest modification: March 15, 1992
     *ccum = half-temp;
   }
   /*
-    ------------------------------------------------------------------
-    Evaluate  anorm  for 0.66291 <= |X| <= sqrt(32)
-    ------------------------------------------------------------------
-  */
-  else if(y <= root32) {
+     ------------------------------------------------------------------
+     Evaluate  anorm  for 0.66291 <= |X| <= sqrt(32)
+     ------------------------------------------------------------------
+     */
+  else if (y <= root32) {
     xnum = c[8]*y;
     xden = y;
     for(i=0; i<7; i++) {
@@ -6330,17 +6284,17 @@ Latest modification: March 15, 1992
     del = (y-xsq)*(y+xsq);
     *result = exp(-(xsq*xsq*half))*exp(-(del*half))**result;
     *ccum = one-*result;
-    if(x > zero) {
+    if (x > zero) {
       temp = *result;
       *result = *ccum;
       *ccum = temp;
     }
   }
   /*
-    ------------------------------------------------------------------
-    Evaluate  anorm  for |X| > sqrt(32)
-    ------------------------------------------------------------------
-  */
+     ------------------------------------------------------------------
+     Evaluate  anorm  for |X| > sqrt(32)
+     ------------------------------------------------------------------
+     */
   else  {
     *result = zero;
     xsq = one/(x*x);
@@ -6356,22 +6310,21 @@ Latest modification: March 15, 1992
     del = (x-xsq)*(x+xsq);
     *result = exp(-(xsq*xsq*half))*exp(-(del*half))**result;
     *ccum = one-*result;
-    if(x > zero) {
+    if (x > zero) {
       temp = *result;
       *result = *ccum;
       *ccum = temp;
     }
   }
-  if(*result < min) *result = 0.0e0;
+  if (*result < min) *result = 0.0e0;
   /*
-    ------------------------------------------------------------------
-    Fix up for negative argument, erf, etc.
-    ------------------------------------------------------------------
-    ----------Last card of ANORM ----------
-  */
-  if(*ccum < min) *ccum = 0.0e0;
+     ------------------------------------------------------------------
+     Fix up for negative argument, erf, etc.
+     ------------------------------------------------------------------
+     ----------Last card of ANORM ----------
+     */
+  if (*ccum < min) *ccum = 0.0e0;
 }
-
 
 /* CUMulative POIsson distribution
  *  
@@ -6395,7 +6348,6 @@ static void cumpoi(double *s,double *xlam,double *cum,double *ccum)
   cumchi(&chi,&df,ccum,cum);
   return;
 }
-
 
 /* CUMulative T-distribution
  *  
@@ -6423,7 +6375,7 @@ static void cumt(double *t,double *df,double *cum,double *ccum)
   T1 = 0.5 * *df;
   cumbet(&xx, &yy, &T1, &K2, &a, &oma);
 
-  if(*t <= 0.)
+  if (*t <= 0.)
     {
       *cum = 0.5 * a;
       *ccum = oma + *cum;
@@ -6434,9 +6386,6 @@ static void cumt(double *t,double *df,double *cum,double *ccum)
       *cum = oma + *ccum;
     }
 }
-
-
-
 
 /* Double precision EVALuate a PoLynomial at X
  *  
@@ -6457,47 +6406,44 @@ static double devlpl(double a[],int *n,double *x)
   return term;
 }
 
-
-static double dinvnr(double *p,double *q)
 /*
-**********************************************************************
- 
-double dinvnr(double *p,double *q)
-Double precision NoRmal distribution INVerse
- 
- 
-Function
- 
- 
-Returns X  such that CUMNOR(X)  =   P,  i.e., the  integral from -
-infinity to X of (1/SQRT(2*M_PI)) EXP(-U*U/2) dU is P
- 
- 
-Arguments
- 
- 
-P --> The probability whose normal deviate is sought.
-P is DOUBLE PRECISION
- 
-Q --> 1-P
-P is DOUBLE PRECISION
- 
- 
-Method
- 
- 
-The  rational   function   on  page 95    of Kennedy  and  Gentle,
-Statistical Computing, Marcel Dekker, NY , 1980 is used as a start
-value for the Newton method of finding roots.
- 
- 
-Note
- 
- 
-If P or Q .lt. machine EPS returns +/- DINVNR(EPS)
- 
-**********************************************************************
-*/
+ * 
+ * double dinvnr(double *p,double *q)
+ * Double precision NoRmal distribution INVerse
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Returns X  such that CUMNOR(X)  =   P,  i.e., the  integral from -
+ * infinity to X of (1/SQRT(2*M_PI)) EXP(-U*U/2) dU is P
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * P --> The probability whose normal deviate is sought.
+ * P is DOUBLE PRECISION
+ * 
+ * Q --> 1-P
+ * P is DOUBLE PRECISION
+ * 
+ * 
+ * Method
+ * 
+ * 
+ * The  rational   function   on  page 95    of Kennedy  and  Gentle,
+ * Statistical Computing, Marcel Dekker, NY , 1980 is used as a start
+ * value for the Newton method of finding roots.
+ * 
+ * 
+ * Note
+ * 
+ * 
+ * If P or Q .lt. machine EPS returns +/- DINVNR(EPS)
+ * 
+ */
+static double dinvnr(double *p,double *q)
 {
 #define maxit 100
 #define eps (1.0e-13)
@@ -6508,45 +6454,45 @@ If P or Q .lt. machine EPS returns +/- DINVNR(EPS)
   static int i;
   static unsigned long qporq;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   /*
-    FIND MINIMUM OF P AND Q
-  */
+     FIND MINIMUM OF P AND Q
+     */
   qporq = *p <= *q;
-  if(!qporq) goto S10;
+  if (!qporq) goto S10;
   pp = *p;
   goto S20;
- S10:
+S10:
   pp = *q;
- S20:
+S20:
   /*
-    INITIALIZATION STEP
-  */
+     INITIALIZATION STEP
+     */
   strtx = stvaln(&pp);
   xcur = strtx;
   /*
-    NEWTON INTERATIONS
-  */
+     NEWTON INTERATIONS
+     */
   for(i=1; i<=maxit; i++) {
     cumnor(&xcur,&cum,&ccum);
     dx = (cum-pp)/dennor(xcur);
     xcur -= dx;
-    if(fabs(dx/xcur) < eps) goto S40;
+    if (fabs(dx/xcur) < eps) goto S40;
   }
   dinvnr_0 = strtx;
   /*
-    IF WE GET HERE, NEWTON HAS FAILED
-  */
-  if(!qporq) dinvnr_0 = -dinvnr_0;
+     IF WE GET HERE, NEWTON HAS FAILED
+     */
+  if (!qporq) dinvnr_0 = -dinvnr_0;
   return dinvnr_0;
- S40:
+S40:
   /*
-    IF WE GET HERE, NEWTON HAS SUCCEDED
-  */
+     IF WE GET HERE, NEWTON HAS SUCCEDED
+     */
   dinvnr_0 = xcur;
-  if(!qporq) dinvnr_0 = -dinvnr_0;
+  if (!qporq) dinvnr_0 = -dinvnr_0;
   return dinvnr_0;
 #undef maxit
 #undef eps
@@ -6554,7 +6500,7 @@ If P or Q .lt. machine EPS returns +/- DINVNR(EPS)
 #undef nhalf
 #undef dennor
 }
-/* DEFINE DINVR */
+
 static void E0000(int IENTRY,int *status,double *x,double *fx,
                   unsigned long *qleft,unsigned long *qhi,double *zabsst,
                   double *zabsto,double *zbig,double *zrelst,
@@ -6562,184 +6508,184 @@ static void E0000(int IENTRY,int *status,double *x,double *fx,
 {
 #define qxmon(zx,zy,zz) (int)((zx) <= (zy) && (zy) <= (zz))
   static double absstp,abstol,big,fbig,fsmall,relstp,reltol,small,step,stpmul,xhi,
-    xlb,xlo,xsave,xub,yy;
+                xlb,xlo,xsave,xub,yy;
   static int i99999;
   static unsigned long qbdd,qcond,qdum1,qdum2,qincr,qlim,qup;
   switch(IENTRY){case 0: goto DINVR; case 1: goto DSTINV;}
- DINVR:
-  if(*status > 0) goto S310;
+DINVR:
+  if (*status > 0) goto S310;
   qcond = !qxmon(small,*x,big);
-  if(qcond) ftnstop(" SMALL, X, BIG not monotone in INVR");
+  if (qcond) ftnstop(" SMALL, X, BIG not monotone in INVR");
   xsave = *x;
   /*
-    See that SMALL and BIG bound the zero and set QINCR
-  */
+     See that SMALL and BIG bound the zero and set QINCR
+     */
   *x = small;
   /*
-    GET-FUNCTION-VALUE
-  */
+     GET-FUNCTION-VALUE
+     */
   i99999 = 1;
   goto S300;
- S10:
+S10:
   fsmall = *fx;
   *x = big;
   /*
-    GET-FUNCTION-VALUE
-  */
+     GET-FUNCTION-VALUE
+     */
   i99999 = 2;
   goto S300;
- S20:
+S20:
   fbig = *fx;
   qincr = fbig > fsmall;
-  if(!qincr) goto S50;
-  if(fsmall <= 0.0e0) goto S30;
+  if (!qincr) goto S50;
+  if (fsmall <= 0.0e0) goto S30;
   *status = -1;
   *qleft = *qhi = 1;
   return;
- S30:
-  if(fbig >= 0.0e0) goto S40;
+S30:
+  if (fbig >= 0.0e0) goto S40;
   *status = -1;
   *qleft = *qhi = 0;
   return;
- S40:
+S40:
   goto S80;
- S50:
-  if(fsmall >= 0.0e0) goto S60;
+S50:
+  if (fsmall >= 0.0e0) goto S60;
   *status = -1;
   *qleft = 1;
   *qhi = 0;
   return;
- S60:
-  if(fbig <= 0.0e0) goto S70;
+S60:
+  if (fbig <= 0.0e0) goto S70;
   *status = -1;
   *qleft = 0;
   *qhi = 1;
   return;
- S80:
- S70:
+S80:
+S70:
   *x = xsave;
   step = fifdmax1(absstp,relstp*fabs(*x));
   /*
-    YY = F(X) - Y
-    GET-FUNCTION-VALUE
-  */
+     YY = F(X) - Y
+     GET-FUNCTION-VALUE
+     */
   i99999 = 3;
   goto S300;
- S90:
+S90:
   yy = *fx;
-  if(!(yy == 0.0e0)) goto S100;
+  if (!(yy == 0.0e0)) goto S100;
   *status = 0;
   return;
- S100:
+S100:
   qup = (qincr && yy < 0.0e0) || (!qincr && yy > 0.0e0);
   /*
-    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    HANDLE CASE IN WHICH WE MUST STEP HIGHER
-    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  */
-  if(!qup) goto S170;
+     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     HANDLE CASE IN WHICH WE MUST STEP HIGHER
+     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     */
+  if (!qup) goto S170;
   xlb = xsave;
   xub = fifdmin1(xlb+step,big);
   goto S120;
- S110:
-  if(qcond) goto S150;
- S120:
+S110:
+  if (qcond) goto S150;
+S120:
   /*
-    YY = F(XUB) - Y
-  */
+     YY = F(XUB) - Y
+     */
   *x = xub;
   /*
-    GET-FUNCTION-VALUE
-  */
+     GET-FUNCTION-VALUE
+     */
   i99999 = 4;
   goto S300;
- S130:
+S130:
   yy = *fx;
   qbdd =( qincr && yy >= 0.0e0) || ( !qincr && yy <= 0.0e0);
   qlim = xub >= big;
   qcond = qbdd || qlim;
-  if(qcond) goto S140;
+  if (qcond) goto S140;
   step = stpmul*step;
   xlb = xub;
   xub = fifdmin1(xlb+step,big);
- S140:
+S140:
   goto S110;
- S150:
-  if(!(qlim && !qbdd)) goto S160;
+S150:
+  if (!(qlim && !qbdd)) goto S160;
   *status = -1;
   *qleft = 0;
   *qhi = !qincr;
   *x = big;
   return;
- S160:
+S160:
   goto S240;
- S170:
+S170:
   /*
-    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    HANDLE CASE IN WHICH WE MUST STEP LOWER
-    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  */
+     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     HANDLE CASE IN WHICH WE MUST STEP LOWER
+     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     */
   xub = xsave;
   xlb = fifdmax1(xub-step,small);
   goto S190;
- S180:
-  if(qcond) goto S220;
- S190:
+S180:
+  if (qcond) goto S220;
+S190:
   /*
-    YY = F(XLB) - Y
-  */
+     YY = F(XLB) - Y
+     */
   *x = xlb;
   /*
-    GET-FUNCTION-VALUE
-  */
+     GET-FUNCTION-VALUE
+     */
   i99999 = 5;
   goto S300;
- S200:
+S200:
   yy = *fx;
   qbdd = (qincr && yy <= 0.0e0) || (!qincr && yy >= 0.0e0);
   qlim = xlb <= small;
   qcond = qbdd || qlim;
-  if(qcond) goto S210;
+  if (qcond) goto S210;
   step = stpmul*step;
   xub = xlb;
   xlb = fifdmax1(xub-step,small);
- S210:
+S210:
   goto S180;
- S220:
-  if(!(qlim && !qbdd)) goto S230;
+S220:
+  if (!(qlim && !qbdd)) goto S230;
   *status = -1;
   *qleft = 1;
   *qhi = qincr;
   *x = small;
   return;
- S240:
- S230:
+S240:
+S230:
   dstzr(&xlb,&xub,&abstol,&reltol);
   /*
-    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    IF WE REACH HERE, XLB AND XUB BOUND THE ZERO OF F.
-    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  */
+     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     IF WE REACH HERE, XLB AND XUB BOUND THE ZERO OF F.
+     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     */
   *status = 0;
   goto S260;
- S250:
-  if(!(*status == 1)) goto S290;
- S260:
+S250:
+  if (!(*status == 1)) goto S290;
+S260:
   dzror(status,x,fx,&xlo,&xhi,&qdum1,&qdum2);
-  if(!(*status == 1)) goto S280;
+  if (!(*status == 1)) goto S280;
   /*
-    GET-FUNCTION-VALUE
-  */
+     GET-FUNCTION-VALUE
+     */
   i99999 = 6;
   goto S300;
- S280:
- S270:
+S280:
+S270:
   goto S250;
- S290:
+S290:
   *x = xlo;
   *status = 0;
   return;
- DSTINV:
+DSTINV:
   small = *zsmall;
   big = *zbig;
   absstp = *zabsst;
@@ -6748,149 +6694,147 @@ static void E0000(int IENTRY,int *status,double *x,double *fx,
   abstol = *zabsto;
   reltol = *zrelto;
   return;
- S300:
+S300:
   /*
-    TO GET-FUNCTION-VALUE
-  */
+     TO GET-FUNCTION-VALUE
+     */
   *status = 1;
   return;
- S310:
+S310:
   switch((int)i99999){case 1: goto S10;case 2: goto S20;case 3: goto S90;case 
-                                                                           4: goto S130;case 5: goto S200;case 6: goto S270;default: break;}
+    4: goto S130;case 5: goto S200;case 6: goto S270;default: break;}
 #undef qxmon
 }
+
+/*
+ * 
+ * void dinvr(int *status,double *x,double *fx,
+ * unsigned long *qleft,unsigned long *qhi)
+ * 
+ * Double precision
+ * bounds the zero of the function and invokes zror
+ * Reverse Communication
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Bounds the    function  and  invokes  ZROR   to perform the   zero
+ * finding.  STINVR  must  have   been  called  before this   routine
+ * in order to set its parameters.
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * STATUS <--> At the beginning of a zero finding problem, STATUS
+ * should be set to 0 and INVR invoked.  (The value
+ * of parameters other than X will be ignored on this cal
+ * 
+ * When INVR needs the function evaluated, it will set
+ * STATUS to 1 and return.  The value of the function
+ * should be set in FX and INVR again called without
+ * changing any of its other parameters.
+ * 
+ * When INVR has finished without error, it will return
+ * with STATUS 0.  In that case X is approximately a root
+ * of F(X).
+ * 
+ * If INVR cannot bound the function, it returns status
+ * -1 and sets QLEFT and QHI.
+ * INTEGER STATUS
+ * 
+ * X <-- The value of X at which F(X) is to be evaluated.
+ * DOUBLE PRECISION X
+ * 
+ * FX --> The value of F(X) calculated when INVR returns with
+ * STATUS = 1.
+ * DOUBLE PRECISION FX
+ * 
+ * QLEFT <-- Defined only if QMFINV returns .FALSE.  In that
+ * case it is .TRUE. If the stepping search terminated
+ * unsucessfully at SMALL.  If it is .FALSE. the search
+ * terminated unsucessfully at BIG.
+ * QLEFT is LOGICAL
+ * 
+ * QHI <-- Defined only if QMFINV returns .FALSE.  In that
+ * case it is .TRUE. if F(X) .GT. Y at the termination
+ * of the search and .FALSE. if F(X) .LT. Y at the
+ * termination of the search.
+ * QHI is LOGICAL
+ * 
+ */
 static void dinvr(int *status,double *x,double *fx,
                   unsigned long *qleft,unsigned long *qhi)
-/*
-**********************************************************************
- 
-void dinvr(int *status,double *x,double *fx,
-unsigned long *qleft,unsigned long *qhi)
-
-Double precision
-bounds the zero of the function and invokes zror
-Reverse Communication
- 
- 
-Function
- 
- 
-Bounds the    function  and  invokes  ZROR   to perform the   zero
-finding.  STINVR  must  have   been  called  before this   routine
-in order to set its parameters.
- 
- 
-Arguments
- 
- 
-STATUS <--> At the beginning of a zero finding problem, STATUS
-should be set to 0 and INVR invoked.  (The value
-of parameters other than X will be ignored on this cal
- 
-When INVR needs the function evaluated, it will set
-STATUS to 1 and return.  The value of the function
-should be set in FX and INVR again called without
-changing any of its other parameters.
- 
-When INVR has finished without error, it will return
-with STATUS 0.  In that case X is approximately a root
-of F(X).
- 
-If INVR cannot bound the function, it returns status
--1 and sets QLEFT and QHI.
-INTEGER STATUS
- 
-X <-- The value of X at which F(X) is to be evaluated.
-DOUBLE PRECISION X
- 
-FX --> The value of F(X) calculated when INVR returns with
-STATUS = 1.
-DOUBLE PRECISION FX
- 
-QLEFT <-- Defined only if QMFINV returns .FALSE.  In that
-case it is .TRUE. If the stepping search terminated
-unsucessfully at SMALL.  If it is .FALSE. the search
-terminated unsucessfully at BIG.
-QLEFT is LOGICAL
- 
-QHI <-- Defined only if QMFINV returns .FALSE.  In that
-case it is .TRUE. if F(X) .GT. Y at the termination
-of the search and .FALSE. if F(X) .LT. Y at the
-termination of the search.
-QHI is LOGICAL
- 
-**********************************************************************
-*/
 {
   E0000(0,status,x,fx,qleft,qhi,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 }
+
+/*
+ * void dstinv(double *zsmall,double *zbig,double *zabsst,
+ * double *zrelst,double *zstpmu,double *zabsto,
+ * double *zrelto)
+ * 
+ * Double Precision - SeT INverse finder - Reverse Communication
+ * Function
+ * Concise Description - Given a monotone function F finds X
+ * such that F(X) = Y.  Uses Reverse communication -- see invr.
+ * This routine sets quantities needed by INVR.
+ * More Precise Description of INVR -
+ * F must be a monotone function, the results of QMFINV are
+ * otherwise undefined.  QINCR must be .TRUE. if F is non-
+ * decreasing and .FALSE. if F is non-increasing.
+ * QMFINV will return .TRUE. if and only if F(SMALL) and
+ * F(BIG) bracket Y, i. e.,
+ * QINCR is .TRUE. and F(SMALL).LE.Y.LE.F(BIG) or
+ * QINCR is .FALSE. and F(BIG).LE.Y.LE.F(SMALL)
+ * if QMFINV returns .TRUE., then the X returned satisfies
+ * the following condition.  let
+ * TOL(X) = MAX(ABSTOL,RELTOL*ABS(X))
+ * then if QINCR is .TRUE.,
+ * F(X-TOL(X)) .LE. Y .LE. F(X+TOL(X))
+ * and if QINCR is .FALSE.
+ * F(X-TOL(X)) .GE. Y .GE. F(X+TOL(X))
+ * Arguments
+ * SMALL --> The left endpoint of the interval to be
+ * searched for a solution.
+ * SMALL is DOUBLE PRECISION
+ * BIG --> The right endpoint of the interval to be
+ * searched for a solution.
+ * BIG is DOUBLE PRECISION
+ * ABSSTP, RELSTP --> The initial step size in the search
+ * is MAX(ABSSTP,RELSTP*ABS(X)). See algorithm.
+ * ABSSTP is DOUBLE PRECISION
+ * RELSTP is DOUBLE PRECISION
+ * STPMUL --> When a step doesn't bound the zero, the step
+ * size is multiplied by STPMUL and another step
+ * taken.  A popular value is 2.0
+ * DOUBLE PRECISION STPMUL
+ * ABSTOL, RELTOL --> Two numbers that determine the accuracy
+ * of the solution.  See function for a precise definition.
+ * ABSTOL is DOUBLE PRECISION
+ * RELTOL is DOUBLE PRECISION
+ * Method
+ * Compares F(X) with Y for the input value of X then uses QINCR
+ * to determine whether to step left or right to bound the
+ * desired x.  the initial step size is
+ * MAX(ABSSTP,RELSTP*ABS(S)) for the input value of X.
+ * Iteratively steps right or left until it bounds X.
+ * At each step which doesn't bound X, the step size is doubled.
+ * The routine is careful never to step beyond SMALL or BIG.  If
+ * it hasn't bounded X at SMALL or BIG, QMFINV returns .FALSE.
+ * after setting QLEFT and QHI.
+ * If X is successfully bounded then Algorithm R of the paper
+ * 'Two Efficient Algorithms with Guaranteed Convergence for
+ * Finding a Zero of a Function' by J. C. P. Bus and
+ * T. J. Dekker in ACM Transactions on Mathematical
+ * Software, Volume 1, No. 4 page 330 (DEC. '75) is employed
+ * to find the zero of the function F(X)-Y. This is routine
+ * QRZERO.
+ */
 static void dstinv(double *zsmall,double *zbig,double *zabsst,
                    double *zrelst,double *zstpmu,double *zabsto,
                    double *zrelto)
-/*
-**********************************************************************
-void dstinv(double *zsmall,double *zbig,double *zabsst,
-double *zrelst,double *zstpmu,double *zabsto,
-double *zrelto)
-
-Double Precision - SeT INverse finder - Reverse Communication
-Function
-Concise Description - Given a monotone function F finds X
-such that F(X) = Y.  Uses Reverse communication -- see invr.
-This routine sets quantities needed by INVR.
-More Precise Description of INVR -
-F must be a monotone function, the results of QMFINV are
-otherwise undefined.  QINCR must be .TRUE. if F is non-
-decreasing and .FALSE. if F is non-increasing.
-QMFINV will return .TRUE. if and only if F(SMALL) and
-F(BIG) bracket Y, i. e.,
-QINCR is .TRUE. and F(SMALL).LE.Y.LE.F(BIG) or
-QINCR is .FALSE. and F(BIG).LE.Y.LE.F(SMALL)
-if QMFINV returns .TRUE., then the X returned satisfies
-the following condition.  let
-TOL(X) = MAX(ABSTOL,RELTOL*ABS(X))
-then if QINCR is .TRUE.,
-F(X-TOL(X)) .LE. Y .LE. F(X+TOL(X))
-and if QINCR is .FALSE.
-F(X-TOL(X)) .GE. Y .GE. F(X+TOL(X))
-Arguments
-SMALL --> The left endpoint of the interval to be
-searched for a solution.
-SMALL is DOUBLE PRECISION
-BIG --> The right endpoint of the interval to be
-searched for a solution.
-BIG is DOUBLE PRECISION
-ABSSTP, RELSTP --> The initial step size in the search
-is MAX(ABSSTP,RELSTP*ABS(X)). See algorithm.
-ABSSTP is DOUBLE PRECISION
-RELSTP is DOUBLE PRECISION
-STPMUL --> When a step doesn't bound the zero, the step
-size is multiplied by STPMUL and another step
-taken.  A popular value is 2.0
-DOUBLE PRECISION STPMUL
-ABSTOL, RELTOL --> Two numbers that determine the accuracy
-of the solution.  See function for a precise definition.
-ABSTOL is DOUBLE PRECISION
-RELTOL is DOUBLE PRECISION
-Method
-Compares F(X) with Y for the input value of X then uses QINCR
-to determine whether to step left or right to bound the
-desired x.  the initial step size is
-MAX(ABSSTP,RELSTP*ABS(S)) for the input value of X.
-Iteratively steps right or left until it bounds X.
-At each step which doesn't bound X, the step size is doubled.
-The routine is careful never to step beyond SMALL or BIG.  If
-it hasn't bounded X at SMALL or BIG, QMFINV returns .FALSE.
-after setting QLEFT and QHI.
-If X is successfully bounded then Algorithm R of the paper
-'Two Efficient Algorithms with Guaranteed Convergence for
-Finding a Zero of a Function' by J. C. P. Bus and
-T. J. Dekker in ACM Transactions on Mathematical
-Software, Volume 1, No. 4 page 330 (DEC. '75) is employed
-to find the zero of the function F(X)-Y. This is routine
-QRZERO.
-**********************************************************************
-*/
 {
   E0000(1,NULL,NULL,NULL,NULL,NULL,zabsst,zabsto,zbig,zrelst,zrelto,zsmall,
         zstpmu);
@@ -6913,10 +6857,10 @@ static double dt1(double *p,double *q,double *df)
   double denpow,sum,term,x,xx;
   int i;
   static double coef[4][5] = {
-    {1.0e0,1.0e0,0.0e0,0.0e0,0.0e0},
-    {3.0e0,16.0e0,5.0e0,0.0e0,0.0e0},
-    {-15.0e0,17.0e0, 19.0e0,3.0e0,0.0e0},
-    {-945.0e0,-1920.0e0,1482.0e0,776.0e0,79.0e0}
+      {1.0e0,1.0e0,0.0e0,0.0e0,0.0e0},
+      {3.0e0,16.0e0,5.0e0,0.0e0,0.0e0},
+      {-15.0e0,17.0e0, 19.0e0,3.0e0,0.0e0},
+      {-945.0e0,-1920.0e0,1482.0e0,776.0e0,79.0e0}
   };
   static double denom[4] = {
     4.0e0,96.0e0,384.0e0,92160.0e0
@@ -6935,7 +6879,7 @@ static double dt1(double *p,double *q,double *df)
       denpow *= *df;
       sum += (term / (denpow * denom[i]) );
     }
-  if(*p >= 0.5) return sum;
+  if (*p >= 0.5) return sum;
   return -sum;
 }
 
@@ -6950,58 +6894,58 @@ static void E0001(int IENTRY,int *status,double *x,double *fx,
   static int ext,i99999;
   static unsigned long first,qrzero;
   switch(IENTRY){case 0: goto DZROR; case 1: goto DSTZR;}
- DZROR:
-  if(*status > 0) goto S280;
+DZROR:
+  if (*status > 0) goto S280;
   *xlo = xxlo;
   *xhi = xxhi;
   b = *x = *xlo;
   /*
-    GET-FUNCTION-VALUE
-  */
+     GET-FUNCTION-VALUE
+     */
   i99999 = 1;
   goto S270;
- S10:
+S10:
   fb = *fx;
   *xlo = *xhi;
   a = *x = *xlo;
   /*
-    GET-FUNCTION-VALUE
-  */
+     GET-FUNCTION-VALUE
+     */
   i99999 = 2;
   goto S270;
- S20:
+S20:
   /*
-    Check that F(ZXLO) < 0 < F(ZXHI)  or
-    F(ZXLO) > 0 > F(ZXHI)
-  */
-  if(!(fb < 0.0e0)) goto S40;
-  if(!(*fx < 0.0e0)) goto S30;
+     Check that F(ZXLO) < 0 < F(ZXHI)  or
+     F(ZXLO) > 0 > F(ZXHI)
+     */
+  if (!(fb < 0.0e0)) goto S40;
+  if (!(*fx < 0.0e0)) goto S30;
   *status = -1;
   *qleft = *fx < fb;
   *qhi = 0;
   return;
- S40:
- S30:
-  if(!(fb > 0.0e0)) goto S60;
-  if(!(*fx > 0.0e0)) goto S50;
+S40:
+S30:
+  if (!(fb > 0.0e0)) goto S60;
+  if (!(*fx > 0.0e0)) goto S50;
   *status = -1;
   *qleft = *fx > fb;
   *qhi = 1;
   return;
- S60:
- S50:
+S60:
+S50:
   fa = *fx;
   first = 1;
- S70:
+S70:
   c = a;
   fc = fa;
   ext = 0;
- S80:
-  if(!(fabs(fc) < fabs(fb))) goto S100;
-  if(!(c != a)) goto S90;
+S80:
+  if (!(fabs(fc) < fabs(fb))) goto S100;
+  if (!(c != a)) goto S90;
   d = a;
   fd = fa;
- S90:
+S90:
   a = b;
   fa = fb;
   *xlo = c;
@@ -7009,44 +6953,44 @@ static void E0001(int IENTRY,int *status,double *x,double *fx,
   fb = fc;
   c = a;
   fc = fa;
- S100:
+S100:
   tol = ftol(*xlo);
   m = (c+b)*.5e0;
   mb = m-b;
-  if(!(fabs(mb) > tol)) goto S240;
-  if(!(ext > 3)) goto S110;
+  if (!(fabs(mb) > tol)) goto S240;
+  if (!(ext > 3)) goto S110;
   w = mb;
   goto S190;
- S110:
+S110:
   tol = fifdsign(tol,mb);
   p = (b-a)*fb;
-  if(!first) goto S120;
+  if (!first) goto S120;
   q = fa-fb;
   first = 0;
   goto S130;
- S120:
+S120:
   fdb = (fd-fb)/(d-b);
   fda = (fd-fa)/(d-a);
   p = fda*p;
   q = fdb*fa-fda*fb;
- S130:
-  if(!(p < 0.0e0)) goto S140;
+S130:
+  if (!(p < 0.0e0)) goto S140;
   p = -p;
   q = -q;
- S140:
-  if(ext == 3) p *= 2.0e0;
-  if(!(p*1.0e0 == 0.0e0 || p <= q*tol)) goto S150;
+S140:
+  if (ext == 3) p *= 2.0e0;
+  if (!(p*1.0e0 == 0.0e0 || p <= q*tol)) goto S150;
   w = tol;
   goto S180;
- S150:
-  if(!(p < mb*q)) goto S160;
+S150:
+  if (!(p < mb*q)) goto S160;
   w = p/q;
   goto S170;
- S160:
+S160:
   w = mb;
- S190:
- S180:
- S170:
+S190:
+S180:
+S170:
   d = a;
   fd = fa;
   a = b;
@@ -7055,237 +6999,181 @@ static void E0001(int IENTRY,int *status,double *x,double *fx,
   *xlo = b;
   *x = *xlo;
   /*
-    GET-FUNCTION-VALUE
-  */
+     GET-FUNCTION-VALUE
+     */
   i99999 = 3;
   goto S270;
- S200:
+S200:
   fb = *fx;
-  if(!(fc*fb >= 0.0e0)) goto S210;
+  if (!(fc*fb >= 0.0e0)) goto S210;
   goto S70;
- S210:
-  if(!(w == mb)) goto S220;
+S210:
+  if (!(w == mb)) goto S220;
   ext = 0;
   goto S230;
- S220:
+S220:
   ext += 1;
- S230:
+S230:
   goto S80;
- S240:
+S240:
   *xhi = c;
   qrzero = ( fc >= 0.0e0 && fb <= 0.0e0) || ( fc < 0.0e0 && fb >= 0.0e0);
-  if(!qrzero) goto S250;
+  if (!qrzero) goto S250;
   *status = 0;
   goto S260;
- S250:
+S250:
   *status = -1;
- S260:
+S260:
   return;
- DSTZR:
+DSTZR:
   xxlo = *zxlo;
   xxhi = *zxhi;
   abstol = *zabstl;
   reltol = *zreltl;
   return;
- S270:
+S270:
   /*
-    TO GET-FUNCTION-VALUE
-  */
+     TO GET-FUNCTION-VALUE
+     */
   *status = 1;
   return;
- S280:
+S280:
   switch((int)i99999){case 1: goto S10;case 2: goto S20;case 3: goto S200;
   default: break;}
 #undef ftol
 }
+
+/*
+ * 
+ * 
+ * void dzror(int *status,double *x,double *fx,double *xlo,
+ * double *xhi,unsigned long *qleft,unsigned long *qhi)
+ * 
+ * Double precision ZeRo of a function -- Reverse Communication
+ * 
+ * 
+ * Function
+ * 
+ * 
+ * Performs the zero finding.  STZROR must have been called before
+ * this routine in order to set its parameters.
+ * 
+ * 
+ * Arguments
+ * 
+ * 
+ * STATUS <--> At the beginning of a zero finding problem, STATUS
+ * should be set to 0 and ZROR invoked.  (The value
+ * of other parameters will be ignored on this call.)
+ * 
+ * When ZROR needs the function evaluated, it will set
+ * STATUS to 1 and return.  The value of the function
+ * should be set in FX and ZROR again called without
+ * changing any of its other parameters.
+ * 
+ * When ZROR has finished without error, it will return
+ * with STATUS 0.  In that case (XLO,XHI) bound the answe
+ * 
+ * If ZROR finds an error (which implies that F(XLO)-Y an
+ * F(XHI)-Y have the same sign, it returns STATUS -1.  In
+ * this case, XLO and XHI are undefined.
+ * INTEGER STATUS
+ * 
+ * X <-- The value of X at which F(X) is to be evaluated.
+ * DOUBLE PRECISION X
+ * 
+ * FX --> The value of F(X) calculated when ZROR returns with
+ * STATUS = 1.
+ * DOUBLE PRECISION FX
+ * 
+ * XLO <-- When ZROR returns with STATUS = 0, XLO bounds the
+ * inverval in X containing the solution below.
+ * DOUBLE PRECISION XLO
+ * 
+ * XHI <-- When ZROR returns with STATUS = 0, XHI bounds the
+ * inverval in X containing the solution above.
+ * DOUBLE PRECISION XHI
+ * 
+ * QLEFT <-- .TRUE. if the stepping search terminated unsucessfully
+ * at XLO.  If it is .FALSE. the search terminated
+ * unsucessfully at XHI.
+ * QLEFT is LOGICAL
+ * 
+ * QHI <-- .TRUE. if F(X) .GT. Y at the termination of the
+ * search and .FALSE. if F(X) .LT. Y at the
+ * termination of the search.
+ * QHI is LOGICAL
+ * 
+ */
 static void dzror(int *status,double *x,double *fx,double *xlo,
                   double *xhi,unsigned long *qleft,unsigned long *qhi)
-/*
-**********************************************************************
- 
-void dzror(int *status,double *x,double *fx,double *xlo,
-double *xhi,unsigned long *qleft,unsigned long *qhi)
-
-Double precision ZeRo of a function -- Reverse Communication
- 
- 
-Function
- 
- 
-Performs the zero finding.  STZROR must have been called before
-this routine in order to set its parameters.
- 
- 
-Arguments
- 
- 
-STATUS <--> At the beginning of a zero finding problem, STATUS
-should be set to 0 and ZROR invoked.  (The value
-of other parameters will be ignored on this call.)
- 
-When ZROR needs the function evaluated, it will set
-STATUS to 1 and return.  The value of the function
-should be set in FX and ZROR again called without
-changing any of its other parameters.
- 
-When ZROR has finished without error, it will return
-with STATUS 0.  In that case (XLO,XHI) bound the answe
- 
-If ZROR finds an error (which implies that F(XLO)-Y an
-F(XHI)-Y have the same sign, it returns STATUS -1.  In
-this case, XLO and XHI are undefined.
-INTEGER STATUS
- 
-X <-- The value of X at which F(X) is to be evaluated.
-DOUBLE PRECISION X
- 
-FX --> The value of F(X) calculated when ZROR returns with
-STATUS = 1.
-DOUBLE PRECISION FX
- 
-XLO <-- When ZROR returns with STATUS = 0, XLO bounds the
-inverval in X containing the solution below.
-DOUBLE PRECISION XLO
- 
-XHI <-- When ZROR returns with STATUS = 0, XHI bounds the
-inverval in X containing the solution above.
-DOUBLE PRECISION XHI
- 
-QLEFT <-- .TRUE. if the stepping search terminated unsucessfully
-at XLO.  If it is .FALSE. the search terminated
-unsucessfully at XHI.
-QLEFT is LOGICAL
- 
-QHI <-- .TRUE. if F(X) .GT. Y at the termination of the
-search and .FALSE. if F(X) .LT. Y at the
-termination of the search.
-QHI is LOGICAL
- 
-**********************************************************************
-*/
 {
   E0001(0,status,x,fx,xlo,xhi,qleft,qhi,NULL,NULL,NULL,NULL);
 }
-static void dstzr(double *zxlo,double *zxhi,double *zabstl,double *zreltl)
+
 /*
-**********************************************************************
-void dstzr(double *zxlo,double *zxhi,double *zabstl,double *zreltl)
-Double precision SeT ZeRo finder - Reverse communication version
-Function
-Sets quantities needed by ZROR.  The function of ZROR
-and the quantities set is given here.
-Concise Description - Given a function F
-find XLO such that F(XLO) = 0.
-More Precise Description -
-Input condition. F is a double precision function of a single
-double precision argument and XLO and XHI are such that
-F(XLO)*F(XHI)  .LE.  0.0
-If the input condition is met, QRZERO returns .TRUE.
-and output values of XLO and XHI satisfy the following
-F(XLO)*F(XHI)  .LE. 0.
-ABS(F(XLO)  .LE. ABS(F(XHI)
-ABS(XLO-XHI)  .LE. TOL(X)
-where
-TOL(X) = MAX(ABSTOL,RELTOL*ABS(X))
-If this algorithm does not find XLO and XHI satisfying
-these conditions then QRZERO returns .FALSE.  This
-implies that the input condition was not met.
-Arguments
-XLO --> The left endpoint of the interval to be
-searched for a solution.
-XLO is DOUBLE PRECISION
-XHI --> The right endpoint of the interval to be
-for a solution.
-XHI is DOUBLE PRECISION
-ABSTOL, RELTOL --> Two numbers that determine the accuracy
-of the solution.  See function for a
-precise definition.
-ABSTOL is DOUBLE PRECISION
-RELTOL is DOUBLE PRECISION
-Method
-Algorithm R of the paper 'Two Efficient Algorithms with
-Guaranteed Convergence for Finding a Zero of a Function'
-by J. C. P. Bus and T. J. Dekker in ACM Transactions on
-Mathematical Software, Volume 1, no. 4 page 330
-(Dec. '75) is employed to find the zero of F(X)-Y.
-**********************************************************************
-*/
+ * 
+ * void dstzr(double *zxlo,double *zxhi,double *zabstl,double *zreltl)
+ * Double precision SeT ZeRo finder - Reverse communication version
+ * Function
+ * Sets quantities needed by ZROR.  The function of ZROR
+ * and the quantities set is given here.
+ * Concise Description - Given a function F
+ * find XLO such that F(XLO) = 0.
+ * More Precise Description -
+ * Input condition. F is a double precision function of a single
+ * double precision argument and XLO and XHI are such that
+ * F(XLO)*F(XHI)  .LE.  0.0
+ * If the input condition is met, QRZERO returns .TRUE.
+ * and output values of XLO and XHI satisfy the following
+ * F(XLO)*F(XHI)  .LE. 0.
+ * ABS(F(XLO)  .LE. ABS(F(XHI)
+ * ABS(XLO-XHI)  .LE. TOL(X)
+ * where
+ * TOL(X) = MAX(ABSTOL,RELTOL*ABS(X))
+ * If this algorithm does not find XLO and XHI satisfying
+ * these conditions then QRZERO returns .FALSE.  This
+ * implies that the input condition was not met.
+ * Arguments
+ * XLO --> The left endpoint of the interval to be
+ * searched for a solution.
+ * XLO is DOUBLE PRECISION
+ * XHI --> The right endpoint of the interval to be
+ * for a solution.
+ * XHI is DOUBLE PRECISION
+ * ABSTOL, RELTOL --> Two numbers that determine the accuracy
+ * of the solution.  See function for a
+ * precise definition.
+ * ABSTOL is DOUBLE PRECISION
+ * RELTOL is DOUBLE PRECISION
+ * Method
+ * Algorithm R of the paper 'Two Efficient Algorithms with
+ * Guaranteed Convergence for Finding a Zero of a Function'
+ * by J. C. P. Bus and T. J. Dekker in ACM Transactions on
+ * Mathematical Software, Volume 1, no. 4 page 330
+ * (Dec. '75) is employed to find the zero of F(X)-Y.
+ * 
+ */
+static void dstzr(double *zxlo,double *zxhi,double *zabstl,double *zreltl)
 {
   E0001(1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,zabstl,zreltl,zxhi,zxlo);
 }
 
 /*
-  evaluation of the real error function
-*/
+   evaluation of the real error function
+   */
 static double erf1(double *x)
 {
-  double c = .564189583547756;
-  static double a[5] = {
-    .771058495001320e-04,-.133733772997339e-02,.323076579225834e-01,
-    .479137145607681e-01,.128379167095513e+00
-  };
-  static double b[3] = {
-    .301048631703895e-02,.538971687740286e-01,.375795757275549e+00
-  };
-  static double p[8] = {
-    -1.36864857382717e-07,5.64195517478974e-01,7.21175825088309e+00,
-    4.31622272220567e+01,1.52989285046940e+02,3.39320816734344e+02,
-    4.51918953711873e+02,3.00459261020162e+02
-  };
-  static double q[8] = {
-    1.00000000000000e+00,1.27827273196294e+01,7.70001529352295e+01,
-    2.77585444743988e+02,6.38980264465631e+02,9.31354094850610e+02,
-    7.90950925327898e+02,3.00459260956983e+02
-  };
-  static double r[5] = {
-    2.10144126479064e+00,2.62370141675169e+01,2.13688200555087e+01,
-    4.65807828718470e+00,2.82094791773523e-01
-  };
-  static double s[4] = {
-    9.41537750555460e+01,1.87114811799590e+02,9.90191814623914e+01,
-    1.80124575948747e+01
-  };
-  static double erf1_0,ax,bot,t,top,x2;
-
-  ax = fabs(*x);
-  if(ax <= 0.5)
-    {
-      t = *x * *x;
-      top = (((a[0]*t+a[1])*t+a[2])*t+a[3])*t+a[4]+1.;
-      bot = ((b[0]*t+b[1])*t+b[2])*t+1.;
-      return *x * (top/bot);
-    }
-  
-  if(ax <= 4.)
-    {
-      top = ((((((p[0]*ax+p[1])*ax+p[2])*ax+p[3])*ax+p[4])*ax+p[5])*ax+p[6])*ax+p[7];
-      bot = ((((((q[0]*ax+q[1])*ax+q[2])*ax+q[3])*ax+q[4])*ax+q[5])*ax+q[6])*ax+q[7];
-      erf1_0 = 0.5+(0.5-exp(-(*x**x))*top/bot);
-      if(*x < 0.) erf1_0 = -erf1_0;
-      return erf1_0;
-    }
-
-  if(ax >= 5.8) return fifdsign(1.,*x);
-  x2 = *x * *x;
-  t = 1. / x2;
-  top = (((r[0]*t+r[1])*t+r[2])*t+r[3])*t+r[4];
-  bot = (((s[0]*t+s[1])*t+s[2])*t+s[3])*t+1.;
-  erf1_0 = (c-top/(x2*bot))/ax;
-  erf1_0 = 0.5+(0.5-exp(-x2)*erf1_0);
-  if(*x < 0.) erf1_0 = -erf1_0;
-  return erf1_0;
+  return pnl_sf_erf (*x);
 }
 
-
-static double erfc1(int *ind,double *x)
 /*
-  -----------------------------------------------------------------------
-  EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
- 
-  ERFC1(IND,X) = ERFC(X)            IF IND = 0
-  ERFC1(IND,X) = EXP(X*X)*ERFC(X)   OTHERWISE
-  -----------------------------------------------------------------------
-*/
+ * EVALUATION OF THE COMPLEMENTARY ERROR FUNCTION
+ * 
+ * ERFC1(IND,X) = ERFC(X)            IF IND = 0
+ * ERFC1(IND,X) = EXP(X*X)*ERFC(X)   OTHERWISE
+ */
+static double erfc1(int *ind,double *x)
 {
   static double c = .564189583547756e0;
   static double a[5] = {
@@ -7316,72 +7204,68 @@ static double erfc1(int *ind,double *x)
   static int K1 = 1;
   static double erfc1_0,ax,bot,e,t,top,w;
   /*
-    ..
-    .. Executable Statements ..
-  */
-  /*
-    ABS(X) .LE. 0.5
-  */
+     ABS(X) .LE. 0.5
+     */
   ax = fabs(*x);
-  if(ax > 0.5e0) goto S10;
+  if (ax > 0.5e0) goto S10;
   t = *x**x;
   top = (((a[0]*t+a[1])*t+a[2])*t+a[3])*t+a[4]+1.0e0;
   bot = ((b[0]*t+b[1])*t+b[2])*t+1.0e0;
   erfc1_0 = 0.5e0+(0.5e0-*x*(top/bot));
-  if(*ind != 0) erfc1_0 = exp(t)*erfc1_0;
+  if (*ind != 0) erfc1_0 = exp(t)*erfc1_0;
   return erfc1_0;
- S10:
+S10:
   /*
-    0.5 .LT. ABS(X) .LE. 4
-  */
-  if(ax > 4.0e0) goto S20;
+     0.5 .LT. ABS(X) .LE. 4
+     */
+  if (ax > 4.0e0) goto S20;
   top = ((((((p[0]*ax+p[1])*ax+p[2])*ax+p[3])*ax+p[4])*ax+p[5])*ax+p[6])*ax+p[
-                                                                              7];
+    7];
   bot = ((((((q[0]*ax+q[1])*ax+q[2])*ax+q[3])*ax+q[4])*ax+q[5])*ax+q[6])*ax+q[
-                                                                              7];
+    7];
   erfc1_0 = top/bot;
   goto S40;
- S20:
+S20:
   /*
-    ABS(X) .GT. 4
-  */
-  if(*x <= -5.6e0) goto S60;
-  if(*ind != 0) goto S30;
-  if(*x > 100.0e0) goto S70;
-  if(*x**x > -exparg(&K1)) goto S70;
- S30:
+     ABS(X) .GT. 4
+     */
+  if (*x <= -5.6e0) goto S60;
+  if (*ind != 0) goto S30;
+  if (*x > 100.0e0) goto S70;
+  if (*x**x > -exparg(&K1)) goto S70;
+S30:
   t = pow(1.0e0/ *x,2.0);
   top = (((r[0]*t+r[1])*t+r[2])*t+r[3])*t+r[4];
   bot = (((s[0]*t+s[1])*t+s[2])*t+s[3])*t+1.0e0;
   erfc1_0 = (c-t*top/bot)/ax;
- S40:
+S40:
   /*
-    FINAL ASSEMBLY
-  */
-  if(*ind == 0) goto S50;
-  if(*x < 0.0e0) erfc1_0 = 2.0e0*exp(*x**x)-erfc1_0;
+     FINAL ASSEMBLY
+     */
+  if (*ind == 0) goto S50;
+  if (*x < 0.0e0) erfc1_0 = 2.0e0*exp(*x**x)-erfc1_0;
   return erfc1_0;
- S50:
+S50:
   w = *x**x;
   t = w;
   e = w-t;
   erfc1_0 = (0.5e0+(0.5e0-e))*exp(-t)*erfc1_0;
-  if(*x < 0.0e0) erfc1_0 = 2.0e0-erfc1_0;
+  if (*x < 0.0e0) erfc1_0 = 2.0e0-erfc1_0;
   return erfc1_0;
- S60:
+S60:
   /*
-    LIMIT VALUE FOR LARGE NEGATIVE X
-  */
+     LIMIT VALUE FOR LARGE NEGATIVE X
+     */
   erfc1_0 = 2.0e0;
-  if(*ind != 0) erfc1_0 = 2.0e0*exp(*x**x);
+  if (*ind != 0) erfc1_0 = 2.0e0*exp(*x**x);
   return erfc1_0;
- S70:
+S70:
   /*
-    LIMIT VALUE FOR LARGE POSITIVE X
-    WHEN IND = 0
-  */
+     LIMIT VALUE FOR LARGE POSITIVE X
+     WHEN IND = 0
+     */
   return 0.0e0;
-  
+
 }
 
 /*
@@ -7393,18 +7277,17 @@ static double esum(int *mu,double *x)
 
   if (*x > 0.)
     {
-      if(*mu > 0) return exp ((double) *mu) * exp (*x);
+      if (*mu > 0) return exp ((double) *mu) * exp (*x);
       w = (double)*mu+*x;
-      if(w < 0.) return exp ((double) *mu) * exp (*x);
+      if (w < 0.) return exp ((double) *mu) * exp (*x);
       return exp(w);
     }
-  
-  if(*mu < 0) return exp ((double) *mu) * exp (*x);
+
+  if (*mu < 0) return exp ((double) *mu) * exp (*x);
   w = (double)*mu + *x;
-  if(w > 0.) return exp ((double) *mu) * exp (*x); 
+  if (w > 0.) return exp ((double) *mu) * exp (*x); 
   return exp (w);
 }
-
 
 
 /*
@@ -7420,7 +7303,7 @@ static double exparg(int *l)
 {
   double lnb;
   int b,m;
-  
+
   b = pnl_ipmpar(4);
 
   if (b == 2) lnb = .69314718055995;
@@ -7437,34 +7320,29 @@ static double exparg(int *l)
   return 0.99999 * ((double)m * lnb);
 }
 
-static double fpser(double *a,double *b,double *x,double *eps)
 /*
-  -----------------------------------------------------------------------
- 
-  EVALUATION OF I (A,B)
-  X
- 
-  FOR B .LT. MIN(EPS,EPS*A) AND X .LE. 0.5.
- 
-  -----------------------------------------------------------------------
- 
-  SET  FPSER = X**A
-*/
+ * EVALUATION OF I_X (A,B)
+ * 
+ * FOR B .LT. MIN(EPS,EPS*A) AND X .LE. 0.5.
+ * 
+ * SET  FPSER = X**A
+ */
+static double fpser(double *a,double *b,double *x,double *eps)
 {
   static int K1 = 1;
   static double fpser_0,an,c,s,t,tol;
 
   fpser_0 = 1.0e0;
-  if(*a > 1.e-3**eps) 
+  if (*a > 1.e-3**eps) 
     {
       fpser_0 = 0.0e0;
       t = *a*log(*x);
-      if(t < exparg(&K1)) return fpser_0;
+      if (t < exparg(&K1)) return fpser_0;
       fpser_0 = exp(t);
     }
   /*
-    NOTE THAT 1/B(A,B) = B
-  */
+     NOTE THAT 1/B(A,B) = B
+     */
   fpser_0 = *b/ *a*fpser_0;
   tol = *eps/ *a;
   an = *a+1.0e0;
@@ -7482,12 +7360,11 @@ static double fpser(double *a,double *b,double *x,double *eps)
   fpser_0 *= (1.0e0+*a*s);
   return fpser_0;
 }
-static double gam1(double *a)
+
 /*
-  ------------------------------------------------------------------
-  COMPUTATION OF 1/GAMMA(A+1) - 1  FOR -0.5 .LE. A .LE. 1.5
-  ------------------------------------------------------------------
-*/
+ * COMPUTATION OF 1/GAMMA(A+1) - 1  FOR -0.5 .LE. A .LE. 1.5
+ */
+static double gam1(double *a)
 {
   static double s1 = .273076135303957e+00;
   static double s2 = .559398236957378e-01;
@@ -7512,86 +7389,85 @@ static double gam1(double *a)
      */
   t = *a;
   d = *a-0.5e0;
-  if(d > 0.0e0) t = d-0.5e0;
+  if (d > 0.0e0) t = d-0.5e0;
   T1 = t;
-  if(T1 < 0) 
+  if (T1 < 0) 
     {
       top = (((((((r[8]*t+r[7])*t+r[6])*t+r[5])*t+r[4])*t+r[3])*t+r[2])*t+r[1])*t+
         r[0];
       bot = (s2*t+s1)*t+1.0e0;
       w = top/bot;
-      if(d > 0.0e0) 
+      if (d > 0.0e0) 
         return t*w/ *a;
       else
         return *a*(w+0.5e0+0.5e0);
     }
-  else if(T1 == 0) return 0.;
+  else if (T1 == 0) return 0.;
   else 
     {
       top = (((((p[6]*t+p[5])*t+p[4])*t+p[3])*t+p[2])*t+p[1])*t+p[0];
       bot = (((q[4]*t+q[3])*t+q[2])*t+q[1])*t+1.0e0;
       w = top/bot;
-      if(d > 0.0e0) 
+      if (d > 0.0e0) 
         return t/ *a*(w-0.5e0-0.5e0);
       else
         return *a*w;
     }
 }
+
+/*
+ * INVERSE INCOMPLETE GAMMA RATIO FUNCTION
+ * 
+ * GIVEN POSITIVE A, AND NONEGATIVE P AND Q WHERE P + Q = 1.
+ * THEN X IS COMPUTED WHERE P(A,X) = P AND Q(A,X) = Q. SCHRODER
+ * ITERATION IS EMPLOYED. THE ROUTINE ATTEMPTS TO COMPUTE X
+ * TO 10 SIGNIFICANT DIGITS IF THIS IS POSSIBLE FOR THE
+ * PARTICULAR COMPUTER ARITHMETIC BEING USED.
+ * 
+ * ------------
+ * 
+ * X IS A VARIABLE. IF P = 0 THEN X IS ASSIGNED THE VALUE 0,
+ * AND IF Q = 0 THEN X IS SET TO THE LARGEST FLOATING POINT
+ * NUMBER AVAILABLE. OTHERWISE, GAMINV ATTEMPTS TO OBTAIN
+ * A SOLUTION FOR P(A,X) = P AND Q(A,X) = Q. IF THE ROUTINE
+ * IS SUCCESSFUL THEN THE SOLUTION IS STORED IN X.
+ * 
+ * X0 IS AN OPTIONAL INITIAL APPROXIMATION FOR X. IF THE USER
+ * DOES NOT WISH TO SUPPLY AN INITIAL APPROXIMATION, THEN SET
+ * X0 .LE. 0.
+ * 
+ * IERR IS A VARIABLE THAT REPORTS THE STATUS OF THE RESULTS.
+ * WHEN THE ROUTINE TERMINATES, IERR HAS ONE OF THE FOLLOWING
+ * VALUES ...
+ * 
+ * IERR =  0    THE SOLUTION WAS OBTAINED. ITERATION WAS
+ * NOT USED.
+ * IERR.GT.0    THE SOLUTION WAS OBTAINED. IERR ITERATIONS
+ * WERE PERFORMED.
+ * IERR = -2    (INPUT ERROR) A .LE. 0
+ * IERR = -3    NO SOLUTION WAS OBTAINED. THE RATIO Q/A
+ * IS TOO LARGE.
+ * IERR = -4    (INPUT ERROR) P + Q .NE. 1
+ * IERR = -6    20 ITERATIONS WERE PERFORMED. THE MOST
+ * RECENT VALUE OBTAINED FOR X IS GIVEN.
+ * THIS CANNOT OCCUR IF X0 .LE. 0.
+ * IERR = -7    ITERATION FAILED. NO VALUE IS GIVEN FOR X.
+ * THIS MAY OCCUR WHEN X IS APPROXIMATELY 0.
+ * IERR = -8    A VALUE FOR X HAS BEEN OBTAINED, BUT THE
+ * ROUTINE IS NOT CERTAIN OF ITS ACCURACY.
+ * ITERATION CANNOT BE PERFORMED IN THIS
+ * CASE. IF X0 .LE. 0, THIS CAN OCCUR ONLY
+ * WHEN P OR Q IS APPROXIMATELY 0. IF X0 IS
+ * POSITIVE THEN THIS CAN OCCUR WHEN A IS
+ * EXCEEDINGLY CLOSE TO X AND A IS EXTREMELY
+ * LARGE (SAY A .GE. 1.E20).
+ * ----------------------------------------------------------------------
+ * WRITTEN BY ALFRED H. MORRIS, JR.
+ * NAVAL SURFACE WEAPONS CENTER
+ * DAHLGREN, VIRGINIA
+ */
 static void gaminv(double *a,double *x,double *x0,double *p,double *q,
                    int *ierr)
-/*
-  ----------------------------------------------------------------------
-  INVERSE INCOMPLETE GAMMA RATIO FUNCTION
- 
-  GIVEN POSITIVE A, AND NONEGATIVE P AND Q WHERE P + Q = 1.
-  THEN X IS COMPUTED WHERE P(A,X) = P AND Q(A,X) = Q. SCHRODER
-  ITERATION IS EMPLOYED. THE ROUTINE ATTEMPTS TO COMPUTE X
-  TO 10 SIGNIFICANT DIGITS IF THIS IS POSSIBLE FOR THE
-  PARTICULAR COMPUTER ARITHMETIC BEING USED.
- 
-  ------------
- 
-  X IS A VARIABLE. IF P = 0 THEN X IS ASSIGNED THE VALUE 0,
-  AND IF Q = 0 THEN X IS SET TO THE LARGEST FLOATING POINT
-  NUMBER AVAILABLE. OTHERWISE, GAMINV ATTEMPTS TO OBTAIN
-  A SOLUTION FOR P(A,X) = P AND Q(A,X) = Q. IF THE ROUTINE
-  IS SUCCESSFUL THEN THE SOLUTION IS STORED IN X.
- 
-  X0 IS AN OPTIONAL INITIAL APPROXIMATION FOR X. IF THE USER
-  DOES NOT WISH TO SUPPLY AN INITIAL APPROXIMATION, THEN SET
-  X0 .LE. 0.
- 
-  IERR IS A VARIABLE THAT REPORTS THE STATUS OF THE RESULTS.
-  WHEN THE ROUTINE TERMINATES, IERR HAS ONE OF THE FOLLOWING
-  VALUES ...
- 
-  IERR =  0    THE SOLUTION WAS OBTAINED. ITERATION WAS
-  NOT USED.
-  IERR.GT.0    THE SOLUTION WAS OBTAINED. IERR ITERATIONS
-  WERE PERFORMED.
-  IERR = -2    (INPUT ERROR) A .LE. 0
-  IERR = -3    NO SOLUTION WAS OBTAINED. THE RATIO Q/A
-  IS TOO LARGE.
-  IERR = -4    (INPUT ERROR) P + Q .NE. 1
-  IERR = -6    20 ITERATIONS WERE PERFORMED. THE MOST
-  RECENT VALUE OBTAINED FOR X IS GIVEN.
-  THIS CANNOT OCCUR IF X0 .LE. 0.
-  IERR = -7    ITERATION FAILED. NO VALUE IS GIVEN FOR X.
-  THIS MAY OCCUR WHEN X IS APPROXIMATELY 0.
-  IERR = -8    A VALUE FOR X HAS BEEN OBTAINED, BUT THE
-  ROUTINE IS NOT CERTAIN OF ITS ACCURACY.
-  ITERATION CANNOT BE PERFORMED IN THIS
-  CASE. IF X0 .LE. 0, THIS CAN OCCUR ONLY
-  WHEN P OR Q IS APPROXIMATELY 0. IF X0 IS
-  POSITIVE THEN THIS CAN OCCUR WHEN A IS
-  EXCEEDINGLY CLOSE TO X AND A IS EXTREMELY
-  LARGE (SAY A .GE. 1.E20).
-  ----------------------------------------------------------------------
-  WRITTEN BY ALFRED H. MORRIS, JR.
-  NAVAL SURFACE WEAPONS CENTER
-  DAHLGREN, VIRGINIA
-  -------------------
-*/
 {
   static double a0 = 3.31125922108741e0;
   static double a1 = 11.6616720288968e0;
@@ -7624,69 +7500,69 @@ static void gaminv(double *a,double *x,double *x0,double *p,double *q,
   static int K3 = 3;
   static int K8 = 0;
   static double am1,amax,ap1,ap2,ap3,apn,b,c1,c2,c3,c4,c5,d,e,e2,eps,g,h,pn,qg,qn,
-    r,rta,s,s2,sum,t,u,w,xmax,xmin,xn,y,z;
+                r,rta,s,s2,sum,t,u,w,xmax,xmin,xn,y,z;
   static int iop;
   static double T4,T5,T6,T7,T9;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   /*
-****** E, XMIN, AND XMAX ARE MACHINE DEPENDENT CONSTANTS.
-E IS THE SMALLEST NUMBER FOR WHICH 1.0 + E .GT. 1.0.
-XMIN IS THE SMALLEST POSITIVE NUMBER AND XMAX IS THE
-LARGEST POSITIVE NUMBER.
-  */
+   ****** E, XMIN, AND XMAX ARE MACHINE DEPENDENT CONSTANTS.
+   E IS THE SMALLEST NUMBER FOR WHICH 1.0 + E .GT. 1.0.
+   XMIN IS THE SMALLEST POSITIVE NUMBER AND XMAX IS THE
+   LARGEST POSITIVE NUMBER.
+   */
   e = spmpar(&K1);
   xmin = spmpar(&K2);
   xmax = spmpar(&K3);
   *x = 0.0e0;
-  if(*a <= 0.0e0) goto S300;
+  if (*a <= 0.0e0) goto S300;
   t = *p+*q-1.e0;
-  if(fabs(t) > e) goto S320;
+  if (fabs(t) > e) goto S320;
   *ierr = 0;
-  if(*p == 0.0e0) return;
-  if(*q == 0.0e0) goto S270;
-  if(*a == 1.0e0) goto S280;
+  if (*p == 0.0e0) return;
+  if (*q == 0.0e0) goto S270;
+  if (*a == 1.0e0) goto S280;
   e2 = 2.0e0*e;
   amax = 0.4e-10/(e*e);
   iop = 1;
-  if(e > 1.e-10) iop = 2;
+  if (e > 1.e-10) iop = 2;
   eps = eps0[iop-1];
   xn = *x0;
-  if(*x0 > 0.0e0) goto S160;
+  if (*x0 > 0.0e0) goto S160;
   /*
-    SELECTION OF THE INITIAL APPROXIMATION XN OF X
-    WHEN A .LT. 1
-  */
-  if(*a > 1.0e0) goto S80;
+     SELECTION OF THE INITIAL APPROXIMATION XN OF X
+     WHEN A .LT. 1
+     */
+  if (*a > 1.0e0) goto S80;
   T4 = *a+1.0e0;
   g = Xgamm(&T4);
   qg = *q*g;
-  if(qg == 0.0e0) goto S360;
+  if (qg == 0.0e0) goto S360;
   b = qg/ *a;
-  if(qg > 0.6e0**a) goto S40;
-  if(*a >= 0.30e0 || b < 0.35e0) goto S10;
+  if (qg > 0.6e0**a) goto S40;
+  if (*a >= 0.30e0 || b < 0.35e0) goto S10;
   t = exp(-(b+c));
   u = t*exp(t);
   xn = t*exp(u);
   goto S160;
- S10:
-  if(b >= 0.45e0) goto S40;
-  if(b == 0.0e0) goto S360;
+S10:
+  if (b >= 0.45e0) goto S40;
+  if (b == 0.0e0) goto S360;
   y = -log(b);
   s = 0.5e0+(0.5e0-*a);
   z = log(y);
   t = y-s*z;
-  if(b < 0.15e0) goto S20;
+  if (b < 0.15e0) goto S20;
   xn = y-s*log(t)-log(1.0e0+s/(t+1.0e0));
   goto S220;
- S20:
-  if(b <= 0.01e0) goto S30;
+S20:
+  if (b <= 0.01e0) goto S30;
   u = ((t+2.0e0*(3.0e0-*a))*t+(2.0e0-*a)*(3.0e0-*a))/((t+(5.0e0-*a))*t+2.0e0);
   xn = y-s*log(t)-log(u);
   goto S220;
- S30:
+S30:
   c1 = -(s*z);
   c2 = -(s*(1.0e0+c1));
   c3 = s*((0.5e0*c1+(2.0e0-*a))*c1+(2.5e0-1.5e0**a));
@@ -7696,71 +7572,71 @@ LARGEST POSITIVE NUMBER.
                                                          *a-13.0e0))*c1+0.5e0*(((2.0e0**a-25.0e0)**a+72.0e0)**a-61.0e0))*c1+((
                                                                                                                               (25.0e0**a-195.0e0)**a+477.0e0)**a-379.0e0)/12.0e0));
   xn = (((c5/y+c4)/y+c3)/y+c2)/y+c1+y;
-  if(*a > 1.0e0) goto S220;
-  if(b > bmin[iop-1]) goto S220;
+  if (*a > 1.0e0) goto S220;
+  if (b > bmin[iop-1]) goto S220;
   *x = xn;
   return;
- S40:
-  if(b**q > 1.e-8) goto S50;
+S40:
+  if (b**q > 1.e-8) goto S50;
   xn = exp(-(*q/ *a+c));
   goto S70;
- S50:
-  if(*p <= 0.9e0) goto S60;
+S50:
+  if (*p <= 0.9e0) goto S60;
   T5 = -*q;
   xn = exp((alnrel(&T5)+gamln1(a))/ *a);
   goto S70;
- S60:
+S60:
   xn = exp(log(*p*g)/ *a);
- S70:
-  if(xn == 0.0e0) goto S310;
+S70:
+  if (xn == 0.0e0) goto S310;
   t = 0.5e0+(0.5e0-xn/(*a+1.0e0));
   xn /= t;
   goto S160;
- S80:
+S80:
   /*
-    SELECTION OF THE INITIAL APPROXIMATION XN OF X
-    WHEN A .GT. 1
-  */
-  if(*q <= 0.5e0) goto S90;
+     SELECTION OF THE INITIAL APPROXIMATION XN OF X
+     WHEN A .GT. 1
+     */
+  if (*q <= 0.5e0) goto S90;
   w = log(*p);
   goto S100;
- S90:
+S90:
   w = log(*q);
- S100:
+S100:
   t = sqrt(-(2.0e0*w));
   s = t-(((a3*t+a2)*t+a1)*t+a0)/((((b4*t+b3)*t+b2)*t+b1)*t+1.0e0);
-  if(*q > 0.5e0) s = -s;
+  if (*q > 0.5e0) s = -s;
   rta = sqrt(*a);
   s2 = s*s;
   xn = *a+s*rta+(s2-1.0e0)/3.0e0+s*(s2-7.0e0)/(36.0e0*rta)-((3.0e0*s2+7.0e0)*
                                                             s2-16.0e0)/(810.0e0**a)+s*((9.0e0*s2+256.0e0)*s2-433.0e0)/(38880.0e0**a*
                                                                                                                        rta);
   xn = fifdmax1(xn,0.0e0);
-  if(*a < amin[iop-1]) goto S110;
+  if (*a < amin[iop-1]) goto S110;
   *x = xn;
   d = 0.5e0+(0.5e0-*x/ *a);
-  if(fabs(d) <= dmin[iop-1]) return;
- S110:
-  if(*p <= 0.5e0) goto S130;
-  if(xn < 3.0e0**a) goto S220;
+  if (fabs(d) <= dmin[iop-1]) return;
+S110:
+  if (*p <= 0.5e0) goto S130;
+  if (xn < 3.0e0**a) goto S220;
   y = -(w+gamln(a));
   d = fifdmax1(2.0e0,*a*(*a-1.0e0));
-  if(y < ln10*d) goto S120;
+  if (y < ln10*d) goto S120;
   s = 1.0e0-*a;
   z = log(y);
   goto S30;
- S120:
+S120:
   t = *a-1.0e0;
   T6 = -(t/(xn+1.0e0));
   xn = y+t*log(xn)-alnrel(&T6);
   T7 = -(t/(xn+1.0e0));
   xn = y+t*log(xn)-alnrel(&T7);
   goto S220;
- S130:
+S130:
   ap1 = *a+1.0e0;
-  if(xn > 0.70e0*ap1) goto S170;
+  if (xn > 0.70e0*ap1) goto S170;
   w += gamln(&ap1);
-  if(xn > 0.15e0*ap1) goto S140;
+  if (xn > 0.15e0*ap1) goto S140;
   ap2 = *a+2.0e0;
   ap3 = *a+3.0e0;
   *x = exp((w+*x)/ *a);
@@ -7768,199 +7644,152 @@ LARGEST POSITIVE NUMBER.
   *x = exp((w+*x-log(1.0e0+*x/ap1*(1.0e0+*x/ap2)))/ *a);
   *x = exp((w+*x-log(1.0e0+*x/ap1*(1.0e0+*x/ap2*(1.0e0+*x/ap3))))/ *a);
   xn = *x;
-  if(xn > 1.e-2*ap1) goto S140;
-  if(xn <= emin[iop-1]*ap1) return;
+  if (xn > 1.e-2*ap1) goto S140;
+  if (xn <= emin[iop-1]*ap1) return;
   goto S170;
- S140:
+S140:
   apn = ap1;
   t = xn/apn;
   sum = 1.0e0+t;
- S150:
+S150:
   apn += 1.0e0;
   t *= (xn/apn);
   sum += t;
-  if(t > 1.e-4) goto S150;
+  if (t > 1.e-4) goto S150;
   t = w-log(sum);
   xn = exp((xn+t)/ *a);
   xn *= (1.0e0-(*a*log(xn)-xn-t)/(*a-xn));
   goto S170;
- S160:
+S160:
   /*
-    SCHRODER ITERATION USING P
-  */
-  if(*p > 0.5e0) goto S220;
- S170:
-  if(*p <= 1.e10*xmin) goto S350;
+     SCHRODER ITERATION USING P
+     */
+  if (*p > 0.5e0) goto S220;
+S170:
+  if (*p <= 1.e10*xmin) goto S350;
   am1 = *a-0.5e0-0.5e0;
- S180:
-  if(*a <= amax) goto S190;
+S180:
+  if (*a <= amax) goto S190;
   d = 0.5e0+(0.5e0-xn/ *a);
-  if(fabs(d) <= e2) goto S350;
- S190:
-  if(*ierr >= 20) goto S330;
+  if (fabs(d) <= e2) goto S350;
+S190:
+  if (*ierr >= 20) goto S330;
   *ierr += 1;
   gratio(a,&xn,&pn,&qn,&K8);
-  if(pn == 0.0e0 || qn == 0.0e0) goto S350;
+  if (pn == 0.0e0 || qn == 0.0e0) goto S350;
   r = rcomp(a,&xn);
-  if(r == 0.0e0) goto S350;
+  if (r == 0.0e0) goto S350;
   t = (pn-*p)/r;
   w = 0.5e0*(am1-xn);
-  if(fabs(t) <= 0.1e0 && fabs(w*t) <= 0.1e0) goto S200;
+  if (fabs(t) <= 0.1e0 && fabs(w*t) <= 0.1e0) goto S200;
   *x = xn*(1.0e0-t);
-  if(*x <= 0.0e0) goto S340;
+  if (*x <= 0.0e0) goto S340;
   d = fabs(t);
   goto S210;
- S200:
+S200:
   h = t*(1.0e0+w*t);
   *x = xn*(1.0e0-h);
-  if(*x <= 0.0e0) goto S340;
-  if(fabs(w) >= 1.0e0 && fabs(w)*t*t <= eps) return;
+  if (*x <= 0.0e0) goto S340;
+  if (fabs(w) >= 1.0e0 && fabs(w)*t*t <= eps) return;
   d = fabs(h);
- S210:
+S210:
   xn = *x;
-  if(d > tol) goto S180;
-  if(d <= eps) return;
-  if(fabs(*p-pn) <= tol**p) return;
+  if (d > tol) goto S180;
+  if (d <= eps) return;
+  if (fabs(*p-pn) <= tol**p) return;
   goto S180;
- S220:
+S220:
   /*
-    SCHRODER ITERATION USING Q
-  */
-  if(*q <= 1.e10*xmin) goto S350;
+     SCHRODER ITERATION USING Q
+     */
+  if (*q <= 1.e10*xmin) goto S350;
   am1 = *a-0.5e0-0.5e0;
- S230:
-  if(*a <= amax) goto S240;
+S230:
+  if (*a <= amax) goto S240;
   d = 0.5e0+(0.5e0-xn/ *a);
-  if(fabs(d) <= e2) goto S350;
- S240:
-  if(*ierr >= 20) goto S330;
+  if (fabs(d) <= e2) goto S350;
+S240:
+  if (*ierr >= 20) goto S330;
   *ierr += 1;
   gratio(a,&xn,&pn,&qn,&K8);
-  if(pn == 0.0e0 || qn == 0.0e0) goto S350;
+  if (pn == 0.0e0 || qn == 0.0e0) goto S350;
   r = rcomp(a,&xn);
-  if(r == 0.0e0) goto S350;
+  if (r == 0.0e0) goto S350;
   t = (*q-qn)/r;
   w = 0.5e0*(am1-xn);
-  if(fabs(t) <= 0.1e0 && fabs(w*t) <= 0.1e0) goto S250;
+  if (fabs(t) <= 0.1e0 && fabs(w*t) <= 0.1e0) goto S250;
   *x = xn*(1.0e0-t);
-  if(*x <= 0.0e0) goto S340;
+  if (*x <= 0.0e0) goto S340;
   d = fabs(t);
   goto S260;
- S250:
+S250:
   h = t*(1.0e0+w*t);
   *x = xn*(1.0e0-h);
-  if(*x <= 0.0e0) goto S340;
-  if(fabs(w) >= 1.0e0 && fabs(w)*t*t <= eps) return;
+  if (*x <= 0.0e0) goto S340;
+  if (fabs(w) >= 1.0e0 && fabs(w)*t*t <= eps) return;
   d = fabs(h);
- S260:
+S260:
   xn = *x;
-  if(d > tol) goto S230;
-  if(d <= eps) return;
-  if(fabs(*q-qn) <= tol**q) return;
+  if (d > tol) goto S230;
+  if (d <= eps) return;
+  if (fabs(*q-qn) <= tol**q) return;
   goto S230;
- S270:
+S270:
   /*
-    SPECIAL CASES
-  */
+     SPECIAL CASES
+     */
   *x = xmax;
   return;
- S280:
-  if(*q < 0.9e0) goto S290;
+S280:
+  if (*q < 0.9e0) goto S290;
   T9 = -*p;
   *x = -alnrel(&T9);
   return;
- S290:
+S290:
   *x = -log(*q);
   return;
- S300:
+S300:
   /*
-    ERROR RETURN
-  */
+     ERROR RETURN
+     */
   *ierr = -2;
   return;
- S310:
+S310:
   *ierr = -3;
   return;
- S320:
+S320:
   *ierr = -4;
   return;
- S330:
+S330:
   *ierr = -6;
   return;
- S340:
+S340:
   *ierr = -7;
   return;
- S350:
+S350:
   *x = xn;
   *ierr = -8;
   return;
- S360:
+S360:
   *x = xmax;
   *ierr = -8;
   return;
 }
+
+/*
+ * Compute the log of the gamma function
+ */
 static double gamln(double *a)
-/*
-  -----------------------------------------------------------------------
-  EVALUATION OF LN(GAMMA(A)) FOR POSITIVE A
-  -----------------------------------------------------------------------
-  WRITTEN BY ALFRED H. MORRIS
-  NAVAL SURFACE WARFARE CENTER
-  DAHLGREN, VIRGINIA
-  --------------------------
-  D = 0.5*(LN(2*M_PI) - 1)
-  --------------------------
-*/
 {
-  static double c0 = .833333333333333e-01;
-  static double c1 = -.277777777760991e-02;
-  static double c2 = .793650666825390e-03;
-  static double c3 = -.595202931351870e-03;
-  static double c4 = .837308034031215e-03;
-  static double c5 = -.165322962780713e-02;
-  static double d = .418938533204673e0;
-  static double t,w;
-  static int i,n;
-  static double T1;
-  /*
-     ..
-     .. Executable Statements ..
-     */
-  if(*a <= 0.8e0) 
-    {
-      return gamln1(a)-log(*a);
-    }
-  else if(*a > 2.25e0) 
-    {
-      t = *a-0.5e0-0.5e0;
-      return gamln1(&t);
-    }
-  else if(*a >= 10.0e0) 
-    {
-      t = pow(1.0e0/ *a,2.0);
-      w = (((((c5*t+c4)*t+c3)*t+c2)*t+c1)*t+c0)/ *a;
-      return d+w+(*a-0.5e0)*(log(*a)-1.0e0);
-    }
-  else
-    {
-      n = *a-1.25e0;
-      t = *a;
-      w = 1.0e0;
-      for(i=1; i<=n; i++) 
-        {
-          t -= 1.0e0;
-          w = t*w;
-        }
-      T1 = t-1.0e0;
-      return gamln1(&T1)+log(w);
-    }
+  return pnl_sf_log_gamma (*a);
 }
-static double gamln1(double *a)
+
 /*
-  -----------------------------------------------------------------------
-  EVALUATION OF LN(GAMMA(1 + A)) FOR -0.2 .LE. A .LE. 1.25
-  -----------------------------------------------------------------------
-*/
+ * -----------------------------------------------------------------------
+ * EVALUATION OF LN(GAMMA(1 + A)) FOR -0.2 .LE. A .LE. 1.25
+ * -----------------------------------------------------------------------
+ */
+static double gamln1(double *a)
 {
   static double p0 = .577215664901533e+00;
   static double p1 = .844203922187225e+00;
@@ -7988,7 +7817,7 @@ static double gamln1(double *a)
   static double s5 = .116165475989616e-03;
   static double w,x;
 
-  if(*a >= 0.6e0) 
+  if (*a >= 0.6e0) 
     {
       x = *a-0.5e0-0.5e0;
       w = (((((r5*x+r4)*x+r3)*x+r2)*x+r1)*x+r0)/
@@ -8002,155 +7831,15 @@ static double gamln1(double *a)
       return -(*a*w);
     }
 }
-static double Xgamm(double *a)
+
 /*
-  -----------------------------------------------------------------------
- 
-  EVALUATION OF THE GAMMA FUNCTION FOR REAL ARGUMENTS
- 
-  -----------
- 
-  GAMMA(A) IS ASSIGNED THE VALUE 0 WHEN THE GAMMA FUNCTION CANNOT
-  BE COMPUTED.
- 
-  -----------------------------------------------------------------------
-  WRITTEN BY ALFRED H. MORRIS, JR.
-  NAVAL SURFACE WEAPONS CENTER
-  DAHLGREN, VIRGINIA
-  -----------------------------------------------------------------------
-*/
+ * Compute the gamma function
+ */
+static double Xgamm(double *a)
 {
-  static double d = .41893853320467274178e0;
-  static double pi = 3.1415926535898e0;
-  static double r1 = .820756370353826e-03;
-  static double r2 = -.595156336428591e-03;
-  static double r3 = .793650663183693e-03;
-  static double r4 = -.277777777770481e-02;
-  static double r5 = .833333333333333e-01;
-  static double p[7] = {
-    .539637273585445e-03,.261939260042690e-02,.204493667594920e-01,
-    .730981088720487e-01,.279648642639792e+00,.553413866010467e+00,1.0e0
-  };
-  static double q[7] = {
-    -.832979206704073e-03,.470059485860584e-02,.225211131035340e-01,
-    -.170458969313360e+00,-.567902761974940e-01,.113062953091122e+01,1.0e0
-  };
-  static int K2 = 3;
-  static int K3 = 0;
-  static double Xgamm_0,bot,g,lnx,s,t,top,w,x,z;
-  static int i,j,m,n,T1;
-  /*
-    ..
-    .. Executable Statements ..
-  */
-  Xgamm_0 = 0.0e0;
-  x = *a;
-  if(fabs(*a) >= 15.0e0) goto S110;
-  /*
-    -----------------------------------------------------------------------
-    EVALUATION OF GAMMA(A) FOR ABS(A) .LT. 15
-    -----------------------------------------------------------------------
-  */
-  t = 1.0e0;
-  m = fifidint(*a)-1;
-  /*
-    LET T BE THE PRODUCT OF A-J WHEN A .GE. 2
-  */
-  T1 = m;
-  if(T1 < 0) goto S40;
-  else if(T1 == 0) goto S30;
-  else  goto S10;
- S10:
-  for(j=1; j<=m; j++) {
-    x -= 1.0e0;
-    t = x*t;
-  }
- S30:
-  x -= 1.0e0;
-  goto S80;
- S40:
-  /*
-    LET T BE THE PRODUCT OF A+J WHEN A .LT. 1
-  */
-  t = *a;
-  if(*a > 0.0e0) goto S70;
-  m = -m-1;
-  if(m == 0) goto S60;
-  for(j=1; j<=m; j++) {
-    x += 1.0e0;
-    t = x*t;
-  }
- S60:
-  x += (0.5e0+0.5e0);
-  t = x*t;
-  if(t == 0.0e0) return Xgamm_0;
- S70:
-  /*
-    THE FOLLOWING CODE CHECKS IF 1/T CAN OVERFLOW. THIS
-    CODE MAY BE OMITTED IF DESIRED.
-  */
-  if(fabs(t) >= 1.e-30) goto S80;
-  if(fabs(t)*spmpar(&K2) <= 1.0001e0) return Xgamm_0;
-  Xgamm_0 = 1.0e0/t;
-  return Xgamm_0;
- S80:
-  /*
-    COMPUTE GAMMA(1 + X) FOR  0 .LE. X .LT. 1
-  */
-  top = p[0];
-  bot = q[0];
-  for(i=1; i<7; i++) {
-    top = p[i]+x*top;
-    bot = q[i]+x*bot;
-  }
-  Xgamm_0 = top/bot;
-  /*
-    TERMINATION
-  */
-  if(*a < 1.0e0) goto S100;
-  Xgamm_0 *= t;
-  return Xgamm_0;
- S100:
-  Xgamm_0 /= t;
-  return Xgamm_0;
- S110:
-  /*
-    -----------------------------------------------------------------------
-    EVALUATION OF GAMMA(A) FOR ABS(A) .GE. 15
-    -----------------------------------------------------------------------
-  */
-  if(fabs(*a) >= 1.e3) return Xgamm_0;
-  if(*a > 0.0e0) goto S120;
-  x = -*a;
-  n = x;
-  t = x-(double)n;
-  if(t > 0.9e0) t = 1.0e0-t;
-  s = sin(pi*t)/pi;
-  if(fifmod(n,2) == 0) s = -s;
-  if(s == 0.0e0) return Xgamm_0;
- S120:
-  /*
-    COMPUTE THE MODIFIED ASYMPTOTIC SUM
-  */
-  t = 1.0e0/(x*x);
-  g = ((((r1*t+r2)*t+r3)*t+r4)*t+r5)/x;
-  /*
-    ONE MAY REPLACE THE NEXT STATEMENT WITH  LNX = ALOG(X)
-    BUT LESS ACCURACY WILL NORMALLY BE OBTAINED.
-  */
-  lnx = log(x);
-  /*
-    FINAL ASSEMBLY
-  */
-  z = x;
-  g = d+g+(z-0.5e0)*(lnx-1.e0);
-  w = g;
-  t = g-w;
-  if(w > 0.99999e0*exparg(&K3)) return Xgamm_0;
-  Xgamm_0 = exp(w)*(1.0e0+t);
-  if(*a < 0.0e0) Xgamm_0 = 1.0e0/(Xgamm_0*s)/x;
-  return Xgamm_0;
+  return pnl_sf_gamma (*a);
 }
+
 
 static void grat1(double *a,double *x,double *r,double *p,double *q,
                   double *eps)
@@ -8158,65 +7847,65 @@ static void grat1(double *a,double *x,double *r,double *p,double *q,
   static int K2 = 0;
   static double a2n,a2nm1,am0,an,an0,b2n,b2nm1,c,cma,g,h,j,l,sum,t,tol,w,z,T1,T3;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   /*
-    -----------------------------------------------------------------------
-    EVALUATION OF THE INCOMPLETE GAMMA RATIO FUNCTIONS
-    P(A,X) AND Q(A,X)
-    IT IS ASSUMED THAT A .LE. 1.  EPS IS THE TOLERANCE TO BE USED.
-    THE INPUT ARGUMENT R HAS THE VALUE E**(-X)*X**A/GAMMA(A).
-    -----------------------------------------------------------------------
-  */
-  if(*a**x == 0.0e0) goto S120;
-  if(*a == 0.5e0) goto S100;
-  if(*x < 1.1e0) goto S10;
+     -----------------------------------------------------------------------
+     EVALUATION OF THE INCOMPLETE GAMMA RATIO FUNCTIONS
+     P(A,X) AND Q(A,X)
+     IT IS ASSUMED THAT A .LE. 1.  EPS IS THE TOLERANCE TO BE USED.
+     THE INPUT ARGUMENT R HAS THE VALUE E**(-X)*X**A/GAMMA(A).
+     -----------------------------------------------------------------------
+     */
+  if (*a**x == 0.0e0) goto S120;
+  if (*a == 0.5e0) goto S100;
+  if (*x < 1.1e0) goto S10;
   goto S60;
- S10:
+S10:
   /*
-    TAYLOR SERIES FOR P(A,X)/X**A
-  */
+     TAYLOR SERIES FOR P(A,X)/X**A
+     */
   an = 3.0e0;
   c = *x;
   sum = *x/(*a+3.0e0);
   tol = 0.1e0**eps/(*a+1.0e0);
- S20:
+S20:
   an += 1.0e0;
   c = -(c*(*x/an));
   t = c/(*a+an);
   sum += t;
-  if(fabs(t) > tol) goto S20;
+  if (fabs(t) > tol) goto S20;
   j = *a**x*((sum/6.0e0-0.5e0/(*a+2.0e0))**x+1.0e0/(*a+1.0e0));
   z = *a*log(*x);
   h = gam1(a);
   g = 1.0e0+h;
-  if(*x < 0.25e0) goto S30;
-  if(*a < *x/2.59e0) goto S50;
+  if (*x < 0.25e0) goto S30;
+  if (*a < *x/2.59e0) goto S50;
   goto S40;
- S30:
-  if(z > -.13394e0) goto S50;
- S40:
+S30:
+  if (z > -.13394e0) goto S50;
+S40:
   w = exp(z);
   *p = w*g*(0.5e0+(0.5e0-j));
   *q = 0.5e0+(0.5e0-*p);
   return;
- S50:
+S50:
   l = rexp(&z);
   w = 0.5e0+(0.5e0+l);
   *q = (w*j-l)*g-h;
-  if(*q < 0.0e0) goto S90;
+  if (*q < 0.0e0) goto S90;
   *p = 0.5e0+(0.5e0-*q);
   return;
- S60:
+S60:
   /*
-    CONTINUED FRACTION EXPANSION
-  */
+     CONTINUED FRACTION EXPANSION
+     */
   a2nm1 = a2n = 1.0e0;
   b2nm1 = *x;
   b2n = *x+(1.0e0-*a);
   c = 1.0e0;
- S70:
+S70:
   a2nm1 = *x*a2n+c*a2nm1;
   b2nm1 = *x*b2n+c*b2nm1;
   am0 = a2nm1/b2nm1;
@@ -8225,66 +7914,67 @@ static void grat1(double *a,double *x,double *r,double *p,double *q,
   a2n = a2nm1+cma*a2n;
   b2n = b2nm1+cma*b2n;
   an0 = a2n/b2n;
-  if(fabs(an0-am0) >= *eps*an0) goto S70;
+  if (fabs(an0-am0) >= *eps*an0) goto S70;
   *q = *r*an0;
   *p = 0.5e0+(0.5e0-*q);
   return;
- S80:
+S80:
   /*
-    SPECIAL CASES
-  */
+     SPECIAL CASES
+     */
   *p = 0.0e0;
   *q = 1.0e0;
   return;
- S90:
+S90:
   *p = 1.0e0;
   *q = 0.0e0;
   return;
- S100:
-  if(*x >= 0.25e0) goto S110;
+S100:
+  if (*x >= 0.25e0) goto S110;
   T1 = sqrt(*x);
   *p = erf1(&T1);
   *q = 0.5e0+(0.5e0-*p);
   return;
- S110:
+S110:
   T3 = sqrt(*x);
   *q = erfc1(&K2,&T3);
   *p = 0.5e0+(0.5e0-*q);
   return;
- S120:
-  if(*x <= *a) goto S80;
+S120:
+  if (*x <= *a) goto S80;
   goto S90;
 }
-static void gratio(double *a,double *x,double *ans,double *qans,int *ind)
+
 /*
-  ----------------------------------------------------------------------
-  EVALUATION OF THE INCOMPLETE GAMMA RATIO FUNCTIONS
-  P(A,X) AND Q(A,X)
- 
-  ----------
- 
-  IT IS ASSUMED THAT A AND X ARE NONNEGATIVE, WHERE A AND X
-  ARE NOT BOTH 0.
- 
-  ANS AND QANS ARE VARIABLES. GRATIO ASSIGNS ANS THE VALUE
-  P(A,X) AND QANS THE VALUE Q(A,X). IND MAY BE ANY INTEGER.
-  IF IND = 0 THEN THE USER IS REQUESTING AS MUCH ACCURACY AS
-  POSSIBLE (UP TO 14 SIGNIFICANT DIGITS). OTHERWISE, IF
-  IND = 1 THEN ACCURACY IS REQUESTED TO WITHIN 1 UNIT OF THE
-  6-TH SIGNIFICANT DIGIT, AND IF IND .NE. 0,1 THEN ACCURACY
-  IS REQUESTED TO WITHIN 1 UNIT OF THE 3RD SIGNIFICANT DIGIT.
- 
-  ERROR RETURN ...
-  ANS IS ASSIGNED THE VALUE 2 WHEN A OR X IS NEGATIVE,
-  WHEN A*X = 0, OR WHEN P(A,X) AND Q(A,X) ARE INDETERMINANT.
-  P(A,X) AND Q(A,X) ARE COMPUTATIONALLY INDETERMINANT WHEN
-  X IS EXCEEDINGLY CLOSE TO A AND A IS EXTREMELY LARGE.
-  ----------------------------------------------------------------------
-  WRITTEN BY ALFRED H. MORRIS, JR.
-  NAVAL SURFACE WEAPONS CENTER
-  DAHLGREN, VIRGINIA
-  --------------------
-*/
+ * ----------------------------------------------------------------------
+ * EVALUATION OF THE INCOMPLETE GAMMA RATIO FUNCTIONS
+ * P(A,X) AND Q(A,X)
+ * 
+ * ----------
+ * 
+ * IT IS ASSUMED THAT A AND X ARE NONNEGATIVE, WHERE A AND X
+ * ARE NOT BOTH 0.
+ * 
+ * ANS AND QANS ARE VARIABLES. GRATIO ASSIGNS ANS THE VALUE
+ * P(A,X) AND QANS THE VALUE Q(A,X). IND MAY BE ANY INTEGER.
+ * IF IND = 0 THEN THE USER IS REQUESTING AS MUCH ACCURACY AS
+ * POSSIBLE (UP TO 14 SIGNIFICANT DIGITS). OTHERWISE, IF
+ * IND = 1 THEN ACCURACY IS REQUESTED TO WITHIN 1 UNIT OF THE
+ * 6-TH SIGNIFICANT DIGIT, AND IF IND .NE. 0,1 THEN ACCURACY
+ * IS REQUESTED TO WITHIN 1 UNIT OF THE 3RD SIGNIFICANT DIGIT.
+ * 
+ * ERROR RETURN ...
+ * ANS IS ASSIGNED THE VALUE 2 WHEN A OR X IS NEGATIVE,
+ * WHEN A*X = 0, OR WHEN P(A,X) AND Q(A,X) ARE INDETERMINANT.
+ * P(A,X) AND Q(A,X) ARE COMPUTATIONALLY INDETERMINANT WHEN
+ * X IS EXCEEDINGLY CLOSE TO A AND A IS EXTREMELY LARGE.
+ * ----------------------------------------------------------------------
+ * WRITTEN BY ALFRED H. MORRIS, JR.
+ * NAVAL SURFACE WEAPONS CENTER
+ * DAHLGREN, VIRGINIA
+ * --------------------
+ */
+static void gratio(double *a,double *x,double *ans,double *qans,int *ind)
 {
   static double alog10 = 2.30258509299405e0;
   static double d10 = -.185185185185185e-02;
@@ -8347,94 +8037,94 @@ static void gratio(double *a,double *x,double *ans,double *qans,int *ind)
   static int K1 = 1;
   static int K2 = 0;
   static double a2n,a2nm1,acc,am0,amn,an,an0,apn,b2n,b2nm1,c,c0,c1,c2,c3,c4,c5,c6,
-    cma,e,e0,g,h,j,l,r,rta,rtx,s,sum,t,t1,tol,twoa,u,w,x0,y,z;
+                cma,e,e0,g,h,j,l,r,rta,rtx,s,sum,t,t1,tol,twoa,u,w,x0,y,z;
   static int i,iop,m,max,n;
   static double wk[20],T3;
   static int T4,T5;
   static double T6,T7;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   /*
-    --------------------
-    ****** E IS A MACHINE DEPENDENT CONSTANT. E IS THE SMALLEST
-    FLOATING POINT NUMBER FOR WHICH 1.0 + E .GT. 1.0 .
-  */
+     --------------------
+   ****** E IS A MACHINE DEPENDENT CONSTANT. E IS THE SMALLEST
+   FLOATING POINT NUMBER FOR WHICH 1.0 + E .GT. 1.0 .
+   */
   e = spmpar(&K1);
-  if(*a < 0.0e0 || *x < 0.0e0) goto S430;
-  if(*a == 0.0e0 && *x == 0.0e0) goto S430;
-  if(*a**x == 0.0e0) goto S420;
+  if (*a < 0.0e0 || *x < 0.0e0) goto S430;
+  if (*a == 0.0e0 && *x == 0.0e0) goto S430;
+  if (*a**x == 0.0e0) goto S420;
   iop = *ind+1;
-  if(iop != 1 && iop != 2) iop = 3;
+  if (iop != 1 && iop != 2) iop = 3;
   acc = fifdmax1(acc0[iop-1],e);
   e0 = e00[iop-1];
   x0 = x00[iop-1];
   /*
-    SELECT THE APPROPRIATE ALGORITHM
-  */
-  if(*a >= 1.0e0) goto S10;
-  if(*a == 0.5e0) goto S390;
-  if(*x < 1.1e0) goto S160;
+     SELECT THE APPROPRIATE ALGORITHM
+     */
+  if (*a >= 1.0e0) goto S10;
+  if (*a == 0.5e0) goto S390;
+  if (*x < 1.1e0) goto S160;
   t1 = *a*log(*x)-*x;
   u = *a*exp(t1);
-  if(u == 0.0e0) goto S380;
+  if (u == 0.0e0) goto S380;
   r = u*(1.0e0+gam1(a));
   goto S250;
- S10:
-  if(*a >= big[iop-1]) goto S30;
-  if(*a > *x || *x >= x0) goto S20;
+S10:
+  if (*a >= big[iop-1]) goto S30;
+  if (*a > *x || *x >= x0) goto S20;
   twoa = *a+*a;
   m = fifidint(twoa);
-  if(twoa != (double)m) goto S20;
+  if (twoa != (double)m) goto S20;
   i = m/2;
-  if(*a == (double)i) goto S210;
+  if (*a == (double)i) goto S210;
   goto S220;
- S20:
+S20:
   t1 = *a*log(*x)-*x;
   r = exp(t1)/Xgamm(a);
   goto S40;
- S30:
+S30:
   l = *x/ *a;
-  if(l == 0.0e0) goto S370;
+  if (l == 0.0e0) goto S370;
   s = 0.5e0+(0.5e0-l);
   z = rlog(&l);
-  if(z >= 700.0e0/ *a) goto S410;
+  if (z >= 700.0e0/ *a) goto S410;
   y = *a*z;
   rta = sqrt(*a);
-  if(fabs(s) <= e0/rta) goto S330;
-  if(fabs(s) <= 0.4e0) goto S270;
+  if (fabs(s) <= e0/rta) goto S330;
+  if (fabs(s) <= 0.4e0) goto S270;
   t = pow(1.0e0/ *a,2.0);
   t1 = (((0.75e0*t-1.0e0)*t+3.5e0)*t-105.0e0)/(*a*1260.0e0);
   t1 -= y;
   r = rt2pin*rta*exp(t1);
- S40:
-  if(r == 0.0e0) goto S420;
-  if(*x <= fifdmax1(*a,alog10)) goto S50;
-  if(*x < x0) goto S250;
+S40:
+  if (r == 0.0e0) goto S420;
+  if (*x <= fifdmax1(*a,alog10)) goto S50;
+  if (*x < x0) goto S250;
   goto S100;
- S50:
+S50:
   /*
-    TAYLOR SERIES FOR P/R
-  */
+     TAYLOR SERIES FOR P/R
+     */
   apn = *a+1.0e0;
   t = *x/apn;
   wk[0] = t;
   for(n=2; n<=20; n++) {
     apn += 1.0e0;
     t *= (*x/apn);
-    if(t <= 1.e-3) goto S70;
+    if (t <= 1.e-3) goto S70;
     wk[n-1] = t;
   }
   n = 20;
- S70:
+S70:
   sum = t;
   tol = 0.5e0*acc;
- S80:
+S80:
   apn += 1.0e0;
   t *= (*x/apn);
   sum += t;
-  if(t > tol) goto S80;
+  if (t > tol) goto S80;
   max = n-1;
   for(m=1; m<=max; m++) {
     n -= 1;
@@ -8443,29 +8133,29 @@ static void gratio(double *a,double *x,double *ans,double *qans,int *ind)
   *ans = r/ *a*(1.0e0+sum);
   *qans = 0.5e0+(0.5e0-*ans);
   return;
- S100:
+S100:
   /*
-    ASYMPTOTIC EXPANSION
-  */
+     ASYMPTOTIC EXPANSION
+     */
   amn = *a-1.0e0;
   t = amn/ *x;
   wk[0] = t;
   for(n=2; n<=20; n++) {
     amn -= 1.0e0;
     t *= (amn/ *x);
-    if(fabs(t) <= 1.e-3) goto S120;
+    if (fabs(t) <= 1.e-3) goto S120;
     wk[n-1] = t;
   }
   n = 20;
- S120:
+S120:
   sum = t;
- S130:
-  if(fabs(t) <= acc) goto S140;
+S130:
+  if (fabs(t) <= acc) goto S140;
   amn -= 1.0e0;
   t *= (amn/ *x);
   sum += t;
   goto S130;
- S140:
+S140:
   max = n-1;
   for(m=1; m<=max; m++) {
     n -= 1;
@@ -8474,78 +8164,78 @@ static void gratio(double *a,double *x,double *ans,double *qans,int *ind)
   *qans = r/ *x*(1.0e0+sum);
   *ans = 0.5e0+(0.5e0-*qans);
   return;
- S160:
+S160:
   /*
-    TAYLOR SERIES FOR P(A,X)/X**A
-  */
+     TAYLOR SERIES FOR P(A,X)/X**A
+     */
   an = 3.0e0;
   c = *x;
   sum = *x/(*a+3.0e0);
   tol = 3.0e0*acc/(*a+1.0e0);
- S170:
+S170:
   an += 1.0e0;
   c = -(c*(*x/an));
   t = c/(*a+an);
   sum += t;
-  if(fabs(t) > tol) goto S170;
+  if (fabs(t) > tol) goto S170;
   j = *a**x*((sum/6.0e0-0.5e0/(*a+2.0e0))**x+1.0e0/(*a+1.0e0));
   z = *a*log(*x);
   h = gam1(a);
   g = 1.0e0+h;
-  if(*x < 0.25e0) goto S180;
-  if(*a < *x/2.59e0) goto S200;
+  if (*x < 0.25e0) goto S180;
+  if (*a < *x/2.59e0) goto S200;
   goto S190;
- S180:
-  if(z > -.13394e0) goto S200;
- S190:
+S180:
+  if (z > -.13394e0) goto S200;
+S190:
   w = exp(z);
   *ans = w*g*(0.5e0+(0.5e0-j));
   *qans = 0.5e0+(0.5e0-*ans);
   return;
- S200:
+S200:
   l = rexp(&z);
   w = 0.5e0+(0.5e0+l);
   *qans = (w*j-l)*g-h;
-  if(*qans < 0.0e0) goto S380;
+  if (*qans < 0.0e0) goto S380;
   *ans = 0.5e0+(0.5e0-*qans);
   return;
- S210:
+S210:
   /*
-    FINITE SUMS FOR Q WHEN A .GE. 1
-    AND 2*A IS AN INTEGER
-  */
+     FINITE SUMS FOR Q WHEN A .GE. 1
+     AND 2*A IS AN INTEGER
+     */
   sum = exp(-*x);
   t = sum;
   n = 1;
   c = 0.0e0;
   goto S230;
- S220:
+S220:
   rtx = sqrt(*x);
   sum = erfc1(&K2,&rtx);
   t = exp(-*x)/(rtpi*rtx);
   n = 0;
   c = -0.5e0;
- S230:
-  if(n == i) goto S240;
+S230:
+  if (n == i) goto S240;
   n += 1;
   c += 1.0e0;
   t = *x*t/c;
   sum += t;
   goto S230;
- S240:
+S240:
   *qans = sum;
   *ans = 0.5e0+(0.5e0-*qans);
   return;
- S250:
+S250:
   /*
-    CONTINUED FRACTION EXPANSION
-  */
+     CONTINUED FRACTION EXPANSION
+     */
   tol = fifdmax1(5.0e0*e,acc);
   a2nm1 = a2n = 1.0e0;
   b2nm1 = *x;
   b2n = *x+(1.0e0-*a);
   c = 1.0e0;
- S260:
+S260:
   a2nm1 = *x*a2n+c*a2nm1;
   b2nm1 = *x*b2n+c*b2nm1;
   am0 = a2nm1/b2nm1;
@@ -8554,31 +8244,31 @@ static void gratio(double *a,double *x,double *ans,double *qans,int *ind)
   a2n = a2nm1+cma*a2n;
   b2n = b2nm1+cma*b2n;
   an0 = a2n/b2n;
-  if(fabs(an0-am0) >= tol*an0) goto S260;
+  if (fabs(an0-am0) >= tol*an0) goto S260;
   *qans = r*an0;
   *ans = 0.5e0+(0.5e0-*qans);
   return;
- S270:
+S270:
   /*
-    GENERAL TEMME EXPANSION
-  */
-  if(fabs(s) <= 2.0e0*e && *a*e*e > 3.28e-3) goto S430;
+     GENERAL TEMME EXPANSION
+     */
+  if (fabs(s) <= 2.0e0*e && *a*e*e > 3.28e-3) goto S430;
   c = exp(-y);
   T3 = sqrt(y);
   w = 0.5e0*erfc1(&K1,&T3);
   u = 1.0e0/ *a;
   z = sqrt(z+z);
-  if(l < 1.0e0) z = -z;
+  if (l < 1.0e0) z = -z;
   T4 = iop-2;
-  if(T4 < 0) goto S280;
-  else if(T4 == 0) goto S290;
+  if (T4 < 0) goto S280;
+  else if (T4 == 0) goto S290;
   else  goto S300;
- S280:
-  if(fabs(s) <= 1.e-3) goto S340;
+S280:
+  if (fabs(s) <= 1.e-3) goto S340;
   c0 = ((((((((((((d0[12]*z+d0[11])*z+d0[10])*z+d0[9])*z+d0[8])*z+d0[7])*z+d0[
-                                                                              6])*z+d0[5])*z+d0[4])*z+d0[3])*z+d0[2])*z+d0[1])*z+d0[0])*z-third;
+              6])*z+d0[5])*z+d0[4])*z+d0[3])*z+d0[2])*z+d0[1])*z+d0[0])*z-third;
   c1 = (((((((((((d1[11]*z+d1[10])*z+d1[9])*z+d1[8])*z+d1[7])*z+d1[6])*z+d1[5]
-             )*z+d1[4])*z+d1[3])*z+d1[2])*z+d1[1])*z+d1[0])*z+d10;
+            )*z+d1[4])*z+d1[3])*z+d1[2])*z+d1[1])*z+d1[0])*z+d10;
   c2 = (((((((((d2[9]*z+d2[8])*z+d2[7])*z+d2[6])*z+d2[5])*z+d2[4])*z+d2[3])*z+
           d2[2])*z+d2[1])*z+d2[0])*z+d20;
   c3 = (((((((d3[7]*z+d3[6])*z+d3[5])*z+d3[4])*z+d3[3])*z+d3[2])*z+d3[1])*z+
@@ -8588,38 +8278,38 @@ static void gratio(double *a,double *x,double *ans,double *qans,int *ind)
   c6 = (d6[1]*z+d6[0])*z+d60;
   t = ((((((d70*u+c6)*u+c5)*u+c4)*u+c3)*u+c2)*u+c1)*u+c0;
   goto S310;
- S290:
+S290:
   c0 = (((((d0[5]*z+d0[4])*z+d0[3])*z+d0[2])*z+d0[1])*z+d0[0])*z-third;
   c1 = (((d1[3]*z+d1[2])*z+d1[1])*z+d1[0])*z+d10;
   c2 = d2[0]*z+d20;
   t = (c2*u+c1)*u+c0;
   goto S310;
- S300:
+S300:
   t = ((d0[2]*z+d0[1])*z+d0[0])*z-third;
- S310:
-  if(l < 1.0e0) goto S320;
+S310:
+  if (l < 1.0e0) goto S320;
   *qans = c*(w+rt2pin*t/rta);
   *ans = 0.5e0+(0.5e0-*qans);
   return;
- S320:
+S320:
   *ans = c*(w-rt2pin*t/rta);
   *qans = 0.5e0+(0.5e0-*ans);
   return;
- S330:
+S330:
   /*
-    TEMME EXPANSION FOR L = 1
-  */
-  if(*a*e*e > 3.28e-3) goto S430;
+     TEMME EXPANSION FOR L = 1
+     */
+  if (*a*e*e > 3.28e-3) goto S430;
   c = 0.5e0+(0.5e0-y);
   w = (0.5e0-sqrt(y)*(0.5e0+(0.5e0-y/3.0e0))/rtpi)/c;
   u = 1.0e0/ *a;
   z = sqrt(z+z);
-  if(l < 1.0e0) z = -z;
+  if (l < 1.0e0) z = -z;
   T5 = iop-2;
-  if(T5 < 0) goto S340;
-  else if(T5 == 0) goto S350;
+  if (T5 < 0) goto S340;
+  else if (T5 == 0) goto S350;
   else  goto S360;
- S340:
+S340:
   c0 = ((((((d0[6]*z+d0[5])*z+d0[4])*z+d0[3])*z+d0[2])*z+d0[1])*z+d0[0])*z-
     third;
   c1 = (((((d1[5]*z+d1[4])*z+d1[3])*z+d1[2])*z+d1[1])*z+d1[0])*z+d10;
@@ -8630,64 +8320,63 @@ static void gratio(double *a,double *x,double *ans,double *qans,int *ind)
   c6 = d6[0]*z+d60;
   t = ((((((d70*u+c6)*u+c5)*u+c4)*u+c3)*u+c2)*u+c1)*u+c0;
   goto S310;
- S350:
+S350:
   c0 = (d0[1]*z+d0[0])*z-third;
   c1 = d1[0]*z+d10;
   t = (d20*u+c1)*u+c0;
   goto S310;
- S360:
+S360:
   t = d0[0]*z-third;
   goto S310;
- S370:
+S370:
   /*
-    SPECIAL CASES
-  */
+     SPECIAL CASES
+     */
   *ans = 0.0e0;
   *qans = 1.0e0;
   return;
- S380:
+S380:
   *ans = 1.0e0;
   *qans = 0.0e0;
   return;
- S390:
-  if(*x >= 0.25e0) goto S400;
+S390:
+  if (*x >= 0.25e0) goto S400;
   T6 = sqrt(*x);
   *ans = erf1(&T6);
   *qans = 0.5e0+(0.5e0-*ans);
   return;
- S400:
+S400:
   T7 = sqrt(*x);
   *qans = erfc1(&K2,&T7);
   *ans = 0.5e0+(0.5e0-*qans);
   return;
- S410:
-  if(fabs(s) <= 2.0e0*e) goto S430;
- S420:
-  if(*x <= *a) goto S370;
+S410:
+  if (fabs(s) <= 2.0e0*e) goto S430;
+S420:
+  if (*x <= *a) goto S370;
   goto S380;
- S430:
+S430:
   /*
-    ERROR RETURN
-  */
+     ERROR RETURN
+     */
   *ans = 2.0e0;
   return;
 }
-static double gsumln(double *a,double *b)
+
 /*
-  -----------------------------------------------------------------------
-  EVALUATION OF THE FUNCTION LN(GAMMA(A + B))
-  FOR 1 .LE. A .LE. 2  AND  1 .LE. B .LE. 2
-  -----------------------------------------------------------------------
-*/
+ * EVALUATION OF THE FUNCTION LN(GAMMA(A + B))
+ * FOR 1 .LE. A .LE. 2  AND  1 .LE. B .LE. 2
+ */
+static double gsumln(double *a,double *b)
 {
   static double x,T1,T2;
   x = *a+*b-2.e0;
-  if(x <= 0.25e0) 
+  if (x <= 0.25e0) 
     {
       T1 = 1.0e0+x;
       return gamln1(&T1);
     }
-  else if(x > 1.25e0)
+  else if (x > 1.25e0)
     {
       T2 = x-1.0e0;
       return gamln1(&T2)+log(x*(1.0e0+x));
@@ -8695,244 +8384,56 @@ static double gsumln(double *a,double *b)
   else
     return gamln1(&x)+alnrel(&x);
 }
+
 static double psi(double *xx)
-/*
-  ---------------------------------------------------------------------
- 
-  EVALUATION OF THE DIGAMMA FUNCTION
- 
-  -----------
- 
-  PSI(XX) IS ASSIGNED THE VALUE 0 WHEN THE DIGAMMA FUNCTION CANNOT
-  BE COMPUTED.
- 
-  THE MAIN COMPUTATION INVOLVES EVALUATION OF RATIONAL CHEBYSHEV
-  APPROXIMATIONS PUBLISHED IN MATH. COMP. 27, 123-127(1973) BY
-  CODY, STRECOK AND THACHER.
- 
-  ---------------------------------------------------------------------
-  PSI WAS WRITTEN AT ARGONNE NATIONAL LABORATORY FOR THE FUNPACK
-  PACKAGE OF SPECIAL FUNCTION SUBROUTINES. PSI WAS MODIFIED BY
-  A.H. MORRIS (NSWC).
-  ---------------------------------------------------------------------
-*/
 {
-  static double dx0 = 1.461632144968362341262659542325721325e0;
-  static double piov4 = .785398163397448e0;
-  static double p1[7] = {
-    .895385022981970e-02,.477762828042627e+01,.142441585084029e+03,
-    .118645200713425e+04,.363351846806499e+04,.413810161269013e+04,
-    .130560269827897e+04
-  };
-  static double p2[4] = {
-    -.212940445131011e+01,-.701677227766759e+01,-.448616543918019e+01,
-    -.648157123766197e+00
-  };
-  static double q1[6] = {
-    .448452573429826e+02,.520752771467162e+03,.221000799247830e+04,
-    .364127349079381e+04,.190831076596300e+04,.691091682714533e-05
-  };
-  static double q2[4] = {
-    .322703493791143e+02,.892920700481861e+02,.546117738103215e+02,
-    .777788548522962e+01
-  };
-  static int K1 = 3;
-  static int K2 = 1;
-  static double aug,den,sgn,upper,w,x,xmax1,xmx0,xsmall,z;
-  static int i,m,n,nq;
-  /*
-    ..
-    .. Executable Statements ..
-  */
-  /*
-    ---------------------------------------------------------------------
-    MACHINE DEPENDENT CONSTANTS ...
-    XMAX1  = THE SMALLEST POSITIVE FLOATING POINT CONSTANT
-    WITH ENTIRELY INTEGER REPRESENTATION.  ALSO USED
-    AS NEGATIVE OF LOWER BOUND ON ACCEPTABLE NEGATIVE
-    ARGUMENTS AND AS THE POSITIVE ARGUMENT BEYOND WHICH
-    PSI MAY BE REPRESENTED AS ALOG(X).
-    XSMALL = ABSOLUTE ARGUMENT BELOW WHICH M_PI*COTAN(M_PI*X)
-    MAY BE REPRESENTED BY 1/X.
-    ---------------------------------------------------------------------
-  */
-  xmax1 = pnl_ipmpar(K1);
-  xmax1 = fifdmin1(xmax1,1.0e0/spmpar(&K2));
-  xsmall = 1.e-9;
-  x = *xx;
-  aug = 0.0e0;
-  if(x >= 0.5e0) goto S50;
-  /*
-    ---------------------------------------------------------------------
-    X .LT. 0.5,  USE REFLECTION FORMULA
-    PSI(1-X) = PSI(X) + M_PI * COTAN(M_PI*X)
-    ---------------------------------------------------------------------
-  */
-  if(fabs(x) > xsmall) goto S10;
-  if(x == 0.0e0) goto S100;
-  /*
-    ---------------------------------------------------------------------
-    0 .LT. ABS(X) .LE. XSMALL.  USE 1/X AS A SUBSTITUTE
-    FOR  M_PI*COTAN(M_PI*X)
-    ---------------------------------------------------------------------
-  */
-  aug = -(1.0e0/x);
-  goto S40;
- S10:
-  /*
-    ---------------------------------------------------------------------
-    REDUCTION OF ARGUMENT FOR COTAN
-    ---------------------------------------------------------------------
-  */
-  w = -x;
-  sgn = piov4;
-  if(w > 0.0e0) goto S20;
-  w = -w;
-  sgn = -sgn;
- S20:
-  /*
-    ---------------------------------------------------------------------
-    MAKE AN ERROR EXIT IF X .LE. -XMAX1
-    ---------------------------------------------------------------------
-  */
-  if(w >= xmax1) goto S100;
-  nq = fifidint(w);
-  w -= (double)nq;
-  nq = fifidint(w*4.0e0);
-  w = 4.0e0*(w-(double)nq*.25e0);
-  /*
-    ---------------------------------------------------------------------
-    W IS NOW RELATED TO THE FRACTIONAL PART OF  4.0 * X.
-    ADJUST ARGUMENT TO CORRESPOND TO VALUES IN FIRST
-    QUADRANT AND DETERMINE SIGN
-    ---------------------------------------------------------------------
-  */
-  n = nq/2;
-  if(n+n != nq) w = 1.0e0-w;
-  z = piov4*w;
-  m = n/2;
-  if(m+m != n) sgn = -sgn;
-  /*
-    ---------------------------------------------------------------------
-    DETERMINE FINAL VALUE FOR  -M_PI*COTAN(M_PI*X)
-    ---------------------------------------------------------------------
-  */
-  n = (nq+1)/2;
-  m = n/2;
-  m += m;
-  if(m != n) goto S30;
-  /*
-    ---------------------------------------------------------------------
-    CHECK FOR SINGULARITY
-    ---------------------------------------------------------------------
-  */
-  if(z == 0.0e0) goto S100;
-  /*
-    ---------------------------------------------------------------------
-    USE COS/SIN AS A SUBSTITUTE FOR COTAN, AND
-    SIN/COS AS A SUBSTITUTE FOR TAN
-    ---------------------------------------------------------------------
-  */
-  aug = sgn*(cos(z)/sin(z)*4.0e0);
-  goto S40;
- S30:
-  aug = sgn*(sin(z)/cos(z)*4.0e0);
- S40:
-  x = 1.0e0-x;
- S50:
-  if(x > 3.0e0) goto S70;
-  /*
-    ---------------------------------------------------------------------
-    0.5 .LE. X .LE. 3.0
-    ---------------------------------------------------------------------
-  */
-  den = x;
-  upper = p1[0]*x;
-  for(i=1; i<=5; i++) {
-    den = (den+q1[i-1])*x;
-    upper = (upper+p1[i+1-1])*x;
-  }
-  den = (upper+p1[6])/(den+q1[5]);
-  xmx0 = x-dx0;
-  return den*xmx0+aug;
- S70:
-  /*
-    ---------------------------------------------------------------------
-    IF X .GE. XMAX1, PSI = LN(X)
-    ---------------------------------------------------------------------
-  */
-  if(x >= xmax1) goto S90;
-  /*
-    ---------------------------------------------------------------------
-    3.0 .LT. X .LT. XMAX1
-    ---------------------------------------------------------------------
-  */
-  w = 1.0e0/(x*x);
-  den = w;
-  upper = p2[0]*w;
-  for(i=1; i<=3; i++) {
-    den = (den+q2[i-1])*w;
-    upper = (upper+p2[i+1-1])*w;
-  }
-  aug = upper/(den+q2[3])-0.5e0/x+aug;
- S90:
-  return aug+log(x);
- S100:
-  /*
-    ---------------------------------------------------------------------
-    ERROR RETURN
-    ---------------------------------------------------------------------
-  */
-  return 0.0e0;
+  return pnl_sf_psi (*xx);
 }
-static double rcomp(double *a,double *x)
+
 /*
-  -------------------
-  EVALUATION OF EXP(-X)*X**A/GAMMA(A)
-  -------------------
-  RT2PIN = 1/SQRT(2*M_PI)
-  -------------------
-*/
+ * EVALUATION OF EXP(-X)*X**A/GAMMA(A)
+ * 
+ * RT2PIN = 1/SQRT(2*M_PI)
+ */
+static double rcomp(double *a,double *x)
 {
   static double rt2pin = .398942280401433e0;
   static double rcomp_0,t,t1,u;
   /*
-    ..
-    .. Executable Statements ..
-  */
+     ..
+     .. Executable Statements ..
+     */
   rcomp_0 = 0.0e0;
-  if(*a >= 20.0e0) goto S20;
+  if (*a >= 20.0e0) goto S20;
   t = *a*log(*x)-*x;
-  if(*a >= 1.0e0) goto S10;
+  if (*a >= 1.0e0) goto S10;
   rcomp_0 = *a*exp(t)*(1.0e0+gam1(a));
   return rcomp_0;
- S10:
+S10:
   return exp(t)/Xgamm(a);
-  
- S20:
+
+S20:
   u = *x/ *a;
-  if(u == 0.0e0) return rcomp_0;
+  if (u == 0.0e0) return rcomp_0;
   t = pow(1.0e0/ *a,2.0);
   t1 = (((0.75e0*t-1.0e0)*t+3.5e0)*t-105.0e0)/(*a*1260.0e0);
   t1 -= (*a*rlog(&u));
   return rt2pin*sqrt(*a)*exp(t1);
-  
+
 }
-static double rexp(double *x)
+
 /*
-  -----------------------------------------------------------------------
-  EVALUATION OF THE FUNCTION EXP(X) - 1
-  -----------------------------------------------------------------------
-*/
+ * EVALUATION OF THE FUNCTION EXP(X) - 1
+ */
+static double rexp(double *x)
 {
   return pnl_expm1 (*x);
 }
-static double rlog(double *x)
+
 /*
-  -------------------
-  COMPUTATION OF  X - 1 - LN(X)
-  -------------------
-*/
+ * COMPUTATION OF  X - 1 - LN(X)
+ */
+static double rlog(double *x)
 {
   static double a = .566749439387324e-01;
   static double b = .456512608815524e-01;
@@ -8943,44 +8444,43 @@ static double rlog(double *x)
   static double q2 = .354508718369557e+00;
   static double r,t,u,w,w1;
   /*
-    ..
-    .. Executable Statements ..
-  */
-  if(*x < 0.61e0 || *x > 1.57e0) goto S40;
-  if(*x < 0.82e0) goto S10;
-  if(*x > 1.18e0) goto S20;
+     ..
+     .. Executable Statements ..
+     */
+  if (*x < 0.61e0 || *x > 1.57e0) goto S40;
+  if (*x < 0.82e0) goto S10;
+  if (*x > 1.18e0) goto S20;
   /*
-    ARGUMENT REDUCTION
-  */
+     ARGUMENT REDUCTION
+     */
   u = *x-0.5e0-0.5e0;
   w1 = 0.0e0;
   goto S30;
- S10:
+S10:
   u = *x-0.7e0;
   u /= 0.7e0;
   w1 = a-u*0.3e0;
   goto S30;
- S20:
+S20:
   u = 0.75e0**x-1.e0;
   w1 = b+u/3.0e0;
- S30:
+S30:
   /*
-    SERIES EXPANSION
-  */
+     SERIES EXPANSION
+     */
   r = u/(u+2.0e0);
   t = r*r;
   w = ((p2*t+p1)*t+p0)/((q2*t+q1)*t+1.0e0);
   return 2.0e0*t*(1.0e0/(1.0e0-r)-r*w)+w1;
- S40:
+S40:
   r = *x-0.5e0-0.5e0;
   return r-log(*x);
 }
-static double rlog1(double *x)
+
 /*
-  -----------------------------------------------------------------------
-  EVALUATION OF THE FUNCTION X - LN(1 + X)
-  -----------------------------------------------------------------------
-*/
+ * EVALUATION OF THE FUNCTION X - LN(1 + X)
+ */
+static double rlog1(double *x)
 {
   static double a = .566749439387324e-01;
   static double b = .456512608815524e-01;
@@ -8991,35 +8491,35 @@ static double rlog1(double *x)
   static double q2 = .354508718369557e+00;
   static double h,r,t,w,w1;
   /*
-    ..
-    .. Executable Statements ..
-  */
-  if(*x < -0.39e0 || *x > 0.57e0) goto S40;
-  if(*x < -0.18e0) goto S10;
-  if(*x > 0.18e0) goto S20;
+     ..
+     .. Executable Statements ..
+     */
+  if (*x < -0.39e0 || *x > 0.57e0) goto S40;
+  if (*x < -0.18e0) goto S10;
+  if (*x > 0.18e0) goto S20;
   /*
-    ARGUMENT REDUCTION
-  */
+     ARGUMENT REDUCTION
+     */
   h = *x;
   w1 = 0.0e0;
   goto S30;
- S10:
+S10:
   h = *x+0.3e0;
   h /= 0.7e0;
   w1 = a-h*0.3e0;
   goto S30;
- S20:
+S20:
   h = 0.75e0**x-0.25e0;
   w1 = b+h/3.0e0;
- S30:
+S30:
   /*
-    SERIES EXPANSION
-  */
+     SERIES EXPANSION
+     */
   r = h/(h+2.0e0);
   t = r*r;
   w = ((p2*t+p1)*t+p0)/((q2*t+q1)*t+1.0e0);
   return 2.0e0*t*(1.0e0/(1.0e0-r)-r*w)+w1;
- S40:
+S40:
   w = *x+0.5e0+0.5e0;
   return *x-log(w);
 }
@@ -9046,38 +8546,26 @@ static double spmpar (int *i)
   return 0.0;
 }
 
-
-static double stvaln(double *p)
 /*
-**********************************************************************
- 
-double stvaln(double *p)
-STarting VALue for Neton-Raphon
-calculation of Normal distribution Inverse
- 
- 
-Function
- 
- 
-Returns X  such that CUMNOR(X)  =   P,  i.e., the  integral from -
-infinity to X of (1/SQRT(2*M_PI)) EXP(-U*U/2) dU is P
- 
- 
-Arguments
- 
- 
-P --> The probability whose normal deviate is sought.
-P is DOUBLE PRECISION
- 
- 
-Method
- 
- 
-The  rational   function   on  page 95    of Kennedy  and  Gentle,
-Statistical Computing, Marcel Dekker, NY , 1980.
- 
-**********************************************************************
-*/
+ * 
+ * double stvaln(double *p)
+ * STarting VALue for Neton-Raphon
+ * calculation of Normal distribution Inverse
+ * 
+ * Returns X  such that CUMNOR(X)  =   P,  i.e., the  integral from -
+ * infinity to X of (1/SQRT(2*M_PI)) EXP(-U*U/2) dU is P
+ * 
+ * P --> The probability whose normal deviate is sought.
+ * P is DOUBLE PRECISION
+ * 
+ * 
+ * Method
+ * 
+ * The  rational   function   on  page 95    of Kennedy  and  Gentle,
+ * Statistical Computing, Marcel Dekker, NY , 1980.
+ * 
+ */
+static double stvaln(double *p)
 {
   static double xden[5] = {
     0.993484626060e-1,0.588581570495e0,0.531103462366e0,0.103537752850e0,
@@ -9090,7 +8578,7 @@ Statistical Computing, Marcel Dekker, NY , 1980.
   static int K1 = 5;
   static double stvaln_0,sign,y,z;
 
-  if((*p <= 0.5e0))
+  if ((*p <= 0.5e0))
     {
       sign = -1.0e0;
       z = *p;
@@ -9105,85 +8593,63 @@ Statistical Computing, Marcel Dekker, NY , 1980.
   stvaln_0 = y+devlpl(xnum,&K1,&y)/devlpl(xden,&K1,&y);
   return sign*stvaln_0;
 }
-/************************************************************************
-FIFDINT:
-Truncates a double precision number to an integer and returns the
-value in a double.
- ************************************************************************/
+
+/*
+ * Truncates a double precision number to an integer and returns the
+ * value in a double.
+ */
 static double fifdint(double a)
-        /* a     -     number to be truncated */
 {
   return (double) ((int) a);
 }
-/************************************************************************
-FIFDMAX1:
-returns the maximum of two numbers a and b
-************************************************************************/
+
+/*
+ * returns the maximum of two numbers a and b
+ */
 static double fifdmax1(double a,double b)
-/* a     -      first number */
-/* b     -      second number */
 {
   if (a < b) return b;
   else return a;
 }
-/************************************************************************
-FIFDMIN1:
-returns the minimum of two numbers a and b
-************************************************************************/
+
+/*
+ * returns the minimum of two numbers a and b
+ */
 static double fifdmin1(double a,double b)
-/* a     -     first number */
-/* b     -     second number */
 {
   if (a < b) return a;
   else return b;
 }
-/************************************************************************
-FIFDSIGN:
-transfers the sign of the variable "sign" to the variable "mag"
-************************************************************************/
+
+/*
+ * transfers the sign of the variable "sign" to the variable "mag"
+ */
 static double fifdsign(double mag,double sign)
-/* mag     -     magnitude */
-/* sign    -     sign to be transfered */
 {
   if (mag < 0) mag = -mag;
   if (sign < 0) mag = -mag;
   return mag;
-
 }
-/************************************************************************
-FIFIDINT:
-Truncates a double precision number to a long integer
-************************************************************************/
+
+/*
+ * Truncates a double precision number to a long integer
+ */
 static long fifidint(double a)
-/* a - number to be truncated */
 {
   if (a < 1.0) return (long) 0;
   else return (long) a;
 }
-/************************************************************************
-FIFMOD:
-returns the modulo of a and b
-************************************************************************/
-static long fifmod(long a,long b)
-/* a - numerator */
-/* b - denominator */
-{
-  return a % b;
-}
-/************************************************************************
-FTNSTOP:
-Prints msg to standard error and then exits
-************************************************************************/
-static void ftnstop(char* msg)
+
 /* msg - error message */
+static void ftnstop(char* msg)
 {
   if (msg != NULL) fprintf(stderr,"%s\n",msg);
   exit(0);
 }
 
-/************************************************************************
-Simple useable cumulative functions
-************************************************************************/
+/*
+ * Simple useable cumulative functions
+ */
 
 /**
  * Computes the CDF of Chi2(df, nc)
@@ -9245,10 +8711,10 @@ double pnl_cdfnor(double x)
   const double b4= -1.821255978;
   const double b5= 1.330274429;
   const double one_over_twopi= 0.39894228;
-  
+
   double t;
-  
-  if(x >= 0.0)
+
+  if (x >= 0.0)
     {
       t = 1.0 / ( 1.0 + p * x );
       return (1.0 - one_over_twopi * exp( -x * x / 2.0 ) * t *
@@ -9274,22 +8740,21 @@ static double ff(double x, double y, double aa, double bb, double r)
   return exp(aa*(2.*x-aa) + bb*(2.*y - bb) + 2.*r*(x-aa)*(y-bb));     
 }
 
-
 static double NN1( double a, double b, double r)
 {   
   static const double u[4] = {0.3253030,0.4211071,0.1334425,0.006374323};
   static const double v[4] = {0.1337764,0.6243247,1.3425378,2.2626645};
   double aa,bb,m;
   int i,j;
-  
+
   aa = a/(sqrt(2.*(1.-r*r)));
   bb = b/(sqrt(2.*(1.-r*r)));
   m = 0.0;
-  
+
   for ( i = 0; i <= 3; i++)     
     for ( j = 0; j <= 3; j++)           
       m = m + u[i]*u[j]*ff(v[i], v[j], aa, bb, r);
-  
+
   m = m*(sqrt(1.0- r*r))/M_PI;
   return (m);
 }
@@ -9297,8 +8762,8 @@ static double NN1( double a, double b, double r)
 static double NN2( double a, double b, double r)
 {
   double res=0.0;
-  
-  if(( a <= 0.0 ) && ( b <= 0.0 ) && ( r <= 0.0 ))
+
+  if (( a <= 0.0 ) && ( b <= 0.0 ) && ( r <= 0.0 ))
     {
       res =  NN1(a, b, r);
     }
@@ -9317,7 +8782,6 @@ static double NN2( double a, double b, double r)
   return (res);
 }
 
-
 static double sgn( double x )
 {
   if ( x > 0.0 ) return 1.;
@@ -9334,11 +8798,11 @@ static double sgn( double x )
  *
  * @return  the cumlative bivariate normal distribution function with
  * correlation r at the point (a,b)
-*/
+ */
 double pnl_cdf2nor( double a, double b, double r)
 {
   double r1,r2,d,res;
-  
+
   if (r+PRECISION>=1)
     {
       res=cdf_nor(MIN(a,b));
@@ -9352,7 +8816,7 @@ double pnl_cdf2nor( double a, double b, double r)
           {res=0;}
       }
     else
-      if( a*b*r <= 0.0 )
+      if ( a*b*r <= 0.0 )
         {
           res = NN2(a,b,r);
         }
@@ -9363,10 +8827,9 @@ double pnl_cdf2nor( double a, double b, double r)
           d = (1.0- sgn(a)*sgn(b))/4.0;
           res = NN2( a, 0.0, r1 ) + NN2( b, 0.0, r2) - d;
         }
-  
+
   return (res);
 }
-
 
 /** One-dimensional normal density function
  * @param x point at which the density is computed
@@ -9445,12 +8908,12 @@ static  double InvNormal2Q3[] = {
   0.1E1
 };
 
-
 /**
  * Computes the inverse of the normal cumulative distribution function.
  * Comes from Pierre L'Ecuyer (SSJ)
  */
-double pnl_inv_cdfnor (double u) {
+double pnl_inv_cdfnor (double u)
+{
   /*
    * Returns the inverse of the cdf of the normal distribution.
    * Rational approximations giving 16 decimals of precision.
