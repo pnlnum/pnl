@@ -16,6 +16,15 @@
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
 
+
+#include <errno.h>
+#include <math.h>
+#include "pnl/pnl_complex.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_specfun.h"
+
+#define MAX_INT_FACT 170
+
 /* 
  * This code originally comes from specfun.f written and copyrighted by 
  *      Shanjie Zhang and Jianming Jin
@@ -25,13 +34,7 @@
  *
  * The fortran code has been hand translated into C by Jérôme Lelong
  */
-
-#include <errno.h>
-#include <math.h>
-#include "pnl/pnl_complex.h"
-#include "pnl/pnl_mathtools.h"
-
-/*
+/**
  * Compute the Gamma function for complex argument
  *
  * gr + gi i = Gamma(x + i y) if kf = 1
@@ -154,3 +157,55 @@ dcomplex Clgamma (dcomplex z)
   return c;
 } 
 
+/** factorial function
+ * @param n an integer
+ * @return the factorial of n as a double
+ */
+double pnl_sf_fact (int n)  
+{
+  if ( n <= 0 ) return 1.0;
+  if ( n >= MAX_INT_FACT ) return PNL_INF;
+  else
+    { 
+      int i;
+      double z = 1.;
+      for ( i=n ; i>1 ; i-- ) z *= i;
+      return z;
+    }
+}
+
+/** 
+ * Compute the binomial coefficient 
+ *
+ *      / n \        n!      
+ *      |   |  = --------- 
+ *      \ k /    k! (n-k)! 
+ *
+ * @param n a non-negative integer
+ * @param k a non-negative integer smaller that n
+ * 
+ * @return 
+ */
+double pnl_sf_choose (int n, int p)
+{
+  int k = MAX(p, n-p);
+
+  if ( n-p<0 || n<0 || p<0 ) return 0.;
+
+  if ( k < 64 )
+    {
+      int i;
+      double prod = 1.;
+      for ( i=n ; i>k ; i-- )
+        {
+          prod *= (double) (i) / (double) (i-k);
+        }
+      return prod;
+    }
+  else
+    {
+      double ln_choose = pnl_sf_log_gamma (n+1) - pnl_sf_log_gamma (p+1) 
+        - pnl_sf_log_gamma (n-p+1);
+      return exp (ln_choose);
+    }
+}

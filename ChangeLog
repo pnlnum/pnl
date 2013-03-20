@@ -1,4 +1,14 @@
-19-01-2012 Jérôme Lelong <jerome.lelong@gmail.com>
+20-03-2013 Jérôme Lelong <jerome.lelong@gmail.com>
+	* specfun.c: Add pnl_sf_choose and pnl_sf_fact
+
+05-03-2013 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* cephes: Add pnl_round and pnl_psi (di-gamma)
+	* cumulfunc.c: Clean spaghetti code but be carefull that most functions
+	are not threadsafe yet.
+	* mathtools.c:  intapprox --> pnl_{i,l}trunc. Add pnl_{i,l}round
+
+19-01-2013 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* Autotools files are removed
 

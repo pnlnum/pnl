@@ -26,6 +26,10 @@
 #include "pnl/pnl_random.h"
 #include "tests_utils.h"
 
+static double wrap_pnl_sf_choose (double n, double p)
+{
+  return pnl_sf_choose ((int) n, (int) p);
+}
 
 /* 
  * struct for double(*f)(double)
@@ -96,8 +100,6 @@ struct dddd2d_test
   double res;
 };
 
-
-
 /* 
  * struct for dcomplex(*f)(doubla, dcomplex)
  */
@@ -113,7 +115,6 @@ struct dc2c_test
 struct d2d_test list_gamma_tst [] =
 {
 #include "Data_specfun/gamma_test.dat"
-/* #include "Data_specfun/expintEi_test.dat" */
     { NULL, NULL, 0, 0}
 };
 

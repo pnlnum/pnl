@@ -50,7 +50,9 @@ function y = gammaincQ (x, a)
     y = gammainc (x, a, "upper");
 end
 
-
+function y = choose (n, p)
+    y = gamma (n+1) / (gamma (p+1) * gamma (n-p+1));
+end
 
 Lfunc = { {"gammainc2", "pnl_sf_gamma_inc"},...
     {"gammaincP", "pnl_sf_gamma_inc_P"}, ...
@@ -66,6 +68,15 @@ for j=1:size(Lfunc,2)
         fprintf(dat,"{ ""%s"", %s, %.18f, %.18f, %.18f },\n", func{2}, func{2}, arg, alpha, res)
     end
 end
+
+func = {"choose", "wrap_pnl_sf_choose"};
+for i=(1:10)
+    n = floor(rand(1) * 30);
+    k = floor(rand(1) * n);
+    res = feval (func{1}, n, k);
+    fprintf(dat,"{ ""%s"", %s, %.18f, %.18f, %.18f },\n", func{2}, func{2}, k, n , res)
+end
+
 
 fclose(dat)
 

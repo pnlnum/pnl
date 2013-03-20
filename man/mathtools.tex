@@ -59,55 +59,15 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
 \end{itemize}
 
 \subsubsection{Functions}
-\begin{itemize}
-\item \describefun{double}{Cnp}{int n, int p}
-  \sshortdescribe Compute the binomial coefficient $\binom{n}{p}$ in double
-  precision.
-
-\item \describefun{double}{pnl_fact}{int n}
-  \sshortdescribe Compute $n! = \Gamma(n+1)$ in double precision.
-
-\item \describefun{double}{pnl_pow_i}{double x, int n}
-  \sshortdescribe Compute $x^n$ for $n \in \N$ using a squaring method.
-
-
-\item \describefun{void}{pnl_qsort}{void *a, int n, int es, int lda, int *t,
-  int ldt, int use_index, int (*cmp)(void const *, void const *)}
-  \sshortdescribe Sort the array \var{a} using the comparison function
-  \var{cmp}. \var{n} is the number of elements in \var{a}, each element being of
-  size \var{es}. \var{t} is an array of integers of length \var{n} used to store
-  the permutation when \var{use_index=TRUE}. \var{lda} and \var{ldt} are the
-  leading dimensions of the arrays \var{a} and \var{t} and are used to sort
-  matrices column-wise. 
-
-\item \describefun{double}{pnl_nan}{}
-  \sshortdescribe Return \var{Nan}
-
-\item \describefun{double}{pnl_posinf}{}
-  \sshortdescribe Return \var{+ infinity} 
-
-\item \describefun{double}{pnl_neginf}{}
-  \sshortdescribe Return \var{- infinity} 
-
-\item \describefun{int}{pnl_isnan}{double x}
-  \sshortdescribe Return \var{1} if \var{x = Nan}
-
-\item \describefun{int}{pnl_isfinite}{}
-  \sshortdescribe Return \var{1} if \var{x != Inf}
-
-\item \describefun{int}{pnl_isinf}{}
-  \sshortdescribe Return \var{+1} if \var{x = +Inf}, \var{-1} if \var{x = -Inf},
-  \var{0} otherwise.
-\end{itemize}
 
 We provide a few functions mathematical functions named \verb+pnl_funcname+,
-some of which are already part of C99 as \verb+funcname+.
+some of them may be available in C99 as \verb+funcname+.
 \begin{itemize}
   \item \describefun{int}{pnl_itrunc}{double s}
     \sshortdescribe This function is similar to the \var{trunc} function
     (provided by the C library) but the result is typed as an integer instead of a
     double. Digits may be lost if \var{s} exceeds \var{MAX_INT}.
-  \item \describefun{int}{pnl_itrunc}{double s}
+  \item \describefun{long int}{pnl_ltrunc}{double s}
     \sshortdescribe This function is similar to the \var{trunc} function
     (provided by the C library) but the result is typed as a long integer instead of a
     double. 
@@ -122,7 +82,7 @@ some of which are already part of C99 as \verb+funcname+.
     \sshortdescribe This function is similar to the \var{round} function
     (provided by the C library) but the result is typed as an integer instead of a
     double. Digits may be lost if \var{s} exceeds \var{MAX_INT}.
-  \item \describefun{int}{pnl_iround}{double s}
+  \item \describefun{long int}{pnl_lround}{double s}
     \sshortdescribe This function is similar to the \var{round} function
     (provided by the C library) but the result is typed as a long integer instead of a
     double. 

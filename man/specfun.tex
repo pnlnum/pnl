@@ -123,14 +123,18 @@ For $x>0$, the Gamma Function is defined by
 \end{equation*}
 
 \begin{itemize}
+\item \describefun{double}{pnl_sf_fact}{int n}
+  \sshortdescribe   Computes factorial of \var{n} $ \Gamma (n+1)$.
 \item \describefun{double}{pnl_sf_gamma}{double x}
   \sshortdescribe   Computes $\Gamma(x), x \geq 0$
 \item \describefun{double}{pnl_sf_log_gamma}{double x}
   \sshortdescribe   Computes $\log(\Gamma(x)), x \geq 0$
-\item \describefun{int}{pnl_sf_log_gamma_sgn}{double x, double \ptr y, int \ptr
-    sgn}
+\item \describefun{int}{pnl_sf_log_gamma_sgn}{double x, double \ptr y, int \ptr sgn}
   \sshortdescribe   Computes $y = \log(|\Gamma(x)|)$ for \var{x > 0} \var{sgn}
   contains the sign of $\Gamma(x)$ (-1 or +1).
+\item \describefun{double}{pnl_sf_choose}{int n, int k}
+  \sshortdescribe Computes the binomial coefficient $\binom{n}{k} = 
+  \frac{n!}{k! (n-k)!}$ for $0 \le k \le n$ in double precision.
 \end{itemize}
 
 \subsection{Digamma function}
@@ -240,15 +244,8 @@ For $x \in \R$
 
 \begin{itemize}
 \item \describefun{double}{pnl_sf_expint_En}{int n, double x}
-  \sshortdescribe   Computes for  $ n\geq 0, x \geq 0$ and $x>0$ if $n=0$ or $1$.
-  \begin{equation*}
-    E_n(x)= \int_1^{\infty} u^{-n} \expp{-x u} du.
-  \end{equation*}
-% \item \describefun{double}{pnl_sf_expint_Ei}{double x}
-%   \sshortdescribe   Computes for  $x>0$  the principal value of
-%   \begin{equation*}
-%     Ei(x)= \int_{-\infty}^x \frac{\expp{t}}{t}  du.
-%   \end{equation*}
+  \sshortdescribe   Computes \var{E_n(x)} for  $ n\geq 0, x \geq 0$, or $x>0$
+  when $n=0$ or $1$.
 \end{itemize}
 
 \subsection{Hypergeometric functions}

@@ -74,6 +74,9 @@ extern double pnl_sf_gamma_inc_Q(double a,double x);
 extern double pnl_sf_expint_En(int n,double x);
 /* extern double pnl_sf_expint_Ei(double x); */
 
+
+extern double pnl_sf_fact (int n);
+extern double pnl_sf_choose (int n , int k);
 extern double pnl_sf_gamma (double);
 extern double pnl_sf_log_gamma (double);
 extern int pnl_sf_log_gamma_sgn(double x, double *res, int *sgn);

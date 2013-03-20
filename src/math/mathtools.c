@@ -54,6 +54,7 @@ double pnl_trunc(double x)
   if ( x >= 0. ) return floor (x);
   else return ceil (x);
 }
+
 /** 
  * 
  * Same as round but the result is casted as an int, digits may be
@@ -81,59 +82,13 @@ long int pnl_lround(double x)
   return (long int) pnl_round (x);
 }
 
-/** 
- * Compute the binomial coefficients with an error smaller than 1 for large
- * values of the parameter n
- * @param n an integer
- * @param p an integer
- * @return C(n, p)
- */
-double Cnp(int n, int p) 
-{                          
-  
-  double z, iter;
-  int i;
-  z=0.0;
-
-  if ((n-p<= -1) || (n<0) || (p<0))
-  {
-    return z;
-  }
-  else
-  {
-    if (p==0)
-      z=1.0;
-    else
-    {
-      z=1.0;
-      iter=z;
-      i=0;
-      while(i<=p-1)
-      {
-        iter=iter*(double)(n-i)/(p-i);
-        i=i+1;
-      }
-      if ((iter-floor(iter))>=0.5)
-        z=floor(iter)+1;
-      else
-        z=floor(iter);
-    }
-  }
-
-  return z;
-}
-
 /** factorial function
  * @param n an integer
  * @return the factorial of n as a double
  */
 double pnl_fact(int n)  
 {
-  int i;
-  double z=1.0;
-  if (n<=0) { z=1.0; }
-  else { for ( i=1 ; i<=n ; i++) z=z*i; }
-  return z;
+  return pnl_sf_fact (n);
 }
 
 /**
