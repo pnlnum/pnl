@@ -1,6 +1,12 @@
 include_directories(${PROJECT_BINARY_DIR}/src/include ${PROJECT_SOURCE_DIR}/src/include)
 enable_testing()
-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)
+add_custom_target(check
+    COMMAND ${CMAKE_COMMAND} -E create_symlink
+        ${CMAKE_CURRENT_SOURCE_DIR}/Data ${CMAKE_CURRENT_BINARY_DIR}/Data
+    COMMAND ${CMAKE_COMMAND} -E create_symlink
+        ${CMAKE_CURRENT_SOURCE_DIR}/Data_specfun
+        ${CMAKE_CURRENT_BINARY_DIR}/Data_specfun
+    COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)
 
 SET(band_matrix_test_SRCS
    band_matrix_test.c
