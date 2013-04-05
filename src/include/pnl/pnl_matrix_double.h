@@ -148,7 +148,7 @@ extern int pnl_mat_ls_mat (const PnlMat *A, PnlMat *B);
 extern int pnl_mat_ls (const PnlMat *A, PnlVect *b);
 
 /* inline functions if you are using GCC */
-#ifdef PNL_PNL_HAVE_INLINE 
+#ifdef PNL_HAVE_INLINE 
 PNL_INLINE_FUNC double pnl_mat_get (const PnlMat *self, int i, int j)
 {
   CheckIndexMat(self,i, j);

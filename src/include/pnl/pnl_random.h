@@ -85,7 +85,7 @@ extern PnlRng PnlRngSobolI8;
 extern PnlRng PnlRngNiederreiter;
 extern PnlRng *PnlRngArray[];
 
-#ifdef PNL_PNL_HAVE_INLINE
+#ifdef PNL_HAVE_INLINE
 PNL_INLINE_FUNC PnlRng* pnl_rng_get_from_id (PnlRngType t)
 {
   return PnlRngArray[t];

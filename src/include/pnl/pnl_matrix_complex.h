@@ -127,7 +127,7 @@ extern int pnl_mat_complex_exp (PnlMatComplex *expA, const PnlMatComplex *A);
 
 
 /* inline functions if you are using GCC */
-#ifdef PNL_PNL_HAVE_INLINE 
+#ifdef PNL_HAVE_INLINE 
 PNL_INLINE_FUNC dcomplex pnl_mat_complex_get (const PnlMatComplex *self, int i, int j)
 {
   CheckIndexMat(self,i, j);

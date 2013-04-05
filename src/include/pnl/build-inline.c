@@ -2,10 +2,10 @@
 /* To prevent from loading pnl/pnl_config.h */
 #define _PNL_CONFIG_H 
 
-#ifdef PNL_PNL_HAVE_INLINE
-#undef PNL_PNL_HAVE_INLINE
+#ifdef PNL_HAVE_INLINE
+#undef PNL_HAVE_INLINE
 #endif
-#define PNL_PNL_HAVE_INLINE
+#define PNL_HAVE_INLINE
 
 #ifdef PNL_INLINE_DECL
 #undef PNL_INLINE_DECL
