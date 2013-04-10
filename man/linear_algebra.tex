@@ -99,6 +99,10 @@ There are no special functions to access the size of a vector, instead the field
     size, const double \ptr x}
   \sshortdescribe Create a new \refstruct{PnlVect} pointer and copies \var{x}
   to \var{array}.  
+\item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_from_mat}{
+  const PnlMat *M}
+  \sshortdescribe Create a new \refstruct{PnlVect} pointer of size \var{M->mn}
+  and copy the content of \var{M} row wise.
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_from_list}{int
     size, ...}
   \sshortdescribe Create a new \refstruct{PnlVect} pointer of length

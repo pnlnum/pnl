@@ -154,6 +154,21 @@ TYPE(PnlVect) * FUNCTION(pnl_vect,create_from_ptr)(const int size,const BASE  * 
 }
 
 /**
+ * Create a new TYPE(PnlVect) pointer.
+ *
+ * @param M a TYPE(PnlMat)
+ * @return  a TYPE(PnlVect)pointer
+ */
+TYPE(PnlVect) * FUNCTION(pnl_vect,create_from_mat)(const TYPE(PnlMat) *M)
+{
+  TYPE(PnlVect) * v;
+  if ((v = FUNCTION(pnl_vect,create) (M->mn)) == NULL)
+    return NULL;
+  memcpy (v->array, M->array, v->size * sizeof(BASE));
+  return v;
+}
+
+/**
  * Create a new TYPE(PnlVect)pointer.
  *
  * @param size the size of the array

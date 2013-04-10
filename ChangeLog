@@ -1,3 +1,6 @@
+10-04-2013 Jérôme Lelong <jerome.lelong@gmail.com>
+	* TVector_source.c: Add pnl_vect_create_from_mat
+
 20-03-2013 Jérôme Lelong <jerome.lelong@gmail.com>
 	* specfun.c: Add pnl_sf_choose and pnl_sf_fact
 
