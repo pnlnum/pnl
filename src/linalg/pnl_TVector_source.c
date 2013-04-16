@@ -761,14 +761,11 @@ void FUNCTION(pnl_vect,map)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs, BASE(*
  */
 void FUNCTION(pnl_vect,map_vect_inplace)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs, BASE(*f)(BASE,BASE))
 {
-  BASE *lptr;
   int i;
   CheckVectMatch(lhs, rhs);
-  i=0;
-  while(i<lhs->size)
+  for ( i=0 ; i<lhs->size ; i++ )
     {
-      lptr = FUNCTION(pnl_vect,lget)(lhs, i);
-      *lptr =(*f)(*lptr, PNL_GET(rhs,i)); i++;
+      PNL_LET(lhs, i) = (*f)(PNL_GET(lhs, i), PNL_GET(rhs,i)); 
     }
 }
 
@@ -1354,7 +1351,7 @@ void FUNCTION(pnl_vect,axpby)(BASE a, const TYPE(PnlVect) *x,  BASE b, TYPE(PnlV
   for ( i=0 ; i<x->size ; i++ )
     {
       BASE xi =  PNL_GET(x, i);
-      BASE *yi = FUNCTION(pnl_vect,lget)(y, i);
+      BASE *yi = &(PNL_GET(y, i));
       xi = MULT(xi, a);
       *yi = PLUS(*yi, xi);
     }

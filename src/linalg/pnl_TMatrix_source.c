@@ -473,7 +473,7 @@ void FUNCTION(pnl_mat,fprint )(FILE *fic, const TYPE(PnlMat) *M)
     {
       for (j=0;j<M->n;j++)
         {
-          fprintf (fic,OUT_FORMAT " ",OUT_PUT_FORMAT(FUNCTION(pnl_mat,get )(M, i, j)));
+          fprintf (fic,OUT_FORMAT " ",OUT_PUT_FORMAT(PNL_MGET(M, i, j)));
         }
       fprintf (fic, "\n");
     }
@@ -501,7 +501,7 @@ void FUNCTION(pnl_mat, fprint_nsp)(FILE *fic, const TYPE(PnlMat) * M)
     {
       for (j=0;j<M->n;j++)
         {
-          fprintf(fic,OUT_FORMAT,OUT_PUT_FORMAT(FUNCTION(pnl_mat,get )(M, i, j)));
+          fprintf(fic,OUT_FORMAT,OUT_PUT_FORMAT(PNL_MGET(M, i, j)));
           if (j != M->n-1) fprintf (fic,", ");
         }
       if (i != M->m-1) fprintf(fic,"; \n  ");
@@ -577,27 +577,27 @@ void FUNCTION(pnl_mat,swap_rows )(TYPE(PnlMat) *M, int i, int j)
   p = M->n % 3;
   for (k=0; k<p; k++)
     {
-      Mik = FUNCTION(pnl_mat,get )(M, i, k);
-      Mjk = FUNCTION(pnl_mat,get )(M,j, k);
-      FUNCTION(pnl_mat,set )(M, i, k, Mjk);
-      FUNCTION(pnl_mat,set )(M, j, k, Mik);
+      Mik = PNL_MGET(M, i, k);
+      Mjk = PNL_MGET(M,j, k);
+      PNL_MLET(M, i, k) = Mjk;
+      PNL_MLET(M, j, k) = Mik;
     }
   for (k=p; k<M->n; k+=3)
     {
-      Mik = FUNCTION(pnl_mat,get )(M, i, k);
-      Mjk = FUNCTION(pnl_mat,get )(M,j, k);
-      FUNCTION(pnl_mat,set )(M, i, k, Mjk);
-      FUNCTION(pnl_mat,set )(M, j, k, Mik);
+      Mik = PNL_MGET(M, i, k);
+      Mjk = PNL_MGET(M,j, k);
+      PNL_MLET(M, i, k) = Mjk;
+      PNL_MLET(M, j, k) = Mik;
 
-      Mik = FUNCTION(pnl_mat,get )(M, i, k+1);
-      Mjk = FUNCTION(pnl_mat,get )(M,j, k+1);
-      FUNCTION(pnl_mat,set )(M, i, k+1, Mjk);
-      FUNCTION(pnl_mat,set )(M, j, k+1, Mik);
+      Mik = PNL_MGET(M, i, k+1);
+      Mjk = PNL_MGET(M,j, k+1);
+      PNL_MLET(M, i, k+1) = Mjk;
+      PNL_MLET(M, j, k+1) = Mik;
 
-      Mik = FUNCTION(pnl_mat,get )(M, i, k+2);
-      Mjk = FUNCTION(pnl_mat,get )(M,j, k+2);
-      FUNCTION(pnl_mat,set )(M, i, k+2, Mjk);
-      FUNCTION(pnl_mat,set )(M, j, k+2, Mik);
+      Mik = PNL_MGET(M, i, k+2);
+      Mjk = PNL_MGET(M,j, k+2);
+      PNL_MLET(M, i, k+2) = Mjk;
+      PNL_MLET(M, j, k+2) = Mik;
     }
 }
 
@@ -687,7 +687,7 @@ void FUNCTION(pnl_mat, get_col)(TYPE(PnlVect) *V, const TYPE(PnlMat) *M, int j)
   FUNCTION(pnl_vect, resize)(V,M->m);
   for (i=0; i<M->m; i++)
     {
-      FUNCTION(pnl_vect,set) (V, i, PNL_MGET (M, i, j) );
+      PNL_LET (V, i) = PNL_MGET (M, i, j);
     }
 }
 
@@ -1047,11 +1047,11 @@ void FUNCTION(pnl_mat,dgemv) (char trans, BASE alpha, const TYPE(PnlMat) *A,
           for ( j=0 ; j<A->n ; j++)
             {
               temp = PLUS (temp, MULT(PNL_MGET (A, i, j),
-                                      FUNCTION(pnl_vect,get) (x, j) ) );
+                                      PNL_GET (x, j) ) );
             }
-          yi = FUNCTION(pnl_vect,get) (y, i);
+          yi = PNL_GET (y, i);
           yi = PLUS( yi, MULT(alpha, temp));
-          FUNCTION(pnl_vect,set) (y, i, yi);
+          PNL_LET (y, i) = yi;
         }
     }
   /* Form alpha * A' * x + beta * y */
@@ -1060,12 +1060,12 @@ void FUNCTION(pnl_mat,dgemv) (char trans, BASE alpha, const TYPE(PnlMat) *A,
       PNL_CHECK (A->m != x->size || A->n != y->size, "size mismatch", "pnl_mat_dgmev");
       for (j=0; j<A->m; j++)
         {
-          temp = MULT(alpha, FUNCTION(pnl_vect,get) (x, j));
+          temp = MULT(alpha, PNL_GET (x, j));
           for (i=0; i<y->size; i++)
             {
-              yi =  FUNCTION(pnl_vect,get) (y, i);
+              yi =  PNL_GET (y, i);
               yi = PLUS(yi, MULT(PNL_MGET (A, j, i), temp));
-              FUNCTION(pnl_vect,set) (y, i, yi);
+              PNL_LET (y, i) = yi;
             }
         }
     }
@@ -1185,17 +1185,16 @@ void FUNCTION(pnl_mat,axpy) (BASE a, const TYPE(PnlMat) *X, TYPE(PnlMat) *Y)
 void FUNCTION(pnl_mat,dger) (BASE alpha, const TYPE(PnlVect) *x, const TYPE(PnlVect) *y, TYPE(PnlMat) *A)
 {
   int i, j;
-  BASE ai, alpha_xi;
   PNL_CHECK ((x->size != y->size) || (A->m != A->n) || (A->m != x->size), "size mismatch", "pnl_mat_dger");
   if ( EQ(alpha,ZERO) ) return;
 
-  for ( i=0 ; i<x->size ; i++)
+  for ( i=0 ; i<x->size ; i++ )
     {
-      alpha_xi = MULT(alpha, FUNCTION(pnl_vect,get) (x, i));
+      const BASE alpha_xi = MULT(alpha, PNL_GET (x, i));
       for (j=0; j<x->size; j++)
         {
-          ai = PNL_MGET (A, i, j);
-          ai = PLUS(ai, MULT(alpha_xi, FUNCTION(pnl_vect,get) (x, j)));
+          BASE ai = PNL_MGET (A, i, j);
+          ai = PLUS(ai, MULT(alpha_xi, PNL_GET (x, j)));
           PNL_MLET(A, i, j) = ai;
         }
     }
@@ -1227,9 +1226,9 @@ BASE FUNCTION(pnl_mat,scalar_prod)(const TYPE(PnlMat) *A, const TYPE(PnlVect) *x
       BASE temp = ZERO;
       for (j=0; j<A->n; j++) 
         {
-          temp = PLUS(temp, MULT(FUNCTION(pnl_mat,get)(A,i,j), FUNCTION(pnl_vect,get)(y,j)));
+          temp = PLUS(temp, MULT(PNL_MGET(A,i,j), PNL_GET(y,j)));
         }
-      sum = PLUS(sum, MULT(FUNCTION(pnl_vect,get)(x,i), temp));
+      sum = PLUS(sum, MULT(PNL_GET(x,i), temp));
     }
   return sum;
 }
@@ -1320,9 +1319,9 @@ void FUNCTION(pnl_mat,sum_vect)(TYPE(PnlVect) *y, const TYPE(PnlMat) *A, char a)
         {
           for (j=0; j<A->n; j++)
             {
-              yj = FUNCTION(pnl_vect,get) (y, j);
+              yj = PNL_GET (y, j);
               yj = PLUS (yj, PNL_MGET (A, i, j));
-              FUNCTION(pnl_vect,set) (y, j, yj);
+              PNL_LET (y, j) = yj;
             }
         }
     }
@@ -1336,7 +1335,7 @@ void FUNCTION(pnl_mat,sum_vect)(TYPE(PnlVect) *y, const TYPE(PnlMat) *A, char a)
             {
               sum = PLUS (sum, PNL_MGET (A, i, j));
             }
-          FUNCTION(pnl_vect,set) (y, i, sum);
+          PNL_LET (y, i) = sum;
         }
     }
   else
@@ -1370,9 +1369,9 @@ void FUNCTION(pnl_mat,prod_vect)(TYPE(PnlVect) *y, const TYPE(PnlMat) *A, char a
         {
           for (j=0; j<A->n; j++)
             {
-              yj = FUNCTION(pnl_vect,get) (y, j);
+              yj = PNL_GET (y, j);
               yj = MULT (yj, PNL_MGET (A, i, j));
-              FUNCTION(pnl_vect,set) (y, j, yj);
+              PNL_LET (y, j) = yj;
             }
         }
     }
@@ -1386,7 +1385,7 @@ void FUNCTION(pnl_mat,prod_vect)(TYPE(PnlVect) *y, const TYPE(PnlMat) *A, char a
             {
               prod = MULT (prod, PNL_MGET (A, i, j));
             }
-          FUNCTION(pnl_vect,set) (y, i, prod);
+          PNL_LET (y, i) = prod;
         }
     }
   else

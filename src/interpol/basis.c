@@ -1241,7 +1241,7 @@ double pnl_basis_eval (const PnlBasis *basis, const PnlVect *coef, const double 
   y = 0.;
   for ( i=0 ; i<coef->size ; i++ )
     {
-      const double a = pnl_vect_get (coef, i);
+      const double a = PNL_GET (coef, i);
       if ( a != 0 ) { y += a * pnl_basis_i (basis, x, i); }
     }
   return y;
@@ -1267,7 +1267,7 @@ double pnl_basis_eval_D (const PnlBasis *basis, const PnlVect *coef, const doubl
   y = 0.;
   for ( k=0 ; k<coef->size ; k++ )
     {
-      const double a = pnl_vect_get (coef, k);
+      const double a = PNL_GET (coef, k);
       if ( a != 0. ) { y += a * pnl_basis_i_D (basis, x, k, i); }
     }
   return y;
@@ -1294,7 +1294,7 @@ double pnl_basis_eval_D2 (const PnlBasis *basis, const PnlVect *coef, const doub
   y = 0.;
   for ( k=0 ; k<coef->size ; k++ )
     {
-      const double a = pnl_vect_get (coef, k);
+      const double a = PNL_GET (coef, k);
       if ( a != 0. ) { y += a * pnl_basis_i_D2 (basis, x, k, i, j); }
     }
   return y;
@@ -1331,7 +1331,7 @@ void pnl_basis_eval_derivs (const PnlBasis *b, const PnlVect *coef, const double
   for ( i=0 ; i<coef->size ; i++ )
     {
       double auxf;
-      const double a = pnl_vect_get (coef, i);
+      const double a = PNL_GET (coef, i);
       if ( a == 0. ) continue;
       auxf = 1;
       /*
@@ -1435,10 +1435,10 @@ int pnl_basis_fit_ls (const PnlBasis *basis, PnlVect *coef, const PnlMat *x, con
         {
           PnlVect xi = pnl_vect_wrap_mat_row (x, i);
           const double tmp = pnl_basis_i_vect (basis, &xi, k);
-          b_k =  pnl_vect_get(coef, k);
-          b_k += tmp * pnl_vect_get (y, i);
-          pnl_vect_set (coef, k, b_k);
-          pnl_vect_set (phi_k, k, tmp);
+          b_k =  PNL_GET(coef, k);
+          b_k += tmp * PNL_GET (y, i);
+          PNL_LET (coef, k) = b_k;
+          PNL_LET (phi_k, k) = tmp;
         }
       /* A += phi_k' * phi_k */
       pnl_mat_dger(1., phi_k, phi_k, A);

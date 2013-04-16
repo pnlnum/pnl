@@ -147,7 +147,7 @@ void pnl_ilap_fft(PnlVect *res, PnlCmplxFunc *f, double T, double eps)
       res_i = Creal (Cmul (pnl_vect_complex_get (fft, i), mul));
       mul = Cmul (mul, fac);
       res_i = (h / M_PI) * exp (a * (i + 1) * time_step) * (res_i + .5 * f_a);
-      pnl_vect_set (res, i, res_i);
+      PNL_LET (res, i) = res_i;
     }
   pnl_vect_complex_free (&fft);
 }

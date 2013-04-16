@@ -64,7 +64,7 @@ static int pnl_mat_is_sym (const PnlMat *A)
   for ( i=0 ; i<A->m ; i++ )
     for ( j=0 ; j<i ; j++ )
       {
-        if (pnl_mat_get(A, i, j) != pnl_mat_get(A, j, i)) return FALSE;
+        if (PNL_MGET(A, i, j) != PNL_MGET(A, j, i)) return FALSE;
       }
   return TRUE;
 }
@@ -80,7 +80,7 @@ static void pnl_mat_make_upper (PnlMat *A)
     {
       for ( j=0 ; j<i ; j++ )
         {
-          pnl_mat_set (A, i, j, 0.);
+          PNL_MLET (A, i, j) = 0.;
         }
     }
 }
@@ -382,7 +382,7 @@ int pnl_mat_log (PnlMat *B, const PnlMat *A)
     {
       for ( j=0 ; j<n ; j++ )
         {
-          pnl_mat_set ( P, i, j, pnl_mat_get (P, i, j) * log (pnl_vect_get (D, j)) );
+          PNL_MLET ( P, i, j) = PNL_MGET (P, i, j) * log (PNL_GET (D, j));
         }
     }
 

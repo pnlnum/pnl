@@ -95,7 +95,7 @@ void pnl_vect_permute (PnlVect *px, const PnlVect *x, const PnlPermutation *p)
   for (i=0; i<x->size; i++)
     {
       k = p->array[i];
-      pnl_vect_set (px, i, pnl_vect_get (x, k));
+      PNL_LET (px, i) = PNL_GET (x, k);
     }
 }
 

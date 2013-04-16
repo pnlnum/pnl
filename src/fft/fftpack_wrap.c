@@ -198,7 +198,7 @@ int pnl_real_fft(const PnlVect *in, PnlVectComplex *out)
   n = in->size;
   if ((data = malloc (n * sizeof (double))) == NULL) return FAIL;
 
-  for (i=0; i<n; i++) { data[i] = pnl_vect_get (in, i); }
+  for (i=0; i<n; i++) { data[i] = PNL_GET (in, i); }
   if (pnl_real_fft_inplace (data, n) == FAIL) return FAIL;
 
   pnl_vect_complex_resize (out, n);
