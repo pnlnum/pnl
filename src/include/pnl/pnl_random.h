@@ -143,6 +143,8 @@ extern double pnl_rng_exp(double lambda,PnlRng *rng);
 extern double pnl_rng_uni (PnlRng *rng);
 extern double pnl_rng_uni_ab (double a, double b, PnlRng *rng);
 extern double pnl_rng_normal (PnlRng *rng);
+extern double pnl_rng_lognormal (double m, double sigma2, PnlRng *rng);
+extern double pnl_rng_invgauss (double mu, double lambda, PnlRng *rng);
 extern void pnl_vect_rng_uni(PnlVect *G, int samples, double a, double b, PnlRng *rng);
 extern void pnl_vect_rng_uni_d(PnlVect *G, int dimension, double a, double b, PnlRng *rng);
 extern void pnl_vect_rng_normal(PnlVect *G, int samples, PnlRng *rng);

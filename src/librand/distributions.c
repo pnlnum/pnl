@@ -551,6 +551,47 @@ double pnl_rng_normal (PnlRng *rng)
   return Gauss_BoxMuller(rng);
 }
 
+/** 
+ * Return of log normal random variable
+ * 
+ * @param m mean of the normal variable
+ * @param sigma2 variance of the normal distribution
+ * @param rng the generator to use
+ */
+double pnl_rng_lognormal (double m, double sigma2, PnlRng *rng)
+{
+  return exp (m + sqrt(sigma2) * pnl_rng_normal (rng));
+}
+
+/** 
+ * Return an inverse gaussian random sample
+ *
+ * The algorithm used is based on 
+ *
+ *     John R. Michael, William R. Schucany and Roy W. Haas
+ *     Generating Random Variates Using Transformations with Multiple Roots,
+ *     The American Statistician, Vol. 30, No. 2 (May, 1976), pp. 88-90
+ * 
+ * @param mu mean of the distribution (must be positive)
+ * @param lambda shape parameter (must be positive)
+ * 
+ */
+double pnl_rng_invgauss (double mu, double lambda, PnlRng *rng)
+{
+  double g = pnl_rng_normal (rng);
+  double v = g * g;
+  double w = mu * v;
+  double x1 = mu + mu / (2. * lambda) * (w - sqrt (w * (4 * lambda + w)));
+  if ( pnl_rng_uni (rng) < mu / (x1 + mu) )
+    {
+      return x1;
+    }
+  else
+    {
+      return mu * mu / x1;
+    }
+}
+
 /**
  * Compute a vector of independent and uniformly distributed r.v. on [a,b]
  * @param G existing PnlVect containing the random numbers on exit

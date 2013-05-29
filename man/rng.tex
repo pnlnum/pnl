@@ -152,6 +152,14 @@ The following functions return one sample from a specified law.
 \item \describefun{double}{pnl_rng_normal} {\refstruct{PnlRng} \ptr rng}
   \sshortdescribe Generate a sample from the standard normal distribution.
 
+\item \describefun{double}{pnl_rng_lognormal}{double m, double sigma2, \refstruct{PnlRng} \ptr rng}
+  \sshortdescribe Generate a sample from the log-normal distribution. The
+  underlying normal distribution has mean \var{m} and variance \var{sigma2}.
+
+\item \describefun{double}{pnl_rng_invgauss}{double mu, double lambda, \refstruct{PnlRng} \ptr rng}
+  \sshortdescribe Generate a sample from the inverse Gaussian distribution with
+  mean \var{mu} and shape parameter \var{lambda}.
+
 \item \describefun{long}{pnl_rng_poisson1}{double lambda, double
     t,\refstruct{PnlRng} \ptr rng}
   \sshortdescribe Generate a sample from a Poisson process with intensity
