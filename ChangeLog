@@ -1,6 +1,7 @@
-29-05-2013 Jérôme Lelong <jerome.lelong@gmail.com>
+30-05-2013 Jérôme Lelong <jerome.lelong@gmail.com>
 	* distributions.c: Add random variate generation from the following
-	distributions: log-normal and inverse gaussian distributions.
+	distributions: log-normal, inverse gaussian, asymmetric double
+	exponential distributions.
 
 10-04-2013 Jérôme Lelong <jerome.lelong@gmail.com>
 	* TVector_source.c: Add pnl_vect_create_from_mat

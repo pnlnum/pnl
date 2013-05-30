@@ -140,6 +140,7 @@ extern int pnl_rng_bernoulli(double p, PnlRng *rng);
 extern long pnl_rng_poisson(double lambda, PnlRng *rng);
 extern long pnl_rng_poisson1(double lambda,double t, PnlRng *rng);
 extern double pnl_rng_exp(double lambda,PnlRng *rng);
+extern double pnl_rng_dblexp (double lambda_p, double lambda_m, double p, PnlRng *rng);
 extern double pnl_rng_uni (PnlRng *rng);
 extern double pnl_rng_uni_ab (double a, double b, PnlRng *rng);
 extern double pnl_rng_normal (PnlRng *rng);

@@ -142,6 +142,15 @@ The following functions return one sample from a specified law.
   \sshortdescribe Generate a sample from the Exponential law with
   parameter \var{lambda}.
 
+\item \describefun{double}{pnl_rng_dblexp}{double lambda_p, double lambda_m, double p, \refstruct{PnlRng} \ptr rng}
+  \sshortdescribe Generate a sample from the asymmetric exponential distribution
+  with density 
+  \begin{equation*}
+    p \lambda_p \expp{-\lambda_p y} \ind{y > 0} + (1-p) \lambda_m
+    \expp{-\lambda_m |y|} \ind{y < 0}
+  \end{equation*}
+  where $\lambda_p >0, \lambda_m >0$ and $p \in [0, 1]$.
+
 \item \describefun{double}{pnl_rng_uni} {\refstruct{PnlRng} \ptr rng}
   \sshortdescribe Generate a sample from the Uniform law on $[0, 1]$.
 
