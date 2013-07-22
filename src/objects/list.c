@@ -39,6 +39,7 @@ PnlList* pnl_list_new ()
   o->len = 0;
   o->object.type = PNL_TYPE_LIST;
   o->object.parent_type = PNL_TYPE_LIST;
+  o->object.nref = 0;
   o->object.label = pnl_list_label;
   o->object.destroy = (DestroyFunc *) pnl_list_free;
   o->object.constructor = (NewFunc *) pnl_list_new;
@@ -127,6 +128,9 @@ void pnl_list_insert_first (PnlList *L, PnlObject *o)
   L->len++;
   L->first = C;
 
+  /* update nref for o */
+  if ( o != NULL ) o->nref ++;
+
 }
 
 /**
@@ -157,6 +161,9 @@ void pnl_list_insert_last (PnlList *L, PnlObject *o)
   if (L->len == 0) L->first = C;
   L->len++;
   L->last = C;
+
+  /* update nref for o */
+  if ( o != NULL ) o->nref ++;
 }
 
 /**
@@ -199,8 +206,13 @@ void pnl_cell_free (PnlCell **c)
   if ( O != NULL )
     {
       void *O_void = (void *) O;
-      O->destroy (&O_void);
-      O = NULL;
+      if ( O->nref > 1 ) 
+        O->nref --;
+      else
+        {
+          O->destroy (&O_void);
+          O = NULL;
+        }
     }
   /*
    * Update downward and upward linkage
@@ -356,7 +368,7 @@ void pnl_list_resize (PnlList *L, int n)
    */
   for ( i=0 ; i<diff_len ; i++ ) pnl_list_remove_last (L);
   /*
-   * Create -n - L->len cells with field self set to NULL)
+   * Create L->len-n cells with field self set to NULL
    */
   for ( i=0 ; i<-diff_len ; i++ ) pnl_list_insert_last (L, NULL);
 }
@@ -364,7 +376,7 @@ void pnl_list_resize (PnlList *L, int n)
 /** 
  * Clone a PnlList
  * 
- * For each element, it tries to call its clone member, but A[i] and C[i]
+ * For each element, it tries to call its clone member. If A[i] and C[i]
  * are not of the same type, C[i] is destroyed and A[i]->copy is called to
  * re--create C[i].
 
@@ -384,11 +396,21 @@ void pnl_list_clone (PnlList *C, const PnlList *A)
       if ( COi != NULL && PNL_GET_TYPE(COi) != PNL_GET_TYPE(AOi) )
         {
           void * COi_void = (void *) COi;
-          COi->destroy(&COi_void); COi=NULL;
+          if ( COi->nref > 1 ) 
+            COi->nref --;
+          else
+            COi->destroy(&COi_void); 
+          COi = NULL;
         }
-      else if ( COi == NULL )
+      else if ( COi == AOi )
+        {
+          COi->nref --;
+          COi = NULL;
+        }
+      if ( COi == NULL )
         {
           COi = AOi->copy(AOi);
+          COi->nref ++;
           Ci->self = COi;
         }
       else

@@ -37,6 +37,7 @@ PnlArray* pnl_array_new ()
   o->mem_size = 0;
   o->object.type = PNL_TYPE_ARRAY;
   o->object.parent_type = PNL_TYPE_ARRAY;
+  o->object.nref = 0;
   o->object.label = pnl_array_label;
   o->object.destroy = (DestroyFunc *) pnl_array_free;
   o->object.constructor = (NewFunc *) pnl_array_new;
@@ -108,7 +109,11 @@ void pnl_array_clone (PnlArray *C, const PnlArray *A)
       if ( Ci != NULL  && PNL_GET_TYPE(Ci) != PNL_GET_TYPE(Ai) )
         {
           void *Ci_void = (void *)Ci;
-          Ci->destroy(&Ci_void); Ci = NULL;
+          if ( Ci->nref > 1 )
+            Ci->nref --;
+          else
+            Ci->destroy(&Ci_void); 
+          Ci = NULL;
         }
       else if ( Ci == NULL )
         {
@@ -191,6 +196,9 @@ void pnl_array_set (PnlArray *T, int i, PnlObject *O)
 {
   PNL_CHECK (i >= T->size, "index exceeded", "pnl_array_set");
   T->array[i] = O;
+  /* update nref for O */
+  if ( O != NULL ) O->nref ++;
+
 }
 
 /**
@@ -208,8 +216,14 @@ void pnl_array_free (PnlArray **T)
       PnlObject *O = (*T)->array[i];
       if ( O != NULL ) 
         {
-          void *O_void = (void *) O;
-          O->destroy (&O_void);
+          if ( O->nref > 1 )
+            O->nref --;
+          else
+            {
+              void *O_void = (void *) O;
+              O->destroy (&O_void);
+              O = NULL;
+            }
         }
     }
   if ( (*T)->array != NULL ) free ((*T)->array);

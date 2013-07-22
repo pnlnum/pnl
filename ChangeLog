@@ -1,3 +1,8 @@
+22-07-2013 Jérôme Lelong <jerome.lelong@gmail.com>
+	
+	* objects: field nref added to improve the memory management of lists
+	and arrays.
+
 30-05-2013 Jérôme Lelong <jerome.lelong@gmail.com>
 	* distributions.c: Add random variate generation from the following
 	distributions: log-normal, inverse gaussian, asymmetric double

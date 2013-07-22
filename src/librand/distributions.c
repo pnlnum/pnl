@@ -291,6 +291,7 @@ double pnl_rng_lognormal (double m, double sigma2, PnlRng *rng)
  * 
  * @param mu mean of the distribution (must be positive)
  * @param lambda shape parameter (must be positive)
+ * @param rng a random number generator
  * 
  */
 double pnl_rng_invgauss (double mu, double lambda, PnlRng *rng)

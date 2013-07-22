@@ -182,7 +182,7 @@ double pnl_sf_fact (int n)
  *      \ k /    k! (n-k)! 
  *
  * @param n a non-negative integer
- * @param k a non-negative integer smaller that n
+ * @param p a non-negative integer smaller that n
  * 
  * @return 
  */

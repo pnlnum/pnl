@@ -10,6 +10,11 @@ extern "C" {
 /**
  * \defgroup PnlArray an array object
  * This object is used to store doubly linked arrays.
+ *
+ * Note that elements are not hard copied into arrays. Arrays only store
+ * addresses of #PnlObject. So to easily manage the memory used by the
+ * elements inserted into lists, we use the PnlObject#nref field to make
+ * sure there is no more reference to an object before deleting it.
  */
 /*@{*/
 

@@ -49,6 +49,7 @@ PnlBandMatObject* pnl_band_mat_object_new ()
   o->array = NULL;
   o->object.type = PNL_TYPE_BAND_MATRIX;
   o->object.parent_type = PNL_TYPE_BAND_MATRIX;
+  o->object.nref = 0;
   o->object.label = pnl_band_mat_object_label;
   o->object.destroy = (DestroyFunc *) pnl_band_mat_object_free;
   return o;

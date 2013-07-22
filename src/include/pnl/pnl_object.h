@@ -130,15 +130,20 @@ typedef void (CloneFunc) (PnlObject *dest, const PnlObject *src);
 /**
  * The \a PnlObject structure is used to simulate some inheritance between the
  * ojbects of Pnl.  It must be the first element of all the objects existing in
- * Pnl so that casting any object to a PnlObject is legal 
+ * Pnl so that casting any object to a PnlObject is legal.
+ *
+ * To improve the memory management of objects inserted into arrays and
+ * lists, we keep track of the number of references on a given object (see
+ * nref) to easily free objects which could be inserted in everal lists. 
  * 
  */
 struct _PnlObject
 {
-  PnlType type; /*!< a unique integer id */
-  const char *label; /*!< a string identifier (for the moment not useful) */
-  PnlType parent_type; /*!< the identifier of the parent object is any,
-                          otherwise parent_type=id */
+  PnlType      type; /*!< a unique integer id */
+  const char  *label; /*!< a string identifier (for the moment not useful) */
+  PnlType      parent_type; /*!< the identifier of the parent object is any,
+                                 otherwise parent_type=id */
+  int          nref; /*!< number of references to the current object */
   DestroyFunc *destroy; /*!< frees an object */
   NewFunc     *constructor; /*!< New function */
   CopyFunc    *copy; /*!< Copy function */

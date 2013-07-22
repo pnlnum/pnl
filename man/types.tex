@@ -20,6 +20,7 @@ struct _PnlObject
   const char *label; /*!< a string identifier (for the moment not useful) */
   PnlType parent_type; /*!< the identifier of the parent object is any,
                           otherwise parent_type=id */
+  int nref; /*!< number of references on the object */ 
   DestroyFunc *destroy; /*!< frees an object */
   NewFunc     *constructor; /*!< New function */
   CopyFunc    *copy; /*!< Copy function */
@@ -52,7 +53,8 @@ Here is the list of all the types actually defined
     PNL_TYPE_HMATRIX_COMPLEX & complex hyper matrices \\
     PNL_TYPE_BASIS & bases \\
     PNL_TYPE_RNG & random number generators \\
-    PNL_TYPE_LIST & doubly linked list
+    PNL_TYPE_LIST & doubly linked list \\
+    PNL_TYPE_ARRAY & array
   \end{tabular}
   \caption{PnlTypes}
   \label{types}
@@ -86,6 +88,9 @@ We provide several macros for manipulating PnlObejcts.
 
 \item \describemacro{PNL_LIST_OBJECT}{o}
   \sshortdescribe Cast any object into a PnlList
+
+\item \describemacro{PNL_LIST_ARRAY}{o}
+  \sshortdescribe Cast any object into a PnlArray
 
 \item \describemacro{PNL_GET_TYPENAME}{o}
   \sshortdescribe Return the name of the type of any object inheriting from PnlObject
@@ -139,6 +144,11 @@ struct _PnlList
   int len; /*!< length of the list */
 };
 \end{verbatim}
+
+\textbf{Important note}: Lists only store addresses of objects. So when an
+object is inserted into a list, only its address is stored into the list. This
+implies that you \textbf{must not} free any objects inserted into a list. The
+deallocation is automatically handled by the function \reffun{pnl_list_free}.
 
 \begin{itemize}
 \item \describefun{\refstruct{PnlList} \ptr }{pnl_list_new}{}
@@ -212,6 +222,11 @@ struct _PnlArray
   int mem_size;
 };
 \end{verbatim}
+
+\textbf{Important note}: Arrays only store addresses of objects. So when an
+object is inserted into an array, only its address is stored into the array. This
+implies that you \textbf{must not} free any objects inserted into a array. The
+deallocation is automatically handled by the function \reffun{pnl_array_free}.
 
 \begin{itemize}
 \item \describefun{\refstruct{PnlArray} \ptr }{pnl_array_new}{}

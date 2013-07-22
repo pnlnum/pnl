@@ -49,6 +49,7 @@ PnlVectObject* pnl_vect_object_new ()
   o->array = NULL;
   o->object.type = PNL_TYPE_VECTOR;
   o->object.parent_type = PNL_TYPE_VECTOR;
+  o->object.nref = 0;
   o->object.label = pnl_vector_label;
   o->object.destroy = (DestroyFunc *) pnl_vect_object_free;
   o->object.constructor = (NewFunc *) pnl_vect_object_new;
@@ -69,6 +70,7 @@ void pnl_vect_object_free(PnlVectObject **v)
     {
       if ((*v)->array != NULL && (*v)->owner == 1)
         { free((*v)->array); (*v)->array = NULL; }
+      (*v)->size = 0;
       free(*v);
     }
 }

@@ -48,6 +48,7 @@ PnlMatObject* pnl_mat_object_new ()
   o->array = NULL;
   o->object.type = PNL_TYPE_MATRIX;
   o->object.parent_type = PNL_TYPE_MATRIX;
+  o->object.nref = 0;
   o->object.label = pnl_matrix_label;
   o->object.destroy = (DestroyFunc *) pnl_mat_object_free;
   o->object.constructor = (NewFunc *) pnl_mat_object_new;
@@ -65,6 +66,7 @@ void pnl_mat_object_free (PnlMatObject **o)
     {
       if ((*o)->array != NULL && (*o)->owner == 1)
         { free((*o)->array); (*o)->array = NULL; }
+      (*o)->m = (*o)->n = (*o)->mn = 0;
       free(*o);
     }
 }
@@ -121,7 +123,6 @@ int pnl_mat_object_resize(PnlMatObject *M, int m, int n)
   return OK;
 }
 
-
 /**
  * Create a PnlHmatObject which is the parent type of all hyper-matrices
  */
@@ -136,6 +137,7 @@ PnlHmatObject* pnl_hmat_object_new ()
   o->array = NULL;
   o->object.type = PNL_TYPE_HMATRIX;
   o->object.parent_type = PNL_TYPE_HMATRIX;
+  o->object.nref = 0;
   o->object.label = pnl_hmatrix_label;
   o->object.constructor = (NewFunc *) pnl_hmat_object_new;
   o->object.clone = NULL;
@@ -174,7 +176,6 @@ void pnl_hmat_compute_pdims (int *pdims, int ndim, const int *dims)
       pdims[i-1] = dims[i] * pdims[i];
     }
 }
-
 
 /** 
  * Compute the value of the linear index (ie. the index in the field

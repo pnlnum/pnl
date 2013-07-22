@@ -87,6 +87,7 @@ PnlVectCompact* pnl_vect_compact_new ()
 {
   PnlVectCompact *o;
   if ( (o=malloc (sizeof (PnlVectCompact)))==NULL) return NULL;
+  o->object.nref = 0;
   o->object.type = PNL_TYPE_VECTOR_COMPACT;
   o->object.parent_type = PNL_TYPE_OBJECT;
   o->object.label = pnl_vector_compact_label;

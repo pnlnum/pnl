@@ -77,6 +77,7 @@ static void array_copy ()
   pnl_test_set_ok ("pnl_array_copy");
 J1:
   pnl_array_free (&T);
+  pnl_array_free (&C);
 }
 
 /** 
@@ -106,6 +107,7 @@ static void array_clone ()
   pnl_test_set_ok ("pnl_array_copy");
 J1:
   pnl_array_free (&T);
+  pnl_array_free (&C);
 }
 
 

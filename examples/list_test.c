@@ -176,7 +176,6 @@ static void list_concat_test ()
   pnl_list_free (&L1);
 }
 
-
 static void list_copy_test ()
 {
   PnlList *L1, *L2;
@@ -203,9 +202,8 @@ static void list_copy_test ()
       pnl_test_set_ok ("pnl_list_copy");
     }
   pnl_list_free (&L1);
+  pnl_list_free (&L2);
 }
-
-
 
 int main (int argc, char **argv)
 {

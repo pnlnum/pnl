@@ -134,6 +134,7 @@ PnlTridiagMat* pnl_tridiag_mat_new()
   if ( (o = (PnlTridiagMat *) pnl_tridiag_mat_object_new ()) == NULL) return NULL;
   o->object.type = PNL_TYPE_TRIDIAG_MATRIX_DOUBLE;
   o->object.label = pnl_tridiag_mat_label;
+  o->object.nref = 0;
   o->object.clone = (CloneFunc *) pnl_tridiag_mat_clone;
   o->object.copy = (CopyFunc *) pnl_tridiag_mat_copy;
   o->object.constructor = (NewFunc *) pnl_tridiag_mat_new;

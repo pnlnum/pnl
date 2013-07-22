@@ -244,7 +244,7 @@ static PnlMatInt* compute_tensor (int nb_func, int nb_variates)
  */
 static int compute_nb_elements (const PnlMatInt *T, int degree, 
                                 int (*count_degree)(const PnlMatInt *, int),
-                                int (freedom_degree)(int, int))
+                                int (*freedom_degree)(int, int))
 
 {
   int i;
@@ -798,6 +798,7 @@ PnlBasis* pnl_basis_new ()
   o->object.type = PNL_TYPE_BASIS;
   o->object.parent_type = PNL_TYPE_BASIS;
   o->object.label = pnl_basis_label;
+  o->object.nref = 0;
   o->object.destroy = (DestroyFunc *) pnl_basis_free;
   o->object.constructor = (NewFunc *) pnl_basis_new;
   o->object.clone = (CloneFunc *) pnl_basis_clone;
