@@ -460,6 +460,11 @@ void FUNCTION(pnl_mat,sq_transpose) (TYPE(PnlMat) *M)
     }
 }
 
+/**
+ * Compute the trace of a square matrix
+ *
+ * @param M : a PnlMat pointer.
+ */
 BASE FUNCTION(pnl_mat,trace) (const TYPE(PnlMat) *M)
 {
 
@@ -924,6 +929,32 @@ void FUNCTION(pnl_mat,extract_subblock)(TYPE(PnlMat) *M_sub, const TYPE(PnlMat) 
         }
     }
 }
+
+/**
+ * Set a subblock in a matrix
+ *
+ * @param M a matrix
+ * @param block a matrix
+ * @param i line index
+ * @param j column index. (i,j) represents the top left hand side anchor
+ * inside the matrix M
+ *
+ */
+void FUNCTION(pnl_mat,set_subblock)(TYPE(PnlMat) *M, const TYPE(PnlMat) *block, int i,  int j)
+{
+  int k, l;
+  PNL_CHECK (i+block->m > M->m, "size exceeded", "pnl_mat_extract_subblock");
+  PNL_CHECK (j+block->n > M->n, "size exceeded", "pnl_mat_extract_subblock");
+
+  for ( k=0 ; k<block->m ; k++ )
+    {
+      for ( l=0 ; l<block->n ; l++ )
+        {
+          PNL_MLET(M, i+k, j+l) = PNL_MGET (block, k, l);
+        }
+    }
+}
+
 
 /**
  * in-place matrix matrix addition

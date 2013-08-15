@@ -745,6 +745,12 @@ and the size of the matrix.
   \sshortdescribe \var{M_sub = M(i:i+len_i-1, j:j+len_j-1)}. \var{len_i}
   (resp. \var{len_j}) is the number of rows (resp. columns) to be extracted.
   
+\item \describefun{void}{pnl_mat_set_subblock}{\refstruct{PnlMat} \ptr
+    M, const \refstruct{PnlMat} \ptr block, int i, int j}
+    \sshortdescribe If \var{block} is a matrix of size \var{m_block x n_block},
+    the dimensions of \var{M} must satisfy that \var{M->m <= i + m_block}
+    \var{M->n <= j + n_block}. On output \var{M(i:i+m_block-1, j:j+n_block-1) =
+    block}. 
 \end{itemize}  
 
 

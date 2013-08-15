@@ -38,6 +38,7 @@ extern PnlMatComplex* pnl_mat_complex_create_from_file (const char * file);
 extern void pnl_vect_complex_extract_submat (PnlVectComplex *M_sub, const PnlMatComplex *M, const PnlVectInt *indi, const PnlVectInt *indj);
 extern PnlVectComplex* pnl_vect_complex_create_submat (const PnlMatComplex *M, const PnlVectInt *indi, const PnlVectInt *indj);
 extern void pnl_mat_complex_extract_subblock (PnlMatComplex *M_sub, const PnlMatComplex *M, int i, int len_i, int j, int len_j);
+extern void pnl_mat_complex_set_subblock (PnlMatComplex *M, const PnlMatComplex *block, int i, int j);
 extern int pnl_mat_complex_resize(PnlMatComplex *v, int m, int n);
 extern void pnl_mat_complex_free(PnlMatComplex **v);
 extern PnlMatComplex* pnl_mat_complex_copy(const PnlMatComplex *v);

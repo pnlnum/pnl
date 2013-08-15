@@ -49,6 +49,7 @@ extern PnlMat* pnl_mat_create_from_file (const char * file);
 extern void pnl_vect_extract_submat (PnlVect *M_sub, const PnlMat *M, const PnlVectInt *indi, const PnlVectInt *indj);
 extern PnlVect* pnl_vect_create_submat (const PnlMat *M, const PnlVectInt *indi, const PnlVectInt *indj);
 extern void pnl_mat_extract_subblock (PnlMat *M_sub, const PnlMat *M, int i, int len_i, int j, int len_j);
+extern void pnl_mat_set_subblock (PnlMat *M, const PnlMat *block, int i, int j);
 extern int pnl_mat_resize(PnlMat *v, int m, int n);
 extern void pnl_mat_free(PnlMat **v);
 extern PnlMat* pnl_mat_copy(const PnlMat *v);

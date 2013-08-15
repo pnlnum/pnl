@@ -1,6 +1,8 @@
 15-8-2013 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* linalg: Add pnl_mat_trace to compute the trace of a square matrix.
+	Add pnl_mat_set_subblock to emulate the use of pnl_mat_extract_subblock
+	as a lvalue.
 
 22-07-2013 Jérôme Lelong <jerome.lelong@gmail.com>
 	
