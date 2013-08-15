@@ -1,3 +1,7 @@
+15-8-2013 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* linalg: Add pnl_mat_trace to compute the trace of a square matrix.
+
 22-07-2013 Jérôme Lelong <jerome.lelong@gmail.com>
 	
 	* objects: field nref added to improve the memory management of lists

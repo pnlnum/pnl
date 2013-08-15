@@ -1046,6 +1046,9 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
   \refstruct{PnlMat} \ptr tM, const \refstruct{PnlMat} \ptr M} 
   \sshortdescribe On exit, \var{tM = M'}
 
+\item \describefun{double}{pnl_mat_trace}{const \refstruct{PnlMat} \ptr M}
+  \sshortdescribe Return the trace of a square matrix.
+
 \item \describefun{void}{pnl_mat_axpy}{double alpha, const \refstruct{PnlMat}
     \ptr A, \refstruct{PnlMat} \ptr B}
   \sshortdescribe Compute \var{B := alpha * A + B}

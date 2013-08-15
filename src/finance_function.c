@@ -254,17 +254,15 @@ double pnl_bs_implicit_vol (int is_call, double Price, double spot, double Strik
     {
       if (Price <= exp(-r * T) * MAX (spot * exp ( (r-divid) * T) - Strike, 0.0))
         return 0.0;
-      else
-        if (Price >= spot * exp (-divid * T))
-          return 10.0;
+      else if (Price >= spot * exp (-divid * T))
+        return PNL_POSINF;
     }
   else
     {
       if (Price <= exp (-r * T) * MAX (Strike - spot * exp ( (r-divid) * T), 0.0))
         return 0.0;
-      else
-        if (Price >= exp (-r * T) * Strike)
-          return 10.0;
+      else if (Price >= exp (-r * T) * Strike)
+        return PNL_POSINF;
     }
 
   func.function = pnl_bs_increment_call_put;

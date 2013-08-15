@@ -460,6 +460,19 @@ void FUNCTION(pnl_mat,sq_transpose) (TYPE(PnlMat) *M)
     }
 }
 
+BASE FUNCTION(pnl_mat,trace) (const TYPE(PnlMat) *M)
+{
+
+  int i;
+  BASE trace = ZERO;
+  CheckIsSquare(M);
+  for ( i=0 ; i<M->m ; i++ )
+    {
+      trace = PLUS (trace, PNL_MGET(M, i, i));
+    }
+  return trace;
+}
+
 /**
  * Print a matrix to a file
  *

@@ -93,6 +93,7 @@ extern void pnl_mat_div_mat_term(PnlMat *lhs, const PnlMat *rhs);
 extern void pnl_mat_sq_transpose(PnlMat *M);
 extern PnlMat* pnl_mat_transpose(const PnlMat *M);
 extern void pnl_mat_tr(PnlMat*, const PnlMat *M);
+extern double pnl_mat_trace (const PnlMat *M);
 extern void pnl_mat_print(const PnlMat *M);
 extern void pnl_mat_fprint(FILE *fic, const PnlMat *M);
 extern void pnl_mat_fprint_nsp (FILE *fic, const PnlMat *M);
