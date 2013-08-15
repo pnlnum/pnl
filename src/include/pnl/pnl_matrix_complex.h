@@ -126,6 +126,9 @@ extern int pnl_mat_complex_syslin_inplace (PnlMatComplex *A, PnlVectComplex *b);
 extern int pnl_mat_complex_inverse (PnlMatComplex *inverse, const PnlMatComplex *A);
 extern int pnl_mat_complex_inverse_with_chol (PnlMatComplex *inverse, const PnlMatComplex *A);
 extern int pnl_mat_complex_exp (PnlMatComplex *expA, const PnlMatComplex *A);
+extern int pnl_mat_complex_eigen (PnlVectComplex *v, PnlMatComplex *P, const PnlMatComplex *A, int with_eigenvectors);
+extern int pnl_mat_complex_log (PnlMatComplex *B, const PnlMatComplex *A);
+
 
 
 /* inline functions if you are using GCC */

@@ -408,18 +408,13 @@ void FUNCTION(pnl_mat,set_from_ptr)(TYPE(PnlMat) *M, const BASE* x)
  */
 void FUNCTION(pnl_mat,tr)(TYPE(PnlMat)*tM, const TYPE(PnlMat) *M)
 {
-  BASE *mptr;
-  BASE *rptr;
   int i,j;
   FUNCTION(pnl_mat,resize)(tM, M->n,M->m);
-  rptr=tM->array;
-
-  for (i=0;i<tM->m;i++)
+  for ( i=0 ; i<tM->m ; i++)
     {
-      mptr=M->array+i;
-      for (j=0;j<tM->n;j++)
+      for ( j=0 ; j<tM->n ; j++)
         {
-          (*rptr)=(*mptr); rptr++;mptr+=M->n;
+          PNL_MLET(tM, i, j) = PNL_MGET(M, j, i);
         }
     }
 }
@@ -445,17 +440,17 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,transpose)(const TYPE(PnlMat) *M)
  */
 void FUNCTION(pnl_mat,sq_transpose) (TYPE(PnlMat) *M)
 {
-  BASE a, *b;
+  BASE a, b;
   int i,j;
   CheckIsSquare(M);
   for (i=0;i<M->m;i++)
     {
       for (j=i+1;j<M->n;j++)
         {
-          b = &(PNL_MGET (M, j, i));
+          b = PNL_MGET (M, j, i);
           a = PNL_MGET (M, i, j);
-          PNL_MLET (M, i, j) = *b;
-          *b = a;
+          PNL_MLET (M, i, j) = b;
+          PNL_MLET(M, j, i) = a;
         }
     }
 }
@@ -943,8 +938,8 @@ void FUNCTION(pnl_mat,extract_subblock)(TYPE(PnlMat) *M_sub, const TYPE(PnlMat) 
 void FUNCTION(pnl_mat,set_subblock)(TYPE(PnlMat) *M, const TYPE(PnlMat) *block, int i,  int j)
 {
   int k, l;
-  PNL_CHECK (i+block->m > M->m, "size exceeded", "pnl_mat_extract_subblock");
-  PNL_CHECK (j+block->n > M->n, "size exceeded", "pnl_mat_extract_subblock");
+  PNL_CHECK (i+block->m > M->m, "size exceeded", "pnl_mat_set_subblock");
+  PNL_CHECK (j+block->n > M->n, "size exceeded", "pnl_mat_set_subblock");
 
   for ( k=0 ; k<block->m ; k++ )
     {

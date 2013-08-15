@@ -70,6 +70,27 @@ static int pnl_mat_is_sym (const PnlMat *A)
 }
 
 /**
+ * Check if a (complex) matrix is Hermitian
+ * @param A a real matrix
+ * @return TRUE or FALSE
+ */
+static int pnl_mat_complex_is_he (const PnlMatComplex *A)
+{
+  int i, j;
+
+  if (A->m != A->n) return FALSE;
+  for ( i=0 ; i<A->m ; i++ )
+    for ( j=0 ; j<i ; j++ )
+      {
+        const dcomplex Aij = PNL_MGET(A,i,j);
+        const dcomplex conj_Aji = Conj(PNL_MGET(A, j, i));
+        if ( (Aij.r != conj_Aji.r) || (Aij.i != conj_Aji.i) ) return FALSE;
+      }
+  return TRUE;
+}
+
+
+/**
  * Put 0 in the lower triangular part of a square matrix
  * @param A a real matrix
  */
@@ -259,26 +280,28 @@ static int pnl_dgeev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvect
 {
   int n=A->n;
   int info, lwork,i;
-  double *work=NULL, *wi=NULL, *input=NULL;
+  double *work=NULL, *wi=NULL;
   double qlwork;
+  PnlMat *tA;
 
   wi = MALLOC_DOUBLE(n);
-  input = MALLOC_DOUBLE(A->mn);
-  if ( wi == NULL || input == NULL ) goto err;
+  if ( wi == NULL ) goto err;
   if ( with_eigenvectors == TRUE ) { pnl_mat_resize (P, n, n); }
   pnl_vect_resize (v, n);
-  /* Copy A, because dgeev modifies its input argument */
-  memcpy (input, A->array, A->mn * sizeof(double));
-  
+  /* 
+   * Copy A in a transpose form, because zgeev modifies its input argument
+   * and Lapack uses column wise storage.
+   */
+  tA = pnl_mat_transpose (A);
   
   lwork = -1;
-  C2F(dgeev)((with_eigenvectors==TRUE)?"V":"N", "N", &n, input, &n, v->array, wi,
-             (with_eigenvectors==FALSE)?NULL:P->array, &n, NULL, &n,
+  C2F(dgeev)("N", (with_eigenvectors==TRUE)?"V":"N",  &n, tA->array, &n, v->array, wi,
+               NULL, &n, (with_eigenvectors==FALSE)?NULL:P->array, &n,
              &qlwork, &lwork, &info);
   lwork = (int) qlwork;
   if ( (work=MALLOC_DOUBLE(lwork)) == NULL ) goto err;
-  C2F(dgeev)((with_eigenvectors==FALSE)?"N":"V", "N", &n, input, &n, v->array, wi,
-             (with_eigenvectors==FALSE)?NULL:P->array, &n, NULL, &n,
+  C2F(dgeev)("N", (with_eigenvectors==FALSE)?"N":"V",  &n, tA->array, &n, v->array, wi,
+              NULL, &n, (with_eigenvectors==FALSE)?NULL:P->array, &n,
              work, &lwork, &info);
 
   if (info != 0) 
@@ -296,11 +319,13 @@ static int pnl_dgeev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvect
   /* Convert to row wise storage */
   pnl_mat_sq_transpose (P);
 
-  free(wi); free(work); free(input);
+  free(wi); free(work);
+  pnl_mat_free (&tA);
   return OK;
 
  err:
-  free(wi); free(work); free(input);
+  free(wi); free(work);
+  pnl_mat_free (&tA);
   return FAIL;
 }
 
@@ -360,7 +385,7 @@ int pnl_mat_log (PnlMat *B, const PnlMat *A)
 
   for ( i=0 ; i<n ; i++ )
     {
-      if (pnl_vect_get(D, i) <= 0)
+      if (PNL_GET(D, i) <= 0)
         {
           PNL_MESSAGE_ERROR ("Negative eigenvalues", "pnl_mat_log");
           return FAIL;
@@ -392,6 +417,213 @@ int pnl_mat_log (PnlMat *B, const PnlMat *A)
   pnl_mat_free (&P);
   pnl_mat_free (&invP);
   pnl_vect_free (&D);
+  return OK;
+}
+
+/**
+ * Wrapper to zhesv
+ * Compute the eigenvalues and eigenvectors of an Hermitian matrix
+ *
+ * @param v a vector containing the eigenvalues on exit
+ * @param P a matrix containing the eigenvectors on exit (P is orthonormal)
+ * @param A a complex Hermitian matrix
+ * @param with_eigenvectors can be TRUE to compute the eigenvectors or FALSE
+ * if they are not required, in this latter case P can be NULL
+ * @return OK or FAIL
+ */
+static int pnl_zheev (PnlVectComplex *v, PnlMatComplex *P, const PnlMatComplex *A, int with_eigenvectors)
+{
+  int n=A->n;
+  int i, info, lwork;
+  double *rwork = NULL, *w=NULL;
+  dcomplex *work=NULL;
+  dcomplex qlwork;
+
+  rwork = MALLOC_DOUBLE(MAX(1, 2 * n - 1));
+  w = MALLOC_DOUBLE(n);
+  /* Clone A, because dsyev modifies its input argument */
+  pnl_mat_complex_clone (P, A);
+  pnl_vect_complex_resize (v, n);
+  
+  lwork = -1;
+  C2F(zheev)((with_eigenvectors==TRUE)?"V":"N", "L", &n, P->array, &n, w,
+             &qlwork, &lwork, rwork, &info);
+  lwork = (int) qlwork.r;
+  if ( (work=MALLOC_COMPLEX(lwork)) == NULL ) goto err;
+  C2F(zheev)((with_eigenvectors==TRUE)?"V":"N", "L", &n, P->array, &n, w,
+             work, &lwork, rwork, &info);
+
+  if (info != 0) 
+    {
+      printf("Error: convergence problem in zhesv\n");
+      goto err;
+    }
+
+  for ( i=0 ; i<n ; i++ )
+    {
+      dcomplex v_i = PNL_LET(v, i);
+      v_i.r = w[i]; v_i.i = 0.;
+    }
+  /* Revert to row wise storage */
+  pnl_mat_complex_sq_transpose (P);
+
+  free(work); free(w);
+  return OK;
+
+ err:
+  free(work); free(w);
+  return FAIL;
+}
+
+/**
+ * Wrapper to dgeev
+ * Compute the eigenvalues and eigenvectors of a complex non Hermitian
+ * matrix
+ *
+ * @param v a vector containing the eigenvalues on exit
+ * @param P a matrix containing the eigenvectors on exit
+ * @param A a complex matrix
+ * @param with_eigenvectors can be TRUE to compute the eigenvectors or FALSE
+ * if they are not required, in this latter case P can be NULL
+ * @return OK or FAIL
+ */
+static int pnl_zgeev (PnlVectComplex *v, PnlMatComplex *P, const PnlMatComplex *A, int with_eigenvectors)
+{
+  int n=A->n;
+  int info, lwork;
+  double *rwork;
+  dcomplex *work=NULL;
+  dcomplex qlwork;
+  PnlMatComplex *tA;
+
+  rwork = MALLOC_DOUBLE(2*n);
+  if ( with_eigenvectors == TRUE ) { pnl_mat_complex_resize (P, n, n); }
+  pnl_vect_complex_resize (v, n);
+  /* 
+   * Copy A in a transpose form, because zgeev modifies its input argument
+   * and Lapack uses column wise storage.
+   */
+  tA = pnl_mat_complex_transpose (A);
+  
+  
+  lwork = -1;
+  C2F(zgeev)("N", (with_eigenvectors==TRUE)?"V":"N", &n, tA->array, &n, v->array, 
+              NULL, &n, (with_eigenvectors==FALSE)?NULL:P->array, &n,
+             &qlwork, &lwork, rwork, &info);
+  lwork = (int) qlwork.r;
+  if ( (work=MALLOC_COMPLEX(lwork)) == NULL ) goto err;
+  C2F(zgeev)("N", (with_eigenvectors==FALSE)?"N":"V", &n, tA->array, &n, v->array, 
+             NULL, &n, (with_eigenvectors==FALSE)?NULL:P->array, &n, 
+             work, &lwork, rwork, &info);
+
+  if (info != 0) 
+    {
+      printf("Error: convergence problem in dgeev\n");
+      goto err;
+    }
+
+  /* Convert to row wise storage */
+  pnl_mat_complex_sq_transpose (P);
+
+  free(work); free(rwork); 
+  pnl_mat_complex_free (&tA);
+  return OK;
+
+ err:
+  free(work); free(rwork);
+  pnl_mat_complex_free (&tA);
+  return FAIL;
+}
+
+/**
+ * Compute the eigenvalues and eigenvectors of a real matrix
+ *
+ * @param v a vector containing the eigenvalues on exit
+ * @param P a matrix containing the eigenvectors on exit
+ * @param A a matrix
+ * @param with_eigenvectors can be TRUE to compute the eigenvectors or FALSE
+ * if they are not required, in this latter case P can be NULL
+ * @return OK or FAIL
+ */
+int pnl_mat_complex_eigen (PnlVectComplex *v, PnlMatComplex *P, const PnlMatComplex *A, int with_eigenvectors)
+{
+  int is_sym;
+  int info;
+
+  is_sym = pnl_mat_complex_is_he (A);
+  if (is_sym == TRUE) info = pnl_zheev(v, P, A, with_eigenvectors);
+  else info = pnl_zgeev(v, P, A, with_eigenvectors);
+
+  if (info == FAIL)
+    {
+      PNL_MESSAGE_ERROR ("Error", "pnl_mat_eigen");
+      return FAIL;
+    }
+  return OK;
+}
+
+/**
+ * Matrix logarithm B = log( A).
+ *
+ * Note : A must be diagonalizable.
+ *
+ * @param A a real diagonalizable matrix
+ * @param B contains log(A) on return
+ * @return OK or FAIL
+ */
+int pnl_mat_complex_log (PnlMatComplex *B, const PnlMatComplex *A)
+{
+  int n, i, j;
+  PnlMatComplex *P, *invP;
+  PnlVectComplex *D;
+  CheckIsSquare (A);
+  n = A->n;
+
+  P = pnl_mat_complex_create(n,n);
+  D = pnl_vect_complex_create(n);
+
+  if ( pnl_mat_complex_eigen(D, P, A, TRUE) != OK )
+    {
+      pnl_mat_complex_free (&P);
+      pnl_vect_complex_free (&D);
+      return FAIL;
+    }
+
+  for ( i=0 ; i<n ; i++ )
+    {
+      dcomplex di = PNL_GET(D, i);
+      if ( di.r == 0. && di.i == 0. )
+        {
+          PNL_MESSAGE_ERROR ("Zero eigenvalue detected", "pnl_mat_complex_log");
+          return FAIL;
+        }
+    }
+
+  /* Compute inv(P). If P is not invertible, it means that the matrix A is
+     not diagonalizable.
+  */
+  invP = pnl_mat_complex_create(n,n);
+  if ( pnl_mat_complex_inverse (invP, P) != OK )
+    {
+      PNL_MESSAGE_ERROR ("matrix is not diagonalizable", "pnl_mat_log");
+      return FAIL;
+    }
+  
+  /* compute P = P * diag(log(D)) */
+  for ( i=0 ; i<n ; i++ )
+    {
+      for ( j=0 ; j<n ; j++ )
+        {
+          PNL_MLET ( P, i, j) = Cmul (PNL_MGET (P, i, j), Clog (PNL_GET (D, j)));
+        }
+    }
+
+  /* compute B = P * inv(P) */
+  pnl_mat_complex_mult_mat_inplace (B, P, invP);
+
+  pnl_mat_complex_free (&P);
+  pnl_mat_complex_free (&invP);
+  pnl_vect_complex_free (&D);
   return OK;
 }
 

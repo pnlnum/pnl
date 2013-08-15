@@ -69,7 +69,6 @@ int pnl_mat_cross(PnlMat *lhs, const PnlMat *A, const PnlMat *B)
     return FAIL;
 }
 
-
 /**
  * Matrix exponential B = exp( A)
  *

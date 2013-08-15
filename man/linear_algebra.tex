@@ -1134,6 +1134,18 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 \item \describefun{void}{pnl_mat_exp}{\refstruct{PnlMat} \ptr B, 
     const \refstruct{PnlMat} \ptr A}
   \sshortdescribe Compute the matrix exponential \var{B = exp(A)}.
+
+\item \describefun{void}{pnl_mat_log}{\refstruct{PnlMat} \ptr B, 
+    const \refstruct{PnlMat} \ptr A}
+  \sshortdescribe Compute the matrix logarithm \var{B = log(A)}. For the
+  moment, this function only works if \var{A} is diagonalizable.
+
+\item \describefun{void}{pnl_mat_eigen}{\refstruct{PnlVect} *v, \refstruct{PnlMat} \ptr P, 
+    const \refstruct{PnlMat} \ptr A, int with_eigenvector}
+  \sshortdescribe Compute the eigenvalues (stored in \var{v}) and optionally
+  the eigenvectors stored column wise in \var{P} when
+  \var{with_eigenvector==TRUE}. If \var{A} is symmetric or Hermitian in the
+  complex case, \var{P} is orthonormal.
 \end{itemize}
 
 
@@ -1283,20 +1295,6 @@ invert the system matrix because it is much longer.
 
 \subsubsection{Functions specific to base type {\tt double}}
 
-\paragraph{Standard matrix operations}
-\begin{itemize}
-
-\item \describefun{void}{pnl_mat_log}{\refstruct{PnlMat} \ptr B, 
-    const \refstruct{PnlMat} \ptr A}
-  \sshortdescribe Compute the matrix logarithm \var{B = log(A)}. For the
-  moment, this function only works if \var{A} is diagonalizable.
-
-\item \describefun{void}{pnl_mat_eigen}{\refstruct{PnlVect} *v, \refstruct{PnlMat} \ptr P, 
-    const \refstruct{PnlMat} \ptr A, int with_eigenvector}
-  \sshortdescribe Compute the eigenvalues (stored in \var{v}) and optionally
-  the eigenvectors stored column wise in \var{P} when
-  \var{with_eigenvector==TRUE}. If \var{A} is symmetric, \var{P} is orthonormal.
-\end{itemize}
 
 \paragraph{Linear systems and matrix decompositions}
 

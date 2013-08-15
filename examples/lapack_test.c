@@ -84,7 +84,7 @@ static void pnl_mat_eigen_test ()
   pnl_mat_inverse(Pinv, P);
   pnl_mat_mult_mat_inplace (A, P, V);  /* P V */
   pnl_mat_mult_mat_inplace (V, A, Pinv); /* P V P^-1 */
-  pnl_test_mat_eq_abs(V, B, 1E-8, "eigen", "");
+  pnl_test_mat_eq_abs(V, B, 1E-8, "eigen sym", "");
   
 
   pnl_mat_free (&V);
@@ -128,14 +128,26 @@ static void pnl_mat_complex_exp_test ()
   sol = pnl_mat_complex_create_from_file ("Data/expAcomplex.txt");
   expA = pnl_mat_complex_new ();
   pnl_mat_complex_exp (expA, A);
-  pnl_mat_complex_print (expA);
-  printf ("\n");
-  pnl_mat_complex_print (sol);
 
-  pnl_test_mat_complex_eq_abs(expA, sol, 1E-8, "expm", "");
+  pnl_test_mat_complex_eq_abs(expA, sol, 1E-8, "complex expm", "");
   pnl_mat_complex_free (&A);
   pnl_mat_complex_free (&expA);
   pnl_mat_complex_free (&sol);
+}
+
+static void pnl_mat_complex_log_test ()
+{
+  PnlMatComplex *A, *logA, *explogA;
+  A = pnl_mat_complex_create_from_file ("Data/expAcomplex.txt");
+  logA = pnl_mat_complex_new ();
+  explogA = pnl_mat_complex_new ();
+  pnl_mat_complex_log (logA, A);
+  pnl_mat_complex_exp (explogA, logA);
+
+  pnl_test_mat_complex_eq_abs(explogA, A, 1E-8, "complex logm", "");
+  pnl_mat_complex_free (&A);
+  pnl_mat_complex_free (&logA);
+  pnl_mat_complex_free (&explogA);
 }
 
 static void pnl_mat_ls_test ()
@@ -246,6 +258,7 @@ int main (int argc, char *argv[])
   pnl_mat_eigen_test ();
   pnl_mat_log_test ();
   pnl_mat_complex_exp_test ();
+  pnl_mat_complex_log_test ();
   pnl_mat_ls_test ();
   pnl_mat_pchol_test ();
   pnl_mat_qr_test ();
