@@ -80,15 +80,18 @@ static int pnl_mat_complex_is_he (const PnlMatComplex *A)
 
   if (A->m != A->n) return FALSE;
   for ( i=0 ; i<A->m ; i++ )
-    for ( j=0 ; j<i ; j++ )
-      {
-        const dcomplex Aij = PNL_MGET(A,i,j);
-        const dcomplex conj_Aji = Conj(PNL_MGET(A, j, i));
-        if ( (Aij.r != conj_Aji.r) || (Aij.i != conj_Aji.i) ) return FALSE;
-      }
+    {
+      const dcomplex Aii = PNL_MGET(A, i, i);
+      if ( Aii.i != 0. ) return FALSE;
+      for ( j=0 ; j<i ; j++ )
+        {
+          const dcomplex Aij = PNL_MGET(A,i,j);
+          const dcomplex conj_Aji = Conj(PNL_MGET(A, j, i));
+          if ( (Aij.r != conj_Aji.r) || (Aij.i != conj_Aji.i) ) return FALSE;
+        }
+    }
   return TRUE;
 }
-
 
 /**
  * Put 0 in the lower triangular part of a square matrix
@@ -461,8 +464,7 @@ static int pnl_zheev (PnlVectComplex *v, PnlMatComplex *P, const PnlMatComplex *
 
   for ( i=0 ; i<n ; i++ )
     {
-      dcomplex v_i = PNL_LET(v, i);
-      v_i.r = w[i]; v_i.i = 0.;
+      PNL_LET (v, i) = Complex (w[i], 0.);
     }
   /* Revert to row wise storage */
   pnl_mat_complex_sq_transpose (P);
