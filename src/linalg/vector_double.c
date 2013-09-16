@@ -94,6 +94,7 @@ PnlVectCompact* pnl_vect_compact_new ()
   o->size = 0;
   o->convert = 'd';
   o->val = 0;
+  o->array = NULL;
   return o;
 }
 
@@ -105,8 +106,7 @@ PnlVectCompact* pnl_vect_compact_new ()
  */
 PnlVectCompact* pnl_vect_compact_create (int n, double x)
 {
-  PnlVectCompact *v;
-  if ((v=malloc (sizeof(PnlVectCompact)))==NULL) return NULL;
+  PnlVectCompact *v = pnl_vect_compact_new ();
   v->size = n;
   v->convert = 'd';
   v->val = x;
@@ -121,14 +121,13 @@ PnlVectCompact* pnl_vect_compact_create (int n, double x)
 */
 PnlVectCompact* pnl_vect_compact_create_from_ptr(int n, double const *x) 
 {
-	PnlVectCompact *v; int i;
-	if ((v=malloc (sizeof(PnlVectCompact)))==NULL) return NULL;
-	v->size = n;
-	v->convert = 'a';
-	if ((v->array = (double*)malloc(sizeof (double) * n)) == NULL) { free(v); return NULL;};
-	for (i = 0; i != n; ++i)
-		v->array[i] = x[i];
-	return v;
+  int i;
+  PnlVectCompact *v = pnl_vect_compact_new ();
+  v->size = n;
+  v->convert = 'a';
+  if ((v->array = (double*)malloc(sizeof (double) * n)) == NULL) { free(v); return NULL;};
+  for (i = 0; i != n; ++i) { v->array[i] = x[i]; }
+  return v;
 }
 
 /**

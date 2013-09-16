@@ -135,11 +135,8 @@ typedef struct PnlVectCompact
 {
   PnlObject object;
   int size; /*!< size of the vector */
-  union 
-    {
-      double val; /*!< single value */
-      double *array; /*!< Pointer to double values */
-    };
+  double val; /*!< single value */
+  double *array; /*!< Pointer to double values */
   char convert; /*!< 'a', 'd' : array, double */
 } PnlVectCompact;
 

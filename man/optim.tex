@@ -60,11 +60,10 @@ To solve an inequality constrained optimization problem, ie $m_E=0$, we provide 
   \end{itemize}
 
   The algorithm returns an $int$, its value depends on the output status of the algorithm. We have 4 cases:
-
   \begin{itemize}
   \item 0: Failure: Initial point is not strictly feasible.
-  \item 1: Step too small, we stop the algorithm.
-  \item 2: Maximum iteration reached.
+  \item 1: Step is too small, we stop the algorithm.
+  \item 2: Maximum number of iterations reached.
   \item 3: A solution has been found up to the required accuracy.
   \end{itemize}
 
@@ -73,12 +72,13 @@ To solve an inequality constrained optimization problem, ie $m_E=0$, we provide 
   $$ || \nabla \ell(x,\lambda^I)||_{\infty} = ||\nabla f(x) - \nabla c^I(x) \lambda^I ||_{\infty} < \var{tolerance} $$
   $$ || c^I(x) \lambda^I ||_{\infty} < \var{tolerance} $$
 
-  where $c^I(x) \lambda^I$ is a vector of term by term multiplication of $c^I(x)$ and $\lambda^I$.
+  where $c^I(x) \: .* \: \lambda^I$ where '$.*$' denotes the term by term multiplication.
 
   The first inequality is known as the optimality condition, the second one as the complementarity condition.\\
 
-  \textbf{Important Remark 1}: The algorithm we implement requires that the initial point $x_0$, given as an input to the algorithm, to be strictly feasible, ie: $c(x_0)>0$.\\
-  \textbf{Important Remark 2}: The algorithm try to find a pair ($x$, $\lambda$) that solves the equations ($P$), but this does not guarantee that $x$ is a global minimum of $f$ on the set $\{c(x)\geq0\}$.
+  \textbf{Important Remark 1}: Our implementation requires that initial point $x_0$ to be strictly feasible, ie: $c(x_0)>0$.\\
+  \textbf{Important Remark 2}: The algorithm tries to find a pair ($x$, $\lambda$)
+  solving the Equations ($P$), but this does not guarantee that $x$ is a global minimum of $f$ on the set $\{c(x)\geq0\}$.
 
 \end{itemize}
 
