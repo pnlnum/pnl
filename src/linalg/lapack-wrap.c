@@ -469,11 +469,11 @@ static int pnl_zheev (PnlVectComplex *v, PnlMatComplex *P, const PnlMatComplex *
   /* Revert to row wise storage */
   pnl_mat_complex_sq_transpose (P);
 
-  free(work); free(w);
+  free(work); free (rwork); free(w);
   return OK;
 
  err:
-  free(work); free(w);
+  free(work); free (rwork); free(w);
   return FAIL;
 }
 
