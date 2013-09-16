@@ -1340,6 +1340,13 @@ computations have been carried out successfully and \var{FAIL} otherwise.
 
 \end{itemize}
 
+\subsubsection{Functions specific to base type {\tt dcomplex}}
+
+\begin{itemize}
+  \item \describefun{\refstruct{PnlMatComplex}\ptr }{pnl_mat_complex_create_from_mat}{const \refstruct{PnlMat} \ptr R}
+    \sshortdescribe Create a complex matrix using a real one. The complex parts
+    of the entries of the returned matrix are all set to zero.
+\end{itemize}
 
 \subsubsection{Permutations}
 

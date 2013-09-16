@@ -32,6 +32,7 @@ extern int pnl_mat_complex_eq_domplex (const PnlMatComplex *, dcomplex);
 extern PnlMatComplex* pnl_mat_complex_create(int m, int n); 
 extern PnlMatComplex* pnl_mat_complex_create_from_dcomplex(int m, int n, dcomplex x);
 extern PnlMatComplex* pnl_mat_complex_create_from_ptr(int m, int n, const dcomplex* x);
+extern PnlMatComplex* pnl_mat_complex_create_from_mat (const PnlMat *R);
 extern PnlMatComplex* pnl_mat_complex_create_from_list(int m, int n, ...); 
 extern PnlMatComplex pnl_mat_complex_wrap_array(const dcomplex* x, int m, int n);
 extern PnlMatComplex* pnl_mat_complex_create_from_file (const char * file);

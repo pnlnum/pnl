@@ -375,6 +375,26 @@ int pnl_mat_complex_exp (PnlMatComplex *B, const PnlMatComplex *A)
   return OK;
 }
 
+/** 
+ * Create a complex matrix from a real one.
+ * 
+ * @param R a real matrix
+ * 
+ * @return a c xomplexified version of R
+ */
+PnlMatComplex* pnl_mat_complex_create_from_mat (const PnlMat *R)
+{
+  int i;
+  PnlMatComplex *C;
+  C = pnl_mat_complex_create (R->m, R->n);
+
+  for ( i=0 ; i<C->mn ; i++ )
+    {
+      C->array[i].r = R->array[i];
+      C->array[i].i = 0.;
+    }
+  return C; 
+}
 
 
 
