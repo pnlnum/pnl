@@ -34,7 +34,10 @@ int count_fail;
  */
 void pnl_test_init (int argc, char **argv)
 {
-  if ( argc == 2 && strcmp (argv[1], "-v") == 0 )
+  if ( argc == 2 &&  
+       ( ( strcmp (argv[1], "-v") == 0 ) || 
+         ( strcmp (argv[1], "--verbose") == 0 ) )
+     )
     {
       verbose = 1;
     }

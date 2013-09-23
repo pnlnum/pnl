@@ -238,17 +238,26 @@ static int pnl_dsyev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvect
   int info, lwork;
   double *work=NULL;
   double qlwork;
+  PnlMat *Acopy;
 
   /* Clone A, because dsyev modifies its input argument */
-  pnl_mat_clone (P, A);
+  if ( with_eigenvectors == FALSE)
+    {
+      Acopy = pnl_mat_copy (A);
+    }
+  else
+    {
+      pnl_mat_clone (P, A);
+      Acopy = P;
+    }
   pnl_vect_resize (v, n);
   
   lwork = -1;
-  C2F(dsyev)((with_eigenvectors==TRUE)?"V":"N", "L", &n, P->array, &n, v->array, 
+  C2F(dsyev)((with_eigenvectors==TRUE)?"V":"N", "L", &n, Acopy->array, &n, v->array, 
              &qlwork, &lwork, &info);
   lwork = (int) qlwork;
   if ( (work=MALLOC_DOUBLE(lwork)) == NULL ) goto err;
-  C2F(dsyev)((with_eigenvectors==TRUE)?"V":"N", "L", &n, P->array, &n, v->array, 
+  C2F(dsyev)((with_eigenvectors==TRUE)?"V":"N", "L", &n, Acopy->array, &n, v->array, 
              work, &lwork, &info);
 
   if (info != 0) 
@@ -258,13 +267,16 @@ static int pnl_dsyev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvect
     }
 
   /* Revert to row wise storage */
-  pnl_mat_sq_transpose (P);
+  if ( with_eigenvectors ) pnl_mat_sq_transpose (P);
+
 
   free(work);
+  if ( with_eigenvectors == FALSE) pnl_mat_free (&Acopy);
   return OK;
 
  err:
   free(work);  
+  if ( with_eigenvectors == FALSE) pnl_mat_free (&Acopy);
   return FAIL;
 }
 
@@ -320,7 +332,7 @@ static int pnl_dgeev (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvect
     }
 
   /* Convert to row wise storage */
-  pnl_mat_sq_transpose (P);
+  if ( with_eigenvectors ) pnl_mat_sq_transpose (P);
 
   free(wi); free(work);
   pnl_mat_free (&tA);
