@@ -807,6 +807,17 @@ and the size of the matrix.
 \item \describefun{void}{pnl_mat_set_row}{\refstruct{PnlMat} \ptr M, 
     const \refstruct{PnlVect} \ptr V, int i}
   \sshortdescribe Replace the \var{i}-th row of a matrix M by a vector V  
+
+\item \describefun{void}{pnl_mat_add_row}{\refstruct{PnlMat} \ptr M, int i, const \refstruct{PnlVect} \ptr r}
+  \sshortdescribe Add a row in matrix \var{M} before position \var{i} and fill
+  it with the content of \var{r}. If \var{r == NULL}, row \var{i} is left
+  uninitialized. The index \var{i} may vary between \var{0} --- add a row at the
+  top of the matrix --- and \var{M->m} --- add a row after all rows.
+
+\item \describefun{void}{pnl_mat_del_row}{\refstruct{PnlMat} \ptr M, int i}
+  \sshortdescribe Delete the row with index \var{i} (between \var{0} and
+  \var{M->m-1}) of the matrix \var{M}.
+
 \end{itemize}
 
 Equivalently to the functions \reffun{pnl_mat_get} and \reffun{pnl_mat_set},

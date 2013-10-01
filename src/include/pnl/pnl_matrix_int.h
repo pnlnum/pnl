@@ -61,6 +61,8 @@ extern void pnl_mat_int_set_col(PnlMatInt *M, const PnlVectInt *V, int j);/* M(:
 extern void pnl_mat_int_swap_rows (PnlMatInt *M, int i, int j);
 extern void pnl_mat_int_get_row(PnlVectInt *V, const PnlMatInt *M, int i);/* V(:)=M(i,:) */
 extern void pnl_mat_int_get_col(PnlVectInt *V, const PnlMatInt *M, int j);
+extern void pnl_mat_int_add_row(PnlMatInt *M, int i, const PnlVectInt *r);
+extern void pnl_mat_int_del_row(PnlMatInt *M, int i);
 extern PnlVectInt pnl_vect_int_wrap_mat_row(const PnlMatInt *M, int i);/* M(i,:)=V(:) */
 extern PnlMatInt pnl_mat_int_wrap_vect(const PnlVectInt *V);
 extern void pnl_mat_int_map_inplace(PnlMatInt *lhs, int(*f)(int)); /*lhs=f(lhs)*/

@@ -950,6 +950,56 @@ void FUNCTION(pnl_mat,set_subblock)(TYPE(PnlMat) *M, const TYPE(PnlMat) *block, 
     }
 }
 
+/** 
+ * 
+ * Add a row before row i and fill it with the content of r
+ * 
+ * @param M a matrix, modified on output
+ * @param i the position at which the row is added
+ * @param r a vector to fill the new row with. If NULL is passed, the matrix
+ * is enlarged but row i is left uninitialized
+ */
+void FUNCTION(pnl_mat,add_row)(TYPE(PnlMat) *M, int i, const TYPE(PnlVect) *r)
+{
+  int new_size;
+  PNL_CHECK (i > M->m, "size exceeded", "pnl_mat_add_row");
+  PNL_CHECK (i < 0, "size exceeded", "pnl_mat_add_row");
+  PNL_CHECK (r->size != M->n, "incompatible size", "pnl_mat_add_row");
+
+  new_size = M->mn + M->n;
+  if ( M->mem_size < new_size )
+    {
+      M->array = realloc (M->array, new_size * sizeof(BASE));
+      M->mem_size = new_size;
+    }
+  /* Move the second block, starting at row i */
+  if ( i < M->m ) memmove (M->array + (i+1) * M->n, M->array + i * M->n, (M->m-i) * M->n * sizeof(BASE));
+  /* Copy r into row i if r != NULL */
+  if ( r != NULL ) memcpy (M->array + i * M->n, r->array, M->n * sizeof(BASE));
+  M->m ++;
+  M->mn += M->n;
+}
+
+
+/** 
+ * 
+ * Delete row with index i
+ * 
+ * @param M a matrix
+ * @param i the index of the row to be deleted
+ */
+void FUNCTION(pnl_mat,del_row)(TYPE(PnlMat) *M, int i)
+{
+  PNL_CHECK (i >= M->m, "size exceeded", "pnl_mat_del_row");
+  PNL_CHECK (i < 0, "size exceeded", "pnl_mat_del_row");
+  if ( i < M->m - 1 )
+    {
+      int rem_len = (M->m - 1 - i) * M->n;
+      memmove (M->array + (i * M->n), M->array + ((i+1) * M->n), rem_len * sizeof(BASE));
+    }
+  M->m --;
+  M->mn -= M->n;
+}
 
 /**
  * in-place matrix matrix addition

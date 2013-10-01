@@ -59,15 +59,13 @@ extern void pnl_mat_complex_fprint(FILE *fic,const PnlMatComplex *M);
 extern void pnl_mat_complex_fprint_nsp(FILE *fic,const PnlMatComplex *M);
 extern PnlMatComplex* pnl_mat_complex_create_diag_from_ptr(const dcomplex x[], int d);
 extern PnlMatComplex* pnl_mat_complex_create_diag(const PnlVectComplex *V);
-extern void
-pnl_mat_complex_set_row(PnlMatComplex *M, const PnlVectComplex *V, int i);/* M(i,:)=V(:) */
-extern void
-pnl_mat_complex_set_col(PnlMatComplex *M, const PnlVectComplex *V, int j);/* M(:,j)=V(:) */
-extern void
-pnl_mat_complex_swap_rows (PnlMatComplex *M, int i, int j);
-extern void
-pnl_mat_complex_get_row(PnlVectComplex *V, const PnlMatComplex *M, int i);/* V(:)=M(i,:) */
+extern void pnl_mat_complex_set_row(PnlMatComplex *M, const PnlVectComplex *V, int i);/* M(i,:)=V(:) */
+extern void pnl_mat_complex_set_col(PnlMatComplex *M, const PnlVectComplex *V, int j);/* M(:,j)=V(:) */
+extern void pnl_mat_complex_swap_rows (PnlMatComplex *M, int i, int j);
+extern void pnl_mat_complex_get_row(PnlVectComplex *V, const PnlMatComplex *M, int i);/* V(:)=M(i,:) */
 extern void pnl_mat_complex_get_col(PnlVectComplex *V, const PnlMatComplex *M, int j);
+extern void pnl_mat_complex_add_row(PnlMatComplex *M, int i, const PnlVectComplex *r);
+extern void pnl_mat_complex_del_row(PnlMatComplex *M, int i);
 extern PnlVectComplex pnl_vect_complex_wrap_mat_row(const PnlMatComplex *M, int i);/* M(i,:)=V(:) */
 extern PnlMatComplex pnl_mat_complex_wrap_vect(const PnlVectComplex *V);
 extern void pnl_mat_complex_map_inplace(PnlMatComplex *lhs, dcomplex(*f)(dcomplex)); /*lhs=f(lhs)*/

@@ -1,3 +1,6 @@
+01-10-2013 Jérôme Lelong <jerome.lelong@gmail.com>
+	* pnl_TMatrix_source.c: Add pnl_mat_{add,del}_row
+
 15-8-2013 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* pnl_TMatrix_source.c: Add pnl_mat_trace to compute the trace of a square matrix.

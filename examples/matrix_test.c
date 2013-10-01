@@ -26,7 +26,7 @@
 #include "tests_utils.h"
 
 /* static double function_prod(double x, double y) {return x*y;} */
-
+static PnlRng *rng;
 
 /** 
  * Sets the upper (uplo='U') or lower (uplo='L') triangle to 0
@@ -65,14 +65,14 @@ static void set_triangular_to_zero (PnlMat *A, char uplo)
  * 
  * @param A Output parameter, contains a n x n intervible matrix.
  * @param n size of the matrix
- * @param gen index of the generator
+ * @param rng index of the generator
  */
-static void create_invertible_matrix (PnlMat *A, int n, int gen)
+static void create_invertible_matrix (PnlMat *A, int n, PnlRng *rng)
 {
   PnlMat *B;
 
   B = pnl_mat_create (n, n);
-  pnl_mat_rand_uni2 (B, n, n, 0., 1., gen);
+  pnl_mat_rng_uni2 (B, n, n, 0., 1., rng);
 
   pnl_mat_exp (A, B);
   pnl_mat_free (&B);
@@ -85,14 +85,14 @@ static void create_invertible_matrix (PnlMat *A, int n, int gen)
  * @param n size of the matrix
  * @param gen index of the generator
  */
-static void create_sym_pos_matrix (PnlMat *S, int n, int gen)
+static void create_sym_pos_matrix (PnlMat *S, int n, PnlRng *rng)
 {
   PnlVect *b;
   double g;
   int i;
 
   b = pnl_vect_create (n);
-  pnl_vect_rand_uni (b, n, 0., 1., gen);
+  pnl_vect_rng_uni (b, n, 0., 1., rng);
 
   /* S is set to a diagonal matrix with positive eigenvalues */
   pnl_mat_set_double (S, 0.);
@@ -100,7 +100,7 @@ static void create_sym_pos_matrix (PnlMat *S, int n, int gen)
     {
       do
         {
-          g = fabs (pnl_rand_normal (gen));
+          g = fabs (pnl_rng_normal (rng));
         }
       while (g < 1E-4);
       pnl_mat_set (S, i, i, g);
@@ -171,16 +171,14 @@ static int cmp (double x[]) { return (x[0] >= x[1]) && (x[1] < x[2]); }
 
 static void pnl_mat_submat_test ()
 {
-  int gen=PNL_RNG_MERSENNE_RANDOM_SEED;
   int i, m = 5, n = 7;
   PnlMat *M1, *M2;
   PnlVect *v1;
   PnlVectInt *indi, *indj;
-  pnl_rand_init (gen, m, n);
   M1 = pnl_mat_create (m ,n);
   M2 = pnl_mat_create (m, n);
-  pnl_mat_rand_normal(M1, m, n, gen);
-  pnl_mat_rand_normal(M2, m, n, gen);
+  pnl_mat_rng_normal(M1, m, n, rng);
+  pnl_mat_rng_normal(M2, m, n, rng);
   indi = pnl_vect_int_create (0);
   indj = pnl_vect_int_create (0);
 
@@ -429,12 +427,10 @@ static void pnl_mat_mult_mat_term_test()
 {
   int i;
   PnlMat *M1, *M2, *M;
-  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  pnl_rand_init (gen, 5, 5);
   M1 = pnl_mat_create (5, 4);
   M2 = pnl_mat_create (5, 4);
-  pnl_mat_rand_normal (M1, 5, 4, gen);
-  pnl_mat_rand_normal (M2, 5, 4, gen);
+  pnl_mat_rng_normal (M1, 5, 4, rng);
+  pnl_mat_rng_normal (M2, 5, 4, rng);
   M = pnl_mat_copy (M1);
   pnl_mat_mult_mat_term(M,M2);
   for ( i=0 ; i<M->mn ; i++ )
@@ -457,12 +453,10 @@ static void pnl_mat_chol_test()
 {
   PnlMat *S, *Scopy, *Sres;
   PnlVect *x;
-  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  pnl_rand_init (gen, 5, 5);
   x = pnl_vect_create (5);
   S = pnl_mat_create (5, 5);
   pnl_mat_set_id (S);
-  pnl_vect_rand_normal (x, 5, gen);
+  pnl_vect_rng_normal (x, 5, rng);
   pnl_mat_dger (1., x, x, S);
   Scopy = pnl_mat_copy (S);
   pnl_mat_chol(S);
@@ -574,17 +568,113 @@ J1:
   pnl_mat_free(&M);
 }
 
+static void pnl_mat_add_row_test ()
+{
+  int i, m, n;
+  PnlMat *M, *Morig;
+  PnlVect *r, row_i;
+  m = 10; n =8;
+  M = pnl_mat_new ();
+  Morig = pnl_mat_new ();
+  r = pnl_vect_new ();
+  pnl_mat_rng_normal (Morig, m, n, rng);
+  pnl_vect_rng_normal (r, n, rng);
+
+  /* Add a row at the top */
+  i = 0;
+  pnl_mat_clone (M, Morig);
+  pnl_mat_add_row (M, i, r);
+  row_i = pnl_vect_wrap_mat_row (M, i);
+  if ( (M->n != Morig->n) || (M->m != Morig->m + 1) || (M->mn != Morig->mn + M->n) ||
+       (pnl_vect_eq (r, &row_i) == FALSE) ||
+       memcmp (M->array + M->n, Morig->array, Morig->mn * sizeof(double)) != 0 )
+    pnl_test_set_fail ("mat_add_row top", 0., 0.);
+  else
+    pnl_test_set_ok ("mat_add_row top");
+    
+
+  /* Add a row in the middle */
+  i = m/2;
+  pnl_mat_clone (M, Morig);
+  pnl_mat_add_row (M, i, r);
+  row_i = pnl_vect_wrap_mat_row (M, i);
+  if ( (M->n != Morig->n) || (M->m != Morig->m + 1) || (M->mn != Morig->mn + M->n) ||
+       (pnl_vect_eq (r, &row_i) == FALSE) ||
+       memcmp (M->array, Morig->array, M->n * i * sizeof(double)) != 0 ||
+       memcmp (M->array + (i+1) * M->n, Morig->array + i * M->n, M->n * (Morig->m - i) * sizeof(double)) != 0 )
+    pnl_test_set_fail ("mat_add_row middle", 0., 0.);
+  else
+    pnl_test_set_ok ("mat_add_row middle");
+
+  /* Add a row at the bottom */
+  i = m;
+  pnl_mat_clone (M, Morig);
+  pnl_mat_add_row (M, i, r);
+  row_i = pnl_vect_wrap_mat_row (M, i);
+  if ( (M->n != Morig->n) || (M->m != Morig->m + 1) || (M->mn != Morig->mn + M->n) ||
+       (pnl_vect_eq (r, &row_i) == FALSE) ||
+       memcmp (M->array, Morig->array, Morig->mn * sizeof(double)) != 0 )
+    pnl_test_set_fail ("mat_add_row bottom", 0., 0.);
+  else
+    pnl_test_set_ok ("mat_add_row bottom");
+
+  pnl_mat_free (&M);
+  pnl_vect_free (&r);
+}
+
+static void pnl_mat_del_row_test ()
+{
+  int i, m, n;
+  PnlMat *M, *Morig;
+  m = 10; n =8;
+  M = pnl_mat_new ();
+  Morig = pnl_mat_new ();
+  pnl_mat_rng_normal (Morig, m, n, rng);
+
+  /* Delete a row at the top */
+  i = 0;
+  pnl_mat_clone (M, Morig);
+  pnl_mat_del_row (M, i);
+  if ( (M->n != Morig->n) || (M->m != Morig->m - 1) || (M->mn != Morig->mn - M->n) ||
+       memcmp (M->array , Morig->array + M->n, M->mn * sizeof(double)) != 0 )
+    pnl_test_set_fail ("mat_del_row top", 0., 0.);
+  else
+    pnl_test_set_ok ("mat_del_row top");
+    
+
+  /* Delete a row in the middle */
+  i = m/2;
+  pnl_mat_clone (M, Morig);
+  pnl_mat_del_row (M, i);
+  if ( (M->n != Morig->n) || (M->m != Morig->m - 1) || (M->mn != Morig->mn - M->n) ||
+       memcmp (M->array, Morig->array, M->n * i * sizeof(double)) != 0 ||
+       memcmp (M->array + i * M->n, Morig->array + (i+1) * M->n, M->n * (M->m - i) * sizeof(double)) != 0 )
+    pnl_test_set_fail ("mat_del_row middle", 0., 0.);
+  else
+    pnl_test_set_ok ("mat_del_row middle");
+
+  /* Delete a row at the bottom */
+  i = m-1;
+  pnl_mat_clone (M, Morig);
+  pnl_mat_del_row (M, i);
+  if ( (M->n != Morig->n) || (M->m != Morig->m - 1) || (M->mn != Morig->mn - M->n) ||
+       memcmp (M->array, Morig->array, M->mn * sizeof(double)) != 0 )
+    pnl_test_set_fail ("mat_del_row bottom", 0., 0.);
+  else
+    pnl_test_set_ok ("mat_del_row bottom");
+
+  pnl_mat_free (&M);
+
+}
+
 static void pnl_mat_sum_test()
 {
   PnlMat *M, *Mcopy, *M_cumsum_r, *M_cumsum_c;
   double sum;
   int i;
 
-  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  pnl_rand_init (gen, 5, 5);
-
   M = pnl_mat_create (5, 4);
-  pnl_mat_rand_normal (M, 5, 4, gen);
+  pnl_mat_rng_normal (M, 5, 4, rng);
   sum = 0.;
   for ( i=0 ; i<M->mn ; i++ )
     {
@@ -617,10 +707,8 @@ static void pnl_mat_prod_test()
   PnlMat *M, *Mcopy, *M_cumprod_r, *M_cumprod_c;
   double prod;
   int i;
-  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  pnl_rand_init (gen, 5, 5);
   M = pnl_mat_create (5, 4);
-  pnl_mat_rand_normal (M, 5, 4, gen);
+  pnl_mat_rng_normal (M, 5, 4, rng);
   prod = 1.;
   for ( i=0 ; i<M->mn ; i++ )
     {
@@ -844,24 +932,21 @@ static void pnl_mat_triangular_inverse_test ()
 {
   PnlMat *A, *B, *AB, *Id;
   PnlVect *d;
-  int gen;
   int n = 5;
 
-  gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  pnl_rand_init (gen, n, n);
   d = pnl_vect_create_from_double (n, 1.);
   Id = pnl_mat_create_diag (d);
   A = pnl_mat_create (n, n);
   B = pnl_mat_create (n, n);
   AB = pnl_mat_create (n, n);
-  create_invertible_matrix (B, n, gen);
+  create_invertible_matrix (B, n, rng);
 
   set_triangular_to_zero (B, 'L');
   pnl_mat_upper_inverse(A,B);
   pnl_mat_mult_mat_inplace (AB, A, B);
   pnl_test_mat_eq_abs (AB, Id, 1E-8, "mat_upper_inverse", "");
 
-  create_invertible_matrix (B, n, gen);
+  create_invertible_matrix (B, n, rng);
   set_triangular_to_zero (B, 'U');
   pnl_mat_lower_inverse(A,B);
   pnl_mat_mult_mat_inplace (AB, A, B);
@@ -879,23 +964,20 @@ static void pnl_mat_inverse_test ()
 {
   PnlMat *A, *invA, *invAA, *Id;
   PnlVect *d;
-  int gen;
   int n = 5;
 
-  gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  pnl_rand_init (gen, n, n);
   d = pnl_vect_create_from_double (n, 1.);
   Id = pnl_mat_create_diag (d);
   A = pnl_mat_create (n, n);
   invA = pnl_mat_create (n, n);
   invAA = pnl_mat_create (n, n);
 
-  create_sym_pos_matrix (A, n, gen);
+  create_sym_pos_matrix (A, n, rng);
   pnl_mat_inverse_with_chol (invA, A);
   pnl_mat_mult_mat_inplace (invAA, A, invA);
   pnl_test_mat_eq_abs (invAA, Id, 1E-8, "mat_inverse_with_chol", "");
 
-  create_invertible_matrix (A, n, gen);
+  create_invertible_matrix (A, n, rng);
   pnl_mat_inverse (invA, A);
   pnl_mat_mult_mat_inplace (invAA, A, invA);
   pnl_test_mat_eq_abs (invAA, Id, 1E-8, "mat_inverse", "");
@@ -913,14 +995,12 @@ static void pnl_mat_syslin_test ()
   PnlMat *Q, *R;
   PnlVect *b, *x, *Sx;
   PnlVectInt *p;
-  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  pnl_rand_init (gen, 5, 5);
   b = pnl_vect_create (5);
   Sx = pnl_vect_new ();
   S = pnl_mat_create (5, 5);
   SB = pnl_mat_new ();
-  pnl_vect_rand_normal (b, 5, gen);
-  create_sym_pos_matrix (S, 5, gen);
+  pnl_vect_rng_normal (b, 5, rng);
+  create_sym_pos_matrix (S, 5, rng);
 
   Scopy = pnl_mat_copy (S);
   x = pnl_vect_new ();
@@ -961,7 +1041,7 @@ static void pnl_mat_syslin_test ()
   pnl_test_vect_eq_abs (Sx, b, 1E-8, "mat_syslin (symmetric)", "");
 
   B = pnl_mat_create (5,5);
-  pnl_mat_rand_normal (B, 5, 5, gen);
+  pnl_mat_rng_normal (B, 5, 5, rng);
   Bcopy = pnl_mat_copy (B);
   pnl_mat_clone (S, Scopy);
   pnl_mat_chol (S);
@@ -983,7 +1063,7 @@ static void pnl_mat_syslin_test ()
   pnl_test_mat_eq_abs (SB, Bcopy, 1E-8, "mat_syslin_mat (symmetric)", "");
 
 
-  create_invertible_matrix (S, 5, gen);
+  create_invertible_matrix (S, 5, rng);
   pnl_mat_clone (Scopy, S);
   pnl_mat_lu (S, p);
   pnl_mat_lu_syslin (x, S, p, b);
@@ -1028,126 +1108,128 @@ static void pnl_mat_syslin_test ()
   pnl_vect_int_free (&p);
 }
 
-/* static void pnl_mat_complex_complex_syslin_test () */
-/* { */
-/*   PnlMatComplex *S, *Scopy, *B, *Bcopy, *SB; */
-/*   PnlMatComplex *Q, *R; */
-/*   PnlVectComplex *b, *x, *Sx; */
-/*   PnlVectInt *p; */
-/*   int gen = PNL_RNG_MERSENNE_RANDOM_SEED; */
-/*   pnl_rand_init (gen, 5, 5); */
-/*   b = pnl_vect_complex_create (5); */
-/*   Sx = pnl_vect_complex_new (); */
-/*   S = pnl_mat_complex_create (5, 5); */
-/*   SB = pnl_mat_complex_new (); */
-/*   pnl_vect_rand_normal (b, 5, gen); */
-/*   create_sym_her_matrix (S, 5, gen); */
 
-/*   Scopy = pnl_mat_complex_copy (S); */
-/*   x = pnl_vect_new (); */
+#if 0
+static void pnl_mat_complex_complex_syslin_test ()
+{
+  PnlMatComplex *S, *Scopy, *B, *Bcopy, *SB;
+  PnlMatComplex *Q, *R;
+  PnlVectComplex *b, *x, *Sx;
+  PnlVectInt *p;
+  b = pnl_vect_complex_create (5);
+  Sx = pnl_vect_complex_new ();
+  S = pnl_mat_complex_create (5, 5);
+  SB = pnl_mat_complex_new ();
+  pnl_vect_rng_normal (b, 5, rng);
+  create_sym_her_matrix (S, 5, rng);
 
-/*   set_triangular_to_zero (S, 'L'); */
-/*   pnl_mat_complex_upper_syslin(x,S,b); */
-/*   |+ check solution +| */
-/*   pnl_mat_complex_clone (S, Scopy); */
-/*   set_triangular_to_zero (S, 'L'); */
-/*   pnl_mat_complex_mult_vect_inplace (Sx, S, x); */
-/*   pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "mat_upper_syslin", ""); */
+  Scopy = pnl_mat_complex_copy (S);
+  x = pnl_vect_new ();
 
-/*   pnl_mat_complex_clone (S, Scopy); */
-/*   set_triangular_to_zero (S, 'U'); */
-/*   pnl_mat_complex_lower_syslin(x,S,b); */
-/*   |+ check solution +| */
-/*   pnl_mat_complex_clone (S, Scopy); */
-/*   set_triangular_to_zero (S, 'U'); */
-/*   pnl_mat_complex_mult_vect_inplace (Sx, S, x); */
-/*   pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "mat_lower_syslin", ""); */
+  set_triangular_to_zero (S, 'L');
+  pnl_mat_complex_upper_syslin(x,S,b);
+  /* check solution */
+  pnl_mat_complex_clone (S, Scopy);
+  set_triangular_to_zero (S, 'L');
+  pnl_mat_complex_mult_vect_inplace (Sx, S, x);
+  pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "complex_mat_upper_syslin", "");
 
-/*   pnl_mat_complex_clone (S, Scopy); */
-/*   pnl_mat_complex_chol (S); */
-/*   pnl_mat_complex_chol_syslin(x, S, b); */
-/*   pnl_mat_complex_mult_vect_inplace (Sx, Scopy, x); */
-/*   pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "mat_chol_syslin", ""); */
+  pnl_mat_complex_clone (S, Scopy);
+  set_triangular_to_zero (S, 'U');
+  pnl_mat_complex_lower_syslin(x,S,b);
+  /* check solution */
+  pnl_mat_complex_clone (S, Scopy);
+  set_triangular_to_zero (S, 'U');
+  pnl_mat_complex_mult_vect_inplace (Sx, S, x);
+  pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "complex_mat_lower_syslin", "");
 
-/*   pnl_mat_complex_clone (S, Scopy); */
-/*   p = pnl_vect_int_create (5); */
-/*   pnl_mat_complex_lu (S, p); */
-/*   pnl_mat_complex_lu_syslin (x, S, p, b); */
-/*   pnl_mat_complex_mult_vect_inplace (Sx, Scopy, x); */
-/*   pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "mat_lu_syslin (symmetric)", ""); */
+  pnl_mat_complex_clone (S, Scopy);
+  pnl_mat_complex_chol (S);
+  pnl_mat_complex_chol_syslin(x, S, b);
+  pnl_mat_complex_mult_vect_inplace (Sx, Scopy, x);
+  pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "complex_mat_chol_syslin", "");
 
-/*   pnl_mat_complex_clone (S, Scopy); */
-/*   pnl_mat_complex_syslin (x, S, b); */
-/*   pnl_mat_complex_mult_vect_inplace (Sx, Scopy, x); */
-/*   pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "mat_syslin (symmetric)", ""); */
+  pnl_mat_complex_clone (S, Scopy);
+  p = pnl_vect_int_create (5);
+  pnl_mat_complex_lu (S, p);
+  pnl_mat_complex_lu_syslin (x, S, p, b);
+  pnl_mat_complex_mult_vect_inplace (Sx, Scopy, x);
+  pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "complex_mat_lu_syslin (symmetric)", "");
 
-/*   B = pnl_mat_complex_create (5,5); */
-/*   pnl_mat_complex_rand_normal (B, 5, 5, gen); */
-/*   Bcopy = pnl_mat_complex_copy (B); */
-/*   pnl_mat_complex_clone (S, Scopy); */
-/*   pnl_mat_complex_chol (S); */
-/*   pnl_mat_complex_chol_syslin_mat (S, B); */
-/*   pnl_mat_complex_mult_mat_inplace (SB, Scopy, B); */
-/*   pnl_test_mat_complex_eq_abs (SB, Bcopy, 1E-8, "mat_chol_syslin_mat (symmetric)", ""); */
+  pnl_mat_complex_clone (S, Scopy);
+  pnl_mat_complex_syslin (x, S, b);
+  pnl_mat_complex_mult_vect_inplace (Sx, Scopy, x);
+  pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "complex_mat_syslin (symmetric)", "");
 
-/*   pnl_mat_complex_clone (S, Scopy); */
-/*   pnl_mat_complex_clone (B, Bcopy); */
-/*   pnl_mat_complex_lu (S, p); */
-/*   pnl_mat_complex_lu_syslin_mat (S, p, B); */
-/*   pnl_mat_complex_mult_mat_inplace (SB, Scopy, B); */
-/*   pnl_test_mat_complex_eq_abs (SB, Bcopy, 1E-8, "mat_lu_syslin_mat (symmetric)", ""); */
+  B = pnl_mat_complex_create (5,5);
+  pnl_mat_complex_rng_normal (B, 5, 5, rng);
+  Bcopy = pnl_mat_complex_copy (B);
+  pnl_mat_complex_clone (S, Scopy);
+  pnl_mat_complex_chol (S);
+  pnl_mat_complex_chol_syslin_mat (S, B);
+  pnl_mat_complex_mult_mat_inplace (SB, Scopy, B);
+  pnl_test_mat_complex_eq_abs (SB, Bcopy, 1E-8, "complex_mat_chol_syslin_mat (symmetric)", "");
 
-/*   pnl_mat_complex_clone (S, Scopy); */
-/*   pnl_mat_complex_clone (B, Bcopy); */
-/*   pnl_mat_complex_syslin_mat (S, B); */
-/*   pnl_mat_complex_mult_mat_inplace (SB, Scopy, B); */
-/*   pnl_test_mat_complex_eq_abs (SB, Bcopy, 1E-8, "mat_syslin_mat (symmetric)", ""); */
+  pnl_mat_complex_clone (S, Scopy);
+  pnl_mat_complex_clone (B, Bcopy);
+  pnl_mat_complex_lu (S, p);
+  pnl_mat_complex_lu_syslin_mat (S, p, B);
+  pnl_mat_complex_mult_mat_inplace (SB, Scopy, B);
+  pnl_test_mat_complex_eq_abs (SB, Bcopy, 1E-8, "complex_mat_lu_syslin_mat (symmetric)", "");
+
+  pnl_mat_complex_clone (S, Scopy);
+  pnl_mat_complex_clone (B, Bcopy);
+  pnl_mat_complex_syslin_mat (S, B);
+  pnl_mat_complex_mult_mat_inplace (SB, Scopy, B);
+  pnl_test_mat_complex_eq_abs (SB, Bcopy, 1E-8, "complex_mat_syslin_mat (symmetric)", "");
 
 
-/*   create_invertible_matrix (S, 5, gen); */
-/*   pnl_mat_complex_clone (Scopy, S); */
-/*   pnl_mat_complex_lu (S, p); */
-/*   pnl_mat_complex_lu_syslin (x, S, p, b); */
-/*   pnl_mat_complex_mult_vect_inplace (Sx, Scopy, x); */
-/*   pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "mat_lu_syslin", ""); */
+  create_invertible_matrix (S, 5, rng);
+  pnl_mat_complex_clone (Scopy, S);
+  pnl_mat_complex_lu (S, p);
+  pnl_mat_complex_lu_syslin (x, S, p, b);
+  pnl_mat_complex_mult_vect_inplace (Sx, Scopy, x);
+  pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "mat_lu_syslin", "");
 
-/*   pnl_mat_complex_clone (S, Scopy); */
-/*   Q = pnl_mat_complex_new (); */
-/*   R = pnl_mat_complex_new (); */
-/*   pnl_mat_complex_qr (Q, R, p, S); */
-/*   pnl_mat_complex_qr_syslin (x, Q, R, p, b); */
-/*   pnl_mat_complex_mult_vect_inplace (Sx, Scopy, x); */
-/*   pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "mat_qr_syslin", ""); */
-/*   pnl_mat_complex_free (&Q); */
-/*   pnl_mat_complex_free (&R); */
+  pnl_mat_complex_clone (S, Scopy);
+  Q = pnl_mat_complex_new ();
+  R = pnl_mat_complex_new ();
+  pnl_mat_complex_qr (Q, R, p, S);
+  pnl_mat_complex_qr_syslin (x, Q, R, p, b);
+  pnl_mat_complex_mult_vect_inplace (Sx, Scopy, x);
+  pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "complex_mat_qr_syslin", "");
+  pnl_mat_complex_free (&Q);
+  pnl_mat_complex_free (&R);
 
-/*   pnl_mat_complex_clone (S, Scopy); */
-/*   pnl_mat_complex_syslin (x, S, b); */
-/*   pnl_mat_complex_mult_vect_inplace (Sx, Scopy, x); */
-/*   pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "mat_syslin", ""); */
+  pnl_mat_complex_clone (S, Scopy);
+  pnl_mat_complex_syslin (x, S, b);
+  pnl_mat_complex_mult_vect_inplace (Sx, Scopy, x);
+  pnl_test_vect_complex_eq_abs (Sx, b, 1E-8, "complex_mat_syslin", "");
 
-/*   pnl_mat_complex_clone (S, Scopy); */
-/*   pnl_mat_complex_clone (B, Bcopy); */
-/*   pnl_mat_complex_lu (S, p); */
-/*   pnl_mat_complex_lu_syslin_mat (S, p, B); */
-/*   pnl_mat_complex_mult_mat_inplace (SB, Scopy, B); */
-/*   pnl_test_mat_complex_eq_abs (SB, Bcopy, 1E-8, "mat_lu_syslin_mat", ""); */
+  pnl_mat_complex_clone (S, Scopy);
+  pnl_mat_complex_clone (B, Bcopy);
+  pnl_mat_complex_lu (S, p);
+  pnl_mat_complex_lu_syslin_mat (S, p, B);
+  pnl_mat_complex_mult_mat_inplace (SB, Scopy, B);
+  pnl_test_mat_complex_eq_abs (SB, Bcopy, 1E-8, "complex_mat_lu_syslin_mat", "");
 
-/*   pnl_mat_complex_clone (S, Scopy); */
-/*   pnl_mat_complex_clone (B, Bcopy); */
-/*   pnl_mat_complex_syslin_mat (S, B); */
-/*   pnl_test_mat_complex_eq_abs (SB, Bcopy, 1E-8, "mat_syslin_mat", ""); */
+  pnl_mat_complex_clone (S, Scopy);
+  pnl_mat_complex_clone (B, Bcopy);
+  pnl_mat_complex_syslin_mat (S, B);
+  pnl_test_mat_complex_eq_abs (SB, Bcopy, 1E-8, "complex_mat_syslin_mat", "");
 
-/*   pnl_mat_complex_free (&B); */
-/*   pnl_mat_complex_free (&SB); */
-/*   pnl_mat_complex_free (&Bcopy); */
-/*   pnl_mat_complex_free (&S); */
-/*   pnl_mat_complex_free (&Scopy); */
-/*   pnl_vect_free (&b); */
-/*   pnl_vect_free (&Sx); */
-/*   pnl_vect_free (&x); */
-/*   pnl_vect_int_free (&p); */
-/* } */
+  pnl_mat_complex_free (&B);
+  pnl_mat_complex_free (&SB);
+  pnl_mat_complex_free (&Bcopy);
+  pnl_mat_complex_free (&S);
+  pnl_mat_complex_free (&Scopy);
+  pnl_vect_free (&b);
+  pnl_vect_free (&Sx);
+  pnl_vect_free (&x);
+  pnl_vect_int_free (&p);
+}
+
+#endif
 
 static void pnl_mat_create_from_file_test ()
 {
@@ -1256,16 +1338,14 @@ static void pnl_mat_scalar_prod_test ()
 {
   PnlMat *A;
   PnlVect *x, *y, *Ay;
-  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
-  pnl_rand_init (gen, 5, 4);
   A = pnl_mat_create (5, 4);
-  pnl_mat_rand_normal (A, 5, 4, gen);
+  pnl_mat_rng_normal (A, 5, 4, rng);
   y = pnl_vect_create (4);
-  pnl_vect_rand_normal(y, 4, gen);
+  pnl_vect_rng_normal(y, 4, rng);
   Ay = pnl_mat_mult_vect (A, y);
 
   x = pnl_vect_create (5);
-  pnl_vect_rand_normal(x, 5, gen);
+  pnl_vect_rng_normal(x, 5, rng);
   pnl_test_eq (pnl_mat_scalar_prod (A, x, y), pnl_vect_scalar_prod (x, Ay),
                1E-12, "mat_scalar_prod", "");
 
@@ -1277,6 +1357,9 @@ static void pnl_mat_scalar_prod_test ()
 
 int main (int argc, char **argv)
 {
+  rng = pnl_rng_create (PNL_RNG_MERSENNE);
+  pnl_rng_sseed (rng, 0);
+
   pnl_test_init (argc, argv);
   pnl_mat_create_from_double_test();
   pnl_mat_create_from_ptr_test();
@@ -1296,6 +1379,8 @@ int main (int argc, char **argv)
   pnl_mat_transpose_test();
   pnl_vect_wrap_mat_row_test();
   pnl_mat_get_row_test();
+  pnl_mat_add_row_test ();
+  pnl_mat_del_row_test ();
   pnl_mat_sum_test();
   pnl_mat_sum_vect_test();
   pnl_mat_prod_test();
@@ -1311,5 +1396,7 @@ int main (int argc, char **argv)
   pnl_mat_mult_vect_transpose_test();
   pnl_mat_scalar_prod_test();
   pnl_mat_dgemv_test();
+
+  pnl_rng_free (&rng);
   exit (pnl_test_finalize ("Matrix"));
 }

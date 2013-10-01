@@ -103,6 +103,8 @@ extern PnlVect pnl_vect_wrap_mat_row(const PnlMat *M, int i);
 extern PnlMat pnl_mat_wrap_vect(const PnlVect *v);
 extern void pnl_mat_get_row(PnlVect *V, const PnlMat *M, int i);
 extern void pnl_mat_get_col(PnlVect *V, const PnlMat *M, int j);
+extern void pnl_mat_add_row(PnlMat *M, int i, const PnlVect *r);
+extern void pnl_mat_del_row(PnlMat *M, int i);
 extern PnlMat* pnl_mat_create_diag_from_ptr(const double x[], int d);
 extern PnlMat* pnl_mat_create_diag(const PnlVect *V);
 extern double pnl_mat_sum(const PnlMat *lhs);
