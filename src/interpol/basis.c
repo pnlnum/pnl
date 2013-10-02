@@ -943,6 +943,57 @@ void pnl_basis_clone (PnlBasis *dest, const PnlBasis *src)
 }
 
 /** 
+ * Delete the i-th basis function, ie. remove line i from the tensor
+ * 
+ * @param B a PnlBasis
+ * @param i an integer between 0 and B->nb_func-1
+ */
+void pnl_basis_del_elt_i (PnlBasis *B, int i)
+{
+  pnl_mat_int_del_row (B->T, i);
+  B->nb_func --;
+}
+
+/** 
+ * Delete a basis function described by its tensor decomposition
+ * 
+ * @param B a PnlBasis
+ * @param d a PnlVectInt describing the element to remove
+ */
+void pnl_basis_del_elt (PnlBasis *B, const PnlVectInt *d)
+{
+  int i;
+  if ( B->nb_variates != d->size )
+    {
+      perror ("size mismatch in pnl_basis_del_elt_i\n");
+      abort ();
+    }
+  for ( i=0 ; i<B->nb_func ; i++ )
+    {
+      PnlVectInt Ti = pnl_vect_int_wrap_mat_row (B->T, i);
+      if ( pnl_vect_int_eq (&Ti, d) == TRUE ) break;
+    }
+  if ( i < B->nb_func) pnl_basis_del_elt_i (B, i);
+}
+
+/** 
+ * Add a function described by its tensor decomposition to a basis
+ * 
+ * @param B a PnlBasis
+ * @param d a PnlVectInt describing the function to add
+ */
+void pnl_basis_add_elt (PnlBasis *B, const PnlVectInt *d)
+{
+  if ( B->nb_variates != d->size )
+    {
+      perror ("size mismatch in pnl_basis_del_elt_i\n");
+      abort ();
+    }
+  pnl_mat_int_add_row (B->T, B->T->m, d);
+  B->nb_func ++;
+}
+
+/** 
  * Create a copy of a basis
  * 
  * @param B a basis

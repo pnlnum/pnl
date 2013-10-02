@@ -179,6 +179,18 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
   \reffun{pnl_basis_create}. Beware that \var{basis} is the address of a
   \refstruct{PnlBasis}\ptr.
 
+
+\item \describefun{void}{pnl_basis_del_elt}{\refstruct{PnlBasis} \ptr B, const \refstruct{PnlVectInt} \ptr d}
+  \sshortdescribe Remove the function defined by the tensor product \var{d} from
+  an existing basis \var{B}.
+
+\item \describefun{void}{pnl_basis_del_elt_i}{\refstruct{PnlBasis} \ptr B, int i}
+  \sshortdescribe Remove the \var{i-th} element of basis \var{B}.
+
+\item \describefun{void}{pnl_basis_add_elt}{\refstruct{PnlBasis} \ptr B, const \refstruct{PnlVectInt} \ptr d}
+  \sshortdescribe Add the function defined by the tensor \var{d} to the Basis \var{B}.
+
+
 \end{itemize}
 
 
