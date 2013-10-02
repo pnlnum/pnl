@@ -619,6 +619,7 @@ static void pnl_mat_add_row_test ()
     pnl_test_set_ok ("mat_add_row bottom");
 
   pnl_mat_free (&M);
+  pnl_mat_free (&Morig);
   pnl_vect_free (&r);
 }
 
@@ -664,6 +665,7 @@ static void pnl_mat_del_row_test ()
     pnl_test_set_ok ("mat_del_row bottom");
 
   pnl_mat_free (&M);
+  pnl_mat_free (&Morig);
 
 }
 
@@ -1276,6 +1278,7 @@ static void pnl_mat_dgemm_test()
   pnl_test_mat_eq_abs (C, expec, 1E-12, "dgemm T T", "");
 
 
+  pnl_mat_free(&expec);
   pnl_mat_free(&A);
   pnl_mat_free(&B);
   pnl_mat_free(&tA);
@@ -1313,6 +1316,7 @@ static void pnl_mat_dgemv_test ()
   pnl_vect_free (&x);
   pnl_vect_free (&y);
   pnl_vect_free (&yclone);
+  pnl_vect_free(&expec);
 }
 
 static void pnl_mat_mult_vect_transpose_test ()

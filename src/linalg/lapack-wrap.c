@@ -218,6 +218,7 @@ int pnl_mat_qr_syslin (PnlVect *x, const PnlMat *Q, const PnlMat *R,
   pnl_mat_dgemv ('T', 1., Q, b, 0., y); /* y = Q' b */
   pnl_mat_upper_syslin (x, R, y); /* x = R^-1 Q' b */
   pnl_vect_permute_inverse_inplace (x, p);
+  pnl_vect_free (&y);
   return OK;
 }
 
