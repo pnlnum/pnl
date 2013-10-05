@@ -408,6 +408,22 @@ mybinary_CXXFLAGS=-g -O0
 include full_path_to_pnl_build/CMakeuser.incl
 \end{verbatim}
 
+\subsubsection{Inline Functions and getters}
+\label{sec:inline}
+
+It it is supported by your compiler, getter and setter functions are declared
+as inline functions. This is automatically detected when running CMake. By
+default, setter and getter functions check that the required access is valid,
+basically it boils down to checking whether the index of the access is within an
+acceptable range. These extra tests can become very expensive when getter and
+setter function are intensively called. 
+
+Thus,  it is possible to alter this default behaviour by defining the macro
+\texttt{PNL_RANGE_CHECK_OFF}. This macro is automatically defined when the
+library is compiled in Release mode, ie. with \verb!-DCMAKE_BUILD_TYPE=Release!
+passed to CMake.
+
+
 \input{types.tex}
 \input{mathematical_functions.tex}
 \input{linear_algebra.tex}
@@ -432,5 +448,6 @@ include full_path_to_pnl_build/CMakeuser.incl
 \clearpage
 \addcontentsline{toc}{section}{Index}
 \printindex
+
 
 \end{document}

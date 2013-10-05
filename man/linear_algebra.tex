@@ -180,12 +180,12 @@ There are no special functions to access the size of a vector, instead the field
   vector. \var{t} must be of size \var{size}.
 \end{itemize}  
 
-\subparagraph{Accessing elements}
+\subparagraph{Accessing elements.}
 
 If it is supported by the compiler, the following functions are declared
-inline. You just need to define the macro \verb!HAVE_INLINE! for by passing
-\verb!-DHAVE_INLINE! to gcc to use the inline versions of the following
-functions.
+inline. To speed up these functions, you can use the macro constant
+\texttt{PNL_RANGE_CHECK_OFF}, see Section~\ref{sec:inline} for an explanation. 
+
 \begin{itemize}
 \item \describefun{void}{pnl_vect_set}{\refstruct{PnlVect} \ptr v, int i, double x}
   \sshortdescribe Set v[i]=x  
@@ -752,8 +752,11 @@ and the size of the matrix.
 \end{itemize}  
 
 
-\paragraph{Accessing elements}
+\paragraph{Accessing elements.}
 
+If it is supported by the compiler, the following functions are declared
+inline. To speed up these functions, you can use the macro constant
+\texttt{PNL_RANGE_CHECK_OFF}, see Section~\ref{sec:inline} for an explanation. 
 \begin{itemize}
 \item \describefun{void}{pnl_mat_set}{\refstruct{PnlMat} \ptr M, int i, int j, double x}
   \sshortdescribe Set the value of M[i, j]=x  
@@ -1508,8 +1511,11 @@ This type is used to store the LU decomposition of a tridiagonal matrix.
 \end{itemize}
 
 
-\paragraph{Accessing elements}
+\paragraph{Accessing elements.}
 
+If it is supported by the compiler, the following functions are declared
+inline. To speed up these functions, you can use the macro constant
+\texttt{PNL_RANGE_CHECK_OFF}, see Section~\ref{sec:inline} for an explanation. 
 \begin{itemize}
   \item \describefun{void}{pnl_tridiag_mat_set}{\refstruct{PnlTridiagMat} \ptr self, int d, int up, double x}
     \sshortdescribe Set \var{self[d, d+up] = x}, \var{up} can be $\{-1, 0, 1\}$.  
@@ -1678,7 +1684,12 @@ The structures and functions related to band matrices are declared in
   \sshortdescribe Resize \var{BM} to store a \var{m x n} band matrix with
   \var{nu} upper diagonals and \var{nl} lower diagonals.
 \end{itemize}
-\paragraph{Accessing elements}
+
+\paragraph{Accessing elements.}
+
+If it is supported by the compiler, the following functions are declared
+inline. To speed up these functions, you can use the macro constant
+\texttt{PNL_RANGE_CHECK_OFF}, see Section~\ref{sec:inline} for an explanation. 
 \begin{itemize}
 \item \describefun{void}{pnl_band_mat_set}{\refstruct{PnlBandMat}
     \ptr M, int i, int j, double x}
