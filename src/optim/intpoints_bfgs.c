@@ -173,20 +173,25 @@ static void AllConstraints_Value(PnlVect *constraints_x, const PnlVect *x,
 {
   int i, index;
 
-  if (all_constraints->NL_Constraints!=NULL) PNL_EVAL_RNFUNCRM(all_constraints->NL_Constraints, x, constraints_x);
+  if (all_constraints->NL_Constraints!=NULL) 
+    PNL_EVAL_RNFUNCRM(all_constraints->NL_Constraints, x, constraints_x);
 
-  pnl_vect_resize(constraints_x, (all_constraints->nbr_nl_constraints)+(all_constraints->nbr_lower_bounds) + (all_constraints->nbr_upper_bounds));
+  pnl_vect_resize(constraints_x, all_constraints->nbr_nl_constraints 
+                                  + all_constraints->nbr_lower_bounds 
+                                  + all_constraints->nbr_upper_bounds);
 
   for (i=0; i<(all_constraints->nbr_lower_bounds); i++)
     {
-      index = pnl_vect_int_get(all_constraints->LowerBoundsIndex, i);
-      LET(constraints_x, (all_constraints->nbr_nl_constraints)+i) = GET(x, index)-GET(all_constraints->LowerBounds, i);
+      index = PNL_GET(all_constraints->LowerBoundsIndex, i);
+      LET(constraints_x, all_constraints->nbr_nl_constraints + i) = GET(x, index)-GET(all_constraints->LowerBounds, i);
     }
 
   for (i=0; i<(all_constraints->nbr_upper_bounds); i++)
     {
-      index = pnl_vect_int_get(all_constraints->UpperBoundsIndex, i);
-      LET(constraints_x, (all_constraints->nbr_nl_constraints)+(all_constraints->nbr_lower_bounds)+i) = GET(all_constraints->UpperBounds, i) - GET(x, index);
+      index = PNL_GET(all_constraints->UpperBoundsIndex, i);
+      LET(constraints_x, all_constraints->nbr_nl_constraints 
+                        + all_constraints->nbr_lower_bounds + i) 
+           = GET(all_constraints->UpperBounds, i) - GET(x, index);
     }
 }
 
@@ -208,7 +213,8 @@ static void gradient_f(PnlRnFuncRm *grad_func, PnlRnFuncR * func, PnlVect * x, P
   double h = 0.00001;
   double dx=0;
 
-  // If the gradient of objective function is not provided, we estimate it using finites differences.
+  /* If the gradient of objective function is not provided, we estimate it
+   * using finites differences. */
   if (grad_func==NULL)
     {
 
@@ -222,9 +228,11 @@ static void gradient_f(PnlRnFuncRm *grad_func, PnlRnFuncR * func, PnlVect * x, P
           if (fabs(GET(x,i))<h) dx=h;
           else dx = h*GET(x,i);
 
+          /* Shift x[i] */
           LET(x1,i)=GET(x,i) + dx;
           LET(x2,i)=GET(x,i) - dx;
-          LET(res,i) = (PNL_EVAL_RNFUNCR(func, x1)-PNL_EVAL_RNFUNCR(func, x2))/ (2 * dx);
+          LET(res,i) = (PNL_EVAL_RNFUNCR(func, x1) - PNL_EVAL_RNFUNCR(func, x2)) / (2 * dx);
+          /* Restore x[i] */
           LET(x1,i)=GET(x,i);
           LET(x2,i)=GET(x,i);
 
@@ -232,7 +240,6 @@ static void gradient_f(PnlRnFuncRm *grad_func, PnlRnFuncR * func, PnlVect * x, P
       pnl_vect_free(&x1);
       pnl_vect_free(&x2);
     }
-
   else
     {
       PNL_EVAL_RNFUNCRM(grad_func, x, res);
@@ -581,7 +588,7 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
           norm_d_x = pnl_vect_norm_one(d_x);
 
           // Line Search : find a good step size alpha, verifying Armijo rule.
-          alpha = 1./(decrease_alpha); // Initial value for coefficient alpha (= 1 ?)
+          alpha = 1. / (decrease_alpha); // Initial value for coefficient alpha (= 1 ?)
           do
             {
               alpha *= decrease_alpha; // decrease
