@@ -90,7 +90,7 @@ static void brent_test()
   pnl_test_eq_abs ( r, M_PI_2, tol, "root_brent (cosine)", "");
 }
 
-static void find_root_test ()
+static void newton_bisection_root_test ()
 {
   double x1, x2, tol, r;
   PnlFuncDFunc func;
@@ -102,7 +102,7 @@ static void find_root_test ()
   func.function = FDF_FUNC;
   func.params = NULL;
 
-  status = pnl_find_root(&func, x1, x2, tol, N_max, &r);
+  status = pnl_root_newton_bisection(&func, x1, x2, tol, N_max, &r);
   pnl_test_eq_abs ( r, M_PI_2, epsabs, "find_root (cosine)", "");
 }
 
@@ -286,7 +286,7 @@ int main (int argc, char **argv)
   brent_test () ;
   bisection_test ();
   newton_test ();
-  find_root_test ();
+  newton_bisection_root_test ();
   test_hybrX ();
   test_lmdif_and_lmder ();
   exit(pnl_test_finalize ("ROOT"));

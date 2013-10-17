@@ -267,7 +267,7 @@ double pnl_bs_implicit_vol (int is_call, double Price, double spot, double Strik
 
   func.function = pnl_bs_increment_call_put;
   func.params = &data;
-  *error = pnl_find_root(&func,0.001,10.0,0.0001,20,&impli_vol);
+  *error = pnl_root_newton_bisection(&func,0.001,10.0,0.0001,20,&impli_vol);
   return impli_vol;
 }
 

@@ -117,12 +117,13 @@ functions.
   an accuracy of order \var{tol}. On exit \var{tol} is an upper bound of the
   error.
 
-\item \describefun{int}{pnl_find_root}{\refstruct{PnlFuncDFunc}\ptr  Func,
+\item \describefun{int}{pnl_root_newton_bisection}{\refstruct{PnlFuncDFunc}\ptr  Func,
     double x_min, double x_max, double tol, int N_Max, double\ptr  res}
   \sshortdescribe Find the root of \var{F} between \var{x1} and \var{x2} with
   an accuracy of order \var{tol} and a maximum of \var{N_max} iterations. On
-  exit, the root is stored in \var{res}. Note that the function \var{F} must
-  also compute the first derivative of the function.
+  exit, the root is stored in \var{res}. Note that the function \var{Func} must
+  also compute the first derivative of the function. This function relies on
+  combining Newton's approach with a bisection technique.
 
 
 \item \describefun{int}{pnl_root_newton}{\refstruct{PnlFuncDFunc} \ptr Func,

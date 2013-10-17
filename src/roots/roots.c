@@ -25,52 +25,54 @@
 
 
 /**
- * Find the root of a function
+ * Find the root of a function by combining Newton's method with the bisection
+ * method
  *
  * @param x_min a double pointer to an already existing PnlVect
  * @param x_max a double the root is suppose to be in [x_min, x_max] 
  * @param tol a double speed of derivative decrease, if derivative is less
  * than tolerance, then it is converged 
- * @param N_max a int maximal number of iteration
+ * @param max_iter a int maximal number of iteration
  * @param res the root, if the algorithm has converged
  * @param func a function pointer which computes f(x_anc) df(x_anc) 
  * @return OK or FAIL
  */
-int pnl_find_root (PnlFuncDFunc *func, double x_min, double x_max, double tol, int N_max, double * res)
+int pnl_root_newton_bisection (PnlFuncDFunc *func, double x_min, double x_max, double tol, int max_iter, double * res)
 {
-  int iter; 
+  int i; 
   double func_low, func_high, func_current, diff_func_current;
   double rts, dx_anc, dx,xl, xh;
 
   PNL_EVAL_FUNC_DFUNC (func, x_min, &func_low, &diff_func_current);
   if (func_low == 0.0)
     {
-      *res=x_min;return OK;
+      *res=x_min; return OK;
     }
   PNL_EVAL_FUNC_DFUNC (func, x_max, &func_high,&diff_func_current);
+
   if (func_high == 0.0) 
     {
-      *res=x_max;return OK;
+      *res=x_max; return OK;
     }
-  if ((func_low > 0.0 && func_high > 0.0) || (func_low < 0.0 && func_high < 0.0)) 
+
+  /* Root is not bracketed by x1 and x2  */
+  if ( (func_low > 0.0 && func_high > 0.0) 
+       || (func_low < 0.0 && func_high < 0.0) ) 
     return FAIL;
-  /*Root must be bracketed by x1 and x2  */
-  if (func_low < 0.0)
-    {
-      xl = x_min; xh = x_max;
-    }
-  else
-    {
-      xl = x_max; xh = x_min;
-    }
+
+  if (func_low < 0.0) { xl = x_min; xh = x_max; }
+  else { xl = x_max; xh = x_min; }
+
   rts = 0.5 * (x_min + x_max);
   dx_anc = fabs(x_max - x_min);
   dx = dx_anc;
   PNL_EVAL_FUNC_DFUNC (func, rts, &func_current, &diff_func_current);
-  for (iter=0;iter<N_max;iter++)
+
+  for ( i=0 ; i<max_iter ; i++ )
     {
-      if (((rts - xh) * diff_func_current - func_current) * ((rts - xl) * diff_func_current - func_current) >= 0.0
-          || fabs(2.0 * func_current) > fabs(dx_anc * diff_func_current))
+      if ( ( ((rts - xh) * diff_func_current - func_current) 
+             * ((rts - xl) * diff_func_current - func_current) >= 0.0 )
+          || fabs(2.0 * func_current) > fabs(dx_anc * diff_func_current) )
         {
           dx_anc = dx;
           dx = 0.5 * (xh - xl);
@@ -84,16 +86,13 @@ int pnl_find_root (PnlFuncDFunc *func, double x_min, double x_max, double tol, i
         }
       if (fabs(dx) < tol)
         {
-          *res= rts;return OK;
+          *res = rts; return OK;
         }
-      PNL_EVAL_FUNC_DFUNC (func, rts, &func_current,&diff_func_current);
-      if (func_current < 0.0)
-        xl = rts;
-      else 
-        xh= rts;
+      PNL_EVAL_FUNC_DFUNC (func, rts, &func_current, &diff_func_current);
+      if ( func_current < 0.0 ) xl = rts; else xh= rts;
     }
-  return FAIL;
   /* Maximum number of iterations exceeded */
+  return FAIL;
 };
 
 
