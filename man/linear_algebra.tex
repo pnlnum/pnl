@@ -666,7 +666,11 @@ and the size of the matrix.
 
 \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_create_from_double}{int m, int n, double x}
   \sshortdescribe Create a \refstruct{PnlMat} with \var{m} rows and \var{n}
-  columns and sets all the elements to \var{x}
+  columns and sets all the elements to \var{x}.
+
+\item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_create_from_zero}{int m, int n}
+  \sshortdescribe Create a \refstruct{PnlMat} with \var{m} rows and \var{n}
+  columns and sets all elements to 0.
 
 \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_create_from_ptr}{int m, int n, const double \ptr x}
   \sshortdescribe Create a \refstruct{PnlMat} with \var{m} rows and \var{n}

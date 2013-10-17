@@ -128,7 +128,7 @@ int FUNCTION(pnl_vect,CONCAT2(eq_,BASE))(const TYPE(PnlVect) *v, BASE x)
  * Create a new TYPE(PnlVect) pointer.
  *
  * @param size the size of the array
- * @return  a TYPE(PnlVect)pointer all value at 0
+ * @return  a TYPE(PnlVect) pointer with all entries set to 0
  */
 TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_zero)(const int size)
 {

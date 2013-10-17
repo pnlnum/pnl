@@ -138,6 +138,19 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,CONCAT2(create_from_,BASE))(int m, int n, BASE x)
 }
 
 /**
+ * Create a new TYPE(PnlMat) pointer.
+ *
+ * @param m number of rows
+ * @param n number of columns
+ * @return  a TYPE(PnlMat) pointer with all entries set to 0
+ */
+TYPE(PnlMat)* FUNCTION(pnl_mat,create_from_zero)(int m, int n)
+{
+  const BASE zero = ZERO;
+  return FUNCTION(pnl_mat,CONCAT2(create_from_,BASE)) (m, n, zero);
+}
+
+/**
  * Create a TYPE(PnlMat) from a C array
  * @param m number of rows
  * @param n number of columns

@@ -42,6 +42,7 @@ extern int pnl_mat_eq (const PnlMat *, const PnlMat *);
 extern int pnl_mat_eq_double (const PnlMat *, double);
 extern PnlMat* pnl_mat_create(int m, int n); 
 extern PnlMat* pnl_mat_create_from_double(int m, int n, double x);
+extern PnlMat* pnl_mat_create_from_zero(int m, int n);
 extern PnlMat* pnl_mat_create_from_ptr(int m, int n, const double* x);
 extern PnlMat* pnl_mat_create_from_list(int m, int n, ...); 
 extern PnlMat pnl_mat_wrap_array(const double* x,int m, int n);
