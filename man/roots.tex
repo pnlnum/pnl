@@ -1,5 +1,6 @@
 \section{Root finding}
 \subsection{Overview}
+\label{sec:PnlFunc}
 
 To provide a uniformed framework to root finding functions, we use several
 structures for storing different kind of functions. The pointer
@@ -13,10 +14,10 @@ and their Jacobian.
  * The function  pointer returns f(x)
  *
 typedef struct {
-  double (*function) (double x, void *params);
+  double (*F) (double x, void *params);
   void *params;
 } PnlFunc ;
-#define PNL_EVAL_FUNC(F, x) (*((F)->function))(x, (F)->params)
+#define PNL_EVAL_FUNC(Fstruct, x) (*((Fstruct)->F))(x, (Fstruct)->params)
 \end{verbatim}
 
 \describestruct{PnlFunc2D}
@@ -26,10 +27,10 @@ typedef struct {
  * The function pointer returns f(x)
  *
 typedef struct {
-  double (*function) (double x, double y, void *params);
+  double (*F) (double x, double y, void *params);
   void *params;
 } PnlFunc2D ;
-#define PNL_EVAL_FUNC2D(F, x, y) (*((F)->function))(x, y, (F)->params)
+#define PNL_EVAL_FUNC2D(Fstruct, x, y) (*((Fstruct)->F))(x, y, (Fstruct)->params)
 \end{verbatim}
 
 \describestruct{PnlFuncDFunc}
@@ -40,10 +41,10 @@ typedef struct {
  * and dfx respectively
  *
 typedef struct {
-  void (*function) (double x, double *fx, double *dfx, void *params);
+  void (*F) (double x, double *fx, double *dfx, void *params);
   void *params;
 } PnlFuncDFunc ;
-#define PNL_EVAL_FUNC_DFUNC(F, x, fx, dfx) (*((F)->function))(x, fx, dfx, (F)->params)
+#define PNL_EVAL_FUNC_DF(Fstruct, x, fx, dfx) (*((Fstruct)->F))(x, fx, dfx, (Fstruct)->params)
 \end{verbatim}
 
 \describestruct{PnlRnFuncR}
@@ -53,10 +54,10 @@ typedef struct {
  * The function pointer returns f(x)
  *
 typedef struct {
-  double (*function) (const PnlVect *x, void *params);
+  double (*F) (const PnlVect *x, void *params);
   void *params;
 } PnlRnFuncR ;
-#define PNL_EVAL_RNFUNCR(F, x) (*((F)->function))(x, (F)->params)
+#define PNL_EVAL_RNFUNCR(Fstruct, x) (*((Fstruct)->F))(x, (Fstruct)->params)
 \end{verbatim}
 
 \describestruct{PnlRnFuncRm}
@@ -68,10 +69,10 @@ typedef struct {
  * fx (vector of size m)
  *
 typedef struct {
-  void (*function) (const PnlVect *x, PnlVect *fx, void *params);
+  void (*F) (const PnlVect *x, PnlVect *fx, void *params);
   void *params;
 } PnlRnFuncRm ;
-#define PNL_EVAL_RNFUNCRM(F, x, fx) (*((F)->function))(x, fx, (F)->params)
+#define PNL_EVAL_RNFUNCRM(Fstruct, x, fx) (*((Fstruct)->F))(x, fx, (Fstruct)->params)
 
 /*
  * Synonymous of PnlRnFuncRm for f:R^n --> R^n
@@ -91,17 +92,22 @@ typedef PnlRnFuncRm PnlRnFuncRn;
  * (matrix of size m x n)
  *
 typedef struct {
-  void (*function) (const PnlVect *x, PnlVect *fx, void *params);
-  void (*Dfunction) (const PnlVect *x, PnlMat *dfx, void *params);
+  void (*F) (const PnlVect *x, PnlVect *fx, void *params);
+  void (*DF) (const PnlVect *x, PnlMat *dfx, void *params);
+  void (*FDF) (const PnlVect *x, PnlVect *fx, PnlMat *dfx, void *params);
   void *params;
 } PnlRnFuncRmDFunc ;
-#define PNL_EVAL_RNFUNCRM_DFUNC(F, x, dfx) (*((F)->Dfunction))(x, dfx, (F)->params)
+#define PNL_EVAL_RNFUNCRM_DF(Fstruct, x, dfx) \
+    (*((Fstruct)->Dfunction))(x, dfx, (Fstruct)->params)
+#define PNL_EVAL_RNFUNCRM_FDF(Fstruct, x, fx, dfx) \
+    (*((Fstruct)->F))(x, fx, dfx, (Fstruct)->params)
 
 /*
  * Synonymous of PnlRnFuncRmDFunc for f:R^n --> R^m
  *
 typedef PnlRnFuncRmDFunc PnlRnFuncRnDFunc;
-#define PNL_EVAL_RNFUNCRN_DFUNC PNL_EVAL_RNFUNCRM_DFUNC
+#define PNL_EVAL_RNFUNCRN_DF PNL_EVAL_RNFUNCRM_DF
+#define PNL_EVAL_RNFUNCRN_FDF PNL_EVAL_RNFUNCRM_FDF
 \end{verbatim}
 
 \subsection{Functions}
@@ -111,14 +117,14 @@ To use the following functions, you should include \verb!pnl/pnl_root.h!.
 For finding the zero of a real valued function we provide the following
 functions.
 \begin{itemize}
-\item \describefun{double}{pnl_root_brent}{\refstruct{PnlFunc}\ptr  F, double
+\item \describefun{double}{pnl_root_brent}{\refstruct{PnlFunc} \ptr F, double
     x1, double  x2, double \ptr tol}
   \sshortdescribe Find the root of \var{F} between \var{x1} and \var{x2} with
   an accuracy of order \var{tol}. On exit \var{tol} is an upper bound of the
   error.
 
-\item \describefun{int}{pnl_root_newton_bisection}{\refstruct{PnlFuncDFunc}\ptr  Func,
-    double x_min, double x_max, double tol, int N_Max, double\ptr  res}
+\item \describefun{int}{pnl_root_newton_bisection}{\refstruct{PnlFuncDFunc} \ptr  Func,
+    double x_min, double x_max, double tol, int N_Max, double \ptr res}
   \sshortdescribe Find the root of \var{F} between \var{x1} and \var{x2} with
   an accuracy of order \var{tol} and a maximum of \var{N_max} iterations. On
   exit, the root is stored in \var{res}. Note that the function \var{Func} must
@@ -160,7 +166,8 @@ two wrappers for calling minpack routines.
     store the function whose root is to be found. \var{f} can also
     store the Jacobian of the function, if not it is computed using
     finite differences (see the file \url{examples/minpack_test.c} for
-    a usage example),
+    a usage example). \var{f->FDF} can be NULL because it is
+    not used in this function.
   \item  \var{x} contains on input the starting point of the search and
     an approximation of the root of \var{f} on output,
   \item \var{xtol} is the precision required on \var{x}, if set to 0 a
@@ -193,7 +200,8 @@ two wrappers for calling minpack routines.
     store the function whose root is to be found. \var{f} can also
     store the Jacobian of the function, if not it is computed using
     finite differences (see the file \url{examples/minpack_test.c} for
-    a usage example),
+    a usage example). \var{f->FDF} can be NULL because it is
+    not used in this function.
   \item  \var{x} contains on input the starting
     point of the search and an approximation of the root of \var{f} on
     output,

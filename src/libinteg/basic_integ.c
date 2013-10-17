@@ -65,13 +65,13 @@ static const PnlFunc2D* globalfunc;
 
 static double func1D(double y, void *params) 
 {
-  return globalfunc->function(xsav, y, params);
+  return globalfunc->F(xsav, y, params);
 }
 
 static double int_1d(double x, void *params) 
 {
   PnlFunc wrap_1d;
-  wrap_1d.function = func1D;
+  wrap_1d.F = func1D;
   wrap_1d.params = params;
   xsav=x;
   return pnl_integration (&wrap_1d, y0sav, y1sav, nysav, methsav);
@@ -93,7 +93,7 @@ double pnl_integration_2d (PnlFunc2D *F, double x0, double x1,
                           double y0,double y1, int nx, int ny, char *meth)
 {
   PnlFunc func_1d;
-  func_1d.function = &int_1d;
+  func_1d.F = &int_1d;
   func_1d.params   = NULL;
   globalfunc       = F;
   y0sav            = y0;

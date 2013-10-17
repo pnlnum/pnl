@@ -56,18 +56,18 @@ static void integration_qag_test()
   double result,abserr,expected;
   int neval;
   PnlFunc func;
-  func.function = x_square;
+  func.F = x_square;
   func.params = NULL;
   expected = - log(cos(1));
   pnl_integration_qag(&func,0.0,1.0,0.00001,0.000001,0,&result,&abserr,&neval);
   pnl_test_eq_abs (result, expected, abserr, "QAGS (finite interval with no singularity)", ""); 
 
-  func.function = indefinite;
+  func.F = indefinite;
   func.params = NULL;
   pnl_integration_qag(&func,0,PNL_POSINF,0.00001,0.000001,0,&result,&abserr,&neval);
   pnl_test_eq_abs (result, M_EULER, abserr, "QAGS (infinite interval)", ""); 
 
-  func.function = singular;
+  func.F = singular;
   func.params = NULL;
   pnl_integration_qag(&func,0.0,10,0.00001,0.000001,0,&result,&abserr,&neval);
   pnl_test_eq_abs (result, 1 - cos(2.5) + exp(-2.5) - exp(-5.0), abserr, "QAGS (with singularities)", ""); 
@@ -84,7 +84,7 @@ static void integration_qagp_test()
   PnlFunc func;
 
   pts = pnl_vect_create_from_list (2, 2.5, 5.);
-  func.function = singular;
+  func.F = singular;
   func.params = NULL;
   pnl_integration_qagp(&func,0.0,10,pts,0.00001,0.000001,0,&result,&abserr,&neval);
   pnl_test_eq_abs (result, 1 - cos(2.5) + exp(-2.5) - exp(-5.0), abserr, "QAGP (with known singularities)", ""); 
@@ -95,7 +95,7 @@ static void integration_qng_test()
   double result,abserr,expected;
   int neval;
   PnlFunc func;
-  func.function = x_square;
+  func.F = x_square;
   func.params = NULL;
   expected= - log(cos(1));
   pnl_integration_qng(&func,0.0,1.0,0.00001,0.000001,&result,&abserr,&neval);
@@ -107,7 +107,7 @@ static void integration_qng_2d_test()
   double result,abserr,expected;
   int neval;
   PnlFunc2D func;
-  func.function = test_xy;
+  func.F = test_xy;
   func.params = NULL;
   expected= - 2 * (cos(2) - 1);
   pnl_integration_qng_2d(&func,-1.0,1.0,-1.0,1.0,0.00001,0.000001,&result,&abserr,&neval);
@@ -120,7 +120,7 @@ static void integ_test()
   double result, expected;
   PnlFunc func;
   int n = 50;
-  func.function = x_square;
+  func.F = x_square;
   func.params = NULL;
   expected = -log(cos(1));
   result = pnl_integration(&func,0.0,1.0,n, "rect");
@@ -138,7 +138,7 @@ static void integ_2d_test()
   PnlFunc2D func;
   nx = 50;
   ny = 50;
-  func.function = test_xy;
+  func.F = test_xy;
   func.params = NULL;
   expected= - 2 * (cos(2) - 1);
   result = pnl_integration_2d(&func,-1.0,1.0,-1.0,1.0,nx, ny, "rect");

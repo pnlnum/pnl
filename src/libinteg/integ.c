@@ -299,7 +299,7 @@ int pnl_integration_qagp (PnlFunc *f, double a, double b, const PnlVect *singula
 
 static double func1D(double y, void *params) 
 {
-  return globalfunc->function(xsav,y, params);
+  return globalfunc->F(xsav,y, params);
 }
 
 /*
@@ -310,7 +310,7 @@ static double int_1d(double x, void *params)
   PnlFunc wrap_1d;
   double res,err;
   int it;
-  wrap_1d.function = func1D;
+  wrap_1d.F= func1D;
   wrap_1d.params = params;
   xsav=x;
   if (pnl_integration_qng (&wrap_1d,y0sav,y1sav,xepsabs,xepsrel,&res,&err,&it)!=OK)
@@ -345,7 +345,7 @@ int pnl_integration_qng_2d (PnlFunc2D *F,
                           int * neval)
 {
   PnlFunc func_1d;
-  func_1d.function = &int_1d;
+  func_1d.F = &int_1d;
   func_1d.params = NULL;
   globalfunc=F;
   xepsabs=epsabs;

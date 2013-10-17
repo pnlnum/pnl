@@ -91,7 +91,7 @@ extern dcomplex C_op_idamcb(double d,dcomplex a, dcomplex b);
 
 typedef struct
 {
-  dcomplex (*function) (dcomplex x, void *params);
+  dcomplex (*F) (dcomplex x, void *params);
   void *params;
 } PnlCmplxFunc;
 

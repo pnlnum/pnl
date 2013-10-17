@@ -53,7 +53,7 @@ static void bisection_test ()
   
   x1 = 0;
   x2 = 3;
-  func.function = FUNC;
+  func.F = FUNC;
   func.params = NULL;
 
   status = pnl_root_bisection(&func, x1, x2, epsrel, epsabs, N_max, &r);
@@ -68,7 +68,7 @@ static void newton_test ()
   int status;
   
   x0 = 0.5;
-  func.function = FDF_FUNC;
+  func.F = FDF_FUNC;
   func.params = NULL;
 
   status = pnl_root_newton(&func, x0, epsrel, epsabs, N_max, &r);
@@ -83,7 +83,7 @@ static void brent_test()
   x1 = -1;
   x2 = 3;
   tol = 0.001;
-  func.function = FUNC;
+  func.F = FUNC;
   func.params = NULL;
 
   r = pnl_root_brent(&func, x1, x2, &tol);
@@ -99,7 +99,7 @@ static void newton_bisection_root_test ()
   x1 = -1;
   x2 = 3;
   tol = 0.001;
-  func.function = FDF_FUNC;
+  func.F = FDF_FUNC;
   func.params = NULL;
 
   status = pnl_root_newton_bisection(&func, x1, x2, tol, N_max, &r);
@@ -209,8 +209,9 @@ static void test_hybrX ()
   /*
    * Test without Jacobian
    */
-  f.function = fcn_fsolve;
-  f.Dfunction = NULL;
+  f.F = fcn_fsolve;
+  f.DF = NULL;
+  f.FDF = NULL;
   f.params = NULL;
   info = pnl_root_fsolve (&f, x, fvec, xtol, maxfev, &nfev, diag, FALSE);
   fnorm = pnl_vect_norm_two(fvec);
@@ -220,8 +221,9 @@ static void test_hybrX ()
   /*
    * Test with Jacobian
    */
-  f.function = fcn_fsolve;
-  f.Dfunction = Dfcn_fsolve;
+  f.F = fcn_fsolve;
+  f.DF = Dfcn_fsolve;
+  f.FDF = NULL;
   f.params = NULL;
   info = pnl_root_fsolve (&f, x, fvec, xtol, maxfev, &nfev, diag, FALSE);
   fnorm = pnl_vect_norm_two(fvec);
@@ -258,8 +260,9 @@ static void test_lmdif_and_lmder ()
   /*
    * Test without user supplied Jacobian
    */
-  f.function = fcn_lsq;
-  f.Dfunction = NULL;
+  f.F = fcn_lsq;
+  f.DF = NULL;
+  f.FDF = NULL;
   f.params = NULL;
   info = pnl_root_fsolve_lsq(&f, x, m, fvec, tol, tol, 0., maxfev, &nfev, NULL, FALSE);
   pnl_test_vect_eq_abs (x, sol, 1E-6, "root_fsolve_lsq (without Jacobian)", "");
@@ -267,8 +270,9 @@ static void test_lmdif_and_lmder ()
   /*
    * Test with user supplied Jacobian
    */
-  f.function = fcn_lsq;
-  f.Dfunction = Dfcn_lsq;
+  f.F = fcn_lsq;
+  f.DF = Dfcn_lsq;
+  f.FDF = NULL;
   f.params = NULL;
   info = pnl_root_fsolve_lsq(&f, x, m, fvec, tol, tol, 0., maxfev, &nfev, NULL, FALSE);
   pnl_test_vect_eq_abs (x, sol, 1E-6, "root_fsolve_lsq (without Jacobian)", "");

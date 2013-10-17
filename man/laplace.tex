@@ -14,7 +14,7 @@ To use the following functions, you should include \verb!pnl/pnl_laplace.h!.
 \begin{verbatim}
 typedef struct
 {
-  dcomplex (*function) (dcomplex x, void *params);
+  dcomplex (*F) (dcomplex x, void *params);
   void *params;
 } PnlCmplxFunc;
  \end{verbatim}

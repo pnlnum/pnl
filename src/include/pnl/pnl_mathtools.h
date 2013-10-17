@@ -246,10 +246,10 @@ extern double pnl_round (double x);
  */
 typedef struct
 {
-  double (*function) (double x, void *params);
+  double (*F) (double x, void *params);
   void *params;
 } PnlFunc ;
-#define PNL_EVAL_FUNC(F, x) (*((F)->function))(x, (F)->params)
+#define PNL_EVAL_FUNC(Fstruct, x) (*((Fstruct)->F))(x, (Fstruct)->params)
 
 /**
  * f: R^2 --> R
@@ -257,10 +257,10 @@ typedef struct
  */
 typedef struct 
 {
-  double (*function) (double x, double y, void *params);
+  double (*F) (double x, double y, void *params);
   void *params;
 } PnlFunc2D ;
-#define PNL_EVAL_FUNC2D(F, x, y) (*((F)->function))(x, y, (F)->params)
+#define PNL_EVAL_FUNC2D(Fstruct, x, y) (*((Fstruct)->F))(x, y, (Fstruct)->params)
 
 /**
  * f: R --> R
@@ -269,10 +269,10 @@ typedef struct
  */
 typedef struct 
 {
-  void (*function) (double x, double *fx, double *dfx, void *params);
+  void (*F) (double x, double *fx, double *dfx, void *params);
   void *params;
 } PnlFuncDFunc ;
-#define PNL_EVAL_FUNC_DFUNC(F, x, fx, dfx) (*((F)->function))(x, fx, dfx, (F)->params)
+#define PNL_EVAL_FUNC_DF(Fstruct, x, fx, dfx) (*((Fstruct)->F))(x, fx, dfx, (Fstruct)->params)
 
 /**
  * f: R^n --> R
@@ -280,10 +280,10 @@ typedef struct
  */
 typedef struct 
 {
-  double (*function) (const PnlVect *x, void *params);
+  double (*F) (const PnlVect *x, void *params);
   void *params;
 } PnlRnFuncR ;
-#define PNL_EVAL_RNFUNCR(F, x) (*((F)->function))(x, (F)->params)
+#define PNL_EVAL_RNFUNCR(Fstruct, x) (*((Fstruct)->F))(x, (Fstruct)->params)
 
 /**
  * f: R^n --> R^m
@@ -292,10 +292,10 @@ typedef struct
  */
 typedef struct 
 {
-  void (*function) (const PnlVect *x, PnlVect *fx, void *params);
+  void (*F) (const PnlVect *x, PnlVect *fx, void *params);
   void *params;
 } PnlRnFuncRm ;
-#define PNL_EVAL_RNFUNCRM(F, x, fx) (*((F)->function))(x, fx, (F)->params)
+#define PNL_EVAL_RNFUNCRM(Fstruct, x, fx) (*((Fstruct)->F))(x, fx, (Fstruct)->params)
 
 /**
  * Synonymous of PnlRnFuncRm for f:R^n --> R^n 
@@ -313,17 +313,20 @@ typedef PnlRnFuncRm PnlRnFuncRn;
  */
 typedef struct 
 {
-  void (*function) (const PnlVect *x, PnlVect *fx, void *params);
-  void (*Dfunction) (const PnlVect *x, PnlMat *dfx, void *params);
+  void (*F) (const PnlVect *x, PnlVect *fx, void *params);
+  void (*DF) (const PnlVect *x, PnlMat *dfx, void *params);
+  void (*FDF) (const PnlVect *x, PnlVect *fx, PnlMat *dfx, void *params);
   void *params;
 } PnlRnFuncRmDFunc ;
-#define PNL_EVAL_RNFUNCRM_DFUNC(F, x, dfx) (*((F)->Dfunction))(x, dfx, (F)->params)
+#define PNL_EVAL_RNFUNCRM_DF(Fstruct, x, dfx) (*((Fstruct)->DF))(x, dfx, (Fstruct)->params)
+#define PNL_EVAL_RNFUNCRM_FDF(Fstruct, x, fx, dfx) (*((Fstruct)->F))(x, fx, dfx, (Fstruct)->params)
 
 /**
  * Synonymous of PnlRnFuncRmDFunc for f:R^n --> R^m
  */
 typedef PnlRnFuncRmDFunc PnlRnFuncRnDFunc;
-#define PNL_EVAL_RNFUNCRN_DFUNC PNL_EVAL_RNFUNCRM_DFUNC
+#define PNL_EVAL_RNFUNCRN_DF PNL_EVAL_RNFUNCRM_DF
+#define PNL_EVAL_RNFUNCRN_FDF PNL_EVAL_RNFUNCRM_FDF
 
 /**
  * ODE functions
@@ -343,11 +346,11 @@ typedef struct
    * @param[in] params a generic pointer containing extra parameters involved
    * in the equation
    */
-  void (*function) (int neqn, double t, const double *y, double *yp, void *params);
+  void (*F) (int neqn, double t, const double *y, double *yp, void *params);
   int neqn; /*!< number of equations of the system */
   void *params;
 } PnlODEFunc ;
-#define PNL_EVAL_ODEFUNC(F, t, y, yp) (*((F)->function))((F)->neqn, t, y, yp, (F)->params)
+#define PNL_EVAL_ODEFUNC(Fstruct, t, y, yp) (*((Fstruct)->F))((Fstruct)->neqn, t, y, yp, (Fstruct)->params)
 
 extern void pnl_qsort (void *a, int n, int es, int lda, int *t, int ldt, int use_index, int (*cmp)(void const *, void const *));
 

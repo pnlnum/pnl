@@ -60,11 +60,11 @@ static void euler_test()
   double mu;
   int M, N;
 
-  lap.function = exp_law_laplace;
+  lap.F = exp_law_laplace;
   lap.params = &mu;
-  density.function = exp_law_density;
+  density.F = exp_law_density;
   density.params = &mu;
-  cdf.function = exp_law_cdf;
+  cdf.F = exp_law_cdf;
   cdf.params = &mu;
   res = pnl_vect_create (0);
 
@@ -90,9 +90,9 @@ static void gs_test ()
   double mu;
   int n;
 
-  lap.function = exp_law_real_laplace;
+  lap.F = exp_law_real_laplace;
   lap.params = &mu;
-  density.function = exp_law_density;
+  density.F = exp_law_density;
   density.params = &mu;
 
   n = 10;

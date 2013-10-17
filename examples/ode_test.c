@@ -66,7 +66,7 @@ void test01 ( )
   y[0] = 1.0;
   r4_f1 ( 1, t, y, yp, NULL );
 
-  f.function = r4_f1;
+  f.F = r4_f1;
   f.neqn = 1;
   f.params = NULL;
 

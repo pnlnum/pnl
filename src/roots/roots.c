@@ -43,12 +43,12 @@ int pnl_root_newton_bisection (PnlFuncDFunc *func, double x_min, double x_max, d
   double func_low, func_high, func_current, diff_func_current;
   double rts, dx_anc, dx,xl, xh;
 
-  PNL_EVAL_FUNC_DFUNC (func, x_min, &func_low, &diff_func_current);
+  PNL_EVAL_FUNC_DF (func, x_min, &func_low, &diff_func_current);
   if (func_low == 0.0)
     {
       *res=x_min; return OK;
     }
-  PNL_EVAL_FUNC_DFUNC (func, x_max, &func_high,&diff_func_current);
+  PNL_EVAL_FUNC_DF (func, x_max, &func_high,&diff_func_current);
 
   if (func_high == 0.0) 
     {
@@ -66,7 +66,7 @@ int pnl_root_newton_bisection (PnlFuncDFunc *func, double x_min, double x_max, d
   rts = 0.5 * (x_min + x_max);
   dx_anc = fabs(x_max - x_min);
   dx = dx_anc;
-  PNL_EVAL_FUNC_DFUNC (func, rts, &func_current, &diff_func_current);
+  PNL_EVAL_FUNC_DF (func, rts, &func_current, &diff_func_current);
 
   for ( i=0 ; i<max_iter ; i++ )
     {
@@ -88,7 +88,7 @@ int pnl_root_newton_bisection (PnlFuncDFunc *func, double x_min, double x_max, d
         {
           *res = rts; return OK;
         }
-      PNL_EVAL_FUNC_DFUNC (func, rts, &func_current, &diff_func_current);
+      PNL_EVAL_FUNC_DF (func, rts, &func_current, &diff_func_current);
       if ( func_current < 0.0 ) xl = rts; else xh= rts;
     }
   /* Maximum number of iterations exceeded */
@@ -118,7 +118,7 @@ int pnl_root_newton (PnlFuncDFunc *func, double x0, double epsrel, double epsabs
 
   for (i=0; i<N_max; i++)
     {
-      PNL_EVAL_FUNC_DFUNC (func, root, &f, &df);
+      PNL_EVAL_FUNC_DF (func, root, &f, &df);
       if (df == 0.)
         {
           PNL_ERROR ("div by zero", "pnl_root_newton");
@@ -186,3 +186,4 @@ int pnl_root_bisection (PnlFunc *func, double xmin, double xmax, double epsrel, 
   if (i==N_max) return FAIL;
   return OK;
 }
+

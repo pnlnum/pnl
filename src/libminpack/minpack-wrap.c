@@ -55,7 +55,7 @@ static int hybrj_fcn (void *pnl_func, int n, const double *x, double *fvec,
   else if ( iflag == 2 )
     {
       Fjac = pnl_mat_wrap_array (fjac, n, n);
-      PNL_EVAL_RNFUNCRN_DFUNC(f, &X, &Fjac);
+      PNL_EVAL_RNFUNCRN_DF(f, &X, &Fjac);
       /*
        * Because Minpack uses the Fortran column-wise storage, 
        * we need to transpose the Jacobian matrix to convert from 
@@ -154,7 +154,7 @@ static int lmder_fcn (void *pnl_func, int m, int n, const double *x, double *fve
       PnlMat Jac;
       jac = MALLOC_DOUBLE(m*n);
       Jac = pnl_mat_wrap_array (jac, m, n);
-      PNL_EVAL_RNFUNCRN_DFUNC(f, &X, &Jac);
+      PNL_EVAL_RNFUNCRN_DF(f, &X, &Jac);
       /*
        * Because Minpack uses the Fortran column-wise storage, 
        * we need to transpose the Jacobian matrix to convert from 
@@ -212,7 +212,7 @@ int pnl_root_fsolve (PnlRnFuncRnDFunc *f, PnlVect *x, PnlVect *fx,  double xtol,
    */
   wa = fjac = NULL;
   pnl_vect_resize (fx, n);
-  with_jac = ( f->Dfunction == NULL ) ? 0 : 1;
+  with_jac = ( f->DF == NULL ) ? 0 : 1;
   if ( xtol <= 0 )
     {
       xtol = sqrt (2 * eps);
@@ -349,7 +349,7 @@ int pnl_root_fsolve_lsq (PnlRnFuncRmDFunc *f, PnlVect *x, int m, PnlVect *fx,  d
    */
   wa = fjac = NULL;
   pnl_vect_resize (fx, n);
-  with_jac = ( f->Dfunction == NULL ) ? 0 : 1;
+  with_jac = ( f->DF == NULL ) ? 0 : 1;
   if ( xtol <= 0 ) { xtol = sqrt (2 * eps); }
   if ( gtol <= 0 ) { gtol = 0.; }
   if ( ftol <= 0 ) { ftol = sqrt (2 * eps); }

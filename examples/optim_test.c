@@ -118,15 +118,15 @@ static void minimize_func_HS15()
   upper_bounds = pnl_vect_create_from_list(2, 0.5, PNL_POSINF);
 
   // Objective function
-  FuncToMinimize.function = &func_HS15;
+  FuncToMinimize.F = &func_HS15;
   FuncToMinimize.params = NULL;
 
   // Gradient of objective function
-  GradFuncToMinimize.function = &grad_func_HS15;
+  GradFuncToMinimize.F = &grad_func_HS15;
   GradFuncToMinimize.params = NULL;
 
   // Constraints
-  NL_Constraints.function = &NL_Constraints_HS15;
+  NL_Constraints.F = &NL_Constraints_HS15;
   NL_Constraints.params = NULL;
 
   // We use a random starting point
