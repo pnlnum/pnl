@@ -6,7 +6,7 @@ function(WRITE_UNINSTALL_TARGET_SCRIPT)
         file(WRITE ${__uninstall_filename} "\# - uninstall target template\n\#")
         file(APPEND ${__uninstall_filename} "
 if (NOT EXISTS \"${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt\")
-    message(FATAL_ERROR "Cannot find install manifest: \"${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt\"")
+    message(FATAL_ERROR \"Cannot find install manifest: ${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt\")
 endif(NOT EXISTS \"${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt\")
 
 file(READ \"${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt\" files)
@@ -14,7 +14,7 @@ string(REGEX REPLACE \"\\n\" \";\" files \"\${files}\")
 string(REGEX REPLACE \";\$\" \"\" files \"\${files}\")
 list(REVERSE files)
 foreach (file \${files})
-    message(STATUS "Uninstalling \"\$ENV{DESTDIR}\${file}\"")
+    message(STATUS \"Uninstalling \$ENV{DESTDIR}\${file}\")
     if (EXISTS \"\$ENV{DESTDIR}\${file}\")
         execute_process(
             COMMAND ${CMAKE_COMMAND} -E remove \"\$ENV{DESTDIR}\${file}\"
@@ -22,10 +22,10 @@ foreach (file \${files})
             RESULT_VARIABLE rm_retval
         )
         if(NOT \${rm_retval} EQUAL 0)
-            message(FATAL_ERROR "Problem when removing \"\$ENV{DESTDIR}${file}\"")
+            message(FATAL_ERROR \"Problem when removing \$ENV{DESTDIR}${file}\")
         endif (NOT \${rm_retval} EQUAL 0)
     else (EXISTS \"\$ENV{DESTDIR}${file}\")
-        message(STATUS "File \"\$ENV{DESTDIR}\${file}\" does not exist.")
+        message(STATUS \"File \$ENV{DESTDIR}\${file} does not exist.\")
     endif (EXISTS \"\$ENV{DESTDIR}\${file}\")
 endforeach(file)
 
