@@ -219,11 +219,15 @@ if (MPI_C_FOUND)
         mpibindings_test.c
         tests_utils.c
     )
+    add_executable(mpibindings_test ${mpibindings_test_SRCS})
+    target_link_libraries(mpibindings_test pnl)
 
     SET(rng_mpi_test_SRCS
         rng-mpi.c
         tests_utils.c
     )
+    add_executable(rng_mpi_test ${rng_mpi_test_SRCS})
+    target_link_libraries(rng_mpi_test pnl)
 
     SET(saveload_test_SRCS
         saveload_test.c
