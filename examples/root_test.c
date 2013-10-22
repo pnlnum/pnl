@@ -1,4 +1,3 @@
-
 /*
  * Written and (C) by Jérôme Lelong <jerome.lelong@gmail.com>
  *
@@ -104,6 +103,99 @@ static void newton_bisection_root_test ()
 
   status = pnl_root_newton_bisection(&func, x1, x2, tol, N_max, &r);
   pnl_test_eq_abs ( r, M_PI_2, epsabs, "find_root (cosine)", "");
+}
+
+
+/** 
+ * Derivative of the Rosenbrock function
+ *
+ * \sum_{i=1}^{N-1} 100 (x_i - x_{i-1}^2)^2 + (1 - x_{i-1})^2.
+ *
+ * See scipy.optimize test for more explanations on that.
+ * 
+ * @param x point at which to evaluate the function
+ * @param dfx holds the gradient on output
+ */
+static void Rosenbrock_der (const PnlVect *x, PnlVect *dfx, void *params)
+{
+  int i, n;
+  n = x->size;
+  pnl_vect_resize (dfx, n);
+
+  {
+    double x0 = GET(x, 0);
+    double x1 = GET(x, 1);
+    LET(dfx, 0) = - 400. * x0 * (x1 - x0 * x0) - 2. * (1. - x0);
+  }
+
+  {
+    double x_1 = GET (x, n-1);
+    double x_2 = GET (x, n-2);
+    LET (dfx, n-1) = 200. * (x_1 - x_2 * x_2);
+  }
+
+  for ( i=1 ; i<n-1 ; i++ )
+    {
+      double xi = GET (x, i);
+      double xi_1 = GET (x, i-1);
+      double xi__1 = GET (x, i+1);
+      LET (dfx, i) = 200. * (xi - xi_1 * xi_1) - 400. * xi * (xi__1 - xi * xi) - 2. * (1. - xi);
+    }
+}
+
+/** 
+ * Hessian of the Rosenbrock function
+ *
+ * \sum_{i=1}^{N-1} 100 (x_i - x_{i-1}^2)^2 + (1 - x_{i-1})^2.
+ *
+ * See scipy.optimize test for more explanations on that.
+ * 
+ * @param x point at which to evaluate the function
+ * @param Hfx holds the Hessian on output
+ */
+static void Rosenbrock_hess (const PnlVect *x, PnlMat *Hfx, void *params)
+{
+  int i, n;
+  n = x->size;
+  pnl_mat_resize (Hfx, n, n);
+  pnl_mat_set_zero (Hfx);
+
+  for ( i=0 ; i<n-1 ; i++ )
+    {
+      double xi__1 = GET(x, i+1);
+      double xi = GET(x, i);
+      MLET (Hfx, i, i) = 202. + 1200. * xi * xi - 400. * xi__1;
+      MLET (Hfx, i+1, i) = -400. * xi;
+      MLET (Hfx, i, i+1) = -400. * xi;
+    }
+  MLET (Hfx, n-1, n-1) = 200.;
+  MLET (Hfx, 0, 0) -= 200.;
+}
+
+static void multiroot_newton_test ()
+{
+  int n;
+  double x_eps, fx_eps;
+  PnlVect *x0, *x_sol, *true_sol;
+  PnlRnFuncRnDFunc Fn;
+  double init[5]  = {1.3, 0.7, 0.8, 1.9, 1.2};
+
+
+  n = 5;
+  x_eps = fx_eps = 1E-4;
+  x0 = pnl_vect_create_from_ptr (n, init);
+  true_sol = pnl_vect_create_from_double (n, 1.);
+  x_sol = pnl_vect_new ();
+  Fn.F = Rosenbrock_der;
+  Fn.DF = Rosenbrock_hess;
+  Fn.FDF = NULL;
+  Fn.params = NULL;
+
+  pnl_multiroot_newton (&Fn, x0, x_eps, fx_eps, 200, pnl_test_is_verbose (), x_sol);
+  pnl_test_vect_eq (x_sol, true_sol, x_eps, "multiroot_newton", "");
+  pnl_vect_free (&x0);
+  pnl_vect_free (&x_sol);
+
 }
 
 /*
@@ -291,6 +383,7 @@ int main (int argc, char **argv)
   bisection_test ();
   newton_test ();
   newton_bisection_root_test ();
+  multiroot_newton_test ();
   test_hybrX ();
   test_lmdif_and_lmder ();
   exit(pnl_test_finalize ("ROOT"));

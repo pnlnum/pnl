@@ -272,7 +272,7 @@ typedef struct
   void (*F) (double x, double *fx, double *dfx, void *params);
   void *params;
 } PnlFuncDFunc ;
-#define PNL_EVAL_FUNC_DF(Fstruct, x, fx, dfx) (*((Fstruct)->F))(x, fx, dfx, (Fstruct)->params)
+#define PNL_EVAL_FUNC_FDF(Fstruct, x, fx, dfx) (*((Fstruct)->F))(x, fx, dfx, (Fstruct)->params)
 
 /**
  * f: R^n --> R
@@ -319,7 +319,21 @@ typedef struct
   void *params;
 } PnlRnFuncRmDFunc ;
 #define PNL_EVAL_RNFUNCRM_DF(Fstruct, x, dfx) (*((Fstruct)->DF))(x, dfx, (Fstruct)->params)
-#define PNL_EVAL_RNFUNCRM_FDF(Fstruct, x, fx, dfx) (*((Fstruct)->F))(x, fx, dfx, (Fstruct)->params)
+#define PNL_EVAL_RNFUNCRM_FDF(Fstruct, x, fx, dfx) (*((Fstruct)->FDF))(x, fx, dfx, (Fstruct)->params)
+
+#define PNL_EVAL_RNFUNCRM_F_DF(Fstruct, x, fx, dfx) 					\
+      if ( (Fstruct)->FDF != NULL ) 									\
+        { 																\
+          PNL_EVAL_RNFUNCRN_FDF (Fstruct, x, fx, dfx); 					\
+        } 																\
+      else 																\
+        { 																\
+          PNL_EVAL_RNFUNCRN (Fstruct, x, fx); 							\
+          PNL_EVAL_RNFUNCRN_DF (Fstruct, x, dfx); 						\
+        }
+
+
+
 
 /**
  * Synonymous of PnlRnFuncRmDFunc for f:R^n --> R^m
@@ -327,6 +341,7 @@ typedef struct
 typedef PnlRnFuncRmDFunc PnlRnFuncRnDFunc;
 #define PNL_EVAL_RNFUNCRN_DF PNL_EVAL_RNFUNCRM_DF
 #define PNL_EVAL_RNFUNCRN_FDF PNL_EVAL_RNFUNCRM_FDF
+#define PNL_EVAL_RNFUNCRN_F_DF PNL_EVAL_RNFUNCRM_F_DF
 
 /**
  * ODE functions

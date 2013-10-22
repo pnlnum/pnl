@@ -24,7 +24,7 @@
 #include "pnl/pnl_mathtools.h"
 #include "tests_utils.h"
 
-int verbose = 0;
+int verbose = FALSE;
 int count_tests;
 int count_ok;
 int count_fail;
@@ -39,7 +39,7 @@ void pnl_test_init (int argc, char **argv)
          ( strcmp (argv[1], "--verbose") == 0 ) )
      )
     {
-      verbose = 1;
+      verbose = TRUE;
     }
   count_tests = 0;
   count_ok = 0;
@@ -89,7 +89,7 @@ int pnl_test_is_verbose ()
 void pnl_test_set_ok (const char *str)
 {
   update_count_tests (0);
-  if ( verbose ) 
+  if ( verbose == TRUE ) 
     {
       printf ("\t%s : OK\n", str);
     }
@@ -148,7 +148,7 @@ static int pnl_test_eq_aux (double x, double y, double relerr, int(*cmp)(double,
     {
       status = (*cmp)(x, y, relerr);
     }
-  if ( status || verbose )
+  if ( status || verbose == TRUE )
     {
       printf ("\t%s : ", str);
       printf ( status ? "FAIL" : "OK");
@@ -260,7 +260,7 @@ static int pnl_test_array (const double *X, const double *Y, int n, double reler
       status = (*cmp)(x, y, relerr);
       if ( status ) break;
     }
-  if ( status || verbose )
+  if ( status || verbose == TRUE )
     {
       printf ("\t%s : ", str);
       printf ( status ? "FAIL" : "OK");
@@ -394,7 +394,7 @@ int pnl_test_mat_int_eq(const PnlMatInt *X, const PnlMatInt *Y, const char *str,
       status  = (x != y);
       if ( status ) break;
     }
-  if ( status || verbose )
+  if ( status || verbose == TRUE )
     {
       printf ("\t%s : ", str);
       printf ( status ? "FAIL" : "OK");

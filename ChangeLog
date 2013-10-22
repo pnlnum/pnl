@@ -1,3 +1,14 @@
+22-10-2013 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* roots.c: Add Newton's algorithm with Armijo line search for computing
+	the zero of a vector valued function (defined as a gradient). The real
+	valued version of Newton's algorithm is modified to use the same line
+	search approach.
+
+02-10-2013 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* basis.c: Add or remove elements from an existing basis.
+
 01-10-2013 Jérôme Lelong <jerome.lelong@gmail.com>
 	* pnl_TMatrix_source.c: Add pnl_mat_{add,del}_row
 

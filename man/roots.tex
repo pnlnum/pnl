@@ -44,7 +44,7 @@ typedef struct {
   void (*F) (double x, double *fx, double *dfx, void *params);
   void *params;
 } PnlFuncDFunc ;
-#define PNL_EVAL_FUNC_DF(Fstruct, x, fx, dfx) (*((Fstruct)->F))(x, fx, dfx, (Fstruct)->params)
+#define PNL_EVAL_FUNC_FDF(Fstruct, x, fx, dfx) (*((Fstruct)->F))(x, fx, dfx, (Fstruct)->params)
 \end{verbatim}
 
 \describestruct{PnlRnFuncR}
@@ -101,21 +101,30 @@ typedef struct {
     (*((Fstruct)->Dfunction))(x, dfx, (Fstruct)->params)
 #define PNL_EVAL_RNFUNCRM_FDF(Fstruct, x, fx, dfx) \
     (*((Fstruct)->F))(x, fx, dfx, (Fstruct)->params)
-
+#define PNL_EVAL_RNFUNCRM_F_DF(Fstruct, x, fx, dfx)    \
+      if ( (Fstruct)->FDF != NULL )                    \
+        {                                              \
+          PNL_EVAL_RNFUNCRN_FDF (Fstruct, x, fx, dfx); \
+        }                                              \
+      else                                             \
+        {                                              \
+          PNL_EVAL_RNFUNCRN (Fstruct, x, fx);          \
+          PNL_EVAL_RNFUNCRN_DF (Fstruct, x, dfx);      \
+        }
 /*
  * Synonymous of PnlRnFuncRmDFunc for f:R^n --> R^m
  *
 typedef PnlRnFuncRmDFunc PnlRnFuncRnDFunc;
 #define PNL_EVAL_RNFUNCRN_DF PNL_EVAL_RNFUNCRM_DF
 #define PNL_EVAL_RNFUNCRN_FDF PNL_EVAL_RNFUNCRM_FDF
+#define PNL_EVAL_RNFUNCRN_F_DF PNL_EVAL_RNFUNCRM_F_DF
 \end{verbatim}
 
 \subsection{Functions}
 
 To use the following functions, you should include \verb!pnl/pnl_root.h!.
 
-For finding the zero of a real valued function we provide the following
-functions.
+\paragraph{Real valued functions of a real argument}
 \begin{itemize}
 \item \describefun{double}{pnl_root_brent}{\refstruct{PnlFunc} \ptr F, double
     x1, double  x2, double \ptr tol}
@@ -133,23 +142,59 @@ functions.
 
 
 \item \describefun{int}{pnl_root_newton}{\refstruct{PnlFuncDFunc} \ptr Func,
-    double x0, double epsrel, double epsabs, int N_max, double \ptr res}
-  \sshortdescribe Find the root of \var{F} starting from \var{x0} with an
-  accuracy given both by \var{epsrel} and \var{epsabs} and a maximum number of
-  iterations \var{N_max}. On exit, the root is stored in \var{res}.Note that
-  the function \var{F} must also compute the first derivative of the function.
-
+  double x0, double x_eps, double fx_eps, int max_iter, double \ptr res}
+  \sshortdescribe Find the root of \var{f} starting from \var{x0} using Newton's
+  method with descent direction given by the inverse of the derivative, ie.
+  $d_k = f(x_k) / f'(x_k)$. Armijo's line search is used to make sure \var{|f|}
+  decreases along the iterations. $\alpha_k = \max\{ \gamma^j \; ; \; j \ge 0\}$
+  such that
+  \begin{align*}
+    |f(x_k + \alpha_k d_k)| & \le |f(x_k)| (1 - \omega \alpha_k).
+  \end{align*}
+  In this implementation, $\omega = 10^{-4}$ and $\gamma = 1/2$.
+  The algorithm stops when one of the three following
+  conditions is met:
+  \begin{itemize}
+    \item the maximum number of iterations \var{max_iter} is reached;
+    \item the last improvement over \var{x} is smaller that \var{x * x_eps};
+    \item at the current position \var{|f(x)| < fx_eps}
+  \end{itemize}
+  On exit, the root is stored in \var{res}. 
 \item \describefun{int}{pnl_root_bisection}{\refstruct{PnlFunc} \ptr Func,
     double xmin, double xmax, double epsrel, double espabs, int N_max, double
     \ptr res}
   \sshortdescribe Find the root of \var{F} between \var{x1} and \var{x2} with
-  an accuracy given both by \var{epsrel} and \var{epsabs} and a maximum number
-  of iterations \var{N_max}. On exit, the root is stored in \var{res}
+  the accuracy \var{|x2 - x1| < epsrel * x1 + epsabs} or with the maximum number
+  of iterations \var{N_max}. On exit, \var{res = (x2 + x1) / 2}.
 \end{itemize}
 
-Searching for the zero of a multivariate and vector valued function is a
-complicated problem and we rely on minpack for doing this. Here, we provide
-two wrappers for calling minpack routines.
+\paragraph{Vector valued functions with several arguments}
+
+\begin{itemize}
+\item \describefun{int}{pnl_multiroot_newton}{\refstruct{PnlRnFuncRnDFunc} \ptr
+  func, const \refstruct{PnlVect} \ptr x0, double x_eps, double fx_eps, int
+  max_iter, int verbose, \refstruct{PnlVect} \ptr res}
+  \sshortdescribe Find the root of \var{func} starting from \var{x0} using
+  Newton's method with descent direction given by the inverse of the Jacobian
+  matrix, ie. $d_k = (\nabla f(x_k))^{-1} f(x_k)$. Armijo's line search is used to make sure \var{|f|}
+  decreases along the iterations. $\alpha_k = \max\{ \gamma^j \; ; \; j \ge 0\}$
+  such that
+  \begin{align*}
+    |f(x_k + \alpha_k d_k)| & \le |f(x_k)| (1 - \omega \alpha_k).
+  \end{align*}
+  In this implementation, $\omega = 10^{-4}$ and $\gamma = 1/2$.  The algorithm
+  stops when one of the three following conditions is met:
+  \begin{itemize}
+    \item the maximum number of iterations \var{max_iter} is reached;
+    \item the norm of the last improvement over \var{x} is smaller that \var{|x| * x_eps};
+    \item at the current position \var{|f(x)| < fx_eps}
+  \end{itemize}
+  On exit, the root is stored in \var{res}.  Note that the function \var{F} must
+  also compute the first derivative of the function. When defining \var{Func},
+  you must either define \var{Func->F} and \var{Func->DF} or \var{Func->FDF}.
+\end{itemize}
+
+We provide two wrappers for calling minpack routines.
 \begin{itemize}
 \item \describefun
   {int}{pnl_root_fsolve}{\refstruct{PnlRnFuncRnDFunc} \ptr f,
