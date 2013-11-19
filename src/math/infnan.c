@@ -85,9 +85,9 @@ int pnl_isfinite (double x)
 int pnl_isfinite (double x)
 {
 #ifdef PNL_HAVE_ISFINITE
-  return isfinite(x);
+  return (isfinite(x) != 0);
 #elif defined (PNL_HAVE_FINITE)
-  return finite(x);
+  return (finite(x) != 0);
 #elif defined (PNL_HAVE_ISINF)
   /* isinf(3): In glibc 2.01 and earlier, isinf() returns a
      non-zero value (actually: 1) if x is an infinity (positive or
