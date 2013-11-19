@@ -868,12 +868,10 @@ static int unpack_hmatrix (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI
   pnl_hmat_object_resize (M, ndim, dims);
   switch (PNL_GET_TYPE (M))
     {
-    case PNL_TYPE_HMATRIX_DOUBLE : mn = M->mn; t = MPI_DOUBLE;
-                                   break;
-    case PNL_TYPE_HMATRIX_COMPLEX : mn = 2*M->mn; t = MPI_DOUBLE;
-                                    break;
-    case PNL_TYPE_HMATRIX_INT : mn = M->mn; t = MPI_INT;
-                                break;
+    case PNL_TYPE_HMATRIX_DOUBLE : mn = M->mn; t = MPI_DOUBLE; break;
+    case PNL_TYPE_HMATRIX_COMPLEX : mn = 2*M->mn; t = MPI_DOUBLE; break;
+    case PNL_TYPE_HMATRIX_INT : mn = M->mn; t = MPI_INT; break;
+    default: return MPI_ERR_TYPE;
     }
   if((info=MPI_Unpack(buf,bufsize,pos,M->array,mn,t,comm)))return(info);
   return(info);
@@ -1473,6 +1471,7 @@ int pnl_object_mpi_reduce (PnlObject *Sendbuf, const PnlObject *Recvbuf, MPI_Op 
           return FAIL;
         }
       break;
+    default: return FAIL;
     }
 
   MPI_Reduce (sendptr, recvptr, count, type, op, root, comm);

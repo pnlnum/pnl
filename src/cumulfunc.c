@@ -2561,7 +2561,7 @@ void pnl_cdf_chi(int *which,double *p,double *q,double *x,double *df,
   double K2 = 0.;
   double K4 = 0.5e0;
   double K5 = 5.;
-  double fx,cum,ccum,pq,porq;
+  double fx,cum,ccum,pq,porq=0.;
   unsigned long qhi,qleft,qporq;
   double T3,T6,T7,T8,T9,T10,T11;
   /*
@@ -3866,7 +3866,7 @@ void pnl_cdf_gam(int *which,double *p,double *q,double *x,double *shape,
   int K1 = 1;
   double K5 = 0.5e0;
   double K6 = 5.;
-  double xx,fx,xscale,cum,ccum,pq,porq;
+  double xx,fx,xscale,cum,ccum,pq,porq=0.;
   int ierr;
   unsigned long qhi,qleft,qporq;
   double T2,T3,T4,T7,T8,T9;

@@ -48,29 +48,26 @@ static void bisection_test ()
 {
   double x1, x2, r;
   PnlFunc func;
-  int status;
   
   x1 = 0;
   x2 = 3;
   func.F = FUNC;
   func.params = NULL;
 
-  status = pnl_root_bisection(&func, x1, x2, epsrel, epsabs, N_max, &r);
+  pnl_root_bisection(&func, x1, x2, epsrel, epsabs, N_max, &r);
   pnl_test_eq_abs ( r, M_PI_2, epsabs, "root_bisection (cosine)", "");
-
 }
 
 static void newton_test ()
 {
   double x0, r;
   PnlFuncDFunc func;
-  int status;
   
   x0 = 0.5;
   func.F = FDF_FUNC;
   func.params = NULL;
 
-  status = pnl_root_newton(&func, x0, epsrel, epsabs, N_max, &r);
+  pnl_root_newton(&func, x0, epsrel, epsabs, N_max, &r);
   pnl_test_eq_abs ( r, M_PI_2, epsabs, "root_newton (cosine)", "");
 }
 
@@ -93,7 +90,6 @@ static void newton_bisection_root_test ()
 {
   double x1, x2, tol, r;
   PnlFuncDFunc func;
-  int status;
   
   x1 = -1;
   x2 = 3;
@@ -101,7 +97,7 @@ static void newton_bisection_root_test ()
   func.F = FDF_FUNC;
   func.params = NULL;
 
-  status = pnl_root_newton_bisection(&func, x1, x2, tol, N_max, &r);
+  pnl_root_newton_bisection(&func, x1, x2, tol, N_max, &r);
   pnl_test_eq_abs ( r, M_PI_2, epsabs, "find_root (cosine)", "");
 }
 
@@ -306,9 +302,16 @@ static void test_hybrX ()
   f.FDF = NULL;
   f.params = NULL;
   info = pnl_root_fsolve (&f, x, fvec, xtol, maxfev, &nfev, diag, FALSE);
-  fnorm = pnl_vect_norm_two(fvec);
-  /* Test residuals */
-  pnl_test_eq_abs (fnorm, 0., 1E-7, "root_fsolve (without Jacobian)", "");
+  if ( info == FAIL )
+    {
+      pnl_test_set_fail ("root_fsolve returned FAIL", 0., 0.);
+    }
+  else
+    {
+      fnorm = pnl_vect_norm_two(fvec);
+      /* Test residuals */
+      pnl_test_eq_abs (fnorm, 0., 1E-7, "root_fsolve (without Jacobian)", "");
+    }
   
   /*
    * Test with Jacobian
@@ -318,9 +321,16 @@ static void test_hybrX ()
   f.FDF = NULL;
   f.params = NULL;
   info = pnl_root_fsolve (&f, x, fvec, xtol, maxfev, &nfev, diag, FALSE);
-  fnorm = pnl_vect_norm_two(fvec);
-  /* Test residuals */
-  pnl_test_eq_abs (fnorm, 0., 1E-7, "root_fsolve (with Jacobian)", "");
+  if ( info == FAIL )
+    {
+      pnl_test_set_fail ("root_fsolve returned FAIL", 0., 0.);
+    }
+  else
+    {
+      fnorm = pnl_vect_norm_two(fvec);
+      /* Test residuals */
+      pnl_test_eq_abs (fnorm, 0., 1E-7, "root_fsolve (with Jacobian)", "");
+    }
 
   pnl_vect_free (&x);
   pnl_vect_free (&fvec);
@@ -357,7 +367,10 @@ static void test_lmdif_and_lmder ()
   f.FDF = NULL;
   f.params = NULL;
   info = pnl_root_fsolve_lsq(&f, x, m, fvec, tol, tol, 0., maxfev, &nfev, NULL, FALSE);
-  pnl_test_vect_eq_abs (x, sol, 1E-6, "root_fsolve_lsq (without Jacobian)", "");
+  if ( info == FAIL )
+    pnl_test_set_fail ("root_fsolve_lsq", 0., 0.);
+  else
+    pnl_test_vect_eq_abs (x, sol, 1E-6, "root_fsolve_lsq (without Jacobian)", "");
 
   /*
    * Test with user supplied Jacobian
@@ -367,6 +380,9 @@ static void test_lmdif_and_lmder ()
   f.FDF = NULL;
   f.params = NULL;
   info = pnl_root_fsolve_lsq(&f, x, m, fvec, tol, tol, 0., maxfev, &nfev, NULL, FALSE);
+  if ( info == FAIL )
+    pnl_test_set_fail ("root_fsolve_lsq", 0., 0.);
+  else
   pnl_test_vect_eq_abs (x, sol, 1E-6, "root_fsolve_lsq (without Jacobian)", "");
 
 
