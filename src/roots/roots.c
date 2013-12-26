@@ -231,6 +231,7 @@ static void print_newton_iter (int iter, const PnlVect *x, const PnlVect *Fx, in
       printf ("iter = %d\n", iter);
       printf ("\tx = "); pnl_vect_print_asrow (x);
       printf ("\tf(x) = "); pnl_vect_print_asrow (Fx);
+      printf ("\t|f(x)| = %f\n", pnl_vect_norm_two (Fx));
     }
 }
 
