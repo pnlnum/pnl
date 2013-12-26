@@ -48,6 +48,7 @@ static void speed_access ()
   double   cpu_time_used;
   int      type_gen, i,j;
   double   sum;
+  double  *ptr;
   int      N   = 10000;
   int      dim = 500;
   PnlMat  *M   = pnl_mat_create (0,0);
@@ -61,8 +62,6 @@ static void speed_access ()
   for (i=0; i<N; i++)
     {
       for (j=0; j<dim; j++){
-        /*sum += M->array[i*dim + j];*/
-        /*sum += M->get(M, i, j); */
         sum += MGET(M,i,j);
       }
     }
@@ -71,9 +70,9 @@ static void speed_access ()
   printf("%f get version : %f\n", sum, cpu_time_used);
   start = clock();
   sum = 0.0;
-  for (i=0; i<N; i++)
+  for (i=0, ptr=M->array; i<N*dim; i++, ptr++)
     {
-      for (j=0; j<dim; j++) {sum += M->array[i*dim+j];}
+      sum += *ptr;
     }
   end = clock();
   cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
@@ -114,6 +113,30 @@ void speed_copy ()
   pnl_mat_free (&M);
   free (d);
 }
+
+void speed_setvalue ()
+{
+  clock_t  start, end;
+  double   cpu_time_used;
+  int      n   = 10000;
+  int      m = 500;
+  PnlMat  *M1   = pnl_mat_create (n, m);
+  PnlMat  *M2   = pnl_mat_create (n, m);
+     
+  start = clock();
+  memset (M1->array, 0, n*m*sizeof(double));
+  end = clock();
+  cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+  printf("memset time : %f\n", cpu_time_used);
+  start = clock();
+  pnl_mat_set_zero (M2);
+  end = clock();
+  cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+  printf("pnl_mat_set_zero time : %f\n", cpu_time_used);
+  pnl_mat_free (&M1);
+  pnl_mat_free (&M2);
+}
+
 
 void dgemm3 (double alpha, const PnlMat *A,
              const PnlMat *B, double beta, PnlMat *C)
@@ -555,6 +578,7 @@ void speed_matrix_test ()
 {
   speed_access ();
   speed_copy ();
+  speed_setvalue ();
   speed_dgemm ();
   speed_dgemv ();
   speed_mat_sum_vect ();

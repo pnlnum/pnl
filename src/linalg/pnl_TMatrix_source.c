@@ -146,8 +146,9 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,CONCAT2(create_from_,BASE))(int m, int n, BASE x)
  */
 TYPE(PnlMat)* FUNCTION(pnl_mat,create_from_zero)(int m, int n)
 {
-  const BASE zero = ZERO;
-  return FUNCTION(pnl_mat,CONCAT2(create_from_,BASE)) (m, n, zero);
+  TYPE(PnlMat) *M = FUNCTION(pnl_mat,create)(m, n);
+  FUNCTION(pnl_mat,set_zero) (M);
+  return M;
 }
 
 /**
@@ -361,8 +362,7 @@ void FUNCTION(pnl_mat, CONCAT2(set_,BASE)) (TYPE(PnlMat) *lhs, BASE x)
  */
 void FUNCTION(pnl_mat, set_zero) (TYPE(PnlMat) *lhs)
 {
-  int i;
-  for (i=0; i<lhs->mn; i++) lhs->array[i] = ZERO;
+  memset (lhs->array, 0, sizeof(BASE) * lhs->mn);
 }
 
 /**

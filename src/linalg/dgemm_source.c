@@ -72,7 +72,7 @@ static void FUNCTION(pnl_mat,dgemmNN) (BASE alpha, const TYPE(PnlMat) *A, const 
               aibk = MULT(temp, Bkj);
               PLUSEQ (Cij, aibk);
               PNL_MLET (C, i, j) = Cij;
-              
+
               Cij1 = PNL_MGET(C, i1, j);
               ai1bk = MULT(temp1, Bkj);
               PLUSEQ (Cij1, ai1bk);
@@ -239,7 +239,7 @@ void FUNCTION(pnl_mat,dgemm) (char transA, char transB, BASE alpha, const TYPE(P
   if ( EQ(beta,ZERO) )
     {
       FUNCTION(pnl_mat,resize) (C, m, n);
-      FUNCTION(pnl_mat,CONCAT2(set_,BASE)) (C, ZERO);
+      FUNCTION(pnl_mat,set_zero)(C);
     }
   else if ( NEQ(beta, ONE) )
     {

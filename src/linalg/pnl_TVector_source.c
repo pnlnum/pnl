@@ -132,8 +132,9 @@ int FUNCTION(pnl_vect,CONCAT2(eq_,BASE))(const TYPE(PnlVect) *v, BASE x)
  */
 TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_zero)(const int size)
 {
-  const BASE zero = ZERO;
-  return FUNCTION(pnl_vect,CONCAT2(create_from_,BASE)) (size, zero);
+  TYPE(PnlVect)* v = FUNCTION(pnl_vect, create)(size);
+  FUNCTION(pnl_vect, set_zero)(v);
+  return v;
 }
 
 /**
@@ -507,10 +508,7 @@ void FUNCTION(pnl_vect,CONCAT2(set_,BASE))(TYPE(PnlVect) * v, BASE x)
  */
 void FUNCTION(pnl_vect, set_zero)(TYPE(PnlVect) * v)
 {
-  const BASE zero = ZERO ;
-  int i;
-  for(i = 0; i < v->size; i++)
-    {v->array[i] = zero;}
+  memset (v->array, 0, v->size * sizeof(BASE));
 }
 
 /**
