@@ -25,6 +25,8 @@
 
 static char pnl_list_label[] = "PnlList";
 
+#define RESET_CURCELL(L) L->curcell = L->first; L->icurcell = 0;
+
 /**
  * Create an empty list
  */
@@ -35,7 +37,7 @@ PnlList* pnl_list_new ()
   o->first = NULL;
   o->last = NULL;
   o->curcell = NULL;
-  o->icurcell = NULLINT;
+  o->icurcell = 0;
   o->len = 0;
   o->object.type = PNL_TYPE_LIST;
   o->object.parent_type = PNL_TYPE_LIST;
@@ -80,7 +82,7 @@ PnlObject* pnl_list_get (PnlList *L, int i)
    * than starting at the beginning of the list, we use the curcell member to
    * speed up the access
    */
-  if ( L->icurcell != NULLINT  && i == L->icurcell + 1 )
+  if ( i == L->icurcell + 1 )
     {
       L->curcell = L->curcell->next;
       L->icurcell ++;
@@ -116,7 +118,7 @@ void pnl_list_insert_first (PnlList *L, PnlObject *o)
   C->self = o;
 
   /* Upward linkage */
-  if (L->len >0)
+  if ( L->len > 0 )
     {
       PnlCell *second;
       second = C->next;
@@ -124,13 +126,15 @@ void pnl_list_insert_first (PnlList *L, PnlObject *o)
     }
 
   /* Put C on top of L */
-  if (L->len == 0) L->last = C;
+  if ( L->len == 0i ) L->last = C;
   L->len++;
   L->first = C;
 
   /* update nref for o */
   if ( o != NULL ) o->nref ++;
 
+  /* Set curcell to the first cell */
+  RESET_CURCELL(L);
 }
 
 /**
@@ -150,7 +154,7 @@ void pnl_list_insert_last (PnlList *L, PnlObject *o)
   C->self = o;
 
   /* Downward linkage */
-  if (L->len > 0)
+  if ( L->len > 0 )
     {
       PnlCell *lastbut;
       lastbut = L->last;
@@ -158,12 +162,14 @@ void pnl_list_insert_last (PnlList *L, PnlObject *o)
     }
 
   /* Put C at the bottom of L */
-  if (L->len == 0) L->first = C;
+  if ( L->len == 0 ) L->first = C;
   L->len++;
   L->last = C;
 
   /* update nref for o */
   if ( o != NULL ) o->nref ++;
+  /* Set curcell to the first cell */
+  RESET_CURCELL(L);
 }
 
 /**
@@ -176,10 +182,10 @@ void pnl_list_free (PnlList **L)
   int i=0;
   PnlCell *node, *next;
 
-  if (*L == NULL) return;
+  if ( *L == NULL ) return;
   node = (*L)->first;
 
-  for ( i=0 ; i< (*L)->len ; i++ )
+  for ( i=0 ; i<(*L)->len ; i++ )
     {
       next = node->next;
       pnl_cell_free (&node);
@@ -197,7 +203,7 @@ void pnl_list_free (PnlList **L)
 void pnl_cell_free (PnlCell **c)
 {
   PnlObject *O;
-  if (*c == NULL) return;
+  if ( *c == NULL ) return;
 
   /*
    * destroy the content of the cell
@@ -231,8 +237,8 @@ void pnl_list_remove_last (PnlList *L)
 {
   PnlCell *last_but, *last;
 
-  if (L->len == 0) return;
-  if (L->len == 1)
+  if ( L->len == 0 ) return;
+  if ( L->len == 1 )
     {
       pnl_cell_free (&(L->first));
       L->first = NULL;
@@ -248,6 +254,7 @@ void pnl_list_remove_last (PnlList *L)
 
   L->len--;
   L->last = last_but;
+  RESET_CURCELL(L);
 
   pnl_cell_free (&last);
 }
@@ -261,8 +268,8 @@ void pnl_list_remove_first (PnlList *L)
 {
   PnlCell *C;
 
-  if (L->len == 0) return;
-  if (L->len == 1)
+  if ( L->len == 0 ) return;
+  if ( L->len == 1 )
     {
       pnl_cell_free (&(L->first));
       L->first = NULL;
@@ -275,6 +282,7 @@ void pnl_list_remove_first (PnlList *L)
   L->first = C->next;
   L->first->prev = NULL;
   L->len--;
+  RESET_CURCELL(L);
 
   pnl_cell_free (&C);
 }
@@ -298,6 +306,7 @@ void pnl_list_concat (PnlList *L1, PnlList *L2)
   last1->next = first2;
   first2->prev = last1;
   L1->len += L2->len;
+  RESET_CURCELL(L1);
 
   free (L2);
 }
@@ -345,6 +354,7 @@ void pnl_list_remove_i (PnlList *L, int i)
   for ( k=0 ; k<i ; k++ ) { C = C->next; }
   pnl_cell_free (&C);
   L->len--;
+  RESET_CURCELL(L);
 }
 
 /** 
@@ -363,14 +373,11 @@ void pnl_list_resize (PnlList *L, int n)
 {
   int i, diff_len;
   diff_len = L->len - n;
-  /*
-   * Remove extra elements in dest, if any
-   */
+  /* Remove extra elements in dest, if any */
   for ( i=0 ; i<diff_len ; i++ ) pnl_list_remove_last (L);
-  /*
-   * Create L->len-n cells with field self set to NULL
-   */
+  /* Create L->len-n cells with field self set to NULL */
   for ( i=0 ; i<-diff_len ; i++ ) pnl_list_insert_last (L, NULL);
+  RESET_CURCELL(L);
 }
 
 /** 
@@ -418,6 +425,7 @@ void pnl_list_clone (PnlList *C, const PnlList *A)
           AOi->clone(COi, AOi);
         }
     }
+  RESET_CURCELL(C);
 }
 
 /** 

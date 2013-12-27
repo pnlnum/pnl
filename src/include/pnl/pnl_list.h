@@ -36,8 +36,8 @@ struct _PnlList
   PnlObject object; 
   PnlCell *first; /*!< first element of the list */
   PnlCell *last; /*!< last element of the list */
-  PnlCell *curcell; /*!< last accessed element, if never accessed is NULL */
-  int icurcell; /*!< index of the last accessed element, if never accessed is NULLINT */
+  PnlCell *curcell; /*!< last accessed element, if never accessed redirect first */
+  int icurcell; /*!< index of the last accessed element, if never accessed is 0 */
   int len; /*!< length of the list */
 };
 
