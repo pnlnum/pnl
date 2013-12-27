@@ -62,7 +62,7 @@ static void create_data (PnlMat *X, PnlVect *y, int d, int n)
   pnl_rng_free (&rng);
 }
 
-void speed_basis_test ()
+static void speed_sparse_basis ()
 {
   PnlMat *X;
   PnlVect *y, *x, *xmin, *xmax;
@@ -124,4 +124,76 @@ void speed_basis_test ()
   pnl_mat_free (&X);
   pnl_rng_free (&rng);
 
+}
+
+static void speed_eval_basis ()
+{
+  PnlBasis *B;
+  PnlVect *alpha, *x;
+  PnlRng *rng;
+  double start, end;
+  int i;
+  int n_vars = 30;
+  int deg = 3;
+
+  B = pnl_basis_create_from_degree (PNL_BASIS_HERMITE, deg, n_vars);
+  rng = pnl_rng_create (PNL_RNG_MERSENNE);
+  x = pnl_vect_new ();
+  alpha = pnl_vect_new ();
+  pnl_rng_sseed(rng, 0);
+  pnl_vect_rng_normal (x, n_vars, rng);
+  pnl_vect_rng_normal (alpha, B->nb_func, rng);
+
+  printf (" Evaluation of all the functions in the basis.\n");
+  start = clock();
+  for ( i=0 ; i<1E3 ; i++ ) pnl_basis_eval_vect (B, alpha, x);
+  end = clock ();
+  printf ("      CPU time : %f\n", (end-start) / CLOCKS_PER_SEC);
+
+  pnl_vect_free (&x);
+  pnl_vect_free (&alpha);
+  pnl_basis_free (&B);
+  pnl_rng_free (&rng);
+}
+
+static void speed_evalderivs_basis ()
+{
+  PnlBasis *B;
+  PnlVect *alpha, *x, *dfx;
+  PnlMat *d2fx;
+  PnlRng *rng;
+  double start, end, fx;
+  int i;
+  int n_vars = 30;
+  int deg = 3;
+
+  B = pnl_basis_create_from_degree (PNL_BASIS_HERMITE, deg, n_vars);
+  rng = pnl_rng_create (PNL_RNG_MERSENNE);
+  x = pnl_vect_new ();
+  dfx = pnl_vect_new ();
+  d2fx = pnl_mat_new ();
+  alpha = pnl_vect_new ();
+  pnl_rng_sseed(rng, 0);
+  pnl_vect_rng_normal (x, n_vars, rng);
+  pnl_vect_rng_normal (alpha, B->nb_func, rng);
+
+  printf (" Evaluation of all the F, DF, D2F in the basis.\n");
+  start = clock();
+  for ( i=0 ; i<1E2 ; i++ ) pnl_basis_eval_derivs_vect (B, alpha, x, &fx, dfx, d2fx);
+  end = clock ();
+  printf ("      CPU time : %f\n", (end-start) / CLOCKS_PER_SEC);
+
+  pnl_vect_free (&x);
+  pnl_vect_free (&dfx);
+  pnl_mat_free (&d2fx);
+  pnl_vect_free (&alpha);
+  pnl_basis_free (&B);
+  pnl_rng_free (&rng);
+}
+
+void speed_basis_test ()
+{
+  /* speed_sparse_basis (); */
+  speed_eval_basis ();
+  speed_evalderivs_basis ();
 }

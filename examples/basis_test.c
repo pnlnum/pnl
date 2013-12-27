@@ -29,6 +29,7 @@
 
 #define function exp
 
+#define PRINT_COEFF 0
 
 /*
  * example of how to use  pnl_basis_fit_ls to regress on a basis.
@@ -71,7 +72,7 @@ static void exp_regression2()
   basis = pnl_basis_create (basis_name, basis_dim, space_dim);
 
   pnl_basis_fit_ls (basis, alpha, t, y);
-  if ( verbose )
+  if ( PRINT_COEFF )
     {
       printf("coefficients of the decomposition : ");
       pnl_vect_print (alpha);
@@ -136,7 +137,7 @@ static void regression_multid()
   basis = pnl_basis_create (basis_name, nb_func, nb_variates);
 
   pnl_basis_fit_ls (basis, alpha, t, y);
-  if ( verbose )
+  if ( PRINT_COEFF )
     {
       printf("coefficients of the decomposition : ");
       pnl_vect_print (alpha);
@@ -158,7 +159,7 @@ static void regression_multid()
   basis = pnl_basis_create_from_degree (basis_name, degree, nb_variates);
 
   pnl_basis_fit_ls (basis, alpha, t, y);
-  if ( verbose )
+  if ( PRINT_COEFF )
     {
       printf("coefficients of the decomposition : ");
       pnl_vect_print (alpha);
@@ -180,7 +181,7 @@ static void regression_multid()
   basis = pnl_basis_create_from_prod_degree (basis_name, degree, nb_variates);
 
   pnl_basis_fit_ls (basis, alpha, t, y);
-  if ( verbose )
+  if ( PRINT_COEFF )
     {
       printf("coefficients of the decomposition : ");
       pnl_vect_print (alpha);
@@ -235,6 +236,19 @@ static double derive_x_approx_fonction(PnlBasis *B, PnlVect *alpha, double t, do
   arg[0] = t; arg[1] = x;
   return pnl_basis_eval_D (B, alpha, arg, 1);
 }
+
+static void derive_approx_fonction2(PnlBasis *B, PnlVect *D, PnlVect *alpha, double t, double x)
+{
+  double arg[2];
+  arg[0] = t; arg[1] = x;
+
+  LET(D,3) = pnl_basis_eval_D (B, alpha, arg, 0); // GET(grad,0);
+  LET(D,1) = pnl_basis_eval_D (B, alpha, arg, 1); //GET(grad,1);
+  LET(D,0) = pnl_basis_eval (B, alpha, arg);
+  LET(D,2) = pnl_basis_eval_D2 (B, alpha, arg, 1, 1); // PNL_MGET(Hes, 1, 1);
+  LET(D,4) = pnl_basis_eval_D2 (B, alpha, arg, 0, 1); // PNL_MGET(Hes, 0, 1);
+}
+
 
 static void derive_approx_fonction(PnlBasis *B, PnlVect *D, PnlVect *alpha, double t, double x)
 {
@@ -299,22 +313,23 @@ static void pnl_basis_eval_test ()
       LET(V,j)=fonction_a_retrouver(GET(t,j),GET(x,j));
     }
   pnl_basis_fit_ls (basis, alpha, X, V);
+
+
   /*
-   * compute approximations of the derivatives (first order in time and
-   * second order in space )
+   * Test pnl_basis_eval_derivs 
    */
   derive_approx_fonction(basis, D, alpha,t0,x0);
   pnl_test_eq_abs (pnl_vect_get(D,0), fonction_a_retrouver(t0,x0), tol,
-                   "deriv_approx_fonction", "derivative 0");
+                   "pnl_basis_eval_derivs", "derivative 0");
   pnl_test_eq_abs (derive_x_approx_fonction(basis, alpha, t0, x0), 
                    derive_x_fonction_a_retrouver(t0,x0), tol, 
-                   "deriv_approx_fonction", "derivative %% x");
+                   "pnl_basis_eval_derivs", "derivative %% x");
   pnl_test_eq_abs (pnl_vect_get(D,2), derive_xx_fonction_a_retrouver(t0,x0), 
-                   tol, "deriv_approx_fonction", "derivative %% xx");
+                   tol, "pnl_basis_eval_derivs", "derivative %% xx");
   pnl_test_eq_abs (pnl_vect_get(D,3), derive_t_fonction_a_retrouver(t0,x0),
-                   tol, "deriv_approx_fonction", "derivative %% t");
+                   tol, "pnl_basis_eval_derivs", "derivative %% t");
   pnl_test_eq_abs (pnl_vect_get(D,4), derive_xt_fonction_a_retrouver(t0,x0),
-                   tol, "deriv_approx_fonction", "derivative %% tx");
+                   tol, "pnl_basis_eval_derivs", "derivative %% tx");
 
   pnl_basis_free (&basis);
 
@@ -327,16 +342,55 @@ static void pnl_basis_eval_test ()
 
   derive_approx_fonction(basis, D, alpha,t0,x0);
   pnl_test_eq_abs (pnl_vect_get(D,0), fonction_a_retrouver(t0,x0), tol,
-                   "deriv_approx_fonction (reduced)", "derivative 0");
+                   "pnl_basis_eval_derivs (reduced)", "derivative 0");
   pnl_test_eq_abs (derive_x_approx_fonction(basis, alpha, t0, x0), 
                    derive_x_fonction_a_retrouver(t0,x0), tol, 
-                   "deriv_approx_fonction (reduced)", "derivative %% x");
+                   "pnl_basis_eval_derivs (reduced)", "derivative %% x");
   pnl_test_eq_abs (pnl_vect_get(D,2), derive_xx_fonction_a_retrouver(t0,x0), 
-                   tol, "deriv_approx_fonction (reduced)",  "derivative %% xx");
+                   tol, "pnl_basis_eval_derivs (reduced)",  "derivative %% xx");
   pnl_test_eq_abs (pnl_vect_get(D,3), derive_t_fonction_a_retrouver(t0,x0),
-                   tol, "deriv_approx_fonction (reduced)", "derivative %% t");
+                   tol, "pnl_basis_eval_derivs (reduced)", "derivative %% t");
   pnl_test_eq_abs (pnl_vect_get(D,4), derive_xt_fonction_a_retrouver(t0,x0),
-                   tol, "deriv_approx_fonction (reduced)",  "derivative %% tx");
+                   tol, "pnl_basis_eval_derivs (reduced)",  "derivative %% tx");
+
+  /*
+   * Test pnl_basis_eval_D and pnl_basis_eval_D2
+   */
+  derive_approx_fonction2(basis, D, alpha,t0,x0);
+  pnl_test_eq_abs (pnl_vect_get(D,0), fonction_a_retrouver(t0,x0), tol,
+                   "pnl_basis_eval", "derivative 0");
+  pnl_test_eq_abs (derive_x_approx_fonction(basis, alpha, t0, x0), 
+                   derive_x_fonction_a_retrouver(t0,x0), tol, 
+                   "pnl_basis_eval_D", "derivative %% x");
+  pnl_test_eq_abs (pnl_vect_get(D,2), derive_xx_fonction_a_retrouver(t0,x0), 
+                   tol, "pnl_basis_eval_D2", "derivative %% xx");
+  pnl_test_eq_abs (pnl_vect_get(D,3), derive_t_fonction_a_retrouver(t0,x0),
+                   tol, "pnl_basis_eval_D", "derivative %% t");
+  pnl_test_eq_abs (pnl_vect_get(D,4), derive_xt_fonction_a_retrouver(t0,x0),
+                   tol, "pnl_basis_eval_D2", "derivative %% tx");
+
+  pnl_basis_free (&basis);
+
+  /* reduced basis */
+  basis = pnl_basis_create_from_degree (PNL_BASIS_HERMITIAN, deg, 2);
+  lower = pnl_vect_create_from_list (2, 0., -5.);
+  upper = pnl_vect_create_from_list (2, 1., 4.);
+  pnl_basis_set_domain (basis, lower, upper);
+  pnl_basis_fit_ls (basis, alpha, X, V);
+
+  derive_approx_fonction2(basis, D, alpha,t0,x0);
+  pnl_test_eq_abs (pnl_vect_get(D,0), fonction_a_retrouver(t0,x0), tol,
+                   "pnl_basis_eval (reduced)", "derivative 0");
+  pnl_test_eq_abs (derive_x_approx_fonction(basis, alpha, t0, x0), 
+                   derive_x_fonction_a_retrouver(t0,x0), tol, 
+                   "pnl_basis_eval_D (reduced)", "derivative %% x");
+  pnl_test_eq_abs (pnl_vect_get(D,2), derive_xx_fonction_a_retrouver(t0,x0), 
+                   tol, "pnl_basis_eval_D2 (reduced)",  "derivative %% xx");
+  pnl_test_eq_abs (pnl_vect_get(D,3), derive_t_fonction_a_retrouver(t0,x0),
+                   tol, "pnl_basis_eval_D (reduced)", "derivative %% t");
+  pnl_test_eq_abs (pnl_vect_get(D,4), derive_xt_fonction_a_retrouver(t0,x0),
+                   tol, "pnl_basis_eval_D2 (reduced)",  "derivative %% tx");
+
 
   pnl_basis_free (&basis);
   pnl_rng_free (&rng);
