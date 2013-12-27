@@ -1,3 +1,8 @@
+27-12-2013 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* basis.c: Improve the effeciency of the evaluation by avoid to
+	computation to compute terms with degree 0.
+
 22-10-2013 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* roots.c: Add Newton's algorithm with Armijo line search for computing
