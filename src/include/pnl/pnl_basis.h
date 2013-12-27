@@ -37,11 +37,12 @@ struct _PnlBasis
   int         nb_func; /*!< number of elements in the basis */
   PnlMatInt  *T; /*!< Tensor matrix */
   double    (*f)(double x, int i); /*!< Computes the i-th element of the one
-                                            dimensional basis */
+                                     dimensional basis. As a convention, 
+                                     (*f)(x, 0) MUST be equal to 1 */
   double    (*Df)(double x, int i); /*!< Computes the first derivative of i-th element
-                                            of the one dimensional basis */
+                                      of the one dimensional basis */
   double    (*D2f)(double x, int i); /*!< Computes the second derivative of the i-th 
-                                           element of the one dimensional basis */
+                                       element of the one dimensional basis */
   int         isreduced; /* TRUE if the basis is reduced */
   double     *center; /*!< center of the domain */
   double     *scale; /*<! inverse of the scaling factor to map the domain 

@@ -1125,13 +1125,15 @@ void pnl_basis_print (const PnlBasis *B)
  */
 double pnl_basis_ik (const PnlBasis *b, const double *x, int i, int k)
 {
+  const int Tik = PNL_MGET (b->T, i, k);
+  if ( Tik == 0 ) return 1.;
   if ( b->isreduced == 1)
     {
-      return (b->f)((x[k] - b->center[k]) * b->scale[k], PNL_MGET (b->T, i, k));
+      return (b->f)((x[k] - b->center[k]) * b->scale[k], Tik);
     }
   else
     {
-      return (b->f)(x[k], PNL_MGET (b->T, i, k));
+      return (b->f)(x[k], Tik);
     }
 }
 
@@ -1154,14 +1156,18 @@ double pnl_basis_i (const PnlBasis *b, const double *x, int i )
     {
       for ( k=0 ; k<b->nb_variates ; k++ )
         {
-          aux *= (b->f)((x[k] - b->center[k]) * b->scale[k], PNL_MGET (b->T, i, k));
+          const int Tik = PNL_MGET (b->T, i, k);
+          if ( Tik == 0 ) continue;
+          aux *= (b->f)((x[k] - b->center[k]) * b->scale[k], Tik);
         }
     }
   else
     {
       for ( k=0 ; k<b->nb_variates ; k++ )
         {
-          aux *= (b->f)(x[k], PNL_MGET (b->T, i, k));
+          const int Tik = PNL_MGET (b->T, i, k);
+          if ( Tik == 0 ) continue;
+          aux *= (b->f)(x[k], Tik);
         }
     }
   return aux;
@@ -1181,27 +1187,33 @@ double pnl_basis_i_D (const PnlBasis *b, const double *x, int i, int j )
 {
   int k;
   double aux = 1;
+
+  /* Test if the partial degree is small enough to return 0 */
+  if ( PNL_MGET(b->T, i, j) == 0 ) return 0.;
+
   if ( b->isreduced == 1)
     {
       for ( k=0 ; k < b->nb_variates ; k++ )
         {
+          const int Tik = PNL_MGET (b->T, i, k);
+          if ( Tik == 0 ) continue;
           if ( k == j )
-            aux *= b->scale[k] * (b->Df) ( (x[k] - b->center[k]) * b->scale[k], 
-                                           PNL_MGET(b->T, i, k));
+            aux *= b->scale[k] * (b->Df) ( (x[k] - b->center[k]) * b->scale[k], Tik);
           else
-            aux *= (b->f) ((x[k] - b->center[k]) * b->scale[k], PNL_MGET(b->T, i, k));
+            aux *= (b->f) ((x[k] - b->center[k]) * b->scale[k], Tik);
         }
     }
   else
     {
       for ( k=0 ; k < b->nb_variates ; k++ )
         {
+          const int Tik = PNL_MGET (b->T, i, k);
+          if ( Tik == 0 ) continue;
           if ( k == j )
-            aux *= (b->Df) (x[k], PNL_MGET(b->T, i, k));
+            aux *= (b->Df) (x[k], Tik);
           else
-            aux *= (b->f) (x[k], PNL_MGET(b->T, i, k));
+            aux *= (b->f) (x[k], Tik);
         }
-
     }
   return aux;
 }
@@ -1221,29 +1233,34 @@ double pnl_basis_i_D2 (const PnlBasis *b, const double *x, int i, int j1, int j2
 {
   int k;
   double aux = 1;
+  /* Test if the partial degree is small enough to return 0 */
+  if ( (j1 == j2) && PNL_MGET(b->T, i, j1) < 2 ) return 0.;
+  if ( PNL_MGET(b->T, i, j1) == 0 || PNL_MGET(b->T, i, j2) == 0 ) return 0.;
+
   if ( b->isreduced == 1)
     {
       if (j1 == j2)
         {
           for ( k = 0 ; k < b->nb_variates ; k++ )
             {
+              const int Tik = PNL_MGET (b->T, i, k);
+              if ( Tik == 0 ) continue;
               if ( k == j1 )
-                aux *= b->scale[k] * b->scale[k] * 
-                        (b->D2f) ((x[k] - b->center[k]) * b->scale[k], 
-                                  PNL_MGET(b->T, i, k));
+                aux *= b->scale[k] * b->scale[k] * (b->D2f) ((x[k] - b->center[k]) * b->scale[k], Tik);
               else
-                aux *= (b->f) (x[k], PNL_MGET(b->T, i, k));
+                aux *= (b->f) ((x[k] - b->center[k]) * b->scale[k], Tik);
             }
         }
       else
         {
           for ( k = 0 ; k < b->nb_variates ; k++ )
             {
+              const int Tik = PNL_MGET (b->T, i, k);
+              if ( Tik == 0 ) continue;
               if ( k == j1 || k == j2 )
-                aux *= b->scale[k] * (b->Df) ((x[k] - b->center[k]) * b->scale[k],
-                                              PNL_MGET(b->T, i, k));
+                aux *= b->scale[k] * (b->Df) ((x[k] - b->center[k]) * b->scale[k], Tik);
               else
-                aux *= (b->f) ((x[k] - b->center[k]) * b->scale[k], PNL_MGET(b->T, i, k));
+                aux *= (b->f) ((x[k] - b->center[k]) * b->scale[k], Tik);
             }
         }
     }
@@ -1253,6 +1270,8 @@ double pnl_basis_i_D2 (const PnlBasis *b, const double *x, int i, int j1, int j2
         {
           for ( k = 0 ; k < b->nb_variates ; k++ )
             {
+              const int Tik = PNL_MGET (b->T, i, k);
+              if ( Tik == 0 ) continue;
               if ( k == j1 )
                 aux *= (b->D2f) (x[k], PNL_MGET(b->T, i, k));
               else
@@ -1263,6 +1282,8 @@ double pnl_basis_i_D2 (const PnlBasis *b, const double *x, int i, int j1, int j2
         {
           for ( k = 0 ; k < b->nb_variates ; k++ )
             {
+              const int Tik = PNL_MGET (b->T, i, k);
+              if ( Tik == 0 ) continue;
               if ( k == j1 || k == j2 )
                 aux *= (b->Df) (x[k], PNL_MGET(b->T, i, k));
               else
@@ -1377,9 +1398,9 @@ void pnl_basis_eval_derivs (const PnlBasis *b, const PnlVect *coef, const double
   f = malloc(sizeof(double) * n);
   Df = malloc(sizeof(double) * n);
   pnl_vect_resize (grad, n);
-  pnl_mat_resize (hes, n,n);
-  pnl_vect_set_double (grad, 0.);
-  pnl_mat_set_double (hes, 0.);
+  pnl_mat_resize (hes, n, n);
+  pnl_vect_set_zero (grad);
+  pnl_mat_set_zero (hes);
   for ( i=0 ; i<coef->size ; i++ )
     {
       double auxf;
@@ -1393,8 +1414,9 @@ void pnl_basis_eval_derivs (const PnlBasis *b, const PnlVect *coef, const double
         {
           for ( k=0 ; k<n ; k++ )
             {
-              f[k] = (b->f)((x[k] - b->center[k]) * b->scale[k],
-                                PNL_MGET(b->T, i, k));
+              const int Tik = PNL_MGET (b->T, i, k);
+              if ( Tik == 0 ) { f[k] = 1.; continue; }
+              f[k] = (b->f)((x[k] - b->center[k]) * b->scale[k], Tik);
               auxf *= f[k];
             }
         }
@@ -1402,7 +1424,9 @@ void pnl_basis_eval_derivs (const PnlBasis *b, const PnlVect *coef, const double
         {
           for ( k=0 ; k<n ; k++ )
             {
-              f[k] = (b->f)(x[k], PNL_MGET(b->T, i, k));
+              const int Tik = PNL_MGET (b->T, i, k);
+              if ( Tik == 0 ) { f[k] = 1.; continue; }
+              f[k] = (b->f)(x[k], Tik);
               auxf *= f[k];
             }
         }
@@ -1417,30 +1441,47 @@ void pnl_basis_eval_derivs (const PnlBasis *b, const PnlVect *coef, const double
           for ( k=k+1 ; k<n ; k++ ) auxf *= f[k];
           if ( b->isreduced == 1 )
             {
+              const int Tij = PNL_MGET (b->T, i, j);
               /* gradient */
-              Df[j] = b->scale[j] * (b->Df) ((x[j] - b->center[j]) * b->scale[j],
-                                                 PNL_MGET(b->T, i, j));
-              PNL_LET(grad,j) = PNL_GET(grad, j) + a * auxf * Df[j];
+              if ( Tij >= 1 )
+                {
+                  Df[j] = b->scale[j] * (b->Df) ((x[j] - b->center[j]) * b->scale[j], Tij);
+                  PNL_LET(grad,j) = PNL_GET(grad, j) + a * auxf * Df[j];
+                }
+              else
+                Df[j] = 0.;
 
               /* diagonal terms of the Hessian matrix */
-              D2f = b->scale[j] *b->scale[j] *  
-                    (b->D2f) ((x[j] - b->center[j]) * b->scale[j], 
-                                  PNL_MGET(b->T, i, j));
-              PNL_MLET(hes,j,j) = PNL_MGET(hes,j,j) + a * auxf * D2f;
+              if ( Tij >= 2 )
+                {
+                  D2f = b->scale[j] *b->scale[j] * (b->D2f) ((x[j] - b->center[j]) * b->scale[j], Tij);
+                  PNL_MLET(hes,j,j) = PNL_MGET(hes,j,j) + a * auxf * D2f;
+                }
             }
           else
             {
+              const int Tij = PNL_MGET (b->T, i, j);
               /* gradient */
-              Df[j] = (b->Df) (x[j], PNL_MGET(b->T, i, j));
-              PNL_LET(grad,j) = PNL_GET(grad, j) + a * auxf * Df[j];
+              if ( Tij >= 1 )
+                {
+                  Df[j] = (b->Df) (x[j], Tij);
+                  PNL_LET(grad,j) = PNL_GET(grad, j) + a * auxf * Df[j];
+                }
+              else
+                Df[j] = 0.;
+
               /* diagonal terms of the Hessian matrix */
-              D2f = (b->D2f) (x[j], PNL_MGET(b->T, i, j));
-              PNL_MLET(hes,j,j) = PNL_MGET(hes,j,j) + a * auxf * D2f;
+              if ( Tij >= 2 )
+                {
+                  D2f = (b->D2f) (x[j], Tij);
+                  PNL_MLET(hes,j,j) = PNL_MGET(hes,j,j) + a * auxf * D2f;
+                }
             }
 
           /* non diagonal terms of the Hessian matrix */
           for ( l=0 ; l<j ; l++)
             {
+              if ( Df[j] == 0. || Df[l] == 0. ) continue;
               auxf = 1;
               for ( k=0 ; k<l ; k++ ) auxf *= f[k];
               for ( k=k+1 ; k<j ; k++ ) auxf *= f[k];
