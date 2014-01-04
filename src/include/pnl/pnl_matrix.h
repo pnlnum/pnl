@@ -46,7 +46,7 @@
 #include "pnl/pnl_config.h"
 
 /**
- * \defgroup PnlMatrices a Matrix object
+ * \defgroup PnlMat a Matrix object
  *
  * Matrix are stored row-wise in a one dimensional array.
  * The element (i,j) of a matrix is stored in array[i*n+j]
@@ -69,7 +69,7 @@ extern int pnl_mat_object_resize(PnlMatObject *M, int m, int n);
 /*@}*/
 
 /**
- * \defgroup PnlHmatrices Hyper Matrix object
+ * \defgroup PnlHmat Hyper Matrix object
  *
  * HMatrices are stored as a contiguous memory block following the same
  * scheme as for matrices and applying it recursively. For instance, for a
@@ -101,15 +101,9 @@ extern int pnl_hmat_object_resize(PnlHmatObject *H, int ndim, const int *dims);
 
 
 /**
- * \ingroup PnlMatrices
+ * \ingroup PnlMat
  */
 /*@{*/
-
-/**
- * \defgroup PnlMat Double Matrix 
- */
-/*@{*/
-
 
 extern void pnl_mat_init(PnlMat *); 
 extern PnlMat* pnl_mat_new(); 
@@ -251,17 +245,10 @@ PNL_INLINE_FUNC void pnl_mat_set (PnlMat *self, int i, int j, double x)
 PNL_INLINE_DECL void pnl_mat_set(PnlMat *v, int i, int j, double x);
 PNL_INLINE_DECL double pnl_mat_get(const PnlMat *v, int i, int j);
 PNL_INLINE_DECL double* pnl_mat_lget(PnlMat *v, int i, int j);
-
-/*@}*/
-/*@}*/
+/* @} */
 
 /**
- * \ingroup PnlHmatrices
- */
-/*@{*/
-
-/**
- * \defgroup PnlHmat Double HyperMatrix 
+ * \ingroup PnlHmat
  */
 /*@{*/
 
@@ -285,7 +272,6 @@ extern PnlMat pnl_mat_wrap_hmat(PnlHmat *H, int *t);
 extern PnlVect pnl_vect_wrap_hmat(PnlHmat *H, int *t);
 
 /*@}*/
-/*@}*/
 
 
 /*
@@ -293,16 +279,9 @@ extern PnlVect pnl_vect_wrap_hmat(PnlHmat *H, int *t);
  */
 
 /**
- * \ingroup PnlMatrices
+ * \ingroup PnlMat
  */
 /*@{*/
-
-/**
- * \defgroup PnlMatInt Int Matrix 
- */
-/*@{*/
-  
-
 
 extern void pnl_mat_int_init(PnlMatInt *); 
 extern PnlMatInt* pnl_mat_int_new(); 
@@ -421,15 +400,10 @@ PNL_INLINE_DECL int pnl_mat_int_get(const PnlMatInt *v, int i, int j);
 PNL_INLINE_DECL int* pnl_mat_int_lget(PnlMatInt *v, int i, int j);
 
 /*@}*/
-/*@}*/
 
 
 /**
- * \ingroup PnlHmatrices a Hyper Matrix
- */
-/*@{*/
-/**
- * \defgroup PnlHmatInt Int HyperMatrix 
+ * \ingroup PnlHmat a Hyper Matrix
  */
 /*@{*/
 
@@ -454,7 +428,6 @@ extern PnlMatInt pnl_mat_int_wrap_hmat(PnlHmatInt *H, int *t);
 extern PnlVectInt pnl_vect_int_wrap_hmat(PnlHmatInt *H, int *t);
 
 /*@}*/
-/*@}*/
 
 
 /*
@@ -464,17 +437,9 @@ extern PnlVectInt pnl_vect_int_wrap_hmat(PnlHmatInt *H, int *t);
 #include "pnl/pnl_complex.h"
 
 /**
- * \ingroup PnlMatrices
+ * \ingroup PnlMat
  */
 /*@{*/
-
-/**
- * \defgroup PnlMatComplex Complex Matrix
- */
-/*@{*/
-
-
-
 
 extern void pnl_mat_complex_init(PnlMatComplex *); 
 extern PnlMatComplex* pnl_mat_complex_new(); 
@@ -662,18 +627,12 @@ PNL_INLINE_DECL double* pnl_mat_complex_lget_imag(PnlMatComplex *v, int i, int j
 #endif
 
 /*@}*/
-/*@}*/
 
 
 /**
- * \ingroup PnlHmatrices a Hyper Matrix
+ * \ingroup PnlHmat a Hyper Matrix
  */
 /*@{*/
-/**
- * \defgroup PnlHmatComplex Complex HyperMatrix 
- */
-/*@{*/
-
 
 extern PnlHmatComplex* pnl_hmat_complex_new(); 
 extern PnlHmatComplex* pnl_hmat_complex_create(int ndim, const int *dims); 
@@ -693,7 +652,6 @@ extern dcomplex* pnl_hmat_complex_lget(PnlHmatComplex *H, int *tab);
 extern PnlMatComplex pnl_mat_complex_wrap_hmat(PnlHmatComplex *H, int *t);
 extern PnlVectComplex pnl_vect_complex_wrap_hmat(PnlHmatComplex *H, int *t);
 
-/*@}*/
 /*@}*/
 
 /*

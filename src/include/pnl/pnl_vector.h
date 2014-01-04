@@ -17,7 +17,7 @@
 #include "pnl/pnl_config.h"
 
 /**
- * \defgroup PnlVectors  a Vector object
+ * \defgroup PnlVect  a Vector object
  */
 
 #define PNL_GET(v,i) (v)->array[i]
@@ -40,12 +40,7 @@ extern int pnl_vect_object_resize(PnlVectObject * v, int size);
  */
 
 /**
- * \ingroup PnlVectors
- */
-/*@{*/
-
-/**
- * \defgroup PnlVect Double Vector 
+ * \ingroup PnlVect
  */
 /*@{*/
 
@@ -179,18 +174,11 @@ extern double pnl_vect_compact_get (const PnlVectCompact *C, int i);
 extern void pnl_vect_compact_set_all (PnlVectCompact *C, double x);
 extern void pnl_vect_compact_set_ptr (PnlVectCompact *C, double *ptr);
 
-/*@}*/
-
 
 /*
  * PnlVectInt
  */
 
-
-/**
- * \defgroup PnlVectInt Int Vector 
- */
-/*@{*/
 
 #ifdef PNL_HAVE_INLINE 
 PNL_INLINE_FUNC int pnl_vect_int_get (const PnlVectInt *self, int i)
@@ -290,7 +278,6 @@ extern void pnl_vect_int_swap_elements(PnlVectInt * v, int i, int j);
 extern void pnl_vect_int_reverse(PnlVectInt * v);
 
 extern int pnl_vect_int_less(const PnlVectInt * a,const PnlVectInt * b);
-/*@}*/
 
 
 /*
@@ -299,11 +286,6 @@ extern int pnl_vect_int_less(const PnlVectInt * a,const PnlVectInt * b);
 
 #include "pnl/pnl_complex.h"
 
-
-/**
- * \defgroup PnlVectComplex Complex Vector 
- */
-/*@{*/
 
 #ifdef PNL_HAVE_INLINE 
 PNL_INLINE_FUNC dcomplex pnl_vect_complex_get (const PnlVectComplex *self, int i)
@@ -449,7 +431,6 @@ extern void pnl_vect_complex_split_in_vect(const PnlVectComplex* v, PnlVect *re,
 extern void pnl_vect_complex_swap_elements(PnlVectComplex * v, int i, int j); 
 extern void pnl_vect_complex_reverse(PnlVectComplex * v);
 
-/*@}*/
 /*@}*/
 
 /*

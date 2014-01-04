@@ -149,8 +149,8 @@ TYPE(PnlSpMat)* FUNCTION(pnl_sp_mat,create)(int m, int n, int nzmax)
 * Set M(,i, j) = x. May create this entry or overwrite it.
 * 
 * @param M sparse matrix
-* @param m row index
-* @param n col index
+* @param i row index
+* @param j col index
 * @param x value
 */
 void FUNCTION(pnl_sp_mat,set)(TYPE(PnlSpMat) *M, int i, int j, BASE x)
@@ -184,9 +184,8 @@ void FUNCTION(pnl_sp_mat,set)(TYPE(PnlSpMat) *M, int i, int j, BASE x)
 * Get M(,i, j) in x. Return TRUE if M has an entry (i,j) and FALSE otherwise
 * 
 * @param M sparse matrix
-* @param m row index
-* @param n col index
-* @param[out] x value
+* @param i row index
+* @param j col index
 */
 BASE FUNCTION(pnl_sp_mat,get)(const TYPE(PnlSpMat) *M, int i, int j)
 {

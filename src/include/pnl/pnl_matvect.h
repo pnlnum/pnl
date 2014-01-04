@@ -10,7 +10,7 @@ extern "C" {
 
 
 /**
- * \ingroup PnlVectors
+ * \ingroup PnlVect
  */
 /*@{*/
 
@@ -38,9 +38,6 @@ struct _PnlVectObject
   int owner; /*!< 1 if the object owns its array member, 0 otherwise */
 };
 
-/**
- * \ingroup PnlVect
- */
 struct _PnlVect
 {
   /** 
@@ -53,13 +50,8 @@ struct _PnlVect
   int mem_size; /*!< size of the memory block allocated for array */
   int owner; /*!< 1 if the object owns its array member, 0 otherwise */
 };
-/*@}*/
 
 
-/**
- * \ingroup PnlVectInt
- */
-/*@{*/
 struct _PnlVectInt
 {
   /** 
@@ -72,13 +64,8 @@ struct _PnlVectInt
   int mem_size; /*!< size of the memory block allocated for array */
   int owner; /*!< 1 if the object owns its array member, 0 otherwise */
 }; 
-/*@}*/
 
 
-/**
- * \ingroup PnlVectComplex
- */
-/*@{*/
 struct _PnlVectComplex
 {
   /** 
@@ -92,10 +79,9 @@ struct _PnlVectComplex
   int owner; /*!< 1 if the object owns its array member, 0 otherwise */
 };
 /*@}*/
-/*@}*/
 
 /**
- * \ingroup PnlMatrices
+ * \ingroup PnlMat
  */
 /*@{*/
 
@@ -125,11 +111,6 @@ struct _PnlMatObject
 }; 
 
 
-/**
- * \ingroup PnlMat
- */
-/*@{*/
-
 struct _PnlMat
 {
   /** 
@@ -144,12 +125,7 @@ struct _PnlMat
   double *array; /*!< pointer to store the data row-wise */
   int owner; /*!< 1 if the object owns its array member, 0 otherwise */
 };
-/*@}*/
 
-/**
- * \ingroup PnlMatInt
- */
-/*@{*/
 struct _PnlMatInt
 {
   /** 
@@ -164,12 +140,7 @@ struct _PnlMatInt
   int *array; /*!< pointer to store the data row-wise */
   int owner; /*!< 1 if the object owns its array member, 0 otherwise */
 };
-/*@}*/
 
-/**
- * \ingroup PnlMatComplex
- */
-/*@{*/
 struct _PnlMatComplex
 {
   /** 
@@ -186,10 +157,9 @@ struct _PnlMatComplex
 };
 
 /*@}*/
-/*@}*/
 
 /**
- * \ingroup PnlHmatrices
+ * \ingroup PnlHmat
  */
 /*@{*/
 
@@ -215,11 +185,6 @@ struct _PnlHmatObject
 } ;
 
 
-/**
- * \ingroup PnlHMat
- */
-/*@{*/
-
 struct _PnlHmat
 {
   /** 
@@ -235,10 +200,6 @@ struct _PnlHmat
   double *array; /*!< pointer to store */
 };
 
-/**
- * \ingroup PnlHMatInt
- */
-/*@{*/
 struct _PnlHmatInt
 {
   /** 
@@ -255,10 +216,6 @@ struct _PnlHmatInt
 };
 
 
-/**
- * \ingroup PnlHMatComplex
- */
-/*@{*/
 struct _PnlHmatComplex
 {
   /** 
@@ -273,7 +230,6 @@ struct _PnlHmatComplex
                 with pdims[ndim - 1] = 1 */
   dcomplex *array; /*!< pointer to store */
 };
-/*@}*/
 /*@}*/
 
 #ifdef __cplusplus

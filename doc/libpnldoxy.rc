@@ -622,15 +622,16 @@ EXCLUDE_SYMLINKS       = NO
 # EXCLUDE_PATTERNS tag to specify one or more wildcard patterns to exclude
 # certain files from those directories. Note that the wildcards are matched
 # against the file with absolute path, so to exclude all test directories
-# for example use the pattern */test/*
+# for example use the pattern 
 
 EXCLUDE_PATTERNS       = *_source.c \
                          *template_on.h \
                          *template_off.h \
                          */src/include/clapack.h \
                          */src/interpol/interpolation.c \
-                         */src/linalg/pnl_TVector.c \
-                         */src/linalg/pnl_TMatrix.c \
+                         */src/linalg/vector.c \
+                         */src/linalg/matrix.c \
+                         */src/linalg/sp_matrix.c \
                          */src/include/pnl/clapack.h
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
