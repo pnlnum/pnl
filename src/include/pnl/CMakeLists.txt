@@ -16,9 +16,6 @@ install(FILES
     pnl_list.h 
     pnl_mathtools.h 
     pnl_matrix.h 
-    pnl_matrix_complex.h 
-    pnl_matrix_double.h 
-    pnl_matrix_int.h 
     pnl_matvect.h 
     pnl_mpi.h 
     pnl_object.h 
@@ -31,9 +28,6 @@ install(FILES
     pnl_templates_on.h 
     pnl_tridiag_matrix.h 
     pnl_vector.h 
-    pnl_vector_complex.h 
-    pnl_vector_double.h 
-    pnl_vector_int.h 
     DESTINATION include/pnl
 )
 

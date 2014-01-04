@@ -17,6 +17,7 @@
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
 
+#include <string.h>
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"

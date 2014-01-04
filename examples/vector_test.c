@@ -22,7 +22,6 @@
 #include <math.h>
 
 #include "pnl/pnl_vector.h"
-#include "pnl/pnl_vector_complex.h"
 #include "pnl/pnl_random.h"
 #include "tests_utils.h"
 

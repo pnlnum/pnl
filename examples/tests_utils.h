@@ -1,6 +1,8 @@
 #ifndef _TESTS_H
 #define _TESTS_H
 
+#include <string.h>
+
 /**
  * \defgroup PnlTest a unit test framework
  */

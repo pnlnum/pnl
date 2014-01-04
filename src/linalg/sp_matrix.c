@@ -18,6 +18,7 @@
 /************************************************************************/
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "pnl/pnl_config.h"
 #include "pnl/pnl_mathtools.h"

@@ -22,7 +22,6 @@
 #include <math.h>
 
 #include "pnl/pnl_matrix.h"
-#include "pnl/pnl_matrix_complex.h"
 #include "pnl/pnl_random.h"
 #include "tests_utils.h"
 
