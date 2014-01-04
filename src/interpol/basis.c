@@ -43,7 +43,6 @@
 #define CHECK_NB_VARIATES(x, basis) 
 #endif
 
-
 /** 
  * Compute the the maximum degree which can be put on the last component
  * is the total order of the rest is partial.
@@ -1234,7 +1233,7 @@ double pnl_basis_i_D2 (const PnlBasis *b, const double *x, int i, int j1, int j2
   int k;
   double aux = 1;
   /* Test if the partial degree is small enough to return 0 */
-  if ( (j1 == j2) && PNL_MGET(b->T, i, j1) < 2 ) return 0.;
+  if ( (j1 == j2) && PNL_MGET(b->T, i, j1) == 0 ) return 0.;
   if ( PNL_MGET(b->T, i, j1) == 0 || PNL_MGET(b->T, i, j2) == 0 ) return 0.;
 
   if ( b->isreduced == 1)
