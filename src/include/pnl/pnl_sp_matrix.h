@@ -91,6 +91,9 @@ extern int pnl_sp_mat_resize(PnlSpMat *M, int m, int n, int nzmax);
 extern void pnl_sp_mat_set(PnlSpMat *M, int i, int j, double x);
 extern double pnl_sp_mat_get(const PnlSpMat *M, int i, int j);
 extern PnlMat* pnl_mat_create_from_sp_mat(const PnlSpMat *M);
+extern PnlSpMat* pnl_sp_mat_create_from_mat(const PnlMat *M);
+extern int pnl_sp_mat_eq(const PnlSpMat *Sp1, const PnlSpMat *Sp2);
+
 /*@}*/
 
 
@@ -125,6 +128,8 @@ extern int pnl_sp_mat_int_resize(PnlSpMatInt *M, int m, int n, int nzmax);
 extern void pnl_sp_mat_int_set(PnlSpMatInt *M, int i, int j, int x);
 extern int pnl_sp_mat_int_get(const PnlSpMatInt *M, int i, int j);
 extern PnlMatInt* pnl_mat_int_create_from_sp_mat (const PnlSpMatInt *M);
+extern PnlSpMatInt* pnl_sp_mat_int_create_from_mat(const PnlMatInt *M);
+extern int pnl_sp_mat_int_eq(const PnlSpMatInt *Sp1, const PnlSpMatInt *Sp2);
 /*@}*/
 
 
@@ -159,6 +164,8 @@ extern int pnl_sp_mat_complex_resize(PnlSpMatComplex *M, int m, int n, int nzmax
 extern void pnl_sp_mat_complex_set(PnlSpMatComplex *M, int i, int j, dcomplex x);
 extern dcomplex pnl_sp_mat_complex_get(const PnlSpMatComplex *M, int i, int j);
 extern PnlMatComplex* pnl_mat_complex_create_from_sp_mat (const PnlSpMatComplex *M);
+extern PnlSpMatComplex* pnl_sp_mat_complex_create_from_mat(const PnlMatComplex *M);
+extern int pnl_sp_mat_complex_eq(const PnlSpMatComplex *Sp1, const PnlSpMatComplex *Sp2);
 /*@}*/
 /*@}*/
 

@@ -523,7 +523,7 @@ typedef struct PnlVectCompact {
 
 \item \describefun{\PnlVectCompact \ptr }{pnl_vect_compact_create}{int n, double x}
   \sshortdescribe Create a \PnlVectCompact filled in with \var{x}
-\item \describefun{\PnlVectCompact \ptr }{pnl_vect_compact_create}{int n, double *x}
+\item \describefun{\PnlVectCompact \ptr }{pnl_vect_compact_create_from_ptr}{int n, double *x}
   \sshortdescribe Create a \PnlVectCompact filled in with the content of
   \var{x}. Note that \var{x} must have at least \var{n} elements.
 
@@ -1921,6 +1921,12 @@ for integer, float or complex base data according to the following table
 
   \item \describefun{\PnlMat\ptr }{pnl_mat_create_from_sp_mat}{const \PnlSpMat \ptr M}
     \sshortdescribe Create a dense \PnlMat from a spare one.
+\item \describefun{\PnlSpMat \ptr }{pnl_sp_mat_create_from_mat}{const \PnlMat \ptr M}
+  \sshortdescribe Create a sparse matrix from a dense one.
+\item \describefun{int}{pnl_sp_mat_eq}{const \PnlSpMat \ptr Sp1, const \PnlSpMat \ptr Sp2}
+  \sshortdescribe Test if two sparse matrices are equal, ie. if they have the
+  same size (m, n, nz) and hold the same values. Return \var{TRUE} or \var{FALSE}.
+
 \end{itemize}
 
 \paragraph{Accessing elements}

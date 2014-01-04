@@ -62,14 +62,30 @@ static void sp_get_set_test ()
         }
     }
   if ( nb_fail == 0 )
-    {
-      pnl_test_set_ok ("sp_mat_get_set");
-    }
+    pnl_test_set_ok ("sp_mat_get_set");
   else
-    {
-      pnl_test_set_fail ("sp_mat_get_set", nb_fail, 0);
-    }
+    pnl_test_set_fail ("sp_mat_get_set", nb_fail, 0);
   pnl_sp_mat_free (&Sp);
+  pnl_mat_free (&M);
+  pnl_rng_free (&rng);
+}
+
+static void sp_create_test ()
+{
+  PnlSpMat *Sp, *Sp2;
+  PnlMat *M;
+  PnlRng * rng = pnl_rng_create(PNL_RNG_MERSENNE);
+  int m = 9, n = 11;
+  pnl_rng_sseed (rng, 0);
+  Sp = create_random_sp (m, n, rng);
+  M = pnl_mat_create_from_sp_mat (Sp);
+  Sp2 = pnl_sp_mat_create_from_mat (M);
+  if ( pnl_sp_mat_eq (Sp2, Sp) == TRUE )
+    pnl_test_set_ok ("sp_mat_create");
+  else
+    pnl_test_set_fail ("sp_mat_create", 0, 0);
+  pnl_sp_mat_free (&Sp);
+  pnl_sp_mat_free (&Sp2);
   pnl_mat_free (&M);
   pnl_rng_free (&rng);
 }
@@ -78,6 +94,7 @@ int main (int argc, char *argv[])
 {
   pnl_test_init (argc, argv);
   sp_get_set_test ();
+  sp_create_test ();
   /* sp_add_test (); */
   exit (pnl_test_finalize("Sparse matrices"));
 }

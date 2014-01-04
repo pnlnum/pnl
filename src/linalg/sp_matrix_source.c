@@ -203,6 +203,11 @@ BASE FUNCTION(pnl_sp_mat,get)(const TYPE(PnlSpMat) *M, int i, int j)
   return ZERO;
 }
 
+/** 
+ * Create a dense matrix from a sparse one
+ * 
+ * @param Sp a sparse matrix
+ */
 TYPE(PnlMat)* FUNCTION(pnl_mat,create_from_sp_mat)(const TYPE(PnlSpMat) *Sp)
 {
   int i, j;
@@ -219,6 +224,57 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,create_from_sp_mat)(const TYPE(PnlSpMat) *Sp)
         }
     }
   return M;
+}
+
+/** 
+ * Create a sparse matrix from a dense one
+ * 
+ * @param M a dense matrix
+ */
+TYPE(PnlSpMat)* FUNCTION(pnl_sp_mat,create_from_mat)(const TYPE(PnlMat) *M)
+{
+  int i, j, nz;
+  TYPE(PnlSpMat) *Sp;
+
+  for ( i=0, nz=0 ; i<M->mn ; i++ ) { if ( NEQ(M->array[i], ZERO) ) nz++; }
+  Sp = FUNCTION(pnl_sp_mat,create)(M->m, M->n, nz);
+
+  for ( i=0 ; i<M->m ; i++ ) 
+    {
+      Sp->I[i] = Sp->nz;
+      for ( j=0 ; j<M->n ; j++ )
+        {
+          BASE Mij = PNL_MGET(M, i, j);
+          if ( NEQ(Mij, ZERO) ) 
+            {
+              Sp->array[Sp->nz] = Mij;
+              Sp->J[Sp->nz] = j;
+              Sp->nz++;
+            }
+        }
+    }
+  Sp->I[M->m] = Sp->nz;
+  return Sp;
+}
+
+/** 
+ * Compare two sparse matrices
+ * 
+ * @param Sp1  a sparse matrix
+ * @param Sp2  a sparse matrix
+ * 
+ * @return  TRUE or FALSE
+ */
+int FUNCTION(pnl_sp_mat, eq)(const TYPE(PnlSpMat) *Sp1, const TYPE(PnlSpMat) *Sp2)
+{
+  int k;
+  if ( (Sp1->m != Sp2->m) || (Sp1->n != Sp1->n) || (Sp1->nz != Sp2->nz) ) return FALSE;
+  for ( k=0 ; k<Sp1->m ; k++ ) { if ( Sp1->I[k] != Sp2->I[k] ) return FALSE; }
+  for ( k=0 ; k<Sp1->nz ; k++ ) 
+    {
+      if ( (Sp1->J[k] != Sp2->J[k]) || NEQ(Sp1->array[k], Sp2->array[k]) ) return FALSE; 
+    }
+  return TRUE;
 }
 
 #ifdef PNL_CLANG_COMPLETE
