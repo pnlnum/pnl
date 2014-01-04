@@ -170,6 +170,7 @@ set(CMAKE_REQUIRED_LIBRARIES ${LIBS})
 
 # Check some math functions
 include(CheckFunctionExists)
+include(CheckSymbolExists)
 CHECK_FUNCTION_EXISTS(tgamma PNL_HAVE_TGAMMA)
 CHECK_FUNCTION_EXISTS(lgamma PNL_HAVE_LGAMMA)
 CHECK_FUNCTION_EXISTS(exp10 PNL_HAVE_EXP10)

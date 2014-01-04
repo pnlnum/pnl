@@ -19,6 +19,7 @@
 
 #include "pnl/pnl_complex.h"
 #include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_specfun.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_fft.h"
