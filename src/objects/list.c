@@ -126,7 +126,7 @@ void pnl_list_insert_first (PnlList *L, PnlObject *o)
     }
 
   /* Put C on top of L */
-  if ( L->len == 0i ) L->last = C;
+  if ( L->len == 0 ) L->last = C;
   L->len++;
   L->first = C;
 
