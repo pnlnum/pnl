@@ -252,7 +252,7 @@ double pnl_ilap_gs (PnlFunc *fhat, double t, int n)
   PnlMatInt *iwork;
 
   f = 0.;
-  Cnk = 1. / pnl_fact (n-1);
+  Cnk = 1. / pnl_sf_fact (n-1);
   work = pnl_mat_create (2 * n, n+1); 
   iwork = pnl_mat_int_create_from_scalar (2 * n, n+1, 0);
   for ( k=1 ; k<n+1 ; k++ )

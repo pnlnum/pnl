@@ -363,7 +363,7 @@ void pnl_list_remove_i (PnlList *L, int i)
  * If the new length is shorter, the last elements are removed (ie. deleted
  * from the list and freed) for the sizes to match.
  *
- * If the new length is longer, the newly added elements are toi
+ * If the new length is longer, the newly added elements are set to
  * (PnlObject*) NULL.
  * 
  * @param L a PnlList

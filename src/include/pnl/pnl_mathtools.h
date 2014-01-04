@@ -20,7 +20,6 @@ extern double pnl_trunc(double x);
 extern int pnl_iround(double x);
 extern long int pnl_lround(double x);
 extern double pnl_round(double x);
-extern double Cnp(int n, int p);
 extern double pnl_fact(int n);
 extern double pnl_lgamma (double x);
 extern double pnl_tgamma (double x);
