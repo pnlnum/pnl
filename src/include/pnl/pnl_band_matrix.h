@@ -91,10 +91,10 @@ extern void pnl_band_mat_map (PnlBandMat *lhs, const PnlBandMat *rhs, double(*f)
 extern void pnl_band_mat_map_inplace (PnlBandMat *BM, double(*f)(double));
 extern void pnl_band_mat_map_band_mat_inplace (PnlBandMat *BA, const PnlBandMat *BB, double(*f)(double, double));
 
-extern void pnl_band_mat_plus_double (PnlBandMat *BM, double x);
-extern void pnl_band_mat_minus_double (PnlBandMat *BM, double x);
-extern void pnl_band_mat_mult_double (PnlBandMat *BM, double x);
-extern void pnl_band_mat_div_double (PnlBandMat *BM, double x);
+extern void pnl_band_mat_plus_scalar (PnlBandMat *BM, double x);
+extern void pnl_band_mat_minus_scalar (PnlBandMat *BM, double x);
+extern void pnl_band_mat_mult_scalar (PnlBandMat *BM, double x);
+extern void pnl_band_mat_div_scalar (PnlBandMat *BM, double x);
 
 extern void pnl_band_mat_plus_band_mat (PnlBandMat *lhs, const PnlBandMat *rhs);
 extern void pnl_band_mat_minus_band_mat (PnlBandMat *lhs, const PnlBandMat *rhs);
@@ -104,7 +104,7 @@ extern void pnl_band_mat_mult_band_mat_term (PnlBandMat *lhs, const PnlBandMat *
 extern double pnl_band_mat_get (PnlBandMat * M, int i, int j);
 extern double* pnl_band_mat_lget (PnlBandMat * M, int i, int j);
 extern void pnl_band_mat_set (PnlBandMat * M, int i, int j, double x);
-extern void pnl_band_mat_set_double (PnlBandMat* BM, double x);
+extern void pnl_band_mat_set_all (PnlBandMat* BM, double x);
 
 extern void pnl_band_mat_mult_vect_inplace (PnlVect *lhs, const PnlBandMat *mat, const 
 PnlVect *rhs);
@@ -117,6 +117,13 @@ extern void pnl_band_mat_lu_syslin_inplace (const PnlBandMat *LU, const PnlVectI
 extern void pnl_band_mat_lu_syslin (PnlVect *x, const PnlBandMat *LU, const PnlVectInt *p, const PnlVect *b);
 
 /*@}*/
+
+/*
+ * Somes deprecated names
+ */
+
+#include "pnl/pnl_deprecated.h"
+
 
 #ifdef __cplusplus
 }

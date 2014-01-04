@@ -60,5 +60,8 @@
 /* Define to 1 if you use internal Blas */
 #cmakedefine USE_INTERNAL_BLAS
 
+/* Define to 1 not to build deprecated functions */
+#cmakedefine WITHOUT_DEPRECATED
+
 #endif /* _PNL_CONFIG_H */
 

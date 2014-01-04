@@ -150,11 +150,11 @@ void dgemm3 (double alpha, const PnlMat *A,
   if ( beta == 0. )
     {
       pnl_mat_resize (C, m, n);
-      pnl_mat_set_double (C, 0.);
+      pnl_mat_set_all (C, 0.);
     }
   else if ( beta != 1. )
     {
-      pnl_mat_mult_double (C, beta); 
+      pnl_mat_mult_scalar (C, beta); 
     }
   if ( alpha == 0.) return;
 
@@ -196,11 +196,11 @@ void dgemm2 (double alpha, const PnlMat *A,
   if ( beta == 0. )
     {
       pnl_mat_resize (C, m, n);
-      pnl_mat_set_double (C, 0.);
+      pnl_mat_set_all (C, 0.);
     }
   else if ( beta != 1. )
     {
-      pnl_mat_mult_double (C, beta); 
+      pnl_mat_mult_scalar (C, beta); 
     }
   if ( alpha == 0.) return;
 

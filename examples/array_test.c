@@ -34,8 +34,8 @@ static void array_ops ()
   PnlMat *M;
   PnlTridiagMat *tridiag;
 
-  M = pnl_mat_create_from_double (2, 3, 3.5);
-  tridiag = pnl_tridiag_mat_create_from_double (4, 0.5);
+  M = pnl_mat_create_from_scalar (2, 3, 3.5);
+  tridiag = pnl_tridiag_mat_create_from_scalar (4, 0.5);
   T = pnl_array_create (2);
   pnl_array_set (T, 0, PNL_OBJECT(M));
   pnl_array_set (T, 1, PNL_OBJECT(tridiag));
@@ -60,8 +60,8 @@ static void array_copy ()
   PnlMat *M;
   PnlVect *v;
 
-  M = pnl_mat_create_from_double (2, 3, 3.5);
-  v = pnl_vect_create_from_double (5, M_SQRT2);
+  M = pnl_mat_create_from_scalar (2, 3, 3.5);
+  v = pnl_vect_create_from_scalar (5, M_SQRT2);
   T = pnl_array_create (2);
   pnl_array_set (T, 0, PNL_OBJECT(M));
   pnl_array_set (T, 1, PNL_OBJECT(v));
@@ -89,8 +89,8 @@ static void array_clone ()
   PnlMat *M;
   PnlVect *v;
 
-  M = pnl_mat_create_from_double (2, 3, 3.5);
-  v = pnl_vect_create_from_double (5, M_SQRT2);
+  M = pnl_mat_create_from_scalar (2, 3, 3.5);
+  v = pnl_vect_create_from_scalar (5, M_SQRT2);
   T = pnl_array_create (2);
   pnl_array_set (T, 0, PNL_OBJECT(M));
   pnl_array_set (T, 1, PNL_OBJECT(v));

@@ -76,7 +76,7 @@ TYPE(PnlVect) * FUNCTION(pnl_vect,create)(int size)
  * @param x value of all component
  * @return  a TYPE(PnlVect)pointer all value at 0
  */
-TYPE(PnlVect)* FUNCTION(pnl_vect,CONCAT2(create_from_,BASE))(const int size,BASE x)
+TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_scalar)(const int size,BASE x)
 {
   int i;
   TYPE(PnlVect) *v;
@@ -114,7 +114,7 @@ int FUNCTION(pnl_vect,eq)(const TYPE(PnlVect) *v1, const TYPE(PnlVect) *v2)
  * @param x a BASE element
  * @return  TRUE or FALSE
  */
-int FUNCTION(pnl_vect,CONCAT2(eq_,BASE))(const TYPE(PnlVect) *v, BASE x)
+int FUNCTION(pnl_vect,eq_all)(const TYPE(PnlVect) *v, BASE x)
 {
   int i;
   for ( i=0 ; i<v->size ; i++ )
@@ -446,7 +446,7 @@ int FUNCTION(pnl_vect,resize)(TYPE(PnlVect) * v, int size)
  * @param x : the value used to fill the new cells when the
  * array is enlarged
  */
-int FUNCTION(pnl_vect,CONCAT2(resize_from_,BASE))(TYPE(PnlVect) *v, int size, BASE x)
+int FUNCTION(pnl_vect,resize_from_scalar)(TYPE(PnlVect) *v, int size, BASE x)
 {
   int i=0;
   int old_size = v->size;
@@ -495,7 +495,7 @@ int FUNCTION(pnl_vect,resize_from_ptr)(TYPE(PnlVect) *v, int size, const BASE *t
  * @param v a  TYPE(PnlVect)
  * @param x a  Base element
  */
-void FUNCTION(pnl_vect,CONCAT2(set_,BASE))(TYPE(PnlVect) * v, BASE x)
+void FUNCTION(pnl_vect,set_all)(TYPE(PnlVect) * v, BASE x)
 {
   int i;
   for(i = 0; i < v->size; i++)
@@ -694,7 +694,7 @@ static double FUNCTION(,_op_abs)(BASE a) { return NORMONE(a); }
  * @param x scalar
  * @return  lhs = lhs+x
  */
-void FUNCTION(pnl_vect,CONCAT2(plus_,BASE))(TYPE(PnlVect) *lhs , BASE x)
+void FUNCTION(pnl_vect,plus_scalar)(TYPE(PnlVect) *lhs , BASE x)
 {
   FUNCTION(pnl_vect,apply_op)(lhs, x,FUNCTION(,_op_plus));
 }
@@ -707,7 +707,7 @@ void FUNCTION(pnl_vect,CONCAT2(plus_,BASE))(TYPE(PnlVect) *lhs , BASE x)
  * @param x scalar
  * @return  lhs = lhs-x
  */
-void FUNCTION(pnl_vect,CONCAT2(minus_,BASE))(TYPE(PnlVect) *lhs , BASE x)
+void FUNCTION(pnl_vect,minus_scalar)(TYPE(PnlVect) *lhs , BASE x)
 {
   FUNCTION(pnl_vect,apply_op)(lhs, x, FUNCTION(,_op_minus));
 }
@@ -720,7 +720,7 @@ void FUNCTION(pnl_vect,CONCAT2(minus_,BASE))(TYPE(PnlVect) *lhs , BASE x)
  * @param x scalar
  * @return  lhs = lhs*x
  */
-void FUNCTION(pnl_vect,CONCAT2(mult_,BASE))(TYPE(PnlVect) *lhs , BASE x)
+void FUNCTION(pnl_vect,mult_scalar)(TYPE(PnlVect) *lhs , BASE x)
 {
   FUNCTION(pnl_vect,apply_op)(lhs, x, FUNCTION(,_op_mult));
 }
@@ -732,7 +732,7 @@ void FUNCTION(pnl_vect,CONCAT2(mult_,BASE))(TYPE(PnlVect) *lhs , BASE x)
  * @param x scalar
  * @return  lhs = lhs/x
  */
-void FUNCTION(pnl_vect,CONCAT2(div_,BASE))(TYPE(PnlVect) *lhs , BASE x)
+void FUNCTION(pnl_vect,div_scalar)(TYPE(PnlVect) *lhs , BASE x)
 {
   FUNCTION(pnl_vect,apply_op)(lhs, x, FUNCTION(,_op_div));
 }
@@ -1334,9 +1334,9 @@ void FUNCTION(pnl_vect,axpby)(BASE a, const TYPE(PnlVect) *x,  BASE b, TYPE(PnlV
   if ( EQ(b,zero) )
     {
       FUNCTION(pnl_vect,resize) (y, x->size);
-      FUNCTION(pnl_vect,CONCAT2(set_,BASE))(y, zero);
+      FUNCTION(pnl_vect,set_all)(y, zero);
     }
-  else if ( NEQ(b,one) ) FUNCTION(pnl_vect,CONCAT2(mult_,BASE)) (y, b);
+  else if ( NEQ(b,one) ) FUNCTION(pnl_vect,mult_scalar) (y, b);
   if ( EQ(a,zero) ) return;
 
 #ifndef PNL_RANGE_CHECK_OFF

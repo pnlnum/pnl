@@ -471,13 +471,13 @@ int pnl_mat_exp (PnlMat *B, const PnlMat *A)
   pnl_mat_axpy (-1., &Mwork1, &Mwork2 );
   pnl_mat_syslin_mat (&Mwork2, &Mwork1);
 
-  pnl_mat_mult_double (&Mwork1, 2.);
+  pnl_mat_mult_scalar (&Mwork1, 2.);
   for (j=0; j<A->m; j++) work[ip+j*(A->m+1)] += 1.;
   iput = ip;
 
   if (ns == 0 && iodd == 1)
     {
-      pnl_mat_mult_double (&Mwork1, -1.);
+      pnl_mat_mult_scalar (&Mwork1, -1.);
     }
   else
     {
@@ -611,13 +611,13 @@ int pnl_mat_complex_exp (PnlMatComplex *B, const PnlMatComplex *A)
   pnl_mat_complex_axpy (Complex(-1.,0.), &Mwork1, &Mwork2 );
   pnl_mat_complex_syslin_mat (&Mwork2, &Mwork1);
 
-  pnl_mat_complex_mult_dcomplex (&Mwork1, Complex(2.,0.));
+  pnl_mat_complex_mult_scalar (&Mwork1, Complex(2.,0.));
   for (j=0; j<A->m; j++) work[ip+j*(A->m+1)].r += 1.;
   iput = ip;
 
   if (ns == 0 && iodd == 1)
     {
-      pnl_mat_complex_mult_dcomplex (&Mwork1, Complex(-1.,0.));
+      pnl_mat_complex_mult_scalar (&Mwork1, Complex(-1.,0.));
     }
   else
     {

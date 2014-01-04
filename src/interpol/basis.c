@@ -1516,9 +1516,9 @@ int pnl_basis_fit_ls (const PnlBasis *basis, PnlVect *coef, const PnlMat *x, con
 
   N = y->size;
   pnl_vect_resize (coef, basis->nb_func);
-  pnl_vect_set_double (coef, 0.);
-  phi_k = pnl_vect_create_from_double (basis->nb_func, 0.);
-  A = pnl_mat_create_from_double (basis->nb_func, basis->nb_func, 0.);
+  pnl_vect_set_all (coef, 0.);
+  phi_k = pnl_vect_create_from_scalar (basis->nb_func, 0.);
+  A = pnl_mat_create_from_scalar (basis->nb_func, basis->nb_func, 0.);
 
   /* construct A and b*/
   for ( i=0 ; i<N ; i++ )

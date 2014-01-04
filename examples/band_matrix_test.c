@@ -60,7 +60,7 @@ static void create_sym_pos_matrix (PnlMat *S, int n, int gen)
   pnl_vect_rand_uni (b, n, 0., 1., gen);
 
   /* S is set to a diagonal matrix with positive eigenvalues */
-  pnl_mat_set_double (S, 0.);
+  pnl_mat_set_all (S, 0.);
   for ( i=0 ; i<S->n ; i++ )
     {
       do
@@ -156,7 +156,7 @@ static void basic_band_mat_test ()
 
 
   pnl_band_mat_clone (BM, BMclone);
-  pnl_band_mat_mult_double (BM, 2.0);
+  pnl_band_mat_mult_scalar (BM, 2.0);
   for ( i=0 ; i<BM->m ; i++ )
     {
       for ( j=MAX(0, i-BM->nl) ; j<MIN(BM->n, i+BM->nu) ; j++ )
@@ -173,7 +173,7 @@ static void basic_band_mat_test ()
 
 J1:
   pnl_band_mat_clone (BM, BMclone);
-  pnl_band_mat_plus_double (BM, 2.0);
+  pnl_band_mat_plus_scalar (BM, 2.0);
   for ( i=0 ; i<BM->m ; i++ )
     {
       for ( j=MAX(0, i-BM->nl) ; j<MIN(BM->n, i+BM->nu) ; j++ )

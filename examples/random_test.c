@@ -90,14 +90,14 @@ static void test_pnl_mat_rng(PnlRng *rng, const char *name)
   int i;
   double sum;
   char str[256];
-  inf = pnl_vect_create_from_double(dim, 0.0);
-  sup = pnl_vect_create_from_double(dim, 1.0);
+  inf = pnl_vect_create_from_scalar(dim, 0.0);
+  sup = pnl_vect_create_from_scalar(dim, 1.0);
   M = pnl_mat_create(0,0);
   Vsum = pnl_vect_create (0);
   reset_rng (rng, dim);
   pnl_mat_rng_uni(M, samples, dim, inf, sup, rng);
   pnl_mat_sum_vect(Vsum, M, 'r');
-  pnl_vect_div_double(Vsum, samples);
+  pnl_vect_div_scalar(Vsum, samples);
   /* we should ckeck that Vsum is full of 0.5 */
   pnl_vect_free(&Vsum);
   pnl_vect_free(&inf);

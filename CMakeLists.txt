@@ -34,6 +34,7 @@ set(CMAKE_FILES_DIRECTORY "/CMakeFiles")
 
 
 option(USE_MPI "Compiles the MPI bindings for PNL. Default = on" ON)
+option(WITHOUT_DEPRECATED "Build deprecated functions. Default = off" OFF)
 option(USE_INTERNAL_BLAS "Use internal Blas & Lapack instead of the system's ones. Default = off" OFF)
 
 set(CMAKE_MODULE_PATH "${pnl_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")

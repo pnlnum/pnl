@@ -114,9 +114,9 @@ extern int pnl_hmat_object_resize(PnlHmatObject *H, int ndim, const int *dims);
 extern void pnl_mat_init(PnlMat *); 
 extern PnlMat* pnl_mat_new(); 
 extern int pnl_mat_eq (const PnlMat *, const PnlMat *);
-extern int pnl_mat_eq_double (const PnlMat *, double);
+extern int pnl_mat_eq_all (const PnlMat *, double);
 extern PnlMat* pnl_mat_create(int m, int n); 
-extern PnlMat* pnl_mat_create_from_double(int m, int n, double x);
+extern PnlMat* pnl_mat_create_from_scalar(int m, int n, double x);
 extern PnlMat* pnl_mat_create_from_zero(int m, int n);
 extern PnlMat* pnl_mat_create_from_ptr(int m, int n, const double* x);
 extern PnlMat* pnl_mat_create_from_list(int m, int n, ...); 
@@ -135,12 +135,12 @@ extern void pnl_mat_map(PnlMat *lhs, const PnlMat *rhs, double(*f)(double));/* l
 extern void pnl_mat_map_mat_inplace(PnlMat *lhs, const PnlMat *rhs, double(*f)(double,double));
 extern void pnl_mat_map_mat(PnlMat *lhs, const PnlMat *rhs1, const PnlMat *rhs2, double(*f)(double,double));
 extern int pnl_mat_find(PnlVectInt *indi, PnlVectInt *indj, char* type, int(*f)(double *), ...);
-extern void pnl_mat_plus_double(PnlMat *lhs, double x); /*lhs+=x*/
-extern void pnl_mat_minus_double(PnlMat *lhs, double x); /*lhs-=x*/
+extern void pnl_mat_plus_scalar(PnlMat *lhs, double x); /*lhs+=x*/
+extern void pnl_mat_minus_scalar(PnlMat *lhs, double x); /*lhs-=x*/
 extern void pnl_mat_plus_mat(PnlMat *lhs, const PnlMat *rhs); /*lhs+=rhs*/
 extern void pnl_mat_minus_mat(PnlMat *lhs, const PnlMat *rhs); /*lhs-=rhs*/
-extern void pnl_mat_mult_double(PnlMat *lhs, double x); /*lhs*=x*/
-extern void pnl_mat_div_double(PnlMat *lhs, double x); /*lhs/=x*/
+extern void pnl_mat_mult_scalar(PnlMat *lhs, double x); /*lhs*=x*/
+extern void pnl_mat_div_scalar(PnlMat *lhs, double x); /*lhs/=x*/
 extern PnlMat* pnl_mat_mult_mat(const PnlMat *rhs1, const PnlMat *rhs2);
 extern void pnl_mat_mult_mat_inplace(PnlMat *lhs, const PnlMat *rhs1,
                                      const PnlMat *rhs2);/*lhs=rhs1*rhs2*/
@@ -160,7 +160,7 @@ extern void pnl_mat_dgemv (char trans, double alpha, const PnlMat *A,
 extern double pnl_mat_scalar_prod(const PnlMat *A, const PnlVect *x , const PnlVect * y);
 extern int pnl_mat_cross(PnlMat *lhs, const PnlMat *A, const PnlMat *B);
 
-extern void pnl_mat_set_double(PnlMat *lhs, double x);
+extern void pnl_mat_set_all(PnlMat *lhs, double x);
 extern void pnl_mat_set_zero(PnlMat *lhs);
 extern void pnl_mat_set_id(PnlMat *lhs);
 extern void pnl_mat_set_diag(PnlMat *lhs, double x, int d);
@@ -268,7 +268,7 @@ PNL_INLINE_DECL double* pnl_mat_lget(PnlMat *v, int i, int j);
 
 extern PnlHmat* pnl_hmat_new(); 
 extern PnlHmat* pnl_hmat_create(int ndim, const int *dims); 
-extern PnlHmat* pnl_hmat_create_from_double(int ndim, const int *dims, double x); 
+extern PnlHmat* pnl_hmat_create_from_scalar(int ndim, const int *dims, double x); 
 extern PnlHmat* pnl_hmat_create_from_ptr(int ndim, const int *dims, const double *x);
 extern int pnl_hmat_resize(PnlHmat *v, int ndim, const int *dims);
 extern void pnl_hmat_free(PnlHmat **v);
@@ -276,7 +276,7 @@ extern PnlHmat* pnl_hmat_copy(const PnlHmat *H);
 extern void pnl_hmat_clone(PnlHmat *clone, const PnlHmat *H);
 extern void pnl_hmat_print(const PnlHmat *H);
 extern void pnl_hmat_plus_hmat(PnlHmat *lhs, const PnlHmat *rhs);/*lhs+=rhs*/
-extern void pnl_hmat_mult_double(PnlHmat *lhs, double x);/* lhs *=x;*/
+extern void pnl_hmat_mult_scalar(PnlHmat *lhs, double x);/* lhs *=x;*/
 
 extern void pnl_hmat_set(PnlHmat *H, int *tab, double x);
 extern double pnl_hmat_get(const PnlHmat *H, int *tab);
@@ -307,9 +307,9 @@ extern PnlVect pnl_vect_wrap_hmat(PnlHmat *H, int *t);
 extern void pnl_mat_int_init(PnlMatInt *); 
 extern PnlMatInt* pnl_mat_int_new(); 
 extern int pnl_mat_int_eq (const PnlMatInt *, const PnlMatInt *);
-extern int pnl_mat_int_eq_int (const PnlMatInt *, int);
+extern int pnl_mat_int_eq_all (const PnlMatInt *, int);
 extern PnlMatInt* pnl_mat_int_create(int m, int n); 
-extern PnlMatInt* pnl_mat_int_create_from_int(int m, int n, int x);
+extern PnlMatInt* pnl_mat_int_create_from_scalar(int m, int n, int x);
 extern PnlMatInt* pnl_mat_int_create_from_zero(int m, int n);
 extern PnlMatInt* pnl_mat_int_create_from_ptr(int m, int n, const int* x);
 extern PnlMatInt* pnl_mat_int_create_from_list(int m, int n, ...); 
@@ -323,7 +323,7 @@ extern int pnl_mat_int_resize(PnlMatInt *v, int m, int n);
 extern void pnl_mat_int_free(PnlMatInt **v);
 extern PnlMatInt* pnl_mat_int_copy(const PnlMatInt *v);
 extern void pnl_mat_int_clone(PnlMatInt *clone, const PnlMatInt *M);
-extern void pnl_mat_int_set_int(PnlMatInt *lhs, int x);/*lhs=x*/
+extern void pnl_mat_int_set_all(PnlMatInt *lhs, int x);/*lhs=x*/
 extern void pnl_mat_int_set_zero(PnlMatInt *lhs);
 extern void pnl_mat_int_set_id(PnlMatInt *lhs);
 extern void pnl_mat_int_set_diag(PnlMatInt *lhs, int x, int d);
@@ -352,12 +352,12 @@ extern void pnl_mat_int_map(PnlMatInt *lhs, const PnlMatInt *rhs, int(*f)(int));
 extern void pnl_mat_int_map_mat_inplace(PnlMatInt *lhs, const PnlMatInt *rhs, int(*f)(int,int));
 extern void pnl_mat_int_map_mat(PnlMatInt *lhs, const PnlMatInt *rhs1, const PnlMatInt *rhs2, int(*f)(int,int));
 extern int pnl_mat_int_find(PnlVectInt *indi, PnlVectInt *indj, char* type, int(*f)(int *), ...);
-extern void pnl_mat_int_plus_int(PnlMatInt *lhs, int x); /*lhs+=x*/
-extern void pnl_mat_int_minus_int(PnlMatInt *lhs, int x); /*lhs-=x*/
+extern void pnl_mat_int_plus_scalar(PnlMatInt *lhs, int x); /*lhs+=x*/
+extern void pnl_mat_int_minus_scalar(PnlMatInt *lhs, int x); /*lhs-=x*/
 extern void pnl_mat_int_plus_mat(PnlMatInt *lhs, const PnlMatInt *rhs); /*lhs+=rhs*/
 extern void pnl_mat_int_minus_mat(PnlMatInt *lhs, const PnlMatInt *rhs); /*lhs-=rhs*/
-extern void pnl_mat_int_mult_int(PnlMatInt *lhs, int x); /*lhs*=x*/
-extern void pnl_mat_int_div_int(PnlMatInt *lhs, int x); /*lhs/=x*/
+extern void pnl_mat_int_mult_scalar(PnlMatInt *lhs, int x); /*lhs*=x*/
+extern void pnl_mat_int_div_scalar(PnlMatInt *lhs, int x); /*lhs/=x*/
 extern void
 pnl_mat_int_mult_mat_term(PnlMatInt *lhs, const PnlMatInt *rhs); /*lhs=lhs.*rhs*/
 extern void
@@ -437,7 +437,7 @@ PNL_INLINE_DECL int* pnl_mat_int_lget(PnlMatInt *v, int i, int j);
 
 extern PnlHmatInt* pnl_hmat_int_new(); 
 extern PnlHmatInt* pnl_hmat_int_create(int ndim, const int *dims); 
-extern PnlHmatInt* pnl_hmat_int_create_from_int(int ndim, const int *dims, int x); 
+extern PnlHmatInt* pnl_hmat_int_create_from_scalar(int ndim, const int *dims, int x); 
 extern PnlHmatInt* pnl_hmat_int_create_from_ptr(int ndim, const int *dims, const int *x);
 extern int pnl_hmat_int_resize(PnlHmatInt *v, int ndim, const int *dims);
 extern void pnl_hmat_int_free(PnlHmatInt **v);
@@ -445,7 +445,7 @@ extern PnlHmatInt* pnl_hmat_int_copy(const PnlHmatInt *H);
 extern void pnl_hmat_int_print(const PnlHmatInt *H);
 extern void pnl_hmat_int_clone(PnlHmatInt *clone, const PnlHmatInt *H);
 extern void pnl_hmat_int_plus_hmat(PnlHmatInt *lhs, const PnlHmatInt *rhs);/*lhs+=rhs*/
-extern void pnl_hmat_int_mult_int(PnlHmatInt *lhs, int x);/* lhs *=x;*/
+extern void pnl_hmat_int_mult_scalar(PnlHmatInt *lhs, int x);/* lhs *=x;*/
 
 extern void pnl_hmat_int_set(PnlHmatInt *H, int *tab, int x);
 extern int pnl_hmat_int_get(const PnlHmatInt *H, int *tab);
@@ -479,9 +479,9 @@ extern PnlVectInt pnl_vect_int_wrap_hmat(PnlHmatInt *H, int *t);
 extern void pnl_mat_complex_init(PnlMatComplex *); 
 extern PnlMatComplex* pnl_mat_complex_new(); 
 extern int pnl_mat_complex_eq (const PnlMatComplex *, const PnlMatComplex *);
-extern int pnl_mat_complex_eq_domplex (const PnlMatComplex *, dcomplex);
+extern int pnl_mat_complex_eq_all (const PnlMatComplex *, dcomplex);
 extern PnlMatComplex* pnl_mat_complex_create(int m, int n); 
-extern PnlMatComplex* pnl_mat_complex_create_from_dcomplex(int m, int n, dcomplex x);
+extern PnlMatComplex* pnl_mat_complex_create_from_scalar(int m, int n, dcomplex x);
 extern PnlMatComplex* pnl_mat_complex_create_from_zero(int m, int n);
 extern PnlMatComplex* pnl_mat_complex_create_from_ptr(int m, int n, const dcomplex* x);
 extern PnlMatComplex* pnl_mat_complex_create_from_mat (const PnlMat *R);
@@ -496,7 +496,7 @@ extern int pnl_mat_complex_resize(PnlMatComplex *v, int m, int n);
 extern void pnl_mat_complex_free(PnlMatComplex **v);
 extern PnlMatComplex* pnl_mat_complex_copy(const PnlMatComplex *v);
 extern void pnl_mat_complex_clone(PnlMatComplex *clone, const PnlMatComplex *M);
-extern void pnl_mat_complex_set_dcomplex(PnlMatComplex *lhs, dcomplex x);/*lhs=x*/
+extern void pnl_mat_complex_set_all(PnlMatComplex *lhs, dcomplex x);/*lhs=x*/
 extern void pnl_mat_complex_set_zero(PnlMatComplex *lhs);
 extern void pnl_mat_complex_set_id(PnlMatComplex *lhs);
 extern void pnl_mat_complex_set_diag(PnlMatComplex *lhs, dcomplex x, int d);
@@ -525,12 +525,12 @@ extern void pnl_mat_complex_map(PnlMatComplex *lhs, const PnlMatComplex *rhs, dc
 extern void pnl_mat_complex_map_mat_inplace(PnlMatComplex *lhs, const PnlMatComplex *rhs, dcomplex(*f)(dcomplex,dcomplex));
 extern void pnl_mat_complex_map_mat(PnlMatComplex *lhs, const PnlMatComplex *rhs1, const PnlMatComplex *rhs2, dcomplex(*f)(dcomplex,dcomplex));
 extern int pnl_mat_complex_find(PnlVectInt *indi, PnlVectInt *indj, char* type, int(*f)(dcomplex *), ...);
-extern void pnl_mat_complex_plus_dcomplex(PnlMatComplex *lhs, dcomplex x); /*lhs+=x*/
-extern void pnl_mat_complex_minus_dcomplex(PnlMatComplex *lhs, dcomplex x); /*lhs-=x*/
+extern void pnl_mat_complex_plus_scalar(PnlMatComplex *lhs, dcomplex x); /*lhs+=x*/
+extern void pnl_mat_complex_minus_scalar(PnlMatComplex *lhs, dcomplex x); /*lhs-=x*/
 extern void pnl_mat_complex_plus_mat(PnlMatComplex *lhs, const PnlMatComplex *rhs); /*lhs+=rhs*/
 extern void pnl_mat_complex_minus_mat(PnlMatComplex *lhs, const PnlMatComplex *rhs); /*lhs-=rhs*/
-extern void pnl_mat_complex_mult_dcomplex(PnlMatComplex *lhs, dcomplex x); /*lhs*=x*/
-extern void pnl_mat_complex_div_dcomplex(PnlMatComplex *lhs, dcomplex x); /*lhs/=x*/
+extern void pnl_mat_complex_mult_scalar(PnlMatComplex *lhs, dcomplex x); /*lhs*=x*/
+extern void pnl_mat_complex_div_scalar(PnlMatComplex *lhs, dcomplex x); /*lhs/=x*/
 extern void
 pnl_mat_complex_mult_mat_term(PnlMatComplex *lhs, const PnlMatComplex *rhs); /*lhs=lhs.*rhs*/
 extern void
@@ -677,7 +677,7 @@ PNL_INLINE_DECL double* pnl_mat_complex_lget_imag(PnlMatComplex *v, int i, int j
 
 extern PnlHmatComplex* pnl_hmat_complex_new(); 
 extern PnlHmatComplex* pnl_hmat_complex_create(int ndim, const int *dims); 
-extern PnlHmatComplex* pnl_hmat_complex_create_from_dcomplex(int ndim, const int *dims, dcomplex x); 
+extern PnlHmatComplex* pnl_hmat_complex_create_from_scalar(int ndim, const int *dims, dcomplex x); 
 extern PnlHmatComplex* pnl_hmat_complex_create_from_ptr(int ndim, const int *dims, const dcomplex *x);
 extern int pnl_hmat_complex_resize(PnlHmatComplex *v, int ndim, const int *dims);
 extern void pnl_hmat_complex_free(PnlHmatComplex **v);
@@ -685,7 +685,7 @@ extern void pnl_hmat_complex_print(const PnlHmatComplex *H);
 extern PnlHmatComplex* pnl_hmat_complex_copy(const PnlHmatComplex *H);
 extern void pnl_hmat_complex_clone(PnlHmatComplex *clone, const PnlHmatComplex *H);
 extern void pnl_hmat_complex_plus_hmat(PnlHmatComplex *lhs, const PnlHmatComplex *rhs);/*lhs+=rhs*/
-extern void pnl_hmat_complex_mult_dcomplex(PnlHmatComplex *lhs, dcomplex x);/* lhs *=x;*/
+extern void pnl_hmat_complex_mult_scalar(PnlHmatComplex *lhs, dcomplex x);/* lhs *=x;*/
 
 extern void pnl_hmat_complex_set(PnlHmatComplex *H, int *tab, dcomplex x);
 extern dcomplex pnl_hmat_complex_get(const PnlHmatComplex *H, int *tab);
@@ -695,6 +695,12 @@ extern PnlVectComplex pnl_vect_complex_wrap_hmat(PnlHmatComplex *H, int *t);
 
 /*@}*/
 /*@}*/
+
+/*
+ * Some deprecated names
+ */
+
+#include "pnl/pnl_deprecated.h"
 
 #ifdef __cplusplus
 }

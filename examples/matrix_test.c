@@ -95,7 +95,7 @@ static void create_sym_pos_matrix (PnlMat *S, int n, PnlRng *rng)
   pnl_vect_rng_uni (b, n, 0., 1., rng);
 
   /* S is set to a diagonal matrix with positive eigenvalues */
-  pnl_mat_set_double (S, 0.);
+  pnl_mat_set_all (S, 0.);
   for ( i=0 ; i<S->n ; i++ )
     {
       do
@@ -118,7 +118,7 @@ static void pnl_mat_create_from_double_test()
   rows=4;
   cols=2;
   x=2.5;
-  M=pnl_mat_create_from_double(rows,cols,x);
+  M=pnl_mat_create_from_scalar(rows,cols,x);
   for ( i=0 ; i<M->mn ; i++ )
     {
       if ( M->array[i] != 2.5 )
@@ -256,7 +256,7 @@ static void pnl_mat_copy_test()
 {
   PnlMat *M1;
   PnlMat *M2;
-  M2=pnl_mat_create_from_double(4,2,3.0);
+  M2=pnl_mat_create_from_scalar(4,2,3.0);
   M1=pnl_mat_copy(M2);
   pnl_test_mat_eq_abs (M1, M2, 1E-18, "mat_copy", "");
   pnl_mat_free(&M1);
@@ -267,7 +267,7 @@ static void pnl_mat_clone_test()
 {
   PnlMat *M1;
   PnlMat *M2;
-  M2=pnl_mat_create_from_double(4,2,3.0);
+  M2=pnl_mat_create_from_scalar(4,2,3.0);
   M1=pnl_mat_create(0,0);
   pnl_mat_clone(M1,M2);
   pnl_test_mat_eq_abs (M1, M2, 1E-18, "mat_clone", "");
@@ -279,7 +279,7 @@ static void pnl_mat_map_inplace_test()
 {
   int i;
   PnlMat *M;
-  M=pnl_mat_create_from_double(4,2,3.0);
+  M=pnl_mat_create_from_scalar(4,2,3.0);
   pnl_mat_map_inplace(M,exp);
   for ( i=0 ; i<M->mn ; i++ )
     {
@@ -305,7 +305,7 @@ static void pnl_mat_plus_mat_test()
   cols=2;
   M1=pnl_mat_create_from_ptr(rows,cols,x);
   M1copy = pnl_mat_copy (M1);
-  M2=pnl_mat_create_from_double(4,2,3.0);
+  M2=pnl_mat_create_from_scalar(4,2,3.0);
   pnl_mat_plus_mat(M1,M2);
   for ( i=0 ; i<M1->mn ; i++ )
     {
@@ -327,9 +327,9 @@ static void pnl_mat_plus_double_test()
 {
   int i;
   PnlMat *M, *Mcopy;
-  M=pnl_mat_create_from_double(4,2,3.0);
+  M=pnl_mat_create_from_scalar(4,2,3.0);
   Mcopy = pnl_mat_copy (M);
-  pnl_mat_plus_double(M,0.5);
+  pnl_mat_plus_scalar(M,0.5);
   for ( i=0 ; i<M->mn ; i++ )
     {
       double expected = Mcopy->array[i] + 0.5;
@@ -405,9 +405,9 @@ static void pnl_mat_mult_double_test()
 {
   int i;
   PnlMat *M, *Mcopy;
-  M=pnl_mat_create_from_double(4,2,3.0);
+  M=pnl_mat_create_from_scalar(4,2,3.0);
   Mcopy = pnl_mat_copy (M);
-  pnl_mat_mult_double(M,0.5);
+  pnl_mat_mult_scalar(M,0.5);
   for ( i=0 ; i<M->mn ; i++ )
     {
       double expected = Mcopy->array[i] * 0.5;
@@ -867,7 +867,7 @@ static void pnl_mat_qsort_test ()
   pnl_mat_qsort_index (M, t, 'r', 'i');
   res = pnl_mat_create_from_file ("Data/sort_A_r_i.txt");
   res_t = pnl_mat_int_create_from_file ("Data/sort_A_r_i_index.txt");
-  pnl_mat_int_plus_int( res_t, -1);
+  pnl_mat_int_plus_scalar( res_t, -1);
   pnl_test_mat_eq_abs ( M, res, 1E-12, "mat_qsort r i", ""); 
   pnl_test_mat_int_eq ( t, res_t,  "mat_qsort r i (index)", ""); 
   pnl_mat_free (&res);
@@ -877,7 +877,7 @@ static void pnl_mat_qsort_test ()
   pnl_mat_qsort_index (M, t, 'r', 'd');
   res = pnl_mat_create_from_file ("Data/sort_A_r_d.txt");
   res_t = pnl_mat_int_create_from_file ("Data/sort_A_r_d_index.txt");
-  pnl_mat_int_plus_int( res_t, -1);
+  pnl_mat_int_plus_scalar( res_t, -1);
   pnl_test_mat_eq_abs ( M, res, 1E-12, "mat_qsort r d", ""); 
   pnl_test_mat_int_eq ( t, res_t,  "mat_qsort r d (index)", ""); 
   pnl_mat_free (&res);
@@ -887,7 +887,7 @@ static void pnl_mat_qsort_test ()
   pnl_mat_qsort_index (M, t, 'c', 'i');
   res = pnl_mat_create_from_file ("Data/sort_A_c_i.txt");
   res_t = pnl_mat_int_create_from_file ("Data/sort_A_c_i_index.txt");
-  pnl_mat_int_plus_int( res_t, -1);
+  pnl_mat_int_plus_scalar( res_t, -1);
   pnl_test_mat_eq_abs ( M, res, 1E-12, "mat_qsort c i", ""); 
   pnl_test_mat_int_eq ( t, res_t,  "mat_qsort c i (index)", ""); 
   pnl_mat_free (&res);
@@ -897,7 +897,7 @@ static void pnl_mat_qsort_test ()
   pnl_mat_qsort_index (M, t, 'c', 'd');
   res = pnl_mat_create_from_file ("Data/sort_A_c_d.txt");
   res_t = pnl_mat_int_create_from_file ("Data/sort_A_c_d_index.txt");
-  pnl_mat_int_plus_int( res_t, -1);
+  pnl_mat_int_plus_scalar( res_t, -1);
   pnl_test_mat_eq_abs ( M, res, 1E-12, "mat_qsort c d", ""); 
   pnl_test_mat_int_eq ( t, res_t,  "mat_qsort c d (index)", ""); 
   pnl_mat_free (&res);
@@ -936,7 +936,7 @@ static void pnl_mat_triangular_inverse_test ()
   PnlVect *d;
   int n = 5;
 
-  d = pnl_vect_create_from_double (n, 1.);
+  d = pnl_vect_create_from_scalar (n, 1.);
   Id = pnl_mat_create_diag (d);
   A = pnl_mat_create (n, n);
   B = pnl_mat_create (n, n);
@@ -968,7 +968,7 @@ static void pnl_mat_inverse_test ()
   PnlVect *d;
   int n = 5;
 
-  d = pnl_vect_create_from_double (n, 1.);
+  d = pnl_vect_create_from_scalar (n, 1.);
   Id = pnl_mat_create_diag (d);
   A = pnl_mat_create (n, n);
   invA = pnl_mat_create (n, n);

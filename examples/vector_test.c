@@ -45,7 +45,7 @@ static void pnl_vect_copy_test()
 {
   PnlVect *v1;
   PnlVect *v2;
-  v2=pnl_vect_create_from_double(4,3.0);
+  v2=pnl_vect_create_from_scalar(4,3.0);
   v1=pnl_vect_copy(v2);
   pnl_test_vect_eq_abs (v1, v2, 1E-18, "vect_copy", "");
   pnl_vect_free(&v1);
@@ -56,7 +56,7 @@ static void pnl_vect_clone_test()
 {
   PnlVect *v1;
   PnlVect *v2;
-  v2=pnl_vect_create_from_double(4,3.0);
+  v2=pnl_vect_create_from_scalar(4,3.0);
   v1=pnl_vect_create(0);
   pnl_vect_clone(v1,v2);
   pnl_test_vect_eq_abs (v1, v2, 1E-18, "vect_clone", "");
@@ -136,7 +136,7 @@ static void pnl_vect_plus_vect_test()
   PnlVect *v2;
   double x[4]={1.0, 5.0, 3.0, 8.0};
   v1=pnl_vect_create_from_ptr(4,x);
-  v2=pnl_vect_create_from_double(4,3.0);
+  v2=pnl_vect_create_from_scalar(4,3.0);
   pnl_vect_plus_vect(v1,v2);
   for ( i=0; i<4; i++ )
     {
@@ -156,7 +156,7 @@ static void pnl_vect_map_inplace_test()
 {
   int i;
   PnlVect *v;
-  v=pnl_vect_create_from_double(4,3.0);
+  v=pnl_vect_create_from_scalar(4,3.0);
   pnl_vect_map_inplace(v,exp);
   for ( i=0; i<4; i++ )
     {
@@ -171,40 +171,40 @@ J1:
   pnl_vect_free(&v);
 }
 
-static void pnl_vect_plus_double_test()
+static void pnl_vect_plus_scalar_test()
 {
   int i;
   PnlVect *v;
-  v=pnl_vect_create_from_double(4,3.0);
-  pnl_vect_plus_double(v,0.5);
+  v=pnl_vect_create_from_scalar(4,3.0);
+  pnl_vect_plus_scalar(v,0.5);
   for ( i=0; i<4; i++ )
     {
       if ( GET(v,i) != 3.5 )
         {
-          pnl_test_set_fail ("vect_plus_double", GET(v,i), 3.5);
+          pnl_test_set_fail ("vect_plus_scalar", GET(v,i), 3.5);
           goto J1;
         }
     }
-  pnl_test_set_ok ("vect_plus_double");
+  pnl_test_set_ok ("vect_plus_scalar");
 J1:
   pnl_vect_free(&v);
 }
 
-static void pnl_vect_mult_double_test()
+static void pnl_vect_mult_scalar_test()
 {
   int i;
   PnlVect *v;
-  v=pnl_vect_create_from_double(4,3.0);
-  pnl_vect_mult_double(v,0.5);
+  v=pnl_vect_create_from_scalar(4,3.0);
+  pnl_vect_mult_scalar(v,0.5);
   for ( i=0; i<4; i++ )
     {
       if ( GET(v,i) != 1.5 )
         {
-          pnl_test_set_fail ("vect_mult_double", GET(v,i), 1.5);
+          pnl_test_set_fail ("vect_mult_scalar", GET(v,i), 1.5);
           goto J1;
         }
     }
-  pnl_test_set_ok ("vect_mult_double");
+  pnl_test_set_ok ("vect_mult_scalar");
 J1:
   pnl_vect_free(&v);
 }
@@ -213,13 +213,13 @@ static void pnl_vect_inv_term_test()
 {
   int i;
   PnlVect *v;
-  v=pnl_vect_create_from_double(4,3.0);
+  v=pnl_vect_create_from_scalar(4,3.0);
   pnl_vect_inv_term(v);
   for ( i=0; i<4; i++ )
     {
       if ( GET(v,i) != 1. / 3. )
         {
-          pnl_test_set_fail ("vect_mult_double", GET(v,i), 1 / 3.);
+          pnl_test_set_fail ("vect_mult_scalar", GET(v,i), 1 / 3.);
           goto J1;
         }
     }
@@ -235,7 +235,7 @@ static void pnl_vect_div_vect_term_test()
   PnlVect *v2;
   double x[4]={1.0, 5.0, 3.0, 8.0};
   v1=pnl_vect_create_from_ptr(4,x);
-  v2=pnl_vect_create_from_double(4,3.0);
+  v2=pnl_vect_create_from_scalar(4,3.0);
   pnl_vect_div_vect_term(v1,v2);
   for ( i=0; i<4; i++ )
     {
@@ -258,7 +258,7 @@ static void pnl_vect_mult_vect_term_test()
   PnlVect *v2;
   double x[4]={1.0, 5.0, 3.0, 8.0};
   v1=pnl_vect_create_from_ptr(4,x);
-  v2=pnl_vect_create_from_double(4,3.0);
+  v2=pnl_vect_create_from_scalar(4,3.0);
   pnl_vect_mult_vect_term(v1,v2);
   for ( i=0; i<4; i++ )
     {
@@ -306,7 +306,7 @@ static void pnl_vect_map_test()
   PnlVect *v1;
   PnlVect *v2;
   v1=pnl_vect_create(0);
-  v2=pnl_vect_create_from_double(4,3.0);
+  v2=pnl_vect_create_from_scalar(4,3.0);
   pnl_vect_map(v1,v2,exp);
   for ( i=0; i<4; i++ )
     {
@@ -330,7 +330,7 @@ static void pnl_vect_scalar_prod_test()
   double scalar, res;
   double x[4]={1.0, 5.0, 3.0, 8.0};
   v1=pnl_vect_create_from_ptr(4,x);
-  v2=pnl_vect_create_from_double(4,3.0);
+  v2=pnl_vect_create_from_scalar(4,3.0);
   scalar = pnl_vect_scalar_prod(v1,v2);
   res = 0.;
   for ( i=0 ; i<4 ; i++ )
@@ -466,8 +466,8 @@ int main (int argc, char *argv[])
   pnl_vect_clone_test();
   pnl_vect_plus_vect_test();
   pnl_vect_map_inplace_test();
-  pnl_vect_plus_double_test();
-  pnl_vect_mult_double_test();
+  pnl_vect_plus_scalar_test();
+  pnl_vect_mult_scalar_test();
   pnl_vect_inv_term_test();
   pnl_vect_div_vect_term_test();
   pnl_vect_mult_vect_term_test();

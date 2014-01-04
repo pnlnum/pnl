@@ -243,7 +243,7 @@ void FUNCTION(pnl_mat,dgemm) (char transA, char transB, BASE alpha, const TYPE(P
     }
   else if ( NEQ(beta, ONE) )
     {
-      FUNCTION(pnl_mat,CONCAT2(mult_,BASE)) (C, beta); 
+      FUNCTION(pnl_mat,mult_scalar) (C, beta); 
     }
   if ( EQ(alpha,ZERO) ) return;
 

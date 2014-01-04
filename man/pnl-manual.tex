@@ -212,7 +212,7 @@ possible use with a C++ compiler. The header files must be include using
     \begin{verbatim}
     PnlVectComplex *v1;
     PnlVectComplex v2;
-    v1 = pnl_vect_complex_create_from_complex (5, Complex(0., 1.));
+    v1 = pnl_vect_complex_create_from_scalar (5, Complex(0., 1.));
     v2 = pnl_vect_complex_wrap_subvect (v1, 1, 2);
 
     ...
@@ -290,7 +290,7 @@ possible use with a C++ compiler. The header files must be include using
     Example:
     \begin{verbatim}
     PnlVect *v1, *v2;
-    v1 = pnl_vect_create_from_double (5, 2.5);
+    v1 = pnl_vect_create_from_scalar (5, 2.5);
     v2 = pnl_vect_copy (v1);
     \end{verbatim}
     \verb!v1! and \verb!v2! are two vectors of size 5 with all their elements
@@ -304,7 +304,7 @@ possible use with a C++ compiler. The header files must be include using
     Example:
     \begin{verbatim}
     PnlVect *v1, *v2;
-    v1 = pnl_vect_create_from_double (5, 2.5);
+    v1 = pnl_vect_create_from_scalar (5, 2.5);
     v2 = pnl_vect_new ();
     pnl_vect_clone (v2, v1);
     \end{verbatim}

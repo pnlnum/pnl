@@ -97,7 +97,7 @@ int FUNCTION(pnl_mat,pchol) (TYPE(PnlMat) *M, double tol, int *rank, PnlVectInt 
         }
     }
   /* C indices start at 0 */
-  pnl_vect_int_minus_int (p, 1);
+  pnl_vect_int_minus_scalar (p, 1);
   return OK;
 }
 
@@ -124,7 +124,7 @@ int FUNCTION(pnl_mat,lu) (TYPE(PnlMat) *A, PnlPermutation *p)
     }
   FUNCTION(pnl_mat,sq_transpose) (A);
   /* C indices start at 0 */
-  pnl_vect_int_minus_int (p, 1);
+  pnl_vect_int_minus_scalar (p, 1);
   return OK;
 }
 

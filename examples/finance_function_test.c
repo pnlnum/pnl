@@ -90,12 +90,12 @@ static void test_pnl_finance_function_vol_impli()
   PnlMat *Vol;
   PnlMat *VolImpli;
   
-  Strike = pnl_vect_create_from_double(N, k0);
-  Matu = pnl_vect_create_from_double(N, tmax);
+  Strike = pnl_vect_create_from_scalar(N, k0);
+  Matu = pnl_vect_create_from_scalar(N, tmax);
   IsCall = pnl_mat_int_create(N, N);
-  Price = pnl_mat_create_from_double(N, N, 0.0);
-  Vol = pnl_mat_create_from_double(N, N, 0.0);
-  VolImpli = pnl_mat_create_from_double(N, N, 0.0);
+  Price = pnl_mat_create_from_scalar(N, N, 0.0);
+  Vol = pnl_mat_create_from_scalar(N, N, 0.0);
+  VolImpli = pnl_mat_create_from_scalar(N, N, 0.0);
   for(i=0;i<Strike->size;i++)  LET(Strike,i)-=(-N/2+i)*k0/N;
   for(j=0;j<Matu->size;j++) LET(Matu,j)*=(double)(j+1)/(double)(N);
   for(i=0;i<Strike->size;i++)  

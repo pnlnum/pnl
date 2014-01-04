@@ -180,7 +180,7 @@ static void multiroot_newton_test ()
   n = 5;
   x_eps = fx_eps = 1E-4;
   x0 = pnl_vect_create_from_ptr (n, init);
-  true_sol = pnl_vect_create_from_double (n, 1.);
+  true_sol = pnl_vect_create_from_scalar (n, 1.);
   x_sol = pnl_vect_new ();
   Fn.F = Rosenbrock_der;
   Fn.DF = Rosenbrock_hess;
@@ -286,13 +286,13 @@ static void test_hybrX ()
   diag = pnl_vect_create (n);
 
   /* the following starting values provide a rough solution. */
-  pnl_vect_set_double (x, -1);
+  pnl_vect_set_all (x, -1);
 
   /* default value for xtol */
   xtol = 0;
 
   maxfev = 2000;
-  pnl_vect_set_double (diag, 1);
+  pnl_vect_set_all (diag, 1);
 
   /*
    * Test without Jacobian
@@ -353,7 +353,7 @@ static void test_lmdif_and_lmder ()
 
   /* the following starting values provide a rough fit. */
 
-  pnl_vect_set_double (x, 1.);
+  pnl_vect_set_all (x, 1.);
   /* default vlaues */
   tol = 0;
   maxfev = 0;

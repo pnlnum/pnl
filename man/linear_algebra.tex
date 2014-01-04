@@ -91,7 +91,7 @@ There are no special functions to access the size of a vector, instead the field
   \sshortdescribe Create a new \refstruct{PnlVect} pointer.  
 \item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_from_zero}{int size}
   \sshortdescribe Create a new \refstruct{PnlVect} pointer and sets it to zero.  
-\item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_from_double}
+\item \describefun{\refstruct{PnlVect} \ptr }{pnl_vect_create_from_scalar}
   {int size, double x}
   \sshortdescribe Create a new \refstruct{PnlVect} pointer and sets all
   elements t \var{x}.  
@@ -180,7 +180,7 @@ There are no special functions to access the size of a vector, instead the field
   vector. \var{t} must be of size \var{size}.
 \end{itemize}  
 
-\subparagraph{Accessing elements.}
+\subparagraph{Accessing elements}
 
 If it is supported by the compiler, the following functions are declared
 inline. To speed up these functions, you can use the macro constant
@@ -193,7 +193,7 @@ inline. To speed up these functions, you can use the macro constant
   \sshortdescribe Return the value of v[i].  
 \item \describefun{void}{pnl_vect_lget}{\refstruct{PnlVect} \ptr v, int i}
   \sshortdescribe Return the address of v[i].  
-\item \describefun{void}{pnl_vect_set_double}{\refstruct{PnlVect} \ptr v, double x}
+\item \describefun{void}{pnl_vect_set_all}{\refstruct{PnlVect} \ptr v, double x}
   \sshortdescribe Set all elements to x.  
 \item \describefun{void}{pnl_vect_set_zero}{\refstruct{PnlVect} \ptr v}
   \sshortdescribe Set all elements to zero.  
@@ -234,13 +234,13 @@ Equivalently to these functions, there exist macros for {\bf \refstruct{PnlVect}
 \begin{itemize}
 \item \describefun{void}{pnl_vect_minus}{\refstruct{PnlVect} \ptr lhs}
   \sshortdescribe In-place unary minus
-\item \describefun{void}{pnl_vect_plus_double}{\refstruct{PnlVect} \ptr lhs, double x}
+\item \describefun{void}{pnl_vect_plus_scalar}{\refstruct{PnlVect} \ptr lhs, double x}
   \sshortdescribe In-place vector scalar addition  
-\item \describefun{void}{pnl_vect_minus_double}{\refstruct{PnlVect} \ptr lhs, double x}
+\item \describefun{void}{pnl_vect_minus_scalar}{\refstruct{PnlVect} \ptr lhs, double x}
   \sshortdescribe In-place vector scalar substraction  
-\item \describefun{void}{pnl_vect_mult_double}{\refstruct{PnlVect} \ptr lhs, double x}
+\item \describefun{void}{pnl_vect_mult_scalar}{\refstruct{PnlVect} \ptr lhs, double x}
   \sshortdescribe In-place vector scalar multiplication  
-\item \describefun{void}{pnl_vect_div_double}{\refstruct{PnlVect} \ptr lhs, double x}
+\item \describefun{void}{pnl_vect_div_scalar}{\refstruct{PnlVect} \ptr lhs, double x}
   \sshortdescribe In-place vector scalar division  
 \end{itemize}
 
@@ -335,7 +335,7 @@ Equivalently to these functions, there exist macros for {\bf \refstruct{PnlVect}
     const \refstruct{PnlVect} \ptr V2}
   \sshortdescribe Test if two vectors are equal. Returns \var{TRUE} or
   \var{FALSE}.
-\item \describefun{int}{pnl_vect_eq_double}{const \refstruct{PnlVect} \ptr v,
+\item \describefun{int}{pnl_vect_eq_all}{const \refstruct{PnlVect} \ptr v,
     double x}
   \sshortdescribe Test if all the components of \var{v} are equal to
   \var{x}. Returns \var{TRUE} or \var{FALSE}.
@@ -664,7 +664,7 @@ and the size of the matrix.
 \item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_create}{int m, int n}
   \sshortdescribe Create a \refstruct{PnlMat}  with \var{m} rows and \var{n} columns.
 
-\item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_create_from_double}{int m, int n, double x}
+\item \describefun{\refstruct{PnlMat} \ptr }{pnl_mat_create_from_scalar}{int m, int n, double x}
   \sshortdescribe Create a \refstruct{PnlMat} with \var{m} rows and \var{n}
   columns and sets all the elements to \var{x}.
 
@@ -771,7 +771,7 @@ inline. To speed up these functions, you can use the macro constant
 \item \describefun{double \ptr }{pnl_mat_lget}{\refstruct{PnlMat} \ptr M, int i, int j}
   \sshortdescribe Return the address of M[i, j] for use as a lvalue.
 
-\item \describefun{void}{pnl_mat_set_double}{\refstruct{PnlMat} \ptr M, double x}
+\item \describefun{void}{pnl_mat_set_all}{\refstruct{PnlMat} \ptr M, double x}
   \sshortdescribe Set all elements of \var{M} to \var{x}.
 \item \describefun{void}{pnl_mat_set_zero}{\refstruct{PnlMat} \ptr M}
   \sshortdescribe Set all elements of \var{M} to \var{0}.
@@ -860,16 +860,16 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
 
 \paragraph{Applying external operations}
 \begin{itemize}
-\item \describefun{void}{pnl_mat_plus_double}{\refstruct{PnlMat} \ptr lhs, double x}
+  \item \describefun{void}{pnl_mat_plus_scalar}{\refstruct{PnlMat} \ptr lhs, double x}
   \sshortdescribe In-place matrix scalar addition  
 
-\item \describefun{void}{pnl_mat_minus_double}{\refstruct{PnlMat} \ptr lhs, double x}
+\item \describefun{void}{pnl_mat_minus_scalar}{\refstruct{PnlMat} \ptr lhs, double x}
   \sshortdescribe In-place matrix scalar substraction  
 
-\item \describefun{void}{pnl_mat_mult_double}{\refstruct{PnlMat} \ptr lhs, double x}
+\item \describefun{void}{pnl_mat_mult_scalar}{\refstruct{PnlMat} \ptr lhs, double x}
   \sshortdescribe In-place matrix scalar multiplication  
 
-\item \describefun{void}{pnl_mat_div_double}{\refstruct{PnlMat} \ptr lhs, double x}
+\item \describefun{void}{pnl_mat_div_scalar}{\refstruct{PnlMat} \ptr lhs, double x}
   \sshortdescribe In-place matrix scalar division  
 
 \end{itemize}
@@ -944,7 +944,7 @@ there exist macros for {\bf \refstruct{PnlMat} only}.
     const \refstruct{PnlMat} \ptr M2}
   \sshortdescribe Test if two matrices are equal. Returns \var{TRUE} or
   \var{FALSE}.
-\item \describefun{int}{pnl_mat_eq_double}{const \refstruct{PnlMat} \ptr M,
+\item \describefun{int}{pnl_mat_eq_all}{const \refstruct{PnlMat} \ptr M,
     double x}
   \sshortdescribe Test if all the components of \var{M} are equal to
   \var{x}. Returns \var{TRUE} or \var{FALSE}.
@@ -1485,10 +1485,10 @@ This type is used to store the LU decomposition of a tridiagonal matrix.
     \sshortdescribe Create a \refstruct{PnlTridiagMat} with size 0
   \item \describefun{\refstruct{PnlTridiagMat} \ptr }{pnl_tridiag_mat_create}{int size}
     \sshortdescribe Create a \refstruct{PnlTridiagMat} with size \var{size}
-  \item \describefun{\refstruct{PnlTridiagMat} \ptr }{pnl_tridiag_mat_create_from_double}{int size, double x}
+  \item \describefun{\refstruct{PnlTridiagMat} \ptr }{pnl_tridiag_mat_create_from_scalar}{int size, double x}
     \sshortdescribe Create a \refstruct{PnlTridiagMat} with the 3 diagonals
     filled with \var{x}
-  \item \describefun{\refstruct{PnlTridiagMat} \ptr }{pnl_tridiag_mat_create_from_two_double}{int size, double x, double y}
+  \item \describefun{\refstruct{PnlTridiagMat} \ptr }{pnl_tridiag_mat_create_from_two_scalar}{int size, double x, double y}
     \sshortdescribe Create a \refstruct{PnlTridiagMat}  with the diagonal
     filled with \var{x} and the upper and lower diagonals filled with \var{y}
   \item \describefun{\refstruct{PnlTridiagMat}
@@ -1543,13 +1543,13 @@ inline. To speed up these functions, you can use the macro constant
     \sshortdescribe In-place matrix matrix addition  
   \item \describefun{void}{pnl_tridiag_mat_minus_tridiag_mat}{\refstruct{PnlTridiagMat} \ptr lhs, const \refstruct{PnlTridiagMat} \ptr rhs}
     \sshortdescribe In-place matrix matrix substraction  
-  \item \describefun{void}{pnl_tridiag_mat_plus_double}{\refstruct{PnlTridiagMat} \ptr lhs, double x}
+  \item \describefun{void}{pnl_tridiag_mat_plus_scalar}{\refstruct{PnlTridiagMat} \ptr lhs, double x}
     \sshortdescribe In-place matrix scalar addition  
-  \item \describefun{void}{pnl_tridiag_mat_minus_double}{\refstruct{PnlTridiagMat} \ptr lhs, double x}
+  \item \describefun{void}{pnl_tridiag_mat_minus_scalar}{\refstruct{PnlTridiagMat} \ptr lhs, double x}
     \sshortdescribe In-place matrix scalar substraction  
-  \item \describefun{void}{pnl_tridiag_mat_mult_double}{\refstruct{PnlTridiagMat} \ptr lhs, double x}
+  \item \describefun{void}{pnl_tridiag_mat_mult_scalar}{\refstruct{PnlTridiagMat} \ptr lhs, double x}
     \sshortdescribe In-place matrix scalar multiplication  
-  \item \describefun{void}{pnl_tridiag_mat_div_double}{\refstruct{PnlTridiagMat} \ptr lhs, double x}
+  \item \describefun{void}{pnl_tridiag_mat_div_scalar}{\refstruct{PnlTridiagMat} \ptr lhs, double x}
     \sshortdescribe In-place matrix scalar division
 \end{itemize}
 
@@ -1706,7 +1706,7 @@ inline. To speed up these functions, you can use the macro constant
 \item \describefun{void}{pnl_band_mat_lget}{\refstruct{PnlBandMat}
     \ptr M, int i, int j}
     \sshortdescribe Return the address $\&(M_{i, j})$.
-\item \describefun{void}{pnl_band_mat_set_double}{\refstruct{PnlBandMat}
+\item \describefun{void}{pnl_band_mat_set_all}{\refstruct{PnlBandMat}
     \ptr M, double x}
     \sshortdescribe Set all the elements of \var{M} to \var{x}.
 
@@ -1718,19 +1718,19 @@ inline. To speed up these functions, you can use the macro constant
 \subparagraph{Element wise operations}
 
 \begin{itemize}
-  \item \describefun{void}{pnl_band_mat_plus_double}{\refstruct{PnlBandMat} \ptr lhs, 
+  \item \describefun{void}{pnl_band_mat_plus_scalar}{\refstruct{PnlBandMat} \ptr lhs, 
   double x} 
     \sshortdescribe In-place addition, \var{lhs += x} 
 
-  \item \describefun{void}{pnl_band_mat_minus_double}{\refstruct{PnlBandMat} \ptr lhs, 
+  \item \describefun{void}{pnl_band_mat_minus_scalar}{\refstruct{PnlBandMat} \ptr lhs, 
   double x} 
   \sshortdescribe In-place substraction \var{lhs -= x} 
 
-\item \describefun{void}{pnl_band_mat_div_double}{\refstruct{PnlBandMat}
+\item \describefun{void}{pnl_band_mat_div_scalar}{\refstruct{PnlBandMat}
   \ptr lhs, double x} 
   \sshortdescribe \var{lhs = lhs ./ x}
 
-\item \describefun{void}{pnl_band_mat_mult_double}{\refstruct{PnlBandMat}
+\item \describefun{void}{pnl_band_mat_mult_scalar}{\refstruct{PnlBandMat}
   \ptr lhs, double x} 
   \sshortdescribe \var{lhs = lhs * x}
 
@@ -2028,7 +2028,7 @@ the above table.
   \var{dims}
   
 \item 
-  \describefun{\refstruct{PnlHmat} \ptr }{pnl_hmat_create_from_double}{int ndim, const int \ptr dims, double x}
+  \describefun{\refstruct{PnlHmat} \ptr }{pnl_hmat_create_from_scalar}{int ndim, const int \ptr dims, double x}
   \sshortdescribe Create a \refstruct{PnlHmat} with \var{ndim} dimensions given
   by $\prod_i \var{dims[i]}$ filled with \var{x}.
   
@@ -2088,7 +2088,7 @@ the above table.
 \item \describefun{void}{pnl_hmat_plus_hmat}{\refstruct{PnlHmat} \ptr lhs, const \refstruct{PnlHmat} \ptr rhs}
   \sshortdescribe Compute \var{lhs += rhs}.
   
-\item \describefun{void}{pnl_hmat_mult_double}{\refstruct{PnlHmat} \ptr lhs, double x}
+\item \describefun{void}{pnl_hmat_mult_scalar}{\refstruct{PnlHmat} \ptr lhs, double x}
   \sshortdescribe Compute \var{lhs *= x} where x is a real number.
 \end{itemize}
 

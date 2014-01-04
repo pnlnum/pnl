@@ -229,7 +229,7 @@ PnlMat* pnl_band_mat_to_mat(const PnlBandMat *BM)
 {
   PnlMat *M;
   int i, j;
-  M = pnl_mat_create_from_double (BM->m, BM->n, 0.);
+  M = pnl_mat_create_from_scalar (BM->m, BM->n, 0.);
   for ( j=0 ; j<BM->n ; j++ )
     {
       for ( i=MAX(0, j - BM->nu) ; i<MIN(BM->m, j+BM->nl+1) ; i++ )
@@ -323,7 +323,7 @@ static void __pnl_band_mat_apply_op(PnlBandMat *BM, double x, double (*op)(doubl
  * @param x scalar
  * @return  BM += x
  */
-void pnl_band_mat_plus_double(PnlBandMat *BM , double x)
+void pnl_band_mat_plus_scalar(PnlBandMat *BM , double x)
 {
   __pnl_band_mat_apply_op (BM, x, __op_plus);
 }
@@ -335,7 +335,7 @@ void pnl_band_mat_plus_double(PnlBandMat *BM , double x)
  * @param x scalar
  * @return  BM -= x
  */
-void pnl_band_mat_minus_double(PnlBandMat *BM , double x)
+void pnl_band_mat_minus_scalar(PnlBandMat *BM , double x)
 {
   __pnl_band_mat_apply_op (BM, x, __op_minus);
 }
@@ -347,7 +347,7 @@ void pnl_band_mat_minus_double(PnlBandMat *BM , double x)
  * @param x scalar
  * @return  BM *= x
  */
-void pnl_band_mat_mult_double(PnlBandMat *BM , double x)
+void pnl_band_mat_mult_scalar(PnlBandMat *BM , double x)
 {
   __pnl_band_mat_apply_op (BM, x, __op_mult);
 }
@@ -359,7 +359,7 @@ void pnl_band_mat_mult_double(PnlBandMat *BM , double x)
  * @param x scalar
  * @return  BM /= x
  */
-void pnl_band_mat_div_double(PnlBandMat *BM , double x)
+void pnl_band_mat_div_scalar(PnlBandMat *BM , double x)
 {
   __pnl_band_mat_apply_op (BM, x, __op_div);
 }
@@ -467,13 +467,13 @@ void pnl_band_mat_set(PnlBandMat * BM,int i,int j,double x)
 }
 
 /**
- * pnl_band_mat_set_double
+ * pnl_band_mat_set_all
  * put value x for all entries of M,
  *
  * @param BM a PnlBandMat.
  * @param x double.
  */
-void pnl_band_mat_set_double(PnlBandMat*  BM,double x)
+void pnl_band_mat_set_all(PnlBandMat*  BM,double x)
 {
   int i, j;
   for ( j=0 ; j<BM->n_band ; j++ )

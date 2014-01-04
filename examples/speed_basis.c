@@ -82,8 +82,8 @@ static void speed_sparse_basis ()
   alpha = pnl_vect_new ();
   alphar = pnl_vect_new ();
   x = pnl_vect_new ();
-  xmin = pnl_vect_create_from_double (d, XMIN);
-  xmax = pnl_vect_create_from_double (d, XMAX);
+  xmin = pnl_vect_create_from_scalar (d, XMIN);
+  xmax = pnl_vect_create_from_scalar (d, XMAX);
   X = pnl_mat_create (n, d);
   y = pnl_vect_create (n);
 

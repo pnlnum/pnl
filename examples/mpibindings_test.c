@@ -343,8 +343,8 @@ static int send_list ()
   PnlTridiagMat *T;
 
   L = pnl_list_new ();
-  M = pnl_mat_create_from_double (2, 3, 3.5);
-  T = pnl_tridiag_mat_create_from_double (4, 0.5);
+  M = pnl_mat_create_from_scalar (2, 3, 3.5);
+  T = pnl_tridiag_mat_create_from_scalar (4, 0.5);
   pnl_list_insert_first (L, PNL_OBJECT(M));
   pnl_list_insert_first (L, PNL_OBJECT(T));
   pnl_list_print (L);

@@ -167,7 +167,7 @@ PnlTridiagMat* pnl_tridiag_mat_create(int size)
  * @param y used to fill the extra diagonal matrix with
  * @return a PnlTridiagMat pointer
  */
-PnlTridiagMat* pnl_tridiag_mat_create_from_two_double(int size, double x, double y)
+PnlTridiagMat* pnl_tridiag_mat_create_from_two_scalar(int size, double x, double y)
 {
   PnlTridiagMat *mat;
   int i;
@@ -190,9 +190,9 @@ PnlTridiagMat* pnl_tridiag_mat_create_from_two_double(int size, double x, double
  * @param x used to fill the three diagonals
  * @return a PnlTridiagMat pointer
  */
-PnlTridiagMat* pnl_tridiag_mat_create_from_double(int size, double x)
+PnlTridiagMat* pnl_tridiag_mat_create_from_scalar(int size, double x)
 {
-  return pnl_tridiag_mat_create_from_two_double (size, x, x);
+  return pnl_tridiag_mat_create_from_two_scalar (size, x, x);
 }
 
 /**
@@ -276,7 +276,7 @@ PnlMat* pnl_tridiag_mat_to_mat (const PnlTridiagMat * T)
 {
   PnlMat *M;
   int i;
-  M=pnl_mat_create_from_double(T->size, T->size,0.);
+  M=pnl_mat_create_from_scalar(T->size, T->size,0.);
   for (i=0; i<T->size-1; i++)
     {
       PNL_MLET(M, i, i+1) = T->DU[i];
@@ -497,7 +497,7 @@ void pnl_tridiag_mat_minus_tridiag_mat(PnlTridiagMat *lhs, const PnlTridiagMat *
  * @param  x : scalar
  * @return  lhs = lhs+x
  */
-void pnl_tridiag_mat_plus_double(PnlTridiagMat *lhs, double x)
+void pnl_tridiag_mat_plus_scalar(PnlTridiagMat *lhs, double x)
 {
   __pnl_tridiag_mat_apply_op(lhs, x, __op_plus);
 }
@@ -509,7 +509,7 @@ void pnl_tridiag_mat_plus_double(PnlTridiagMat *lhs, double x)
  * @param  x : scalar
  * @return  lhs = lhs-x
  */
-void pnl_tridiag_mat_minus_double(PnlTridiagMat *lhs, double x)
+void pnl_tridiag_mat_minus_scalar(PnlTridiagMat *lhs, double x)
 {
   __pnl_tridiag_mat_apply_op(lhs, x, __op_minus);
 }
@@ -521,7 +521,7 @@ void pnl_tridiag_mat_minus_double(PnlTridiagMat *lhs, double x)
  * @param x : scalar
  * @return  lhs = lhs*x
  */
-void pnl_tridiag_mat_mult_double(PnlTridiagMat *lhs, double x)
+void pnl_tridiag_mat_mult_scalar(PnlTridiagMat *lhs, double x)
 {
   __pnl_tridiag_mat_apply_op(lhs, x, __op_mult);
 }
@@ -534,7 +534,7 @@ void pnl_tridiag_mat_mult_double(PnlTridiagMat *lhs, double x)
  * @param x : scalar
  * @return  lhs = lhs*x
  */
-void pnl_tridiag_mat_div_double(PnlTridiagMat *lhs, double x)
+void pnl_tridiag_mat_div_scalar(PnlTridiagMat *lhs, double x)
 {
   __pnl_tridiag_mat_apply_op(lhs, x, __op_div);
 }
@@ -732,7 +732,7 @@ void pnl_tridiag_mat_lAxpby (double l, const PnlTridiagMat *A, const PnlVect *x,
       else
         {
           beta = 1.;
-          pnl_vect_mult_double (y, b);
+          pnl_vect_mult_scalar (y, b);
         }
     }
 
@@ -743,7 +743,7 @@ void pnl_tridiag_mat_lAxpby (double l, const PnlTridiagMat *A, const PnlVect *x,
               A->DU, x->array, &n, &beta, y->array, &n);
   if (l != 0. && l != 1.&& l != 1.)
     {
-      pnl_vect_mult_double (y, l);
+      pnl_vect_mult_scalar (y, l);
     }
 }
 

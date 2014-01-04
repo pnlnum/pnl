@@ -1,0 +1,92 @@
+#ifndef _PNL_DEPRECATED_H
+#define _PNL_DEPRECATED_H 
+
+#ifndef WITHOUT_DEPRECATED
+
+/* Some deprecated names */
+
+#define pnl_vect_create_from_double pnl_vect_create_from_scalar
+#define pnl_vect_int_create_from_int pnl_vect_int_create_from_scalar
+#define pnl_vect_complex_create_from_dcomplex pnl_vect_complex_create_from_scalar
+
+#define pnl_vect_resize_from_double pnl_vect_resize_from_scalar
+#define pnl_vect_int_resize_from_int pnl_vect_int_resize_from_scalar
+#define pnl_vect_complex_resize_from_dcomplex pnl_vect_complex_resize_from_scalar
+
+#define pnl_vect_set_double pnl_vect_set_all
+#define pnl_vect_int_set_int pnl_vect_int_set_all
+#define pnl_vect_complex_set_dcomplex pnl_vect_complex_set_all
+
+#define pnl_vect_eq_double pnl_vect_eq_all
+#define pnl_vect_int_eq_int pnl_vect_int_eq_all
+#define pnl_vect_complex_eq_dcomplex pnl_vect_complex_eq_all
+
+#define pnl_vect_plus_double pnl_vect_plus_scalar
+#define pnl_vect_int_plus_int pnl_vect_int_plus_scalar
+#define pnl_vect_complex_plus_dcomplex pnl_vect_complex_plus_scalar
+
+#define pnl_vect_minus_double pnl_vect_minus_scalar
+#define pnl_vect_int_minus_int pnl_vect_int_minus_scalar
+#define pnl_vect_complex_minus_dcomplex pnl_vect_complex_minus_scalar
+
+#define pnl_vect_mult_double pnl_vect_mult_scalar
+#define pnl_vect_int_mult_int pnl_vect_int_mult_scalar
+#define pnl_vect_complex_mult_dcomplex pnl_vect_complex_mult_scalar
+
+#define pnl_vect_div_double pnl_vect_div_scalar
+#define pnl_vect_int_div_int pnl_vect_int_div_scalar
+#define pnl_vect_complex_div_dcomplex pnl_vect_complex_div_scalar
+
+#define pnl_mat_create_from_double pnl_mat_create_from_scalar
+#define pnl_mat_int_create_from_int pnl_mat_int_create_from_scalar
+#define pnl_mat_complex_create_from_dcomplex pnl_mat_complex_create_from_scalar
+
+#define pnl_mat_set_double pnl_mat_set_all
+#define pnl_mat_int_set_int pnl_mat_int_set_all
+#define pnl_mat_complex_set_dcomplex pnl_mat_complex_set_all
+
+#define pnl_mat_eq_double pnl_mat_eq_all
+#define pnl_mat_int_eq_int pnl_mat_int_eq_all
+#define pnl_mat_complex_eq_dcomplex pnl_mat_complex_eq_all
+
+#define pnl_mat_plus_double pnl_mat_plus_scalar
+#define pnl_mat_int_plus_int pnl_mat_int_plus_scalar
+#define pnl_mat_complex_plus_dcomplex pnl_mat_complex_plus_scalar
+
+#define pnl_mat_minus_double pnl_mat_minus_scalar
+#define pnl_mat_int_minus_int pnl_mat_int_minus_scalar
+#define pnl_mat_complex_minus_dcomplex pnl_mat_complex_minus_scalar
+
+#define pnl_mat_mult_double pnl_mat_mult_scalar
+#define pnl_mat_int_mult_int pnl_mat_int_mult_scalar
+#define pnl_mat_complex_mult_dcomplex pnl_mat_complex_mult_scalar
+
+#define pnl_mat_div_double pnl_mat_div_scalar
+#define pnl_mat_int_div_int pnl_mat_int_div_scalar
+#define pnl_mat_complex_div_dcomplex pnl_mat_complex_div_scalar
+
+#define pnl_hmat_create_from_double pnl_hmat_create_from_scalar
+#define pnl_hmat_int_create_from_int pnl_hmat_int_create_from_scalar
+#define pnl_hmat_complex_create_from_dcomplex pnl_hmat_complex_create_from_scalar
+
+#define pnl_hmat_mult_double pnl_hmat_mult_scalar
+#define pnl_hmat_int_mult_int pnl_hmat_int_mult_scalar
+#define pnl_hmat_complex_mult_dcomplex pnl_hmat_complex_mult_scalar
+
+
+#define pnl_band_mat_div_double pnl_band_mat_div_scalar
+#define pnl_band_mat_plus_double pnl_band_mat_plus_scalar
+#define pnl_band_mat_minus_double pnl_band_mat_minus_scalar
+#define pnl_band_mat_mult_double pnl_band_mat_mult_scalar
+#define pnl_band_mat_set_double pnl_band_mat_set_all 
+
+#define pnl_tridiag_mat_div_double pnl_tridiag_mat_div_scalar
+#define pnl_tridiag_mat_plus_double pnl_tridiag_mat_plus_scalar
+#define pnl_tridiag_mat_minus_double pnl_tridiag_mat_minus_scalar
+#define pnl_tridiag_mat_mult_double pnl_tridiag_mat_mult_scalar
+#define pnl_tridiag_mat_create_from_double pnl_tridiag_mat_create_from_scalar
+#define pnl_tridiag_mat_create_from_two_double pnl_tridiag_mat_create_from_two_scalar
+
+#endif /* WITHOUT_DEPRECATED */
+
+#endif /* _PNL_DEPRECATED_H */

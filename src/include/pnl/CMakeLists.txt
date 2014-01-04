@@ -7,7 +7,8 @@ install(FILES
     pnl_basis.h 
     pnl_cdf.h 
     pnl_complex.h 
-    pnl_fft.h pnl_root.h 
+    pnl_deprecated.h
+    pnl_fft.h 
     pnl_finance.h
     pnl_integration.h 
     pnl_interpolation.h 
@@ -22,6 +23,7 @@ install(FILES
     pnl_optim.h 
     pnl_perm.h 
     pnl_random.h 
+    pnl_root.h 
     pnl_sp_matrix.h 
     pnl_specfun.h
     pnl_templates_off.h 

@@ -196,7 +196,7 @@ PnlVect* pnl_vect_compact_to_pnl_vect (const PnlVectCompact *C)
   PnlVect *v;
   if (C->convert == 'd')
     {
-      v = pnl_vect_create_from_double (C->size, C->val);
+      v = pnl_vect_create_from_scalar (C->size, C->val);
     }
   else
     {

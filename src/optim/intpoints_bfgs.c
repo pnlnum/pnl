@@ -269,7 +269,7 @@ static void gradient_c(AllConstraints* all_constraints, PnlVect* x, PnlMat* grad
   nbr_upper_bounds = all_constraints->nbr_upper_bounds;
 
   pnl_mat_resize(grad_c, nbr_var, nbr_nl_constraints+nbr_lower_bounds+nbr_upper_bounds);
-  pnl_mat_set_double(grad_c, 0.);
+  pnl_mat_set_all(grad_c, 0.);
 
   if (all_constraints->NL_Constraints!=NULL)
     {

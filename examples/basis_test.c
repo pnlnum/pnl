@@ -53,7 +53,7 @@ static void exp_regression2()
   a=0.0; b=5.0;
   n = 100;
   h = (b-a)/n;
-  t = pnl_mat_create_from_double (n+1, 1, h);
+  t = pnl_mat_create_from_scalar (n+1, 1, h);
   pnl_mat_set (t, 0, 0, 0.0);
   pnl_mat_cumsum (t, 'r');
 

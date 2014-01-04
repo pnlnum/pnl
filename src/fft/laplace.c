@@ -254,7 +254,7 @@ double pnl_ilap_gs (PnlFunc *fhat, double t, int n)
   f = 0.;
   Cnk = 1. / pnl_fact (n-1);
   work = pnl_mat_create (2 * n, n+1); 
-  iwork = pnl_mat_int_create_from_int (2 * n, n+1, 0);
+  iwork = pnl_mat_int_create_from_scalar (2 * n, n+1, 0);
   for ( k=1 ; k<n+1 ; k++ )
     {
       f += ALTERNATE(n-k) * pow(k, n) * Cnk * f_tilde (fhat, work, iwork, k, t, k);

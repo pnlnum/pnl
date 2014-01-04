@@ -86,10 +86,11 @@ extern void pnl_vect_free(PnlVect **v);
 extern void pnl_vect_init(PnlVect *v);
 extern PnlVect* pnl_vect_new();
 extern int pnl_vect_eq (const PnlVect *, const PnlVect *);
+extern int pnl_vect_eq_all (const PnlVect *, double);
 extern PnlVect* pnl_vect_create(int size);
 extern PnlVect pnl_vect_wrap_array(const double *x, int size);
 extern PnlVect* pnl_vect_create_from_zero(int size);
-extern PnlVect* pnl_vect_create_from_double(int size, double x);
+extern PnlVect* pnl_vect_create_from_scalar(int size, double x);
 extern PnlVect* pnl_vect_create_from_ptr(int size, const double* x);
 extern PnlVect* pnl_vect_create_from_list(int size,...);
 extern PnlVect* pnl_vect_create_from_file (const char * file);
@@ -98,7 +99,7 @@ extern void pnl_vect_extract_subvect_with_ind (PnlVect *V_sub, const PnlVect *V,
 extern PnlVect* pnl_vect_create_subvect (const PnlVect *V, int i, int len);
 extern void pnl_vect_extract_subvect (PnlVect *V_sub, const PnlVect *V, int i, int len);
 extern int pnl_vect_resize(PnlVect *v, int size);
-extern int pnl_vect_resize_from_double(PnlVect *v, int size, double x);
+extern int pnl_vect_resize_from_scalar(PnlVect *v, int size, double x);
 extern int pnl_vect_resize_from_ptr(PnlVect *v, int size, const double *t);
 extern PnlVect* pnl_vect_copy(const PnlVect *v);
 extern void pnl_vect_clone(PnlVect *clone, const PnlVect *v);
@@ -121,15 +122,15 @@ extern void pnl_vect_map_vect_inplace(PnlVect *lhs, const PnlVect *rhs, double(*
 extern void pnl_vect_map_vect(PnlVect *lhs, const PnlVect *rhs1, const PnlVect *rhs2, double(*f)(double, double));
 extern int pnl_vect_find(PnlVectInt *ind, char *type, int(*f)(double *), ...);
 extern void pnl_vect_minus(PnlVect *lhs);
-extern void pnl_vect_plus_double(PnlVect *lhs, double x); 
-extern void pnl_vect_minus_double(PnlVect *lhs, double x);
+extern void pnl_vect_plus_scalar(PnlVect *lhs, double x); 
+extern void pnl_vect_minus_scalar(PnlVect *lhs, double x);
 extern void pnl_vect_axpby(double a, const PnlVect *x, double b, PnlVect *y); 
-extern void pnl_vect_mult_double(PnlVect *lhs, double x);
-extern void pnl_vect_div_double(PnlVect *lhs, double x); 
+extern void pnl_vect_mult_scalar(PnlVect *lhs, double x);
+extern void pnl_vect_div_scalar(PnlVect *lhs, double x); 
 extern void pnl_vect_inv_term(PnlVect *lhs); 
 extern void pnl_vect_div_vect_term(PnlVect *lhs, const PnlVect *rhs);
 extern void pnl_vect_mult_vect_term(PnlVect *lhs, const PnlVect *rhs);
-extern void pnl_vect_set_double(PnlVect *v, double x);
+extern void pnl_vect_set_all(PnlVect *v, double x);
 extern void pnl_vect_set_zero(PnlVect * v);
 extern double pnl_vect_sum(const PnlVect *lhs);
 extern void pnl_vect_cumsum(PnlVect *lhs);
@@ -175,7 +176,7 @@ extern PnlVectCompact* pnl_vect_compact_copy(const PnlVectCompact *v);
 extern void pnl_vect_compact_free (PnlVectCompact **v);
 extern PnlVect* pnl_vect_compact_to_pnl_vect (const PnlVectCompact *C);
 extern double pnl_vect_compact_get (const PnlVectCompact *C, int i);
-extern void pnl_vect_compact_set_double (PnlVectCompact *C, double x);
+extern void pnl_vect_compact_set_all (PnlVectCompact *C, double x);
 extern void pnl_vect_compact_set_ptr (PnlVectCompact *C, double *ptr);
 
 /*@}*/
@@ -219,10 +220,10 @@ extern void pnl_vect_int_free(PnlVectInt **v);
 extern void pnl_vect_int_init(PnlVectInt *v);
 extern PnlVectInt* pnl_vect_int_new();
 extern int pnl_vect_int_eq (const PnlVectInt *, const PnlVectInt *);
-extern int pnl_vect_int_eq_int (const PnlVectInt *, int);
+extern int pnl_vect_int_eq_all (const PnlVectInt *, int);
 extern PnlVectInt* pnl_vect_int_create(int size);
 extern PnlVectInt pnl_vect_int_wrap_array(const int *x, int size);
-extern PnlVectInt* pnl_vect_int_create_from_int(int size, int x);
+extern PnlVectInt* pnl_vect_int_create_from_scalar(int size, int x);
 extern PnlVectInt* pnl_vect_int_create_from_zero(int size);
 extern PnlVectInt* pnl_vect_int_create_from_ptr(int size, const int* x);
 extern PnlVectInt* pnl_vect_int_create_from_list(int size,...);
@@ -232,7 +233,7 @@ extern void pnl_vect_int_extract_subvect_with_ind (PnlVectInt *V_sub, const PnlV
 extern PnlVectInt* pnl_vect_int_create_subvect (const PnlVectInt *V, int i, int len);
 extern void pnl_vect_int_extract_subvect (PnlVectInt *V_sub, const PnlVectInt *V, int i, int len);
 extern int pnl_vect_int_resize(PnlVectInt *v, int size);
-extern int pnl_vect_int_resize_from_int(PnlVectInt *v, int size, int x);
+extern int pnl_vect_int_resize_from_scalar(PnlVectInt *v, int size, int x);
 extern int pnl_vect_int_resize_from_ptr(PnlVectInt *v, int size, const int *t);
 extern PnlVectInt* pnl_vect_int_copy(const PnlVectInt *v);
 extern void pnl_vect_int_clone(PnlVectInt *clone, const PnlVectInt *v);
@@ -253,22 +254,19 @@ extern void pnl_vect_int_map(PnlVectInt *lhs, const PnlVectInt *rhs, int(*f)(int
 extern void pnl_vect_int_map_vect_inplace(PnlVectInt *lhs, const PnlVectInt *rhs, int(*f)(int, int)); 
 extern void pnl_vect_int_map_vect(PnlVectInt *lhs, const PnlVectInt *rhs1, const PnlVectInt *rhs2, int(*f)(int, int));
 extern int pnl_vect_int_find(PnlVectInt *ind, char *type, int(*f)(int *), ...);
-extern void pnl_vect_int_plus_int(PnlVectInt *lhs, int x); /*lhs+=x*/
-extern void pnl_vect_int_minus_int(PnlVectInt *lhs, int x); /*lhs-=x*/
+extern void pnl_vect_int_plus_scalar(PnlVectInt *lhs, int x); /*lhs+=x*/
+extern void pnl_vect_int_minus_scalar(PnlVectInt *lhs, int x); /*lhs-=x*/
 extern void pnl_vect_int_axpby(int a, const PnlVectInt *x, int b, PnlVectInt *y); /* y:=a x + b y */
-extern void pnl_vect_int_mult_int(PnlVectInt *lhs, int x); /*lhs*=x*/
-extern void pnl_vect_int_div_int(PnlVectInt *lhs, int x); /*lhs*=x*/
+extern void pnl_vect_int_mult_scalar(PnlVectInt *lhs, int x); /*lhs*=x*/
+extern void pnl_vect_int_div_scalar(PnlVectInt *lhs, int x); /*lhs*=x*/
 extern void pnl_vect_int_inv_term(PnlVectInt *lhs); /* lhs = 1 ./ lhs*/
-extern void
-pnl_vect_int_div_vect_term(PnlVectInt *lhs, const PnlVectInt *rhs);/* lhs = lhs ./ rhs*/
-extern void
-pnl_vect_int_mult_vect_term(PnlVectInt *lhs, const PnlVectInt *rhs); /* lhs= lhs.*rhs */ 
-extern void pnl_vect_int_set_int(PnlVectInt *v, int x);/* v[j]= x */
+extern void pnl_vect_int_div_vect_term(PnlVectInt *lhs, const PnlVectInt *rhs);/* lhs = lhs ./ rhs*/
+extern void pnl_vect_int_mult_vect_term(PnlVectInt *lhs, const PnlVectInt *rhs); /* lhs= lhs.*rhs */ 
+extern void pnl_vect_int_set_all(PnlVectInt *v, int x);/* v[j]= x */
 extern void pnl_vect_int_set_zero(PnlVectInt *v); /* v[j]= 0 */
 extern int pnl_vect_int_sum(const PnlVectInt *lhs);/* sum(x) */
 extern void pnl_vect_int_cumsum(PnlVectInt *lhs);
-extern int
-pnl_vect_int_scalar_prod(const PnlVectInt *rhs1, const PnlVectInt *rhs2); /*rhs1.rhs2*/
+extern int pnl_vect_int_scalar_prod(const PnlVectInt *rhs1, const PnlVectInt *rhs2); /*rhs1.rhs2*/
 extern int pnl_vect_int_prod(const PnlVectInt *V); /*res=prod(V(i))*/
 extern void pnl_vect_int_cumprod(PnlVectInt *V); /*res=prod(V(i))*/
 extern int pnl_vect_int_max(const PnlVectInt *V); /*res=max(V)*/
@@ -292,7 +290,6 @@ extern void pnl_vect_int_swap_elements(PnlVectInt * v, int i, int j);
 extern void pnl_vect_int_reverse(PnlVectInt * v);
 
 extern int pnl_vect_int_less(const PnlVectInt * a,const PnlVectInt * b);
-extern int pnl_vect_int_equal(const PnlVectInt * a,const PnlVectInt * b);
 /*@}*/
 
 
@@ -385,10 +382,10 @@ extern void pnl_vect_complex_free(PnlVectComplex **v);
 extern void pnl_vect_complex_init(PnlVectComplex *v);
 extern PnlVectComplex* pnl_vect_complex_new();
 extern int pnl_vect_complex_eq (const PnlVectComplex *, const PnlVectComplex *);
-extern int pnl_vect_complex_eq_dcomplex (const PnlVectComplex *, dcomplex);
+extern int pnl_vect_complex_eq_all (const PnlVectComplex *, dcomplex);
 extern PnlVectComplex* pnl_vect_complex_create(int size);
 extern PnlVectComplex pnl_vect_complex_wrap_array(const dcomplex *x, int size);
-extern PnlVectComplex* pnl_vect_complex_create_from_dcomplex(int size, dcomplex x);
+extern PnlVectComplex* pnl_vect_complex_create_from_scalar(int size, dcomplex x);
 extern PnlVectComplex* pnl_vect_complex_create_from_zero(int size);
 extern PnlVectComplex* pnl_vect_complex_create_from_array(int size, const double *re, const double *im);
 extern PnlVectComplex* pnl_vect_complex_create_from_ptr(int size, const dcomplex* x);
@@ -400,7 +397,7 @@ extern PnlVectComplex* pnl_vect_complex_create_subvect (const PnlVectComplex *V,
 extern void pnl_vect_complex_extract (PnlVectComplex *V_sub, const PnlVectComplex *V, int i, int len);
 
 extern int pnl_vect_complex_resize(PnlVectComplex *v, int size);
-extern int pnl_vect_complex_resize_from_dcomplex(PnlVectComplex *v, int size, dcomplex x);
+extern int pnl_vect_complex_resize_from_scalar(PnlVectComplex *v, int size, dcomplex x);
 extern int pnl_vect_complex_resize_from_ptr(PnlVectComplex *v, int size, const dcomplex *t);
 extern PnlVectComplex* pnl_vect_complex_copy(const PnlVectComplex *v);
 extern void pnl_vect_complex_clone(PnlVectComplex *clone, const PnlVectComplex *v);
@@ -423,18 +420,18 @@ extern void pnl_vect_complex_map_vect_inplace(PnlVectComplex *lhs, const PnlVect
 extern void pnl_vect_complex_map_vect(PnlVectComplex *lhs, const PnlVectComplex *rhs1, const PnlVectComplex *rhs2, dcomplex(*f)(dcomplex,dcomplex));
 extern int pnl_vect_complex_find(PnlVectInt *ind, char *type, int(*f)(dcomplex *), ...);  
 extern void pnl_vect_complex_minus(PnlVectComplex *lhs);
-extern void pnl_vect_complex_plus_dcomplex(PnlVectComplex *lhs, dcomplex x); /*lhs+=x*/
-extern void pnl_vect_complex_minus_dcomplex(PnlVectComplex *lhs, dcomplex x); /*lhs-=x*/
+extern void pnl_vect_complex_plus_scalar(PnlVectComplex *lhs, dcomplex x); /*lhs+=x*/
+extern void pnl_vect_complex_minus_scalar(PnlVectComplex *lhs, dcomplex x); /*lhs-=x*/
 extern void pnl_vect_complex_axpby(dcomplex a, const PnlVectComplex *x, dcomplex b, PnlVectComplex *y); 
-extern void pnl_vect_complex_mult_dcomplex(PnlVectComplex *lhs, dcomplex x); /*lhs*=x*/
-extern void pnl_vect_complex_div_dcomplex(PnlVectComplex *lhs, dcomplex x); /*lhs*=x*/
+extern void pnl_vect_complex_mult_scalar(PnlVectComplex *lhs, dcomplex x); /*lhs*=x*/
+extern void pnl_vect_complex_div_scalar(PnlVectComplex *lhs, dcomplex x); /*lhs*=x*/
 extern void pnl_vect_complex_inv_term(PnlVectComplex *lhs); /* lhs = 1 ./ lhs*/
 extern void pnl_vect_complex_mult_double(PnlVectComplex *lhs , double x);
 extern void
 pnl_vect_complex_div_vect_term(PnlVectComplex *lhs, const PnlVectComplex *rhs);/* lhs = lhs ./ rhs*/
 extern void
 pnl_vect_complex_mult_vect_term(PnlVectComplex *lhs, const PnlVectComplex *rhs); /* lhs= lhs.*rhs */ 
-extern void pnl_vect_complex_set_dcomplex(PnlVectComplex *v, dcomplex x);
+extern void pnl_vect_complex_set_all(PnlVectComplex *v, dcomplex x);
 extern void pnl_vect_complex_set_zero(PnlVectComplex *v);
 extern void pnl_vect_set_zero(PnlVect * v); /* v[j]= 0 */
 extern dcomplex pnl_vect_complex_sum(const PnlVectComplex *lhs);/* sum(x) */
@@ -454,6 +451,13 @@ extern void pnl_vect_complex_reverse(PnlVectComplex * v);
 
 /*@}*/
 /*@}*/
+
+/*
+ * Some deprecated names
+ */
+
+#include "pnl/pnl_deprecated.h"
+
 
 #ifdef __cplusplus
 }

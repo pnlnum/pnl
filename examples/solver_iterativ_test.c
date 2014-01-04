@@ -34,12 +34,12 @@ void Test_Solver_sym(void )
   PnlBicgSolver* Solver2;
   PnlGmresSolver* Solver3;
   Size=10;
-  b=pnl_vect_create_from_double(Size,1);
+  b=pnl_vect_create_from_scalar(Size,1);
   b->array[2]=2.0;
   b->array[1]=0.0;
-  x1=pnl_vect_create_from_double(Size,2);
-  x2=pnl_vect_create_from_double(Size,2);
-  x3=pnl_vect_create_from_double(Size,2);
+  x1=pnl_vect_create_from_scalar(Size,2);
+  x2=pnl_vect_create_from_scalar(Size,2);
+  x3=pnl_vect_create_from_scalar(Size,2);
   M=pnl_mat_create_from_file("Data/Test_mat_sym");
   PC=pnl_mat_create_from_file("Data/Test_PCmat");
 
@@ -73,8 +73,8 @@ void Test_Solver_no_sym(void )
   Size=20;
   b   = pnl_vect_create_from_file ("Data/Test_vect_rhs.dat");
   res = pnl_vect_create_from_file ("Data/Test_res.dat");
-  x1=pnl_vect_create_from_double(Size,0.0);
-  x2=pnl_vect_create_from_double(Size,0.0);
+  x1=pnl_vect_create_from_scalar(Size,0.0);
+  x2=pnl_vect_create_from_scalar(Size,0.0);
   Q=pnl_mat_create_from_file("Data/Test_mat_no_sym.dat");
   PC=pnl_mat_create_from_file("Data/Test_PCmat_20.dat");
 

@@ -280,10 +280,10 @@ PnlCgSolver* pnl_cg_solver_create(int Size,int max_iter_, double tolerance_)
 {
   PnlCgSolver * Solver;
   if((Solver = pnl_cg_solver_new ()) ==NULL) return NULL;
-  Solver->r=pnl_vect_create_from_double(Size,0.0);
-  Solver->z=pnl_vect_create_from_double(Size,0.0);
-  Solver->p=pnl_vect_create_from_double(Size,0.0);
-  Solver->q=pnl_vect_create_from_double(Size,0.0);
+  Solver->r=pnl_vect_create_from_scalar(Size,0.0);
+  Solver->z=pnl_vect_create_from_scalar(Size,0.0);
+  Solver->p=pnl_vect_create_from_scalar(Size,0.0);
+  Solver->q=pnl_vect_create_from_scalar(Size,0.0);
   Solver->iter=pnl_iteration_base_create(max_iter_,tolerance_);
   return Solver;
 }
@@ -426,14 +426,14 @@ PnlBicgSolver* pnl_bicg_solver_create(int Size,int max_iter_, double tolerance_)
 {
   PnlBicgSolver * Solver;
   if ((Solver = pnl_bicg_solver_new ()) == NULL) return NULL;
-  Solver->r=pnl_vect_create_from_double(Size,0.0);
-  Solver->rtilde=pnl_vect_create_from_double(Size,0.0);
-  Solver->p=pnl_vect_create_from_double(Size,0.0);
-  Solver->phat=pnl_vect_create_from_double(Size,0.0);
-  Solver->s=pnl_vect_create_from_double(Size,0.0);
-  Solver->shat=pnl_vect_create_from_double(Size,0.0);
-  Solver->t=pnl_vect_create_from_double(Size,0.0);
-  Solver->v=pnl_vect_create_from_double(Size,0.0);
+  Solver->r=pnl_vect_create_from_scalar(Size,0.0);
+  Solver->rtilde=pnl_vect_create_from_scalar(Size,0.0);
+  Solver->p=pnl_vect_create_from_scalar(Size,0.0);
+  Solver->phat=pnl_vect_create_from_scalar(Size,0.0);
+  Solver->s=pnl_vect_create_from_scalar(Size,0.0);
+  Solver->shat=pnl_vect_create_from_scalar(Size,0.0);
+  Solver->t=pnl_vect_create_from_scalar(Size,0.0);
+  Solver->v=pnl_vect_create_from_scalar(Size,0.0);
   Solver->iter=pnl_iteration_base_create(max_iter_,tolerance_);
   return Solver;
 }
@@ -612,14 +612,14 @@ PnlGmresSolver* pnl_gmres_solver_create(int Size, int max_iter_,
   PnlGmresSolver *Solver;
   if( (Solver = pnl_gmres_solver_new ()) == NULL ) return NULL;
   Solver->restart=MIN(MAX_RESTART - 1,restart_);
-  Solver->s=pnl_vect_create_from_double(Solver->restart+1,0.0);
-  Solver->cs=pnl_vect_create_from_double(Solver->restart+1,0.0);
-  Solver->sn=pnl_vect_create_from_double(Solver->restart+1,0.0);
-  Solver->w=pnl_vect_create_from_double(Size,0.0);
-  Solver->r=pnl_vect_create_from_double(Size,0.0);
-  Solver->H=pnl_mat_create_from_double(Solver->restart+1,Solver->restart,0.0);
+  Solver->s=pnl_vect_create_from_scalar(Solver->restart+1,0.0);
+  Solver->cs=pnl_vect_create_from_scalar(Solver->restart+1,0.0);
+  Solver->sn=pnl_vect_create_from_scalar(Solver->restart+1,0.0);
+  Solver->w=pnl_vect_create_from_scalar(Size,0.0);
+  Solver->r=pnl_vect_create_from_scalar(Size,0.0);
+  Solver->H=pnl_mat_create_from_scalar(Solver->restart+1,Solver->restart,0.0);
   for(i=0;i<=Solver->restart+1;i++)
-    Solver->v[i]=pnl_vect_create_from_double(Size,0.0);
+    Solver->v[i]=pnl_vect_create_from_scalar(Size,0.0);
   Solver->iter=pnl_iteration_base_create(max_iter_,tolerance_);
   Solver->iter_inner=pnl_iteration_base_create(restart_,tolerance_);
   return Solver;
@@ -638,7 +638,7 @@ void pnl_gmres_solver_initialisation(PnlGmresSolver *Solver,
 {
   double normb=pnl_vect_norm_two(b);
   pnl_vect_clone(Solver->r,b);
-  pnl_mat_set_double(Solver->H,0.0);
+  pnl_mat_set_all(Solver->H,0.0);
   Solver->beta=0.0;
   pnl_iteration_base_initialisation_norm(Solver->iter,normb);
   pnl_iteration_base_initialisation_norm(Solver->iter_inner,normb);
@@ -744,7 +744,7 @@ int pnl_gmres_solver_solve(void (* matrix_vector_product )(const void *,const Pn
   while(!pnl_iteration_base_finished(Solver->iter,Solver->w))
     {
       pnl_vect_axpby(1.0 /Solver->beta, Solver->w, 0.0, Solver->v[0]);    
-      pnl_vect_set_double(Solver->s,0.0);
+      pnl_vect_set_all(Solver->s,0.0);
       pnl_vect_set(Solver->s,0,Solver->beta);
       i = 0;
       pnl_iteration_base_begin(Solver->iter_inner);

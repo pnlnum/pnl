@@ -77,8 +77,8 @@ extern PnlTridiagMatObject* pnl_tridiag_mat_object_new();
 extern void pnl_tridiag_mat_object_free (PnlTridiagMatObject **BM);
 extern PnlTridiagMat* pnl_tridiag_mat_new();
 extern PnlTridiagMat* pnl_tridiag_mat_create(int size);
-extern PnlTridiagMat* pnl_tridiag_mat_create_from_double(int size, double x);
-extern PnlTridiagMat* pnl_tridiag_mat_create_from_two_double(int size, double x, double y);
+extern PnlTridiagMat* pnl_tridiag_mat_create_from_scalar(int size, double x);
+extern PnlTridiagMat* pnl_tridiag_mat_create_from_two_scalar(int size, double x, double y);
 extern PnlTridiagMat* pnl_tridiag_mat_create_from_ptr(int size, const double* DL, 
 						   const double* D, const double* DU);
 extern PnlTridiagMat* pnl_tridiag_mat_create_from_mat(const PnlMat * mat);
@@ -95,10 +95,10 @@ extern void pnl_tridiag_mat_fprint(FILE *fic, const PnlTridiagMat *M);
 
 extern void pnl_tridiag_mat_plus_tridiag_mat(PnlTridiagMat *lhs, const PnlTridiagMat *rhs); 
 extern void pnl_tridiag_mat_minus_tridiag_mat(PnlTridiagMat *lhs, const PnlTridiagMat *rhs); 
-extern void pnl_tridiag_mat_plus_double(PnlTridiagMat *lhs, double x);
-extern void pnl_tridiag_mat_minus_double(PnlTridiagMat *lhs, double x);
-extern void pnl_tridiag_mat_mult_double(PnlTridiagMat *lhs, double x); 
-extern void pnl_tridiag_mat_div_double(PnlTridiagMat *lhs, double x); 
+extern void pnl_tridiag_mat_plus_scalar(PnlTridiagMat *lhs, double x);
+extern void pnl_tridiag_mat_minus_scalar(PnlTridiagMat *lhs, double x);
+extern void pnl_tridiag_mat_mult_scalar(PnlTridiagMat *lhs, double x); 
+extern void pnl_tridiag_mat_div_scalar(PnlTridiagMat *lhs, double x); 
 extern void pnl_tridiag_mat_mult_tridiag_mat_term(PnlTridiagMat *lhs, const PnlTridiagMat *rhs);
 extern void pnl_tridiag_mat_div_tridiag_mat_term(PnlTridiagMat *lhs, const PnlTridiagMat *rhs);
 
@@ -161,6 +161,12 @@ extern int pnl_tridiag_mat_lu_syslin_inplace (PnlTridiagMatLU *LU, PnlVect *b);
 extern int pnl_tridiag_mat_lu_syslin (PnlVect *x, PnlTridiagMatLU *LU, const PnlVect *b);
 
 /*@}*/
+
+/*
+ * Somes deprecated names
+ */
+#include "pnl/pnl_deprecated.h"
+
 
 #ifdef __cplusplus
 }

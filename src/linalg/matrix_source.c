@@ -87,7 +87,7 @@ int FUNCTION(pnl_mat,eq)(const TYPE(PnlMat) *M1, const TYPE(PnlMat) *M2)
  * @param x a BASE type element
  * @return  TRUE or FALSE
  */
-int FUNCTION(pnl_mat,CONCAT2(eq_,BASE))(const TYPE(PnlMat) *M, BASE x)
+int FUNCTION(pnl_mat,eq_all)(const TYPE(PnlMat) *M, BASE x)
 {
   int i;
   for ( i=0 ; i<M->mn ; i++ )
@@ -126,7 +126,7 @@ TYPE(PnlMat) * FUNCTION(pnl_mat,create)(int m, int n)
  * @param x used to fill the matrix with
  * @return a TYPE(PnlMat) pointer
  */
-TYPE(PnlMat)* FUNCTION(pnl_mat,CONCAT2(create_from_,BASE))(int m, int n, BASE x)
+TYPE(PnlMat)* FUNCTION(pnl_mat,create_from_scalar)(int m, int n, BASE x)
 {
   TYPE(PnlMat) *M;
   int i;
@@ -348,7 +348,7 @@ int FUNCTION(pnl_mat,resize)(TYPE(PnlMat) *M, int m, int n)
  * @param x : scalar
  * @return  lhs = x
  */
-void FUNCTION(pnl_mat, CONCAT2(set_,BASE)) (TYPE(PnlMat) *lhs, BASE x)
+void FUNCTION(pnl_mat,set_all) (TYPE(PnlMat) *lhs, BASE x)
 {
   int i;
   for (i=0; i<lhs->mn; i++) lhs->array[i] = x;
@@ -565,7 +565,7 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,create_diag_from_ptr)(const BASE x[], int d)
 {
   TYPE(PnlMat)* lhs;
   int i;
-  if((lhs=FUNCTION(pnl_mat,CONCAT2(create_from_,BASE))(d,d,ZERO))==NULL)
+  if((lhs=FUNCTION(pnl_mat,create_from_scalar)(d,d,ZERO))==NULL)
     return NULL;
   for(i=0;i<d;i++) { PNL_MLET(lhs, i, i) =  x[i]; }
   return lhs;
@@ -749,10 +749,10 @@ void FUNCTION(pnl_mat,map)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs, BASE(*f)(
   FUNCTION(pnl_mat,map_inplace)(lhs, f);
 }
 
-static BASE CONCAT2(__op_plus_,BASE)(BASE a, BASE b) { return PLUS(a,b); }
-static BASE CONCAT2(__op_minus_,BASE)(BASE a, BASE b) { return MINUS(a,b); }
-static BASE CONCAT2(__op_mult_,BASE)(BASE a, BASE b) { return MULT(a,b); }
-static BASE CONCAT2(__op_div_,BASE)(BASE a, BASE b) { return DIV(a,b); }
+static BASE FUNCTION(,_op_plus)(BASE a, BASE b) { return PLUS(a,b); }
+static BASE FUNCTION(,_op_minus)(BASE a, BASE b) { return MINUS(a,b); }
+static BASE FUNCTION(,_op_mult)(BASE a, BASE b) { return MULT(a,b); }
+static BASE FUNCTION(,_op_div)(BASE a, BASE b) { return DIV(a,b); }
 
 /**
  * in-place matrix operator application
@@ -1023,7 +1023,7 @@ void FUNCTION(pnl_mat,del_row)(TYPE(PnlMat) *M, int i)
  */
 void FUNCTION(pnl_mat,plus_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
 {
-  FUNCTION(pnl_mat,map_mat_inplace)(lhs, rhs, CONCAT2(__op_plus_,BASE));
+  FUNCTION(pnl_mat,map_mat_inplace)(lhs, rhs, FUNCTION(,_op_plus));
 }
 
 /**
@@ -1035,7 +1035,7 @@ void FUNCTION(pnl_mat,plus_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
  */
 void FUNCTION(pnl_mat,minus_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
 {
-  FUNCTION(pnl_mat,map_mat_inplace)(lhs, rhs, CONCAT2(__op_minus_,BASE));
+  FUNCTION(pnl_mat,map_mat_inplace)(lhs, rhs, FUNCTION(,_op_minus));
 }
 
 /**
@@ -1046,9 +1046,9 @@ void FUNCTION(pnl_mat,minus_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
  * @return  lhs = lhs+x
  */
 
-void FUNCTION(pnl_mat,CONCAT2(plus_,BASE))(TYPE(PnlMat) *lhs, BASE x)
+void FUNCTION(pnl_mat,plus_scalar)(TYPE(PnlMat) *lhs, BASE x)
 {
-  FUNCTION(__pnl_mat,apply_op)(lhs, x, CONCAT2(__op_plus_,BASE));
+  FUNCTION(__pnl_mat,apply_op)(lhs, x, FUNCTION(,_op_plus));
 }
 
 /**
@@ -1058,9 +1058,9 @@ void FUNCTION(pnl_mat,CONCAT2(plus_,BASE))(TYPE(PnlMat) *lhs, BASE x)
  * @param  x : scalar
  * @return  lhs = lhs-x
  */
-void FUNCTION(pnl_mat,CONCAT2(minus_,BASE))(TYPE(PnlMat) *lhs, BASE x)
+void FUNCTION(pnl_mat,minus_scalar)(TYPE(PnlMat) *lhs, BASE x)
 {
-  FUNCTION(__pnl_mat,apply_op)(lhs, x, CONCAT2(__op_minus_,BASE));
+  FUNCTION(__pnl_mat,apply_op)(lhs, x, FUNCTION(,_op_minus));
 }
 
 /**
@@ -1070,9 +1070,9 @@ void FUNCTION(pnl_mat,CONCAT2(minus_,BASE))(TYPE(PnlMat) *lhs, BASE x)
  * @param x : scalar
  * @return  lhs = lhs*x
  */
-void FUNCTION(pnl_mat,CONCAT2(mult_,BASE))(TYPE(PnlMat) *lhs, BASE x)
+void FUNCTION(pnl_mat,mult_scalar)(TYPE(PnlMat) *lhs, BASE x)
 {
-  FUNCTION(__pnl_mat,apply_op)(lhs, x, CONCAT2(__op_mult_,BASE));
+  FUNCTION(__pnl_mat,apply_op)(lhs, x, FUNCTION(,_op_mult));
 }
 
 /**
@@ -1082,9 +1082,9 @@ void FUNCTION(pnl_mat,CONCAT2(mult_,BASE))(TYPE(PnlMat) *lhs, BASE x)
  * @param x : scalar
  * @return  lhs = lhs*x
  */
-void FUNCTION(pnl_mat,CONCAT2(div_,BASE))(TYPE(PnlMat) *lhs, BASE x)
+void FUNCTION(pnl_mat,div_scalar)(TYPE(PnlMat) *lhs, BASE x)
 {
-  FUNCTION(__pnl_mat,apply_op)(lhs, x, CONCAT2(__op_div_,BASE));
+  FUNCTION(__pnl_mat,apply_op)(lhs, x, FUNCTION(,_op_div));
 }
 
 /**
@@ -1096,7 +1096,7 @@ void FUNCTION(pnl_mat,CONCAT2(div_,BASE))(TYPE(PnlMat) *lhs, BASE x)
  */
 void FUNCTION(pnl_mat,mult_mat_term)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
 {
-  FUNCTION(pnl_mat,map_mat_inplace)(lhs, rhs, CONCAT2(__op_mult_,BASE));
+  FUNCTION(pnl_mat,map_mat_inplace)(lhs, rhs, FUNCTION(,_op_mult));
 }
 
 /**
@@ -1108,7 +1108,7 @@ void FUNCTION(pnl_mat,mult_mat_term)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
  */
 void FUNCTION(pnl_mat,div_mat_term)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
 {
-  FUNCTION(pnl_mat,map_mat_inplace)(lhs, rhs, CONCAT2(__op_div_,BASE));
+  FUNCTION(pnl_mat,map_mat_inplace)(lhs, rhs, FUNCTION(,_op_div));
 }
 
 /**
@@ -1133,9 +1133,9 @@ void FUNCTION(pnl_mat,dgemv) (char trans, BASE alpha, const TYPE(PnlMat) *A,
     {
       if (trans=='N' || trans=='n') FUNCTION(pnl_vect,resize) (y, A->m);
       else FUNCTION(pnl_vect,resize)(y, A->n);
-      FUNCTION(pnl_vect,CONCAT2(set_,BASE)) (y, ZERO);
+      FUNCTION(pnl_vect,set_all) (y, ZERO);
     }
-  else if ( NEQ(beta, ONE) ) FUNCTION(pnl_vect,CONCAT2(mult_,BASE)) (y, beta);
+  else if ( NEQ(beta, ONE) ) FUNCTION(pnl_vect,mult_scalar) (y, beta);
   if ( EQ(alpha, ZERO) ) return;
 
 
@@ -1416,7 +1416,7 @@ void FUNCTION(pnl_mat,sum_vect)(TYPE(PnlVect) *y, const TYPE(PnlMat) *A, char a)
       /* the loops are done in a non natural order to make the most of
          data alignment while using matrix with row major storage */
       FUNCTION(pnl_vect,resize) (y, A->n);
-      FUNCTION(pnl_vect,CONCAT2(set_, BASE)) (y, ZERO);
+      FUNCTION(pnl_vect,set_all)(y, ZERO);
       for (i=0; i<A->m; i++)
         {
           for (j=0; j<A->n; j++)
@@ -1466,7 +1466,7 @@ void FUNCTION(pnl_mat,prod_vect)(TYPE(PnlVect) *y, const TYPE(PnlMat) *A, char a
       /* the loops are done in a non natural order to make the most of
          data alignment while using matrix with row major storage */
       FUNCTION(pnl_vect,resize) (y, A->n);
-      FUNCTION(pnl_vect,CONCAT2(set_, BASE)) (y, ONE);
+      FUNCTION(pnl_vect,set_all) (y, ONE);
       for (i=0; i<A->m; i++)
         {
           for (j=0; j<A->n; j++)
@@ -1863,7 +1863,7 @@ TYPE(PnlHmat)* FUNCTION(pnl_hmat,create)(int ndim, const int *dims)
   return H;
 }
 
-TYPE(PnlHmat)* FUNCTION(pnl_hmat,CONCAT2(create_from_,BASE))(int ndim, const int *dims, BASE x)
+TYPE(PnlHmat)* FUNCTION(pnl_hmat,create_from_scalar)(int ndim, const int *dims, BASE x)
 {
   TYPE(PnlHmat) *H;
   int i;
@@ -2066,7 +2066,7 @@ void FUNCTION(pnl_hmat,plus_hmat)(TYPE(PnlHmat) *lhs, const TYPE(PnlHmat) *rhs)
  * @param x : scalar
  * @return  lhs = lhs*x
  */
-void FUNCTION(pnl_hmat,CONCAT2(mult_,BASE))(TYPE(PnlHmat) *lhs, BASE x)
+void FUNCTION(pnl_hmat,mult_scalar)(TYPE(PnlHmat) *lhs, BASE x)
 {
   int i;
   for ( i=0 ; i<lhs->mn ; i++ )

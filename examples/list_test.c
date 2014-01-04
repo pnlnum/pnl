@@ -30,8 +30,8 @@ static void list_insert_test ()
   PnlTridiagMat *T;
 
   L = pnl_list_new ();
-  M = pnl_mat_create_from_double (2, 3, 3.5);
-  T = pnl_tridiag_mat_create_from_double (4, 0.5);
+  M = pnl_mat_create_from_scalar (2, 3, 3.5);
+  T = pnl_tridiag_mat_create_from_scalar (4, 0.5);
   pnl_list_insert_first (L, PNL_OBJECT(M));
   pnl_list_insert_first (L, PNL_OBJECT(T));
 
@@ -47,8 +47,8 @@ static void list_insert_test ()
   pnl_list_free (&L);
 
   L = pnl_list_new ();
-  M = pnl_mat_create_from_double (2, 3, 3.5);
-  T = pnl_tridiag_mat_create_from_double (4, 0.5);
+  M = pnl_mat_create_from_scalar (2, 3, 3.5);
+  T = pnl_tridiag_mat_create_from_scalar (4, 0.5);
   pnl_list_insert_last (L, PNL_OBJECT(M));
   pnl_list_insert_last (L, PNL_OBJECT(T));
   if ( pnl_list_get (L, 0) != PNL_OBJECT(M)  || 
@@ -64,8 +64,8 @@ static void list_insert_test ()
 
 
   L = pnl_list_new ();
-  M = pnl_mat_create_from_double (2, 3, 3.5);
-  T = pnl_tridiag_mat_create_from_double (4, 0.5);
+  M = pnl_mat_create_from_scalar (2, 3, 3.5);
+  T = pnl_tridiag_mat_create_from_scalar (4, 0.5);
   pnl_list_insert_last (L, PNL_OBJECT(M));
   pnl_list_insert_last (L, PNL_OBJECT(T));
   pnl_list_remove_last (L);
@@ -82,8 +82,8 @@ static void list_insert_test ()
 
 
   L = pnl_list_new ();
-  M = pnl_mat_create_from_double (2, 3, 3.5);
-  T = pnl_tridiag_mat_create_from_double (4, 0.5);
+  M = pnl_mat_create_from_scalar (2, 3, 3.5);
+  T = pnl_tridiag_mat_create_from_scalar (4, 0.5);
   pnl_list_insert_last (L, PNL_OBJECT(M));
   pnl_list_insert_last (L, PNL_OBJECT(T));
   pnl_list_remove_first (L);
@@ -107,8 +107,8 @@ static void list_remove_test ()
   PnlTridiagMat *T;
 
   L = pnl_list_new ();
-  M = pnl_mat_create_from_double (2, 3, 3.5);
-  T = pnl_tridiag_mat_create_from_double (4, 0.5);
+  M = pnl_mat_create_from_scalar (2, 3, 3.5);
+  T = pnl_tridiag_mat_create_from_scalar (4, 0.5);
   pnl_list_insert_last (L, PNL_OBJECT(M));
   pnl_list_insert_last (L, PNL_OBJECT(T));
   pnl_list_remove_last (L);
@@ -125,8 +125,8 @@ static void list_remove_test ()
 
 
   L = pnl_list_new ();
-  M = pnl_mat_create_from_double (2, 3, 3.5);
-  T = pnl_tridiag_mat_create_from_double (4, 0.5);
+  M = pnl_mat_create_from_scalar (2, 3, 3.5);
+  T = pnl_tridiag_mat_create_from_scalar (4, 0.5);
   pnl_list_insert_last (L, PNL_OBJECT(M));
   pnl_list_insert_last (L, PNL_OBJECT(T));
   pnl_list_remove_first (L);
@@ -150,12 +150,12 @@ static void list_concat_test ()
 
   L1 = pnl_list_new ();
   L2 = pnl_list_new ();
-  M1 = pnl_mat_create_from_double (2, 3, 3.5);
-  T1 = pnl_tridiag_mat_create_from_double (4, 0.5);
+  M1 = pnl_mat_create_from_scalar (2, 3, 3.5);
+  T1 = pnl_tridiag_mat_create_from_scalar (4, 0.5);
   pnl_list_insert_last (L1, PNL_OBJECT(M1));
   pnl_list_insert_last (L1, PNL_OBJECT(T1));
-  M2 = pnl_mat_create_from_double (2, 3, 3.5);
-  T2 = pnl_tridiag_mat_create_from_double (4, 0.5);
+  M2 = pnl_mat_create_from_scalar (2, 3, 3.5);
+  T2 = pnl_tridiag_mat_create_from_scalar (4, 0.5);
   pnl_list_insert_first (L2, PNL_OBJECT(M2));
   pnl_list_insert_first (L2, PNL_OBJECT(T2));
 
@@ -183,8 +183,8 @@ static void list_copy_test ()
   PnlVect *T1;
 
   L1 = pnl_list_new ();
-  M1 = pnl_mat_create_from_double (2, 3, 3.5);
-  T1 = pnl_vect_create_from_double (4, 0.5);
+  M1 = pnl_mat_create_from_scalar (2, 3, 3.5);
+  T1 = pnl_vect_create_from_scalar (4, 0.5);
   pnl_list_insert_last (L1, PNL_OBJECT(M1));
   pnl_list_insert_last (L1, PNL_OBJECT(T1));
 
