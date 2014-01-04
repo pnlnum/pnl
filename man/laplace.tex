@@ -20,14 +20,14 @@ typedef struct
  \end{verbatim}
 
 \begin{itemize}
-\item \describefun{double}{pnl_ilap_euler}{\refstruct{PnlCmplxFunc}
+\item \describefun{double}{pnl_ilap_euler}{\PnlCmplxFunc
     \ptr fhat, double t, int N, int M}
   \sshortdescribe Compute $f(\var{t})$ where $f$ is given by its Laplace
   transform \var{fhat} by numerically inverting the Laplace transform using
   Euler's summation. The values \var{N = M = 15} usually give a very good
   accuracy. For more details on the accuracy of the method.
 
-\item \describefun{double}{pnl_ilap_cdf_euler}{\refstruct{PnlCmplxFunc}
+\item \describefun{double}{pnl_ilap_cdf_euler}{\PnlCmplxFunc
     \ptr fhat, double t, double h, int N, int M}
   \sshortdescribe Compute the cumulative distribution function $F(\var{t})$
   where $F(x) = \int_0^x f(t) dt$ and $f$ is a density function with values on
@@ -37,8 +37,8 @@ typedef struct
   good accuracy. The parameter \var{h} is the discretization step, the
   algorithm is very sensitive to the choice of \var{h}.
 
-\item \describefun{double}{pnl_ilap_fft}{\refstruct{PnlVect} \ptr res,
-    \refstruct{PnlCmplxFunc} \ptr fhat, double T, double eps}
+\item \describefun{double}{pnl_ilap_fft}{\PnlVect \ptr res,
+    \PnlCmplxFunc \ptr fhat, double T, double eps}
   \sshortdescribe Compute $f(t)$ for $t \in [h, \var{T}]$ on a regular grid
   and stores the values in \var{res}, where $h = T / {\mathrm size}(res)$. The
   function $f$ is defined by its Laplace transform \var{fhat}, which is

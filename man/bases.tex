@@ -71,23 +71,23 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
   PnlBasis *B = pnl_basis_create_from_degree (id, 2, 5);
   \end{verbatim}
 
-\item \describefun{\refstruct{PnlBasis} *}{pnl_basis_new}{}
-  \sshortdescribe Create an empty \refstruct{PnlBasis}.
+\item \describefun{\PnlBasis *}{pnl_basis_new}{}
+  \sshortdescribe Create an empty \PnlBasis.
 
-\item \describefun{void}{pnl_basis_print}{const \refstruct{PnlBasis} \ptr B}
+\item \describefun{void}{pnl_basis_print}{const \PnlBasis \ptr B}
   \sshortdescribe Print the characteristics of a basis.
   
   
-\item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create}{int index, int
+\item \describefun{\PnlBasis *}{pnl_basis_create}{int index, int
     nb_func, int nb_variates}
-  \sshortdescribe Create a \refstruct{PnlBasis} for the family
+  \sshortdescribe Create a \PnlBasis for the family
   defined by \var{index} (see Table~\ref{basis_index} and
   \reffun{pnl_basis_type_register}) with \var{nb_variates}
   variates. The basis will contain \var{nb_func}.
 
-\item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create_from_degree}{int
+\item \describefun{\PnlBasis *}{pnl_basis_create_from_degree}{int
     index, int degree, int nb_variates}
-  \sshortdescribe Create a \refstruct{PnlBasis} for the family
+  \sshortdescribe Create a \PnlBasis for the family
   defined by \var{index} (see Table~\ref{basis_index} and \reffun{pnl_basis_type_register}) with total degree less
   or equal than \var{degree} and \var{nb_variates} variates. The total degree is
   the sum of the partial degrees.\\
@@ -113,17 +113,17 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
       0 & 0 & 0 & 2\\
     \end{array}
   \right) \]
-\item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create_from_prod_degree}{int
+\item \describefun{\PnlBasis *}{pnl_basis_create_from_prod_degree}{int
     index, int degree, int nb_variates}
-  \sshortdescribe Create a \refstruct{PnlBasis} for the family
+  \sshortdescribe Create a \PnlBasis for the family
   defined by \var{index} (see Table~\ref{basis_index} and \reffun{pnl_basis_type_register}) with total degree less
   or equal than \var{degree} and \var{nb_variates} variates. The total degree is
   the product of \var{MAX(1, d_i)} where the \var{d_i} are the partial degrees.
 
 
-\item \describefun{\refstruct{PnlBasis} *}{pnl_basis_create_from_tensor}{int
+\item \describefun{\PnlBasis *}{pnl_basis_create_from_tensor}{int
     index, PnlMatInt \ptr T}
-  \sshortdescribe Create a \refstruct{PnlBasis} for the polynomial family
+  \sshortdescribe Create a \PnlBasis for the polynomial family
   defined by \var{index} (see Table~\ref{basis_index}) using the basis
   described by the tensor matrix \var{T}. The number of lines of \var{T} is
   the number of functions of the basis whereas the numbers of columns of
@@ -148,14 +148,14 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
     \end{array}
   \right) \]
 
-\item \describefun{void}{pnl_basis_clone}{\refstruct{PnlBasis} \ptr dest, const \refstruct{PnlBasis} \ptr src}
+\item \describefun{void}{pnl_basis_clone}{\PnlBasis \ptr dest, const \PnlBasis \ptr src}
   \sshortdescribe Clone \var{src} into \var{dest}. The basis \var{dest} must
   already exist before calling this function. On exit, \var{dest} and \var{src}
   are identical and independent.
-\item \describefun{\refstruct{PnlBasis}\ptr }{pnl_basis_copy}{const \refstruct{PnlBasis} \ptr B}
+\item \describefun{\PnlBasis\ptr }{pnl_basis_copy}{const \PnlBasis \ptr B}
   \sshortdescribe Create a copy of \var{B}.
-\item \describefun{void }{pnl_basis_set_from_tensor}{\refstruct{PnlBasis} \ptr
-    b, int index, const \refstruct{PnlMatInt} \ptr T}
+\item \describefun{void }{pnl_basis_set_from_tensor}{\PnlBasis \ptr
+    b, int index, const \PnlMatInt \ptr T}
   \sshortdescribe Set an alredy existing basis \var{b} to a polynomial family
   defined by \var{index} (see Table~\ref{basis_index}) using the basis
   described by the tensor matrix \var{T}. The number of lines of \var{T} is
@@ -164,7 +164,7 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
   Same function as \reffun{pnl_basis_create_from_tensor} except that it
   operates on an already existing basis.
 
-\item  \describefun{\refstruct{PnlBasis}\ptr}{pnl_basis_create_from_hyperbolic_degree}
+\item  \describefun{\PnlBasis\ptr}{pnl_basis_create_from_hyperbolic_degree}
   {int index, double degree, double q, int n}
   \sshortdescribe Create a sparse basis of polynomial with \var{n}
   variates. We give the example of the Canonical basis. A canonical polynomial
@@ -174,20 +174,20 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
   hyperbolic set of indices gives priority to polynomials associated to low
   order interaction.
 
-\item  \describefun{void}{pnl_basis_free}{\refstruct{PnlBasis} \ptr\ptr basis}
-  \sshortdescribe Free a \refstruct{PnlBasis} created by
+\item  \describefun{void}{pnl_basis_free}{\PnlBasis \ptr\ptr basis}
+  \sshortdescribe Free a \PnlBasis created by
   \reffun{pnl_basis_create}. Beware that \var{basis} is the address of a
-  \refstruct{PnlBasis}\ptr.
+  \PnlBasis\ptr.
 
 
-\item \describefun{void}{pnl_basis_del_elt}{\refstruct{PnlBasis} \ptr B, const \refstruct{PnlVectInt} \ptr d}
+\item \describefun{void}{pnl_basis_del_elt}{\PnlBasis \ptr B, const \PnlVectInt \ptr d}
   \sshortdescribe Remove the function defined by the tensor product \var{d} from
   an existing basis \var{B}.
 
-\item \describefun{void}{pnl_basis_del_elt_i}{\refstruct{PnlBasis} \ptr B, int i}
+\item \describefun{void}{pnl_basis_del_elt_i}{\PnlBasis \ptr B, int i}
   \sshortdescribe Remove the \var{i-th} element of basis \var{B}.
 
-\item \describefun{void}{pnl_basis_add_elt}{\refstruct{PnlBasis} \ptr B, const \refstruct{PnlVectInt} \ptr d}
+\item \describefun{void}{pnl_basis_add_elt}{\PnlBasis \ptr B, const \PnlVectInt \ptr d}
   \sshortdescribe Add the function defined by the tensor \var{d} to the Basis \var{B}.
 
 
@@ -205,14 +205,14 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
   \right)_{i=1,\cdots,d}
 \end{equation}
 \begin{itemize}
-\item \describefun{void}{pnl_basis_set_domain}{\refstruct{PnlBasis} \ptr B, 
-  const \refstruct{PnlVect} \ptr a, const \refstruct{PnlVect} \ptr b}
+\item \describefun{void}{pnl_basis_set_domain}{\PnlBasis \ptr B, 
+  const \PnlVect \ptr a, const \PnlVect \ptr b}
   \sshortdescribe This function declares \var{B} as a centered and normalised basis
   as defined by Equation~\ref{basis_reduced}. Calling this function is equivalent to
   calling \reffun{pnl_basis_set_reduced} with \var{center=(b+a)/2} and
   \var{scale=(b-a)/2}.
-\item \describefun{void}{pnl_basis_set_reduced}{\refstruct{PnlBasis} \ptr B,
-  const \refstruct{PnlVect} \ptr center, const \refstruct{PnlVect} \ptr scale}
+\item \describefun{void}{pnl_basis_set_reduced}{\PnlBasis \ptr B,
+  const \PnlVect \ptr center, const \PnlVect \ptr scale}
   \sshortdescribe This function declares \var{B} as a centered and normalised basis
   using the mapping
   \begin{equation*}
@@ -223,9 +223,9 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
 
 
 \begin{itemize}
-\item \describefun{int}{pnl_basis_fit_ls}{\refstruct{PnlBasis} \ptr
-    P, \refstruct{PnlVect} \ptr  coef, \refstruct{PnlMat} \ptr  x,
-    \refstruct{PnlVect} \ptr  y}
+\item \describefun{int}{pnl_basis_fit_ls}{\PnlBasis \ptr
+    P, \PnlVect \ptr  coef, \PnlMat \ptr  x,
+    \PnlVect \ptr  y}
   \sshortdescribe Compute the coefficients \var{coef} defined by
   \begin{equation*}
     \var{coef} = \arg\min_\alpha \sum_{i=1}^n
@@ -237,27 +237,27 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
   of one point $x_i$. The function to be approximated is defined by the vector
   \var{y} of the values of the function at the points \var{x}.
 
-\item \describefun{double}{pnl_basis_ik_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr x, int i, int k}
+\item \describefun{double}{pnl_basis_ik_vect}{const \PnlBasis \ptr b, const \PnlVect \ptr x, int i, int k}
   \sshortdescribe An element of a basis writes $\prod_{l=0}^{\var{nb_variates}}
   \phi_l(x_l)$ where the $\phi$'s are one dimensional polynomials. This
   functions computes the therm $\phi_k$ of the \var{i-th} basis function at the
   point \var{x}.
-\item \describefun{double}{pnl_basis_i_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr x, int i}
+\item \describefun{double}{pnl_basis_i_vect}{const \PnlBasis \ptr b, const \PnlVect \ptr x, int i}
   \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}-1}$,
   then this function returns $f_i(x)$. 
 
-\item \describefun{double}{pnl_basis_i_D_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr x, int i, int j}
+\item \describefun{double}{pnl_basis_i_D_vect}{const \PnlBasis \ptr b, const \PnlVect \ptr x, int i, int j}
   \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}-1}$,
   then this function returns $\partial_{x_{\var{j}}} f_i(x)$.
 
   
-\item \describefun{double}{pnl_basis_i_D2_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr x, int i, int j1, int j2}
+\item \describefun{double}{pnl_basis_i_D2_vect}{const \PnlBasis \ptr b, const \PnlVect \ptr x, int i, int j1, int j2}
   \sshortdescribe If \var{b} is composed of $f_0, \dots, f_{\var{nb\_func}-1}$,
   then this function returns $\partial^2_{x_{\var{j1}}, x_{\var{j2}}}
   f_i(x)$.
 
 
-\item \describefun{void}{pnl_basis_eval_derivs_vect}{const \refstruct{PnlBasis} \ptr b, const \refstruct{PnlVect} \ptr coef, const \refstruct{PnlVect} \ptr x, double \ptr fx, \refstruct{PnlVect} \ptr Dfx, \refstruct{PnlMat} \ptr D2fx}
+\item \describefun{void}{pnl_basis_eval_derivs_vect}{const \PnlBasis \ptr b, const \PnlVect \ptr coef, const \PnlVect \ptr x, double \ptr fx, \PnlVect \ptr Dfx, \PnlMat \ptr D2fx}
   \sshortdescribe Compute the function, the gradient and the Hessian matrix
   of $\sum_{k=0}^n \var{coef}_k  P_k(\cdot)$ at the point \var{x}.
   On output, \var{fx} contains the value of the function, \var{Dfx} its
@@ -265,13 +265,13 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
   performs much better than calling \reffun{pnl_basis_eval},
   \reffun{pnl_basis_eval_D} and \reffun{pnl_basis_eval_D2} sequentially.
 
-\item \describefun{double}{pnl_basis_eval_vect}{const \refstruct{PnlBasis} \ptr basis, const \refstruct{PnlVect} \ptr coef, const \refstruct{PnlVect} \ptr x}
+\item \describefun{double}{pnl_basis_eval_vect}{const \PnlBasis \ptr basis, const \PnlVect \ptr coef, const \PnlVect \ptr x}
   \sshortdescribe Compute the linear combination of \var{P_k(x)} defined by
   \var{coef}. Given the coefficients computed by the function
   \reffun{pnl_basis_fit_ls}, this function returns $\sum_{k=0}^n
   \var{coef}_k  P_k(\var{x})$.
 
-\item \describefun{double}{pnl_basis_eval_D_vect}{const \refstruct{PnlBasis} \ptr basis, const \refstruct{PnlVect} \ptr coef, const \refstruct{PnlVect} \ptr x, int i}
+\item \describefun{double}{pnl_basis_eval_D_vect}{const \PnlBasis \ptr basis, const \PnlVect \ptr coef, const \PnlVect \ptr x, int i}
   \sshortdescribe Compute the derivative with respect to \var{x_i} of the
   linear combination of \var{P_k(x)} defined by \var{coef}. Given the
   coefficients computed by the function \reffun{pnl_basis_fit_ls}, this function
@@ -279,7 +279,7 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
   \var{i} may vary between \var{0} and \var{P->nb_variates - 1}.
 
 
-\item \describefun{double}{pnl_basis_eval_D2_vect}{const \refstruct{PnlBasis} \ptr basis, const \refstruct{PnlVect} \ptr coef, const \refstruct{PnlVect} \ptr x, int i, int j}
+\item \describefun{double}{pnl_basis_eval_D2_vect}{const \PnlBasis \ptr basis, const \PnlVect \ptr coef, const \PnlVect \ptr x, int i, int j}
   \sshortdescribe Compute the derivative with respect to \var{x_i} of the
   linear combination of \var{P_k(x)} defined by \var{coef}. Given the
   coefficients computed by the function \reffun{pnl_basis_fit_ls}, this function
@@ -287,28 +287,28 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
   P_k(\var{x})$.  The indices \var{i} and \var{j} may vary between \var{0} and
   \var{P->nb_variates - 1}.
 
-\item \describefun{double}{pnl_basis_ik}{const \refstruct{PnlBasis} \ptr b, const double \ptr x, int i, int k}
+\item \describefun{double}{pnl_basis_ik}{const \PnlBasis \ptr b, const double \ptr x, int i, int k}
   \sshortdescribe Same as function \reffun{pnl_basis_ik_vect} but takes a
   C array as the point of evaluation.
-\item  \describefun{double}{pnl_basis_i}{\refstruct{PnlBasis} \ptr b, double \ptr x, int i}
+\item  \describefun{double}{pnl_basis_i}{\PnlBasis \ptr b, double \ptr x, int i}
   \sshortdescribe Same as function \reffun{pnl_basis_i_vect} but takes a
   C array as the point of evaluation.
-\item \describefun{double}{pnl_basis_i_D}{ const \refstruct{PnlBasis} \ptr b, const double \ptr x, int i, int j }
+\item \describefun{double}{pnl_basis_i_D}{ const \PnlBasis \ptr b, const double \ptr x, int i, int j }
   \sshortdescribe Same as function \reffun{pnl_basis_i_D_vect} but takes a
   C array as the point of evaluation.
-\item \describefun{double}{pnl_basis_i_D2}{const \refstruct{PnlBasis} \ptr b, const double \ptr x, int i, int j1, int j2}
+\item \describefun{double}{pnl_basis_i_D2}{const \PnlBasis \ptr b, const double \ptr x, int i, int j1, int j2}
   \sshortdescribe Same as function \reffun{pnl_basis_i_D2_vect} but takes a
   C array as the point of evaluation.
-\item \describefun{double}{pnl_basis_eval}{\refstruct{PnlBasis} \ptr P, \refstruct{PnlVect}\ptr  coef, double \ptr x}
+\item \describefun{double}{pnl_basis_eval}{\PnlBasis \ptr P, \PnlVect\ptr  coef, double \ptr x}
   \sshortdescribe Same as function \reffun{pnl_basis_eval_vect} but takes a
   C array as the point of evaluation.
-\item \describefun{double}{pnl_basis_eval_D}{\refstruct{PnlBasis} \ptr P, \refstruct{PnlVect} \ptr  coef, double \ptr x, int i}
+\item \describefun{double}{pnl_basis_eval_D}{\PnlBasis \ptr P, \PnlVect \ptr  coef, double \ptr x, int i}
   \sshortdescribe Same as function \reffun{pnl_basis_eval_D_vect} but takes a
   C array as the point of evaluation.
-\item \describefun{double}{pnl_basis_eval_D2}{\refstruct{PnlBasis} \ptr  P, \refstruct{PnlVect} \ptr  coef, double \ptr x,  int i, int j}
+\item \describefun{double}{pnl_basis_eval_D2}{\PnlBasis \ptr  P, \PnlVect \ptr  coef, double \ptr x,  int i, int j}
   \sshortdescribe Same as function \reffun{pnl_basis_eval_D2_vect} but takes a 
   C array as the point of evaluation.
-\item \describefun{double}{pnl_basis_eval_derivs}{\refstruct{PnlBasis} \ptr P, \refstruct{PnlVect}\ptr coef, double \ptr x, double \ptr fx, \refstruct{PnlVect} \ptr Dfx, \refstruct{PnlMat} \ptr D2fx}
+\item \describefun{double}{pnl_basis_eval_derivs}{\PnlBasis \ptr P, \PnlVect\ptr coef, double \ptr x, double \ptr fx, \PnlVect \ptr Dfx, \PnlMat \ptr D2fx}
   \sshortdescribe Same as function \reffun{pnl_basis_eval_derivs_vect} but takes a
   C array as the point of evaluation.
 \end{itemize}

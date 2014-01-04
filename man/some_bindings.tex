@@ -17,14 +17,14 @@ error occurred.
 
 \begin{itemize}
 \item \describefun{int}{pnl_object_mpi_pack_size}{const
-    \refstruct{PnlObject} \ptr Obj, MPI_Comm comm, int \ptr size}
+    \PnlObject \ptr Obj, MPI_Comm comm, int \ptr size}
   \sshortdescribe Compute in \var{size} the amount of space needed to pack \var{Obj}.
-\item \describefun{int}{pnl_object_mpi_pack}{const \refstruct{PnlObject}
+\item \describefun{int}{pnl_object_mpi_pack}{const \PnlObject
     \ptr Obj, void \ptr buf, int bufsize, int \ptr pos, MPI_Comm comm}
   \sshortdescribe Pack \var{Obj} into \var{buf} which must be at least of
   length \var{size}. \var{size} must be at least equal to the value returned
   by \reffun{pnl_object_mpi_pack_size}. 
-\item \describefun{int}{pnl_object_mpi_unpack}{\refstruct{PnlObject} \ptr
+\item \describefun{int}{pnl_object_mpi_unpack}{\PnlObject \ptr
     Obj, void \ptr buf, int bufsize, int \ptr pos, MPI_Comm comm}
   \sshortdescribe Unpack the content of \var{buf} starting at position
   \var{pos} (unless several objects have been packed contiguously, \var{\ptr
@@ -35,17 +35,17 @@ error occurred.
   unpacked. \var{pos} is properly set for a future call to {\it MPI_Unpack}
   if any.
   
-\item \describefun{int}{pnl_object_mpi_send}{const \refstruct{PnlObject}
+\item \describefun{int}{pnl_object_mpi_send}{const \PnlObject
     \ptr Obj, int dest, int tag, MPI_Comm comm}
   \sshortdescribe Perform a standard-mode blocking send of \var{Obj}. The
   object is sent to the process with rank \var{dest}.
 
-\item \describefun{int}{pnl_object_mpi_ssend}{const \refstruct{PnlObject} \ptr
+\item \describefun{int}{pnl_object_mpi_ssend}{const \PnlObject \ptr
     Obj, int dest, int tag, MPI_Comm comm}
   \sshortdescribe Perform a standard-mode synchronous blocking send of
   \var{Obj}. The object is sent to the process with rank \var{dest}.
   
-\item \describefun{int}{pnl_object_mpi_recv}{\refstruct{PnlObject} \ptr Obj,
+\item \describefun{int}{pnl_object_mpi_recv}{\PnlObject \ptr Obj,
     int src, int tag, MPI_Comm comm, MPI_Status \ptr status} 
   \sshortdescribe Perform a standard-mode blocking receive of \var{Obj}. The
   object is sent to the process with rank \var{dest}. Note that \var{Obj}
@@ -54,13 +54,13 @@ error occurred.
   process who sent the object.
 
   
-\item \describefun{int}{pnl_object_mpi_bcast}{\refstruct{PnlObject} \ptr
+\item \describefun{int}{pnl_object_mpi_bcast}{\PnlObject \ptr
     Obj, int root, MPI_Comm comm}
   \sshortdescribe Broadcast the object \var{Obj} from the process with rank
   \var{root} to all other processes of the group \var{comm}.
 
-\item \describefun{int}{pnl_object_mpi_reduce}{\refstruct{PnlObject} \ptr Recvbuf, const
-  \refstruct{PnlObject} \ptr Sendbuf, MPI_Op op, int root, MPI_Comm comm}
+\item \describefun{int}{pnl_object_mpi_reduce}{\PnlObject \ptr Recvbuf, const
+  \PnlObject \ptr Sendbuf, MPI_Op op, int root, MPI_Comm comm}
   \sshortdescribe Perform the reduction described by \var{op} on
   the objects \var{Sendbuf} and stores the result into \var{Recvbuf}. Note that
   \var{Recvbuf} and \var{Sendbuf} must be of the same type. The argument
@@ -82,7 +82,7 @@ error occurred.
 
 For more expect users, we provide the following nonblocking functions.
 \begin{itemize}
-\item \describefun{int}{pnl_object_mpi_isend}{const \refstruct{PnlObject}
+\item \describefun{int}{pnl_object_mpi_isend}{const \PnlObject
     \ptr Obj, int dest, int tag, MPI_Comm comm, MPI_Request \ptr request}
   \sshortdescribe Start a standard-mode, nonblocking send of object
   \var{Obj} to the process with rank \var{dest}.
@@ -104,11 +104,11 @@ is based on the Packing/Unpacking facilities of MPI.
 
 The functionnalities described in this chapter are declared in \verb!pnl/pnl_mpi.h!.
 \begin{itemize}
-\item \describefun{\refstruct{PnlRng}\ptr \ptr}
+\item \describefun{\PnlRng\ptr \ptr}
   {pnl_rng_create_from_file}{char \ptr str, int n}
   \sshortdescribe Load \var{n} rng from the file of name \var{str} and
-  returns an array of \var{n} \refstruct{PnlRng}.
-\item \describefun{int}{pnl_rng_save_to_file}{\refstruct{PnlRng} \ptr \ptr
+  returns an array of \var{n} \PnlRng.
+\item \describefun{int}{pnl_rng_save_to_file}{\PnlRng \ptr \ptr
     rngtab, int n, char \ptr str}
     \sshortdescribe Save \var{n} rng stored in \var{rngtab} into the file of
   name \var{str}.
@@ -123,7 +123,7 @@ The functionnalities described in this chapter are declared in \verb!pnl/pnl_mpi
   was empty or it did not contain any PnlObjects, the function returns \var{NULL}.
 \item \describefun{PnlList\ptr}{pnl_object_load_into_list}{FILE *stream}
   \sshortdescribe Load as many objects as possible from the stream \var{stream} and
-  stores them into a \refstruct{PnlList}. \var{stream} is typically created by
+  stores them into a \PnlList. \var{stream} is typically created by
   calling fopen with \var{mode="rb"}. If \var{stream} was empty or it did not contain
   any PnlObjects, the function returns \var{NULL}.
 \end{itemize}

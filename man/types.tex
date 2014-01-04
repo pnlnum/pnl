@@ -110,7 +110,7 @@ We provide several macros for manipulating PnlObejcts.
 \end{itemize}
 
 \begin{itemize}
-\item \describefun{\refstruct{PnlObject}\ptr }{pnl_object_create}{PnlType t}
+\item \describefun{\PnlObject\ptr }{pnl_object_create}{PnlType t}
   \sshortdescribe Create an empty PnlObject of type \var{t} which can any of
   the registered types, see Table~\ref{types}.
 \end{itemize}
@@ -158,52 +158,52 @@ implies that you \textbf{must not} free any objects inserted into a list. The
 deallocation is automatically handled by the function \reffun{pnl_list_free}.
 
 \begin{itemize}
-\item \describefun{\refstruct{PnlList} \ptr }{pnl_list_new}{}
+\item \describefun{\PnlList \ptr }{pnl_list_new}{}
   \sshortdescribe Create an empty list
-\item \describefun{\refstruct{PnlCell} \ptr }{pnl_cell_new}{}
+\item \describefun{\PnlCell \ptr }{pnl_cell_new}{}
   \sshortdescribe Create an cell list
-\item \describefun{\refstruct{PnlList}\ptr }{pnl_list_copy}{const \refstruct{PnlList}\ptr A}
-  \sshortdescribe Create a copy of a \refstruct{PnlList}. Each element of the
+\item \describefun{\PnlList\ptr }{pnl_list_copy}{const \PnlList\ptr A}
+  \sshortdescribe Create a copy of a \PnlList. Each element of the
   list \var{A} is copied by calling the its copy member.
-\item \describefun{void}{pnl_list_clone}{\refstruct{PnlList} \ptr dest, const
-  \refstruct{PnlList}\ptr src}
+\item \describefun{void}{pnl_list_clone}{\PnlList \ptr dest, const
+  \PnlList\ptr src}
   \sshortdescribe Copy the content of \var{src} into the already existing
   list \var{dest}. The list \var{dest} is automatically resized. This is a
   hard copy, the contents of both lists are independent after cloning.
-\item \describefun{void}{pnl_list_free}{\refstruct{PnlList}  \ptr \ptr L}
+\item \describefun{void}{pnl_list_free}{\PnlList  \ptr \ptr L}
   \sshortdescribe Free a list
-\item \describefun{void}{pnl_cell_free}{\refstruct{PnlCell}  \ptr \ptr c}
+\item \describefun{void}{pnl_cell_free}{\PnlCell  \ptr \ptr c}
   \sshortdescribe Free a list
-\item \describefun{\refstruct{PnlObject}\ptr}{pnl_list_get}{
-    \refstruct{PnlList} \ptr L, int i}
+\item \describefun{\PnlObject\ptr}{pnl_list_get}{
+    \PnlList \ptr L, int i}
   \sshortdescribe This function returns the content of the \var{i}--th cell of
   the list \var{L}. This function is optimized for linearly accessing all the
   elements, so it can be used inside a for loop for instance.
-\item \describefun{void}{pnl_list_insert_first}{\refstruct{PnlList}  \ptr L,
-    \refstruct{PnlObject}  \ptr o}
+\item \describefun{void}{pnl_list_insert_first}{\PnlList  \ptr L,
+    \PnlObject  \ptr o}
   \sshortdescribe Insert the object \var{o} on top of the list \var{L}. Note that
   \var{o} is not copied in \var{L}, so do  {\bf not} free \var{o} yourself, it
   will be done automatically when calling \reffun{pnl_list_free}
-\item \describefun{void}{pnl_list_insert_last}{\refstruct{PnlList}  \ptr L,
-    \refstruct{PnlObject}  \ptr o}
+\item \describefun{void}{pnl_list_insert_last}{\PnlList  \ptr L,
+    \PnlObject  \ptr o}
   \sshortdescribe Insert the object \var{o} at the bottom of the list \var{L}. Note that
   \var{o} is not copied in \var{L}, so do  {\bf not} free \var{o} yourself, it
   will be done automatically when calling \reffun{pnl_list_free}
-\item \describefun{void}{pnl_list_remove_last}{\refstruct{PnlList}  \ptr L}
+\item \describefun{void}{pnl_list_remove_last}{\PnlList  \ptr L}
   \sshortdescribe Remove the last element of the list \var{L} and frees it.
-\item \describefun{void}{pnl_list_remove_first}{\refstruct{PnlList}  \ptr L}
+\item \describefun{void}{pnl_list_remove_first}{\PnlList  \ptr L}
   \sshortdescribe Remove the first element of the list \var{L} and frees it.
-\item \describefun{void}{pnl_list_remove_i}{\refstruct{PnlList}  \ptr L, int i}
+\item \describefun{void}{pnl_list_remove_i}{\PnlList  \ptr L, int i}
   \sshortdescribe Remove the \var{i-th} element of the list \var{L} and frees it.
-\item \describefun{void}{pnl_list_concat}{\refstruct{PnlList}  \ptr L1,
-    \refstruct{PnlList}  \ptr L2}
+\item \describefun{void}{pnl_list_concat}{\PnlList  \ptr L1,
+    \PnlList  \ptr L2}
   \sshortdescribe Concatenate the two lists \var{L1} and \var{L2}. The
   resulting list is store in \var{L1} on exit. Do {\bf not} free \var{L2}
   since concatenation does not actually copy objects but only manipulates
   addresses.
-\item \describefun{void}{pnl_list_print}{const \refstruct{PnlList}  \ptr L}
+\item \describefun{void}{pnl_list_print}{const \PnlList  \ptr L}
   \sshortdescribe Only prints the types of each element. When  the
-  \refstruct{PnlObject} object has a print member, we will use it.
+  \PnlObject object has a print member, we will use it.
 \end{itemize}
 
 \subsection{Array object}
@@ -236,34 +236,34 @@ implies that you \textbf{must not} free any objects inserted into a array. The
 deallocation is automatically handled by the function \reffun{pnl_array_free}.
 
 \begin{itemize}
-\item \describefun{\refstruct{PnlArray} \ptr }{pnl_array_new}{}
+\item \describefun{\PnlArray \ptr }{pnl_array_new}{}
   \sshortdescribe Create an empty array
-\item \describefun{\refstruct{PnlArray} \ptr }{pnl_array_create}{int n}
+\item \describefun{\PnlArray \ptr }{pnl_array_create}{int n}
   \sshortdescribe Create an array of length \var{n}.
-\item \describefun{\refstruct{PnlArray}\ptr }{pnl_array_copy}{const \refstruct{PnlArray}\ptr A}
-  \sshortdescribe Create a copy of a \refstruct{PnlArray}. Each element of the
+\item \describefun{\PnlArray\ptr }{pnl_array_copy}{const \PnlArray\ptr A}
+  \sshortdescribe Create a copy of a \PnlArray. Each element of the
   array \var{A} is copied by calling the \var{A[i].object.copy}.
-\item \describefun{void}{pnl_array_clone}{\refstruct{PnlArray} \ptr dest, const
-  \refstruct{PnlArray}\ptr src}
+\item \describefun{void}{pnl_array_clone}{\PnlArray \ptr dest, const
+  \PnlArray\ptr src}
   \sshortdescribe Copy the content of \var{src} into the already existing
   array \var{dest}. The array \var{dest} is automatically resized. This is a
   hard copy, the contents of both arrays are independent after cloning.
-\item \describefun{void}{pnl_array_free}{\refstruct{PnlArray}  \ptr \ptr}
+\item \describefun{void}{pnl_array_free}{\PnlArray  \ptr \ptr}
   \sshortdescribe Free an array and all the objects hold by the array.
-\item \describefun{int}{pnl_array_resize}{\refstruct{PnlArray} \ptr  T, int size}
+\item \describefun{int}{pnl_array_resize}{\PnlArray \ptr  T, int size}
   \sshortdescribe Resize \var{T} to be \var{size} long. As much as possible of
   the original data is kept.
-\item \describefun{\refstruct{PnlObject}\ptr}{pnl_array_get}{
-    \refstruct{PnlArray} \ptr T, int i}
+\item \describefun{\PnlObject\ptr}{pnl_array_get}{
+    \PnlArray \ptr T, int i}
   \sshortdescribe This function returns the content of the \var{i}--th cell of
   the array \var{T}. No copy is made.
-\item \describefun{\refstruct{PnlObject}\ptr}{pnl_array_set}{
-    \refstruct{PnlArray} \ptr T, int i, \refstruct{PnlObject}\ptr O}
+\item \describefun{\PnlObject\ptr}{pnl_array_set}{
+    \PnlArray \ptr T, int i, \PnlObject\ptr O}
   \sshortdescribe \var{T[i] = O}. No copy is made, so the object \var{O} must
   not be freed manually.
-\item \describefun{void}{pnl_array_print}{\refstruct{PnlArray}  \ptr}
+\item \describefun{void}{pnl_array_print}{\PnlArray  \ptr}
   \sshortdescribe Not yet implemented because it would require that the
-  structure \refstruct{PnlObject} has a field copy.
+  structure \PnlObject has a field copy.
 \end{itemize}
 
 

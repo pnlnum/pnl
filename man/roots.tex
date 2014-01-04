@@ -172,8 +172,8 @@ To use the following functions, you should include \verb!pnl/pnl_root.h!.
 
 \begin{itemize}
 \item \describefun{int}{pnl_multiroot_newton}{\refstruct{PnlRnFuncRnDFunc} \ptr
-  func, const \refstruct{PnlVect} \ptr x0, double x_eps, double fx_eps, int
-  max_iter, int verbose, \refstruct{PnlVect} \ptr res}
+  func, const \PnlVect \ptr x0, double x_eps, double fx_eps, int
+  max_iter, int verbose, \PnlVect \ptr res}
   \sshortdescribe Find the root of \var{func} starting from \var{x0} using
   Newton's method with descent direction given by the inverse of the Jacobian
   matrix, ie. $d_k = (\nabla f(x_k))^{-1} f(x_k)$. Armijo's line search is used to make sure \var{|f|}
@@ -198,8 +198,8 @@ We provide two wrappers for calling minpack routines.
 \begin{itemize}
 \item \describefun
   {int}{pnl_root_fsolve}{\refstruct{PnlRnFuncRnDFunc} \ptr f,
-    \refstruct{PnlVect} \ptr x, \refstruct{PnlVect} \ptr fx, double xtol,
-    int maxfev, int \ptr nfev, \refstruct{PnlVect} \ptr scale, int
+    \PnlVect \ptr x, \PnlVect \ptr fx, double xtol,
+    int maxfev, int \ptr nfev, \PnlVect \ptr scale, int
     error_msg}
   \sshortdescribe Compute the root of a function $f:\R^n \longmapsto
   \R^n$. Note that the number of components of \var{f} must be equal to the
@@ -233,9 +233,9 @@ We provide two wrappers for calling minpack routines.
   \end{itemize}
 
 \item \describefun {int}{pnl_root_fsolve_lsq}{\refstruct{PnlRnFuncRmDFunc}
-    \ptr f, \refstruct{PnlVect} \ptr x, int m, \refstruct{PnlVect} \ptr fx,
+    \ptr f, \PnlVect \ptr x, int m, \PnlVect \ptr fx,
     double xtol, double ftol, double gtol, int maxfev, int \ptr nfev,
-    \refstruct{PnlVect} \ptr scale, int error_msg}
+    \PnlVect \ptr scale, int error_msg}
   \sshortdescribe Compute the root of $x \in \R^n \longmapsto
   \sum_{i=1}^m f_i(x)^2$, note that there is no reason why \var{m} should
   be equal to \var{n}.

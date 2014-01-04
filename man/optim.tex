@@ -41,7 +41,7 @@ To use the following functions, you should include \verb!pnl/pnl_optim.h!.
 
 To solve an inequality constrained optimization problem, ie $m_E=0$, we provide the following function.
 \begin{itemize}
-\item \describefun{int}{pnl_optim_intpoints_bfgs_solve}{\refstruct{PnlRnFuncR}\ptr func, \refstruct{PnlRnFuncRm}\ptr grad_func, \refstruct{PnlRnFuncRm}\ptr nl_constraints, \refstruct{PnlVect}\ptr lower_bounds, \refstruct{PnlVect}\ptr upper_bounds, \refstruct{PnlVect}\ptr x_input, double tolerance, int iter_max, int print_inner_steps, \refstruct{PnlVect}\ptr output}
+\item \describefun{int}{pnl_optim_intpoints_bfgs_solve}{\refstruct{PnlRnFuncR}\ptr func, \refstruct{PnlRnFuncRm}\ptr grad_func, \refstruct{PnlRnFuncRm}\ptr nl_constraints, \PnlVect\ptr lower_bounds, \PnlVect\ptr upper_bounds, \PnlVect\ptr x_input, double tolerance, int iter_max, int print_inner_steps, \PnlVect\ptr output}
   \sshortdescribe This function has the following arguments:
 
   \begin{itemize}

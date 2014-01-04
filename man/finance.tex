@@ -86,10 +86,10 @@ maturities, a matrix of prices (with strikes varying row-wise).
   or \var{FAIL} if it failed.
 
 \item 
-  \describefun{int}{pnl_bs_matrix_implicit_vol}{const \refstruct{PnlMatInt}
-    \ptr iscall, const \refstruct{PnlMat} \ptr Price, double s, 
-    double r, double divid, const \refstruct{PnlVect} \ptr K, 
-    const \refstruct{PnlVect} \ptr T, \refstruct{PnlMat} \ptr Vol}
+  \describefun{int}{pnl_bs_matrix_implicit_vol}{const \PnlMatInt
+    \ptr iscall, const \PnlMat \ptr Price, double s, 
+    double r, double divid, const \PnlVect \ptr K, 
+    const \PnlVect \ptr T, \PnlMat \ptr Vol}
   \sshortdescribe Compute the matrix of implied volatilities \var{Vol(i,j)}
   of a put option if \var{iscall(i,j)=0} or a call option if
   \var{iscall(i,j)=1} with spot \var{s} and strike \var{K(j)} in the
