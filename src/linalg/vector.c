@@ -130,14 +130,14 @@ int pnl_vect_object_resize(PnlVectObject * v, int size)
 #define BASE_DOUBLE
 #include "pnl/pnl_templates_on.h"
 static char pnl_vect_label[] = "PnlVectorDouble";
-#include "pnl_TVector_source.c"
+#include "vector_source.c"
 #include "pnl/pnl_templates_off.h"
 #undef BASE_DOUBLE
  
 #define BASE_PNL_COMPLEX
 #include "pnl/pnl_templates_on.h"
 static char pnl_vect_complex_label[] = "PnlVectorComplex";
-#include "pnl_TVector_source.c"
+#include "vector_source.c"
 #include "pnl/pnl_templates_off.h"
 #undef BASE_PNL_COMPLEX
 
@@ -145,7 +145,7 @@ static char pnl_vect_complex_label[] = "PnlVectorComplex";
 #define BASE_INT
 #include "pnl/pnl_templates_on.h"
 static char pnl_vect_int_label[] = "PnlVectorInt";
-#include "pnl_TVector_source.c"
+#include "vector_source.c"
 #include "pnl/pnl_templates_off.h"
 #undef  BASE_INT
 
