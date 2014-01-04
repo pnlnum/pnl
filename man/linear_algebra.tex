@@ -522,7 +522,10 @@ typedef struct PnlVectCompact {
   \sshortdescribe Create a \PnlVectCompact of size 0.  
 
 \item \describefun{\PnlVectCompact \ptr }{pnl_vect_compact_create}{int n, double x}
-  \sshortdescribe Create a \PnlVectCompact.  
+  \sshortdescribe Create a \PnlVectCompact filled in with \var{x}
+\item \describefun{\PnlVectCompact \ptr }{pnl_vect_compact_create}{int n, double *x}
+  \sshortdescribe Create a \PnlVectCompact filled in with the content of
+  \var{x}. Note that \var{x} must have at least \var{n} elements.
 
 \item \describefun{int}{pnl_vect_compact_resize}{\PnlVectCompact
     \ptr v, int size, double x} 
@@ -542,7 +545,7 @@ typedef struct PnlVectCompact {
 \item \describefun{double}{pnl_vect_compact_get}{const \PnlVectCompact \ptr C, int i}
   \sshortdescribe Access function
 
-\item \describefun{void}{pnl_vect_compact_set_double}{\PnlVectCompact
+\item \describefun{void}{pnl_vect_compact_set_all}{\PnlVectCompact
     \ptr C, double x}
   \sshortdescribe Set all elements of \var{C} to \var{x}. \var{C} is
   converted to a compact storage.
@@ -1894,6 +1897,9 @@ for integer, float or complex base data according to the following table
 \begin{itemize}
   \item \describefun{\PnlSpMat \ptr}{pnl_sp_mat_new}{}
     \sshortdescribe Create an empty sparse matrix.
+  \item \describefun{\PnlSpMat \ptr}{pnl_sp_mat_create}{int m, int n, int nzmax}
+    \sshortdescribe Create a sparse matrix with size \var{m x n} designed to
+    hold at most \var{nzmax} non zero elements.
 
   \item \describefun{void}{pnl_sp_mat_clone}{\PnlSpMat \ptr dest, const \PnlSpMat \ptr src}
     \sshortdescribe Clone \var{src} into \var{dest}, which is automatically

@@ -60,9 +60,20 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
 
 \subsubsection{Functions}
 
-We provide a few functions mathematical functions named \verb+pnl_funcname+,
-some of them may be available in C99 as \verb+funcname+.
 \begin{itemize}
+  \item \describefun{double}{pnl_nan}{}
+    \sshortdescribe Return \var{NaN}
+  \item \describefun{double}{pnl_posinf}{}
+    \sshortdescribe Return \var{+ infinity}
+  \item \describefun{double}{pnl_neginf}{}
+    \sshortdescribe Return \var{- infinity}
+  \item \describefun{int}{pnl_isnan}{double x}
+    \sshortdescribe Return \var{+1} if \var{x=NaN}
+  \item \describefun{int}{pnl_isinf}{double x}
+    \sshortdescribe Return \var{+1} if \var{x=+Inf}, \var{-1} if \var{x=-Inf}
+    and \var{0} otherwise.
+  \item \describefun{int}{pnl_isfinite}{double x}
+    \sshortdescribe Return \var{1} if \var{x!=+-Inf}
   \item \describefun{int}{pnl_itrunc}{double s}
     \sshortdescribe This function is similar to the \var{trunc} function
     (provided by the C library) but the result is typed as an integer instead of a
@@ -86,10 +97,12 @@ some of them may be available in C99 as \verb+funcname+.
     \sshortdescribe This function is similar to the \var{round} function
     (provided by the C library) but the result is typed as a long integer instead of a
     double. 
+  \item \describefun{double}{pnl_fact}{double x}
+    \sshortdescribe See \reffun{pnl_sf_fact}
   \item \describefun{double}{pnl_lgamma}{double x}
-    \sshortdescribe Compute $\log(\Gamma(x))$.
+    \sshortdescribe See \reffun{pnl_sf_log_gamma}
   \item \describefun{double}{pnl_tgamma}{double x}
-    \sshortdescribe Compute $\Gamma(x)$.
+    \sshortdescribe See \reffun{pnl_sf_gamma}
   \item \describefun{double}{pnl_acosh}{double x}
     \sshortdescribe Compute \var{acosh(x)}.
   \item \describefun{double}{pnl_asinh}{double x}

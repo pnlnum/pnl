@@ -201,6 +201,9 @@ deallocation is automatically handled by the function \reffun{pnl_list_free}.
   resulting list is store in \var{L1} on exit. Do {\bf not} free \var{L2}
   since concatenation does not actually copy objects but only manipulates
   addresses.
+\item \describefun{void}{pnl_list_resize}{\PnlList \ptr L, int n}
+  \sshortdescribe Change the length of \var{L} to become \var{n}. If the length
+  of \var{L} id increased, the extra elements are set to NULL.
 \item \describefun{void}{pnl_list_print}{const \PnlList  \ptr L}
   \sshortdescribe Only prints the types of each element. When  the
   \PnlObject object has a print member, we will use it.
