@@ -16,6 +16,14 @@ add_executable(band_matrix_test ${band_matrix_test_SRCS})
 target_link_libraries(band_matrix_test pnl)
 add_test(band_matrix_test ${CMAKE_CURRENT_BINARY_DIR}/band_matrix_test)
 
+SET(sp_matrix_test_SRCS
+   spmatrix_test.c
+   tests_utils.c
+)
+add_executable(sp_matrix_test ${sp_matrix_test_SRCS})
+target_link_libraries(sp_matrix_test pnl)
+add_test(sp_matrix_test ${CMAKE_CURRENT_BINARY_DIR}/sp_matrix_test)
+
 
 SET(basis_test_SRCS
    basis_test.c

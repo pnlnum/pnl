@@ -52,6 +52,10 @@ typedef struct _PnlObject PnlObject;
  */
 #define PNL_TRIDIAGMATLU_OBJECT(o) ((PnlTridiagMatLUObject *) (o))
 /**
+ * Casts any object into a PnlSpMatObject
+ */
+#define PNL_SP_MAT_OBJECT(o) ((PnlSpMatObject *) (o))
+/**
  * Casts any object into a PnlBasis
  */
 #define PNL_BASIS_OBJECT(o) ((PnlBasis *) (o))
@@ -106,6 +110,10 @@ enum {
   PNL_TYPE_HMATRIX_DOUBLE,
   PNL_TYPE_HMATRIX_INT,
   PNL_TYPE_HMATRIX_COMPLEX,
+  PNL_TYPE_SP_MATRIX,
+  PNL_TYPE_SP_MATRIX_DOUBLE,
+  PNL_TYPE_SP_MATRIX_INT,
+  PNL_TYPE_SP_MATRIX_COMPLEX,
   PNL_TYPE_LIST,
   PNL_TYPE_ARRAY,
   PNL_TYPE_BASIS,

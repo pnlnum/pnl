@@ -110,12 +110,9 @@ int pnl_mat_object_resize(PnlMatObject *M, int m, int n)
   M->mn = M->mem_size = mn;
   switch (PNL_GET_TYPE(M))
     {
-    case PNL_TYPE_MATRIX_DOUBLE : sizeof_base = sizeof(double);
-      break;
-    case PNL_TYPE_MATRIX_COMPLEX : sizeof_base = sizeof(dcomplex);
-      break;
-    case PNL_TYPE_MATRIX_INT : sizeof_base = sizeof(int);
-      break;
+    case PNL_TYPE_MATRIX_DOUBLE : sizeof_base = sizeof(double); break;
+    case PNL_TYPE_MATRIX_COMPLEX : sizeof_base = sizeof(dcomplex); break;
+    case PNL_TYPE_MATRIX_INT : sizeof_base = sizeof(int); break;
     default : PNL_MESSAGE (1, "Unknown type in pnl_mat_object_resize.\n");
       return FAIL;
     }

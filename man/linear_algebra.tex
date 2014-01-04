@@ -1805,6 +1805,139 @@ inline. To speed up these functions, you can use the macro constant
   decomposition computed by \reffun{pnl_band_mat_lu} and \var{p} the associated permutation. 
 \end{itemize}
 
+
+\subsection{Sparse Matrices}
+\subsubsection{Short description}
+The structures and functions related to matrices are declared in
+\verb!pnl/pnl_sp_matrix.h!.
+
+\describestruct{PnlSpMat}\describestruct{PnlSpMatInt}\describestruct{PnlSpMatComplex}
+\begin{verbatim}
+typedef struct _PnlSpMat
+{
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows a PnlSpMat pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
+  int m; /*!< number of rows */
+  int n; /*!< number of columns */
+  int nz; /*!< number of non-zero elements */
+  int *J; /*!< column indices, vector of size nzmax */
+  int *I; /*!< row offset integer vector, 
+            array[I[i]] is the first element of row i.
+            Vector of size (m+1) */ 
+  double *array; /*!< pointer to store the data of size nzmax*/
+  int nzmax; /*!< size of the memory block allocated for array */
+} PnlSpMat;
+
+typedef struct _PnlSpMatInt
+{
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows a PnlSpMat pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
+  int m; /*!< number of rows */
+  int n; /*!< number of columns */
+  int nz; /*!< number of non-zero elements */
+  int *J; /*!< column indices, vector of size nzmax */
+  int *I; /*!< row offset integer vector, 
+            array[I[i]] is the first element of row i.
+            Vector of size (m+1) */ 
+  int *array; /*!< pointer to store the data of size nzmax */
+  int nzmax; /*!< size of the memory block allocated for array */
+} PnlSpMatInt;
+
+typedef struct _PnlSpMatComplex
+{
+  /** 
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows a PnlSpMat pointer to be cast to a PnlObject
+   */
+  PnlObject object; 
+  int m; /*!< number of rows */
+  int n; /*!< number of columns */
+  int nz; /*!< number of non-zero elements */
+  int *J; /*!< column indices, vector of size nzmax */
+  int *I; /*!< row offset integer vector, 
+            array[I[i]] is the first element of row i.
+            Vector of size (m+1) */ 
+  dcomplex *array; /*!< pointer to store the data of size nzmax */
+  int nzmax; /*!< size of the memory block allocated for array */
+} PnlSpMatComplex;
+\end{verbatim}
+
+The non zero elements of row \var{i} are stored in \var{array} between the
+indices \var{I[i]} and \var{I[i+1]-1}. The array \var{J} contains the column
+indices of every element of \var{array}.
+\\
+
+Sparse matrices are defined using the internal template approach and can be used
+for integer, float or complex base data according to the following table
+\begin{center}
+  \begin{tabular}[t]{lll}
+    base type & prefix & type \\
+    \hline
+    double & pnl_sp_mat & PnlSpMat \\
+    \hline
+    int & pnl_sp_mat_int & PnlSpMatInt \\
+    \hline
+    dcomplex & pnl_sp_mat_complex & PnlSpMatComplex
+  \end{tabular}
+\end{center}
+
+\subsubsection{Functions}
+
+\paragraph{Constructors and destructors}
+
+\begin{itemize}
+  \item \describefun{\PnlSpMat \ptr}{pnl_sp_mat_new}{}
+    \sshortdescribe Create an empty sparse matrix.
+
+  \item \describefun{void}{pnl_sp_mat_clone}{\PnlSpMat \ptr dest, const \PnlSpMat \ptr src}
+    \sshortdescribe Clone \var{src} into \var{dest}, which is automatically
+    resized. On output, \var{dest} and \var{src} are equal but independent.
+
+  \item \describefun{\PnlSpMat \ptr}{pnl_sp_mat_copy}{\PnlSpMat \ptr src}
+    \sshortdescribe Create an independent copy of \var{src}.
+
+  \item \describefun{int}{pnl_sp_mat_resize}{\PnlSpMat \ptr M, int m, int n, int nzmax}
+    \sshortdescribe Modify the sparse matrix \var{M} to have \var{m} rows and
+    \var{n} columns and to hold at most \var{nz} non zero elements. Note that if
+    \var{nz < M->nzmax}, no memory is freed and \var{M->nzmax} is left
+    unchanged. Return \var{OK} or \var{FAIL}.
+
+  \item \describefun{void}{pnl_sp_mat_set}{\PnlSpMat \ptr M, int i, int j, double x}
+    \sshortdescribe Set \var{M(i,j) = x}.
+
+  \item \describefun{void}{pnl_sp_mat_free}{\PnlSpMat \ptr\ptr}
+    \sshortdescribe Delete a sparse matrix.
+
+  \item \describefun{int}{pnl_sp_mat_resize}{\PnlSpMat \ptr M, int m, int n, int nzmax}
+    \sshortdescribe Resize an existing \PnlSpMat to become a \var{m x n} sparse
+    matrices holding at most \var{nzmax}. Note that no old data are kept except if
+    \var{M->m} and \var{M->n} are left unchanged and we only call this function to
+    increase \var{M->nzmax}
+
+
+  \item \describefun{\PnlMat\ptr }{pnl_mat_create_from_sp_mat}{const \PnlSpMat \ptr M}
+    \sshortdescribe Create a dense \PnlMat from a spare one.
+\end{itemize}
+
+\paragraph{Accessing elements}
+
+\begin{itemize}
+  \item \describefun{void}{pnl_sp_mat_set}{\PnlSpMat \ptr M, int i, int j, double x}
+    \sshortdescribe Set \var{M[i,j] = x}. This function increases \var{M->nzmax}
+    if necessary.
+
+  \item \describefun{double}{pnl_sp_mat_get}{const \PnlSpMat \ptr M, int i, int j}
+    \sshortdescribe Return \var{M[i,j]}. If \var{M} has no entry with such an
+    index, zero is returned.
+\end{itemize}
+
+
 \subsection{Hyper Matrices}
 \subsubsection{Short description}
 
@@ -1861,21 +1994,20 @@ integer array \var{pdims} is used to create the one--to--one map between the
 natural indexing and the linear indexing used in \var{array}.
 
 
-\subsubsection{Generic Functions}
-\paragraph{General functions}
+\subsubsection{Functions}
 These functions exist for all types of hypermatrices no matter what the basic type
 is. The following conventions are used to name functions operating on hypermatrices.
 Here is the table of prefixes used for the different basic types.
 
 \begin{center}
   \begin{tabular}[t]{lll}
-    type & prefix & BASE\\
+    base type & prefix & type\\
     \hline
-    double & pnl_hmat & double \\
+    double & pnl_hmat & PnlHmat \\
     \hline
-    int & pnl_hmat_int & int \\
+    int & pnl_hmat_int & PnlHmatInt \\
     \hline
-    dcomplex & pnl_hmat_complex & dcomplex
+    dcomplex & pnl_hmat_complex & PnlHmatComplex
   \end{tabular}
 \end{center}
 
@@ -1884,8 +2016,6 @@ which exist for all types. To deduce the prototypes of these functions for
 other basic types, one must replace {\tt pnl_hmat} and {\tt double} according
 the above table.
 
-
-\subsubsection{Functions}
 
 \paragraph{Constructors and destructors}
 \begin{itemize}

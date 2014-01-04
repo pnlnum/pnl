@@ -25,6 +25,7 @@ install(FILES
     pnl_optim.h 
     pnl_perm.h 
     pnl_random.h 
+    pnl_sp_matrix.h 
     pnl_specfun.h
     pnl_templates_off.h 
     pnl_templates_on.h 

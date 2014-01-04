@@ -5,6 +5,7 @@ add_library(linalg OBJECT
    matrix.c
    perm.c
    solver_iterativ.c
+   sp_matrix.c
    tridiag_matrix.c
    vector.c
    vector_complex.c

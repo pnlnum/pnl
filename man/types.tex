@@ -47,6 +47,10 @@ Here is the list of all the types actually defined
     PNL_TYPE_TRIDIAG_MATRIX_DOUBLE & real  tridiagonal matrices \\
     PNL_TYPE_BAND_MATRIX & general band matrices \\
     PNL_TYPE_BAND_MATRIX_DOUBLE & real band matrices \\
+    PNL_TYPE_SP_MATRIX & sparse general matrices  \\
+    PNL_TYPE_SP_MATRIX_DOUBLE & sparse real matrices \\
+    PNL_TYPE_SP_MATRIX_INT & sparse integer matrices \\
+    PNL_TYPE_SP_MATRIX_COMPLEX & sparse complex matrices \\
     PNL_TYPE_HMATRIX & general hyper matrices \\
     PNL_TYPE_HMATRIX_DOUBLE & real hyper matrices \\
     PNL_TYPE_HMATRIX_INT & integer hyper matrices \\
@@ -70,6 +74,9 @@ We provide several macros for manipulating PnlObejcts.
 
 \item \describemacro{PNL_MAT_OBJECT}{o}
   \sshortdescribe Cast any object into a PnlMatObject
+
+\item \describemacro{PNL_SP_MAT_OBJECT}{o}
+  \sshortdescribe Cast any object into a PnlSpMatObject
 
 \item \describemacro{PNL_HMAT_OBJECT}{o}
   \sshortdescribe Cast any object into a PnlHmatObject

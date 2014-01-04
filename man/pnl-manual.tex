@@ -116,6 +116,14 @@
 \fi
 \makeatother
 
+% Macro for Pnl types
+\def\PnlSpMat{\refstruct{PnlSpMat}\space}
+\def\PnlMat{\refstruct{PnlMat}\space}
+\def\PnlHmat{\refstruct{PnlHmat}\space}
+\def\PnlVect{\refstruct{PnlVect}\space}
+
+
+
 \setcounter{tocdepth}{2}
 \title{Pnl Manual}
 \date{\today}
@@ -135,7 +143,7 @@ parts.
 \begin{itemize}
 \item Mathematical functions: complex numbers, special functions, standard
   financial functions for the Black \& Scholes model.
-\item Linear algebra : vectors, matrices, hypermatrices, tridiagonal matrices,
+\item Linear algebra : vectors, matrices (dense and sparse), hypermatrices, tridiagonal matrices,
   band matrices and the corresponding routines to manipulate them and solve linear systems.
 \item Probabilistic functions: random number generators and  cumulative
   distribution functions.
@@ -177,6 +185,17 @@ possible use with a C++ compiler. The header files must be include using
     \verb!PnlFooBar *! object (note the ``\ptr'').
     These objects must be freed by calling respectively \verb!pnl_foo_free! or
     \verb!pnl_foo_bar_free!.
+
+  \item Functions ending in \verb!_clone! take two arguments \verb!src! and
+    \verb!dest! and modify \verb!dest! to make it identical to \verb!src!, ie.
+    they have the same size and data. Note that no new object is allocated,
+    \verb!dest! must exist before calling this function.
+
+  \item Functions ending in \verb!_copy! create a new object identical (ie. with
+    the same size and content) as its argument but independent (ie. modifying
+    one of them does not alter the other). Calling \verb!A = pnl_xxx_create(B)!
+    is equivalent to first calling \verb!A = pnl_xxx_new()! function and then
+    \verb!pnl_xxx_clone(A, B)!.
     
   \item Every object must implement a \verb!pnl_xxx_new! function which returns
     a pointer to an empty object with all its elements properly set to $0$. This
@@ -238,6 +257,10 @@ possible use with a C++ compiler. The header files must be include using
       PnlMat & pnl_mat \\
       PnlMatComplex & pnl_mat_complex \\
       PnlMatInt & pnl_mat_int \\
+      & \\
+      PnlSpMat & pnl_sp_mat \\
+      PnlSpMatComplex & pnl_sp_mat_complex \\
+      PnlSpMatInt & pnl_sp_mat_int \\
       & \\
       PnlHmat & pnl_hmat \\
       PnlHmatComplex & pnl_hmat_complex \\

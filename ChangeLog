@@ -1,3 +1,7 @@
+03-01-2014 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* sp_matrix.c: Add a template sparse matrix type.
+
 27-12-2013 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* basis.c: Improve the effeciency of the evaluation by avoid to

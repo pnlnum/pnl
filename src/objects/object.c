@@ -21,6 +21,7 @@
 #include "pnl/pnl_object.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
+#include "pnl/pnl_sp_matrix.h"
 #include "pnl/pnl_tridiag_matrix.h"
 #include "pnl/pnl_band_matrix.h"
 #include "pnl/pnl_basis.h"
@@ -74,6 +75,14 @@ PnlObject* pnl_object_create (PnlType type)
       o = PNL_OBJECT(pnl_band_mat_object_new ()); break;
     case PNL_TYPE_BAND_MATRIX_DOUBLE:
       o = PNL_OBJECT(pnl_band_mat_new ()); break;
+    case PNL_TYPE_SP_MATRIX:
+      o = PNL_OBJECT(pnl_sp_mat_object_new ()); break;
+    case PNL_TYPE_SP_MATRIX_DOUBLE:
+      o = PNL_OBJECT(pnl_sp_mat_new ()); break;
+    case PNL_TYPE_SP_MATRIX_INT:
+      o = PNL_OBJECT(pnl_sp_mat_int_new ()); break;
+    case PNL_TYPE_SP_MATRIX_COMPLEX:
+      o = PNL_OBJECT(pnl_sp_mat_complex_new ()); break;
     case PNL_TYPE_HMATRIX:
       o = PNL_OBJECT(pnl_hmat_object_new ()); break;
     case PNL_TYPE_HMATRIX_DOUBLE:
