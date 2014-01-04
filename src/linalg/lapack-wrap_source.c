@@ -16,6 +16,22 @@
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
 
+/* To enable clang completion */
+#ifdef PNL_CLANG_COMPLETE
+#include <stdlib.h>
+#include <string.h>
+
+#include "pnl/pnl_internals.h"
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_machine.h"
+#include "pnl/clapack.h"
+#define BASE_DOUBLE
+#include "pnl/pnl_templates_on.h"
+#endif
+
+
 
 /**
  * Cholesky decomposition. Postivity is checked during the
@@ -551,4 +567,8 @@ int FUNCTION(pnl_mat,inverse) (TYPE(PnlMat) *inv, const TYPE(PnlMat) *A)
   return OK;
 }
 
+#ifdef PNL_CLANG_COMPLETE
+#include "pnl/pnl_templates_off.h"
+#undef  BASE_DOUBLE
+#endif
 

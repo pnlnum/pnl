@@ -16,6 +16,17 @@
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
 
+/* To enable clang completion */
+#ifdef PNL_CLANG_COMPLETE
+#include <stdlib.h>
+#include <string.h>
+
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_internals.h"
+#define BASE_DOUBLE
+#include "pnl/pnl_templates_on.h"
+#endif
 
 
 
@@ -1469,3 +1480,7 @@ TYPE(PnlVect) FUNCTION(pnl_vect,wrap_mat)(const TYPE(PnlMat) *M)
   return V;
 }
 
+#ifdef PNL_CLANG_COMPLETE
+#include "pnl/pnl_templates_off.h"
+#undef  BASE_DOUBLE
+#endif

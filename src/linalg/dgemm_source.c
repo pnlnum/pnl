@@ -18,6 +18,17 @@
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
 
+/* To enable clang completion */
+#ifdef PNL_CLANG_COMPLETE
+#include <stdlib.h>
+#include <string.h>
+
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_internals.h"
+#define BASE_DOUBLE
+#include "pnl/pnl_templates_on.h"
+#endif
 
 
 /**
@@ -278,3 +289,10 @@ void FUNCTION(pnl_mat,dgemm) (char transA, char transB, BASE alpha, const TYPE(P
       FUNCTION(pnl_mat,dgemmNT) (alpha, A, B, C);
     }
 }
+
+#ifdef PNL_CLANG_COMPLETE
+#include "pnl/pnl_templates_off.h"
+#undef  BASE_DOUBLE
+#endif
+
+

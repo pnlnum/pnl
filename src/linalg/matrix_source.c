@@ -24,11 +24,19 @@
 /* License along with this program.  If not, see                        */
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
-
 
-/***************************
- *** PnlMat functions ***
- ***************************/
+/* To enable clang completion */
+#ifdef PNL_CLANG_COMPLETE
+#include <stdlib.h>
+#include <string.h>
+
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_internals.h"
+#define BASE_DOUBLE
+#include "pnl/pnl_templates_on.h"
+#endif
+
 
 /**
  * Initialize a PnlMat
@@ -2113,3 +2121,8 @@ TYPE(PnlVect) FUNCTION(pnl_vect,wrap_hmat)(TYPE(PnlHmat) *M, int *t)
   return v;
 }
 
+
+#ifdef PNL_CLANG_COMPLETE
+#include "pnl/pnl_templates_off.h"
+#undef  BASE_DOUBLE
+#endif

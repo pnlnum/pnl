@@ -17,6 +17,17 @@
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
 
+/* To enable clang completion */
+#ifdef PNL_CLANG_COMPLETE
+#include <stdlib.h>
+#include <string.h>
+
+#include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_sp_matrix.h"
+#include "pnl/pnl_internals.h"
+#define BASE_DOUBLE
+#include "pnl/pnl_templates_on.h"
+#endif
 
 /**
  * Initialize a PnlSpMat
@@ -209,4 +220,10 @@ TYPE(PnlMat)* FUNCTION(pnl_mat,create_from_sp_mat)(const TYPE(PnlSpMat) *Sp)
     }
   return M;
 }
+
+#ifdef PNL_CLANG_COMPLETE
+#include "pnl/pnl_templates_off.h"
+#undef  BASE_DOUBLE
+#endif
+
 
