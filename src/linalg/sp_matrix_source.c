@@ -276,24 +276,48 @@ int FUNCTION(pnl_sp_mat, eq)(const TYPE(PnlSpMat) *Sp1, const TYPE(PnlSpMat) *Sp
   return TRUE;
 }
 
+/** 
+ *  M = M + x
+ * 
+ * @param M a sparse matrix
+ * @param x a scalar
+ */
 void FUNCTION(pnl_sp_mat,plus_scalar)(TYPE(PnlSpMat) *M, BASE x)
 {
   int i;
   for ( i=0 ; i<M->nz ; i++ ) { PLUSEQ(M->array[i], x); }
 }
 
+/** 
+ *  M = M - x
+ * 
+ * @param M a sparse matrix
+ * @param x a scalar
+ */
 void FUNCTION(pnl_sp_mat,minus_scalar)(TYPE(PnlSpMat) *M, BASE x)
 {
   int i;
   for ( i=0 ; i<M->nz ; i++ ) { MINUSEQ(M->array[i], x); }
 }
 
+/** 
+ *  M = M * x
+ * 
+ * @param M a sparse matrix
+ * @param x a scalar
+ */
 void FUNCTION(pnl_sp_mat,mult_scalar)(TYPE(PnlSpMat) *M, BASE x)
 {
   int i;
   for ( i=0 ; i<M->nz ; i++ ) { MULTEQ(M->array[i], x); }
 }
 
+/** 
+ *  M = M / x
+ * 
+ * @param M a sparse matrix
+ * @param x a scalar
+ */
 void FUNCTION(pnl_sp_mat,div_scalar)(TYPE(PnlSpMat) *M, BASE x)
 {
   int i;
