@@ -625,7 +625,7 @@ and \var{y} are vectors.
   \reffun{pnl_mat_dgemm} & \var{C := alpha * op (A) * op (B) + beta * C}\\
   \reffun{pnl_mat_mult_vect_transpose_inplace} & \var{y = A' * x}\\
   \reffun{pnl_mat_mult_vect_inplace} & \var{y = A * x}\\
-  \reffun{pnl_mat_lAxpby} & \var{y := alpha * A * x + beta * y}\\
+  \reffun{pnl_mat_lAxpby} & \var{y := lambda * A * x + beta * y}\\
   \reffun{pnl_mat_dgemv} & \var{y := alpha * op (A) * x + beta * y}\\
   \reffun{pnl_mat_dger} & \var{A := alpha x * y' + A}
 \end{tabular}
@@ -1112,10 +1112,10 @@ there exist macros for {\bf \PnlMat only}.
 
   
 \item \describefun{void}{pnl_mat_lAxpby}{double lambda, const \PnlMat
-    \ptr A, const \PnlVect \ptr x, double mu, \PnlVect \ptr b} 
-  \sshortdescribe Compute \var{b := lambda A x + mu b}. When \var{mu==0}, the
-  content of \var{b} is not used on input and instead \var{b} is resized to
-  match \var{A*x}. The vectors \var{x} and \var{b} must be different.
+    \ptr A, const \PnlVect \ptr x, double b, \PnlVect \ptr y} 
+  \sshortdescribe Compute \var{y := lambda A x + b y}. When \var{b=0}, the
+  content of \var{y} is not used on input and instead \var{y} is resized to
+  match \var{A*x}. The vectors \var{x} and \var{y} must be different.
 
 
 \item \describefun{void}{pnl_mat_dgemv}{char trans, double lambda, const
@@ -1952,6 +1952,20 @@ for integer, float or complex base data according to the following table
   \sshortdescribe In-place matrix scalar multiplication
 \item \describefun{void}{pnl_sp_mat_div_scalar}{\PnlSpMat \ptr M, double x}
   \sshortdescribe In-place matrix scalar division
+\end{itemize}
+
+
+\paragraph{Standard matrix operations}
+
+\begin{itemize}
+\item \describefun{void}{pnl_sp_mat_mult_vect}(\PnlVect \ptr y, const
+  \PnlSpMat \ptr A, const \PnlVect \ptr x)
+  \sshortdescribe \var{y = A x}.
+\item \describefun{void}{pnl_sp_mat_lAxpby}{double lambda, const \PnlSpMat
+  \ptr A, const \PnlVect \ptr x, double b, \PnlVect \ptr y} 
+  \sshortdescribe Compute \var{y := lambda A x + b y}. When \var{b=0}, the
+  content of \var{y} is not used on input and instead \var{y} is resized to
+  match \var{A*x}. The vectors \var{x} and \var{y} must be different.
 \end{itemize}
 
 \subsection{Hyper Matrices}

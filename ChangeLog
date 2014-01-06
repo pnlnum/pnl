@@ -1,6 +1,7 @@
-04-01-2014 Jérôme Lelong <jerome.lelong@gmail.com>
+06-01-2014 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* sp_matrix.c: Add scalar operations on sparse matrices.
+	Add matrix/vector multiplication and co.
 
 04-01-2014 Jérôme Lelong <jerome.lelong@gmail.com>
 

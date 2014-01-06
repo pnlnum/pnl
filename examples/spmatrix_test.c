@@ -179,6 +179,41 @@ static void sp_scalar_ops ()
   pnl_rng_free (&rng);
 }
 
+static void sp_mat_mult_vect ()
+{
+  PnlSpMat *Sp;
+  PnlMat *M;
+  PnlVect *x, *y1, *y2;
+  PnlRng * rng = pnl_rng_create(PNL_RNG_MERSENNE);
+  int m = 9, n = 11;
+  double abserr = 1E-12;
+  double lambda = 0.5, b = 2.;
+  pnl_rng_sseed (rng, 0);
+  Sp = create_random_sp (m, n, rng);
+  M = pnl_mat_create_from_sp_mat (Sp);
+  x = pnl_vect_new ();
+  y1 = pnl_vect_new ();
+  y2 = pnl_vect_new ();
+  pnl_vect_rng_normal (x, n, rng);
+
+  pnl_sp_mat_mult_vect (y1, Sp, x);
+  pnl_mat_mult_vect_inplace (y2, M, x);
+  pnl_test_vect_eq_abs (y1, y2, abserr, "sp_mat_mult_vect", "");
+
+  pnl_vect_rng_normal (y1, m, rng);
+  pnl_vect_clone (y2, y1);
+  pnl_sp_mat_lAxpby (lambda, Sp, x, b, y2);
+  pnl_mat_lAxpby (lambda, M, x, b, y1);
+  pnl_test_vect_eq_abs (y1, y2, abserr, "sp_mat_lAxpby", "");
+
+  pnl_sp_mat_free (&Sp);
+  pnl_mat_free (&M);
+  pnl_vect_free (&y1);
+  pnl_vect_free (&y2);
+  pnl_rng_free (&rng);
+}
+
+
 int main (int argc, char *argv[])
 {
   pnl_test_init (argc, argv);
@@ -186,6 +221,7 @@ int main (int argc, char *argv[])
   sp_create_test ();
   sp_clone_test ();
   sp_scalar_ops ();
+  sp_mat_mult_vect ();
   /* sp_add_test (); */
   exit (pnl_test_finalize("Sparse matrices"));
 }

@@ -324,6 +324,65 @@ void FUNCTION(pnl_sp_mat,div_scalar)(TYPE(PnlSpMat) *M, BASE x)
   for ( i=0 ; i<M->nz ; i++ ) { DIVEQ(M->array[i], x); }
 }
 
+/** 
+ * Compute y = A x
+ *  
+ * @param[out] y a vector
+ * @param A a sparse matrix
+ * @param x a vector
+ */
+void FUNCTION(pnl_sp_mat,mult_vect)(TYPE(PnlVect) *y, const TYPE(PnlSpMat)*A, const TYPE(PnlVect) *x)
+{
+  int i, k;
+  CheckSpMatVectIsCompatible(A, x);
+  FUNCTION(pnl_vect,resize)(y, A->m);
+  FUNCTION(pnl_vect,set_zero)(y);
+
+  for ( i=0 ; i<A->m ; i++ )
+    {
+      BASE yi = ZERO;
+      for ( k=A->I[i] ; k<A->I[i+1] ; k++ )
+        {
+          PLUSEQ(yi, MULT(A->array[k], PNL_GET(x, A->J[k])) );
+        }
+      PNL_LET(y, i) = yi;
+    }
+}
+
+/** 
+ * Compute y = lambda A x + b y
+ *  
+ * @param[in/out] y a vector
+ * @param lambda a scalar
+ * @param b a scalar
+ * @param A a sparse matrix
+ * @param x a vector
+ */
+void FUNCTION(pnl_sp_mat,lAxpby)(BASE lambda, const TYPE(PnlSpMat) *A, const TYPE(PnlVect) *x, BASE b, TYPE(PnlVect) *y)
+{
+  int i, k;
+  CheckSpMatVectIsCompatible(A, x);
+  if ( EQ(b, ZERO) )
+    {
+      FUNCTION(pnl_vect,resize)(y, A->m);
+      FUNCTION(pnl_vect,set_zero)(y);
+    }
+  else if (NEQ(b, ZERO)) FUNCTION(pnl_vect,mult_scalar) (y, b);
+  if ( EQ(lambda, ZERO) ) return;
+
+  PNL_CHECK (A->n != x->size || A->m != y->size, "size mismatch", "pnl_sp_mat_lAxpby");
+  for ( i=0 ; i<A->m ; i++ )
+    {
+      BASE temp = ZERO;
+      for ( k=A->I[i] ; k<A->I[i+1] ; k++ )
+        {
+          PLUSEQ(temp, MULT(A->array[k], PNL_GET(x, A->J[k])) );
+        }
+      PLUSEQ(PNL_LET(y, i),  MULT(lambda, temp));
+    }
+
+
+}
 
 #ifdef PNL_CLANG_COMPLETE
 #include "pnl/pnl_templates_off.h"

@@ -8,7 +8,11 @@
 #ifndef PNL_RANGE_CHECK_OFF
 #define CheckIndexSpMat(M,i,j) \
   if ( (i)>((M)->m-1) || (j)>((M)->n-1) || (i)<0 || (j)<0 ) { perror("index of range"); abort(); }
-
+#define CheckSpMatVectIsCompatible(M,x) \
+  if ( (M)->n != (x)->size ) { perror("size mismatch"); abort(); }
+#else
+#define CheckIndexSpMat(M,i,j)  {}
+#define CheckSpMatVectIsCompatible(M,x) {}
 #endif /* PNL_RANGE_CHECK_OFF */
 
 #include "pnl/pnl_config.h"
@@ -97,6 +101,8 @@ extern void pnl_sp_mat_plus_scalar(PnlSpMat *M, double x);
 extern void pnl_sp_mat_minus_scalar(PnlSpMat *M, double x);
 extern void pnl_sp_mat_mult_scalar(PnlSpMat *M, double x);
 extern void pnl_sp_mat_div_scalar(PnlSpMat *M, double x);
+extern void pnl_sp_mat_mult_vect(PnlVect *y, const PnlSpMat *A, const PnlVect *x);
+extern void pnl_sp_mat_lAxpby (double lambda, const PnlSpMat *A, const PnlVect *x, double b, PnlVect *y);
 
 /*@}*/
 
@@ -138,6 +144,8 @@ extern void pnl_sp_mat_int_plus_scalar(PnlSpMatInt *M, int x);
 extern void pnl_sp_mat_int_minus_scalar(PnlSpMatInt *M, int x);
 extern void pnl_sp_mat_int_mult_scalar(PnlSpMatInt *M, int x);
 extern void pnl_sp_mat_int_div_scalar(PnlSpMatInt *M, int x);
+extern void pnl_sp_mat_int_mult_vect(PnlVectInt *y, const PnlSpMatInt *A, const PnlVectInt *x);
+extern void pnl_sp_mat_int_lAxpby (int lambda, const PnlSpMatInt *A, const PnlVectInt *x, int b, PnlVectInt *y);
 
 /*@}*/
 
@@ -179,6 +187,8 @@ extern void pnl_sp_mat_complex_plus_scalar(PnlSpMatComplex *M, dcomplex x);
 extern void pnl_sp_mat_complex_minus_scalar(PnlSpMatComplex *M, dcomplex x);
 extern void pnl_sp_mat_complex_mult_scalar(PnlSpMatComplex *M, dcomplex x);
 extern void pnl_sp_mat_complex_div_scalar(PnlSpMatComplex *M, dcomplex x);
+extern void pnl_sp_mat_complex_mult_vect(PnlVectComplex *y, const PnlSpMatComplex *A, const PnlVectComplex *x);
+extern void pnl_sp_mat_complex_lAxpby (dcomplex lambda, const PnlSpMatComplex *A, const PnlVectComplex *x, dcomplex b, PnlVectComplex *y);
 
 /*@}*/
 /*@}*/
