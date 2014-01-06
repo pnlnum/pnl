@@ -10,6 +10,5 @@ add_library(linalg OBJECT
    vector.c
    vector_complex.c
    vector_double.c
-   vector_int.c
    zpstrf.c
 )

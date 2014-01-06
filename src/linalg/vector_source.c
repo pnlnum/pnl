@@ -1073,6 +1073,25 @@ void FUNCTION(pnl_vect, reverse)(TYPE(PnlVect) * v)
 
 #if defined ORDERED
 
+/** 
+ * Return TRUE if a[i] < b[i] and a and b have the same length.
+ * 
+ * @param a
+ * @param b
+ * 
+ * @return  TRUE or FALSE
+ */
+int FUNCTION(pnl_vect,less) (const TYPE(PnlVect) *a, const TYPE(PnlVect) *b)
+{
+  int i;
+  if (a->size != b->size) return FAIL;
+  for ( i=0 ; i<a->size ; i++ )
+    {
+      if ( (PNL_GET(a, i) >= PNL_GET(b, i)) ) return FALSE;
+    }
+  return TRUE;
+}
+
 /**
  * Return the index of the minimum of the elements of an array
  *

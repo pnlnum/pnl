@@ -82,6 +82,7 @@ extern void pnl_vect_init(PnlVect *v);
 extern PnlVect* pnl_vect_new();
 extern int pnl_vect_eq (const PnlVect *, const PnlVect *);
 extern int pnl_vect_eq_all (const PnlVect *, double);
+extern int pnl_vect_less(const PnlVect * a,const PnlVect * b);
 extern PnlVect* pnl_vect_create(int size);
 extern PnlVect pnl_vect_wrap_array(const double *x, int size);
 extern PnlVect* pnl_vect_create_from_zero(int size);
@@ -209,6 +210,7 @@ extern void pnl_vect_int_init(PnlVectInt *v);
 extern PnlVectInt* pnl_vect_int_new();
 extern int pnl_vect_int_eq (const PnlVectInt *, const PnlVectInt *);
 extern int pnl_vect_int_eq_all (const PnlVectInt *, int);
+extern int pnl_vect_int_less(const PnlVectInt * a,const PnlVectInt * b);
 extern PnlVectInt* pnl_vect_int_create(int size);
 extern PnlVectInt pnl_vect_int_wrap_array(const int *x, int size);
 extern PnlVectInt* pnl_vect_int_create_from_scalar(int size, int x);
@@ -277,7 +279,6 @@ extern void pnl_vect_int_dyadic_cast(const PnlVectInt * v_int,PnlVect * v_out);
 extern void pnl_vect_int_swap_elements(PnlVectInt * v, int i, int j); 
 extern void pnl_vect_int_reverse(PnlVectInt * v);
 
-extern int pnl_vect_int_less(const PnlVectInt * a,const PnlVectInt * b);
 
 
 /*
