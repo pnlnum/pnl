@@ -1,5 +1,9 @@
 04-01-2014 Jérôme Lelong <jerome.lelong@gmail.com>
 
+	* sp_matrix.c: Add scalar operations on sparse matrices.
+
+04-01-2014 Jérôme Lelong <jerome.lelong@gmail.com>
+
 	* linalg: many templated function names have been changed to be more
 	coherent. See src/include/pnl/pnl_deprecated.h to get a list of the
 	changes. The old names can still be used, but we encourage new code to

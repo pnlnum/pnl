@@ -1941,6 +1941,18 @@ for integer, float or complex base data according to the following table
     index, zero is returned.
 \end{itemize}
 
+\paragraph{Applying external operations}
+
+\begin{itemize}
+\item \describefun{void}{pnl_sp_mat_plus_scalar}{\PnlSpMat \ptr M, double x}
+  \sshortdescribe In-place matrix scalar addition
+\item \describefun{void}{pnl_sp_mat_minus_scalar}{\PnlSpMat \ptr M, double x}
+  \sshortdescribe In-place matrix scalar substraction
+\item \describefun{void}{pnl_sp_mat_mult_scalar}{\PnlSpMat \ptr M, double x}
+  \sshortdescribe In-place matrix scalar multiplication
+\item \describefun{void}{pnl_sp_mat_div_scalar}{\PnlSpMat \ptr M, double x}
+  \sshortdescribe In-place matrix scalar division
+\end{itemize}
 
 \subsection{Hyper Matrices}
 \subsubsection{Short description}

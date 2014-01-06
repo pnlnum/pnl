@@ -101,6 +101,7 @@ void FUNCTION(pnl_sp_mat,clone)(TYPE(PnlSpMat) *clone, const TYPE(PnlSpMat) *M)
   memcpy(clone->I, M->I, sizeof(int) * (M->m + 1));
   memcpy(clone->J, M->J, sizeof(int) * M->nz);
   memcpy(clone->array, M->array, sizeof(BASE) * M->nz);
+  clone->nz = M->nz;
 }
 
 /**
@@ -274,6 +275,31 @@ int FUNCTION(pnl_sp_mat, eq)(const TYPE(PnlSpMat) *Sp1, const TYPE(PnlSpMat) *Sp
     }
   return TRUE;
 }
+
+void FUNCTION(pnl_sp_mat,plus_scalar)(TYPE(PnlSpMat) *M, BASE x)
+{
+  int i;
+  for ( i=0 ; i<M->nz ; i++ ) { PLUSEQ(M->array[i], x); }
+}
+
+void FUNCTION(pnl_sp_mat,minus_scalar)(TYPE(PnlSpMat) *M, BASE x)
+{
+  int i;
+  for ( i=0 ; i<M->nz ; i++ ) { MINUSEQ(M->array[i], x); }
+}
+
+void FUNCTION(pnl_sp_mat,mult_scalar)(TYPE(PnlSpMat) *M, BASE x)
+{
+  int i;
+  for ( i=0 ; i<M->nz ; i++ ) { MULTEQ(M->array[i], x); }
+}
+
+void FUNCTION(pnl_sp_mat,div_scalar)(TYPE(PnlSpMat) *M, BASE x)
+{
+  int i;
+  for ( i=0 ; i<M->nz ; i++ ) { DIVEQ(M->array[i], x); }
+}
+
 
 #ifdef PNL_CLANG_COMPLETE
 #include "pnl/pnl_templates_off.h"

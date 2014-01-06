@@ -90,11 +90,102 @@ static void sp_create_test ()
   pnl_rng_free (&rng);
 }
 
+static void sp_clone_test ()
+{
+  PnlSpMat *Sp, *Sp2;
+  PnlRng * rng = pnl_rng_create(PNL_RNG_MERSENNE);
+  int m = 9, n = 11;
+  pnl_rng_sseed (rng, 0);
+  Sp = create_random_sp (m, n, rng);
+  Sp2 = pnl_sp_mat_new ();
+  pnl_sp_mat_clone (Sp2, Sp);
+   
+  if ( pnl_sp_mat_eq (Sp2, Sp) == TRUE )
+    pnl_test_set_ok ("sp_mat_clone");
+  else
+    pnl_test_set_fail ("sp_mat_clone", 0, 0);
+  pnl_sp_mat_free (&Sp);
+  pnl_sp_mat_free (&Sp2);
+  pnl_rng_free (&rng);
+}
+
+#define NEQ_ERR(a,b) (fabs(a-b) > err)
+static void sp_scalar_ops ()
+{
+  PnlSpMat *Sp, *Sp2;
+  PnlRng * rng = pnl_rng_create(PNL_RNG_MERSENNE);
+  int status, i, m = 9, n = 11;
+  double x = 3.6;
+  double err = 1E-12;
+  pnl_rng_sseed (rng, 0);
+  Sp = create_random_sp (m, n, rng);
+  Sp2 = pnl_sp_mat_new ();
+
+  /* plus op */
+  status = OK;
+  pnl_sp_mat_clone (Sp2, Sp);
+  pnl_sp_mat_plus_scalar (Sp2, x);
+  for ( i=0 ; i<Sp->nz ; i++ ) 
+    {
+      if ( NEQ_ERR(Sp->array[i] + x, Sp2->array[i]) ) { status = FAIL; break; }
+    }
+  if ( status == FAIL ) 
+    pnl_test_set_fail ("sp_mat_plus_scalar", 0, 0);
+  else
+    pnl_test_set_ok ("sp_mat_plus_scalar");
+
+  /* minus op */
+  status = OK;
+  pnl_sp_mat_clone (Sp2, Sp);
+  pnl_sp_mat_minus_scalar (Sp2, x);
+  for ( i=0 ; i<Sp->nz ; i++ ) 
+    {
+      if ( NEQ_ERR(Sp->array[i] - x, Sp2->array[i]) ) { status = FAIL; break; }
+    }
+  if ( status == FAIL ) 
+    pnl_test_set_fail ("sp_mat_minus_scalar", 0, 0);
+  else
+    pnl_test_set_ok ("sp_mat_minus_scalar");
+
+  /* mult op */
+  status = OK;
+  pnl_sp_mat_clone (Sp2, Sp);
+  pnl_sp_mat_mult_scalar (Sp2, x);
+  for ( i=0 ; i<Sp->nz ; i++ ) 
+    {
+      if ( NEQ_ERR(Sp->array[i] * x, Sp2->array[i]) ) { status = FAIL; break; }
+    }
+  if ( status == FAIL ) 
+    pnl_test_set_fail ("sp_mat_mult_scalar", 0, 0);
+  else
+    pnl_test_set_ok ("sp_mat_mult_scalar");
+
+  /* div op */
+  status = OK;
+  pnl_sp_mat_clone (Sp2, Sp);
+  pnl_sp_mat_div_scalar (Sp2, x);
+  for ( i=0 ; i<Sp->nz ; i++ ) 
+    {
+      if ( NEQ_ERR(Sp->array[i] / x, Sp2->array[i]) ) { status = FAIL; break; }
+    }
+  if ( status == FAIL ) 
+    pnl_test_set_fail ("sp_mat_div_scalar", 0, 0);
+  else
+    pnl_test_set_ok ("sp_mat_div_scalar");
+
+
+  pnl_sp_mat_free (&Sp);
+  pnl_sp_mat_free (&Sp2);
+  pnl_rng_free (&rng);
+}
+
 int main (int argc, char *argv[])
 {
   pnl_test_init (argc, argv);
   sp_get_set_test ();
   sp_create_test ();
+  sp_clone_test ();
+  sp_scalar_ops ();
   /* sp_add_test (); */
   exit (pnl_test_finalize("Sparse matrices"));
 }
