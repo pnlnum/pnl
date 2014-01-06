@@ -16,6 +16,8 @@
 #define pnl_vect_set_double pnl_vect_set_all
 #define pnl_vect_int_set_int pnl_vect_int_set_all
 #define pnl_vect_complex_set_dcomplex pnl_vect_complex_set_all
+#define pnl_vect_compact_set_double pnl_vect_compact_set_all
+
 
 #define pnl_vect_eq_double pnl_vect_eq_all
 #define pnl_vect_int_eq_int pnl_vect_int_eq_all

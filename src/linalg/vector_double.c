@@ -226,7 +226,7 @@ double pnl_vect_compact_get (const PnlVectCompact *C, int i)
  * @param C a PnlVectCompact
  * @param x a real value
  */
-void pnl_vect_compact_set_double (PnlVectCompact *C, double x)
+void pnl_vect_compact_set_all (PnlVectCompact *C, double x)
 {
   if ( C->convert =='a' && C->array != NULL )
     {
@@ -234,6 +234,7 @@ void pnl_vect_compact_set_double (PnlVectCompact *C, double x)
     }
   C->convert = 'd'; C->val = x;
 }
+
 /**
  * Copy an array into a PnlVectCompact
  * 
