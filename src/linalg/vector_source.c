@@ -645,16 +645,14 @@ void FUNCTION(pnl_vect, print_nsp)(const TYPE(PnlVect) * V)
 void FUNCTION(pnl_vect,map_inplace)(TYPE(PnlVect) *lhs,
                                      BASE(*f)(BASE ))
 {
-  BASE *lptr;
-  int i=0;
-  while(i<lhs->size)
+  int i;
+  for ( i=0 ; i<lhs->size ; i++ )
     {
-      lptr = FUNCTION(pnl_vect, lget)(lhs, i);
-      (*lptr)=(*f)(*lptr); i++;
+      const BASE xi = PNL_GET(lhs, i);
+      PNL_LET(lhs, i) =(*f)(xi);
     }
 }
 
-#if (defined BASE_DOUBLE || defined BASE_PNL_COMPLEX || defined BASE_INT)
 static BASE FUNCTION(,_unary_minus)(BASE a) { return MINUS(ZERO,a); }
 
 /**
@@ -666,86 +664,76 @@ void FUNCTION(pnl_vect,minus)(TYPE(PnlVect) *lhs)
 {
   FUNCTION(pnl_vect,map_inplace)(lhs, FUNCTION(,_unary_minus));
 }
-#endif
 
-/**
- * in-place vector operator application
- *
- * @param lhs left hand side vector
- * @param x double arg
- * @param op a binary operator, given as a function
- * @return  lhs = lhs op x
- */
-static void FUNCTION(pnl_vect,apply_op)(TYPE(PnlVect) *lhs,
-                                        BASE  x,
-                                        BASE (*op)(BASE, BASE ))
-{
-  BASE *lptr;
-  int i=0;
-  while(i<lhs->size)
-    {
-      lptr = FUNCTION(pnl_vect, lget)(lhs, i);
-      (*lptr)= op(*lptr,x); i++;
-    }
-}
-
-
-static BASE FUNCTION(,_op_plus)(BASE a, BASE b) { return PLUS(a,b);}
-static BASE FUNCTION(,_op_minus)(BASE a, BASE b) { return MINUS(a,b);}
-static BASE FUNCTION(,_op_mult)(BASE a, BASE b) { return MULT(a,b); }
-static BASE FUNCTION(,_op_div)(BASE a, BASE b) { return DIV(a,b); }
-static BASE FUNCTION(,_op_inv)(BASE a) { return INV(a); }
 static double FUNCTION(,_op_sqr_norm)(BASE a) { return SQUARE_NORM(a); }
 static double FUNCTION(,_op_abs)(BASE a) { return NORMONE(a); }
 
 /**
  * in-place vector scalar addition
  *
- * @param lhs left hand side vector
+ * @param v left hand side vector
  * @param x scalar
- * @return  lhs = lhs+x
+ * @return  v = v+x
  */
-void FUNCTION(pnl_vect,plus_scalar)(TYPE(PnlVect) *lhs , BASE x)
+void FUNCTION(pnl_vect,plus_scalar)(TYPE(PnlVect) *v , BASE x)
 {
-  FUNCTION(pnl_vect,apply_op)(lhs, x,FUNCTION(,_op_plus));
+  int i;
+  for ( i=0 ; i<v->size ; i++ )
+    {
+      const BASE vi = v->array[i];
+      v->array[i] = PLUS(vi,x);
+    }
 }
 
-#if (defined BASE_DOUBLE || defined BASE_PNL_COMPLEX || defined BASE_INT)
 /**
  * in-place vector scalar substraction
  *
- * @param lhs left hand side vector
+ * @param v left hand side vector
  * @param x scalar
- * @return  lhs = lhs-x
+ * @return  v = v-x
  */
-void FUNCTION(pnl_vect,minus_scalar)(TYPE(PnlVect) *lhs , BASE x)
+void FUNCTION(pnl_vect,minus_scalar)(TYPE(PnlVect) *v , BASE x)
 {
-  FUNCTION(pnl_vect,apply_op)(lhs, x, FUNCTION(,_op_minus));
+  int i;
+  for ( i=0 ; i<v->size ; i++ )
+    {
+      const BASE vi = v->array[i];
+      v->array[i] = MINUS(vi,x);
+    }
 }
-#endif
 
 /**
  * in-place vector scalar multiplication
  *
- * @param lhs left hand side vector
+ * @param v left hand side vector
  * @param x scalar
- * @return  lhs = lhs*x
+ * @return  v = v*x
  */
-void FUNCTION(pnl_vect,mult_scalar)(TYPE(PnlVect) *lhs , BASE x)
+void FUNCTION(pnl_vect,mult_scalar)(TYPE(PnlVect) *v , BASE x)
 {
-  FUNCTION(pnl_vect,apply_op)(lhs, x, FUNCTION(,_op_mult));
+  int i;
+  for ( i=0 ; i<v->size ; i++ )
+    {
+      const BASE vi = v->array[i];
+      v->array[i] = MULT(vi,x);
+    }
 }
 
 /**
  * in-place vector scalar division
  *
- * @param lhs left hand side vector
+ * @param v left hand side vector
  * @param x scalar
- * @return  lhs = lhs/x
+ * @return  v = v/x
  */
-void FUNCTION(pnl_vect,div_scalar)(TYPE(PnlVect) *lhs , BASE x)
+void FUNCTION(pnl_vect,div_scalar)(TYPE(PnlVect) *v , BASE x)
 {
-  FUNCTION(pnl_vect,apply_op)(lhs, x, FUNCTION(,_op_div));
+  int i;
+  for ( i=0 ; i<v->size ; i++ )
+    {
+      const BASE vi = v->array[i];
+      v->array[i] = DIV(vi,x);
+    }
 }
 
 /**
@@ -877,7 +865,12 @@ void FUNCTION(pnl_vect,map_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs1, 
  */
 void FUNCTION(pnl_vect,plus_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
 {
-  FUNCTION(pnl_vect,map_vect_inplace)(lhs, rhs, FUNCTION(,_op_plus));
+  int i;
+  CheckVectMatch(lhs, rhs);
+  for ( i=0 ; i<lhs->size ; i++ )
+    {
+      PNL_LET(lhs, i) = PLUS(PNL_GET(lhs, i), PNL_GET(rhs,i)); 
+    }
 }
 
 /**
@@ -889,18 +882,28 @@ void FUNCTION(pnl_vect,plus_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
  */
 void FUNCTION(pnl_vect,minus_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
 {
-  FUNCTION(pnl_vect,map_vect_inplace)(lhs, rhs, FUNCTION(,_op_minus));
+  int i;
+  CheckVectMatch(lhs, rhs);
+  for ( i=0 ; i<lhs->size ; i++ )
+    {
+      PNL_LET(lhs, i) = MINUS(PNL_GET(lhs, i), PNL_GET(rhs,i)); 
+    }
 }
 
 /**
  * in-place term by term vector inverse
  *
- * @param lhs left hand side vector
- * @return  lhs = 1 ./ lhs
+ * @param v left hand side vector
+ * @return  v = 1 ./ v
  */
-void FUNCTION(pnl_vect,inv_term)(TYPE(PnlVect) *lhs)
+void FUNCTION(pnl_vect,inv_term)(TYPE(PnlVect) *v)
 {
-  FUNCTION(pnl_vect,map_inplace)(lhs,FUNCTION(,_op_inv));
+  int i;
+  for ( i=0 ; i<v->size ; i++ )
+    {
+      const BASE vi = v->array[i];
+      v->array[i] = DIV(ONE, vi);
+    }
 }
 
 /**
@@ -912,7 +915,12 @@ void FUNCTION(pnl_vect,inv_term)(TYPE(PnlVect) *lhs)
  */
 void FUNCTION(pnl_vect,div_vect_term)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
 {
-  FUNCTION(pnl_vect,map_vect_inplace)(lhs, rhs,FUNCTION(,_op_div));
+  int i;
+  CheckVectMatch(lhs, rhs);
+  for ( i=0 ; i<lhs->size ; i++ )
+    {
+      PNL_LET(lhs, i) = DIV(PNL_GET(lhs, i), PNL_GET(rhs,i)); 
+    }
 }
 
 /**
@@ -924,7 +932,12 @@ void FUNCTION(pnl_vect,div_vect_term)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *r
  */
 void FUNCTION(pnl_vect,mult_vect_term)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
 {
-  FUNCTION(pnl_vect,map_vect_inplace)(lhs, rhs, FUNCTION(,_op_mult));
+  int i;
+  CheckVectMatch(lhs, rhs);
+  for ( i=0 ; i<lhs->size ; i++ )
+    {
+      PNL_LET(lhs, i) = MULT(PNL_GET(lhs, i), PNL_GET(rhs,i)); 
+    }
 }
 
 /**
@@ -935,11 +948,9 @@ void FUNCTION(pnl_vect,mult_vect_term)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *
  */
 BASE FUNCTION(pnl_vect,sum)(const TYPE(PnlVect) *lhs)
 {
-  BASE sum;
-  int i=0;
-  sum=ZERO;
-  while(i<lhs->size)
-    {sum = PLUS(sum, PNL_GET(lhs, i)); i++;}
+  int i;
+  BASE sum=ZERO;
+  for ( i=0 ; i<lhs->size ; i++ ) { sum = PLUS(sum, PNL_GET(lhs, i)); }
   return sum;
 }
 
@@ -973,18 +984,13 @@ BASE FUNCTION(pnl_vect,scalar_prod)(const TYPE(PnlVect) *x,
 {
   BASE xi, yi;
   BASE sum=ZERO;
-  int i=0;
+  int i;
   CheckVectMatch(x, y);
-  while(i<x->size)
+  for ( i=0 ; i<x->size ; i++)
     {
       xi = PNL_GET(x, i);
       yi = PNL_GET(y, i);
-#if MULTIPLICITY == 1
-      sum += xi * yi;
-#else
       sum = PLUS(sum,(MULT(xi, yi)));
-#endif
-      i++;
     }
   return sum;
 }

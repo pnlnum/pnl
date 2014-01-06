@@ -757,28 +757,6 @@ void FUNCTION(pnl_mat,map)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs, BASE(*f)(
   FUNCTION(pnl_mat,map_inplace)(lhs, f);
 }
 
-static BASE FUNCTION(,_op_plus)(BASE a, BASE b) { return PLUS(a,b); }
-static BASE FUNCTION(,_op_minus)(BASE a, BASE b) { return MINUS(a,b); }
-static BASE FUNCTION(,_op_mult)(BASE a, BASE b) { return MULT(a,b); }
-static BASE FUNCTION(,_op_div)(BASE a, BASE b) { return DIV(a,b); }
-
-/**
- * in-place matrix operator application
- *
- * @param lhs : left hand side vector
- * @param x : BASE arg
- * @param op : a binary operator, given as a function
- * @return  lhs = lhs op x
- */
-static void FUNCTION(__pnl_mat,apply_op)(TYPE(PnlMat) *lhs, BASE x, BASE (*op)(BASE, BASE))
-{
-  int i;
-  for (i=0; i<lhs->mn; i++)
-    {
-      lhs->array[i] = (*op) (lhs->array[i], x);
-    }
-}
-
 /**
  * map matrix componentwise
  *
@@ -1022,29 +1000,6 @@ void FUNCTION(pnl_mat,del_row)(TYPE(PnlMat) *M, int i)
   M->mn -= M->n;
 }
 
-/**
- * in-place matrix matrix addition
- *
- * @param lhs : left hand side matrix
- * @param rhs : rigth hand side matrix
- * @return  lhs = lhs+rhs
- */
-void FUNCTION(pnl_mat,plus_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
-{
-  FUNCTION(pnl_mat,map_mat_inplace)(lhs, rhs, FUNCTION(,_op_plus));
-}
-
-/**
- * in-place matrix matrix substraction
- *
- * @param lhs : left hand side matrix
- * @param rhs : rigth hand side matrix
- * @return  lhs = lhs+rhs
- */
-void FUNCTION(pnl_mat,minus_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
-{
-  FUNCTION(pnl_mat,map_mat_inplace)(lhs, rhs, FUNCTION(,_op_minus));
-}
 
 /**
  * in-place matrix scalar addition
@@ -1053,10 +1008,10 @@ void FUNCTION(pnl_mat,minus_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
  * @param  x : scalar
  * @return  lhs = lhs+x
  */
-
 void FUNCTION(pnl_mat,plus_scalar)(TYPE(PnlMat) *lhs, BASE x)
 {
-  FUNCTION(__pnl_mat,apply_op)(lhs, x, FUNCTION(,_op_plus));
+  int i;
+  for ( i=0 ; i<lhs->mn ; i++ ) { PLUSEQ (lhs->array[i], x); }
 }
 
 /**
@@ -1068,7 +1023,8 @@ void FUNCTION(pnl_mat,plus_scalar)(TYPE(PnlMat) *lhs, BASE x)
  */
 void FUNCTION(pnl_mat,minus_scalar)(TYPE(PnlMat) *lhs, BASE x)
 {
-  FUNCTION(__pnl_mat,apply_op)(lhs, x, FUNCTION(,_op_minus));
+  int i;
+  for ( i=0 ; i<lhs->mn ; i++ ) { MINUSEQ (lhs->array[i], x); }
 }
 
 /**
@@ -1080,7 +1036,8 @@ void FUNCTION(pnl_mat,minus_scalar)(TYPE(PnlMat) *lhs, BASE x)
  */
 void FUNCTION(pnl_mat,mult_scalar)(TYPE(PnlMat) *lhs, BASE x)
 {
-  FUNCTION(__pnl_mat,apply_op)(lhs, x, FUNCTION(,_op_mult));
+  int i;
+  for ( i=0 ; i<lhs->mn ; i++ ) { MULTEQ (lhs->array[i], x); }
 }
 
 /**
@@ -1092,7 +1049,42 @@ void FUNCTION(pnl_mat,mult_scalar)(TYPE(PnlMat) *lhs, BASE x)
  */
 void FUNCTION(pnl_mat,div_scalar)(TYPE(PnlMat) *lhs, BASE x)
 {
-  FUNCTION(__pnl_mat,apply_op)(lhs, x, FUNCTION(,_op_div));
+  int i;
+  for ( i=0 ; i<lhs->mn ; i++ ) { DIVEQ (lhs->array[i], x); }
+}
+
+/**
+ * in-place matrix matrix addition
+ *
+ * @param lhs : left hand side matrix
+ * @param rhs : rigth hand side matrix
+ * @return  lhs = lhs+rhs
+ */
+void FUNCTION(pnl_mat,plus_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
+{
+  int i;
+  CheckMatMatch(lhs, rhs);
+  for (i=0; i<lhs->mn; i++)
+    {
+      lhs->array[i] = PLUS (lhs->array[i], rhs->array[i]);
+    }
+}
+
+/**
+ * in-place matrix matrix substraction
+ *
+ * @param lhs : left hand side matrix
+ * @param rhs : rigth hand side matrix
+ * @return  lhs = lhs+rhs
+ */
+void FUNCTION(pnl_mat,minus_mat)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
+{
+  int i;
+  CheckMatMatch(lhs, rhs);
+  for (i=0; i<lhs->mn; i++)
+    {
+      lhs->array[i] = MINUS (lhs->array[i], rhs->array[i]);
+    }
 }
 
 /**
@@ -1104,7 +1096,12 @@ void FUNCTION(pnl_mat,div_scalar)(TYPE(PnlMat) *lhs, BASE x)
  */
 void FUNCTION(pnl_mat,mult_mat_term)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
 {
-  FUNCTION(pnl_mat,map_mat_inplace)(lhs, rhs, FUNCTION(,_op_mult));
+  int i;
+  CheckMatMatch(lhs, rhs);
+  for (i=0; i<lhs->mn; i++)
+    {
+      lhs->array[i] = MULT (lhs->array[i], rhs->array[i]);
+    }
 }
 
 /**
@@ -1116,7 +1113,12 @@ void FUNCTION(pnl_mat,mult_mat_term)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
  */
 void FUNCTION(pnl_mat,div_mat_term)(TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
 {
-  FUNCTION(pnl_mat,map_mat_inplace)(lhs, rhs, FUNCTION(,_op_div));
+  int i;
+  CheckMatMatch(lhs, rhs);
+  for (i=0; i<lhs->mn; i++)
+    {
+      lhs->array[i] = DIV (lhs->array[i], rhs->array[i]);
+    }
 }
 
 /**
