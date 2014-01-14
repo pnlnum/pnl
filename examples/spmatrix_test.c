@@ -208,10 +208,54 @@ static void sp_mat_mult_vect ()
 
   pnl_sp_mat_free (&Sp);
   pnl_mat_free (&M);
+  pnl_vect_free (&x);
   pnl_vect_free (&y1);
   pnl_vect_free (&y2);
   pnl_rng_free (&rng);
 }
+
+static void sp_mat_del_row ()
+{
+  PnlSpMat *Sp;
+  PnlMat *M, *Mdel;
+  PnlRng * rng = pnl_rng_create(PNL_RNG_MERSENNE);
+  int m = 9, n = 11;
+  double abserr = 1E-12;
+  pnl_rng_sseed (rng, 0);
+
+  Sp = create_random_sp (m, n, rng);
+  M = pnl_mat_create_from_sp_mat (Sp);
+  pnl_mat_del_row (M, 0);
+  pnl_sp_mat_del_row (Sp, 0);
+  Mdel = pnl_mat_create_from_sp_mat (Sp);
+  pnl_test_mat_eq (M, Mdel, abserr, "sp_mat_del_row -- row 0", "");
+  pnl_sp_mat_free (&Sp);
+  pnl_mat_free (&M);
+  pnl_mat_free (&Mdel);
+
+  Sp = create_random_sp (m, n, rng);
+  M = pnl_mat_create_from_sp_mat (Sp);
+  pnl_mat_del_row (M, m/2);
+  pnl_sp_mat_del_row (Sp, m/2);
+  Mdel = pnl_mat_create_from_sp_mat (Sp);
+  pnl_test_mat_eq (M, Mdel, abserr, "sp_mat_del_row -- middle", "");
+  pnl_sp_mat_free (&Sp);
+  pnl_mat_free (&M);
+  pnl_mat_free (&Mdel);
+
+  Sp = create_random_sp (m, n, rng);
+  M = pnl_mat_create_from_sp_mat (Sp);
+  pnl_mat_del_row (M, m-1);
+  pnl_sp_mat_del_row (Sp, m-1);
+  Mdel = pnl_mat_create_from_sp_mat (Sp);
+  pnl_test_mat_eq (M, Mdel, abserr, "sp_mat_del_row -- last row", "");
+  pnl_sp_mat_free (&Sp);
+  pnl_mat_free (&M);
+  pnl_mat_free (&Mdel);
+
+  pnl_rng_free (&rng);
+}
+
 
 
 int main (int argc, char *argv[])
@@ -222,6 +266,7 @@ int main (int argc, char *argv[])
   sp_clone_test ();
   sp_scalar_ops ();
   sp_mat_mult_vect ();
+  sp_mat_del_row ();
   /* sp_add_test (); */
   exit (pnl_test_finalize("Sparse matrices"));
 }

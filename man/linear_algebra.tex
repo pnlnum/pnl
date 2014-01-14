@@ -1945,9 +1945,13 @@ for integer, float or complex base data according to the following table
 
 \begin{itemize}
 \item \describefun{void}{pnl_sp_mat_plus_scalar}{\PnlSpMat \ptr M, double x}
-  \sshortdescribe In-place matrix scalar addition
+  \sshortdescribe Add \var{x} to all non zero entries of \var{M}. To apply the
+  operation to all entries including the zero ones, first convert \var{M} to
+  a dense matrix and use \reffun{pnl_mat_plus_scalar}.
 \item \describefun{void}{pnl_sp_mat_minus_scalar}{\PnlSpMat \ptr M, double x}
-  \sshortdescribe In-place matrix scalar substraction
+  \sshortdescribe Substract \var{x} to all non zero entries of \var{M}. To apply the
+  operation to all entries including the zero ones, first convert \var{M} to
+  a dense matrix and use \reffun{pnl_mat_minus_scalar}.
 \item \describefun{void}{pnl_sp_mat_mult_scalar}{\PnlSpMat \ptr M, double x}
   \sshortdescribe In-place matrix scalar multiplication
 \item \describefun{void}{pnl_sp_mat_div_scalar}{\PnlSpMat \ptr M, double x}

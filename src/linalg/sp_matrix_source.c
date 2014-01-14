@@ -123,6 +123,33 @@ int FUNCTION(pnl_sp_mat,resize)(TYPE(PnlSpMat) *M, int m, int n, int nzmax)
 }
 
 /** 
+ * Delete a row from sparse matrix
+ * 
+ * @param M a sparse matrix
+ * @param i the idnex of the row to delete
+ */
+void FUNCTION(pnl_sp_mat,del_row)(TYPE(PnlSpMat) *M, int i)
+{
+  int k, nzi, rem_len;
+  if ( i > M->m-1 ) return;
+  nzi = M->I[i+1] - M->I[i];
+  if ( nzi > 0 ) 
+    { 
+      /* Not all elements of row i are zero */
+      rem_len = M->nz - M->I[i+1];
+
+      /* Drop row i in array and J */
+      memmove (M->array + M->I[i], M->array + M->I[i+1], rem_len * sizeof(BASE));
+      memmove (M->J + M->I[i], M->J + M->I[i+1], rem_len * sizeof(int));
+    }
+  /* Drop row i in I and shift all the offsets after i by -nzi */
+  for ( k=i ; k<M->m ; k++ ) { M->I[k] = M->I[k+1] - nzi; }
+  M->m--;
+  M->nz -= nzi;
+}
+
+
+/** 
  * Create a sparse matrix of size m x n with all entries set to 0.
  * Note that the created matrix can hold as many as nz entries.
  * 
@@ -277,7 +304,8 @@ int FUNCTION(pnl_sp_mat, eq)(const TYPE(PnlSpMat) *Sp1, const TYPE(PnlSpMat) *Sp
 }
 
 /** 
- *  M = M + x
+ *  Add x to non zero elements of M. To add x to all elements, first convert M
+ *  to a full matrix and use pnl_mat_plus_scalar.
  * 
  * @param M a sparse matrix
  * @param x a scalar
@@ -289,7 +317,8 @@ void FUNCTION(pnl_sp_mat,plus_scalar)(TYPE(PnlSpMat) *M, BASE x)
 }
 
 /** 
- *  M = M - x
+ *  Substract x to non zero elements of M. To substract x to all elements,
+ *  first convert M to a full matrix and use pnl_mat_plus_scalar.
  * 
  * @param M a sparse matrix
  * @param x a scalar
@@ -352,7 +381,7 @@ void FUNCTION(pnl_sp_mat,mult_vect)(TYPE(PnlVect) *y, const TYPE(PnlSpMat)*A, co
 /** 
  * Compute y = lambda A x + b y
  *  
- * @param[in/out] y a vector
+ * @param[in,out] y a vector
  * @param lambda a scalar
  * @param b a scalar
  * @param A a sparse matrix
