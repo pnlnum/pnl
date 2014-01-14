@@ -6,23 +6,34 @@ To use these functionalities, you should include \verb!pnl/pnl_basis.h!.
 \describestruct{PnlBasis}
 \begin{verbatim}
 struct PnlBasis_t {
-  int         id;
-  const char *label; /*!< string to label the basis *
-  int         nb_variates;  /*!< number of variates *
-  int         nb_func; /*!< number of elements in the basis *
-  PnlMatInt  *T; /*!< Tensor matrix *
-  double    (*f)(double   x, int i); /*!< Computes the i-th element
+  int          id;
+  const char  *label; /*!< string to label the basis *
+  int          nb_variates;  /*!< number of variates *
+  int          nb_func; /*!< number of elements in the basis *
+  PnlMatInt   *T; /*!< Tensor matrix *
+  PnlSpMatInt *SpT; /*!< Sparse Tensor matrix *
+  double     (*f)(double   x, int i); /*!< Computes the i-th element
                                       of the one dimensional basis */
-  double    (*Df)(double  x, int i); /*!< Computes the first derivative
+  double     (*Df)(double  x, int i); /*!< Computes the first derivative
                    of the i-th element of the one dimensional basis */
-  double    (*D2f)(double x, int i); /*!< Computes the second derivative
-                      of the i-th element of the one dimensional basis */
-  int         isreduced; /* TRUE if the basis is reduced */
-  double     *center; /*!< center of the domain */
-  double     *scale; /*<! inverse of the scaling factor to map the 
+  double     (*D2f)(double x, int i); /*!< Computes the second derivative
+                       of the i-th element of the one dimensional basis */
+  int          isreduced; /* TRUE if the basis is reduced */
+  double      *center; /*!< center of the domain */
+  double      *scale; /*<! inverse of the scaling factor to map the 
                           domain to [-1, 1]^nb_variates */
 };
 \end{verbatim}
+
+A multi-dimensional basis is built as a tensor product of one dimensional
+elements. Hence, we only need a tensor matrix to describe a multi-dimensional
+basis in terms of the one dimensional one.
+The two tensors \var{T} and \var{SpT} do actually store the same information ---
+\var{T(i,j)} is the degree w.r.t the \var{j}-th variable in the \var{i}-th
+function. Originally, we were only using the dense representation \var{T}, which
+is far more convenient to use when building the basis but it slows down the
+evaluation of the basis by a great deal. To overcome this lack of efficiency, a
+sparse storage has been added. 
 
 \begin{table}[h!]
   \begin{describeconst}

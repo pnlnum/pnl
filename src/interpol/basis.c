@@ -25,6 +25,7 @@
 #include "pnl/pnl_basis.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
+#include "pnl/pnl_sp_matrix.h"
 #include "pnl/pnl_mathtools.h"
 
 #ifndef PNL_RANGE_CHECK_OFF
@@ -791,6 +792,7 @@ PnlBasis* pnl_basis_new ()
   o->label = "";
   o->nb_variates = 0;
   o->T = NULL;
+  o->SpT = NULL;
   o->isreduced = 0;
   o->center = NULL;
   o->scale = NULL;
@@ -821,6 +823,7 @@ void  pnl_basis_set_from_tensor (PnlBasis *b, int index, const PnlMatInt *T)
 
   /* Not sure this is the right place to put it */
   pnl_mat_int_free (&(b->T));
+  pnl_sp_mat_int_free (&(b->SpT));
   if ( b->isreduced == 1 )
     {
       b->isreduced = 0;
@@ -829,6 +832,7 @@ void  pnl_basis_set_from_tensor (PnlBasis *b, int index, const PnlMatInt *T)
     }
 
   b->T = (PnlMatInt *) T;
+  b->SpT = pnl_sp_mat_int_create_from_mat (T);
 
   b->label = PnlBasisTypeTab[index].label;
   b->f = PnlBasisTypeTab[index].f;
@@ -950,6 +954,7 @@ void pnl_basis_clone (PnlBasis *dest, const PnlBasis *src)
 void pnl_basis_del_elt_i (PnlBasis *B, int i)
 {
   pnl_mat_int_del_row (B->T, i);
+  pnl_sp_mat_int_del_row (B->SpT, i);
   B->nb_func --;
 }
 
@@ -962,11 +967,7 @@ void pnl_basis_del_elt_i (PnlBasis *B, int i)
 void pnl_basis_del_elt (PnlBasis *B, const PnlVectInt *d)
 {
   int i;
-  if ( B->nb_variates != d->size )
-    {
-      perror ("size mismatch in pnl_basis_del_elt_i\n");
-      abort ();
-    }
+  PNL_CHECK ( B->nb_variates != d->size, "size mismatch",  "basis_del_elt");
   for ( i=0 ; i<B->nb_func ; i++ )
     {
       PnlVectInt Ti = pnl_vect_int_wrap_mat_row (B->T, i);
@@ -983,12 +984,9 @@ void pnl_basis_del_elt (PnlBasis *B, const PnlVectInt *d)
  */
 void pnl_basis_add_elt (PnlBasis *B, const PnlVectInt *d)
 {
-  if ( B->nb_variates != d->size )
-    {
-      perror ("size mismatch in pnl_basis_del_elt_i\n");
-      abort ();
-    }
+  PNL_CHECK ( B->nb_variates != d->size, "size mismatch",  "basis_del_elt");
   pnl_mat_int_add_row (B->T, B->T->m, d);
+  pnl_sp_mat_int_add_row (B->SpT, B->SpT->m, d);
   B->nb_func ++;
 }
 
@@ -1071,6 +1069,7 @@ void pnl_basis_free (PnlBasis **B)
 {
   if (*B == NULL) return;
   pnl_mat_int_free ( &((*B)->T) );
+  pnl_sp_mat_int_free (&(*B)->SpT);
   if ( (*B)->isreduced == 1 )
     {
       free ((*B)->center); (*B)->center = NULL;
@@ -1153,20 +1152,20 @@ double pnl_basis_i (const PnlBasis *b, const double *x, int i )
   double aux = 1.;
   if ( b->isreduced == 1)
     {
-      for ( k=0 ; k<b->nb_variates ; k++ )
+      for ( k=b->SpT->I[i] ; k<b->SpT->I[i+1] ; k++ )
         {
-          const int Tik = PNL_MGET (b->T, i, k);
-          if ( Tik == 0 ) continue;
-          aux *= (b->f)((x[k] - b->center[k]) * b->scale[k], Tik);
+          const int j = b->SpT->J[k];
+          const int Tij = b->SpT->array[k]; 
+          aux *= (b->f)((x[j] - b->center[j]) * b->scale[j], Tij);
         }
     }
   else
     {
-      for ( k=0 ; k<b->nb_variates ; k++ )
+      for ( k=b->SpT->I[i] ; k<b->SpT->I[i+1] ; k++ )
         {
-          const int Tik = PNL_MGET (b->T, i, k);
-          if ( Tik == 0 ) continue;
-          aux *= (b->f)(x[k], Tik);
+          const int j = b->SpT->J[k];
+          const int Tij = b->SpT->array[k]; 
+          aux *= (b->f)(x[j], Tij);
         }
     }
   return aux;
@@ -1184,7 +1183,7 @@ double pnl_basis_i (const PnlBasis *b, const double *x, int i )
  */
 double pnl_basis_i_D (const PnlBasis *b, const double *x, int i, int j )
 {
-  int k;
+  int l;
   double aux = 1;
 
   /* Test if the partial degree is small enough to return 0 */
@@ -1192,10 +1191,10 @@ double pnl_basis_i_D (const PnlBasis *b, const double *x, int i, int j )
 
   if ( b->isreduced == 1)
     {
-      for ( k=0 ; k < b->nb_variates ; k++ )
+      for ( l=b->SpT->I[i] ; l<b->SpT->I[i+1] ; l++ )
         {
-          const int Tik = PNL_MGET (b->T, i, k);
-          if ( Tik == 0 ) continue;
+          const int k = b->SpT->J[l];
+          const int Tik = b->SpT->array[l]; 
           if ( k == j )
             aux *= b->scale[k] * (b->Df) ( (x[k] - b->center[k]) * b->scale[k], Tik);
           else
@@ -1204,10 +1203,10 @@ double pnl_basis_i_D (const PnlBasis *b, const double *x, int i, int j )
     }
   else
     {
-      for ( k=0 ; k < b->nb_variates ; k++ )
+      for ( l=b->SpT->I[i] ; l<b->SpT->I[i+1] ; l++ )
         {
-          const int Tik = PNL_MGET (b->T, i, k);
-          if ( Tik == 0 ) continue;
+          const int k = b->SpT->J[l];
+          const int Tik = b->SpT->array[l]; 
           if ( k == j )
             aux *= (b->Df) (x[k], Tik);
           else
@@ -1230,7 +1229,7 @@ double pnl_basis_i_D (const PnlBasis *b, const double *x, int i, int j )
  */
 double pnl_basis_i_D2 (const PnlBasis *b, const double *x, int i, int j1, int j2)
 {
-  int k;
+  int l;
   double aux = 1;
   /* Test if the partial degree is small enough to return 0 */
   if ( (j1 == j2) && PNL_MGET(b->T, i, j1) == 0 ) return 0.;
@@ -1240,10 +1239,10 @@ double pnl_basis_i_D2 (const PnlBasis *b, const double *x, int i, int j1, int j2
     {
       if (j1 == j2)
         {
-          for ( k = 0 ; k < b->nb_variates ; k++ )
+          for ( l=b->SpT->I[i] ; l<b->SpT->I[i+1] ; l++ )
             {
-              const int Tik = PNL_MGET (b->T, i, k);
-              if ( Tik == 0 ) continue;
+              const int k = b->SpT->J[l];
+              const int Tik = b->SpT->array[l]; 
               if ( k == j1 )
                 aux *= b->scale[k] * b->scale[k] * (b->D2f) ((x[k] - b->center[k]) * b->scale[k], Tik);
               else
@@ -1252,41 +1251,41 @@ double pnl_basis_i_D2 (const PnlBasis *b, const double *x, int i, int j1, int j2
         }
       else
         {
-          for ( k = 0 ; k < b->nb_variates ; k++ )
-            {
-              const int Tik = PNL_MGET (b->T, i, k);
-              if ( Tik == 0 ) continue;
-              if ( k == j1 || k == j2 )
-                aux *= b->scale[k] * (b->Df) ((x[k] - b->center[k]) * b->scale[k], Tik);
-              else
-                aux *= (b->f) ((x[k] - b->center[k]) * b->scale[k], Tik);
-            }
+      for ( l=b->SpT->I[i] ; l<b->SpT->I[i+1] ; l++ )
+        {
+          const int k = b->SpT->J[l];
+          const int Tik = b->SpT->array[l]; 
+          if ( k == j1 || k == j2 )
+            aux *= b->scale[k] * (b->Df) ((x[k] - b->center[k]) * b->scale[k], Tik);
+          else
+            aux *= (b->f) ((x[k] - b->center[k]) * b->scale[k], Tik);
+        }
         }
     }
   else
     {
       if (j1 == j2)
         {
-          for ( k = 0 ; k < b->nb_variates ; k++ )
+          for ( l=b->SpT->I[i] ; l<b->SpT->I[i+1] ; l++ )
             {
-              const int Tik = PNL_MGET (b->T, i, k);
-              if ( Tik == 0 ) continue;
+              const int k = b->SpT->J[l];
+              const int Tik = b->SpT->array[l]; 
               if ( k == j1 )
-                aux *= (b->D2f) (x[k], PNL_MGET(b->T, i, k));
+                aux *= (b->D2f) (x[k], Tik);
               else
-                aux *= (b->f) (x[k], PNL_MGET(b->T, i, k));
+                aux *= (b->f) (x[k], Tik);
             }
         }
       else
         {
-          for ( k = 0 ; k < b->nb_variates ; k++ )
+          for ( l=b->SpT->I[i] ; l<b->SpT->I[i+1] ; l++ )
             {
-              const int Tik = PNL_MGET (b->T, i, k);
-              if ( Tik == 0 ) continue;
+              const int k = b->SpT->J[l];
+              const int Tik = b->SpT->array[l]; 
               if ( k == j1 || k == j2 )
-                aux *= (b->Df) (x[k], PNL_MGET(b->T, i, k));
+                aux *= (b->Df) (x[k], Tik);
               else
-                aux *= (b->f) (x[k], PNL_MGET(b->T, i, k));
+                aux *= (b->f) (x[k], Tik);
             }
         }
 

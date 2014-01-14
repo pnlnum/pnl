@@ -2,6 +2,7 @@
 #define _PNL_BASIS_H
 
 #include "pnl/pnl_matrix.h"
+#include "pnl/pnl_sp_matrix.h"
 #include "pnl/pnl_object.h"
 
 #ifdef __cplusplus
@@ -19,7 +20,9 @@ extern "C" {
  * PnlBasisTypeTab array */
 enum {PNL_BASIS_NULL=-1, PNL_BASIS_CANONICAL=0, PNL_BASIS_HERMITE=1, PNL_BASIS_TCHEBYCHEV=2 };
 /* synonymous for compatibility purposes */
-enum {CANONICAL=0, HERMITIAN=1, TCHEBYCHEV=3 };
+#define CANONICAL PNL_BASIS_CANONICAL
+#define HERMITIAN PNL_BASIS_HERMITE
+#define TCHEBYCHEV PNL_BASIS_TCHEBYCHEV
 #define PNL_BASIS_HERMITIAN PNL_BASIS_HERMITE
 
 typedef struct _PnlBasis PnlBasis;
@@ -30,23 +33,23 @@ struct _PnlBasis
    * Must be the first element in order for the object mechanism to work
    * properly. This allows any PnlBasis pointer to be cast to a PnlObject
    */
-  PnlObject object;
-  int         id; /*<! basis type */
-  const char *label; /*!< string to label the basis */
-  int         nb_variates;  /*!< number of variates */
-  int         nb_func; /*!< number of elements in the basis */
-  PnlMatInt  *T; /*!< Tensor matrix */
-  double    (*f)(double x, int i); /*!< Computes the i-th element of the one
-                                     dimensional basis. As a convention, 
-                                     (*f)(x, 0) MUST be equal to 1 */
-  double    (*Df)(double x, int i); /*!< Computes the first derivative of i-th element
-                                      of the one dimensional basis */
-  double    (*D2f)(double x, int i); /*!< Computes the second derivative of the i-th 
-                                       element of the one dimensional basis */
-  int         isreduced; /* TRUE if the basis is reduced */
-  double     *center; /*!< center of the domain */
-  double     *scale; /*<! inverse of the scaling factor to map the domain 
-                          to [-1, 1]^nb_variates */
+  PnlObject     object;
+  int           id;                     /*<! basis type */
+  const char   *label;                  /*!< string to label the basis */
+  int           nb_variates;            /*!< number of variates */
+  int           nb_func;                /*!< number of elements in the basis */
+  PnlMatInt    *T;                      /*!< Tensor matrix */
+  PnlSpMatInt  *SpT;                    /*!< Sparse Tensor matrix */
+  double      (*f)(double    x, int i); /*!< Computes the i-th element of the one dimensional basis.
+                                          As a convention, (*f)(x, 0) MUST be equal to 1 */
+  double      (*Df)(double   x, int i); /*!< Computes the first derivative of i-th element of
+                                          the one dimensional basis */
+  double      (*D2f)(double  x, int i); /*!< Computes the second derivative of the i-th element
+                                          of the one dimensional basis */
+  int           isreduced;              /* TRUE if the basis is reduced */
+  double       *center;                 /*!< center of the domain */
+  double       *scale;                  /*<! inverse of the scaling factor to map the
+                                          domain to [-1, 1]^nb_variates */
 };
 
 extern int pnl_basis_type_register (const char *name, double (*f)(double, int), 
