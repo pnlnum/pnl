@@ -104,6 +104,36 @@ void FUNCTION(pnl_sp_mat,clone)(TYPE(PnlSpMat) *clone, const TYPE(PnlSpMat) *M)
   clone->nz = M->nz;
 }
 
+/** 
+ * Print a sparse matrix to a file descriptor
+ * 
+ * @param  fic an open file descriptor
+ * @param M a sparse matrix
+ */
+void FUNCTION(pnl_sp_mat, fprint)(FILE *fic, const TYPE(PnlSpMat)* M)
+{
+  int i, k;
+  for ( i=0; i<M->m ; i++ )
+    {
+      int k1 = M->I[i];
+      int k2 = M->I[i+1];
+      for ( k=k1 ; k<k2 ; k++ )
+        {
+          fprintf(fic, "(%d, %d) --> ", i, M->J[k]);
+          fprintf (fic,OUT_FORMAT "\n",OUT_PUT_FORMAT(M->array[k]));
+        }
+    }
+}
+
+/**
+ * Print a sparse matrix to the standard output
+ *
+ * @param M a TYPE(PnlSpMat) pointer.
+ */
+void FUNCTION(pnl_sp_mat,print )(const TYPE(PnlSpMat) *M)
+{ FUNCTION(pnl_sp_mat,fprint)(stdout, M);}
+
+
 /**
  * Resize a TYPE(PnlSpMat).  If the new size is smaller than the current one, no
  * memory is freed. If the new size is larger than the current nzmax, a new

@@ -1953,6 +1953,12 @@ same size (m, n, nz) and hold the same values. Return \var{TRUE} or \var{FALSE}.
 \paragraph{Standard matrix operations}
 
 \begin{itemize}
+\item \describefun{void}{pnl_sp_mat_fprint}{FILE \ptr fic, const \PnlSpMat\ptr  M}
+  \sshortdescribe Print a sparse matrix to a file descriptor using the format
+  \var{(row, col) --> val}.
+\item \describefun{void}{pnl_sp_mat_print}{const \PnlSpMat\ptr  M}
+  \sshortdescribe Same as \reffun{pnl_sp_mat_fprint} but print to standard
+  output.
 \item \describefun{void}{pnl_sp_mat_mult_vect}(\PnlVect \ptr y, const
   \PnlSpMat \ptr A, const \PnlVect \ptr x)
   \sshortdescribe \var{y = A x}.
