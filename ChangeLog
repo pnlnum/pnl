@@ -1,3 +1,15 @@
+14-01-2014 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* basis.c: Basis evaluation uses a sparse tensor.
+		Speed up of (nb_variates/degree)
+
+	* mpi_ops.c: Add support for sparse matrices
+
+	* sp_matrix_source.c: Add several functions:
+			pnl_sp_mat_{add,del}_row
+			pnl_sp_mat_lAxpby
+			external scalar operations
+
 06-01-2014 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* sp_matrix.c: Add scalar operations on sparse matrices.

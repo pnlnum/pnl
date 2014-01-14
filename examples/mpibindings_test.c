@@ -158,6 +158,39 @@ static int recv_matrix ()
   return info;
 }
 
+static double set_zero_neg (double x) { return MAX(0., x); }
+
+static int send_sp_matrix ()
+{
+  PnlMat *M;
+  PnlSpMat *Sp;
+  int info, m = 7, n =9;
+  int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
+  M = pnl_mat_new ();
+  pnl_rand_init (gen, m, n);
+  pnl_mat_rand_normal (M, m, n, gen);
+  pnl_mat_map_inplace (M, set_zero_neg);
+  Sp = pnl_sp_mat_create_from_mat (M);
+  printf ("Original sparse matrix \n"); pnl_sp_mat_print (Sp); printf ("\n");
+  info = pnl_object_mpi_send (PNL_OBJECT(Sp), 1, SENDTAG, MPI_COMM_WORLD);
+  pnl_mat_free (&M);
+  pnl_sp_mat_free (&Sp);
+  return info;
+}
+
+static int recv_sp_matrix ()
+{
+  MPI_Status status;
+  PnlSpMat *Sp;
+  int info;
+  Sp = pnl_sp_mat_new ();
+  info = pnl_object_mpi_recv (PNL_OBJECT(Sp), 0, SENDTAG, MPI_COMM_WORLD, &status);
+  printf ("Received sparse matrix \n"); pnl_sp_mat_print (Sp); printf ("\n");
+  pnl_sp_mat_free (&Sp);
+  return info;
+}
+
+
 static int send_int_matrix ()
 {
   PnlMatInt *M;
@@ -580,7 +613,6 @@ static void test_reduce (int rank)
     }
 }
 
-
 int main(int argc, char *argv[])
 {
   PnlMat *M;
@@ -608,6 +640,7 @@ int main(int argc, char *argv[])
       send_int_vector (); MPI_Barrier (MPI_COMM_WORLD);
       send_complex_vector (); MPI_Barrier (MPI_COMM_WORLD);
       send_matrix (); MPI_Barrier (MPI_COMM_WORLD);
+      send_sp_matrix (); MPI_Barrier (MPI_COMM_WORLD);
       send_int_matrix (); MPI_Barrier (MPI_COMM_WORLD);
       send_complex_matrix (); MPI_Barrier (MPI_COMM_WORLD);
       send_bandmatrix (); MPI_Barrier (MPI_COMM_WORLD);
@@ -625,6 +658,7 @@ int main(int argc, char *argv[])
       recv_int_vector (); MPI_Barrier (MPI_COMM_WORLD);
       recv_complex_vector (); MPI_Barrier (MPI_COMM_WORLD);
       recv_matrix (); MPI_Barrier (MPI_COMM_WORLD);
+      recv_sp_matrix (); MPI_Barrier (MPI_COMM_WORLD);
       recv_int_matrix (); MPI_Barrier (MPI_COMM_WORLD);
       recv_complex_matrix (); MPI_Barrier (MPI_COMM_WORLD);
       recv_bandmatrix (); MPI_Barrier (MPI_COMM_WORLD);

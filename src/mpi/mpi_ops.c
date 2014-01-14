@@ -43,6 +43,7 @@
  */
 static int size_vector (const PnlObject *Obj, MPI_Comm comm, int *size);
 static int size_matrix (const PnlObject *Obj, MPI_Comm comm, int *size);
+static int size_sp_matrix (const PnlObject *Obj, MPI_Comm comm, int *size);
 static int size_tridiag_matrix (const PnlObject *Obj, MPI_Comm comm, int *size);
 static int size_tridiag_matrix_lu (const PnlObject *Obj, MPI_Comm comm, int *size);
 static int size_band_matrix (const PnlObject *Obj, MPI_Comm comm, int *size);
@@ -56,6 +57,7 @@ static int size_list (const PnlObject *Obj, MPI_Comm comm, int *size);
  */
 static int pack_vector (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_matrix (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
+static int pack_sp_matrix (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_tridiag_matrix (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_tridiag_matrix_lu (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int pack_band_matrix (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
@@ -69,6 +71,7 @@ static int pack_list (const PnlObject *Obj, void *buf, int bufsize, int *pos, MP
  */
 static int unpack_vector (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_matrix (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
+static int unpack_sp_matrix (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_tridiag_matrix (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_tridiag_matrix_lu (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
 static int unpack_band_matrix (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm);
@@ -146,6 +149,44 @@ static int size_matrix (const PnlObject *Obj, MPI_Comm comm, int *size)
                                break;
     }
   info=MPI_Pack_size(mn,t,comm,&count);
+  *size += count;
+  return(info);
+}
+
+/**
+ * Compute the length of the buffer needed to pack the PnlObject
+ *
+ * @param Obj a PnlObject actually containing a PnlSpMatObject
+ * @param comm an MPI Communicator
+ * @param size the upper bound on the number of bytes needed to pack Obj
+ *
+ * @return an error value equal to MPI_SUCCESS when everything is OK
+ */
+static int size_sp_matrix (const PnlObject *Obj, MPI_Comm comm, int *size)
+{
+  int info, count, nz;
+  MPI_Datatype t = MPI_DATATYPE_NULL;
+  PnlSpMatObject *M = PNL_SP_MAT_OBJECT(Obj);
+  *size = 0;
+  /* M->m, M->n, M->nz */
+  if((info=MPI_Pack_size(1, MPI_INT, comm,&count))) return(info);
+  *size += 3 * count;
+  /* M->I */
+  if((info=MPI_Pack_size(M->m+1, MPI_INT, comm,&count))) return(info);
+  *size += count;
+  /* M->J */
+  if((info=MPI_Pack_size(M->nz, MPI_INT, comm,&count))) return(info);
+  *size += count;
+
+  nz = M->nz;
+  switch (PNL_GET_TYPE (Obj))
+    {
+    case PNL_TYPE_SP_MATRIX_DOUBLE : t=MPI_DOUBLE; break;
+    case PNL_TYPE_SP_MATRIX_COMPLEX : t=MPI_DOUBLE; nz *= 2; break;
+    case PNL_TYPE_SP_MATRIX_INT : t=MPI_INT; break;
+    }
+  /* M->array */
+  info=MPI_Pack_size(nz,t,comm,&count);
   *size += count;
   return(info);
 }
@@ -461,6 +502,39 @@ static int pack_matrix (const PnlObject *Obj, void *buf, int bufsize, int *pos, 
 }
 
 /**
+ * Pack a PnlSpMatObject
+ *
+ * @param Obj a PnlObject containing a PnlSpMatObject
+ * @param buf an already allocated buffer of length bufsize used to store Obj
+ * @param bufsize the size of the buffer. It must be at least equal to the value
+ * computed by size_matrix
+ * @param comm an MPI Communicator
+ * @param pos (in/out) the current position in buf
+ *
+ * @return an error value equal to MPI_SUCCESS when everything is OK
+ */
+static int pack_sp_matrix (const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
+{
+  int nz,info;
+  MPI_Datatype t = MPI_DATATYPE_NULL;
+  PnlSpMatObject *M = PNL_SP_MAT_OBJECT(Obj);
+  if ((info=MPI_Pack(&(M->m), 1, MPI_INT, buf, bufsize, pos, comm))) return info;
+  if ((info=MPI_Pack(&(M->n), 1, MPI_INT, buf, bufsize, pos, comm))) return info;
+  if ((info=MPI_Pack(&(M->nz), 1, MPI_INT, buf, bufsize, pos, comm))) return info;
+  if ((info=MPI_Pack(M->I, M->m+1, MPI_INT, buf, bufsize, pos, comm))) return info;
+  if ((info=MPI_Pack(M->J, M->nz, MPI_INT, buf, bufsize, pos, comm))) return info;
+  nz = M->nz;
+  switch (PNL_GET_TYPE (M))
+    {
+    case PNL_TYPE_SP_MATRIX_DOUBLE : t = MPI_DOUBLE; break;
+    case PNL_TYPE_SP_MATRIX_COMPLEX : nz *= 2; t = MPI_DOUBLE; break;
+    case PNL_TYPE_SP_MATRIX_INT : t = MPI_INT; break;
+    }
+  info=MPI_Pack(M->array,nz,t,buf,bufsize,pos,comm);
+  return(info);
+}
+
+/**
  * Pack a PnlTridiagMatObject
  *
  * @param Obj a PnlObject containing a PnlTridiagMatObject
@@ -716,7 +790,7 @@ static int unpack_vector (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_
  * @param Obj a PnlObject containing a PnlMatObject
  * @param buf an already allocated buffer of length bufsize used to store Obj
  * @param bufsize the size of the buffer. It must be at least equal to the value
- * computed by size_vector
+ * computed by size_matrix
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
@@ -748,6 +822,46 @@ static int unpack_matrix (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_
                                break;
     }
   if((info=MPI_Unpack(buf,bufsize,pos,M->array,mn,t,comm)))return(info);
+  return info;
+}
+
+/**
+ * Unpack a PnlSpMatObject
+ *
+ * @param Obj a PnlObject containing a PnlSpMatObject
+ * @param buf an already allocated buffer of length bufsize used to store Obj
+ * @param bufsize the size of the buffer. It must be at least equal to the value
+ * computed by size_sp_matrix
+ * @param comm an MPI Communicator
+ * @param pos (in/out) the current position in buf
+ *
+ * @return an error value equal to MPI_SUCCESS when everything is OK
+ */
+static int unpack_sp_matrix (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
+{
+  int m, n, nz, id, info;
+  MPI_Datatype t = MPI_DATATYPE_NULL;
+  PnlSpMatObject *M = PNL_SP_MAT_OBJECT(Obj);
+
+  if ((info=MPI_Unpack(buf,bufsize,pos,&id,1,MPI_INT,comm))) return info;
+  if ( id != PNL_GET_TYPE (M) )
+    {
+      printf ("Wrong type of object in unpack_matrix.\n");
+      return MPI_ERR_TYPE;
+    }
+  if ((info=MPI_Unpack(buf,bufsize,pos,&m,1,MPI_INT,comm))) return info;
+  if ((info=MPI_Unpack(buf,bufsize,pos,&n,1,MPI_INT,comm))) return info;
+  if ((info=MPI_Unpack(buf,bufsize,pos,&nz,1,MPI_INT,comm))) return info;
+  pnl_sp_mat_object_resize(M, m, n, nz);
+  if ((info=MPI_Unpack(buf,bufsize,pos,M->I,m+1,MPI_INT,comm))) return info;
+  if ((info=MPI_Unpack(buf,bufsize,pos,M->J,nz,MPI_INT,comm))) return info;
+  switch (PNL_GET_TYPE (M))
+    {
+    case PNL_TYPE_SP_MATRIX_DOUBLE : t = MPI_DOUBLE; break;
+    case PNL_TYPE_SP_MATRIX_COMPLEX : nz *= 2; t = MPI_DOUBLE; break;
+    case PNL_TYPE_SP_MATRIX_INT : t = MPI_INT; break;
+    }
+  if((info=MPI_Unpack(buf,bufsize,pos,M->array,nz,t,comm)))return(info);
   return info;
 }
 
@@ -1045,6 +1159,9 @@ int pnl_object_mpi_pack_size (const PnlObject *Obj, MPI_Comm comm, int *size)
     case PNL_TYPE_MATRIX:
       info = size_matrix (Obj, comm, &count);
       break;
+    case PNL_TYPE_SP_MATRIX:
+      info = size_sp_matrix (Obj, comm, &count);
+      break;
     case PNL_TYPE_TRIDIAG_MATRIX:
       info = size_tridiag_matrix (Obj, comm, &count);
       break;
@@ -1099,6 +1216,9 @@ int pnl_object_mpi_pack (const PnlObject *Obj, void *buf, int bufsize, int *pos,
       break;
     case PNL_TYPE_MATRIX:
       return pack_matrix (Obj, buf, bufsize, pos, comm);
+      break;
+    case PNL_TYPE_SP_MATRIX:
+      return pack_sp_matrix (Obj, buf, bufsize, pos, comm);
       break;
     case PNL_TYPE_TRIDIAG_MATRIX:
       return pack_tridiag_matrix (Obj, buf, bufsize, pos, comm);
@@ -1158,6 +1278,9 @@ int pnl_object_mpi_unpack (PnlObject *Obj, void *buf, int bufsize, int *pos, MPI
       break;
     case PNL_TYPE_MATRIX:
       return unpack_matrix (Obj, buf, bufsize, pos, comm);
+      break;
+    case PNL_TYPE_SP_MATRIX:
+      return unpack_sp_matrix (Obj, buf, bufsize, pos, comm);
       break;
     case PNL_TYPE_TRIDIAG_MATRIX:
       return unpack_tridiag_matrix (Obj, buf, bufsize, pos, comm);
