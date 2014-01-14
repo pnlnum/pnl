@@ -369,6 +369,8 @@ static void pnl_basis_eval_test ()
   pnl_test_eq_abs (pnl_vect_get(D,4), derive_xt_fonction_a_retrouver(t0,x0),
                    tol, "pnl_basis_eval_D2", "derivative %% tx");
 
+  pnl_vect_free(&lower);
+  pnl_vect_free(&upper);
   pnl_basis_free (&basis);
 
   /* reduced basis */
