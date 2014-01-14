@@ -107,7 +107,7 @@ void FUNCTION(pnl_sp_mat,clone)(TYPE(PnlSpMat) *clone, const TYPE(PnlSpMat) *M)
 /**
  * Resize a TYPE(PnlSpMat).  If the new size is smaller than the current one, no
  * memory is freed. If the new size is larger than the current nzmax, a new
- * pointer is allocated. The old data are kept only when (m,n) are unchanged
+ * pointer is allocated. The old data are kept only when m is left unchanged
  * and we increase nzmax.
  *
  * @param M a pointer to an already existing TYPE(PnlSpMat)
@@ -123,20 +123,20 @@ int FUNCTION(pnl_sp_mat,resize)(TYPE(PnlSpMat) *M, int m, int n, int nzmax)
 }
 
 /** 
- * Delete a row from sparse matrix
+ * Delete a row from a sparse matrix
  * 
  * @param M a sparse matrix
- * @param i the idnex of the row to delete
+ * @param i the index of the row to delete
  */
 void FUNCTION(pnl_sp_mat,del_row)(TYPE(PnlSpMat) *M, int i)
 {
-  int k, nzi, rem_len;
+  int k, nzi;
   if ( i > M->m-1 ) return;
   nzi = M->I[i+1] - M->I[i];
   if ( nzi > 0 ) 
     { 
       /* Not all elements of row i are zero */
-      rem_len = M->nz - M->I[i+1];
+      int rem_len = M->nz - M->I[i+1];
 
       /* Drop row i in array and J */
       memmove (M->array + M->I[i], M->array + M->I[i+1], rem_len * sizeof(BASE));
@@ -148,6 +148,42 @@ void FUNCTION(pnl_sp_mat,del_row)(TYPE(PnlSpMat) *M, int i)
   M->nz -= nzi;
 }
 
+/** 
+ * Add a row in a sparse matrix
+ * 
+ * @param M a sparse matrix
+ * @param i the index of the row to delete
+ */
+void FUNCTION(pnl_sp_mat,add_row)(TYPE(PnlSpMat) *M, int i, const TYPE(PnlVect) *d)
+{
+  int k, nzi;
+
+  PNL_CHECK (d->size != M->n, "size mismatch", "sp_mat_add_row");
+  PNL_CHECK (i > M->m, "size mismatch", "sp_mat_add_row");
+  nzi = 0;
+  for ( k=0 ; k<d->size ; k++ ) { if ( NEQ(PNL_GET(d,k), ZERO) ) nzi++; }
+  FUNCTION(pnl_sp_mat, resize) (M, M->m+1, M->n, M->nz + nzi);
+  if ( nzi > 0 ) 
+    { 
+      /* Not all elements of row i are zero */
+      int rem_len = M->nz - M->I[i];
+      /* Add row i in array and J */
+      memmove (M->array + M->I[i] + nzi, M->array + M->I[i], rem_len * sizeof(BASE));
+      memmove (M->J + M->I[i] + nzi, M->J + M->I[i], rem_len * sizeof(int));
+    }
+  /* Add row i in I and shift all the offsets after i by nzi */
+  for ( k=M->m ; k>i ; k-- ) { M->I[k] = M->I[k-1] + nzi; }
+  M->nz += nzi;
+  nzi = M->I[i];
+  for ( k=0 ; k<d->size ; k++ ) 
+    { 
+      if ( NEQ(PNL_GET(d,k), ZERO) )  
+        {
+          M->array[nzi] = PNL_GET(d, k);
+          M->J[nzi++] = k; 
+        }
+    }
+}
 
 /** 
  * Create a sparse matrix of size m x n with all entries set to 0.

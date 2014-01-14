@@ -1895,50 +1895,41 @@ for integer, float or complex base data according to the following table
 \paragraph{Constructors and destructors}
 
 \begin{itemize}
-  \item \describefun{\PnlSpMat \ptr}{pnl_sp_mat_new}{}
-    \sshortdescribe Create an empty sparse matrix.
-  \item \describefun{\PnlSpMat \ptr}{pnl_sp_mat_create}{int m, int n, int nzmax}
-    \sshortdescribe Create a sparse matrix with size \var{m x n} designed to
-    hold at most \var{nzmax} non zero elements.
-
-  \item \describefun{void}{pnl_sp_mat_clone}{\PnlSpMat \ptr dest, const \PnlSpMat \ptr src}
-    \sshortdescribe Clone \var{src} into \var{dest}, which is automatically
-    resized. On output, \var{dest} and \var{src} are equal but independent.
-
-  \item \describefun{\PnlSpMat \ptr}{pnl_sp_mat_copy}{\PnlSpMat \ptr src}
-    \sshortdescribe Create an independent copy of \var{src}.
-
-
-  \item \describefun{void}{pnl_sp_mat_free}{\PnlSpMat \ptr\ptr}
-    \sshortdescribe Delete a sparse matrix.
-
-  \item \describefun{int}{pnl_sp_mat_resize}{\PnlSpMat \ptr M, int m, int n, int nzmax}
-    \sshortdescribe Resize an existing \PnlSpMat to become a \var{m x n} sparse
-    matrices holding at most \var{nzmax}. Note that no old data are kept except if
-    \var{M->m} and \var{M->n} are left unchanged and we only call this function to
-    increase \var{M->nzmax}. Return \var{OK} or \var{FAIL}.
-
-
-  \item \describefun{\PnlMat\ptr }{pnl_mat_create_from_sp_mat}{const \PnlSpMat \ptr M}
-    \sshortdescribe Create a dense \PnlMat from a spare one.
+\item \describefun{\PnlSpMat \ptr}{pnl_sp_mat_new}{}
+  \sshortdescribe Create an empty sparse matrix.
+\item \describefun{\PnlSpMat \ptr}{pnl_sp_mat_create}{int m, int n, int nzmax}
+  \sshortdescribe Create a sparse matrix with size \var{m x n} designed to
+  hold at most \var{nzmax} non zero elements.
+\item \describefun{void}{pnl_sp_mat_clone}{\PnlSpMat \ptr dest, const \PnlSpMat \ptr src}
+  \sshortdescribe Clone \var{src} into \var{dest}, which is automatically
+  resized. On output, \var{dest} and \var{src} are equal but independent.
+\item \describefun{\PnlSpMat \ptr}{pnl_sp_mat_copy}{\PnlSpMat \ptr src}
+  \sshortdescribe Create an independent copy of \var{src}.
+\item \describefun{void}{pnl_sp_mat_free}{\PnlSpMat \ptr\ptr}
+  \sshortdescribe Delete a sparse matrix.
+\item \describefun{int}{pnl_sp_mat_resize}{\PnlSpMat \ptr M, int m, int n, int nzmax}
+  \sshortdescribe Resize an existing \PnlSpMat to become a \var{m x n} sparse
+  matrices holding at most \var{nzmax}. Note that no old data are kept except if
+  \var{M->m} is left unchanged and we only call this function to increase
+  \var{M->nzmax}. Return \var{OK} or \var{FAIL}.
+\item \describefun{\PnlMat\ptr }{pnl_mat_create_from_sp_mat}{const \PnlSpMat \ptr M}
+  \sshortdescribe Create a dense \PnlMat from a spare one.
 \item \describefun{\PnlSpMat \ptr }{pnl_sp_mat_create_from_mat}{const \PnlMat \ptr M}
-  \sshortdescribe Create a sparse matrix from a dense one.
+\sshortdescribe Create a sparse matrix from a dense one.
 \item \describefun{int}{pnl_sp_mat_eq}{const \PnlSpMat \ptr Sp1, const \PnlSpMat \ptr Sp2}
-  \sshortdescribe Test if two sparse matrices are equal, ie. if they have the
-  same size (m, n, nz) and hold the same values. Return \var{TRUE} or \var{FALSE}.
-
+\sshortdescribe Test if two sparse matrices are equal, ie. if they have the
+same size (m, n, nz) and hold the same values. Return \var{TRUE} or \var{FALSE}.
 \end{itemize}
 
 \paragraph{Accessing elements}
 
 \begin{itemize}
-  \item \describefun{void}{pnl_sp_mat_set}{\PnlSpMat \ptr M, int i, int j, double x}
-    \sshortdescribe Set \var{M[i,j] = x}. This function increases \var{M->nzmax}
-    if necessary.
-
-  \item \describefun{double}{pnl_sp_mat_get}{const \PnlSpMat \ptr M, int i, int j}
-    \sshortdescribe Return \var{M[i,j]}. If \var{M} has no entry with such an
-    index, zero is returned.
+\item \describefun{void}{pnl_sp_mat_set}{\PnlSpMat \ptr M, int i, int j, double x}
+  \sshortdescribe Set \var{M[i,j] = x}. This function increases \var{M->nzmax}
+  if necessary.
+\item \describefun{double}{pnl_sp_mat_get}{const \PnlSpMat \ptr M, int i, int j}
+  \sshortdescribe Return \var{M[i,j]}. If \var{M} has no entry with such an
+  index, zero is returned.
 \end{itemize}
 
 \paragraph{Applying external operations}

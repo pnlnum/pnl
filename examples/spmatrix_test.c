@@ -256,6 +256,55 @@ static void sp_mat_del_row ()
   pnl_rng_free (&rng);
 }
 
+static double set_zero_neg (double x) { return MAX(0., x); }
+
+static void sp_mat_add_row ()
+{
+  PnlSpMat *Sp;
+  PnlMat *M, *Madd;
+  PnlVect *d;
+  PnlRng * rng = pnl_rng_create(PNL_RNG_MERSENNE);
+  int m = 9, n = 11;
+  double abserr = 1E-12;
+  pnl_rng_sseed (rng, 0);
+  d = pnl_vect_new ();
+  pnl_vect_rng_normal (d, n, rng);
+  pnl_vect_map_inplace (d, set_zero_neg);
+
+
+  Sp = create_random_sp (m, n, rng);
+  M = pnl_mat_create_from_sp_mat (Sp);
+  pnl_mat_add_row (M, 0, d);
+  pnl_sp_mat_add_row (Sp, 0, d);
+  Madd = pnl_mat_create_from_sp_mat (Sp);
+  pnl_test_mat_eq (M, Madd, abserr, "sp_mat_add_row -- row 0", "");
+  pnl_sp_mat_free (&Sp);
+  pnl_mat_free (&M);
+  pnl_mat_free (&Madd);
+
+  Sp = create_random_sp (m, n, rng);
+  M = pnl_mat_create_from_sp_mat (Sp);
+  pnl_mat_add_row (M, m/2, d);
+  pnl_sp_mat_add_row (Sp, m/2, d);
+  Madd = pnl_mat_create_from_sp_mat (Sp);
+  pnl_test_mat_eq (M, Madd, abserr, "sp_mat_add_row -- middle", "");
+  pnl_sp_mat_free (&Sp);
+  pnl_mat_free (&M);
+  pnl_mat_free (&Madd);
+
+  Sp = create_random_sp (m, n, rng);
+  M = pnl_mat_create_from_sp_mat (Sp);
+  pnl_mat_add_row (M, m, d);
+  pnl_sp_mat_add_row (Sp, m, d);
+  Madd = pnl_mat_create_from_sp_mat (Sp);
+  pnl_test_mat_eq (M, Madd, abserr, "sp_mat_add_row -- last row", "");
+  pnl_sp_mat_free (&Sp);
+  pnl_mat_free (&M);
+  pnl_mat_free (&Madd);
+
+  pnl_rng_free (&rng);
+  pnl_vect_free (&d);
+}
 
 
 int main (int argc, char *argv[])
@@ -267,6 +316,7 @@ int main (int argc, char *argv[])
   sp_scalar_ops ();
   sp_mat_mult_vect ();
   sp_mat_del_row ();
+  sp_mat_add_row ();
   /* sp_add_test (); */
   exit (pnl_test_finalize("Sparse matrices"));
 }
