@@ -40,3 +40,5 @@ CTestTestfile.cmake
 cmake_uninstall.cmake
 install_manifest.txt
 CMakeCache.txt
+build*
+.clang_complete
