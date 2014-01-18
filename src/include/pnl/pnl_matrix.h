@@ -88,15 +88,11 @@ extern int pnl_hmat_object_resize(PnlHmatObject *H, int ndim, const int *dims);
  */
 
 #ifndef PNL_RANGE_CHECK_OFF
-
 #define MGET(v,i,j) pnl_mat_get((v), (i), (j))
 #define MLET(v,i,j) *(pnl_mat_lget((v), (i), (j)))
-
 #else /* PNL_RANGE_CHECK_OFF */
-
 #define MGET(v,i,j) (v)->array[(i)*(v)->n+(j)]
 #define MLET(v,i,j) (v)->array[(i)*(v)->n+(j)]
-
 #endif /* PNL_RANGE_CHECK_OFF */
 
 
@@ -282,6 +278,15 @@ extern PnlVect pnl_vect_wrap_hmat(PnlHmat *H, int *t);
  * \ingroup PnlMat
  */
 /*@{*/
+
+#ifndef PNL_RANGE_CHECK_OFF
+#define MGET_INT(v,i,j) pnl_mat_get_int((v), (i), (j))
+#define MLET_INT(v,i,j) *(pnl_mat_lget_int((v), (i), (j)))
+#else /* PNL_RANGE_CHECK_OFF */
+#define MGET_INT(v,i,j) (v)->array[(i)*(v)->n+(j)]
+#define MLET_INT(v,i,j) (v)->array[(i)*(v)->n+(j)]
+#endif /* PNL_RANGE_CHECK_OFF */
+
 
 extern void pnl_mat_int_init(PnlMatInt *); 
 extern PnlMatInt* pnl_mat_int_new(); 
@@ -619,12 +624,17 @@ PNL_INLINE_DECL double* pnl_mat_complex_lget_imag(PnlMatComplex *v, int i, int j
 #define MLET_REAL(v,i,j) *(pnl_mat_complex_lget_real(v,i,j))
 #define MGET_IMAG(v,i,j) pnl_mat_complex_get_imag(v,i,j)
 #define MLET_IMAG(v,i,j) *(pnl_mat_complex_lget_imag(v,i,j))
+#define MGET_COMPLEX(v,i,j) pnl_mat_get_complex((v), (i), (j))
+#define MLET_COMPLEX(v,i,j) *(pnl_mat_lget_complex((v), (i), (j)))
 #else
 #define MGET_REAL(v,i,j) ((v)->array[(i)*(v)->n+(j)]).r
 #define MLET_REAL(v,i,j) ((v)->array[(i)*(v)->n+(j)]).r
 #define MGET_IMAG(v,i,j) ((v)->array[(i)*(v)->n+(j)]).i
 #define MLET_IMAG(v,i,j) ((v)->array[(i)*(v)->n+(j)]).i
+#define MGET_COMPLEX(v,i,j) (v)->array[(i)*(v)->n+(j)]
+#define MLET_COMPLEX(v,i,j) (v)->array[(i)*(v)->n+(j)]
 #endif
+
 
 /*@}*/
 

@@ -205,6 +205,15 @@ PNL_INLINE_DECL void pnl_vect_int_set(PnlVectInt *v, int i, int x);
 PNL_INLINE_DECL int pnl_vect_int_get(const PnlVectInt *v, int i);
 PNL_INLINE_DECL int* pnl_vect_int_lget(PnlVectInt *v, int i);
 
+#ifndef PNL_RANGE_CHECK_OFF
+#define GET_INT(v,i) pnl_vect_get_int(v,i)
+#define LET_INT(v,i) *(pnl_vect_lget_int(v,i))
+#else
+#define GET_INT(v,i) (v)->array[i]
+#define LET_INT(v,i) (v)->array[i]
+#endif
+
+
 extern void pnl_vect_int_free(PnlVectInt **v);
 extern void pnl_vect_int_init(PnlVectInt *v);
 extern PnlVectInt* pnl_vect_int_new();
@@ -343,11 +352,15 @@ PNL_INLINE_FUNC void pnl_vect_complex_set_imag (const PnlVectComplex *v, int i, 
 #define LET_REAL(v,index) *(pnl_vect_complex_lget_real(v,index))
 #define GET_IMAG(v,index) pnl_vect_complex_get_imag(v,index)
 #define LET_IMAG(v,index) *(pnl_vect_complex_lget_imag(v,index))
+#define GET_COMPLEX(v,index) pnl_vect_complex_get(v,index)
+#define LET_COMPLEX(v,index) *(pnl_vect_complex_lget(v,index))
 #else
 #define GET_REAL(v,index) ((v)->array[index]).r
 #define LET_REAL(v,index) ((v)->array[index]).r
 #define GET_IMAG(v,index) ((v)->array[index]).i
 #define LET_IMAG(v,index) ((v)->array[index]).i
+#define GET_COMPLEX(v,index) (v)->array[index]
+#define LET_COMPLEX(v,index) (v)->array[index]
 #endif
 
 

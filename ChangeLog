@@ -1,3 +1,8 @@
+17-01-2014 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* pnl_vector.h, pnl_matrix.h: Add macros for accessing elements of all
+	types of vectors and matrices.
+
 14-01-2014 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* basis.c: Basis evaluation uses a sparse tensor.

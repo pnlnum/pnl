@@ -183,8 +183,25 @@ There are no special functions to access the size of a vector, instead the field
 \subparagraph{Accessing elements}
 
 If it is supported by the compiler, the following functions are declared
-inline. To speed up these functions, you can use the macro constant
+inline. To speed up these functions, you can define the macro 
 \texttt{PNL_RANGE_CHECK_OFF}, see Section~\ref{sec:inline} for an explanation. 
+
+Accessing elements of a vector is faster using the following macros
+\begin{itemize}
+\item \describefun{}{GET}{\PnlVect \ptr v, int i}
+  \sshortdescribe Return \var{v[i]} for reading, eg. \var{x=GET(v,i)}
+\item \describefun{}{GET_INT}{\PnlVectInt \ptr v, int i}
+  \sshortdescribe Same as \reffun{GET} but for an integer vector.
+\item \describefun{}{GET_COMPLEX}{\PnlVectComplex \ptr v, int i}
+  \sshortdescribe Same as \reffun{GET} but for a complex vector.
+\item \describefun{}{LET}{\PnlVect \ptr v, int i}
+  \sshortdescribe Return \var{v[i]} as a lvalue for writing, eg.
+  \var{LET(v,i)=x}
+\item \describefun{}{LET_INT}{\PnlVectInt \ptr v, int i}
+  \sshortdescribe Same as \reffun{LET} but for an integer vector.
+\item \describefun{}{LET_COMPLEX}{\PnlVectComplex \ptr v, int i}
+  \sshortdescribe Same as \reffun{LET} but for a complex vector.
+\end{itemize}
 
 \begin{itemize}
 \item \describefun{void}{pnl_vect_set}{\PnlVect \ptr v, int i, double x}
@@ -197,15 +214,6 @@ inline. To speed up these functions, you can use the macro constant
   \sshortdescribe Set all elements to x.  
 \item \describefun{void}{pnl_vect_set_zero}{\PnlVect \ptr v}
   \sshortdescribe Set all elements to zero.  
-\end{itemize}
-Equivalently to these functions, there exist macros for {\bf \PnlVect only}.
-\begin{itemize}
-\item \describefun{}{GET}{v, i}
-  \sshortdescribe Return \var{v[i]} for reading, eg. \var{x=LET(v,i)}
-  
-\item \describefun{}{LET}{v, i}
-  \sshortdescribe Return \var{v[i]} as a lvalue for writing, eg.
-  \var{LET(v,i)=x}
 \end{itemize}
 
 
@@ -762,8 +770,26 @@ and the size of the matrix.
 \paragraph{Accessing elements.}
 
 If it is supported by the compiler, the following functions are declared
-inline. To speed up these functions, you can use the macro constant
+inline. To speed up these functions, you can define the macro 
 \texttt{PNL_RANGE_CHECK_OFF}, see Section~\ref{sec:inline} for an explanation. 
+
+Accessing elements of a matrix is faster using the following macros
+\begin{itemize}
+  \item \describefun{}{MGET}{\PnlMat \ptr M, int i, int j}
+  \sshortdescribe Return \var{M[i,j]} for reading, eg. \var{x=MGET(M,i,j)}
+\item \describefun{}{MGET_INT}{\PnlMatInt \ptr M, int i, int j}
+  \sshortdescribe Same as \reffun{MGET} but for an integer matrix.
+\item \describefun{}{MGET_COMPLEX}{\PnlMatComplex \ptr M, int i, int j}
+  \sshortdescribe Same as \reffun{MGET} but for a complex matrix.
+\item \describefun{}{MLET}{\PnlMat \ptr M, int i, int j}
+  \sshortdescribe Return \var{M[i,j]} as a lvalue for writing, eg.
+  \var{MLET(M,i,j)=x}
+\item \describefun{}{MLET_INT}{\PnlMatInt \ptr M, int i, int j}
+  \sshortdescribe Same as \reffun{MLET} but for an integer matrix.
+\item \describefun{}{MLET_COMPLEX}{\PnlMatComplex \ptr M, int i, int j}
+  \sshortdescribe Same as \reffun{MLET} but for a complex matrix.
+\end{itemize}
+
 \begin{itemize}
 \item \describefun{void}{pnl_mat_set}{\PnlMat \ptr M, int i, int j, double x}
   \sshortdescribe Set the value of M[i, j]=x  
