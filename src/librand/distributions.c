@@ -311,6 +311,26 @@ double pnl_rng_invgauss (double mu, double lambda, PnlRng *rng)
 }
 
 /**
+ * Simulate an iid smaple of Bernoulli random variables
+ * @param p parameter of the law
+ * @param a, b the two values taken by the law
+ * @param rng generator to use
+ */
+void pnl_vect_rng_bernoulli(PnlVect *V, int samples, double a, double b, double p, PnlRng *rng)
+{
+  int i;
+  double x = 0.;
+  pnl_vect_resize (V, samples);
+
+  for ( i=0 ; i<samples ; i++ )
+    {
+      rng->Compute(rng,&x);
+      PNL_LET (V, i) = (x<p) ? b : a;
+    }
+}
+
+
+/**
  * Compute a vector of independent and uniformly distributed r.v. on [a,b]
  * @param G existing PnlVect containing the random numbers on exit
  * @param samples size of G (number of independent samples requested)

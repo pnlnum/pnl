@@ -198,6 +198,12 @@ $n-$samples from a distribution in dimension $1$, and one sample from the same
 distribution in dimension $n$ only matters when using a {\bf Quasi} random
 number generator.
 \begin{itemize}
+  \item \describefun{void}{pnl_vect_rng_bernoulli}{\PnlVect \ptr V, int samples,
+    double a, double b, double p, \PnlRng \ptr rng}
+    \sshortdescribe Simulate a random vector according to the Bernoulli
+    distribution with values in \var{a,b} and parameter \var{p}. The result is
+    stored in \var{V}.
+     
 \item \describefun{void}{pnl_vect_rng_uni}{\PnlVect \ptr G, int
     samples, double a, double b, \PnlRng \ptr rng}
   \sshortdescribe \var{G} is a vector of independent and identically distributed
