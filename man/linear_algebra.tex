@@ -856,17 +856,6 @@ Accessing elements of a matrix is faster using the following macros
 
 \end{itemize}
 
-Equivalently to the functions \reffun{pnl_mat_get} and \reffun{pnl_mat_set},
-there exist macros for {\bf \PnlMat only}.
-\begin{itemize}
-\item \describefun{}{MGET}{M, i, j}
-  \sshortdescribe Return \var{M[i,j]} for reading, eg. \var{x=M(i,j)}
-  
-\item \describefun{}{MLET}{M, i, j}
-  \sshortdescribe Return \var{M[i,j]} as a lvalue for writing, eg. eg. \var{x=M(i,j)}
-\end{itemize}
-
-
 \paragraph{Printing Matrices}
 
 \begin{itemize}
