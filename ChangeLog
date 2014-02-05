@@ -1,3 +1,7 @@
+05-02-2014 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* distributions.c: Add vector and matrix with Bernoulli distribution.
+
 17-01-2014 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* pnl_vector.h, pnl_matrix.h: Add macros for accessing elements of all

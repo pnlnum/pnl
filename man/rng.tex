@@ -200,10 +200,23 @@ number generator.
 \begin{itemize}
   \item \describefun{void}{pnl_vect_rng_bernoulli}{\PnlVect \ptr V, int samples,
     double a, double b, double p, \PnlRng \ptr rng}
-    \sshortdescribe Simulate a random vector according to the Bernoulli
+    \sshortdescribe Simulate an i.i.d. sample from the Bernoulli
     distribution with values in \var{a,b} and parameter \var{p}. The result is
     stored in \var{V}.
-     
+
+  \item \describefun{void}{pnl_vect_rng_bernoulli_d}{\PnlVect \ptr V, int
+    dimension, const \PnlVect \ptr a, const \PnlVect \ptr b, const \PnlVect \ptr p, \PnlRng \ptr rng}
+    \sshortdescribe Simulate a random vector according to the Bernoulli
+    distribution with values in \var{\{a,b\}} and parameter \var{p}. The result is
+    stored in \var{V}, ie. \var{V(i)} follows a Bernoulli distribution on
+    \var{\{a(i), b(i)\}} with parameter \var{p(i)}.
+
+  \item \describefun{void}{pnl_mat_bernoulli_uni}{\PnlMat \ptr M, int samples, int dimension,
+    const \PnlVect \ptr a, const \PnlVect \ptr b, const \PnlVect \ptr p, \PnlRng \ptr rng}
+    \sshortdescribe Compute a random matrix with independent rows, each of them
+    having a vector Bernoulli distributions, ie. \var{M(i, j)} follows a
+    Bernoulli distribution on \var{\{a(j), b(j)\}} with parameter \var{p(j)}.
+  
 \item \describefun{void}{pnl_vect_rng_uni}{\PnlVect \ptr G, int
     samples, double a, double b, \PnlRng \ptr rng}
   \sshortdescribe \var{G} is a vector of independent and identically distributed

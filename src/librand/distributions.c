@@ -311,7 +311,7 @@ double pnl_rng_invgauss (double mu, double lambda, PnlRng *rng)
 }
 
 /**
- * Simulate an iid smaple of Bernoulli random variables
+ * Simulate an iid sample of Bernoulli random variables
  * @param p parameter of the law
  * @param a, b the two values taken by the law
  * @param rng generator to use
@@ -328,6 +328,37 @@ void pnl_vect_rng_bernoulli(PnlVect *V, int samples, double a, double b, double 
       PNL_LET (V, i) = (x<p) ? b : a;
     }
 }
+
+/**
+ * Simulate a sample of a random vector with Bernoulli distribution
+ * V(i) is a Bernoulli in {a(i), b(i)} with parameter p(i)
+ *
+ * @param p vector of parameters of the law
+ * @param a, b the vectors of two values taken by the law
+ * @param rng generator to use
+ */
+void pnl_vect_rng_bernoulli_d(PnlVect *V, int dimension, const PnlVect *a, const PnlVect *b, const PnlVect *p, PnlRng *rng)
+{
+  int i;
+  pnl_vect_resize (V, dimension);
+  if (rng->rand_or_quasi == PNL_QMC)
+    {
+      CheckQMCDim(rng, dimension);
+      rng->Compute(rng, V->array);
+    }
+  else
+    {
+      for ( i=0 ; i<dimension ; i++ ) { rng->Compute(rng, &(PNL_LET(V, i))); }
+    }
+  for ( i=0 ; i<dimension ; i++ )
+    {
+      const double ai = PNL_GET(a, i);
+      const double bi = PNL_GET(b, i);
+      const double pi = PNL_GET(p, i);
+      PNL_LET(V,i) = (PNL_GET(V,i) < pi) ? bi : ai; 
+    }
+}
+
 
 
 /**
@@ -455,6 +486,53 @@ void pnl_vect_rng_normal_d (PnlVect *G, int dimension, PnlRng *rng)
 }
 
 /**
+ * Compute a matrix with independent rows following a Bernoulli distribution
+ * onver [a,b] with parameter p (a, b and p are vectors)
+ *
+ * the samples have values in [a, b] (space of dimension dimension)
+ *
+ * @param M  the matrix of random numbers, must already be allocated
+ * @param samples  number of Monte Carlo samples (= number of rows of M)
+ * @param dimension  dimension of the simulation (= number of columns of M)
+ * @param a, b values of the Bernoulli distribution
+ * @param p parameter of the distribution
+ * @param rng generator to use
+ *
+ * WARNING : The rows of M are indenpendent. This is very
+ * important if PNL_QMC is used
+ */
+void pnl_mat_bernoulli_uni(PnlMat *M, int samples, int dimension, const
+                           PnlVect *a, const PnlVect *b, const PnlVect *p,
+                           PnlRng *rng)
+{
+  int i, j;
+  pnl_mat_resize(M, samples, dimension);
+
+  if (rng->rand_or_quasi == PNL_QMC)
+    {
+      CheckQMCDim(rng, dimension);
+      for ( i=0 ; i<samples ; i++ ) { rng->Compute(rng, &(PNL_MGET(M, i, 0))); }
+    }
+  else
+    {
+      for ( i=0 ; i<M->mn ; i++ ) { rng->Compute(rng, M->array + i); }
+    }
+
+
+  for ( j=0 ; j<dimension ; j++ )
+    {
+      const double aj = PNL_GET(a, j);
+      const double bj = PNL_GET(b, j);
+      const double pj = PNL_GET(p, j);
+      for ( i=0 ; i<samples ; i++ )
+        {
+          PNL_MLET(M, i, j) = (PNL_MGET(M, i, j) < pj) ? bj : aj; 
+        }
+    }
+}
+
+
+/**
  * Compute a matrix with independent and uniformly distributed rows on [a,b]
  * ( a and b are vectors )
  *
@@ -489,9 +567,9 @@ void pnl_mat_rng_uni(PnlMat *M, int samples, int dimension,
         }
       return;
     }
+  CheckQMCDim(rng, dimension);
   for(i=0;i<samples;i++)
     {
-      CheckQMCDim(rng, dimension);
       rng->Compute(rng, &(PNL_MGET(M, i, 0)));
       for (j=0; j<dimension; j++)
         {
