@@ -206,8 +206,8 @@ PNL_INLINE_DECL int pnl_vect_int_get(const PnlVectInt *v, int i);
 PNL_INLINE_DECL int* pnl_vect_int_lget(PnlVectInt *v, int i);
 
 #ifndef PNL_RANGE_CHECK_OFF
-#define GET_INT(v,i) pnl_vect_get_int(v,i)
-#define LET_INT(v,i) *(pnl_vect_lget_int(v,i))
+#define GET_INT(v,i) pnl_vect_int_get(v,i)
+#define LET_INT(v,i) *(pnl_vect_int_lget(v,i))
 #else
 #define GET_INT(v,i) (v)->array[i]
 #define LET_INT(v,i) (v)->array[i]

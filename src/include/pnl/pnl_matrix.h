@@ -280,8 +280,8 @@ extern PnlVect pnl_vect_wrap_hmat(PnlHmat *H, int *t);
 /*@{*/
 
 #ifndef PNL_RANGE_CHECK_OFF
-#define MGET_INT(v,i,j) pnl_mat_get_int((v), (i), (j))
-#define MLET_INT(v,i,j) *(pnl_mat_lget_int((v), (i), (j)))
+#define MGET_INT(v,i,j) pnl_mat_int_get((v), (i), (j))
+#define MLET_INT(v,i,j) *(pnl_mat_int_lget((v), (i), (j)))
 #else /* PNL_RANGE_CHECK_OFF */
 #define MGET_INT(v,i,j) (v)->array[(i)*(v)->n+(j)]
 #define MLET_INT(v,i,j) (v)->array[(i)*(v)->n+(j)]
