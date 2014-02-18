@@ -1506,7 +1506,7 @@ int pnl_object_mpi_irecv (void **buf, int *size, int src, int tag, MPI_Comm comm
  * 
  * @return FAIL or OK
  */
-int pnl_object_mpi_reduce (PnlObject *Sendbuf, const PnlObject *Recvbuf, MPI_Op op, int root, MPI_Comm comm)
+int pnl_object_mpi_reduce (PnlObject *Sendbuf, PnlObject *Recvbuf, MPI_Op op, int root, MPI_Comm comm)
 {
   int rank, parent_id;
   void *recvptr, *sendptr;
@@ -1539,7 +1539,8 @@ int pnl_object_mpi_reduce (PnlObject *Sendbuf, const PnlObject *Recvbuf, MPI_Op 
           recvptr = PNL_MAT_OBJECT(Recvbuf)->array;
           break;
         default:
-          printf("Reduction is not implemented for type %s", Recvbuf->label);
+          if ( pnl_message_is_on () ) 
+            printf("Reduction is not implemented for type %s", Recvbuf->label);
           return FAIL;
         }
     }
@@ -1554,7 +1555,8 @@ int pnl_object_mpi_reduce (PnlObject *Sendbuf, const PnlObject *Recvbuf, MPI_Op 
       count = PNL_MAT_OBJECT(Sendbuf)->mn;
       break;
     default:
-      printf("Reduction is not implemented for type %s", Sendbuf->label);
+      if ( pnl_message_is_on () ) 
+        printf("Reduction is not implemented for type %s", Sendbuf->label);
       return FAIL;
     }
 
@@ -1569,7 +1571,8 @@ int pnl_object_mpi_reduce (PnlObject *Sendbuf, const PnlObject *Recvbuf, MPI_Op 
       type = MPI_DOUBLE; 
       if ( op != MPI_SUM && op != MPI_PROD && op != MPI_MIN && op != MPI_MAX )
         {
-          printf("Reduction is not implemented for type %s", Sendbuf->label);
+          if ( pnl_message_is_on () ) 
+            printf("Reduction is not implemented for type %s", Sendbuf->label);
           return FAIL;
         }
       break;
@@ -1578,7 +1581,8 @@ int pnl_object_mpi_reduce (PnlObject *Sendbuf, const PnlObject *Recvbuf, MPI_Op 
       type = MPI_INT; 
       if ( op != MPI_SUM && op != MPI_PROD && op != MPI_MIN && op != MPI_MAX )
         {
-          printf("Reduction is not implemented for type %s", Sendbuf->label);
+          if ( pnl_message_is_on () ) 
+            printf("Reduction is not implemented for type %s", Sendbuf->label);
           return FAIL;
         }
       break;
@@ -1590,7 +1594,8 @@ int pnl_object_mpi_reduce (PnlObject *Sendbuf, const PnlObject *Recvbuf, MPI_Op 
       type = MPI_DOUBLE; count *= 2; 
       if ( op != MPI_SUM )
         {
-          printf("Reduction is not implemented for type %s", Sendbuf->label);
+          if ( pnl_message_is_on () ) 
+            printf("Reduction is not implemented for type %s", Sendbuf->label);
           return FAIL;
         }
       break;

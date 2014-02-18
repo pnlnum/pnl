@@ -59,8 +59,8 @@ error occurred.
   \sshortdescribe Broadcast the object \var{Obj} from the process with rank
   \var{root} to all other processes of the group \var{comm}.
 
-\item \describefun{int}{pnl_object_mpi_reduce}{\PnlObject \ptr Recvbuf, const
-  \PnlObject \ptr Sendbuf, MPI_Op op, int root, MPI_Comm comm}
+\item \describefun{int}{pnl_object_mpi_reduce}{\PnlObject \ptr Sendbuf, 
+  \PnlObject \ptr Recvbuf, MPI_Op op, int root, MPI_Comm comm}
   \sshortdescribe Perform the reduction described by \var{op} on
   the objects \var{Sendbuf} and stores the result into \var{Recvbuf}. Note that
   \var{Recvbuf} and \var{Sendbuf} must be of the same type. The argument
