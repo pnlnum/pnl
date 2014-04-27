@@ -233,17 +233,20 @@ static void pnl_cdf_poi_test()
   int which;
   double p;
   double q;
-  double s;
+  double s, se;
   double xlam, xlame;
   int status;
   double bound;
   which=3;
   p=0.4;
   q=0.6;
-  s=5.0;
+  se = s = 5.0;
   xlame = 6.291918983308751656;
   pnl_cdf_poi(&which,&p,&q,&s,&xlam,&status,&bound);
   pnl_test_eq_abs (xlam, xlame, abserr, "cdf_poi xlam", "");
+  which = 2;
+  pnl_cdf_poi(&which, &p, &q, &s, &xlam, &status, &bound);
+  pnl_test_eq_abs (s, se, abserr, "cdf_poi inv", "");
 }
 
 static void pnl_cdf_t_test()
