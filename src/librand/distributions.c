@@ -811,8 +811,21 @@ void pnl_mat_rng_normal(PnlMat *M, int samples, int dimension, PnlRng *rng)
  */
 double pnl_rng_gamma (double a, double b, PnlRng *rng)
 {
-  /* assume a > 0 */
 
+  if ( rng->rand_or_quasi == PNL_QMC )
+    {
+      int status, which;
+      double x, bound, p, q;
+      CheckQMCDim(rng, 1);
+      rng->Compute(rng,&p);
+      q = 1. - p;
+      which = 2;
+      /* The function pnl_cdf_gam uses the rate instead of the scale */
+      b = 1. / b; 
+      pnl_cdf_gam(&which, &p, &q, &x, &a, &b, &status, &bound);
+      return x;
+    }
+  /* assume a > 0 */
   if (a < 1)
     {
       double u = pnl_rng_uni (rng);
@@ -820,9 +833,9 @@ double pnl_rng_gamma (double a, double b, PnlRng *rng)
     }
 
   {
-    double x, v, u;
-    double d = a - 1.0 / 3.0;
-    double c = (1.0 / 3.0) / sqrt (d);
+    double x, v, u, d, c;
+    d = a - 1.0 / 3.0;
+    c = (1.0 / 3.0) / sqrt (d);
 
     while (1)
       {

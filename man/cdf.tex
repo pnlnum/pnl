@@ -59,9 +59,11 @@ name. All these functions are based on the same prototype
   \sshortdescribe Cumulative Distribution Function Non-central F distribution.
 
 \item \describefun{void}{pnl_cdf_gam}{int \ptr which, double \ptr p, double
-    \ptr q, double \ptr x, double \ptr shape, double \ptr scale, int
+    \ptr q, double \ptr x, double \ptr shape, double \ptr rate, int
     \ptr status, double \ptr bound}
-  \sshortdescribe Cumulative Distribution Function GAMma distribution.
+  \sshortdescribe Cumulative Distribution Function GAMma distribution. Note that
+  the parameter \var{rate} is \var{1/scale}. The density writes 
+  $f(x)= 1/(s^a \Gamma(a)) x^{a-1} e^{-x/s}$ with \var{scale=s} and \var{shape=1/rate=a}.
 
 \item \describefun{void}{pnl_cdf_nbn}{int \ptr which, double \ptr p, double
     \ptr q, double \ptr x, double \ptr xn, double \ptr pr, double

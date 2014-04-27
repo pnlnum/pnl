@@ -1,3 +1,8 @@
+27-04-2014 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* distributions.c: All sampling functions know how to handle QMC
+	generators
+
 26-04-2014 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* distributions.c: Refactor the Poisson distribution sampling and add
