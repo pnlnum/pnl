@@ -1,3 +1,10 @@
+26-04-2014 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* distributions.c: Refactor the Poisson distribution sampling and add
+	two new functions:
+		pnl_vect_rng_poisson
+		pnl_vect_rng_poisson_d
+
 05-02-2014 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* distributions.c: Add vector and matrix with Bernoulli distribution.

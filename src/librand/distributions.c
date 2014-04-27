@@ -142,7 +142,34 @@ int pnl_rng_bernoulli(double p, PnlRng *rng)
 {
   double x=0.0;
   rng->Compute(rng,&x);
-  if (x<p) return 1; else return  0;
+  if (x<p) return 1; else return 0;
+}
+
+/**
+ * Simulation of a Poisson random variable using the PTRS algorithm
+ * @param lambda parameter of the law
+ * @param rng generator to use
+ */
+static long pnl_rng_poisson_ptrs(double lambda, PnlRng *rng)
+{
+  const double loglambda = log(lambda);
+  const double b = 0.931 + 2.53 * sqrt(lambda);
+  const double a = -0.059 + 0.02483 * b;
+  const double invalpha = 1.1239 + 1.1328 / (b - 3.4);
+  const double vr = 0.9277 - 3.6224 / (b - 2.);
+
+  while (1)
+    {
+      double U = pnl_rng_uni(rng) - 0.5;
+      double V = pnl_rng_uni(rng);
+      double us = 0.5 - fabs(U);
+      long k = (long) floor((2 * a / us + b) * U + lambda + 0.43);
+      if ((us >= 0.07) && (V <= vr)) return k;
+      if ((k < 0) || ((us < 0.013) && (V > us))) continue;
+      if ((log(V) + log(invalpha) - log(a/(us*us)+b)) <= 
+          (-lambda + k*loglambda - lgamma(k+1)))
+        return k;
+    }
 }
 
 /**
@@ -152,20 +179,41 @@ int pnl_rng_bernoulli(double p, PnlRng *rng)
  */
 long pnl_rng_poisson(double lambda, PnlRng *rng)
 {
-  double u;
-  double a = exp(-lambda);
-  long n = 0;
-  double random_number;
-
-  rng->Compute(rng,&random_number);
-  u = random_number;
-  while (u>a)
+  if (rng->rand_or_quasi == PNL_QMC)
     {
-      rng->Compute(rng,&random_number);
-      u *= random_number;
-      n++;
+      int status, which;
+      double x, bound, p, q;
+      CheckQMCDim(rng, 1);
+      rng->Compute(rng,&p);
+      q = 1. - p;
+      which = 2;
+      pnl_cdf_poi(&which, &p, &q, &x, &lambda, &status, &bound);
+      return (long) ceil(x);
     }
-  return n;
+  else
+    {
+      if ( lambda < 10 )
+        {
+          double random_number;
+          double u = 1;
+          double elambda = exp(-lambda);
+          long n = 0;
+
+          while (1)
+            {
+              rng->Compute(rng, &random_number);
+              u *= random_number;
+              if ( u > elambda )
+                n++;
+              else
+                return n;
+            }
+        }
+      else 
+        { 
+          return pnl_rng_poisson_ptrs(lambda, rng);
+        }
+    }
 }
 
 /**
@@ -176,11 +224,10 @@ long pnl_rng_poisson(double lambda, PnlRng *rng)
 double pnl_rng_exp(double lambda,PnlRng *rng)
 {
   double x;
-
   do{
-    rng->Compute(rng,&x);
-  } while(x==0);
-  return (double) (-log(x)/lambda);
+    rng->Compute(rng, &x);
+  } while (x == 0);
+  return  (-log(x) / lambda);
 }
 
 /** 
@@ -212,15 +259,7 @@ double pnl_rng_dblexp (double lambda_p, double lambda_m, double p, PnlRng *rng)
  */
 long pnl_rng_poisson1(double lambda, double t, PnlRng *rng)
 {
-  double S;
-  long Nt;
-  Nt=0;
-  S=0;
-  do {
-    S=S+pnl_rng_exp (lambda,rng);
-    Nt=Nt+1;
-  } while (S<=t);
-  return Nt-1;
+  return pnl_rng_poisson(lambda * t, rng);
 }
 
 /**
@@ -359,6 +398,62 @@ void pnl_vect_rng_bernoulli_d(PnlVect *V, int dimension, const PnlVect *a, const
     }
 }
 
+/** 
+ * Sample a vector of i.i.d rv following the Poisson distribution 
+ * 
+ * @param V contains the rv on output
+ * @param samples number of samples
+ * @param lambda Poisson parameter
+ * @param rng generator to use
+ */
+void pnl_vect_rng_poisson(PnlVect *V, int samples, double lambda, PnlRng *rng)
+{
+  int i;
+  pnl_vect_resize(V, samples);
+
+  for ( i=0 ; i<samples ; i++ )
+    {
+      LET(V,i) = (double) pnl_rng_poisson(lambda, rng);
+    }
+}
+
+/** 
+ * Sample a vector from the multidimensional Poisson distribution 
+ * 
+ * @param V contains the rv on output
+ * @param dimension size the vector lambda
+ * @param lambda vector of Poisson parameters
+ * @param rng generator to use
+ */
+void pnl_vect_rng_poisson_d(PnlVect *V, int dimension, const PnlVect *lambda, PnlRng *rng)
+{
+  int i;
+  pnl_vect_resize(V, dimension);
+
+  if (rng->rand_or_quasi == PNL_QMC)
+    {
+      int status, which;
+      double bound, p, q, x, lam;
+      which = 2;
+      CheckQMCDim(rng, dimension);
+      rng->Compute(rng, V->array);
+      for ( i=0 ; i<dimension ; i++ )
+        {
+          p = PNL_GET(V, i);
+          lam = GET(lambda, i);
+          q = 1. - p;
+          pnl_cdf_poi(&which, &p, &q, &x, &lam, &status, &bound);
+          PNL_LET(V, i) = ceil(x);
+        }
+    }
+  else
+    {
+      for ( i=0 ; i<dimension ; i++ )
+        {
+          PNL_LET(V,i) = (double) pnl_rng_poisson(PNL_GET(lambda, i), rng);
+        }
+    }
+}
 
 
 /**
@@ -530,7 +625,6 @@ void pnl_mat_bernoulli_uni(PnlMat *M, int samples, int dimension, const
         }
     }
 }
-
 
 /**
  * Compute a matrix with independent and uniformly distributed rows on [a,b]

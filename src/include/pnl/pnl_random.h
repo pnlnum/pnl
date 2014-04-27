@@ -151,6 +151,8 @@ extern double pnl_rng_chi2  (double nu, PnlRng *rng);
 extern int pnl_rng_bessel (double nu, double a, PnlRng *rng);
 extern void pnl_vect_rng_bernoulli(PnlVect *V, int samples, double a, double b, double p, PnlRng *rng);
 extern void pnl_vect_rng_bernoulli_d(PnlVect *V, int dimension, const PnlVect *a, const PnlVect *b, const PnlVect *p, PnlRng *rng);
+extern void pnl_vect_rng_poisson(PnlVect *V, int samples, double lambda, PnlRng *rng);
+extern void pnl_vect_rng_poisson_d(PnlVect *V, int dimension, const PnlVect *lambda, PnlRng *rng);
 extern void pnl_vect_rng_uni(PnlVect *G, int samples, double a, double b, PnlRng *rng);
 extern void pnl_vect_rng_uni_d(PnlVect *G, int dimension, double a, double b, PnlRng *rng);
 extern void pnl_vect_rng_normal(PnlVect *G, int samples, PnlRng *rng);
