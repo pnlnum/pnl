@@ -455,7 +455,6 @@ void pnl_vect_rng_poisson_d(PnlVect *V, int dimension, const PnlVect *lambda, Pn
     }
 }
 
-
 /**
  * Compute a vector of independent and uniformly distributed r.v. on [a,b]
  * @param G existing PnlVect containing the random numbers on exit
@@ -596,7 +595,7 @@ void pnl_vect_rng_normal_d (PnlVect *G, int dimension, PnlRng *rng)
  * WARNING : The rows of M are indenpendent. This is very
  * important if PNL_QMC is used
  */
-void pnl_mat_bernoulli_uni(PnlMat *M, int samples, int dimension, const
+void pnl_mat_bernoulli(PnlMat *M, int samples, int dimension, const
                            PnlVect *a, const PnlVect *b, const PnlVect *p,
                            PnlRng *rng)
 {
@@ -622,6 +621,52 @@ void pnl_mat_bernoulli_uni(PnlMat *M, int samples, int dimension, const
       for ( i=0 ; i<samples ; i++ )
         {
           PNL_MLET(M, i, j) = (PNL_MGET(M, i, j) < pj) ? bj : aj; 
+        }
+    }
+}
+
+/** 
+ * Sample a iid vectors from the multidimensional Poisson distribution. The
+ * rows are independent.
+ * 
+ * @param M contains the random matrix on output (samples x dimension)
+ * @param dimension size the vector lambda
+ * @param lambda vector of Poisson parameters
+ * @param rng generator to use
+ */
+void pnl_mat_rng_poisson(PnlMat *M, int samples, int dimension, const PnlVect *lambda, PnlRng *rng)
+{
+  int i, j;
+  pnl_mat_resize(M, samples, dimension);
+
+  if (rng->rand_or_quasi == PNL_QMC)
+    {
+      int status, which;
+      double bound, p, q, x, lam;
+      which = 2;
+      CheckQMCDim(rng, dimension);
+      for ( i=0 ; i<samples ; i++ )
+        {
+          rng->Compute(rng, &(PNL_MLET(M, i, 0)));
+          for ( j=0 ; j<dimension ; j++ )
+            {
+              p = PNL_MGET(M, i, j);
+              lam = GET(lambda, j);
+              q = 1. - p;
+              pnl_cdf_poi(&which, &p, &q, &x, &lam, &status, &bound);
+              PNL_MLET(M, i, j) = ceil(x);
+            }
+        }
+    }
+  else
+    {
+
+      for ( i=0 ; i<samples ; i++ )
+        {
+          for ( j=0 ; j<dimension ; j++ )
+            {
+              PNL_MLET(M, i, j) = (double) pnl_rng_poisson(PNL_GET(lambda, j), rng);
+            }
         }
     }
 }

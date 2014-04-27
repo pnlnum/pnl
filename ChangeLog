@@ -1,9 +1,10 @@
 26-04-2014 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* distributions.c: Refactor the Poisson distribution sampling and add
-	two new functions:
+	three new functions:
 		pnl_vect_rng_poisson
 		pnl_vect_rng_poisson_d
+		pnl_mat_rng_poisson
 
 05-02-2014 Jérôme Lelong <jerome.lelong@gmail.com>
 

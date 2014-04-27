@@ -211,11 +211,12 @@ number generator.
   stored in \var{V}, ie. \var{V(i)} follows a Bernoulli distribution on
   \var{\{a(i), b(i)\}} with parameter \var{p(i)}.
 
-\item \describefun{void}{pnl_mat_bernoulli_uni}{\PnlMat \ptr M, int samples, int dimension,
+\item \describefun{void}{pnl_mat_bernoulli}{\PnlMat \ptr M, int samples, int dimension,
   const \PnlVect \ptr a, const \PnlVect \ptr b, const \PnlVect \ptr p, \PnlRng \ptr rng}
   \sshortdescribe Compute a random matrix with independent rows, each of them
-  having a vector Bernoulli distributions, ie. \var{M(i, j)} follows a
+  having a vector Bernoulli distribution, ie. \var{M(i, j)} follows a
   Bernoulli distribution on \var{\{a(j), b(j)\}} with parameter \var{p(j)}.
+
 
 \item \describefun{void}{pnl_vect_rng_poisson}{\PnlVect \ptr V, int samples,
   double lambda,  \PnlRng \ptr rng}
@@ -230,6 +231,12 @@ number generator.
   ie. \var{V(i)} follows a Poisson distribution with parameter \var{lambda(i)}.
   Note that, we are using double based vectors and not integer based vectors.
   
+\item \describefun{void}{pnl_mat_poisson}{\PnlMat \ptr M, int samples, int dimension,
+  const \PnlVect \ptr lambda, \PnlRng \ptr rng}
+  \sshortdescribe Compute a random matrix with independent rows, each of them
+  having a vector Poisson distribution, ie. \var{M(i, j)} follows a
+  Poisson distribution with parameter \var{p(j)}.
+
 \item \describefun{void}{pnl_vect_rng_uni}{\PnlVect \ptr G, int
     samples, double a, double b, \PnlRng \ptr rng}
   \sshortdescribe \var{G} is a vector of independent and identically distributed
