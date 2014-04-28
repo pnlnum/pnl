@@ -17,8 +17,8 @@
 
 17-01-2014 Jérôme Lelong <jerome.lelong@gmail.com>
 
-	* pnl_vector.h, pnl_matrix.h: Add macros for accessing elements of all
-	types of vectors and matrices.
+	* pnl_vector.h, pnl_matrix.h: Add macros for accessing the elements of
+	all types of vectors and matrices.
 
 14-01-2014 Jérôme Lelong <jerome.lelong@gmail.com>
 
@@ -50,8 +50,8 @@
 
 27-12-2013 Jérôme Lelong <jerome.lelong@gmail.com>
 
-	* basis.c: Improve the effeciency of the evaluation by avoid to
-	computation to compute terms with degree 0.
+	* basis.c: Improve the effeciency of the evaluation by avoiding to
+	compute the terms with degree 0.
 
 22-10-2013 Jérôme Lelong <jerome.lelong@gmail.com>
 
