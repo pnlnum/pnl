@@ -28,7 +28,8 @@
 static PnlSpMat* create_random_sp (int m, int n, PnlRng *rng) 
 {
   int it;
-  int nz = floor (pnl_rng_uni (rng) * m * n * 0.5);
+  /* Sparsity rate between 20% and 60% */
+  int nz = floor (((pnl_rng_uni(rng) * 0.4) + 0.2) * m * n);
   PnlSpMat *M = pnl_sp_mat_create (m, n, nz);
 
   for ( it=0 ; it<nz ; it++ )
