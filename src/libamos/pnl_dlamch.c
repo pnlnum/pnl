@@ -66,13 +66,13 @@ double pnl_dlamch (char *cmach)
 	{
 	  rnd = one;
 	  i_1 = 1 - it;
-	  eps = pow(base, i_1) / 2; /* pow_di */
+	  eps = pnl_pow_i(base, i_1) / 2; /* pow_di */
 	}
       else
 	{
 	  rnd = zero;
 	  i_1 = 1 - it;
-	  eps = pow(base, i_1);/* pow_di */
+	  eps = pnl_pow_i(base, i_1);/* pow_di */
 	}
       prec = eps * base;
       emin = (double) imin;
@@ -386,7 +386,7 @@ static int pnl_dlamc2 (int *beta, int *t, int *rnd, double *eps,
 
       b = (double) lbeta;
       i_1 = -lt;
-      a = pow(b, i_1); /* pow_di */
+      a = pnl_pow_i(b, i_1); /* pow_di */
       leps = a;
       /*        Try some tricks to see whether or not this is the correct  EPS. */
       b = two / 3;

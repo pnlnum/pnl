@@ -1,3 +1,4 @@
+set_source_files_properties(pnl_dlamch.c PROPERTIES COMPILE_FLAGS -O0)
 add_library(libamos OBJECT
    amos_wrappers.c
    xerror.c
