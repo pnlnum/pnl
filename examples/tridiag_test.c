@@ -70,6 +70,7 @@ static void tridiag_add_test ()
   PnlTridiagMat *A, *Aclone, *B;
   int i, n = 5;
   int gen = PNL_RNG_MERSENNE_RANDOM_SEED;
+  double abserr = 1E-12;
 
 
   pnl_rand_init (gen, 1, 1);
@@ -82,9 +83,9 @@ static void tridiag_add_test ()
   pnl_tridiag_mat_plus_tridiag_mat (A, B);
   for ( i=0 ; i<A->size-1 ; i++ )
     {
-      if ( A->DL[i] != Aclone->DL[i] + B->DL[i] ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (-1)", A->DL[i], Aclone->DL[i] + B->DL[i] ); goto J1;}
-      if ( A->DU[i] != Aclone->DU[i] + B->DU[i] ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (+1)", A->DU[i], Aclone->DU[i] + B->DU[i] ); goto J1;}
-      if ( A->D[i] != Aclone->D[i] + B->D[i] ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (0)", A->D[i], Aclone->D[i] + B->D[i] ); goto J1; }
+      if ( pnl_cmp_eq_abs(A->DL[i], Aclone->DL[i] + B->DL[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (-1)", A->DL[i], Aclone->DL[i] + B->DL[i] ); goto J1;}
+      if ( pnl_cmp_eq_abs(A->DU[i], Aclone->DU[i] + B->DU[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (+1)", A->DU[i], Aclone->DU[i] + B->DU[i] ); goto J1;}
+      if ( pnl_cmp_eq_abs(A->D[i], Aclone->D[i] + B->D[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (0)", A->D[i], Aclone->D[i] + B->D[i] ); goto J1; }
     }
   if ( A->D[A->size-1] != Aclone->D[A->size-1] + B->D[A->size-1] ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (0)", A->D[A->size-1], Aclone->D[A->size-1] + B->D[A->size-1] ); goto J1;}
 
@@ -95,9 +96,9 @@ J1:
   pnl_tridiag_mat_minus_tridiag_mat (A, B);
   for ( i=0 ; i<A->size-1 ; i++ )
     {
-      if ( A->DL[i] != Aclone->DL[i] - B->DL[i] ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (-1)", A->DL[i], Aclone->DL[i] - B->DL[i] ); goto J2;}
-      if ( A->DU[i] != Aclone->DU[i] - B->DU[i] ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (+1)", A->DU[i], Aclone->DU[i] - B->DU[i] ); goto J2;}
-      if ( A->D[i] != Aclone->D[i] - B->D[i] ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (0)", A->D[i], Aclone->D[i] - B->D[i] ); goto J2; }
+      if ( pnl_cmp_eq_abs(A->DL[i], Aclone->DL[i] - B->DL[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (-1)", A->DL[i], Aclone->DL[i] - B->DL[i] ); goto J2;}
+      if ( pnl_cmp_eq_abs(A->DU[i], Aclone->DU[i] - B->DU[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (+1)", A->DU[i], Aclone->DU[i] - B->DU[i] ); goto J2;}
+      if ( pnl_cmp_eq_abs(A->D[i], Aclone->D[i] - B->D[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (0)", A->D[i], Aclone->D[i] - B->D[i] ); goto J2; }
     }
   if ( A->D[A->size-1] != Aclone->D[A->size-1] - B->D[A->size-1] ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (0)", A->D[A->size-1], Aclone->D[A->size-1] - B->D[A->size-1] ); goto J2;}
 
@@ -108,9 +109,9 @@ J2:
   pnl_tridiag_mat_mult_tridiag_mat_term (A, B);
   for ( i=0 ; i<A->size-1 ; i++ )
     {
-      if ( A->DL[i] != Aclone->DL[i] * B->DL[i] ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (-1)", A->DL[i], Aclone->DL[i] * B->DL[i] ); goto J3;}
-      if ( A->DU[i] != Aclone->DU[i] * B->DU[i] ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (+1)", A->DU[i], Aclone->DU[i] * B->DU[i] ); goto J3;}
-      if ( A->D[i] != Aclone->D[i] * B->D[i] ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (0)", A->D[i], Aclone->D[i] * B->D[i] ); goto J3; }
+      if ( pnl_cmp_eq_abs(A->DL[i], Aclone->DL[i] * B->DL[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (-1)", A->DL[i], Aclone->DL[i] * B->DL[i] ); goto J3;}
+      if ( pnl_cmp_eq_abs(A->DU[i], Aclone->DU[i] * B->DU[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (+1)", A->DU[i], Aclone->DU[i] * B->DU[i] ); goto J3;}
+      if ( pnl_cmp_eq_abs(A->D[i], Aclone->D[i] * B->D[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (0)", A->D[i], Aclone->D[i] * B->D[i] ); goto J3; }
     }
   if ( A->D[A->size-1] != Aclone->D[A->size-1] * B->D[A->size-1] ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (0)", A->D[A->size-1], Aclone->D[A->size-1] * B->D[A->size-1] ); goto J3;}
 

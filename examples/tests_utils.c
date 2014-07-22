@@ -108,7 +108,16 @@ void pnl_test_set_fail (const char *str, double res, double expected)
   printf ("\t%s : FAIL (observed %.18f expected %.18f)\n", str, res, expected);
 }
 
-static int test_eq_rel (double x, double y, double relerr)
+/** 
+ * Relative comparison of two real numbers
+ * 
+ * @param x real number
+ * @param y real number
+ * @param relerr real number 
+ * 
+ * @return  0 or 1
+ */
+int pnl_cmp_eq_rel (double x, double y, double relerr)
 {
   int status;
   if ( y != 0 )
@@ -122,14 +131,32 @@ static int test_eq_rel (double x, double y, double relerr)
   return status;
 }
 
-static int test_eq_abs (double x, double y, double abserr)
+/** 
+ * Absolute comparison of two real numbers
+ * 
+ * @param x real number
+ * @param y real number
+ * @param relerr real number 
+ * 
+ * @return  0 or 1
+ */
+int pnl_cmp_eq_abs (double x, double y, double abserr)
 {
   int status;
   status = (fabs (x -y) > abserr);
   return status;
 }
 
-static int test_eq (double x, double y, double abserr)
+/** 
+ * Comparison of two real numbers
+ * 
+ * @param x real number
+ * @param y real number
+ * @param relerr real number 
+ * 
+ * @return  0 or 1
+ */
+int pnl_cmp_eq (double x, double y, double abserr)
 {
   int status;
   status = (fabs (x -y) / MAX(1, fabs (y)) > abserr);
@@ -185,11 +212,11 @@ int pnl_test_eq(double x, double y, double relerr, const char *str, const char *
   va_end (ap);
   if ( fabs(y) >= 1 )
     {
-      return pnl_test_eq_aux (x, y, relerr, test_eq_rel, str, fmt, ap);
+      return pnl_test_eq_aux (x, y, relerr, pnl_cmp_eq_rel, str, fmt, ap);
     }
   else
     {
-      return pnl_test_eq_aux (x, y, relerr, test_eq_abs, str, fmt, ap);
+      return pnl_test_eq_aux (x, y, relerr, pnl_cmp_eq_abs, str, fmt, ap);
    }
 }
 
@@ -211,7 +238,7 @@ int pnl_test_eq_rel (double x, double y, double relerr, const char *str, const c
   va_list ap;
   va_start (ap, fmt);
   va_end (ap);
-  return pnl_test_eq_aux (x, y, relerr, test_eq_rel, str, fmt, ap);
+  return pnl_test_eq_aux (x, y, relerr, pnl_cmp_eq_rel, str, fmt, ap);
 }
 
 /** 
@@ -231,7 +258,7 @@ int pnl_test_eq_abs (double x, double y, double abserr, const char *str, const c
   va_list ap;
   va_start (ap, fmt);
   va_end (ap);
-  return pnl_test_eq_aux (x, y, abserr, test_eq_abs, str, fmt, ap);
+  return pnl_test_eq_aux (x, y, abserr, pnl_cmp_eq_abs, str, fmt, ap);
 }
 
 /** 
@@ -302,7 +329,7 @@ int pnl_test_mat_eq_rel (const PnlMat *X, const PnlMat *Y, double relerr, const 
       update_count_tests (1);
       return FALSE;
     }
-  return pnl_test_array (X->array, Y->array, X->mn, relerr, test_eq_rel, str, fmt, ap);
+  return pnl_test_array (X->array, Y->array, X->mn, relerr, pnl_cmp_eq_rel, str, fmt, ap);
 }
 
 /** 
@@ -330,7 +357,7 @@ int pnl_test_mat_eq_abs (const PnlMat *X, const PnlMat *Y, double abserr, const 
       update_count_tests (1);
       return FALSE;
     }
-  return pnl_test_array (X->array, Y->array, X->mn, abserr, test_eq_abs, str, fmt, ap);
+  return pnl_test_array (X->array, Y->array, X->mn, abserr, pnl_cmp_eq_abs, str, fmt, ap);
 }
 
 /** 
@@ -358,7 +385,7 @@ int pnl_test_mat_complex_eq_abs (const PnlMatComplex *X, const PnlMatComplex *Y,
       update_count_tests (1);
       return FALSE;
     }
-  return pnl_test_array ((double *)X->array, (double *)Y->array, 2 * X->mn, abserr, test_eq_abs, str, fmt, ap);
+  return pnl_test_array ((double *)X->array, (double *)Y->array, 2 * X->mn, abserr, pnl_cmp_eq_abs, str, fmt, ap);
 }
 
 /** 
@@ -437,7 +464,7 @@ int pnl_test_mat_eq(const PnlMat *X, const PnlMat *Y, double relerr, const char 
       update_count_tests (1);
       return FALSE;
     }
-  return pnl_test_array (X->array, Y->array, X->mn, relerr, test_eq, str, fmt, ap);
+  return pnl_test_array (X->array, Y->array, X->mn, relerr, pnl_cmp_eq, str, fmt, ap);
 }
 
 /** 
@@ -465,7 +492,7 @@ int pnl_test_vect_eq_rel (const PnlVect *X, const PnlVect *Y, double relerr, con
       update_count_tests (1);
       return FALSE;
     }
-  return pnl_test_array (X->array, Y->array, X->size, relerr, test_eq_rel, str, fmt, ap);
+  return pnl_test_array (X->array, Y->array, X->size, relerr, pnl_cmp_eq_rel, str, fmt, ap);
 }
 
 /** 
@@ -493,7 +520,7 @@ int pnl_test_vect_eq_abs (const PnlVect *X, const PnlVect *Y, double abserr, con
       update_count_tests (1);
       return FALSE;
     }
-  return pnl_test_array (X->array, Y->array, X->size, abserr, test_eq_abs, str, fmt, ap);
+  return pnl_test_array (X->array, Y->array, X->size, abserr, pnl_cmp_eq_abs, str, fmt, ap);
 }
 
 /** 
@@ -522,7 +549,7 @@ int pnl_test_vect_eq(const PnlVect *X, const PnlVect *Y, double relerr, const ch
       update_count_tests (1);
       return FALSE;
     }
-  return pnl_test_array (X->array, Y->array, X->size, relerr, test_eq, str, fmt, ap);
+  return pnl_test_array (X->array, Y->array, X->size, relerr, pnl_cmp_eq, str, fmt, ap);
 }
 
 /** 
@@ -550,7 +577,7 @@ int pnl_test_vect_complex_eq_abs (const PnlVectComplex *X, const PnlVectComplex 
       update_count_tests (1);
       return FALSE;
     }
-  return pnl_test_array ((double *)X->array, (double *)Y->array, 2 * X->size, abserr, test_eq_abs, str, fmt, ap);
+  return pnl_test_array ((double *)X->array, (double *)Y->array, 2 * X->size, abserr, pnl_cmp_eq_abs, str, fmt, ap);
 }
 
 /**
@@ -577,7 +604,7 @@ int pnl_test_hmat_eq_rel (const PnlHmat *X, const PnlHmat *Y, double relerr, con
     {
       if ( X->dims[i] != Y->dims[i] ) goto dim_fail;
     }
-  return pnl_test_array (X->array, Y->array, X->mn, relerr, test_eq_rel, str, fmt, ap);
+  return pnl_test_array (X->array, Y->array, X->mn, relerr, pnl_cmp_eq_rel, str, fmt, ap);
 
 dim_fail:
   printf ("%s : ", str);
@@ -611,7 +638,7 @@ int pnl_test_hmat_eq_abs (const PnlHmat *X, const PnlHmat *Y, double abserr, con
     {
       if ( X->dims[i] != Y->dims[i] ) goto dim_fail;
     }
-  return pnl_test_array (X->array, Y->array, X->mn, abserr, test_eq_abs, str, fmt, ap);
+  return pnl_test_array (X->array, Y->array, X->mn, abserr, pnl_cmp_eq_abs, str, fmt, ap);
 
 dim_fail:
   printf ("%s : ", str);
@@ -645,7 +672,7 @@ int pnl_test_hmat_eq (const PnlHmat *X, const PnlHmat *Y, double abserr, const c
     {
       if ( X->dims[i] != Y->dims[i] ) goto dim_fail;
     }
-  return pnl_test_array (X->array, Y->array, X->mn, abserr, test_eq, str, fmt, ap);
+  return pnl_test_array (X->array, Y->array, X->mn, abserr, pnl_cmp_eq, str, fmt, ap);
 
 dim_fail:
   printf ("%s : ", str);

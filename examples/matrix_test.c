@@ -427,6 +427,7 @@ static void pnl_mat_mult_mat_term_test()
 {
   int i;
   PnlMat *M1, *M2, *M;
+  double abserr = 1E-12;
   M1 = pnl_mat_create (5, 4);
   M2 = pnl_mat_create (5, 4);
   pnl_mat_rng_normal (M1, 5, 4, rng);
@@ -436,7 +437,7 @@ static void pnl_mat_mult_mat_term_test()
   for ( i=0 ; i<M->mn ; i++ )
     {
       double expected = M1->array[i] * M2->array[i];
-      if ( M->array[i] != expected )
+      if (pnl_cmp_eq_abs(M->array[i], expected, abserr))
         {
           pnl_test_set_fail ( "mat_mutl_mat_term", M->array[i], expected);
           goto J1;

@@ -23,6 +23,9 @@ extern void menu_test (tst_list *l);
 
 /* New unit test framework */
 extern int verbose;
+extern int pnl_cmp_eq_rel (double x, double y, double relerr);
+extern int pnl_cmp_eq_abs (double x, double y, double abserr);
+extern int pnl_cmp_eq (double x, double y, double abserr);
 extern int pnl_test_eq (double x, double y, double relerr, const char *label, const char *fmt, ...);
 extern int pnl_test_eq_rel (double x, double y, double relerr, const char *label, const char *fmt, ...);
 extern int pnl_test_eq_abs (double x, double y, double abserr, const char *label, const char *fmt, ...);

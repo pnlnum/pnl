@@ -145,6 +145,7 @@ static void basic_band_mat_test ()
 {
   PnlBandMat *BM, *BMclone;
   int m, n, nl, nu, gen, i, j;
+  double abserr = 1E-12;
   gen = PNL_RNG_MERSENNE_RANDOM_SEED;
   pnl_rand_init (gen, 1, 1);
   m = n = 5;
@@ -161,7 +162,8 @@ static void basic_band_mat_test ()
     {
       for ( j=MAX(0, i-BM->nl) ; j<MIN(BM->n, i+BM->nu) ; j++ )
         {
-          if (pnl_band_mat_get(BM, i, j) != 2. * pnl_band_mat_get(BMclone, i, j))
+          if (pnl_cmp_eq_abs(pnl_band_mat_get(BM, i, j), 
+                             2. * pnl_band_mat_get(BMclone, i, j), abserr))
             {
               pnl_test_set_fail ("band_mat_mult_double", pnl_band_mat_get(BM, i, j),
                                  2. * pnl_band_mat_get(BMclone, i, j));
@@ -178,7 +180,8 @@ J1:
     {
       for ( j=MAX(0, i-BM->nl) ; j<MIN(BM->n, i+BM->nu) ; j++ )
         {
-          if (pnl_band_mat_get(BM, i, j) != 2. + pnl_band_mat_get(BMclone, i, j))
+          if (pnl_cmp_eq_abs(pnl_band_mat_get(BM, i, j), 
+                             2. + pnl_band_mat_get(BMclone, i, j), abserr))
             {
               pnl_test_set_fail ("band_mat_plus_double", pnl_band_mat_get(BM, i, j),
                                  2. + pnl_band_mat_get(BMclone, i, j));
@@ -197,6 +200,7 @@ static void band_mat_ops_test ()
 {
   PnlBandMat *BA, *BB, *BAclone;
   int m, n, nl, nu, gen, i, j;
+  double abserr = 1E-12;
   gen = PNL_RNG_MERSENNE_RANDOM_SEED;
   pnl_rand_init (gen, 1, 1);
   m = n = 6;
@@ -219,7 +223,7 @@ static void band_mat_ops_test ()
           Aij = pnl_band_mat_get (BAclone, i, j);
           Bij = pnl_band_mat_get (BB, i, j);
           Rij = pnl_band_mat_get (BA, i, j);
-          if ( Aij + Bij != Rij )
+          if (pnl_cmp_eq_abs(Aij + Bij, Rij, abserr))
             {
               pnl_test_set_fail ("band_mat_plus_band_mat", Rij, Aij + Bij);
               goto J1;
@@ -238,7 +242,7 @@ J1:
           Aij = pnl_band_mat_get (BAclone, i, j);
           Bij = pnl_band_mat_get (BB, i, j);
           Rij = pnl_band_mat_get (BA, i, j);
-          if ( Aij * Bij != Rij )
+          if (pnl_cmp_eq_abs(Aij * Bij, Rij, abserr))
             {
               pnl_test_set_fail ("band_mat_mult_band_mat", Rij, Aij * Bij);
               goto J2;

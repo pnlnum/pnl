@@ -234,12 +234,13 @@ static void pnl_vect_div_vect_term_test()
   PnlVect *v1;
   PnlVect *v2;
   double x[4]={1.0, 5.0, 3.0, 8.0};
+  double abserr = 1E-12;
   v1=pnl_vect_create_from_ptr(4,x);
   v2=pnl_vect_create_from_scalar(4,3.0);
   pnl_vect_div_vect_term(v1,v2);
   for ( i=0; i<4; i++ )
     {
-      if ( GET(v1,i) != x[i] / 3. )
+      if ( pnl_cmp_eq_abs(GET(v1,i), x[i] / 3., abserr) )
         {
           pnl_test_set_fail ("vect_div_vect_term", GET(v1,i), x[i] / 3.);
           goto J1;
