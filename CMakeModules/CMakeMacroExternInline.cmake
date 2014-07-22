@@ -64,17 +64,24 @@ function(check_c99_inline result)
 endfunction(check_c99_inline)
 
 
-set (PNL_INLINE_DECL )
-set (PNL_INLINE_FUNC )
+set(PNL_INLINE_DECL )
+set(PNL_INLINE_FUNC )
 
-check_extern_inline (HAS_EXTERN_INLINE)
-if (NOT HAS_EXTERN_INLINE)
-    check_c99_inline (HAS_C99_INLINE)
-endif (NOT HAS_EXTERN_INLINE)
-
-if (HAS_EXTERN_INLINE OR HAS_C99_INLINE)
-    set(PNL_HAVE_INLINE true cache internal "Can build inline functions")
+if (MINGW)
+    # If we are cross-compiling, detection of inline may be wrong. 
+    # We would rather deactivating it
+    message (STATUS "Check inline...not possible when cross-compiling")
+    set(PNL_HAVE_INLINE "" CACHE INTERNAL "Cannot build inline functions")
 else ()
-    set(PNL_HAVE_INLINE false cache internal "Cannot build inline functions")
-endif (HAS_EXTERN_INLINE OR HAS_C99_INLINE)
+    check_extern_inline (HAS_EXTERN_INLINE)
+    if (NOT HAS_EXTERN_INLINE)
+        check_c99_inline (HAS_C99_INLINE)
+    endif (NOT HAS_EXTERN_INLINE)
+
+    if (HAS_EXTERN_INLINE OR HAS_C99_INLINE)
+        set(PNL_HAVE_INLINE 1 CACHE INTERNAL "Can build inline functions")
+    else ()
+        set(PNL_HAVE_INLINE "" CACHE INTERNAL "Cannot build inline functions")
+    endif (HAS_EXTERN_INLINE OR HAS_C99_INLINE)
+endif (MINGW)
 
