@@ -22,7 +22,8 @@
 
         1. Extract the zip file, this will create a directory named pnl-XXX
            where XXX is the version number.
-        2. Launch Visual C++ command prompt and change to directory
+        2. Launch Visual C++ command prompt (make sure to use the 32bit
+                version) and change to directory
             pnl-XXX/lib. In this directory, run
                 lib.exe /def:libpnl.def /out:libpnl.lib
             This command creates the .lib file needed by Visual to link a
@@ -33,6 +34,8 @@
             directories where to search for external dlls.
         6. Add libpnl.lib as an additional dependency of your project
             (Properties -> Linking -> Input)
+        7. Copy the files libpnl.dll, libblas.dll and liblapack.dll from
+            the lib directory to the directory containing the executable file.
 
     B. Source version
 
