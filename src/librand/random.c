@@ -1358,8 +1358,10 @@ void pnl_rng_sseed (PnlRng *rng, ulong seed)
       pnl_tausworthe_sseed((tausworthe_state *)(rng->state), seed);
       break;
     case PNL_RNG_MERSENNE :
-    case PNL_RNG_MERSENNE_RANDOM_SEED :
       pnl_mt_sseed((mt_state *)(rng->state), seed);
+      break;
+    case PNL_RNG_MERSENNE_RANDOM_SEED :
+      pnl_mt_sseed((mt_state *)(rng->state), time(NULL));
       break;
     case PNL_RNG_DCMT :
       {
