@@ -177,8 +177,11 @@ The following functions return one sample from a specified law.
 \item \describefun{double}{pnl_rng_gamma} {double a, double b, \PnlRng \ptr rng}
   \sshortdescribe Generate a sample from the $\Gamma(a, b)$ distribution.
 
-\item \describefun{double}{pnl_rng_chi2} {double n, \PnlRng \ptr rng}
-  \sshortdescribe Generate a sample from the centered $\chi^2(n)$ distribution.
+\item \describefun{double}{pnl_rng_chi2} {double df, \PnlRng \ptr rng}
+  \sshortdescribe Generate a sample from the centered $\chi^2(df)$ distribution.
+\item \describefun{double}{pnl_rng_ncchi2} {double df, double xnonc, \PnlRng \ptr rng}
+  \sshortdescribe Generate a sample from the non central $\chi^2$ distribution
+  with \var{df} degrees of freedom and non central parameter \var{xnonc}.
 \item \describefun{double}{pnl_rng_bessel} {double v, double a,\PnlRng \ptr rng}
   \sshortdescribe Generate a sample from the Bessel distribution with parameters
   \var{v > -1} and \var{a > 0}.

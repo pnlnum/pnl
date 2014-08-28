@@ -811,7 +811,6 @@ void pnl_mat_rng_normal(PnlMat *M, int samples, int dimension, PnlRng *rng)
  */
 double pnl_rng_gamma (double a, double b, PnlRng *rng)
 {
-
   if ( rng->rand_or_quasi == PNL_QMC )
     {
       int status, which;
@@ -875,6 +874,43 @@ double pnl_rng_gamma (double a, double b, PnlRng *rng)
 double pnl_rng_chi2  (double nu, PnlRng *rng)
 {
   return 2. * pnl_rng_gamma ( nu / 2, 1.0, rng);
+}
+
+/** 
+ * Sample from the non central chi squared distribution
+ * 
+ * @param nu number of degrees of freedom
+ * @param xnonc non centrality parameter (must be positive)
+ * @param rng random number generator
+ * 
+ * @return a non central chi squared distributed random variable
+ */
+double pnl_rng_ncchi2(double nu, double xnonc, PnlRng *rng)
+{
+  PNL_CHECK(nu <= 0, "nu must be > 0", "pnl_rng_ncchi2")
+  PNL_CHECK(xnonc < 0, "nu must be >= 0", "pnl_rng_ncchi2")
+  if ( rng->rand_or_quasi == PNL_QMC )
+    {
+      int status, which;
+      double x, bound, p, q;
+      CheckQMCDim(rng, 1);
+      rng->Compute(rng,&p);
+      q = 1. - p;
+      which = 2;
+      pnl_cdf_gam(&which, &p, &q, &x, &nu, &xnonc, &status, &bound);
+      return x;
+    }
+
+  if ( nu > 1 )
+    {
+      double Y = sqrt(xnonc) + pnl_rng_normal(rng);
+      return Y * Y + pnl_rng_chi2(nu - 1., rng);
+    }
+  else
+    {
+      int J = pnl_rng_poisson(xnonc / 2., rng);
+      return pnl_rng_chi2(nu + 2 * J, rng);
+    }
 }
 
 /** 
