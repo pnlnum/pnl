@@ -216,7 +216,7 @@ possible use with a C++ compiler. The header files must be include using
 
   \item Functions ending in \verb!_copy! create a new object identical (ie. with
     the same size and content) as its argument but independent (ie. modifying
-    one of them does not alter the other). Calling \verb!A = pnl_xxx_create(B)!
+    one of them does not alter the other). Calling \verb!A = pnl_xxx_copy(B)!
     is equivalent to first calling \verb!A = pnl_xxx_new()! function and then
     \verb!pnl_xxx_clone(A, B)!.
     
