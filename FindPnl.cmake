@@ -46,13 +46,28 @@ else (PNL_ROOT)
         )
 endif (PNL_ROOT)
 
+# if (PNL_LIBRARY AND PNL_INCLUDE_DIR)
+#     set(PNL_FOUND TRUE)
+#     set(PNL_INCLUDE_DIRS ${PNL_INCLUDE_DIR})
+#     set(PNL_LIBRARIES ${PNL_LIBRARY})
+# else (PNL_LIBRARY AND PNL_INCLUDE_DIR)
+#     set(PNL_FOUND FALSE)
+#     message(STATUS
+#         "PNL not found. Consider specifying either (PNL_LIBRARY, PNL_INCLUDE_DIR) or PNL_ROOT."
+#         )
+# endif (PNL_LIBRARY AND PNL_INCLUDE_DIR)
+
+
 # Handle the QUIETLY and REQUIRED arguments and set PNL_FOUND to TRUE if
 # all listed variables are TRUE
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(PNL 
-    REQUIRED_VARS PNL_LIBRARY PNL_INCLUDE_DIR)
+    REQUIRED_VARS PNL_LIBRARY PNL_INCLUDE_DIR
+    FAIL_MESSAGE "PNL not found. Specify either (PNL_LIBRARY, PNL_INCLUDE_DIR) or PNL_ROOT")
 if (PNL_FOUND)
     set(PNL_INCLUDE_DIRS ${PNL_INCLUDE_DIR})
     set(PNL_LIBRARIES ${PNL_LIBRARY})
+    message(STATUS "PNL Include: ${PNL_INCLUDE_DIRS}")
+    message(STATUS "PNL Libraries: ${PNL_LIBRARIES}")
 endif (PNL_FOUND)
 mark_as_advanced(PNL_INCLUDE_DIRS PNL_LIBRARIES)
