@@ -384,6 +384,8 @@ void pnl_vect_rng_bernoulli(PnlVect *V, int samples, double a, double b, double 
 void pnl_vect_rng_bernoulli_d(PnlVect *V, int dimension, const PnlVect *a, const PnlVect *b, const PnlVect *p, PnlRng *rng)
 {
   int i;
+  PNL_CHECK(!(a->size == b->size && a->size == p->size && p->size == dimension),
+            "size mismatch", "vect_rng_bernoulli_d")
   pnl_vect_resize (V, dimension);
   if (rng->rand_or_quasi == PNL_QMC)
     {
@@ -433,6 +435,8 @@ void pnl_vect_rng_poisson(PnlVect *V, int samples, double lambda, PnlRng *rng)
 void pnl_vect_rng_poisson_d(PnlVect *V, int dimension, const PnlVect *lambda, PnlRng *rng)
 {
   int i;
+  PNL_CHECK(!(lambda->size == dimension),
+            "size mismatch", "vect_rng_poisson_d")
   pnl_vect_resize(V, dimension);
 
   if (rng->rand_or_quasi == PNL_QMC)
@@ -605,6 +609,7 @@ void pnl_mat_rng_bernoulli(PnlMat *M, int samples, int dimension, const
                            PnlRng *rng)
 {
   int i, j;
+  PNL_CHECK(!(a->size == b->size && a->size == p->size && p->size == dimension), "size mismatch", "mat_rng_bernoulli")
   pnl_mat_resize(M, samples, dimension);
 
   if (rng->rand_or_quasi == PNL_QMC)
@@ -642,6 +647,7 @@ void pnl_mat_rng_bernoulli(PnlMat *M, int samples, int dimension, const
 void pnl_mat_rng_poisson(PnlMat *M, int samples, int dimension, const PnlVect *lambda, PnlRng *rng)
 {
   int i, j;
+  PNL_CHECK(!(lambda->size == dimension), "size mismatch", "mat_rng_poisson")
   pnl_mat_resize(M, samples, dimension);
 
   if (rng->rand_or_quasi == PNL_QMC)
@@ -697,6 +703,7 @@ void pnl_mat_rng_uni(PnlMat *M, int samples, int dimension,
 {
   int i, j;
   double u;
+  PNL_CHECK(!(a->size == b->size && a->size == dimension), "size mismatch", "mat_rng_uni")
   pnl_mat_resize(M,samples,dimension);
 
   if (rng->rand_or_quasi == PNL_MC)
@@ -725,7 +732,7 @@ void pnl_mat_rng_uni(PnlMat *M, int samples, int dimension,
 /**
  * Compute a  matrix with independent and uniformly distributed rows on [a,b]^dimension.
  *
- * the samples have values in [a, b] (space of dimension dimension)
+ * the samples have values in [a, b]^dimension
  *
  * @param M : the matrix of gaussian numbers, must already be allocated
  * @param samples : number of Monte Carlo samples (= number of rows of M)
