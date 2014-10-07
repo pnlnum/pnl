@@ -136,7 +136,7 @@ int pnl_cmp_eq_rel (double x, double y, double relerr)
  * 
  * @param x real number
  * @param y real number
- * @param relerr real number 
+ * @param abserr real number defining the absolute error
  * 
  * @return  0 or 1
  */
@@ -152,7 +152,7 @@ int pnl_cmp_eq_abs (double x, double y, double abserr)
  * 
  * @param x real number
  * @param y real number
- * @param relerr real number 
+ * @param abserr real number defining the absolute error
  * 
  * @return  0 or 1
  */

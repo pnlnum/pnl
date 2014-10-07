@@ -135,12 +135,12 @@ void FUNCTION(pnl_sp_mat,print )(const TYPE(PnlSpMat) *M)
 
 
 /**
- * Resize a TYPE(PnlSpMat).  If the new size is smaller than the current one, no
+ * Resize a PnlSpMat.  If the new size is smaller than the current one, no
  * memory is freed. If the new size is larger than the current nzmax, a new
  * pointer is allocated. The old data are kept only when m is left unchanged
  * and we increase nzmax.
  *
- * @param M a pointer to an already existing TYPE(PnlSpMat)
+ * @param M a pointer to an already existing PnlSpMat
  * @param m new nb of rows
  * @param n new nb of columns
  * @param nzmax new maximum number of non-zero elements.
@@ -183,6 +183,7 @@ void FUNCTION(pnl_sp_mat,del_row)(TYPE(PnlSpMat) *M, int i)
  * 
  * @param M a sparse matrix
  * @param i the index of the row to delete
+ * @param d a dense vector to add as row i in M
  */
 void FUNCTION(pnl_sp_mat,add_row)(TYPE(PnlSpMat) *M, int i, const TYPE(PnlVect) *d)
 {

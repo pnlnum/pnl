@@ -67,15 +67,15 @@ void pnl_sp_mat_object_free (PnlSpMatObject **o)
 }
 
 /**
- * Resize a TYPE(PnlSpMat).  If the new size is smaller than the current one, no
+ * Resize a PnlSpMatObject.  If the new size is smaller than the current one, no
  * memory is freed. If the new size is larger than the current nzmax, a new
  * pointer is allocated. The old data are kept only when m is left unchanged
  * and we increase nzmax.
  *
- * @param M a pointer to an already existing TYPE(PnlSpMat)
+ * @param o a pointer to an already existing PnlSpMatObject
  * @param m new nb of rows
  * @param n new nb of columns
- * @param nzmax new maximum number of non-zero elements.
+ * @param nz new maximum number of non-zero elements.
  *
  * @return OK or FAIL. When returns OK, the matrix M is changed.
  */

@@ -351,6 +351,9 @@ double pnl_rng_invgauss (double mu, double lambda, PnlRng *rng)
 
 /**
  * Simulate an iid sample of Bernoulli random variables
+ *
+ * @param V a real vector. Must be initialized on input.
+ * @param samples number of samples from the Bernoulli distribution
  * @param p parameter of the law
  * @param a, b the two values taken by the law
  * @param rng generator to use
@@ -372,7 +375,9 @@ void pnl_vect_rng_bernoulli(PnlVect *V, int samples, double a, double b, double 
  * Simulate a sample of a random vector with Bernoulli distribution
  * V(i) is a Bernoulli in {a(i), b(i)} with parameter p(i)
  *
+ * @param V a real vector. Must be initialized on input.
  * @param p vector of parameters of the law
+ * @param dimension size of a, b and p
  * @param a, b the vectors of two values taken by the law
  * @param rng generator to use
  */
@@ -629,6 +634,7 @@ void pnl_mat_rng_bernoulli(PnlMat *M, int samples, int dimension, const
  * rows are independent.
  * 
  * @param M contains the random matrix on output (samples x dimension)
+ * @param samples number of samples from the vector Poisson distribution
  * @param dimension size the vector lambda
  * @param lambda vector of Poisson parameters
  * @param rng generator to use
