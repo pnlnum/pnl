@@ -595,7 +595,7 @@ void pnl_vect_rng_normal_d (PnlVect *G, int dimension, PnlRng *rng)
  * WARNING : The rows of M are indenpendent. This is very
  * important if PNL_QMC is used
  */
-void pnl_mat_bernoulli(PnlMat *M, int samples, int dimension, const
+void pnl_mat_rng_bernoulli(PnlMat *M, int samples, int dimension, const
                            PnlVect *a, const PnlVect *b, const PnlVect *p,
                            PnlRng *rng)
 {
@@ -611,7 +611,6 @@ void pnl_mat_bernoulli(PnlMat *M, int samples, int dimension, const
     {
       for ( i=0 ; i<M->mn ; i++ ) { rng->Compute(rng, M->array + i); }
     }
-
 
   for ( j=0 ; j<dimension ; j++ )
     {
