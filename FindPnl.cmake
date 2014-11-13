@@ -17,7 +17,7 @@
 if (PNL_ROOT)
     find_library(
         PNL_LIBRARY
-        NAMES "pnl"
+        NAMES "pnl" "libpnl"
         PATHS ${PNL_ROOT}
         PATH_SUFFIXES "lib" "lib64"
         NO_DEFAULT_PATH
@@ -33,7 +33,7 @@ if (PNL_ROOT)
 else (PNL_ROOT)
     find_library(
         PNL_LIBRARY
-        NAMES "pnl"
+        NAMES "pnl" "libpnl"
         PATH_SUFFIXES "lib" "lib64"
         NO_DEFAULT_PATH
         )
@@ -61,9 +61,10 @@ endif (PNL_ROOT)
 # Handle the QUIETLY and REQUIRED arguments and set PNL_FOUND to TRUE if
 # all listed variables are TRUE
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(PNL 
+find_package_handle_standard_args(Pnl
+    FOUND_VAR PNL_FOUND
     REQUIRED_VARS PNL_LIBRARY PNL_INCLUDE_DIR
-    FAIL_MESSAGE "PNL not found. Specify either (PNL_LIBRARY, PNL_INCLUDE_DIR) or PNL_ROOT")
+    FAIL_MESSAGE "Pnl not found. Specify either (PNL_LIBRARY, PNL_INCLUDE_DIR) or PNL_ROOT")
 if (PNL_FOUND)
     set(PNL_INCLUDE_DIRS ${PNL_INCLUDE_DIR})
     set(PNL_LIBRARIES ${PNL_LIBRARY})
