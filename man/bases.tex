@@ -46,6 +46,13 @@ sparse storage has been added.
   \label{basis_index}
 \end{table}
 
+The Hermite polynomials are defined by
+\begin{equation*}
+  H_n(x) = (-1)^n \expp{\frac{x^2}{2}} \frac{d^n}{dx^n} \expp{-\frac{x^2}{2}}.
+\end{equation*}
+If $G$ is a real valued standard normal random variable, ${\mathbb E}[H_n(G) H_m(G)] = n!
+\ind{n = m}$. \\
+
 In this section, we provide functions to solve regression problems on
 finite dimensional bases. Let $(x_i, i=1 \dots n)$ be $n$ points in $\R^d$ and a
 function $g$ defined by the data $(y_i = g(x_i), i=1 \dots n)$. Assume you
