@@ -689,6 +689,29 @@ TYPE(PnlVect) FUNCTION(pnl_vect,wrap_mat_row)(const TYPE(PnlMat) *M, int i)
 }
 
 /**
+ * Extract rows of a matrix and wrap it into an other matrix.
+ * @param M a matrix
+ * @param i_start the index of the first row to be extracted
+ * @param i_end the index of the last row to be extracted
+ * @return a matrix (not a pointer) whose array pointer is the address of the
+ * first element of the ith row of M. No copying is done.
+ */
+TYPE(PnlMat) FUNCTION(pnl_mat,wrap_mat_rows)(const TYPE(PnlMat) *M, int i_start, int i_end)
+{
+  TYPE(PnlMat) Mwrap;
+  PNL_CHECK (i_start<0 || i_end<0 || i_start>=M->m || i_end>=M->m,"index out of range", "pnl_vect_wrap_mat_row");
+  FUNCTION(pnl_mat,init)(&Mwrap);
+  Mwrap.n = M->n;
+  Mwrap.m = i_end - i_start + 1;
+  Mwrap.mn = Mwrap.n * Mwrap.m;
+  Mwrap.mem_size = 0;
+  Mwrap.owner = 0;
+  Mwrap.array = &(M->array[i_start*M->n]);
+  return Mwrap;
+}
+
+
+/**
  * Wrap a vector into a PnlMat
  * @param V a vector
  * @return a matrix (not a pointer) whose array pointer is the address of the

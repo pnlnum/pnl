@@ -832,6 +832,13 @@ Accessing elements of a matrix is faster using the following macros
   the \var{i}-th row of \var{M}. The new vector shares its data with the
   matrix \var{M}, which means that any modification to one of them will affect
   the other.
+\item \describefun{\PnlMat}{pnl_mat_wrap_mat_rows}
+  {const \PnlMat \ptr M, int i_start, int i_end}
+  \sshortdescribe Return a \PnlMat (not a pointer) holding rows from
+  \var{i_start} to \var{i_end} (included) of \var{M}.
+  The new matrix shares its data with the
+  matrix \var{M}, which means that any modification to one of them will affect
+  the other.
   
 \item \describefun{void}{pnl_mat_swap_rows}{\PnlMat \ptr M, int i, int j}
   \sshortdescribe Swap two rows of a matrix.  

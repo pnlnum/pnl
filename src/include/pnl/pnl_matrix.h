@@ -166,6 +166,7 @@ extern void pnl_mat_fprint(FILE *fic, const PnlMat *M);
 extern void pnl_mat_fprint_nsp (FILE *fic, const PnlMat *M);
 extern void pnl_mat_print_nsp (const PnlMat *M);
 extern PnlVect pnl_vect_wrap_mat_row(const PnlMat *M, int i);
+extern PnlMat pnl_mat_wrap_mat_rows(const PnlMat *M, int i_start, int i_end);
 extern PnlMat pnl_mat_wrap_vect(const PnlVect *v);
 extern void pnl_mat_get_row(PnlVect *V, const PnlMat *M, int i);
 extern void pnl_mat_get_col(PnlVect *V, const PnlMat *M, int j);
@@ -330,6 +331,7 @@ extern void pnl_mat_int_get_col(PnlVectInt *V, const PnlMatInt *M, int j);
 extern void pnl_mat_int_add_row(PnlMatInt *M, int i, const PnlVectInt *r);
 extern void pnl_mat_int_del_row(PnlMatInt *M, int i);
 extern PnlVectInt pnl_vect_int_wrap_mat_row(const PnlMatInt *M, int i);/* M(i,:)=V(:) */
+extern PnlMatInt pnl_mat_int_wrap_mat_rows(const PnlMatInt *M, int i_start, int i_end);
 extern PnlMatInt pnl_mat_int_wrap_vect(const PnlVectInt *V);
 extern void pnl_mat_int_map_inplace(PnlMatInt *lhs, int(*f)(int)); /*lhs=f(lhs)*/
 extern void pnl_mat_int_map(PnlMatInt *lhs, const PnlMatInt *rhs, int(*f)(int));/* lhs(i)=f(rhs(i)) */
@@ -489,6 +491,7 @@ extern void pnl_mat_complex_get_col(PnlVectComplex *V, const PnlMatComplex *M, i
 extern void pnl_mat_complex_add_row(PnlMatComplex *M, int i, const PnlVectComplex *r);
 extern void pnl_mat_complex_del_row(PnlMatComplex *M, int i);
 extern PnlVectComplex pnl_vect_complex_wrap_mat_row(const PnlMatComplex *M, int i);/* M(i,:)=V(:) */
+extern PnlMatComplex pnl_mat_complex_wrap_mat_rows(const PnlMatComplex *M, int i_start, int i_end);
 extern PnlMatComplex pnl_mat_complex_wrap_vect(const PnlVectComplex *V);
 extern void pnl_mat_complex_map_inplace(PnlMatComplex *lhs, dcomplex(*f)(dcomplex)); /*lhs=f(lhs)*/
 extern void pnl_mat_complex_map(PnlMatComplex *lhs, const PnlMatComplex *rhs, dcomplex(*f)(dcomplex));/* lhs(i)=f(rhs(i)) */
