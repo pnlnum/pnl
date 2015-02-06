@@ -1112,7 +1112,7 @@ void pnl_basis_print (const PnlBasis *B)
  * evaluate the basis
  * @param i an integer describing the index of the element of the basis to
  * consider
- * @param k the index of the term to be evaluated with element i of the
+ * @param k the index of the term to be evaluated within element i of the
  * basis
  *
  * @return (f_i)_k (x) 
