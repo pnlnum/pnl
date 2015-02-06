@@ -46,12 +46,12 @@
 
 /** 
  * Compute the the maximum degree which can be put on the last component
- * is the total order of the rest is partial.
+ * if the total degree of the cwother elements is partial.
  *
  * The total degree function is the sum of the partial degrees
  * 
  * @param total total degree
- * @param partial partial degree alredy used
+ * @param partial partial degree already used
  * 
  * @return 
  */
@@ -63,12 +63,12 @@ static int freedom_degree_sum (int total, int partial)
 
 /** 
  * Compute the the maximum degree which can be put on the last component
- * is the total order of the rest is partial.
+ * if the total degree of the cwother elements is partial.
  *
  * The total degree function is the product of the partial degrees
  * 
  * @param total total degree
- * @param partial partial degree alredy used
+ * @param partial partial degree already used
  * 
  * @return 
  */
@@ -414,13 +414,13 @@ static double D2CanonicalD1(double x, int ind)
  * order. This function is only used for order > 7
  *  @param x the address of a real number
  *  @param n the order of the polynomial to be evaluated
- *  @param n0 7 on input
- *  @param f_n used to store the polynomial of order n. On input is P(7)
- *  @param f_n_1 used to store the polynomial of order n-1. On input is P(6)
+ *  @param n0 rank of initialization
+ *  @param f_n used to store the polynomial of order n0.
+ *  @param f_n_1 used to store the polynomial of order n0 - 1.
  */
 static double Hermite_rec (double x, int n, int n0, double *f_n, double *f_n_1)
 {
-  if (n == 7)
+  if (n == n0)
     {
       return *f_n;
     }
@@ -429,7 +429,7 @@ static double Hermite_rec (double x, int n, int n0, double *f_n, double *f_n_1)
       double save = *f_n;
       *f_n = (x) * (*f_n) - n0 * (*f_n_1);
       *f_n_1 = save;
-      return Hermite_rec (x, n-1, n0 + 1, f_n, f_n_1);
+      return Hermite_rec (x, n, n0 + 1, f_n, f_n_1);
     }
 }
 
@@ -489,24 +489,25 @@ static double D2HermiteD1(double x, int n)
 
 /**
  * The terminal recursive function to compute Tchebychev polynomials of any
- * order. This function is only used for order > 7
- *  @param x the address of a real number
- *  @param n the order of the polynomial to be evaluated
- *  @param f_n used to store the polynomial of order n. On input is P(7)
- *  @param f_n_1 used to store the polynomial of order n-1. On input is P(6)
+ * order.
+ * @param x the address of a real number
+ * @param n the order of the polynomial to be evaluated
+ * @param n0 rank of initilization
+ * @param f_n0 used to store the polynomial of order n0
+ * @param f_n1 used to store the polynomial of order n0 - 1
  */
-static double Tchebychev_rec (double x, int n, double *f_n, double *f_n_1)
+static double Tchebychev_rec (double x, int n, int n0, double *f_n0, double *f_n1)
 {
   if (n == 7)
     {
-      return *f_n;
+      return *f_n0;
     }
   else
     {
-      double save = *f_n;
-      *f_n = 2 * (x) * (*f_n) - (*f_n_1);
-      *f_n_1 = save;
-      return Tchebychev_rec (x, n-1, f_n, f_n_1);
+      double save = *f_n0;
+      *f_n0 = 2 * (x) * (*f_n0) - (*f_n1);
+      *f_n1 = save;
+      return Tchebychev_rec (x, n, n0 + 1, f_n0, f_n1);
     }
 }
 
@@ -546,35 +547,33 @@ static double TchebychevD1(double x, int n)
     default :
       f_n = TchebychevD1 (x, 7);
       f_n_1 = TchebychevD1 (x, 6);
-      return Tchebychev_rec (x, n, &f_n, &f_n_1);
+      return Tchebychev_rec (x, n, 7, &f_n, &f_n_1);
     }
 }
 
 /**
  * The terminal recursive function to compute the first derivative of the
- * Tchebychev polynomials of any order. This function is only used for order >
- * 7
+ * Tchebychev polynomials of any order.
  *
  *  @param x the address of a real number
  *  @param n the order of the polynomial to be evaluated
- *  @param n0 7 on input
- *  @param f_n used to store the derivative of the polynomial of order n. On
- *  input is P'(7)
+ *  @param n0 rank of initialization
+ *  @param f_n used to store the derivative of the polynomial of order n0.
  *  @param f_n_1 used to store the derivative of  the polynomial of order
- *  n-1. On input is P'(6)
+ *  n0-1.
  */
 static double DTchebychev_rec (double x, int n, int n0, double *f_n, double *f_n_1)
 {
-  if (n == 7)
+  if (n == n0)
     {
       return *f_n;
     }
   else
     {
       double save = *f_n;
-      *f_n = 2 * (x) * (*f_n) - (*f_n_1) + 2 * TchebychevD1 (x, n0);
+      *f_n = 2 * x * (double)(n0 + 1.0) / (double)n0 * (*f_n) -  (double)(n0 + 1.) / (double)(n0 - 1.) * (*f_n_1);
       *f_n_1 = save;
-      return DTchebychev_rec (x, n-1, n0+1, f_n, f_n_1);
+      return DTchebychev_rec (x, n, n0 + 1, f_n, f_n_1);
     }
 }
 
@@ -618,29 +617,26 @@ static double DTchebychevD1(double x, int n)
 
 /**
  * The terminal recursive function to compute the second derivative of the
- * Tchebychev polynomials of any order. This function is only used for order >
- * 7
+ * Tchebychev polynomials of any order.
  *
  *  @param x the address of a real number
  *  @param n the order of the polynomial to be evaluated
- *  @param n0 7 on input
- *  @param f_n used to store the derivative of the polynomial of order n. On
- *  input is P''(7)
- *  @param f_n_1 used to store the derivative of  the polynomial of order
- *  n-1. On input is P''(6)
+ *  @param n0 rank of initialization
+ *  @param f_n used to store the derivative of the polynomial of order n0
+ *  @param f_n_1 used to store the derivative of  the polynomial of order n0 - 1
  */
 static double D2Tchebychev_rec (double x, int n, int n0, double *f_n, double *f_n_1)
 {
-  if (n == 7)
+  if (n == n0)
     {
       return *f_n;
     }
   else
     {
       double save = *f_n;
-      *f_n = 2 * (x) * (*f_n) - (*f_n_1) + 4 * DTchebychevD1 (x, n0);
+      *f_n = 2 * x * (*f_n) - (*f_n_1) + 4 * DTchebychevD1 (x, n0);
       *f_n_1 = save;
-      return D2Tchebychev_rec (x, n-1, n0+1, f_n, f_n_1);
+      return D2Tchebychev_rec (x, n, n0 + 1, f_n, f_n_1);
     }
 }
 
