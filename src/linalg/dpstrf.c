@@ -2,7 +2,7 @@
  * Written and (C) by Jérôme Lelong <jerome.lelong@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as 
+ * it under the terms of the GNU Lesser General Public License as
  * published by  the Free Software Foundation; either version 3 of the
  * License, or (at your option) any later version.
  *
@@ -13,11 +13,11 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License  along with this program.  If not, see
- * <http://www.gnu.org/licenses/>. 
+ * <http://www.gnu.org/licenses/>.
  */
 
 /*
- * This file contains two functions from Lapack: 
+ * This file contains two functions from Lapack:
  *    dpstrf and dpstf2 (and dmaxloc)
  * to compute a Block Cholesky factorization for non
  * definite matrices. It is only used if PNL_HAVE_DPSTRF is
@@ -40,16 +40,16 @@
 #ifndef PNL_HAVE_DPSTRF
 
 
-/** 
+/**
  * Return TRUE if x is NaN and FALSE otherwise
- * 
+ *
  * @param x the address of a real number
- * 
+ *
  * @return  TRUE or FALSE
  */
-int disnan_ (double *x)
+int disnan_(double *x)
 {
-  return pnl_isnan (*x) ? TRUE : FALSE;
+  return pnl_isnan(*x) ? TRUE : FALSE;
 }
 
 /* dpstrf.f -- translated by f2c (version 20061008).
@@ -72,7 +72,7 @@ static double c_b22 = -1.;
 static double c_b24 = 1.;
 
 int C2F(dpstrf)(char *uplo, int *n, double *a, int *
-                lda, int *piv, int *rank, double *tol, double *work, 
+                lda, int *piv, int *rank, double *tol, double *work,
                 int *info)
 {
   /* System generated locals */
@@ -86,26 +86,26 @@ int C2F(dpstrf)(char *uplo, int *n, double *a, int *
   int i__, j, k, maxlocvar, jb, nb;
   double ajj;
   int pvt;
-  extern  int dscal_(int *, double *, double *, 
+  extern  int dscal_(int *, double *, double *,
                      int *);
   extern int lsame_(char *, char *);
-  extern  int dgemv_(char *, int *, int *, 
-                     double *, double *, int *, double *, int *, 
+  extern  int dgemv_(char *, int *, int *,
+                     double *, double *, int *, double *, int *,
                      double *, double *, int *);
   double dtemp;
   int itemp;
-  extern  int dswap_(int *, double *, int *, 
+  extern  int dswap_(int *, double *, int *,
                      double *, int *);
   double dstop;
   int upper;
-  extern  int dsyrk_(char *, char *, int *, int *, 
-                     double *, double *, int *, double *, double *, 
+  extern  int dsyrk_(char *, char *, int *, int *,
+                     double *, double *, int *, double *, double *,
                      int *);
   extern int dpstf2_(char *, int *, double *, int *, int *, int *,
                      double *, double *, int *);
   extern double dlamch_(char *);
   extern  int xerbla_(char *, int *);
-  extern int ilaenv_(int *, char *, char *, int *, int *, 
+  extern int ilaenv_(int *, char *, char *, int *, int *,
                      int *, int *);
   extern int dmaxloc_(double *, int *);
 
@@ -209,296 +209,338 @@ int C2F(dpstrf)(char *uplo, int *n, double *a, int *
   /* Function Body */
   *info = 0;
   upper = lsame_(uplo, "U");
-  if (! upper && ! lsame_(uplo, "L")) {
-    *info = -1;
-  } else if (*n < 0) {
-    *info = -2;
-  } else if (*lda < MAX(1,*n)) {
-    *info = -4;
-  }
-  if (*info != 0) {
-    i__1 = -(*info);
-    xerbla_("DPSTRF", &i__1);
-    return 0;
-  }
+  if (! upper && ! lsame_(uplo, "L"))
+    {
+      *info = -1;
+    }
+  else if (*n < 0)
+    {
+      *info = -2;
+    }
+  else if (*lda < MAX(1, *n))
+    {
+      *info = -4;
+    }
+  if (*info != 0)
+    {
+      i__1 = -(*info);
+      xerbla_("DPSTRF", &i__1);
+      return 0;
+    }
 
   /* Quick return if possible */
 
-  if (*n == 0) {
-    return 0;
-  }
+  if (*n == 0)
+    {
+      return 0;
+    }
 
   /* Get block size */
 
   nb = ilaenv_(&c__1, "DPOTRF", uplo, n, &c_n1, &c_n1, &c_n1);
-  if (nb <= 1 || nb >= *n) {
+  if (nb <= 1 || nb >= *n)
+    {
 
-    /* Use unblocked code */
+      /* Use unblocked code */
 
-    dpstf2_(uplo, n, &a[a_dim1 + 1], lda, &piv[1], rank, tol, &work[1], 
-            info);
-    goto L200;
-
-  } else {
-
-    /* Initialize PIV */
-
-    i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-      piv[i__] = i__;
-      /* L100: */
-    }
-
-    /* Compute stopping value */
-
-    pvt = 1;
-    ajj = a[pvt + pvt * a_dim1];
-    i__1 = *n;
-    for (i__ = 2; i__ <= i__1; ++i__) {
-      if (a[i__ + i__ * a_dim1] > ajj) {
-        pvt = i__;
-        ajj = a[pvt + pvt * a_dim1];
-      }
-    }
-    if (ajj == 0. || disnan_(&ajj)) {
-      *rank = 0;
-      *info = 1;
+      dpstf2_(uplo, n, &a[a_dim1 + 1], lda, &piv[1], rank, tol, &work[1],
+              info);
       goto L200;
+
     }
+  else
+    {
 
-    /* Compute stopping value if not supplied */
-
-    if (*tol < 0.) {
-      dstop = *n * dlamch_("Epsilon") * ajj;
-    } else {
-      dstop = *tol;
-    }
-
-
-    if (upper) {
-
-      /* Compute the Cholesky factorization P' * A * P = U' * U */
+      /* Initialize PIV */
 
       i__1 = *n;
-      i__2 = nb;
-      for (k = 1; i__2 < 0 ? k >= i__1 : k <= i__1; k += i__2) {
-
-        /* Account for last block not being NB wide */
-
-        /* Computing MIN */
-        i__3 = nb, i__4 = *n - k + 1;
-        jb = MIN(i__3,i__4);
-
-        /* Set relevant part of first half of WORK to zero, */
-        /* holds dot products */
-
-        i__3 = *n;
-        for (i__ = k; i__ <= i__3; ++i__) {
-          work[i__] = 0.;
-          /* L110: */
+      for (i__ = 1; i__ <= i__1; ++i__)
+        {
+          piv[i__] = i__;
+          /* L100: */
         }
 
-        i__3 = k + jb - 1;
-        for (j = k; j <= i__3; ++j) {
+      /* Compute stopping value */
 
-          /* Find pivot, test for exit, else swap rows and columns */
-          /* Update dot products, compute possible pivots which are */
-          /* stored in the second half of WORK */
-
-          i__4 = *n;
-          for (i__ = j; i__ <= i__4; ++i__) {
-
-            if (j > k) {
-              /* Computing 2nd power */
-              d__1 = a[j - 1 + i__ * a_dim1];
-              work[i__] += d__1 * d__1;
+      pvt = 1;
+      ajj = a[pvt + pvt * a_dim1];
+      i__1 = *n;
+      for (i__ = 2; i__ <= i__1; ++i__)
+        {
+          if (a[i__ + i__ * a_dim1] > ajj)
+            {
+              pvt = i__;
+              ajj = a[pvt + pvt * a_dim1];
             }
-            work[*n + i__] = a[i__ + i__ * a_dim1] - work[i__];
-
-            /* L120: */
-          }
-
-          if (j > 1) {
-            maxlocvar = (*n << 1) - (*n + j) + 1;
-            itemp = dmaxloc_(&work[*n + j], &maxlocvar);
-            pvt = itemp + j - 1;
-            ajj = work[*n + pvt];
-            if (ajj <= dstop || disnan_(&ajj)) {
-              a[j + j * a_dim1] = ajj;
-              goto L190;
-            }
-          }
-
-          if (j != pvt) {
-
-            /* Pivot OK, so can now swap pivot rows and columns */
-
-            a[pvt + pvt * a_dim1] = a[j + j * a_dim1];
-            i__4 = j - 1;
-            dswap_(&i__4, &a[j * a_dim1 + 1], &c__1, &a[pvt * 
-                   a_dim1 + 1], &c__1);
-            if (pvt < *n) {
-              i__4 = *n - pvt;
-              dswap_(&i__4, &a[j + (pvt + 1) * a_dim1], lda, &a[
-                     pvt + (pvt + 1) * a_dim1], lda);
-            }
-            i__4 = pvt - j - 1;
-            dswap_(&i__4, &a[j + (j + 1) * a_dim1], lda, &a[j + 1 
-                   + pvt * a_dim1], &c__1);
-
-            /* Swap dot products and PIV */
-
-            dtemp = work[j];
-            work[j] = work[pvt];
-            work[pvt] = dtemp;
-            itemp = piv[pvt];
-            piv[pvt] = piv[j];
-            piv[j] = itemp;
-          }
-
-          ajj = sqrt(ajj);
-          a[j + j * a_dim1] = ajj;
-
-          /* Compute elements J+1:N of row J. */
-
-          if (j < *n) {
-            i__4 = j - k;
-            i__5 = *n - j;
-            dgemv_("Trans", &i__4, &i__5, &c_b22, &a[k + (j + 1) *
-                   a_dim1], lda, &a[k + j * a_dim1], &c__1, &
-                   c_b24, &a[j + (j + 1) * a_dim1], lda);
-            i__4 = *n - j;
-            d__1 = 1. / ajj;
-            dscal_(&i__4, &d__1, &a[j + (j + 1) * a_dim1], lda);
-          }
-
-          /* L130: */
+        }
+      if (ajj == 0. || disnan_(&ajj))
+        {
+          *rank = 0;
+          *info = 1;
+          goto L200;
         }
 
-        /* Update trailing matrix, J already incremented */
+      /* Compute stopping value if not supplied */
 
-        if (k + jb <= *n) {
-          i__3 = *n - j + 1;
-          dsyrk_("Upper", "Trans", &i__3, &jb, &c_b22, &a[k + j * 
-                 a_dim1], lda, &c_b24, &a[j + j * a_dim1], lda);
+      if (*tol < 0.)
+        {
+          dstop = *n * dlamch_("Epsilon") * ajj;
+        }
+      else
+        {
+          dstop = *tol;
         }
 
-        /* L140: */
-      }
 
-    } else {
+      if (upper)
+        {
 
-      /* Compute the Cholesky factorization P' * A * P = L * L' */
+          /* Compute the Cholesky factorization P' * A * P = U' * U */
 
-      i__2 = *n;
-      i__1 = nb;
-      for (k = 1; i__1 < 0 ? k >= i__2 : k <= i__2; k += i__1) {
+          i__1 = *n;
+          i__2 = nb;
+          for (k = 1; i__2 < 0 ? k >= i__1 : k <= i__1; k += i__2)
+            {
 
-        /* Account for last block not being NB wide */
+              /* Account for last block not being NB wide */
 
-        /* Computing MIN */
-        i__3 = nb, i__4 = *n - k + 1;
-        jb = MIN(i__3,i__4);
+              /* Computing MIN */
+              i__3 = nb, i__4 = *n - k + 1;
+              jb = MIN(i__3, i__4);
 
-        /* Set relevant part of first half of WORK to zero, */
-        /* holds dot products */
+              /* Set relevant part of first half of WORK to zero, */
+              /* holds dot products */
 
-        i__3 = *n;
-        for (i__ = k; i__ <= i__3; ++i__) {
-          work[i__] = 0.;
-          /* L150: */
-        }
+              i__3 = *n;
+              for (i__ = k; i__ <= i__3; ++i__)
+                {
+                  work[i__] = 0.;
+                  /* L110: */
+                }
 
-        i__3 = k + jb - 1;
-        for (j = k; j <= i__3; ++j) {
+              i__3 = k + jb - 1;
+              for (j = k; j <= i__3; ++j)
+                {
 
-          /* Find pivot, test for exit, else swap rows and columns */
-          /* Update dot products, compute possible pivots which are */
-          /* stored in the second half of WORK */
+                  /* Find pivot, test for exit, else swap rows and columns */
+                  /* Update dot products, compute possible pivots which are */
+                  /* stored in the second half of WORK */
 
-          i__4 = *n;
-          for (i__ = j; i__ <= i__4; ++i__) {
+                  i__4 = *n;
+                  for (i__ = j; i__ <= i__4; ++i__)
+                    {
 
-            if (j > k) {
-              /* Computing 2nd power */
-              d__1 = a[i__ + (j - 1) * a_dim1];
-              work[i__] += d__1 * d__1;
+                      if (j > k)
+                        {
+                          /* Computing 2nd power */
+                          d__1 = a[j - 1 + i__ * a_dim1];
+                          work[i__] += d__1 * d__1;
+                        }
+                      work[*n + i__] = a[i__ + i__ * a_dim1] - work[i__];
+
+                      /* L120: */
+                    }
+
+                  if (j > 1)
+                    {
+                      maxlocvar = (*n << 1) - (*n + j) + 1;
+                      itemp = dmaxloc_(&work[*n + j], &maxlocvar);
+                      pvt = itemp + j - 1;
+                      ajj = work[*n + pvt];
+                      if (ajj <= dstop || disnan_(&ajj))
+                        {
+                          a[j + j * a_dim1] = ajj;
+                          goto L190;
+                        }
+                    }
+
+                  if (j != pvt)
+                    {
+
+                      /* Pivot OK, so can now swap pivot rows and columns */
+
+                      a[pvt + pvt * a_dim1] = a[j + j * a_dim1];
+                      i__4 = j - 1;
+                      dswap_(&i__4, &a[j * a_dim1 + 1], &c__1, &a[pvt *
+                             a_dim1 + 1], &c__1);
+                      if (pvt < *n)
+                        {
+                          i__4 = *n - pvt;
+                          dswap_(&i__4, &a[j + (pvt + 1) * a_dim1], lda, &a[
+                                   pvt + (pvt + 1) * a_dim1], lda);
+                        }
+                      i__4 = pvt - j - 1;
+                      dswap_(&i__4, &a[j + (j + 1) * a_dim1], lda, &a[j + 1
+                             + pvt * a_dim1], &c__1);
+
+                      /* Swap dot products and PIV */
+
+                      dtemp = work[j];
+                      work[j] = work[pvt];
+                      work[pvt] = dtemp;
+                      itemp = piv[pvt];
+                      piv[pvt] = piv[j];
+                      piv[j] = itemp;
+                    }
+
+                  ajj = sqrt(ajj);
+                  a[j + j * a_dim1] = ajj;
+
+                  /* Compute elements J+1:N of row J. */
+
+                  if (j < *n)
+                    {
+                      i__4 = j - k;
+                      i__5 = *n - j;
+                      dgemv_("Trans", &i__4, &i__5, &c_b22, &a[k + (j + 1) *
+                             a_dim1], lda, &a[k + j * a_dim1], &c__1, &
+                             c_b24, &a[j + (j + 1) * a_dim1], lda);
+                      i__4 = *n - j;
+                      d__1 = 1. / ajj;
+                      dscal_(&i__4, &d__1, &a[j + (j + 1) * a_dim1], lda);
+                    }
+
+                  /* L130: */
+                }
+
+              /* Update trailing matrix, J already incremented */
+
+              if (k + jb <= *n)
+                {
+                  i__3 = *n - j + 1;
+                  dsyrk_("Upper", "Trans", &i__3, &jb, &c_b22, &a[k + j *
+                         a_dim1], lda, &c_b24, &a[j + j * a_dim1], lda);
+                }
+
+              /* L140: */
             }
-            work[*n + i__] = a[i__ + i__ * a_dim1] - work[i__];
 
-            /* L160: */
-          }
-
-          if (j > 1) {
-            maxlocvar = (*n << 1) - (*n + j) + 1;
-            itemp = dmaxloc_(&work[*n + j], &maxlocvar);
-            pvt = itemp + j - 1;
-            ajj = work[*n + pvt];
-            if (ajj <= dstop || disnan_(&ajj)) {
-              a[j + j * a_dim1] = ajj;
-              goto L190;
-            }
-          }
-
-          if (j != pvt) {
-
-            /* Pivot OK, so can now swap pivot rows and columns */
-
-            a[pvt + pvt * a_dim1] = a[j + j * a_dim1];
-            i__4 = j - 1;
-            dswap_(&i__4, &a[j + a_dim1], lda, &a[pvt + a_dim1], 
-                   lda);
-            if (pvt < *n) {
-              i__4 = *n - pvt;
-              dswap_(&i__4, &a[pvt + 1 + j * a_dim1], &c__1, &a[
-                     pvt + 1 + pvt * a_dim1], &c__1);
-            }
-            i__4 = pvt - j - 1;
-            dswap_(&i__4, &a[j + 1 + j * a_dim1], &c__1, &a[pvt + 
-                   (j + 1) * a_dim1], lda);
-
-            /* Swap dot products and PIV */
-
-            dtemp = work[j];
-            work[j] = work[pvt];
-            work[pvt] = dtemp;
-            itemp = piv[pvt];
-            piv[pvt] = piv[j];
-            piv[j] = itemp;
-          }
-
-          ajj = sqrt(ajj);
-          a[j + j * a_dim1] = ajj;
-
-          /* Compute elements J+1:N of column J. */
-
-          if (j < *n) {
-            i__4 = *n - j;
-            i__5 = j - k;
-            dgemv_("No Trans", &i__4, &i__5, &c_b22, &a[j + 1 + k 
-                   * a_dim1], lda, &a[j + k * a_dim1], lda, &
-                   c_b24, &a[j + 1 + j * a_dim1], &c__1);
-            i__4 = *n - j;
-            d__1 = 1. / ajj;
-            dscal_(&i__4, &d__1, &a[j + 1 + j * a_dim1], &c__1);
-          }
-
-          /* L170: */
         }
+      else
+        {
 
-        /* Update trailing matrix, J already incremented */
+          /* Compute the Cholesky factorization P' * A * P = L * L' */
 
-        if (k + jb <= *n) {
-          i__3 = *n - j + 1;
-          dsyrk_("Lower", "No Trans", &i__3, &jb, &c_b22, &a[j + k *
-                 a_dim1], lda, &c_b24, &a[j + j * a_dim1], lda);
+          i__2 = *n;
+          i__1 = nb;
+          for (k = 1; i__1 < 0 ? k >= i__2 : k <= i__2; k += i__1)
+            {
+
+              /* Account for last block not being NB wide */
+
+              /* Computing MIN */
+              i__3 = nb, i__4 = *n - k + 1;
+              jb = MIN(i__3, i__4);
+
+              /* Set relevant part of first half of WORK to zero, */
+              /* holds dot products */
+
+              i__3 = *n;
+              for (i__ = k; i__ <= i__3; ++i__)
+                {
+                  work[i__] = 0.;
+                  /* L150: */
+                }
+
+              i__3 = k + jb - 1;
+              for (j = k; j <= i__3; ++j)
+                {
+
+                  /* Find pivot, test for exit, else swap rows and columns */
+                  /* Update dot products, compute possible pivots which are */
+                  /* stored in the second half of WORK */
+
+                  i__4 = *n;
+                  for (i__ = j; i__ <= i__4; ++i__)
+                    {
+
+                      if (j > k)
+                        {
+                          /* Computing 2nd power */
+                          d__1 = a[i__ + (j - 1) * a_dim1];
+                          work[i__] += d__1 * d__1;
+                        }
+                      work[*n + i__] = a[i__ + i__ * a_dim1] - work[i__];
+
+                      /* L160: */
+                    }
+
+                  if (j > 1)
+                    {
+                      maxlocvar = (*n << 1) - (*n + j) + 1;
+                      itemp = dmaxloc_(&work[*n + j], &maxlocvar);
+                      pvt = itemp + j - 1;
+                      ajj = work[*n + pvt];
+                      if (ajj <= dstop || disnan_(&ajj))
+                        {
+                          a[j + j * a_dim1] = ajj;
+                          goto L190;
+                        }
+                    }
+
+                  if (j != pvt)
+                    {
+
+                      /* Pivot OK, so can now swap pivot rows and columns */
+
+                      a[pvt + pvt * a_dim1] = a[j + j * a_dim1];
+                      i__4 = j - 1;
+                      dswap_(&i__4, &a[j + a_dim1], lda, &a[pvt + a_dim1],
+                             lda);
+                      if (pvt < *n)
+                        {
+                          i__4 = *n - pvt;
+                          dswap_(&i__4, &a[pvt + 1 + j * a_dim1], &c__1, &a[
+                                   pvt + 1 + pvt * a_dim1], &c__1);
+                        }
+                      i__4 = pvt - j - 1;
+                      dswap_(&i__4, &a[j + 1 + j * a_dim1], &c__1, &a[pvt +
+                             (j + 1) * a_dim1], lda);
+
+                      /* Swap dot products and PIV */
+
+                      dtemp = work[j];
+                      work[j] = work[pvt];
+                      work[pvt] = dtemp;
+                      itemp = piv[pvt];
+                      piv[pvt] = piv[j];
+                      piv[j] = itemp;
+                    }
+
+                  ajj = sqrt(ajj);
+                  a[j + j * a_dim1] = ajj;
+
+                  /* Compute elements J+1:N of column J. */
+
+                  if (j < *n)
+                    {
+                      i__4 = *n - j;
+                      i__5 = j - k;
+                      dgemv_("No Trans", &i__4, &i__5, &c_b22, &a[j + 1 + k
+                             * a_dim1], lda, &a[j + k * a_dim1], lda, &
+                             c_b24, &a[j + 1 + j * a_dim1], &c__1);
+                      i__4 = *n - j;
+                      d__1 = 1. / ajj;
+                      dscal_(&i__4, &d__1, &a[j + 1 + j * a_dim1], &c__1);
+                    }
+
+                  /* L170: */
+                }
+
+              /* Update trailing matrix, J already incremented */
+
+              if (k + jb <= *n)
+                {
+                  i__3 = *n - j + 1;
+                  dsyrk_("Lower", "No Trans", &i__3, &jb, &c_b22, &a[j + k *
+                         a_dim1], lda, &c_b24, &a[j + j * a_dim1], lda);
+                }
+
+              /* L180: */
+            }
+
         }
-
-        /* L180: */
-      }
-
     }
-  }
 
   /* Ran to completion, A has full rank */
 
@@ -539,8 +581,8 @@ static double c_b16 = -1.;
 static double c_b18 = 1.;
 
 int C2F(dpstf2)(char *uplo, int *n, double *a, int *
-            lda, int *piv, int *rank, double *tol, double *work, 
-            int *info)
+                lda, int *piv, int *rank, double *tol, double *work,
+                int *info)
 {
   /* System generated locals */
   int a_dim1, a_offset, i__1, i__2, i__3;
@@ -553,15 +595,15 @@ int C2F(dpstf2)(char *uplo, int *n, double *a, int *
   int i__, j, maxlocval;
   double ajj;
   int pvt;
-  extern  int dscal_(int *, double *, double *, 
+  extern  int dscal_(int *, double *, double *,
                      int *);
   extern int lsame_(char *, char *);
-  extern  int dgemv_(char *, int *, int *, 
-                     double *, double *, int *, double *, int *, 
+  extern  int dgemv_(char *, int *, int *,
+                     double *, double *, int *, double *, int *,
                      double *, double *, int *);
   double dtemp;
   int itemp;
-  extern  int dswap_(int *, double *, int *, 
+  extern  int dswap_(int *, double *, int *,
                      double *, int *);
   double dstop;
   int upper;
@@ -670,228 +712,262 @@ int C2F(dpstf2)(char *uplo, int *n, double *a, int *
   /* Function Body */
   *info = 0;
   upper = lsame_(uplo, "U");
-  if (! upper && ! lsame_(uplo, "L")) {
-    *info = -1;
-  } else if (*n < 0) {
-    *info = -2;
-  } else if (*lda < MAX(1,*n)) {
-    *info = -4;
-  }
-  if (*info != 0) {
-    i__1 = -(*info);
-    xerbla_("DPSTF2", &i__1);
-    return 0;
-  }
+  if (! upper && ! lsame_(uplo, "L"))
+    {
+      *info = -1;
+    }
+  else if (*n < 0)
+    {
+      *info = -2;
+    }
+  else if (*lda < MAX(1, *n))
+    {
+      *info = -4;
+    }
+  if (*info != 0)
+    {
+      i__1 = -(*info);
+      xerbla_("DPSTF2", &i__1);
+      return 0;
+    }
 
   /* Quick return if possible */
 
-  if (*n == 0) {
-    return 0;
-  }
+  if (*n == 0)
+    {
+      return 0;
+    }
 
   /* Initialize PIV */
 
   i__1 = *n;
-  for (i__ = 1; i__ <= i__1; ++i__) {
-    piv[i__] = i__;
-    /* L100: */
-  }
+  for (i__ = 1; i__ <= i__1; ++i__)
+    {
+      piv[i__] = i__;
+      /* L100: */
+    }
 
   /* Compute stopping value */
 
   pvt = 1;
   ajj = a[pvt + pvt * a_dim1];
   i__1 = *n;
-  for (i__ = 2; i__ <= i__1; ++i__) {
-    if (a[i__ + i__ * a_dim1] > ajj) {
-      pvt = i__;
-      ajj = a[pvt + pvt * a_dim1];
+  for (i__ = 2; i__ <= i__1; ++i__)
+    {
+      if (a[i__ + i__ * a_dim1] > ajj)
+        {
+          pvt = i__;
+          ajj = a[pvt + pvt * a_dim1];
+        }
     }
-  }
-  if (ajj == 0. || disnan_(&ajj)) {
-    *rank = 0;
-    *info = 1;
-    goto L170;
-  }
+  if (ajj == 0. || disnan_(&ajj))
+    {
+      *rank = 0;
+      *info = 1;
+      goto L170;
+    }
 
   /* Compute stopping value if not supplied */
 
-  if (*tol < 0.) {
-    dstop = *n * dlamch_("Epsilon") * ajj;
-  } else {
-    dstop = *tol;
-  }
+  if (*tol < 0.)
+    {
+      dstop = *n * dlamch_("Epsilon") * ajj;
+    }
+  else
+    {
+      dstop = *tol;
+    }
 
   /* Set first half of WORK to zero, holds dot products */
 
   i__1 = *n;
-  for (i__ = 1; i__ <= i__1; ++i__) {
-    work[i__] = 0.;
-    /* L110: */
-  }
-
-  if (upper) {
-
-    /* Compute the Cholesky factorization P' * A * P = U' * U */
-
-    i__1 = *n;
-    for (j = 1; j <= i__1; ++j) {
-
-      /* Find pivot, test for exit, else swap rows and columns */
-      /* Update dot products, compute possible pivots which are */
-      /* stored in the second half of WORK */
-
-      i__2 = *n;
-      for (i__ = j; i__ <= i__2; ++i__) {
-
-        if (j > 1) {
-          /* Computing 2nd power */
-          d__1 = a[j - 1 + i__ * a_dim1];
-          work[i__] += d__1 * d__1;
-        }
-        work[*n + i__] = a[i__ + i__ * a_dim1] - work[i__];
-
-        /* L120: */
-      }
-
-      if (j > 1) {
-        maxlocval = (*n << 1) - (*n + j) + 1;
-        itemp = dmaxloc_(&work[*n + j], &maxlocval);
-        pvt = itemp + j - 1;
-        ajj = work[*n + pvt];
-        if (ajj <= dstop || disnan_(&ajj)) {
-          a[j + j * a_dim1] = ajj;
-          goto L160;
-        }
-      }
-
-      if (j != pvt) {
-
-        /* Pivot OK, so can now swap pivot rows and columns */
-
-        a[pvt + pvt * a_dim1] = a[j + j * a_dim1];
-        i__2 = j - 1;
-        dswap_(&i__2, &a[j * a_dim1 + 1], &c__1, &a[pvt * a_dim1 + 1], 
-               &c__1);
-        if (pvt < *n) {
-          i__2 = *n - pvt;
-          dswap_(&i__2, &a[j + (pvt + 1) * a_dim1], lda, &a[pvt + (
-              pvt + 1) * a_dim1], lda);
-        }
-        i__2 = pvt - j - 1;
-        dswap_(&i__2, &a[j + (j + 1) * a_dim1], lda, &a[j + 1 + pvt * 
-               a_dim1], &c__1);
-
-        /* Swap dot products and PIV */
-
-        dtemp = work[j];
-        work[j] = work[pvt];
-        work[pvt] = dtemp;
-        itemp = piv[pvt];
-        piv[pvt] = piv[j];
-        piv[j] = itemp;
-      }
-
-      ajj = sqrt(ajj);
-      a[j + j * a_dim1] = ajj;
-
-      /* Compute elements J+1:N of row J */
-
-      if (j < *n) {
-        i__2 = j - 1;
-        i__3 = *n - j;
-        dgemv_("Trans", &i__2, &i__3, &c_b16, &a[(j + 1) * a_dim1 + 1]
-               , lda, &a[j * a_dim1 + 1], &c__1, &c_b18, &a[j + (j + 
-                                                                 1) * a_dim1], lda);
-        i__2 = *n - j;
-        d__1 = 1. / ajj;
-        dscal_(&i__2, &d__1, &a[j + (j + 1) * a_dim1], lda);
-      }
-
-      /* L130: */
+  for (i__ = 1; i__ <= i__1; ++i__)
+    {
+      work[i__] = 0.;
+      /* L110: */
     }
 
-  } else {
+  if (upper)
+    {
 
-    /* Compute the Cholesky factorization P' * A * P = L * L' */
+      /* Compute the Cholesky factorization P' * A * P = U' * U */
 
-    i__1 = *n;
-    for (j = 1; j <= i__1; ++j) {
+      i__1 = *n;
+      for (j = 1; j <= i__1; ++j)
+        {
 
-      /* Find pivot, test for exit, else swap rows and columns */
-      /* Update dot products, compute possible pivots which are */
-      /* stored in the second half of WORK */
+          /* Find pivot, test for exit, else swap rows and columns */
+          /* Update dot products, compute possible pivots which are */
+          /* stored in the second half of WORK */
 
-      i__2 = *n;
-      for (i__ = j; i__ <= i__2; ++i__) {
+          i__2 = *n;
+          for (i__ = j; i__ <= i__2; ++i__)
+            {
 
-        if (j > 1) {
-          /* Computing 2nd power */
-          d__1 = a[i__ + (j - 1) * a_dim1];
-          work[i__] += d__1 * d__1;
-        }
-        work[*n + i__] = a[i__ + i__ * a_dim1] - work[i__];
+              if (j > 1)
+                {
+                  /* Computing 2nd power */
+                  d__1 = a[j - 1 + i__ * a_dim1];
+                  work[i__] += d__1 * d__1;
+                }
+              work[*n + i__] = a[i__ + i__ * a_dim1] - work[i__];
 
-        /* L140: */
-      }
+              /* L120: */
+            }
 
-      if (j > 1) {
-        maxlocval = (*n << 1) - (*n + j) + 1;
-        itemp = dmaxloc_(&work[*n + j], &maxlocval);
-        pvt = itemp + j - 1;
-        ajj = work[*n + pvt];
-        if (ajj <= dstop || disnan_(&ajj)) {
+          if (j > 1)
+            {
+              maxlocval = (*n << 1) - (*n + j) + 1;
+              itemp = dmaxloc_(&work[*n + j], &maxlocval);
+              pvt = itemp + j - 1;
+              ajj = work[*n + pvt];
+              if (ajj <= dstop || disnan_(&ajj))
+                {
+                  a[j + j * a_dim1] = ajj;
+                  goto L160;
+                }
+            }
+
+          if (j != pvt)
+            {
+
+              /* Pivot OK, so can now swap pivot rows and columns */
+
+              a[pvt + pvt * a_dim1] = a[j + j * a_dim1];
+              i__2 = j - 1;
+              dswap_(&i__2, &a[j * a_dim1 + 1], &c__1, &a[pvt * a_dim1 + 1],
+                     &c__1);
+              if (pvt < *n)
+                {
+                  i__2 = *n - pvt;
+                  dswap_(&i__2, &a[j + (pvt + 1) * a_dim1], lda, &a[pvt + (
+                           pvt + 1) * a_dim1], lda);
+                }
+              i__2 = pvt - j - 1;
+              dswap_(&i__2, &a[j + (j + 1) * a_dim1], lda, &a[j + 1 + pvt *
+                     a_dim1], &c__1);
+
+              /* Swap dot products and PIV */
+
+              dtemp = work[j];
+              work[j] = work[pvt];
+              work[pvt] = dtemp;
+              itemp = piv[pvt];
+              piv[pvt] = piv[j];
+              piv[j] = itemp;
+            }
+
+          ajj = sqrt(ajj);
           a[j + j * a_dim1] = ajj;
-          goto L160;
+
+          /* Compute elements J+1:N of row J */
+
+          if (j < *n)
+            {
+              i__2 = j - 1;
+              i__3 = *n - j;
+              dgemv_("Trans", &i__2, &i__3, &c_b16, &a[(j + 1) * a_dim1 + 1]
+                     , lda, &a[j * a_dim1 + 1], &c__1, &c_b18, &a[j + (j +
+                         1) * a_dim1], lda);
+              i__2 = *n - j;
+              d__1 = 1. / ajj;
+              dscal_(&i__2, &d__1, &a[j + (j + 1) * a_dim1], lda);
+            }
+
+          /* L130: */
         }
-      }
 
-      if (j != pvt) {
-
-        /* Pivot OK, so can now swap pivot rows and columns */
-
-        a[pvt + pvt * a_dim1] = a[j + j * a_dim1];
-        i__2 = j - 1;
-        dswap_(&i__2, &a[j + a_dim1], lda, &a[pvt + a_dim1], lda);
-        if (pvt < *n) {
-          i__2 = *n - pvt;
-          dswap_(&i__2, &a[pvt + 1 + j * a_dim1], &c__1, &a[pvt + 1 
-                 + pvt * a_dim1], &c__1);
-        }
-        i__2 = pvt - j - 1;
-        dswap_(&i__2, &a[j + 1 + j * a_dim1], &c__1, &a[pvt + (j + 1) 
-               * a_dim1], lda);
-
-        /* Swap dot products and PIV */
-
-        dtemp = work[j];
-        work[j] = work[pvt];
-        work[pvt] = dtemp;
-        itemp = piv[pvt];
-        piv[pvt] = piv[j];
-        piv[j] = itemp;
-      }
-
-      ajj = sqrt(ajj);
-      a[j + j * a_dim1] = ajj;
-
-      /* Compute elements J+1:N of column J */
-
-      if (j < *n) {
-        i__2 = *n - j;
-        i__3 = j - 1;
-        dgemv_("No Trans", &i__2, &i__3, &c_b16, &a[j + 1 + a_dim1], 
-               lda, &a[j + a_dim1], lda, &c_b18, &a[j + 1 + j * 
-               a_dim1], &c__1);
-        i__2 = *n - j;
-        d__1 = 1. / ajj;
-        dscal_(&i__2, &d__1, &a[j + 1 + j * a_dim1], &c__1);
-      }
-
-      /* L150: */
     }
+  else
+    {
 
-  }
+      /* Compute the Cholesky factorization P' * A * P = L * L' */
+
+      i__1 = *n;
+      for (j = 1; j <= i__1; ++j)
+        {
+
+          /* Find pivot, test for exit, else swap rows and columns */
+          /* Update dot products, compute possible pivots which are */
+          /* stored in the second half of WORK */
+
+          i__2 = *n;
+          for (i__ = j; i__ <= i__2; ++i__)
+            {
+
+              if (j > 1)
+                {
+                  /* Computing 2nd power */
+                  d__1 = a[i__ + (j - 1) * a_dim1];
+                  work[i__] += d__1 * d__1;
+                }
+              work[*n + i__] = a[i__ + i__ * a_dim1] - work[i__];
+
+              /* L140: */
+            }
+
+          if (j > 1)
+            {
+              maxlocval = (*n << 1) - (*n + j) + 1;
+              itemp = dmaxloc_(&work[*n + j], &maxlocval);
+              pvt = itemp + j - 1;
+              ajj = work[*n + pvt];
+              if (ajj <= dstop || disnan_(&ajj))
+                {
+                  a[j + j * a_dim1] = ajj;
+                  goto L160;
+                }
+            }
+
+          if (j != pvt)
+            {
+
+              /* Pivot OK, so can now swap pivot rows and columns */
+
+              a[pvt + pvt * a_dim1] = a[j + j * a_dim1];
+              i__2 = j - 1;
+              dswap_(&i__2, &a[j + a_dim1], lda, &a[pvt + a_dim1], lda);
+              if (pvt < *n)
+                {
+                  i__2 = *n - pvt;
+                  dswap_(&i__2, &a[pvt + 1 + j * a_dim1], &c__1, &a[pvt + 1
+                         + pvt * a_dim1], &c__1);
+                }
+              i__2 = pvt - j - 1;
+              dswap_(&i__2, &a[j + 1 + j * a_dim1], &c__1, &a[pvt + (j + 1)
+                     * a_dim1], lda);
+
+              /* Swap dot products and PIV */
+
+              dtemp = work[j];
+              work[j] = work[pvt];
+              work[pvt] = dtemp;
+              itemp = piv[pvt];
+              piv[pvt] = piv[j];
+              piv[j] = itemp;
+            }
+
+          ajj = sqrt(ajj);
+          a[j + j * a_dim1] = ajj;
+
+          /* Compute elements J+1:N of column J */
+
+          if (j < *n)
+            {
+              i__2 = *n - j;
+              i__3 = j - 1;
+              dgemv_("No Trans", &i__2, &i__3, &c_b16, &a[j + 1 + a_dim1],
+                     lda, &a[j + a_dim1], lda, &c_b18, &a[j + 1 + j *
+                         a_dim1], &c__1);
+              i__2 = *n - j;
+              d__1 = 1. / ajj;
+              dscal_(&i__2, &d__1, &a[j + 1 + j * a_dim1], &c__1);
+            }
+
+          /* L150: */
+        }
+
+    }
 
   /* Ran to completion, A has full rank */
 
@@ -915,30 +991,32 @@ L170:
 
 int C2F(dmaxloc)(double *a, int *dimm)
 {
-    /* System generated locals */
-    int ret_val, i__1;
+  /* System generated locals */
+  int ret_val, i__1;
 
-    /* Local variables */
-    int i__;
-    double dmax__;
+  /* Local variables */
+  int i__;
+  double dmax__;
 
 
 
-    /* Parameter adjustments */
-    --a;
+  /* Parameter adjustments */
+  --a;
 
-    /* Function Body */
-    ret_val = 1;
-    dmax__ = a[1];
-    i__1 = *dimm;
-    for (i__ = 2; i__ <= i__1; ++i__) {
-	if (dmax__ < a[i__]) {
-	    dmax__ = a[i__];
-	    ret_val = i__;
-	}
-/* L20: */
+  /* Function Body */
+  ret_val = 1;
+  dmax__ = a[1];
+  i__1 = *dimm;
+  for (i__ = 2; i__ <= i__1; ++i__)
+    {
+      if (dmax__ < a[i__])
+        {
+          dmax__ = a[i__];
+          ret_val = i__;
+        }
+      /* L20: */
     }
-    return ret_val;
+  return ret_val;
 } /* dmaxloc_ */
 
 #endif /* PNL_HAVE_DPSTRF */

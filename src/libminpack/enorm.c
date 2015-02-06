@@ -1,30 +1,30 @@
 /* Minpack Copyright Notice (1999) University of Chicago.  All rights reserved
- * 
+ *
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the
  * following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above
  * copyright notice, this list of conditions and the following
  * disclaimer.
- * 
+ *
  * 2. Redistributions in binary form must reproduce the above
  * copyright notice, this list of conditions and the following
  * disclaimer in the documentation and/or other materials
  * provided with the distribution.
- * 
+ *
  * 3. The end-user documentation included with the
  * redistribution, if any, must include the following
  * acknowledgment:
- * 
+ *
  *    "This product includes software developed by the
  *    University of Chicago, as Operator of Argonne National
  *    Laboratory.
- * 
+ *
  * Alternately, this acknowledgment may appear in the software
  * itself, if and wherever such third-party acknowledgments
  * normally appear.
- * 
+ *
  * 4. WARRANTY DISCLAIMER. THE SOFTWARE IS SUPPLIED "AS IS"
  * WITHOUT WARRANTY OF ANY KIND. THE COPYRIGHT HOLDER, THE
  * UNITED STATES, THE UNITED STATES DEPARTMENT OF ENERGY, AND
@@ -38,7 +38,7 @@
  * DO NOT WARRANT THAT THE SOFTWARE WILL FUNCTION
  * UNINTERRUPTED, THAT IT IS ERROR-FREE OR THAT ANY ERRORS WILL
  * BE CORRECTED.
- * 
+ *
  * 5. LIMITATION OF LIABILITY. IN NO EVENT WILL THE COPYRIGHT
  * HOLDER, THE UNITED STATES, THE UNITED STATES DEPARTMENT OF
  * ENERGY, OR THEIR EMPLOYEES: BE LIABLE FOR ANY INDIRECT,
@@ -54,12 +54,12 @@
 #include <math.h>
 #include "cminpack.h"
 
-/* 
+/*
  * function enorm
- * 
+ *
  * given an n-vector x, this function calculates the
  * euclidean norm of x.
- * 
+ *
  * the euclidean norm is computed by accumulating the sum of
  * squares in three different sums. the sums of squares for the
  * small and large components are scaled so that no overflows
@@ -83,8 +83,8 @@
 double pnl_minpack_enorm(int n, const double *x)
 {
 
-  double rdwarf=3.834e-20;
-  double rgiant=1.304e19;
+  double rdwarf = 3.834e-20;
+  double rgiant = 1.304e19;
 
   /* System generated locals */
   double ret_val, d__1;
@@ -99,9 +99,9 @@ double pnl_minpack_enorm(int n, const double *x)
   s3 = 0.;
   x1max = 0.;
   x3max = 0.;
-  floatn = (double) (n);
+  floatn = (double)(n);
   agiant = rgiant / floatn;
-  for ( i = 0 ; i < n; i++ ) 
+  for (i = 0 ; i < n; i++)
     {
       xabs = fabs(x[i]);
       if (xabs > rdwarf && xabs < agiant)
@@ -111,12 +111,12 @@ double pnl_minpack_enorm(int n, const double *x)
           s2 += d__1 * d__1;
           continue;
         }
-      if (xabs <= rdwarf) 
+      if (xabs <= rdwarf)
         {
           /* sum for small components. */
           if (xabs <= x3max)
             {
-              if (xabs != 0.) 
+              if (xabs != 0.)
                 {
                   d__1 = xabs / x3max;
                   s3 += d__1 * d__1;
@@ -155,11 +155,11 @@ double pnl_minpack_enorm(int n, const double *x)
         }
       else
         {
-          if (s2 >= x3max) 
+          if (s2 >= x3max)
             {
               ret_val = sqrt(s2 * (1. + x3max / s2 * (x3max * s3)));
             }
-          else 
+          else
             {
               ret_val = sqrt(x3max * (s2 / x3max + x3max * s3));
             }
@@ -170,5 +170,5 @@ double pnl_minpack_enorm(int n, const double *x)
       ret_val = x1max * sqrt(s1 + s2 / x1max / x1max);
     }
   return ret_val;
-} 
+}
 

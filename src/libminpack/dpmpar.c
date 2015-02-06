@@ -34,9 +34,15 @@ double pnl_minpack_dpmpar(int i)
 
   switch (i)
     {
-      case 1: return pnl_dlamch ("p"); break;
-      case 2: return pnl_dlamch ("u"); break;
-      case 3: return pnl_dlamch ("o"); break;
+    case 1:
+      return pnl_dlamch("p");
+      break;
+    case 2:
+      return pnl_dlamch("u");
+      break;
+    case 3:
+      return pnl_dlamch("o");
+      break;
     }
   return 0.0;
 

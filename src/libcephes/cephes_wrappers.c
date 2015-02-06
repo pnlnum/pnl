@@ -21,7 +21,7 @@
 #include "pnl/pnl_specfun.h"
 
 
-extern double hyp2f0 (double, double, double, int, double*);
+extern double hyp2f0(double, double, double, int, double *);
 
 /**
  * Incomplete Gamma function
@@ -30,24 +30,24 @@ extern double hyp2f0 (double, double, double, int, double*);
  * @param x the lower bound of the integral
  * @return Gamma (a, x)
  */
-double pnl_sf_gamma_inc (double a, double x)
+double pnl_sf_gamma_inc(double a, double x)
 {
   if (x == 0.)
     {
-      return pnl_sf_gamma (a);
+      return pnl_sf_gamma(a);
     }
   else if (a < 0)
     {
-      double shift = -pow (x, a) * exp (-x);
-      return (shift +  pnl_sf_gamma_inc (a + 1., x)) / a;
+      double shift = -pow(x, a) * exp(-x);
+      return (shift +  pnl_sf_gamma_inc(a + 1., x)) / a;
     }
   else if (a == 0.)
     {
-      return pnl_sf_expint_En (1, x);
+      return pnl_sf_expint_En(1, x);
     }
   else
     {
-      return  pnl_sf_gamma_inc_Q (a, x) * pnl_sf_gamma (a);      
+      return  pnl_sf_gamma_inc_Q(a, x) * pnl_sf_gamma(a);
     }
 }
 
@@ -56,14 +56,14 @@ double pnl_sf_gamma_inc (double a, double x)
  *   return - pnl_sf_expint_En (1, -x);
  * } */
 
-double pnl_sf_log_erf (double x)
+double pnl_sf_log_erf(double x)
 {
-  return log (pnl_sf_erf (x));
+  return log(pnl_sf_erf(x));
 }
 
-double pnl_sf_log_erfc (double x)
+double pnl_sf_log_erfc(double x)
 {
-  return log (pnl_sf_erfc (x));
+  return log(pnl_sf_erfc(x));
 }
 
 /*
@@ -81,13 +81,13 @@ double pnl_sf_log_erfc (double x)
  *   return res1;
  * } */
 
-double pnl_sf_hyperg_2F0 (double a, double b, double x)
+double pnl_sf_hyperg_2F0(double a, double b, double x)
 {
   if (x < 0.)
     {
       double mult;
-      mult = pow (-1. / x, a);
-      return mult * pnl_sf_hyperg_U (a, 1. + a - b, -1 / x);
+      mult = pow(-1. / x, a);
+      return mult * pnl_sf_hyperg_U(a, 1. + a - b, -1 / x);
     }
   else if (x == 0.)
     {
@@ -95,23 +95,23 @@ double pnl_sf_hyperg_2F0 (double a, double b, double x)
     }
   else
     {
-      PNL_ERROR ("x must be <= 0", "hyperg_2F0");
+      PNL_ERROR("x must be <= 0", "hyperg_2F0");
     }
 }
 
-double pnl_sf_hyperg_0F1 (double v, double x)
+double pnl_sf_hyperg_0F1(double v, double x)
 {
 
-  if ( x==0 ) return 1.0;
+  if (x == 0) return 1.0;
 
-  if ( x < 0 )
+  if (x < 0)
     {
       double lgam, bes, m;
       int sign;
       pnl_sf_log_gamma_sgn(v, &lgam, &sign);
-      bes = pnl_bessel_j (v-1, 2*sqrt(-x));
+      bes = pnl_bessel_j(v - 1, 2 * sqrt(-x));
       m = log(-x) * 0.5 * (1.0 - v);
-      return sign * bes * exp (lgam + m); 
+      return sign * bes * exp(lgam + m);
 
     }
   else
@@ -119,9 +119,9 @@ double pnl_sf_hyperg_0F1 (double v, double x)
       double lgam, bes, m;
       int sign;
       pnl_sf_log_gamma_sgn(v, &lgam, &sign);
-      bes = pnl_bessel_i (v-1, 2*sqrt(x));
+      bes = pnl_bessel_i(v - 1, 2 * sqrt(x));
       m = log(x) * 0.5 * (1.0 - v);
-      return sign * bes * exp (lgam + m); 
+      return sign * bes * exp(lgam + m);
     }
 }
 

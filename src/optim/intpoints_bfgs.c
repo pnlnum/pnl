@@ -38,12 +38,12 @@
  */
 typedef struct AllConstraints
 {
-  PnlRnFuncRm* NL_Constraints; // non linear constraints
-  PnlVect* LowerBounds; // lower bound constraints
-  PnlVect* UpperBounds; // upper bound constraints
+  PnlRnFuncRm *NL_Constraints; // non linear constraints
+  PnlVect *LowerBounds; // lower bound constraints
+  PnlVect *UpperBounds; // upper bound constraints
 
-  PnlVectInt* LowerBoundsIndex; // index of variable where a bound constraints is applied
-  PnlVectInt* UpperBoundsIndex; // index of variable where a bound constraints is applied
+  PnlVectInt *LowerBoundsIndex; // index of variable where a bound constraints is applied
+  PnlVectInt *UpperBoundsIndex; // index of variable where a bound constraints is applied
 
   int nbr_nl_constraints;
   int nbr_lower_bounds;
@@ -82,14 +82,14 @@ static void AllConstraints_Free(AllConstraints *all_constraints)
  * (c(xinit)>0), 1 otherwise.
  */
 static int AllConstraints_Init(AllConstraints *all_constraints,
-                               PnlRnFuncRm* NL_Constraints, PnlVect*
-                               LowerBounds, PnlVect* UpperBounds, PnlVect*
+                               PnlRnFuncRm *NL_Constraints, PnlVect *
+                               LowerBounds, PnlVect *UpperBounds, PnlVect *
                                xinit)
 {
   int i, j, k, nbr_var, xinit_feasible;
   double lb, ub;
 
-  PnlVect* dummy;
+  PnlVect *dummy;
 
   dummy = pnl_vect_create(0);
   all_constraints->NL_Constraints = NL_Constraints;
@@ -101,14 +101,14 @@ static int AllConstraints_Init(AllConstraints *all_constraints,
   all_constraints->LowerBounds = pnl_vect_create(nbr_var);
   all_constraints->UpperBounds = pnl_vect_create(nbr_var);
 
-  xinit_feasible=0;
-  if (all_constraints->NL_Constraints!=NULL)
+  xinit_feasible = 0;
+  if (all_constraints->NL_Constraints != NULL)
     {
       PNL_EVAL_RNFUNCRM(NL_Constraints, xinit, dummy);
       all_constraints->nbr_nl_constraints = dummy->size;
-      for (i=0; i<all_constraints->nbr_nl_constraints; i++)
+      for (i = 0; i < all_constraints->nbr_nl_constraints; i++)
         {
-          if (GET(dummy, i)<=0)
+          if (GET(dummy, i) <= 0)
             {
               xinit_feasible = 1;
               break;
@@ -117,35 +117,35 @@ static int AllConstraints_Init(AllConstraints *all_constraints,
     }
   else all_constraints->nbr_nl_constraints = 0;
 
-  k=0;
-  j=0;
-  if ( LowerBounds != NULL )
+  k = 0;
+  j = 0;
+  if (LowerBounds != NULL)
     {
-      for (i=0; i<nbr_var; i++)
+      for (i = 0; i < nbr_var; i++)
         {
           lb = GET(LowerBounds, i);
-          if (pnl_isinf(lb)==0)
+          if (pnl_isinf(lb) == 0)
             {
               pnl_vect_int_set(all_constraints->LowerBoundsIndex, j, i);
               LET(all_constraints->LowerBounds, j) = lb;
               j++;
 
-              if (GET(xinit, i)<=lb) xinit_feasible = 1;
+              if (GET(xinit, i) <= lb) xinit_feasible = 1;
             }
-        } 
+        }
     }
-  if ( UpperBounds != NULL )
+  if (UpperBounds != NULL)
     {
-      for (i=0; i<nbr_var; i++)
+      for (i = 0; i < nbr_var; i++)
         {
           ub = GET(UpperBounds, i);
-          if (pnl_isinf(ub)==0)
+          if (pnl_isinf(ub) == 0)
             {
               pnl_vect_int_set(all_constraints->UpperBoundsIndex, k, i);
               LET(all_constraints->UpperBounds, k) = ub;
               k++;
 
-              if (GET(xinit, i)>=ub) xinit_feasible = 1;
+              if (GET(xinit, i) >= ub) xinit_feasible = 1;
             }
         }
     }
@@ -173,25 +173,25 @@ static void AllConstraints_Value(PnlVect *constraints_x, const PnlVect *x,
 {
   int i, index;
 
-  if (all_constraints->NL_Constraints!=NULL) 
+  if (all_constraints->NL_Constraints != NULL)
     PNL_EVAL_RNFUNCRM(all_constraints->NL_Constraints, x, constraints_x);
 
-  pnl_vect_resize(constraints_x, all_constraints->nbr_nl_constraints 
-                                  + all_constraints->nbr_lower_bounds 
-                                  + all_constraints->nbr_upper_bounds);
+  pnl_vect_resize(constraints_x, all_constraints->nbr_nl_constraints
+                  + all_constraints->nbr_lower_bounds
+                  + all_constraints->nbr_upper_bounds);
 
-  for (i=0; i<(all_constraints->nbr_lower_bounds); i++)
+  for (i = 0; i < (all_constraints->nbr_lower_bounds); i++)
     {
       index = PNL_GET(all_constraints->LowerBoundsIndex, i);
-      LET(constraints_x, all_constraints->nbr_nl_constraints + i) = GET(x, index)-GET(all_constraints->LowerBounds, i);
+      LET(constraints_x, all_constraints->nbr_nl_constraints + i) = GET(x, index) - GET(all_constraints->LowerBounds, i);
     }
 
-  for (i=0; i<(all_constraints->nbr_upper_bounds); i++)
+  for (i = 0; i < (all_constraints->nbr_upper_bounds); i++)
     {
       index = PNL_GET(all_constraints->UpperBoundsIndex, i);
-      LET(constraints_x, all_constraints->nbr_nl_constraints 
-                        + all_constraints->nbr_lower_bounds + i) 
-           = GET(all_constraints->UpperBounds, i) - GET(x, index);
+      LET(constraints_x, all_constraints->nbr_nl_constraints
+          + all_constraints->nbr_lower_bounds + i)
+        = GET(all_constraints->UpperBounds, i) - GET(x, index);
     }
 }
 
@@ -207,34 +207,34 @@ static void AllConstraints_Value(PnlVect *constraints_x, const PnlVect *x,
  * @param x: vector where gradient is computed
  * @param res: vector containting value of gradient valued at x
  */
-static void gradient_f(PnlRnFuncRm *grad_func, PnlRnFuncR * func, PnlVect * x, PnlVect *res)
+static void gradient_f(PnlRnFuncRm *grad_func, PnlRnFuncR *func, PnlVect *x, PnlVect *res)
 {
-  int i=0,nbr_var = x->size;
+  int i = 0, nbr_var = x->size;
   double h = 0.00001;
-  double dx=0;
+  double dx = 0;
 
   /* If the gradient of objective function is not provided, we estimate it
    * using finites differences. */
-  if (grad_func==NULL)
+  if (grad_func == NULL)
     {
 
-      PnlVect * x1=pnl_vect_copy(x);
-      PnlVect * x2=pnl_vect_copy(x);
+      PnlVect *x1 = pnl_vect_copy(x);
+      PnlVect *x2 = pnl_vect_copy(x);
 
       pnl_vect_resize(res, nbr_var);
 
       for (i = 0; i < nbr_var; i++)
         {
-          if (fabs(GET(x,i))<h) dx=h;
-          else dx = h*GET(x,i);
+          if (fabs(GET(x, i)) < h) dx = h;
+          else dx = h * GET(x, i);
 
           /* Shift x[i] */
-          LET(x1,i)=GET(x,i) + dx;
-          LET(x2,i)=GET(x,i) - dx;
-          LET(res,i) = (PNL_EVAL_RNFUNCR(func, x1) - PNL_EVAL_RNFUNCR(func, x2)) / (2 * dx);
+          LET(x1, i) = GET(x, i) + dx;
+          LET(x2, i) = GET(x, i) - dx;
+          LET(res, i) = (PNL_EVAL_RNFUNCR(func, x1) - PNL_EVAL_RNFUNCR(func, x2)) / (2 * dx);
           /* Restore x[i] */
-          LET(x1,i)=GET(x,i);
-          LET(x2,i)=GET(x,i);
+          LET(x1, i) = GET(x, i);
+          LET(x2, i) = GET(x, i);
 
         }
       pnl_vect_free(&x1);
@@ -254,13 +254,13 @@ static void gradient_f(PnlRnFuncRm *grad_func, PnlRnFuncR * func, PnlVect * x, P
  * @param x: vector where gradient is computed
  * @param grad_c: vector containting value of gradient valued at x
  */
-static void gradient_c(AllConstraints* all_constraints, PnlVect* x, PnlMat* grad_c)
+static void gradient_c(AllConstraints *all_constraints, PnlVect *x, PnlMat *grad_c)
 {
   int i, j, nbr_nl_constraints, nbr_lower_bounds, nbr_upper_bounds, nbr_var = x->size;
   double h = 0.0001;
   double dx;
-  PnlVect * x1 = pnl_vect_copy(x);
-  PnlVect * x2 = pnl_vect_copy(x);
+  PnlVect *x1 = pnl_vect_copy(x);
+  PnlVect *x2 = pnl_vect_copy(x);
   PnlVect *constraintsmd = pnl_vect_create(0);
   PnlVect *constraintspd = pnl_vect_create(0);
 
@@ -268,43 +268,43 @@ static void gradient_c(AllConstraints* all_constraints, PnlVect* x, PnlMat* grad
   nbr_lower_bounds = all_constraints->nbr_lower_bounds;
   nbr_upper_bounds = all_constraints->nbr_upper_bounds;
 
-  pnl_mat_resize(grad_c, nbr_var, nbr_nl_constraints+nbr_lower_bounds+nbr_upper_bounds);
+  pnl_mat_resize(grad_c, nbr_var, nbr_nl_constraints + nbr_lower_bounds + nbr_upper_bounds);
   pnl_mat_set_all(grad_c, 0.);
 
-  if (all_constraints->NL_Constraints!=NULL)
+  if (all_constraints->NL_Constraints != NULL)
     {
-      for (i=0; i<nbr_var; i++)
+      for (i = 0; i < nbr_var; i++)
         {
-          if (fabs(GET(x,i))<h) dx=h;
-          else dx = h*GET(x,i);
+          if (fabs(GET(x, i)) < h) dx = h;
+          else dx = h * GET(x, i);
 
-          LET(x1,i)=GET(x,i) + dx;
-          LET(x2,i)=GET(x,i) - dx;
+          LET(x1, i) = GET(x, i) + dx;
+          LET(x2, i) = GET(x, i) - dx;
 
           PNL_EVAL_RNFUNCRM(all_constraints->NL_Constraints, x1, constraintspd);
           PNL_EVAL_RNFUNCRM(all_constraints->NL_Constraints, x2, constraintsmd);
-          pnl_vect_axpby(-1/(2*dx), constraintsmd, 1/(2*dx), constraintspd);
+          pnl_vect_axpby(-1 / (2 * dx), constraintsmd, 1 / (2 * dx), constraintspd);
 
-          for (j=0; j<nbr_nl_constraints; j++)
+          for (j = 0; j < nbr_nl_constraints; j++)
             {
               MLET(grad_c, i, j) = GET(constraintspd, j);
             }
 
-          LET(x1,i)=GET(x,i);
-          LET(x2,i)=GET(x,i);
+          LET(x1, i) = GET(x, i);
+          LET(x2, i) = GET(x, i);
         }
     }
 
-  for (i=0; i<nbr_lower_bounds; i++)
+  for (i = 0; i < nbr_lower_bounds; i++)
     {
       j = pnl_vect_int_get(all_constraints->LowerBoundsIndex, i);
-      MLET(grad_c, j, nbr_nl_constraints+i) = 1.;
+      MLET(grad_c, j, nbr_nl_constraints + i) = 1.;
     }
 
-  for (i=0; i<nbr_upper_bounds; i++)
+  for (i = 0; i < nbr_upper_bounds; i++)
     {
       j = pnl_vect_int_get(all_constraints->UpperBoundsIndex, i);
-      MLET(grad_c, j, nbr_nl_constraints+nbr_lower_bounds+i) = -1.;
+      MLET(grad_c, j, nbr_nl_constraints + nbr_lower_bounds + i) = -1.;
     }
 
   pnl_vect_free(&constraintsmd);
@@ -352,10 +352,10 @@ static void gradient_c(AllConstraints* all_constraints, PnlVect* x, PnlMat* grad
  CONVERGENCE=2 : Output Status: Maximum iteration reached.
  CONVERGENCE=3 : Output Status: A solution has been found up to the required accuracy.
  ****************************************************************************************/
-/** 
- * 
- * min {f(x) ; c(x)>=0} 
- * 
+/**
+ *
+ * min {f(x) ; c(x)>=0}
+ *
  * @param func the function to minimize
  * @param grad_func the gradient of func. It may be NULL, in this case a
  * finite difference approach is used
@@ -366,44 +366,44 @@ static void gradient_c(AllConstraints* all_constraints, PnlVect* x, PnlMat* grad
  * constraint. Some components can be +Inf
  * @param x_input Initial starting point of the algorithm
  * @param tolerance Precision required in solving the minimization problem
- * @param iter_max Maximum number of iterations 
+ * @param iter_max Maximum number of iterations
  * @param print_algo_steps Flag to print extra information
  *               =0 : we print no information
  *               =1 : we print final results
  *               >1 : we print information at each iteration
  * @param x_output the solution
- * 
+ *
  * @return an integer error code
  *    =0 : Output Status: Failure: Initial point is not strictly feasible
  *    =1 : Output Status: Step too small, we stop the algorithm.
  *    =2 : Output Status: Maximum iteration reached.
  *    =3 : Output Status: A solution has been found up to the required accuracy.
  */
-int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
+int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR *func, PnlRnFuncRm
                                    *grad_func, PnlRnFuncRm *
-                                   nl_constraints, PnlVect* lower_bounds,
-                                   PnlVect* upper_bounds, PnlVect *
+                                   nl_constraints, PnlVect *lower_bounds,
+                                   PnlVect *upper_bounds, PnlVect *
                                    x_input, double tolerance, int iter_max,
                                    int print_algo_steps, PnlVect *
                                    x_output)
 {
-  int i, j, k, nbr_func_eval=0;
+  int i, j, k, nbr_func_eval = 0;
   int CONVERGENCE; //Output Status
-  double norm_grad_lagrangien=0.; // Norm of the gradient of langrange function.
-  double norm_comp_cond=0.; // Norm of complmentarity condition.
+  double norm_grad_lagrangien = 0.; // Norm of the gradient of langrange function.
+  double norm_comp_cond = 0.; // Norm of complmentarity condition.
   double norm_delta_x_min = 1e-15; // Minimal step that the algorithm can make.
   double norm_delta_x = 0.0; // Step between successive iterates
   double norm_x, norm_d_x; // Norm of current iterate. Norm of the descent direction.
 
   int nbr_var = x_input->size; // Number of variables
   int nbr_nl_constraints, nbr_lower_bounds, nbr_upper_bounds, nbr_constraints; // nbr of constraints.
-  int nbr_iterations=0; // Current number of iterations
-  int TestInfeasibility=0; // Test of feasibility of (x, lambda)
-  int OptimalityCriterion=0., inner_iter=0, inner_iter_max=5;
+  int nbr_iterations = 0; // Current number of iterations
+  int TestInfeasibility = 0; // Test of feasibility of (x, lambda)
+  int OptimalityCriterion = 0., inner_iter = 0, inner_iter_max = 5;
 
   double f;     // Current value of objective function
-  double f_min=0.; // Minimum value reached during the algorithm
-  double mu = 1., mu_min=1e-30; // Perturbation parameter. Minimum value for the perturbation parameter.
+  double f_min = 0.; // Minimum value reached during the algorithm
+  double mu = 1., mu_min = 1e-30; // Perturbation parameter. Minimum value for the perturbation parameter.
 
   //****** Parameters of Line Search ******//
   double alpha = 1.0;  // Descent step size. x=x+alpha*d_x and lambda=lambda+alpha*d_lambda
@@ -424,8 +424,8 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
 
   double sum = 0.0, temps_cpu;
 
-  PnlVect *comp_cond_vect, *grad_lagrangien, *vect_constraints, *lambda,*lambda_old, *x, *x_old,* d_x,* d_lambda, * delta,*M_delta,* delta_M,* gamma,*grad_f,* grad_f_old;
-  PnlMat * M,* M_old,* A,* grad_c,* grad_c_old;
+  PnlVect *comp_cond_vect, *grad_lagrangien, *vect_constraints, *lambda, *lambda_old, *x, *x_old, * d_x, * d_lambda, * delta, *M_delta, * delta_M, * gamma, *grad_f, * grad_f_old;
+  PnlMat *M, * M_old, * A, * grad_c, * grad_c_old;
   PnlVect *x_min, *lambda_min;
 
   AllConstraints all_constraints;
@@ -459,31 +459,31 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
   grad_f_old = pnl_vect_create(nbr_var); // previous value of grandient of objective function
   M = pnl_mat_create(nbr_var, nbr_var); // BFGS matrix
   M_old = pnl_mat_create(nbr_var, nbr_var); // previous BFGS matrix
-  A = pnl_mat_create(nbr_var,nbr_var); // Matrix used to compute the descent direction d_x, by solving a linear system
-  grad_c = pnl_mat_create(nbr_var,nbr_constraints); // gradient of constraints
-  grad_c_old = pnl_mat_create(nbr_var,nbr_constraints); //previous value of gradient of constraints
+  A = pnl_mat_create(nbr_var, nbr_var); // Matrix used to compute the descent direction d_x, by solving a linear system
+  grad_c = pnl_mat_create(nbr_var, nbr_constraints); // gradient of constraints
+  grad_c_old = pnl_mat_create(nbr_var, nbr_constraints); //previous value of gradient of constraints
 
   // Initial point must be strictly admissible. ie constraint(x) > 0, otherwise we stop the algorithm.
-  if (TestInfeasibility==1)
+  if (TestInfeasibility == 1)
     {
       printf("Initial point must be strictly admissible. ie constraint(x) > 0.\n");
-      CONVERGENCE=0;
+      CONVERGENCE = 0;
       goto Sortie;
     }
 
   AllConstraints_Value(vect_constraints, x, &all_constraints);
-  f = PNL_EVAL_RNFUNCR(func,x);
+  f = PNL_EVAL_RNFUNCR(func, x);
   nbr_func_eval++;
 
   // We choose the initial value of mu in accordance with the objective function and the constraints
   // with some max and min values
-  mu=0.;
-  for (j=0; j<nbr_constraints; j++) mu += (log(GET(vect_constraints,j)));
-  mu = MAX(fabs(f/mu), 1e-1);
+  mu = 0.;
+  for (j = 0; j < nbr_constraints; j++) mu += (log(GET(vect_constraints, j)));
+  mu = MAX(fabs(f / mu), 1e-1);
   mu = MIN(mu, 1e1);
 
   // Initialization of lagrange variable lambda
-  for (j=0; j<nbr_constraints; j++) LET(lambda,j) = mu / GET(vect_constraints,j);
+  for (j = 0; j < nbr_constraints; j++) LET(lambda, j) = mu / GET(vect_constraints, j);
 
   // Initialization of BFGS matrix using identity.
   // M should be positive definite.
@@ -498,7 +498,7 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
   //****************** Start of Global Algorithm (A) *******************//
   do
     {
-      inner_iter=0;
+      inner_iter = 0;
       // We start the inner algorithm at the best iteration.
       pnl_vect_clone(x, x_min);
       pnl_vect_clone(lambda, lambda_min);
@@ -513,7 +513,7 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
 
           // Objective function gradient, Constraint gradient
           gradient_f(grad_func, func, x, grad_f);
-          if (grad_func==NULL) nbr_func_eval+=2;
+          if (grad_func == NULL) nbr_func_eval += 2;
           gradient_c(&all_constraints, x, grad_c);
 
           for (i = 0; i < nbr_var; i++)
@@ -523,10 +523,10 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
                   sum = 0;
                   for (k = 0; k < nbr_constraints; k++)
                     {
-                      sum += MGET(grad_c,i,k) * GET(lambda, k) * MGET(grad_c,j,k) / GET(vect_constraints,k);
+                      sum += MGET(grad_c, i, k) * GET(lambda, k) * MGET(grad_c, j, k) / GET(vect_constraints, k);
                     }
-                  MLET(A,i,j) = MGET(M,i,j) + sum;
-                  MLET(M_old,i,j) = MGET(M,i,j); // Save old BFGS matrix M
+                  MLET(A, i, j) = MGET(M, i, j) + sum;
+                  MLET(M_old, i, j) = MGET(M, i, j); // Save old BFGS matrix M
                 }
             }
 
@@ -535,14 +535,14 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
               sum = 0;
               for (k = 0; k < nbr_constraints; k++)
                 {
-                  sum += MGET(grad_c,i,k)/GET(vect_constraints,k);
+                  sum += MGET(grad_c, i, k) / GET(vect_constraints, k);
                 }
-              LET(d_x,i) = -GET(grad_f,i) + mu*sum;
+              LET(d_x, i) = -GET(grad_f, i) + mu * sum;
 
             }
 
           //Compute primal descent direction d_x by solving linear system
-          pnl_mat_ls (A, d_x);
+          pnl_mat_ls(A, d_x);
 
           //Compute dual descent direction d_lambda
           for (i = 0; i < nbr_constraints; i++)
@@ -550,16 +550,16 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
               sum = 0;
               for (k = 0; k < nbr_var; k++)
                 {
-                  sum += MLET(grad_c,k,i) * GET(d_x,k);
+                  sum += MLET(grad_c, k, i) * GET(d_x, k);
                 }
-              LET(d_lambda,i) = (mu - GET(lambda,i)*sum)/GET(vect_constraints,i) - GET(lambda,i);
+              LET(d_lambda, i) = (mu - GET(lambda, i) * sum) / GET(vect_constraints, i) - GET(lambda, i);
             }
 
           // Compute the value of merit function psi, used in the Line Search :
           psi = f;
           for (i = 0; i < nbr_constraints; i++)
             {
-              psi += GET(lambda,i)*GET(vect_constraints,i) - mu*log(GET(lambda,i)*SQR(GET(vect_constraints,i)));
+              psi += GET(lambda, i) * GET(vect_constraints, i) - mu * log(GET(lambda, i) * SQR(GET(vect_constraints, i)));
             }
 
           // Scalar product between gradient of merit function psi and primal descent direction d_x : <grad_psi, d_x>
@@ -569,14 +569,14 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
               sum = 0;
               for (k = 0; k < nbr_constraints; k++)
                 {
-                  sum += MGET(grad_c,i,k)*(GET(lambda,k)-2*mu/GET(vect_constraints,k));
+                  sum += MGET(grad_c, i, k) * (GET(lambda, k) - 2 * mu / GET(vect_constraints, k));
                 }
-              grad_psi_d += (GET(grad_f,i)+ sum) * GET(d_x,i);
+              grad_psi_d += (GET(grad_f, i) + sum) * GET(d_x, i);
             }
 
           for (i = 0; i < nbr_constraints; i++)
             {
-              grad_psi_d += (GET(vect_constraints,i)-mu/GET(lambda,i))*GET(d_lambda,i);
+              grad_psi_d += (GET(vect_constraints, i) - mu / GET(lambda, i)) * GET(d_lambda, i);
             }
 
           // Save old values of x, lambda and gradients
@@ -594,17 +594,17 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
               alpha *= decrease_alpha; // decrease
 
               // To prevent d_x = 0 or alpha = 0, in this case we end the inner loop.
-              norm_delta_x = alpha*norm_d_x;
-              if (norm_delta_x/norm_x < norm_delta_x_min)
+              norm_delta_x = alpha * norm_d_x;
+              if (norm_delta_x / norm_x < norm_delta_x_min)
                 {
-                  CONVERGENCE=1;
+                  CONVERGENCE = 1;
                   pnl_vect_clone(x, x_min);
                   pnl_vect_clone(lambda, lambda_min);
                   goto End_Inner_Algo;
                 }
 
-              for (i = 0; i < nbr_var; i++) LET(x,i) = GET(x_old,i) + alpha*GET(d_x,i);
-              for (i = 0; i < nbr_constraints; i++) LET(lambda,i) = GET(lambda_old,i) + alpha*GET(d_lambda,i);
+              for (i = 0; i < nbr_var; i++) LET(x, i) = GET(x_old, i) + alpha * GET(d_x, i);
+              for (i = 0; i < nbr_constraints; i++) LET(lambda, i) = GET(lambda_old, i) + alpha * GET(d_lambda, i);
 
 
               // Compute Psi(x+alpha*d_x, lambda+alpha*d_lambda)
@@ -613,21 +613,21 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
               TestInfeasibility = 0; // If (x, lambda) is not feasible we go back to the decrease of alpha.
               for (i = 0; i < nbr_constraints; i++)
                 {
-                  if ((GET(lambda,i) < 0)|| (GET(vect_constraints,i) < 0))
+                  if ((GET(lambda, i) < 0) || (GET(vect_constraints, i) < 0))
                     {
                       TestInfeasibility = 1;
                       break;
                     }
-                  psi_alpha += GET(lambda,i)*GET(vect_constraints,i) - mu * log(GET(lambda,i)*SQR(GET(vect_constraints,i)));
+                  psi_alpha += GET(lambda, i) * GET(vect_constraints, i) - mu * log(GET(lambda, i) * SQR(GET(vect_constraints, i)));
                 }
 
-              if (TestInfeasibility==0)
+              if (TestInfeasibility == 0)
                 {
                   // We compute f(x) only if it's strictly feasible.
-                  f = PNL_EVAL_RNFUNCR(func,x);
+                  f = PNL_EVAL_RNFUNCR(func, x);
                   nbr_func_eval++;
                   psi_alpha += f;
-                  if (f<f_min)// We keep in memory the best iteration.
+                  if (f < f_min) // We keep in memory the best iteration.
                     {
                       f_min = f;
                       pnl_vect_clone(x_min, x);
@@ -635,13 +635,13 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
                     }
                 }
             }
-          while ((TestInfeasibility==1)||((psi_alpha >= psi + omega * alpha * grad_psi_d)));
+          while ((TestInfeasibility == 1) || ((psi_alpha >= psi + omega * alpha * grad_psi_d)));
 
           /***************************************************************************
            * Update of matrix M by the BFGS formula with the use of Powell correction *
            ****************************************************************************/
           gradient_f(grad_func, func, x, grad_f);
-          if (grad_func==NULL) nbr_func_eval+=2;
+          if (grad_func == NULL) nbr_func_eval += 2;
           gradient_c(&all_constraints, x, grad_c);
 
           norm_gamma = 0;
@@ -657,7 +657,7 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
               sum = 0; // sum = grad_c * lambda
               for (j = 0; j < nbr_constraints; j++)
                 {
-                  sum += (MGET(grad_c,i,j) - MGET(grad_c_old,i,j)) * GET(lambda, j);
+                  sum += (MGET(grad_c, i, j) - MGET(grad_c_old, i, j)) * GET(lambda, j);
                 }
 
               LET(gamma, i) = GET(gamma, i) - sum;
@@ -666,7 +666,7 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
               norm_gamma += SQR(GET(gamma, i)); // norm_gamma=norm(gamma)^2
             }
 
-          delta_M_delta=pnl_mat_scalar_prod(M_old,delta,delta); //transpose(delta)*M*delta
+          delta_M_delta = pnl_mat_scalar_prod(M_old, delta, delta); //transpose(delta)*M*delta
           // Up date of M only if BFGS formula is well defined.
           if ((fabs(delta_gamma) > eta) && (fabs(delta_M_delta) > eta))
             {
@@ -680,8 +680,8 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
                 }
 
               // Compute M*delta and transpose(delta)*M
-              pnl_mat_mult_vect_inplace(M_delta,M_old,delta);
-              pnl_mat_mult_vect_transpose_inplace(delta_M,M_old,delta);
+              pnl_mat_mult_vect_inplace(M_delta, M_old, delta);
+              pnl_mat_mult_vect_transpose_inplace(delta_M, M_old, delta);
               // Self-Scaling coefficient as proposed by Al-Baali
               SelfScalingBFGS = 1.;
               if (delta_gamma < delta_M_delta)
@@ -694,7 +694,7 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
                 {
                   for (j = 0; j < nbr_var; j++)
                     {
-                      MLET(M,i,j) = SelfScalingBFGS * (MGET(M_old,i,j) - GET(M_delta,i) * GET(delta_M,j) / delta_M_delta) + GET(gamma,i) * GET(gamma,j)/delta_gamma;
+                      MLET(M, i, j) = SelfScalingBFGS * (MGET(M_old, i, j) - GET(M_delta, i) * GET(delta_M, j) / delta_M_delta) + GET(gamma, i) * GET(gamma, j) / delta_gamma;
                     }
                 }
 
@@ -711,7 +711,7 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
           norm_comp_cond = pnl_vect_norm_infty(comp_cond_vect);
           OptimalityCriterion = ((norm_grad_lagrangien < tolerance) && (norm_comp_cond < tolerance));
 
-          if (print_algo_steps>1)
+          if (print_algo_steps > 1)
             {
               printf("iter=%3i  f_eval=%3i   mu=%.3e   f=%.10e   ", nbr_iterations, nbr_func_eval, mu, f);
               printf("|grad_lagr|=%e   |comp_cond|=%e |Step|=%e\n", norm_grad_lagrangien, norm_comp_cond, norm_delta_x);
@@ -722,28 +722,28 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm
 End_Inner_Algo:
 
       // Decrease of perturbation parameter
-      if (inner_iter<MAX(3,inner_iter_max/2)) mu *= 0.1;
+      if (inner_iter < MAX(3, inner_iter_max / 2)) mu *= 0.1;
       else mu *= 0.5;
     }
-  while ((!OptimalityCriterion) && (nbr_iterations < iter_max) && mu>mu_min);
+  while ((!OptimalityCriterion) && (nbr_iterations < iter_max) && mu > mu_min);
 
 Sortie:
 
-  if (nbr_iterations >= iter_max) CONVERGENCE=2;
-  if (OptimalityCriterion) CONVERGENCE=3;
+  if (nbr_iterations >= iter_max) CONVERGENCE = 2;
+  if (OptimalityCriterion) CONVERGENCE = 3;
 
   pnl_vect_clone(x_output, x_min);
   pnl_vect_clone(lambda, lambda_min);
   temps_final = clock();
-  temps_cpu = ((double) (temps_final - temps_initial)) / CLOCKS_PER_SEC;
+  temps_cpu = ((double)(temps_final - temps_initial)) / CLOCKS_PER_SEC;
 
-  if (print_algo_steps>0 && CONVERGENCE!=0)
+  if (print_algo_steps > 0 && CONVERGENCE != 0)
     {
       printf("\n**********************************************************************************\n");
-      if (CONVERGENCE==0) printf("************ Output Status: Failure: Initial point is not strictly feasible. \n");
-      if (CONVERGENCE==1) printf("************ Output Status: Step too small, we stop the algorithm. \n");
-      if (CONVERGENCE==2) printf("************ Output Status: Maximum iteration reached. \n");
-      if (CONVERGENCE==3) printf("************ Output Status: A solution has been found up to the required accuracy. \n");
+      if (CONVERGENCE == 0) printf("************ Output Status: Failure: Initial point is not strictly feasible. \n");
+      if (CONVERGENCE == 1) printf("************ Output Status: Step too small, we stop the algorithm. \n");
+      if (CONVERGENCE == 2) printf("************ Output Status: Maximum iteration reached. \n");
+      if (CONVERGENCE == 3) printf("************ Output Status: A solution has been found up to the required accuracy. \n");
       printf("\n****** Initial point= ");
       pnl_vect_print(x_input);
       printf("****** Objective_function(Initial point)  = %e \n\n", PNL_EVAL_RNFUNCR(func, x_input));
@@ -772,7 +772,7 @@ Sortie:
   pnl_vect_free(&x_old);
   pnl_vect_free(&x_min);
   pnl_vect_free(&d_x);
-  pnl_vect_free(&d_lambda );
+  pnl_vect_free(&d_lambda);
   pnl_vect_free(&delta);
   pnl_vect_free(&M_delta);
   pnl_vect_free(&delta_M);

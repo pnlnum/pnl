@@ -28,13 +28,13 @@
 
 static char pnl_sp_matrix_label[] = "PnlSpMatObject";
 
-/** 
+/**
  * Create a new sparse matrix object
  */
-PnlSpMatObject* pnl_sp_mat_object_new ()
+PnlSpMatObject *pnl_sp_mat_object_new()
 {
   PnlSpMatObject *o;
-  if ( (o = malloc (sizeof (PnlSpMatObject))) == NULL) return NULL;
+  if ((o = malloc(sizeof(PnlSpMatObject))) == NULL) return NULL;
   o->object.type = PNL_TYPE_SP_MATRIX;
   o->object.parent_type = PNL_TYPE_SP_MATRIX;
   o->object.nref = 0;
@@ -51,16 +51,19 @@ PnlSpMatObject* pnl_sp_mat_object_new ()
   return o;
 }
 
-/** 
+/**
  * Free a sparse matrix object
  */
-void pnl_sp_mat_object_free (PnlSpMatObject **o)
+void pnl_sp_mat_object_free(PnlSpMatObject **o)
 {
-    if ( (*o != NULL) && ((*o)->nzmax > 0) )
+  if ((*o != NULL) && ((*o)->nzmax > 0))
     {
-      free((*o)->array); (*o)->array = NULL; 
-      free((*o)->I); (*o)->I= NULL; 
-      free((*o)->J); (*o)->J = NULL; 
+      free((*o)->array);
+      (*o)->array = NULL;
+      free((*o)->I);
+      (*o)->I = NULL;
+      free((*o)->J);
+      (*o)->J = NULL;
       (*o)->m = (*o)->n = (*o)->nz = 0;
       free(*o);
     }
@@ -79,49 +82,70 @@ void pnl_sp_mat_object_free (PnlSpMatObject **o)
  *
  * @return OK or FAIL. When returns OK, the matrix M is changed.
  */
-int pnl_sp_mat_object_resize (PnlSpMatObject *o, int m, int n, int nz)
+int pnl_sp_mat_object_resize(PnlSpMatObject *o, int m, int n, int nz)
 {
-  if ( m<0 || n<0 || nz<0 ) return FAIL;
-  if ( m == 0 || n == 0 )
+  if (m < 0 || n < 0 || nz < 0) return FAIL;
+  if (m == 0 || n == 0)
     {
       o->m = o->n = 0;
       o->nz = o->nzmax = 0;
-      if ( o->array ) { free (o->array); o->array = NULL; }
+      if (o->array)
+        {
+          free(o->array);
+          o->array = NULL;
+        }
       return OK;
     }
 
   /* Increase the number of rows if needed */
-  if ( m > o->m ) 
-    { 
+  if (m > o->m)
+    {
       int i;
-      o->I = realloc (o->I, (m + 1) * sizeof(int)); 
-      for ( i=o->m+1 ; i<m+1 ; i++ ) { o->I[i] = o->I[o->m]; }
+      o->I = realloc(o->I, (m + 1) * sizeof(int));
+      for (i = o->m + 1 ; i < m + 1 ; i++)
+        {
+          o->I[i] = o->I[o->m];
+        }
     }
   o->m = m;
 
   /* Increase the maximum number of non-zero elements */
-  if ( nz > o->nzmax ) 
+  if (nz > o->nzmax)
     {
       size_t sizeof_base = 0;
       switch (PNL_GET_TYPE(o))
         {
-        case PNL_TYPE_SP_MATRIX_DOUBLE: sizeof_base = sizeof(double); break;
-        case PNL_TYPE_SP_MATRIX_COMPLEX : sizeof_base = sizeof(dcomplex); break;
-        case PNL_TYPE_SP_MATRIX_INT : sizeof_base = sizeof(int); break;
-        default : PNL_MESSAGE (1, "Unknown type in pnl_sp_mat_object_resize.\n"); return FAIL;
+        case PNL_TYPE_SP_MATRIX_DOUBLE:
+          sizeof_base = sizeof(double);
+          break;
+        case PNL_TYPE_SP_MATRIX_COMPLEX :
+          sizeof_base = sizeof(dcomplex);
+          break;
+        case PNL_TYPE_SP_MATRIX_INT :
+          sizeof_base = sizeof(int);
+          break;
+        default :
+          PNL_MESSAGE(1, "Unknown type in pnl_sp_mat_object_resize.\n");
+          return FAIL;
         }
-      o->array = realloc (o->array, nz * sizeof_base);
-      o->J = realloc (o->J, nz * sizeof(int));
+      o->array = realloc(o->array, nz * sizeof_base);
+      o->J = realloc(o->J, nz * sizeof(int));
       o->nzmax = nz;
     }
-  if ( o->n > n )
-    { 
+  if (o->n > n)
+    {
       int i;
       /* Some values in J must be out of range (greater than n-1) so we empty
        * the matrix by setting all the elements to zero */
-      o->nz = 0; 
-      for ( i=0 ; i<m+1 ; i++ ) { o->I[i] = 0; }
-      for ( i=0 ; i<o->nzmax ; i++ ) { o->J[i] = 0; }
+      o->nz = 0;
+      for (i = 0 ; i < m + 1 ; i++)
+        {
+          o->I[i] = 0;
+        }
+      for (i = 0 ; i < o->nzmax ; i++)
+        {
+          o->J[i] = 0;
+        }
     }
   o->n = n;
   return OK;

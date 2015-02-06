@@ -204,7 +204,7 @@ static int chguit_(double *a, double *b, double *x,
   hu2 /= ga;
   *hu = hu1 + hu2;
   return 0;
-} 
+}
 
 static int chgu_(double *a, double *b, double *x,
                  double *hu, int *md)
@@ -661,7 +661,7 @@ static int chgubi_(double *a, double *b, double *x,
       *id -= abs(id1 - id2);
     }
   return 0;
-} 
+}
 
 
 static int psi_spec__(double *x, double *ps)

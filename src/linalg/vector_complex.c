@@ -28,18 +28,20 @@
  * @param im array of the imaginary parts
  * @return v[i] = re[i] + I im[i]
  */
-PnlVectComplex* pnl_vect_complex_create_from_array(int size, const double *re, const double *im)
+PnlVectComplex *pnl_vect_complex_create_from_array(int size, const double *re, const double *im)
 {
   int i, i_re, i_im;
-  PnlVectComplex *v = pnl_vect_complex_create (size);
-  double *ptr = (double*) v->array;
-  
-  i_re = 0; i_im = 1;
-  for (i=0; i<size; i++)
+  PnlVectComplex *v = pnl_vect_complex_create(size);
+  double *ptr = (double *) v->array;
+
+  i_re = 0;
+  i_im = 1;
+  for (i = 0; i < size; i++)
     {
       ptr[i_re] = re[i];
       ptr[i_im] = im[i];
-      i_re += 2; i_im+=2;
+      i_re += 2;
+      i_im += 2;
     }
   return v;
 }
@@ -51,18 +53,20 @@ PnlVectComplex* pnl_vect_complex_create_from_array(int size, const double *re, c
  * @param re on exit contains the real parts of the elements of v. Must already be allocated.
  * @param im on exit contains the imaginary parts of the elements of v. Must already be allocated.
  */
-void pnl_vect_complex_split_in_array(const PnlVectComplex* v, double *re, double *im)
+void pnl_vect_complex_split_in_array(const PnlVectComplex *v, double *re, double *im)
 {
   int i, i_re, i_im;
-  int size =v->size;
-  double *ptr = (double*)v->array;
-  
-  i_re = 0; i_im = 1;
-  for (i=0; i<size; i++)
+  int size = v->size;
+  double *ptr = (double *)v->array;
+
+  i_re = 0;
+  i_im = 1;
+  for (i = 0; i < size; i++)
     {
-      re[i]=ptr[i_re] ;
-      im[i]=ptr[i_im] ;
-      i_re += 2; i_im+=2;
+      re[i] = ptr[i_re] ;
+      im[i] = ptr[i_im] ;
+      i_re += 2;
+      i_im += 2;
     }
 }
 
@@ -73,11 +77,11 @@ void pnl_vect_complex_split_in_array(const PnlVectComplex* v, double *re, double
  * @param re on exit contains the real parts of the elements of v. Must already be allocated.
  * @param im on exit contains the imaginary parts of the elements of v. Must already be allocated.
  */
-void pnl_vect_complex_split_in_vect(const PnlVectComplex* v, PnlVect *re, PnlVect *im)
+void pnl_vect_complex_split_in_vect(const PnlVectComplex *v, PnlVect *re, PnlVect *im)
 {
-  pnl_vect_resize (re, v->size);
-  pnl_vect_resize (im, v->size);
-  pnl_vect_complex_split_in_array (v, re->array, im->array);
+  pnl_vect_resize(re, v->size);
+  pnl_vect_resize(im, v->size);
+  pnl_vect_complex_split_in_array(v, re->array, im->array);
 }
 
 /**
@@ -90,8 +94,8 @@ void pnl_vect_complex_split_in_vect(const PnlVectComplex* v, PnlVect *re, PnlVec
 void pnl_vect_complex_mult_double(PnlVectComplex *lhs , double x)
 {
   dcomplex *lptr;
-  int i=0;
-  while(i<lhs->size)
+  int i = 0;
+  while (i < lhs->size)
     {
       lptr = pnl_vect_complex_lget(lhs, i);
       lptr->r *= x;

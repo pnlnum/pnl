@@ -32,10 +32,10 @@
 /**
  * Create an empty PnlPermutation
  */
-PnlPermutation* pnl_permutation_new ()
+PnlPermutation *pnl_permutation_new()
 {
   PnlPermutation *p;
-  p = pnl_vect_int_create (0);
+  p = pnl_vect_int_create(0);
   return p;
 }
 
@@ -44,26 +44,26 @@ PnlPermutation* pnl_permutation_new ()
  *
  * @param n length of the permutation
  */
-PnlPermutation* pnl_permutation_create (int n)
+PnlPermutation *pnl_permutation_create(int n)
 {
   PnlPermutation *p;
-  p = pnl_vect_int_create (n);
+  p = pnl_vect_int_create(n);
   return p;
 }
 
-/** 
+/**
  * Compute the inverse of a permutation vector
- * 
+ *
  * @param inv contains the inverse on output
  * @param p a permutation
- * 
+ *
  */
-void pnl_permutation_inverse (PnlPermutation *inv, const PnlPermutation *p)
+void pnl_permutation_inverse(PnlPermutation *inv, const PnlPermutation *p)
 {
   int i;
-  pnl_vect_int_resize (inv, p->size);
-  
-  for ( i=0 ; i<p->size ; i++ )
+  pnl_vect_int_resize(inv, p->size);
+
+  for (i = 0 ; i < p->size ; i++)
     {
       inv->array[p->array[i]] = i;
     }
@@ -74,9 +74,9 @@ void pnl_permutation_inverse (PnlPermutation *inv, const PnlPermutation *p)
  *
  * @param p address of a permutation
  */
-void pnl_permutation_free (PnlPermutation **p)
+void pnl_permutation_free(PnlPermutation **p)
 {
-  pnl_vect_int_free (p);
+  pnl_vect_int_free(p);
 }
 
 /**
@@ -87,15 +87,15 @@ void pnl_permutation_free (PnlPermutation **p)
  * @param x the vector to permute
  * @param p a permutation
  */
-void pnl_vect_permute (PnlVect *px, const PnlVect *x, const PnlPermutation *p)
+void pnl_vect_permute(PnlVect *px, const PnlVect *x, const PnlPermutation *p)
 {
   int i, k;
-  PNL_CHECK (x->size != p->size, "incompatible permutation size", "pnl_vect_permute");
-  pnl_vect_resize (px, x->size);
-  for (i=0; i<x->size; i++)
+  PNL_CHECK(x->size != p->size, "incompatible permutation size", "pnl_vect_permute");
+  pnl_vect_resize(px, x->size);
+  for (i = 0; i < x->size; i++)
     {
       k = p->array[i];
-      PNL_LET (px, i) = PNL_GET (x, k);
+      PNL_LET(px, i) = PNL_GET(x, k);
     }
 }
 
@@ -107,15 +107,15 @@ void pnl_vect_permute (PnlVect *px, const PnlVect *x, const PnlPermutation *p)
  * @param x the vector to permute
  * @param p a permutation
  */
-void pnl_vect_permute_inverse (PnlVect *px, const PnlVect *x, const PnlPermutation *p)
+void pnl_vect_permute_inverse(PnlVect *px, const PnlVect *x, const PnlPermutation *p)
 {
   int i;
-  PNL_CHECK (x->size != p->size, "incompatible permutation size", "pnl_vect_permute_inverse");
-  pnl_vect_resize (px, x->size);
-  for (i=0; i<x->size; i++)
+  PNL_CHECK(x->size != p->size, "incompatible permutation size", "pnl_vect_permute_inverse");
+  pnl_vect_resize(px, x->size);
+  for (i = 0; i < x->size; i++)
     {
       const int k = p->array[i];
-      LET (px, k) = GET (x, i);
+      LET(px, k) = GET(x, i);
     }
 }
 
@@ -134,7 +134,7 @@ void pnl_vect_permute_inverse (PnlVect *px, const PnlVect *x, const PnlPermutati
  * cycles. First we search for the cycles and then apply each of them inplace,
  * which is much easier.
  */
-static void pnl_permute_inplace (double *x, const int *p, int n)
+static void pnl_permute_inplace(double *x, const int *p, int n)
 {
   int i, k, pk;
   double t;
@@ -152,9 +152,9 @@ static void pnl_permute_inplace (double *x, const int *p, int n)
              if k <i, then i was not a cycle leader
              if pk == 1, this is not a true cycle, but instead  i is a fixed
              point
-             now we also have pk = p[i] 
+             now we also have pk = p[i]
           */
-          
+
           /* shuffle the elements of the cycle starting from i */
           t = x[i];
           while (pk != i)
@@ -183,7 +183,7 @@ static void pnl_permute_inplace (double *x, const int *p, int n)
  * cycles. First we search for the cycles and then apply each of them inplace,
  * which is much easier.
  */
-static void pnl_permute_inverse_inplace (double *x, const int *p, int n)
+static void pnl_permute_inverse_inplace(double *x, const int *p, int n)
 {
   int i, k, pk;
   double t;
@@ -201,9 +201,9 @@ static void pnl_permute_inverse_inplace (double *x, const int *p, int n)
              if k <i, then i was not a cycle leader
              if pk == 1, this is not a true cycle, but instead  i is a fixed
              point
-             now we also have pk = p[i] 
+             now we also have pk = p[i]
           */
-          
+
           /* shuffle the elements of the cycle starting from k */
           t = x[k];
           while (pk != i)
@@ -225,22 +225,22 @@ static void pnl_permute_inverse_inplace (double *x, const int *p, int n)
  * @param x the vector to permute. Contains the permuted vector on exit
  * @param p a permutation
  */
-void pnl_vect_permute_inplace (PnlVect *x, const PnlPermutation *p)
+void pnl_vect_permute_inplace(PnlVect *x, const PnlPermutation *p)
 {
-  PNL_CHECK (x->size != p->size, "incompatible permutation size", "pnl_vect_permute");
-  pnl_permute_inplace (x->array, p->array, x->size);
+  PNL_CHECK(x->size != p->size, "incompatible permutation size", "pnl_vect_permute");
+  pnl_permute_inplace(x->array, p->array, x->size);
 }
-  
+
 /**
  * Apply the inverse of a Permutation to a PnlVect in place
  *
  * @param x the vector to permute. Contains the permuted vector on exit
  * @param p a permutation
  */
-void pnl_vect_permute_inverse_inplace (PnlVect *x, const PnlPermutation *p)
+void pnl_vect_permute_inverse_inplace(PnlVect *x, const PnlPermutation *p)
 {
-  PNL_CHECK (x->size != p->size, "incompatible permutation size", "pnl_vect_permute_inverse");
-  pnl_permute_inverse_inplace (x->array, p->array, x->size);
+  PNL_CHECK(x->size != p->size, "incompatible permutation size", "pnl_vect_permute_inverse");
+  pnl_permute_inverse_inplace(x->array, p->array, x->size);
 }
 
 /**
@@ -251,17 +251,17 @@ void pnl_vect_permute_inverse_inplace (PnlVect *x, const PnlPermutation *p)
  * @param X the matrix to permute
  * @param p a permutation
  */
-void pnl_mat_col_permute (PnlMat *pX, const PnlMat *X, const PnlPermutation *p)
+void pnl_mat_col_permute(PnlMat *pX, const PnlMat *X, const PnlPermutation *p)
 {
   int i, j, k;
-  PNL_CHECK (X->n != p->size, "incompatible permutation size", "pnl_mat_col_permute");
-  pnl_mat_resize (pX, X->m, X->n);
-  for ( j=0 ; j<X->n ; j++ )
+  PNL_CHECK(X->n != p->size, "incompatible permutation size", "pnl_mat_col_permute");
+  pnl_mat_resize(pX, X->m, X->n);
+  for (j = 0 ; j < X->n ; j++)
     {
       k = p->array[j];
-      for ( i=0 ; i<X->m ; i++ )
+      for (i = 0 ; i < X->m ; i++)
         {
-          MLET (pX, i, j) = MGET(X, i, k);
+          MLET(pX, i, j) = MGET(X, i, k);
         }
     }
 }
@@ -274,17 +274,17 @@ void pnl_mat_col_permute (PnlMat *pX, const PnlMat *X, const PnlPermutation *p)
  * @param X the matrix to permute
  * @param p a permutation
  */
-void pnl_mat_row_permute (PnlMat *pX, const PnlMat *X, const PnlPermutation *p)
+void pnl_mat_row_permute(PnlMat *pX, const PnlMat *X, const PnlPermutation *p)
 {
   int i, j, k;
-  PNL_CHECK (X->m != p->size, "incompatible permutation size", "pnl_mat_col_permute");
-  pnl_mat_resize (pX, X->m, X->n);
-  for ( i=0 ; i<X->m ; i++ )
+  PNL_CHECK(X->m != p->size, "incompatible permutation size", "pnl_mat_col_permute");
+  pnl_mat_resize(pX, X->m, X->n);
+  for (i = 0 ; i < X->m ; i++)
     {
       k = p->array[i];
-      for ( j=0 ; j<X->n ; j++ )
+      for (j = 0 ; j < X->n ; j++)
         {
-          MLET (pX, i, j) = MGET(X, k, j);
+          MLET(pX, i, j) = MGET(X, k, j);
         }
     }
 }
@@ -295,9 +295,9 @@ void pnl_mat_row_permute (PnlMat *pX, const PnlMat *X, const PnlPermutation *p)
  * @param fic a File decriptor
  * @param p the permutation to print
  */
-void pnl_permutation_fprint (FILE *fic, const PnlPermutation *p)
+void pnl_permutation_fprint(FILE *fic, const PnlPermutation *p)
 {
-  pnl_vect_int_fprint (fic, p);
+  pnl_vect_int_fprint(fic, p);
 }
 
 /**
@@ -305,8 +305,8 @@ void pnl_permutation_fprint (FILE *fic, const PnlPermutation *p)
  *
  * @param p the permutation to print
  */
-void pnl_permutation_print (const PnlPermutation *p)
-{ 
-  pnl_vect_int_print (p);
+void pnl_permutation_print(const PnlPermutation *p)
+{
+  pnl_vect_int_print(p);
 }
 

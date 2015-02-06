@@ -39,10 +39,10 @@ static char pnl_vector_label[] = "PnlVectObject";
  *
  * @return a PnlVectObject
  */
-PnlVectObject* pnl_vect_object_new ()
+PnlVectObject *pnl_vect_object_new()
 {
   PnlVectObject *o;
-  if ( (o = malloc (sizeof (PnlVectObject))) == NULL) return NULL;
+  if ((o = malloc(sizeof(PnlVectObject))) == NULL) return NULL;
   o->size = 0;
   o->mem_size = 0;
   o->owner = 1;
@@ -69,7 +69,10 @@ void pnl_vect_object_free(PnlVectObject **v)
   if (*v != NULL)
     {
       if ((*v)->array != NULL && (*v)->owner == 1)
-        { free((*v)->array); (*v)->array = NULL; }
+        {
+          free((*v)->array);
+          (*v)->array = NULL;
+        }
       (*v)->size = 0;
       free(*v);
     }
@@ -79,13 +82,13 @@ void pnl_vect_object_free(PnlVectObject **v)
  * Resize a PnlVectObject. If the new size is smaller than the
  * current one, no memory is freed and the datas are
  * kept. If the new size is larger than the current one, a
- * new pointer is allocated. The old datas are kept. 
+ * new pointer is allocated. The old datas are kept.
  *
  * @param v a pointer to an already existing PnlVectObject. If v->owner=0,
  * nothing is done
  * @param size the new size of the array
  */
-int pnl_vect_object_resize(PnlVectObject * v, int size)
+int pnl_vect_object_resize(PnlVectObject *v, int size)
 {
 
   size_t sizeof_base = 0;
@@ -93,34 +96,39 @@ int pnl_vect_object_resize(PnlVectObject * v, int size)
   if (size < 0) return FAIL;
   if (size == 0)
     {
-      if (v->mem_size > 0) free (v->array);
+      if (v->mem_size > 0) free(v->array);
       v->size = 0;
       v->mem_size = 0;
-      v->array=NULL;
+      v->array = NULL;
       return OK;
     }
-  
+
   if (v->mem_size >= size)
     {
       /* If the new size is smaller, we do not reduce the size of the
          allocated block. It may change, but it allows to grow the vector
          quicker */
-      v->size=size; return OK;
+      v->size = size;
+      return OK;
     }
 
   /* Now, v->mem_size < size */
   switch (PNL_GET_TYPE(v))
     {
-    case PNL_TYPE_VECTOR_DOUBLE : sizeof_base = sizeof(double);
+    case PNL_TYPE_VECTOR_DOUBLE :
+      sizeof_base = sizeof(double);
       break;
-    case PNL_TYPE_VECTOR_COMPLEX : sizeof_base = sizeof(dcomplex);
+    case PNL_TYPE_VECTOR_COMPLEX :
+      sizeof_base = sizeof(dcomplex);
       break;
-    case PNL_TYPE_VECTOR_INT : sizeof_base = sizeof(int);
+    case PNL_TYPE_VECTOR_INT :
+      sizeof_base = sizeof(int);
       break;
-    default : PNL_MESSAGE (1, "Unknown type in pnl_vect_object_resize.\n");
+    default :
+      PNL_MESSAGE(1, "Unknown type in pnl_vect_object_resize.\n");
       return FAIL;
     }
-  if ((v->array=realloc(v->array,size*sizeof_base)) == NULL) return FAIL;
+  if ((v->array = realloc(v->array, size * sizeof_base)) == NULL) return FAIL;
   v->size = size;
   v->mem_size = size;
   return OK;
@@ -133,7 +141,7 @@ static char pnl_vect_label[] = "PnlVectorDouble";
 #include "vector_source.c"
 #include "pnl/pnl_templates_off.h"
 #undef BASE_DOUBLE
- 
+
 #define BASE_PNL_COMPLEX
 #include "pnl/pnl_templates_on.h"
 static char pnl_vect_complex_label[] = "PnlVectorComplex";

@@ -65,17 +65,25 @@ swapfunc(char *a, char *b, int es, int n, int lda)
   long i = n, atomic_size;
   register char *pi = a;
   register char *pj = b;
-  
-  do {
-    atomic_size = es;
-    do {
-      register char temp = *pi;
-      *pi = *pj; *pj = temp;
-      pi++; pj++;
-    } while (--atomic_size >0);
-    pi--; pj--;
-    pi += lda; pj += lda;
-  } while (--i > 0);
+
+  do
+    {
+      atomic_size = es;
+      do
+        {
+          register char temp = *pi;
+          *pi = *pj;
+          *pj = temp;
+          pi++;
+          pj++;
+        }
+      while (--atomic_size > 0);
+      pi--;
+      pj--;
+      pi += lda;
+      pj += lda;
+    }
+  while (--i > 0);
 }
 
 static __inline__ void
@@ -83,11 +91,15 @@ swapfunc_double(double *a, double *b, int n, int lda)
 {
   register double *pi = a;
   register double *pj = b;
-  do {
-    register double temp = *pi;
-    *pi = *pj; *pj = temp;
-    pi += lda; pj += lda;
-  } while (--n > 0);
+  do
+    {
+      register double temp = *pi;
+      *pi = *pj;
+      *pj = temp;
+      pi += lda;
+      pj += lda;
+    }
+  while (--n > 0);
 }
 
 static __inline__ void
@@ -95,11 +107,15 @@ swapfunc_int(int *a, int *b, int n, int lda)
 {
   register int *pi = a;
   register int *pj = b;
-  do {
-    register int temp = *pi;
-    *pi = *pj; *pj = temp;
-    pi += lda; pj += lda;
-  } while (--n > 0);
+  do
+    {
+      register int temp = *pi;
+      *pi = *pj;
+      *pj = temp;
+      pi += lda;
+      pj += lda;
+    }
+  while (--n > 0);
 }
 
 
@@ -131,22 +147,22 @@ swapfunc_int(int *a, int *b, int n, int lda)
 /* } */
 
 static __inline__ void med3withindex(char *ans, int *i_ans, char *a, char *b, char *c,
-                                 int *i_a, int *i_b, int *i_c, int (*cmp)(const void*, const void*))
+                                     int *i_a, int *i_b, int *i_c, int (*cmp)(const void *, const void *))
 {
   cmp(a, b) < 0 ?
-    (cmp(b, c) < 0 ? (ans=b, i_ans=i_b) :
-     (cmp(a, c) < 0 ? (ans=c, i_ans=i_c) :
-      (ans=a, i_ans=i_a) ))
-    :(cmp(b, c) > 0 ? (ans=b, i_ans=i_b) :
-      (cmp(a, c) < 0 ? (ans=a, i_ans=i_a) :
-       (ans=c, i_ans=i_c)));
+  (cmp(b, c) < 0 ? (ans = b, i_ans = i_b) :
+   (cmp(a, c) < 0 ? (ans = c, i_ans = i_c) :
+    (ans = a, i_ans = i_a)))
+  : (cmp(b, c) > 0 ? (ans = b, i_ans = i_b) :
+     (cmp(a, c) < 0 ? (ans = a, i_ans = i_a) :
+      (ans = c, i_ans = i_c)));
 }
 
 static __inline__ void med3noindex(char *ans, int *i_ans, char *a, char *b, char *c,
                                    int *i_a, int *i_b, int *i_c, int (*cmp)(const void *, const void *))
 {
-  cmp(a, b) < 0 ? (cmp(b, c) < 0 ? (ans=b) : (cmp(a, c) < 0 ? (ans=c) : (ans=a) ))
-    :(cmp(b, c) > 0 ? (ans=b) : (cmp(a, c) < 0 ? (ans=a) : (ans=c)));
+  cmp(a, b) < 0 ? (cmp(b, c) < 0 ? (ans = b) : (cmp(a, c) < 0 ? (ans = c) : (ans = a)))
+  : (cmp(b, c) > 0 ? (ans = b) : (cmp(a, c) < 0 ? (ans = a) : (ans = c)));
 }
 
 #define med3index (index_flag==TRUE ? med3withindex : med3noindex)
@@ -173,12 +189,12 @@ void pnl_qsort(void *a, int n, int es, int lda, int *t, int ldt, int index_flag,
 
   esa = es * lda;
   est = ldt;
-  
- loop: 
+
+loop:
   swap_cnt = 0;
   if (n < 7)
     {
-      for (pm = ((char*)a) + esa, tm = t + est; pm < ((char *) a) + n * esa; pm += esa, tm += est)
+      for (pm = ((char *)a) + esa, tm = t + est; pm < ((char *) a) + n * esa; pm += esa, tm += est)
         {
           for (pl = pm, tl = tm; pl > (char *) a && cmp(pl - esa, pl) > 0; pl -= esa, tl -= est)
             {
@@ -190,102 +206,107 @@ void pnl_qsort(void *a, int n, int es, int lda, int *t, int ldt, int index_flag,
     }
   pm = ((char *) a) + (n / 2) * esa;
   tm = t + (n / 2) * est;
-  if (n > 7) {
-    pl = a;
-    tl = t;
-    pn = ((char *) a) + (n - 1) * esa;
-    tn = t + (n - 1) * est;
-    if (n > 40) {
-      d = (n / 8) * esa;
-      d_t = (n / 8) * est;
-      med3index(pl, tl, pl, pl + d, pl + 2 * d, tl, tl + d_t, tl + 2 * d_t, cmp);
-      med3index(pm, tm, pm - d, pm, pm + d, tm - d_t, tm, tm + d_t, cmp);
-      med3index(pn, tn, pn - 2 * d, pn - d, pn, tn - 2 * d_t, tn - d_t, tn, cmp);
+  if (n > 7)
+    {
+      pl = a;
+      tl = t;
+      pn = ((char *) a) + (n - 1) * esa;
+      tn = t + (n - 1) * est;
+      if (n > 40)
+        {
+          d = (n / 8) * esa;
+          d_t = (n / 8) * est;
+          med3index(pl, tl, pl, pl + d, pl + 2 * d, tl, tl + d_t, tl + 2 * d_t, cmp);
+          med3index(pm, tm, pm - d, pm, pm + d, tm - d_t, tm, tm + d_t, cmp);
+          med3index(pn, tn, pn - 2 * d, pn - d, pn, tn - 2 * d_t, tn - d_t, tn, cmp);
+        }
+      med3index(pm, tm, pl, pm, pn, tl, tm, tn, cmp);
     }
-    med3index(pm, tm, pl, pm, pn, tl, tm, tn, cmp);
-  }
   swap(a, pm);
   swapindex(t, tm);
 
   pa = pb = ((char *) a) + esa;
-  pc = pd = ((char *)a ) + (n - 1) * esa;
+  pc = pd = ((char *)a) + (n - 1) * esa;
 
   ta = tb = t + est;
-  tc = td = t + (n-1) * est;
-    
-  for (;;) {
-    while (pb <= pc && (r = cmp(pb, a)) <= 0)
-      {
-        if (r == 0)
-          {
-            swap_cnt = 1;              
-            swap(pa, pb);
-            pa += esa;
-            swapindex(ta, tb);
-            ta += est;
-          }
-        pb += esa;
-        tb += est;
-      }
-    while (pb <= pc && (r = cmp(pc, a)) >= 0)
-      {
-        if (r == 0)
-          {
-            swap_cnt = 1;
-            swap(pc, pd);
-            pd -= esa;
-            swapindex(tc, td);
-            td -= est;
-          }
-        pc -= esa;
-        tc -= est;
-      }
-    if (pb > pc)
-      break;
-    swap(pb, pc);
-    swapindex(tb, tc);
-    swap_cnt = 1;
-    pb += esa;
-    pc -= esa;
-    tb += est;
-    tc -= est;
-  }
-  if (swap_cnt == 0) {  /* Switch to insertion sort */
-    for (pm = ((char*)a) + esa, tm = t + est; pm < ((char *) a) + n * esa; pm += esa, tm+= est)
-      {
-      for (pl = pm, tl = tm; pl > (char *) a && cmp(pl - esa, pl) > 0; 
-           pl -= esa, tl -= est)
+  tc = td = t + (n - 1) * est;
+
+  for (;;)
+    {
+      while (pb <= pc && (r = cmp(pb, a)) <= 0)
         {
-          swap(pl, pl - esa);
-          swapindex(tl, tl - est);
+          if (r == 0)
+            {
+              swap_cnt = 1;
+              swap(pa, pb);
+              pa += esa;
+              swapindex(ta, tb);
+              ta += est;
+            }
+          pb += esa;
+          tb += est;
         }
-      }
-    return;
-  }
+      while (pb <= pc && (r = cmp(pc, a)) >= 0)
+        {
+          if (r == 0)
+            {
+              swap_cnt = 1;
+              swap(pc, pd);
+              pd -= esa;
+              swapindex(tc, td);
+              td -= est;
+            }
+          pc -= esa;
+          tc -= est;
+        }
+      if (pb > pc)
+        break;
+      swap(pb, pc);
+      swapindex(tb, tc);
+      swap_cnt = 1;
+      pb += esa;
+      pc -= esa;
+      tb += est;
+      tc -= est;
+    }
+  if (swap_cnt == 0)    /* Switch to insertion sort */
+    {
+      for (pm = ((char *)a) + esa, tm = t + est; pm < ((char *) a) + n * esa; pm += esa, tm += est)
+        {
+          for (pl = pm, tl = tm; pl > (char *) a && cmp(pl - esa, pl) > 0;
+               pl -= esa, tl -= est)
+            {
+              swap(pl, pl - esa);
+              swapindex(tl, tl - est);
+            }
+        }
+      return;
+    }
 
   pn = ((char *) a) + n * esa;
   r = MIN(pa - (char *)a, pb - pa);
-  vecswap(a, pb - r, r/lda, lda);
-  
+  vecswap(a, pb - r, r / lda, lda);
+
   tn = t + n * est;
   r_t = MIN(ta - t, tb - ta);
-  vecswapindex(t, tb - r_t, r_t/ldt, ldt);
-  
+  vecswapindex(t, tb - r_t, r_t / ldt, ldt);
+
   r = MIN(pd - pc, pn - pd - esa);
-  vecswap(pb, pn - r, r/lda, lda);
+  vecswap(pb, pn - r, r / lda, lda);
 
   r_t = MIN(td - tc, tn - td - est);
-  vecswapindex(tb, tn - r_t, r_t/ldt, ldt);
+  vecswapindex(tb, tn - r_t, r_t / ldt, ldt);
 
   if ((r = pb - pa) > esa)
     pnl_qsort(a, r / esa, es, lda, t, ldt, index_flag, cmp);
-  if ((r = pd - pc) > esa) { 
-    /* Iterate rather than recurse to save stack space */
-    a = pn - r;
-    t = tn - (td - tc);
-    n = r / esa;
-    goto loop;
-  }
+  if ((r = pd - pc) > esa)
+    {
+      /* Iterate rather than recurse to save stack space */
+      a = pn - r;
+      t = tn - (td - tc);
+      n = r / esa;
+      goto loop;
+    }
   /* pnl_qsort(pn - r, r / esa, es, lda, tn - (td - tc), ldt, cmp); */
 }
 

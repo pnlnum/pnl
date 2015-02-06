@@ -33,15 +33,15 @@
 /**
  * Initialize a PnlVect with size 0
  */
-void FUNCTION(pnl_vect,init)(TYPE(PnlVect) *o)
+void FUNCTION(pnl_vect, init)(TYPE(PnlVect) *o)
 {
   o->object.parent_type = PNL_TYPE_VECTOR;
   o->object.type = CONCAT2(PNL_TYPE_VECTOR_, BASE_TYPE);
-  o->object.label = FUNCTION(pnl_vect,label);
+  o->object.label = FUNCTION(pnl_vect, label);
   o->object.destroy = (DestroyFunc *) pnl_vect_object_free;
-  o->object.constructor = (NewFunc *) FUNCTION(pnl_vect,new);
-  o->object.clone = (CloneFunc *) FUNCTION(pnl_vect,clone);
-  o->object.copy = (CopyFunc *) FUNCTION(pnl_vect,copy);
+  o->object.constructor = (NewFunc *) FUNCTION(pnl_vect, new);
+  o->object.clone = (CloneFunc *) FUNCTION(pnl_vect, clone);
+  o->object.copy = (CopyFunc *) FUNCTION(pnl_vect, copy);
   o->size = 0;
   o->mem_size = 0;
   o->owner = 1;
@@ -52,11 +52,11 @@ void FUNCTION(pnl_vect,init)(TYPE(PnlVect) *o)
  * Create a new PnlVect with size 0 and initializes the object
  *
  */
-TYPE(PnlVect)* FUNCTION(pnl_vect,new)()
+TYPE(PnlVect) *FUNCTION(pnl_vect, new)()
 {
   TYPE(PnlVect) *o;
-  if ( (o = (TYPE(PnlVect) *) pnl_vect_object_new ()) == NULL) return NULL;
-  FUNCTION(pnl_vect,init)(o);
+  if ((o = (TYPE(PnlVect) *) pnl_vect_object_new()) == NULL) return NULL;
+  FUNCTION(pnl_vect, init)(o);
   return o;
 }
 
@@ -66,13 +66,13 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,new)()
  * @param size the size of the array
  * @return  a TYPE(PnlVect) pointer
  */
-TYPE(PnlVect) * FUNCTION(pnl_vect,create)(int size)
+TYPE(PnlVect) *FUNCTION(pnl_vect, create)(int size)
 {
   TYPE(PnlVect)* v;
-  if ((v = FUNCTION(pnl_vect,new)()) == NULL) return NULL;
+  if ((v = FUNCTION(pnl_vect, new)()) == NULL) return NULL;
   if (size > 0)
     {
-      if ((v->array = malloc (size * sizeof (BASE))) == NULL) return NULL;
+      if ((v->array = malloc(size * sizeof(BASE))) == NULL) return NULL;
       v->size = size;
       v->mem_size = size;
       v->owner = 1;
@@ -87,15 +87,15 @@ TYPE(PnlVect) * FUNCTION(pnl_vect,create)(int size)
  * @param x value of all component
  * @return  a TYPE(PnlVect)pointer all value at 0
  */
-TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_scalar)(const int size,BASE x)
+TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_scalar)(const int size, BASE x)
 {
   int i;
   TYPE(PnlVect) *v;
-  if ((v=FUNCTION(pnl_vect, create)(size))==NULL)
+  if ((v = FUNCTION(pnl_vect, create)(size)) == NULL)
     return NULL;
-  for ( i=0 ; i<size ; i++ )
+  for (i = 0 ; i < size ; i++)
     {
-      FUNCTION(pnl_vect, set) (v, i, x);
+      FUNCTION(pnl_vect, set)(v, i, x);
     }
   return v;
 }
@@ -107,13 +107,13 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_scalar)(const int size,BASE x)
  * @param v2 a vector
  * @return  TRUE or FALSE
  */
-int FUNCTION(pnl_vect,eq)(const TYPE(PnlVect) *v1, const TYPE(PnlVect) *v2)
+int FUNCTION(pnl_vect, eq)(const TYPE(PnlVect) *v1, const TYPE(PnlVect) *v2)
 {
   int i;
   if (v1->size != v2->size) return FAIL;
-  for ( i=0 ; i<v1->size ; i++ )
+  for (i = 0 ; i < v1->size ; i++)
     {
-      if ( NEQ(PNL_GET(v1, i), PNL_GET(v2, i)) ) return FALSE;
+      if (NEQ(PNL_GET(v1, i), PNL_GET(v2, i))) return FALSE;
     }
   return TRUE;
 }
@@ -125,12 +125,12 @@ int FUNCTION(pnl_vect,eq)(const TYPE(PnlVect) *v1, const TYPE(PnlVect) *v2)
  * @param x a BASE element
  * @return  TRUE or FALSE
  */
-int FUNCTION(pnl_vect,eq_all)(const TYPE(PnlVect) *v, BASE x)
+int FUNCTION(pnl_vect, eq_all)(const TYPE(PnlVect) *v, BASE x)
 {
   int i;
-  for ( i=0 ; i<v->size ; i++ )
+  for (i = 0 ; i < v->size ; i++)
     {
-      if ( NEQ(PNL_GET(v, i), x) ) return FALSE;
+      if (NEQ(PNL_GET(v, i), x)) return FALSE;
     }
   return TRUE;
 }
@@ -141,7 +141,7 @@ int FUNCTION(pnl_vect,eq_all)(const TYPE(PnlVect) *v, BASE x)
  * @param size the size of the array
  * @return  a TYPE(PnlVect) pointer with all entries set to 0
  */
-TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_zero)(const int size)
+TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_zero)(const int size)
 {
   TYPE(PnlVect)* v = FUNCTION(pnl_vect, create)(size);
   FUNCTION(pnl_vect, set_zero)(v);
@@ -156,12 +156,12 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_zero)(const int size)
  * \c x has to be at least of length size.
  * @return  a TYPE(PnlVect)pointer
  */
-TYPE(PnlVect) * FUNCTION(pnl_vect,create_from_ptr)(const int size,const BASE  * x)
+TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_ptr)(const int size, const BASE   *x)
 {
   TYPE(PnlVect) * v;
-  if ((v = FUNCTION(pnl_vect,create) (size)) == NULL)
+  if ((v = FUNCTION(pnl_vect, create)(size)) == NULL)
     return NULL;
-  memcpy (v->array, x, v->size * sizeof(BASE));
+  memcpy(v->array, x, v->size * sizeof(BASE));
   return v;
 }
 
@@ -171,12 +171,12 @@ TYPE(PnlVect) * FUNCTION(pnl_vect,create_from_ptr)(const int size,const BASE  * 
  * @param M a TYPE(PnlMat)
  * @return  a TYPE(PnlVect)pointer
  */
-TYPE(PnlVect) * FUNCTION(pnl_vect,create_from_mat)(const TYPE(PnlMat) *M)
+TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_mat)(const TYPE(PnlMat) *M)
 {
   TYPE(PnlVect) * v;
-  if ((v = FUNCTION(pnl_vect,create) (M->mn)) == NULL)
+  if ((v = FUNCTION(pnl_vect, create)(M->mn)) == NULL)
     return NULL;
-  memcpy (v->array, M->array, v->size * sizeof(BASE));
+  memcpy(v->array, M->array, v->size * sizeof(BASE));
   return v;
 }
 
@@ -188,20 +188,20 @@ TYPE(PnlVect) * FUNCTION(pnl_vect,create_from_mat)(const TYPE(PnlMat) *M)
  * must be of length size
  * @return  a TYPE(PnlVect)pointer
  */
-TYPE(PnlVect) * FUNCTION(pnl_vect,create_from_list)(const int size,...)
+TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_list)(const int size, ...)
 {
   TYPE(PnlVect) * v;
   va_list ap;
   int i;
 
-  if ((v = FUNCTION(pnl_vect,create)(size)) == NULL)
+  if ((v = FUNCTION(pnl_vect, create)(size)) == NULL)
     return NULL;
-  va_start (ap, size);
+  va_start(ap, size);
 
-  for ( i=0; i<size ; i++ )
+  for (i = 0; i < size ; i++)
     {
       BASE val ;
-      val = va_arg (ap, BASE);
+      val = va_arg(ap, BASE);
       PNL_SET(v, i, val);
     }
   va_end(ap);
@@ -214,14 +214,14 @@ TYPE(PnlVect) * FUNCTION(pnl_vect,create_from_list)(const int size,...)
  * @param file  the file to be read
  * @return a PnlVect
  */
-TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_file) (const char * file)
+TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_file)(const char *file)
 {
-  char car, prev='\0', empty=1;
+  char car, prev = '\0', empty = 1;
   TYPE(PnlVect) *v;
   int m, count;
   BASE *data;
-  FILE *FIC = fopen( file, "r");
-  if ( FIC == NULL )
+  FILE *FIC = fopen(file, "r");
+  if (FIC == NULL)
     {
       PNL_ERROR("Cannot open file", "pnl_vect_create_from_file");
     }
@@ -234,49 +234,60 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_file) (const char * file)
    * Count the number of elements on the first line
    */
   m = 1;
-  while((car=fgetc(FIC))!='\n' && car != EOF)
+  while ((car = fgetc(FIC)) != '\n' && car != EOF)
     {
       if (isdigit(car) || car == '-' || car == '.')
         {
           empty = 0;
-          if (prev == ' ' || prev == '\t' ) ++m;
+          if (prev == ' ' || prev == '\t') ++m;
         }
       prev = car;
     }
-  if ( empty ) { m = 0; }
+  if (empty)
+    {
+      m = 0;
+    }
   m = m / MULTIPLICITY;
-  if ( m == 1 )
-    { 
+  if (m == 1)
+    {
       /* We consider it as a column vector */
       empty = 1;
-      while((car=fgetc(FIC))!= EOF)
+      while ((car = fgetc(FIC)) != EOF)
         {
-          if ( car=='\n' )
+          if (car == '\n')
             {
-              if (!empty) { ++m; empty = 1;}
+              if (!empty)
+                {
+                  ++m;
+                  empty = 1;
+                }
               else break;
             }
-          else if (empty && isdigit(car)) empty=0;
+          else if (empty && isdigit(car)) empty = 0;
         }
     }
-  if (m==0)
+  if (m == 0)
     {
-      v = FUNCTION(pnl_vect,create) (0);
-      fclose (FIC);
+      v = FUNCTION(pnl_vect, create)(0);
+      fclose(FIC);
       return v;
     }
 
-  if ((v = FUNCTION(pnl_vect,create) (m)) == NULL)
+  if ((v = FUNCTION(pnl_vect, create)(m)) == NULL)
     {
       PNL_ERROR("Allocation error", "pnl_vect_create_from_file");
     }
 
   /* second pass to read data */
-  rewind (FIC);
+  rewind(FIC);
   count = 0;
-  data = FUNCTION(pnl_vect,lget) (v, 0);
-  while ( fscanf(FIC,IN_FORMAT,IN_PUT_FORMAT(data)) == MULTIPLICITY && count<m )   { data++; count++;}
-  fclose (FIC);
+  data = FUNCTION(pnl_vect, lget)(v, 0);
+  while (fscanf(FIC, IN_FORMAT, IN_PUT_FORMAT(data)) == MULTIPLICITY && count < m)
+    {
+      data++;
+      count++;
+    }
+  fclose(FIC);
   return v;
 }
 
@@ -288,14 +299,14 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_from_file) (const char * file)
  * @param V a vector
  * @param ind a vector of integers representing the list of indices to be extracted
  */
-void FUNCTION(pnl_vect,extract_subvect_with_ind)(TYPE(PnlVect) *V_sub, const TYPE(PnlVect) *V, const PnlVectInt *ind)
+void FUNCTION(pnl_vect, extract_subvect_with_ind)(TYPE(PnlVect) *V_sub, const TYPE(PnlVect) *V, const PnlVectInt *ind)
 {
   int i;
-  FUNCTION(pnl_vect,resize)(V_sub, ind->size);
-  for ( i=0 ; i<ind->size ; i++ )
+  FUNCTION(pnl_vect, resize)(V_sub, ind->size);
+  for (i = 0 ; i < ind->size ; i++)
     {
-      PNL_CHECK (PNL_GET(ind, i) >= V->size, "index exceeded", "pnl_vect_extract_subvect_with_ind");
-      PNL_LET (V_sub, i) = PNL_GET(V, PNL_GET(ind, i));
+      PNL_CHECK(PNL_GET(ind, i) >= V->size, "index exceeded", "pnl_vect_extract_subvect_with_ind");
+      PNL_LET(V_sub, i) = PNL_GET(V, PNL_GET(ind, i));
     }
 }
 
@@ -308,14 +319,14 @@ void FUNCTION(pnl_vect,extract_subvect_with_ind)(TYPE(PnlVect) *V_sub, const TYP
  * @param i starting point of extraction
  * @param len length of extraction
  */
-void FUNCTION(pnl_vect,extract_subvect)(TYPE(PnlVect) *V_sub, const TYPE(PnlVect) *V, int i, int len)
+void FUNCTION(pnl_vect, extract_subvect)(TYPE(PnlVect) *V_sub, const TYPE(PnlVect) *V, int i, int len)
 {
   int j;
-  FUNCTION(pnl_vect,resize)(V_sub, len);
-  PNL_CHECK (V->size < len + i, "index exceeded", "pnl_vect_extract_subvect");
-  for ( j=0 ; j<len ; j++ )
+  FUNCTION(pnl_vect, resize)(V_sub, len);
+  PNL_CHECK(V->size < len + i, "index exceeded", "pnl_vect_extract_subvect");
+  for (j = 0 ; j < len ; j++)
     {
-      PNL_LET (V_sub, j) = PNL_GET(V, j+i);
+      PNL_LET(V_sub, j) = PNL_GET(V, j + i);
     }
 }
 
@@ -327,11 +338,11 @@ void FUNCTION(pnl_vect,extract_subvect)(TYPE(PnlVect) *V_sub, const TYPE(PnlVect
  * @param ind a vector of integers representing the list of indices to be extracted
  * @return V(ind(:))
  */
-TYPE(PnlVect)* FUNCTION(pnl_vect,create_subvect_with_ind) (const TYPE(PnlVect) *V, const PnlVectInt *ind)
+TYPE(PnlVect) *FUNCTION(pnl_vect, create_subvect_with_ind)(const TYPE(PnlVect) *V, const PnlVectInt *ind)
 {
   TYPE(PnlVect) *V_sub;
-  V_sub  = FUNCTION(pnl_vect,create)(ind->size);
-  FUNCTION(pnl_vect,extract_subvect_with_ind)(V_sub, V, ind);
+  V_sub  = FUNCTION(pnl_vect, create)(ind->size);
+  FUNCTION(pnl_vect, extract_subvect_with_ind)(V_sub, V, ind);
   return V_sub;
 }
 
@@ -344,11 +355,11 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_subvect_with_ind) (const TYPE(PnlVect) *
  * @param len length of extraction
  * @return V(i:i+len-1)
  */
-TYPE(PnlVect)* FUNCTION(pnl_vect,create_subvect) (const TYPE(PnlVect) *V, int i, int len)
+TYPE(PnlVect) *FUNCTION(pnl_vect, create_subvect)(const TYPE(PnlVect) *V, int i, int len)
 {
   TYPE(PnlVect) *V_sub;
-  V_sub  = FUNCTION(pnl_vect,new)();
-  FUNCTION(pnl_vect,extract_subvect)(V_sub, V, i, len);
+  V_sub  = FUNCTION(pnl_vect, new)();
+  FUNCTION(pnl_vect, extract_subvect)(V_sub, V, i, len);
   return V_sub;
 }
 
@@ -359,10 +370,10 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_subvect) (const TYPE(PnlVect) *V, int i,
  * m. No test can be done about it.
  * @return a TYPE(PnlVect) pointer
  */
-TYPE(PnlVect) FUNCTION(pnl_vect,wrap_array)(const BASE* x, int m)
+TYPE(PnlVect) FUNCTION(pnl_vect, wrap_array)(const BASE *x, int m)
 {
   TYPE(PnlVect) v;
-  FUNCTION (pnl_vect,init) (&v);
+  FUNCTION(pnl_vect, init)(&v);
 
   v.size = m;
   v.owner = 0;
@@ -380,20 +391,20 @@ TYPE(PnlVect) FUNCTION(pnl_vect,wrap_array)(const BASE* x, int m)
  * @param indi a vector of integers
  * @param indj a vector of integers
  */
-void FUNCTION(pnl_vect,extract_submat) (TYPE(PnlVect) *val, const TYPE(PnlMat) *M,
+void FUNCTION(pnl_vect, extract_submat)(TYPE(PnlVect) *val, const TYPE(PnlMat) *M,
                                         const PnlVectInt *indi, const PnlVectInt *indj)
 {
   int k;
   int i, j;
-  CheckVectMatch (indi, indj);
+  CheckVectMatch(indi, indj);
 
-  FUNCTION(pnl_vect,resize)(val, indi->size);
-  for ( k=0 ; k<indi->size ; k++ )
+  FUNCTION(pnl_vect, resize)(val, indi->size);
+  for (k = 0 ; k < indi->size ; k++)
     {
-      i = PNL_GET (indi, k);
-      j = PNL_GET (indj, k);
-      PNL_CHECK (i<0 || j<0 || i>= M->m || j>= M->n, "index of range", "extract_submat");
-      PNL_LET (val, k) = PNL_MGET (M, i, j);
+      i = PNL_GET(indi, k);
+      j = PNL_GET(indj, k);
+      PNL_CHECK(i < 0 || j < 0 || i >= M->m || j >= M->n, "index of range", "extract_submat");
+      PNL_LET(val, k) = PNL_MGET(M, i, j);
     }
 }
 
@@ -407,12 +418,12 @@ void FUNCTION(pnl_vect,extract_submat) (TYPE(PnlVect) *val, const TYPE(PnlMat) *
  * j) of the elements to be extracted
  * @return M(indi(:),indj(:))
  */
-TYPE(PnlVect)* FUNCTION(pnl_vect,create_submat) (const TYPE(PnlMat) *M,
-                                        const PnlVectInt *indi, const PnlVectInt *indj)
+TYPE(PnlVect) *FUNCTION(pnl_vect, create_submat)(const TYPE(PnlMat) *M,
+    const PnlVectInt *indi, const PnlVectInt *indj)
 {
   TYPE(PnlVect) *val;
-  val  = FUNCTION(pnl_vect,create)(0);
-  FUNCTION(pnl_vect,extract_submat)(val, M, indi, indj);
+  val  = FUNCTION(pnl_vect, create)(0);
+  FUNCTION(pnl_vect, extract_submat)(val, M, indi, indj);
   return val;
 }
 
@@ -423,11 +434,11 @@ TYPE(PnlVect)* FUNCTION(pnl_vect,create_submat) (const TYPE(PnlMat) *M,
  *
  * @param v address of the pointer to free
  */
-void FUNCTION(pnl_vect,free)(TYPE(PnlVect) **v)
+void FUNCTION(pnl_vect, free)(TYPE(PnlVect) **v)
 {
   PnlVectObject *o;
   o = PNL_VECT_OBJECT(*v);
-  pnl_vect_object_free (&o);
+  pnl_vect_object_free(&o);
   *v = NULL;
 }
 
@@ -441,9 +452,9 @@ void FUNCTION(pnl_vect,free)(TYPE(PnlVect) **v)
  * nothing is done
  * @param size the new size of the array
  */
-int FUNCTION(pnl_vect,resize)(TYPE(PnlVect) * v, int size)
+int FUNCTION(pnl_vect, resize)(TYPE(PnlVect) * v, int size)
 {
-  return pnl_vect_object_resize (PNL_VECT_OBJECT(v), size);
+  return pnl_vect_object_resize(PNL_VECT_OBJECT(v), size);
 }
 
 /**
@@ -457,27 +468,27 @@ int FUNCTION(pnl_vect,resize)(TYPE(PnlVect) * v, int size)
  * @param x : the value used to fill the new cells when the
  * array is enlarged
  */
-int FUNCTION(pnl_vect,resize_from_scalar)(TYPE(PnlVect) *v, int size, BASE x)
+int FUNCTION(pnl_vect, resize_from_scalar)(TYPE(PnlVect) *v, int size, BASE x)
 {
-  int i=0;
+  int i = 0;
   int old_size = v->size;
 
-  if (v->size >0 && v->owner == 0) return FAIL;
+  if (v->size > 0 && v->owner == 0) return FAIL;
 
-  v->size=size;
+  v->size = size;
   if (size <= old_size)
     return OK;
   if (v->array == NULL)
     {
-      if ((v->array=malloc(size*sizeof(BASE)))==NULL)
+      if ((v->array = malloc(size * sizeof(BASE))) == NULL)
         return FAIL;
     }
   else
     {
-      if ((v->array=realloc(v->array, size*sizeof(BASE)))==NULL)
+      if ((v->array = realloc(v->array, size * sizeof(BASE))) == NULL)
         return FAIL;
     }
-  for(i=old_size; i<size; i++)
+  for (i = old_size; i < size; i++)
     {
       FUNCTION(pnl_vect, set)(v, i, x);
     }
@@ -493,10 +504,10 @@ int FUNCTION(pnl_vect,resize_from_scalar)(TYPE(PnlVect) *v, int size, BASE x)
  * @param size  the new size of the array
  * @param t array used to fill v, must be of size size
  */
-int FUNCTION(pnl_vect,resize_from_ptr)(TYPE(PnlVect) *v, int size, const BASE *t)
+int FUNCTION(pnl_vect, resize_from_ptr)(TYPE(PnlVect) *v, int size, const BASE *t)
 {
-  if (FUNCTION(pnl_vect,resize) (v, size) != OK) return FAIL;
-  memcpy (v->array, t, size*sizeof(BASE));
+  if (FUNCTION(pnl_vect, resize)(v, size) != OK) return FAIL;
+  memcpy(v->array, t, size * sizeof(BASE));
   return OK;
 }
 
@@ -506,11 +517,13 @@ int FUNCTION(pnl_vect,resize_from_ptr)(TYPE(PnlVect) *v, int size, const BASE *t
  * @param v a  TYPE(PnlVect)
  * @param x a  Base element
  */
-void FUNCTION(pnl_vect,set_all)(TYPE(PnlVect) * v, BASE x)
+void FUNCTION(pnl_vect, set_all)(TYPE(PnlVect) * v, BASE x)
 {
   int i;
-  for(i = 0; i < v->size; i++)
-    {v->array[i] = x; }
+  for (i = 0; i < v->size; i++)
+    {
+      v->array[i] = x;
+    }
 }
 /**
  * Set v to zero v[i]=0 for all i
@@ -519,7 +532,7 @@ void FUNCTION(pnl_vect,set_all)(TYPE(PnlVect) * v, BASE x)
  */
 void FUNCTION(pnl_vect, set_zero)(TYPE(PnlVect) * v)
 {
-  memset (v->array, 0, v->size * sizeof(BASE));
+  memset(v->array, 0, v->size * sizeof(BASE));
 }
 
 /**
@@ -528,10 +541,10 @@ void FUNCTION(pnl_vect, set_zero)(TYPE(PnlVect) * v)
  * @param v a constant TYPE(PnlVect) pointer
  * @return a TYPE(PnlVect)
  */
-TYPE(PnlVect) * FUNCTION(pnl_vect, copy)(const TYPE(PnlVect) * v)
+TYPE(PnlVect) *FUNCTION(pnl_vect, copy)(const TYPE(PnlVect) * v)
 {
   TYPE(PnlVect) *ret;
-  if ((ret=FUNCTION(pnl_vect,create)(v->size))==NULL) return NULL;
+  if ((ret = FUNCTION(pnl_vect, create)(v->size)) == NULL) return NULL;
   memcpy(ret->array, v->array, sizeof(BASE)*ret->size);
   return ret;
 }
@@ -547,9 +560,9 @@ void FUNCTION(pnl_vect, clone)(TYPE(PnlVect) * clone,
 {
   if (clone->owner == 0 && clone->size != v->size)
     {
-      PNL_ERROR ("owner == 0 and size mismatch", "pnl_vect_clone");
+      PNL_ERROR("owner == 0 and size mismatch", "pnl_vect_clone");
     }
-  FUNCTION(pnl_vect,resize)(clone, v->size);
+  FUNCTION(pnl_vect, resize)(clone, v->size);
   memcpy(clone->array, v->array, sizeof(BASE)*v->size);
 }
 
@@ -562,9 +575,9 @@ void FUNCTION(pnl_vect, clone)(TYPE(PnlVect) * clone,
 void FUNCTION(pnl_vect, fprint)(FILE *fic, const TYPE(PnlVect) * V)
 {
   int i;
-  for ( i=0 ; i<V->size ; i++ )
+  for (i = 0 ; i < V->size ; i++)
     {
-      fprintf(fic,OUT_FORMAT,OUT_PUT_FORMAT(V->array[i]));
+      fprintf(fic, OUT_FORMAT, OUT_PUT_FORMAT(V->array[i]));
       fprintf(fic, "\n");
     }
 }
@@ -588,12 +601,12 @@ void FUNCTION(pnl_vect, print)(const TYPE(PnlVect) * V)
 void FUNCTION(pnl_vect, fprint_asrow)(FILE *fic, const TYPE(PnlVect) * V)
 {
   int i;
-  for ( i=0 ; i<V->size ; i++ )
+  for (i = 0 ; i < V->size ; i++)
     {
-      fprintf(fic,OUT_FORMAT,OUT_PUT_FORMAT(V->array[i]));
+      fprintf(fic, OUT_FORMAT, OUT_PUT_FORMAT(V->array[i]));
       fprintf(fic, " ");
     }
-  fprintf (fic, "\n");
+  fprintf(fic, "\n");
 }
 
 /**
@@ -615,14 +628,14 @@ void FUNCTION(pnl_vect, print_asrow)(const TYPE(PnlVect) * V)
 void FUNCTION(pnl_vect, fprint_nsp)(FILE *fic, const TYPE(PnlVect) * V)
 {
   int i;
-  fprintf(fic,"[ ");
-  for (i=0; i<V->size-1; i++)
+  fprintf(fic, "[ ");
+  for (i = 0; i < V->size - 1; i++)
     {
-      fprintf(fic,OUT_FORMAT,OUT_PUT_FORMAT(V->array[i]));
-      fprintf(fic,"; ");
+      fprintf(fic, OUT_FORMAT, OUT_PUT_FORMAT(V->array[i]));
+      fprintf(fic, "; ");
     }
-  fprintf(fic,OUT_FORMAT,OUT_PUT_FORMAT(V->array[i]));
-  fprintf(fic," ]; \n");
+  fprintf(fic, OUT_FORMAT, OUT_PUT_FORMAT(V->array[i]));
+  fprintf(fic, " ]; \n");
 }
 
 /**
@@ -642,31 +655,40 @@ void FUNCTION(pnl_vect, print_nsp)(const TYPE(PnlVect) * V)
  * @param f the function to be applied term by term
  * @return  lhs = f(lhs)
  */
-void FUNCTION(pnl_vect,map_inplace)(TYPE(PnlVect) *lhs,
-                                     BASE(*f)(BASE ))
+void FUNCTION(pnl_vect, map_inplace)(TYPE(PnlVect) *lhs,
+                                     BASE(*f)(BASE))
 {
   int i;
-  for ( i=0 ; i<lhs->size ; i++ )
+  for (i = 0 ; i < lhs->size ; i++)
     {
       const BASE xi = PNL_GET(lhs, i);
-      PNL_LET(lhs, i) =(*f)(xi);
+      PNL_LET(lhs, i) = (*f)(xi);
     }
 }
 
-static BASE FUNCTION(,_unary_minus)(BASE a) { return MINUS(ZERO,a); }
+static BASE FUNCTION(, _unary_minus)(BASE a)
+{
+  return MINUS(ZERO, a);
+}
 
 /**
  * in-place unary minus vector operator application
  *
  * @param lhs left hand side vector. On exit lhs = -lhs
  */
-void FUNCTION(pnl_vect,minus)(TYPE(PnlVect) *lhs)
+void FUNCTION(pnl_vect, minus)(TYPE(PnlVect) *lhs)
 {
-  FUNCTION(pnl_vect,map_inplace)(lhs, FUNCTION(,_unary_minus));
+  FUNCTION(pnl_vect, map_inplace)(lhs, FUNCTION(, _unary_minus));
 }
 
-static double FUNCTION(,_op_sqr_norm)(BASE a) { return SQUARE_NORM(a); }
-static double FUNCTION(,_op_abs)(BASE a) { return NORMONE(a); }
+static double FUNCTION(, _op_sqr_norm)(BASE a)
+{
+  return SQUARE_NORM(a);
+}
+static double FUNCTION(, _op_abs)(BASE a)
+{
+  return NORMONE(a);
+}
 
 /**
  * in-place vector scalar addition
@@ -675,13 +697,13 @@ static double FUNCTION(,_op_abs)(BASE a) { return NORMONE(a); }
  * @param x scalar
  * @return  v = v+x
  */
-void FUNCTION(pnl_vect,plus_scalar)(TYPE(PnlVect) *v , BASE x)
+void FUNCTION(pnl_vect, plus_scalar)(TYPE(PnlVect) *v , BASE x)
 {
   int i;
-  for ( i=0 ; i<v->size ; i++ )
+  for (i = 0 ; i < v->size ; i++)
     {
       const BASE vi = v->array[i];
-      v->array[i] = PLUS(vi,x);
+      v->array[i] = PLUS(vi, x);
     }
 }
 
@@ -692,13 +714,13 @@ void FUNCTION(pnl_vect,plus_scalar)(TYPE(PnlVect) *v , BASE x)
  * @param x scalar
  * @return  v = v-x
  */
-void FUNCTION(pnl_vect,minus_scalar)(TYPE(PnlVect) *v , BASE x)
+void FUNCTION(pnl_vect, minus_scalar)(TYPE(PnlVect) *v , BASE x)
 {
   int i;
-  for ( i=0 ; i<v->size ; i++ )
+  for (i = 0 ; i < v->size ; i++)
     {
       const BASE vi = v->array[i];
-      v->array[i] = MINUS(vi,x);
+      v->array[i] = MINUS(vi, x);
     }
 }
 
@@ -709,13 +731,13 @@ void FUNCTION(pnl_vect,minus_scalar)(TYPE(PnlVect) *v , BASE x)
  * @param x scalar
  * @return  v = v*x
  */
-void FUNCTION(pnl_vect,mult_scalar)(TYPE(PnlVect) *v , BASE x)
+void FUNCTION(pnl_vect, mult_scalar)(TYPE(PnlVect) *v , BASE x)
 {
   int i;
-  for ( i=0 ; i<v->size ; i++ )
+  for (i = 0 ; i < v->size ; i++)
     {
       const BASE vi = v->array[i];
-      v->array[i] = MULT(vi,x);
+      v->array[i] = MULT(vi, x);
     }
 }
 
@@ -726,13 +748,13 @@ void FUNCTION(pnl_vect,mult_scalar)(TYPE(PnlVect) *v , BASE x)
  * @param x scalar
  * @return  v = v/x
  */
-void FUNCTION(pnl_vect,div_scalar)(TYPE(PnlVect) *v , BASE x)
+void FUNCTION(pnl_vect, div_scalar)(TYPE(PnlVect) *v , BASE x)
 {
   int i;
-  for ( i=0 ; i<v->size ; i++ )
+  for (i = 0 ; i < v->size ; i++)
     {
       const BASE vi = v->array[i];
-      v->array[i] = DIV(vi,x);
+      v->array[i] = DIV(vi, x);
     }
 }
 
@@ -743,10 +765,10 @@ void FUNCTION(pnl_vect,div_scalar)(TYPE(PnlVect) *v , BASE x)
  * @param rhs right hand side vector
  * @param f real function
  */
-void FUNCTION(pnl_vect,map)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs, BASE(*f)(BASE))
+void FUNCTION(pnl_vect, map)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs, BASE(*f)(BASE))
 {
-  FUNCTION(pnl_vect,clone)(lhs, rhs);
-  FUNCTION(pnl_vect,map_inplace)(lhs, f);
+  FUNCTION(pnl_vect, clone)(lhs, rhs);
+  FUNCTION(pnl_vect, map_inplace)(lhs, f);
 }
 
 /**
@@ -756,18 +778,23 @@ void FUNCTION(pnl_vect,map)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs, BASE(*
  * @param rhs right hand side vector
  * @param f real function
  */
-void FUNCTION(pnl_vect,map_vect_inplace)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs, BASE(*f)(BASE,BASE))
+void FUNCTION(pnl_vect, map_vect_inplace)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs, BASE(*f)(BASE, BASE))
 {
   int i;
   CheckVectMatch(lhs, rhs);
-  for ( i=0 ; i<lhs->size ; i++ )
+  for (i = 0 ; i < lhs->size ; i++)
     {
-      PNL_LET(lhs, i) = (*f)(PNL_GET(lhs, i), PNL_GET(rhs,i)); 
+      PNL_LET(lhs, i) = (*f)(PNL_GET(lhs, i), PNL_GET(rhs, i));
     }
 }
 
-typedef struct {
-  union {BASE x; TYPE(PnlVect) *V ;};
+typedef struct
+{
+  union
+  {
+    BASE x;
+    TYPE(PnlVect) *V ;
+  };
   char type;
 } TYPE(cell);
 
@@ -778,7 +805,7 @@ typedef struct {
  * @param type a string composed by the letters 'r' and 'v'.
  * @param f a function returning an integer (typically a test function)
  */
-int FUNCTION(pnl_vect,find) (PnlVectInt *index, char* type, int(*f)(BASE *), ...)
+int FUNCTION(pnl_vect, find)(PnlVectInt *index, char *type, int(*f)(BASE *), ...)
 {
   va_list ap;
   TYPE(cell) *args;
@@ -786,26 +813,30 @@ int FUNCTION(pnl_vect,find) (PnlVectInt *index, char* type, int(*f)(BASE *), ...
   BASE val, *t;
   size = -1;
 
-  nvar = strlen (type);
-  if ((args = malloc (sizeof(cell) * nvar)) == NULL) return FAIL;
-  if ((t = malloc (sizeof(BASE) * nvar)) == NULL) return FAIL;
+  nvar = strlen(type);
+  if ((args = malloc(sizeof(cell) * nvar)) == NULL) return FAIL;
+  if ((t = malloc(sizeof(BASE) * nvar)) == NULL) return FAIL;
 
-  va_start (ap, f);
+  va_start(ap, f);
 
-  for ( i=0; i<nvar ; i++ )
+  for (i = 0; i < nvar ; i++)
     {
       switch (type[i])
         {
-          case 'r' :
-            val = va_arg (ap, BASE);
-            args[i].x = val; args[i].type = 'r';
-            break;
-          case 'v' :
-            args[i].V= va_arg (ap, TYPE(PnlVect) *);
-            args[i].type = 'v';
-            if ( size == -1 ) size = args[i].V->size;
-            else { PNL_CHECK ( size != args[i].V->size , "incompatible size", "pnl_vect_find"); }
-            break;
+        case 'r' :
+          val = va_arg(ap, BASE);
+          args[i].x = val;
+          args[i].type = 'r';
+          break;
+        case 'v' :
+          args[i].V = va_arg(ap, TYPE(PnlVect) *);
+          args[i].type = 'v';
+          if (size == -1) size = args[i].V->size;
+          else
+            {
+              PNL_CHECK(size != args[i].V->size , "incompatible size", "pnl_vect_find");
+            }
+          break;
         }
     }
   va_end(ap);
@@ -814,31 +845,35 @@ int FUNCTION(pnl_vect,find) (PnlVectInt *index, char* type, int(*f)(BASE *), ...
    * 2 passes are needed.
    * The first one to determine the size of index
    */
-  for ( i=0, count=0 ; i<size ; i++ )
+  for (i = 0, count = 0 ; i < size ; i++)
     {
-       for ( j=0 ; j<nvar ; j++ )
-         {
-           if ( args[j].type == 'r' ) t[j] = args[j].x;
-           else t[j] = PNL_GET(args[j].V, i);
-         }
-       if ( f(t) == 1 ) count++;
+      for (j = 0 ; j < nvar ; j++)
+        {
+          if (args[j].type == 'r') t[j] = args[j].x;
+          else t[j] = PNL_GET(args[j].V, i);
+        }
+      if (f(t) == 1) count++;
     }
-  pnl_vect_int_resize (index, count);
+  pnl_vect_int_resize(index, count);
   /*
    * Second pass to extract the indices for which f == 1
    */
-  for ( i=0, count=0 ; i<size ; i++ )
+  for (i = 0, count = 0 ; i < size ; i++)
     {
-       for ( j=0 ; j<nvar ; j++ )
-         {
-           if ( args[j].type == 'r' ) t[j] = args[j].x;
-           else t[j] = PNL_GET(args[j].V, i);
-         }
-       if ( f(t) == 1 ) { PNL_LET (index, count) = i; count++; }
+      for (j = 0 ; j < nvar ; j++)
+        {
+          if (args[j].type == 'r') t[j] = args[j].x;
+          else t[j] = PNL_GET(args[j].V, i);
+        }
+      if (f(t) == 1)
+        {
+          PNL_LET(index, count) = i;
+          count++;
+        }
     }
 
-  free (args);
-  free (t);
+  free(args);
+  free(t);
   return OK;
 }
 
@@ -850,10 +885,10 @@ int FUNCTION(pnl_vect,find) (PnlVectInt *index, char* type, int(*f)(BASE *), ...
  * @param rhs2 a vector
  * @param f real function
  */
-void FUNCTION(pnl_vect,map_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs1, const TYPE(PnlVect) *rhs2, BASE(*f)(BASE,BASE))
+void FUNCTION(pnl_vect, map_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs1, const TYPE(PnlVect) *rhs2, BASE(*f)(BASE, BASE))
 {
-  FUNCTION(pnl_vect,clone)(lhs,rhs1);
-  FUNCTION(pnl_vect,map_vect_inplace) (lhs, rhs2, f);
+  FUNCTION(pnl_vect, clone)(lhs, rhs1);
+  FUNCTION(pnl_vect, map_vect_inplace)(lhs, rhs2, f);
 }
 
 /**
@@ -863,13 +898,13 @@ void FUNCTION(pnl_vect,map_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs1, 
  * @param rhs rigth hand side vector
  * @return  lhs = lhs+rhs
  */
-void FUNCTION(pnl_vect,plus_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
+void FUNCTION(pnl_vect, plus_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
 {
   int i;
   CheckVectMatch(lhs, rhs);
-  for ( i=0 ; i<lhs->size ; i++ )
+  for (i = 0 ; i < lhs->size ; i++)
     {
-      PNL_LET(lhs, i) = PLUS(PNL_GET(lhs, i), PNL_GET(rhs,i)); 
+      PNL_LET(lhs, i) = PLUS(PNL_GET(lhs, i), PNL_GET(rhs, i));
     }
 }
 
@@ -880,13 +915,13 @@ void FUNCTION(pnl_vect,plus_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
  * @param rhs rigth hand side vector
  * @return  lhs = lhs+rhs
  */
-void FUNCTION(pnl_vect,minus_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
+void FUNCTION(pnl_vect, minus_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
 {
   int i;
   CheckVectMatch(lhs, rhs);
-  for ( i=0 ; i<lhs->size ; i++ )
+  for (i = 0 ; i < lhs->size ; i++)
     {
-      PNL_LET(lhs, i) = MINUS(PNL_GET(lhs, i), PNL_GET(rhs,i)); 
+      PNL_LET(lhs, i) = MINUS(PNL_GET(lhs, i), PNL_GET(rhs, i));
     }
 }
 
@@ -896,10 +931,10 @@ void FUNCTION(pnl_vect,minus_vect)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
  * @param v left hand side vector
  * @return  v = 1 ./ v
  */
-void FUNCTION(pnl_vect,inv_term)(TYPE(PnlVect) *v)
+void FUNCTION(pnl_vect, inv_term)(TYPE(PnlVect) *v)
 {
   int i;
-  for ( i=0 ; i<v->size ; i++ )
+  for (i = 0 ; i < v->size ; i++)
     {
       const BASE vi = v->array[i];
       v->array[i] = DIV(ONE, vi);
@@ -913,13 +948,13 @@ void FUNCTION(pnl_vect,inv_term)(TYPE(PnlVect) *v)
  * @param rhs right hand side vector
  * @return  lhs = lhs ./ rhs
  */
-void FUNCTION(pnl_vect,div_vect_term)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
+void FUNCTION(pnl_vect, div_vect_term)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
 {
   int i;
   CheckVectMatch(lhs, rhs);
-  for ( i=0 ; i<lhs->size ; i++ )
+  for (i = 0 ; i < lhs->size ; i++)
     {
-      PNL_LET(lhs, i) = DIV(PNL_GET(lhs, i), PNL_GET(rhs,i)); 
+      PNL_LET(lhs, i) = DIV(PNL_GET(lhs, i), PNL_GET(rhs, i));
     }
 }
 
@@ -930,13 +965,13 @@ void FUNCTION(pnl_vect,div_vect_term)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *r
  * @param rhs right hand side vector
  * @return  lhs = lhs.*rhs
  */
-void FUNCTION(pnl_vect,mult_vect_term)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
+void FUNCTION(pnl_vect, mult_vect_term)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *rhs)
 {
   int i;
   CheckVectMatch(lhs, rhs);
-  for ( i=0 ; i<lhs->size ; i++ )
+  for (i = 0 ; i < lhs->size ; i++)
     {
-      PNL_LET(lhs, i) = MULT(PNL_GET(lhs, i), PNL_GET(rhs,i)); 
+      PNL_LET(lhs, i) = MULT(PNL_GET(lhs, i), PNL_GET(rhs, i));
     }
 }
 
@@ -946,11 +981,14 @@ void FUNCTION(pnl_vect,mult_vect_term)(TYPE(PnlVect) *lhs, const TYPE(PnlVect) *
  * @param lhs left hand side vector
  * @return  sum=sum(lhs)
  */
-BASE FUNCTION(pnl_vect,sum)(const TYPE(PnlVect) *lhs)
+BASE FUNCTION(pnl_vect, sum)(const TYPE(PnlVect) *lhs)
 {
   int i;
-  BASE sum=ZERO;
-  for ( i=0 ; i<lhs->size ; i++ ) { sum = PLUS(sum, PNL_GET(lhs, i)); }
+  BASE sum = ZERO;
+  for (i = 0 ; i < lhs->size ; i++)
+    {
+      sum = PLUS(sum, PNL_GET(lhs, i));
+    }
   return sum;
 }
 
@@ -959,15 +997,15 @@ BASE FUNCTION(pnl_vect,sum)(const TYPE(PnlVect) *lhs)
  *
  * @param lhs : left hand side vector
  */
-void FUNCTION(pnl_vect,cumsum)(TYPE(PnlVect) *lhs)
+void FUNCTION(pnl_vect, cumsum)(TYPE(PnlVect) *lhs)
 {
   BASE sum;
   int i;
-  sum=ZERO;
-  for (i=0; i<lhs->size; i++)
+  sum = ZERO;
+  for (i = 0; i < lhs->size; i++)
     {
       sum = PLUS(sum, PNL_GET(lhs, i));
-      FUNCTION(pnl_vect, set) (lhs, i, sum);
+      FUNCTION(pnl_vect, set)(lhs, i, sum);
     }
 }
 
@@ -979,18 +1017,18 @@ void FUNCTION(pnl_vect,cumsum)(TYPE(PnlVect) *lhs)
  * @return the scalar product x' * y
  * and rhs2
  */
-BASE FUNCTION(pnl_vect,scalar_prod)(const TYPE(PnlVect) *x,
-                                    const TYPE(PnlVect) *y)
+BASE FUNCTION(pnl_vect, scalar_prod)(const TYPE(PnlVect) *x,
+                                     const TYPE(PnlVect) *y)
 {
   BASE xi, yi;
-  BASE sum=ZERO;
+  BASE sum = ZERO;
   int i;
   CheckVectMatch(x, y);
-  for ( i=0 ; i<x->size ; i++)
+  for (i = 0 ; i < x->size ; i++)
     {
       xi = PNL_GET(x, i);
       yi = PNL_GET(y, i);
-      sum = PLUS(sum,(MULT(xi, yi)));
+      sum = PLUS(sum, (MULT(xi, yi)));
     }
   return sum;
 }
@@ -1002,13 +1040,13 @@ BASE FUNCTION(pnl_vect,scalar_prod)(const TYPE(PnlVect) *x,
  * @param V a a TYPE(PnlVect)
  * @return the product of the components of V
  */
-BASE FUNCTION(pnl_vect,prod)(const TYPE(PnlVect) *V)
+BASE FUNCTION(pnl_vect, prod)(const TYPE(PnlVect) *V)
 {
   int i;
-  BASE p=ONE;
-  for (i=0; i<V->size; i++)
+  BASE p = ONE;
+  for (i = 0; i < V->size; i++)
     {
-      p = MULT(p,PNL_GET(V, i));
+      p = MULT(p, PNL_GET(V, i));
     }
   return p;
 }
@@ -1018,14 +1056,14 @@ BASE FUNCTION(pnl_vect,prod)(const TYPE(PnlVect) *V)
  *
  * @param V a a TYPE(PnlVect)
  */
-void FUNCTION(pnl_vect,cumprod)(TYPE(PnlVect) *V)
+void FUNCTION(pnl_vect, cumprod)(TYPE(PnlVect) *V)
 {
   int i;
-  BASE p=ONE;
-  for (i=0; i<V->size; i++)
+  BASE p = ONE;
+  for (i = 0; i < V->size; i++)
     {
-      p = MULT(p,PNL_GET(V, i));
-      FUNCTION(pnl_vect, set) (V, i, p);
+      p = MULT(p, PNL_GET(V, i));
+      FUNCTION(pnl_vect, set)(V, i, p);
     }
 }
 
@@ -1039,9 +1077,9 @@ void FUNCTION(pnl_vect,cumprod)(TYPE(PnlVect) *V)
 void FUNCTION(pnl_vect, swap_elements)(TYPE(PnlVect) * v, int i, int j)
 {
 #ifndef PNL_RANGE_CHECK_OFF
-  if (i>=v->size || j>=v->size)
+  if (i >= v->size || j >= v->size)
     {
-      PNL_ERROR ("index out of range", "pnl_vect_swap_elements");
+      PNL_ERROR("index out of range", "pnl_vect_swap_elements");
     }
 #endif
   if (i != j)
@@ -1062,7 +1100,7 @@ void FUNCTION(pnl_vect, reverse)(TYPE(PnlVect) * v)
 {
   int i ;
   int size = v->size ;
-  for(i = 0 ; i <(size / 2) ; i++)
+  for (i = 0 ; i < (size / 2) ; i++)
     {
       int j = size - i - 1 ;
       BASE tmp = v->array[j];
@@ -1073,21 +1111,21 @@ void FUNCTION(pnl_vect, reverse)(TYPE(PnlVect) * v)
 
 #if defined ORDERED
 
-/** 
+/**
  * Return TRUE if a[i] < b[i] and a and b have the same length.
- * 
+ *
  * @param a
  * @param b
- * 
+ *
  * @return  TRUE or FALSE
  */
-int FUNCTION(pnl_vect,less) (const TYPE(PnlVect) *a, const TYPE(PnlVect) *b)
+int FUNCTION(pnl_vect, less)(const TYPE(PnlVect) *a, const TYPE(PnlVect) *b)
 {
   int i;
   if (a->size != b->size) return FAIL;
-  for ( i=0 ; i<a->size ; i++ )
+  for (i = 0 ; i < a->size ; i++)
     {
-      if ( (PNL_GET(a, i) >= PNL_GET(b, i)) ) return FALSE;
+      if ((PNL_GET(a, i) >= PNL_GET(b, i))) return FALSE;
     }
   return TRUE;
 }
@@ -1108,16 +1146,18 @@ void FUNCTION(pnl_array, min_index)(const BASE *a, int n, int incr,
 {
   BASE min = a[0];
   int j, i, imin = 0;
-  for(i = 1, j=incr; i < n; i++, j += incr)
+  for (i = 1, j = incr; i < n; i++, j += incr)
     {
       BASE x = a[j];
       if (x < min)
         {
-          min = x; imin = i;
+          min = x;
+          imin = i;
         }
       if (pnl_isnan(x))
         {
-          *imin_out = i; *min_out = x;
+          *imin_out = i;
+          *min_out = x;
           return;
         }
     }
@@ -1141,16 +1181,18 @@ void FUNCTION(pnl_array, max_index)(const BASE *a, int n, int incr,
 {
   BASE max = a[0];
   int j, i, imax = 0;
-  for(i = 1, j=incr; i < n; i++, j += incr)
+  for (i = 1, j = incr; i < n; i++, j += incr)
     {
       BASE x = a[j];
       if (x > max)
         {
-          max = x; imax = i;
+          max = x;
+          imax = i;
         }
       if (pnl_isnan(x))
         {
-          *imax_out = i; *max_out = x;
+          *imax_out = i;
+          *max_out = x;
           return;
         }
     }
@@ -1180,16 +1222,18 @@ void FUNCTION(pnl_array, minmax_index)(const BASE *a, int n, int incr,
   BASE max = a[0];
   BASE min = max;
 
-  for(i = 1, j=incr; i < n; i++, j += incr)
+  for (i = 1, j = incr; i < n; i++, j += incr)
     {
       BASE x = a[j];
       if (x < min)
         {
-          min = x; imin = i;
+          min = x;
+          imin = i;
         }
       if (x > max)
         {
-          max = x; imax = i;
+          max = x;
+          imax = i;
         }
       if (pnl_isnan(x))
         {
@@ -1210,12 +1254,12 @@ void FUNCTION(pnl_array, minmax_index)(const BASE *a, int n, int incr,
  * @param V a vector
  * @return the maximum of the components of V
  */
-BASE FUNCTION(pnl_vect,max)(const TYPE(PnlVect) *V)
+BASE FUNCTION(pnl_vect, max)(const TYPE(PnlVect) *V)
 {
   BASE m;
   int i;
 
-  FUNCTION (pnl_vect, max_index)(&m, &i, V);
+  FUNCTION(pnl_vect, max_index)(&m, &i, V);
   return m;
 }
 
@@ -1225,12 +1269,12 @@ BASE FUNCTION(pnl_vect,max)(const TYPE(PnlVect) *V)
  * @param V a vector
  * @return the minimum of the components of V
  */
-BASE FUNCTION(pnl_vect,min)(const TYPE(PnlVect) *V)
+BASE FUNCTION(pnl_vect, min)(const TYPE(PnlVect) *V)
 {
   BASE m;
   int i;
 
-  FUNCTION (pnl_vect, min_index)(&m, &i, V);
+  FUNCTION(pnl_vect, min_index)(&m, &i, V);
   return m;
 }
 
@@ -1290,17 +1334,17 @@ void FUNCTION(pnl_vect, minmax_index)(BASE *min_out, BASE *max_out,
                                     imin_out, imax_out);
 }
 
-static int FUNCTION(__pnl, cmp_i) ( const void *a, const void *b)
+static int FUNCTION(__pnl, cmp_i)(const void *a, const void *b)
 {
-  if ( * (BASE *) a < * (BASE *) b) return -1;
-  if ( * (BASE *) a == * (BASE *) b) return 0;
+  if (* (BASE *) a < * (BASE *) b) return -1;
+  if (* (BASE *) a == * (BASE *) b) return 0;
   return 1;
 }
 
-static int FUNCTION(__pnl, cmp_d) ( const void *a, const void *b)
+static int FUNCTION(__pnl, cmp_d)(const void *a, const void *b)
 {
-  if ( * (BASE *) a > * (BASE *) b) return -1;
-  if ( * (BASE *) a == * (BASE *) b) return 0;
+  if (* (BASE *) a > * (BASE *) b) return -1;
+  if (* (BASE *) a == * (BASE *) b) return 0;
   return 1;
 }
 
@@ -1309,21 +1353,22 @@ static void FUNCTION(pnl_vect, qsort_aux)(TYPE(PnlVect) * m, PnlVectInt *t, int 
   int i, *index = NULL;
   if (use_index == TRUE)
     {
-      pnl_vect_int_resize (t, m->size);
-      for (i=0; i<t->size; i++) t->array[i] = i;
+      pnl_vect_int_resize(t, m->size);
+      for (i = 0; i < t->size; i++) t->array[i] = i;
       index = t->array;
     }
 
   switch (order)
     {
     case 'i' :
-      pnl_qsort ( m->array, m->size, sizeof(BASE), 1, index, 1, use_index, FUNCTION(__pnl, cmp_i));
+      pnl_qsort(m->array, m->size, sizeof(BASE), 1, index, 1, use_index, FUNCTION(__pnl, cmp_i));
       break;
     case 'd' :
-      pnl_qsort ( m->array, m->size, sizeof(BASE), 1, index, 1, use_index, FUNCTION(__pnl, cmp_d));
+      pnl_qsort(m->array, m->size, sizeof(BASE), 1, index, 1, use_index, FUNCTION(__pnl, cmp_d));
       break;
     default:
-      PNL_ERROR ("unknow order", "pnl_vect_qsort"); break;
+      PNL_ERROR("unknow order", "pnl_vect_qsort");
+      break;
     }
 }
 
@@ -1360,29 +1405,29 @@ void FUNCTION(pnl_vect, qsort_index)(TYPE(PnlVect) * m, PnlVectInt *t, char orde
  * @param b BASE
  * @param y a vector
  */
-void FUNCTION(pnl_vect,axpby)(BASE a, const TYPE(PnlVect) *x,  BASE b, TYPE(PnlVect) *y)
+void FUNCTION(pnl_vect, axpby)(BASE a, const TYPE(PnlVect) *x,  BASE b, TYPE(PnlVect) *y)
 {
   int i;
   BASE zero, one;
   zero = ZERO;
   one = ONE;
 
-  if ( EQ(b,zero) )
+  if (EQ(b, zero))
     {
-      FUNCTION(pnl_vect,resize) (y, x->size);
-      FUNCTION(pnl_vect,set_all)(y, zero);
+      FUNCTION(pnl_vect, resize)(y, x->size);
+      FUNCTION(pnl_vect, set_all)(y, zero);
     }
-  else if ( NEQ(b,one) ) FUNCTION(pnl_vect,mult_scalar) (y, b);
-  if ( EQ(a,zero) ) return;
+  else if (NEQ(b, one)) FUNCTION(pnl_vect, mult_scalar)(y, b);
+  if (EQ(a, zero)) return;
 
 #ifndef PNL_RANGE_CHECK_OFF
   if (x->size != y->size)
     {
-      PNL_ERROR ("size mismatch", "pnl_vect_axpby");
+      PNL_ERROR("size mismatch", "pnl_vect_axpby");
     }
 #endif
 
-  for ( i=0 ; i<x->size ; i++ )
+  for (i = 0 ; i < x->size ; i++)
     {
       BASE xi =  PNL_GET(x, i);
       BASE *yi = &(PNL_GET(y, i));
@@ -1398,12 +1443,12 @@ void FUNCTION(pnl_vect,axpby)(BASE a, const TYPE(PnlVect) *x,  BASE b, TYPE(PnlV
  * @param f a pointer's function on a norm function
  * @return the X norm of V
  */
-static double FUNCTION(pnl_vect,norm_x)(const TYPE(PnlVect) *V,double(*f)(BASE))
+static double FUNCTION(pnl_vect, norm_x)(const TYPE(PnlVect) *V, double(*f)(BASE))
 {
   int i;
-  double p=0;
-  for ( i=0 ; i<V->size ; i++ )
-    { 
+  double p = 0;
+  for (i = 0 ; i < V->size ; i++)
+    {
       p += (*f)(PNL_GET(V, i));
     }
   return p;
@@ -1415,9 +1460,9 @@ static double FUNCTION(pnl_vect,norm_x)(const TYPE(PnlVect) *V,double(*f)(BASE))
  * @param V  TYPE(PnlVect)
  * @return  the square root of the sum of the square value of components of V
  */
-double FUNCTION(pnl_vect,norm_two)(const TYPE(PnlVect) *V)
+double FUNCTION(pnl_vect, norm_two)(const TYPE(PnlVect) *V)
 {
-  return sqrt(FUNCTION(pnl_vect,norm_x(V,FUNCTION(,_op_sqr_norm))));
+  return sqrt(FUNCTION(pnl_vect, norm_x(V, FUNCTION(, _op_sqr_norm))));
 }
 
 /**
@@ -1426,9 +1471,9 @@ double FUNCTION(pnl_vect,norm_two)(const TYPE(PnlVect) *V)
  * @param V a vector
  * @return the sum of the absolute value of components of V
  */
-double FUNCTION(pnl_vect,norm_one)(const TYPE(PnlVect) *V)
+double FUNCTION(pnl_vect, norm_one)(const TYPE(PnlVect) *V)
 {
-  return FUNCTION(pnl_vect,norm_x)(V,FUNCTION(,_op_abs));
+  return FUNCTION(pnl_vect, norm_x)(V, FUNCTION(, _op_abs));
 }
 
 /**
@@ -1437,13 +1482,13 @@ double FUNCTION(pnl_vect,norm_one)(const TYPE(PnlVect) *V)
  * @param V a TYPE(PnlVect)
  * @return the maximum of the absolute value of components of V
  */
-double FUNCTION(pnl_vect,norm_infty)(const TYPE(PnlVect) *V)
+double FUNCTION(pnl_vect, norm_infty)(const TYPE(PnlVect) *V)
 {
   int i;
-  double p=0., q=0.;
-  for ( i=0 ; i<V->size ; i++ )
+  double p = 0., q = 0.;
+  for (i = 0 ; i < V->size ; i++)
     {
-      q = NORMONE(PNL_GET(V,i));
+      q = NORMONE(PNL_GET(V, i));
       p = MAX(p, q);
     }
   return p;
@@ -1458,16 +1503,16 @@ double FUNCTION(pnl_vect,norm_infty)(const TYPE(PnlVect) *V)
  * i-th element of V. No copying is done. This is a container for
  * V(i:i+s-1). The length of the xtracted vector is s.
  */
-TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect)(const TYPE(PnlVect) *V, int i,int s)
+TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect)(const TYPE(PnlVect) *V, int i, int s)
 {
   TYPE(PnlVect) ret;
 #ifndef PNL_RANGE_CHECK_OFF
-  if ( (i+s-1 >= V->size) || (s<=0) || (i<0) )
+  if ((i + s - 1 >= V->size) || (s <= 0) || (i < 0))
     {
-      PNL_ERROR ("index out of range", "pnl_vect_wrap_subvect");
+      PNL_ERROR("index out of range", "pnl_vect_wrap_subvect");
     }
 #endif
-  FUNCTION(pnl_vect,init)(&ret);
+  FUNCTION(pnl_vect, init)(&ret);
   ret.size = s;
   ret.mem_size = 0;
   ret.owner = 0;
@@ -1483,9 +1528,9 @@ TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect)(const TYPE(PnlVect) *V, int i,int
  * @return a vector (not a pointer) whose array pointer is the address of the
  * i-th element of V. No copying is done. This is a container for V(i:j)
  */
-TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect_with_last)(const TYPE(PnlVect) *V, int i,int j)
+TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect_with_last)(const TYPE(PnlVect) *V, int i, int j)
 {
-  return FUNCTION(pnl_vect, wrap_subvect)(V,i,j-i+1);
+  return FUNCTION(pnl_vect, wrap_subvect)(V, i, j - i + 1);
 }
 
 /**
@@ -1494,10 +1539,10 @@ TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect_with_last)(const TYPE(PnlVect) *V,
  * @return a vector (not a pointer) whose array pointer is the address of the
  * first element of the matrix M. No copying is done.
  */
-TYPE(PnlVect) FUNCTION(pnl_vect,wrap_mat)(const TYPE(PnlMat) *M)
+TYPE(PnlVect) FUNCTION(pnl_vect, wrap_mat)(const TYPE(PnlMat) *M)
 {
   TYPE(PnlVect) V;
-  FUNCTION(pnl_vect,init)(&V);
+  FUNCTION(pnl_vect, init)(&V);
   V.size = M->mn;
   V.mem_size = 0;
   V.owner = 0;

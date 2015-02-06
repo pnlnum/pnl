@@ -29,52 +29,52 @@
 #include "pnl/pnl_mathtools.h"
 
 
-/** 
+/**
  * Compute the cross product of two vectors of size 3
- * 
+ *
  * @param[out] lhs Contains (x) x (y) on output
  * @param x must be a vector of size 3
  * @param y must be a vector of size 3
- * 
+ *
  * @return FAIL in case of dimension mismatch, OK otherwise
  */
 int pnl_vect_cross(PnlVect *lhs, const PnlVect *x, const PnlVect *y)
 {
   int three = 3;
-  pnl_vect_resize (lhs, three);  
-  if ( x->size != 3 || y->size != 3 )
+  pnl_vect_resize(lhs, three);
+  if (x->size != 3 || y->size != 3)
     {
 #ifndef PNL_RANGE_CHECK_OFF
-      PNL_ERROR ("Args must be of size 3", "pnl_vect_cross");
+      PNL_ERROR("Args must be of size 3", "pnl_vect_cross");
 #endif
       return FAIL;
     }
-  LET(lhs,0) = GET(x,1) * GET(y,2) - GET(x,2) * GET(y,1);
-  LET(lhs,1) = GET(x,2) * GET(y,0) - GET(x,0) * GET(y,2);
-  LET(lhs,2) = GET(x,0) * GET(y,1) - GET(x,1) * GET(y,0);
+  LET(lhs, 0) = GET(x, 1) * GET(y, 2) - GET(x, 2) * GET(y, 1);
+  LET(lhs, 1) = GET(x, 2) * GET(y, 0) - GET(x, 0) * GET(y, 2);
+  LET(lhs, 2) = GET(x, 0) * GET(y, 1) - GET(x, 1) * GET(y, 0);
   return OK;
 }
 
-/** 
+/**
  * Compute the distance between x and y
- * 
+ *
  * @param x a vector
  * @param y a vector
- * 
+ *
  * @return |x - y |_2
  */
-double pnl_vect_dist (const PnlVect *x, const PnlVect *y)
+double pnl_vect_dist(const PnlVect *x, const PnlVect *y)
 {
   int i;
   double dist = 0.;
-  CheckVectMatch (x,y);
+  CheckVectMatch(x, y);
 
-  for ( i=0 ; i<x->size ; i++ )
+  for (i = 0 ; i < x->size ; i++)
     {
-      double tmp = GET (x, i) - GET (y, i);
+      double tmp = GET(x, i) - GET(y, i);
       dist += SQR(tmp);
     }
-  return sqrt (dist);
+  return sqrt(dist);
 }
 
 static char pnl_vector_compact_label[] = "PnlVectCompact";
@@ -83,10 +83,10 @@ static char pnl_vector_compact_label[] = "PnlVectCompact";
  * Create a new PnlVectCompact with size 0
  * @return a pointeur to PnlVectCompact
  */
-PnlVectCompact* pnl_vect_compact_new ()
+PnlVectCompact *pnl_vect_compact_new()
 {
   PnlVectCompact *o;
-  if ( (o=malloc (sizeof (PnlVectCompact)))==NULL) return NULL;
+  if ((o = malloc(sizeof(PnlVectCompact))) == NULL) return NULL;
   o->object.nref = 0;
   o->object.type = PNL_TYPE_VECTOR_COMPACT;
   o->object.parent_type = PNL_TYPE_OBJECT;
@@ -104,9 +104,9 @@ PnlVectCompact* pnl_vect_compact_new ()
  * @param x value to fill the vector
  * @return a pointeur to PnlVectCompact
  */
-PnlVectCompact* pnl_vect_compact_create (int n, double x)
+PnlVectCompact *pnl_vect_compact_create(int n, double x)
 {
-  PnlVectCompact *v = pnl_vect_compact_new ();
+  PnlVectCompact *v = pnl_vect_compact_new();
   v->size = n;
   v->convert = 'd';
   v->val = x;
@@ -119,14 +119,21 @@ PnlVectCompact* pnl_vect_compact_create (int n, double x)
 * @param x pointer to a vector of doubles to fill the PnlVectCompact
 * @return a pointeur to PnlVectCompact
 */
-PnlVectCompact* pnl_vect_compact_create_from_ptr(int n, double const *x) 
+PnlVectCompact *pnl_vect_compact_create_from_ptr(int n, double const *x)
 {
   int i;
-  PnlVectCompact *v = pnl_vect_compact_new ();
+  PnlVectCompact *v = pnl_vect_compact_new();
   v->size = n;
   v->convert = 'a';
-  if ((v->array = (double*)malloc(sizeof (double) * n)) == NULL) { free(v); return NULL;};
-  for (i = 0; i != n; ++i) { v->array[i] = x[i]; }
+  if ((v->array = (double *)malloc(sizeof(double) * n)) == NULL)
+    {
+      free(v);
+      return NULL;
+    };
+  for (i = 0; i != n; ++i)
+    {
+      v->array[i] = x[i];
+    }
   return v;
 }
 
@@ -137,11 +144,12 @@ PnlVectCompact* pnl_vect_compact_create_from_ptr(int n, double const *x)
  * @param x new value to set
  * @return OK or WRONG
  */
-int pnl_vect_compact_resize (PnlVectCompact *v, int size, double x)
+int pnl_vect_compact_resize(PnlVectCompact *v, int size, double x)
 {
   if (v->convert == 'a')
     {
-      free (v->array); v->array = NULL;
+      free(v->array);
+      v->array = NULL;
     }
   v->size = size;
   v->convert = 'd';
@@ -155,18 +163,18 @@ int pnl_vect_compact_resize (PnlVectCompact *v, int size, double x)
  * @param v a constant PnlVectCompact pointer
  * @return  a PnlVectCompact  pointer initialised with v
  */
-PnlVectCompact* pnl_vect_compact_copy(const PnlVectCompact *v)
+PnlVectCompact *pnl_vect_compact_copy(const PnlVectCompact *v)
 {
   PnlVectCompact *ret = NULL;
 
   if (v->convert == 'd')
-    ret = pnl_vect_compact_create (v->size, v->val);
+    ret = pnl_vect_compact_create(v->size, v->val);
   else
     {
-      if ((ret=malloc(sizeof(PnlVectCompact)))==NULL) return NULL;
+      if ((ret = malloc(sizeof(PnlVectCompact))) == NULL) return NULL;
       ret->size = v->size;
       ret->convert = 'a';
-      if ((ret->array=malloc(v->size*sizeof(double)))==NULL) return NULL;
+      if ((ret->array = malloc(v->size * sizeof(double))) == NULL) return NULL;
       memcpy(ret->array, v->array, sizeof(double)*ret->size);
     }
   return ret;
@@ -176,14 +184,16 @@ PnlVectCompact* pnl_vect_compact_copy(const PnlVectCompact *v)
  * Free a PnlVectCompact
  * @param v address of a PnlVectCompact
  */
-void pnl_vect_compact_free (PnlVectCompact **v)
+void pnl_vect_compact_free(PnlVectCompact **v)
 {
   if ((*v) == NULL) return;
-  if ((*v)->convert == 'a' && (*v)->array!= NULL)
+  if ((*v)->convert == 'a' && (*v)->array != NULL)
     {
-      free ((*v)->array); (*v)->array = NULL;
+      free((*v)->array);
+      (*v)->array = NULL;
     }
-  free (*v); *v=NULL;
+  free(*v);
+  *v = NULL;
 }
 
 /**
@@ -191,17 +201,17 @@ void pnl_vect_compact_free (PnlVectCompact **v)
  * @param C the PnlVectCompact to be expanded
  * @return a PnlVect pointeur
  */
-PnlVect* pnl_vect_compact_to_pnl_vect (const PnlVectCompact *C)
+PnlVect *pnl_vect_compact_to_pnl_vect(const PnlVectCompact *C)
 {
   PnlVect *v;
   if (C->convert == 'd')
     {
-      v = pnl_vect_create_from_scalar (C->size, C->val);
+      v = pnl_vect_create_from_scalar(C->size, C->val);
     }
   else
     {
-      v = pnl_vect_create (C->size);
-      memcpy (v->array, C->array, C->size*sizeof(double));
+      v = pnl_vect_create(C->size);
+      memcpy(v->array, C->array, C->size * sizeof(double));
     }
   return v;
 }
@@ -212,9 +222,9 @@ PnlVect* pnl_vect_compact_to_pnl_vect (const PnlVectCompact *C)
  * @param i index
  * @return C[i]
  */
-double pnl_vect_compact_get (const PnlVectCompact *C, int i)
+double pnl_vect_compact_get(const PnlVectCompact *C, int i)
 {
-  CheckIndexVect (C, i);
+  CheckIndexVect(C, i);
   if (C->convert == 'd') return C->val;
   return C->array[i];
 }
@@ -222,31 +232,33 @@ double pnl_vect_compact_get (const PnlVectCompact *C, int i)
 /**
  * Fill a PnlVectCompact with a unique value.
  * The storage is converted to the compact way
- * 
+ *
  * @param C a PnlVectCompact
  * @param x a real value
  */
-void pnl_vect_compact_set_all (PnlVectCompact *C, double x)
+void pnl_vect_compact_set_all(PnlVectCompact *C, double x)
 {
-  if ( C->convert =='a' && C->array != NULL )
+  if (C->convert == 'a' && C->array != NULL)
     {
-      free (C->array); C->array = NULL;
+      free(C->array);
+      C->array = NULL;
     }
-  C->convert = 'd'; C->val = x;
+  C->convert = 'd';
+  C->val = x;
 }
 
 /**
  * Copy an array into a PnlVectCompact
- * 
+ *
  * @param C a PnlVectCompact
  * @param ptr an array of double. We assume it has the same size as C
  */
-void pnl_vect_compact_set_ptr (PnlVectCompact *C, double *ptr)
+void pnl_vect_compact_set_ptr(PnlVectCompact *C, double *ptr)
 {
-  if ( C->convert == 'd' )
+  if (C->convert == 'd')
     {
       C->convert = 'a';
-      C->array = malloc (sizeof(double) * C->size);
+      C->array = malloc(sizeof(double) * C->size);
     }
-  memcpy (C->array, ptr, C->size * sizeof(double));
+  memcpy(C->array, ptr, C->size * sizeof(double));
 }

@@ -30,7 +30,7 @@
  *
  * @return an array of n rng
  */
-PnlRng** pnl_rng_create_from_file (char *str, int n)
+PnlRng **pnl_rng_create_from_file(char *str, int n)
 {
   PnlRng **rngtab;
   int i, size, pos;
@@ -38,29 +38,35 @@ PnlRng** pnl_rng_create_from_file (char *str, int n)
   char *buf;
 
   size = 0;
-  
-  if ( (xdr = fopen (str, "rb")) == NULL ) { return NULL; }
 
-  
-  while (fgetc(xdr) != EOF) { size++; }
-  buf = malloc (size);
-  rewind (xdr);
-  fread (buf, sizeof(char), size,  xdr);
-  fclose (xdr);
+  if ((xdr = fopen(str, "rb")) == NULL)
+    {
+      return NULL;
+    }
+
+
+  while (fgetc(xdr) != EOF)
+    {
+      size++;
+    }
+  buf = malloc(size);
+  rewind(xdr);
+  fread(buf, sizeof(char), size,  xdr);
+  fclose(xdr);
   pos = 0;
 
-  rngtab = malloc (n * sizeof(PnlRng *));
-  for ( i=0 ; i<n ; i++ )
+  rngtab = malloc(n * sizeof(PnlRng *));
+  for (i = 0 ; i < n ; i++)
     {
-      if ( pos >= size )
+      if (pos >= size)
         {
-          printf ("File %s only contains %d generators\n", str, i);
+          printf("File %s only contains %d generators\n", str, i);
           break;
         }
       rngtab[i] = pnl_rng_new();
-      pnl_object_mpi_unpack (PNL_OBJECT(rngtab[i]), buf, size, &pos, MPI_COMM_WORLD);
+      pnl_object_mpi_unpack(PNL_OBJECT(rngtab[i]), buf, size, &pos, MPI_COMM_WORLD);
     }
-  free (buf);
+  free(buf);
   return rngtab;
 }
 
@@ -74,19 +80,19 @@ PnlRng** pnl_rng_create_from_file (char *str, int n)
  *
  * @return an MPI error code
  */
-int pnl_rng_save_to_file (PnlRng **rngtab, int n, char *str)
+int pnl_rng_save_to_file(PnlRng **rngtab, int n, char *str)
 {
   int i;
   FILE *stream;
 
-  if ( (stream = fopen (str, "wb")) == NULL ) return MPI_ERR_BUFFER;
+  if ((stream = fopen(str, "wb")) == NULL) return MPI_ERR_BUFFER;
 
-  for ( i=0 ; i<n ; i++ )
+  for (i = 0 ; i < n ; i++)
     {
       int info;
-      if ((info = pnl_object_save (PNL_OBJECT(rngtab[i]), stream))) return info;
+      if ((info = pnl_object_save(PNL_OBJECT(rngtab[i]), stream))) return info;
     }
-  fclose (stream);
+  fclose(stream);
   return MPI_SUCCESS;
 }
 
@@ -99,21 +105,23 @@ int pnl_rng_save_to_file (PnlRng **rngtab, int n, char *str)
  *
  * @return an error code equal to MPI_SUCCESS when the function succeeds
  */
-int pnl_object_save (PnlObject *obj, FILE *stream)
+int pnl_object_save(PnlObject *obj, FILE *stream)
 {
   int size, pos, info;
   char *buf;
 
-  pos = 0; size = 0;
-  if ((info = pnl_object_mpi_pack_size (PNL_OBJECT(obj), MPI_COMM_WORLD, &size))) return info;
-  if ((buf = malloc (size)) == NULL) return MPI_ERR_BUFFER;
-  if ((info = pnl_object_mpi_pack (PNL_OBJECT(obj), buf, size, &pos, MPI_COMM_WORLD)))
+  pos = 0;
+  size = 0;
+  if ((info = pnl_object_mpi_pack_size(PNL_OBJECT(obj), MPI_COMM_WORLD, &size))) return info;
+  if ((buf = malloc(size)) == NULL) return MPI_ERR_BUFFER;
+  if ((info = pnl_object_mpi_pack(PNL_OBJECT(obj), buf, size, &pos, MPI_COMM_WORLD)))
     {
-      free (buf); return info;
+      free(buf);
+      return info;
     }
-  info = fwrite (buf, sizeof(char), pos, stream);
-  free (buf);
-  if ( info < pos ) return MPI_ERR_BUFFER;
+  info = fwrite(buf, sizeof(char), pos, stream);
+  free(buf);
+  if (info < pos) return MPI_ERR_BUFFER;
   return MPI_SUCCESS;
 }
 
@@ -125,7 +133,7 @@ int pnl_object_save (PnlObject *obj, FILE *stream)
  * @param pos (input/output) current position in buf
  * @return a PnlObject
  */
-static PnlObject* load_from_buf (char *buf, int bufsize, int *pos)
+static PnlObject *load_from_buf(char *buf, int bufsize, int *pos)
 {
   PnlObject *O;
   int parent_id, id, savepos;
@@ -134,7 +142,7 @@ static PnlObject* load_from_buf (char *buf, int bufsize, int *pos)
   if (MPI_Unpack(buf, bufsize, pos, &parent_id, 1, MPI_INT, MPI_COMM_WORLD)
       || MPI_Unpack(buf, bufsize, pos, &id, 1, MPI_INT, MPI_COMM_WORLD))
     {
-      printf ("Cannot read any correct PnlTypes in pnl_object_load\n");
+      printf("Cannot read any correct PnlTypes in pnl_object_load\n");
       return NULL;
     }
   O = pnl_object_create(id);
@@ -152,7 +160,7 @@ static PnlObject* load_from_buf (char *buf, int bufsize, int *pos)
  * @return a PnlObject or NULL if the stream was empty or it did not
  * contain any PnlObject
  */
-PnlObject* pnl_object_load (FILE *stream)
+PnlObject *pnl_object_load(FILE *stream)
 {
   PnlObject *O;
   long pos_in_stream;
@@ -161,15 +169,18 @@ PnlObject* pnl_object_load (FILE *stream)
 
   pos_in_stream = ftell(stream);
   bufsize = 0;
-  while (fgetc(stream) != EOF) { bufsize++; }
-  if ( bufsize == 0 ) return NULL;
-  buf = malloc (bufsize);
+  while (fgetc(stream) != EOF)
+    {
+      bufsize++;
+    }
+  if (bufsize == 0) return NULL;
+  buf = malloc(bufsize);
   fseek(stream, pos_in_stream, SEEK_SET);
-  fread (buf, 1, bufsize,  stream);
+  fread(buf, 1, bufsize,  stream);
 
   pos = 0;
-  O = load_from_buf (buf, bufsize, &pos);
-  free (buf);
+  O = load_from_buf(buf, bufsize, &pos);
+  free(buf);
   fseek(stream, pos_in_stream + pos, SEEK_SET);
   return O;
 }
@@ -183,7 +194,7 @@ PnlObject* pnl_object_load (FILE *stream)
  * @return a PnlList or NULL if the stream was empty or it did not
  * contain any PnlObjects
  */
-PnlList* pnl_object_load_into_list (FILE *stream)
+PnlList *pnl_object_load_into_list(FILE *stream)
 {
 
   PnlList *L;
@@ -194,28 +205,33 @@ PnlList* pnl_object_load_into_list (FILE *stream)
 
   pos_in_stream = ftell(stream);
   bufsize = 0;
-  while (fgetc(stream) != EOF) { bufsize++; }
-  if ( bufsize == 0 ) return NULL;
-  buf = malloc (bufsize);
+  while (fgetc(stream) != EOF)
+    {
+      bufsize++;
+    }
+  if (bufsize == 0) return NULL;
+  buf = malloc(bufsize);
   fseek(stream, pos_in_stream, SEEK_SET);
-  fread (buf, 1, bufsize,  stream);
+  fread(buf, 1, bufsize,  stream);
 
   pos = 0;
-  L = pnl_list_new ();
-  while ( pos < bufsize )
+  L = pnl_list_new();
+  while (pos < bufsize)
     {
       PnlObject *O;
-      if ((O = load_from_buf (buf, bufsize, &pos)) == NULL)
+      if ((O = load_from_buf(buf, bufsize, &pos)) == NULL)
         {
-          free (buf); break;
+          free(buf);
+          break;
         }
-      pnl_list_insert_last (L, O);
+      pnl_list_insert_last(L, O);
     }
-  free (buf);
+  free(buf);
   fseek(stream, pos_in_stream + pos, SEEK_SET);
   if (L->len == 0)
     {
-      pnl_list_free(&L); L=NULL;
+      pnl_list_free(&L);
+      L = NULL;
     }
   return L;
 }

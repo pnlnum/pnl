@@ -40,18 +40,18 @@ static double ArrayOfRandomNumbers[DIM_MAX];
  */
 static double Gauss_BoxMuller(PnlRng *rng)
 {
-  double xs,ys, g1, g2;
+  double xs, ys, g1, g2;
 
-  if ( rng->has_gauss == 0 )
+  if (rng->has_gauss == 0)
     {
       /* draw 2 new samples */
       do
         {
-          rng->Compute(rng,&xs);
+          rng->Compute(rng, &xs);
         }
       while (xs == 0.);
-      rng->Compute(rng,&ys);
-      xs = sqrt( -2. * log(xs) );
+      rng->Compute(rng, &ys);
+      xs = sqrt(-2. * log(xs));
       ys = M_2PI * ys;
       g1 = xs * cos(ys);
       g2 = xs * sin(ys);
@@ -80,7 +80,7 @@ static double GaussMC(int dimension, int create_or_retrieve, int index, PnlRng *
   if (create_or_retrieve == CREATE)
     {
       int i;
-      for (i=0; i<dimension; i++)
+      for (i = 0; i < dimension; i++)
         ArrayOfRandomNumbers[i] = Gauss_BoxMuller(rng);
     }
   return (ArrayOfRandomNumbers[index]);
@@ -98,11 +98,11 @@ static double GaussMC(int dimension, int create_or_retrieve, int index, PnlRng *
  * @param index index to be returned
  * @param rng a generator
  */
-static double GaussQMC(int dimension, int create_or_retrieve, int index,PnlRng *rng)
+static double GaussQMC(int dimension, int create_or_retrieve, int index, PnlRng *rng)
 {
   CheckQMCDim(rng, dimension);
   if (create_or_retrieve == CREATE)
-    rng->Compute(rng,ArrayOfRandomNumbers);
+    rng->Compute(rng, ArrayOfRandomNumbers);
   return pnl_inv_cdfnor(ArrayOfRandomNumbers[index]);
 }
 
@@ -140,9 +140,10 @@ double pnl_rng_gauss(int d, int create_or_retrieve, int index, PnlRng *rng)
  */
 int pnl_rng_bernoulli(double p, PnlRng *rng)
 {
-  double x=0.0;
-  rng->Compute(rng,&x);
-  if (x<p) return 1; else return 0;
+  double x = 0.0;
+  rng->Compute(rng, &x);
+  if (x < p) return 1;
+  else return 0;
 }
 
 /**
@@ -166,8 +167,8 @@ static long pnl_rng_poisson_ptrs(double lambda, PnlRng *rng)
       long k = (long) floor((2 * a / us + b) * U + lambda + 0.43);
       if ((us >= 0.07) && (V <= vr)) return k;
       if ((k < 0) || ((us < 0.013) && (V > us))) continue;
-      if ((log(V) + log(invalpha) - log(a/(us*us)+b)) <= 
-          (-lambda + k*loglambda - lgamma(k+1)))
+      if ((log(V) + log(invalpha) - log(a / (us * us) + b)) <=
+          (-lambda + k * loglambda - lgamma(k + 1)))
         return k;
     }
 }
@@ -184,7 +185,7 @@ long pnl_rng_poisson(double lambda, PnlRng *rng)
       int status, which;
       double x, bound, p, q;
       CheckQMCDim(rng, 1);
-      rng->Compute(rng,&p);
+      rng->Compute(rng, &p);
       q = 1. - p;
       which = 2;
       pnl_cdf_poi(&which, &p, &q, &x, &lambda, &status, &bound);
@@ -192,7 +193,7 @@ long pnl_rng_poisson(double lambda, PnlRng *rng)
     }
   else
     {
-      if ( lambda < 10 )
+      if (lambda < 10)
         {
           double random_number;
           double u = 1;
@@ -203,14 +204,14 @@ long pnl_rng_poisson(double lambda, PnlRng *rng)
             {
               rng->Compute(rng, &random_number);
               u *= random_number;
-              if ( u > elambda )
+              if (u > elambda)
                 n++;
               else
                 return n;
             }
         }
-      else 
-        { 
+      else
+        {
           return pnl_rng_poisson_ptrs(lambda, rng);
         }
     }
@@ -221,33 +222,35 @@ long pnl_rng_poisson(double lambda, PnlRng *rng)
  * @param lambda parameter of the law
  * @param rng generator to use
  */
-double pnl_rng_exp(double lambda,PnlRng *rng)
+double pnl_rng_exp(double lambda, PnlRng *rng)
 {
   double x;
-  do{
-    rng->Compute(rng, &x);
-  } while (x == 0);
-  return  (-log(x) / lambda);
+  do
+    {
+      rng->Compute(rng, &x);
+    }
+  while (x == 0);
+  return (-log(x) / lambda);
 }
 
-/** 
+/**
  * Generate a non symmetric exponential distribution
- * 
+ *
  * @param lambda_p parameter of the positive exponential
  * @param lambda_m parameter of the negative exponential
  * @param p probability of being positive
  * @param rng generator to ise
- * 
+ *
  */
-double pnl_rng_dblexp (double lambda_p, double lambda_m, double p, PnlRng *rng)
+double pnl_rng_dblexp(double lambda_p, double lambda_m, double p, PnlRng *rng)
 {
-  if ( pnl_rng_uni (rng) < p )
+  if (pnl_rng_uni(rng) < p)
     {
-      return pnl_rng_exp (lambda_p, rng);
+      return pnl_rng_exp(lambda_p, rng);
     }
   else
     {
-      return - pnl_rng_exp (lambda_m, rng);
+      return - pnl_rng_exp(lambda_m, rng);
     }
 }
 
@@ -268,10 +271,13 @@ long pnl_rng_poisson1(double lambda, double t, PnlRng *rng)
  *
  * @see pnl_rng_uni_ab
  */
-double pnl_rng_uni (PnlRng *rng)
+double pnl_rng_uni(PnlRng *rng)
 {
   double u;
-  do { rng->Compute(rng,&u); }
+  do
+    {
+      rng->Compute(rng, &u);
+    }
   while (u == 0);
   return u;
 }
@@ -284,62 +290,62 @@ double pnl_rng_uni (PnlRng *rng)
  *
  * @see pnl_rng_uni
  */
-double pnl_rng_uni_ab (double a, double b, PnlRng *rng)
+double pnl_rng_uni_ab(double a, double b, PnlRng *rng)
 {
   double u;
-  rng->Compute(rng,&u);
-  return a+(b-a)*u;
+  rng->Compute(rng, &u);
+  return a + (b - a) * u;
 }
 
 /**
  * Generate a normally distributed number.
  * @param rng generator to use
  */
-double pnl_rng_normal (PnlRng *rng)
+double pnl_rng_normal(PnlRng *rng)
 {
   if (rng->rand_or_quasi == PNL_QMC)
     {
       double u;
       CheckQMCDim(rng, 1);
-      rng->Compute(rng,&u);
+      rng->Compute(rng, &u);
       return pnl_inv_cdfnor(u);
     }
   return Gauss_BoxMuller(rng);
 }
 
-/** 
+/**
  * Return of log normal random variable
- * 
+ *
  * @param m mean of the normal variable
  * @param sigma2 variance of the normal distribution
  * @param rng the generator to use
  */
-double pnl_rng_lognormal (double m, double sigma2, PnlRng *rng)
+double pnl_rng_lognormal(double m, double sigma2, PnlRng *rng)
 {
-  return exp (m + sqrt(sigma2) * pnl_rng_normal (rng));
+  return exp(m + sqrt(sigma2) * pnl_rng_normal(rng));
 }
 
-/** 
+/**
  * Return an inverse gaussian random sample
  *
- * The algorithm used is based on 
+ * The algorithm used is based on
  *
  *     John R. Michael, William R. Schucany and Roy W. Haas
  *     Generating Random Variates Using Transformations with Multiple Roots,
  *     The American Statistician, Vol. 30, No. 2 (May, 1976), pp. 88-90
- * 
+ *
  * @param mu mean of the distribution (must be positive)
  * @param lambda shape parameter (must be positive)
  * @param rng a random number generator
- * 
+ *
  */
-double pnl_rng_invgauss (double mu, double lambda, PnlRng *rng)
+double pnl_rng_invgauss(double mu, double lambda, PnlRng *rng)
 {
-  double g = pnl_rng_normal (rng);
+  double g = pnl_rng_normal(rng);
   double v = g * g;
   double w = mu * v;
-  double x1 = mu + mu / (2. * lambda) * (w - sqrt (w * (4 * lambda + w)));
-  if ( pnl_rng_uni (rng) < mu / (x1 + mu) )
+  double x1 = mu + mu / (2. * lambda) * (w - sqrt(w * (4 * lambda + w)));
+  if (pnl_rng_uni(rng) < mu / (x1 + mu))
     {
       return x1;
     }
@@ -362,12 +368,12 @@ void pnl_vect_rng_bernoulli(PnlVect *V, int samples, double a, double b, double 
 {
   int i;
   double x = 0.;
-  pnl_vect_resize (V, samples);
+  pnl_vect_resize(V, samples);
 
-  for ( i=0 ; i<samples ; i++ )
+  for (i = 0 ; i < samples ; i++)
     {
-      rng->Compute(rng,&x);
-      PNL_LET (V, i) = (x<p) ? b : a;
+      rng->Compute(rng, &x);
+      PNL_LET(V, i) = (x < p) ? b : a;
     }
 }
 
@@ -386,7 +392,7 @@ void pnl_vect_rng_bernoulli_d(PnlVect *V, int dimension, const PnlVect *a, const
   int i;
   PNL_CHECK(!(a->size == b->size && a->size == p->size && p->size == dimension),
             "size mismatch", "vect_rng_bernoulli_d")
-  pnl_vect_resize (V, dimension);
+  pnl_vect_resize(V, dimension);
   if (rng->rand_or_quasi == PNL_QMC)
     {
       CheckQMCDim(rng, dimension);
@@ -394,20 +400,23 @@ void pnl_vect_rng_bernoulli_d(PnlVect *V, int dimension, const PnlVect *a, const
     }
   else
     {
-      for ( i=0 ; i<dimension ; i++ ) { rng->Compute(rng, &(PNL_LET(V, i))); }
+      for (i = 0 ; i < dimension ; i++)
+        {
+          rng->Compute(rng, &(PNL_LET(V, i)));
+        }
     }
-  for ( i=0 ; i<dimension ; i++ )
+  for (i = 0 ; i < dimension ; i++)
     {
       const double ai = PNL_GET(a, i);
       const double bi = PNL_GET(b, i);
       const double pi = PNL_GET(p, i);
-      PNL_LET(V,i) = (PNL_GET(V,i) < pi) ? bi : ai; 
+      PNL_LET(V, i) = (PNL_GET(V, i) < pi) ? bi : ai;
     }
 }
 
-/** 
- * Sample a vector of i.i.d rv following the Poisson distribution 
- * 
+/**
+ * Sample a vector of i.i.d rv following the Poisson distribution
+ *
  * @param V contains the rv on output
  * @param samples number of samples
  * @param lambda Poisson parameter
@@ -418,15 +427,15 @@ void pnl_vect_rng_poisson(PnlVect *V, int samples, double lambda, PnlRng *rng)
   int i;
   pnl_vect_resize(V, samples);
 
-  for ( i=0 ; i<samples ; i++ )
+  for (i = 0 ; i < samples ; i++)
     {
-      LET(V,i) = (double) pnl_rng_poisson(lambda, rng);
+      LET(V, i) = (double) pnl_rng_poisson(lambda, rng);
     }
 }
 
-/** 
- * Sample a vector from the multidimensional Poisson distribution 
- * 
+/**
+ * Sample a vector from the multidimensional Poisson distribution
+ *
  * @param V contains the rv on output
  * @param dimension size the vector lambda
  * @param lambda vector of Poisson parameters
@@ -446,7 +455,7 @@ void pnl_vect_rng_poisson_d(PnlVect *V, int dimension, const PnlVect *lambda, Pn
       which = 2;
       CheckQMCDim(rng, dimension);
       rng->Compute(rng, V->array);
-      for ( i=0 ; i<dimension ; i++ )
+      for (i = 0 ; i < dimension ; i++)
         {
           p = PNL_GET(V, i);
           lam = GET(lambda, i);
@@ -457,9 +466,9 @@ void pnl_vect_rng_poisson_d(PnlVect *V, int dimension, const PnlVect *lambda, Pn
     }
   else
     {
-      for ( i=0 ; i<dimension ; i++ )
+      for (i = 0 ; i < dimension ; i++)
         {
-          PNL_LET(V,i) = (double) pnl_rng_poisson(PNL_GET(lambda, i), rng);
+          PNL_LET(V, i) = (double) pnl_rng_poisson(PNL_GET(lambda, i), rng);
         }
     }
 }
@@ -478,11 +487,11 @@ void pnl_vect_rng_uni(PnlVect *G, int samples, double a, double b, PnlRng *rng)
 {
   int i;
   double u;
-  pnl_vect_resize(G,samples);
-  for(i=0;i<samples;i++)
+  pnl_vect_resize(G, samples);
+  for (i = 0; i < samples; i++)
     {
-      rng->Compute(rng,&u);
-      PNL_LET(G, i) = a+(b-a)*u;
+      rng->Compute(rng, &u);
+      PNL_LET(G, i) = a + (b - a) * u;
     }
 }
 
@@ -502,25 +511,25 @@ void pnl_vect_rng_uni(PnlVect *G, int samples, double a, double b, PnlRng *rng)
  *
  * @see pnl_vect_rng_uni
  */
-void pnl_vect_rng_uni_d (PnlVect *G, int dimension, double a, double b, PnlRng *rng)
+void pnl_vect_rng_uni_d(PnlVect *G, int dimension, double a, double b, PnlRng *rng)
 {
   int i;
   double u;
-  pnl_vect_resize(G,dimension);
+  pnl_vect_resize(G, dimension);
   if (rng->rand_or_quasi == PNL_QMC)
     {
       CheckQMCDim(rng, dimension);
       rng->Compute(rng, G->array);
-      for(i=0;i<dimension;i++)
+      for (i = 0; i < dimension; i++)
         {
-          PNL_LET(G,i) = a+(b-a)*PNL_GET(G,i);
+          PNL_LET(G, i) = a + (b - a) * PNL_GET(G, i);
         }
       return;
     }
-  for(i=0;i<dimension;i++)
+  for (i = 0; i < dimension; i++)
     {
       rng->Compute(rng, &u);
-      PNL_LET(G,i) = a+(b-a)*u;
+      PNL_LET(G, i) = a + (b - a) * u;
     }
 }
 
@@ -533,24 +542,24 @@ void pnl_vect_rng_uni_d (PnlVect *G, int dimension, double a, double b, PnlRng *
  *
  * @see pnl_vect_rng_normal_d
  */
-void pnl_vect_rng_normal (PnlVect *G, int samples, PnlRng *rng)
+void pnl_vect_rng_normal(PnlVect *G, int samples, PnlRng *rng)
 {
   int i;
   double u;
-  pnl_vect_resize(G,samples);
+  pnl_vect_resize(G, samples);
   if (rng->rand_or_quasi == PNL_QMC)
     {
       CheckQMCDim(rng, 1);
-      for (i=0; i<samples; i++)
+      for (i = 0; i < samples; i++)
         {
-          rng->Compute(rng,&u);
-          PNL_LET(G,i) = pnl_inv_cdfnor(u);
+          rng->Compute(rng, &u);
+          PNL_LET(G, i) = pnl_inv_cdfnor(u);
         }
       return;
     }
-  for (i=0; i<samples; i++)
+  for (i = 0; i < samples; i++)
     {
-      PNL_LET(G,i) = Gauss_BoxMuller(rng);
+      PNL_LET(G, i) = Gauss_BoxMuller(rng);
     }
 }
 
@@ -568,23 +577,23 @@ void pnl_vect_rng_normal (PnlVect *G, int samples, PnlRng *rng)
  *
  * @see pnl_vect_rng_normal
  */
-void pnl_vect_rng_normal_d (PnlVect *G, int dimension, PnlRng *rng)
+void pnl_vect_rng_normal_d(PnlVect *G, int dimension, PnlRng *rng)
 {
   int i;
-  pnl_vect_resize(G,dimension);
+  pnl_vect_resize(G, dimension);
   if (rng->rand_or_quasi == PNL_QMC)
     {
       CheckQMCDim(rng, dimension);
-      rng->Compute(rng,G->array);
-      for (i=0; i<dimension; i++)
+      rng->Compute(rng, G->array);
+      for (i = 0; i < dimension; i++)
         {
-          PNL_LET(G,i) = pnl_inv_cdfnor(PNL_GET(G,i));
+          PNL_LET(G, i) = pnl_inv_cdfnor(PNL_GET(G, i));
         }
       return;
     }
-  for (i=0; i<dimension; i++)
+  for (i = 0; i < dimension; i++)
     {
-      PNL_LET(G,i) = Gauss_BoxMuller(rng);
+      PNL_LET(G, i) = Gauss_BoxMuller(rng);
     }
 }
 
@@ -615,29 +624,35 @@ void pnl_mat_rng_bernoulli(PnlMat *M, int samples, int dimension, const
   if (rng->rand_or_quasi == PNL_QMC)
     {
       CheckQMCDim(rng, dimension);
-      for ( i=0 ; i<samples ; i++ ) { rng->Compute(rng, &(PNL_MGET(M, i, 0))); }
+      for (i = 0 ; i < samples ; i++)
+        {
+          rng->Compute(rng, &(PNL_MGET(M, i, 0)));
+        }
     }
   else
     {
-      for ( i=0 ; i<M->mn ; i++ ) { rng->Compute(rng, M->array + i); }
+      for (i = 0 ; i < M->mn ; i++)
+        {
+          rng->Compute(rng, M->array + i);
+        }
     }
 
-  for ( j=0 ; j<dimension ; j++ )
+  for (j = 0 ; j < dimension ; j++)
     {
       const double aj = PNL_GET(a, j);
       const double bj = PNL_GET(b, j);
       const double pj = PNL_GET(p, j);
-      for ( i=0 ; i<samples ; i++ )
+      for (i = 0 ; i < samples ; i++)
         {
-          PNL_MLET(M, i, j) = (PNL_MGET(M, i, j) < pj) ? bj : aj; 
+          PNL_MLET(M, i, j) = (PNL_MGET(M, i, j) < pj) ? bj : aj;
         }
     }
 }
 
-/** 
+/**
  * Sample a iid vectors from the multidimensional Poisson distribution. The
  * rows are independent.
- * 
+ *
  * @param M contains the random matrix on output (samples x dimension)
  * @param samples number of samples from the vector Poisson distribution
  * @param dimension size the vector lambda
@@ -656,10 +671,10 @@ void pnl_mat_rng_poisson(PnlMat *M, int samples, int dimension, const PnlVect *l
       double bound, p, q, x, lam;
       which = 2;
       CheckQMCDim(rng, dimension);
-      for ( i=0 ; i<samples ; i++ )
+      for (i = 0 ; i < samples ; i++)
         {
           rng->Compute(rng, &(PNL_MLET(M, i, 0)));
-          for ( j=0 ; j<dimension ; j++ )
+          for (j = 0 ; j < dimension ; j++)
             {
               p = PNL_MGET(M, i, j);
               lam = GET(lambda, j);
@@ -672,9 +687,9 @@ void pnl_mat_rng_poisson(PnlMat *M, int samples, int dimension, const PnlVect *l
   else
     {
 
-      for ( i=0 ; i<samples ; i++ )
+      for (i = 0 ; i < samples ; i++)
         {
-          for ( j=0 ; j<dimension ; j++ )
+          for (j = 0 ; j < dimension ; j++)
             {
               PNL_MLET(M, i, j) = (double) pnl_rng_poisson(PNL_GET(lambda, j), rng);
             }
@@ -704,27 +719,27 @@ void pnl_mat_rng_uni(PnlMat *M, int samples, int dimension,
   int i, j;
   double u;
   PNL_CHECK(!(a->size == b->size && a->size == dimension), "size mismatch", "mat_rng_uni")
-  pnl_mat_resize(M,samples,dimension);
+  pnl_mat_resize(M, samples, dimension);
 
   if (rng->rand_or_quasi == PNL_MC)
     {
-      for(i=0;i<samples;i++)
+      for (i = 0; i < samples; i++)
         {
-          for (j=0; j<dimension; j++)
+          for (j = 0; j < dimension; j++)
             {
               rng->Compute(rng, &u);
-              PNL_MLET(M,i,j)=PNL_GET(a,j)+(PNL_GET(b,j)- PNL_GET(a,j))*u;
+              PNL_MLET(M, i, j) = PNL_GET(a, j) + (PNL_GET(b, j) - PNL_GET(a, j)) * u;
             }
         }
       return;
     }
   CheckQMCDim(rng, dimension);
-  for(i=0;i<samples;i++)
+  for (i = 0; i < samples; i++)
     {
       rng->Compute(rng, &(PNL_MGET(M, i, 0)));
-      for (j=0; j<dimension; j++)
+      for (j = 0; j < dimension; j++)
         {
-          PNL_MLET(M,i,j)=PNL_GET(a,j)+(PNL_GET(b,j)- PNL_GET(a,j))*PNL_MGET(M,i,j);
+          PNL_MLET(M, i, j) = PNL_GET(a, j) + (PNL_GET(b, j) - PNL_GET(a, j)) * PNL_MGET(M, i, j);
         }
     }
 }
@@ -749,27 +764,27 @@ void pnl_mat_rng_uni2(PnlMat *M, int samples, int dimension,
 {
   int i, j;
   double u;
-  pnl_mat_resize(M,samples,dimension);
+  pnl_mat_resize(M, samples, dimension);
 
   if (rng->rand_or_quasi == PNL_MC)
     {
-      for(i=0;i<samples;i++)
+      for (i = 0; i < samples; i++)
         {
-          for (j=0; j<dimension; j++)
+          for (j = 0; j < dimension; j++)
             {
               rng->Compute(rng, &u);
-              PNL_MLET(M,i,j)=a+(b- a)*u;
+              PNL_MLET(M, i, j) = a + (b - a) * u;
             }
         }
       return;
     }
-  for(i=0;i<samples;i++)
+  for (i = 0; i < samples; i++)
     {
       CheckQMCDim(rng, dimension);
       rng->Compute(rng, &(PNL_MGET(M, i, 0)));
-      for (j=0; j<dimension; j++)
+      for (j = 0; j < dimension; j++)
         {
-          PNL_MLET(M,i,j)=a+(b -a)*PNL_MGET(M,i,j);
+          PNL_MLET(M, i, j) = a + (b - a) * PNL_MGET(M, i, j);
         }
     }
 }
@@ -790,22 +805,22 @@ void pnl_mat_rng_uni2(PnlMat *M, int samples, int dimension,
 void pnl_mat_rng_normal(PnlMat *M, int samples, int dimension, PnlRng *rng)
 {
   int i, j;
-  pnl_mat_resize(M,samples,dimension);
+  pnl_mat_resize(M, samples, dimension);
   if (rng->rand_or_quasi == PNL_MC)
     {
-      for (i=0; i<M->mn; i++)
+      for (i = 0; i < M->mn; i++)
         {
           M->array[i] = Gauss_BoxMuller(rng);
         }
       return;
     }
-  for(i=0;i<samples;i++)
+  for (i = 0; i < samples; i++)
     {
       CheckQMCDim(rng, dimension);
       rng->Compute(rng, &(PNL_MGET(M, i, 0)));
-      for (j=0; j<dimension; j++)
+      for (j = 0; j < dimension; j++)
         {
-          PNL_MLET(M,i,j)=pnl_inv_cdfnor(PNL_MGET(M,i,j));
+          PNL_MLET(M, i, j) = pnl_inv_cdfnor(PNL_MGET(M, i, j));
         }
     }
 }
@@ -821,49 +836,49 @@ void pnl_mat_rng_normal(PnlMat *M, int samples, int dimension, PnlRng *rng)
  * generating gamma variables", ACM Transactions on Mathematical
  * Software, Vol 26, No 3 (2000), p363-372.
  */
-double pnl_rng_gamma (double a, double b, PnlRng *rng)
+double pnl_rng_gamma(double a, double b, PnlRng *rng)
 {
-  if ( rng->rand_or_quasi == PNL_QMC )
+  if (rng->rand_or_quasi == PNL_QMC)
     {
       int status, which;
       double x, bound, p, q;
       CheckQMCDim(rng, 1);
-      rng->Compute(rng,&p);
+      rng->Compute(rng, &p);
       q = 1. - p;
       which = 2;
       /* The function pnl_cdf_gam uses the rate instead of the scale */
-      b = 1. / b; 
+      b = 1. / b;
       pnl_cdf_gam(&which, &p, &q, &x, &a, &b, &status, &bound);
       return x;
     }
   /* assume a > 0 */
   if (a < 1)
     {
-      double u = pnl_rng_uni (rng);
-      return pnl_rng_gamma ( 1.0 + a, b, rng) * pow (u, 1.0 / a);
+      double u = pnl_rng_uni(rng);
+      return pnl_rng_gamma(1.0 + a, b, rng) * pow(u, 1.0 / a);
     }
 
   {
     double x, v, u, d, c;
     d = a - 1.0 / 3.0;
-    c = (1.0 / 3.0) / sqrt (d);
+    c = (1.0 / 3.0) / sqrt(d);
 
     while (1)
       {
         do
           {
-            x = pnl_rng_normal (rng);
+            x = pnl_rng_normal(rng);
             v = 1.0 + c * x;
           }
         while (v <= 0);
 
         v = v * v * v;
-        u = pnl_rng_uni (rng);
+        u = pnl_rng_uni(rng);
 
         if (u < 1 - 0.0331 * x * x * x * x)
           break;
 
-        if (log (u) < 0.5 * x * x + d * (1 - v + log (v)))
+        if (log(u) < 0.5 * x * x + d * (1 - v + log(v)))
           break;
       }
 
@@ -883,37 +898,37 @@ double pnl_rng_gamma (double a, double b, PnlRng *rng)
  *
  * for x = 0 ... +infty
  */
-double pnl_rng_chi2  (double nu, PnlRng *rng)
+double pnl_rng_chi2(double nu, PnlRng *rng)
 {
-  return 2. * pnl_rng_gamma ( nu / 2, 1.0, rng);
+  return 2. * pnl_rng_gamma(nu / 2, 1.0, rng);
 }
 
-/** 
+/**
  * Sample from the non central chi squared distribution
- * 
+ *
  * @param nu number of degrees of freedom
  * @param xnonc non centrality parameter (must be positive)
  * @param rng random number generator
- * 
+ *
  * @return a non central chi squared distributed random variable
  */
 double pnl_rng_ncchi2(double nu, double xnonc, PnlRng *rng)
 {
   PNL_CHECK(nu <= 0, "nu must be > 0", "pnl_rng_ncchi2")
   PNL_CHECK(xnonc < 0, "nu must be >= 0", "pnl_rng_ncchi2")
-  if ( rng->rand_or_quasi == PNL_QMC )
+  if (rng->rand_or_quasi == PNL_QMC)
     {
       int status, which;
       double x, bound, p, q;
       CheckQMCDim(rng, 1);
-      rng->Compute(rng,&p);
+      rng->Compute(rng, &p);
       q = 1. - p;
       which = 2;
       pnl_cdf_gam(&which, &p, &q, &x, &nu, &xnonc, &status, &bound);
       return x;
     }
 
-  if ( nu > 1 )
+  if (nu > 1)
     {
       double Y = sqrt(xnonc) + pnl_rng_normal(rng);
       return Y * Y + pnl_rng_chi2(nu - 1., rng);
@@ -925,10 +940,10 @@ double pnl_rng_ncchi2(double nu, double xnonc, PnlRng *rng)
     }
 }
 
-/** 
+/**
  * Generate a random variable with Bessel distribution with parameters nu
- * and a. We refer to 
- * 
+ * and a. We refer to
+ *
  * article{Devroye2002249,
  * title = "Simulating Bessel random variables",
  * journal = "Statistics & Probability Letters",
@@ -942,30 +957,31 @@ double pnl_rng_ncchi2(double nu, double xnonc, PnlRng *rng)
  * random variables. We are using the most naive which also turns to be the
  * fastest (probably because we are relying on libamis for evaluating
  * Bessel functions).
- * 
+ *
  * @param nu a real number > -1
  * @param a a real number > 0
  * @param rng a PnlRng
- * 
+ *
  * @return an integer number
  */
-int pnl_rng_bessel (double nu, double a, PnlRng *rng)
+int pnl_rng_bessel(double nu, double a, PnlRng *rng)
 {
   double p0;
-  double tmp,u;
+  double tmp, u;
   int n;
 
-  p0 = pow (a * 0.5, nu) / ( pnl_bessel_i (nu, a) * pnl_sf_gamma (nu + 1.) );
-  u = pnl_rng_uni (rng);
+  p0 = pow(a * 0.5, nu) / (pnl_bessel_i(nu, a) * pnl_sf_gamma(nu + 1.));
+  u = pnl_rng_uni(rng);
   tmp = 0;
   n = 0;
-  if ( u <= p0 ) return 0;
+  if (u <= p0) return 0;
   do
-    {                                                                        
+    {
       tmp += p0;
       p0 = p0 * a * a / (4. * (n + 1) * (n + 1 + nu));
       n++;
-    } while ( u> tmp + p0 );
+    }
+  while (u > tmp + p0);
   return n;
 }
 
@@ -986,7 +1002,7 @@ double pnl_rand_gauss(int d, int create_or_retrieve, int index, int type_generat
 {
   PnlRng *rng;
   rng = pnl_rng_get_from_id(type_generator);
-  return pnl_rng_gauss (d, create_or_retrieve, index, rng);
+  return pnl_rng_gauss(d, create_or_retrieve, index, rng);
 }
 
 /**
@@ -998,7 +1014,7 @@ int pnl_rand_bernoulli(double p, int type_generator)
 {
   PnlRng *rng;
   rng = pnl_rng_get_from_id(type_generator);
-  return pnl_rng_bernoulli (p, rng);
+  return pnl_rng_bernoulli(p, rng);
 }
 
 /**
@@ -1018,11 +1034,11 @@ long pnl_rand_poisson(double lambda, int type_generator)
  * @param lambda parameter of the law
  * @param type_generator index of the generator ot be used
  */
-double pnl_rand_exp(double lambda,int type_generator)
+double pnl_rand_exp(double lambda, int type_generator)
 {
   PnlRng *rng;
   rng = pnl_rng_get_from_id(type_generator);
-  return pnl_rng_exp (lambda, rng);
+  return pnl_rng_exp(lambda, rng);
 
 }
 
@@ -1045,7 +1061,7 @@ long pnl_rand_poisson1(double lambda, double t, int type_generator)
  *
  * @see pnl_rand_uni_ab
  */
-double pnl_rand_uni (int type_generator)
+double pnl_rand_uni(int type_generator)
 {
   PnlRng *rng;
   rng = pnl_rng_get_from_id(type_generator);
@@ -1060,23 +1076,23 @@ double pnl_rand_uni (int type_generator)
  *
  * @see pnl_rand_uni
  */
-double pnl_rand_uni_ab (double a, double b, int type_generator)
+double pnl_rand_uni_ab(double a, double b, int type_generator)
 {
 
   PnlRng *rng;
   rng = pnl_rng_get_from_id(type_generator);
-  return pnl_rng_uni_ab (a, b, rng);
+  return pnl_rng_uni_ab(a, b, rng);
 }
 
 /**
  * Generate a normally distributed number.
  * @param type_generator index ot the generator to be used
  */
-double pnl_rand_normal (int type_generator)
+double pnl_rand_normal(int type_generator)
 {
   PnlRng *rng;
   rng = pnl_rng_get_from_id(type_generator);
-  return pnl_rng_normal (rng);
+  return pnl_rng_normal(rng);
 }
 
 /**
@@ -1093,7 +1109,7 @@ void pnl_vect_rand_uni(PnlVect *G, int samples, double a, double b, int type_gen
 {
   PnlRng *rng;
   rng = pnl_rng_get_from_id(type_generator);
-  pnl_vect_rng_uni (G, samples, a, b, rng);
+  pnl_vect_rng_uni(G, samples, a, b, rng);
 }
 
 /**
@@ -1112,7 +1128,7 @@ void pnl_vect_rand_uni(PnlVect *G, int samples, double a, double b, int type_gen
  *
  * @see pnl_vect_rand_uni
  */
-void pnl_vect_rand_uni_d (PnlVect *G, int dimension, double a, double b, int type_generator)
+void pnl_vect_rand_uni_d(PnlVect *G, int dimension, double a, double b, int type_generator)
 {
   PnlRng *rng;
   rng = pnl_rng_get_from_id(type_generator);
@@ -1128,11 +1144,11 @@ void pnl_vect_rand_uni_d (PnlVect *G, int dimension, double a, double b, int typ
  *
  * @see pnl_vect_rand_normal_d
  */
-void pnl_vect_rand_normal (PnlVect *G, int samples, int type_generator)
+void pnl_vect_rand_normal(PnlVect *G, int samples, int type_generator)
 {
   PnlRng *rng;
   rng = pnl_rng_get_from_id(type_generator);
-  pnl_vect_rng_normal (G, samples, rng);
+  pnl_vect_rng_normal(G, samples, rng);
 }
 
 /**
@@ -1149,11 +1165,11 @@ void pnl_vect_rand_normal (PnlVect *G, int samples, int type_generator)
  *
  * @see pnl_vect_rand_normal
  */
-void pnl_vect_rand_normal_d (PnlVect *G, int dimension, int type_generator)
+void pnl_vect_rand_normal_d(PnlVect *G, int dimension, int type_generator)
 {
   PnlRng *rng;
   rng = pnl_rng_get_from_id(type_generator);
-  pnl_vect_rng_normal_d (G, dimension, rng);
+  pnl_vect_rng_normal_d(G, dimension, rng);
 }
 
 /**
@@ -1176,7 +1192,7 @@ void pnl_mat_rand_uni(PnlMat *M, int samples, int dimension,
 {
   PnlRng *rng;
   rng = pnl_rng_get_from_id(type_generator);
-  pnl_mat_rng_uni (M, samples, dimension, a, b, rng);
+  pnl_mat_rng_uni(M, samples, dimension, a, b, rng);
 }
 
 /**
@@ -1200,7 +1216,7 @@ void pnl_mat_rand_uni2(PnlMat *M, int samples, int dimension,
 
   PnlRng *rng;
   rng = pnl_rng_get_from_id(type_generator);
-  pnl_mat_rng_uni2 (M, samples, dimension, a, b, rng);
+  pnl_mat_rng_uni2(M, samples, dimension, a, b, rng);
 }
 
 /**
@@ -1221,7 +1237,7 @@ void pnl_mat_rand_normal(PnlMat *M, int samples, int dimension,
 {
   PnlRng *rng;
   rng = pnl_rng_get_from_id(type_generator);
-  pnl_mat_rng_normal (M, samples, dimension, rng);
+  pnl_mat_rng_normal(M, samples, dimension, rng);
 }
 
 /**
@@ -1235,11 +1251,11 @@ void pnl_mat_rand_normal(PnlMat *M, int samples, int dimension,
  * generating gamma variables", ACM Transactions on Mathematical
  * Software, Vol 26, No 3 (2000), p363-372.
  */
-double pnl_rand_gamma (double a, double b, int gen)
+double pnl_rand_gamma(double a, double b, int gen)
 {
   PnlRng *rng;
   rng = pnl_rng_get_from_id(gen);
-  return pnl_rng_gamma (a, b, rng);
+  return pnl_rng_gamma(a, b, rng);
 }
 
 /**
@@ -1254,27 +1270,27 @@ double pnl_rand_gamma (double a, double b, int gen)
  *
  * for x = 0 ... +infty
  */
-double pnl_rand_chi2  (double nu, int gen)
+double pnl_rand_chi2(double nu, int gen)
 {
   PnlRng *rng;
   rng = pnl_rng_get_from_id(gen);
-  return pnl_rng_chi2 (nu, rng);
+  return pnl_rng_chi2(nu, rng);
 }
 
-/** 
+/**
  * Generate a random variable with Bessel distribution with parameters nu
  * and a
- * 
+ *
  * @param nu a real number > -1
  * @param a a real number > 0
  * @param gen the index of the generator to be used
- * 
+ *
  * @return an integer number
  */
-int pnl_rand_bessel (double nu, double a, int gen)
+int pnl_rand_bessel(double nu, double a, int gen)
 {
   PnlRng *rng;
   rng = pnl_rng_get_from_id(gen);
-  return pnl_rng_bessel (nu, a, rng);
+  return pnl_rng_bessel(nu, a, rng);
 }
 

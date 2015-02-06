@@ -24,7 +24,7 @@
 /**
  * Evaluate an integral over [x0, x1] with a non-adaptive method
  *
- * @param *F a PnlFunc to be integrated 
+ * @param *F a PnlFunc to be integrated
  * @param x0 left corner of domain
  * @param x1 rightt corner of domain
  * @param n the number of steps to be used
@@ -32,7 +32,7 @@
  * (trapezoidal rule), "simpson" (Simpson's rule)
  * @return the value of the integral
  */
-double pnl_integration (PnlFunc *F, double x0, double x1, int n, char *meth)
+double pnl_integration(PnlFunc *F, double x0, double x1, int n, char *meth)
 {
   double h, xh, sum;
 
@@ -40,18 +40,33 @@ double pnl_integration (PnlFunc *F, double x0, double x1, int n, char *meth)
   sum = 0.;
 
   /* sum over the strictly inner points */
-  for (xh = x0 + h; xh < x1; xh += h) { sum += PNL_EVAL_FUNC(F, xh); }
+  for (xh = x0 + h; xh < x1; xh += h)
+    {
+      sum += PNL_EVAL_FUNC(F, xh);
+    }
 
-  if (strcmp (meth, "rect") == 0) { sum += PNL_EVAL_FUNC(F, x0); }
-  else if (strcmp (meth, "trap") == 0) { sum += (PNL_EVAL_FUNC(F, x0) + PNL_EVAL_FUNC(F, x1)) / 2.; }
-  else if (strcmp (meth, "simpson") == 0)
+  if (strcmp(meth, "rect") == 0)
+    {
+      sum += PNL_EVAL_FUNC(F, x0);
+    }
+  else if (strcmp(meth, "trap") == 0)
+    {
+      sum += (PNL_EVAL_FUNC(F, x0) + PNL_EVAL_FUNC(F, x1)) / 2.;
+    }
+  else if (strcmp(meth, "simpson") == 0)
     {
       double sum2 = 0.;
-      for (xh = x0 + h/2; xh < x1; xh += h) { sum2 += PNL_EVAL_FUNC(F, xh); }
+      for (xh = x0 + h / 2; xh < x1; xh += h)
+        {
+          sum2 += PNL_EVAL_FUNC(F, xh);
+        }
       sum = 2. * sum + PNL_EVAL_FUNC(F, x0) + PNL_EVAL_FUNC(F, x1) + 4. * sum2;
       sum /= 6.;
     }
-  else { PNL_ERROR("unknow method", "pnl_integration"); }
+  else
+    {
+      PNL_ERROR("unknow method", "pnl_integration");
+    }
 
   sum *= h;
   return sum;
@@ -61,24 +76,24 @@ double pnl_integration (PnlFunc *F, double x0, double x1, int n, char *meth)
 static double xsav, y0sav, y1sav;
 static int nysav;
 static char *methsav;
-static const PnlFunc2D* globalfunc;
+static const PnlFunc2D *globalfunc;
 
-static double func1D(double y, void *params) 
+static double func1D(double y, void *params)
 {
   return globalfunc->F(xsav, y, params);
 }
 
-static double int_1d(double x, void *params) 
+static double int_1d(double x, void *params)
 {
   PnlFunc wrap_1d;
   wrap_1d.F = func1D;
   wrap_1d.params = params;
-  xsav=x;
-  return pnl_integration (&wrap_1d, y0sav, y1sav, nysav, methsav);
+  xsav = x;
+  return pnl_integration(&wrap_1d, y0sav, y1sav, nysav, methsav);
 }
 /**
- * integrate a function on [x0,x1]x[y0, y1] 
- * @param *F a PnlFunc of two variables to be integrated 
+ * integrate a function on [x0,x1]x[y0, y1]
+ * @param *F a PnlFunc of two variables to be integrated
  * @param x0 bottom left corner of domain
  * @param x1 bottom right corner of domain
  * @param y0 top left corner of domain
@@ -89,8 +104,8 @@ static double int_1d(double x, void *params)
  * (rapezoidal rule), "simpson" (Simpson's rule)
  * @return the value of the integral
  */
-double pnl_integration_2d (PnlFunc2D *F, double x0, double x1,
-                          double y0,double y1, int nx, int ny, char *meth)
+double pnl_integration_2d(PnlFunc2D *F, double x0, double x1,
+                          double y0, double y1, int nx, int ny, char *meth)
 {
   PnlFunc func_1d;
   func_1d.F = &int_1d;
@@ -100,5 +115,5 @@ double pnl_integration_2d (PnlFunc2D *F, double x0, double x1,
   y1sav            = y1;
   nysav            = ny;
   methsav          = meth;
-  return pnl_integration (&func_1d, x0, x1, nx, meth);
+  return pnl_integration(&func_1d, x0, x1, nx, meth);
 }

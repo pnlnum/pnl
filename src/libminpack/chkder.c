@@ -1,30 +1,30 @@
 /* Minpack Copyright Notice (1999) University of Chicago.  All rights reserved
- * 
+ *
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the
  * following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above
  * copyright notice, this list of conditions and the following
  * disclaimer.
- * 
+ *
  * 2. Redistributions in binary form must reproduce the above
  * copyright notice, this list of conditions and the following
  * disclaimer in the documentation and/or other materials
  * provided with the distribution.
- * 
+ *
  * 3. The end-user documentation included with the
  * redistribution, if any, must include the following
  * acknowledgment:
- * 
+ *
  *    "This product includes software developed by the
  *    University of Chicago, as Operator of Argonne National
  *    Laboratory.
- * 
+ *
  * Alternately, this acknowledgment may appear in the software
  * itself, if and wherever such third-party acknowledgments
  * normally appear.
- * 
+ *
  * 4. WARRANTY DISCLAIMER. THE SOFTWARE IS SUPPLIED "AS IS"
  * WITHOUT WARRANTY OF ANY KIND. THE COPYRIGHT HOLDER, THE
  * UNITED STATES, THE UNITED STATES DEPARTMENT OF ENERGY, AND
@@ -38,7 +38,7 @@
  * DO NOT WARRANT THAT THE SOFTWARE WILL FUNCTION
  * UNINTERRUPTED, THAT IT IS ERROR-FREE OR THAT ANY ERRORS WILL
  * BE CORRECTED.
- * 
+ *
  * 5. LIMITATION OF LIABILITY. IN NO EVENT WILL THE COPYRIGHT
  * HOLDER, THE UNITED STATES, THE UNITED STATES DEPARTMENT OF
  * ENERGY, OR THEIR EMPLOYEES: BE LIABLE FOR ANY INDIRECT,
@@ -58,182 +58,192 @@
 
 /* Table of constant values */
 
-void pnl_minpack_chkder(int m, int n, const double *x, 
-	double *fvec, double *fjac, int ldfjac, double *xp, 
-	double *fvecp, int mode, double *err)
+void pnl_minpack_chkder(int m, int n, const double *x,
+                        double *fvec, double *fjac, int ldfjac, double *xp,
+                        double *fvecp, int mode, double *err)
 {
-    /* System generated locals */
-    int fjac_dim1, fjac_offset, i__1, i__2;
+  /* System generated locals */
+  int fjac_dim1, fjac_offset, i__1, i__2;
 
-    /* Local variables */
-    int i__, j;
-    double eps, epsf, temp, epsmch;
-    double epslog;
+  /* Local variables */
+  int i__, j;
+  double eps, epsf, temp, epsmch;
+  double epslog;
 
-/*     ********** */
+  /*     ********** */
 
-/*     subroutine chkder */
+  /*     subroutine chkder */
 
-/*     this subroutine checks the gradients of m nonlinear functions */
-/*     in n variables, evaluated at a point x, for consistency with */
-/*     the functions themselves. the user must call chkder twice, */
-/*     first with mode = 1 and then with mode = 2. */
+  /*     this subroutine checks the gradients of m nonlinear functions */
+  /*     in n variables, evaluated at a point x, for consistency with */
+  /*     the functions themselves. the user must call chkder twice, */
+  /*     first with mode = 1 and then with mode = 2. */
 
-/*     mode = 1. on input, x must contain the point of evaluation. */
-/*               on output, xp is set to a neighboring point. */
+  /*     mode = 1. on input, x must contain the point of evaluation. */
+  /*               on output, xp is set to a neighboring point. */
 
-/*     mode = 2. on input, fvec must contain the functions and the */
-/*                         rows of fjac must contain the gradients */
-/*                         of the respective functions each evaluated */
-/*                         at x, and fvecp must contain the functions */
-/*                         evaluated at xp. */
-/*               on output, err contains measures of correctness of */
-/*                          the respective gradients. */
+  /*     mode = 2. on input, fvec must contain the functions and the */
+  /*                         rows of fjac must contain the gradients */
+  /*                         of the respective functions each evaluated */
+  /*                         at x, and fvecp must contain the functions */
+  /*                         evaluated at xp. */
+  /*               on output, err contains measures of correctness of */
+  /*                          the respective gradients. */
 
-/*     the subroutine does not perform reliably if cancellation or */
-/*     rounding errors cause a severe loss of significance in the */
-/*     evaluation of a function. therefore, none of the components */
-/*     of x should be unusually small (in particular, zero) or any */
-/*     other value which may cause loss of significance. */
+  /*     the subroutine does not perform reliably if cancellation or */
+  /*     rounding errors cause a severe loss of significance in the */
+  /*     evaluation of a function. therefore, none of the components */
+  /*     of x should be unusually small (in particular, zero) or any */
+  /*     other value which may cause loss of significance. */
 
-/*     the subroutine statement is */
+  /*     the subroutine statement is */
 
-/*       pnl_minpack_chkder(m,n,x,fvec,fjac,ldfjac,xp,fvecp,mode,err) */
+  /*       pnl_minpack_chkder(m,n,x,fvec,fjac,ldfjac,xp,fvecp,mode,err) */
 
-/*     where */
+  /*     where */
 
-/*       m is a positive integer input variable set to the number */
-/*         of functions. */
+  /*       m is a positive integer input variable set to the number */
+  /*         of functions. */
 
-/*       n is a positive integer input variable set to the number */
-/*         of variables. */
+  /*       n is a positive integer input variable set to the number */
+  /*         of variables. */
 
-/*       x is an input array of length n. */
+  /*       x is an input array of length n. */
 
-/*       fvec is an array of length m. on input when mode = 2, */
-/*         fvec must contain the functions evaluated at x. */
+  /*       fvec is an array of length m. on input when mode = 2, */
+  /*         fvec must contain the functions evaluated at x. */
 
-/*       fjac is an m by n array. on input when mode = 2, */
-/*         the rows of fjac must contain the gradients of */
-/*         the respective functions evaluated at x. */
+  /*       fjac is an m by n array. on input when mode = 2, */
+  /*         the rows of fjac must contain the gradients of */
+  /*         the respective functions evaluated at x. */
 
-/*       ldfjac is a positive integer input parameter not less than m */
-/*         which specifies the leading dimension of the array fjac. */
+  /*       ldfjac is a positive integer input parameter not less than m */
+  /*         which specifies the leading dimension of the array fjac. */
 
-/*       xp is an array of length n. on output when mode = 1, */
-/*         xp is set to a neighboring point of x. */
+  /*       xp is an array of length n. on output when mode = 1, */
+  /*         xp is set to a neighboring point of x. */
 
-/*       fvecp is an array of length m. on input when mode = 2, */
-/*         fvecp must contain the functions evaluated at xp. */
+  /*       fvecp is an array of length m. on input when mode = 2, */
+  /*         fvecp must contain the functions evaluated at xp. */
 
-/*       mode is an integer input variable set to 1 on the first call */
-/*         and 2 on the second. other values of mode are equivalent */
-/*         to mode = 1. */
+  /*       mode is an integer input variable set to 1 on the first call */
+  /*         and 2 on the second. other values of mode are equivalent */
+  /*         to mode = 1. */
 
-/*       err is an array of length m. on output when mode = 2, */
-/*         err contains measures of correctness of the respective */
-/*         gradients. if there is no severe loss of significance, */
-/*         then if err(i) is 1.0 the i-th gradient is correct, */
-/*         while if err(i) is 0.0 the i-th gradient is incorrect. */
-/*         for values of err between 0.0 and 1.0, the categorization */
-/*         is less certain. in general, a value of err(i) greater */
-/*         than 0.5 indicates that the i-th gradient is probably */
-/*         correct, while a value of err(i) less than 0.5 indicates */
-/*         that the i-th gradient is probably incorrect. */
+  /*       err is an array of length m. on output when mode = 2, */
+  /*         err contains measures of correctness of the respective */
+  /*         gradients. if there is no severe loss of significance, */
+  /*         then if err(i) is 1.0 the i-th gradient is correct, */
+  /*         while if err(i) is 0.0 the i-th gradient is incorrect. */
+  /*         for values of err between 0.0 and 1.0, the categorization */
+  /*         is less certain. in general, a value of err(i) greater */
+  /*         than 0.5 indicates that the i-th gradient is probably */
+  /*         correct, while a value of err(i) less than 0.5 indicates */
+  /*         that the i-th gradient is probably incorrect. */
 
-/*     subprograms called */
+  /*     subprograms called */
 
-/*       minpack supplied ... dpmpar */
+  /*       minpack supplied ... dpmpar */
 
-/*       fortran supplied ... dabs,dlog10,dsqrt */
+  /*       fortran supplied ... dabs,dlog10,dsqrt */
 
-/*     argonne national laboratory. minpack project. march 1980. */
-/*     burton s. garbow, kenneth e. hillstrom, jorge j. more */
+  /*     argonne national laboratory. minpack project. march 1980. */
+  /*     burton s. garbow, kenneth e. hillstrom, jorge j. more */
 
-/*     ********** */
-    /* Parameter adjustments */
-    --err;
-    --fvecp;
-    --fvec;
-    --xp;
-    --x;
-    fjac_dim1 = ldfjac;
-    fjac_offset = 1 + fjac_dim1 * 1;
-    fjac -= fjac_offset;
+  /*     ********** */
+  /* Parameter adjustments */
+  --err;
+  --fvecp;
+  --fvec;
+  --xp;
+  --x;
+  fjac_dim1 = ldfjac;
+  fjac_offset = 1 + fjac_dim1 * 1;
+  fjac -= fjac_offset;
 
-    /* Function Body */
+  /* Function Body */
 
-/*     epsmch is the machine precision. */
+  /*     epsmch is the machine precision. */
 
-    epsmch = pnl_minpack_dpmpar(1);
+  epsmch = pnl_minpack_dpmpar(1);
 
-    eps = sqrt(epsmch);
+  eps = sqrt(epsmch);
 
-    if (mode == 2) {
-	goto L20;
+  if (mode == 2)
+    {
+      goto L20;
     }
 
-/*        mode = 1. */
+  /*        mode = 1. */
 
-    i__1 = n;
-    for (j = 1; j <= i__1; ++j) {
-	temp = eps * fabs(x[j]);
-	if (temp == 0.) {
-	    temp = eps;
-	}
-	xp[j] = x[j] + temp;
-/* L10: */
+  i__1 = n;
+  for (j = 1; j <= i__1; ++j)
+    {
+      temp = eps * fabs(x[j]);
+      if (temp == 0.)
+        {
+          temp = eps;
+        }
+      xp[j] = x[j] + temp;
+      /* L10: */
     }
-    /* goto L70; */
-    return;
+  /* goto L70; */
+  return;
 L20:
 
-/*        mode = 2. */
+  /*        mode = 2. */
 
-    epsf = factor * epsmch;
-    epslog = M_LOG10E * log(eps);
-    i__1 = m;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	err[i__] = 0.;
-/* L30: */
+  epsf = factor * epsmch;
+  epslog = M_LOG10E * log(eps);
+  i__1 = m;
+  for (i__ = 1; i__ <= i__1; ++i__)
+    {
+      err[i__] = 0.;
+      /* L30: */
     }
-    i__1 = n;
-    for (j = 1; j <= i__1; ++j) {
-	temp = fabs(x[j]);
-	if (temp == 0.) {
-	    temp = 1.;
-	}
-	i__2 = m;
-	for (i__ = 1; i__ <= i__2; ++i__) {
-	    err[i__] += temp * fjac[i__ + j * fjac_dim1];
-/* L40: */
-	}
-/* L50: */
+  i__1 = n;
+  for (j = 1; j <= i__1; ++j)
+    {
+      temp = fabs(x[j]);
+      if (temp == 0.)
+        {
+          temp = 1.;
+        }
+      i__2 = m;
+      for (i__ = 1; i__ <= i__2; ++i__)
+        {
+          err[i__] += temp * fjac[i__ + j * fjac_dim1];
+          /* L40: */
+        }
+      /* L50: */
     }
-    i__1 = m;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	temp = 1.;
-	if (fvec[i__] != 0. && fvecp[i__] != 0. && fabs(fvecp[i__] - 
-		fvec[i__]) >= epsf * fabs(fvec[i__]))
-		 {
-	    temp = eps * fabs((fvecp[i__] - fvec[i__]) / eps - err[i__]) 
-		    / (fabs(fvec[i__]) +
-                       fabs(fvecp[i__]));
-	}
-	err[i__] = 1.;
-	if (temp > epsmch && temp < eps) {
-	    err[i__] = (M_LOG10E * log(temp) - epslog) / epslog;
-	}
-	if (temp >= eps) {
-	    err[i__] = 0.;
-	}
-/* L60: */
+  i__1 = m;
+  for (i__ = 1; i__ <= i__1; ++i__)
+    {
+      temp = 1.;
+      if (fvec[i__] != 0. && fvecp[i__] != 0. && fabs(fvecp[i__] -
+          fvec[i__]) >= epsf * fabs(fvec[i__]))
+        {
+          temp = eps * fabs((fvecp[i__] - fvec[i__]) / eps - err[i__])
+                 / (fabs(fvec[i__]) +
+                    fabs(fvecp[i__]));
+        }
+      err[i__] = 1.;
+      if (temp > epsmch && temp < eps)
+        {
+          err[i__] = (M_LOG10E * log(temp) - epslog) / epslog;
+        }
+      if (temp >= eps)
+        {
+          err[i__] = 0.;
+        }
+      /* L60: */
     }
-/* L70: */
+  /* L70: */
 
-    /* return 0; */
+  /* return 0; */
 
-/*     last card of subroutine chkder. */
+  /*     last card of subroutine chkder. */
 
 } /* chkder_ */
 
