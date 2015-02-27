@@ -168,7 +168,7 @@ static long pnl_rng_poisson_ptrs(double lambda, PnlRng *rng)
       if ((us >= 0.07) && (V <= vr)) return k;
       if ((k < 0) || ((us < 0.013) && (V > us))) continue;
       if ((log(V) + log(invalpha) - log(a / (us * us) + b)) <=
-          (-lambda + k * loglambda - lgamma(k + 1)))
+          (-lambda + k * loglambda - pnl_lgamma(k + 1)))
         return k;
     }
 }
