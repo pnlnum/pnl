@@ -480,7 +480,7 @@ static int pnl_dlamc2 (int *beta, int *t, int *rnd, double *eps,
 	}
       else if (ngpmin == gpmin && ngnmin == gnmin)
 	{
-	  if ((i_1 = ngpmin - ngnmin, fabs (i_1)) == 1)
+	  if ((i_1 = ngpmin - ngnmin, abs (i_1)) == 1)
 	    {
 	      lemin = MAX (ngpmin, ngnmin);
 	      /*            ( Twos-complement machines, no gradual underflow; 
@@ -495,7 +495,7 @@ static int pnl_dlamc2 (int *beta, int *t, int *rnd, double *eps,
 	    }
 
 	}
-      else if ((i_1 = ngpmin - ngnmin, fabs (i_1)) == 1 && gpmin == gnmin)
+      else if ((i_1 = ngpmin - ngnmin, abs (i_1)) == 1 && gpmin == gnmin)
 	{
 	  if (gpmin - MIN (ngpmin, ngnmin) == 3)
 	    {
