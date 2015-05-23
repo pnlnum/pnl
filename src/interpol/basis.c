@@ -1274,17 +1274,17 @@ double pnl_basis_i_D2(const PnlBasis *b, const double *x, int i, int j1, int j2)
   int l;
   double aux = 1;
   /* Test if the partial degree is small enough to return 0 */
-  if ((j1 == j2) && PNL_MGET(b->T, i, j1) == 0) return 0.;
+  if ((j1 == j2) && PNL_MGET(b->T, i, j1) <= 1) return 0.;
   if (PNL_MGET(b->T, i, j1) == 0 || PNL_MGET(b->T, i, j2) == 0) return 0.;
 
   if (b->isreduced == 1)
     {
       if (j1 == j2)
         {
-          for (l = b->SpT->I[i] ; l < b->SpT->I[i + 1] ; l++)
-            {
-              const int k = b->SpT->J[l];
-              const int Tik = b->SpT->array[l];
+            for (l = b->SpT->I[i] ; l < b->SpT->I[i + 1] ; l++)
+              {
+                const int k = b->SpT->J[l];
+                const int Tik = b->SpT->array[l];
               if (k == j1)
                 aux *= b->scale[k] * b->scale[k] * (b->D2f)((x[k] - b->center[k]) * b->scale[k], Tik);
               else
@@ -1438,7 +1438,7 @@ double pnl_basis_eval_D2(const PnlBasis *basis, const PnlVect *coef, const doubl
 void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double *x,
                            double *val, PnlVect *grad, PnlMat *hes)
 {
-  int i, k, j, l, n;
+  int i, j, l, n, m;
   double y, *f, *Df, D2f;
 
   CHECK_NB_FUNC(coef, b);
@@ -1461,28 +1461,20 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
        */
       if (b->isreduced == 1)
         {
-          for (k = 0 ; k < n ; k++)
+          for (l = b->SpT->I[i] ; l < b->SpT->I[i + 1] ; l++)
             {
-              const int Tik = PNL_MGET(b->T, i, k);
-              if (Tik == 0)
-                {
-                  f[k] = 1.;
-                  continue;
-                }
+              const int k = b->SpT->J[l];
+              const int Tik = b->SpT->array[l];
               f[k] = (b->f)((x[k] - b->center[k]) * b->scale[k], Tik);
               auxf *= f[k];
             }
         }
       else
         {
-          for (k = 0 ; k < n ; k++)
+          for (l = b->SpT->I[i] ; l < b->SpT->I[i + 1] ; l++)
             {
-              const int Tik = PNL_MGET(b->T, i, k);
-              if (Tik == 0)
-                {
-                  f[k] = 1.;
-                  continue;
-                }
+              const int k = b->SpT->J[l];
+              const int Tik = b->SpT->array[l];
               f[k] = (b->f)(x[k], Tik);
               auxf *= f[k];
             }
@@ -1494,8 +1486,11 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
       for (j = 0 ; j < n ; j++)
         {
           auxf = 1;
-          for (k = 0 ; k < j ; k++) auxf *= f[k];
-          for (k = k + 1 ; k < n ; k++) auxf *= f[k];
+          for (l = b->SpT->I[i] ; l < b->SpT->I[i + 1] ; l++)
+            {
+              const int k = b->SpT->J[l];
+              if (k != j) auxf *= f[k];
+            }
           if (b->isreduced == 1)
             {
               const int Tij = PNL_MGET(b->T, i, j);
@@ -1503,7 +1498,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
               if (Tij >= 1)
                 {
                   Df[j] = b->scale[j] * (b->Df)((x[j] - b->center[j]) * b->scale[j], Tij);
-                  PNL_LET(grad, j) = PNL_GET(grad, j) + a * auxf * Df[j];
+                  PNL_LET(grad, j) += a * auxf * Df[j];
                 }
               else
                 Df[j] = 0.;
@@ -1512,7 +1507,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
               if (Tij >= 2)
                 {
                   D2f = b->scale[j] * b->scale[j] * (b->D2f)((x[j] - b->center[j]) * b->scale[j], Tij);
-                  PNL_MLET(hes, j, j) = PNL_MGET(hes, j, j) + a * auxf * D2f;
+                  PNL_MLET(hes, j, j) += a * auxf * D2f;
                 }
             }
           else
@@ -1522,7 +1517,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
               if (Tij >= 1)
                 {
                   Df[j] = (b->Df)(x[j], Tij);
-                  PNL_LET(grad, j) = PNL_GET(grad, j) + a * auxf * Df[j];
+                  PNL_LET(grad, j) += a * auxf * Df[j];
                 }
               else
                 Df[j] = 0.;
@@ -1531,21 +1526,23 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
               if (Tij >= 2)
                 {
                   D2f = (b->D2f)(x[j], Tij);
-                  PNL_MLET(hes, j, j) = PNL_MGET(hes, j, j) + a * auxf * D2f;
+                  PNL_MLET(hes, j, j) += a * auxf * D2f;
                 }
             }
 
           /* non diagonal terms of the Hessian matrix */
-          for (l = 0 ; l < j ; l++)
+          for (m = 0 ; m < j ; m++)
             {
-              if (Df[j] == 0. || Df[l] == 0.) continue;
+              if (Df[j] == 0. || Df[m] == 0.) continue;
               auxf = 1;
-              for (k = 0 ; k < l ; k++) auxf *= f[k];
-              for (k = k + 1 ; k < j ; k++) auxf *= f[k];
-              for (k = k + 1 ; k < n ; k++) auxf *= f[k];
+              for (l = b->SpT->I[i] ; l < b->SpT->I[i + 1] ; l++)
+                {
+                  const int k = b->SpT->J[l];
+                  if ((k != j) && (k != m)) auxf *= f[k];
+                }
 
-              PNL_MLET(hes, j, l) = PNL_MGET(hes, j, l) + a * auxf * Df[j] * Df[l];
-              PNL_MLET(hes, l, j) = PNL_MGET(hes, j, l);
+              PNL_MLET(hes, j, m) += a * auxf * Df[j] * Df[m];
+              PNL_MLET(hes, m, j) = PNL_MGET(hes, j, m);
             }
         }
     }
