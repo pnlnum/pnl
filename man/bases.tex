@@ -326,7 +326,7 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
 \item \describefun{double}{pnl_basis_eval_D2}{\PnlBasis \ptr  P, \PnlVect \ptr  coef, double \ptr x,  int i, int j}
   \sshortdescribe Same as function \reffun{pnl_basis_eval_D2_vect} but takes a 
   C array as the point of evaluation.
-\item \describefun{double}{pnl_basis_eval_derivs}{\PnlBasis \ptr P, \PnlVect\ptr coef, double \ptr x, double \ptr fx, \PnlVect \ptr Dfx, \PnlMat \ptr D2fx}
+\item \describefun{void}{pnl_basis_eval_derivs}{\PnlBasis \ptr P, \PnlVect\ptr coef, double \ptr x, double \ptr fx, \PnlVect \ptr Dfx, \PnlMat \ptr D2fx}
   \sshortdescribe Same as function \reffun{pnl_basis_eval_derivs_vect} but takes a
   C array as the point of evaluation.
 \end{itemize}
