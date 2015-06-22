@@ -1,5 +1,5 @@
-GCC=$(shell which gcc-4.9)
-GXX=$(shell which g++-4.9)
+GCC=$(shell which gcc-5)
+GXX=$(shell which g++-5)
 
 all: build build-gcc build-gcc-O2 build-O2
 
