@@ -62,7 +62,7 @@
 
     Some useful variables to modify the behaviour of cmake.
 
-        -DCMAKE_INSTALL_PREFIX    The path where to install the library. If
+        -DPNL_INSTALL_PREFIX     The path where to install the library. If
                 this variable is not specified, the library is installed in
                 the building directory.
 
