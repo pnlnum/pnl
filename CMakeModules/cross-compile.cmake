@@ -1,0 +1,6 @@
+SET(CMAKE_SYSTEM_NAME Windows)
+SET(CMAKE_C_COMPILER x86_64-w64-mingw32-gcc)
+SET(CMAKE_CXX_COMPILER x86_64-w64-mingw32-g++)
+SET(CMAKE_RC_COMPILER x86_64-w64-mingw32-windres)
+SET(BLAS_LIBRAIRES /usr/local/mingw64/x86_64-w64-mingw32/bin/libblas.dll)
+SET(LAPACK_LIBRAIRES /usr/local/mingw64/x86_64-w64-mingw32/bin/liblapack.dll)

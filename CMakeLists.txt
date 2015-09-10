@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8.9)
 cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
 set(PROJECT_LIBRARY_NAME ${PROJECT_NAME})
 set(VERSION_CURRENT 1)
 set(VERSION_AGE 7)
@@ -20,6 +21,12 @@ if (CXX)
     set (CMAKE_CXX_COMPILER ${CXX})
 endif (CXX)
 
+
+if(CROSS_COMPILE)
+    include(cross-compile)
+    set(MINGW ON)
+endif()
+
 project(pnl C)
 
 if (NOT LINK_TYPE) 
@@ -39,7 +46,6 @@ option(USE_MPI "Compiles the MPI bindings for PNL. Default = on" ON)
 option(WITHOUT_DEPRECATED "Build deprecated functions. Default = off" OFF)
 option(USE_INTERNAL_BLAS "Use internal Blas & Lapack instead of the system's ones. Default = off" OFF)
 
-set(CMAKE_MODULE_PATH "${pnl_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
 
 # Release or Debug
 if (NOT CMAKE_BUILD_TYPE)
@@ -106,7 +112,7 @@ if (USE_INTERNAL_BLAS)
     set (PNL_HAVE_DPSTRF ON)
 else (USE_INTERNAL_BLAS)
     # Check if Fortran is available
-    enable_language(Fortran OPTIONAL)
+    # enable_language(Fortran OPTIONAL)
     if (CMAKE_Fortran_COMPILER_WORKS)
         message ("Fortran compiler found ${CMAKE_Fortran_COMPILER}")
         set(PNL_HAVE_FORTRAN_COMPILER ON)
@@ -124,9 +130,6 @@ else (USE_INTERNAL_BLAS)
 endif (USE_INTERNAL_BLAS)
 
 
-if (USE_INTERNAL_BLAS)
-endif (USE_INTERNAL_BLAS)
-
 if (USE_MPI)
     set (MPI_FIND_QUIETLY true)
     find_package(MPI)
@@ -141,27 +144,6 @@ endif (USE_MPI)
 if (UNIX)
     set(LIBS ${LIBS} m)
 endif (UNIX)
-
-# Prepare for creating libtool .la
-# include(CMakeMacroLibtoolFile)
-# if (UNIX)
-#     LIST( REMOVE_DUPLICATES LIBS )
-#     foreach( _lib ${LIBS} )
-#         # Remove path to the library and suffixes. Transformation example: libXXX-2.0.(so|dylib) => XXX-2.0
-#         STRING(REGEX REPLACE ".*/lib(.*)\\.(dylib|so)" "\\1" _lib_no_path "${_lib}" )
-#         STRING(REGEX REPLACE "(.*)/lib[^/]*\\.(dylib|so)" "\\1" _lib_path "${_lib}" )
-#         if (NOT ${_lib_no_path} STREQUAL ${_lib})
-#             set(PNL_LDFLAGS "${PNL_LDFLAGS} ${CMAKE_LIBRARY_PATH_FLAG}${_lib_path}" )
-#         endif ()
-#         if (NOT ${_lib_no_path} STREQUAL ${_lib})
-#             set(PNL_LDFLAGS "${PNL_LDFLAGS} ${CMAKE_LINK_LIBRARY_FLAG}${_lib_no_path}" )
-#         endif ()
-#     endforeach( _lib )
-#     if (APPLE)
-#         set(PNL_LDFLAGS "${PNL_LDFLAGS} -lblas -llapack" )
-#     endif (APPLE)
-#     set(PNL_LDFLAGS "${PNL_LDFLAGS} -lm" )
-# endif (UNIX)
 
 # Stuff for CMakeuser.incl
 STRING(REGEX REPLACE ";" " -I" PNL_CPP_FLAGS "${PNL_CPP_FLAGS}" )
