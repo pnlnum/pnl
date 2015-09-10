@@ -32,7 +32,7 @@
 /*   pnl_mat_free (&Tfull); */
 /* } */
 
-static PnlTridiagMat* create_random_tridiag (n, gen)
+static PnlTridiagMat* create_random_tridiag (int n, int gen)
 {
   PnlVect *dl, *du, *d;
   PnlTridiagMat *M;
