@@ -1,17 +1,10 @@
 
-- List structure
-       * Add a pnl_list_copy function. It implies to add a
-         copy function to PnlObject
-
 - splines 
     CMlib 
     in scilab routines/callelm/somespline.f
 
 - Complex tridiag and band matrices
     I am not sure these storages are so meaningful for complex data
-
-- Should dgemm use Blas ?
-    Probably yes, we should have a look at CBlas
 
 - interface dgesvd
 

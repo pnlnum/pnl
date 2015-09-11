@@ -4,10 +4,10 @@
 
 0. Dependencies
 
-    To compile PNL, you need CMake version 2.8 at least.
+    To compile PNL, you need CMake version >= 2.8.
         http://cmake.org/cmake/resources/software.html
     
-    In addition, users should know that :
+    In addition, users should know that:
 
         - Linear Algebra routines mainly rely on Blas & Lapack. If these
         two libraries are not found on the machine, the versions shipped with
@@ -22,20 +22,17 @@
 
         1. Extract the zip file, this will create a directory named pnl-XXX
            where XXX is the version number.
-        2. Launch Visual C++ command prompt (make sure to use the 32bit
-                version) and change to directory
-            pnl-XXX/lib. In this directory, run
-                lib.exe /def:libpnl.def /out:libpnl.lib
-            This command creates the .lib file needed by Visual to link a
-            project to an external library.
-        4. Add the directory /path/to/pnl-XXX/include to the list of
+        2. Add the directory /path/to/pnl-XXX/include to the list of
             directories where to search for header files.
-        5. Add the directory /path/to/pnl-XXX/lib to the list of
+        3. Add the directory /path/to/pnl-XXX/lib to the list of
             directories where to search for external dlls.
-        6. Add libpnl.lib as an additional dependency of your project
+        4. Add libpnl.lib as an additional dependency of your project
             (Properties -> Linking -> Input)
-        7. Copy the files libpnl.dll, libblas.dll and liblapack.dll from
-            the lib directory to the directory containing the executable file.
+        7. Copy the following dlls from the lib directory to the directory
+            containing the executable file: 
+                libblas.dll  libgcc_s_seh-1.dll libgfortran-3.dll
+                liblapack.dll  libpnl.dll  libquadmath-0.dll
+
 
     B. Source version
 
@@ -45,14 +42,14 @@
 
 2. Source version
 
-    You need CMake 2.8 for installing PNL from the source version.
+    You need CMake >= 2.8 to compile PNL.
 
      
     Per default, the make install command installs the library in the build
     directory. 
 
-    Go to the top level directory of PNL and run.
     We advice to build the library out of the source tree.
+    Go to the top level directory of PNL and run.
     > mkdir build
     > cd build
     
@@ -62,15 +59,13 @@
 
     Some useful variables to modify the behaviour of cmake.
 
-        -DPNL_INSTALL_PREFIX     The path where to install the library. If
-                this variable is not specified, the library is installed in
-                the building directory.
+        -DPNL_INSTALL_PREFIX     The path where to install the library.
+                Default is to use the building directory as the installation
+                prefix.
 
         -DCMAKE_BUILD_TYPE        Release OR Debug. Default is Debug.
-
                 Choose Debug for building a development release without
                 optimization and with debugging symbols.
-
                 Choose Release for building an optimized version.
 
         -DLAPACK_LIBRARIES        Full path of a Lapack library (not just its
@@ -81,14 +76,13 @@
                 directory). Blas is detected automatically but the user
                 can specify a particular library.
 
-
             Note that you must specify both BLAS_LIBRARIES and
             LAPACK_LIBRARIES or none of them.
 
         -DUSE_MPI                 ON/OFF. Default is ON. If ON, build the MPI
                 bindings.
 
-        -DUSE_INTERNAL_BLAS       ON/OFF. Default OFF. If ON, use the
+        -DUSE_INTERNAL_BLAS       ON/OFF. Default is OFF. If ON, use the
                 internal Blas & Lapack libraries shipped with the PNL
                 source code.
 
