@@ -8,24 +8,24 @@ based on the \PnlRng object. This interface uses reentrant functions
 and is suitable for multi-threaded applications.
 
 The older {\em rand} interface is kept for compatibility
-issues only and hsould not be used in newly written code.
+purposes only and should not be used in new code.
 \begin{table}[h!]
   \begin{tabular}{l|l|l|l}
     Random generator & index & Type & Info\\
     \hline
-    KNUTH & PNL_RNG_KNUTH & pseudo\\
-    MRGK3 & PNL_RNG_MRGK3 & pseudo\\
-    MRGK5 & PNL_RNG_MRGK5 & pseudo\\
-    SHUFL & PNL_RNG_SHUFL & pseudo\\
-    L'ECUYER & PNL_RNG_L_ECUYER & pseudo\\
-    TAUSWORTHE & PNL_RNG_TAUSWORTHE & pseudo\\
-    MERSENNE & PNL_RNG_MERSENNE & pseudo\\
-    SQRT & PNL_RNG_SQRT & quasi\\
-    HALTON & PNL_RNG_HALTON & quasi\\
-    FAURE & PNL_RNG_FAURE & quasi\\
+    KNUTH & PNL_RNG_KNUTH & pseudo &\\
+    MRGK3 & PNL_RNG_MRGK3 & pseudo &\\
+    MRGK5 & PNL_RNG_MRGK5 & pseudo& \\
+    SHUFL & PNL_RNG_SHUFL & pseudo &\\
+    L'ECUYER & PNL_RNG_L_ECUYER & pseudo &\\
+    TAUSWORTHE & PNL_RNG_TAUSWORTHE & pseudo& \\
+    MERSENNE & PNL_RNG_MERSENNE & pseudo &\\
+    SQRT & PNL_RNG_SQRT & quasi &\\
+    HALTON & PNL_RNG_HALTON & quasi &\\
+    FAURE & PNL_RNG_FAURE & quasi& \\
     SOBOL_I4 & PNL_RNG_SOBOL_I4 & quasi & uses 32 bit intergers\\
     SOBOL_I8 & PNL_RNG_SOBOL2_I8 & quasi & uses 64 bit intergers\\
-    NIEDERREITER & PNL_RNG_NIEDERREITER & quasi
+    NIEDERREITER & PNL_RNG_NIEDERREITER & quasi &
   \end{tabular}
   \caption{Indices of the random generators}
   \label{rng-indices}
@@ -35,7 +35,7 @@ issues only and hsould not be used in newly written code.
 \subsection{The rng interface}
 \label{rng-int}
 
-It is possible to create random number generators each with its own state
+It is possible to create several random number generators each with its own state
 variable so that they can evolve independently in a shared memory environment.
 These generators are suitable for use in multi-threaded programs. 
 
@@ -104,13 +104,11 @@ struct _PnlRng
   \sshortdescribe Create an array of \var{n} independent DCMT. \var{seed} is
   the seed used to initialize the Mersenne Twister generator internally used to
   find new DCMT. On exit, \var{count} contains the number of generators actually
-  created. Same function as \reffun{pnl_dcmt_create_array} instead that it
-  directly returns an array of \PnlRng. Before using the generators, you
-  must initialize each of them by calling the function \reffun{pnl_rng_sseed}
-  \var{count} times.
+  created. Before using the generators, you must initialize each of them by calling the
+  function \reffun{pnl_rng_sseed} \var{count} times.
 \end{itemize}
 
-Some auxiliary functions internally used (to use with caution)
+Some auxiliary functions internally used (to be used with caution)
 \begin{itemize}
 \item \describefun{\PnlRng\ptr }{pnl_rng_new}{}
   \sshortdescribe Create an empty \PnlRng.
@@ -128,7 +126,7 @@ Some auxiliary functions internally used (to use with caution)
 \end{itemize}
 
 
-The following functions return one sample from a specified law.
+The following functions return one sample from the specified distribution.
 \begin{itemize}
 \item \describefun{int}{pnl_rng_bernoulli}{double p, \PnlRng \ptr rng}
   \sshortdescribe Generate a sample from the Bernouilli law on $\{0, 1\}$ with
@@ -195,10 +193,10 @@ The following functions return one sample from a specified law.
 \end{itemize}
 
 The following functions take an already existing \PnlVect\ptr  as
-its first argument and fill each entry of the vector with a sample from the
-specified law. All the entries are independent. The difference between
+first argument and fill each entry of the vector with a sample from the
+specified distribution. All the entries are independent. The difference between
 $n-$samples from a distribution in dimension $1$, and one sample from the same
-distribution in dimension $n$ only matters when using a {\bf Quasi} random
+distribution in dimension $n$ only matters when using a {\bf quasi} random
 number generator.
 \begin{itemize}
 \item \describefun{void}{pnl_vect_rng_bernoulli}{\PnlVect \ptr V, int samples,
@@ -250,8 +248,8 @@ number generator.
 \end{itemize}
 
 The following functions take an already existing \PnlMat\ptr  as
-first argument and fill each entry of the vector with a sample from the
-specified law. All the entries are independent. On return, the matrix \var{M}
+first argument and fill each entry of the matrix with a sample from the
+specified distribution. All the entries are independent. On return, the matrix \var{M}
 is of size \verb!samples x dimension!. The rows of \var{M} are independent
 and identically distributed. Each row is a sample from the given law in
 dimension \var{dimension}.
@@ -340,10 +338,6 @@ int main ()
   exit(0);
 }
 \end{verbatim}
-
-
-
-
 
 \subsection{The {\em rand} interface (deprecated)}
 \label{rand-int}
@@ -498,75 +492,74 @@ store it so that you can access the elements individually afterwards.
 \end{itemize}
 
 
-\subsubsection{Advanced usage}
-
-We also provide functions for directly manipulating Mersenne Twister and
-``Dynamically created Mersenne Twister'' random number generators, although we
-believe one should rather use the new {\em rng} interface.
-
-\paragraph{Mersenne Twister}
-
-It is possible to create Mersenne Twister random number generators each with
-its state variable.
-\begin{verbatim}
-typedef struct
-{
-  unsigned long mt[624];
-  int mti;
-} mt_state;
-typedef unsigned long ulong;
-\end{verbatim}
-
-\begin{itemize}
-\item \describefun{void}{pnl_mt_sseed}{mt_state \ptr state, unsigned long int
-    s}
-  \sshortdescribe Set the initial value of variable \var{state} using \var{s}
-\item \describefun{ulong}{pnl_mt_genrand}{mt_state \ptr state}
-  \sshortdescribe Return the following number in the sequence as an unsigned
-  long variable. A mask is applied so that only the lowest 32-bits are used.
-\item \describefun{double}{pnl_mt_genrand_double}{mt_state \ptr state}
-  \sshortdescribe Return the following number in the sequence as a double.
-\end{itemize}
-
-
-\paragraph{Dynamically created Mersenne Twister}
-
-
-These are Mersenne Twister type generators with Mersenne exponent fixed to
-\var{p=521} and word length \var{w=32} bits. These choices are hard coded and
-cannot be changed without altering the code directly.
-
-\begin{verbatim}
-typedef struct
-{
-  ulong aaa;
-  int mm,nn,rr,ww;
-  ulong wmask,umask,lmask;
-  int shift0, shift1, shiftB, shiftC;
-  ulong maskB, maskC;
-  int i;
-  ulong state[17];
-} dcmt_state;
-\end{verbatim}
-
-Some functions to use ``Dynamically Created Mersenne Twister'' random number
-generators (DCMT).
-\begin{itemize}
-\item \describefun{dcmt_state\ptr}{pnl_dcmt_get_parameter}{ulong seed}
-  \sshortdescribe Create a DCMT. \var{seed} is the seed used to initialize
-  the Mersenne Twister generator internally used to find new DCMT.
-\item \describefun{dcmt_state \ptr \ptr}{pnl_dcmt_create_array}{int n, ulong seed, int \ptr count}
-  \sshortdescribe Create an array of \var{n} independent DCMT. \var{seed} is
-  the seed used to initialize the Mersenne Twister generator internally used to
-  find new DCMT. On exit, \var{count} contains the number of generators actually
-  created.
-\item \describefun{double}{pnl_dcmt_genrand_double}{dcmt_state \ptr mts}
-  \sshortdescribe Generate a uniformly distributed random variable on \var{[0,1]}.
-\item \describefun{void}{pnl_dcmt_free}{dcmt_state \ptr \ptr mts}
-  \sshortdescribe Free a dcmt.
-\item \describefun{void}{pnl_dcmt_free_array}{dcmt_state \ptr \ptr mts, int count}
-  \sshortdescribe Free an array of dcmt as returned by \reffun{pnl_dcmt_create_array}
-\end{itemize}
+% \subsubsection{Advanced usage}
+%
+% We also provide functions for directly manipulating Mersenne Twister and
+% ``Dynamically created Mersenne Twister'' random number generators, although we
+% believe one should rather use the new {\em rng} interface.
+%
+% \paragraph{Mersenne Twister}
+%
+% It is possible to create Mersenne Twister random number generators each with
+% its state variable.
+% \begin{verbatim}
+% typedef struct
+% {
+%   unsigned long mt[624];
+%   int mti;
+% } mt_state;
+% typedef unsigned long ulong;
+% \end{verbatim}
+%
+% \begin{itemize}
+% \item \describefun{void}{pnl_mt_sseed}{mt_state \ptr state, unsigned long int
+%     s}
+%   \sshortdescribe Set the initial value of variable \var{state} using \var{s}
+% \item \describefun{ulong}{pnl_mt_genrand}{mt_state \ptr state}
+%   \sshortdescribe Return the following number in the sequence as an unsigned
+%   long variable. A mask is applied so that only the lowest 32-bits are used.
+% \item \describefun{double}{pnl_mt_genrand_double}{mt_state \ptr state}
+%   \sshortdescribe Return the following number in the sequence as a double.
+% \end{itemize}
+%
+%
+% \paragraph{Dynamically created Mersenne Twister}
+%
+%
+% These are Mersenne Twister type generators with Mersenne exponent fixed to
+% \var{p=521} and word length \var{w=32} bits. These choices are hard coded and
+% cannot be changed without altering the code directly.
+%
+% \begin{verbatim}
+% typedef struct
+% {
+%   ulong aaa;
+%   int mm,nn,rr,ww;
+%   ulong wmask,umask,lmask;
+%   int shift0, shift1, shiftB, shiftC;
+%   ulong maskB, maskC;
+%   int i;
+%   ulong state[17];
+% } dcmt_state;
+% \end{verbatim}
+%
+% Some functions to use ``Dynamically Created Mersenne Twister'' random number
+% generators (DCMT).
+% \begin{itemize}
+% \item \describefun{dcmt_state\ptr}{pnl_dcmt_get_parameter}{ulong seed}
+%   \sshortdescribe Create a DCMT. \var{seed} is the seed used to initialize
+%   the Mersenne Twister generator internally used to find new DCMT.
+% \item \describefun{dcmt_state \ptr \ptr}{pnl_dcmt_create_array}{int n, ulong seed, int \ptr count}
+%   \sshortdescribe Create an array of \var{n} independent DCMT. \var{seed} is
+%   the seed used to initialize the Mersenne Twister generator internally used to
+%   find new DCMT. On exit, \var{count} contains the number of generators actually
+%   created.
+% \item \describefun{double}{pnl_dcmt_genrand_double}{dcmt_state \ptr mts}
+%   \sshortdescribe Generate a uniformly distributed random variable on \var{[0,1]}.
+% \item \describefun{void}{pnl_dcmt_free}{dcmt_state \ptr \ptr mts}
+%   \sshortdescribe Free a dcmt.
+% \item \describefun{void}{pnl_dcmt_free_array}{dcmt_state \ptr \ptr mts, int count}
+%   \sshortdescribe Free an array of dcmt as returned by \reffun{pnl_dcmt_create_array}
+% \end{itemize}
 
 % vim:spelllang=en:spell:
-
