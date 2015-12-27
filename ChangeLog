@@ -1,3 +1,17 @@
+25-12-2015 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* basis.c: Add non tensor functions to PnlBasis.
+
+23-05-2015 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* basis.c: Fix a bug in Tchebychev polynomials and improve the
+	efficiency of pnl_basis_eval_derivs.
+
+09-09-2014 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* FindPnl.cmake: Provide a CMake module to detect Pnl in external
+	projects.
+
 28-08-2014 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* distributions.c: Sample from the non central chi2 distribution.
@@ -5,7 +19,7 @@
 27-04-2014 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* distributions.c: All sampling functions know how to handle QMC
-	generators
+	generators.
 
 26-04-2014 Jérôme Lelong <jerome.lelong@gmail.com>
 
