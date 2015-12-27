@@ -2,8 +2,8 @@
 
 /**
    @mainpage Pnl
-   @version 1.5
-   @author Jérôme Lelong (2007 - 2012)
+   @version 1.7.2
+   @author Jérôme Lelong (2007 - 2016)
    @author David Pommier (2007 - Apr. 2009)
  
    @section PnlIntro Introduction

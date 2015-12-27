@@ -1150,6 +1150,8 @@ void pnl_basis_print(const PnlBasis *B)
  * for a polynomial with n variates. Each p_k is a polynomial with only
  * one variate.
  *
+ * @deprecated Use the function pnl_basis_ik_vect(const PnlBasis *b, const PnlVect *x, int i, int k)
+ *
  * This functions evaluates the term p_k of the i-th element of the
  * basis b at the point x
  *
@@ -1179,6 +1181,8 @@ double pnl_basis_ik(const PnlBasis *b, const double *x, int i, int k)
 
 /**
  * Evaluate the i-th element of the basis b at the point x
+ *
+ * @deprecated Use the function pnl_basis_i_vect(const PnlBasis *b, const PnlVect *x, int i)
  *
  * @param b a PnlBasis
  * @param x a C array containing the coordinates of the point at which to
@@ -1215,6 +1219,8 @@ double pnl_basis_i(const PnlBasis *b, const double *x, int i)
 
 /**
  * First order derivative
+ *
+ * @deprecated Use the function pnl_basis_i_D_vect(const PnlBasis *b, const PnlVect *x, int i, int j)
  *
  * @param b a basis
  * @param x the point at which to evaluate the first derivative
@@ -1260,6 +1266,8 @@ double pnl_basis_i_D(const PnlBasis *b, const double *x, int i, int j)
 
 /**
  * Second order derivative
+ *
+ * @deprecated Use the function pnl_basis_i_D2_vect(const PnlBasis *b, const PnlVect *x, int i, int j1, int j2)
  *
  * @param b a basis
  * @param x the point at which to evaluate the first derivative
@@ -1339,6 +1347,8 @@ double pnl_basis_i_D2(const PnlBasis *b, const double *x, int i, int j1, int j2)
 /**
  * Evaluate a linear combination of basis functions at x
  *
+ * @deprecated Use the function pnl_basis_eval_vect(const PnlBasis *basis, const PnlVect *coef, const PnlVect *x)
+ *
  * @param coef a vector typically computed by pnl_basis_fit_ls
  * @param x the coordinates of the point at which to evaluate the function
  * @param basis a PnlBasis
@@ -1366,6 +1376,8 @@ double pnl_basis_eval(const PnlBasis *basis, const PnlVect *coef, const double *
 /**
  * Evaluate the first derivative with respect to x[i] of a linear combination
  * of basis functions at x
+ *
+ * @deprecated Use the function pnl_basis_eval_D_vect(const PnlBasis *basis, const PnlVect *coef, const PnlVect *x, int i)
  *
  * @param coef a vector typically computed by pnl_basis_fit_ls
  * @param x the coordinates of the point at which to evaluate the function
@@ -1396,6 +1408,8 @@ double pnl_basis_eval_D(const PnlBasis *basis, const PnlVect *coef, const double
  * Evaluate the second derivative with respect to x[i] and x[j] of a linear
  * combination of basis functions at x
  *
+ * @deprecated Use the function pnl_basis_eval_D2_vect(const PnlBasis *basis, const PnlVect *coef, const PnlVect *x, int i, int j)
+ *
  * @param coef a vector typically computed by pnl_basis_fit_ls
  * @param x the coordinates of the point at which to evaluate the function
  * @param basis a PnlBasis
@@ -1425,7 +1439,8 @@ double pnl_basis_eval_D2(const PnlBasis *basis, const PnlVect *coef, const doubl
 /**
  * Evaluate the function, its gradient and Hessian matrix at x. The function is
  * defined by  linear combination sum (coef .* f(x))
-
+ *
+ * @deprecated Use the function pnl_basis_eval_derivs_vect(const PnlBasis *b, const PnlVect *coef, const PnlVect *x, double *val, PnlVect *grad, PnlMat *hes)
  *
  * @param coef a vector typically computed by pnl_basis_fit_ls
  * @param x the coordinates of the point at which to evaluate the function

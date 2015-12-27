@@ -305,6 +305,10 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
   P_k(\var{x})$.  The indices \var{i} and \var{j} may vary between \var{0} and
   \var{P->nb_variates - 1}.
 
+\end{itemize}
+The following functions are provided for compatibility purposes but are marked as
+deprecated. Use the functions with the \verb!_vect! extension.
+\begin{itemize}
 \item \describefun{double}{pnl_basis_ik}{const \PnlBasis \ptr b, const double \ptr x, int i, int k}
   \sshortdescribe Same as function \reffun{pnl_basis_ik_vect} but takes a
   C array as the point of evaluation.

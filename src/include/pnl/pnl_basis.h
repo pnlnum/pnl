@@ -11,7 +11,8 @@ extern "C" {
 
 
 /**
- * \defgroup reg_basis Polynomial Bases
+ * \defgroup reg_basis Function Bases
+ * It stores multivariate functions.
  */
 
 /*@{*/
@@ -46,7 +47,7 @@ struct _PnlBasis
                                           the one dimensional basis */
   double      (*D2f)(double  x, int i); /*!< Computes the second derivative of the i-th element
                                           of the one dimensional basis */
-  int           isreduced;              /* TRUE if the basis is reduced */
+  int           isreduced;              /*!< TRUE if the basis is reduced */
   double       *center;                 /*!< center of the domain */
   double       *scale;                  /*<! inverse of the scaling factor to map the
                                           domain to [-1, 1]^nb_variates */
