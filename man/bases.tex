@@ -6,28 +6,53 @@ To use these functionalities, you should include \verb!pnl/pnl_basis.h!.
 \describestruct{PnlBasis}
 \begin{verbatim}
 struct PnlBasis_t {
-  int          id;
-  const char  *label; /*!< string to label the basis *
-  int          nb_variates;  /*!< number of variates *
-  int          nb_func; /*!< number of elements in the basis *
-  PnlMatInt   *T; /*!< Tensor matrix *
-  PnlSpMatInt *SpT; /*!< Sparse Tensor matrix *
-  double     (*f)(double   x, int i); /*!< Computes the i-th element
-                                      of the one dimensional basis */
-  double     (*Df)(double  x, int i); /*!< Computes the first derivative
-                   of the i-th element of the one dimensional basis */
-  double     (*D2f)(double x, int i); /*!< Computes the second derivative
-                       of the i-th element of the one dimensional basis */
-  int          isreduced; /* TRUE if the basis is reduced */
-  double      *center; /*!< center of the domain */
-  double      *scale; /*<! inverse of the scaling factor to map the 
-                          domain to [-1, 1]^nb_variates */
+  PnlObject     object;
+  /** The basis type */
+  int           id;
+  /** The string to label the basis */
+  const char   *label;
+  /** The number of variates */
+  int           nb_variates;
+  /** The total number of elements in the basis */
+  int           nb_func;
+  /** The tensor matrix */
+  PnlMatInt    *T;
+  /** The sparse Tensor matrix */
+  PnlSpMatInt  *SpT;
+  /** The number of functions in the tensor #T */
+  int           len_T;
+  /** The i-th element of the one dimensional basis. */
+  double      (*f)(double    x, int i);
+  /** The first derivative of i-th element of the one dimensional basis */
+  double      (*Df)(double   x, int i);
+  /** The second derivative of the i-th element of the one dimensional basis */
+  double      (*D2f)(double  x, int i);
+  /** TRUE if the basis is reduced */
+  int           isreduced;
+  /** The center of the domain */
+  double       *center;
+  /** The inverse of the scaling factor to map the domain to [-1, 1]^nb_variates */
+  double       *scale;
+  /** An array of additional functions */
+  PnlRnFuncR  *func_list;
+  /** The number of functions in #func_list */
+  int          len_func_list;
 };
 \end{verbatim}
 
-A multi-dimensional basis is built as a tensor product of one dimensional
-elements. Hence, we only need a tensor matrix to describe a multi-dimensional
-basis in terms of the one dimensional one.
+A \refstruct{PnlBasis} is a family of multivariate functions with real values. Tow
+different kinds of functions can be stored in these families: tensor functions ---
+originally, this was the only possibility, and standard multivariate function typed as
+\refstruct{PnlRnFuncR}.
+
+\paragraph{Tensor functions.}  Tensors functions are built as a tensor product of one
+dimensional elements. Hence, we only need a tensor matrix \var{T} to describe a
+multi-dimensional basis in terms of the one dimensional one. These tensors functions can
+be easily evaluated and differentiated twice, see \reffun{pnl_basis_eval},
+\reffun{pnl_basis_eval_vect}, \reffun{pnl_basis_eval_D}, \reffun{pnl_basis_eval_D_vect},
+\reffun{pnl_basis_eval_D2}, \reffun{pnl_basis_eval_D2_vect},
+\reffun{pnl_basis_eval_derivs}, \reffun{pnl_basis_eval_derivs_vect}.
+
 The two tensors \var{T} and \var{SpT} do actually store the same information ---
 \var{T(i,j)} is the degree w.r.t the \var{j}-th variable in the \var{i}-th
 function. Originally, we were only using the dense representation \var{T}, which
@@ -53,15 +78,15 @@ The Hermite polynomials are defined by
 If $G$ is a real valued standard normal random variable, ${\mathbb E}[H_n(G) H_m(G)] = n!
 \ind{n = m}$. \\
 
-In this section, we provide functions to solve regression problems on
-finite dimensional bases. Let $(x_i, i=1 \dots n)$ be $n$ points in $\R^d$ and a
-function $g$ defined by the data $(y_i = g(x_i), i=1 \dots n)$. Assume you
-want to approximate the function $g$ by its decomposition on a family of $N$
-functions $(f_j, j=1\dots N)$. Then, we want to compute the vector
-$\alpha^\star \in \R^N$ solving
-\begin{equation*} \alpha^\star = \arg\min_\alpha \sum_{i=1}^{n}
-  \left(\sum_{j=0}^N \alpha_j f_j(x_i) - y_i\right)^2
-\end{equation*}
+\paragraph{Standard multivariate functions.} These functions are supposed to be \refstruct{PnlRnFuncR}.
+
+  To make this toolbox more complete, it is now possible to add some extra functions,
+  which are not tensor product. They are stored using an independent mechanism in
+  \var{func_list}.  These additional functions are only taken into account by the methods
+  \reffun{pnl_basis_i}, \reffun{pnl_basis_i_vect}, \reffun{pnl_basis_eval} and
+  \reffun{pnl_basis_eval_vect}. Note in particular that it is not possible to
+  differentiate these functions. To add an extra function to an existing
+  \refstruct{PnlBasis}, call the function \reffun{pnl_basis_add_function}.
 
 \subsection{Functions}
 
@@ -166,6 +191,8 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
     \end{array}
   \right) \]
 
+\item \describefun{void}{pnl_basis_add_function}{\PnlBasis \ptr b, \PnlRnFuncR \ptr f}
+  \sshortdescribe Add the function \var{f} to the already existing basis \var{b}.
 \item \describefun{void}{pnl_basis_clone}{\PnlBasis \ptr dest, const \PnlBasis \ptr src}
   \sshortdescribe Clone \var{src} into \var{dest}. The basis \var{dest} must
   already exist before calling this function. On exit, \var{dest} and \var{src}

@@ -4,6 +4,7 @@
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_sp_matrix.h"
 #include "pnl/pnl_object.h"
+#include "pnl/pnl_mathtools.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,6 +29,24 @@ enum {PNL_BASIS_NULL=-1, PNL_BASIS_CANONICAL=0, PNL_BASIS_HERMITE=1, PNL_BASIS_T
 
 typedef struct _PnlBasis PnlBasis;
 
+/**
+ * @struct _PnlBasis
+ *
+ * It was originally designed to exclusively hold tensored functions with the exponents of
+ * the tensor product stored in PnlBasis#T. This way, we could easily build multivariate polynomials as
+ * tensor products of single variate ones. Because we are using polynomials, we advise to map the
+ * original domain to [-1,1]^d to avoid numerical blow up; this is the purpose of
+ * PnlBasis#isreduced, PnlBasis#center, PnlBasis#scale. These tensored functions can easily be
+ * differentiated twice, see pnl_basis_eval_derivs_vect(), pnl_basis_eval_D_vect() and
+ * pnl_basis_eval_D2_vect().
+ *
+ * To make this toolbox more complete, it is now possible to add some extra functions, which are not
+ * tensor functions. They are stored using an independent mechanism in PnlBasis#func_list and typed as
+ * #PnlRnFuncR.
+ * These additional functions are only taken into account by the methods pnl_basis_i(),
+ * pnl_basis_i_vect(), pnl_basis_eval() and pnl_basis_eval_vect(). Note in particular that it is not
+ * possible to differentiate these functions.
+ */
 struct _PnlBasis
 {
   /**
@@ -35,22 +54,36 @@ struct _PnlBasis
    * properly. This allows any PnlBasis pointer to be cast to a PnlObject
    */
   PnlObject     object;
-  int           id;                     /*<! basis type */
-  const char   *label;                  /*!< string to label the basis */
-  int           nb_variates;            /*!< number of variates */
-  int           nb_func;                /*!< number of elements in the basis */
-  PnlMatInt    *T;                      /*!< Tensor matrix */
-  PnlSpMatInt  *SpT;                    /*!< Sparse Tensor matrix */
-  double      (*f)(double    x, int i); /*!< Computes the i-th element of the one dimensional basis.
-                                          As a convention, (*f)(x, 0) MUST be equal to 1 */
-  double      (*Df)(double   x, int i); /*!< Computes the first derivative of i-th element of
-                                          the one dimensional basis */
-  double      (*D2f)(double  x, int i); /*!< Computes the second derivative of the i-th element
-                                          of the one dimensional basis */
-  int           isreduced;              /*!< TRUE if the basis is reduced */
-  double       *center;                 /*!< center of the domain */
-  double       *scale;                  /*<! inverse of the scaling factor to map the
-                                          domain to [-1, 1]^nb_variates */
+  /** The basis type */
+  int           id;
+  /** The string to label the basis */
+  const char   *label;
+  /** The number of variates */
+  int           nb_variates;
+  /** The total number of elements in the basis */
+  int           nb_func;
+  /** The tensor matrix */
+  PnlMatInt    *T;
+  /** The sparse Tensor matrix */
+  PnlSpMatInt  *SpT;
+  /** The number of functions in the tensor #T */
+  int           len_T;
+  /** Compute the i-th element of the one dimensional basis.  As a convention, (*f)(x, 0) MUST be equal to 1 */
+  double      (*f)(double    x, int i);
+  /** Compute the first derivative of i-th element of the one dimensional basis */
+  double      (*Df)(double   x, int i);
+  /** Compute the second derivative of the i-th element of the one dimensional basis */
+  double      (*D2f)(double  x, int i);
+  /** TRUE if the basis is reduced */
+  int           isreduced;
+  /** The center of the domain */
+  double       *center;
+  /** The inverse of the scaling factor to map the domain to [-1, 1]^nb_variates */
+  double       *scale;
+  /** An array of additional functions */
+  PnlRnFuncR  *func_list;
+  /** The number of functions in #func_list */
+  int          len_func_list;
 };
 
 extern int pnl_basis_type_register(const char *name, double (*f)(double, int), double (*Df)(double, int), double (*D2f)(double, int));
@@ -87,7 +120,7 @@ extern double pnl_basis_eval(const PnlBasis *basis, const PnlVect *coef, const d
 extern double pnl_basis_eval_D(const PnlBasis *basis, const PnlVect *coef, const double *x, int i);
 extern double pnl_basis_eval_D2(const PnlBasis *basis, const PnlVect *coef, const double *x, int i, int j);
 extern void pnl_basis_eval_derivs(const PnlBasis *basis, const PnlVect *coef, const double *x, double *val, PnlVect *grad, PnlMat *hes);
-
+extern void pnl_basis_add_function(PnlBasis *b, PnlRnFuncR *f);
 
 /*@}*/
 

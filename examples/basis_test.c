@@ -88,20 +88,28 @@ static void exp_regression2()
   pnl_vect_free(&alpha);
 }
 
-static double function2d(double *x)
+static double function2d_1(double *x)
 {
-  /* return x[0]*x[0] + x[1]*x[1]; */
-  return log(1 + x[0] * x[0] + x[1] * x[1]);
+  return (x[0]*x[0] + x[1]*x[1] + x[0] * x[1]) * (x[0] - x[1]);
 }
 
-static void regression_multid()
+static double function2d_2(double *x)
 {
-  int i, j, n, basis_name, nb_variates, degree;
+  return log(1 + 2 * (x[0] * x[0] + x[1] * x[1])) + (x[0] * x[0] + x[1] * x[1]);
+}
+
+static double myfunction(const PnlVect *x, void *p)
+{
+  double a = ((double *) p)[0];
+  return log(1 + a * SQR(pnl_vect_norm_two(x)));
+}
+
+static double regression_multid_aux(double(*f)(double *), PnlBasis *basis)
+{
+  int i, j, n;
   double a, b, h, err;
   PnlMat *t;
   PnlVect *y, *alpha;
-  PnlBasis *basis;
-  alpha = pnl_vect_new();
 
   /* creating the grid */
   a = -2.0;
@@ -118,14 +126,11 @@ static void regression_multid()
         {
           MLET(t, i * (n + 1) + j, 0) =  a + i * h;
           MLET(t, i * (n + 1) + j, 1) =  a + j * h;
-          LET(y, i * (n + 1) + j) = function2d(pnl_mat_lget(t, i * (n + 1) + j, 0));
+          LET(y, i * (n + 1) + j) = (*f)(pnl_mat_lget(t, i * (n + 1) + j, 0));
         }
     }
 
-  basis_name = PNL_BASIS_HERMITE;
-  nb_variates = 2; /* functions with values in R^2 */
-  degree = 4; /* total sum degree */
-  basis = pnl_basis_create_from_degree(basis_name, degree, nb_variates);
+  alpha = pnl_vect_new();
   pnl_basis_fit_ls(basis, alpha, t, y);
   if (PRINT_COEFF)
     {
@@ -137,38 +142,52 @@ static void regression_multid()
   err = 0.;
   for (i = 0; i < t->m; i++)
     {
-      double tmp = function2d(pnl_mat_lget(t, i, 0)) -
+      double tmp = (*f)(pnl_mat_lget(t, i, 0)) -
                    pnl_basis_eval(basis, alpha, pnl_mat_lget(t, i, 0));
       if (fabs(tmp) > err) err = fabs(tmp);
     }
+  return err;
+}
 
-  pnl_test_eq_abs(err, 0.263175, 1E-5, "pnl_basis_eval (sum degree)", "log (1+x[0]*x[0] + x[1]*x[1]) on [-2,2]^2");
-  pnl_basis_free(&basis);
-
-  degree = 4; /* total product degree */
-  basis = pnl_basis_create_from_prod_degree(basis_name, degree, nb_variates);
-  pnl_basis_fit_ls(basis, alpha, t, y);
-  if (PRINT_COEFF)
+static void regression_multid()
+{
     {
-      printf("\tcoefficients of the decomposition : ");
-      pnl_vect_print_asrow(alpha);
+      double err;
+      int basis_name = PNL_BASIS_HERMITE;
+      int nb_variates = 2; /* functions with values in R^2 */
+      int degree = 3; /* total sum degree */
+      PnlBasis *basis = pnl_basis_create_from_degree(basis_name, degree, nb_variates);
+      err = regression_multid_aux(function2d_1, basis);
+      pnl_test_eq_abs(err, 0., 1E-5, "pnl_basis_eval (sum degree)", "polynomial with deg <= 3");
+      pnl_basis_free(&basis);
     }
 
-  /* computing the infinity norm of the error */
-  err = 0.;
-  for (i = 0; i < t->m; i++)
     {
-      double tmp = function2d(pnl_mat_lget(t, i, 0)) -
-                   pnl_basis_eval(basis, alpha, pnl_mat_lget(t, i, 0));
-      if (fabs(tmp) > err) err = fabs(tmp);
+      double err;
+      int basis_name = PNL_BASIS_HERMITE;
+      int nb_variates = 2; /* functions with values in R^2 */
+      int degree = 3; /* total product degree */
+      PnlBasis *basis = pnl_basis_create_from_prod_degree(basis_name, degree, nb_variates);
+      err = regression_multid_aux(function2d_1, basis);
+      pnl_test_eq_abs(err, 0., 1E-5, "pnl_basis_eval (prod degree)", "polynomial with deg <= 3");
+      pnl_basis_free(&basis);
     }
 
-  pnl_test_eq_abs(err, 0.263175, 1E-5, "pnl_basis_eval (prod degree)", "log (1+x[0]*x[0] + x[1]*x[1]) on [-2,2]^2");
-  pnl_basis_free(&basis);
-
-  pnl_mat_free(&t);
-  pnl_vect_free(&y);
-  pnl_vect_free(&alpha);
+    {
+      double err;
+      PnlRnFuncR F;
+      double a = 2;
+      int basis_name = PNL_BASIS_HERMITE;
+      int nb_variates = 2; /* functions with values in R^2 */
+      int degree = 3; /* total product degree */
+      PnlBasis *basis = pnl_basis_create_from_prod_degree(basis_name, degree, nb_variates);
+      F.F = myfunction;
+      F.params = (void *) &a;
+      pnl_basis_add_function(basis, &F);
+      err = regression_multid_aux(function2d_2, basis);
+      pnl_test_eq_abs(err, 0., 1E-5, "pnl_basis_eval (extra functions)", "log (1+x[0]*x[0] + x[1]*x[1]) + (x[0]*x[0] + x[1]*x[1]) on [-2,2]^2");
+      pnl_basis_free(&basis);
+    }
 }
 
 static double fonction_a_retrouver(double t, double x)

@@ -833,6 +833,9 @@ PnlBasis *pnl_basis_new()
   o->isreduced = 0;
   o->center = NULL;
   o->scale = NULL;
+  o->func_list = NULL;
+  o->len_func_list = 0;
+  o->len_T = 0;
   o->object.type = PNL_TYPE_BASIS;
   o->object.parent_type = PNL_TYPE_BASIS;
   o->object.label = pnl_basis_label;
@@ -857,6 +860,9 @@ void  pnl_basis_set_from_tensor(PnlBasis *b, int index, const PnlMatInt *T)
   b->nb_func = T->m;
   b->id = index;
   b->nb_variates = T->n;
+  if(b->func_list) free(b->func_list);
+  b->len_func_list = 0;
+  b->len_T = T->m;
 
   /* Not sure this is the right place to put it */
   pnl_mat_int_free(&(b->T));
@@ -963,6 +969,25 @@ PnlBasis *pnl_basis_create_from_hyperbolic_degree(int index, double degree, doub
 }
 
 /**
+ * Add an extra function to an existing basis.
+ *
+ * Note that it is not possible to make a deep copy of f->params, so make sure that its address
+ * remains valid as long as b is used. If this does not sound clear, just remember it can be granted
+ * by never making a function returning a PnlBasis, nor encapsulating it into a struct.
+ *
+ * @param b an existing basis
+ * @param f a function to be added to b->func_list
+ */
+void pnl_basis_add_function(PnlBasis *b, PnlRnFuncR *f)
+{
+  ++(b->len_func_list);
+  ++(b->nb_func);
+  b->func_list = realloc(b->func_list, b->len_func_list * sizeof(PnlRnFuncR));
+  (b->func_list[b->len_func_list - 1]).F = f->F;
+  (b->func_list[b->len_func_list - 1]).params = f->params;
+}
+
+/**
  * Clone a basis
  *
  * @param dest destination
@@ -981,7 +1006,10 @@ void pnl_basis_clone(PnlBasis *dest, const PnlBasis *src)
       memcpy(dest->center, src->center, n * sizeof(double));
       memcpy(dest->scale, src->scale, n * sizeof(double));
     }
-
+  /* Copy the extra functions if any*/
+  dest->func_list = malloc(src->len_func_list * sizeof(PnlRnFuncR));
+  memcpy(dest->func_list, src->func_list, src->len_func_list * sizeof(PnlRnFuncR));
+  dest->len_func_list = src->len_func_list;
 }
 
 /**
@@ -994,7 +1022,8 @@ void pnl_basis_del_elt_i(PnlBasis *B, int i)
 {
   pnl_mat_int_del_row(B->T, i);
   pnl_sp_mat_int_del_row(B->SpT, i);
-  B->nb_func --;
+  --(B->nb_func);
+  --(B->len_T);
 }
 
 /**
@@ -1026,7 +1055,8 @@ void pnl_basis_add_elt(PnlBasis *B, const PnlVectInt *d)
   PNL_CHECK(B->nb_variates != d->size, "size mismatch",  "basis_del_elt");
   pnl_mat_int_add_row(B->T, B->T->m, d);
   pnl_sp_mat_int_add_row(B->SpT, B->SpT->m, d);
-  B->nb_func ++;
+  ++(B->nb_func);
+  ++(B->len_T);
 }
 
 /**
@@ -1116,6 +1146,7 @@ void pnl_basis_free(PnlBasis **B)
       free((*B)->scale);
       (*B)->scale = NULL;
     }
+  if ((*B)->len_func_list > 0) free((*B)->func_list);
   free(*B);
   *B = NULL;
 }
@@ -1128,7 +1159,9 @@ void pnl_basis_print(const PnlBasis *B)
 {
   printf("Basis Name : %s\n", B->label);
   printf("\tNumber of variates : %d\n", B->nb_variates);
-  printf("\tNumber of functions : %d\n", B->nb_func);
+  printf("\tNumber of functions in tensor: %d\n", B->len_T);;
+  printf("\tNumber of extra functions : %d\n", B->len_func_list);
+  printf("\tTotal number of functions : %d\n", B->nb_func);
   printf("\tisreduced = %d\n", B->isreduced);
   if (B->isreduced)
     {
@@ -1196,6 +1229,11 @@ double pnl_basis_i(const PnlBasis *b, const double *x, int i)
 {
   int k;
   double aux = 1.;
+  if (i > b->len_T - 1)
+    {
+      PnlVect view = pnl_vect_wrap_array(x, b->nb_variates);
+      return PNL_EVAL_RNFUNCR(&(b->func_list[i-b->len_T]), &view);
+    }
   if (b->isreduced == 1)
     {
       for (k = b->SpT->I[i] ; k < b->SpT->I[i + 1] ; k++)
@@ -1447,7 +1485,7 @@ double pnl_basis_eval_D2(const PnlBasis *basis, const PnlVect *coef, const doubl
  * @param b PnlBasis
  * @param val contains the value of sum (coef .* f(x)) on exit
  * @param grad contains the value of sum (coef .* Df(x)) on exit
- * @param hes contains the value of sum (coef .* D2 f(x)) on exit
+ * @param hes contains the value of sum (coef .* D2f(x)) on exit
  *
  */
 void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double *x,
@@ -1654,6 +1692,10 @@ double pnl_basis_ik_vect(const PnlBasis *b, const PnlVect *x, int i, int k)
  */
 double pnl_basis_i_vect(const PnlBasis *b, const PnlVect *x, int i)
 {
+  if (i > b->len_T - 1)
+    {
+      return PNL_EVAL_RNFUNCR(&(b->func_list[i-b->len_T]), x);
+    }
   return pnl_basis_i(b, x->array, i);
 }
 
@@ -1738,7 +1780,6 @@ double pnl_basis_eval_D2_vect(const PnlBasis *basis, const PnlVect *coef, const 
 /**
  * Evaluate the function, its gradient and Hessian matrix at x. The function is
  * defined by  linear combination sum (coef .* f(x))
-
  *
  * @param coef a vector typically computed by pnl_basis_fit_ls
  * @param x the coordinates of the point at which to evaluate the function
