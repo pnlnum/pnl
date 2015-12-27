@@ -1,5 +1,5 @@
 #ifndef _PNL_MATHTOOLS_H
-#define _PNL_MATHTOOLS_H 
+#define _PNL_MATHTOOLS_H
 
 
 #include <math.h>
@@ -118,7 +118,7 @@ extern double pnl_round (double x);
 #define M_2PI          6.28318530717958623199   /* 2 pi */
 #endif
 
-#ifndef M_SQRT2PI 
+#ifndef M_SQRT2PI
 #define M_SQRT2PI      2.506628274631000502415  /* sqrt(2*pi) */
 #endif
 
@@ -128,7 +128,7 @@ extern double pnl_round (double x);
 #define MAX_INT INT_MAX
 
 #ifndef DBL_MAX
-#define DBL_MAX		   1.79769313486231470e+308
+#define DBL_MAX        1.79769313486231470e+308
 #endif
 #ifndef SQRT_DBL_MAX
 #define SQRT_DBL_MAX   1.3407807929942596e+154
@@ -139,7 +139,7 @@ extern double pnl_round (double x);
 #define DBL_MIN        2.2250738585072014e-308
 #endif
 #ifndef SQRT_DBL_MIN
-#define SQRT_DBL_MIN  1.4916681462400413e-154 
+#define SQRT_DBL_MIN  1.4916681462400413e-154
 #endif
 
 
@@ -253,7 +253,7 @@ typedef struct
  * f: R^2 --> R
  * The function pointer returns f(x)
  */
-typedef struct 
+typedef struct
 {
   double (*F) (double x, double y, void *params);
   void *params;
@@ -265,7 +265,7 @@ typedef struct
  * The function pointer computes f(x) and Df(x) and stores them in fx
  * and dfx respectively
  */
-typedef struct 
+typedef struct
 {
   void (*F) (double x, double *fx, double *dfx, void *params);
   void *params;
@@ -276,7 +276,7 @@ typedef struct
  * f: R^n --> R
  * The function pointer returns f(x)
  */
-typedef struct 
+typedef struct
 {
   double (*F) (const PnlVect *x, void *params);
   void *params;
@@ -288,7 +288,7 @@ typedef struct
  * The function pointer computes the vector f(x) and stores it in
  * fx (vector of size m)
  */
-typedef struct 
+typedef struct
 {
   void (*F) (const PnlVect *x, PnlVect *fx, void *params);
   void *params;
@@ -296,7 +296,7 @@ typedef struct
 #define PNL_EVAL_RNFUNCRM(Fstruct, x, fx) (*((Fstruct)->F))(x, fx, (Fstruct)->params)
 
 /**
- * Synonymous of PnlRnFuncRm for f:R^n --> R^n 
+ * Synonymous of PnlRnFuncRm for f:R^n --> R^n
  */
 typedef PnlRnFuncRm PnlRnFuncRn;
 #define PNL_EVAL_RNFUNCRN  PNL_EVAL_RNFUNCRM
@@ -305,11 +305,11 @@ typedef PnlRnFuncRm PnlRnFuncRn;
 /**
  * f: R^n --> R^m
  * The function pointer computes the vector f(x) and stores it in fx
- * (vector of size m) 
+ * (vector of size m)
  * The Dfunction pointer computes the matrix Df(x) and stores it in dfx
- * (matrix of size m x n) 
+ * (matrix of size m x n)
  */
-typedef struct 
+typedef struct
 {
   void (*F) (const PnlVect *x, PnlVect *fx, void *params);
   void (*DF) (const PnlVect *x, PnlMat *dfx, void *params);
@@ -319,15 +319,15 @@ typedef struct
 #define PNL_EVAL_RNFUNCRM_DF(Fstruct, x, dfx) (*((Fstruct)->DF))(x, dfx, (Fstruct)->params)
 #define PNL_EVAL_RNFUNCRM_FDF(Fstruct, x, fx, dfx) (*((Fstruct)->FDF))(x, fx, dfx, (Fstruct)->params)
 
-#define PNL_EVAL_RNFUNCRM_F_DF(Fstruct, x, fx, dfx) 					\
-      if ( (Fstruct)->FDF != NULL ) 									\
-        { 																\
-          PNL_EVAL_RNFUNCRN_FDF (Fstruct, x, fx, dfx); 					\
-        } 																\
-      else 																\
-        { 																\
-          PNL_EVAL_RNFUNCRN (Fstruct, x, fx); 							\
-          PNL_EVAL_RNFUNCRN_DF (Fstruct, x, dfx); 						\
+#define PNL_EVAL_RNFUNCRM_F_DF(Fstruct, x, fx, dfx)                     \
+      if ( (Fstruct)->FDF != NULL )                                     \
+        {                                                               \
+          PNL_EVAL_RNFUNCRN_FDF (Fstruct, x, fx, dfx);                  \
+        }                                                               \
+      else                                                              \
+        {                                                               \
+          PNL_EVAL_RNFUNCRN (Fstruct, x, fx);                           \
+          PNL_EVAL_RNFUNCRN_DF (Fstruct, x, dfx);                       \
         }
 
 
@@ -348,9 +348,9 @@ typedef PnlRnFuncRmDFunc PnlRnFuncRnDFunc;
  */
 typedef struct
 {
-  /** 
+  /**
    * yp_i (t) = dy_i(t)/dt
-   * 
+   *
    * @param[in] neqn number of equations
    * @param[in] t the point at which to evaluate the function
    * @param[in] y a C array of size neqn
@@ -372,4 +372,4 @@ extern void pnl_qsort (void *a, int n, int es, int lda, int *t, int ldt, int use
 #endif /* __cplusplus */
 
 
-#endif /* _PNL_MATHTOOLS_H */ 
+#endif /* _PNL_MATHTOOLS_H */
