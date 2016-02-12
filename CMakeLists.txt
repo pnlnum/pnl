@@ -34,17 +34,18 @@ if (NOT LINK_TYPE)
     set(LINK_TYPE SHARED)
 endif (NOT LINK_TYPE)
 
+set(CMAKE_MACOSX_RPATH ON)
+set(CMAKE_SKIP_BUILD_RPATH  FALSE)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 set(pnl_INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib" )
 set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
-set(CMAKE_MACOSX_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-set(pnl_USE_RPATH ON)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH OFF)
 set(CMAKE_FILES_DIRECTORY "/CMakeFiles")
 
 
 option(USE_MPI "Compiles the MPI bindings for PNL. Default = on" ON)
-option(WITHOUT_DEPRECATED "Build deprecated functions. Default = off" OFF)
+option(WITHOUT_DEPRECATED "Do not build deprecated functions. Default = off" OFF)
 option(USE_INTERNAL_BLAS "Use internal Blas & Lapack instead of the system's ones. Default = off" OFF)
 
 
