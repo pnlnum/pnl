@@ -28,6 +28,15 @@ typedef struct {
 
 \subsubsection{Functions}
 \begin{itemize}
+  \item \describefun{double, double}{CMPLX}{dcomplex z}
+    \sshortdescribe \var{z.r, z.i}  
+
+\item \describefun{dcomplex}{Complex}{double x, double y}
+  \sshortdescribe \var{x + i y}  
+
+\item \describefun{dcomplex}{Complex_polar}{double r, double theta}
+  \sshortdescribe  \var{ r exp(i theta) }  
+
 \item \describefun{double}{Creal}{\refstruct{dcomplex} z}
   \sshortdescribe $ \mathrm{R}(z) $ 
 
@@ -69,12 +78,6 @@ typedef struct {
 
 \item \describefun{dcomplex}{RCdiv}{double x, \refstruct{dcomplex} z}
   \sshortdescribe \var{ x/z }
-
-\item \describefun{dcomplex}{Complex}{double x, double y}
-  \sshortdescribe \var{x + i y}  
-
-\item \describefun{dcomplex}{Complex_polar}{double r, double theta}
-  \sshortdescribe  \var{ r exp(i theta) }  
 
 \item \describefun{dcomplex}{Conj}{\refstruct{dcomplex} z}
   \sshortdescribe $\overline{z}$  

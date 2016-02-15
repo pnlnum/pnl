@@ -54,7 +54,9 @@
 }
 
 % Describing struct
-\newcommand{\describestruct}[1]{\index{Structs!#1}\label{#1}}
+\newcommand{\describestruct}[1]{%
+  % \expandafter\newcommand\csname #1\endcsname{\refstruct{#1}\space}%
+  \index{Structs!#1}\label{#1}}
 
 % Describing variables
 \newcommand{\describevar}[2]{{#1~{\bf #2}}}
@@ -101,7 +103,9 @@
   \index{#1}\label{#1}\HCode{<span class='struct'>}#1\HCode{</span>} && #2 \\ }
 
 % Describing struct
-\newcommand{\describestruct}[1]{\index{#1}\label{#1}}
+\newcommand{\describestruct}[1]{%
+  % \expandafter\newcommand\csname #1\endcsname{\refstruct{#1}\space}%
+  \index{Structs!#1}\label{#1}}
 
 \def\refstruct#1{\hyperref[#1]{\HCode{<span class='struct'>}#1\HCode{</span>}}}
 \def\reffun#1{\hyperref[#1]{#1}}
@@ -145,6 +149,7 @@
 \def\PnlVectCompact{\refstruct{PnlVectCompact}\space}
 \def\PnlVectComplex{\refstruct{PnlVectComplex}\space}
 \def\PnlVectInt{\refstruct{PnlVectInt}\space}
+\def\PnlRnFuncR{\refstruct{PnlRnFuncR}\space}
 
 
 \setcounter{tocdepth}{2}
