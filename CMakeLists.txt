@@ -28,7 +28,7 @@ if(CROSS_COMPILE)
     set(MINGW ON)
 endif()
 
-project(pnl C)
+project(pnl C CXX)
 
 if (NOT LINK_TYPE) 
     set(LINK_TYPE SHARED)

@@ -55,7 +55,7 @@ void pnl_test_init (int argc, char **argv)
 static void update_count_tests (int status)
 {
   count_tests ++;
-  if ( status )
+  if (status)
     {
       count_fail ++;
     }
@@ -108,78 +108,87 @@ void pnl_test_set_fail (const char *str, double res, double expected)
   printf ("\t%s : FAIL (observed %.18f expected %.18f)\n", str, res, expected);
 }
 
-/** 
+/**
  * Relative comparison of two real numbers
- * 
+ *
  * @param x real number
  * @param y real number
- * @param relerr real number 
- * 
+ * @param relerr real number
+ *
  * @return  0 or 1
  */
 int pnl_cmp_eq_rel (double x, double y, double relerr)
 {
-  int status;
-  if ( y != 0 )
+  if ((isnan(x) && !isnan(y)) || (!isnan(x) && isnan(y))
+      || (isinf(x) && !isinf(y)) || (!isinf(x) && isinf(y))) return 1;
+  if (isinf(x) && isinf(y))
     {
-      status = (fabs (x -y) / fabs(y) > relerr);
+      if (x * y > 0.) return 0;
+      else return 1;
+    }
+  if (isnan(x) && isnan(y)) return 0;
+  if ( y == 0. )
+    {
+      return ((x == 0.) ? 0 : 1);
     }
   else
     {
-      status = (fabs(x) > relerr);
+      return ((fabs (x -y) / fabs(y)) > relerr);
     }
-  return status;
 }
 
-/** 
+/**
  * Absolute comparison of two real numbers
- * 
+ *
  * @param x real number
  * @param y real number
  * @param abserr real number defining the absolute error
- * 
+ *
  * @return  0 or 1
  */
 int pnl_cmp_eq_abs (double x, double y, double abserr)
 {
-  int status;
-  status = (fabs (x -y) > abserr);
-  return status;
+  if ((isnan(x) && !isnan(y)) || (!isnan(x) && isnan(y))
+      || (isinf(x) && !isinf(y)) || (!isinf(x) && isinf(y))) return 1;
+  if (isinf(x) && isinf(y))
+    {
+      if (x * y > 0.) return 0;
+      else return 1;
+    }
+  if (isnan(x) && isnan(y)) return 0;
+  return (fabs (x -y) > abserr);
 }
 
-/** 
+/**
  * Comparison of two real numbers
- * 
+ *
  * @param x real number
  * @param y real number
  * @param abserr real number defining the absolute error
- * 
+ *
  * @return  0 or 1
  */
 int pnl_cmp_eq (double x, double y, double abserr)
 {
-  int status;
-  status = (fabs (x -y) / MAX(1, fabs (y)) > abserr);
-  return status;
+  if ((isnan(x) && !isnan(y)) || (!isnan(x) && isnan(y))
+      || (isinf(x) && !isinf(y)) || (!isinf(x) && isinf(y))) return 1;
+  if (isinf(x) && isinf(y))
+    {
+      if (x * y > 0.) return 0;
+      else return 1;
+    }
+  if (isnan(x) && isnan(y)) return 0;
+  return (fabs (x -y) / MAX(1, fabs (y)) > abserr);
 }
 
 static int pnl_test_eq_aux (double x, double y, double relerr, int(*cmp)(double, double, double), const char *str, const char *fmt, va_list ap)
 {
-  int status = 0;
-  if ( (pnl_isnan (x) && !pnl_isnan(y)) ||
-       (pnl_isinf (x) && !pnl_isinf(y)) )
-    {
-      status = 1;
-    }
-  else
-    {
-      status = (*cmp)(x, y, relerr);
-    }
-  if ( status || verbose == TRUE )
+  int status = (*cmp)(x, y, relerr);
+  if ( status || (verbose == TRUE) )
     {
       printf ("\t%s : ", str);
       printf ( status ? "FAIL" : "OK");
-      if ( status ) 
+      if ( status )
         {
           printf (" (");
           vprintf (fmt, ap);

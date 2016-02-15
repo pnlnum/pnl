@@ -1,3 +1,8 @@
+15-02-2016 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* specfun: Add the Faddeeva package to define error functions for
+	complex arguments.
+
 25-12-2015 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* basis.c: Add non tensor functions to PnlBasis.

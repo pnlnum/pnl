@@ -106,9 +106,31 @@ functions
 
 \begin{itemize}
 \item \describefun{double}{pnl_sf_erf}{double x}
-  \sshortdescribe Compute $\frac{2}{\pi}\int_0^\infty \expp{-t^2} dt$
+  \sshortdescribe Compute the error function $\frac{2}{\pi}\int_0^\infty \expp{-t^2} dt$.
+\item \describefun{dcomplex}{pnl_sf_complex_erf}{dcomplex z}
+  \sshortdescribe Same as \reffun{pnl_sf_erf} for complex arguments.
 \item \describefun{double}{pnl_sf_erfc}{double x}
-  \sshortdescribe Compute $1. - \frac{2}{\pi}\int_0^\infty \expp{-t^2} dt$
+  \sshortdescribe Compute the complementary error function \var{1. - erf(x)}.
+\item \describefun{dcomplex}{pnl_sf_complex_erfc}{dcomplex x}
+  \sshortdescribe Same as \reffun{pnl_sf_erfc} for complex arguments.
+\item \describefun{double}{pnl_sf_erfcx}{double x}
+  \sshortdescribe Compute the scaled complementary error function of x, defined by
+  $\expp{x^2} \text{erfc}(x)$.
+\item \describefun{dcomplex}{pnl_sf_complex_erfcx}{dcomplex z}
+  \sshortdescribe Same as \reffun{pnl_sf_erfcx} for complex arguments. Note that
+  \var{erfcx(-i x) = w(x)}.
+\item \describefun{dcomplex}{pnl_sf_w}{dcomplex z}
+  \sshortdescribe Compute $\expp{-z^2} \, \text{erfc}(-i \, z)$.
+\item \describefun{double}{pnl_sf_w_im}{double x}
+  \sshortdescribe Compute $2 \, \text{Dawson}(x)/\sqrt{\pi}$
+\item \describefun{double}{pnl_sf_erfi}{double x}
+  \sshortdescribe Compute \var{-i erf(i z)}
+\item \describefun{dcomplex}{pnl_sf_complex_erfi}{dcomplex z}
+  \sshortdescribe Same as \reffun{pnl_sf_erfi} for complex arguments.
+\item \describefun{double}{pnl_sf_dawson}{double x}
+  \sshortdescribe Compute $\sqrt{\pi}/2 \, \expp(-x^2) \, \text{erfi}(x)$.
+\item \describefun{dcomplex}{pnl_sf_complex_dawson}{dcomplex z}
+  \sshortdescribe Same as \reffun{pnl_sf_dawson} for complex arguments.
 \item \describefun{double}{pnl_sf_log_erf}{double x}
   \sshortdescribe Compute $\log$ \reffun{pnl_sf_erf}$(x)$
 \item \describefun{double}{pnl_sf_log_erfc}{double x}

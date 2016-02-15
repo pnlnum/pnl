@@ -9,7 +9,6 @@ add_library(libcephes OBJECT
    igam.c
    igami.c
    mtherr.c
-   ndtr.c
    ndtri.c
    polevl.c
    polmisc.c
