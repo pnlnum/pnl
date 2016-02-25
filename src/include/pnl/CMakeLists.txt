@@ -15,6 +15,7 @@ install(FILES
     pnl_laplace.h 
     pnl_linalgsolver.h 
     pnl_list.h 
+    pnl_machine.h
     pnl_mathtools.h 
     pnl_matrix.h 
     pnl_matvect.h 
