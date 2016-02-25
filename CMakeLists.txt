@@ -193,25 +193,6 @@ if (NOT SUB_CMAKE_CALL)
     add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 endif (NOT SUB_CMAKE_CALL)
 
-# distclean 
-if (UNIX AND (NOT SUB_CMAKE_CALL))
-add_custom_target (distclean
-    COMMAND echo "Cleaning all generated files"
-    COMMAND make clean
-    COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/pnl_config.h"
-    COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/FC.h"
-    COMMAND find "${CMAKE_CURRENT_BINARY_DIR}/" -name 'CMakeFiles' -type d | xargs rm -rf 
-    COMMAND find "${CMAKE_CURRENT_BINARY_DIR}/" -name 'CTestTestfile.cmake' | xargs rm -f 
-    COMMAND find "${CMAKE_CURRENT_BINARY_DIR}/" -name 'cmake_install.cmake' | xargs rm -f 
-    COMMAND find "${CMAKE_CURRENT_BINARY_DIR}/" -name 'cmake_uninstall.cmake' | xargs rm -f 
-    COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/CMakeCache.txt" 
-    COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/CMakeuser.incl" 
-    COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt"
-    COMMAND rm -f "${CMAKE_CURRENT_BINARY_DIR}/libpnl.la"
-    COMMAND find "${CMAKE_CURRENT_BINARY_DIR}/src" -name 'Makefile' | xargs rm -f 
-    )
-endif (UNIX AND (NOT SUB_CMAKE_CALL))
-
 ## Output configuration stuff ##
 message("C Compiler :             ${CMAKE_C_COMPILER}")
 message("     FLAGS :             ${PNL_C_FLAGS}")
