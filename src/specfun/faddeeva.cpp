@@ -138,12 +138,13 @@
 */
 
 
-#include "pnl/pnl_mathtools.h"
-#include "faddeeva.hpp"
-
 #include <cfloat>
 #include <cmath>
 #include <limits>
+
+#include "pnl/pnl_mathtools.h"
+#include "faddeeva.hpp"
+
 using namespace std;
 
 // use std::numeric_limits, since 1./0. and 0./0. fail with some compilers (MS)
