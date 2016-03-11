@@ -58,13 +58,6 @@ endif ()
 
 
 enable_language(CXX OPTIONAL)
-# Compiler Flags
-if (UNIX)
-    set(CMAKE_C_FLAGS_DEBUG "-Wall -g")
-    set(CMAKE_C_FLAGS_RELEASE "-Wall -O2")
-    set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g -fno-inline")
-    set(CMAKE_CXX_FLAGS_RELEASE "-Wall -O2")
-endif (UNIX)
 
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
     set(PNL_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG}")
