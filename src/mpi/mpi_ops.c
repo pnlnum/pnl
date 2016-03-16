@@ -1567,7 +1567,7 @@ int pnl_object_mpi_irecv(void **buf, int *size, int src, int tag, MPI_Comm comm,
  *      MPI_MIN
  *
  * @param Recvbuf (input) PnlObject where to store the result of the
- * reduction. Only used by the root process
+ * reduction. Only used by the root process. 
  * @param Sendbuf PnlObject to be sent, must be valid for all processes
  * @param op reduction operation
  * @param root index of the root process
@@ -1580,7 +1580,7 @@ int pnl_object_mpi_reduce(PnlObject *Sendbuf, PnlObject *Recvbuf, MPI_Op op, int
   int rank, parent_id;
   void *recvptr, *sendptr;
   MPI_Datatype type;
-  int count;
+  int count, info;
   parent_id = PNL_GET_PARENT_TYPE(Sendbuf);
   recvptr = NULL;
   sendptr = NULL;
@@ -1611,7 +1611,7 @@ int pnl_object_mpi_reduce(PnlObject *Sendbuf, PnlObject *Recvbuf, MPI_Op op, int
         default:
           if (pnl_message_is_on())
             printf("Reduction is not implemented for type %s", Recvbuf->label);
-          return FAIL;
+          return MPI_ERR_TYPE;
         }
     }
   switch (parent_id)
@@ -1627,7 +1627,7 @@ int pnl_object_mpi_reduce(PnlObject *Sendbuf, PnlObject *Recvbuf, MPI_Op op, int
     default:
       if (pnl_message_is_on())
         printf("Reduction is not implemented for type %s", Sendbuf->label);
-      return FAIL;
+      return MPI_ERR_TYPE;
     }
 
   /*
@@ -1643,7 +1643,7 @@ int pnl_object_mpi_reduce(PnlObject *Sendbuf, PnlObject *Recvbuf, MPI_Op op, int
         {
           if (pnl_message_is_on())
             printf("Reduction is not implemented for type %s", Sendbuf->label);
-          return FAIL;
+          return MPI_ERR_TYPE;
         }
       break;
     case PNL_TYPE_VECTOR_INT:
@@ -1653,7 +1653,7 @@ int pnl_object_mpi_reduce(PnlObject *Sendbuf, PnlObject *Recvbuf, MPI_Op op, int
         {
           if (pnl_message_is_on())
             printf("Reduction is not implemented for type %s", Sendbuf->label);
-          return FAIL;
+          return MPI_ERR_TYPE;
         }
       break;
     case PNL_TYPE_VECTOR_COMPLEX:
@@ -1667,13 +1667,16 @@ int pnl_object_mpi_reduce(PnlObject *Sendbuf, PnlObject *Recvbuf, MPI_Op op, int
         {
           if (pnl_message_is_on())
             printf("Reduction is not implemented for type %s", Sendbuf->label);
-          return FAIL;
+          return MPI_ERR_TYPE;
         }
       break;
     default:
-      return FAIL;
+      return MPI_ERR_TYPE;
     }
 
-  MPI_Reduce(sendptr, recvptr, count, type, op, root, comm);
-  return OK;
+  if ((Sendbuf == Recvbuf) && rank == root)
+    info = MPI_Reduce(MPI_IN_PLACE, recvptr, count, type, op, root, comm);
+  else
+    info = MPI_Reduce(sendptr, recvptr, count, type, op, root, comm);
+  return info;
 }
