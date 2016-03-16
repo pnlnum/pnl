@@ -20,3 +20,4 @@
 #include "pnl_matrix.h"
 #include "pnl_vector.h"
 #include "pnl_random.h"
+#include "pnl_basis.h"
