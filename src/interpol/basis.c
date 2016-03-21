@@ -27,6 +27,7 @@
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_sp_matrix.h"
 #include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_specfun.h"
 
 #ifndef PNL_RANGE_CHECK_OFF
 #define CHECK_NB_FUNC(coef, basis)                                  \
@@ -361,9 +362,58 @@ static PnlMatInt *compute_tensor_from_degree_function(int degree, int nb_variate
     }
 }
 
+/**
+ * Compute the tensor representation
+ *
+ * @param[int,out] T
+ * @param degree
+ * @param nb_variates
+ *
+ * @return the number of rows already computed in T
+ */
+static int compute_tensor_from_sum_degree_rec(PnlMatInt *T, int degree, int nb_variates)
+{
+  if (nb_variates <= 0)
+    {
+      printf("Nb of variates must be stricly positive in compute_tensor_from_degree\n");
+      abort();
+    }
+  if (nb_variates == 1)
+    {
+      int i;
+      pnl_mat_int_set_zero(T);
+      for (i = 0 ; i < degree + 1 ; i++)
+        {
+          PNL_MLET(T, i, 0) = i;
+        }
+      return degree + 1;
+    }
+  else
+    {
+      int l, deg, current_row;
+      int rows_rec = compute_tensor_from_sum_degree_rec(T, degree, nb_variates - 1);
+      current_row = rows_rec;
+      for (l = 0; l < rows_rec; l++)
+        {
+          int partial_degree = count_sum_degree(T, l);
+          for (deg = 1; deg <= degree - partial_degree; deg++)
+            {
+              PnlVectInt row_l = pnl_vect_int_wrap_mat_row(T, l);
+              pnl_mat_int_set_row(T, &row_l, current_row);
+              PNL_MLET(T, current_row, nb_variates - 1) = deg;
+              current_row ++;
+            }
+        }
+      return current_row;
+    }
+}
+
 static PnlMatInt *compute_tensor_from_sum_degree(int degree, int nb_variates)
 {
-  return compute_tensor_from_degree_function(degree, nb_variates, count_sum_degree, freedom_degree_sum);
+  int nb_elements = pnl_sf_choose(nb_variates + degree, degree);
+  PnlMatInt *T = pnl_mat_int_create(nb_elements, nb_variates);
+  compute_tensor_from_sum_degree_rec(T, degree, nb_variates);
+  return T;
 }
 
 static PnlMatInt *compute_tensor_from_prod_degree(int degree, int nb_variates)
