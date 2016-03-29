@@ -88,9 +88,9 @@ static int pnl_iteration_base_converged(PnlIterationBase *it, const PnlVect *rhs
       printf(" converged in %d iterations \n", it->iteration);
       return true;
     }
-  return false;
+  return FALSE;
 #endif
-  return (it->resid <= it->tol_) ? true : false;
+  return (it->resid <= it->tol_) ? TRUE : FALSE;
 }
 
 /**
@@ -103,7 +103,7 @@ static int pnl_iteration_base_converged(PnlIterationBase *it, const PnlVect *rhs
 static int pnl_iteration_base_converged_norm(PnlIterationBase *it, double Res)
 {
   it->resid = Res / it->normb;
-  return (it->resid <= it->tol_) ? true : false;
+  return (it->resid <= it->tol_) ? TRUE : FALSE;
 }
 
 /**
@@ -117,7 +117,7 @@ static int pnl_iteration_base_converged_norm(PnlIterationBase *it, double Res)
 static int pnl_iteration_base_finished(PnlIterationBase *it, const  PnlVect *rhs)
 {
   if (pnl_iteration_base_converged(it, rhs))
-    return true;
+    return TRUE;
   /*    printf("converged in %d iterations , with residu = %f max_iter = %d \n" , */
   /*       it->iteration,it->resid,it->max_iter); */
   if ((*it).iteration > (*it).max_iter)
@@ -126,9 +126,9 @@ static int pnl_iteration_base_finished(PnlIterationBase *it, const  PnlVect *rhs
       printf("iterative Solver not converged in last iterations with residu = %f iter = %d \n" ,
              it->resid, it->iteration);
       abort();
-      return true;
+      return TRUE;
     }
-  return false;
+  return FALSE;
 
 }
 

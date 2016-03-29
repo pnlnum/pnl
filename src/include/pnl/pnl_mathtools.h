@@ -37,10 +37,8 @@ extern double pnl_expm1 (double x);
 extern double pnl_cosm1 (double x);
 extern double pnl_round (double x);
 
-#define false 0
 #undef FALSE
 #define FALSE 0
-#define true 1
 #undef TRUE
 #define TRUE 1
 
