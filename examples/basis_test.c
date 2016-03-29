@@ -267,7 +267,7 @@ static void pnl_basis_eval_test()
   int        j, deg, n;
   double     t0, x0, tol;
 
-  tol = 1E-8;
+  tol = 1E-5;
   deg = 5; //total degree
   n = 50;
   D = pnl_vect_create(5);
