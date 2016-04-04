@@ -410,7 +410,7 @@ static int compute_tensor_from_sum_degree_rec(PnlMatInt *T, int degree, int nb_v
 
 static PnlMatInt *compute_tensor_from_sum_degree(int degree, int nb_variates)
 {
-  int nb_elements = pnl_sf_choose(nb_variates + degree, degree);
+  int nb_elements = pnl_round(pnl_sf_choose(nb_variates + degree, degree));
   PnlMatInt *T = pnl_mat_int_create(nb_elements, nb_variates);
   compute_tensor_from_sum_degree_rec(T, degree, nb_variates);
   return T;
