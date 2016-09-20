@@ -761,8 +761,8 @@ and the size of the matrix.
 \item \describefun{void}{pnl_mat_set_subblock}{\PnlMat \ptr
     M, const \PnlMat \ptr block, int i, int j}
     \sshortdescribe If \var{block} is a matrix of size \var{m_block x n_block},
-    the dimensions of \var{M} must satisfy that \var{M->m <= i + m_block}
-    \var{M->n <= j + n_block}. On output \var{M(i:i+m_block-1, j:j+n_block-1) =
+    the dimensions of \var{M} must satisfy that \var{M->m >= i + m_block} and 
+    \var{M->n >= j + n_block}. On output \var{M(i:i+m_block-1, j:j+n_block-1) =
     block}. 
 \end{itemize}  
 
