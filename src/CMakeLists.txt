@@ -29,7 +29,9 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 SET(pnl_LIB_SRCS
    cumulfunc.c
    finance_function.c
+   pnl.def
 )
+install(FILES pnl.def DESTINATION lib)
 
 add_subdirectory(include/pnl)
 foreach(subdir ${SUBDIRS})
