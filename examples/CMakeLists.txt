@@ -213,14 +213,16 @@ target_link_libraries(array_test pnl)
 add_test(array_test ${CMAKE_CURRENT_BINARY_DIR}/array_test)
 
 
-SET(speed_test_SRCS
-   speed_test.c
-   speed_matrix.c
-   speed_basis.c
-   tests_utils.c
-)
-add_executable(speed_test ${speed_test_SRCS})
-target_link_libraries(speed_test pnl)
+if (NOT USE_INTERNAL_BLAS)
+    SET(speed_test_SRCS
+        speed_test.c
+        speed_matrix.c
+        speed_basis.c
+        tests_utils.c
+        )
+    add_executable(speed_test ${speed_test_SRCS})
+    target_link_libraries(speed_test pnl)
+endif ()
 
 if (MPI_C_FOUND)
     SET(mpibindings_test_SRCS
