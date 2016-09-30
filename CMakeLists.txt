@@ -177,15 +177,6 @@ install(FILES
 )
 
 
-
-
-# Add the uninstall target
-if (NOT SUB_CMAKE_CALL)
-    include(CMakeUninstallTarget)
-    WRITE_UNINSTALL_TARGET_SCRIPT()
-    add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
-endif (NOT SUB_CMAKE_CALL)
-
 ## Output configuration stuff ##
 message("C Compiler :             ${CMAKE_C_COMPILER}")
 message("     FLAGS :             ${PNL_C_FLAGS}")
