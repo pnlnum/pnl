@@ -52,12 +52,9 @@ if (MINGW)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libpnl.def DESTINATION lib)
 endif (MINGW)
 
-if (UNIX)
-    set_target_properties(pnl PROPERTIES 
-        SOVERSION ${VERSION_CURRENT}
-        VERSION ${VERSION_CURRENT}.${VERSION_AGE}.${VERSION_REVISION}
-    )
-endif(UNIX)
+set_target_properties(pnl PROPERTIES 
+    SOVERSION ${PNL_VERSION}
+    VERSION ${PNL_VERSION})
 install(TARGETS pnl DESTINATION lib)
 
 set(PNL_INCLUDE_DIRS)
