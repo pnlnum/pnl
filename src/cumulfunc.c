@@ -8417,28 +8417,12 @@ void pnl_cdfbchi2n(double x, double nu, double lambda, double beta, double *P)
  */
 double pnl_cdfnor(double x)
 {
-  double p= 0.2316419;
-  double b1= 0.319381530;
-  double b2= -0.356563782;
-  double b3= 1.781477937;
-  double b4= -1.821255978;
-  double b5= 1.330274429;
-  double one_over_twopi= 0.39894228;
-
-  double t;
-
-  if (x >= 0.0)
-    {
-      t = 1.0 / ( 1.0 + p * x );
-      return (1.0 - one_over_twopi * exp( -x * x / 2.0 ) * t *
-              ( t *( t * ( t * ( t * b5 + b4 ) + b3 ) + b2 ) + b1 ));
-    } 
-  else /* x < 0 */
-    {
-      t = 1.0 / ( 1.0 - p * x );
-      return ( one_over_twopi * exp( -x * x / 2.0 ) * t *
-               ( t *( t * ( t * ( t * b5 + b4 ) + b3 ) + b2 ) + b1 ));
-    }
+  int status;
+  double p, q, bound;
+  int which = 1;
+  double mean = 0, sd = 1;
+  pnl_cdf_nor(&which, &p, &q, &x, &mean, &sd, &status, &bound);
+  return p;
 }
 
 double cdf_nor(double x)
@@ -8687,7 +8671,7 @@ double pnl_inv_cdfnor (double u)
     if (z > 0.1)
       v = 1.0 / sqrt(-log (1.0 - u));
     else
-      v = 1.0 / sqrt (-log (2.0*z));         
+      v = 1.0 / sqrt (-log (2.0*z));
     numer = denom = 0.0;
 
     for (i = 10; i >= 0; i--)
