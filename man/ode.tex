@@ -13,7 +13,7 @@ The system of equations is defined by the following structure
 \begin{verbatim}
 typedef struct
 {
-  void (*function) (int neqn, double t, const double *y, double *yp, void *params);
+  void (*F) (int neqn, double t, const double *y, double *yp, void *params);
   int neqn; 
   void *params;
 } PnlODEFunc ;
@@ -25,7 +25,7 @@ typedef struct
 \item \describevar{void \ptr}{params} 
   \sshortdescribe An untyped structure used to pass extra
   arguments to the function \var{f} defining the system
-\item \describefun*{void}{(\ptr\ function)}{int neqn, double t, const double \ptr
+\item \describefun*{void}{(\ptr\ F)}{int neqn, double t, const double \ptr
     y, double \ptr yp, void \ptr params}
   \sshortdescribe After calling the fuction, \var{yp} should be defined as
   follows \var{yp_i = f_i(neqn, t, y, params)}. \var{y} and \var{yp} should be
@@ -34,8 +34,8 @@ typedef struct
 We provide the following macro to evaluate a \refstruct{PnlODEFunc}
 at a given point
 \begin{verbatim}
-#define PNL_EVAL_ODEFUNC(F, t, y, yp) \
-        (*((F)->function))((F)->neqn, t, y, yp, (F)->params)
+#define PNL_EVAL_ODEFUNC(Fstruct, t, y, yp) \
+    (*((Fstruct)->F))((Fstruct)->neqn, t, y, yp, (Fstruct)->params)
 \end{verbatim}
 
 \subsection{Functions}
