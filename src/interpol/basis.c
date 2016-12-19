@@ -365,7 +365,7 @@ static PnlMatInt *compute_tensor_from_degree_function(int degree, int nb_variate
 /**
  * Compute the tensor representation
  *
- * @param[int,out] T
+ * @param[in,out] T
  * @param degree
  * @param nb_variates
  *

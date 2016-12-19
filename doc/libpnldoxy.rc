@@ -827,7 +827,6 @@ EXCLUDE_PATTERNS       = *_source.c \
                          *template_on.h \
                          *template_off.h \
                          */src/include/clapack.h \
-                         */src/interpol/interpolation.c \
                          */src/linalg/vector.c \
                          */src/linalg/matrix.c \
                          */src/linalg/sp_matrix.c \

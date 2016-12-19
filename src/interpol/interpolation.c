@@ -1244,20 +1244,20 @@ static void nsp_eval_bicubic(double *x, double *y, double *C, int nx, int ny, do
 
 /**
  * Compute a bicubic spline s (s is twice continuously differentiable)
- * which interpolates the @param u values on the grid defined by @param x
- * and @param y. (s(x[i],y[j]) must be equal to u(i,j)=u[i*nx*j]). The
- * spline is completly defined with the triplet (@param x @param y @param
- * C) and could be evaluated at some points with nsp_eval_bicubic.
- * See coef_bicubic for detail about the bicubic patch coef @param C.
+ * which interpolates the \p u values on the grid defined by (\p x, \p y).
+ * (s(x[i],y[j]) must be equal to u(i,j). The
+ * spline is completly defined with the triplet (\p x \p y \p C)
+ * and could be evaluated at some points with nsp_eval_bicubic.
+ * See coef_bicubic for detail about the bicubic patch coef \p C.
  *
  *
- * @param x (input) first coordinates of the grid points
- * @param y (input) second coordinates of the grid points
- * @param u (input) array of size nx x ny, u(i,j)=u[i+nx*j] value u(x,y) at
- * the grid point (@param x[i] @param y[j])
- * @param C (output) array of size 4 x 4 x (size(x)-1) x (size(y)-1) (must
+ * @param[in] x first coordinates of the grid points
+ * @param[in] y second coordinates of the grid points
+ * @param[in] u matrix of size size(\p x) x size(\p y), u(i,j) is the value at
+ * the grid point (\p x[i], \p y[j])
+ * @param[out] C array of size 4 x 4 x (size(\p x)-1) x (size(\p y)-1) (must
  * be preallocated)
- * @param type (input) type of bicubic spline to compute can be NOT_A_KNOT
+ * @param[in] type type of bicubic spline to compute can be NOT_A_KNOT
  * NATURAL, PERIODIC, MONOTONE, FAST_PERIODIC or FAST
  *
  * @return OK or FAIL
@@ -1269,36 +1269,32 @@ int pnl_bicubic_spline(PnlVect *x, PnlVect *y, PnlMat *u, double *C, int type)
 
 
 /**
- * Evaluate the bicubic defined by the triplet  (x y C) at the points
- * (x_eval,y_eval). If  dzdx_eval is not NULL it is assumed that dzdx_eval
- * and dzdy_eval are arrays of size m and the first derivatives at the
- * (x_eval,y_eval) points are also computed. The bicubic (x y C) could be
- * build to interpolate grid values with either nsp_bicubic_spline or
+ * Evaluate the bicubic defined by the triplet  (x y C) at the points (\p x_eval,\p y_eval). If \p
+ * dzdx_eval is not NULL it is assumed that \p dzdx_eval and \p dzdy_eval are arrays of of the same
+ * size as \p x_eval and the first derivatives at the (\p x_eval, \p y_eval) points are also computed. The
+ * bicubic (x y C) could be build to interpolate grid values with either nsp_bicubic_spline or
  * nsp_bicubic_subspline.
  *
  *
- * @param x (input) first coordinates of the grid points
- * @param y (input) second coordinates of the grid points
- * @param C (input) array of size 4 x 4 x (size(x)-1) x (size(y)-1)
- * @param nx (input) size of the grid in x
- * @param ny (input) size of the grid in y
- * @param x_eval (input) array of size @param m
- * @param y_eval (input) array of size @param m
- * @param z_eval (output) array of size @param m z_eval[k] will be the value of the bicubic at the point (x_eval[k],y_eval[k]).
- * @param dzdx_eval (output) if not NULL must be an array of size m
- * @param dzdy_eval (output) if not NULL must be an array of size m
- * @param m (input) length of arrays x_eval and y_eval number of points
- * where the bicubic must be evaluated
- * @param outmode (input) set the behavior to evaluate the bicubic outside the grid, can be BY_NAN, BY_ZERO, PERIODIC, C0, NATURAL
+ * @param[in] x first coordinates of the grid points
+ * @param[in] y second coordinates of the grid points
+ * @param[in] C array of size 4 x 4 x (size(\p x)-1) x (size(\p y)-1)
+ * @param[in] x_eval vector
+ * @param[in] y_eval vector of the same size as \p x_eval
+ * @param[out] z_eval vector of the same size as \p x_eval.  On output, z_eval[k] holds the value of the bicubic spline at the point (x_eval[k],y_eval[k]).
+ * @param[out] dzdx_eval if not NULL must be a vector of the same size as \p x_eval
+ * @param[out] dzdy_eval if not NULL must be a vector of the same size as \p x_eval. If \p dzdx_eval is
+ * not NULL, dzdy_eval must be not NULL
+ * @param[in] outmode set the behavior to evaluate the bicubic outside the grid, can be BY_NAN, BY_ZERO, PERIODIC, C0, NATURAL
 */
-void pnl_eval_bicubic(PnlVect *x, PnlVect *y, double *C, PnlVect *x_eval, PnlVect *y_eval, PnlMat *z_eval, PnlMat *dzdx_eval, PnlMat *dzdy_eval, int outmode)
+void pnl_eval_bicubic(PnlVect *x, PnlVect *y, double *C, PnlVect *x_eval, PnlVect *y_eval, PnlVect *z_eval, PnlMat *dzdx_eval, PnlMat *dzdy_eval, int outmode)
 {
   if (dzdx_eval == NULL)
     {
-      nsp_eval_bicubic(pnl_vect_lget(x, 0), pnl_vect_lget(y, 0), C, x->size, y->size, pnl_vect_lget(x_eval, 0), pnl_vect_lget(y_eval, 0), pnl_mat_lget(z_eval, 0, 0), NULL, NULL, x_eval->size, outmode);
+      nsp_eval_bicubic(pnl_vect_lget(x, 0), pnl_vect_lget(y, 0), C, x->size, y->size, pnl_vect_lget(x_eval, 0), pnl_vect_lget(y_eval, 0), pnl_vect_lget(z_eval, 0), NULL, NULL, x_eval->size, outmode);
     }
   else
     {
-      nsp_eval_bicubic(pnl_vect_lget(x, 0), pnl_vect_lget(y, 0), C, x->size, y->size, pnl_vect_lget(x_eval, 0), pnl_vect_lget(y_eval, 0), pnl_mat_lget(z_eval, 0, 0), pnl_mat_lget(dzdx_eval, 0, 0), pnl_mat_lget(dzdy_eval, 0, 0), x_eval->size, outmode);
+      nsp_eval_bicubic(pnl_vect_lget(x, 0), pnl_vect_lget(y, 0), C, x->size, y->size, pnl_vect_lget(x_eval, 0), pnl_vect_lget(y_eval, 0), pnl_vect_lget(z_eval, 0), pnl_mat_lget(dzdx_eval, 0, 0), pnl_mat_lget(dzdy_eval, 0, 0), x_eval->size, outmode);
     }
 }

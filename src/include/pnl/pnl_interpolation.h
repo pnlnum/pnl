@@ -8,7 +8,13 @@
 extern "C" {
 #endif /* __cplusplus */
 
-enum 
+/**
+ * \defgroup spline  Splines
+ * Bicubic splines
+ */
+/*@{*/
+
+enum
   {
     NOT_A_KNOT, 
     NATURAL, 
@@ -27,9 +33,10 @@ enum
 int pnl_bicubic_spline(PnlVect *x, PnlVect *y, PnlMat *u, double *C, int type);
 
 void pnl_eval_bicubic(PnlVect *x, PnlVect *y, double *C, PnlVect *x_eval,
-                      PnlVect *y_eval, PnlMat *z_eval, PnlMat *dzdx_eval,
+                      PnlVect *y_eval, PnlVect *z_eval, PnlMat *dzdx_eval,
                       PnlMat *dzdy_eval, int outmode);
 
+/*@}*/
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
