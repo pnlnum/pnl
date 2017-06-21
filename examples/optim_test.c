@@ -238,6 +238,55 @@ void linprog_ineq_bounds_eq_test()
   pnl_mat_free(&A_eq);
 }
 
+void linprog_sp_test()
+{
+  PnlVect *Obj = pnl_vect_create_from_list(3, -2., -4., -3.);
+  PnlMat matObj = pnl_mat_wrap_vect(Obj);
+  PnlSpMat *spObj = pnl_sp_mat_create_from_mat(&matObj);
+  PnlMat *A_ineq = pnl_mat_create_from_list(2, 3, 0., 4., 2., 1., 0., 2.);
+  PnlSpMat *spA_ineq = pnl_sp_mat_create_from_mat(A_ineq);
+  PnlVect *B_ineq = pnl_vect_create_from_list(2, 60., 80.);
+  PnlMat *A_eq = pnl_mat_create_from_list(1, 3, 2., 1., 0.);
+  PnlSpMat *spA_eq = pnl_sp_mat_create_from_mat(A_eq);
+  PnlVect *B_eq = pnl_vect_create_from_list(1, 30.);
+  PnlVect *x = pnl_vect_new();
+  PnlVect *xmin = pnl_vect_create_from_list(3, -PNL_INF, 0., 2.);
+  PnlVect *xmin_sp  = pnl_vect_create_from_list(2, -PNL_INF, 2.);
+  PnlVectInt *index_min = pnl_vect_int_create_from_list(2, 0, 2);
+  PnlVect *xmax = pnl_vect_create_from_list(3, 4., 100., PNL_INF);
+  PnlVect *xmax_sp  = pnl_vect_create_from_list(2, 16., 100.);
+  PnlVectInt *index_max = pnl_vect_int_create_from_list(2, 0, 1);
+  PnlVect *xres = pnl_vect_create_from_list(3, 15., 0., 30.);
+  double res = -120.;
+  double val = 0.;
+  if (pnl_optim_linprog_sp(spObj, spA_ineq, B_ineq, spA_eq, B_eq, index_min, xmin_sp, index_max, xmax_sp, pnl_test_is_verbose(), x, &val) == OK)
+    {
+      pnl_test_eq_rel(val, res, 1E-8, "linprog with bounds and eq constraints", "") && pnl_test_vect_eq_abs(x, xres, 1E-8, "linprog with bounds and eq constraints", "");
+    }
+  else
+    pnl_test_set_fail("linprog with bounds and eq constraints", 0., 0.);
+
+
+  pnl_vect_free(&Obj);
+  pnl_vect_free(&B_ineq);
+  pnl_vect_free(&B_eq);
+  pnl_vect_free(&x);
+  pnl_vect_free(&xmin);
+  pnl_vect_free(&xmax);
+  pnl_vect_free(&xres);
+  pnl_mat_free(&A_ineq);
+  pnl_mat_free(&A_eq);
+
+  pnl_sp_mat_free(&spObj);
+  pnl_sp_mat_free(&spA_eq);
+  pnl_sp_mat_free(&spA_ineq);
+  pnl_vect_int_free(&index_min);
+  pnl_vect_int_free(&index_max);
+  pnl_vect_free(&xmin_sp);
+  pnl_vect_free(&xmax_sp);
+}
+
+
 int main (int argc, char **argv)
 {
   pnl_test_init (argc, argv);
@@ -245,5 +294,6 @@ int main (int argc, char **argv)
   linprog_ineq_test();
   linprog_ineq_bounds_test();
   linprog_ineq_bounds_eq_test();
+  linprog_sp_test();
   exit (pnl_test_finalize ("Optim"));
 }

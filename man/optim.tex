@@ -22,7 +22,7 @@ To solve such a linear problem, we provide a wrapper to the \emph{LPSolve} libra
   \item \describefun{int}{pnl_optim_linprog}{const \PnlVect \ptr C, const \PnlMat \ptr A_ineq, const \PnlVect \ptr B_ineq, const \PnlMat \ptr A_eq, const \PnlVect \ptr B_eq, const \PnlVect \ptr x_min, const \PnlVect \ptr x_max, int debug, \PnlVect \ptr xopt, double \ptr fobj_opt}
     \sshortdescribe This function has the following arguments:
     \begin{itemize}
-      \item \var{C} The coefficients of the linear obejctive function.
+      \item \var{C} The coefficients of the linear objective function.
       \item \var{A_ineq} The l.h.s matrix of the inequality constraints. Can be NULL.
       \item \var{B_ineq} The r.h.s vector of the inequality constraints. The lengh of
         \var{B_ineq} must match the number of rows of \var{A_ineq}.
@@ -33,6 +33,33 @@ To solve such a linear problem, we provide a wrapper to the \emph{LPSolve} libra
         of \var{x} must be non negative.
       \item \var{x_max} The upper bound on \var{x}. If NULL, it means \var{+Infinity} for
         all the components.
+      \item \var{debug} TRUE or FALSE. If TRUE some debugging details are printed.
+      \item \var{xopt} The \var{argmin} of the problem.
+      \item \var{fobj_opt} The value of the obective funtion at the optimum \var{xopt}
+    \end{itemize}
+    The function returns \var{OK} or \var{FAIL}.
+
+  \item \describefun{int}{pnl_optim_linprog_sp}{const \PnlSpMat \ptr C, const \PnlSpMat \ptr A_ineq, const \PnlVect \ptr B_ineq, const \PnlSpMat \ptr A_eq, const \PnlVect \ptr B_eq, const \PnlVectInt \ptr index_min, const \PnlVect \ptr x_min, const \PnlVectInt \ptr index_max, const \PnlVect \ptr x_max, int debug, \PnlVect \ptr xopt, double \ptr fobj_opt}
+    \sshortdescribe This function has the following arguments:
+    \begin{itemize}
+      \item \var{C} The coefficients of the linear obejctive function, given as a sparse
+        matrix with a single column.
+      \item \var{A_ineq} The l.h.s matrix of the inequality constraints. Can be NULL.
+      \item \var{B_ineq} The r.h.s vector of the inequality constraints. The lengh of
+        \var{B_ineq} must match the number of rows of \var{A_ineq}.
+      \item \var{A_eq} The l.h.s matrix of the equality constraints. Can be NULL.
+      \item \var{B_eq} The r.h.s vector of the equality constraints. The lengh of
+        \var{B_eq} must match the number of rows of \var{A_ineq}.
+      \item \var{index_min} The indices of the variables with a lower bound constraint.
+        The corresponding lower bound is given in \var{x_min}
+      \item \var{x_min} The lower bound on \var{x}. If NULL, it means all the components
+        of \var{x} must be non negative. Can be NULL. For non specified variables, the
+        default lower bound is \var{0}.
+      \item \var{index_max} The indices of the variables with an upper bound constraint.
+        The corresponding lower bound is given in \var{x_max}. Can be NULL.
+      \item \var{x_max} The upper bound on \var{x}. If NULL, it means \var{+Infinity} for
+        all the components. For non specified variables, the
+        default upper bound is \var{+Infinity}..
       \item \var{debug} TRUE or FALSE. If TRUE some debugging details are printed.
       \item \var{xopt} The \var{argmin} of the problem.
       \item \var{fobj_opt} The value of the obective funtion at the optimum \var{xopt}
