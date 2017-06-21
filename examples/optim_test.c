@@ -154,10 +154,96 @@ static void minimize_func_HS15()
   pnl_vect_free(&upper_bounds);
 }
 
+void linprog_ineq_test()
+{
+  PnlVect *Obj = pnl_vect_create_from_list(3, -2., -4., -3.);
+  PnlMat *A_ineq = pnl_mat_create_from_list(3, 3, 3., 4., 2., 2., 1., 2., 1., 3., 2.);
+  PnlVect *B_ineq = pnl_vect_create_from_list(3, 60., 40., 80.);
+  PnlVect *x = pnl_vect_new();
+  PnlVect *xres = pnl_vect_create_from_list(3, 0., 6.66666666667, 16.66666666667);
+  double res = -76.6666667;
+  double val = 0.;
+  if (pnl_optim_linprog(Obj, A_ineq, B_ineq, NULL, NULL, NULL, NULL, pnl_test_is_verbose(), x, &val) == OK)
+    {
+      pnl_test_eq_rel(val, res, 1E-8, "linprog", "") && pnl_test_vect_eq_abs(x, xres, 1E-8, "linprog", "");
+    }
+  else
+    pnl_test_set_fail("linprog", 0., 0.);
+
+  pnl_vect_free(&Obj);
+  pnl_vect_free(&B_ineq);
+  pnl_vect_free(&x);
+  pnl_vect_free(&xres);
+  pnl_mat_free(&A_ineq);
+}
+
+void linprog_ineq_bounds_test()
+{
+  PnlVect *Obj = pnl_vect_create_from_list(3, -2., -4., -3.);
+  PnlMat *A_ineq = pnl_mat_create_from_list(3, 3, 3., 4., 2., 2., 1., 2., 1., 3., 2.);
+  PnlVect *B_ineq = pnl_vect_create_from_list(3, 60., 40., 80.);
+  PnlVect *x = pnl_vect_new();
+  PnlVect *xmin = pnl_vect_create_from_list(3, -PNL_INF, 0., 2.);
+  PnlVect *xmax = pnl_vect_create_from_list(3, 4., 100., PNL_INF);
+  PnlVect *xres = pnl_vect_create_from_list(3, -16., 12., 30.);
+  double res = -106.;
+  double val = 0.;
+
+  if (pnl_optim_linprog(Obj, A_ineq, B_ineq, NULL, NULL, xmin, xmax, pnl_test_is_verbose(), x, &val) == OK)
+    {
+      pnl_test_eq_rel(val, res, 1E-8, "linprog with bounds", "") && pnl_test_vect_eq_abs(x, xres, 1E-8, "linprog with bounds", "");
+    }
+  else
+    pnl_test_set_fail("linprog with bounds", 0., 0.);
+
+
+  pnl_vect_free(&Obj);
+  pnl_vect_free(&B_ineq);
+  pnl_vect_free(&x);
+  pnl_vect_free(&xmin);
+  pnl_vect_free(&xmax);
+  pnl_vect_free(&xres);
+  pnl_mat_free(&A_ineq);
+}
+
+void linprog_ineq_bounds_eq_test()
+{
+  PnlVect *Obj = pnl_vect_create_from_list(3, -2., -4., -3.);
+  PnlMat *A_ineq = pnl_mat_create_from_list(2, 3, 3., 4., 2., 1., 3., 2.);
+  PnlVect *B_ineq = pnl_vect_create_from_list(2, 60., 80.);
+  PnlMat *A_eq = pnl_mat_create_from_list(1, 3, 2., 1., 2.);
+  PnlVect *B_eq = pnl_vect_create_from_list(1, 30.);
+  PnlVect *x = pnl_vect_new();
+  PnlVect *xmin = pnl_vect_create_from_list(3, -PNL_INF, 0., 2.);
+  PnlVect *xmax = pnl_vect_create_from_list(3, 4., 100., PNL_INF);
+  PnlVect *xres = pnl_vect_create_from_list(3, -18., 16., 25.);
+  double res = -103.;
+  double val = 0.;
+  if (pnl_optim_linprog(Obj, A_ineq, B_ineq, A_eq, B_eq, xmin, xmax, pnl_test_is_verbose(), x, &val) == OK)
+    {
+      pnl_test_eq_rel(val, res, 1E-8, "linprog with bounds and eq constraints", "") && pnl_test_vect_eq_abs(x, xres, 1E-8, "linprog with bounds and eq constraints", "");
+    }
+  else
+    pnl_test_set_fail("linprog with bounds and eq constraints", 0., 0.);
+
+
+  pnl_vect_free(&Obj);
+  pnl_vect_free(&B_ineq);
+  pnl_vect_free(&B_eq);
+  pnl_vect_free(&x);
+  pnl_vect_free(&xmin);
+  pnl_vect_free(&xmax);
+  pnl_vect_free(&xres);
+  pnl_mat_free(&A_ineq);
+  pnl_mat_free(&A_eq);
+}
 
 int main (int argc, char **argv)
 {
   pnl_test_init (argc, argv);
   minimize_func_HS15();
+  linprog_ineq_test();
+  linprog_ineq_bounds_test();
+  linprog_ineq_bounds_eq_test();
   exit (pnl_test_finalize ("Optim"));
 }

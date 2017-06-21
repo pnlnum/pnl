@@ -1,3 +1,7 @@
+21-06-2017 Jérôme Lelong <jerome.lelong@gmail.com>
+
+	* optim: Add a wrapper to LPSolve.
+
 15-02-2016 Jérôme Lelong <jerome.lelong@gmail.com>
 
 	* specfun: Add the Faddeeva package to define error functions for

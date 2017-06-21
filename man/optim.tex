@@ -1,5 +1,48 @@
-\section{Nonlinear Constrained Optimization}
-\subsection{Overview}
+\section{Optimization}
+
+To use the functions described in this section, you should include \verb!pnl/pnl_optim.h!.
+
+\subsection{Linear constrained optimization (linear programming)}
+
+\subsubsection{Overview}
+
+Consider the minimization problem
+\begin{align*}
+  \min_x \quad & C^T \; x \\
+  \mbox{s.t.} \quad & 
+  A_{\text{ineq}} \; x \le B_{\text{ineq}}\\
+  &A_{\text{eq}} \; x = B_{\text{eq}}\\
+  & x_{\text{min}} \le x \le x_{\text{max}}
+\end{align*}
+
+\subsubsection{Functions}
+To solve such a linear problem, we provide a wrapper to the \emph{LPSolve} library
+(\url{http://lpsolve.sourceforge.net}).
+\begin{itemize}
+  \item \describefun{int}{pnl_optim_linprog}{const \PnlVect \ptr C, const \PnlMat \ptr A_ineq, const \PnlVect \ptr B_ineq, const \PnlMat \ptr A_eq, const \PnlVect \ptr B_eq, const \PnlVect \ptr x_min, const \PnlVect \ptr x_max, int debug, \PnlVect \ptr xopt, double \ptr fobj_opt}
+    \sshortdescribe This function has the following arguments:
+    \begin{itemize}
+      \item \var{C} The coefficients of the linear obejctive function.
+      \item \var{A_ineq} The l.h.s matrix of the inequality constraints. Can be NULL.
+      \item \var{B_ineq} The r.h.s vector of the inequality constraints. The lengh of
+        \var{B_ineq} must match the number of rows of \var{A_ineq}.
+      \item \var{A_eq} The l.h.s matrix of the equality constraints. Can be NULL.
+      \item \var{B_eq} The r.h.s vector of the equality constraints. The lengh of
+        \var{B_eq} must match the number of rows of \var{A_ineq}.
+      \item \var{x_min} The lower bound on \var{x}. If NULL, it means all the components
+        of \var{x} must be non negative.
+      \item \var{x_max} The upper bound on \var{x}. If NULL, it means \var{+Infinity} for
+        all the components.
+      \item \var{debug} TRUE or FALSE. If TRUE some debugging details are printed.
+      \item \var{xopt} The \var{argmin} of the problem.
+      \item \var{fobj_opt} The value of the obective funtion at the optimum \var{xopt}
+    \end{itemize}
+    The function returns \var{OK} or \var{FAIL}.
+\end{itemize}
+
+
+\subsection{Nonlinear constrained optimization}
+\subsubsection{Overview}
 
 A standard Constrained Nonlinear Optimization problem can be written as:
 
@@ -33,11 +76,9 @@ Under some conditions, if $x \in \mathbb{R}^n$ is a solution of problem ($O$), t
   \right.
 \end{equation*}
 
-$l$ is known as the lagrangian of the problem $(O)$, $\lambda^I$ and $\lambda^E$ as the dual variables while $x$ is the primal variable.
+$l$ is known as the Lagrangian of the problem $(O)$, $\lambda^I$ and $\lambda^E$ as the dual variables while $x$ is the primal variable.
 
-\subsection{Functions}
-
-To use the following functions, you should include \verb!pnl/pnl_optim.h!.
+\subsubsection{Functions}
 
 To solve an inequality constrained optimization problem, ie $m_E=0$, we provide the following function.
 \begin{itemize}
@@ -76,14 +117,10 @@ To solve an inequality constrained optimization problem, ie $m_E=0$, we provide 
 
   The first inequality is known as the optimality condition, the second one as the complementarity condition.\\
 
-  \textbf{Important Remark 1}: Our implementation requires that initial point $x_0$ to be strictly feasible, ie: $c(x_0)>0$.\\
-  \textbf{Important Remark 2}: The algorithm tries to find a pair ($x$, $\lambda$)
-  solving the Equations ($P$), but this does not guarantee that $x$ is a global minimum of $f$ on the set $\{c(x)\geq0\}$.
+  \textbf{Remarks} Our implementation requires the initial point $x_0$ to be strictly
+  feasible, ie: $c(x_0)>0$. The algorithm tries to find a pair ($x$, $\lambda$) solving
+  the Equations ($P$), but this does not guarantee that $x$ is a global minimum of $f$ on
+  the set $\{c(x)\geq0\}$.
 
 \end{itemize}
 
-
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: "pnl-manual"
-%%% End: 

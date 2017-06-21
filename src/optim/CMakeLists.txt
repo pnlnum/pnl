@@ -1,3 +1,31 @@
 add_library(optim OBJECT
    intpoints_bfgs.c
+   lp_solve/lp_LUSOL.c
+   lp_solve/lusol.c
+   lp_solve/colamd.c
+   lp_solve/ini.c
+   lp_solve/commonlib.c
+   lp_solve/mmio.c
+   lp_solve/myblas.c
+   lp_solve/lp_crash.c
+   lp_solve/lp_Hash.c
+   lp_solve/lp_lib.c
+   lp_solve/lp_matrix.c
+   lp_solve/lp_MDO.c
+   lp_solve/lp_mipbb.c
+   lp_solve/lp_MPS.c
+   lp_solve/lp_params.c
+   lp_solve/lp_presolve.c
+   lp_solve/lp_price.c
+   lp_solve/lp_pricePSE.c
+   lp_solve/lp_report.c
+   lp_solve/lp_scale.c
+   lp_solve/lp_simplex.c
+   lp_solve/lp_SOS.c
+   lp_solve/lp_utils.c
+   lp_solve/lp_wlp.c
+   lp_solve-wrap.c
 )
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lp_solve)
+add_definitions(-DINVERSE_ACTIVE=INVERSE_LUSOL)
+add_definitions(-DRoleIsExternalInvEngine)

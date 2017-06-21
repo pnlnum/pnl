@@ -16,7 +16,7 @@ extern "C" {
 
 
 extern int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR * func, PnlRnFuncRm *grad_func, PnlRnFuncRm * nl_constraints, PnlVect* lower_bounds, PnlVect* upper_bounds, PnlVect * x_input , double tolerance, int iter_max, int print_inner_steps, PnlVect *output);
-
+extern int pnl_optim_linprog(const PnlVect *C, const PnlMat *A_ineq, const PnlVect *B_ineq, const PnlMat *A_eq, const PnlVect *B_eq, const PnlVect *x_min, const PnlVect *x_max, int debug, PnlVect *xopt, double *fobj_opt);
 
 #ifdef __cplusplus
 }
