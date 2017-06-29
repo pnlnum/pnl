@@ -166,6 +166,10 @@ int * incr(int n, int *T)
  * non negative. Use -PNL_INF for every coordinate with no lower bound.
  * @param x_max The upper bounds on the solution. If NULL, it means +Infinity.
  * Use PNL_INF for every coordinate with no upper bound.
+ * @param index_min the indices of the variables with lower bounds specified by x_min. Must be NULL
+ * when x_min is NULL.
+ * @param index_max the indices of the variables with lower bounds specified by x_min. Must be NULL
+ * when x_max is NULL.
  * @param debug TRUE or FALSE. If TRUE, it prints all intermediate results and the branch-and-bound decisions
  * @param[out] xopt contains the optimal x on output.
  * @param[out] fobj_opt contains the value of the objective function at xopt

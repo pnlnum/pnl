@@ -116,19 +116,19 @@ static void coord_by_periodicity(double *t, const double x[], int n, int *i)
  *
  *
  * @param x the grid abscissae  (x[j][] are the grid abscissae in the dimension j)
- * @param dim nb of grid points in each dimension (@param dim[j] is the nb of points in dimension j)
- * @param n number of dimensions (@param n=1 for linear interpolation, @param n=2 for bilinear interpolation, etc...)
+ * @param dim nb of grid points in each dimension (dim[j] is the nb of points in dimension j)
+ * @param n number of dimensions (n=1 for linear interpolation, n=2 for bilinear interpolation, etc...)
  * @param val array of the grid node values, for instance if nbdim = 3
- *       and dim = [nx ny nz] then @param val(i j,k) is stored in i + nx( j + ny k )
+ *       and dim = [nx ny nz] then val(i j,k) is stored in i + nx( j + ny k )
  * @param xp the coordinates where we have to interpolate (the coordinate of the
- *      i th point are stored at @param xp[0][i] ..... @param xp[@n-1][i])
- * @param yp the result (an array 0...@param np-1)
+ *      i th point are stored at xp[0][i] ..... xp[n-1][i])
+ * @param yp the result (an array 0...np-1)
  * @param np nb of points for the evaluation
  * @param outmode specify the method of evaluation when a point is outside the grid
- * @param u work array of size @param n
- * @param v work array of size 2^@param n
- * @param ad work array of size 2^@param n
- * @param k work array of size @param n
+ * @param u work array of size n
+ * @param v work array of size 2^n
+ * @param ad work array of size 2^n
+ * @param k work array of size n
  */
 void nsp_nlinear_interp(double **x , double val[], int dim[], int n,
                         double **xp, double yp[], int np, int outmode,
@@ -825,11 +825,11 @@ void nsp_eval_piecewise_hermite(double *t, double *st, double *dst, double *d2st
  *
  * the coef C(k,l,i,j) defined below is stored in C[ k+4*l + 16*(i + (nx-1)j) ]
  *
- * *
- * @param u (input) array of size nx x ny, u(i,j)=u[i+nx*j] value u(x,y) at the grid point (@param x[i] @param y[j])
- * @param p (input) array of size nx x ny, p(i,j)=p[i+nx*j] value of du/dx at the grid point (@param x[i] @param y[j])
- * @param q (input) array of size nx x ny, q(i,j)=q[i+nx*j] value of du/dy at the grid point (@param x[i] @param y[j])
- * @param r (input) array of size nx x ny, r(i,j)=r[i+nx*j] value of ddu/dxdy at the grid point (@param x[i] @param y[j])
+ *
+ * @param u (input) array of size nx x ny, u(i,j)=u[i+nx*j] value u(x,y) at the grid point (x[i] y[j])
+ * @param p (input) array of size nx x ny, p(i,j)=p[i+nx*j] value of du/dx at the grid point (x[i] y[j])
+ * @param q (input) array of size nx x ny, q(i,j)=q[i+nx*j] value of du/dy at the grid point (x[i] y[j])
+ * @param r (input) array of size nx x ny, r(i,j)=r[i+nx*j] value of ddu/dxdy at the grid point (x[i] y[j])
  * @param x (input) first coordinate of the grid points
  * @param y (input) second coordinate of the grid points
  * @param nx (input) size of the grid in x
@@ -891,17 +891,17 @@ static void coef_bicubic(double *u, double *p, double *q, double *r, double *x, 
 
 /**
  * compute a bicubic subspline s (s is only one time continuously differentiable)
- * which interpolates the @param u values on the grid defined by @param x and @param y. (s(x[i],y[j])
+ * which interpolates the @param u values on the grid defined by x and y. (s(x[i],y[j])
  * must be equal to u(i,j)=u[i*nx*j]). The subspline is completly defined with
- * the triplet (@param x @param y @param C) and could be evaluated at some points with #nsp_eval_bicubic.
- * See #coef_bicubic for detail about the bicubic patch coef @param C.
+ * the triplet (x y C) and could be evaluated at some points with #nsp_eval_bicubic.
+ * See #coef_bicubic for detail about the bicubic patch coef C.
  *
  * return %OK or %FAIL (%FAIL when allocation of works arrays fail or when type is
  * not good)
  * *
  * @param x (input) first coordinates of the grid points
  * @param y (input) second coordinates of the grid points
- * @param u (input) array of size nx x ny, u(i,j)=u[i+nx*j] value u(x,y) at the grid point (@param x[i] @param y[j])
+ * @param u (input) array of size nx x ny, u(i,j)=u[i+nx*j] value u(x,y) at the grid point (x[i] y[j])
  * @param nx (input) size of the grid in x
  * @param ny (input) size of the grid in y
  * @param C (output) array of size 4 x 4 x (nx-1) x (ny-1) (must be preallocated)
@@ -971,17 +971,17 @@ int nsp_bicubic_subspline(double *x, double *y, double *u, int nx, int ny, doubl
 
 /**
  * compute a bicubic spline s (s is twice continuously differentiable)
- * which interpolates the @param u values on the grid defined by @param x and @param y. (s(x[i],y[j])
+ * which interpolates the u values on the grid defined by x and y. (s(x[i],y[j])
  * must be equal to u(i,j)=u[i*nx*j]). The spline is completly defined with
- * the triplet (@param x @param y @param C) and could be evaluated at some points with #nsp_eval_bicubic.
- * See #coef_bicubic for detail about the bicubic patch coef @param C.
+ * the triplet (x y C) and could be evaluated at some points with #nsp_eval_bicubic.
+ * See #coef_bicubic for detail about the bicubic patch coef C.
  *
  * return %OK or %FAIL (%FAIL when allocation of works arrays fail)
  *
  * *
  * @param x (input) first coordinates of the grid points
  * @param y (input) second coordinates of the grid points
- * @param u (input) array of size nx x ny, u(i,j)=u[i+nx*j] value u(x,y) at the grid point (@param x[i] @param y[j])
+ * @param u (input) array of size nx x ny, u(i,j)=u[i+nx*j] value u(x,y) at the grid point (x[i] y[j])
  * @param nx (input) size of the grid in x
  * @param ny (input) size of the grid in y
  * @param C (output) array of size 4 x 4 x (nx-1) x (ny-1) (must be preallocated)
