@@ -2,8 +2,8 @@
 
 /**
    @mainpage Pnl
-   @version 1.7.2
-   @author Jérôme Lelong (2007 - 2016)
+   @version 1.7.5
+   @author Jérôme Lelong (2007 - 2017)
    @author David Pommier (2007 - Apr. 2009)
  
    @section PnlIntro Introduction
@@ -25,6 +25,7 @@
    - Numerical Integration
    - ODE solvers
    - Optimization with inequality constraints
+   - Linear programming
    - Random Generators
    - Sorting
    - Special Functions
