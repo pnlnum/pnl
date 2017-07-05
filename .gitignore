@@ -29,7 +29,7 @@ pnl-manual.idx
 pnl-manual.ilg
 pnl-manual.ind
 pnl-manual.out
-pnl-manual.pdf
+man/pnl-manual.pdf
 main.cpp
 stamp-h1
 man/html/pnl-manual*
