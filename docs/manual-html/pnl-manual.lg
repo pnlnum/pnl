@@ -1,0 +1,594 @@
+htfcss: ts1-lmbx  font-weight: bold;
+htfcss: ts1-lmbxi  font-style:italic; font-weight: bold;
+htfcss: ts1-lmbxo  font-style: oblique; font-weight: bold;
+htfcss: ts1-lmcsco  font-style: oblique;
+htfcss: ts1-lmri  font-style:italic;
+htfcss: ts1-lmro  font-style: oblique;
+htfcss: ts1-lmss  font-family: sans-serif;
+htfcss: ts1-lmssbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: ts1-lmssbx  font-family: sans-serif; font-weight: bold;
+htfcss: ts1-lmssdc  font-family: sans-serif;
+htfcss: ts1-lmssdo  font-family: sans-serif; font-style: oblique;
+htfcss: ts1-lmsso  font-family: sans-serif; font-style: oblique;
+htfcss: ts1-lmssq  font-family: sans-serif;
+htfcss: ts1-lmssqbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: ts1-lmssqbx  font-family: sans-serif; font-weight: bold;
+htfcss: ts1-lmssqo  font-family: sans-serif; font-style: oblique;
+htfcss: ts1-lmtcsc  font-family: monospace;
+htfcss: ts1-lmtcso  font-style: oblique; font-family: monospace;
+htfcss: ts1-lmtk  font-family: monospace;
+htfcss: ts1-lmtko  font-style: oblique; font-family: monospace;
+htfcss: ts1-lmtl  font-weight: light; font-family: monospace;
+htfcss: ts1-lmtlc  font-weight: light; font-family: monospace;
+htfcss: ts1-lmtlco  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ts1-lmtlo  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ts1-lmtt  font-family: monospace;
+htfcss: ts1-lmtti  font-family: monospace; font-style:italic;
+htfcss: ts1-lmtto  font-style: oblique; font-family: monospace;
+htfcss: ts1-lmvtk  font-family: monospace;
+htfcss: ts1-lmvtko  font-style: oblique; font-family: monospace;
+htfcss: ts1-lmvtl  font-weight: light; font-family: monospace;
+htfcss: ts1-lmvtlo  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ts1-lmvtt  font-family: monospace;
+htfcss: ts1-lmvtto  font-style: oblique; font-family: monospace;
+htfcss: ts1-lmbo  font-style: oblique;
+htfcss: ec-lmbo  font-style: oblique;
+htfcss: ec-lmbx  font-weight: bold;
+htfcss: ec-lmbxi  font-style:italic; font-weight: bold;
+htfcss: ec-lmbxo  font-style: oblique; font-weight: bold;
+htfcss: ec-lmcsco  font-style: oblique;
+htfcss: ec-lmri  font-style:italic;
+htfcss: ec-lmro  font-style: oblique;
+htfcss: ec-lmss  font-family: sans-serif;
+htfcss: ec-lmssbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: ec-lmssbx  font-family: sans-serif; font-weight: bold;
+htfcss: ec-lmssdc  font-family: sans-serif;
+htfcss: ec-lmssdo  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmsso  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmssq  font-family: sans-serif;
+htfcss: ec-lmssqbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: ec-lmssqbx  font-family: sans-serif; font-weight: bold;
+htfcss: ec-lmssqo  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmtcsc  font-family: monospace;
+htfcss: ec-lmtcso  font-style: oblique; font-family: monospace;
+htfcss: ec-lmtk  font-family: monospace;
+htfcss: ec-lmtko  font-style: oblique; font-family: monospace;
+htfcss: ec-lmtl  font-weight: light; font-family: monospace;
+htfcss: ec-lmtlc  font-weight: light; font-family: monospace;
+htfcss: ec-lmtlco  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmtlo  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmtt  font-family: monospace;
+htfcss: ec-lmtti  font-family: monospace; font-style:italic;
+htfcss: ec-lmtto  font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtk  font-family: monospace;
+htfcss: ec-lmvtko  font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtl  font-weight: light; font-family: monospace;
+htfcss: ec-lmvtlo  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtt  font-family: monospace;
+htfcss: ec-lmvtto  font-style: oblique; font-family: monospace;
+htfcss: ec-lmbo  font-style: oblique;
+htfcss: ec-lmbx  font-weight: bold;
+htfcss: ec-lmbxi  font-style:italic; font-weight: bold;
+htfcss: ec-lmbxo  font-style: oblique; font-weight: bold;
+htfcss: ec-lmcsco  font-style: oblique;
+htfcss: ec-lmri  font-style:italic;
+htfcss: ec-lmro  font-style: oblique;
+htfcss: ec-lmss  font-family: sans-serif;
+htfcss: ec-lmssbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: ec-lmssbx  font-family: sans-serif; font-weight: bold;
+htfcss: ec-lmssdc  font-family: sans-serif;
+htfcss: ec-lmssdo  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmsso  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmssq  font-family: sans-serif;
+htfcss: ec-lmssqbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: ec-lmssqbx  font-family: sans-serif; font-weight: bold;
+htfcss: ec-lmssqo  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmtcsc  font-family: monospace;
+htfcss: ec-lmtcso  font-style: oblique; font-family: monospace;
+htfcss: ec-lmtk  font-family: monospace;
+htfcss: ec-lmtko  font-style: oblique; font-family: monospace;
+htfcss: ec-lmtl  font-weight: light; font-family: monospace;
+htfcss: ec-lmtlc  font-weight: light; font-family: monospace;
+htfcss: ec-lmtlco  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmtlo  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmtt  font-family: monospace;
+htfcss: ec-lmtti  font-family: monospace; font-style:italic;
+htfcss: ec-lmtto  font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtk  font-family: monospace;
+htfcss: ec-lmvtko  font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtl  font-weight: light; font-family: monospace;
+htfcss: ec-lmvtlo  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtt  font-family: monospace;
+htfcss: ec-lmvtto  font-style: oblique; font-family: monospace;
+htfcss: lmmib font_weight:bold;
+htfcss: cmmi font-style: italic;
+htfcss: cmmib font-style: italic; font-weight: bold;
+htfcss: rm-lmbo  font-style: oblique;
+htfcss: rm-lmbx  font-weight: bold;
+htfcss: rm-lmbxi  font-style:italic; font-weight: bold;
+htfcss: rm-lmbxo  font-style: oblique; font-weight: bold;
+htfcss: rm-lmri  font-style:italic;
+htfcss: rm-lmro  font-style: oblique;
+htfcss: rm-lmss  font-family: sans-serif;
+htfcss: rm-lmssbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: rm-lmssbx  font-family: sans-serif; font-weight: bold;
+htfcss: rm-lmssdc  font-family: sans-serif;
+htfcss: rm-lmssdo  font-family: sans-serif; font-style: oblique;
+htfcss: rm-lmsso  font-family: sans-serif; font-style: oblique;
+htfcss: rm-lmssq  font-family: sans-serif;
+htfcss: rm-lmssqbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: rm-lmssqbx  font-family: sans-serif; font-weight: bold;
+htfcss: rm-lmssqo  font-family: sans-serif; font-style: oblique;
+htfcss: ts1-lmbx  font-weight: bold;
+htfcss: ts1-lmbxi  font-style:italic; font-weight: bold;
+htfcss: ts1-lmbxo  font-style: oblique; font-weight: bold;
+htfcss: ts1-lmcsco  font-style: oblique;
+htfcss: ts1-lmri  font-style:italic;
+htfcss: ts1-lmro  font-style: oblique;
+htfcss: ts1-lmss  font-family: sans-serif;
+htfcss: ts1-lmssbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: ts1-lmssbx  font-family: sans-serif; font-weight: bold;
+htfcss: ts1-lmssdc  font-family: sans-serif;
+htfcss: ts1-lmssdo  font-family: sans-serif; font-style: oblique;
+htfcss: ts1-lmsso  font-family: sans-serif; font-style: oblique;
+htfcss: ts1-lmssq  font-family: sans-serif;
+htfcss: ts1-lmssqbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: ts1-lmssqbx  font-family: sans-serif; font-weight: bold;
+htfcss: ts1-lmssqo  font-family: sans-serif; font-style: oblique;
+htfcss: ts1-lmtcsc  font-family: monospace;
+htfcss: ts1-lmtcso  font-style: oblique; font-family: monospace;
+htfcss: ts1-lmtk  font-family: monospace;
+htfcss: ts1-lmtko  font-style: oblique; font-family: monospace;
+htfcss: ts1-lmtl  font-weight: light; font-family: monospace;
+htfcss: ts1-lmtlc  font-weight: light; font-family: monospace;
+htfcss: ts1-lmtlco  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ts1-lmtlo  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ts1-lmtt  font-family: monospace;
+htfcss: ts1-lmtti  font-family: monospace; font-style:italic;
+htfcss: ts1-lmtto  font-style: oblique; font-family: monospace;
+htfcss: ts1-lmvtk  font-family: monospace;
+htfcss: ts1-lmvtko  font-style: oblique; font-family: monospace;
+htfcss: ts1-lmvtl  font-weight: light; font-family: monospace;
+htfcss: ts1-lmvtlo  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ts1-lmvtt  font-family: monospace;
+htfcss: ts1-lmvtto  font-style: oblique; font-family: monospace;
+htfcss: ec-lmbo  font-style: oblique;
+htfcss: ec-lmbx  font-weight: bold;
+htfcss: ec-lmbxi  font-style:italic; font-weight: bold;
+htfcss: ec-lmbxo  font-style: oblique; font-weight: bold;
+htfcss: ec-lmcsco  font-style: oblique;
+htfcss: ec-lmri  font-style:italic;
+htfcss: ec-lmro  font-style: oblique;
+htfcss: ec-lmss  font-family: sans-serif;
+htfcss: ec-lmssbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: ec-lmssbx  font-family: sans-serif; font-weight: bold;
+htfcss: ec-lmssdc  font-family: sans-serif;
+htfcss: ec-lmssdo  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmsso  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmssq  font-family: sans-serif;
+htfcss: ec-lmssqbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: ec-lmssqbx  font-family: sans-serif; font-weight: bold;
+htfcss: ec-lmssqo  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmtcsc  font-family: monospace;
+htfcss: ec-lmtcso  font-style: oblique; font-family: monospace;
+htfcss: ec-lmtk  font-family: monospace;
+htfcss: ec-lmtko  font-style: oblique; font-family: monospace;
+htfcss: ec-lmtl  font-weight: light; font-family: monospace;
+htfcss: ec-lmtlc  font-weight: light; font-family: monospace;
+htfcss: ec-lmtlco  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmtlo  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmtt  font-family: monospace;
+htfcss: ec-lmtti  font-family: monospace; font-style:italic;
+htfcss: ec-lmtto  font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtk  font-family: monospace;
+htfcss: ec-lmvtko  font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtl  font-weight: light; font-family: monospace;
+htfcss: ec-lmvtlo  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtt  font-family: monospace;
+htfcss: ec-lmvtto  font-style: oblique; font-family: monospace;
+htfcss: ec-lmbo  font-style: oblique;
+htfcss: ec-lmbx  font-weight: bold;
+htfcss: ec-lmbxi  font-style:italic; font-weight: bold;
+htfcss: ec-lmbxo  font-style: oblique; font-weight: bold;
+htfcss: ec-lmcsco  font-style: oblique;
+htfcss: ec-lmri  font-style:italic;
+htfcss: ec-lmro  font-style: oblique;
+htfcss: ec-lmss  font-family: sans-serif;
+htfcss: ec-lmssbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: ec-lmssbx  font-family: sans-serif; font-weight: bold;
+htfcss: ec-lmssdc  font-family: sans-serif;
+htfcss: ec-lmssdo  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmsso  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmssq  font-family: sans-serif;
+htfcss: ec-lmssqbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: ec-lmssqbx  font-family: sans-serif; font-weight: bold;
+htfcss: ec-lmssqo  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmtcsc  font-family: monospace;
+htfcss: ec-lmtcso  font-style: oblique; font-family: monospace;
+htfcss: ec-lmtk  font-family: monospace;
+htfcss: ec-lmtko  font-style: oblique; font-family: monospace;
+htfcss: ec-lmtl  font-weight: light; font-family: monospace;
+htfcss: ec-lmtlc  font-weight: light; font-family: monospace;
+htfcss: ec-lmtlco  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmtlo  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmtt  font-family: monospace;
+htfcss: ec-lmtti  font-family: monospace; font-style:italic;
+htfcss: ec-lmtto  font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtk  font-family: monospace;
+htfcss: ec-lmvtko  font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtl  font-weight: light; font-family: monospace;
+htfcss: ec-lmvtlo  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtt  font-family: monospace;
+htfcss: ec-lmvtto  font-style: oblique; font-family: monospace;
+htfcss: lmmib font_weight:bold;
+htfcss: lmmib font_weight:bold;
+htfcss: ec-lmbo  font-style: oblique;
+htfcss: ec-lmbx  font-weight: bold;
+htfcss: ec-lmbxi  font-style:italic; font-weight: bold;
+htfcss: ec-lmbxo  font-style: oblique; font-weight: bold;
+htfcss: ec-lmcsco  font-style: oblique;
+htfcss: ec-lmri  font-style:italic;
+htfcss: ec-lmro  font-style: oblique;
+htfcss: ec-lmss  font-family: sans-serif;
+htfcss: ec-lmssbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: ec-lmssbx  font-family: sans-serif; font-weight: bold;
+htfcss: ec-lmssdc  font-family: sans-serif;
+htfcss: ec-lmssdo  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmsso  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmssq  font-family: sans-serif;
+htfcss: ec-lmssqbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: ec-lmssqbx  font-family: sans-serif; font-weight: bold;
+htfcss: ec-lmssqo  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmtcsc  font-family: monospace;
+htfcss: ec-lmtcso  font-style: oblique; font-family: monospace;
+htfcss: ec-lmtk  font-family: monospace;
+htfcss: ec-lmtko  font-style: oblique; font-family: monospace;
+htfcss: ec-lmtl  font-weight: light; font-family: monospace;
+htfcss: ec-lmtlc  font-weight: light; font-family: monospace;
+htfcss: ec-lmtlco  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmtlo  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmtt  font-family: monospace;
+htfcss: ec-lmtti  font-family: monospace; font-style:italic;
+htfcss: ec-lmtto  font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtk  font-family: monospace;
+htfcss: ec-lmvtko  font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtl  font-weight: light; font-family: monospace;
+htfcss: ec-lmvtlo  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtt  font-family: monospace;
+htfcss: ec-lmvtto  font-style: oblique; font-family: monospace;
+htfcss: ec-lmbo  font-style: oblique;
+htfcss: ec-lmbx  font-weight: bold;
+htfcss: ec-lmbxi  font-style:italic; font-weight: bold;
+htfcss: ec-lmbxo  font-style: oblique; font-weight: bold;
+htfcss: ec-lmcsco  font-style: oblique;
+htfcss: ec-lmri  font-style:italic;
+htfcss: ec-lmro  font-style: oblique;
+htfcss: ec-lmss  font-family: sans-serif;
+htfcss: ec-lmssbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: ec-lmssbx  font-family: sans-serif; font-weight: bold;
+htfcss: ec-lmssdc  font-family: sans-serif;
+htfcss: ec-lmssdo  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmsso  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmssq  font-family: sans-serif;
+htfcss: ec-lmssqbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: ec-lmssqbx  font-family: sans-serif; font-weight: bold;
+htfcss: ec-lmssqo  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmtcsc  font-family: monospace;
+htfcss: ec-lmtcso  font-style: oblique; font-family: monospace;
+htfcss: ec-lmtk  font-family: monospace;
+htfcss: ec-lmtko  font-style: oblique; font-family: monospace;
+htfcss: ec-lmtl  font-weight: light; font-family: monospace;
+htfcss: ec-lmtlc  font-weight: light; font-family: monospace;
+htfcss: ec-lmtlco  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmtlo  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmtt  font-family: monospace;
+htfcss: ec-lmtti  font-family: monospace; font-style:italic;
+htfcss: ec-lmtto  font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtk  font-family: monospace;
+htfcss: ec-lmvtko  font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtl  font-weight: light; font-family: monospace;
+htfcss: ec-lmvtlo  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtt  font-family: monospace;
+htfcss: ec-lmvtto  font-style: oblique; font-family: monospace;
+htfcss: ec-lmbo  font-style: oblique;
+htfcss: ec-lmbx  font-weight: bold;
+htfcss: ec-lmbxi  font-style:italic; font-weight: bold;
+htfcss: ec-lmbxo  font-style: oblique; font-weight: bold;
+htfcss: ec-lmcsco  font-style: oblique;
+htfcss: ec-lmri  font-style:italic;
+htfcss: ec-lmro  font-style: oblique;
+htfcss: ec-lmss  font-family: sans-serif;
+htfcss: ec-lmssbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: ec-lmssbx  font-family: sans-serif; font-weight: bold;
+htfcss: ec-lmssdc  font-family: sans-serif;
+htfcss: ec-lmssdo  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmsso  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmssq  font-family: sans-serif;
+htfcss: ec-lmssqbo  font-family: sans-serif; font-style: oblique; font-weight: bold;
+htfcss: ec-lmssqbx  font-family: sans-serif; font-weight: bold;
+htfcss: ec-lmssqo  font-family: sans-serif; font-style: oblique;
+htfcss: ec-lmtcsc  font-family: monospace;
+htfcss: ec-lmtcso  font-style: oblique; font-family: monospace;
+htfcss: ec-lmtk  font-family: monospace;
+htfcss: ec-lmtko  font-style: oblique; font-family: monospace;
+htfcss: ec-lmtl  font-weight: light; font-family: monospace;
+htfcss: ec-lmtlc  font-weight: light; font-family: monospace;
+htfcss: ec-lmtlco  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmtlo  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmtt  font-family: monospace;
+htfcss: ec-lmtti  font-family: monospace; font-style:italic;
+htfcss: ec-lmtto  font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtk  font-family: monospace;
+htfcss: ec-lmvtko  font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtl  font-weight: light; font-family: monospace;
+htfcss: ec-lmvtlo  font-weight: light; font-style: oblique; font-family: monospace;
+htfcss: ec-lmvtt  font-family: monospace;
+htfcss: ec-lmvtto  font-style: oblique; font-family: monospace;
+File: pnl-manual.html
+File: pnl-manual.css
+File: pnl-manual.tmp
+File: pnl-manualli1.html
+File: pnl-manualse1.html
+File: pnl-manualse2.html
+File: pnl-manualse3.html
+Font_Class(1,"1"): <img  src="" alt="" class="%s-%dx-x-%x" />
+File: pnl-manualse4.html
+File: pnl-manualse5.html
+File: pnl-manualse6.html
+File: pnl-manualse7.html
+Font_Class(12,"12"): <!--span  class="htf-calligraphy"--><!--/span-->
+File: pnl-manualse8.html
+File: pnl-manualse9.html
+File: pnl-manualse10.html
+File: pnl-manualse11.html
+File: pnl-manualse12.html
+File: pnl-manualse13.html
+File: pnl-manualse14.html
+File: pnl-manualse15.html
+File: pnl-manualse16.html
+File: pnl-manualli2.html
+Css: @media print {span.next {visibility:hidden;}}
+Css: p.noindent { text-indent: 0em }
+Css: td p.noindent { text-indent: 0em; margin-top:0em; }
+Css: p.nopar { text-indent: 0em; }
+Css: p.indent{ text-indent: 1.5em }
+Css: @media print {div.crosslinks {visibility:hidden;}}
+Css: a img { border-top: 0; border-left: 0; border-right: 0; }
+Font_Css("4"): .small-caps{font-variant: small-caps; }
+Font_Css("10"): .htf-cmbx {font-weight: bold; font-style:normal;}
+Font_Css("12"): .htf-calligraphy {font-family:cursive}
+Font_Css("14"): .htf-italic {font-style: italic;}
+Font_Css("16"): .htf-bold {font-weight: bold;}
+Font_Css("12"): .htf-calligraphy-bold {font-family:cursive ; font-weight: bold; }
+Css: center { margin-top:1em; margin-bottom:1em; }
+Css: td center { margin-top:0em; margin-bottom:0em; }
+Css: .Canvas { position:relative; }
+Css: img.math{vertical-align:middle;}
+Css: li p.indent { text-indent: 0em }
+Css: li p:first-child{ margin-top:0em; }
+Css: li p:last-child, li div:last-child { margin-bottom:0.5em; }
+Css: li p~ul:last-child, li p~ol:last-child{ margin-bottom:0.5em; }
+Css: .enumerate1 {list-style-type:decimal;}
+Css: .enumerate2 {list-style-type:lower-alpha;}
+Css: .enumerate3 {list-style-type:lower-roman;}
+Css: .enumerate4 {list-style-type:upper-alpha;}
+Css: div.newtheorem { margin-bottom: 2em; margin-top: 2em;}
+Css: .obeylines-h,.obeylines-v {white-space: nowrap; }
+Css: div.obeylines-v p { margin-top:0; margin-bottom:0; }
+Css: .overline{ text-decoration:overline; }
+Css: .overline img{ border-top: 1px solid black; }
+Css: td.displaylines {text-align:center; white-space:nowrap;}
+Css: .centerline {text-align:center;}
+Css: .rightline {text-align:right;}
+Css: div.verbatim {font-family: monospace; white-space: nowrap; text-align:left; clear:both; }
+Css: .fbox {padding-left:3.0pt; padding-right:3.0pt; text-indent:0pt; border:solid black 0.4pt; }
+Css: div.fbox {display:table}
+Css: div.center div.fbox {text-align:center; clear:both; padding-left:3.0pt; padding-right:3.0pt; text-indent:0pt; border:solid black 0.4pt; }
+Css: div.minipage{width:100%;}
+Css: div.center, div.center div.center {text-align: center; margin-left:1em; margin-right:1em;}
+Css: div.center div {text-align: left;}
+Css: div.flushright, div.flushright div.flushright {text-align: right;}
+Css: div.flushright div {text-align: left;}
+Css: div.flushleft {text-align: left;}
+Css: .underline{ text-decoration:underline; }
+Css: .underline img{ border-bottom: 1px solid black; margin-bottom:1pt; }
+Css: .framebox-c, .framebox-l, .framebox-r { padding-left:3.0pt; padding-right:3.0pt; text-indent:0pt; border:solid black 0.4pt; }
+Css: .framebox-c {text-align:center;}
+Css: .framebox-l {text-align:left;}
+Css: .framebox-r {text-align:right;}
+Css: span.thank-mark{ vertical-align: super }
+Css: span.footnote-mark sup.textsuperscript, span.footnote-mark a sup.textsuperscript{ font-size:80%; }
+Css: div.tabular, div.center div.tabular {text-align: center; margin-top:0.5em; margin-bottom:0.5em; }
+Css: table.tabular td p{margin-top:0em;}
+Css: table.tabular {margin-left: auto; margin-right: auto;}
+Css: td p:first-child{ margin-top:0em; }
+Css: td p:last-child{ margin-bottom:0em; }
+Css: div.td00{ margin-left:0pt; margin-right:0pt; }
+Css: div.td01{ margin-left:0pt; margin-right:5pt; }
+Css: div.td10{ margin-left:5pt; margin-right:0pt; }
+Css: div.td11{ margin-left:5pt; margin-right:5pt; }
+Css: table[rules] {border-left:solid black 0.4pt; border-right:solid black 0.4pt; }
+Css: td.td00{ padding-left:0pt; padding-right:0pt; }
+Css: td.td01{ padding-left:0pt; padding-right:5pt; }
+Css: td.td10{ padding-left:5pt; padding-right:0pt; }
+Css: td.td11{ padding-left:5pt; padding-right:5pt; }
+Css: table[rules] {border-left:solid black 0.4pt; border-right:solid black 0.4pt; }
+Css: .hline hr, .cline hr{ height : 1px; margin:0px; }
+Css: .tabbing-right {text-align:right;}
+Css: span.TEX {letter-spacing: -0.125em; }
+Css: span.TEX span.E{ position:relative;top:0.5ex;left:-0.0417em;}
+Css: a span.TEX span.E {text-decoration: none; }
+Css: span.LATEX span.A{ position:relative; top:-0.5ex; left:-0.4em; font-size:85%;}
+Css: span.LATEX span.TEX{ position:relative; left: -0.4em; }
+Css: div.float, div.figure {margin-left: auto; margin-right: auto;}
+Css: div.float img {text-align:center;}
+Css: div.figure img {text-align:center;}
+Css: .marginpar {width:20%; float:right; text-align:left; margin-left:auto; margin-top:0.5em; font-size:85%; text-decoration:underline;}
+Css: .marginpar p{margin-top:0.4em; margin-bottom:0.4em;}
+Css: table.equation {width:100%;}
+Css: .equation td{text-align:center; }
+Css: td.equation { margin-top:1em; margin-bottom:1em; } 
+Css: td.equation-label { width:5%; text-align:center; }
+Css: td.eqnarray4 { width:5%; white-space: normal; }
+Css: td.eqnarray2 { width:5%; }
+Css: table.eqnarray-star, table.eqnarray {width:100%;}
+Css: div.eqnarray{text-align:center;}
+Css: div.array {text-align:center;}
+Css: div.pmatrix {text-align:center;}
+Css: table.pmatrix {width:100%;}
+Css: span.pmatrix img{vertical-align:middle;}
+Css: div.pmatrix {text-align:center;}
+Css: table.pmatrix {width:100%;}
+Css: span.bar-css {text-decoration:overline;}
+Css: img.cdots{vertical-align:middle;}
+Css: .partToc a, .partToc, .likepartToc a, .likepartToc {line-height: 200%; font-weight:bold; font-size:110%;}
+Css: .index-item, .index-subitem, .index-subsubitem {display:block}
+Css: div.caption {text-indent:-2em; margin-left:3em; margin-right:1em; text-align:left;}
+Css: div.caption span.id{font-weight: bold; white-space: nowrap; }
+Css: h1.partHead{text-align: center}
+Css: p.bibitem { text-indent: -2em; margin-left: 2em; margin-top:0.6em; margin-bottom:0.6em; }
+Css: p.bibitem-p { text-indent: 0em; margin-left: 2em; margin-top:0.6em; margin-bottom:0.6em; }
+Css: .paragraphHead, .likeparagraphHead { margin-top:2em; font-weight: bold;}
+Css: .subparagraphHead, .likesubparagraphHead { font-weight: bold;}
+Css: .quote {margin-bottom:0.25em; margin-top:0.25em; margin-left:1em; margin-right:1em; text-align:justify;}
+Css: .verse{white-space:nowrap; margin-left:2em}
+Css: div.maketitle {text-align:center;}
+Css: h2.titleHead{text-align:center;}
+Css: div.maketitle{ margin-bottom: 2em; }
+Css: div.author, div.date {text-align:center;}
+Css: div.thanks{text-align:left; margin-left:10%; font-size:85%; font-style:italic; }
+Css: div.author{white-space: nowrap;}
+Font_Size: 11
+Css: .quotation {margin-bottom:0.25em; margin-top:0.25em; margin-left:1em; }
+Css: .abstract p {margin-left:5%; margin-right:5%;}
+Css: div.abstract {width:100%;}
+Css: .subsectionToc, .likesubsectionToc {margin-left:2em;}
+Css: .subsubsectionToc, .likesubsubsectionToc {margin-left:4em;}
+Css: div.verbatiminput {font-family: monospace; white-space: nowrap; }
+Css: table.boxedverbatim {width:100%;}
+Css:  pre.boxedverbatim{border:solid 1px; padding-right:1em;} 
+Css: table.boxedverbatim {text-align:center;}
+Css: .listinginput p{ margin-bottom:0em; margin-top:0em; }
+Css: .alltt P { margin-bottom : 0em; margin-top : 0em; }
+Css: .alltt { margin-bottom : 1em; margin-top : 1em; }
+Css: .equation td{text-align:center; }
+Css: .equation-star td{text-align:center; }
+Css: table.equation-star { width:100%; }
+Css: table.equation { width:100%; }
+Css: table.align, table.alignat, table.xalignat, table.xxalignat, table.flalign {width:95%; margin-left:5%; white-space: nowrap;}
+Css: table.align-star, table.alignat-star, table.xalignat-star, table.flalign-star {margin-left:auto; margin-right:auto; white-space: nowrap;}
+Css: td.align-label { width:5%; text-align:center; }
+Css: td.align-odd { text-align:right; padding-right:0.3em;}
+Css: td.align-even { text-align:left; padding-right:0.6em;}
+Css: table.multline, table.multline-star {width:100%;}
+Css: td.gather {text-align:center; }
+Css: table.gather {width:100%;}
+Css: div.gather-star {text-align:center;}
+Css: #TBL-2 colgroup{border-left: 1px solid black;border-right:1px solid black;}
+Css: #TBL-2{border-collapse:collapse;}
+Css: #TBL-2 colgroup{border-left: 1px solid black;border-right:1px solid black;}
+Css: #TBL-2{border-collapse:collapse;}
+Css: #TBL-2 colgroup{border-left: 1px solid black;border-right:1px solid black;}
+Css: #TBL-2{border-collapse:collapse;}
+File: pnl-manual.4idx
+Css: #TBL-3 colgroup{border-left: 1px solid black;border-right:1px solid black;}
+Css: #TBL-3{border-collapse:collapse;}
+--- needs --- pnl-manual.idv[2] ==> pnl-manual0x.png ---
+--- needs --- pnl-manual.idv[3] ==> pnl-manual1x.png ---
+--- needs --- pnl-manual.idv[4] ==> pnl-manual2x.png ---
+--- needs --- pnl-manual.idv[5] ==> pnl-manual3x.png ---
+--- needs --- pnl-manual.idv[6] ==> pnl-manual4x.png ---
+--- needs --- pnl-manual.idv[7] ==> pnl-manual5x.png ---
+--- needs --- pnl-manual.idv[9] ==> pnl-manual6x.png ---
+--- needs --- pnl-manual.idv[10] ==> pnl-manual7x.png ---
+--- needs --- pnl-manual.idv[11] ==> pnl-manual8x.png ---
+--- needs --- pnl-manual.idv[13] ==> pnl-manual9x.png ---
+--- needs --- pnl-manual.idv[14] ==> pnl-manual10x.png ---
+--- needs --- pnl-manual.idv[15] ==> pnl-manual11x.png ---
+--- needs --- pnl-manual.idv[16] ==> pnl-manual12x.png ---
+--- needs --- pnl-manual.idv[17] ==> pnl-manual13x.png ---
+--- needs --- pnl-manual.idv[19] ==> pnl-manual14x.png ---
+--- needs --- pnl-manual.idv[21] ==> pnl-manual15x.png ---
+--- needs --- pnl-manual.idv[23] ==> pnl-manual16x.png ---
+--- needs --- pnl-manual.idv[24] ==> pnl-manual17x.png ---
+--- needs --- pnl-manual.idv[26] ==> pnl-manual18x.png ---
+--- needs --- pnl-manual.idv[28] ==> pnl-manual19x.png ---
+--- needs --- pnl-manual.idv[29] ==> pnl-manual20x.png ---
+Css: #TBL-11 colgroup{border-left: 1px solid black;border-right:1px solid black;}
+Css: #TBL-11{border-collapse:collapse;}
+Css: #TBL-11 colgroup{border-left: 1px solid black;border-right:1px solid black;}
+Css: #TBL-11{border-collapse:collapse;}
+Css: #TBL-11 colgroup{border-left: 1px solid black;border-right:1px solid black;}
+Css: #TBL-11{border-collapse:collapse;}
+--- needs --- pnl-manual.idv[31] ==> pnl-manual21x.png ---
+--- needs --- pnl-manual.idv[33] ==> pnl-manual22x.png ---
+--- needs --- pnl-manual.idv[34] ==> pnl-manual23x.png ---
+--- needs --- pnl-manual.idv[36] ==> pnl-manual24x.png ---
+--- needs --- pnl-manual.idv[38] ==> pnl-manual25x.png ---
+--- needs --- pnl-manual.idv[39] ==> pnl-manual26x.png ---
+--- needs --- pnl-manual.idv[41] ==> pnl-manual27x.png ---
+--- needs --- pnl-manual.idv[43] ==> pnl-manual28x.png ---
+--- needs --- pnl-manual.idv[44] ==> pnl-manual29x.png ---
+--- needs --- pnl-manual.idv[46] ==> pnl-manual30x.png ---
+--- needs --- pnl-manual.idv[47] ==> pnl-manual31x.png ---
+--- needs --- pnl-manual.idv[49] ==> pnl-manual32x.png ---
+--- needs --- pnl-manual.idv[51] ==> pnl-manual33x.png ---
+--- needs --- pnl-manual.idv[53] ==> pnl-manual34x.png ---
+--- needs --- pnl-manual.idv[55] ==> pnl-manual35x.png ---
+--- needs --- pnl-manual.idv[57] ==> pnl-manual36x.png ---
+--- needs --- pnl-manual.idv[59] ==> pnl-manual37x.png ---
+--- needs --- pnl-manual.idv[60] ==> pnl-manual38x.png ---
+--- needs --- pnl-manual.idv[61] ==> pnl-manual39x.png ---
+--- needs --- pnl-manual.idv[63] ==> pnl-manual40x.png ---
+--- needs --- pnl-manual.idv[64] ==> pnl-manual41x.png ---
+--- needs --- pnl-manual.idv[66] ==> pnl-manual42x.png ---
+--- needs --- pnl-manual.idv[67] ==> pnl-manual43x.png ---
+--- needs --- pnl-manual.idv[68] ==> pnl-manual44x.png ---
+--- needs --- pnl-manual.idv[70] ==> pnl-manual45x.png ---
+--- needs --- pnl-manual.idv[72] ==> pnl-manual46x.png ---
+--- needs --- pnl-manual.idv[73] ==> pnl-manual47x.png ---
+--- needs --- pnl-manual.idv[74] ==> pnl-manual48x.png ---
+--- needs --- pnl-manual.idv[75] ==> pnl-manual49x.png ---
+--- needs --- pnl-manual.idv[77] ==> pnl-manual50x.png ---
+--- needs --- pnl-manual.idv[78] ==> pnl-manual51x.png ---
+--- needs --- pnl-manual.idv[80] ==> pnl-manual52x.png ---
+--- needs --- pnl-manual.idv[81] ==> pnl-manual53x.png ---
+--- needs --- pnl-manual.idv[82] ==> pnl-manual54x.png ---
+--- needs --- pnl-manual.idv[83] ==> pnl-manual55x.png ---
+--- needs --- pnl-manual.idv[84] ==> pnl-manual56x.png ---
+--- needs --- pnl-manual.idv[86] ==> pnl-manual57x.png ---
+--- needs --- pnl-manual.idv[87] ==> pnl-manual58x.png ---
+--- needs --- pnl-manual.idv[88] ==> pnl-manual59x.png ---
+--- needs --- pnl-manual.idv[90] ==> pnl-manual60x.png ---
+--- needs --- pnl-manual.idv[91] ==> pnl-manual61x.png ---
+--- needs --- pnl-manual.idv[92] ==> pnl-manual62x.png ---
+--- needs --- pnl-manual.idv[94] ==> pnl-manual63x.png ---
+--- needs --- pnl-manual.idv[95] ==> pnl-manual64x.png ---
+--- needs --- pnl-manual.idv[96] ==> pnl-manual65x.png ---
+--- needs --- pnl-manual.idv[98] ==> pnl-manual66x.png ---
+--- needs --- pnl-manual.idv[99] ==> pnl-manual67x.png ---
+--- needs --- pnl-manual.idv[101] ==> pnl-manual68x.png ---
+Css: #TBL-13 colgroup{border-left: 1px solid black;border-right:1px solid black;}
+Css: #TBL-13{border-collapse:collapse;}
+--- characters ---
+Font("ec-lmr","10","10","109")
+Font("ec-lmr","17","17","100")
+Font("ec-lmr","12","12","100")
+Font("rm-lmr","8","8","100")
+Font("rm-lmr","6","6","100")
+Font("lmmi","8","8","100")
+Font("lmmi","6","6","100")
+Font("lmsy8","","8","100")
+Font("lmsy6","","6","100")
+Font("lmex","10","10","100")
+Font("ec-lmri","10","10","109")
+Font("ec-lmtt","10","10","109")
+Font("ts1-lmr10","","10","109")
+Font("rm-lmr","10","10","109")
+Font("lmmi","10","10","109")
+--- needs --- pnl-manual.idv[103] ==> lmmi10-7b.png ---
+Font("lmsy","10","10","109")
+Font("msbm","10","10","109")
+Font("ec-lmbx","10","10","109")
+Font("ec-lmbxi","10","10","109")
+Font("ts1-lmbx10","","10","109")

@@ -1,0 +1,946 @@
+<?xml version="1.0" encoding="iso-8859-1" ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->  
+<html xmlns="http://www.w3.org/1999/xhtml"  
+> 
+<head><title>Special functions</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> 
+<meta name="generator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<meta name="originator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<!-- xhtml,uni-html4,2,subsection+,next,html --> 
+<meta name="src" content="pnl-manual.tex" /> 
+<link rel="stylesheet" type="text/css" href="pnl-manual.css" /> 
+</head><body 
+>
+<!--l. 2--><div class="crosslinks"><p class="noindent">[<a 
+href="pnl-manualse15.html" >next</a>] [<a 
+href="pnl-manualse13.html" >prev</a>] [<a 
+href="pnl-manualse13.html#tailpnl-manualse13.html" >prev-tail</a>] [<a 
+href="#tailpnl-manualse14.html">tail</a>] [<a 
+href="pnl-manual.html#pnl-manualse14.html" >up</a>] </p></div>
+<h3 class="sectionHead"><span class="titlemark">14   </span> <a 
+ id="x16-12700014"></a>Special functions</h3>
+<!--l. 4--><p class="noindent" >The special function approximations are defined in the header <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl/pnl_specfun.h</span></span></span>.<br 
+class="newline" />
+</p><!--l. 6--><p class="noindent" >Most of these functions rely on the <span 
+class="ec-lmri-10x-x-109">Cephes </span>library which uses its own error mechanism which can be
+activated or deactivated using the two following functions </p>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx16-127001"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_deactivate_mtherr</span></span>&#x00A0;(<span class='args'></span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Deactivate Cephes error mechanism
+     </li>
+     <li class="itemize"><a 
+ id="dx16-127002"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_activate_mtherr</span></span>&#x00A0;(<span class='args'></span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Activate Cephes error mechanism</li></ul>
+<!--l. 17--><p class="noindent" >
+</p>
+<h4 class="subsectionHead"><span class="titlemark">14.1   </span> <a 
+ id="x16-12800014.1"></a>Real Bessel functions</h4>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx16-128001"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bessel_i</span></span>&#x00A0;(<span class='args'>double v, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Modified Bessel function of the first kind of order <span class='var'>v</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-128002"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bessel_i_scaled</span></span>&#x00A0;(<span class='args'>double v, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Modified Bessel function of the first kind of order <span class='var'>v</span> divided by <span 
+class="lmmi-10x-x-109">e</span><sup><span 
+class="lmsy8-">|</span><span 
+class="lmmi-8">x</span><span 
+class="lmsy8-">|</span></sup>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-128003"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bessel_rati</span></span>&#x00A0;(<span class='args'>double v, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Ratio of modified Bessel functions of the first kind : <span 
+class="lmmi-10x-x-109">I</span><sub><span 
+class="lmmi-8">v</span><span 
+class="rm-lmr-8">+1</span></sub><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)</span><span 
+class="lmmi-10x-x-109">&#x2215;I</span><sub><span 
+class="lmmi-8">v</span></sub><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-128004"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bessel_j</span></span>&#x00A0;(<span class='args'>double v, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Bessel function of the first kind of order <span class='var'>v</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-128005"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bessel_j_scaled</span></span>&#x00A0;(<span class='args'>double v, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Bessel  function  of  the  first  kind  of  order  <span class='var'>v</span>.  Same  function  as
+     <a 
+href="#x16-12800014.1">pnl_bessel_j</a>.
+                                                                                    
+
+                                                                                    
+     </li>
+     <li class="itemize"><a 
+ id="dx16-128006"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bessel_y</span></span>&#x00A0;(<span class='args'>double v, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Modified Bessel function of the second kind of order <span class='var'>v</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-128007"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bessel_y_scaled</span></span>&#x00A0;(<span class='args'>double v, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Modified Bessel function of the second kind of order <span class='var'>v</span>. Same function as
+     <a 
+href="#x16-12800014.1">pnl_bessel_y</a>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-128008"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bessel_k</span></span>&#x00A0;(<span class='args'>double v, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Bessel function of the third kind of order <span class='var'>v</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-128009"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bessel_k_scaled</span></span>&#x00A0;(<span class='args'>double v, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Bessel function of the third kind of order <span class='var'>v</span> multiplied by <span 
+class="lmmi-10x-x-109">e</span><sup><span 
+class="lmmi-8">x</span></sup>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-128010"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bessel_h1</span></span>&#x00A0;(<span class='args'>double v, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Hankel function of the first kind of order <span class='var'>v</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-128011"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bessel_h1_scaled</span></span>&#x00A0;(<span class='args'>double v, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Hankel function of the first kind of order <span class='var'>v</span> and divided by <span 
+class="lmmi-10x-x-109">e</span><sup><span 
+class="lmmi-8">Ix</span></sup>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-128012"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bessel_h2</span></span>&#x00A0;(<span class='args'>double v, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Hankel function of the second kind of order <span class='var'>v</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-128013"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bessel_h2_scaled</span></span>&#x00A0;(<span class='args'>double v, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Hankel function of the second kind of order <span class='var'>v</span> and multiplied by <span 
+class="lmmi-10x-x-109">e</span><sup><span 
+class="lmmi-8">Ix</span></sup>.</li></ul>
+<!--l. 61--><p class="noindent" >
+</p>
+<h4 class="subsectionHead"><span class="titlemark">14.2   </span> <a 
+ id="x16-12900014.2"></a>Complex Bessel functions</h4>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx16-129001"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_complex_bessel_i</span></span>&#x00A0;(<span class='args'>double v, dcomplex z</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Complex Modified Bessel function of the first kind of order <span class='var'>v</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-129002"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_complex_bessel_i_scaled</span></span>&#x00A0;(<span class='args'>double v, dcomplex z</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Complex Modified Bessel function of the first kind of order <span class='var'>v</span> divided by
+     <span 
+class="lmmi-10x-x-109">e</span><sup><span 
+class="lmsy8-">|</span><span 
+class="lmmi-8">Creal</span><span 
+class="rm-lmr-8">(</span><span 
+class="lmmi-8">z</span><span 
+class="rm-lmr-8">)</span><span 
+class="lmsy8-">|</span></sup>.
+                                                                                    
+
+                                                                                    
+     </li>
+     <li class="itemize"><a 
+ id="dx16-129003"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_complex_bessel_rati</span></span>&#x00A0;(<span class='args'>double v, dcomplex x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Ratio  of  complex  modified  Bessel  functions  of  the  first  kind  :
+     <span 
+class="lmmi-10x-x-109">I</span><sub><span 
+class="lmmi-8">v</span><span 
+class="rm-lmr-8">+1</span></sub><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)</span><span 
+class="lmmi-10x-x-109">&#x2215;I</span><sub><span 
+class="lmmi-8">v</span></sub><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-129004"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_complex_bessel_j</span></span>&#x00A0;(<span class='args'>double v, dcomplex z</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Complex Bessel function of the first kind of order <span class='var'>v</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-129005"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_complex_bessel_j_scaled</span></span>&#x00A0;(<span class='args'>double v, dcomplex z</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Complex Bessel function of the first kind of order <span class='var'>v</span> divided by <span 
+class="lmmi-10x-x-109">e</span><sup><span 
+class="lmsy8-">|</span><span 
+class="lmmi-8">Cimag</span><span 
+class="rm-lmr-8">(</span><span 
+class="lmmi-8">z</span><span 
+class="rm-lmr-8">)</span><span 
+class="lmsy8-">|</span></sup>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-129006"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_complex_bessel_y</span></span>&#x00A0;(<span class='args'>double v, dcomplex z</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Complex Modified Bessel function of the second kind of order <span class='var'>v</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-129007"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_complex_bessel_y_scaled</span></span>&#x00A0;(<span class='args'>double v, dcomplex z</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Complex Modified Bessel function of the second kind of order <span class='var'>v</span> divided
+     by <span 
+class="lmmi-10x-x-109">e</span><sup><span 
+class="lmsy8-">|</span><span 
+class="lmmi-8">Cimag</span><span 
+class="rm-lmr-8">(</span><span 
+class="lmmi-8">z</span><span 
+class="rm-lmr-8">)</span><span 
+class="lmsy8-">|</span></sup>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-129008"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_complex_bessel_k</span></span>&#x00A0;(<span class='args'>double v, dcomplex z</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Complex Bessel function of the third kind of order <span class='var'>v</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-129009"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_complex_bessel_k_scaled</span></span>&#x00A0;(<span class='args'>double v, dcomplex z</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Complex Bessel function of the third kind of order <span class='var'>v</span> multiplied by <span 
+class="lmmi-10x-x-109">e</span><sup><span 
+class="lmmi-8">z</span></sup>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-129010"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_complex_bessel_h1</span></span>&#x00A0;(<span class='args'>double v, dcomplex z</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Complex Hankel function of the first kind of order <span class='var'>v</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-129011"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_complex_bessel_h1_scaled</span></span>&#x00A0;(<span class='args'>double v, dcomplex z</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Complex Hankel function of the first kind of order <span class='var'>v</span> and divided by <span 
+class="lmmi-10x-x-109">e</span><sup><span 
+class="lmmi-8">Iz</span></sup>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-129012"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_complex_bessel_h2</span></span>&#x00A0;(<span class='args'>double v, dcomplex z</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Complex Hankel function of the second kind of order <span class='var'>v</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-129013"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_complex_bessel_h2_scaled</span></span>&#x00A0;(<span class='args'>double v, dcomplex z</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Complex Hankel function of the second kind of order <span class='var'>v</span> and multiplied
+     by <span 
+class="lmmi-10x-x-109">e</span><sup><span 
+class="lmmi-8">Iz</span></sup>.</li></ul>
+                                                                                    
+
+                                                                                    
+<!--l. 105--><p class="noindent" >
+</p>
+<h4 class="subsectionHead"><span class="titlemark">14.3   </span> <a 
+ id="x16-13000014.3"></a>Error functions</h4>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx16-130001"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_erf</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the error function <img 
+src="pnl-manual42x.png" alt="2
+&#x03C0;"  class="frac" align="middle" /> <span 
+class="lmex-10">&#x222B;</span>
+   <sub><span 
+class="rm-lmr-8">0</span></sub><sup><span 
+class="lmmi-8">x</span></sup> <span 
+class="rm-lmr-10x-x-109">e</span><span 
+class="lmsy8-">-</span><span 
+class="lmmi-8">t</span><sup><span 
+class="rm-lmr-6">2</span></sup>
+         <span 
+class="lmmi-10x-x-109">dt</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-130002"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_complex_erf</span></span>&#x00A0;(<span class='args'>dcomplex z</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Same as <a 
+href="#x16-13000014.3">pnl_sf_erf</a> for complex arguments.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-130003"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_erfc</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the complementary error function <span class='var'>1. - erf(x)</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-130004"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_complex_erfc</span></span>&#x00A0;(<span class='args'>dcomplex x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Same as <a 
+href="#x16-13000014.3">pnl_sf_erfc</a> for complex arguments.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-130005"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_erfcx</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute  the  scaled  complementary  error  function  of  x,  defined  by
+     <span 
+class="rm-lmr-10x-x-109">e</span><span 
+class="lmmi-8">x</span><sup><span 
+class="rm-lmr-6">2</span></sup>
+        erfc<span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-130006"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_complex_erfcx</span></span>&#x00A0;(<span class='args'>dcomplex z</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Same as <a 
+href="#x16-13000014.3">pnl_sf_erfcx</a> for complex arguments. Note that <span class='var'>erfcx(-i x) =
+     w(x)</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-130007"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_w</span></span>&#x00A0;(<span class='args'>dcomplex z</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span 
+class="rm-lmr-10x-x-109">e</span><span 
+class="lmsy8-">-</span><span 
+class="lmmi-8">z</span><sup><span 
+class="rm-lmr-6">2</span></sup>
+          <span style="margin-left:0.3em" class="thinspace"></span>erfc<span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmsy-10x-x-109">-</span><span 
+class="lmmi-10x-x-109">i</span><span style="margin-left:0.3em" class="thinspace"></span><span 
+class="lmmi-10x-x-109">z</span><span 
+class="rm-lmr-10x-x-109">)</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-130008"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_w_im</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span 
+class="rm-lmr-10x-x-109">2</span><span style="margin-left:0.3em" class="thinspace"></span>Dawson<span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)</span><span 
+class="lmmi-10x-x-109">&#x2215;</span><img 
+src="pnl-manual43x.png" alt="&#x221A; &#x03C0;-"  class="sqrt"  />
+     </li>
+     <li class="itemize"><a 
+ id="dx16-130009"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_erfi</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span class='var'>-i erf(i z)</span>
+     </li>
+     <li class="itemize"><a 
+ id="dx16-130010"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_complex_erfi</span></span>&#x00A0;(<span class='args'>dcomplex z</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Same as <a 
+href="#x16-13000014.3">pnl_sf_erfi</a> for complex arguments.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-130011"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_dawson</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <img 
+src="pnl-manual44x.png" alt="&#x221A; --
+  &#x03C0;"  class="sqrt"  /><span 
+class="lmmi-10x-x-109">&#x2215;</span><span 
+class="rm-lmr-10x-x-109">2</span><span style="margin-left:0.3em" class="thinspace"></span><span 
+class="rm-lmr-10x-x-109">e</span><span 
+class="lmsy8-">-</span><span 
+class="lmmi-8">x</span><sup><span 
+class="rm-lmr-6">2</span></sup>
+          <span style="margin-left:0.3em" class="thinspace"></span>erfi<span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)</span>.
+                                                                                    
+
+                                                                                    
+     </li>
+     <li class="itemize"><a 
+ id="dx16-130012"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_complex_dawson</span></span>&#x00A0;(<span class='args'>dcomplex z</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Same as <a 
+href="#x16-13000014.3">pnl_sf_dawson</a> for complex arguments.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-130013"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_log_erf</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span 
+class="rm-lmr-10x-x-109">log</span> <a 
+href="#x16-13000014.3">pnl_sf_erf</a><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)</span>
+     </li>
+     <li class="itemize"><a 
+ id="dx16-130014"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_log_erfc</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span 
+class="rm-lmr-10x-x-109">log</span> <a 
+href="#x16-13000014.3">pnl_sf_erfc</a><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)</span></li></ul>
+<!--l. 140--><p class="noindent" >
+</p>
+<h4 class="subsectionHead"><span class="titlemark">14.4   </span> <a 
+ id="x16-13100014.4"></a>Gamma functions</h4>
+<!--l. 142--><p class="noindent" >For <span 
+class="lmmi-10x-x-109">x &#x003E; </span><span 
+class="rm-lmr-10x-x-109">0</span>, the Gamma Function is defined by
+</p>
+<table 
+class="equation-star"><tr><td>
+<center class="math-display" >
+<img 
+src="pnl-manual45x.png" alt="       &#x222B; &#x221E;
+&#x0393; (x ) =    e-u ux-1du.
+        0
+" class="math-display"  /></center></td></tr></table>
+<!--l. 145--><p class="nopar" >
+</p>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx16-131001"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_fact</span></span>&#x00A0;(<span class='args'>int n</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Computes factorial of <span class='var'>n</span> <span 
+class="rm-lmr-10x-x-109">&#x0393;(</span><span 
+class="lmmi-10x-x-109">n </span><span 
+class="rm-lmr-10x-x-109">+ 1)</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-131002"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_gamma</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Computes <span 
+class="rm-lmr-10x-x-109">&#x0393;(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)</span><span 
+class="lmmi-10x-x-109">,x </span><span 
+class="lmsy-10x-x-109">&#x2265; </span><span 
+class="rm-lmr-10x-x-109">0</span>
+     </li>
+     <li class="itemize"><a 
+ id="dx16-131003"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_log_gamma</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Computes <span 
+class="rm-lmr-10x-x-109">log</span><span 
+class="rm-lmr-10x-x-109">(&#x0393;(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">))</span><span 
+class="lmmi-10x-x-109">,x </span><span 
+class="lmsy-10x-x-109">&#x2265; </span><span 
+class="rm-lmr-10x-x-109">0</span>
+                                                                                    
+
+                                                                                    
+     </li>
+     <li class="itemize"><a 
+ id="dx16-131004"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_log_gamma_sgn</span></span>&#x00A0;(<span class='args'>double x, double <span 
+class="ts1-lmr10-x-x-109">*</span>y, int <span 
+class="ts1-lmr10-x-x-109">*</span>sgn</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Computes <span 
+class="lmmi-10x-x-109">y </span><span 
+class="rm-lmr-10x-x-109">=</span> <span 
+class="rm-lmr-10x-x-109">log</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmsy-10x-x-109">|</span><span 
+class="rm-lmr-10x-x-109">&#x0393;(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)</span><span 
+class="lmsy-10x-x-109">|</span><span 
+class="rm-lmr-10x-x-109">) </span>for <span class='var'>x &#x003E; 0</span> <span class='var'>sgn</span> contains the sign of <span 
+class="rm-lmr-10x-x-109">&#x0393;(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">) </span>(-1 or
+     +1).
+     </li>
+     <li class="itemize"><a 
+ id="dx16-131005"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_choose</span></span>&#x00A0;(<span class='args'>int n, int k</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Computes the binomial coefficient <img 
+src="pnl-manual46x.png" alt="(n)
+ k"  /> <span 
+class="rm-lmr-10x-x-109">=</span> <img 
+src="pnl-manual47x.png" alt="---n!--
+k!(n- k)!"  class="frac" align="middle" /> for <span 
+class="rm-lmr-10x-x-109">0 </span><span 
+class="lmsy-10x-x-109">&#x2264; </span><span 
+class="lmmi-10x-x-109">k </span><span 
+class="lmsy-10x-x-109">&#x2264; </span><span 
+class="lmmi-10x-x-109">n </span>in double
+     precision.</li></ul>
+<!--l. 162--><p class="noindent" >
+</p>
+<h4 class="subsectionHead"><span class="titlemark">14.5   </span> <a 
+ id="x16-13200014.5"></a>Digamma function</h4>
+<!--l. 164--><p class="noindent" >For <span 
+class="lmmi-10x-x-109">x &#x003E; </span><span 
+class="rm-lmr-10x-x-109">0</span>, the digamma function <span 
+class="lmmi-10x-x-109">&#x03C8; </span>is defined as the logarithmic derivative of the Gamma function
+<span 
+class="rm-lmr-10x-x-109">&#x0393;</span>
+</p>
+<table 
+class="equation-star"><tr><td>
+<center class="math-display" >
+<img 
+src="pnl-manual48x.png" alt="        d           &#x0393; &#x2032;(x)
+&#x03C8; (x ) =---log&#x0393; (x ) =-----.
+       dx            &#x0393; (x)
+" class="math-display"  /></center></td></tr></table>
+<!--l. 168--><p class="nopar" >
+The function <span 
+class="lmmi-10x-x-109">&#x03C8; </span>admits the following integral representation
+</p>
+<table 
+class="equation-star"><tr><td>
+<center class="math-display" >
+<img 
+src="pnl-manual49x.png" alt="       &#x222B; &#x221E; ( - u     -xu  )
+&#x03C8;(x) =       e---  -e-----  .
+        0     u    1- e- u
+" class="math-display"  /></center></td></tr></table>
+<!--l. 173--><p class="nopar" >
+                                                                                    
+
+                                                                                    
+</p>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx16-132001"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_psi</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Return <span 
+class="lmmi-10x-x-109">&#x03C8;</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)</span>.</li></ul>
+<!--l. 180--><p class="noindent" >
+</p>
+<h4 class="subsectionHead"><span class="titlemark">14.6   </span> <a 
+ id="x16-13300014.6"></a>Incomplete Gamma functions</h4>
+<!--l. 182--><p class="noindent" >For <span 
+class="lmmi-10x-x-109">a </span><span 
+class="lmsy-10x-x-109">&#x2208; </span><span 
+class="msbm-10x-x-109">&#x211D; </span>and <span 
+class="lmmi-10x-x-109">x &#x003E; </span><span 
+class="rm-lmr-10x-x-109">0</span>, the Incomplete Gamma Function is defined by
+</p>
+<table 
+class="equation-star"><tr><td>
+<center class="math-display" >
+<img 
+src="pnl-manual50x.png" alt="         &#x222B;
+           &#x221E;  -u  a-1
+&#x0393; (a,x ) = x  e   u   du.
+" class="math-display"  /></center></td></tr></table>
+<!--l. 185--><p class="nopar" >
+A relation similar to the one existing for the standard Gamma function holds
+</p>
+<table 
+class="equation-star"><tr><td>
+<center class="math-display" >
+<img 
+src="pnl-manual51x.png" alt="&#x0393; (a,x) = - xa-e-x+-&#x0393; (a-+-1,x).
+                   a
+" class="math-display"  /></center></td></tr></table>
+<!--l. 189--><p class="nopar" >
+                                                                                    
+
+                                                                                    
+</p><table 
+class="align-star">
+                 <tr><td 
+class="align-odd"><span 
+class="rm-lmr-10x-x-109">&#x0393;(</span><span 
+class="lmmi-10x-x-109">a</span><span 
+class="rm-lmr-10x-x-109">)</span></td>                   <td 
+class="align-even"> <span 
+class="rm-lmr-10x-x-109">=</span> <span 
+class="lmex-10">&#x222B;</span>
+  <sub><span 
+class="rm-lmr-8">0</span></sub><sup><span 
+class="lmsy8-">&#x221E;</span></sup><span 
+class="lmmi-10x-x-109">u</span><sup><span 
+class="lmmi-8">a</span><span 
+class="lmsy8-">-</span><span 
+class="rm-lmr-8">1</span></sup> <span 
+class="rm-lmr-10x-x-109">e</span><span 
+class="lmsy8-">-</span><span 
+class="lmmi-8">u</span> <span 
+class="lmmi-10x-x-109">du</span></td>                                            <td 
+class="align-label"></td>                 <td 
+class="align-label">
+                 </td></tr><tr><td 
+class="align-odd"><span 
+class="lmmi-10x-x-109">P</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">a,x</span><span 
+class="rm-lmr-10x-x-109">)</span></td>                 <td 
+class="align-even"> <span 
+class="rm-lmr-10x-x-109">=</span> <img 
+src="pnl-manual52x.png" alt="&#x0393; (a) - &#x0393; (a,x)
+-------------
+    &#x0393; (a)"  class="frac" align="middle" /> <span 
+class="rm-lmr-10x-x-109">=</span> <img 
+src="pnl-manual53x.png" alt="  1
+-----
+&#x0393; (a)"  class="frac" align="middle" /><span 
+class="lmex-10">&#x222B;</span>
+     <sub><span 
+class="rm-lmr-8">0</span></sub><sup><span 
+class="lmmi-8">x</span></sup><span 
+class="lmmi-10x-x-109">u</span><sup><span 
+class="lmmi-8">a</span><span 
+class="lmsy8-">-</span><span 
+class="rm-lmr-8">1</span></sup> <span 
+class="rm-lmr-10x-x-109">e</span><span 
+class="lmsy8-">-</span><span 
+class="lmmi-8">u</span> <span 
+class="lmmi-10x-x-109">du</span></td>                        <td 
+class="align-label"></td>                 <td 
+class="align-label">
+                 </td></tr><tr><td 
+class="align-odd"><span 
+class="lmmi-10x-x-109">Q</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">a,x</span><span 
+class="rm-lmr-10x-x-109">)</span></td>                 <td 
+class="align-even"> <span 
+class="rm-lmr-10x-x-109">= 1 </span><span 
+class="lmsy-10x-x-109">- </span><span 
+class="lmmi-10x-x-109">P</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">a,x</span><span 
+class="rm-lmr-10x-x-109">) =</span> <img 
+src="pnl-manual54x.png" alt="&#x0393; (a,x)
+ &#x0393; (a)"  class="frac" align="middle" /> <span 
+class="rm-lmr-10x-x-109">=</span> <img 
+src="pnl-manual55x.png" alt="--1--
+&#x0393; (a )"  class="frac" align="middle" /><span 
+class="lmex-10">&#x222B;</span>
+     <sub><span 
+class="lmmi-8">x</span></sub><sup><span 
+class="lmsy8-">&#x221E;</span></sup><span 
+class="rm-lmr-10x-x-109">e</span><span 
+class="lmsy8-">-</span><span 
+class="lmmi-8">u</span> <span 
+class="lmmi-10x-x-109">u</span><sup><span 
+class="lmmi-8">a</span><span 
+class="lmsy8-">-</span><span 
+class="rm-lmr-8">1</span></sup><span 
+class="lmmi-10x-x-109">du.</span></td>                 <td 
+class="align-label"></td>                 <td 
+class="align-label"></td></tr></table>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx16-133001"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_gamma_inc</span></span>&#x00A0;(<span class='args'>double a, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Computes <span 
+class="rm-lmr-10x-x-109">&#x0393;(</span><span 
+class="lmmi-10x-x-109">a,x</span><span 
+class="rm-lmr-10x-x-109">)</span><span 
+class="lmmi-10x-x-109">,   a </span><span 
+class="lmsy-10x-x-109">&#x2208; </span><span 
+class="msbm-10x-x-109">&#x211D;</span><span 
+class="lmmi-10x-x-109">,x </span><span 
+class="lmsy-10x-x-109">&#x2265; </span><span 
+class="rm-lmr-10x-x-109">0</span>
+     </li>
+     <li class="itemize"><a 
+ id="dx16-133002"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_gamma_inc_P</span></span>&#x00A0;(<span class='args'>double a, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Computes <span 
+class="lmmi-10x-x-109">P</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">a,x</span><span 
+class="rm-lmr-10x-x-109">)</span><span 
+class="lmmi-10x-x-109">,   a &#x003E; </span><span 
+class="rm-lmr-10x-x-109">0</span><span 
+class="lmmi-10x-x-109">,x </span><span 
+class="lmsy-10x-x-109">&#x2265; </span><span 
+class="rm-lmr-10x-x-109">0</span>
+     </li>
+     <li class="itemize"><a 
+ id="dx16-133003"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_gamma_inc_Q</span></span>&#x00A0;(<span class='args'>double a, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Computes <span 
+class="lmmi-10x-x-109">Q</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">a,x</span><span 
+class="rm-lmr-10x-x-109">)</span><span 
+class="lmmi-10x-x-109">,   a &#x003E; </span><span 
+class="rm-lmr-10x-x-109">0</span><span 
+class="lmmi-10x-x-109">,x </span><span 
+class="lmsy-10x-x-109">&#x2265; </span><span 
+class="rm-lmr-10x-x-109">0</span></li></ul>
+<!--l. 207--><p class="noindent" >
+</p>
+<h4 class="subsectionHead"><span class="titlemark">14.7   </span> <a 
+ id="x16-13400014.7"></a>Exponential integrals</h4>
+<!--l. 208--><p class="noindent" >For <span 
+class="lmmi-10x-x-109">x &#x003E; </span><span 
+class="rm-lmr-10x-x-109">0 </span>and <span 
+class="lmmi-10x-x-109">n </span><span 
+class="lmsy-10x-x-109">&#x2208; </span><span 
+class="msbm-10x-x-109">&#x2115;</span>, the function <span 
+class="lmmi-10x-x-109">E</span><sub><span 
+class="lmmi-8">n</span></sub> is defined by
+</p>
+<table 
+class="equation-star"><tr><td>
+<center class="math-display" >
+<img 
+src="pnl-manual56x.png" alt="        &#x222B; &#x221E;  -xu  -n
+En (x ) =    e    u  du
+         1
+" class="math-display"  /></center></td></tr></table>
+                                                                                    
+
+                                                                                    
+<!--l. 211--><p class="nopar" >
+</p><!--l. 213--><p class="noindent" >This function is linked to the Incomplete Gamma function by
+</p>
+<table 
+class="equation-star"><tr><td>
+<center class="math-display" >
+<img 
+src="pnl-manual57x.png" alt="        &#x222B; &#x221E;                             &#x222B; &#x221E;
+En (x) =    e- xu(xu )-nxn-1d(xu) = xn-1     e-tt-ndt = xn-1&#x0393; (1 - n,x) ,
+         x                               x
+" class="math-display"  /></center></td></tr></table>
+<!--l. 218--><p class="nopar" >
+from which we can deduce
+</p>
+<table 
+class="equation-star"><tr><td>
+<center class="math-display" >
+<img 
+src="pnl-manual58x.png" alt="nEn+1 (x) = e- x- xEn (x ).
+" class="math-display"  /></center></td></tr></table>
+<!--l. 222--><p class="nopar" >
+For <span 
+class="lmmi-10x-x-109">n &#x003E; </span><span 
+class="rm-lmr-10x-x-109">1</span>, the series expansion is given by
+</p>
+<table 
+class="equation-star"><tr><td>
+<center class="math-display" >
+<img 
+src="pnl-manual59x.png" alt="                      [                                         ]
+E (x) = xn-1&#x0393; (1 - n)+  ---1-- + --x-- - ---x2---+  --x3----- ... .
+ n                       1 - n   2 - n   2(3-  n)   6(4 - n)
+" class="math-display"  /></center></td></tr></table>
+                                                                                    
+
+                                                                                    
+<!--l. 228--><p class="nopar" >
+The asymptotic behaviour is given by
+</p>
+<table 
+class="equation-star"><tr><td>
+<center class="math-display" >
+<img 
+src="pnl-manual60x.png" alt="         - x[                     ]
+En (x ) = e-- 1 - n-+ n(n-+-1) + ....
+         x       x      x2
+" class="math-display"  /></center></td></tr></table>
+<!--l. 232--><p class="nopar" >
+The special case <span 
+class="lmmi-10x-x-109">n </span><span 
+class="rm-lmr-10x-x-109">= 1 </span>gives
+</p>
+<table 
+class="equation-star"><tr><td>
+<center class="math-display" >
+<img 
+src="pnl-manual61x.png" alt="        &#x222B; &#x221E;  e-u
+E1 (x) =     ---du,  |Arg (x )| &#x2265; &#x03C0;.
+          x   u
+" class="math-display"  /></center></td></tr></table>
+<!--l. 236--><p class="nopar" >
+For any complex number <span 
+class="lmmi-10x-x-109">x </span>with positive real part, this can be written
+</p>
+<table 
+class="equation-star"><tr><td>
+<center class="math-display" >
+<img 
+src="pnl-manual62x.png" alt="        &#x222B; &#x221E; e-ux
+E1(x) =     -u--du,   &#x211C;(x) &#x2265; 0.
+         1
+" class="math-display"  /></center></td></tr></table>
+                                                                                    
+
+                                                                                    
+<!--l. 240--><p class="nopar" >
+By integrating the Taylor expansion of <span 
+class="rm-lmr-10x-x-109">e</span><span 
+class="lmsy8-">-</span><span 
+class="lmmi-8">t</span> <span 
+class="lmmi-10x-x-109">&#x2215;t</span>, and extracting the logarithmic singularity, we can
+derive the following series representation for <span 
+class="lmmi-10x-x-109">E</span><sub><span 
+class="rm-lmr-8">1</span></sub><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)</span>,
+</p>
+<table 
+class="equation-star"><tr><td>
+<center class="math-display" >
+<img 
+src="pnl-manual63x.png" alt="                   &#x2211;&#x221E; (--1)kxk
+E1(x) = - &#x03B3; - lnx -      kk!      |Arg(x)| &#x003C; &#x03C0;.
+                   k=1
+" class="math-display"  /></center></td></tr></table>
+<!--l. 247--><p class="nopar" >
+The function <span 
+class="lmmi-10x-x-109">E</span><sub><span 
+class="rm-lmr-8">1</span></sub> is linked to the exponential integral <span 
+class="lmmi-10x-x-109">Ei</span>
+</p>
+<table 
+class="equation-star"><tr><td>
+<center class="math-display" >
+<img 
+src="pnl-manual64x.png" alt="        &#x222B; x eu        &#x222B; &#x221E; e-u
+Ei(x) =     --du =  -     ---du   &#x2200;x &#x2044;= 0.
+         -&#x221E;  u         -x  u
+" class="math-display"  /></center></td></tr></table>
+<!--l. 252--><p class="nopar" >
+The above definition can be used for positive values of <span 
+class="lmmi-10x-x-109">x</span>, but the integral has to be
+understood in terms of its Cauchy principal value, due to the singularity of the integrand at
+zero.
+</p>
+<table 
+class="equation-star"><tr><td>
+<center class="math-display" >
+<img 
+src="pnl-manual65x.png" alt="Ei(- x) = - E1 (x ), &#x211C; (x) &#x2265; 0.
+                                                                                    
+
+                                                                                    
+" class="math-display"  /></center></td></tr></table>
+<!--l. 258--><p class="nopar" >
+We deduce,
+</p>
+<table 
+class="equation-star"><tr><td>
+<center class="math-display" >
+<img 
+src="pnl-manual66x.png" alt="                 &#x2211;&#x221E;  xk
+Ei(x) = &#x03B3; + lnx +    ---,  x &#x003E; 0.
+                 k=1 kk!
+" class="math-display"  /></center></td></tr></table>
+<!--l. 262--><p class="nopar" >
+For <span 
+class="lmmi-10x-x-109">x </span><span 
+class="lmsy-10x-x-109">&#x2208; </span><span 
+class="msbm-10x-x-109">&#x211D;</span>
+</p>
+<table 
+class="equation-star"><tr><td>
+<center class="math-display" >
+<img 
+src="pnl-manual67x.png" alt="         {
+            - Ei (- x) - i&#x03C0; x &#x003C; 0,
+&#x0393; (0,x) =   - Ei (- x) x &#x003E; 0.
+" class="math-display"  /></center></td></tr></table>
+<!--l. 270--><p class="nopar" >
+</p>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx16-134001"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_expint_En</span></span>&#x00A0;(<span class='args'>int n, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Computes <span class='var'>E_n(x)</span> for <span 
+class="lmmi-10x-x-109">n </span><span 
+class="lmsy-10x-x-109">&#x2265; </span><span 
+class="rm-lmr-10x-x-109">0</span><span 
+class="lmmi-10x-x-109">,x </span><span 
+class="lmsy-10x-x-109">&#x2265; </span><span 
+class="rm-lmr-10x-x-109">0</span>, or <span 
+class="lmmi-10x-x-109">x &#x003E; </span><span 
+class="rm-lmr-10x-x-109">0 </span>when <span 
+class="lmmi-10x-x-109">n </span><span 
+class="rm-lmr-10x-x-109">= 0 </span>or <span 
+class="rm-lmr-10x-x-109">1</span>.</li></ul>
+<!--l. 278--><p class="noindent" >
+</p>
+<h4 class="subsectionHead"><span class="titlemark">14.8   </span> <a 
+ id="x16-13500014.8"></a>Hypergeometric functions</h4>
+                                                                                    
+
+                                                                                    
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx16-135001"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_hyperg_2F1</span></span>&#x00A0;(<span class='args'>double a, double b, double c, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the Gauss hypergeometric function <span class='var'>2F1(a,b,c,x)</span> for <span class='var'>|x| &#x003C; 1</span> and
+     for <span class='var'>x &#x003C; -1</span> when <span class='var'>b,a,c,(b-a),(c-a),(c-b)</span> are not integers
+     </li>
+     <li class="itemize"><a 
+ id="dx16-135002"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_hyperg_1F1</span></span>&#x00A0;(<span class='args'>double a, double b, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the hypergeometric function <span class='var'>1F1(a,b,x)</span>
+     </li>
+     <li class="itemize"><a 
+ id="dx16-135003"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_hyperg_2F0</span></span>&#x00A0;(<span class='args'>double a, double b, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute  the  hypergeometric  function  <span class='var'>2F0(a,b,x)</span>  for  <span class='var'>x&#x003C;0</span>  using  the
+     relation <span 
+class="rm-lmr-10x-x-109">2</span><span 
+class="lmmi-10x-x-109">F</span><span 
+class="rm-lmr-10x-x-109">0(</span><span 
+class="lmmi-10x-x-109">a,b,x</span><span 
+class="rm-lmr-10x-x-109">) = (</span><span 
+class="lmsy-10x-x-109">-</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)</span><sup><span 
+class="lmsy8-">-</span><span 
+class="lmmi-8">a</span></sup><span 
+class="lmmi-10x-x-109">U</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">a,</span><span 
+class="rm-lmr-10x-x-109">1 + </span><span 
+class="lmmi-10x-x-109">a </span><span 
+class="lmsy-10x-x-109">- </span><span 
+class="lmmi-10x-x-109">b,</span><span 
+class="lmsy-10x-x-109">-</span><img 
+src="pnl-manual68x.png" alt="1
+x"  class="frac" align="middle" /><span 
+class="rm-lmr-10x-x-109">)</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx16-135004"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_hyperg_0F1</span></span>&#x00A0;(<span class='args'>double c, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the hypergeometric function <span class='var'>0F1(c,x)</span>
+     </li>
+     <li class="itemize"><a 
+ id="dx16-135005"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sf_hyperg_U</span></span>&#x00A0;(<span class='args'>double a, double b, double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the confluent hypergeometric function <span class='var'>U(a,b,x)</span> with <span class='var'>x &#x003E; 0</span></li></ul>
+                                                                                    
+
+                                                                                    
+<!--l. 1--><div class="crosslinks"><p class="noindent">[<a 
+href="pnl-manualse15.html" >next</a>] [<a 
+href="pnl-manualse13.html" >prev</a>] [<a 
+href="pnl-manualse13.html#tailpnl-manualse13.html" >prev-tail</a>] [<a 
+href="pnl-manualse14.html" >front</a>] [<a 
+href="pnl-manual.html#pnl-manualse14.html" >up</a>] </p></div>
+<!--l. 1--><p class="noindent" ><a 
+ id="tailpnl-manualse14.html"></a> </p> 
+</body></html> 

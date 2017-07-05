@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="iso-8859-1" ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->  
+<html xmlns="http://www.w3.org/1999/xhtml"  
+> 
+<head><title>Some bindings</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> 
+<meta name="generator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<meta name="originator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<!-- xhtml,uni-html4,2,subsection+,next,html --> 
+<meta name="src" content="pnl-manual.tex" /> 
+<link rel="stylesheet" type="text/css" href="pnl-manual.css" /> 
+</head><body 
+>
+<!--l. 1--><div class="crosslinks"><p class="noindent">[<a 
+href="pnl-manualse16.html" >next</a>] [<a 
+href="pnl-manualse14.html" >prev</a>] [<a 
+href="pnl-manualse14.html#tailpnl-manualse14.html" >prev-tail</a>] [<a 
+href="#tailpnl-manualse15.html">tail</a>] [<a 
+href="pnl-manual.html#pnl-manualse15.html" >up</a>] </p></div>
+<h3 class="sectionHead"><span class="titlemark">15   </span> <a 
+ id="x17-13600015"></a>Some bindings</h3>
+<!--l. 5--><p class="noindent" >
+</p>
+<h4 class="subsectionHead"><span class="titlemark">15.1   </span> <a 
+ id="x17-13700015.1"></a>MPI bindings</h4>
+<!--l. 6--><p class="noindent" >
+</p>
+<h5 class="subsubsectionHead"><span class="titlemark">15.1.1   </span> <a 
+ id="x17-13800015.1.1"></a>Overview</h5>
+<!--l. 8--><p class="noindent" >We provide some bindings for the MPI library to natively handle <span 
+class="ec-lmri-10x-x-109">PnlObjects</span>.
+</p><!--l. 10--><p class="noindent" >The functionnalities described in this chapter are declared in <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl/pnl_mpi.h</span></span></span>.
+</p><!--l. 12--><p class="noindent" >
+</p>
+<h5 class="subsubsectionHead"><span class="titlemark">15.1.2   </span> <a 
+ id="x17-13900015.1.2"></a>Functions</h5>
+<!--l. 14--><p class="noindent" >All the following functions return an error code as an integer value. This returned value should be
+tested against <span class='var'>MPI_SUCCESS</span> to check that no error occurred.
+</p>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx17-139001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_object_mpi_pack_size</span></span>&#x00A0;(<span class='args'>const <a 
+href="pnl-manualse2.html#x4-110002.1"><span class='struct'>PnlObject</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>Obj, MPI_Comm comm, int
+     <span 
+class="ts1-lmr10-x-x-109">*</span>size</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute in <span class='var'>size</span> the amount of space needed to pack <span class='var'>Obj</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx17-139002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_object_mpi_pack</span></span>&#x00A0;(<span class='args'>const <a 
+href="pnl-manualse2.html#x4-110002.1"><span class='struct'>PnlObject</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>Obj, void <span 
+class="ts1-lmr10-x-x-109">*</span>buf, int bufsize, int <span 
+class="ts1-lmr10-x-x-109">*</span>pos,
+     MPI_Comm comm</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Pack <span class='var'>Obj</span> into <span class='var'>buf</span> which must be at least of length <span class='var'>size</span>. <span class='var'>size</span> must be at
+     least equal to the value returned by <a 
+href="#x17-13900015.1.2">pnl_object_mpi_pack_size</a>.
+     </li>
+     <li class="itemize"><a 
+ id="dx17-139003"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_object_mpi_unpack</span></span>&#x00A0;(<span class='args'><a 
+href="pnl-manualse2.html#x4-110002.1"><span class='struct'>PnlObject</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>Obj, void <span 
+class="ts1-lmr10-x-x-109">*</span>buf, int bufsize, int <span 
+class="ts1-lmr10-x-x-109">*</span>pos,
+     MPI_Comm comm</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Unpack the content of <span class='var'>buf</span> starting at position <span class='var'>pos</span> (unless several objects
+     have been packed contiguously, <span class='var'><span 
+class="ts1-lmr10-x-x-109">*</span>pos</span> should be equal to <span class='var'>0</span>). <span class='var'>buf</span> is a contigous memery
+     area of length <span class='var'>bufsize</span> (note that the size is counted in bytes). <span class='var'>pos</span> is incremented and
+     is on output the first location in the input buffer after the locations occupied by the
+     message that was unpacked. <span class='var'>pos</span> is properly set for a future call to <span 
+class="ec-lmri-10x-x-109">MPI_Unpack </span>if any.
+                                                                                    
+
+                                                                                    
+     </li>
+     <li class="itemize"><a 
+ id="dx17-139004"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_object_mpi_send</span></span>&#x00A0;(<span class='args'>const <a 
+href="pnl-manualse2.html#x4-110002.1"><span class='struct'>PnlObject</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>Obj, int dest, int tag, MPI_Comm
+     comm</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Perform a standard-mode blocking send of <span class='var'>Obj</span>. The object is sent to the
+     process with rank <span class='var'>dest</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx17-139005"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_object_mpi_ssend</span></span>&#x00A0;(<span class='args'>const <a 
+href="pnl-manualse2.html#x4-110002.1"><span class='struct'>PnlObject</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>Obj, int dest, int tag, MPI_Comm
+     comm</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Perform a standard-mode synchronous blocking send of <span class='var'>Obj</span>. The object
+     is sent to the process with rank <span class='var'>dest</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx17-139006"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_object_mpi_recv</span></span>&#x00A0;(<span class='args'><a 
+href="pnl-manualse2.html#x4-110002.1"><span class='struct'>PnlObject</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>Obj, int src, int tag, MPI_Comm comm,
+     MPI_Status <span 
+class="ts1-lmr10-x-x-109">*</span>status</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Perform a standard-mode blocking receive of <span class='var'>Obj</span>. The object is sent to
+     the process with rank <span class='var'>dest</span>. Note that <span class='var'>Obj</span> should be an already allocated object and
+     that its type should match the true type of the object to be received. <span class='var'>src</span> is the rank of
+     the process who sent the object.
+     </li>
+     <li class="itemize"><a 
+ id="dx17-139007"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_object_mpi_bcast</span></span>&#x00A0;(<span class='args'><a 
+href="pnl-manualse2.html#x4-110002.1"><span class='struct'>PnlObject</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>Obj, int root, MPI_Comm comm</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Broadcast the object <span class='var'>Obj</span> from the process with rank <span class='var'>root</span> to all other
+     processes of the group <span class='var'>comm</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx17-139008"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_object_mpi_reduce</span></span>&#x00A0;(<span class='args'><a 
+href="pnl-manualse2.html#x4-110002.1"><span class='struct'>PnlObject</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>Sendbuf, <a 
+href="pnl-manualse2.html#x4-110002.1"><span class='struct'>PnlObject</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>Recvbuf, MPI_Op
+     op, int root, MPI_Comm comm</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Perform the reduction described by <span class='var'>op</span> on the objects <span class='var'>Sendbuf</span> and stores
+     the result into <span class='var'>Recvbuf</span>. Note that <span class='var'>Recvbuf</span> and <span class='var'>Sendbuf</span> must be of the same type. The
+     argument <span class='var'>root</span> is the index of the root process and <span class='var'>comm</span> is a communicator. Not all
+     reductions are implemented for all types. Here is the list of compatible reductions
+     <div class="center" 
+>
+<!--l. 71--><p class="noindent" >
+</p>
+<div class="tabular"> <table id="TBL-13" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-13-1g"><col 
+id="TBL-13-1" /></colgroup><colgroup id="TBL-13-2g"><col 
+id="TBL-13-2" /></colgroup><tr  
+ style="vertical-align:baseline;" id="TBL-13-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-13-1-1"  
+class="td10">MPI_SUM                         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-13-1-2"  
+class="td01">PnlVect, PnlVectInt, PnlVectComplex,   </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-13-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-13-2-1"  
+class="td10">                          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-13-2-2"  
+class="td01">PnlMat, PnlMatInt, PnlMatComplex     </td>
+</tr><tr 
+class="hline"><td><hr /></td><td><hr /></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-13-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-13-3-1"  
+class="td10">MPI_PROD, MPI_MAX,      </td><td  style="white-space:nowrap; text-align:left;" id="TBL-13-3-2"  
+class="td01">PnlVect, PnlVectInt, PnlMat, PnlMatInt</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-13-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-13-4-1"  
+class="td10">MPI_MIN                           </td><td  style="white-space:nowrap; text-align:left;" id="TBL-13-4-2"  
+class="td01">                                  </td>
+</tr></table></div></div>
+     </li></ul>
+<!--l. 83--><p class="noindent" >For more expect users, we provide the following nonblocking functions. </p>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx17-139009"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_object_mpi_isend</span></span>&#x00A0;(<span class='args'>const <a 
+href="pnl-manualse2.html#x4-110002.1"><span class='struct'>PnlObject</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>Obj, int dest, int tag, MPI_Comm
+                                                                                    
+
+                                                                                    
+     comm, MPI_Request <span 
+class="ts1-lmr10-x-x-109">*</span>request</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Start a standard-mode, nonblocking send of object <span class='var'>Obj</span> to the process
+     with rank <span class='var'>dest</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx17-139010"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_object_mpi_irecv</span></span>&#x00A0;(<span class='args'>void <span 
+class="ts1-lmr10-x-x-109">**</span>buf, int <span 
+class="ts1-lmr10-x-x-109">*</span>size, int src, int tag, MPI_Comm
+     comm, int <span 
+class="ts1-lmr10-x-x-109">*</span>flag, MPI_Request <span 
+class="ts1-lmr10-x-x-109">*</span>request</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Start  a  standard-mode,  nonblocking  receive  of  object  <span class='var'>Obj</span>  from  the
+     process with rank <span class='var'>root</span>. On output <span class='var'>flag</span> equals to <span class='var'>TRUE</span> if the object can be received
+     and <span class='var'>FALSE</span> otherwise (this is the same as for <span 
+class="ec-lmri-10x-x-109">MPI_Iprobe</span>).</li></ul>
+<!--l. 100--><p class="noindent" >
+</p>
+<h4 class="subsectionHead"><span class="titlemark">15.2   </span> <a 
+ id="x17-14000015.2"></a>The save/load interface</h4>
+<!--l. 102--><p class="noindent" >The interface is only accessible when the MPI bindings are compiled since it is based on the
+Packing/Unpacking facilities of MPI.
+</p><!--l. 105--><p class="noindent" >The functionnalities described in this chapter are declared in <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl/pnl_mpi.h</span></span></span>. </p>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx17-140001"></a> <span class='ret'><a 
+href="pnl-manualse6.html#x8-970006.1"><span class='struct'>PnlRng</span></a> <span 
+class="ts1-lmr10-x-x-109">**</span></span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_rng_create_from_file</span></span>&#x00A0;(<span class='args'>char <span 
+class="ts1-lmr10-x-x-109">*</span>str, int n</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Load <span class='var'>n</span> rng from the file of name <span class='var'>str</span> and returns an array of <span class='var'>n</span> <a 
+href="pnl-manualse6.html#x8-970006.1"><span class='struct'>PnlRng</span></a> .
+     </li>
+     <li class="itemize"><a 
+ id="dx17-140002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_rng_save_to_file</span></span>&#x00A0;(<span class='args'><a 
+href="pnl-manualse6.html#x8-970006.1"><span class='struct'>PnlRng</span></a> <span 
+class="ts1-lmr10-x-x-109">**</span>rngtab, int n, char <span 
+class="ts1-lmr10-x-x-109">*</span>str</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Save <span class='var'>n</span> rng stored in <span class='var'>rngtab</span> into the file of name <span class='var'>str</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx17-140003"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_object_save</span></span>&#x00A0;(<span class='args'>PnlObject <span 
+class="ts1-lmr10-x-x-109">*</span>O, FILE *stream</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Save the object <span class='var'>O</span> into the stream <span class='var'>stream</span>. <span class='var'>stream</span> is typically created by
+     calling fopen with <span class='var'>mode="wb"</span>. This function can be called several times to save several
+     objects in the same stream.
+     </li>
+     <li class="itemize"><a 
+ id="dx17-140004"></a> <span class='ret'>PnlObject<span 
+class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_object_load</span></span>&#x00A0;(<span class='args'>FILE *stream</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Load an object from the stream <span class='var'>stream</span>. <span class='var'>stream</span> is typically created by
+     calling fopen with <span class='var'>mode="rb"</span>. This function can be called several times to load several
+     objects from the same stream. If <span class='var'>stream</span> was empty or it did not contain any PnlObjects,
+     the function returns <span class='var'>NULL</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx17-140005"></a> <span class='ret'>PnlList<span 
+class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_object_load_into_list</span></span>&#x00A0;(<span class='args'>FILE *stream</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Load as many objects as possible from the stream <span class='var'>stream</span> and stores
+     them into a <a 
+href="pnl-manualse2.html#x4-120002.2"><span class='struct'>PnlList</span></a> . <span class='var'>stream</span> is typically created by calling fopen with <span class='var'>mode="rb"</span>. If
+     <span class='var'>stream</span> was empty or it did not contain any PnlObjects, the function returns <span class='var'>NULL</span>.</li></ul>
+                                                                                    
+
+                                                                                    
+<!--l. 2--><div class="crosslinks"><p class="noindent">[<a 
+href="pnl-manualse16.html" >next</a>] [<a 
+href="pnl-manualse14.html" >prev</a>] [<a 
+href="pnl-manualse14.html#tailpnl-manualse14.html" >prev-tail</a>] [<a 
+href="pnl-manualse15.html" >front</a>] [<a 
+href="pnl-manual.html#pnl-manualse15.html" >up</a>] </p></div>
+<!--l. 2--><p class="noindent" ><a 
+ id="tailpnl-manualse15.html"></a> </p> 
+</body></html> 

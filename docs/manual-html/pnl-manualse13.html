@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="iso-8859-1" ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->  
+<html xmlns="http://www.w3.org/1999/xhtml"  
+> 
+<head><title>Root finding</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> 
+<meta name="generator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<meta name="originator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<!-- xhtml,uni-html4,2,subsection+,next,html --> 
+<meta name="src" content="pnl-manual.tex" /> 
+<link rel="stylesheet" type="text/css" href="pnl-manual.css" /> 
+</head><body 
+>
+<!--l. 1--><div class="crosslinks"><p class="noindent">[<a 
+href="pnl-manualse14.html" >next</a>] [<a 
+href="pnl-manualse12.html" >prev</a>] [<a 
+href="pnl-manualse12.html#tailpnl-manualse12.html" >prev-tail</a>] [<a 
+href="#tailpnl-manualse13.html">tail</a>] [<a 
+href="pnl-manual.html#pnl-manualse13.html" >up</a>] </p></div>
+<h3 class="sectionHead"><span class="titlemark">13   </span> <a 
+ id="x15-12200013"></a>Root finding</h3>
+<!--l. 2--><p class="noindent" >
+</p>
+<h4 class="subsectionHead"><span class="titlemark">13.1   </span> <a 
+ id="x15-12300013.1"></a>Overview</h4>
+<!--l. 5--><p class="noindent" >To provide a uniformed framework to root finding functions, we use several structures for storing
+different kind of functions. The pointer <span class='var'>params</span> is used to store the extra parameters. These new
+types come with dedicated macros starting in <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">PNL_EVAL</span></span></span> to evaluate the function and their Jacobian.
+<a 
+ id="dx15-123001"></a>
+                                                                                    
+
+                                                                                    
+</p>
+<div class="verbatim" id="verbatim-42">
+/*
+&#x00A0;<br />&#x00A0;*&#x00A0;f:&#x00A0;R&#x00A0;--&#x003E;&#x00A0;R
+&#x00A0;<br />&#x00A0;*&#x00A0;The&#x00A0;function&#x00A0;&#x00A0;pointer&#x00A0;returns&#x00A0;f(x)
+&#x00A0;<br />&#x00A0;*
+&#x00A0;<br />typedef&#x00A0;struct&#x00A0;{
+&#x00A0;<br />&#x00A0;&#x00A0;double&#x00A0;(*F)&#x00A0;(double&#x00A0;x,&#x00A0;void&#x00A0;*params);
+&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;*params;
+&#x00A0;<br />}&#x00A0;PnlFunc&#x00A0;;
+&#x00A0;<br />#define&#x00A0;PNL_EVAL_FUNC(Fstruct,&#x00A0;x)&#x00A0;(*((Fstruct)-&#x003E;F))(x,&#x00A0;(Fstruct)-&#x003E;params)
+</div>
+<!--l. 21--><p class="nopar" >
+<a 
+ id="dx15-123002"></a>
+                                                                                    
+
+                                                                                    
+</p>
+<div class="verbatim" id="verbatim-43">
+/*
+&#x00A0;<br />&#x00A0;*&#x00A0;f:&#x00A0;R^2&#x00A0;--&#x003E;&#x00A0;R
+&#x00A0;<br />&#x00A0;*&#x00A0;The&#x00A0;function&#x00A0;pointer&#x00A0;returns&#x00A0;f(x)
+&#x00A0;<br />&#x00A0;*
+&#x00A0;<br />typedef&#x00A0;struct&#x00A0;{
+&#x00A0;<br />&#x00A0;&#x00A0;double&#x00A0;(*F)&#x00A0;(double&#x00A0;x,&#x00A0;double&#x00A0;y,&#x00A0;void&#x00A0;*params);
+&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;*params;
+&#x00A0;<br />}&#x00A0;PnlFunc2D&#x00A0;;
+&#x00A0;<br />#define&#x00A0;PNL_EVAL_FUNC2D(Fstruct,&#x00A0;x,&#x00A0;y)&#x00A0;(*((Fstruct)-&#x003E;F))(x,&#x00A0;y,&#x00A0;(Fstruct)-&#x003E;params)
+</div>
+<!--l. 34--><p class="nopar" >
+<a 
+ id="dx15-123003"></a>
+                                                                                    
+
+                                                                                    
+</p>
+<div class="verbatim" id="verbatim-44">
+/*
+&#x00A0;<br />&#x00A0;*&#x00A0;f:&#x00A0;R&#x00A0;--&#x003E;&#x00A0;R
+&#x00A0;<br />&#x00A0;*&#x00A0;The&#x00A0;function&#x00A0;pointer&#x00A0;computes&#x00A0;f(x)&#x00A0;and&#x00A0;Df(x)&#x00A0;and&#x00A0;stores&#x00A0;them&#x00A0;in&#x00A0;fx
+&#x00A0;<br />&#x00A0;*&#x00A0;and&#x00A0;dfx&#x00A0;respectively
+&#x00A0;<br />&#x00A0;*
+&#x00A0;<br />typedef&#x00A0;struct&#x00A0;{
+&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;(*F)&#x00A0;(double&#x00A0;x,&#x00A0;double&#x00A0;*fx,&#x00A0;double&#x00A0;*dfx,&#x00A0;void&#x00A0;*params);
+&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;*params;
+&#x00A0;<br />}&#x00A0;PnlFuncDFunc&#x00A0;;
+&#x00A0;<br />#define&#x00A0;PNL_EVAL_FUNC_FDF(Fstruct,&#x00A0;x,&#x00A0;fx,&#x00A0;dfx)&#x00A0;(*((Fstruct)-&#x003E;F))(x,&#x00A0;fx,&#x00A0;dfx,&#x00A0;(Fstruct)-&#x003E;params)
+</div>
+<!--l. 48--><p class="nopar" >
+<a 
+ id="dx15-123004"></a>
+                                                                                    
+
+                                                                                    
+</p>
+<div class="verbatim" id="verbatim-45">
+/*
+&#x00A0;<br />&#x00A0;*&#x00A0;f:&#x00A0;R^n&#x00A0;--&#x003E;&#x00A0;R
+&#x00A0;<br />&#x00A0;*&#x00A0;The&#x00A0;function&#x00A0;pointer&#x00A0;returns&#x00A0;f(x)
+&#x00A0;<br />&#x00A0;*
+&#x00A0;<br />typedef&#x00A0;struct&#x00A0;{
+&#x00A0;<br />&#x00A0;&#x00A0;double&#x00A0;(*F)&#x00A0;(const&#x00A0;PnlVect&#x00A0;*x,&#x00A0;void&#x00A0;*params);
+&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;*params;
+&#x00A0;<br />}&#x00A0;PnlRnFuncR&#x00A0;;
+&#x00A0;<br />#define&#x00A0;PNL_EVAL_RNFUNCR(Fstruct,&#x00A0;x)&#x00A0;(*((Fstruct)-&#x003E;F))(x,&#x00A0;(Fstruct)-&#x003E;params)
+</div>
+<!--l. 61--><p class="nopar" >
+<a 
+ id="dx15-123005"></a>
+<a 
+ id="dx15-123006"></a>
+                                                                                    
+
+                                                                                    
+</p>
+<div class="verbatim" id="verbatim-46">
+/*
+&#x00A0;<br />&#x00A0;*&#x00A0;f:&#x00A0;R^n&#x00A0;--&#x003E;&#x00A0;R^m
+&#x00A0;<br />&#x00A0;*&#x00A0;The&#x00A0;function&#x00A0;pointer&#x00A0;computes&#x00A0;the&#x00A0;vector&#x00A0;f(x)&#x00A0;and&#x00A0;stores&#x00A0;it&#x00A0;in
+&#x00A0;<br />&#x00A0;*&#x00A0;fx&#x00A0;(vector&#x00A0;of&#x00A0;size&#x00A0;m)
+&#x00A0;<br />&#x00A0;*
+&#x00A0;<br />typedef&#x00A0;struct&#x00A0;{
+&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;(*F)&#x00A0;(const&#x00A0;PnlVect&#x00A0;*x,&#x00A0;PnlVect&#x00A0;*fx,&#x00A0;void&#x00A0;*params);
+&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;*params;
+&#x00A0;<br />}&#x00A0;PnlRnFuncRm&#x00A0;;
+&#x00A0;<br />#define&#x00A0;PNL_EVAL_RNFUNCRM(Fstruct,&#x00A0;x,&#x00A0;fx)&#x00A0;(*((Fstruct)-&#x003E;F))(x,&#x00A0;fx,&#x00A0;(Fstruct)-&#x003E;params)
+&#x00A0;<br />
+&#x00A0;<br />/*
+&#x00A0;<br />&#x00A0;*&#x00A0;Synonymous&#x00A0;of&#x00A0;PnlRnFuncRm&#x00A0;for&#x00A0;f:R^n&#x00A0;--&#x003E;&#x00A0;R^n
+&#x00A0;<br />&#x00A0;*
+&#x00A0;<br />typedef&#x00A0;PnlRnFuncRm&#x00A0;PnlRnFuncRn;
+&#x00A0;<br />#define&#x00A0;PNL_EVAL_RNFUNCRN&#x00A0;&#x00A0;PNL_EVAL_RNFUNCRM
+</div>
+<!--l. 82--><p class="nopar" >
+<a 
+ id="dx15-123007"></a>
+<a 
+ id="dx15-123008"></a>
+                                                                                    
+
+                                                                                    
+</p>
+<div class="verbatim" id="verbatim-47">
+/*
+&#x00A0;<br />&#x00A0;*&#x00A0;f:&#x00A0;R^n&#x00A0;--&#x003E;&#x00A0;R^m
+&#x00A0;<br />&#x00A0;*&#x00A0;The&#x00A0;function&#x00A0;pointer&#x00A0;computes&#x00A0;the&#x00A0;vector&#x00A0;f(x)&#x00A0;and&#x00A0;stores&#x00A0;it&#x00A0;in&#x00A0;fx
+&#x00A0;<br />&#x00A0;*&#x00A0;(vector&#x00A0;of&#x00A0;size&#x00A0;m)
+&#x00A0;<br />&#x00A0;*&#x00A0;The&#x00A0;Dfunction&#x00A0;pointer&#x00A0;computes&#x00A0;the&#x00A0;matrix&#x00A0;Df(x)&#x00A0;and&#x00A0;stores&#x00A0;it&#x00A0;in&#x00A0;dfx
+&#x00A0;<br />&#x00A0;*&#x00A0;(matrix&#x00A0;of&#x00A0;size&#x00A0;m&#x00A0;x&#x00A0;n)
+&#x00A0;<br />&#x00A0;*
+&#x00A0;<br />typedef&#x00A0;struct&#x00A0;{
+&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;(*F)&#x00A0;(const&#x00A0;PnlVect&#x00A0;*x,&#x00A0;PnlVect&#x00A0;*fx,&#x00A0;void&#x00A0;*params);
+&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;(*DF)&#x00A0;(const&#x00A0;PnlVect&#x00A0;*x,&#x00A0;PnlMat&#x00A0;*dfx,&#x00A0;void&#x00A0;*params);
+&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;(*FDF)&#x00A0;(const&#x00A0;PnlVect&#x00A0;*x,&#x00A0;PnlVect&#x00A0;*fx,&#x00A0;PnlMat&#x00A0;*dfx,&#x00A0;void&#x00A0;*params);
+&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;*params;
+&#x00A0;<br />}&#x00A0;PnlRnFuncRmDFunc&#x00A0;;
+&#x00A0;<br />#define&#x00A0;PNL_EVAL_RNFUNCRM_DF(Fstruct,&#x00A0;x,&#x00A0;dfx)&#x00A0;\
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;(*((Fstruct)-&#x003E;Dfunction))(x,&#x00A0;dfx,&#x00A0;(Fstruct)-&#x003E;params)
+&#x00A0;<br />#define&#x00A0;PNL_EVAL_RNFUNCRM_FDF(Fstruct,&#x00A0;x,&#x00A0;fx,&#x00A0;dfx)&#x00A0;\
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;(*((Fstruct)-&#x003E;F))(x,&#x00A0;fx,&#x00A0;dfx,&#x00A0;(Fstruct)-&#x003E;params)
+&#x00A0;<br />#define&#x00A0;PNL_EVAL_RNFUNCRM_F_DF(Fstruct,&#x00A0;x,&#x00A0;fx,&#x00A0;dfx)&#x00A0;&#x00A0;&#x00A0;&#x00A0;\
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;if&#x00A0;(&#x00A0;(Fstruct)-&#x003E;FDF&#x00A0;!=&#x00A0;NULL&#x00A0;)&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;\
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;{&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;\
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;PNL_EVAL_RNFUNCRN_FDF&#x00A0;(Fstruct,&#x00A0;x,&#x00A0;fx,&#x00A0;dfx);&#x00A0;\
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;}&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;\
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;else&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;\
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;{&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;\
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;PNL_EVAL_RNFUNCRN&#x00A0;(Fstruct,&#x00A0;x,&#x00A0;fx);&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;\
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;PNL_EVAL_RNFUNCRN_DF&#x00A0;(Fstruct,&#x00A0;x,&#x00A0;dfx);&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;\
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;}
+&#x00A0;<br />/*
+&#x00A0;<br />&#x00A0;*&#x00A0;Synonymous&#x00A0;of&#x00A0;PnlRnFuncRmDFunc&#x00A0;for&#x00A0;f:R^n&#x00A0;--&#x003E;&#x00A0;R^m
+&#x00A0;<br />&#x00A0;*
+&#x00A0;<br />typedef&#x00A0;PnlRnFuncRmDFunc&#x00A0;PnlRnFuncRnDFunc;
+&#x00A0;<br />#define&#x00A0;PNL_EVAL_RNFUNCRN_DF&#x00A0;PNL_EVAL_RNFUNCRM_DF
+&#x00A0;<br />#define&#x00A0;PNL_EVAL_RNFUNCRN_FDF&#x00A0;PNL_EVAL_RNFUNCRM_FDF
+&#x00A0;<br />#define&#x00A0;PNL_EVAL_RNFUNCRN_F_DF&#x00A0;PNL_EVAL_RNFUNCRM_F_DF
+</div>
+<!--l. 121--><p class="nopar" >
+</p><!--l. 123--><p class="noindent" >
+</p>
+<h4 class="subsectionHead"><span class="titlemark">13.2   </span> <a 
+ id="x15-12400013.2"></a>Functions</h4>
+<!--l. 125--><p class="noindent" >To use the following functions, you should include <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl/pnl_root.h</span></span></span>.
+                                                                                    
+
+                                                                                    
+</p>
+<!--l. 127--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x15-12500013.2"></a><span 
+class="ec-lmbx-10x-x-109">Real valued functions of a real argument</span></span>
+</p>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx15-125001"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_root_brent</span></span>&#x00A0;(<span class='args'><a 
+href="#x15-12300013.1"><span class='struct'>PnlFunc</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>F, double x1, double x2, double <span 
+class="ts1-lmr10-x-x-109">*</span>tol</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Find the root of <span class='var'>F</span> between <span class='var'>x1</span> and <span class='var'>x2</span> with an accuracy of order <span class='var'>tol</span>. On
+     exit <span class='var'>tol</span> is an upper bound of the error.
+     </li>
+     <li class="itemize"><a 
+ id="dx15-125002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_root_newton_bisection</span></span>&#x00A0;(<span class='args'><a 
+href="#x15-12300013.1"><span class='struct'>PnlFuncDFunc</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>Func, double x_min, double
+     x_max, double tol, int N_Max, double <span 
+class="ts1-lmr10-x-x-109">*</span>res</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Find the root of <span class='var'>F</span> between <span class='var'>x1</span> and <span class='var'>x2</span> with an accuracy of order <span class='var'>tol</span>
+     and a maximum of <span class='var'>N_max</span> iterations. On exit, the root is stored in <span class='var'>res</span>. Note that the
+     function <span class='var'>Func</span> must also compute the first derivative of the function. This function relies
+     on combining Newton&#8217;s approach with a bisection technique.
+     </li>
+     <li class="itemize"><a 
+ id="dx15-125003"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_root_newton</span></span>&#x00A0;(<span class='args'><a 
+href="#x15-12300013.1"><span class='struct'>PnlFuncDFunc</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>Func, double x0, double x_eps, double fx_eps, int
+     max_iter, double <span 
+class="ts1-lmr10-x-x-109">*</span>res</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Find the root of <span class='var'>f</span> starting from <span class='var'>x0</span> using Newton&#8217;s method with descent
+     direction given by the inverse of the derivative, ie. <span 
+class="lmmi-10x-x-109">d</span><sub><span 
+class="lmmi-8">k</span></sub> <span 
+class="rm-lmr-10x-x-109">= </span><span 
+class="lmmi-10x-x-109">f</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="rm-lmr-10x-x-109">)</span><span 
+class="lmmi-10x-x-109">&#x2215;f</span><span 
+class="lmsy-10x-x-109">&#x2032;</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="rm-lmr-10x-x-109">)</span>. Armijo&#8217;s line search is
+     used to make sure <span class='var'>|f|</span> decreases along the iterations. <span 
+class="lmmi-10x-x-109">&#x03B1;</span><sub><span 
+class="lmmi-8">k</span></sub> <span 
+class="rm-lmr-10x-x-109">=</span> <span 
+class="rm-lmr-10x-x-109">max</span><span 
+class="lmsy-10x-x-109">{</span><span 
+class="lmmi-10x-x-109">&#x03B3;</span><sup><span 
+class="lmmi-8">j</span></sup><span style="margin-left:3.04074pt" class="tmspace"></span><span 
+class="rm-lmr-10x-x-109">;</span><span style="margin-left:3.04074pt" class="tmspace"></span><span 
+class="lmmi-10x-x-109">j </span><span 
+class="lmsy-10x-x-109">&#x2265; </span><span 
+class="rm-lmr-10x-x-109">0</span><span 
+class="lmsy-10x-x-109">} </span>such
+     that
+     <table 
+class="align-star">
+                                  <tr><td 
+class="align-odd"><span 
+class="lmsy-10x-x-109">|</span><span 
+class="lmmi-10x-x-109">f</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><sub><span 
+class="lmmi-8">k</span></sub> <span 
+class="rm-lmr-10x-x-109">+ </span><span 
+class="lmmi-10x-x-109">&#x03B1;</span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="lmmi-10x-x-109">d</span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="rm-lmr-10x-x-109">)</span><span 
+class="lmsy-10x-x-109">|</span></td>                    <td 
+class="align-even"><span 
+class="lmsy-10x-x-109">&#x2264;|</span><span 
+class="lmmi-10x-x-109">f</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="rm-lmr-10x-x-109">)</span><span 
+class="lmsy-10x-x-109">|</span><span 
+class="rm-lmr-10x-x-109">(1 </span><span 
+class="lmsy-10x-x-109">- </span><span 
+class="lmmi-10x-x-109">&#x03C9;&#x03B1;</span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="rm-lmr-10x-x-109">)</span><span 
+class="lmmi-10x-x-109">.</span></td>                             <td 
+class="align-label"></td>                             <td 
+class="align-label"></td></tr></table>
+     <!--l. 154--><p class="noindent" >In this implementation, <span 
+class="lmmi-10x-x-109">&#x03C9; </span><span 
+class="rm-lmr-10x-x-109">= 10</span><sup><span 
+class="lmsy8-">-</span><span 
+class="rm-lmr-8">4</span></sup> and <span 
+class="lmmi-10x-x-109">&#x03B3; </span><span 
+class="rm-lmr-10x-x-109">= 1</span><span 
+class="lmmi-10x-x-109">&#x2215;</span><span 
+class="rm-lmr-10x-x-109">2</span>. The algorithm stops when one of the three
+     following conditions is met: </p>
+          <ul class="itemize2">
+          <li class="itemize">the maximum number of iterations <span class='var'>max_iter</span> is reached;
+                                                                                    
+
+                                                                                    
+          </li>
+          <li class="itemize">the last improvement over <span class='var'>x</span> is smaller that <span class='var'>x * x_eps</span>;
+          </li>
+          <li class="itemize">at the current position <span class='var'>|f(x)| &#x003C; fx_eps</span></li></ul>
+     <!--l. 162--><p class="noindent" >On exit, the root is stored in <span class='var'>res</span>.
+     </p></li>
+     <li class="itemize"><a 
+ id="dx15-125004"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_root_bisection</span></span>&#x00A0;(<span class='args'><a 
+href="#x15-12300013.1"><span class='struct'>PnlFunc</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>Func, double xmin, double xmax, double epsrel, double
+     espabs, int N_max, double <span 
+class="ts1-lmr10-x-x-109">*</span>res</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Find the root of <span class='var'>F</span> between <span class='var'>x1</span> and <span class='var'>x2</span> with the accuracy <span class='var'>|x2 - x1| &#x003C; epsrel * x1
+     + epsabs</span> or with the maximum number of iterations <span class='var'>N_max</span>. On exit, <span class='var'>res = (x2 + x1) /
+     2</span>.</li></ul>
+<!--l. 171--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x15-12600013.2"></a><span 
+class="ec-lmbx-10x-x-109">Vector valued functions with several arguments</span></span>
+</p>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx15-126001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_multiroot_newton</span></span>&#x00A0;(<span class='args'><a 
+href="#x15-12300013.1"><span class='struct'>PnlRnFuncRnDFunc</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>func, const <a 
+href="pnl-manualse4.html#x6-250004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>x0, double
+     x_eps, double fx_eps, int max_iter, int verbose, <a 
+href="pnl-manualse4.html#x6-250004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>res</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Find the root of <span class='var'>func</span> starting from <span class='var'>x0</span> using Newton&#8217;s method with descent
+     direction given by the inverse of the Jacobian matrix, ie. <span 
+class="lmmi-10x-x-109">d</span><sub><span 
+class="lmmi-8">k</span></sub> <span 
+class="rm-lmr-10x-x-109">= (</span><span 
+class="lmsy-10x-x-109">&#x2207;</span><span 
+class="lmmi-10x-x-109">f</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="rm-lmr-10x-x-109">))</span><sup><span 
+class="lmsy8-">-</span><span 
+class="rm-lmr-8">1</span></sup><span 
+class="lmmi-10x-x-109">f</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="rm-lmr-10x-x-109">)</span>. Armijo&#8217;s line
+     search is used to make sure <span class='var'>|f|</span> decreases along the iterations. <span 
+class="lmmi-10x-x-109">&#x03B1;</span><sub><span 
+class="lmmi-8">k</span></sub> <span 
+class="rm-lmr-10x-x-109">=</span> <span 
+class="rm-lmr-10x-x-109">max</span><span 
+class="lmsy-10x-x-109">{</span><span 
+class="lmmi-10x-x-109">&#x03B3;</span><sup><span 
+class="lmmi-8">j</span></sup><span style="margin-left:3.04074pt" class="tmspace"></span><span 
+class="rm-lmr-10x-x-109">;</span><span style="margin-left:3.04074pt" class="tmspace"></span><span 
+class="lmmi-10x-x-109">j </span><span 
+class="lmsy-10x-x-109">&#x2265; </span><span 
+class="rm-lmr-10x-x-109">0</span><span 
+class="lmsy-10x-x-109">} </span>such
+     that
+     <table 
+class="align-star">
+                                  <tr><td 
+class="align-odd"><span 
+class="lmsy-10x-x-109">|</span><span 
+class="lmmi-10x-x-109">f</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><sub><span 
+class="lmmi-8">k</span></sub> <span 
+class="rm-lmr-10x-x-109">+ </span><span 
+class="lmmi-10x-x-109">&#x03B1;</span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="lmmi-10x-x-109">d</span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="rm-lmr-10x-x-109">)</span><span 
+class="lmsy-10x-x-109">|</span></td>                    <td 
+class="align-even"><span 
+class="lmsy-10x-x-109">&#x2264;|</span><span 
+class="lmmi-10x-x-109">f</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="rm-lmr-10x-x-109">)</span><span 
+class="lmsy-10x-x-109">|</span><span 
+class="rm-lmr-10x-x-109">(1 </span><span 
+class="lmsy-10x-x-109">- </span><span 
+class="lmmi-10x-x-109">&#x03C9;&#x03B1;</span><sub><span 
+class="lmmi-8">k</span></sub><span 
+class="rm-lmr-10x-x-109">)</span><span 
+class="lmmi-10x-x-109">.</span></td>                             <td 
+class="align-label"></td>                             <td 
+class="align-label"></td></tr></table>
+     <!--l. 185--><p class="noindent" >In this implementation, <span 
+class="lmmi-10x-x-109">&#x03C9; </span><span 
+class="rm-lmr-10x-x-109">= 10</span><sup><span 
+class="lmsy8-">-</span><span 
+class="rm-lmr-8">4</span></sup> and <span 
+class="lmmi-10x-x-109">&#x03B3; </span><span 
+class="rm-lmr-10x-x-109">= 1</span><span 
+class="lmmi-10x-x-109">&#x2215;</span><span 
+class="rm-lmr-10x-x-109">2</span>. The algorithm stops when one of the three
+     following conditions is met: </p>
+                                                                                    
+
+                                                                                    
+          <ul class="itemize2">
+          <li class="itemize">the maximum number of iterations <span class='var'>max_iter</span> is reached;
+          </li>
+          <li class="itemize">the norm of the last improvement over <span class='var'>x</span> is smaller that <span class='var'>|x| * x_eps</span>;
+          </li>
+          <li class="itemize">at the current position <span class='var'>|f(x)| &#x003C; fx_eps</span></li></ul>
+     <!--l. 192--><p class="noindent" >On exit, the root is stored in <span class='var'>res</span>. Note that the function <span class='var'>F</span> must also compute the first
+     derivative of the function. When defining <span class='var'>Func</span>, you must either define <span class='var'>Func-&#x003E;F</span> and
+     <span class='var'>Func-&#x003E;DF</span> or <span class='var'>Func-&#x003E;FDF</span>.</p></li></ul>
+<!--l. 197--><p class="noindent" >We provide two wrappers for calling minpack routines. </p>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx15-126002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_root_fsolve</span></span>&#x00A0;(<span class='args'><a 
+href="#x15-12300013.1"><span class='struct'>PnlRnFuncRnDFunc</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>f, <a 
+href="pnl-manualse4.html#x6-250004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>x, <a 
+href="pnl-manualse4.html#x6-250004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>fx, double xtol, int
+     maxfev, int <span 
+class="ts1-lmr10-x-x-109">*</span>nfev, <a 
+href="pnl-manualse4.html#x6-250004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>scale, int error_msg</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the root of a function <span 
+class="lmmi-10x-x-109">f </span><span 
+class="rm-lmr-10x-x-109">: </span><span 
+class="msbm-10x-x-109">&#x211D;</span><sup><span 
+class="lmmi-8">n</span></sup><span 
+class="lmmi-10x-x-109">&#x21A6;</span><span 
+class="msbm-10x-x-109">&#x211D;</span><sup><span 
+class="lmmi-8">n</span></sup>. Note that the number of
+     components of <span class='var'>f</span> must be equal to the number of variates of <span class='var'>f</span>. This function returns <span class='var'>OK</span> or
+     <span class='var'>FAIL</span> if something went wrong.<br 
+class="newline" />   <span class='description'>Parameters&#x00A0;</span>
+          <ul class="itemize2">
+          <li class="itemize"><span class='var'>f</span> is a pointer to a <a 
+href="#x15-12300013.1"><span class='struct'>PnlRnFuncRnDFunc</span></a> used to store the function whose root is to
+          be found. <span class='var'>f</span> can also store the Jacobian of the function, if not it is computed using
+          finite differences (see the file <a 
+href="examples/minpack_test.c" class="url" ><span 
+class="ec-lmtt-10x-x-109">examples/minpack_test.c</span></a> for a usage example).
+          <span class='var'>f-&#x003E;FDF</span> can be NULL because it is not used in this function.
+          </li>
+          <li class="itemize"><span class='var'>x</span> contains on input the starting point of the search and an approximation of the
+          root of <span class='var'>f</span> on output,
+          </li>
+          <li class="itemize"><span class='var'>xtol</span> is the precision required on <span class='var'>x</span>, if set to 0 a default value is used.
+          </li>
+          <li class="itemize"><span class='var'>maxfev</span>  is  the  maximum  number  of  evaluations  of  the  function  <span class='var'>f</span>  before  the
+          algorithm returns, if set to 0, a coherent number is determined internally.
+          </li>
+          <li class="itemize"><span class='var'>nfev</span> contains on output the number of evaluations of <span class='var'>f</span> during the algorithm,
+          </li>
+          <li class="itemize"><span class='var'>scale</span> is a vector used to rescale <span class='var'>x</span> in a way that each coordinate of the solution is
+          approximately of order 1 after rescaling. If on input <span class='var'>scale=NULL</span>, a scaling vector
+          is computed internally by the algorithm.
+          </li>
+          <li class="itemize"><span class='var'>error_msg</span> is a boolean (<span class='var'>TRUE</span> or <span class='var'>FALSE</span>) to specify if an error message should
+          be printed when the algorithm stops before having converged.
+          </li>
+          <li class="itemize">On output, <span class='var'>fx</span> contains <span class='var'>f(x)</span>.</li></ul>
+                                                                                    
+
+                                                                                    
+     </li>
+     <li class="itemize"><a 
+ id="dx15-126003"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_root_fsolve_lsq</span></span>&#x00A0;(<span class='args'><a 
+href="#x15-12300013.1"><span class='struct'>PnlRnFuncRmDFunc</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>f, <a 
+href="pnl-manualse4.html#x6-250004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>x, int m, <a 
+href="pnl-manualse4.html#x6-250004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>fx,
+     double xtol, double ftol, double gtol, int maxfev, int <span 
+class="ts1-lmr10-x-x-109">*</span>nfev, <a 
+href="pnl-manualse4.html#x6-250004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>scale, int
+     error_msg</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the root of <span 
+class="lmmi-10x-x-109">x </span><span 
+class="lmsy-10x-x-109">&#x2208; </span><span 
+class="msbm-10x-x-109">&#x211D;</span><sup><span 
+class="lmmi-8">n</span></sup><span 
+class="lmmi-10x-x-109">&#x21A6;</span><span 
+class="lmex-10">&#x2211;</span>
+   <sub><span 
+class="lmmi-8">i</span><span 
+class="rm-lmr-8">=1</span></sub><sup><span 
+class="lmmi-8">m</span></sup><span 
+class="lmmi-10x-x-109">f</span><sub><span 
+class="lmmi-8">i</span></sub><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)</span><sup><span 
+class="rm-lmr-8">2</span></sup>, note that there is no reason why <span class='var'>m</span>
+     should be equal to <span class='var'>n</span>.<br 
+class="newline" />   <span class='description'>Parameters&#x00A0;</span>
+          <ul class="itemize2">
+          <li class="itemize"><span class='var'>f</span> is a pointer to a <a 
+href="#x15-12300013.1"><span class='struct'>PnlRnFuncRmDFunc</span></a> used to store the function whose root is to
+          be found. <span class='var'>f</span> can also store the Jacobian of the function, if not it is computed using
+          finite differences (see the file <a 
+href="examples/minpack_test.c" class="url" ><span 
+class="ec-lmtt-10x-x-109">examples/minpack_test.c</span></a> for a usage example).
+          <span class='var'>f-&#x003E;FDF</span> can be NULL because it is not used in this function.
+          </li>
+          <li class="itemize"><span class='var'>x</span> contains on input the starting point of the search and an approximation of the
+          root of <span class='var'>f</span> on output,
+          </li>
+          <li class="itemize"><span class='var'>m</span> is the number of components of <span class='var'>f</span>,
+          </li>
+          <li class="itemize"><span class='var'>xtol</span> is the precision required on <span class='var'>x</span>, if set to 0 a default value is used.
+          </li>
+          <li class="itemize"><span class='var'>ftol</span> is the precision required on <span class='var'>f</span>, if set to 0 a default value is used.
+          </li>
+          <li class="itemize"><span class='var'>gtol</span> is the precision required on the Jacobian of <span class='var'>f</span>, if set to 0 a default value is used.
+          </li>
+          <li class="itemize"><span class='var'>maxfev</span>  is  the  maximum  number  of  evaluations  of  the  function  <span class='var'>f</span>  before  the
+          algorithm returns, if set to 0, a coherent number is determined internally.
+          </li>
+          <li class="itemize"><span class='var'>nfev</span> contains on output the number of evaluations of <span class='var'>f</span> during the algorithm,
+          </li>
+          <li class="itemize"><span class='var'>scale</span> is a vector used to rescale <span class='var'>x</span> in a way that each coordinate of the solution is
+          approximately of order 1 after rescaling. If on input <span class='var'>scale=NULL</span>, a scaling vector
+          is computed internally by the algorithm.
+          </li>
+          <li class="itemize"><span class='var'>error_msg</span> is a boolean (<span class='var'>TRUE</span> or <span class='var'>FALSE</span>) to specify if an error message should
+          be printed when the algorithm stops before having converged.
+          </li>
+          <li class="itemize">On output, <span class='var'>fx</span> contains <span class='var'>f(x)</span>.</li></ul>
+     </li></ul>
+                                                                                    
+
+                                                                                    
+<!--l. 2--><div class="crosslinks"><p class="noindent">[<a 
+href="pnl-manualse14.html" >next</a>] [<a 
+href="pnl-manualse12.html" >prev</a>] [<a 
+href="pnl-manualse12.html#tailpnl-manualse12.html" >prev-tail</a>] [<a 
+href="pnl-manualse13.html" >front</a>] [<a 
+href="pnl-manual.html#pnl-manualse13.html" >up</a>] </p></div>
+<!--l. 2--><p class="noindent" ><a 
+ id="tailpnl-manualse13.html"></a>  </p> 
+</body></html> 

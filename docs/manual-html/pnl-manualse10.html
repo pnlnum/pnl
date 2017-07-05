@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="iso-8859-1" ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->  
+<html xmlns="http://www.w3.org/1999/xhtml"  
+> 
+<head><title>Inverse Laplace Transform</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> 
+<meta name="generator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<meta name="originator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<!-- xhtml,uni-html4,2,subsection+,next,html --> 
+<meta name="src" content="pnl-manual.tex" /> 
+<link rel="stylesheet" type="text/css" href="pnl-manual.css" /> 
+</head><body 
+>
+<!--l. 2--><div class="crosslinks"><p class="noindent">[<a 
+href="pnl-manualse11.html" >next</a>] [<a 
+href="pnl-manualse9.html" >prev</a>] [<a 
+href="pnl-manualse9.html#tailpnl-manualse9.html" >prev-tail</a>] [<a 
+href="#tailpnl-manualse10.html">tail</a>] [<a 
+href="pnl-manual.html#pnl-manualse10.html" >up</a>] </p></div>
+<h3 class="sectionHead"><span class="titlemark">10   </span> <a 
+ id="x12-11100010"></a>Inverse Laplace Transform</h3>
+<!--l. 4--><p class="noindent" >For a real valued function <span 
+class="lmmi-10x-x-109">f </span>such that <span 
+class="lmmi-10x-x-109">t</span><span 
+class="lmmi-10x-x-109">&#x21A6;</span><span 
+class="lmmi-10x-x-109">f</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">t</span><span 
+class="rm-lmr-10x-x-109">)</span><span 
+class="rm-lmr-10x-x-109">e</span><span 
+class="lmsy8-">-</span><span 
+class="lmmi-8">&#x03C3;</span><sub><span 
+class="lmmi-6">c</span></sub><span 
+class="lmmi-8">t</span> is integrable over <span 
+class="msbm-10x-x-109">&#x211D;</span><sup><span 
+class="rm-lmr-8">+</span></sup>, we can define its Laplace
+transform
+</p>
+<table 
+class="equation-star"><tr><td>
+<center class="math-display" >
+<img 
+src="pnl-manual35x.png" alt=" ^     &#x222B; &#x221E;      -&#x03BB;t
+f(&#x03BB;) =  0  f(t)e   dt    for &#x03BB; &#x2208; &#x2102; with Re (&#x03BB; ) &#x2265; &#x03C3;c.
+" class="math-display"  /></center></td></tr></table>
+<!--l. 9--><p class="nopar" >
+</p><!--l. 11--><p class="noindent" >To use the following functions, you should include <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl/pnl_laplace.h</span></span></span>.
+<a 
+ id="dx12-111001"></a>
+                                                                                    
+
+                                                                                    
+</p>
+<div class="verbatim" id="verbatim-39">
+typedef&#x00A0;struct
+&#x00A0;<br />{
+&#x00A0;<br />&#x00A0;&#x00A0;dcomplex&#x00A0;(*F)&#x00A0;(dcomplex&#x00A0;x,&#x00A0;void&#x00A0;*params);
+&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;*params;
+&#x00A0;<br />}&#x00A0;PnlCmplxFunc;
+&#x00A0;<br />&#x00A0;
+</div>
+<!--l. 20--><p class="nopar" >
+</p>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx12-111002"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_ilap_euler</span></span>&#x00A0;(<span class='args'><a 
+href="#x12-11100010"><span class='struct'>PnlCmplxFunc</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>fhat, double t, int N, int M</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute  <span 
+class="lmmi-10x-x-109">f</span><span 
+class="rm-lmr-10x-x-109">(</span><span class='var'><span 
+class="lmmi-10x-x-109">t</span></span><span 
+class="rm-lmr-10x-x-109">)  </span>where  <span 
+class="lmmi-10x-x-109">f  </span>is  given  by  its  Laplace  transform  <span class='var'>fhat</span>  by
+     numerically inverting the Laplace transform using Euler&#8217;s summation. The values <span class='var'>N =
+     M = 15</span> usually give a very good accuracy. For more details on the accuracy of the
+     method.
+     </li>
+     <li class="itemize"><a 
+ id="dx12-111003"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_ilap_cdf_euler</span></span>&#x00A0;(<span class='args'><a 
+href="#x12-11100010"><span class='struct'>PnlCmplxFunc</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>fhat, double t, double h, int N, int
+     M</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute  the  cumulative  distribution  function  <span 
+class="lmmi-10x-x-109">F</span><span 
+class="rm-lmr-10x-x-109">(</span><span class='var'><span 
+class="lmmi-10x-x-109">t</span></span><span 
+class="rm-lmr-10x-x-109">)  </span>where  <span 
+class="lmmi-10x-x-109">F</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)  =</span>
+     <span 
+class="lmex-10">&#x222B;</span>
+      <sub><span 
+class="rm-lmr-8">0</span></sub><sup><span 
+class="lmmi-8">x</span></sup><span 
+class="lmmi-10x-x-109">f</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">t</span><span 
+class="rm-lmr-10x-x-109">)</span><span 
+class="lmmi-10x-x-109">dt </span>and <span 
+class="lmmi-10x-x-109">f </span>is a density function with values on the positive real linegiven by its
+     Laplace transform <span class='var'>fhat</span>. The computation is carried out by numerical inversion of the
+     Laplace transform using Euler&#8217;s summation. The values <span class='var'>N = M = 15</span> usually give a
+     very good accuracy. The parameter <span class='var'>h</span> is the discretization step, the algorithm is very
+     sensitive to the choice of <span class='var'>h</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx12-111004"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_ilap_fft</span></span>&#x00A0;(<span class='args'><a 
+href="pnl-manualse4.html#x6-250004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>res, <a 
+href="#x12-11100010"><span class='struct'>PnlCmplxFunc</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>fhat, double T, double eps</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span 
+class="lmmi-10x-x-109">f</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">t</span><span 
+class="rm-lmr-10x-x-109">) </span>for <span 
+class="lmmi-10x-x-109">t </span><span 
+class="lmsy-10x-x-109">&#x2208; </span><span 
+class="rm-lmr-10x-x-109">[</span><span 
+class="lmmi-10x-x-109">h,</span><span class='var'><span 
+class="lmmi-10x-x-109">T</span></span><span 
+class="rm-lmr-10x-x-109">] </span>on a regular grid and stores the values in
+     <span class='var'>res</span>, where <span 
+class="lmmi-10x-x-109">h </span><span 
+class="rm-lmr-10x-x-109">= </span><span 
+class="lmmi-10x-x-109">T&#x2215;</span><span 
+class="rm-lmr-10x-x-109">s</span><span 
+class="lmmi-10x-x-109">ize</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">res</span><span 
+class="rm-lmr-10x-x-109">)</span>. The function <span 
+class="lmmi-10x-x-109">f </span>is defined by its Laplace transform <span class='var'>fhat</span>,
+     which is numerically inverted using a Fast Fourier Transform algorithm. The size of <span class='var'>res</span>
+     is related to the choice of the relative precision <span class='var'>eps</span> required on the value of <span 
+class="lmmi-10x-x-109">f</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">t</span><span 
+class="rm-lmr-10x-x-109">) </span>for all
+     <span 
+class="lmmi-10x-x-109">t </span><span 
+class="lmsy-10x-x-109">&#x2264; </span><span 
+class="lmmi-10x-x-109">T</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx12-111005"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_ilap_gs</span></span>&#x00A0;(<span class='args'><a 
+href="pnl-manualse13.html#x15-12300013.1"><span class='struct'>PnlFunc</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>fhat, double t, int n</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute  <span 
+class="lmmi-10x-x-109">f</span><span 
+class="rm-lmr-10x-x-109">(</span><span class='var'><span 
+class="lmmi-10x-x-109">t</span></span><span 
+class="rm-lmr-10x-x-109">)  </span>where  <span 
+class="lmmi-10x-x-109">f  </span>is  given  by  its  Laplace  transform  <span class='var'>fhat</span>  by
+     numerically inverting the Laplace transform using a weighted combination of different
+     Gaver Stehfest&#8217;s algorithms. Note that this function does not need the complex valued
+     Laplace transform but only the real valued one. <span class='var'>n</span> is the number of terms used in the
+     weighted combination.
+                                                                                    
+
+                                                                                    
+     </li>
+     <li class="itemize"><a 
+ id="dx12-111006"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_ilap_gs_basic</span></span>&#x00A0;(<span class='args'><a 
+href="pnl-manualse13.html#x15-12300013.1"><span class='struct'>PnlFunc</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>fhat, double t, int n</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute  <span 
+class="lmmi-10x-x-109">f</span><span 
+class="rm-lmr-10x-x-109">(</span><span class='var'><span 
+class="lmmi-10x-x-109">t</span></span><span 
+class="rm-lmr-10x-x-109">)  </span>where  <span 
+class="lmmi-10x-x-109">f  </span>is  given  by  its  Laplace  transform  <span class='var'>fhat</span>  by
+     numerically inverting the Laplace transform using Gaver Stehfest&#8217;s method. Note that
+     this function does not need the complex valued Laplace transform but only the real
+     valued one. <span class='var'>n</span> is the number of iterations of the algorithm. <span 
+class="ec-lmbx-10x-x-109">Note : </span>&#x00A0;This function
+     is provided for test purposes only. The function <a 
+href="#x12-11100010">pnl_ilap_gs</a> gives far more accurate
+     results.</li></ul>
+                                                                                    
+
+                                                                                    
+<!--l. 1--><div class="crosslinks"><p class="noindent">[<a 
+href="pnl-manualse11.html" >next</a>] [<a 
+href="pnl-manualse9.html" >prev</a>] [<a 
+href="pnl-manualse9.html#tailpnl-manualse9.html" >prev-tail</a>] [<a 
+href="pnl-manualse10.html" >front</a>] [<a 
+href="pnl-manual.html#pnl-manualse10.html" >up</a>] </p></div>
+<!--l. 1--><p class="noindent" ><a 
+ id="tailpnl-manualse10.html"></a> </p> 
+</body></html> 
