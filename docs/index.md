@@ -1,4 +1,7 @@
-# PNL - Scientifc Library
+### [Introduction](#Introduction) | [Download](#download-and-installation)  | [Documentation](#Documentation)   | [About](#about-the-library) 
+
+
+# Introduction
 
 PNL is a numerical library for C and C++ programmers. It is free software under the GNU LGPL.
 
@@ -24,4 +27,23 @@ A wide range of routines are available on the following topics
 
 PNL is thread-safe and suitable for use in a parallel environment.
 
-If you have questions, comments or experience any problems with the library, do not hesitate to contact `jerome.lelong at gmail.com`
+# Download and Installation
+
+
+# Documentation
+
+PNL comes with a manual describing all the routines exported by the
+library. This documentation written in LaTeX can be produced in both PDF or
+HTML formats.
+
+* [PNL Manual - PDF](pnl-manual.pdf)
+* [PNL Manual - HTML](manual-html/pnl-manual.html)
+
+
+# About the library
+
+The PNL project started in 2007 and has been mainly developed by Jérôme Lelong since then with some contributions by Céline Labart, Ismail Laachir and David Pommier.
+
+This library is currently used by the [PREMIA software](http://www.premia.fr) (a software to price and hedge financial derivatives).
+
+People from the following universities or labs have reported to use the library: Ecole Centrale Paris, Ecole des Ponts (CERMICS), INRIA (MATHRISK), Nanyang Technological University (Division of Mathematical Sciences), University Grenoble Alpes (LJK), University of Paris East (LAMA), University of Savoie (LAMA), University Paris 13 (LAGA), University of Udine.
