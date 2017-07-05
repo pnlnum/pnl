@@ -1,3 +1,8 @@
+---
+layout: page
+title: Changes
+permalink: changes
+---
 # Short list of changes across the releases
 
 **Version 1.7.5** was released on January 18, 2017.  

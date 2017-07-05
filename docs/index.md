@@ -1,3 +1,8 @@
+---
+layout: page
+title: Home
+permalink: index
+---
 # PNL - Scientifc Library
 
 PNL is a numerical library for C and C++ programmers. It is free software under the GNU LGPL.
