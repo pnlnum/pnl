@@ -1,3 +1,7 @@
+---
+title: PNL Scientific Library
+---
+
 ### [Introduction](#Introduction) | [Download](#download-and-installation)  | [Documentation](#Documentation)   | [About](#about-the-library) 
 
 
