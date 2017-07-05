@@ -1,7 +1,5 @@
 ---
-layout: page
-title: Home
-permalink: index
+layout: home
 ---
 # PNL - Scientifc Library
 

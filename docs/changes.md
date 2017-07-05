@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Changes
-permalink: changes
+permalink: /changes/
 ---
 # Short list of changes across the releases
 
