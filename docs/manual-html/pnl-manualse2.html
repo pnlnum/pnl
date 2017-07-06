@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="iso-8859-1" ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->  
+<html xmlns="http://www.w3.org/1999/xhtml"  
+> 
+<head><title>Objects</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> 
+<meta name="generator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<meta name="originator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<!-- xhtml,uni-html4,2,subsection+,next,html --> 
+<meta name="src" content="pnl-manual.tex" /> 
+<link rel="stylesheet" type="text/css" href="pnl-manual.css" /> 
+</head><body 
+>
+<!--l. 1--><div class="crosslinks"><p class="noindent">[<a 
+href="pnl-manualse3.html" >next</a>] [<a 
+href="pnl-manualse1.html" >prev</a>] [<a 
+href="pnl-manualse1.html#tailpnl-manualse1.html" >prev-tail</a>] [<a 
+href="#tailpnl-manualse2.html">tail</a>] [<a 
+href="pnl-manual.html#pnl-manualse2.html" >up</a>] </p></div>
+<h3 class="sectionHead"><span class="titlemark">2   </span> <a 
+ id="x4-110002"></a>Objects</h3>
+<!--l. 3--><p class="noindent" >
+</p>
+<h4 class="subsectionHead"><span class="titlemark">2.1   </span> <a 
+ id="x4-120002.1"></a>The top-level object</h4>
+<!--l. 5--><p class="noindent" >The PnlObject structure is used to simulate some inheritance between the ojbects of Pnl. It must be
+the first element of all the objects existing in Pnl so that casting any object to a PnlObject is
+legal
+<a 
+ id="dx4-12001"></a>
+                                                                                    
+
+                                                                                    
+</p>
+<div class="verbatim" id="verbatim-11">
+typedef&#x00A0;unsigned&#x00A0;int&#x00A0;PnlType;
+&#x00A0;<br />
+&#x00A0;<br />typedef&#x00A0;void&#x00A0;(DestroyFunc)&#x00A0;(void&#x00A0;**);
+&#x00A0;<br />typedef&#x00A0;PnlObject*&#x00A0;(CopyFunc)&#x00A0;(PnlObject&#x00A0;*);
+&#x00A0;<br />typedef&#x00A0;PnlObject*&#x00A0;(NewFunc)&#x00A0;(PnlObject&#x00A0;*);
+&#x00A0;<br />typedef&#x00A0;void&#x00A0;(CloneFunc)&#x00A0;(PnlObject&#x00A0;*dest,&#x00A0;const&#x00A0;PnlObject&#x00A0;*src);
+&#x00A0;<br />struct&#x00A0;_PnlObject
+&#x00A0;<br />{
+&#x00A0;<br />&#x00A0;&#x00A0;PnlType&#x00A0;type;&#x00A0;/*!&#x003C;&#x00A0;a&#x00A0;unique&#x00A0;integer&#x00A0;id&#x00A0;*/
+&#x00A0;<br />&#x00A0;&#x00A0;const&#x00A0;char&#x00A0;*label;&#x00A0;/*!&#x003C;&#x00A0;a&#x00A0;string&#x00A0;identifier&#x00A0;(for&#x00A0;the&#x00A0;moment&#x00A0;not&#x00A0;useful)&#x00A0;*/
+&#x00A0;<br />&#x00A0;&#x00A0;PnlType&#x00A0;parent_type;&#x00A0;/*!&#x003C;&#x00A0;the&#x00A0;identifier&#x00A0;of&#x00A0;the&#x00A0;parent&#x00A0;object&#x00A0;is&#x00A0;any,
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;otherwise&#x00A0;parent_type=id&#x00A0;*/
+&#x00A0;<br />&#x00A0;&#x00A0;int&#x00A0;nref;&#x00A0;/*!&#x003C;&#x00A0;number&#x00A0;of&#x00A0;references&#x00A0;on&#x00A0;the&#x00A0;object&#x00A0;*/
+&#x00A0;<br />&#x00A0;&#x00A0;DestroyFunc&#x00A0;*destroy;&#x00A0;/*!&#x003C;&#x00A0;frees&#x00A0;an&#x00A0;object&#x00A0;*/
+&#x00A0;<br />&#x00A0;&#x00A0;NewFunc&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;*constructor;&#x00A0;/*!&#x003C;&#x00A0;New&#x00A0;function&#x00A0;*/
+&#x00A0;<br />&#x00A0;&#x00A0;CopyFunc&#x00A0;&#x00A0;&#x00A0;&#x00A0;*copy;&#x00A0;/*!&#x003C;&#x00A0;Copy&#x00A0;function&#x00A0;*/
+&#x00A0;<br />&#x00A0;&#x00A0;CloneFunc&#x00A0;&#x00A0;&#x00A0;*clone;&#x00A0;/*!&#x003C;&#x00A0;Clone&#x00A0;function&#x00A0;*/
+&#x00A0;<br />};
+</div>
+<!--l. 29--><p class="nopar" >
+</p><!--l. 31--><p class="noindent" >Here is the list of all the types actually defined </p><div class="table">
+                                                                                    
+
+                                                                                    
+<!--l. 33--><p class="noindent" ><a 
+ id="x4-120021"></a></p><hr class="float" /><div class="float" 
+>
+                                                                                    
+
+                                                                                    
+<div class="tabular"> <table id="TBL-3" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-3-1g"><col 
+id="TBL-3-1" /></colgroup><colgroup id="TBL-3-2g"><col 
+id="TBL-3-2" /></colgroup><tr 
+class="hline"><td><hr /></td><td><hr /></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-1-1"  
+class="td11">PnlType                                                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-1-2"  
+class="td11">Description                      </td>
+</tr><tr 
+class="hline"><td><hr /></td><td><hr /></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-2-1"  
+class="td11">PNL_TYPE_VECTOR                              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-2-2"  
+class="td11">general vectors                 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-3-1"  
+class="td11">PNL_TYPE_VECTOR_DOUBLE               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-3-2"  
+class="td11">real vectors                      </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-4-1"  
+class="td11">PNL_TYPE_VECTOR_INT                      </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-4-2"  
+class="td11">integer vectors                 </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-5-1"  
+class="td11">PNL_TYPE_VECTOR_COMPLEX            </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-5-2"  
+class="td11">complex vectors                </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-6-1"  
+class="td11">PNL_TYPE_MATRIX                               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-6-2"  
+class="td11">general matrices               </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-7-1"  
+class="td11">PNL_TYPE_MATRIX_DOUBLE                </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-7-2"  
+class="td11">real matrices                    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-8-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-8-1"  
+class="td11">PNL_TYPE_MATRIX_INT                       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-8-2"  
+class="td11">integer matrices                </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-9-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-9-1"  
+class="td11">PNL_TYPE_MATRIX_COMPLEX             </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-9-2"  
+class="td11">complex matrices              </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-10-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-10-1"  
+class="td11">PNL_TYPE_TRIDIAG_MATRIX               </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-10-2"  
+class="td11">general tridiagonal matrices</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-11-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-11-1"  
+class="td11">PNL_TYPE_TRIDIAG_MATRIX_DOUBLE</td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-11-2"  
+class="td11">real tridiagonal matrices    </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-12-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-12-1"  
+class="td11">PNL_TYPE_BAND_MATRIX                    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-12-2"  
+class="td11">general band matrices        </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-13-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-13-1"  
+class="td11">PNL_TYPE_BAND_MATRIX_DOUBLE    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-13-2"  
+class="td11">real band matrices            </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-14-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-14-1"  
+class="td11">PNL_TYPE_SP_MATRIX                         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-14-2"  
+class="td11">sparse general matrices      </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-15-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-15-1"  
+class="td11">PNL_TYPE_SP_MATRIX_DOUBLE          </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-15-2"  
+class="td11">sparse real matrices           </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-16-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-16-1"  
+class="td11">PNL_TYPE_SP_MATRIX_INT                 </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-16-2"  
+class="td11">sparse integer matrices       </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-17-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-17-1"  
+class="td11">PNL_TYPE_SP_MATRIX_COMPLEX       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-17-2"  
+class="td11">sparse complex matrices     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-18-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-18-1"  
+class="td11">PNL_TYPE_HMATRIX                             </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-18-2"  
+class="td11">general hyper matrices       </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-19-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-19-1"  
+class="td11">PNL_TYPE_HMATRIX_DOUBLE             </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-19-2"  
+class="td11">real hyper matrices           </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-20-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-20-1"  
+class="td11">PNL_TYPE_HMATRIX_INT                     </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-20-2"  
+class="td11">integer hyper matrices       </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-21-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-21-1"  
+class="td11">PNL_TYPE_HMATRIX_COMPLEX           </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-21-2"  
+class="td11">complex hyper matrices     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-22-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-22-1"  
+class="td11">PNL_TYPE_BASIS                                  </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-22-2"  
+class="td11">bases                              </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-23-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-23-1"  
+class="td11">PNL_TYPE_RNG                                    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-23-2"  
+class="td11">random number generators </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-24-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-24-1"  
+class="td11">PNL_TYPE_LIST                                    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-24-2"  
+class="td11">doubly linked list              </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-3-25-"><td  style="white-space:nowrap; text-align:left;" id="TBL-3-25-1"  
+class="td11">PNL_TYPE_ARRAY                                </td><td  style="white-space:nowrap; text-align:left;" id="TBL-3-25-2"  
+class="td11">array                              </td></tr></table></div>
+<br /> <div class="caption" 
+><span class="id">Table&#x00A0;1: </span><span  
+class="content">PnlTypes</span></div><!--tex4ht:label?: x4-120021 -->
+                                                                                    
+
+                                                                                    
+</div><hr class="endfloat" />
+</div>
+<!--l. 67--><p class="noindent" >We provide several macros for manipulating PnlObejcts. </p>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx4-12003"></a> <span 
+class="ec-lmbx-10x-x-109">PNL_OBJECT</span>&#x00A0;(o)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Cast any object into a PnlObject
+     </li>
+     <li class="itemize"><a 
+ id="dx4-12004"></a> <span 
+class="ec-lmbx-10x-x-109">PNL_VECT_OBJECT</span>&#x00A0;(o)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Cast any object into a PnlVectObject
+     </li>
+     <li class="itemize"><a 
+ id="dx4-12005"></a> <span 
+class="ec-lmbx-10x-x-109">PNL_MAT_OBJECT</span>&#x00A0;(o)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Cast any object into a PnlMatObject
+     </li>
+     <li class="itemize"><a 
+ id="dx4-12006"></a> <span 
+class="ec-lmbx-10x-x-109">PNL_SP_MAT_OBJECT</span>&#x00A0;(o)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Cast any object into a PnlSpMatObject
+     </li>
+     <li class="itemize"><a 
+ id="dx4-12007"></a> <span 
+class="ec-lmbx-10x-x-109">PNL_HMAT_OBJECT</span>&#x00A0;(o)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Cast any object into a PnlHmatObject
+     </li>
+     <li class="itemize"><a 
+ id="dx4-12008"></a> <span 
+class="ec-lmbx-10x-x-109">PNL_BAND_MAT_OBJECT</span>&#x00A0;(o)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Cast any object into a PnlBandMatObject
+     </li>
+     <li class="itemize"><a 
+ id="dx4-12009"></a> <span 
+class="ec-lmbx-10x-x-109">PNL_TRIDIAGMAT_OBJECT</span>&#x00A0;(o)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Cast any object into a PnlTridiagMatObject
+     </li>
+     <li class="itemize"><a 
+ id="dx4-12010"></a> <span 
+class="ec-lmbx-10x-x-109">PNL_BASIS_OBJECT</span>&#x00A0;(o)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Cast any object into a PnlBasis
+     </li>
+     <li class="itemize"><a 
+ id="dx4-12011"></a> <span 
+class="ec-lmbx-10x-x-109">PNL_RNG_OBJECT</span>&#x00A0;(o)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Cast any object into a PnlRng
+     </li>
+     <li class="itemize"><a 
+ id="dx4-12012"></a> <span 
+class="ec-lmbx-10x-x-109">PNL_LIST_OBJECT</span>&#x00A0;(o)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Cast any object into a PnlList
+     </li>
+     <li class="itemize"><a 
+ id="dx4-12013"></a> <span 
+class="ec-lmbx-10x-x-109">PNL_LIST_ARRAY</span>&#x00A0;(o)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Cast any object into a PnlArray
+     </li>
+     <li class="itemize"><a 
+ id="dx4-12014"></a> <span 
+class="ec-lmbx-10x-x-109">PNL_GET_TYPENAME</span>&#x00A0;(o)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Return the name of the type of any object inheriting from PnlObject
+                                                                                    
+
+                                                                                    
+     </li>
+     <li class="itemize"><a 
+ id="dx4-12015"></a> <span 
+class="ec-lmbx-10x-x-109">PNL_GET_TYPE</span>&#x00A0;(o)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Return the type of any object inheriting from PnlObject
+     </li>
+     <li class="itemize"><a 
+ id="dx4-12016"></a> <span 
+class="ec-lmbx-10x-x-109">PNL_GET_PARENT_TYPE</span>&#x00A0;(o)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Return the parent type of any object inheriting from PnlObject</li></ul>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx4-12017"></a> <span class='ret'><a 
+href="#x4-120002.1"><span class='struct'>PnlObject</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_object_create</span></span>&#x00A0;(<span class='args'>PnlType t</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Create an empty PnlObject of type <span class='var'>t</span> which can any of the registered
+     types, see Table&#x00A0;<a 
+href="#x4-120021">1<!--tex4ht:ref: types --></a>.</li></ul>
+<h4 class="subsectionHead"><span class="titlemark">2.2   </span> <a 
+ id="x4-130002.2"></a>List object</h4>
+<!--l. 120--><p class="noindent" >This section describes functions for creating an manipulating lists. Lists are internally stored as
+doubly linked lists.
+</p><!--l. 123--><p class="noindent" >The structures and functions related to lists are declared in <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl/pnl_list.h</span></span></span>.
+<a 
+ id="dx4-13001"></a>
+<a 
+ id="dx4-13002"></a>
+                                                                                    
+
+                                                                                    
+</p>
+<div class="verbatim" id="verbatim-12">
+typedef&#x00A0;struct&#x00A0;_PnlCell&#x00A0;PnlCell;
+&#x00A0;<br />struct&#x00A0;_PnlCell
+&#x00A0;<br />{
+&#x00A0;<br />&#x00A0;&#x00A0;struct&#x00A0;_PnlCell&#x00A0;*prev;&#x00A0;&#x00A0;/*!&#x003C;&#x00A0;previous&#x00A0;cell&#x00A0;or&#x00A0;0&#x00A0;*/
+&#x00A0;<br />&#x00A0;&#x00A0;struct&#x00A0;_PnlCell&#x00A0;*next;&#x00A0;&#x00A0;/*!&#x003C;&#x00A0;next&#x00A0;cell&#x00A0;or&#x00A0;0&#x00A0;*/
+&#x00A0;<br />&#x00A0;&#x00A0;PnlObject&#x00A0;*self;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;/*!&#x003C;&#x00A0;stored&#x00A0;object&#x00A0;*/
+&#x00A0;<br />};
+&#x00A0;<br />
+&#x00A0;<br />
+&#x00A0;<br />typedef&#x00A0;struct&#x00A0;_PnlList&#x00A0;PnlList;
+&#x00A0;<br />struct&#x00A0;_PnlList
+&#x00A0;<br />{
+&#x00A0;<br />&#x00A0;&#x00A0;/**
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;*&#x00A0;Must&#x00A0;be&#x00A0;the&#x00A0;first&#x00A0;element&#x00A0;in&#x00A0;order&#x00A0;for&#x00A0;the&#x00A0;object&#x00A0;mechanism&#x00A0;to&#x00A0;work
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;*&#x00A0;properly.&#x00A0;This&#x00A0;allows&#x00A0;any&#x00A0;PnlList&#x00A0;pointer&#x00A0;to&#x00A0;be&#x00A0;cast&#x00A0;to&#x00A0;a&#x00A0;PnlObject
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;*/
+&#x00A0;<br />&#x00A0;&#x00A0;PnlObject&#x00A0;object;
+&#x00A0;<br />&#x00A0;&#x00A0;PnlCell&#x00A0;*first;&#x00A0;/*!&#x003C;&#x00A0;first&#x00A0;element&#x00A0;of&#x00A0;the&#x00A0;list&#x00A0;*/
+&#x00A0;<br />&#x00A0;&#x00A0;PnlCell&#x00A0;*last;&#x00A0;/*!&#x003C;&#x00A0;last&#x00A0;element&#x00A0;of&#x00A0;the&#x00A0;list&#x00A0;*/
+&#x00A0;<br />&#x00A0;&#x00A0;PnlCell&#x00A0;*curcell;&#x00A0;/*!&#x003C;&#x00A0;last&#x00A0;accessed&#x00A0;element,
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;if&#x00A0;never&#x00A0;accessed&#x00A0;is&#x00A0;NULL&#x00A0;*/
+&#x00A0;<br />&#x00A0;&#x00A0;int&#x00A0;icurcell;&#x00A0;/*!&#x003C;&#x00A0;index&#x00A0;of&#x00A0;the&#x00A0;last&#x00A0;accessed&#x00A0;element,
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;if&#x00A0;never&#x00A0;accessed&#x00A0;is&#x00A0;NULLINT&#x00A0;*/
+&#x00A0;<br />&#x00A0;&#x00A0;int&#x00A0;len;&#x00A0;/*!&#x003C;&#x00A0;length&#x00A0;of&#x00A0;the&#x00A0;list&#x00A0;*/
+&#x00A0;<br />};
+</div>
+<!--l. 153--><p class="nopar" >
+</p><!--l. 155--><p class="noindent" ><span 
+class="ec-lmbx-10x-x-109">Important note</span>: Lists only store addresses of objects. So when an object is inserted into a
+list, only its address is stored into the list. This implies that you <span 
+class="ec-lmbx-10x-x-109">must not </span>free any
+objects inserted into a list. The deallocation is automatically handled by the function
+<a 
+href="#x4-130002.2">pnl_list_free</a>.
+</p>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx4-13003"></a> <span class='ret'><a 
+href="#x4-130002.2"><span class='struct'>PnlList</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_list_new</span></span>&#x00A0;(<span class='args'></span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Create an empty list
+     </li>
+     <li class="itemize"><a 
+ id="dx4-13004"></a> <span class='ret'><a 
+href="#x4-130002.2"><span class='struct'>PnlCell</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_cell_new</span></span>&#x00A0;(<span class='args'></span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Create an cell list
+     </li>
+     <li class="itemize"><a 
+ id="dx4-13005"></a> <span class='ret'><a 
+href="#x4-130002.2"><span class='struct'>PnlList</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_list_copy</span></span>&#x00A0;(<span class='args'>const <a 
+href="#x4-130002.2"><span class='struct'>PnlList</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>A</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Create a copy of a <a 
+href="#x4-130002.2"><span class='struct'>PnlList</span></a> . Each element of the list <span class='var'>A</span> is copied by calling
+     the its copy member.
+     </li>
+     <li class="itemize"><a 
+ id="dx4-13006"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_list_clone</span></span>&#x00A0;(<span class='args'><a 
+href="#x4-130002.2"><span class='struct'>PnlList</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>dest, const <a 
+href="#x4-130002.2"><span class='struct'>PnlList</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>src</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Copy the content of <span class='var'>src</span> into the already existing list <span class='var'>dest</span>. The list <span class='var'>dest</span>
+     is automatically resized. This is a hard copy, the contents of both lists are independent
+     after cloning.
+     </li>
+     <li class="itemize"><a 
+ id="dx4-13007"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_list_free</span></span>&#x00A0;(<span class='args'><a 
+href="#x4-130002.2"><span class='struct'>PnlList</span></a> <span 
+class="ts1-lmr10-x-x-109">**</span>L</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Free a list
+     </li>
+     <li class="itemize"><a 
+ id="dx4-13008"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_cell_free</span></span>&#x00A0;(<span class='args'><a 
+href="#x4-130002.2"><span class='struct'>PnlCell</span></a> <span 
+class="ts1-lmr10-x-x-109">**</span>c</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Free a list
+     </li>
+     <li class="itemize"><a 
+ id="dx4-13009"></a> <span class='ret'><a 
+href="#x4-120002.1"><span class='struct'>PnlObject</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_list_get</span></span>&#x00A0;(<span class='args'> <a 
+href="#x4-130002.2"><span class='struct'>PnlList</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>L, int i</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>This function returns the content of the <span class='var'>i</span>&#8211;th cell of the list <span class='var'>L</span>. This
+     function is optimized for linearly accessing all the elements, so it can be used inside a
+     for loop for instance.
+     </li>
+     <li class="itemize"><a 
+ id="dx4-13010"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_list_insert_first</span></span>&#x00A0;(<span class='args'><a 
+href="#x4-130002.2"><span class='struct'>PnlList</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>L, <a 
+href="#x4-120002.1"><span class='struct'>PnlObject</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>o</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Insert the object <span class='var'>o</span> on top of the list <span class='var'>L</span>. Note that <span class='var'>o</span> is not copied in <span class='var'>L</span>,
+     so do <span 
+class="ec-lmbx-10x-x-109">not </span>free <span class='var'>o</span> yourself, it will be done automatically when calling <a 
+href="#x4-130002.2">pnl_list_free</a>
+     </li>
+     <li class="itemize"><a 
+ id="dx4-13011"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_list_insert_last</span></span>&#x00A0;(<span class='args'><a 
+href="#x4-130002.2"><span class='struct'>PnlList</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>L, <a 
+href="#x4-120002.1"><span class='struct'>PnlObject</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>o</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Insert the object <span class='var'>o</span> at the bottom of the list <span class='var'>L</span>. Note that <span class='var'>o</span> is not copied
+     in <span class='var'>L</span>, so do <span 
+class="ec-lmbx-10x-x-109">not </span>free <span class='var'>o</span> yourself, it will be done automatically when calling <a 
+href="#x4-130002.2">pnl_list_free</a>
+     </li>
+     <li class="itemize"><a 
+ id="dx4-13012"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_list_remove_last</span></span>&#x00A0;(<span class='args'><a 
+href="#x4-130002.2"><span class='struct'>PnlList</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>L</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Remove the last element of the list <span class='var'>L</span> and frees it.
+     </li>
+     <li class="itemize"><a 
+ id="dx4-13013"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_list_remove_first</span></span>&#x00A0;(<span class='args'><a 
+href="#x4-130002.2"><span class='struct'>PnlList</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>L</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Remove the first element of the list <span class='var'>L</span> and frees it.
+     </li>
+     <li class="itemize"><a 
+ id="dx4-13014"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_list_remove_i</span></span>&#x00A0;(<span class='args'><a 
+href="#x4-130002.2"><span class='struct'>PnlList</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>L, int i</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Remove the <span class='var'>i-th</span> element of the list <span class='var'>L</span> and frees it.
+     </li>
+     <li class="itemize"><a 
+ id="dx4-13015"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_list_concat</span></span>&#x00A0;(<span class='args'><a 
+href="#x4-130002.2"><span class='struct'>PnlList</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>L1, <a 
+href="#x4-130002.2"><span class='struct'>PnlList</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>L2</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Concatenate the two lists <span class='var'>L1</span> and <span class='var'>L2</span>. The resulting list is store in <span class='var'>L1</span>
+     on exit. Do <span 
+class="ec-lmbx-10x-x-109">not </span>free <span class='var'>L2</span> since concatenation does not actually copy objects but only
+     manipulates addresses.
+                                                                                    
+
+                                                                                    
+     </li>
+     <li class="itemize"><a 
+ id="dx4-13016"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_list_resize</span></span>&#x00A0;(<span class='args'><a 
+href="#x4-130002.2"><span class='struct'>PnlList</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>L, int n</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Change the length of <span class='var'>L</span> to become <span class='var'>n</span>. If the length of <span class='var'>L</span> id increased, the
+     extra elements are set to NULL.
+     </li>
+     <li class="itemize"><a 
+ id="dx4-13017"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_list_print</span></span>&#x00A0;(<span class='args'>const <a 
+href="#x4-130002.2"><span class='struct'>PnlList</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>L</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Only prints the types of each element. When the <a 
+href="#x4-120002.1"><span class='struct'>PnlObject</span></a> object has
+     a print member, we will use it.</li></ul>
+<!--l. 212--><p class="noindent" >
+</p>
+<h4 class="subsectionHead"><span class="titlemark">2.3   </span> <a 
+ id="x4-140002.3"></a>Array object</h4>
+<!--l. 214--><p class="noindent" >This section describes functions for creating and manipulating arrays of PnlObjects.
+</p><!--l. 217--><p class="noindent" >The structures and functions related to arrays are declared in <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl/pnl_array.h</span></span></span>.
+<a 
+ id="dx4-14001"></a>
+                                                                                    
+
+                                                                                    
+</p>
+<div class="verbatim" id="verbatim-13">
+typedef&#x00A0;struct&#x00A0;_PnlArray&#x00A0;PnlArray;
+&#x00A0;<br />struct&#x00A0;_PnlArray
+&#x00A0;<br />{
+&#x00A0;<br />&#x00A0;&#x00A0;/**
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;*&#x00A0;Must&#x00A0;be&#x00A0;the&#x00A0;first&#x00A0;element&#x00A0;in&#x00A0;order&#x00A0;for&#x00A0;the&#x00A0;object&#x00A0;mechanism&#x00A0;to&#x00A0;work
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;*&#x00A0;properly.&#x00A0;This&#x00A0;allows&#x00A0;any&#x00A0;PnlArray&#x00A0;pointer&#x00A0;to&#x00A0;be&#x00A0;cast&#x00A0;to&#x00A0;a&#x00A0;PnlObject
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;*/
+&#x00A0;<br />&#x00A0;&#x00A0;PnlObject&#x00A0;object;
+&#x00A0;<br />&#x00A0;&#x00A0;int&#x00A0;size;
+&#x00A0;<br />&#x00A0;&#x00A0;PnlObject&#x00A0;**array;
+&#x00A0;<br />&#x00A0;&#x00A0;int&#x00A0;mem_size;
+&#x00A0;<br />};
+</div>
+<!--l. 234--><p class="nopar" >
+</p><!--l. 236--><p class="noindent" ><span 
+class="ec-lmbx-10x-x-109">Important note</span>: Arrays only store addresses of objects. So when an object is inserted into an
+array, only its address is stored into the array. This implies that you <span 
+class="ec-lmbx-10x-x-109">must not </span>free any
+objects inserted into a array. The deallocation is automatically handled by the function
+<a 
+href="#x4-140002.3">pnl_array_free</a>.
+</p>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx4-14002"></a> <span class='ret'><a 
+href="#x4-140002.3"><span class='struct'>PnlArray</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_array_new</span></span>&#x00A0;(<span class='args'></span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Create an empty array
+     </li>
+     <li class="itemize"><a 
+ id="dx4-14003"></a> <span class='ret'><a 
+href="#x4-140002.3"><span class='struct'>PnlArray</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_array_create</span></span>&#x00A0;(<span class='args'>int n</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Create an array of length <span class='var'>n</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx4-14004"></a> <span class='ret'><a 
+href="#x4-140002.3"><span class='struct'>PnlArray</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_array_copy</span></span>&#x00A0;(<span class='args'>const <a 
+href="#x4-140002.3"><span class='struct'>PnlArray</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>A</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Create a copy of a <a 
+href="#x4-140002.3"><span class='struct'>PnlArray</span></a> . Each element of the array <span class='var'>A</span> is copied by
+     calling the <span class='var'>A[i].object.copy</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx4-14005"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_array_clone</span></span>&#x00A0;(<span class='args'><a 
+href="#x4-140002.3"><span class='struct'>PnlArray</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>dest, const <a 
+href="#x4-140002.3"><span class='struct'>PnlArray</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>src</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Copy the content of <span class='var'>src</span> into the already existing array <span class='var'>dest</span>. The array
+     <span class='var'>dest</span>  is  automatically  resized.  This  is  a  hard  copy,  the  contents  of  both  arrays  are
+     independent after cloning.
+     </li>
+     <li class="itemize"><a 
+ id="dx4-14006"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_array_free</span></span>&#x00A0;(<span class='args'><a 
+href="#x4-140002.3"><span class='struct'>PnlArray</span></a> <span 
+class="ts1-lmr10-x-x-109">**</span></span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Free an array and all the objects hold by the array.
+                                                                                    
+
+                                                                                    
+     </li>
+     <li class="itemize"><a 
+ id="dx4-14007"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_array_resize</span></span>&#x00A0;(<span class='args'><a 
+href="#x4-140002.3"><span class='struct'>PnlArray</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>T, int size</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Resize <span class='var'>T</span> to be <span class='var'>size</span> long. As much as possible of the original data is kept.
+     </li>
+     <li class="itemize"><a 
+ id="dx4-14008"></a> <span class='ret'><a 
+href="#x4-120002.1"><span class='struct'>PnlObject</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_array_get</span></span>&#x00A0;(<span class='args'> <a 
+href="#x4-140002.3"><span class='struct'>PnlArray</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>T, int i</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>This function returns the content of the <span class='var'>i</span>&#8211;th cell of the array <span class='var'>T</span>. No copy
+     is made.
+     </li>
+     <li class="itemize"><a 
+ id="dx4-14009"></a> <span class='ret'><a 
+href="#x4-120002.1"><span class='struct'>PnlObject</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_array_set</span></span>&#x00A0;(<span class='args'> <a 
+href="#x4-140002.3"><span class='struct'>PnlArray</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>T, int i, <a 
+href="#x4-120002.1"><span class='struct'>PnlObject</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>O</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>T[i] = O</span>. No copy is made, so the object <span class='var'>O</span> must not be freed manually.
+     </li>
+     <li class="itemize"><a 
+ id="dx4-14010"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_array_print</span></span>&#x00A0;(<span class='args'><a 
+href="#x4-140002.3"><span class='struct'>PnlArray</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span></span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Not  yet  implemented  because  it  would  require  that  the  structure
+     <a 
+href="#x4-120002.1"><span class='struct'>PnlObject</span></a> has a field copy.</li></ul>
+                                                                                    
+
+                                                                                    
+<!--l. 1--><div class="crosslinks"><p class="noindent">[<a 
+href="pnl-manualse3.html" >next</a>] [<a 
+href="pnl-manualse1.html" >prev</a>] [<a 
+href="pnl-manualse1.html#tailpnl-manualse1.html" >prev-tail</a>] [<a 
+href="pnl-manualse2.html" >front</a>] [<a 
+href="pnl-manual.html#pnl-manualse2.html" >up</a>] </p></div>
+<!--l. 1--><p class="noindent" ><a 
+ id="tailpnl-manualse2.html"></a> </p> 
+</body></html> 

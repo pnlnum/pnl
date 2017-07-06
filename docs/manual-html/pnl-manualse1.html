@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="iso-8859-1" ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->  
+<html xmlns="http://www.w3.org/1999/xhtml"  
+> 
+<head><title>Introduction</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> 
+<meta name="generator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<meta name="originator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<!-- xhtml,uni-html4,2,subsection+,next,html --> 
+<meta name="src" content="pnl-manual.tex" /> 
+<link rel="stylesheet" type="text/css" href="pnl-manual.css" /> 
+</head><body 
+>
+<!--l. 165--><div class="crosslinks"><p class="noindent">[<a 
+href="pnl-manualse2.html" >next</a>] [<a 
+href="pnl-manualli1.html" >prev</a>] [<a 
+href="pnl-manualli1.html#tailpnl-manualli1.html" >prev-tail</a>] [<a 
+href="#tailpnl-manualse1.html">tail</a>] [<a 
+href="pnl-manual.html#pnl-manualse1.html" >up</a>] </p></div>
+<h3 class="sectionHead"><span class="titlemark">1   </span> <a 
+ id="x3-20001"></a>Introduction</h3>
+<!--l. 166--><p class="noindent" >
+</p>
+<h4 class="subsectionHead"><span class="titlemark">1.1   </span> <a 
+ id="x3-30001.1"></a>What is Pnl</h4>
+<!--l. 168--><p class="noindent" >Pnl is a scientific library written in C and distributed under the Gnu Lesser General Public Licence
+(LGPL). This manual is divided into four parts. </p>
+     <ul class="itemize1">
+     <li class="itemize">Mathematical  functions:  complex  numbers,  special  functions,  standard  financial
+     functions for the Black &amp; Scholes model.
+     </li>
+     <li class="itemize">Linear  algebra  :  vectors,  matrices  (dense  and  sparse),  hypermatrices,  tridiagonal
+     matrices, band matrices and the corresponding routines to manipulate them and solve
+     linear systems.
+     </li>
+     <li class="itemize">Probabilistic  functions:  random  number  generators  and  cumulative  distribution
+     functions.
+     </li>
+     <li class="itemize">Deterministic toolbox : FFT, Laplace inversion, numerical integration, zero searching,
+     multivariate polynomial regression, <span 
+class="lmmi-10x-x-109">&#x2026;</span><span style="margin-left:0.3em" class="thinspace"></span></li></ul>
+<!--l. 182--><p class="noindent" >
+</p>
+<h4 class="subsectionHead"><span class="titlemark">1.2   </span> <a 
+ id="x3-40001.2"></a>A few helpful conventions</h4>
+     <ul class="itemize1">
+     <li class="itemize">All header file names are prefixed by <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl_</span></span></span> and are surrounded by the preprocessor
+     conditionals
+                                                                                    
+
+                                                                                    
+     <div class="verbatim" id="verbatim-1">
+     #ifndef&#x00A0;_PNL_MATRIX_H
+     &#x00A0;<br />#define&#x00A0;_PNL_MATRIX_H
+     &#x00A0;<br />
+     &#x00A0;<br />...
+     &#x00A0;<br />
+     &#x00A0;<br />#endif&#x00A0;/*&#x00A0;_PNL_MATRIX_H
+</div>
+     <!--l. 194--><p class="nopar" >All the header files are protected by an <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">extern</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;"C"</span></span></span> declaration for possible use with a C++
+     compiler. The header files must be include using
+                                                                                    
+
+                                                                                    
+</p>
+     <div class="verbatim" id="verbatim-2">
+     #include&#x00A0;"pnl/pnl_xxx.h"
+</div>
+     <!--l. 199--><p class="nopar" >
+     </p></li>
+     <li class="itemize">All function names are prefixed by <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl_</span></span></span> except those implementing complex number
+     arithmetic which are named following the <span 
+class="ec-lmri-10x-x-109">C99 </span>complex library but using a capitalised first
+     letter <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">C</span></span></span>. <br 
+class="newline" />For example, the addition of two complex numbers is performed by the function
+     <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">Cadd</span></span></span>.
+     </li>
+     <li class="itemize">Function containing <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">_create</span></span></span> in their names always return a pointer to an object created by
+     one or several calls to dynamic allocation. Once these objects are not used, they must be freed
+     by calling the same function but ending in <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">_free</span></span></span>. A function <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl_foo_create_yyy</span></span></span> returns a
+     <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">PnlFoo</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;*</span></span></span> object (note the &#8220;<span 
+class="ts1-lmr10-x-x-109">*</span>&#8221;) and a function <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl_foo_bar_create_yyy</span></span></span> returns a
+     <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">PnlFooBar</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;*</span></span></span> object (note the &#8220;<span 
+class="ts1-lmr10-x-x-109">*</span>&#8221;). These objects must be freed by calling respectively
+     <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl_foo_free</span></span></span> or <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl_foo_bar_free</span></span></span>.
+     </li>
+     <li class="itemize">Functions ending in <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">_clone</span></span></span> take two arguments <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">src</span></span></span> and <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">dest</span></span></span> and modify <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">dest</span></span></span> to make it
+     identical to <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">src</span></span></span>, ie. they have the same size and data. Note that no new object is allocated,
+     <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">dest</span></span></span> must exist before calling this function.
+     </li>
+     <li class="itemize">Functions ending in <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">_copy</span></span></span> create a new object identical (ie. with the same size and content) as
+     its argument but independent (ie. modifying one of them does not alter the other). Calling
+     <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">A</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;=</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;pnl_xxx_copy(B)</span></span></span> is equivalent to first calling <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">A</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;=</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;pnl_xxx_new()</span></span></span> function and then
+     <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl_xxx_clone(A,</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;B)</span></span></span>.
+     </li>
+     <li class="itemize">Every object must implement a <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl_xxx_new</span></span></span> function which returns a pointer to an empty
+     object with all its elements properly set to <span 
+class="rm-lmr-10x-x-109">0</span>. This means that the objects returned by the
+     <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl_xxx_new</span></span></span> functions can be used as output arguments for functions ending in <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">_inplace</span></span></span> for
+     instance. They are suitable for being resized.
+     </li>
+     <li class="itemize">Functions containing <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">_wrap_</span></span></span> in their names always return an object, not a pointer to an
+     object, and do not make any use of dynamic allocation. The returned object must not be
+     freed. For instance, a function <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl_foo_wrap_xxx</span></span></span> returns an object <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">PnlFoo</span></span></span> and a function
+     <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl_foo_bar_wrap_xxx</span></span></span> returns an object <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">PnlFooBar</span></span></span>
+                                                                                    
+
+                                                                                    
+     <div class="verbatim" id="verbatim-3">
+     &#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlVectComplex&#x00A0;*v1;
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlVectComplex&#x00A0;v2;
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;v1&#x00A0;=&#x00A0;pnl_vect_complex_create_from_scalar&#x00A0;(5,&#x00A0;Complex(0.,&#x00A0;1.));
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;v2&#x00A0;=&#x00A0;pnl_vect_complex_wrap_subvect&#x00A0;(v1,&#x00A0;1,&#x00A0;2);
+     &#x00A0;<br />
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;...
+     &#x00A0;<br />
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;pnl_vect_complex_free&#x00A0;(&amp;v1);
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;
+</div>
+     <!--l. 249--><p class="nopar" >The vector <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">v1</span></span></span> is of size 5 and contains the pure imaginary number <span 
+class="lmmi-10x-x-109">i</span>. The vector <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">v2</span></span></span> only
+     provides a view to <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">v1(1:1+2)</span></span></span>, which means that modifying <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">v2</span></span></span> will also modify <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">v1</span></span></span> and
+     vice-versa because <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">v1</span></span></span> shares part of its data with <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">v2</span></span></span>. Note that only <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">v1</span></span></span> must be freed and <span 
+class="ec-lmbx-10x-x-109">not</span>
+     <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">v2</span></span></span>.
+     </p></li>
+     <li class="itemize">Functions ending in <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">_init</span></span></span> do not create any object but only perform some internal
+     initialisation.
+     </li>
+     <li class="itemize">Hypermatrices, matrices and vectors are stored using a flat block of memory obtained by
+     concatenating the matrix rows and C-style pointer-to-pointer arrays. Matrices are stored in
+     row-major order, which means that the column index moves continuously. Note that this
+     convention is not <span 
+class="ec-lmri-10x-x-109">Blas &amp; Lapack </span>compliant since Fortran expects 2-dimensional arrays to be
+     stored in a column-major order.
+     </li>
+     <li class="itemize">Type names always begin with <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">Pnl</span></span></span>, they do not contain underscores but instead we use
+     capital letters to separate units in type names. <br 
+class="newline" />Examples : <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">PnlMat</span></span></span>, <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">PnlMatComplex</span></span></span>.
+     </li>
+     <li class="itemize">Object and function names are intimately linked : an object <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">PnlFoo</span></span></span> is manipulated by
+     functions starting in <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl_foo</span></span></span>, an object <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">PnlFooBar</span></span></span> is manipulated by functions
+     starting in <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl_foo_bar</span></span></span>. In table&#x00A0;<a 
+href="#x3-40011">1<!--tex4ht:ref: pnltypes --></a>, we summarise the types and their corresponding
+     prefixes.
+                                                                                    
+
+                                                                                    
+     <hr class="figure" /><div class="figure" 
+><a 
+ id="x3-40011"></a> <!--tex4ht:inline--><div class="tabular"> <table id="TBL-2" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-2-1g"><col 
+id="TBL-2-1" /></colgroup><colgroup id="TBL-2-2g"><col 
+id="TBL-2-2" /></colgroup><tr 
+class="hline"><td><hr /></td><td><hr /></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-1-1"  
+class="td11">Pnl types           </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-1-2"  
+class="td11">Pnl prefix                 </td>
+</tr><tr 
+class="hline"><td><hr /></td><td><hr /></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-2-1"  
+class="td11">PnlVect              </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-2-2"  
+class="td11">pnl_vect                  </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-3-1"  
+class="td11">PnlVectComplex   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-3-2"  
+class="td11">pnl_vect_complex     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-4-1"  
+class="td11">PnlVectInt           </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-4-2"  
+class="td11">pnl_vect_int            </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-5-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-5-1"  
+class="td11">                </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-5-2"  
+class="td11">                   </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-6-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-6-1"  
+class="td11">PnlMat </td> <td  style="white-space:nowrap; text-align:left;" id="TBL-2-6-2"  
+class="td11">pnl_mat</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-7-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-7-1"  
+class="td11">PnlMatComplex   </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-7-2"  
+class="td11">pnl_mat_complex     </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-8-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-8-1"  
+class="td11">PnlMatInt           </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-8-2"  
+class="td11">pnl_mat_int            </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-9-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-9-1"  
+class="td11">                </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-9-2"  
+class="td11">                   </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-10-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-10-1"  
+class="td11">PnlSpMat </td> <td  style="white-space:nowrap; text-align:left;" id="TBL-2-10-2"  
+class="td11">pnl_sp_mat</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-11-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-11-1"  
+class="td11">PnlSpMatComplex</td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-11-2"  
+class="td11">pnl_sp_mat_complex</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-12-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-12-1"  
+class="td11">PnlSpMatInt        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-12-2"  
+class="td11">pnl_sp_mat_int       </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-13-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-13-1"  
+class="td11">                </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-13-2"  
+class="td11">                   </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-14-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-14-1"  
+class="td11">PnlHmat </td> <td  style="white-space:nowrap; text-align:left;" id="TBL-2-14-2"  
+class="td11">pnl_hmat</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-15-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-15-1"  
+class="td11">PnlHmatComplex </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-15-2"  
+class="td11">pnl_hmat_complex   </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-16-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-16-1"  
+class="td11">PnlHmatInt         </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-16-2"  
+class="td11">pnl_hmat_int           </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-17-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-17-1"  
+class="td11">                </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-17-2"  
+class="td11">                   </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-18-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-18-1"  
+class="td11">PnlTridiagMat </td> <td  style="white-space:nowrap; text-align:left;" id="TBL-2-18-2"  
+class="td11">pnl_tridiag_mat</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-19-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-19-1"  
+class="td11">PnlBandMat        </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-19-2"  
+class="td11">pnl_band_mat         </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-20-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-20-1"  
+class="td11">                </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-20-2"  
+class="td11">                   </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-21-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-21-1"  
+class="td11">PnlList </td> <td  style="white-space:nowrap; text-align:left;" id="TBL-2-21-2"  
+class="td11">pnl_list</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-22-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-22-1"  
+class="td11">                </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-22-2"  
+class="td11">                   </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-23-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-23-1"  
+class="td11">PnlBasis </td> <td  style="white-space:nowrap; text-align:left;" id="TBL-2-23-2"  
+class="td11">pnl_basis</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-24-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-24-1"  
+class="td11">                </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-24-2"  
+class="td11">                   </td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-25-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-25-1"  
+class="td11">PnlCgSolver </td> <td  style="white-space:nowrap; text-align:left;" id="TBL-2-25-2"  
+class="td11">pnl_cg_solver</td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-26-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-26-1"  
+class="td11">PnlBicgSolver       </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-26-2"  
+class="td11">pnl_bicg_solver        </td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-27-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-27-1"  
+class="td11">PnlGmresSolver    </td><td  style="white-space:nowrap; text-align:left;" id="TBL-2-27-2"  
+class="td11">pnl_gmres_solver      </td>
+</tr><tr 
+class="hline"><td><hr /></td><td><hr /></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-2-28-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-28-1"  
+class="td11">                </td></tr></table></div>
+<br /> <div class="caption" 
+><span class="id">Figure&#x00A0;1: </span><span  
+class="content">Pnl types</span></div><!--tex4ht:label?: x3-40011 -->
+     </div><hr class="endfigure" />
+     </li>
+     <li class="itemize">All macro names begin with <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">PNL_</span></span></span> and are capitalised.
+     </li>
+     <li class="itemize">Differences between <span 
+class="ec-lmbx-10x-x-109">copy </span>and <span 
+class="ec-lmbx-10x-x-109">clone </span>methods. The <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">copy</span></span></span> methods take a single argument and
+     return a pointer to an object of the same type which is an independent copy of its argument.
+     Example:
+                                                                                    
+
+                                                                                    
+     <div class="verbatim" id="verbatim-4">
+     &#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlVect&#x00A0;*v1,&#x00A0;*v2;
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;v1&#x00A0;=&#x00A0;pnl_vect_create_from_scalar&#x00A0;(5,&#x00A0;2.5);
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;v2&#x00A0;=&#x00A0;pnl_vect_copy&#x00A0;(v1);
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;
+</div>
+     <!--l. 323--><p class="nopar" ><span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">v1</span></span></span> and <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">v2</span></span></span> are two vectors of size 5 with all their elements equal to 2.5. Note that <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">v2</span></span></span> <span 
+class="ec-lmbx-10x-x-109">must</span>
+     <span 
+class="ec-lmbx-10x-x-109">not </span>have been created by a call to <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl_vect_create_xxx</span></span></span> because otherwise it will cause a
+     memory leak. <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">v1</span></span></span> and <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">v2</span></span></span> are independent in the sense that a modification to one of them does
+     not affect the other.
+     </p><!--l. 330--><p class="noindent" >The <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">clone</span></span></span> methods take two arguments and fill the first one with the second one.
+     Example:
+                                                                                    
+
+                                                                                    
+</p>
+     <div class="verbatim" id="verbatim-5">
+     &#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlVect&#x00A0;*v1,&#x00A0;*v2;
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;v1&#x00A0;=&#x00A0;pnl_vect_create_from_scalar&#x00A0;(5,&#x00A0;2.5);
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;v2&#x00A0;=&#x00A0;pnl_vect_new&#x00A0;();
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;pnl_vect_clone&#x00A0;(v2,&#x00A0;v1);
+     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;
+</div>
+     <!--l. 338--><p class="nopar" ><span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">v1</span></span></span> and <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">v2</span></span></span> are two vectors of size 5 with all their elements equal to 2.5. Note that <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">v2</span></span></span> <span 
+class="ec-lmbx-10x-x-109">must</span>
+     have been created by a call to <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl_vect_new</span></span></span> because otherwise the function <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl_vect_clone</span></span></span>
+     will crash. <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">v1</span></span></span> and <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">v2</span></span></span> are independent in the sense that a modification to one of them does not
+     modify the other.
+     </p></li>
+     <li class="itemize">All objects are measured using integers <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">int</span></span></span> and not <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">size_t</span></span></span>. Hence, iterations over vectors,
+     matrices, &#x2026;should use an index of type <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">int</span></span></span>.
+     </li>
+     <li class="itemize">In fonctions ending in <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">inplace</span></span></span>, the output parameter must be different from any of the input
+     parameters.</li></ul>
+<!--l. 355--><p class="noindent" >
+</p>
+<h4 class="subsectionHead"><span class="titlemark">1.3   </span> <a 
+ id="x3-50001.3"></a>Using Pnl</h4>
+<!--l. 357--><p class="noindent" >In this section, we assume that the library is installed in the directory <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">$HOME/pnl-xxx</span></span></span>.
+</p><!--l. 360--><p class="noindent" >Once installed, the library can be found in the <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">$HOME/pnl-xxx/lib</span></span></span> directory and the header files in
+the <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">$HOME/pnl-xxx/include</span></span></span> directory.
+</p><!--l. 364--><p class="noindent" >
+</p>
+<h5 class="subsubsectionHead"><span class="titlemark">1.3.1   </span> <a 
+ id="x3-60001.3.1"></a>Compiling and Linking</h5>
+<!--l. 366--><p class="noindent" >The header files of the library are installed in a root <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl</span></span></span> directory and should always be included
+with this <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl/</span></span></span> prefix. So, for instance to use random number generators you should
+include
+                                                                                    
+
+                                                                                    
+</p>
+<div class="verbatim" id="verbatim-6">
+#include&#x00A0;&#x003C;pnl/pnl_random.h&#x003E;
+</div>
+<!--l. 371--><p class="nopar" >
+</p>
+<!--l. 373--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x3-70001.3.1"></a><span 
+class="ec-lmbx-10x-x-109">Compiling and linking by hand.</span></span>
+If <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">gcc</span></span></span> or <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">llvm</span></span></span> is used, you should pass the following options </p>
+     <ul class="itemize1">
+     <li class="itemize"><span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">-I$HOME/pnl-xxx/include</span></span></span> for compiling
+     </li>
+     <li class="itemize"><span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">-L$HOME/pnl-xxx/lib</span><span 
+class="ec-lmtt-10x-x-109">&#x00A0;-lpnl</span></span></span> for linking</li></ul>
+<!--l. 380--><p class="noindent" >This does not work straight away on all OS especially if the library is not installed in a standard
+directory namely <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">/usr/</span></span></span> or <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">/usr/local/</span></span></span> for which you need a privileged writing access. On some
+systems, you may need to add to the linker flags the dependencies of the library, which can become
+very tedious. Therefore, we provide a second automatic mechanism which takes care of the
+dependencies on its own.
+</p>
+<!--l. 387--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x3-80001.3.1"></a><span 
+class="ec-lmbx-10x-x-109">Compiling and linking using an automatic Makefile.</span></span>
+This mechanism only works under Unix (it has been tested under various Linux distributions and
+Mac OS X).
+</p><!--l. 392--><p class="noindent" >First, you need to create a new directory wherever you want, put in all your code and create a
+Makefile as below
+</p><!--l. 395--><p class="noindent" >To define your target just add the executable name, say <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">my-exec</span></span></span>, to the <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">BINS</span></span></span> list and create an
+entry <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">my_exec_SRC</span></span></span> carrying the list of source files needed to create your executable. Note that if
+dashes &#8217;-&#8217; may appear in an executable name, the name of the associated variable holding the list of
+source files is obtained by replacing dashes with underscores &#8217;_&#8217; and adding the _SRC
+suffix.
+</p><!--l. 402--><p class="noindent" >Assume you want to create two binaries : <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">my-exec</span></span></span> based on mixed C and C++ code (<span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">file1.c</span></span></span> and
+<span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">file2.cpp</span></span></span>) and <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">mybinary</span></span></span> based on <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">poo1.cxx</span></span></span> and <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">poo2.cpp</span></span></span>. You can use the following
+Makefile.
+                                                                                    
+
+                                                                                    
+</p>
+<div class="verbatim" id="verbatim-7">
+##&#x00A0;Flags&#x00A0;passed&#x00A0;to&#x00A0;the&#x00A0;linker
+&#x00A0;<br />LDFLAGS=
+&#x00A0;<br />
+&#x00A0;<br />##&#x00A0;Flags&#x00A0;passed&#x00A0;to&#x00A0;the&#x00A0;compiler
+&#x00A0;<br />CFLAGS=
+&#x00A0;<br />
+&#x00A0;<br />##&#x00A0;list&#x00A0;of&#x00A0;executables&#x00A0;to&#x00A0;create
+&#x00A0;<br />BINS=my-exec&#x00A0;mybinary
+&#x00A0;<br />
+&#x00A0;<br />my_exec_SRC=file1.c&#x00A0;file2.cpp
+&#x00A0;<br />#&#x00A0;optional&#x00A0;flags&#x00A0;for&#x00A0;compiling&#x00A0;and&#x00A0;linking
+&#x00A0;<br />my_exec_CFLAGS=
+&#x00A0;<br />my_exec_CXXFLAGS=
+&#x00A0;<br />my_exec_LDFLAGS=
+&#x00A0;<br />
+&#x00A0;<br />mybinary_SRC=poo1.cxx&#x00A0;poo2.cpp
+&#x00A0;<br />#&#x00A0;optional&#x00A0;flags&#x00A0;for&#x00A0;compiling&#x00A0;and&#x00A0;linking
+&#x00A0;<br />mybinary_CFLAGS=
+&#x00A0;<br />mybinary_CXXFLAGS=
+&#x00A0;<br />mybinary_LDFLAGS=
+&#x00A0;<br />
+&#x00A0;<br />
+&#x00A0;<br />##&#x00A0;This&#x00A0;line&#x00A0;must&#x00A0;be&#x00A0;the&#x00A0;last&#x00A0;one
+&#x00A0;<br />include&#x00A0;full_path_to_pnl_build/CMakeuser.incl
+</div>
+<!--l. 430--><p class="nopar" >Let us comment a little the different variables </p>
+     <ul class="itemize1">
+     <li class="itemize"><span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">CFLAGS</span></span></span>: global flags used for creating objects based on C code
+     </li>
+     <li class="itemize"><span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">CXXFLAGS</span></span></span>: global flags used for creating objects based on C++ code
+     </li>
+     <li class="itemize"><span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">LDFLAGS</span></span></span>: gobal linker flags.
+     </li>
+     <li class="itemize"><span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">binaryname_CFLAGS</span></span></span>: flags used when creating the objects based on C code and required
+     by <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">binaryname</span></span></span>
+     </li>
+     <li class="itemize"><span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">binaryname_CXXFLAGS</span></span></span>: flags used when creating the objects based on C++ code and
+     required by <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">binaryname</span></span></span>
+                                                                                    
+
+                                                                                    
+     </li>
+     <li class="itemize"><span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">binaryname_LDFLAGS</span></span></span>: flags used when linking objects for creating <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">binaryname</span></span></span></li></ul>
+<!--l. 443--><p class="noindent" >An example of such a Makefile can be found in <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl-xxx/perso</span></span></span>.
+</p><!--l. 445--><p class="noindent" ><span 
+class="ec-lmbx-10x-x-109">Warning: </span>if a file appears in the source list of several binairies, the flags used to compile this file
+are determined by the ones of the first binary involving this file. In the following example <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">main.cpp</span></span></span>
+will always be compiled with the flag <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">-O3</span></span></span> even for generating <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">bin2</span></span></span>
+                                                                                    
+
+                                                                                    
+</p>
+<div class="verbatim" id="verbatim-8">
+BINS=bin1&#x00A0;bin2
+&#x00A0;<br />
+&#x00A0;<br />bin1_SRC=main.cpp&#x00A0;poo1.c
+&#x00A0;<br />my_exec_CXXFLAGS=-O3
+&#x00A0;<br />
+&#x00A0;<br />bin2_SRC=main.cpp&#x00A0;poo2.c
+&#x00A0;<br />mybinary_CXXFLAGS=-g&#x00A0;-O0
+&#x00A0;<br />
+&#x00A0;<br />##&#x00A0;This&#x00A0;line&#x00A0;must&#x00A0;be&#x00A0;the&#x00A0;last&#x00A0;one
+&#x00A0;<br />include&#x00A0;full_path_to_pnl_build/CMakeuser.incl
+</div>
+<!--l. 460--><p class="nopar" >
+</p>
+<!--l. 462--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x3-90001.3.1"></a><span 
+class="ec-lmbx-10x-x-109">Compiling and linking using CMake.</span></span>
+If you already use CMake for your new project, just add the following to your toplevel
+<span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">CMakeLists.txt</span></span></span>
+                                                                                    
+
+                                                                                    
+</p>
+<div class="verbatim" id="verbatim-9">
+find_package(Pnl&#x00A0;REQUIRED)
+&#x00A0;<br />set(LIBS&#x00A0;${LIBS}&#x00A0;${PNL_LIBRARIES})
+&#x00A0;<br />include_directories(${PNL_INCLUDE_DIRS})
+&#x00A0;<br />#&#x00A0;Deactivate&#x00A0;PNL&#x00A0;debugging&#x00A0;stuff&#x00A0;on&#x00A0;Release&#x00A0;builds
+&#x00A0;<br />if(${CMAKE_BUILD_TYPE}&#x00A0;STREQUAL&#x00A0;"Release")
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;add_definitions(-DPNL_RANGE_CHECK_OFF)
+&#x00A0;<br />endif()
+</div>
+<!--l. 474--><p class="nopar" >Then, call cmake with the following extra flag
+                                                                                    
+
+                                                                                    
+</p>
+<div class="verbatim" id="verbatim-10">
+-DCMAKE_PREFIX_PATH=path/to/build-dir
+</div>
+<!--l. 478--><p class="nopar" >or add the variable <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">CMAKE_BUILD_TYPE</span></span></span> to the GUI. <br 
+class="newline" />
+</p><!--l. 481--><p class="noindent" >Just in case, we give an example of a complete although elementary <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">CMakeLists.txt</span></span></span>
+</p><div class="verbatiminput"></div>
+<!--l. 484--><p class="noindent" >
+</p>
+<h5 class="subsubsectionHead"><span class="titlemark">1.3.2   </span> <a 
+ id="x3-100001.3.2"></a>Inline Functions and getters</h5>
+<!--l. 487--><p class="noindent" >If it is supported by your compiler, getter and setter functions are declared as inline functions. This
+is automatically detected when running CMake. By default, setter and getter functions check that
+the required access is valid, basically it boils down to checking whether the index of the access is
+within an acceptable range. These extra tests can become very expensive when getter and setter
+function are intensively called.
+</p><!--l. 494--><p class="noindent" >Thus, it is possible to alter this default behaviour by defining the macro <span 
+class="ec-lmtt-10x-x-109">PNL_RANGE_CHECK_OFF</span>.
+This macro is automatically defined when the library is compiled in Release mode, ie. with
+<span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">-DCMAKE_BUILD_TYPE=Release</span></span></span> passed to CMake.
+                                                                                    
+
+                                                                                    
+</p>
+<!--l. 1--><div class="crosslinks"><p class="noindent">[<a 
+href="pnl-manualse2.html" >next</a>] [<a 
+href="pnl-manualli1.html" >prev</a>] [<a 
+href="pnl-manualli1.html#tailpnl-manualli1.html" >prev-tail</a>] [<a 
+href="pnl-manualse1.html" >front</a>] [<a 
+href="pnl-manual.html#pnl-manualse1.html" >up</a>] </p></div>
+<!--l. 1--><p class="noindent" ><a 
+ id="tailpnl-manualse1.html"></a>  </p> 
+</body></html> 

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="iso-8859-1" ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->  
+<html xmlns="http://www.w3.org/1999/xhtml"  
+> 
+<head><title>Financial functions</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> 
+<meta name="generator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<meta name="originator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<!-- xhtml,uni-html4,2,subsection+,next,html --> 
+<meta name="src" content="pnl-manual.tex" /> 
+<link rel="stylesheet" type="text/css" href="pnl-manual.css" /> 
+</head><body 
+>
+<!--l. 2--><div class="crosslinks"><p class="noindent">[<a 
+href="pnl-manualli2.html" >next</a>] [<a 
+href="pnl-manualse15.html" >prev</a>] [<a 
+href="pnl-manualse15.html#tailpnl-manualse15.html" >prev-tail</a>] [<a 
+href="#tailpnl-manualse16.html">tail</a>] [<a 
+href="pnl-manual.html#pnl-manualse16.html" >up</a>] </p></div>
+<h3 class="sectionHead"><span class="titlemark">16   </span> <a 
+ id="x18-14200016"></a>Financial functions</h3>
+<!--l. 4--><p class="noindent" >The financial functions are defined in the header <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl/pnl_finance.h</span></span></span>.<br 
+class="newline" />
+</p>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx18-142001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_cf_call_bs</span></span>&#x00A0;(<span class='args'>double s, double k, double T, double r, double divid, double
+     sigma, double <span 
+class="ts1-lmr10-x-x-109">*</span>ptprice, double <span 
+class="ts1-lmr10-x-x-109">*</span>ptdelta</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the price and delta of a call option <span 
+class="rm-lmr-10x-x-109">(</span><span class='var'><span 
+class="lmmi-10x-x-109">s</span></span><span 
+class="lmsy-10x-x-109">-</span><span class='var'><span 
+class="lmmi-10x-x-109">k</span></span><span 
+class="rm-lmr-10x-x-109">)</span><sub><span 
+class="rm-lmr-8">+</span></sub> in the Black-Scholes
+     model with volatility <span class='var'>sigma</span>, instantaneous interest rate <span class='var'>r</span>, maturity <span class='var'>T</span> and dividend rate
+     <span class='var'>divid</span>. The parameters <span class='var'>ptprice</span> and <span class='var'>ptdelta</span> are respectively set to the price and delta on
+     output.
+     </li>
+     <li class="itemize"><a 
+ id="dx18-142002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_cf_put_bs</span></span>&#x00A0;(<span class='args'>double s, double k, double T, double r, double divid, double
+     sigma, double <span 
+class="ts1-lmr10-x-x-109">*</span>ptprice, double <span 
+class="ts1-lmr10-x-x-109">*</span>ptdelta</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the price and delta of a put option <span 
+class="rm-lmr-10x-x-109">(</span><span class='var'><span 
+class="lmmi-10x-x-109">k</span></span><span 
+class="lmsy-10x-x-109">-</span><span class='var'><span 
+class="lmmi-10x-x-109">s</span></span><span 
+class="rm-lmr-10x-x-109">)</span><sub><span 
+class="rm-lmr-8">+</span></sub> in the Black-Scholes
+     model with volatility <span class='var'>sigma</span>, instantaneous interest rate <span class='var'>r</span>, maturity <span class='var'>T</span> and dividend rate
+     <span class='var'>divid</span>. The parameters <span class='var'>ptprice</span> and <span class='var'>ptdelta</span> are respectively set to the price and delta on
+     output.
+     </li></ul>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx18-142003"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bs_call</span></span>&#x00A0;(<span class='args'>double s, double k, double T, double r, double divid, double
+     sigma</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute  the  price  of  a  call  option  with  spot  <span class='var'>s</span>  and  strike  <span class='var'>k</span>  in  the
+     Black-Scholes model with volatility <span class='var'>sigma</span>, instantaneous interest rate <span class='var'>r</span>, maturity <span class='var'>T</span> and
+     dividend rate <span class='var'>divid</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx18-142004"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bs_put</span></span>&#x00A0;(<span class='args'>double s, double k, double T, double r, double divid, double
+     sigma</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute  the  price  a  put  option  with  spot  <span class='var'>s</span>  and  strike  <span class='var'>k</span>  in  the
+     Black-Scholes model with volatility <span class='var'>sigma</span>, instantaneous interest rate <span class='var'>r</span>, maturity <span class='var'>T</span> and
+     dividend rate <span class='var'>divid</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx18-142005"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bs_call_put</span></span>&#x00A0;(<span class='args'>int iscall, double s, double k, double T, double r, double
+     divid, double sigma</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the price of a put option if <span class='var'>iscall=0</span> or a call option if <span class='var'>iscall=1</span>
+     with spot <span class='var'>s</span> and strike <span class='var'>k</span> in the Black-Scholes model with volatility <span class='var'>sigma</span>, instantaneous
+     interest rate <span class='var'>r</span>, maturity <span class='var'>T</span> and dividend rate <span class='var'>divid</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx18-142006"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bs_vega</span></span>&#x00A0;(<span class='args'>double s, double k, double T, double r, double divid, double
+     sigma</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the vega of a put or call option with spot <span class='var'>s</span> and strike <span class='var'>k</span> in the
+     Black-Scholes model with volatility <span class='var'>sigma</span>, instantaneous interest rate <span class='var'>r</span>, maturity <span class='var'>T</span> and
+     dividend rate <span class='var'>divid</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx18-142007"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bs_gamma</span></span>&#x00A0;(<span class='args'>double s, double k, double T, double r, double divid, double
+     sigma</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the gamma of a put or call option with spot <span class='var'>s</span> and strike <span class='var'>k</span> in
+     the Black-Scholes model with volatility <span class='var'>sigma</span>, instantaneous interest rate <span class='var'>r</span>, maturity
+     <span class='var'>T</span> and dividend rate <span class='var'>divid</span>.</li></ul>
+<!--l. 70--><p class="noindent" >Practitioners do not speak in terms of option prices, but rather compare prices in terms of their
+implied Black &amp; Scholes volatilities. So this parameter is very useful in practice. Here, we propose
+two functions to compute <span 
+class="lmmi-10x-x-109">&#x03C3;</span><sub><span 
+class="lmmi-8">impl</span></sub> : the first one is for one up-let, maturity, strike, option price. the
+second function is for a list of strikes and maturities, a matrix of prices (with strikes varying
+row-wise).
+</p>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx18-142008"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bs_implicit_vol</span></span>&#x00A0;(<span class='args'>int is_call, double Price, double s, double K, double
+     T, double r, double divid, int *error</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the implied volatility of a put option if <span class='var'>iscall=0</span> or a call option
+     if <span class='var'>iscall=1</span> with spot <span class='var'>s</span> and strike <span class='var'>K</span> in the Black-Scholes model with instantaneous
+     interest  rate  <span class='var'>r</span>,  maturity  <span class='var'>T</span>  and  dividend  rate  <span class='var'>divid</span>.  On  output  <span class='var'>error</span>  is  <span class='var'>OK</span>  if  the
+     computation of the implied volatility succeeded or <span class='var'>FAIL</span> if it failed.
+     </li>
+     <li class="itemize"><a 
+ id="dx18-142009"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_bs_matrix_implicit_vol</span></span>&#x00A0;(<span class='args'>const <a 
+href="pnl-manualse4.html#x6-440004.3.1"><span class='struct'>PnlMatInt</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>iscall, const <a 
+href="pnl-manualse4.html#x6-440004.3.1"><span class='struct'>PnlMat</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>Price,
+     double s, double r, double divid, const <a 
+href="pnl-manualse4.html#x6-260004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>K, const <a 
+href="pnl-manualse4.html#x6-260004.1.1"><span class='struct'>PnlVect</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>T, <a 
+href="pnl-manualse4.html#x6-440004.3.1"><span class='struct'>PnlMat</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>Vol</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute  the  matrix  of  implied  volatilities  <span class='var'>Vol(i,j)</span>  of  a  put  option
+     if  <span class='var'>iscall(i,j)=0</span>  or  a  call  option  if  <span class='var'>iscall(i,j)=1</span>  with  spot  <span class='var'>s</span>  and  strike  <span class='var'>K(j)</span>  in  the
+     Black-Scholes model with instantaneous interest rate <span class='var'>r</span>, maturity <span class='var'>T(j)</span> and dividend rate
+     <span class='var'>divid</span>. This function returns the number of failures, when everything succeeded it returns
+     <span 
+class="rm-lmr-10x-x-109">0</span>.</li></ul>
+                                                                                    
+
+                                                                                    
+<a 
+ id="Q1-18-147"></a>
+                                                                                    
+
+                                                                                    
+<!--l. 1--><div class="crosslinks"><p class="noindent">[<a 
+href="pnl-manualli2.html" >next</a>] [<a 
+href="pnl-manualse15.html" >prev</a>] [<a 
+href="pnl-manualse15.html#tailpnl-manualse15.html" >prev-tail</a>] [<a 
+href="pnl-manualse16.html" >front</a>] [<a 
+href="pnl-manual.html#pnl-manualse16.html" >up</a>] </p></div>
+<!--l. 1--><p class="noindent" ><a 
+ id="tailpnl-manualse16.html"></a> </p> 
+</body></html> 
