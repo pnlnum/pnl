@@ -8,36 +8,211 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
 License for more details.
 
 
-# Compilation and installation
+# Installation
 
-See the INSTALL file
+## Compiling the library
+
+
+To compile PNL, you need CMake version >= 2.8. [Get CMake](http://cmake.org/cmake/resources/software.html)
+
+Before compiling the library, users should bear in mind that 
+- Linear Algebra routines mainly rely on Blas & Lapack. If these two
+  libraries are not found on the machine, the versions shipped with PNL are
+  used. For a better performance, one should consider using `Atlas` under
+  Linux
+- When an MPI library is detected on the computer, some MPI bindings
+  are compiled within the library to enable the direct manipulation of
+  `PnlObjects`. 
+
+
+To actually compile the library, just use CMake. 
+
+### Under Unix
+
+```
+mkdir build-dir
+cd /toplevel/pnl/dir
+cmake /relative/path/to/buil-dir
+make
+make install
+```
+
+Note the command `make install`, which installs
+- the headers to `build-dir/include`
+- the library and the CMake config file to `build-dir/lib`
+
+
+Some useful variables to modify the behaviour of cmake.
+
+```
+-DPNL_INSTALL_PREFIX     The path where to install the library.
+        Default is to use the building directory as the installation
+        prefix.
+
+-DCMAKE_BUILD_TYPE        Release OR Debug. Default is Debug.
+        Choose Debug for building a development release without
+        optimization and with debugging symbols.
+        Choose Release for building an optimized version.
+
+-DLAPACK_LIBRARIES        Full path of a Lapack library (not just its
+        directory). Lapack is detected automatically but the user
+        can specify a particular library.
+
+-DBLAS_LIBRARIES          Full path of a Blas library (not just its
+        directory). Blas is detected automatically but the user
+        can specify a particular library.
+
+    Note that you must specify both BLAS_LIBRARIES and
+    LAPACK_LIBRARIES or none of them.
+
+-DUSE_MPI                 ON/OFF. Default is ON. If ON, build the MPI
+        bindings.
+
+-DUSE_INTERNAL_BLAS       ON/OFF. Default is OFF. If ON, use the
+        internal Blas & Lapack libraries shipped with the PNL
+        source code.
+
+-DLINK_TYPE               SHARED or STATIC. Default is SHARED.
+                          Determine which type of library to build.
+
+```
+
+### Under Windows
+
+Use CMake to create Visual C++ solution for the library. Once done, open
+the solution in Visual C++ and be sure to call `generate` for both the
+`ALL_BUILD` and `INSTALL` projects.
+
+
+See the Unix section for the description of useful variables to modify
+CMake's behaviour
+
+The generation of the `INSTALL` project takes care of installing the
+headers and the library files (`.lib` and `.dll`) in the `build-dir` you
+have specified in CMake (ie. the directory containing the Visual C++
+solution).
+
+
+
+## Getting the documentation
 
 If you have cloned the git repository, you need to compile the
 documentation yourself by going to the directory `man` and 
-    - for the pdf version, run `make` (you need a LaTeX compiler). 
-    - for the html version, run `make html` (you need tex4ht). 
+    - for the pdf version, run `make` (you need a `LaTeX` compiler). 
+    - for the html version, run `make html` (you need `tex4ht`). 
 
-# Using the library under Unix
 
-You must have installed the library before proceeding to this step. 
-If your want to use the library to develop your own code, here is one
-way of doing it.
+# Using the library
 
-- create a new directory at the top level.
+## Under Unix
 
-- Copy the Makefile located in `perso/` to your new directory and
-edit it according to your needs. 
-To define your target just add the executable name, say `my-exec`, to the `BINS`
-list and create an entry
+### Using CMake
+
+In your regular `CMakeLists.txt`, add
 ```
-my_exec_OBJS 
+find_package(Pnl REQUIRED)
+set(LIBS ${LIBS} ${PNL_LIBRARIES})
+include_directories(${PNL_INCLUDE_DIRS})
+# Deactivate PNL debugging stuff on Release builds
+if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
+    add_definitions(-DPNL_RANGE_CHECK_OFF)
+endif()
 ```
-carrying the list of .o files needed to create your executable.
-Note that the '-' in executable names are replaced by '_' to create the
-corresponding `_OBJS` variable
-   
 
-If you encounter any problem or want to report some bug, contact 
-Jerome Lelong <jerome.lelong@gmail.com>
+To build your project, call CMake with the following extra flag
+```
+-DCMAKE_
+```
 
+A complete though basic CMakeLists.txt could de
+```
+cmake_minimum_required(VERSION 2.8)
+project(my-project CXX)
+
+# Prefix
+if (NOT PREFIX)
+    set(PREFIX ${CMAKE_CURRENT_BINARY_DIR})
+endif (NOT PREFIX)
+set(CMAKE_INSTALL_PREFIX ${PREFIX} CACHE STRING "Installation prefix." FORCE)
+
+# Release or Debug
+if (NOT CMAKE_BUILD_TYPE)
+    message(STATUS "Setting build type to 'Debug' as none was specified.")
+    set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
+endif ()
+
+
+# Detect PNL
+find_package(Pnl REQUIRED)
+set(LIBS ${LIBS} ${PNL_LIBRARIES})
+include_directories(${PNL_INCLUDE_DIRS})
+if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
+    add_definitions(-DPNL_RANGE_CHECK_OFF)
+endif()
+
+# Testing the parser
+add_executable(exec-name list_of_source_files)
+target_link_libraries(exec-name ${LIBS})
+
+
+# Print compiler flags
+get_directory_property(DirDefs COMPILE_DEFINITIONS)
+message(STATUS "COMPILE_DEFINITIONS = ${DirDefs}")
+if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
+    message(STATUS "C++ Flags: ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE} ${CMAKE_LINKER_EXE_FLAGS}" )
+else()
+    message(STATUS "C++ Flags: ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG} ${CMAKE_LINKER_EXE_FLAGS}" )
+endif()
+```
+
+### Using a Makefile
+
+
+In whatever project you want to use PNL, create a `Makefile` containing
+```
+## Extra linker flags. Can be empty
+LDFLAGS=
+
+## Extra compiler flags. Can be empty.
+CFLAGS=
+
+## list of executables to create
+BINS=pipo
+
+## For each executable, create the variables
+pipo_SRC= list_of_source_files
+## Per target flags. Can be empty.
+pipo_LDFLAGS=
+pipo_CFLAGS=
+pipo_CXXFLAGS=
+
+
+## This line must be the last one
+include /path/to/build-dir/CMakeuser.incl
+```
+See the [manual](https://jlelong.github.io/pnl/manual-html/pnl-manual.html) section 1.3.1 for more details on the syntax of this Makefile.
+
+
+
+## Under Windows with Visual C++
+
+If you want to use the previously compiled library in a new Visual C++
+project, you have to go through the folliwings steps
+
+1. Set the configuration of the solution to 64 bits.
+```
+Solution properties -> Configuration
+```
+2. Add `build-dir/include` as an additional include directory
+```
+Project properties -> C/C++ -> General -> Additional Include Directories
+```
+3. Add `build-dir/lib` as an additional library directory
+```
+Project properties -> Linker -> General -> Additional Library Directories
+```
+4. Add `pnl.lib` as a dependency library
+```
+Project properties -> Linker -> Input -> Additional Dependencies
+```
 
