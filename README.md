@@ -121,49 +121,10 @@ endif()
 
 To build your project, call CMake with the following extra flag
 ```
--DCMAKE_
+-DCMAKE_PREFIX_PATH=path/to/build-dir
 ```
 
-A complete though basic CMakeLists.txt could de
-```
-cmake_minimum_required(VERSION 2.8)
-project(my-project CXX)
-
-# Prefix
-if (NOT PREFIX)
-    set(PREFIX ${CMAKE_CURRENT_BINARY_DIR})
-endif (NOT PREFIX)
-set(CMAKE_INSTALL_PREFIX ${PREFIX} CACHE STRING "Installation prefix." FORCE)
-
-# Release or Debug
-if (NOT CMAKE_BUILD_TYPE)
-    message(STATUS "Setting build type to 'Debug' as none was specified.")
-    set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
-endif ()
-
-
-# Detect PNL
-find_package(Pnl REQUIRED)
-set(LIBS ${LIBS} ${PNL_LIBRARIES})
-include_directories(${PNL_INCLUDE_DIRS})
-if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
-    add_definitions(-DPNL_RANGE_CHECK_OFF)
-endif()
-
-# Testing the parser
-add_executable(exec-name list_of_source_files)
-target_link_libraries(exec-name ${LIBS})
-
-
-# Print compiler flags
-get_directory_property(DirDefs COMPILE_DEFINITIONS)
-message(STATUS "COMPILE_DEFINITIONS = ${DirDefs}")
-if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
-    message(STATUS "C++ Flags: ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE} ${CMAKE_LINKER_EXE_FLAGS}" )
-else()
-    message(STATUS "C++ Flags: ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG} ${CMAKE_LINKER_EXE_FLAGS}" )
-endif()
-```
+A complete though basic CMakeLists.txt is avaible [there](perso/CMakeLists-example.txt).
 
 ### Using a Makefile
 
@@ -181,11 +142,6 @@ BINS=pipo
 
 ## For each executable, create the variables
 pipo_SRC= list_of_source_files
-## Per target flags. Can be empty.
-pipo_LDFLAGS=
-pipo_CFLAGS=
-pipo_CXXFLAGS=
-
 
 ## This line must be the last one
 include /path/to/build-dir/CMakeuser.incl
@@ -197,7 +153,7 @@ See the [manual](https://jlelong.github.io/pnl/manual-html/pnl-manual.html) sect
 ## Under Windows with Visual C++
 
 If you want to use the previously compiled library in a new Visual C++
-project, you have to go through the folliwings steps
+project, you have to go through the followings steps
 
 1. Set the configuration of the solution to 64 bits.
 ```
@@ -215,4 +171,4 @@ Project properties -> Linker -> General -> Additional Library Directories
 ```
 Project properties -> Linker -> Input -> Additional Dependencies
 ```
-
+5. To run your executable, copy the file `build-dir/lib/pnl.dll` to the folder containing the executable.

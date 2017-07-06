@@ -1,0 +1,22 @@
+cmake_minimum_required(VERSION 2.8)
+project(my-project CXX)
+
+# Release or Debug
+if (NOT CMAKE_BUILD_TYPE)
+    message(STATUS "Setting build type to 'Debug' as none was specified.")
+    set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
+endif ()
+
+
+# Detect PNL
+find_package(Pnl REQUIRED)
+set(LIBS ${LIBS} ${PNL_LIBRARIES})
+include_directories(${PNL_INCLUDE_DIRS})
+if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
+    add_definitions(-DPNL_RANGE_CHECK_OFF)
+endif()
+
+# Testing the parser
+add_executable(exec-name list_of_source_files)
+target_link_libraries(exec-name ${LIBS})
+
