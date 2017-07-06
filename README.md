@@ -10,11 +10,10 @@ License for more details.
 
 # Compilation and installation
 
-See the INSTALLATION file
+See the INSTALL file
 
-If you got the sources from the svn repository, you need to compile the
-documentation yourself: 
-  Go to directory man and 
+If you have cloned the git repository, you need to compile the
+documentation yourself by going to the directory `man` and 
     - for the pdf version, run `make` (you need a LaTeX compiler). 
     - for the html version, run `make html` (you need tex4ht). 
 
