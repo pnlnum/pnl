@@ -245,7 +245,6 @@ if (MPI_C_FOUND)
     )
     add_executable(saveload_test ${saveload_test_SRCS})
     target_link_libraries(saveload_test pnl)
-    add_test(saveload_test ${CMAKE_CURRENT_BINARY_DIR}/saveload_test)
 endif (MPI_C_FOUND)
     
 
