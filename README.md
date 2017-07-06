@@ -10,10 +10,17 @@ License for more details.
 
 # Installation
 
+## Binary releases for Windows
+
+Binary releases are compatible with Visual C++ up to VS2013. 
+If you downloaded a binary release, just unzip the package and go to
+Section [Using the library](#under-windows-with-visual).
+
+
 ## Compiling the library
 
 
-To compile PNL, you need CMake version >= 2.8. [Get CMake](http://cmake.org/cmake/resources/software.html)
+To compile PNL, you need CMake version >= 2.8. [Get CMake](http://cmake.org/cmake/resources/software.html).
 
 Before compiling the library, users should bear in mind that 
 - Linear Algebra routines mainly rely on Blas & Lapack. If these two
@@ -38,7 +45,7 @@ make install
 ```
 
 Note the command `make install`, which installs
-- the headers to `build-dir/include`
+- the header files to `build-dir/include`
 - the library and the CMake config file to `build-dir/lib`
 
 
@@ -98,8 +105,8 @@ solution).
 
 If you have cloned the git repository, you need to compile the
 documentation yourself by going to the directory `man` and 
-    - for the pdf version, run `make` (you need a `LaTeX` compiler). 
-    - for the html version, run `make html` (you need `tex4ht`). 
+- for the pdf version, run `make` (you need a `LaTeX` compiler). 
+- for the html version, run `make html` (you need `tex4ht`). 
 
 
 # Using the library
@@ -150,7 +157,7 @@ See the [manual](https://jlelong.github.io/pnl/manual-html/pnl-manual.html) sect
 
 
 
-## Under Windows with Visual C++
+## Under Windows with Visual
 
 If you want to use the previously compiled library in a new Visual C++
 project, you have to go through the followings steps
