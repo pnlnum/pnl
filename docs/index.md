@@ -33,7 +33,10 @@ PNL is thread-safe and suitable for use in a parallel environment.
 
 # Download and Installation
 
-To download the library, simply clone (or fork) the Github repo. Alternatively, you regularly provide releases on [here](https://github.com/jlelong/pnl/releases). Binary versions are available for use with Visual Studio stricly older than 2015.
+To download the library, simply clone (or fork) the Github repo.  
+Alternatively, releases are available [here](https://github.com/jlelong/pnl/releases). 
+The users of Visual Studio (strictly before VS2015) can directly use binary
+releases.
 
 
 For more details on installing and using the library, see the README file on the [Github page](https://github.com/jlelong/pnl).
