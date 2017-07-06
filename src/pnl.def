@@ -701,6 +701,8 @@ EXPORTS
     pnl_ode_rkf45 
     pnl_ode_rkf45_step 
     pnl_optim_intpoints_bfgs_solve 
+    pnl_optim_linprog
+    pnl_optim_linprog_sp
     pnl_permutation_create 
     pnl_permutation_fprint 
     pnl_permutation_free 
