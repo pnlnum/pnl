@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
+# Declare a project
 project(my-project CXX)
 
 # Release or Debug
@@ -16,7 +17,7 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
     add_definitions(-DPNL_RANGE_CHECK_OFF)
 endif()
 
-# Testing the parser
+# Adding an executable.
 add_executable(exec-name list_of_source_files)
 target_link_libraries(exec-name ${LIBS})
 

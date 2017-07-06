@@ -357,8 +357,8 @@ possible use with a C++ compiler. The header files must be include using
 In this section, we assume that the library is installed in the directory
 \verb!$HOME/pnl-xxx!.
 
-Once the library has been installed, the libraries can be found in the
-\verb!$HOME/pnl-xxx/lib!  directory and the headers in the
+Once installed, the library can be found in the
+\verb!$HOME/pnl-xxx/lib!  directory and the header files in the
 \verb!$HOME/pnl-xxx/include! directory. 
 
 \subsubsection{Compiling and Linking}
@@ -370,9 +370,9 @@ random number generators you should include
 #include <pnl/pnl_random.h>
 \end{verbatim}
 
-\paragraph{Compiling and linking by hand}
+\paragraph{Compiling and linking by hand.}
 
-If \verb!gcc! is used, you should pass the following options
+If \verb!gcc! or \verb!llvm! is used, you should pass the following options
 \begin{itemize}
 \item \verb!-I$HOME/pnl-xxx/include! for compiling
 \item \verb!-L$HOME/pnl-xxx/lib -lpnl! for linking
@@ -384,7 +384,7 @@ On some systems, you may need to add to the linker flags the dependencies of the
 library, which can become very tedious. Therefore, we provide a second automatic
 mechanism which takes care of the dependencies on its own.
 
-\paragraph{Compiling and linking using an automatic Makefile}
+\paragraph{Compiling and linking using an automatic Makefile.}
 
 This mechanism only works under Unix (it has been tested under various Linux
 distributions and Mac OS X).
@@ -459,10 +459,32 @@ mybinary_CXXFLAGS=-g -O0
 include full_path_to_pnl_build/CMakeuser.incl
 \end{verbatim}
 
+\paragraph{Compiling and linking using CMake.}
+
+If you already use CMake for your new project, just add the following to your toplevel
+\verb!CMakeLists.txt!
+\begin{verbatim}
+find_package(Pnl REQUIRED)
+set(LIBS ${LIBS} ${PNL_LIBRARIES})
+include_directories(${PNL_INCLUDE_DIRS})
+# Deactivate PNL debugging stuff on Release builds
+if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
+    add_definitions(-DPNL_RANGE_CHECK_OFF)
+endif()
+\end{verbatim}
+Then, call cmake with the following extra flag 
+\begin{verbatim}
+-DCMAKE_PREFIX_PATH=path/to/build-dir
+\end{verbatim}
+or add the variable \verb!CMAKE_BUILD_TYPE! to the GUI. \\
+
+Just in case, we give an example of a complete although elementary \verb!CMakeLists.txt!
+\verbatiminput{../perso/CMakeLists-example.txt}
+
 \subsubsection{Inline Functions and getters}
 \label{sec:inline}
 
-It it is supported by your compiler, getter and setter functions are declared
+If it is supported by your compiler, getter and setter functions are declared
 as inline functions. This is automatically detected when running CMake. By
 default, setter and getter functions check that the required access is valid,
 basically it boils down to checking whether the index of the access is within an
