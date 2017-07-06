@@ -56,12 +56,6 @@
 /* Define user program feature option switches                               */
 /* ------------------------------------------------------------------------- */
 
-# if defined _WIN32 && !defined __GNUC__
-#  define isnan _isnan
-# endif
-#if defined NOISNAN
-# define isnan(x) FALSE
-#endif
 
 #define SETMASK(variable, mask)     variable |= mask
 #define CLEARMASK(variable, mask)   variable &= ~(mask)

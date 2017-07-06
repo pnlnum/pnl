@@ -38,6 +38,7 @@
 # include "lp_fortify.h"
 #endif
 
+#include "pnl/pnl_mathtools.h"
 
 /* Allocation routine for the BB record structure */
 STATIC BBrec *create_BB(lprec *lp, BBrec *parentBB, MYBOOL dofullcopy)
@@ -368,7 +369,7 @@ STATIC MYBOOL initbranches_BB(BBrec *BB)
     /* Otherwise check if we should do automatic branching */
     else if(get_var_branch(lp, k) == BRANCH_AUTOMATIC) {
       new_bound = modf(BB->lastsolution/get_pseudorange(lp->bb_PseudoCost, k, BB->vartype), &temp);
-      if(isnan(new_bound))
+      if(pnl_isnan(new_bound))
         new_bound = 0;
       else if(new_bound < 0)
         new_bound += 1.0;

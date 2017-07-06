@@ -87,6 +87,7 @@
 #endif
 
 #define sensrejvar TRUE
+#include "pnl/pnl_mathtools.h"
 
 /* Return lp_solve version information */
 void __WINAPI lp_solve_version(int *majorversion, int *minorversion, int *release, int *build)
@@ -8130,7 +8131,7 @@ STATIC void update_pseudocost(BBPSrec *pc, int mipvar, int varcode, MYBOOL capup
   else
     OFsol = pc->lp->solution[0];              /* The problem's objective function value */
 
-  if(isnan(varsol)) {
+  if(pnl_isnan(varsol)) {
     pc->lp->bb_parentOF = OFsol;
     return;
   }
@@ -8189,7 +8190,7 @@ STATIC REAL get_pseudonodecost(BBPSrec *pc, int mipvar, int vartype, REAL varsol
 
   uplim = get_pseudorange(pc, mipvar, vartype);
   varsol = modf(varsol/uplim, &hold);
-  if(isnan(varsol))
+  if(pnl_isnan(varsol))
     varsol = 0;
 
   hold = pc->LOcost[mipvar].value*varsol +
