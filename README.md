@@ -37,9 +37,9 @@ To actually compile the library, just use CMake.
 ### Under Unix
 
 ```
-mkdir build-dir
-cd /toplevel/pnl/dir
-cmake /relative/path/to/buil-dir
+mkdir pnl-build
+cd  pnl-build
+cmake /relative/path/to/pnl
 make
 make install
 ```
@@ -52,14 +52,14 @@ Note the command `make install`, which installs
 Some useful variables to modify the behaviour of cmake.
 
 ```
--DPNL_INSTALL_PREFIX     The path where to install the library.
-        Default is to use the building directory as the installation
-        prefix.
-
 -DCMAKE_BUILD_TYPE        Release OR Debug. Default is Debug.
         Choose Debug for building a development release without
         optimization and with debugging symbols.
         Choose Release for building an optimized version.
+
+-DPNL_INSTALL_PREFIX     The path where to install the library.
+        Default is to use the building directory as the installation
+        prefix.
 
 -DLAPACK_LIBRARIES        Full path of a Lapack library (not just its
         directory). Lapack is detected automatically but the user
@@ -86,8 +86,8 @@ Some useful variables to modify the behaviour of cmake.
 
 ### Under Windows
 
-Use CMake to create Visual C++ solution for the library. Once done, open
-the solution in Visual C++ and be sure to call `generate` for both the
+Use CMake to create the Visual C++ solution for the library. Once done,
+open the solution in Visual C++ and be sure to call `generate` for both the
 `ALL_BUILD` and `INSTALL` projects.
 
 
