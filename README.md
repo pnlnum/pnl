@@ -26,7 +26,7 @@ Before compiling the library, users should bear in mind that
 - Linear Algebra routines mainly rely on Blas & Lapack. If these two
   libraries are not found on the machine, the versions shipped with PNL are
   used. For a better performance, one should consider using `Atlas` under
-  Linux
+  Linux.
 - When an MPI library is detected on the computer, some MPI bindings
   are compiled within the library to enable the direct manipulation of
   `PnlObjects`. 
@@ -92,7 +92,7 @@ open the solution in Visual C++ and be sure to call `generate` for both the
 
 
 See the Unix section for the description of useful variables to modify
-CMake's behaviour
+CMake's behaviour.
 
 The generation of the `INSTALL` project takes care of installing the
 headers and the library files (`.lib` and `.dll`) in the `build-dir` you
@@ -162,7 +162,7 @@ See the [manual](https://jlelong.github.io/pnl/manual-html/pnl-manual.html) sect
 If you want to use the previously compiled library in a new Visual C++
 project, you have to go through the followings steps
 
-1. Set the configuration of the solution to 64 bits.
+1. Set the configuration of the solution to __64 bits__.
 ```
 Solution properties -> Configuration
 ```
