@@ -134,9 +134,9 @@ if (USE_MPI)
     endif (MPI_C_FOUND)
 endif (USE_MPI)
 
-# Add -lm if needed
+# Add -lm and -ldl if needed
 if (UNIX)
-    set(LIBS ${LIBS} m)
+    set(LIBS ${LIBS} m dl)
 endif (UNIX)
 
 # Stuff for CMakeuser.incl
