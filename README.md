@@ -45,8 +45,8 @@ make install
 ```
 
 Note the command `make install`, which installs
-- the header files to `build-dir/include`
-- the library and the CMake config file to `build-dir/lib`
+- the header files to `pnl-build/include`
+- the library and the CMake config file to `pnl-build/lib`
 
 
 Some useful variables to modify the behaviour of cmake.
@@ -108,6 +108,9 @@ documentation yourself by going to the directory `man` and
 - for the pdf version, run `make` (you need a `LaTeX` compiler). 
 - for the html version, run `make html` (you need `tex4ht`). 
 
+The directory `examples`, which is actually used for non regression tests,
+contains usage examples for all the functionalities provided by the
+library.
 
 # Using the library
 
