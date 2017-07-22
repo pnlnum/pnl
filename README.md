@@ -156,7 +156,7 @@ pipo_SRC= list_of_source_files
 ## This line must be the last one
 include /path/to/build-dir/CMakeuser.incl
 ```
-See the [manual](https://jlelong.github.io/pnl/manual-html/pnl-manual.html) section 1.3.1 for more details on the syntax of this Makefile.
+See the [manual](https://pnlnum.github.io/pnl/manual-html/pnl-manual.html) section 1.3.1 for more details on the syntax of this Makefile.
 
 
 
