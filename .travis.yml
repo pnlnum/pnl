@@ -6,6 +6,6 @@ script:
 - cmake ..
 - make
 - make install
-- make test
+- make check
 
 install: true
