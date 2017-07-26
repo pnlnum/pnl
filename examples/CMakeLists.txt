@@ -1,12 +1,13 @@
 include_directories(${PROJECT_BINARY_DIR}/src/include ${PROJECT_SOURCE_DIR}/src/include)
 enable_testing()
-add_custom_target(check
+add_custom_target(link_data
     COMMAND ${CMAKE_COMMAND} -E create_symlink
         ${CMAKE_CURRENT_SOURCE_DIR}/Data ${CMAKE_CURRENT_BINARY_DIR}/Data
     COMMAND ${CMAKE_COMMAND} -E create_symlink
         ${CMAKE_CURRENT_SOURCE_DIR}/Data_specfun
-        ${CMAKE_CURRENT_BINARY_DIR}/Data_specfun
-    COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)
+        ${CMAKE_CURRENT_BINARY_DIR}/Data_specfun)
+
+add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)
 
 SET(band_matrix_test_SRCS
    band_matrix_test.c
@@ -86,6 +87,7 @@ SET(lapack_test_SRCS
 add_executable(lapack_test ${lapack_test_SRCS})
 target_link_libraries(lapack_test pnl)
 add_test(lapack_test ${CMAKE_CURRENT_BINARY_DIR}/lapack_test)
+add_dependencies(lapack_test link_data)
 
 
 SET(laplace_test_SRCS
@@ -157,6 +159,7 @@ SET(matrix_test_SRCS
 add_executable(matrix_test ${matrix_test_SRCS})
 target_link_libraries(matrix_test pnl)
 add_test(matrix_test ${CMAKE_CURRENT_BINARY_DIR}/matrix_test)
+add_dependencies(matrix_test link_data)
 
 
 SET(solver_iterativ_test_SRCS
@@ -166,6 +169,7 @@ SET(solver_iterativ_test_SRCS
 add_executable(solver_iterativ_test ${solver_iterativ_test_SRCS})
 target_link_libraries(solver_iterativ_test pnl)
 add_test(solver_iterativ_test ${CMAKE_CURRENT_BINARY_DIR}/solver_iterativ_test)
+add_dependencies(solver_iterativ_test link_data)
 
 
 SET(special_func_test_SRCS
@@ -175,6 +179,7 @@ SET(special_func_test_SRCS
 add_executable(special_func_test ${special_func_test_SRCS})
 target_link_libraries(special_func_test pnl)
 add_test(special_func_test ${CMAKE_CURRENT_BINARY_DIR}/special_func_test)
+add_dependencies(special_func_test link_data)
 
 
 SET(tridiag_test_SRCS
