@@ -1,29 +1,29 @@
 language: c
 
 os:
-  - linux
-  - osx
+- linux
+- osx
 
 compiler:
-  - gcc
-  - clang
-
-addons:
-  apt:
-    packages:
-      - libblas-dev
-      - liblapack-dev
+- gcc
+- clang
 
 before_script:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install blas; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install lapack; fi
+- |
+  if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
+    brew install blas; 
+    brew install lapack;
+  else
+    sudo apt-get install libblas-dev
+    sudo-apt-get install liblapacck-dev
+  fi
 
 script:
-  - mkdir -p build
-  - cd build
-  - cmake ..
-  - make
-  - make install
-  - make test
+- mkdir -p build
+- cd build
+- cmake ..
+- make
+- make install
+- make test
 
-  install: true
+install: true
