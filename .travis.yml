@@ -14,9 +14,9 @@ addons:
       - libblas-dev
       - liblapack-dev
 
-before_install:
-  - if [ $TRAVIS_OS_NAME = osx ]; then brew install blas; fi
-  - if [ $TRAVIS_OS_NAME = osx ]; then brew install lapack; fi
+before_script:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install blas; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install lapack; fi
 
 script:
   - mkdir -p build
