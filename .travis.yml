@@ -21,6 +21,6 @@ script:
 - cmake ..
 - make
 - make install
-- CTEST_ON_FAILURE=1 make test
+- make CTEST_OUTPUT_ON_FAILURE=1 test
 
 install: true
