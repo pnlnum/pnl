@@ -175,7 +175,7 @@ struct ddd2d_test list_hyper2F0_tst [] =
 struct dddd2d_test list_hyper2F1_tst [] =
 {
 #include "Data_specfun/hyperg2F1_test.dat"
-    { NULL, NULL, 0, 0, 0, 0}
+    { NULL, NULL, 0, 0, 0, 0, 0}
 };
 
 void d2d_funcs_test (struct d2d_test *tst)
