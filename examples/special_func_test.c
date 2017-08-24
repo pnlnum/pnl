@@ -452,7 +452,7 @@ void test_faddeeva()
       for (i = 0; i < NTST; ++i)
         {
           dcomplex fw = pnl_sf_w(z[i]);
-          pnl_test_eq_rel(w[i].r, fw.r, errmax, "pnl_sf_w", "Computed at (%g + i %g)", z[i].r, z[i].i);
+          pnl_test_eq_rel(fw.r, w[i].r, errmax, "pnl_sf_w", "Computed at (%g + i %g)", z[i].r, z[i].i);
         }
     }
   {
@@ -576,7 +576,7 @@ void test_faddeeva()
     int i;                                                                                                     \
     for (i = 0; i < NTST; ++i) {                                                                               \
       dcomplex fw = pnl_sf_complex_##f(z[i]);                                                                  \
-        pnl_test_eq_rel(w[i].r, fw.r, errmax, "pnl_sf_complex_" #f, "Computed at (%g + i %g)", z[i].r, z[i].i); \
+        pnl_test_eq_rel(fw.r, w[i].r, errmax, "pnl_sf_complex_" #f, "Computed at (%g + i %g)", z[i].r, z[i].i); \
     }
 
     TST(erf, 1e-20);
