@@ -209,14 +209,15 @@ TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_list)(const int size, ...)
 }
 
 /**
- * Read a vector from a file and creates the corresponding PnlVect. The
- * data can be stored column or row wise
+ * Read a vector from a file and creates the corresponding PnlVect.
+ * The data can be stored column or row wise.
+ * Anything after a '#' is ignored up to the end of the line.
  * @param file  the file to be read
  * @return a PnlVect
  */
 TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_file)(const char *file)
 {
-  char car, prev = '\0', empty = 1;
+  char car, prev = '\0', empty = 1, comment = '#';
   TYPE(PnlVect) *v;
   int m, count;
   BASE *data;
@@ -236,6 +237,14 @@ TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_file)(const char *file)
   m = 1;
   while ((car = fgetc(FIC)) != '\n' && car != EOF)
     {
+      if (car == comment)
+        {
+          while ((car = fgetc(FIC)) != '\n' && car != EOF) {};
+          if (!empty)
+            break;
+          else
+            continue;
+        }
       if (isdigit(car) || car == '-' || car == '.')
         {
           empty = 0;
@@ -254,6 +263,10 @@ TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_file)(const char *file)
       empty = 1;
       while ((car = fgetc(FIC)) != EOF)
         {
+          if (car == comment)
+            {
+              while ((car = fgetc(FIC)) != '\n' && car != EOF) { };
+            }
           if (car == '\n')
             {
               if (!empty)
@@ -261,7 +274,7 @@ TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_file)(const char *file)
                   ++m;
                   empty = 1;
                 }
-              else break;
+              /* else break; */
             }
           else if (empty && isdigit(car)) empty = 0;
         }
@@ -282,10 +295,28 @@ TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_file)(const char *file)
   rewind(FIC);
   count = 0;
   data = FUNCTION(pnl_vect, lget)(v, 0);
-  while (fscanf(FIC, IN_FORMAT, IN_PUT_FORMAT(data)) == MULTIPLICITY && count < m)
+  for (count = 0; count < m; count++)
     {
-      data++;
-      count++;
+      /* Remove leading spaces */
+      while ((car = fgetc(FIC)) == ' ' || car == '\t') {};
+      /* Ignore comments */
+      if (car == comment)
+        {
+          while ((car = fgetc(FIC)) != '\n' && car != EOF) {};
+          count--;
+        }
+      else
+        {
+          ungetc(car, FIC);
+          /* Read a value according to the IN_FORMAT and eat everything up to eol */
+          if (fscanf(FIC, IN_FORMAT, IN_PUT_FORMAT(data)) == MULTIPLICITY)
+            {
+              data++;
+              while ((car = fgetc(FIC)) != '\n') {};
+            }
+          /* else */
+          /*   break; */
+        }
     }
   fclose(FIC);
   return v;
