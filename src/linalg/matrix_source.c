@@ -236,9 +236,9 @@ TYPE(PnlMat) FUNCTION(pnl_mat, wrap_array)(const BASE *x, int m, int n)
  */
 TYPE(PnlMat) *FUNCTION(pnl_mat, create_from_file)(const char *file)
 {
-  char car, prev = '\0', empty = 1;
+  char car, prev = '\0', empty = 1, comment = '#';
   TYPE(PnlMat) *M;
-  int m, n, count, mn;
+  int m, n, i, j;
   BASE *data;
   FILE *FIC = NULL;
 
@@ -252,6 +252,14 @@ TYPE(PnlMat) *FUNCTION(pnl_mat, create_from_file)(const char *file)
   n = 1;
   while ((car = fgetc(FIC)) != '\n' && car != EOF)
     {
+      if (car == comment)
+        {
+          while ((car = fgetc(FIC)) != '\n' && car != EOF) {};
+          if (!empty)
+            break;
+          else
+            continue;
+        }
       if (isdigit(car) || car == '-' || car == '.')
         {
           empty = 0;
@@ -265,14 +273,18 @@ TYPE(PnlMat) *FUNCTION(pnl_mat, create_from_file)(const char *file)
   empty = 1;
   while ((car = fgetc(FIC)) != EOF)
     {
-      if (car == '\n')
+      if (car == comment)
+        {
+          while ((car = fgetc(FIC)) != '\n' && car != EOF) { };
+        }
+      if (car == '\n') /*  || car == EOF) */
         {
           if (!empty)
             {
               ++m;
               empty = 1;
             }
-          else break;
+          /* else break; */
         }
       else if (empty && isdigit(car)) empty = 0;
     }
@@ -284,21 +296,36 @@ TYPE(PnlMat) *FUNCTION(pnl_mat, create_from_file)(const char *file)
       return M;
     }
 
-  mn = m * n;
   if ((M = FUNCTION(pnl_mat, create)(m, n)) == NULL)
     {
       PNL_ERROR("Allocation error", "FUNCTION(pnl_mat,create_from_file)");
     }
 
-  data = FUNCTION(pnl_mat, lget)(M, 0, 0);
-
   /* second pass to read data */
   rewind(FIC);
-  count = 0;
-  while (fscanf(FIC, IN_FORMAT, IN_PUT_FORMAT(data)) > 0 && count < mn)
+  data = FUNCTION(pnl_mat, lget)(M, 0, 0);
+  for (i = 0; i < m; i++)
     {
-      data++;
-      count++;
+      /* Remove leading spaces */
+      while ((car = fgetc(FIC)) == ' ' || car == '\t') {};
+      /* Ignore comments */
+      if (car == comment)
+        {
+          while ((car = fgetc(FIC)) != '\n' && car != EOF) {};
+          i--;
+        }
+      else
+        {
+          ungetc(car, FIC);
+          for (j = 0; j < n; j++)
+            {
+              if (fscanf(FIC, IN_FORMAT, IN_PUT_FORMAT(data)) == MULTIPLICITY)
+                {
+                  data++;
+                }
+            }
+          while ((car = fgetc(FIC)) != '\n') {};
+        }
     }
   fclose(FIC);
   return M;
