@@ -113,8 +113,9 @@ There are no special functions to access the size of a vector, instead the field
 \item \describefun{\PnlVect \ptr }{pnl_vect_create_from_file}
   {const char \ptr file}
   \sshortdescribe Read a vector from a file and creates the corresponding
-  \PnlVect. The data might be stored as a single blank separated line
-  or as a one column file with one element per line.
+  \PnlVect. The data might be stored as a single white space separated line
+  or as a one column file with one element per line. Anything after a '\#' is ignored up to
+  the end of line.
 
 \item \describefun{\PnlVect \ptr }{pnl_vect_copy}{const
     \PnlVect \ptr v}
@@ -710,13 +711,9 @@ and the size of the matrix.
 
 \item \describefun{\PnlMat \ptr }{pnl_mat_create_from_file}{const char \ptr file}
   \sshortdescribe Read a matrix from a file and creates the corresponding
-  \PnlMat. The following conventions are used for the storage in a
-  file:
-  \begin{itemize}
-  \item one row of the matrix corresponds to one line of the file
-  \item the elements of a row should be separated by blanks (spaces or tabs) and
-    nothing else (no comma or semi-colon separators are detected).
-  \end{itemize}
+  \PnlMat. One row of the matrix corresponds to one line of the file and 
+  the elements of a row are separated by blanks (spaces or tabs). Anything after a '\#' is
+  ignored up to the end of line.
 
 \item \describefun{void}{pnl_mat_free}{\PnlMat \ptr \ptr M}
   \sshortdescribe Free a \PnlMat and sets \var{\ptr M} to \var{NULL} 
