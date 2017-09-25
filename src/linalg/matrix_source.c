@@ -636,7 +636,7 @@ TYPE(PnlMat) *FUNCTION(pnl_mat, create_diag_from_ptr)(const BASE x[], int d)
  */
 void FUNCTION(pnl_mat, set_row)(TYPE(PnlMat) *M, const TYPE(PnlVect) *V, int i)
 {
-  PNL_CHECK(i > M->m, "index out of range", "pnl_mat_set_row");
+  PNL_CHECK(i > M->m - 1, "index out of range", "pnl_mat_set_row");
   PNL_CHECK(M->n != V->size, "incompatible data", "pnl_mat_set_row");
   memcpy(&(M->array[i * M->n]), V->array, V->size * sizeof(BASE));
 }
