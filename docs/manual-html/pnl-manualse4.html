@@ -1745,19 +1745,38 @@ href="#x6-440004.3.1"><span class='struct'>PnlMat</span></a> <span
 class="ts1-lmr10-x-x-109">*</span>M, const <a 
 href="#x6-260004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>V, int j</span>)<br 
-class="newline" />   <span class='description'>Description&#x00A0;</span>Replace the <span class='var'>i</span>-th column of a matrix M by a vector V
+class="newline" />   <span class='description'>Description&#x00A0;</span>Set the <span class='var'>i</span>-th column of a matrix <span class='var'>M</span> with the content of <span class='var'>V</span>
      </li>
      <li class="itemize"><a 
  id="dx6-47021"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_mat_set_col_from_ptr</span></span>&#x00A0;(<span class='args'><a 
+href="#x6-440004.3.1"><span class='struct'>PnlMat</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>M, const double <span 
+class="ts1-lmr10-x-x-109">*</span>x, int j</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Set the <span class='var'>i</span>-th column of <span class='var'>M</span> with the content of <span class='var'>x</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx6-47022"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_mat_set_row</span></span>&#x00A0;(<span class='args'><a 
 href="#x6-440004.3.1"><span class='struct'>PnlMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>M, const <a 
 href="#x6-260004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>V, int i</span>)<br 
-class="newline" />   <span class='description'>Description&#x00A0;</span>Replace the <span class='var'>i</span>-th row of a matrix M by a vector V
+class="newline" />   <span class='description'>Description&#x00A0;</span>Set the <span class='var'>i</span>-th row of <span class='var'>M</span> with the content of <span class='var'>V</span>
      </li>
      <li class="itemize"><a 
- id="dx6-47022"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx6-47023"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_mat_set_row_from_ptr</span></span>&#x00A0;(<span class='args'><a 
+href="#x6-440004.3.1"><span class='struct'>PnlMat</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>M, const double <span 
+class="ts1-lmr10-x-x-109">*</span>x, int i</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Set the <span class='var'>i</span>-th row of <span class='var'>M</span> with the content of <span class='var'>x</span>
+                                                                                    
+
+                                                                                    
+     </li>
+     <li class="itemize"><a 
+ id="dx6-47024"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_mat_add_row</span></span>&#x00A0;(<span class='args'><a 
 href="#x6-440004.3.1"><span class='struct'>PnlMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>M, int i, const <a 
@@ -1768,16 +1787,13 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Add a r
      at the top of the matrix &#8212; and <span class='var'>M-&#x003E;m</span> &#8212; add a row after all rows.
      </li>
      <li class="itemize"><a 
- id="dx6-47023"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx6-47025"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_mat_del_row</span></span>&#x00A0;(<span class='args'><a 
 href="#x6-440004.3.1"><span class='struct'>PnlMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>M, int i</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Delete the row with index <span class='var'>i</span> (between <span class='var'>0</span> and <span class='var'>M-&#x003E;m-1</span>) of the matrix <span class='var'>M</span>.
-                                                                                    
-
-                                                                                    
      </li></ul>
-<!--l. 863--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 869--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-480004.3.2"></a><span 
 class="ec-lmbx-10x-x-109">Printing Matrices</span></span>
 </p>
@@ -1813,7 +1829,7 @@ class="ts1-lmr10-x-x-109">*</span>M</span>)<br
 class="newline" />   <span class='description'>Description&#x00A0;</span>Print a matrix to a file in a format compatible with Nsp. The saved
      matrix can be reloaded by the function <a 
 href="#x6-460004.3.2">pnl_mat_create_from_file</a>.</li></ul>
-<!--l. 883--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 889--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-490004.3.2"></a><span 
 class="ec-lmbx-10x-x-109">Applying external operations</span></span>
 </p>
@@ -1838,6 +1854,9 @@ class="ec-lmbx-10x-x-109">pnl_mat_mult_scalar</span></span>&#x00A0;(<span class=
 href="#x6-440004.3.1"><span class='struct'>PnlMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>lhs, double x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>In-place matrix scalar multiplication
+                                                                                    
+
+                                                                                    
      </li>
      <li class="itemize"><a 
  id="dx6-49004"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
@@ -1846,10 +1865,7 @@ href="#x6-440004.3.1"><span class='struct'>PnlMat</span></a> <span
 class="ts1-lmr10-x-x-109">*</span>lhs, double x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>In-place matrix scalar division
      </li></ul>
-                                                                                    
-
-                                                                                    
-<!--l. 899--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 905--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-500004.3.2"></a><span 
 class="ec-lmbx-10x-x-109">Element wise operations</span></span>
 </p>
@@ -1956,6 +1972,9 @@ class="ec-lmbx-10x-x-109">pnl_mat_cumsum</span></span>&#x00A0;(<span class='args
 href="#x6-440004.3.1"><span class='struct'>PnlMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>A, char c</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Cumulative sum over the rows or columns. Argument <span class='var'>c</span> can be either &#8217;r&#8217;
+                                                                                    
+
+                                                                                    
      to sum over the rows or &#8217;c&#8217; to sum over the columns. When <span class='var'>c=&#8217;r&#8217;</span>, <span 
 class="lmmi-10x-x-109">A</span><sub><span 
 class="lmmi-8">ij</span></sub> <span 
@@ -1989,9 +2008,6 @@ class="ec-lmbx-10x-x-109">pnl_mat_prod</span></span>&#x00A0;(<span class='args'>
 href="#x6-440004.3.1"><span class='struct'>PnlMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>lhs</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Product matrix component-wise
-                                                                                    
-
-                                                                                    
      </li>
      <li class="itemize"><a 
  id="dx6-50011"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
@@ -2054,7 +2070,7 @@ class="lmsy8-">&#x2264;</span><span
 class="lmmi-8">j</span></sub><span 
 class="lmmi-10x-x-109">A</span><sub><span 
 class="lmmi-8">ik</span></sub>.</li></ul>
-<!--l. 962--><p class="noindent" ><span class="subparagraphHead"> <a 
+<!--l. 968--><p class="noindent" ><span class="subparagraphHead"> <a 
  id="x6-510004.3.2"></a><span 
 class="ec-lmbx-10x-x-109">Test functions</span></span>
 </p>
@@ -2074,7 +2090,7 @@ class="ec-lmbx-10x-x-109">pnl_mat_eq_all</span></span>&#x00A0;(<span class='args
 href="#x6-440004.3.1"><span class='struct'>PnlMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>M, double x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Test if all the components of <span class='var'>M</span> are equal to <span class='var'>x</span>. Returns <span class='var'>TRUE</span> or <span class='var'>FALSE</span>.</li></ul>
-<!--l. 976--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 982--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-520004.3.2"></a><span 
 class="ec-lmbx-10x-x-109">Ordering operations</span></span>
 </p>
@@ -2162,6 +2178,9 @@ class="lmmi-10x-x-109">A</span></span><span
 class="rm-lmr-10x-x-109">(</span><span 
 class="lmmi-10x-x-109">i,j</span><span 
 class="rm-lmr-10x-x-109">) </span>when <span class='var'>d=&#8217;*&#8217;</span>.
+                                                                                    
+
+                                                                                    
      </li>
      <li class="itemize"><a 
  id="dx6-52003"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
@@ -2239,9 +2258,6 @@ class="lmmi-10x-x-109">A</span></span><span
 class="rm-lmr-10x-x-109">(</span><span 
 class="lmmi-10x-x-109">i,j</span><span 
 class="rm-lmr-10x-x-109">) </span>when <span class='var'>d=&#8217;*&#8217;</span>.
-                                                                                    
-
-                                                                                    
      </li>
      <li class="itemize"><a 
  id="dx6-52004"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
@@ -2332,6 +2348,9 @@ class="newline" />   <span class='description'>Description&#x00A0;</span><span c
      appearing after <span class='var'>f</span> : &#8217;r&#8217; for real numbers and &#8217;m&#8217; for matrices. This function aims at simulating
      Scilab&#8217;s <span class='var'>find</span> function. Here are a few examples (capital letters are used for matrices and small
      letters for real values)
+                                                                                    
+
+                                                                                    
           <ul class="itemize2">
           <li class="itemize"><span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">[indi,</span><span 
@@ -2351,7 +2370,7 @@ class="ec-lmtt-10x-x-109">&#x00A0;)</span></span></span>
           &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;pnl_mat_find&#x00A0;(&#x00A0;indi,&#x00A0;indj,&#x00A0;"rm",&#x00A0;isless,&#x00A0;a,&#x00A0;X&#x00A0;);
           &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;
 </div>
-          <!--l. 1047--><p class="nopar" >
+          <!--l. 1053--><p class="nopar" >
           </p></li>
           <li class="itemize"><span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">ind</span><span 
@@ -2368,7 +2387,7 @@ class="ec-lmtt-10x-x-109">&#x00A0;Y)</span></span></span>
           &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;pnl_mat_find&#x00A0;(&#x00A0;ind,&#x00A0;"mm",&#x00A0;isless,&#x00A0;X,&#x00A0;Y&#x00A0;);
           &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;
 </div>
-          <!--l. 1052--><p class="nopar" >
+          <!--l. 1058--><p class="nopar" >
           </p></li>
           <li class="itemize"><span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">[indi,</span><span 
@@ -2393,13 +2412,13 @@ class="ec-lmtt-10x-x-109">&#x00A0;Y))</span></span></span>
           &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;pnl_mat_find&#x00A0;(&#x00A0;indi,&#x00A0;indj,&#x00A0;"rmm",&#x00A0;cmp,&#x00A0;a,&#x00A0;X,&#x00A0;Y&#x00A0;);
           &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;
 </div>
-          <!--l. 1060--><p class="nopar" ></p></li></ul>
-     <!--l. 1062--><p class="noindent" ><span class='var'>(indi, indj)</span> contains on exit the indices <span class='var'>(i,j)</span> for which the function <span class='var'>f</span> returned <span class='var'>1</span>. Note that if
+          <!--l. 1066--><p class="nopar" ></p></li></ul>
+     <!--l. 1068--><p class="noindent" ><span class='var'>(indi, indj)</span> contains on exit the indices <span class='var'>(i,j)</span> for which the function <span class='var'>f</span> returned <span class='var'>1</span>. Note that if
      <span class='var'>indj == NULL</span> on entry, a linear indexing is used for matrices, which means that matrices
      are seen as large vectors built up be stacking rows. This function returns <span class='var'>OK</span> or
      <span class='var'>FAIL</span> if something went wrong (size mismatch between matrices, invalid string
      type).</p></li></ul>
-<!--l. 1070--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 1076--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-530004.3.2"></a><span 
 class="ec-lmbx-10x-x-109">Standard matrix operations</span></span>
 </p>
@@ -2654,7 +2673,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Compute
      stored  column  wise  in  <span class='var'>P</span>  when  <span class='var'>with_eigenvector==TRUE</span>.  If  <span class='var'>A</span>  is  symmetric  or
      Hermitian in the complex case, <span class='var'>P</span> is orthonormal. When <span class='var'>with_eigenvector=FALSE</span>, <span class='var'>P</span>
      can be <span class='var'>NULL</span>.</li></ul>
-<!--l. 1191--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 1197--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-540004.3.2"></a><span 
 class="ec-lmbx-10x-x-109">Linear systems and matrix decompositions</span></span>
 The following functions are designed to solve linear system of the from <span class='var'>A x = b</span> where <span class='var'>A</span> is a matrix
@@ -2665,7 +2684,7 @@ href="#x6-540004.3.2">pnl_mat_lu_syslin_mat</a> and
 href="#x6-540004.3.2">pnl_mat_chol_syslin_mat</a> which expect the right hand side member to be a matrix too. Whenever
 the vector <span class='var'>b</span> is not needed once the system is solved, you should consider using &#8220;inplace&#8221;
 functions.
-</p><!--l. 1201--><p class="noindent" >All the functions described in this paragraph return <span class='var'>OK</span> if the computations have been carried out
+</p><!--l. 1207--><p class="noindent" >All the functions described in this paragraph return <span class='var'>OK</span> if the computations have been carried out
 successfully and <span class='var'>FAIL</span> otherwise.
 </p>
                                                                                     
@@ -2858,7 +2877,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Solve a
 href="#x6-540004.3.2">pnl_mat_lu</a>. <span class='var'>B</span> is matrix with the same number of rows as <span class='var'>A</span>. The solution
      of the system is stored in <span class='var'>B</span> on exit.
      </li></ul>
-<!--l. 1310--><p class="noindent" >The following functions are designed to invert matrices. The authors provide these functions
+<!--l. 1316--><p class="noindent" >The following functions are designed to invert matrices. The authors provide these functions
 although they cannot find good reasons to use them. Note that to solve a linear system, one must
 used the <span class='var'>syslin</span> functions and not invert the system matrix because it is much longer.
 </p>
@@ -2904,12 +2923,12 @@ class="ts1-lmr10-x-x-109">*</span>A</span>)<br
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the inverse of a symmetric positive definite matrix A and stores
      the result into <span class='var'>inverse</span>. The Cholesky factorisation of the matrix <span class='var'>A</span> is computed inside
      this function.</li></ul>
-<!--l. 1335--><p class="noindent" >
+<!--l. 1341--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">4.3.3   </span> <a 
  id="x6-550004.3.3"></a>Functions specific to base type <span 
 class="ec-lmtt-10x-x-109">double</span></h5>
-<!--l. 1338--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 1344--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-560004.3.3"></a><span 
 class="ec-lmbx-10x-x-109">Linear systems and matrix decompositions</span></span>
 The following functions are designed to solve linear system of the from <span class='var'>A x = b</span> where <span class='var'>A</span> is a matrix
@@ -2920,7 +2939,7 @@ href="#x6-540004.3.2">pnl_mat_lu_syslin_mat</a> and
 href="#x6-540004.3.2">pnl_mat_chol_syslin_mat</a> which expect the right hand side member to be a matrix too. Whenever
 the vector <span class='var'>b</span> is not needed once the system is solved, you should consider using &#8220;inplace&#8221;
 functions.
-</p><!--l. 1348--><p class="noindent" >All the functions described in this paragraph return <span class='var'>OK</span> if the computations have been carried out
+</p><!--l. 1354--><p class="noindent" >All the functions described in this paragraph return <span class='var'>OK</span> if the computations have been carried out
 successfully and <span class='var'>FAIL</span> otherwise.
 </p>
      <ul class="itemize1">
@@ -3021,7 +3040,7 @@ class="rm-lmr-8">2</span></sup>. The solution is stored into <span class='var'>B
 href="#x6-560004.3.3">pnl_mat_ls</a> but handles
      several r.h.s.
      </li></ul>
-<!--l. 1384--><p class="noindent" >
+<!--l. 1390--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">4.3.4   </span> <a 
  id="x6-570004.3.4"></a>Functions specific to base type <span 
@@ -3036,7 +3055,7 @@ href="#x6-440004.3.1"><span class='struct'>PnlMat</span></a> <span
 class="ts1-lmr10-x-x-109">*</span>R</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create a complex matrix using a real one. The complex parts of the
      entries of the returned matrix are all set to zero.</li></ul>
-<!--l. 1392--><p class="noindent" >
+<!--l. 1398--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">4.3.5   </span> <a 
  id="x6-580004.3.5"></a>Permutations</h5>
@@ -3048,8 +3067,8 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Create 
 <div class="verbatim" id="verbatim-24">
 typedef&#x00A0;PnlVectInt&#x00A0;PnlPermutation;
 </div>
-<!--l. 1397--><p class="nopar" >
-</p><!--l. 1399--><p class="noindent" >The <span class="obeylines-h"><span class="verb"><span 
+<!--l. 1403--><p class="nopar" >
+</p><!--l. 1405--><p class="noindent" >The <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">PnlPermutation</span></span></span> type is actually nothing else than a vector of integers, i.e. a <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">PnlVectInt</span></span></span>. It is
 used to store the partial pivoting with row interchanges transformation needed in the LU
@@ -3193,17 +3212,17 @@ class="ec-lmbx-10x-x-109">pnl_permutation_print</span></span>&#x00A0;(<span clas
 href="#x6-580004.3.5"><span class='struct'>PnlPermutation</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>p</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Print a permutation to the standard output.</li></ul>
-<!--l. 1458--><p class="noindent" >
+<!--l. 1464--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">4.4   </span> <a 
  id="x6-590004.4"></a>Tridiagonal Matrices</h4>
-<!--l. 1459--><p class="noindent" >
+<!--l. 1465--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">4.4.1   </span> <a 
  id="x6-600004.4.1"></a>Overview</h5>
-<!--l. 1461--><p class="noindent" >The structures and functions related to tridiagonal matrices are declared in <span class="obeylines-h"><span class="verb"><span 
+<!--l. 1467--><p class="noindent" >The structures and functions related to tridiagonal matrices are declared in <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl/pnl_tridiag_matrix.h</span></span></span>.
-</p><!--l. 1464--><p class="noindent" >We only store the three main diagonals as three vectors.
+</p><!--l. 1470--><p class="noindent" >We only store the three main diagonals as three vectors.
 <a 
  id="dx6-60001"></a>
                                                                                     
@@ -3223,7 +3242,7 @@ typedef&#x00A0;struct&#x00A0;PnlTridiagMat{
 &#x00A0;<br />&#x00A0;&#x00A0;double&#x00A0;*DL;&#x00A0;/*!&#x003C;&#x00A0;lower&#x00A0;diagonal&#x00A0;elements&#x00A0;*/
 &#x00A0;<br />}&#x00A0;PnlTridiagMat;
 </div>
-<!--l. 1479--><p class="nopar" ><span class='var'>size</span> is the size of the matrix, <span class='var'>D</span> is an array of size <span class='var'>size</span> containing the diagonal terms. <span class='var'>DU</span>, <span class='var'>DL</span> are
+<!--l. 1485--><p class="nopar" ><span class='var'>size</span> is the size of the matrix, <span class='var'>D</span> is an array of size <span class='var'>size</span> containing the diagonal terms. <span class='var'>DU</span>, <span class='var'>DL</span> are
 two arrays of size <span class='var'>size-1</span> containing respectively the upper diagonal (<span 
 class="lmmi-10x-x-109">M</span><sub><span 
 class="lmmi-8">i,i</span><span 
@@ -3255,12 +3274,12 @@ typedef&#x00A0;struct&#x00A0;PnlTridiagMatLU{
 &#x00A0;<br />&#x00A0;&#x00A0;int&#x00A0;*ipiv;&#x00A0;/*!&#x003C;&#x00A0;Permutation:&#x00A0;row&#x00A0;i&#x00A0;has&#x00A0;been&#x00A0;interchanged&#x00A0;with&#x00A0;row&#x00A0;ipiv(i)&#x00A0;*/
 &#x00A0;<br />};
 </div>
-<!--l. 1500--><p class="nopar" >This type is used to store the LU decomposition of a tridiagonal matrix.
-</p><!--l. 1503--><p class="noindent" >
+<!--l. 1506--><p class="nopar" >This type is used to store the LU decomposition of a tridiagonal matrix.
+</p><!--l. 1509--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">4.4.2   </span> <a 
  id="x6-610004.4.2"></a>Functions</h5>
-<!--l. 1504--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 1510--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-620004.4.2"></a><span 
 class="ec-lmbx-10x-x-109">Constructors and destructors</span></span>
 </p>
@@ -3366,7 +3385,7 @@ href="#x6-600004.4.1"><span class='struct'>PnlTridiagMat</span></a> <span
 class="ts1-lmr10-x-x-109">*</span>v, int size</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Resize a <a 
 href="#x6-600004.4.1"><span class='struct'>PnlTridiagMat</span></a> .</li></ul>
-<!--l. 1540--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 1546--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-630004.4.2"></a><span 
 class="ec-lmbx-10x-x-109">Accessing elements.</span></span>
 If it is supported by the compiler, the following functions are declared inline. To speed up these
@@ -3420,7 +3439,7 @@ class="lmsy-10x-x-109">}</span>.</li></ul>
                                                                                     
 
                                                                                     
-<!--l. 1554--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 1560--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-640004.4.2"></a><span 
 class="ec-lmbx-10x-x-109">Printing Matrix</span></span>
 </p>
@@ -3439,7 +3458,7 @@ class="ec-lmbx-10x-x-109">pnl_tridiag_mat_print</span></span>&#x00A0;(<span clas
 href="#x6-600004.4.1"><span class='struct'>PnlTridiagMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>M</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Print a tridiagonal matrix to the standard output.</li></ul>
-<!--l. 1562--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 1568--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-650004.4.2"></a><span 
 class="ec-lmbx-10x-x-109">Algebra operations</span></span>
 </p>
@@ -3491,7 +3510,7 @@ class="ec-lmbx-10x-x-109">pnl_tridiag_mat_div_scalar</span></span>&#x00A0;(<span
 href="#x6-600004.4.1"><span class='struct'>PnlTridiagMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>lhs, double x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>In-place matrix scalar division</li></ul>
-<!--l. 1578--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 1584--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-660004.4.2"></a><span 
 class="ec-lmbx-10x-x-109">Element-wise operations</span></span>
 </p>
@@ -3537,7 +3556,7 @@ href="#x6-600004.4.1"><span class='struct'>PnlTridiagMat</span></a> <span
 class="ts1-lmr10-x-x-109">*</span>rhs, double(<span 
 class="ts1-lmr10-x-x-109">*</span>f)(double, double)</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>lhs = f(lhs, rhs)</span>.</li></ul>
-<!--l. 1594--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 1600--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-670004.4.2"></a><span 
 class="ec-lmbx-10x-x-109">Standard matrix operations &amp; Linear systems</span></span>
 </p>
@@ -3713,11 +3732,11 @@ href="#x6-670004.4.2">pnl_tridiag_mat_lu_compute</a>.</li></ul>
                                                                                     
 
                                                                                     
-<!--l. 1651--><p class="noindent" >
+<!--l. 1657--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">4.5   </span> <a 
  id="x6-680004.5"></a>Band Matrices</h4>
-<!--l. 1652--><p class="noindent" >
+<!--l. 1658--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">4.5.1   </span> <a 
  id="x6-690004.5.1"></a>Overview</h5>
@@ -3743,14 +3762,14 @@ typedef&#x00A0;struct
 &#x00A0;<br />&#x00A0;&#x00A0;double&#x00A0;*array;&#x00A0;&#x00A0;/*!&#x003C;&#x00A0;a&#x00A0;block&#x00A0;to&#x00A0;store&#x00A0;the&#x00A0;bands&#x00A0;*/
 &#x00A0;<br />}&#x00A0;PnlBandMat;
 </div>
-<!--l. 1671--><p class="nopar" >
-</p><!--l. 1674--><p class="noindent" >The structures and functions related to band matrices are declared in <span class="obeylines-h"><span class="verb"><span 
+<!--l. 1677--><p class="nopar" >
+</p><!--l. 1680--><p class="noindent" >The structures and functions related to band matrices are declared in <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl/pnl_band_matrix.h</span></span></span>.
-</p><!--l. 1678--><p class="noindent" >
+</p><!--l. 1684--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">4.5.2   </span> <a 
  id="x6-700004.5.2"></a>Functions</h5>
-<!--l. 1679--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 1685--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-710004.5.2"></a><span 
 class="ec-lmbx-10x-x-109">Constructors and destructors</span></span>
 </p>
@@ -3827,7 +3846,7 @@ href="#x6-690004.5.1"><span class='struct'>PnlBandMat</span></a> <span
 class="ts1-lmr10-x-x-109">*</span>BM, int m, int n, int nl, int nu</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Resize <span class='var'>BM</span> to store a <span class='var'>m x n</span> band matrix with <span class='var'>nu</span> upper diagonals and
      <span class='var'>nl</span> lower diagonals.</li></ul>
-<!--l. 1714--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 1720--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-720004.5.2"></a><span 
 class="ec-lmbx-10x-x-109">Accessing elements.</span></span>
 If it is supported by the compiler, the following functions are declared inline. To speed up these
@@ -3883,7 +3902,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Print a
                                                                                     
 
                                                                                     
-<!--l. 1740--><p class="noindent" ><span class="subparagraphHead"> <a 
+<!--l. 1746--><p class="noindent" ><span class="subparagraphHead"> <a 
  id="x6-730004.5.2"></a><span 
 class="ec-lmbx-10x-x-109">Element wise operations</span></span>
 </p>
@@ -3995,7 +4014,7 @@ href="#x6-690004.5.1"><span class='struct'>PnlBandMat</span></a> <span
 class="ts1-lmr10-x-x-109">*</span>rhs, double(<span 
 class="ts1-lmr10-x-x-109">*</span>f)(double,double)</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>lhs = f(lhs,rhs)</span></li></ul>
-<!--l. 1791--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 1797--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-740004.5.2"></a><span 
 class="ec-lmbx-10x-x-109">Standard matrix operations &amp; Linear system</span></span>
 </p>
@@ -4097,15 +4116,15 @@ href="#x6-740004.5.2">pnl_band_mat_lu</a> and <span class='var'>p</span> the ass
                                                                                     
 
                                                                                     
-<!--l. 1831--><p class="noindent" >
+<!--l. 1837--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">4.6   </span> <a 
  id="x6-750004.6"></a>Sparse Matrices</h4>
-<!--l. 1832--><p class="noindent" >
+<!--l. 1838--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">4.6.1   </span> <a 
  id="x6-760004.6.1"></a>Short description</h5>
-<!--l. 1833--><p class="noindent" >The structures and functions related to matrices are declared in <span class="obeylines-h"><span class="verb"><span 
+<!--l. 1839--><p class="noindent" >The structures and functions related to matrices are declared in <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl/pnl_sp_matrix.h</span></span></span>.
 <a 
  id="dx6-76001"></a>
@@ -4175,15 +4194,15 @@ typedef&#x00A0;struct&#x00A0;_PnlSpMat
 &#x00A0;<br />&#x00A0;&#x00A0;int&#x00A0;nzmax;&#x00A0;/*!&#x003C;&#x00A0;size&#x00A0;of&#x00A0;the&#x00A0;memory&#x00A0;block&#x00A0;allocated&#x00A0;for&#x00A0;array&#x00A0;*/
 &#x00A0;<br />}&#x00A0;PnlSpMatComplex;
 </div>
-<!--l. 1891--><p class="nopar" >
-</p><!--l. 1893--><p class="noindent" >The non zero elements of row <span class='var'>i</span> are stored in <span class='var'>array</span> between the indices <span class='var'>I[i]</span> and <span class='var'>I[i+1]-1</span>. The array <span class='var'>J</span>
+<!--l. 1897--><p class="nopar" >
+</p><!--l. 1899--><p class="noindent" >The non zero elements of row <span class='var'>i</span> are stored in <span class='var'>array</span> between the indices <span class='var'>I[i]</span> and <span class='var'>I[i+1]-1</span>. The array <span class='var'>J</span>
 contains the column indices of every element of <span class='var'>array</span>. <br 
 class="newline" />
-</p><!--l. 1898--><p class="noindent" >Sparse matrices are defined using the internal template approach and can be used for integer, float
+</p><!--l. 1904--><p class="noindent" >Sparse matrices are defined using the internal template approach and can be used for integer, float
 or complex base data according to the following table </p>
 <div class="center" 
 >
-<!--l. 1900--><p class="noindent" >
+<!--l. 1906--><p class="noindent" >
 </p>
 <div class="tabular"> <table id="TBL-9" class="tabular" 
 cellspacing="0" cellpadding="0"  
@@ -4213,11 +4232,11 @@ class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
 class="td11">dcomplex </td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-4-2"  
 class="td11">pnl_sp_mat_complex</td><td  style="white-space:nowrap; text-align:left;" id="TBL-9-4-3"  
 class="td11">PnlSpMatComplex</td></tr></table></div></div>
-<!--l. 1912--><p class="noindent" >
+<!--l. 1918--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">4.6.2   </span> <a 
  id="x6-770004.6.2"></a>Functions</h5>
-<!--l. 1914--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 1920--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-780004.6.2"></a><span 
 class="ec-lmbx-10x-x-109">Constructors and destructors</span></span>
 </p>
@@ -4304,7 +4323,7 @@ href="#x6-760004.6.1"><span class='struct'>PnlSpMat</span></a> <span
 class="ts1-lmr10-x-x-109">*</span>Sp2</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Test if two sparse matrices are equal, ie. if they have the same size (m,
      n, nz) and hold the same values. Return <span class='var'>TRUE</span> or <span class='var'>FALSE</span>.</li></ul>
-<!--l. 1943--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 1949--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-790004.6.2"></a><span 
 class="ec-lmbx-10x-x-109">Accessing elements</span></span>
 </p>
@@ -4325,7 +4344,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Return 
                                                                                     
 
                                                                                     
-<!--l. 1954--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 1960--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-800004.6.2"></a><span 
 class="ec-lmbx-10x-x-109">Applying external operations</span></span>
 </p>
@@ -4362,7 +4381,7 @@ class="ec-lmbx-10x-x-109">pnl_sp_mat_div_scalar</span></span>&#x00A0;(<span clas
 href="#x6-760004.6.1"><span class='struct'>PnlSpMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>M, double x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>In-place matrix scalar division</li></ul>
-<!--l. 1972--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 1978--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-810004.6.2"></a><span 
 class="ec-lmbx-10x-x-109">Standard matrix operations</span></span>
 </p>
@@ -4412,15 +4431,15 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Compute
                                                                                     
 
                                                                                     
-<!--l. 1991--><p class="noindent" >
+<!--l. 1997--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">4.7   </span> <a 
  id="x6-820004.7"></a>Hyper Matrices</h4>
-<!--l. 1992--><p class="noindent" >
+<!--l. 1998--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">4.7.1   </span> <a 
  id="x6-830004.7.1"></a>Short description</h5>
-<!--l. 1994--><p class="noindent" >The Hyper matrix types and related functions are defined in the header <span class="obeylines-h"><span class="verb"><span 
+<!--l. 2000--><p class="noindent" >The Hyper matrix types and related functions are defined in the header <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl/pnl_matrix.h</span></span></span>.
 <a 
  id="dx6-83001"></a>
@@ -4478,21 +4497,21 @@ typedef&#x00A0;struct&#x00A0;PnlHmat{
                                                                                     
 
                                                                                     
-<!--l. 2039--><p class="nopar" ><span class='var'>ndim</span> is the number of dimensions, <span class='var'>dim</span> is an array to store the size of each dimension and <span class='var'>nm</span>
+<!--l. 2045--><p class="nopar" ><span class='var'>ndim</span> is the number of dimensions, <span class='var'>dim</span> is an array to store the size of each dimension and <span class='var'>nm</span>
 contains the product of the sizes of each dimension. <span class='var'>array</span> is an array of size <span class='var'>mn</span> containing the data.
 The integer array <span class='var'>pdims</span> is used to create the one&#8211;to&#8211;one map between the natural indexing and the
 linear indexing used in <span class='var'>array</span>.
-</p><!--l. 2047--><p class="noindent" >
+</p><!--l. 2053--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">4.7.2   </span> <a 
  id="x6-840004.7.2"></a>Functions</h5>
-<!--l. 2048--><p class="noindent" >These functions exist for all types of hypermatrices no matter what the basic type is. The following
+<!--l. 2054--><p class="noindent" >These functions exist for all types of hypermatrices no matter what the basic type is. The following
 conventions are used to name functions operating on hypermatrices. Here is the table of prefixes
 used for the different basic types.
 </p>
 <div class="center" 
 >
-<!--l. 2052--><p class="noindent" >
+<!--l. 2058--><p class="noindent" >
 </p>
 <div class="tabular"> <table id="TBL-10" class="tabular" 
 cellspacing="0" cellpadding="0"  
@@ -4522,14 +4541,14 @@ class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
 class="td11">dcomplex </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-4-2"  
 class="td11">pnl_hmat_complex</td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-4-3"  
 class="td11">PnlHmatComplex</td></tr></table></div></div>
-<!--l. 2064--><p class="noindent" >In this paragraph, we present the functions operating on <a 
+<!--l. 2070--><p class="noindent" >In this paragraph, we present the functions operating on <a 
 href="#x6-830004.7.1"><span class='struct'>PnlHmat</span></a> which exist for all types. To
 deduce the prototypes of these functions for other basic types, one must replace <span 
 class="ec-lmtt-10x-x-109">pnl_hmat </span>and
 <span 
 class="ec-lmtt-10x-x-109">double </span>according the above table.
 </p>
-<!--l. 2070--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 2076--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-850004.7.2"></a><span 
 class="ec-lmbx-10x-x-109">Constructors and destructors</span></span>
 </p>
@@ -4617,7 +4636,7 @@ class="ts1-lmr10-x-x-109">*</span>H, int ndim, const int <span
 class="ts1-lmr10-x-x-109">*</span>dims</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Resize a <a 
 href="#x6-830004.7.1"><span class='struct'>PnlHmat</span></a> .</li></ul>
-<!--l. 2101--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 2107--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-860004.7.2"></a><span 
 class="ec-lmbx-10x-x-109">Accessing elements</span></span>
 </p>
@@ -4674,7 +4693,7 @@ href="#x6-260004.1.1"><span class='struct'>PnlVect</span></a> not a pointer hold
                                                                                     
 
                                                                                     
-<!--l. 2128--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 2134--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-870004.7.2"></a><span 
 class="ec-lmbx-10x-x-109">Printing hypermatrices</span></span>
 </p>
@@ -4685,7 +4704,7 @@ class="ec-lmbx-10x-x-109">pnl_hmat_print</span></span>&#x00A0;(<span class='args
 href="#x6-830004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>H</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Print an hypermatrix.</li></ul>
-<!--l. 2135--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 2141--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-880004.7.2"></a><span 
 class="ec-lmbx-10x-x-109">Term by term operations</span></span>
 </p>
@@ -4705,15 +4724,15 @@ class="ec-lmbx-10x-x-109">pnl_hmat_mult_scalar</span></span>&#x00A0;(<span class
 href="#x6-830004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>lhs, double x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span class='var'>lhs *= x</span> where x is a real number.</li></ul>
-<!--l. 2361--><p class="noindent" >
+<!--l. 2367--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">4.8   </span> <a 
  id="x6-890004.8"></a>Iterative Solvers</h4>
-<!--l. 2362--><p class="noindent" >
+<!--l. 2368--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">4.8.1   </span> <a 
  id="x6-900004.8.1"></a>Overview</h5>
-<!--l. 2364--><p class="noindent" >The structures and functions related to solvers are declared in <span class="obeylines-h"><span class="verb"><span 
+<!--l. 2370--><p class="noindent" >The structures and functions related to solvers are declared in <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl/pnl_linalgsolver.h</span></span></span>.
 <a 
  id="dx6-90001"></a>
@@ -4810,8 +4829,8 @@ typedef&#x00A0;struct&#x00A0;_PnlIterationBase&#x00A0;PnlIterationBase;
 &#x00A0;<br />&#x00A0;&#x00A0;PnlIterationBase&#x00A0;*iter_inner;
 &#x00A0;<br />}&#x00A0;;
 </div>
-<!--l. 2450--><p class="nopar" >
-</p><!--l. 2452--><p class="noindent" >A Left preconditioner solves the problem :
+<!--l. 2456--><p class="nopar" >
+</p><!--l. 2458--><p class="noindent" >A Left preconditioner solves the problem :
 </p>
 <center class="math-display" >
 <img 
@@ -4821,13 +4840,13 @@ whereas right preconditioner solves
 <img 
 src="pnl-manual17x.png" alt="M  Py = b,    P y = x.
 " class="math-display"  /></center>
-<!--l. 2465--><p class="noindent" >More information is given in <span 
+<!--l. 2471--><p class="noindent" >More information is given in <span 
 class="ec-lmri-10x-x-109">Saad, Yousef (2003). Iterative methods for sparse linear systems (2nd</span>
 <span 
 class="ec-lmri-10x-x-109">ed. ed.). SIAM. ISBN 0898715342. OCLC 51266114</span>. The reader will find in this book
 some discussion about right or/and left preconditioner and a description of the following
 algorithms.
-</p><!--l. 2470--><p class="noindent" >These algorithms, we implemented with a left preconditioner. Right preconditioner can be easily
+</p><!--l. 2476--><p class="noindent" >These algorithms, we implemented with a left preconditioner. Right preconditioner can be easily
 computed changing matrix vector multiplication operator from <span 
 class="lmmi-10x-x-109">M</span><span 
 class="lmmi-10x-x-109">&#x00A0;x </span>to <span 
@@ -4841,17 +4860,17 @@ class="lmmi-8">R</span></sub><span
 class="lmmi-10x-x-109">y </span><span 
 class="rm-lmr-10x-x-109">= </span><span 
 class="lmmi-10x-x-109">x </span>at the end of algorithm.
-</p><!--l. 2475--><p class="noindent" >
+</p><!--l. 2481--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">4.8.2   </span> <a 
  id="x6-910004.8.2"></a>Functions</h5>
-<!--l. 2477--><p class="noindent" >Three methods are implemented : Conjugate Gradient, BICGstab and GMRES with restart. For
+<!--l. 2483--><p class="noindent" >Three methods are implemented : Conjugate Gradient, BICGstab and GMRES with restart. For
 each of them a structure is created to store temporary vectors used in the algorithm. In some cases,
 we have to apply iterative methods more than once : for example to solve at each time step a
 discrete form of an elliptic problem come from parabolic problem. In the cases, do not call the
 constructor and destructor at each time, but instead use the initialization and solve
 procedures.
-</p><!--l. 2484--><p class="noindent" >Formally we have,
+</p><!--l. 2490--><p class="noindent" >Formally we have,
                                                                                     
 
                                                                                     
@@ -4864,11 +4883,11 @@ Create&#x00A0;iterative&#x00A0;method
 &#x00A0;<br />end&#x00A0;for
 &#x00A0;<br />free&#x00A0;iterative&#x00A0;method
 </div>
-<!--l. 2492--><p class="nopar" >
-</p><!--l. 2494--><p class="noindent" >In these functions, we don&#8217;t use any particular matrix structure. We give the matrix vector
+<!--l. 2498--><p class="nopar" >
+</p><!--l. 2500--><p class="noindent" >In these functions, we don&#8217;t use any particular matrix structure. We give the matrix vector
 multiplication as a parameter of the solver.
 </p>
-<!--l. 2497--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 2503--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-920004.8.2"></a><span 
 class="ec-lmbx-10x-x-109">Conjugate Gradient method</span></span>
 Only available for symmetric and positive matrices. </p>
@@ -4938,7 +4957,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Solve  
                                                                                     
 
                                                                                     
-<!--l. 2512--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 2518--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-930004.8.2"></a><span 
 class="ec-lmbx-10x-x-109">BICG stab</span></span>
 </p>
@@ -5005,7 +5024,7 @@ class="ts1-lmr10-x-x-109">*</span>Solver</span>)<br
 class="newline" />   <span class='description'>Description&#x00A0;</span>Solve  the  linear  system  matrix  vector-product  is  the  matrix  vector
      multiplication  function  matrix  vector-product-PC  is  the  preconditioner  function
      Matrix-Data &amp; PC-Data is data to compute matrix vector multiplication.</li></ul>
-<!--l. 2526--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 2532--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-940004.8.2"></a><span 
 class="ec-lmbx-10x-x-109">GMRES with restart</span></span>
 See <span 
@@ -5018,7 +5037,7 @@ class="lmmi-10x-x-109">p </span><span
 class="rm-lmr-10x-x-109">= </span><span 
 class="lmmi-10x-x-109">restart </span>and restarts the algorithm with the previously computed solution as initial
 guess.
-</p><!--l. 2533--><p class="noindent" >Note that if restart equals <span 
+</p><!--l. 2539--><p class="noindent" >Note that if restart equals <span 
 class="lmmi-10x-x-109">m</span>, we have a classical GMRES algorithm.
 </p>
      <ul class="itemize1">
@@ -5089,7 +5108,7 @@ class="ts1-lmr10-x-x-109">*</span>Solver</span>)<br
 class="newline" />   <span class='description'>Description&#x00A0;</span>Solve  the  linear  system  matrix  vector-product  is  the  matrix  vector
      multiplication  function  matrix  vector-product-PC  is  the  preconditionner  function
      Matrix-Data &amp; PC-Data is data to compute matrix vector multiplication.</li></ul>
-<!--l. 2549--><p class="noindent" >In the next paragraph, we write all the solvers for <a 
+<!--l. 2555--><p class="noindent" >In the next paragraph, we write all the solvers for <a 
 href="#x6-440004.3.1"><span class='struct'>PnlMat</span></a> . This will be done as follows: construct
 an application matrix vector.
                                                                                     
@@ -5102,7 +5121,7 @@ static&#x00A0;void&#x00A0;pnl_mat_mult_vect_applied(const&#x00A0;void&#x00A0;*ma
 &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlVect&#x00A0;*lhs)
 &#x00A0;<br />{pnl_mat_lAxpby(a,&#x00A0;(PnlMat*)mat,&#x00A0;vec,&#x00A0;b,&#x00A0;lhs);}
 </div>
-<!--l. 2556--><p class="nopar" >and give it as the parameter of the iterative method
+<!--l. 2562--><p class="nopar" >and give it as the parameter of the iterative method
                                                                                     
 
                                                                                     
@@ -5114,8 +5133,8 @@ int&#x00A0;pnl_mat_cg_solver_solve(const&#x00A0;PnlMat&#x00A0;*&#x00A0;Matrix,&#
 &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;Matrix,&#x00A0;pnl_mat_mult_vect_applied,
 &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;PC,&#x00A0;x,&#x00A0;b,&#x00A0;Solver);}
 </div>
-<!--l. 2564--><p class="nopar" >
-</p><!--l. 2566--><p class="noindent" >In practice, we cannot define all iterative methods for all structures. With this implementation, the
+<!--l. 2570--><p class="nopar" >
+</p><!--l. 2572--><p class="noindent" >In practice, we cannot define all iterative methods for all structures. With this implementation, the
 user can easily : </p>
      <ul class="itemize1">
      <li class="itemize">implement right precondioner,
@@ -5123,7 +5142,7 @@ user can easily : </p>
      <li class="itemize">implement  method  with  sparse  matrix  and  diagonal  preconditioner,  or  special
      combination of this form <span 
 class="lmmi-10x-x-109">&#x2026;</span><span style="margin-left:0.3em" class="thinspace"></span></li></ul>
-<!--l. 2575--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 2581--><p class="noindent" ><span class="paragraphHead"><a 
  id="x6-950004.8.2"></a><span 
 class="ec-lmbx-10x-x-109">Iterative algorithms for </span><a 
 href="#x6-440004.3.1"><span class='struct'><span 
