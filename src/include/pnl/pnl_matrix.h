@@ -189,7 +189,9 @@ extern void pnl_mat_minmax_index (PnlVect *m, PnlVect *M, PnlVectInt *im, PnlVec
 extern void pnl_mat_qsort_index (PnlMat *A, PnlMatInt *t, char dir, char order);
 extern void pnl_mat_qsort (PnlMat *A, char dir, char order);
 extern void pnl_mat_set_row(PnlMat *M, const PnlVect *V, int i);
+extern void pnl_mat_set_row_from_ptr(PnlMat *M, const double*, int i);
 extern void pnl_mat_set_col(PnlMat *M, const PnlVect *V, int j);
+extern void pnl_mat_set_col_from_ptr(PnlMat *M, const double *x, int j);
 extern void pnl_mat_swap_rows (PnlMat *M, int i, int j);
 extern int pnl_mat_upper_inverse(PnlMat *A, const PnlMat *B);
 extern int pnl_mat_lower_inverse (PnlMat *A, const PnlMat *B);
@@ -324,7 +326,9 @@ extern void pnl_mat_int_fprint_nsp(FILE *fic,const PnlMatInt *M);
 extern PnlMatInt* pnl_mat_int_create_diag_from_ptr(const int x[], int d);
 extern PnlMatInt* pnl_mat_int_create_diag(const PnlVectInt *V);
 extern void pnl_mat_int_set_row(PnlMatInt *M, const PnlVectInt *V, int i);/* M(i,:)=V(:) */
+extern void pnl_mat_int_set_row_from_ptr(PnlMatInt *M, const int *x, int i);/* M(i,:)=V(:) */
 extern void pnl_mat_int_set_col(PnlMatInt *M, const PnlVectInt *V, int j);/* M(:,j)=V(:) */
+extern void pnl_mat_int_set_col_from_ptr(PnlMatInt *M, const int *x, int j);/* M(:,j)=V(:) */
 extern void pnl_mat_int_swap_rows (PnlMatInt *M, int i, int j);
 extern void pnl_mat_int_get_row(PnlVectInt *V, const PnlMatInt *M, int i);/* V(:)=M(i,:) */
 extern void pnl_mat_int_get_col(PnlVectInt *V, const PnlMatInt *M, int j);
@@ -484,7 +488,9 @@ extern void pnl_mat_complex_fprint_nsp(FILE *fic,const PnlMatComplex *M);
 extern PnlMatComplex* pnl_mat_complex_create_diag_from_ptr(const dcomplex x[], int d);
 extern PnlMatComplex* pnl_mat_complex_create_diag(const PnlVectComplex *V);
 extern void pnl_mat_complex_set_row(PnlMatComplex *M, const PnlVectComplex *V, int i);/* M(i,:)=V(:) */
+extern void pnl_mat_complex_set_row_from_ptr(PnlMatComplex *M, const dcomplex *x, int i);/* M(i,:)=V(:) */
 extern void pnl_mat_complex_set_col(PnlMatComplex *M, const PnlVectComplex *V, int j);/* M(:,j)=V(:) */
+extern void pnl_mat_complex_set_col_from_ptr(PnlMatComplex *M, const dcomplex *x, int j);/* M(:,j)=V(:) */
 extern void pnl_mat_complex_swap_rows (PnlMatComplex *M, int i, int j);
 extern void pnl_mat_complex_get_row(PnlVectComplex *V, const PnlMatComplex *M, int i);/* V(:)=M(i,:) */
 extern void pnl_mat_complex_get_col(PnlVectComplex *V, const PnlMatComplex *M, int j);

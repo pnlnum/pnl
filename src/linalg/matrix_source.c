@@ -626,19 +626,30 @@ TYPE(PnlMat) *FUNCTION(pnl_mat, create_diag_from_ptr)(const BASE x[], int d)
 }
 
 /**
- * replace the ith row of a matrix M by a vector V
+ * Set the i-th row of a matrix with the content of a vector
  *
- * @param M : left hand side matrix (needs to be already allocated)
- * @param V : right hand side vector
- * @param i : integer corresponding to the row of M which
- * becomes V
- * @return matrix M which contains whose ith row is becoming V
+ * @param M a matrix
+ * @param V a vector
+ * @param i the index of the row of M to be set
  */
 void FUNCTION(pnl_mat, set_row)(TYPE(PnlMat) *M, const TYPE(PnlVect) *V, int i)
 {
   PNL_CHECK(i > M->m - 1, "index out of range", "pnl_mat_set_row");
   PNL_CHECK(M->n != V->size, "incompatible data", "pnl_mat_set_row");
   memcpy(&(M->array[i * M->n]), V->array, V->size * sizeof(BASE));
+}
+
+
+/**
+ * Set the i-th row of a matrix
+ * @param M a matrix
+ * @param x an array
+ * @param i the index of the row of M to be set
+ */
+void FUNCTION(pnl_mat, set_row_from_ptr)(TYPE(PnlMat) *M,  const BASE *x, int i)
+{
+  PNL_CHECK(i > M->m - 1, "index out of range", "pnl_mat_set_row_from_ptr");
+  memcpy(&(M->array[i * M->n]), x, M->n * sizeof(BASE));
 }
 
 /**
@@ -682,13 +693,11 @@ void FUNCTION(pnl_mat, swap_rows)(TYPE(PnlMat) *M, int i, int j)
 }
 
 /**
- * replace the ith column of a matrix M by a vector V
+ * Set the i-th column of a matrix
  *
- * @param M : left hand side matrix (needs to be already allocated)
- * @param V : right hand side vector
- * @param j : integer corresponding to the column of M which
- * becomes V
- * @return matrix M which contains whose ith row is becoming V
+ * @param M a matrix
+ * @param V a vector
+ * @param j the index of the column to be set
  */
 void FUNCTION(pnl_mat, set_col)(TYPE(PnlMat) *M, const TYPE(PnlVect) *V, int j)
 {
@@ -698,6 +707,23 @@ void FUNCTION(pnl_mat, set_col)(TYPE(PnlMat) *M, const TYPE(PnlVect) *V, int j)
   for (i = 0; i < M->m; i++)
     {
       PNL_MLET(M, i, j) = PNL_GET(V, i);
+    }
+}
+
+/**
+ * Set the i-th column of a matrix
+ *
+ * @param M a matrix
+ * @param V a vector
+ * @param j the index of the column to be set
+ */
+void FUNCTION(pnl_mat, set_col_from_ptr)(TYPE(PnlMat) *M, const BASE *x, int j)
+{
+  int i;
+  PNL_CHECK(j >= M->n, "index of range", "mat_set_col");
+  for (i = 0; i < M->m; i++)
+    {
+      PNL_MLET(M, i, j) = x[i];
     }
 }
 

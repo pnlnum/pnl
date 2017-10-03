@@ -842,11 +842,17 @@ Accessing elements of a matrix is faster using the following macros
 
 \item \describefun{void}{pnl_mat_set_col}{\PnlMat \ptr M, 
     const \PnlVect \ptr V, int j}
-  \sshortdescribe Replace the \var{i}-th column of a matrix M by a vector V 
+    \sshortdescribe Set the \var{i}-th column of a matrix \var{M} with the content of \var{V}
+\item \describefun{void}{pnl_mat_set_col_from_ptr}{\PnlMat \ptr M, 
+    const double \ptr x, int j}
+    \sshortdescribe Set the \var{i}-th column of \var{M} with the content of \var{x}.
 
 \item \describefun{void}{pnl_mat_set_row}{\PnlMat \ptr M, 
     const \PnlVect \ptr V, int i}
-  \sshortdescribe Replace the \var{i}-th row of a matrix M by a vector V  
+    \sshortdescribe Set the \var{i}-th row of \var{M} with the content of \var{V}
+  \item \describefun{void}{pnl_mat_set_row_from_ptr}{\PnlMat \ptr M, 
+    const double \ptr x, int i}
+    \sshortdescribe Set the \var{i}-th row of \var{M} with the content of \var{x}
 
 \item \describefun{void}{pnl_mat_add_row}{\PnlMat \ptr M, int i, const \PnlVect \ptr r}
   \sshortdescribe Add a row in matrix \var{M} before position \var{i} and fill
