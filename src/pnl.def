@@ -443,12 +443,14 @@ EXPORTS
     pnl_mat_complex_set 
     pnl_mat_complex_set_all 
     pnl_mat_complex_set_col 
+    pnl_mat_complex_set_col_from_ptr
     pnl_mat_complex_set_diag 
     pnl_mat_complex_set_from_ptr 
     pnl_mat_complex_set_id 
     pnl_mat_complex_set_imag 
     pnl_mat_complex_set_real 
     pnl_mat_complex_set_row 
+    pnl_mat_complex_set_row_from_ptr 
     pnl_mat_complex_set_subblock 
     pnl_mat_complex_set_zero 
     pnl_mat_complex_sq_transpose 
@@ -568,10 +570,12 @@ EXPORTS
     pnl_mat_int_set 
     pnl_mat_int_set_all 
     pnl_mat_int_set_col 
+    pnl_mat_int_set_col_from_ptr
     pnl_mat_int_set_diag 
     pnl_mat_int_set_from_ptr 
     pnl_mat_int_set_id 
     pnl_mat_int_set_row 
+    pnl_mat_int_set_row_from_ptr 
     pnl_mat_int_set_subblock 
     pnl_mat_int_set_zero 
     pnl_mat_int_sq_transpose 
@@ -647,10 +651,12 @@ EXPORTS
     pnl_mat_set 
     pnl_mat_set_all 
     pnl_mat_set_col 
+    pnl_mat_set_col_from_ptr
     pnl_mat_set_diag 
     pnl_mat_set_from_ptr 
     pnl_mat_set_id 
     pnl_mat_set_row 
+    pnl_mat_set_row_from_ptr
     pnl_mat_set_subblock 
     pnl_mat_set_zero 
     pnl_mat_sq_transpose 
