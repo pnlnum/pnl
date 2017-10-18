@@ -1042,10 +1042,10 @@ int pnl_rand_init(int type_generator, int dimension, long samples)
     case PNL_RNG_TAUSWORTHE:
     case PNL_RNG_MERSENNE:
     case PNL_RNG_DCMT:
-      pnl_rand_sseed(type_generator, 0);
+      pnl_rng_sseed(rng, 0);
       break;
     case PNL_RNG_MERSENNE_RANDOM_SEED:
-      pnl_rand_sseed(type_generator, time(NULL));
+      pnl_rng_sseed(rng, time(NULL));
       break;
     case PNL_RNG_FAURE :
       pnl_rng_sdim(rng, dimension);
