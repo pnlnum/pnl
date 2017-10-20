@@ -14,12 +14,12 @@ else(PNL_INSTALL_PREFIX)
 endif(PNL_INSTALL_PREFIX)
 
 # Compilers
-if (CC)
-    set (CMAKE_C_COMPILER ${CC})
-endif (CC)
-if (CXX)
-    set (CMAKE_CXX_COMPILER ${CXX})
-endif (CXX)
+# if (CC)
+#     set (CMAKE_C_COMPILER ${CC})
+# endif (CC)
+# if (CXX)
+#     set (CMAKE_CXX_COMPILER ${CXX})
+# endif (CXX)
 
 
 if(CROSS_COMPILE)
