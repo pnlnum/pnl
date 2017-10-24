@@ -1,6 +1,6 @@
 
 /************************************************************************/
-/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
+/* Copyright Jï¿½rï¿½me Lelong <jerome.lelong@gmail.com>                    */
 /*                                                                      */
 /* This program is free software: you can redistribute it and/or modify */
 /* it under the terms of the GNU Lesser General Public License as       */
@@ -56,14 +56,23 @@ PnlSpMatObject *pnl_sp_mat_object_new()
  */
 void pnl_sp_mat_object_free(PnlSpMatObject **o)
 {
-  if ((*o != NULL) && ((*o)->nzmax > 0))
+  if ((*o != NULL))
     {
-      free((*o)->array);
-      (*o)->array = NULL;
-      free((*o)->I);
-      (*o)->I = NULL;
-      free((*o)->J);
-      (*o)->J = NULL;
+      if ((*o)->array != NULL)
+        {
+          free((*o)->array);
+          (*o)->array = NULL;
+        }
+      if ((*o)->I != NULL)
+        {
+          free((*o)->I);
+          (*o)->I = NULL;
+        }
+      if ((*o)->J != NULL)
+        {
+          free((*o)->J);
+          (*o)->J = NULL;
+        }
       (*o)->m = (*o)->n = (*o)->nz = 0;
       free(*o);
     }
