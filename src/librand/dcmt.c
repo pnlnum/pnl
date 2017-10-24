@@ -23,7 +23,7 @@
 /*
  * The orignal code has been modified for inclusion into PNL
  *
- * Written and (C) by Jérôme Lelong <jerome.lelong@gmail.com>
+ * Written and (C) by Jï¿½rï¿½me Lelong <jerome.lelong@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -1644,6 +1644,7 @@ PnlRng *pnl_rng_dcmt_create_id(int id, ulong seed)
 
   state = pnl_dcmt_get_parameter_id(id, seed);
   rng = pnl_rng_create(PNL_RNG_DCMT);
+  free(rng->state);
   rng->state = state;
   return rng;
 }
