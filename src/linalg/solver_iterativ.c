@@ -274,7 +274,7 @@ PnlCgSolver *pnl_cg_solver_new()
   PnlCgSolver *o;
   if ((o = malloc(sizeof(PnlCgSolver))) == NULL) return NULL;
   o->r = o->z = o->p = o->q = NULL;
-  o->iter = pnl_iteration_base_new();
+  o->iter = NULL;
   o->object.type = PNL_TYPE_CG_SOLVER;
   o->object.parent_type = PNL_TYPE_OBJECT;
   o->object.label = pnl_cg_solver_label;
@@ -333,7 +333,7 @@ void pnl_cg_solver_free(PnlCgSolver **Solver)
       pnl_vect_free(&(*Solver)->z);
       pnl_vect_free(&(*Solver)->p);
       pnl_vect_free(&(*Solver)->q);
-      free((*Solver)->iter);
+      if ((*Solver)->iter) free((*Solver)->iter);
       free(*Solver);
       *Solver = NULL;
     }
@@ -420,7 +420,7 @@ PnlBicgSolver *pnl_bicg_solver_new()
   o->shat = NULL;
   o->t = NULL;
   o->v = NULL;
-  o->iter = pnl_iteration_base_new();
+  o->iter = NULL;
   o->object.type = PNL_TYPE_CG_SOLVER;
   o->object.parent_type = PNL_TYPE_OBJECT;
   o->object.label = pnl_bicg_solver_label;
@@ -489,7 +489,7 @@ void pnl_bicg_solver_free(PnlBicgSolver **Solver)
       pnl_vect_free(&(*Solver)->v);
       pnl_vect_free(&(*Solver)->r);
       pnl_vect_free(&(*Solver)->rtilde);
-      free((*Solver)->iter);
+      if ((*Solver)->iter) free((*Solver)->iter);
       free(*Solver);
       *Solver = NULL;
     }
@@ -602,8 +602,8 @@ PnlGmresSolver *pnl_gmres_solver_new()
     {
       o->v[i] = NULL;
     }
-  o->iter = pnl_iteration_base_new();
-  o->iter_inner = pnl_iteration_base_new();
+  o->iter = NULL;
+  o->iter_inner = NULL;
   o->object.type = PNL_TYPE_GMRES_SOLVER;
   o->object.parent_type = PNL_TYPE_OBJECT;
   o->object.label = pnl_gmres_solver_label;
@@ -681,8 +681,8 @@ void pnl_gmres_solver_free(PnlGmresSolver **Solver)
       pnl_mat_free(&(*Solver)->H);
       for (i = 0; i <= (*Solver)->restart + 1; i++)
         pnl_vect_free(&(*Solver)->v[i]);
-      free((*Solver)->iter);
-      free((*Solver)->iter_inner);
+      if ((*Solver)->iter)free((*Solver)->iter);
+      if ((*Solver)->iter_inner) free((*Solver)->iter_inner);
       free(*Solver);
       *Solver = NULL;
     }
