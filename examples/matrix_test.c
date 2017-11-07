@@ -437,7 +437,7 @@ static void pnl_mat_mult_mat_term_test()
   for ( i=0 ; i<M->mn ; i++ )
     {
       double expected = M1->array[i] * M2->array[i];
-      if (pnl_cmp_eq_abs(M->array[i], expected, abserr))
+      if (!pnl_isequal_abs(M->array[i], expected, abserr))
         {
           pnl_test_set_fail ( "mat_mutl_mat_term", M->array[i], expected);
           goto J1;

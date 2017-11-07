@@ -36,6 +36,9 @@ extern double pnl_log1p (double x);
 extern double pnl_expm1 (double x);
 extern double pnl_cosm1 (double x);
 extern double pnl_round (double x);
+extern int pnl_isequal_rel(double x, double y, double relerr);
+extern int pnl_isequal_abs(double x, double y, double abserr);
+extern int pnl_isequal(double x, double y, double relerr);
 
 #undef FALSE
 #define FALSE 0

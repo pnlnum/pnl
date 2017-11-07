@@ -83,11 +83,11 @@ static void tridiag_add_test ()
   pnl_tridiag_mat_plus_tridiag_mat (A, B);
   for ( i=0 ; i<A->size-1 ; i++ )
     {
-      if ( pnl_cmp_eq_abs(A->DL[i], Aclone->DL[i] + B->DL[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (-1)", A->DL[i], Aclone->DL[i] + B->DL[i] ); goto J1;}
-      if ( pnl_cmp_eq_abs(A->DU[i], Aclone->DU[i] + B->DU[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (+1)", A->DU[i], Aclone->DU[i] + B->DU[i] ); goto J1;}
-      if ( pnl_cmp_eq_abs(A->D[i], Aclone->D[i] + B->D[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (0)", A->D[i], Aclone->D[i] + B->D[i] ); goto J1; }
+      if ( !pnl_isequal_abs(A->DL[i], Aclone->DL[i] + B->DL[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (-1)", A->DL[i], Aclone->DL[i] + B->DL[i] ); goto J1;}
+      if ( !pnl_isequal_abs(A->DU[i], Aclone->DU[i] + B->DU[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (+1)", A->DU[i], Aclone->DU[i] + B->DU[i] ); goto J1;}
+      if ( !pnl_isequal_abs(A->D[i], Aclone->D[i] + B->D[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (0)", A->D[i], Aclone->D[i] + B->D[i] ); goto J1; }
     }
-  if ( pnl_cmp_eq_abs(A->D[A->size-1], Aclone->D[A->size-1] + B->D[A->size-1], abserr) ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (0)", A->D[A->size-1], Aclone->D[A->size-1] + B->D[A->size-1] ); goto J1;}
+  if ( !pnl_isequal_abs(A->D[A->size-1], Aclone->D[A->size-1] + B->D[A->size-1], abserr) ) { pnl_test_set_fail ("tridiag_mat_plus_tridiag_mat (0)", A->D[A->size-1], Aclone->D[A->size-1] + B->D[A->size-1] ); goto J1;}
 
   pnl_test_set_ok ("tridiag_mat_plus_tridiag_mat");
 J1:
@@ -96,11 +96,11 @@ J1:
   pnl_tridiag_mat_minus_tridiag_mat (A, B);
   for ( i=0 ; i<A->size-1 ; i++ )
     {
-      if ( pnl_cmp_eq_abs(A->DL[i], Aclone->DL[i] - B->DL[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_minus_tridiag_mat (-1)", A->DL[i], Aclone->DL[i] - B->DL[i] ); goto J2;}
-      if ( pnl_cmp_eq_abs(A->DU[i], Aclone->DU[i] - B->DU[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_minus_tridiag_mat (+1)", A->DU[i], Aclone->DU[i] - B->DU[i] ); goto J2;}
-      if ( pnl_cmp_eq_abs(A->D[i], Aclone->D[i] - B->D[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_minus_tridiag_mat (0)", A->D[i], Aclone->D[i] - B->D[i] ); goto J2; }
+      if ( !pnl_isequal_abs(A->DL[i], Aclone->DL[i] - B->DL[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_minus_tridiag_mat (-1)", A->DL[i], Aclone->DL[i] - B->DL[i] ); goto J2;}
+      if ( !pnl_isequal_abs(A->DU[i], Aclone->DU[i] - B->DU[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_minus_tridiag_mat (+1)", A->DU[i], Aclone->DU[i] - B->DU[i] ); goto J2;}
+      if ( !pnl_isequal_abs(A->D[i], Aclone->D[i] - B->D[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_minus_tridiag_mat (0)", A->D[i], Aclone->D[i] - B->D[i] ); goto J2; }
     }
-  if ( pnl_cmp_eq_abs(A->D[A->size-1], Aclone->D[A->size-1] - B->D[A->size-1], abserr) ) { pnl_test_set_fail ("tridiag_mat_minus_tridiag_mat (0)", A->D[A->size-1], Aclone->D[A->size-1] - B->D[A->size-1] ); goto J2;}
+  if ( !pnl_isequal_abs(A->D[A->size-1], Aclone->D[A->size-1] - B->D[A->size-1], abserr) ) { pnl_test_set_fail ("tridiag_mat_minus_tridiag_mat (0)", A->D[A->size-1], Aclone->D[A->size-1] - B->D[A->size-1] ); goto J2;}
 
   pnl_test_set_ok ("tridiag_mat_minus_tridiag_mat");
 J2:
@@ -109,11 +109,11 @@ J2:
   pnl_tridiag_mat_mult_tridiag_mat_term (A, B);
   for ( i=0 ; i<A->size-1 ; i++ )
     {
-      if ( pnl_cmp_eq_abs(A->DL[i], Aclone->DL[i] * B->DL[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_mult_tridiag_mat (-1)", A->DL[i], Aclone->DL[i] * B->DL[i] ); goto J3;}
-      if ( pnl_cmp_eq_abs(A->DU[i], Aclone->DU[i] * B->DU[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_mult_tridiag_mat (+1)", A->DU[i], Aclone->DU[i] * B->DU[i] ); goto J3;}
-      if ( pnl_cmp_eq_abs(A->D[i], Aclone->D[i] * B->D[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_mult_tridiag_mat (0)", A->D[i], Aclone->D[i] * B->D[i] ); goto J3; }
+      if ( !pnl_isequal_abs(A->DL[i], Aclone->DL[i] * B->DL[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_mult_tridiag_mat (-1)", A->DL[i], Aclone->DL[i] * B->DL[i] ); goto J3;}
+      if ( !pnl_isequal_abs(A->DU[i], Aclone->DU[i] * B->DU[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_mult_tridiag_mat (+1)", A->DU[i], Aclone->DU[i] * B->DU[i] ); goto J3;}
+      if ( !pnl_isequal_abs(A->D[i], Aclone->D[i] * B->D[i], abserr) ) { pnl_test_set_fail ("tridiag_mat_mult_tridiag_mat (0)", A->D[i], Aclone->D[i] * B->D[i] ); goto J3; }
     }
-  if ( pnl_cmp_eq_abs(A->D[A->size-1], Aclone->D[A->size-1] * B->D[A->size-1], abserr) ) { pnl_test_set_fail ("tridiag_mat_mult_tridiag_mat (0)", A->D[A->size-1], Aclone->D[A->size-1] * B->D[A->size-1] ); goto J3;}
+  if ( !pnl_isequal_abs(A->D[A->size-1], Aclone->D[A->size-1] * B->D[A->size-1], abserr) ) { pnl_test_set_fail ("tridiag_mat_mult_tridiag_mat (0)", A->D[A->size-1], Aclone->D[A->size-1] * B->D[A->size-1] ); goto J3;}
 
   pnl_test_set_ok ("tridiag_mat_mult_tridiag_mat_term");
 J3:

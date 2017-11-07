@@ -240,7 +240,7 @@ static void pnl_vect_div_vect_term_test()
   pnl_vect_div_vect_term(v1,v2);
   for ( i=0; i<4; i++ )
     {
-      if ( pnl_cmp_eq_abs(GET(v1,i), x[i] / 3., abserr) )
+      if ( !pnl_isequal_abs(GET(v1,i), x[i] / 3., abserr) )
         {
           pnl_test_set_fail ("vect_div_vect_term", GET(v1,i), x[i] / 3.);
           goto J1;

@@ -1,6 +1,6 @@
 
 /************************************************************************/
-/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
+/* Copyright Jï¿½rï¿½me Lelong <jerome.lelong@gmail.com>                    */
 /*                                                                      */
 /* This program is free software: you can redistribute it and/or modify */
 /* it under the terms of the GNU Lesser General Public License as       */
@@ -221,3 +221,76 @@ double pnl_atanh(double x)
     }
 }
 
+/**
+ * Relative comparison of two real numbers
+ *
+ * @param x real number
+ * @param y real number
+ * @param relerr real number
+ *
+ * @return  TRUE (if equal) or FALSE
+ */
+int pnl_isequal_rel(double x, double y, double relerr)
+{
+  if ((isnan(x) && !isnan(y)) || (!isnan(x) && isnan(y))
+      || (isinf(x) && !isinf(y)) || (!isinf(x) && isinf(y))) return FALSE;
+  if (isinf(x) && isinf(y))
+    {
+      if (x * y > 0.) return TRUE;
+      return FALSE;
+    }
+  if (isnan(x) && isnan(y)) return TRUE;
+  if (y == 0.)
+    {
+      return ((x == 0.) ? TRUE : FALSE);
+    }
+  else
+    {
+      return ((fabs(x - y) / fabs(y)) > relerr) ? FALSE : TRUE;
+    }
+}
+
+/**
+ * Absolute comparison of two real numbers
+ *
+ * @param x real number
+ * @param y real number
+ * @param abserr real number defining the absolute error
+ *
+ * @return  TRUE (if equal) or FALSE
+ */
+int pnl_isequal_abs(double x, double y, double abserr)
+{
+  if ((isnan(x) && !isnan(y)) || (!isnan(x) && isnan(y))
+      || (isinf(x) && !isinf(y)) || (!isinf(x) && isinf(y))) return FALSE;
+  if (isinf(x) && isinf(y))
+    {
+      if (x * y > 0.) return TRUE;
+      return FALSE;
+    }
+  if (isnan(x) && isnan(y)) return TRUE;
+  return (fabs(x - y) > abserr) ? FALSE : TRUE;
+}
+
+/**
+ * Comparison of two real numbers using the test
+ *    |x - y| / (max(1, |y|)) < relerr
+ *
+ * @param x real number
+ * @param y real number
+ * @param relerr real number defining the relative error
+ *
+ * @return  TRUE (if equal) or FALSE
+ */
+int pnl_isequal(double x, double y, double relerr)
+{
+  if ((isnan(x) && !isnan(y)) || (!isnan(x) && isnan(y))
+      || (isinf(x) && !isinf(y)) || (!isinf(x) && isinf(y))) return FALSE;
+  if (isinf(x) && isinf(y))
+    {
+      if (x * y > 0.) return TRUE;
+      return FALSE;
+    }
+  if (isnan(x) && isnan(y)) return TRUE;
+  return (fabs(x - y) / MAX(1, fabs(y)) > relerr) ? FALSE : TRUE;
+}

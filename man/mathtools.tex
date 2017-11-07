@@ -58,7 +58,7 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
   \sshortdescribe Return \var{$x^3$}.
 \end{itemize}
 
-\subsubsection{Functions}
+\subsubsection{Classifying a floating--point number}
 
 \begin{itemize}
   \item \describefun{double}{pnl_nan}{}
@@ -74,6 +74,10 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
     and \var{0} otherwise.
   \item \describefun{int}{pnl_isfinite}{double x}
     \sshortdescribe Return \var{1} if \var{x!=+-Inf}
+\end{itemize}
+
+\subsubsection{Rouding a floating--point number}
+\begin{itemize}
   \item \describefun{int}{pnl_itrunc}{double s}
     \sshortdescribe This function is similar to the \var{trunc} function
     (provided by the C library) but the result is typed as an integer instead of a
@@ -97,6 +101,10 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
     \sshortdescribe This function is similar to the \var{round} function
     (provided by the C library) but the result is typed as a long integer instead of a
     double. 
+\end{itemize}
+
+\subsubsection{Some standard mathematical functions}
+\begin{itemize}
   \item \describefun{double}{pnl_fact}{double x}
     \sshortdescribe See \reffun{pnl_sf_fact}
   \item \describefun{double}{pnl_lgamma}{double x}
@@ -117,6 +125,16 @@ library. Most of them are actually already defined in {\tt math.h}, {\tt
     \sshortdescribe Compute \var{cos(x)-1} accurately for small values of \var{x}
   \item \describefun{double}{pnl_pow_i}{double x, int n}
     \sshortdescribe Compute \verb!x^n! for an integer \var{n}.
+\end{itemize}
+
+\subsubsection{Comparison of floating--point numbers}
+\begin{itemize}
+  \item \describefun{int}{pnl_isequal_rel}{double x, double y, double relerr}
+    \sshortdescribe Compare two floating--point numbers up to a relative precision \var{relerr}
+  \item \describefun{int}{pnl_isequal_abs}{double x, double y, double abserr}
+    \sshortdescribe Compare two floating--point numbers up to an absolute precision \var{abserr}
+  \item \describefun{int}{pnl_isequal}{double x, double y, double relerr}
+    \sshortdescribe Equivalent to \reffun{pnl_isequal_abs} if \var{|x| < 1} and to \reffun{pnl_isequal_abs} otherwise.
 \end{itemize}
 
 % vim:spelllang=en:spell:
