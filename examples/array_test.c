@@ -1,6 +1,6 @@
 
 /************************************************************************/
-/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
+/* Copyright Jï¿½rï¿½me Lelong <jerome.lelong@gmail.com>                    */
 /*                                                                      */
 /* This program is free software: you can redistribute it and/or modify */
 /* it under the terms of the GNU Lesser General Public License as       */
@@ -68,8 +68,8 @@ static void array_copy ()
 
   C = pnl_array_copy (T);
   if ( C->size != T->size ||
-       pnl_test_mat_eq ((PnlMat *) T->array[0], M, 1E-12, "", "") != TRUE ||
-       pnl_test_vect_eq ((PnlVect *) T->array[1], v, 1E-12, "", "") != TRUE )
+       pnl_test_mat_eq_abs ((PnlMat *) T->array[0], M, 1E-12, "", "") != TRUE ||
+       pnl_test_vect_eq_abs ((PnlVect *) T->array[1], v, 1E-12, "", "") != TRUE )
     {
       pnl_test_set_fail ("pnl_array_copy", 0., 0.);
       goto J1;
@@ -98,8 +98,8 @@ static void array_clone ()
   C = pnl_array_new ();
   pnl_array_clone (C, T);
   if ( C->size != T->size ||
-       pnl_test_mat_eq ((PnlMat *) T->array[0], M, 1E-12, "", "") != TRUE ||
-       pnl_test_vect_eq ((PnlVect *) T->array[1], v, 1E-12, "", "") != TRUE )
+       pnl_test_mat_eq_abs ((PnlMat *) T->array[0], M, 1E-12, "", "") != TRUE ||
+       pnl_test_vect_eq_abs ((PnlVect *) T->array[1], v, 1E-12, "", "") != TRUE )
     {
       pnl_test_set_fail ("pnl_array_copy", 0., 0.);
       goto J1;

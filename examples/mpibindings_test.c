@@ -1,6 +1,6 @@
 
 /************************************************************************/
-/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
+/* Copyright Jï¿½rï¿½me Lelong <jerome.lelong@gmail.com>                    */
 /*                                                                      */
 /* This program is free software: you can redistribute it and/or modify */
 /* it under the terms of the GNU Lesser General Public License as       */
@@ -590,7 +590,7 @@ static void test_reduce (int rank)
       pnl_object_mpi_send (PNL_OBJECT(vect2), 1, SENDTAG, MPI_COMM_WORLD);
       pnl_object_mpi_reduce (PNL_OBJECT(vect1), PNL_OBJECT(reduc), MPI_SUM, 0, MPI_COMM_WORLD);
 
-      if ( pnl_test_vect_eq (sum, reduc, 1E-10, "mpi_reduce", "") == TRUE )
+      if ( pnl_test_vect_eq_abs (sum, reduc, 1E-10, "mpi_reduce", "") == TRUE )
         {
           printf ("MPI_Reduce for PnlObject: OK\n");
         }

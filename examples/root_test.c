@@ -1,5 +1,5 @@
 /*
- * Written and (C) by Jérôme Lelong <jerome.lelong@gmail.com>
+ * Written and (C) by Jï¿½rï¿½me Lelong <jerome.lelong@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as 
@@ -188,7 +188,7 @@ static void multiroot_newton_test ()
   Fn.params = NULL;
 
   pnl_multiroot_newton (&Fn, x0, x_eps, fx_eps, 200, pnl_test_is_verbose (), x_sol);
-  pnl_test_vect_eq (x_sol, true_sol, x_eps, "multiroot_newton", "");
+  pnl_test_vect_eq_abs (x_sol, true_sol, x_eps, "multiroot_newton", "");
   pnl_vect_free (&x0);
   pnl_vect_free (&x_sol);
 
