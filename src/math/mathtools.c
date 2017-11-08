@@ -246,7 +246,7 @@ int pnl_isequal_rel(double x, double y, double relerr)
     }
   else
     {
-      return ((fabs(x - y) / fabs(y)) > relerr) ? FALSE : TRUE;
+      return ((fabs(x - y) > relerr * fabs(y))) ? FALSE : TRUE;
     }
 }
 
@@ -292,5 +292,5 @@ int pnl_isequal(double x, double y, double relerr)
       return FALSE;
     }
   if (isnan(x) && isnan(y)) return TRUE;
-  return (fabs(x - y) / MAX(1, fabs(y)) > relerr) ? FALSE : TRUE;
+  return (fabs(x - y) > MAX(1, fabs(y)) * relerr) ? FALSE : TRUE;
 }
