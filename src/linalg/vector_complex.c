@@ -18,6 +18,7 @@
 
 #include "pnl/pnl_config.h"
 #include "pnl/pnl_vector.h"
+#include "pnl/pnl_mathtools.h"
 
 
 /**
@@ -104,4 +105,59 @@ void pnl_vect_complex_mult_double(PnlVectComplex *lhs , double x)
     }
 }
 
+/**
+ * Test if two complex vectors are equal up to an absolute precision of abserr on each component
+ * 
+ * @param x A complex vector
+ * @param y A complex vector
+ * @param abserr the maximum absolute error
+ * @return TRUE or FALSE
+ */
+int pnl_vect_complex_isequal_abs(const PnlVectComplex *x, const PnlVectComplex *y, double abserr)
+{
+  int i;
+  if (x->size != y->size) return FALSE;
+  for (i = 0 ; i < x->size ; i++)
+    {
+      if (! pnl_complex_isequal_abs(PNL_GET(x, i),PNL_GET(y, i), abserr)) return FALSE;
+    }
+  return TRUE;
+}
 
+/**
+ * Test if two complex vectors are equal up to a relative precision of relerr on each component
+ * 
+ * @param x A complex vector
+ * @param y A complex vector
+ * @param abserr the maximum absolute error
+ * @return TRUE or FALSE
+ */
+int pnl_vect_complex_isequal_rel(const PnlVectComplex *x, const PnlVectComplex *y, double relerr)
+{
+  int i;
+  if (x->size != y->size) return FALSE;
+  for (i = 0 ; i < x->size ; i++)
+    {
+      if (! pnl_complex_isequal_rel(PNL_GET(x, i),PNL_GET(y, i), relerr)) return FALSE;
+    }
+  return TRUE;
+}
+
+/**
+ * Test if two complex vectors are equal up to err. This function applies pnl_complex_isequal to each component.
+ * 
+ * @param x A complex vector
+ * @param y A complex vector
+ * @param err the maximum error
+ * @return TRUE or FALSE
+ */
+int pnl_vect_complex_isequal(const PnlVectComplex *x, const PnlVectComplex *y, double err)
+{
+  int i;
+  if (x->size != y->size) return FALSE;
+  for (i = 0 ; i < x->size ; i++)
+    {
+      if (! pnl_complex_isequal(PNL_GET(x, i),PNL_GET(y, i), err)) return FALSE;
+    }
+  return TRUE;
+}

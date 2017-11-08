@@ -448,6 +448,9 @@ extern void pnl_vect_complex_split_in_array(const PnlVectComplex* v, double *re,
 extern void pnl_vect_complex_split_in_vect(const PnlVectComplex* v, PnlVect *re, PnlVect *im);
 extern void pnl_vect_complex_swap_elements(PnlVectComplex * v, int i, int j); 
 extern void pnl_vect_complex_reverse(PnlVectComplex * v);
+extern int pnl_vect_complex_isequal_abs(const PnlVectComplex *x, const PnlVectComplex *y, double abserr);
+extern int pnl_complex_isequal_rel(dcomplex x, dcomplex y, double relerr);
+extern int pnl_vect_complex_isequal(const PnlVectComplex *x, const PnlVectComplex *y, double err);
 
 /*@}*/
 

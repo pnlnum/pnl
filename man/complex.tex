@@ -147,6 +147,17 @@ typedef struct {
 
 \item \describefun{void}{Cprintf}{\refstruct{dcomplex} z}
   \sshortdescribe Print a complex number on the standard output
+
+\item \describefun{int}{pnl_complex_isequal_abs}{\dcomplex x, \dcomplex y, double abserr}
+  \sshortdescribe Test if two complex numbers are equal up to an absolute error \var{abserr}.
+
+\item \describefun{int}{pnl_complex_isequal_rel}{\dcomplex x, \dcomplex y, double relerr}
+  \sshortdescribe Test if two complex numbers are equal up to a relative error \var{relerr}.
+
+\item \describefun{int}{pnl_complex_isequal}{\dcomplex x, \dcomplex y, double err}
+  \sshortdescribe Test if two complex numbers using one of the above functions depending on the magnitude of \var{|y|}.
+    
+
 \end{itemize}
 
 Most algebraic operations on complex numbers are implemented using the

@@ -224,9 +224,9 @@ double pnl_atanh(double x)
 /**
  * Relative comparison of two real numbers
  *
- * @param x real number
- * @param y real number
- * @param relerr real number
+ * @param x a real number
+ * @param y a real number
+ * @param relerr a real number defining the error
  *
  * @return  TRUE (if equal) or FALSE
  */
@@ -253,9 +253,9 @@ int pnl_isequal_rel(double x, double y, double relerr)
 /**
  * Absolute comparison of two real numbers
  *
- * @param x real number
- * @param y real number
- * @param abserr real number defining the absolute error
+ * @param x areal number
+ * @param y a real number
+ * @param abserr a real number defining the absolute error
  *
  * @return  TRUE (if equal) or FALSE
  */
@@ -276,8 +276,8 @@ int pnl_isequal_abs(double x, double y, double abserr)
  * Comparison of two real numbers using the test
  *    |x - y| / (max(1, |y|)) < relerr
  *
- * @param x real number
- * @param y real number
+ * @param x a real number
+ * @param y a real number
  * @param relerr real number defining the relative error
  *
  * @return  TRUE (if equal) or FALSE

@@ -66,6 +66,10 @@ extern dcomplex Ctanh(dcomplex z);
 extern dcomplex Ccotanh(dcomplex z);
 extern dcomplex Cpow(dcomplex z, dcomplex exp);
 extern dcomplex Cpow_real (dcomplex z, double y);
+extern int pnl_complex_isequal_abs(dcomplex x, dcomplex y, double abserr);
+extern int pnl_complex_isequal_rel(dcomplex x, dcomplex y, double relerr);
+extern int pnl_complex_isequal(dcomplex x, dcomplex y, double err);
+
 /* Algebirc operation on C : */
 /* use i for multiply by i */
 /* use c for congugate */

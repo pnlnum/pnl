@@ -1,6 +1,6 @@
 
 /************************************************************************/
-/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
+/* Copyright Jï¿½rï¿½me Lelong <jerome.lelong@gmail.com>                    */
 /*                                                                      */
 /* This program is free software: you can redistribute it and/or modify */
 /* it under the terms of the GNU Lesser General Public License as       */
@@ -853,3 +853,74 @@ dcomplex C_op_idamcb(double d, dcomplex a, dcomplex b)
   return c;
 }
 
+int Cisnan(dcomplex x)
+{
+  return (isnan(x.r) || isnan(x.i));
+}
+
+double Cisinf(dcomplex x)
+{
+  return (isinf(x.r) || isinf(x.i));
+}
+
+/**
+ * Comparison of two complex numbers using the test
+ *    |x - y| < abserr
+ *
+ * @param x A complex  number
+ * @param y A complex  number
+ * @param abserr the maximum absolute error
+ *
+ * @return  TRUE (if equal) or FALSE
+ */
+int pnl_complex_isequal_abs(dcomplex x, dcomplex y, double abserr)
+{
+ if ((Cisnan(x) && !Cisnan(y)) || (!Cisnan(x) && Cisnan(y))
+      || (Cisinf(x) && !Cisinf(y)) || (!Cisinf(x) && Cisinf(y))) return FALSE;
+  if (Cisinf(x) && Cisinf(y))
+    {
+      return (pnl_isequal_abs(x.r, y.r, abserr) && pnl_isequal_abs(x.i, y.i, abserr));
+    }
+  if (Cisnan(x) && Cisnan(y)) return TRUE;
+  return (Cabs(Csub(x, y)) > abserr) ? FALSE : TRUE;
+}
+
+/**
+ * Comparison of two complex numbers using the test
+ *    |x - y| / |y| < relerr
+ *
+ * @param x A complex  number
+ * @param y A complex  number
+ * @param relerr the maximum relative error
+ *
+ * @return  TRUE (if equal) or FALSE
+ */
+int pnl_complex_isequal_rel(dcomplex x, dcomplex y, double relerr)
+{
+ if ((Cisnan(x) && !Cisnan(y)) || (!Cisnan(x) && Cisnan(y))
+      || (Cisinf(x) && !Cisinf(y)) || (!Cisinf(x) && Cisinf(y))) return FALSE;
+  if (Cisinf(x) && Cisinf(y))
+    {
+      return (pnl_isequal_abs(x.r, y.r, relerr) && pnl_isequal_abs(x.i, y.i, relerr));
+    }
+  if (Cisnan(x) && Cisnan(y)) return TRUE;
+  return (Cabs(Csub(x, y)) > relerr * Cabs(y)) ? FALSE : TRUE;
+}
+
+/**
+ * Comparison of two complex numbers using the test
+ *    |x - y| / (max(1, |y|)) < relerr
+ *
+ * @param x A complex  number
+ * @param y A complex  number
+ * @param relerr the maximum relative error
+ *
+ * @return  TRUE (if equal) or FALSE
+ */
+int pnl_complex_isequal(dcomplex x, dcomplex y, double err)
+{
+  if (Cabs(y) > 1)
+    return pnl_complex_isequal_rel(x, y, err);
+  else
+    return pnl_complex_isequal_abs(x, y, err);
+}

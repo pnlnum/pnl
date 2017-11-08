@@ -97,7 +97,7 @@ int pnl_vect_isequal(const PnlVect *x, const PnlVect *y, double err)
 }
 
 /**
- * Test if two vectors are equal up to an absolute precision of rabserr on each component
+ * Test if two vectors are equal up to an absolute precision of abserr on each component
  * 
  * @param x A real vector
  * @param y A real vector
