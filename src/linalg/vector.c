@@ -1,6 +1,6 @@
 
 /************************************************************************/
-/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
+/* Copyright JÃ©rsÃ´ï¿½me Lelong <jerome.lelong@gmail.com>                    */
 /*                                                                      */
 /* This program is free software: you can redistribute it and/or modify */
 /* it under the terms of the GNU Lesser General Public License as       */
@@ -157,3 +157,20 @@ static char pnl_vect_int_label[] = "PnlVectorInt";
 #include "pnl/pnl_templates_off.h"
 #undef  BASE_INT
 
+/**
+ * Compare integer vectors
+ * 
+ * @param x an integer vector
+ * @param y an integer vector
+ * @return TRUE or FALSE 
+ */
+int pnl_vect_int_isequal(const PnlVectInt *x, const PnlVectInt *y)
+{
+  int i;
+  if (x->size != y->size) return FALSE;
+  for (i = 0 ; i < x->size ; i++)
+    {
+      if (PNL_GET(x, i) != PNL_GET(y,i)) return FALSE;
+    }
+  return TRUE;
+}

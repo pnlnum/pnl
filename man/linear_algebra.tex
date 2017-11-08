@@ -337,17 +337,19 @@ Accessing elements of a vector is faster using the following macros
 
 \end{itemize}
 
-\subparagraph{Test functions}
+\subparagraph{Comparison functions}
 
 \begin{itemize}
-\item \describefun{int}{pnl_vect_eq}{const \PnlVect \ptr V1,
-    const \PnlVect \ptr V2}
-  \sshortdescribe Test if two vectors are equal. Returns \var{TRUE} or
-  \var{FALSE}.
-\item \describefun{int}{pnl_vect_eq_all}{const \PnlVect \ptr v,
-    double x}
-  \sshortdescribe Test if all the components of \var{v} are equal to
-  \var{x}. Returns \var{TRUE} or \var{FALSE}.
+  \item \describefun{int}{pnl_vect_isequal}{const \PnlVect \ptr V1, const \PnlVect \ptr V2, double err}
+    \sshortdescribe Test if two vectors are equal up to \var{err} component--wise. The error \var{err} is either relative or absolute depending on the magnitude of the components. Return \var{TRUE} or \var{FALSE}.
+  \item \describefun{int}{pnl_vect_isequal_abs}{const \PnlVect \ptr V1, const \PnlVect \ptr V2, double abserr}
+    \sshortdescribe Test if two vectors are equal up to an absolute error \var{abserr} component--wise. Return \var{TRUE} or \var{FALSE}.
+  \item \describefun{int}{pnl_vect_isequal_rel}{const \PnlVect \ptr V1, const \PnlVect \ptr V2, double relerr}
+    \sshortdescribe Test if two vectors are equal up to a relative error \var{relerr} component--wise. Return \var{TRUE} or \var{FALSE}.
+  \item \describefun{int}{pnl_vect_eq_all}{const \PnlVect \ptr v,
+      double x}
+    \sshortdescribe Test if all the components of \var{v} are equal to
+    \var{x}. Return \var{TRUE} or \var{FALSE}.
 \end{itemize}
 
 \subparagraph{Ordering functions}

@@ -1,5 +1,5 @@
 /************************************************************************/
-/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
+/* Copyright Jï¿½rï¿½me Lelong <jerome.lelong@gmail.com>                    */
 /*                                                                      */
 /* This program is free software: you can redistribute it and/or modify */
 /* it under the terms of the GNU Lesser General Public License as       */
@@ -110,7 +110,7 @@ TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_scalar)(const int size, BASE x)
 int FUNCTION(pnl_vect, eq)(const TYPE(PnlVect) *v1, const TYPE(PnlVect) *v2)
 {
   int i;
-  if (v1->size != v2->size) return FAIL;
+  if (v1->size != v2->size) return FALSE;
   for (i = 0 ; i < v1->size ; i++)
     {
       if (NEQ(PNL_GET(v1, i), PNL_GET(v2, i))) return FALSE;

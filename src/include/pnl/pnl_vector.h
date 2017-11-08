@@ -110,6 +110,9 @@ extern void pnl_vect_fprint_asrow(FILE *fic, const PnlVect *V);
 extern void pnl_vect_fprint_nsp(FILE *fic, const PnlVect *V);
 extern void pnl_vect_plus_vect(PnlVect *lhs, const PnlVect *rhs); 
 extern void pnl_vect_minus_vect(PnlVect *lhs, const PnlVect *rhs); 
+extern int pnl_vect_isequal(const PnlVect *x, const PnlVect *y, double err);
+extern int pnl_vect_isequal_abs(const PnlVect *x, const PnlVect *y, double abserr);
+extern int pnl_vect_isequal_rel(const PnlVect *x, const PnlVect *y, double relerr);
 
 
 extern void pnl_vect_map_inplace(PnlVect *lhs, double(*f)(double)); 
@@ -276,6 +279,7 @@ extern void pnl_vect_int_max_index (int *, int *,const PnlVectInt *);
 extern void pnl_vect_int_minmax_index (int *, int *, int *, int *,const PnlVectInt *);
 extern void pnl_vect_int_qsort (PnlVectInt *, char);
 extern void pnl_vect_int_qsort_index (PnlVectInt *, PnlVectInt *, char);
+extern int pnl_vect_int_isequal(const PnlVectInt *x, const PnlVectInt *y);
 
 extern double pnl_vect_int_norm_two(const PnlVectInt *V); /*res=\Vert V \Vert_{l^2} */
 extern double pnl_vect_int_norm_one(const PnlVectInt *V); /*res=\Vert V \Vert_{l^1} */

@@ -1,7 +1,7 @@
 
 /************************************************************************/
-/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
-/* Copyright Céline Labart                                              */
+/* Copyright JÃ©rÃ´me Lelong <jerome.lelong@gmail.com>                    */
+/* Copyright CÃ©line Labart                                              */
 /*                                                                      */
 /* This program is free software: you can redistribute it and/or modify */
 /* it under the terms of the GNU Lesser General Public License as       */
@@ -49,9 +49,9 @@ int pnl_vect_cross(PnlVect *lhs, const PnlVect *x, const PnlVect *y)
 #endif
       return FAIL;
     }
-  LET(lhs, 0) = GET(x, 1) * GET(y, 2) - GET(x, 2) * GET(y, 1);
-  LET(lhs, 1) = GET(x, 2) * GET(y, 0) - GET(x, 0) * GET(y, 2);
-  LET(lhs, 2) = GET(x, 0) * GET(y, 1) - GET(x, 1) * GET(y, 0);
+  PNL_LET(lhs, 0) = PNL_GET(x, 1) * PNL_GET(y, 2) - PNL_GET(x, 2) * PNL_GET(y, 1);
+  PNL_LET(lhs, 1) = PNL_GET(x, 2) * PNL_GET(y, 0) - PNL_GET(x, 0) * PNL_GET(y, 2);
+  PNL_LET(lhs, 2) = PNL_GET(x, 0) * PNL_GET(y, 1) - PNL_GET(x, 1) * PNL_GET(y, 0);
   return OK;
 }
 
@@ -71,11 +71,69 @@ double pnl_vect_dist(const PnlVect *x, const PnlVect *y)
 
   for (i = 0 ; i < x->size ; i++)
     {
-      double tmp = GET(x, i) - GET(y, i);
+      double tmp = PNL_GET(x, i) - PNL_GET(y, i);
       dist += SQR(tmp);
     }
   return sqrt(dist);
 }
+
+/**
+ * Test if two vectors are equal up to err. This function applies pnl_isequal to each component.
+ * 
+ * @param x A real vector
+ * @param y A real vector
+ * @param err the maximum error
+ * @return TRUE or FALSE
+ */
+int pnl_vect_isequal(const PnlVect *x, const PnlVect *y, double err)
+{
+  int i;
+  if (x->size != y->size) return FALSE;
+  for (i = 0 ; i < x->size ; i++)
+    {
+      if (! pnl_isequal(PNL_GET(x, i),PNL_GET(y, i), err)) return FALSE;
+    }
+  return TRUE;
+}
+
+/**
+ * Test if two vectors are equal up to an absolute precision of rabserr on each component
+ * 
+ * @param x A real vector
+ * @param y A real vector
+ * @param abserr the maximum absolute error
+ * @return TRUE or FALSE
+ */
+int pnl_vect_isequal_abs(const PnlVect *x, const PnlVect *y, double abserr)
+{
+  int i;
+  if (x->size != y->size) return FALSE;
+  for (i = 0 ; i < x->size ; i++)
+    {
+      if (! pnl_isequal_abs(PNL_GET(x, i),PNL_GET(y, i), abserr)) return FALSE;
+    }
+  return TRUE;
+}
+
+/**
+ * Test if two vectors are equal up to a relative precision of relerr on each component
+ * 
+ * @param x A real vector
+ * @param y A real vector
+ * @param relerr the maximum relative error
+ * @return TRUE or FALSE
+ */
+int pnl_vect_isequal_rel(const PnlVect *x, const PnlVect *y, double relerr)
+{
+  int i;
+  if (x->size != y->size) return FALSE;
+  for (i = 0 ; i < x->size ; i++)
+    {
+      if (! pnl_isequal_rel(PNL_GET(x, i),PNL_GET(y, i), relerr)) return FALSE;
+    }
+  return TRUE;
+}
+
 
 static char pnl_vector_compact_label[] = "PnlVectCompact";
 
