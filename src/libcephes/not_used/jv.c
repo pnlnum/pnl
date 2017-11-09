@@ -45,7 +45,7 @@
   Cephes Math Library Release 2.8:  June, 2000
   Copyright 1984, 1987, 1989, 1992, 2000 by Stephen L. Moshier
 
-  Modified by Jérôme Lelong <jerome.lelong@gmail.com> April, 2011
+  Modified by JÃ©rÃ´me Lelong <jerome.lelong@gmail.com> April, 2011
   to make the code thread-safe (global variable sgngam removed)
 */
 

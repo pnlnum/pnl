@@ -1,6 +1,6 @@
 
 /*
- * Written and (C) by Jérôme Lelong <jerome.lelong@gmail.com>
+ * Written and (C) by JÃ©rÃ´me Lelong <jerome.lelong@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as 
@@ -25,7 +25,7 @@
  * albuquerque,new mexico                                             
  * 
  * It has been translated using f2c and many parts have been hand rewritten
- * by Jérôme Lelong to obtain a more easily readable and maintenable code.
+ * by JÃ©rÃ´me Lelong to obtain a more easily readable and maintenable code.
  *
  */
 

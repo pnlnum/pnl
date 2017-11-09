@@ -1,6 +1,6 @@
 
 /************************************************************************/
-/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
+/* Copyright JÃ©rÃ´me Lelong <jerome.lelong@gmail.com>                    */
 /*                                                                      */
 /* This program is free software: you can redistribute it and/or modify */
 /* it under the terms of the GNU Lesser General Public License as       */
@@ -371,7 +371,7 @@ int pnl_mat_cross(PnlMat *lhs, const PnlMat *A, const PnlMat *B)
  * @param A a matrix
  * @param B contains exp(A) on return
  *
- * This algorithms has been written in C by Jérôme Lelong
+ * This algorithms has been written in C by JÃ©rÃ´me Lelong
  * following the Fortran implementation given in EXPOKIT
  * Roger B. Sidje Department of Mathematics, University of Queensland
  * Brisbane, QLD-4072, Australia, (c) 1996-1999 All Rights Reserved

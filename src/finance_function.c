@@ -25,7 +25,7 @@
 
 /*
  * This code has been significantly modified by 
- * Jérôme Lelong <jerome.lelong@gmail.com>
+ * JÃ©rÃ´me Lelong <jerome.lelong@gmail.com>
  * November 2009
  */
 

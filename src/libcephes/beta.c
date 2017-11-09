@@ -48,7 +48,7 @@
   Copyright 1984, 1987 by Stephen L. Moshier
   Direct inquiries to 30 Frost Street, Cambridge, MA 02140
 
-  Modified by Jérôme Lelong <jerome.lelong@gmail.com> April, 2011
+  Modified by JÃ©rÃ´me Lelong <jerome.lelong@gmail.com> April, 2011
   to make the code thread-safe (global variable sgngam removed)
 */
 

@@ -140,7 +140,7 @@ void nsp_nlinear_interp(double **x , double val[], int dim[], int n,
 
   /*
    *   calcul des decalages d'indices pour retrouver les valeurs
-   *   de l'hypercube encadrant le point à interpoler
+   *   de l'hypercube encadrant le point Ã  interpoler
    */
   ad[0] = 0;
   ad[1] = 1;

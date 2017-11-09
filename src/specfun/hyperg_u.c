@@ -1,6 +1,6 @@
 
 /************************************************************************/
-/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
+/* Copyright JÃ©rÃ´me Lelong <jerome.lelong@gmail.com>                    */
 /*                                                                      */
 /* This program is free software: you can redistribute it and/or modify */
 /* it under the terms of the GNU Lesser General Public License as       */
@@ -128,7 +128,7 @@ static int chguit_(double *a, double *b, double *x,
   /*                x  --- Argument ( x > 0 ) */
   /*       Output:  HU --- U(a,b,z) */
   /*                ID --- Estimated number of significant digits */
-  /*       Routine called: GAMMA2 for computing â(x) */
+  /*       Routine called: GAMMA2 for computing Ã¢(x) */
   /*       ====================================================== */
 
   *id = 7;
@@ -472,14 +472,14 @@ static int chgubi_(double *a, double *b, double *x,
 
   /*       ====================================================== */
   /*       Purpose: Compute confluent hypergeometric function */
-  /*                U(a,b,x) with int b ( b = ñ1,ñ2,... ) */
+  /*                U(a,b,x) with int b ( b = Ã±1,Ã±2,... ) */
   /*       Input  : a  --- Parameter */
   /*                b  --- Parameter */
   /*                x  --- Argument */
   /*       Output:  HU --- U(a,b,x) */
   /*                ID --- Estimated number of significant digits */
   /*       Routines called: */
-  /*            (1) GAMMA2 for computing gamma function â(x) */
+  /*            (1) GAMMA2 for computing gamma function Ã¢(x) */
   /*            (2) PSI_SPEC for computing psi function */
   /*       ====================================================== */
 

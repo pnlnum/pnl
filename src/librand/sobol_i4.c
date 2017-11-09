@@ -1,7 +1,7 @@
 
 /*
  * Written and (C) 2005-2009 by John Burkardt
- * Written and (C) 2011 by Jérôme Lelong <jerome.lelong@gmail.com>
+ * Written and (C) 2011 by JÃ©rÃ´me Lelong <jerome.lelong@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as

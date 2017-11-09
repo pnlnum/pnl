@@ -1,7 +1,7 @@
 /*
  * This code comes from the Numpy package with the following license
  *
- *  Copyright © 2005-2012, NumPy Developers.
+ *  Copyright Â© 2005-2012, NumPy Developers.
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:

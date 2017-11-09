@@ -1,5 +1,5 @@
 /************************************************************************/
-/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
+/* Copyright JÃ©rÃ´me Lelong <jerome.lelong@gmail.com>                    */
 /*                                                                      */
 /* This program is free software: you can redistribute it and/or modify */
 /* it under the terms of the GNU Lesser General Public License as       */
@@ -32,7 +32,7 @@
  * but permission is granted to use code in programs
  * "Computation of Special Functions", 1996, John Wiley & Sons, Inc.
  *
- * The fortran code has been hand translated into C by Jérôme Lelong
+ * The fortran code has been hand translated into C by JÃ©rÃ´me Lelong
  */
 /**
  * Compute the Gamma function for complex argument

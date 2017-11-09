@@ -4,7 +4,7 @@
  * available on www.netlib.org
  *
  * This routine has been translated from Fortran using f2c and then slightly
- * modified by Jérôme Lelong for integration into Pnl. All Quadpack names have
+ * modified by JÃ©rÃ´me Lelong for integration into Pnl. All Quadpack names have
  * been prefixed by pnl to avoid possible clash in names. Calls to d1mach have
  * been replaced by calls to dlamch coming from Lapack
  */

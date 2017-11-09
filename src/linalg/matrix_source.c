@@ -2,13 +2,13 @@
  * This code was originally written for matrices of doubles and has been
  * translated using a template system by
  *    David Pommier <pommier.david@gmail.com>
- *    Jérôme Lelong <jerome.lelong@gmail.com>
+ *    JÃ©rÃ´me Lelong <jerome.lelong@gmail.com>
  */
 
 
 /************************************************************************/
-/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
-/* Copyright Céline Labart                                              */
+/* Copyright JÃ©rÃ´me Lelong <jerome.lelong@gmail.com>                    */
+/* Copyright CÃ©line Labart                                              */
 /*                                                                      */
 /* This program is free software: you can redistribute it and/or modify */
 /* it under the terms of the GNU Lesser General Public License as       */

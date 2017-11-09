@@ -32,7 +32,7 @@
  */
 
 /*
- * This file has been modified by Jérôme Lelong to store the permutation vector
+ * This file has been modified by JÃ©rÃ´me Lelong to store the permutation vector
  * resulting from the sorting and to sort array with non contiguous cells,
  * typically a column of matrix sotred row-wise.
  */
