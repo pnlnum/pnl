@@ -229,7 +229,7 @@ static void sp_mat_del_row ()
   pnl_mat_del_row (M, 0);
   pnl_sp_mat_del_row (Sp, 0);
   Mdel = pnl_mat_create_from_sp_mat (Sp);
-  pnl_test_mat_eq (M, Mdel, abserr, "sp_mat_del_row -- row 0", "");
+  pnl_test_mat_eq_abs (M, Mdel, abserr, "sp_mat_del_row -- row 0", "");
   pnl_sp_mat_free (&Sp);
   pnl_mat_free (&M);
   pnl_mat_free (&Mdel);
@@ -239,7 +239,7 @@ static void sp_mat_del_row ()
   pnl_mat_del_row (M, m/2);
   pnl_sp_mat_del_row (Sp, m/2);
   Mdel = pnl_mat_create_from_sp_mat (Sp);
-  pnl_test_mat_eq (M, Mdel, abserr, "sp_mat_del_row -- middle", "");
+  pnl_test_mat_eq_abs (M, Mdel, abserr, "sp_mat_del_row -- middle", "");
   pnl_sp_mat_free (&Sp);
   pnl_mat_free (&M);
   pnl_mat_free (&Mdel);
@@ -249,7 +249,7 @@ static void sp_mat_del_row ()
   pnl_mat_del_row (M, m-1);
   pnl_sp_mat_del_row (Sp, m-1);
   Mdel = pnl_mat_create_from_sp_mat (Sp);
-  pnl_test_mat_eq (M, Mdel, abserr, "sp_mat_del_row -- last row", "");
+  pnl_test_mat_eq_abs (M, Mdel, abserr, "sp_mat_del_row -- last row", "");
   pnl_sp_mat_free (&Sp);
   pnl_mat_free (&M);
   pnl_mat_free (&Mdel);
@@ -278,7 +278,7 @@ static void sp_mat_add_row ()
   pnl_mat_add_row (M, 0, d);
   pnl_sp_mat_add_row (Sp, 0, d);
   Madd = pnl_mat_create_from_sp_mat (Sp);
-  pnl_test_mat_eq (M, Madd, abserr, "sp_mat_add_row -- row 0", "");
+  pnl_test_mat_eq_abs (M, Madd, abserr, "sp_mat_add_row -- row 0", "");
   pnl_sp_mat_free (&Sp);
   pnl_mat_free (&M);
   pnl_mat_free (&Madd);
@@ -288,7 +288,7 @@ static void sp_mat_add_row ()
   pnl_mat_add_row (M, m/2, d);
   pnl_sp_mat_add_row (Sp, m/2, d);
   Madd = pnl_mat_create_from_sp_mat (Sp);
-  pnl_test_mat_eq (M, Madd, abserr, "sp_mat_add_row -- middle", "");
+  pnl_test_mat_eq_abs (M, Madd, abserr, "sp_mat_add_row -- middle", "");
   pnl_sp_mat_free (&Sp);
   pnl_mat_free (&M);
   pnl_mat_free (&Madd);
@@ -298,7 +298,7 @@ static void sp_mat_add_row ()
   pnl_mat_add_row (M, m, d);
   pnl_sp_mat_add_row (Sp, m, d);
   Madd = pnl_mat_create_from_sp_mat (Sp);
-  pnl_test_mat_eq (M, Madd, abserr, "sp_mat_add_row -- last row", "");
+  pnl_test_mat_eq_abs (M, Madd, abserr, "sp_mat_add_row -- last row", "");
   pnl_sp_mat_free (&Sp);
   pnl_mat_free (&M);
   pnl_mat_free (&Madd);

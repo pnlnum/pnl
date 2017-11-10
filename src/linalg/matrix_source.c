@@ -2024,7 +2024,66 @@ void FUNCTION(pnl_mat, qsort_index)(TYPE(PnlMat) * A, PnlMatInt *t, char dir, ch
   FUNCTION(pnl_mat, qsort_aux)(A, t, TRUE, dir, order);
 }
 
-#endif
+#endif /* ORDERED */
+
+#if defined(BASE_DOUBLE) || defined(BASE_PNL_COMPLEX)
+/**
+ * Test if two matrices are equal up to err. This function applies pnl_isequal to each component.
+ * 
+ * @param x A real vector
+ * @param y A real vector
+ * @param err the maximum error
+ * @return TRUE or FALSE
+ */
+int FUNCTION(pnl_mat,isequal)(const TYPE(PnlMat) *A, const TYPE(PnlMat) *B, double err)
+{
+  int i;
+  if ((A->m != B->m) || (A->n != B->n)) return FALSE;
+  for (i = 0 ; i < A->mn ; i++)
+    {
+      if (! FUNCTION(pnl,isequal)(A->array[i], B->array[i], err)) return FALSE;
+    }
+  return TRUE;
+}
+
+/**
+ * Test if two matrices are equal up to an absolute precision of abserr on each component
+ * 
+ * @param A A real vector
+ * @param B A real vector
+ * @param abserr the maximum absolute error
+ * @return TRUE or FALSE
+ */
+int FUNCTION(pnl_mat,isequal_abs)(const TYPE(PnlMat) *A, const TYPE(PnlMat) *B, double abserr)
+{
+  int i;
+  if ((A->m != B->m) || (A->n != B->n)) return FALSE;
+  for (i = 0 ; i < A->mn ; i++)
+    {
+      if (! FUNCTION(pnl,isequal_abs)(A->array[i], B->array[i], abserr)) return FALSE;
+    }
+  return TRUE;
+}
+
+/**
+ * Test if two matrices are equal up to a relative precision of relerr on each component
+ * 
+ * @param A A real vector
+ * @param B A real vector
+ * @param relerr the maximum relative error
+ * @return TRUE or FALSE
+ */
+int FUNCTION(pnl_mat,isequal_rel)(const TYPE(PnlMat) *A, const TYPE(PnlMat) *B, double relerr)
+{
+  int i;
+  if ((A->m != B->m) || (A->n != B->n)) return FALSE;
+  for (i = 0 ; i < A->mn ; i++)
+    {
+      if (! FUNCTION(pnl,isequal_rel)(A->array[i], B->array[i], relerr)) return FALSE;
+    }
+  return TRUE;
+}
+#endif /* efined(BASE_DOUBLE) || defined(BASE_PNL_COMPLEX) */
 
 
 /****************************

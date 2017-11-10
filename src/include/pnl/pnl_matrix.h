@@ -132,21 +132,16 @@ extern void pnl_mat_minus_mat(PnlMat *lhs, const PnlMat *rhs); /*lhs-=rhs*/
 extern void pnl_mat_mult_scalar(PnlMat *lhs, double x); /*lhs*=x*/
 extern void pnl_mat_div_scalar(PnlMat *lhs, double x); /*lhs/=x*/
 extern PnlMat* pnl_mat_mult_mat(const PnlMat *rhs1, const PnlMat *rhs2);
-extern void pnl_mat_mult_mat_inplace(PnlMat *lhs, const PnlMat *rhs1,
-                                     const PnlMat *rhs2);/*lhs=rhs1*rhs2*/
-extern void pnl_mat_dgemm (char transA, char transB, double alpha, const PnlMat *A,
-                           const PnlMat *B, double beta, PnlMat *C); 
+extern void pnl_mat_mult_mat_inplace(PnlMat *lhs, const PnlMat *rhs1, const PnlMat *rhs2);/*lhs=rhs1*rhs2*/
+extern void pnl_mat_dgemm (char transA, char transB, double alpha, const PnlMat *A, const PnlMat *B, double beta, PnlMat *C); 
 extern void pnl_mat_axpy (double a, const PnlMat *X, PnlMat *Y); 
 extern void pnl_mat_dger (double alpha, const PnlVect *x, const PnlVect *y, PnlMat *A);
 extern PnlVect* pnl_mat_mult_vect(const PnlMat *mat, const PnlVect *vec);
-extern void pnl_mat_mult_vect_inplace(PnlVect *lhs, const PnlMat *mat,
-                                      const PnlVect *rhs);
-
+extern void pnl_mat_mult_vect_inplace(PnlVect *lhs, const PnlMat *mat, const PnlVect *rhs);
 extern PnlVect* pnl_mat_mult_vect_transpose(const PnlMat *mat, const PnlVect *vec);
 extern void pnl_mat_mult_vect_transpose_inplace(PnlVect *lhs, const PnlMat *mat, const PnlVect *rhs);
 extern  void pnl_mat_lAxpby(double l, const PnlMat *A, const PnlVect *x, double b, PnlVect * y);
-extern void pnl_mat_dgemv (char trans, double alpha, const PnlMat *A,
-                           const PnlVect *x , double beta, PnlVect * y);
+extern void pnl_mat_dgemv (char trans, double alpha, const PnlMat *A, const PnlVect *x , double beta, PnlVect * y);
 extern double pnl_mat_scalar_prod(const PnlMat *A, const PnlVect *x , const PnlVect * y);
 extern int pnl_mat_cross(PnlMat *lhs, const PnlMat *A, const PnlMat *B);
 
@@ -202,8 +197,7 @@ extern int pnl_mat_lower_syslin (PnlVect *x, const PnlMat *L, const  PnlVect *b)
 extern int pnl_mat_chol_syslin (PnlVect *x, const PnlMat *chol, const  PnlVect *b);
 extern int pnl_mat_chol_syslin_inplace (const PnlMat *chol, PnlVect *b);
 extern int pnl_mat_lu (PnlMat *A, PnlVectInt *p);
-extern int pnl_mat_lu_syslin (PnlVect *x, PnlMat *LU,
-                               const PnlVectInt *p, const PnlVect *b);
+extern int pnl_mat_lu_syslin (PnlVect *x, PnlMat *LU, const PnlVectInt *p, const PnlVect *b);
 extern int pnl_mat_lu_syslin_inplace(PnlMat *LU, const PnlVectInt *p, PnlVect *b);
 extern int pnl_mat_qr_syslin (PnlVect *x, const PnlMat *Q, const PnlMat *R, const PnlVectInt *p, const PnlVect *b);
 extern int pnl_mat_syslin_mat (PnlMat *A,  PnlMat *B);
@@ -219,6 +213,10 @@ extern int pnl_mat_eigen (PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigen
 extern int pnl_mat_qr (PnlMat *Q, PnlMat *R, PnlVectInt *p, const PnlMat *A);
 extern int pnl_mat_ls_mat (const PnlMat *A, PnlMat *B);
 extern int pnl_mat_ls (const PnlMat *A, PnlVect *b);
+extern int pnl_mat_isequal_abs(const PnlMat *x, const PnlMat *y, double abserr);
+extern int pnl_mat_isequal_rel(const PnlMat *x, const PnlMat *y, double abserr);
+extern int pnl_mat_isequal(const PnlMat *x, const PnlMat *y, double err);
+
 
 /* inline functions if you are using GCC */
 #ifdef PNL_HAVE_INLINE 
@@ -382,6 +380,7 @@ extern void pnl_mat_int_max_index (PnlVectInt *out, PnlVectInt *i, const PnlMatI
 extern void pnl_mat_int_minmax_index (PnlVectInt *m, PnlVectInt *M, PnlVectInt *im, PnlVectInt *iM, const PnlMatInt *A, char d);
 extern void pnl_mat_int_qsort_index (PnlMatInt *A, PnlMatInt *t, char dir, char order);
 extern void pnl_mat_int_qsort (PnlMatInt *A, char dir, char order);
+extern int pnl_mat_int_isequal(const PnlMatInt *x, const PnlMatInt *y);
 
 
 /* inline functions if you are using GCC */
@@ -558,6 +557,9 @@ extern int pnl_mat_complex_inverse_with_chol (PnlMatComplex *inverse, const PnlM
 extern int pnl_mat_complex_exp (PnlMatComplex *expA, const PnlMatComplex *A);
 extern int pnl_mat_complex_eigen (PnlVectComplex *v, PnlMatComplex *P, const PnlMatComplex *A, int with_eigenvectors);
 extern int pnl_mat_complex_log (PnlMatComplex *B, const PnlMatComplex *A);
+extern int pnl_mat_complex_isequal_abs(const PnlMatComplex *x, const PnlMatComplex *y, double abserr);
+extern int pnl_complex_isequal_rel(dcomplex x, dcomplex y, double relerr);
+extern int pnl_mat_complex_isequal(const PnlMatComplex *x, const PnlMatComplex *y, double err);
 
 
 

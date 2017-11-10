@@ -3,6 +3,8 @@
 
 #include <string.h>
 #include "pnl/pnl_mathtools.h"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_matrix.h"
 
 /**
  * \defgroup PnlTest a unit test framework
@@ -27,12 +29,9 @@ extern int verbose;
 extern int pnl_test_eq (double x, double y, double relerr, const char *label, const char *fmt, ...);
 extern int pnl_test_eq_rel (double x, double y, double relerr, const char *label, const char *fmt, ...);
 extern int pnl_test_eq_abs (double x, double y, double abserr, const char *label, const char *fmt, ...);
-extern int pnl_test_vect_eq(const PnlVect *X, const PnlVect *Y, double relerr, const char *str, const char *fmt, ...);
-extern int pnl_test_vect_eq_rel(const PnlVect *X, const PnlVect *Y, double relerr, const char *str, const char *fmt, ...);
 extern int pnl_test_vect_eq_abs(const PnlVect *X, const PnlVect *Y, double relerr, const char *str, const char *fmt, ...);
 extern int pnl_test_vect_complex_eq_abs (const PnlVectComplex *X, const PnlVectComplex *Y, double abserr, const char *str, const char *fmt, ...);
 extern int pnl_test_mat_eq(const PnlMat *X, const PnlMat *Y, double relerr, const char *str, const char *fmt, ...);
-extern int pnl_test_mat_eq_rel(const PnlMat *X, const PnlMat *Y, double relerr, const char *str, const char *fmt, ...);
 extern int pnl_test_mat_eq_abs(const PnlMat *X, const PnlMat *Y, double relerr, const char *str, const char *fmt, ...);
 extern int pnl_test_mat_int_eq(const PnlMatInt *X, const PnlMatInt *Y, const char *str, const char *fmt, ...);
 extern int pnl_test_mat_complex_eq_abs (const PnlMatComplex *X, const PnlMatComplex *Y, double abserr, const char *str, const char *fmt, ...);

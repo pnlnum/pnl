@@ -696,4 +696,20 @@ PnlMatComplex *pnl_mat_complex_create_from_mat(const PnlMat *R)
   return C;
 }
 
-
+/**
+ * Test if two matrices are equal up to an absolute precision of abserr on each component
+ * 
+ * @param A A real vector
+ * @param B A real vector
+ * @return TRUE or FALSE
+ */
+int pnl_mat_int_isequal(const PnlMatInt *A, const PnlMatInt *B)
+{
+  int i;
+  if ((A->m != B->m) || (A->n != B->n)) return FALSE;
+  for (i = 0 ; i < A->mn ; i++)
+    {
+      if (A->array[i] != B->array[i]) return FALSE;
+    }
+  return TRUE;
+}

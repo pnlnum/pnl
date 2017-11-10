@@ -966,19 +966,16 @@ Accessing elements of a matrix is faster using the following macros
   $A_{ij} = \prod_{1 \le k \le j} A_{ik}$.
 \end{itemize}
 
-\subparagraph{Test functions}
+\subparagraph{Comparison functions}
 
 \begin{itemize}
-\item \describefun{int}{pnl_mat_eq}{const \PnlMat \ptr M1,
-    const \PnlMat \ptr M2}
-  \sshortdescribe Test if two matrices are equal. Returns \var{TRUE} or
-  \var{FALSE}.
-\item \describefun{int}{pnl_mat_eq_all}{const \PnlMat \ptr M,
-    double x}
-  \sshortdescribe Test if all the components of \var{M} are equal to
-  \var{x}. Returns \var{TRUE} or \var{FALSE}.
+  \item \describefun{int}{pnl_mat_isequal}{const \PnlMat \ptr A, const \PnlMat \ptr B, double err}
+    \sshortdescribe Test if two matrices are equal up to \var{err} component--wise. The error \var{err} is either relative or absolute depending on the magnitude of the components. Return \var{TRUE} or \var{FALSE}.
+  \item \describefun{int}{pnl_mat_isequal_abs}{const \PnlMat \ptr A, const \PnlMat \ptr B, double abserr}
+    \sshortdescribe Test if two matrices are equal up to an absolute error \var{abserr} component--wise. Return \var{TRUE} or \var{FALSE}.
+  \item \describefun{int}{pnl_mat_isequal_rel}{const \PnlMat \ptr A, const \PnlMat \ptr B, double relerr}
+    \sshortdescribe Test if two matrices are equal up to a relative error \var{relerr} component--wise. Return \var{TRUE} or \var{FALSE}.
 \end{itemize}
-
 
 \paragraph{Ordering operations}
 

@@ -240,36 +240,6 @@ static int pnl_test_array (const double *X, const double *Y, int n, double reler
 }
 
 /** 
- * Checks if |x(i,j) - y(i,j)| / |y(i,j)| < relerr
- * 
- * @param X computed result (matrix)
- * @param Y expected result (matrix)
- * @param relerr relative error
- * @param str the name of the tested function
- * @param fmt a format string to be passed to printf
- * @param ... extra arguments for printf
- * 
- * @return FALSE or TRUE
- */
-int pnl_test_mat_eq_rel (const PnlMat *X, const PnlMat *Y, double relerr, const char *str, const char *fmt, ...)
-{
-  int status;
-  va_list ap;
-  va_start (ap, fmt);
-  if ( X->m != Y->m || X->n != Y->n )
-    {
-      printf ("%s : ", str);
-      printf ("FAIL (size mismatch");
-      printf (fmt, ap); printf (")\n");
-      update_count_tests(FALSE);
-      return FALSE;
-    }
-  status = pnl_test_array (X->array, Y->array, X->mn, relerr, pnl_isequal_rel, str, fmt, ap);
-  va_end (ap);
-  return status;
-}
-
-/** 
  * Checks if |x(i,j) - y(i,j)| < abserr
  * 
  * @param X computed result (matrix)
@@ -343,24 +313,8 @@ int pnl_test_mat_int_eq(const PnlMatInt *X, const PnlMatInt *Y, const char *str,
   int i, status;
   va_list ap;
   va_start(ap, fmt);
-  status = 0;
-  if (X->m != Y->m || X->n != Y->n)
-    {
-      printf("%s : ", str);
-      printf("FAIL (size mismatch");
-      printf(fmt, ap);
-      printf(")\n");
-      update_count_tests(FALSE);
-      va_end(ap);
-      return FALSE;
-    }
-  for (i = 0; i < X->mn; i++)
-    {
-      const int x = X->array[i];
-      const int y = Y->array[i];
-      status = (x == y);
-      if (!status) break;
-    }
+  status = pnl_mat_int_isequal(X, Y);
+  update_count_tests(status);
   if (status == FALSE || verbose == TRUE)
     {
       printf("\t%s : ", str);
@@ -369,77 +323,10 @@ int pnl_test_mat_int_eq(const PnlMatInt *X, const PnlMatInt *Y, const char *str,
         {
           printf(" (");
           vprintf(fmt, ap);
-          printf(" expected %d observed %d)", Y->array[i], X->array[i]);
-        }
-      printf("\n");
-    }
-  update_count_tests(status);
-  va_end(ap);
-  return status;
-}
-
-/** 
- * Checks if |x(i,j) - y(i,j)| / (max(1, |y(i,j)|)) < relerr for all (i,j)
- * 
- * @param X computed result (matrix)
- * @param Y expected result (matrix)
- * @param relerr relative error (note that when |y| < 1, it is an abolute
- * error)
- * @param str the name of the tested function
- * @param fmt a format string to be passed to printf
- * @param ... extra arguments for printf
- * 
- * @return FALSE or TRUE
- */
-int pnl_test_mat_eq(const PnlMat *X, const PnlMat *Y, double relerr, const char *str, const char *fmt, ...)
-{
-  int status;
-  va_list ap;
-  va_start (ap, fmt);
-  if ( X->m != Y->m || X->n != Y->n )
-    {
-      printf ("%s : ", str);
-      printf ("FAIL (size mismatch");
-      printf (fmt, ap); printf (")\n");
-      update_count_tests(FALSE);
-      return FALSE;
-    }
-  status = pnl_test_array (X->array, Y->array, X->mn, relerr, pnl_isequal, str, fmt, ap);
-  va_end (ap);
-  return status;
-}
-
-/** 
- * Checks if |x(i,j) - y(i,j)| / |y(i,j)| < relerr
- * 
- * @param X computed result (vector)
- * @param Y expected result (vector)
- * @param relerr relative error
- * @param str the name of the tested function
- * @param fmt a format string to be passed to printf
- * @param ... extra arguments for printf
- * 
- * @return FALSE or TRUE
- */
-int pnl_test_vect_eq_rel(const PnlVect *X, const PnlVect *Y, double relerr, const char *str, const char *fmt, ...)
-{
-  int status;
-  va_list ap;
-  va_start (ap, fmt);
-  status = pnl_vect_isequal_rel(X, Y, relerr);
-  update_count_tests(status);
-  if (!status || verbose)
-    {
-      printf("\t%s : ", str);
-      printf(status ? "OK" : "FAIL");
-      if (!status)
-        {
-          printf(" (");
-          vprintf(fmt, ap);
-          printf("\n  expected: ");
-          pnl_vect_print_asrow(Y);
-          printf("  observed: ");
-          pnl_vect_print_asrow(X);
+          printf("\n  expected:\n");
+          pnl_mat_int_print(Y);
+          printf("  observed:\n");
+          pnl_mat_int_print(X);
           printf(")");
         }
       printf("\n");
