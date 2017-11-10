@@ -110,7 +110,7 @@ static void test_pnl_finance_function_vol_impli()
       }
     }
   pnl_bs_matrix_implicit_vol(IsCall,Price,s,r,divid,Strike,Matu,VolImpli);
-  pnl_test_mat_eq (VolImpli,Vol, 1E-5, "pnl_bs_matrix_implicit_vol", "");
+  pnl_test_mat_eq_abs (VolImpli,Vol, 1E-5, "pnl_bs_matrix_implicit_vol", "");
   
   pnl_mat_free(&VolImpli);
   pnl_mat_free(&Vol);
