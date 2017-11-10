@@ -1,5 +1,5 @@
 /************************************************************************/
-/* Copyright J�r�me Lelong <jerome.lelong@gmail.com>                    */
+/* Copyright Jérôme Lelong <jerome.lelong@gmail.com>                    */
 /*                                                                      */
 /* This program is free software: you can redistribute it and/or modify */
 /* it under the terms of the GNU Lesser General Public License as       */
@@ -1333,6 +1333,69 @@ void FUNCTION(pnl_vect, qsort_index)(TYPE(PnlVect) * m, PnlVectInt *t, char orde
 }
 
 #endif
+
+
+#if defined(BASE_DOUBLE) || defined(BASE_PNL_COMPLEX)
+/**
+ * Test if two vectors are equal up to err. This function applies pnl_isequal to each component.
+ * 
+ * @param x A real vector
+ * @param y A real vector
+ * @param err the maximum error
+ * @return TRUE or FALSE
+ */
+int FUNCTION(pnl_vect,isequal)(const TYPE(PnlVect) *x, const TYPE(PnlVect) *y, double err)
+{
+  int i;
+  if (x->size != y->size) return FALSE;
+  for (i = 0 ; i < x->size ; i++)
+    {
+      if (! FUNCTION(pnl,isequal)(PNL_GET(x, i),PNL_GET(y, i), err)) return FALSE;
+    }
+  return TRUE;
+}
+
+/**
+ * Test if two vectors are equal up to an absolute precision of abserr on each component
+ * 
+ * @param x A real vector
+ * @param y A real vector
+ * @param abserr the maximum absolute error
+ * @return TRUE or FALSE
+ */
+int FUNCTION(pnl_vect,isequal_abs)(const TYPE(PnlVect) *x, const TYPE(PnlVect) *y, double abserr)
+{
+  int i;
+  if (x->size != y->size) return FALSE;
+  for (i = 0 ; i < x->size ; i++)
+    {
+      if (! FUNCTION(pnl,isequal_abs)(PNL_GET(x, i),PNL_GET(y, i), abserr)) return FALSE;
+    }
+  return TRUE;
+}
+
+/**
+ * Test if two vectors are equal up to a relative precision of relerr on each component
+ * 
+ * @param x A real vector
+ * @param y A real vector
+ * @param relerr the maximum relative error
+ * @return TRUE or FALSE
+ */
+int FUNCTION(pnl_vect,isequal_rel)(const TYPE(PnlVect) *x, const TYPE(PnlVect) *y, double relerr)
+{
+  int i;
+  if (x->size != y->size) return FALSE;
+  for (i = 0 ; i < x->size ; i++)
+    {
+      if (! FUNCTION(pnl,isequal_rel)(PNL_GET(x, i),PNL_GET(y, i), relerr)) return FALSE;
+    }
+  return TRUE;
+}
+
+
+
+#endif /* efined(BASE_DOUBLE) || defined(BASE_PNL_COMPLEX) */
 
 /**
  * Compute a x + b y and stores the result in y

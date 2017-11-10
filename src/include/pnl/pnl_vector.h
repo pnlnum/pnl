@@ -220,6 +220,7 @@ PNL_INLINE_DECL int* pnl_vect_int_lget(PnlVectInt *v, int i);
 extern void pnl_vect_int_free(PnlVectInt **v);
 extern void pnl_vect_int_init(PnlVectInt *v);
 extern PnlVectInt* pnl_vect_int_new();
+extern int pnl_vect_int_isequal(const PnlVectInt *x, const PnlVectInt *y);
 extern int pnl_vect_int_eq (const PnlVectInt *, const PnlVectInt *);
 extern int pnl_vect_int_eq_all (const PnlVectInt *, int);
 extern int pnl_vect_int_less(const PnlVectInt * a,const PnlVectInt * b);
@@ -449,7 +450,7 @@ extern void pnl_vect_complex_split_in_vect(const PnlVectComplex* v, PnlVect *re,
 extern void pnl_vect_complex_swap_elements(PnlVectComplex * v, int i, int j); 
 extern void pnl_vect_complex_reverse(PnlVectComplex * v);
 extern int pnl_vect_complex_isequal_abs(const PnlVectComplex *x, const PnlVectComplex *y, double abserr);
-extern int pnl_complex_isequal_rel(dcomplex x, dcomplex y, double relerr);
+extern int pnl_vect_complex_isequal_rel(const PnlVectComplex *x, const PnlVectComplex *y, double relerr);
 extern int pnl_vect_complex_isequal(const PnlVectComplex *x, const PnlVectComplex *y, double err);
 
 /*@}*/
