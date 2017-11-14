@@ -20,7 +20,7 @@ href="pnl-manualse9.html#tailpnl-manualse9.html" >prev-tail</a>] [<a
 href="#tailpnl-manualse10.html">tail</a>] [<a 
 href="pnl-manual.html#pnl-manualse10.html" >up</a>] </p></div>
 <h3 class="sectionHead"><span class="titlemark">10   </span> <a 
- id="x12-11200010"></a>Inverse Laplace Transform</h3>
+ id="x12-11500010"></a>Inverse Laplace Transform</h3>
 <!--l. 4--><p class="noindent" >For a real valued function <span 
 class="lmmi-10x-x-109">f </span>such that <span 
 class="lmmi-10x-x-109">t</span><span 
@@ -49,7 +49,7 @@ f(&#x03BB;) =  0  f(t)e   dt    for &#x03BB; &#x2208; &#x2102; with Re (&#x03BB;
 </p><!--l. 11--><p class="noindent" >To use the following functions, you should include <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl/pnl_laplace.h</span></span></span>.
 <a 
- id="dx12-112001"></a>
+ id="dx12-115001"></a>
                                                                                     
 
                                                                                     
@@ -66,9 +66,9 @@ typedef&#x00A0;struct
 </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx12-112002"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx12-115002"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_ilap_euler</span></span>&#x00A0;(<span class='args'><a 
-href="#x12-11200010"><span class='struct'>PnlCmplxFunc</span></a> <span 
+href="#x12-11500010"><span class='struct'>PnlCmplxFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>fhat, double t, int N, int M</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute  <span 
 class="lmmi-10x-x-109">f</span><span 
@@ -81,9 +81,9 @@ class="lmmi-10x-x-109">f  </span>is  given  by  its  Laplace  transform  <span c
      method.
      </li>
      <li class="itemize"><a 
- id="dx12-112003"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx12-115003"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_ilap_cdf_euler</span></span>&#x00A0;(<span class='args'><a 
-href="#x12-11200010"><span class='struct'>PnlCmplxFunc</span></a> <span 
+href="#x12-11500010"><span class='struct'>PnlCmplxFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>fhat, double t, double h, int N, int
      M</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute  the  cumulative  distribution  function  <span 
@@ -112,11 +112,11 @@ class="lmmi-10x-x-109">f </span>is a density function with values on the positiv
      sensitive to the choice of <span class='var'>h</span>.
      </li>
      <li class="itemize"><a 
- id="dx12-112004"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx12-115004"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_ilap_fft</span></span>&#x00A0;(<span class='args'><a 
-href="pnl-manualse4.html#x6-260004.1.1"><span class='struct'>PnlVect</span></a> <span 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>res, <a 
-href="#x12-11200010"><span class='struct'>PnlCmplxFunc</span></a> <span 
+href="#x12-11500010"><span class='struct'>PnlCmplxFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>fhat, double T, double eps</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span 
 class="lmmi-10x-x-109">f</span><span 
@@ -151,9 +151,9 @@ class="lmsy-10x-x-109">&#x2264; </span><span
 class="lmmi-10x-x-109">T</span>.
      </li>
      <li class="itemize"><a 
- id="dx12-112005"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx12-115005"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_ilap_gs</span></span>&#x00A0;(<span class='args'><a 
-href="pnl-manualse13.html#x15-12400013.1"><span class='struct'>PnlFunc</span></a> <span 
+href="pnl-manualse13.html#x15-12700013.1"><span class='struct'>PnlFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>fhat, double t, int n</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute  <span 
 class="lmmi-10x-x-109">f</span><span 
@@ -170,9 +170,9 @@ class="lmmi-10x-x-109">f  </span>is  given  by  its  Laplace  transform  <span c
                                                                                     
      </li>
      <li class="itemize"><a 
- id="dx12-112006"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx12-115006"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_ilap_gs_basic</span></span>&#x00A0;(<span class='args'><a 
-href="pnl-manualse13.html#x15-12400013.1"><span class='struct'>PnlFunc</span></a> <span 
+href="pnl-manualse13.html#x15-12700013.1"><span class='struct'>PnlFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>fhat, double t, int n</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute  <span 
 class="lmmi-10x-x-109">f</span><span 
@@ -185,7 +185,7 @@ class="lmmi-10x-x-109">f  </span>is  given  by  its  Laplace  transform  <span c
      valued one. <span class='var'>n</span> is the number of iterations of the algorithm. <span 
 class="ec-lmbx-10x-x-109">Note : </span>&#x00A0;This function
      is provided for test purposes only. The function <a 
-href="#x12-11200010">pnl_ilap_gs</a> gives far more accurate
+href="#x12-11500010">pnl_ilap_gs</a> gives far more accurate
      results.</li></ul>
                                                                                     
 

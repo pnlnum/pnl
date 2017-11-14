@@ -20,14 +20,14 @@ href="pnl-manualse15.html#tailpnl-manualse15.html" >prev-tail</a>] [<a
 href="#tailpnl-manualse16.html">tail</a>] [<a 
 href="pnl-manual.html#pnl-manualse16.html" >up</a>] </p></div>
 <h3 class="sectionHead"><span class="titlemark">16   </span> <a 
- id="x18-14200016"></a>Financial functions</h3>
+ id="x18-14500016"></a>Financial functions</h3>
 <!--l. 4--><p class="noindent" >The financial functions are defined in the header <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl/pnl_finance.h</span></span></span>.<br 
 class="newline" />
 </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx18-142001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx18-145001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cf_call_bs</span></span>&#x00A0;(<span class='args'>double s, double k, double T, double r, double divid, double
      sigma, double <span 
 class="ts1-lmr10-x-x-109">*</span>ptprice, double <span 
@@ -44,7 +44,7 @@ class="rm-lmr-8">+</span></sub> in the Black-Scholes
      output.
      </li>
      <li class="itemize"><a 
- id="dx18-142002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx18-145002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cf_put_bs</span></span>&#x00A0;(<span class='args'>double s, double k, double T, double r, double divid, double
      sigma, double <span 
 class="ts1-lmr10-x-x-109">*</span>ptprice, double <span 
@@ -62,7 +62,7 @@ class="rm-lmr-8">+</span></sub> in the Black-Scholes
      </li></ul>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx18-142003"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx18-145003"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_bs_call</span></span>&#x00A0;(<span class='args'>double s, double k, double T, double r, double divid, double
      sigma</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute  the  price  of  a  call  option  with  spot  <span class='var'>s</span>  and  strike  <span class='var'>k</span>  in  the
@@ -70,7 +70,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Compute
      dividend rate <span class='var'>divid</span>.
      </li>
      <li class="itemize"><a 
- id="dx18-142004"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx18-145004"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_bs_put</span></span>&#x00A0;(<span class='args'>double s, double k, double T, double r, double divid, double
      sigma</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute  the  price  a  put  option  with  spot  <span class='var'>s</span>  and  strike  <span class='var'>k</span>  in  the
@@ -78,7 +78,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Compute
      dividend rate <span class='var'>divid</span>.
      </li>
      <li class="itemize"><a 
- id="dx18-142005"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx18-145005"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_bs_call_put</span></span>&#x00A0;(<span class='args'>int iscall, double s, double k, double T, double r, double
      divid, double sigma</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the price of a put option if <span class='var'>iscall=0</span> or a call option if <span class='var'>iscall=1</span>
@@ -86,7 +86,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Compute
      interest rate <span class='var'>r</span>, maturity <span class='var'>T</span> and dividend rate <span class='var'>divid</span>.
      </li>
      <li class="itemize"><a 
- id="dx18-142006"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx18-145006"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_bs_vega</span></span>&#x00A0;(<span class='args'>double s, double k, double T, double r, double divid, double
      sigma</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the vega of a put or call option with spot <span class='var'>s</span> and strike <span class='var'>k</span> in the
@@ -94,7 +94,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Compute
      dividend rate <span class='var'>divid</span>.
      </li>
      <li class="itemize"><a 
- id="dx18-142007"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx18-145007"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_bs_gamma</span></span>&#x00A0;(<span class='args'>double s, double k, double T, double r, double divid, double
      sigma</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the gamma of a put or call option with spot <span class='var'>s</span> and strike <span class='var'>k</span> in
@@ -110,7 +110,7 @@ row-wise).
 </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx18-142008"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx18-145008"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_bs_implicit_vol</span></span>&#x00A0;(<span class='args'>int is_call, double Price, double s, double K, double
      T, double r, double divid, int *error</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the implied volatility of a put option if <span class='var'>iscall=0</span> or a call option
@@ -119,18 +119,18 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Compute
      computation of the implied volatility succeeded or <span class='var'>FAIL</span> if it failed.
      </li>
      <li class="itemize"><a 
- id="dx18-142009"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx18-145009"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_bs_matrix_implicit_vol</span></span>&#x00A0;(<span class='args'>const <a 
-href="pnl-manualse4.html#x6-440004.3.1"><span class='struct'>PnlMatInt</span></a> <span 
+href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMatInt</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>iscall, const <a 
-href="pnl-manualse4.html#x6-440004.3.1"><span class='struct'>PnlMat</span></a> <span 
+href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>Price,
      double s, double r, double divid, const <a 
-href="pnl-manualse4.html#x6-260004.1.1"><span class='struct'>PnlVect</span></a> <span 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>K, const <a 
-href="pnl-manualse4.html#x6-260004.1.1"><span class='struct'>PnlVect</span></a> <span 
+href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>T, <a 
-href="pnl-manualse4.html#x6-440004.3.1"><span class='struct'>PnlMat</span></a> <span 
+href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>Vol</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute  the  matrix  of  implied  volatilities  <span class='var'>Vol(i,j)</span>  of  a  put  option
      if  <span class='var'>iscall(i,j)=0</span>  or  a  call  option  if  <span class='var'>iscall(i,j)=1</span>  with  spot  <span class='var'>s</span>  and  strike  <span class='var'>K(j)</span>  in  the
@@ -142,7 +142,7 @@ class="rm-lmr-10x-x-109">0</span>.</li></ul>
 
                                                                                     
 <a 
- id="Q1-18-147"></a>
+ id="Q1-18-150"></a>
                                                                                     
 
                                                                                     
