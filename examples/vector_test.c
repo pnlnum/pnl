@@ -418,7 +418,7 @@ static void pnl_vect_qsort_test ()
     {
       if ( GET (v,i-1) > GET(v,i) ) 
         {
-          pnl_test_set_fail ("vect_qsort", 0, 0);
+          pnl_test_set_fail0("vect_qsort");
           goto J1;
         }
     }
@@ -433,7 +433,7 @@ J1:
     {
       if ( GET (v,i-1) > GET(v,i) || GET(v,i) != GET(vclone, PNL_GET(t,i)) ) 
         {
-          pnl_test_set_fail ("vect_qsort_index (increasing)", 0, 0);
+          pnl_test_set_fail0("vect_qsort_index (increasing)");
           goto J2;
         }
     }
@@ -446,7 +446,7 @@ J2:
     {
       if ( GET (v,i-1) < GET(v,i) || GET(v,i) != GET(vclone, PNL_GET(t,i)) ) 
         {
-          pnl_test_set_fail ( "vect_qsort_index (decreasing)", 0, 0);
+          pnl_test_set_fail0( "vect_qsort_index (decreasing)");
           goto J3;
         }
     }

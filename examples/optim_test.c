@@ -168,7 +168,7 @@ void linprog_ineq_test()
       pnl_test_eq_rel(val, res, 1E-8, "linprog", "") && pnl_test_vect_eq_abs(x, xres, 1E-8, "linprog", "");
     }
   else
-    pnl_test_set_fail("linprog", 0., 0.);
+    pnl_test_set_fail0("linprog");
 
   pnl_vect_free(&Obj);
   pnl_vect_free(&B_ineq);
@@ -194,7 +194,7 @@ void linprog_ineq_bounds_test()
       pnl_test_eq_rel(val, res, 1E-8, "linprog with bounds", "") && pnl_test_vect_eq_abs(x, xres, 1E-8, "linprog with bounds", "");
     }
   else
-    pnl_test_set_fail("linprog with bounds", 0., 0.);
+    pnl_test_set_fail0("linprog with bounds");
 
 
   pnl_vect_free(&Obj);
@@ -224,7 +224,7 @@ void linprog_ineq_bounds_eq_test()
       pnl_test_eq_rel(val, res, 1E-8, "linprog with bounds and eq constraints", "") && pnl_test_vect_eq_abs(x, xres, 1E-8, "linprog with bounds and eq constraints", "");
     }
   else
-    pnl_test_set_fail("linprog with bounds and eq constraints", 0., 0.);
+    pnl_test_set_fail0("linprog with bounds and eq constraints");
 
 
   pnl_vect_free(&Obj);
@@ -264,7 +264,7 @@ void linprog_sp_test()
       pnl_test_eq_rel(val, res, 1E-8, "linprog with bounds and eq constraints", "") && pnl_test_vect_eq_abs(x, xres, 1E-8, "linprog with bounds and eq constraints", "");
     }
   else
-    pnl_test_set_fail("linprog with bounds and eq constraints", 0., 0.);
+    pnl_test_set_fail0("linprog with bounds and eq constraints");
 
 
   pnl_vect_free(&Obj);

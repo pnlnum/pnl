@@ -107,6 +107,19 @@ void pnl_test_set_fail (const char *str, double res, double expected)
   printf ("\t%s : FAIL (observed %.18f expected %.18f)\n", str, res, expected);
 }
 
+
+/** 
+ * Declares a test as failed
+ * 
+ * @param str a string
+ */
+void pnl_test_set_fail0(const char *str)
+{
+  update_count_tests(FALSE);
+  printf ("\t%s : FAIL", str);
+}
+
+
 static int pnl_test_eq_aux (double x, double y, double relerr, int(*cmp)(double, double, double), const char *str, const char *fmt, va_list ap)
 {
   int status = (*cmp)(x, y, relerr);

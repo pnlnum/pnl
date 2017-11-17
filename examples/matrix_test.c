@@ -488,7 +488,7 @@ static void pnl_mat_sq_transpose_test()
           double tMji = MGET(M, j, i);
           if ( Mij != tMji ) 
             {
-              pnl_test_set_fail ("mat_sq_transpose", 0, 0);
+              pnl_test_set_fail0("mat_sq_transpose");
               goto J1;
             }
         }
@@ -514,7 +514,7 @@ static void pnl_mat_transpose_test()
           double tMji = MGET(M1, j, i);
           if ( Mij != tMji ) 
             {
-              pnl_test_set_fail ("mat_transpose", 0, 0);
+              pnl_test_set_fail0("mat_transpose");
               goto J1;
             }
         }
@@ -589,7 +589,7 @@ static void pnl_mat_add_row_test ()
   if ( (M->n != Morig->n) || (M->m != Morig->m + 1) || (M->mn != Morig->mn + M->n) ||
        (pnl_vect_eq (r, &row_i) == FALSE) ||
        memcmp (M->array + M->n, Morig->array, Morig->mn * sizeof(double)) != 0 )
-    pnl_test_set_fail ("mat_add_row top", 0., 0.);
+    pnl_test_set_fail0("mat_add_row top");
   else
     pnl_test_set_ok ("mat_add_row top");
     
@@ -603,7 +603,7 @@ static void pnl_mat_add_row_test ()
        (pnl_vect_eq (r, &row_i) == FALSE) ||
        memcmp (M->array, Morig->array, M->n * i * sizeof(double)) != 0 ||
        memcmp (M->array + (i+1) * M->n, Morig->array + i * M->n, M->n * (Morig->m - i) * sizeof(double)) != 0 )
-    pnl_test_set_fail ("mat_add_row middle", 0., 0.);
+    pnl_test_set_fail0("mat_add_row middle");
   else
     pnl_test_set_ok ("mat_add_row middle");
 
@@ -615,7 +615,7 @@ static void pnl_mat_add_row_test ()
   if ( (M->n != Morig->n) || (M->m != Morig->m + 1) || (M->mn != Morig->mn + M->n) ||
        (pnl_vect_eq (r, &row_i) == FALSE) ||
        memcmp (M->array, Morig->array, Morig->mn * sizeof(double)) != 0 )
-    pnl_test_set_fail ("mat_add_row bottom", 0., 0.);
+    pnl_test_set_fail0("mat_add_row bottom");
   else
     pnl_test_set_ok ("mat_add_row bottom");
 
@@ -639,7 +639,7 @@ static void pnl_mat_del_row_test ()
   pnl_mat_del_row (M, i);
   if ( (M->n != Morig->n) || (M->m != Morig->m - 1) || (M->mn != Morig->mn - M->n) ||
        memcmp (M->array , Morig->array + M->n, M->mn * sizeof(double)) != 0 )
-    pnl_test_set_fail ("mat_del_row top", 0., 0.);
+    pnl_test_set_fail0("mat_del_row top");
   else
     pnl_test_set_ok ("mat_del_row top");
     
@@ -651,7 +651,7 @@ static void pnl_mat_del_row_test ()
   if ( (M->n != Morig->n) || (M->m != Morig->m - 1) || (M->mn != Morig->mn - M->n) ||
        memcmp (M->array, Morig->array, M->n * i * sizeof(double)) != 0 ||
        memcmp (M->array + i * M->n, Morig->array + (i+1) * M->n, M->n * (M->m - i) * sizeof(double)) != 0 )
-    pnl_test_set_fail ("mat_del_row middle", 0., 0.);
+    pnl_test_set_fail0("mat_del_row middle");
   else
     pnl_test_set_ok ("mat_del_row middle");
 
@@ -661,7 +661,7 @@ static void pnl_mat_del_row_test ()
   pnl_mat_del_row (M, i);
   if ( (M->n != Morig->n) || (M->m != Morig->m - 1) || (M->mn != Morig->mn - M->n) ||
        memcmp (M->array, Morig->array, M->mn * sizeof(double)) != 0 )
-    pnl_test_set_fail ("mat_del_row bottom", 0., 0.);
+    pnl_test_set_fail0("mat_del_row bottom");
   else
     pnl_test_set_ok ("mat_del_row bottom");
 

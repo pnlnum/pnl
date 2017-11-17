@@ -43,7 +43,7 @@ static void array_ops ()
   if ( pnl_array_get (T, 0) != PNL_OBJECT(M) || 
        pnl_array_get (T, 1) != PNL_OBJECT(tridiag))
     {
-      pnl_test_set_fail ("pnl_array_{g,s}et", 0., 0.);
+      pnl_test_set_fail0("pnl_array_{g,s}et");
       goto J1;
     }
   pnl_test_set_ok ("pnl_array_{g,s}et");
@@ -71,7 +71,7 @@ static void array_copy ()
        pnl_test_mat_eq_abs ((PnlMat *) T->array[0], M, 1E-12, "", "") != TRUE ||
        pnl_test_vect_eq_abs ((PnlVect *) T->array[1], v, 1E-12, "", "") != TRUE )
     {
-      pnl_test_set_fail ("pnl_array_copy", 0., 0.);
+      pnl_test_set_fail0("pnl_array_copy");
       goto J1;
     }
   pnl_test_set_ok ("pnl_array_copy");
@@ -101,7 +101,7 @@ static void array_clone ()
        pnl_test_mat_eq_abs ((PnlMat *) T->array[0], M, 1E-12, "", "") != TRUE ||
        pnl_test_vect_eq_abs ((PnlVect *) T->array[1], v, 1E-12, "", "") != TRUE )
     {
-      pnl_test_set_fail ("pnl_array_copy", 0., 0.);
+      pnl_test_set_fail0("pnl_array_copy");
       goto J1;
     }
   pnl_test_set_ok ("pnl_array_copy");

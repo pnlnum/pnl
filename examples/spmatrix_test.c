@@ -86,7 +86,7 @@ static void sp_create_test ()
   if ( pnl_sp_mat_isequal (Sp2, Sp, PRECISION) == TRUE )
     pnl_test_set_ok ("sp_mat_create");
   else
-    pnl_test_set_fail ("sp_mat_create", 0, 0);
+    pnl_test_set_fail0("sp_mat_create");
   pnl_sp_mat_free (&Sp);
   pnl_sp_mat_free (&Sp2);
   pnl_mat_free (&M);
@@ -106,7 +106,7 @@ static void sp_clone_test ()
   if ( pnl_sp_mat_isequal (Sp2, Sp, PRECISION) == TRUE )
     pnl_test_set_ok ("sp_mat_clone");
   else
-    pnl_test_set_fail ("sp_mat_clone", 0, 0);
+    pnl_test_set_fail0("sp_mat_clone");
   pnl_sp_mat_free (&Sp);
   pnl_sp_mat_free (&Sp2);
   pnl_rng_free (&rng);
@@ -133,7 +133,7 @@ static void sp_scalar_ops ()
       if ( NEQ_ERR(Sp->array[i] + x, Sp2->array[i]) ) { status = FAIL; break; }
     }
   if ( status == FAIL ) 
-    pnl_test_set_fail ("sp_mat_plus_scalar", 0, 0);
+    pnl_test_set_fail0("sp_mat_plus_scalar");
   else
     pnl_test_set_ok ("sp_mat_plus_scalar");
 
@@ -146,7 +146,7 @@ static void sp_scalar_ops ()
       if ( NEQ_ERR(Sp->array[i] - x, Sp2->array[i]) ) { status = FAIL; break; }
     }
   if ( status == FAIL ) 
-    pnl_test_set_fail ("sp_mat_minus_scalar", 0, 0);
+    pnl_test_set_fail0("sp_mat_minus_scalar");
   else
     pnl_test_set_ok ("sp_mat_minus_scalar");
 
@@ -159,7 +159,7 @@ static void sp_scalar_ops ()
       if ( NEQ_ERR(Sp->array[i] * x, Sp2->array[i]) ) { status = FAIL; break; }
     }
   if ( status == FAIL ) 
-    pnl_test_set_fail ("sp_mat_mult_scalar", 0, 0);
+    pnl_test_set_fail0("sp_mat_mult_scalar");
   else
     pnl_test_set_ok ("sp_mat_mult_scalar");
 
@@ -172,7 +172,7 @@ static void sp_scalar_ops ()
       if ( NEQ_ERR(Sp->array[i] / x, Sp2->array[i]) ) { status = FAIL; break; }
     }
   if ( status == FAIL ) 
-    pnl_test_set_fail ("sp_mat_div_scalar", 0, 0);
+    pnl_test_set_fail0("sp_mat_div_scalar");
   else
     pnl_test_set_ok ("sp_mat_div_scalar");
 

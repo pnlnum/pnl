@@ -38,7 +38,7 @@ static void list_insert_test ()
   if ( pnl_list_get (L, 0) != PNL_OBJECT(T)  || 
        pnl_list_get (L, 1) != PNL_OBJECT(M)  )
     {
-      pnl_test_set_fail ("pnl_list_insert_firt", 0., 0.);
+      pnl_test_set_fail0("pnl_list_insert_firt");
     }
   else
     {
@@ -54,7 +54,7 @@ static void list_insert_test ()
   if ( pnl_list_get (L, 0) != PNL_OBJECT(M)  || 
        pnl_list_get (L, 1) != PNL_OBJECT(T)  )
     {
-      pnl_test_set_fail ("pnl_list_insert_last", 0., 0.);
+      pnl_test_set_fail0("pnl_list_insert_last");
     }
   else
     {
@@ -72,7 +72,7 @@ static void list_insert_test ()
   if ( pnl_list_get (L, 0) != PNL_OBJECT(M)  || 
        L->len != 1)
     {
-      pnl_test_set_fail ("pnl_list_remove_last", 0., 0.);
+      pnl_test_set_fail0("pnl_list_remove_last");
     }
   else
     {
@@ -90,7 +90,7 @@ static void list_insert_test ()
   if ( pnl_list_get (L, 0) != PNL_OBJECT(T)  || 
        L->len != 1)
     {
-      pnl_test_set_fail ("pnl_list_remove_first", 0., 0.);
+      pnl_test_set_fail0("pnl_list_remove_first");
     }
   else
     {
@@ -115,7 +115,7 @@ static void list_remove_test ()
   if ( pnl_list_get (L, 0) != PNL_OBJECT(M)  || 
        L->len != 1)
     {
-      pnl_test_set_fail ("pnl_list_remove_last", 0., 0.);
+      pnl_test_set_fail0("pnl_list_remove_last");
     }
   else
     {
@@ -133,7 +133,7 @@ static void list_remove_test ()
   if ( pnl_list_get (L, 0) != PNL_OBJECT(T)  || 
        L->len != 1)
     {
-      pnl_test_set_fail ("pnl_list_remove_first", 0., 0.);
+      pnl_test_set_fail0("pnl_list_remove_first");
     }
   else
     {
@@ -167,7 +167,7 @@ static void list_concat_test ()
        pnl_list_get (L1, 3) != PNL_OBJECT(M2)  )
        
     {
-      pnl_test_set_fail ("pnl_list_concat", 0., 0.);
+      pnl_test_set_fail0("pnl_list_concat");
     }
   else
     {
@@ -193,7 +193,7 @@ static void list_copy_test ()
        pnl_test_mat_eq_abs ((PnlMat *)pnl_list_get (L2, 0), M1, 1E-12, "", "") != TRUE  || 
        pnl_test_vect_eq_abs ((PnlVect *)pnl_list_get (L2, 1), T1, 1E-12, "", "") != TRUE )
     {
-      pnl_test_set_fail ("pnl_list_copy", 0., 0.);
+      pnl_test_set_fail0("pnl_list_copy");
     }
   else
     {

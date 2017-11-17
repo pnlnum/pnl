@@ -304,7 +304,7 @@ static void test_hybrX ()
   info = pnl_root_fsolve (&f, x, fvec, xtol, maxfev, &nfev, diag, FALSE);
   if ( info == FAIL )
     {
-      pnl_test_set_fail ("root_fsolve returned FAIL", 0., 0.);
+      pnl_test_set_fail0("root_fsolve returned FAIL");
     }
   else
     {
@@ -323,7 +323,7 @@ static void test_hybrX ()
   info = pnl_root_fsolve (&f, x, fvec, xtol, maxfev, &nfev, diag, FALSE);
   if ( info == FAIL )
     {
-      pnl_test_set_fail ("root_fsolve returned FAIL", 0., 0.);
+      pnl_test_set_fail0("root_fsolve returned FAIL");
     }
   else
     {
@@ -368,7 +368,7 @@ static void test_lmdif_and_lmder ()
   f.params = NULL;
   info = pnl_root_fsolve_lsq(&f, x, m, fvec, tol, tol, 0., maxfev, &nfev, NULL, FALSE);
   if ( info == FAIL )
-    pnl_test_set_fail ("root_fsolve_lsq", 0., 0.);
+    pnl_test_set_fail0("root_fsolve_lsq");
   else
     pnl_test_vect_eq_abs (x, sol, 1E-6, "root_fsolve_lsq (without Jacobian)", "");
 
@@ -381,7 +381,7 @@ static void test_lmdif_and_lmder ()
   f.params = NULL;
   info = pnl_root_fsolve_lsq(&f, x, m, fvec, tol, tol, 0., maxfev, &nfev, NULL, FALSE);
   if ( info == FAIL )
-    pnl_test_set_fail ("root_fsolve_lsq", 0., 0.);
+    pnl_test_set_fail0("root_fsolve_lsq");
   else
   pnl_test_vect_eq_abs (x, sol, 1E-6, "root_fsolve_lsq (without Jacobian)", "");
 
