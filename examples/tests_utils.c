@@ -29,7 +29,7 @@ int count_ok;
 int count_fail;
 
 /** 
- * Initializes test counting system
+ * Initialize test counting system
  */
 void pnl_test_init (int argc, char **argv)
 {
@@ -81,7 +81,7 @@ int pnl_test_is_verbose ()
 }
 
 /** 
- * Declares a test as passed
+ * Declare a test as passed
  * 
  * @param str a string
  */
@@ -95,7 +95,7 @@ void pnl_test_set_ok (const char *str)
 }
 
 /** 
- * Declares a test as failed
+ * Declare a test as failed
  * 
  * @param str a string
  * @param res computed result
@@ -108,15 +108,15 @@ void pnl_test_set_fail (const char *str, double res, double expected)
 }
 
 
-/** 
- * Declares a test as failed
- * 
+/**
+ * Declare a test as failed
+ *
  * @param str a string
  */
 void pnl_test_set_fail0(const char *str)
 {
   update_count_tests(FALSE);
-  printf ("\t%s : FAIL", str);
+  printf ("\t%s : FAIL\n", str);
 }
 
 
@@ -140,7 +140,7 @@ static int pnl_test_eq_aux (double x, double y, double relerr, int(*cmp)(double,
 }
 
 /** 
- * Checks if |x - y| / (max(1, |y|)) < relerr
+ * Check if |x - y| / (max(1, |y|)) < relerr
  * 
  * @param x computed result
  * @param y expected result
@@ -167,7 +167,7 @@ int pnl_test_eq(double x, double y, double relerr, const char *str, const char *
 
 
 /** 
- * Checks if |x -y| / |y| < relerr
+ * Check if |x -y| / |y| < relerr
  * 
  * @param x computed result
  * @param y exepcted value
@@ -189,7 +189,7 @@ int pnl_test_eq_rel (double x, double y, double relerr, const char *str, const c
 }
 
 /** 
- * Checks if |x - y|  < abserr
+ * Check if |x - y|  < abserr
  * 
  * @param x computed result
  * @param y exepcted value
@@ -211,7 +211,7 @@ int pnl_test_eq_abs (double x, double y, double abserr, const char *str, const c
 }
 
 /** 
- * Compares two vectors component-wise using the comparison function
+ * Compare two vectors component-wise using the comparison function
  * specified b cmp
  * 
  * @param X a vector (computed result)
@@ -253,7 +253,7 @@ static int pnl_test_array (const double *X, const double *Y, int n, double reler
 }
 
 /** 
- * Checks if |x(i,j) - y(i,j)| < abserr
+ * Check if |x(i,j) - y(i,j)| < abserr
  * 
  * @param X computed result (matrix)
  * @param Y expected result (matrix)
@@ -283,7 +283,7 @@ int pnl_test_mat_eq_abs (const PnlMat *X, const PnlMat *Y, double abserr, const 
 }
 
 /** 
- * Checks if |x(i,j) - y(i,j)| < abserr
+ * Check if |x(i,j) - y(i,j)| < abserr
  * 
  * @param X computed result (matrix)
  * @param Y expected result (matrix)
@@ -311,7 +311,7 @@ int pnl_test_mat_complex_eq_abs (const PnlMatComplex *X, const PnlMatComplex *Y,
 }
 
 /** 
- * Checks if x(i,j) = y(i,j) for integer matrices
+ * Check if x(i,j) = y(i,j) for integer matrices
  * 
  * @param X computed result (matrix)
  * @param Y expected result (matrix)
@@ -349,7 +349,7 @@ int pnl_test_mat_int_eq(const PnlMatInt *X, const PnlMatInt *Y, const char *str,
 }
 
 /** 
- * Checks if |x(i,j) - y(i,j)| < abserr
+ * Check if |x(i,j) - y(i,j)| < abserr
  * 
  * @param X computed result (vector)
  * @param Y expected result (vector)
@@ -388,7 +388,7 @@ int pnl_test_vect_eq_abs (const PnlVect *X, const PnlVect *Y, double abserr, con
 }
 
 /** 
- * Checks if |x(i,j) - y(i,j)| < abserr
+ * Check if |x(i,j) - y(i,j)| < abserr
  * 
  * @param X computed result (vector)
  * @param Y expected result (vector)
@@ -427,7 +427,7 @@ int pnl_test_vect_complex_eq_abs (const PnlVectComplex *X, const PnlVectComplex 
 }
 
 /** 
- * Checks if |x(i,j,...) - y(i,j,...)| < abserr
+ * Check if |x(i,j,...) - y(i,j,...)| < abserr
  * 
  * @param X computed result (Hmatrix)
  * @param Y expected result (Hmatrix)
