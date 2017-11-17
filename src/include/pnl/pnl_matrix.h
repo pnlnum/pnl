@@ -558,7 +558,7 @@ extern int pnl_mat_complex_exp (PnlMatComplex *expA, const PnlMatComplex *A);
 extern int pnl_mat_complex_eigen (PnlVectComplex *v, PnlMatComplex *P, const PnlMatComplex *A, int with_eigenvectors);
 extern int pnl_mat_complex_log (PnlMatComplex *B, const PnlMatComplex *A);
 extern int pnl_mat_complex_isequal_abs(const PnlMatComplex *x, const PnlMatComplex *y, double abserr);
-extern int pnl_complex_isequal_rel(dcomplex x, dcomplex y, double relerr);
+extern int pnl_mat_complex_isequal_rel(const PnlMatComplex *x, const PnlMatComplex *y, double relerr);
 extern int pnl_mat_complex_isequal(const PnlMatComplex *x, const PnlMatComplex *y, double err);
 
 
