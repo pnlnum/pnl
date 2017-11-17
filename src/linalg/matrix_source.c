@@ -230,7 +230,9 @@ TYPE(PnlMat) FUNCTION(pnl_mat, wrap_array)(const BASE *x, int m, int n)
 }
 
 /**
- * Read a matrix from a file and creates the corresponding TYPE(PnlMat)
+ * Read a matrix from a file and creates the corresponding TYPE(PnlMat). 
+ * The entries of the matrix can be psearated by any of the following characters 
+ *  space, TAB, ',', ';'
  * @param file  the file to be read
  * @ return a TYPE(PnlMat)
  */
@@ -247,14 +249,14 @@ TYPE(PnlMat) *FUNCTION(pnl_mat, create_from_file)(const char *file)
       PNL_ERROR("Cannot open file", "FUNCTION(pnl_mat,create_from_file)");
     }
 
-  /* first pass to determine dimensions */
+  /* First pass to determine the dimensions */
   m = 0;
   n = 1;
   while ((car = fgetc(FIC)) != '\n' && car != EOF)
     {
       if (car == comment)
         {
-          while ((car = fgetc(FIC)) != '\n' && car != EOF) {};
+          while ((car = fgetc(FIC)) != '\n' && car != EOF) continue;
           if (!empty)
             break;
           else
@@ -263,7 +265,7 @@ TYPE(PnlMat) *FUNCTION(pnl_mat, create_from_file)(const char *file)
       if (isdigit(car) || car == '-' || car == '.')
         {
           empty = 0;
-          if (prev == ' ' || prev == '\t') ++n;
+          if (prev == ' ' || prev == '\t' || prev == ',' || prev == ';') ++n;
         }
       prev = car;
     }
@@ -275,7 +277,7 @@ TYPE(PnlMat) *FUNCTION(pnl_mat, create_from_file)(const char *file)
     {
       if (car == comment)
         {
-          while ((car = fgetc(FIC)) != '\n' && car != EOF) { };
+          while ((car = fgetc(FIC)) != '\n' && car != EOF) continue;
         }
       if (car == '\n') /*  || car == EOF) */
         {
@@ -301,17 +303,17 @@ TYPE(PnlMat) *FUNCTION(pnl_mat, create_from_file)(const char *file)
       PNL_ERROR("Allocation error", "FUNCTION(pnl_mat,create_from_file)");
     }
 
-  /* second pass to read data */
+  /* Second pass to actually read the data */
   rewind(FIC);
   data = FUNCTION(pnl_mat, lget)(M, 0, 0);
   for (i = 0; i < m; i++)
     {
       /* Remove leading spaces */
-      while ((car = fgetc(FIC)) == ' ' || car == '\t') {};
+      while ((car = fgetc(FIC)) == ' ' || car == '\t') continue;
       /* Ignore comments */
       if (car == comment)
         {
-          while ((car = fgetc(FIC)) != '\n' && car != EOF) {};
+          while ((car = fgetc(FIC)) != '\n' && car != EOF) continue;
           i--;
         }
       else
@@ -324,7 +326,7 @@ TYPE(PnlMat) *FUNCTION(pnl_mat, create_from_file)(const char *file)
                   data++;
                 }
             }
-          while ((car = fgetc(FIC)) != '\n') {};
+          while ((car = fgetc(FIC)) != '\n') continue;
         }
     }
   fclose(FIC);

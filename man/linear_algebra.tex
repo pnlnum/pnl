@@ -113,9 +113,7 @@ There are no special functions to access the size of a vector, instead the field
 \item \describefun{\PnlVect \ptr }{pnl_vect_create_from_file}
   {const char \ptr file}
   \sshortdescribe Read a vector from a file and creates the corresponding
-  \PnlVect. The data might be stored as a single white space separated line
-  or as a one column file with one element per line. Anything after a '\#' is ignored up to
-  the end of line.
+  \PnlVect. The data might be stored as a row or column vector. Entries can be separated by spaces, tabs, commas or semicolons. Anything after a '\#' is ignored up to the end of line.
 
 \item \describefun{\PnlVect \ptr }{pnl_vect_copy}{const
     \PnlVect \ptr v}
@@ -206,15 +204,15 @@ Accessing elements of a vector is faster using the following macros
 
 \begin{itemize}
 \item \describefun{void}{pnl_vect_set}{\PnlVect \ptr v, int i, double x}
-  \sshortdescribe Set v[i]=x  
+  \sshortdescribe Set v[i]=x.
 \item \describefun{double}{pnl_vect_get}{const \PnlVect \ptr v, int i}
-  \sshortdescribe Return the value of v[i].  
+  \sshortdescribe Return the value of v[i].
 \item \describefun{void}{pnl_vect_lget}{\PnlVect \ptr v, int i}
-  \sshortdescribe Return the address of v[i].  
+  \sshortdescribe Return the address of v[i].
 \item \describefun{void}{pnl_vect_set_all}{\PnlVect \ptr v, double x}
-  \sshortdescribe Set all elements to x.  
+  \sshortdescribe Set all elements to x.
 \item \describefun{void}{pnl_vect_set_zero}{\PnlVect \ptr v}
-  \sshortdescribe Set all elements to zero.  
+  \sshortdescribe Set all elements to zero.
 \end{itemize}
 
 
@@ -224,18 +222,18 @@ Accessing elements of a vector is faster using the following macros
   \sshortdescribe Print a \PnlVect as a column vector
 \item \describefun{void}{pnl_vect_fprint}{FILE \ptr fic, const \PnlVect \ptr V}
   \sshortdescribe Print a \PnlVect in file \var{fic} as a column
-  vector.
+  vector. The file can be read by \reffun{pnl_vect_create_from_file}.
 \item \describefun{void}{pnl_vect_print_asrow}{const \PnlVect \ptr V}
   \sshortdescribe Print a \PnlVect as a row vector
 \item \describefun{void}{pnl_vect_fprint_asrow}{FILE \ptr fic, const \PnlVect \ptr V}
   \sshortdescribe Print a \PnlVect in file \var{fic} as a row
-  vector.
+  vector. The file can be read by \reffun{pnl_vect_create_from_file}.
 \item \describefun{void}{pnl_vect_print_nsp}{const \PnlVect \ptr V}
   \sshortdescribe Print a vector to the standard output in a format
-  compatible with Nsp.  
+  compatible with Nsp.
 \item \describefun{void}{pnl_vect_fprint_nsp}{FILE \ptr fic, const
     \PnlVect \ptr V}
-  \sshortdescribe Print a vector to a file in a format compatible with Nsp. 
+  \sshortdescribe Print a vector to a file in a format compatible with Nsp.
 \end{itemize}
 
 \subparagraph{Applying external operation to vectors}
@@ -713,7 +711,7 @@ and the size of the matrix.
 \item \describefun{\PnlMat \ptr }{pnl_mat_create_from_file}{const char \ptr file}
   \sshortdescribe Read a matrix from a file and creates the corresponding
   \PnlMat. One row of the matrix corresponds to one line of the file and 
-  the elements of a row are separated by blanks (spaces or tabs). Anything after a '\#' is
+  the elements of a row can be separated by spaces, tabs, commas or semicolons. Anything after a '\#' is
   ignored up to the end of line.
 
 \item \describefun{void}{pnl_mat_free}{\PnlMat \ptr \ptr M}
@@ -874,7 +872,9 @@ Accessing elements of a matrix is faster using the following macros
   \sshortdescribe Print a matrix to the standard output.  
 
 \item \describefun{void}{pnl_mat_fprint}{FILE \ptr fic, const \PnlMat \ptr M}
-  \sshortdescribe Print a matrix to a file.
+  \sshortdescribe Print a matrix to a file. The
+  saved matrix can be reloaded by the function
+  \reffun{pnl_mat_create_from_file}.
 
 \item \describefun{void}{pnl_mat_print_nsp}{const \PnlMat \ptr M}
   \sshortdescribe Print a matrix to the standard output in a format
@@ -882,9 +882,7 @@ Accessing elements of a matrix is faster using the following macros
 
 \item \describefun{void}{pnl_mat_fprint_nsp}{FILE \ptr fic, const
     \PnlMat \ptr M}
-  \sshortdescribe Print a matrix to a file in a format compatible with Nsp. The
-  saved matrix can be reloaded by the function
-  \reffun{pnl_mat_create_from_file}.
+  \sshortdescribe Print a matrix to a file in a format compatible with Nsp.
 \end{itemize}
 
 \paragraph{Applying external operations}
