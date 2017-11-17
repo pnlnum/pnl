@@ -20,11 +20,11 @@ href="pnl-manualse8.html#tailpnl-manualse8.html" >prev-tail</a>] [<a
 href="#tailpnl-manualse9.html">tail</a>] [<a 
 href="pnl-manual.html#pnl-manualse9.html" >up</a>] </p></div>
 <h3 class="sectionHead"><span class="titlemark">9   </span> <a 
- id="x11-1110009"></a>Fast Fourier Transform</h3>
+ id="x11-1120009"></a>Fast Fourier Transform</h3>
 <!--l. 2--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">9.1   </span> <a 
- id="x11-1120009.1"></a>Overview</h4>
+ id="x11-1130009.1"></a>Overview</h4>
 <!--l. 4--><p class="noindent" >The forward Fourier transform of a vector <span 
 class="lmmi-10x-x-109">c </span>is defined by
 </p>
@@ -57,7 +57,7 @@ ck =    zj e            ,  j = 1,&#x22C5;&#x22C5;&#x22C5;,N
                                                                                     
 <table 
 class="equation"><tr><td><a 
- id="x11-112001r2"></a>
+ id="x11-113001r2"></a>
 <center class="math-display" >
 <img 
 src="pnl-manual32x.png" alt="     -----
@@ -77,9 +77,9 @@ class="lmmi-10x-x-109">N </span>is the number of discretization points.
 class="lmmi-10x-x-109">n&#x2215;</span><span 
 class="rm-lmr-10x-x-109">2 </span>is not stored
      either, since the symmetry (<a 
-href="#x11-112001r2">2<!--tex4ht:ref: eq:fft-sym --></a>) implies that this is purely real too.</li></ul>
+href="#x11-113001r2">2<!--tex4ht:ref: eq:fft-sym --></a>) implies that this is purely real too.</li></ul>
 <!--l. 34--><p class="noindent" ><span class="paragraphHead"><a 
- id="x11-1130009.1"></a><span 
+ id="x11-1140009.1"></a><span 
 class="ec-lmbx-10x-x-109">FFTPack storage</span></span>
 The functions use the fftpack storage convention for half-complex sequences. In this convention, the
 half-complex transform of a real sequence is stored with frequencies in increasing order,
@@ -98,7 +98,7 @@ returned if the same real input sequence were passed to pnl_dft_complex as a com
 </p>
 <table 
 class="equation"><tr><td><a 
- id="x11-113001r3"></a>
+ id="x11-114001r3"></a>
 <center class="math-display" >
                                                                                     
 
@@ -127,7 +127,7 @@ values which are purely real,
 </p>
 <table 
 class="equation"><tr><td><a 
- id="x11-113002r4"></a>
+ id="x11-114002r4"></a>
 <center class="math-display" >
 <img 
 src="pnl-manual34x.png" alt="C(0) = V(0) + i0,
@@ -141,7 +141,7 @@ C(5) = V(1) + iV (2) = C-(1)
 </p><!--l. 75--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">9.2   </span> <a 
- id="x11-1140009.2"></a>Functions</h4>
+ id="x11-1150009.2"></a>Functions</h4>
 <!--l. 77--><p class="noindent" >To use the following functions, you should include <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl/pnl_fft.h</span></span></span>.
 </p><!--l. 79--><p class="noindent" >The following functions comes from a C version of the Fortran FFTPack library available on
@@ -150,7 +150,7 @@ href="http://www.netlib.org/fftpack" class="url" ><span
 class="ec-lmtt-10x-x-109">http://www.netlib.org/fftpack</span></a>. </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx11-114001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx11-115001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_fft_inplace</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVectComplex</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>data</span>)<br 
@@ -160,7 +160,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Compute
                                                                                     
      </li>
      <li class="itemize"><a 
- id="dx11-114002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx11-115002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_ifft_inplace</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVectComplex</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>data</span>)<br 
@@ -168,7 +168,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Compute
      is lost.
      </li>
      <li class="itemize"><a 
- id="dx11-114003"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx11-115003"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_fft</span></span>&#x00A0;(<span class='args'>const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVectComplex</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>in, <a 
@@ -177,7 +177,7 @@ class="ts1-lmr10-x-x-109">*</span>out</span>)<br
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the FFT of <span class='var'>in</span> and stores it into <span class='var'>out</span>.
      </li>
      <li class="itemize"><a 
- id="dx11-114004"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx11-115004"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_ifft</span></span>&#x00A0;(<span class='args'>const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVectComplex</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>in, <a 
@@ -186,7 +186,7 @@ class="ts1-lmr10-x-x-109">*</span>out</span>)<br
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the inverse FFT of <span class='var'>in</span> and stores it into <span class='var'>out</span>.
      </li>
      <li class="itemize"><a 
- id="dx11-114005"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx11-115005"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_fft2</span></span>&#x00A0;(<span class='args'>double <span 
 class="ts1-lmr10-x-x-109">*</span>re, double <span 
 class="ts1-lmr10-x-x-109">*</span>im, int n</span>)<br 
@@ -195,7 +195,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Compute
      are respectively stored in <span class='var'>re</span> and <span class='var'>im</span> on output.
      </li>
      <li class="itemize"><a 
- id="dx11-114006"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx11-115006"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_ifft2</span></span>&#x00A0;(<span class='args'>double <span 
 class="ts1-lmr10-x-x-109">*</span>re, double <span 
 class="ts1-lmr10-x-x-109">*</span>im, int n</span>)<br 
@@ -204,7 +204,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Compute
      the inverse FFT are respectively stored in <span class='var'>re</span> and <span class='var'>im</span> on output.
      </li>
      <li class="itemize"><a 
- id="dx11-114007"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx11-115007"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_real_fft</span></span>&#x00A0;(<span class='args'>const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>in, <a 
@@ -213,7 +213,7 @@ class="ts1-lmr10-x-x-109">*</span>out</span>)<br
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the FFT of the real valued sequence <span class='var'>in</span> and stores it into <span class='var'>out</span>.
      </li>
      <li class="itemize"><a 
- id="dx11-114008"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx11-115008"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_real_ifft</span></span>&#x00A0;(<span class='args'>const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>in, <a 
@@ -222,15 +222,15 @@ class="ts1-lmr10-x-x-109">*</span>out</span>)<br
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the inverse FFT of <span class='var'>in</span> and stores it into <span class='var'>out</span>.
      </li>
      <li class="itemize"><a 
- id="dx11-114009"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx11-115009"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_real_fft_inplace</span></span>&#x00A0;(<span class='args'>double <span 
 class="ts1-lmr10-x-x-109">*</span>data, int n</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the FFT of the real valued vector <span class='var'>data</span> of length <span class='var'>n</span>. The result
      is stored in <span class='var'>data</span> using the FFTPack storage described above, see&#x00A0;<a 
-href="#x11-1130009.1">9.1<!--tex4ht:ref: sec:fftpack-storage --></a>.
+href="#x11-1140009.1">9.1<!--tex4ht:ref: sec:fftpack-storage --></a>.
      </li>
      <li class="itemize"><a 
- id="dx11-114010"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx11-115010"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_real_ifft_inplace</span></span>&#x00A0;(<span class='args'>double <span 
 class="ts1-lmr10-x-x-109">*</span>data, int n</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the inverse FFT of the vector <span class='var'>data</span> of length <span class='var'>n</span>. <span class='var'>data</span> is supposed
@@ -238,7 +238,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Compute
      On output, <span class='var'>data</span> contains the inverse FFT.
      </li>
      <li class="itemize"><a 
- id="dx11-114011"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx11-115011"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_real_fft2</span></span>&#x00A0;(<span class='args'>double <span 
 class="ts1-lmr10-x-x-109">*</span>re, double <span 
 class="ts1-lmr10-x-x-109">*</span>im, int n</span>)<br 
@@ -249,7 +249,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Compute
                                                                                     
      </li>
      <li class="itemize"><a 
- id="dx11-114012"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx11-115012"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_real_ifft2</span></span>&#x00A0;(<span class='args'>double <span 
 class="ts1-lmr10-x-x-109">*</span>re, double <span 
 class="ts1-lmr10-x-x-109">*</span>im, int n</span>)<br 
@@ -257,7 +257,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Compute
      supposed to be the FFT of a real valued sequence. On exit, <span class='var'>im</span> is unused.
      </li>
      <li class="itemize"><a 
- id="dx11-114013"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx11-115013"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_fft2d_inplace</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMatComplex</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>data</span>)<br 
@@ -265,16 +265,16 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Compute
      row of the matrix and then a 1D FFT to each column of the modified matrix.
      </li>
      <li class="itemize"><a 
- id="dx11-114014"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx11-115014"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_ifft2d_inplace</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMatComplex</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>data</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the inverse 2D FFT of <span class='var'>data</span>. This function is the inverse of the
      function <a 
-href="#x11-1140009.2">pnl_fft2d_inplace</a>.
+href="#x11-1150009.2">pnl_fft2d_inplace</a>.
      </li>
      <li class="itemize"><a 
- id="dx11-114015"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx11-115015"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_fft2d</span></span>&#x00A0;(<span class='args'>const <a 
 href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMatComplex</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>in, <a 
@@ -283,7 +283,7 @@ class="ts1-lmr10-x-x-109">*</span>out</span>)<br
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the 2D FFT of <span class='var'>in</span> and stores it into <span class='var'>out</span>.
      </li>
      <li class="itemize"><a 
- id="dx11-114016"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx11-115016"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_ifft2d</span></span>&#x00A0;(<span class='args'>const <a 
 href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMatComplex</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>in, <a 
@@ -292,7 +292,7 @@ class="ts1-lmr10-x-x-109">*</span>out</span>)<br
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the inverse 2D FFT of <span class='var'>in</span> and stores it into <span class='var'>out</span>.
      </li>
      <li class="itemize"><a 
- id="dx11-114017"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx11-115017"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_real_fft2d</span></span>&#x00A0;(<span class='args'>const <a 
 href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>in, <a 
@@ -301,7 +301,7 @@ class="ts1-lmr10-x-x-109">*</span>out</span>)<br
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the 2D FFT of the real matrix <span class='var'>in</span> and stores it into <span class='var'>out</span>.
      </li>
      <li class="itemize"><a 
- id="dx11-114018"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx11-115018"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_real_ifft2d</span></span>&#x00A0;(<span class='args'>const <a 
 href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMatComplex</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>in, <a 

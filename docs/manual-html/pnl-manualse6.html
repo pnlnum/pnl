@@ -20,13 +20,13 @@ href="pnl-manualse5.html#tailpnl-manualse5.html" >prev-tail</a>] [<a
 href="#tailpnl-manualse6.html">tail</a>] [<a 
 href="pnl-manual.html#pnl-manualse6.html" >up</a>] </p></div>
 <h3 class="sectionHead"><span class="titlemark">6   </span> <a 
- id="x8-1000006"></a>Random Number Generators</h3>
+ id="x8-1010006"></a>Random Number Generators</h3>
 <!--l. 3--><p class="noindent" >The functionalities described in this chapter are declared in <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl/pnl_random.h</span></span></span>.
 </p><!--l. 6--><p class="noindent" >Random number generators should be called through the new <span 
 class="ec-lmri-10x-x-109">rng </span>interface based on the
 <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> object. This interface uses reentrant functions and is suitable for multi-threaded
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> object. This interface uses reentrant functions and is suitable for multi-threaded
 applications.
 </p><!--l. 10--><p class="noindent" >The older <span 
 class="ec-lmri-10x-x-109">rand </span>interface is kept for compatibility purposes only and should not be used in new code.
@@ -35,7 +35,7 @@ class="ec-lmri-10x-x-109">rand </span>interface is kept for compatibility purpos
 
                                                                                     
 <!--l. 12--><p class="noindent" ><a 
- id="x8-1000012"></a></p><hr class="float" /><div class="float" 
+ id="x8-1010012"></a></p><hr class="float" /><div class="float" 
 >
                                                                                     
 
@@ -133,19 +133,19 @@ class="td11">quasi  </td><td  style="white-space:nowrap; text-align:left;" id="T
 class="td11">                 </td></tr></table></div>
 <br /> <div class="caption" 
 ><span class="id">Table&#x00A0;2: </span><span  
-class="content">Indices of the random generators</span></div><!--tex4ht:label?: x8-1000012 -->
+class="content">Indices of the random generators</span></div><!--tex4ht:label?: x8-1010012 -->
                                                                                     
 
                                                                                     
 </div><hr class="endfloat" />
 </div>
 <h4 class="subsectionHead"><span class="titlemark">6.1   </span> <a 
- id="x8-1010006.1"></a>The rng interface</h4>
+ id="x8-1020006.1"></a>The rng interface</h4>
 <!--l. 38--><p class="noindent" >It is possible to create several random number generators each with its own state variable so that
 they can evolve independently in a shared memory environment. These generators are suitable for
 use in multi-threaded programs.
 <a 
- id="dx8-101001"></a>
+ id="dx8-102001"></a>
                                                                                     
 
                                                                                     
@@ -171,51 +171,51 @@ typedef&#x00A0;struct&#x00A0;_PnlRng&#x00A0;PnlRng;
 </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx8-101002"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102002"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_free</span></span>&#x00A0;(<span class='args'><a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">**</span></span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Free a <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> .
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> .
      </li>
      <li class="itemize"><a 
- id="dx8-101003"></a> <span class='ret'><a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+ id="dx8-102003"></a> <span class='ret'><a 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_create</span></span>&#x00A0;(<span class='args'>int type</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create a <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> corresponding to <span class='var'>type</span> which can be any of the values
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> corresponding to <span class='var'>type</span> which can be any of the values
      <span class='var'>PNL_RNG_XXX</span>  listed  in  Table&#x00A0;<a 
-href="#x8-1000012">2<!--tex4ht:ref: rng-indices --></a>  which  correspond  to  <span 
+href="#x8-1010012">2<!--tex4ht:ref: rng-indices --></a>  which  correspond  to  <span 
 class="ec-lmbx-10x-x-109">pseudo </span>random  number
      generators. Once a generator has been created, you <span 
 class="ec-lmbx-10x-x-109">must </span>call <a 
-href="#x8-1010006.1">pnl_rng_sseed</a> before
+href="#x8-1020006.1">pnl_rng_sseed</a> before
      using it.
      </li>
      <li class="itemize"><a 
- id="dx8-101004"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102004"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_sseed</span></span>&#x00A0;(<span class='args'><a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng, unsigned long int s</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Set the seed of the genrator <span class='var'>rng</span> using <span class='var'>s</span>. If <span class='var'>s=0</span>, then a default seed
      (depending on the generator) is used.
      </li>
      <li class="itemize"><a 
- id="dx8-101005"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102005"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_sdim</span></span>&#x00A0;(<span class='args'><a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng, int dim</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Set the dimension of the state space for a QMC generator and initializes
      it accordingly. Returns OK if the generator has been initialized properly and FAIL
      otherwise.
      </li>
      <li class="itemize"><a 
- id="dx8-101006"></a> <span class='ret'><a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+ id="dx8-102006"></a> <span class='ret'><a 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_copy</span></span>&#x00A0;(<span class='args'>const <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create a copy of <span class='var'>rng</span>.
                                                                                     
@@ -223,29 +223,29 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Create 
                                                                                     
      </li>
      <li class="itemize"><a 
- id="dx8-101007"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102007"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_clone</span></span>&#x00A0;(<span class='args'><a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>dest, const <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>src</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Copy the content of <span class='var'>src</span> into the already existing basis <span class='var'>dest</span>. On exit, <span class='var'>src</span>
      and <span class='var'>dest</span> are identical but independent.
      </li>
      <li class="itemize"><a 
- id="dx8-101008"></a> <span class='ret'><a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+ id="dx8-102008"></a> <span class='ret'><a 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_dcmt_create_id</span></span>&#x00A0;(<span class='args'>int id, ulong seed</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create a generator with type <span class='var'>PNL_RNG_DCMT</span> and identifier <span class='var'>id</span>. Two
      generators with different <span class='var'>id</span>s are independent. Note that the returned generator must
      be  initialized  with  <a 
-href="#x8-1010006.1">pnl_rng_sseed</a>  before  usage.  The  identifier  <span class='var'>id</span>  can  for  instance
+href="#x8-1020006.1">pnl_rng_sseed</a>  before  usage.  The  identifier  <span class='var'>id</span>  can  for  instance
      correspond to the thread number or the processor rank in parallel computing.
      </li>
      <li class="itemize"><a 
- id="dx8-101009"></a> <span class='ret'><a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+ id="dx8-102009"></a> <span class='ret'><a 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">**</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_dcmt_create_array_id</span></span>&#x00A0;(<span class='args'>int start_id, int max_id, ulong
      seed, int <span 
@@ -254,11 +254,11 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Create 
      identifiers linearly varying between <span class='var'>start_id</span> and <span class='var'>max_id</span>. The number of generators
      created is <span class='var'>max_id - start_id + 1</span>. All the generators are independent. Note that each
      generator of the returned array must be initialized with <a 
-href="#x8-1010006.1">pnl_rng_sseed</a> before usage.
+href="#x8-1020006.1">pnl_rng_sseed</a> before usage.
      </li>
      <li class="itemize"><a 
- id="dx8-101010"></a> <span class='ret'><a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+ id="dx8-102010"></a> <span class='ret'><a 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">**</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_dcmt_create_array</span></span>&#x00A0;(<span class='args'>int n, ulong seed, int <span 
 class="ts1-lmr10-x-x-109">*</span>count</span>)<br 
@@ -266,48 +266,48 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Create 
      initialize the Mersenne Twister generator internally used to find new DCMT. On exit,
      <span class='var'>count</span> contains the number of generators actually created. Before using the generators,
      you must initialize each of them by calling the function <a 
-href="#x8-1010006.1">pnl_rng_sseed</a> <span class='var'>count</span> times.</li></ul>
+href="#x8-1020006.1">pnl_rng_sseed</a> <span class='var'>count</span> times.</li></ul>
 <!--l. 111--><p class="noindent" >Some auxiliary functions internally used (to be used with caution) </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx8-101011"></a> <span class='ret'><a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+ id="dx8-102011"></a> <span class='ret'><a 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_new</span></span>&#x00A0;(<span class='args'></span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create an empty <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> .
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> .
      </li>
      <li class="itemize"><a 
- id="dx8-101012"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102012"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_init</span></span>&#x00A0;(<span class='args'><a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng, int type</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Initialize  an  empty  <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a>  as  returned  by  <a 
-href="#x8-1010006.1">pnl_rng_new</a>  to  become
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a>  as  returned  by  <a 
+href="#x8-1020006.1">pnl_rng_new</a>  to  become
      a  generator  of  type  <span class='var'>type</span>  which  can  be  any  of  the  values  <span class='var'>PNL_RNG_XXX</span>
      listed  in  Table&#x00A0;<a 
-href="#x8-1000012">2<!--tex4ht:ref: rng-indices --></a>  which  correspond  to  <span 
+href="#x8-1010012">2<!--tex4ht:ref: rng-indices --></a>  which  correspond  to  <span 
 class="ec-lmbx-10x-x-109">pseudo </span>random  number  generators.  Calling
      <a 
-href="#x8-1010006.1">pnl_rng_create</a> is equivalent to calling first <a 
-href="#x8-1010006.1">pnl_rng_new</a> and then <a 
-href="#x8-1010006.1">pnl_rng_init</a>.
+href="#x8-1020006.1">pnl_rng_create</a> is equivalent to calling first <a 
+href="#x8-1020006.1">pnl_rng_new</a> and then <a 
+href="#x8-1020006.1">pnl_rng_init</a>.
      </li>
      <li class="itemize"><a 
- id="dx8-101013"></a> <span class='ret'><a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+ id="dx8-102013"></a> <span class='ret'><a 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_get_from_id</span></span>&#x00A0;(<span class='args'>int id</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return the global generator described by its macro name. The variable
      <span class='var'>id</span> can be any of the values <span class='var'>PNL_RNG_XXX</span> listed in Table&#x00A0;<a 
-href="#x8-1000012">2<!--tex4ht:ref: rng-indices --></a>.</li></ul>
+href="#x8-1010012">2<!--tex4ht:ref: rng-indices --></a>.</li></ul>
 <!--l. 129--><p class="noindent" >The following functions return one sample from the specified distribution. </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx8-101014"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102014"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_bernoulli</span></span>&#x00A0;(<span class='args'>double p, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the Bernouilli law on <span 
 class="lmsy-10x-x-109">{</span><span 
@@ -320,23 +320,23 @@ class="lmsy-10x-x-109">} </span>with parameter <span class='var'>p</span>.
                                                                                     
      </li>
      <li class="itemize"><a 
- id="dx8-101015"></a> <span class='ret'>long</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102015"></a> <span class='ret'>long</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_poisson</span></span>&#x00A0;(<span class='args'>double lambda, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the Poisson law with parameter <span class='var'>lambda</span>.
      </li>
      <li class="itemize"><a 
- id="dx8-101016"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102016"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_exp</span></span>&#x00A0;(<span class='args'>double lambda, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the Exponential law with parameter <span class='var'>lambda</span>.
      </li>
      <li class="itemize"><a 
- id="dx8-101017"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102017"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_dblexp</span></span>&#x00A0;(<span class='args'>double lambda_p, double lambda_m, double p, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a>
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a>
      <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the asymmetric exponential distribution with
@@ -365,9 +365,9 @@ class="lmmi-10x-x-109">,</span><span
 class="rm-lmr-10x-x-109">1]</span>.
      </p></li>
      <li class="itemize"><a 
- id="dx8-101018"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102018"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_uni</span></span>&#x00A0;(<span class='args'><a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the Uniform law on <span 
 class="rm-lmr-10x-x-109">]0</span><span 
@@ -375,9 +375,9 @@ class="lmmi-10x-x-109">,</span><span
 class="rm-lmr-10x-x-109">1]</span>.
      </li>
      <li class="itemize"><a 
- id="dx8-101019"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102019"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_uni_ab</span></span>&#x00A0;(<span class='args'>double a, double b, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the Uniform law on <span 
 class="rm-lmr-10x-x-109">[</span><span 
@@ -385,24 +385,24 @@ class="lmmi-10x-x-109">a,b</span><span
 class="rm-lmr-10x-x-109">]</span>.
      </li>
      <li class="itemize"><a 
- id="dx8-101020"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102020"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_normal</span></span>&#x00A0;(<span class='args'><a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the standard normal distribution.
      </li>
      <li class="itemize"><a 
- id="dx8-101021"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102021"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_lognormal</span></span>&#x00A0;(<span class='args'>double m, double sigma2, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the log-normal distribution. The underlying normal
      distribution has mean <span class='var'>m</span> and variance <span class='var'>sigma2</span>.
      </li>
      <li class="itemize"><a 
- id="dx8-101022"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102022"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_invgauss</span></span>&#x00A0;(<span class='args'>double mu, double lambda, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the inverse Gaussian distribution with mean <span class='var'>mu</span> and
      shape parameter <span class='var'>lambda</span>.
@@ -411,17 +411,17 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Generat
                                                                                     
      </li>
      <li class="itemize"><a 
- id="dx8-101023"></a> <span class='ret'>long</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102023"></a> <span class='ret'>long</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_poisson1</span></span>&#x00A0;(<span class='args'>double lambda, double t,<a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from a Poisson process with intensity <span class='var'>lambda</span> at time
      <span class='var'>t</span>.
      </li>
      <li class="itemize"><a 
- id="dx8-101024"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102024"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_gamma</span></span>&#x00A0;(<span class='args'>double a, double b, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the <span 
 class="rm-lmr-10x-x-109">&#x0393;(</span><span 
@@ -429,9 +429,9 @@ class="lmmi-10x-x-109">a,b</span><span
 class="rm-lmr-10x-x-109">) </span>distribution.
      </li>
      <li class="itemize"><a 
- id="dx8-101025"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102025"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_chi2</span></span>&#x00A0;(<span class='args'>double df, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the centered <span 
 class="lmmi-10x-x-109">&#x03C7;</span><sup><span 
@@ -441,9 +441,9 @@ class="lmmi-10x-x-109">df</span><span
 class="rm-lmr-10x-x-109">) </span>distribution.
      </li>
      <li class="itemize"><a 
- id="dx8-101026"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102026"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_ncchi2</span></span>&#x00A0;(<span class='args'>double df, double xnonc, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the non central <span 
 class="lmmi-10x-x-109">&#x03C7;</span><sup><span 
@@ -451,15 +451,15 @@ class="rm-lmr-8">2</span></sup> distribution with <span class='var'>df</span> de
      freedom and non central parameter <span class='var'>xnonc</span>.
      </li>
      <li class="itemize"><a 
- id="dx8-101027"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102027"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_bessel</span></span>&#x00A0;(<span class='args'>double v, double a,<a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the Bessel distribution with parameters <span class='var'>v &#x003E; -1</span> and <span class='var'>a
      &#x003E; 0</span>.
      </li>
      <li class="itemize"><a 
- id="dx8-101028"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102028"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rng_gauss</span></span>&#x00A0;(<span class='args'>int d, int create_or_retrieve, int index, PnlRng <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>The second argument can be either <span class='var'>CREATE</span> (to actually draw the sample) or
@@ -480,18 +480,18 @@ class="ec-lmbx-10x-x-109">quasi </span>random number generator.
 </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx8-101029"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102029"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_vect_rng_bernoulli</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>V, int samples, double a, double b, double
      p, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Simulate an i.i.d. sample from the Bernoulli distribution with values in
      <span class='var'>a,b</span> and parameter <span class='var'>p</span>. The result is stored in <span class='var'>V</span>.
      </li>
      <li class="itemize"><a 
- id="dx8-101030"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102030"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_vect_rng_bernoulli_d</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>V, int dimension, const <a 
@@ -502,7 +502,7 @@ href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> 
 class="ts1-lmr10-x-x-109">*</span>b, const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>p, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Simulate a random vector according to the Bernoulli distribution with
      values in <span class='var'>{a,b}</span> and parameter <span class='var'>p</span>. The result is stored in <span class='var'>V</span>, ie. <span class='var'>V(i)</span> follows a Bernoulli
@@ -512,11 +512,11 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Simulat
                                                                                     
      </li>
      <li class="itemize"><a 
- id="dx8-101031"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102031"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_vect_rng_poisson</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>V, int samples, double lambda, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a>
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a>
      <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Simulate an i.i.d. sample from the Poisson distribution with parameter
@@ -524,14 +524,14 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Simulat
      integer based vectors.
      </li>
      <li class="itemize"><a 
- id="dx8-101032"></a>  <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102032"></a>  <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_vect_rng_poisson_d</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a>  <span 
 class="ts1-lmr10-x-x-109">*</span>V,  int  dimension,  const  <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a>
      <span 
 class="ts1-lmr10-x-x-109">*</span>lambda, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Simulate a random vector according to the Poisson distribution with
      <span 
@@ -540,11 +540,11 @@ class="ec-lmbx-10x-x-109">vector  </span>parameter  <span class='var'>lambda</sp
      and not integer based vectors.
      </li>
      <li class="itemize"><a 
- id="dx8-101033"></a>  <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102033"></a>  <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_vect_rng_uni</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a>  <span 
 class="ts1-lmr10-x-x-109">*</span>G,  int  samples,  double  a,  double  b,  <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a>
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a>
      <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>G</span> is a vector of independent and identically distributed samples from
@@ -554,21 +554,21 @@ class="lmmi-10x-x-109">a,b</span><span
 class="rm-lmr-10x-x-109">]</span>.
      </li>
      <li class="itemize"><a 
- id="dx8-101034"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102034"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_vect_rng_normal</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>G, int samples, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>G</span> is a vector of independent and identically distributed samples from
      the standard normal distribution.
      </li>
      <li class="itemize"><a 
- id="dx8-101035"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102035"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_vect_rng_uni_d</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>G, int d, double a, double b, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>G</span> is a sample from the uniform distribution on <span 
 class="rm-lmr-10x-x-109">[</span><span 
@@ -576,11 +576,11 @@ class="lmmi-10x-x-109">a,b</span><span
 class="rm-lmr-10x-x-109">]</span><sup>d</sup>.
      </li>
      <li class="itemize"><a 
- id="dx8-101036"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102036"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_vect_rng_normal_d</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>G, int d, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>G</span> is a sample from the <span class='var'>d</span>-dimensional standard normal distribution.
      </li></ul>
@@ -596,14 +596,14 @@ identically distributed. Each row is a sample from the given law in dimension <s
 </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx8-101037"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102037"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_mat_rng_uni</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>M, int samples, int d, const PnlVect <span 
 class="ts1-lmr10-x-x-109">*</span>a, const
      PnlVect <span 
 class="ts1-lmr10-x-x-109">*</span>b, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>M</span>   contains   <span class='var'>samples</span>   samples   from   the   uniform   distribution   on
      <span 
@@ -620,7 +620,7 @@ class="lmmi-8">i</span></sub><span
 class="rm-lmr-10x-x-109">]</span>.
      </li>
      <li class="itemize"><a 
- id="dx8-101038"></a>  <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102038"></a>  <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_mat_rng_uni2</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMat</span></a>  <span 
 class="ts1-lmr10-x-x-109">*</span>M,  int  samples,  int  d,  double  a,  double  b,
@@ -628,7 +628,7 @@ class="ts1-lmr10-x-x-109">*</span>M,  int  samples,  int  d,  double  a,  double
 
                                                                                     
      <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>M</span> contains <span class='var'>samples</span> samples from the uniform distribution on <span 
 class="rm-lmr-10x-x-109">[</span><span 
@@ -636,17 +636,17 @@ class="lmmi-10x-x-109">a,b</span><span
 class="rm-lmr-10x-x-109">]</span><sup>d</sup>.
      </li>
      <li class="itemize"><a 
- id="dx8-101039"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102039"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_mat_rng_normal</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>M, int samples, int d, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>M</span> contains <span class='var'>samples</span> samples from the <span class='var'>d</span>-dimensional standard normal
      distribution.
      </li>
      <li class="itemize"><a 
- id="dx8-101040"></a>  <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102040"></a>  <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_mat_rng_bernoulli</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMat</span></a>  <span 
 class="ts1-lmr10-x-x-109">*</span>M,  int  samples,  int  dimension,  const
@@ -657,21 +657,21 @@ href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> 
 class="ts1-lmr10-x-x-109">*</span>b, const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>p, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute a random matrix with independent rows, each of them having
      a vector Bernoulli distribution, ie. <span class='var'>M(i, j)</span> follows a Bernoulli distribution on <span class='var'>{a(j), b(j)}</span>
      with parameter <span class='var'>p(j)</span>.
      </li>
      <li class="itemize"><a 
- id="dx8-101041"></a>  <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-102041"></a>  <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_mat_rng_poisson</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMat</span></a>  <span 
 class="ts1-lmr10-x-x-109">*</span>M,  int  samples,  int  dimension,  const
      <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>lambda, <a 
-href="#x8-1010006.1"><span class='struct'>PnlRng</span></a> <span 
+href="#x8-1020006.1"><span class='struct'>PnlRng</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rng</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute a random matrix with independent rows, each of them having
      a vector Poisson distribution, ie. <span class='var'>M(i, j)</span> follows a Poisson distribution with parameter
@@ -743,7 +743,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Compute
 </p><!--l. 342--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">6.2   </span> <a 
- id="x8-1020006.2"></a>The <span 
+ id="x8-1030006.2"></a>The <span 
 class="ec-lmri-10x-x-109">rand </span>interface (deprecated)</h4>
 <!--l. 346--><p class="noindent" ><span 
 class="ec-lmbxi-10x-x-109">Note</span><span 
@@ -753,7 +753,7 @@ class="ec-lmri-10x-x-109">interface to random number generation although we stro
 <span 
 class="ec-lmri-10x-x-109">interface (see section</span><span 
 class="ec-lmri-10x-x-109">&#x00A0;</span><a 
-href="#x8-1010006.1"><span 
+href="#x8-1020006.1"><span 
 class="ec-lmri-10x-x-109">6.1</span><!--tex4ht:ref: rng-int --></a><span 
 class="ec-lmri-10x-x-109">).</span>
 </p><!--l. 352--><p class="noindent" >Every generator is identified by an integer valued macro. One must <span 
@@ -762,9 +762,9 @@ directly the value of the macro <span class='var'>PNL_RNG_XXX</span> because the
 to store the generators will remain the same in future releases. Instead, one should call generators
 directly using their macro names.
 </p><!--l. 358--><p class="noindent" >The initial seeds of all the generators are fixed by the function <a 
-href="#x8-1020006.2">pnl_rand_init</a> but you can change it
+href="#x8-1030006.2">pnl_rand_init</a> but you can change it
 by calling <a 
-href="#x8-1020006.2">pnl_rand_sseed</a>.
+href="#x8-1030006.2">pnl_rand_sseed</a>.
 </p><!--l. 361--><p class="noindent" >Before starting to use random number generators, you <span 
 class="ec-lmbx-10x-x-109">must </span>initialize them by calling
 </p>
@@ -773,7 +773,7 @@ class="ec-lmbx-10x-x-109">must </span>initialize them by calling
                                                                                     
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx8-102001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rand_init</span></span>&#x00A0;(<span class='args'>int type_generator, int simulation_dim, long samples</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>It resets the sample counter to <span 
 class="rm-lmr-10x-x-109">0 </span>and checks that the generator described
@@ -781,18 +781,18 @@ class="rm-lmr-10x-x-109">0 </span>and checks that the generator described
      fixes the seed.</li></ul>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx8-102002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rand_or_quasi</span></span>&#x00A0;(<span class='args'>int type_generator</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return the type the generator of index <span class='var'>type_generator</span>, <span class='var'>PNL_MC</span> or
      <span class='var'>PNL_QMC</span>
      </li>
      <li class="itemize"><a 
- id="dx8-102003"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103003"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rand_sseed</span></span>&#x00A0;(<span class='args'>(int type_generator, unsigned long int seed)</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>It sets the seed of the generator <span class='var'>type_generator</span> with <span class='var'>seed</span>.
      </li>
      <li class="itemize"><a 
- id="dx8-102004"></a> <span class='ret'>const char <span 
+ id="dx8-103004"></a> <span class='ret'>const char <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rand_name</span></span>&#x00A0;(<span class='args'>int type_generator</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return the name of the generator of index <span class='var'>type_generator</span></li></ul>
@@ -801,7 +801,7 @@ according to a given law.
 </p><!--l. 387--><p class="noindent" >The following functions return one sample from a specified law. </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx8-102005"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103005"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rand_bernoulli</span></span>&#x00A0;(<span class='args'>double p, int type_generator</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the Bernouilli law on <span 
 class="lmsy-10x-x-109">{</span><span 
@@ -811,17 +811,17 @@ class="rm-lmr-10x-x-109">1</span><span
 class="lmsy-10x-x-109">} </span>with parameter <span class='var'>p</span>.
      </li>
      <li class="itemize"><a 
- id="dx8-102006"></a> <span class='ret'>long</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103006"></a> <span class='ret'>long</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rand_poisson</span></span>&#x00A0;(<span class='args'>double lambda, int type_generator</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the Poisson law with parameter <span class='var'>lambda</span>.
      </li>
      <li class="itemize"><a 
- id="dx8-102007"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103007"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rand_exp</span></span>&#x00A0;(<span class='args'>double lambda, int type_generator</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the Exponential law with parameter <span class='var'>lambda</span>.
      </li>
      <li class="itemize"><a 
- id="dx8-102008"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103008"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rand_uni</span></span>&#x00A0;(<span class='args'>int type_generator</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the Uniform law on <span 
 class="rm-lmr-10x-x-109">[0</span><span 
@@ -829,7 +829,7 @@ class="lmmi-10x-x-109">,</span><span
 class="rm-lmr-10x-x-109">1]</span>.
      </li>
      <li class="itemize"><a 
- id="dx8-102009"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103009"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rand_uni_ab</span></span>&#x00A0;(<span class='args'>double a, double b, int type_generator</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the Uniform law on <span 
 class="rm-lmr-10x-x-109">[</span><span 
@@ -837,12 +837,12 @@ class="lmmi-10x-x-109">a,b</span><span
 class="rm-lmr-10x-x-109">]</span>.
      </li>
      <li class="itemize"><a 
- id="dx8-102010"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103010"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rand_normal</span></span>&#x00A0;(<span class='args'>int type_generator</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the standard normal distribution.
      </li>
      <li class="itemize"><a 
- id="dx8-102011"></a> <span class='ret'>long</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103011"></a> <span class='ret'>long</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rand_poisson1</span></span>&#x00A0;(<span class='args'>double lambda, double t, int type_generator</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from a Poisson process with intensity <span class='var'>lambda</span> at time
      <span class='var'>t</span>.
@@ -851,7 +851,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Generat
                                                                                     
      </li>
      <li class="itemize"><a 
- id="dx8-102012"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103012"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rand_gamma</span></span>&#x00A0;(<span class='args'>double a, double b, int type_generator</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the <span 
 class="rm-lmr-10x-x-109">&#x0393;(</span><span 
@@ -859,7 +859,7 @@ class="lmmi-10x-x-109">a,b</span><span
 class="rm-lmr-10x-x-109">) </span>distribution.
      </li>
      <li class="itemize"><a 
- id="dx8-102013"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103013"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rand_chi2</span></span>&#x00A0;(<span class='args'>double n, int type_generator</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the centered <span 
 class="lmmi-10x-x-109">&#x03C7;</span><sup><span 
@@ -869,7 +869,7 @@ class="lmmi-10x-x-109">n</span><span
 class="rm-lmr-10x-x-109">) </span>distribution.
      </li>
      <li class="itemize"><a 
- id="dx8-102014"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103014"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rand_bessel</span></span>&#x00A0;(<span class='args'>double v, double a, int generator</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Generate a sample from the Bessel distribution with parameters <span class='var'>v &#x003E; -1</span>
      and <span class='var'>a &#x003E; 0</span>.</li></ul>
@@ -887,7 +887,7 @@ class="ec-lmbx-10x-x-109">Quasi </span>random number generator.
 </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx8-102015"></a>  <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103015"></a>  <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_vect_rand_uni</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a>  <span 
 class="ts1-lmr10-x-x-109">*</span>G,  int  samples,  double  a,  double  b,  int
@@ -899,7 +899,7 @@ class="lmmi-10x-x-109">a,b</span><span
 class="rm-lmr-10x-x-109">]</span>.
      </li>
      <li class="itemize"><a 
- id="dx8-102016"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103016"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_vect_rand_normal</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>G, int samples, int generator</span>)<br 
@@ -907,7 +907,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span><span c
      the standard normal distribution.
      </li>
      <li class="itemize"><a 
- id="dx8-102017"></a>  <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103017"></a>  <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_vect_rand_uni_d</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a>  <span 
 class="ts1-lmr10-x-x-109">*</span>G,  int  d,  double  a,  double  b,  int
@@ -918,7 +918,7 @@ class="lmmi-10x-x-109">a,b</span><span
 class="rm-lmr-10x-x-109">]</span><sup>d</sup>.
      </li>
      <li class="itemize"><a 
- id="dx8-102018"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103018"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_vect_rand_normal_d</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>G, int d, int generator</span>)<br 
@@ -936,7 +936,7 @@ identically distributed. Each row is a sample from the given law in dimension <s
 </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx8-102019"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103019"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_mat_rand_uni</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>M, int samples, int d, const PnlVect <span 
@@ -961,7 +961,7 @@ class="rm-lmr-10x-x-109">]</span>.
                                                                                     
      </li>
      <li class="itemize"><a 
- id="dx8-102020"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103020"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_mat_rand_uni2</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>M, int samples, int d, double a, double b, int
@@ -972,7 +972,7 @@ class="lmmi-10x-x-109">a,b</span><span
 class="rm-lmr-10x-x-109">]</span><sup>d</sup>.
      </li>
      <li class="itemize"><a 
- id="dx8-102021"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103021"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_mat_rand_normal</span></span>&#x00A0;(<span class='args'><a 
 href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>M, int samples, int d, int type_generator</span>)<br 
@@ -986,7 +986,7 @@ distribution and store it so that you can access the elements individually after
 </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx8-102022"></a>    <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx8-103022"></a>    <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_rand_gauss</span></span>&#x00A0;(<span class='args'>int    d,    int    create_or_retrieve,    int    index,    int
      type_generator</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>The  second  argument  can  be  either  <span class='var'>CREATE</span>  (to  actually  draw  the

@@ -4468,22 +4468,58 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Compute
                                                                                     
 
                                                                                     
-<!--l. 1995--><p class="noindent" >
+<!--l. 1995--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x6-850004.6.2"></a><span 
+class="ec-lmbx-10x-x-109">Comparison functions</span></span>
+</p>
+     <ul class="itemize1">
+     <li class="itemize"><a 
+ id="dx6-85001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sp_mat_isequal</span></span>&#x00A0;(<span class='args'>const <a 
+href="#x6-790004.6.1"><span class='struct'>PnlSpMat</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>x, const <a 
+href="#x6-790004.6.1"><span class='struct'>PnlSpMat</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>y, double abserr</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Test if two sparse matrices are equal up to <span class='var'>err</span> component&#8211;wise. The
+     error <span class='var'>err</span> is either relative or absolute depending on the magnitude of the components.
+     Return <span class='var'>TRUE</span> or <span class='var'>FALSE</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx6-85002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sp_mat_isequal_abs</span></span>&#x00A0;(<span class='args'>const <a 
+href="#x6-790004.6.1"><span class='struct'>PnlSpMat</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>x, const <a 
+href="#x6-790004.6.1"><span class='struct'>PnlSpMat</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>y, double
+     relerr</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Test if two sparse matrices are equal up to an absolute error <span class='var'>abserr</span>
+     component&#8211;wise. Return <span class='var'>TRUE</span> or <span class='var'>FALSE</span>.
+     </li>
+     <li class="itemize"><a 
+ id="dx6-85003"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_sp_mat_isequal_rel</span></span>&#x00A0;(<span class='args'>const <a 
+href="#x6-790004.6.1"><span class='struct'>PnlSpMat</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>x, const <a 
+href="#x6-790004.6.1"><span class='struct'>PnlSpMat</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span>y, double err</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Test  if  two  sparse  matrices  are  equal  up  to  a  relative  error  <span class='var'>relerr</span>
+     component&#8211;wise. Return <span class='var'>TRUE</span> or <span class='var'>FALSE</span>.</li></ul>
+<!--l. 2007--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">4.7   </span> <a 
- id="x6-850004.7"></a>Hyper Matrices</h4>
-<!--l. 1996--><p class="noindent" >
+ id="x6-860004.7"></a>Hyper Matrices</h4>
+<!--l. 2008--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">4.7.1   </span> <a 
- id="x6-860004.7.1"></a>Short description</h5>
-<!--l. 1998--><p class="noindent" >The Hyper matrix types and related functions are defined in the header <span class="obeylines-h"><span class="verb"><span 
+ id="x6-870004.7.1"></a>Short description</h5>
+<!--l. 2010--><p class="noindent" >The Hyper matrix types and related functions are defined in the header <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl/pnl_matrix.h</span></span></span>.
 <a 
- id="dx6-86001"></a>
+ id="dx6-87001"></a>
 <a 
- id="dx6-86002"></a>
+ id="dx6-87002"></a>
 <a 
- id="dx6-86003"></a>
+ id="dx6-87003"></a>
                                                                                     
 
                                                                                     
@@ -4534,21 +4570,21 @@ typedef&#x00A0;struct&#x00A0;PnlHmat{
                                                                                     
 
                                                                                     
-<!--l. 2043--><p class="nopar" ><span class='var'>ndim</span> is the number of dimensions, <span class='var'>dim</span> is an array to store the size of each dimension and <span class='var'>nm</span>
+<!--l. 2055--><p class="nopar" ><span class='var'>ndim</span> is the number of dimensions, <span class='var'>dim</span> is an array to store the size of each dimension and <span class='var'>nm</span>
 contains the product of the sizes of each dimension. <span class='var'>array</span> is an array of size <span class='var'>mn</span> containing the data.
 The integer array <span class='var'>pdims</span> is used to create the one&#8211;to&#8211;one map between the natural indexing and the
 linear indexing used in <span class='var'>array</span>.
-</p><!--l. 2051--><p class="noindent" >
+</p><!--l. 2063--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">4.7.2   </span> <a 
- id="x6-870004.7.2"></a>Functions</h5>
-<!--l. 2052--><p class="noindent" >These functions exist for all types of hypermatrices no matter what the basic type is. The following
+ id="x6-880004.7.2"></a>Functions</h5>
+<!--l. 2064--><p class="noindent" >These functions exist for all types of hypermatrices no matter what the basic type is. The following
 conventions are used to name functions operating on hypermatrices. Here is the table of prefixes
 used for the different basic types.
 </p>
 <div class="center" 
 >
-<!--l. 2056--><p class="noindent" >
+<!--l. 2068--><p class="noindent" >
 </p>
 <div class="tabular"> <table id="TBL-10" class="tabular" 
 cellspacing="0" cellpadding="0"  
@@ -4578,44 +4614,44 @@ class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr
 class="td11">dcomplex </td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-4-2"  
 class="td11">pnl_hmat_complex</td><td  style="white-space:nowrap; text-align:left;" id="TBL-10-4-3"  
 class="td11">PnlHmatComplex</td></tr></table></div></div>
-<!--l. 2068--><p class="noindent" >In this paragraph, we present the functions operating on <a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> which exist for all types. To
+<!--l. 2080--><p class="noindent" >In this paragraph, we present the functions operating on <a 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> which exist for all types. To
 deduce the prototypes of these functions for other basic types, one must replace <span 
 class="ec-lmtt-10x-x-109">pnl_hmat </span>and
 <span 
 class="ec-lmtt-10x-x-109">double </span>according the above table.
 </p>
-<!--l. 2074--><p class="noindent" ><span class="paragraphHead"><a 
- id="x6-880004.7.2"></a><span 
+<!--l. 2086--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x6-890004.7.2"></a><span 
 class="ec-lmbx-10x-x-109">Constructors and destructors</span></span>
 </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx6-88001"></a> <span class='ret'><a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> <span 
+ id="dx6-89001"></a> <span class='ret'><a 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_hmat_new</span></span>&#x00A0;(<span class='args'></span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create an empty <a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> .
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> .
      </li>
      <li class="itemize"><a 
- id="dx6-88002"></a> <span class='ret'><a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> <span 
+ id="dx6-89002"></a> <span class='ret'><a 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_hmat_create</span></span>&#x00A0;(<span class='args'>int ndim, const int <span 
 class="ts1-lmr10-x-x-109">*</span>dims</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create a <a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> with <span class='var'>ndim</span> dimensions and the size of each dimension
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> with <span class='var'>ndim</span> dimensions and the size of each dimension
      is given by the entries of the integer array <span class='var'>dims</span>
      </li>
      <li class="itemize"><a 
- id="dx6-88003"></a> <span class='ret'><a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> <span 
+ id="dx6-89003"></a> <span class='ret'><a 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_hmat_create_from_scalar</span></span>&#x00A0;(<span class='args'>int ndim, const int <span 
 class="ts1-lmr10-x-x-109">*</span>dims, double x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create a <a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> with <span class='var'>ndim</span> dimensions given by <span 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> with <span class='var'>ndim</span> dimensions given by <span 
 class="lmex-10">&#x220F;</span>
   <sub><span 
 class="lmmi-8">i</span></sub><span class='var'><span 
@@ -4629,8 +4665,8 @@ class="rm-lmr-10x-x-109">]</span></span> filled with
                                                                                     
      </li>
      <li class="itemize"><a 
- id="dx6-88004"></a> <span class='ret'><a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> <span 
+ id="dx6-89004"></a> <span class='ret'><a 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_hmat_create_from_ptr</span></span>&#x00A0;(<span class='args'>int ndim, const int <span 
 class="ts1-lmr10-x-x-109">*</span>dims, const double
@@ -4638,76 +4674,76 @@ class="ts1-lmr10-x-x-109">*</span>dims, const double
 class="ts1-lmr10-x-x-109">*</span>x</span>)
      </li>
      <li class="itemize"><a 
- id="dx6-88005"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx6-89005"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_hmat_free</span></span>&#x00A0;(<span class='args'><a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> <span 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">**</span>H</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Free a <a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a>
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a>
      </li>
      <li class="itemize"><a 
- id="dx6-88006"></a> <span class='ret'><a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> <span 
+ id="dx6-89006"></a> <span class='ret'><a 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_hmat_copy</span></span>&#x00A0;(<span class='args'>const <a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> <span 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>H</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Copy a <a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> .
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> .
      </li>
      <li class="itemize"><a 
- id="dx6-88007"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx6-89007"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_hmat_clone</span></span>&#x00A0;(<span class='args'><a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> <span 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>clone, const <a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> <span 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>H</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Clone a <a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> .
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> .
      </li>
      <li class="itemize"><a 
- id="dx6-88008"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx6-89008"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_hmat_resize</span></span>&#x00A0;(<span class='args'><a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> <span 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>H, int ndim, const int <span 
 class="ts1-lmr10-x-x-109">*</span>dims</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Resize a <a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> .</li></ul>
-<!--l. 2105--><p class="noindent" ><span class="paragraphHead"><a 
- id="x6-890004.7.2"></a><span 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> .</li></ul>
+<!--l. 2117--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x6-900004.7.2"></a><span 
 class="ec-lmbx-10x-x-109">Accessing elements</span></span>
 </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx6-89001"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx6-90001"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_hmat_set</span></span>&#x00A0;(<span class='args'><a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> <span 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>self, int <span 
 class="ts1-lmr10-x-x-109">*</span>tab, double x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Set the element of index <span class='var'>tab</span> to <span class='var'>x</span>.
      </li>
      <li class="itemize"><a 
- id="dx6-89002"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx6-90002"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_hmat_get</span></span>&#x00A0;(<span class='args'>const <a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> <span 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>self, int <span 
 class="ts1-lmr10-x-x-109">*</span>tab</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return the value of the element of index <span class='var'>tab</span>
      </li>
      <li class="itemize"><a 
- id="dx6-89003"></a> <span class='ret'>double<span 
+ id="dx6-90003"></a> <span class='ret'>double<span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_hmat_lget</span></span>&#x00A0;(<span class='args'><a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> <span 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>self, int <span 
 class="ts1-lmr10-x-x-109">*</span>tab</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return the address of self[tab] for use as a lvalue.
      </li>
      <li class="itemize"><a 
- id="dx6-89004"></a> <span class='ret'><a 
+ id="dx6-90004"></a> <span class='ret'><a 
 href="#x6-470004.3.1"><span class='struct'>PnlMat</span></a> </span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_mat_wrap_hmat</span></span>&#x00A0;(<span class='args'><a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> <span 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>H, int <span 
 class="ts1-lmr10-x-x-109">*</span>t</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return a true <a 
@@ -4716,10 +4752,10 @@ href="#x6-470004.3.1"><span class='struct'>PnlMat</span></a> not a pointer holdi
      matrix shares its data with <span class='var'>H</span>, it is only a view not a true copy.
      </li>
      <li class="itemize"><a 
- id="dx6-89005"></a> <span class='ret'><a 
+ id="dx6-90005"></a> <span class='ret'><a 
 href="#x6-290004.1.1"><span class='struct'>PnlVect</span></a> </span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_vect_wrap_hmat</span></span>&#x00A0;(<span class='args'><a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> <span 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>H, int <span 
 class="ts1-lmr10-x-x-109">*</span>t</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return a true <a 
@@ -4730,55 +4766,55 @@ href="#x6-290004.1.1"><span class='struct'>PnlVect</span></a> not a pointer hold
                                                                                     
 
                                                                                     
-<!--l. 2132--><p class="noindent" ><span class="paragraphHead"><a 
- id="x6-900004.7.2"></a><span 
+<!--l. 2144--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x6-910004.7.2"></a><span 
 class="ec-lmbx-10x-x-109">Printing hypermatrices</span></span>
 </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx6-90001"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx6-91001"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_hmat_print</span></span>&#x00A0;(<span class='args'>const <a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> <span 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>H</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Print an hypermatrix.</li></ul>
-<!--l. 2139--><p class="noindent" ><span class="paragraphHead"><a 
- id="x6-910004.7.2"></a><span 
+<!--l. 2151--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x6-920004.7.2"></a><span 
 class="ec-lmbx-10x-x-109">Term by term operations</span></span>
 </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx6-91001"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx6-92001"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_hmat_plus_hmat</span></span>&#x00A0;(<span class='args'><a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> <span 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>lhs, const <a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> <span 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>rhs</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span class='var'>lhs += rhs</span>.
      </li>
      <li class="itemize"><a 
- id="dx6-91002"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx6-92002"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_hmat_mult_scalar</span></span>&#x00A0;(<span class='args'><a 
-href="#x6-860004.7.1"><span class='struct'>PnlHmat</span></a> <span 
+href="#x6-870004.7.1"><span class='struct'>PnlHmat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>lhs, double x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span class='var'>lhs *= x</span> where x is a real number.</li></ul>
-<!--l. 2365--><p class="noindent" >
+<!--l. 2377--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">4.8   </span> <a 
- id="x6-920004.8"></a>Iterative Solvers</h4>
-<!--l. 2366--><p class="noindent" >
+ id="x6-930004.8"></a>Iterative Solvers</h4>
+<!--l. 2378--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">4.8.1   </span> <a 
- id="x6-930004.8.1"></a>Overview</h5>
-<!--l. 2368--><p class="noindent" >The structures and functions related to solvers are declared in <span class="obeylines-h"><span class="verb"><span 
+ id="x6-940004.8.1"></a>Overview</h5>
+<!--l. 2380--><p class="noindent" >The structures and functions related to solvers are declared in <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl/pnl_linalgsolver.h</span></span></span>.
 <a 
- id="dx6-93001"></a>
+ id="dx6-94001"></a>
 <a 
- id="dx6-93002"></a>
+ id="dx6-94002"></a>
 <a 
- id="dx6-93003"></a>
+ id="dx6-94003"></a>
 <a 
- id="dx6-93004"></a>
+ id="dx6-94004"></a>
                                                                                     
 
                                                                                     
@@ -4866,8 +4902,8 @@ typedef&#x00A0;struct&#x00A0;_PnlIterationBase&#x00A0;PnlIterationBase;
 &#x00A0;<br />&#x00A0;&#x00A0;PnlIterationBase&#x00A0;*iter_inner;
 &#x00A0;<br />}&#x00A0;;
 </div>
-<!--l. 2454--><p class="nopar" >
-</p><!--l. 2456--><p class="noindent" >A Left preconditioner solves the problem :
+<!--l. 2466--><p class="nopar" >
+</p><!--l. 2468--><p class="noindent" >A Left preconditioner solves the problem :
 </p>
 <center class="math-display" >
 <img 
@@ -4877,13 +4913,13 @@ whereas right preconditioner solves
 <img 
 src="pnl-manual17x.png" alt="M  Py = b,    P y = x.
 " class="math-display"  /></center>
-<!--l. 2469--><p class="noindent" >More information is given in <span 
+<!--l. 2481--><p class="noindent" >More information is given in <span 
 class="ec-lmri-10x-x-109">Saad, Yousef (2003). Iterative methods for sparse linear systems (2nd</span>
 <span 
 class="ec-lmri-10x-x-109">ed. ed.). SIAM. ISBN 0898715342. OCLC 51266114</span>. The reader will find in this book
 some discussion about right or/and left preconditioner and a description of the following
 algorithms.
-</p><!--l. 2474--><p class="noindent" >These algorithms, we implemented with a left preconditioner. Right preconditioner can be easily
+</p><!--l. 2486--><p class="noindent" >These algorithms, we implemented with a left preconditioner. Right preconditioner can be easily
 computed changing matrix vector multiplication operator from <span 
 class="lmmi-10x-x-109">M</span><span 
 class="lmmi-10x-x-109">&#x00A0;x </span>to <span 
@@ -4897,17 +4933,17 @@ class="lmmi-8">R</span></sub><span
 class="lmmi-10x-x-109">y </span><span 
 class="rm-lmr-10x-x-109">= </span><span 
 class="lmmi-10x-x-109">x </span>at the end of algorithm.
-</p><!--l. 2479--><p class="noindent" >
+</p><!--l. 2491--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">4.8.2   </span> <a 
- id="x6-940004.8.2"></a>Functions</h5>
-<!--l. 2481--><p class="noindent" >Three methods are implemented : Conjugate Gradient, BICGstab and GMRES with restart. For
+ id="x6-950004.8.2"></a>Functions</h5>
+<!--l. 2493--><p class="noindent" >Three methods are implemented : Conjugate Gradient, BICGstab and GMRES with restart. For
 each of them a structure is created to store temporary vectors used in the algorithm. In some cases,
 we have to apply iterative methods more than once : for example to solve at each time step a
 discrete form of an elliptic problem come from parabolic problem. In the cases, do not call the
 constructor and destructor at each time, but instead use the initialization and solve
 procedures.
-</p><!--l. 2488--><p class="noindent" >Formally we have,
+</p><!--l. 2500--><p class="noindent" >Formally we have,
                                                                                     
 
                                                                                     
@@ -4920,49 +4956,49 @@ Create&#x00A0;iterative&#x00A0;method
 &#x00A0;<br />end&#x00A0;for
 &#x00A0;<br />free&#x00A0;iterative&#x00A0;method
 </div>
-<!--l. 2496--><p class="nopar" >
-</p><!--l. 2498--><p class="noindent" >In these functions, we don&#8217;t use any particular matrix structure. We give the matrix vector
+<!--l. 2508--><p class="nopar" >
+</p><!--l. 2510--><p class="noindent" >In these functions, we don&#8217;t use any particular matrix structure. We give the matrix vector
 multiplication as a parameter of the solver.
 </p>
-<!--l. 2501--><p class="noindent" ><span class="paragraphHead"><a 
- id="x6-950004.8.2"></a><span 
+<!--l. 2513--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x6-960004.8.2"></a><span 
 class="ec-lmbx-10x-x-109">Conjugate Gradient method</span></span>
 Only available for symmetric and positive matrices. </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx6-95001"></a> <span class='ret'><a 
-href="#x6-930004.8.1"><span class='struct'>PnlCgSolver</span></a> <span 
+ id="dx6-96001"></a> <span class='ret'><a 
+href="#x6-940004.8.1"><span class='struct'>PnlCgSolver</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cg_solver_new</span></span>&#x00A0;(<span class='args'></span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create an empty <a 
-href="#x6-930004.8.1"><span class='struct'>PnlCgSolver</span></a>
+href="#x6-940004.8.1"><span class='struct'>PnlCgSolver</span></a>
      </li>
      <li class="itemize"><a 
- id="dx6-95002"></a> <span class='ret'><a 
-href="#x6-930004.8.1"><span class='struct'>PnlCgSolver</span></a> <span 
+ id="dx6-96002"></a> <span class='ret'><a 
+href="#x6-940004.8.1"><span class='struct'>PnlCgSolver</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cg_solver_create</span></span>&#x00A0;(<span class='args'>int Size, int max-iter, double tolerance</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create a new <a 
-href="#x6-930004.8.1"><span class='struct'>PnlCgSolver</span></a> pointer.
+href="#x6-940004.8.1"><span class='struct'>PnlCgSolver</span></a> pointer.
      </li>
      <li class="itemize"><a 
- id="dx6-95003"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx6-96003"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cg_solver_initialisation</span></span>&#x00A0;(<span class='args'><a 
-href="#x6-930004.8.1"><span class='struct'>PnlCgSolver</span></a> <span 
+href="#x6-940004.8.1"><span class='struct'>PnlCgSolver</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>Solver, const <a 
 href="#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Initialisation of the solver at the beginning of iterative method.
      </li>
      <li class="itemize"><a 
- id="dx6-95004"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx6-96004"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cg_solver_free</span></span>&#x00A0;(<span class='args'><a 
-href="#x6-930004.8.1"><span class='struct'>PnlCgSolver</span></a> <span 
+href="#x6-940004.8.1"><span class='struct'>PnlCgSolver</span></a> <span 
 class="ts1-lmr10-x-x-109">**</span>Solver</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Destructor of iterative solver
      </li>
      <li class="itemize"><a 
- id="dx6-95005"></a>   <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx6-96005"></a>   <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cg_solver_solve</span></span>&#x00A0;(<span class='args'>void(<span 
 class="ts1-lmr10-x-x-109">*</span>matrix   vector-product)(const   void   <span 
 class="ts1-lmr10-x-x-109">*</span>,   const
@@ -4985,7 +5021,7 @@ href="#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span
 class="ts1-lmr10-x-x-109">*</span>x, const <a 
 href="#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, <a 
-href="#x6-930004.8.1"><span class='struct'>PnlCgSolver</span></a>
+href="#x6-940004.8.1"><span class='struct'>PnlCgSolver</span></a>
      <span 
 class="ts1-lmr10-x-x-109">*</span>Solver</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Solve  the  linear  system  matrix  vector-product  is  the  matrix  vector
@@ -4994,45 +5030,45 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Solve  
                                                                                     
 
                                                                                     
-<!--l. 2516--><p class="noindent" ><span class="paragraphHead"><a 
- id="x6-960004.8.2"></a><span 
+<!--l. 2528--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x6-970004.8.2"></a><span 
 class="ec-lmbx-10x-x-109">BICG stab</span></span>
 </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx6-96001"></a> <span class='ret'><a 
-href="#x6-930004.8.1"><span class='struct'>PnlBicgSolver</span></a> <span 
+ id="dx6-97001"></a> <span class='ret'><a 
+href="#x6-940004.8.1"><span class='struct'>PnlBicgSolver</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_bicg_solver_new</span></span>&#x00A0;(<span class='args'></span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create an empty <a 
-href="#x6-930004.8.1"><span class='struct'>PnlBicgSolver</span></a>.
+href="#x6-940004.8.1"><span class='struct'>PnlBicgSolver</span></a>.
      </li>
      <li class="itemize"><a 
- id="dx6-96002"></a> <span class='ret'><a 
-href="#x6-930004.8.1"><span class='struct'>PnlBicgSolver</span></a> <span 
+ id="dx6-97002"></a> <span class='ret'><a 
+href="#x6-940004.8.1"><span class='struct'>PnlBicgSolver</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_bicg_solver_create</span></span>&#x00A0;(<span class='args'>int Size, int max-iter, double tolerance</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create a new <a 
-href="#x6-930004.8.1"><span class='struct'>PnlBicgSolver</span></a> pointer.
+href="#x6-940004.8.1"><span class='struct'>PnlBicgSolver</span></a> pointer.
      </li>
      <li class="itemize"><a 
- id="dx6-96003"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx6-97003"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_bicg_solver_initialisation</span></span>&#x00A0;(<span class='args'><a 
-href="#x6-930004.8.1"><span class='struct'>PnlBicgSolver</span></a> <span 
+href="#x6-940004.8.1"><span class='struct'>PnlBicgSolver</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>Solver, const <a 
 href="#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Initialisation of the solver at the beginning of iterative method.
      </li>
      <li class="itemize"><a 
- id="dx6-96004"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx6-97004"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_bicg_solver_free</span></span>&#x00A0;(<span class='args'><a 
-href="#x6-930004.8.1"><span class='struct'>PnlBicgSolver</span></a> <span 
+href="#x6-940004.8.1"><span class='struct'>PnlBicgSolver</span></a> <span 
 class="ts1-lmr10-x-x-109">**</span>Solver</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Destructor of iterative solver
      </li>
      <li class="itemize"><a 
- id="dx6-96005"></a>  <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx6-97005"></a>  <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_bicg_solver_solve</span></span>&#x00A0;(<span class='args'>void(<span 
 class="ts1-lmr10-x-x-109">*</span>matrix  vector-product)(const  void  <span 
 class="ts1-lmr10-x-x-109">*</span>,  const
@@ -5055,14 +5091,14 @@ href="#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span
 class="ts1-lmr10-x-x-109">*</span>x, const <a 
 href="#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, <a 
-href="#x6-930004.8.1"><span class='struct'>PnlBicgSolver</span></a>
+href="#x6-940004.8.1"><span class='struct'>PnlBicgSolver</span></a>
      <span 
 class="ts1-lmr10-x-x-109">*</span>Solver</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Solve  the  linear  system  matrix  vector-product  is  the  matrix  vector
      multiplication  function  matrix  vector-product-PC  is  the  preconditioner  function
      Matrix-Data &amp; PC-Data is data to compute matrix vector multiplication.</li></ul>
-<!--l. 2530--><p class="noindent" ><span class="paragraphHead"><a 
- id="x6-970004.8.2"></a><span 
+<!--l. 2542--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x6-980004.8.2"></a><span 
 class="ec-lmbx-10x-x-109">GMRES with restart</span></span>
 See <span 
 class="ec-lmri-10x-x-109">Saad, Yousef (2003) </span>for a discussion about the restart parameter. For GMRES we need to
@@ -5074,34 +5110,34 @@ class="lmmi-10x-x-109">p </span><span
 class="rm-lmr-10x-x-109">= </span><span 
 class="lmmi-10x-x-109">restart </span>and restarts the algorithm with the previously computed solution as initial
 guess.
-</p><!--l. 2537--><p class="noindent" >Note that if restart equals <span 
+</p><!--l. 2549--><p class="noindent" >Note that if restart equals <span 
 class="lmmi-10x-x-109">m</span>, we have a classical GMRES algorithm.
 </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx6-97001"></a> <span class='ret'><a 
-href="#x6-930004.8.1"><span class='struct'>PnlGmresSolver</span></a> <span 
+ id="dx6-98001"></a> <span class='ret'><a 
+href="#x6-940004.8.1"><span class='struct'>PnlGmresSolver</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_gmres_solver_new</span></span>&#x00A0;(<span class='args'></span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create an empty <a 
-href="#x6-930004.8.1"><span class='struct'>PnlGmresSolver</span></a>
+href="#x6-940004.8.1"><span class='struct'>PnlGmresSolver</span></a>
      </li>
      <li class="itemize"><a 
- id="dx6-97002"></a> <span class='ret'><a 
-href="#x6-930004.8.1"><span class='struct'>PnlGmresSolver</span></a> <span 
+ id="dx6-98002"></a> <span class='ret'><a 
+href="#x6-940004.8.1"><span class='struct'>PnlGmresSolver</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_gmres_solver_create</span></span>&#x00A0;(<span class='args'>int Size, int max-iter, int restart,
      double tolerance</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create a new <a 
-href="#x6-930004.8.1"><span class='struct'>PnlGmresSolver</span></a> pointer.
+href="#x6-940004.8.1"><span class='struct'>PnlGmresSolver</span></a> pointer.
                                                                                     
 
                                                                                     
      </li>
      <li class="itemize"><a 
- id="dx6-97003"></a>  <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx6-98003"></a>  <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_gmres_solver_initialisation</span></span>&#x00A0;(<span class='args'><a 
-href="#x6-930004.8.1"><span class='struct'>PnlGmresSolver</span></a>  <span 
+href="#x6-940004.8.1"><span class='struct'>PnlGmresSolver</span></a>  <span 
 class="ts1-lmr10-x-x-109">*</span>Solver,  const  <a 
 href="#x6-290004.1.1"><span class='struct'>PnlVect</span></a>
      <span 
@@ -5109,14 +5145,14 @@ class="ts1-lmr10-x-x-109">*</span>b</span>)<br
 class="newline" />   <span class='description'>Description&#x00A0;</span>Initialisation of the solver at the beginning of iterative method.
      </li>
      <li class="itemize"><a 
- id="dx6-97004"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx6-98004"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_gmres_solver_free</span></span>&#x00A0;(<span class='args'><a 
-href="#x6-930004.8.1"><span class='struct'>PnlGmresSolver</span></a> <span 
+href="#x6-940004.8.1"><span class='struct'>PnlGmresSolver</span></a> <span 
 class="ts1-lmr10-x-x-109">**</span>Solver</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Destructor of iterative solver
      </li>
      <li class="itemize"><a 
- id="dx6-97005"></a>  <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx6-98005"></a>  <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_gmres_solver_solve</span></span>&#x00A0;(<span class='args'>void(<span 
 class="ts1-lmr10-x-x-109">*</span>matrix  vector-product)(const  void  <span 
 class="ts1-lmr10-x-x-109">*</span>,  const
@@ -5139,13 +5175,13 @@ href="#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span
 class="ts1-lmr10-x-x-109">*</span>x, const <a 
 href="#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, <a 
-href="#x6-930004.8.1"><span class='struct'>PnlGmresSolver</span></a>
+href="#x6-940004.8.1"><span class='struct'>PnlGmresSolver</span></a>
      <span 
 class="ts1-lmr10-x-x-109">*</span>Solver</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Solve  the  linear  system  matrix  vector-product  is  the  matrix  vector
      multiplication  function  matrix  vector-product-PC  is  the  preconditionner  function
      Matrix-Data &amp; PC-Data is data to compute matrix vector multiplication.</li></ul>
-<!--l. 2553--><p class="noindent" >In the next paragraph, we write all the solvers for <a 
+<!--l. 2565--><p class="noindent" >In the next paragraph, we write all the solvers for <a 
 href="#x6-470004.3.1"><span class='struct'>PnlMat</span></a> . This will be done as follows: construct
 an application matrix vector.
                                                                                     
@@ -5158,7 +5194,7 @@ static&#x00A0;void&#x00A0;pnl_mat_mult_vect_applied(const&#x00A0;void&#x00A0;*ma
 &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlVect&#x00A0;*lhs)
 &#x00A0;<br />{pnl_mat_lAxpby(a,&#x00A0;(PnlMat*)mat,&#x00A0;vec,&#x00A0;b,&#x00A0;lhs);}
 </div>
-<!--l. 2560--><p class="nopar" >and give it as the parameter of the iterative method
+<!--l. 2572--><p class="nopar" >and give it as the parameter of the iterative method
                                                                                     
 
                                                                                     
@@ -5170,8 +5206,8 @@ int&#x00A0;pnl_mat_cg_solver_solve(const&#x00A0;PnlMat&#x00A0;*&#x00A0;Matrix,&#
 &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;Matrix,&#x00A0;pnl_mat_mult_vect_applied,
 &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;PC,&#x00A0;x,&#x00A0;b,&#x00A0;Solver);}
 </div>
-<!--l. 2568--><p class="nopar" >
-</p><!--l. 2570--><p class="noindent" >In practice, we cannot define all iterative methods for all structures. With this implementation, the
+<!--l. 2580--><p class="nopar" >
+</p><!--l. 2582--><p class="noindent" >In practice, we cannot define all iterative methods for all structures. With this implementation, the
 user can easily : </p>
      <ul class="itemize1">
      <li class="itemize">implement right precondioner,
@@ -5179,15 +5215,15 @@ user can easily : </p>
      <li class="itemize">implement  method  with  sparse  matrix  and  diagonal  preconditioner,  or  special
      combination of this form <span 
 class="lmmi-10x-x-109">&#x2026;</span><span style="margin-left:0.3em" class="thinspace"></span></li></ul>
-<!--l. 2579--><p class="noindent" ><span class="paragraphHead"><a 
- id="x6-980004.8.2"></a><span 
+<!--l. 2591--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x6-990004.8.2"></a><span 
 class="ec-lmbx-10x-x-109">Iterative algorithms for </span><a 
 href="#x6-470004.3.1"><span class='struct'><span 
 class="ec-lmbx-10x-x-109">PnlMat</span></span></a> </span>
 </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx6-98001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx6-99001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_mat_cg_solver_solve</span></span>&#x00A0;(<span class='args'>const <a 
 href="#x6-470004.3.1"><span class='struct'>PnlMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>M, const <a 
@@ -5198,12 +5234,12 @@ href="#x6-290004.1.1"><span class='struct'>PnlVect</span></a>
 class="ts1-lmr10-x-x-109">*</span>x, const <a 
 href="#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, <a 
-href="#x6-930004.8.1"><span class='struct'>PnlCgSolver</span></a> <span 
+href="#x6-940004.8.1"><span class='struct'>PnlCgSolver</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>Solver</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Solve the linear system <span class='var'>M x = b</span> with preconditionner PC.
      </li>
      <li class="itemize"><a 
- id="dx6-98002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx6-99002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_mat_bicg_solver_solve</span></span>&#x00A0;(<span class='args'>const <a 
 href="#x6-470004.3.1"><span class='struct'>PnlMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>M, const <a 
@@ -5214,12 +5250,12 @@ href="#x6-290004.1.1"><span class='struct'>PnlVect</span></a>
 class="ts1-lmr10-x-x-109">*</span>x, const <a 
 href="#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, <a 
-href="#x6-930004.8.1"><span class='struct'>PnlBicgSolver</span></a> <span 
+href="#x6-940004.8.1"><span class='struct'>PnlBicgSolver</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>Solver</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Solve the linear system <span class='var'>M x = b</span> with preconditionner PC.
      </li>
      <li class="itemize"><a 
- id="dx6-98003"></a>  <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx6-99003"></a>  <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_mat_gmres_solver_solve</span></span>&#x00A0;(<span class='args'>const  <a 
 href="#x6-470004.3.1"><span class='struct'>PnlMat</span></a>  <span 
 class="ts1-lmr10-x-x-109">*</span>M,  const  <a 
@@ -5230,7 +5266,7 @@ href="#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span
 class="ts1-lmr10-x-x-109">*</span>x, <a 
 href="#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, <a 
-href="#x6-930004.8.1"><span class='struct'>PnlGmresSolver</span></a> <span 
+href="#x6-940004.8.1"><span class='struct'>PnlGmresSolver</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>Solver</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Solve the linear system <span class='var'>M x = b</span> with preconditionner PC.</li></ul>
                                                                                     

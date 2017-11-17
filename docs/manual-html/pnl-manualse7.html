@@ -20,15 +20,15 @@ href="pnl-manualse6.html#tailpnl-manualse6.html" >prev-tail</a>] [<a
 href="#tailpnl-manualse7.html">tail</a>] [<a 
 href="pnl-manual.html#pnl-manualse7.html" >up</a>] </p></div>
 <h3 class="sectionHead"><span class="titlemark">7   </span> <a 
- id="x9-1030007"></a>Function bases and regression</h3>
+ id="x9-1040007"></a>Function bases and regression</h3>
 <!--l. 2--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">7.1   </span> <a 
- id="x9-1040007.1"></a>Overview</h4>
+ id="x9-1050007.1"></a>Overview</h4>
 <!--l. 4--><p class="noindent" >To use these functionalities, you should include <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl/pnl_basis.h</span></span></span>.
 <a 
- id="dx9-104001"></a>
+ id="dx9-105001"></a>
                                                                                     
 
                                                                                     
@@ -70,13 +70,13 @@ struct&#x00A0;PnlBasis_t&#x00A0;{
 </div>
 <!--l. 41--><p class="nopar" >
 </p><!--l. 43--><p class="noindent" >A <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> is a family of multivariate functions with real values. Tow different kinds of functions
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> is a family of multivariate functions with real values. Tow different kinds of functions
 can be stored in these families: tensor functions &#8212; originally, this was the only possibility, and
 standard multivariate function typed as <a 
-href="pnl-manualse13.html#x15-12700013.1"><span class='struct'>PnlRnFuncR</span></a>.
+href="pnl-manualse13.html#x15-12800013.1"><span class='struct'>PnlRnFuncR</span></a>.
 </p>
 <!--l. 48--><p class="noindent" ><span class="paragraphHead"><a 
- id="x9-1050007.1"></a><span 
+ id="x9-1060007.1"></a><span 
 class="ec-lmbx-10x-x-109">Tensor functions.</span></span>
                                                                                     
 
@@ -84,16 +84,16 @@ class="ec-lmbx-10x-x-109">Tensor functions.</span></span>
 Tensors functions are built as a tensor product of one dimensional elements. Hence, we only need a
 tensor matrix <span class='var'>T</span> to describe a multi-dimensional basis in terms of the one dimensional one. These
 tensors functions can be easily evaluated and differentiated twice, see <a 
-href="#x9-1070007.2">pnl_basis_eval</a>,
+href="#x9-1080007.2">pnl_basis_eval</a>,
 <a 
-href="#x9-1070007.2">pnl_basis_eval_vect</a>, <a 
-href="#x9-1070007.2">pnl_basis_eval_D</a>, <a 
-href="#x9-1070007.2">pnl_basis_eval_D_vect</a>, <a 
-href="#x9-1070007.2">pnl_basis_eval_D2</a>,
+href="#x9-1080007.2">pnl_basis_eval_vect</a>, <a 
+href="#x9-1080007.2">pnl_basis_eval_D</a>, <a 
+href="#x9-1080007.2">pnl_basis_eval_D_vect</a>, <a 
+href="#x9-1080007.2">pnl_basis_eval_D2</a>,
 <a 
-href="#x9-1070007.2">pnl_basis_eval_D2_vect</a>, <a 
-href="#x9-1070007.2">pnl_basis_eval_derivs</a>, <a 
-href="#x9-1070007.2">pnl_basis_eval_derivs_vect</a>.
+href="#x9-1080007.2">pnl_basis_eval_D2_vect</a>, <a 
+href="#x9-1080007.2">pnl_basis_eval_derivs</a>, <a 
+href="#x9-1080007.2">pnl_basis_eval_derivs_vect</a>.
 </p><!--l. 56--><p class="noindent" >The two tensors <span class='var'>T</span> and <span class='var'>SpT</span> do actually store the same information &#8212; <span class='var'>T(i,j)</span> is the degree w.r.t the
 <span class='var'>j</span>-th variable in the <span class='var'>i</span>-th function. Originally, we were only using the dense representation <span class='var'>T</span>, which is
 far more convenient to use when building the basis but it slows down the evaluation of
@@ -105,7 +105,7 @@ added.
 
                                                                                     
 <!--l. 63--><p class="noindent" ><a 
- id="x9-1050043"></a></p><hr class="float" /><div class="float" 
+ id="x9-1060043"></a></p><hr class="float" /><div class="float" 
 >
                                                                                     
 
@@ -118,19 +118,19 @@ id="TBL-12-2" /><col
 id="TBL-12-3" /></colgroup><tr  
  style="vertical-align:baseline;" id="TBL-12-1-"><td  style="white-space:nowrap; text-align:left;" id="TBL-12-1-1"  
 class="td11"><a 
- id="dx9-105001"></a><span class='struct'>PNL_BASIS_CANONICAL</span>  </td><td  style="white-space:wrap; text-align:left;" id="TBL-12-1-2"  
+ id="dx9-106001"></a><span class='struct'>PNL_BASIS_CANONICAL</span>  </td><td  style="white-space:wrap; text-align:left;" id="TBL-12-1-2"  
 class="td11"><!--l. 65--><p class="noindent" >     </p></td><td  style="white-space:nowrap; text-align:left;" id="TBL-12-1-3"  
 class="td11">for the Canonical polynomials  </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-12-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-12-2-1"  
 class="td11"><a 
- id="dx9-105002"></a><span class='struct'>PNL_BASIS_HERMITE</span>       </td><td  style="white-space:wrap; text-align:left;" id="TBL-12-2-2"  
+ id="dx9-106002"></a><span class='struct'>PNL_BASIS_HERMITE</span>       </td><td  style="white-space:wrap; text-align:left;" id="TBL-12-2-2"  
 class="td11"><!--l. 66--><p class="noindent" >     </p></td><td  style="white-space:nowrap; text-align:left;" id="TBL-12-2-3"  
 class="td11">for the Hermite polynomials     </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-12-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-12-3-1"  
 class="td11"><a 
- id="dx9-105003"></a><span class='struct'>PNL_BASIS_TCHEBYCHEV</span></td><td  style="white-space:wrap; text-align:left;" id="TBL-12-3-2"  
+ id="dx9-106003"></a><span class='struct'>PNL_BASIS_TCHEBYCHEV</span></td><td  style="white-space:wrap; text-align:left;" id="TBL-12-3-2"  
 class="td11"><!--l. 67--><p class="noindent" >     </p></td><td  style="white-space:nowrap; text-align:left;" id="TBL-12-3-3"  
 class="td11">for the Tchebychev polynomials</td>
 </tr><tr  
@@ -139,8 +139,8 @@ class="td11">                          </td></tr></table></div>
  <div class="caption" 
 ><span class="id">Table&#x00A0;3: </span><span  
 class="content">Names of the bases. See also function <a 
-href="#x9-1070007.2">pnl_basis_type_register</a> to register more
-basis types.</span></div><!--tex4ht:label?: x9-1050043 -->
+href="#x9-1080007.2">pnl_basis_type_register</a> to register more
+basis types.</span></div><!--tex4ht:label?: x9-1060043 -->
                                                                                     
 
                                                                                     
@@ -177,33 +177,33 @@ src="pnl-manual23x.png" alt="{n=m}"  class="left" align="middle" /></sub>.
 class="newline" />
 </p>
 <!--l. 81--><p class="noindent" ><span class="paragraphHead"><a 
- id="x9-1060007.1"></a><span 
+ id="x9-1070007.1"></a><span 
 class="ec-lmbx-10x-x-109">Standard multivariate functions.</span></span>
 These functions are supposed to be <a 
-href="pnl-manualse13.html#x15-12700013.1"><span class='struct'>PnlRnFuncR</span></a>.
+href="pnl-manualse13.html#x15-12800013.1"><span class='struct'>PnlRnFuncR</span></a>.
 </p><!--l. 83--><p class="noindent" >To make this toolbox more complete, it is now possible to add some extra functions, which are not
 tensor product. They are stored using an independent mechanism in <span class='var'>func_list</span>. These additional
 functions are only taken into account by the methods <a 
-href="#x9-1070007.2">pnl_basis_i</a>, <a 
-href="#x9-1070007.2">pnl_basis_i_vect</a>,
+href="#x9-1080007.2">pnl_basis_i</a>, <a 
+href="#x9-1080007.2">pnl_basis_i_vect</a>,
 <a 
-href="#x9-1070007.2">pnl_basis_eval</a> and <a 
-href="#x9-1070007.2">pnl_basis_eval_vect</a>. Note in particular that it is not possible to
+href="#x9-1080007.2">pnl_basis_eval</a> and <a 
+href="#x9-1080007.2">pnl_basis_eval_vect</a>. Note in particular that it is not possible to
 differentiate these functions. To add an extra function to an existing <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a>, call the function
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a>, call the function
 <a 
-href="#x9-1070007.2">pnl_basis_add_function</a>.
+href="#x9-1080007.2">pnl_basis_add_function</a>.
 </p><!--l. 91--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">7.2   </span> <a 
- id="x9-1070007.2"></a>Functions</h4>
+ id="x9-1080007.2"></a>Functions</h4>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx9-107001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_type_register</span></span>&#x00A0;(<span class='args'>const char *name, double (*f)(double, int), double
      (*Df)(double, int), double (*D2f)(double, int)</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Register a new basis type and return the index to be passed to <a 
-href="#x9-1070007.2">pnl_basis_create</a> .
+href="#x9-1080007.2">pnl_basis_create</a> .
      The variable <span class='var'>name</span> is a unique string identifier of the family. The variables <span class='var'>f</span>, <span class='var'>Df</span>, <span class='var'>D2f</span> are the
      one dimensional basis functions, its first and second order derivatives. Each of these functions
      must return a <span class='var'>double</span> and take two arguments : the first one is the point at which evaluating
@@ -233,38 +233,38 @@ href="#x9-1070007.2">pnl_basis_create</a> .
      <!--l. 115--><p class="nopar" >
      </p></li>
      <li class="itemize"><a 
- id="dx9-107002"></a> <span class='ret'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> *</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108002"></a> <span class='ret'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> *</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_new</span></span>&#x00A0;(<span class='args'></span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create an empty <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> .
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> .
      </li>
      <li class="itemize"><a 
- id="dx9-107003"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108003"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_print</span></span>&#x00A0;(<span class='args'>const <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>B</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Print the characteristics of a basis.
      </li>
      <li class="itemize"><a 
- id="dx9-107004"></a> <span class='ret'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> *</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108004"></a> <span class='ret'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> *</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_create</span></span>&#x00A0;(<span class='args'>int index, int nb_func, int nb_variates</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create a <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> for the family defined by <span class='var'>index</span> (see Table&#x00A0;<a 
-href="#x9-1050043">3<!--tex4ht:ref: basis_index --></a> and
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> for the family defined by <span class='var'>index</span> (see Table&#x00A0;<a 
+href="#x9-1060043">3<!--tex4ht:ref: basis_index --></a> and
      <a 
-href="#x9-1070007.2">pnl_basis_type_register</a>) with <span class='var'>nb_variates</span> variates. The basis will contain <span class='var'>nb_func</span>.
+href="#x9-1080007.2">pnl_basis_type_register</a>) with <span class='var'>nb_variates</span> variates. The basis will contain <span class='var'>nb_func</span>.
      </li>
      <li class="itemize"><a 
- id="dx9-107005"></a> <span class='ret'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> *</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108005"></a> <span class='ret'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> *</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_create_from_degree</span></span>&#x00A0;(<span class='args'>int index, int degree, int nb_variates</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create a <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> for the family defined by <span class='var'>index</span> (see Table&#x00A0;<a 
-href="#x9-1050043">3<!--tex4ht:ref: basis_index --></a> and
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> for the family defined by <span class='var'>index</span> (see Table&#x00A0;<a 
+href="#x9-1060043">3<!--tex4ht:ref: basis_index --></a> and
      <a 
-href="#x9-1070007.2">pnl_basis_type_register</a>) with total degree less or equal than <span class='var'>degree</span> and <span class='var'>nb_variates</span>
+href="#x9-1080007.2">pnl_basis_type_register</a>) with total degree less or equal than <span class='var'>degree</span> and <span class='var'>nb_variates</span>
      variates. The total degree is the sum of the partial degrees.<br 
 class="newline" />For instance, calling <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl_basis_create_from_degree</span><span 
@@ -299,32 +299,32 @@ src="pnl-manual24x.png" alt="(            )
      <!--l. 158--><p class="nopar" >
      </p></li>
      <li class="itemize"><a 
- id="dx9-107006"></a> <span class='ret'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> *</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108006"></a> <span class='ret'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> *</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_create_from_prod_degree</span></span>&#x00A0;(<span class='args'>int index, int degree, int
      nb_variates</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create a <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> for the family defined by <span class='var'>index</span> (see Table&#x00A0;<a 
-href="#x9-1050043">3<!--tex4ht:ref: basis_index --></a> and
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> for the family defined by <span class='var'>index</span> (see Table&#x00A0;<a 
+href="#x9-1060043">3<!--tex4ht:ref: basis_index --></a> and
      <a 
-href="#x9-1070007.2">pnl_basis_type_register</a>) with total degree less or equal than <span class='var'>degree</span> and <span class='var'>nb_variates</span>
+href="#x9-1080007.2">pnl_basis_type_register</a>) with total degree less or equal than <span class='var'>degree</span> and <span class='var'>nb_variates</span>
      variates. The total degree is the product of <span class='var'>MAX(1, d_i)</span> where the <span class='var'>d_i</span> are the partial
      degrees.
      </li>
      <li class="itemize"><a 
- id="dx9-107007"></a> <span class='ret'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> *</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108007"></a> <span class='ret'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> *</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_create_from_tensor</span></span>&#x00A0;(<span class='args'>int index, PnlMatInt <span 
 class="ts1-lmr10-x-x-109">*</span>T</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create a <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> for the polynomial family defined by <span class='var'>index</span> (see Table&#x00A0;<a 
-href="#x9-1050043">3<!--tex4ht:ref: basis_index --></a>)
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> for the polynomial family defined by <span class='var'>index</span> (see Table&#x00A0;<a 
+href="#x9-1060043">3<!--tex4ht:ref: basis_index --></a>)
      using the basis described by the tensor matrix <span class='var'>T</span>. The number of lines of <span class='var'>T</span> is the number of
      functions of the basis whereas the numbers of columns of <span class='var'>T</span> is the number of variates of the
      functions. Note that <span class='var'>T</span> is not copied inside this function but only its address is stored, so
      <span 
 class="ec-lmbx-10x-x-109">never </span>free <span class='var'>T</span>. It will be freed when calling <a 
-href="#x9-1070007.2">pnl_basis_free</a> on the returned object.
+href="#x9-1080007.2">pnl_basis_free</a> on the returned object.
      i<br 
 class="newline" />Here is an example of a tensor matrix. Assume you are working with three variate functions,
      the basis <span class="obeylines-h"><span class="verb"><span 
@@ -354,53 +354,53 @@ src="pnl-manual25x.png" alt="(          )
      <!--l. 192--><p class="nopar" >
      </p></li>
      <li class="itemize"><a 
- id="dx9-107008"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108008"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_add_function</span></span>&#x00A0;(<span class='args'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, <a 
-href="pnl-manualse13.html#x15-12700013.1"><span class='struct'>PnlRnFuncR</span></a> <span 
+href="pnl-manualse13.html#x15-12800013.1"><span class='struct'>PnlRnFuncR</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>f</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Add the function <span class='var'>f</span> to the already existing basis <span class='var'>b</span>.
      </li>
      <li class="itemize"><a 
- id="dx9-107009"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108009"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_clone</span></span>&#x00A0;(<span class='args'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>dest, const <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>src</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Clone <span class='var'>src</span> into <span class='var'>dest</span>. The basis <span class='var'>dest</span> must already exist before calling this
      function. On exit, <span class='var'>dest</span> and <span class='var'>src</span> are identical and independent.
      </li>
      <li class="itemize"><a 
- id="dx9-107010"></a> <span class='ret'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+ id="dx9-108010"></a> <span class='ret'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_copy</span></span>&#x00A0;(<span class='args'>const <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>B</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Create a copy of <span class='var'>B</span>.
      </li>
      <li class="itemize"><a 
- id="dx9-107011"></a> <span class='ret'>void </span>&#x00A0;<span class='fun'><span 
+ id="dx9-108011"></a> <span class='ret'>void </span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_set_from_tensor</span></span>&#x00A0;(<span class='args'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, int index, const <a 
 href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMatInt</span></a>
      <span 
 class="ts1-lmr10-x-x-109">*</span>T</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Set an alredy existing basis <span class='var'>b</span> to a polynomial family defined by <span class='var'>index</span> (see
      Table&#x00A0;<a 
-href="#x9-1050043">3<!--tex4ht:ref: basis_index --></a>) using the basis described by the tensor matrix <span class='var'>T</span>. The number of lines of <span class='var'>T</span> is the
+href="#x9-1060043">3<!--tex4ht:ref: basis_index --></a>) using the basis described by the tensor matrix <span class='var'>T</span>. The number of lines of <span class='var'>T</span> is the
      number of functions of the basis whereas the numbers of columns of <span class='var'>T</span> is the number of
      variates of the functions. <br 
 class="newline" />Same function as <a 
-href="#x9-1070007.2">pnl_basis_create_from_tensor</a> except that it operates on an already
+href="#x9-1080007.2">pnl_basis_create_from_tensor</a> except that it operates on an already
      existing basis.
      </li>
      <li class="itemize"><a 
- id="dx9-107012"></a> <span class='ret'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+ id="dx9-108012"></a> <span class='ret'><a 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_create_from_hyperbolic_degree</span></span>&#x00A0;(<span class='args'>int index, double degree,
      double q, int n</span>)<br 
@@ -430,24 +430,24 @@ class="lmmi-10x-x-109">degree</span>. This kind of basis based on
      interaction.
      </li>
      <li class="itemize"><a 
- id="dx9-107013"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108013"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_free</span></span>&#x00A0;(<span class='args'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">**</span>basis</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Free a <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> created by <a 
-href="#x9-1070007.2">pnl_basis_create</a>. Beware that <span class='var'>basis</span> is the address
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> created by <a 
+href="#x9-1080007.2">pnl_basis_create</a>. Beware that <span class='var'>basis</span> is the address
      of a <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>.
                                                                                     
 
                                                                                     
      </li>
      <li class="itemize"><a 
- id="dx9-107014"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108014"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_del_elt</span></span>&#x00A0;(<span class='args'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>B, const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVectInt</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>d</span>)<br 
@@ -455,16 +455,16 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Remove 
      <span class='var'>B</span>.
      </li>
      <li class="itemize"><a 
- id="dx9-107015"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108015"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_del_elt_i</span></span>&#x00A0;(<span class='args'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>B, int i</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Remove the <span class='var'>i-th</span> element of basis <span class='var'>B</span>.
      </li>
      <li class="itemize"><a 
- id="dx9-107016"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108016"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_add_elt</span></span>&#x00A0;(<span class='args'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>B, const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVectInt</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>d</span>)<br 
@@ -497,7 +497,7 @@ by
 </p>
 <table 
 class="equation"><tr><td><a 
- id="x9-107017r1"></a>
+ id="x9-108017r1"></a>
 <center class="math-display" >
 <img 
 src="pnl-manual27x.png" alt="         (               )
@@ -508,9 +508,9 @@ x &#x2208; D &#x21A6;-&#x2192;   xi --(bi +-ai)&#x2215;2
 </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx9-107018"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108018"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_set_domain</span></span>&#x00A0;(<span class='args'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>B, const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>a, const <a 
@@ -518,14 +518,14 @@ href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> 
 class="ts1-lmr10-x-x-109">*</span>b</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>This function declares <span class='var'>B</span> as a centered and normalised basis as defined by
      Equation&#x00A0;<a 
-href="#x9-107017r1">1<!--tex4ht:ref: basis_reduced --></a>. Calling this function is equivalent to calling <a 
-href="#x9-1070007.2">pnl_basis_set_reduced</a> with
+href="#x9-108017r1">1<!--tex4ht:ref: basis_reduced --></a>. Calling this function is equivalent to calling <a 
+href="#x9-1080007.2">pnl_basis_set_reduced</a> with
      <span class='var'>center=(b+a)/2</span> and <span class='var'>scale=(b-a)/2</span>.
      </li>
      <li class="itemize"><a 
- id="dx9-107019"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108019"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_set_reduced</span></span>&#x00A0;(<span class='args'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>B, const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>center, const <a 
@@ -549,9 +549,9 @@ x &#x2208; D &#x21A6;- &#x2192;      scalei    i=1,&#x22C5;&#x22C5;&#x22C5;,d
      </p></li></ul>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx9-107020"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108020"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_fit_ls</span></span>&#x00A0;(<span class='args'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>P, <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>coef, <a 
@@ -584,9 +584,9 @@ class="lmmi-8">i</span></sub>. The function to be
      <span class='var'>x</span>.
      </p></li>
      <li class="itemize"><a 
- id="dx9-107021"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108021"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_ik_vect</span></span>&#x00A0;(<span class='args'>const <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>x, int i, int
@@ -612,9 +612,9 @@ class="lmmi-8">k</span></sub> of the <span class='var'>i-th</span> basis functio
      the point <span class='var'>x</span>.
      </li>
      <li class="itemize"><a 
- id="dx9-107022"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108022"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_i_vect</span></span>&#x00A0;(<span class='args'>const <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>x, int i</span>)<br 
@@ -638,9 +638,9 @@ class="rm-lmr-10x-x-109">)</span>.
                                                                                     
      </li>
      <li class="itemize"><a 
- id="dx9-107023"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108023"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_i_D_vect</span></span>&#x00A0;(<span class='args'>const <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>x, int i, int
@@ -665,9 +665,9 @@ class="lmmi-10x-x-109">x</span><span
 class="rm-lmr-10x-x-109">)</span>.
      </li>
      <li class="itemize"><a 
- id="dx9-107024"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108024"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_i_D2_vect</span></span>&#x00A0;(<span class='args'>const <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>x, int i, int j1, int
@@ -697,9 +697,9 @@ class="lmmi-10x-x-109">x</span><span
 class="rm-lmr-10x-x-109">)</span>.
      </li>
      <li class="itemize"><a 
- id="dx9-107025"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108025"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_eval_derivs_vect</span></span>&#x00A0;(<span class='args'>const <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>coef, const
@@ -727,15 +727,15 @@ class="lmsy-10x-x-109">&#x22C5;</span><span
 class="rm-lmr-10x-x-109">) </span>at the point <span class='var'>x</span>. On output, <span class='var'>fx</span> contains the value of the function, <span class='var'>Dfx</span> its
      gradient and <span class='var'>D2fx</span> its Hessian matrix. This function is optimized and performs much
      better than calling <a 
-href="#x9-1070007.2">pnl_basis_eval</a>, <a 
-href="#x9-1070007.2">pnl_basis_eval_D</a> and <a 
-href="#x9-1070007.2">pnl_basis_eval_D2</a>
+href="#x9-1080007.2">pnl_basis_eval</a>, <a 
+href="#x9-1080007.2">pnl_basis_eval_D</a> and <a 
+href="#x9-1080007.2">pnl_basis_eval_D2</a>
      sequentially.
      </li>
      <li class="itemize"><a 
- id="dx9-107026"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108026"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_eval_vect</span></span>&#x00A0;(<span class='args'>const <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>basis, const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>coef, const <a 
@@ -744,7 +744,7 @@ href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a>
 class="ts1-lmr10-x-x-109">*</span>x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the linear combination of <span class='var'>P_k(x)</span> defined by <span class='var'>coef</span>. Given
      the coefficients computed by the function <a 
-href="#x9-1070007.2">pnl_basis_fit_ls</a>, this function returns
+href="#x9-1080007.2">pnl_basis_fit_ls</a>, this function returns
      <span 
 class="lmex-10">&#x2211;</span>
        <sub><span 
@@ -760,9 +760,9 @@ class="lmmi-10x-x-109">x</span></span><span
 class="rm-lmr-10x-x-109">)</span>.
      </li>
      <li class="itemize"><a 
- id="dx9-107027"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108027"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_eval_D_vect</span></span>&#x00A0;(<span class='args'>const <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>basis, const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>coef, const
@@ -771,7 +771,7 @@ href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> 
 class="ts1-lmr10-x-x-109">*</span>x, int i</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the derivative with respect to <span class='var'>x_i</span> of the linear combination of
      <span class='var'>P_k(x)</span> defined by <span class='var'>coef</span>. Given the coefficients computed by the function <a 
-href="#x9-1070007.2">pnl_basis_fit_ls</a>,
+href="#x9-1080007.2">pnl_basis_fit_ls</a>,
      this function returns <span 
 class="lmmi-10x-x-109">&#x2202;</span><sub><span 
 class="lmmi-8">x</span><sub><span 
@@ -791,9 +791,9 @@ class="rm-lmr-10x-x-109">) </span>The index <span class='var'>i</span> may vary 
      <span class='var'>P-&#x003E;nb_variates - 1</span>.
      </li>
      <li class="itemize"><a 
- id="dx9-107028"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108028"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_eval_D2_vect</span></span>&#x00A0;(<span class='args'>const <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>basis, const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>coef, const
@@ -802,7 +802,7 @@ href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> 
 class="ts1-lmr10-x-x-109">*</span>x, int i, int j</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the derivative with respect to <span class='var'>x_i</span> of the linear combination of
      <span class='var'>P_k(x)</span> defined by <span class='var'>coef</span>. Given the coefficients computed by the function <a 
-href="#x9-1070007.2">pnl_basis_fit_ls</a>,
+href="#x9-1080007.2">pnl_basis_fit_ls</a>,
      this function returns <span 
 class="lmmi-10x-x-109">&#x2202;</span><sub><span 
 class="lmmi-8">x</span><sub><span 
@@ -829,88 +829,88 @@ the functions with the <span class="obeylines-h"><span class="verb"><span
 class="ec-lmtt-10x-x-109">_vect</span></span></span> extension. </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx9-107029"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108029"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_ik</span></span>&#x00A0;(<span class='args'>const <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, const double <span 
 class="ts1-lmr10-x-x-109">*</span>x, int i, int k</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
-href="#x9-1070007.2">pnl_basis_ik_vect</a> but takes a C array as the point of
+href="#x9-1080007.2">pnl_basis_ik_vect</a> but takes a C array as the point of
      evaluation.
                                                                                     
 
                                                                                     
      </li>
      <li class="itemize"><a 
- id="dx9-107030"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108030"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_i</span></span>&#x00A0;(<span class='args'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, double <span 
 class="ts1-lmr10-x-x-109">*</span>x, int i</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
-href="#x9-1070007.2">pnl_basis_i_vect</a> but takes a C array as the point of
+href="#x9-1080007.2">pnl_basis_i_vect</a> but takes a C array as the point of
      evaluation.
      </li>
      <li class="itemize"><a 
- id="dx9-107031"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108031"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_i_D</span></span>&#x00A0;(<span class='args'> const <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, const double <span 
 class="ts1-lmr10-x-x-109">*</span>x, int i, int j </span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
-href="#x9-1070007.2">pnl_basis_i_D_vect</a> but takes a C array as the point
+href="#x9-1080007.2">pnl_basis_i_D_vect</a> but takes a C array as the point
      of evaluation.
      </li>
      <li class="itemize"><a 
- id="dx9-107032"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108032"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_i_D2</span></span>&#x00A0;(<span class='args'>const <a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, const double <span 
 class="ts1-lmr10-x-x-109">*</span>x, int i, int j1, int j2</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
-href="#x9-1070007.2">pnl_basis_i_D2_vect</a> but takes a C array as the point
+href="#x9-1080007.2">pnl_basis_i_D2_vect</a> but takes a C array as the point
      of evaluation.
      </li>
      <li class="itemize"><a 
- id="dx9-107033"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108033"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_eval</span></span>&#x00A0;(<span class='args'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>P, <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>coef, double <span 
 class="ts1-lmr10-x-x-109">*</span>x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
-href="#x9-1070007.2">pnl_basis_eval_vect</a> but takes a C array as the point
+href="#x9-1080007.2">pnl_basis_eval_vect</a> but takes a C array as the point
      of evaluation.
      </li>
      <li class="itemize"><a 
- id="dx9-107034"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108034"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_eval_D</span></span>&#x00A0;(<span class='args'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>P, <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>coef, double <span 
 class="ts1-lmr10-x-x-109">*</span>x, int i</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
-href="#x9-1070007.2">pnl_basis_eval_D_vect</a> but takes a C array as the
+href="#x9-1080007.2">pnl_basis_eval_D_vect</a> but takes a C array as the
      point of evaluation.
      </li>
      <li class="itemize"><a 
- id="dx9-107035"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108035"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_eval_D2</span></span>&#x00A0;(<span class='args'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>P, <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>coef, double <span 
 class="ts1-lmr10-x-x-109">*</span>x, int i, int j</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
-href="#x9-1070007.2">pnl_basis_eval_D2_vect</a> but takes a C array as the
+href="#x9-1080007.2">pnl_basis_eval_D2_vect</a> but takes a C array as the
      point of evaluation.
      </li>
      <li class="itemize"><a 
- id="dx9-107036"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx9-108036"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_eval_derivs</span></span>&#x00A0;(<span class='args'><a 
-href="#x9-1040007.1"><span class='struct'>PnlBasis</span></a> <span 
+href="#x9-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>P, <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>coef, double <span 
@@ -922,7 +922,7 @@ class="ts1-lmr10-x-x-109">*</span>Dfx, <a
 href="pnl-manualse4.html#x6-470004.3.1"><span class='struct'>PnlMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>D2fx</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
-href="#x9-1070007.2">pnl_basis_eval_derivs_vect</a> but takes a C array as
+href="#x9-1080007.2">pnl_basis_eval_derivs_vect</a> but takes a C array as
      the point of evaluation.</li></ul>
                                                                                     
 
