@@ -182,3 +182,24 @@ static char pnl_sp_mat_int_label[] = "PnlSpMatrixInt";
 #include "pnl/pnl_templates_off.h"
 #undef  BASE_INT
 
+/**
+ * Test if two integer sparse matrices are equal
+ *
+ * @param Sp1  a sparse matrix
+ * @param Sp2  a sparse matrix
+ * @return TRUE or FALSE
+ */
+int pnl_sp_mat_int_isequal(const PnlSpMatInt *Sp1, const PnlSpMatInt *Sp2)
+{
+  int k;
+  if ((Sp1->m != Sp2->m) || (Sp1->n != Sp1->n) || (Sp1->nz != Sp2->nz)) return FALSE;
+  for (k = 0; k < Sp1->m; k++)
+    {
+      if (Sp1->I[k] != Sp2->I[k]) return FALSE;
+    }
+  for (k = 0; k < Sp1->nz; k++)
+    {
+      if ((Sp1->J[k] != Sp2->J[k]) || (Sp1->array[k] != Sp2->array[k])) return FALSE;
+    }
+  return TRUE;
+}

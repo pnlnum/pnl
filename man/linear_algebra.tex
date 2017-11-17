@@ -1992,6 +1992,18 @@ same size (m, n, nz) and hold the same values. Return \var{TRUE} or \var{FALSE}.
   match \var{A*x}. The vectors \var{x} and \var{y} must be different.
 \end{itemize}
 
+\paragraph{Comparison functions}
+
+\begin{itemize}
+  \item \describefun{int}{pnl_sp_mat_isequal}{const \PnlSpMat \ptr x, const \PnlSpMat \ptr y, double abserr}
+    \sshortdescribe Test if two sparse matrices are equal up to \var{err} component--wise. The error \var{err} is either relative or absolute depending on the magnitude of the components. Return \var{TRUE} or \var{FALSE}.
+  \item \describefun{int}{pnl_sp_mat_isequal_abs}{const \PnlSpMat \ptr x, const \PnlSpMat \ptr y, double relerr}
+    \sshortdescribe Test if two sparse matrices are equal up to an absolute error \var{abserr} component--wise. Return \var{TRUE} or \var{FALSE}.
+  \item \describefun{int}{pnl_sp_mat_isequal_rel}{const \PnlSpMat \ptr x, const \PnlSpMat \ptr y, double err}
+    \sshortdescribe Test if two sparse matrices are equal up to a relative error \var{relerr} component--wise. Return \var{TRUE} or \var{FALSE}.
+\end{itemize}
+
+
 \subsection{Hyper Matrices}
 \subsubsection{Short description}
 

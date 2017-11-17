@@ -384,28 +384,78 @@ TYPE(PnlSpMat) *FUNCTION(pnl_sp_mat, create_from_mat)(const TYPE(PnlMat) *M)
   return Sp;
 }
 
+#if defined(BASE_DOUBLE) || defined(BASE_PNL_COMPLEX)
 /**
- * Compare two sparse matrices
+ * Test if two sparse matrices are equal up to err.
+ * This function applies pnl_isequal to each element of the matrix.
  *
  * @param Sp1  a sparse matrix
  * @param Sp2  a sparse matrix
- *
- * @return  TRUE or FALSE
+ * @param err the maximum error
+ * @return TRUE or FALSE
  */
-int FUNCTION(pnl_sp_mat, eq)(const TYPE(PnlSpMat) *Sp1, const TYPE(PnlSpMat) *Sp2)
+int FUNCTION(pnl_sp_mat, isequal)(const TYPE(PnlSpMat) * Sp1, const TYPE(PnlSpMat) * Sp2, double err)
 {
   int k;
   if ((Sp1->m != Sp2->m) || (Sp1->n != Sp1->n) || (Sp1->nz != Sp2->nz)) return FALSE;
-  for (k = 0 ; k < Sp1->m ; k++)
+  for (k = 0; k < Sp1->m; k++)
     {
       if (Sp1->I[k] != Sp2->I[k]) return FALSE;
     }
-  for (k = 0 ; k < Sp1->nz ; k++)
+  for (k = 0; k < Sp1->nz; k++)
     {
-      if ((Sp1->J[k] != Sp2->J[k]) || NEQ(Sp1->array[k], Sp2->array[k])) return FALSE;
+      if ((Sp1->J[k] != Sp2->J[k]) || !FUNCTION(pnl, isequal)(Sp1->array[k], Sp2->array[k], err)) return FALSE;
     }
   return TRUE;
 }
+
+/**
+ * Test if two matrices are equal up to an absolute precision of abserr on each component
+ *
+ * @param Sp1  a sparse matrix
+ * @param Sp2  a sparse matrix
+ * @param abserr the maximum relative error
+ * @return TRUE or FALSE
+ */
+int FUNCTION(pnl_sp_mat, isequal_abs)(const TYPE(PnlSpMat) * Sp1, const TYPE(PnlSpMat) * Sp2, double abserr)
+{
+  int k;
+  if ((Sp1->m != Sp2->m) || (Sp1->n != Sp1->n) || (Sp1->nz != Sp2->nz)) return FALSE;
+  for (k = 0; k < Sp1->m; k++)
+    {
+      if (Sp1->I[k] != Sp2->I[k]) return FALSE;
+    }
+  for (k = 0; k < Sp1->nz; k++)
+    {
+      if ((Sp1->J[k] != Sp2->J[k]) || !FUNCTION(pnl, isequal_abs)(Sp1->array[k], Sp2->array[k], abserr)) return FALSE;
+    }
+  return TRUE;
+}
+
+/**
+ * Test if two matrices are equal up to a relative precision of relerr on each component
+ *
+ * @param Sp1  a sparse matrix
+ * @param Sp2  a sparse matrix
+ * @param relerr the maximum relative error
+ * @return TRUE or FALSE
+ */
+int FUNCTION(pnl_sp_mat, isequal_rel)(const TYPE(PnlSpMat) * Sp1, const TYPE(PnlSpMat) * Sp2, double relerr)
+{
+  int k;
+  if ((Sp1->m != Sp2->m) || (Sp1->n != Sp1->n) || (Sp1->nz != Sp2->nz)) return FALSE;
+  for (k = 0; k < Sp1->m; k++)
+    {
+      if (Sp1->I[k] != Sp2->I[k]) return FALSE;
+    }
+  for (k = 0; k < Sp1->nz; k++)
+    {
+      if ((Sp1->J[k] != Sp2->J[k]) || !FUNCTION(pnl, isequal_abs)(Sp1->array[k], Sp2->array[k], relerr)) return FALSE;
+    }
+  return TRUE;
+}
+
+#endif /* efined(BASE_DOUBLE) || defined(BASE_PNL_COMPLEX) */
 
 /**
  *  Add x to non zero elements of M. To add x to all elements, first convert M

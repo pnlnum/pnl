@@ -100,13 +100,15 @@ extern void pnl_sp_mat_set(PnlSpMat *M, int i, int j, double x);
 extern double pnl_sp_mat_get(const PnlSpMat *M, int i, int j);
 extern PnlMat* pnl_mat_create_from_sp_mat(const PnlSpMat *M);
 extern PnlSpMat* pnl_sp_mat_create_from_mat(const PnlMat *M);
-extern int pnl_sp_mat_eq(const PnlSpMat *Sp1, const PnlSpMat *Sp2);
 extern void pnl_sp_mat_plus_scalar(PnlSpMat *M, double x);
 extern void pnl_sp_mat_minus_scalar(PnlSpMat *M, double x);
 extern void pnl_sp_mat_mult_scalar(PnlSpMat *M, double x);
 extern void pnl_sp_mat_div_scalar(PnlSpMat *M, double x);
 extern void pnl_sp_mat_mult_vect(PnlVect *y, const PnlSpMat *A, const PnlVect *x);
 extern void pnl_sp_mat_lAxpby (double lambda, const PnlSpMat *A, const PnlVect *x, double b, PnlVect *y);
+extern int pnl_sp_mat_isequal_abs(const PnlSpMat *x, const PnlSpMat *y, double abserr);
+extern int pnl_sp_mat_isequal_rel(const PnlSpMat *x, const PnlSpMat *y, double relerr);
+extern int pnl_sp_mat_isequal(const PnlSpMat *x, const PnlSpMat *y, double err);
 
 /*@}*/
 
@@ -147,7 +149,7 @@ extern void pnl_sp_mat_int_set(PnlSpMatInt *M, int i, int j, int x);
 extern int pnl_sp_mat_int_get(const PnlSpMatInt *M, int i, int j);
 extern PnlMatInt* pnl_mat_int_create_from_sp_mat (const PnlSpMatInt *M);
 extern PnlSpMatInt* pnl_sp_mat_int_create_from_mat(const PnlMatInt *M);
-extern int pnl_sp_mat_int_eq(const PnlSpMatInt *Sp1, const PnlSpMatInt *Sp2);
+extern int pnl_sp_mat_int_isequal(const PnlSpMatInt *Sp1, const PnlSpMatInt *Sp2);
 extern void pnl_sp_mat_int_plus_scalar(PnlSpMatInt *M, int x);
 extern void pnl_sp_mat_int_minus_scalar(PnlSpMatInt *M, int x);
 extern void pnl_sp_mat_int_mult_scalar(PnlSpMatInt *M, int x);
@@ -194,13 +196,15 @@ extern void pnl_sp_mat_complex_set(PnlSpMatComplex *M, int i, int j, dcomplex x)
 extern dcomplex pnl_sp_mat_complex_get(const PnlSpMatComplex *M, int i, int j);
 extern PnlMatComplex* pnl_mat_complex_create_from_sp_mat (const PnlSpMatComplex *M);
 extern PnlSpMatComplex* pnl_sp_mat_complex_create_from_mat(const PnlMatComplex *M);
-extern int pnl_sp_mat_complex_eq(const PnlSpMatComplex *Sp1, const PnlSpMatComplex *Sp2);
 extern void pnl_sp_mat_complex_plus_scalar(PnlSpMatComplex *M, dcomplex x);
 extern void pnl_sp_mat_complex_minus_scalar(PnlSpMatComplex *M, dcomplex x);
 extern void pnl_sp_mat_complex_mult_scalar(PnlSpMatComplex *M, dcomplex x);
 extern void pnl_sp_mat_complex_div_scalar(PnlSpMatComplex *M, dcomplex x);
 extern void pnl_sp_mat_complex_mult_vect(PnlVectComplex *y, const PnlSpMatComplex *A, const PnlVectComplex *x);
 extern void pnl_sp_mat_complex_lAxpby (dcomplex lambda, const PnlSpMatComplex *A, const PnlVectComplex *x, dcomplex b, PnlVectComplex *y);
+extern int pnl_sp_mat_complex_isequal_abs(const PnlSpMatComplex *x, const PnlSpMatComplex *y, double abserr);
+extern int pnl_sp_mat_complex_isequal_rel(const PnlSpMatComplex *x, const PnlSpMatComplex *y, double relerr);
+extern int pnl_sp_mat_complex_isequal(const PnlSpMatComplex *x, const PnlSpMatComplex *y, double err);
 
 /*@}*/
 /*@}*/
