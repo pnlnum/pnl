@@ -1936,10 +1936,18 @@ for integer, float or complex base data according to the following table
 \item \describefun{\PnlMat\ptr }{pnl_mat_create_from_sp_mat}{const \PnlSpMat \ptr M}
   \sshortdescribe Create a dense \PnlMat from a spare one.
 \item \describefun{\PnlSpMat \ptr }{pnl_sp_mat_create_from_mat}{const \PnlMat \ptr M}
-\sshortdescribe Create a sparse matrix from a dense one.
-\item \describefun{int}{pnl_sp_mat_eq}{const \PnlSpMat \ptr Sp1, const \PnlSpMat \ptr Sp2}
-\sshortdescribe Test if two sparse matrices are equal, ie. if they have the
-same size (m, n, nz) and hold the same values. Return \var{TRUE} or \var{FALSE}.
+  \sshortdescribe Create a sparse matrix from a dense one.
+\item \describefun{void}{pnl_sp_mat_create_from_file}{char *file}
+  \sshortdescribe Read a sparse matrix from the file with name \var{file}. We use the Matrix Market Exchange Format
+  \begin{verbatim}
+M  N  L                                   | <--- rows, columns, entries
+I1  J1  A(I1, J1)                         | <--+
+I2  J2  A(I2, J2)                         |    |
+I3  J3  A(I3, J3)                         |    |-- L lines
+    . . .                                 |    |
+IL JL  A(IL, JL)                          | <--+
+  \end{verbatim}
+  The format \verb!(I1, J1) A(I1, J1)! is also accepted.
 \end{itemize}
 
 \paragraph{Accessing elements}
@@ -1976,7 +1984,7 @@ same size (m, n, nz) and hold the same values. Return \var{TRUE} or \var{FALSE}.
 \begin{itemize}
 \item \describefun{void}{pnl_sp_mat_fprint}{FILE \ptr fic, const \PnlSpMat\ptr  M}
   \sshortdescribe Print a sparse matrix to a file descriptor using the format
-  \var{(row, col) --> val}.
+  \var{(row, col) --> val}. The file can be read by \reffun{pnl_sp_mat_create_from_file}.
 \item \describefun{void}{pnl_sp_mat_print}{const \PnlSpMat\ptr  M}
   \sshortdescribe Same as \reffun{pnl_sp_mat_fprint} but print to standard
   output.

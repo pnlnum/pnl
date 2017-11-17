@@ -119,7 +119,7 @@ void FUNCTION(pnl_sp_mat, fprint)(FILE *fic, const TYPE(PnlSpMat)* M)
       int k2 = M->I[i + 1];
       for (k = k1 ; k < k2 ; k++)
         {
-          fprintf(fic, "(%d, %d) --> ", i, M->J[k]);
+          fprintf(fic, "(%d, %d) ", i, M->J[k]);
           fprintf(fic, OUT_FORMAT "\n", OUT_PUT_FORMAT(M->array[k]));
         }
     }
@@ -382,6 +382,84 @@ TYPE(PnlSpMat) *FUNCTION(pnl_sp_mat, create_from_mat)(const TYPE(PnlMat) *M)
     }
   Sp->I[M->m] = Sp->nz;
   return Sp;
+}
+
+TYPE(PnlSpMat)* FUNCTION(pnl_sp_mat,create_from_file)(const char *file)
+{
+  char car, prev = '\0', empty = 1, comment = '#';
+  TYPE(PnlSpMat) *M;
+  int m, n, nz, i, row_prev, row, col;
+  BASE *data;
+  FILE *FIC = NULL;
+
+  if ((FIC = fopen(file, "r")) == NULL)
+    {
+      PNL_ERROR("Cannot open file", "FUNCTION(pnl_sp_mat,create_from_file)");
+    }
+
+  /* Read the dimensions of the sparse matrix */
+  while (1)
+    {
+      /* Remove leading spaces */
+      while ((car = fgetc(FIC)) == ' ' || car == '\t') continue;
+      /* Ignore comments */
+      if (car == comment)
+        {
+          while ((car = fgetc(FIC)) != '\n' && car != EOF) continue;
+        }
+      else
+        {
+          ungetc(car, FIC);
+          break;
+        }
+    }
+    if (fscanf(FIC, "%d%*[ \t]%d%*[ \t]%d", &m, &n, &nz) != 3)
+    {
+      PNL_ERROR("Wrong file format", "FUNCTION(pnl_sp_mat,create_from_file)")
+    }
+    while ((car = fgetc(FIC)) != '\n') continue;
+    M = FUNCTION(pnl_sp_mat,create)(m, n, nz);
+    data = M->array;
+    /* Now, we assume that the entries are sorted according to a row-wise storage */
+    row_prev = 0;
+    for (i = 0; i < nz; i++)
+    {
+      /* Remove leading spaces */
+      while ((car = fgetc(FIC)) == ' ' || car == '\t') continue;
+      /* Ignore comments */
+      if (car == comment)
+        {
+          while ((car = fgetc(FIC)) != '\n' && car != EOF) continue;
+          i--;
+        }
+      else
+        {
+          ungetc(car, FIC);
+          /* Drop '(' if any */
+          fscanf(FIC, "%*[ \t(]");
+          if (fscanf(FIC, "%d%*[, \t]%d", &row, &col) != 2)
+          {
+            PNL_ERROR("Wrong file format", "FUNCTION(pnl_sp_mat,create_from_file)")
+          }
+          if (fscanf(FIC, "%*[): \t]" IN_FORMAT, IN_PUT_FORMAT(data)) == MULTIPLICITY)
+            {
+              M->J[i] = col;
+              /* Check if we are reading a new row */
+              if (row > row_prev)
+              {
+                int k;
+                for (k = row_prev + 1; k <= row; k++) M->I[k] = i;
+                row_prev = row;
+              }
+              data++;
+              M->nz++;
+            }
+          while ((car = fgetc(FIC)) != '\n' && car != EOF) continue;
+        }
+    }
+    for (i = row + 1; i <= M->m; i++) M->I[i] = nz;
+    fclose(FIC);
+    return M;
 }
 
 #if defined(BASE_DOUBLE) || defined(BASE_PNL_COMPLEX)

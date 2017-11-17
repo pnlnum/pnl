@@ -112,6 +112,20 @@ static void sp_clone_test ()
   pnl_rng_free (&rng);
 }
 
+static void sp_create_from_file_test()
+{
+  PnlSpMat *Msparse = pnl_sp_mat_create_from_file("Data/sparse_M.txt");
+  PnlMat *Mfull = pnl_mat_create_from_file("Data/full_M.txt");
+  PnlSpMat *Msparse_from_full = pnl_sp_mat_create_from_mat(Mfull);
+  if (pnl_sp_mat_isequal(Msparse, Msparse_from_full, PRECISION))
+    pnl_test_set_ok ("sp_mat_create_from_file");
+  else
+    pnl_test_set_fail0("sp_mat_create_from_file");
+  pnl_sp_mat_free(&Msparse);
+  pnl_sp_mat_free(&Msparse_from_full);
+  pnl_mat_free(&Mfull);
+}
+
 #define NEQ_ERR(a,b) (fabs(a-b) > err)
 static void sp_scalar_ops ()
 {
@@ -315,6 +329,7 @@ int main (int argc, char *argv[])
   pnl_test_init (argc, argv);
   sp_get_set_test ();
   sp_create_test ();
+  sp_create_from_file_test ();
   sp_clone_test ();
   sp_scalar_ops ();
   sp_mat_mult_vect ();
