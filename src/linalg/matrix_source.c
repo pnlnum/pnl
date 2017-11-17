@@ -279,7 +279,7 @@ TYPE(PnlMat) *FUNCTION(pnl_mat, create_from_file)(const char *file)
         {
           while ((car = fgetc(FIC)) != '\n' && car != EOF) continue;
         }
-      if (car == '\n') /*  || car == EOF) */
+      if (car == '\n')
         {
           if (!empty)
             {
@@ -290,6 +290,8 @@ TYPE(PnlMat) *FUNCTION(pnl_mat, create_from_file)(const char *file)
         }
       else if (empty && isdigit(car)) empty = 0;
     }
+    /* If there is no blank line at EOF */
+    if (!empty) ++m;
   /* If no data has been read */
   if (m == 0 || n == 0)
     {
@@ -326,7 +328,7 @@ TYPE(PnlMat) *FUNCTION(pnl_mat, create_from_file)(const char *file)
                   data++;
                 }
             }
-          while ((car = fgetc(FIC)) != '\n') continue;
+          while ((car = fgetc(FIC)) != '\n' && car != EOF) continue;
         }
     }
   fclose(FIC);
