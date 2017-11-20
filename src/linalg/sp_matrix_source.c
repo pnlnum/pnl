@@ -113,6 +113,7 @@ void FUNCTION(pnl_sp_mat, clone)(TYPE(PnlSpMat) *clone, const TYPE(PnlSpMat) *M)
 void FUNCTION(pnl_sp_mat, fprint)(FILE *fic, const TYPE(PnlSpMat)* M)
 {
   int i, k;
+  fprintf(fic, "%d %d %d\n", M->m, M->n, M->nz);
   for (i = 0; i < M->m ; i++)
     {
       int k1 = M->I[i];
