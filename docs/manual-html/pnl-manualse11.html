@@ -46,7 +46,7 @@ The system of equations is defined by the following structure <a
 
                                                                                     
 </p>
-<div class="verbatim" id="verbatim-42">
+<div class="verbatim" id="verbatim-43">
 typedef&#x00A0;struct
 &#x00A0;<br />{
 &#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;(*F)&#x00A0;(int&#x00A0;neqn,&#x00A0;double&#x00A0;t,&#x00A0;const&#x00A0;double&#x00A0;*y,&#x00A0;double&#x00A0;*yp,&#x00A0;void&#x00A0;*params);
@@ -82,7 +82,7 @@ href="#x13-11800011.1"><span class='struct'>PnlODEFunc</span></a> at a given poi
 
                                                                                     
 </p>
-<div class="verbatim" id="verbatim-43">
+<div class="verbatim" id="verbatim-44">
 #define&#x00A0;PNL_EVAL_ODEFUNC(Fstruct,&#x00A0;t,&#x00A0;y,&#x00A0;yp)&#x00A0;\
 &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;(*((Fstruct)-&#x003E;F))((Fstruct)-&#x003E;neqn,&#x00A0;t,&#x00A0;y,&#x00A0;yp,&#x00A0;(Fstruct)-&#x003E;params)
 </div>

@@ -37,7 +37,7 @@ class="rm-lmr-8">2</span></sup>).
 
                                                                                     
 </p>
-<div class="verbatim" id="verbatim-39">
+<div class="verbatim" id="verbatim-40">
 typedef&#x00A0;struct&#x00A0;{
 &#x00A0;<br />&#x00A0;&#x00A0;double&#x00A0;(*function)&#x00A0;(double&#x00A0;x,&#x00A0;void&#x00A0;*params);
 &#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;*params;
@@ -57,7 +57,7 @@ point
 
                                                                                     
 </p>
-<div class="verbatim" id="verbatim-40">
+<div class="verbatim" id="verbatim-41">
 #define&#x00A0;PNL_EVAL_FUNC(F,&#x00A0;x)&#x00A0;(*((F)-&#x003E;function))(x,&#x00A0;(F)-&#x003E;params)
 &#x00A0;<br />#define&#x00A0;PNL_EVAL_FUNC2D(F,&#x00A0;x,&#x00A0;y)&#x00A0;(*((F)-&#x003E;function))(x,&#x00A0;y,&#x00A0;(F)-&#x003E;params)
 </div>
