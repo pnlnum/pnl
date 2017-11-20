@@ -22,6 +22,9 @@
       printf (msg);                             \
     }
 
+/* Check comment character when reading matrices from file */
+#define iscomment(c) (((c) == '#') || ((c) == '%'))
+
 extern double pnl_d1mach (int i);
 extern double pnl_dlamch (char *);
 

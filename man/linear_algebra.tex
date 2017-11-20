@@ -1,4 +1,4 @@
-\section{Linear Algebra}
+  \section{Linear Algebra}
 
 % vector
 \subsection{Vectors}
@@ -113,7 +113,7 @@ There are no special functions to access the size of a vector, instead the field
 \item \describefun{\PnlVect \ptr }{pnl_vect_create_from_file}
   {const char \ptr file}
   \sshortdescribe Read a vector from a file and creates the corresponding
-  \PnlVect. The data might be stored as a row or column vector. Entries can be separated by spaces, tabs, commas or semicolons. Anything after a '\#' is ignored up to the end of line.
+  \PnlVect. The data might be stored as a row or column vector. Entries can be separated by spaces, tabs, commas or semicolons. Anything after a \verb!#! or \verb!%! is ignored up to the end of the line.
 
 \item \describefun{\PnlVect \ptr }{pnl_vect_copy}{const
     \PnlVect \ptr v}
@@ -710,9 +710,7 @@ and the size of the matrix.
 
 \item \describefun{\PnlMat \ptr }{pnl_mat_create_from_file}{const char \ptr file}
   \sshortdescribe Read a matrix from a file and creates the corresponding
-  \PnlMat. One row of the matrix corresponds to one line of the file and 
-  the elements of a row can be separated by spaces, tabs, commas or semicolons. Anything after a '\#' is
-  ignored up to the end of line.
+  \PnlMat. One row of the matrix corresponds to one line of the file and the elements of a row can be separated by spaces, tabs, commas or semicolons. Anything after a \verb!#! or \verb!%! is ignored up to the end of the line.
 
 \item \describefun{void}{pnl_mat_free}{\PnlMat \ptr \ptr M}
   \sshortdescribe Free a \PnlMat and sets \var{\ptr M} to \var{NULL} 
@@ -1947,7 +1945,7 @@ I3  J3  A(I3, J3)                         |    |-- L lines
     . . .                                 |    |
 IL JL  A(IL, JL)                          | <--+
   \end{verbatim}
-  The format \verb!(I1, J1) A(I1, J1)! is also accepted.
+  The format \verb!(I1, J1) A(I1, J1)! is also accepted. Anything after a \verb!#! or \verb!%! is ignored up to the end of the line.
 \end{itemize}
 
 \paragraph{Accessing elements}

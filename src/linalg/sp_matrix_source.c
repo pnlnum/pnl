@@ -386,7 +386,7 @@ TYPE(PnlSpMat) *FUNCTION(pnl_sp_mat, create_from_mat)(const TYPE(PnlMat) *M)
 
 TYPE(PnlSpMat)* FUNCTION(pnl_sp_mat,create_from_file)(const char *file)
 {
-  char car, prev = '\0', empty = 1, comment = '#';
+  char car, prev = '\0', empty = 1;
   TYPE(PnlSpMat) *M;
   int m, n, nz, i, row_prev, row, col;
   BASE *data;
@@ -403,7 +403,7 @@ TYPE(PnlSpMat)* FUNCTION(pnl_sp_mat,create_from_file)(const char *file)
       /* Remove leading spaces */
       while ((car = fgetc(FIC)) == ' ' || car == '\t') continue;
       /* Ignore comments */
-      if (car == comment)
+      if (iscomment(car))
         {
           while ((car = fgetc(FIC)) != '\n' && car != EOF) continue;
         }
@@ -427,7 +427,7 @@ TYPE(PnlSpMat)* FUNCTION(pnl_sp_mat,create_from_file)(const char *file)
       /* Remove leading spaces */
       while ((car = fgetc(FIC)) == ' ' || car == '\t') continue;
       /* Ignore comments */
-      if (car == comment)
+      if (iscomment(car))
         {
           while ((car = fgetc(FIC)) != '\n' && car != EOF) continue;
           i--;

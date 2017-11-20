@@ -238,7 +238,7 @@ TYPE(PnlMat) FUNCTION(pnl_mat, wrap_array)(const BASE *x, int m, int n)
  */
 TYPE(PnlMat) *FUNCTION(pnl_mat, create_from_file)(const char *file)
 {
-  char car, prev = '\0', empty = 1, comment = '#';
+  char car, prev = '\0', empty = 1;
   TYPE(PnlMat) *M;
   int m, n, i, j;
   BASE *data;
@@ -254,7 +254,7 @@ TYPE(PnlMat) *FUNCTION(pnl_mat, create_from_file)(const char *file)
   n = 1;
   while ((car = fgetc(FIC)) != '\n' && car != EOF)
     {
-      if (car == comment)
+      if (iscomment(car))
         {
           while ((car = fgetc(FIC)) != '\n' && car != EOF) continue;
           if (!empty)
@@ -275,7 +275,7 @@ TYPE(PnlMat) *FUNCTION(pnl_mat, create_from_file)(const char *file)
   empty = 1;
   while ((car = fgetc(FIC)) != EOF)
     {
-      if (car == comment)
+      if (iscomment(car))
         {
           while ((car = fgetc(FIC)) != '\n' && car != EOF) continue;
         }
@@ -313,7 +313,7 @@ TYPE(PnlMat) *FUNCTION(pnl_mat, create_from_file)(const char *file)
       /* Remove leading spaces */
       while ((car = fgetc(FIC)) == ' ' || car == '\t') continue;
       /* Ignore comments */
-      if (car == comment)
+      if (iscomment(car))
         {
           while ((car = fgetc(FIC)) != '\n' && car != EOF) continue;
           i--;
