@@ -1,0 +1,15 @@
+BasedOnStyle: LLVM
+IndentWidth: 2
+AlwaysBreakAfterReturnType: None
+BreakBeforeBinaryOperators: All
+BreakBeforeBraces: GNU
+BreakBeforeTernaryOperators: true
+Cpp11BracedListStyle: false
+SpaceBeforeParens: ControlStatements
+Standard: Cpp03
+ColumnLimit: 0
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+BinPackArguments: true
+BinPackParameters: true
+AllowShortFunctionsOnASingleLine: Inline
