@@ -19,3 +19,5 @@ CTestTestfile.cmake
 install_manifest.txt
 CMakeCache.txt
 build*
+.vscode
+.ycm_extra_conf.py*
