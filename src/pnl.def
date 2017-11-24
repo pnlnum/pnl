@@ -219,6 +219,9 @@ EXPORTS
     pnl_complex_bessel_rati 
     pnl_complex_bessel_y 
     pnl_complex_bessel_y_scaled 
+    pnl_complex_isequal
+    pnl_complex_isequal_abs
+    pnl_complex_isequal_rel
     pnl_cosm1 
     pnl_d1mach 
     pnl_dcmt_create 
@@ -331,6 +334,9 @@ EXPORTS
     pnl_inv_cdfnor 
     pnl_ipmpar 
     pnl_iround 
+    pnl_isequal
+    pnl_isequal_abs
+    pnl_isequal_rel
     pnl_isfinite 
     pnl_isinf 
     pnl_isnan 
@@ -405,6 +411,9 @@ EXPORTS
     pnl_mat_complex_init 
     pnl_mat_complex_inverse 
     pnl_mat_complex_inverse_with_chol 
+    pnl_mat_complex_isequal
+    pnl_mat_complex_isequal_abs
+    pnl_mat_complex_isequal_rel
     pnl_mat_complex_lAxpby 
     pnl_mat_complex_lget 
     pnl_mat_complex_lget_imag 
@@ -534,6 +543,7 @@ EXPORTS
     pnl_mat_int_get_col 
     pnl_mat_int_get_row 
     pnl_mat_int_init 
+    pnl_mat_int_isequal
     pnl_mat_int_lAxpby 
     pnl_mat_int_lget 
     pnl_mat_int_map 
@@ -591,6 +601,9 @@ EXPORTS
     pnl_mat_int_wrap_vect 
     pnl_mat_inverse 
     pnl_mat_inverse_with_chol 
+    pnl_mat_isequal
+    pnl_mat_isequal_abs
+    pnl_mat_isequal_rel
     pnl_mat_lAxpby 
     pnl_mat_lget 
     pnl_mat_log 
@@ -704,6 +717,19 @@ EXPORTS
     pnl_neginf 
     pnl_normal_density 
     pnl_object_create 
+    pnl_object_load
+    pnl_object_load_into_list
+    pnl_object_mpi_bcast
+    pnl_object_mpi_irecv
+    pnl_object_mpi_isend
+    pnl_object_mpi_pack
+    pnl_object_mpi_pack_size
+    pnl_object_mpi_recv
+    pnl_object_mpi_reduce
+    pnl_object_mpi_send
+    pnl_object_mpi_ssend
+    pnl_object_mpi_unpack
+    pnl_object_save
     pnl_ode_rkf45 
     pnl_ode_rkf45_step 
     pnl_optim_intpoints_bfgs_solve 
@@ -747,6 +773,7 @@ EXPORTS
     pnl_rng_clone 
     pnl_rng_copy 
     pnl_rng_create 
+    pnl_rng_create_from_file
     pnl_rng_dblexp 
     pnl_rng_dcmt_create_array 
     pnl_rng_dcmt_create_array_id 
@@ -765,8 +792,12 @@ EXPORTS
     pnl_rng_normal 
     pnl_rng_poisson 
     pnl_rng_poisson1 
+    pnl_rng_save_to_file
     pnl_rng_sdim 
     pnl_rng_sseed 
+    pnl_rng_state_mpi_pack
+    pnl_rng_state_mpi_pack_size
+    pnl_rng_state_mpi_unpack
     pnl_rng_uni 
     pnl_rng_uni_ab 
     pnl_root_bisection 
@@ -813,14 +844,17 @@ EXPORTS
     pnl_sp_mat_complex_clone 
     pnl_sp_mat_complex_copy 
     pnl_sp_mat_complex_create 
+    pnl_sp_mat_complex_create_from_file
     pnl_sp_mat_complex_create_from_mat 
     pnl_sp_mat_complex_del_row 
     pnl_sp_mat_complex_div_scalar 
-    pnl_sp_mat_complex_eq 
     pnl_sp_mat_complex_fprint 
     pnl_sp_mat_complex_free 
     pnl_sp_mat_complex_get 
     pnl_sp_mat_complex_init 
+    pnl_sp_mat_complex_isequal
+    pnl_sp_mat_complex_isequal_abs
+    pnl_sp_mat_complex_isequal_rel
     pnl_sp_mat_complex_lAxpby 
     pnl_sp_mat_complex_minus_scalar 
     pnl_sp_mat_complex_mult_scalar 
@@ -832,10 +866,10 @@ EXPORTS
     pnl_sp_mat_complex_set 
     pnl_sp_mat_copy 
     pnl_sp_mat_create 
+    pnl_sp_mat_create_from_file
     pnl_sp_mat_create_from_mat 
     pnl_sp_mat_del_row 
     pnl_sp_mat_div_scalar 
-    pnl_sp_mat_eq 
     pnl_sp_mat_fprint 
     pnl_sp_mat_free 
     pnl_sp_mat_get 
@@ -844,14 +878,15 @@ EXPORTS
     pnl_sp_mat_int_clone 
     pnl_sp_mat_int_copy 
     pnl_sp_mat_int_create 
+    pnl_sp_mat_int_create_from_file
     pnl_sp_mat_int_create_from_mat 
     pnl_sp_mat_int_del_row 
     pnl_sp_mat_int_div_scalar 
-    pnl_sp_mat_int_eq 
     pnl_sp_mat_int_fprint 
     pnl_sp_mat_int_free 
     pnl_sp_mat_int_get 
     pnl_sp_mat_int_init 
+    pnl_sp_mat_int_isequal
     pnl_sp_mat_int_lAxpby 
     pnl_sp_mat_int_minus_scalar 
     pnl_sp_mat_int_mult_scalar 
@@ -861,6 +896,9 @@ EXPORTS
     pnl_sp_mat_int_print 
     pnl_sp_mat_int_resize 
     pnl_sp_mat_int_set 
+    pnl_sp_mat_isequal
+    pnl_sp_mat_isequal_abs
+    pnl_sp_mat_isequal_rel
     pnl_sp_mat_lAxpby 
     pnl_sp_mat_minus_scalar 
     pnl_sp_mat_mult_scalar 
@@ -965,6 +1003,9 @@ EXPORTS
     pnl_vect_complex_get_real 
     pnl_vect_complex_init 
     pnl_vect_complex_inv_term 
+    pnl_vect_complex_isequal
+    pnl_vect_complex_isequal_abs
+    pnl_vect_complex_isequal_rel
     pnl_vect_complex_lget 
     pnl_vect_complex_lget_imag 
     pnl_vect_complex_lget_real 
@@ -1067,6 +1108,7 @@ EXPORTS
     pnl_vect_int_get 
     pnl_vect_int_init 
     pnl_vect_int_inv_term 
+    pnl_vect_int_isequal
     pnl_vect_int_less 
     pnl_vect_int_lget 
     pnl_vect_int_map 
@@ -1113,6 +1155,9 @@ EXPORTS
     pnl_vect_int_wrap_subvect 
     pnl_vect_int_wrap_subvect_with_last 
     pnl_vect_inv_term 
+    pnl_vect_isequal
+    pnl_vect_isequal_abs
+    pnl_vect_isequal_rel
     pnl_vect_less 
     pnl_vect_lget 
     pnl_vect_map 
@@ -1186,4 +1231,3 @@ EXPORTS
     pnl_zbiry 
     pnl_zrati 
     pnl_zuni2 
-
