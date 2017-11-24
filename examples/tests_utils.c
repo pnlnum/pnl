@@ -323,7 +323,7 @@ int pnl_test_mat_complex_eq_abs (const PnlMatComplex *X, const PnlMatComplex *Y,
  */
 int pnl_test_mat_int_eq(const PnlMatInt *X, const PnlMatInt *Y, const char *str, const char *fmt, ...)
 {
-  int i, status;
+  int status;
   va_list ap;
   va_start(ap, fmt);
   status = pnl_mat_int_isequal(X, Y);
