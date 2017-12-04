@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0) 
 # Declare a project
 project(my-project CXX)
 
@@ -20,4 +20,5 @@ endif()
 # Adding an executable.
 add_executable(exec-name list_of_source_files)
 target_link_libraries(exec-name ${LIBS})
+add_pnl_postbuild(exec-name)
 
