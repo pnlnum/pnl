@@ -13,15 +13,6 @@ else(PNL_INSTALL_PREFIX)
     set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR} CACHE STRING "Installation prefix." FORCE)
 endif(PNL_INSTALL_PREFIX)
 
-# Compilers
-# if (CC)
-#     set (CMAKE_C_COMPILER ${CC})
-# endif (CC)
-# if (CXX)
-#     set (CMAKE_CXX_COMPILER ${CXX})
-# endif (CXX)
-
-
 if(CROSS_COMPILE)
     include(cross-compile)
     set(MINGW ON)
@@ -54,10 +45,6 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
 endif ()
 
-
-
-enable_language(CXX OPTIONAL)
-
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
     set(PNL_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG}")
     set(PNL_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG}")
@@ -71,9 +58,9 @@ endif ()
 include(CMakeMacroExternInline)
 
 if (WIN32)
-    add_definitions (-DMSDOS)
+    add_definitions(-DMSDOS)
     if (MSVC)
-        set (USE_INTERNAL_BLAS ON)
+        set(USE_INTERNAL_BLAS ON)
     endif (MSVC)
 endif (WIN32)
 
@@ -82,20 +69,19 @@ endif (WIN32)
 if (NOT USE_INTERNAL_BLAS)
     # Has the user supplied a Blas Library?
     if ( (BLAS_LIBRARIES AND (NOT LAPACK_LIBRARIES)) OR ((NOT BLAS_LIBRARIES) AND LAPACK_LIBRARIES) )
-        message (FATAL_ERROR "--> You must specify both BLAS_LIBRARIES and LAPACK_LIBRARIES or none of them.")
+        message(FATAL_ERROR "--> You must specify both BLAS_LIBRARIES and LAPACK_LIBRARIES or none of them.")
     endif ()
 
     if (BLAS_LIBRARIES AND LAPACK_LIBRARIES) 
-        set (BLAS_FOUND true)
-        set (LAPACK_FOUND true)
+        set(BLAS_FOUND true)
+        set(LAPACK_FOUND true)
     else ()
         find_package(BLAS)
         find_package(LAPACK)
     endif (BLAS_LIBRARIES AND LAPACK_LIBRARIES) 
     
     if (BLAS_FOUND AND LAPACK_FOUND)
-        set(LIBS ${LIBS} ${BLAS_LIBRARIES})
-        set(LIBS ${LIBS} ${LAPACK_LIBRARIES})
+        set(LIBS ${LIBS} ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES})
     else ()
         set(USE_INTERNAL_BLAS ON)
     endif (BLAS_FOUND AND LAPACK_FOUND)
@@ -103,12 +89,12 @@ endif (NOT USE_INTERNAL_BLAS)
 
 if (USE_INTERNAL_BLAS)
     set(PNL_HAVE_FORTRAN_COMPILER OFF)
-    set (PNL_HAVE_DPSTRF ON)
+    set(PNL_HAVE_DPSTRF ON)
 else (USE_INTERNAL_BLAS)
     # Check if Fortran is available
     # enable_language(Fortran OPTIONAL)
     if (CMAKE_Fortran_COMPILER_WORKS)
-        message ("Fortran compiler found ${CMAKE_Fortran_COMPILER}")
+        message("Fortran compiler found ${CMAKE_Fortran_COMPILER}")
         set(PNL_HAVE_FORTRAN_COMPILER ON)
         include(FortranCInterface)
         FortranCInterface_HEADER(src/include/pnl/FC.h MACRO_NAMESPACE "FC_")
@@ -125,7 +111,7 @@ endif (USE_INTERNAL_BLAS)
 
 
 if (USE_MPI)
-    set (MPI_FIND_QUIETLY true)
+    set(MPI_FIND_QUIETLY true)
     find_package(MPI)
     if (MPI_C_FOUND)
         set(LIBS ${LIBS} ${MPI_C_LIBRARIES})
