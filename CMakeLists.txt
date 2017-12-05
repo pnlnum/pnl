@@ -154,12 +154,8 @@ endif (NOT SUB_CMAKE_CALL)
 
 
 message ("Generate configure file ${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/pnl_config.h")
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake 
-    ${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/pnl_config.h)
-install(FILES 
-    ${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/pnl_config.h
-    DESTINATION include/pnl
-)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/pnl_config.h)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/pnl_config.h DESTINATION include/pnl)
 
 
 ## Output configuration stuff ##

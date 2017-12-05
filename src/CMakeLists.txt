@@ -30,7 +30,10 @@ SET(pnl_LIB_SRCS
    cumulfunc.c
    finance_function.c
 )
-install(FILES pnl.def DESTINATION lib)
+if (WIN32)
+    install(FILES pnl.def DESTINATION lib)
+    set (pnl_LIB_SRCS ${pnl_LIB_SRCS} pnl.def)
+endif (WIN32)
 
 add_subdirectory(include/pnl)
 foreach(subdir ${SUBDIRS})
@@ -45,11 +48,11 @@ set (pnl_LIB_SRCS ${pnl_LIB_SRCS} include/pnl/build-inline.c)
 add_library(pnl ${LINK_TYPE} ${pnl_LIB_SRCS})
 target_link_libraries(pnl ${LIBS})
 
-if (MINGW)
-    set_target_properties(pnl PROPERTIES 
-        LINK_FLAGS "-Wl,--output-def,${CMAKE_CURRENT_BINARY_DIR}/libpnl.def")
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libpnl.def DESTINATION lib)
-endif (MINGW)
+# if (MINGW)
+#     set_target_properties(pnl PROPERTIES 
+#         LINK_FLAGS "-Wl,--output-def,${CMAKE_CURRENT_BINARY_DIR}/libpnl.def")
+#     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libpnl.def DESTINATION lib)
+# endif (MINGW)
 
 set_target_properties(pnl PROPERTIES 
     SOVERSION ${PNL_VERSION}
