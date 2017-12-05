@@ -126,8 +126,6 @@ if (UNIX)
 endif (UNIX)
 
 # Stuff for CMakeuser.incl
-STRING(REGEX REPLACE ";" " -I" PNL_CPP_FLAGS "${PNL_CPP_FLAGS}" )
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/CMakeuser.incl.in ${CMAKE_CURRENT_BINARY_DIR}/CMakeuser.incl @ONLY)
 
 # Check math function from the standard library
 set(CMAKE_REQUIRED_LIBRARIES ${LIBS})
@@ -150,6 +148,14 @@ add_subdirectory(src)
 if (NOT SUB_CMAKE_CALL)
     enable_testing()
     add_subdirectory(examples)
+    if (UNIX)
+        execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/split_link.sh ${CMAKE_INSTALL_PREFIX} ${CMAKE_BINARY_DIR} OUTPUT_VARIABLE CMAKE_LINK_LIST)
+        list(GET CMAKE_LINK_LIST 0 CMAKE_LINK_COMMAND_FLAGS_BEFORE)
+        list(GET CMAKE_LINK_LIST 1 CMAKE_LINK_COMMAND_FLAGS_AFTER)
+        STRING(REGEX REPLACE ";" " -I" PNL_CPP_FLAGS "${PNL_CPP_FLAGS}" )
+        configure_file(${CMAKE_CURRENT_SOURCE_DIR}/CMakeuser.incl.in ${CMAKE_CURRENT_BINARY_DIR}/CMakeuser.incl @ONLY)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CMakeuser.incl DESTINATION share/pnl)
+    endif (UNIX)
 endif (NOT SUB_CMAKE_CALL)
 
 

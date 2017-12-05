@@ -21,7 +21,7 @@
 ########################################################################
 
 
-# 
+#
 # A few variables fixed by cmake
 #
 INSTALL_PREFIX=@CMAKE_INSTALL_PREFIX@
@@ -35,19 +35,9 @@ endif
 PNL_CPP_FLAGS=@PNL_CPP_FLAGS@
 PNL_C_FLAGS=@PNL_C_FLAGS@
 PNL_CXX_FLAGS=@PNL_CXX_FLAGS@
-
-pnl_includedir=$(INSTALL_PREFIX)/include
-pnl_libdir=$(INSTALL_PREFIX)/lib
-LINK_TXT=$(BUILD_DIR)/examples/CMakeFiles/array_test.dir/link.txt
-# Drop the compiler name, fix after
-CMAKE_LINK_COMMAND1=$(shell cat ${LINK_TXT} | sed -e 's/^[^ ]* //' )
-# Fix libpnl path with full path
-CMAKE_LINK_COMMAND=$(shell echo ${CMAKE_LINK_COMMAND1} | sed "s![^ ]*\(libpnl[^ ]*\.[^ ]*\) !${INSTALL_PREFIX}/lib/\1 !")
-# Get flags at the end of the command
-CMAKE_LINK_COMMAND_FLAGS_AFTER=$(shell echo ${CMAKE_LINK_COMMAND} | sed 's/^.*\.c\.o -o array_test//') 
-# Get flags at the beginning of the command
-CMAKE_LINK_COMMAND_FLAGS_BEFORE=$(shell echo ${CMAKE_LINK_COMMAND} | sed  -e 's/\( [^ ]*\.c\.o\)*//g' -e 's/\(.*\)-o array_test.*/\1/' ) 
-PNL_INCLUDES = -I$(pnl_includedir)
+CMAKE_LINK_COMMAND_FLAGS_BEFORE=@CMAKE_LINK_COMMAND_FLAGS_BEFORE@
+CMAKE_LINK_COMMAND_FLAGS_AFTER=@CMAKE_LINK_COMMAND_FLAGS_AFTER@
+PNL_INCLUDES = -I$(INSTALL_PREFIX)/include
 
 QUIET=--quiet
 
