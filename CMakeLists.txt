@@ -158,30 +158,27 @@ if (NOT SUB_CMAKE_CALL)
     endif (UNIX)
 endif (NOT SUB_CMAKE_CALL)
 
-
-message ("Generate configure file ${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/pnl_config.h")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/pnl_config.h)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/pnl_config.h DESTINATION include/pnl)
 
-
 ## Output configuration stuff ##
-message("C Compiler :             ${CMAKE_C_COMPILER}")
-message("     FLAGS :             ${PNL_C_FLAGS}")
+message("C Compiler: ${CMAKE_C_COMPILER}")
+message("C FLAGS: ${PNL_C_FLAGS}")
 if (CMAKE_CXX_COMPILER_WORKS)
-    message("C++ Compiler :           ${CMAKE_CXX_COMPILER}")
-    message("     FLAGS   :           ${PNL_CXX_FLAGS}")
+    message("C++ Compiler: ${CMAKE_CXX_COMPILER}")
+    message("C++ FLAGS: ${PNL_CXX_FLAGS}")
 endif (CMAKE_CXX_COMPILER_WORKS)
 
-message("Installation directory : ${CMAKE_INSTALL_PREFIX}") 
+message("Installation directory : ${CMAKE_INSTALL_PREFIX}")
 if (BLAS_FOUND AND LAPACK_FOUND)
-    message("Blas:        ${BLAS_LIBRARIES}")
-    message("Lapack:      ${LAPACK_LIBRARIES}")
+    message("Blas: ${BLAS_LIBRARIES}")
+    message("Lapack: ${LAPACK_LIBRARIES}")
 else ()
     message("Using internal Blas & Lapack")
 endif (BLAS_FOUND AND LAPACK_FOUND)
 
 if (MPI_C_FOUND)
-    message("MPI:        ${MPI_C_LIBRARIES}")
+    message("MPI: ${MPI_C_LIBRARIES}")
 else ()
     message ("No MPI installation found.")
 endif (MPI_C_FOUND)
