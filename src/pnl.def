@@ -717,19 +717,6 @@ EXPORTS
     pnl_neginf 
     pnl_normal_density 
     pnl_object_create 
-    pnl_object_load
-    pnl_object_load_into_list
-    pnl_object_mpi_bcast
-    pnl_object_mpi_irecv
-    pnl_object_mpi_isend
-    pnl_object_mpi_pack
-    pnl_object_mpi_pack_size
-    pnl_object_mpi_recv
-    pnl_object_mpi_reduce
-    pnl_object_mpi_send
-    pnl_object_mpi_ssend
-    pnl_object_mpi_unpack
-    pnl_object_save
     pnl_ode_rkf45 
     pnl_ode_rkf45_step 
     pnl_optim_intpoints_bfgs_solve 
@@ -773,7 +760,6 @@ EXPORTS
     pnl_rng_clone 
     pnl_rng_copy 
     pnl_rng_create 
-    pnl_rng_create_from_file
     pnl_rng_dblexp 
     pnl_rng_dcmt_create_array 
     pnl_rng_dcmt_create_array_id 
@@ -792,12 +778,8 @@ EXPORTS
     pnl_rng_normal 
     pnl_rng_poisson 
     pnl_rng_poisson1 
-    pnl_rng_save_to_file
     pnl_rng_sdim 
     pnl_rng_sseed 
-    pnl_rng_state_mpi_pack
-    pnl_rng_state_mpi_pack_size
-    pnl_rng_state_mpi_unpack
     pnl_rng_uni 
     pnl_rng_uni_ab 
     pnl_root_bisection 
