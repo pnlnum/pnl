@@ -387,7 +387,7 @@ TYPE(PnlSpMat) *FUNCTION(pnl_sp_mat, create_from_mat)(const TYPE(PnlMat) *M)
 
 TYPE(PnlSpMat)* FUNCTION(pnl_sp_mat,create_from_file)(const char *file)
 {
-  char car, prev = '\0', empty = 1;
+  char car;
   TYPE(PnlSpMat) *M;
   int m, n, nz, i, row_prev, row, col;
   BASE *data;
@@ -476,7 +476,7 @@ TYPE(PnlSpMat)* FUNCTION(pnl_sp_mat,create_from_file)(const char *file)
 int FUNCTION(pnl_sp_mat, isequal)(const TYPE(PnlSpMat) * Sp1, const TYPE(PnlSpMat) * Sp2, double err)
 {
   int k;
-  if ((Sp1->m != Sp2->m) || (Sp1->n != Sp1->n) || (Sp1->nz != Sp2->nz)) return FALSE;
+  if ((Sp1->m != Sp2->m) || (Sp1->n != Sp2->n) || (Sp1->nz != Sp2->nz)) return FALSE;
   for (k = 0; k < Sp1->m; k++)
     {
       if (Sp1->I[k] != Sp2->I[k]) return FALSE;
@@ -499,7 +499,7 @@ int FUNCTION(pnl_sp_mat, isequal)(const TYPE(PnlSpMat) * Sp1, const TYPE(PnlSpMa
 int FUNCTION(pnl_sp_mat, isequal_abs)(const TYPE(PnlSpMat) * Sp1, const TYPE(PnlSpMat) * Sp2, double abserr)
 {
   int k;
-  if ((Sp1->m != Sp2->m) || (Sp1->n != Sp1->n) || (Sp1->nz != Sp2->nz)) return FALSE;
+  if ((Sp1->m != Sp2->m) || (Sp1->n != Sp2->n) || (Sp1->nz != Sp2->nz)) return FALSE;
   for (k = 0; k < Sp1->m; k++)
     {
       if (Sp1->I[k] != Sp2->I[k]) return FALSE;
@@ -522,7 +522,7 @@ int FUNCTION(pnl_sp_mat, isequal_abs)(const TYPE(PnlSpMat) * Sp1, const TYPE(Pnl
 int FUNCTION(pnl_sp_mat, isequal_rel)(const TYPE(PnlSpMat) * Sp1, const TYPE(PnlSpMat) * Sp2, double relerr)
 {
   int k;
-  if ((Sp1->m != Sp2->m) || (Sp1->n != Sp1->n) || (Sp1->nz != Sp2->nz)) return FALSE;
+  if ((Sp1->m != Sp2->m) || (Sp1->n != Sp2->n) || (Sp1->nz != Sp2->nz)) return FALSE;
   for (k = 0; k < Sp1->m; k++)
     {
       if (Sp1->I[k] != Sp2->I[k]) return FALSE;
