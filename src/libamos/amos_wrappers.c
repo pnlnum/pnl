@@ -42,30 +42,6 @@ static char *ermsg[8] = {
 };
 
 
-static int mtherr(char *name, int code)
-{
-
-  /* Display string passed by calling program,
-   * which is supposed to be the name of the
-   * function in which the error occurred:
-   */
-
-  /* Display error message defined
-   * by the code argument.
-   */
-  if( (code <= 0) || (code >= 8) )
-    code = 0;
-  if (print_error_messages) {
-    printf( "\n%s ", name );
-    printf( "%s error\n", ermsg[code] );
-  }
-
-  /* Return to calling
-   * program
-   */
-  return( 0 );
-}
-
 static int ierr_to_mtherr( int nz, int ierr) 
 {
   /* Return mtherr equivalents for ierr values */

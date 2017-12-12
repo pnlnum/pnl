@@ -27,7 +27,7 @@
 
 
 static int ierr_to_mtherr( int nz, int ierr);
-static int mtherr(char *name, int code); /* from libcephes */
+extern int mtherr(char *name, int code); /* from libcephes */
 
 #define DO_MTHERR(name) if (nz !=0 || ierr !=0) mtherr(name, ierr_to_mtherr(nz, ierr))
 #define CADDR(z) (double *)&z.r, (double*)&z.i

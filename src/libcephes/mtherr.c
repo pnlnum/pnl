@@ -97,7 +97,7 @@ int mtherr(char *name, int code)
   if ((code <= 0) || (code >= 8))
     code = 0;
 
-  printf("%s: %s error", name, ermsg[code]);
+  printf("%s: %s error\n", name, ermsg[code]);
   
   /* Return to calling
    * program
