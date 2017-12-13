@@ -50,8 +50,11 @@ The `make install` command installs
 - the CMake config file to `<prefix>/lib/cmake/pnl`
 - the CMakeuser.incl file to `<prefix>/share/pnl` (see [below](#with-a-makefile))
 
-**The default value for `prefix` is the current build directory, but it can be changed passing `-DPNL_INSTALL_PREFIX=some/new/prefix` to `cmake` command line.**
+**The default value for `prefix` is the current build directory, but it can be changed by calling cmake as**
 
+```
+cmake -DPNL_INSTALL_PREFIX=some/new/prefix /relative/path/to/pnl
+```
 
 Some useful variables to modify the behaviour of cmake.
 
@@ -69,7 +72,7 @@ Some useful variables to modify the behaviour of cmake.
 
 - `-DLINK_TYPE`: SHARED or STATIC. Default is SHARED. Determine which type of library to build.
 
-- `-DPNL_ENABLE_TESTS`: ON/OFF. Default is ON. If OFF, no test is compiled nor registered for running with cmake. This is intended to be used when PNL is included as a sub project instead of being compiled as an external library.
+- `-DPNL_ENABLE_TESTS`: ON/OFF. Default is ON. If OFF, no test is compiled nor registered for running with `ctest`. This is intended to be used when PNL is included as a sub project instead of being compiled as an external library.
 
 #### Under Windows
 
