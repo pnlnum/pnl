@@ -148,8 +148,10 @@
 using namespace std;
 
 // use std::numeric_limits, since 1./0. and 0./0. fail with some compilers (MS)
-#define Inf numeric_limits<double>::infinity()
-#define NaN numeric_limits<double>::quiet_NaN()
+// #define Inf numeric_limits<double>::infinity()
+// #define NaN numeric_limits<double>::quiet_NaN()
+#define Inf PNL_INF
+#define NaN PNL_NAN
 
 typedef complex<double> cmplx;
 #define C(a,b) cmplx(a,b)
