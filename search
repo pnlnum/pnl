@@ -1,8 +1,0 @@
-#!/bin/sh
-
-CWD="$(pwd)/$0"
-CWD=$(dirname "$CWD")
-
-
-find "$CWD/src" "$CWD/examples" -name '*.[ch]' | xargs grep -n -E "$@"
-
