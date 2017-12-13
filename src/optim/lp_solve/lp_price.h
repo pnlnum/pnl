@@ -36,7 +36,6 @@ STATIC MYBOOL validSubstitutionVar(pricerec *candidate);
 /* Row+column selection routines */
 STATIC MYBOOL findImprovementVar(pricerec *current, pricerec *candidate, MYBOOL collectMP, int *candidatecount);
 STATIC MYBOOL findSubstitutionVar(pricerec *current, pricerec *candidate, int *candidatecount);
-INLINE REAL normalizeEdge(lprec *lp, int item, REAL edge, MYBOOL isdual);
 STATIC void makePriceLoop(lprec *lp, int *start, int *end, int *delta);
 
 /* Computation of reduced costs */

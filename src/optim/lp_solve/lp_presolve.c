@@ -44,6 +44,52 @@
 # include "lp_fortify.h"
 #endif
 
+INLINE int presolve_nextrecord(psrec *ps, int recnr, int *previtem)
+{
+  int *nzlist = ps->next[recnr], nzcount = nzlist[0], status = -1;
+
+  /* Check if we simply wish the last active column */
+  if(previtem == NULL) {
+    if(nzlist != NULL)
+      status = nzlist[*nzlist];
+    return( status );
+  }
+
+  /* Step to next */
+#ifdef Paranoia
+  else if((*previtem < 0) || (*previtem > nzcount))
+    return( status );
+#endif
+  (*previtem)++;
+
+  /* Set the return values */
+  if(*previtem > nzcount)
+    (*previtem) = 0;
+  else
+    status = nzlist[*previtem];
+
+  return( status );
+}
+
+
+INLINE int presolve_nextcol(presolverec *psdata, int rownr, int *previtem)
+/* Find the first active (non-eliminated) nonzero column in rownr after prevcol */
+{
+  return( presolve_nextrecord(psdata->rows, rownr, previtem) );
+}
+INLINE int presolve_lastcol(presolverec *psdata, int rownr)
+{
+  return( presolve_nextrecord(psdata->rows, rownr, NULL) );
+}
+INLINE int presolve_nextrow(presolverec *psdata, int colnr, int *previtem)
+/* Find the first active (non-eliminated) nonzero row in colnr after prevrow */
+{
+  return( presolve_nextrecord(psdata->cols, colnr, previtem) );
+}
+INLINE int presolve_lastrow(presolverec *psdata, int colnr)
+{
+  return( presolve_nextrecord(psdata->cols, colnr, NULL) );
+}
 
 #define presolve_setstatus(one, two)  presolve_setstatusex(one, two, __LINE__, __FILE__)
 STATIC int presolve_setstatusex(presolverec *psdata, int status, int lineno, char *filename)
@@ -718,51 +764,6 @@ STATIC int presolve_rowlengthdebug(presolverec *psdata)
     rownr = nextActiveLink(psdata->rows->varmap, rownr))
     n += presolve_rowlengthex(psdata, rownr);
   return( n );
-}
-
-INLINE int presolve_nextrecord(psrec *ps, int recnr, int *previtem)
-{
-  int *nzlist = ps->next[recnr], nzcount = nzlist[0], status = -1;
-
-  /* Check if we simply wish the last active column */
-  if(previtem == NULL) {
-    if(nzlist != NULL)
-      status = nzlist[*nzlist];
-    return( status );
-  }
-
-  /* Step to next */
-#ifdef Paranoia
-  else if((*previtem < 0) || (*previtem > nzcount))
-    return( status );
-#endif
-  (*previtem)++;
-
-  /* Set the return values */
-  if(*previtem > nzcount)
-    (*previtem) = 0;
-  else
-    status = nzlist[*previtem];
-
-  return( status );
-}
-INLINE int presolve_nextcol(presolverec *psdata, int rownr, int *previtem)
-/* Find the first active (non-eliminated) nonzero column in rownr after prevcol */
-{
-  return( presolve_nextrecord(psdata->rows, rownr, previtem) );
-}
-INLINE int presolve_lastcol(presolverec *psdata, int rownr)
-{
-  return( presolve_nextrecord(psdata->rows, rownr, NULL) );
-}
-INLINE int presolve_nextrow(presolverec *psdata, int colnr, int *previtem)
-/* Find the first active (non-eliminated) nonzero row in colnr after prevrow */
-{
-  return( presolve_nextrecord(psdata->cols, colnr, previtem) );
-}
-INLINE int presolve_lastrow(presolverec *psdata, int colnr)
-{
-  return( presolve_nextrecord(psdata->cols, colnr, NULL) );
 }
 
 INLINE void presolve_adjustrhs(presolverec *psdata, int rownr, REAL fixdelta, REAL epsvalue)

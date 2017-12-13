@@ -87,9 +87,6 @@ STATIC MYBOOL presolve_freeUndo(lprec *lp);
 
 STATIC MYBOOL presolve_updatesums(presolverec *psdata);
 
-INLINE int presolve_nextrow(presolverec *psdata, int colnr, int *previtem);
-INLINE int presolve_nextcol(presolverec *psdata, int rownr, int *previtem);
-
 STATIC presolverec *presolve_init(lprec *lp);
 STATIC void presolve_free(presolverec **psdata);
 STATIC int presolve_shrink(presolverec *psdata, int *nConRemove, int *nVarRemove);
