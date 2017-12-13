@@ -51,10 +51,6 @@ extern double pnl_sf_gamma_inc_P ( double a, double x );
 extern double igami ( double a, double y0 );
 extern double incbet ( double aa, double bb, double xx );
 extern double incbi ( double aa, double bb, double yy0 );
-extern double j0 ( double x );
-extern double y0 ( double x );
-extern double j1 ( double x );
-extern double y1 ( double x );
 extern double jv ( double n, double x );
 extern double k0 ( double x );
 extern double k0e ( double x );
@@ -125,7 +121,6 @@ extern double tukeylambdacdf ( double x, double lmbda );
 extern double pnl_log1p ( double x );
 extern double pnl_expm1 ( double x );
 extern double pnl_cosm1 ( double x );
-extern double yn ( int n, double x );
 extern double zeta ( double x, double q );
 extern double zetac ( double x );
 
