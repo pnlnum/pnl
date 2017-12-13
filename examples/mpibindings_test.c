@@ -491,7 +491,7 @@ static int bcast_matrix (PnlMat *M)
  * TridiagMatLU 
  */
 
-static PnlTridiagMat* create_random_tridiag (n, gen)
+static PnlTridiagMat* create_random_tridiag (int n, int gen)
 {
   PnlVect *dl, *du, *d;
   PnlTridiagMat *M;
