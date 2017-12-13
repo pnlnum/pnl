@@ -37,6 +37,7 @@ set(CMAKE_FILES_DIRECTORY "/CMakeFiles")
 option(USE_MPI "Compiles the MPI bindings for PNL. Default = on" ON)
 option(WITHOUT_DEPRECATED "Do not build deprecated functions. Default = off" OFF)
 option(USE_INTERNAL_BLAS "Use internal Blas & Lapack instead of the system's ones. Default = off" OFF)
+option(PNL_ENABLE_TESTS "Enable PNL tests. Default = on" ON)
 
 
 # Release or Debug
@@ -145,7 +146,7 @@ check_symbol_exists(isinf math.h PNL_HAVE_ISINF)
 
 add_subdirectory(src)
 
-if (NOT SUB_CMAKE_CALL)
+if (PNL_ENABLE_TESTS)
     enable_testing()
     add_subdirectory(examples)
     if (UNIX)
@@ -155,7 +156,7 @@ if (NOT SUB_CMAKE_CALL)
             COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/split_linker_command.sh ${CMAKE_INSTALL_PREFIX} ${CMAKE_CURRENT_BINARY_DIR})
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CMakeuser.incl DESTINATION share/pnl)
     endif (UNIX)
-endif (NOT SUB_CMAKE_CALL)
+endif (PNL_ENABLE_TESTS)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/pnl_config.h)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/src/include/pnl/pnl_config.h DESTINATION include/pnl)

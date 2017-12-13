@@ -36,8 +36,8 @@ To actually compile the library, just use CMake.
 #### Under Unix
 
 ```
-mkdir pnl-build
-cd  pnl-build
+mkdir build
+cd  build
 cmake /relative/path/to/pnl
 make
 make install
@@ -50,7 +50,7 @@ The `make install` command installs
 - the CMake config file to `<prefix>/lib/cmake/pnl`
 - the CMakeuser.incl file to `<prefix>/share/pnl` (see [below](#with-a-makefile))
 
-The default value for `prefix` is the current build directory, but it can be changed passing `-DPNL_INSTALL_PREFIX=<some/new/prefix>` to `cmake` command line.
+**The default value for `prefix` is the current build directory, but it can be changed passing `-DPNL_INSTALL_PREFIX=some/new/prefix` to `cmake` command line.**
 
 
 Some useful variables to modify the behaviour of cmake.
@@ -68,6 +68,8 @@ Some useful variables to modify the behaviour of cmake.
 - `-DUSE_INTERNAL_BLAS`: ON/OFF. Default is OFF. If ON, use the internal Blas & Lapack libraries shipped with the PNL source code.
 
 - `-DLINK_TYPE`: SHARED or STATIC. Default is SHARED. Determine which type of library to build.
+
+- `-DPNL_ENABLE_TESTS`: ON/OFF. Default is ON. If OFF, no test is compiled nor registered for running with cmake. This is intended to be used when PNL is included as a sub project instead of being compiled as an external library.
 
 #### Under Windows
 
@@ -119,7 +121,7 @@ Note the instruction `add_pnl_postbuild`, which takes care of post build instruc
 To build your project, call CMake with the following extra flag
 
 ```
--DCMAKE_PREFIX_PATH=path/to/pnl/install/dir or path/to/pnl/build/dir
+-DCMAKE_PREFIX_PATH=path/to/pnl/install or path/to/pnl/build
 ```
 
 A complete though basic CMakeLists.txt is available [there](perso/CMakeLists-example.txt).
@@ -145,7 +147,7 @@ pipo_SRC= list_of_source_files
 include <prefix>/share/pnl/CMakeuser.incl
 ```
 
-Note that the `CMakeuser.incl` file can also be found in the `build` directory.
+The `CMakeuser.incl` file can also be found in the root of the `build` directory.
 
 See Section 1.3.1 of the [manual](https://pnlnum.github.io/pnl/manual-html/pnl-manual.html)  for more details on the syntax of this Makefile.
 

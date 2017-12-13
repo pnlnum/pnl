@@ -489,7 +489,7 @@ as inline functions. This is automatically detected when running CMake. By
 default, setter and getter functions check that the required access is valid,
 basically it boils down to checking whether the index of the access is within an
 acceptable range. These extra tests can become very expensive when getter and
-setter function are intensively called. 
+setter functions are intensively called.
 
 Thus,  it is possible to alter this default behaviour by defining the macro
 \texttt{PNL_RANGE_CHECK_OFF}. This macro is automatically defined when the
