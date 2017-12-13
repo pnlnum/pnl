@@ -17,5 +17,6 @@ CMAKE_LINK_COMMAND_FLAGS_AFTER=$(echo ${CMAKE_LINK_COMMAND} | sed 's/^.*\.c\.o -
 # Get flags at the beginning of the command
 CMAKE_LINK_COMMAND_FLAGS_BEFORE=$(echo ${CMAKE_LINK_COMMAND} | sed  -e 's/\( [^ ]*\.c\.o\)*//g' -e 's/\(.*\)-o array_test.*/\1/' )
 
-# Do not remove the last ;
-echo "$CMAKE_LINK_COMMAND_FLAGS_BEFORE;$CMAKE_LINK_COMMAND_FLAGS_AFTER;"
+# Insert the flags into build-dir/CMakeuser.incl
+sed -i~ "s!^CMAKE_LINK_COMMAND_FLAGS_BEFORE=.*\$!CMAKE_LINK_COMMAND_FLAGS_BEFORE=${CMAKE_LINK_COMMAND_FLAGS_BEFORE}!" ${BUILD_DIR}/CMakeuser.incl
+sed -i~ "s!^CMAKE_LINK_COMMAND_FLAGS_AFTER=.*\$!CMAKE_LINK_COMMAND_FLAGS_AFTER=${CMAKE_LINK_COMMAND_FLAGS_AFTER}!" ${BUILD_DIR}/CMakeuser.incl

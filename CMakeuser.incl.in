@@ -35,9 +35,9 @@ endif
 PNL_CPP_FLAGS=@PNL_CPP_FLAGS@
 PNL_C_FLAGS=@PNL_C_FLAGS@
 PNL_CXX_FLAGS=@PNL_CXX_FLAGS@
-CMAKE_LINK_COMMAND_FLAGS_BEFORE=@CMAKE_LINK_COMMAND_FLAGS_BEFORE@
-CMAKE_LINK_COMMAND_FLAGS_AFTER=@CMAKE_LINK_COMMAND_FLAGS_AFTER@
-PNL_INCLUDES = -I$(INSTALL_PREFIX)/include
+CMAKE_LINK_COMMAND_FLAGS_BEFORE=
+CMAKE_LINK_COMMAND_FLAGS_AFTER=
+PNL_INCLUDES=-I$(INSTALL_PREFIX)/include
 
 QUIET=--quiet
 
@@ -127,8 +127,7 @@ all: $(BINS)
 $(foreach target,$(BINS),$(eval $(call new_target,$(target))))
 
 clean::
-	$(RM) *.o *.lo
-	$(RM) -r .libs
+	$(RM) *.o
 
 cleanall:: clean
 	@for b in $(BINS); do \
