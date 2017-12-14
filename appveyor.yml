@@ -1,0 +1,15 @@
+version: 1.0.{build}
+skip_tags: true
+image: Visual Studio 2017
+platform: x64
+configuration: Release
+clone_folder: c:\projects\pnl
+build_script:
+- ps: >-
+    mkdir build
+    cd build
+    cmake -G "%generator%" ..
+    cmake --build . --config %configuration%
+    cp "src/%configuration%/pnl.dll" "examples/%configuration%"
+test_script:
+- ps: ctest --output-on-failure --build-config %configuration%
