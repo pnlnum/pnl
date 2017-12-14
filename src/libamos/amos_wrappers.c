@@ -24,24 +24,6 @@
 #include "amos_wrappers.h"
 #include "pnl/pnl_specfun.h"
 
-static int print_error_messages = 1;
-
-/* Notice: the order of appearance of the following
- * messages is bound to the error codes defined
- * in amos_wrappers.h.
- */
-static char *ermsg[8] = {
-  "unknown",      /* error code 0 */
-  "domain",       /* error code 1 */
-  "singularity",  /* et seq.      */
-  "overflow",
-  "underflow",
-  "total loss of precision",
-  "partial loss of precision",
-  "too many iterations"
-};
-
-
 static int ierr_to_mtherr( int nz, int ierr) 
 {
   /* Return mtherr equivalents for ierr values */

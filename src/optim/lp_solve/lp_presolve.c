@@ -44,6 +44,24 @@
 # include "lp_fortify.h"
 #endif
 
+INLINE int presolve_rowlength(presolverec *psdata, int rownr)
+{
+  int *items = psdata->rows->next[rownr];
+
+  if(items == NULL)
+    return( 0 );
+  else
+    return( items[0] );
+}
+INLINE int presolve_collength(presolverec *psdata, int colnr)
+{
+  int *items = psdata->cols->next[colnr];
+  if(items == NULL)
+    return( 0 );
+  else
+    return( items[0] );
+}
+
 INLINE int presolve_nextrecord(psrec *ps, int recnr, int *previtem)
 {
   int *nzlist = ps->next[recnr], nzcount = nzlist[0], status = -1;
@@ -420,7 +438,7 @@ INLINE REAL presolve_roundval(lprec *lp, REAL value)
   return( value );
 }
 
-INLINE MYBOOL presolve_mustupdate(lprec *lp, int colnr)
+/* INLINE MYBOOL presolve_mustupdate(lprec *lp, int colnr)
 {
 #if 0
   return( my_infinite(lp, get_lowbo(lp, colnr)) ||
@@ -429,7 +447,7 @@ INLINE MYBOOL presolve_mustupdate(lprec *lp, int colnr)
   return( my_infinite(lp, lp->orig_lowbo[lp->rows+colnr]) ||
           my_infinite(lp, lp->orig_upbo[lp->rows+colnr]) );
 #endif
-}
+} */
 
 INLINE REAL presolve_sumplumin(lprec *lp, int item, psrec *ps, MYBOOL doUpper)
 {

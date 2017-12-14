@@ -6841,7 +6841,7 @@ STATIC REAL MIP_stepOF(lprec *lp)
     /* Check non-ints in the OF to see if we can get more info */
     if(realcount > 0) {
       int niv = 0;            /* Number of real variables identified as integer */
-      int nrows = lp->rows;
+      /* int nrows = lp->rows; */
       REAL    rowdelta;
 
       OFdelta = lp->infinite;
@@ -8944,7 +8944,7 @@ STATIC int check_solution(lprec *lp, int  lastcolumn, REAL *solution,
 /*#define UseMaxValueInCheck*/
 #define RelativeAccuracyCheck
   MYBOOL isSC;
-  REAL   test, value, diff, maxdiff = 0.0, maxerr = 0.0, *matValue;
+  REAL   test, value, diff, maxdiff = 0.0, maxerr = 0.0;
 #ifndef RelativeAccuracyCheck
   REAL   hold;
 #endif
@@ -8953,8 +8953,12 @@ STATIC int check_solution(lprec *lp, int  lastcolumn, REAL *solution,
 #elif !defined RelativeAccuracyCheck
   REAL *plusum = NULL, *negsum = NULL;
 #endif
-  int    i,j,n, errlevel = IMPORTANT, errlimit = 10, *matRownr, *matColnr;
-  MATrec *mat = lp->matA;
+#if defined UseMaxValueInCheck || !defined RelativeAccuracyCheck
+ REAL *matValue;
+ int *matRownr, *matColnr;
+#endif
+  int    i,j,n, errlevel = IMPORTANT, errlimit = 10;
+  /* MATrec *mat = lp->matA; */
   int    solveStatus = OPTIMAL;
 
   report(lp, NORMAL, " \n");

@@ -194,7 +194,7 @@ static void speed_evalderivs_basis ()
 
 void speed_basis_test ()
 {
-  /* speed_sparse_basis (); */
+  speed_sparse_basis ();
   speed_eval_basis ();
   speed_evalderivs_basis ();
 }

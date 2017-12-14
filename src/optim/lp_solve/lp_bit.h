@@ -11,10 +11,10 @@ MYINLINE void set_biton(MYBOOL *bitarray, int item)
   bitarray[item / 8] |= (1 << (item % 8));
 }
 
-MYINLINE void set_bitoff(MYBOOL *bitarray, int item)
+/* MYINLINE void set_bitoff(MYBOOL *bitarray, int item)
 {
   bitarray[item / 8] &= ~(1 << (item % 8));
-}
+} */
 
 MYINLINE MYBOOL is_biton(MYBOOL *bitarray, int item)
 {

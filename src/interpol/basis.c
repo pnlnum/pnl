@@ -45,33 +45,31 @@
 #define CHECK_NB_VARIATES(x, basis)
 #endif
 
+#if 0
 /**
- * Compute the the maximum degree which can be put on the last component
- * if the total degree of the cwother elements is partial.
+ * Compute the maximum degree of the last component.
+ * if the total degree of the other elements is @p partial.
  *
  * The total degree function is the sum of the partial degrees
  *
  * @param total total degree
  * @param partial partial degree already used
- *
- * @return
  */
 static int freedom_degree_sum(int total, int partial)
 {
   if (partial > total) return -1;
   return total - partial;
 }
+#endif
 
 /**
- * Compute the the maximum degree which can be put on the last component
- * if the total degree of the cwother elements is partial.
+ * Compute the maximum degree of the last component
+ * if the total degree of the other elements is @p partial.
  *
  * The total degree function is the product of the partial degrees
  *
  * @param total total degree
  * @param partial partial degree already used
- *
- * @return
  */
 static int freedom_degree_prod(int total, int partial)
 {
