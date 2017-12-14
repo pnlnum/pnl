@@ -122,20 +122,16 @@ set (ZLASRC_MINIMAL
   zspsvx.c zsptrf.c zsptri.c zsptrs.c zdrscl.c zstedc.c 
   zstegr.c zstein.c zsteqr.c zsycon.c zsymv.c  
   zsyr.c   zsyrfs.c zsysv.c  zsysvx.c zsytf2.c zsytrf.c zsytri.c 
-  zsytrs.c ztbcon.c ztbrfs.c ztbtrs.c ztgevc.c ztgex2.c 
-  ztgexc.c ztgsen.c ztgsja.c ztgsna.c ztgsy2.c ztgsyl.c ztpcon.c 
-  ztprfs.c ztptri.c 
-  ztptrs.c ztrcon.c ztrevc.c ztrexc.c ztrrfs.c ztrsen.c ztrsna.c 
+  zsytrs.c ztgevc.c ztgex2.c 
+  ztgexc.c ztgsen.c ztgsja.c ztgsna.c ztgsyl.c ztgsy2.c 
+  ztptri.c 
+  ztrevc.c ztrexc.c ztrsen.c ztrsna.c 
   ztrsyl.c ztrti2.c ztrtri.c ztrtrs.c ztzrqf.c ztzrzf.c zung2l.c 
   zung2r.c zungbr.c zunghr.c zungl2.c zunglq.c zungql.c zungqr.c zungr2.c 
   zungrq.c zungtr.c zunm2l.c zunm2r.c zunmbr.c zunmhr.c zunml2.c 
   zunmlq.c zunmql.c zunmqr.c zunmr2.c zunmr3.c zunmrq.c zunmrz.c 
   zunmtr.c zupgtr.c 
-  zupmtr.c izmax1.c dzsum1.c zstemr.c 
-  zlag2c.c clag2z.c zlat2c.c 
-  zhfrk.c ztfttp.c zlanhf.c zpftrf.c zpftri.c zpftrs.c ztfsm.c ztftri.c 
-  ztfttr.c ztpttf.c ztpttr.c ztrttf.c ztrttp.c 
-  zgeequb.c zgbequb.c zsyequb.c zpoequb.c zheequb.c )
+  zupmtr.c izmax1.c dzsum1.c zstemr.c) 
 
 add_library(liblapack OBJECT
    ${DLASRC_MINIMAL}
