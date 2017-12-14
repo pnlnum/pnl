@@ -3,13 +3,12 @@ skip_tags: true
 image: Visual Studio 2017
 platform: x64
 configuration: Release
-generator: Visual Studio 15 2017 Win64
 clone_folder: c:\projects\pnl
 build_script:
     - if exist "build" ( rmdir build /s /q )
     - mkdir build
     - cd build
-    - cmake -G "%generator%" ..
+    - cmake -G "Visual Studio 15 2017 Win 64" ..
     - cmake --build . --config %configuration%
     - cp "src/%configuration%/pnl.dll" "examples/%configuration%"
 test_script:
