@@ -35,7 +35,7 @@ To actually compile the library, just use CMake.
 
 #### Under Unix
 
-```
+```shell
 mkdir build
 cd  build
 cmake /relative/path/to/pnl
@@ -52,7 +52,7 @@ The `make install` command installs
 
 **The default value for `prefix` is the current build directory, but it can be changed by calling cmake as**
 
-```
+```shell
 cmake -DPNL_INSTALL_PREFIX=some/new/prefix /relative/path/to/pnl
 ```
 
@@ -72,7 +72,18 @@ Some useful variables to modify the behaviour of cmake.
 
 - `-DLINK_TYPE`: SHARED or STATIC. Default is SHARED. Determine which type of library to build.
 
-- `-DPNL_ENABLE_TESTS`: ON/OFF. Default is ON. If OFF, no test is compiled nor registered for running with `ctest`. This is intended to be used when PNL is included as a sub project instead of being compiled as an external library.
+- `-DPNL_ENABLE_TESTS`: ON/OFF. Default is ON. If OFF, no test is compiled nor registered for running with `ctest`. This is intended to be used when PNL is included as a sub project instead of being compiled as an external library. In such a case, the typical usage is
+
+        set(PNL_ENABLE_TESTS OFF CACHE BOOL "Disable PNL test.")
+        add_subdirectory(some/path/to/pnl)
+        include_directories(some/path/to/pnl/src/include)
+
+        # Define some targets
+
+        # For every target, add
+        target_link_libraries(my_target pnl)
+        # On Windows, to ensure all the dll's are copied next to the executable
+        add_pnl_postbuild(my_target)
 
 #### Under Windows
 
@@ -106,7 +117,7 @@ library.
 
 In your regular `CMakeLists.txt`, add
 
-```
+```shell
 find_package(Pnl REQUIRED)
 set(LIBS ${LIBS} ${PNL_LIBRARIES})
 include_directories(${PNL_INCLUDE_DIRS})
@@ -115,7 +126,9 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
     add_definitions(-DPNL_RANGE_CHECK_OFF)
 endif()
 
-# For every executable <my_exec> add the instruction
+# For Windows only. To make sure all the required dll's are copied
+# next to every executable, add the following instruction where
+# <my_exec> is a target defined by add_executable.
 add_pnl_postbuild(my_exec)
 ```
 
@@ -123,7 +136,7 @@ Note the instruction `add_pnl_postbuild`, which takes care of post build instruc
 
 To build your project, call CMake with the following extra flag
 
-```
+```shell
 -DCMAKE_PREFIX_PATH=path/to/pnl/install or path/to/pnl/build
 ```
 
@@ -133,7 +146,7 @@ A complete though basic CMakeLists.txt is available [there](perso/CMakeLists-exa
 
 You can use PNL in your own codes by creating `Makefile` containing
 
-```
+```shell
 ## Extra linker flags. Can be empty
 LDFLAGS=
 
