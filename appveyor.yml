@@ -5,11 +5,11 @@ platform: x64
 configuration: Release
 clone_folder: c:\projects\pnl
 build_script:
-- ps: >-
-    mkdir build
-    cd build
-    cmake -G "%generator%" ..
-    cmake --build . --config %configuration%
-    cp "src/%configuration%/pnl.dll" "examples/%configuration%"
+    - if exist "build" ( rmdir build /s /q )
+    - mkdir build
+    - cd build
+    - cmake -G "%generator%" ..
+    - cmake --build . --config %configuration%
+    - cp "src/%configuration%/pnl.dll" "examples/%configuration%"
 test_script:
-- ps: ctest --output-on-failure --build-config %configuration%
+    - ctest --output-on-failure --build-config %configuration%
