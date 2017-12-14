@@ -8,7 +8,7 @@ build_script:
     - if exist "build" ( rmdir build /s /q )
     - mkdir build
     - cd build
-    - cmake -G "Visual Studio 15 2017 Win 64" ..
+/bin/bash: q : commande introuvable
     - cmake --build . --config %configuration%
     - cp "src/%configuration%/pnl.dll" "examples/%configuration%"
 test_script:
