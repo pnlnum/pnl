@@ -67,6 +67,7 @@ static void grad_func_HS15(const PnlVect *x, PnlVect *grad, void *pt)
   LET(grad, 1) = 200.0 * dTmp;
 }
 
+#if 0
 // In order to test the algorithm, the starting point is chosen randomly.
 // Of course, in practical cases, one chooses a starting point in accordance with the problem.
 static void choose_random_input_point(int type_generator, PnlVect* x_input)
@@ -82,11 +83,12 @@ static void choose_random_input_point(int type_generator, PnlVect* x_input)
   x_max = x_min+10.;
   LET(x_input, 1) = theta*x_min + (1-theta)*x_max;
 }
+#endif
 
 static void minimize_func_HS15()
 {
   double tolerance;
-  int CONVERGENCE, type_generator, print_algo_steps, iter_max;
+  int CONVERGENCE, print_algo_steps, iter_max;
 
   PnlVect *x_input, *x_output;
   PnlVect *lower_bounds, *upper_bounds;
@@ -95,8 +97,8 @@ static void minimize_func_HS15()
   PnlRnFuncRm GradFuncToMinimize; // Structure that contains the gradient objective function
   PnlRnFuncRm NL_Constraints; // Structure that contains the constraints
 
-  type_generator = PNL_RNG_MERSENNE_RANDOM_SEED;
-  pnl_rand_init(type_generator, 2, 1);
+  // type_generator = PNL_RNG_MERSENNE_RANDOM_SEED;
+  // pnl_rand_init(type_generator, 2, 1);
 
   tolerance = 1e-9; // Optimality termination tolerance
   iter_max = 500; // Maximum number of iteration
@@ -132,7 +134,9 @@ static void minimize_func_HS15()
   // We use a random starting point
   // Of course, in practical cases, one chooses a starting point in accordance with the problem.
   // !! Initial point must be strictly admissible. ie constraint(x) > 0. !!
-  choose_random_input_point(type_generator, x_input);
+  // choose_random_input_point(type_generator, x_input);
+  LET(x_input, 0) = 0.2;
+  LET(x_input, 1) = 6.;
 
   // Call of the optimization routine.
   CONVERGENCE = pnl_optim_intpoints_bfgs_solve(&FuncToMinimize, &GradFuncToMinimize, &NL_Constraints, lower_bounds, upper_bounds, x_input, tolerance, iter_max, print_algo_steps, x_output);
@@ -146,6 +150,10 @@ static void minimize_func_HS15()
       PnlVect *res = pnl_vect_create_from_list (2, 0.5, 2.0);
       pnl_test_vect_eq_abs (x_output, res, 1E-8, "intpoints_bfgs", "An other solution may be (-0.79212, -1.26243)");
       pnl_vect_free (&res);
+    }
+  else
+    {
+      pnl_test_set_fail0("intpoints_bfgs");
     }
 
   pnl_vect_free(&x_input);
