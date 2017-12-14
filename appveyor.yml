@@ -10,7 +10,7 @@ build_script:
     - if exist "build" ( rmdir build /s /q )
     - mkdir build
     - cd build
-    - cmake -G %generator ..
+    - cmake -G %generator% ..
     - cmake --build . --config %configuration%
     - cp "src/%configuration%/pnl.dll" "examples/%configuration%"
 test_script:
