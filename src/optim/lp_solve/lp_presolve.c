@@ -405,7 +405,7 @@ STATIC MYBOOL presolve_SOScheck(presolverec *psdata)
 /* Presolve routines for tightening the model                                    */
 /* ----------------------------------------------------------------------------- */
 
-INLINE REAL presolve_roundrhs(lprec *lp, REAL value, MYBOOL isGE)
+REAL presolve_roundrhs(lprec *lp, REAL value, MYBOOL isGE)
 {
 #ifdef DoPresolveRounding
   REAL eps = PRESOLVE_EPSVALUE*1000,
