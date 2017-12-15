@@ -19,61 +19,49 @@ set (DZLAUX
   dsteqr.c dsterf.c dlaisnan.c disnan.c )
 
 set (DLASRC_MINIMAL  
-  dgbbrd.c dgbcon.c dgbequ.c dgbrfs.c dgbsv.c  
-  dgbsvx.c dgbtf2.c dgbtrf.c dgbtrs.c dgebak.c dgebal.c dgebd2.c 
-  dgebrd.c dgecon.c dgeequ.c dgees.c  dgeesx.c dgeev.c  dgeevx.c 
-  dgegs.c  dgegv.c  dgehd2.c dgehrd.c dgelq2.c dgelqf.c 
-  dgels.c  dgelsd.c dgelss.c dgelsx.c dgelsy.c dgeql2.c dgeqlf.c 
+  dgbsv.c  
+  dgbtf2.c dgbtrf.c dgbtrs.c dgebak.c dgebal.c
+  dgecon.c dgeev.c 
+  dgehd2.c dgehrd.c
+  dgelsy.c 
   dgeqp3.c dgeqpf.c dgeqr2.c dgeqrf.c dgerfs.c dgerq2.c dgerqf.c 
-  dgesc2.c dgesdd.c dgesv.c  dgesvd.c dgesvx.c dgetc2.c dgetf2.c 
+  dgesc2.c dgetc2.c dgetf2.c 
   dgetrf.c dgetri.c 
-  dgetrs.c dggbak.c dggbal.c dgges.c  dggesx.c dggev.c  dggevx.c 
-  dggglm.c dgghrd.c dgglse.c dggqrf.c 
-  dggrqf.c dggsvd.c dggsvp.c dgtcon.c dgtrfs.c dgtsv.c  
-  dgtsvx.c dgttrf.c dgttrs.c dgtts2.c dhgeqz.c 
-  dhsein.c dhseqr.c dlabrd.c dlacon.c dlacn2.c 
+  dgetrs.c dggbak.c dggbal.c 
+  dgghrd.c
+  dggrqf.c dgtsv.c  
+  dgttrf.c dgttrs.c dgtts2.c dhgeqz.c 
+  dhseqr.c dlabrd.c dlacn2.c 
   dlaein.c dlaexc.c dlag2.c  dlags2.c dlagtm.c dlagv2.c dlahqr.c 
-  dlahrd.c dlahr2.c dlaic1.c dlaln2.c dlals0.c dlalsa.c dlalsd.c 
-  dlangb.c dlange.c dlangt.c dlanhs.c dlansb.c dlansp.c 
-  dlansy.c dlantb.c dlantp.c dlantr.c dlanv2.c 
+  dlahr2.c dlaic1.c dlaln2.c dlals0.c dlalsa.c dlalsd.c 
+  dlangb.c dlange.c dlangt.c dlanhs.c 
+  dlansy.c dlantb.c dlantr.c dlanv2.c 
   dlapll.c dlapmt.c 
-  dlaqgb.c dlaqge.c dlaqp2.c dlaqps.c dlaqsb.c dlaqsp.c dlaqsy.c 
-  dlaqr0.c dlaqr1.c dlaqr2.c dlaqr3.c dlaqr4.c dlaqr5.c 
+  dlaqgb.c dlaqge.c dlaqp2.c dlaqps.c 
+  dlaqr0.c dlaqr1.c dlaqr2.c dlaqr3.c dlaqr4.c dlaqr5.c
   dlaqtr.c dlar1v.c dlar2v.c iladlr.c iladlc.c 
   dlarf.c  dlarfb.c dlarfg.c dlarft.c dlarfx.c dlargv.c 
   dlarrv.c dlartv.c dlarfp.c 
   dlarz.c  dlarzb.c dlarzt.c dlaswp.c dlasy2.c dlasyf.c 
-  dlatbs.c dlatdf.c dlatps.c dlatrd.c dlatrs.c dlatrz.c dlatzm.c dlauu2.c 
-  dlauum.c dopgtr.c dopmtr.c dorg2l.c dorg2r.c 
+  dlatbs.c dlatdf.c dlatrd.c dlatrs.c dlatrz.c dlatzm.c dlauu2.c 
+  dlauum.c dorg2l.c dorg2r.c 
   dorgbr.c dorghr.c dorgl2.c dorglq.c dorgql.c dorgqr.c dorgr2.c 
-  dorgrq.c dorgtr.c dorm2l.c dorm2r.c 
-  dormbr.c dormhr.c dorml2.c dormlq.c dormql.c dormqr.c dormr2.c 
-  dormr3.c dormrq.c dormrz.c dormtr.c dpbcon.c dpbequ.c dpbrfs.c 
-  dpbstf.c dpbsv.c  dpbsvx.c 
-  dpbtf2.c dpbtrf.c dpbtrs.c dpocon.c dpoequ.c dporfs.c dposv.c  
-  dposvx.c dpotf2.c dpotrf.c dpotri.c dpotrs.c dpstrf.c dpstf2.c 
-  dppcon.c dppequ.c 
-  dpprfs.c dppsv.c  dppsvx.c dpptrf.c dpptri.c dpptrs.c dptcon.c 
-  dpteqr.c dptrfs.c dptsv.c  dptsvx.c dpttrs.c dptts2.c drscl.c  
-  dsbev.c  dsbevd.c dsbevx.c dsbgst.c dsbgv.c  dsbgvd.c dsbgvx.c 
-  dsbtrd.c  dspcon.c dspev.c  dspevd.c dspevx.c dspgst.c 
-  dspgv.c  dspgvd.c dspgvx.c dsprfs.c dspsv.c  dspsvx.c dsptrd.c 
-  dsptrf.c dsptri.c dsptrs.c dstegr.c dstein.c dstev.c  dstevd.c dstevr.c 
-  dstevx.c dsycon.c dsyev.c  dsyevd.c dsyevr.c 
-  dsyevx.c dsygs2.c dsygst.c dsygv.c  dsygvd.c dsygvx.c dsyrfs.c 
-  dsysv.c  dsysvx.c 
-  dsytd2.c dsytf2.c dsytrd.c dsytrf.c dsytri.c dsytrs.c dtbcon.c 
-  dtbrfs.c dtbtrs.c dtgevc.c dtgex2.c dtgexc.c dtgsen.c 
-  dtgsja.c dtgsna.c dtgsy2.c dtgsyl.c dtpcon.c dtprfs.c dtptri.c 
-  dtptrs.c 
-  dtrcon.c dtrevc.c dtrexc.c dtrrfs.c dtrsen.c dtrsna.c dtrsyl.c 
+  dorgtr.c dorm2r.c 
+  dormbr.c dormhr.c  dorml2.c dormlq.c dormqr.c dormr2.c 
+  dormr3.c dormrq.c dormrz.c
+  dpbtf2.c dpbtrf.c dpbtrs.c  
+  dpotf2.c dpotrf.c dpotri.c dpotrs.c dpstrf.c dpstf2.c 
+  drscl.c  
+  dsbtrd.c 
+  dsptrd.c 
+  dsptrf.c dsptrs.c dstein.c 
+  dsyev.c
+  dsytd2.c dsytf2.c dsytrd.c dsytrf.c dsytri.c dsytrs.c 
+  dtgevc.c dtgex2.c dtgexc.c dtgsen.c 
+  dtgsja.c dtgsna.c dtgsy2.c dtgsyl.c dtptri.c 
+  dtrevc.c dtrexc.c dtrsen.c dtrsna.c dtrsyl.c 
   dtrti2.c dtrtri.c dtrtrs.c dtzrqf.c dtzrzf.c dstemr.c 
-  dlag2s.c slag2d.c dlat2s.c 
-  dlansf.c dpftrf.c dpftri.c dpftrs.c dsfrk.c dtfsm.c dtftri.c dtfttp.c 
-  dtfttr.c dtpttf.c dtpttr.c dtrttf.c dtrttp.c 
-  dgejsv.c  dgesvj.c  dgsvj0.c  dgsvj1.c 
-  dgeequb.c dsyequb.c dpoequb.c dgbequb.c )
-
+  )
 set (ZLASRC_MINIMAL  
   zgbtf2.c zgbtrf.c zgbtrs.c zgebak.c zgebal.c 
   zgecon.c zgeev.c 
