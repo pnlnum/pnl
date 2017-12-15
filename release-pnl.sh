@@ -5,7 +5,8 @@
 
 CWD="$(pwd)/$0"
 PNLGIT=$(dirname $"CWD")
-MINGW_PREFIX="/usr/local/mingw64"
+MINGW_PREFIX="/usr/local/opt/mingw-w64/toolchain-x86_64"
+# MINGW_PREFIX="/usr/local/mingw64"
 
 DATE=$(date +%Y%m%d)
 # Local temporary directory
@@ -81,20 +82,23 @@ create_win_version() {
     mkdir -p "$PNL_WINDIR"
     mkdir -p "$LOCAL_TMPDIR/build-win"
     cd "$LOCAL_TMPDIR/build-win"
-    PATH="$MINGW_PREFIX/bin:$MINGW_PREFIX/x86_64-w64-mingw32/bin:$PATH"
+    PATH="$MINGW_PREFIX/bin:$MINGW_PREFIX/x86_64-w64-mingw32/bin:$MINGW_PREFIX/x86_64-w64-mingw32/lib:$PATH"
     cmake -DCROSS_COMPILE=ON -DCMAKE_BUILD_TYPE=Release -DPNL_INSTALL_PREFIX="$PNL_WINDIR" "$PNL_DIR"
     make || { echo "make failed" && exit 1; }
     make install || { echo "make install failed" && exit 1; }
+    cp -r examples "$PNL_WINDIR"
     cd "$PNL_WINDIR"
     mv lib/libpnl.dll.a lib/libpnl.lib
     # Copy the manual
     cp -r "$PNL_DIR/manual-html" "$PNL_WINDIR"
     cp -r "$PNL_DIR/pnl-manual.pdf" "$PNL_WINDIR"
     # Copy all required dll's
-    LIBS="libblas.dll libgcc_s_seh-1.dll libgfortran-3.dll liblapack.dll libquadmath-0.dll"
+    LIBS="libblas.dll libgcc_s_seh-1.dll libgfortran-4.dll liblapack.dll libquadmath-0.dll"
     for lib in $LIBS; do
-        cp $MINGW_PREFIX/x86_64-w64-mingw32/bin/$lib lib
+        cp $MINGW_PREFIX/x86_64-w64-mingw32/lib/$lib lib
+        cp -r $MINGW_PREFIX/x86_64-w64-mingw32/lib/$lib examples
     done
+    cp lib/libpnl.dll examples
     cd "$LOCAL_TMPDIR"
     [[ -f "pnl-win64-$VERSION.zip" ]] && rm "pnl-win64-$VERSION.zip"
     zip -q -r "pnl-win64-$VERSION.zip" "pnl-win64-$VERSION"
