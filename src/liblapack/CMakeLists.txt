@@ -75,53 +75,45 @@ set (DLASRC_MINIMAL
   dgeequb.c dsyequb.c dpoequb.c dgbequb.c )
 
 set (ZLASRC_MINIMAL  
-  zbdsqr.c zgbbrd.c zgbcon.c zgbequ.c zgbrfs.c zgbsv.c  zgbsvx.c 
-  zgbtf2.c zgbtrf.c zgbtrs.c zgebak.c zgebal.c zgebd2.c zgebrd.c 
-  zgecon.c zgeequ.c zgees.c  zgeesx.c zgeev.c  zgeevx.c 
-  zgegs.c  zgegv.c  zgehd2.c zgehrd.c zgelq2.c zgelqf.c 
-  zgels.c  zgelsd.c zgelss.c zgelsx.c zgelsy.c zgeql2.c zgeqlf.c zgeqp3.c 
-  zgeqpf.c zgeqr2.c zgeqrf.c zgerfs.c zgerq2.c zgerqf.c 
-  zgesc2.c zgesdd.c zgesv.c  zgesvd.c zgesvx.c zgetc2.c zgetf2.c zgetrf.c 
+  zgbtf2.c zgbtrf.c zgbtrs.c zgebak.c zgebal.c 
+  zgecon.c zgeev.c 
+  zgehd2.c zgehrd.c 
+  zgeqpf.c zgeqr2.c zgeqrf.c zgerq2.c zgerqf.c 
+  zgesc2.c zgetc2.c zgetf2.c zgetrf.c 
   zgetri.c zgetrs.c 
-  zggbak.c zggbal.c zgges.c  zggesx.c zggev.c  zggevx.c zggglm.c 
-  zgghrd.c zgglse.c zggqrf.c zggrqf.c 
-  zggsvd.c zggsvp.c 
-  zgtcon.c zgtrfs.c zgtsv.c  zgtsvx.c zgttrf.c zgttrs.c zgtts2.c zhbev.c  
-  zhbevd.c zhbevx.c zhbgst.c zhbgv.c  zhbgvd.c zhbgvx.c zhbtrd.c 
-  zhecon.c zheev.c  zheevd.c zheevr.c zheevx.c zhegs2.c zhegst.c 
-  zhegv.c  zhegvd.c zhegvx.c zherfs.c zhesv.c  zhesvx.c zhetd2.c 
+  zggbak.c zggbal.c
+  zgghrd.c zggqrf.c
+  zhbtrd.c 
+  zheev.c 
+  zhetd2.c 
   zhetf2.c zhetrd.c 
-  zhetrf.c zhetri.c zhetrs.c zhgeqz.c zhpcon.c zhpev.c  zhpevd.c 
-  zhpevx.c zhpgst.c zhpgv.c  zhpgvd.c zhpgvx.c zhprfs.c zhpsv.c  
-  zhpsvx.c 
-  zhptrd.c zhptrf.c zhptri.c zhptrs.c zhsein.c zhseqr.c zlabrd.c 
-  zlacgv.c zlacon.c zlacn2.c zlacp2.c zlacpy.c zlacrm.c zlacrt.c zladiv.c 
+  zhetrf.c zhetrs.c zhgeqz.c 
+  zhptrd.c zhptrf.c zhptrs.c zhseqr.c zlabrd.c 
+  zlacgv.c zlacn2.c zlacp2.c zlacpy.c zlacrm.c zladiv.c 
   zlaed0.c zlaed7.c zlaed8.c 
-  zlaein.c zlaesy.c zlaev2.c zlags2.c zlagtm.c 
+  zlaein.c zlags2.c zlagtm.c 
   zlahef.c zlahqr.c 
-  zlahrd.c zlahr2.c zlaic1.c zlals0.c zlalsa.c zlalsd.c zlangb.c zlange.c 
+  zlahr2.c zlaic1.c zlals0.c zlalsa.c zlalsd.c zlangb.c zlange.c 
   zlangt.c zlanhb.c 
   zlanhe.c 
-  zlanhp.c zlanhs.c zlanht.c zlansb.c zlansp.c zlansy.c zlantb.c 
-  zlantp.c zlantr.c zlapll.c zlapmt.c zlaqgb.c zlaqge.c 
-  zlaqhb.c zlaqhe.c zlaqhp.c zlaqp2.c zlaqps.c zlaqsb.c 
+  zlanhp.c zlanhs.c zlanht.c zlansy.c zlantb.c 
+  zlantr.c zlapll.c zlapmt.c zlaqgb.c zlaqge.c 
+  zlaqp2.c zlaqps.c
   zlaqr0.c zlaqr1.c zlaqr2.c zlaqr3.c zlaqr4.c zlaqr5.c 
-  zlaqsp.c zlaqsy.c zlar1v.c zlar2v.c ilazlr.c ilazlc.c 
+  zlar1v.c zlar2v.c ilazlr.c ilazlc.c 
   zlarcm.c zlarf.c  zlarfb.c 
   zlarfg.c zlarft.c zlarfp.c 
-  zlarfx.c zlargv.c zlarnv.c zlarrv.c zlartg.c zlartv.c 
+  zlargv.c zlarrv.c zlartg.c zlartv.c 
   zlarz.c  zlarzb.c zlarzt.c zlascl.c zlaset.c zlasr.c  
   zlassq.c zlaswp.c zlasyf.c 
-  zlatbs.c zlatdf.c zlatps.c zlatrd.c zlatrs.c zlatrz.c zlatzm.c zlauu2.c 
-  zlauum.c zpbcon.c zpbequ.c zpbrfs.c zpbstf.c zpbsv.c  
-  zpbsvx.c zpbtf2.c zpbtrf.c zpbtrs.c zpocon.c zpoequ.c zporfs.c 
-  zposv.c  zposvx.c zpotf2.c zpotrf.c zpotri.c zpotrs.c zpstrf.c zpstf2.c 
-  zppcon.c zppequ.c zpprfs.c zppsv.c  zppsvx.c zpptrf.c zpptri.c zpptrs.c 
-  zptcon.c zpteqr.c zptrfs.c zptsv.c  zptsvx.c zpttrf.c zpttrs.c zptts2.c 
-  zrot.c   zspcon.c zspmv.c  zspr.c   zsprfs.c zspsv.c  
-  zspsvx.c zsptrf.c zsptri.c zsptrs.c zdrscl.c zstedc.c 
-  zstegr.c zstein.c zsteqr.c zsycon.c zsymv.c  
-  zsyr.c   zsyrfs.c zsysv.c  zsysvx.c zsytf2.c zsytrf.c zsytri.c 
+  zlatbs.c zlatdf.c zlatrd.c zlatrs.c zlatrz.c zlatzm.c zlauu2.c 
+  zlauum.c zpbstf.c
+  zpbtf2.c zpbtrf.c zpbtrs.c
+  zpotf2.c zpotrf.c zpotri.c zpotrs.c zpstrf.c zpstf2.c 
+  zpptrf.c
+  zrot.c zspr.c
+  zsptrf.c zsptrs.c zdrscl.c zstedc.c 
+  zstein.c zsteqr.c 
   zsytrs.c ztgevc.c ztgex2.c 
   ztgexc.c ztgsen.c ztgsja.c ztgsna.c ztgsyl.c ztgsy2.c 
   ztptri.c 
