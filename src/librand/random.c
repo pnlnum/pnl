@@ -853,87 +853,87 @@ static sobol_i8_state sobol_i8_st;
 
 PnlRng PnlRngKnuth =
 {
-  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free},
+  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free, (NewFunc *) pnl_rng_new, (CopyFunc *) pnl_rng_copy, (CloneFunc *) pnl_rng_clone},
   PNL_RNG_KNUTH, &KNUTH,
-  PNL_MC, 0, 0, 0, 0, sizeof(knuth_state), &knuth_st
+  PNL_MC, 0, 0, 0, 0., sizeof(knuth_state), &knuth_st
 };
 PnlRng PnlRngMrgk3 =
 {
-  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free},
+  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free, (NewFunc *) pnl_rng_new, (CopyFunc *) pnl_rng_copy, (CloneFunc *) pnl_rng_clone},
   PNL_RNG_MRGK3, &MRGK3,
-  PNL_MC, 0, 0, 0, 0, sizeof(mrgk3_state), &mrgk3_st
+  PNL_MC, 0, 0, 0, 0., sizeof(mrgk3_state), &mrgk3_st
 };
 PnlRng PnlRngMrgk5 =
 {
-  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free},
+  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free, (NewFunc *) pnl_rng_new, (CopyFunc *) pnl_rng_copy, (CloneFunc *) pnl_rng_clone},
   PNL_RNG_MRGK5, &MRGK5,
-  PNL_MC, 0, 0, 0, 0, sizeof(mrgk5_state), &mrgk5_st
+  PNL_MC, 0, 0, 0, 0., sizeof(mrgk5_state), &mrgk5_st
 };
 PnlRng PnlRngShufl =
 {
-  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free},
+  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free, (NewFunc *) pnl_rng_new, (CopyFunc *) pnl_rng_copy, (CloneFunc *) pnl_rng_clone},
   PNL_RNG_SHUFL, &SHUFL,
-  PNL_MC, 0, 0, 0, 0, sizeof(shufl_state), &shufl_st
+  PNL_MC, 0, 0, 0, 0., sizeof(shufl_state), &shufl_st
 };
 PnlRng PnlRngLecuyer =
 {
-  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free},
+  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free, (NewFunc *) pnl_rng_new, (CopyFunc *) pnl_rng_copy, (CloneFunc *) pnl_rng_clone},
   PNL_RNG_LECUYER, &LECUYER,
-  PNL_MC, 0, 0, 0, 0, sizeof(lecuyer_state), &lecuyer_st
+  PNL_MC, 0, 0, 0, 0., sizeof(lecuyer_state), &lecuyer_st
 };
 PnlRng PnlRngTausworthe =
 {
-  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free},
+  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free, (NewFunc *) pnl_rng_new, (CopyFunc *) pnl_rng_copy, (CloneFunc *) pnl_rng_clone},
   PNL_RNG_TAUSWORTHE, &TAUS,
-  PNL_MC, 0, 0, 0, 0, sizeof(tausworthe_state), &tausworthe_st
+  PNL_MC, 0, 0, 0, 0., sizeof(tausworthe_state), &tausworthe_st
 };
 PnlRng PnlRngMersenne =
 {
-  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free},
+  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free, (NewFunc *) pnl_rng_new, (CopyFunc *) pnl_rng_copy, (CloneFunc *) pnl_rng_clone},
   PNL_RNG_MERSENNE, &MERSENNE,
-  PNL_MC, 0, 0, 0, 0, sizeof(mt_state), &mt_st1
+  PNL_MC, 0, 0, 0, 0., sizeof(mt_state), &mt_st1
 };
 PnlRng PnlRngMersenneRandomSeed =
 {
-  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free},
+  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free, (NewFunc *) pnl_rng_new, (CopyFunc *) pnl_rng_copy, (CloneFunc *) pnl_rng_clone},
   PNL_RNG_MERSENNE_RANDOM_SEED, &MERSENNE,
-  PNL_MC, 0, 0, 0, 0, sizeof(mt_state), &mt_st2
+  PNL_MC, 0, 0, 0, 0., sizeof(mt_state), &mt_st2
 };
 PnlRng PnlRngSqrt =
 {
-  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free},
+  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free, (NewFunc *) pnl_rng_new, (CopyFunc *) pnl_rng_copy, (CloneFunc *) pnl_rng_clone},
   PNL_RNG_SQRT, &SQRT,
-  PNL_QMC, 0, 0, 0, 0, sizeof(sqrt_state), &sqrt_st
+  PNL_QMC, 0, 0, 0, 0., sizeof(sqrt_state), &sqrt_st
 };
 PnlRng PnlRngHalton =
 {
-  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free},
+  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free, (NewFunc *) pnl_rng_new, (CopyFunc *) pnl_rng_copy, (CloneFunc *) pnl_rng_clone},
   PNL_RNG_HALTON, &HALTON,
-  PNL_QMC, 0, 0, 0, 0, sizeof(halton_state), &halton_st
+  PNL_QMC, 0, 0, 0, 0., sizeof(halton_state), &halton_st
 };
 PnlRng PnlRngFaure =
 {
-  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free},
+  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free, (NewFunc *) pnl_rng_new, (CopyFunc *) pnl_rng_copy, (CloneFunc *) pnl_rng_clone},
   PNL_RNG_FAURE, &FAURE,
-  PNL_QMC, 0, 0, 0, 0, sizeof(faure_state), &faure_st
+  PNL_QMC, 0, 0, 0, 0., sizeof(faure_state), &faure_st
 };
 PnlRng PnlRngSobolI4 =
 {
-  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free},
+  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free, (NewFunc *) pnl_rng_new, (CopyFunc *) pnl_rng_copy, (CloneFunc *) pnl_rng_clone},
   PNL_RNG_SOBOL_I4, &I4_SOBOL,
-  PNL_QMC, 0, 0, 0, 0, sizeof(sobol_i4_state), &sobol_i4_st
+  PNL_QMC, 0, 0, 0, 0., sizeof(sobol_i4_state), &sobol_i4_st
 };
 PnlRng PnlRngSobolI8 =
 {
-  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free},
+  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free, (NewFunc *) pnl_rng_new, (CopyFunc *) pnl_rng_copy, (CloneFunc *) pnl_rng_clone},
   PNL_RNG_SOBOL_I8, &I8_SOBOL,
-  PNL_QMC, 0, 0, 0, 0, sizeof(sobol_i8_state), &sobol_i8_st
+  PNL_QMC, 0, 0, 0, 0., sizeof(sobol_i8_state), &sobol_i8_st
 };
 PnlRng PnlRngNiederreiter =
 {
-  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free},
+  {PNL_TYPE_RNG, pnl_rng_label, PNL_TYPE_RNG, 0, (DestroyFunc *) pnl_rng_free, (NewFunc *) pnl_rng_new, (CopyFunc *) pnl_rng_copy, (CloneFunc *) pnl_rng_clone},
   PNL_RNG_NIEDERREITER, &NIEDERREITER,
-  PNL_QMC, 0, 0, 0, 0, sizeof(nied_state), &nied_st
+  PNL_QMC, 0, 0, 0, 0., sizeof(nied_state), &nied_st
 };
 
 PnlRng *PnlRngArray[] =
@@ -1022,7 +1022,7 @@ char *pnl_rng_get_name(PnlRngType id)
  * @param dimension dimension of the value space to simulate in. Only
  * used for PNL_QMC.
  * @param samples maximum number of samples requested. Only used for PNL_QMC.
- * @returns OK or WRONG
+ * @return OK or WRONG
  */
 int pnl_rand_init(int type_generator, int dimension, long samples)
 {
@@ -1048,20 +1048,10 @@ int pnl_rand_init(int type_generator, int dimension, long samples)
       pnl_rng_sseed(rng, time(NULL));
       break;
     case PNL_RNG_FAURE :
-      pnl_rng_sdim(rng, dimension);
-      break;
     case PNL_RNG_SQRT:
-      pnl_rng_sdim(rng, dimension);
-      break;
     case PNL_RNG_HALTON:
-      pnl_rng_sdim(rng, dimension);
-      break;
     case PNL_RNG_SOBOL_I4:
-      pnl_rng_sdim(rng, dimension);
-      break;
     case PNL_RNG_SOBOL_I8:
-      pnl_rng_sdim(rng, dimension);
-      break;
     case PNL_RNG_NIEDERREITER:
       pnl_rng_sdim(rng, dimension);
       break;
@@ -1134,7 +1124,7 @@ PnlRng *pnl_rng_new()
   rng->dimension = 0;
   rng->counter = 0;
   rng->has_gauss = 0;
-  rng->gauss = 0;
+  rng->gauss = 0.;
   rng->size_state = 0;
   rng->state = NULL;
   return rng;
@@ -1156,7 +1146,7 @@ void pnl_rng_init(PnlRng *rng, int type)
   rng->dimension = 0;
   rng->counter = 0;
   rng->has_gauss = 0;
-  rng->gauss = 0;
+  rng->gauss = 0.;
   rng->size_state = 0;
   rng->state = NULL;
   switch (type)
