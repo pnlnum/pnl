@@ -3,10 +3,9 @@ cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
 set(PROJECT_LIBRARY_NAME ${PROJECT_NAME})
 file(STRINGS "VERSION" PNL_VERSION)
-set(BUILD_SHARED_LIBS ON)
 
 
-# Prefix 
+# Prefix
 if(PNL_INSTALL_PREFIX)
     set(CMAKE_INSTALL_PREFIX ${PNL_INSTALL_PREFIX} CACHE STRING "Installation prefix." FORCE)
 else(PNL_INSTALL_PREFIX)
@@ -19,10 +18,6 @@ if(CROSS_COMPILE)
 endif()
 
 project(pnl C CXX)
-
-if (NOT LINK_TYPE) 
-    set(LINK_TYPE SHARED)
-endif (NOT LINK_TYPE)
 
 set(CMAKE_MACOSX_RPATH ON)
 set(CMAKE_SKIP_BUILD_RPATH  FALSE)
@@ -38,6 +33,7 @@ option(USE_MPI "Compiles the MPI bindings for PNL. Default = on" ON)
 option(WITHOUT_DEPRECATED "Do not build deprecated functions. Default = off" OFF)
 option(USE_INTERNAL_BLAS "Use internal Blas & Lapack instead of the system's ones. Default = off" OFF)
 option(PNL_ENABLE_TESTS "Enable PNL tests. Default = on" ON)
+option(BUILD_SHARED_LIBS "Build PNL as a shared library. Default = on. If off, PNL is built as a static library" ON)
 
 
 # Release or Debug
@@ -59,7 +55,7 @@ include(CMakeMacroExternInline)
 if (WIN32)
     add_definitions(-DMSDOS)
     if (MSVC)
-        set(USE_INTERNAL_BLAS ON)
+        add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
     endif (MSVC)
 endif (WIN32)
 
@@ -71,14 +67,14 @@ if (NOT USE_INTERNAL_BLAS)
         message(FATAL_ERROR "--> You must specify both BLAS_LIBRARIES and LAPACK_LIBRARIES or none of them.")
     endif ()
 
-    if (BLAS_LIBRARIES AND LAPACK_LIBRARIES) 
+    if (BLAS_LIBRARIES AND LAPACK_LIBRARIES)
         set(BLAS_FOUND true)
         set(LAPACK_FOUND true)
     else ()
         find_package(BLAS)
         find_package(LAPACK)
-    endif (BLAS_LIBRARIES AND LAPACK_LIBRARIES) 
-    
+    endif (BLAS_LIBRARIES AND LAPACK_LIBRARIES)
+
     if (BLAS_FOUND AND LAPACK_FOUND)
         set(LIBS ${LIBS} ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES})
     else ()

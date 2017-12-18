@@ -58,13 +58,15 @@ cmake -DPNL_INSTALL_PREFIX=some/new/prefix /relative/path/to/pnl
 
 Some useful variables to modify the behaviour of cmake.
 
-- `-DCMAKE_BUILD_TYPE`: Release OR Debug. Default is Debug. Choose Debug for building a development release without optimization and with debugging symbols. Choose Release for building an optimized version.
+- `-DCMAKE_BUILD_TYPE=Release/Debug`. Default is Debug. Choose Debug for building a development release without optimization and with debugging symbols. Choose Release for building an optimized version.
 
 - `-DPNL_INSTALL_PREFIX`: the path where to install the library. Default is to use the building directory as the installation prefix.
 
-- `-DLAPACK_LIBRARIES`: full path of a Lapack library (not just its directory). Lapack is detected automatically but the user can specify a particular library.
+- `-DBUILD_SHARED_LIBS=ON/OFF`. Default is ON. If ON, PNL is built as a shared library and if OFF as a static library.
 
-- `-DBLAS_LIBRARIES`: full path of a Blas library (not just its directory). Blas is detected automatically but the user can specify a particular library. **Note that you must specify both `BLAS_LIBRARIES` and `LAPACK_LIBRARIES` or none of them.**
+- `-DLAPACK_LIBRARIES`: full path to a Lapack library (not just its directory). Lapack is detected automatically but the user can specify a particular library.
+
+- `-DBLAS_LIBRARIES`: full path to a Blas library (not just its directory). Blas is detected automatically but the user can specify a particular library. **Note that you must specify both `BLAS_LIBRARIES` and `LAPACK_LIBRARIES` or none of them.**
 
 - `-DUSE_MPI`: ON/OFF. Default is ON. If ON, build the MPI bindings.
 
