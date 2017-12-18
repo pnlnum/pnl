@@ -2,6 +2,7 @@
 #define _PNL_RANDOM_H
 
 #include "pnl/pnl_config.h"
+#include "pnl/pnl_extern.h"
 #include "pnl/pnl_object.h"
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_vector.h"
@@ -25,7 +26,7 @@ extern "C" {
 /* indices of random generators
  * The first generators must be true PNL_MC generators and the last ones are PNL_QMC
  * Do NOT mix them */
-typedef enum 
+typedef enum
 {
   PNL_RNG_NULL                 = -1,
   PNL_RNG_KNUTH                = 0,
@@ -57,8 +58,7 @@ struct _PnlRng
 {
   PnlObject object;
   PnlRngType type; /*!< generator type */
-  void (*Compute)(PnlRng *g, double *sample); /*!< the function to compute the
-                                                next number in the sequence */
+  void (*Compute)(PnlRng *g, double *sample); /*!< the function to compute the next number in the sequence */
   int rand_or_quasi; /*!< can be PNL_MC or PNL_QMC */
   int dimension; /*!< dimension of the space in which we draw the samples */
   int counter; /*!< counter = number of samples already drawn */
@@ -69,21 +69,21 @@ struct _PnlRng
 };
 
 
-extern PnlRng PnlRngKnuth;
-extern PnlRng PnlRngMrgk3;
-extern PnlRng PnlRngMrgk5;
-extern PnlRng PnlRngShufl;
-extern PnlRng PnlRngLecuyer;
-extern PnlRng PnlRngTausworthe;
-extern PnlRng PnlRngMersenne;
-extern PnlRng PnlRngMersenneRandomSeed;
-extern PnlRng PnlRngSqrt;
-extern PnlRng PnlRngHalton;
-extern PnlRng PnlRngFaure;
-extern PnlRng PnlRngSobolI4;
-extern PnlRng PnlRngSobolI8;
-extern PnlRng PnlRngNiederreiter;
-extern PnlRng *PnlRngArray[];
+DECLEXTERN PnlRng PnlRngKnuth;
+DECLEXTERN PnlRng PnlRngMrgk3;
+DECLEXTERN PnlRng PnlRngMrgk5;
+DECLEXTERN PnlRng PnlRngShufl;
+DECLEXTERN PnlRng PnlRngLecuyer;
+DECLEXTERN PnlRng PnlRngTausworthe;
+DECLEXTERN PnlRng PnlRngMersenne;
+DECLEXTERN PnlRng PnlRngMersenneRandomSeed;
+DECLEXTERN PnlRng PnlRngSqrt;
+DECLEXTERN PnlRng PnlRngHalton;
+DECLEXTERN PnlRng PnlRngFaure;
+DECLEXTERN PnlRng PnlRngSobolI4;
+DECLEXTERN PnlRng PnlRngSobolI8;
+DECLEXTERN PnlRng PnlRngNiederreiter;
+DECLEXTERN PnlRng *PnlRngArray[];
 
 #ifdef PNL_HAVE_INLINE
 PNL_INLINE_FUNC PnlRng* pnl_rng_get_from_id (PnlRngType t)

@@ -52,11 +52,15 @@ endif()
 # Do we have inline
 include(CMakeMacroExternInline)
 
+set(PNL_DLL OFF)
 if (WIN32)
     add_definitions(-DMSDOS)
     if (MSVC)
         add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
     endif (MSVC)
+    if (BUILD_SHARED_LIBS)
+        set(PNL_DLL ON)
+    endif (BUILD_SHARED_LIBS)
 endif (WIN32)
 
 

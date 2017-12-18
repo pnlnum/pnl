@@ -51,17 +51,14 @@
 /* turn off range checking by default internally */
 #cmakedefine PNL_RANGE_CHECK_OFF
 
-/* Runnning on Cygwin */
-#cmakedefine _CYGWIN
-
-/* Running on a Win32 system */
-#cmakedefine _WIN32
-
 /* Define to 1 if you use internal Blas */
 #cmakedefine USE_INTERNAL_BLAS
 
 /* Define to 1 not to build deprecated functions */
 #cmakedefine WITHOUT_DEPRECATED
+
+/* Define to 1 if we build a dll for pnl */
+#cmakedefine PNL_DLL
 
 #endif /* _PNL_CONFIG_H */
 

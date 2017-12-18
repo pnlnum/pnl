@@ -8,6 +8,7 @@ install(FILES
     pnl_cdf.h 
     pnl_complex.h 
     pnl_deprecated.h
+    pnl_extern.h
     pnl_fft.h 
     pnl_finance.h
     pnl_integration.h 

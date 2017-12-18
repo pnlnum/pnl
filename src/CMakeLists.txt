@@ -35,6 +35,7 @@ if (WIN32)
     set (pnl_LIB_SRCS ${pnl_LIB_SRCS} pnl.def)
 endif (WIN32)
 
+add_definitions(-D_COMPILING_PNL)
 add_subdirectory(include/pnl)
 foreach(subdir ${SUBDIRS})
     add_subdirectory (${subdir})

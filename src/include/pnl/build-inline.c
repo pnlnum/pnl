@@ -1,6 +1,4 @@
-
-/* To prevent from loading pnl/pnl_config.h */
-#define _PNL_CONFIG_H 
+#include "pnl/pnl_extern.h"
 
 #ifdef PNL_HAVE_INLINE
 #undef PNL_HAVE_INLINE
@@ -16,6 +14,9 @@
 #undef PNL_INLINE_FUNC
 #endif
 #define PNL_INLINE_FUNC
+
+/* To prevent from loading pnl/pnl_config.h */
+#define _PNL_CONFIG_H 
 
 #include "pnl_matrix.h"
 #include "pnl_vector.h"
