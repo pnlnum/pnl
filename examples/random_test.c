@@ -137,13 +137,13 @@ static void test_pnl_rng_gauss(PnlRng *rng, const char *name)
 static void test_rng ()
 {
   int i;
-  for (i = PNL_RNG_KNUTH; i <= PNL_RNG_NIEDERREITER; i++)
+  PnlRng *rng;
+  for (i = 0; PnlRngArray[i] != NULL; i++)
     {
-      PnlRng *rng = pnl_rng_create(i);
-      test_pnl_vect_rng(rng, pnl_rng_get_name(rng->type));
-      test_pnl_mat_rng(rng, pnl_rng_get_name(rng->type));
-      test_pnl_rng_gauss(rng, pnl_rng_get_name(rng->type));
-      pnl_rng_free(&rng);
+      rng = PnlRngArray[i];
+      test_pnl_vect_rng(rng, pnl_rng_get_name(PnlRngArray[i]->type));
+      test_pnl_mat_rng(rng, pnl_rng_get_name(PnlRngArray[i]->type));
+      test_pnl_rng_gauss(rng, pnl_rng_get_name(PnlRngArray[i]->type));
     }
 }
 

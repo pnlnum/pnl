@@ -1182,7 +1182,6 @@ void pnl_rng_init(PnlRng *rng, int type)
       rng->size_state = sizeof(tausworthe_state);
       break;
     case PNL_RNG_MERSENNE:
-    case PNL_RNG_MERSENNE_RANDOM_SEED:
       rng->Compute = MERSENNE;
       rng->rand_or_quasi = PNL_MC;
       rng->size_state = sizeof(mt_state);
