@@ -137,7 +137,7 @@ int pnl_optim_linprog(const PnlVect *C, const PnlMat *A_ineq, const PnlVect *B_i
   return (ret == OPTIMAL) ? OK : FAIL;
 }
 
-int * incr(int n, int *T)
+static int * incr(int n, int *T)
 {
   int i;
   int *ret = malloc(n * sizeof(int));
