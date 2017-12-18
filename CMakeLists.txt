@@ -29,7 +29,7 @@ set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 set(CMAKE_FILES_DIRECTORY "/CMakeFiles")
 
 
-option(USE_MPI "Compiles the MPI bindings for PNL. Default = on" ON)
+option(WITH_MPI "Compiles the MPI bindings for PNL. Default = on" ON)
 option(WITHOUT_DEPRECATED "Do not build deprecated functions. Default = off" OFF)
 option(USE_INTERNAL_BLAS "Use internal Blas & Lapack instead of the system's ones. Default = off" OFF)
 option(PNL_ENABLE_TESTS "Enable PNL tests. Default = on" ON)
@@ -105,7 +105,7 @@ else (USE_INTERNAL_BLAS)
 endif (USE_INTERNAL_BLAS)
 
 
-if (USE_MPI)
+if (WITH_MPI)
     set(MPI_FIND_QUIETLY true)
     find_package(MPI)
     if (MPI_C_FOUND)
@@ -113,7 +113,7 @@ if (USE_MPI)
         include_directories(${MPI_C_INCLUDE_PATH})
         set(PNL_CPP_FLAGS "${PNL_CPP_FLAGS} -I${MPI_C_INCLUDE_PATH}")
     endif (MPI_C_FOUND)
-endif (USE_MPI)
+endif (WITH_MPI)
 
 # Add -lm and -ldl if needed
 if (UNIX)

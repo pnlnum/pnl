@@ -60,21 +60,19 @@ Some useful variables to modify the behaviour of cmake.
 
 - `-DCMAKE_BUILD_TYPE=Release/Debug`. Default is Debug. Choose Debug for building a development release without optimization and with debugging symbols. Choose Release for building an optimized version.
 
-- `-DPNL_INSTALL_PREFIX`: the path where to install the library. Default is to use the building directory as the installation prefix.
+- `-DPNL_INSTALL_PREFIX=<path>`. Directory where to install the library. Default is to use the building directory as the installation prefix.
 
 - `-DBUILD_SHARED_LIBS=ON/OFF`. Default is ON. If ON, PNL is built as a shared library and if OFF as a static library.
 
-- `-DLAPACK_LIBRARIES`: full path to a Lapack library (not just its directory). Lapack is detected automatically but the user can specify a particular library.
+- `-DLAPACK_LIBRARIES=<path>`. Full path to a Lapack library (not just its directory). Lapack is detected automatically but the user can specify a particular library.
 
-- `-DBLAS_LIBRARIES`: full path to a Blas library (not just its directory). Blas is detected automatically but the user can specify a particular library. **Note that you must specify both `BLAS_LIBRARIES` and `LAPACK_LIBRARIES` or none of them.**
+- `-DBLAS_LIBRARIES=<path>`. Full path to a Blas library (not just its directory). Blas is detected automatically but the user can specify a particular library. **Note that you must specify both `BLAS_LIBRARIES` and `LAPACK_LIBRARIES` or none of them.**
 
-- `-DUSE_MPI`: ON/OFF. Default is ON. If ON, build the MPI bindings.
+- `-DWITH_MPI=ON/OFF. Default is ON. If ON, build the MPI bindings.
 
-- `-DUSE_INTERNAL_BLAS`: ON/OFF. Default is OFF. If ON, use the internal Blas & Lapack libraries shipped with the PNL source code.
+- `-DUSE_INTERNAL_BLAS=ON/OFF`. Default is OFF. If ON, use the internal Blas & Lapack libraries shipped with the PNL source code.
 
-- `-DLINK_TYPE`: SHARED or STATIC. Default is SHARED. Determine which type of library to build.
-
-- `-DPNL_ENABLE_TESTS`: ON/OFF. Default is ON. If OFF, no test is compiled nor registered for running with `ctest`. This is intended to be used when PNL is included as a sub project instead of being compiled as an external library. In such a case, the typical usage is
+- `-DPNL_ENABLE_TESTS=ON/OFF`. Default is ON. If OFF, no test is compiled nor registered for running with `ctest`. This is intended to be used when PNL is included as a sub project instead of being compiled as an external library. In such a case, the typical usage is
 
         set(PNL_ENABLE_TESTS OFF CACHE BOOL "Disable PNL test.")
         add_subdirectory(some/path/to/pnl)
