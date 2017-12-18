@@ -497,8 +497,14 @@ void I8_SOBOL(PnlRng *rng, double quasi[ ])
       printf("\n");
       printf("i8_SOBOL - Fatal error!\n");
       printf("  The value of SEED seems to be too large!\n");
-      printf("  MAXCOL = %lld\n", maxcol);
-      printf("  L =      %lld\n", l);
+      #ifdef __MINGW32__
+        __mingw_printf("  MAXCOL = %lld\n", maxcol);
+        __mingw_printf("  L =      %lld\n", l);
+      #else
+        printf("  MAXCOL = %lld\n", maxcol);
+        printf("  L =      %lld\n", l);
+      #endif
+
       exit(2);
     }
   /*
