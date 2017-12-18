@@ -22,7 +22,7 @@ find_package_handle_standard_args(Pnl
 function(pnl_add_postbuild target)
     # Copy all the .dll to the binary build dir
 	if(MSVC)
-		set(components @CMAKE_SHARED_LIBRARY_PREFIX@pnl.dll libblas.dll liblapack.dll libgcc_s_seh-1.dll libquadmath-0.dll libgfortran-3.dll)
+		set(components @CMAKE_SHARED_LIBRARY_PREFIX@pnl.dll libblas.dll liblapack.dll libgcc_s_seh-1.dll libquadmath-0.dll libgfortran-4.dll)
 		get_filename_component(PNL_LIB_DIRECTORY ${PNL_LIBRARY} DIRECTORY)
         foreach(entry ${components})
             add_custom_command(TARGET ${target} POST_BUILD
