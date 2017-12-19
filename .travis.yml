@@ -18,9 +18,9 @@ before_script:
 script:
 - mkdir -p build
 - cd build
-- cmake ..
-- make
-- make install
+- cmake .. || travis_terminate 1
+- make || travis_terminate 1
+- make install || travis_terminate 1
 - make CTEST_OUTPUT_ON_FAILURE=1 test
 
 install: true
