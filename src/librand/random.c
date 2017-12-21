@@ -123,7 +123,7 @@ static void MRGK3(PnlRng *rng, double *sample)
 
   /* First generator */
   p1 = A12 * s->x12 - A13N * s->x10;
-  k = p1 / M1;
+  k = (long) (p1 / M1);
   p1 -= k * M1;
   if (p1 < 0) p1 += M1;
 
@@ -133,7 +133,7 @@ static void MRGK3(PnlRng *rng, double *sample)
 
   /* Second generator */
   p2 = A21 * s->x22 - A23N * s->x20;
-  k = p2 / M2;
+  k = (long) (p2 / M2);
   p2 -= k * M2;
   if (p2 < 0) p2 += M2;
 
@@ -179,7 +179,7 @@ static void MRGK5(PnlRng *rng, double *sample)
   p1 = A12 * s->x13 - A15N * s->x10;
   if (p1 > 0) p1 -= A14 * M1;
   p1 += A14 * s->x11;
-  k = p1 / M1;
+  k = (long) (p1 / M1);
   p1 -= k * M1;
 
   if (p1 < 0) p1 += M1;
@@ -194,7 +194,7 @@ static void MRGK5(PnlRng *rng, double *sample)
   p2 = A21 * s->x24 - A25N * s->x20;
   if (p2 > 0) p2 -= A23 * M2;
   p2 += A23 * s->x22;
-  k = p2 / M2;
+  k = (long) (p2 / M2);
   p2 -= k * M2;
 
   if (p2 < 0) p2 += M2;
@@ -1045,7 +1045,7 @@ int pnl_rand_init(int type_generator, int dimension, long samples)
       pnl_rng_sseed(rng, 0);
       break;
     case PNL_RNG_MERSENNE_RANDOM_SEED:
-      pnl_rng_sseed(rng, time(NULL));
+      pnl_rng_sseed(rng, (ulong) time(NULL));
       break;
     case PNL_RNG_FAURE :
     case PNL_RNG_SQRT:
@@ -1450,7 +1450,7 @@ void pnl_rng_sseed(PnlRng *rng, ulong seed)
       pnl_mt_sseed((mt_state *)(rng->state), seed);
       break;
     case PNL_RNG_MERSENNE_RANDOM_SEED :
-      pnl_mt_sseed((mt_state *)(rng->state), time(NULL));
+      pnl_mt_sseed((mt_state *)(rng->state), (ulong) time(NULL));
       break;
     case PNL_RNG_DCMT :
     {

@@ -39,6 +39,7 @@
 
 #include <sys/types.h>
 #include <stdlib.h>
+#include <stddef.h>
 
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_config.h"
@@ -183,9 +184,10 @@ static __inline__ void med3noindex(char *ans, int *i_ans, char *a, char *b, char
 void pnl_qsort(void *a, int n, int es, int lda, int *t, int ldt, int index_flag, int (*cmp)(const void *, const void *))
 {
   char *pa, *pb, *pc, *pd, *pl, *pm, *pn;
-  int d, r, swap_cnt;
-  int *ta, *tb, *tc, *td, *tm, *tl, *tn, d_t, r_t;
+  int d, swap_cnt;
+  int *ta, *tb, *tc, *td, *tm, *tl, *tn, d_t;
   int esa, est;
+  ptrdiff_t r, r_t;
 
   esa = es * lda;
   est = ldt;

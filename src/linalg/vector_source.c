@@ -87,7 +87,7 @@ TYPE(PnlVect) *FUNCTION(pnl_vect, create)(int size)
  * @param x value of all component
  * @return  a TYPE(PnlVect)pointer all value at 0
  */
-TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_scalar)(const int size, BASE x)
+TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_scalar)(int size, BASE x)
 {
   int i;
   TYPE(PnlVect) *v;
@@ -141,7 +141,7 @@ int FUNCTION(pnl_vect, eq_all)(const TYPE(PnlVect) *v, BASE x)
  * @param size the size of the array
  * @return  a TYPE(PnlVect) pointer with all entries set to 0
  */
-TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_zero)(const int size)
+TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_zero)(int size)
 {
   TYPE(PnlVect)* v = FUNCTION(pnl_vect, create)(size);
   FUNCTION(pnl_vect, set_zero)(v);
@@ -156,7 +156,7 @@ TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_zero)(const int size)
  * \c x has to be at least of length size.
  * @return  a TYPE(PnlVect)pointer
  */
-TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_ptr)(const int size, const BASE   *x)
+TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_ptr)(int size, const BASE   *x)
 {
   TYPE(PnlVect) * v;
   if ((v = FUNCTION(pnl_vect, create)(size)) == NULL)
@@ -188,7 +188,7 @@ TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_mat)(const TYPE(PnlMat) *M)
  * must be of length size
  * @return  a TYPE(PnlVect)pointer
  */
-TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_list)(const int size, ...)
+TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_list)(int size, ...)
 {
   TYPE(PnlVect) * v;
   va_list ap;
@@ -750,7 +750,7 @@ int FUNCTION(pnl_vect, find)(PnlVectInt *index, char *type, int(*f)(BASE *), ...
   BASE val, *t;
   size = -1;
 
-  nvar = strlen(type);
+  nvar = (int) strlen(type);
   if ((args = malloc(sizeof(cell) * nvar)) == NULL) return FAIL;
   if ((t = malloc(sizeof(BASE) * nvar)) == NULL) return FAIL;
 

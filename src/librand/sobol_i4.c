@@ -381,7 +381,7 @@ void i4_sobol_init(PnlRng *rng, int dim)
   /*
    *  RECIPD is 1/(common denominator of the elements in V).
    */
-  state->recipd = 1.0E+00 / ((float)(2 * l));
+  state->recipd = 1. / ((float)(2 * l));
 
 }
 

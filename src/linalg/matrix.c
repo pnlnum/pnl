@@ -184,7 +184,7 @@ void pnl_hmat_object_free(PnlHmatObject **H)
 void pnl_hmat_compute_pdims(int *pdims, int ndim, const int *dims)
 {
   int i;
-  pdims[ndim - 1] = 1.;
+  pdims[ndim - 1] = 1;
   for (i = ndim - 1 ; i > 0 ; i--)
     {
       pdims[i - 1] = dims[i] * pdims[i];

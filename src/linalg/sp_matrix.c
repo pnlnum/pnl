@@ -192,7 +192,7 @@ static char pnl_sp_mat_int_label[] = "PnlSpMatrixInt";
 int pnl_sp_mat_int_isequal(const PnlSpMatInt *Sp1, const PnlSpMatInt *Sp2)
 {
   int k;
-  if ((Sp1->m != Sp2->m) || (Sp1->n != Sp1->n) || (Sp1->nz != Sp2->nz)) return FALSE;
+  if ((Sp1->m != Sp2->m) || (Sp1->n != Sp2->n) || (Sp1->nz != Sp2->nz)) return FALSE;
   for (k = 0; k < Sp1->m; k++)
     {
       if (Sp1->I[k] != Sp2->I[k]) return FALSE;

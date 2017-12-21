@@ -914,7 +914,7 @@ int FUNCTION(pnl_mat, find)(PnlVectInt *indi, PnlVectInt *indj, char *type, int(
   BASE val, *t;
   m = n = -1;
 
-  nvar = strlen(type);
+  nvar = (int) strlen(type);
   if ((args = malloc(sizeof(cell) * nvar)) == NULL) return FAIL;
   if ((t = malloc(sizeof(BASE) * nvar)) == NULL) return FAIL;
 

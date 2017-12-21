@@ -399,7 +399,7 @@ int pnl_optim_intpoints_bfgs_solve(PnlRnFuncR *func, PnlRnFuncRm
   int nbr_nl_constraints, nbr_lower_bounds, nbr_upper_bounds, nbr_constraints; // nbr of constraints.
   int nbr_iterations = 0; // Current number of iterations
   int TestInfeasibility = 0; // Test of feasibility of (x, lambda)
-  int OptimalityCriterion = 0., inner_iter = 0, inner_iter_max = 5;
+  int OptimalityCriterion = 0, inner_iter = 0, inner_iter_max = 5;
 
   double f;     // Current value of objective function
   double f_min = 0.; // Minimum value reached during the algorithm

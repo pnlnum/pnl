@@ -346,7 +346,7 @@ void i8_sobol_init(PnlRng *rng, int dim)
        */
       for (j = m; j < state->maxcol; j++)
         {
-          int newv = state->v[i][j - m];
+          long long newv = state->v[i][j - m];
           l = 1;
 
           for (k = 0; k < m; k++)

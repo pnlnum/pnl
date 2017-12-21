@@ -298,8 +298,8 @@ static void pnl_mat_plus_mat_test()
 {
   PnlMat *M1, *M2, *M1copy;
   int i;
-  double rows;
-  double cols;
+  int rows;
+  int cols;
   double x[8]={1.0, 5.0, 3.0, 8.0, 3.0, 7.0, 6.0, 9.0};
   rows=4;
   cols=2;

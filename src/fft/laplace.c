@@ -114,18 +114,19 @@ void pnl_ilap_fft(PnlVect *res, PnlCmplxFunc *f, double T, double eps)
   PnlVectComplex *fft;
   int             i, N, size;
   double          h, time_step, a;
+  double          Ndouble;
   double          f_a, omega;
   dcomplex        mul, fac;
 
   h = M_PI / (2 * T);
   a = h * log(1 + 1. / eps) / (M_2PI);
 
-  N = MAX(sqrt(exp(a * T) / eps), h / (M_2PI * eps)) ;
-  N = pow(2., ceil(log(N) / M_LN2));
+  Ndouble = MAX(sqrt(exp(a * T) / eps), h / (M_2PI * eps)) ;
+  N = pnl_pow_i(2, (int)ceil(log(Ndouble) / M_LN2));
   time_step = M_2PI / (N * h);
 
   fft = pnl_vect_complex_create(N);
-  size = floor(T / time_step) + 1;
+  size = (int) floor(T / time_step) + 1;
   pnl_vect_resize(res, size);
 
   fac = CIexp(-M_2PI / N);

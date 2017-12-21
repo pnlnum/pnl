@@ -750,7 +750,7 @@ static double betaln(double *a0,double *b0)
     {
       if (b > 1E3) 
         {
-          n = a-1.;
+          n = (int) (a-1.);
           w = 1.;
           for(i=1; i<=n; i++) 
             {
@@ -760,7 +760,7 @@ static double betaln(double *a0,double *b0)
           return log(w)-(double)n*log(b)+(gamln(&a)+algdiv(&a,&b));
         }
 
-      n = a-1.;
+      n = (int) (a-1.);
       w = 1.;
       for(i=1; i<=n; i++) 
         {
@@ -771,7 +771,7 @@ static double betaln(double *a0,double *b0)
       w = log(w);
       if (b < 8.)
         {
-          n = b-1.;
+          n = (int) (b-1.);
           z = 1.;
           for(i=1; i<=n; i++) 
             {
@@ -787,7 +787,7 @@ static double betaln(double *a0,double *b0)
       w = 0.;
       if (b < 8.) 
         {
-          n = b-1.;
+          n = (int) (b-1.);
           z = 1.;
           for(i=1; i<=n; i++)
             {
@@ -1001,7 +1001,7 @@ S40:
      PROCEDURE FOR A0 .LT. 1 AND 1 .LT. B0 .LT. 8
      */
   u = gamln1(&a0);
-  m = b0-1.;
+  m = (int) (b0-1.);
   if (m >= 1) 
     {
       c = 1.;
@@ -1212,7 +1212,7 @@ S150:
   *w = 0.5e0+(0.5e0-*w1);
   goto S250;
 S160:
-  n = b0;
+  n = (int) b0;
   b0 -= (double)n;
   if (b0 != 0.) goto S170;
   n -= 1;
@@ -1363,7 +1363,7 @@ S70:
      ALGORITHM FOR 1 .LT. B0 .LT. 8
      */
   u = gamln1(&a0);
-  n = b0-1.;
+  n = (int) (b0-1.);
   if (n < 1) goto S90;
   c = 1.;
   for(i=1; i<=n; i++) {
@@ -1502,7 +1502,7 @@ S70:
      ALGORITHM FOR 1 .LT. B0 .LT. 8
      */
   u = gamln1(&a0);
-  n = b0-1.;
+  n = (int) (b0-1.);
   if (n < 1) goto S90;
   c = 1.;
   for(i=1; i<=n; i++) {
@@ -1590,8 +1590,8 @@ static double bup(double *a,double *b,double *x,double *y,int *n,double *eps)
   d = 1.;
   if (*n == 1 || *a < 1.) goto S10;
   if (apb < 1.1e0*ap1) goto S10;
-  mu = fabs(exparg(&K1));
-  k = exparg(&K2);
+  mu = (int) fabs(exparg(&K1));
+  k = (int) exparg(&K2);
   if (k < mu) mu = k;
   t = mu;
   d = exp(-t);
@@ -1612,7 +1612,7 @@ S20:
   r = (*b-1.)**x/ *y-*a;
   if (r < 1.) goto S50;
   k = t = nm1;
-  if (r < t) k = r;
+  if (r < t) k = (int) r;
 S30:
   /*
      ADD THE INCREASING TERMS OF THE SERIES
@@ -5686,7 +5686,7 @@ static void cumfnc(double *f,double *dfn,double *dfd,double *pnonc,
   /*
    * Calculate the central term of the poisson weighting factor.
    */
-  icent = xnonc;
+  icent = (int) xnonc;
   if (icent == 0) icent = 1;
   /*
    * Compute central weight term
