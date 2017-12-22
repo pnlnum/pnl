@@ -1,3 +1,7 @@
+if("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
+  message(STATUS "Suppress -Wunused-but-set-variable")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-but-set-variable")
+endif()
 add_library(optim OBJECT
    intpoints_bfgs.c
    lp_solve/lp_LUSOL.c
