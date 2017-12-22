@@ -5329,7 +5329,7 @@ STATIC int presolve_rows(presolverec *psdata, int *nCoeffChanged, int *nConRemov
           if((Value1 != 0) && deleteSOS) {
             if(!presolve_fixSOS1(psdata, j, Value1, &iConRemove, &iVarFixed))
               status = presolve_setstatus(psdata, INFEASIBLE);
-              psdata->forceupdate = TRUE;
+            psdata->forceupdate = TRUE;
           }
           else {
             if(!presolve_colfix(psdata, j, Value1, (MYBOOL) !isSOS, NULL))
