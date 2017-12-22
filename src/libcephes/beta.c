@@ -204,7 +204,7 @@ int pnl_sf_lbeta (double a, double b, double *res, int *sgn)
 
 double lbeta( double a, double b )
 {
-  double res;
+  double res = 0.;
   int sgn;
   pnl_sf_lbeta (a, b, &res, &sgn);
   return res;
