@@ -50,7 +50,7 @@ The `make install` command installs
 
 - the header files to `<prefix>/include`
 - the library to `<prefix>/lib`
-- the CMake config file to `<prefix>/lib/cmake/pnl`
+- the CMake config file `PnlConfig.cmake` to `<prefix>/lib/cmake/pnl`
 - the CMakeuser.incl file to `<prefix>/share/pnl` (see [below](#with-a-makefile))
 
 **The default value for `prefix` is the current build directory, but it can be changed by calling cmake as**
@@ -59,7 +59,7 @@ The `make install` command installs
 cmake -DPNL_INSTALL_PREFIX=some/new/prefix /relative/path/to/pnl
 ```
 
-Some useful variables to modify the behaviour of cmake.
+Some useful variables to modify the behavior of cmake.
 
 - `-DCMAKE_BUILD_TYPE=Release/Debug`. Default is Debug. Choose Debug for building a development release without optimization and with debugging symbols. Choose Release for building an optimized version.
 
@@ -71,7 +71,7 @@ Some useful variables to modify the behaviour of cmake.
 
 - `-DBLAS_LIBRARIES=<path>`. Full path to a Blas library (not just its directory). Blas is detected automatically but the user can specify a particular library. **Note that you must specify both `BLAS_LIBRARIES` and `LAPACK_LIBRARIES` or none of them.**
 
-- `-DWITH_MPI=ON/OFF. Default is ON. If ON, build the MPI bindings.
+- `-DWITH_MPI=ON/OFF`. Default is ON. If ON, build the MPI bindings.
 
 - `-DUSE_INTERNAL_BLAS=ON/OFF`. Default is OFF. If ON, use the internal Blas & Lapack libraries shipped with the PNL source code.
 
@@ -85,7 +85,8 @@ Some useful variables to modify the behaviour of cmake.
 
         # For every target, add
         target_link_libraries(my_target pnl)
-        # On Windows, to ensure all the dll's are copied next to the executable
+        # On Windows, to ensure all the dll's are copied next to the executable 
+        # (on other platforms, add_pnl_postbuild does nothing).
         add_pnl_postbuild(my_target)
 
 #### Under Windows
@@ -191,4 +192,4 @@ project without using `CMake`, you have to go through the followings steps
 
         Project properties -> Linker -> Input -> Additional Dependencies
 
-1. To run your executable, copy all the `.dll` files from  `pnl/lib/pnl.dll` to the folder containing the executable.
+1. To run your executable, copy all the `.dll` files from  `pnl/lib/` to the folder containing the executable.
