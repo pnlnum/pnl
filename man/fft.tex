@@ -3,12 +3,13 @@
 
 The forward Fourier transform of a vector $c$ is defined by
 \begin{equation*}
-  z_j = \sum_{k=1}^N c_k \expp{-i (j-1) (k-1) 2 \pi / N}, \quad j=1,\cdots,N
+  z_j = \sum_{k=0}^{N-1} c_k \expp{-i j k 2 \pi / N}, \quad j=0,\cdots,N-1
 \end{equation*}
 The inverse Fourier transform enables to recover $c$ from $z$ and is defined by
 \begin{equation*}
-  c_k = \sum_{j=1}^N z_j \expp{i (j-1) (k-1) 2 \pi / N}, \quad j=1,\cdots,N
+  c_k = \frac{1}{N}\sum_{k=0}^{N-1} c_k \expp{i j k 2 \pi / N}, \quad j=0,\cdots,N-1
 \end{equation*}
+Note that the inverse Fourier transform is scaled by $\frac{1}{N}$, such that the inverse Fourier transform applies to the Fourier transform just yields the original vector.
 
 
 The coefficients of the Fourier transform of a real function satisfy the
@@ -43,7 +44,7 @@ The storage scheme is best shown by some examples. The table below shows the
 output for an odd-length sequence, $n=5$.  The two columns give the
 correspondence between the $5$ values in the half-complex sequence (stored in
 a PnlVect $V$) and the values (PnlVectComplex $C$) that would be returned if
-the same real input sequence were passed to pnl_dft_complex as a complex
+the same real input sequence were passed to \reffun{pnl_fft} as a complex
 sequence (with imaginary parts set to 0),
 \begin{equation}
   \begin{array}{l}
@@ -55,11 +56,11 @@ sequence (with imaginary parts set to 0),
   \end{array}
 \end{equation}
 
-The elements of index greater than $N/2$ of the complex array, as $C(3)$
-$C(4)$, are filled in using the symmetry condition.
+The elements of index greater than $N/2$ of the complex array, as $C(3)$ and
+$C(4)$ are filled in using the symmetry condition.
 
 The next table shows the output for an even-length sequence, $n=6$.
-In the even case there are two values which are purely real,
+In the even case, there are two values which are purely real,
 \begin{equation}
   \begin{array}{l}
     C(0) =  V(0) + \imath 0, \\
@@ -112,9 +113,9 @@ available on \url{http://www.netlib.org/fftpack}.
   \sshortdescribe Compute the FFT of the real valued sequence \var{in} and
   stores it into \var{out}.
 
-\item \describefun{int}{pnl_real_ifft}{const \PnlVect \ptr in,
-    \PnlVectComplex \ptr out}
-  \sshortdescribe Compute the inverse FFT of \var{in} and stores it into \var{out}.
+\item \describefun{int}{pnl_real_ifft}{const \PnlVectComplex \ptr in,
+    \PnlVect \ptr out}
+  \sshortdescribe Compute the inverse FFT of \var{in} and stores it into \var{out}. The vector \var{in} is supposed to be the FFT of a real valued vector.
 
 \item \describefun{int}{pnl_real_fft_inplace}{double \ptr data, int n}
   \sshortdescribe Compute the FFT of the real valued vector \var{data} of
