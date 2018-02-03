@@ -402,7 +402,7 @@ TYPE(PnlSpMat)* FUNCTION(pnl_sp_mat,create_from_file)(const char *file)
   while (1)
     {
       /* Remove leading spaces */
-      while ((car = fgetc(FIC)) == ' ' || car == '\t') continue;
+      while ((car = fgetc(FIC)) == ' ' || car == ' ') continue;
       /* Ignore comments */
       if (iscomment(car))
         {
@@ -414,7 +414,7 @@ TYPE(PnlSpMat)* FUNCTION(pnl_sp_mat,create_from_file)(const char *file)
           break;
         }
     }
-    if (fscanf(FIC, "%d%*[ \t]%d%*[ \t]%d", &m, &n, &nz) != 3)
+    if (fscanf(FIC, "%d%*[  ]%d%*[  ]%d", &m, &n, &nz) != 3)
     {
       PNL_ERROR("Wrong file format", "FUNCTION(pnl_sp_mat,create_from_file)")
     }
@@ -426,7 +426,7 @@ TYPE(PnlSpMat)* FUNCTION(pnl_sp_mat,create_from_file)(const char *file)
     for (i = 0; i < nz; i++)
     {
       /* Remove leading spaces */
-      while ((car = fgetc(FIC)) == ' ' || car == '\t') continue;
+      while ((car = fgetc(FIC)) == ' ' || car == ' ') continue;
       /* Ignore comments */
       if (iscomment(car))
         {
@@ -437,12 +437,12 @@ TYPE(PnlSpMat)* FUNCTION(pnl_sp_mat,create_from_file)(const char *file)
         {
           ungetc(car, FIC);
           /* Drop '(' if any */
-          fscanf(FIC, "%*[ \t(]");
-          if (fscanf(FIC, "%d%*[, \t]%d", &row, &col) != 2)
+          fscanf(FIC, "%*[  (]");
+          if (fscanf(FIC, "%d%*[,  ]%d", &row, &col) != 2)
           {
             PNL_ERROR("Wrong file format", "FUNCTION(pnl_sp_mat,create_from_file)")
           }
-          if (fscanf(FIC, "%*[): \t]" IN_FORMAT, IN_PUT_FORMAT(data)) == MULTIPLICITY)
+          if (fscanf(FIC, "%*[):  ]" IN_FORMAT, IN_PUT_FORMAT(data)) == MULTIPLICITY)
             {
               M->J[i] = col;
               /* Check if we are reading a new row */
