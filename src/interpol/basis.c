@@ -1206,21 +1206,21 @@ void pnl_basis_free(PnlBasis **B)
 void pnl_basis_print(const PnlBasis *B)
 {
   printf("Basis Name : %s\n", B->label);
-  printf(" Number of variates : %d\n", B->nb_variates);
-  printf(" Number of functions in tensor: %d\n", B->len_T);;
-  printf(" Number of extra functions : %d\n", B->len_func_list);
-  printf(" Total number of functions : %d\n", B->nb_func);
-  printf(" isreduced = %d\n", B->isreduced);
+  printf("\tNumber of variates : %d\n", B->nb_variates);
+  printf("\tNumber of functions in tensor: %d\n", B->len_T);;
+  printf("\tNumber of extra functions : %d\n", B->len_func_list);
+  printf("\tTotal number of functions : %d\n", B->nb_func);
+  printf("\tisreduced = %d\n", B->isreduced);
   if (B->isreduced)
     {
       int i;
-      printf(" center = ");
+      printf("\tcenter = ");
       for (i = 0 ; i < B->nb_variates ; i++) printf("%f ", B->center[i]);
-      printf("\n scale = ");
+      printf("\n\tscale = ");
       for (i = 0 ; i < B->nb_variates ; i++) printf("%f ", B->scale[i]);
       printf("\n");
     }
-  printf(" Tensor matrix : \n");
+  printf("\tTensor matrix : \n");
   pnl_mat_int_print(B->T);
   printf("\n");
 }

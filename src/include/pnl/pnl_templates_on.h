@@ -15,7 +15,7 @@
 #define BASE_TYPE DOUBLE
 #define MULTIPLICITY 1
 #define FP 1
-#define IN_FORMAT "%lf%*[,;  ]"
+#define IN_FORMAT "%lf%*[,; \t]"
 #define OUT_FORMAT "%f"
 #define IN_PUT_FORMAT(a) (a)
 #define OUT_PUT_FORMAT(a) a
@@ -49,7 +49,7 @@
 #define BASE_TYPE COMPLEX
 #define MULTIPLICITY 2
 #define FP 1
-#define IN_FORMAT "%lf + %lfi%*[,;  ]"
+#define IN_FORMAT "%lf + %lfi%*[,; \t]"
 #define OUT_FORMAT "%f + %fi"
 #define IN_PUT_FORMAT(a) &((*(a)).r),&((*(a)).i)
 #define OUT_PUT_FORMAT(a) (a).r,(a).i
@@ -81,7 +81,7 @@
 #define ATOMIC unsigned int
 #define BASE_TYPE UINT
 #define MULTIPLICITY 1
-#define IN_FORMAT "%u%*[,;  ]"
+#define IN_FORMAT "%u%*[,; \t]"
 #define OUT_FORMAT "%u"
 #define IN_PUT_FORMAT(a) (a)
 #define OUT_PUT_FORMAT(a) (a)
@@ -111,7 +111,7 @@
 #define ATOMIC int
 #define BASE_TYPE INT
 #define MULTIPLICITY 1
-#define IN_FORMAT "%d%*[,;  ]"
+#define IN_FORMAT "%d%*[,; \t]"
 #define OUT_FORMAT "%d"
 #define IN_PUT_FORMAT(a) (a)
 #define OUT_PUT_FORMAT(a) (a)

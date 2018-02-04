@@ -229,9 +229,9 @@ static void print_newton_iter (int iter, const PnlVect *x, const PnlVect *Fx, in
   if ( verbose == TRUE )
     {
       printf ("iter = %d\n", iter);
-      printf (" x = "); pnl_vect_print_asrow (x);
-      printf (" f(x) = "); pnl_vect_print_asrow (Fx);
-      printf (" |f(x)| = %f\n", pnl_vect_norm_two (Fx));
+      printf ("\tx = "); pnl_vect_print_asrow (x);
+      printf ("\tf(x) = "); pnl_vect_print_asrow (Fx);
+      printf ("\t|f(x)| = %f\n", pnl_vect_norm_two (Fx));
     }
 }
 
@@ -317,7 +317,7 @@ int pnl_multiroot_newton (PnlRnFuncRnDFunc *func, const PnlVect *x0, double x_ep
         }
       if ( (verbose == TRUE) && (nb_tries_ls > 1) )
         {
-          printf (" Need to redude step size %d times.\n", nb_tries_ls);
+          printf ("\tNeed to redude step size %d times.\n", nb_tries_ls);
         }
       if ( (pnl_vect_norm_two (dx) < x_eps * pnl_vect_norm_two (res))
            || (norm < fx_eps) )

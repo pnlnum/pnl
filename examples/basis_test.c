@@ -68,7 +68,7 @@ static void exp_regression2()
   pnl_basis_fit_ls(basis, alpha, t, y);
   if (PRINT_COEFF)
     {
-      printf(" coefficients of the decomposition : ");
+      printf("\tcoefficients of the decomposition : ");
       pnl_vect_print_asrow(alpha);
     }
   /* computing the infinity norm of the error */
@@ -134,7 +134,7 @@ static double regression_multid_aux(double(*f)(double *), PnlBasis *basis)
   pnl_basis_fit_ls(basis, alpha, t, y);
   if (PRINT_COEFF)
     {
-      printf(" coefficients of the decomposition : ");
+      printf("\tcoefficients of the decomposition : ");
       pnl_vect_print_asrow(alpha);
     }
 

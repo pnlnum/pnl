@@ -828,25 +828,25 @@ static void pnl_mat_minmax_test()
   /* printf ("--> pnl_mat_min_index \n"); */
   /* pnl_mat_min_index(A, min, imin, 'c'); */
   /* printf("min(A, 'c') = "); pnl_vect_print_nsp (min); */
-  /* printf(" index = "); pnl_vect_int_print_nsp (imin); */
+  /* printf("\tindex = "); pnl_vect_int_print_nsp (imin); */
   /* pnl_mat_min_index(A, min, imin, 'r'); */
   /* printf("min(A, 'r') = "); pnl_vect_print_nsp (min); */
-  /* printf(" index = "); pnl_vect_int_print_nsp (imin); */
+  /* printf("\tindex = "); pnl_vect_int_print_nsp (imin); */
 
   /* printf ("--> pnl_mat_max_index \n"); */
   /* pnl_mat_max_index(A, max, imax, 'c'); */
   /* printf("max(A, 'c') = "); pnl_vect_print_nsp (max); */
-  /* printf(" index = "); pnl_vect_int_print_nsp (imax); */
+  /* printf("\tindex = "); pnl_vect_int_print_nsp (imax); */
   /* pnl_mat_max_index(A, max, imax, 'r'); */
   /* printf("max(A, 'r') = "); pnl_vect_print_nsp (max); */
-  /* printf(" index = "); pnl_vect_int_print_nsp (imax); */
+  /* printf("\tindex = "); pnl_vect_int_print_nsp (imax); */
 
   /* printf ("--> pnl_mat_minmax_index \n"); */
   /* pnl_mat_minmax_index (A, min, max, imin, imax, 'r'); */
   /* printf("max(A, 'r') = "); pnl_vect_print_nsp (max); */
-  /* printf(" index = "); pnl_vect_int_print_nsp (imax); */
+  /* printf("\tindex = "); pnl_vect_int_print_nsp (imax); */
   /* printf("min(A, 'r') = "); pnl_vect_print_nsp (min); */
-  /* printf(" index = "); pnl_vect_int_print_nsp (imin); */
+  /* printf("\tindex = "); pnl_vect_int_print_nsp (imin); */
 
 }
 

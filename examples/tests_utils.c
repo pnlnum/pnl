@@ -90,7 +90,7 @@ void pnl_test_set_ok (const char *str)
   update_count_tests(TRUE);
   if (verbose) 
     {
-      printf (" %s : OK\n", str);
+      printf ("\t%s : OK\n", str);
     }
 }
 
@@ -104,7 +104,7 @@ void pnl_test_set_ok (const char *str)
 void pnl_test_set_fail (const char *str, double res, double expected)
 {
   update_count_tests(FALSE);
-  printf (" %s : FAIL (observed %.18f expected %.18f)\n", str, res, expected);
+  printf ("\t%s : FAIL (observed %.18f expected %.18f)\n", str, res, expected);
 }
 
 
@@ -116,7 +116,7 @@ void pnl_test_set_fail (const char *str, double res, double expected)
 void pnl_test_set_fail0(const char *str)
 {
   update_count_tests(FALSE);
-  printf (" %s : FAIL\n", str);
+  printf ("\t%s : FAIL\n", str);
 }
 
 
@@ -125,7 +125,7 @@ static int pnl_test_eq_aux (double x, double y, double relerr, int(*cmp)(double,
   int status = (*cmp)(x, y, relerr);
   if ((status == FALSE) || (verbose == TRUE))
     {
-      printf(" %s : ", str);
+      printf("\t%s : ", str);
       printf(status == FALSE ? "FAIL" : "OK");
       if (!status)
         {
@@ -238,7 +238,7 @@ static int pnl_test_array (const double *X, const double *Y, int n, double reler
     }
   if ((status == FALSE) || (verbose == TRUE))
     {
-      printf(" %s : ", str);
+      printf("\t%s : ", str);
       printf(status == TRUE ? "OK" : "FAIL");
       if (status == FALSE)
         {
@@ -330,7 +330,7 @@ int pnl_test_mat_int_eq(const PnlMatInt *X, const PnlMatInt *Y, const char *str,
   update_count_tests(status);
   if (status == FALSE || verbose == TRUE)
     {
-      printf(" %s : ", str);
+      printf("\t%s : ", str);
       printf(status ? "OK" : "FAIL");
       if (!status)
         {
@@ -369,7 +369,7 @@ int pnl_test_vect_eq_abs (const PnlVect *X, const PnlVect *Y, double abserr, con
   update_count_tests(status);
   if (!status || verbose)
     {
-      printf(" %s : ", str);
+      printf("\t%s : ", str);
       printf(status ? "OK" : "FAIL");
       if (!status)
         {
@@ -408,7 +408,7 @@ int pnl_test_vect_complex_eq_abs (const PnlVectComplex *X, const PnlVectComplex 
   update_count_tests(status);
   if (!status || verbose)
     {
-      printf(" %s : ", str);
+      printf("\t%s : ", str);
       printf(status ? "OK" : "FAIL");
       if (!status)
         {
