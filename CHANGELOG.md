@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- Add `PNL_ENABLE_TESTS=OFF` as an option to CMake to disable tests. Default value is s`ON`.
+- Add option `PNL_ENABLE_TESTS=OFF` to CMake to disable tests. Default value is s`ON`.
 
 ### Changed
 
@@ -97,10 +97,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.7.1] -  2014-07-10
 
-### Added
-
-### Changed
-
 ### Fixed
 
 - Minor fixes in the examples
@@ -116,9 +112,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-- Random number generation. Three new distributions have been added: log-normal, inverse gaussian and asymmetric double exponential distributions.
-- Polynomial regression. The evaluation of a multivariate polynomial has been greatly improved thanks to the use of sparse storage of these objects. This new implementation relies on sparse matrices.
-- Internal design. The internal structure of the top level object has been modified to keep track of the number references on to a given object, which has enabled us to improve by a great deal the memory management of lists and arrays.
+- Three new distributions are added: log-normal, inverse gaussian and asymmetric double exponential distributions.
+- The evaluation of a multivariate polynomial is greatly improved thanks to the use of sparse storage of these objects. This new implementation relies on sparse matrices.
+- The internal structure of the top level object is modified to keep track of the number references on to a given object, which has enabled us to improve by a great deal the memory management of lists and arrays.
 
 ## [1.6.0] - 2013-03-22
 
@@ -191,9 +187,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - New organisation of the manual
 - Update Lapack to version 3.2.1
 - Integration of the Mersenne Twister Dynamic Creator version 0.6.1
-
-### Fixed
-
 
 ## [1.3.3] -  2011-03-10
 
