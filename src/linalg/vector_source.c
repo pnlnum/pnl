@@ -538,10 +538,10 @@ void FUNCTION(pnl_vect, print)(const TYPE(PnlVect) * V)
 void FUNCTION(pnl_vect, fprint_asrow)(FILE *fic, const TYPE(PnlVect) * V)
 {
   int i;
-  for (i = 0 ; i < V->size ; i++)
+  for (i = 0 ; i < V->size; i++)
     {
       fprintf(fic, OUT_FORMAT, OUT_PUT_FORMAT(V->array[i]));
-      fprintf(fic, " ");
+      if (i != V->size - 1) fprintf(fic, " ");
     }
   fprintf(fic, "\n");
 }

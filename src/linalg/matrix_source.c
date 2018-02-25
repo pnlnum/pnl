@@ -550,7 +550,8 @@ void FUNCTION(pnl_mat, fprint)(FILE *fic, const TYPE(PnlMat) *M)
     {
       for (j = 0; j < M->n; j++)
         {
-          fprintf(fic, OUT_FORMAT " ", OUT_PUT_FORMAT(PNL_MGET(M, i, j)));
+          fprintf(fic, OUT_FORMAT, OUT_PUT_FORMAT(PNL_MGET(M, i, j)));
+          if (j != M->n - 1) fprintf(fic, " ");
         }
       fprintf(fic, "\n");
     }
@@ -583,9 +584,9 @@ void FUNCTION(pnl_mat, fprint_nsp)(FILE *fic, const TYPE(PnlMat) * M)
           fprintf(fic, OUT_FORMAT, OUT_PUT_FORMAT(PNL_MGET(M, i, j)));
           if (j != M->n - 1) fprintf(fic, ", ");
         }
-      if (i != M->m - 1) fprintf(fic, "; \n  ");
+      if (i != M->m - 1) fprintf(fic, ";\n");
     }
-  fprintf(fic, " ]; \n");
+  fprintf(fic, " ];\n");
 }
 
 /**
