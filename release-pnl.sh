@@ -88,24 +88,25 @@ create_win_version() {
     cmake -DCROSS_COMPILE=ON -DCMAKE_BUILD_TYPE=Release -DPNL_INSTALL_PREFIX="$PNL_WINDIR" "$PNL_DIR"
     make || { echo "make failed" && exit 1; }
     make install || { echo "make install failed" && exit 1; }
-    cp -r examples "$PNL_WINDIR"
+
     cd "$PNL_WINDIR"
-    mv lib/libpnl.dll.a lib/libpnl.lib
+    mv $PNL_WINDIR/lib/libpnl.dll.a $PNL_WINDIR/lib/libpnl.lib
     # Copy the manual
     cp -r "$PNL_DIR/manual-html" "$PNL_WINDIR"
     cp -r "$PNL_DIR/pnl-manual.pdf" "$PNL_WINDIR"
     # Copy all required dll's
     LIBS="libgcc_s_seh-1.dll libgfortran-4.dll libquadmath-0.dll"
     for lib in $LIBS; do
-        cp $MINGW_PREFIX/x86_64-w64-mingw32/lib/$lib lib
-        cp -r $MINGW_PREFIX/x86_64-w64-mingw32/lib/$lib examples
+        cp $MINGW_PREFIX/x86_64-w64-mingw32/lib/$lib $PNL_WINDIR/lib
+        cp -r $MINGW_PREFIX/x86_64-w64-mingw32/lib/$lib $LOCAL_TMPDIR/build-win/examples
     done
     LIBS="libblas.dll liblapack.dll"
     for lib in $LIBS; do
-        cp $LIBLAPACK_DIR/$lib lib
-        cp -r $LIBLAPACK_DIR/$lib examples
+        cp $LIBLAPACK_DIR/$lib $PNL_WINDIR/lib
+        cp -r $LIBLAPACK_DIR/$lib $LOCAL_TMPDIR/build-win/examples
     done
-    cp lib/libpnl.dll examples
+    cp lib/libpnl.dll $LOCAL_TMPDIR/build-win/examples
+
     cd "$LOCAL_TMPDIR"
     [[ -f "pnl-win64-$VERSION.zip" ]] && rm "pnl-win64-$VERSION.zip"
     zip -q -r "pnl-win64-$VERSION.zip" "pnl-win64-$VERSION"
