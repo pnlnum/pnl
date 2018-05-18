@@ -6,7 +6,9 @@
 CWD="$(pwd)/$0"
 PNLGIT=$(dirname $"CWD")
 MINGW_PREFIX="/usr/local/opt/mingw-w64/toolchain-x86_64"
-# MINGW_PREFIX="/usr/local/mingw64"
+
+# Make sure lib{blas,lapack}.{lib,dll} can be found in LIBLAPACK_DIR
+LIBLAPACK_DIR="/usr/local/src/libs/lapack-3.7.1/build-win64/lib/"
 
 DATE=$(date +%Y%m%d)
 # Local temporary directory
@@ -82,7 +84,7 @@ create_win_version() {
     mkdir -p "$PNL_WINDIR"
     mkdir -p "$LOCAL_TMPDIR/build-win"
     cd "$LOCAL_TMPDIR/build-win"
-    PATH="$MINGW_PREFIX/bin:$MINGW_PREFIX/x86_64-w64-mingw32/bin:$MINGW_PREFIX/x86_64-w64-mingw32/lib:$PATH"
+    PATH="$MINGW_PREFIX/bin:$MINGW_PREFIX/x86_64-w64-mingw32/bin:$MINGW_PREFIX/x86_64-w64-mingw32/lib:$LIBLAPACK_DIR:$PATH"
     cmake -DCROSS_COMPILE=ON -DCMAKE_BUILD_TYPE=Release -DPNL_INSTALL_PREFIX="$PNL_WINDIR" "$PNL_DIR"
     make || { echo "make failed" && exit 1; }
     make install || { echo "make install failed" && exit 1; }
@@ -93,10 +95,15 @@ create_win_version() {
     cp -r "$PNL_DIR/manual-html" "$PNL_WINDIR"
     cp -r "$PNL_DIR/pnl-manual.pdf" "$PNL_WINDIR"
     # Copy all required dll's
-    LIBS="libblas.dll libgcc_s_seh-1.dll libgfortran-4.dll liblapack.dll libquadmath-0.dll"
+    LIBS="libgcc_s_seh-1.dll libgfortran-4.dll libquadmath-0.dll"
     for lib in $LIBS; do
         cp $MINGW_PREFIX/x86_64-w64-mingw32/lib/$lib lib
         cp -r $MINGW_PREFIX/x86_64-w64-mingw32/lib/$lib examples
+    done
+    LIBS="libblas.dll liblapack.dll"
+    for lib in $LIBS; do
+        cp $LIBLAPACK_DIR/$lib lib
+        cp -r $LIBLAPACK_DIR/$lib examples
     done
     cp lib/libpnl.dll examples
     cd "$LOCAL_TMPDIR"
