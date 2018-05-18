@@ -5,6 +5,13 @@ All notable changes to PNL will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.9.3] - 2018-05-18
+
+### Fixed
+
+- Fix compilation error with Glibc 2.27 (missing symbols in `math.h`)
+- Fix initialization of Mersenne Twister random generator with random seed.
+
 ## [1.9.2] - 2017-12-24
 
 ### Fixed
