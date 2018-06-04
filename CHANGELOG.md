@@ -5,12 +5,17 @@ All notable changes to PNL will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.9.5] - 2018-06-04
+
+### Fixed
+
+- Fix compilation error with Glibc 2.27 (missing symbols in `math.h`)
+
 ## [1.9.4] - 2018-05-22
 
 ### Fixed
 
 - Fix wrong release number
-
 
 ## [1.9.3] - 2018-05-18
 
