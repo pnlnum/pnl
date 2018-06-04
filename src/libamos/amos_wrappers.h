@@ -1,10 +1,10 @@
-/*  
+/*
  *  This file is a collection of wrappers around the
  *  Amos Fortran library of functions that take complex
  *  variables (see www.netlib.org) so that they can be called from
  *  the cephes library of corresponding name but work with complex
  *  arguments.
- * 
+ *
  *  Author:  Travis E. Oliphant
  *            oliphant.travis@altavista.net
  *
@@ -15,13 +15,26 @@
 
 #include "pnl/pnl_complex.h" /* just for dcomplex ! */
 
-/* already defined in math.h */
-/* #define DOMAIN		1	|+ argument domain error +| */
-/* #define SING		2	|+ argument singularity +| */
-/* #define OVERFLOW	3	|+ overflow range error +| */
-/* #define UNDERFLOW	4	|+ underflow range error +| */
-/* #define TLOSS		5	|+ total loss of precision +| */
-/* #define PLOSS		6	|+ partial loss of precision +| */
+/* These constants were defined in math.h, prior to G libc 2.27 */
+#ifndef DOMAIN
+#define DOMAIN		1	/* argument domain error */
+#endif
+#ifndef SING
+#define SING		2	/* argument singularity */
+#endif
+#ifndef OVERFLOW
+#define OVERFLOW	3	/* overflow range error */
+#endif
+#ifndef UNDERFLOW
+#define UNDERFLOW	4	/* underflow range error */
+#endif
+#ifndef TLOSS
+#define TLOSS		5	/* total loss of precision */
+#endif
+#ifndef PLOSS
+#define PLOSS		6	/* partial loss of precision */
+#endif
+
 #define TOOMANY         7       /* too many iterations */
 #define MAXITER        500
 
@@ -38,14 +51,3 @@ extern int mtherr(char *name, int code); /* from libcephes */
 
 
 #endif
-
-
-
-  
-
-
-
-
-
-
-
