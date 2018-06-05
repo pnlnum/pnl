@@ -278,7 +278,7 @@ static void SHUFL(PnlRng *rng, double *sample)
 static void LECUYER(PnlRng *rng, double *sample)
 {
   long N1;
-  int j;
+  long j;
   long hi;               /* high order bit */
   lecuyer_state *s = (lecuyer_state *)(rng->state);
 
@@ -291,7 +291,7 @@ static void LECUYER(PnlRng *rng, double *sample)
   static const long R1 = 12221;        /* m1 mod a1   */
   static const long R2 = 3791;         /* m2 mod a2   */
 
-  N1 = (M1 / 32);
+  N1 = 1 + (M1 - 1) / 32;
 
   /* First call to the sequence */
   if (rng->counter == 1)
