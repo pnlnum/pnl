@@ -227,6 +227,7 @@ void pnl_array_free (PnlArray **T)
         }
     }
   if ( (*T)->array != NULL ) free ((*T)->array);
+  (*T)->size = (*T)->mem_size = 0;
   free (*T);
   *T = NULL;
 }

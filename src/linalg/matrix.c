@@ -70,6 +70,7 @@ void pnl_mat_object_free(PnlMatObject **o)
           (*o)->array = NULL;
         }
       (*o)->m = (*o)->n = (*o)->mn = 0;
+      (*o)->mem_size = 0;
       free(*o);
     }
 }

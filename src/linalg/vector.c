@@ -74,6 +74,7 @@ void pnl_vect_object_free(PnlVectObject **v)
           (*v)->array = NULL;
         }
       (*v)->size = 0;
+      (*v)->mem_size = 0;
       free(*v);
     }
 }
