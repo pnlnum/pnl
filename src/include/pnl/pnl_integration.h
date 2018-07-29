@@ -8,11 +8,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 extern double pnl_integration (PnlFunc *F, double x0, double x1, int n,
-                               char *meth);
+                               const char *meth);
 
 extern double pnl_integration_2d (PnlFunc2D *F, double x0, double x1,
-                                  double y0,double y1, int nx, int ny, char
-                                  *meth);
+                                  double y0,double y1, int nx, int ny,
+                                  const char *meth);
 
 extern int pnl_integration_qng (PnlFunc *F, double x0, double x1, double
                                 epsabs, double epsrel, double * result,

@@ -32,7 +32,7 @@
  * (trapezoidal rule), "simpson" (Simpson's rule)
  * @return the value of the integral
  */
-double pnl_integration(PnlFunc *F, double x0, double x1, int n, char *meth)
+double pnl_integration(PnlFunc *F, double x0, double x1, int n, const char *meth)
 {
   double h, xh, sum;
 
@@ -75,7 +75,7 @@ double pnl_integration(PnlFunc *F, double x0, double x1, int n, char *meth)
 
 static double xsav, y0sav, y1sav;
 static int nysav;
-static char *methsav;
+static const char *methsav;
 static const PnlFunc2D *globalfunc;
 
 static double func1D(double y, void *params)
@@ -104,8 +104,7 @@ static double int_1d(double x, void *params)
  * (rapezoidal rule), "simpson" (Simpson's rule)
  * @return the value of the integral
  */
-double pnl_integration_2d(PnlFunc2D *F, double x0, double x1,
-                          double y0, double y1, int nx, int ny, char *meth)
+double pnl_integration_2d(PnlFunc2D *F, double x0, double x1, double y0, double y1, int nx, int ny, const char *meth)
 {
   PnlFunc func_1d;
   func_1d.F = &int_1d;
