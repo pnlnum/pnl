@@ -1510,6 +1510,32 @@ void FUNCTION(pnl_mat, mult_mat_inplace)(TYPE(PnlMat) *lhs, const  TYPE(PnlMat) 
 }
 
 /**
+ *  matrix Kronecker product
+ *
+ * @param lhs : left hand side matrix
+ * @param rhs : right hand side matrix
+ * @return  Kron(lhs,rhs)
+ */
+
+TYPE(PnlMat) *FUNCTION(pnl_mat, kron_mat)(const  TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
+{
+  TYPE(PnlMat) *kron;
+  int m = lhs->m, n = lhs->n, p = lhs->m, q = lhs->n;
+  int rowlhs, collhs, rowrhs, colrhs;
+  kron = FUNCTION(pnl_mat, create)(m*p, n*q);
+  for(rowlhs = 0; rowlhs < m; rowlhs++){
+    for(collhs = 0; collhs < n; collhs++){
+      for(rowrhs = 0; rowrhs < p; rowrhs++){
+        for(colrhs = 0; colrhs < q; colrhs++){
+          PNL_MLET(kron, rowlhs*p+rowrhs, collhs*q+colrhs) = MULT(PNL_MGET(lhs, rowlhs, collhs), PNL_MGET(rhs, rowrhs, colrhs));
+        }
+      }
+    }
+  }
+  return kron;
+}
+
+/**
  * sum matrix componentwise
  *
  * @param lhs : left hand side matrix
