@@ -136,6 +136,18 @@ void FUNCTION(pnl_sp_mat, print)(const TYPE(PnlSpMat) *M)
   FUNCTION(pnl_sp_mat, fprint)(stdout, M);
 }
 
+/**
+ * Print a sparse matrix to the standard output
+ *
+ * @param M a TYPE(PnlSpMat) pointer.
+ */
+void FUNCTION(pnl_sp_mat, print_as_full)(const TYPE(PnlSpMat) *Sp)
+{
+  TYPE(PnlMat) *M = FUNCTION(pnl_mat, create_from_sp_mat)(Sp);
+  FUNCTION(pnl_mat, print)(M);
+  FUNCTION(pnl_mat, free)(&M);
+}
+
 
 /**
  * Resize a PnlSpMat.  If the new size is smaller than the current one, no
