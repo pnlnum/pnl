@@ -104,6 +104,7 @@ extern PnlSpMat* pnl_sp_mat_create_from_mat(const PnlMat *M);
 extern PnlSpMat* pnl_sp_mat_create_from_file(const char *file);
 extern void pnl_sp_mat_plus_scalar(PnlSpMat *M, double x);
 extern void pnl_sp_mat_minus_scalar(PnlSpMat *M, double x);
+extern PnlSpMat* pnl_sp_mat_plus_sp_mat(PnlSpMat *A, PnlSpMat *B);
 extern void pnl_sp_mat_mult_scalar(PnlSpMat *M, double x);
 extern void pnl_sp_mat_div_scalar(PnlSpMat *M, double x);
 extern void pnl_sp_mat_mult_vect(PnlVect *y, const PnlSpMat *A, const PnlVect *x);
@@ -157,6 +158,7 @@ extern int pnl_sp_mat_int_isequal(const PnlSpMatInt *Sp1, const PnlSpMatInt *Sp2
 extern void pnl_sp_mat_int_plus_scalar(PnlSpMatInt *M, int x);
 extern void pnl_sp_mat_int_minus_scalar(PnlSpMatInt *M, int x);
 extern void pnl_sp_mat_int_mult_scalar(PnlSpMatInt *M, int x);
+extern PnlSpMatInt* pnl_sp_mat_int_plus_sp_mat(PnlSpMatInt *A, PnlSpMatInt *B);
 extern void pnl_sp_mat_int_div_scalar(PnlSpMatInt *M, int x);
 extern void pnl_sp_mat_int_mult_vect(PnlVectInt *y, const PnlSpMatInt *A, const PnlVectInt *x);
 extern void pnl_sp_mat_int_lAxpby (int lambda, const PnlSpMatInt *A, const PnlVectInt *x, int b, PnlVectInt *y);
@@ -204,6 +206,7 @@ extern PnlSpMatComplex* pnl_sp_mat_complex_create_from_mat(const PnlMatComplex *
 extern PnlSpMatComplex* pnl_sp_mat_complex_create_from_file(const char *file);
 extern void pnl_sp_mat_complex_plus_scalar(PnlSpMatComplex *M, dcomplex x);
 extern void pnl_sp_mat_complex_minus_scalar(PnlSpMatComplex *M, dcomplex x);
+extern PnlSpMatComplex* pnl_sp_mat_complex_plus_sp_mat(PnlSpMatComplex *A, PnlSpMatComplex *B);
 extern void pnl_sp_mat_complex_mult_scalar(PnlSpMatComplex *M, dcomplex x);
 extern void pnl_sp_mat_complex_div_scalar(PnlSpMatComplex *M, dcomplex x);
 extern void pnl_sp_mat_complex_mult_vect(PnlVectComplex *y, const PnlSpMatComplex *A, const PnlVectComplex *x);
