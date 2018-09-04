@@ -775,6 +775,75 @@ void FUNCTION(pnl_sp_mat, lAxpby)(BASE lambda, const TYPE(PnlSpMat) *A, const TY
 
 }
 
+/**
+ * Compute the kronecker product between A and B
+ *
+ * @param M1sp sparse matrix
+ * @param M2sp sparse matrix
+ */
+
+TYPE(PnlSpMat) * FUNCTION(pnl_sp_mat, kron)(TYPE(PnlSpMat) * M1sp, TYPE(PnlSpMat) * M2sp){
+  TYPE(PnlSpMat) *result;
+  int *M1I, *M1Idiff, *M1J;
+  BASE *M1arr;
+  int *M2I, *M2Idiff, *M2J;
+  BASE *M2arr;
+  int *RESI, *RESIdiff, *RESJ;
+  BASE *RESarr;
+  int M1m = M1sp->m, M1n = M1sp->n, M2m = M2sp->m, M2n = M2sp->n;
+  int M1nz = M1sp->nz, M2nz = M2sp->nz;
+
+  result = FUNCTION(pnl_sp_mat, create)(M1m*M2m, M1n * M2n, M1nz * M2nz +1);
+
+  M1I = M1sp->I;
+  M1J = M1sp->J;
+  M1arr = M1sp->array;
+
+  M2I = M2sp->I;
+  M2J = M2sp->J;
+  M2arr = M2sp->array;
+
+  RESI = result->I;
+  RESJ = result->J;
+  RESarr = result->array;
+
+  M1Idiff = (int *) malloc((M1m)*sizeof(int));
+  M2Idiff = (int *) malloc((M2m)*sizeof(int));
+  RESIdiff = (int *) malloc((M1m*M2m)*sizeof(int));
+
+
+  M1Idiff[0] = M1I[0];
+  int m1ind, m2ind;
+  for(m1ind = 0; m1ind < M1m; m1ind++){
+    M1Idiff[m1ind] = M1I[m1ind+1] - M1I[m1ind];
+  }
+  M2Idiff[0] = M2I[0];
+  for(m2ind = 0; m2ind < M2m; m2ind++){
+    M2Idiff[m2ind] = M2I[m2ind+1] - M2I[m2ind];
+  }
+  RESI[0] = 0;
+  int resiter = 0, fircols, seccols, firrows, secrows, resrows;
+  for(resrows =0; resrows < M1m*M2m; resrows++){
+    firrows = resrows/M2m;
+    secrows = resrows%M2m;
+    RESIdiff[resrows] = M1Idiff[firrows] * M2Idiff[secrows];
+    RESI[resrows+1] = RESI[resrows] + RESIdiff[resrows];
+    for(fircols = M1I[firrows]; fircols < M1I[firrows+1]; fircols++){
+      for(seccols = M2I[secrows]; seccols < M2I[secrows+1]; seccols++){
+        RESJ[resiter] = M1J[fircols]*M2n + M2J[seccols];
+        RESarr[resiter] = MULT(M1arr[fircols],M2arr[seccols]);
+        resiter++;
+        result->nz = result->nz+1;
+      }
+    }
+  }
+
+  free(M1Idiff);
+  free(M2Idiff);
+  free(RESIdiff);
+  return result;
+}
+
 #ifdef PNL_CLANG_COMPLETE
 #include "pnl/pnl_templates_off.h"
 #undef  BASE_DOUBLE
