@@ -10,9 +10,12 @@
   if ( (i)>((M)->m-1) || (j)>((M)->n-1) || (i)<0 || (j)<0 ) { perror("index of range"); abort(); }
 #define CheckSpMatVectIsCompatible(M,x) \
   if ( (M)->n != (x)->size ) { perror("size mismatch"); abort(); }
+#define CheckSpMatMatch(lhs, rhs) { if ((lhs)->m != (rhs)->m || (lhs)->n != (rhs)->n) \
+      {perror("non compatible dimensions"); abort();}}
 #else
 #define CheckIndexSpMat(M,i,j)  {}
 #define CheckSpMatVectIsCompatible(M,x) {}
+#define CheckSpMatMatch(lhs, rhs) {}
 #endif /* PNL_RANGE_CHECK_OFF */
 
 #include "pnl/pnl_config.h"

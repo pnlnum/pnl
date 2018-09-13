@@ -572,6 +572,7 @@ void FUNCTION(pnl_sp_mat, plus_scalar)(TYPE(PnlSpMat) *M, BASE x)
  */
 TYPE(PnlSpMat) * FUNCTION(pnl_sp_mat, plus_sp_mat)(TYPE(PnlSpMat) *A, TYPE(PnlSpMat) *B)
 {
+  CheckSpMatMatch(A,B);
   TYPE(PnlSpMat) * result;
 
   int *M1I, *M1J;
