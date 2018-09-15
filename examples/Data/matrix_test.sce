@@ -17,6 +17,7 @@ fprintfMat("B.txt", B, format="%.18f");
 fprintfMat("tB.txt", tB, format="%.18f");
 fprintfMat("C.txt", C, format="%.18f");
 fprintfMat("AB.txt", A*B, format="%.18f");
+fprintfMat("kron_A_B.txt", kron(A,B), format="%.18f");
 fprintfMat("alpha_AB_beta_C.txt", alpha * A * B + beta * C, format="%.18f");
 fprintfMat("alpha_Ax_beta_y.txt", alpha * A * x + beta * y, format="%.18f");
 
