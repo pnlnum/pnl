@@ -849,6 +849,7 @@ EXPORTS
     pnl_sp_mat_complex_plus_scalar 
     pnl_sp_mat_complex_plus_sp_mat
     pnl_sp_mat_complex_print 
+    pnl_sp_mat_complex_print_as_full
     pnl_sp_mat_complex_resize 
     pnl_sp_mat_complex_set 
     pnl_sp_mat_copy 
@@ -883,6 +884,7 @@ EXPORTS
     pnl_sp_mat_int_plus_scalar 
     pnl_sp_mat_int_plus_sp_mat
     pnl_sp_mat_int_print 
+    pnl_sp_mat_int_print_as_full
     pnl_sp_mat_int_resize 
     pnl_sp_mat_int_set 
     pnl_sp_mat_isequal
@@ -900,6 +902,7 @@ EXPORTS
     pnl_sp_mat_plus_scalar
     pnl_sp_mat_plus_sp_mat
     pnl_sp_mat_print 
+    pnl_sp_mat_print_as_full
     pnl_sp_mat_resize 
     pnl_sp_mat_set 
     pnl_tgamma 
