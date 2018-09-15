@@ -840,6 +840,7 @@ EXPORTS
     pnl_sp_mat_complex_isequal
     pnl_sp_mat_complex_isequal_abs
     pnl_sp_mat_complex_isequal_rel
+    pnl_sp_mat_complex_kron
     pnl_sp_mat_complex_lAxpby 
     pnl_sp_mat_complex_minus_scalar 
     pnl_sp_mat_complex_mult_scalar 
@@ -872,6 +873,7 @@ EXPORTS
     pnl_sp_mat_int_get 
     pnl_sp_mat_int_init 
     pnl_sp_mat_int_isequal
+    pnl_sp_mat_int_kron
     pnl_sp_mat_int_lAxpby 
     pnl_sp_mat_int_minus_scalar 
     pnl_sp_mat_int_mult_scalar 
@@ -885,6 +887,7 @@ EXPORTS
     pnl_sp_mat_isequal_abs
     pnl_sp_mat_isequal_rel
     pnl_sp_mat_lAxpby 
+    pnl_sp_mat_kron
     pnl_sp_mat_minus_scalar 
     pnl_sp_mat_mult_scalar 
     pnl_sp_mat_mult_vect 
