@@ -1520,7 +1520,7 @@ void FUNCTION(pnl_mat, mult_mat_inplace)(TYPE(PnlMat) *lhs, const  TYPE(PnlMat) 
 TYPE(PnlMat) *FUNCTION(pnl_mat, kron_mat)(const  TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
 {
   TYPE(PnlMat) *kron;
-  int m = lhs->m, n = lhs->n, p = lhs->m, q = lhs->n;
+  int m = lhs->m, n = lhs->n, p = rhs->m, q = rhs->n;
   int rowlhs, collhs, rowrhs, colrhs;
   kron = FUNCTION(pnl_mat, create)(m*p, n*q);
   for(rowlhs = 0; rowlhs < m; rowlhs++){
