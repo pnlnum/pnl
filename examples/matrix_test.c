@@ -367,7 +367,7 @@ static void pnl_mat_kron_mat_test()
   A = pnl_mat_create_from_file ("Data/A.txt");
   B = pnl_mat_create_from_file ("Data/B.txt");
   AB = pnl_mat_create_from_file ("Data/kron_A_B.txt");
-  res = pnl_mat_kron_mat (A, B);
+  res = pnl_mat_kron_mat(A, B);
 
   pnl_test_mat_eq_abs(AB, res, 1E-12, "mat_kron_mat", "");
 

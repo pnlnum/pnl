@@ -414,6 +414,7 @@ EXPORTS
     pnl_mat_complex_isequal
     pnl_mat_complex_isequal_abs
     pnl_mat_complex_isequal_rel
+    pnl_mat_complex_kron_mat
     pnl_mat_complex_lAxpby 
     pnl_mat_complex_lget 
     pnl_mat_complex_lget_imag 
@@ -544,6 +545,7 @@ EXPORTS
     pnl_mat_int_get_row 
     pnl_mat_int_init 
     pnl_mat_int_isequal
+    pnl_mat_int_kron_mat
     pnl_mat_int_lAxpby 
     pnl_mat_int_lget 
     pnl_mat_int_map 
@@ -604,6 +606,7 @@ EXPORTS
     pnl_mat_isequal
     pnl_mat_isequal_abs
     pnl_mat_isequal_rel
+    pnl_mat_kron_mat
     pnl_mat_lAxpby 
     pnl_mat_lget 
     pnl_mat_log 
