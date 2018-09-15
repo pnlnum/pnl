@@ -231,6 +231,29 @@ static void sp_mat_mult_vect ()
   pnl_rng_free (&rng);
 }
 
+static void pnl_sp_mat_kron_test()
+{
+  PnlMat *A, *B, *AB, *res;
+  PnlSpMat *Asp, *Bsp, *ressp;
+  A = pnl_mat_create_from_file ("Data/A.txt");
+  B = pnl_mat_create_from_file ("Data/B.txt");
+  AB = pnl_mat_create_from_file ("Data/kron_A_B.txt");
+  Asp = pnl_sp_mat_create_from_mat(A);
+  Bsp = pnl_sp_mat_create_from_mat(B);
+  ressp = pnl_sp_mat_kron (Asp, Bsp);
+  res = pnl_mat_create_from_sp_mat(ressp);
+
+  pnl_test_mat_eq_abs(AB, res, 1E-12, "sp_mat_kron_mat", "");
+
+  pnl_mat_free (&A);
+  pnl_mat_free (&B);
+  pnl_mat_free (&AB);
+  pnl_mat_free (&res);
+  pnl_sp_mat_free (&Asp);
+  pnl_sp_mat_free (&Bsp);
+  pnl_sp_mat_free (&ressp);
+}
+
 static void sp_mat_del_row ()
 {
   PnlSpMat *Sp;
@@ -333,6 +356,7 @@ int main (int argc, char *argv[])
   sp_clone_test ();
   sp_scalar_ops ();
   sp_mat_mult_vect ();
+  pnl_sp_mat_kron_test();
   sp_mat_del_row ();
   sp_mat_add_row ();
   /* sp_add_test (); */
