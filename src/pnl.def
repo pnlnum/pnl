@@ -847,6 +847,7 @@ EXPORTS
     pnl_sp_mat_complex_mult_vect 
     pnl_sp_mat_complex_new 
     pnl_sp_mat_complex_plus_scalar 
+    pnl_sp_mat_complex_plus_sp_mat
     pnl_sp_mat_complex_print 
     pnl_sp_mat_complex_resize 
     pnl_sp_mat_complex_set 
@@ -880,6 +881,7 @@ EXPORTS
     pnl_sp_mat_int_mult_vect 
     pnl_sp_mat_int_new 
     pnl_sp_mat_int_plus_scalar 
+    pnl_sp_mat_int_plus_sp_mat
     pnl_sp_mat_int_print 
     pnl_sp_mat_int_resize 
     pnl_sp_mat_int_set 
@@ -895,7 +897,8 @@ EXPORTS
     pnl_sp_mat_object_free 
     pnl_sp_mat_object_new 
     pnl_sp_mat_object_resize 
-    pnl_sp_mat_plus_scalar 
+    pnl_sp_mat_plus_scalar
+    pnl_sp_mat_plus_sp_mat
     pnl_sp_mat_print 
     pnl_sp_mat_resize 
     pnl_sp_mat_set 
