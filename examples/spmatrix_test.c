@@ -254,6 +254,34 @@ static void pnl_sp_mat_kron_test()
   pnl_sp_mat_free (&ressp);
 }
 
+static void pnl_sp_mat_plus_sp_mat_test()
+{
+  PnlMat *A, *B, *res;
+  PnlSpMat *Asp, *Bsp, *ressp;
+  Asp = pnl_sp_mat_create(3, 3, 5);
+  Bsp = pnl_sp_mat_create(3, 3, 5);
+  pnl_sp_mat_set(Asp, 0,0,1);
+  pnl_sp_mat_set(Asp, 0,1,2);
+  pnl_sp_mat_set(Asp, 0,2,3);
+  pnl_sp_mat_set(Asp, 2,1,4);
+  pnl_sp_mat_set(Bsp, 0,0,11);
+  pnl_sp_mat_set(Bsp, 0,1,12);
+  pnl_sp_mat_set(Bsp, 0,2,13);
+  pnl_sp_mat_set(Bsp, 2,2,14);
+  A = pnl_mat_create_from_sp_mat(Asp);
+  B = pnl_mat_create_from_sp_mat(Bsp);
+  pnl_mat_plus_mat(A,B);
+  ressp = pnl_sp_mat_plus_sp_mat(Asp, Bsp);
+  res = pnl_mat_create_from_sp_mat(ressp);
+  pnl_test_mat_eq_abs(A, res, 1E-12, "sp_mat_plus_sp_mat", "");
+  pnl_mat_free (&A);
+  pnl_mat_free (&B);
+  pnl_mat_free (&res);
+  pnl_sp_mat_free (&Asp);
+  pnl_sp_mat_free (&Bsp);
+  pnl_sp_mat_free (&ressp);
+}
+
 static void sp_mat_del_row ()
 {
   PnlSpMat *Sp;
@@ -357,6 +385,7 @@ int main (int argc, char *argv[])
   sp_scalar_ops ();
   sp_mat_mult_vect ();
   pnl_sp_mat_kron_test();
+  pnl_sp_mat_plus_sp_mat_test();
   sp_mat_del_row ();
   sp_mat_add_row ();
   /* sp_add_test (); */
