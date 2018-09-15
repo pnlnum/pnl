@@ -235,6 +235,7 @@ static void pnl_sp_mat_kron_test()
 {
   PnlMat *A, *B, *AB, *res;
   PnlSpMat *Asp, *Bsp, *ressp;
+  double abserr = 1E-12;
   A = pnl_mat_create_from_file ("Data/A.txt");
   B = pnl_mat_create_from_file ("Data/B.txt");
   AB = pnl_mat_create_from_file ("Data/kron_A_B.txt");
@@ -243,7 +244,7 @@ static void pnl_sp_mat_kron_test()
   ressp = pnl_sp_mat_kron (Asp, Bsp);
   res = pnl_mat_create_from_sp_mat(ressp);
 
-  pnl_test_mat_eq_abs(AB, res, 1E-12, "sp_mat_kron_mat", "");
+  pnl_test_mat_eq_abs(AB, res, abserr, "sp_mat_kron_mat", "");
 
   pnl_mat_free (&A);
   pnl_mat_free (&B);
@@ -258,6 +259,7 @@ static void pnl_sp_mat_plus_sp_mat_test()
 {
   PnlMat *A, *B, *res;
   PnlSpMat *Asp, *Bsp, *ressp;
+  double abserr = 1E-12;
   Asp = pnl_sp_mat_create(3, 3, 5);
   Bsp = pnl_sp_mat_create(3, 3, 5);
   pnl_sp_mat_set(Asp, 0,0,1);
@@ -273,7 +275,7 @@ static void pnl_sp_mat_plus_sp_mat_test()
   pnl_mat_plus_mat(A,B);
   ressp = pnl_sp_mat_plus_sp_mat(Asp, Bsp);
   res = pnl_mat_create_from_sp_mat(ressp);
-  pnl_test_mat_eq_abs(A, res, 1E-12, "sp_mat_plus_sp_mat", "");
+  pnl_test_mat_eq_abs(A, res, abserr, "sp_mat_plus_sp_mat", "");
   pnl_mat_free (&A);
   pnl_mat_free (&B);
   pnl_mat_free (&res);
