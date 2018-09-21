@@ -133,7 +133,8 @@ extern void pnl_mat_mult_scalar(PnlMat *lhs, double x); /*lhs*=x*/
 extern void pnl_mat_div_scalar(PnlMat *lhs, double x); /*lhs/=x*/
 extern PnlMat* pnl_mat_mult_mat(const PnlMat *rhs1, const PnlMat *rhs2);
 extern void pnl_mat_mult_mat_inplace(PnlMat *lhs, const PnlMat *rhs1, const PnlMat *rhs2);/*lhs=rhs1*rhs2*/
-extern PnlMat* pnl_mat_kron_mat(const PnlMat *lhs, const PnlMat *rhs);
+extern void pnl_mat_kron_inplace(PnlMat *res, const PnlMat *A, const PnlMat *B);
+extern PnlMat* pnl_mat_kron(const PnlMat *A, const PnlMat *B);
 extern void pnl_mat_dgemm (char transA, char transB, double alpha, const PnlMat *A, const PnlMat *B, double beta, PnlMat *C); 
 extern void pnl_mat_axpy (double a, const PnlMat *X, PnlMat *Y); 
 extern void pnl_mat_dger (double alpha, const PnlVect *x, const PnlVect *y, PnlMat *A);
@@ -365,7 +366,8 @@ extern void pnl_mat_int_dgemv (char trans, int alpha, const PnlMatInt *A,
 extern PnlMatInt* pnl_mat_int_mult_mat(const PnlMatInt *rhs1, const PnlMatInt *rhs2);
 extern void pnl_mat_int_mult_mat_inplace(PnlMatInt *lhs, const PnlMatInt *rhs1,
                                      const PnlMatInt *rhs2);/*lhs=rhs1*rhs2*/
-extern PnlMatInt* pnl_mat_int_kron_mat(const PnlMatInt *lhs, const PnlMatInt *rhs);
+extern void pnl_mat_int_kron_inplace(PnlMatInt *res, const PnlMatInt *A, const PnlMatInt *B);
+extern PnlMatInt* pnl_mat_int_kron(const PnlMatInt *A, const PnlMatInt *B);
 extern void pnl_mat_int_dgemm (char transA, char transB, int alpha, const PnlMatInt *A,
                            const PnlMatInt *B, int beta, PnlMatInt *C); 
 extern int pnl_mat_int_sum(const PnlMatInt *lhs);
@@ -528,7 +530,8 @@ extern void pnl_mat_complex_dgemv (char trans, dcomplex alpha, const PnlMatCompl
 extern PnlMatComplex* pnl_mat_complex_mult_mat(const PnlMatComplex *rhs1, const PnlMatComplex *rhs2);
 extern void pnl_mat_complex_mult_mat_inplace(PnlMatComplex *lhs, const PnlMatComplex *rhs1,
                                           const PnlMatComplex *rhs2);/*lhs=rhs1*rhs2*/
-extern PnlMatComplex* pnl_mat_complex_kron_mat(const PnlMatComplex *lhs, const PnlMatComplex *rhs);
+extern void pnl_mat_complex_kron_inplace(PnlMatComplex *res, const PnlMatComplex *A, const PnlMatComplex *B);
+extern PnlMatComplex* pnl_mat_complex_kron(const PnlMatComplex *A, const PnlMatComplex *B);
 extern void pnl_mat_complex_dgemm (char transA, char transB, dcomplex alpha, const PnlMatComplex *A,
                                 const PnlMatComplex *B, dcomplex beta, PnlMatComplex *C);
 extern dcomplex pnl_mat_complex_sum(const PnlMatComplex *lhs);

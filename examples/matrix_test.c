@@ -361,15 +361,15 @@ static void pnl_mat_mult_mat_test()
   pnl_mat_free (&res);
 }
 
-static void pnl_mat_kron_mat_test()
+static void pnl_mat_kron_test()
 {
   PnlMat *A, *B, *AB, *res;
   A = pnl_mat_create_from_file ("Data/A.txt");
   B = pnl_mat_create_from_file ("Data/B.txt");
   AB = pnl_mat_create_from_file ("Data/kron_A_B.txt");
-  res = pnl_mat_kron_mat(A, B);
+  res = pnl_mat_kron(A, B);
 
-  pnl_test_mat_eq_abs(AB, res, 1E-12, "mat_kron_mat", "");
+  pnl_test_mat_eq_abs(AB, res, 1E-12, "mat_kron", "");
 
   pnl_mat_free (&A);
   pnl_mat_free (&B);
@@ -1391,7 +1391,7 @@ int main (int argc, char **argv)
   pnl_mat_plus_mat_test();
   pnl_mat_plus_double_test();
   pnl_mat_mult_mat_test();
-  pnl_mat_kron_mat_test();
+  pnl_mat_kron_test();
   pnl_mat_mult_mat_inplace_test();
   pnl_mat_mult_vect_test();
   pnl_mat_mult_double_test();

@@ -1512,28 +1512,46 @@ void FUNCTION(pnl_mat, mult_mat_inplace)(TYPE(PnlMat) *lhs, const  TYPE(PnlMat) 
 /**
  *  matrix Kronecker product
  *
- * @param lhs : left hand side matrix
- * @param rhs : right hand side matrix
- * @return  Kron(lhs,rhs)
+ * param[out] kron contains the result on output
+ * @param A a matrix
+ * @param B a matrix
  */
 
-TYPE(PnlMat) *FUNCTION(pnl_mat, kron_mat)(const  TYPE(PnlMat) *lhs, const TYPE(PnlMat) *rhs)
+void FUNCTION(pnl_mat, kron_inplace)(TYPE(PnlMat) *kron, const TYPE(PnlMat) * A, const TYPE(PnlMat) * B)
 {
-  TYPE(PnlMat) *kron;
-  int m = lhs->m, n = lhs->n, p = rhs->m, q = rhs->n;
-  int rowlhs, collhs, rowrhs, colrhs;
-  kron = FUNCTION(pnl_mat, create)(m*p, n*q);
-  for(rowlhs = 0; rowlhs < m; rowlhs++){
-    for(collhs = 0; collhs < n; collhs++){
-      for(rowrhs = 0; rowrhs < p; rowrhs++){
-        for(colrhs = 0; colrhs < q; colrhs++){
-          PNL_MLET(kron, rowlhs*p+rowrhs, collhs*q+colrhs) = MULT(PNL_MGET(lhs, rowlhs, collhs), PNL_MGET(rhs, rowrhs, colrhs));
+  int m = A->m, n = A->n, p = B->m, q = B->n;
+  int rowA, colA, rowB, colB;
+  FUNCTION(pnl_mat, resize)(kron, m * p, n * q);
+  for (rowA = 0; rowA < m; rowA++)
+    {
+      for (colA = 0; colA < n; colA++)
+        {
+          for (rowB = 0; rowB < p; rowB++)
+            {
+              for (colB = 0; colB < q; colB++)
+                {
+                  PNL_MLET(kron, rowA * p + rowB, colA * q + colB) = MULT(PNL_MGET(A, rowA, colA), PNL_MGET(B, rowB, colB));
+                }
+            }
         }
-      }
     }
-  }
+}
+
+/**
+ *  matrix Kronecker product
+ *
+ * @param A a matrix
+ * @param B a matrix
+ * @return  Kron(A, B)
+ */
+
+TYPE(PnlMat) * FUNCTION(pnl_mat, kron)(const TYPE(PnlMat) * A, const TYPE(PnlMat) * B)
+{
+  TYPE(PnlMat) * kron = FUNCTION(pnl_mat, new)();
+  FUNCTION(pnl_mat, kron_inplace)(kron, A, B);
   return kron;
 }
+
 
 /**
  * sum matrix componentwise
