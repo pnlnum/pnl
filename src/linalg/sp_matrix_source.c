@@ -136,6 +136,18 @@ void FUNCTION(pnl_sp_mat, print)(const TYPE(PnlSpMat) *M)
   FUNCTION(pnl_sp_mat, fprint)(stdout, M);
 }
 
+/**
+ * Print a sparse matrix to the standard output
+ *
+ * @param M a TYPE(PnlSpMat) pointer.
+ */
+void FUNCTION(pnl_sp_mat, print_as_full)(const TYPE(PnlSpMat) *Sp)
+{
+  TYPE(PnlMat) *M = FUNCTION(pnl_mat, create_from_sp_mat)(Sp);
+  FUNCTION(pnl_mat, print)(M);
+  FUNCTION(pnl_mat, free)(&M);
+}
+
 
 /**
  * Resize a PnlSpMat.  If the new size is smaller than the current one, no
@@ -553,6 +565,135 @@ void FUNCTION(pnl_sp_mat, plus_scalar)(TYPE(PnlSpMat) *M, BASE x)
 }
 
 /**
+ *  Add two sparse matrices in-place
+ *
+ * @param[out] result contains A + B on output
+ * @param A a sparse matrix
+ * @param B a sparse matrix
+ */
+void FUNCTION(pnl_sp_mat, plus_sp_mat_inplace)(TYPE(PnlSpMat) * result, const TYPE(PnlSpMat) * A, const TYPE(PnlSpMat) * B)
+{
+  CheckSpMatMatch(A, B);
+
+  int *M1I, *M1J;
+  int i, iter1, iter2, RESiter;
+  int *RESI, *RESJ;
+  BASE *M1arr;
+  int *M2I, *M2J;
+  BASE *M2arr;
+  int m = A->m;
+  M1I = A->I;
+  M1J = A->J;
+  M1arr = A->array;
+
+  M2I = B->I;
+  M2J = B->J;
+  M2arr = B->array;
+
+  RESiter = 0;
+
+  for (i = 0; i < m; i++)
+    {
+      iter1 = M1I[i];
+      iter2 = M2I[i];
+      while (iter1 < M1I[i + 1] && iter2 < M2I[i + 1])
+        {
+          if (M1J[iter1] < M2J[iter2])
+            {
+              iter1++;
+            }
+          else if (M2J[iter2] < M1J[iter1])
+            {
+              iter2++;
+            }
+          else
+            {
+              iter1++;
+              iter2++;
+            }
+          RESiter++;
+        }
+      while (iter1 < M1I[i + 1])
+        {
+          RESiter++;
+          iter1++;
+        }
+      while (iter2 < M2I[i + 1])
+        {
+          RESiter++;
+          iter2++;
+        }
+    }
+
+  FUNCTION(pnl_sp_mat, resize)(result, A->m, A->n, RESiter + 1);
+
+  BASE *RESarr;
+  RESI = result->I;
+  RESJ = result->J;
+  RESarr = result->array;
+  RESI[0] = 0;
+  RESiter = 0;
+  for (i = 0; i < m; i++)
+    {
+      RESI[i + 1] = RESI[i];
+      iter1 = M1I[i];
+      iter2 = M2I[i];
+      while (iter1 < M1I[i + 1] && iter2 < M2I[i + 1])
+        {
+          RESI[i + 1]++;
+          if (M1J[iter1] < M2J[iter2])
+            {
+              RESJ[RESiter] = M1J[iter1];
+              RESarr[RESiter] = M1arr[iter1];
+              iter1++;
+            }
+          else if (M2J[iter2] < M1J[iter1])
+            {
+              RESJ[RESiter] = M2J[iter2];
+              RESarr[RESiter] = M2arr[iter2];
+              iter2++;
+            }
+          else
+            {
+              RESJ[RESiter] = M1J[iter1];
+              RESarr[RESiter] = PLUS(M1arr[iter1], M2arr[iter2]);
+              iter1++;
+              iter2++;
+            }
+          RESiter++;
+          result->nz++;
+        }
+      while (iter1 < M1I[i + 1])
+        {
+          RESI[i + 1]++;
+          RESJ[RESiter] = M1J[iter1];
+          RESarr[RESiter] = M1arr[iter1];
+          iter1++;
+          RESiter++;
+          result->nz++;
+        }
+      while (iter2 < M2I[i + 1])
+        {
+          RESI[i + 1]++;
+          RESJ[RESiter] = M2J[iter2];
+          RESarr[RESiter] = M2arr[iter2];
+          iter2++;
+          RESiter++;
+          result->nz++;
+        }
+    }
+}
+
+TYPE(PnlSpMat)* FUNCTION(pnl_sp_mat, plus_sp_mat)(const TYPE(PnlSpMat) *A, const TYPE(PnlSpMat) *B)
+{
+  CheckSpMatMatch(A,B);
+  TYPE(PnlSpMat) * result = FUNCTION(pnl_sp_mat,new)();
+  FUNCTION(pnl_sp_mat, plus_sp_mat_inplace)(result, A, B);
+  return result;
+}
+
+
+/**
  *  Substract x to non zero elements of M. To substract x to all elements,
  *  first convert M to a full matrix and use pnl_mat_plus_scalar.
  *
@@ -657,6 +798,95 @@ void FUNCTION(pnl_sp_mat, lAxpby)(BASE lambda, const TYPE(PnlSpMat) *A, const TY
 
 
 }
+
+/**
+ * Compute the kronecker product of two sparse matrices
+ *
+ * @param[out] result contains the Kroenecker.
+ * @param M1sp sparse matrix
+ * @param M2sp sparse matrix
+ */
+void FUNCTION(pnl_sp_mat, kron_inplace)(TYPE(PnlSpMat) * result, const TYPE(PnlSpMat) * M1sp, const TYPE(PnlSpMat) * M2sp)
+{
+
+  int *M1I, *M1Idiff, *M1J;
+  BASE *M1arr;
+  int *M2I, *M2Idiff, *M2J;
+  BASE *M2arr;
+  int *RESI, *RESIdiff, *RESJ;
+  BASE *RESarr;
+  int M1m = M1sp->m, M1n = M1sp->n, M2m = M2sp->m, M2n = M2sp->n;
+  int M1nz = M1sp->nz, M2nz = M2sp->nz;
+
+  FUNCTION(pnl_sp_mat, resize)
+  (result, M1m * M2m, M1n * M2n, M1nz * M2nz + 1);
+
+  M1I = M1sp->I;
+  M1J = M1sp->J;
+  M1arr = M1sp->array;
+
+  M2I = M2sp->I;
+  M2J = M2sp->J;
+  M2arr = M2sp->array;
+
+  RESI = result->I;
+  RESJ = result->J;
+  RESarr = result->array;
+
+  M1Idiff = (int *)malloc((M1m) * sizeof(int));
+  M2Idiff = (int *)malloc((M2m) * sizeof(int));
+  RESIdiff = (int *)malloc((M1m * M2m) * sizeof(int));
+
+  M1Idiff[0] = M1I[0];
+  int m1ind, m2ind;
+  for (m1ind = 0; m1ind < M1m; m1ind++)
+    {
+      M1Idiff[m1ind] = M1I[m1ind + 1] - M1I[m1ind];
+    }
+  M2Idiff[0] = M2I[0];
+  for (m2ind = 0; m2ind < M2m; m2ind++)
+    {
+      M2Idiff[m2ind] = M2I[m2ind + 1] - M2I[m2ind];
+    }
+  RESI[0] = 0;
+  int resiter = 0, fircols, seccols, firrows, secrows, resrows;
+  for (resrows = 0; resrows < M1m * M2m; resrows++)
+    {
+      firrows = resrows / M2m;
+      secrows = resrows % M2m;
+      RESIdiff[resrows] = M1Idiff[firrows] * M2Idiff[secrows];
+      RESI[resrows + 1] = RESI[resrows] + RESIdiff[resrows];
+      for (fircols = M1I[firrows]; fircols < M1I[firrows + 1]; fircols++)
+        {
+          for (seccols = M2I[secrows]; seccols < M2I[secrows + 1]; seccols++)
+            {
+              RESJ[resiter] = M1J[fircols] * M2n + M2J[seccols];
+              RESarr[resiter] = MULT(M1arr[fircols], M2arr[seccols]);
+              resiter++;
+              result->nz = result->nz + 1;
+            }
+        }
+    }
+
+  free(M1Idiff);
+  free(M2Idiff);
+  free(RESIdiff);
+}
+
+/**
+ * Compute the kronecker product of two sparse matrices
+ *
+ * @param[out] result contains the Kroenecker.
+ * @param M1sp sparse matrix
+ * @param M2sp sparse matrix
+ */
+TYPE(PnlSpMat)*  FUNCTION(pnl_sp_mat, kron)(const TYPE(PnlSpMat) * M1sp,const TYPE(PnlSpMat) * M2sp)
+{
+  TYPE(PnlSpMat) * result = FUNCTION(pnl_sp_mat,new)();
+  FUNCTION(pnl_sp_mat,kron_inplace)(result, M1sp, M2sp);
+  return result;
+}
+
 
 #ifdef PNL_CLANG_COMPLETE
 #include "pnl/pnl_templates_off.h"

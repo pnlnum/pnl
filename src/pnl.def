@@ -414,6 +414,8 @@ EXPORTS
     pnl_mat_complex_isequal
     pnl_mat_complex_isequal_abs
     pnl_mat_complex_isequal_rel
+    pnl_mat_complex_kron_inplace
+    pnl_mat_complex_kron
     pnl_mat_complex_lAxpby 
     pnl_mat_complex_lget 
     pnl_mat_complex_lget_imag 
@@ -544,6 +546,8 @@ EXPORTS
     pnl_mat_int_get_row 
     pnl_mat_int_init 
     pnl_mat_int_isequal
+    pnl_mat_int_kron_inplace
+    pnl_mat_int_kron
     pnl_mat_int_lAxpby 
     pnl_mat_int_lget 
     pnl_mat_int_map 
@@ -604,6 +608,8 @@ EXPORTS
     pnl_mat_isequal
     pnl_mat_isequal_abs
     pnl_mat_isequal_rel
+    pnl_mat_kron_inplace
+    pnl_mat_kron
     pnl_mat_lAxpby 
     pnl_mat_lget 
     pnl_mat_log 
@@ -837,13 +843,17 @@ EXPORTS
     pnl_sp_mat_complex_isequal
     pnl_sp_mat_complex_isequal_abs
     pnl_sp_mat_complex_isequal_rel
+    pnl_sp_mat_complex_kron
+    pnl_sp_mat_complex_kron_inplace
     pnl_sp_mat_complex_lAxpby 
     pnl_sp_mat_complex_minus_scalar 
     pnl_sp_mat_complex_mult_scalar 
     pnl_sp_mat_complex_mult_vect 
     pnl_sp_mat_complex_new 
     pnl_sp_mat_complex_plus_scalar 
+    pnl_sp_mat_complex_plus_sp_mat
     pnl_sp_mat_complex_print 
+    pnl_sp_mat_complex_print_as_full
     pnl_sp_mat_complex_resize 
     pnl_sp_mat_complex_set 
     pnl_sp_mat_copy 
@@ -869,19 +879,25 @@ EXPORTS
     pnl_sp_mat_int_get 
     pnl_sp_mat_int_init 
     pnl_sp_mat_int_isequal
+    pnl_sp_mat_int_kron_inplace
+    pnl_sp_mat_int_kron
     pnl_sp_mat_int_lAxpby 
     pnl_sp_mat_int_minus_scalar 
     pnl_sp_mat_int_mult_scalar 
     pnl_sp_mat_int_mult_vect 
     pnl_sp_mat_int_new 
     pnl_sp_mat_int_plus_scalar 
+    pnl_sp_mat_int_plus_sp_mat
     pnl_sp_mat_int_print 
+    pnl_sp_mat_int_print_as_full
     pnl_sp_mat_int_resize 
     pnl_sp_mat_int_set 
     pnl_sp_mat_isequal
     pnl_sp_mat_isequal_abs
     pnl_sp_mat_isequal_rel
     pnl_sp_mat_lAxpby 
+    pnl_sp_mat_kron_inplace
+    pnl_sp_mat_kron
     pnl_sp_mat_minus_scalar 
     pnl_sp_mat_mult_scalar 
     pnl_sp_mat_mult_vect 
@@ -889,8 +905,11 @@ EXPORTS
     pnl_sp_mat_object_free 
     pnl_sp_mat_object_new 
     pnl_sp_mat_object_resize 
-    pnl_sp_mat_plus_scalar 
+    pnl_sp_mat_plus_scalar
+    pnl_sp_mat_plus_sp_mat_inplace
+    pnl_sp_mat_plus_sp_mat
     pnl_sp_mat_print 
+    pnl_sp_mat_print_as_full
     pnl_sp_mat_resize 
     pnl_sp_mat_set 
     pnl_tgamma 
