@@ -906,6 +906,7 @@ EXPORTS
     pnl_sp_mat_object_new 
     pnl_sp_mat_object_resize 
     pnl_sp_mat_plus_scalar
+    pnl_sp_mat_plus_sp_mat_inplace
     pnl_sp_mat_plus_sp_mat
     pnl_sp_mat_print 
     pnl_sp_mat_print_as_full

@@ -565,17 +565,19 @@ void FUNCTION(pnl_sp_mat, plus_scalar)(TYPE(PnlSpMat) *M, BASE x)
 }
 
 /**
- *  Add two matrices
+ *  Add two sparse matrices in-place
  *
+ * @param[out] result contains A + B on output
  * @param A a sparse matrix
  * @param B a sparse matrix
  */
-TYPE(PnlSpMat) * FUNCTION(pnl_sp_mat, plus_sp_mat)(TYPE(PnlSpMat) *A, TYPE(PnlSpMat) *B)
+void FUNCTION(pnl_sp_mat, plus_sp_mat_inplace)(TYPE(PnlSpMat) * result, const TYPE(PnlSpMat) * A, const TYPE(PnlSpMat) * B)
 {
-  CheckSpMatMatch(A,B);
-  TYPE(PnlSpMat) * result;
+  CheckSpMatMatch(A, B);
 
   int *M1I, *M1J;
+  int i, iter1, iter2, RESiter;
+  int *RESI, *RESJ;
   BASE *M1arr;
   int *M2I, *M2J;
   BASE *M2arr;
@@ -588,84 +590,105 @@ TYPE(PnlSpMat) * FUNCTION(pnl_sp_mat, plus_sp_mat)(TYPE(PnlSpMat) *A, TYPE(PnlSp
   M2J = B->J;
   M2arr = B->array;
 
-  int i, iter1, iter2, RESiter;
-
   RESiter = 0;
 
-  for(i = 0; i<m; i++){
-    iter1 = M1I[i];
-    iter2 = M2I[i];
-    while(iter1<M1I[i+1] && iter2 < M2I[i+1]){
-      if(M1J[iter1]<M2J[iter2]){
-        iter1++;
-      }else if(M2J[iter2]<M1J[iter1]){
-        iter2++;
-      }else{
-        iter1++;
-        iter2++;
-      }
-      RESiter++;
+  for (i = 0; i < m; i++)
+    {
+      iter1 = M1I[i];
+      iter2 = M2I[i];
+      while (iter1 < M1I[i + 1] && iter2 < M2I[i + 1])
+        {
+          if (M1J[iter1] < M2J[iter2])
+            {
+              iter1++;
+            }
+          else if (M2J[iter2] < M1J[iter1])
+            {
+              iter2++;
+            }
+          else
+            {
+              iter1++;
+              iter2++;
+            }
+          RESiter++;
+        }
+      while (iter1 < M1I[i + 1])
+        {
+          RESiter++;
+          iter1++;
+        }
+      while (iter2 < M2I[i + 1])
+        {
+          RESiter++;
+          iter2++;
+        }
     }
-    while(iter1<M1I[i+1]){
-      RESiter++;
-      iter1++;
-    }
-    while(iter2<M2I[i+1]){
-      RESiter++;
-      iter2++;
-    }
-  }
 
-  result = FUNCTION(pnl_sp_mat, create)(A->m, A->n, RESiter+1);
+  FUNCTION(pnl_sp_mat, resize)(result, A->m, A->n, RESiter + 1);
 
-  int *RESI, *RESJ;
   BASE *RESarr;
   RESI = result->I;
   RESJ = result->J;
   RESarr = result->array;
-  RESI[0]=0;
-  RESiter=0;
-  for(i = 0; i<m; i++){
-    RESI[i+1] = RESI[i];
-    iter1 = M1I[i];
-    iter2 = M2I[i];
-    while(iter1<M1I[i+1] && iter2 < M2I[i+1]){
-      RESI[i+1]++;
-      if(M1J[iter1]<M2J[iter2]){
-        RESJ[RESiter] = M1J[iter1];
-        RESarr[RESiter] = M1arr[iter1];
-        iter1++;
-      }else if(M2J[iter2]<M1J[iter1]){
-        RESJ[RESiter] = M2J[iter2];
-        RESarr[RESiter] = M2arr[iter2];
-        iter2++;
-      }else{
-        RESJ[RESiter] = M1J[iter1];
-        RESarr[RESiter] = PLUS(M1arr[iter1], M2arr[iter2]);
-        iter1++;
-        iter2++;
-      }
-      RESiter++;
-      result->nz++;
+  RESI[0] = 0;
+  RESiter = 0;
+  for (i = 0; i < m; i++)
+    {
+      RESI[i + 1] = RESI[i];
+      iter1 = M1I[i];
+      iter2 = M2I[i];
+      while (iter1 < M1I[i + 1] && iter2 < M2I[i + 1])
+        {
+          RESI[i + 1]++;
+          if (M1J[iter1] < M2J[iter2])
+            {
+              RESJ[RESiter] = M1J[iter1];
+              RESarr[RESiter] = M1arr[iter1];
+              iter1++;
+            }
+          else if (M2J[iter2] < M1J[iter1])
+            {
+              RESJ[RESiter] = M2J[iter2];
+              RESarr[RESiter] = M2arr[iter2];
+              iter2++;
+            }
+          else
+            {
+              RESJ[RESiter] = M1J[iter1];
+              RESarr[RESiter] = PLUS(M1arr[iter1], M2arr[iter2]);
+              iter1++;
+              iter2++;
+            }
+          RESiter++;
+          result->nz++;
+        }
+      while (iter1 < M1I[i + 1])
+        {
+          RESI[i + 1]++;
+          RESJ[RESiter] = M1J[iter1];
+          RESarr[RESiter] = M1arr[iter1];
+          iter1++;
+          RESiter++;
+          result->nz++;
+        }
+      while (iter2 < M2I[i + 1])
+        {
+          RESI[i + 1]++;
+          RESJ[RESiter] = M2J[iter2];
+          RESarr[RESiter] = M2arr[iter2];
+          iter2++;
+          RESiter++;
+          result->nz++;
+        }
     }
-    while(iter1<M1I[i+1]){
-      RESI[i+1]++;
-      RESJ[RESiter] = M1J[iter1];
-      RESarr[RESiter] = M1arr[iter1];
-      iter1++;
-      RESiter++;
-      result->nz++;
-    }
-    while(iter2<M2I[i+1]){
-      RESI[i+1]++;
-      RESJ[RESiter] = M2J[iter2];
-      RESarr[RESiter] = M2arr[iter2];
-      iter2++;
-      RESiter++;
-      result->nz++;
-    }
-  }
+}
 
+TYPE(PnlSpMat)* FUNCTION(pnl_sp_mat, plus_sp_mat)(const TYPE(PnlSpMat) *A, const TYPE(PnlSpMat) *B)
+{
+  CheckSpMatMatch(A,B);
+  TYPE(PnlSpMat) * result = FUNCTION(pnl_sp_mat,new)();
+  FUNCTION(pnl_sp_mat, plus_sp_mat_inplace)(result, A, B);
   return result;
 }
 
