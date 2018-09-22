@@ -910,6 +910,12 @@ Accessing elements of a matrix is faster using the following macros
     const \PnlMat \ptr rhs} 
   \sshortdescribe In-place matrix matrix term by term division
 
+\item \describefun{void}{pnl_mat_kron_mat_inplace}{\PnlMat \ptr res, const \PnlMat \ptr B, const \PnlMat \ptr B}
+  \sshortdescribe In-place Kroenecker product of \var{A} and \var{B}
+
+\item \describefun{\PnlMat \ptr}{pnl_mat_kron_mat}{const \PnlMat \ptr B, const \PnlMat \ptr B}
+  \sshortdescribe Return the Kroenecker product of \var{A} and \var{B}
+
 \item \describefun{void}{pnl_mat_map_inplace}{\PnlMat \ptr lhs, 
     double(\ptr f)(double)} 
   \sshortdescribe \var{lhs = f(lhs)}.
@@ -1986,14 +1992,22 @@ IL JL  A(IL, JL)                          | <--+
 \item \describefun{void}{pnl_sp_mat_print}{const \PnlSpMat\ptr  M}
   \sshortdescribe Same as \reffun{pnl_sp_mat_fprint} but print to standard
   output.
-\item \describefun{void}{pnl_sp_mat_mult_vect}(\PnlVect \ptr y, const
-  \PnlSpMat \ptr A, const \PnlVect \ptr x)
+\item \describefun{void}{pnl_sp_mat_mult_vect}{\PnlVect \ptr y, const
+  \PnlSpMat \ptr A, const \PnlVect \ptr x}
   \sshortdescribe \var{y = A x}.
 \item \describefun{void}{pnl_sp_mat_lAxpby}{double lambda, const \PnlSpMat
   \ptr A, const \PnlVect \ptr x, double b, \PnlVect \ptr y} 
   \sshortdescribe Compute \var{y := lambda A x + b y}. When \var{b=0}, the
   content of \var{y} is not used on input and instead \var{y} is resized to
   match \var{A*x}. The vectors \var{x} and \var{y} must be different.
+\item \describefun{void }{pnl_sp_mat_plus_sp_mat_inplace}{\PnlSpMat \ptr res, const \PnlSpMat \ptr A, const \PnlSpMat \ptr B}
+  \sshortdescribe In-place addition: \var{res = A + B}.
+\item \describefun{\PnlSpMat \ptr}{pnl_sp_mat_sp_mat}{const \PnlSpMat \ptr A, const \PnlSpMat \ptr B}
+  \sshortdescribe Return the sum of \var{A} and \var{B}.
+\item \describefun{void }{pnl_sp_mat_kron_inplace}{\PnlSpMat \ptr result, const \PnlSpMat \ptr A, const \PnlSpMat \ptr B}
+  \sshortdescribe In-place Kroenecker product of \var{A} and \var{B}.
+\item \describefun{\PnlSpMat \ptr}{pnl_sp_mat_kron}{const \PnlSpMat \ptr A, const \PnlSpMat \ptr B}
+  \sshortdescribe Return the Kroenecker product of \var{A} and \var{B}.
 \end{itemize}
 
 \paragraph{Comparison functions}
