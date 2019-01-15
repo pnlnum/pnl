@@ -49,6 +49,16 @@ if ("${CMAKE_C_COMPILER_ID}" MATCHES Clang OR "${CMAKE_C_COMPILER_ID}" MATCHES G
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 endif()
 
+if (CMAKE_BUILD_TYPE MATCHES "Debug")
+    set(PNL_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG}")
+    set(PNL_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG}")
+elseif (CMAKE_BUILD_TYPE MATCHES "Release")
+    add_definitions(-DPNL_RANGE_CHECK_OFF)
+    set(PNL_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_RELEASE}")
+    set(PNL_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE}")
+endif ()
+
+
 # Do we have inline
 include(CMakeMacroExternInline)
 
@@ -143,15 +153,6 @@ check_symbol_exists(isnan math.h PNL_HAVE_ISNAN)
 check_symbol_exists(isinf math.h PNL_HAVE_ISINF)
 
 add_subdirectory(src)
-
-if (CMAKE_BUILD_TYPE MATCHES "Debug")
-    set(PNL_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG}")
-    set(PNL_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG}")
-elseif (CMAKE_BUILD_TYPE MATCHES "Release")
-    add_definitions(-DPNL_RANGE_CHECK_OFF)
-    set(PNL_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_RELEASE}")
-    set(PNL_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE}")
-endif ()
 
 if (PNL_ENABLE_TESTS)
     enable_testing()
