@@ -25,6 +25,194 @@
 #include "fftpack.h"
 
 /**
+ * Allocate a workspace for FFT functions
+ * 
+ * @param func the function name
+ * @param n the size of the input data
+ * @return the allocated array or NULL
+ */
+double* pnl_fft_alloc_wspace(char *func, int n)
+{
+  if (strcasecmp(func, "pnl_fft_inplace") == 0 || strcasecmp(func, "pnl_ifft_inplace") == 0
+      || strcasecmp(func, "pnl_real_fft_inplace") == 0 || strcasecmp(func, "pnl_real_ifft_inplace") == 0
+      || strcasecmp(func, "pnl_real_ifft") == 0)
+  {
+    return malloc((4 * n + 15) * sizeof(double));
+  }
+  else if (strcasecmp(func, "pnl_real_fft") == 0 )
+  {
+    return malloc((5 * n + 15) * sizeof(double));
+  }
+  else
+  {
+    perror("un");
+  }
+  return NULL;
+}
+
+/**
+ * In-place Forward FFT
+ *
+ * @param data input complex vector. On output contains the FFT of the input vector
+ * @return OK or FAIL
+ */
+int pnl_fft_inplace_with_wspace(PnlVectComplex *data, double *wspace)
+{
+  int n;
+  n = data->size;
+
+  cffti(n, wspace);
+  cfftf(n, (double *)(data->array), wspace);
+
+  return OK;
+}
+
+/**
+ * In-place Inverse FFT
+ *
+ * @param data input complex vector. On output contains the inverse
+ * FFT of the input vector
+ * @return OK or FAIL
+ */
+int pnl_ifft_inplace_with_wspace(PnlVectComplex *data, double *wspace)
+{
+  int n;
+  n = data->size;
+
+  cffti(n, wspace);
+  cfftb(n, (double *)(data->array), wspace);
+  pnl_vect_complex_mult_double(data, 1.0 / (double) n);
+
+  return OK;
+}
+
+/**
+ *  Forward FFT of real valued sequence
+ *
+ * @param data an array of real numbers. On exit contains the FFT of the input sequence.
+ * @param n size of re and im
+ * @return OK or FAIL
+ */
+int pnl_real_fft_inplace_with_wspace(double *data, double *wspace, int n)
+{
+  rffti(n, wspace);
+  rfftf(n, data, wspace);
+
+  return OK;
+}
+
+/**
+ * Inverse FFT of a sequence to be known to be the FFT a real valued sequence.
+ *
+ * @param data an array of real numbers. On exit contains the inverse FFT.
+ * @param n size of re and im
+ * @return OK or FAIL
+ */
+int pnl_real_ifft_inplace_with_wspace(double *data, double *wspace, int n)
+{
+  int i;
+
+  rffti(n, wspace);
+  rfftb(n, data, wspace);
+  for (i = 0; i < n; i++)
+    {
+      data[i] /= (double) n;
+    }
+  return OK;
+}
+
+/**
+ * Forward FFT of real valued sequence
+ *
+ * @param in an array of real numbers.
+ * @param out a complex vector containing the FFT sequence
+ * @return OK or FAIL
+ */
+int pnl_real_fft_with_wspace(const PnlVect *in, PnlVectComplex *out, double *wspace)
+{
+  int     n, i, l;
+  double *data, *wsave;
+
+  n = in->size;
+  /* Split wspace in two parts */
+  data = wspace;
+  wsave = wspace + n;
+
+
+  for (i = 0; i < n; i++)
+    {
+      data[i] = PNL_GET(in, i);
+    }
+  if (pnl_real_fft_inplace_with_wspace(data, wsave, n) == FAIL) return FAIL;
+
+  pnl_vect_complex_resize(out, n);
+  if (PNL_IS_ODD(n))
+    {
+      l = (n + 1) / 2;
+    }
+  else
+    {
+      l = n / 2;
+    }
+
+  LET_REAL(out, 0) = data[0];
+  LET_IMAG(out, 0) = 0.;
+
+  for (i = 1; i < l; i++)
+    {
+      LET_REAL(out, i) = data[2 * i - 1];
+      LET_IMAG(out, i) = data[2 * i];
+      LET_REAL(out, n - i) = data[2 * i - 1];
+      LET_IMAG(out, n - i) = -data[2 * i];
+    }
+  if (PNL_IS_EVEN(n))
+    {
+      LET_REAL(out, l) = data[n - 1];
+      LET_IMAG(out, l) = 0.;
+    }
+  return OK;
+}
+
+/**
+ * Forward FFT of real valued sequence
+ *
+ * @param in an array of complex numbers representing the FFT of a real valued sequence
+ * @param out a real vector containing the (real-) inverse FFT of in
+ * @return OK or FAIL
+ */
+int pnl_real_ifft_with_wspace(const PnlVectComplex *in, PnlVect *out, double *wspace)
+{
+  int     n, i, l;
+
+  n = in->size;
+  pnl_vect_resize(out, n);
+
+  LET(out, 0) = GET_REAL(in, 0);
+  if (PNL_IS_ODD(n))
+    {
+      l = (n + 1) / 2;
+    }
+  else
+    {
+      l = n / 2;
+    }
+  for (i = 1; i < l; i++)
+    {
+      LET(out, 2 * i - 1) = GET_REAL(in, i);
+      LET(out, 2 * i) = GET_IMAG(in, i);
+    }
+  if (PNL_IS_EVEN(n))
+    {
+      LET(out, n - 1) = GET_REAL(in, l);
+    }
+
+  if (pnl_real_ifft_inplace_with_wspace(out->array, wspace, n) == FAIL) return FAIL;
+
+  return OK;
+}
+
+
+/**
  * In-place Forward FFT
  *
  * @param data input complex vector. On output contains the FFT of the input vector
@@ -32,17 +220,11 @@
  */
 int pnl_fft_inplace(PnlVectComplex *data)
 {
-  int n;
-  double *wsave;
-
-  n = data->size;
-  if ((wsave = malloc((4 * n + 15) * sizeof(double))) == NULL) return FAIL;
-
-  cffti(n, wsave);
-  cfftf(n, (double *)(data->array), wsave);
-
-  free(wsave);
-  return OK;
+  int n = data->size;
+  double *wspace = pnl_fft_alloc_wspace("pnl_fft_inplace", n);
+  int res = pnl_fft_inplace_with_wspace(data, wspace);
+  free(wspace);
+  return res;
 }
 
 /**
@@ -54,18 +236,11 @@ int pnl_fft_inplace(PnlVectComplex *data)
  */
 int pnl_ifft_inplace(PnlVectComplex *data)
 {
-  int n;
-  double *wsave;
-
-  n = data->size;
-  if ((wsave = malloc((4 * n + 15) * sizeof(double))) == NULL) return FAIL;
-
-  cffti(n, wsave);
-  cfftb(n, (double *)(data->array), wsave);
-  pnl_vect_complex_mult_double(data, 1.0 / (double) n);
-
-  free(wsave);
-  return OK;
+  int n = data->size;
+  double *wspace = pnl_fft_alloc_wspace("pnl_ifft_inplace", n);
+  int res = pnl_ifft_inplace_with_wspace(data, wspace);
+  free(wspace);
+  return res;
 }
 
 /**
@@ -168,15 +343,12 @@ int pnl_ifft2(double *re, double *im, int n)
  */
 int pnl_real_fft_inplace(double *data, int n)
 {
-  double *wsave;
-
-  if ((wsave = malloc((4 * n + 15) * sizeof(double))) == NULL) return FAIL;
-
-  rffti(n, wsave);
-  rfftf(n, data, wsave);
-
+  int res;
+  double *wsave = pnl_fft_alloc_wspace("pnl_real_fft_inplace", n);
+  if (!wsave) return FAIL;
+  res = pnl_real_fft_inplace_with_wspace(data, wsave, n);
   free(wsave);
-  return OK;
+  return res;
 }
 
 /**
@@ -188,19 +360,12 @@ int pnl_real_fft_inplace(double *data, int n)
  */
 int pnl_real_ifft_inplace(double *data, int n)
 {
-  double *wsave;
-  int     i;
-
-  if ((wsave = malloc((4 * n + 15) * sizeof(double))) == NULL) return FAIL;
-
-  rffti(n, wsave);
-  rfftb(n, data, wsave);
-  for (i = 0; i < n; i++)
-    {
-      data[i] /= (double) n;
-    }
+  int res;
+  double *wsave = pnl_fft_alloc_wspace("pnl_real_ifft_inplace", n);
+  if (!wsave) return FAIL;
+  res = pnl_real_ifft_inplace_with_wspace(data, wsave, n);
   free(wsave);
-  return OK;
+  return res;
 }
 
 /**
@@ -212,45 +377,12 @@ int pnl_real_ifft_inplace(double *data, int n)
  */
 int pnl_real_fft(const PnlVect *in, PnlVectComplex *out)
 {
-  int     n, i, l;
-  double *data;
-
-  n = in->size;
-  if ((data = malloc(n * sizeof(double))) == NULL) return FAIL;
-
-  for (i = 0; i < n; i++)
-    {
-      data[i] = PNL_GET(in, i);
-    }
-  if (pnl_real_fft_inplace(data, n) == FAIL) return FAIL;
-
-  pnl_vect_complex_resize(out, n);
-  if (PNL_IS_ODD(n))
-    {
-      l = (n + 1) / 2;
-    }
-  else
-    {
-      l = n / 2;
-    }
-
-  LET_REAL(out, 0) = data[0];
-  LET_IMAG(out, 0) = 0.;
-
-  for (i = 1; i < l; i++)
-    {
-      LET_REAL(out, i) = data[2 * i - 1];
-      LET_IMAG(out, i) = data[2 * i];
-      LET_REAL(out, n - i) = data[2 * i - 1];
-      LET_IMAG(out, n - i) = -data[2 * i];
-    }
-  if (PNL_IS_EVEN(n))
-    {
-      LET_REAL(out, l) = data[n - 1];
-      LET_IMAG(out, l) = 0.;
-    }
-  free(data);
-  return OK;
+  int res;
+  double *wspace = pnl_fft_alloc_wspace("pnl_real_fft", in->size);
+  if (!wspace) return FAIL;
+  res = pnl_real_fft_with_wspace(in, out, wspace);
+  free(wspace);
+  return res;
 }
 
 /**
@@ -262,33 +394,12 @@ int pnl_real_fft(const PnlVect *in, PnlVectComplex *out)
  */
 int pnl_real_ifft(const PnlVectComplex *in, PnlVect *out)
 {
-  int     n, i, l;
-
-  n = in->size;
-  pnl_vect_resize(out, n);
-
-  LET(out, 0) = GET_REAL(in, 0);
-  if (PNL_IS_ODD(n))
-    {
-      l = (n + 1) / 2;
-    }
-  else
-    {
-      l = n / 2;
-    }
-  for (i = 1; i < l; i++)
-    {
-      LET(out, 2 * i - 1) = GET_REAL(in, i);
-      LET(out, 2 * i) = GET_IMAG(in, i);
-    }
-  if (PNL_IS_EVEN(n))
-    {
-      LET(out, n - 1) = GET_REAL(in, l);
-    }
-
-  if (pnl_real_ifft_inplace(out->array, n) == FAIL) return FAIL;
-
-  return OK;
+  int res;
+  double *wspace = pnl_fft_alloc_wspace("pnl_real_ifft", in->size);
+  if (!wspace) return FAIL;
+  res = pnl_real_ifft_with_wspace(in, out, wspace);
+  free(wspace);
+  return res;
 }
 
 /**
