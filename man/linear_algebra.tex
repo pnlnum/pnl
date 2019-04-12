@@ -143,6 +143,9 @@ There are no special functions to access the size of a vector, instead the field
   \sshortdescribe On exit, \var{V_sub = V(i:i+len-1)}.  The
   elements are copied.
 
+\item \describefun{void}{pnl_vect_set_subblock}{\PnlVect \ptr dest, const \PnlVect \ptr src, int i}
+  \sshortdescribe Set \var{dest[i:] = src}.
+
 \item \describefun{void}{pnl_vect_free}{\PnlVect \ptr\ptr v}
   \sshortdescribe Free a \PnlVect pointer and set the data pointer to NULL  
 \item \describefun{\PnlVect}{pnl_vect_wrap_array}{const double \ptr x, 

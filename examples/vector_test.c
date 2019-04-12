@@ -81,6 +81,24 @@ static void pnl_vect_extract_test()
   pnl_vect_free(&v4); 
 }
 
+static void pnl_vect_set_subblock_test()
+{
+  double x[5]={2.0, 3.0,4.0, 5.0, 6.0};
+  double y[10]={1.0,1.0, 2.0, 3.0,4.0, 5.0, 6.0, 1.0, 1.0, 1.0};
+  PnlVect *block, *expected;
+  PnlVect *v;
+  expected = pnl_vect_create_from_ptr(10, y);
+  block = pnl_vect_create_from_ptr(5, x);
+  v = pnl_vect_create_from_scalar (10, 1.);
+  pnl_vect_set_subblock(v, block, 2);
+  pnl_test_vect_eq_abs (v, expected, 1E-18, "set_subblock", "");
+  pnl_vect_free(&v); 
+  pnl_vect_free(&block); 
+  pnl_vect_free(&expected); 
+}
+
+
+
 static int ispos (double *x) { return *x >= 0; }
 static int islarger (double *t) { return t[0] >= t[1]; }
 
@@ -480,5 +498,6 @@ int main (int argc, char *argv[])
   pnl_vect_qsort_test();
   pnl_vect_extract_test();
   pnl_vect_subvect_test();
+  pnl_vect_set_subblock_test();
   exit (pnl_test_finalize ("Vector"));
 }

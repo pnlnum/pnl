@@ -473,7 +473,7 @@ void FUNCTION(pnl_vect, set_zero)(TYPE(PnlVect) * v)
 }
 
 /**
- * Copie a TYPE(PnlVect)
+ * Copy a TYPE(PnlVect)
  *
  * @param v a constant TYPE(PnlVect) pointer
  * @return a TYPE(PnlVect)
@@ -501,6 +501,21 @@ void FUNCTION(pnl_vect, clone)(TYPE(PnlVect) * clone,
     }
   FUNCTION(pnl_vect, resize)(clone, v->size);
   memcpy(clone->array, v->array, sizeof(BASE)*v->size);
+}
+
+/**
+ * Set a subblock
+ * On output, dest[i:] = src
+ *
+ * @param dest needs to be already allocated.
+ * @param src a constant TYPE(PnlVect)pointer
+ * @param i the index where the copy starts
+ */
+void FUNCTION(pnl_vect, set_subblock)(TYPE(PnlVect) *dest, const TYPE(PnlVect) *src, int i)
+{
+  CheckIndexVect(dest, i);
+  PNL_CHECK(dest->size < src->size + i, "size exceeded", "pnl_vect_set_subblock");
+  memcpy(dest->array + i, src->array, sizeof(BASE)*src->size);
 }
 
 /**
@@ -1395,7 +1410,7 @@ int FUNCTION(pnl_vect,isequal_rel)(const TYPE(PnlVect) *x, const TYPE(PnlVect) *
 
 
 
-#endif /* efined(BASE_DOUBLE) || defined(BASE_PNL_COMPLEX) */
+#endif /* defined(BASE_DOUBLE) || defined(BASE_PNL_COMPLEX) */
 
 /**
  * Compute a x + b y and stores the result in y
@@ -1501,7 +1516,7 @@ double FUNCTION(pnl_vect, norm_infty)(const TYPE(PnlVect) *V)
  * @param s the size of extracted vector
  * @return a vector (not a pointer) whose array pointer is the address of the
  * i-th element of V. No copying is done. This is a container for
- * V(i:i+s-1). The length of the xtracted vector is s.
+ * V(i:i+s-1). The length of the extracted vector is s.
  */
 TYPE(PnlVect) FUNCTION(pnl_vect, wrap_subvect)(const TYPE(PnlVect) *V, int i, int s)
 {

@@ -94,6 +94,7 @@ extern PnlVect* pnl_vect_create_subvect_with_ind (const PnlVect *V, const PnlVec
 extern void pnl_vect_extract_subvect_with_ind (PnlVect *V_sub, const PnlVect *V, const PnlVectInt *ind);
 extern PnlVect* pnl_vect_create_subvect (const PnlVect *V, int i, int len);
 extern void pnl_vect_extract_subvect (PnlVect *V_sub, const PnlVect *V, int i, int len);
+extern void pnl_vect_set_subblock(PnlVect *dest, const PnlVect *src, int i);
 extern int pnl_vect_resize(PnlVect *v, int size);
 extern int pnl_vect_resize_from_scalar(PnlVect *v, int size, double x);
 extern int pnl_vect_resize_from_ptr(PnlVect *v, int size, const double *t);
@@ -235,6 +236,7 @@ extern PnlVectInt* pnl_vect_int_create_subvect_with_ind (const PnlVectInt *V, co
 extern void pnl_vect_int_extract_subvect_with_ind (PnlVectInt *V_sub, const PnlVectInt *V, const PnlVectInt *ind);
 extern PnlVectInt* pnl_vect_int_create_subvect (const PnlVectInt *V, int i, int len);
 extern void pnl_vect_int_extract_subvect (PnlVectInt *V_sub, const PnlVectInt *V, int i, int len);
+extern void pnl_vect_int_set_subblock(PnlVectInt *dest, const PnlVectInt *src, int i);
 extern int pnl_vect_int_resize(PnlVectInt *v, int size);
 extern int pnl_vect_int_resize_from_scalar(PnlVectInt *v, int size, int x);
 extern int pnl_vect_int_resize_from_ptr(PnlVectInt *v, int size, const int *t);
@@ -396,6 +398,7 @@ extern PnlVectComplex* pnl_vect_complex_create_subvect_with_ind (const PnlVectCo
 extern void pnl_vect_complex_extract_subvect_ind (PnlVectComplex *V_sub, const PnlVectComplex *V, const PnlVectInt *ind);
 extern PnlVectComplex* pnl_vect_complex_create_subvect (const PnlVectComplex *V,  int i, int len);
 extern void pnl_vect_complex_extract (PnlVectComplex *V_sub, const PnlVectComplex *V, int i, int len);
+extern void pnl_vect_complex_set_subblock(PnlVectComplex *dest, const PnlVectComplex *src, int i);
 
 extern int pnl_vect_complex_resize(PnlVectComplex *v, int size);
 extern int pnl_vect_complex_resize_from_scalar(PnlVectComplex *v, int size, dcomplex x);
