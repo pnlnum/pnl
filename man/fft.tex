@@ -1,6 +1,9 @@
 \section{Fast Fourier Transform}
 \subsection{Overview}
 
+This toolbox uses C version of the Fortran FFTPack library available on \url{http://www.netlib.org/fftpack}. \\
+
+
 The forward Fourier transform of a vector $c$ is defined by
 \begin{equation*}
   z_j = \sum_{k=0}^{N-1} c_k \expp{-i j k 2 \pi / N}, \quad j=0,\cdots,N-1
@@ -77,8 +80,9 @@ In the even case, there are two values which are purely real,
 
 To use the following functions, you should include \verb!pnl/pnl_fft.h!.
 
-The following functions comes from a C version of the Fortran FFTPack library
-available on \url{http://www.netlib.org/fftpack}.
+\subsubsection{Direct call functions}
+All FFT functions need some extra memory to perform their computations. This is automatically handled by all the functions but you can these repeatedly, for instance inside a Monte Carlo loop, you should allocate a workspace once and for all and use the same at every iteration. In this case, use the functions defined in Section~\ref{sec:fft-workspace}.
+
 \begin{itemize}
 \item \describefun{int}{pnl_fft_inplace}{\PnlVectComplex \ptr data}
   \sshortdescribe Compute the FFT of \var{data} in place. The original content
@@ -156,5 +160,34 @@ available on \url{http://www.netlib.org/fftpack}.
   into \var{out}. Note that this function modifies the input matrix \var{in}.
 \end{itemize}
 
-% vim:spelllang=en:spell:
+\subsubsection{Function with workspace}
+\label{sec:fft-workspace}
+
+\begin{itemize}
+  \item \describefun{double\ptr }{pnl_fft_alloc_wspace}{char \ptr func, int n}
+    \sshortdescribe Return an allocated workspace array ready yo use for function \var{func} and input data of size \var{n}
+
+  \item \describefun{int}{pnl_fft_inplace_with_wspace}{\PnlVectComplex \ptr data, double \ptr wspace}
+    \sshortdescribe Compute the FFT of \var{data} in place. The original content of \var{data} is lost.
+
+  \item \describefun{int}{pnl_ifft_inplace_with_wspace}{\PnlVectComplex \ptr data, double \ptr wspace}
+    \sshortdescribe Compute the inverse FFT of \var{data} in place. The original content of \var{data} is lost.
+
+  \item \describefun{int}{pnl_real_fft_inplace_with_wspace}{double \ptr data, double \ptr wspace, int n}
+    \sshortdescribe Compute the inverse FFT of \var{in} and stores it into \var{out}. The vector \var{in} is supposed to be the FFT of a real valued vector.
+
+  \item \describefun{int}{pnl_real_ifft_inplace_with_wspace}{double \ptr data, double \ptr wspace, int n}
+  \sshortdescribe Compute the inverse FFT of the vector \var{data} of length
+  \var{n}. \var{data} is supposed to be the FFT coefficients a real valued
+  sequence stored using the FFTPack storage. On output, \var{data} contains
+  the inverse FFT.
+
+  \item \describefun{int}{pnl_real_fft_with_wspace}{const \PnlVect \ptr in, \PnlVectComplex \ptr out, double \ptr wspace}
+    \sshortdescribe Compute the FFT of the real valued sequence \var{in} and stores it into \var{out}.
+
+  \item \describefun{int}{pnl_real_ifft_with_wspace}{const \PnlVectComplex \ptr in, \PnlVect \ptr out, double \ptr wspace}
+    \sshortdescribe Compute the inverse FFT of \var{in} and stores it into \var{out}. The vector \var{in} is supposed to be the FFT of a real valued vector.
+\end{itemize}
+
+
 
