@@ -33,13 +33,13 @@
  */
 double* pnl_fft_alloc_wspace(char *func, int n)
 {
-  if (strcasecmp(func, "pnl_fft_inplace") == 0 || strcasecmp(func, "pnl_ifft_inplace") == 0
-      || strcasecmp(func, "pnl_real_fft_inplace") == 0 || strcasecmp(func, "pnl_real_ifft_inplace") == 0
-      || strcasecmp(func, "pnl_real_ifft") == 0)
+  if (strcmp(func, "pnl_fft_inplace") == 0 || strcmp(func, "pnl_ifft_inplace") == 0
+      || strcmp(func, "pnl_real_fft_inplace") == 0 || strcmp(func, "pnl_real_ifft_inplace") == 0
+      || strcmp(func, "pnl_real_ifft") == 0)
   {
     return malloc((4 * n + 15) * sizeof(double));
   }
-  else if (strcasecmp(func, "pnl_real_fft") == 0 )
+  else if (strcmp(func, "pnl_real_fft") == 0 )
   {
     return malloc((5 * n + 15) * sizeof(double));
   }
