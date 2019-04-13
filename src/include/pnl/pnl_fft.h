@@ -16,7 +16,7 @@ extern "C" {
 
 /*@{*/
 
-extern double* pnl_fft_alloc_wspace(char *func, int n);
+extern double* pnl_fft_alloc_wspace(const char *func, int n);
 extern int pnl_fft_inplace_with_wspace(PnlVectComplex *data, double *wspace);
 extern int pnl_ifft_inplace_with_wspace(PnlVectComplex *data, double *wspace);
 extern int pnl_real_fft_inplace_with_wspace(double *data, double *wspace, int n);

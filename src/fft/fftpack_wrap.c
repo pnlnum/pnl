@@ -31,7 +31,7 @@
  * @param n the size of the input data
  * @return the allocated array or NULL
  */
-double* pnl_fft_alloc_wspace(char *func, int n)
+double* pnl_fft_alloc_wspace(const char *func, int n)
 {
   if (strcmp(func, "pnl_fft_inplace") == 0 || strcmp(func, "pnl_ifft_inplace") == 0
       || strcmp(func, "pnl_real_fft_inplace") == 0 || strcmp(func, "pnl_real_ifft_inplace") == 0

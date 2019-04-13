@@ -164,7 +164,7 @@ All FFT functions need some extra memory to perform their computations. This is 
 \label{sec:fft-workspace}
 
 \begin{itemize}
-  \item \describefun{double\ptr }{pnl_fft_alloc_wspace}{char \ptr func, int n}
+  \item \describefun{double\ptr }{pnl_fft_alloc_wspace}{const char \ptr func, int n}
     \sshortdescribe Return an allocated workspace array ready yo use for function \var{func} and input data of size \var{n}
 
   \item \describefun{int}{pnl_fft_inplace_with_wspace}{\PnlVectComplex \ptr data, double \ptr wspace}
