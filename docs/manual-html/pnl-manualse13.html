@@ -20,17 +20,17 @@ href="pnl-manualse12.html#tailpnl-manualse12.html" >prev-tail</a>] [<a
 href="#tailpnl-manualse13.html">tail</a>] [<a 
 href="pnl-manual.html#pnl-manualse13.html" >up</a>] </p></div>
 <h3 class="sectionHead"><span class="titlemark">13   </span> <a 
- id="x15-12700013"></a>Root finding</h3>
+ id="x15-12900013"></a>Root finding</h3>
 <!--l. 2--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">13.1   </span> <a 
- id="x15-12800013.1"></a>Overview</h4>
+ id="x15-13000013.1"></a>Overview</h4>
 <!--l. 5--><p class="noindent" >To provide a uniformed framework to root finding functions, we use several structures for storing
 different kind of functions. The pointer <span class='var'>params</span> is used to store the extra parameters. These new
 types come with dedicated macros starting in <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">PNL_EVAL</span></span></span> to evaluate the function and their Jacobian.
 <a 
- id="dx15-128001"></a>
+ id="dx15-130001"></a>
                                                                                     
 
                                                                                     
@@ -48,7 +48,7 @@ class="ec-lmtt-10x-x-109">PNL_EVAL</span></span></span> to evaluate the function
 </div>
 <!--l. 21--><p class="nopar" >
 <a 
- id="dx15-128002"></a>
+ id="dx15-130002"></a>
                                                                                     
 
                                                                                     
@@ -66,7 +66,7 @@ class="ec-lmtt-10x-x-109">PNL_EVAL</span></span></span> to evaluate the function
 </div>
 <!--l. 34--><p class="nopar" >
 <a 
- id="dx15-128003"></a>
+ id="dx15-130003"></a>
                                                                                     
 
                                                                                     
@@ -85,7 +85,7 @@ class="ec-lmtt-10x-x-109">PNL_EVAL</span></span></span> to evaluate the function
 </div>
 <!--l. 48--><p class="nopar" >
 <a 
- id="dx15-128004"></a>
+ id="dx15-130004"></a>
                                                                                     
 
                                                                                     
@@ -103,9 +103,9 @@ class="ec-lmtt-10x-x-109">PNL_EVAL</span></span></span> to evaluate the function
 </div>
 <!--l. 61--><p class="nopar" >
 <a 
- id="dx15-128005"></a>
+ id="dx15-130005"></a>
 <a 
- id="dx15-128006"></a>
+ id="dx15-130006"></a>
                                                                                     
 
                                                                                     
@@ -130,9 +130,9 @@ class="ec-lmtt-10x-x-109">PNL_EVAL</span></span></span> to evaluate the function
 </div>
 <!--l. 82--><p class="nopar" >
 <a 
- id="dx15-128007"></a>
+ id="dx15-130007"></a>
 <a 
- id="dx15-128008"></a>
+ id="dx15-130008"></a>
                                                                                     
 
                                                                                     
@@ -177,7 +177,7 @@ class="ec-lmtt-10x-x-109">PNL_EVAL</span></span></span> to evaluate the function
 </p><!--l. 123--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">13.2   </span> <a 
- id="x15-12900013.2"></a>Functions</h4>
+ id="x15-13100013.2"></a>Functions</h4>
 <!--l. 125--><p class="noindent" >To use the following functions, you should include <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl/pnl_root.h</span></span></span>.
                                                                                     
@@ -185,23 +185,23 @@ class="ec-lmtt-10x-x-109">pnl/pnl_root.h</span></span></span>.
                                                                                     
 </p>
 <!--l. 127--><p class="noindent" ><span class="paragraphHead"><a 
- id="x15-13000013.2"></a><span 
+ id="x15-13200013.2"></a><span 
 class="ec-lmbx-10x-x-109">Real valued functions of a real argument</span></span>
 </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx15-130001"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx15-132001"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_root_brent</span></span>&#x00A0;(<span class='args'><a 
-href="#x15-12800013.1"><span class='struct'>PnlFunc</span></a> <span 
+href="#x15-13000013.1"><span class='struct'>PnlFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>F, double x1, double x2, double <span 
 class="ts1-lmr10-x-x-109">*</span>tol</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Find the root of <span class='var'>F</span> between <span class='var'>x1</span> and <span class='var'>x2</span> with an accuracy of order <span class='var'>tol</span>. On
      exit <span class='var'>tol</span> is an upper bound of the error.
      </li>
      <li class="itemize"><a 
- id="dx15-130002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx15-132002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_root_newton_bisection</span></span>&#x00A0;(<span class='args'><a 
-href="#x15-12800013.1"><span class='struct'>PnlFuncDFunc</span></a> <span 
+href="#x15-13000013.1"><span class='struct'>PnlFuncDFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>Func, double x_min, double
      x_max, double tol, int N_Max, double <span 
 class="ts1-lmr10-x-x-109">*</span>res</span>)<br 
@@ -211,9 +211,9 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Find th
      on combining Newton&#8217;s approach with a bisection technique.
      </li>
      <li class="itemize"><a 
- id="dx15-130003"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx15-132003"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_root_newton</span></span>&#x00A0;(<span class='args'><a 
-href="#x15-12800013.1"><span class='struct'>PnlFuncDFunc</span></a> <span 
+href="#x15-13000013.1"><span class='struct'>PnlFuncDFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>Func, double x0, double x_eps, double fx_eps, int
      max_iter, double <span 
 class="ts1-lmr10-x-x-109">*</span>res</span>)<br 
@@ -240,8 +240,8 @@ class="rm-lmr-10x-x-109">=</span> <span
 class="rm-lmr-10x-x-109">max</span><span 
 class="lmsy-10x-x-109">{</span><span 
 class="lmmi-10x-x-109">&#x03B3;</span><sup><span 
-class="lmmi-8">j</span></sup><span style="margin-left:3.04074pt" class="tmspace"></span><span 
-class="rm-lmr-10x-x-109">;</span><span style="margin-left:3.04074pt" class="tmspace"></span><span 
+class="lmmi-8">j</span></sup><span 
+class="rm-lmr-10x-x-109">;</span><span 
 class="lmmi-10x-x-109">j </span><span 
 class="lmsy-10x-x-109">&#x2265; </span><span 
 class="rm-lmr-10x-x-109">0</span><span 
@@ -301,9 +301,9 @@ class="rm-lmr-10x-x-109">2</span>. The algorithm stops when one of the three
      <!--l. 162--><p class="noindent" >On exit, the root is stored in <span class='var'>res</span>.
      </p></li>
      <li class="itemize"><a 
- id="dx15-130004"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx15-132004"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_root_bisection</span></span>&#x00A0;(<span class='args'><a 
-href="#x15-12800013.1"><span class='struct'>PnlFunc</span></a> <span 
+href="#x15-13000013.1"><span class='struct'>PnlFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>Func, double xmin, double xmax, double epsrel, double
      espabs, int N_max, double <span 
 class="ts1-lmr10-x-x-109">*</span>res</span>)<br 
@@ -311,14 +311,14 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Find th
      + epsabs</span> or with the maximum number of iterations <span class='var'>N_max</span>. On exit, <span class='var'>res = (x2 + x1) /
      2</span>.</li></ul>
 <!--l. 171--><p class="noindent" ><span class="paragraphHead"><a 
- id="x15-13100013.2"></a><span 
+ id="x15-13300013.2"></a><span 
 class="ec-lmbx-10x-x-109">Vector valued functions with several arguments</span></span>
 </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx15-131001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx15-133001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_multiroot_newton</span></span>&#x00A0;(<span class='args'><a 
-href="#x15-12800013.1"><span class='struct'>PnlRnFuncRnDFunc</span></a> <span 
+href="#x15-13000013.1"><span class='struct'>PnlRnFuncRnDFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>func, const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>x0, double
@@ -350,8 +350,8 @@ class="rm-lmr-10x-x-109">=</span> <span
 class="rm-lmr-10x-x-109">max</span><span 
 class="lmsy-10x-x-109">{</span><span 
 class="lmmi-10x-x-109">&#x03B3;</span><sup><span 
-class="lmmi-8">j</span></sup><span style="margin-left:3.04074pt" class="tmspace"></span><span 
-class="rm-lmr-10x-x-109">;</span><span style="margin-left:3.04074pt" class="tmspace"></span><span 
+class="lmmi-8">j</span></sup><span 
+class="rm-lmr-10x-x-109">;</span><span 
 class="lmmi-10x-x-109">j </span><span 
 class="lmsy-10x-x-109">&#x2265; </span><span 
 class="rm-lmr-10x-x-109">0</span><span 
@@ -414,9 +414,9 @@ class="rm-lmr-10x-x-109">2</span>. The algorithm stops when one of the three
 <!--l. 197--><p class="noindent" >We provide two wrappers for calling minpack routines. </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx15-131002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx15-133002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_root_fsolve</span></span>&#x00A0;(<span class='args'><a 
-href="#x15-12800013.1"><span class='struct'>PnlRnFuncRnDFunc</span></a> <span 
+href="#x15-13000013.1"><span class='struct'>PnlRnFuncRnDFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>f, <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>x, <a 
@@ -439,7 +439,7 @@ class="lmmi-8">n</span></sup>. Note that the number of
 class="newline" />   <span class='description'>Parameters&#x00A0;</span>
           <ul class="itemize2">
           <li class="itemize"><span class='var'>f</span> is a pointer to a <a 
-href="#x15-12800013.1"><span class='struct'>PnlRnFuncRnDFunc</span></a> used to store the function whose root is to
+href="#x15-13000013.1"><span class='struct'>PnlRnFuncRnDFunc</span></a> used to store the function whose root is to
           be found. <span class='var'>f</span> can also store the Jacobian of the function, if not it is computed using
           finite differences (see the file <a 
 href="examples/minpack_test.c" class="url" ><span 
@@ -469,9 +469,9 @@ class="ec-lmtt-10x-x-109">examples/minpack_test.c</span></a> for a usage example
                                                                                     
      </li>
      <li class="itemize"><a 
- id="dx15-131003"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx15-133003"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_root_fsolve_lsq</span></span>&#x00A0;(<span class='args'><a 
-href="#x15-12800013.1"><span class='struct'>PnlRnFuncRmDFunc</span></a> <span 
+href="#x15-13000013.1"><span class='struct'>PnlRnFuncRmDFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>f, <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>x, int m, <a 
@@ -503,7 +503,7 @@ class="rm-lmr-8">2</span></sup>, note that there is no reason why <span class='v
 class="newline" />   <span class='description'>Parameters&#x00A0;</span>
           <ul class="itemize2">
           <li class="itemize"><span class='var'>f</span> is a pointer to a <a 
-href="#x15-12800013.1"><span class='struct'>PnlRnFuncRmDFunc</span></a> used to store the function whose root is to
+href="#x15-13000013.1"><span class='struct'>PnlRnFuncRmDFunc</span></a> used to store the function whose root is to
           be found. <span class='var'>f</span> can also store the Jacobian of the function, if not it is computed using
           finite differences (see the file <a 
 href="examples/minpack_test.c" class="url" ><span 

@@ -20,11 +20,11 @@ href="pnl-manualse10.html#tailpnl-manualse10.html" >prev-tail</a>] [<a
 href="#tailpnl-manualse11.html">tail</a>] [<a 
 href="pnl-manual.html#pnl-manualse11.html" >up</a>] </p></div>
 <h3 class="sectionHead"><span class="titlemark">11   </span> <a 
- id="x13-11700011"></a>Ordinary differential equations</h3>
+ id="x13-11900011"></a>Ordinary differential equations</h3>
 <!--l. 2--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">11.1   </span> <a 
- id="x13-11800011.1"></a>Overview</h4>
+ id="x13-12000011.1"></a>Overview</h4>
 <!--l. 4--><p class="noindent" >To use these functionalities, you should include <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl/pnl_integration.h</span></span></span>.
 </p><!--l. 6--><p class="noindent" >These functions are designed for numerically solving <span 
@@ -36,12 +36,12 @@ equation of the general form
 class="equation-star"><tr><td>
 <center class="math-display" >
 <img 
-src="pnl-manual36x.png" alt="dyi
+src="pnl-manual37x.png" alt="dyi
 dt-(t) = fi(t,y1(t),&#x22C5;&#x22C5;&#x22C5;,yn(t))
 " class="math-display"  /></center></td></tr></table>
 <!--l. 10--><p class="nopar" >
 The system of equations is defined by the following structure <a 
- id="dx13-118001"></a>
+ id="dx13-120001"></a>
                                                                                     
 
                                                                                     
@@ -77,7 +77,7 @@ class="ts1-lmr10-x-x-109">*</span>params</span>)<br
 class="newline" />   <span class='description'>Description&#x00A0;</span>After calling the fuction, <span class='var'>yp</span> should be defined as follows <span class='var'>yp_i = f_i(neqn,
      t, y, params)</span>. <span class='var'>y</span> and <span class='var'>yp</span> should be both of size <span class='var'>neqn</span></li></ul>
 <!--l. 34--><p class="noindent" >We provide the following macro to evaluate a <a 
-href="#x13-11800011.1"><span class='struct'>PnlODEFunc</span></a> at a given point
+href="#x13-12000011.1"><span class='struct'>PnlODEFunc</span></a> at a given point
                                                                                     
 
                                                                                     
@@ -90,18 +90,18 @@ href="#x13-11800011.1"><span class='struct'>PnlODEFunc</span></a> at a given poi
 </p><!--l. 41--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">11.2   </span> <a 
- id="x13-11900011.2"></a>Functions</h4>
+ id="x13-12100011.2"></a>Functions</h4>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx13-119001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx13-121001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_ode_rkf45</span></span>&#x00A0;(<span class='args'><a 
-href="#x13-11800011.1"><span class='struct'>PnlODEFunc</span></a> <span 
+href="#x13-12000011.1"><span class='struct'>PnlODEFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>f, double <span 
 class="ts1-lmr10-x-x-109">*</span>y, double t, double t_out, double relerr,
      double abserr, int <span 
 class="ts1-lmr10-x-x-109">*</span>flag</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>This function computes the solution of the system defined by the <a 
-href="#x13-11800011.1"><span class='struct'>PnlODEFunc</span></a>
+href="#x13-12000011.1"><span class='struct'>PnlODEFunc</span></a>
      <span class='var'>f</span> at the point <span class='var'>t_out</span>. On input, <span class='var'><span 
 class="rm-lmr-10x-x-109">(</span><span 
 class="lmmi-10x-x-109">t,y</span><span 
@@ -137,15 +137,15 @@ class="rm-lmr-10x-x-109">)</span></span> should be the initial condition, <span 
           <li class="itemize"><span class='var'>flag = 7</span> : it is likely that rkf45 is inefficient for solving this problem. too much
           output is restricting the natural stepsize choice. use the one-step integrator mode.
           see <a 
-href="#x13-11900011.2">pnl_ode_rkf45_step</a>.
+href="#x13-12100011.2">pnl_ode_rkf45_step</a>.
           </li>
           <li class="itemize"><span class='var'>flag = 8</span> : invalid input parameters this indicator occurs if any of the following is
           satisfied - neqn &#x003C;= 0, t=tout, relerr or abserr &#x003C;= 0.</li></ul>
      </li>
      <li class="itemize"><a 
- id="dx13-119002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx13-121002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_ode_rkf45_step</span></span>&#x00A0;(<span class='args'><a 
-href="#x13-11800011.1"><span class='struct'>PnlODEFunc</span></a> <span 
+href="#x13-12000011.1"><span class='struct'>PnlODEFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>f, double <span 
 class="ts1-lmr10-x-x-109">*</span>y, double <span 
 class="ts1-lmr10-x-x-109">*</span>t, double t_out, double
@@ -155,7 +155,7 @@ class="ts1-lmr10-x-x-109">*</span>work, int <span
 class="ts1-lmr10-x-x-109">*</span>iwork, int <span 
 class="ts1-lmr10-x-x-109">*</span>flag</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Same as <a 
-href="#x13-11900011.2">pnl_ode_rkf45</a> but it only computes one step of integration in the
+href="#x13-12100011.2">pnl_ode_rkf45</a> but it only computes one step of integration in the
      direction of <span class='var'>t_out</span>. <span class='var'>work</span> and <span class='var'>iwork</span> are working arrays of size <span class='var'>3 + 6 * neqn</span> and <span class='var'>5</span> respectively
      and should remain untouched between successive calls to the function. On output <span class='var'>t</span> holds
      the point at which integration stopped and <span class='var'>y</span> the value of the solution at that

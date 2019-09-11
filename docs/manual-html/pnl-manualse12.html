@@ -20,17 +20,17 @@ href="pnl-manualse11.html#tailpnl-manualse11.html" >prev-tail</a>] [<a
 href="#tailpnl-manualse12.html">tail</a>] [<a 
 href="pnl-manual.html#pnl-manualse12.html" >up</a>] </p></div>
 <h3 class="sectionHead"><span class="titlemark">12   </span> <a 
- id="x14-12000012"></a>Optimization</h3>
+ id="x14-12200012"></a>Optimization</h3>
 <!--l. 3--><p class="noindent" >To use the functions described in this section, you should include <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl/pnl_optim.h</span></span></span>.
 </p><!--l. 5--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">12.1   </span> <a 
- id="x14-12100012.1"></a>Linear constrained optimization (linear programming)</h4>
+ id="x14-12300012.1"></a>Linear constrained optimization (linear programming)</h4>
 <!--l. 7--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">12.1.1   </span> <a 
- id="x14-12200012.1.1"></a>Overview</h5>
+ id="x14-12400012.1.1"></a>Overview</h5>
 <!--l. 9--><p class="noindent" >Consider the minimization problem
 </p><table 
 class="align-star">
@@ -40,14 +40,14 @@ class="rm-lmr-10x-x-109">min</span> <sub><span
 class="lmmi-8">x</span></sub>   </td>                                <td 
 class="align-even"><span 
 class="lmmi-10x-x-109">C</span><sup><span 
-class="lmmi-8">T</span> </sup><span style="margin-left:3.04074pt" class="tmspace"></span><span 
+class="lmmi-8">T</span> </sup><span 
 class="lmmi-10x-x-109">x</span></td>                                            <td 
 class="align-label"></td>                                <td 
 class="align-label">
                                 </td></tr><tr><td 
 class="align-odd">s.t.   </td>                                  <td 
 class="align-even"><span 
-class="lmmi-10x-x-109">A</span><sub>ineq</sub><span style="margin-left:3.04074pt" class="tmspace"></span><span 
+class="lmmi-10x-x-109">A</span><sub>ineq</sub><span 
 class="lmmi-10x-x-109">x </span><span 
 class="lmsy-10x-x-109">&#x2264; </span><span 
 class="lmmi-10x-x-109">B</span><sub>ineq</sub></td>                                  <td 
@@ -56,7 +56,7 @@ class="align-label">
                                 </td></tr><tr><td 
 class="align-odd"></td>                                       <td 
 class="align-even"><span 
-class="lmmi-10x-x-109">A</span><sub>eq</sub><span style="margin-left:3.04074pt" class="tmspace"></span><span 
+class="lmmi-10x-x-109">A</span><sub>eq</sub><span 
 class="lmmi-10x-x-109">x </span><span 
 class="rm-lmr-10x-x-109">= </span><span 
 class="lmmi-10x-x-109">B</span><sub>eq</sub></td>                                     <td 
@@ -78,7 +78,7 @@ class="align-label"></td></tr></table>
 <!--l. 18--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">12.1.2   </span> <a 
- id="x14-12300012.1.2"></a>Functions</h5>
+ id="x14-12500012.1.2"></a>Functions</h5>
 <!--l. 19--><p class="noindent" >To solve such a linear problem, we provide a wrapper to the <span 
 class="ec-lmri-10x-x-109">LPSolve </span>library
 (<a 
@@ -86,7 +86,7 @@ href="http://lpsolve.sourceforge.net" class="url" ><span
 class="ec-lmtt-10x-x-109">http://lpsolve.sourceforge.net</span></a>). </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx14-123001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx14-125001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_optim_linprog</span></span>&#x00A0;(<span class='args'>const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>C, const <a 
@@ -134,7 +134,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>This fu
      <!--l. 40--><p class="noindent" >The function returns <span class='var'>OK</span> or <span class='var'>FAIL</span>.
      </p></li>
      <li class="itemize"><a 
- id="dx14-123002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx14-125002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_optim_linprog_sp</span></span>&#x00A0;(<span class='args'>const <a 
 href="pnl-manualse4.html#x6-790004.6.1"><span class='struct'>PnlSpMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>C, const <a 
@@ -200,21 +200,21 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>This fu
 <!--l. 71--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">12.2   </span> <a 
- id="x14-12400012.2"></a>Nonlinear constrained optimization</h4>
+ id="x14-12600012.2"></a>Nonlinear constrained optimization</h4>
                                                                                     
 
                                                                                     
 <!--l. 72--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">12.2.1   </span> <a 
- id="x14-12500012.2.1"></a>Overview</h5>
+ id="x14-12700012.2.1"></a>Overview</h5>
 <!--l. 74--><p class="noindent" >A standard Constrained Nonlinear Optimization problem can be written as:
 </p>
 <table 
 class="equation-star"><tr><td>
 <center class="math-display" >
 <img 
-src="pnl-manual37x.png" alt="   (
+src="pnl-manual38x.png" alt="   (
    |{  min f(x)
 (O )   cI(x) &#x2265; 0
    |(  cE(x) = 0
@@ -253,7 +253,7 @@ class="lmmi-8">I</span></sup><span
 class="rm-lmr-10x-x-109">(</span><span 
 class="lmmi-10x-x-109">x</span><span 
 class="rm-lmr-10x-x-109">) = </span><img 
-src="pnl-manual38x.png" alt="(g(x),x - l,u - x)"  class="left" align="middle" />. The vector <span 
+src="pnl-manual39x.png" alt="(g(x),x - l,u - x)"  class="left" align="middle" />. The vector <span 
 class="lmmi-10x-x-109">l </span>and <span 
 class="lmmi-10x-x-109">u</span>
 are the lower and upper bounds on the variables <span 
@@ -291,7 +291,7 @@ conditions are satisfied:
 class="equation-star"><tr><td>
 <center class="math-display" >
 <img 
-src="pnl-manual39x.png" alt="    (         I  E               I    I     E    E
+src="pnl-manual40x.png" alt="    (         I  E               I    I     E    E
     ||||  &#x2207; &#x2113;(x,&#x03BB; ,&#x03BB;  ) = &#x2207;f (x )E- &#x2207;c (x)&#x03BB;  - &#x2207;c  (x)&#x03BB;  = 0
     |{                     c (x) = 0
 (P )|                     cI(x) &#x2265; 0
@@ -316,7 +316,7 @@ primal variable.
 </p><!--l. 108--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">12.2.2   </span> <a 
- id="x14-12600012.2.2"></a>Functions</h5>
+ id="x14-12800012.2.2"></a>Functions</h5>
 <!--l. 110--><p class="noindent" >To solve an inequality constrained optimization problem, ie <span 
 class="lmmi-10x-x-109">m</span><sub><span 
 class="lmmi-8">E</span></sub> <span 
@@ -324,14 +324,14 @@ class="rm-lmr-10x-x-109">= 0</span>, we provide the following
 function. </p>
      <ul class="itemize1">
      <li class="itemize"><a 
- id="dx14-126001"></a>                              <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx14-128001"></a>                              <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_optim_intpoints_bfgs_solve</span></span>&#x00A0;(<span class='args'><a 
-href="pnl-manualse13.html#x15-12800013.1"><span class='struct'>PnlRnFuncR</span></a><span 
+href="pnl-manualse13.html#x15-13000013.1"><span class='struct'>PnlRnFuncR</span></a><span 
 class="ts1-lmr10-x-x-109">*</span>func,
      <a 
-href="pnl-manualse13.html#x15-12800013.1"><span class='struct'>PnlRnFuncRm</span></a><span 
+href="pnl-manualse13.html#x15-13000013.1"><span class='struct'>PnlRnFuncRm</span></a><span 
 class="ts1-lmr10-x-x-109">*</span>grad_func,  <a 
-href="pnl-manualse13.html#x15-12800013.1"><span class='struct'>PnlRnFuncRm</span></a><span 
+href="pnl-manualse13.html#x15-13000013.1"><span class='struct'>PnlRnFuncRm</span></a><span 
 class="ts1-lmr10-x-x-109">*</span>nl_constraints,  <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a>  <span 
 class="ts1-lmr10-x-x-109">*</span>lower_bounds,
@@ -393,12 +393,12 @@ class="lmmi-10x-x-109">int</span>, its value depends on the output status of the
      </p>
      <center class="math-display" >
      <img 
-src="pnl-manual40x.png" alt="        I                   I    I
+src="pnl-manual41x.png" alt="        I                   I    I
 ||&#x2207;&#x2113;(x,&#x03BB; )||&#x221E;  = ||&#x2207;f (x)- &#x2207;c  (x)&#x03BB; ||&#x221E; &#x003C; tolerance
      " class="math-display"  /></center>
      <center class="math-display" >
      <img 
-src="pnl-manual41x.png" alt="||cI(x)&#x03BB;I|| &#x003C;  tolerance
+src="pnl-manual42x.png" alt="||cI(x)&#x03BB;I|| &#x003C;  tolerance
          &#x221E;
      " class="math-display"  /></center>
      <!--l. 143--><p class="noindent" >where <span 
@@ -406,9 +406,9 @@ class="lmmi-10x-x-109">c</span><sup><span
 class="lmmi-8">I</span></sup><span 
 class="rm-lmr-10x-x-109">(</span><span 
 class="lmmi-10x-x-109">x</span><span 
-class="rm-lmr-10x-x-109">)</span><span style="margin-left:2.43306pt" class="tmspace"></span><span 
+class="rm-lmr-10x-x-109">)</span><span 
 class="lmmi-10x-x-109">. </span><span 
-class="lmsy-10x-x-109">*</span><span style="margin-left:2.43306pt" class="tmspace"></span><span 
+class="lmsy-10x-x-109">* </span><span 
 class="lmmi-10x-x-109">&#x03BB;</span><sup><span 
 class="lmmi-8">I</span></sup> where &#8217;<span 
 class="lmmi-10x-x-109">.</span><span 
