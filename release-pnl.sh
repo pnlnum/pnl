@@ -95,7 +95,7 @@ create_win_version() {
     cp -r "$PNL_DIR/manual-html" "$PNL_WINDIR"
     cp -r "$PNL_DIR/pnl-manual.pdf" "$PNL_WINDIR"
     # Copy all required dll's
-    LIBS="libgcc_s_seh-1.dll libgfortran-4.dll libquadmath-0.dll"
+    LIBS="libgcc_s_seh-1.dll libgfortran-5.dll libquadmath-0.dll"
     for lib in $LIBS; do
         cp $MINGW_PREFIX/x86_64-w64-mingw32/lib/$lib $PNL_WINDIR/lib
         cp -r $MINGW_PREFIX/x86_64-w64-mingw32/lib/$lib $LOCAL_TMPDIR/build-win/examples
