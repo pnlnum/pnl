@@ -641,8 +641,8 @@ PNL_INLINE_DECL double* pnl_mat_complex_lget_imag(PnlMatComplex *v, int i, int j
 #define MLET_REAL(v,i,j) *(pnl_mat_complex_lget_real(v,i,j))
 #define MGET_IMAG(v,i,j) pnl_mat_complex_get_imag(v,i,j)
 #define MLET_IMAG(v,i,j) *(pnl_mat_complex_lget_imag(v,i,j))
-#define MGET_COMPLEX(v,i,j) pnl_mat_get_complex((v), (i), (j))
-#define MLET_COMPLEX(v,i,j) *(pnl_mat_lget_complex((v), (i), (j)))
+#define MGET_COMPLEX(v,i,j) pnl_mat_complex_get((v), (i), (j))
+#define MLET_COMPLEX(v,i,j) *(pnl_mat_complex_lget((v), (i), (j)))
 #else
 #define MGET_REAL(v,i,j) ((v)->array[(i)*(v)->n+(j)]).r
 #define MLET_REAL(v,i,j) ((v)->array[(i)*(v)->n+(j)]).r
