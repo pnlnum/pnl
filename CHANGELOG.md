@@ -5,6 +5,19 @@ All notable changes to PNL will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.10.0] - 2019-09-11
+
+### Fixed
+
+- Fix strcasecmp not available on MSVC
+- Fix PNL_RANGE_CHECK_OFF in Release mode
+
+### Added
+
+- Add new functions for sparse matrices
+- Add pnl_vect_set_subblock
+- Add FFT api with work spaces
+
 ## [1.9.6] - 2018-06-06
 
 ### Fixed
