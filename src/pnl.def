@@ -257,7 +257,9 @@ EXPORTS
     pnl_fft2 
     pnl_fft2d 
     pnl_fft2d_inplace 
+    pnl_fft_alloc_wspace
     pnl_fft_inplace 
+    pnl_fft_inplace_with_wspace
     pnl_gmres_solver_create 
     pnl_gmres_solver_free 
     pnl_gmres_solver_initialisation 
@@ -318,6 +320,7 @@ EXPORTS
     pnl_ifft2d 
     pnl_ifft2d_inplace 
     pnl_ifft_inplace 
+    pnl_ifft_inplace_with_wspace
     pnl_ilap_cdf_euler 
     pnl_ilap_euler 
     pnl_ilap_fft 
@@ -414,8 +417,8 @@ EXPORTS
     pnl_mat_complex_isequal
     pnl_mat_complex_isequal_abs
     pnl_mat_complex_isequal_rel
-    pnl_mat_complex_kron_inplace
     pnl_mat_complex_kron
+    pnl_mat_complex_kron_inplace
     pnl_mat_complex_lAxpby 
     pnl_mat_complex_lget 
     pnl_mat_complex_lget_imag 
@@ -546,8 +549,8 @@ EXPORTS
     pnl_mat_int_get_row 
     pnl_mat_int_init 
     pnl_mat_int_isequal
-    pnl_mat_int_kron_inplace
     pnl_mat_int_kron
+    pnl_mat_int_kron_inplace
     pnl_mat_int_lAxpby 
     pnl_mat_int_lget 
     pnl_mat_int_map 
@@ -608,8 +611,8 @@ EXPORTS
     pnl_mat_isequal
     pnl_mat_isequal_abs
     pnl_mat_isequal_rel
-    pnl_mat_kron_inplace
     pnl_mat_kron
+    pnl_mat_kron_inplace
     pnl_mat_lAxpby 
     pnl_mat_lget 
     pnl_mat_log 
@@ -756,10 +759,14 @@ EXPORTS
     pnl_real_fft2 
     pnl_real_fft2d 
     pnl_real_fft_inplace 
+    pnl_real_fft_inplace_with_wspace
+    pnl_real_fft_with_wspace
     pnl_real_ifft 
     pnl_real_ifft2 
     pnl_real_ifft2d 
     pnl_real_ifft_inplace 
+    pnl_real_ifft_inplace_with_wspace
+    pnl_real_ifft_with_wspace
     pnl_rng_bernoulli 
     pnl_rng_bessel 
     pnl_rng_chi2 
@@ -852,6 +859,7 @@ EXPORTS
     pnl_sp_mat_complex_new 
     pnl_sp_mat_complex_plus_scalar 
     pnl_sp_mat_complex_plus_sp_mat
+    pnl_sp_mat_complex_plus_sp_mat_inplace
     pnl_sp_mat_complex_print 
     pnl_sp_mat_complex_print_as_full
     pnl_sp_mat_complex_resize 
@@ -879,8 +887,8 @@ EXPORTS
     pnl_sp_mat_int_get 
     pnl_sp_mat_int_init 
     pnl_sp_mat_int_isequal
-    pnl_sp_mat_int_kron_inplace
     pnl_sp_mat_int_kron
+    pnl_sp_mat_int_kron_inplace
     pnl_sp_mat_int_lAxpby 
     pnl_sp_mat_int_minus_scalar 
     pnl_sp_mat_int_mult_scalar 
@@ -888,6 +896,7 @@ EXPORTS
     pnl_sp_mat_int_new 
     pnl_sp_mat_int_plus_scalar 
     pnl_sp_mat_int_plus_sp_mat
+    pnl_sp_mat_int_plus_sp_mat_inplace
     pnl_sp_mat_int_print 
     pnl_sp_mat_int_print_as_full
     pnl_sp_mat_int_resize 
@@ -895,9 +904,9 @@ EXPORTS
     pnl_sp_mat_isequal
     pnl_sp_mat_isequal_abs
     pnl_sp_mat_isequal_rel
-    pnl_sp_mat_lAxpby 
-    pnl_sp_mat_kron_inplace
     pnl_sp_mat_kron
+    pnl_sp_mat_kron_inplace
+    pnl_sp_mat_lAxpby
     pnl_sp_mat_minus_scalar 
     pnl_sp_mat_mult_scalar 
     pnl_sp_mat_mult_vect 
@@ -906,8 +915,8 @@ EXPORTS
     pnl_sp_mat_object_new 
     pnl_sp_mat_object_resize 
     pnl_sp_mat_plus_scalar
-    pnl_sp_mat_plus_sp_mat_inplace
     pnl_sp_mat_plus_sp_mat
+    pnl_sp_mat_plus_sp_mat_inplace
     pnl_sp_mat_print 
     pnl_sp_mat_print_as_full
     pnl_sp_mat_resize 
@@ -1039,6 +1048,7 @@ EXPORTS
     pnl_vect_complex_set_all 
     pnl_vect_complex_set_imag 
     pnl_vect_complex_set_real 
+    pnl_vect_complex_set_subblock
     pnl_vect_complex_set_zero 
     pnl_vect_complex_split_in_array 
     pnl_vect_complex_split_in_vect 
@@ -1146,6 +1156,7 @@ EXPORTS
     pnl_vect_int_scalar_prod 
     pnl_vect_int_set 
     pnl_vect_int_set_all 
+    pnl_vect_int_set_subblock
     pnl_vect_int_set_zero 
     pnl_vect_int_sum 
     pnl_vect_int_swap_elements 
@@ -1214,6 +1225,7 @@ EXPORTS
     pnl_vect_scalar_prod 
     pnl_vect_set 
     pnl_vect_set_all 
+    pnl_vect_set_subblock
     pnl_vect_set_zero 
     pnl_vect_sum 
     pnl_vect_swap_elements 
