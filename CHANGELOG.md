@@ -5,6 +5,13 @@ All notable changes to PNL will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.10.2] - 2019-09-13
+
+### Fixed
+
+- Fix libgfortran version for Windows binary release
+- Fix README typos
+
 ## [1.10.1] - 2019-09-11
 
 ### Fixed
