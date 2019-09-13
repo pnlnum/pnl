@@ -86,8 +86,8 @@ Some useful variables to modify the behavior of cmake.
         # For every target, add
         target_link_libraries(my_target pnl)
         # On Windows, to ensure all the dll's are copied next to the executable 
-        # (on other platforms, add_pnl_postbuild does nothing).
-        add_pnl_postbuild(my_target)
+        # (on other platforms, pnl_add_postbuild does nothing).
+        pnl_add_postbuild(my_target)
 
 #### Under Windows
 
@@ -133,10 +133,10 @@ endif()
 # For Windows only. To make sure all the required dll's are copied
 # next to every executable, add the following instruction where
 # <my_exec> is a target defined by add_executable.
-add_pnl_postbuild(my_exec)
+pnl_add_postbuild(my_exec)
 ```
 
-Note the instruction `add_pnl_postbuild`, which takes care of post build instructions when creating Visual Studio solutions from CMake. It basically copies all the required `.dll` to the directory containing the executable.
+Note the instruction `pnl_add_postbuild`, which takes care of post build instructions when creating Visual Studio solutions from CMake. It basically copies all the required `.dll` to the directory containing the executable.
 
 To build your project, call CMake with the following extra flag
 
@@ -144,7 +144,7 @@ To build your project, call CMake with the following extra flag
 -DCMAKE_PREFIX_PATH=path/to/pnl/install or path/to/pnl/build
 ```
 
-A complete though basic CMakeLists.txt is available [there](perso/CMakeLists-example.txt).
+A complete though basic `CMakeLists.txt` is available [there](perso/CMakeLists-example.txt).
 
 ### With a Makefile
 
