@@ -100,6 +100,11 @@ create_win_version() {
         cp $MINGW_PREFIX/x86_64-w64-mingw32/lib/$lib $PNL_WINDIR/lib
         cp -r $MINGW_PREFIX/x86_64-w64-mingw32/lib/$lib $LOCAL_TMPDIR/build-win/examples
     done
+    BINS="libwinpthread-1.dll"
+    for bin in $BINS; do
+        cp $MINGW_PREFIX/x86_64-w64-mingw32/bin/$bin $PNL_WINDIR/lib
+        cp -r $MINGW_PREFIX/x86_64-w64-mingw32/bin/$bin $LOCAL_TMPDIR/build-win/examples
+    done
     LIBS="libblas.dll liblapack.dll"
     for lib in $LIBS; do
         cp $LIBLAPACK_DIR/$lib $PNL_WINDIR/lib
