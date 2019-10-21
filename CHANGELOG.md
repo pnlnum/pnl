@@ -5,6 +5,12 @@ All notable changes to PNL will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.10.4] - 2019-10-21
+
+### Fixed
+
+- Add missing libwinpthread-1.dll to post_build event
+
 ## [1.10.3] - 2019-09-16
 
 ### Fixed
