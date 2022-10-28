@@ -8,7 +8,7 @@ build_script:
     - if exist "build" ( rmdir build /s /q )
     - mkdir build
     - cd build
-    - cmake -D CMAKE_BUILD_TYPE=%configuration% -G "Visual Studio 16 2019 Win64" .. || exit /b 1
+    - cmake -D CMAKE_BUILD_TYPE=%configuration% -G "Visual Studio 16 2019" -A "Win64" .. || exit /b 1
     - cmake --build . --config %configuration% || exit /b 1
     - cp "src/%configuration%/pnl.dll" "examples/%configuration%"
 test_script:
