@@ -176,6 +176,9 @@ There are no special functions to access the size of a vector, instead the field
 \item \describefun{int}{pnl_vect_resize}{\PnlVect \ptr v, int size}
   \sshortdescribe Resize a \PnlVect. It copies as much of the old
   data to fit in the resized object.
+  \item \describefun{int}{pnl_vect_resize_from_scalar}{\PnlVect
+  \ptr v, int size, double x} 
+  \sshortdescribe Resize a \PnlVect. Copy as much of the old data as possible and fill the new cells with \var{x}.
 \item \describefun{int}{pnl_vect_resize_from_ptr}{\PnlVect
     \ptr v, int size, double \ptr t} 
   \sshortdescribe Resize a \PnlVect and uses \var{t} to fill the
