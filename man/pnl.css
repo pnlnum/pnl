@@ -42,7 +42,7 @@ ul {  font-size: 100%;}
 
 ul#manualtoc { padding-left:1.25em;}
 
-.verbatim {font-family: monospace; white-space: nowrap; color: #3366ff;}
+.verbatim {font-family: monospace; color: #3366ff;}
 .verb {font-family: monospace; white-space: nowrap; color: #3366ff;}
 .var {font-family: monospace; white-space: nowrap; color: green;}
 .struct { color: red;}
