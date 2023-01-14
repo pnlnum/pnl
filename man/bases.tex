@@ -40,10 +40,7 @@ struct PnlBasis_t {
 };
 \end{verbatim}
 
-A \refstruct{PnlBasis} is a family of multivariate functions with real values. Tow
-different kinds of functions can be stored in these families: tensor functions ---
-originally, this was the only possibility, and standard multivariate function typed as
-\refstruct{PnlRnFuncR}.
+A \refstruct{PnlBasis} is a family of multivariate functions with real values. Tow different kinds of functions can be stored in these families: tensor functions --- originally, this was the only possibility --- and standard multivariate function typed as \refstruct{PnlRnFuncR}.
 
 \paragraph{Tensor functions.}  Tensors functions are built as a tensor product of one
 dimensional elements. Hence, we only need a tensor matrix \var{T} to describe a
@@ -80,13 +77,7 @@ If $G$ is a real valued standard normal random variable, ${\mathbb E}[H_n(G) H_m
 
 \paragraph{Standard multivariate functions.} These functions are supposed to be \refstruct{PnlRnFuncR}.
 
-  To make this toolbox more complete, it is now possible to add some extra functions,
-  which are not tensor product. They are stored using an independent mechanism in
-  \var{func_list}.  These additional functions are only taken into account by the methods
-  \reffun{pnl_basis_i}, \reffun{pnl_basis_i_vect}, \reffun{pnl_basis_eval} and
-  \reffun{pnl_basis_eval_vect}. Note in particular that it is not possible to
-  differentiate these functions. To add an extra function to an existing
-  \refstruct{PnlBasis}, call the function \reffun{pnl_basis_add_function}.
+  To make this toolbox more complete, it is now possible to add some extra functions, which are not tensor product. They are stored using an independent mechanism in \var{func_list}.  These additional functions are only taken into account by the methods \reffun{pnl_basis_i}, \reffun{pnl_basis_i_vect}, \reffun{pnl_basis_eval} and \reffun{pnl_basis_eval_vect}. Note in particular that it is not possible to differentiate these functions and that they are not sensitive to the \var{isreduced} attribute. To add an extra function to an existing \refstruct{PnlBasis}, call the function \reffun{pnl_basis_add_function}.
 
 \subsection{Functions}
 
@@ -239,11 +230,7 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
 \end{itemize}
 
 
-Functional regression based on a least square approach often leads to ill
-conditioned linear systems. One way of improving the stability of the system is to
-use centered and renormalised polynomials so that the original domain of interest
-$\cD$ (a subset of $\R^d$) is mapped to $[-1,1]^d$. If the domain $\cD$ is
-rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by 
+Functional regression based on a least square approach often leads to ill conditioned linear systems. One way of improving the stability of the system is to use centered and renormalised polynomials so that the original domain of interest $\cD$ (a subset of $\R^d$) is mapped to $[-1,1]^d$. If the domain $\cD$ is rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by 
 \begin{equation}
   \label{basis_reduced}
   x \in \cD \longmapsto \left(\frac{x_i - (b_i+a_i)/2}{(b_i - a_i)/2}
@@ -265,6 +252,7 @@ rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by
     \right)_{i=1,\cdots,d}
   \end{equation*}
 \end{itemize}
+Note that this renormlization does not apply to the extra functions by \reffun{pnl_basis_add_function} but only to the functions defined by the tensor \var{T}.
 
 
 \begin{itemize}
