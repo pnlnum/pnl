@@ -5,6 +5,12 @@ All notable changes to PNL will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.11.0] - XXX
+
+### Changed
+
+- The macros `RETRIEVE` and `CREATE` are prefix with `PNL_RAND`. This is a braking change.
+
 ## [1.10.4] - 2019-10-21
 
 ### Fixed

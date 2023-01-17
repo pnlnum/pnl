@@ -20,8 +20,8 @@ extern "C" {
 
 #define PNL_MC 0
 #define PNL_QMC 1
-#define CREATE 0
-#define RETRIEVE 1
+#define PNL_RAND_CREATE 0
+#define PNL_RAND_RETRIEVE 1
 
 /* indices of random generators
  * The first generators must be true PNL_MC generators and the last ones are PNL_QMC

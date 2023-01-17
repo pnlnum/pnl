@@ -126,8 +126,8 @@ static void test_pnl_rng_gauss(PnlRng *rng, const char *name)
   reset_rng (rng, dimension);
   for (i=0; i<samples; i++)
     {
-      g1=pnl_rng_gauss(dimension, CREATE, 0, rng);
-      g2=pnl_rng_gauss(dimension, RETRIEVE, 8, rng);
+      g1=pnl_rng_gauss(dimension, PNL_RAND_CREATE, 0, rng);
+      g2=pnl_rng_gauss(dimension, PNL_RAND_RETRIEVE, 8, rng);
       sum += g1*g2;
     }
   sprintf (str, "Covariance %s Gaussian case", name);

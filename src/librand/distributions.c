@@ -71,13 +71,13 @@ static double Gauss_BoxMuller(PnlRng *rng)
  * Simulation of a Gaussian standard variable.
  *
  * @param dimension size of the vector to simulate
- * @param create_or_retrieve boolean can be CREATE or RETRIEVE.
- * @param index (unused when calling with CREATE)
+ * @param create_or_retrieve boolean can be PNL_RAND_CREATE or PNL_RAND_RETRIEVE.
+ * @param index (unused when calling with PNL_RAND_CREATE)
  * @param rng a generator
  */
 static double GaussMC(int dimension, int create_or_retrieve, int index, PnlRng *rng)
 {
-  if (create_or_retrieve == CREATE)
+  if (create_or_retrieve == PNL_RAND_CREATE)
     {
       int i;
       for (i = 0; i < dimension; i++)
@@ -92,16 +92,16 @@ static double GaussMC(int dimension, int create_or_retrieve, int index, PnlRng *
  *  This function can be called for the generation of a n-dimensional vector of
  *  independent variables: call to a n-dimensional low-discrepancy sequence.
  * @param dimension size of the vector to simulate
- * @param create_or_retrieve boolean can be CREATE or
- * RETRIEVE. if it is CREATE, draw all the dimensions and returns the fisrt
- * one. If it s RETRIEVE, returns the dimension corresponding to index
+ * @param create_or_retrieve boolean can be PNL_RAND_CREATE or
+ * PNL_RAND_RETRIEVE. if it is PNL_RAND_CREATE, draw all the dimensions and returns the first
+ * one. If it s PNL_RAND_RETRIEVE, returns the dimension corresponding to index
  * @param index index to be returned
  * @param rng a generator
  */
 static double GaussQMC(int dimension, int create_or_retrieve, int index, PnlRng *rng)
 {
   CheckQMCDim(rng, dimension);
-  if (create_or_retrieve == CREATE)
+  if (create_or_retrieve == PNL_RAND_CREATE)
     rng->Compute(rng, ArrayOfRandomNumbers);
   return pnl_inv_cdfnor(ArrayOfRandomNumbers[index]);
 }
@@ -113,9 +113,9 @@ static double GaussQMC(int dimension, int create_or_retrieve, int index, PnlRng 
 /**
  * Simulation of a Gaussian standard variable in dimension d
  * @param d size od the vector we are simulating
- * @param create_or_retrieve boolean can be CREATE or
- * RETRIEVE. if it is CREATE, draw all the dimensions and returns the fisrt
- * one. If it s RETRIEVE, returns the dimension corresponding to index
+ * @param create_or_retrieve boolean can be PNL_RAND_CREATE or
+ * PNL_RAND_RETRIEVE. if it is PNL_RAND_CREATE, draw all the dimensions and returns the fisrt
+ * one. If it s PNL_RAND_RETRIEVE, returns the dimension corresponding to index
  * @param index index to be returned
  * @param rng a generator
  */
@@ -992,9 +992,9 @@ int pnl_rng_bessel(double nu, double a, PnlRng *rng)
 /**
  * Simulation of a Gaussian standard variable in dimension d
  * @param d size od the vector we are simulating
- * @param create_or_retrieve boolean can be CREATE or
- * RETRIEVE. if it is CREATE, draw all the dimensions and returns the fisrt
- * one. If it s RETRIEVE, returns the dimension corresponding to index
+ * @param create_or_retrieve boolean can be PNL_RAND_CREATE or
+ * PNL_RAND_RETRIEVE. if it is PNL_RAND_CREATE, draw all the dimensions and returns the fisrt
+ * one. If it s PNL_RAND_RETRIEVE, returns the dimension corresponding to index
  * @param index index to be returned
  * @param type_generator index of the generator
  */
