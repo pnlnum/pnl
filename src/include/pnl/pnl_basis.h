@@ -74,7 +74,7 @@ struct _PnlBasis
   double      (*Df)(double   x, int i);
   /** Compute the second derivative of the i-th element of the one dimensional basis */
   double      (*D2f)(double  x, int i);
-  /** TRUE if the basis is reduced */
+  /** PNL_TRUE if the basis is reduced */
   int           isreduced;
   /** The center of the domain */
   double       *center;

@@ -188,10 +188,10 @@ static int lmder_fcn(void *pnl_func, int m, int n, const double *x, double *fvec
  * @param nfev number of evaluations of f in the algorithm
  * @param scale a vector of scale factors to make the components of the
  * solution roughly of the same order, once they have been scaled
- * @param error_msg a boolean TRUE or FALSE. If TRUE, a message is printed
+ * @param error_msg a boolean PNL_TRUE or PNL_FALSE. If PNL_TRUE, a message is printed
  * if the hybrd function did not return properly
  *
- * @return OK or FAIL (if FAIL, use error_msg=TRUE to know what happened)
+ * @return OK or FAIL (if FAIL, use error_msg=PNL_TRUE to know what happened)
  */
 int pnl_root_fsolve(PnlRnFuncRnDFunc *f, PnlVect *x, PnlVect *fx,  double xtol,
                     int maxfev, int *nfev, PnlVect *scale, int error_msg)
@@ -275,7 +275,7 @@ int pnl_root_fsolve(PnlRnFuncRnDFunc *f, PnlVect *x, PnlVect *fx,  double xtol,
   /*
    * Error treatments
    */
-  if (error_msg == FALSE)
+  if (error_msg == PNL_FALSE)
     {
       if (info == 1) return OK;
       else return FAIL;
@@ -327,10 +327,10 @@ int pnl_root_fsolve(PnlRnFuncRnDFunc *f, PnlVect *x, PnlVect *fx,  double xtol,
  * @param nfev number of evaluations of f in the algorithm
  * @param scale a vector of scale factors to make the components of the
  * solution roughly of the same order, once they have been scaled
- * @param error_msg a boolean TRUE or FALSE. If TRUE, a message is printed
+ * @param error_msg a boolean PNL_TRUE or PNL_FALSE. If PNL_TRUE, a message is printed
  * if the lmdif or lmder function did not return properly
  *
- * @return OK or FAIL (if FAIL, use error_msg=TRUE to know what happened)
+ * @return OK or FAIL (if FAIL, use error_msg=PNL_TRUE to know what happened)
  */
 int pnl_root_fsolve_lsq(PnlRnFuncRmDFunc *f, PnlVect *x, int m, PnlVect *fx,  double xtol,
                         double ftol, double gtol, int maxfev, int *nfev,
@@ -345,7 +345,7 @@ int pnl_root_fsolve_lsq(PnlRnFuncRmDFunc *f, PnlVect *x, int m, PnlVect *fx,  do
   epsfcn = 0.;
   n = x->size;
   factor = 100.;
-  msg = (error_msg == TRUE);
+  msg = (error_msg == PNL_TRUE);
 
   /*
    * Some pre-treatment on the parameters

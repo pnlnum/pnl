@@ -24,7 +24,7 @@
  * non negative. Use -PNL_INF for every coordinate with no lower bound.
  * @param x_max The upper bounds on the solution. If NULL, it means +Infinity.
  * Use PNL_INF for every coordinate with no upper bound.
- * @param debug TRUE or FALSE. If TRUE, it prints all intermediate results and the branch-and-bound decisions
+ * @param debug PNL_TRUE or PNL_FALSE. If PNL_TRUE, it prints all intermediate results and the branch-and-bound decisions
  * @param[out] xopt contains the optimal x on output.
  * @param[out] fobj_opt contains the value of the objective function at xopt
  *
@@ -73,7 +73,7 @@ int pnl_optim_linprog(const PnlVect *C, const PnlMat *A_ineq, const PnlVect *B_i
       return FAIL;
     }
   set_verbose(lp, IMPORTANT);
-  if (debug == TRUE) set_debug(lp, TRUE);
+  if (debug == PNL_TRUE) set_debug(lp, PNL_TRUE);
   /* Set the objective function */
   set_obj_fnex(lp, C->size, C->array - 1, NULL);
   /* Set the inequality constraints */
@@ -170,7 +170,7 @@ static int * incr(int n, int *T)
  * when x_min is NULL.
  * @param index_max the indices of the variables with lower bounds specified by x_min. Must be NULL
  * when x_max is NULL.
- * @param debug TRUE or FALSE. If TRUE, it prints all intermediate results and the branch-and-bound decisions
+ * @param debug PNL_TRUE or PNL_FALSE. If PNL_TRUE, it prints all intermediate results and the branch-and-bound decisions
  * @param[out] xopt contains the optimal x on output.
  * @param[out] fobj_opt contains the value of the objective function at xopt
  *
@@ -224,7 +224,7 @@ int pnl_optim_linprog_sp(const PnlSpMat *C, const PnlSpMat *A_ineq, const PnlVec
       return FAIL;
     }
   set_verbose(lp, IMPORTANT);
-  if (debug == TRUE) set_debug(lp, TRUE);
+  if (debug == PNL_TRUE) set_debug(lp, PNL_TRUE);
   /* Set the objective function */
   set_obj_fnex(lp, C->nz, C->array, colC);
   /* Set the inequality constraints */

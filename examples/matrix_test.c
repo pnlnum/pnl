@@ -603,7 +603,7 @@ static void pnl_mat_add_row_test ()
   pnl_mat_add_row (M, i, r);
   row_i = pnl_vect_wrap_mat_row (M, i);
   if ( (M->n != Morig->n) || (M->m != Morig->m + 1) || (M->mn != Morig->mn + M->n) ||
-       (pnl_vect_eq (r, &row_i) == FALSE) ||
+       (pnl_vect_eq (r, &row_i) == PNL_FALSE) ||
        memcmp (M->array + M->n, Morig->array, Morig->mn * sizeof(double)) != 0 )
     pnl_test_set_fail0("mat_add_row top");
   else
@@ -616,7 +616,7 @@ static void pnl_mat_add_row_test ()
   pnl_mat_add_row (M, i, r);
   row_i = pnl_vect_wrap_mat_row (M, i);
   if ( (M->n != Morig->n) || (M->m != Morig->m + 1) || (M->mn != Morig->mn + M->n) ||
-       (pnl_vect_eq (r, &row_i) == FALSE) ||
+       (pnl_vect_eq (r, &row_i) == PNL_FALSE) ||
        memcmp (M->array, Morig->array, M->n * i * sizeof(double)) != 0 ||
        memcmp (M->array + (i+1) * M->n, Morig->array + i * M->n, M->n * (Morig->m - i) * sizeof(double)) != 0 )
     pnl_test_set_fail0("mat_add_row middle");
@@ -629,7 +629,7 @@ static void pnl_mat_add_row_test ()
   pnl_mat_add_row (M, i, r);
   row_i = pnl_vect_wrap_mat_row (M, i);
   if ( (M->n != Morig->n) || (M->m != Morig->m + 1) || (M->mn != Morig->mn + M->n) ||
-       (pnl_vect_eq (r, &row_i) == FALSE) ||
+       (pnl_vect_eq (r, &row_i) == PNL_FALSE) ||
        memcmp (M->array, Morig->array, Morig->mn * sizeof(double)) != 0 )
     pnl_test_set_fail0("mat_add_row bottom");
   else

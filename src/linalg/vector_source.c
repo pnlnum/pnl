@@ -105,17 +105,17 @@ TYPE(PnlVect) *FUNCTION(pnl_vect, create_from_scalar)(int size, BASE x)
  *
  * @param v1 a vector
  * @param v2 a vector
- * @return  TRUE or FALSE
+ * @return  PNL_TRUE or PNL_FALSE
  */
 int FUNCTION(pnl_vect, eq)(const TYPE(PnlVect) *v1, const TYPE(PnlVect) *v2)
 {
   int i;
-  if (v1->size != v2->size) return FALSE;
+  if (v1->size != v2->size) return PNL_FALSE;
   for (i = 0 ; i < v1->size ; i++)
     {
-      if (NEQ(PNL_GET(v1, i), PNL_GET(v2, i))) return FALSE;
+      if (NEQ(PNL_GET(v1, i), PNL_GET(v2, i))) return PNL_FALSE;
     }
-  return TRUE;
+  return PNL_TRUE;
 }
 
 /**
@@ -123,16 +123,16 @@ int FUNCTION(pnl_vect, eq)(const TYPE(PnlVect) *v1, const TYPE(PnlVect) *v2)
  *
  * @param v a vector
  * @param x a BASE element
- * @return  TRUE or FALSE
+ * @return  PNL_TRUE or PNL_FALSE
  */
 int FUNCTION(pnl_vect, eq_all)(const TYPE(PnlVect) *v, BASE x)
 {
   int i;
   for (i = 0 ; i < v->size ; i++)
     {
-      if (NEQ(PNL_GET(v, i), x)) return FALSE;
+      if (NEQ(PNL_GET(v, i), x)) return PNL_FALSE;
     }
-  return TRUE;
+  return PNL_TRUE;
 }
 
 /**
@@ -1064,12 +1064,12 @@ void FUNCTION(pnl_vect, reverse)(TYPE(PnlVect) * v)
 #if defined ORDERED
 
 /**
- * Return TRUE if a[i] < b[i] and a and b have the same length.
+ * Return PNL_TRUE if a[i] < b[i] and a and b have the same length.
  *
  * @param a
  * @param b
  *
- * @return  TRUE or FALSE
+ * @return  PNL_TRUE or PNL_FALSE
  */
 int FUNCTION(pnl_vect, less)(const TYPE(PnlVect) *a, const TYPE(PnlVect) *b)
 {
@@ -1077,9 +1077,9 @@ int FUNCTION(pnl_vect, less)(const TYPE(PnlVect) *a, const TYPE(PnlVect) *b)
   if (a->size != b->size) return FAIL;
   for (i = 0 ; i < a->size ; i++)
     {
-      if ((PNL_GET(a, i) >= PNL_GET(b, i))) return FALSE;
+      if ((PNL_GET(a, i) >= PNL_GET(b, i))) return PNL_FALSE;
     }
-  return TRUE;
+  return PNL_TRUE;
 }
 
 /**
@@ -1303,7 +1303,7 @@ static int FUNCTION(__pnl, cmp_d)(const void *a, const void *b)
 static void FUNCTION(pnl_vect, qsort_aux)(TYPE(PnlVect) * m, PnlVectInt *t, int use_index, char order)
 {
   int i, *index = NULL;
-  if (use_index == TRUE)
+  if (use_index == PNL_TRUE)
     {
       pnl_vect_int_resize(t, m->size);
       for (i = 0; i < t->size; i++) t->array[i] = i;
@@ -1332,7 +1332,7 @@ static void FUNCTION(pnl_vect, qsort_aux)(TYPE(PnlVect) * m, PnlVectInt *t, int 
  */
 void FUNCTION(pnl_vect, qsort)(TYPE(PnlVect) * m, char order)
 {
-  FUNCTION(pnl_vect, qsort_aux)(m, NULL, FALSE, order);
+  FUNCTION(pnl_vect, qsort_aux)(m, NULL, PNL_FALSE, order);
 }
 
 /**
@@ -1344,7 +1344,7 @@ void FUNCTION(pnl_vect, qsort)(TYPE(PnlVect) * m, char order)
  */
 void FUNCTION(pnl_vect, qsort_index)(TYPE(PnlVect) * m, PnlVectInt *t, char order)
 {
-  FUNCTION(pnl_vect, qsort_aux)(m, t, TRUE, order);
+  FUNCTION(pnl_vect, qsort_aux)(m, t, PNL_TRUE, order);
 }
 
 #endif
@@ -1357,17 +1357,17 @@ void FUNCTION(pnl_vect, qsort_index)(TYPE(PnlVect) * m, PnlVectInt *t, char orde
  * @param x A real vector
  * @param y A real vector
  * @param err the maximum error
- * @return TRUE or FALSE
+ * @return PNL_TRUE or PNL_FALSE
  */
 int FUNCTION(pnl_vect,isequal)(const TYPE(PnlVect) *x, const TYPE(PnlVect) *y, double err)
 {
   int i;
-  if (x->size != y->size) return FALSE;
+  if (x->size != y->size) return PNL_FALSE;
   for (i = 0 ; i < x->size ; i++)
     {
-      if (! FUNCTION(pnl,isequal)(PNL_GET(x, i),PNL_GET(y, i), err)) return FALSE;
+      if (! FUNCTION(pnl,isequal)(PNL_GET(x, i),PNL_GET(y, i), err)) return PNL_FALSE;
     }
-  return TRUE;
+  return PNL_TRUE;
 }
 
 /**
@@ -1376,17 +1376,17 @@ int FUNCTION(pnl_vect,isequal)(const TYPE(PnlVect) *x, const TYPE(PnlVect) *y, d
  * @param x A real vector
  * @param y A real vector
  * @param abserr the maximum absolute error
- * @return TRUE or FALSE
+ * @return PNL_TRUE or PNL_FALSE
  */
 int FUNCTION(pnl_vect,isequal_abs)(const TYPE(PnlVect) *x, const TYPE(PnlVect) *y, double abserr)
 {
   int i;
-  if (x->size != y->size) return FALSE;
+  if (x->size != y->size) return PNL_FALSE;
   for (i = 0 ; i < x->size ; i++)
     {
-      if (! FUNCTION(pnl,isequal_abs)(PNL_GET(x, i),PNL_GET(y, i), abserr)) return FALSE;
+      if (! FUNCTION(pnl,isequal_abs)(PNL_GET(x, i),PNL_GET(y, i), abserr)) return PNL_FALSE;
     }
-  return TRUE;
+  return PNL_TRUE;
 }
 
 /**
@@ -1395,17 +1395,17 @@ int FUNCTION(pnl_vect,isequal_abs)(const TYPE(PnlVect) *x, const TYPE(PnlVect) *
  * @param x A real vector
  * @param y A real vector
  * @param relerr the maximum relative error
- * @return TRUE or FALSE
+ * @return PNL_TRUE or PNL_FALSE
  */
 int FUNCTION(pnl_vect,isequal_rel)(const TYPE(PnlVect) *x, const TYPE(PnlVect) *y, double relerr)
 {
   int i;
-  if (x->size != y->size) return FALSE;
+  if (x->size != y->size) return PNL_FALSE;
   for (i = 0 ; i < x->size ; i++)
     {
-      if (! FUNCTION(pnl,isequal_rel)(PNL_GET(x, i),PNL_GET(y, i), relerr)) return FALSE;
+      if (! FUNCTION(pnl,isequal_rel)(PNL_GET(x, i),PNL_GET(y, i), relerr)) return PNL_FALSE;
     }
-  return TRUE;
+  return PNL_TRUE;
 }
 
 

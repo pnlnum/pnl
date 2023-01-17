@@ -301,7 +301,7 @@ static void test_hybrX ()
   f.DF = NULL;
   f.FDF = NULL;
   f.params = NULL;
-  info = pnl_root_fsolve (&f, x, fvec, xtol, maxfev, &nfev, diag, FALSE);
+  info = pnl_root_fsolve (&f, x, fvec, xtol, maxfev, &nfev, diag, PNL_FALSE);
   if ( info == FAIL )
     {
       pnl_test_set_fail0("root_fsolve returned FAIL");
@@ -320,7 +320,7 @@ static void test_hybrX ()
   f.DF = Dfcn_fsolve;
   f.FDF = NULL;
   f.params = NULL;
-  info = pnl_root_fsolve (&f, x, fvec, xtol, maxfev, &nfev, diag, FALSE);
+  info = pnl_root_fsolve (&f, x, fvec, xtol, maxfev, &nfev, diag, PNL_FALSE);
   if ( info == FAIL )
     {
       pnl_test_set_fail0("root_fsolve returned FAIL");
@@ -366,7 +366,7 @@ static void test_lmdif_and_lmder ()
   f.DF = NULL;
   f.FDF = NULL;
   f.params = NULL;
-  info = pnl_root_fsolve_lsq(&f, x, m, fvec, tol, tol, 0., maxfev, &nfev, NULL, FALSE);
+  info = pnl_root_fsolve_lsq(&f, x, m, fvec, tol, tol, 0., maxfev, &nfev, NULL, PNL_FALSE);
   if ( info == FAIL )
     pnl_test_set_fail0("root_fsolve_lsq");
   else
@@ -379,7 +379,7 @@ static void test_lmdif_and_lmder ()
   f.DF = Dfcn_lsq;
   f.FDF = NULL;
   f.params = NULL;
-  info = pnl_root_fsolve_lsq(&f, x, m, fvec, tol, tol, 0., maxfev, &nfev, NULL, FALSE);
+  info = pnl_root_fsolve_lsq(&f, x, m, fvec, tol, tol, 0., maxfev, &nfev, NULL, PNL_FALSE);
   if ( info == FAIL )
     pnl_test_set_fail0("root_fsolve_lsq");
   else

@@ -163,15 +163,15 @@ static char pnl_vect_int_label[] = "PnlVectorInt";
  * 
  * @param x an integer vector
  * @param y an integer vector
- * @return TRUE or FALSE 
+ * @return PNL_TRUE or PNL_FALSE 
  */
 int pnl_vect_int_isequal(const PnlVectInt *x, const PnlVectInt *y)
 {
   int i;
-  if (x->size != y->size) return FALSE;
+  if (x->size != y->size) return PNL_FALSE;
   for (i = 0 ; i < x->size ; i++)
     {
-      if (PNL_GET(x, i) != PNL_GET(y,i)) return FALSE;
+      if (PNL_GET(x, i) != PNL_GET(y,i)) return PNL_FALSE;
     }
-  return TRUE;
+  return PNL_TRUE;
 }

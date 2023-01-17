@@ -702,15 +702,15 @@ PnlMatComplex *pnl_mat_complex_create_from_mat(const PnlMat *R)
  * 
  * @param A A real vector
  * @param B A real vector
- * @return TRUE or FALSE
+ * @return PNL_TRUE or PNL_FALSE
  */
 int pnl_mat_int_isequal(const PnlMatInt *A, const PnlMatInt *B)
 {
   int i;
-  if ((A->m != B->m) || (A->n != B->n)) return FALSE;
+  if ((A->m != B->m) || (A->n != B->n)) return PNL_FALSE;
   for (i = 0 ; i < A->mn ; i++)
     {
-      if (A->array[i] != B->array[i]) return FALSE;
+      if (A->array[i] != B->array[i]) return PNL_FALSE;
     }
-  return TRUE;
+  return PNL_TRUE;
 }

@@ -9,8 +9,8 @@ else (MSVC)
 endif(MSVC)
 set(PNL_INCLUDE_DIR ${pnl_rootdir}/include)
 
-# Handle the QUIETLY and REQUIRED arguments and set PNL_FOUND to TRUE if
-# all listed variables are TRUE
+# Handle the QUIETLY and REQUIRED arguments and set PNL_FOUND to PNL_TRUE if
+# all listed variables are PNL_TRUE
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Pnl
     REQUIRED_VARS 

@@ -190,8 +190,8 @@ static void list_copy_test ()
 
   L2 = pnl_list_copy(L1);
   if  (L2->len != 2 ||
-       pnl_test_mat_eq_abs ((PnlMat *)pnl_list_get (L2, 0), M1, 1E-12, "", "") != TRUE  || 
-       pnl_test_vect_eq_abs ((PnlVect *)pnl_list_get (L2, 1), T1, 1E-12, "", "") != TRUE )
+       pnl_test_mat_eq_abs ((PnlMat *)pnl_list_get (L2, 0), M1, 1E-12, "", "") != PNL_TRUE  || 
+       pnl_test_vect_eq_abs ((PnlVect *)pnl_list_get (L2, 1), T1, 1E-12, "", "") != PNL_TRUE )
     {
       pnl_test_set_fail0("pnl_list_copy");
     }

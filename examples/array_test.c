@@ -68,8 +68,8 @@ static void array_copy ()
 
   C = pnl_array_copy (T);
   if ( C->size != T->size ||
-       pnl_test_mat_eq_abs ((PnlMat *) T->array[0], M, 1E-12, "", "") != TRUE ||
-       pnl_test_vect_eq_abs ((PnlVect *) T->array[1], v, 1E-12, "", "") != TRUE )
+       pnl_test_mat_eq_abs ((PnlMat *) T->array[0], M, 1E-12, "", "") != PNL_TRUE ||
+       pnl_test_vect_eq_abs ((PnlVect *) T->array[1], v, 1E-12, "", "") != PNL_TRUE )
     {
       pnl_test_set_fail0("pnl_array_copy");
       goto J1;
@@ -98,8 +98,8 @@ static void array_clone ()
   C = pnl_array_new ();
   pnl_array_clone (C, T);
   if ( C->size != T->size ||
-       pnl_test_mat_eq_abs ((PnlMat *) T->array[0], M, 1E-12, "", "") != TRUE ||
-       pnl_test_vect_eq_abs ((PnlVect *) T->array[1], v, 1E-12, "", "") != TRUE )
+       pnl_test_mat_eq_abs ((PnlMat *) T->array[0], M, 1E-12, "", "") != PNL_TRUE ||
+       pnl_test_vect_eq_abs ((PnlVect *) T->array[1], v, 1E-12, "", "") != PNL_TRUE )
     {
       pnl_test_set_fail0("pnl_array_copy");
       goto J1;

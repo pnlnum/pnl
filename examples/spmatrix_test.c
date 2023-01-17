@@ -84,7 +84,7 @@ static void sp_create_test ()
   Sp = create_random_sp (m, n, rng);
   M = pnl_mat_create_from_sp_mat (Sp);
   Sp2 = pnl_sp_mat_create_from_mat (M);
-  if ( pnl_sp_mat_isequal (Sp2, Sp, PRECISION) == TRUE )
+  if ( pnl_sp_mat_isequal (Sp2, Sp, PRECISION) == PNL_TRUE )
     pnl_test_set_ok ("sp_mat_create");
   else
     pnl_test_set_fail0("sp_mat_create");
@@ -104,7 +104,7 @@ static void sp_clone_test ()
   Sp2 = pnl_sp_mat_new ();
   pnl_sp_mat_clone (Sp2, Sp);
    
-  if ( pnl_sp_mat_isequal (Sp2, Sp, PRECISION) == TRUE )
+  if ( pnl_sp_mat_isequal (Sp2, Sp, PRECISION) == PNL_TRUE )
     pnl_test_set_ok ("sp_mat_clone");
   else
     pnl_test_set_fail0("sp_mat_clone");

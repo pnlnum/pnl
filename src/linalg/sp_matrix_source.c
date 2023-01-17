@@ -313,7 +313,7 @@ void FUNCTION(pnl_sp_mat, set)(TYPE(PnlSpMat) *M, int i, int j, BASE x)
 
 /**
 *
-* Get M(,i, j) in x. Return TRUE if M has an entry (i,j) and FALSE otherwise
+* Get M(,i, j) in x. Return PNL_TRUE if M has an entry (i,j) and PNL_FALSE otherwise
 *
 * @param M sparse matrix
 * @param i row index
@@ -483,21 +483,21 @@ TYPE(PnlSpMat)* FUNCTION(pnl_sp_mat,create_from_file)(const char *file)
  * @param Sp1  a sparse matrix
  * @param Sp2  a sparse matrix
  * @param err the maximum error
- * @return TRUE or FALSE
+ * @return PNL_TRUE or PNL_FALSE
  */
 int FUNCTION(pnl_sp_mat, isequal)(const TYPE(PnlSpMat) * Sp1, const TYPE(PnlSpMat) * Sp2, double err)
 {
   int k;
-  if ((Sp1->m != Sp2->m) || (Sp1->n != Sp2->n) || (Sp1->nz != Sp2->nz)) return FALSE;
+  if ((Sp1->m != Sp2->m) || (Sp1->n != Sp2->n) || (Sp1->nz != Sp2->nz)) return PNL_FALSE;
   for (k = 0; k < Sp1->m; k++)
     {
-      if (Sp1->I[k] != Sp2->I[k]) return FALSE;
+      if (Sp1->I[k] != Sp2->I[k]) return PNL_FALSE;
     }
   for (k = 0; k < Sp1->nz; k++)
     {
-      if ((Sp1->J[k] != Sp2->J[k]) || !FUNCTION(pnl, isequal)(Sp1->array[k], Sp2->array[k], err)) return FALSE;
+      if ((Sp1->J[k] != Sp2->J[k]) || !FUNCTION(pnl, isequal)(Sp1->array[k], Sp2->array[k], err)) return PNL_FALSE;
     }
-  return TRUE;
+  return PNL_TRUE;
 }
 
 /**
@@ -506,21 +506,21 @@ int FUNCTION(pnl_sp_mat, isequal)(const TYPE(PnlSpMat) * Sp1, const TYPE(PnlSpMa
  * @param Sp1  a sparse matrix
  * @param Sp2  a sparse matrix
  * @param abserr the maximum relative error
- * @return TRUE or FALSE
+ * @return PNL_TRUE or PNL_FALSE
  */
 int FUNCTION(pnl_sp_mat, isequal_abs)(const TYPE(PnlSpMat) * Sp1, const TYPE(PnlSpMat) * Sp2, double abserr)
 {
   int k;
-  if ((Sp1->m != Sp2->m) || (Sp1->n != Sp2->n) || (Sp1->nz != Sp2->nz)) return FALSE;
+  if ((Sp1->m != Sp2->m) || (Sp1->n != Sp2->n) || (Sp1->nz != Sp2->nz)) return PNL_FALSE;
   for (k = 0; k < Sp1->m; k++)
     {
-      if (Sp1->I[k] != Sp2->I[k]) return FALSE;
+      if (Sp1->I[k] != Sp2->I[k]) return PNL_FALSE;
     }
   for (k = 0; k < Sp1->nz; k++)
     {
-      if ((Sp1->J[k] != Sp2->J[k]) || !FUNCTION(pnl, isequal_abs)(Sp1->array[k], Sp2->array[k], abserr)) return FALSE;
+      if ((Sp1->J[k] != Sp2->J[k]) || !FUNCTION(pnl, isequal_abs)(Sp1->array[k], Sp2->array[k], abserr)) return PNL_FALSE;
     }
-  return TRUE;
+  return PNL_TRUE;
 }
 
 /**
@@ -529,21 +529,21 @@ int FUNCTION(pnl_sp_mat, isequal_abs)(const TYPE(PnlSpMat) * Sp1, const TYPE(Pnl
  * @param Sp1  a sparse matrix
  * @param Sp2  a sparse matrix
  * @param relerr the maximum relative error
- * @return TRUE or FALSE
+ * @return PNL_TRUE or PNL_FALSE
  */
 int FUNCTION(pnl_sp_mat, isequal_rel)(const TYPE(PnlSpMat) * Sp1, const TYPE(PnlSpMat) * Sp2, double relerr)
 {
   int k;
-  if ((Sp1->m != Sp2->m) || (Sp1->n != Sp2->n) || (Sp1->nz != Sp2->nz)) return FALSE;
+  if ((Sp1->m != Sp2->m) || (Sp1->n != Sp2->n) || (Sp1->nz != Sp2->nz)) return PNL_FALSE;
   for (k = 0; k < Sp1->m; k++)
     {
-      if (Sp1->I[k] != Sp2->I[k]) return FALSE;
+      if (Sp1->I[k] != Sp2->I[k]) return PNL_FALSE;
     }
   for (k = 0; k < Sp1->nz; k++)
     {
-      if ((Sp1->J[k] != Sp2->J[k]) || !FUNCTION(pnl, isequal_abs)(Sp1->array[k], Sp2->array[k], relerr)) return FALSE;
+      if ((Sp1->J[k] != Sp2->J[k]) || !FUNCTION(pnl, isequal_abs)(Sp1->array[k], Sp2->array[k], relerr)) return PNL_FALSE;
     }
-  return TRUE;
+  return PNL_TRUE;
 }
 
 #endif /* efined(BASE_DOUBLE) || defined(BASE_PNL_COMPLEX) */

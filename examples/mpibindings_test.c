@@ -430,8 +430,8 @@ static int status_is_empty (MPI_Status *status)
 {
   if ( status->MPI_TAG == MPI_ANY_TAG && status->MPI_SOURCE == MPI_ANY_SOURCE
        && status->MPI_ERROR == MPI_SUCCESS )
-    return TRUE;
-  else return FALSE;
+    return PNL_TRUE;
+  else return PNL_FALSE;
 }
 
 static int irecv_matrix ()
@@ -447,15 +447,15 @@ static int irecv_matrix ()
     {
       info = pnl_object_mpi_irecv (&buf, &size, 0, SENDTAG, MPI_COMM_WORLD, &flag, &request);
     }
-  while (flag == FALSE);
+  while (flag == PNL_FALSE);
   PNL_MPI_MESSAGE (info, "error in pnl_object_mpi_irecv\n");
   MPI_Test (&request, &flag, &status);
-  if ( status_is_empty (&status) == TRUE )
+  if ( status_is_empty (&status) == PNL_TRUE )
     {
       printf ("Emtpy status\n");
       return MPI_ERR_REQUEST;
     }
-  if ( flag == FALSE )
+  if ( flag == PNL_FALSE )
     {
       info = MPI_Wait (&request, &status);
     }
@@ -554,7 +554,7 @@ static int test_tridiag_mat_lu ()
       pnl_object_mpi_recv (PNL_OBJECT(b), 0, SENDTAG, MPI_COMM_WORLD, &status);
       pnl_object_mpi_recv (PNL_OBJECT(x_save), 0, SENDTAG, MPI_COMM_WORLD, &status);
       pnl_tridiag_mat_lu_syslin (x, LU, b);
-      if ( pnl_test_vect_eq_abs (x, x_save, 1E-12, "tridiag_mat_lu (MIP tests)", "") == TRUE )
+      if ( pnl_test_vect_eq_abs (x, x_save, 1E-12, "tridiag_mat_lu (MIP tests)", "") == PNL_TRUE )
         {
           printf ("PnlTridiagMatLU Send/Receive OK\n");
         }
@@ -590,7 +590,7 @@ static void test_reduce (int rank)
       pnl_object_mpi_send (PNL_OBJECT(vect2), 1, SENDTAG, MPI_COMM_WORLD);
       pnl_object_mpi_reduce (PNL_OBJECT(vect1), PNL_OBJECT(reduc), MPI_SUM, 0, MPI_COMM_WORLD);
 
-      if ( pnl_test_vect_eq_abs (sum, reduc, 1E-10, "mpi_reduce", "") == TRUE )
+      if ( pnl_test_vect_eq_abs (sum, reduc, 1E-10, "mpi_reduce", "") == PNL_TRUE )
         {
           printf ("MPI_Reduce for PnlObject: OK\n");
         }

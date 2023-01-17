@@ -78,7 +78,7 @@ static void pnl_mat_eigen_test ()
   pnl_mat_dgemm ('N', 'T', 1., A, A, 0., B);
   v = pnl_vect_create (0);
 
-  pnl_mat_eigen (v, P, B, TRUE);
+  pnl_mat_eigen (v, P, B, PNL_TRUE);
   V = pnl_mat_create_diag (v);
   pnl_mat_inverse(Pinv, P);
   pnl_mat_mult_mat_inplace (A, P, V);  /* P V */
@@ -86,7 +86,7 @@ static void pnl_mat_eigen_test ()
   pnl_test_mat_eq_abs(V, B, 1E-8, "eigen sym", "");
   pnl_mat_free (&V);
   
-  pnl_mat_eigen (v, NULL, B, FALSE);
+  pnl_mat_eigen (v, NULL, B, PNL_FALSE);
   V = pnl_mat_create_diag (v);
   pnl_mat_mult_mat_inplace (A, P, V);  /* P V */
   pnl_mat_mult_mat_inplace (V, A, Pinv); /* P V P^-1 */
@@ -95,7 +95,7 @@ static void pnl_mat_eigen_test ()
   pnl_mat_free(&A);
 
   A = pnl_mat_create_diagonalizable (n);
-  pnl_mat_eigen (v, P, A, TRUE);
+  pnl_mat_eigen (v, P, A, PNL_TRUE);
   V = pnl_mat_create_diag (v);
   pnl_mat_inverse(Pinv, P);
   pnl_mat_mult_mat_inplace (B, P, V);  /* P V */
@@ -103,7 +103,7 @@ static void pnl_mat_eigen_test ()
   pnl_test_mat_eq_abs(V, A, 1E-8, "eigen", "");
   pnl_mat_free (&V);
 
-  pnl_mat_eigen (v, NULL, A, FALSE);
+  pnl_mat_eigen (v, NULL, A, PNL_FALSE);
   V = pnl_mat_create_diag (v);
   pnl_mat_mult_mat_inplace (B, P, V);  /* P V */
   pnl_mat_mult_mat_inplace (V, B, Pinv); /* P V P^-1 */

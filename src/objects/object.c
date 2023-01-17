@@ -111,10 +111,10 @@ PnlObject* pnl_object_create (PnlType type)
   return o;
 }
 
-static int MessageIsOn = FALSE;
-void pnl_message_on () { MessageIsOn = TRUE; }
-void pnl_message_off () { MessageIsOn = FALSE; }
+static int MessageIsOn = PNL_FALSE;
+void pnl_message_on () { MessageIsOn = PNL_TRUE; }
+void pnl_message_off () { MessageIsOn = PNL_FALSE; }
 int pnl_message_is_on ()
 {
-  return ( MessageIsOn == TRUE ) ? TRUE : FALSE;
+  return ( MessageIsOn == PNL_TRUE ) ? PNL_TRUE : PNL_FALSE;
 }

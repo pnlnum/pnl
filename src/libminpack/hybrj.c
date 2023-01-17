@@ -302,7 +302,7 @@ L20:
   /*     beginning of the outer loop. */
 
 L30:
-  jeval = TRUE;
+  jeval = PNL_TRUE;
 
   /*        calculate the jacobian matrix. */
 
@@ -315,7 +315,7 @@ L30:
 
   /*        compute the qr factorization of the jacobian. */
 
-  pnl_minpack_qrfac(n, n, &fjac[fjac_offset], ldfjac, FALSE, iwa, 1, &wa1[1], &
+  pnl_minpack_qrfac(n, n, &fjac[fjac_offset], ldfjac, PNL_FALSE, iwa, 1, &wa1[1], &
                     wa2[1], &wa3[1]);
 
   /*        on the first iteration and if mode is 1, scale according */
@@ -394,7 +394,7 @@ L110:
 
   /*        copy the triangular factor of the qr factorization into r. */
 
-  sing = FALSE;
+  sing = PNL_FALSE;
   i__1 = n;
   for (j = 1; j <= i__1; ++j)
     {
@@ -415,7 +415,7 @@ L140:
       r__[l] = wa1[j];
       if (wa1[j] == 0.)
         {
-          sing = TRUE;
+          sing = PNL_TRUE;
         }
       /* L150: */
     }
@@ -676,7 +676,7 @@ L260:
 
   /*           end of the inner loop. */
 
-  jeval = FALSE;
+  jeval = PNL_FALSE;
   goto L180;
 L290:
 

@@ -476,8 +476,8 @@ L80:
     nres = 0;
     numrl2 = 1;
     ktMIN = 0;
-    extrap = FALSE;
-    noext = FALSE;
+    extrap = PNL_FALSE;
+    noext = PNL_FALSE;
     erlarg = errsum;
     ertest = errbnd;
     levMAX = 1;
@@ -622,7 +622,7 @@ L110:
 	if (level[MAXerr] + 1 <= levMAX) {
 	    goto L160;
 	}
-	extrap = TRUE;
+	extrap = PNL_TRUE;
 	nrMAX = 2;
 L120:
 	if (ierro == 3 || erlarg <= ertest) {
@@ -682,7 +682,7 @@ L140:
 
 L150:
 	if (numrl2 == 1) {
-	    noext = TRUE;
+	    noext = PNL_TRUE;
 	}
 	if (*ier >= 5) {
 	    goto L170;
@@ -691,7 +691,7 @@ L155:
 	MAXerr = iord[1];
 	errMAX = elist[MAXerr];
 	nrMAX = 1;
-	extrap = FALSE;
+	extrap = PNL_FALSE;
 	++levMAX;
 	erlarg = errsum;
 L160:

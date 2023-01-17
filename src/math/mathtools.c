@@ -228,25 +228,25 @@ double pnl_atanh(double x)
  * @param y a real number
  * @param relerr a real number defining the error
  *
- * @return  TRUE (if equal) or FALSE
+ * @return  PNL_TRUE (if equal) or PNL_FALSE
  */
 int pnl_isequal_rel(double x, double y, double relerr)
 {
   if ((isnan(x) && !isnan(y)) || (!isnan(x) && isnan(y))
-      || (isinf(x) && !isinf(y)) || (!isinf(x) && isinf(y))) return FALSE;
+      || (isinf(x) && !isinf(y)) || (!isinf(x) && isinf(y))) return PNL_FALSE;
   if (isinf(x) && isinf(y))
     {
-      if (x * y > 0.) return TRUE;
-      return FALSE;
+      if (x * y > 0.) return PNL_TRUE;
+      return PNL_FALSE;
     }
-  if (isnan(x) && isnan(y)) return TRUE;
+  if (isnan(x) && isnan(y)) return PNL_TRUE;
   if (y == 0.)
     {
-      return ((x == 0.) ? TRUE : FALSE);
+      return ((x == 0.) ? PNL_TRUE : PNL_FALSE);
     }
   else
     {
-      return ((fabs(x - y) > relerr * fabs(y))) ? FALSE : TRUE;
+      return ((fabs(x - y) > relerr * fabs(y))) ? PNL_FALSE : PNL_TRUE;
     }
 }
 
@@ -257,19 +257,19 @@ int pnl_isequal_rel(double x, double y, double relerr)
  * @param y a real number
  * @param abserr a real number defining the absolute error
  *
- * @return  TRUE (if equal) or FALSE
+ * @return  PNL_TRUE (if equal) or PNL_FALSE
  */
 int pnl_isequal_abs(double x, double y, double abserr)
 {
   if ((isnan(x) && !isnan(y)) || (!isnan(x) && isnan(y))
-      || (isinf(x) && !isinf(y)) || (!isinf(x) && isinf(y))) return FALSE;
+      || (isinf(x) && !isinf(y)) || (!isinf(x) && isinf(y))) return PNL_FALSE;
   if (isinf(x) && isinf(y))
     {
-      if (x * y > 0.) return TRUE;
-      return FALSE;
+      if (x * y > 0.) return PNL_TRUE;
+      return PNL_FALSE;
     }
-  if (isnan(x) && isnan(y)) return TRUE;
-  return (fabs(x - y) > abserr) ? FALSE : TRUE;
+  if (isnan(x) && isnan(y)) return PNL_TRUE;
+  return (fabs(x - y) > abserr) ? PNL_FALSE : PNL_TRUE;
 }
 
 /**
@@ -280,17 +280,17 @@ int pnl_isequal_abs(double x, double y, double abserr)
  * @param y a real number
  * @param relerr real number defining the relative error
  *
- * @return  TRUE (if equal) or FALSE
+ * @return  PNL_TRUE (if equal) or PNL_FALSE
  */
 int pnl_isequal(double x, double y, double relerr)
 {
   if ((isnan(x) && !isnan(y)) || (!isnan(x) && isnan(y))
-      || (isinf(x) && !isinf(y)) || (!isinf(x) && isinf(y))) return FALSE;
+      || (isinf(x) && !isinf(y)) || (!isinf(x) && isinf(y))) return PNL_FALSE;
   if (isinf(x) && isinf(y))
     {
-      if (x * y > 0.) return TRUE;
-      return FALSE;
+      if (x * y > 0.) return PNL_TRUE;
+      return PNL_FALSE;
     }
-  if (isnan(x) && isnan(y)) return TRUE;
-  return (fabs(x - y) > MAX(1, fabs(y)) * relerr) ? FALSE : TRUE;
+  if (isnan(x) && isnan(y)) return PNL_TRUE;
+  return (fabs(x - y) > MAX(1, fabs(y)) * relerr) ? PNL_FALSE : PNL_TRUE;
 }

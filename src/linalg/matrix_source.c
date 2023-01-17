@@ -75,17 +75,17 @@ TYPE(PnlMat) *FUNCTION(pnl_mat, new)()
  *
  * @param M1 a matrix
  * @param M2 a matrix
- * @return  TRUE or FALSE
+ * @return  PNL_TRUE or PNL_FALSE
  */
 int FUNCTION(pnl_mat, eq)(const TYPE(PnlMat) *M1, const TYPE(PnlMat) *M2)
 {
   int i;
-  if ((M1->m != M2->m) || (M1->n != M2->n)) return FALSE;
+  if ((M1->m != M2->m) || (M1->n != M2->n)) return PNL_FALSE;
   for (i = 0 ; i < M1->mn ; i++)
     {
-      if (NEQ(M1->array[i], M2->array[i])) return FALSE;
+      if (NEQ(M1->array[i], M2->array[i])) return PNL_FALSE;
     }
-  return TRUE;
+  return PNL_TRUE;
 }
 
 /**
@@ -93,16 +93,16 @@ int FUNCTION(pnl_mat, eq)(const TYPE(PnlMat) *M1, const TYPE(PnlMat) *M2)
  *
  * @param M a matrix
  * @param x a BASE type element
- * @return  TRUE or FALSE
+ * @return  PNL_TRUE or PNL_FALSE
  */
 int FUNCTION(pnl_mat, eq_all)(const TYPE(PnlMat) *M, BASE x)
 {
   int i;
   for (i = 0 ; i < M->mn ; i++)
     {
-      if (NEQ(M->array[i], x)) return FALSE;
+      if (NEQ(M->array[i], x)) return PNL_FALSE;
     }
-  return TRUE;
+  return PNL_TRUE;
 }
 
 /**
@@ -1991,7 +1991,7 @@ static void FUNCTION(pnl_mat, qsort_aux)(TYPE(PnlMat) * A, PnlMatInt *t, int use
 
   lda = incr = loops = n = 0;   /* avoid warnings */
 
-  if (use_index == TRUE)
+  if (use_index == PNL_TRUE)
     {
       pnl_mat_int_resize(t, A->m, A->n);
       index = t->array;
@@ -2017,7 +2017,7 @@ static void FUNCTION(pnl_mat, qsort_aux)(TYPE(PnlMat) * A, PnlMatInt *t, int use
       incr = 1;
       n = A->m;
       loops = A->n;
-      if (use_index == TRUE)
+      if (use_index == PNL_TRUE)
         {
           for (i = 0; i < t->m; i++)
             for (j = 0; j < t->n; j++)
@@ -2031,7 +2031,7 @@ static void FUNCTION(pnl_mat, qsort_aux)(TYPE(PnlMat) * A, PnlMatInt *t, int use
       incr = A->n;
       n = A->n;
       loops = A->m;
-      if (use_index == TRUE)
+      if (use_index == PNL_TRUE)
         {
           for (i = 0; i < t->m; i++)
             for (j = 0; j < t->n; j++)
@@ -2057,7 +2057,7 @@ static void FUNCTION(pnl_mat, qsort_aux)(TYPE(PnlMat) * A, PnlMatInt *t, int use
  */
 void FUNCTION(pnl_mat, qsort)(TYPE(PnlMat) * A, char dir, char order)
 {
-  FUNCTION(pnl_mat, qsort_aux)(A, NULL, FALSE, dir, order);
+  FUNCTION(pnl_mat, qsort_aux)(A, NULL, PNL_FALSE, dir, order);
 }
 
 /**
@@ -2070,7 +2070,7 @@ void FUNCTION(pnl_mat, qsort)(TYPE(PnlMat) * A, char dir, char order)
  */
 void FUNCTION(pnl_mat, qsort_index)(TYPE(PnlMat) * A, PnlMatInt *t, char dir, char order)
 {
-  FUNCTION(pnl_mat, qsort_aux)(A, t, TRUE, dir, order);
+  FUNCTION(pnl_mat, qsort_aux)(A, t, PNL_TRUE, dir, order);
 }
 
 #endif /* ORDERED */
@@ -2082,17 +2082,17 @@ void FUNCTION(pnl_mat, qsort_index)(TYPE(PnlMat) * A, PnlMatInt *t, char dir, ch
  * @param x A real vector
  * @param y A real vector
  * @param err the maximum error
- * @return TRUE or FALSE
+ * @return PNL_TRUE or PNL_FALSE
  */
 int FUNCTION(pnl_mat,isequal)(const TYPE(PnlMat) *A, const TYPE(PnlMat) *B, double err)
 {
   int i;
-  if ((A->m != B->m) || (A->n != B->n)) return FALSE;
+  if ((A->m != B->m) || (A->n != B->n)) return PNL_FALSE;
   for (i = 0 ; i < A->mn ; i++)
     {
-      if (! FUNCTION(pnl,isequal)(A->array[i], B->array[i], err)) return FALSE;
+      if (! FUNCTION(pnl,isequal)(A->array[i], B->array[i], err)) return PNL_FALSE;
     }
-  return TRUE;
+  return PNL_TRUE;
 }
 
 /**
@@ -2101,17 +2101,17 @@ int FUNCTION(pnl_mat,isequal)(const TYPE(PnlMat) *A, const TYPE(PnlMat) *B, doub
  * @param A A real vector
  * @param B A real vector
  * @param abserr the maximum absolute error
- * @return TRUE or FALSE
+ * @return PNL_TRUE or PNL_FALSE
  */
 int FUNCTION(pnl_mat,isequal_abs)(const TYPE(PnlMat) *A, const TYPE(PnlMat) *B, double abserr)
 {
   int i;
-  if ((A->m != B->m) || (A->n != B->n)) return FALSE;
+  if ((A->m != B->m) || (A->n != B->n)) return PNL_FALSE;
   for (i = 0 ; i < A->mn ; i++)
     {
-      if (! FUNCTION(pnl,isequal_abs)(A->array[i], B->array[i], abserr)) return FALSE;
+      if (! FUNCTION(pnl,isequal_abs)(A->array[i], B->array[i], abserr)) return PNL_FALSE;
     }
-  return TRUE;
+  return PNL_TRUE;
 }
 
 /**
@@ -2120,17 +2120,17 @@ int FUNCTION(pnl_mat,isequal_abs)(const TYPE(PnlMat) *A, const TYPE(PnlMat) *B, 
  * @param A A real vector
  * @param B A real vector
  * @param relerr the maximum relative error
- * @return TRUE or FALSE
+ * @return PNL_TRUE or PNL_FALSE
  */
 int FUNCTION(pnl_mat,isequal_rel)(const TYPE(PnlMat) *A, const TYPE(PnlMat) *B, double relerr)
 {
   int i;
-  if ((A->m != B->m) || (A->n != B->n)) return FALSE;
+  if ((A->m != B->m) || (A->n != B->n)) return PNL_FALSE;
   for (i = 0 ; i < A->mn ; i++)
     {
-      if (! FUNCTION(pnl,isequal_rel)(A->array[i], B->array[i], relerr)) return FALSE;
+      if (! FUNCTION(pnl,isequal_rel)(A->array[i], B->array[i], relerr)) return PNL_FALSE;
     }
-  return TRUE;
+  return PNL_TRUE;
 }
 #endif /* efined(BASE_DOUBLE) || defined(BASE_PNL_COMPLEX) */
 

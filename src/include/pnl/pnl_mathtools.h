@@ -40,10 +40,10 @@ extern int pnl_isequal_rel(double x, double y, double relerr);
 extern int pnl_isequal_abs(double x, double y, double abserr);
 extern int pnl_isequal(double x, double y, double relerr);
 
-#undef FALSE
-#define FALSE 0
-#undef TRUE
-#define TRUE 1
+#undef PNL_FALSE
+#define PNL_FALSE 0
+#undef PNL_TRUE
+#define PNL_TRUE 1
 
 
 /* The following constants are normally defined in /usr/include/{math.h,

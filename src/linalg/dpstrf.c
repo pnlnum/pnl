@@ -41,15 +41,15 @@
 
 
 /**
- * Return TRUE if x is NaN and FALSE otherwise
+ * Return PNL_TRUE if x is NaN and PNL_FALSE otherwise
  *
  * @param x the address of a real number
  *
- * @return  TRUE or FALSE
+ * @return  PNL_TRUE or PNL_FALSE
  */
 int disnan_(double *x)
 {
-  return pnl_isnan(*x) ? TRUE : FALSE;
+  return pnl_isnan(*x) ? PNL_TRUE : PNL_FALSE;
 }
 
 /* dpstrf.f -- translated by f2c (version 20061008).

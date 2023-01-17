@@ -321,7 +321,7 @@ int pnl_ode_rkf45_step (PnlODEFunc *f, double *y, double *t,
         &work[k1m], &work[k1], &work[k2], &work[k3], &work[k4],
         &work[k5], &work[k6], &work[k6 + 1], &iwork[0], &iwork[1],
         &iwork[2], &iwork[3], &iwork[4]);
-  if ( *iflag == -2 ) return OK; else return FALSE;
+  if ( *iflag == -2 ) return OK; else return PNL_FALSE;
 }
 
 
@@ -591,7 +591,7 @@ L50:
     }
   /*     initialize output point indicator */
 
-  output = FALSE;
+  output = PNL_FALSE;
 
   /*     to avoid premature underflow in the error tolerance function, */
   /*     scale the error tolerances */
@@ -602,7 +602,7 @@ L50:
   /*     step by step integration */
 
 L100:
-  hfaild = FALSE;
+  hfaild = PNL_FALSE;
 
   /*     set smallest allowable stepsize */
 
@@ -625,7 +625,7 @@ L100:
   /*     the next successful step will complete the integration to the */
   /*     output point */
 
-  output = TRUE;
+  output = PNL_TRUE;
   *h = dt;
   goto L200;
 
@@ -708,8 +708,8 @@ L200:
   /*  reduce the stepsize , try again */
   /*  the decrease is limited to a factor of 1/10 */
 
-  hfaild = TRUE;
-  output = FALSE;
+  hfaild = PNL_TRUE;
+  output = PNL_FALSE;
   if (esttol < 59049.)
     {
       s = .9 / pow (esttol, 0.2);

@@ -226,7 +226,7 @@ int pnl_root_bisection (PnlFunc *func, double xmin, double xmax, double epsrel, 
  */
 static void print_newton_iter (int iter, const PnlVect *x, const PnlVect *Fx, int verbose)
 {
-  if ( verbose == TRUE )
+  if ( verbose == PNL_TRUE )
     {
       printf ("iter = %d\n", iter);
       printf ("\tx = "); pnl_vect_print_asrow (x);
@@ -254,7 +254,7 @@ static void print_newton_iter (int iter, const PnlVect *x, const PnlVect *Fx, in
  * @param x_eps minimum relative movement of x before the algorithms stops.
  * @param fx_eps the algorithm stops if |f(x)| < fs_eps
  * @param max_iter Maximum number of iterations
- * @param verbose boolean (TRUE or FALSE). If TRUE, the details of each
+ * @param verbose boolean (PNL_TRUE or PNL_FALSE). If PNL_TRUE, the details of each
  * iteration are printed
  * @param res Holds the solution on output
  * 
@@ -315,7 +315,7 @@ int pnl_multiroot_newton (PnlRnFuncRnDFunc *func, const PnlVect *x0, double x_ep
           t *= gamma;
           nb_tries_ls++;
         }
-      if ( (verbose == TRUE) && (nb_tries_ls > 1) )
+      if ( (verbose == PNL_TRUE) && (nb_tries_ls > 1) )
         {
           printf ("\tNeed to redude step size %d times.\n", nb_tries_ls);
         }

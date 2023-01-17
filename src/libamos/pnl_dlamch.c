@@ -51,14 +51,14 @@ static  int pnl_dlamc5 (int *beta, int *p, int *emin, int *ieee, int *emax, doub
 
 double pnl_dlamch (char *cmach)
 {
-  static int first = TRUE;
+  static int first = PNL_TRUE;
   static double base, emin, prec, emax, rmin, rmax,t, sfmin, rnd, eps,  rmach=0.0, small;
   const double zero= 0.0,one=1.0;
   int i_1, beta, imin, imax, lrnd,  it;
 
   if (first)
     {
-      first = FALSE;
+      first = PNL_FALSE;
       pnl_dlamc2 (&beta, &it, &lrnd, &eps, &imin, &rmin, &imax, &rmax);
       base = (double) beta;
       t = (double) it;
@@ -144,8 +144,8 @@ double pnl_dlamch (char *cmach)
  *  T       (output) INT 
  *          The number of ( BETA ) digits in the mantissa. 
  *  RND     (output) INT 
- *          Specifies whether proper rounding  ( RND = .TRUE. )  or 
- *          chopping  ( RND = .FALSE. )  occurs in addition. This may not 
+ *          Specifies whether proper rounding  ( RND = .PNL_TRUE. )  or 
+ *          chopping  ( RND = .PNL_FALSE. )  occurs in addition. This may not 
  *          be a reliable guide to the way in which the machine performs 
  *          its arithmetic. 
  *  IEEE1   (output) INT 
@@ -164,7 +164,7 @@ double pnl_dlamch (char *cmach)
 
 static int pnl_dlamc1 (int *beta, int *t, int *rnd, int *ieee1)
 {
-  static int first = TRUE;
+  static int first = PNL_TRUE;
   double d_1, d_2;
   /* Local variables */
   static int lrnd;
@@ -177,7 +177,7 @@ static int pnl_dlamc1 (int *beta, int *t, int *rnd, int *ieee1)
   double one, qtr;
   if (first)
     {
-      first = FALSE;
+      first = PNL_FALSE;
       one = 1.;
       /*        LBETA,  LIEEE1,  LT and  LRND  are the  local values  of  BETA, 
        *        IEEE1, T and RND. 
@@ -237,11 +237,11 @@ static int pnl_dlamc1 (int *beta, int *t, int *rnd, int *ieee1)
       c_ = pnl_dlamc3 (&f, &a);
       if (c_ == a)
 	{
-	  lrnd = TRUE;
+	  lrnd = PNL_TRUE;
 	}
       else
 	{
-	  lrnd = FALSE;
+	  lrnd = PNL_FALSE;
 	}
       d_1 = b / 2;
       d_2 = b / 100;
@@ -249,7 +249,7 @@ static int pnl_dlamc1 (int *beta, int *t, int *rnd, int *ieee1)
       c_ = pnl_dlamc3 (&f, &a);
       if (lrnd && c_ == a)
 	{
-	  lrnd = FALSE;
+	  lrnd = PNL_FALSE;
 	}
       /*        Try and decide whether rounding is done in the  IEEE  'round to 
        *        nearest' style. B/2 is half a unit in the last place of the two 
@@ -309,8 +309,8 @@ static int pnl_dlamc1 (int *beta, int *t, int *rnd, int *ieee1)
  *  T       (output) INT 
  *          The number of ( BETA ) digits in the mantissa. 
  *  RND     (output) INT 
- *          Specifies whether proper rounding  ( RND = .TRUE. )  or 
- *          chopping  ( RND = .FALSE. )  occurs in addition. This may not 
+ *          Specifies whether proper rounding  ( RND = .PNL_TRUE. )  or 
+ *          chopping  ( RND = .PNL_FALSE. )  occurs in addition. This may not 
  *          be a reliable guide to the way in which the machine performs 
  *          its arithmetic. 
  *  EPS     (output) DOUBLE PRECISION 
@@ -339,8 +339,8 @@ static int pnl_dlamc2 (int *beta, int *t, int *rnd, double *eps,
 		       int *emin, double *rmin,
 		       int *emax, double *rmax)
 {
-  static int first = TRUE;
-  static int iwarn = FALSE;
+  static int first = PNL_TRUE;
+  static int iwarn = PNL_FALSE;
   /* System generated locals */
   int i_1;
   double d_1, d_2, d_3, d_4, d_5;
@@ -368,7 +368,7 @@ static int pnl_dlamc2 (int *beta, int *t, int *rnd, double *eps,
 
   if (first)
     {
-      first = FALSE;
+      first = PNL_FALSE;
       zero = 0.;
       one = 1.;
       two = 2.;
@@ -451,7 +451,7 @@ static int pnl_dlamc2 (int *beta, int *t, int *rnd, double *eps,
       pnl_dlamc4 (&gpmin, &a, &lbeta);
       d_1 = -a;
       pnl_dlamc4 (&gnmin, &d_1, &lbeta);
-      ieee = FALSE;
+      ieee = PNL_FALSE;
 
       if (ngpmin == ngnmin && gpmin == gnmin)
 	{
@@ -465,7 +465,7 @@ static int pnl_dlamc2 (int *beta, int *t, int *rnd, double *eps,
 	  else if (gpmin - ngpmin == 3)
 	    {
 	      lemin = ngpmin - 1 + lt;
-	      ieee = TRUE;
+	      ieee = PNL_TRUE;
 	      /*            ( Non twos-complement machines, with gradual underflow; 
 	       *              e.g., IEEE standard followers ) 
 	       */
@@ -474,7 +474,7 @@ static int pnl_dlamc2 (int *beta, int *t, int *rnd, double *eps,
 	    {
 	      lemin = MIN (ngpmin, gpmin);
 	      /*            ( A guess; no known machine ) */
-	      iwarn = TRUE;
+	      iwarn = PNL_TRUE;
 	    }
 
 	}
@@ -491,7 +491,7 @@ static int pnl_dlamc2 (int *beta, int *t, int *rnd, double *eps,
 	    {
 	      lemin = MIN (ngpmin, ngnmin);
 	      /*            ( A guess; no known machine ) */
-	      iwarn = TRUE;
+	      iwarn = PNL_TRUE;
 	    }
 
 	}
@@ -508,7 +508,7 @@ static int pnl_dlamc2 (int *beta, int *t, int *rnd, double *eps,
 	    {
 	      lemin = MIN (ngpmin, ngnmin);
 	      /*            ( A guess; no known machine ) */
-	      iwarn = TRUE;
+	      iwarn = PNL_TRUE;
 	    }
 
 	}
@@ -518,7 +518,7 @@ static int pnl_dlamc2 (int *beta, int *t, int *rnd, double *eps,
 	  i_1 = MIN (ngpmin, ngnmin), i_1 = MIN (i_1, gpmin);
 	  lemin = MIN (i_1, gnmin);
 	  /*         ( A guess; no known machine ) */
-	  iwarn = TRUE;
+	  iwarn = PNL_TRUE;
 	}
       /* ** */
       /* Comment out this if block if EMIN is ok */
@@ -822,7 +822,7 @@ static  int pnl_dlamc5 (int *beta, int *p, int *emin, int *ieee, int *emax, doub
 }
 
 
-/*  LSAME returns .TRUE. if CA is the same letter as CB regardless of case. */
+/*  LSAME returns .PNL_TRUE. if CA is the same letter as CB regardless of case. */
 
 static int pnl_lsame (const char *ca,const  char *cb)
 {

@@ -116,16 +116,16 @@ static int count_sum_degree(const PnlMatInt *T, int i)
  */
 static int count_prod_degree(const PnlMatInt *T, int i)
 {
-  int j, deg, all_zero = TRUE;
+  int j, deg, all_zero = PNL_TRUE;
   deg = 1;
 
   for (j = 0 ; j < T->n ; j++)
     {
       const int power = PNL_MGET(T, i, j);
-      if (all_zero == TRUE && power > 0) all_zero = FALSE;
+      if (all_zero == PNL_TRUE && power > 0) all_zero = PNL_FALSE;
       deg *= MAX(power, 1);
     }
-  if (all_zero == TRUE) return 0;
+  if (all_zero == PNL_TRUE) return 0;
   return deg;
 }
 
@@ -1087,7 +1087,7 @@ void pnl_basis_del_elt(PnlBasis *B, const PnlVectInt *d)
   for (i = 0 ; i < B->nb_func ; i++)
     {
       PnlVectInt Ti = pnl_vect_int_wrap_mat_row(B->T, i);
-      if (pnl_vect_int_eq(&Ti, d) == TRUE) break;
+      if (pnl_vect_int_eq(&Ti, d) == PNL_TRUE) break;
     }
   if (i < B->nb_func) pnl_basis_del_elt_i(B, i);
 }

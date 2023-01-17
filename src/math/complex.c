@@ -871,18 +871,18 @@ double Cisinf(dcomplex x)
  * @param y A complex  number
  * @param abserr the maximum absolute error
  *
- * @return  TRUE (if equal) or FALSE
+ * @return  PNL_TRUE (if equal) or PNL_FALSE
  */
 int pnl_complex_isequal_abs(dcomplex x, dcomplex y, double abserr)
 {
  if ((Cisnan(x) && !Cisnan(y)) || (!Cisnan(x) && Cisnan(y))
-      || (Cisinf(x) && !Cisinf(y)) || (!Cisinf(x) && Cisinf(y))) return FALSE;
+      || (Cisinf(x) && !Cisinf(y)) || (!Cisinf(x) && Cisinf(y))) return PNL_FALSE;
   if (Cisinf(x) && Cisinf(y))
     {
       return (pnl_isequal_abs(x.r, y.r, abserr) && pnl_isequal_abs(x.i, y.i, abserr));
     }
-  if (Cisnan(x) && Cisnan(y)) return TRUE;
-  return (Cabs(Csub(x, y)) > abserr) ? FALSE : TRUE;
+  if (Cisnan(x) && Cisnan(y)) return PNL_TRUE;
+  return (Cabs(Csub(x, y)) > abserr) ? PNL_FALSE : PNL_TRUE;
 }
 
 /**
@@ -893,18 +893,18 @@ int pnl_complex_isequal_abs(dcomplex x, dcomplex y, double abserr)
  * @param y A complex  number
  * @param relerr the maximum relative error
  *
- * @return  TRUE (if equal) or FALSE
+ * @return  PNL_TRUE (if equal) or PNL_FALSE
  */
 int pnl_complex_isequal_rel(dcomplex x, dcomplex y, double relerr)
 {
  if ((Cisnan(x) && !Cisnan(y)) || (!Cisnan(x) && Cisnan(y))
-      || (Cisinf(x) && !Cisinf(y)) || (!Cisinf(x) && Cisinf(y))) return FALSE;
+      || (Cisinf(x) && !Cisinf(y)) || (!Cisinf(x) && Cisinf(y))) return PNL_FALSE;
   if (Cisinf(x) && Cisinf(y))
     {
       return (pnl_isequal_abs(x.r, y.r, relerr) && pnl_isequal_abs(x.i, y.i, relerr));
     }
-  if (Cisnan(x) && Cisnan(y)) return TRUE;
-  return (Cabs(Csub(x, y)) > relerr * Cabs(y)) ? FALSE : TRUE;
+  if (Cisnan(x) && Cisnan(y)) return PNL_TRUE;
+  return (Cabs(Csub(x, y)) > relerr * Cabs(y)) ? PNL_FALSE : PNL_TRUE;
 }
 
 /**
@@ -915,7 +915,7 @@ int pnl_complex_isequal_rel(dcomplex x, dcomplex y, double relerr)
  * @param y A complex  number
  * @param relerr the maximum relative error
  *
- * @return  TRUE (if equal) or FALSE
+ * @return  PNL_TRUE (if equal) or PNL_FALSE
  */
 int pnl_complex_isequal(dcomplex x, dcomplex y, double err)
 {

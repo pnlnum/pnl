@@ -397,8 +397,8 @@ L5:
     errsum = *abserr;
     *abserr = oflow;
     nrMAX = 1;
-    extrap = FALSE;
-    noext = FALSE;
+    extrap = PNL_FALSE;
+    noext = PNL_FALSE;
     ierro = 0;
     iroff1 = 0;
     iroff2 = 0;
@@ -407,16 +407,16 @@ L5:
     small = (d__1 = *b - *a, ABS(d__1)) * .75;
     nres = 0;
     numrl2 = 0;
-    extall = FALSE;
+    extall = PNL_FALSE;
     if ((d__1 = *b - *a, ABS(d__1)) * .5 * domega > 2.) {
 	goto L10;
     }
     numrl2 = 1;
-    extall = TRUE;
+    extall = PNL_TRUE;
     rlist2[0] = *result;
 L10:
     if ((d__1 = *b - *a, ABS(d__1)) * .25 * domega <= 2.) {
-	extall = TRUE;
+	extall = PNL_TRUE;
     }
     ksgn = -1;
     if (dres >= (1. - epmach * 50.) * defabs) {
@@ -576,10 +576,10 @@ L50:
 	if (width * .25 * domega > 2.) {
 	    goto L140;
 	}
-	extall = TRUE;
+	extall = PNL_TRUE;
 	goto L130;
 L60:
-	extrap = TRUE;
+	extrap = PNL_TRUE;
 	nrMAX = 2;
 L70:
 	if (ierro == 3 || erlarg <= ertest) {
@@ -638,7 +638,7 @@ L90:
 
 L100:
 	if (numrl2 == 1) {
-	    noext = TRUE;
+	    noext = PNL_TRUE;
 	}
 	if (*ier == 5) {
 	    goto L150;
@@ -647,7 +647,7 @@ L110:
 	MAXerr = iord[1];
 	errMAX = elist[MAXerr];
 	nrMAX = 1;
-	extrap = FALSE;
+	extrap = PNL_FALSE;
 	small *= .5;
 	erlarg = errsum;
 	goto L140;

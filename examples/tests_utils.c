@@ -23,7 +23,7 @@
 #include <stdarg.h>
 #include "tests_utils.h"
 
-int verbose = FALSE;
+int verbose = PNL_FALSE;
 int count_tests;
 int count_ok;
 int count_fail;
@@ -38,7 +38,7 @@ void pnl_test_init (int argc, char **argv)
          ( strcmp (argv[1], "--verbose") == 0 ) )
      )
     {
-      verbose = TRUE;
+      verbose = PNL_TRUE;
     }
   count_tests = 0;
   count_ok = 0;
@@ -54,7 +54,7 @@ void pnl_test_init (int argc, char **argv)
 static void update_count_tests (int status)
 {
   count_tests++;
-  if (status == FALSE)
+  if (status == PNL_FALSE)
     {
       count_fail++;
     }
@@ -87,7 +87,7 @@ int pnl_test_is_verbose ()
  */
 void pnl_test_set_ok (const char *str)
 {
-  update_count_tests(TRUE);
+  update_count_tests(PNL_TRUE);
   if (verbose) 
     {
       printf ("\t%s : OK\n", str);
@@ -103,7 +103,7 @@ void pnl_test_set_ok (const char *str)
  */
 void pnl_test_set_fail (const char *str, double res, double expected)
 {
-  update_count_tests(FALSE);
+  update_count_tests(PNL_FALSE);
   printf ("\t%s : FAIL (observed %.18f expected %.18f)\n", str, res, expected);
 }
 
@@ -115,7 +115,7 @@ void pnl_test_set_fail (const char *str, double res, double expected)
  */
 void pnl_test_set_fail0(const char *str)
 {
-  update_count_tests(FALSE);
+  update_count_tests(PNL_FALSE);
   printf ("\t%s : FAIL\n", str);
 }
 
@@ -123,10 +123,10 @@ void pnl_test_set_fail0(const char *str)
 static int pnl_test_eq_aux (double x, double y, double relerr, int(*cmp)(double, double, double), const char *str, const char *fmt, va_list ap)
 {
   int status = (*cmp)(x, y, relerr);
-  if ((status == FALSE) || (verbose == TRUE))
+  if ((status == PNL_FALSE) || (verbose == PNL_TRUE))
     {
       printf("\t%s : ", str);
-      printf(status == FALSE ? "FAIL" : "OK");
+      printf(status == PNL_FALSE ? "FAIL" : "OK");
       if (!status)
         {
           printf (" (");
@@ -150,7 +150,7 @@ static int pnl_test_eq_aux (double x, double y, double relerr, int(*cmp)(double,
  * @param fmt a format string to be passed to printf
  * @param ... extra arguments for printf
  * 
- * @return FALSE or TRUE
+ * @return PNL_FALSE or PNL_TRUE
  */
 int pnl_test_eq(double x, double y, double relerr, const char *str, const char *fmt, ...)
 {
@@ -176,7 +176,7 @@ int pnl_test_eq(double x, double y, double relerr, const char *str, const char *
  * @param fmt a format string to be passed to printf
  * @param ... extra arguments for printf
  * 
- * @return FALSE or TRUE
+ * @return PNL_FALSE or PNL_TRUE
  */
 int pnl_test_eq_rel (double x, double y, double relerr, const char *str, const char *fmt, ...)
 {
@@ -198,7 +198,7 @@ int pnl_test_eq_rel (double x, double y, double relerr, const char *str, const c
  * @param fmt a format string to be passed to printf
  * @param ... extra arguments for printf
  * 
- * @return FALSE or TRUE
+ * @return PNL_FALSE or PNL_TRUE
  */
 int pnl_test_eq_abs (double x, double y, double abserr, const char *str, const char *fmt, ...)
 {
@@ -223,7 +223,7 @@ int pnl_test_eq_abs (double x, double y, double abserr, const char *str, const c
  * @param fmt a format string
  * @param ap extra arguments
  * 
- * @return TRUE or FALSE
+ * @return PNL_TRUE or PNL_FALSE
  */
 static int pnl_test_array (const double *X, const double *Y, int n, double relerr, int(*cmp)(double, double, double), const char *str, const char *fmt, va_list ap)
 {
@@ -234,13 +234,13 @@ static int pnl_test_array (const double *X, const double *Y, int n, double reler
       const double x = X[i];
       const double y = Y[i];
       status = (*cmp)(x, y, relerr);
-      if (status == FALSE) break;
+      if (status == PNL_FALSE) break;
     }
-  if ((status == FALSE) || (verbose == TRUE))
+  if ((status == PNL_FALSE) || (verbose == PNL_TRUE))
     {
       printf("\t%s : ", str);
-      printf(status == TRUE ? "OK" : "FAIL");
-      if (status == FALSE)
+      printf(status == PNL_TRUE ? "OK" : "FAIL");
+      if (status == PNL_FALSE)
         {
           printf(" (");
           vprintf(fmt, ap);
@@ -262,7 +262,7 @@ static int pnl_test_array (const double *X, const double *Y, int n, double reler
  * @param fmt a format string to be passed to printf
  * @param ... extra arguments for printf
  * 
- * @return FALSE or TRUE
+ * @return PNL_FALSE or PNL_TRUE
  */
 int pnl_test_mat_eq_abs (const PnlMat *X, const PnlMat *Y, double abserr, const char *str, const char *fmt, ...)
 {
@@ -274,8 +274,8 @@ int pnl_test_mat_eq_abs (const PnlMat *X, const PnlMat *Y, double abserr, const 
       printf ("%s : ", str);
       printf ("FAIL (size mismatch");
       printf (fmt, ap); printf (")\n");
-      update_count_tests(FALSE);
-      return FALSE;
+      update_count_tests(PNL_FALSE);
+      return PNL_FALSE;
     }
   status = pnl_test_array (X->array, Y->array, X->mn, abserr, pnl_isequal_abs, str, fmt, ap);
   va_end (ap);
@@ -292,7 +292,7 @@ int pnl_test_mat_eq_abs (const PnlMat *X, const PnlMat *Y, double abserr, const 
  * @param fmt a format string to be passed to printf
  * @param ... extra arguments for printf
  * 
- * @return FALSE or TRUE
+ * @return PNL_FALSE or PNL_TRUE
  */
 int pnl_test_mat_complex_eq_abs (const PnlMatComplex *X, const PnlMatComplex *Y, double abserr, const char *str, const char *fmt, ...)
 {
@@ -304,8 +304,8 @@ int pnl_test_mat_complex_eq_abs (const PnlMatComplex *X, const PnlMatComplex *Y,
       printf ("%s : ", str);
       printf ("FAIL (size mismatch");
       printf (fmt, ap); printf (")\n");
-      update_count_tests(FALSE);
-      return FALSE;
+      update_count_tests(PNL_FALSE);
+      return PNL_FALSE;
     }
   return pnl_test_array ((double *)X->array, (double *)Y->array, 2 * X->mn, abserr, pnl_isequal_abs, str, fmt, ap);
 }
@@ -319,7 +319,7 @@ int pnl_test_mat_complex_eq_abs (const PnlMatComplex *X, const PnlMatComplex *Y,
  * @param fmt a format string to be passed to printf
  * @param ... extra arguments for printf
  * 
- * @return FALSE or TRUE
+ * @return PNL_FALSE or PNL_TRUE
  */
 int pnl_test_mat_int_eq(const PnlMatInt *X, const PnlMatInt *Y, const char *str, const char *fmt, ...)
 {
@@ -328,7 +328,7 @@ int pnl_test_mat_int_eq(const PnlMatInt *X, const PnlMatInt *Y, const char *str,
   va_start(ap, fmt);
   status = pnl_mat_int_isequal(X, Y);
   update_count_tests(status);
-  if (status == FALSE || verbose == TRUE)
+  if (status == PNL_FALSE || verbose == PNL_TRUE)
     {
       printf("\t%s : ", str);
       printf(status ? "OK" : "FAIL");
@@ -358,7 +358,7 @@ int pnl_test_mat_int_eq(const PnlMatInt *X, const PnlMatInt *Y, const char *str,
  * @param fmt a format string to be passed to printf
  * @param ... extra arguments for printf
  * 
- * @return FALSE or TRUE
+ * @return PNL_FALSE or PNL_TRUE
  */
 int pnl_test_vect_eq_abs (const PnlVect *X, const PnlVect *Y, double abserr, const char *str, const char *fmt, ...)
 {
@@ -397,7 +397,7 @@ int pnl_test_vect_eq_abs (const PnlVect *X, const PnlVect *Y, double abserr, con
  * @param fmt a format string to be passed to printf
  * @param ... extra arguments for printf
  * 
- * @return FALSE or TRUE
+ * @return PNL_FALSE or PNL_TRUE
  */
 int pnl_test_vect_complex_eq_abs (const PnlVectComplex *X, const PnlVectComplex *Y, double abserr, const char *str, const char *fmt, ...)
 {
@@ -436,7 +436,7 @@ int pnl_test_vect_complex_eq_abs (const PnlVectComplex *X, const PnlVectComplex 
  * @param fmt a forhmat string to be passed to printf
  * @param ... extra arguments for printf
  * 
- * @return FALSE or TRUE
+ * @return PNL_FALSE or PNL_TRUE
  */
 int pnl_test_hmat_eq_abs (const PnlHmat *X, const PnlHmat *Y, double abserr, const char *str, const char *fmt, ...)
 {
@@ -458,9 +458,9 @@ dim_fail:
   printf ("%s : ", str);
   printf ("FAIL (size mismatch");
   printf (fmt, ap); printf (")\n");
-  update_count_tests(FALSE);
+  update_count_tests(PNL_FALSE);
   va_end (ap);
-  return FALSE;
+  return PNL_FALSE;
 }
 
 void run_all_test (tst_list *l)

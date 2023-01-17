@@ -1528,8 +1528,8 @@ int pnl_object_mpi_isend(const PnlObject *Obj, int dest, int tag, MPI_Comm comm,
  * @param src the rank of source (integer)
  * @param tag the message tag (integer)
  * @param comm a Communicator (handle)
- * @param flag (output) set to FALSE if no matching message is ready for being
- * received, set to TRUE otherwise.
+ * @param flag (output) set to PNL_FALSE if no matching message is ready for being
+ * received, set to PNL_TRUE otherwise.
  * @param request (output) a communication request (handle)
  *
  * @return an error value, it should be MPI_SUCCESS when everything went OK
@@ -1540,9 +1540,9 @@ int pnl_object_mpi_irecv(void **buf, int *size, int src, int tag, MPI_Comm comm,
   int info;
   info = MPI_Iprobe(src, tag, comm, flag, &status);
   PNL_MPI_MESSAGE(info, "error in IProbe.\n");
-  if (*flag == FALSE)
+  if (*flag == PNL_FALSE)
     {
-      PNL_MESSAGE(*flag == FALSE, "Cannot find a matching message.\n");
+      PNL_MESSAGE(*flag == PNL_FALSE, "Cannot find a matching message.\n");
       return MPI_SUCCESS;
     }
   info = MPI_Get_count(&status, MPI_PACKED, size);

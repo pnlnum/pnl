@@ -331,8 +331,8 @@ int pnl_dqagse(PnlFunc *f, double *a, double *b, double
     nres = 0;
     numrl2 = 2;
     ktMIN = 0;
-    extrap = FALSE;
-    noext = FALSE;
+    extrap = PNL_FALSE;
+    noext = PNL_FALSE;
     iroff1 = 0;
     iroff2 = 0;
     iroff3 = 0;
@@ -469,7 +469,7 @@ L30:
 	if ((d__1 = blist[MAXerr] - alist__[MAXerr], ABS(d__1)) > small) {
 	    goto L90;
 	}
-	extrap = TRUE;
+	extrap = PNL_TRUE;
 	nrMAX = 2;
 L40:
 	if (ierro == 3 || erlarg <= ertest) {
@@ -526,7 +526,7 @@ L60:
 
 L70:
 	if (numrl2 == 1) {
-	    noext = TRUE;
+	    noext = PNL_TRUE;
 	}
 	if (*ier == 5) {
 	    goto L100;
@@ -534,7 +534,7 @@ L70:
 	MAXerr = iord[1];
 	errMAX = elist[MAXerr];
 	nrMAX = 1;
-	extrap = FALSE;
+	extrap = PNL_FALSE;
 	small *= .5;
 	erlarg = errsum;
 	goto L90;

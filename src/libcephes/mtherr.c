@@ -59,7 +59,7 @@
 #include "pnl/pnl_specfun.h"
 #include "mconf.h"
 
-static int _mtherr_activated = TRUE;
+static int _mtherr_activated = PNL_TRUE;
 static int merror = 0;
 
 /* Notice: the order of appearance of the following
@@ -81,7 +81,7 @@ static char *ermsg[8] = {
 int mtherr(char *name, int code)
 {
 
-  if (_mtherr_activated == FALSE) return (0);
+  if (_mtherr_activated == PNL_FALSE) return (0);
   
   /* Display string passed by calling program,
    * which is supposed to be the name of the
@@ -111,11 +111,11 @@ int mtherr(char *name, int code)
  */
 void pnl_deactivate_mtherr (void)
 {
-  _mtherr_activated = FALSE;
+  _mtherr_activated = PNL_FALSE;
 }
 
 
 void pnl_activate_mtherr (void)
 {
-  _mtherr_activated = TRUE;
+  _mtherr_activated = PNL_TRUE;
 }

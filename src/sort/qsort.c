@@ -127,7 +127,7 @@ swapfunc_int(int *a, int *b, int n, int lda)
     else if (es==sizeof(double)) swap2 (a, b, double)       \
       else swapfunc(a, b, es, 1, 1);
 
-#define swapindex(a,b) if (index_flag==TRUE) {register int temp; temp = *(a); *(a) = *(b); *(b) = temp; }
+#define swapindex(a,b) if (index_flag==PNL_TRUE) {register int temp; temp = *(a); *(a) = *(b); *(b) = temp; }
 
 
 #define vecswap(a, b, n, lda)    if ((n) > 0) {                         \
@@ -138,7 +138,7 @@ swapfunc_int(int *a, int *b, int n, int lda)
 
 /* #define vecswap(a, b, n, lda)    if ((n) > 0) { swapfunc(a, b, es, n/es, lda); } */
 
-#define vecswapindex(a, b, n, lda)    if ((n) > 0 && index_flag==TRUE) swapfunc_int(a, b, n, lda)
+#define vecswapindex(a, b, n, lda)    if ((n) > 0 && index_flag==PNL_TRUE) swapfunc_int(a, b, n, lda)
 
 /* static __inline__ char *med3(char *a, char *b, char *c, int (*cmp)(const void*, const void *)) */
 /* { */
@@ -166,7 +166,7 @@ static __inline__ void med3noindex(char *ans, int *i_ans, char *a, char *b, char
   : (cmp(b, c) > 0 ? (ans = b) : (cmp(a, c) < 0 ? (ans = a) : (ans = c)));
 }
 
-#define med3index (index_flag==TRUE ? med3withindex : med3noindex)
+#define med3index (index_flag==PNL_TRUE ? med3withindex : med3noindex)
 
 /**
  * @param a a generic pointer to be sorted
@@ -177,8 +177,8 @@ static __inline__ void med3noindex(char *ans, int *i_ans, char *a, char *b, char
  * @param t an array of integers to store the permutation used to sort a
  * @param ldt the leading dimension of t, used to sort columns of matrices
  * stored row-wise
- * @param index_flag can be TRUE or FALSE. If TRUE the permutation vector is
- * computed. If FALSE the parameter t is not used
+ * @param index_flag can be PNL_TRUE or PNL_FALSE. If PNL_TRUE the permutation vector is
+ * computed. If PNL_FALSE the parameter t is not used
  * @param cmp the comparaison function
  */
 void pnl_qsort(void *a, int n, int es, int lda, int *t, int ldt, int index_flag, int (*cmp)(const void *, const void *))

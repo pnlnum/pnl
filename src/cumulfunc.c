@@ -5394,7 +5394,7 @@ static void cumchi(double *x,double *df,double *cum,double *ccum)
  * in each sum.
  * NTIRED is INTEGER
  * 
- * QCONV   --- .TRUE. if convergence achieved -
+ * QCONV   --- .PNL_TRUE. if convergence achieved -
  * i.e., program did not stop on NTIRED criterion.
  * QCONV is LOGICAL
  * 
@@ -6469,15 +6469,15 @@ DSTINV:
  * STATUS = 1.
  * DOUBLE PRECISION FX
  * 
- * QLEFT <-- Defined only if QMFINV returns .FALSE.  In that
- * case it is .TRUE. If the stepping search terminated
- * unsucessfully at SMALL.  If it is .FALSE. the search
+ * QLEFT <-- Defined only if QMFINV returns .PNL_FALSE.  In that
+ * case it is .PNL_TRUE. If the stepping search terminated
+ * unsucessfully at SMALL.  If it is .PNL_FALSE. the search
  * terminated unsucessfully at BIG.
  * QLEFT is LOGICAL
  * 
- * QHI <-- Defined only if QMFINV returns .FALSE.  In that
- * case it is .TRUE. if F(X) .GT. Y at the termination
- * of the search and .FALSE. if F(X) .LT. Y at the
+ * QHI <-- Defined only if QMFINV returns .PNL_FALSE.  In that
+ * case it is .PNL_TRUE. if F(X) .GT. Y at the termination
+ * of the search and .PNL_FALSE. if F(X) .LT. Y at the
  * termination of the search.
  * QHI is LOGICAL
  * 
@@ -6500,18 +6500,18 @@ static void dinvr(int *status,double *x,double *fx,
  * This routine sets quantities needed by INVR.
  * More Precise Description of INVR -
  * F must be a monotone function, the results of QMFINV are
- * otherwise undefined.  QINCR must be .TRUE. if F is non-
- * decreasing and .FALSE. if F is non-increasing.
- * QMFINV will return .TRUE. if and only if F(SMALL) and
+ * otherwise undefined.  QINCR must be .PNL_TRUE. if F is non-
+ * decreasing and .PNL_FALSE. if F is non-increasing.
+ * QMFINV will return .PNL_TRUE. if and only if F(SMALL) and
  * F(BIG) bracket Y, i. e.,
- * QINCR is .TRUE. and F(SMALL).LE.Y.LE.F(BIG) or
- * QINCR is .FALSE. and F(BIG).LE.Y.LE.F(SMALL)
- * if QMFINV returns .TRUE., then the X returned satisfies
+ * QINCR is .PNL_TRUE. and F(SMALL).LE.Y.LE.F(BIG) or
+ * QINCR is .PNL_FALSE. and F(BIG).LE.Y.LE.F(SMALL)
+ * if QMFINV returns .PNL_TRUE., then the X returned satisfies
  * the following condition.  let
  * TOL(X) = MAX(ABSTOL,RELTOL*ABS(X))
- * then if QINCR is .TRUE.,
+ * then if QINCR is .PNL_TRUE.,
  * F(X-TOL(X)) .LE. Y .LE. F(X+TOL(X))
- * and if QINCR is .FALSE.
+ * and if QINCR is .PNL_FALSE.
  * F(X-TOL(X)) .GE. Y .GE. F(X+TOL(X))
  * Arguments
  * SMALL --> The left endpoint of the interval to be
@@ -6540,7 +6540,7 @@ static void dinvr(int *status,double *x,double *fx,
  * Iteratively steps right or left until it bounds X.
  * At each step which doesn't bound X, the step size is doubled.
  * The routine is careful never to step beyond SMALL or BIG.  If
- * it hasn't bounded X at SMALL or BIG, QMFINV returns .FALSE.
+ * it hasn't bounded X at SMALL or BIG, QMFINV returns .PNL_FALSE.
  * after setting QLEFT and QHI.
  * If X is successfully bounded then Algorithm R of the paper
  * 'Two Efficient Algorithms with Guaranteed Convergence for
@@ -6808,13 +6808,13 @@ S280:
  * inverval in X containing the solution above.
  * DOUBLE PRECISION XHI
  * 
- * QLEFT <-- .TRUE. if the stepping search terminated unsucessfully
- * at XLO.  If it is .FALSE. the search terminated
+ * QLEFT <-- .PNL_TRUE. if the stepping search terminated unsucessfully
+ * at XLO.  If it is .PNL_FALSE. the search terminated
  * unsucessfully at XHI.
  * QLEFT is LOGICAL
  * 
- * QHI <-- .TRUE. if F(X) .GT. Y at the termination of the
- * search and .FALSE. if F(X) .LT. Y at the
+ * QHI <-- .PNL_TRUE. if F(X) .GT. Y at the termination of the
+ * search and .PNL_FALSE. if F(X) .LT. Y at the
  * termination of the search.
  * QHI is LOGICAL
  * 
@@ -6838,7 +6838,7 @@ static void dzror(int *status,double *x,double *fx,double *xlo,
  * Input condition. F is a double precision function of a single
  * double precision argument and XLO and XHI are such that
  * F(XLO)*F(XHI)  .LE.  0.0
- * If the input condition is met, QRZERO returns .TRUE.
+ * If the input condition is met, QRZERO returns .PNL_TRUE.
  * and output values of XLO and XHI satisfy the following
  * F(XLO)*F(XHI)  .LE. 0.
  * ABS(F(XLO)  .LE. ABS(F(XHI)
@@ -6846,7 +6846,7 @@ static void dzror(int *status,double *x,double *fx,double *xlo,
  * where
  * TOL(X) = MAX(ABSTOL,RELTOL*ABS(X))
  * If this algorithm does not find XLO and XHI satisfying
- * these conditions then QRZERO returns .FALSE.  This
+ * these conditions then QRZERO returns .PNL_FALSE.  This
  * implies that the input condition was not met.
  * Arguments
  * XLO --> The left endpoint of the interval to be

@@ -248,7 +248,7 @@ L70:
 
   /*     eliminate the spike. */
 
-  *sing = FALSE;
+  *sing = PNL_FALSE;
   if (nm1 < 1)
     {
       goto L140;
@@ -311,7 +311,7 @@ L120:
 
       if (s[jj] == 0.)
         {
-          *sing = TRUE;
+          *sing = PNL_TRUE;
         }
       jj += m - j + 1;
       /* L130: */
@@ -330,7 +330,7 @@ L140:
     }
   if (s[jj] == 0.)
     {
-      *sing = TRUE;
+      *sing = PNL_TRUE;
     }
   return;
 

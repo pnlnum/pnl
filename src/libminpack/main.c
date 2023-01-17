@@ -116,7 +116,7 @@ static void test_hybrX()
   f.function = fcn_fsolve;
   f.Dfunction = NULL;
   f.params = NULL;
-  info = pnl_root_fsolve(&f, x, fvec, xtol, maxfev, &nfev, diag, FALSE);
+  info = pnl_root_fsolve(&f, x, fvec, xtol, maxfev, &nfev, diag, PNL_FALSE);
   fnorm = pnl_vect_norm_two(fvec);
   printf("     final l2 norm of the residuals %15.7g\n\n", fnorm);
   printf("     number of function evaluations  %10i\n\n", nfev);
@@ -132,7 +132,7 @@ static void test_hybrX()
   f.function = fcn_fsolve;
   f.Dfunction = Dfcn_fsolve;
   f.params = NULL;
-  info = pnl_root_fsolve(&f, x, fvec, xtol, maxfev, &nfev, diag, FALSE);
+  info = pnl_root_fsolve(&f, x, fvec, xtol, maxfev, &nfev, diag, PNL_FALSE);
   fnorm = pnl_vect_norm_two(fvec);
   printf("     final l2 norm of the residuals %15.7g\n\n", fnorm);
   printf("     number of function evaluations  %10i\n\n", nfev);
@@ -174,7 +174,7 @@ static void test_lmdif()
   f.function = fcn_lsq;
   f.Dfunction = NULL;
   f.params = NULL;
-  info = pnl_root_fsolve_lsq(&f, x, m, fvec, tol, tol, 0., maxfev, &nfev, NULL, TRUE);
+  info = pnl_root_fsolve_lsq(&f, x, m, fvec, tol, tol, 0., maxfev, &nfev, NULL, PNL_TRUE);
 
   fnorm = pnl_vect_norm_two(fvec);
 
@@ -190,7 +190,7 @@ static void test_lmdif()
   f.function = fcn_lsq;
   f.Dfunction = Dfcn_lsq;
   f.params = NULL;
-  info = pnl_root_fsolve_lsq(&f, x, m, fvec, tol, tol, 0., maxfev, &nfev, NULL, TRUE);
+  info = pnl_root_fsolve_lsq(&f, x, m, fvec, tol, tol, 0., maxfev, &nfev, NULL, PNL_TRUE);
 
   fnorm = pnl_vect_norm_two(fvec);
 

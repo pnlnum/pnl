@@ -200,7 +200,7 @@ L40:
 
   /*        compute the qr factorization of the jacobian. */
 
-  pnl_minpack_qrfac(m, n, &fjac[fjac_offset], ldfjac, TRUE, &ipvt[1], n, &wa1[1], &
+  pnl_minpack_qrfac(m, n, &fjac[fjac_offset], ldfjac, PNL_TRUE, &ipvt[1], n, &wa1[1], &
                     wa2[1], &wa3[1]);
 
   /*        on the first iteration and if mode is 1, scale according */

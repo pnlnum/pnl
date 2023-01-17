@@ -74,7 +74,7 @@ static PnlIterationBase *pnl_iteration_base_create(int max_iter_, double t)
  *
  * @param it : a PnlIterationBase ptr.
  * @param rhs : a PnlVect ptr
- * @return   TRUE or FALSE.
+ * @return   PNL_TRUE or PNL_FALSE.
  */
 static int pnl_iteration_base_converged(PnlIterationBase *it, const PnlVect *rhs)
 {
@@ -88,9 +88,9 @@ static int pnl_iteration_base_converged(PnlIterationBase *it, const PnlVect *rhs
       printf(" converged in %d iterations \n", it->iteration);
       return true;
     }
-  return FALSE;
+  return PNL_FALSE;
 #endif
-  return (it->resid <= it->tol_) ? TRUE : FALSE;
+  return (it->resid <= it->tol_) ? PNL_TRUE : PNL_FALSE;
 }
 
 /**
@@ -98,12 +98,12 @@ static int pnl_iteration_base_converged(PnlIterationBase *it, const PnlVect *rhs
  *
  * @param it : a PnlIterationBase ptr.
  * @param Res : a double
- * @return   TRUE or FALSE.
+ * @return   PNL_TRUE or PNL_FALSE.
  */
 static int pnl_iteration_base_converged_norm(PnlIterationBase *it, double Res)
 {
   it->resid = Res / it->normb;
-  return (it->resid <= it->tol_) ? TRUE : FALSE;
+  return (it->resid <= it->tol_) ? PNL_TRUE : PNL_FALSE;
 }
 
 /**
@@ -112,12 +112,12 @@ static int pnl_iteration_base_converged_norm(PnlIterationBase *it, double Res)
  *
  * @param it : a PnlIterationBase ptr.
  * @param rhs : a PnlVect ptr
- * @return   TRUE or FALSE.
+ * @return   PNL_TRUE or PNL_FALSE.
  */
 static int pnl_iteration_base_finished(PnlIterationBase *it, const  PnlVect *rhs)
 {
   if (pnl_iteration_base_converged(it, rhs))
-    return TRUE;
+    return PNL_TRUE;
   /*    printf("converged in %d iterations , with residu = %f max_iter = %d \n" , */
   /*       it->iteration,it->resid,it->max_iter); */
   if ((*it).iteration > (*it).max_iter)
@@ -126,9 +126,9 @@ static int pnl_iteration_base_finished(PnlIterationBase *it, const  PnlVect *rhs
       printf("iterative Solver not converged in last iterations with residu = %f iter = %d \n" ,
              it->resid, it->iteration);
       abort();
-      return TRUE;
+      return PNL_TRUE;
     }
-  return FALSE;
+  return PNL_FALSE;
 
 }
 
@@ -138,7 +138,7 @@ static int pnl_iteration_base_finished(PnlIterationBase *it, const  PnlVect *rhs
  *  *
  *  * @param it : a PnlIterationBase ptr.
  *  * @param Res : a double
- *  * @return   TRUE or FALSE.
+ *  * @return   PNL_TRUE or PNL_FALSE.
  *  *\/
  * static int pnl_iteration_base_finished_norm(PnlIterationBase * it,double Res)
  * {
@@ -220,7 +220,7 @@ static int pnl_iteration_base_error_code(PnlIterationBase *it)
  * Test first iteration
  *
  * @param it : a PnlIterationBase ptr.
- * @return   TRUE or FALSE
+ * @return   PNL_TRUE or PNL_FALSE
  */
 static int pnl_iteration_base_first(PnlIterationBase *it)
 {

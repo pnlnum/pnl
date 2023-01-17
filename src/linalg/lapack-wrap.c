@@ -54,43 +54,43 @@ static int pnl_dsyev(PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvecto
 /**
  * Check if a (real) matrix is symmetric
  * @param A a real matrix
- * @return TRUE or FALSE
+ * @return PNL_TRUE or PNL_FALSE
  */
 static int pnl_mat_is_sym(const PnlMat *A)
 {
   int i, j;
 
-  if (A->m != A->n) return FALSE;
+  if (A->m != A->n) return PNL_FALSE;
   for (i = 0 ; i < A->m ; i++)
     for (j = 0 ; j < i ; j++)
       {
-        if (PNL_MGET(A, i, j) != PNL_MGET(A, j, i)) return FALSE;
+        if (PNL_MGET(A, i, j) != PNL_MGET(A, j, i)) return PNL_FALSE;
       }
-  return TRUE;
+  return PNL_TRUE;
 }
 
 /**
  * Check if a (complex) matrix is Hermitian
  * @param A a real matrix
- * @return TRUE or FALSE
+ * @return PNL_TRUE or PNL_FALSE
  */
 static int pnl_mat_complex_is_he(const PnlMatComplex *A)
 {
   int i, j;
 
-  if (A->m != A->n) return FALSE;
+  if (A->m != A->n) return PNL_FALSE;
   for (i = 0 ; i < A->m ; i++)
     {
       const dcomplex Aii = PNL_MGET(A, i, i);
-      if (Aii.i != 0.) return FALSE;
+      if (Aii.i != 0.) return PNL_FALSE;
       for (j = 0 ; j < i ; j++)
         {
           const dcomplex Aij = PNL_MGET(A, i, j);
           const dcomplex conj_Aji = Conj(PNL_MGET(A, j, i));
-          if ((Aij.r != conj_Aji.r) || (Aij.i != conj_Aji.i)) return FALSE;
+          if ((Aij.r != conj_Aji.r) || (Aij.i != conj_Aji.i)) return PNL_FALSE;
         }
     }
-  return TRUE;
+  return PNL_TRUE;
 }
 
 /**
@@ -229,7 +229,7 @@ int pnl_mat_qr_syslin(PnlVect *x, const PnlMat *Q, const PnlMat *R,
  * @param v a vector containing the eigenvalues on exit
  * @param P a matrix containing the eigenvectors on exit (P is orthonormal)
  * @param A a real symmetric matrix
- * @param with_eigenvectors can be TRUE to compute the eigenvectors or FALSE
+ * @param with_eigenvectors can be PNL_TRUE to compute the eigenvectors or PNL_FALSE
  * if they are not required, in this latter case P can be NULL
  * @return OK or FAIL
  */
@@ -242,7 +242,7 @@ static int pnl_dsyev(PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvecto
   PnlMat *Acopy;
 
   /* Clone A, because dsyev modifies its input argument */
-  if (with_eigenvectors == FALSE)
+  if (with_eigenvectors == PNL_FALSE)
     {
       Acopy = pnl_mat_copy(A);
     }
@@ -254,11 +254,11 @@ static int pnl_dsyev(PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvecto
   pnl_vect_resize(v, n);
 
   lwork = -1;
-  C2F(dsyev)((with_eigenvectors == TRUE) ? "V" : "N", "L", &n, Acopy->array, &n, v->array,
+  C2F(dsyev)((with_eigenvectors == PNL_TRUE) ? "V" : "N", "L", &n, Acopy->array, &n, v->array,
              &qlwork, &lwork, &info);
   lwork = (int) qlwork;
   if ((work = MALLOC_DOUBLE(lwork)) == NULL) goto err;
-  C2F(dsyev)((with_eigenvectors == TRUE) ? "V" : "N", "L", &n, Acopy->array, &n, v->array,
+  C2F(dsyev)((with_eigenvectors == PNL_TRUE) ? "V" : "N", "L", &n, Acopy->array, &n, v->array,
              work, &lwork, &info);
 
   if (info != 0)
@@ -272,12 +272,12 @@ static int pnl_dsyev(PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvecto
 
 
   free(work);
-  if (with_eigenvectors == FALSE) pnl_mat_free(&Acopy);
+  if (with_eigenvectors == PNL_FALSE) pnl_mat_free(&Acopy);
   return OK;
 
 err:
   free(work);
-  if (with_eigenvectors == FALSE) pnl_mat_free(&Acopy);
+  if (with_eigenvectors == PNL_FALSE) pnl_mat_free(&Acopy);
   return FAIL;
 }
 
@@ -288,7 +288,7 @@ err:
  * @param v a vector containing the eigenvalues on exit
  * @param P a matrix containing the eigenvectors on exit
  * @param A a real non symmetric matrix
- * @param with_eigenvectors can be TRUE to compute the eigenvectors or FALSE
+ * @param with_eigenvectors can be PNL_TRUE to compute the eigenvectors or PNL_FALSE
  * if they are not required, in this latter case P can be NULL
  * @return OK or FAIL
  */
@@ -302,7 +302,7 @@ static int pnl_dgeev(PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvecto
 
   wi = MALLOC_DOUBLE(n);
   if (wi == NULL) goto err;
-  if (with_eigenvectors == TRUE)
+  if (with_eigenvectors == PNL_TRUE)
     {
       pnl_mat_resize(P, n, n);
     }
@@ -314,13 +314,13 @@ static int pnl_dgeev(PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvecto
   tA = pnl_mat_transpose(A);
 
   lwork = -1;
-  C2F(dgeev)("N", (with_eigenvectors == TRUE) ? "V" : "N",  &n, tA->array, &n, v->array, wi,
-             NULL, &n, (with_eigenvectors == FALSE) ? NULL : P->array, &n,
+  C2F(dgeev)("N", (with_eigenvectors == PNL_TRUE) ? "V" : "N",  &n, tA->array, &n, v->array, wi,
+             NULL, &n, (with_eigenvectors == PNL_FALSE) ? NULL : P->array, &n,
              &qlwork, &lwork, &info);
   lwork = (int) qlwork;
   if ((work = MALLOC_DOUBLE(lwork)) == NULL) goto err;
-  C2F(dgeev)("N", (with_eigenvectors == FALSE) ? "N" : "V",  &n, tA->array, &n, v->array, wi,
-             NULL, &n, (with_eigenvectors == FALSE) ? NULL : P->array, &n,
+  C2F(dgeev)("N", (with_eigenvectors == PNL_FALSE) ? "N" : "V",  &n, tA->array, &n, v->array, wi,
+             NULL, &n, (with_eigenvectors == PNL_FALSE) ? NULL : P->array, &n,
              work, &lwork, &info);
 
   if (info != 0)
@@ -360,7 +360,7 @@ err:
  * @param v a vector containing the eigenvalues on exit
  * @param P a matrix containing the eigenvectors on exit
  * @param A a matrix
- * @param with_eigenvectors can be TRUE to compute the eigenvectors or FALSE
+ * @param with_eigenvectors can be PNL_TRUE to compute the eigenvectors or PNL_FALSE
  * if they are not required, in this latter case P can be NULL
  * @return OK or FAIL
  */
@@ -370,7 +370,7 @@ int pnl_mat_eigen(PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors)
   int info;
 
   is_sym = pnl_mat_is_sym(A);
-  if (is_sym == TRUE) info = pnl_dsyev(v, P, A, with_eigenvectors);
+  if (is_sym == PNL_TRUE) info = pnl_dsyev(v, P, A, with_eigenvectors);
   else info = pnl_dgeev(v, P, A, with_eigenvectors);
 
   if (info == FAIL)
@@ -401,7 +401,7 @@ int pnl_mat_log(PnlMat *B, const PnlMat *A)
   P = pnl_mat_create(n, n);
   D = pnl_vect_create(n);
 
-  if (pnl_mat_eigen(D, P, A, TRUE) != OK)
+  if (pnl_mat_eigen(D, P, A, PNL_TRUE) != OK)
     {
       pnl_mat_free(&P);
       pnl_vect_free(&D);
@@ -452,7 +452,7 @@ int pnl_mat_log(PnlMat *B, const PnlMat *A)
  * @param v a vector containing the eigenvalues on exit
  * @param P a matrix containing the eigenvectors on exit (P is orthonormal)
  * @param A a complex Hermitian matrix
- * @param with_eigenvectors can be TRUE to compute the eigenvectors or FALSE
+ * @param with_eigenvectors can be PNL_TRUE to compute the eigenvectors or PNL_FALSE
  * if they are not required, in this latter case P can be NULL
  * @return OK or FAIL
  */
@@ -471,11 +471,11 @@ static int pnl_zheev(PnlVectComplex *v, PnlMatComplex *P, const PnlMatComplex *A
   pnl_vect_complex_resize(v, n);
 
   lwork = -1;
-  C2F(zheev)((with_eigenvectors == TRUE) ? "V" : "N", "L", &n, P->array, &n, w,
+  C2F(zheev)((with_eigenvectors == PNL_TRUE) ? "V" : "N", "L", &n, P->array, &n, w,
              &qlwork, &lwork, rwork, &info);
   lwork = (int) qlwork.r;
   if ((work = MALLOC_COMPLEX(lwork)) == NULL) goto err;
-  C2F(zheev)((with_eigenvectors == TRUE) ? "V" : "N", "L", &n, P->array, &n, w,
+  C2F(zheev)((with_eigenvectors == PNL_TRUE) ? "V" : "N", "L", &n, P->array, &n, w,
              work, &lwork, rwork, &info);
 
   if (info != 0)
@@ -511,7 +511,7 @@ err:
  * @param v a vector containing the eigenvalues on exit
  * @param P a matrix containing the eigenvectors on exit
  * @param A a complex matrix
- * @param with_eigenvectors can be TRUE to compute the eigenvectors or FALSE
+ * @param with_eigenvectors can be PNL_TRUE to compute the eigenvectors or PNL_FALSE
  * if they are not required, in this latter case P can be NULL
  * @return OK or FAIL
  */
@@ -525,7 +525,7 @@ static int pnl_zgeev(PnlVectComplex *v, PnlMatComplex *P, const PnlMatComplex *A
   PnlMatComplex *tA;
 
   rwork = MALLOC_DOUBLE(2 * n);
-  if (with_eigenvectors == TRUE)
+  if (with_eigenvectors == PNL_TRUE)
     {
       pnl_mat_complex_resize(P, n, n);
     }
@@ -538,13 +538,13 @@ static int pnl_zgeev(PnlVectComplex *v, PnlMatComplex *P, const PnlMatComplex *A
 
 
   lwork = -1;
-  C2F(zgeev)("N", (with_eigenvectors == TRUE) ? "V" : "N", &n, tA->array, &n, v->array,
-             NULL, &n, (with_eigenvectors == FALSE) ? NULL : P->array, &n,
+  C2F(zgeev)("N", (with_eigenvectors == PNL_TRUE) ? "V" : "N", &n, tA->array, &n, v->array,
+             NULL, &n, (with_eigenvectors == PNL_FALSE) ? NULL : P->array, &n,
              &qlwork, &lwork, rwork, &info);
   lwork = (int) qlwork.r;
   if ((work = MALLOC_COMPLEX(lwork)) == NULL) goto err;
-  C2F(zgeev)("N", (with_eigenvectors == FALSE) ? "N" : "V", &n, tA->array, &n, v->array,
-             NULL, &n, (with_eigenvectors == FALSE) ? NULL : P->array, &n,
+  C2F(zgeev)("N", (with_eigenvectors == PNL_FALSE) ? "N" : "V", &n, tA->array, &n, v->array,
+             NULL, &n, (with_eigenvectors == PNL_FALSE) ? NULL : P->array, &n,
              work, &lwork, rwork, &info);
 
   if (info != 0)
@@ -574,7 +574,7 @@ err:
  * @param v a vector containing the eigenvalues on exit
  * @param P a matrix containing the eigenvectors on exit
  * @param A a matrix
- * @param with_eigenvectors can be TRUE to compute the eigenvectors or FALSE
+ * @param with_eigenvectors can be PNL_TRUE to compute the eigenvectors or PNL_FALSE
  * if they are not required, in this latter case P can be NULL
  * @return OK or FAIL
  */
@@ -584,7 +584,7 @@ int pnl_mat_complex_eigen(PnlVectComplex *v, PnlMatComplex *P, const PnlMatCompl
   int info;
 
   is_sym = pnl_mat_complex_is_he(A);
-  if (is_sym == TRUE) info = pnl_zheev(v, P, A, with_eigenvectors);
+  if (is_sym == PNL_TRUE) info = pnl_zheev(v, P, A, with_eigenvectors);
   else info = pnl_zgeev(v, P, A, with_eigenvectors);
 
   if (info == FAIL)
@@ -615,7 +615,7 @@ int pnl_mat_complex_log(PnlMatComplex *B, const PnlMatComplex *A)
   P = pnl_mat_complex_create(n, n);
   D = pnl_vect_complex_create(n);
 
-  if (pnl_mat_complex_eigen(D, P, A, TRUE) != OK)
+  if (pnl_mat_complex_eigen(D, P, A, PNL_TRUE) != OK)
     {
       pnl_mat_complex_free(&P);
       pnl_vect_complex_free(&D);
