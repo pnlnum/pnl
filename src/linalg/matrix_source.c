@@ -538,12 +538,13 @@ BASE FUNCTION(pnl_mat, trace)(const TYPE(PnlMat) *M)
 }
 
 /**
- * Print a matrix to a file
+ * Print a matrix to a csv file
  *
  * @param fic a file descriptor.
  * @param M a TYPE(PnlMat) pointer.
+ * @param sep a single char used as separator
  */
-void FUNCTION(pnl_mat, fprint)(FILE *fic, const TYPE(PnlMat) *M)
+void FUNCTION(pnl_mat, fprint_csv)(FILE *fic, const TYPE(PnlMat) *M, char sep)
 {
   int i, j;
   for (i = 0; i < M->m; i++)
@@ -551,10 +552,32 @@ void FUNCTION(pnl_mat, fprint)(FILE *fic, const TYPE(PnlMat) *M)
       for (j = 0; j < M->n; j++)
         {
           fprintf(fic, OUT_FORMAT, OUT_PUT_FORMAT(PNL_MGET(M, i, j)));
-          if (j != M->n - 1) fprintf(fic, " ");
+          if (j != M->n - 1) fprintf(fic, "%c", sep);
         }
       fprintf(fic, "\n");
     }
+}
+
+/**
+ * Print a matrix to the standard output
+ *
+ * @param M a TYPE(PnlMat) pointer.
+ * @param sep a single char used as separator
+ */
+void FUNCTION(pnl_mat, print_csv)(const TYPE(PnlMat) *M, char sep)
+{
+  FUNCTION(pnl_mat, fprint_csv)(stdout, M, sep);
+}
+
+/**
+ * Print a matrix to a file
+ *
+ * @param fic a file descriptor.
+ * @param M a TYPE(PnlMat) pointer.
+ */
+void FUNCTION(pnl_mat, fprint)(FILE *fic, const TYPE(PnlMat) *M)
+{
+  FUNCTION(pnl_mat, fprint_csv)(stdout, M, ' ');
 }
 
 /**
@@ -566,6 +589,7 @@ void FUNCTION(pnl_mat, print)(const TYPE(PnlMat) *M)
 {
   FUNCTION(pnl_mat, fprint)(stdout, M);
 }
+
 
 /**
  * Print a TYPE(PnlMat) to a file in a format compatible with Nsp
