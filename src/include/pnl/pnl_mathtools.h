@@ -236,8 +236,7 @@ extern int pnl_isequal(double x, double y, double relerr);
 #endif
 
 #define OK 0
-#define WRONG 1
-#define FAIL 1 /* synonym of WRONG (more menaningful) */
+#define FAIL 1
 
 /**
  * f: R --> R

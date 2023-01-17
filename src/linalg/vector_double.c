@@ -142,7 +142,7 @@ PnlVectCompact *pnl_vect_compact_create_from_ptr(int n, double const *x)
  * @param v the PvlVectCompact to be resized
  * @param size new size
  * @param x new value to set
- * @return OK or WRONG
+ * @return OK or FAIL
  */
 int pnl_vect_compact_resize(PnlVectCompact *v, int size, double x)
 {

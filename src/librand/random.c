@@ -1022,7 +1022,7 @@ char *pnl_rng_get_name(PnlRngType id)
  * @param dimension dimension of the value space to simulate in. Only
  * used for PNL_QMC.
  * @param samples maximum number of samples requested. Only used for PNL_QMC.
- * @return OK or WRONG
+ * @return OK or FAIL
  */
 int pnl_rand_init(int type_generator, int dimension, long samples)
 {
