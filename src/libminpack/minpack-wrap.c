@@ -191,7 +191,7 @@ static int lmder_fcn(void *pnl_func, int m, int n, const double *x, double *fvec
  * @param error_msg a boolean PNL_TRUE or PNL_FALSE. If PNL_TRUE, a message is printed
  * if the hybrd function did not return properly
  *
- * @return OK or FAIL (if FAIL, use error_msg=PNL_TRUE to know what happened)
+ * @return PNL_OK or PNL_FAIL (if PNL_FAIL, use error_msg=PNL_TRUE to know what happened)
  */
 int pnl_root_fsolve(PnlRnFuncRnDFunc *f, PnlVect *x, PnlVect *fx,  double xtol,
                     int maxfev, int *nfev, PnlVect *scale, int error_msg)
@@ -277,8 +277,8 @@ int pnl_root_fsolve(PnlRnFuncRnDFunc *f, PnlVect *x, PnlVect *fx,  double xtol,
    */
   if (error_msg == PNL_FALSE)
     {
-      if (info == 1) return OK;
-      else return FAIL;
+      if (info == 1) return PNL_OK;
+      else return PNL_FAIL;
     }
   switch (info)
     {
@@ -303,8 +303,8 @@ int pnl_root_fsolve(PnlRnFuncRnDFunc *f, PnlVect *x, PnlVect *fx,  double xtol,
           printf("Execution was aborted.\n");
         }
     }
-  if (info == 1) return OK;
-  else return FAIL;
+  if (info == 1) return PNL_OK;
+  else return PNL_FAIL;
 
 }
 
@@ -330,7 +330,7 @@ int pnl_root_fsolve(PnlRnFuncRnDFunc *f, PnlVect *x, PnlVect *fx,  double xtol,
  * @param error_msg a boolean PNL_TRUE or PNL_FALSE. If PNL_TRUE, a message is printed
  * if the lmdif or lmder function did not return properly
  *
- * @return OK or FAIL (if FAIL, use error_msg=PNL_TRUE to know what happened)
+ * @return PNL_OK or PNL_FAIL (if PNL_FAIL, use error_msg=PNL_TRUE to know what happened)
  */
 int pnl_root_fsolve_lsq(PnlRnFuncRmDFunc *f, PnlVect *x, int m, PnlVect *fx,  double xtol,
                         double ftol, double gtol, int maxfev, int *nfev,
@@ -429,40 +429,40 @@ int pnl_root_fsolve_lsq(PnlRnFuncRmDFunc *f, PnlVect *x, int m, PnlVect *fx,  do
     {
     case 0:
       if (msg) printf("Improper input parameters.\n");
-      return FAIL;
+      return PNL_FAIL;
       break;
     case 1:
       if (msg) printf("Both actual and predicted relative reductions in the sum\nof squares are at most ftol.\n");
-      return OK;
+      return PNL_OK;
       break;
     case 2:
       if (msg) printf("Relative error between two consecutive iterates is at most xtol.\n");
-      return OK;
+      return PNL_OK;
       break;
     case 3:
       if (msg) printf("Both actual and predicted relative reductions in the sum\nof squares are at most ftol.\n");
       if (msg) printf("Relative error between two consecutive iterates is at most xtol.\n");
-      return OK;
+      return PNL_OK;
       break;
     case 4:
       if (msg) printf("The cosine of the angle between fvec and any\ncolumn of the jacobian is at most gtol in\nabsolute value.\n");
-      return OK;
+      return PNL_OK;
       break;
     case 5:
       if (msg) printf("Number of calls to fcn has reached or exceeded maxfev=%d.\n", maxfev);
-      return FAIL;
+      return PNL_FAIL;
       break;
     case 6:
       if (msg) printf("ftol is too small. No further reduction in\nthe sum of squares is possible.\n");
-      return OK;
+      return PNL_OK;
       break;
     case 7:
       if (msg) printf("xtol is too small. No further improvement in\nthe approximate solution x is possible.\n");
-      return OK;
+      return PNL_OK;
       break;
     case 8:
       if (msg) printf("gtol is too small. fvec is orthogonal to the\ncolumns of the jacobian to machine precision.\n");
-      return OK;
+      return PNL_OK;
       break;
 
     default:
@@ -470,7 +470,7 @@ int pnl_root_fsolve_lsq(PnlRnFuncRmDFunc *f, PnlVect *x, int m, PnlVect *fx,  do
         {
           printf("Execution was aborted.\n");
         }
-      return FAIL;
+      return PNL_FAIL;
     }
 
 }

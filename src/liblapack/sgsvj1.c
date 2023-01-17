@@ -661,7 +661,7 @@ static float c_b35 = 1.f;
 					}
 					sva[p] = aapp;
 				    }
-/*              end of OK rotation */
+/*              end of PNL_OK rotation */
 				} else {
 				    ++notrot;
 /*           SKIPPED  = SKIPPED  + 1 */

@@ -180,14 +180,14 @@ void pnl_band_mat_free(PnlBandMat **BM)
 int pnl_band_mat_resize(PnlBandMat *BM, int m, int n, int nl, int nu)
 {
   int size;
-  if (m < 0 || n < 0 || nu < 0 || nl < 0) return FAIL;
+  if (m < 0 || n < 0 || nu < 0 || nl < 0) return PNL_FAIL;
   if (m == 0 || n == 0)
     {
       if (BM->array != NULL) free(BM->array);
       BM->array = NULL;
       BM->m = BM->n = BM->m_band = BM->n_band = 0;
       BM->nl = BM->nu = 0;
-      return OK;
+      return PNL_OK;
     }
   size = (nl + nu + 1) * n;
   if (BM->m_band * BM->n_band >= size)
@@ -198,7 +198,7 @@ int pnl_band_mat_resize(PnlBandMat *BM, int m, int n, int nl, int nu)
       BM->n_band = n;
       BM->nl = nl;
       BM->nu = nu;
-      return OK;
+      return PNL_OK;
     }
   /* now BM->size < size */
   BM->m = m;
@@ -208,8 +208,8 @@ int pnl_band_mat_resize(PnlBandMat *BM, int m, int n, int nl, int nu)
   BM->nl = nl;
   BM->nu = nu;
   if (BM->array != NULL) free(BM->array);
-  if ((BM->array = malloc(size * sizeof(double))) == NULL) return FAIL;
-  return OK;
+  if ((BM->array = malloc(size * sizeof(double))) == NULL) return PNL_FAIL;
+  return PNL_OK;
 }
 
 /**

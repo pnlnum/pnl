@@ -401,5 +401,5 @@ int main(int argc, char **argv)
   regression_multid();
   pnl_basis_eval_test();
   pnl_test_finalize("Basis functions");
-  return OK;
+  return PNL_OK;
 }

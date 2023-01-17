@@ -71,7 +71,7 @@ static void update_count_tests (int status)
  */
 int pnl_test_finalize(const char *str)
 {
-  printf ("%s : %s (TOTAL: %d, PASSED: %d, FAILED: %d)\n", str, (count_fail == 0) ? "OK" : "FAIL", count_tests, count_ok, count_fail);
+  printf ("%s : %s (TOTAL: %d, PASSED: %d, FAILED: %d)\n", str, (count_fail == 0) ? "PNL_OK" : "PNL_FAIL", count_tests, count_ok, count_fail);
   return ( count_fail >0 );
 }
 
@@ -90,7 +90,7 @@ void pnl_test_set_ok (const char *str)
   update_count_tests(PNL_TRUE);
   if (verbose) 
     {
-      printf ("\t%s : OK\n", str);
+      printf ("\t%s : PNL_OK\n", str);
     }
 }
 
@@ -104,7 +104,7 @@ void pnl_test_set_ok (const char *str)
 void pnl_test_set_fail (const char *str, double res, double expected)
 {
   update_count_tests(PNL_FALSE);
-  printf ("\t%s : FAIL (observed %.18f expected %.18f)\n", str, res, expected);
+  printf ("\t%s : PNL_FAIL (observed %.18f expected %.18f)\n", str, res, expected);
 }
 
 
@@ -116,7 +116,7 @@ void pnl_test_set_fail (const char *str, double res, double expected)
 void pnl_test_set_fail0(const char *str)
 {
   update_count_tests(PNL_FALSE);
-  printf ("\t%s : FAIL\n", str);
+  printf ("\t%s : PNL_FAIL\n", str);
 }
 
 
@@ -126,7 +126,7 @@ static int pnl_test_eq_aux (double x, double y, double relerr, int(*cmp)(double,
   if ((status == PNL_FALSE) || (verbose == PNL_TRUE))
     {
       printf("\t%s : ", str);
-      printf(status == PNL_FALSE ? "FAIL" : "OK");
+      printf(status == PNL_FALSE ? "PNL_FAIL" : "PNL_OK");
       if (!status)
         {
           printf (" (");
@@ -239,7 +239,7 @@ static int pnl_test_array (const double *X, const double *Y, int n, double reler
   if ((status == PNL_FALSE) || (verbose == PNL_TRUE))
     {
       printf("\t%s : ", str);
-      printf(status == PNL_TRUE ? "OK" : "FAIL");
+      printf(status == PNL_TRUE ? "PNL_OK" : "PNL_FAIL");
       if (status == PNL_FALSE)
         {
           printf(" (");
@@ -272,7 +272,7 @@ int pnl_test_mat_eq_abs (const PnlMat *X, const PnlMat *Y, double abserr, const 
   if ( X->m != Y->m || X->n != Y->n )
     {
       printf ("%s : ", str);
-      printf ("FAIL (size mismatch");
+      printf ("PNL_FAIL (size mismatch");
       printf (fmt, ap); printf (")\n");
       update_count_tests(PNL_FALSE);
       return PNL_FALSE;
@@ -302,7 +302,7 @@ int pnl_test_mat_complex_eq_abs (const PnlMatComplex *X, const PnlMatComplex *Y,
   if ( X->m != Y->m || X->n != Y->n )
     {
       printf ("%s : ", str);
-      printf ("FAIL (size mismatch");
+      printf ("PNL_FAIL (size mismatch");
       printf (fmt, ap); printf (")\n");
       update_count_tests(PNL_FALSE);
       return PNL_FALSE;
@@ -331,7 +331,7 @@ int pnl_test_mat_int_eq(const PnlMatInt *X, const PnlMatInt *Y, const char *str,
   if (status == PNL_FALSE || verbose == PNL_TRUE)
     {
       printf("\t%s : ", str);
-      printf(status ? "OK" : "FAIL");
+      printf(status ? "PNL_OK" : "PNL_FAIL");
       if (!status)
         {
           printf(" (");
@@ -370,7 +370,7 @@ int pnl_test_vect_eq_abs (const PnlVect *X, const PnlVect *Y, double abserr, con
   if (!status || verbose)
     {
       printf("\t%s : ", str);
-      printf(status ? "OK" : "FAIL");
+      printf(status ? "PNL_OK" : "PNL_FAIL");
       if (!status)
         {
           printf(" (");
@@ -409,7 +409,7 @@ int pnl_test_vect_complex_eq_abs (const PnlVectComplex *X, const PnlVectComplex 
   if (!status || verbose)
     {
       printf("\t%s : ", str);
-      printf(status ? "OK" : "FAIL");
+      printf(status ? "PNL_OK" : "PNL_FAIL");
       if (!status)
         {
           printf(" (");
@@ -456,7 +456,7 @@ int pnl_test_hmat_eq_abs (const PnlHmat *X, const PnlHmat *Y, double abserr, con
 
 dim_fail:
   printf ("%s : ", str);
-  printf ("FAIL (size mismatch");
+  printf ("PNL_FAIL (size mismatch");
   printf (fmt, ap); printf (")\n");
   update_count_tests(PNL_FALSE);
   va_end (ap);

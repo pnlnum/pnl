@@ -93,15 +93,15 @@ int pnl_vect_object_resize(PnlVectObject *v, int size)
 {
 
   size_t sizeof_base = 0;
-  if (v->owner == 0) return OK;
-  if (size < 0) return FAIL;
+  if (v->owner == 0) return PNL_OK;
+  if (size < 0) return PNL_FAIL;
   if (size == 0)
     {
       if (v->mem_size > 0) free(v->array);
       v->size = 0;
       v->mem_size = 0;
       v->array = NULL;
-      return OK;
+      return PNL_OK;
     }
 
   if (v->mem_size >= size)
@@ -110,7 +110,7 @@ int pnl_vect_object_resize(PnlVectObject *v, int size)
          allocated block. It may change, but it allows to grow the vector
          quicker */
       v->size = size;
-      return OK;
+      return PNL_OK;
     }
 
   /* Now, v->mem_size < size */
@@ -127,12 +127,12 @@ int pnl_vect_object_resize(PnlVectObject *v, int size)
       break;
     default :
       PNL_MESSAGE(1, "Unknown type in pnl_vect_object_resize.\n");
-      return FAIL;
+      return PNL_FAIL;
     }
-  if ((v->array = realloc(v->array, size * sizeof_base)) == NULL) return FAIL;
+  if ((v->array = realloc(v->array, size * sizeof_base)) == NULL) return PNL_FAIL;
   v->size = size;
   v->mem_size = size;
-  return OK;
+  return PNL_OK;
 }
 
 

@@ -42,7 +42,7 @@
  * set to 0.
  *
  * @param M : a PnlMat pointer.
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int FUNCTION(pnl_mat, chol)(TYPE(PnlMat) *M)
 {
@@ -56,7 +56,7 @@ int FUNCTION(pnl_mat, chol)(TYPE(PnlMat) *M)
   if (info != 0)
     {
       PNL_MESSAGE_ERROR("matrix is singular", "pnl_mat_chol");
-      return FAIL;
+      return PNL_FAIL;
     }
   /* Sets the upper part to 0 */
   for (i = 0 ; i < M->m ; i++)
@@ -66,7 +66,7 @@ int FUNCTION(pnl_mat, chol)(TYPE(PnlMat) *M)
           PNL_MLET(M, i, j) = ZERO;
         }
     }
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -82,7 +82,7 @@ int FUNCTION(pnl_mat, chol)(TYPE(PnlMat) *M)
  * @param rank (output) rank of the matrix
  * @param p An integer vector representing a permutation
  *
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int FUNCTION(pnl_mat, pchol)(TYPE(PnlMat) *M, double tol, int *rank, PnlVectInt *p)
 {
@@ -102,7 +102,7 @@ int FUNCTION(pnl_mat, pchol)(TYPE(PnlMat) *M, double tol, int *rank, PnlVectInt 
   if (info < 0)
     {
       PNL_MESSAGE_ERROR("matrix has illegal entries", "pnl_mat_pchol");
-      return FAIL;
+      return PNL_FAIL;
     }
   /* Sets the upper part to 0 */
   for (i = 0 ; i < M->m ; i++)
@@ -114,7 +114,7 @@ int FUNCTION(pnl_mat, pchol)(TYPE(PnlMat) *M, double tol, int *rank, PnlVectInt 
     }
   /* C indices start at 0 */
   pnl_vect_int_minus_scalar(p, 1);
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -123,7 +123,7 @@ int FUNCTION(pnl_mat, pchol)(TYPE(PnlMat) *M, double tol, int *rank, PnlVectInt 
  *
  * @param A the matrix to decompose.
  * @param p a PnlPermutation.
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int FUNCTION(pnl_mat, lu)(TYPE(PnlMat) *A, PnlPermutation *p)
 {
@@ -136,12 +136,12 @@ int FUNCTION(pnl_mat, lu)(TYPE(PnlMat) *A, PnlPermutation *p)
   if (info != 0)
     {
       PNL_MESSAGE_ERROR("LU decomposition cannot be computed", "pnl_mat_lu");
-      return FAIL;
+      return PNL_FAIL;
     }
   FUNCTION(pnl_mat, sq_transpose)(A);
   /* C indices start at 0 */
   pnl_vect_int_minus_scalar(p, 1);
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -150,7 +150,7 @@ int FUNCTION(pnl_mat, lu)(TYPE(PnlMat) *A, PnlPermutation *p)
  * @param x already existing PnlVect that contains the solution on exit
  * @param A an upper triangular matric
  * @param b right hand side member
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int FUNCTION(pnl_mat, upper_syslin)(TYPE(PnlVect) *x, const TYPE(PnlMat) *A, const  TYPE(PnlVect) *b)
 {
@@ -167,9 +167,9 @@ int FUNCTION(pnl_mat, upper_syslin)(TYPE(PnlVect) *x, const TYPE(PnlMat) *A, con
   if (info != 0)
     {
       PNL_MESSAGE_ERROR("Matrix is singular", "pnl_mat_upper_syslin");
-      return FAIL;
+      return PNL_FAIL;
     }
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -178,7 +178,7 @@ int FUNCTION(pnl_mat, upper_syslin)(TYPE(PnlVect) *x, const TYPE(PnlMat) *A, con
  * @param x already existing PnlVect that contains the solution on exit
  * @param A a lower triangular matrix
  * @param b right hand side member
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int FUNCTION(pnl_mat, lower_syslin)(TYPE(PnlVect) *x, const TYPE(PnlMat) *A, const  TYPE(PnlVect) *b)
 {
@@ -195,9 +195,9 @@ int FUNCTION(pnl_mat, lower_syslin)(TYPE(PnlVect) *x, const TYPE(PnlMat) *A, con
   if (info != 0)
     {
       PNL_MESSAGE_ERROR("Matrix is singular", "pnl_mat_lower_syslin");
-      return FAIL;
+      return PNL_FAIL;
     }
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -206,7 +206,7 @@ int FUNCTION(pnl_mat, lower_syslin)(TYPE(PnlVect) *x, const TYPE(PnlMat) *A, con
  *
  * @param chol the Cholesky decomposition of the system as computed by pnl_mat_chol
  * @param b right hand side member. On exit, b contains the solution of the system.
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int FUNCTION(pnl_mat, chol_syslin_inplace)(const TYPE(PnlMat) *chol, TYPE(PnlVect) *b)
 {
@@ -222,9 +222,9 @@ int FUNCTION(pnl_mat, chol_syslin_inplace)(const TYPE(PnlMat) *chol, TYPE(PnlVec
   if (info != 0)
     {
       PNL_MESSAGE_ERROR("illegal value", "pnl_mat_chol_syslin");
-      return FAIL;
+      return PNL_FAIL;
     }
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -234,7 +234,7 @@ int FUNCTION(pnl_mat, chol_syslin_inplace)(const TYPE(PnlMat) *chol, TYPE(PnlVec
  * @param x already existing TYPE(PnlVect) that contains the solution on exit
  * @param chol the Cholesky decomposition of the system as computed by pnl_mat_chol
  * @param b right hand side member
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int FUNCTION(pnl_mat, chol_syslin)(TYPE(PnlVect) *x, const TYPE(PnlMat) *chol, const  TYPE(PnlVect) *b)
 {
@@ -250,7 +250,7 @@ int FUNCTION(pnl_mat, chol_syslin)(TYPE(PnlVect) *x, const TYPE(PnlMat) *chol, c
  * pnl_mat_chol
  * @param B the r.h.s. matrix of the system of size n x m. On exit B contains
  * the solution X
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int FUNCTION(pnl_mat, chol_syslin_mat)(const TYPE(PnlMat) *A,  TYPE(PnlMat) *B)
 {
@@ -271,12 +271,12 @@ int FUNCTION(pnl_mat, chol_syslin_mat)(const TYPE(PnlMat) *A,  TYPE(PnlMat) *B)
   if (info != 0)
     {
       PNL_MESSAGE_ERROR("illegal value", "pnl_mat_chol_syslin");
-      return FAIL;
+      return PNL_FAIL;
     }
   /* Revert to row wise storage */
   FUNCTION(pnl_mat, tr)(B, tB);
   FUNCTION(pnl_mat, free)(&tB);
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -286,7 +286,7 @@ int FUNCTION(pnl_mat, chol_syslin_mat)(const TYPE(PnlMat) *A,  TYPE(PnlMat) *B)
  * @param A a TYPE(PnlMat) containing the LU decomposition of A
  * @param p a TYPE(PnlVect)Int.
  * @param b right hand side member. Contains the solution x on exit
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int FUNCTION(pnl_mat, lu_syslin_inplace)(TYPE(PnlMat) *A, const PnlVectInt *p, TYPE(PnlVect) *b)
 {
@@ -311,9 +311,9 @@ int FUNCTION(pnl_mat, lu_syslin_inplace)(TYPE(PnlMat) *A, const PnlVectInt *p, T
   if (info != 0)
     {
       PNL_MESSAGE_ERROR("Matrix is singular", "pnl_lu_syslin");
-      return FAIL;
+      return PNL_FAIL;
     }
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -324,7 +324,7 @@ int FUNCTION(pnl_mat, lu_syslin_inplace)(TYPE(PnlMat) *A, const PnlVectInt *p, T
  * @param LU a TYPE(PnlMat) containing the LU decomposition of A
  * @param b right hand side member
  * @param p a TYPE(PnlVect)Int.
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int FUNCTION(pnl_mat, lu_syslin)(TYPE(PnlVect) *x, TYPE(PnlMat) *LU, const PnlVectInt *p, const TYPE(PnlVect) *b)
 {
@@ -337,7 +337,7 @@ int FUNCTION(pnl_mat, lu_syslin)(TYPE(PnlVect) *x, TYPE(PnlMat) *LU, const PnlVe
  * Solve a linear system A x = b using a LU factorization
  * @param A the matrix of the system. On exit contains the LU decomposition of A.
  * @param b the r.h.s. member
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int FUNCTION(pnl_mat, syslin_inplace)(TYPE(PnlMat) *A, TYPE(PnlVect) *b)
 {
@@ -346,7 +346,7 @@ int FUNCTION(pnl_mat, syslin_inplace)(TYPE(PnlMat) *A, TYPE(PnlVect) *b)
   CheckIsSquare(A);
   p = pnl_vect_int_create(A->m);
   status = FUNCTION(pnl_mat, lu)(A, p);
-  if (status != OK) return FAIL;
+  if (status != PNL_OK) return PNL_FAIL;
   status = FUNCTION(pnl_mat, lu_syslin_inplace)(A, p, b);
   pnl_vect_int_free(&p);
   return status;
@@ -358,7 +358,7 @@ int FUNCTION(pnl_mat, syslin_inplace)(TYPE(PnlMat) *A, TYPE(PnlVect) *b)
  * been created )
  * @param A the matrix of the system
  * @param b the r.h.s. member
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int FUNCTION(pnl_mat, syslin)(TYPE(PnlVect) *x, const TYPE(PnlMat) *A, const TYPE(PnlVect) *b)
 {
@@ -378,7 +378,7 @@ int FUNCTION(pnl_mat, syslin)(TYPE(PnlVect) *x, const TYPE(PnlMat) *A, const TYP
  * @param p the permutation associated to the PA = LU factotisation
  * @param B the r.h.s. matrix of the system of size n x m. On exit B contains
  * the solution X
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int FUNCTION(pnl_mat, lu_syslin_mat)(const TYPE(PnlMat) *A,  const PnlPermutation *p, TYPE(PnlMat) *B)
 {
@@ -410,10 +410,10 @@ int FUNCTION(pnl_mat, lu_syslin_mat)(const TYPE(PnlMat) *A,  const PnlPermutatio
   if (info != 0)
     {
       PNL_MESSAGE_ERROR("Matrix is singular", "pnl_lu_syslin");
-      return FAIL;
+      return PNL_FAIL;
     }
   FUNCTION(pnl_mat, free)(&tB);
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -421,7 +421,7 @@ int FUNCTION(pnl_mat, lu_syslin_mat)(const TYPE(PnlMat) *A,  const PnlPermutatio
  * @param A the matrix of the system of size n x n. On exit contains the LU decomposition
  * @param B the r.h.s. matrix of the system of size n x m. On exit B contains
  * the solution X
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int FUNCTION(pnl_mat, syslin_mat)(TYPE(PnlMat) *A,  TYPE(PnlMat) *B)
 {
@@ -441,7 +441,7 @@ int FUNCTION(pnl_mat, syslin_mat)(TYPE(PnlMat) *A,  TYPE(PnlMat) *B)
  *
  * @param A on exit, contains the inverse of B. A must be an already allocated TYPE(PnlMat)
  * @param B an upper triangular matrix
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int FUNCTION(pnl_mat, upper_inverse)(TYPE(PnlMat) *A, const TYPE(PnlMat) *B)
 {
@@ -456,9 +456,9 @@ int FUNCTION(pnl_mat, upper_inverse)(TYPE(PnlMat) *A, const TYPE(PnlMat) *B)
   if (info != 0)
     {
       PNL_MESSAGE_ERROR("Matrix is singular", "pnl_mat_upper_inverse");
-      return FAIL;
+      return PNL_FAIL;
     }
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -466,7 +466,7 @@ int FUNCTION(pnl_mat, upper_inverse)(TYPE(PnlMat) *A, const TYPE(PnlMat) *B)
  *
  * @param A on exit, contains the inverse of B. A must be an already allocated TYPE(PnlMat)
  * @param B a lower triangular matrix
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int FUNCTION(pnl_mat, lower_inverse)(TYPE(PnlMat) *A, const TYPE(PnlMat) *B)
 {
@@ -481,9 +481,9 @@ int FUNCTION(pnl_mat, lower_inverse)(TYPE(PnlMat) *A, const TYPE(PnlMat) *B)
   if (info != 0)
     {
       PNL_MESSAGE_ERROR("Matrix is singular", "pnl_mat_upper_inverse");
-      return FAIL;
+      return PNL_FAIL;
     }
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -492,7 +492,7 @@ int FUNCTION(pnl_mat, lower_inverse)(TYPE(PnlMat) *A, const TYPE(PnlMat) *B)
  *
  * @param A a matrix.
  * @param inv a TYPE(PnlMat) (already allocated). contains A^-1 on exit.
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int FUNCTION(pnl_mat, inverse_with_chol)(TYPE(PnlMat) *inv, const TYPE(PnlMat) *A)
 {
@@ -506,7 +506,7 @@ int FUNCTION(pnl_mat, inverse_with_chol)(TYPE(PnlMat) *inv, const TYPE(PnlMat) *
   if (info != 0)
     {
       PNL_MESSAGE_ERROR("illegal values", "pnl_mat_inverse_with_chol");
-      return FAIL;
+      return PNL_FAIL;
     }
   /* Now we need to symmetrise inv because the upper part is 0 */
   for (i = 0 ; i < inv->m ; i++)
@@ -516,7 +516,7 @@ int FUNCTION(pnl_mat, inverse_with_chol)(TYPE(PnlMat) *inv, const TYPE(PnlMat) *
           PNL_MLET(inv, j, i) = PNL_MGET(inv, i, j);
         }
     }
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -525,7 +525,7 @@ int FUNCTION(pnl_mat, inverse_with_chol)(TYPE(PnlMat) *inv, const TYPE(PnlMat) *
  * @param A a matrix.
  * @param inv a TYPE(PnlMat) (already allocated). contains
  * \verbatim A^-1 \endverbatim on exit.
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int FUNCTION(pnl_mat, inverse)(TYPE(PnlMat) *inv, const TYPE(PnlMat) *A)
 {
@@ -540,14 +540,14 @@ int FUNCTION(pnl_mat, inverse)(TYPE(PnlMat) *inv, const TYPE(PnlMat) *A)
     {
       free(ipiv);
       PNL_MESSAGE_ERROR("matrix is singular", "pnl_mat_inverse");
-      return FAIL;
+      return PNL_FAIL;
     }
   lwork = -1;
   PNL_C2F(getri)(&n, inv->array, &lda, ipiv, &qwork, &lwork, &info);
   if (info != 0)
     {
       PNL_MESSAGE_ERROR("Cannot query workspace", "pnl_mat_inverse");
-      return FAIL;
+      return PNL_FAIL;
     }
 #if MULTIPLICITY == 2
   lwork = (int) Creal(qwork);
@@ -561,12 +561,12 @@ int FUNCTION(pnl_mat, inverse)(TYPE(PnlMat) *inv, const TYPE(PnlMat) *A)
       free(ipiv);
       free(work);
       PNL_MESSAGE_ERROR("matrix is singular", "pnl_mat_inverse");
-      return FAIL;
+      return PNL_FAIL;
     }
   FUNCTION(pnl_mat, sq_transpose)(inv);
   free(ipiv);
   free(work);
-  return OK;
+  return PNL_OK;
 }
 
 #ifdef PNL_CLANG_COMPLETE

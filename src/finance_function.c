@@ -66,7 +66,7 @@ int pnl_cf_call_bs(double s, double k, double t, double r, double divid,
   *ptprice = s * exp (-divid * t) * cdf_nor(D1) - k * exp (-r * t) * cdf_nor(D2);
   /*Delta*/
   *ptdelta = exp ( -divid * t) * cdf_nor(D1);
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -100,7 +100,7 @@ int pnl_cf_put_bs(double s, double k, double t, double r, double divid,
   *ptprice = k * exp (-r * t) * cdf_nor(-D2) - s * exp (-divid * t) * cdf_nor(-D1);
   /*Delta*/
   *ptdelta = -exp ( -divid * t) * cdf_nor(-D1);
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -232,7 +232,7 @@ static void pnl_bs_increment_call_put(double x, double * fx, double * dfx, void*
  * @param spot the initial value of the asset
  * @param Strike a double, for value contract
  * @param T a double, echeance time (T)
- * @param error an integer containing the error code on output (OK or FAIL) 
+ * @param error an integer containing the error code on output (PNL_OK or PNL_FAIL) 
  * @return implied of a call/put option
  */
 double pnl_bs_implicit_vol (int is_call, double Price, double spot, double Strike,
@@ -249,7 +249,7 @@ double pnl_bs_implicit_vol (int is_call, double Price, double spot, double Strik
   data.divid = divid;
   data.strike = Strike;
   data.T = T;
-  *error = FAIL;
+  *error = PNL_FAIL;
   if(is_call)
     {
       if (Price <= exp(-r * T) * MAX (spot * exp ( (r-divid) * T) - Strike, 0.0))
@@ -283,7 +283,7 @@ double pnl_bs_implicit_vol (int is_call, double Price, double spot, double Strik
  * @param Strike a Vector, for value contract
  * @param Maturity a Vector, echeance time (T)
  * @param Vol a Matrix, to store matrix volatility
- * @return error code  indicating the number of errors (0 if all was OK)
+ * @return error code  indicating the number of errors (0 if all was PNL_OK)
  */
 int pnl_bs_matrix_implicit_vol (const PnlMatInt * is_call, const PnlMat * Price,double spot,double r, double divid,
                                 const PnlVect * Strike,const PnlVect * Maturity,PnlMat * Vol)
@@ -302,7 +302,7 @@ int pnl_bs_matrix_implicit_vol (const PnlMatInt * is_call, const PnlMat * Price,
           k = GET(Strike,i);
 
           MLET(Vol, i, j) = pnl_bs_implicit_vol (iscall, price, spot, k, T, r, divid, &error);
-          g_error += (error == FAIL ? 1 : 0);
+          g_error += (error == PNL_FAIL ? 1 : 0);
         }
     }
   return g_error;

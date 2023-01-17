@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - The macros `RETRIEVE` and `CREATE` are prefix with `PNL_RAND`. This is a breaking change.
-- Add `PNL_` prefix to `TRUE` and `FALSE`. This is a breaking change.
+- Add `PNL_` prefix to `FALSE`, `TRUE`, `OK` and `FAIL`. This is a breaking change.
 
 ## [1.10.4] - 2019-10-21
 

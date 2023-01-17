@@ -36,7 +36,7 @@
  * @param x must be a vector of size 3
  * @param y must be a vector of size 3
  *
- * @return FAIL in case of dimension mismatch, OK otherwise
+ * @return PNL_FAIL in case of dimension mismatch, PNL_OK otherwise
  */
 int pnl_vect_cross(PnlVect *lhs, const PnlVect *x, const PnlVect *y)
 {
@@ -47,12 +47,12 @@ int pnl_vect_cross(PnlVect *lhs, const PnlVect *x, const PnlVect *y)
 #ifndef PNL_RANGE_CHECK_OFF
       PNL_ERROR("Args must be of size 3", "pnl_vect_cross");
 #endif
-      return FAIL;
+      return PNL_FAIL;
     }
   PNL_LET(lhs, 0) = PNL_GET(x, 1) * PNL_GET(y, 2) - PNL_GET(x, 2) * PNL_GET(y, 1);
   PNL_LET(lhs, 1) = PNL_GET(x, 2) * PNL_GET(y, 0) - PNL_GET(x, 0) * PNL_GET(y, 2);
   PNL_LET(lhs, 2) = PNL_GET(x, 0) * PNL_GET(y, 1) - PNL_GET(x, 1) * PNL_GET(y, 0);
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -142,7 +142,7 @@ PnlVectCompact *pnl_vect_compact_create_from_ptr(int n, double const *x)
  * @param v the PvlVectCompact to be resized
  * @param size new size
  * @param x new value to set
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_vect_compact_resize(PnlVectCompact *v, int size, double x)
 {
@@ -154,7 +154,7 @@ int pnl_vect_compact_resize(PnlVectCompact *v, int size, double x)
   v->size = size;
   v->convert = 'd';
   v->val = x;
-  return OK;
+  return PNL_OK;
 }
 
 /**

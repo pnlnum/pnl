@@ -54,7 +54,7 @@ double* pnl_fft_alloc_wspace(const char *func, int n)
  * In-place Forward FFT
  *
  * @param data input complex vector. On output contains the FFT of the input vector
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_fft_inplace_with_wspace(PnlVectComplex *data, double *wspace)
 {
@@ -64,7 +64,7 @@ int pnl_fft_inplace_with_wspace(PnlVectComplex *data, double *wspace)
   cffti(n, wspace);
   cfftf(n, (double *)(data->array), wspace);
 
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -72,7 +72,7 @@ int pnl_fft_inplace_with_wspace(PnlVectComplex *data, double *wspace)
  *
  * @param data input complex vector. On output contains the inverse
  * FFT of the input vector
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_ifft_inplace_with_wspace(PnlVectComplex *data, double *wspace)
 {
@@ -83,7 +83,7 @@ int pnl_ifft_inplace_with_wspace(PnlVectComplex *data, double *wspace)
   cfftb(n, (double *)(data->array), wspace);
   pnl_vect_complex_mult_double(data, 1.0 / (double) n);
 
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -91,14 +91,14 @@ int pnl_ifft_inplace_with_wspace(PnlVectComplex *data, double *wspace)
  *
  * @param data an array of real numbers. On exit contains the FFT of the input sequence.
  * @param n size of re and im
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_real_fft_inplace_with_wspace(double *data, double *wspace, int n)
 {
   rffti(n, wspace);
   rfftf(n, data, wspace);
 
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -106,7 +106,7 @@ int pnl_real_fft_inplace_with_wspace(double *data, double *wspace, int n)
  *
  * @param data an array of real numbers. On exit contains the inverse FFT.
  * @param n size of re and im
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_real_ifft_inplace_with_wspace(double *data, double *wspace, int n)
 {
@@ -118,7 +118,7 @@ int pnl_real_ifft_inplace_with_wspace(double *data, double *wspace, int n)
     {
       data[i] /= (double) n;
     }
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -126,7 +126,7 @@ int pnl_real_ifft_inplace_with_wspace(double *data, double *wspace, int n)
  *
  * @param in an array of real numbers.
  * @param out a complex vector containing the FFT sequence
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_real_fft_with_wspace(const PnlVect *in, PnlVectComplex *out, double *wspace)
 {
@@ -143,7 +143,7 @@ int pnl_real_fft_with_wspace(const PnlVect *in, PnlVectComplex *out, double *wsp
     {
       data[i] = PNL_GET(in, i);
     }
-  if (pnl_real_fft_inplace_with_wspace(data, wsave, n) == FAIL) return FAIL;
+  if (pnl_real_fft_inplace_with_wspace(data, wsave, n) == PNL_FAIL) return PNL_FAIL;
 
   pnl_vect_complex_resize(out, n);
   if (PNL_IS_ODD(n))
@@ -170,7 +170,7 @@ int pnl_real_fft_with_wspace(const PnlVect *in, PnlVectComplex *out, double *wsp
       LET_REAL(out, l) = data[n - 1];
       LET_IMAG(out, l) = 0.;
     }
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -178,7 +178,7 @@ int pnl_real_fft_with_wspace(const PnlVect *in, PnlVectComplex *out, double *wsp
  *
  * @param in an array of complex numbers representing the FFT of a real valued sequence
  * @param out a real vector containing the (real-) inverse FFT of in
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_real_ifft_with_wspace(const PnlVectComplex *in, PnlVect *out, double *wspace)
 {
@@ -206,9 +206,9 @@ int pnl_real_ifft_with_wspace(const PnlVectComplex *in, PnlVect *out, double *ws
       LET(out, n - 1) = GET_REAL(in, l);
     }
 
-  if (pnl_real_ifft_inplace_with_wspace(out->array, wspace, n) == FAIL) return FAIL;
+  if (pnl_real_ifft_inplace_with_wspace(out->array, wspace, n) == PNL_FAIL) return PNL_FAIL;
 
-  return OK;
+  return PNL_OK;
 }
 
 
@@ -216,7 +216,7 @@ int pnl_real_ifft_with_wspace(const PnlVectComplex *in, PnlVect *out, double *ws
  * In-place Forward FFT
  *
  * @param data input complex vector. On output contains the FFT of the input vector
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_fft_inplace(PnlVectComplex *data)
 {
@@ -232,7 +232,7 @@ int pnl_fft_inplace(PnlVectComplex *data)
  *
  * @param data input complex vector. On output contains the inverse
  * FFT of the input vector
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_ifft_inplace(PnlVectComplex *data)
 {
@@ -249,7 +249,7 @@ int pnl_ifft_inplace(PnlVectComplex *data)
  * @param in input complex vector
  * @param out on output contains the FFT of the input vector. This vector
  * must have already been allocated
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_fft(const PnlVectComplex *in, PnlVectComplex *out)
 {
@@ -263,7 +263,7 @@ int pnl_fft(const PnlVectComplex *in, PnlVectComplex *out)
  * @param in input complex vector
  * @param out on output contains the Inverse FFT of the input vector. This vector
  * must have already been allocated
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_ifft(const PnlVectComplex *in, PnlVectComplex *out)
 {
@@ -277,7 +277,7 @@ int pnl_ifft(const PnlVectComplex *in, PnlVectComplex *out)
  * @param re real part of the data. On exit contains the real part of the FFT.
  * @param im imaginary part of the data. On exit contains the imaginary part of the FFT.
  * @param n size of re and im
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_fft2(double *re, double *im, int n)
 {
@@ -290,7 +290,7 @@ int pnl_fft2(double *re, double *im, int n)
       in->array[i].r = re[i];
       in->array[i].i = im[i];
     }
-  if (pnl_fft_inplace(in) == FAIL) return FAIL;
+  if (pnl_fft_inplace(in) == PNL_FAIL) return PNL_FAIL;
 
   for (i = 0; i < n; i++)
     {
@@ -298,7 +298,7 @@ int pnl_fft2(double *re, double *im, int n)
       im[i] = in->array[i].i;
     }
   pnl_vect_complex_free(&in);
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -309,7 +309,7 @@ int pnl_fft2(double *re, double *im, int n)
  * @param im imaginary part of the data. On exit contains the imaginary part
  * of the inverse FFT.
  * @param n size of re and im
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_ifft2(double *re, double *im, int n)
 {
@@ -322,7 +322,7 @@ int pnl_ifft2(double *re, double *im, int n)
       in->array[i].r = re[i];
       in->array[i].i = im[i];
     }
-  if (pnl_ifft_inplace(in) == FAIL) return FAIL;
+  if (pnl_ifft_inplace(in) == PNL_FAIL) return PNL_FAIL;
 
   for (i = 0; i < n; i++)
     {
@@ -331,7 +331,7 @@ int pnl_ifft2(double *re, double *im, int n)
     }
 
   pnl_vect_complex_free(&in);
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -339,13 +339,13 @@ int pnl_ifft2(double *re, double *im, int n)
  *
  * @param data an array of real numbers. On exit contains the FFT of the input sequence.
  * @param n size of re and im
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_real_fft_inplace(double *data, int n)
 {
   int res;
   double *wsave = pnl_fft_alloc_wspace("pnl_real_fft_inplace", n);
-  if (!wsave) return FAIL;
+  if (!wsave) return PNL_FAIL;
   res = pnl_real_fft_inplace_with_wspace(data, wsave, n);
   free(wsave);
   return res;
@@ -356,13 +356,13 @@ int pnl_real_fft_inplace(double *data, int n)
  *
  * @param data an array of real numbers. On exit contains the inverse FFT.
  * @param n size of re and im
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_real_ifft_inplace(double *data, int n)
 {
   int res;
   double *wsave = pnl_fft_alloc_wspace("pnl_real_ifft_inplace", n);
-  if (!wsave) return FAIL;
+  if (!wsave) return PNL_FAIL;
   res = pnl_real_ifft_inplace_with_wspace(data, wsave, n);
   free(wsave);
   return res;
@@ -373,13 +373,13 @@ int pnl_real_ifft_inplace(double *data, int n)
  *
  * @param in an array of real numbers.
  * @param out a complex vector containing the FFT sequence
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_real_fft(const PnlVect *in, PnlVectComplex *out)
 {
   int res;
   double *wspace = pnl_fft_alloc_wspace("pnl_real_fft", in->size);
-  if (!wspace) return FAIL;
+  if (!wspace) return PNL_FAIL;
   res = pnl_real_fft_with_wspace(in, out, wspace);
   free(wspace);
   return res;
@@ -390,13 +390,13 @@ int pnl_real_fft(const PnlVect *in, PnlVectComplex *out)
  *
  * @param in an array of complex numbers representing the FFT of a real valued sequence
  * @param out a real vector containing the (real-) inverse FFT of in
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_real_ifft(const PnlVectComplex *in, PnlVect *out)
 {
   int res;
   double *wspace = pnl_fft_alloc_wspace("pnl_real_ifft", in->size);
-  if (!wspace) return FAIL;
+  if (!wspace) return PNL_FAIL;
   res = pnl_real_ifft_with_wspace(in, out, wspace);
   free(wspace);
   return res;
@@ -408,13 +408,13 @@ int pnl_real_ifft(const PnlVectComplex *in, PnlVect *out)
  * @param re real valued data data. On exit contains the real part of the FFT.
  * @param im unused on input. On exit contains the imaginary part of the FFT.
  * @param n size of re and im
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_real_fft2(double *re, double *im, int n)
 {
 
   int i, l;
-  if (pnl_real_fft_inplace(re, n) == FAIL) return FAIL;
+  if (pnl_real_fft_inplace(re, n) == PNL_FAIL) return PNL_FAIL;
 
   if (PNL_IS_ODD(n))
     {
@@ -444,7 +444,7 @@ int pnl_real_fft2(double *re, double *im, int n)
       im[n - i] = -im[i];
     }
 
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -455,7 +455,7 @@ int pnl_real_fft2(double *re, double *im, int n)
  * @param im imaginary part of the data. Unusedon output
  * of the inverse FFT.
  * @param n size of re and im
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_real_ifft2(double *re, double *im, int n)
 {
@@ -483,8 +483,8 @@ int pnl_real_ifft2(double *re, double *im, int n)
       im[i] = 0.;
     }
 
-  if (pnl_real_ifft_inplace(re, n) == FAIL) return FAIL;
-  return OK;
+  if (pnl_real_ifft_inplace(re, n) == PNL_FAIL) return PNL_FAIL;
+  return PNL_OK;
 }
 
 /**
@@ -492,7 +492,7 @@ int pnl_real_ifft2(double *re, double *im, int n)
  *
  * @param data a complex matrix
  *
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_fft2d_inplace(PnlMatComplex *data)
 {
@@ -502,7 +502,7 @@ int pnl_fft2d_inplace(PnlMatComplex *data)
 
 
   n = MAX(data->m, data->n);
-  if ((wsave = malloc((4 * n + 15) * sizeof(double))) == NULL) return FAIL;
+  if ((wsave = malloc((4 * n + 15) * sizeof(double))) == NULL) return PNL_FAIL;
   cffti(data->n, wsave);
   /*
    * First, compute the FFT of each row inplace
@@ -517,7 +517,7 @@ int pnl_fft2d_inplace(PnlMatComplex *data)
    * step 1
    */
   cffti(data->m, wsave);
-  if ((row = malloc(sizeof(dcomplex) * data->m)) == NULL) return FAIL;
+  if ((row = malloc(sizeof(dcomplex) * data->m)) == NULL) return PNL_FAIL;
   for (j = 0 ; j < data->n ; j++)
     {
       for (i = 0 ; i < data->m ; i++) row[i] = PNL_MGET(data, i, j);
@@ -527,7 +527,7 @@ int pnl_fft2d_inplace(PnlMatComplex *data)
 
   free(wsave);
   free(row);
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -536,7 +536,7 @@ int pnl_fft2d_inplace(PnlMatComplex *data)
  * @param in input complex matrix
  * @param out on output contains the FFT of the input matrix. This matrix
  * must have already been allocated
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_fft2d(const PnlMatComplex *in, PnlMatComplex *out)
 {
@@ -549,7 +549,7 @@ int pnl_fft2d(const PnlMatComplex *in, PnlMatComplex *out)
  *
  * @param data a complex matrix
  *
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_ifft2d_inplace(PnlMatComplex *data)
 {
@@ -559,7 +559,7 @@ int pnl_ifft2d_inplace(PnlMatComplex *data)
 
 
   n = MAX(data->m, data->n);
-  if ((wsave = malloc((4 * n + 15) * sizeof(double))) == NULL) return FAIL;
+  if ((wsave = malloc((4 * n + 15) * sizeof(double))) == NULL) return PNL_FAIL;
   cffti(data->n, wsave);
   /*
    * First, compute the FFT of each col inplace
@@ -574,7 +574,7 @@ int pnl_ifft2d_inplace(PnlMatComplex *data)
    * step 1
    */
   cffti(data->m, wsave);
-  if ((col = malloc(sizeof(dcomplex) * data->m)) == NULL) return FAIL;
+  if ((col = malloc(sizeof(dcomplex) * data->m)) == NULL) return PNL_FAIL;
   for (j = 0 ; j < data->n ; j++)
     {
       /* Don't forget the renormalization from the previous step */
@@ -591,7 +591,7 @@ int pnl_ifft2d_inplace(PnlMatComplex *data)
 
   free(wsave);
   free(col);
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -600,7 +600,7 @@ int pnl_ifft2d_inplace(PnlMatComplex *data)
  * @param in input complex matrix
  * @param out on output contains the FFT of the input matrix. This matrix
  * must have already been allocated
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_ifft2d(const PnlMatComplex *in, PnlMatComplex *out)
 {
@@ -614,7 +614,7 @@ int pnl_ifft2d(const PnlMatComplex *in, PnlMatComplex *out)
  * @param in input real matrix
  * @param out on output contains the FFT of the input matrix. This matrix
  * must have already been allocated
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_real_fft2d(const PnlMat *in, PnlMatComplex *out)
 {
@@ -625,8 +625,8 @@ int pnl_real_fft2d(const PnlMat *in, PnlMatComplex *out)
   pnl_mat_complex_resize(out, in->m, in->n);
 
   n = MAX(in->m, in->n);
-  if ((wsave = malloc((4 * n + 15) * sizeof(double))) == NULL) return FAIL;
-  if ((data = malloc(n * sizeof(double))) == NULL) return FAIL;
+  if ((wsave = malloc((4 * n + 15) * sizeof(double))) == NULL) return PNL_FAIL;
+  if ((data = malloc(n * sizeof(double))) == NULL) return PNL_FAIL;
 
   /*
    * Compute the FFT of each row
@@ -672,7 +672,7 @@ int pnl_real_fft2d(const PnlMat *in, PnlMatComplex *out)
    * step 1
    */
   cffti(in->m, wsave);
-  if ((col = malloc(sizeof(dcomplex) * in->m)) == NULL) return FAIL;
+  if ((col = malloc(sizeof(dcomplex) * in->m)) == NULL) return PNL_FAIL;
   for (j = 0 ; j < in->n ; j++)
     {
       for (i = 0 ; i < in->m ; i++) col[i] = PNL_MGET(out, i, j);
@@ -683,7 +683,7 @@ int pnl_real_fft2d(const PnlMat *in, PnlMatComplex *out)
   free(wsave);
   free(col);
   free(data);
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -693,7 +693,7 @@ int pnl_real_fft2d(const PnlMat *in, PnlMatComplex *out)
  * @param in input complex matrix. This matrix is lost on output
  * @param out real matrix on output contains the 2D FFT of the input matrix. This matrix
  * must have already been allocated
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_real_ifft2d(const PnlMatComplex *in, PnlMat *out)
 {
@@ -704,7 +704,7 @@ int pnl_real_ifft2d(const PnlMatComplex *in, PnlMat *out)
   pnl_mat_resize(out, in->m, in->n);
 
   n = MAX(in->m, in->n);
-  if ((wsave = malloc((4 * n + 15) * sizeof(double))) == NULL) return FAIL;
+  if ((wsave = malloc((4 * n + 15) * sizeof(double))) == NULL) return PNL_FAIL;
 
   /*
    * Compute the FFT of each row
@@ -730,7 +730,7 @@ int pnl_real_ifft2d(const PnlMatComplex *in, PnlMat *out)
     {
       l = in->m / 2;
     }
-  if ((col = malloc(sizeof(double) * in->m)) == NULL) return FAIL;
+  if ((col = malloc(sizeof(double) * in->m)) == NULL) return PNL_FAIL;
   for (j = 0 ; j < in->n ; j++)
     {
       /* Don't forget the renormalization from the previous step */
@@ -751,7 +751,7 @@ int pnl_real_ifft2d(const PnlMatComplex *in, PnlMat *out)
   free(col);
   free(wsave);
   pnl_mat_complex_free(&data);
-  return OK;
+  return PNL_OK;
 
 }
 

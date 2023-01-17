@@ -87,7 +87,7 @@ double hyperg( a, b, x)
     return( exp(x) * hyperg( temp, b, -x )  );
 
 
-  /* Try power & asymptotic series, starting from the one that is likely OK */
+  /* Try power & asymptotic series, starting from the one that is likely PNL_OK */
   if (fabs(x) < 10 + fabs(a) + fabs(b))
     {
       psum = hy1f1p( a, b, x, &pcanc );

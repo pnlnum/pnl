@@ -275,8 +275,8 @@ int pnl_ode_rkf45 (PnlODEFunc *f, double *y, double t, double tout,
   init_err (&relerr);
   init_err (&abserr);
 
-  if ( (work = malloc ((3 + 6 * neqn) * sizeof(double))) == NULL ) return FAIL; 
-  if ( (iwork = malloc (5 * sizeof(int))) == NULL ) return FAIL; 
+  if ( (work = malloc ((3 + 6 * neqn) * sizeof(double))) == NULL ) return PNL_FAIL; 
+  if ( (iwork = malloc (5 * sizeof(int))) == NULL ) return PNL_FAIL; 
 
   /* Compute indices for the splitting of the work array */
   k1m = neqn;
@@ -294,7 +294,7 @@ int pnl_ode_rkf45 (PnlODEFunc *f, double *y, double t, double tout,
 
   free (work); work = NULL;
   free (iwork); iwork = NULL;
-  if ( *flag == 2 ) return OK; else return FAIL;
+  if ( *flag == 2 ) return PNL_OK; else return PNL_FAIL;
 }
 
 int pnl_ode_rkf45_step (PnlODEFunc *f, double *y, double *t,
@@ -321,7 +321,7 @@ int pnl_ode_rkf45_step (PnlODEFunc *f, double *y, double *t,
         &work[k1m], &work[k1], &work[k2], &work[k3], &work[k4],
         &work[k5], &work[k6], &work[k6 + 1], &iwork[0], &iwork[1],
         &iwork[2], &iwork[3], &iwork[4]);
-  if ( *iflag == -2 ) return OK; else return PNL_FALSE;
+  if ( *iflag == -2 ) return PNL_OK; else return PNL_FALSE;
 }
 
 
@@ -391,12 +391,12 @@ static int rkfs (PnlODEFunc *f,  double *y, double *t, double *tout,
   if (neqn < 1)
     {
       *iflag = 8;
-      return FAIL;
+      return PNL_FAIL;
     }
   if (*relerr < 0. || *abserr < 0.)
     {
       *iflag = 8;
-      return FAIL;
+      return PNL_FAIL;
     }
   mflag = ABS (*iflag);
 
@@ -411,7 +411,7 @@ static int rkfs (PnlODEFunc *f,  double *y, double *t, double *tout,
   if (*t == *tout && *kflag != 3)
     {
       *iflag = 8;
-      return FAIL;
+      return PNL_FAIL;
     }
   if (mflag != 2)
     {
@@ -498,7 +498,7 @@ L50:
       *relerr = rer;
       *iflag = 3;
       *kflag = 3;
-      return FAIL;
+      return PNL_FAIL;
     }
 
   dt = *tout - *t;
@@ -514,7 +514,7 @@ L50:
       if (*t == *tout)
         {
           *iflag = 2;
-          return OK;
+          return PNL_OK;
         }
     }
   /* initialization -- */
@@ -571,7 +571,7 @@ L50:
     {
       *kop = 0;
       *iflag = 7;
-      return FAIL;
+      return PNL_FAIL;
     }
 
   /*     if too close to output point,extrapolate and return */
@@ -587,7 +587,7 @@ L50:
       ++(*nfe);
       *t = *tout;
       *iflag = 2;
-      return OK;
+      return PNL_OK;
     }
   /*     initialize output point indicator */
 
@@ -666,7 +666,7 @@ L200:
       /*     too much work */
       *iflag = 4;
       *kflag = 4;
-      return FAIL;
+      return PNL_FAIL;
     }
   /*     advance an approximate solution over one step of length h */
 
@@ -685,7 +685,7 @@ L200:
       if (et <= 0.)
         {
           *iflag = 5;
-          return FAIL;
+          return PNL_FAIL;
         }
       else
         {
@@ -727,7 +727,7 @@ L200:
   /*     requested error unattainable at smallest allowable stepsize */
   *iflag = 6;
   *kflag = 6;
-  return FAIL;
+  return PNL_FAIL;
 
 
   /* successful step */
@@ -774,7 +774,7 @@ L260:
     {
       *t = *tout;
       *iflag = 2;
-      return OK;
+      return PNL_OK;
     }
   if (*iflag > 0)
     {
@@ -786,7 +786,7 @@ L260:
 
   /* one-step mode */
   *iflag = -2;
-  return OK;
+  return PNL_OK;
 
 }	
 
@@ -868,5 +868,5 @@ static int fehl (PnlODEFunc *f, double *y, double *t, double *h,
                                                           f5[k] * 277020.));
     }
 
-  return OK;
+  return PNL_OK;
 }

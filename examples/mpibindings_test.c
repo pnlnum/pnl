@@ -556,18 +556,18 @@ static int test_tridiag_mat_lu ()
       pnl_tridiag_mat_lu_syslin (x, LU, b);
       if ( pnl_test_vect_eq_abs (x, x_save, 1E-12, "tridiag_mat_lu (MIP tests)", "") == PNL_TRUE )
         {
-          printf ("PnlTridiagMatLU Send/Receive OK\n");
+          printf ("PnlTridiagMatLU Send/Receive PNL_OK\n");
         }
       else
         {
-          printf ("PnlTridiagMatLU Send/Receive FAIL\n");
+          printf ("PnlTridiagMatLU Send/Receive PNL_FAIL\n");
         }
 
       pnl_vect_free (&x);
       pnl_vect_free (&x_save);
       pnl_tridiag_mat_lu_free (&LU);
     }
-  return OK;
+  return PNL_OK;
 }
 
 static void test_reduce (int rank)
@@ -592,11 +592,11 @@ static void test_reduce (int rank)
 
       if ( pnl_test_vect_eq_abs (sum, reduc, 1E-10, "mpi_reduce", "") == PNL_TRUE )
         {
-          printf ("MPI_Reduce for PnlObject: OK\n");
+          printf ("MPI_Reduce for PnlObject: PNL_OK\n");
         }
       else
         {
-          printf ("MPI_Reduce for PnlObject: FAIL\n");
+          printf ("MPI_Reduce for PnlObject: PNL_FAIL\n");
         }
       pnl_vect_free (&reduc);
       pnl_vect_free (&sum);

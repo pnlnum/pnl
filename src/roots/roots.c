@@ -36,7 +36,7 @@
  * @param max_iter a int maximal number of iteration
  * @param res the root, if the algorithm has converged
  * @param func a function pointer which computes f(x_anc) df(x_anc) 
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_root_newton_bisection (PnlFuncDFunc *func, double x_min, double x_max, double tol, int max_iter, double *res)
 {
@@ -47,19 +47,19 @@ int pnl_root_newton_bisection (PnlFuncDFunc *func, double x_min, double x_max, d
   PNL_EVAL_FUNC_FDF (func, x_min, &func_low, &diff_func_current);
   if (func_low == 0.0)
     {
-      *res=x_min; return OK;
+      *res=x_min; return PNL_OK;
     }
   PNL_EVAL_FUNC_FDF (func, x_max, &func_high,&diff_func_current);
 
   if (func_high == 0.0) 
     {
-      *res=x_max; return OK;
+      *res=x_max; return PNL_OK;
     }
 
   /* Root is not bracketed by x1 and x2  */
   if ( (func_low > 0.0 && func_high > 0.0) 
        || (func_low < 0.0 && func_high < 0.0) ) 
-    return FAIL;
+    return PNL_FAIL;
 
   if (func_low < 0.0) { xl = x_min; xh = x_max; }
   else { xl = x_max; xh = x_min; }
@@ -87,13 +87,13 @@ int pnl_root_newton_bisection (PnlFuncDFunc *func, double x_min, double x_max, d
         }
       if (fabs(dx) < tol)
         {
-          *res = rts; return OK;
+          *res = rts; return PNL_OK;
         }
       PNL_EVAL_FUNC_FDF (func, rts, &func_current, &diff_func_current);
       if ( func_current < 0.0 ) xl = rts; else xh= rts;
     }
   /* Maximum number of iterations exceeded */
-  return FAIL;
+  return PNL_FAIL;
 };
 
 /**
@@ -116,7 +116,7 @@ int pnl_root_newton_bisection (PnlFuncDFunc *func, double x_min, double x_max, d
  * @param res contains the root on exit
  * @param max_iter maximum number of iterations
  * @param func a F_DF pointer
- * @return OK or FAIL if N_max reached
+ * @return PNL_OK or PNL_FAIL if N_max reached
  */
 int pnl_root_newton (PnlFuncDFunc *func, double x0, double x_eps, double fx_eps, int max_iter, double *res)
 {
@@ -158,8 +158,8 @@ int pnl_root_newton (PnlFuncDFunc *func, double x0, double x_eps, double fx_eps,
     }
   *res = root;
   /* maximum number of iterations reached */
-  if ( i == max_iter ) return FAIL; 
-  return OK;
+  if ( i == max_iter ) return PNL_FAIL; 
+  return PNL_OK;
 }
 
 /**
@@ -174,7 +174,7 @@ int pnl_root_newton (PnlFuncDFunc *func, double x0, double x_eps, double fx_eps,
  * @param res contains the root on exit
  * @param N_max maximum number of iterations
  * @param func a function pointer
- * @return OK or FAIL if N_max reached
+ * @return PNL_OK or PNL_FAIL if N_max reached
  */
 int pnl_root_bisection (PnlFunc *func, double xmin, double xmax, double epsrel, double epsabs,
                         int N_max, double *res)
@@ -212,8 +212,8 @@ int pnl_root_bisection (PnlFunc *func, double xmin, double xmax, double epsrel, 
       if ( fabs (b - a) < epsabs + epsrel * fabs (a)) break;
     }
   *res = (a + b) / 2.;
-  if (i==N_max) return FAIL;
-  return OK;
+  if (i==N_max) return PNL_FAIL;
+  return PNL_OK;
 }
 
 /** 
@@ -295,7 +295,7 @@ int pnl_multiroot_newton (PnlRnFuncRnDFunc *func, const PnlVect *x0, double x_ep
       t = 1.;
 
       print_newton_iter (iter, res, Fx, verbose);
-      if ( pnl_mat_syslin (dx, DFx, Fx) == FAIL )
+      if ( pnl_mat_syslin (dx, DFx, Fx) == PNL_FAIL )
         {
           PNL_ERROR ("Non invertible Jacobian", "pnl_multiroot_newton");
         }
@@ -330,6 +330,6 @@ int pnl_multiroot_newton (PnlRnFuncRnDFunc *func, const PnlVect *x0, double x_ep
   pnl_mat_free (&DFx);
 
   /* maximum number of iterations reached */
-  if ( iter == max_iter ) return FAIL; 
-  return OK;
+  if ( iter == max_iter ) return PNL_FAIL; 
+  return PNL_OK;
 }

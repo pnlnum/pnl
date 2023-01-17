@@ -896,7 +896,7 @@ static void coef_bicubic(double *u, double *p, double *q, double *r, double *x, 
  * the triplet (x y C) and could be evaluated at some points with #nsp_eval_bicubic.
  * See #coef_bicubic for detail about the bicubic patch coef C.
  *
- * return %OK or %FAIL (%FAIL when allocation of works arrays fail or when type is
+ * return %PNL_OK or %PNL_FAIL (%PNL_FAIL when allocation of works arrays fail or when type is
  * not good)
  * *
  * @param x (input) first coordinates of the grid points
@@ -921,7 +921,7 @@ int nsp_bicubic_subspline(double *x, double *y, double *u, int nx, int ny, doubl
       free(p);
       free(q);
       free(r);
-      return FAIL;
+      return PNL_FAIL;
     }
 
   if (type == MONOTONE)   /*  approximate the derivatives with nsp_dpchim */
@@ -959,14 +959,14 @@ int nsp_bicubic_subspline(double *x, double *y, double *u, int nx, int ny, doubl
       free(p);
       free(q);
       free(r);
-      return FAIL;
+      return PNL_FAIL;
     }
 
   /* compute polynomial coefficients in the basis (x-x(i))^k (y-y(j))^l  0<= k,l <= 3
    * for fast evaluation with Horner 's scheme */
   coef_bicubic(u, p, q, r, x, y, nx, ny, C);
 
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -976,7 +976,7 @@ int nsp_bicubic_subspline(double *x, double *y, double *u, int nx, int ny, doubl
  * the triplet (x y C) and could be evaluated at some points with #nsp_eval_bicubic.
  * See #coef_bicubic for detail about the bicubic patch coef C.
  *
- * return %OK or %FAIL (%FAIL when allocation of works arrays fail)
+ * return %PNL_OK or %PNL_FAIL (%PNL_FAIL when allocation of works arrays fail)
  *
  * *
  * @param x (input) first coordinates of the grid points
@@ -1014,7 +1014,7 @@ static int nsp_bicubic_spline(double *x, double *y, double *u, int nx, int ny, d
       free(Asd);
       free(qdu);
       free(ll);
-      return FAIL;
+      return PNL_FAIL;
     }
 
   /* compute du/dx */
@@ -1058,7 +1058,7 @@ static int nsp_bicubic_spline(double *x, double *y, double *u, int nx, int ny, d
       free(ll);
     }
 
-  return OK;
+  return PNL_OK;
 }
 
 static double nsp_eval_bicubic_patch(double xx, double yy, double xk, double yk, double *Ck)
@@ -1260,7 +1260,7 @@ static void nsp_eval_bicubic(double *x, double *y, double *C, int nx, int ny, do
  * @param[in] type type of bicubic spline to compute can be NOT_A_KNOT
  * NATURAL, PERIODIC, MONOTONE, FAST_PERIODIC or FAST
  *
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_bicubic_spline(PnlVect *x, PnlVect *y, PnlMat *u, double *C, int type)
 {

@@ -140,53 +140,53 @@ static void sp_scalar_ops ()
   Sp2 = pnl_sp_mat_new ();
 
   /* plus op */
-  status = OK;
+  status = PNL_OK;
   pnl_sp_mat_clone (Sp2, Sp);
   pnl_sp_mat_plus_scalar (Sp2, x);
   for ( i=0 ; i<Sp->nz ; i++ ) 
     {
-      if ( NEQ_ERR(Sp->array[i] + x, Sp2->array[i]) ) { status = FAIL; break; }
+      if ( NEQ_ERR(Sp->array[i] + x, Sp2->array[i]) ) { status = PNL_FAIL; break; }
     }
-  if ( status == FAIL ) 
+  if ( status == PNL_FAIL ) 
     pnl_test_set_fail0("sp_mat_plus_scalar");
   else
     pnl_test_set_ok ("sp_mat_plus_scalar");
 
   /* minus op */
-  status = OK;
+  status = PNL_OK;
   pnl_sp_mat_clone (Sp2, Sp);
   pnl_sp_mat_minus_scalar (Sp2, x);
   for ( i=0 ; i<Sp->nz ; i++ ) 
     {
-      if ( NEQ_ERR(Sp->array[i] - x, Sp2->array[i]) ) { status = FAIL; break; }
+      if ( NEQ_ERR(Sp->array[i] - x, Sp2->array[i]) ) { status = PNL_FAIL; break; }
     }
-  if ( status == FAIL ) 
+  if ( status == PNL_FAIL ) 
     pnl_test_set_fail0("sp_mat_minus_scalar");
   else
     pnl_test_set_ok ("sp_mat_minus_scalar");
 
   /* mult op */
-  status = OK;
+  status = PNL_OK;
   pnl_sp_mat_clone (Sp2, Sp);
   pnl_sp_mat_mult_scalar (Sp2, x);
   for ( i=0 ; i<Sp->nz ; i++ ) 
     {
-      if ( NEQ_ERR(Sp->array[i] * x, Sp2->array[i]) ) { status = FAIL; break; }
+      if ( NEQ_ERR(Sp->array[i] * x, Sp2->array[i]) ) { status = PNL_FAIL; break; }
     }
-  if ( status == FAIL ) 
+  if ( status == PNL_FAIL ) 
     pnl_test_set_fail0("sp_mat_mult_scalar");
   else
     pnl_test_set_ok ("sp_mat_mult_scalar");
 
   /* div op */
-  status = OK;
+  status = PNL_OK;
   pnl_sp_mat_clone (Sp2, Sp);
   pnl_sp_mat_div_scalar (Sp2, x);
   for ( i=0 ; i<Sp->nz ; i++ ) 
     {
-      if ( NEQ_ERR(Sp->array[i] / x, Sp2->array[i]) ) { status = FAIL; break; }
+      if ( NEQ_ERR(Sp->array[i] / x, Sp2->array[i]) ) { status = PNL_FAIL; break; }
     }
-  if ( status == FAIL ) 
+  if ( status == PNL_FAIL ) 
     pnl_test_set_fail0("sp_mat_div_scalar");
   else
     pnl_test_set_ok ("sp_mat_div_scalar");

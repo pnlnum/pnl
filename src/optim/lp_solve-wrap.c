@@ -28,7 +28,7 @@
  * @param[out] xopt contains the optimal x on output.
  * @param[out] fobj_opt contains the value of the objective function at xopt
  *
- * @return FAIL or OK
+ * @return PNL_FAIL or PNL_OK
  */
 int pnl_optim_linprog(const PnlVect *C, const PnlMat *A_ineq, const PnlVect *B_ineq, const PnlMat *A_eq, const PnlVect *B_eq,
                       const PnlVect *x_min, const PnlVect *x_max, int debug, PnlVect *xopt, double *fobj_opt)
@@ -70,7 +70,7 @@ int pnl_optim_linprog(const PnlVect *C, const PnlMat *A_ineq, const PnlVect *B_i
   if ((lp = make_lp(nConstraint, nVar)) == NULL)
     {
       printf("Cannot allocate a linear programming problem.\n");
-      return FAIL;
+      return PNL_FAIL;
     }
   set_verbose(lp, IMPORTANT);
   if (debug == PNL_TRUE) set_debug(lp, PNL_TRUE);
@@ -134,7 +134,7 @@ int pnl_optim_linprog(const PnlVect *C, const PnlMat *A_ineq, const PnlVect *B_i
     }
 
   delete_lp(lp);
-  return (ret == OPTIMAL) ? OK : FAIL;
+  return (ret == OPTIMAL) ? PNL_OK : PNL_FAIL;
 }
 
 static int * incr(int n, int *T)
@@ -174,7 +174,7 @@ static int * incr(int n, int *T)
  * @param[out] xopt contains the optimal x on output.
  * @param[out] fobj_opt contains the value of the objective function at xopt
  *
- * @return FAIL or OK
+ * @return PNL_FAIL or PNL_OK
  */
 int pnl_optim_linprog_sp(const PnlSpMat *C, const PnlSpMat *A_ineq, const PnlVect *B_ineq, const PnlSpMat *A_eq, const PnlVect *B_eq,
                          const PnlVectInt *index_min, const PnlVect *x_min, const PnlVectInt *index_max, const PnlVect *x_max,
@@ -221,7 +221,7 @@ int pnl_optim_linprog_sp(const PnlSpMat *C, const PnlSpMat *A_ineq, const PnlVec
   if ((lp = make_lp(nConstraint, nVar)) == NULL)
     {
       printf("Cannot allocate a linear programming problem.\n");
-      return FAIL;
+      return PNL_FAIL;
     }
   set_verbose(lp, IMPORTANT);
   if (debug == PNL_TRUE) set_debug(lp, PNL_TRUE);
@@ -294,5 +294,5 @@ int pnl_optim_linprog_sp(const PnlSpMat *C, const PnlSpMat *A_ineq, const PnlVec
   free(colC);
   free(colA_eq);
   free(colA_ineq);
-  return (ret == OPTIMAL) ? OK : FAIL;
+  return (ret == OPTIMAL) ? PNL_OK : PNL_FAIL;
 }

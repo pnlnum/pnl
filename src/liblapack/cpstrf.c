@@ -287,7 +287,7 @@ static float c_b30 = 1.f;
 
 		    if (j != pvt) {
 
-/*                    Pivot OK, so can now swap pivot rows and columns */
+/*                    Pivot PNL_OK, so can now swap pivot rows and columns */
 
 			i__4 = pvt + pvt * a_dim1;
 			i__5 = j + j * a_dim1;
@@ -422,7 +422,7 @@ static float c_b30 = 1.f;
 
 		    if (j != pvt) {
 
-/*                    Pivot OK, so can now swap pivot rows and columns */
+/*                    Pivot PNL_OK, so can now swap pivot rows and columns */
 
 			i__4 = pvt + pvt * a_dim1;
 			i__5 = j + j * a_dim1;

@@ -410,26 +410,26 @@ int FUNCTION(pnl_vect, resize_from_scalar)(TYPE(PnlVect) *v, int size, BASE x)
   int i = 0;
   int old_size = v->size;
 
-  if (v->size > 0 && v->owner == 0) return FAIL;
+  if (v->size > 0 && v->owner == 0) return PNL_FAIL;
 
   v->size = size;
   if (size <= old_size)
-    return OK;
+    return PNL_OK;
   if (v->array == NULL)
     {
       if ((v->array = malloc(size * sizeof(BASE))) == NULL)
-        return FAIL;
+        return PNL_FAIL;
     }
   else
     {
       if ((v->array = realloc(v->array, size * sizeof(BASE))) == NULL)
-        return FAIL;
+        return PNL_FAIL;
     }
   for (i = old_size; i < size; i++)
     {
       FUNCTION(pnl_vect, set)(v, i, x);
     }
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -443,9 +443,9 @@ int FUNCTION(pnl_vect, resize_from_scalar)(TYPE(PnlVect) *v, int size, BASE x)
  */
 int FUNCTION(pnl_vect, resize_from_ptr)(TYPE(PnlVect) *v, int size, const BASE *t)
 {
-  if (FUNCTION(pnl_vect, resize)(v, size) != OK) return FAIL;
+  if (FUNCTION(pnl_vect, resize)(v, size) != PNL_OK) return PNL_FAIL;
   memcpy(v->array, t, size * sizeof(BASE));
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -766,8 +766,8 @@ int FUNCTION(pnl_vect, find)(PnlVectInt *index, char *type, int(*f)(BASE *), ...
   size = -1;
 
   nvar = (int) strlen(type);
-  if ((args = malloc(sizeof(cell) * nvar)) == NULL) return FAIL;
-  if ((t = malloc(sizeof(BASE) * nvar)) == NULL) return FAIL;
+  if ((args = malloc(sizeof(cell) * nvar)) == NULL) return PNL_FAIL;
+  if ((t = malloc(sizeof(BASE) * nvar)) == NULL) return PNL_FAIL;
 
   va_start(ap, f);
 
@@ -826,7 +826,7 @@ int FUNCTION(pnl_vect, find)(PnlVectInt *index, char *type, int(*f)(BASE *), ...
 
   free(args);
   free(t);
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -1074,7 +1074,7 @@ void FUNCTION(pnl_vect, reverse)(TYPE(PnlVect) * v)
 int FUNCTION(pnl_vect, less)(const TYPE(PnlVect) *a, const TYPE(PnlVect) *b)
 {
   int i;
-  if (a->size != b->size) return FAIL;
+  if (a->size != b->size) return PNL_FAIL;
   for (i = 0 ; i < a->size ; i++)
     {
       if ((PNL_GET(a, i) >= PNL_GET(b, i))) return PNL_FALSE;

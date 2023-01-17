@@ -65,7 +65,7 @@ cpmul( a, da, b, db, c, dc )
 
   if( da > db )   /* Know which polynomial has higher degree */
     {
-      i = da; /* Swapping is OK because args are on the stack */
+      i = da; /* Swapping is PNL_OK because args are on the stack */
       da = db;
       db = i;
       pa = a;

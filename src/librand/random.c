@@ -1022,7 +1022,7 @@ char *pnl_rng_get_name(PnlRngType id)
  * @param dimension dimension of the value space to simulate in. Only
  * used for PNL_QMC.
  * @param samples maximum number of samples requested. Only used for PNL_QMC.
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_rand_init(int type_generator, int dimension, long samples)
 {
@@ -1063,7 +1063,7 @@ int pnl_rand_init(int type_generator, int dimension, long samples)
   rng->counter = 1;
   rng->has_gauss = 0;
   rng->gauss = 0.;
-  return OK;
+  return PNL_OK;
 }
 
 void pnl_rand_sseed(int type_generator, ulong seed)
@@ -1485,7 +1485,7 @@ void pnl_rng_sseed(PnlRng *rng, ulong seed)
  *
  * @param rng a PnlRng
  * @param dim the dimension of the state space
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_rng_sdim(PnlRng *rng, int dim)
 {
@@ -1493,14 +1493,14 @@ int pnl_rng_sdim(PnlRng *rng, int dim)
   rng->has_gauss = 0;
   rng->gauss = 0.;
   rng->dimension = dim;
-  if (dim < 1) return FAIL;
+  if (dim < 1) return PNL_FAIL;
   switch (rng->type)
     {
     case PNL_RNG_SQRT:
     {
       int i;
       sqrt_state *state;
-      if (dim > PNL_DIM_MAX_QMC) return FAIL;
+      if (dim > PNL_DIM_MAX_QMC) return PNL_FAIL;
       state = (sqrt_state *)(rng->state);
       prime_number(rng->dimension, state->prime);
       for (i = 0; i < rng->dimension; i++)
@@ -1510,14 +1510,14 @@ int pnl_rng_sdim(PnlRng *rng, int dim)
     }
     break;
     case PNL_RNG_HALTON:
-      if (dim > PNL_DIM_MAX_QMC) return FAIL;
+      if (dim > PNL_DIM_MAX_QMC) return PNL_FAIL;
       prime_number(rng->dimension, ((halton_state *)(rng->state))->prime);
       break;
     case PNL_RNG_FAURE:
     {
       int prime[PNL_DIM_MAX_QMC];
       faure_state *state;
-      if (dim > DIM_MAX_FAURE) return FAIL;
+      if (dim > DIM_MAX_FAURE) return PNL_FAIL;
       state = (faure_state *)(rng->state);
       binomial(FAURE_MAXI);
       if ((rng->dimension == 2) || (rng->dimension == 1))
@@ -1533,7 +1533,7 @@ int pnl_rng_sdim(PnlRng *rng, int dim)
     {
       int i, j;
       nied_state *state;
-      if (dim  > PNL_DIM_MAX_NIED) return FAIL;
+      if (dim  > PNL_DIM_MAX_NIED) return PNL_FAIL;
       state = (nied_state *)(rng->state);
       /* Initialization of initX_n[] */
       for (i = 1; i <= PNL_DIM_MAX_NIED; i++)
@@ -1562,11 +1562,11 @@ int pnl_rng_sdim(PnlRng *rng, int dim)
     }
     break;
     case PNL_RNG_SOBOL_I4:
-      if (dim  > PNL_SOBOL_I4_DIM_MAX2) return FAIL;
+      if (dim  > PNL_SOBOL_I4_DIM_MAX2) return PNL_FAIL;
       i4_sobol_init(rng, dim);
       break;
     case PNL_RNG_SOBOL_I8:
-      if (dim  > PNL_SOBOL_I8_DIM_MAX2) return FAIL;
+      if (dim  > PNL_SOBOL_I8_DIM_MAX2) return PNL_FAIL;
       i8_sobol_init(rng, dim);
       break;
 
@@ -1574,6 +1574,6 @@ int pnl_rng_sdim(PnlRng *rng, int dim)
       printf("For PNL_MC rng, you shoud use pnl_rng_sseed instead of pnl_rng_sdim\n");
       break;
     }
-  return OK;
+  return PNL_OK;
 }
 

@@ -1484,7 +1484,7 @@ L3302:
 		condr1 = 1.f / sqrt(temp1);
 /*           .. here need a second oppinion on the condition number */
 /*           .. then assume worst case scenario */
-/*           R1 is OK for inverse <=> CONDR1 .LT. FLOAT(N) */
+/*           R1 is PNL_OK for inverse <=> CONDR1 .LT. FLOAT(N) */
 /*           more conservative    <=> CONDR1 .LT. SQRT(FLOAT(N)) */
 
 		cond_ok__ = sqrt((float) nr);

@@ -177,12 +177,12 @@ static void pnl_mat_ls_test ()
   pnl_vect_rand_uni (b, m, 0, 1, gen);
 
   Bcopy = pnl_mat_copy (B);
-  if (pnl_mat_ls_mat (A, B) != OK) printf("error in pnl_mat_ls\n");
+  if (pnl_mat_ls_mat (A, B) != PNL_OK) printf("error in pnl_mat_ls\n");
   AB = pnl_mat_mult_mat (A, B);
   pnl_test_mat_eq_abs( AB, Bcopy, 1E-8, "mat_ls_mat", "");
 
   bcopy = pnl_vect_copy (b);
-  if (pnl_mat_ls (A, b) != OK) printf("error in pnl_mat_ls\n");
+  if (pnl_mat_ls (A, b) != PNL_OK) printf("error in pnl_mat_ls\n");
   Ab = pnl_mat_mult_vect (A, b);
   pnl_test_vect_eq_abs( Ab, bcopy, 1E-8, "mat_ls", "");
 

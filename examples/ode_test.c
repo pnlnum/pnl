@@ -74,7 +74,7 @@ void test01 ( )
     {
       t = ((n_step - i) * t_start + i * t_stop) / ( double ) n_step;
       t_out = ((n_step - (i + 1) ) * t_start + (i + 1) * t_stop)  / ( double ) n_step;
-      if ( pnl_ode_rkf45 ( &f, y, t, t_out, relerr, abserr, &flag ) == FAIL )
+      if ( pnl_ode_rkf45 ( &f, y, t, t_out, relerr, abserr, &flag ) == PNL_FAIL )
         {
           pnl_test_set_fail0("pnl_ode_rkf45 failed");
         }

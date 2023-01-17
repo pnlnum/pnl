@@ -186,7 +186,7 @@ static void pnl_mat_submat_test ()
    * Finds all the components s.t. M1(i, j) >= 0
    * extracts the indices for which the test is true
    */
-  if ( pnl_mat_find (indi, indj, "m", ispos, M1) == FAIL ) printf ("Error in pnl_mat_find\n");
+  if ( pnl_mat_find (indi, indj, "m", ispos, M1) == PNL_FAIL ) printf ("Error in pnl_mat_find\n");
   v1 = pnl_vect_create_submat (M1, indi, indj);
   for ( i=0 ; i<v1->size ; i++ )
     {
@@ -203,7 +203,7 @@ static void pnl_mat_submat_test ()
    * Finds all the components s.t. M1(i, j) >= 0
    * extracts the linear index for which the test is true
    */
-  if ( pnl_mat_find (indi, NULL, "m", ispos, M1) == FAIL ) printf ("Error in pnl_mat_find\n");
+  if ( pnl_mat_find (indi, NULL, "m", ispos, M1) == PNL_FAIL ) printf ("Error in pnl_mat_find\n");
   for ( i=0 ; i<indi->size ; i++ )
     {
       if ( ! ispos ( &(PNL_GET(M1,indi->array[i])) ) ) 
@@ -217,7 +217,7 @@ static void pnl_mat_submat_test ()
   /*
    * Finds the components s.t. M1(i,j) >= M2(i,j)
    */
-  if ( pnl_mat_find (indi, indj, "mm", islarger, M1, M2) == FAIL ) printf ("Error in pnl_mat_find\n");
+  if ( pnl_mat_find (indi, indj, "mm", islarger, M1, M2) == PNL_FAIL ) printf ("Error in pnl_mat_find\n");
   for ( i=0 ; i<indi->size ; i++ )
     {
       double M1_ij = PNL_MGET(M1, PNL_GET(indi,i), PNL_GET(indj,i));

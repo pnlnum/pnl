@@ -36,7 +36,7 @@ int CF_Call_BS(double s,double k,double t,double r,double divid,double sigma,dou
   *ptprice=s*delta-exp(-r*t)*k*cdf_nor(d2);
   /*Delta*/
   *ptdelta=delta;
-  return OK;
+  return PNL_OK;
 }
 
 int CF_Put_BS(double s,double k,double t,double r,double divid,double sigma,double *ptprice,double *ptdelta)
@@ -53,7 +53,7 @@ int CF_Put_BS(double s,double k,double t,double r,double divid,double sigma,doub
 
   /*Delta*/
   *ptdelta=delta;
-  return OK;
+  return PNL_OK;
 }
 
 static void test_pnl_finance_function_call_put()

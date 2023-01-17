@@ -84,15 +84,15 @@ void pnl_mat_object_free(PnlMatObject **o)
  * @param m : new nb rows
  * @param n : new nb columns
  *
- * @return OK or FAIL. When returns OK, the matrix is changed.
+ * @return PNL_OK or PNL_FAIL. When returns PNL_OK, the matrix is changed.
  */
 int pnl_mat_object_resize(PnlMatObject *M, int m, int n)
 {
   int mn;
   size_t sizeof_base = 0;
   mn = m * n;
-  if (M->owner == 0) return OK;
-  if (mn < 0) return FAIL;
+  if (M->owner == 0) return PNL_OK;
+  if (mn < 0) return PNL_FAIL;
   if (mn == 0) /* free array */
     {
       M->m = M->n = M->mn = M->mem_size = 0;
@@ -101,7 +101,7 @@ int pnl_mat_object_resize(PnlMatObject *M, int m, int n)
           free(M->array);
           M->array = NULL;
         }
-      return OK;
+      return PNL_OK;
     }
 
   if (M->mem_size >= mn)
@@ -112,7 +112,7 @@ int pnl_mat_object_resize(PnlMatObject *M, int m, int n)
       M->m = m;
       M->n = n;
       M->mn = mn;
-      return OK;
+      return PNL_OK;
     }
 
   /* Now, M->mem_size < mn */
@@ -132,10 +132,10 @@ int pnl_mat_object_resize(PnlMatObject *M, int m, int n)
       break;
     default :
       PNL_MESSAGE(1, "Unknown type in pnl_mat_object_resize.\n");
-      return FAIL;
+      return PNL_FAIL;
     }
-  if ((M->array = realloc(M->array, mn * sizeof_base)) == NULL) return FAIL;
-  return OK;
+  if ((M->array = realloc(M->array, mn * sizeof_base)) == NULL) return PNL_FAIL;
+  return PNL_OK;
 }
 
 /**
@@ -225,7 +225,7 @@ int pnl_hmat_compute_linear_index(PnlHmatObject *H, int *tab)
  * @param ndim : new nb dimensions
  * @param dims : new pointer to the dimensions array
  *
- * @return OK or FAIL. When returns OK, the hmatrix is changed.
+ * @return PNL_OK or PNL_FAIL. When returns PNL_OK, the hmatrix is changed.
  */
 int pnl_hmat_object_resize(PnlHmatObject *H, int ndim, const int *dims)
 {
@@ -241,14 +241,14 @@ int pnl_hmat_object_resize(PnlHmatObject *H, int ndim, const int *dims)
       H->ndim = ndim;
       if (H->ndim > ndim)
         {
-          if ((H->dims = realloc(H->dims, sizeof(int) * ndim)) == NULL) return FAIL;
-          if ((H->pdims = realloc(H->pdims, sizeof(int) * ndim)) == NULL) return FAIL;
+          if ((H->dims = realloc(H->dims, sizeof(int) * ndim)) == NULL) return PNL_FAIL;
+          if ((H->pdims = realloc(H->pdims, sizeof(int) * ndim)) == NULL) return PNL_FAIL;
         }
       memcpy(H->dims, dims, ndim * sizeof(int));
       pnl_hmat_compute_pdims(H->pdims, ndim, dims);
-      return OK;
+      return PNL_OK;
     }
-  if (s < 0) return FAIL;
+  if (s < 0) return PNL_FAIL;
   if (s == 0) /* free array */
     {
       H->ndim =  H->mn = 0;
@@ -256,13 +256,13 @@ int pnl_hmat_object_resize(PnlHmatObject *H, int ndim, const int *dims)
       H->pdims = NULL;
       free(H->array);
       H->array = NULL;
-      return OK;
+      return PNL_OK;
     }
   H->ndim = ndim;
   H->mn = s;
-  if ((H->dims = realloc(H->dims, sizeof(int) * ndim)) == NULL) return FAIL;
+  if ((H->dims = realloc(H->dims, sizeof(int) * ndim)) == NULL) return PNL_FAIL;
   memcpy(H->dims, dims, ndim * sizeof(int));
-  if ((H->pdims = realloc(H->pdims, sizeof(int) * ndim)) == NULL) return FAIL;
+  if ((H->pdims = realloc(H->pdims, sizeof(int) * ndim)) == NULL) return PNL_FAIL;
   pnl_hmat_compute_pdims(H->pdims, ndim, dims);
 
   switch (PNL_GET_TYPE(H))
@@ -278,19 +278,19 @@ int pnl_hmat_object_resize(PnlHmatObject *H, int ndim, const int *dims)
       break;
     default :
       PNL_MESSAGE(1, "Unknown type in pnl_hmat_object_resize.\n");
-      return FAIL;
+      return PNL_FAIL;
     }
   if (H->array == NULL)
     {
       if ((H->array = malloc(H->mn * sizeof_base)) == NULL)
-        return FAIL;
+        return PNL_FAIL;
     }
   else
     {
       if ((H->array = realloc(H->array, H->mn * sizeof_base)) == NULL)
-        return FAIL;
+        return PNL_FAIL;
     }
-  return OK;
+  return PNL_OK;
 }
 
 
@@ -333,7 +333,7 @@ static char pnl_hmat_int_label[] = "PnlHmatrixInt";
  * @param A must be a matrix with 3 rows or columns
  * @param B must be a matrix with the same size as A
  *
- * @return FAIL in case of dimension mismatch, OK otherwise
+ * @return PNL_FAIL in case of dimension mismatch, PNL_OK otherwise
  */
 int pnl_mat_cross(PnlMat *lhs, const PnlMat *A, const PnlMat *B)
 {
@@ -349,7 +349,7 @@ int pnl_mat_cross(PnlMat *lhs, const PnlMat *A, const PnlMat *B)
           MLET(lhs, i, 1) = MGET(A, i, 2) * MGET(B, i, 0) - MGET(A, i, 0) * MGET(B, i, 2);
           MLET(lhs, i, 2) = MGET(A, i, 0) * MGET(B, i, 1) - MGET(A, i, 1) * MGET(B, i, 0);
         }
-      return OK;
+      return PNL_OK;
     }
   if (A->m == 3)
     {
@@ -360,10 +360,10 @@ int pnl_mat_cross(PnlMat *lhs, const PnlMat *A, const PnlMat *B)
           MLET(lhs, 1, j) = MGET(A, 2, j) * MGET(B, 0, j) - MGET(A, 0, j) * MGET(B, 2, j);
           MLET(lhs, 2, j) = MGET(A, 0, j) * MGET(B, 1, j) - MGET(A, 1, j) * MGET(B, 0, j);
         }
-      return OK;
+      return PNL_OK;
     }
   else
-    return FAIL;
+    return PNL_FAIL;
 }
 
 /**
@@ -436,7 +436,7 @@ int pnl_mat_exp(PnlMat *B, const PnlMat *A)
       pnl_mat_set_id(B);
       free(work);
       work = NULL;
-      return FAIL;
+      return PNL_FAIL;
     }
   ns = MAX(0, (int)(log(hnorm) / log(2.)) + 2);
   scale = 1. / pnl_pow_i(2., ns);
@@ -531,7 +531,7 @@ int pnl_mat_exp(PnlMat *B, const PnlMat *A)
 
   free(work);
   work = NULL;
-  return OK;
+  return PNL_OK;
 }
 
 int pnl_mat_complex_exp(PnlMatComplex *B, const PnlMatComplex *A)
@@ -577,7 +577,7 @@ int pnl_mat_complex_exp(PnlMatComplex *B, const PnlMatComplex *A)
       pnl_mat_complex_set_id(B);
       free(work);
       work = NULL;
-      return FAIL;
+      return PNL_FAIL;
     }
   ns = MAX(0, (int)(log(hnorm) / log(2.)) + 2);
   scale = Complex(1. / pnl_pow_i(2., ns), 0.);
@@ -673,7 +673,7 @@ int pnl_mat_complex_exp(PnlMatComplex *B, const PnlMatComplex *A)
 
   free(work);
   work = NULL;
-  return OK;
+  return PNL_OK;
 }
 
 /**

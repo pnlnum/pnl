@@ -36,7 +36,7 @@ static void reset_rng (PnlRng *rng, int s)
     }
   else
     {
-      if ( pnl_rng_sdim (rng, s) == FAIL )
+      if ( pnl_rng_sdim (rng, s) == PNL_FAIL )
         {
           printf ("Initialization error of generator %d\n", rng->type);
         }

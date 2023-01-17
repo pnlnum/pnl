@@ -143,14 +143,14 @@ int pnl_array_resize(PnlArray * v, int size)
 {
 
   int i, old_size = v->size;
-  if (size < 0) return FAIL;
+  if (size < 0) return PNL_FAIL;
   if (size == 0)
     {
       if (v->mem_size > 0) free (v->array);
       v->size = 0;
       v->mem_size = 0;
       v->array=NULL;
-      return OK;
+      return PNL_OK;
     }
   
   if (v->mem_size >= size)
@@ -158,15 +158,15 @@ int pnl_array_resize(PnlArray * v, int size)
       /* If the new size is smaller, we do not reduce the size of the
          allocated block. It may change, but it allows to grow the vector
          quicker */
-      v->size=size; return OK;
+      v->size=size; return PNL_OK;
     }
 
   /* Now, v->mem_size < size */
-  if ((v->array=realloc(v->array,size*sizeof(PnlObject *))) == NULL) return FAIL;
+  if ((v->array=realloc(v->array,size*sizeof(PnlObject *))) == NULL) return PNL_FAIL;
   for ( i=old_size ; i<size ; i++ ) v->array[i] = NULL;
   v->size = size;
   v->mem_size = size;
-  return OK;
+  return PNL_OK;
 }
 
 /**

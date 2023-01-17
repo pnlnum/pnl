@@ -797,7 +797,7 @@ static int pnl_basis_type_tab_length = PNL_BASIS_MAX_TYPE; /*!< length of PnlBas
  * @param Df the first derivative of the generating function in dimension 1
  * @param D2f the second derivative of the generating function in dimension 1
  *
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 static int pnl_basis_type_register_with_id(int id, const char *label, double (*f)(double, int),
     double (*Df)(double, int), double (*D2f)(double, int))
@@ -810,7 +810,7 @@ static int pnl_basis_type_register_with_id(int id, const char *label, double (*f
       pnl_basis_type_tab_length *= 2;
       PnlBasisTypeTab = realloc(PnlBasisTypeTab, pnl_basis_type_tab_length * sizeof(PnlBasisType));
     }
-  if (pnl_basis_type_next != id) return FAIL;
+  if (pnl_basis_type_next != id) return PNL_FAIL;
 
   PnlBasisTypeTab[id].id = id;
   PnlBasisTypeTab[id].label = label;
@@ -819,7 +819,7 @@ static int pnl_basis_type_register_with_id(int id, const char *label, double (*f
   PnlBasisTypeTab[id].D2f = D2f;
   pnl_basis_type_next++;
 
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -829,14 +829,14 @@ static int pnl_basis_type_register_with_id(int id, const char *label, double (*f
  */
 static int pnl_basis_type_init()
 {
-  if (PnlBasisTypeTab != NULL)  return OK;
+  if (PnlBasisTypeTab != NULL)  return PNL_OK;
   PnlBasisTypeTab = malloc(PNL_BASIS_MAX_TYPE * sizeof(PnlBasisType));
 
-  if (pnl_basis_type_register_with_id(PNL_BASIS_CANONICAL, "Canonical", CanonicalD1, DCanonicalD1, D2CanonicalD1) != OK) return FAIL;
-  if (pnl_basis_type_register_with_id(PNL_BASIS_HERMITE, "Hermite", HermiteD1, DHermiteD1, D2HermiteD1) != OK) return FAIL;
-  if (pnl_basis_type_register_with_id(PNL_BASIS_TCHEBYCHEV, "Tchebychev", TchebychevD1, DTchebychevD1, D2TchebychevD1) != OK) return FAIL;
+  if (pnl_basis_type_register_with_id(PNL_BASIS_CANONICAL, "Canonical", CanonicalD1, DCanonicalD1, D2CanonicalD1) != PNL_OK) return PNL_FAIL;
+  if (pnl_basis_type_register_with_id(PNL_BASIS_HERMITE, "Hermite", HermiteD1, DHermiteD1, D2HermiteD1) != PNL_OK) return PNL_FAIL;
+  if (pnl_basis_type_register_with_id(PNL_BASIS_TCHEBYCHEV, "Tchebychev", TchebychevD1, DTchebychevD1, D2TchebychevD1) != PNL_OK) return PNL_FAIL;
 
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -855,7 +855,7 @@ int pnl_basis_type_register(const char *name, double (*f)(double, int),
   int id;
   pnl_basis_type_init();
   id = pnl_basis_type_next;
-  if (pnl_basis_type_register_with_id(id, name, f, Df, D2f) == FAIL)
+  if (pnl_basis_type_register_with_id(id, name, f, Df, D2f) == PNL_FAIL)
     return PNL_BASIS_NULL;
   return id;
 }
@@ -1623,7 +1623,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
  * @param y the values of the function f at the points defined by x
  * @param coef contains on exit the coefficients of the regression
  *
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_basis_fit_ls(const PnlBasis *basis, PnlVect *coef, const PnlMat *x, const PnlVect *y)
 {
@@ -1662,7 +1662,7 @@ int pnl_basis_fit_ls(const PnlBasis *basis, PnlVect *coef, const PnlMat *x, cons
   pnl_vect_free(&phi_k);
   pnl_mat_free(&A);
 
-  return OK;
+  return PNL_OK;
 }
 
 /**

@@ -323,11 +323,11 @@ void pnl_tridiag_mat_free(PnlTridiagMat **v)
  * @param v : a pointer to an already existing PnlTridiagMat (size
  * must be initialised)
  * @param size : new nb rows
- * @return OK or FAIL. When returns OK, the matrix is changed.
+ * @return PNL_OK or PNL_FAIL. When returns PNL_OK, the matrix is changed.
  */
 int pnl_tridiag_mat_resize(PnlTridiagMat *v, int size)
 {
-  if (size < 0) return FAIL;
+  if (size < 0) return PNL_FAIL;
   if (size == 0) /* free array */
     {
       v->size = 0;
@@ -346,12 +346,12 @@ int pnl_tridiag_mat_resize(PnlTridiagMat *v, int size)
           free(v->DL);
           v->DL = NULL;
         }
-      return OK;
+      return PNL_OK;
     }
   if (v->size >= size) /*nothing to do, just adjust m and n*/
     {
       v->size = size;
-      return OK;
+      return PNL_OK;
     }
   v->size = size;
   if (v->D == NULL)
@@ -359,7 +359,7 @@ int pnl_tridiag_mat_resize(PnlTridiagMat *v, int size)
       if (((v->D = malloc(v->size * sizeof(double))) == NULL)
           || ((v->DU = malloc((v->size - 1) * sizeof(double))) == NULL)
           || ((v->DL = malloc((v->size - 1) * sizeof(double))) == NULL))
-        return FAIL;
+        return PNL_FAIL;
     }
   else
     {
@@ -369,9 +369,9 @@ int pnl_tridiag_mat_resize(PnlTridiagMat *v, int size)
       if (((v->D = malloc(v->size * sizeof(double))) == NULL)
           || ((v->DU = malloc((v->size - 1) * sizeof(double))) == NULL)
           || ((v->DL = malloc((v->size - 1) * sizeof(double))) == NULL))
-        return FAIL;
+        return PNL_FAIL;
     }
-  return OK;
+  return PNL_OK;
 }
 
 
@@ -662,7 +662,7 @@ void pnl_tridiag_mat_print(const PnlTridiagMat *M)
  *
  * @param A a PnlTridiagMat. On exit, A is modified and becomes unusable.
  * @param b right hand side member. On exit b contains the solution x
- * @return FAIL or OK
+ * @return PNL_FAIL or PNL_OK
  */
 int pnl_tridiag_mat_syslin_inplace(PnlTridiagMat *A, PnlVect *b)
 {
@@ -674,8 +674,8 @@ int pnl_tridiag_mat_syslin_inplace(PnlTridiagMat *A, PnlVect *b)
   PNL_CHECK(A->size != b->size, "incompatible size", "tridiag_lu");
 
   C2F(dgtsv)(&n, &nrhs, A->DL, A->D, A->DU, b->array, &ldb, &info);
-  if (info == 0) return OK;
-  else return FAIL;
+  if (info == 0) return PNL_OK;
+  else return PNL_FAIL;
 }
 
 /**
@@ -684,7 +684,7 @@ int pnl_tridiag_mat_syslin_inplace(PnlTridiagMat *A, PnlVect *b)
  * @param A a PnlTridiagMat. On exit, A is modified and becomes unusable.
  * @param x contains the solution on exit
  * @param b right hand side member.
- * @return FAIL or OK
+ * @return PNL_FAIL or PNL_OK
  */
 int pnl_tridiag_mat_syslin(PnlVect *x, PnlTridiagMat *A, const PnlVect *b)
 {
@@ -897,11 +897,11 @@ void pnl_tridiag_mat_lu_free(PnlTridiagMatLU **v)
  * @param v : a pointer to an already existing PnlTridiagMatLU (size
  * must be initialised)
  * @param size : new nb rows
- * @return OK or FAIL. When returns OK, the matrix is changed.
+ * @return PNL_OK or PNL_FAIL. When returns PNL_OK, the matrix is changed.
  */
 int pnl_tridiag_mat_lu_resize(PnlTridiagMatLU *v, int size)
 {
-  if (size < 0) return FAIL;
+  if (size < 0) return PNL_FAIL;
   if (size == 0) /* free array */
     {
       v->size = 0;
@@ -930,12 +930,12 @@ int pnl_tridiag_mat_lu_resize(PnlTridiagMatLU *v, int size)
           free(v->ipiv);
           v->ipiv = NULL;
         }
-      return OK;
+      return PNL_OK;
     }
   if (v->size >= size) /*nothing to do, just adjust m and n*/
     {
       v->size = size;
-      return OK;
+      return PNL_OK;
     }
   v->size = size;
   if (v->size > 0)
@@ -951,8 +951,8 @@ int pnl_tridiag_mat_lu_resize(PnlTridiagMatLU *v, int size)
       || ((v->DU2 = malloc((v->size - 2) * sizeof(double))) == NULL)
       || ((v->DL = malloc((v->size - 1) * sizeof(double))) == NULL)
       || ((v->ipiv = malloc((v->size) * sizeof(int))) == NULL))
-    return FAIL;
-  return OK;
+    return PNL_FAIL;
+  return PNL_OK;
 }
 
 /**
@@ -962,7 +962,7 @@ int pnl_tridiag_mat_lu_resize(PnlTridiagMatLU *v, int size)
  * PnlTridiagMatLU as returned by pnl_tridiag_mat_lu_new
  * @param A the initial tridiagonal matrix
  *
- * @return  OK or FAIL
+ * @return  PNL_OK or PNL_FAIL
  */
 int pnl_tridiag_mat_lu_compute(PnlTridiagMatLU *LU, const PnlTridiagMat *A)
 {
@@ -976,9 +976,9 @@ int pnl_tridiag_mat_lu_compute(PnlTridiagMatLU *LU, const PnlTridiagMat *A)
   if (info != 0)
     {
       PNL_MESSAGE_ERROR("LU decomposition cannot be computed", "pnl_tridiag_mat_lu_compute");
-      return FAIL;
+      return PNL_FAIL;
     }
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -987,7 +987,7 @@ int pnl_tridiag_mat_lu_compute(PnlTridiagMatLU *LU, const PnlTridiagMat *A)
  * @param LU a PnlTridiagMatLU. A must have been computed by a previous call
  * to pnl_mat_lu_compute
  * @param b right hand side member. On exit b contains the solution x
- * @return FAIL or OK
+ * @return PNL_FAIL or PNL_OK
  */
 int pnl_tridiag_mat_lu_syslin_inplace(PnlTridiagMatLU *LU, PnlVect *b)
 {
@@ -999,8 +999,8 @@ int pnl_tridiag_mat_lu_syslin_inplace(PnlTridiagMatLU *LU, PnlVect *b)
   PNL_CHECK(LU->size != b->size, "incompatible size", "tridiag_mat_lu_syslin");
 
   C2F(dgttrs)("N", &n, &nrhs, LU->DL, LU->D, LU->DU, LU->DU2, LU->ipiv, b->array, &ldb, &info);
-  if (info == 0) return OK;
-  else return FAIL;
+  if (info == 0) return PNL_OK;
+  else return PNL_FAIL;
 }
 
 /**
@@ -1010,7 +1010,7 @@ int pnl_tridiag_mat_lu_syslin_inplace(PnlTridiagMatLU *LU, PnlVect *b)
  * to pnl_mat_lu_compute
  * @param x contains the solution on exit
  * @param b right hand side member.
- * @return FAIL or OK
+ * @return PNL_FAIL or PNL_OK
  */
 int pnl_tridiag_mat_lu_syslin(PnlVect *x, PnlTridiagMatLU *LU, const PnlVect *b)
 {

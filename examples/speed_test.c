@@ -42,7 +42,7 @@ tst_list speed_tests[] =
 int main ()
 {
   menu_test(speed_tests); 
-  return OK;
+  return PNL_OK;
 }
 
 

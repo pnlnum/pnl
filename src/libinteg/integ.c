@@ -67,7 +67,7 @@ static int status, xneval;
  * @param result the result of the integration
  * @param abserr the absolute error of the computation
  * @param neval number of function evaluations
- * @return  OK or FAIL if the required precision cannot be attained
+ * @return  PNL_OK or PNL_FAIL if the required precision cannot be attained
  */
 int pnl_integration_qng(PnlFunc *F,
                         double a, double b,
@@ -78,8 +78,8 @@ int pnl_integration_qng(PnlFunc *F,
   int ier;
   pnl_dqng(F, &a, &b, &epsabs, &epsrel, result, abserr, neval, &ier);
 
-  if (ier != 0) return FAIL;
-  return OK;
+  if (ier != 0) return PNL_FAIL;
+  return PNL_OK;
 }
 
 /**
@@ -97,7 +97,7 @@ int pnl_integration_qng(PnlFunc *F,
  * @param result the result of the integration
  * @param abserr the absolute error of the computation
  * @param neval number of function evaluations
- * @return  OK or FAIL if the required precision cannot be attained
+ * @return  PNL_OK or PNL_FAIL if the required precision cannot be attained
  */
 int pnl_integration_GK(PnlFunc *F,
                        double a, double b,
@@ -108,8 +108,8 @@ int pnl_integration_GK(PnlFunc *F,
   int ier;
   pnl_dqng(F, &a, &b, &epsabs, &epsrel, result, abserr, neval, &ier);
 
-  if (ier != 0) return FAIL;
-  return OK;
+  if (ier != 0) return PNL_FAIL;
+  return PNL_OK;
 }
 
 
@@ -127,7 +127,7 @@ int pnl_integration_GK(PnlFunc *F,
  * @param result the result of the integration
  * @param abserr the absolute error of the computation
  * @param neval number of function evaluations
- * @return  OK or FAIL if the required precision cannot be attained
+ * @return  PNL_OK or PNL_FAIL if the required precision cannot be attained
  */
 int pnl_integration_qag(PnlFunc *f, double a, double b, double epsabs,
                         double epsrel, int limit, double *result,
@@ -143,7 +143,7 @@ int pnl_integration_qag(PnlFunc *f, double a, double b, double epsabs,
       *result = 0.;
       *abserr = 0.;
       *neval  = 0;
-      return OK;
+      return PNL_OK;
     }
   if (a > b)
     {
@@ -214,8 +214,8 @@ int pnl_integration_qag(PnlFunc *f, double a, double b, double epsabs,
   FREE(elist);
   FREE(iord);
 
-  if (ier != 0) return FAIL;
-  return OK;
+  if (ier != 0) return PNL_FAIL;
+  return PNL_OK;
 }
 
 
@@ -234,7 +234,7 @@ int pnl_integration_qag(PnlFunc *f, double a, double b, double epsabs,
  * @param result the result of the integration
  * @param abserr the absolute error of the computation
  * @param neval number of function evaluations
- * @return  OK or FAIL if the required precision cannot be attained
+ * @return  PNL_OK or PNL_FAIL if the required precision cannot be attained
  */
 int pnl_integration_qagp(PnlFunc *f, double a, double b, const PnlVect *singularities,
                          double epsabs, double epsrel, int limit, double *result,
@@ -249,7 +249,7 @@ int pnl_integration_qagp(PnlFunc *f, double a, double b, const PnlVect *singular
       *result = 0.;
       *abserr = 0.;
       *neval  = 0;
-      return OK;
+      return PNL_OK;
     }
   if (a > b)
     {
@@ -310,8 +310,8 @@ int pnl_integration_qagp(PnlFunc *f, double a, double b, const PnlVect *singular
   FREE(ndim);
   FREE(points);
 
-  if (ier != 0) return FAIL;
-  return OK;
+  if (ier != 0) return PNL_FAIL;
+  return PNL_OK;
 }
 
 /*
@@ -334,9 +334,9 @@ static double int_1d(double x, void *params)
   wrap_1d.F = func1D;
   wrap_1d.params = params;
   xsav = x;
-  if (pnl_integration_qng(&wrap_1d, y0sav, y1sav, xepsabs, xepsrel, &res, &err, &it) != OK)
+  if (pnl_integration_qng(&wrap_1d, y0sav, y1sav, xepsabs, xepsrel, &res, &err, &it) != PNL_OK)
     {
-      status = FAIL;
+      status = PNL_FAIL;
       return 0.;
     }
   xneval += it;
@@ -356,7 +356,7 @@ static double int_1d(double x, void *params)
  * @param result results of integration
  * @param abserr error of integration
  * @param neval number of function evaluations
- * @return  OK or FAIL if the required precision cannot be achieved
+ * @return  PNL_OK or PNL_FAIL if the required precision cannot be achieved
  */
 int pnl_integration_qng_2d(PnlFunc2D *F,
                            double x0, double x1,
@@ -373,10 +373,10 @@ int pnl_integration_qng_2d(PnlFunc2D *F,
   xepsrel = epsrel;
   y0sav = y0;
   y1sav = y1;
-  status = OK;
+  status = PNL_OK;
   xneval = 0;
-  if (pnl_integration_GK(&func_1d, x0, x1, epsabs, epsrel, result, abserr, neval) == FAIL)
-    return FAIL;
+  if (pnl_integration_GK(&func_1d, x0, x1, epsabs, epsrel, result, abserr, neval) == PNL_FAIL)
+    return PNL_FAIL;
   else
     {
       *neval = xneval;
@@ -401,7 +401,7 @@ int pnl_integration_qng_2d(PnlFunc2D *F,
  * @param result results of integration
  * @param abserr error of integration
  * @param neval number of function evaluations
- * @return  OK or FAIL if the required precision cannot be achieved
+ * @return  PNL_OK or PNL_FAIL if the required precision cannot be achieved
  */
 int pnl_integration_GK2D(PnlFunc2D *F,
                          double x0, double x1,

@@ -309,7 +309,7 @@ int zpstf2_(char *uplo, int *n, dcomplex *a,
           if (j != pvt)
             {
 
-              /*              Pivot OK, so can now swap pivot rows and columns */
+              /*              Pivot PNL_OK, so can now swap pivot rows and columns */
 
               i__2 = pvt + pvt * a_dim1;
               i__3 = j + j * a_dim1;
@@ -424,7 +424,7 @@ int zpstf2_(char *uplo, int *n, dcomplex *a,
           if (j != pvt)
             {
 
-              /*              Pivot OK, so can now swap pivot rows and columns */
+              /*              Pivot PNL_OK, so can now swap pivot rows and columns */
 
               i__2 = pvt + pvt * a_dim1;
               i__3 = j + j * a_dim1;
@@ -811,7 +811,7 @@ int zpstrf_(char *uplo, int *n, dcomplex *a,
                   if (j != pvt)
                     {
 
-                      /*                    Pivot OK, so can now swap pivot rows and columns */
+                      /*                    Pivot PNL_OK, so can now swap pivot rows and columns */
 
                       i__4 = pvt + pvt * a_dim1;
                       i__5 = j + j * a_dim1;
@@ -960,7 +960,7 @@ int zpstrf_(char *uplo, int *n, dcomplex *a,
                   if (j != pvt)
                     {
 
-                      /*                    Pivot OK, so can now swap pivot rows and columns */
+                      /*                    Pivot PNL_OK, so can now swap pivot rows and columns */
 
                       i__4 = pvt + pvt * a_dim1;
                       i__5 = j + j * a_dim1;

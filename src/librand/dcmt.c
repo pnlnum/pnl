@@ -1611,19 +1611,19 @@ int pnl_dcmt_create(dcmt_state *mts)
   static int id = 0;
 
   pnl_mt_sseed(&org, 4172);
-  if ((template_mts = init_mt_search(&ck, &pre, 521)) == NULL) return FAIL;
+  if ((template_mts = init_mt_search(&ck, &pre, 521)) == NULL) return PNL_FAIL;
 
   copy_params_of_dcmt_state(template_mts, mts);
   if (NOT_FOUND == get_irred_param(&ck, &pre, &org, mts, id, DEFAULT_ID_SIZE))
     {
       pnl_dcmt_free(&mts);
-      return FAIL;
+      return PNL_FAIL;
     }
   _get_tempering_parameter_hard_dc(mts);
   end_mt_search(&pre);
   id++;
 
-  return OK;
+  return PNL_OK;
 }
 
 /**

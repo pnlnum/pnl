@@ -1031,7 +1031,7 @@ L2103:
 					}
 					sva[p] = aapp;
 				    }
-/*              end of OK rotation */
+/*              end of PNL_OK rotation */
 				} else {
 				    ++notrot;
 				    ++pskipped;

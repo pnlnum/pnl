@@ -235,8 +235,8 @@ extern int pnl_isequal(double x, double y, double relerr);
   }
 #endif
 
-#define OK 0
-#define FAIL 1
+#define PNL_OK 0
+#define PNL_FAIL 1
 
 /**
  * f: R --> R

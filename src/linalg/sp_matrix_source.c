@@ -160,7 +160,7 @@ void FUNCTION(pnl_sp_mat, print_as_full)(const TYPE(PnlSpMat) *Sp)
  * @param n new nb of columns
  * @param nzmax new maximum number of non-zero elements.
  *
- * @return OK or FAIL. When returns OK, the matrix M is changed.
+ * @return PNL_OK or PNL_FAIL. When returns PNL_OK, the matrix M is changed.
  */
 int FUNCTION(pnl_sp_mat, resize)(TYPE(PnlSpMat) *M, int m, int n, int nzmax)
 {

@@ -1492,7 +1492,7 @@ L3302:
 		condr1 = 1. / sqrt(temp1);
 /*           .. here need a second oppinion on the condition number */
 /*           .. then assume worst case scenario */
-/*           R1 is OK for inverse <=> CONDR1 .LT. DBLE(N) */
+/*           R1 is PNL_OK for inverse <=> CONDR1 .LT. DBLE(N) */
 /*           more conservative    <=> CONDR1 .LT. DSQRT(DBLE(N)) */
 
 		cond_ok__ = sqrt((double) nr);

@@ -89,11 +89,11 @@ void pnl_sp_mat_object_free(PnlSpMatObject **o)
  * @param n new nb of columns
  * @param nz new maximum number of non-zero elements.
  *
- * @return OK or FAIL. When returns OK, the matrix M is changed.
+ * @return PNL_OK or PNL_FAIL. When returns PNL_OK, the matrix M is changed.
  */
 int pnl_sp_mat_object_resize(PnlSpMatObject *o, int m, int n, int nz)
 {
-  if (m < 0 || n < 0 || nz < 0) return FAIL;
+  if (m < 0 || n < 0 || nz < 0) return PNL_FAIL;
   if (m == 0 || n == 0)
     {
       o->m = o->n = 0;
@@ -103,7 +103,7 @@ int pnl_sp_mat_object_resize(PnlSpMatObject *o, int m, int n, int nz)
           free(o->array);
           o->array = NULL;
         }
-      return OK;
+      return PNL_OK;
     }
 
   /* Increase the number of rows if needed */
@@ -135,7 +135,7 @@ int pnl_sp_mat_object_resize(PnlSpMatObject *o, int m, int n, int nz)
           break;
         default :
           PNL_MESSAGE(1, "Unknown type in pnl_sp_mat_object_resize.\n");
-          return FAIL;
+          return PNL_FAIL;
         }
       o->array = realloc(o->array, nz * sizeof_base);
       o->J = realloc(o->J, nz * sizeof(int));
@@ -157,7 +157,7 @@ int pnl_sp_mat_object_resize(PnlSpMatObject *o, int m, int n, int nz)
         }
     }
   o->n = n;
-  return OK;
+  return PNL_OK;
 }
 
 #define BASE_DOUBLE

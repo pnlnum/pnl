@@ -323,7 +323,7 @@ int pnl_sf_gamma_sgn(double x, double *res, int *sgn)
             gamnan:
               mtherr( "Gamma", OVERFLOW );
               *res = MAXNUM;
-              return FAIL;
+              return PNL_FAIL;
             }
           i = p;
           if( (i & 1) == 0 )
@@ -338,7 +338,7 @@ int pnl_sf_gamma_sgn(double x, double *res, int *sgn)
           if( z == 0.0 )
             {
               *res = *sgn * INFINITY;
-              return( OK );
+              return( PNL_OK );
             }
           z = fabs(z);
           z = M_PI/(z * stirf(q) );
@@ -348,7 +348,7 @@ int pnl_sf_gamma_sgn(double x, double *res, int *sgn)
           z = stirf(x);
         }
       *res =  *sgn * z;
-      return OK;
+      return PNL_OK;
     }
 
   z = 1.0;
@@ -377,14 +377,14 @@ int pnl_sf_gamma_sgn(double x, double *res, int *sgn)
   if( x == 2.0 )
     {
       *res = z;
-      return OK;
+      return PNL_OK;
     }
 
   x -= 2.0;
   p = polevl( x, P, 6 );
   q = polevl( x, Q, 7 );
   *res  = z * p / q;
-  return OK;
+  return PNL_OK;
 
  small:
   if( x == 0.0 )
@@ -395,7 +395,7 @@ int pnl_sf_gamma_sgn(double x, double *res, int *sgn)
     {
       *res = z/((1.0 + 0.5772156649015329 * x) * x);
     }
-  return OK;    
+  return PNL_OK;    
 }
 
 
@@ -542,13 +542,13 @@ int pnl_sf_log_gamma_sgn(double x, double *res, int *sgn)
   if( pnl_isnan(x) ) 
     {
       *res = x;
-      return FAIL;
+      return PNL_FAIL;
     }
 
   if( !pnl_isfinite(x) ) 
     {
       *res = INFINITY;
-      return FAIL;
+      return PNL_FAIL;
     }
 
   if( x < -34.0 )
@@ -561,7 +561,7 @@ int pnl_sf_log_gamma_sgn(double x, double *res, int *sgn)
         lgsing:
           mtherr( "lgam", SING );
           *res = INFINITY;
-          return (FAIL);
+          return (PNL_FAIL);
         }
       i = p;
       if( (i & 1) == 0 )
@@ -579,7 +579,7 @@ int pnl_sf_log_gamma_sgn(double x, double *res, int *sgn)
         goto lgsing;
       /*      z = log(M_PI) - log( z ) - w;*/
       *res = LOGPI - log( z ) - w;
-      return( OK );
+      return( PNL_OK );
     }
 
   if( x < 13.0 )
@@ -611,26 +611,26 @@ int pnl_sf_log_gamma_sgn(double x, double *res, int *sgn)
       if( u == 2.0 )
         {
           *res = log(z);
-          return OK;
+          return PNL_OK;
         }
       p -= 2.0;
       x = x + p;
       p = x * polevl( x, B, 5 ) / p1evl( x, C, 6);
       *res = ( log(z) + p );
-      return OK;
+      return PNL_OK;
     }
 
   if( x > MAXLGM )
     {
       *res = *sgn * INFINITY;
-      return OK;
+      return PNL_OK;
     }
 
   q = ( x - 0.5 ) * log(x) - x + LS2PI;
   if( x > 1.0e8 )
     {
       *res = q;
-      return OK;
+      return PNL_OK;
     }
 
   p = 1.0/(x*x);
@@ -641,7 +641,7 @@ int pnl_sf_log_gamma_sgn(double x, double *res, int *sgn)
   else
     q += polevl( p, A, 4 ) / x;
   *res = q;
-  return OK;
+  return PNL_OK;
 }
 
 

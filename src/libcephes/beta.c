@@ -167,7 +167,7 @@ int pnl_sf_lbeta (double a, double b, double *res, int *sgn)
       sign *= *sgn;
       *sgn = sign;
       *res = y;
-      return OK;
+      return PNL_OK;
     }
 
   y = pnl_sf_gamma(y);
@@ -199,7 +199,7 @@ int pnl_sf_lbeta (double a, double b, double *res, int *sgn)
       *sgn = 1;
       *res = log (y);
     }
-  return OK;
+  return PNL_OK;
 }
 
 double lbeta( double a, double b )

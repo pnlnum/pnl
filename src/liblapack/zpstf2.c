@@ -253,7 +253,7 @@ static int c__1 = 1;
 
 	    if (j != pvt) {
 
-/*              Pivot OK, so can now swap pivot rows and columns */
+/*              Pivot PNL_OK, so can now swap pivot rows and columns */
 
 		i__2 = pvt + pvt * a_dim1;
 		i__3 = j + j * a_dim1;
@@ -357,7 +357,7 @@ static int c__1 = 1;
 
 	    if (j != pvt) {
 
-/*              Pivot OK, so can now swap pivot rows and columns */
+/*              Pivot PNL_OK, so can now swap pivot rows and columns */
 
 		i__2 = pvt + pvt * a_dim1;
 		i__3 = j + j * a_dim1;

@@ -1,0 +1,138 @@
+======Documentation======
+
+==== Manual ====
+
+
+PNL is written in C and implements an hierarchical object system inspired from the Glib library.
+
+PNL comes with a manual describing all the routines exported by the library. This documentation written in LaTeX can be produced in both PDF or HTML formats
+  * [[http://pnl.gforge.inria.fr/docs/pnl-manual.pdf|PNL manual - PDF]]
+  * [[http://pnl.gforge.inria.fr/docs/html/index.html|PNL manual - HTML]] (with one page per node)
+
+==== Short list of changes across the releases ====
+
+**Version 1.7.5** was released on 18 January 2017.\\
+Short list of the most important changes:
+
+  * Improve PNL detection for use in third party projects.
+  * Fix some bugs under MSVC.
+
+
+**Version 1.7.4** was released on 29 March 2016.\\
+Short list of the most important changes:
+
+  * Fix compiling errors in the examples under MSVC.
+  * Provide a PnlConfig.cmake file to use CMake find_package command in config mode.
+  * Enable in-place MPI reductions of PNL objects
+  * Improve the efficiency of creating and evaluationg pnl_basis objects.
+
+
+**Version 1.7.3** was released on 15 February 2016.\\
+Short list of the most important changes:
+
+  * PnlBasis objects can hold non tensor functions. The user can add its own functions to an existing basis.
+  * Complex error functions based on the Faddeev package.
+
+
+**Version 1.7.2** was released on 10 September 2015.\\
+Short list of the most important changes:
+
+  * Adds a CMake module to include the library in other projects.
+  * Improves and fixes a bug in the pnl_basis module.
+  * Adds the non central chi squared distribution to the random number generation toolbox.
+
+
+**Version 1.7.1** was released on 22 July 2014.\\
+Short list of the most important changes:
+
+  * Minor fixes in the examples
+  * Improvement of the inline facility detection in CMake. This fixes a bug of the 1.7.0 under Windows.
+
+
+**Version 1.7.0** was released on 28 April 2014.\\
+Short list of the most important changes:
+
+  * Random number generation. All methods know how to handle QMC generators. Three new distributions have been added: log-normal, inverse gaussian and asymmetric double exponential distributions.
+  * Linear Algebra. Computations of the logarithm and exponential of complex matrices. Sparse matrix object.
+  * Optimization. Newton's algorithm with Armijo line search.
+  * Polynomial regression. The evaluation of a multivariate polynomial has been greatly improved thanks to the use of sparse storage of these objects. This new implementation relies on sparse matrices.
+  * Internal design. The internal structure of the top level object has been modified to keep track of the number references on to a given object, which has enabled us to improve by a great deal the memory management of lists and arrays.
+
+
+**Version 1.6.0** was released on 22 March 2013.\\
+Short list of the most important changes:
+
+  * Improve Blas & Lapack detection on Mac OS X.
+  * Fix a minor bug in two dimensional FFT.
+  * Add a few functions for rounding (some are part of C99).
+
+
+**Version 1.5.2** was released on 24 January 2013.\\
+Short list of the most important changes:
+
+  * The compilation chain has moved from the autotools to CMake.
+
+**Version 1.5.1** was released on 16 October 2012.\\
+Short list of the most important changes:
+
+  * MPI_Reduce binding for PnlVect and PnlMat objects.
+  * 2D FFT.
+  * The user can define new function bases and register them for further usage as native bases.
+  * The PnlObject structure has three new function members: clone, copy, new. It is mainly useful for inheritance purposes.
+
+**Version 1.5.0** was released on 19 March 2012.\\
+//This new release breaks the compatibility with older versions//. \\
+Short list of the most important changes:
+
+  * Most macros are renamed with a pnl_ prefix to avoid name clashes
+  * Linear solver using a QR decomposition with column pivoting
+  * Inverse of permutations and its applying it in place
+  * Approximations for inverse hyperbolic functions (part of C99 but missing under Visual)
+
+
+**Version 1.4.1** was released on 11 October 2011.\\
+Short list of the most important changes:
+
+  * A bug in pnl_mat_{lower,upper}_syslin has been fixed
+  * Redesign of how Hmatrices are stored in memory
+  * New functions to extract data from Hmatrices as vectors or matrices
+  * New PnlArray type: array of PnlObjects. It is often a good alternative to using Hmatrices.
+
+**Version 1.4.0** was released on 9 September 2011. \\
+Short list of the most important changes:
+
+  * Runge Kutta Fehler 45 integrator for n dimensional ODEs
+  * Design of a new unit test framework
+  * New organisation of the manual
+  * LU decomposition of tridiagonal matrices
+  * Cholesky factorization with complete pivoting for positive semidefinite matrices
+  * New threadsafe Sobol generators (from John Burkardt)
+  * Update to version 3.2.1 of Lapack
+  * Integration of the Mersenne Twister Dynamic Creator version 0.6.1
+
+**Version 1.3.3** was released on 10 March 2011.\\
+The most important changes concern parallel computing, random number generators and multivariate polynomial bases:
+
+  * Random number generators become thread-safe
+  * Generation of Bessel random variables
+  * A generator for parallel computing (MPI) is added : Dynamic created Mersenne Twister
+  * Sparse polynomial bases based on hyperbolic sets of indices. Bases can be centered and normalised.
+  * Save/Load interface based on MPI Pack/Unpack
+
+**Version 1.3.2** was released on 3 December 2010. \\
+
+**Version 1.3.1** was released on 24 November 2010. \\
+
+**Version 1.3.0** was released on 4 November 2010. \\
+
+**Version 1.2.0** was released on 15 July 2010. \\
+Short list of the most important changes:
+
+  * Update of random number generators to work on 64-bit machines
+  * Bindings for MPI
+
+**Version 1.1.1** was released on 25 June 2010. \\
+
+**Version 1.1.0** was released on 27 May 2010. \\
+
+**Version 1.0.0-beta** was released on 4 March 2010. \\

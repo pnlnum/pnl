@@ -280,7 +280,7 @@ static double c_b24 = 1.;
 
 		    if (j != pvt) {
 
-/*                    Pivot OK, so can now swap pivot rows and columns */
+/*                    Pivot PNL_OK, so can now swap pivot rows and columns */
 
 			a[pvt + pvt * a_dim1] = a[j + j * a_dim1];
 			i__4 = j - 1;
@@ -391,7 +391,7 @@ static double c_b24 = 1.;
 
 		    if (j != pvt) {
 
-/*                    Pivot OK, so can now swap pivot rows and columns */
+/*                    Pivot PNL_OK, so can now swap pivot rows and columns */
 
 			a[pvt + pvt * a_dim1] = a[j + j * a_dim1];
 			i__4 = j - 1;

@@ -171,7 +171,7 @@ void linprog_ineq_test()
   PnlVect *xres = pnl_vect_create_from_list(3, 0., 6.66666666667, 16.66666666667);
   double res = -76.6666667;
   double val = 0.;
-  if (!((pnl_optim_linprog(Obj, A_ineq, B_ineq, NULL, NULL, NULL, NULL, pnl_test_is_verbose(), x, &val) == OK)
+  if (!((pnl_optim_linprog(Obj, A_ineq, B_ineq, NULL, NULL, NULL, NULL, pnl_test_is_verbose(), x, &val) == PNL_OK)
         && pnl_test_eq_rel(val, res, 1E-8, "linprog", "")
         && pnl_test_vect_eq_abs(x, xres, 1E-8, "linprog", "")))
     pnl_test_set_fail0("linprog");
@@ -195,7 +195,7 @@ void linprog_ineq_bounds_test()
   double res = -106.;
   double val = 0.;
 
-  if (!((pnl_optim_linprog(Obj, A_ineq, B_ineq, NULL, NULL, xmin, xmax, pnl_test_is_verbose(), x, &val) == OK)
+  if (!((pnl_optim_linprog(Obj, A_ineq, B_ineq, NULL, NULL, xmin, xmax, pnl_test_is_verbose(), x, &val) == PNL_OK)
         && pnl_test_eq_rel(val, res, 1E-8, "linprog with bounds", "")
         && pnl_test_vect_eq_abs(x, xres, 1E-8, "linprog with bounds", "")))
     pnl_test_set_fail0("linprog with bounds");
@@ -223,7 +223,7 @@ void linprog_ineq_bounds_eq_test()
   PnlVect *xres = pnl_vect_create_from_list(3, -18., 16., 25.);
   double res = -103.;
   double val = 0.;
-  if (!((pnl_optim_linprog(Obj, A_ineq, B_ineq, A_eq, B_eq, xmin, xmax, pnl_test_is_verbose(), x, &val) == OK)
+  if (!((pnl_optim_linprog(Obj, A_ineq, B_ineq, A_eq, B_eq, xmin, xmax, pnl_test_is_verbose(), x, &val) == PNL_OK)
         && pnl_test_eq_rel(val, res, 1E-8, "linprog with bounds and eq constraints", "")
         && pnl_test_vect_eq_abs(x, xres, 1E-8, "linprog with bounds and eq constraints", "")))
     pnl_test_set_fail0("linprog with bounds and eq constraints");
@@ -261,7 +261,7 @@ void linprog_sp_test()
   PnlVect *xres = pnl_vect_create_from_list(3, 15., 0., 30.);
   double res = -120.;
   double val = 0.;
-  if (!((pnl_optim_linprog_sp(spObj, spA_ineq, B_ineq, spA_eq, B_eq, index_min, xmin_sp, index_max, xmax_sp, pnl_test_is_verbose(), x, &val) == OK)
+  if (!((pnl_optim_linprog_sp(spObj, spA_ineq, B_ineq, spA_eq, B_eq, index_min, xmin_sp, index_max, xmax_sp, pnl_test_is_verbose(), x, &val) == PNL_OK)
         && pnl_test_eq_rel(val, res, 1E-8, "linprog with bounds and eq constraints", "")
         && pnl_test_vect_eq_abs(x, xres, 1E-8, "linprog with bounds and eq constraints", "")))
     pnl_test_set_fail0("linprog with bounds and eq constraints");

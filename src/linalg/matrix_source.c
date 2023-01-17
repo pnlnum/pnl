@@ -385,7 +385,7 @@ void FUNCTION(pnl_mat, clone)(TYPE(PnlMat) *clone, const TYPE(PnlMat) *M)
  * @param m : new nb rows
  * @param n : new nb columns
  *
- * @return OK or FAIL. When returns OK, the matrix is changed.
+ * @return PNL_OK or PNL_FAIL. When returns PNL_OK, the matrix is changed.
  */
 int FUNCTION(pnl_mat, resize)(TYPE(PnlMat) *M, int m, int n)
 {
@@ -905,7 +905,7 @@ typedef struct
  * @param type is a string composed of the letters 'r' (real) and 'm' (matrix)
  * to specify the type of the extra arguments
  * @param f a function returning an integer (typically a test function)
- * @return OK or FAIL if something went wrong
+ * @return PNL_OK or PNL_FAIL if something went wrong
  */
 int FUNCTION(pnl_mat, find)(PnlVectInt *indi, PnlVectInt *indj, char *type, int(*f)(BASE *), ...)
 {
@@ -916,8 +916,8 @@ int FUNCTION(pnl_mat, find)(PnlVectInt *indi, PnlVectInt *indj, char *type, int(
   m = n = -1;
 
   nvar = (int) strlen(type);
-  if ((args = malloc(sizeof(cell) * nvar)) == NULL) return FAIL;
-  if ((t = malloc(sizeof(BASE) * nvar)) == NULL) return FAIL;
+  if ((args = malloc(sizeof(cell) * nvar)) == NULL) return PNL_FAIL;
+  if ((t = malloc(sizeof(BASE) * nvar)) == NULL) return PNL_FAIL;
 
   va_start(ap, f);
 
@@ -945,7 +945,7 @@ int FUNCTION(pnl_mat, find)(PnlVectInt *indi, PnlVectInt *indj, char *type, int(
             }
           break;
         default:
-          return FAIL;
+          return PNL_FAIL;
         }
     }
   va_end(ap);
@@ -1015,7 +1015,7 @@ int FUNCTION(pnl_mat, find)(PnlVectInt *indi, PnlVectInt *indj, char *type, int(
 
   free(args);
   free(t);
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -2261,7 +2261,7 @@ void FUNCTION(pnl_hmat, clone)(TYPE(PnlHmat) *clone, const TYPE(PnlHmat) *H)
  * @param ndim : new nb dimensions
  * @param dims : new pointer to the dimensions array
  *
- * @return OK or FAIL. When returns OK, the hmatrix is changed.
+ * @return PNL_OK or PNL_FAIL. When returns PNL_OK, the hmatrix is changed.
  */
 int FUNCTION(pnl_hmat, resize)(TYPE(PnlHmat) *H, int ndim, const int *dims)
 {

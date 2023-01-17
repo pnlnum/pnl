@@ -116,7 +116,7 @@ static void pnl_mat_make_upper(PnlMat *A)
  * @param R an upper triangular matrix on exit
  * @param p a PnlPermutation. If p is NULL no permutation is computed.
  * @param A the matrix to decompose. PA = QR
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  *
  */
 int pnl_mat_qr(PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
@@ -140,7 +140,7 @@ int pnl_mat_qr(PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
       if (info != 0)
         {
           PNL_MESSAGE_ERROR("QR decomposition cannot be computed", "pnl_mat_qr");
-          return FAIL;
+          return PNL_FAIL;
         }
       lwork = (int) qlwork;
       work = MALLOC_DOUBLE(lwork);
@@ -148,7 +148,7 @@ int pnl_mat_qr(PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
       if (info != 0)
         {
           PNL_MESSAGE_ERROR("QR decomposition cannot be computed", "pnl_mat_qr");
-          return FAIL;
+          return PNL_FAIL;
         }
     }
   else
@@ -160,7 +160,7 @@ int pnl_mat_qr(PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
       if (info != 0)
         {
           PNL_MESSAGE_ERROR("QR decomposition cannot be computed", "pnl_mat_qr");
-          return FAIL;
+          return PNL_FAIL;
         }
       lwork = (int) qlwork;
       work = MALLOC_DOUBLE(lwork);
@@ -168,7 +168,7 @@ int pnl_mat_qr(PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
       if (info != 0)
         {
           PNL_MESSAGE_ERROR("QR decomposition cannot be computed", "pnl_mat_qr");
-          return FAIL;
+          return PNL_FAIL;
         }
       for (i = 0; i < m ; i++) p->array[i]--;
     }
@@ -179,7 +179,7 @@ int pnl_mat_qr(PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
   if (info != 0)
     {
       PNL_MESSAGE_ERROR("QR decomposition cannot be computed", "pnl_mat_qr");
-      return FAIL;
+      return PNL_FAIL;
     }
 
 
@@ -193,7 +193,7 @@ int pnl_mat_qr(PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
 
   FREE(work);
   FREE(tau);
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -203,7 +203,7 @@ int pnl_mat_qr(PnlMat *Q, PnlMat *R, PnlPermutation *p, const PnlMat *A)
  * @param R an upper triagular PnlMat
  * @param p a PnlVectInt (permutation vector)
  * @param b right hand side member
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_mat_qr_syslin(PnlVect *x, const PnlMat *Q, const PnlMat *R,
                       const PnlVectInt *p, const PnlVect *b)
@@ -219,7 +219,7 @@ int pnl_mat_qr_syslin(PnlVect *x, const PnlMat *Q, const PnlMat *R,
   pnl_mat_upper_syslin(x, R, y);  /* x = R^-1 Q' b */
   pnl_vect_permute_inverse_inplace(x, p);
   pnl_vect_free(&y);
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -231,7 +231,7 @@ int pnl_mat_qr_syslin(PnlVect *x, const PnlMat *Q, const PnlMat *R,
  * @param A a real symmetric matrix
  * @param with_eigenvectors can be PNL_TRUE to compute the eigenvectors or PNL_FALSE
  * if they are not required, in this latter case P can be NULL
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 static int pnl_dsyev(PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors)
 {
@@ -273,12 +273,12 @@ static int pnl_dsyev(PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvecto
 
   free(work);
   if (with_eigenvectors == PNL_FALSE) pnl_mat_free(&Acopy);
-  return OK;
+  return PNL_OK;
 
 err:
   free(work);
   if (with_eigenvectors == PNL_FALSE) pnl_mat_free(&Acopy);
-  return FAIL;
+  return PNL_FAIL;
 }
 
 /**
@@ -290,7 +290,7 @@ err:
  * @param A a real non symmetric matrix
  * @param with_eigenvectors can be PNL_TRUE to compute the eigenvectors or PNL_FALSE
  * if they are not required, in this latter case P can be NULL
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 static int pnl_dgeev(PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors)
 {
@@ -345,13 +345,13 @@ static int pnl_dgeev(PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvecto
   free(wi);
   free(work);
   pnl_mat_free(&tA);
-  return OK;
+  return PNL_OK;
 
 err:
   free(wi);
   free(work);
   pnl_mat_free(&tA);
-  return FAIL;
+  return PNL_FAIL;
 }
 
 /**
@@ -362,7 +362,7 @@ err:
  * @param A a matrix
  * @param with_eigenvectors can be PNL_TRUE to compute the eigenvectors or PNL_FALSE
  * if they are not required, in this latter case P can be NULL
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_mat_eigen(PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors)
 {
@@ -373,12 +373,12 @@ int pnl_mat_eigen(PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors)
   if (is_sym == PNL_TRUE) info = pnl_dsyev(v, P, A, with_eigenvectors);
   else info = pnl_dgeev(v, P, A, with_eigenvectors);
 
-  if (info == FAIL)
+  if (info == PNL_FAIL)
     {
       PNL_MESSAGE_ERROR("Error", "pnl_mat_eigen");
-      return FAIL;
+      return PNL_FAIL;
     }
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -388,7 +388,7 @@ int pnl_mat_eigen(PnlVect *v, PnlMat *P, const PnlMat *A, int with_eigenvectors)
  *
  * @param A a real diagonalizable matrix
  * @param B contains log(A) on return
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_mat_log(PnlMat *B, const PnlMat *A)
 {
@@ -401,11 +401,11 @@ int pnl_mat_log(PnlMat *B, const PnlMat *A)
   P = pnl_mat_create(n, n);
   D = pnl_vect_create(n);
 
-  if (pnl_mat_eigen(D, P, A, PNL_TRUE) != OK)
+  if (pnl_mat_eigen(D, P, A, PNL_TRUE) != PNL_OK)
     {
       pnl_mat_free(&P);
       pnl_vect_free(&D);
-      return FAIL;
+      return PNL_FAIL;
     }
 
   for (i = 0 ; i < n ; i++)
@@ -413,7 +413,7 @@ int pnl_mat_log(PnlMat *B, const PnlMat *A)
       if (PNL_GET(D, i) <= 0)
         {
           PNL_MESSAGE_ERROR("Negative eigenvalues", "pnl_mat_log");
-          return FAIL;
+          return PNL_FAIL;
         }
     }
 
@@ -421,10 +421,10 @@ int pnl_mat_log(PnlMat *B, const PnlMat *A)
      not diagonalizable.
   */
   invP = pnl_mat_create(n, n);
-  if (pnl_mat_inverse(invP, P) != OK)
+  if (pnl_mat_inverse(invP, P) != PNL_OK)
     {
       PNL_MESSAGE_ERROR("matrix is not diagonalizable", "pnl_mat_log");
-      return FAIL;
+      return PNL_FAIL;
     }
 
   /* compute P = P * diag(log(D)) */
@@ -442,7 +442,7 @@ int pnl_mat_log(PnlMat *B, const PnlMat *A)
   pnl_mat_free(&P);
   pnl_mat_free(&invP);
   pnl_vect_free(&D);
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -454,7 +454,7 @@ int pnl_mat_log(PnlMat *B, const PnlMat *A)
  * @param A a complex Hermitian matrix
  * @param with_eigenvectors can be PNL_TRUE to compute the eigenvectors or PNL_FALSE
  * if they are not required, in this latter case P can be NULL
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 static int pnl_zheev(PnlVectComplex *v, PnlMatComplex *P, const PnlMatComplex *A, int with_eigenvectors)
 {
@@ -494,13 +494,13 @@ static int pnl_zheev(PnlVectComplex *v, PnlMatComplex *P, const PnlMatComplex *A
   free(work);
   free(rwork);
   free(w);
-  return OK;
+  return PNL_OK;
 
 err:
   free(work);
   free(rwork);
   free(w);
-  return FAIL;
+  return PNL_FAIL;
 }
 
 /**
@@ -513,7 +513,7 @@ err:
  * @param A a complex matrix
  * @param with_eigenvectors can be PNL_TRUE to compute the eigenvectors or PNL_FALSE
  * if they are not required, in this latter case P can be NULL
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 static int pnl_zgeev(PnlVectComplex *v, PnlMatComplex *P, const PnlMatComplex *A, int with_eigenvectors)
 {
@@ -559,13 +559,13 @@ static int pnl_zgeev(PnlVectComplex *v, PnlMatComplex *P, const PnlMatComplex *A
   free(work);
   free(rwork);
   pnl_mat_complex_free(&tA);
-  return OK;
+  return PNL_OK;
 
 err:
   free(work);
   free(rwork);
   pnl_mat_complex_free(&tA);
-  return FAIL;
+  return PNL_FAIL;
 }
 
 /**
@@ -576,7 +576,7 @@ err:
  * @param A a matrix
  * @param with_eigenvectors can be PNL_TRUE to compute the eigenvectors or PNL_FALSE
  * if they are not required, in this latter case P can be NULL
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_mat_complex_eigen(PnlVectComplex *v, PnlMatComplex *P, const PnlMatComplex *A, int with_eigenvectors)
 {
@@ -587,12 +587,12 @@ int pnl_mat_complex_eigen(PnlVectComplex *v, PnlMatComplex *P, const PnlMatCompl
   if (is_sym == PNL_TRUE) info = pnl_zheev(v, P, A, with_eigenvectors);
   else info = pnl_zgeev(v, P, A, with_eigenvectors);
 
-  if (info == FAIL)
+  if (info == PNL_FAIL)
     {
       PNL_MESSAGE_ERROR("Error", "pnl_mat_eigen");
-      return FAIL;
+      return PNL_FAIL;
     }
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -602,7 +602,7 @@ int pnl_mat_complex_eigen(PnlVectComplex *v, PnlMatComplex *P, const PnlMatCompl
  *
  * @param A a real diagonalizable matrix
  * @param B contains log(A) on return
- * @return OK or FAIL
+ * @return PNL_OK or PNL_FAIL
  */
 int pnl_mat_complex_log(PnlMatComplex *B, const PnlMatComplex *A)
 {
@@ -615,11 +615,11 @@ int pnl_mat_complex_log(PnlMatComplex *B, const PnlMatComplex *A)
   P = pnl_mat_complex_create(n, n);
   D = pnl_vect_complex_create(n);
 
-  if (pnl_mat_complex_eigen(D, P, A, PNL_TRUE) != OK)
+  if (pnl_mat_complex_eigen(D, P, A, PNL_TRUE) != PNL_OK)
     {
       pnl_mat_complex_free(&P);
       pnl_vect_complex_free(&D);
-      return FAIL;
+      return PNL_FAIL;
     }
 
   for (i = 0 ; i < n ; i++)
@@ -628,7 +628,7 @@ int pnl_mat_complex_log(PnlMatComplex *B, const PnlMatComplex *A)
       if (di.r == 0. && di.i == 0.)
         {
           PNL_MESSAGE_ERROR("Zero eigenvalue detected", "pnl_mat_complex_log");
-          return FAIL;
+          return PNL_FAIL;
         }
     }
 
@@ -636,10 +636,10 @@ int pnl_mat_complex_log(PnlMatComplex *B, const PnlMatComplex *A)
      not diagonalizable.
   */
   invP = pnl_mat_complex_create(n, n);
-  if (pnl_mat_complex_inverse(invP, P) != OK)
+  if (pnl_mat_complex_inverse(invP, P) != PNL_OK)
     {
       PNL_MESSAGE_ERROR("matrix is not diagonalizable", "pnl_mat_log");
-      return FAIL;
+      return PNL_FAIL;
     }
 
   /* compute P = P * diag(log(D)) */
@@ -657,7 +657,7 @@ int pnl_mat_complex_log(PnlMatComplex *B, const PnlMatComplex *A)
   pnl_mat_complex_free(&P);
   pnl_mat_complex_free(&invP);
   pnl_vect_complex_free(&D);
-  return OK;
+  return PNL_OK;
 }
 
 /**
@@ -667,7 +667,7 @@ int pnl_mat_complex_log(PnlMatComplex *B, const PnlMatComplex *A)
  * X on exit is an n x nrhs matrix
  * B an m x nrhs matrix
  *
- * @return FAIL or OK
+ * @return PNL_FAIL or PNL_OK
  */
 int pnl_mat_ls_mat(const PnlMat *A, PnlMat *B)
 {
@@ -692,7 +692,7 @@ int pnl_mat_ls_mat(const PnlMat *A, PnlMat *B)
      of column wise storage.
      X is matrix of size nrhs x ldb
   */
-  if ((X = MALLOC_DOUBLE(ldb * nrhs)) == NULL) return FAIL;
+  if ((X = MALLOC_DOUBLE(ldb * nrhs)) == NULL) return PNL_FAIL;
   for (i = 0 ; i < B->m ; i++)
     for (j = 0 ; j < B->n ; j++)
       {
@@ -721,13 +721,13 @@ int pnl_mat_ls_mat(const PnlMat *A, PnlMat *B)
   FREE(jpvt);
   FREE(X);
   pnl_mat_free(&tA);
-  return OK;
+  return PNL_OK;
 
 err:
   pnl_mat_free(&tA);
   FREE(work);
   FREE(jpvt);
-  return FAIL;
+  return PNL_FAIL;
 }
 
 /**
@@ -737,7 +737,7 @@ err:
  * X on exit is an vector of size n
  * B is a vector of size m
  *
- * @return FAIL or OK
+ * @return PNL_FAIL or PNL_OK
  */
 int pnl_mat_ls(const PnlMat *A, PnlVect *b)
 {

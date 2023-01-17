@@ -1,0 +1,9 @@
+* dft_test.c : one failure with fftpack.
+
+* cumulfunc.c: Nsp and Scicoslab do not give the same values
+        cdf_chn pnonc : FAIL ( expected 5.81258007289420586 observed
+                               5.81257983511331755)
+        cdf_fnc pnonc : FAIL ( expected 13.1788762073281518 observed
+                               13.1787447556500386)
+
+# vim:ft=txt:
