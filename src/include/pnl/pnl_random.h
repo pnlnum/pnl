@@ -4,7 +4,6 @@
 #include "pnl/pnl_config.h"
 #include "pnl/pnl_extern.h"
 #include "pnl/pnl_object.h"
-#include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 

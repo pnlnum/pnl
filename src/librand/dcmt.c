@@ -56,6 +56,7 @@
 #include <string.h>
 #include "pnl/pnl_config.h"
 #include "pnl/pnl_random.h"
+#include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_internals.h"
 
 #ifdef PNL_HAVE_INLINE

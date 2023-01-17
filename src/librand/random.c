@@ -1571,7 +1571,7 @@ int pnl_rng_sdim(PnlRng *rng, int dim)
       break;
 
     default:
-      printf("For PNL_MC rng, you shoud use pnl_rng_sseed instead of pnl_rng_sdim\n");
+      printf("For PNL_MC rng, you should use pnl_rng_sseed instead of pnl_rng_sdim\n");
       break;
     }
   return PNL_OK;
