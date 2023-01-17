@@ -5,12 +5,16 @@ All notable changes to PNL will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [1.11.0] - XXX
+## [1.11.0] - 2023-01-17
 
 ### Changed
 
 - The macros `RETRIEVE` and `CREATE` are prefix with `PNL_RAND`. This is a breaking change.
 - Add `PNL_` prefix to `FALSE`, `TRUE`, `OK` and `FAIL`. This is a breaking change.
+
+### Added
+
+- Add `pnl_mat_print_csv` to print a matrix in a csv format.
 
 ## [1.10.4] - 2019-10-21
 
