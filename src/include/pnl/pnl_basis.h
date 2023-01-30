@@ -69,11 +69,11 @@ struct _PnlBasis
   /** The number of functions in the tensor #T */
   int           len_T;
   /** Compute the i-th element of the one dimensional basis.  As a convention, (*f)(x, 0) MUST be equal to 1 */
-  double      (*f)(double x, int i, void *params);
+  double      (*f)(double x, int i, int dim, void *params);
   /** Compute the first derivative of i-th element of the one dimensional basis */
-  double      (*Df)(double x, int i, void *params);
+  double      (*Df)(double x, int i, int dim, void *params);
   /** Compute the second derivative of the i-th element of the one dimensional basis */
-  double      (*D2f)(double x, int i, void *params);
+  double      (*D2f)(double x, int i, int dim, void *params);
   /** PNL_TRUE if the basis is reduced */
   int           isreduced;
   /** The center of the domain */
@@ -90,7 +90,7 @@ struct _PnlBasis
   size_t        params_size;
 };
 
-extern int pnl_basis_type_register(const char *name, double (*f)(double, int, void*), double (*Df)(double, int, void*), double (*D2f)(double, int, void*));
+extern int pnl_basis_type_register(const char *name, double (*f)(double, int, int, void*), double (*Df)(double, int, int, void*), double (*D2f)(double, int, int, void*));
 extern PnlBasis* pnl_basis_new();
 extern PnlBasis* pnl_basis_create(int index, int nb_func, int space_dim);
 extern PnlBasis* pnl_basis_create_from_degree(int index, int degree, int space_dim);
@@ -155,7 +155,7 @@ PNL_INLINE_FUNC double pnl_basis_i(const PnlBasis *b, const double *x, int i)
         {
           const int j = b->SpT->J[k];
           const int Tij = b->SpT->array[k];
-          aux *= (b->f)((x[j] - b->center[j]) * b->scale[j], Tij, b->params);
+          aux *= (b->f)((x[j] - b->center[j]) * b->scale[j], Tij, j, b->params);
         }
     }
   else
@@ -164,7 +164,7 @@ PNL_INLINE_FUNC double pnl_basis_i(const PnlBasis *b, const double *x, int i)
         {
           const int j = b->SpT->J[k];
           const int Tij = b->SpT->array[k];
-          aux *= (b->f)(x[j], Tij, b->params);
+          aux *= (b->f)(x[j], Tij, j, b->params);
         }
     }
   return aux;

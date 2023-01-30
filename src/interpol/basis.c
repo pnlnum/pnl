@@ -453,9 +453,10 @@ static PnlMatInt *compute_tensor_from_hyperbolic_degree(double degree, double q,
  *  Canonical polynomials
  *  @param x the address of a real number
  *  @param l the index of the polynomial to be evaluated
+ *  @param dim the index of the component on which the function is applied
  *  @param params extra parameters
  */
-static double CanonicalD1(double x, int l, void *params)
+static double CanonicalD1(double x, int l, int dim, void *params)
 {
   return pnl_pow_i(x, l);
 }
@@ -464,9 +465,10 @@ static double CanonicalD1(double x, int l, void *params)
  *  First derivative of the Canonical polynomials
  *  @param x the address of a real number
  *  @param l the index of the polynomial whose first derivative is to be evaluated
+ *  @param dim the index of the component on which the function is applied
  *  @param params extra parameters
  */
-static double DCanonicalD1(double x, int l, void *params)
+static double DCanonicalD1(double x, int l, int dim, void *params)
 {
   if (l == 0) return 0.;
   return l * pnl_pow_i(x, l - 1);
@@ -476,9 +478,10 @@ static double DCanonicalD1(double x, int l, void *params)
  *  Second derivative of the Canonical polynomials
  *  @param x the address of a real number
  *  @param l the index of the polynomial whose second derivative is to be evaluated
+ *  @param dim the index of the component on which the function is applied
  *  @param params extra parameters
  */
-static double D2CanonicalD1(double x, int l, void *params)
+static double D2CanonicalD1(double x, int l, int dim, void *params)
 {
   if (l <= 1) return 0.;
   return l * (l - 1) * pnl_pow_i(x, l - 2);
@@ -512,9 +515,10 @@ static double Hermite_rec(double x, int n, int n0, double *f_n, double *f_n_1)
  *  Hermite polynomials
  *  @param x the address of a real number
  *  @param n the index of the polynomial to be evaluated
+ *  @param dim the index of the component on which the function is applied
  *  @param params extra parameters
  */
-static double HermiteD1(double x, int n, void *params)
+static double HermiteD1(double x, int n, int dim, void *params)
 {
   double val = x;
   double val2;
@@ -542,8 +546,8 @@ static double HermiteD1(double x, int n, void *params)
       val2 = val * val;
       return (((val2 - 21.) * val2 + 105.) * val2 - 105) * val;
     default:
-      f_n = HermiteD1(x, 7, params);
-      f_n_1 = HermiteD1(x, 6, params);
+      f_n = HermiteD1(x, 7, dim, params);
+      f_n_1 = HermiteD1(x, 6, dim, params);
       return Hermite_rec(x, n, 7, &f_n, &f_n_1);
     }
 }
@@ -554,10 +558,10 @@ static double HermiteD1(double x, int n, void *params)
  *  @param n the index of the polynomial whose derivative is to be evaluated
  *  @param params extra parameters
  */
-static double DHermiteD1(double x, int n, void *params)
+static double DHermiteD1(double x, int n, int dim, void *params)
 {
   if (n == 0) return 0.;
-  else return n * HermiteD1(x, n - 1, params);
+  else return n * HermiteD1(x, n - 1, dim, params);
 
 }
 
@@ -565,12 +569,13 @@ static double DHermiteD1(double x, int n, void *params)
  *  Second derivative of the Hermite polynomials
  *  @param x the address of a real number
  *  @param n the index of the polynomial whose second derivative is to be evaluated
+ *  @param dim the index of the component on which the function is applied
  *  @param params extra parameters
  */
-static double D2HermiteD1(double x, int n, void *params)
+static double D2HermiteD1(double x, int n, int dim, void *params)
 {
   if (n == 0 || n == 1) return 0.;
-  return n * (n - 1) * HermiteD1(x, n - 2, params);
+  return n * (n - 1) * HermiteD1(x, n - 2, dim, params);
 }
 
 /**
@@ -601,9 +606,10 @@ static double Tchebychev_rec(double x, int n, int n0, double *f_n0, double *f_n1
  *  Tchebytchev polynomials of any order
  *  @param x the address of a real number
  *  @param n the order of the polynomial to be evaluated
+ *  @param dim the index of the component on which the function is applied
  *  @param params extra parameters
  */
-static double TchebychevD1(double x, int n, void *params)
+static double TchebychevD1(double x, int n, int dim, void *params)
 {
   double val = x;
   double val2, val3, val4;
@@ -636,8 +642,8 @@ static double TchebychevD1(double x, int n, void *params)
       val4 = val2 * val2;
       return (64. * val4 - 112. * val2 + 56) * val3 - 7. * val;
     default :
-      f_n = TchebychevD1(x, 7, params);
-      f_n_1 = TchebychevD1(x, 6, params);
+      f_n = TchebychevD1(x, 7, dim, params);
+      f_n_1 = TchebychevD1(x, 6, dim, params);
       return Tchebychev_rec(x, n, 7, &f_n, &f_n_1);
     }
 }
@@ -672,9 +678,10 @@ static double DTchebychev_rec(double x, int n, int n0, double *f_n, double *f_n_
  *  First derivative of the Tchebytchev polynomials
  *  @param x the address of a real number
  *  @param n the index of the polynomial whose first derivative is to be evaluated
+ *  @param dim the index of the component on which the function is applied
  *  @param params extra parameters
  */
-static double DTchebychevD1(double x, int n, void *params)
+static double DTchebychevD1(double x, int n, int dim, void *params)
 {
   double val = x;
   double val2, val4;
@@ -703,8 +710,8 @@ static double DTchebychevD1(double x, int n, void *params)
       val4 = val2 * val2;
       return (448. * val4 - 560. * val2 + 168) * val2 - 7.;
     default :
-      f_n = DTchebychevD1(x, 7, params);
-      f_n_1 = DTchebychevD1(x, 6, params);
+      f_n = DTchebychevD1(x, 7, dim, params);
+      f_n_1 = DTchebychevD1(x, 6, dim, params);
       return DTchebychev_rec(x, n, 7, &f_n, &f_n_1);
     }
 }
@@ -718,9 +725,10 @@ static double DTchebychevD1(double x, int n, void *params)
  *  @param n0 rank of initialization
  *  @param f_n used to store the derivative of the polynomial of order n0
  *  @param f_n_1 used to store the derivative of  the polynomial of order n0 - 1
+ *  @param dim the index of the component on which the function is applied
  *  @param params extra parameters
  */
-static double D2Tchebychev_rec(double x, int n, int n0, double *f_n, double *f_n_1, void *params)
+static double D2Tchebychev_rec(double x, int n, int n0, double *f_n, double *f_n_1, int dim, void *params)
 {
   if (n == n0)
     {
@@ -729,9 +737,9 @@ static double D2Tchebychev_rec(double x, int n, int n0, double *f_n, double *f_n
   else
     {
       double save = *f_n;
-      *f_n = 2 * x * (*f_n) - (*f_n_1) + 4 * DTchebychevD1(x, n0, params);
+      *f_n = 2 * x * (*f_n) - (*f_n_1) + 4 * DTchebychevD1(x, n0, dim, params);
       *f_n_1 = save;
-      return D2Tchebychev_rec(x, n, n0 + 1, f_n, f_n_1, params);
+      return D2Tchebychev_rec(x, n, n0 + 1, f_n, f_n_1, dim, params);
     }
 }
 
@@ -739,9 +747,10 @@ static double D2Tchebychev_rec(double x, int n, int n0, double *f_n, double *f_n
  *  Second derivative of the Tchebytchev polynomials
  *  @param x the address of a real number
  *  @param n the index of the polynomial whose second derivative is to be evaluated
+ *  @param dim the index of the component on which the function is applied
  *  @param params extra parameters
  */
-static double D2TchebychevD1(double x, int n, void *params)
+static double D2TchebychevD1(double x, int n, int dim, void *params)
 {
   double val = x;
   double val2, val4;
@@ -770,9 +779,9 @@ static double D2TchebychevD1(double x, int n, void *params)
       val4 = val2 * val2;
       return (2688. * val4 - 2240. * val2 + 336) * val;
     default :
-      f_n = D2TchebychevD1(x, 7, params);
-      f_n_1 = D2TchebychevD1(x, 6, params);
-      return D2Tchebychev_rec(x, n, 7, &f_n, &f_n_1, params);
+      f_n = D2TchebychevD1(x, 7, dim, params);
+      f_n_1 = D2TchebychevD1(x, 6, dim, params);
+      return D2Tchebychev_rec(x, n, 7, &f_n, &f_n_1, dim, params);
     }
 }
 
@@ -784,9 +793,9 @@ struct PnlBasisType_t
 {
   int id;
   const char *label;
-  double (*f)(double x, int l, void *params);
-  double (*Df)(double x, int l, void *params);
-  double (*D2f)(double x, int l, void *params);
+  double (*f)(double x, int l, int dim, void *params);
+  double (*Df)(double x, int l, int dim, void *params);
+  double (*D2f)(double x, int l, int dim, void *params);
 };
 
 #define PNL_BASIS_MAX_TYPE 10
@@ -808,8 +817,11 @@ static int pnl_basis_type_tab_length = PNL_BASIS_MAX_TYPE; /*!< length of PnlBas
  *
  * @return PNL_OK or PNL_FAIL
  */
-static int pnl_basis_type_register_with_id(int id, const char *label, double (*f)(double x, int l, void *params),
-    double (*Df)(double x, int l, void *params), double (*D2f)(double x, int l, void *params))
+static int pnl_basis_type_register_with_id(int id, const char *label,
+    double (*f)(double x, int l, int dim, void *params),
+    double (*Df)(double x, int l, int dim, void *params),
+    double (*D2f)(double x, int l, int dim, void *params)
+)
 {
   /*
    * Enlarge the array if needed
@@ -858,8 +870,8 @@ static int pnl_basis_type_init()
  *
  * @return the next available index or PNL_BASIS_NULL if an error occurred
  */
-int pnl_basis_type_register(const char *name, double (*f)(double x, int l, void *params),
-    double (*Df)(double x, int l, void *params), double (*D2f)(double x, int l, void *params))
+int pnl_basis_type_register(const char *name, double (*f)(double x, int l, int dim, void *params),
+    double (*Df)(double x, int l, int dim, void *params), double (*D2f)(double x, int l, int dim, void *params))
 {
   int id;
   pnl_basis_type_init();
@@ -1271,11 +1283,11 @@ double pnl_basis_ik(const PnlBasis *b, const double *x, int i, int k)
   if (Tik == 0) return 1.;
   if (b->isreduced == 1)
     {
-      return (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, b->params);
+      return (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->params);
     }
   else
     {
-      return (b->f)(x[k], Tik, b->params);
+      return (b->f)(x[k], Tik, k, b->params);
     }
 }
 
@@ -1311,9 +1323,9 @@ double pnl_basis_i_D(const PnlBasis *b, const double *x, int i, int j)
           const int k = b->SpT->J[l];
           const int Tik = b->SpT->array[l];
           if (k == j)
-            aux *= b->scale[k] * (b->Df)((x[k] - b->center[k]) * b->scale[k], Tik, b->params);
+            aux *= b->scale[k] * (b->Df)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->params);
           else
-            aux *= (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, b->params);
+            aux *= (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->params);
         }
     }
   else
@@ -1323,9 +1335,9 @@ double pnl_basis_i_D(const PnlBasis *b, const double *x, int i, int j)
           const int k = b->SpT->J[l];
           const int Tik = b->SpT->array[l];
           if (k == j)
-            aux *= (b->Df)(x[k], Tik, b->params);
+            aux *= (b->Df)(x[k], Tik, k, b->params);
           else
-            aux *= (b->f)(x[k], Tik, b->params);
+            aux *= (b->f)(x[k], Tik, k, b->params);
         }
     }
   return aux;
@@ -1361,9 +1373,9 @@ double pnl_basis_i_D2(const PnlBasis *b, const double *x, int i, int j1, int j2)
                 const int k = b->SpT->J[l];
                 const int Tik = b->SpT->array[l];
               if (k == j1)
-                aux *= b->scale[k] * b->scale[k] * (b->D2f)((x[k] - b->center[k]) * b->scale[k], Tik, b->params);
+                aux *= b->scale[k] * b->scale[k] * (b->D2f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->params);
               else
-                aux *= (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, b->params);
+                aux *= (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->params);
             }
         }
       else
@@ -1373,9 +1385,9 @@ double pnl_basis_i_D2(const PnlBasis *b, const double *x, int i, int j1, int j2)
               const int k = b->SpT->J[l];
               const int Tik = b->SpT->array[l];
               if (k == j1 || k == j2)
-                aux *= b->scale[k] * (b->Df)((x[k] - b->center[k]) * b->scale[k], Tik, b->params);
+                aux *= b->scale[k] * (b->Df)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->params);
               else
-                aux *= (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, b->params);
+                aux *= (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->params);
             }
         }
     }
@@ -1388,9 +1400,9 @@ double pnl_basis_i_D2(const PnlBasis *b, const double *x, int i, int j1, int j2)
               const int k = b->SpT->J[l];
               const int Tik = b->SpT->array[l];
               if (k == j1)
-                aux *= (b->D2f)(x[k], Tik, b->params);
+                aux *= (b->D2f)(x[k], Tik, k, b->params);
               else
-                aux *= (b->f)(x[k], Tik, b->params);
+                aux *= (b->f)(x[k], Tik, k, b->params);
             }
         }
       else
@@ -1400,9 +1412,9 @@ double pnl_basis_i_D2(const PnlBasis *b, const double *x, int i, int j1, int j2)
               const int k = b->SpT->J[l];
               const int Tik = b->SpT->array[l];
               if (k == j1 || k == j2)
-                aux *= (b->Df)(x[k], Tik, b->params);
+                aux *= (b->Df)(x[k], Tik, k, b->params);
               else
-                aux *= (b->f)(x[k], Tik, b->params);
+                aux *= (b->f)(x[k], Tik, k, b->params);
             }
         }
 
@@ -1547,7 +1559,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
             {
               const int k = b->SpT->J[l];
               const int Tik = b->SpT->array[l];
-              f[k] = (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, b->params);
+              f[k] = (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->params);
               auxf *= f[k];
             }
         }
@@ -1557,7 +1569,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
             {
               const int k = b->SpT->J[l];
               const int Tik = b->SpT->array[l];
-              f[k] = (b->f)(x[k], Tik, b->params);
+              f[k] = (b->f)(x[k], Tik, k, b->params);
               auxf *= f[k];
             }
         }
@@ -1579,7 +1591,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
               /* gradient */
               if (Tij >= 1)
                 {
-                  Df[j] = b->scale[j] * (b->Df)((x[j] - b->center[j]) * b->scale[j], Tij, b->params);
+                  Df[j] = b->scale[j] * (b->Df)((x[j] - b->center[j]) * b->scale[j], Tij, j, b->params);
                   PNL_LET(grad, j) += a * auxf * Df[j];
                 }
               else
@@ -1588,7 +1600,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
               /* diagonal terms of the Hessian matrix */
               if (Tij >= 2)
                 {
-                  D2f = b->scale[j] * b->scale[j] * (b->D2f)((x[j] - b->center[j]) * b->scale[j], Tij, b->params);
+                  D2f = b->scale[j] * b->scale[j] * (b->D2f)((x[j] - b->center[j]) * b->scale[j], Tij, j, b->params);
                   PNL_MLET(hes, j, j) += a * auxf * D2f;
                 }
             }
@@ -1598,7 +1610,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
               /* gradient */
               if (Tij >= 1)
                 {
-                  Df[j] = (b->Df)(x[j], Tij, b->params);
+                  Df[j] = (b->Df)(x[j], Tij, j, b->params);
                   PNL_LET(grad, j) += a * auxf * Df[j];
                 }
               else
@@ -1607,7 +1619,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
               /* diagonal terms of the Hessian matrix */
               if (Tij >= 2)
                 {
-                  D2f = (b->D2f)(x[j], Tij, b->params);
+                  D2f = (b->D2f)(x[j], Tij, j, b->params);
                   PNL_MLET(hes, j, j) += a * auxf * D2f;
                 }
             }
