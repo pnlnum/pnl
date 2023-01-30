@@ -922,14 +922,12 @@ PnlBasis *pnl_basis_new()
  * Create a PnlBasis and stores it into its first argument
  *
  * @param b an already allocated basis (as returned by pnl_basis_new for instance)
- * @param index the index of the family to be used
  * @param T the tensor of the multi-dimensional basis. No copy of T is done, so
  * do not free T. It will be freed transparently by pnl_basis_free
  */
-void  pnl_basis_set_from_tensor(PnlBasis *b, int index, const PnlMatInt *T)
+void  pnl_basis_set_from_tensor(PnlBasis *b, const PnlMatInt *T)
 {
   b->nb_func = T->m;
-  b->id = index;
   b->nb_variates = T->n;
   if(b->func_list) free(b->func_list);
   b->len_func_list = 0;
@@ -950,10 +948,22 @@ void  pnl_basis_set_from_tensor(PnlBasis *b, int index, const PnlMatInt *T)
   b->T = (PnlMatInt *) T;
   b->SpT = pnl_sp_mat_int_create_from_mat(T);
 
-  b->label = PnlBasisTypeTab[index].label;
-  b->f = PnlBasisTypeTab[index].f;
-  b->Df = PnlBasisTypeTab[index].Df;
-  b->D2f = PnlBasisTypeTab[index].D2f;
+}
+
+/**
+ * Set the type of basis
+ *
+ * @param B a PnlBasis
+ * @param index the index of the family to be used
+ */
+void pnl_basis_set_type(PnlBasis *B, int index)
+{
+  B->id = index;
+  B->label = PnlBasisTypeTab[index].label;
+  B->f = PnlBasisTypeTab[index].f;
+  B->Df = PnlBasisTypeTab[index].Df;
+  B->D2f = PnlBasisTypeTab[index].D2f;
+
 }
 
 /**
@@ -968,7 +978,8 @@ PnlBasis *pnl_basis_create_from_tensor(int index, const PnlMatInt *T)
 {
   PnlBasis *b;
   if ((b = pnl_basis_new()) == NULL) return NULL;
-  pnl_basis_set_from_tensor(b, index, T);
+  pnl_basis_set_from_tensor(b, T);
+  pnl_basis_set_type(b, index);
   return b;
 }
 
@@ -1066,7 +1077,12 @@ void pnl_basis_add_function(PnlBasis *b, PnlRnFuncR *f)
  */
 void pnl_basis_clone(PnlBasis *dest, const PnlBasis *src)
 {
-  pnl_basis_set_from_tensor(dest, src->id, src->T);
+  pnl_basis_set_from_tensor(dest, src->T);
+  dest->id = src->id;
+  dest->label = src->label;
+  dest->f = src->f;
+  dest->Df = src->Df;
+  dest->D2f = src->D2f;
   dest->params = realloc(dest->params, src->params_size);
   dest->params_size = src->params_size;
   if (src->isreduced == 1)
