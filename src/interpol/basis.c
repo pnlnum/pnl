@@ -452,33 +452,33 @@ static PnlMatInt *compute_tensor_from_hyperbolic_degree(double degree, double q,
 /**
  *  Canonical polynomials
  *  @param x the address of a real number
- *  @param ind the index of the polynomial to be evaluated
+ *  @param l the index of the polynomial to be evaluated
  */
-static double CanonicalD1(double x, int ind, void *params)
+static double CanonicalD1(double x, int l, void *params)
 {
-  return pnl_pow_i(x, ind);
+  return pnl_pow_i(x, l);
 }
 
 /**
  *  First derivative of the Canonical polynomials
  *  @param x the address of a real number
- *  @param ind the index of the polynomial whose first derivative is to be evaluated
+ *  @param l the index of the polynomial whose first derivative is to be evaluated
  */
-static double DCanonicalD1(double x, int ind, void *params)
+static double DCanonicalD1(double x, int l, void *params)
 {
-  if (ind == 0) return 0.;
-  return ind * pnl_pow_i(x, ind - 1);
+  if (l == 0) return 0.;
+  return l * pnl_pow_i(x, l - 1);
 }
 
 /**
  *  Second derivative of the Canonical polynomials
  *  @param x the address of a real number
- *  @param ind the index of the polynomial whose second derivative is to be evaluated
+ *  @param l the index of the polynomial whose second derivative is to be evaluated
  */
-static double D2CanonicalD1(double x, int ind, void *params)
+static double D2CanonicalD1(double x, int l, void *params)
 {
-  if (ind <= 1) return 0.;
-  return ind * (ind - 1) * pnl_pow_i(x, ind - 2);
+  if (l <= 1) return 0.;
+  return l * (l - 1) * pnl_pow_i(x, l - 2);
 }
 
 /**
@@ -572,7 +572,7 @@ static double D2HermiteD1(double x, int n, void *params)
  * order.
  * @param x the address of a real number
  * @param n the order of the polynomial to be evaluated
- * @param n0 rank of initilization
+ * @param n0 rank of initialization
  * @param f_n0 used to store the polynomial of order n0
  * @param f_n1 used to store the polynomial of order n0 - 1
  */
@@ -774,9 +774,9 @@ struct PnlBasisType_t
 {
   int id;
   const char *label;
-  double (*f)(double x, int n, void *params);
-  double (*Df)(double x, int n, void *params);
-  double (*D2f)(double x, int n, void *params);
+  double (*f)(double x, int l, void *params);
+  double (*Df)(double x, int l, void *params);
+  double (*D2f)(double x, int l, void *params);
 };
 
 #define PNL_BASIS_MAX_TYPE 10
@@ -798,8 +798,8 @@ static int pnl_basis_type_tab_length = PNL_BASIS_MAX_TYPE; /*!< length of PnlBas
  *
  * @return PNL_OK or PNL_FAIL
  */
-static int pnl_basis_type_register_with_id(int id, const char *label, double (*f)(double, int, void *params),
-    double (*Df)(double, int, void *params), double (*D2f)(double, int, void *params))
+static int pnl_basis_type_register_with_id(int id, const char *label, double (*f)(double x, int l, void *params),
+    double (*Df)(double x, int l, void *params), double (*D2f)(double x, int l, void *params))
 {
   /*
    * Enlarge the array if needed
@@ -848,8 +848,8 @@ static int pnl_basis_type_init()
  *
  * @return the next available index or PNL_BASIS_NULL if an error occurred
  */
-int pnl_basis_type_register(const char *name, double (*f)(double, int, void *params),
-    double (*Df)(double, int, void *params), double (*D2f)(double, int, void *params))
+int pnl_basis_type_register(const char *name, double (*f)(double x, int l, void *params),
+    double (*Df)(double x, int l, void *params), double (*D2f)(double x, int l, void *params))
 {
   int id;
   pnl_basis_type_init();
