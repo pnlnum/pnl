@@ -90,7 +90,7 @@ struct _PnlBasis
   size_t        params_size;
 };
 
-extern int pnl_basis_type_register(const char *name, double (*f)(double, int, int, void*), double (*Df)(double, int, int, void*), double (*D2f)(double, int, int, void*));
+extern int pnl_basis_type_register(const char *name, double (*f)(double, int, int, void*), double (*Df)(double, int, int, void*), double (*D2f)(double, int, int, void*), int is_orthogonal);
 extern PnlBasis* pnl_basis_new();
 extern PnlBasis* pnl_basis_create(int index, int nb_func, int space_dim);
 extern PnlBasis* pnl_basis_create_from_degree(int index, int degree, int space_dim);

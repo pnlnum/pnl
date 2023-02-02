@@ -865,6 +865,7 @@ struct PnlBasisType_t
   double (*f)(double x, int l, int dim, void *params);
   double (*Df)(double x, int l, int dim, void *params);
   double (*D2f)(double x, int l, int dim, void *params);
+  int is_orthogonal;
 };
 
 #define PNL_BASIS_MAX_TYPE 10
@@ -883,13 +884,15 @@ static int pnl_basis_type_tab_length = PNL_BASIS_MAX_TYPE; /*!< length of PnlBas
  * @param f the generating function in dimension 1
  * @param Df the first derivative of the generating function in dimension 1
  * @param D2f the second derivative of the generating function in dimension 1
+ * @param is_orthogonal a boolean 
  *
  * @return PNL_OK or PNL_FAIL
  */
 static int pnl_basis_type_register_with_id(int id, const char *label,
     double (*f)(double x, int l, int dim, void *params),
     double (*Df)(double x, int l, int dim, void *params),
-    double (*D2f)(double x, int l, int dim, void *params)
+    double (*D2f)(double x, int l, int dim, void *params),
+    int is_orthogonal
 )
 {
   /*
@@ -907,7 +910,7 @@ static int pnl_basis_type_register_with_id(int id, const char *label,
   PnlBasisTypeTab[id].f = f;
   PnlBasisTypeTab[id].Df = Df;
   PnlBasisTypeTab[id].D2f = D2f;
-  pnl_basis_type_next++;
+  PnlBasisTypeTab[id].is_orthogonal = is_orthogonal;
 
   return PNL_OK;
 }
@@ -922,10 +925,14 @@ static int pnl_basis_type_init()
   if (PnlBasisTypeTab != NULL)  return PNL_OK;
   PnlBasisTypeTab = malloc(PNL_BASIS_MAX_TYPE * sizeof(PnlBasisType));
 
-  if (pnl_basis_type_register_with_id(PNL_BASIS_CANONICAL, "Canonical", CanonicalD1, DCanonicalD1, D2CanonicalD1) != PNL_OK) return PNL_FAIL;
-  if (pnl_basis_type_register_with_id(PNL_BASIS_HERMITE, "Hermite", HermiteD1, DHermiteD1, D2HermiteD1) != PNL_OK) return PNL_FAIL;
-  if (pnl_basis_type_register_with_id(PNL_BASIS_TCHEBYCHEV, "Tchebychev", TchebychevD1, DTchebychevD1, D2TchebychevD1) != PNL_OK) return PNL_FAIL;
-  if (pnl_basis_type_register_with_id(PNL_BASIS_LOCAL, "Local", LocalD1, DLocalD1, D2LocalD1) != PNL_OK) return PNL_FAIL;
+  if (pnl_basis_type_register_with_id(PNL_BASIS_CANONICAL, "Canonical", CanonicalD1, DCanonicalD1, D2CanonicalD1, PNL_FALSE) != PNL_OK) return PNL_FAIL;
+  pnl_basis_type_next++;
+  if (pnl_basis_type_register_with_id(PNL_BASIS_HERMITE, "Hermite", HermiteD1, DHermiteD1, D2HermiteD1, PNL_FALSE) != PNL_OK) return PNL_FAIL;
+  pnl_basis_type_next++;
+  if (pnl_basis_type_register_with_id(PNL_BASIS_TCHEBYCHEV, "Tchebychev", TchebychevD1, DTchebychevD1, D2TchebychevD1, PNL_FALSE) != PNL_OK) return PNL_FAIL;
+  pnl_basis_type_next++;
+  if (pnl_basis_type_register_with_id(PNL_BASIS_LOCAL, "Local", LocalD1, DLocalD1, D2LocalD1, PNL_TRUE) != PNL_OK) return PNL_FAIL;
+  pnl_basis_type_next++;
 
   return PNL_OK;
 }
@@ -937,16 +944,21 @@ static int pnl_basis_type_init()
  * @param f the generating function in dimension 1
  * @param Df the first derivative of the generating function in dimension 1
  * @param D2f the second derivative of the generating function in dimension 1
+ * @param is_orthogonal a boolean
  *
  * @return the next available index or PNL_BASIS_NULL if an error occurred
  */
-int pnl_basis_type_register(const char *name, double (*f)(double x, int l, int dim, void *params),
-    double (*Df)(double x, int l, int dim, void *params), double (*D2f)(double x, int l, int dim, void *params))
+int pnl_basis_type_register(const char *name,
+  double (*f)(double x, int l, int dim, void *params),
+  double (*Df)(double x, int l, int dim, void *params),
+  double (*D2f)(double x, int l, int dim, void *params),
+  int is_orthogonal
+)
 {
   int id;
   pnl_basis_type_init();
   id = pnl_basis_type_next;
-  if (pnl_basis_type_register_with_id(id, name, f, Df, D2f) == PNL_FAIL)
+  if (pnl_basis_type_register_with_id(id, name, f, Df, D2f, is_orthogonal) == PNL_FAIL)
     return PNL_BASIS_NULL;
   return id;
 }
@@ -1122,8 +1134,8 @@ PnlBasis *pnl_basis_create_from_hyperbolic_degree(int index, double degree, doub
 /**
  * Return a PnlBasis with local and orthogonal function
  *
- * @param space_dim the dimension of the state space
  * @param n_intervals this is an array of size \a space_dim describing the number of intervals for every dimension
+ * @param space_dim the dimension of the state space
  * @return PnlBasis
  */
 PnlBasis* pnl_basis_create_local(int *n_intervals, int space_dim)
@@ -1140,8 +1152,8 @@ PnlBasis* pnl_basis_create_local(int *n_intervals, int space_dim)
 /**
  * Return a PnlBasis with local and orthogonal function
  *
- * @param space_dim the dimension of the state space
  * @param n_intervals number of intervals per dimension
+ * @param space_dim the dimension of the state space
  * @return PnlBasis
  */
 PnlBasis* pnl_basis_create_local_regular(int n_intervals, int space_dim)
@@ -1767,6 +1779,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
 
 /**
  * Find the best approximation of the function defined by f(x(i,:)) = y(i)
+ * General purpose function
  *
  * @param basis a PnlBasis
  * @param x the matrix of points at which we know the value of the function. One line
@@ -1776,7 +1789,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
  *
  * @return PNL_OK or PNL_FAIL
  */
-int pnl_basis_fit_ls(const PnlBasis *basis, PnlVect *coef, const PnlMat *x, const PnlVect *y)
+static int pnl_basis_fit_ls_general(const PnlBasis *basis, PnlVect *coef, const PnlMat *x, const PnlVect *y)
 {
   int N, i, k;
   double b_k;
@@ -1814,6 +1827,67 @@ int pnl_basis_fit_ls(const PnlBasis *basis, PnlVect *coef, const PnlMat *x, cons
   pnl_mat_free(&A);
 
   return PNL_OK;
+}
+
+/**
+ * Find the best approximation of the function defined by f(x(i,:)) = y(i)
+ * For orthogonal basis only
+ *
+ * @param basis a PnlBasis
+ * @param x the matrix of points at which we know the value of the function. One line
+ * of the matrix is the vector of the coordinates of one point
+ * @param y the values of the function f at the points defined by x
+ * @param coef contains on exit the coefficients of the regression
+ *
+ * @return PNL_OK or PNL_FAIL
+ */
+static int pnl_basis_fit_ls_orthogonal(const PnlBasis *basis, PnlVect *coef, const PnlMat *x, const PnlVect *y)
+{
+  int N, i, k;
+  N = y->size;
+  pnl_vect_resize(coef, basis->nb_func);
+  pnl_vect_set_all(coef, 0.);
+
+  for (k = 0 ; k < basis->nb_func ; k++)
+    {
+      double sum, norm;
+      sum = norm = 0.;
+      for (i = 0 ; i < N ; i++)
+        {
+          PnlVect xi = pnl_vect_wrap_mat_row(x, i);
+          const double val = pnl_basis_i_vect(basis, &xi, k);
+          sum += val * PNL_GET(y, i);
+          norm += val * val;
+        }
+      if (norm != 0.)
+        {
+          PNL_LET(coef, k) = sum / norm;
+        }
+    }
+  return PNL_OK;
+}
+
+/**
+ * Find the best approximation of the function defined by f(x(i,:)) = y(i)
+ *
+ * @param basis a PnlBasis
+ * @param x the matrix of points at which we know the value of the function. One line
+ * of the matrix is the vector of the coordinates of one point
+ * @param y the values of the function f at the points defined by x
+ * @param coef contains on exit the coefficients of the regression
+ *
+ * @return PNL_OK or PNL_FAIL
+ */
+int pnl_basis_fit_ls(const PnlBasis *basis, PnlVect *coef, const PnlMat *x, const PnlVect *y)
+{
+  if (PnlBasisTypeTab[basis->id].is_orthogonal == PNL_TRUE)
+    {
+      return pnl_basis_fit_ls_orthogonal(basis, coef, x, y);
+    }
+  else
+    {
+      return pnl_basis_fit_ls_general(basis, coef, x, y);
+    }
 }
 
 /**
