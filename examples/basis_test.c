@@ -98,36 +98,43 @@ static double function2d_2(double *x)
   return log(1 + 2 * (x[0] * x[0] + x[1] * x[1])) + (x[0] * x[0] + x[1] * x[1]);
 }
 
+static double function2d_3(double *x)
+{
+  return (x[0] * x[1]);
+}
+
 static double myfunction(const PnlVect *x, void *p)
 {
   double a = ((double *) p)[0];
   return log(1 + a * SQR(pnl_vect_norm_two(x)));
 }
 
-static double regression_multid_aux(double(*f)(double *), PnlBasis *basis)
+enum {ABS_ERR = 1, MEAN_ERR = 2};
+static double regression_multid_aux(double(*f)(double *), PnlBasis *basis, int err_type)
 {
-  int i, j, n;
-  double a, b, h, err;
+  int i, n;
+  double a, b, err, mean;;
   PnlMat *t;
-  PnlVect *y, *alpha;
+  PnlVect *y, *alpha, *xmin, *xmax;
+  PnlRng *rng;
 
-  /* creating the grid */
+  /* creating the grid on [a,b]^2 */
+  n = 100000;
   a = -2.0;
   b = 2.0;
-  n = 100;
-  h = (b - a) / n;
-  t = pnl_mat_create((n + 1) * (n + 1), 2);
+  t = pnl_mat_create(n, 2);
+  rng = pnl_rng_create(PNL_RNG_MERSENNE);
+  pnl_rng_sseed(rng, 0);
+  pnl_mat_rng_uni2(t, n, 2, a, b, rng);
+  xmin = pnl_vect_create_from_double(2, a);
+  xmax = pnl_vect_create_from_double(2, b);
+  pnl_basis_set_domain(basis, xmin, xmax);
 
   /* creating the values of exp on the grid */
-  y = pnl_vect_create((n + 1) * (n + 1));
-  for (i = 0; i < n + 1; i++)
+  y = pnl_vect_create(n);
+  for (i = 0; i < n ; i++)
     {
-      for (j = 0; j < n + 1; j++)
-        {
-          MLET(t, i * (n + 1) + j, 0) =  a + i * h;
-          MLET(t, i * (n + 1) + j, 1) =  a + j * h;
-          LET(y, i * (n + 1) + j) = (*f)(pnl_mat_lget(t, i * (n + 1) + j, 0));
-        }
+      LET(y, i) = (*f)(pnl_mat_lget(t, i, 0));
     }
 
   alpha = pnl_vect_new();
@@ -138,56 +145,84 @@ static double regression_multid_aux(double(*f)(double *), PnlBasis *basis)
       pnl_vect_print_asrow(alpha);
     }
 
-  /* Compute the infinity norm of the error */
-  err = 0.;
-  for (i = 0; i < t->m; i++)
+  /* Compute the L^2 and infinity norm of the error */
+  mean = err = 0.;
+  for (i = 0; i < n; i++)
     {
       double tmp = (*f)(pnl_mat_lget(t, i, 0)) -
                    pnl_basis_eval(basis, alpha, pnl_mat_lget(t, i, 0));
+      mean += tmp * tmp;
       if (fabs(tmp) > err) err = fabs(tmp);
     }
+  switch (err_type)
+  {
+  case ABS_ERR:
+    break;
+  case MEAN_ERR:
+    err = mean / n;
+    break;
+  default:
+    printf("Unknow error type: %d. Returning L^∞.\n", err_type);
+    break;
+  }
+  pnl_vect_free(&y);
+  pnl_vect_free(&alpha);
+  pnl_vect_free(&xmin);
+  pnl_vect_free(&xmax);
+  pnl_mat_free(&t);
+  pnl_rng_free(&rng);
   return err;
 }
 
 static void regression_multid()
 {
-    {
-      double err;
-      int basis_name = PNL_BASIS_HERMITE;
-      int nb_variates = 2; /* functions with values in R^2 */
-      int degree = 3; /* total sum degree */
-      PnlBasis *basis = pnl_basis_create_from_degree(basis_name, degree, nb_variates);
-      err = regression_multid_aux(function2d_1, basis);
-      pnl_test_eq_abs(err, 0., 1E-5, "pnl_basis_eval (sum degree)", "polynomial with deg <= 3");
-      pnl_basis_free(&basis);
-    }
+  {
+    double err;
+    int basis_name = PNL_BASIS_HERMITE;
+    int nb_variates = 2; /* functions with values in R^2 */
+    int degree = 3; /* total sum degree */
+    PnlBasis *basis = pnl_basis_create_from_degree(basis_name, degree, nb_variates);
+    err = regression_multid_aux(function2d_1, basis, ABS_ERR);
+    pnl_test_eq_abs(err, 0., 1E-5, "pnl_basis_eval (sum degree)", "polynomial with deg <= 3");
+    pnl_basis_free(&basis);
+  }
 
-    {
-      double err;
-      int basis_name = PNL_BASIS_HERMITE;
-      int nb_variates = 2; /* functions with values in R^2 */
-      int degree = 3; /* total product degree */
-      PnlBasis *basis = pnl_basis_create_from_prod_degree(basis_name, degree, nb_variates);
-      err = regression_multid_aux(function2d_1, basis);
-      pnl_test_eq_abs(err, 0., 1E-5, "pnl_basis_eval (prod degree)", "polynomial with deg <= 3");
-      pnl_basis_free(&basis);
-    }
+  {
+    double err;
+    int basis_name = PNL_BASIS_HERMITE;
+    int nb_variates = 2; /* functions with values in R^2 */
+    int degree = 3; /* total product degree */
+    PnlBasis *basis = pnl_basis_create_from_prod_degree(basis_name, degree, nb_variates);
+    err = regression_multid_aux(function2d_1, basis, ABS_ERR);
+    pnl_test_eq_abs(err, 0., 1E-5, "pnl_basis_eval (prod degree)", "polynomial with deg <= 3");
+    pnl_basis_free(&basis);
+  }
 
-    {
-      double err;
-      PnlRnFuncR F;
-      double a = 2;
-      int basis_name = PNL_BASIS_HERMITE;
-      int nb_variates = 2; /* functions with values in R^2 */
-      int degree = 3; /* total product degree */
-      PnlBasis *basis = pnl_basis_create_from_prod_degree(basis_name, degree, nb_variates);
-      F.F = myfunction;
-      F.params = (void *) &a;
-      pnl_basis_add_function(basis, &F);
-      err = regression_multid_aux(function2d_2, basis);
-      pnl_test_eq_abs(err, 0., 1E-5, "pnl_basis_eval (extra functions)", "log (1+x[0]*x[0] + x[1]*x[1]) + (x[0]*x[0] + x[1]*x[1]) on [-2,2]^2");
-      pnl_basis_free(&basis);
-    }
+  {
+    double err;
+    int nb_variates = 2; /* functions with values in R^2 */
+    int n_intervals = 30; /*  number of intervals  */
+    PnlBasis *basis = pnl_basis_create_local_regular(n_intervals, nb_variates);
+    err = regression_multid_aux(function2d_3, basis, MEAN_ERR);
+    pnl_test_eq_abs(err, 0., 1E-2, "pnl_basis_eval (local basis)", "local basis with 50 intervals");
+    pnl_basis_free(&basis);
+  }
+
+  {
+    double err;
+    PnlRnFuncR F;
+    double a = 2;
+    int basis_name = PNL_BASIS_HERMITE;
+    int nb_variates = 2; /* functions with values in R^2 */
+    int degree = 3; /* total product degree */
+    PnlBasis *basis = pnl_basis_create_from_prod_degree(basis_name, degree, nb_variates);
+    F.F = myfunction;
+    F.params = (void *) &a;
+    pnl_basis_add_function(basis, &F);
+    err = regression_multid_aux(function2d_2, basis, ABS_ERR);
+    pnl_test_eq_abs(err, 0., 1E-5, "pnl_basis_eval (extra functions)", "log (1+x[0]*x[0] + x[1]*x[1]) + (x[0]*x[0] + x[1]*x[1]) on [-2,2]^2");
+    pnl_basis_free(&basis);
+  }
 }
 
 static double fonction_a_retrouver(double t, double x)
@@ -380,7 +415,6 @@ static void pnl_basis_eval_test()
   pnl_test_eq_abs(pnl_vect_get(D, 4), derive_xt_fonction_a_retrouver(t0, x0),
                   tol, "pnl_basis_eval_D2 (reduced)",  "derivative %% tx");
 
-
   pnl_basis_free(&basis);
   pnl_rng_free(&rng);
   pnl_vect_free(&alpha);
@@ -393,10 +427,36 @@ static void pnl_basis_eval_test()
   pnl_mat_free(&X);
 }
 
+static void local_basis_test()
+{
+  int i;
+  int dim = 2;
+  PnlBasis *B = pnl_basis_create_local_regular(30, dim);
+  int n = 100000;
+  PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
+  PnlMat *x = pnl_mat_new();
+  PnlVect *y = pnl_vect_create_from_double(n, 1);
+  PnlVect *alpha = pnl_vect_new();
+
+  pnl_rng_sseed(rng, 0);
+  pnl_mat_rng_normal(x, n, dim ,rng);
+  pnl_basis_fit_ls(B, alpha, x, y);
+  for (i = 0; i < alpha->size; i++)
+    {
+      pnl_test_eq_abs(GET(alpha, i), 1, 1E-6, "local_constant_regression", "");
+    }
+  pnl_basis_free(&B);
+  pnl_vect_free(&y);
+  pnl_vect_free(&alpha);
+  pnl_mat_free(&x);
+  pnl_rng_free(&rng);
+}
+
 int main(int argc, char **argv)
 {
   pnl_test_init(argc, argv);
   if (pnl_test_is_verbose()) PRINT_COEFF = 1;
+  local_basis_test();
   exp_regression2();
   regression_multid();
   pnl_basis_eval_test();
