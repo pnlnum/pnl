@@ -224,7 +224,7 @@ static PnlMatInt *compute_tensor(int nb_func, int nb_variates)
                     }
                   block_start++;
                 }
-              /* Loop in an incresing order over the block of global degree deg */
+              /* Loop in an increasing order over the block of global degree deg */
               for (block = block_start ; block <= k ; block++ , i++)
                 {
                   if (i == nb_func)
@@ -294,7 +294,7 @@ static PnlMatInt *compute_tensor_from_degree_function(int degree, int nb_variate
   PnlMatInt *T;
   if (nb_variates <= 0)
     {
-      printf("Nb of variates must be stricly positive in compute_tensor_from_degree\n");
+      printf("Nb of variates must be strictly positive in compute_tensor_from_degree\n");
       abort();
     }
   if (nb_variates == 1)
@@ -446,6 +446,48 @@ static PnlMatInt *compute_tensor_from_hyperbolic_degree(double degree, double q,
       i_sparse++;
     }
   pnl_mat_int_resize(T, i_sparse, n);
+  return T;
+}
+
+/**
+ * Compute the tensor for a tensor local basis
+ * 
+ * @param space_dim the dimension of the state space
+ * @param n_intervals this is an array of size \a space_dim describing the number of intervals for every dimension
+ * @return PnlMatInt
+ */
+static PnlMatInt* compute_tensor_permutation(int space_dim, int *n_elements)
+{
+  int permutation_length, i, col;
+  int inner_loop_length, outer_loop_length;
+  PnlMatInt *T;
+  permutation_length = 1;
+  for (i = 0; i < space_dim; i++)
+    {
+      permutation_length *= n_elements[i];
+    }
+  T = pnl_mat_int_create(permutation_length, space_dim);
+  outer_loop_length = permutation_length;
+  inner_loop_length = 1;
+  for (col = 0; col < space_dim; col++)
+    {
+      int outer_index;
+      outer_loop_length /= n_elements[col];
+      for (outer_index = 0; outer_index < outer_loop_length; outer_index++)
+        {
+          int middle_loop;
+          for (middle_loop = 0; middle_loop < n_elements[col]; middle_loop++)
+            {
+              int inner_loop;
+              for (inner_loop = 0; inner_loop < inner_loop_length; inner_loop++)
+                {
+                  int row = outer_index * inner_loop_length * n_elements[col] + middle_loop * inner_loop_length + inner_loop;
+                  PNL_MLET(T, row, col) = middle_loop + 1;
+                }
+            }
+        }
+      inner_loop_length *= n_elements[col];
+    }
   return T;
 }
 
@@ -785,6 +827,33 @@ static double D2TchebychevD1(double x, int n, int dim, void *params)
     }
 }
 
+static double LocalD1(double x, int n, int dim, void *params)
+{
+  /* For the tensor mechanism to work, the first interval must have index 1 and not 0. */
+  n--;
+  int *n_intervals = (int*) params;
+  if (-1. + 2. * n / (double) n_intervals[dim] <= x && x < -1. + 2. * (n + 1) / (double) n_intervals[dim])
+    {
+      return 1.;
+    }
+  else
+    {
+      return 0.;
+    }
+}
+
+static double DLocalD1(double x, int n, int dim, void *params)
+{
+  printf("Differentiating a local basis is not implemented.\n");
+  abort();
+}
+
+static double D2LocalD1(double x, int n, int dim, void *params)
+{
+  printf("Differentiating a local basis is not implemented.\n");
+  abort();
+}
+
 /**
  * Struture used to describe the type of a basis
  */
@@ -856,6 +925,7 @@ static int pnl_basis_type_init()
   if (pnl_basis_type_register_with_id(PNL_BASIS_CANONICAL, "Canonical", CanonicalD1, DCanonicalD1, D2CanonicalD1) != PNL_OK) return PNL_FAIL;
   if (pnl_basis_type_register_with_id(PNL_BASIS_HERMITE, "Hermite", HermiteD1, DHermiteD1, D2HermiteD1) != PNL_OK) return PNL_FAIL;
   if (pnl_basis_type_register_with_id(PNL_BASIS_TCHEBYCHEV, "Tchebychev", TchebychevD1, DTchebychevD1, D2TchebychevD1) != PNL_OK) return PNL_FAIL;
+  if (pnl_basis_type_register_with_id(PNL_BASIS_LOCAL, "Local", LocalD1, DLocalD1, D2LocalD1) != PNL_OK) return PNL_FAIL;
 
   return PNL_OK;
 }
@@ -947,7 +1017,6 @@ void  pnl_basis_set_from_tensor(PnlBasis *b, const PnlMatInt *T)
 
   b->T = (PnlMatInt *) T;
   b->SpT = pnl_sp_mat_int_create_from_mat(T);
-
 }
 
 /**
@@ -1040,7 +1109,7 @@ PnlBasis *pnl_basis_create_from_prod_degree(int index, int degree, int nb_variat
  * @param q the hyperbolic exponent (0 < q <= 1)
  * @param n the size of the space in which the basis functions are
  * defined
- * @return a PnlBasis  such that every element prod_{i=1}^n f_i^(a_i) sastifies
+ * @return a PnlBasis such that every element prod_{i=1}^n f_i^(a_i) satisfies
  * (sum_{i=1}^n (a_i^q))^(1/q) <= degree
  */
 PnlBasis *pnl_basis_create_from_hyperbolic_degree(int index, double degree, double q, int n)
@@ -1048,6 +1117,41 @@ PnlBasis *pnl_basis_create_from_hyperbolic_degree(int index, double degree, doub
   PnlMatInt *T;
   T = compute_tensor_from_hyperbolic_degree(degree, q, n);
   return pnl_basis_create_from_tensor(index, T);
+}
+
+/**
+ * Return a PnlBasis with local and orthogonal function
+ *
+ * @param space_dim the dimension of the state space
+ * @param n_intervals this is an array of size \a space_dim describing the number of intervals for every dimension
+ * @return PnlBasis
+ */
+PnlBasis* pnl_basis_create_local(int *n_intervals, int space_dim)
+{
+  PnlMatInt *T;
+  PnlBasis *B;
+  T = compute_tensor_permutation(space_dim, n_intervals);
+  B = pnl_basis_create_from_tensor(PNL_BASIS_LOCAL, T);
+  B->params_size = space_dim * sizeof(int);
+  B->params = n_intervals;
+  return B;
+}
+
+/**
+ * Return a PnlBasis with local and orthogonal function
+ *
+ * @param space_dim the dimension of the state space
+ * @param n_intervals number of intervals per dimension
+ * @return PnlBasis
+ */
+PnlBasis* pnl_basis_create_local_regular(int n_intervals, int space_dim)
+{
+  PnlBasis *B;
+  int i;
+  int *intervals_tab = malloc(space_dim * sizeof(int));
+  for (i = 0; i < space_dim; i++) intervals_tab[i] = n_intervals;
+  B = pnl_basis_create_local(intervals_tab, space_dim);
+  return B;
 }
 
 /**

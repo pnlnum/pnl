@@ -20,7 +20,7 @@ extern "C" {
 
 /* basis indices must start from 0 because they serve an index for the
  * PnlBasisTypeTab array */
-enum {PNL_BASIS_NULL=-1, PNL_BASIS_CANONICAL=0, PNL_BASIS_HERMITE=1, PNL_BASIS_TCHEBYCHEV=2 };
+enum {PNL_BASIS_NULL=-1, PNL_BASIS_CANONICAL=0, PNL_BASIS_HERMITE=1, PNL_BASIS_TCHEBYCHEV=2, PNL_BASIS_LOCAL=3 };
 /* synonymous for compatibility purposes */
 #define CANONICAL PNL_BASIS_CANONICAL
 #define HERMITIAN PNL_BASIS_HERMITE
@@ -94,6 +94,8 @@ extern int pnl_basis_type_register(const char *name, double (*f)(double, int, in
 extern PnlBasis* pnl_basis_new();
 extern PnlBasis* pnl_basis_create(int index, int nb_func, int space_dim);
 extern PnlBasis* pnl_basis_create_from_degree(int index, int degree, int space_dim);
+extern PnlBasis* pnl_basis_create_local(int *n_intervals, int space_dim);
+extern PnlBasis* pnl_basis_create_local_regular(int n_intervals, int space_dim);
 extern PnlBasis* pnl_basis_create_from_prod_degree(int index, int degree, int nb_variates);
 extern PnlBasis* pnl_basis_create_from_hyperbolic_degree(int index, double degree, double q, int n);
 extern void pnl_basis_clone(PnlBasis *dest, const PnlBasis *src);
