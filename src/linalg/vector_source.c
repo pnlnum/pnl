@@ -260,7 +260,7 @@ void FUNCTION(pnl_vect, extract_subvect)(TYPE(PnlVect) *V_sub, const TYPE(PnlVec
 {
   int j;
   FUNCTION(pnl_vect, resize)(V_sub, len);
-  PNL_CHECK(V->size < len + i, "index exceeded", "pnl_vect_extract_subvect");
+  PNL_CHECK(i < 0 || V->size < len + i, "index exceeded", "pnl_vect_extract_subvect");
   for (j = 0 ; j < len ; j++)
     {
       PNL_LET(V_sub, j) = PNL_GET(V, j + i);
@@ -514,7 +514,7 @@ void FUNCTION(pnl_vect, clone)(TYPE(PnlVect) * clone,
 void FUNCTION(pnl_vect, set_subblock)(TYPE(PnlVect) *dest, const TYPE(PnlVect) *src, int i)
 {
   CheckIndexVect(dest, i);
-  PNL_CHECK(dest->size < src->size + i, "size exceeded", "pnl_vect_set_subblock");
+  PNL_CHECK(i < 0 || dest->size < src->size + i, "size exceeded", "pnl_vect_set_subblock");
   memcpy(dest->array + i, src->array, sizeof(BASE)*src->size);
 }
 

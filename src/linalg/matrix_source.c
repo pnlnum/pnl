@@ -663,7 +663,7 @@ TYPE(PnlMat) *FUNCTION(pnl_mat, create_diag_from_ptr)(const BASE x[], int d)
  */
 void FUNCTION(pnl_mat, set_row)(TYPE(PnlMat) *M, const TYPE(PnlVect) *V, int i)
 {
-  PNL_CHECK(i > M->m - 1, "index out of range", "pnl_mat_set_row");
+  PNL_CHECK(i < 0 || i > M->m - 1, "index out of range", "pnl_mat_set_row");
   PNL_CHECK(M->n != V->size, "incompatible data", "pnl_mat_set_row");
   memcpy(&(M->array[i * M->n]), V->array, V->size * sizeof(BASE));
 }
@@ -677,7 +677,7 @@ void FUNCTION(pnl_mat, set_row)(TYPE(PnlMat) *M, const TYPE(PnlVect) *V, int i)
  */
 void FUNCTION(pnl_mat, set_row_from_ptr)(TYPE(PnlMat) *M,  const BASE *x, int i)
 {
-  PNL_CHECK(i > M->m - 1, "index out of range", "pnl_mat_set_row_from_ptr");
+  PNL_CHECK(i < 0 || i > M->m - 1, "index out of range", "pnl_mat_set_row_from_ptr");
   memcpy(&(M->array[i * M->n]), x, M->n * sizeof(BASE));
 }
 
@@ -692,8 +692,8 @@ void FUNCTION(pnl_mat, swap_rows)(TYPE(PnlMat) *M, int i, int j)
 {
   int k, p;
   register BASE Mik, Mjk;
-  PNL_CHECK(i >= M->m, "first index is out of range", "FUNCTION(pnl_mat,swap_rows");
-  PNL_CHECK(j >= M->m, "second index is out of range", "FUNCTION(pnl_mat,swap_rows");
+  PNL_CHECK(i < 0 || i >= M->m, "first index is out of range", "FUNCTION(pnl_mat,swap_rows");
+  PNL_CHECK(j < 0 || j >= M->m, "second index is out of range", "FUNCTION(pnl_mat,swap_rows");
   p = M->n % 3;
   for (k = 0; k < p; k++)
     {
@@ -731,7 +731,7 @@ void FUNCTION(pnl_mat, swap_rows)(TYPE(PnlMat) *M, int i, int j)
 void FUNCTION(pnl_mat, set_col)(TYPE(PnlMat) *M, const TYPE(PnlVect) *V, int j)
 {
   int i;
-  PNL_CHECK(j >= M->n, "index of range", "mat_set_col");
+  PNL_CHECK(j < 0 || j >= M->n, "index of range", "mat_set_col");
   PNL_CHECK(M->m != V->size, "incompatible size", "mat_set_col");
   for (i = 0; i < M->m; i++)
     {
@@ -749,7 +749,7 @@ void FUNCTION(pnl_mat, set_col)(TYPE(PnlMat) *M, const TYPE(PnlVect) *V, int j)
 void FUNCTION(pnl_mat, set_col_from_ptr)(TYPE(PnlMat) *M, const BASE *x, int j)
 {
   int i;
-  PNL_CHECK(j >= M->n, "index of range", "mat_set_col");
+  PNL_CHECK(j < 0 || j >= M->n, "index of range", "mat_set_col");
   for (i = 0; i < M->m; i++)
     {
       PNL_MLET(M, i, j) = x[i];
@@ -765,7 +765,7 @@ void FUNCTION(pnl_mat, set_col_from_ptr)(TYPE(PnlMat) *M, const BASE *x, int j)
  */
 void FUNCTION(pnl_mat, get_row)(TYPE(PnlVect) *V, const TYPE(PnlMat) *M, int i)
 {
-  PNL_CHECK(i >= M->m, "index out of range", "pnl_mat_get_row");
+  PNL_CHECK(i < 0 || i >= M->m, "index out of range", "pnl_mat_get_row");
   FUNCTION(pnl_vect, resize)(V, M->n);
   memcpy(V->array, &(M->array[i * M->n]), M->n * sizeof(BASE));
 }
@@ -780,7 +780,7 @@ void FUNCTION(pnl_mat, get_row)(TYPE(PnlVect) *V, const TYPE(PnlMat) *M, int i)
 TYPE(PnlVect) FUNCTION(pnl_vect, wrap_mat_row)(const TYPE(PnlMat) *M, int i)
 {
   TYPE(PnlVect) V;
-  PNL_CHECK(i >= M->m, "index out of range", "pnl_vect_wrap_mat_row");
+  PNL_CHECK(i < 0 || i >= M->m, "index out of range", "pnl_vect_wrap_mat_row");
   FUNCTION(pnl_vect, init)(&V);
   V.size = M->n;
   V.mem_size = 0;
@@ -841,7 +841,7 @@ TYPE(PnlMat) FUNCTION(pnl_mat, wrap_vect)(const TYPE(PnlVect) *V)
 void FUNCTION(pnl_mat, get_col)(TYPE(PnlVect) *V, const TYPE(PnlMat) *M, int j)
 {
   int i;
-  PNL_CHECK(j >= M->n, "index out of range", "pnl_mat_get_col");
+  PNL_CHECK(j < 0 || j >= M->n, "index out of range", "pnl_mat_get_col");
   FUNCTION(pnl_vect, resize)(V, M->m);
   for (i = 0; i < M->m; i++)
     {
@@ -1056,8 +1056,8 @@ int FUNCTION(pnl_mat, find)(PnlVectInt *indi, PnlVectInt *indj, char *type, int(
 void FUNCTION(pnl_mat, extract_subblock)(TYPE(PnlMat) *M_sub, const TYPE(PnlMat) *M, int i, int len_i, int j, int len_j)
 {
   int k, l;
-  PNL_CHECK(i + len_i > M->m, "size exceeded", "pnl_mat_extract_subblock");
-  PNL_CHECK(j + len_j > M->n, "size exceeded", "pnl_mat_extract_subblock");
+  PNL_CHECK(i < 0 || len_i < 0 || i + len_i > M->m, "size exceeded", "pnl_mat_extract_subblock");
+  PNL_CHECK(j < 0 || len_j < 0 || j + len_j > M->n, "size exceeded", "pnl_mat_extract_subblock");
   FUNCTION(pnl_mat, resize)(M_sub, len_i, len_j);
 
   for (k = 0 ; k < len_i ; k++)
@@ -1082,8 +1082,8 @@ void FUNCTION(pnl_mat, extract_subblock)(TYPE(PnlMat) *M_sub, const TYPE(PnlMat)
 void FUNCTION(pnl_mat, set_subblock)(TYPE(PnlMat) *M, const TYPE(PnlMat) *block, int i,  int j)
 {
   int k, l;
-  PNL_CHECK(i + block->m > M->m, "size exceeded", "pnl_mat_set_subblock");
-  PNL_CHECK(j + block->n > M->n, "size exceeded", "pnl_mat_set_subblock");
+  PNL_CHECK(i < 0 || i + block->m > M->m, "size exceeded", "pnl_mat_set_subblock");
+  PNL_CHECK(j < 0 || j + block->n > M->n, "size exceeded", "pnl_mat_set_subblock");
 
   for (k = 0 ; k < block->m ; k++)
     {
@@ -1106,8 +1106,7 @@ void FUNCTION(pnl_mat, set_subblock)(TYPE(PnlMat) *M, const TYPE(PnlMat) *block,
 void FUNCTION(pnl_mat, add_row)(TYPE(PnlMat) *M, int i, const TYPE(PnlVect) *r)
 {
   int new_size;
-  PNL_CHECK(i > M->m, "size exceeded", "pnl_mat_add_row");
-  PNL_CHECK(i < 0, "size exceeded", "pnl_mat_add_row");
+  PNL_CHECK(i < 0 || i > M->m, "size exceeded", "pnl_mat_add_row");
   PNL_CHECK(r->size != M->n, "incompatible size", "pnl_mat_add_row");
 
   new_size = M->mn + M->n;
@@ -1134,8 +1133,7 @@ void FUNCTION(pnl_mat, add_row)(TYPE(PnlMat) *M, int i, const TYPE(PnlVect) *r)
  */
 void FUNCTION(pnl_mat, del_row)(TYPE(PnlMat) *M, int i)
 {
-  PNL_CHECK(i >= M->m, "size exceeded", "pnl_mat_del_row");
-  PNL_CHECK(i < 0, "size exceeded", "pnl_mat_del_row");
+  PNL_CHECK(i < 0 || i >= M->m, "size exceeded", "pnl_mat_del_row");
   if (i < M->m - 1)
     {
       int rem_len = (M->m - 1 - i) * M->n;
