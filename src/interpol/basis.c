@@ -40,9 +40,15 @@
     {                                                                             \
       PNL_ERROR("Dimension mismatch for the evaluation point", "pnl_basis_eval"); \
     }
+#define CHECK_BASIS_TYPE(type, basis)                       \
+  if ( type != basis->id )                                  \
+    {                                                       \
+      PNL_ERROR("Unexpected basis type", "pnl_basis_eval"); \
+    }
 #else
 #define CHECK_NB_FUNC(coef, basis)
 #define CHECK_NB_VARIATES(x, basis)
+#define CHECK_BASIS_TYPE(type, basis)
 #endif
 
 #if 0
@@ -1555,12 +1561,59 @@ double pnl_basis_i_D2(const PnlBasis *b, const double *x, int i, int j1, int j2)
 
 }
 
+static int pnl_basis_local_get_index(const PnlBasis *basis, const double *x)
+{
+  int i;
+  int index_per_dim, global_index, n_intervals_prod;
+  int *n_intervals = (int*) basis->params;
+  global_index = 0;
+  n_intervals_prod = 1;
+  for (i = 0; i < basis->nb_variates; i++)
+    {
+      if (basis->isreduced)
+        {
+          index_per_dim = (int) (((x[i] - basis->center[i]) * basis->scale[i] + 1) * n_intervals[i] / 2.);
+        }
+      else
+        {
+          index_per_dim = (int) ((x[i] + 1) * n_intervals[i] / 2.);
+        }
+      if (index_per_dim < 0 || index_per_dim > n_intervals[i])
+        {
+          return -1;
+        }
+      global_index += index_per_dim * n_intervals_prod;
+      n_intervals_prod *= n_intervals[i];
+    }
+    return global_index;
+}
+
+/**
+ * Evaluate a local basis at x
+ *
+ * @param coef a vector of weights
+ * @param x the coordinates of the point at which to evaluate the function
+ * @param basis a PnlBasis
+ *
+ * @return sum (coef .* f(x))
+ */
+double pnl_basis_eval_local(const PnlBasis *basis, const PnlVect *coef, const double *x)
+{
+  CHECK_BASIS_TYPE(PNL_BASIS_LOCAL, basis);
+  int global_index = pnl_basis_local_get_index(basis, x);
+  if (global_index < 0)
+    {
+      return 0.;
+    }
+  return GET(coef, global_index);
+}
+
 /**
  * Evaluate a linear combination of basis functions at x
  *
  * @deprecated Use the function pnl_basis_eval_vect(const PnlBasis *basis, const PnlVect *coef, const PnlVect *x)
  *
- * @param coef a vector typically computed by pnl_basis_fit_ls
+ * @param coef a vector of weights
  * @param x the coordinates of the point at which to evaluate the function
  * @param basis a PnlBasis
  *
@@ -1572,6 +1625,11 @@ double pnl_basis_eval(const PnlBasis *basis, const PnlVect *coef, const double *
   double y;
 
   CHECK_NB_FUNC(coef, basis);
+
+  if (basis->id == PNL_BASIS_LOCAL)
+    {
+      return pnl_basis_eval_local(basis, coef, x);
+    }
   y = 0.;
   for (i = 0 ; i < coef->size ; i++)
     {
@@ -1831,6 +1889,46 @@ static int pnl_basis_fit_ls_general(const PnlBasis *basis, PnlVect *coef, const 
 
 /**
  * Find the best approximation of the function defined by f(x(i,:)) = y(i)
+ * For local basis only
+ *
+ * @param basis a PnlBasis
+ * @param x the matrix of points at which we know the value of the function. One line
+ * of the matrix is the vector of the coordinates of one point
+ * @param y the values of the function f at the points defined by x
+ * @param coef contains on exit the coefficients of the regression
+ *
+ * @return PNL_OK or PNL_FAIL
+ */
+static int pnl_basis_fit_ls_local(const PnlBasis *basis, PnlVect *coef, const PnlMat *x, const PnlVect *y)
+{
+  int i, k;
+  int *count;
+  CHECK_BASIS_TYPE(PNL_BASIS_LOCAL, basis);
+  pnl_vect_resize(coef, basis->nb_func);
+  pnl_vect_set_all(coef, 0.);
+  count = calloc(coef->size, sizeof(int));
+
+
+  for (i = 0; i < x->m; i++)
+    {
+      PnlVect xi = pnl_vect_wrap_mat_row(x, i);
+      int x_index = pnl_basis_local_get_index(basis, xi.array);
+      if (x_index >= 0)
+        {
+          LET(coef, x_index) += GET(y, i);
+          count[x_index] += 1;
+        }
+    }
+
+  for (k = 0 ; k < coef->size; k++)
+    {
+      PNL_LET(coef, k) /= count[k];
+    }
+  return PNL_OK;
+}
+
+/**
+ * Find the best approximation of the function defined by f(x(i,:)) = y(i)
  * For orthogonal basis only
  *
  * @param basis a PnlBasis
@@ -1880,32 +1978,28 @@ static int pnl_basis_fit_ls_orthogonal(const PnlBasis *basis, PnlVect *coef, con
  */
 int pnl_basis_fit_ls(const PnlBasis *basis, PnlVect *coef, const PnlMat *x, const PnlVect *y)
 {
+  if (basis->id == PNL_BASIS_LOCAL)
+    {
+      return pnl_basis_fit_ls_local(basis, coef, x, y);
+    }
   if (PnlBasisTypeTab[basis->id].is_orthogonal == PNL_TRUE)
     {
       return pnl_basis_fit_ls_orthogonal(basis, coef, x, y);
     }
-  else
-    {
-      return pnl_basis_fit_ls_general(basis, coef, x, y);
-    }
+  return pnl_basis_fit_ls_general(basis, coef, x, y);
 }
 
 /**
  * An element of a basis writes as a product
  *      p_1(x_1) p2(x_2) .... p_n(x_n)
- * for a polynomial with n variates. Each p_k is a polynomial with only
- * one variate.
+ * for a polynomial with n variates. Each p_k is a polynomial with only one variate.
  *
- * This functions evaluates the term p_k of the i-th element of the
- * basis b at the point x
+ * This functions evaluates the term p_k of the i-th element of the basis b at the point x
  *
  * @param b a PnlBasis
- * @param x a PnlVect containing the coordinates of the point at which to
- * evaluate the basis
- * @param i an integer describing the index of the element of the basis to
- * consider
- * @param k the index of the term to be evaluated with element i of the
- * basis
+ * @param x a PnlVect containing the coordinates of the point at which to evaluate the basis
+ * @param i an integer describing the index of the element of the basis to consider
+ * @param k the index of the term to be evaluated with element i of the basis
  *
  * @return (f_i)_k (x)
  */
@@ -1918,10 +2012,8 @@ double pnl_basis_ik_vect(const PnlBasis *b, const PnlVect *x, int i, int k)
  * Evaluate the i-th element of the basis b at the point x
  *
  * @param b a PnlBasis
- * @param x a PnlVect containing the coordinates of the point at which to
- * evaluate the basis
- * @param i an integer describing the index of the element of the basis to
- * considier
+ * @param x a PnlVect containing the coordinates of the point at which to evaluate the basis
+ * @param i an integer describing the index of the element of the basis to consider
  *
  * @return f_i(x) where f is the i-th basis function
  */

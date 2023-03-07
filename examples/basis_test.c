@@ -201,7 +201,7 @@ static void regression_multid()
   {
     double err;
     int nb_variates = 2; /* functions with values in R^2 */
-    int n_intervals = 30; /*  number of intervals  */
+    int n_intervals = 50; /*  number of intervals  */
     PnlBasis *basis = pnl_basis_create_local_regular(n_intervals, nb_variates);
     err = regression_multid_aux(function2d_3, basis, MEAN_ERR);
     pnl_test_eq_abs(err, 0., 1E-2, "pnl_basis_eval (local basis)", "local basis with 50 intervals");

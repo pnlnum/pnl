@@ -18,8 +18,7 @@ extern "C" {
 
 /*@{*/
 
-/* basis indices must start from 0 because they serve an index for the
- * PnlBasisTypeTab array */
+/* basis indices must start from 0 because they serve as an index for the PnlBasisTypeTab array */
 enum {PNL_BASIS_NULL=-1, PNL_BASIS_CANONICAL=0, PNL_BASIS_HERMITE=1, PNL_BASIS_TCHEBYCHEV=2, PNL_BASIS_LOCAL=3 };
 /* synonymous for compatibility purposes */
 #define CANONICAL PNL_BASIS_CANONICAL
