@@ -1931,6 +1931,7 @@ static int pnl_basis_fit_ls_local(const PnlBasis *basis, PnlVect *coef, const Pn
     {
       PNL_LET(coef, k) /= count[k];
     }
+  free(count);
   return PNL_OK;
 }
 
