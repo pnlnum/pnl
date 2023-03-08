@@ -5,7 +5,12 @@ To use these functionalities, you should include \verb!pnl/pnl_basis.h!.
 
 \describestruct{PnlBasis}
 \begin{verbatim}
-struct PnlBasis_t {
+struct _PnlBasis
+{
+  /**
+   * Must be the first element in order for the object mechanism to work
+   * properly. This allows any PnlBasis pointer to be cast to a PnlObject
+   */
   PnlObject     object;
   /** The basis type */
   int           id;
@@ -21,22 +26,26 @@ struct PnlBasis_t {
   PnlSpMatInt  *SpT;
   /** The number of functions in the tensor #T */
   int           len_T;
-  /** The i-th element of the one dimensional basis. */
-  double      (*f)(double    x, int i);
-  /** The first derivative of i-th element of the one dimensional basis */
-  double      (*Df)(double   x, int i);
-  /** The second derivative of the i-th element of the one dimensional basis */
-  double      (*D2f)(double  x, int i);
-  /** TRUE if the basis is reduced */
+  /** Compute the i-th element of the one dimensional basis.  As a convention, (*f)(x, 0) MUST be equal to 1 */
+  double      (*f)(double x, int i, int dim, void *params);
+  /** Compute the first derivative of i-th element of the one dimensional basis */
+  double      (*Df)(double x, int i, int dim, void *params);
+  /** Compute the second derivative of the i-th element of the one dimensional basis */
+  double      (*D2f)(double x, int i, int dim, void *params);
+  /** PNL_TRUE if the basis is reduced */
   int           isreduced;
   /** The center of the domain */
   double       *center;
   /** The inverse of the scaling factor to map the domain to [-1, 1]^nb_variates */
   double       *scale;
   /** An array of additional functions */
-  PnlRnFuncR  *func_list;
+  PnlRnFuncR   *func_list;
   /** The number of functions in #func_list */
-  int          len_func_list;
+  int           len_func_list;
+  /** Extra parameters to pass to basis functions */
+  void         *params;
+  /** Size of params in bytes to be passed to malloc */
+  size_t        params_size;
 };
 \end{verbatim}
 
@@ -82,22 +91,22 @@ If $G$ is a real valued standard normal random variable, ${\mathbb E}[H_n(G) H_m
 \subsection{Functions}
 
 \begin{itemize}
-\item \describefun{int}{pnl_basis_type_register}{const char *name, double (*f)(double, int), double (*Df)(double, int), double (*D2f)(double, int)}
+\item \describefun{int}{pnl_basis_type_register}{const char *name, double (*f)(double, int, int, void), double (*Df)(double, int, int, void), double (*D2f)(double, int, int, void), int is_orthogonal}
 \sshortdescribe Register a new basis type and return the index to be passed to
 \reffun{pnl_basis_create} . The variable \var{name} is a unique
 string identifier of the family. The variables \var{f}, \var{Df}, \var{D2f} are
 the one dimensional basis functions, its first and second order derivatives.
 Each of these functions must return a \var{double} and take two arguments : the
 first one is the point at which evaluating the basis functions, the second one
-is the index of function. Here is a toy example to show how the canonical basis
+is the index of function. The var{is_orthogonal} if the elements of the basis are orthogonal for the $L^2$ scalar product. Here is a toy example to show how the canonical basis
 is registered (this family is actually already available with the id
 PNL_BASIS_CANONICAL, so the following example may look a little fake)
 \begin{verbatim}
-  double f(double x, int n) { return pnl_pow_i(x, n); }
-  double Df(double x, int n) { return n * pnl_pow_i(x, n-1); }
-  double f(double x, int n) { return n * (n-1) * pnl_pow_i(x, n-2); }
+  double f(double x, int n, int dim, void *params) { return pnl_pow_i(x, n); }
+  double Df(double x, int n, int dim, void *params) { return n * pnl_pow_i(x, n-1); }
+  double f(double x, int n, int dim, void *params) { return n * (n-1) * pnl_pow_i(x, n-2); }
 
-  int id = pnl_basis_register ("Canonic", f, Df, D2f);
+  int id = pnl_basis_register ("Canonic", f, Df, D2f, PNL_FALSE);
   /*
    * B is the Canonical basis of polynomials with degree less or equal than 2 in
    * dimension 5.
@@ -110,8 +119,7 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
 
 \item \describefun{void}{pnl_basis_print}{const \PnlBasis \ptr B}
   \sshortdescribe Print the characteristics of a basis.
-  
-  
+
 \item \describefun{\PnlBasis *}{pnl_basis_create}{int index, int
     nb_func, int nb_variates}
   \sshortdescribe Create a \PnlBasis for the family
@@ -125,8 +133,8 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
   defined by \var{index} (see Table~\ref{basis_index} and \reffun{pnl_basis_type_register}) with total degree less
   or equal than \var{degree} and \var{nb_variates} variates. The total degree is
   the sum of the partial degrees.\\
-  For instance, calling \verb!pnl_basis_create_from_degree (index, 2, 4)! is
-  equivalent to calling \verb!pnl_basis_create_from_tensor (index, T)! where
+  For instance, calling \verb!pnl_basis_create_from_degree(index, 2, 4)! is
+  equivalent to calling \verb!pnl_basis_create_from_tensor(index, T)! where
   \var{T} is given by
   \[ \left(
     \begin{array}{cccc}
@@ -209,6 +217,9 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
     {\alpha_i}^q \right)^{1/q} \leq degree$. This kind of basis based on an
   hyperbolic set of indices gives priority to polynomials associated to low
   order interaction.
+
+\item \describefun{\PnlBasis\ptr}{pnl_basis_create_local}{int \ptr n_intervals, int space_dim}
+  \sshortdescribe Create a local bases on $(-1, 1)^{\var{space_dim}}$ with \var{n_intervals[i]} along dimension \var{i} for $i \in \{1,\dots,\var{space_dim}\}$. This basis is orthogonal. Note that this basis is not differentiable.
 
 \item  \describefun{void}{pnl_basis_free}{\PnlBasis \ptr\ptr basis}
   \sshortdescribe Free a \PnlBasis created by

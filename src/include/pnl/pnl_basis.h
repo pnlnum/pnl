@@ -18,9 +18,8 @@ extern "C" {
 
 /*@{*/
 
-/* basis indices must start from 0 because they serve an index for the
- * PnlBasisTypeTab array */
-enum {PNL_BASIS_NULL=-1, PNL_BASIS_CANONICAL=0, PNL_BASIS_HERMITE=1, PNL_BASIS_TCHEBYCHEV=2 };
+/* basis indices must start from 0 because they serve as an index for the PnlBasisTypeTab array */
+enum {PNL_BASIS_NULL=-1, PNL_BASIS_CANONICAL=0, PNL_BASIS_HERMITE=1, PNL_BASIS_TCHEBYCHEV=2, PNL_BASIS_LOCAL=3 };
 /* synonymous for compatibility purposes */
 #define CANONICAL PNL_BASIS_CANONICAL
 #define HERMITIAN PNL_BASIS_HERMITE
@@ -69,11 +68,11 @@ struct _PnlBasis
   /** The number of functions in the tensor #T */
   int           len_T;
   /** Compute the i-th element of the one dimensional basis.  As a convention, (*f)(x, 0) MUST be equal to 1 */
-  double      (*f)(double    x, int i);
+  double      (*f)(double x, int i, int dim, void *params);
   /** Compute the first derivative of i-th element of the one dimensional basis */
-  double      (*Df)(double   x, int i);
+  double      (*Df)(double x, int i, int dim, void *params);
   /** Compute the second derivative of the i-th element of the one dimensional basis */
-  double      (*D2f)(double  x, int i);
+  double      (*D2f)(double x, int i, int dim, void *params);
   /** PNL_TRUE if the basis is reduced */
   int           isreduced;
   /** The center of the domain */
@@ -81,24 +80,32 @@ struct _PnlBasis
   /** The inverse of the scaling factor to map the domain to [-1, 1]^nb_variates */
   double       *scale;
   /** An array of additional functions */
-  PnlRnFuncR  *func_list;
+  PnlRnFuncR   *func_list;
   /** The number of functions in #func_list */
-  int          len_func_list;
+  int           len_func_list;
+  /** Extra parameters to pass to basis functions */
+  void         *params;
+  /** Size of params in bytes to be passed to malloc */
+  size_t        params_size;
 };
 
-extern int pnl_basis_type_register(const char *name, double (*f)(double, int), double (*Df)(double, int), double (*D2f)(double, int));
+extern int pnl_basis_type_register(const char *name, double (*f)(double, int, int, void*), double (*Df)(double, int, int, void*), double (*D2f)(double, int, int, void*), int is_orthogonal);
 extern PnlBasis* pnl_basis_new();
 extern PnlBasis* pnl_basis_create(int index, int nb_func, int space_dim);
 extern PnlBasis* pnl_basis_create_from_degree(int index, int degree, int space_dim);
+extern PnlBasis* pnl_basis_create_local(int *n_intervals, int space_dim);
+extern PnlBasis* pnl_basis_create_local_regular(int n_intervals, int space_dim);
 extern PnlBasis* pnl_basis_create_from_prod_degree(int index, int degree, int nb_variates);
 extern PnlBasis* pnl_basis_create_from_hyperbolic_degree(int index, double degree, double q, int n);
 extern void pnl_basis_clone(PnlBasis *dest, const PnlBasis *src);
 extern PnlBasis* pnl_basis_copy(const PnlBasis *B);
-extern void  pnl_basis_set_from_tensor(PnlBasis *b, int index, const PnlMatInt *T);
+extern void pnl_basis_set_type(PnlBasis *B, int index);
+extern void  pnl_basis_set_from_tensor(PnlBasis *b, const PnlMatInt *T);
 extern PnlBasis* pnl_basis_create_from_tensor( int index, const PnlMatInt *T);
 extern void pnl_basis_del_elt(PnlBasis *B, const PnlVectInt *d);
 extern void pnl_basis_del_elt_i(PnlBasis *B, int i);
 extern void pnl_basis_add_elt(PnlBasis *B, const PnlVectInt *d);
+extern int pnl_basis_local_get_index(const PnlBasis *basis, const double *x);
 extern void pnl_basis_set_domain(PnlBasis *B, const PnlVect *xmin, const PnlVect *xmax);
 extern void pnl_basis_set_reduced(PnlBasis *B, const PnlVect *center, const PnlVect *scale);
 extern void pnl_basis_free(PnlBasis **basis);
@@ -151,7 +158,7 @@ PNL_INLINE_FUNC double pnl_basis_i(const PnlBasis *b, const double *x, int i)
         {
           const int j = b->SpT->J[k];
           const int Tij = b->SpT->array[k];
-          aux *= (b->f)((x[j] - b->center[j]) * b->scale[j], Tij);
+          aux *= (b->f)((x[j] - b->center[j]) * b->scale[j], Tij, j, b->params);
         }
     }
   else
@@ -160,7 +167,7 @@ PNL_INLINE_FUNC double pnl_basis_i(const PnlBasis *b, const double *x, int i)
         {
           const int j = b->SpT->J[k];
           const int Tij = b->SpT->array[k];
-          aux *= (b->f)(x[j], Tij);
+          aux *= (b->f)(x[j], Tij, j, b->params);
         }
     }
   return aux;

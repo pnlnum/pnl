@@ -17,6 +17,8 @@
 /* <http://www.gnu.org/licenses/>.                                      */
 /************************************************************************/
 
+#include <stdint.h>
+#include <limits.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <mpi.h>
@@ -37,6 +39,19 @@
   return info;                              \
 }
 
+#if SIZE_MAX == UCHAR_MAX
+  #define MPI_SIZE_T MPI_UNSIGNED_CHAR
+#elif SIZE_MAX == USHRT_MAX
+  #define MPI_SIZE_T MPI_UNSIGNED_SHORT
+#elif SIZE_MAX == UINT_MAX
+  #define MPI_SIZE_T MPI_UNSIGNED
+#elif SIZE_MAX == ULONG_MAX
+  #define MPI_SIZE_T MPI_UNSIGNED_LONG
+#elif SIZE_MAX == ULLONG_MAX
+  #define MPI_SIZE_T MPI_UNSIGNED_LONG_LONG
+#else
+  #error "what is happening here?"
+#endif
 
 /*
  * MPI_Pack_size wrappers
@@ -374,6 +389,10 @@ static int size_basis(const PnlObject *Obj, MPI_Comm comm, int *size)
       if ((info = MPI_Pack_size(B->nb_variates, MPI_DOUBLE, comm, &count))) return (info);
       *size += 2 * count;
     }
+  if ((info = MPI_Pack_size(1, MPI_SIZE_T, comm, &count))) return info;
+  *size += count;
+  if ((info = MPI_Pack_size(B->params_size, MPI_BYTE, comm, &count))) return info;
+  *size += count;
   return (info);
 }
 
@@ -695,7 +714,7 @@ static int pack_hmatrix(const PnlObject *Obj, void *buf, int bufsize, int *pos, 
 }
 
 /**
- * Pack a PnlBasis
+ * Pack a PnlBasis. It does not take into account the additional non-tensor functions.
  *
  * @param Obj a PnlObject containing a PnlBasis
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -719,6 +738,8 @@ static int pack_basis(const PnlObject *Obj, void *buf, int bufsize, int *pos, MP
       if ((info = MPI_Pack(B->center, n, MPI_DOUBLE, buf, bufsize, pos, comm))) return info;
       if ((info = MPI_Pack(B->scale, n, MPI_DOUBLE, buf, bufsize, pos, comm))) return info;
     }
+  if ((info = MPI_Pack(&B->params_size, 1, MPI_SIZE_T, buf, bufsize, pos, comm))) return info;
+  if ((info = MPI_Pack(&B->params, B->params_size, MPI_BYTE, buf, bufsize, pos, comm))) return info;
   return (info);
 }
 
@@ -1056,7 +1077,7 @@ static int unpack_hmatrix(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_
 }
 
 /**
- * Unpack a PnlBasis
+ * Unpack a PnlBasis. It does not take into account the extra non-tensor functions.
  *
  * @param Obj a PnlObject containing a PnlBasis
  * @param buf an already allocated buffer of length bufsize used to store Obj
@@ -1075,7 +1096,8 @@ static int unpack_basis(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Co
   if ((info = MPI_Unpack(buf, bufsize, pos, &id, 1, MPI_INT, comm))) return info;
   if ((info = MPI_Unpack(buf, bufsize, pos, &basis_id, 1, MPI_INT, comm))) return info;
   if ((info = pnl_object_mpi_unpack(PNL_OBJECT(T), buf, bufsize, pos, comm))) return info;
-  pnl_basis_set_from_tensor(B, basis_id, T);
+  pnl_basis_set_from_tensor(B, T);
+  pnl_basis_set_type(B, basis_id);
   /* do not free T, it will be done by pnl_basis_free later */
   if ((info = MPI_Unpack(buf, bufsize, pos, &B->isreduced, 1, MPI_INT, comm))) return info;
   if (B->isreduced == 1)
@@ -1086,6 +1108,9 @@ static int unpack_basis(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Co
       B->scale = malloc(n * sizeof(double));
       if ((info = MPI_Unpack(buf, bufsize, pos, B->scale, n, MPI_DOUBLE, comm))) return info;
     }
+  if ((info = MPI_Unpack(buf, bufsize, pos, &B->params_size, 1, MPI_SIZE_T, comm))) return info;
+  B->params = malloc(B->params_size);
+  if ((info = MPI_Unpack(buf, bufsize, pos, B->params, B->params_size, MPI_BYTE, comm))) return info;
   return (MPI_SUCCESS);
 }
 
