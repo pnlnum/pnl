@@ -346,8 +346,10 @@ int FUNCTION(pnl_mat, syslin_inplace)(TYPE(PnlMat) *A, TYPE(PnlVect) *b)
   CheckIsSquare(A);
   p = pnl_vect_int_create(A->m);
   status = FUNCTION(pnl_mat, lu)(A, p);
-  if (status != PNL_OK) return PNL_FAIL;
-  status = FUNCTION(pnl_mat, lu_syslin_inplace)(A, p, b);
+  if (status == PNL_OK)
+    {
+      status = FUNCTION(pnl_mat, lu_syslin_inplace)(A, p, b);
+    }
   pnl_vect_int_free(&p);
   return status;
 }
