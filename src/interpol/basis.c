@@ -1566,7 +1566,7 @@ double pnl_basis_i_D2(const PnlBasis *b, const double *x, int i, int j1, int j2)
  *
  * @param basis A local basis
  * @param x
- * @return int an integer between -1 and basis->nb_func. The value -1 means that x lies outside of the domain.
+ * @return int an integer between -1 and basis->nb_func - 1. The value -1 means that x lies outside of the domain.
  */
 int pnl_basis_local_get_index(const PnlBasis *basis, const double *x)
 {
