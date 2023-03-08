@@ -1585,7 +1585,7 @@ int pnl_basis_local_get_index(const PnlBasis *basis, const double *x)
         {
           index_per_dim = (int) ((x[i] + 1) * n_intervals[i] / 2.);
         }
-      if (index_per_dim < 0 || index_per_dim > n_intervals[i])
+      if (index_per_dim < 0 || index_per_dim >= n_intervals[i])
         {
           return -1;
         }
