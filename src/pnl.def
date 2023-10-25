@@ -130,6 +130,8 @@ EXPORTS
     pnl_basis_create_from_hyperbolic_degree 
     pnl_basis_create_from_prod_degree 
     pnl_basis_create_from_tensor 
+    pnl_basis_create_local
+    pnl_basis_create_local_regular
     pnl_basis_del_elt 
     pnl_basis_del_elt_i 
     pnl_basis_eval 
@@ -139,6 +141,7 @@ EXPORTS
     pnl_basis_eval_D_vect 
     pnl_basis_eval_derivs 
     pnl_basis_eval_derivs_vect 
+    pnl_basis_eval_local
     pnl_basis_eval_vect 
     pnl_basis_fit_ls 
     pnl_basis_free 
@@ -150,11 +153,13 @@ EXPORTS
     pnl_basis_i_vect 
     pnl_basis_ik 
     pnl_basis_ik_vect 
+    pnl_basis_local_get_index
     pnl_basis_new 
     pnl_basis_print 
     pnl_basis_set_domain 
     pnl_basis_set_from_tensor 
     pnl_basis_set_reduced 
+    pnl_basis_set_type
     pnl_basis_type_register 
     pnl_bessel_h1 
     pnl_bessel_h1_scaled 
@@ -404,6 +409,7 @@ EXPORTS
     pnl_mat_complex_extract_subblock 
     pnl_mat_complex_find 
     pnl_mat_complex_fprint 
+    pnl_mat_complex_fprint_csv
     pnl_mat_complex_fprint_nsp 
     pnl_mat_complex_free 
     pnl_mat_complex_get 
@@ -449,6 +455,7 @@ EXPORTS
     pnl_mat_complex_plus_mat 
     pnl_mat_complex_plus_scalar 
     pnl_mat_complex_print 
+    pnl_mat_complex_print_csv
     pnl_mat_complex_print_nsp 
     pnl_mat_complex_prod 
     pnl_mat_complex_prod_vect 
@@ -509,6 +516,7 @@ EXPORTS
     pnl_mat_extract_subblock 
     pnl_mat_find 
     pnl_mat_fprint 
+    pnl_mat_fprint_csv
     pnl_mat_fprint_nsp 
     pnl_mat_free 
     pnl_mat_get 
@@ -542,6 +550,7 @@ EXPORTS
     pnl_mat_int_extract_subblock 
     pnl_mat_int_find 
     pnl_mat_int_fprint 
+    pnl_mat_int_fprint_csv
     pnl_mat_int_fprint_nsp 
     pnl_mat_int_free 
     pnl_mat_int_get 
@@ -577,6 +586,7 @@ EXPORTS
     pnl_mat_int_plus_mat 
     pnl_mat_int_plus_scalar 
     pnl_mat_int_print 
+    pnl_mat_int_print_csv
     pnl_mat_int_print_nsp 
     pnl_mat_int_prod 
     pnl_mat_int_prod_vect 
@@ -652,6 +662,7 @@ EXPORTS
     pnl_mat_plus_mat 
     pnl_mat_plus_scalar 
     pnl_mat_print 
+    pnl_mat_print_csv
     pnl_mat_print_nsp 
     pnl_mat_prod 
     pnl_mat_prod_vect 
