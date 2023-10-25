@@ -5,6 +5,12 @@ All notable changes to PNL will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.12.0] - 2023-10-25
+
+### Added
+
+- Add local bases (#5)
+
 ## [1.11.0] - 2023-01-17
 
 ### Changed
