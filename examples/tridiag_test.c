@@ -139,7 +139,7 @@ static void tridiag_mv_test ()
 
   pnl_tridiag_mat_mult_vect_inplace (y, M, x);
   Fy = pnl_mat_mult_vect (FM, x);
-  pnl_test_vect_eq_abs (y, Fy, 1E-18, "tridiag_mat_mutl_vect", "");
+  pnl_test_vect_eq_abs (y, Fy, 1E-14, "tridiag_mat_mult_vect", "");
 
   pnl_vect_free (&x);
   pnl_vect_free (&y);

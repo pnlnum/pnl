@@ -40,7 +40,7 @@ extern int pnl_test_hmat_eq_rel(const PnlHmat *X, const PnlHmat *Y, double reler
 extern int pnl_test_hmat_eq_abs(const PnlHmat *X, const PnlHmat *Y, double relerr, const char *str, const char *fmt, ...);
 
 extern void pnl_test_init(int argc, char **argv);
-extern int pnl_test_finalize();
+extern int pnl_test_finalize(const char *str);
 extern void pnl_test_set_ok (const char *str);
 extern void pnl_test_set_fail (const char *str, double res, double expected);
 extern void pnl_test_set_fail0(const char *str);
