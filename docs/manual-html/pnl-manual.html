@@ -24,7 +24,7 @@
 <h2 class="titleHead">Pnl Manual</h2>
 <div class="author" ></div><br />
 <div class="date" ><span 
-class="ec-lmr-12">January 11, 2023</span></div>
+class="ec-lmr-12">February 2, 2023</span></div>
 </div>
 <h3 class="likesectionHead"><a 
  id="x1-1000"></a>Contents</h3>
@@ -7363,10 +7363,11 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>In-plac
  id="dx1-84006"></a> <span class='ret'><a 
 href="#x1-790004.6.1"><span class='struct'>PnlSpMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
-class="ec-lmbx-10x-x-109">pnl_sp_mat_sp_mat</span></span>&#x00A0;(<span class='args'>const <a 
+class="ec-lmbx-10x-x-109">pnl_sp_mat_plus_sp_mat</span></span>&#x00A0;(<span class='args'>const <a 
 href="#x1-790004.6.1"><span class='struct'>PnlSpMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>A, const <a 
-href="#x1-790004.6.1"><span class='struct'>PnlSpMat</span></a> <span 
+href="#x1-790004.6.1"><span class='struct'>PnlSpMat</span></a>
+     <span 
 class="ts1-lmr10-x-x-109">*</span>B</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return the sum of <span class='var'>A</span> and <span class='var'>B</span>.
      </p></li>
@@ -9629,7 +9630,12 @@ class="ec-lmtt-10x-x-109">pnl/pnl_basis.h</span></span></span>.
                                                                                     
 </p>
 <pre class="verbatim" id="verbatim-38">
-struct&#x00A0;PnlBasis_t&#x00A0;{
+struct&#x00A0;_PnlBasis
+{
+&#x00A0;&#x00A0;/**
+&#x00A0;&#x00A0;&#x00A0;*&#x00A0;Must&#x00A0;be&#x00A0;the&#x00A0;first&#x00A0;element&#x00A0;in&#x00A0;order&#x00A0;for&#x00A0;the&#x00A0;object&#x00A0;mechanism&#x00A0;to&#x00A0;work
+&#x00A0;&#x00A0;&#x00A0;*&#x00A0;properly.&#x00A0;This&#x00A0;allows&#x00A0;any&#x00A0;PnlBasis&#x00A0;pointer&#x00A0;to&#x00A0;be&#x00A0;cast&#x00A0;to&#x00A0;a&#x00A0;PnlObject
+&#x00A0;&#x00A0;&#x00A0;*/
 &#x00A0;&#x00A0;PnlObject&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;object;
 &#x00A0;&#x00A0;/**&#x00A0;The&#x00A0;basis&#x00A0;type&#x00A0;*/
 &#x00A0;&#x00A0;int&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;id;
@@ -9645,51 +9651,55 @@ struct&#x00A0;PnlBasis_t&#x00A0;{
 &#x00A0;&#x00A0;PnlSpMatInt&#x00A0;&#x00A0;*SpT;
 &#x00A0;&#x00A0;/**&#x00A0;The&#x00A0;number&#x00A0;of&#x00A0;functions&#x00A0;in&#x00A0;the&#x00A0;tensor&#x00A0;#T&#x00A0;*/
 &#x00A0;&#x00A0;int&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;len_T;
-&#x00A0;&#x00A0;/**&#x00A0;The&#x00A0;i-th&#x00A0;element&#x00A0;of&#x00A0;the&#x00A0;one&#x00A0;dimensional&#x00A0;basis.&#x00A0;*/
-&#x00A0;&#x00A0;double&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;(*f)(double&#x00A0;&#x00A0;&#x00A0;&#x00A0;x,&#x00A0;int&#x00A0;i);
-&#x00A0;&#x00A0;/**&#x00A0;The&#x00A0;first&#x00A0;derivative&#x00A0;of&#x00A0;i-th&#x00A0;element&#x00A0;of&#x00A0;the&#x00A0;one&#x00A0;dimensional&#x00A0;basis&#x00A0;*/
-&#x00A0;&#x00A0;double&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;(*Df)(double&#x00A0;&#x00A0;&#x00A0;x,&#x00A0;int&#x00A0;i);
-&#x00A0;&#x00A0;/**&#x00A0;The&#x00A0;second&#x00A0;derivative&#x00A0;of&#x00A0;the&#x00A0;i-th&#x00A0;element&#x00A0;of&#x00A0;the&#x00A0;one&#x00A0;dimensional&#x00A0;basis&#x00A0;*/
-&#x00A0;&#x00A0;double&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;(*D2f)(double&#x00A0;&#x00A0;x,&#x00A0;int&#x00A0;i);
-&#x00A0;&#x00A0;/**&#x00A0;TRUE&#x00A0;if&#x00A0;the&#x00A0;basis&#x00A0;is&#x00A0;reduced&#x00A0;*/
+&#x00A0;&#x00A0;/**&#x00A0;Compute&#x00A0;the&#x00A0;i-th&#x00A0;element&#x00A0;of&#x00A0;the&#x00A0;one&#x00A0;dimensional&#x00A0;basis.&#x00A0;&#x00A0;As&#x00A0;a&#x00A0;convention,&#x00A0;(*f)(x,&#x00A0;0)&#x00A0;MUST&#x00A0;be&#x00A0;equal&#x00A0;to&#x00A0;1&#x00A0;*/
+&#x00A0;&#x00A0;double&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;(*f)(double&#x00A0;x,&#x00A0;int&#x00A0;i,&#x00A0;int&#x00A0;dim,&#x00A0;void&#x00A0;*params);
+&#x00A0;&#x00A0;/**&#x00A0;Compute&#x00A0;the&#x00A0;first&#x00A0;derivative&#x00A0;of&#x00A0;i-th&#x00A0;element&#x00A0;of&#x00A0;the&#x00A0;one&#x00A0;dimensional&#x00A0;basis&#x00A0;*/
+&#x00A0;&#x00A0;double&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;(*Df)(double&#x00A0;x,&#x00A0;int&#x00A0;i,&#x00A0;int&#x00A0;dim,&#x00A0;void&#x00A0;*params);
+&#x00A0;&#x00A0;/**&#x00A0;Compute&#x00A0;the&#x00A0;second&#x00A0;derivative&#x00A0;of&#x00A0;the&#x00A0;i-th&#x00A0;element&#x00A0;of&#x00A0;the&#x00A0;one&#x00A0;dimensional&#x00A0;basis&#x00A0;*/
+&#x00A0;&#x00A0;double&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;(*D2f)(double&#x00A0;x,&#x00A0;int&#x00A0;i,&#x00A0;int&#x00A0;dim,&#x00A0;void&#x00A0;*params);
+&#x00A0;&#x00A0;/**&#x00A0;PNL_TRUE&#x00A0;if&#x00A0;the&#x00A0;basis&#x00A0;is&#x00A0;reduced&#x00A0;*/
 &#x00A0;&#x00A0;int&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;isreduced;
 &#x00A0;&#x00A0;/**&#x00A0;The&#x00A0;center&#x00A0;of&#x00A0;the&#x00A0;domain&#x00A0;*/
 &#x00A0;&#x00A0;double&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;*center;
 &#x00A0;&#x00A0;/**&#x00A0;The&#x00A0;inverse&#x00A0;of&#x00A0;the&#x00A0;scaling&#x00A0;factor&#x00A0;to&#x00A0;map&#x00A0;the&#x00A0;domain&#x00A0;to&#x00A0;[-1,&#x00A0;1]^nb_variates&#x00A0;*/
 &#x00A0;&#x00A0;double&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;*scale;
 &#x00A0;&#x00A0;/**&#x00A0;An&#x00A0;array&#x00A0;of&#x00A0;additional&#x00A0;functions&#x00A0;*/
-&#x00A0;&#x00A0;PnlRnFuncR&#x00A0;&#x00A0;*func_list;
+&#x00A0;&#x00A0;PnlRnFuncR&#x00A0;&#x00A0;&#x00A0;*func_list;
 &#x00A0;&#x00A0;/**&#x00A0;The&#x00A0;number&#x00A0;of&#x00A0;functions&#x00A0;in&#x00A0;#func_list&#x00A0;*/
-&#x00A0;&#x00A0;int&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;len_func_list;
+&#x00A0;&#x00A0;int&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;len_func_list;
+&#x00A0;&#x00A0;/**&#x00A0;Extra&#x00A0;parameters&#x00A0;to&#x00A0;pass&#x00A0;to&#x00A0;basis&#x00A0;functions&#x00A0;*/
+&#x00A0;&#x00A0;void&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;*params;
+&#x00A0;&#x00A0;/**&#x00A0;Size&#x00A0;of&#x00A0;params&#x00A0;in&#x00A0;bytes&#x00A0;to&#x00A0;be&#x00A0;passed&#x00A0;to&#x00A0;malloc&#x00A0;*/
+&#x00A0;&#x00A0;size_t&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;params_size;
 };
-</pre>
-<!--l. 41--><p class="nopar" >
-</p><!--l. 43--><p class="noindent" >A <a 
-href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> is a family of multivariate functions with real values. Tow different kinds of functions
-can be stored in these families: tensor functions &#8212; originally, this was the only possibility, and
-standard multivariate function typed as <a 
-href="#x1-13000013.1"><span class='struct'>PnlRnFuncR</span></a>.
-</p>
-<!--l. 48--><p class="noindent" ><span class="paragraphHead"><a 
- id="x1-106000"></a><span 
-class="ec-lmbx-10x-x-109">Tensor functions.</span></span>
                                                                                     
 
                                                                                     
+</pre>
+<!--l. 50--><p class="nopar" >
+</p><!--l. 52--><p class="noindent" >A <a 
+href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> is a family of multivariate functions with real values. Tow different kinds of functions
+can be stored in these families: tensor functions &#8212; originally, this was the only possibility &#8212; and
+standard multivariate function typed as <a 
+href="#x1-13000013.1"><span class='struct'>PnlRnFuncR</span></a>.
+</p>
+<!--l. 54--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x1-106000"></a><span 
+class="ec-lmbx-10x-x-109">Tensor functions.</span></span>
 Tensors functions are built as a tensor product of one dimensional elements. Hence, we only need a
 tensor matrix <span class='var'>T</span> to describe a multi-dimensional basis in terms of the one dimensional one. These
 tensors functions can be easily evaluated and differentiated twice, see <a 
-href="#x1-108017r7.2">pnl_basis_eval</a>,
+href="#x1-108018r7.2">pnl_basis_eval</a>,
 <a 
-href="#x1-108017r7.2">pnl_basis_eval_vect</a>, <a 
-href="#x1-108017r7.2">pnl_basis_eval_D</a>, <a 
-href="#x1-108017r7.2">pnl_basis_eval_D_vect</a>, <a 
-href="#x1-108017r7.2">pnl_basis_eval_D2</a>,
+href="#x1-108018r7.2">pnl_basis_eval_vect</a>, <a 
+href="#x1-108018r7.2">pnl_basis_eval_D</a>, <a 
+href="#x1-108018r7.2">pnl_basis_eval_D_vect</a>, <a 
+href="#x1-108018r7.2">pnl_basis_eval_D2</a>,
 <a 
-href="#x1-108017r7.2">pnl_basis_eval_D2_vect</a>, <a 
-href="#x1-108017r7.2">pnl_basis_eval_derivs</a>, <a 
-href="#x1-108017r7.2">pnl_basis_eval_derivs_vect</a>.
-</p><!--l. 56--><p class="noindent" >The two tensors <span class='var'>T</span> and <span class='var'>SpT</span> do actually store the same information &#8212; <span class='var'>T(i,j)</span> is the degree w.r.t the
+href="#x1-108018r7.2">pnl_basis_eval_D2_vect</a>, <a 
+href="#x1-108018r7.2">pnl_basis_eval_derivs</a>, <a 
+href="#x1-108018r7.2">pnl_basis_eval_derivs_vect</a>.
+</p><!--l. 62--><p class="noindent" >The two tensors <span class='var'>T</span> and <span class='var'>SpT</span> do actually store the same information &#8212; <span class='var'>T(i,j)</span> is the degree w.r.t the
 <span class='var'>j</span>-th variable in the <span class='var'>i</span>-th function. Originally, we were only using the dense representation <span class='var'>T</span>, which is
 far more convenient to use when building the basis but it slows down the evaluation of
 the basis by a great deal. To overcome this lack of efficiency, a sparse storage has been
@@ -9699,7 +9709,7 @@ added.
                                                                                     
 
                                                                                     
-<!--l. 63--><p class="noindent" ><a 
+<!--l. 69--><p class="noindent" ><a 
  id="x1-1060043"></a></p><hr class="float" /><div class="float" 
 >
                                                                                     
@@ -9715,19 +9725,19 @@ id="TBL-12-3" /></colgroup><tr
 class="td11"><a 
  id="dx1-106001"></a><a 
  id="x1-106000doc"></a><span class='struct'>PNL_BASIS_CANONICAL</span>  </td><td  style="white-space:normal; text-align:left;" id="TBL-12-1-2"  
-class="td11"><!--l. 65--><p class="noindent" >     </p></td><td  style="white-space:nowrap; text-align:left;" id="TBL-12-1-3"  
+class="td11"><!--l. 71--><p class="noindent" >     </p></td><td  style="white-space:nowrap; text-align:left;" id="TBL-12-1-3"  
 class="td11">for the Canonical polynomials  </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-12-2-"><td  style="white-space:nowrap; text-align:left;" id="TBL-12-2-1"  
 class="td11"><a 
  id="dx1-106002"></a><span class='struct'>PNL_BASIS_HERMITE</span>       </td><td  style="white-space:normal; text-align:left;" id="TBL-12-2-2"  
-class="td11"><!--l. 66--><p class="noindent" >     </p></td><td  style="white-space:nowrap; text-align:left;" id="TBL-12-2-3"  
+class="td11"><!--l. 72--><p class="noindent" >     </p></td><td  style="white-space:nowrap; text-align:left;" id="TBL-12-2-3"  
 class="td11">for the Hermite polynomials     </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-12-3-"><td  style="white-space:nowrap; text-align:left;" id="TBL-12-3-1"  
 class="td11"><a 
  id="dx1-106003"></a><span class='struct'>PNL_BASIS_TCHEBYCHEV</span></td><td  style="white-space:normal; text-align:left;" id="TBL-12-3-2"  
-class="td11"><!--l. 67--><p class="noindent" >     </p></td><td  style="white-space:nowrap; text-align:left;" id="TBL-12-3-3"  
+class="td11"><!--l. 73--><p class="noindent" >     </p></td><td  style="white-space:nowrap; text-align:left;" id="TBL-12-3-3"  
 class="td11">for the Tchebychev polynomials</td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-12-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-12-4-1"  
@@ -9742,7 +9752,7 @@ basis types.</span></div><!--tex4ht:label?: x1-1060043 -->
                                                                                     
 </div><hr class="endfloat" />
 </div>
-<!--l. 74--><p class="noindent" >The Hermite polynomials are defined by
+<!--l. 80--><p class="noindent" >The Hermite polynomials are defined by
 </p>
 <table 
 class="equation-star"><tr><td>
@@ -9753,7 +9763,7 @@ H (x) = (- 1)n ex22-d-e- x22-.
  n               dxn
 " class="math-display"  /></div>
 </td></tr></table>
-<!--l. 77--><p class="nopar" >If <span 
+<!--l. 83--><p class="nopar" >If <span 
 class="lmmi-10x-x-109">G </span>is a real valued standard normal random variable, <span 
 class="msbm-10x-x-109">E</span><span 
 class="rm-lmr-10x-x-109">[</span><span 
@@ -9773,20 +9783,21 @@ src="pnl-manual23x.png" alt="{n=m}"  class="left" align="middle" /></sub>.
 <br 
 class="newline" />
 </p>
-<!--l. 81--><p class="noindent" ><span class="paragraphHead"><a 
+<!--l. 87--><p class="noindent" ><span class="paragraphHead"><a 
  id="x1-107000"></a><span 
 class="ec-lmbx-10x-x-109">Standard multivariate functions.</span></span>
 These functions are supposed to be <a 
 href="#x1-13000013.1"><span class='struct'>PnlRnFuncR</span></a>.
-</p><!--l. 83--><p class="noindent" >To make this toolbox more complete, it is now possible to add some extra functions, which are not
-tensor product. They are stored using an independent mechanism in <span class='var'>func_list</span>. These additional
-functions are only taken into account by the methods <a 
-href="#x1-108017r7.2">pnl_basis_i</a>, <a 
-href="#x1-108017r7.2">pnl_basis_i_vect</a>,
+</p><!--l. 89--><p class="noindent" >To make this toolbox more complete, it is now possible to add some extra functions, which
+are not tensor product. They are stored using an independent mechanism in <span class='var'>func_list</span>.
+These additional functions are only taken into account by the methods <a 
+href="#x1-108018r7.2">pnl_basis_i</a>,
 <a 
-href="#x1-108017r7.2">pnl_basis_eval</a> and <a 
-href="#x1-108017r7.2">pnl_basis_eval_vect</a>. Note in particular that it is not possible to
-differentiate these functions. To add an extra function to an existing <a 
+href="#x1-108018r7.2">pnl_basis_i_vect</a>, <a 
+href="#x1-108018r7.2">pnl_basis_eval</a> and <a 
+href="#x1-108018r7.2">pnl_basis_eval_vect</a>. Note in particular that it
+is not possible to differentiate these functions and that they are not sensitive to the
+<span class='var'>isreduced</span> attribute. To add an extra function to an existing <a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a>, call the function
 <a 
 href="#x1-1080007.2">pnl_basis_add_function</a>.
@@ -9798,18 +9809,22 @@ href="#x1-1080007.2">pnl_basis_add_function</a>.
      <li class="itemize">
      <!--l. 94--><p class="noindent" ><a 
  id="dx1-108001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
-class="ec-lmbx-10x-x-109">pnl_basis_type_register</span></span>&#x00A0;(<span class='args'>const char *name, double (*f)(double, int), double
-     (*Df)(double, int), double (*D2f)(double, int)</span>)<br 
+class="ec-lmbx-10x-x-109">pnl_basis_type_register</span></span>&#x00A0;(<span class='args'>const char *name, double (*f)(double, int, int,
+     void), double (*Df)(double, int, int, void), double (*D2f)(double, int, int, void), int
+     is_orthogonal</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Register a new basis type and return the index to be passed to <a 
 href="#x1-1080007.2">pnl_basis_create</a> .
      The variable <span class='var'>name</span> is a unique string identifier of the family. The variables <span class='var'>f</span>, <span class='var'>Df</span>, <span class='var'>D2f</span> are the
      one dimensional basis functions, its first and second order derivatives. Each of these functions
      must return a <span class='var'>double</span> and take two arguments : the first one is the point at which evaluating
-     the basis functions, the second one is the index of function. Here is a toy example to show
-     how the canonical basis is registered (this family is actually already available with
                                                                                     
 
                                                                                     
+     the basis functions, the second one is the index of function. The varis_orthogonal if the
+     elements of the basis are orthogonal for the <span 
+class="lmmi-10x-x-109">L</span><sup><span 
+class="rm-lmr-8">2</span></sup> scalar product. Here is a toy example to show
+     how the canonical basis is registered (this family is actually already available with
      the id PNL_BASIS_CANONICAL, so the following example may look a little
      fake)
                                                                                     
@@ -9817,11 +9832,11 @@ href="#x1-1080007.2">pnl_basis_create</a> .
                                                                                     
 </p>
      <pre class="verbatim" id="verbatim-39">
-     &#x00A0;&#x00A0;double&#x00A0;f(double&#x00A0;x,&#x00A0;int&#x00A0;n)&#x00A0;{&#x00A0;return&#x00A0;pnl_pow_i(x,&#x00A0;n);&#x00A0;}
-     &#x00A0;&#x00A0;double&#x00A0;Df(double&#x00A0;x,&#x00A0;int&#x00A0;n)&#x00A0;{&#x00A0;return&#x00A0;n&#x00A0;*&#x00A0;pnl_pow_i(x,&#x00A0;n-1);&#x00A0;}
-     &#x00A0;&#x00A0;double&#x00A0;f(double&#x00A0;x,&#x00A0;int&#x00A0;n)&#x00A0;{&#x00A0;return&#x00A0;n&#x00A0;*&#x00A0;(n-1)&#x00A0;*&#x00A0;pnl_pow_i(x,&#x00A0;n-2);&#x00A0;}
+     &#x00A0;&#x00A0;double&#x00A0;f(double&#x00A0;x,&#x00A0;int&#x00A0;n,&#x00A0;int&#x00A0;dim,&#x00A0;void&#x00A0;*params)&#x00A0;{&#x00A0;return&#x00A0;pnl_pow_i(x,&#x00A0;n);&#x00A0;}
+     &#x00A0;&#x00A0;double&#x00A0;Df(double&#x00A0;x,&#x00A0;int&#x00A0;n,&#x00A0;int&#x00A0;dim,&#x00A0;void&#x00A0;*params)&#x00A0;{&#x00A0;return&#x00A0;n&#x00A0;*&#x00A0;pnl_pow_i(x,&#x00A0;n-1);&#x00A0;}
+     &#x00A0;&#x00A0;double&#x00A0;f(double&#x00A0;x,&#x00A0;int&#x00A0;n,&#x00A0;int&#x00A0;dim,&#x00A0;void&#x00A0;*params)&#x00A0;{&#x00A0;return&#x00A0;n&#x00A0;*&#x00A0;(n-1)&#x00A0;*&#x00A0;pnl_pow_i(x,&#x00A0;n-2);&#x00A0;}
      
-     &#x00A0;&#x00A0;int&#x00A0;id&#x00A0;=&#x00A0;pnl_basis_register&#x00A0;("Canonic",&#x00A0;f,&#x00A0;Df,&#x00A0;D2f);
+     &#x00A0;&#x00A0;int&#x00A0;id&#x00A0;=&#x00A0;pnl_basis_register&#x00A0;("Canonic",&#x00A0;f,&#x00A0;Df,&#x00A0;D2f,&#x00A0;PNL_FALSE);
      &#x00A0;&#x00A0;/*
      &#x00A0;&#x00A0;&#x00A0;*&#x00A0;B&#x00A0;is&#x00A0;the&#x00A0;Canonical&#x00A0;basis&#x00A0;of&#x00A0;polynomials&#x00A0;with&#x00A0;degree&#x00A0;less&#x00A0;or&#x00A0;equal&#x00A0;than&#x00A0;2&#x00A0;in
      &#x00A0;&#x00A0;&#x00A0;*&#x00A0;dimension&#x00A0;5.
@@ -10045,7 +10060,36 @@ class="lmmi-10x-x-109">degree</span>. This kind of basis based on
      </p></li>
      <li class="itemize">
      <!--l. 222--><p class="noindent" ><a 
- id="dx1-108013"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx1-108013"></a> <span class='ret'><a 
+href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
+class="ts1-lmr10-x-x-109">*</span></span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_basis_create_local</span></span>&#x00A0;(<span class='args'>int <span 
+class="ts1-lmr10-x-x-109">*</span>n_intervals, int space_dim</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Create a local bases on <span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmsy-10x-x-109">-</span><span 
+class="rm-lmr-10x-x-109">1</span><span 
+class="lmmi-10x-x-109">,</span><span 
+class="rm-lmr-10x-x-109">1)</span><sup><span class='var'><span 
+class="lmmi-8">space</span><sub><span 
+class="lmmi-6">d</span></sub><span 
+class="lmmi-8">im</span></span></sup> with <span class='var'>n_intervals[i]</span> along
+     dimension <span class='var'>i</span> for <span 
+class="lmmi-10x-x-109">i </span><span 
+class="lmsy-10x-x-109">&#x2208;{</span><span 
+class="rm-lmr-10x-x-109">1</span><span 
+class="lmmi-10x-x-109">,</span><span 
+class="lmmi-10x-x-109">&#x2026;</span><span 
+class="lmmi-10x-x-109">,</span><span class='var'><span 
+class="lmmi-10x-x-109">space</span><sub><span 
+class="lmmi-8">d</span></sub><span 
+class="lmmi-10x-x-109">im</span></span><span 
+class="lmsy-10x-x-109">}</span>. This basis is orthogonal. Note that this basis is not
+     differentiable.
+     </p></li>
+     <li class="itemize">
+     <!--l. 225--><p class="noindent" ><a 
+ id="dx1-108014"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_free</span></span>&#x00A0;(<span class='args'><a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">**</span>basis</span>)<br 
@@ -10057,8 +10101,8 @@ href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span
 class="ts1-lmr10-x-x-109">*</span>.
      </p></li>
      <li class="itemize">
-     <!--l. 228--><p class="noindent" ><a 
- id="dx1-108014"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+     <!--l. 231--><p class="noindent" ><a 
+ id="dx1-108015"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_del_elt</span></span>&#x00A0;(<span class='args'><a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>B, const <a 
@@ -10068,16 +10112,16 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Remove 
      <span class='var'>B</span>.
      </p></li>
      <li class="itemize">
-     <!--l. 232--><p class="noindent" ><a 
- id="dx1-108015"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+     <!--l. 235--><p class="noindent" ><a 
+ id="dx1-108016"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_del_elt_i</span></span>&#x00A0;(<span class='args'><a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>B, int i</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Remove the <span class='var'>i-th</span> element of basis <span class='var'>B</span>.
      </p></li>
      <li class="itemize">
-     <!--l. 235--><p class="noindent" ><a 
- id="dx1-108016"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+     <!--l. 238--><p class="noindent" ><a 
+ id="dx1-108017"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_add_elt</span></span>&#x00A0;(<span class='args'><a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>B, const <a 
@@ -10086,7 +10130,7 @@ class="ts1-lmr10-x-x-109">*</span>d</span>)<br
 class="newline" />   <span class='description'>Description&#x00A0;</span>Add the function defined by the tensor <span class='var'>d</span> to the Basis <span class='var'>B</span>.
 </p>
      </li></ul>
-<!--l. 242--><p class="noindent" >Functional regression based on a least square approach often leads to ill conditioned linear systems.
+<!--l. 245--><p class="noindent" >Functional regression based on a least square approach often leads to ill conditioned linear systems.
 One way of improving the stability of the system is to use centered and renormalised
 polynomials so that the original domain of interest <span 
 class="lmsy-10x-x-109"><!--span 
@@ -10113,19 +10157,23 @@ by
 </p>
 <table 
 class="equation"><tr><td>
+                                                                                    
+
+                                                                                    
 <div class="math-display" >
 <img 
 src="pnl-manual27x.png" alt="          (               )
-x &#x2208; D &#x21A6;- &#x2192;   xi --(bi +-ai)&#x2215;2
-              (bi - ai)&#x2215;2   i=1,&#x22C5;&#x22C5;&#x22C5;,d
+            xi --(bi +-ai)&#x2215;2
+x &#x2208; D &#x21A6;- &#x2192;     (bi - ai)&#x2215;2
+                            i=1,&#x22C5;&#x22C5;&#x22C5;,d
 " class="math-display"  /><a 
- id="x1-108017r1"></a></div>
+ id="x1-108018r1"></a></div>
 </td><td class="equation-label">(1)</td></tr></table>
-<!--l. 251--><p class="nopar" ></p>
+<!--l. 250--><p class="nopar" ></p>
      <ul class="itemize1">
      <li class="itemize">
-     <!--l. 253--><p class="noindent" ><a 
- id="dx1-108018"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+     <!--l. 252--><p class="noindent" ><a 
+ id="dx1-108019"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_set_domain</span></span>&#x00A0;(<span class='args'><a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>B, const <a 
@@ -10135,12 +10183,12 @@ href="#x1-290004.1.1"><span class='struct'>PnlVect</span></a> <span
 class="ts1-lmr10-x-x-109">*</span>b</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>This function declares <span class='var'>B</span> as a centered and normalised basis as defined by
      Equation&#x00A0;1. Calling this function is equivalent to calling <a 
-href="#x1-108017r7.2">pnl_basis_set_reduced</a> with
+href="#x1-108018r7.2">pnl_basis_set_reduced</a> with
      <span class='var'>center=(b+a)/2</span> and <span class='var'>scale=(b-a)/2</span>.
      </p></li>
      <li class="itemize">
-     <!--l. 259--><p class="noindent" ><a 
- id="dx1-108019"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+     <!--l. 258--><p class="noindent" ><a 
+ id="dx1-108020"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_set_reduced</span></span>&#x00A0;(<span class='args'><a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>B, const <a 
@@ -10156,16 +10204,23 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>This fu
 class="equation-star"><tr><td>
 <div class="math-display" >
 <img 
-src="pnl-manual28x.png" alt="          (            )
-            xi --centeri
-x &#x2208; D &#x21A6;-&#x2192;      scalei    i=1,&#x22C5;&#x22C5;&#x22C5;,d
+src="pnl-manual28x.png" alt="          ( x - center )
+x &#x2208; D &#x21A6;-&#x2192;    -i--------i
+              scalei    i=1,&#x22C5;&#x22C5;&#x22C5;,d
 " class="math-display"  /></div>
      </td></tr></table>
-     <!--l. 266--><p class="nopar" ></p></li></ul>
+     <!--l. 265--><p class="nopar" ></p></li></ul>
+<!--l. 267--><p class="noindent" >Note that this renormlization does not apply to the extra functions by <a 
+href="#x1-1080007.2">pnl_basis_add_function</a> but
+only to the functions defined by the tensor <span class='var'>T</span>.
+</p>
+                                                                                    
+
+                                                                                    
      <ul class="itemize1">
      <li class="itemize">
      <!--l. 271--><p class="noindent" ><a 
- id="dx1-108020"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+ id="dx1-108021"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_fit_ls</span></span>&#x00A0;(<span class='args'><a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>P, <a 
@@ -10179,14 +10234,12 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Compute
 </p>
      <table 
 class="equation-star"><tr><td>
-                                                                                    
-
-                                                                                    
 <div class="math-display" >
 <img 
-src="pnl-manual29x.png" alt="               n ( N              )2
-coef = arg min &#x2211;  ( &#x2211;  &#x03B1; P (x )- y )
-           &#x03B1;  i=1   j=0  j j  i    i
+src="pnl-manual29x.png" alt="                 (                )2
+              &#x2211;n   N&#x2211;
+coef = arg mi&#x03B1;n    (    &#x03B1;jPj(xi)- yi)
+              i=1   j=0
 " class="math-display"  /></div>
      </td></tr></table>
      <!--l. 278--><p class="nopar" >where <span class='var'>N</span> is the number of functions to regress upon and <span 
@@ -10205,7 +10258,7 @@ class="lmmi-8">i</span></sub>. The function to be
      </p></li>
      <li class="itemize">
      <!--l. 285--><p class="noindent" ><a 
- id="dx1-108021"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx1-108022"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_ik_vect</span></span>&#x00A0;(<span class='args'>const <a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, const <a 
@@ -10234,7 +10287,7 @@ class="lmmi-8">k</span></sub> of the <span class='var'>i-th</span> basis functio
      </p></li>
      <li class="itemize">
      <!--l. 290--><p class="noindent" ><a 
- id="dx1-108022"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx1-108023"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_i_vect</span></span>&#x00A0;(<span class='args'>const <a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, const <a 
@@ -10258,7 +10311,7 @@ class="rm-lmr-10x-x-109">)</span>.
      </p></li>
      <li class="itemize">
      <!--l. 294--><p class="noindent" ><a 
- id="dx1-108023"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx1-108024"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_i_D_vect</span></span>&#x00A0;(<span class='args'>const <a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, const <a 
@@ -10283,10 +10336,13 @@ class="lmmi-8">i</span></sub><span
 class="rm-lmr-10x-x-109">(</span><span 
 class="lmmi-10x-x-109">x</span><span 
 class="rm-lmr-10x-x-109">)</span>.
+                                                                                    
+
+                                                                                    
      </p></li>
      <li class="itemize">
      <!--l. 299--><p class="noindent" ><a 
- id="dx1-108024"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx1-108025"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_i_D2_vect</span></span>&#x00A0;(<span class='args'>const <a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, const <a 
@@ -10319,7 +10375,7 @@ class="rm-lmr-10x-x-109">)</span>.
      </p></li>
      <li class="itemize">
      <!--l. 305--><p class="noindent" ><a 
- id="dx1-108025"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx1-108026"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_eval_derivs_vect</span></span>&#x00A0;(<span class='args'>const <a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, const <a 
@@ -10349,14 +10405,14 @@ class="lmsy-10x-x-109">&#x22C5;</span><span
 class="rm-lmr-10x-x-109">) </span>at the point <span class='var'>x</span>. On output, <span class='var'>fx</span> contains the value of the function, <span class='var'>Dfx</span> its
      gradient and <span class='var'>D2fx</span> its Hessian matrix. This function is optimized and performs much
      better than calling <a 
-href="#x1-108017r7.2">pnl_basis_eval</a>, <a 
-href="#x1-108017r7.2">pnl_basis_eval_D</a> and <a 
-href="#x1-108017r7.2">pnl_basis_eval_D2</a>
+href="#x1-108018r7.2">pnl_basis_eval</a>, <a 
+href="#x1-108018r7.2">pnl_basis_eval_D</a> and <a 
+href="#x1-108018r7.2">pnl_basis_eval_D2</a>
      sequentially.
      </p></li>
      <li class="itemize">
      <!--l. 313--><p class="noindent" ><a 
- id="dx1-108026"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx1-108027"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_eval_vect</span></span>&#x00A0;(<span class='args'>const <a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>basis, const <a 
@@ -10367,7 +10423,7 @@ href="#x1-290004.1.1"><span class='struct'>PnlVect</span></a>
 class="ts1-lmr10-x-x-109">*</span>x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the linear combination of <span class='var'>P_k(x)</span> defined by <span class='var'>coef</span>. Given
      the coefficients computed by the function <a 
-href="#x1-108017r7.2">pnl_basis_fit_ls</a>, this function returns
+href="#x1-108018r7.2">pnl_basis_fit_ls</a>, this function returns
      <span 
 class="lmex-10">&#x2211;</span>
        <sub><span 
@@ -10384,7 +10440,7 @@ class="rm-lmr-10x-x-109">)</span>.
      </p></li>
      <li class="itemize">
      <!--l. 319--><p class="noindent" ><a 
- id="dx1-108027"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx1-108028"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_eval_D_vect</span></span>&#x00A0;(<span class='args'>const <a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>basis, const <a 
@@ -10395,7 +10451,7 @@ href="#x1-290004.1.1"><span class='struct'>PnlVect</span></a> <span
 class="ts1-lmr10-x-x-109">*</span>x, int i</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the derivative with respect to <span class='var'>x_i</span> of the linear combination of
      <span class='var'>P_k(x)</span> defined by <span class='var'>coef</span>. Given the coefficients computed by the function <a 
-href="#x1-108017r7.2">pnl_basis_fit_ls</a>,
+href="#x1-108018r7.2">pnl_basis_fit_ls</a>,
      this function returns <span 
 class="lmmi-10x-x-109">&#x2202;</span><sub><span 
 class="lmmi-8">x</span><sub><span 
@@ -10416,7 +10472,7 @@ class="rm-lmr-10x-x-109">) </span>The index <span class='var'>i</span> may vary 
      </p></li>
      <li class="itemize">
      <!--l. 327--><p class="noindent" ><a 
- id="dx1-108028"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx1-108029"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_eval_D2_vect</span></span>&#x00A0;(<span class='args'>const <a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>basis, const <a 
@@ -10427,7 +10483,7 @@ href="#x1-290004.1.1"><span class='struct'>PnlVect</span></a> <span
 class="ts1-lmr10-x-x-109">*</span>x, int i, int j</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the derivative with respect to <span class='var'>x_i</span> of the linear combination of
      <span class='var'>P_k(x)</span> defined by <span class='var'>coef</span>. Given the coefficients computed by the function <a 
-href="#x1-108017r7.2">pnl_basis_fit_ls</a>,
+href="#x1-108018r7.2">pnl_basis_fit_ls</a>,
      this function returns <span 
 class="lmmi-10x-x-109">&#x2202;</span><sub><span 
 class="lmmi-8">x</span><sub><span 
@@ -10453,57 +10509,57 @@ class="rm-lmr-10x-x-109">)</span>. The indices <span class='var'>i</span> and <s
 <!--l. 336--><p class="noindent" >The following functions are provided for compatibility purposes but are marked as deprecated. Use
 the functions with the <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">_vect</span></span></span> extension. </p>
+                                                                                    
+
+                                                                                    
      <ul class="itemize1">
      <li class="itemize">
      <!--l. 339--><p class="noindent" ><a 
- id="dx1-108029"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx1-108030"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_ik</span></span>&#x00A0;(<span class='args'>const <a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, const double <span 
 class="ts1-lmr10-x-x-109">*</span>x, int i, int k</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
-href="#x1-108017r7.2">pnl_basis_ik_vect</a> but takes a C array as the point of
+href="#x1-108018r7.2">pnl_basis_ik_vect</a> but takes a C array as the point of
      evaluation.
      </p></li>
      <li class="itemize">
      <!--l. 342--><p class="noindent" ><a 
- id="dx1-108030"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx1-108031"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_i</span></span>&#x00A0;(<span class='args'><a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, double <span 
 class="ts1-lmr10-x-x-109">*</span>x, int i</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
-href="#x1-108017r7.2">pnl_basis_i_vect</a> but takes a C array as the point of
+href="#x1-108018r7.2">pnl_basis_i_vect</a> but takes a C array as the point of
      evaluation.
-                                                                                    
-
-                                                                                    
      </p></li>
      <li class="itemize">
      <!--l. 345--><p class="noindent" ><a 
- id="dx1-108031"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx1-108032"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_i_D</span></span>&#x00A0;(<span class='args'> const <a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, const double <span 
 class="ts1-lmr10-x-x-109">*</span>x, int i, int j </span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
-href="#x1-108017r7.2">pnl_basis_i_D_vect</a> but takes a C array as the point
+href="#x1-108018r7.2">pnl_basis_i_D_vect</a> but takes a C array as the point
      of evaluation.
      </p></li>
      <li class="itemize">
      <!--l. 348--><p class="noindent" ><a 
- id="dx1-108032"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx1-108033"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_i_D2</span></span>&#x00A0;(<span class='args'>const <a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>b, const double <span 
 class="ts1-lmr10-x-x-109">*</span>x, int i, int j1, int j2</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
-href="#x1-108017r7.2">pnl_basis_i_D2_vect</a> but takes a C array as the point
+href="#x1-108018r7.2">pnl_basis_i_D2_vect</a> but takes a C array as the point
      of evaluation.
      </p></li>
      <li class="itemize">
      <!--l. 351--><p class="noindent" ><a 
- id="dx1-108033"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx1-108034"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_eval</span></span>&#x00A0;(<span class='args'><a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>P, <a 
@@ -10511,12 +10567,12 @@ href="#x1-290004.1.1"><span class='struct'>PnlVect</span></a> <span
 class="ts1-lmr10-x-x-109">*</span>coef, double <span 
 class="ts1-lmr10-x-x-109">*</span>x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
-href="#x1-108017r7.2">pnl_basis_eval_vect</a> but takes a C array as the point
+href="#x1-108018r7.2">pnl_basis_eval_vect</a> but takes a C array as the point
      of evaluation.
      </p></li>
      <li class="itemize">
      <!--l. 354--><p class="noindent" ><a 
- id="dx1-108034"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx1-108035"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_eval_D</span></span>&#x00A0;(<span class='args'><a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>P, <a 
@@ -10524,12 +10580,12 @@ href="#x1-290004.1.1"><span class='struct'>PnlVect</span></a> <span
 class="ts1-lmr10-x-x-109">*</span>coef, double <span 
 class="ts1-lmr10-x-x-109">*</span>x, int i</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
-href="#x1-108017r7.2">pnl_basis_eval_D_vect</a> but takes a C array as the
+href="#x1-108018r7.2">pnl_basis_eval_D_vect</a> but takes a C array as the
      point of evaluation.
      </p></li>
      <li class="itemize">
      <!--l. 357--><p class="noindent" ><a 
- id="dx1-108035"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+ id="dx1-108036"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_eval_D2</span></span>&#x00A0;(<span class='args'><a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>P, <a 
@@ -10537,12 +10593,12 @@ href="#x1-290004.1.1"><span class='struct'>PnlVect</span></a> <span
 class="ts1-lmr10-x-x-109">*</span>coef, double <span 
 class="ts1-lmr10-x-x-109">*</span>x, int i, int j</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
-href="#x1-108017r7.2">pnl_basis_eval_D2_vect</a> but takes a C array as the
+href="#x1-108018r7.2">pnl_basis_eval_D2_vect</a> but takes a C array as the
      point of evaluation.
      </p></li>
      <li class="itemize">
      <!--l. 360--><p class="noindent" ><a 
- id="dx1-108036"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
+ id="dx1-108037"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_basis_eval_derivs</span></span>&#x00A0;(<span class='args'><a 
 href="#x1-1050007.1"><span class='struct'>PnlBasis</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>P, <a 
@@ -10556,15 +10612,15 @@ class="ts1-lmr10-x-x-109">*</span>Dfx, <a
 href="#x1-470004.3.1"><span class='struct'>PnlMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>D2fx</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Same as function <a 
-href="#x1-108017r7.2">pnl_basis_eval_derivs_vect</a> but takes a C array as
+href="#x1-108018r7.2">pnl_basis_eval_derivs_vect</a> but takes a C array as
      the point of evaluation.</p></li></ul>
+                                                                                    
+
+                                                                                    
 <!--l. 1--><p class="noindent" >
 </p>
 <h3 class="sectionHead"><span class="titlemark">8   </span> <a 
  id="x1-1090008"></a>Numerical integration</h3>
-                                                                                    
-
-                                                                                    
 <!--l. 2--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">8.1   </span> <a 
@@ -14254,7 +14310,7 @@ href="pnl-manual.html#dx1-77003" >143</a> <br /></span>
 <span class="index-item">pnl_band_mat_to_mat, <a 
 href="pnl-manual.html#dx1-74007" >144</a> <br /></span>
 <span class="index-item">pnl_basis_add_elt, <a 
-href="pnl-manual.html#dx1-108016" >145</a> <br /></span>
+href="pnl-manual.html#dx1-108017" >145</a> <br /></span>
 <span class="index-item">pnl_basis_add_function, <a 
 href="pnl-manual.html#dx1-108008" >146</a> <br /></span>
 <span class="index-item">PNL_BASIS_CANONICAL, <a 
@@ -14273,1377 +14329,1379 @@ href="pnl-manual.html#dx1-108012" >152</a> <br /></span>
 href="pnl-manual.html#dx1-108006" >153</a> <br /></span>
 <span class="index-item">pnl_basis_create_from_tensor, <a 
 href="pnl-manual.html#dx1-108007" >154</a> <br /></span>
+<span class="index-item">pnl_basis_create_local, <a 
+href="pnl-manual.html#dx1-108013" >155</a> <br /></span>
 <span class="index-item">pnl_basis_del_elt, <a 
-href="pnl-manual.html#dx1-108014" >155</a> <br /></span>
-<span class="index-item">pnl_basis_del_elt_i, <a 
 href="pnl-manual.html#dx1-108015" >156</a> <br /></span>
+<span class="index-item">pnl_basis_del_elt_i, <a 
+href="pnl-manual.html#dx1-108016" >157</a> <br /></span>
 <span class="index-item">pnl_basis_eval, <a 
-href="pnl-manual.html#dx1-108033" >157</a> <br /></span>
-<span class="index-item">pnl_basis_eval_D, <a 
 href="pnl-manual.html#dx1-108034" >158</a> <br /></span>
-<span class="index-item">pnl_basis_eval_D2, <a 
+<span class="index-item">pnl_basis_eval_D, <a 
 href="pnl-manual.html#dx1-108035" >159</a> <br /></span>
+<span class="index-item">pnl_basis_eval_D2, <a 
+href="pnl-manual.html#dx1-108036" >160</a> <br /></span>
 <span class="index-item">pnl_basis_eval_D2_vect, <a 
-href="pnl-manual.html#dx1-108028" >160</a> <br /></span>
+href="pnl-manual.html#dx1-108029" >161</a> <br /></span>
 <span class="index-item">pnl_basis_eval_D_vect, <a 
-href="pnl-manual.html#dx1-108027" >161</a> <br /></span>
+href="pnl-manual.html#dx1-108028" >162</a> <br /></span>
 <span class="index-item">pnl_basis_eval_derivs, <a 
-href="pnl-manual.html#dx1-108036" >162</a> <br /></span>
+href="pnl-manual.html#dx1-108037" >163</a> <br /></span>
 <span class="index-item">pnl_basis_eval_derivs_vect, <a 
-href="pnl-manual.html#dx1-108025" >163</a> <br /></span>
-<span class="index-item">pnl_basis_eval_vect, <a 
 href="pnl-manual.html#dx1-108026" >164</a> <br /></span>
+<span class="index-item">pnl_basis_eval_vect, <a 
+href="pnl-manual.html#dx1-108027" >165</a> <br /></span>
 <span class="index-item">pnl_basis_fit_ls, <a 
-href="pnl-manual.html#dx1-108020" >165</a> <br /></span>
+href="pnl-manual.html#dx1-108021" >166</a> <br /></span>
 <span class="index-item">pnl_basis_free, <a 
-href="pnl-manual.html#dx1-108013" >166</a> <br /></span>
+href="pnl-manual.html#dx1-108014" >167</a> <br /></span>
+                                                                                    
+
+                                                                                    
 <span class="index-item">PNL_BASIS_HERMITE, <a 
-href="pnl-manual.html#dx1-106002" >167</a> <br /></span>
-                                                                                    
-
-                                                                                    
+href="pnl-manual.html#dx1-106002" >168</a> <br /></span>
 <span class="index-item">pnl_basis_i, <a 
-href="pnl-manual.html#dx1-108030" >168</a> <br /></span>
-<span class="index-item">pnl_basis_i_D, <a 
 href="pnl-manual.html#dx1-108031" >169</a> <br /></span>
-<span class="index-item">pnl_basis_i_D2, <a 
+<span class="index-item">pnl_basis_i_D, <a 
 href="pnl-manual.html#dx1-108032" >170</a> <br /></span>
+<span class="index-item">pnl_basis_i_D2, <a 
+href="pnl-manual.html#dx1-108033" >171</a> <br /></span>
 <span class="index-item">pnl_basis_i_D2_vect, <a 
-href="pnl-manual.html#dx1-108024" >171</a> <br /></span>
+href="pnl-manual.html#dx1-108025" >172</a> <br /></span>
 <span class="index-item">pnl_basis_i_D_vect, <a 
-href="pnl-manual.html#dx1-108023" >172</a> <br /></span>
+href="pnl-manual.html#dx1-108024" >173</a> <br /></span>
 <span class="index-item">pnl_basis_i_vect, <a 
-href="pnl-manual.html#dx1-108022" >173</a> <br /></span>
+href="pnl-manual.html#dx1-108023" >174</a> <br /></span>
 <span class="index-item">pnl_basis_ik, <a 
-href="pnl-manual.html#dx1-108029" >174</a> <br /></span>
+href="pnl-manual.html#dx1-108030" >175</a> <br /></span>
 <span class="index-item">pnl_basis_ik_vect, <a 
-href="pnl-manual.html#dx1-108021" >175</a> <br /></span>
+href="pnl-manual.html#dx1-108022" >176</a> <br /></span>
 <span class="index-item">pnl_basis_new, <a 
-href="pnl-manual.html#dx1-108002" >176</a> <br /></span>
+href="pnl-manual.html#dx1-108002" >177</a> <br /></span>
 <span class="index-item">PNL_BASIS_OBJECT, <a 
-href="pnl-manual.html#dx1-12010" >177</a> <br /></span>
+href="pnl-manual.html#dx1-12010" >178</a> <br /></span>
 <span class="index-item">pnl_basis_print, <a 
-href="pnl-manual.html#dx1-108003" >178</a> <br /></span>
+href="pnl-manual.html#dx1-108003" >179</a> <br /></span>
 <span class="index-item">pnl_basis_set_domain, <a 
-href="pnl-manual.html#dx1-108018" >179</a> <br /></span>
+href="pnl-manual.html#dx1-108019" >180</a> <br /></span>
 <span class="index-item">pnl_basis_set_from_tensor, <a 
-href="pnl-manual.html#dx1-108011" >180</a> <br /></span>
+href="pnl-manual.html#dx1-108011" >181</a> <br /></span>
 <span class="index-item">pnl_basis_set_reduced, <a 
-href="pnl-manual.html#dx1-108019" >181</a> <br /></span>
+href="pnl-manual.html#dx1-108020" >182</a> <br /></span>
 <span class="index-item">PNL_BASIS_TCHEBYCHEV, <a 
-href="pnl-manual.html#dx1-106003" >182</a> <br /></span>
+href="pnl-manual.html#dx1-106003" >183</a> <br /></span>
 <span class="index-item">pnl_basis_type_register, <a 
-href="pnl-manual.html#dx1-108001" >183</a> <br /></span>
+href="pnl-manual.html#dx1-108001" >184</a> <br /></span>
 <span class="index-item">pnl_bessel_h1, <a 
-href="pnl-manual.html#dx1-135010" >184</a> <br /></span>
+href="pnl-manual.html#dx1-135010" >185</a> <br /></span>
 <span class="index-item">pnl_bessel_h1_scaled, <a 
-href="pnl-manual.html#dx1-135011" >185</a> <br /></span>
+href="pnl-manual.html#dx1-135011" >186</a> <br /></span>
 <span class="index-item">pnl_bessel_h2, <a 
-href="pnl-manual.html#dx1-135012" >186</a> <br /></span>
+href="pnl-manual.html#dx1-135012" >187</a> <br /></span>
 <span class="index-item">pnl_bessel_h2_scaled, <a 
-href="pnl-manual.html#dx1-135013" >187</a> <br /></span>
+href="pnl-manual.html#dx1-135013" >188</a> <br /></span>
 <span class="index-item">pnl_bessel_i, <a 
-href="pnl-manual.html#dx1-135001" >188</a> <br /></span>
+href="pnl-manual.html#dx1-135001" >189</a> <br /></span>
 <span class="index-item">pnl_bessel_i_scaled, <a 
-href="pnl-manual.html#dx1-135002" >189</a> <br /></span>
+href="pnl-manual.html#dx1-135002" >190</a> <br /></span>
 <span class="index-item">pnl_bessel_j, <a 
-href="pnl-manual.html#dx1-135004" >190</a> <br /></span>
+href="pnl-manual.html#dx1-135004" >191</a> <br /></span>
 <span class="index-item">pnl_bessel_j_scaled, <a 
-href="pnl-manual.html#dx1-135005" >191</a> <br /></span>
+href="pnl-manual.html#dx1-135005" >192</a> <br /></span>
 <span class="index-item">pnl_bessel_k, <a 
-href="pnl-manual.html#dx1-135008" >192</a> <br /></span>
+href="pnl-manual.html#dx1-135008" >193</a> <br /></span>
 <span class="index-item">pnl_bessel_k_scaled, <a 
-href="pnl-manual.html#dx1-135009" >193</a> <br /></span>
+href="pnl-manual.html#dx1-135009" >194</a> <br /></span>
 <span class="index-item">pnl_bessel_rati, <a 
-href="pnl-manual.html#dx1-135003" >194</a> <br /></span>
+href="pnl-manual.html#dx1-135003" >195</a> <br /></span>
 <span class="index-item">pnl_bessel_y, <a 
-href="pnl-manual.html#dx1-135006" >195</a> <br /></span>
+href="pnl-manual.html#dx1-135006" >196</a> <br /></span>
 <span class="index-item">pnl_bessel_y_scaled, <a 
-href="pnl-manual.html#dx1-135007" >196</a> <br /></span>
+href="pnl-manual.html#dx1-135007" >197</a> <br /></span>
 <span class="index-item">pnl_bicg_solver_create, <a 
-href="pnl-manual.html#dx1-97002" >197</a> <br /></span>
+href="pnl-manual.html#dx1-97002" >198</a> <br /></span>
 <span class="index-item">pnl_bicg_solver_free, <a 
-href="pnl-manual.html#dx1-97004" >198</a> <br /></span>
+href="pnl-manual.html#dx1-97004" >199</a> <br /></span>
 <span class="index-item">pnl_bicg_solver_initialisation, <a 
-href="pnl-manual.html#dx1-97003" >199</a> <br /></span>
+href="pnl-manual.html#dx1-97003" >200</a> <br /></span>
 <span class="index-item">pnl_bicg_solver_new, <a 
-href="pnl-manual.html#dx1-97001" >200</a> <br /></span>
+href="pnl-manual.html#dx1-97001" >201</a> <br /></span>
 <span class="index-item">pnl_bicg_solver_solve, <a 
-href="pnl-manual.html#dx1-97005" >201</a> <br /></span>
+href="pnl-manual.html#dx1-97005" >202</a> <br /></span>
 <span class="index-item">pnl_bs_call, <a 
-href="pnl-manual.html#dx1-148003" >202</a> <br /></span>
+href="pnl-manual.html#dx1-148003" >203</a> <br /></span>
 <span class="index-item">pnl_bs_call_put, <a 
-href="pnl-manual.html#dx1-148005" >203</a> <br /></span>
+href="pnl-manual.html#dx1-148005" >204</a> <br /></span>
 <span class="index-item">pnl_bs_gamma, <a 
-href="pnl-manual.html#dx1-148007" >204</a> <br /></span>
+href="pnl-manual.html#dx1-148007" >205</a> <br /></span>
 <span class="index-item">pnl_bs_implicit_vol, <a 
-href="pnl-manual.html#dx1-148008" >205</a> <br /></span>
+href="pnl-manual.html#dx1-148008" >206</a> <br /></span>
 <span class="index-item">pnl_bs_matrix_implicit_vol, <a 
-href="pnl-manual.html#dx1-148009" >206</a> <br /></span>
+href="pnl-manual.html#dx1-148009" >207</a> <br /></span>
 <span class="index-item">pnl_bs_put, <a 
-href="pnl-manual.html#dx1-148004" >207</a> <br /></span>
+href="pnl-manual.html#dx1-148004" >208</a> <br /></span>
 <span class="index-item">pnl_bs_vega, <a 
-href="pnl-manual.html#dx1-148006" >208</a> <br /></span>
+href="pnl-manual.html#dx1-148006" >209</a> <br /></span>
 <span class="index-item">pnl_cdf2nor, <a 
-href="pnl-manual.html#dx1-100016" >209</a> <br /></span>
+href="pnl-manual.html#dx1-100016" >210</a> <br /></span>
 <span class="index-item">pnl_cdf_bet, <a 
-href="pnl-manual.html#dx1-100001" >210</a> <br /></span>
+href="pnl-manual.html#dx1-100001" >211</a> <br /></span>
 <span class="index-item">pnl_cdf_bin, <a 
-href="pnl-manual.html#dx1-100002" >211</a> <br /></span>
+href="pnl-manual.html#dx1-100002" >212</a> <br /></span>
 <span class="index-item">pnl_cdf_chi, <a 
-href="pnl-manual.html#dx1-100003" >212</a> <br /></span>
+href="pnl-manual.html#dx1-100003" >213</a> <br /></span>
 <span class="index-item">pnl_cdf_chn, <a 
-href="pnl-manual.html#dx1-100004" >213</a> <br /></span>
+href="pnl-manual.html#dx1-100004" >214</a> <br /></span>
+                                                                                    
+
+                                                                                    
 <span class="index-item">pnl_cdf_f, <a 
-href="pnl-manual.html#dx1-100005" >214</a> <br /></span>
-                                                                                    
-
-                                                                                    
+href="pnl-manual.html#dx1-100005" >215</a> <br /></span>
 <span class="index-item">pnl_cdf_fnc, <a 
-href="pnl-manual.html#dx1-100006" >215</a> <br /></span>
+href="pnl-manual.html#dx1-100006" >216</a> <br /></span>
 <span class="index-item">pnl_cdf_gam, <a 
-href="pnl-manual.html#dx1-100007" >216</a> <br /></span>
+href="pnl-manual.html#dx1-100007" >217</a> <br /></span>
 <span class="index-item">pnl_cdf_nbn, <a 
-href="pnl-manual.html#dx1-100008" >217</a> <br /></span>
+href="pnl-manual.html#dx1-100008" >218</a> <br /></span>
 <span class="index-item">pnl_cdf_nor, <a 
-href="pnl-manual.html#dx1-100009" >218</a> <br /></span>
+href="pnl-manual.html#dx1-100009" >219</a> <br /></span>
 <span class="index-item">pnl_cdf_poi, <a 
-href="pnl-manual.html#dx1-100010" >219</a> <br /></span>
+href="pnl-manual.html#dx1-100010" >220</a> <br /></span>
 <span class="index-item">pnl_cdf_t, <a 
-href="pnl-manual.html#dx1-100011" >220</a> <br /></span>
+href="pnl-manual.html#dx1-100011" >221</a> <br /></span>
 <span class="index-item">pnl_cdfbchi2n, <a 
-href="pnl-manual.html#dx1-100013" >221</a> <br /></span>
+href="pnl-manual.html#dx1-100013" >222</a> <br /></span>
 <span class="index-item">pnl_cdfchi2n, <a 
-href="pnl-manual.html#dx1-100012" >222</a> <br /></span>
+href="pnl-manual.html#dx1-100012" >223</a> <br /></span>
 <span class="index-item">pnl_cdfnor, <a 
-href="pnl-manual.html#dx1-100015" >223</a> <br /></span>
+href="pnl-manual.html#dx1-100015" >224</a> <br /></span>
 <span class="index-item">pnl_cell_free, <a 
-href="pnl-manual.html#dx1-13008" >224</a> <br /></span>
+href="pnl-manual.html#dx1-13008" >225</a> <br /></span>
 <span class="index-item">pnl_cell_new, <a 
-href="pnl-manual.html#dx1-13004" >225</a> <br /></span>
+href="pnl-manual.html#dx1-13004" >226</a> <br /></span>
 <span class="index-item">pnl_cf_call_bs, <a 
-href="pnl-manual.html#dx1-148001" >226</a> <br /></span>
+href="pnl-manual.html#dx1-148001" >227</a> <br /></span>
 <span class="index-item">pnl_cf_put_bs, <a 
-href="pnl-manual.html#dx1-148002" >227</a> <br /></span>
+href="pnl-manual.html#dx1-148002" >228</a> <br /></span>
 <span class="index-item">pnl_cg_solver_create, <a 
-href="pnl-manual.html#dx1-96002" >228</a> <br /></span>
+href="pnl-manual.html#dx1-96002" >229</a> <br /></span>
 <span class="index-item">pnl_cg_solver_free, <a 
-href="pnl-manual.html#dx1-96004" >229</a> <br /></span>
+href="pnl-manual.html#dx1-96004" >230</a> <br /></span>
 <span class="index-item">pnl_cg_solver_initialisation, <a 
-href="pnl-manual.html#dx1-96003" >230</a> <br /></span>
+href="pnl-manual.html#dx1-96003" >231</a> <br /></span>
 <span class="index-item">pnl_cg_solver_new, <a 
-href="pnl-manual.html#dx1-96001" >231</a> <br /></span>
+href="pnl-manual.html#dx1-96001" >232</a> <br /></span>
 <span class="index-item">pnl_cg_solver_solve, <a 
-href="pnl-manual.html#dx1-96005" >232</a> <br /></span>
+href="pnl-manual.html#dx1-96005" >233</a> <br /></span>
 <span class="index-item">pnl_complex_bessel_h1, <a 
-href="pnl-manual.html#dx1-136010" >233</a> <br /></span>
+href="pnl-manual.html#dx1-136010" >234</a> <br /></span>
 <span class="index-item">pnl_complex_bessel_h1_scaled, <a 
-href="pnl-manual.html#dx1-136011" >234</a> <br /></span>
+href="pnl-manual.html#dx1-136011" >235</a> <br /></span>
 <span class="index-item">pnl_complex_bessel_h2, <a 
-href="pnl-manual.html#dx1-136012" >235</a> <br /></span>
+href="pnl-manual.html#dx1-136012" >236</a> <br /></span>
 <span class="index-item">pnl_complex_bessel_h2_scaled, <a 
-href="pnl-manual.html#dx1-136013" >236</a> <br /></span>
+href="pnl-manual.html#dx1-136013" >237</a> <br /></span>
 <span class="index-item">pnl_complex_bessel_i, <a 
-href="pnl-manual.html#dx1-136001" >237</a> <br /></span>
+href="pnl-manual.html#dx1-136001" >238</a> <br /></span>
 <span class="index-item">pnl_complex_bessel_i_scaled, <a 
-href="pnl-manual.html#dx1-136002" >238</a> <br /></span>
+href="pnl-manual.html#dx1-136002" >239</a> <br /></span>
 <span class="index-item">pnl_complex_bessel_j, <a 
-href="pnl-manual.html#dx1-136004" >239</a> <br /></span>
+href="pnl-manual.html#dx1-136004" >240</a> <br /></span>
 <span class="index-item">pnl_complex_bessel_j_scaled, <a 
-href="pnl-manual.html#dx1-136005" >240</a> <br /></span>
+href="pnl-manual.html#dx1-136005" >241</a> <br /></span>
 <span class="index-item">pnl_complex_bessel_k, <a 
-href="pnl-manual.html#dx1-136008" >241</a> <br /></span>
+href="pnl-manual.html#dx1-136008" >242</a> <br /></span>
 <span class="index-item">pnl_complex_bessel_k_scaled, <a 
-href="pnl-manual.html#dx1-136009" >242</a> <br /></span>
+href="pnl-manual.html#dx1-136009" >243</a> <br /></span>
 <span class="index-item">pnl_complex_bessel_rati, <a 
-href="pnl-manual.html#dx1-136003" >243</a> <br /></span>
+href="pnl-manual.html#dx1-136003" >244</a> <br /></span>
 <span class="index-item">pnl_complex_bessel_y, <a 
-href="pnl-manual.html#dx1-136006" >244</a> <br /></span>
+href="pnl-manual.html#dx1-136006" >245</a> <br /></span>
 <span class="index-item">pnl_complex_bessel_y_scaled, <a 
-href="pnl-manual.html#dx1-136007" >245</a> <br /></span>
+href="pnl-manual.html#dx1-136007" >246</a> <br /></span>
 <span class="index-item">pnl_complex_isequal, <a 
-href="pnl-manual.html#dx1-26043" >246</a> <br /></span>
+href="pnl-manual.html#dx1-26043" >247</a> <br /></span>
 <span class="index-item">pnl_complex_isequal_abs, <a 
-href="pnl-manual.html#dx1-26041" >247</a> <br /></span>
+href="pnl-manual.html#dx1-26041" >248</a> <br /></span>
 <span class="index-item">pnl_complex_isequal_rel, <a 
-href="pnl-manual.html#dx1-26042" >248</a> <br /></span>
+href="pnl-manual.html#dx1-26042" >249</a> <br /></span>
 <span class="index-item">pnl_cosm1, <a 
-href="pnl-manual.html#dx1-21009" >249</a> <br /></span>
+href="pnl-manual.html#dx1-21009" >250</a> <br /></span>
 <span class="index-item">pnl_deactivate_mtherr, <a 
-href="pnl-manual.html#dx1-134001" >250</a> <br /></span>
+href="pnl-manual.html#dx1-134001" >251</a> <br /></span>
 <span class="index-item">pnl_expm1, <a 
-href="pnl-manual.html#dx1-21008" >251</a> <br /></span>
+href="pnl-manual.html#dx1-21008" >252</a> <br /></span>
 <span class="index-item">pnl_fact, <a 
-href="pnl-manual.html#dx1-21001" >252</a> <br /></span>
+href="pnl-manual.html#dx1-21001" >253</a> <br /></span>
 <span class="index-item">pnl_fft, <a 
-href="pnl-manual.html#dx1-116003" >253</a> <br /></span>
+href="pnl-manual.html#dx1-116003" >254</a> <br /></span>
 <span class="index-item">pnl_fft2, <a 
-href="pnl-manual.html#dx1-116005" >254</a> <br /></span>
+href="pnl-manual.html#dx1-116005" >255</a> <br /></span>
 <span class="index-item">pnl_fft2d, <a 
-href="pnl-manual.html#dx1-116015" >255</a> <br /></span>
+href="pnl-manual.html#dx1-116015" >256</a> <br /></span>
 <span class="index-item">pnl_fft2d_inplace, <a 
-href="pnl-manual.html#dx1-116013" >256</a> <br /></span>
+href="pnl-manual.html#dx1-116013" >257</a> <br /></span>
 <span class="index-item">pnl_fft_alloc_wspace, <a 
-href="pnl-manual.html#dx1-117001" >257</a> <br /></span>
+href="pnl-manual.html#dx1-117001" >258</a> <br /></span>
 <span class="index-item">pnl_fft_inplace, <a 
-href="pnl-manual.html#dx1-116001" >258</a> <br /></span>
+href="pnl-manual.html#dx1-116001" >259</a> <br /></span>
 <span class="index-item">pnl_fft_inplace_with_wspace, <a 
-href="pnl-manual.html#dx1-117002" >259</a> <br /></span>
+href="pnl-manual.html#dx1-117002" >260</a> <br /></span>
 <span class="index-item">PNL_GET_PARENT_TYPE, <a 
-href="pnl-manual.html#dx1-12016" >260</a> <br /></span>
+href="pnl-manual.html#dx1-12016" >261</a> <br /></span>
+                                                                                    
+
+                                                                                    
 <span class="index-item">PNL_GET_TYPE, <a 
-href="pnl-manual.html#dx1-12015" >261</a> <br /></span>
-                                                                                    
-
-                                                                                    
+href="pnl-manual.html#dx1-12015" >262</a> <br /></span>
 <span class="index-item">PNL_GET_TYPENAME, <a 
-href="pnl-manual.html#dx1-12014" >262</a> <br /></span>
+href="pnl-manual.html#dx1-12014" >263</a> <br /></span>
 <span class="index-item">pnl_gmres_solver_create, <a 
-href="pnl-manual.html#dx1-98002" >263</a> <br /></span>
+href="pnl-manual.html#dx1-98002" >264</a> <br /></span>
 <span class="index-item">pnl_gmres_solver_free, <a 
-href="pnl-manual.html#dx1-98004" >264</a> <br /></span>
+href="pnl-manual.html#dx1-98004" >265</a> <br /></span>
 <span class="index-item">pnl_gmres_solver_initialisation, <a 
-href="pnl-manual.html#dx1-98003" >265</a> <br /></span>
+href="pnl-manual.html#dx1-98003" >266</a> <br /></span>
 <span class="index-item">pnl_gmres_solver_new, <a 
-href="pnl-manual.html#dx1-98001" >266</a> <br /></span>
+href="pnl-manual.html#dx1-98001" >267</a> <br /></span>
 <span class="index-item">pnl_gmres_solver_solve, <a 
-href="pnl-manual.html#dx1-98005" >267</a> <br /></span>
+href="pnl-manual.html#dx1-98005" >268</a> <br /></span>
 <span class="index-item">pnl_hmat_clone, <a 
-href="pnl-manual.html#dx1-89007" >268</a> <br /></span>
+href="pnl-manual.html#dx1-89007" >269</a> <br /></span>
 <span class="index-item">pnl_hmat_copy, <a 
-href="pnl-manual.html#dx1-89006" >269</a> <br /></span>
+href="pnl-manual.html#dx1-89006" >270</a> <br /></span>
 <span class="index-item">pnl_hmat_create, <a 
-href="pnl-manual.html#dx1-89002" >270</a> <br /></span>
+href="pnl-manual.html#dx1-89002" >271</a> <br /></span>
 <span class="index-item">pnl_hmat_create_from_ptr, <a 
-href="pnl-manual.html#dx1-89004" >271</a> <br /></span>
+href="pnl-manual.html#dx1-89004" >272</a> <br /></span>
 <span class="index-item">pnl_hmat_create_from_scalar, <a 
-href="pnl-manual.html#dx1-89003" >272</a> <br /></span>
+href="pnl-manual.html#dx1-89003" >273</a> <br /></span>
 <span class="index-item">pnl_hmat_free, <a 
-href="pnl-manual.html#dx1-89005" >273</a> <br /></span>
+href="pnl-manual.html#dx1-89005" >274</a> <br /></span>
 <span class="index-item">pnl_hmat_get, <a 
-href="pnl-manual.html#dx1-90002" >274</a> <br /></span>
+href="pnl-manual.html#dx1-90002" >275</a> <br /></span>
 <span class="index-item">pnl_hmat_lget, <a 
-href="pnl-manual.html#dx1-90003" >275</a> <br /></span>
+href="pnl-manual.html#dx1-90003" >276</a> <br /></span>
 <span class="index-item">pnl_hmat_mult_scalar, <a 
-href="pnl-manual.html#dx1-92002" >276</a> <br /></span>
+href="pnl-manual.html#dx1-92002" >277</a> <br /></span>
 <span class="index-item">pnl_hmat_new, <a 
-href="pnl-manual.html#dx1-89001" >277</a> <br /></span>
+href="pnl-manual.html#dx1-89001" >278</a> <br /></span>
 <span class="index-item">PNL_HMAT_OBJECT, <a 
-href="pnl-manual.html#dx1-12007" >278</a> <br /></span>
+href="pnl-manual.html#dx1-12007" >279</a> <br /></span>
 <span class="index-item">pnl_hmat_plus_hmat, <a 
-href="pnl-manual.html#dx1-92001" >279</a> <br /></span>
+href="pnl-manual.html#dx1-92001" >280</a> <br /></span>
 <span class="index-item">pnl_hmat_print, <a 
-href="pnl-manual.html#dx1-91001" >280</a> <br /></span>
+href="pnl-manual.html#dx1-91001" >281</a> <br /></span>
 <span class="index-item">pnl_hmat_resize, <a 
-href="pnl-manual.html#dx1-89008" >281</a> <br /></span>
+href="pnl-manual.html#dx1-89008" >282</a> <br /></span>
 <span class="index-item">pnl_hmat_set, <a 
-href="pnl-manual.html#dx1-90001" >282</a> <br /></span>
+href="pnl-manual.html#dx1-90001" >283</a> <br /></span>
 <span class="index-item">pnl_ifft, <a 
-href="pnl-manual.html#dx1-116004" >283</a> <br /></span>
+href="pnl-manual.html#dx1-116004" >284</a> <br /></span>
 <span class="index-item">pnl_ifft2, <a 
-href="pnl-manual.html#dx1-116006" >284</a> <br /></span>
+href="pnl-manual.html#dx1-116006" >285</a> <br /></span>
 <span class="index-item">pnl_ifft2d, <a 
-href="pnl-manual.html#dx1-116016" >285</a> <br /></span>
+href="pnl-manual.html#dx1-116016" >286</a> <br /></span>
 <span class="index-item">pnl_ifft2d_inplace, <a 
-href="pnl-manual.html#dx1-116014" >286</a> <br /></span>
+href="pnl-manual.html#dx1-116014" >287</a> <br /></span>
 <span class="index-item">pnl_ifft_inplace, <a 
-href="pnl-manual.html#dx1-116002" >287</a> <br /></span>
+href="pnl-manual.html#dx1-116002" >288</a> <br /></span>
 <span class="index-item">pnl_ifft_inplace_with_wspace, <a 
-href="pnl-manual.html#dx1-117003" >288</a> <br /></span>
+href="pnl-manual.html#dx1-117003" >289</a> <br /></span>
 <span class="index-item">pnl_ilap_cdf_euler, <a 
-href="pnl-manual.html#dx1-118003" >289</a> <br /></span>
+href="pnl-manual.html#dx1-118003" >290</a> <br /></span>
 <span class="index-item">pnl_ilap_euler, <a 
-href="pnl-manual.html#dx1-118002" >290</a> <br /></span>
+href="pnl-manual.html#dx1-118002" >291</a> <br /></span>
 <span class="index-item">pnl_ilap_fft, <a 
-href="pnl-manual.html#dx1-118004" >291</a> <br /></span>
+href="pnl-manual.html#dx1-118004" >292</a> <br /></span>
 <span class="index-item">pnl_ilap_gs, <a 
-href="pnl-manual.html#dx1-118005" >292</a> <br /></span>
+href="pnl-manual.html#dx1-118005" >293</a> <br /></span>
 <span class="index-item">pnl_ilap_gs_basic, <a 
-href="pnl-manual.html#dx1-118006" >293</a> <br /></span>
+href="pnl-manual.html#dx1-118006" >294</a> <br /></span>
 <span class="index-item">PNL_INF, <a 
-href="pnl-manual.html#dx1-17026" >294</a> <br /></span>
+href="pnl-manual.html#dx1-17026" >295</a> <br /></span>
 <span class="index-item">pnl_integration, <a 
-href="pnl-manual.html#dx1-111001" >295</a> <br /></span>
+href="pnl-manual.html#dx1-111001" >296</a> <br /></span>
 <span class="index-item">pnl_integration_2d, <a 
-href="pnl-manual.html#dx1-111002" >296</a> <br /></span>
+href="pnl-manual.html#dx1-111002" >297</a> <br /></span>
 <span class="index-item">pnl_integration_GK, <a 
-href="pnl-manual.html#dx1-111004" >297</a> <br /></span>
+href="pnl-manual.html#dx1-111004" >298</a> <br /></span>
 <span class="index-item">pnl_integration_GK2D, <a 
-href="pnl-manual.html#dx1-111006" >298</a> <br /></span>
+href="pnl-manual.html#dx1-111006" >299</a> <br /></span>
 <span class="index-item">pnl_integration_qag, <a 
-href="pnl-manual.html#dx1-111007" >299</a> <br /></span>
+href="pnl-manual.html#dx1-111007" >300</a> <br /></span>
 <span class="index-item">pnl_integration_qagp, <a 
-href="pnl-manual.html#dx1-111008" >300</a> <br /></span>
+href="pnl-manual.html#dx1-111008" >301</a> <br /></span>
 <span class="index-item">pnl_integration_qng, <a 
-href="pnl-manual.html#dx1-111003" >301</a> <br /></span>
+href="pnl-manual.html#dx1-111003" >302</a> <br /></span>
 <span class="index-item">pnl_integration_qng_2d, <a 
-href="pnl-manual.html#dx1-111005" >302</a> <br /></span>
+href="pnl-manual.html#dx1-111005" >303</a> <br /></span>
 <span class="index-item">pnl_inv_cdfnor, <a 
-href="pnl-manual.html#dx1-100017" >303</a> <br /></span>
+href="pnl-manual.html#dx1-100017" >304</a> <br /></span>
 <span class="index-item">pnl_iround, <a 
-href="pnl-manual.html#dx1-20005" >304</a> <br /></span>
+href="pnl-manual.html#dx1-20005" >305</a> <br /></span>
 <span class="index-item">PNL_IS_EVEN, <a 
-href="pnl-manual.html#dx1-18002" >305</a> <br /></span>
+href="pnl-manual.html#dx1-18002" >306</a> <br /></span>
 <span class="index-item">PNL_IS_ODD, <a 
-href="pnl-manual.html#dx1-18001" >306</a> <br /></span>
+href="pnl-manual.html#dx1-18001" >307</a> <br /></span>
 <span class="index-item">pnl_isequal, <a 
-href="pnl-manual.html#dx1-22003" >307</a> <br /></span>
+href="pnl-manual.html#dx1-22003" >308</a> <br /></span>
+                                                                                    
+
+                                                                                    
 <span class="index-item">pnl_isequal_abs, <a 
-href="pnl-manual.html#dx1-22002" >308</a> <br /></span>
-                                                                                    
-
-                                                                                    
+href="pnl-manual.html#dx1-22002" >309</a> <br /></span>
 <span class="index-item">pnl_isequal_rel, <a 
-href="pnl-manual.html#dx1-22001" >309</a> <br /></span>
+href="pnl-manual.html#dx1-22001" >310</a> <br /></span>
 <span class="index-item">pnl_isfinite, <a 
-href="pnl-manual.html#dx1-19006" >310</a> <br /></span>
+href="pnl-manual.html#dx1-19006" >311</a> <br /></span>
 <span class="index-item">pnl_isinf, <a 
-href="pnl-manual.html#dx1-19005" >311</a> <br /></span>
+href="pnl-manual.html#dx1-19005" >312</a> <br /></span>
 <span class="index-item">pnl_isnan, <a 
-href="pnl-manual.html#dx1-19004" >312</a> <br /></span>
+href="pnl-manual.html#dx1-19004" >313</a> <br /></span>
 <span class="index-item">pnl_itrunc, <a 
-href="pnl-manual.html#dx1-20001" >313</a> <br /></span>
+href="pnl-manual.html#dx1-20001" >314</a> <br /></span>
 <span class="index-item">pnl_lgamma, <a 
-href="pnl-manual.html#dx1-21002" >314</a> <br /></span>
+href="pnl-manual.html#dx1-21002" >315</a> <br /></span>
 <span class="index-item">PNL_LIST_ARRAY, <a 
-href="pnl-manual.html#dx1-12013" >315</a> <br /></span>
+href="pnl-manual.html#dx1-12013" >316</a> <br /></span>
 <span class="index-item">pnl_list_clone, <a 
-href="pnl-manual.html#dx1-13006" >316</a> <br /></span>
+href="pnl-manual.html#dx1-13006" >317</a> <br /></span>
 <span class="index-item">pnl_list_concat, <a 
-href="pnl-manual.html#dx1-13015" >317</a> <br /></span>
+href="pnl-manual.html#dx1-13015" >318</a> <br /></span>
 <span class="index-item">pnl_list_copy, <a 
-href="pnl-manual.html#dx1-13005" >318</a> <br /></span>
+href="pnl-manual.html#dx1-13005" >319</a> <br /></span>
 <span class="index-item">pnl_list_free, <a 
-href="pnl-manual.html#dx1-13007" >319</a> <br /></span>
+href="pnl-manual.html#dx1-13007" >320</a> <br /></span>
 <span class="index-item">pnl_list_get, <a 
-href="pnl-manual.html#dx1-13009" >320</a> <br /></span>
+href="pnl-manual.html#dx1-13009" >321</a> <br /></span>
 <span class="index-item">pnl_list_insert_first, <a 
-href="pnl-manual.html#dx1-13010" >321</a> <br /></span>
+href="pnl-manual.html#dx1-13010" >322</a> <br /></span>
 <span class="index-item">pnl_list_insert_last, <a 
-href="pnl-manual.html#dx1-13011" >322</a> <br /></span>
+href="pnl-manual.html#dx1-13011" >323</a> <br /></span>
 <span class="index-item">pnl_list_new, <a 
-href="pnl-manual.html#dx1-13003" >323</a> <br /></span>
+href="pnl-manual.html#dx1-13003" >324</a> <br /></span>
 <span class="index-item">PNL_LIST_OBJECT, <a 
-href="pnl-manual.html#dx1-12012" >324</a> <br /></span>
+href="pnl-manual.html#dx1-12012" >325</a> <br /></span>
 <span class="index-item">pnl_list_print, <a 
-href="pnl-manual.html#dx1-13017" >325</a> <br /></span>
+href="pnl-manual.html#dx1-13017" >326</a> <br /></span>
 <span class="index-item">pnl_list_remove_first, <a 
-href="pnl-manual.html#dx1-13013" >326</a> <br /></span>
+href="pnl-manual.html#dx1-13013" >327</a> <br /></span>
 <span class="index-item">pnl_list_remove_i, <a 
-href="pnl-manual.html#dx1-13014" >327</a> <br /></span>
+href="pnl-manual.html#dx1-13014" >328</a> <br /></span>
 <span class="index-item">pnl_list_remove_last, <a 
-href="pnl-manual.html#dx1-13012" >328</a> <br /></span>
+href="pnl-manual.html#dx1-13012" >329</a> <br /></span>
 <span class="index-item">pnl_list_resize, <a 
-href="pnl-manual.html#dx1-13016" >329</a> <br /></span>
+href="pnl-manual.html#dx1-13016" >330</a> <br /></span>
 <span class="index-item">pnl_log1p, <a 
-href="pnl-manual.html#dx1-21007" >330</a> <br /></span>
+href="pnl-manual.html#dx1-21007" >331</a> <br /></span>
 <span class="index-item">pnl_lround, <a 
-href="pnl-manual.html#dx1-20006" >331</a> <br /></span>
+href="pnl-manual.html#dx1-20006" >332</a> <br /></span>
 <span class="index-item">pnl_ltrunc, <a 
-href="pnl-manual.html#dx1-20002" >332</a> <br /></span>
+href="pnl-manual.html#dx1-20002" >333</a> <br /></span>
 <span class="index-item">pnl_mat_add_row, <a 
-href="pnl-manual.html#dx1-50024" >333</a> <br /></span>
+href="pnl-manual.html#dx1-50024" >334</a> <br /></span>
 <span class="index-item">pnl_mat_axpy, <a 
-href="pnl-manual.html#dx1-56007" >334</a> <br /></span>
+href="pnl-manual.html#dx1-56007" >335</a> <br /></span>
 <span class="index-item">pnl_mat_bicg_solver_solve, <a 
-href="pnl-manual.html#dx1-99002" >335</a> <br /></span>
+href="pnl-manual.html#dx1-99002" >336</a> <br /></span>
 <span class="index-item">pnl_mat_cg_solver_solve, <a 
-href="pnl-manual.html#dx1-99001" >336</a> <br /></span>
+href="pnl-manual.html#dx1-99001" >337</a> <br /></span>
 <span class="index-item">pnl_mat_chol, <a 
-href="pnl-manual.html#dx1-57001" >337</a> <br /></span>
+href="pnl-manual.html#dx1-57001" >338</a> <br /></span>
 <span class="index-item">pnl_mat_chol_syslin, <a 
-href="pnl-manual.html#dx1-57006" >338</a> <br /></span>
+href="pnl-manual.html#dx1-57006" >339</a> <br /></span>
 <span class="index-item">pnl_mat_chol_syslin_inplace, <a 
-href="pnl-manual.html#dx1-57007" >339</a> <br /></span>
+href="pnl-manual.html#dx1-57007" >340</a> <br /></span>
 <span class="index-item">pnl_mat_chol_syslin_mat, <a 
-href="pnl-manual.html#dx1-57013" >340</a> <br /></span>
+href="pnl-manual.html#dx1-57013" >341</a> <br /></span>
 <span class="index-item">pnl_mat_clone, <a 
-href="pnl-manual.html#dx1-49014" >341</a> <br /></span>
+href="pnl-manual.html#dx1-49014" >342</a> <br /></span>
 <span class="index-item">pnl_mat_col_permute, <a 
-href="pnl-manual.html#dx1-61010" >342</a> <br /></span>
+href="pnl-manual.html#dx1-61010" >343</a> <br /></span>
 <span class="index-item">pnl_mat_complex_create_from_mat, <a 
-href="pnl-manual.html#dx1-60001" >343</a> <br /></span>
+href="pnl-manual.html#dx1-60001" >344</a> <br /></span>
 <span class="index-item">pnl_mat_copy, <a 
-href="pnl-manual.html#dx1-49007" >344</a> <br /></span>
+href="pnl-manual.html#dx1-49007" >345</a> <br /></span>
 <span class="index-item">pnl_mat_create, <a 
-href="pnl-manual.html#dx1-49002" >345</a> <br /></span>
+href="pnl-manual.html#dx1-49002" >346</a> <br /></span>
 <span class="index-item">pnl_mat_create_diag, <a 
-href="pnl-manual.html#dx1-49009" >346</a> <br /></span>
+href="pnl-manual.html#dx1-49009" >347</a> <br /></span>
 <span class="index-item">pnl_mat_create_diag_from_ptr, <a 
-href="pnl-manual.html#dx1-49008" >347</a> <br /></span>
+href="pnl-manual.html#dx1-49008" >348</a> <br /></span>
 <span class="index-item">pnl_mat_create_from_file, <a 
-href="pnl-manual.html#dx1-49010" >348</a> <br /></span>
+href="pnl-manual.html#dx1-49010" >349</a> <br /></span>
 <span class="index-item">pnl_mat_create_from_list, <a 
-href="pnl-manual.html#dx1-49006" >349</a> <br /></span>
+href="pnl-manual.html#dx1-49006" >350</a> <br /></span>
 <span class="index-item">pnl_mat_create_from_ptr, <a 
-href="pnl-manual.html#dx1-49005" >350</a> <br /></span>
+href="pnl-manual.html#dx1-49005" >351</a> <br /></span>
 <span class="index-item">pnl_mat_create_from_scalar, <a 
-href="pnl-manual.html#dx1-49003" >351</a> <br /></span>
+href="pnl-manual.html#dx1-49003" >352</a> <br /></span>
 <span class="index-item">pnl_mat_create_from_sp_mat, <a 
-href="pnl-manual.html#dx1-81007" >352</a> <br /></span>
+href="pnl-manual.html#dx1-81007" >353</a> <br /></span>
 <span class="index-item">pnl_mat_create_from_zero, <a 
-href="pnl-manual.html#dx1-49004" >353</a> <br /></span>
+href="pnl-manual.html#dx1-49004" >354</a> <br /></span>
 <span class="index-item">pnl_mat_cross, <a 
-href="pnl-manual.html#dx1-56013" >354</a> <br /></span>
+href="pnl-manual.html#dx1-56013" >355</a> <br /></span>
+                                                                                    
+
+                                                                                    
 <span class="index-item">pnl_mat_cumprod, <a 
-href="pnl-manual.html#dx1-53014" >355</a> <br /></span>
-                                                                                    
-
-                                                                                    
+href="pnl-manual.html#dx1-53014" >356</a> <br /></span>
 <span class="index-item">pnl_mat_cumsum, <a 
-href="pnl-manual.html#dx1-53011" >356</a> <br /></span>
+href="pnl-manual.html#dx1-53011" >357</a> <br /></span>
 <span class="index-item">pnl_mat_del_row, <a 
-href="pnl-manual.html#dx1-50025" >357</a> <br /></span>
+href="pnl-manual.html#dx1-50025" >358</a> <br /></span>
 <span class="index-item">pnl_mat_dgemm, <a 
-href="pnl-manual.html#dx1-56016" >358</a> <br /></span>
+href="pnl-manual.html#dx1-56016" >359</a> <br /></span>
 <span class="index-item">pnl_mat_dgemv, <a 
-href="pnl-manual.html#dx1-56015" >359</a> <br /></span>
+href="pnl-manual.html#dx1-56015" >360</a> <br /></span>
 <span class="index-item">pnl_mat_dger, <a 
-href="pnl-manual.html#dx1-56008" >360</a> <br /></span>
+href="pnl-manual.html#dx1-56008" >361</a> <br /></span>
 <span class="index-item">pnl_mat_div_mat_term, <a 
-href="pnl-manual.html#dx1-53002" >361</a> <br /></span>
+href="pnl-manual.html#dx1-53002" >362</a> <br /></span>
 <span class="index-item">pnl_mat_div_scalar, <a 
-href="pnl-manual.html#dx1-52004" >362</a> <br /></span>
+href="pnl-manual.html#dx1-52004" >363</a> <br /></span>
 <span class="index-item">pnl_mat_eigen, <a 
-href="pnl-manual.html#dx1-56022" >363</a> <br /></span>
+href="pnl-manual.html#dx1-56022" >364</a> <br /></span>
 <span class="index-item">pnl_mat_exp, <a 
-href="pnl-manual.html#dx1-56020" >364</a> <br /></span>
+href="pnl-manual.html#dx1-56020" >365</a> <br /></span>
 <span class="index-item">pnl_mat_extract_subblock, <a 
-href="pnl-manual.html#dx1-49018" >365</a> <br /></span>
+href="pnl-manual.html#dx1-49018" >366</a> <br /></span>
 <span class="index-item">pnl_mat_find, <a 
-href="pnl-manual.html#dx1-55009" >366</a> <br /></span>
+href="pnl-manual.html#dx1-55009" >367</a> <br /></span>
 <span class="index-item">pnl_mat_fprint, <a 
-href="pnl-manual.html#dx1-51002" >367</a> <br /></span>
+href="pnl-manual.html#dx1-51002" >368</a> <br /></span>
 <span class="index-item">pnl_mat_fprint_nsp, <a 
-href="pnl-manual.html#dx1-51004" >368</a> <br /></span>
+href="pnl-manual.html#dx1-51004" >369</a> <br /></span>
 <span class="index-item">pnl_mat_free, <a 
-href="pnl-manual.html#dx1-49011" >369</a> <br /></span>
+href="pnl-manual.html#dx1-49011" >370</a> <br /></span>
 <span class="index-item">pnl_mat_get, <a 
-href="pnl-manual.html#dx1-50008" >370</a> <br /></span>
+href="pnl-manual.html#dx1-50008" >371</a> <br /></span>
 <span class="index-item">pnl_mat_get_col, <a 
-href="pnl-manual.html#dx1-50016" >371</a> <br /></span>
+href="pnl-manual.html#dx1-50016" >372</a> <br /></span>
 <span class="index-item">pnl_mat_get_row, <a 
-href="pnl-manual.html#dx1-50015" >372</a> <br /></span>
+href="pnl-manual.html#dx1-50015" >373</a> <br /></span>
 <span class="index-item">pnl_mat_gmres_solver_solve, <a 
-href="pnl-manual.html#dx1-99003" >373</a> <br /></span>
+href="pnl-manual.html#dx1-99003" >374</a> <br /></span>
 <span class="index-item">pnl_mat_inverse, <a 
-href="pnl-manual.html#dx1-57017" >374</a> <br /></span>
+href="pnl-manual.html#dx1-57017" >375</a> <br /></span>
 <span class="index-item">pnl_mat_inverse_with_chol, <a 
-href="pnl-manual.html#dx1-57018" >375</a> <br /></span>
+href="pnl-manual.html#dx1-57018" >376</a> <br /></span>
 <span class="index-item">pnl_mat_isequal, <a 
-href="pnl-manual.html#dx1-54001" >376</a> <br /></span>
+href="pnl-manual.html#dx1-54001" >377</a> <br /></span>
 <span class="index-item">pnl_mat_isequal_abs, <a 
-href="pnl-manual.html#dx1-54002" >377</a> <br /></span>
+href="pnl-manual.html#dx1-54002" >378</a> <br /></span>
 <span class="index-item">pnl_mat_isequal_rel, <a 
-href="pnl-manual.html#dx1-54003" >378</a> <br /></span>
+href="pnl-manual.html#dx1-54003" >379</a> <br /></span>
 <span class="index-item">pnl_mat_kron_mat, <a 
-href="pnl-manual.html#dx1-53004" >379</a> <br /></span>
+href="pnl-manual.html#dx1-53004" >380</a> <br /></span>
 <span class="index-item">pnl_mat_kron_mat_inplace, <a 
-href="pnl-manual.html#dx1-53003" >380</a> <br /></span>
+href="pnl-manual.html#dx1-53003" >381</a> <br /></span>
 <span class="index-item">pnl_mat_lAxpby, <a 
-href="pnl-manual.html#dx1-56014" >381</a> <br /></span>
+href="pnl-manual.html#dx1-56014" >382</a> <br /></span>
 <span class="index-item">pnl_mat_lget, <a 
-href="pnl-manual.html#dx1-50009" >382</a> <br /></span>
+href="pnl-manual.html#dx1-50009" >383</a> <br /></span>
 <span class="index-item">pnl_mat_log, <a 
-href="pnl-manual.html#dx1-56021" >383</a> <br /></span>
+href="pnl-manual.html#dx1-56021" >384</a> <br /></span>
 <span class="index-item">pnl_mat_lower_inverse, <a 
-href="pnl-manual.html#dx1-57016" >384</a> <br /></span>
+href="pnl-manual.html#dx1-57016" >385</a> <br /></span>
 <span class="index-item">pnl_mat_lower_syslin, <a 
-href="pnl-manual.html#dx1-57005" >385</a> <br /></span>
+href="pnl-manual.html#dx1-57005" >386</a> <br /></span>
 <span class="index-item">pnl_mat_ls, <a 
-href="pnl-manual.html#dx1-59003" >386</a> <br /></span>
+href="pnl-manual.html#dx1-59003" >387</a> <br /></span>
 <span class="index-item">pnl_mat_ls_mat, <a 
-href="pnl-manual.html#dx1-59004" >387</a> <br /></span>
+href="pnl-manual.html#dx1-59004" >388</a> <br /></span>
 <span class="index-item">pnl_mat_lu, <a 
-href="pnl-manual.html#dx1-57003" >388</a> <br /></span>
+href="pnl-manual.html#dx1-57003" >389</a> <br /></span>
 <span class="index-item">pnl_mat_lu_syslin, <a 
-href="pnl-manual.html#dx1-57008" >389</a> <br /></span>
+href="pnl-manual.html#dx1-57008" >390</a> <br /></span>
 <span class="index-item">pnl_mat_lu_syslin_inplace, <a 
-href="pnl-manual.html#dx1-57009" >390</a> <br /></span>
+href="pnl-manual.html#dx1-57009" >391</a> <br /></span>
 <span class="index-item">pnl_mat_lu_syslin_mat, <a 
-href="pnl-manual.html#dx1-57014" >391</a> <br /></span>
+href="pnl-manual.html#dx1-57014" >392</a> <br /></span>
 <span class="index-item">pnl_mat_map, <a 
-href="pnl-manual.html#dx1-53006" >392</a> <br /></span>
+href="pnl-manual.html#dx1-53006" >393</a> <br /></span>
 <span class="index-item">pnl_mat_map_inplace, <a 
-href="pnl-manual.html#dx1-53005" >393</a> <br /></span>
+href="pnl-manual.html#dx1-53005" >394</a> <br /></span>
 <span class="index-item">pnl_mat_map_mat, <a 
-href="pnl-manual.html#dx1-53008" >394</a> <br /></span>
+href="pnl-manual.html#dx1-53008" >395</a> <br /></span>
 <span class="index-item">pnl_mat_map_mat_inplace, <a 
-href="pnl-manual.html#dx1-53007" >395</a> <br /></span>
+href="pnl-manual.html#dx1-53007" >396</a> <br /></span>
 <span class="index-item">pnl_mat_max, <a 
-href="pnl-manual.html#dx1-55001" >396</a> <br /></span>
+href="pnl-manual.html#dx1-55001" >397</a> <br /></span>
 <span class="index-item">pnl_mat_max_index, <a 
-href="pnl-manual.html#dx1-55005" >397</a> <br /></span>
+href="pnl-manual.html#dx1-55005" >398</a> <br /></span>
 <span class="index-item">pnl_mat_min, <a 
-href="pnl-manual.html#dx1-55002" >398</a> <br /></span>
+href="pnl-manual.html#dx1-55002" >399</a> <br /></span>
 <span class="index-item">pnl_mat_min_index, <a 
-href="pnl-manual.html#dx1-55004" >399</a> <br /></span>
+href="pnl-manual.html#dx1-55004" >400</a> <br /></span>
 <span class="index-item">pnl_mat_minmax, <a 
-href="pnl-manual.html#dx1-55003" >400</a> <br /></span>
+href="pnl-manual.html#dx1-55003" >401</a> <br /></span>
 <span class="index-item">pnl_mat_minmax_index, <a 
-href="pnl-manual.html#dx1-55006" >401</a> <br /></span>
+href="pnl-manual.html#dx1-55006" >402</a> <br /></span>
+                                                                                    
+
+                                                                                    
 <span class="index-item">pnl_mat_minus_mat, <a 
-href="pnl-manual.html#dx1-56002" >402</a> <br /></span>
-                                                                                    
-
-                                                                                    
+href="pnl-manual.html#dx1-56002" >403</a> <br /></span>
 <span class="index-item">pnl_mat_minus_scalar, <a 
-href="pnl-manual.html#dx1-52002" >403</a> <br /></span>
+href="pnl-manual.html#dx1-52002" >404</a> <br /></span>
 <span class="index-item">pnl_mat_mult_mat, <a 
-href="pnl-manual.html#dx1-56017" >404</a> <br /></span>
+href="pnl-manual.html#dx1-56017" >405</a> <br /></span>
 <span class="index-item">pnl_mat_mult_mat_inplace, <a 
-href="pnl-manual.html#dx1-56018" >405</a> <br /></span>
+href="pnl-manual.html#dx1-56018" >406</a> <br /></span>
 <span class="index-item">pnl_mat_mult_mat_term, <a 
-href="pnl-manual.html#dx1-53001" >406</a> <br /></span>
+href="pnl-manual.html#dx1-53001" >407</a> <br /></span>
 <span class="index-item">pnl_mat_mult_scalar, <a 
-href="pnl-manual.html#dx1-52003" >407</a> <br /></span>
+href="pnl-manual.html#dx1-52003" >408</a> <br /></span>
 <span class="index-item">pnl_mat_mult_vect, <a 
-href="pnl-manual.html#dx1-56009" >408</a> <br /></span>
+href="pnl-manual.html#dx1-56009" >409</a> <br /></span>
 <span class="index-item">pnl_mat_mult_vect_inplace, <a 
-href="pnl-manual.html#dx1-56010" >409</a> <br /></span>
+href="pnl-manual.html#dx1-56010" >410</a> <br /></span>
 <span class="index-item">pnl_mat_mult_vect_transpose, <a 
-href="pnl-manual.html#dx1-56011" >410</a> <br /></span>
+href="pnl-manual.html#dx1-56011" >411</a> <br /></span>
 <span class="index-item">pnl_mat_mult_vect_transpose_inplace, <a 
-href="pnl-manual.html#dx1-56012" >411</a> <br /></span>
+href="pnl-manual.html#dx1-56012" >412</a> <br /></span>
 <span class="index-item">pnl_mat_new, <a 
-href="pnl-manual.html#dx1-49001" >412</a> <br /></span>
+href="pnl-manual.html#dx1-49001" >413</a> <br /></span>
 <span class="index-item">PNL_MAT_OBJECT, <a 
-href="pnl-manual.html#dx1-12005" >413</a> <br /></span>
+href="pnl-manual.html#dx1-12005" >414</a> <br /></span>
 <span class="index-item">pnl_mat_pchol, <a 
-href="pnl-manual.html#dx1-57002" >414</a> <br /></span>
+href="pnl-manual.html#dx1-57002" >415</a> <br /></span>
 <span class="index-item">pnl_mat_plus_mat, <a 
-href="pnl-manual.html#dx1-56001" >415</a> <br /></span>
+href="pnl-manual.html#dx1-56001" >416</a> <br /></span>
 <span class="index-item">pnl_mat_plus_scalar, <a 
-href="pnl-manual.html#dx1-52001" >416</a> <br /></span>
+href="pnl-manual.html#dx1-52001" >417</a> <br /></span>
 <span class="index-item">pnl_mat_print, <a 
-href="pnl-manual.html#dx1-51001" >417</a> <br /></span>
+href="pnl-manual.html#dx1-51001" >418</a> <br /></span>
 <span class="index-item">pnl_mat_print_nsp, <a 
-href="pnl-manual.html#dx1-51003" >418</a> <br /></span>
+href="pnl-manual.html#dx1-51003" >419</a> <br /></span>
 <span class="index-item">pnl_mat_prod, <a 
-href="pnl-manual.html#dx1-53012" >419</a> <br /></span>
+href="pnl-manual.html#dx1-53012" >420</a> <br /></span>
 <span class="index-item">pnl_mat_prod_vect, <a 
-href="pnl-manual.html#dx1-53013" >420</a> <br /></span>
+href="pnl-manual.html#dx1-53013" >421</a> <br /></span>
 <span class="index-item">pnl_mat_qr, <a 
-href="pnl-manual.html#dx1-59001" >421</a> <br /></span>
+href="pnl-manual.html#dx1-59001" >422</a> <br /></span>
 <span class="index-item">pnl_mat_qr_syslin, <a 
-href="pnl-manual.html#dx1-59002" >422</a> <br /></span>
+href="pnl-manual.html#dx1-59002" >423</a> <br /></span>
 <span class="index-item">pnl_mat_qsort, <a 
-href="pnl-manual.html#dx1-55007" >423</a> <br /></span>
+href="pnl-manual.html#dx1-55007" >424</a> <br /></span>
 <span class="index-item">pnl_mat_qsort_index, <a 
-href="pnl-manual.html#dx1-55008" >424</a> <br /></span>
+href="pnl-manual.html#dx1-55008" >425</a> <br /></span>
 <span class="index-item">pnl_mat_rand_normal, <a 
-href="pnl-manual.html#dx1-103021" >425</a> <br /></span>
+href="pnl-manual.html#dx1-103021" >426</a> <br /></span>
 <span class="index-item">pnl_mat_rand_uni, <a 
-href="pnl-manual.html#dx1-103019" >426</a> <br /></span>
+href="pnl-manual.html#dx1-103019" >427</a> <br /></span>
 <span class="index-item">pnl_mat_rand_uni2, <a 
-href="pnl-manual.html#dx1-103020" >427</a> <br /></span>
+href="pnl-manual.html#dx1-103020" >428</a> <br /></span>
 <span class="index-item">pnl_mat_resize, <a 
-href="pnl-manual.html#dx1-49015" >428</a> <br /></span>
+href="pnl-manual.html#dx1-49015" >429</a> <br /></span>
 <span class="index-item">pnl_mat_rng_bernoulli, <a 
-href="pnl-manual.html#dx1-102040" >429</a> <br /></span>
+href="pnl-manual.html#dx1-102040" >430</a> <br /></span>
 <span class="index-item">pnl_mat_rng_normal, <a 
-href="pnl-manual.html#dx1-102039" >430</a> <br /></span>
+href="pnl-manual.html#dx1-102039" >431</a> <br /></span>
 <span class="index-item">pnl_mat_rng_poisson, <a 
-href="pnl-manual.html#dx1-102041" >431</a> <br /></span>
+href="pnl-manual.html#dx1-102041" >432</a> <br /></span>
 <span class="index-item">pnl_mat_rng_uni, <a 
-href="pnl-manual.html#dx1-102037" >432</a> <br /></span>
+href="pnl-manual.html#dx1-102037" >433</a> <br /></span>
 <span class="index-item">pnl_mat_rng_uni2, <a 
-href="pnl-manual.html#dx1-102038" >433</a> <br /></span>
+href="pnl-manual.html#dx1-102038" >434</a> <br /></span>
 <span class="index-item">pnl_mat_row_permute, <a 
-href="pnl-manual.html#dx1-61011" >434</a> <br /></span>
+href="pnl-manual.html#dx1-61011" >435</a> <br /></span>
 <span class="index-item">pnl_mat_scalar_prod, <a 
-href="pnl-manual.html#dx1-56019" >435</a> <br /></span>
+href="pnl-manual.html#dx1-56019" >436</a> <br /></span>
 <span class="index-item">pnl_mat_set, <a 
-href="pnl-manual.html#dx1-50007" >436</a> <br /></span>
+href="pnl-manual.html#dx1-50007" >437</a> <br /></span>
 <span class="index-item">pnl_mat_set_all, <a 
-href="pnl-manual.html#dx1-50010" >437</a> <br /></span>
+href="pnl-manual.html#dx1-50010" >438</a> <br /></span>
 <span class="index-item">pnl_mat_set_col, <a 
-href="pnl-manual.html#dx1-50020" >438</a> <br /></span>
+href="pnl-manual.html#dx1-50020" >439</a> <br /></span>
 <span class="index-item">pnl_mat_set_col_from_ptr, <a 
-href="pnl-manual.html#dx1-50021" >439</a> <br /></span>
+href="pnl-manual.html#dx1-50021" >440</a> <br /></span>
 <span class="index-item">pnl_mat_set_diag, <a 
-href="pnl-manual.html#dx1-50013" >440</a> <br /></span>
+href="pnl-manual.html#dx1-50013" >441</a> <br /></span>
 <span class="index-item">pnl_mat_set_from_ptr, <a 
-href="pnl-manual.html#dx1-50014" >441</a> <br /></span>
+href="pnl-manual.html#dx1-50014" >442</a> <br /></span>
 <span class="index-item">pnl_mat_set_id, <a 
-href="pnl-manual.html#dx1-50012" >442</a> <br /></span>
+href="pnl-manual.html#dx1-50012" >443</a> <br /></span>
 <span class="index-item">pnl_mat_set_row, <a 
-href="pnl-manual.html#dx1-50022" >443</a> <br /></span>
+href="pnl-manual.html#dx1-50022" >444</a> <br /></span>
 <span class="index-item">pnl_mat_set_row_from_ptr, <a 
-href="pnl-manual.html#dx1-50023" >444</a> <br /></span>
+href="pnl-manual.html#dx1-50023" >445</a> <br /></span>
 <span class="index-item">pnl_mat_set_subblock, <a 
-href="pnl-manual.html#dx1-49019" >445</a> <br /></span>
+href="pnl-manual.html#dx1-49019" >446</a> <br /></span>
 <span class="index-item">pnl_mat_set_zero, <a 
-href="pnl-manual.html#dx1-50011" >446</a> <br /></span>
+href="pnl-manual.html#dx1-50011" >447</a> <br /></span>
 <span class="index-item">pnl_mat_sq_transpose, <a 
-href="pnl-manual.html#dx1-56003" >447</a> <br /></span>
+href="pnl-manual.html#dx1-56003" >448</a> <br /></span>
 <span class="index-item">pnl_mat_sum, <a 
-href="pnl-manual.html#dx1-53009" >448</a> <br /></span>
+href="pnl-manual.html#dx1-53009" >449</a> <br /></span>
+                                                                                    
+
+                                                                                    
 <span class="index-item">pnl_mat_sum_vect, <a 
-href="pnl-manual.html#dx1-53010" >449</a> <br /></span>
-                                                                                    
-
-                                                                                    
+href="pnl-manual.html#dx1-53010" >450</a> <br /></span>
 <span class="index-item">pnl_mat_swap_rows, <a 
-href="pnl-manual.html#dx1-50019" >450</a> <br /></span>
+href="pnl-manual.html#dx1-50019" >451</a> <br /></span>
 <span class="index-item">pnl_mat_syslin, <a 
-href="pnl-manual.html#dx1-57010" >451</a> <br /></span>
+href="pnl-manual.html#dx1-57010" >452</a> <br /></span>
 <span class="index-item">pnl_mat_syslin_inplace, <a 
-href="pnl-manual.html#dx1-57011" >452</a> <br /></span>
+href="pnl-manual.html#dx1-57011" >453</a> <br /></span>
 <span class="index-item">pnl_mat_syslin_mat, <a 
-href="pnl-manual.html#dx1-57012" >453</a> <br /></span>
+href="pnl-manual.html#dx1-57012" >454</a> <br /></span>
 <span class="index-item">pnl_mat_tr, <a 
-href="pnl-manual.html#dx1-56005" >454</a> <br /></span>
+href="pnl-manual.html#dx1-56005" >455</a> <br /></span>
 <span class="index-item">pnl_mat_trace, <a 
-href="pnl-manual.html#dx1-56006" >455</a> <br /></span>
+href="pnl-manual.html#dx1-56006" >456</a> <br /></span>
 <span class="index-item">pnl_mat_transpose, <a 
-href="pnl-manual.html#dx1-56004" >456</a> <br /></span>
+href="pnl-manual.html#dx1-56004" >457</a> <br /></span>
 <span class="index-item">pnl_mat_upper_inverse, <a 
-href="pnl-manual.html#dx1-57015" >457</a> <br /></span>
+href="pnl-manual.html#dx1-57015" >458</a> <br /></span>
 <span class="index-item">pnl_mat_upper_syslin, <a 
-href="pnl-manual.html#dx1-57004" >458</a> <br /></span>
+href="pnl-manual.html#dx1-57004" >459</a> <br /></span>
 <span class="index-item">pnl_mat_wrap_array, <a 
-href="pnl-manual.html#dx1-49012" >459</a> <br /></span>
+href="pnl-manual.html#dx1-49012" >460</a> <br /></span>
 <span class="index-item">pnl_mat_wrap_hmat, <a 
-href="pnl-manual.html#dx1-90004" >460</a> <br /></span>
+href="pnl-manual.html#dx1-90004" >461</a> <br /></span>
 <span class="index-item">pnl_mat_wrap_mat_rows, <a 
-href="pnl-manual.html#dx1-50018" >461</a> <br /></span>
+href="pnl-manual.html#dx1-50018" >462</a> <br /></span>
 <span class="index-item">pnl_mat_wrap_vect, <a 
-href="pnl-manual.html#dx1-49013" >462</a> <br /></span>
+href="pnl-manual.html#dx1-49013" >463</a> <br /></span>
 <span class="index-item">pnl_multiroot_newton, <a 
-href="pnl-manual.html#dx1-133001" >463</a> <br /></span>
+href="pnl-manual.html#dx1-133001" >464</a> <br /></span>
 <span class="index-item">pnl_nan, <a 
-href="pnl-manual.html#dx1-19001" >464</a> <br /></span>
+href="pnl-manual.html#dx1-19001" >465</a> <br /></span>
 <span class="index-item">PNL_NEGINF, <a 
-href="pnl-manual.html#dx1-17024" >465</a> <br /></span>
+href="pnl-manual.html#dx1-17024" >466</a> <br /></span>
 <span class="index-item">pnl_neginf, <a 
-href="pnl-manual.html#dx1-19003" >466</a> <br /></span>
+href="pnl-manual.html#dx1-19003" >467</a> <br /></span>
 <span class="index-item">pnl_normal_density, <a 
-href="pnl-manual.html#dx1-100014" >467</a> <br /></span>
+href="pnl-manual.html#dx1-100014" >468</a> <br /></span>
 <span class="index-item">PNL_OBJECT, <a 
-href="pnl-manual.html#dx1-12003" >468</a> <br /></span>
+href="pnl-manual.html#dx1-12003" >469</a> <br /></span>
 <span class="index-item">pnl_object_create, <a 
-href="pnl-manual.html#dx1-12017" >469</a> <br /></span>
+href="pnl-manual.html#dx1-12017" >470</a> <br /></span>
 <span class="index-item">pnl_object_load, <a 
-href="pnl-manual.html#dx1-147004" >470</a> <br /></span>
+href="pnl-manual.html#dx1-147004" >471</a> <br /></span>
 <span class="index-item">pnl_object_load_into_list, <a 
-href="pnl-manual.html#dx1-147005" >471</a> <br /></span>
+href="pnl-manual.html#dx1-147005" >472</a> <br /></span>
 <span class="index-item">pnl_object_mpi_bcast, <a 
-href="pnl-manual.html#dx1-146007" >472</a> <br /></span>
+href="pnl-manual.html#dx1-146007" >473</a> <br /></span>
 <span class="index-item">pnl_object_mpi_irecv, <a 
-href="pnl-manual.html#dx1-146010" >473</a> <br /></span>
+href="pnl-manual.html#dx1-146010" >474</a> <br /></span>
 <span class="index-item">pnl_object_mpi_isend, <a 
-href="pnl-manual.html#dx1-146009" >474</a> <br /></span>
+href="pnl-manual.html#dx1-146009" >475</a> <br /></span>
 <span class="index-item">pnl_object_mpi_pack, <a 
-href="pnl-manual.html#dx1-146002" >475</a> <br /></span>
+href="pnl-manual.html#dx1-146002" >476</a> <br /></span>
 <span class="index-item">pnl_object_mpi_pack_size, <a 
-href="pnl-manual.html#dx1-146001" >476</a> <br /></span>
+href="pnl-manual.html#dx1-146001" >477</a> <br /></span>
 <span class="index-item">pnl_object_mpi_recv, <a 
-href="pnl-manual.html#dx1-146006" >477</a> <br /></span>
+href="pnl-manual.html#dx1-146006" >478</a> <br /></span>
 <span class="index-item">pnl_object_mpi_reduce, <a 
-href="pnl-manual.html#dx1-146008" >478</a> <br /></span>
+href="pnl-manual.html#dx1-146008" >479</a> <br /></span>
 <span class="index-item">pnl_object_mpi_send, <a 
-href="pnl-manual.html#dx1-146004" >479</a> <br /></span>
+href="pnl-manual.html#dx1-146004" >480</a> <br /></span>
 <span class="index-item">pnl_object_mpi_ssend, <a 
-href="pnl-manual.html#dx1-146005" >480</a> <br /></span>
+href="pnl-manual.html#dx1-146005" >481</a> <br /></span>
 <span class="index-item">pnl_object_mpi_unpack, <a 
-href="pnl-manual.html#dx1-146003" >481</a> <br /></span>
+href="pnl-manual.html#dx1-146003" >482</a> <br /></span>
 <span class="index-item">pnl_object_save, <a 
-href="pnl-manual.html#dx1-147003" >482</a> <br /></span>
+href="pnl-manual.html#dx1-147003" >483</a> <br /></span>
 <span class="index-item">pnl_ode_rkf45, <a 
-href="pnl-manual.html#dx1-121001" >483</a> <br /></span>
+href="pnl-manual.html#dx1-121001" >484</a> <br /></span>
 <span class="index-item">pnl_ode_rkf45_step, <a 
-href="pnl-manual.html#dx1-121002" >484</a> <br /></span>
+href="pnl-manual.html#dx1-121002" >485</a> <br /></span>
 <span class="index-item">pnl_optim_intpoints_bfgs_solve, <a 
-href="pnl-manual.html#dx1-128001" >485</a> <br /></span>
+href="pnl-manual.html#dx1-128001" >486</a> <br /></span>
 <span class="index-item">pnl_optim_linprog, <a 
-href="pnl-manual.html#dx1-125001" >486</a> <br /></span>
+href="pnl-manual.html#dx1-125001" >487</a> <br /></span>
 <span class="index-item">pnl_optim_linprog_sp, <a 
-href="pnl-manual.html#dx1-125002" >487</a> <br /></span>
+href="pnl-manual.html#dx1-125002" >488</a> <br /></span>
 <span class="index-item">pnl_permutation_create, <a 
-href="pnl-manual.html#dx1-61003" >488</a> <br /></span>
+href="pnl-manual.html#dx1-61003" >489</a> <br /></span>
 <span class="index-item">pnl_permutation_fprint, <a 
-href="pnl-manual.html#dx1-61012" >489</a> <br /></span>
+href="pnl-manual.html#dx1-61012" >490</a> <br /></span>
 <span class="index-item">pnl_permutation_free, <a 
-href="pnl-manual.html#dx1-61004" >490</a> <br /></span>
+href="pnl-manual.html#dx1-61004" >491</a> <br /></span>
 <span class="index-item">pnl_permutation_inverse, <a 
-href="pnl-manual.html#dx1-61005" >491</a> <br /></span>
+href="pnl-manual.html#dx1-61005" >492</a> <br /></span>
 <span class="index-item">pnl_permutation_new, <a 
-href="pnl-manual.html#dx1-61002" >492</a> <br /></span>
+href="pnl-manual.html#dx1-61002" >493</a> <br /></span>
 <span class="index-item">pnl_permutation_print, <a 
-href="pnl-manual.html#dx1-61013" >493</a> <br /></span>
+href="pnl-manual.html#dx1-61013" >494</a> <br /></span>
 <span class="index-item">PNL_POSINF, <a 
-href="pnl-manual.html#dx1-17025" >494</a> <br /></span>
+href="pnl-manual.html#dx1-17025" >495</a> <br /></span>
 <span class="index-item">pnl_posinf, <a 
-href="pnl-manual.html#dx1-19002" >495</a> <br /></span>
+href="pnl-manual.html#dx1-19002" >496</a> <br /></span>
+                                                                                    
+
+                                                                                    
 <span class="index-item">pnl_pow_i, <a 
-href="pnl-manual.html#dx1-21010" >496</a> <br /></span>
-                                                                                    
-
-                                                                                    
+href="pnl-manual.html#dx1-21010" >497</a> <br /></span>
 <span class="index-item">pnl_rand_bernoulli, <a 
-href="pnl-manual.html#dx1-103005" >497</a> <br /></span>
+href="pnl-manual.html#dx1-103005" >498</a> <br /></span>
 <span class="index-item">pnl_rand_bessel, <a 
-href="pnl-manual.html#dx1-103014" >498</a> <br /></span>
+href="pnl-manual.html#dx1-103014" >499</a> <br /></span>
 <span class="index-item">pnl_rand_chi2, <a 
-href="pnl-manual.html#dx1-103013" >499</a> <br /></span>
+href="pnl-manual.html#dx1-103013" >500</a> <br /></span>
 <span class="index-item">pnl_rand_exp, <a 
-href="pnl-manual.html#dx1-103007" >500</a> <br /></span>
+href="pnl-manual.html#dx1-103007" >501</a> <br /></span>
 <span class="index-item">pnl_rand_gamma, <a 
-href="pnl-manual.html#dx1-103012" >501</a> <br /></span>
+href="pnl-manual.html#dx1-103012" >502</a> <br /></span>
 <span class="index-item">pnl_rand_gauss, <a 
-href="pnl-manual.html#dx1-103022" >502</a> <br /></span>
+href="pnl-manual.html#dx1-103022" >503</a> <br /></span>
 <span class="index-item">pnl_rand_init, <a 
-href="pnl-manual.html#dx1-103001" >503</a> <br /></span>
+href="pnl-manual.html#dx1-103001" >504</a> <br /></span>
 <span class="index-item">pnl_rand_name, <a 
-href="pnl-manual.html#dx1-103004" >504</a> <br /></span>
+href="pnl-manual.html#dx1-103004" >505</a> <br /></span>
 <span class="index-item">pnl_rand_normal, <a 
-href="pnl-manual.html#dx1-103010" >505</a> <br /></span>
+href="pnl-manual.html#dx1-103010" >506</a> <br /></span>
 <span class="index-item">pnl_rand_or_quasi, <a 
-href="pnl-manual.html#dx1-103002" >506</a> <br /></span>
+href="pnl-manual.html#dx1-103002" >507</a> <br /></span>
 <span class="index-item">pnl_rand_poisson, <a 
-href="pnl-manual.html#dx1-103006" >507</a> <br /></span>
+href="pnl-manual.html#dx1-103006" >508</a> <br /></span>
 <span class="index-item">pnl_rand_poisson1, <a 
-href="pnl-manual.html#dx1-103011" >508</a> <br /></span>
+href="pnl-manual.html#dx1-103011" >509</a> <br /></span>
 <span class="index-item">pnl_rand_sseed, <a 
-href="pnl-manual.html#dx1-103003" >509</a> <br /></span>
+href="pnl-manual.html#dx1-103003" >510</a> <br /></span>
 <span class="index-item">pnl_rand_uni, <a 
-href="pnl-manual.html#dx1-103008" >510</a> <br /></span>
+href="pnl-manual.html#dx1-103008" >511</a> <br /></span>
 <span class="index-item">pnl_rand_uni_ab, <a 
-href="pnl-manual.html#dx1-103009" >511</a> <br /></span>
+href="pnl-manual.html#dx1-103009" >512</a> <br /></span>
 <span class="index-item">pnl_real_fft, <a 
-href="pnl-manual.html#dx1-116007" >512</a> <br /></span>
+href="pnl-manual.html#dx1-116007" >513</a> <br /></span>
 <span class="index-item">pnl_real_fft2, <a 
-href="pnl-manual.html#dx1-116011" >513</a> <br /></span>
+href="pnl-manual.html#dx1-116011" >514</a> <br /></span>
 <span class="index-item">pnl_real_fft2d, <a 
-href="pnl-manual.html#dx1-116017" >514</a> <br /></span>
+href="pnl-manual.html#dx1-116017" >515</a> <br /></span>
 <span class="index-item">pnl_real_fft_inplace, <a 
-href="pnl-manual.html#dx1-116009" >515</a> <br /></span>
+href="pnl-manual.html#dx1-116009" >516</a> <br /></span>
 <span class="index-item">pnl_real_fft_inplace_with_wspace, <a 
-href="pnl-manual.html#dx1-117004" >516</a> <br /></span>
+href="pnl-manual.html#dx1-117004" >517</a> <br /></span>
 <span class="index-item">pnl_real_fft_with_wspace, <a 
-href="pnl-manual.html#dx1-117006" >517</a> <br /></span>
+href="pnl-manual.html#dx1-117006" >518</a> <br /></span>
 <span class="index-item">pnl_real_ifft, <a 
-href="pnl-manual.html#dx1-116008" >518</a> <br /></span>
+href="pnl-manual.html#dx1-116008" >519</a> <br /></span>
 <span class="index-item">pnl_real_ifft2, <a 
-href="pnl-manual.html#dx1-116012" >519</a> <br /></span>
+href="pnl-manual.html#dx1-116012" >520</a> <br /></span>
 <span class="index-item">pnl_real_ifft2d, <a 
-href="pnl-manual.html#dx1-116018" >520</a> <br /></span>
+href="pnl-manual.html#dx1-116018" >521</a> <br /></span>
 <span class="index-item">pnl_real_ifft_inplace, <a 
-href="pnl-manual.html#dx1-116010" >521</a> <br /></span>
+href="pnl-manual.html#dx1-116010" >522</a> <br /></span>
 <span class="index-item">pnl_real_ifft_inplace_with_wspace, <a 
-href="pnl-manual.html#dx1-117005" >522</a> <br /></span>
+href="pnl-manual.html#dx1-117005" >523</a> <br /></span>
 <span class="index-item">pnl_real_ifft_with_wspace, <a 
-href="pnl-manual.html#dx1-117007" >523</a> <br /></span>
+href="pnl-manual.html#dx1-117007" >524</a> <br /></span>
 <span class="index-item">pnl_rng_bernoulli, <a 
-href="pnl-manual.html#dx1-102014" >524</a> <br /></span>
+href="pnl-manual.html#dx1-102014" >525</a> <br /></span>
 <span class="index-item">pnl_rng_bessel, <a 
-href="pnl-manual.html#dx1-102027" >525</a> <br /></span>
+href="pnl-manual.html#dx1-102027" >526</a> <br /></span>
 <span class="index-item">pnl_rng_chi2, <a 
-href="pnl-manual.html#dx1-102025" >526</a> <br /></span>
+href="pnl-manual.html#dx1-102025" >527</a> <br /></span>
 <span class="index-item">pnl_rng_clone, <a 
-href="pnl-manual.html#dx1-102007" >527</a> <br /></span>
+href="pnl-manual.html#dx1-102007" >528</a> <br /></span>
 <span class="index-item">pnl_rng_copy, <a 
-href="pnl-manual.html#dx1-102006" >528</a> <br /></span>
+href="pnl-manual.html#dx1-102006" >529</a> <br /></span>
 <span class="index-item">pnl_rng_create, <a 
-href="pnl-manual.html#dx1-102003" >529</a> <br /></span>
+href="pnl-manual.html#dx1-102003" >530</a> <br /></span>
 <span class="index-item">pnl_rng_create_from_file, <a 
-href="pnl-manual.html#dx1-147001" >530</a> <br /></span>
+href="pnl-manual.html#dx1-147001" >531</a> <br /></span>
 <span class="index-item">pnl_rng_dblexp, <a 
-href="pnl-manual.html#dx1-102017" >531</a> <br /></span>
+href="pnl-manual.html#dx1-102017" >532</a> <br /></span>
 <span class="index-item">pnl_rng_dcmt_create_array, <a 
-href="pnl-manual.html#dx1-102010" >532</a> <br /></span>
+href="pnl-manual.html#dx1-102010" >533</a> <br /></span>
 <span class="index-item">pnl_rng_dcmt_create_array_id, <a 
-href="pnl-manual.html#dx1-102009" >533</a> <br /></span>
+href="pnl-manual.html#dx1-102009" >534</a> <br /></span>
 <span class="index-item">pnl_rng_dcmt_create_id, <a 
-href="pnl-manual.html#dx1-102008" >534</a> <br /></span>
+href="pnl-manual.html#dx1-102008" >535</a> <br /></span>
 <span class="index-item">pnl_rng_exp, <a 
-href="pnl-manual.html#dx1-102016" >535</a> <br /></span>
+href="pnl-manual.html#dx1-102016" >536</a> <br /></span>
 <span class="index-item">pnl_rng_free, <a 
-href="pnl-manual.html#dx1-102002" >536</a> <br /></span>
+href="pnl-manual.html#dx1-102002" >537</a> <br /></span>
 <span class="index-item">pnl_rng_gamma, <a 
-href="pnl-manual.html#dx1-102024" >537</a> <br /></span>
+href="pnl-manual.html#dx1-102024" >538</a> <br /></span>
 <span class="index-item">pnl_rng_gauss, <a 
-href="pnl-manual.html#dx1-102028" >538</a> <br /></span>
+href="pnl-manual.html#dx1-102028" >539</a> <br /></span>
 <span class="index-item">pnl_rng_get_from_id, <a 
-href="pnl-manual.html#dx1-102013" >539</a> <br /></span>
+href="pnl-manual.html#dx1-102013" >540</a> <br /></span>
 <span class="index-item">pnl_rng_init, <a 
-href="pnl-manual.html#dx1-102012" >540</a> <br /></span>
+href="pnl-manual.html#dx1-102012" >541</a> <br /></span>
 <span class="index-item">pnl_rng_invgauss, <a 
-href="pnl-manual.html#dx1-102022" >541</a> <br /></span>
+href="pnl-manual.html#dx1-102022" >542</a> <br /></span>
 <span class="index-item">pnl_rng_lognormal, <a 
-href="pnl-manual.html#dx1-102021" >542</a> <br /></span>
+href="pnl-manual.html#dx1-102021" >543</a> <br /></span>
+                                                                                    
+
+                                                                                    
 <span class="index-item">pnl_rng_ncchi2, <a 
-href="pnl-manual.html#dx1-102026" >543</a> <br /></span>
-                                                                                    
-
-                                                                                    
+href="pnl-manual.html#dx1-102026" >544</a> <br /></span>
 <span class="index-item">pnl_rng_new, <a 
-href="pnl-manual.html#dx1-102011" >544</a> <br /></span>
+href="pnl-manual.html#dx1-102011" >545</a> <br /></span>
 <span class="index-item">pnl_rng_normal, <a 
-href="pnl-manual.html#dx1-102020" >545</a> <br /></span>
+href="pnl-manual.html#dx1-102020" >546</a> <br /></span>
 <span class="index-item">PNL_RNG_OBJECT, <a 
-href="pnl-manual.html#dx1-12011" >546</a> <br /></span>
+href="pnl-manual.html#dx1-12011" >547</a> <br /></span>
 <span class="index-item">pnl_rng_poisson, <a 
-href="pnl-manual.html#dx1-102015" >547</a> <br /></span>
+href="pnl-manual.html#dx1-102015" >548</a> <br /></span>
 <span class="index-item">pnl_rng_poisson1, <a 
-href="pnl-manual.html#dx1-102023" >548</a> <br /></span>
+href="pnl-manual.html#dx1-102023" >549</a> <br /></span>
 <span class="index-item">pnl_rng_save_to_file, <a 
-href="pnl-manual.html#dx1-147002" >549</a> <br /></span>
+href="pnl-manual.html#dx1-147002" >550</a> <br /></span>
 <span class="index-item">pnl_rng_sdim, <a 
-href="pnl-manual.html#dx1-102005" >550</a> <br /></span>
+href="pnl-manual.html#dx1-102005" >551</a> <br /></span>
 <span class="index-item">pnl_rng_sseed, <a 
-href="pnl-manual.html#dx1-102004" >551</a> <br /></span>
+href="pnl-manual.html#dx1-102004" >552</a> <br /></span>
 <span class="index-item">pnl_rng_uni, <a 
-href="pnl-manual.html#dx1-102018" >552</a> <br /></span>
+href="pnl-manual.html#dx1-102018" >553</a> <br /></span>
 <span class="index-item">pnl_rng_uni_ab, <a 
-href="pnl-manual.html#dx1-102019" >553</a> <br /></span>
+href="pnl-manual.html#dx1-102019" >554</a> <br /></span>
 <span class="index-item">pnl_root_bisection, <a 
-href="pnl-manual.html#dx1-132004" >554</a> <br /></span>
+href="pnl-manual.html#dx1-132004" >555</a> <br /></span>
 <span class="index-item">pnl_root_brent, <a 
-href="pnl-manual.html#dx1-132001" >555</a> <br /></span>
+href="pnl-manual.html#dx1-132001" >556</a> <br /></span>
 <span class="index-item">pnl_root_fsolve, <a 
-href="pnl-manual.html#dx1-133002" >556</a> <br /></span>
+href="pnl-manual.html#dx1-133002" >557</a> <br /></span>
 <span class="index-item">pnl_root_fsolve_lsq, <a 
-href="pnl-manual.html#dx1-133003" >557</a> <br /></span>
+href="pnl-manual.html#dx1-133003" >558</a> <br /></span>
 <span class="index-item">pnl_root_newton, <a 
-href="pnl-manual.html#dx1-132003" >558</a> <br /></span>
+href="pnl-manual.html#dx1-132003" >559</a> <br /></span>
 <span class="index-item">pnl_root_newton_bisection, <a 
-href="pnl-manual.html#dx1-132002" >559</a> <br /></span>
+href="pnl-manual.html#dx1-132002" >560</a> <br /></span>
 <span class="index-item">pnl_round, <a 
-href="pnl-manual.html#dx1-20004" >560</a> <br /></span>
+href="pnl-manual.html#dx1-20004" >561</a> <br /></span>
 <span class="index-item">pnl_sf_choose, <a 
-href="pnl-manual.html#dx1-138005" >561</a> <br /></span>
+href="pnl-manual.html#dx1-138005" >562</a> <br /></span>
 <span class="index-item">pnl_sf_complex_dawson, <a 
-href="pnl-manual.html#dx1-137012" >562</a> <br /></span>
+href="pnl-manual.html#dx1-137012" >563</a> <br /></span>
 <span class="index-item">pnl_sf_complex_erf, <a 
-href="pnl-manual.html#dx1-137002" >563</a> <br /></span>
+href="pnl-manual.html#dx1-137002" >564</a> <br /></span>
 <span class="index-item">pnl_sf_complex_erfc, <a 
-href="pnl-manual.html#dx1-137004" >564</a> <br /></span>
+href="pnl-manual.html#dx1-137004" >565</a> <br /></span>
 <span class="index-item">pnl_sf_complex_erfcx, <a 
-href="pnl-manual.html#dx1-137006" >565</a> <br /></span>
+href="pnl-manual.html#dx1-137006" >566</a> <br /></span>
 <span class="index-item">pnl_sf_complex_erfi, <a 
-href="pnl-manual.html#dx1-137010" >566</a> <br /></span>
+href="pnl-manual.html#dx1-137010" >567</a> <br /></span>
 <span class="index-item">pnl_sf_dawson, <a 
-href="pnl-manual.html#dx1-137011" >567</a> <br /></span>
+href="pnl-manual.html#dx1-137011" >568</a> <br /></span>
 <span class="index-item">pnl_sf_erf, <a 
-href="pnl-manual.html#dx1-137001" >568</a> <br /></span>
+href="pnl-manual.html#dx1-137001" >569</a> <br /></span>
 <span class="index-item">pnl_sf_erfc, <a 
-href="pnl-manual.html#dx1-137003" >569</a> <br /></span>
+href="pnl-manual.html#dx1-137003" >570</a> <br /></span>
 <span class="index-item">pnl_sf_erfcx, <a 
-href="pnl-manual.html#dx1-137005" >570</a> <br /></span>
+href="pnl-manual.html#dx1-137005" >571</a> <br /></span>
 <span class="index-item">pnl_sf_erfi, <a 
-href="pnl-manual.html#dx1-137009" >571</a> <br /></span>
+href="pnl-manual.html#dx1-137009" >572</a> <br /></span>
 <span class="index-item">pnl_sf_expint_En, <a 
-href="pnl-manual.html#dx1-141001" >572</a> <br /></span>
+href="pnl-manual.html#dx1-141001" >573</a> <br /></span>
 <span class="index-item">pnl_sf_fact, <a 
-href="pnl-manual.html#dx1-138001" >573</a> <br /></span>
+href="pnl-manual.html#dx1-138001" >574</a> <br /></span>
 <span class="index-item">pnl_sf_gamma, <a 
-href="pnl-manual.html#dx1-138002" >574</a> <br /></span>
+href="pnl-manual.html#dx1-138002" >575</a> <br /></span>
 <span class="index-item">pnl_sf_gamma_inc, <a 
-href="pnl-manual.html#dx1-140001" >575</a> <br /></span>
+href="pnl-manual.html#dx1-140001" >576</a> <br /></span>
 <span class="index-item">pnl_sf_gamma_inc_P, <a 
-href="pnl-manual.html#dx1-140002" >576</a> <br /></span>
+href="pnl-manual.html#dx1-140002" >577</a> <br /></span>
 <span class="index-item">pnl_sf_gamma_inc_Q, <a 
-href="pnl-manual.html#dx1-140003" >577</a> <br /></span>
+href="pnl-manual.html#dx1-140003" >578</a> <br /></span>
 <span class="index-item">pnl_sf_hyperg_0F1, <a 
-href="pnl-manual.html#dx1-142004" >578</a> <br /></span>
+href="pnl-manual.html#dx1-142004" >579</a> <br /></span>
 <span class="index-item">pnl_sf_hyperg_1F1, <a 
-href="pnl-manual.html#dx1-142002" >579</a> <br /></span>
+href="pnl-manual.html#dx1-142002" >580</a> <br /></span>
 <span class="index-item">pnl_sf_hyperg_2F0, <a 
-href="pnl-manual.html#dx1-142003" >580</a> <br /></span>
+href="pnl-manual.html#dx1-142003" >581</a> <br /></span>
 <span class="index-item">pnl_sf_hyperg_2F1, <a 
-href="pnl-manual.html#dx1-142001" >581</a> <br /></span>
+href="pnl-manual.html#dx1-142001" >582</a> <br /></span>
 <span class="index-item">pnl_sf_hyperg_U, <a 
-href="pnl-manual.html#dx1-142005" >582</a> <br /></span>
+href="pnl-manual.html#dx1-142005" >583</a> <br /></span>
 <span class="index-item">pnl_sf_log_erf, <a 
-href="pnl-manual.html#dx1-137013" >583</a> <br /></span>
+href="pnl-manual.html#dx1-137013" >584</a> <br /></span>
 <span class="index-item">pnl_sf_log_erfc, <a 
-href="pnl-manual.html#dx1-137014" >584</a> <br /></span>
+href="pnl-manual.html#dx1-137014" >585</a> <br /></span>
 <span class="index-item">pnl_sf_log_gamma, <a 
-href="pnl-manual.html#dx1-138003" >585</a> <br /></span>
+href="pnl-manual.html#dx1-138003" >586</a> <br /></span>
 <span class="index-item">pnl_sf_log_gamma_sgn, <a 
-href="pnl-manual.html#dx1-138004" >586</a> <br /></span>
+href="pnl-manual.html#dx1-138004" >587</a> <br /></span>
 <span class="index-item">pnl_sf_psi, <a 
-href="pnl-manual.html#dx1-139001" >587</a> <br /></span>
+href="pnl-manual.html#dx1-139001" >588</a> <br /></span>
 <span class="index-item">pnl_sf_w, <a 
-href="pnl-manual.html#dx1-137007" >588</a> <br /></span>
+href="pnl-manual.html#dx1-137007" >589</a> <br /></span>
 <span class="index-item">pnl_sf_w_im, <a 
-href="pnl-manual.html#dx1-137008" >589</a> <br /></span>
+href="pnl-manual.html#dx1-137008" >590</a> <br /></span>
+                                                                                    
+
+                                                                                    
 <span class="index-item">PNL_SIGN, <a 
-href="pnl-manual.html#dx1-18007" >590</a> <br /></span>
-                                                                                    
-
-                                                                                    
+href="pnl-manual.html#dx1-18007" >591</a> <br /></span>
 <span class="index-item">pnl_sp_mat_clone, <a 
-href="pnl-manual.html#dx1-81003" >591</a> <br /></span>
+href="pnl-manual.html#dx1-81003" >592</a> <br /></span>
 <span class="index-item">pnl_sp_mat_copy, <a 
-href="pnl-manual.html#dx1-81004" >592</a> <br /></span>
+href="pnl-manual.html#dx1-81004" >593</a> <br /></span>
 <span class="index-item">pnl_sp_mat_create, <a 
-href="pnl-manual.html#dx1-81002" >593</a> <br /></span>
+href="pnl-manual.html#dx1-81002" >594</a> <br /></span>
 <span class="index-item">pnl_sp_mat_create_from_file, <a 
-href="pnl-manual.html#dx1-81009" >594</a> <br /></span>
+href="pnl-manual.html#dx1-81009" >595</a> <br /></span>
 <span class="index-item">pnl_sp_mat_create_from_mat, <a 
-href="pnl-manual.html#dx1-81008" >595</a> <br /></span>
+href="pnl-manual.html#dx1-81008" >596</a> <br /></span>
 <span class="index-item">pnl_sp_mat_div_scalar, <a 
-href="pnl-manual.html#dx1-83004" >596</a> <br /></span>
+href="pnl-manual.html#dx1-83004" >597</a> <br /></span>
 <span class="index-item">pnl_sp_mat_fprint, <a 
-href="pnl-manual.html#dx1-84001" >597</a> <br /></span>
+href="pnl-manual.html#dx1-84001" >598</a> <br /></span>
 <span class="index-item">pnl_sp_mat_free, <a 
-href="pnl-manual.html#dx1-81005" >598</a> <br /></span>
+href="pnl-manual.html#dx1-81005" >599</a> <br /></span>
 <span class="index-item">pnl_sp_mat_get, <a 
-href="pnl-manual.html#dx1-82002" >599</a> <br /></span>
+href="pnl-manual.html#dx1-82002" >600</a> <br /></span>
 <span class="index-item">pnl_sp_mat_isequal, <a 
-href="pnl-manual.html#dx1-85001" >600</a> <br /></span>
+href="pnl-manual.html#dx1-85001" >601</a> <br /></span>
 <span class="index-item">pnl_sp_mat_isequal_abs, <a 
-href="pnl-manual.html#dx1-85002" >601</a> <br /></span>
+href="pnl-manual.html#dx1-85002" >602</a> <br /></span>
 <span class="index-item">pnl_sp_mat_isequal_rel, <a 
-href="pnl-manual.html#dx1-85003" >602</a> <br /></span>
+href="pnl-manual.html#dx1-85003" >603</a> <br /></span>
 <span class="index-item">pnl_sp_mat_kron, <a 
-href="pnl-manual.html#dx1-84008" >603</a> <br /></span>
+href="pnl-manual.html#dx1-84008" >604</a> <br /></span>
 <span class="index-item">pnl_sp_mat_kron_inplace, <a 
-href="pnl-manual.html#dx1-84007" >604</a> <br /></span>
+href="pnl-manual.html#dx1-84007" >605</a> <br /></span>
 <span class="index-item">pnl_sp_mat_lAxpby, <a 
-href="pnl-manual.html#dx1-84004" >605</a> <br /></span>
+href="pnl-manual.html#dx1-84004" >606</a> <br /></span>
 <span class="index-item">pnl_sp_mat_minus_scalar, <a 
-href="pnl-manual.html#dx1-83002" >606</a> <br /></span>
+href="pnl-manual.html#dx1-83002" >607</a> <br /></span>
 <span class="index-item">pnl_sp_mat_mult_scalar, <a 
-href="pnl-manual.html#dx1-83003" >607</a> <br /></span>
+href="pnl-manual.html#dx1-83003" >608</a> <br /></span>
 <span class="index-item">pnl_sp_mat_mult_vect, <a 
-href="pnl-manual.html#dx1-84003" >608</a> <br /></span>
+href="pnl-manual.html#dx1-84003" >609</a> <br /></span>
 <span class="index-item">pnl_sp_mat_new, <a 
-href="pnl-manual.html#dx1-81001" >609</a> <br /></span>
+href="pnl-manual.html#dx1-81001" >610</a> <br /></span>
 <span class="index-item">PNL_SP_MAT_OBJECT, <a 
-href="pnl-manual.html#dx1-12006" >610</a> <br /></span>
+href="pnl-manual.html#dx1-12006" >611</a> <br /></span>
 <span class="index-item">pnl_sp_mat_plus_scalar, <a 
-href="pnl-manual.html#dx1-83001" >611</a> <br /></span>
+href="pnl-manual.html#dx1-83001" >612</a> <br /></span>
+<span class="index-item">pnl_sp_mat_plus_sp_mat, <a 
+href="pnl-manual.html#dx1-84006" >613</a> <br /></span>
 <span class="index-item">pnl_sp_mat_plus_sp_mat_inplace, <a 
-href="pnl-manual.html#dx1-84005" >612</a> <br /></span>
+href="pnl-manual.html#dx1-84005" >614</a> <br /></span>
 <span class="index-item">pnl_sp_mat_print, <a 
-href="pnl-manual.html#dx1-84002" >613</a> <br /></span>
+href="pnl-manual.html#dx1-84002" >615</a> <br /></span>
 <span class="index-item">pnl_sp_mat_resize, <a 
-href="pnl-manual.html#dx1-81006" >614</a> <br /></span>
+href="pnl-manual.html#dx1-81006" >616</a> <br /></span>
 <span class="index-item">pnl_sp_mat_set, <a 
-href="pnl-manual.html#dx1-82001" >615</a> <br /></span>
-<span class="index-item">pnl_sp_mat_sp_mat, <a 
-href="pnl-manual.html#dx1-84006" >616</a> <br /></span>
+href="pnl-manual.html#dx1-82001" >617</a> <br /></span>
 <span class="index-item">pnl_tgamma, <a 
-href="pnl-manual.html#dx1-21003" >617</a> <br /></span>
+href="pnl-manual.html#dx1-21003" >618</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_clone, <a 
-href="pnl-manual.html#dx1-65009" >618</a> <br /></span>
+href="pnl-manual.html#dx1-65009" >619</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_copy, <a 
-href="pnl-manual.html#dx1-65008" >619</a> <br /></span>
+href="pnl-manual.html#dx1-65008" >620</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_create, <a 
-href="pnl-manual.html#dx1-65002" >620</a> <br /></span>
+href="pnl-manual.html#dx1-65002" >621</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_create_from_mat, <a 
-href="pnl-manual.html#dx1-65006" >621</a> <br /></span>
+href="pnl-manual.html#dx1-65006" >622</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_create_from_ptr, <a 
-href="pnl-manual.html#dx1-65005" >622</a> <br /></span>
+href="pnl-manual.html#dx1-65005" >623</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_create_from_scalar, <a 
-href="pnl-manual.html#dx1-65003" >623</a> <br /></span>
+href="pnl-manual.html#dx1-65003" >624</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_create_from_two_scalar, <a 
-href="pnl-manual.html#dx1-65004" >624</a> <br /></span>
+href="pnl-manual.html#dx1-65004" >625</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_div_scalar, <a 
-href="pnl-manual.html#dx1-68006" >625</a> <br /></span>
+href="pnl-manual.html#dx1-68006" >626</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_div_tridiag_mat_term, <a 
-href="pnl-manual.html#dx1-69002" >626</a> <br /></span>
+href="pnl-manual.html#dx1-69002" >627</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_fprint, <a 
-href="pnl-manual.html#dx1-67001" >627</a> <br /></span>
+href="pnl-manual.html#dx1-67001" >628</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_free, <a 
-href="pnl-manual.html#dx1-65010" >628</a> <br /></span>
+href="pnl-manual.html#dx1-65010" >629</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_get, <a 
-href="pnl-manual.html#dx1-66002" >629</a> <br /></span>
+href="pnl-manual.html#dx1-66002" >630</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_lAxpby, <a 
-href="pnl-manual.html#dx1-70003" >630</a> <br /></span>
+href="pnl-manual.html#dx1-70003" >631</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_lget, <a 
-href="pnl-manual.html#dx1-66003" >631</a> <br /></span>
+href="pnl-manual.html#dx1-66003" >632</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_lu_clone, <a 
-href="pnl-manual.html#dx1-70010" >632</a> <br /></span>
+href="pnl-manual.html#dx1-70010" >633</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_lu_compute, <a 
-href="pnl-manual.html#dx1-70013" >633</a> <br /></span>
+href="pnl-manual.html#dx1-70013" >634</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_lu_copy, <a 
-href="pnl-manual.html#dx1-70009" >634</a> <br /></span>
+href="pnl-manual.html#dx1-70009" >635</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_lu_create, <a 
-href="pnl-manual.html#dx1-70008" >635</a> <br /></span>
+href="pnl-manual.html#dx1-70008" >636</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_lu_free, <a 
-href="pnl-manual.html#dx1-70011" >636</a> <br /></span>
+href="pnl-manual.html#dx1-70011" >637</a> <br /></span>
+                                                                                    
+
+                                                                                    
 <span class="index-item">pnl_tridiag_mat_lu_new, <a 
-href="pnl-manual.html#dx1-70007" >637</a> <br /></span>
-                                                                                    
-
-                                                                                    
+href="pnl-manual.html#dx1-70007" >638</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_lu_resize, <a 
-href="pnl-manual.html#dx1-70012" >638</a> <br /></span>
+href="pnl-manual.html#dx1-70012" >639</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_lu_syslin, <a 
-href="pnl-manual.html#dx1-70015" >639</a> <br /></span>
+href="pnl-manual.html#dx1-70015" >640</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_lu_syslin_inplace, <a 
-href="pnl-manual.html#dx1-70014" >640</a> <br /></span>
+href="pnl-manual.html#dx1-70014" >641</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_map_inplace, <a 
-href="pnl-manual.html#dx1-69003" >641</a> <br /></span>
+href="pnl-manual.html#dx1-69003" >642</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_map_tridiag_mat_inplace, <a 
-href="pnl-manual.html#dx1-69004" >642</a> <br /></span>
+href="pnl-manual.html#dx1-69004" >643</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_minus_scalar, <a 
-href="pnl-manual.html#dx1-68004" >643</a> <br /></span>
+href="pnl-manual.html#dx1-68004" >644</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_minus_tridiag_mat, <a 
-href="pnl-manual.html#dx1-68002" >644</a> <br /></span>
+href="pnl-manual.html#dx1-68002" >645</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_mult_scalar, <a 
-href="pnl-manual.html#dx1-68005" >645</a> <br /></span>
+href="pnl-manual.html#dx1-68005" >646</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_mult_tridiag_mat_term, <a 
-href="pnl-manual.html#dx1-69001" >646</a> <br /></span>
+href="pnl-manual.html#dx1-69001" >647</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_mult_vect, <a 
-href="pnl-manual.html#dx1-70002" >647</a> <br /></span>
+href="pnl-manual.html#dx1-70002" >648</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_mult_vect_inplace, <a 
-href="pnl-manual.html#dx1-70001" >648</a> <br /></span>
+href="pnl-manual.html#dx1-70001" >649</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_new, <a 
-href="pnl-manual.html#dx1-65001" >649</a> <br /></span>
+href="pnl-manual.html#dx1-65001" >650</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_plus_scalar, <a 
-href="pnl-manual.html#dx1-68003" >650</a> <br /></span>
+href="pnl-manual.html#dx1-68003" >651</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_plus_tridiag_mat, <a 
-href="pnl-manual.html#dx1-68001" >651</a> <br /></span>
+href="pnl-manual.html#dx1-68001" >652</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_print, <a 
-href="pnl-manual.html#dx1-67002" >652</a> <br /></span>
+href="pnl-manual.html#dx1-67002" >653</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_resize, <a 
-href="pnl-manual.html#dx1-65011" >653</a> <br /></span>
+href="pnl-manual.html#dx1-65011" >654</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_scalar_prod, <a 
-href="pnl-manual.html#dx1-70004" >654</a> <br /></span>
+href="pnl-manual.html#dx1-70004" >655</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_set, <a 
-href="pnl-manual.html#dx1-66001" >655</a> <br /></span>
+href="pnl-manual.html#dx1-66001" >656</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_syslin, <a 
-href="pnl-manual.html#dx1-70006" >656</a> <br /></span>
+href="pnl-manual.html#dx1-70006" >657</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_syslin_inplace, <a 
-href="pnl-manual.html#dx1-70005" >657</a> <br /></span>
+href="pnl-manual.html#dx1-70005" >658</a> <br /></span>
 <span class="index-item">pnl_tridiag_mat_to_mat, <a 
-href="pnl-manual.html#dx1-65007" >658</a> <br /></span>
+href="pnl-manual.html#dx1-65007" >659</a> <br /></span>
 <span class="index-item">PNL_TRIDIAGMAT_OBJECT, <a 
-href="pnl-manual.html#dx1-12009" >659</a> <br /></span>
+href="pnl-manual.html#dx1-12009" >660</a> <br /></span>
 <span class="index-item">pnl_trunc, <a 
-href="pnl-manual.html#dx1-20003" >660</a> <br /></span>
+href="pnl-manual.html#dx1-20003" >661</a> <br /></span>
 <span class="index-item">pnl_vect_axpby, <a 
-href="pnl-manual.html#dx1-37010" >661</a> <br /></span>
+href="pnl-manual.html#dx1-37010" >662</a> <br /></span>
 <span class="index-item">pnl_vect_clone, <a 
-href="pnl-manual.html#dx1-32010" >662</a> <br /></span>
+href="pnl-manual.html#dx1-32010" >663</a> <br /></span>
 <span class="index-item">pnl_vect_compact_copy, <a 
-href="pnl-manual.html#dx1-45005" >663</a> <br /></span>
+href="pnl-manual.html#dx1-45005" >664</a> <br /></span>
 <span class="index-item">pnl_vect_compact_create, <a 
-href="pnl-manual.html#dx1-45002" >664</a> <br /></span>
+href="pnl-manual.html#dx1-45002" >665</a> <br /></span>
 <span class="index-item">pnl_vect_compact_create_from_ptr, <a 
-href="pnl-manual.html#dx1-45003" >665</a> <br /></span>
+href="pnl-manual.html#dx1-45003" >666</a> <br /></span>
 <span class="index-item">pnl_vect_compact_free, <a 
-href="pnl-manual.html#dx1-45006" >666</a> <br /></span>
+href="pnl-manual.html#dx1-45006" >667</a> <br /></span>
 <span class="index-item">pnl_vect_compact_get, <a 
-href="pnl-manual.html#dx1-45008" >667</a> <br /></span>
+href="pnl-manual.html#dx1-45008" >668</a> <br /></span>
 <span class="index-item">pnl_vect_compact_new, <a 
-href="pnl-manual.html#dx1-45001" >668</a> <br /></span>
+href="pnl-manual.html#dx1-45001" >669</a> <br /></span>
 <span class="index-item">pnl_vect_compact_resize, <a 
-href="pnl-manual.html#dx1-45004" >669</a> <br /></span>
+href="pnl-manual.html#dx1-45004" >670</a> <br /></span>
 <span class="index-item">pnl_vect_compact_set_all, <a 
-href="pnl-manual.html#dx1-45009" >670</a> <br /></span>
+href="pnl-manual.html#dx1-45009" >671</a> <br /></span>
 <span class="index-item">pnl_vect_compact_set_ptr, <a 
-href="pnl-manual.html#dx1-45010" >671</a> <br /></span>
+href="pnl-manual.html#dx1-45010" >672</a> <br /></span>
 <span class="index-item">pnl_vect_compact_to_pnl_vect, <a 
-href="pnl-manual.html#dx1-45007" >672</a> <br /></span>
+href="pnl-manual.html#dx1-45007" >673</a> <br /></span>
 <span class="index-item">pnl_vect_complex_create_from_array, <a 
-href="pnl-manual.html#dx1-42002" >673</a> <br /></span>
+href="pnl-manual.html#dx1-42002" >674</a> <br /></span>
 <span class="index-item">pnl_vect_complex_get_imag, <a 
-href="pnl-manual.html#dx1-42006" >674</a> <br /></span>
+href="pnl-manual.html#dx1-42006" >675</a> <br /></span>
 <span class="index-item">pnl_vect_complex_get_real, <a 
-href="pnl-manual.html#dx1-42005" >675</a> <br /></span>
+href="pnl-manual.html#dx1-42005" >676</a> <br /></span>
 <span class="index-item">pnl_vect_complex_lget_imag, <a 
-href="pnl-manual.html#dx1-42008" >676</a> <br /></span>
+href="pnl-manual.html#dx1-42008" >677</a> <br /></span>
 <span class="index-item">pnl_vect_complex_lget_real, <a 
-href="pnl-manual.html#dx1-42007" >677</a> <br /></span>
+href="pnl-manual.html#dx1-42007" >678</a> <br /></span>
 <span class="index-item">pnl_vect_complex_mult_double, <a 
-href="pnl-manual.html#dx1-42001" >678</a> <br /></span>
+href="pnl-manual.html#dx1-42001" >679</a> <br /></span>
 <span class="index-item">pnl_vect_complex_set_imag, <a 
-href="pnl-manual.html#dx1-42010" >679</a> <br /></span>
+href="pnl-manual.html#dx1-42010" >680</a> <br /></span>
 <span class="index-item">pnl_vect_complex_set_real, <a 
-href="pnl-manual.html#dx1-42009" >680</a> <br /></span>
+href="pnl-manual.html#dx1-42009" >681</a> <br /></span>
 <span class="index-item">pnl_vect_complex_split_in_array, <a 
-href="pnl-manual.html#dx1-42003" >681</a> <br /></span>
+href="pnl-manual.html#dx1-42003" >682</a> <br /></span>
 <span class="index-item">pnl_vect_complex_split_in_vect, <a 
-href="pnl-manual.html#dx1-42004" >682</a> <br /></span>
+href="pnl-manual.html#dx1-42004" >683</a> <br /></span>
 <span class="index-item">pnl_vect_copy, <a 
-href="pnl-manual.html#dx1-32009" >683</a> <br /></span>
+href="pnl-manual.html#dx1-32009" >684</a> <br /></span>
+                                                                                    
+
+                                                                                    
 <span class="index-item">pnl_vect_create, <a 
-href="pnl-manual.html#dx1-32002" >684</a> <br /></span>
-                                                                                    
-
-                                                                                    
+href="pnl-manual.html#dx1-32002" >685</a> <br /></span>
 <span class="index-item">pnl_vect_create_from_file, <a 
-href="pnl-manual.html#dx1-32008" >685</a> <br /></span>
+href="pnl-manual.html#dx1-32008" >686</a> <br /></span>
 <span class="index-item">pnl_vect_create_from_list, <a 
-href="pnl-manual.html#dx1-32007" >686</a> <br /></span>
+href="pnl-manual.html#dx1-32007" >687</a> <br /></span>
 <span class="index-item">pnl_vect_create_from_mat, <a 
-href="pnl-manual.html#dx1-32006" >687</a> <br /></span>
+href="pnl-manual.html#dx1-32006" >688</a> <br /></span>
 <span class="index-item">pnl_vect_create_from_ptr, <a 
-href="pnl-manual.html#dx1-32005" >688</a> <br /></span>
+href="pnl-manual.html#dx1-32005" >689</a> <br /></span>
 <span class="index-item">pnl_vect_create_from_scalar, <a 
-href="pnl-manual.html#dx1-32004" >689</a> <br /></span>
+href="pnl-manual.html#dx1-32004" >690</a> <br /></span>
 <span class="index-item">pnl_vect_create_from_zero, <a 
-href="pnl-manual.html#dx1-32003" >690</a> <br /></span>
+href="pnl-manual.html#dx1-32003" >691</a> <br /></span>
 <span class="index-item">pnl_vect_create_submat, <a 
-href="pnl-manual.html#dx1-49016" >691</a> <br /></span>
+href="pnl-manual.html#dx1-49016" >692</a> <br /></span>
 <span class="index-item">pnl_vect_create_subvect, <a 
-href="pnl-manual.html#dx1-32013" >692</a> <br /></span>
+href="pnl-manual.html#dx1-32013" >693</a> <br /></span>
 <span class="index-item">pnl_vect_create_subvect_with_ind, <a 
-href="pnl-manual.html#dx1-32011" >693</a> <br /></span>
+href="pnl-manual.html#dx1-32011" >694</a> <br /></span>
 <span class="index-item">pnl_vect_cross, <a 
-href="pnl-manual.html#dx1-38005" >694</a> <br /></span>
+href="pnl-manual.html#dx1-38005" >695</a> <br /></span>
 <span class="index-item">pnl_vect_cumprod, <a 
-href="pnl-manual.html#dx1-37014" >695</a> <br /></span>
+href="pnl-manual.html#dx1-37014" >696</a> <br /></span>
 <span class="index-item">pnl_vect_cumsum, <a 
-href="pnl-manual.html#dx1-37012" >696</a> <br /></span>
+href="pnl-manual.html#dx1-37012" >697</a> <br /></span>
 <span class="index-item">pnl_vect_dist, <a 
-href="pnl-manual.html#dx1-38006" >697</a> <br /></span>
+href="pnl-manual.html#dx1-38006" >698</a> <br /></span>
 <span class="index-item">pnl_vect_div_scalar, <a 
-href="pnl-manual.html#dx1-36005" >698</a> <br /></span>
+href="pnl-manual.html#dx1-36005" >699</a> <br /></span>
 <span class="index-item">pnl_vect_div_vect_term, <a 
-href="pnl-manual.html#dx1-37004" >699</a> <br /></span>
+href="pnl-manual.html#dx1-37004" >700</a> <br /></span>
 <span class="index-item">pnl_vect_eq_all, <a 
-href="pnl-manual.html#dx1-39004" >700</a> <br /></span>
+href="pnl-manual.html#dx1-39004" >701</a> <br /></span>
 <span class="index-item">pnl_vect_extract_submat, <a 
-href="pnl-manual.html#dx1-49017" >701</a> <br /></span>
+href="pnl-manual.html#dx1-49017" >702</a> <br /></span>
 <span class="index-item">pnl_vect_extract_subvect, <a 
-href="pnl-manual.html#dx1-32014" >702</a> <br /></span>
+href="pnl-manual.html#dx1-32014" >703</a> <br /></span>
 <span class="index-item">pnl_vect_extract_subvect_with_ind, <a 
-href="pnl-manual.html#dx1-32012" >703</a> <br /></span>
+href="pnl-manual.html#dx1-32012" >704</a> <br /></span>
 <span class="index-item">pnl_vect_find, <a 
-href="pnl-manual.html#dx1-40009" >704</a> <br /></span>
+href="pnl-manual.html#dx1-40009" >705</a> <br /></span>
 <span class="index-item">pnl_vect_fprint, <a 
-href="pnl-manual.html#dx1-35002" >705</a> <br /></span>
+href="pnl-manual.html#dx1-35002" >706</a> <br /></span>
 <span class="index-item">pnl_vect_fprint_asrow, <a 
-href="pnl-manual.html#dx1-35004" >706</a> <br /></span>
+href="pnl-manual.html#dx1-35004" >707</a> <br /></span>
 <span class="index-item">pnl_vect_fprint_nsp, <a 
-href="pnl-manual.html#dx1-35006" >707</a> <br /></span>
+href="pnl-manual.html#dx1-35006" >708</a> <br /></span>
 <span class="index-item">pnl_vect_free, <a 
-href="pnl-manual.html#dx1-32016" >708</a> <br /></span>
+href="pnl-manual.html#dx1-32016" >709</a> <br /></span>
 <span class="index-item">pnl_vect_get, <a 
-href="pnl-manual.html#dx1-34008" >709</a> <br /></span>
+href="pnl-manual.html#dx1-34008" >710</a> <br /></span>
 <span class="index-item">pnl_vect_inv_term, <a 
-href="pnl-manual.html#dx1-37003" >710</a> <br /></span>
+href="pnl-manual.html#dx1-37003" >711</a> <br /></span>
 <span class="index-item">pnl_vect_isequal, <a 
-href="pnl-manual.html#dx1-39001" >711</a> <br /></span>
+href="pnl-manual.html#dx1-39001" >712</a> <br /></span>
 <span class="index-item">pnl_vect_isequal_abs, <a 
-href="pnl-manual.html#dx1-39002" >712</a> <br /></span>
+href="pnl-manual.html#dx1-39002" >713</a> <br /></span>
 <span class="index-item">pnl_vect_isequal_rel, <a 
-href="pnl-manual.html#dx1-39003" >713</a> <br /></span>
+href="pnl-manual.html#dx1-39003" >714</a> <br /></span>
 <span class="index-item">pnl_vect_lget, <a 
-href="pnl-manual.html#dx1-34009" >714</a> <br /></span>
+href="pnl-manual.html#dx1-34009" >715</a> <br /></span>
 <span class="index-item">pnl_vect_map, <a 
-href="pnl-manual.html#dx1-37006" >715</a> <br /></span>
+href="pnl-manual.html#dx1-37006" >716</a> <br /></span>
 <span class="index-item">pnl_vect_map_inplace, <a 
-href="pnl-manual.html#dx1-37007" >716</a> <br /></span>
+href="pnl-manual.html#dx1-37007" >717</a> <br /></span>
 <span class="index-item">pnl_vect_map_vect, <a 
-href="pnl-manual.html#dx1-37008" >717</a> <br /></span>
+href="pnl-manual.html#dx1-37008" >718</a> <br /></span>
 <span class="index-item">pnl_vect_map_vect_inplace, <a 
-href="pnl-manual.html#dx1-37009" >718</a> <br /></span>
+href="pnl-manual.html#dx1-37009" >719</a> <br /></span>
 <span class="index-item">pnl_vect_max, <a 
-href="pnl-manual.html#dx1-40001" >719</a> <br /></span>
+href="pnl-manual.html#dx1-40001" >720</a> <br /></span>
 <span class="index-item">pnl_vect_max_index, <a 
-href="pnl-manual.html#dx1-40005" >720</a> <br /></span>
+href="pnl-manual.html#dx1-40005" >721</a> <br /></span>
 <span class="index-item">pnl_vect_min, <a 
-href="pnl-manual.html#dx1-40002" >721</a> <br /></span>
+href="pnl-manual.html#dx1-40002" >722</a> <br /></span>
 <span class="index-item">pnl_vect_min_index, <a 
-href="pnl-manual.html#dx1-40004" >722</a> <br /></span>
+href="pnl-manual.html#dx1-40004" >723</a> <br /></span>
 <span class="index-item">pnl_vect_minmax, <a 
-href="pnl-manual.html#dx1-40003" >723</a> <br /></span>
+href="pnl-manual.html#dx1-40003" >724</a> <br /></span>
 <span class="index-item">pnl_vect_minmax_index, <a 
-href="pnl-manual.html#dx1-40006" >724</a> <br /></span>
+href="pnl-manual.html#dx1-40006" >725</a> <br /></span>
 <span class="index-item">pnl_vect_minus, <a 
-href="pnl-manual.html#dx1-36001" >725</a> <br /></span>
+href="pnl-manual.html#dx1-36001" >726</a> <br /></span>
 <span class="index-item">pnl_vect_minus_scalar, <a 
-href="pnl-manual.html#dx1-36003" >726</a> <br /></span>
+href="pnl-manual.html#dx1-36003" >727</a> <br /></span>
 <span class="index-item">pnl_vect_minus_vect, <a 
-href="pnl-manual.html#dx1-37002" >727</a> <br /></span>
+href="pnl-manual.html#dx1-37002" >728</a> <br /></span>
 <span class="index-item">pnl_vect_mult_scalar, <a 
-href="pnl-manual.html#dx1-36004" >728</a> <br /></span>
+href="pnl-manual.html#dx1-36004" >729</a> <br /></span>
 <span class="index-item">pnl_vect_mult_vect_term, <a 
-href="pnl-manual.html#dx1-37005" >729</a> <br /></span>
+href="pnl-manual.html#dx1-37005" >730</a> <br /></span>
 <span class="index-item">pnl_vect_new, <a 
-href="pnl-manual.html#dx1-32001" >730</a> <br /></span>
-<span class="index-item">pnl_vect_norm_infty, <a 
-href="pnl-manual.html#dx1-38003" >731</a> <br /></span>
+href="pnl-manual.html#dx1-32001" >731</a> <br /></span>
                                                                                     
 
                                                                                     
+<span class="index-item">pnl_vect_norm_infty, <a 
+href="pnl-manual.html#dx1-38003" >732</a> <br /></span>
 <span class="index-item">pnl_vect_norm_one, <a 
-href="pnl-manual.html#dx1-38002" >732</a> <br /></span>
+href="pnl-manual.html#dx1-38002" >733</a> <br /></span>
 <span class="index-item">pnl_vect_norm_two, <a 
-href="pnl-manual.html#dx1-38001" >733</a> <br /></span>
+href="pnl-manual.html#dx1-38001" >734</a> <br /></span>
 <span class="index-item">PNL_VECT_OBJECT, <a 
-href="pnl-manual.html#dx1-12004" >734</a> <br /></span>
+href="pnl-manual.html#dx1-12004" >735</a> <br /></span>
 <span class="index-item">pnl_vect_permute, <a 
-href="pnl-manual.html#dx1-61006" >735</a> <br /></span>
+href="pnl-manual.html#dx1-61006" >736</a> <br /></span>
 <span class="index-item">pnl_vect_permute_inplace, <a 
-href="pnl-manual.html#dx1-61007" >736</a> <br /></span>
+href="pnl-manual.html#dx1-61007" >737</a> <br /></span>
 <span class="index-item">pnl_vect_permute_inverse, <a 
-href="pnl-manual.html#dx1-61008" >737</a> <br /></span>
+href="pnl-manual.html#dx1-61008" >738</a> <br /></span>
 <span class="index-item">pnl_vect_permute_inverse_inplace, <a 
-href="pnl-manual.html#dx1-61009" >738</a> <br /></span>
+href="pnl-manual.html#dx1-61009" >739</a> <br /></span>
 <span class="index-item">pnl_vect_plus_scalar, <a 
-href="pnl-manual.html#dx1-36002" >739</a> <br /></span>
+href="pnl-manual.html#dx1-36002" >740</a> <br /></span>
 <span class="index-item">pnl_vect_plus_vect, <a 
-href="pnl-manual.html#dx1-37001" >740</a> <br /></span>
+href="pnl-manual.html#dx1-37001" >741</a> <br /></span>
 <span class="index-item">pnl_vect_print, <a 
-href="pnl-manual.html#dx1-35001" >741</a> <br /></span>
+href="pnl-manual.html#dx1-35001" >742</a> <br /></span>
 <span class="index-item">pnl_vect_print_asrow, <a 
-href="pnl-manual.html#dx1-35003" >742</a> <br /></span>
+href="pnl-manual.html#dx1-35003" >743</a> <br /></span>
 <span class="index-item">pnl_vect_print_nsp, <a 
-href="pnl-manual.html#dx1-35005" >743</a> <br /></span>
+href="pnl-manual.html#dx1-35005" >744</a> <br /></span>
 <span class="index-item">pnl_vect_prod, <a 
-href="pnl-manual.html#dx1-37013" >744</a> <br /></span>
+href="pnl-manual.html#dx1-37013" >745</a> <br /></span>
 <span class="index-item">pnl_vect_qsort, <a 
-href="pnl-manual.html#dx1-40007" >745</a> <br /></span>
+href="pnl-manual.html#dx1-40007" >746</a> <br /></span>
 <span class="index-item">pnl_vect_qsort_index, <a 
-href="pnl-manual.html#dx1-40008" >746</a> <br /></span>
+href="pnl-manual.html#dx1-40008" >747</a> <br /></span>
 <span class="index-item">pnl_vect_rand_normal, <a 
-href="pnl-manual.html#dx1-103016" >747</a> <br /></span>
+href="pnl-manual.html#dx1-103016" >748</a> <br /></span>
 <span class="index-item">pnl_vect_rand_normal_d, <a 
-href="pnl-manual.html#dx1-103018" >748</a> <br /></span>
+href="pnl-manual.html#dx1-103018" >749</a> <br /></span>
 <span class="index-item">pnl_vect_rand_uni, <a 
-href="pnl-manual.html#dx1-103015" >749</a> <br /></span>
+href="pnl-manual.html#dx1-103015" >750</a> <br /></span>
 <span class="index-item">pnl_vect_rand_uni_d, <a 
-href="pnl-manual.html#dx1-103017" >750</a> <br /></span>
+href="pnl-manual.html#dx1-103017" >751</a> <br /></span>
 <span class="index-item">pnl_vect_resize, <a 
-href="pnl-manual.html#dx1-33001" >751</a> <br /></span>
+href="pnl-manual.html#dx1-33001" >752</a> <br /></span>
 <span class="index-item">pnl_vect_resize_from_ptr, <a 
-href="pnl-manual.html#dx1-33003" >752</a> <br /></span>
+href="pnl-manual.html#dx1-33003" >753</a> <br /></span>
 <span class="index-item">pnl_vect_resize_from_scalar, <a 
-href="pnl-manual.html#dx1-33002" >753</a> <br /></span>
+href="pnl-manual.html#dx1-33002" >754</a> <br /></span>
 <span class="index-item">pnl_vect_reverse, <a 
-href="pnl-manual.html#dx1-41002" >754</a> <br /></span>
+href="pnl-manual.html#dx1-41002" >755</a> <br /></span>
 <span class="index-item">pnl_vect_rng_bernoulli, <a 
-href="pnl-manual.html#dx1-102029" >755</a> <br /></span>
+href="pnl-manual.html#dx1-102029" >756</a> <br /></span>
 <span class="index-item">pnl_vect_rng_bernoulli_d, <a 
-href="pnl-manual.html#dx1-102030" >756</a> <br /></span>
+href="pnl-manual.html#dx1-102030" >757</a> <br /></span>
 <span class="index-item">pnl_vect_rng_normal, <a 
-href="pnl-manual.html#dx1-102034" >757</a> <br /></span>
+href="pnl-manual.html#dx1-102034" >758</a> <br /></span>
 <span class="index-item">pnl_vect_rng_normal_d, <a 
-href="pnl-manual.html#dx1-102036" >758</a> <br /></span>
+href="pnl-manual.html#dx1-102036" >759</a> <br /></span>
 <span class="index-item">pnl_vect_rng_poisson, <a 
-href="pnl-manual.html#dx1-102031" >759</a> <br /></span>
+href="pnl-manual.html#dx1-102031" >760</a> <br /></span>
 <span class="index-item">pnl_vect_rng_poisson_d, <a 
-href="pnl-manual.html#dx1-102032" >760</a> <br /></span>
+href="pnl-manual.html#dx1-102032" >761</a> <br /></span>
 <span class="index-item">pnl_vect_rng_uni, <a 
-href="pnl-manual.html#dx1-102033" >761</a> <br /></span>
+href="pnl-manual.html#dx1-102033" >762</a> <br /></span>
 <span class="index-item">pnl_vect_rng_uni_d, <a 
-href="pnl-manual.html#dx1-102035" >762</a> <br /></span>
+href="pnl-manual.html#dx1-102035" >763</a> <br /></span>
 <span class="index-item">pnl_vect_scalar_prod, <a 
-href="pnl-manual.html#dx1-38004" >763</a> <br /></span>
+href="pnl-manual.html#dx1-38004" >764</a> <br /></span>
 <span class="index-item">pnl_vect_set, <a 
-href="pnl-manual.html#dx1-34007" >764</a> <br /></span>
+href="pnl-manual.html#dx1-34007" >765</a> <br /></span>
 <span class="index-item">pnl_vect_set_all, <a 
-href="pnl-manual.html#dx1-34010" >765</a> <br /></span>
+href="pnl-manual.html#dx1-34010" >766</a> <br /></span>
 <span class="index-item">pnl_vect_set_subblock, <a 
-href="pnl-manual.html#dx1-32015" >766</a> <br /></span>
+href="pnl-manual.html#dx1-32015" >767</a> <br /></span>
 <span class="index-item">pnl_vect_set_zero, <a 
-href="pnl-manual.html#dx1-34011" >767</a> <br /></span>
+href="pnl-manual.html#dx1-34011" >768</a> <br /></span>
 <span class="index-item">pnl_vect_sum, <a 
-href="pnl-manual.html#dx1-37011" >768</a> <br /></span>
+href="pnl-manual.html#dx1-37011" >769</a> <br /></span>
 <span class="index-item">pnl_vect_swap_elements, <a 
-href="pnl-manual.html#dx1-41001" >769</a> <br /></span>
+href="pnl-manual.html#dx1-41001" >770</a> <br /></span>
 <span class="index-item">pnl_vect_wrap_array, <a 
-href="pnl-manual.html#dx1-32017" >770</a> <br /></span>
+href="pnl-manual.html#dx1-32017" >771</a> <br /></span>
 <span class="index-item">pnl_vect_wrap_hmat, <a 
-href="pnl-manual.html#dx1-90005" >771</a> <br /></span>
+href="pnl-manual.html#dx1-90005" >772</a> <br /></span>
 <span class="index-item">pnl_vect_wrap_mat, <a 
-href="pnl-manual.html#dx1-32020" >772</a> <br /></span>
+href="pnl-manual.html#dx1-32020" >773</a> <br /></span>
 <span class="index-item">pnl_vect_wrap_mat_row, <a 
-href="pnl-manual.html#dx1-50017" >773</a> <br /></span>
+href="pnl-manual.html#dx1-50017" >774</a> <br /></span>
 <span class="index-item">pnl_vect_wrap_subvect, <a 
-href="pnl-manual.html#dx1-32018" >774</a> <br /></span>
+href="pnl-manual.html#dx1-32018" >775</a> <br /></span>
 <span class="index-item">pnl_vect_wrap_subvect_with_last, <a 
-href="pnl-manual.html#dx1-32019" >775</a> <br /></span>
+href="pnl-manual.html#dx1-32019" >776</a> <br /></span>
 </p><p class="theindex">
 <span class="index-item">RCadd, <a 
-href="pnl-manual.html#dx1-26008" >776</a> <br /></span>
+href="pnl-manual.html#dx1-26008" >777</a> <br /></span>
                                                                                     
 
                                                                                     
 <span class="index-item">RCdiv, <a 
-href="pnl-manual.html#dx1-26017" >777</a> <br /></span>
+href="pnl-manual.html#dx1-26017" >778</a> <br /></span>
 <span class="index-item">RCmul, <a 
-href="pnl-manual.html#dx1-26014" >778</a> <br /></span>
+href="pnl-manual.html#dx1-26014" >779</a> <br /></span>
 <span class="index-item">RCsub, <a 
-href="pnl-manual.html#dx1-26011" >779</a> <br /></span>
+href="pnl-manual.html#dx1-26011" >780</a> <br /></span>
 </p><p class="theindex">
 <span class="index-item">SQR, <a 
-href="pnl-manual.html#dx1-18008" >780</a> <br /></span>
+href="pnl-manual.html#dx1-18008" >781</a> <br /></span>
 <span class="index-item">Structs <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlArray, <a 
-href="pnl-manual.html#dx1-14001" >781</a> <br /></span>
+href="pnl-manual.html#dx1-14001" >782</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlBandMat, <a 
-href="pnl-manual.html#dx1-72001" >782</a> <br /></span>
+href="pnl-manual.html#dx1-72001" >783</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlBasis, <a 
-href="pnl-manual.html#dx1-105001" >783</a> <br /></span>
+href="pnl-manual.html#dx1-105001" >784</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlBicgSolver, <a 
-href="pnl-manual.html#dx1-94003" >784</a> <br /></span>
+href="pnl-manual.html#dx1-94003" >785</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlCell, <a 
-href="pnl-manual.html#dx1-13002" >785</a> <br /></span>
+href="pnl-manual.html#dx1-13002" >786</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlCgSolver, <a 
-href="pnl-manual.html#dx1-94002" >786</a> <br /></span>
+href="pnl-manual.html#dx1-94002" >787</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlCmplxFunc, <a 
-href="pnl-manual.html#dx1-118001" >787</a> <br /></span>
+href="pnl-manual.html#dx1-118001" >788</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlFunc, <a 
-href="pnl-manual.html#dx1-130001" >788</a> <br /></span>
+href="pnl-manual.html#dx1-130001" >789</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlFunc2D, <a 
-href="pnl-manual.html#dx1-130002" >789</a> <br /></span>
+href="pnl-manual.html#dx1-130002" >790</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlFuncDFunc, <a 
-href="pnl-manual.html#dx1-130003" >790</a> <br /></span>
+href="pnl-manual.html#dx1-130003" >791</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlGmresSolver, <a 
-href="pnl-manual.html#dx1-94004" >791</a> <br /></span>
+href="pnl-manual.html#dx1-94004" >792</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlHmat, <a 
-href="pnl-manual.html#dx1-87001" >792</a> <br /></span>
+href="pnl-manual.html#dx1-87001" >793</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlHmatComplex, <a 
-href="pnl-manual.html#dx1-87003" >793</a> <br /></span>
+href="pnl-manual.html#dx1-87003" >794</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlHmatInt, <a 
-href="pnl-manual.html#dx1-87002" >794</a> <br /></span>
+href="pnl-manual.html#dx1-87002" >795</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlIterationBase, <a 
-href="pnl-manual.html#dx1-94001" >795</a> <br /></span>
+href="pnl-manual.html#dx1-94001" >796</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlList, <a 
-href="pnl-manual.html#dx1-13001" >796</a> <br /></span>
+href="pnl-manual.html#dx1-13001" >797</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlMat, <a 
-href="pnl-manual.html#dx1-47001" >797</a> <br /></span>
+href="pnl-manual.html#dx1-47001" >798</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlMatComplex, <a 
-href="pnl-manual.html#dx1-47003" >798</a> <br /></span>
+href="pnl-manual.html#dx1-47003" >799</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlMatInt, <a 
-href="pnl-manual.html#dx1-47002" >799</a> <br /></span>
+href="pnl-manual.html#dx1-47002" >800</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlObject, <a 
-href="pnl-manual.html#dx1-12001" >800</a> <br /></span>
+href="pnl-manual.html#dx1-12001" >801</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlODEFunc, <a 
-href="pnl-manual.html#dx1-120001" >801</a> <br /></span>
+href="pnl-manual.html#dx1-120001" >802</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlPermutation, <a 
-href="pnl-manual.html#dx1-61001" >802</a> <br /></span>
+href="pnl-manual.html#dx1-61001" >803</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlRnFuncR, <a 
-href="pnl-manual.html#dx1-130004" >803</a> <br /></span>
+href="pnl-manual.html#dx1-130004" >804</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlRnFuncRm, <a 
-href="pnl-manual.html#dx1-130005" >804</a> <br /></span>
+href="pnl-manual.html#dx1-130005" >805</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlRnFuncRmDFunc, <a 
-href="pnl-manual.html#dx1-130007" >805</a> <br /></span>
+href="pnl-manual.html#dx1-130007" >806</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlRnFuncRn, <a 
-href="pnl-manual.html#dx1-130006" >806</a> <br /></span>
+href="pnl-manual.html#dx1-130006" >807</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlRnFuncRnDFunc, <a 
-href="pnl-manual.html#dx1-130008" >807</a> <br /></span>
+href="pnl-manual.html#dx1-130008" >808</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlRng, <a 
-href="pnl-manual.html#dx1-102001" >808</a> <br /></span>
+href="pnl-manual.html#dx1-102001" >809</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlSpMat, <a 
-href="pnl-manual.html#dx1-79001" >809</a> <br /></span>
+href="pnl-manual.html#dx1-79001" >810</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlSpMatComplex, <a 
-href="pnl-manual.html#dx1-79003" >810</a> <br /></span>
+href="pnl-manual.html#dx1-79003" >811</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlSpMatInt, <a 
-href="pnl-manual.html#dx1-79002" >811</a> <br /></span>
+href="pnl-manual.html#dx1-79002" >812</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlTridiagMat, <a 
-href="pnl-manual.html#dx1-63001" >812</a> <br /></span>
+href="pnl-manual.html#dx1-63001" >813</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlTridiagMatLU, <a 
-href="pnl-manual.html#dx1-63002" >813</a> <br /></span>
+href="pnl-manual.html#dx1-63002" >814</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlVect, <a 
-href="pnl-manual.html#dx1-29001" >814</a> <br /></span>
+href="pnl-manual.html#dx1-29001" >815</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlVectCompact, <a 
-href="pnl-manual.html#dx1-44001" >815</a> <br /></span>
+href="pnl-manual.html#dx1-44001" >816</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlVectComplex, <a 
-href="pnl-manual.html#dx1-29003" >816</a> <br /></span>
+href="pnl-manual.html#dx1-29003" >817</a> <br /></span>
 <span class="index-subitem">&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlVectInt, <a 
-href="pnl-manual.html#dx1-29002" >817</a> <br /></span>
+href="pnl-manual.html#dx1-29002" >818</a> <br /></span>
 </p></div>
  
 </body></html> 
