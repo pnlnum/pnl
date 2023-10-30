@@ -10,6 +10,8 @@
 \usepackage[english]{babel}
 \usepackage[strings]{underscore}
 \usepackage{amsmath,amsfonts}
+\usepackage{listings}
+\lstset{language=C, basicstyle=\small, breaklines=true}
 
 \synctex=1
 
@@ -184,19 +186,19 @@ parts.
 \begin{itemize}
   \item All header file names are prefixed by \verb!pnl_! and are surrounded by
     the preprocessor conditionals
-\begin{verbatim}
+\begin{lstlisting}
 #ifndef _PNL_MATRIX_H
 #define _PNL_MATRIX_H
 
 ...
 
 #endif /* _PNL_MATRIX_H
-\end{verbatim}
+\end{lstlisting}
 All the header files are protected by an \verb!extern "C"! declaration for
 possible use with a C++ compiler. The header files must be include using
-\begin{verbatim}
+\begin{lstlisting}
 #include "pnl/pnl_xxx.h"
-\end{verbatim}
+\end{lstlisting}
 
   \item All function names are prefixed by \verb!pnl_! except those implementing
     complex number arithmetic which are named following the \textit{C99}
@@ -237,7 +239,7 @@ possible use with a C++ compiler. The header files must be include using
     For instance, a function \verb!pnl_foo_wrap_xxx! returns an object
     \verb!PnlFoo! and a function \verb!pnl_foo_bar_wrap_xxx! returns an object
     \verb!PnlFooBar! 
-    \begin{verbatim}
+    \begin{lstlisting}
     PnlVectComplex *v1;
     PnlVectComplex v2;
     v1 = pnl_vect_complex_create_from_scalar (5, Complex(0., 1.));
@@ -246,7 +248,7 @@ possible use with a C++ compiler. The header files must be include using
     ...
 
     pnl_vect_complex_free (&v1);
-    \end{verbatim}
+    \end{lstlisting}
     The vector \verb!v1! is of size 5 and contains the pure imaginary number
     $i$. The vector \verb!v2! only provides a view to \verb!v1(1:1+2)!, which
     means that modifying \verb!v2! will also modify \verb!v1! and vice-versa
@@ -316,11 +318,11 @@ possible use with a C++ compiler. The header files must be include using
     The \verb!copy! methods take a single argument and return a pointer to an object
     of the same type which is an independent copy of its argument. 
     Example:
-    \begin{verbatim}
+    \begin{lstlisting}
     PnlVect *v1, *v2;
     v1 = pnl_vect_create_from_scalar (5, 2.5);
     v2 = pnl_vect_copy (v1);
-    \end{verbatim}
+    \end{lstlisting}
     \verb!v1! and \verb!v2! are two vectors of size 5 with all their elements
     equal to 2.5. Note that \verb!v2! {\bf must not} have been created by a call
     to \verb!pnl_vect_create_xxx! because otherwise it will cause a memory leak.
@@ -330,12 +332,12 @@ possible use with a C++ compiler. The header files must be include using
     The \verb!clone! methods take two arguments and fill the first one with the
     second one. 
     Example:
-    \begin{verbatim}
+    \begin{lstlisting}
     PnlVect *v1, *v2;
     v1 = pnl_vect_create_from_scalar (5, 2.5);
     v2 = pnl_vect_new ();
     pnl_vect_clone (v2, v1);
-    \end{verbatim}
+    \end{lstlisting}
     \verb!v1! and \verb!v2! are two vectors of size 5 with all their elements
     equal to 2.5. Note that \verb!v2! {\bf must} have been created by a call to
     \verb!pnl_vect_new! because otherwise the function
@@ -366,9 +368,9 @@ Once installed, the library can be found in the
 The header files of the library are installed in a root \verb!pnl! directory and
 should always be included with this \verb!pnl/! prefix. So, for instance to use
 random number generators you should include 
-\begin{verbatim}
+\begin{lstlisting}
 #include <pnl/pnl_random.h>
-\end{verbatim}
+\end{lstlisting}
 
 \paragraph{Compiling and linking by hand.}
 
@@ -402,7 +404,7 @@ adding the _SRC suffix.
 Assume you want to create two binaries : \verb+my-exec+ based on mixed C and C++
 code (\verb+file1.c+ and \verb+file2.cpp+) and \verb+mybinary+ based on
 \verb+poo1.cxx+ and \verb+poo2.cpp+. You can use the following Makefile.
-\begin{verbatim}
+\begin{lstlisting}
 ## Flags passed to the linker
 LDFLAGS=
 
@@ -427,7 +429,7 @@ mybinary_LDFLAGS=
 
 ## This line must be the last one
 include full_path_to_pnl_build/CMakeuser.incl
-\end{verbatim}
+\end{lstlisting}
 Let us comment a little the different variables
 \begin{itemize}
   \item \verb+CFLAGS+: global flags used for creating objects based on C code
@@ -446,7 +448,7 @@ An example of such a Makefile can be found in \verb+pnl-xxx/perso+.
 flags used to compile this file are determined by the ones of the first binary
 involving this file. In the following example \verb+main.cpp+ will always be compiled
 with the flag \verb+-O3+ even for generating \verb+bin2+
-\begin{verbatim}
+\begin{lstlisting}
 BINS=bin1 bin2
 
 bin1_SRC=main.cpp poo1.c
@@ -457,13 +459,13 @@ mybinary_CXXFLAGS=-g -O0
 
 ## This line must be the last one
 include full_path_to_pnl_build/CMakeuser.incl
-\end{verbatim}
+\end{lstlisting}
 
 \paragraph{Compiling and linking using CMake.}
 
 If you already use CMake for your new project, just add the following to your toplevel
 \verb!CMakeLists.txt!
-\begin{verbatim}
+\begin{lstlisting}
 find_package(Pnl REQUIRED)
 set(LIBS ${LIBS} ${PNL_LIBRARIES})
 include_directories(${PNL_INCLUDE_DIRS})
@@ -471,11 +473,11 @@ include_directories(${PNL_INCLUDE_DIRS})
 if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
     add_definitions(-DPNL_RANGE_CHECK_OFF)
 endif()
-\end{verbatim}
+\end{lstlisting}
 Then, call cmake with the following extra flag 
-\begin{verbatim}
+\begin{lstlisting}
 -DCMAKE_PREFIX_PATH=path/to/build-dir
-\end{verbatim}
+\end{lstlisting}
 or add the variable \verb!CMAKE_BUILD_TYPE! to the GUI. \\
 
 Just in case, we give an example of a complete although elementary \verb!CMakeLists.txt!

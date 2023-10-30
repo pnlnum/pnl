@@ -13,7 +13,7 @@ dcomplex. In the following declarations, {\tt BASE} must be replaced by one
 the previous types and the corresponding vector structures are respectively
 named PnlVect, PnlVectInt, PnlVectComplex
 \describestruct{PnlVect}\describestruct{PnlVectInt}\describestruct{PnlVectComplex}
-\begin{verbatim}
+\begin{lstlisting}
 typedef struct _PnlVect {
   /**
    * Must be the first element in order for the object mechanism to work
@@ -50,7 +50,7 @@ typedef struct _PnlVectComplex {
   dcomplex *array; /*!< pointer to store the data */
   int owner; /*!< 1 if the object owns its array member, 0 otherwise */
 } PnlVectComplex;
-\end{verbatim}
+\end{lstlisting}
 \var{size} is the size of the vector, \var{array} is a pointer containing the
 data and \var{owner} is an integer to know if the vector owns its \var{array}
 pointer (\var{owner=1}) or shares it with another structure (\var{owner=0}).
@@ -404,23 +404,23 @@ no total ordering on Complex numbers
   small letters for real values)
   \begin{itemize}
     \item \verb!ind = find ( a < X )!
-      \begin{verbatim}
+      \begin{lstlisting}
       int isless ( double *t ) { return t[0] < t[1]; }
       pnl_vect_find ( ind, "rv", isless, a, X );
-      \end{verbatim}
+      \end{lstlisting}
     \item \verb!ind = find (X <= Y)!
-      \begin{verbatim}
+      \begin{lstlisting}
       int isless ( double *t ) { return t[0] <= t[1]; }
       pnl_vect_find ( ind, "vv", isless, X, Y );
-      \end{verbatim}
+      \end{lstlisting}
     \item \verb!ind = find ((a < X) && (X <= Y))!
-      \begin{verbatim}
+      \begin{lstlisting}
       int cmp ( double *t ) 
       { 
         return (t[0] <= t[1]) && (t[1] <= t[2]); 
       }
       pnl_vect_find ( ind, "rvv", cmp, a, X, Y );
-      \end{verbatim}
+      \end{lstlisting}
   \end{itemize}
   \var{ind} contains on exit the indices \var{i} for which the function \var{f}
   returned \var{1}. This function returns \var{OK} or \var{FAIL} when something
@@ -515,7 +515,7 @@ functions at least in principle.
 \subsubsection{Short description}
 
 \describestruct{PnlVectCompact}
-\begin{verbatim}
+\begin{lstlisting}
 typedef struct PnlVectCompact {
   /**
    * Must be the first element in order for the object mechanism to work
@@ -527,7 +527,7 @@ typedef struct PnlVectCompact {
   double *array; /* Pointer to double values */
   char convert; /* 'a', 'd' : array, double */
 } PnlVectCompact;
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Functions}
 
@@ -579,7 +579,7 @@ The structures and functions related to matrices are declared in
 \verb!pnl/pnl_matrix.h!.
 
 \describestruct{PnlMat}\describestruct{PnlMatInt}\describestruct{PnlMatComplex}
-\begin{verbatim}
+\begin{lstlisting}
 typedef struct _PnlMat{
   /**
    * Must be the first element in order for the object mechanism to work
@@ -622,7 +622,7 @@ typedef struct _PnlMatComplex{
   dcomplex *array; /*!< pointer to store the data row-wise */
   int owner; /*!< 1 if the object owns its array member, 0 otherwise */
 } PnlMatComplex;
-\end{verbatim}
+\end{lstlisting}
 \var{m} is the number of rows, \var{n} is the number of columns. \var{array}
 is a pointer containing the data of the matrix stored line wise, The element
 \verb!(i, j)! of the matrix is \verb!array[i*m+j]!. \var{owner} is an integer to
@@ -880,6 +880,12 @@ Accessing elements of a matrix is faster using the following macros
   saved matrix can be reloaded by the function
   \reffun{pnl_mat_create_from_file}.
 
+\item \describefun{void}{pnl_mat_print_csv}{const \PnlMat \ptr M, char sep}
+  \sshortdescribe Print a matrix to the standard output in the CSV format using separator \var{sep}.
+
+\item \describefun{void}{pnl_mat_fprint_csv}{FILE \ptr fic, const \PnlMat \ptr M, char sep}
+  \sshortdescribe Print a matrix to a CSV file using separator \var{sep}.
+
 \item \describefun{void}{pnl_mat_print_nsp}{const \PnlMat \ptr M}
   \sshortdescribe Print a matrix to the standard output in a format
   compatible with Nsp.  
@@ -1053,23 +1059,23 @@ Accessing elements of a matrix is faster using the following macros
   small letters for real values)
   \begin{itemize}
     \item \verb![indi, indj] = find ( a < X )!
-      \begin{verbatim}
+      \begin{lstlisting}
       int isless ( double *t ) { return t[0] < t[1]; }
       pnl_mat_find ( indi, indj, "rm", isless, a, X );
-      \end{verbatim}
+      \end{lstlisting}
     \item \verb!ind = find (X <= Y)!
-      \begin{verbatim}
+      \begin{lstlisting}
       int isless ( double *t ) { return t[0] <= t[1]; }
       pnl_mat_find ( ind, "mm", isless, X, Y );
-      \end{verbatim}
+      \end{lstlisting}
     \item \verb![indi, indj] = find ((a < X) && (X <= Y))!
-      \begin{verbatim}
+      \begin{lstlisting}
       int cmp ( double *t ) 
       { 
         return (t[0] <= t[1]) && (t[1] <= t[2]); 
       }
       pnl_mat_find ( indi, indj, "rmm", cmp, a, X, Y );
-      \end{verbatim}
+      \end{lstlisting}
   \end{itemize}
   \var{(indi, indj)} contains on exit the indices \var{(i,j)} for which the function \var{f}
   returned \var{1}. Note that if \var{indj == NULL} on entry, a linear indexing
@@ -1404,9 +1410,9 @@ computations have been carried out successfully and \var{FAIL} otherwise.
 \subsubsection{Permutations}
 
 \describestruct{PnlPermutation}
-\begin{verbatim}
+\begin{lstlisting}
 typedef PnlVectInt PnlPermutation;
-\end{verbatim}
+\end{lstlisting}
 
 The \verb!PnlPermutation! type is actually nothing else than a vector of
 integers, i.e. a \verb!PnlVectInt!. It is used to store the partial pivoting
@@ -1476,7 +1482,7 @@ The structures and functions related to tridiagonal matrices are declared in
 We only store the three main diagonals as three vectors.
 
 \describestruct{PnlTridiagMat}
-\begin{verbatim}
+\begin{lstlisting}
 typedef struct PnlTridiagMat{
   /**
    * Must be the first element in order for the object mechanism to work
@@ -1488,14 +1494,14 @@ typedef struct PnlTridiagMat{
   double *DU; /*!< upper diagonal elements */
   double *DL; /*!< lower diagonal elements */
 } PnlTridiagMat;
-\end{verbatim}
+\end{lstlisting}
 \var{size} is the size of the matrix, \var{D} is an array of size \var{size}
 containing the diagonal terms. \var{DU},
 \var{DL} are two arrays of size \var{size-1} containing respectively the upper
 diagonal ($M_{i, i+1}$) and the lower diagonal ($M_{i-1, i}$). 
 
 \describestruct{PnlTridiagMatLU}
-\begin{verbatim}
+\begin{lstlisting}
 typedef struct PnlTridiagMatLU{
   /** 
    * Must be the first element in order for the object mechanism to work
@@ -1509,7 +1515,7 @@ typedef struct PnlTridiagMatLU{
   double *DL; /*!< lower diagonal elements */
   int *ipiv; /*!< Permutation: row i has been interchanged with row ipiv(i) */
 };
-\end{verbatim}
+\end{lstlisting}
 This type is used to store the LU decomposition of a tridiagonal matrix. 
 
 \subsubsection{Functions}
@@ -1664,7 +1670,7 @@ inline. To speed up these functions, you can use the macro constant
 \subsubsection{Overview}
 
 \describestruct{PnlBandMat}
-\begin{verbatim}
+\begin{lstlisting}
 typedef struct
 {
   /**
@@ -1680,7 +1686,7 @@ typedef struct
   int n_band; /*!< nb columns of the band storage */
   double *array;  /*!< a block to store the bands */  
 } PnlBandMat;
-\end{verbatim}
+\end{lstlisting}
 
 
 The structures and functions related to band matrices are declared in
@@ -1846,7 +1852,7 @@ The structures and functions related to matrices are declared in
 \verb!pnl/pnl_sp_matrix.h!.
 
 \describestruct{PnlSpMat}\describestruct{PnlSpMatInt}\describestruct{PnlSpMatComplex}
-\begin{verbatim}
+\begin{lstlisting}
 typedef struct _PnlSpMat
 {
   /** 
@@ -1900,7 +1906,7 @@ typedef struct _PnlSpMatComplex
   dcomplex *array; /*!< pointer to store the data of size nzmax */
   int nzmax; /*!< size of the memory block allocated for array */
 } PnlSpMatComplex;
-\end{verbatim}
+\end{lstlisting}
 
 The non zero elements of row \var{i} are stored in \var{array} between the
 indices \var{I[i]} and \var{I[i+1]-1}. The array \var{J} contains the column
@@ -1949,14 +1955,14 @@ for integer, float or complex base data according to the following table
   \sshortdescribe Create a sparse matrix from a dense one.
 \item \describefun{void}{pnl_sp_mat_create_from_file}{char *file}
   \sshortdescribe Read a sparse matrix from the file with name \var{file}. We use the Matrix Market Exchange Format
-  \begin{verbatim}
+  \begin{lstlisting}
 M  N  L                                   | <--- rows, columns, entries
 I1  J1  A(I1, J1)                         | <--+
 I2  J2  A(I2, J2)                         |    |
 I3  J3  A(I3, J3)                         |    |-- L lines
     . . .                                 |    |
 IL JL  A(IL, JL)                          | <--+
-  \end{verbatim}
+  \end{lstlisting}
   The format \verb!(I1, J1) A(I1, J1)! is also accepted. Anything after a \verb!#! or \verb!%! is ignored up to the end of the line.
 \end{itemize}
 
@@ -2034,7 +2040,7 @@ IL JL  A(IL, JL)                          | <--+
 The Hyper matrix types and related functions are defined in the header \verb!pnl/pnl_matrix.h!.
 
 \describestruct{PnlHmat}\describestruct{PnlHmatInt}\describestruct{PnlHmatComplex}
-\begin{verbatim}
+\begin{lstlisting}
 typedef struct PnlHmat{
   /**
    * Must be the first element in order for the object mechanism to work
@@ -2076,7 +2082,7 @@ typedef struct PnlHmatComplex{
                 with pdims[ndim - 1] = 1 */
   dcomplex *array; /*!< pointer to store */
 } PnlHmatComplex;
-\end{verbatim}
+\end{lstlisting}
 \var{ndim} is the number of dimensions, \var{dim} is an array to store the
 size of each dimension and \var{nm} contains the product of the sizes of each
 dimension. \var{array} is an array of size \var{mn} containing the data. The
@@ -2203,14 +2209,14 @@ the above table.
 % Conjugate Gradient, BICGstab or GMRES. These methods are discussed in the next
 % section. If we use iterative methods, we can use \PnlMorseMat. 
 
-% \begin{verbatim}
+% \begin{lstlisting}
 % typedef struct SpRow{
 %   int size;  /*!< size of a row */
 %   int Max_size; /*!< max size allocation of a row */
 %   int    *Index; /*!< pointer to an int array giving the columns or row i */
 %   double *Value; /*!< Pointer on values */
 % }SpRow;
-% \end{verbatim}
+% \end{lstlisting}
 % \var{size} is the number of elements, 
 % \var{Max_size} is the size of memory allocation.
 % \var{Index}, is the pointer containing the index of row or column, 
@@ -2219,14 +2225,14 @@ the above table.
 % If $k \leq size $ then
 % $$M_{i, Index[k]}=Value[k].$$  
 
-% \begin{verbatim}
+% \begin{lstlisting}
 % typedef struct PnlMorseMat{
 %   int m; /*!< nb rows */ 
 %   int n; /*!< nb columns */ 
 %   SpRow * array; /*!< pointer in each row or col to store no nul coefficients */
 %   int RC; /*!< 0 if we use row-wise storage, 1 if we use column-wise storage */ 
 % } PnlMorseMat;
-% \end{verbatim}
+% \end{lstlisting}
 % \var{m} is the number of rows, \var{n} is the number of columns.
 % \var{array} is the pointer containing on SpRow array of size n or m (depend of
 % RC).
@@ -2408,7 +2414,7 @@ The structures and functions related to solvers are declared in
 \describestruct{PnlCgSolver}
 \describestruct{PnlBicgSolver}
 \describestruct{PnlGmresSolver}
-\begin{verbatim}
+\begin{lstlisting}
 typedef struct _PnlIterationBase PnlIterationBase;
 typedef struct _PnlCgSolver PnlCgSolver;
 typedef struct _PnlBicgSolver PnlBicgSolver;
@@ -2487,7 +2493,7 @@ struct _PnlGmresSolver
   PnlIterationBase *iter;
   PnlIterationBase *iter_inner;
 } ;
-\end{verbatim}
+\end{lstlisting}
 
 A Left preconditioner solves the problem :
 $$ P M x = P b, $$
@@ -2522,14 +2528,14 @@ elliptic problem come from parabolic problem. In the cases, do not call the cons
 destructor at each time, but instead use the initialization and solve procedures.
 
 Formally we have, 
-\begin{verbatim}
+\begin{lstlisting}
 Create iterative method
 For each time step
   Initialisation of iterative method
   Solve linear system link to elliptic problem
 end for
 free iterative method
-\end{verbatim}
+\end{lstlisting}
 
 In these functions, we don't use any particular matrix structure. We give the
 matrix vector multiplication as a parameter of the solver. 
@@ -2588,20 +2594,20 @@ Note that if restart equals $m$, we have a classical GMRES algorithm.
 
 In the next paragraph, we write all the solvers for \PnlMat. This
 will be done as follows: construct an application matrix vector.
-\begin{verbatim}
+\begin{lstlisting}
 static void pnl_mat_mult_vect_applied(const void *mat, const PnlVect *vec, 
                                       const double a , const double b, 
                                       PnlVect *lhs)
 {pnl_mat_lAxpby(a, (PnlMat*)mat, vec, b, lhs);}
-\end{verbatim}
+\end{lstlisting}
 and give it as the parameter of the iterative method
-\begin{verbatim}
+\begin{lstlisting}
 int pnl_mat_cg_solver_solve(const PnlMat * Matrix, const PnlMat * PC, 
                             PnlVect * x, const PnlVect *b, PnlCgSolver * Solver)
 { return pnl_cg_solver_solve(pnl_mat_mult_vect_applied, 
                              Matrix, pnl_mat_mult_vect_applied, 
                              PC, x, b, Solver);}
-\end{verbatim}
+\end{lstlisting}
 
 In practice, we cannot define all iterative methods for all structures.
 With this implementation, the user can easily :

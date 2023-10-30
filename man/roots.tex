@@ -8,7 +8,7 @@ structures for storing different kind of functions. The pointer
 with dedicated macros starting in \verb!PNL_EVAL!  to evaluate the function
 and their Jacobian.
 \describestruct{PnlFunc}
-\begin{verbatim}
+\begin{lstlisting}
 /*
  * f: R --> R
  * The function  pointer returns f(x)
@@ -18,10 +18,10 @@ typedef struct {
   void *params;
 } PnlFunc ;
 #define PNL_EVAL_FUNC(Fstruct, x) (*((Fstruct)->F))(x, (Fstruct)->params)
-\end{verbatim}
+\end{lstlisting}
 
 \describestruct{PnlFunc2D}
-\begin{verbatim}
+\begin{lstlisting}
 /*
  * f: R^2 --> R
  * The function pointer returns f(x)
@@ -31,10 +31,10 @@ typedef struct {
   void *params;
 } PnlFunc2D ;
 #define PNL_EVAL_FUNC2D(Fstruct, x, y) (*((Fstruct)->F))(x, y, (Fstruct)->params)
-\end{verbatim}
+\end{lstlisting}
 
 \describestruct{PnlFuncDFunc}
-\begin{verbatim}
+\begin{lstlisting}
 /*
  * f: R --> R
  * The function pointer computes f(x) and Df(x) and stores them in fx
@@ -45,10 +45,10 @@ typedef struct {
   void *params;
 } PnlFuncDFunc ;
 #define PNL_EVAL_FUNC_FDF(Fstruct, x, fx, dfx) (*((Fstruct)->F))(x, fx, dfx, (Fstruct)->params)
-\end{verbatim}
+\end{lstlisting}
 
 \describestruct{PnlRnFuncR}
-\begin{verbatim}
+\begin{lstlisting}
 /*
  * f: R^n --> R
  * The function pointer returns f(x)
@@ -58,11 +58,11 @@ typedef struct {
   void *params;
 } PnlRnFuncR ;
 #define PNL_EVAL_RNFUNCR(Fstruct, x) (*((Fstruct)->F))(x, (Fstruct)->params)
-\end{verbatim}
+\end{lstlisting}
 
 \describestruct{PnlRnFuncRm}
 \describestruct{PnlRnFuncRn}
-\begin{verbatim}
+\begin{lstlisting}
 /*
  * f: R^n --> R^m
  * The function pointer computes the vector f(x) and stores it in
@@ -79,11 +79,11 @@ typedef struct {
  *
 typedef PnlRnFuncRm PnlRnFuncRn;
 #define PNL_EVAL_RNFUNCRN  PNL_EVAL_RNFUNCRM
-\end{verbatim}
+\end{lstlisting}
 
 \describestruct{PnlRnFuncRmDFunc}
 \describestruct{PnlRnFuncRnDFunc}
-\begin{verbatim}
+\begin{lstlisting}
 /*
  * f: R^n --> R^m
  * The function pointer computes the vector f(x) and stores it in fx
@@ -118,7 +118,7 @@ typedef PnlRnFuncRmDFunc PnlRnFuncRnDFunc;
 #define PNL_EVAL_RNFUNCRN_DF PNL_EVAL_RNFUNCRM_DF
 #define PNL_EVAL_RNFUNCRN_FDF PNL_EVAL_RNFUNCRM_FDF
 #define PNL_EVAL_RNFUNCRN_F_DF PNL_EVAL_RNFUNCRM_F_DF
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{Functions}
 

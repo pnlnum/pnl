@@ -7,7 +7,7 @@ Numerical integration methods are designed to numerically evaluate the integral
 over a finite or non finite interval (resp. over a square) of real valued
 functions defined on $\R$ (resp. on $\R^2$).
 
-\begin{verbatim}
+\begin{lstlisting}
 typedef struct {
   double (*function) (double x, void *params);
   void *params;
@@ -17,14 +17,14 @@ typedef struct {
   double (*function) (double x, double y, void *params);
   void *params;
 } PnlFunc2D;
-\end{verbatim}
+\end{lstlisting}
 
 We provide the following two macros to evaluate a \refstruct{PnlFunc} or
 \refstruct{PnlFunc2D} at a given point
-\begin{verbatim}
+\begin{lstlisting}
 #define PNL_EVAL_FUNC(F, x) (*((F)->function))(x, (F)->params)
 #define PNL_EVAL_FUNC2D(F, x, y) (*((F)->function))(x, y, (F)->params)
-\end{verbatim}
+\end{lstlisting}
 
 
 

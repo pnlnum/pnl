@@ -10,14 +10,14 @@ ordinary differential equation of the general form
 \end{equation*}
 The system of equations is defined by the following structure
 \describestruct{PnlODEFunc}
-\begin{verbatim}
+\begin{lstlisting}
 typedef struct
 {
   void (*F) (int neqn, double t, const double *y, double *yp, void *params);
   int neqn; 
   void *params;
 } PnlODEFunc ;
-\end{verbatim}
+\end{lstlisting}
 
 \begin{itemize}
 \item \describevar{int}{neqn} 
@@ -33,10 +33,10 @@ typedef struct
 \end{itemize}
 We provide the following macro to evaluate a \refstruct{PnlODEFunc}
 at a given point
-\begin{verbatim}
+\begin{lstlisting}
 #define PNL_EVAL_ODEFUNC(Fstruct, t, y, yp) \
     (*((Fstruct)->F))((Fstruct)->neqn, t, y, yp, (Fstruct)->params)
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{Functions}
 

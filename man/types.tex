@@ -7,7 +7,7 @@ ojbects of Pnl.  It must be the first element of all the objects existing in
 Pnl so that casting any object to a PnlObject is legal
 
 \describestruct{PnlObject}
-\begin{verbatim}
+\begin{lstlisting}
 typedef unsigned int PnlType; 
 
 typedef void (DestroyFunc) (void **);
@@ -26,7 +26,7 @@ struct _PnlObject
   CopyFunc    *copy; /*!< Copy function */
   CloneFunc   *clone; /*!< Clone function */
 };
-\end{verbatim}
+\end{lstlisting}
 
 Here is the list of all the types actually defined
 \begin{table}
@@ -124,7 +124,7 @@ The structures and functions related to lists are declared in
 \verb!pnl/pnl_list.h!.
 
 \describestruct{PnlList}\describestruct{PnlCell}
-\begin{verbatim}
+\begin{lstlisting}
 typedef struct _PnlCell PnlCell;
 struct _PnlCell
 {
@@ -150,7 +150,7 @@ struct _PnlList
                      if never accessed is NULLINT */
   int len; /*!< length of the list */
 };
-\end{verbatim}
+\end{lstlisting}
 
 \textbf{Important note}: Lists only store addresses of objects. So when an
 object is inserted into a list, only its address is stored into the list. This
@@ -218,7 +218,7 @@ The structures and functions related to arrays are declared in
 \verb!pnl/pnl_array.h!.
 
 \describestruct{PnlArray}
-\begin{verbatim}
+\begin{lstlisting}
 typedef struct _PnlArray PnlArray;
 struct _PnlArray
 {
@@ -231,7 +231,7 @@ struct _PnlArray
   PnlObject **array;
   int mem_size;
 };
-\end{verbatim}
+\end{lstlisting}
 
 \textbf{Important note}: Arrays only store addresses of objects. So when an
 object is inserted into an array, only its address is stored into the array. This

@@ -40,7 +40,7 @@ variable so that they can evolve independently in a shared memory environment.
 These generators are suitable for use in multi-threaded programs. 
 
 \describestruct{PnlRng}
-\begin{verbatim}
+\begin{lstlisting}
 typedef struct _PnlRng PnlRng;
 struct _PnlRng
 {
@@ -56,7 +56,7 @@ struct _PnlRng
   int size_state; /*!< size in bytes of the state variable */
   void *state; /*!< state of the random generator */
 };
-\end{verbatim}
+\end{lstlisting}
 
 
 \begin{itemize}
@@ -284,7 +284,7 @@ dimension \var{dimension}.
 \end{itemize}
 
 Some examples
-\begin{verbatim}
+\begin{lstlisting}
 #include <stdlib.h>
 #include "pnl/pnl_random.h"
 
@@ -310,9 +310,9 @@ int main ()
   pnl_rng_free(&rng); /* Frees the generator */
   exit(0);
 }
-\end{verbatim}
+\end{lstlisting}
 
-\begin{verbatim}
+\begin{lstlisting}
 #include <stdlib.h>
 #include <time.h>
 #include "pnl/pnl_random.h"
@@ -337,7 +337,7 @@ int main ()
   pnl_rng_free(&rng); /* Frees the generator */
   exit(0);
 }
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{The {\em rand} interface (deprecated)}
 \label{rand-int}
@@ -502,14 +502,14 @@ store it so that you can access the elements individually afterwards.
 %
 % It is possible to create Mersenne Twister random number generators each with
 % its state variable.
-% \begin{verbatim}
+% \begin{lstlisting}
 % typedef struct
 % {
 %   unsigned long mt[624];
 %   int mti;
 % } mt_state;
 % typedef unsigned long ulong;
-% \end{verbatim}
+% \end{lstlisting}
 %
 % \begin{itemize}
 % \item \describefun{void}{pnl_mt_sseed}{mt_state \ptr state, unsigned long int
@@ -530,7 +530,7 @@ store it so that you can access the elements individually afterwards.
 % \var{p=521} and word length \var{w=32} bits. These choices are hard coded and
 % cannot be changed without altering the code directly.
 %
-% \begin{verbatim}
+% \begin{lstlisting}
 % typedef struct
 % {
 %   ulong aaa;
@@ -541,7 +541,7 @@ store it so that you can access the elements individually afterwards.
 %   int i;
 %   ulong state[17];
 % } dcmt_state;
-% \end{verbatim}
+% \end{lstlisting}
 %
 % Some functions to use ``Dynamically Created Mersenne Twister'' random number
 % generators (DCMT).
