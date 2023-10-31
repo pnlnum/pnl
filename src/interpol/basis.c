@@ -68,24 +68,6 @@
       return NULL;                                      \
     }
 
-
-#if 0
-/**
- * Compute the maximum degree of the last component.
- * if the total degree of the other elements is @p partial.
- *
- * The total degree function is the sum of the partial degrees
- *
- * @param total total degree
- * @param partial partial degree already used
- */
-static int freedom_degree_sum(int total, int partial)
-{
-  if (partial > total) return -1;
-  return total - partial;
-}
-#endif
-
 /**
  * Compute the maximum degree of the last component
  * if the total degree of the other elements is @p partial.
@@ -105,12 +87,9 @@ static int freedom_degree_prod(int total, int partial)
  * Return the total degree (sum of the partial degrees) of the polynomial
  * represented by line i of T
  *
- * @param T a matrix of integers representing the decomposition of the mutli-d
- * polynomials
- * @param i the index of the element to be considered in the basis (i.e. the row
- * of T to consider)
- * @return  the total degree of the polynomials represented by
- * line i of T
+ * @param T a matrix of integers representing the decomposition of the multi-d polynomials
+ * @param i the index of the element to be considered in the basis (i.e. the row of T to consider)
+ * @return  the total degree of the polynomials represented by line i of T
  */
 static int count_sum_degree(const PnlMatInt *T, int i)
 {
@@ -131,12 +110,9 @@ static int count_sum_degree(const PnlMatInt *T, int i)
  * The total degree is the product of MAX(1, d_i) where d_i is the partial
  * degree. If all d_i are zeros, the total degree is 0.
  *
- * @param T a matrix of integers representing the decomposition of the mutli-d
- * polynomials
- * @param i the index of the element to be considered in the basis (i.e. the row
- * of T to consider)
- * @return  the total degree of the polynomials represented by
- * line i of T
+ * @param T a matrix of integers representing the decomposition of the multi-d polynomials
+ * @param i the index of the element to be considered in the basis (i.e. the row of T to consider)
+ * @return the total degree of the polynomials represented by line i of T
  */
 static int count_prod_degree(const PnlMatInt *T, int i)
 {
@@ -157,13 +133,10 @@ static int count_prod_degree(const PnlMatInt *T, int i)
  * Return the total hyperbolic degree at the power q of the polynomial
  * represented by line i of T
  *
- * @param T a matrix of integers representing the decomposition of the mutli-d
- * polynomials
- * @param i the index of the element to be considered in the basis (i.e. the row
- * of T to consider)
+ * @param T a matrix of integers representing the decomposition of the multi-d polynomials
+ * @param i the index of the element to be considered in the basis (i.e. the row of T to consider)
  * @param q the hyperbolic index
- * @return  the total degree of the polynomials represented by
- * line i of T
+ * @return the total degree of the polynomials represented by line i of T
  */
 static double count_hyperbolic_degree(const PnlMatInt *T, int i, double q)
 {
@@ -273,17 +246,16 @@ static PnlMatInt *compute_tensor(int nb_func, int nb_variates)
  *
  * @param T the tensor matrix of the basis with n-1 variates
  * @param degree the maximum total degree requested
- * @param count_degree a function to compute the total of a given line in a
- * tensor
- * @param freedom_degree a function to compute the number of degrees of
- * freedom
+ * @param count_degree a function to compute the total of a given line in a tensor
+ * @param freedom_degree a function to compute the number of degrees of freedom
  *
  * @return the number of elements with total degree less or equal than degree in
  * the basis with n variates
  */
 static int compute_nb_elements(const PnlMatInt *T, int degree,
-                               int (*count_degree)(const PnlMatInt *, int),
-                               int (*freedom_degree)(int, int))
+    int (*count_degree)(const PnlMatInt *, int),
+    int (*freedom_degree)(int, int)
+)
 {
   int i;
   int total_elements; /* Number of elements of total degree smaller than degree */
@@ -298,22 +270,20 @@ static int compute_nb_elements(const PnlMatInt *T, int degree,
 
 /**
  * Compute the tensor matrix of the nb_variates variate basis with a total degree less or
- * equal than degree. The total degree is defined by the function
- * count_degree
+ * equal than degree. The total degree is defined by the function count_degree
  *
  * @param nb_variates the number of variates of the basis.
  * @param degree the total degree
- * @param count_degree a function to compute the total of a given line in a
- * tensor
- * @param freedom_degree a function to compute the number of degrees of
- * freedom
+ * @param count_degree a function to compute the total of a given line in a tensor
+ * @param freedom_degree a function to compute the number of degrees of freedom
  *
  * @return the tensor matrix of the nb_variates variate basis with a total degree less or
  * equal than degree
  */
 static PnlMatInt *compute_tensor_from_degree_function(int degree, int nb_variates,
     int (*count_degree)(const PnlMatInt *, int),
-    int (*freedom_degree)(int total, int partial))
+    int (*freedom_degree)(int total, int partial)
+)
 {
   PnlMatInt *T;
   if (nb_variates <= 0)
@@ -450,8 +420,7 @@ static PnlMatInt *compute_tensor_from_prod_degree(int degree, int nb_variates)
  * @param q the hyperbolic index
  * @param degree the total hyperbolic degree
  *
- * @return the tensor matrix of the n-variate basis with a total degree less or
- * equal than degree
+ * @return the tensor matrix of the n-variate basis with a total degree less or equal than degree
  */
 static PnlMatInt *compute_tensor_from_hyperbolic_degree(double degree, double q, int n)
 {
@@ -475,7 +444,7 @@ static PnlMatInt *compute_tensor_from_hyperbolic_degree(double degree, double q,
 
 /**
  * Compute the tensor for a tensor local basis
- * 
+ *
  * @param space_dim the dimension of the state space
  * @param n_intervals this is an array of size \a space_dim describing the number of intervals for every dimension
  * @return PnlMatInt
@@ -645,8 +614,7 @@ static double D2HermiteD1(double x, int n, int dim, void *params)
 }
 
 /**
- * The terminal recursive function to compute Tchebychev polynomials of any
- * order.
+ * The terminal recursive function to compute Tchebychev polynomials of any order.
  * @param x the address of a real number
  * @param n the order of the polynomial to be evaluated
  * @param n0 rank of initialization
@@ -722,7 +690,7 @@ static double TchebychevD1(double x, int n, int dim, void *params)
  *  @param n the order of the polynomial to be evaluated
  *  @param n0 rank of initialization
  *  @param f_n used to store the derivative of the polynomial of order n0.
- *  @param f_n_1 used to store the derivative of  the polynomial of order
+ *  @param f_n_1 used to store the derivative of the polynomial of order
  *  n0-1.
  */
 static double DTchebychev_rec(double x, int n, int n0, double *f_n, double *f_n_1)
@@ -908,7 +876,7 @@ static int pnl_basis_type_tab_length = PNL_BASIS_MAX_TYPE; /*!< length of PnlBas
  * @param f the generating function in dimension 1
  * @param Df the first derivative of the generating function in dimension 1
  * @param D2f the second derivative of the generating function in dimension 1
- * @param is_orthogonal a boolean 
+ * @param is_orthogonal a boolean
  *
  * @return PNL_OK or PNL_FAIL
  */
