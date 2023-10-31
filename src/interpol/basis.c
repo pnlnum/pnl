@@ -1429,10 +1429,48 @@ double pnl_basis_ik(const PnlBasis *b, const double *x, int i, int k)
     }
 }
 
-/*
- * pnl_basis_i is moved to the header pnl_basis.h to be decalred as inlined.
- * For low order polynomials, the gain is about 20%
+/**
+ * Evaluate the i-th element of the basis b at the point x
+ *
+ * @deprecated Use the function pnl_basis_i_vect(const PnlBasis *b, const PnlVect *x, int i)
+ *
+ * @param b a PnlBasis
+ * @param x a C array containing the coordinates of the point at which to
+ * evaluate the basis
+ * @param i an integer describing the index of the element of the basis to
+ * considier
+ *
+ * @return f_i(x) where f is the i-th basis function
  */
+PNL_INLINE_FUNC double pnl_basis_i(const PnlBasis *b, const double *x, int i)
+{
+  int k;
+  double aux = 1.;
+  if (i > b->len_T - 1)
+    {
+      PnlVect view = pnl_vect_wrap_array(x, b->nb_variates);
+      return PNL_EVAL_RNFUNCR(&(b->func_list[i-b->len_T]), &view);
+    }
+  if (b->isreduced == 1)
+    {
+      for (k = b->SpT->I[i] ; k < b->SpT->I[i + 1] ; k++)
+        {
+          const int j = b->SpT->J[k];
+          const int Tij = b->SpT->array[k];
+          aux *= (b->f)((x[j] - b->center[j]) * b->scale[j], Tij, j, b->params);
+        }
+    }
+  else
+    {
+      for (k = b->SpT->I[i] ; k < b->SpT->I[i + 1] ; k++)
+        {
+          const int j = b->SpT->J[k];
+          const int Tij = b->SpT->array[k];
+          aux *= (b->f)(x[j], Tij, j, b->params);
+        }
+    }
+  return aux;
+}
 
 /**
  * First order derivative

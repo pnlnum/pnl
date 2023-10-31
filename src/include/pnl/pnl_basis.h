@@ -111,6 +111,7 @@ extern void pnl_basis_set_reduced(PnlBasis *B, const PnlVect *center, const PnlV
 extern void pnl_basis_free(PnlBasis **basis);
 extern void pnl_basis_print(const PnlBasis *B);
 extern int pnl_basis_fit_ls(const PnlBasis *f, PnlVect *coef, const PnlMat *x, const PnlVect *y);
+extern double pnl_basis_i(const PnlBasis *b, const double *x, int i);
 extern double pnl_basis_ik_vect(const PnlBasis *b, const PnlVect *x, int i, int k);
 extern double pnl_basis_i_vect(const PnlBasis *b, const PnlVect *x, int i);
 extern double pnl_basis_i_D_vect(const PnlBasis *b, const PnlVect *x, int i, int j);
@@ -128,52 +129,6 @@ extern double pnl_basis_eval_D2(const PnlBasis *basis, const PnlVect *coef, cons
 extern void pnl_basis_eval_derivs(const PnlBasis *basis, const PnlVect *coef, const double *x, double *val, PnlVect *grad, PnlMat *hes);
 extern void pnl_basis_add_function(PnlBasis *b, PnlRnFuncR *f);
 
-#include "pnl/pnl_config.h"
-#ifdef PNL_HAVE_INLINE
-/**
- * Evaluate the i-th element of the basis b at the point x
- *
- * @deprecated Use the function pnl_basis_i_vect(const PnlBasis *b, const PnlVect *x, int i)
- *
- * @param b a PnlBasis
- * @param x a C array containing the coordinates of the point at which to
- * evaluate the basis
- * @param i an integer describing the index of the element of the basis to
- * considier
- *
- * @return f_i(x) where f is the i-th basis function
- */
-PNL_INLINE_FUNC double pnl_basis_i(const PnlBasis *b, const double *x, int i)
-{
-  int k;
-  double aux = 1.;
-  if (i > b->len_T - 1)
-    {
-      PnlVect view = pnl_vect_wrap_array(x, b->nb_variates);
-      return PNL_EVAL_RNFUNCR(&(b->func_list[i-b->len_T]), &view);
-    }
-  if (b->isreduced == 1)
-    {
-      for (k = b->SpT->I[i] ; k < b->SpT->I[i + 1] ; k++)
-        {
-          const int j = b->SpT->J[k];
-          const int Tij = b->SpT->array[k];
-          aux *= (b->f)((x[j] - b->center[j]) * b->scale[j], Tij, j, b->params);
-        }
-    }
-  else
-    {
-      for (k = b->SpT->I[i] ; k < b->SpT->I[i + 1] ; k++)
-        {
-          const int j = b->SpT->J[k];
-          const int Tij = b->SpT->array[k];
-          aux *= (b->f)(x[j], Tij, j, b->params);
-        }
-    }
-  return aux;
-}
-#endif
-PNL_INLINE_DECL double pnl_basis_i(const PnlBasis *b, const double *x, int i);
 
 /*@}*/
 
