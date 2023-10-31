@@ -55,7 +55,8 @@ Tensor functions are built as a tensor product of one dimensional elements. Henc
 \reffun{pnl_basis_eval_D2}, \reffun{pnl_basis_eval_D2_vect},
 \reffun{pnl_basis_eval_derivs}, \reffun{pnl_basis_eval_derivs_vect}.
 
-The two tensors \var{T} and \var{SpT} do actually store the same information --- \var{T(i,j)} is the degree w.r.t the \var{j}-th variable in the \var{i}-th function. Originally, we were only using the dense representation \var{T}, which is far more convenient to use when building the basis but it slows down the evaluation of the basis by a great deal. To overcome this lack of efficiency, a sparse storage has been added. 
+Three bases are already registered as listed in Table~\ref{tab:basis_index}. A new tensor basis can be registered using the function
+  \reffun{pnl_basis_type_register}.
 
 \begin{table}[h!]
   \begin{describeconst}
@@ -63,30 +64,168 @@ The two tensors \var{T} and \var{SpT} do actually store the same information ---
     \constentry{PNL_BASIS_HERMITE}{for the Hermite polynomials}
     \constentry{PNL_BASIS_TCHEBYCHEV}{for the Tchebychev polynomials}
   \end{describeconst}
-  \caption{Names of the bases. See also function
-  \reffun{pnl_basis_type_register} to register more basis types.}
-  \label{basis_index}
+  \caption{Names of the bases.}
+  \label{tab:basis_index}
 \end{table}
 
 The Hermite polynomials are defined by
 \begin{equation*}
   H_n(x) = (-1)^n \expp{\frac{x^2}{2}} \frac{d^n}{dx^n} \expp{-\frac{x^2}{2}}.
 \end{equation*}
-If $G$ is a real valued standard normal random variable, ${\mathbb E}[H_n(G) H_m(G)] = n!
-\ind{n = m}$. \\
+If $G$ is a real valued standard normal random variable, ${\mathbb E}[H_n(G) H_m(G)] = n!  \ind{n = m}$.
+
+
+The two tensors \var{T} and \var{SpT} do actually store the same information --- \var{T(i,j)} is the \emph{degree} w.r.t the \var{j}-th variable in the \var{i}-th function. Originally, we were only using the dense representation \var{T}, which is far more convenient to use when building the basis but it slows down the evaluation of the basis by a great deal. To overcome this lack of efficiency, a sparse storage was added. Such a basis can be created using one of the following functions.
+
+\begin{itemize}
+  \item \describefun{\PnlBasis *}{pnl_basis_create}{int index, int
+      nb_func, int nb_variates}
+    \sshortdescribe Create a \PnlBasis for the family
+    defined by \var{index} (see Table~\ref{basis_index} and
+    \reffun{pnl_basis_type_register}) with \var{nb_variates}
+    variates. The basis will contain \var{nb_func}.
+
+  \item \describefun{\PnlBasis *}{pnl_basis_create_from_degree}{int
+      index, int degree, int nb_variates}
+    \sshortdescribe Create a \PnlBasis for the family
+    defined by \var{index} (see Table~\ref{basis_index} and \reffun{pnl_basis_type_register}) with total degree less
+    or equal than \var{degree} and \var{nb_variates} variates. The total degree is
+    the sum of the partial degrees.\\
+    For instance, calling \verb!pnl_basis_create_from_degree(index, 2, 4)! is
+    equivalent to calling \verb!pnl_basis_create_from_tensor(index, T)! where
+    \var{T} is given by
+    \[ \left(
+      \begin{array}{cccc}
+        0 & 0 & 0 & 0\\
+        1 & 0 & 0 & 0\\
+        0 & 1 & 0 & 0\\
+        0 & 0 & 1 & 0\\
+        0 & 0 & 0 & 1\\
+        1 & 1 & 0 & 0\\
+        1 & 0 & 1 & 0\\
+        1 & 0 & 0 & 1\\
+        0 & 1 & 1 & 0\\
+        0 & 1 & 0 & 1\\
+        0 & 0 & 1 & 1\\
+        2 & 0 & 0 & 0\\
+        0 & 2 & 0 & 0\\
+        0 & 0 & 2 & 0\\
+        0 & 0 & 0 & 2\\
+      \end{array}
+    \right) \]
+  \item \describefun{\PnlBasis *}{pnl_basis_create_from_prod_degree}{int index, int degree, int nb_variates}
+    \sshortdescribe Create a \PnlBasis for the family
+    defined by \var{index} (see Table~\ref{basis_index} and \reffun{pnl_basis_type_register}) with total degree less
+    or equal than \var{degree} and \var{nb_variates} variates. The total degree is
+    the product of \var{MAX(1, d_i)} where the \var{d_i} are the partial degrees.
+
+  \item  \describefun{\PnlBasis\ptr}{pnl_basis_create_from_hyperbolic_degree}
+    {int index, double degree, double q, int n}
+    \sshortdescribe Create a sparse basis of polynomial with \var{n}
+    variates. We give the example of the Canonical basis. A canonical polynomial
+    with \var{n} variates writes $X_1^{\alpha_1} X_2^{\alpha_2} \dots
+    X_n^{\alpha_n}$. To be a member of the basis, it must satisfy $\left(\sum_{i=1}^n {\alpha_i}^q \right)^{1/q} \leq degree$. This kind of basis based on an hyperbolic set of indices gives priority to polynomials associated to low
+    order interaction.
+
+  \item \describefun{\PnlBasis *}{pnl_basis_create_from_tensor}{int
+      index, PnlMatInt \ptr T}
+    \sshortdescribe Create a \PnlBasis for the polynomial family
+    defined by \var{index} (see Table~\ref{basis_index}) using the basis
+    described by the tensor matrix \var{T}. The number of lines of \var{T} is
+    the number of functions of the basis whereas the numbers of columns of
+    \var{T} is the number of variates of the functions.
+    Note that \var{T} is not copied inside this function but only its address is
+    stored, so {\bf never} free \var{T}. It will be freed when calling
+    \reffun{pnl_basis_free} on the returned object. i\\
+    Here is an example of a tensor matrix. Assume you are working with three
+    variate functions, the basis \verb!{ 1, x, y, z, x^2, xy, yz, z^3}! is
+    decomposed in the one dimensional canonical basis using the following tensor
+    matrix
+    \[ \left(
+      \begin{array}{ccc}
+        0 & 0 & 0 \\
+        1 & 0 & 0 \\
+        0 & 1 & 0 \\
+        0 & 0 & 1 \\
+        2 & 0 & 0 \\
+        1 & 1 & 0 \\
+        0 & 1 & 1\\
+        0 & 0 & 3
+      \end{array}
+    \right) \]
+
+  \item \describefun{void }{pnl_basis_set_from_tensor}{\PnlBasis \ptr
+      b, int index, const \PnlMatInt \ptr T}
+    \sshortdescribe Set an alredy existing basis \var{b} to a polynomial family
+    defined by \var{index} (see Table~\ref{basis_index}) using the basis
+    described by the tensor matrix \var{T}. The number of lines of \var{T} is
+    the number of functions of the basis whereas the numbers of columns of
+    \var{T} is the number of variates of the functions. \\
+    Same function as \reffun{pnl_basis_create_from_tensor} except that it
+    operates on an already existing basis.
+
+\end{itemize}
+
+
+\subsubsection{Local basis functions}
+
+A local basis is a family of indicator functions of a Cartesian partition of ${[1,1]}^d$. Let $(n_i)_{i \in \{1, \dots, d\}}$ be the number of interval along each direction. An element of the partition write $A_k = \prod_{i=1}^d [-1 + k_i/n_i, -1 + (k_i + 1) / n_i]$ where $k$ is the multi-index defined by $k_i \in \{0, \dots, n_i - 1\}$ for all $i\in \{1,\dots, d\}$. These functions are orthogonal; this property is used by \reffun{pnl_basis_fit_ls}. Note that they are not differentiable.
+
+We provide the helper function \reffun{pnl_basis_local_get_index} to compute the linear representation of the multi-index $k$.
+
+\begin{itemize}
+  \item \describefun{\PnlBasis\ptr}{pnl_basis_local_create}{int *n_intervals, int space_dim}
+  \sshortdescribe Create a local basis with \var{n_intervals[i - 1]} intervals along dimension $i$ for all $i \in \{1, \dots, \var{space\_dim}\}$
+  \item \describefun{\PnlBasis\ptr}{pnl_basis_local_create_regular}{int n_intervals, int space_dim}
+  \sshortdescribe Equivalent to calling \reffun{pnl_basis_local_create} with an array of size \var{space_dim} filled with \var{n_intervals}.
+  \item \describefun{int}{pnl_basis_local_get_index}{const \PnlBasis *basis, const double *x}
+  \sshortdescribe Return the linear index of the cell containing \var{x}. It is an integer between $0$ and $(\prod_{i=1}^d n_i) - 1$.
+\end{itemize}
+
+If the domain you want to consider is not ${[-1,1]}^d$, use the functions \reffun{pnl_basis_set_domain} or \reffun{pnl_basis_set_reduced} to map your product space into ${[-1,1]}^d$.
 
 \subsubsection{Standard multivariate functions}
 
 These functions are supposed to be \refstruct{PnlRnFuncR}.
 
-To make this toolbox more complete, it is now possible to add some extra functions, which are not tensor product. They are stored using an independent mechanism in \var{func_list}.  These additional functions are only taken into account by the methods \reffun{pnl_basis_i}, \reffun{pnl_basis_i_vect}, \reffun{pnl_basis_eval} and \reffun{pnl_basis_eval_vect}. Note in particular that it is not possible to differentiate these functions and that they are not sensitive to the \var{isreduced} attribute. To add an extra function to an existing \refstruct{PnlBasis}, call the function \reffun{pnl_basis_add_function}.
+To make this toolbox more complete, it is now possible to add some extra functions, which are not tensor product. They are stored using an independent mechanism in \var{func_list}.  These additional functions are only taken into account by the methods \reffun{pnl_basis_i}, \reffun{pnl_basis_i_vect}, \reffun{pnl_basis_eval} and \reffun{pnl_basis_eval_vect}. Note in particular that it is not possible to differentiate these functions and that they are not sensitive to the \var{isreduced} attribute. To add an extra function to an existing \refstruct{PnlBasis}, call the function
+\begin{itemize}
+  \item \describefun{void}{pnl_basis_add_function}{\PnlBasis \ptr b, \PnlRnFuncR \ptr f}
+  \sshortdescribe Add the function \var{f} to the already existing basis \var{b}.
+\end{itemize}
 
 \subsection{Functions}
 
 \begin{itemize}
+
+\item \describefun{\PnlBasis *}{pnl_basis_new}{}
+  \sshortdescribe Create an empty \PnlBasis.
+
+\item \describefun{void}{pnl_basis_clone}{\PnlBasis \ptr dest, const \PnlBasis \ptr src}
+  \sshortdescribe Clone \var{src} into \var{dest}. The basis \var{dest} must
+  already exist before calling this function. On exit, \var{dest} and \var{src}
+  are identical and independent.
+\item \describefun{\PnlBasis\ptr }{pnl_basis_copy}{const \PnlBasis \ptr B}
+  \sshortdescribe Create a copy of \var{B}.
+
+\item  \describefun{void}{pnl_basis_free}{\PnlBasis \ptr\ptr basis}
+  \sshortdescribe Free a \PnlBasis created by
+  \reffun{pnl_basis_create}. Beware that \var{basis} is the address of a
+  \PnlBasis\ptr.
+
+\item \describefun{void}{pnl_basis_del_elt}{\PnlBasis \ptr B, const \PnlVectInt \ptr d}
+  \sshortdescribe Remove the function defined by the tensor product \var{d} from
+  an existing basis \var{B}.
+
+\item \describefun{void}{pnl_basis_del_elt_i}{\PnlBasis \ptr B, int i}
+  \sshortdescribe Remove the \var{i-th} element of basis \var{B}.
+
+\item \describefun{void}{pnl_basis_add_elt}{\PnlBasis \ptr B, const \PnlVectInt \ptr d}
+  \sshortdescribe Add the function defined by the tensor \var{d} to the Basis \var{B}.
+
 \item \describefun{int}{pnl_basis_type_register}{const char *name, double (*f)(double, int, int, void), double (*Df)(double, int, int, void), double (*D2f)(double, int, int, void), int is_orthogonal}
 \sshortdescribe Register a new basis type and return the index to be passed to
-\reffun{pnl_basis_create} . The variable \var{name} is a unique
+\reffun{pnl_basis_create}. The variable \var{name} is a unique
 string identifier of the family. The variables \var{f}, \var{Df}, \var{D2f} are
 the one dimensional basis functions, its first and second order derivatives.
 Each of these functions must return a \var{double} and take two arguments : the
@@ -106,129 +245,8 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
   PnlBasis *B = pnl_basis_create_from_degree (id, 2, 5);
   \end{lstlisting}
 
-\item \describefun{\PnlBasis *}{pnl_basis_new}{}
-  \sshortdescribe Create an empty \PnlBasis.
-
 \item \describefun{void}{pnl_basis_print}{const \PnlBasis \ptr B}
   \sshortdescribe Print the characteristics of a basis.
-
-\item \describefun{\PnlBasis *}{pnl_basis_create}{int index, int
-    nb_func, int nb_variates}
-  \sshortdescribe Create a \PnlBasis for the family
-  defined by \var{index} (see Table~\ref{basis_index} and
-  \reffun{pnl_basis_type_register}) with \var{nb_variates}
-  variates. The basis will contain \var{nb_func}.
-
-\item \describefun{\PnlBasis *}{pnl_basis_create_from_degree}{int
-    index, int degree, int nb_variates}
-  \sshortdescribe Create a \PnlBasis for the family
-  defined by \var{index} (see Table~\ref{basis_index} and \reffun{pnl_basis_type_register}) with total degree less
-  or equal than \var{degree} and \var{nb_variates} variates. The total degree is
-  the sum of the partial degrees.\\
-  For instance, calling \verb!pnl_basis_create_from_degree(index, 2, 4)! is
-  equivalent to calling \verb!pnl_basis_create_from_tensor(index, T)! where
-  \var{T} is given by
-  \[ \left(
-    \begin{array}{cccc}
-      0 & 0 & 0 & 0\\
-      1 & 0 & 0 & 0\\
-      0 & 1 & 0 & 0\\
-      0 & 0 & 1 & 0\\
-      0 & 0 & 0 & 1\\
-      1 & 1 & 0 & 0\\
-      1 & 0 & 1 & 0\\
-      1 & 0 & 0 & 1\\
-      0 & 1 & 1 & 0\\
-      0 & 1 & 0 & 1\\
-      0 & 0 & 1 & 1\\
-      2 & 0 & 0 & 0\\
-      0 & 2 & 0 & 0\\
-      0 & 0 & 2 & 0\\
-      0 & 0 & 0 & 2\\
-    \end{array}
-  \right) \]
-\item \describefun{\PnlBasis *}{pnl_basis_create_from_prod_degree}{int
-    index, int degree, int nb_variates}
-  \sshortdescribe Create a \PnlBasis for the family
-  defined by \var{index} (see Table~\ref{basis_index} and \reffun{pnl_basis_type_register}) with total degree less
-  or equal than \var{degree} and \var{nb_variates} variates. The total degree is
-  the product of \var{MAX(1, d_i)} where the \var{d_i} are the partial degrees.
-
-
-\item \describefun{\PnlBasis *}{pnl_basis_create_from_tensor}{int
-    index, PnlMatInt \ptr T}
-  \sshortdescribe Create a \PnlBasis for the polynomial family
-  defined by \var{index} (see Table~\ref{basis_index}) using the basis
-  described by the tensor matrix \var{T}. The number of lines of \var{T} is
-  the number of functions of the basis whereas the numbers of columns of
-  \var{T} is the number of variates of the functions.
-  Note that \var{T} is not copied inside this function but only its address is
-  stored, so {\bf never} free \var{T}. It will be freed when calling
-  \reffun{pnl_basis_free} on the returned object. i\\
-  Here is an example of a tensor matrix. Assume you are working with three
-  variate functions, the basis \verb!{ 1, x, y, z, x^2, xy, yz, z^3}! is
-  decomposed in the one dimensional canonical basis using the following tensor
-  matrix
-  \[ \left(
-    \begin{array}{ccc}
-      0 & 0 & 0 \\
-      1 & 0 & 0 \\
-      0 & 1 & 0 \\
-      0 & 0 & 1 \\
-      2 & 0 & 0 \\
-      1 & 1 & 0 \\
-      0 & 1 & 1\\
-      0 & 0 & 3
-    \end{array}
-  \right) \]
-
-\item \describefun{void}{pnl_basis_add_function}{\PnlBasis \ptr b, \PnlRnFuncR \ptr f}
-  \sshortdescribe Add the function \var{f} to the already existing basis \var{b}.
-\item \describefun{void}{pnl_basis_clone}{\PnlBasis \ptr dest, const \PnlBasis \ptr src}
-  \sshortdescribe Clone \var{src} into \var{dest}. The basis \var{dest} must
-  already exist before calling this function. On exit, \var{dest} and \var{src}
-  are identical and independent.
-\item \describefun{\PnlBasis\ptr }{pnl_basis_copy}{const \PnlBasis \ptr B}
-  \sshortdescribe Create a copy of \var{B}.
-\item \describefun{void }{pnl_basis_set_from_tensor}{\PnlBasis \ptr
-    b, int index, const \PnlMatInt \ptr T}
-  \sshortdescribe Set an alredy existing basis \var{b} to a polynomial family
-  defined by \var{index} (see Table~\ref{basis_index}) using the basis
-  described by the tensor matrix \var{T}. The number of lines of \var{T} is
-  the number of functions of the basis whereas the numbers of columns of
-  \var{T} is the number of variates of the functions. \\
-  Same function as \reffun{pnl_basis_create_from_tensor} except that it
-  operates on an already existing basis.
-
-\item  \describefun{\PnlBasis\ptr}{pnl_basis_create_from_hyperbolic_degree}
-  {int index, double degree, double q, int n}
-  \sshortdescribe Create a sparse basis of polynomial with \var{n}
-  variates. We give the example of the Canonical basis. A canonical polynomial
-  with \var{n} variates writes $X_1^{\alpha_1} X_2^{\alpha_2} \dots
-  X_n^{\alpha_n}$. To be a member of the basis, it must satisfy $\left(\sum_{i=1}^n
-    {\alpha_i}^q \right)^{1/q} \leq degree$. This kind of basis based on an
-  hyperbolic set of indices gives priority to polynomials associated to low
-  order interaction.
-
-\item \describefun{\PnlBasis\ptr}{pnl_basis_create_local}{int \ptr n_intervals, int space_dim}
-  \sshortdescribe Create a local bases on $(-1, 1)^{\var{space_dim}}$ with \var{n_intervals[i]} along dimension \var{i} for $i \in \{1,\dots,\var{space_dim}\}$. This basis is orthogonal. Note that this basis is not differentiable.
-
-\item  \describefun{void}{pnl_basis_free}{\PnlBasis \ptr\ptr basis}
-  \sshortdescribe Free a \PnlBasis created by
-  \reffun{pnl_basis_create}. Beware that \var{basis} is the address of a
-  \PnlBasis\ptr.
-
-
-\item \describefun{void}{pnl_basis_del_elt}{\PnlBasis \ptr B, const \PnlVectInt \ptr d}
-  \sshortdescribe Remove the function defined by the tensor product \var{d} from
-  an existing basis \var{B}.
-
-\item \describefun{void}{pnl_basis_del_elt_i}{\PnlBasis \ptr B, int i}
-  \sshortdescribe Remove the \var{i-th} element of basis \var{B}.
-
-\item \describefun{void}{pnl_basis_add_elt}{\PnlBasis \ptr B, const \PnlVectInt \ptr d}
-  \sshortdescribe Add the function defined by the tensor \var{d} to the Basis \var{B}.
-
 
 \end{itemize}
 
