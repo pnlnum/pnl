@@ -35,9 +35,9 @@
     {                                                               \
       PNL_ERROR("Wrong number of coefficients", "pnl_basis_eval");  \
     }
-#define CHECK_NB_VARIATES(x, basis)                                               \
-  if ( x->size != basis->nb_variates )                                            \
-    {                                                                             \
+#define CHECK_NB_VARIATES(x,basis)                           \
+  if ( x->size != basis->nb_variate )                        \
+    {                                                        \
       PNL_ERROR("Dimension mismatch for the evaluation point", "pnl_basis_eval"); \
     }
 #define CHECK_BASIS_TYPE(type, basis)                       \
@@ -50,6 +50,24 @@
 #define CHECK_NB_VARIATES(x, basis)
 #define CHECK_BASIS_TYPE(type, basis)
 #endif
+
+#define CHECK_IS_DIFFERENTIABLE(basis)                    \
+  if (basis->Df == NULL)                                  \
+    {                                                     \
+      fprintf(stderr, "Basis is not differentiable.");    \
+      abort();                                            \
+    }
+
+#define CHECK_HAS_TENSOR_REP(basis) \
+  if (basis->SpT != NULL && basis->id != PNL_BASIS_LOCAL)
+
+#define CHECK_IS_CONSTRUCTIBLE_FROM_TENSOR(index, msg) \
+  if (index == PNL_BASIS_LOCAL)                         \
+    {                                                   \
+      fprintf(stderr, msg);                             \
+      return NULL;                                      \
+    }
+
 
 #if 0
 /**
@@ -1013,7 +1031,7 @@ PnlBasis *pnl_basis_new()
  * @param T the tensor of the multi-dimensional basis. No copy of T is done, so
  * do not free T. It will be freed transparently by pnl_basis_free
  */
-void  pnl_basis_set_from_tensor(PnlBasis *b, const PnlMatInt *T)
+void pnl_basis_set_from_tensor(PnlBasis *b, const PnlMatInt *T)
 {
   b->nb_func = T->m;
   b->nb_variates = T->n;
@@ -1064,6 +1082,7 @@ void pnl_basis_set_type(PnlBasis *B, int index)
 PnlBasis *pnl_basis_create_from_tensor(int index, const PnlMatInt *T)
 {
   PnlBasis *b;
+  CHECK_IS_CONSTRUCTIBLE_FROM_TENSOR(index, "Use pnl_basis_local_create to create a local basis");
   if ((b = pnl_basis_new()) == NULL) return NULL;
   pnl_basis_set_from_tensor(b, T);
   pnl_basis_set_type(b, index);
@@ -1082,6 +1101,7 @@ PnlBasis *pnl_basis_create_from_tensor(int index, const PnlMatInt *T)
 PnlBasis *pnl_basis_create(int index, int nb_func, int nb_variates)
 {
   PnlMatInt *T;
+  CHECK_IS_CONSTRUCTIBLE_FROM_TENSOR(index, "Use pnl_basis_local_create to create a local basis");
   T = compute_tensor(nb_func, nb_variates);
   return pnl_basis_create_from_tensor(index, T);
 }
@@ -1098,6 +1118,7 @@ PnlBasis *pnl_basis_create(int index, int nb_func, int nb_variates)
 PnlBasis *pnl_basis_create_from_degree(int index, int degree, int nb_variates)
 {
   PnlMatInt *T;
+  CHECK_IS_CONSTRUCTIBLE_FROM_TENSOR(index, "Use pnl_basis_local_create to create a local basis");
   T = compute_tensor_from_sum_degree(degree, nb_variates);
   return pnl_basis_create_from_tensor(index, T);
 }
@@ -1114,6 +1135,7 @@ PnlBasis *pnl_basis_create_from_degree(int index, int degree, int nb_variates)
 PnlBasis *pnl_basis_create_from_prod_degree(int index, int degree, int nb_variates)
 {
   PnlMatInt *T;
+  CHECK_IS_CONSTRUCTIBLE_FROM_TENSOR(index, "Use pnl_basis_local_create to create a local basis");
   T = compute_tensor_from_prod_degree(degree, nb_variates);
   return pnl_basis_create_from_tensor(index, T);
 }
@@ -1133,6 +1155,7 @@ PnlBasis *pnl_basis_create_from_prod_degree(int index, int degree, int nb_variat
 PnlBasis *pnl_basis_create_from_hyperbolic_degree(int index, double degree, double q, int n)
 {
   PnlMatInt *T;
+  CHECK_IS_CONSTRUCTIBLE_FROM_TENSOR(index, "Use pnl_basis_local_create to create a local basis");
   T = compute_tensor_from_hyperbolic_degree(degree, q, n);
   return pnl_basis_create_from_tensor(index, T);
 }
@@ -1231,6 +1254,7 @@ void pnl_basis_clone(PnlBasis *dest, const PnlBasis *src)
  */
 void pnl_basis_del_elt_i(PnlBasis *B, int i)
 {
+  PNL_CHECK(i >= B->len_T, "size mismatch",  "basis_del_elt_i");
   pnl_mat_int_del_row(B->T, i);
   pnl_sp_mat_int_del_row(B->SpT, i);
   --(B->nb_func);
@@ -1389,9 +1413,12 @@ void pnl_basis_print(const PnlBasis *B)
       for (i = 0 ; i < B->nb_variates ; i++) printf("%f ", B->scale[i]);
       printf("\n");
     }
-  printf("\tTensor matrix : \n");
-  pnl_mat_int_print(B->T);
-  printf("\n");
+  if (B->T)
+    {
+      printf("\tTensor matrix : \n");
+      pnl_mat_int_print(B->T);
+      printf("\n");
+    }
 }
 
 /**
@@ -1442,7 +1469,7 @@ double pnl_basis_ik(const PnlBasis *b, const double *x, int i, int k)
  *
  * @return f_i(x) where f is the i-th basis function
  */
-PNL_INLINE_FUNC double pnl_basis_i(const PnlBasis *b, const double *x, int i)
+double pnl_basis_i(const PnlBasis *b, const double *x, int i)
 {
   int k;
   double aux = 1.;
@@ -1489,6 +1516,7 @@ double pnl_basis_i_D(const PnlBasis *b, const double *x, int i, int j)
   int l;
   double aux = 1;
 
+  CHECK_IS_DIFFERENTIABLE(b);
   /* Test if the partial degree is small enough to return 0 */
   if (PNL_MGET(b->T, i, j) == 0) return 0.;
 
@@ -1536,6 +1564,7 @@ double pnl_basis_i_D2(const PnlBasis *b, const double *x, int i, int j1, int j2)
 {
   int l;
   double aux = 1;
+  CHECK_IS_DIFFERENTIABLE(b);
   /* Test if the partial degree is small enough to return 0 */
   if ((j1 == j2) && PNL_MGET(b->T, i, j1) <= 1) return 0.;
   if (PNL_MGET(b->T, i, j1) == 0 || PNL_MGET(b->T, i, j2) == 0) return 0.;
@@ -1705,6 +1734,7 @@ double pnl_basis_eval_D(const PnlBasis *basis, const PnlVect *coef, const double
   int k;
   double y;
 
+  CHECK_IS_DIFFERENTIABLE(basis);
   CHECK_NB_FUNC(coef, basis);
   y = 0.;
   for (k = 0 ; k < coef->size ; k++)
@@ -1737,6 +1767,7 @@ double pnl_basis_eval_D2(const PnlBasis *basis, const PnlVect *coef, const doubl
   int k;
   double y;
 
+  CHECK_IS_DIFFERENTIABLE(basis);
   CHECK_NB_FUNC(coef, basis);
   y = 0.;
   for (k = 0 ; k < coef->size ; k++)
@@ -1770,6 +1801,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
   int i, j, l, n, m;
   double y, *f, *Df, D2f;
 
+  CHECK_IS_DIFFERENTIABLE(b);
   CHECK_NB_FUNC(coef, b);
   y = 0.;
   n = b->nb_variates;
