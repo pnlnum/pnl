@@ -313,7 +313,7 @@ void FUNCTION(pnl_sp_mat, set)(TYPE(PnlSpMat) *M, int i, int j, BASE x)
 
 /**
 *
-* Get M(,i, j) in x. Return PNL_TRUE if M has an entry (i,j) and PNL_FALSE otherwise
+* Return M(i, j).
 *
 * @param M sparse matrix
 * @param i row index
