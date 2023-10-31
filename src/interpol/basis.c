@@ -1144,7 +1144,7 @@ PnlBasis *pnl_basis_create_from_hyperbolic_degree(int index, double degree, doub
  * @param space_dim the dimension of the state space
  * @return PnlBasis
  */
-PnlBasis* pnl_basis_create_local(int *n_intervals, int space_dim)
+PnlBasis* pnl_basis_local_create(int *n_intervals, int space_dim)
 {
   PnlMatInt *T;
   PnlBasis *B;
@@ -1162,13 +1162,13 @@ PnlBasis* pnl_basis_create_local(int *n_intervals, int space_dim)
  * @param space_dim the dimension of the state space
  * @return PnlBasis
  */
-PnlBasis* pnl_basis_create_local_regular(int n_intervals, int space_dim)
+PnlBasis* pnl_basis_local_create_regular(int n_intervals, int space_dim)
 {
   PnlBasis *B;
   int i;
   int *intervals_tab = malloc(space_dim * sizeof(int));
   for (i = 0; i < space_dim; i++) intervals_tab[i] = n_intervals;
-  B = pnl_basis_create_local(intervals_tab, space_dim);
+  B = pnl_basis_local_create(intervals_tab, space_dim);
   return B;
 }
 
@@ -1604,7 +1604,7 @@ int pnl_basis_local_get_index(const PnlBasis *basis, const double *x)
  *
  * @return sum (coef .* f(x))
  */
-double pnl_basis_eval_local(const PnlBasis *basis, const PnlVect *coef, const double *x)
+static double pnl_basis_local_eval(const PnlBasis *basis, const PnlVect *coef, const double *x)
 {
   CHECK_BASIS_TYPE(PNL_BASIS_LOCAL, basis);
   int global_index = pnl_basis_local_get_index(basis, x);
@@ -1635,7 +1635,7 @@ double pnl_basis_eval(const PnlBasis *basis, const PnlVect *coef, const double *
 
   if (basis->id == PNL_BASIS_LOCAL)
     {
-      return pnl_basis_eval_local(basis, coef, x);
+      return pnl_basis_local_eval(basis, coef, x);
     }
   y = 0.;
   for (i = 0 ; i < coef->size ; i++)

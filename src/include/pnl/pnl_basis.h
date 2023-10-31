@@ -93,8 +93,8 @@ extern int pnl_basis_type_register(const char *name, double (*f)(double, int, in
 extern PnlBasis* pnl_basis_new();
 extern PnlBasis* pnl_basis_create(int index, int nb_func, int space_dim);
 extern PnlBasis* pnl_basis_create_from_degree(int index, int degree, int space_dim);
-extern PnlBasis* pnl_basis_create_local(int *n_intervals, int space_dim);
-extern PnlBasis* pnl_basis_create_local_regular(int n_intervals, int space_dim);
+extern PnlBasis* pnl_basis_local_create(int *n_intervals, int space_dim);
+extern PnlBasis* pnl_basis_local_create_regular(int n_intervals, int space_dim);
 extern PnlBasis* pnl_basis_create_from_prod_degree(int index, int degree, int nb_variates);
 extern PnlBasis* pnl_basis_create_from_hyperbolic_degree(int index, double degree, double q, int n);
 extern void pnl_basis_clone(PnlBasis *dest, const PnlBasis *src);
