@@ -1082,7 +1082,6 @@ void pnl_basis_set_type(PnlBasis *B, int index)
 PnlBasis *pnl_basis_create_from_tensor(int index, const PnlMatInt *T)
 {
   PnlBasis *b;
-  CHECK_IS_CONSTRUCTIBLE_FROM_TENSOR(index, "Use pnl_basis_local_create to create a local basis");
   if ((b = pnl_basis_new()) == NULL) return NULL;
   pnl_basis_set_from_tensor(b, T);
   pnl_basis_set_type(b, index);
@@ -1169,12 +1168,18 @@ PnlBasis *pnl_basis_create_from_hyperbolic_degree(int index, double degree, doub
  */
 PnlBasis* pnl_basis_local_create(int *n_intervals, int space_dim)
 {
-  PnlMatInt *T;
   PnlBasis *B;
-  T = compute_tensor_permutation(space_dim, n_intervals);
-  B = pnl_basis_create_from_tensor(PNL_BASIS_LOCAL, T);
+  int i, prod = 1;
+  if ((B = pnl_basis_new()) == NULL) return NULL;
+  pnl_basis_set_type(B, PNL_BASIS_LOCAL);
   B->params_size = space_dim * sizeof(int);
   B->params = n_intervals;
+  B->nb_variates = space_dim;
+  for (i = 0; i < space_dim; i++)
+    {
+      prod *= n_intervals[i];
+    }
+  B->nb_func = prod;
   return B;
 }
 
@@ -1413,10 +1418,10 @@ void pnl_basis_print(const PnlBasis *B)
       for (i = 0 ; i < B->nb_variates ; i++) printf("%f ", B->scale[i]);
       printf("\n");
     }
-  if (B->T)
+  if (B->SpT)
     {
       printf("\tTensor matrix : \n");
-      pnl_mat_int_print(B->T);
+      pnl_sp_mat_int_print(B->SpT);
       printf("\n");
     }
 }
