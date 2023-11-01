@@ -3,6 +3,7 @@ enable_testing()
 add_custom_target(link_data
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Data ${CMAKE_CURRENT_BINARY_DIR}/Data
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Data_specfun ${CMAKE_CURRENT_BINARY_DIR}/Data_specfun
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Data_basis ${CMAKE_CURRENT_BINARY_DIR}/Data_basis
 )
 
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)

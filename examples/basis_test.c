@@ -25,14 +25,69 @@
 #include "pnl/pnl_basis.h"
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_random.h"
+
+#define DATA_DIR "Data_basis"
 #include "tests_utils.h"
 
 #define function exp
 
 static int PRINT_COEFF = 0;
 
+#define WRITE_DATA
+
+
+static void write_data(const char *expected_result_file, const PnlSpMatInt *SpT)
+{
+#ifdef WRITE_DATA
+  FILE *out = fopen(expected_result_file, "w");
+  pnl_sp_mat_int_fprint(out, SpT);
+  fclose(out);
+#endif
+}
+
+
+static void test_sum_tensor_constructor(int degree, int space_dim, const char *expected_result_file)
+{
+  PnlBasis *B = pnl_basis_create_from_degree(PNL_BASIS_HERMITE, degree, space_dim);
+  write_data(expected_result_file, B->SpT);
+  PnlSpMatInt *expected_SpT = pnl_sp_mat_int_create_from_file(expected_result_file);
+  pnl_test_sp_mat_int_eq(B->SpT, expected_SpT, "test_sum_tensor_constructor", "");
+  pnl_sp_mat_int_free(&expected_SpT);
+  pnl_basis_free(&B);
+}
+
+static void test_tensor_constructor(int nb_functions, int space_dim, const char *expected_result_file)
+{
+  PnlBasis *B = pnl_basis_create(PNL_BASIS_HERMITE, nb_functions, space_dim);
+  write_data(expected_result_file, B->SpT);
+  PnlSpMatInt *expected_SpT = pnl_sp_mat_int_create_from_file(expected_result_file);
+  pnl_test_sp_mat_int_eq(B->SpT, expected_SpT, "test_tensor_constructor", "");
+  pnl_sp_mat_int_free(&expected_SpT);
+  pnl_basis_free(&B);
+}
+
+static void test_prod_tensor_constructor(int degree, int space_dim, const char *expected_result_file)
+{
+  PnlBasis *B = pnl_basis_create_from_prod_degree(PNL_BASIS_HERMITE, degree, space_dim);
+  write_data(expected_result_file, B->SpT);
+  PnlSpMatInt *expected_SpT = pnl_sp_mat_int_create_from_file(expected_result_file);
+  pnl_test_sp_mat_int_eq(B->SpT, expected_SpT, "test_prod_tensor_constructor", "");
+  pnl_sp_mat_int_free(&expected_SpT);
+  pnl_basis_free(&B);
+}
+
+static void test_hyperbolic_tensor_constructor(int degree, double q, int space_dim, const char *expected_result_file)
+{
+  PnlBasis *B = pnl_basis_create_from_hyperbolic_degree(PNL_BASIS_HERMITE, degree, q, space_dim);
+  write_data(expected_result_file, B->SpT);
+  PnlSpMatInt *expected_SpT = pnl_sp_mat_int_create_from_file(expected_result_file);
+  pnl_test_sp_mat_int_eq(B->SpT, expected_SpT, "test_hyperbolic_tensor_constructor", "");
+  pnl_sp_mat_int_free(&expected_SpT);
+  pnl_basis_free(&B);
+}
+
 /*
- * example of how to use  pnl_basis_fit_ls to regress on a basis.
+ * example of how to use pnl_basis_fit_ls to regress on a basis.
  * regression of the exponential function on the grid [0:0.05:5]
  */
 static void exp_regression2()
@@ -456,6 +511,14 @@ int main(int argc, char **argv)
 {
   pnl_test_init(argc, argv);
   if (pnl_test_is_verbose()) PRINT_COEFF = 1;
+  test_sum_tensor_constructor(3, 4, DATA_FILE("tensor_sum_deg_3_dim_4.txt"));
+  test_sum_tensor_constructor(2, 5, DATA_FILE("tensor_sum_deg_2_dim_5.txt"));
+  test_tensor_constructor(15, 4, DATA_FILE("tensor_n15_dim_4.txt"));
+  test_tensor_constructor(28, 5, DATA_FILE("tensor_n28_dim_5.txt"));
+  test_hyperbolic_tensor_constructor(3, 0.6, 4, DATA_FILE("tensor_hyperbolic_deg_3_dim_4_q06.txt"));
+  test_hyperbolic_tensor_constructor(2, 0.6, 5, DATA_FILE("tensor_hyperbolic_deg_2_dim_5_q06.txt"));
+  test_prod_tensor_constructor(2, 5, DATA_FILE("tensor_prod_deg_2_dim_5.txt"));
+  test_prod_tensor_constructor(3, 5, DATA_FILE("tensor_prod_deg_3_dim_5.txt"));
   local_basis_test();
   exp_regression2();
   regression_multid();

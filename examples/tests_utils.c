@@ -144,7 +144,7 @@ static int pnl_test_eq_aux (double x, double y, double relerr, int(*cmp)(double,
  * 
  * @param x computed result
  * @param y expected result
- * @param relerr relative error (note that when |y| < 1, it is an abolute
+ * @param relerr relative error (note that when |y| < 1, it is an absolute
  * error)
  * @param str the name of the tested function
  * @param fmt a format string to be passed to printf
@@ -170,9 +170,9 @@ int pnl_test_eq(double x, double y, double relerr, const char *str, const char *
  * Check if |x -y| / |y| < relerr
  * 
  * @param x computed result
- * @param y exepcted value
+ * @param y expected value
  * @param relerr maximum relative error
- * @param str the fonctionnality tested
+ * @param str the functionality tested
  * @param fmt a format string to be passed to printf
  * @param ... extra arguments for printf
  * 
@@ -192,9 +192,9 @@ int pnl_test_eq_rel (double x, double y, double relerr, const char *str, const c
  * Check if |x - y|  < abserr
  * 
  * @param x computed result
- * @param y exepcted value
+ * @param y expected value
  * @param abserr maximum absolute error
- * @param str the fonctionnality tested
+ * @param str the functionality tested
  * @param fmt a format string to be passed to printf
  * @param ... extra arguments for printf
  * 
@@ -219,7 +219,7 @@ int pnl_test_eq_abs (double x, double y, double abserr, const char *str, const c
  * @param n size of the expected result
  * @param relerr maximum admissible error in the comparison
  * @param cmp the comparison function
- * @param str name of the tested functionnality
+ * @param str name of the tested functionality
  * @param fmt a format string
  * @param ap extra arguments
  * 
@@ -349,6 +349,44 @@ int pnl_test_mat_int_eq(const PnlMatInt *X, const PnlMatInt *Y, const char *str,
 }
 
 /** 
+ * Check if x(i,j) = y(i,j) for integer sparse matrices
+ * 
+ * @param X computed result (matrix)
+ * @param Y expected result (matrix)
+ * @param str the name of the tested function
+ * @param fmt a format string to be passed to printf
+ * @param ... extra arguments for printf
+ * 
+ * @return PNL_FALSE or PNL_TRUE
+ */
+int pnl_test_sp_mat_int_eq(const PnlSpMatInt *X, const PnlSpMatInt *Y, const char *str, const char *fmt, ...)
+{
+  int status;
+  va_list ap;
+  va_start(ap, fmt);
+  status = pnl_sp_mat_int_isequal(X, Y);
+  update_count_tests(status);
+  if (status == PNL_FALSE || verbose == PNL_TRUE)
+    {
+      printf("\t%s : ", str);
+      printf(status ? "PNL_OK" : "PNL_FAIL");
+      if (!status)
+        {
+          printf(" (");
+          vprintf(fmt, ap);
+          printf("\n  expected:\n");
+          pnl_sp_mat_int_print(Y);
+          printf("  observed:\n");
+          pnl_sp_mat_int_print(X);
+          printf(")");
+        }
+      printf("\n");
+    }
+  va_end(ap);
+  return status;
+}
+
+/** 
  * Check if |x(i,j) - y(i,j)| < abserr
  * 
  * @param X computed result (vector)
@@ -433,7 +471,7 @@ int pnl_test_vect_complex_eq_abs (const PnlVectComplex *X, const PnlVectComplex 
  * @param Y expected result (Hmatrix)
  * @param abserr absolute error 
  * @param str the name of the tested function
- * @param fmt a forhmat string to be passed to printf
+ * @param fmt a format string to be passed to printf
  * @param ... extra arguments for printf
  * 
  * @return PNL_FALSE or PNL_TRUE
