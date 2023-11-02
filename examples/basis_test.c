@@ -108,16 +108,6 @@ static void test_sum_tensor_constructor(int degree, int space_dim, const char *e
   pnl_basis_free(&B);
 }
 
-static void test_tensor_constructor(int nb_functions, int space_dim, const char *expected_result_file)
-{
-  PnlBasis *B = pnl_basis_create(PNL_BASIS_HERMITE, nb_functions, space_dim);
-  write_data(expected_result_file, B->SpT);
-  PnlSpMatInt *expected_SpT = pnl_sp_mat_int_create_from_file(expected_result_file);
-  pnl_test_sp_mat_int_eq(B->SpT, expected_SpT, "test_tensor_constructor", "");
-  pnl_sp_mat_int_free(&expected_SpT);
-  pnl_basis_free(&B);
-}
-
 static void test_prod_tensor_constructor(int degree, int space_dim, const char *expected_result_file)
 {
   PnlBasis *B = pnl_basis_create_from_prod_degree(PNL_BASIS_HERMITE, degree, space_dim);
@@ -565,8 +555,6 @@ int main(int argc, char **argv)
   if (pnl_test_is_verbose()) PRINT_COEFF = 1;
   test_sum_tensor_constructor(3, 4, DATA_FILE("tensor_sum_deg_3_dim_4.txt"));
   test_sum_tensor_constructor(2, 5, DATA_FILE("tensor_sum_deg_2_dim_5.txt"));
-  // test_tensor_constructor(15, 4, DATA_FILE("tensor_n15_dim_4.txt"));
-  // test_tensor_constructor(28, 5, DATA_FILE("tensor_n28_dim_5.txt"));
   test_hyperbolic_tensor_constructor(3, 0.6, 4, DATA_FILE("tensor_hyperbolic_deg_3_dim_4_q06.txt"));
   test_hyperbolic_tensor_constructor(2, 0.6, 5, DATA_FILE("tensor_hyperbolic_deg_2_dim_5_q06.txt"));
   test_prod_tensor_constructor(2, 5, DATA_FILE("tensor_prod_deg_2_dim_5.txt"));
