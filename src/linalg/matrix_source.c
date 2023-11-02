@@ -2028,7 +2028,7 @@ static void FUNCTION(pnl_mat, qsort_aux)(TYPE(PnlMat) * A, PnlMatInt *t, int use
       f = FUNCTION(__pnl, cmp_d);
       break;
     default :
-      PNL_ERROR("unknow order", "pnl_mat_qsort");
+      PNL_ERROR("unknown order", "pnl_mat_qsort");
       break;
     }
 
