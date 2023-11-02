@@ -69,377 +69,165 @@
     }
 
 /**
- * Compute the maximum degree of the last component
- * if the total degree of the other elements is @p partial.
+ * Compute the number of elements of a polynomial with product degree
  *
  * The total degree function is the product of the partial degrees
  *
- * @param total total degree
- * @param partial partial degree already used
+ * @param degree total degree
+ * @param nb_variates number of variates of the polynomial
  */
-static int freedom_degree_prod(int total, int partial)
+static int nb_degrees_freedom_prod(int degree, int nb_variates)
 {
-  if (partial > total) return -1;
-  return total / MAX(partial, 1);
+  int partial_degree, nb_elements;
+  if (degree == 0)
+    {
+      return 0;
+    }
+  if (nb_variates == 1)
+    {
+      return degree + 1;
+    }
+  nb_elements = 0;
+  for (partial_degree = 0; partial_degree <= degree; partial_degree++)
+    {
+      nb_elements += nb_degrees_freedom_prod(degree / MAX(1, partial_degree), nb_variates - 1);
+    }
+  return nb_elements;
 }
 
 /**
  * Return the total degree (sum of the partial degrees) of the polynomial
- * represented by line i of T
+ * represented T
  *
- * @param T a matrix of integers representing the decomposition of the multi-d polynomials
- * @param i the index of the element to be considered in the basis (i.e. the row of T to consider)
- * @return  the total degree of the polynomials represented by line i of T
+ * @param T an integer array of size @p n holding the partial degrees
+ * @param n size of T
+ * @return the total degree of the polynomials represented by T
  */
-static int count_sum_degree(const PnlMatInt *T, int i)
+static double count_sum_degree(const int* T, int n, void* _params)
 {
   int j, deg;
   deg = 0;
 
-  for (j = 0 ; j < T->n ; j++)
+  for (j = 0 ; j < n ; j++)
     {
-      deg += PNL_MGET(T, i, j);
+      deg += T[j];
     }
-  return deg;
+  return (double)deg;
 }
 
 /**
- * Return the total degree (product of the partial degrees) of the polynomial
- * represented by line i of T
+ * Return the total degree (sum of the partial degrees) of the polynomial
+ * represented T
  *
  * The total degree is the product of MAX(1, d_i) where d_i is the partial
  * degree. If all d_i are zeros, the total degree is 0.
  *
- * @param T a matrix of integers representing the decomposition of the multi-d polynomials
- * @param i the index of the element to be considered in the basis (i.e. the row of T to consider)
- * @return the total degree of the polynomials represented by line i of T
+ * @param T an integer array of size @p n holding the partial degrees
+ * @param n size of T
+ * @return the total degree of the polynomials represented by T
  */
-static int count_prod_degree(const PnlMatInt *T, int i)
+static double count_prod_degree(const int* T, int n, void* _params)
 {
   int j, deg, all_zero = PNL_TRUE;
   deg = 1;
 
-  for (j = 0 ; j < T->n ; j++)
+  for (j = 0 ; j < n ; j++)
     {
-      const int power = PNL_MGET(T, i, j);
+      const int power = T[j];
       if (all_zero == PNL_TRUE && power > 0) all_zero = PNL_FALSE;
       deg *= MAX(power, 1);
     }
   if (all_zero == PNL_TRUE) return 0;
-  return deg;
+  return (double)deg;
 }
 
 /**
  * Return the total hyperbolic degree at the power q of the polynomial
- * represented by line i of T
+ * represented by T
  *
- * @param T a matrix of integers representing the decomposition of the multi-d polynomials
- * @param i the index of the element to be considered in the basis (i.e. the row of T to consider)
- * @param q the hyperbolic index
- * @return the total degree of the polynomials represented by line i of T
+ * @param T an integer array of size @p n holding the partial degrees
+ * @param n size of T
+ * @param params a pointer to a float containing the hyperbolic index
+ * @return the total degree of the polynomials represented by T
  */
-static double count_hyperbolic_degree(const PnlMatInt *T, int i, double q)
+static double count_hyperbolic_degree(const int* T, int n, void *params)
 {
   int j;
   double deg_q;
+  double q = ((double *)params)[0];
 
-  for (j = 0, deg_q = 0. ; j < T->n ; j++)
+  for (j = 0, deg_q = 0. ; j < n ; j++)
     {
-      deg_q += pow(PNL_MGET(T, i, j), q);
+      deg_q += pow(T[j], q);
     }
-  return deg_q;
+  return pow(deg_q, 1. / q);
 }
 
-/**
- * Copy T_prev(T_previ, :) into T(Ti,:)
- *
- * @param T an integer matrix with more columns than that T_prev
- * @param T_prev an integer matrix containing the last tensor computed
- * @param Ti the index of the line to consider in T
- * @param T_previ the index of the line to consider in T_prev
- *
- */
-static void copy_previous_tensor(PnlMatInt *T, PnlMatInt *T_prev, int Ti, int T_previ)
-{
-  int j;
-  for (j = 0 ; j < T_prev->n ; j++)
-    {
-      PNL_MLET(T, Ti, j) = PNL_MGET(T_prev, T_previ, j);
-    }
-}
-
-/**
- * Compute the integer matrix representing the decomposition as a tensor
- * product of the elements of * the multi-b basis onto the 1-d basis
- *
- * @param nb_variates the number of variates
- * @param nb_func the number of elements of the basis
- *
- * @return a tensor
- */
-static PnlMatInt *compute_tensor(int nb_func, int nb_variates)
-{
-  PnlMatInt *T;
-  T = pnl_mat_int_create(nb_func, nb_variates);
-  if (nb_variates == 1)
-    {
-      int i;
-      for (i = 0 ; i < nb_func ; i++)
-        {
-          PNL_MLET(T, i, 0) = i;
-        }
-      return T;
-    }
-  else
-    {
-      int current_degree, deg;
-      int block, block_start;
-      int i, j, k;
-      PnlMatInt *T_prev;
-      current_degree = 0;
-      T_prev = compute_tensor(nb_func, nb_variates - 1);
-
-      i = 0;
-      while (1) /* loop on global degree */
-        {
-          /* determining the last element of global degree <= current_degree */
-          j = 0;
-          while (j < T_prev->m && count_sum_degree(T_prev, j) < current_degree + 1)
-            {
-              j++;
-            }
-          j--;
-          for (k = j, deg = current_degree ; k >= 0 ; deg--)
-            {
-              block_start = k;
-              if (deg > 0)
-                {
-                  /* Find the beginning of the block with global degree deg */
-                  while (count_sum_degree(T_prev, block_start) == deg)
-                    {
-                      block_start--;
-                    }
-                  block_start++;
-                }
-              /* Loop in an increasing order over the block of global degree deg */
-              for (block = block_start ; block <= k ; block++ , i++)
-                {
-                  if (i == nb_func)
-                    {
-                      pnl_mat_int_free(&T_prev);
-                      return T;
-                    }
-                  copy_previous_tensor(T, T_prev, i, block);
-                  PNL_MLET(T, i, nb_variates - 1) = current_degree - deg;
-                }
-              /* Consider the previous block */
-              k = block_start - 1;
-            }
-          current_degree++;
-        }
-    }
-}
-
-/**
- * Compute the number of elements with total degree less or equal than degree
- * in the basis with (T->n + 1) variates
- *
- * @param T the tensor matrix of the basis with n-1 variates
- * @param degree the maximum total degree requested
- * @param count_degree a function to compute the total of a given line in a tensor
- * @param freedom_degree a function to compute the number of degrees of freedom
- *
- * @return the number of elements with total degree less or equal than degree in
- * the basis with n variates
- */
-static int compute_nb_elements(const PnlMatInt *T, int degree,
-    int (*count_degree)(const PnlMatInt *, int),
-    int (*freedom_degree)(int, int)
-)
-{
-  int i;
-  int total_elements; /* Number of elements of total degree smaller than degree */
-  total_elements = 0;
-  for (i = 0 ; i < T->m ; i++)
-    {
-      int deg = count_degree(T, i);
-      total_elements += freedom_degree(degree, deg) + 1;
-    }
-  return total_elements;
-}
 
 /**
  * Compute the tensor matrix of the nb_variates variate basis with a total degree less or
  * equal than degree. The total degree is defined by the function count_degree
  *
- * @param nb_variates the number of variates of the basis.
  * @param degree the total degree
+ * @param nb_variates the number of variates of the basis.
+ * @param nb_elements the maximum number of elements in the tensor matrix
+ * @param params extra parameters to pass to count_degree
  * @param count_degree a function to compute the total of a given line in a tensor
- * @param freedom_degree a function to compute the number of degrees of freedom
  *
  * @return the tensor matrix of the nb_variates variate basis with a total degree less or
  * equal than degree
  */
-static PnlMatInt *compute_tensor_from_degree_function(int degree, int nb_variates,
-    int (*count_degree)(const PnlMatInt *, int),
-    int (*freedom_degree)(int total, int partial)
+static PnlMatInt *compute_tensor_from_degree_function(int degree, int nb_variates, int nb_elements,
+    void *params, double (*count_degree)(const int*, int, void*)
 )
 {
-  PnlMatInt *T;
-  if (nb_variates <= 0)
+  int i, j;
+  int *partial_degrees = calloc(nb_variates, sizeof(int));
+  PnlMatInt *T = pnl_mat_int_create_from_zero(nb_elements, nb_variates);
+  for (i = 1; i < nb_elements; i++)
     {
-      printf("Nb of variates must be strictly positive in compute_tensor_from_degree\n");
-      abort();
-    }
-  if (nb_variates == 1)
-    {
-      int i;
-      T = pnl_mat_int_create(degree + 1, nb_variates);
-      for (i = 0 ; i < degree + 1 ; i++)
+      for (j = nb_variates - 1; j >= 0; j--)
         {
-          PNL_MLET(T, i, 0) = i;
+          partial_degrees[j]++;
+          if (count_degree(partial_degrees, nb_variates, params) <= degree) { break; }
+          partial_degrees[j] = 0;
         }
-      return T;
+      /* We could not find the next element */
+      if (j == -1) { break; }
+      pnl_mat_int_set_row_from_ptr(T, partial_degrees, i);
     }
-  else
-    {
-      int nb_elements;
-      int current_degree, deg;
-      int block_end, block_start;
-      int line, i, k;
-      PnlMatInt *T_prev;
-      current_degree = 0;
-      /* Compute the tensor with one variate less */
-      T_prev = compute_tensor_from_degree_function(degree, nb_variates - 1, count_degree, freedom_degree);
-      /* Compute the number of rows of T */
-      nb_elements = compute_nb_elements(T_prev, degree, count_degree, freedom_degree);
-      T = pnl_mat_int_create(nb_elements, nb_variates);
-      line = 0;
-      /* loop on global degree */
-      for (current_degree = 0 ; current_degree <= degree ; current_degree++)
-        {
-          /* loop on  partial degree between 0 and current_degree */
-          for (deg = 0 ; deg <= current_degree ; deg++)
-            {
-              block_start = 0;
-              block_end = 0;
-              /* Determine the first element with global degree = deg */
-              while (block_start < T_prev->m && count_degree(T_prev, block_start) < deg)
-                {
-                  block_start++;
-                }
-              block_end = block_start;
-              /* Find the last element of the block with global degree = deg */
-              while (block_end < T_prev->m && count_degree(T_prev, block_end) == deg)
-                {
-                  block_end++;
-                }
-              block_end--;
-
-              /* loop on the degree of the extra dimension */
-              for (i = freedom_degree(current_degree - 1, deg)  + 1; i <= freedom_degree(current_degree, deg) ; i++)
-                {
-
-                  for (k = block_start ; k <= block_end ; k++, line++)
-                    {
-                      copy_previous_tensor(T, T_prev, line, k);
-                      PNL_MLET(T, line, nb_variates - 1) = i;
-                    }
-                }
-            }
-        }
-      pnl_mat_int_free(&T_prev);
-      return T;
-    }
+  free(partial_degrees);
+  pnl_mat_int_resize(T, i, nb_variates);
+  return T;
 }
 
-/**
- * Compute the tensor representation
- *
- * @param[in,out] T
- * @param degree
- * @param nb_variates
- *
- * @return the number of rows already computed in T
- */
-static int compute_tensor_from_sum_degree_rec(PnlMatInt *T, int degree, int nb_variates)
-{
-  if (nb_variates <= 0)
-    {
-      printf("Nb of variates must be strictly positive in compute_tensor_from_degree\n");
-      abort();
-    }
-  if (nb_variates == 1)
-    {
-      int i;
-      pnl_mat_int_set_zero(T);
-      for (i = 0 ; i < degree + 1 ; i++)
-        {
-          PNL_MLET(T, i, 0) = i;
-        }
-      return degree + 1;
-    }
-  else
-    {
-      int l, deg, current_row;
-      int rows_rec = compute_tensor_from_sum_degree_rec(T, degree, nb_variates - 1);
-      current_row = rows_rec;
-      for (l = 0; l < rows_rec; l++)
-        {
-          int partial_degree = count_sum_degree(T, l);
-          for (deg = 1; deg <= degree - partial_degree; deg++)
-            {
-              PnlVectInt row_l = pnl_vect_int_wrap_mat_row(T, l);
-              pnl_mat_int_set_row(T, &row_l, current_row);
-              PNL_MLET(T, current_row, nb_variates - 1) = deg;
-              current_row ++;
-            }
-        }
-      return current_row;
-    }
-}
 
 static PnlMatInt *compute_tensor_from_sum_degree(int degree, int nb_variates)
 {
   int nb_elements = (int) pnl_round(pnl_sf_choose(nb_variates + degree, degree));
-  PnlMatInt *T = pnl_mat_int_create(nb_elements, nb_variates);
-  compute_tensor_from_sum_degree_rec(T, degree, nb_variates);
-  return T;
-}
-
-static PnlMatInt *compute_tensor_from_prod_degree(int degree, int nb_variates)
-{
-  return compute_tensor_from_degree_function(degree, nb_variates, count_prod_degree, freedom_degree_prod);
+  return compute_tensor_from_degree_function(degree, nb_variates, nb_elements, NULL, count_sum_degree);
 }
 
 /**
  * Compute the tensor matrix of the n-variate basis with a
  * hyperbolic degree of order q less or equal than degree
  *
- * @param n the number of variates of the basis.
  * @param q the hyperbolic index
+ * @param nb_variates the number of variates of the basis.
  * @param degree the total hyperbolic degree
  *
  * @return the tensor matrix of the n-variate basis with a total degree less or equal than degree
  */
-static PnlMatInt *compute_tensor_from_hyperbolic_degree(double degree, double q, int n)
+static PnlMatInt *compute_tensor_from_hyperbolic_degree(double degree, double q, int nb_variates)
 {
-  int i, i_sparse;
-  double degree_q;
-  PnlMatInt *T;
-  T = compute_tensor_from_sum_degree((int)ceil(degree), n);
-  degree_q = pow(degree, q);
-  for (i = 0, i_sparse = 0 ; i < T->m ; i++)
-    {
-      if (count_hyperbolic_degree(T, i, q) > degree_q) continue;
-      if (i_sparse < i)
-        {
-          memcpy(T->array + i_sparse * n, T->array + i * n, n * sizeof(int));
-        }
-      i_sparse++;
-    }
-  pnl_mat_int_resize(T, i_sparse, n);
-  return T;
+  int nb_elements = (int) pnl_round(pnl_sf_choose(nb_variates + degree, degree));
+  return compute_tensor_from_degree_function(degree, nb_variates, nb_elements, &q, count_hyperbolic_degree);
+}
+
+static PnlMatInt *compute_tensor_from_prod_degree(int degree, int nb_variates)
+{
+  int nb_elements = nb_degrees_freedom_prod(degree, nb_variates);
+  return compute_tensor_from_degree_function(degree, nb_variates, nb_elements, NULL, count_prod_degree);
 }
 
 /**
@@ -1067,9 +855,18 @@ PnlBasis *pnl_basis_create_from_tensor(int index, const PnlMatInt *T)
  */
 PnlBasis *pnl_basis_create(int index, int nb_func, int nb_variates)
 {
+  int degree = 0;
   PnlMatInt *T;
   CHECK_IS_CONSTRUCTIBLE_FROM_TENSOR(index, "Use pnl_basis_local_create to create a local basis");
-  T = compute_tensor(nb_func, nb_variates);
+  for (degree = 0; 1; degree++)
+    {
+      if (pnl_round(pnl_sf_choose(nb_variates + degree, degree)) > nb_func)
+        {
+          break;
+        }
+    }
+  degree--;
+  T = compute_tensor_from_degree_function(degree, nb_variates, nb_func, NULL, count_sum_degree);
   return pnl_basis_create_from_tensor(index, T);
 }
 
