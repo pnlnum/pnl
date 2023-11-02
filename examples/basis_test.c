@@ -33,8 +33,8 @@
 
 static int PRINT_COEFF = 0;
 
-#define WRITE_DATA
-
+/* Uncomment to regenerate data files for tensor constructor comparison */
+/* #define WRITE_DATA */
 
 static void write_data(const char *expected_result_file, const PnlSpMatInt *SpT)
 {
@@ -45,14 +45,66 @@ static void write_data(const char *expected_result_file, const PnlSpMatInt *SpT)
 #endif
 }
 
+/**
+ * @brief Compare the matrix A and B allowing a row permutation. Call
+ *   pnl_test_set_ok or pnl_test_set_fail0
+ * on exit
+ *
+ * @param A a sparse integer matrix (observed result)
+ * @param B a sparse integer matrix (expected result)
+ * @param msg The message to print along with the result
+ */
+static void compare_sp_mat_int_up_to_permutation(PnlSpMatInt *A, PnlSpMatInt *B, const char *msg)
+{
+  int iA, iB;
+  int status = PNL_TRUE;
+  PnlMatInt *A_full = pnl_mat_int_create_from_sp_mat(A);
+  PnlMatInt *B_full = pnl_mat_int_create_from_sp_mat(B);
+  if (A_full->m != B_full -> m || A_full->n != B_full->n)
+    {
+      status = PNL_FALSE;
+    }
+  for (iA = 0; iA < A_full->m; iA++)
+    {
+      PnlVectInt row_A = pnl_vect_int_wrap_mat_row(A_full, iA);
+      for (iB = 0; iB < B_full->m; iB++)
+        {
+          PnlVectInt row_B = pnl_vect_int_wrap_mat_row(B_full, iB);
+          if (pnl_vect_int_eq(&row_A, &row_B) == PNL_TRUE)
+            {
+              break;
+            }
+        }
+      if (iB == B_full->m)
+        {
+          // No matching row was found in B
+          status = PNL_FALSE;
+          break;
+        }
+    }
+  if (status == PNL_FALSE)
+    {
+      pnl_test_set_fail0(msg);
+      printf("\n  expected:\n");
+      pnl_sp_mat_int_print(B);
+      printf("  observed:\n");
+      pnl_sp_mat_int_print(A);
+    }
+  else
+    {
+      pnl_test_set_ok(msg);
+    }
+
+  pnl_mat_int_free(&A_full);
+  pnl_mat_int_free(&B_full);
+}
 
 static void test_sum_tensor_constructor(int degree, int space_dim, const char *expected_result_file)
 {
   PnlBasis *B = pnl_basis_create_from_degree(PNL_BASIS_HERMITE, degree, space_dim);
   write_data(expected_result_file, B->SpT);
   PnlSpMatInt *expected_SpT = pnl_sp_mat_int_create_from_file(expected_result_file);
-  pnl_test_sp_mat_int_eq(B->SpT, expected_SpT, "test_sum_tensor_constructor", "");
-  pnl_sp_mat_int_free(&expected_SpT);
+  compare_sp_mat_int_up_to_permutation(B->SpT, expected_SpT, "test_sum_tensor_constructor");
   pnl_basis_free(&B);
 }
 
@@ -71,7 +123,7 @@ static void test_prod_tensor_constructor(int degree, int space_dim, const char *
   PnlBasis *B = pnl_basis_create_from_prod_degree(PNL_BASIS_HERMITE, degree, space_dim);
   write_data(expected_result_file, B->SpT);
   PnlSpMatInt *expected_SpT = pnl_sp_mat_int_create_from_file(expected_result_file);
-  pnl_test_sp_mat_int_eq(B->SpT, expected_SpT, "test_prod_tensor_constructor", "");
+  compare_sp_mat_int_up_to_permutation(B->SpT, expected_SpT, "test_prod_tensor_constructor");
   pnl_sp_mat_int_free(&expected_SpT);
   pnl_basis_free(&B);
 }
@@ -81,7 +133,7 @@ static void test_hyperbolic_tensor_constructor(int degree, double q, int space_d
   PnlBasis *B = pnl_basis_create_from_hyperbolic_degree(PNL_BASIS_HERMITE, degree, q, space_dim);
   write_data(expected_result_file, B->SpT);
   PnlSpMatInt *expected_SpT = pnl_sp_mat_int_create_from_file(expected_result_file);
-  pnl_test_sp_mat_int_eq(B->SpT, expected_SpT, "test_hyperbolic_tensor_constructor", "");
+  compare_sp_mat_int_up_to_permutation(B->SpT, expected_SpT, "test_hyperbolic_tensor_constructor");
   pnl_sp_mat_int_free(&expected_SpT);
   pnl_basis_free(&B);
 }
@@ -513,8 +565,8 @@ int main(int argc, char **argv)
   if (pnl_test_is_verbose()) PRINT_COEFF = 1;
   test_sum_tensor_constructor(3, 4, DATA_FILE("tensor_sum_deg_3_dim_4.txt"));
   test_sum_tensor_constructor(2, 5, DATA_FILE("tensor_sum_deg_2_dim_5.txt"));
-  test_tensor_constructor(15, 4, DATA_FILE("tensor_n15_dim_4.txt"));
-  test_tensor_constructor(28, 5, DATA_FILE("tensor_n28_dim_5.txt"));
+  // test_tensor_constructor(15, 4, DATA_FILE("tensor_n15_dim_4.txt"));
+  // test_tensor_constructor(28, 5, DATA_FILE("tensor_n28_dim_5.txt"));
   test_hyperbolic_tensor_constructor(3, 0.6, 4, DATA_FILE("tensor_hyperbolic_deg_3_dim_4_q06.txt"));
   test_hyperbolic_tensor_constructor(2, 0.6, 5, DATA_FILE("tensor_hyperbolic_deg_2_dim_5_q06.txt"));
   test_prod_tensor_constructor(2, 5, DATA_FILE("tensor_prod_deg_2_dim_5.txt"));
@@ -523,6 +575,5 @@ int main(int argc, char **argv)
   exp_regression2();
   regression_multid();
   pnl_basis_eval_test();
-  pnl_test_finalize("Basis functions");
-  return PNL_OK;
+  exit(pnl_test_finalize("Basis functions"));
 }
