@@ -5,6 +5,21 @@ All notable changes to PNL will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.13.0] - 2023-11-03
+
+### Added
+
+- Add missing documentation on local bases.
+- Add tests for basis tensor constructors.
+
+### Changed
+
+- For the sake of consistency, the constructors `pnl_basis_create_local` and `pnl_basis_create_local_regular` are renamed to `pnl_basis_local_create` and `pnl_basis_local_create_regular`.
+- The function `pnl_basis_i` is not marked `inline` anymore.
+- In functions to compute a basis derivative, first check that `Df` is not `NULL`.
+- Prevent standard `PnlBasis` constructors to be used to create a local basis (type `PNL_BASIS_LOCAL`).
+- Refactor `PnlBasis` tensor constructors to drop the recursive and copy approach.
+
 ## [1.12.1] - 2023-10-25
 
 ### Fixed
