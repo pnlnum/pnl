@@ -577,7 +577,7 @@ void FUNCTION(pnl_mat, print_csv)(const TYPE(PnlMat) *M, char sep)
  */
 void FUNCTION(pnl_mat, fprint)(FILE *fic, const TYPE(PnlMat) *M)
 {
-  FUNCTION(pnl_mat, fprint_csv)(stdout, M, ' ');
+  FUNCTION(pnl_mat, fprint_csv)(fic, M, ' ');
 }
 
 /**
