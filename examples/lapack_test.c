@@ -23,6 +23,7 @@
 
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_random.h"
+#define DATA_DIR "Data"
 #include "tests_utils.h"
 
 
@@ -135,8 +136,8 @@ static void pnl_mat_log_test ()
 static void pnl_mat_complex_exp_test ()
 {
   PnlMatComplex *A, *expA, *sol;
-  A = pnl_mat_complex_create_from_file ("Data/Acomplex.txt");
-  sol = pnl_mat_complex_create_from_file ("Data/expAcomplex.txt");
+  A = pnl_mat_complex_create_from_file (DATA_FILE("Acomplex.txt"));
+  sol = pnl_mat_complex_create_from_file (DATA_FILE("expAcomplex.txt"));
   expA = pnl_mat_complex_new ();
   pnl_mat_complex_exp (expA, A);
 
@@ -149,7 +150,7 @@ static void pnl_mat_complex_exp_test ()
 static void pnl_mat_complex_log_test ()
 {
   PnlMatComplex *A, *logA, *explogA;
-  A = pnl_mat_complex_create_from_file ("Data/expAcomplex.txt");
+  A = pnl_mat_complex_create_from_file (DATA_FILE("expAcomplex.txt"));
   logA = pnl_mat_complex_new ();
   explogA = pnl_mat_complex_new ();
   pnl_mat_complex_log (logA, A);

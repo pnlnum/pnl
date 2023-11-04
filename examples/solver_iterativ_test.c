@@ -22,6 +22,7 @@
 #include <math.h>
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_linalgsolver.h"
+#define DATA_DIR "Data"
 #include "tests_utils.h"
 
 
@@ -40,8 +41,8 @@ void Test_Solver_sym(void )
   x1=pnl_vect_create_from_scalar(Size,2);
   x2=pnl_vect_create_from_scalar(Size,2);
   x3=pnl_vect_create_from_scalar(Size,2);
-  M=pnl_mat_create_from_file("Data/Test_mat_sym");
-  PC=pnl_mat_create_from_file("Data/Test_PCmat");
+  M=pnl_mat_create_from_file(DATA_FILE("Test_mat_sym"));
+  PC=pnl_mat_create_from_file(DATA_FILE("Test_PCmat"));
 
   Solver=pnl_cg_solver_create(b->size,20,1e-6);
   Solver2=pnl_bicg_solver_create(b->size,20,1e-6);
@@ -71,12 +72,12 @@ void Test_Solver_no_sym(void )
   PnlBicgSolver* Solver2;
   PnlGmresSolver* Solver3;
   Size=20;
-  b   = pnl_vect_create_from_file ("Data/Test_vect_rhs.dat");
-  res = pnl_vect_create_from_file ("Data/Test_res.dat");
+  b   = pnl_vect_create_from_file (DATA_FILE("Test_vect_rhs.dat"));
+  res = pnl_vect_create_from_file (DATA_FILE("Test_res.dat"));
   x1=pnl_vect_create_from_scalar(Size,0.0);
   x2=pnl_vect_create_from_scalar(Size,0.0);
-  Q=pnl_mat_create_from_file("Data/Test_mat_no_sym.dat");
-  PC=pnl_mat_create_from_file("Data/Test_PCmat_20.dat");
+  Q=pnl_mat_create_from_file(DATA_FILE("Test_mat_no_sym.dat"));
+  PC=pnl_mat_create_from_file(DATA_FILE("Test_PCmat_20.dat"));
 
   Solver2=pnl_bicg_solver_create(b->size,100,1e-6);
   Solver3=pnl_gmres_solver_create(b->size,100,20,1e-6);

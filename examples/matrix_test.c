@@ -23,6 +23,7 @@
 
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_random.h"
+#define DATA_DIR "Data"
 #include "tests_utils.h"
 
 /* static double function_prod(double x, double y) {return x*y;} */
@@ -348,9 +349,9 @@ J1:
 static void pnl_mat_mult_mat_test()
 {
   PnlMat *A, *B, *AB, *res;
-  A = pnl_mat_create_from_file ("Data/A.txt");
-  B = pnl_mat_create_from_file ("Data/B.txt");
-  AB = pnl_mat_create_from_file ("Data/AB.txt");
+  A = pnl_mat_create_from_file (DATA_FILE("A.txt"));
+  B = pnl_mat_create_from_file (DATA_FILE("B.txt"));
+  AB = pnl_mat_create_from_file (DATA_FILE("AB.txt"));
   res = pnl_mat_mult_mat (A, B);
 
   pnl_test_mat_eq_abs(AB, res, 1E-12, "mat_mult_mat", "");
@@ -364,9 +365,9 @@ static void pnl_mat_mult_mat_test()
 static void pnl_mat_kron_test()
 {
   PnlMat *A, *B, *AB, *res;
-  A = pnl_mat_create_from_file ("Data/A.txt");
-  B = pnl_mat_create_from_file ("Data/B.txt");
-  AB = pnl_mat_create_from_file ("Data/kron_A_B.txt");
+  A = pnl_mat_create_from_file (DATA_FILE("A.txt"));
+  B = pnl_mat_create_from_file (DATA_FILE("B.txt"));
+  AB = pnl_mat_create_from_file (DATA_FILE("kron_A_B.txt"));
   res = pnl_mat_kron(A, B);
 
   pnl_test_mat_eq_abs(AB, res, 1E-12, "mat_kron", "");
@@ -380,9 +381,9 @@ static void pnl_mat_kron_test()
 static void pnl_mat_mult_mat_inplace_test()
 {
   PnlMat *A, *B, *AB, *res;
-  A = pnl_mat_create_from_file ("Data/A.txt");
-  B = pnl_mat_create_from_file ("Data/B.txt");
-  AB = pnl_mat_create_from_file ("Data/AB.txt");
+  A = pnl_mat_create_from_file (DATA_FILE("A.txt"));
+  B = pnl_mat_create_from_file (DATA_FILE("B.txt"));
+  AB = pnl_mat_create_from_file (DATA_FILE("AB.txt"));
   res = pnl_mat_new ();
   pnl_mat_mult_mat_inplace (res, A, B);
 
@@ -399,9 +400,9 @@ static void pnl_mat_mult_vect_test()
   PnlMat *A;
   PnlVect *Ax, *x, *y;
 
-  A = pnl_mat_create_from_file ("Data/A.txt");
-  Ax = pnl_vect_create_from_file ("Data/Ax.txt");
-  x = pnl_vect_create_from_file ("Data/x.txt");
+  A = pnl_mat_create_from_file (DATA_FILE("A.txt"));
+  Ax = pnl_vect_create_from_file (DATA_FILE("Ax.txt"));
+  x = pnl_vect_create_from_file (DATA_FILE("x.txt"));
 
   y = pnl_vect_new ();
   pnl_mat_mult_vect_inplace (y, A, x);
@@ -702,10 +703,10 @@ static void pnl_mat_sum_test()
   pnl_test_eq_abs ( sum, pnl_mat_sum(M), 1E-12, "mat_sum", "");
   pnl_mat_free(&M);
 
-  M_cumsum_c = pnl_mat_create_from_file("Data/cumsum_A_c.txt");
-  M_cumsum_r = pnl_mat_create_from_file("Data/cumsum_A_r.txt");
+  M_cumsum_c = pnl_mat_create_from_file(DATA_FILE("cumsum_A_c.txt"));
+  M_cumsum_r = pnl_mat_create_from_file(DATA_FILE("cumsum_A_r.txt"));
 
-  Mcopy = pnl_mat_create_from_file ("Data/A.txt");
+  Mcopy = pnl_mat_create_from_file (DATA_FILE("A.txt"));
   M = pnl_mat_new ();
 
   pnl_mat_clone (M, Mcopy);
@@ -736,10 +737,10 @@ static void pnl_mat_prod_test()
   pnl_test_eq_abs ( prod, pnl_mat_prod(M), 1E-12, "mat_prod", "");
   pnl_mat_free(&M);
 
-  M_cumprod_c = pnl_mat_create_from_file("Data/cumprod_A_c.txt");
-  M_cumprod_r = pnl_mat_create_from_file("Data/cumprod_A_r.txt");
+  M_cumprod_c = pnl_mat_create_from_file(DATA_FILE("cumprod_A_c.txt"));
+  M_cumprod_r = pnl_mat_create_from_file(DATA_FILE("cumprod_A_r.txt"));
 
-  Mcopy = pnl_mat_create_from_file ("Data/A.txt");
+  Mcopy = pnl_mat_create_from_file (DATA_FILE("A.txt"));
   M = pnl_mat_new ();
 
   pnl_mat_clone (M, Mcopy);
@@ -759,10 +760,10 @@ static void pnl_mat_sum_vect_test()
 {
   PnlMat *M;
   PnlVect *V, *M_sum_r, *M_sum_c;
-  M_sum_c = pnl_vect_create_from_file("Data/sum_A_c.txt");
-  M_sum_r = pnl_vect_create_from_file("Data/sum_A_r.txt");
+  M_sum_c = pnl_vect_create_from_file(DATA_FILE("sum_A_c.txt"));
+  M_sum_r = pnl_vect_create_from_file(DATA_FILE("sum_A_r.txt"));
 
-  M = pnl_mat_create_from_file ("Data/A.txt");
+  M = pnl_mat_create_from_file (DATA_FILE("A.txt"));
   V = pnl_vect_new ();
 
   pnl_mat_sum_vect (V, M, 'r');
@@ -781,10 +782,10 @@ static void pnl_mat_prod_vect_test()
 {
   PnlMat *M;
   PnlVect *V, *M_prod_r, *M_prod_c;
-  M_prod_c = pnl_vect_create_from_file("Data/prod_A_c.txt");
-  M_prod_r = pnl_vect_create_from_file("Data/prod_A_r.txt");
+  M_prod_c = pnl_vect_create_from_file(DATA_FILE("prod_A_c.txt"));
+  M_prod_r = pnl_vect_create_from_file(DATA_FILE("prod_A_r.txt"));
 
-  M = pnl_mat_create_from_file ("Data/A.txt");
+  M = pnl_mat_create_from_file (DATA_FILE("A.txt"));
   V = pnl_vect_new ();
 
   pnl_mat_prod_vect (V, M, 'r');
@@ -803,14 +804,14 @@ static void pnl_mat_minmax_test()
 {
   PnlMat *M;
   PnlVect *V, *M_max_r, *M_max_c, *M_min_r, *M_min_c, *M_min_star, *M_max_star;
-  M_max_c = pnl_vect_create_from_file("Data/max_A_c.txt");
-  M_max_r = pnl_vect_create_from_file("Data/max_A_r.txt");
-  M_max_star = pnl_vect_create_from_file("Data/max_A_star.txt");
-  M_min_c = pnl_vect_create_from_file("Data/min_A_c.txt");
-  M_min_r = pnl_vect_create_from_file("Data/min_A_r.txt");
-  M_min_star = pnl_vect_create_from_file("Data/min_A_star.txt");
+  M_max_c = pnl_vect_create_from_file(DATA_FILE("max_A_c.txt"));
+  M_max_r = pnl_vect_create_from_file(DATA_FILE("max_A_r.txt"));
+  M_max_star = pnl_vect_create_from_file(DATA_FILE("max_A_star.txt"));
+  M_min_c = pnl_vect_create_from_file(DATA_FILE("min_A_c.txt"));
+  M_min_r = pnl_vect_create_from_file(DATA_FILE("min_A_r.txt"));
+  M_min_star = pnl_vect_create_from_file(DATA_FILE("min_A_star.txt"));
 
-  M = pnl_mat_create_from_file ("Data/A.txt");
+  M = pnl_mat_create_from_file (DATA_FILE("A.txt"));
   V = pnl_vect_new ();
 
   pnl_mat_max (V, M, 'r');
@@ -871,7 +872,7 @@ static void pnl_mat_qsort_test ()
   PnlMat *M, *Mclone, *res;
   PnlMatInt *t, *res_t;
 
-  Mclone = pnl_mat_create_from_file("Data/A.txt");
+  Mclone = pnl_mat_create_from_file(DATA_FILE("A.txt"));
   t = pnl_mat_int_new();
   M = pnl_mat_new ();
 
@@ -882,8 +883,8 @@ static void pnl_mat_qsort_test ()
    */
   pnl_mat_clone (M, Mclone);
   pnl_mat_qsort_index (M, t, 'r', 'i');
-  res = pnl_mat_create_from_file ("Data/sort_A_r_i.txt");
-  res_t = pnl_mat_int_create_from_file ("Data/sort_A_r_i_index.txt");
+  res = pnl_mat_create_from_file (DATA_FILE("sort_A_r_i.txt"));
+  res_t = pnl_mat_int_create_from_file (DATA_FILE("sort_A_r_i_index.txt"));
   pnl_mat_int_plus_scalar( res_t, -1);
   pnl_test_mat_eq_abs ( M, res, 1E-12, "mat_qsort r i", ""); 
   pnl_test_mat_int_eq ( t, res_t,  "mat_qsort r i (index)", ""); 
@@ -892,8 +893,8 @@ static void pnl_mat_qsort_test ()
 
   pnl_mat_clone (M, Mclone);
   pnl_mat_qsort_index (M, t, 'r', 'd');
-  res = pnl_mat_create_from_file ("Data/sort_A_r_d.txt");
-  res_t = pnl_mat_int_create_from_file ("Data/sort_A_r_d_index.txt");
+  res = pnl_mat_create_from_file (DATA_FILE("sort_A_r_d.txt"));
+  res_t = pnl_mat_int_create_from_file (DATA_FILE("sort_A_r_d_index.txt"));
   pnl_mat_int_plus_scalar( res_t, -1);
   pnl_test_mat_eq_abs ( M, res, 1E-12, "mat_qsort r d", ""); 
   pnl_test_mat_int_eq ( t, res_t,  "mat_qsort r d (index)", ""); 
@@ -902,8 +903,8 @@ static void pnl_mat_qsort_test ()
 
   pnl_mat_clone (M, Mclone);
   pnl_mat_qsort_index (M, t, 'c', 'i');
-  res = pnl_mat_create_from_file ("Data/sort_A_c_i.txt");
-  res_t = pnl_mat_int_create_from_file ("Data/sort_A_c_i_index.txt");
+  res = pnl_mat_create_from_file (DATA_FILE("sort_A_c_i.txt"));
+  res_t = pnl_mat_int_create_from_file (DATA_FILE("sort_A_c_i_index.txt"));
   pnl_mat_int_plus_scalar( res_t, -1);
   pnl_test_mat_eq_abs ( M, res, 1E-12, "mat_qsort c i", ""); 
   pnl_test_mat_int_eq ( t, res_t,  "mat_qsort c i (index)", ""); 
@@ -912,8 +913,8 @@ static void pnl_mat_qsort_test ()
 
   pnl_mat_clone (M, Mclone);
   pnl_mat_qsort_index (M, t, 'c', 'd');
-  res = pnl_mat_create_from_file ("Data/sort_A_c_d.txt");
-  res_t = pnl_mat_int_create_from_file ("Data/sort_A_c_d_index.txt");
+  res = pnl_mat_create_from_file (DATA_FILE("sort_A_c_d.txt"));
+  res_t = pnl_mat_int_create_from_file (DATA_FILE("sort_A_c_d_index.txt"));
   pnl_mat_int_plus_scalar( res_t, -1);
   pnl_test_mat_eq_abs ( M, res, 1E-12, "mat_qsort c d", ""); 
   pnl_test_mat_int_eq ( t, res_t,  "mat_qsort c d (index)", ""); 
@@ -1253,7 +1254,7 @@ static void pnl_mat_complex_complex_syslin_test ()
 static void pnl_mat_create_from_file_test ()
 {
   PnlMat *M, *res;
-  M = pnl_mat_create_from_file ("Data/Test_read_mat.dat");
+  M = pnl_mat_create_from_file (DATA_FILE("Test_read_mat.dat"));
   res = pnl_mat_create_from_list (4, 6, 1.,2.,3.,4.,5.,6., 7.,8.,9.,10.,11.,12., 13.,14.,15.,16.,17.,18., 19.,20.,21.,22.,23.,24.);
   pnl_test_mat_eq_abs (M, res, 1E-18, "mat_create_from_file", "");
   pnl_mat_free (&M);
@@ -1268,12 +1269,12 @@ static void pnl_mat_dgemm_test()
 
   alpha = 1.3;
   beta = 0.5;
-  expec = pnl_mat_create_from_file ("Data/alpha_AB_beta_C.txt");
-  A = pnl_mat_create_from_file ("Data/A.txt");
-  tA = pnl_mat_create_from_file ("Data/tA.txt");
-  B = pnl_mat_create_from_file ("Data/B.txt");
-  tB = pnl_mat_create_from_file ("Data/tB.txt");
-  Cclone = pnl_mat_create_from_file ("Data/C.txt");
+  expec = pnl_mat_create_from_file (DATA_FILE("alpha_AB_beta_C.txt"));
+  A = pnl_mat_create_from_file (DATA_FILE("A.txt"));
+  tA = pnl_mat_create_from_file (DATA_FILE("tA.txt"));
+  B = pnl_mat_create_from_file (DATA_FILE("B.txt"));
+  tB = pnl_mat_create_from_file (DATA_FILE("tB.txt"));
+  Cclone = pnl_mat_create_from_file (DATA_FILE("C.txt"));
   C = pnl_mat_new ();
 
 
@@ -1313,11 +1314,11 @@ static void pnl_mat_dgemv_test ()
   beta = 0.5;
 
 
-  expec = pnl_vect_create_from_file ("Data/alpha_Ax_beta_y.txt");
-  A = pnl_mat_create_from_file ("Data/A.txt");
-  tA = pnl_mat_create_from_file ("Data/tA.txt");
-  x = pnl_vect_create_from_file ("Data/x.txt");
-  yclone = pnl_vect_create_from_file ("Data/y.txt");
+  expec = pnl_vect_create_from_file (DATA_FILE("alpha_Ax_beta_y.txt"));
+  A = pnl_mat_create_from_file (DATA_FILE("A.txt"));
+  tA = pnl_mat_create_from_file (DATA_FILE("tA.txt"));
+  x = pnl_vect_create_from_file (DATA_FILE("x.txt"));
+  yclone = pnl_vect_create_from_file (DATA_FILE("y.txt"));
   y = pnl_vect_new ();
 
   pnl_vect_clone (y, yclone);
@@ -1341,9 +1342,9 @@ static void pnl_mat_mult_vect_transpose_test ()
   PnlMat *tA;
   PnlVect *x, *y1, *Ax;
 
-  tA = pnl_mat_create_from_file ("Data/tA.txt");
-  Ax = pnl_vect_create_from_file ("Data/Ax.txt");
-  x = pnl_vect_create_from_file ("Data/x.txt");
+  tA = pnl_mat_create_from_file (DATA_FILE("tA.txt"));
+  Ax = pnl_vect_create_from_file (DATA_FILE("Ax.txt"));
+  x = pnl_vect_create_from_file (DATA_FILE("x.txt"));
   y1 = pnl_vect_new ();
   pnl_mat_mult_vect_transpose_inplace (y1, tA, x);
   pnl_test_vect_eq_abs (y1, Ax, 1E-12, "mat_mult_vect_transpose_inplace", "");

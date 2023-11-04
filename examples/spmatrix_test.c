@@ -24,6 +24,7 @@
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_sp_matrix.h"
 #include "pnl/pnl_random.h"
+#define DATA_DIR "Data"
 #include "tests_utils.h"
 
 const double PRECISION=1E-6;
@@ -115,8 +116,8 @@ static void sp_clone_test ()
 
 static void sp_create_from_file_test()
 {
-  PnlSpMat *Msparse = pnl_sp_mat_create_from_file("Data/sparse_M.txt");
-  PnlMat *Mfull = pnl_mat_create_from_file("Data/full_M.txt");
+  PnlSpMat *Msparse = pnl_sp_mat_create_from_file(DATA_FILE("sparse_M.txt"));
+  PnlMat *Mfull = pnl_mat_create_from_file(DATA_FILE("full_M.txt"));
   PnlSpMat *Msparse_from_full = pnl_sp_mat_create_from_mat(Mfull);
   if (pnl_sp_mat_isequal(Msparse, Msparse_from_full, PRECISION))
     pnl_test_set_ok ("sp_mat_create_from_file");
@@ -237,9 +238,9 @@ static void sp_mat_kron ()
   PnlMat *A, *B, *AB, *res;
   PnlSpMat *Asp, *Bsp, *ressp;
   double abserr = 1E-12;
-  A = pnl_mat_create_from_file ("Data/A.txt");
-  B = pnl_mat_create_from_file ("Data/B.txt");
-  AB = pnl_mat_create_from_file ("Data/kron_A_B.txt");
+  A = pnl_mat_create_from_file (DATA_FILE("A.txt"));
+  B = pnl_mat_create_from_file (DATA_FILE("B.txt"));
+  AB = pnl_mat_create_from_file (DATA_FILE("kron_A_B.txt"));
   Asp = pnl_sp_mat_create_from_mat (A);
   Bsp = pnl_sp_mat_create_from_mat (B);
   ressp = pnl_sp_mat_kron (Asp, Bsp);
