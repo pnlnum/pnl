@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="iso-8859-1" ?> 
+<?xml version="1.0" encoding="utf-8" ?> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
 <!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->  
 <html xmlns="http://www.w3.org/1999/xhtml"  
 > 
 <head><title>Introduction</title> 
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> 
-<meta name="generator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
-<meta name="originator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<meta name="generator" content="TeX4ht (https://tug.org/tex4ht/)" /> 
+<meta name="originator" content="TeX4ht (https://tug.org/tex4ht/)" /> 
 <!-- xhtml,uni-html4,2,subsection+,next,html --> 
 <meta name="src" content="pnl-manual.tex" /> 
 <link rel="stylesheet" type="text/css" href="pnl-manual.css" /> 
 </head><body 
 >
-<!--l. 165--><div class="crosslinks"><p class="noindent">[<a 
+<!--l. 167--><div class="crosslinks"><p class="noindent">[<a 
 href="pnl-manualse2.html" >next</a>] [<a 
 href="pnl-manualli1.html" >prev</a>] [<a 
 href="pnl-manualli1.html#tailpnl-manualli1.html" >prev-tail</a>] [<a 
@@ -21,59 +21,85 @@ href="#tailpnl-manualse1.html">tail</a>] [<a
 href="pnl-manual.html#pnl-manualse1.html" >up</a>] </p></div>
 <h3 class="sectionHead"><span class="titlemark">1   </span> <a 
  id="x3-20001"></a>Introduction</h3>
-<!--l. 166--><p class="noindent" >
+<!--l. 168--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">1.1   </span> <a 
  id="x3-30001.1"></a>What is Pnl</h4>
-<!--l. 168--><p class="noindent" >Pnl is a scientific library written in C and distributed under the Gnu Lesser General Public Licence
+<!--l. 170--><p class="noindent" >Pnl is a scientific library written in C and distributed under the Gnu Lesser General Public Licence
 (LGPL). This manual is divided into four parts. </p>
      <ul class="itemize1">
-     <li class="itemize">Mathematical  functions:  complex  numbers,  special  functions,  standard  financial
+     <li class="itemize">
+     <!--l. 174--><p class="noindent" >Mathematical  functions:  complex  numbers,  special  functions,  standard  financial
      functions for the Black &amp; Scholes model.
-     </li>
-     <li class="itemize">Linear  algebra  :  vectors,  matrices  (dense  and  sparse),  hypermatrices,  tridiagonal
+     </p></li>
+     <li class="itemize">
+     <!--l. 176--><p class="noindent" >Linear  algebra  :  vectors,  matrices  (dense  and  sparse),  hypermatrices,  tridiagonal
      matrices, band matrices and the corresponding routines to manipulate them and solve
      linear systems.
-     </li>
-     <li class="itemize">Probabilistic  functions:  random  number  generators  and  cumulative  distribution
+     </p></li>
+     <li class="itemize">
+     <!--l. 178--><p class="noindent" >Probabilistic  functions:  random  number  generators  and  cumulative  distribution
      functions.
-     </li>
-     <li class="itemize">Deterministic toolbox : FFT, Laplace inversion, numerical integration, zero searching,
+     </p></li>
+     <li class="itemize">
+     <!--l. 180--><p class="noindent" >Deterministic toolbox : FFT, Laplace inversion, numerical integration, zero searching,
      multivariate polynomial regression, <span 
-class="lmmi-10x-x-109">&#x2026;</span><span style="margin-left:0.3em" class="thinspace"></span></li></ul>
-<!--l. 182--><p class="noindent" >
+class="lmmi-10x-x-109">&#x2026;</span></p></li></ul>
+<!--l. 184--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">1.2   </span> <a 
  id="x3-40001.2"></a>A few helpful conventions</h4>
      <ul class="itemize1">
-     <li class="itemize">All header file names are prefixed by <span class="obeylines-h"><span class="verb"><span 
+     <li class="itemize">
+     <!--l. 187--><p class="noindent" >All header file names are prefixed by <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl_</span></span></span> and are surrounded by the preprocessor
-     conditionals
+     conditionals </p><!--l. 189-->
                                                                                     
 
                                                                                     
-     <div class="verbatim" id="verbatim-1">
-     #ifndef&#x00A0;_PNL_MATRIX_H
-     &#x00A0;<br />#define&#x00A0;_PNL_MATRIX_H
-     &#x00A0;<br />
-     &#x00A0;<br />...
-     &#x00A0;<br />
-     &#x00A0;<br />#endif&#x00A0;/*&#x00A0;_PNL_MATRIX_H
-</div>
-     <!--l. 194--><p class="nopar" >All the header files are protected by an <span class="obeylines-h"><span class="verb"><span 
+     <pre class="lstlisting" id="listing-1"><span class="label"><a 
+ id="x3-4001r1"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtk-10">ifndef</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">_PNL_MATRIX_H</span></span> 
+<span class="label"><a 
+ id="x3-4002r2"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtk-10">define</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">_PNL_MATRIX_H</span></span> 
+<span class="label"><a 
+ id="x3-4003r3"></a></span> 
+<span class="label"><a 
+ id="x3-4004r4"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">...</span></span> 
+<span class="label"><a 
+ id="x3-4005r5"></a></span> 
+<span class="label"><a 
+ id="x3-4006r6"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtk-10">endif</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">_PNL_MATRIX_H</span></span></pre>
+     
+     <!--l. 197--><p class="noindent" >All the header files are protected by an <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">extern</span><span 
 class="ec-lmtt-10x-x-109">&#x00A0;"C"</span></span></span> declaration for possible use with a C++
-     compiler. The header files must be include using
-                                                                                    
-
-                                                                                    
-</p>
-     <div class="verbatim" id="verbatim-2">
-     #include&#x00A0;"pnl/pnl_xxx.h"
-</div>
-     <!--l. 199--><p class="nopar" >
-     </p></li>
-     <li class="itemize">All function names are prefixed by <span class="obeylines-h"><span class="verb"><span 
+     compiler. The header files must be include using </p><!--l. 199-->
+     <pre class="lstlisting" id="listing-2"><span class="label"><a 
+ id="x3-4007r1"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtk-10">include</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">"</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">pnl</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">/</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">pnl_xxx</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">.</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">h</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">"</span></span></pre>
+     
+     </li>
+     <li class="itemize">
+     <!--l. 203--><p class="noindent" >All function names are prefixed by <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl_</span></span></span> except those implementing complex number
      arithmetic which are named following the <span 
 class="ec-lmri-10x-x-109">C99 </span>complex library but using a capitalised first
@@ -82,8 +108,9 @@ class="ec-lmtt-10x-x-109">C</span></span></span>. <br
 class="newline" />For example, the addition of two complex numbers is performed by the function
      <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">Cadd</span></span></span>.
-     </li>
-     <li class="itemize">Function containing <span class="obeylines-h"><span class="verb"><span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 209--><p class="noindent" >Function containing <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">_create</span></span></span> in their names always return a pointer to an object created by
      one or several calls to dynamic allocation. Once these objects are not used, they must be freed
      by calling the same function but ending in <span class="obeylines-h"><span class="verb"><span 
@@ -101,8 +128,9 @@ class="ts1-lmr10-x-x-109">*</span>&#8221;). These objects must be freed by calli
      <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl_foo_free</span></span></span> or <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl_foo_bar_free</span></span></span>.
-     </li>
-     <li class="itemize">Functions ending in <span class="obeylines-h"><span class="verb"><span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 219--><p class="noindent" >Functions ending in <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">_clone</span></span></span> take two arguments <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">src</span></span></span> and <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">dest</span></span></span> and modify <span class="obeylines-h"><span class="verb"><span 
@@ -111,8 +139,9 @@ class="ec-lmtt-10x-x-109">dest</span></span></span> to make it
 class="ec-lmtt-10x-x-109">src</span></span></span>, ie. they have the same size and data. Note that no new object is allocated,
      <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">dest</span></span></span> must exist before calling this function.
-     </li>
-     <li class="itemize">Functions ending in <span class="obeylines-h"><span class="verb"><span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 224--><p class="noindent" >Functions ending in <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">_copy</span></span></span> create a new object identical (ie. with the same size and content) as
      its argument but independent (ie. modifying one of them does not alter the other). Calling
      <span class="obeylines-h"><span class="verb"><span 
@@ -125,8 +154,9 @@ class="ec-lmtt-10x-x-109">&#x00A0;pnl_xxx_new()</span></span></span> function an
      <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl_xxx_clone(A,</span><span 
 class="ec-lmtt-10x-x-109">&#x00A0;B)</span></span></span>.
-     </li>
-     <li class="itemize">Every object must implement a <span class="obeylines-h"><span class="verb"><span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 230--><p class="noindent" >Every object must implement a <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl_xxx_new</span></span></span> function which returns a pointer to an empty
      object with all its elements properly set to <span 
 class="rm-lmr-10x-x-109">0</span>. This means that the objects returned by the
@@ -134,8 +164,12 @@ class="rm-lmr-10x-x-109">0</span>. This means that the objects returned by the
 class="ec-lmtt-10x-x-109">pnl_xxx_new</span></span></span> functions can be used as output arguments for functions ending in <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">_inplace</span></span></span> for
      instance. They are suitable for being resized.
-     </li>
-     <li class="itemize">Functions containing <span class="obeylines-h"><span class="verb"><span 
+     </p></li>
+     <li class="itemize">
+                                                                                    
+
+                                                                                    
+     <!--l. 236--><p class="noindent" >Functions containing <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">_wrap_</span></span></span> in their names always return an object, not a pointer to an
      object, and do not make any use of dynamic allocation. The returned object must not be
      freed. For instance, a function <span class="obeylines-h"><span class="verb"><span 
@@ -143,22 +177,80 @@ class="ec-lmtt-10x-x-109">pnl_foo_wrap_xxx</span></span></span> returns an objec
 class="ec-lmtt-10x-x-109">PnlFoo</span></span></span> and a function
      <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl_foo_bar_wrap_xxx</span></span></span> returns an object <span class="obeylines-h"><span class="verb"><span 
-class="ec-lmtt-10x-x-109">PnlFooBar</span></span></span>
-                                                                                    
-
-                                                                                    
-     <div class="verbatim" id="verbatim-3">
-     &#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlVectComplex&#x00A0;*v1;
-     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlVectComplex&#x00A0;v2;
-     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;v1&#x00A0;=&#x00A0;pnl_vect_complex_create_from_scalar&#x00A0;(5,&#x00A0;Complex(0.,&#x00A0;1.));
-     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;v2&#x00A0;=&#x00A0;pnl_vect_complex_wrap_subvect&#x00A0;(v1,&#x00A0;1,&#x00A0;2);
-     &#x00A0;<br />
-     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;...
-     &#x00A0;<br />
-     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;pnl_vect_complex_free&#x00A0;(&amp;v1);
-     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;
-</div>
-     <!--l. 249--><p class="nopar" >The vector <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">PnlFooBar</span></span></span> </p><!--l. 242-->
+     <pre class="lstlisting" id="listing-3"><span class="label"><a 
+ id="x3-4008r1"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">PnlVectComplex</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">v1</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x3-4009r2"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">PnlVectComplex</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">v2</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x3-4010r3"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">v1</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">pnl_vect_complex_create_from_scalar</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">(5,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">Complex</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(0.,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">1.)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x3-4011r4"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">v2</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">pnl_vect_complex_wrap_subvect</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">v1</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">1,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">2)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x3-4012r5"></a></span> 
+<span class="label"><a 
+ id="x3-4013r6"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">...</span></span> 
+<span class="label"><a 
+ id="x3-4014r7"></a></span> 
+<span class="label"><a 
+ id="x3-4015r8"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">pnl_vect_complex_free</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">(&amp;</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">v1</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span></pre>
+     
+     <!--l. 252--><p class="noindent" >The vector <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">v1</span></span></span> is of size 5 and contains the pure imaginary number <span 
 class="lmmi-10x-x-109">i</span>. The vector <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">v2</span></span></span> only
@@ -174,40 +266,45 @@ class="ec-lmbx-10x-x-109">not</span>
      <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">v2</span></span></span>.
      </p></li>
-     <li class="itemize">Functions ending in <span class="obeylines-h"><span class="verb"><span 
+     <li class="itemize">
+     <!--l. 258--><p class="noindent" >Functions ending in <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">_init</span></span></span> do not create any object but only perform some internal
      initialisation.
-     </li>
-     <li class="itemize">Hypermatrices, matrices and vectors are stored using a flat block of memory obtained by
+     </p></li>
+     <li class="itemize">
+     <!--l. 261--><p class="noindent" >Hypermatrices, matrices and vectors are stored using a flat block of memory obtained by
      concatenating the matrix rows and C-style pointer-to-pointer arrays. Matrices are stored in
      row-major order, which means that the column index moves continuously. Note that this
      convention is not <span 
 class="ec-lmri-10x-x-109">Blas &amp; Lapack </span>compliant since Fortran expects 2-dimensional arrays to be
      stored in a column-major order.
-     </li>
-     <li class="itemize">Type names always begin with <span class="obeylines-h"><span class="verb"><span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 268--><p class="noindent" >Type names always begin with <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">Pnl</span></span></span>, they do not contain underscores but instead we use
      capital letters to separate units in type names. <br 
 class="newline" />Examples : <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">PnlMat</span></span></span>, <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">PnlMatComplex</span></span></span>.
-     </li>
-     <li class="itemize">Object and function names are intimately linked : an object <span class="obeylines-h"><span class="verb"><span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 272--><p class="noindent" >Object and function names are intimately linked : an object <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">PnlFoo</span></span></span> is manipulated by
      functions starting in <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl_foo</span></span></span>, an object <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">PnlFooBar</span></span></span> is manipulated by functions
      starting in <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl_foo_bar</span></span></span>. In table&#x00A0;<a 
-href="#x3-40011">1<!--tex4ht:ref: pnltypes --></a>, we summarise the types and their corresponding
+href="#x3-40161">1<!--tex4ht:ref: pnltypes --></a>, we summarise the types and their corresponding
      prefixes.
+</p>
                                                                                     
 
                                                                                     
      <hr class="figure" /><div class="figure" 
 ><a 
- id="x3-40011"></a> <!--tex4ht:inline--><div class="tabular"> <table id="TBL-2" class="tabular" 
-cellspacing="0" cellpadding="0"  
+ id="x3-40161"></a> <!--tex4ht:inline--><div class="tabular"> <table id="TBL-2" class="tabular" 
+ 
 ><colgroup id="TBL-2-1g"><col 
 id="TBL-2-1" /></colgroup><colgroup id="TBL-2-2g"><col 
 id="TBL-2-2" /></colgroup><tr 
@@ -316,31 +413,63 @@ class="td11">pnl_gmres_solver      </td>
 </tr><tr 
 class="hline"><td><hr /></td><td><hr /></td></tr><tr  
  style="vertical-align:baseline;" id="TBL-2-28-"><td  style="white-space:nowrap; text-align:left;" id="TBL-2-28-1"  
-class="td11">                </td></tr></table></div>
+class="td11">                </td></tr></table>                                                           </div>
 <br /> <div class="caption" 
 ><span class="id">Figure&#x00A0;1: </span><span  
-class="content">Pnl types</span></div><!--tex4ht:label?: x3-40011 -->
+class="content">Pnl types</span></div><!--tex4ht:label?: x3-40161 -->
      </div><hr class="endfigure" />
      </li>
-     <li class="itemize">All macro names begin with <span class="obeylines-h"><span class="verb"><span 
+     <li class="itemize">
+     <!--l. 315--><p class="noindent" >All macro names begin with <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">PNL_</span></span></span> and are capitalised.
-     </li>
-     <li class="itemize">Differences between <span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 317--><p class="noindent" >Differences between <span 
 class="ec-lmbx-10x-x-109">copy </span>and <span 
 class="ec-lmbx-10x-x-109">clone </span>methods. The <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">copy</span></span></span> methods take a single argument and
      return a pointer to an object of the same type which is an independent copy of its argument.
-     Example:
-                                                                                    
-
-                                                                                    
-     <div class="verbatim" id="verbatim-4">
-     &#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlVect&#x00A0;*v1,&#x00A0;*v2;
-     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;v1&#x00A0;=&#x00A0;pnl_vect_create_from_scalar&#x00A0;(5,&#x00A0;2.5);
-     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;v2&#x00A0;=&#x00A0;pnl_vect_copy&#x00A0;(v1);
-     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;
-</div>
-     <!--l. 323--><p class="nopar" ><span class="obeylines-h"><span class="verb"><span 
+     Example: </p><!--l. 321-->
+     <pre class="lstlisting" id="listing-4"><span class="label"><a 
+ id="x3-4017r1"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">PnlVect</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">v1</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">v2</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x3-4018r2"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">v1</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">pnl_vect_create_from_scalar</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">(5,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">2.5)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x3-4019r3"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">v2</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">pnl_vect_copy</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">v1</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span></pre>
+     
+     <!--l. 326--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">v1</span></span></span> and <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">v2</span></span></span> are two vectors of size 5 with all their elements equal to 2.5. Note that <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">v2</span></span></span> <span 
@@ -352,21 +481,60 @@ class="ec-lmtt-10x-x-109">pnl_vect_create_xxx</span></span></span> because other
 class="ec-lmtt-10x-x-109">v1</span></span></span> and <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">v2</span></span></span> are independent in the sense that a modification to one of them does
      not affect the other.
-     </p><!--l. 330--><p class="noindent" >The <span class="obeylines-h"><span class="verb"><span 
-class="ec-lmtt-10x-x-109">clone</span></span></span> methods take two arguments and fill the first one with the second one.
-     Example:
-                                                                                    
-
-                                                                                    
-</p>
-     <div class="verbatim" id="verbatim-5">
-     &#x00A0;&#x00A0;&#x00A0;&#x00A0;PnlVect&#x00A0;*v1,&#x00A0;*v2;
-     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;v1&#x00A0;=&#x00A0;pnl_vect_create_from_scalar&#x00A0;(5,&#x00A0;2.5);
-     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;v2&#x00A0;=&#x00A0;pnl_vect_new&#x00A0;();
-     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;pnl_vect_clone&#x00A0;(v2,&#x00A0;v1);
-     &#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;
-</div>
-     <!--l. 338--><p class="nopar" ><span class="obeylines-h"><span class="verb"><span 
+     </p><!--l. 332--><p class="noindent" >The <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">clone</span></span></span> methods take two arguments and fill the first one with the second one. Example:
+     </p><!--l. 335-->
+     <pre class="lstlisting" id="listing-5"><span class="label"><a 
+ id="x3-4020r1"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">PnlVect</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">v1</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">v2</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x3-4021r2"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">v1</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">pnl_vect_create_from_scalar</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">(5,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">2.5)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x3-4022r3"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">v2</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">pnl_vect_new</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">()</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x3-4023r4"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">pnl_vect_clone</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">v2</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">v1</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span></pre>
+     
+     <!--l. 341--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">v1</span></span></span> and <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">v2</span></span></span> are two vectors of size 5 with all their elements equal to 2.5. Note that <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">v2</span></span></span> <span 
@@ -378,73 +546,85 @@ class="ec-lmtt-10x-x-109">pnl_vect_clone</span></span></span>
 class="ec-lmtt-10x-x-109">v1</span></span></span> and <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">v2</span></span></span> are independent in the sense that a modification to one of them does not
      modify the other.
+                                                                                    
+
+                                                                                    
      </p></li>
-     <li class="itemize">All objects are measured using integers <span class="obeylines-h"><span class="verb"><span 
+     <li class="itemize">
+     <!--l. 348--><p class="noindent" >All objects are measured using integers <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">int</span></span></span> and not <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">size_t</span></span></span>. Hence, iterations over vectors,
      matrices, &#x2026;should use an index of type <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">int</span></span></span>.
-     </li>
-     <li class="itemize">In fonctions ending in <span class="obeylines-h"><span class="verb"><span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 352--><p class="noindent" >In fonctions ending in <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">inplace</span></span></span>, the output parameter must be different from any of the input
-     parameters.</li></ul>
-<!--l. 355--><p class="noindent" >
+     parameters.</p></li></ul>
+<!--l. 357--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">1.3   </span> <a 
  id="x3-50001.3"></a>Using Pnl</h4>
-<!--l. 357--><p class="noindent" >In this section, we assume that the library is installed in the directory <span class="obeylines-h"><span class="verb"><span 
+<!--l. 359--><p class="noindent" >In this section, we assume that the library is installed in the directory <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">$HOME/pnl-xxx</span></span></span>.
-</p><!--l. 360--><p class="noindent" >Once installed, the library can be found in the <span class="obeylines-h"><span class="verb"><span 
+</p><!--l. 362--><p class="noindent" >Once installed, the library can be found in the <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">$HOME/pnl-xxx/lib</span></span></span> directory and the header files in
 the <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">$HOME/pnl-xxx/include</span></span></span> directory.
-</p><!--l. 364--><p class="noindent" >
+</p><!--l. 366--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">1.3.1   </span> <a 
  id="x3-60001.3.1"></a>Compiling and Linking</h5>
-<!--l. 366--><p class="noindent" >The header files of the library are installed in a root <span class="obeylines-h"><span class="verb"><span 
+<!--l. 368--><p class="noindent" >The header files of the library are installed in a root <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl</span></span></span> directory and should always be included
 with this <span class="obeylines-h"><span class="verb"><span 
-class="ec-lmtt-10x-x-109">pnl/</span></span></span> prefix. So, for instance to use random number generators you should
-include
-                                                                                    
-
-                                                                                    
-</p>
-<div class="verbatim" id="verbatim-6">
-#include&#x00A0;&#x003C;pnl/pnl_random.h&#x003E;
-</div>
-<!--l. 371--><p class="nopar" >
-</p>
-<!--l. 373--><p class="noindent" ><span class="paragraphHead"><a 
- id="x3-70001.3.1"></a><span 
+class="ec-lmtt-10x-x-109">pnl/</span></span></span> prefix. So, for instance to use random number generators you should include
+</p><!--l. 371-->
+<pre class="lstlisting" id="listing-6"><span class="label"><a 
+ id="x3-6001r1"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtk-10">include</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">&#x003C;</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">pnl</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">/</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">pnl_random</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">.</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">h</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">&#x003E;</span></span></pre>
+<!--l. 375--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x3-7000"></a><span 
 class="ec-lmbx-10x-x-109">Compiling and linking by hand.</span></span>
 If <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">gcc</span></span></span> or <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">llvm</span></span></span> is used, you should pass the following options </p>
      <ul class="itemize1">
-     <li class="itemize"><span class="obeylines-h"><span class="verb"><span 
+     <li class="itemize">
+     <!--l. 379--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">-I$HOME/pnl-xxx/include</span></span></span> for compiling
-     </li>
-     <li class="itemize"><span class="obeylines-h"><span class="verb"><span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 380--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">-L$HOME/pnl-xxx/lib</span><span 
-class="ec-lmtt-10x-x-109">&#x00A0;-lpnl</span></span></span> for linking</li></ul>
-<!--l. 380--><p class="noindent" >This does not work straight away on all OS especially if the library is not installed in a standard
+class="ec-lmtt-10x-x-109">&#x00A0;-lpnl</span></span></span> for linking</p></li></ul>
+<!--l. 382--><p class="noindent" >This does not work straight away on all OS especially if the library is not installed in a standard
 directory namely <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">/usr/</span></span></span> or <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">/usr/local/</span></span></span> for which you need a privileged writing access. On some
 systems, you may need to add to the linker flags the dependencies of the library, which can become
 very tedious. Therefore, we provide a second automatic mechanism which takes care of the
 dependencies on its own.
+                                                                                    
+
+                                                                                    
 </p>
-<!--l. 387--><p class="noindent" ><span class="paragraphHead"><a 
- id="x3-80001.3.1"></a><span 
+<!--l. 389--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x3-8000"></a><span 
 class="ec-lmbx-10x-x-109">Compiling and linking using an automatic Makefile.</span></span>
 This mechanism only works under Unix (it has been tested under various Linux distributions and
 Mac OS X).
-</p><!--l. 392--><p class="noindent" >First, you need to create a new directory wherever you want, put in all your code and create a
+</p><!--l. 394--><p class="noindent" >First, you need to create a new directory wherever you want, put in all your code and create a
 Makefile as below
-</p><!--l. 395--><p class="noindent" >To define your target just add the executable name, say <span class="obeylines-h"><span class="verb"><span 
+</p><!--l. 397--><p class="noindent" >To define your target just add the executable name, say <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">my-exec</span></span></span>, to the <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">BINS</span></span></span> list and create an
 entry <span class="obeylines-h"><span class="verb"><span 
@@ -452,142 +632,357 @@ class="ec-lmtt-10x-x-109">my_exec_SRC</span></span></span> carrying the list of 
 dashes &#8217;-&#8217; may appear in an executable name, the name of the associated variable holding the list of
 source files is obtained by replacing dashes with underscores &#8217;_&#8217; and adding the _SRC
 suffix.
-</p><!--l. 402--><p class="noindent" >Assume you want to create two binaries : <span class="obeylines-h"><span class="verb"><span 
+</p><!--l. 404--><p class="noindent" >Assume you want to create two binaries : <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">my-exec</span></span></span> based on mixed C and C++ code (<span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">file1.c</span></span></span> and
 <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">file2.cpp</span></span></span>) and <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">mybinary</span></span></span> based on <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">poo1.cxx</span></span></span> and <span class="obeylines-h"><span class="verb"><span 
-class="ec-lmtt-10x-x-109">poo2.cpp</span></span></span>. You can use the following
-Makefile.
-                                                                                    
-
-                                                                                    
-</p>
-<div class="verbatim" id="verbatim-7">
-##&#x00A0;Flags&#x00A0;passed&#x00A0;to&#x00A0;the&#x00A0;linker
-&#x00A0;<br />LDFLAGS=
-&#x00A0;<br />
-&#x00A0;<br />##&#x00A0;Flags&#x00A0;passed&#x00A0;to&#x00A0;the&#x00A0;compiler
-&#x00A0;<br />CFLAGS=
-&#x00A0;<br />
-&#x00A0;<br />##&#x00A0;list&#x00A0;of&#x00A0;executables&#x00A0;to&#x00A0;create
-&#x00A0;<br />BINS=my-exec&#x00A0;mybinary
-&#x00A0;<br />
-&#x00A0;<br />my_exec_SRC=file1.c&#x00A0;file2.cpp
-&#x00A0;<br />#&#x00A0;optional&#x00A0;flags&#x00A0;for&#x00A0;compiling&#x00A0;and&#x00A0;linking
-&#x00A0;<br />my_exec_CFLAGS=
-&#x00A0;<br />my_exec_CXXFLAGS=
-&#x00A0;<br />my_exec_LDFLAGS=
-&#x00A0;<br />
-&#x00A0;<br />mybinary_SRC=poo1.cxx&#x00A0;poo2.cpp
-&#x00A0;<br />#&#x00A0;optional&#x00A0;flags&#x00A0;for&#x00A0;compiling&#x00A0;and&#x00A0;linking
-&#x00A0;<br />mybinary_CFLAGS=
-&#x00A0;<br />mybinary_CXXFLAGS=
-&#x00A0;<br />mybinary_LDFLAGS=
-&#x00A0;<br />
-&#x00A0;<br />
-&#x00A0;<br />##&#x00A0;This&#x00A0;line&#x00A0;must&#x00A0;be&#x00A0;the&#x00A0;last&#x00A0;one
-&#x00A0;<br />include&#x00A0;full_path_to_pnl_build/CMakeuser.incl
-</div>
-<!--l. 430--><p class="nopar" >Let us comment a little the different variables </p>
+class="ec-lmtt-10x-x-109">poo2.cpp</span></span></span>. You can use the following Makefile.
+</p><!--l. 407-->
+<pre class="lstlisting" id="listing-7"><span class="label"><a 
+ id="x3-8001r1"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">#</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">Flags</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">passed</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">to</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">linker</span></span> 
+<span class="label"><a 
+ id="x3-8002r2"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">LDFLAGS</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span> 
+<span class="label"><a 
+ id="x3-8003r3"></a></span> 
+<span class="label"><a 
+ id="x3-8004r4"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">#</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">Flags</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">passed</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">to</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">compiler</span></span> 
+<span class="label"><a 
+ id="x3-8005r5"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">CFLAGS</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span> 
+<span class="label"><a 
+ id="x3-8006r6"></a></span> 
+<span class="label"><a 
+ id="x3-8007r7"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">#</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">list</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">executables</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">to</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">create</span></span> 
+<span class="label"><a 
+ id="x3-8008r8"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">BINS</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">my</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">-</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">exec</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">mybinary</span></span> 
+<span class="label"><a 
+ id="x3-8009r9"></a></span> 
+<span class="label"><a 
+ id="x3-8010r10"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">my_exec_SRC</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">file1</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">.</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">c</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">file2</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">.</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">cpp</span></span> 
+<span class="label"><a 
+ id="x3-8011r11"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">#</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">optional</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">flags</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">for</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">compiling</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">and</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">linking</span></span> 
+<span class="label"><a 
+ id="x3-8012r12"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">my_exec_CFLAGS</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span> 
+<span class="label"><a 
+ id="x3-8013r13"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">my_exec_CXXFLAGS</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span> 
+<span class="label"><a 
+ id="x3-8014r14"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">my_exec_LDFLAGS</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span> 
+<span class="label"><a 
+ id="x3-8015r15"></a></span> 
+<span class="label"><a 
+ id="x3-8016r16"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">mybinary_SRC</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">poo1</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">.</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">cxx</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">poo2</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">.</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">cpp</span></span> 
+<span class="label"><a 
+ id="x3-8017r17"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">#</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">optional</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">flags</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">for</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">compiling</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">and</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">linking</span></span> 
+<span class="label"><a 
+ id="x3-8018r18"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">mybinary_CFLAGS</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span> 
+<span class="label"><a 
+ id="x3-8019r19"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">mybinary_CXXFLAGS</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span> 
+<span class="label"><a 
+ id="x3-8020r20"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">mybinary_LDFLAGS</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span> 
+<span class="label"><a 
+ id="x3-8021r21"></a></span> 
+<span class="label"><a 
+ id="x3-8022r22"></a></span> 
+<span class="label"><a 
+ id="x3-8023r23"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">#</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">This</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">line</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">must</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">be</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">last</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">one</span></span> 
+<span class="label"><a 
+ id="x3-8024r24"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">include</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">full_path_to_pnl_build</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">/</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">CMakeuser</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">.</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">incl</span></span></pre>
+<!--l. 433--><p class="noindent" >Let us comment a little the different variables </p>
      <ul class="itemize1">
-     <li class="itemize"><span class="obeylines-h"><span class="verb"><span 
+     <li class="itemize">
+     <!--l. 435--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">CFLAGS</span></span></span>: global flags used for creating objects based on C code
-     </li>
-     <li class="itemize"><span class="obeylines-h"><span class="verb"><span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 436--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">CXXFLAGS</span></span></span>: global flags used for creating objects based on C++ code
-     </li>
-     <li class="itemize"><span class="obeylines-h"><span class="verb"><span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 437--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">LDFLAGS</span></span></span>: gobal linker flags.
-     </li>
-     <li class="itemize"><span class="obeylines-h"><span class="verb"><span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 438--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">binaryname_CFLAGS</span></span></span>: flags used when creating the objects based on C code and required
      by <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">binaryname</span></span></span>
-     </li>
-     <li class="itemize"><span class="obeylines-h"><span class="verb"><span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 440--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">binaryname_CXXFLAGS</span></span></span>: flags used when creating the objects based on C++ code and
      required by <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">binaryname</span></span></span>
+     </p></li>
+     <li class="itemize">
+     <!--l. 442--><p class="noindent" ><span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">binaryname_LDFLAGS</span></span></span>: flags used when linking objects for creating <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">binaryname</span></span></span></p></li></ul>
+<!--l. 445--><p class="noindent" >An example of such a Makefile can be found in <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">pnl-xxx/perso</span></span></span>.
                                                                                     
 
                                                                                     
-     </li>
-     <li class="itemize"><span class="obeylines-h"><span class="verb"><span 
-class="ec-lmtt-10x-x-109">binaryname_LDFLAGS</span></span></span>: flags used when linking objects for creating <span class="obeylines-h"><span class="verb"><span 
-class="ec-lmtt-10x-x-109">binaryname</span></span></span></li></ul>
-<!--l. 443--><p class="noindent" >An example of such a Makefile can be found in <span class="obeylines-h"><span class="verb"><span 
-class="ec-lmtt-10x-x-109">pnl-xxx/perso</span></span></span>.
-</p><!--l. 445--><p class="noindent" ><span 
-class="ec-lmbx-10x-x-109">Warning: </span>if a file appears in the source list of several binairies, the flags used to compile this file
-are determined by the ones of the first binary involving this file. In the following example <span class="obeylines-h"><span class="verb"><span 
-class="ec-lmtt-10x-x-109">main.cpp</span></span></span>
-will always be compiled with the flag <span class="obeylines-h"><span class="verb"><span 
+</p><!--l. 447--><p class="noindent" ><span 
+class="ec-lmbx-10x-x-109">Warning: </span>if a file appears in the source list of several binairies, the flags used to compile this
+file are determined by the ones of the first binary involving this file. In the following
+example <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">main.cpp</span></span></span> will always be compiled with the flag <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">-O3</span></span></span> even for generating <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">bin2</span></span></span>
-                                                                                    
-
-                                                                                    
-</p>
-<div class="verbatim" id="verbatim-8">
-BINS=bin1&#x00A0;bin2
-&#x00A0;<br />
-&#x00A0;<br />bin1_SRC=main.cpp&#x00A0;poo1.c
-&#x00A0;<br />my_exec_CXXFLAGS=-O3
-&#x00A0;<br />
-&#x00A0;<br />bin2_SRC=main.cpp&#x00A0;poo2.c
-&#x00A0;<br />mybinary_CXXFLAGS=-g&#x00A0;-O0
-&#x00A0;<br />
-&#x00A0;<br />##&#x00A0;This&#x00A0;line&#x00A0;must&#x00A0;be&#x00A0;the&#x00A0;last&#x00A0;one
-&#x00A0;<br />include&#x00A0;full_path_to_pnl_build/CMakeuser.incl
-</div>
-<!--l. 460--><p class="nopar" >
-</p>
-<!--l. 462--><p class="noindent" ><span class="paragraphHead"><a 
- id="x3-90001.3.1"></a><span 
+</p><!--l. 451-->
+<pre class="lstlisting" id="listing-8"><span class="label"><a 
+ id="x3-8025r1"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">BINS</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">bin1</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">bin2</span></span> 
+<span class="label"><a 
+ id="x3-8026r2"></a></span> 
+<span class="label"><a 
+ id="x3-8027r3"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">bin1_SRC</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">main</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">.</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">cpp</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">poo1</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">.</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">c</span></span> 
+<span class="label"><a 
+ id="x3-8028r4"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">my_exec_CXXFLAGS</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">=-</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">O3</span></span> 
+<span class="label"><a 
+ id="x3-8029r5"></a></span> 
+<span class="label"><a 
+ id="x3-8030r6"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">bin2_SRC</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">main</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">.</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">cpp</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">poo2</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">.</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">c</span></span> 
+<span class="label"><a 
+ id="x3-8031r7"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">mybinary_CXXFLAGS</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">=-</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">g</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">-</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">O0</span></span> 
+<span class="label"><a 
+ id="x3-8032r8"></a></span> 
+<span class="label"><a 
+ id="x3-8033r9"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">#</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">This</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">line</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">must</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">be</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">last</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">one</span></span> 
+<span class="label"><a 
+ id="x3-8034r10"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">include</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">full_path_to_pnl_build</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">/</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">CMakeuser</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">.</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">incl</span></span></pre>
+<!--l. 464--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x3-9000"></a><span 
 class="ec-lmbx-10x-x-109">Compiling and linking using CMake.</span></span>
 If you already use CMake for your new project, just add the following to your toplevel
 <span class="obeylines-h"><span class="verb"><span 
-class="ec-lmtt-10x-x-109">CMakeLists.txt</span></span></span>
-                                                                                    
-
-                                                                                    
-</p>
-<div class="verbatim" id="verbatim-9">
-find_package(Pnl&#x00A0;REQUIRED)
-&#x00A0;<br />set(LIBS&#x00A0;${LIBS}&#x00A0;${PNL_LIBRARIES})
-&#x00A0;<br />include_directories(${PNL_INCLUDE_DIRS})
-&#x00A0;<br />#&#x00A0;Deactivate&#x00A0;PNL&#x00A0;debugging&#x00A0;stuff&#x00A0;on&#x00A0;Release&#x00A0;builds
-&#x00A0;<br />if(${CMAKE_BUILD_TYPE}&#x00A0;STREQUAL&#x00A0;"Release")
-&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;add_definitions(-DPNL_RANGE_CHECK_OFF)
-&#x00A0;<br />endif()
-</div>
-<!--l. 474--><p class="nopar" >Then, call cmake with the following extra flag
-                                                                                    
-
-                                                                                    
-</p>
-<div class="verbatim" id="verbatim-10">
--DCMAKE_PREFIX_PATH=path/to/build-dir
-</div>
-<!--l. 478--><p class="nopar" >or add the variable <span class="obeylines-h"><span class="verb"><span 
+class="ec-lmtt-10x-x-109">CMakeLists.txt</span></span></span> </p><!--l. 468-->
+<pre class="lstlisting" id="listing-9"><span class="label"><a 
+ id="x3-9001r1"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">find_package</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">Pnl</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">REQUIRED</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span> 
+<span class="label"><a 
+ id="x3-9002r2"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">set</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">LIBS</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">$</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">{</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">LIBS</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">}</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">$</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">{</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">PNL_LIBRARIES</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">})</span></span> 
+<span class="label"><a 
+ id="x3-9003r3"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">include_directories</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">$</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">{</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">PNL_INCLUDE_DIRS</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">})</span></span> 
+<span class="label"><a 
+ id="x3-9004r4"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">#</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">Deactivate</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">PNL</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">debugging</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">stuff</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">on</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">Release</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">builds</span></span> 
+<span class="label"><a 
+ id="x3-9005r5"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">if</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">$</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">{</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">CMAKE_BUILD_TYPE</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">}</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">STREQUAL</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">"</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">Release</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">"</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span> 
+<span class="label"><a 
+ id="x3-9006r6"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtt-10">add_definitions</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(-</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">DPNL_RANGE_CHECK_OFF</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span> 
+<span class="label"><a 
+ id="x3-9007r7"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">endif</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">()</span></span></pre>
+<!--l. 477--><p class="noindent" >Then, call cmake with the following extra flag </p><!--l. 478-->
+<pre class="lstlisting" id="listing-10"><span class="label"><a 
+ id="x3-9008r1"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">-</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">DCMAKE_PREFIX_PATH</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">=</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">path</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">/</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">to</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">/</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">build</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">-</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">dir</span></span></pre>
+<!--l. 481--><p class="noindent" >or add the variable <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">CMAKE_BUILD_TYPE</span></span></span> to the GUI. <br 
 class="newline" />
-</p><!--l. 481--><p class="noindent" >Just in case, we give an example of a complete although elementary <span class="obeylines-h"><span class="verb"><span 
+</p><!--l. 483--><p class="noindent" >Just in case, we give an example of a complete although elementary <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">CMakeLists.txt</span></span></span>
 </p><div class="verbatiminput"></div>
-<!--l. 484--><p class="noindent" >
+<!--l. 486--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">1.3.2   </span> <a 
  id="x3-100001.3.2"></a>Inline Functions and getters</h5>
-<!--l. 487--><p class="noindent" >If it is supported by your compiler, getter and setter functions are declared as inline functions. This
+<!--l. 489--><p class="noindent" >If it is supported by your compiler, getter and setter functions are declared as inline functions. This
 is automatically detected when running CMake. By default, setter and getter functions check that
 the required access is valid, basically it boils down to checking whether the index of the access is
 within an acceptable range. These extra tests can become very expensive when getter and setter
 functions are intensively called.
-</p><!--l. 494--><p class="noindent" >Thus, it is possible to alter this default behaviour by defining the macro <span 
+</p><!--l. 496--><p class="noindent" >Thus, it is possible to alter this default behaviour by defining the macro <span 
 class="ec-lmtt-10x-x-109">PNL_RANGE_CHECK_OFF</span>.
 This macro is automatically defined when the library is compiled in Release mode, ie. with
 <span class="obeylines-h"><span class="verb"><span 

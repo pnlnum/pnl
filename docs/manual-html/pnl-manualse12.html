@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="iso-8859-1" ?> 
+<?xml version="1.0" encoding="utf-8" ?> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
 <!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->  
 <html xmlns="http://www.w3.org/1999/xhtml"  
 > 
 <head><title>Optimization</title> 
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> 
-<meta name="generator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
-<meta name="originator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<meta name="generator" content="TeX4ht (https://tug.org/tex4ht/)" /> 
+<meta name="originator" content="TeX4ht (https://tug.org/tex4ht/)" /> 
 <!-- xhtml,uni-html4,2,subsection+,next,html --> 
 <meta name="src" content="pnl-manual.tex" /> 
 <link rel="stylesheet" type="text/css" href="pnl-manual.css" /> 
@@ -20,17 +20,17 @@ href="pnl-manualse11.html#tailpnl-manualse11.html" >prev-tail</a>] [<a
 href="#tailpnl-manualse12.html">tail</a>] [<a 
 href="pnl-manual.html#pnl-manualse12.html" >up</a>] </p></div>
 <h3 class="sectionHead"><span class="titlemark">12   </span> <a 
- id="x14-12200012"></a>Optimization</h3>
+ id="x14-12300012"></a>Optimization</h3>
 <!--l. 3--><p class="noindent" >To use the functions described in this section, you should include <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl/pnl_optim.h</span></span></span>.
 </p><!--l. 5--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">12.1   </span> <a 
- id="x14-12300012.1"></a>Linear constrained optimization (linear programming)</h4>
+ id="x14-12400012.1"></a>Linear constrained optimization (linear programming)</h4>
 <!--l. 7--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">12.1.1   </span> <a 
- id="x14-12400012.1.1"></a>Overview</h5>
+ id="x14-12500012.1.1"></a>Overview</h5>
 <!--l. 9--><p class="noindent" >Consider the minimization problem
 </p><table 
 class="align-star">
@@ -40,35 +40,35 @@ class="rm-lmr-10x-x-109">min</span> <sub><span
 class="lmmi-8">x</span></sub>   </td>                                <td 
 class="align-even"><span 
 class="lmmi-10x-x-109">C</span><sup><span 
-class="lmmi-8">T</span> </sup><span 
+class="lmmi-8">T</span> </sup> <span 
 class="lmmi-10x-x-109">x</span></td>                                            <td 
 class="align-label"></td>                                <td 
 class="align-label">
                                 </td></tr><tr><td 
 class="align-odd">s.t.   </td>                                  <td 
 class="align-even"><span 
-class="lmmi-10x-x-109">A</span><sub>ineq</sub><span 
+class="lmmi-10x-x-109">A</span><sub>ineq</sub> <span 
 class="lmmi-10x-x-109">x </span><span 
-class="lmsy-10x-x-109">&#x2264; </span><span 
-class="lmmi-10x-x-109">B</span><sub>ineq</sub></td>                                  <td 
+class="lmsy-10x-x-109">&#x2264;</span><span 
+class="lmmi-10x-x-109">B</span><sub>ineq</sub></td>                                 <td 
 class="align-label"></td>                                <td 
 class="align-label">
                                 </td></tr><tr><td 
 class="align-odd"></td>                                       <td 
 class="align-even"><span 
-class="lmmi-10x-x-109">A</span><sub>eq</sub><span 
+class="lmmi-10x-x-109">A</span><sub>eq</sub> <span 
 class="lmmi-10x-x-109">x </span><span 
 class="rm-lmr-10x-x-109">= </span><span 
-class="lmmi-10x-x-109">B</span><sub>eq</sub></td>                                     <td 
+class="lmmi-10x-x-109">B</span><sub>eq</sub></td>                                    <td 
 class="align-label"></td>                                <td 
 class="align-label">
                                 </td></tr><tr><td 
 class="align-odd"></td>                                       <td 
 class="align-even"><span 
 class="lmmi-10x-x-109">x</span><sub>min</sub> <span 
-class="lmsy-10x-x-109">&#x2264; </span><span 
+class="lmsy-10x-x-109">&#x2264;</span><span 
 class="lmmi-10x-x-109">x </span><span 
-class="lmsy-10x-x-109">&#x2264; </span><span 
+class="lmsy-10x-x-109">&#x2264;</span><span 
 class="lmmi-10x-x-109">x</span><sub>max</sub></td>                                <td 
 class="align-label"></td>                                <td 
 class="align-label"></td></tr></table>
@@ -78,15 +78,16 @@ class="align-label"></td></tr></table>
 <!--l. 18--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">12.1.2   </span> <a 
- id="x14-12500012.1.2"></a>Functions</h5>
+ id="x14-12600012.1.2"></a>Functions</h5>
 <!--l. 19--><p class="noindent" >To solve such a linear problem, we provide a wrapper to the <span 
-class="ec-lmri-10x-x-109">LPSolve </span>library
-(<a 
+class="ec-lmri-10x-x-109">LPSolve </span>library (
+<a 
 href="http://lpsolve.sourceforge.net" class="url" ><span 
 class="ec-lmtt-10x-x-109">http://lpsolve.sourceforge.net</span></a>). </p>
      <ul class="itemize1">
-     <li class="itemize"><a 
- id="dx14-125001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+     <li class="itemize">
+     <!--l. 22--><p class="noindent" ><a 
+ id="dx14-126001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_optim_linprog</span></span>&#x00A0;(<span class='args'>const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>C, const <a 
@@ -107,34 +108,48 @@ class="ts1-lmr10-x-x-109">*</span>x_max, int debug, <a
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>xopt, double <span 
 class="ts1-lmr10-x-x-109">*</span>fobj_opt</span>)<br 
-class="newline" />   <span class='description'>Description&#x00A0;</span>This function has the following arguments:
+class="newline" />   <span class='description'>Description&#x00A0;</span>This function has the following arguments: </p>
           <ul class="itemize2">
-          <li class="itemize"><span class='var'>C</span> The coefficients of the linear objective function.
-          </li>
-          <li class="itemize"><span class='var'>A_ineq</span> The l.h.s matrix of the inequality constraints. Can be NULL.
-          </li>
-          <li class="itemize"><span class='var'>B_ineq</span> The r.h.s vector of the inequality constraints. The lengh of <span class='var'>B_ineq</span> must
+          <li class="itemize">
+          <!--l. 25--><p class="noindent" ><span class='var'>C</span> The coefficients of the linear objective function.
+          </p></li>
+          <li class="itemize">
+          <!--l. 26--><p class="noindent" ><span class='var'>A_ineq</span> The l.h.s matrix of the inequality constraints. Can be NULL.
+          </p></li>
+          <li class="itemize">
+          <!--l. 27--><p class="noindent" ><span class='var'>B_ineq</span> The r.h.s vector of the inequality constraints. The lengh of <span class='var'>B_ineq</span> must
           match the number of rows of <span class='var'>A_ineq</span>.
-          </li>
-          <li class="itemize"><span class='var'>A_eq</span> The l.h.s matrix of the equality constraints. Can be NULL.
-          </li>
-          <li class="itemize"><span class='var'>B_eq</span> The r.h.s vector of the equality constraints. The lengh of <span class='var'>B_eq</span> must match
+          </p></li>
+          <li class="itemize">
+          <!--l. 29--><p class="noindent" ><span class='var'>A_eq</span> The l.h.s matrix of the equality constraints. Can be NULL.
+          </p></li>
+          <li class="itemize">
+          <!--l. 30--><p class="noindent" ><span class='var'>B_eq</span> The r.h.s vector of the equality constraints. The lengh of <span class='var'>B_eq</span> must match
           the number of rows of <span class='var'>A_ineq</span>.
-          </li>
-          <li class="itemize"><span class='var'>x_min</span> The lower bound on <span class='var'>x</span>. If NULL, it means all the components of <span class='var'>x</span> must be
+          </p></li>
+          <li class="itemize">
+          <!--l. 32--><p class="noindent" ><span class='var'>x_min</span> The lower bound on <span class='var'>x</span>. If NULL, it means all the components of <span class='var'>x</span> must be
           non negative.
-          </li>
-          <li class="itemize"><span class='var'>x_max</span> The upper bound on <span class='var'>x</span>. If NULL, it means <span class='var'>+Infinity</span> for all the components.
-          </li>
-          <li class="itemize"><span class='var'>debug</span> TRUE or FALSE. If TRUE some debugging details are printed.
-          </li>
-          <li class="itemize"><span class='var'>xopt</span> The <span class='var'>argmin</span> of the problem.
-          </li>
-          <li class="itemize"><span class='var'>fobj_opt</span> The value of the obective funtion at the optimum <span class='var'>xopt</span></li></ul>
+          </p></li>
+          <li class="itemize">
+          <!--l. 34--><p class="noindent" ><span class='var'>x_max</span> The upper bound on <span class='var'>x</span>. If NULL, it means <span class='var'>+Infinity</span> for all the components.
+          </p></li>
+          <li class="itemize">
+          <!--l. 36--><p class="noindent" ><span class='var'>debug</span> TRUE or FALSE. If TRUE some debugging details are printed.
+          </p></li>
+          <li class="itemize">
+          <!--l. 37--><p class="noindent" ><span class='var'>xopt</span> The <span class='var'>argmin</span> of the problem.
+                                                                                    
+
+                                                                                    
+          </p></li>
+          <li class="itemize">
+          <!--l. 38--><p class="noindent" ><span class='var'>fobj_opt</span> The value of the obective funtion at the optimum <span class='var'>xopt</span></p></li></ul>
      <!--l. 40--><p class="noindent" >The function returns <span class='var'>OK</span> or <span class='var'>FAIL</span>.
      </p></li>
-     <li class="itemize"><a 
- id="dx14-125002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+     <li class="itemize">
+     <!--l. 42--><p class="noindent" ><a 
+ id="dx14-126002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_optim_linprog_sp</span></span>&#x00A0;(<span class='args'>const <a 
 href="pnl-manualse4.html#x6-790004.6.1"><span class='struct'>PnlSpMat</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>C, const <a 
@@ -160,79 +175,89 @@ class="ts1-lmr10-x-x-109">*</span>x_max,
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>xopt, double <span 
 class="ts1-lmr10-x-x-109">*</span>fobj_opt</span>)<br 
-class="newline" />   <span class='description'>Description&#x00A0;</span>This function has the following arguments:
+class="newline" />   <span class='description'>Description&#x00A0;</span>This function has the following arguments: </p>
+          <ul class="itemize2">
+          <li class="itemize">
+          <!--l. 45--><p class="noindent" ><span class='var'>C</span> The coefficients of the linear obejctive function, given as a sparse matrix with a
+          single column.
+          </p></li>
+          <li class="itemize">
+          <!--l. 47--><p class="noindent" ><span class='var'>A_ineq</span> The l.h.s matrix of the inequality constraints. Can be NULL.
+          </p></li>
+          <li class="itemize">
+          <!--l. 48--><p class="noindent" ><span class='var'>B_ineq</span> The r.h.s vector of the inequality constraints. The lengh of <span class='var'>B_ineq</span> must
+          match the number of rows of <span class='var'>A_ineq</span>.
+          </p></li>
+          <li class="itemize">
+          <!--l. 50--><p class="noindent" ><span class='var'>A_eq</span> The l.h.s matrix of the equality constraints. Can be NULL.
+          </p></li>
+          <li class="itemize">
+          <!--l. 51--><p class="noindent" ><span class='var'>B_eq</span> The r.h.s vector of the equality constraints. The lengh of <span class='var'>B_eq</span> must match
+          the number of rows of <span class='var'>A_ineq</span>.
+          </p></li>
+          <li class="itemize">
+          <!--l. 53--><p class="noindent" ><span class='var'>index_min</span>  The  indices  of  the  variables  with  a  lower  bound  constraint.  The
+          corresponding lower bound is given in <span class='var'>x_min</span>
+          </p></li>
+          <li class="itemize">
+          <!--l. 55--><p class="noindent" ><span class='var'>x_min</span> The lower bound on <span class='var'>x</span>. If NULL, it means all the components of <span class='var'>x</span> must be
+          non negative. Can be NULL. For non specified variables, the default lower bound
+          is <span class='var'>0</span>.
+          </p></li>
+          <li class="itemize">
+          <!--l. 58--><p class="noindent" ><span class='var'>index_max</span> The indices of the variables with an upper bound constraint. The
+          corresponding lower bound is given in <span class='var'>x_max</span>. Can be NULL.
                                                                                     
 
                                                                                     
-          <ul class="itemize2">
-          <li class="itemize"><span class='var'>C</span> The coefficients of the linear obejctive function, given as a sparse matrix with a
-          single column.
-          </li>
-          <li class="itemize"><span class='var'>A_ineq</span> The l.h.s matrix of the inequality constraints. Can be NULL.
-          </li>
-          <li class="itemize"><span class='var'>B_ineq</span> The r.h.s vector of the inequality constraints. The lengh of <span class='var'>B_ineq</span> must
-          match the number of rows of <span class='var'>A_ineq</span>.
-          </li>
-          <li class="itemize"><span class='var'>A_eq</span> The l.h.s matrix of the equality constraints. Can be NULL.
-          </li>
-          <li class="itemize"><span class='var'>B_eq</span> The r.h.s vector of the equality constraints. The lengh of <span class='var'>B_eq</span> must match
-          the number of rows of <span class='var'>A_ineq</span>.
-          </li>
-          <li class="itemize"><span class='var'>index_min</span>  The  indices  of  the  variables  with  a  lower  bound  constraint.  The
-          corresponding lower bound is given in <span class='var'>x_min</span>
-          </li>
-          <li class="itemize"><span class='var'>x_min</span> The lower bound on <span class='var'>x</span>. If NULL, it means all the components of <span class='var'>x</span> must be
-          non negative. Can be NULL. For non specified variables, the default lower bound
-          is <span class='var'>0</span>.
-          </li>
-          <li class="itemize"><span class='var'>index_max</span> The indices of the variables with an upper bound constraint. The
-          corresponding lower bound is given in <span class='var'>x_max</span>. Can be NULL.
-          </li>
-          <li class="itemize"><span class='var'>x_max</span> The upper bound on <span class='var'>x</span>. If NULL, it means <span class='var'>+Infinity</span> for all the components.
+          </p></li>
+          <li class="itemize">
+          <!--l. 60--><p class="noindent" ><span class='var'>x_max</span> The upper bound on <span class='var'>x</span>. If NULL, it means <span class='var'>+Infinity</span> for all the components.
           For non specified variables, the default upper bound is <span class='var'>+Infinity</span>..
-          </li>
-          <li class="itemize"><span class='var'>debug</span> TRUE or FALSE. If TRUE some debugging details are printed.
-          </li>
-          <li class="itemize"><span class='var'>xopt</span> The <span class='var'>argmin</span> of the problem.
-          </li>
-          <li class="itemize"><span class='var'>fobj_opt</span> The value of the obective funtion at the optimum <span class='var'>xopt</span></li></ul>
+          </p></li>
+          <li class="itemize">
+          <!--l. 63--><p class="noindent" ><span class='var'>debug</span> TRUE or FALSE. If TRUE some debugging details are printed.
+          </p></li>
+          <li class="itemize">
+          <!--l. 64--><p class="noindent" ><span class='var'>xopt</span> The <span class='var'>argmin</span> of the problem.
+          </p></li>
+          <li class="itemize">
+          <!--l. 65--><p class="noindent" ><span class='var'>fobj_opt</span> The value of the obective funtion at the optimum <span class='var'>xopt</span></p></li></ul>
      <!--l. 67--><p class="noindent" >The function returns <span class='var'>OK</span> or <span class='var'>FAIL</span>.</p></li></ul>
 <!--l. 71--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">12.2   </span> <a 
- id="x14-12600012.2"></a>Nonlinear constrained optimization</h4>
-                                                                                    
-
-                                                                                    
+ id="x14-12700012.2"></a>Nonlinear constrained optimization</h4>
 <!--l. 72--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">12.2.1   </span> <a 
- id="x14-12700012.2.1"></a>Overview</h5>
+ id="x14-12800012.2.1"></a>Overview</h5>
 <!--l. 74--><p class="noindent" >A standard Constrained Nonlinear Optimization problem can be written as:
 </p>
 <table 
 class="equation-star"><tr><td>
-<center class="math-display" >
+<div class="math-display" >
 <img 
-src="pnl-manual38x.png" alt="   (
-   |{  min f(x)
+src="pnl-manual38x.png" alt="     (
+     |{ min  f(x)
 (O )   cI(x) &#x2265; 0
-   |(  cE(x) = 0
-" class="math-display"  /></center></td></tr></table>
+     |( cE (x ) = 0
+" class="math-display"  /></div>
+</td></tr></table>
 <!--l. 85--><p class="nopar" >
 </p><!--l. 87--><p class="noindent" >where the function <span 
 class="lmmi-10x-x-109">f </span><span 
 class="rm-lmr-10x-x-109">: </span><span 
 class="msbm-10x-x-109">&#x211D;</span><sup><span 
 class="lmmi-8">n</span></sup> <span 
-class="lmsy-10x-x-109">&#x2192; </span><span 
+class="lmsy-10x-x-109">&#x2192;</span><span 
 class="msbm-10x-x-109">&#x211D; </span>is the objective function, <span 
 class="lmmi-10x-x-109">c</span><sup><span 
 class="lmmi-8">I</span></sup> <span 
 class="rm-lmr-10x-x-109">: </span><span 
 class="msbm-10x-x-109">&#x211D;</span><sup><span 
 class="lmmi-8">n</span></sup> <span 
-class="lmsy-10x-x-109">&#x2192; </span><span 
+class="lmsy-10x-x-109">&#x2192;</span><span 
 class="msbm-10x-x-109">&#x211D;</span><sup><span 
 class="lmmi-8">m</span><sub><span 
 class="lmmi-6">I</span></sub></sup> are the inequality
@@ -242,21 +267,24 @@ class="lmmi-8">E</span></sup> <span
 class="rm-lmr-10x-x-109">: </span><span 
 class="msbm-10x-x-109">&#x211D;</span><sup><span 
 class="lmmi-8">n</span></sup> <span 
-class="lmsy-10x-x-109">&#x2192; </span><span 
+class="lmsy-10x-x-109">&#x2192;</span><span 
 class="msbm-10x-x-109">&#x211D;</span><sup><span 
 class="lmmi-8">m</span><sub><span 
 class="lmmi-6">E</span></sub></sup> are the equality constraints. These functions are supposed to be
 smooth.
+                                                                                    
+
+                                                                                    
 </p><!--l. 89--><p class="noindent" >In general, the inequality constraints are of the form <span 
 class="lmmi-10x-x-109">c</span><sup><span 
 class="lmmi-8">I</span></sup><span 
 class="rm-lmr-10x-x-109">(</span><span 
 class="lmmi-10x-x-109">x</span><span 
 class="rm-lmr-10x-x-109">) = </span><img 
-src="pnl-manual39x.png" alt="(g(x),x - l,u - x)"  class="left" align="middle" />. The vector <span 
-class="lmmi-10x-x-109">l </span>and <span 
-class="lmmi-10x-x-109">u</span>
-are the lower and upper bounds on the variables <span 
+src="pnl-manual39x.png" alt="(g(x), x- l, u - x)"  class="left" align="middle" />. The vector <span 
+class="lmmi-10x-x-109">l </span>and
+<span 
+class="lmmi-10x-x-109">u </span>are the lower and upper bounds on the variables <span 
 class="lmmi-10x-x-109">x </span>and <span 
 class="lmmi-10x-x-109">g</span><span 
 class="rm-lmr-10x-x-109">(</span><span 
@@ -277,11 +305,11 @@ class="lmmi-8">I</span></sup><span
 class="lmmi-10x-x-109">,&#x03BB;</span><sup><span 
 class="lmmi-8">E</span></sup><span 
 class="rm-lmr-10x-x-109">) </span><span 
-class="lmsy-10x-x-109">&#x2208; </span><span 
+class="lmsy-10x-x-109">&#x2208;</span><span 
 class="msbm-10x-x-109">&#x211D;</span><sup><span 
 class="lmmi-8">m</span><sub><span 
 class="lmmi-6">I</span></sub></sup> <span 
-class="lmsy-10x-x-109">&#x00D7; </span><span 
+class="lmsy-10x-x-109">&#x00D7;</span><span 
 class="msbm-10x-x-109">&#x211D;</span><sup><span 
 class="lmmi-8">m</span><sub><span 
 class="lmmi-6">E</span></sub></sup>, such that the well known Karush-Kuhn-Tucker (KKT) optimality
@@ -289,18 +317,17 @@ conditions are satisfied:
 </p>
 <table 
 class="equation-star"><tr><td>
-<center class="math-display" >
+<div class="math-display" >
 <img 
-src="pnl-manual40x.png" alt="    (         I  E               I    I     E    E
-    ||||  &#x2207; &#x2113;(x,&#x03BB; ,&#x03BB;  ) = &#x2207;f (x )E- &#x2207;c (x)&#x03BB;  - &#x2207;c  (x)&#x03BB;  = 0
-    |{                     c (x) = 0
-(P )|                     cI(x) &#x2265; 0
-    ||||                       &#x03BB;I &#x2265; 0
-    (               cIi(x)&#x03BB;Ii = 0,i = 1...mI
-" class="math-display"  /></center></td></tr></table>
-                                                                                    
-
-                                                                                    
+src="pnl-manual40x.png" alt="    (
+    |||  &#x2207; &#x2113;(x,&#x03BB;I,&#x03BB;E) = &#x2207;f (x)- &#x2207;cI (x)&#x03BB;I - &#x2207;cE (x)&#x03BB;E = 0
+    ||||                     cE (x ) = 0
+    {                      cI(x) &#x2265; 0
+(P )||                       &#x03BB;I &#x2265; 0
+    ||||               cI(x)&#x03BB;I = 0, i = 1...m
+    |(                i    i             I
+" class="math-display"  /></div>
+</td></tr></table>
 <!--l. 104--><p class="nopar" >
 </p><!--l. 106--><p class="noindent" ><span 
 class="lmmi-10x-x-109">l </span>is known as the Lagrangian of the problem <span 
@@ -316,22 +343,23 @@ primal variable.
 </p><!--l. 108--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">12.2.2   </span> <a 
- id="x14-12800012.2.2"></a>Functions</h5>
+ id="x14-12900012.2.2"></a>Functions</h5>
 <!--l. 110--><p class="noindent" >To solve an inequality constrained optimization problem, ie <span 
 class="lmmi-10x-x-109">m</span><sub><span 
 class="lmmi-8">E</span></sub> <span 
 class="rm-lmr-10x-x-109">= 0</span>, we provide the following
 function. </p>
      <ul class="itemize1">
-     <li class="itemize"><a 
- id="dx14-128001"></a>                              <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+     <li class="itemize">
+     <!--l. 112--><p class="noindent" ><a 
+ id="dx14-129001"></a>                              <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_optim_intpoints_bfgs_solve</span></span>&#x00A0;(<span class='args'><a 
-href="pnl-manualse13.html#x15-13000013.1"><span class='struct'>PnlRnFuncR</span></a><span 
+href="#x15-131031r13.1"><span class='struct'>PnlRnFuncR</span></a><span 
 class="ts1-lmr10-x-x-109">*</span>func,
      <a 
-href="pnl-manualse13.html#x15-13000013.1"><span class='struct'>PnlRnFuncRm</span></a><span 
+href="#x15-131041r13.1"><span class='struct'>PnlRnFuncRm</span></a><span 
 class="ts1-lmr10-x-x-109">*</span>grad_func,  <a 
-href="pnl-manualse13.html#x15-13000013.1"><span class='struct'>PnlRnFuncRm</span></a><span 
+href="#x15-131041r13.1"><span class='struct'>PnlRnFuncRm</span></a><span 
 class="ts1-lmr10-x-x-109">*</span>nl_constraints,  <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a>  <span 
 class="ts1-lmr10-x-x-109">*</span>lower_bounds,
@@ -344,69 +372,88 @@ class="ts1-lmr10-x-x-109">*</span>x_input,  double  tolerance,  int  iter_max,  
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>output</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>This function has the following arguments:
-          <ul class="itemize2">
-          <li class="itemize"><span class='var'>func</span> is the function to minimize <span 
-class="lmmi-10x-x-109">f</span>.
-          </li>
-          <li class="itemize"><span class='var'>grad</span> is the gradient of <span 
-class="lmmi-10x-x-109">f</span>. If this gradient is not available, then enter <span class='var'>grad</span>=NULL.
-          In this case, finite difference will be used to estimate the gradient.
-          </li>
-          <li class="itemize"><span class='var'>nl_constraints</span> is the function <span 
-class="lmmi-10x-x-109">g</span><span 
-class="rm-lmr-10x-x-109">(</span><span 
-class="lmmi-10x-x-109">x</span><span 
-class="rm-lmr-10x-x-109">)</span>, ie the non linear inequality constraints.
-          </li>
-          <li class="itemize"><span class='var'>lower_bounds</span> are the lower bounds on <span 
-class="lmmi-10x-x-109">x</span>. Can be NULL if there is no lower bound.
-          </li>
-          <li class="itemize"><span class='var'>upper_bounds</span> are the upper bounds on <span 
-class="lmmi-10x-x-109">x</span>. Can be NULL if there is no upper
-          bound.
-          </li>
-          <li class="itemize"><span class='var'>x_input</span> is the initial point where the algorithm starts.
-          </li>
-          <li class="itemize"><span class='var'>tolerance</span> is the precision required in solving (P).
-          </li>
-          <li class="itemize"><span class='var'>iter_max</span> is the maximum number of iterations in the algorithm.
-          </li>
-          <li class="itemize"><span class='var'>print_algo_steps</span> is a flag to decide to print information.
-          </li>
-          <li class="itemize"><span class='var'>x_output</span> is the point where the algorithm stops.</li></ul>
-     <!--l. 130--><p class="noindent" >The algorithm returns an <span 
-class="lmmi-10x-x-109">int</span>, its value depends on the output status of the algorithm. We
-     have 4 cases: </p>
+</p>
                                                                                     
 
                                                                                     
           <ul class="itemize2">
-          <li class="itemize">0: Failure: Initial point is not strictly feasible.
-          </li>
-          <li class="itemize">1: Step is too small, we stop the algorithm.
-          </li>
-          <li class="itemize">2: Maximum number of iterations reached.
-          </li>
-          <li class="itemize">3: A solution has been found up to the required accuracy.</li></ul>
+          <li class="itemize">
+          <!--l. 116--><p class="noindent" ><span class='var'>func</span> is the function to minimize <span 
+class="lmmi-10x-x-109">f</span>.
+          </p></li>
+          <li class="itemize">
+          <!--l. 117--><p class="noindent" ><span class='var'>grad</span> is the gradient of <span 
+class="lmmi-10x-x-109">f</span>. If this gradient is not available, then enter <span class='var'>grad</span>=NULL.
+          In this case, finite difference will be used to estimate the gradient.
+          </p></li>
+          <li class="itemize">
+          <!--l. 118--><p class="noindent" ><span class='var'>nl_constraints</span> is the function <span 
+class="lmmi-10x-x-109">g</span><span 
+class="rm-lmr-10x-x-109">(</span><span 
+class="lmmi-10x-x-109">x</span><span 
+class="rm-lmr-10x-x-109">)</span>, ie the non linear inequality constraints.
+          </p></li>
+          <li class="itemize">
+          <!--l. 119--><p class="noindent" ><span class='var'>lower_bounds</span> are the lower bounds on <span 
+class="lmmi-10x-x-109">x</span>. Can be NULL if there is no lower bound.
+          </p></li>
+          <li class="itemize">
+          <!--l. 121--><p class="noindent" ><span class='var'>upper_bounds</span> are the upper bounds on <span 
+class="lmmi-10x-x-109">x</span>. Can be NULL if there is no upper
+          bound.
+          </p></li>
+          <li class="itemize">
+          <!--l. 123--><p class="noindent" ><span class='var'>x_input</span> is the initial point where the algorithm starts.
+          </p></li>
+          <li class="itemize">
+          <!--l. 124--><p class="noindent" ><span class='var'>tolerance</span> is the precision required in solving (P).
+          </p></li>
+          <li class="itemize">
+          <!--l. 125--><p class="noindent" ><span class='var'>iter_max</span> is the maximum number of iterations in the algorithm.
+          </p></li>
+          <li class="itemize">
+          <!--l. 126--><p class="noindent" ><span class='var'>print_algo_steps</span> is a flag to decide to print information.
+          </p></li>
+          <li class="itemize">
+          <!--l. 127--><p class="noindent" ><span class='var'>x_output</span> is the point where the algorithm stops.</p></li></ul>
+     <!--l. 130--><p class="noindent" >The algorithm returns an <span 
+class="lmmi-10x-x-109">int</span>, its value depends on the output status of the algorithm. We
+     have 4 cases: </p>
+          <ul class="itemize2">
+          <li class="itemize">
+          <!--l. 132--><p class="noindent" >0: Failure: Initial point is not strictly feasible.
+          </p></li>
+          <li class="itemize">
+          <!--l. 133--><p class="noindent" >1: Step is too small, we stop the algorithm.
+                                                                                    
+
+                                                                                    
+          </p></li>
+          <li class="itemize">
+          <!--l. 134--><p class="noindent" >2: Maximum number of iterations reached.
+          </p></li>
+          <li class="itemize">
+          <!--l. 135--><p class="noindent" >3: A solution has been found up to the required accuracy.</p></li></ul>
      <!--l. 138--><p class="noindent" >The last case is equivalent to the two inequalities:
      </p><!--l. 140--><p class="noindent" >
      </p>
-     <center class="math-display" >
-     <img 
-src="pnl-manual41x.png" alt="        I                   I    I
-||&#x2207;&#x2113;(x,&#x03BB; )||&#x221E;  = ||&#x2207;f (x)- &#x2207;c  (x)&#x03BB; ||&#x221E; &#x003C; tolerance
-     " class="math-display"  /></center>
-     <center class="math-display" >
-     <img 
-src="pnl-manual42x.png" alt="||cI(x)&#x03BB;I|| &#x003C;  tolerance
+<div class="math-display" >
+<img 
+src="pnl-manual41x.png" alt="||&#x2207; &#x2113;(x,&#x03BB;I)||&#x221E; = ||&#x2207;f (x )- &#x2207;cI (x )&#x03BB;I||&#x221E; &#x003C; tolerance
+" class="math-display"  /></div>
+     <!--l. 141--><p class="noindent" >
+     </p>
+<div class="math-display" >
+<img 
+src="pnl-manual42x.png" alt="||cI(x)&#x03BB;I||  &#x003C; tolerance
          &#x221E;
-     " class="math-display"  /></center>
+" class="math-display"  /></div>
      <!--l. 143--><p class="noindent" >where <span 
 class="lmmi-10x-x-109">c</span><sup><span 
 class="lmmi-8">I</span></sup><span 
 class="rm-lmr-10x-x-109">(</span><span 
 class="lmmi-10x-x-109">x</span><span 
-class="rm-lmr-10x-x-109">)</span><span 
+class="rm-lmr-10x-x-109">) </span><span 
 class="lmmi-10x-x-109">. </span><span 
 class="lmsy-10x-x-109">* </span><span 
 class="lmmi-10x-x-109">&#x03BB;</span><sup><span 

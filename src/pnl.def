@@ -130,8 +130,6 @@ EXPORTS
     pnl_basis_create_from_hyperbolic_degree 
     pnl_basis_create_from_prod_degree 
     pnl_basis_create_from_tensor 
-    pnl_basis_local_create
-    pnl_basis_local_create_regular
     pnl_basis_del_elt 
     pnl_basis_del_elt_i 
     pnl_basis_eval 
@@ -141,7 +139,6 @@ EXPORTS
     pnl_basis_eval_D_vect 
     pnl_basis_eval_derivs 
     pnl_basis_eval_derivs_vect 
-    pnl_basis_eval_local
     pnl_basis_eval_vect 
     pnl_basis_fit_ls 
     pnl_basis_free 
@@ -153,6 +150,8 @@ EXPORTS
     pnl_basis_i_vect 
     pnl_basis_ik 
     pnl_basis_ik_vect 
+    pnl_basis_local_create
+    pnl_basis_local_create_regular
     pnl_basis_local_get_index
     pnl_basis_new 
     pnl_basis_print 

@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="iso-8859-1" ?> 
+<?xml version="1.0" encoding="utf-8" ?> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
 <!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->  
 <html xmlns="http://www.w3.org/1999/xhtml"  
 > 
 <head><title>Root finding</title> 
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> 
-<meta name="generator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
-<meta name="originator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<meta name="generator" content="TeX4ht (https://tug.org/tex4ht/)" /> 
+<meta name="originator" content="TeX4ht (https://tug.org/tex4ht/)" /> 
 <!-- xhtml,uni-html4,2,subsection+,next,html --> 
 <meta name="src" content="pnl-manual.tex" /> 
 <link rel="stylesheet" type="text/css" href="pnl-manual.css" /> 
@@ -20,188 +20,1299 @@ href="pnl-manualse12.html#tailpnl-manualse12.html" >prev-tail</a>] [<a
 href="#tailpnl-manualse13.html">tail</a>] [<a 
 href="pnl-manual.html#pnl-manualse13.html" >up</a>] </p></div>
 <h3 class="sectionHead"><span class="titlemark">13   </span> <a 
- id="x15-12900013"></a>Root finding</h3>
+ id="x15-13000013"></a>Root finding</h3>
 <!--l. 2--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">13.1   </span> <a 
- id="x15-13000013.1"></a>Overview</h4>
+ id="x15-13100013.1"></a>Overview</h4>
 <!--l. 5--><p class="noindent" >To provide a uniformed framework to root finding functions, we use several structures for storing
 different kind of functions. The pointer <span class='var'>params</span> is used to store the extra parameters. These new
 types come with dedicated macros starting in <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">PNL_EVAL</span></span></span> to evaluate the function and their Jacobian.
 <a 
- id="dx15-130001"></a>
+ id="dx15-131001"></a> </p><!--l. 11-->
+<pre class="lstlisting" id="listing-45"><span class="label"><a 
+ id="x15-131002r1"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span> 
+<span class="label"><a 
+ id="x15-131003r2"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">f</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">:</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">R</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">--&#x003E;</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">R</span></span> 
+<span class="label"><a 
+ id="x15-131004r3"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">The</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">function</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">pointer</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">returns</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">f</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span> 
+<span class="label"><a 
+ id="x15-131005r4"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span> 
+<span class="label"><a 
+ id="x15-131006r5"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">typedef</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">struct</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">{</span></span> 
+<span class="label"><a 
+ id="x15-131007r6"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">F</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131008r7"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131009r8"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">}</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlFunc</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131010r9"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">define</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_EVAL_FUNC</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(*((</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">-&#x003E;</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">F</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">-&#x003E;</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span></pre>
+<a 
+ id="dx15-131011"></a>
+<!--l. 24-->
+<pre class="lstlisting" id="listing-46"><span class="label"><a 
+ id="x15-131012r1"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span> 
+<span class="label"><a 
+ id="x15-131013r2"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">f</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">:</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">R</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">^2</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">--&#x003E;</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">R</span></span> 
+<span class="label"><a 
+ id="x15-131014r3"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">The</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">function</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">pointer</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">returns</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">f</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span> 
+<span class="label"><a 
+ id="x15-131015r4"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span> 
+<span class="label"><a 
+ id="x15-131016r5"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">typedef</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">struct</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">{</span></span> 
+<span class="label"><a 
+ id="x15-131017r6"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">F</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">y</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131018r7"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131019r8"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">}</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlFunc2D</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131020r9"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">define</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_EVAL_FUNC2D</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">y</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(*((</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">-&#x003E;</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">F</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">y</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">-&#x003E;</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span></pre>
+<a 
+ id="dx15-131021"></a>
+<!--l. 37-->
+<pre class="lstlisting" id="listing-47"><span class="label"><a 
+ id="x15-131022r1"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span> 
+<span class="label"><a 
+ id="x15-131023r2"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">f</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">:</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">R</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">--&#x003E;</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">R</span></span> 
+<span class="label"><a 
+ id="x15-131024r3"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">The</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">function</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">pointer</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">computes</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">f</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">and</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">Df</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">and</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">stores</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">them</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">in</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">fx</span></span> 
+<span class="label"><a 
+ id="x15-131025r4"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">and</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">dfx</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">respectively</span></span> 
+<span class="label"><a 
+ id="x15-131026r5"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span> 
+<span class="label"><a 
+ id="x15-131027r6"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">typedef</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">struct</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">{</span></span> 
+<span class="label"><a 
+ id="x15-131028r7"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">F</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">fx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">dfx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131029r8"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131030r9"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">}</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlFuncDFunc</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131031r10"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">define</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_EVAL_FUNC_FDF</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">fx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">dfx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(*((</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">-&#x003E;</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">F</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">fx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">dfx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">-&#x003E;</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span></pre>
+<a 
+ id="dx15-131032"></a>
+<!--l. 51-->
+<pre class="lstlisting" id="listing-48"><span class="label"><a 
+ id="x15-131033r1"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span> 
+<span class="label"><a 
+ id="x15-131034r2"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">f</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">:</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">R</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">^</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">n</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">--&#x003E;</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">R</span></span> 
+<span class="label"><a 
+ id="x15-131035r3"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">The</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">function</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">pointer</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">returns</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">f</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span> 
+<span class="label"><a 
+ id="x15-131036r4"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span> 
+<span class="label"><a 
+ id="x15-131037r5"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">typedef</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">struct</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">{</span></span> 
+<span class="label"><a 
+ id="x15-131038r6"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">F</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">const</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlVect</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131039r7"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131040r8"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">}</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlRnFuncR</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131041r9"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">define</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_EVAL_RNFUNCR</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(*((</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">-&#x003E;</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">F</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">-&#x003E;</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span></pre>
+<a 
+ id="dx15-131042"></a>
+<a 
+ id="dx15-131043"></a>
+<!--l. 65-->
+<pre class="lstlisting" id="listing-49"><span class="label"><a 
+ id="x15-131044r1"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span> 
+<span class="label"><a 
+ id="x15-131045r2"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">f</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">:</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">R</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">^</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">n</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">--&#x003E;</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">R</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">^</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">m</span></span> 
+<span class="label"><a 
+ id="x15-131046r3"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">The</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">function</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">pointer</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">computes</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">vector</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">f</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">and</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">stores</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">it</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">in</span></span> 
+<span class="label"><a 
+ id="x15-131047r4"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">fx</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">vector</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">size</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">m</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span> 
+<span class="label"><a 
+ id="x15-131048r5"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span> 
+<span class="label"><a 
+ id="x15-131049r6"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">typedef</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">struct</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">{</span></span> 
+<span class="label"><a 
+ id="x15-131050r7"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">F</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">const</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlVect</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlVect</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">fx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131051r8"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131052r9"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">}</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlRnFuncRm</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131053r10"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">define</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_EVAL_RNFUNCRM</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">fx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(*((</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">-&#x003E;</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">F</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">fx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">-&#x003E;</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span> 
+<span class="label"><a 
+ id="x15-131054r11"></a></span> 
+<span class="label"><a 
+ id="x15-131055r12"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span> 
+<span class="label"><a 
+ id="x15-131056r13"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">Synonymous</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlRnFuncRm</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">for</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">f</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">:</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">R</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">^</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">n</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">--&#x003E;</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">R</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">^</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">n</span></span> 
+<span class="label"><a 
+ id="x15-131057r14"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span> 
+<span class="label"><a 
+ id="x15-131058r15"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">typedef</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlRnFuncRm</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlRnFuncRn</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131059r16"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">define</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_EVAL_RNFUNCRN</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_EVAL_RNFUNCRM</span></span></pre>
+<a 
+ id="dx15-131060"></a>
+<a 
+ id="dx15-131061"></a>
+<!--l. 86-->
+<pre class="lstlisting" id="listing-50"><span class="label"><a 
+ id="x15-131062r1"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span> 
+<span class="label"><a 
+ id="x15-131063r2"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">f</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">:</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">R</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">^</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">n</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">--&#x003E;</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">R</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">^</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">m</span></span> 
+<span class="label"><a 
+ id="x15-131064r3"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">The</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">function</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">pointer</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">computes</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">vector</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">f</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">and</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">stores</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">it</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">in</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">fx</span></span> 
+<span class="label"><a 
+ id="x15-131065r4"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">vector</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">size</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">m</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span> 
+<span class="label"><a 
+ id="x15-131066r5"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">The</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">Dfunction</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">pointer</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">computes</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">the</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">matrix</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">Df</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">and</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">stores</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">it</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">in</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">dfx</span></span> 
+<span class="label"><a 
+ id="x15-131067r6"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">matrix</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">size</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">m</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">n</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span> 
+<span class="label"><a 
+ id="x15-131068r7"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span> 
+<span class="label"><a 
+ id="x15-131069r8"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">typedef</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">struct</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">{</span></span> 
+<span class="label"><a 
+ id="x15-131070r9"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">F</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">const</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlVect</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlVect</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">fx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131071r10"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">DF</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">const</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlVect</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlMat</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">dfx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131072r11"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">FDF</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">const</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlVect</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlVect</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">fx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlMat</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">dfx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131073r12"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131074r13"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">}</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlRnFuncRmDFunc</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131075r14"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">define</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_EVAL_RNFUNCRM_DF</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">dfx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">\</span></span> 
+<span class="label"><a 
+ id="x15-131076r15"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">(*((</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">-&#x003E;</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Dfunction</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">dfx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">-&#x003E;</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span> 
+<span class="label"><a 
+ id="x15-131077r16"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">define</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_EVAL_RNFUNCRM_FDF</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">fx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">dfx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">\</span></span> 
+<span class="label"><a 
+ id="x15-131078r17"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">(*((</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">-&#x003E;</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">F</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">fx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">dfx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">-&#x003E;</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span> 
+<span class="label"><a 
+ id="x15-131079r18"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">define</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_EVAL_RNFUNCRM_F_DF</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">fx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">dfx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">\</span></span> 
+<span class="label"><a 
+ id="x15-131080r19"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">if</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">-&#x003E;</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">FDF</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">!=</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">NULL</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">\</span></span> 
+<span class="label"><a 
+ id="x15-131081r20"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">{</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">\</span></span> 
+<span class="label"><a 
+ id="x15-131082r21"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_EVAL_RNFUNCRN_FDF</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">fx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">dfx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">\</span></span> 
+<span class="label"><a 
+ id="x15-131083r22"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">}</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">\</span></span> 
+<span class="label"><a 
+ id="x15-131084r23"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">else</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">\</span></span> 
+<span class="label"><a 
+ id="x15-131085r24"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">{</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">\</span></span> 
+<span class="label"><a 
+ id="x15-131086r25"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_EVAL_RNFUNCRN</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">fx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">\</span></span> 
+<span class="label"><a 
+ id="x15-131087r26"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_EVAL_RNFUNCRN_DF</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">Fstruct</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">dfx</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span><span style="color:#000000"> </span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">\</span></span> 
+<span class="label"><a 
+ id="x15-131088r27"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">}</span></span> 
+<span class="label"><a 
+ id="x15-131089r28"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span> 
+<span class="label"><a 
+ id="x15-131090r29"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">Synonymous</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">of</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlRnFuncRmDFunc</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">for</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">f</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">:</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">R</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">^</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">n</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">--&#x003E;</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">R</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">^</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">m</span></span> 
+<span class="label"><a 
+ id="x15-131091r30"></a></span><span 
+class="ec-lmtti-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtti-10">*</span></span> 
+<span class="label"><a 
+ id="x15-131092r31"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">typedef</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlRnFuncRmDFunc</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PnlRnFuncRnDFunc</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">;</span></span> 
+<span class="label"><a 
+ id="x15-131093r32"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">define</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_EVAL_RNFUNCRN_DF</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_EVAL_RNFUNCRM_DF</span></span> 
+<span class="label"><a 
+ id="x15-131094r33"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">define</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_EVAL_RNFUNCRN_FDF</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_EVAL_RNFUNCRM_FDF</span></span> 
+<span class="label"><a 
+ id="x15-131095r34"></a></span><span style="color:#000000"><span 
+class="ec-lmtti-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">define</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_EVAL_RNFUNCRN_F_DF</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">PNL_EVAL_RNFUNCRM_F_DF</span></span></pre>
                                                                                     
 
                                                                                     
-</p>
-<div class="verbatim" id="verbatim-45">
-/*
-&#x00A0;<br />&#x00A0;*&#x00A0;f:&#x00A0;R&#x00A0;--&#x003E;&#x00A0;R
-&#x00A0;<br />&#x00A0;*&#x00A0;The&#x00A0;function&#x00A0;&#x00A0;pointer&#x00A0;returns&#x00A0;f(x)
-&#x00A0;<br />&#x00A0;*
-&#x00A0;<br />typedef&#x00A0;struct&#x00A0;{
-&#x00A0;<br />&#x00A0;&#x00A0;double&#x00A0;(*F)&#x00A0;(double&#x00A0;x,&#x00A0;void&#x00A0;*params);
-&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;*params;
-&#x00A0;<br />}&#x00A0;PnlFunc&#x00A0;;
-&#x00A0;<br />#define&#x00A0;PNL_EVAL_FUNC(Fstruct,&#x00A0;x)&#x00A0;(*((Fstruct)-&#x003E;F))(x,&#x00A0;(Fstruct)-&#x003E;params)
-</div>
-<!--l. 21--><p class="nopar" >
-<a 
- id="dx15-130002"></a>
-                                                                                    
-
-                                                                                    
-</p>
-<div class="verbatim" id="verbatim-46">
-/*
-&#x00A0;<br />&#x00A0;*&#x00A0;f:&#x00A0;R^2&#x00A0;--&#x003E;&#x00A0;R
-&#x00A0;<br />&#x00A0;*&#x00A0;The&#x00A0;function&#x00A0;pointer&#x00A0;returns&#x00A0;f(x)
-&#x00A0;<br />&#x00A0;*
-&#x00A0;<br />typedef&#x00A0;struct&#x00A0;{
-&#x00A0;<br />&#x00A0;&#x00A0;double&#x00A0;(*F)&#x00A0;(double&#x00A0;x,&#x00A0;double&#x00A0;y,&#x00A0;void&#x00A0;*params);
-&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;*params;
-&#x00A0;<br />}&#x00A0;PnlFunc2D&#x00A0;;
-&#x00A0;<br />#define&#x00A0;PNL_EVAL_FUNC2D(Fstruct,&#x00A0;x,&#x00A0;y)&#x00A0;(*((Fstruct)-&#x003E;F))(x,&#x00A0;y,&#x00A0;(Fstruct)-&#x003E;params)
-</div>
-<!--l. 34--><p class="nopar" >
-<a 
- id="dx15-130003"></a>
-                                                                                    
-
-                                                                                    
-</p>
-<div class="verbatim" id="verbatim-47">
-/*
-&#x00A0;<br />&#x00A0;*&#x00A0;f:&#x00A0;R&#x00A0;--&#x003E;&#x00A0;R
-&#x00A0;<br />&#x00A0;*&#x00A0;The&#x00A0;function&#x00A0;pointer&#x00A0;computes&#x00A0;f(x)&#x00A0;and&#x00A0;Df(x)&#x00A0;and&#x00A0;stores&#x00A0;them&#x00A0;in&#x00A0;fx
-&#x00A0;<br />&#x00A0;*&#x00A0;and&#x00A0;dfx&#x00A0;respectively
-&#x00A0;<br />&#x00A0;*
-&#x00A0;<br />typedef&#x00A0;struct&#x00A0;{
-&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;(*F)&#x00A0;(double&#x00A0;x,&#x00A0;double&#x00A0;*fx,&#x00A0;double&#x00A0;*dfx,&#x00A0;void&#x00A0;*params);
-&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;*params;
-&#x00A0;<br />}&#x00A0;PnlFuncDFunc&#x00A0;;
-&#x00A0;<br />#define&#x00A0;PNL_EVAL_FUNC_FDF(Fstruct,&#x00A0;x,&#x00A0;fx,&#x00A0;dfx)&#x00A0;(*((Fstruct)-&#x003E;F))(x,&#x00A0;fx,&#x00A0;dfx,&#x00A0;(Fstruct)-&#x003E;params)
-</div>
-<!--l. 48--><p class="nopar" >
-<a 
- id="dx15-130004"></a>
-                                                                                    
-
-                                                                                    
-</p>
-<div class="verbatim" id="verbatim-48">
-/*
-&#x00A0;<br />&#x00A0;*&#x00A0;f:&#x00A0;R^n&#x00A0;--&#x003E;&#x00A0;R
-&#x00A0;<br />&#x00A0;*&#x00A0;The&#x00A0;function&#x00A0;pointer&#x00A0;returns&#x00A0;f(x)
-&#x00A0;<br />&#x00A0;*
-&#x00A0;<br />typedef&#x00A0;struct&#x00A0;{
-&#x00A0;<br />&#x00A0;&#x00A0;double&#x00A0;(*F)&#x00A0;(const&#x00A0;PnlVect&#x00A0;*x,&#x00A0;void&#x00A0;*params);
-&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;*params;
-&#x00A0;<br />}&#x00A0;PnlRnFuncR&#x00A0;;
-&#x00A0;<br />#define&#x00A0;PNL_EVAL_RNFUNCR(Fstruct,&#x00A0;x)&#x00A0;(*((Fstruct)-&#x003E;F))(x,&#x00A0;(Fstruct)-&#x003E;params)
-</div>
-<!--l. 61--><p class="nopar" >
-<a 
- id="dx15-130005"></a>
-<a 
- id="dx15-130006"></a>
-                                                                                    
-
-                                                                                    
-</p>
-<div class="verbatim" id="verbatim-49">
-/*
-&#x00A0;<br />&#x00A0;*&#x00A0;f:&#x00A0;R^n&#x00A0;--&#x003E;&#x00A0;R^m
-&#x00A0;<br />&#x00A0;*&#x00A0;The&#x00A0;function&#x00A0;pointer&#x00A0;computes&#x00A0;the&#x00A0;vector&#x00A0;f(x)&#x00A0;and&#x00A0;stores&#x00A0;it&#x00A0;in
-&#x00A0;<br />&#x00A0;*&#x00A0;fx&#x00A0;(vector&#x00A0;of&#x00A0;size&#x00A0;m)
-&#x00A0;<br />&#x00A0;*
-&#x00A0;<br />typedef&#x00A0;struct&#x00A0;{
-&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;(*F)&#x00A0;(const&#x00A0;PnlVect&#x00A0;*x,&#x00A0;PnlVect&#x00A0;*fx,&#x00A0;void&#x00A0;*params);
-&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;*params;
-&#x00A0;<br />}&#x00A0;PnlRnFuncRm&#x00A0;;
-&#x00A0;<br />#define&#x00A0;PNL_EVAL_RNFUNCRM(Fstruct,&#x00A0;x,&#x00A0;fx)&#x00A0;(*((Fstruct)-&#x003E;F))(x,&#x00A0;fx,&#x00A0;(Fstruct)-&#x003E;params)
-&#x00A0;<br />
-&#x00A0;<br />/*
-&#x00A0;<br />&#x00A0;*&#x00A0;Synonymous&#x00A0;of&#x00A0;PnlRnFuncRm&#x00A0;for&#x00A0;f:R^n&#x00A0;--&#x003E;&#x00A0;R^n
-&#x00A0;<br />&#x00A0;*
-&#x00A0;<br />typedef&#x00A0;PnlRnFuncRm&#x00A0;PnlRnFuncRn;
-&#x00A0;<br />#define&#x00A0;PNL_EVAL_RNFUNCRN&#x00A0;&#x00A0;PNL_EVAL_RNFUNCRM
-</div>
-<!--l. 82--><p class="nopar" >
-<a 
- id="dx15-130007"></a>
-<a 
- id="dx15-130008"></a>
-                                                                                    
-
-                                                                                    
-</p>
-<div class="verbatim" id="verbatim-50">
-/*
-&#x00A0;<br />&#x00A0;*&#x00A0;f:&#x00A0;R^n&#x00A0;--&#x003E;&#x00A0;R^m
-&#x00A0;<br />&#x00A0;*&#x00A0;The&#x00A0;function&#x00A0;pointer&#x00A0;computes&#x00A0;the&#x00A0;vector&#x00A0;f(x)&#x00A0;and&#x00A0;stores&#x00A0;it&#x00A0;in&#x00A0;fx
-&#x00A0;<br />&#x00A0;*&#x00A0;(vector&#x00A0;of&#x00A0;size&#x00A0;m)
-&#x00A0;<br />&#x00A0;*&#x00A0;The&#x00A0;Dfunction&#x00A0;pointer&#x00A0;computes&#x00A0;the&#x00A0;matrix&#x00A0;Df(x)&#x00A0;and&#x00A0;stores&#x00A0;it&#x00A0;in&#x00A0;dfx
-&#x00A0;<br />&#x00A0;*&#x00A0;(matrix&#x00A0;of&#x00A0;size&#x00A0;m&#x00A0;x&#x00A0;n)
-&#x00A0;<br />&#x00A0;*
-&#x00A0;<br />typedef&#x00A0;struct&#x00A0;{
-&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;(*F)&#x00A0;(const&#x00A0;PnlVect&#x00A0;*x,&#x00A0;PnlVect&#x00A0;*fx,&#x00A0;void&#x00A0;*params);
-&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;(*DF)&#x00A0;(const&#x00A0;PnlVect&#x00A0;*x,&#x00A0;PnlMat&#x00A0;*dfx,&#x00A0;void&#x00A0;*params);
-&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;(*FDF)&#x00A0;(const&#x00A0;PnlVect&#x00A0;*x,&#x00A0;PnlVect&#x00A0;*fx,&#x00A0;PnlMat&#x00A0;*dfx,&#x00A0;void&#x00A0;*params);
-&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;*params;
-&#x00A0;<br />}&#x00A0;PnlRnFuncRmDFunc&#x00A0;;
-&#x00A0;<br />#define&#x00A0;PNL_EVAL_RNFUNCRM_DF(Fstruct,&#x00A0;x,&#x00A0;dfx)&#x00A0;\
-&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;(*((Fstruct)-&#x003E;Dfunction))(x,&#x00A0;dfx,&#x00A0;(Fstruct)-&#x003E;params)
-&#x00A0;<br />#define&#x00A0;PNL_EVAL_RNFUNCRM_FDF(Fstruct,&#x00A0;x,&#x00A0;fx,&#x00A0;dfx)&#x00A0;\
-&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;(*((Fstruct)-&#x003E;F))(x,&#x00A0;fx,&#x00A0;dfx,&#x00A0;(Fstruct)-&#x003E;params)
-&#x00A0;<br />#define&#x00A0;PNL_EVAL_RNFUNCRM_F_DF(Fstruct,&#x00A0;x,&#x00A0;fx,&#x00A0;dfx)&#x00A0;&#x00A0;&#x00A0;&#x00A0;\
-&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;if&#x00A0;(&#x00A0;(Fstruct)-&#x003E;FDF&#x00A0;!=&#x00A0;NULL&#x00A0;)&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;\
-&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;{&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;\
-&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;PNL_EVAL_RNFUNCRN_FDF&#x00A0;(Fstruct,&#x00A0;x,&#x00A0;fx,&#x00A0;dfx);&#x00A0;\
-&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;}&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;\
-&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;else&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;\
-&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;{&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;\
-&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;PNL_EVAL_RNFUNCRN&#x00A0;(Fstruct,&#x00A0;x,&#x00A0;fx);&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;\
-&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;PNL_EVAL_RNFUNCRN_DF&#x00A0;(Fstruct,&#x00A0;x,&#x00A0;dfx);&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;\
-&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;}
-&#x00A0;<br />/*
-&#x00A0;<br />&#x00A0;*&#x00A0;Synonymous&#x00A0;of&#x00A0;PnlRnFuncRmDFunc&#x00A0;for&#x00A0;f:R^n&#x00A0;--&#x003E;&#x00A0;R^m
-&#x00A0;<br />&#x00A0;*
-&#x00A0;<br />typedef&#x00A0;PnlRnFuncRmDFunc&#x00A0;PnlRnFuncRnDFunc;
-&#x00A0;<br />#define&#x00A0;PNL_EVAL_RNFUNCRN_DF&#x00A0;PNL_EVAL_RNFUNCRM_DF
-&#x00A0;<br />#define&#x00A0;PNL_EVAL_RNFUNCRN_FDF&#x00A0;PNL_EVAL_RNFUNCRM_FDF
-&#x00A0;<br />#define&#x00A0;PNL_EVAL_RNFUNCRN_F_DF&#x00A0;PNL_EVAL_RNFUNCRM_F_DF
-</div>
-<!--l. 121--><p class="nopar" >
-</p><!--l. 123--><p class="noindent" >
+<!--l. 123--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">13.2   </span> <a 
- id="x15-13100013.2"></a>Functions</h4>
+ id="x15-13200013.2"></a>Functions</h4>
 <!--l. 125--><p class="noindent" >To use the following functions, you should include <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl/pnl_root.h</span></span></span>.
-                                                                                    
-
-                                                                                    
 </p>
 <!--l. 127--><p class="noindent" ><span class="paragraphHead"><a 
- id="x15-13200013.2"></a><span 
+ id="x15-133000"></a><span 
 class="ec-lmbx-10x-x-109">Real valued functions of a real argument</span></span>
 </p>
      <ul class="itemize1">
-     <li class="itemize"><a 
- id="dx15-132001"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+     <li class="itemize">
+     <!--l. 129--><p class="noindent" ><a 
+ id="dx15-133001"></a><a 
+ id="x15-133000doc"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_root_brent</span></span>&#x00A0;(<span class='args'><a 
-href="#x15-13000013.1"><span class='struct'>PnlFunc</span></a> <span 
+href="#x15-13100013.1"><span class='struct'>PnlFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>F, double x1, double x2, double <span 
 class="ts1-lmr10-x-x-109">*</span>tol</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Find the root of <span class='var'>F</span> between <span class='var'>x1</span> and <span class='var'>x2</span> with an accuracy of order <span class='var'>tol</span>. On
      exit <span class='var'>tol</span> is an upper bound of the error.
-     </li>
-     <li class="itemize"><a 
- id="dx15-132002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 135--><p class="noindent" ><a 
+ id="dx15-133002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_root_newton_bisection</span></span>&#x00A0;(<span class='args'><a 
-href="#x15-13000013.1"><span class='struct'>PnlFuncDFunc</span></a> <span 
+href="#x15-131020r13.1"><span class='struct'>PnlFuncDFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>Func, double x_min, double
      x_max, double tol, int N_Max, double <span 
 class="ts1-lmr10-x-x-109">*</span>res</span>)<br 
@@ -209,11 +1320,12 @@ class="newline" />   <span class='description'>Description&#x00A0;</span>Find th
      and a maximum of <span class='var'>N_max</span> iterations. On exit, the root is stored in <span class='var'>res</span>. Note that the
      function <span class='var'>Func</span> must also compute the first derivative of the function. This function relies
      on combining Newton&#8217;s approach with a bisection technique.
-     </li>
-     <li class="itemize"><a 
- id="dx15-132003"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 144--><p class="noindent" ><a 
+ id="dx15-133003"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_root_newton</span></span>&#x00A0;(<span class='args'><a 
-href="#x15-13000013.1"><span class='struct'>PnlFuncDFunc</span></a> <span 
+href="#x15-131020r13.1"><span class='struct'>PnlFuncDFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>Func, double x0, double x_eps, double fx_eps, int
      max_iter, double <span 
 class="ts1-lmr10-x-x-109">*</span>res</span>)<br 
@@ -240,16 +1352,19 @@ class="rm-lmr-10x-x-109">=</span> <span
 class="rm-lmr-10x-x-109">max</span><span 
 class="lmsy-10x-x-109">{</span><span 
 class="lmmi-10x-x-109">&#x03B3;</span><sup><span 
-class="lmmi-8">j</span></sup><span 
-class="rm-lmr-10x-x-109">;</span><span 
+class="lmmi-8">j</span></sup> <span 
+class="rm-lmr-10x-x-109">; </span><span 
 class="lmmi-10x-x-109">j </span><span 
 class="lmsy-10x-x-109">&#x2265; </span><span 
 class="rm-lmr-10x-x-109">0</span><span 
 class="lmsy-10x-x-109">} </span>such
      that
-     <table 
+                                                                                    
+
+                                                                                    
+     </p><table 
 class="align-star">
-                                  <tr><td 
+                        <tr><td 
 class="align-odd"><span 
 class="lmsy-10x-x-109">|</span><span 
 class="lmmi-10x-x-109">f</span><span 
@@ -262,7 +1377,7 @@ class="lmmi-8">k</span></sub><span
 class="lmmi-10x-x-109">d</span><sub><span 
 class="lmmi-8">k</span></sub><span 
 class="rm-lmr-10x-x-109">)</span><span 
-class="lmsy-10x-x-109">|</span></td>                    <td 
+class="lmsy-10x-x-109">|</span></td>                        <td 
 class="align-even"><span 
 class="lmsy-10x-x-109">&#x2264;|</span><span 
 class="lmmi-10x-x-109">f</span><span 
@@ -272,12 +1387,12 @@ class="lmmi-8">k</span></sub><span
 class="rm-lmr-10x-x-109">)</span><span 
 class="lmsy-10x-x-109">|</span><span 
 class="rm-lmr-10x-x-109">(1 </span><span 
-class="lmsy-10x-x-109">- </span><span 
+class="lmsy-10x-x-109">-</span><span 
 class="lmmi-10x-x-109">&#x03C9;&#x03B1;</span><sub><span 
 class="lmmi-8">k</span></sub><span 
 class="rm-lmr-10x-x-109">)</span><span 
-class="lmmi-10x-x-109">.</span></td>                             <td 
-class="align-label"></td>                             <td 
+class="lmmi-10x-x-109">.</span></td>                        <td 
+class="align-label"></td>                        <td 
 class="align-label"></td></tr></table>
      <!--l. 154--><p class="noindent" >In this implementation, <span 
 class="lmmi-10x-x-109">&#x03C9; </span><span 
@@ -290,35 +1405,38 @@ class="lmmi-10x-x-109">&#x2215;</span><span
 class="rm-lmr-10x-x-109">2</span>. The algorithm stops when one of the three
      following conditions is met: </p>
           <ul class="itemize2">
-          <li class="itemize">the maximum number of iterations <span class='var'>max_iter</span> is reached;
-                                                                                    
-
-                                                                                    
-          </li>
-          <li class="itemize">the last improvement over <span class='var'>x</span> is smaller that <span class='var'>x * x_eps</span>;
-          </li>
-          <li class="itemize">at the current position <span class='var'>|f(x)| &#x003C; fx_eps</span></li></ul>
+          <li class="itemize">
+          <!--l. 158--><p class="noindent" >the maximum number of iterations <span class='var'>max_iter</span> is reached;
+          </p></li>
+          <li class="itemize">
+          <!--l. 159--><p class="noindent" >the last improvement over <span class='var'>x</span> is smaller that <span class='var'>x * x_eps</span>;
+          </p></li>
+          <li class="itemize">
+          <!--l. 160--><p class="noindent" >at the current position <span class='var'>|f(x)| &#x003C; fx_eps</span></p></li></ul>
      <!--l. 162--><p class="noindent" >On exit, the root is stored in <span class='var'>res</span>.
      </p></li>
-     <li class="itemize"><a 
- id="dx15-132004"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+     <li class="itemize">
+     <!--l. 163--><p class="noindent" ><a 
+ id="dx15-133004"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_root_bisection</span></span>&#x00A0;(<span class='args'><a 
-href="#x15-13000013.1"><span class='struct'>PnlFunc</span></a> <span 
+href="#x15-13100013.1"><span class='struct'>PnlFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>Func, double xmin, double xmax, double epsrel, double
      espabs, int N_max, double <span 
 class="ts1-lmr10-x-x-109">*</span>res</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Find the root of <span class='var'>F</span> between <span class='var'>x1</span> and <span class='var'>x2</span> with the accuracy <span class='var'>|x2 - x1| &#x003C; epsrel * x1
      + epsabs</span> or with the maximum number of iterations <span class='var'>N_max</span>. On exit, <span class='var'>res = (x2 + x1) /
-     2</span>.</li></ul>
+     2</span>.</p></li></ul>
 <!--l. 171--><p class="noindent" ><span class="paragraphHead"><a 
- id="x15-13300013.2"></a><span 
+ id="x15-134000"></a><span 
 class="ec-lmbx-10x-x-109">Vector valued functions with several arguments</span></span>
 </p>
      <ul class="itemize1">
-     <li class="itemize"><a 
- id="dx15-133001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+     <li class="itemize">
+     <!--l. 174--><p class="noindent" ><a 
+ id="dx15-134001"></a><a 
+ id="x15-134000doc"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_multiroot_newton</span></span>&#x00A0;(<span class='args'><a 
-href="#x15-13000013.1"><span class='struct'>PnlRnFuncRnDFunc</span></a> <span 
+href="#x15-131059r13.1"><span class='struct'>PnlRnFuncRnDFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>func, const <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>x0, double
@@ -350,16 +1468,19 @@ class="rm-lmr-10x-x-109">=</span> <span
 class="rm-lmr-10x-x-109">max</span><span 
 class="lmsy-10x-x-109">{</span><span 
 class="lmmi-10x-x-109">&#x03B3;</span><sup><span 
-class="lmmi-8">j</span></sup><span 
-class="rm-lmr-10x-x-109">;</span><span 
+class="lmmi-8">j</span></sup> <span 
+class="rm-lmr-10x-x-109">; </span><span 
 class="lmmi-10x-x-109">j </span><span 
 class="lmsy-10x-x-109">&#x2265; </span><span 
 class="rm-lmr-10x-x-109">0</span><span 
 class="lmsy-10x-x-109">} </span>such
      that
-     <table 
+                                                                                    
+
+                                                                                    
+     </p><table 
 class="align-star">
-                                  <tr><td 
+                        <tr><td 
 class="align-odd"><span 
 class="lmsy-10x-x-109">|</span><span 
 class="lmmi-10x-x-109">f</span><span 
@@ -372,7 +1493,7 @@ class="lmmi-8">k</span></sub><span
 class="lmmi-10x-x-109">d</span><sub><span 
 class="lmmi-8">k</span></sub><span 
 class="rm-lmr-10x-x-109">)</span><span 
-class="lmsy-10x-x-109">|</span></td>                    <td 
+class="lmsy-10x-x-109">|</span></td>                        <td 
 class="align-even"><span 
 class="lmsy-10x-x-109">&#x2264;|</span><span 
 class="lmmi-10x-x-109">f</span><span 
@@ -382,12 +1503,12 @@ class="lmmi-8">k</span></sub><span
 class="rm-lmr-10x-x-109">)</span><span 
 class="lmsy-10x-x-109">|</span><span 
 class="rm-lmr-10x-x-109">(1 </span><span 
-class="lmsy-10x-x-109">- </span><span 
+class="lmsy-10x-x-109">-</span><span 
 class="lmmi-10x-x-109">&#x03C9;&#x03B1;</span><sub><span 
 class="lmmi-8">k</span></sub><span 
 class="rm-lmr-10x-x-109">)</span><span 
-class="lmmi-10x-x-109">.</span></td>                             <td 
-class="align-label"></td>                             <td 
+class="lmmi-10x-x-109">.</span></td>                        <td 
+class="align-label"></td>                        <td 
 class="align-label"></td></tr></table>
      <!--l. 185--><p class="noindent" >In this implementation, <span 
 class="lmmi-10x-x-109">&#x03C9; </span><span 
@@ -399,24 +1520,25 @@ class="rm-lmr-10x-x-109">= 1</span><span
 class="lmmi-10x-x-109">&#x2215;</span><span 
 class="rm-lmr-10x-x-109">2</span>. The algorithm stops when one of the three
      following conditions is met: </p>
-                                                                                    
-
-                                                                                    
           <ul class="itemize2">
-          <li class="itemize">the maximum number of iterations <span class='var'>max_iter</span> is reached;
-          </li>
-          <li class="itemize">the norm of the last improvement over <span class='var'>x</span> is smaller that <span class='var'>|x| * x_eps</span>;
-          </li>
-          <li class="itemize">at the current position <span class='var'>|f(x)| &#x003C; fx_eps</span></li></ul>
+          <li class="itemize">
+          <!--l. 188--><p class="noindent" >the maximum number of iterations <span class='var'>max_iter</span> is reached;
+          </p></li>
+          <li class="itemize">
+          <!--l. 189--><p class="noindent" >the norm of the last improvement over <span class='var'>x</span> is smaller that <span class='var'>|x| * x_eps</span>;
+          </p></li>
+          <li class="itemize">
+          <!--l. 190--><p class="noindent" >at the current position <span class='var'>|f(x)| &#x003C; fx_eps</span></p></li></ul>
      <!--l. 192--><p class="noindent" >On exit, the root is stored in <span class='var'>res</span>. Note that the function <span class='var'>F</span> must also compute the first
      derivative of the function. When defining <span class='var'>Func</span>, you must either define <span class='var'>Func-&#x003E;F</span> and
      <span class='var'>Func-&#x003E;DF</span> or <span class='var'>Func-&#x003E;FDF</span>.</p></li></ul>
 <!--l. 197--><p class="noindent" >We provide two wrappers for calling minpack routines. </p>
      <ul class="itemize1">
-     <li class="itemize"><a 
- id="dx15-133002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+     <li class="itemize">
+     <!--l. 199--><p class="noindent" ><a 
+ id="dx15-134002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_root_fsolve</span></span>&#x00A0;(<span class='args'><a 
-href="#x15-13000013.1"><span class='struct'>PnlRnFuncRnDFunc</span></a> <span 
+href="#x15-131059r13.1"><span class='struct'>PnlRnFuncRnDFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>f, <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>x, <a 
@@ -431,47 +1553,56 @@ class="lmmi-10x-x-109">f </span><span
 class="rm-lmr-10x-x-109">: </span><span 
 class="msbm-10x-x-109">&#x211D;</span><sup><span 
 class="lmmi-8">n</span></sup><span 
-class="lmmi-10x-x-109">&#x21A6;</span><span 
+class="lmmi-10x-x-109">&#x27FC;</span><span 
 class="msbm-10x-x-109">&#x211D;</span><sup><span 
 class="lmmi-8">n</span></sup>. Note that the number of
      components of <span class='var'>f</span> must be equal to the number of variates of <span class='var'>f</span>. This function returns <span class='var'>OK</span> or
      <span class='var'>FAIL</span> if something went wrong.<br 
-class="newline" />   <span class='description'>Parameters&#x00A0;</span>
+class="newline" />   <span class='description'>Parameters&#x00A0;</span></p>
           <ul class="itemize2">
-          <li class="itemize"><span class='var'>f</span> is a pointer to a <a 
-href="#x15-13000013.1"><span class='struct'>PnlRnFuncRnDFunc</span></a> used to store the function whose root is to
+          <li class="itemize">
+          <!--l. 210--><p class="noindent" ><span class='var'>f</span> is a pointer to a <a 
+href="#x15-131059r13.1"><span class='struct'>PnlRnFuncRnDFunc</span></a> used to store the function whose root is to
           be found. <span class='var'>f</span> can also store the Jacobian of the function, if not it is computed using
           finite differences (see the file <a 
 href="examples/minpack_test.c" class="url" ><span 
 class="ec-lmtt-10x-x-109">examples/minpack_test.c</span></a> for a usage example).
           <span class='var'>f-&#x003E;FDF</span> can be NULL because it is not used in this function.
-          </li>
-          <li class="itemize"><span class='var'>x</span> contains on input the starting point of the search and an approximation of the
-          root of <span class='var'>f</span> on output,
-          </li>
-          <li class="itemize"><span class='var'>xtol</span> is the precision required on <span class='var'>x</span>, if set to 0 a default value is used.
-          </li>
-          <li class="itemize"><span class='var'>maxfev</span>  is  the  maximum  number  of  evaluations  of  the  function  <span class='var'>f</span>  before  the
-          algorithm returns, if set to 0, a coherent number is determined internally.
-          </li>
-          <li class="itemize"><span class='var'>nfev</span> contains on output the number of evaluations of <span class='var'>f</span> during the algorithm,
-          </li>
-          <li class="itemize"><span class='var'>scale</span> is a vector used to rescale <span class='var'>x</span> in a way that each coordinate of the solution is
-          approximately of order 1 after rescaling. If on input <span class='var'>scale=NULL</span>, a scaling vector
-          is computed internally by the algorithm.
-          </li>
-          <li class="itemize"><span class='var'>error_msg</span> is a boolean (<span class='var'>TRUE</span> or <span class='var'>FALSE</span>) to specify if an error message should
-          be printed when the algorithm stops before having converged.
-          </li>
-          <li class="itemize">On output, <span class='var'>fx</span> contains <span class='var'>f(x)</span>.</li></ul>
                                                                                     
 
                                                                                     
+          </p></li>
+          <li class="itemize">
+          <!--l. 216--><p class="noindent" ><span class='var'>x</span> contains on input the starting point of the search and an approximation of the
+          root of <span class='var'>f</span> on output,
+          </p></li>
+          <li class="itemize">
+          <!--l. 218--><p class="noindent" ><span class='var'>xtol</span> is the precision required on <span class='var'>x</span>, if set to 0 a default value is used.
+          </p></li>
+          <li class="itemize">
+          <!--l. 220--><p class="noindent" ><span class='var'>maxfev</span>  is  the  maximum  number  of  evaluations  of  the  function  <span class='var'>f</span>  before  the
+          algorithm returns, if set to 0, a coherent number is determined internally.
+          </p></li>
+          <li class="itemize">
+          <!--l. 223--><p class="noindent" ><span class='var'>nfev</span> contains on output the number of evaluations of <span class='var'>f</span> during the algorithm,
+          </p></li>
+          <li class="itemize">
+          <!--l. 225--><p class="noindent" ><span class='var'>scale</span> is a vector used to rescale <span class='var'>x</span> in a way that each coordinate of the solution is
+          approximately of order 1 after rescaling. If on input <span class='var'>scale=NULL</span>, a scaling vector
+          is computed internally by the algorithm.
+          </p></li>
+          <li class="itemize">
+          <!--l. 229--><p class="noindent" ><span class='var'>error_msg</span> is a boolean (<span class='var'>TRUE</span> or <span class='var'>FALSE</span>) to specify if an error message should
+          be printed when the algorithm stops before having converged.
+          </p></li>
+          <li class="itemize">
+          <!--l. 232--><p class="noindent" >On output, <span class='var'>fx</span> contains <span class='var'>f(x)</span>.</p></li></ul>
      </li>
-     <li class="itemize"><a 
- id="dx15-133003"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+     <li class="itemize">
+     <!--l. 235--><p class="noindent" ><a 
+ id="dx15-134003"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_root_fsolve_lsq</span></span>&#x00A0;(<span class='args'><a 
-href="#x15-13000013.1"><span class='struct'>PnlRnFuncRmDFunc</span></a> <span 
+href="#x15-131059r13.1"><span class='struct'>PnlRnFuncRmDFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>f, <a 
 href="pnl-manualse4.html#x6-290004.1.1"><span class='struct'>PnlVect</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>x, int m, <a 
@@ -484,10 +1615,10 @@ class="ts1-lmr10-x-x-109">*</span>scale, int
      error_msg</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the root of <span 
 class="lmmi-10x-x-109">x </span><span 
-class="lmsy-10x-x-109">&#x2208; </span><span 
+class="lmsy-10x-x-109">&#x2208;</span><span 
 class="msbm-10x-x-109">&#x211D;</span><sup><span 
 class="lmmi-8">n</span></sup><span 
-class="lmmi-10x-x-109">&#x21A6;</span><span 
+class="lmmi-10x-x-109">&#x27FC;</span><span 
 class="lmex-10">&#x2211;</span>
    <sub><span 
 class="lmmi-8">i</span><span 
@@ -500,40 +1631,54 @@ class="lmmi-10x-x-109">x</span><span
 class="rm-lmr-10x-x-109">)</span><sup><span 
 class="rm-lmr-8">2</span></sup>, note that there is no reason why <span class='var'>m</span>
      should be equal to <span class='var'>n</span>.<br 
-class="newline" />   <span class='description'>Parameters&#x00A0;</span>
+class="newline" />   <span class='description'>Parameters&#x00A0;</span></p>
           <ul class="itemize2">
-          <li class="itemize"><span class='var'>f</span> is a pointer to a <a 
-href="#x15-13000013.1"><span class='struct'>PnlRnFuncRmDFunc</span></a> used to store the function whose root is to
+          <li class="itemize">
+          <!--l. 244--><p class="noindent" ><span class='var'>f</span> is a pointer to a <a 
+href="#x15-131059r13.1"><span class='struct'>PnlRnFuncRmDFunc</span></a> used to store the function whose root is to
           be found. <span class='var'>f</span> can also store the Jacobian of the function, if not it is computed using
           finite differences (see the file <a 
 href="examples/minpack_test.c" class="url" ><span 
 class="ec-lmtt-10x-x-109">examples/minpack_test.c</span></a> for a usage example).
           <span class='var'>f-&#x003E;FDF</span> can be NULL because it is not used in this function.
-          </li>
-          <li class="itemize"><span class='var'>x</span> contains on input the starting point of the search and an approximation of the
+          </p></li>
+          <li class="itemize">
+                                                                                    
+
+                                                                                    
+          <!--l. 250--><p class="noindent" ><span class='var'>x</span> contains on input the starting point of the search and an approximation of the
           root of <span class='var'>f</span> on output,
-          </li>
-          <li class="itemize"><span class='var'>m</span> is the number of components of <span class='var'>f</span>,
-          </li>
-          <li class="itemize"><span class='var'>xtol</span> is the precision required on <span class='var'>x</span>, if set to 0 a default value is used.
-          </li>
-          <li class="itemize"><span class='var'>ftol</span> is the precision required on <span class='var'>f</span>, if set to 0 a default value is used.
-          </li>
-          <li class="itemize"><span class='var'>gtol</span> is the precision required on the Jacobian of <span class='var'>f</span>, if set to 0 a default value is used.
-          </li>
-          <li class="itemize"><span class='var'>maxfev</span>  is  the  maximum  number  of  evaluations  of  the  function  <span class='var'>f</span>  before  the
+          </p></li>
+          <li class="itemize">
+          <!--l. 253--><p class="noindent" ><span class='var'>m</span> is the number of components of <span class='var'>f</span>,
+          </p></li>
+          <li class="itemize">
+          <!--l. 254--><p class="noindent" ><span class='var'>xtol</span> is the precision required on <span class='var'>x</span>, if set to 0 a default value is used.
+          </p></li>
+          <li class="itemize">
+          <!--l. 256--><p class="noindent" ><span class='var'>ftol</span> is the precision required on <span class='var'>f</span>, if set to 0 a default value is used.
+          </p></li>
+          <li class="itemize">
+          <!--l. 258--><p class="noindent" ><span class='var'>gtol</span> is the precision required on the Jacobian of <span class='var'>f</span>, if set to 0 a default value is used.
+          </p></li>
+          <li class="itemize">
+          <!--l. 260--><p class="noindent" ><span class='var'>maxfev</span>  is  the  maximum  number  of  evaluations  of  the  function  <span class='var'>f</span>  before  the
           algorithm returns, if set to 0, a coherent number is determined internally.
-          </li>
-          <li class="itemize"><span class='var'>nfev</span> contains on output the number of evaluations of <span class='var'>f</span> during the algorithm,
-          </li>
-          <li class="itemize"><span class='var'>scale</span> is a vector used to rescale <span class='var'>x</span> in a way that each coordinate of the solution is
+          </p></li>
+          <li class="itemize">
+          <!--l. 263--><p class="noindent" ><span class='var'>nfev</span> contains on output the number of evaluations of <span class='var'>f</span> during the algorithm,
+          </p></li>
+          <li class="itemize">
+          <!--l. 265--><p class="noindent" ><span class='var'>scale</span> is a vector used to rescale <span class='var'>x</span> in a way that each coordinate of the solution is
           approximately of order 1 after rescaling. If on input <span class='var'>scale=NULL</span>, a scaling vector
           is computed internally by the algorithm.
-          </li>
-          <li class="itemize"><span class='var'>error_msg</span> is a boolean (<span class='var'>TRUE</span> or <span class='var'>FALSE</span>) to specify if an error message should
+          </p></li>
+          <li class="itemize">
+          <!--l. 269--><p class="noindent" ><span class='var'>error_msg</span> is a boolean (<span class='var'>TRUE</span> or <span class='var'>FALSE</span>) to specify if an error message should
           be printed when the algorithm stops before having converged.
-          </li>
-          <li class="itemize">On output, <span class='var'>fx</span> contains <span class='var'>f(x)</span>.</li></ul>
+          </p></li>
+          <li class="itemize">
+          <!--l. 272--><p class="noindent" >On output, <span class='var'>fx</span> contains <span class='var'>f(x)</span>.</p></li></ul>
      </li></ul>
                                                                                     
 

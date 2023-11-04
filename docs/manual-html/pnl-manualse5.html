@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="iso-8859-1" ?> 
+<?xml version="1.0" encoding="utf-8" ?> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
 <!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->  
 <html xmlns="http://www.w3.org/1999/xhtml"  
 > 
 <head><title>Cumulative distribution Functions</title> 
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> 
-<meta name="generator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
-<meta name="originator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<meta name="generator" content="TeX4ht (https://tug.org/tex4ht/)" /> 
+<meta name="originator" content="TeX4ht (https://tug.org/tex4ht/)" /> 
 <!-- xhtml,uni-html4,2,subsection+,next,html --> 
 <meta name="src" content="pnl-manual.tex" /> 
 <link rel="stylesheet" type="text/css" href="pnl-manual.css" /> 
@@ -29,19 +29,23 @@ prototype
 </p>
 <table 
 class="equation-star"><tr><td>
-<center class="math-display" >
+<div class="math-display" >
 <img 
-src="pnl-manual18x.png" alt="               &#x222B; x
+src="pnl-manual18x.png" alt="               &#x222B;
+                 x
 p = 1- q;  p =    density(u)du
-" class="math-display"  /></center></td></tr></table>
+" class="math-display"  /></div>
+</td></tr></table>
 <!--l. 10--><p class="nopar" >
 </p>
      <ul class="itemize1">
-     <li class="itemize"><span class='var'>which</span> If <span class='var'>which=1</span>, it computes <span class='var'>p</span> and <span class='var'>q</span>. If <span class='var'>which=2</span>, it computes <span class='var'>x</span>. For higher values
+     <li class="itemize">
+     <!--l. 13--><p class="noindent" ><span class='var'>which</span> If <span class='var'>which=1</span>, it computes <span class='var'>p</span> and <span class='var'>q</span>. If <span class='var'>which=2</span>, it computes <span class='var'>x</span>. For higher values
      of <span class='var'>which</span> it computes one the parameters characterizing the distribution using all the
      others, <span class='var'>p, q, x</span>.
-     </li>
-     <li class="itemize"><span class='var'>p</span> the probability <span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 17--><p class="noindent" ><span class='var'>p</span> the probability <span 
 class="lmex-10">&#x222B;</span>
   <sup><span 
 class="lmmi-8">x</span></sup><span 
@@ -50,15 +54,21 @@ class="rm-lmr-10x-x-109">(</span><span
 class="lmmi-10x-x-109">u</span><span 
 class="rm-lmr-10x-x-109">)</span><span 
 class="lmmi-10x-x-109">du</span>
-     </li>
-     <li class="itemize"><span class='var'>q</span> <span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 18--><p class="noindent" ><span class='var'>q</span> <span 
 class="rm-lmr-10x-x-109">= 1 </span><span 
-class="lmsy-10x-x-109">- </span><span 
+class="lmsy-10x-x-109">-</span><span 
 class="lmmi-10x-x-109">p</span>
-     </li>
-     <li class="itemize"><span class='var'>x</span> the upper bound of the integral
-     </li>
-     <li class="itemize"><span class='var'>status</span> an integer which indicates on exit the success of the computation. (0) if calculation
+     </p></li>
+     <li class="itemize">
+     <!--l. 19--><p class="noindent" ><span class='var'>x</span> the upper bound of the integral
+                                                                                    
+
+                                                                                    
+     </p></li>
+     <li class="itemize">
+     <!--l. 20--><p class="noindent" ><span class='var'>status</span> an integer which indicates on exit the success of the computation. (0) if calculation
      completed correctly. (-I) if the input parameter number I was out of range. (1) if the
      answer appears to be lower than the lowest search bound. (2) if the answer appears to
      be higher than the greatest search bound. (3) if <span 
@@ -67,14 +77,13 @@ class="rm-lmr-10x-x-109">+ </span><span
 class="lmmi-10x-x-109">q</span><span 
 class="lmmi-10x-x-109">&#x2260;</span><span 
 class="rm-lmr-10x-x-109">1</span>.
-                                                                                    
-
-                                                                                    
-     </li>
-     <li class="itemize"><span class='var'>bound</span> is undefined if STATUS is 0. Bound exceeded by parameter number I if STATUS
-     is negative. Lower search bound if STATUS is 1. Upper search bound if STATUS is 2.</li></ul>
+     </p></li>
+     <li class="itemize">
+     <!--l. 25--><p class="noindent" ><span class='var'>bound</span> is undefined if STATUS is 0. Bound exceeded by parameter number I if STATUS
+     is negative. Lower search bound if STATUS is 1. Upper search bound if STATUS is 2.</p></li></ul>
      <ul class="itemize1">
-     <li class="itemize"><a 
+     <li class="itemize">
+     <!--l. 31--><p class="noindent" ><a 
  id="dx7-100001"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cdf_bet</span></span>&#x00A0;(<span class='args'>int <span 
 class="ts1-lmr10-x-x-109">*</span>which, double <span 
@@ -88,8 +97,9 @@ class="ts1-lmr10-x-x-109">*</span>b, int <span
 class="ts1-lmr10-x-x-109">*</span>status, double <span 
 class="ts1-lmr10-x-x-109">*</span>bound</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Cumulative Distribution Function BETA distribution.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 36--><p class="noindent" ><a 
  id="dx7-100002"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cdf_bin</span></span>&#x00A0;(<span class='args'>int <span 
 class="ts1-lmr10-x-x-109">*</span>which, double <span 
@@ -103,8 +113,9 @@ class="ts1-lmr10-x-x-109">*</span>ompr, int <span
 class="ts1-lmr10-x-x-109">*</span>status, double <span 
 class="ts1-lmr10-x-x-109">*</span>bound</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Cumulative Distribution Function BINa distribution.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 41--><p class="noindent" ><a 
  id="dx7-100003"></a>  <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cdf_chi</span></span>&#x00A0;(<span class='args'>int  <span 
 class="ts1-lmr10-x-x-109">*</span>which,  double  <span 
@@ -116,8 +127,9 @@ class="ts1-lmr10-x-x-109">*</span>df,  int
 class="ts1-lmr10-x-x-109">*</span>status, double <span 
 class="ts1-lmr10-x-x-109">*</span>bound</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Cumulative Distribution Function CHI-Square distribution.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 46--><p class="noindent" ><a 
  id="dx7-100004"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cdf_chn</span></span>&#x00A0;(<span class='args'>int <span 
 class="ts1-lmr10-x-x-109">*</span>which, double <span 
@@ -130,8 +142,9 @@ class="ts1-lmr10-x-x-109">*</span>pnonc, int <span
 class="ts1-lmr10-x-x-109">*</span>status, double <span 
 class="ts1-lmr10-x-x-109">*</span>bound</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Cumulative Distribution Function Non-central Chi-Square distribution.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 51--><p class="noindent" ><a 
  id="dx7-100005"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cdf_f</span></span>&#x00A0;(<span class='args'>int <span 
 class="ts1-lmr10-x-x-109">*</span>which, double <span 
@@ -144,8 +157,12 @@ class="ts1-lmr10-x-x-109">*</span>dfd, int <span
 class="ts1-lmr10-x-x-109">*</span>status, double <span 
 class="ts1-lmr10-x-x-109">*</span>bound</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Cumulative Distribution Function F distribution.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+                                                                                    
+
+                                                                                    
+     <!--l. 56--><p class="noindent" ><a 
  id="dx7-100006"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cdf_fnc</span></span>&#x00A0;(<span class='args'>int <span 
 class="ts1-lmr10-x-x-109">*</span>which, double <span 
@@ -159,8 +176,9 @@ class="ts1-lmr10-x-x-109">*</span>pnonc, int <span
 class="ts1-lmr10-x-x-109">*</span>status, double <span 
 class="ts1-lmr10-x-x-109">*</span>bound</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Cumulative Distribution Function Non-central F distribution.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 61--><p class="noindent" ><a 
  id="dx7-100007"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cdf_gam</span></span>&#x00A0;(<span class='args'>int <span 
 class="ts1-lmr10-x-x-109">*</span>which, double <span 
@@ -193,8 +211,9 @@ class="lmmi-10x-x-109">e</span><sup><span
 class="lmsy8-">-</span><span 
 class="lmmi-8">x&#x2215;s</span></sup> with <span class='var'>scale=s</span>
      and <span class='var'>shape=1/rate=a</span>.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 68--><p class="noindent" ><a 
  id="dx7-100008"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cdf_nbn</span></span>&#x00A0;(<span class='args'>int <span 
 class="ts1-lmr10-x-x-109">*</span>which, double <span 
@@ -208,8 +227,9 @@ class="ts1-lmr10-x-x-109">*</span>ompr, int <span
 class="ts1-lmr10-x-x-109">*</span>status, double <span 
 class="ts1-lmr10-x-x-109">*</span>bound</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Cumulative Distribution Function Negative BiNomial distribution.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 73--><p class="noindent" ><a 
  id="dx7-100009"></a>  <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cdf_nor</span></span>&#x00A0;(<span class='args'>int  <span 
 class="ts1-lmr10-x-x-109">*</span>which,  double  <span 
@@ -222,11 +242,9 @@ class="ts1-lmr10-x-x-109">*</span>sd, int <span
 class="ts1-lmr10-x-x-109">*</span>status, double <span 
 class="ts1-lmr10-x-x-109">*</span>bound</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Cumulative Distribution Function NORmal distribution.
-                                                                                    
-
-                                                                                    
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 78--><p class="noindent" ><a 
  id="dx7-100010"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cdf_poi</span></span>&#x00A0;(<span class='args'>int <span 
 class="ts1-lmr10-x-x-109">*</span>which, double <span 
@@ -238,8 +256,9 @@ class="ts1-lmr10-x-x-109">*</span>xlam, int
 class="ts1-lmr10-x-x-109">*</span>status, double <span 
 class="ts1-lmr10-x-x-109">*</span>bound</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Cumulative Distribution Function POIsson distribution.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 83--><p class="noindent" ><a 
  id="dx7-100011"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cdf_t</span></span>&#x00A0;(<span class='args'>int <span 
 class="ts1-lmr10-x-x-109">*</span>which, double <span 
@@ -251,16 +270,18 @@ class="ts1-lmr10-x-x-109">*</span>status,
      double <span 
 class="ts1-lmr10-x-x-109">*</span>bound</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Cumulative Distribution Function T distribution.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 88--><p class="noindent" ><a 
  id="dx7-100012"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cdfchi2n</span></span>&#x00A0;(<span class='args'>double x, double df, double ncparam</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute the cumulative density function at <span class='var'>x</span> of the non central <span 
 class="lmmi-10x-x-109">&#x03C7;</span><sup><span 
 class="rm-lmr-8">2</span></sup>
      distribution with <span class='var'>df</span> degrees of freedom and non centrality parameter <span class='var'>ncparam</span>.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 93--><p class="noindent" ><a 
  id="dx7-100013"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cdfbchi2n</span></span>&#x00A0;(<span class='args'>double x, double df, double ncparam, double beta, double <span 
 class="ts1-lmr10-x-x-109">*</span>P</span>)<br 
@@ -270,24 +291,30 @@ class="ts1-lmr10-x-x-109">*</span>X</span> where <span class='var'>X</span> is n
 class="lmmi-10x-x-109">&#x03C7;</span><sup><span 
 class="rm-lmr-8">2</span></sup> random variable with <span class='var'>df</span> degrees of freedom and non
      centrality parameter <span class='var'>ncparam</span>.
-     </li>
-     <li class="itemize"><a 
+                                                                                    
+
+                                                                                    
+     </p></li>
+     <li class="itemize">
+     <!--l. 101--><p class="noindent" ><a 
  id="dx7-100014"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_normal_density</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Normal density function.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 104--><p class="noindent" ><a 
  id="dx7-100015"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cdfnor</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Cumulative normal distribution function.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 107--><p class="noindent" ><a 
  id="dx7-100016"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cdf2nor</span></span>&#x00A0;(<span class='args'>double a, double b, double r</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Cumulative    bivariate    normal    distribution    function,    returns
      <img 
-src="pnl-manual19x.png" alt="-&#x221A;-1---
-2&#x03C0; 1-r2"  class="frac" align="middle" /> <span 
+src="pnl-manual19x.png" alt="   1
+2&#x03C0;&#x221A;1--r2"  class="frac" align="middle" /> <span 
 class="lmex-10">&#x222B;</span>
               <sub><span 
 class="lmsy8-">-&#x221E;</span></sub><sup><span 
@@ -298,15 +325,16 @@ class="lmsy8-">-&#x221E;</span></sub><sup><span
 class="lmmi-8">b</span></sup><span 
 class="lmmi-10x-x-109">e</span><sup><span 
 class="lmsy8-">-</span><img 
-src="pnl-manual20x.png" alt=" 2     2
-x-22(r1-xry+2y)--"  class="frac" align="middle" />
+src="pnl-manual20x.png" alt="x2-2rxy+2y2-
+ 2(1-r )"  class="frac" align="middle" />
                      </sup><span 
 class="lmmi-10x-x-109">dxdy.</span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 112--><p class="noindent" ><a 
  id="dx7-100017"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_inv_cdfnor</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
-class="newline" />   <span class='description'>Description&#x00A0;</span>Inverse of the cumulative normal distribution function.</li></ul>
+class="newline" />   <span class='description'>Description&#x00A0;</span>Inverse of the cumulative normal distribution function.</p></li></ul>
                                                                                     
 
                                                                                     

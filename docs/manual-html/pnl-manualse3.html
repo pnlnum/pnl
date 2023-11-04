@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="iso-8859-1" ?> 
+<?xml version="1.0" encoding="utf-8" ?> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
 <!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->  
 <html xmlns="http://www.w3.org/1999/xhtml"  
 > 
 <head><title>Mathematical framework</title> 
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> 
-<meta name="generator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
-<meta name="originator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<meta name="generator" content="TeX4ht (https://tug.org/tex4ht/)" /> 
+<meta name="originator" content="TeX4ht (https://tug.org/tex4ht/)" /> 
 <!-- xhtml,uni-html4,2,subsection+,next,html --> 
 <meta name="src" content="pnl-manual.tex" /> 
 <link rel="stylesheet" type="text/css" href="pnl-manual.css" /> 
@@ -37,7 +37,7 @@ class="ec-lmtt-10x-x-109">math.h</span>, <span
 class="ec-lmtt-10x-x-109">values.h </span>or <span 
 class="ec-lmtt-10x-x-109">limits.h </span>and a few others have been added.
 <!--tex4ht:inline--></p><div class="tabular"> <table id="TBL-4" class="tabular" 
-cellspacing="0" cellpadding="0"  
+ 
 ><colgroup id="TBL-4-1g"><col 
 id="TBL-4-1" /><col 
 id="TBL-4-2" /><col 
@@ -140,8 +140,7 @@ class="td11"><!--l. 21--><p class="noindent" >     </p></td><td  style="white-sp
 class="td11"><span 
 class="rm-lmr-10x-x-109">2</span><span 
 class="lmmi-10x-x-109">&#x2215;</span><img 
-src="pnl-manual0x.png" alt="&#x221A; --
-  &#x03C0;"  class="sqrt"  />                            </td>
+src="pnl-manual0x.png" alt="&#x221A; &#x03C0;-"  class="sqrt"  />                            </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-4-13-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-13-1"  
 class="td11"><a 
@@ -170,8 +169,9 @@ class="rm-lmr-10x-x-109">=</span> <span
 class="rm-lmr-10x-x-109">lim</span> <sub><span 
 class="lmmi-8">n</span><span 
 class="lmsy8-">&#x2192;&#x221E;</span></sub><img 
-src="pnl-manual2x.png" alt="(&#x2211;n    1       )
-   k=1k - ln(n)"  class="left" align="middle" /></td>
+src="pnl-manual2x.png" alt="(              )
+ &#x2211;n   -1- ln(n)
+   k=1k"  class="left" align="middle" /></td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-4-16-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-16-1"  
 class="td11"><a 
@@ -273,30 +273,33 @@ class="td11"><!--l. 36--><p class="noindent" >     </p></td><td  style="white-sp
 class="td11">Not a Number                     </td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-4-28-"><td  style="white-space:nowrap; text-align:left;" id="TBL-4-28-1"  
-class="td11">              </td></tr></table></div>
-                                                                                    
-
-                                                                                    
+class="td11">              </td></tr></table>                                                                   </div>
 <!--l. 39--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">3.1.2   </span> <a 
  id="x5-180003.1.2"></a>A few macros</h5>
+                                                                                    
+
+                                                                                    
      <ul class="itemize1">
-     <li class="itemize"><a 
+     <li class="itemize">
+     <!--l. 41--><p class="noindent" ><a 
  id="dx5-18001"></a> <span 
 class="ec-lmbx-10x-x-109">PNL_IS_ODD</span>&#x00A0;(int n)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return <span 
 class="rm-lmr-10x-x-109">1 </span>if <span class='var'>n</span> is odd and <span 
 class="rm-lmr-10x-x-109">0 </span>otherwise.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 43--><p class="noindent" ><a 
  id="dx5-18002"></a> <span 
 class="ec-lmbx-10x-x-109">PNL_IS_EVEN</span>&#x00A0;(int n)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return <span 
 class="rm-lmr-10x-x-109">1 </span>if <span class='var'>n</span> is even and <span 
 class="rm-lmr-10x-x-109">0 </span>otherwise.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 45--><p class="noindent" ><a 
  id="dx5-18003"></a> <span 
 class="ec-lmbx-10x-x-109">PNL_ALTERNATE</span>&#x00A0;(int n)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return <span 
@@ -304,205 +307,239 @@ class="rm-lmr-10x-x-109">(</span><span
 class="lmsy-10x-x-109">-</span><span 
 class="rm-lmr-10x-x-109">1)</span><sup><span class='var'><span 
 class="lmmi-8">n</span></span></sup>.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 47--><p class="noindent" ><a 
  id="dx5-18004"></a> <span 
 class="ec-lmbx-10x-x-109">MIN</span>&#x00A0;(x,y)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return the minimum of <span class='var'>x</span> and <span class='var'>y</span>.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 49--><p class="noindent" ><a 
  id="dx5-18005"></a> <span 
 class="ec-lmbx-10x-x-109">MAX</span>&#x00A0;(x,y)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return the maximum of <span class='var'>x</span> and <span class='var'>y</span>.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 51--><p class="noindent" ><a 
  id="dx5-18006"></a> <span 
 class="ec-lmbx-10x-x-109">ABS</span>&#x00A0;(x)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return the absolute value of <span class='var'>x</span>.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 53--><p class="noindent" ><a 
  id="dx5-18007"></a> <span 
 class="ec-lmbx-10x-x-109">PNL_SIGN</span>&#x00A0;(x)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return the sign of <span class='var'>x</span> (-1 if x &#x003C; 0, 0 otheriwse).
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 55--><p class="noindent" ><a 
  id="dx5-18008"></a> <span 
 class="ec-lmbx-10x-x-109">SQR</span>&#x00A0;(x)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return <span class='var'><span 
 class="lmmi-10x-x-109">x</span><sup><span 
 class="rm-lmr-8">2</span></sup></span>.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 57--><p class="noindent" ><a 
  id="dx5-18009"></a> <span 
 class="ec-lmbx-10x-x-109">CUB</span>&#x00A0;(x)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return <span class='var'><span 
 class="lmmi-10x-x-109">x</span><sup><span 
-class="rm-lmr-8">3</span></sup></span>.</li></ul>
+class="rm-lmr-8">3</span></sup></span>.</p></li></ul>
+                                                                                    
+
+                                                                                    
 <!--l. 61--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">3.1.3   </span> <a 
  id="x5-190003.1.3"></a>Classifying a floating&#8211;point number</h5>
      <ul class="itemize1">
-     <li class="itemize"><a 
+     <li class="itemize">
+     <!--l. 64--><p class="noindent" ><a 
  id="dx5-19001"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_nan</span></span>&#x00A0;(<span class='args'></span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return <span class='var'>NaN</span>
-                                                                                    
-
-                                                                                    
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 66--><p class="noindent" ><a 
  id="dx5-19002"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_posinf</span></span>&#x00A0;(<span class='args'></span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return <span class='var'>+ infinity</span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 68--><p class="noindent" ><a 
  id="dx5-19003"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_neginf</span></span>&#x00A0;(<span class='args'></span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return <span class='var'>- infinity</span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 70--><p class="noindent" ><a 
  id="dx5-19004"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_isnan</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return <span class='var'>+1</span> if <span class='var'>x=NaN</span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 72--><p class="noindent" ><a 
  id="dx5-19005"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_isinf</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return <span class='var'>+1</span> if <span class='var'>x=+Inf</span>, <span class='var'>-1</span> if <span class='var'>x=-Inf</span> and <span class='var'>0</span> otherwise.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 75--><p class="noindent" ><a 
  id="dx5-19006"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_isfinite</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
-class="newline" />   <span class='description'>Description&#x00A0;</span>Return <span class='var'>1</span> if <span class='var'>x!=+-Inf</span></li></ul>
+class="newline" />   <span class='description'>Description&#x00A0;</span>Return <span class='var'>1</span> if <span class='var'>x!=+-Inf</span></p></li></ul>
 <!--l. 79--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">3.1.4   </span> <a 
  id="x5-200003.1.4"></a>Rouding a floating&#8211;point number</h5>
      <ul class="itemize1">
-     <li class="itemize"><a 
+     <li class="itemize">
+     <!--l. 81--><p class="noindent" ><a 
  id="dx5-20001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_itrunc</span></span>&#x00A0;(<span class='args'>double s</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>This function is similar to the <span class='var'>trunc</span> function (provided by the C library)
      but the result is typed as an integer instead of a double. Digits may be lost if <span class='var'>s</span> exceeds
      <span class='var'>MAX_INT</span>.
-     </li>
-     <li class="itemize"><a 
+                                                                                    
+
+                                                                                    
+     </p></li>
+     <li class="itemize">
+     <!--l. 85--><p class="noindent" ><a 
  id="dx5-20002"></a> <span class='ret'>long int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_ltrunc</span></span>&#x00A0;(<span class='args'>double s</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>This function is similar to the <span class='var'>trunc</span> function (provided by the C library)
      but the result is typed as a long integer instead of a double.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 89--><p class="noindent" ><a 
  id="dx5-20003"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_trunc</span></span>&#x00A0;(<span class='args'>double s</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return the nearest integer not greater than the absolute value of <span class='var'>s</span>. This
      function is part of C99 as <span class='var'>trunc</span>.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 92--><p class="noindent" ><a 
  id="dx5-20004"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_round</span></span>&#x00A0;(<span class='args'>double s</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Return the integral value nearest to x rounding half-way cases away from
      zero, regardless of the current rounding direction. This function is part of C99 as <span class='var'>round</span>.
-                                                                                    
-
-                                                                                    
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 96--><p class="noindent" ><a 
  id="dx5-20005"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_iround</span></span>&#x00A0;(<span class='args'>double s</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>This function is similar to the <span class='var'>round</span> function (provided by the C library)
      but the result is typed as an integer instead of a double. Digits may be lost if <span class='var'>s</span> exceeds
      <span class='var'>MAX_INT</span>.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 100--><p class="noindent" ><a 
  id="dx5-20006"></a> <span class='ret'>long int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_lround</span></span>&#x00A0;(<span class='args'>double s</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>This function is similar to the <span class='var'>round</span> function (provided by the C library)
-     but the result is typed as a long integer instead of a double.</li></ul>
+     but the result is typed as a long integer instead of a double.</p></li></ul>
 <!--l. 106--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">3.1.5   </span> <a 
  id="x5-210003.1.5"></a>Some standard mathematical functions</h5>
      <ul class="itemize1">
-     <li class="itemize"><a 
+     <li class="itemize">
+     <!--l. 108--><p class="noindent" ><a 
  id="dx5-21001"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_fact</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>See <a 
-href="pnl-manualse14.html#x16-13800014.4">pnl_sf_fact</a>
-     </li>
-     <li class="itemize"><a 
+href="pnl-manualse14.html#x16-13900014.4">pnl_sf_fact</a>
+     </p></li>
+     <li class="itemize">
+     <!--l. 110--><p class="noindent" ><a 
  id="dx5-21002"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_lgamma</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>See <a 
-href="pnl-manualse14.html#x16-13800014.4">pnl_sf_log_gamma</a>
-     </li>
-     <li class="itemize"><a 
- id="dx5-21003"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
-class="ec-lmbx-10x-x-109">pnl_tgamma</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
-class="newline" />   <span class='description'>Description&#x00A0;</span>See <a 
-href="pnl-manualse14.html#x16-13800014.4">pnl_sf_gamma</a>
-     </li>
-     <li class="itemize"><a 
- id="dx5-21004"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
-class="ec-lmbx-10x-x-109">pnl_acosh</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
-class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span class='var'>acosh(x)</span>.
-     </li>
-     <li class="itemize"><a 
- id="dx5-21005"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
-class="ec-lmbx-10x-x-109">pnl_asinh</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
-class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span class='var'>asinh(x)</span>.
-     </li>
-     <li class="itemize"><a 
- id="dx5-21006"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
-class="ec-lmbx-10x-x-109">pnl_atanh</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
-class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span class='var'>atanh(x)</span>.
-     </li>
-     <li class="itemize"><a 
- id="dx5-21007"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
-class="ec-lmbx-10x-x-109">pnl_log1p</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
-class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span class='var'>log(1+x)</span> accurately for small values of <span class='var'>x</span>
-     </li>
-     <li class="itemize"><a 
- id="dx5-21008"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
-class="ec-lmbx-10x-x-109">pnl_expm1</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
-class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span class='var'>exp(x)-1</span> accurately for small values of <span class='var'>x</span>
+href="pnl-manualse14.html#x16-13900014.4">pnl_sf_log_gamma</a>
                                                                                     
 
                                                                                     
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 112--><p class="noindent" ><a 
+ id="dx5-21003"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_tgamma</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>See <a 
+href="pnl-manualse14.html#x16-13900014.4">pnl_sf_gamma</a>
+     </p></li>
+     <li class="itemize">
+     <!--l. 114--><p class="noindent" ><a 
+ id="dx5-21004"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_acosh</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span class='var'>acosh(x)</span>.
+     </p></li>
+     <li class="itemize">
+     <!--l. 116--><p class="noindent" ><a 
+ id="dx5-21005"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_asinh</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span class='var'>asinh(x)</span>.
+     </p></li>
+     <li class="itemize">
+     <!--l. 118--><p class="noindent" ><a 
+ id="dx5-21006"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_atanh</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span class='var'>atanh(x)</span>.
+     </p></li>
+     <li class="itemize">
+     <!--l. 120--><p class="noindent" ><a 
+ id="dx5-21007"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_log1p</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span class='var'>log(1+x)</span> accurately for small values of <span class='var'>x</span>
+     </p></li>
+     <li class="itemize">
+     <!--l. 122--><p class="noindent" ><a 
+ id="dx5-21008"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+class="ec-lmbx-10x-x-109">pnl_expm1</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
+class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span class='var'>exp(x)-1</span> accurately for small values of <span class='var'>x</span>
+     </p></li>
+     <li class="itemize">
+     <!--l. 124--><p class="noindent" ><a 
  id="dx5-21009"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_cosm1</span></span>&#x00A0;(<span class='args'>double x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span class='var'>cos(x)-1</span> accurately for small values of <span class='var'>x</span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 126--><p class="noindent" ><a 
  id="dx5-21010"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_pow_i</span></span>&#x00A0;(<span class='args'>double x, int n</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compute <span class="obeylines-h"><span class="verb"><span 
-class="ec-lmtt-10x-x-109">x^n</span></span></span> for an integer <span class='var'>n</span>.</li></ul>
+class="ec-lmtt-10x-x-109">x^n</span></span></span> for an integer <span class='var'>n</span>.</p></li></ul>
 <!--l. 130--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">3.1.6   </span> <a 
  id="x5-220003.1.6"></a>Comparison of floating&#8211;point numbers</h5>
+                                                                                    
+
+                                                                                    
      <ul class="itemize1">
-     <li class="itemize"><a 
+     <li class="itemize">
+     <!--l. 132--><p class="noindent" ><a 
  id="dx5-22001"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_isequal_rel</span></span>&#x00A0;(<span class='args'>double x, double y, double relerr</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compare two floating&#8211;point numbers up to a relative precision <span class='var'>relerr</span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 134--><p class="noindent" ><a 
  id="dx5-22002"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_isequal_abs</span></span>&#x00A0;(<span class='args'>double x, double y, double abserr</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Compare two floating&#8211;point numbers up to an absolute precision <span class='var'>abserr</span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 136--><p class="noindent" ><a 
  id="dx5-22003"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_isequal</span></span>&#x00A0;(<span class='args'>double x, double y, double relerr</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Equivalent  to  <a 
 href="#x5-220003.1.6">pnl_isequal_abs</a>  if  <span class='var'>|x|  &#x003C;  1</span>  and  to  <a 
 href="#x5-220003.1.6">pnl_isequal_abs</a>
-     otherwise.</li></ul>
+     otherwise.</p></li></ul>
 <!--l. 2--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">3.2   </span> <a 
@@ -517,23 +554,52 @@ class="newline" />
 </p><!--l. 8--><p class="noindent" >The first native implementation of complex numbers in the C language appeared in C99, which is
 unfortunately not available on all platforms. For this reason, we provide here an implementation of
 complex numbers.
-                                                                                    
-
-                                                                                    
 </p>
-<div class="verbatim" id="verbatim-14">
-typedef&#x00A0;struct&#x00A0;{
-&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;double&#x00A0;r;&#x00A0;/*!&#x003C;&#x00A0;real&#x00A0;part&#x00A0;*/
-&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;double&#x00A0;i;&#x00A0;/*!&#x003C;&#x00A0;imaginary&#x00A0;part&#x00A0;*/
-&#x00A0;<br />}&#x00A0;dcomplex;
-</div>
-<!--l. 18--><p class="nopar" >
-</p><!--l. 21--><p class="noindent" >
+<!--l. 13-->
+<pre class="lstlisting" id="listing-14"><span class="label"><a 
+ id="x5-24001r1"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">typedef</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">struct</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">{</span></span> 
+<span class="label"><a 
+ id="x5-24002r2"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">r</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">!&#x003C;</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">real</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">part</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x5-24003r3"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">i</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">/*</span></span><span style="color:#000000"><span 
+class="ec-lmtti-10">!&#x003C;</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">imaginary</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">part</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtti-10">*/</span></span> 
+<span class="label"><a 
+ id="x5-24004r4"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">}</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">dcomplex</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span></pre>
+<!--l. 21--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">3.2.2   </span> <a 
  id="x5-250003.2.2"></a>Constants</h5>
 <!--l. 23--><p class="noindent" ><!--tex4ht:inline--></p><div class="tabular"> <table id="TBL-5" class="tabular" 
-cellspacing="0" cellpadding="0"  
+ 
 ><colgroup id="TBL-5-1g"><col 
 id="TBL-5-1" /><col 
 id="TBL-5-2" /><col 
@@ -560,28 +626,35 @@ class="td11"><span
 class="lmmi-10x-x-109">I </span>the unit complex number</td>
 </tr><tr  
  style="vertical-align:baseline;" id="TBL-5-4-"><td  style="white-space:nowrap; text-align:left;" id="TBL-5-4-1"  
-class="td11">       </td></tr></table></div>
+class="td11">       </td></tr></table>                                                                          </div>
+                                                                                    
+
+                                                                                    
 <!--l. 29--><p class="noindent" >
 </p>
 <h5 class="subsubsectionHead"><span class="titlemark">3.2.3   </span> <a 
  id="x5-260003.2.3"></a>Functions</h5>
      <ul class="itemize1">
-     <li class="itemize"><a 
+     <li class="itemize">
+     <!--l. 31--><p class="noindent" ><a 
  id="dx5-26001"></a> <span class='ret'>double, double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">CMPLX</span></span>&#x00A0;(<span class='args'>dcomplex z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>z.r, z.i</span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 34--><p class="noindent" ><a 
  id="dx5-26002"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Complex</span></span>&#x00A0;(<span class='args'>double x, double y</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>x + i y</span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 37--><p class="noindent" ><a 
  id="dx5-26003"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Complex_polar</span></span>&#x00A0;(<span class='args'>double r, double theta</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> r exp(i theta) </span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 40--><p class="noindent" ><a 
  id="dx5-26004"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Creal</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
@@ -589,8 +662,9 @@ class="newline" />   <span class='description'>Description&#x00A0;</span><span
 class="rm-lmr-10x-x-109">R(</span><span 
 class="lmmi-10x-x-109">z</span><span 
 class="rm-lmr-10x-x-109">)</span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 43--><p class="noindent" ><a 
  id="dx5-26005"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Cimag</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
@@ -599,109 +673,125 @@ class="rm-lmr-10x-x-109">Im</span><span
 class="rm-lmr-10x-x-109">(</span><span 
 class="lmmi-10x-x-109">z</span><span 
 class="rm-lmr-10x-x-109">)</span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 46--><p class="noindent" ><a 
  id="dx5-26006"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Cadd</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> b</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> z+b </span>
-                                                                                    
-
-                                                                                    
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 49--><p class="noindent" ><a 
  id="dx5-26007"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">CRadd</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z, double b</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> z+b </span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 52--><p class="noindent" ><a 
  id="dx5-26008"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">RCadd</span></span>&#x00A0;(<span class='args'>double b, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> b+z </span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+                                                                                    
+
+                                                                                    
+     <!--l. 55--><p class="noindent" ><a 
  id="dx5-26009"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Csub</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> b</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> z-b </span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 58--><p class="noindent" ><a 
  id="dx5-26010"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">CRsub</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z, double b</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> z-b </span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 61--><p class="noindent" ><a 
  id="dx5-26011"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">RCsub</span></span>&#x00A0;(<span class='args'>double b, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> b-z </span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 64--><p class="noindent" ><a 
  id="dx5-26012"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Cminus</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> -z </span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 67--><p class="noindent" ><a 
  id="dx5-26013"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Cmul</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> b</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> z*b </span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 70--><p class="noindent" ><a 
  id="dx5-26014"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">RCmul</span></span>&#x00A0;(<span class='args'>double x, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> x*z </span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 73--><p class="noindent" ><a 
  id="dx5-26015"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">CRmul</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z, double x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> z * x </span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 76--><p class="noindent" ><a 
  id="dx5-26016"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">CRdiv</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z, double x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> z/x </span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 79--><p class="noindent" ><a 
  id="dx5-26017"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">RCdiv</span></span>&#x00A0;(<span class='args'>double x, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> x/z </span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 82--><p class="noindent" ><a 
  id="dx5-26018"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Conj</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class="overline"><span 
 class="lmmi-10x-x-109">z</span></span>
-     </li>
-     <li class="itemize"><a 
+                                                                                    
+
+                                                                                    
+     </p></li>
+     <li class="itemize">
+     <!--l. 85--><p class="noindent" ><a 
  id="dx5-26019"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Cinv</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> 1/z </span>
-                                                                                    
-
-                                                                                    
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 88--><p class="noindent" ><a 
  id="dx5-26020"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Cdiv</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> w</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> z/w </span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 91--><p class="noindent" ><a 
  id="dx5-26021"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Csqr_norm</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
@@ -717,37 +807,43 @@ class="rm-lmr-10x-x-109">(</span><span
 class="lmmi-10x-x-109">z</span><span 
 class="rm-lmr-10x-x-109">)</span><sup><span 
 class="rm-lmr-8">2</span></sup>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 94--><p class="noindent" ><a 
  id="dx5-26022"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Cabs</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>|z|</span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 97--><p class="noindent" ><a 
  id="dx5-26023"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Csqrt</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> sqrt(z) </span>, square root (with positive real part)
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 100--><p class="noindent" ><a 
  id="dx5-26024"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Clog</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>log(z)</span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 103--><p class="noindent" ><a 
  id="dx5-26025"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Cexp</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> exp(z) </span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 106--><p class="noindent" ><a 
  id="dx5-26026"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">CIexp</span></span>&#x00A0;(<span class='args'>double t</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> exp( it ) </span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 109--><p class="noindent" ><a 
  id="dx5-26027"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Cpow</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z, <a 
@@ -755,55 +851,63 @@ href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> w</span>)<br
 class="newline" />   <span class='description'>Description&#x00A0;</span><span 
 class="lmmi-10x-x-109">z</span><sup><span 
 class="lmmi-8">w</span></sup>, power function
-     </li>
-     <li class="itemize"><a 
+                                                                                    
+
+                                                                                    
+     </p></li>
+     <li class="itemize">
+     <!--l. 112--><p class="noindent" ><a 
  id="dx5-26028"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Cpow_real</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z, double x</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span 
 class="lmmi-10x-x-109">z</span><sup><span 
 class="lmmi-8">x</span></sup>, power function
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 115--><p class="noindent" ><a 
  id="dx5-26029"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Ccos</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> cos(g)</span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 118--><p class="noindent" ><a 
  id="dx5-26030"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Csin</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>sin(g)</span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 121--><p class="noindent" ><a 
  id="dx5-26031"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Ctan</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>tan(z)</span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 124--><p class="noindent" ><a 
  id="dx5-26032"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Ccotan</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>cotan(z)</span>
-                                                                                    
-
-                                                                                    
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 127--><p class="noindent" ><a 
  id="dx5-26033"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Ccosh</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> cosh(g)</span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 130--><p class="noindent" ><a 
  id="dx5-26034"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Csinh</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>sinh(g)</span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 133--><p class="noindent" ><a 
  id="dx5-26035"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Ctanh</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
@@ -812,10 +916,11 @@ class="rm-lmr-10x-x-109">tanh</span><span
 class="rm-lmr-10x-x-109">(</span><span 
 class="lmmi-10x-x-109">z</span><span 
 class="rm-lmr-10x-x-109">) =</span> <img 
-src="pnl-manual6x.png" alt="1-e-2z
-1+e-2z"  class="frac" align="middle" />
-     </li>
-     <li class="itemize"><a 
+src="pnl-manual6x.png" alt="   -2z
+11-+ee-2z"  class="frac" align="middle" />
+     </p></li>
+     <li class="itemize">
+     <!--l. 136--><p class="noindent" ><a 
  id="dx5-26036"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Ccotanh</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
@@ -824,87 +929,103 @@ class="rm-lmr-10x-x-109">cotanh</span><span
 class="rm-lmr-10x-x-109">(</span><span 
 class="lmmi-10x-x-109">z</span><span 
 class="rm-lmr-10x-x-109">) =</span> <img 
-src="pnl-manual7x.png" alt="1+e-2z
-1-e-2z"  class="frac" align="middle" />
-     </li>
-     <li class="itemize"><a 
+src="pnl-manual7x.png" alt="11+-ee--22zz"  class="frac" align="middle" />
+                                                                                    
+
+                                                                                    
+     </p></li>
+     <li class="itemize">
+     <!--l. 139--><p class="noindent" ><a 
  id="dx5-26037"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Carg</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>arg(z) </span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 142--><p class="noindent" ><a 
  id="dx5-26038"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Ctgamma</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> Gamma(z)</span>, the Gamma function
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 145--><p class="noindent" ><a 
  id="dx5-26039"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Clgamma</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'> log(Gamma (z))</span>, the logarithm of the Gamma function
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 148--><p class="noindent" ><a 
  id="dx5-26040"></a> <span class='ret'>void</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">Cprintf</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> z</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Print a complex number on the standard output
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 151--><p class="noindent" ><a 
  id="dx5-26041"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_complex_isequal_abs</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> x, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> y, double abserr</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Test if two complex numbers are equal up to an absolute error <span class='var'>abserr</span>.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 154--><p class="noindent" ><a 
  id="dx5-26042"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_complex_isequal_rel</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> x, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> y, double relerr</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Test if two complex numbers are equal up to a relative error <span class='var'>relerr</span>.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 157--><p class="noindent" ><a 
  id="dx5-26043"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_complex_isequal</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> x, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> y, double err</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Test if two complex numbers using one of the above functions depending
      on the magnitude of <span class='var'>|y|</span>.
+</p>
      </li></ul>
 <!--l. 163--><p class="noindent" >Most algebraic operations on complex numbers are implemented using the following naming for the
 functions </p>
      <ul class="itemize1">
-     <li class="itemize">All these function names begin in <span 
+     <li class="itemize">
+     <!--l. 166--><p class="noindent" >All these function names begin in <span 
 class="ec-lmtt-10x-x-109">C_op_</span>,
+     </p></li>
+     <li class="itemize">
+     <!--l. 167--><p class="noindent" >The small letters <span 
+class="ec-lmtt-10x-x-109">a, b </span>denote two complex numbers whereas <span 
+class="ec-lmtt-10x-x-109">d </span>is a real number,
                                                                                     
 
                                                                                     
-     </li>
-     <li class="itemize">The small letters <span 
-class="ec-lmtt-10x-x-109">a, b </span>denote two complex numbers whereas <span 
-class="ec-lmtt-10x-x-109">d </span>is a real number,
-     </li>
-     <li class="itemize">The letter <span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 168--><p class="noindent" >The letter <span 
 class="ec-lmtt-10x-x-109">i </span>denotes the multiplication by the pure imagniary number <span 
 class="lmmi-10x-x-109"><img 
 src="lmmi10-7b.png" alt="i" class="10-109x-x-7b" /></span>,
-     </li>
-     <li class="itemize">The letter <span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 170--><p class="noindent" >The letter <span 
 class="ec-lmtt-10x-x-109">c </span>indicates that the next coming number is conjugated.
-     </li>
-     <li class="itemize">The letters <span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 171--><p class="noindent" >The letters <span 
 class="ec-lmtt-10x-x-109">p, m </span>denote the two standard operations <span 
 class="ec-lmri-10x-x-109">plus </span>and <span 
-class="ec-lmri-10x-x-109">minus </span>respectively.</li></ul>
+class="ec-lmri-10x-x-109">minus </span>respectively.</p></li></ul>
 <!--l. 174--><p class="noindent" >For example C_op_idamcb is <span 
 class="lmmi-10x-x-109"><img 
 src="lmmi10-7b.png" alt="i" class="10-109x-x-7b" />d</span><img 
-src="pnl-manual8x.png" alt="(   -)
+src="pnl-manual8x.png" alt="(    )
  a- b"  class="left" align="middle" />. So functions are : </p>
      <ul class="itemize1">
-     <li class="itemize"><a 
+     <li class="itemize">
+     <!--l. 177--><p class="noindent" ><a 
  id="dx5-26044"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">C_op_apib</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> a, <a 
@@ -914,8 +1035,9 @@ class="lmmi-10x-x-109">a </span><span
 class="rm-lmr-10x-x-109">+ </span><span 
 class="lmmi-10x-x-109"><img 
 src="lmmi10-7b.png" alt="i" class="10-109x-x-7b" />b</span>.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 179--><p class="noindent" ><a 
  id="dx5-26045"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">C_op_apcb</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> a, <a 
@@ -924,8 +1046,9 @@ class="newline" />   <span class='description'>Description&#x00A0;</span><span
 class="lmmi-10x-x-109">a </span><span 
 class="rm-lmr-10x-x-109">+</span><span class="overline"> <span 
 class="lmmi-10x-x-109">b</span></span>.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 181--><p class="noindent" ><a 
  id="dx5-26046"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">C_op_amcb</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> a, <a 
@@ -934,15 +1057,17 @@ class="newline" />   <span class='description'>Description&#x00A0;</span><span
 class="lmmi-10x-x-109">a </span><span 
 class="lmsy-10x-x-109">-</span><span class="overline"><span 
 class="lmmi-10x-x-109">b</span></span>.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 183--><p class="noindent" ><a 
  id="dx5-26047"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">C_op_amib</span></span>&#x00A0;(<span class='args'><a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> a, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> b</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span><span class='var'>a - i b</span>
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 186--><p class="noindent" ><a 
  id="dx5-26048"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">C_op_dapb</span></span>&#x00A0;(<span class='args'>double d, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> a, <a 
@@ -954,8 +1079,9 @@ class="lmmi-10x-x-109">a </span><span
 class="rm-lmr-10x-x-109">+ </span><span 
 class="lmmi-10x-x-109">b</span><span 
 class="rm-lmr-10x-x-109">)</span>.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 189--><p class="noindent" ><a 
  id="dx5-26049"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">C_op_damb</span></span>&#x00A0;(<span class='args'>double d, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> a, <a 
@@ -964,11 +1090,12 @@ class="newline" />   <span class='description'>Description&#x00A0;</span><span
 class="lmmi-10x-x-109">d</span><span 
 class="rm-lmr-10x-x-109">(</span><span 
 class="lmmi-10x-x-109">a </span><span 
-class="lmsy-10x-x-109">- </span><span 
+class="lmsy-10x-x-109">-</span><span 
 class="lmmi-10x-x-109">b</span><span 
 class="rm-lmr-10x-x-109">)</span>.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 192--><p class="noindent" ><a 
  id="dx5-26050"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">C_op_dapib</span></span>&#x00A0;(<span class='args'>double d, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> a, <a 
@@ -981,8 +1108,12 @@ class="rm-lmr-10x-x-109">+ </span><span
 class="lmmi-10x-x-109"><img 
 src="lmmi10-7b.png" alt="i" class="10-109x-x-7b" />b</span><span 
 class="rm-lmr-10x-x-109">)</span>.
-     </li>
-     <li class="itemize"><a 
+                                                                                    
+
+                                                                                    
+     </p></li>
+     <li class="itemize">
+     <!--l. 195--><p class="noindent" ><a 
  id="dx5-26051"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">C_op_damib</span></span>&#x00A0;(<span class='args'>double d, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> a, <a 
@@ -991,12 +1122,13 @@ class="newline" />   <span class='description'>Description&#x00A0;</span><span
 class="lmmi-10x-x-109">d</span><span 
 class="rm-lmr-10x-x-109">(</span><span 
 class="lmmi-10x-x-109">a </span><span 
-class="lmsy-10x-x-109">- </span><span 
+class="lmsy-10x-x-109">-</span><span 
 class="lmmi-10x-x-109"><img 
 src="lmmi10-7b.png" alt="i" class="10-109x-x-7b" />b</span><span 
 class="rm-lmr-10x-x-109">)</span>.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 198--><p class="noindent" ><a 
  id="dx5-26052"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">C_op_dapcb</span></span>&#x00A0;(<span class='args'>double d, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> a, <a 
@@ -1005,11 +1137,9 @@ class="newline" />   <span class='description'>Description&#x00A0;</span><span
 class="lmmi-10x-x-109">d</span><img 
 src="pnl-manual9x.png" alt="(   -)
  a+ b"  class="left" align="middle" />.
-                                                                                    
-
-                                                                                    
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 201--><p class="noindent" ><a 
  id="dx5-26053"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">C_op_damcb</span></span>&#x00A0;(<span class='args'>double d, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> a, <a 
@@ -1018,8 +1148,9 @@ class="newline" />   <span class='description'>Description&#x00A0;</span><span
 class="lmmi-10x-x-109">d</span><img 
 src="pnl-manual10x.png" alt="(    )
  a- b"  class="left" align="middle" />.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 204--><p class="noindent" ><a 
  id="dx5-26054"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">C_op_idapb</span></span>&#x00A0;(<span class='args'>double d, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> a, <a 
@@ -1028,8 +1159,9 @@ class="newline" />   <span class='description'>Description&#x00A0;</span><span
 class="lmmi-10x-x-109"><img 
 src="lmmi10-7b.png" alt="i" class="10-109x-x-7b" />d</span><img 
 src="pnl-manual11x.png" alt="(a + b)"  class="left" align="middle" />.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 207--><p class="noindent" ><a 
  id="dx5-26055"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">C_op_idamb</span></span>&#x00A0;(<span class='args'>double d, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> a, <a 
@@ -1038,8 +1170,9 @@ class="newline" />   <span class='description'>Description&#x00A0;</span><span
 class="lmmi-10x-x-109"><img 
 src="lmmi10-7b.png" alt="i" class="10-109x-x-7b" />d</span><img 
 src="pnl-manual12x.png" alt="(a - b)"  class="left" align="middle" />.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 210--><p class="noindent" ><a 
  id="dx5-26056"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">C_op_idapcb</span></span>&#x00A0;(<span class='args'>double d, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> a, <a 
@@ -1049,8 +1182,9 @@ class="lmmi-10x-x-109"><img
 src="lmmi10-7b.png" alt="i" class="10-109x-x-7b" />d</span><img 
 src="pnl-manual13x.png" alt="(    -)
  a + b"  class="left" align="middle" />.
-     </li>
-     <li class="itemize"><a 
+     </p></li>
+     <li class="itemize">
+     <!--l. 213--><p class="noindent" ><a 
  id="dx5-26057"></a> <span class='ret'>dcomplex</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">C_op_idamcb</span></span>&#x00A0;(<span class='args'>double d, <a 
 href="#x5-240003.2.1"><span class='struct'>dcomplex</span></a> a, <a 
@@ -1059,7 +1193,7 @@ class="newline" />   <span class='description'>Description&#x00A0;</span><span
 class="lmmi-10x-x-109"><img 
 src="lmmi10-7b.png" alt="i" class="10-109x-x-7b" />d</span><img 
 src="pnl-manual14x.png" alt="(     )
- a - b"  class="left" align="middle" />.</li></ul>
+ a - b"  class="left" align="middle" />.</p></li></ul>
                                                                                     
 
                                                                                     

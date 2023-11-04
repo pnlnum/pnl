@@ -10,6 +10,19 @@
 .lmsy8-{font-size:72%;}
 .lmsy6-{font-size:54%;}
 .lmex-10{font-size:90%;}
+.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmtt-10x-x-109{ font-family: monospace,monospace;}
+.ec-lmtt-10x-x-109{ font-family: monospace,monospace;}
+.ec-lmtt-10x-x-109{ font-family: monospace,monospace;}
 .ec-lmtt-10x-x-109{ font-family: monospace,monospace;}
 .ec-lmtt-10x-x-109{ font-family: monospace,monospace;}
 .ec-lmtt-10x-x-109{ font-family: monospace,monospace;}
@@ -22,13 +35,36 @@
 .lmmi-10x-x-109{}
 .lmsy-10x-x-109{}
 .msbm-10x-x-109{}
-.ec-lmri-10x-x-109{ font-style:italic;}
-.ec-lmri-10x-x-109{ font-style:italic;}
-.ec-lmri-10x-x-109{ font-style:italic;}
-.ec-lmri-10x-x-109{ font-style:italic;}
-.ec-lmri-10x-x-109{ font-style:italic;}
-.ec-lmri-10x-x-109{ font-style:italic;}
-.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmtt-10{font-size:90%; font-family: monospace,monospace;}
+.ec-lmtt-10{ font-family: monospace,monospace;}
+.ec-lmtt-10{ font-family: monospace,monospace;}
+.ec-lmtt-10{ font-family: monospace,monospace;}
+.ec-lmtt-10{ font-family: monospace,monospace;}
+.ec-lmtt-10{ font-family: monospace,monospace;}
+.ec-lmtt-10{ font-family: monospace,monospace;}
+.ec-lmtt-10{ font-family: monospace,monospace;}
+.ec-lmtt-10{ font-family: monospace,monospace;}
+.ec-lmtt-10{ font-family: monospace,monospace;}
+.ec-lmtk-10{font-size:90%; font-family: monospace,monospace;}
+.ec-lmtk-10{ font-family: monospace,monospace;}
+.ec-lmtk-10{ font-family: monospace,monospace;}
+.ec-lmtk-10{ font-family: monospace,monospace;}
+.ec-lmtk-10{ font-family: monospace,monospace;}
+.ec-lmtk-10{ font-family: monospace,monospace;}
+.ec-lmtk-10{ font-family: monospace,monospace;}
+.ec-lmtk-10{ font-family: monospace,monospace;}
+.ec-lmtk-10{ font-family: monospace,monospace;}
+.ec-lmtk-10{ font-family: monospace,monospace;}
+.ec-lmtti-10{font-size:90%; font-family: monospace,monospace; font-style:italic;}
+.ec-lmtti-10{ font-family: monospace,monospace; font-style:italic;}
+.ec-lmtti-10{ font-family: monospace,monospace; font-style:italic;}
+.ec-lmtti-10{ font-family: monospace,monospace; font-style:italic;}
+.ec-lmtti-10{ font-family: monospace,monospace; font-style:italic;}
+.ec-lmtti-10{ font-family: monospace,monospace; font-style:italic;}
+.ec-lmtti-10{ font-family: monospace,monospace; font-style:italic;}
+.ec-lmtti-10{ font-family: monospace,monospace; font-style:italic;}
+.ec-lmtti-10{ font-family: monospace,monospace; font-style:italic;}
+.ec-lmtti-10{ font-family: monospace,monospace; font-style:italic;}
 .ec-lmbx-10x-x-109{ font-weight: bold;}
 .ec-lmbx-10x-x-109{ font-weight: bold;}
 .ec-lmbx-10x-x-109{ font-weight: bold;}
@@ -36,6 +72,12 @@
 .ec-lmbx-10x-x-109{ font-weight: bold;}
 .ec-lmbx-10x-x-109{ font-weight: bold;}
 .ec-lmbx-10x-x-109{ font-weight: bold;}
+.ec-lmbx-10x-x-109{ font-weight: bold;}
+.ec-lmbx-10x-x-109{ font-weight: bold;}
+.ec-lmbx-10x-x-109{ font-weight: bold;}
+.ec-lmbxi-10x-x-109{ font-style:italic; font-weight: bold;}
+.ec-lmbxi-10x-x-109{ font-style:italic; font-weight: bold;}
+.ec-lmbxi-10x-x-109{ font-style:italic; font-weight: bold;}
 .ec-lmbxi-10x-x-109{ font-style:italic; font-weight: bold;}
 .ec-lmbxi-10x-x-109{ font-style:italic; font-weight: bold;}
 .ec-lmbxi-10x-x-109{ font-style:italic; font-weight: bold;}
@@ -142,7 +184,6 @@ table.pmatrix {width:100%;}
 span.bar-css {text-decoration:overline;}
 img.cdots{vertical-align:middle;}
 .partToc a, .partToc, .likepartToc a, .likepartToc {line-height: 200%; font-weight:bold; font-size:110%;}
-.chapterToc a, .chapterToc, .likechapterToc a, .likechapterToc, .appendixToc a, .appendixToc {line-height: 200%; font-weight:bold;}
 .index-item, .index-subitem, .index-subsubitem {display:block}
 div.caption {text-indent:-2em; margin-left:3em; margin-right:1em; text-align:left;}
 div.caption span.id{font-weight: bold; white-space: nowrap; }
@@ -162,8 +203,10 @@ div.author{white-space: nowrap;}
 div.abstract p {margin-left:5%; margin-right:5%;}
 div.abstract {width:100%;}
 .abstracttitle{text-align:center;margin-bottom:1em;}
-.subsectionToc, .likesubsectionToc {margin-left:2em;}
-.subsubsectionToc, .likesubsubsectionToc {margin-left:4em;}
+.subsectionToc, .likesubsectionToc {margin-left:1em;}
+.subsubsectionToc, .likesubsubsectionToc {margin-left:2em;}
+.paragraphToc, .likeparagraphToc {margin-left:3em;}
+.subparagraphToc, .likesubparagraphToc {margin-left:4em;}
 div.verbatiminput {font-family: monospace,monospace; white-space: nowrap; }
 table.boxedverbatim {width:100%;}
  pre.boxedverbatim{border:solid 1px; padding-right:1em;} 
@@ -184,6 +227,12 @@ table.multline, table.multline-star {width:100%;}
 td.gather {text-align:center; }
 table.gather {width:100%;}
 div.gather-star {text-align:center;}
+code.lstinline{font-family:monospace,monospace;}
+pre.listings{font-family: monospace,monospace; white-space: pre-wrap; margin-top:0.5em; margin-bottom:0.5em; }
+.lstlisting .label{margin-right:0.5em; }
+pre.lstlisting{font-family: monospace,monospace; white-space: pre-wrap; margin-top:0.5em; margin-bottom:0.5em; }
+pre.lstinputlisting{ font-family: monospace,monospace; white-space: pre-wrap; }
+.lstinputlisting .label{margin-right:0.5em;}
 #TBL-2-1{border-left: 1px solid black;}
 #TBL-2-1{border-right:1px solid black;}
 #TBL-2-2{border-right:1px solid black;}

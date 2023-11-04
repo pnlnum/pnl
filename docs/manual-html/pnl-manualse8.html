@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="iso-8859-1" ?> 
+<?xml version="1.0" encoding="utf-8" ?> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
 <!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->  
 <html xmlns="http://www.w3.org/1999/xhtml"  
 > 
 <head><title>Numerical integration</title> 
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> 
-<meta name="generator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
-<meta name="originator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<meta name="generator" content="TeX4ht (https://tug.org/tex4ht/)" /> 
+<meta name="originator" content="TeX4ht (https://tug.org/tex4ht/)" /> 
 <!-- xhtml,uni-html4,2,subsection+,next,html --> 
 <meta name="src" content="pnl-manual.tex" /> 
 <link rel="stylesheet" type="text/css" href="pnl-manual.css" /> 
@@ -20,11 +20,11 @@ href="pnl-manualse7.html#tailpnl-manualse7.html" >prev-tail</a>] [<a
 href="#tailpnl-manualse8.html">tail</a>] [<a 
 href="pnl-manual.html#pnl-manualse8.html" >up</a>] </p></div>
 <h3 class="sectionHead"><span class="titlemark">8   </span> <a 
- id="x10-1090008"></a>Numerical integration</h3>
+ id="x10-1100008"></a>Numerical integration</h3>
 <!--l. 2--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">8.1   </span> <a 
- id="x10-1100008.1"></a>Overview</h4>
+ id="x10-1110008.1"></a>Overview</h4>
 <!--l. 4--><p class="noindent" >To use these functionalities, you should include <span class="obeylines-h"><span class="verb"><span 
 class="ec-lmtt-10x-x-109">pnl/pnl_integration.h</span></span></span>.
 </p><!--l. 6--><p class="noindent" >Numerical integration methods are designed to numerically evaluate the integral over a finite or
@@ -33,44 +33,153 @@ class="msbm-10x-x-109">&#x211D; </span>(resp. on
 <span 
 class="msbm-10x-x-109">&#x211D;</span><sup><span 
 class="rm-lmr-8">2</span></sup>).
-                                                                                    
-
-                                                                                    
 </p>
-<div class="verbatim" id="verbatim-40">
-typedef&#x00A0;struct&#x00A0;{
-&#x00A0;<br />&#x00A0;&#x00A0;double&#x00A0;(*function)&#x00A0;(double&#x00A0;x,&#x00A0;void&#x00A0;*params);
-&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;*params;
-&#x00A0;<br />}&#x00A0;PnlFunc;
-&#x00A0;<br />
-&#x00A0;<br />typedef&#x00A0;struct&#x00A0;{
-&#x00A0;<br />&#x00A0;&#x00A0;double&#x00A0;(*function)&#x00A0;(double&#x00A0;x,&#x00A0;double&#x00A0;y,&#x00A0;void&#x00A0;*params);
-&#x00A0;<br />&#x00A0;&#x00A0;void&#x00A0;*params;
-&#x00A0;<br />}&#x00A0;PnlFunc2D;
-</div>
-<!--l. 20--><p class="nopar" >
-</p><!--l. 22--><p class="noindent" >We provide the following two macros to evaluate a <a 
-href="pnl-manualse13.html#x15-13000013.1"><span class='struct'>PnlFunc</span></a> or <a 
-href="pnl-manualse13.html#x15-13000013.1"><span class='struct'>PnlFunc2D</span></a> at a given
-point
-                                                                                    
-
-                                                                                    
-</p>
-<div class="verbatim" id="verbatim-41">
-#define&#x00A0;PNL_EVAL_FUNC(F,&#x00A0;x)&#x00A0;(*((F)-&#x003E;function))(x,&#x00A0;(F)-&#x003E;params)
-&#x00A0;<br />#define&#x00A0;PNL_EVAL_FUNC2D(F,&#x00A0;x,&#x00A0;y)&#x00A0;(*((F)-&#x003E;function))(x,&#x00A0;y,&#x00A0;(F)-&#x003E;params)
-</div>
-<!--l. 27--><p class="nopar" >
-</p><!--l. 31--><p class="noindent" >
+<!--l. 10-->
+<pre class="lstlisting" id="listing-40"><span class="label"><a 
+ id="x10-111001r1"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">typedef</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">struct</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">{</span></span> 
+<span class="label"><a 
+ id="x10-111002r2"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">(*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">function</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x10-111003r3"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x10-111004r4"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">}</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">PnlFunc</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x10-111005r5"></a></span> 
+<span class="label"><a 
+ id="x10-111006r6"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">typedef</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">struct</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">{</span></span> 
+<span class="label"><a 
+ id="x10-111007r7"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">(*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">function</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">double</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">y</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtk-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x10-111008r8"></a></span><span 
+class="ec-lmtt-10">&#x00A0;</span><span 
+class="ec-lmtt-10">&#x00A0;</span><span style="color:#000000"><span 
+class="ec-lmtk-10">void</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">*</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span> 
+<span class="label"><a 
+ id="x10-111009r9"></a></span><span style="color:#000000"><span 
+class="ec-lmtt-10">}</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">PnlFunc2D</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">;</span></span></pre>
+<!--l. 22--><p class="noindent" >We provide the following two macros to evaluate a <a 
+href="pnl-manualse13.html#x15-13100013.1"><span class='struct'>PnlFunc</span></a> or <a 
+href="#x15-131010r13.1"><span class='struct'>PnlFunc2D</span></a> at a given point
+</p><!--l. 24-->
+<pre class="lstlisting" id="listing-41"><span class="label"><a 
+ id="x10-111010r1"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtk-10">define</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">PNL_EVAL_FUNC</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">F</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">(*((</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">F</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">-&#x003E;</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">function</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">F</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">-&#x003E;</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span> 
+<span class="label"><a 
+ id="x10-111011r2"></a></span><span style="color:#000000"><span 
+class="ec-lmtk-10">#</span></span><span style="color:#000000"><span 
+class="ec-lmtk-10">define</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">PNL_EVAL_FUNC2D</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">F</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">y</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">(*((</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">F</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">-&#x003E;</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">function</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">x</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">y</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">,</span></span><span style="color:#000000"> </span><span style="color:#000000"><span 
+class="ec-lmtt-10">(</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">F</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">-&#x003E;</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">params</span></span><span style="color:#000000"><span 
+class="ec-lmtt-10">)</span></span></pre>
+<!--l. 31--><p class="noindent" >
 </p>
 <h4 class="subsectionHead"><span class="titlemark">8.2   </span> <a 
- id="x10-1110008.2"></a>Functions</h4>
+ id="x10-1120008.2"></a>Functions</h4>
      <ul class="itemize1">
-     <li class="itemize"><a 
- id="dx10-111001"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+     <li class="itemize">
+     <!--l. 34--><p class="noindent" ><a 
+ id="dx10-112001"></a> <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_integration</span></span>&#x00A0;(<span class='args'><a 
-href="pnl-manualse13.html#x15-13000013.1"><span class='struct'>PnlFunc</span></a> <span 
+href="pnl-manualse13.html#x15-13100013.1"><span class='struct'>PnlFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>F, double x0, double x1, int n, char <span 
 class="ts1-lmr10-x-x-109">*</span>meth</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>Evaluate  <span 
@@ -83,11 +192,12 @@ class="rm-lmr-6">1</span></sub></sup><span
 class="lmmi-10x-x-109">F  </span>using  <span class='var'>n</span>  discretization  steps.  The  method  used  to
      discretize the integral is defined by <span class='var'>meth</span> which can be <span class='var'>"rect"</span> (rectangle rule), <span class='var'>"trap"</span>
      (trapezoidal rule), <span class='var'>"simpson"</span> (Simpson&#8217;s rule).
-     </li>
-     <li class="itemize"><a 
- id="dx10-111002"></a>  <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 41--><p class="noindent" ><a 
+ id="dx10-112002"></a>  <span class='ret'>double</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_integration_2d</span></span>&#x00A0;(<span class='args'><a 
-href="pnl-manualse13.html#x15-13000013.1"><span class='struct'>PnlFunc2D</span></a>  <span 
+href="#x15-131010r13.1"><span class='struct'>PnlFunc2D</span></a>  <span 
 class="ts1-lmr10-x-x-109">*</span>F,  double  x0,  double  x1,  double  y0,
      double y1, int nx, int ny, char <span 
 class="ts1-lmr10-x-x-109">*</span>meth</span>)<br 
@@ -110,11 +220,15 @@ class="rm-lmr-8">]</span></sub><span
 class="lmmi-10x-x-109">F </span>using <span class='var'>nx</span> (resp. <span class='var'>ny</span>) discretization steps for <span class='var'>[x0,
      x1]</span> (resp. <span class='var'>[y0, y1]</span>). The method used to discretize the integral is defined by <span class='var'>meth</span> which
      can be <span class='var'>"rect"</span> (rectangle rule), <span class='var'>"trap"</span> (trapezoidal rule), <span class='var'>"simpson"</span> (Simpson&#8217;s rule).
-     </li>
-     <li class="itemize"><a 
- id="dx10-111003"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+                                                                                    
+
+                                                                                    
+     </p></li>
+     <li class="itemize">
+     <!--l. 50--><p class="noindent" ><a 
+ id="dx10-112003"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_integration_qng</span></span>&#x00A0;(<span class='args'><a 
-href="pnl-manualse13.html#x15-13000013.1"><span class='struct'>PnlFunc</span></a> <span 
+href="pnl-manualse13.html#x15-13100013.1"><span class='struct'>PnlFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>F, double x0, double x1, double epsabs, double
      epsrel, double <span 
 class="ts1-lmr10-x-x-109">*</span>result, double <span 
@@ -134,26 +248,28 @@ class="lmmi-10x-x-109">F </span>with an absolute error less than <span class='va
      <span class='var'>FAIL</span> otherwise. This function uses a non-adaptive Gauss Konrod procedure (qng routine
      from <span 
 class="ec-lmri-10x-x-109">QuadPack</span>).
-     </li>
-     <li class="itemize"><a 
- id="dx10-111004"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 61--><p class="noindent" ><a 
+ id="dx10-112004"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_integration_GK</span></span>&#x00A0;(<span class='args'><a 
-href="pnl-manualse13.html#x15-13000013.1"><span class='struct'>PnlFunc</span></a> <span 
+href="pnl-manualse13.html#x15-13100013.1"><span class='struct'>PnlFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>F, double x0, double x1, double epsabs, double
      epsrel, double <span 
 class="ts1-lmr10-x-x-109">*</span>result, double <span 
 class="ts1-lmr10-x-x-109">*</span>abserr, int <span 
 class="ts1-lmr10-x-x-109">*</span>neval</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>This  function  is  a  synonymous  of  <a 
-href="#x10-1110008.2">pnl_integration_qng</a>  and  is  only
+href="#x10-1120008.2">pnl_integration_qng</a>  and  is  only
      available for backward compatibility. It is deprecated, please use <a 
-href="#x10-1110008.2">pnl_integration_qng</a>
+href="#x10-1120008.2">pnl_integration_qng</a>
      instead.
-     </li>
-     <li class="itemize"><a 
- id="dx10-111005"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 69--><p class="noindent" ><a 
+ id="dx10-112005"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_integration_qng_2d</span></span>&#x00A0;(<span class='args'><a 
-href="pnl-manualse13.html#x15-13000013.1"><span class='struct'>PnlFunc2D</span></a> <span 
+href="#x15-131010r13.1"><span class='struct'>PnlFunc2D</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>F, double x0, double x1, double y0,
      double y1, double epsabs, double epsrel, double <span 
 class="ts1-lmr10-x-x-109">*</span>result, double <span 
@@ -180,26 +296,28 @@ class="lmmi-10x-x-109">F </span>with an absolute error less than <span class='va
      variables <span class='var'>abserr</span> and <span class='var'>neval</span> respectively contain the absolute error and the number of
      function evaluations. This function returns <span class='var'>OK</span> if the required accuracy has been reached
      and <span class='var'>FAIL</span> otherwise.
-     </li>
-     <li class="itemize"><a 
- id="dx10-111006"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 79--><p class="noindent" ><a 
+ id="dx10-112006"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_integration_GK2D</span></span>&#x00A0;(<span class='args'><a 
-href="pnl-manualse13.html#x15-13000013.1"><span class='struct'>PnlFunc</span></a> <span 
+href="pnl-manualse13.html#x15-13100013.1"><span class='struct'>PnlFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>F, double x0, double x1, double epsabs,
      double epsrel, double <span 
 class="ts1-lmr10-x-x-109">*</span>result, double <span 
 class="ts1-lmr10-x-x-109">*</span>abserr, int <span 
 class="ts1-lmr10-x-x-109">*</span>neval</span>)<br 
 class="newline" />   <span class='description'>Description&#x00A0;</span>This   function   is   a   synonymous   of   <a 
-href="#x10-1110008.2">pnl_integration_qng_2d</a>   and
+href="#x10-1120008.2">pnl_integration_qng_2d</a>   and
      is   only   available   for   backward   compatibility.   It   is   deprecated,   please   use
      <a 
-href="#x10-1110008.2">pnl_integration_qng_2d</a> instead.
-     </li>
-     <li class="itemize"><a 
- id="dx10-111007"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+href="#x10-1120008.2">pnl_integration_qng_2d</a> instead.
+     </p></li>
+     <li class="itemize">
+     <!--l. 87--><p class="noindent" ><a 
+ id="dx10-112007"></a> <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_integration_qag</span></span>&#x00A0;(<span class='args'><a 
-href="pnl-manualse13.html#x15-13000013.1"><span class='struct'>PnlFunc</span></a> <span 
+href="pnl-manualse13.html#x15-13100013.1"><span class='struct'>PnlFunc</span></a> <span 
 class="ts1-lmr10-x-x-109">*</span>F, double x0, double x1, double epsabs, int
      limit, double epsrel, double <span 
 class="ts1-lmr10-x-x-109">*</span>result, double <span 
@@ -218,15 +336,19 @@ class="lmmi-10x-x-109">F  </span>with  an  absolute  error  less  than  <span cl
      and <span class='var'>neval</span> respectively contain the absolute error and the number of iterations. <span class='var'>limit</span> is
      the maximum number of subdivisions of the interval <span class='var'>(x0,x1)</span> used during the integration.
      If on input, <span class='var'>limit 0</span>, then 750 subdivisions are used. This function returns <span class='var'>OK</span> if the
+                                                                                    
+
+                                                                                    
      required  accuracy  has  been  reached  and  <span class='var'>FAIL</span>  otherwise.  This  function  uses  some
      adaptive procedures (qags and qagi routines from <span 
 class="ec-lmri-10x-x-109">QuadPack</span>). This function is able to
      handle functions <span class='var'>F</span> with integrable singularities on the interval <span class='var'>[x0,x1]</span>.
-     </li>
-     <li class="itemize"><a 
- id="dx10-111008"></a>  <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
+     </p></li>
+     <li class="itemize">
+     <!--l. 103--><p class="noindent" ><a 
+ id="dx10-112008"></a>  <span class='ret'>int</span>&#x00A0;<span class='fun'><span 
 class="ec-lmbx-10x-x-109">pnl_integration_qagp</span></span>&#x00A0;(<span class='args'><a 
-href="pnl-manualse13.html#x15-13000013.1"><span class='struct'>PnlFunc</span></a>  <span 
+href="pnl-manualse13.html#x15-13100013.1"><span class='struct'>PnlFunc</span></a>  <span 
 class="ts1-lmr10-x-x-109">*</span>F,  double  x0,  double  x1,  const  PnlVect
      <span 
 class="ts1-lmr10-x-x-109">*</span>singularities, double epsabs, int limit, double epsrel, double <span 
@@ -250,7 +372,7 @@ class="lmmi-10x-x-109">F  </span>for  a  function  <span class='var'>F</span>  w
      <span class='var'>OK</span> if the required accuracy has been reached and <span class='var'>FAIL</span> otherwise. This function uses
      some adaptive procedures (qagp routine from <span 
 class="ec-lmri-10x-x-109">QuadPack</span>). This function is able to handle
-     functions <span class='var'>F</span> with integrable singularities on the interval <span class='var'>[x0,x1]</span>.</li></ul>
+     functions <span class='var'>F</span> with integrable singularities on the interval <span class='var'>[x0,x1]</span>.</p></li></ul>
                                                                                     
 
                                                                                     
