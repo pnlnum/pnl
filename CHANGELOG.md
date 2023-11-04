@@ -5,7 +5,13 @@ All notable changes to PNL will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [1.13.0] - 2023-11-03
+## [1.13.1] - 2023-11-04
+
+### Fixed
+
+- `pnl_mat_fprint` was printing to `stdout` instead of the file descriptor
+
+## [1.13.0] - 2023-11-04
 
 ### Added
 
