@@ -73,21 +73,21 @@ Some useful variables to modify the behavior of cmake.
 
 - `-DWITH_MPI=ON/OFF`. Default is ON. If ON, build the MPI bindings.
 
-- `-DUSE_INTERNAL_BLAS=ON/OFF`. Default is OFF. If ON, use the internal Blas & Lapack libraries shipped with the PNL source code.
-
 - `-DPNL_ENABLE_TESTS=ON/OFF`. Default is ON. If OFF, no test is compiled nor registered for running with `ctest`. This is intended to be used when PNL is included as a sub project instead of being compiled as an external library. In such a case, the typical usage is
 
-        set(PNL_ENABLE_TESTS OFF CACHE BOOL "Disable PNL test.")
-        add_subdirectory(some/path/to/pnl)
-        include_directories(some/path/to/pnl/src/include)
-
-        # Define some targets
-
-        # For every target, add
-        target_link_libraries(my_target pnl)
-        # On Windows, to ensure all the dll's are copied next to the executable 
-        # (on other platforms, pnl_add_postbuild does nothing).
-        pnl_add_postbuild(my_target)
+    ```
+    set(PNL_ENABLE_TESTS OFF CACHE BOOL "Disable PNL test.")
+    add_subdirectory(some/path/to/pnl)
+    include_directories(some/path/to/pnl/src/include)
+    
+    # Define some targets
+    
+    # For every target, add
+    target_link_libraries(my_target pnl)
+    # On Windows, to ensure all the dll's are copied next to the executable 
+    # (on other platforms, pnl_add_postbuild does nothing).
+    pnl_add_postbuild(my_target)
+    ```
 
 #### Under Windows
 
