@@ -16,15 +16,11 @@ set(SUBDIRS
     libminpack
     optim)
 
-if (NOT BLAS_FOUND OR NOT LAPACK_FOUND)
-    set(SUBDIRS ${SUBDIRS} libf2c libblas liblapack)
-endif (NOT BLAS_FOUND OR NOT LAPACK_FOUND)
-
 if (MPI_C_FOUND)
     set(SUBDIRS ${SUBDIRS} mpi)
 endif (MPI_C_FOUND)
 
-set(CMAKE_POSITION_INDEPENDENT_CODE ON) 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 SET(pnl_LIB_SRCS
    cumulfunc.c
