@@ -169,7 +169,7 @@ The two tensors \var{T} and \var{SpT} do actually store the same information ---
 
 \subsubsection{Local basis functions}
 
-A local basis is a family of indicator functions of a Cartesian partition of ${[1,1]}^d$. Let $(n_i)_{i \in \{1, \dots, d\}}$ be the number of interval along each direction. An element of the partition write $A_k = \prod_{i=1}^d [-1 + k_i/n_i, -1 + (k_i + 1) / n_i]$ where $k$ is the multi-index defined by $k_i \in \{0, \dots, n_i - 1\}$ for all $i\in \{1,\dots, d\}$. These functions are orthogonal; this property is used by \reffun{pnl_basis_fit_ls}. Note that they are not differentiable.
+A local basis is a family of indicator functions of a Cartesian partition of ${[-1,1]}^d$. Let $(n_i)_{i \in \{1, \dots, d\}}$ be the number of interval along each direction. An element of the partition write $A_k = \prod_{i=1}^d [-1 + k_i/n_i, -1 + (k_i + 1) / n_i]$ where $k$ is the multi-index defined by $k_i \in \{0, \dots, n_i - 1\}$ for all $i\in \{1,\dots, d\}$. These functions are orthogonal; this property is used by \reffun{pnl_basis_fit_ls}. Note that they are not differentiable.
 
 We provide the helper function \reffun{pnl_basis_local_get_index} to compute the linear representation of the multi-index $k$.
 
