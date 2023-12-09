@@ -1154,7 +1154,13 @@ void pnl_basis_free(PnlBasis **B)
       (*B)->f_params = NULL;
       (*B)->f_params_size = 0;
     }
-  pnl_basis_reset_reduced(*B);
+  if ((*B)->isreduced == 1)
+    {
+      free((*B)->center);
+      (*B)->center = NULL;
+      free((*B)->scale);
+      (*B)->scale = NULL;
+    }
   if ((*B)->len_func_list > 0) free((*B)->func_list);
   free(*B);
   *B = NULL;
@@ -1168,6 +1174,7 @@ void pnl_basis_print(const PnlBasis *B)
 {
   printf("Basis Name: %s\n", B->label);
   printf("\tNumber of variates: %d\n", B->nb_variates);
+  printf("\tExtra parameters size: %zu\n", B->f_params_size);
   printf("\tExtra parameters size: %zu\n", B->f_params_size);
   printf("\tNumber of functions in tensor: %d\n", B->len_T);;
   printf("\tNumber of extra functions: %d\n", B->len_func_list);
