@@ -391,7 +391,7 @@ static int size_basis(const PnlObject *Obj, MPI_Comm comm, int *size)
     }
   if ((info = MPI_Pack_size(1, MPI_SIZE_T, comm, &count))) return info;
   *size += count;
-  if ((info = MPI_Pack_size(B->params_size, MPI_BYTE, comm, &count))) return info;
+  if ((info = MPI_Pack_size(B->f_params_size, MPI_BYTE, comm, &count))) return info;
   *size += count;
   return (info);
 }
@@ -738,8 +738,8 @@ static int pack_basis(const PnlObject *Obj, void *buf, int bufsize, int *pos, MP
       if ((info = MPI_Pack(B->center, n, MPI_DOUBLE, buf, bufsize, pos, comm))) return info;
       if ((info = MPI_Pack(B->scale, n, MPI_DOUBLE, buf, bufsize, pos, comm))) return info;
     }
-  if ((info = MPI_Pack(&B->params_size, 1, MPI_SIZE_T, buf, bufsize, pos, comm))) return info;
-  if ((info = MPI_Pack(&B->params, B->params_size, MPI_BYTE, buf, bufsize, pos, comm))) return info;
+  if ((info = MPI_Pack(&B->f_params_size, 1, MPI_SIZE_T, buf, bufsize, pos, comm))) return info;
+  if ((info = MPI_Pack(&B->f_params, B->f_params_size, MPI_BYTE, buf, bufsize, pos, comm))) return info;
   return (info);
 }
 
@@ -1108,9 +1108,9 @@ static int unpack_basis(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Co
       B->scale = malloc(n * sizeof(double));
       if ((info = MPI_Unpack(buf, bufsize, pos, B->scale, n, MPI_DOUBLE, comm))) return info;
     }
-  if ((info = MPI_Unpack(buf, bufsize, pos, &B->params_size, 1, MPI_SIZE_T, comm))) return info;
-  B->params = malloc(B->params_size);
-  if ((info = MPI_Unpack(buf, bufsize, pos, B->params, B->params_size, MPI_BYTE, comm))) return info;
+  if ((info = MPI_Unpack(buf, bufsize, pos, &B->f_params_size, 1, MPI_SIZE_T, comm))) return info;
+  B->f_params = malloc(B->f_params_size);
+  if ((info = MPI_Unpack(buf, bufsize, pos, B->f_params, B->f_params_size, MPI_BYTE, comm))) return info;
   return (MPI_SUCCESS);
 }
 
