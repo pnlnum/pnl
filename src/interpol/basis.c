@@ -798,15 +798,6 @@ void pnl_basis_set_from_tensor(PnlBasis *b, const PnlMatInt *T)
   /* Not sure this is the right place to put it */
   pnl_mat_int_free(&(b->T));
   pnl_sp_mat_int_free(&(b->SpT));
-  if (b->isreduced == 1)
-    {
-      b->isreduced = 0;
-      free(b->center);
-      b->center = NULL;
-      free(b->scale);
-      b->scale = NULL;
-    }
-
   b->T = (PnlMatInt *) T;
   b->SpT = pnl_sp_mat_int_create_from_mat(T);
 }
@@ -1003,11 +994,11 @@ void pnl_basis_clone(PnlBasis *dest, const PnlBasis *src)
   dest->f_params = realloc(dest->f_params, src->f_params_size);
   memcpy(dest->f_params, src->f_params, src->f_params_size);
   dest->f_params_size = src->f_params_size;
+  pnl_basis_reset_reduced(dest);
   if (src->isreduced == 1)
     {
       int n = dest->nb_variates;
       dest->isreduced = 0;
-      /* No need to free, basis_set_from_tensor does it */
       dest->center = malloc(n * sizeof(double));
       dest->scale = malloc(n * sizeof(double));
       memcpy(dest->center, src->center, n * sizeof(double));
@@ -1096,11 +1087,9 @@ void pnl_basis_set_domain(PnlBasis *B, const PnlVect *xmin, const PnlVect *xmax)
   PNL_CHECK(xmin->size != xmax->size || xmin->size != B->nb_variates,
             "size mismatch", "pnl_basis_set_domain");
 
-  if (B->center != NULL) free(B->center);
-  if (B->scale != NULL) free(B->scale);
   n = B->nb_variates;
-  B->center = malloc(n * sizeof(double));
-  B->scale = malloc(n * sizeof(double));
+  B->center = realloc(B->center, n * sizeof(double));
+  B->scale = realloc(B->scale, n * sizeof(double));
   B->isreduced = 1;
   for (i = 0 ; i < n ; i++)
     {
@@ -1124,16 +1113,31 @@ void pnl_basis_set_reduced(PnlBasis *B, const PnlVect *center, const PnlVect *sc
   PNL_CHECK(center->size != scale->size || center->size != B->nb_variates,
             "size mismatch", "pnl_basis_set_reduced");
 
-  if (B->center != NULL) free(B->center);
-  if (B->scale != NULL) free(B->scale);
   n = B->nb_variates;
-  B->center = malloc(n * sizeof(double));
-  B->scale = malloc(n * sizeof(double));
+  B->center = realloc(B->center, n * sizeof(double));
+  B->scale = realloc(B->scale, n * sizeof(double));
   B->isreduced = 1;
   memcpy(B->center, center->array, n * sizeof(double));
   for (i = 0 ; i < n ; i++)
     {
       B->scale[i] = 1. / PNL_GET(scale, i);
+    }
+}
+
+/**
+ * @brief Reset center and scale. @p is_reduced is et to 0.
+ *
+ * @param B a PnlBasis
+ */
+void pnl_basis_reset_reduced(PnlBasis *B)
+{
+  if (B->isreduced == 1)
+    {
+      free(B->center);
+      B->center = NULL;
+      free(B->scale);
+      B->scale = NULL;
+      B->isreduced = 0;
     }
 }
 
@@ -1153,13 +1157,7 @@ void pnl_basis_free(PnlBasis **B)
       (*B)->f_params = NULL;
       (*B)->f_params_size = 0;
     }
-  if ((*B)->isreduced == 1)
-    {
-      free((*B)->center);
-      (*B)->center = NULL;
-      free((*B)->scale);
-      (*B)->scale = NULL;
-    }
+  pnl_basis_reset_reduced(*B);
   if ((*B)->len_func_list > 0) free((*B)->func_list);
   free(*B);
   *B = NULL;
@@ -1238,8 +1236,7 @@ double pnl_basis_ik(const PnlBasis *b, const double *x, int i, int k)
  * @param b a PnlBasis
  * @param x a C array containing the coordinates of the point at which to
  * evaluate the basis
- * @param i an integer describing the index of the element of the basis to
- * considier
+ * @param i an integer describing the index of the element of the basis to consider
  *
  * @return f_i(x) where f is the i-th basis function
  */
