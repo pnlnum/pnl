@@ -766,6 +766,9 @@ PnlBasis *pnl_basis_new()
   o->len_T = 0;
   o->f_params = NULL;
   o->f_params_size = 0;
+  o->map = o->Dmap = o->D2map = NULL;
+  o->map_params = NULL;
+  o->map_params_size = 0;
   o->object.type = PNL_TYPE_BASIS;
   o->object.parent_type = PNL_TYPE_BASIS;
   o->object.label = pnl_basis_label;
@@ -812,7 +815,6 @@ void pnl_basis_set_type(PnlBasis *B, int index)
   B->f = PnlBasisTypeTab[index].f;
   B->Df = PnlBasisTypeTab[index].Df;
   B->D2f = PnlBasisTypeTab[index].D2f;
-
 }
 
 /**
@@ -1139,6 +1141,31 @@ void pnl_basis_reset_reduced(PnlBasis *B)
 }
 
 /**
+ * @brief Define the non linear map to apply to every input variable before evaluating the basis functions. First, the centering/rescaling is applied, second this mapping and third the basis functions are evaluated
+ * 
+ * @param map The mapping
+ * @param Dmap The first derivative of the mapping
+ * @param D2map The second derivative of the mapping
+ * @param params The extra parameters to be passed to the mapping function
+ * @param size_params The size in bytes of @p params
+ */
+void pnl_basis_set_map(
+  PnlBasis *B,
+  double (*map)(double, int, void*),
+  double (*Dmap)(double, int, void*),
+  double (*D2map)(double, int, void*),
+  void *params, size_t size_params
+)
+{
+  B->map = map;
+  B->Dmap = Dmap;
+  B->D2map = D2map;
+  B->map_params = realloc(B->map_params, size_params);
+  memcpy(B->map_params, params, size_params);
+  B->map_params_size = size_params;
+}
+
+/**
  * Free a PnlBasis
  *
  * @param B
@@ -1153,6 +1180,12 @@ void pnl_basis_free(PnlBasis **B)
       free((*B)->f_params);
       (*B)->f_params = NULL;
       (*B)->f_params_size = 0;
+    }
+  if ((*B)->map_params_size > 0)
+    {
+      free((*B)->map_params);
+      (*B)->map_params = NULL;
+      (*B)->map_params_size = 0;
     }
   if ((*B)->isreduced == 1)
     {

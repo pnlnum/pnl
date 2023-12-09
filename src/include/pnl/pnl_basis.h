@@ -85,8 +85,18 @@ struct _PnlBasis
   int           len_func_list;
   /** Extra parameters to pass to basis functions */
   void         *f_params;
-  /** Size of params in bytes to be passed to malloc */
-  size_t        f_params_size; 
+  /** Size of @p f_params in bytes to be passed to malloc */
+  size_t        f_params_size;
+ /** Non linear mapping of the data */
+  double       (*map)(double x, int dim, void *params);
+  /** First derivative of the non linear mapping  */
+  double       (*Dmap)(double x, int dim, void *params);
+  /** Second dérivate of the linear mapping */
+  double       (*D2map)(double x, int dim, void *params);
+  /** Extra paramaters for map, Dmap and D2map */
+  void          *map_params;
+  /** Size of @p map_params in bytes to be passed to malloc */
+  size_t         map_params_size;
 };
 
 extern int pnl_basis_type_register(const char *name, double (*f)(double, int, int, void*), double (*Df)(double, int, int, void*), double (*D2f)(double, int, int, void*), int is_orthogonal);
@@ -109,6 +119,7 @@ extern int pnl_basis_local_get_index(const PnlBasis *basis, const double *x);
 extern void pnl_basis_set_domain(PnlBasis *B, const PnlVect *xmin, const PnlVect *xmax);
 extern void pnl_basis_set_reduced(PnlBasis *B, const PnlVect *center, const PnlVect *scale);
 extern void pnl_basis_reset_reduced(PnlBasis *B);
+extern void pnl_basis_set_map(PnlBasis *B, double (*map)(double, int, void*), double (*Dmap)(double, int, void*), double (*D2map)(double, int, void*), void *params, size_t size_params);
 extern void pnl_basis_free(PnlBasis **basis);
 extern void pnl_basis_print(const PnlBasis *B);
 extern int pnl_basis_fit_ls(const PnlBasis *f, PnlVect *coef, const PnlMat *x, const PnlVect *y);
