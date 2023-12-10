@@ -378,9 +378,21 @@ static int size_basis(const PnlObject *Obj, MPI_Comm comm, int *size)
   /* B->id */
   if ((info = MPI_Pack_size(1, MPI_INT, comm, &count))) return (info);
   *size += count;
-  /* B->T */
-  if ((info = pnl_object_mpi_pack_size(PNL_OBJECT(B->T), comm, &count))) return info;
-  *size += count;
+  if (BASIS_HAS_TENSOR_REP(B))
+    {
+      /* B->T */
+      if ((info = pnl_object_mpi_pack_size(PNL_OBJECT(B->T), comm, &count))) return info;
+      *size += count;
+    }
+  else
+    {
+      /* B->nb_func */
+      if ((info = MPI_Pack_size(1, MPI_INT, comm, &count))) return (info);
+      *size += count;
+      /* B->nB_variates */
+      if ((info = MPI_Pack_size(1, MPI_INT, comm, &count))) return (info);
+      *size += count;
+    }
   /* B->isreduced */
   if ((info = MPI_Pack_size(1, MPI_INT, comm, &count))) return (info);
   *size += count;
@@ -730,7 +742,15 @@ static int pack_basis(const PnlObject *Obj, void *buf, int bufsize, int *pos, MP
   int info;
   PnlBasis *B = PNL_BASIS_OBJECT(Obj);
   if ((info = MPI_Pack(&B->id, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
-  if ((info = pnl_object_mpi_pack(PNL_OBJECT(B->T), buf, bufsize, pos, comm))) return info;
+  if (BASIS_HAS_TENSOR_REP(B))
+    {
+      if ((info = pnl_object_mpi_pack(PNL_OBJECT(B->T), buf, bufsize, pos, comm))) return info;
+    }
+  else
+    {
+      if ((info = MPI_Pack(&B->nb_func, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
+      if ((info = MPI_Pack(&B->nb_variates, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
+    }
   if ((info = MPI_Pack(&B->isreduced, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
   if (B->isreduced == 1)
     {
@@ -1092,13 +1112,22 @@ static int unpack_basis(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Co
 {
   int id, info, basis_id;
   PnlBasis *B = PNL_BASIS_OBJECT(Obj);
-  PnlMatInt *T = pnl_mat_int_new();
   if ((info = MPI_Unpack(buf, bufsize, pos, &id, 1, MPI_INT, comm))) return info;
   if ((info = MPI_Unpack(buf, bufsize, pos, &basis_id, 1, MPI_INT, comm))) return info;
-  if ((info = pnl_object_mpi_unpack(PNL_OBJECT(T), buf, bufsize, pos, comm))) return info;
-  pnl_basis_set_from_tensor(B, T);
   pnl_basis_set_type(B, basis_id);
-  /* do not free T, it will be done by pnl_basis_free later */
+  if (BASIS_HAS_TENSOR_REP(B))
+    {
+      PnlMatInt *T = pnl_mat_int_new();
+      if ((info = pnl_object_mpi_unpack(PNL_OBJECT(T), buf, bufsize, pos, comm))) return info;
+      pnl_basis_set_from_tensor(B, T);
+    }
+  else
+    {
+      B->T = NULL;
+      B->SpT = NULL;
+      if ((info = MPI_Unpack(buf, bufsize, pos, &B->nb_func, 1, MPI_INT, comm))) return info;
+      if ((info = MPI_Unpack(buf, bufsize, pos, &B->nb_variates, 1, MPI_INT, comm))) return info;
+    }
   if ((info = MPI_Unpack(buf, bufsize, pos, &B->isreduced, 1, MPI_INT, comm))) return info;
   if (B->isreduced == 1)
     {

@@ -58,9 +58,6 @@
       abort();                                            \
     }
 
-#define CHECK_HAS_TENSOR_REP(basis) \
-  if (basis->SpT != NULL && basis->id != PNL_BASIS_LOCAL)
-
 #define CHECK_IS_CONSTRUCTIBLE_FROM_TENSOR(index, msg) \
   if (index == PNL_BASIS_LOCAL)                         \
     {                                                   \
