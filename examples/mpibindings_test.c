@@ -289,36 +289,6 @@ static int send_tridiagmatrix ()
   return info;
 }
 
-static int send_basis ()
-{
-  PnlBasis *B;
-  int info, index, degree, spaced;
-  index = PNL_BASIS_CANONICAL;
-  degree = 4;
-  spaced =3;
-  B = pnl_basis_create_from_degree (index, degree, spaced);
-  printf ("Original Basis \n"); pnl_basis_print (B); printf ("\n");
-  info = pnl_object_mpi_send (PNL_OBJECT(B), 1, SENDTAG, MPI_COMM_WORLD);
-  PNL_MPI_MESSAGE (info, "Basis not sent\n");
-  pnl_basis_free (&B);
-  return info;
-}
-
-static int ssend_basis ()
-{
-  PnlBasis *B;
-  int info, index, degree, spaced;
-  index = PNL_BASIS_CANONICAL;
-  degree = 4;
-  spaced =3;
-  B = pnl_basis_create_from_degree (index, degree, spaced);
-  printf ("Original Basis \n"); pnl_basis_print (B); printf ("\n");
-  info = pnl_object_mpi_ssend (PNL_OBJECT(B), 1, SENDTAG, MPI_COMM_WORLD);
-  PNL_MPI_MESSAGE (info, "Basis not sent\n");
-  pnl_basis_free (&B);
-  return info;
-}
-
 static int recv_tridiagmatrix ()
 {
   MPI_Status status;
@@ -353,18 +323,6 @@ static int recv_int_hmatrix ()
   info = pnl_object_mpi_recv (PNL_OBJECT(M), 0, SENDTAG, MPI_COMM_WORLD, &status);
   printf ("Received Hmatrix \n"); pnl_hmat_int_print (M); printf ("\n");
   pnl_hmat_int_free (&M);
-  return info;
-}
-
-static int recv_basis ()
-{
-  MPI_Status status;
-  PnlBasis *B;
-  int info;
-  B = pnl_basis_new ();
-  info = pnl_object_mpi_recv (PNL_OBJECT(B), 0, SENDTAG, MPI_COMM_WORLD, &status);
-  printf ("Received basis\n"); pnl_basis_print (B); printf ("\n");
-  pnl_basis_free (&B);
   return info;
 }
 
@@ -556,11 +514,11 @@ static int test_tridiag_mat_lu ()
       pnl_tridiag_mat_lu_syslin (x, LU, b);
       if ( pnl_test_vect_eq_abs (x, x_save, 1E-12, "tridiag_mat_lu (MIP tests)", "") == PNL_TRUE )
         {
-          printf ("PnlTridiagMatLU Send/Receive PNL_OK\n");
+          printf ("PnlTridiagMatLU Send/Receive OK\n");
         }
       else
         {
-          printf ("PnlTridiagMatLU Send/Receive PNL_FAIL\n");
+          printf ("PnlTridiagMatLU Send/Receive AIL\n");
         }
 
       pnl_vect_free (&x);
@@ -589,15 +547,7 @@ static void test_reduce (int rank)
       pnl_vect_plus_vect (sum, vect2);
       pnl_object_mpi_send (PNL_OBJECT(vect2), 1, SENDTAG, MPI_COMM_WORLD);
       pnl_object_mpi_reduce (PNL_OBJECT(vect1), PNL_OBJECT(reduc), MPI_SUM, 0, MPI_COMM_WORLD);
-
-      if ( pnl_test_vect_eq_abs (sum, reduc, 1E-10, "mpi_reduce", "") == PNL_TRUE )
-        {
-          printf ("MPI_Reduce for PnlObject: PNL_OK\n");
-        }
-      else
-        {
-          printf ("MPI_Reduce for PnlObject: PNL_FAIL\n");
-        }
+      pnl_test_vect_eq_abs (sum, reduc, 1E-10, "mpi_reduce", "");
       pnl_vect_free (&reduc);
       pnl_vect_free (&sum);
       pnl_vect_free (&vect1);
@@ -613,6 +563,39 @@ static void test_reduce (int rank)
     }
 }
 
+static void test_basis()
+{
+  PnlBasis *B;
+  int rank;
+  int info, index, degree, spaced;
+  index = PNL_BASIS_CANONICAL;
+  degree = 4;
+  spaced =3;
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  B = pnl_basis_create_from_degree (index, degree, spaced);
+
+  if (rank == 0)
+    {
+      info = pnl_object_mpi_send (PNL_OBJECT(B), 1, SENDTAG, MPI_COMM_WORLD);
+    }
+  else
+    {
+      int res;
+      MPI_Status status;
+      PnlBasis *recvB = pnl_basis_new();
+      info = pnl_object_mpi_recv(PNL_OBJECT(recvB), 0, SENDTAG, MPI_COMM_WORLD, &status);
+      if (info != MPI_SUCCESS)
+        {
+          pnl_test_set_fail0("MPI test: receiving basis.");
+          return;
+        }
+      res = pnl_test_basis_eq(recvB, B);
+      pnl_basis_free(&recvB);
+    }
+  pnl_basis_free (&B);
+}
+
+
 int main(int argc, char *argv[])
 {
   PnlMat *M;
@@ -620,6 +603,7 @@ int main(int argc, char *argv[])
   MPI_Init (&argc, &argv);
   MPI_Comm_size (MPI_COMM_WORLD, &nproc);
   MPI_Comm_rank (MPI_COMM_WORLD, &rank);
+  pnl_test_init(argc, argv);
 
   pnl_message_off();
   if ( nproc != 2 )
@@ -648,8 +632,6 @@ int main(int argc, char *argv[])
       send_int_hmatrix (); MPI_Barrier (MPI_COMM_WORLD);
       isend_matrix (); MPI_Barrier (MPI_COMM_WORLD);
       send_matrix (); MPI_Barrier (MPI_COMM_WORLD);
-      send_basis (); MPI_Barrier (MPI_COMM_WORLD);
-      ssend_basis (); MPI_Barrier (MPI_COMM_WORLD);
       send_list (); MPI_Barrier (MPI_COMM_WORLD);
     }
   else
@@ -666,8 +648,6 @@ int main(int argc, char *argv[])
       recv_int_hmatrix (); MPI_Barrier (MPI_COMM_WORLD);
       recv_matrix (); MPI_Barrier (MPI_COMM_WORLD);
       irecv_matrix (); MPI_Barrier (MPI_COMM_WORLD);
-      recv_basis (); MPI_Barrier (MPI_COMM_WORLD);
-      recv_basis (); MPI_Barrier (MPI_COMM_WORLD);
       recv_list (); MPI_Barrier (MPI_COMM_WORLD);
     }
 
@@ -678,7 +658,8 @@ int main(int argc, char *argv[])
   test_tridiag_mat_lu ();
   MPI_Barrier (MPI_COMM_WORLD);
   test_reduce (rank);
+  test_basis();
 
   MPI_Finalize ();
-  exit (0);
+  exit(pnl_test_finalize("MPI tests"));
 }
