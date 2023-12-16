@@ -759,7 +759,7 @@ static int pack_basis(const PnlObject *Obj, void *buf, int bufsize, int *pos, MP
       if ((info = MPI_Pack(B->scale, n, MPI_DOUBLE, buf, bufsize, pos, comm))) return info;
     }
   if ((info = MPI_Pack(&B->f_params_size, 1, MPI_SIZE_T, buf, bufsize, pos, comm))) return info;
-  if ((info = MPI_Pack(&B->f_params, B->f_params_size, MPI_BYTE, buf, bufsize, pos, comm))) return info;
+  if ((info = MPI_Pack(B->f_params, B->f_params_size, MPI_BYTE, buf, bufsize, pos, comm))) return info;
   return (info);
 }
 
