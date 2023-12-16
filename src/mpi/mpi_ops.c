@@ -102,7 +102,7 @@ static int unpack_list(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Com
  * @param comm an MPI Communicator
  * @param size the upper bound on the number of bytes needed to pack Obj
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int size_vector(const PnlObject *Obj, MPI_Comm comm, int *size)
 {
@@ -142,7 +142,7 @@ static int size_vector(const PnlObject *Obj, MPI_Comm comm, int *size)
  * @param comm an MPI Communicator
  * @param size the upper bound on the number of bytes needed to pack Obj
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int size_matrix(const PnlObject *Obj, MPI_Comm comm, int *size)
 {
@@ -183,7 +183,7 @@ static int size_matrix(const PnlObject *Obj, MPI_Comm comm, int *size)
  * @param comm an MPI Communicator
  * @param size the upper bound on the number of bytes needed to pack Obj
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int size_sp_matrix(const PnlObject *Obj, MPI_Comm comm, int *size)
 {
@@ -228,7 +228,7 @@ static int size_sp_matrix(const PnlObject *Obj, MPI_Comm comm, int *size)
  * @param comm an MPI Communicator
  * @param size the upper bound on the number of bytes needed to pack Obj
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int size_tridiag_matrix(const PnlObject *Obj, MPI_Comm comm, int *size)
 {
@@ -259,7 +259,7 @@ static int size_tridiag_matrix(const PnlObject *Obj, MPI_Comm comm, int *size)
  * @param comm an MPI Communicator
  * @param size the upper bound on the number of bytes needed to pack Obj
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int size_tridiag_matrix_lu(const PnlObject *Obj, MPI_Comm comm, int *size)
 {
@@ -292,7 +292,7 @@ static int size_tridiag_matrix_lu(const PnlObject *Obj, MPI_Comm comm, int *size
  * @param comm an MPI Communicator
  * @param size the upper bound on the number of bytes needed to pack Obj
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int size_band_matrix(const PnlObject *Obj, MPI_Comm comm, int *size)
 {
@@ -327,7 +327,7 @@ static int size_band_matrix(const PnlObject *Obj, MPI_Comm comm, int *size)
  * @param comm an MPI Communicator
  * @param size the upper bound on the number of bytes needed to pack Obj
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int size_hmatrix(const PnlObject *Obj, MPI_Comm comm, int *size)
 {
@@ -368,7 +368,7 @@ static int size_hmatrix(const PnlObject *Obj, MPI_Comm comm, int *size)
  * @param comm an MPI Communicator
  * @param size the upper bound on the number of bytes needed to pack Obj
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int size_basis(const PnlObject *Obj, MPI_Comm comm, int *size)
 {
@@ -378,9 +378,21 @@ static int size_basis(const PnlObject *Obj, MPI_Comm comm, int *size)
   /* B->id */
   if ((info = MPI_Pack_size(1, MPI_INT, comm, &count))) return (info);
   *size += count;
-  /* B->T */
-  if ((info = pnl_object_mpi_pack_size(PNL_OBJECT(B->T), comm, &count))) return info;
-  *size += count;
+  if (BASIS_HAS_TENSOR_REP(B))
+    {
+      /* B->T */
+      if ((info = pnl_object_mpi_pack_size(PNL_OBJECT(B->T), comm, &count))) return info;
+      *size += count;
+    }
+  else
+    {
+      /* B->nb_func */
+      if ((info = MPI_Pack_size(1, MPI_INT, comm, &count))) return (info);
+      *size += count;
+      /* B->nB_variates */
+      if ((info = MPI_Pack_size(1, MPI_INT, comm, &count))) return (info);
+      *size += count;
+    }
   /* B->isreduced */
   if ((info = MPI_Pack_size(1, MPI_INT, comm, &count))) return (info);
   *size += count;
@@ -391,7 +403,7 @@ static int size_basis(const PnlObject *Obj, MPI_Comm comm, int *size)
     }
   if ((info = MPI_Pack_size(1, MPI_SIZE_T, comm, &count))) return info;
   *size += count;
-  if ((info = MPI_Pack_size(B->params_size, MPI_BYTE, comm, &count))) return info;
+  if ((info = MPI_Pack_size(B->f_params_size, MPI_BYTE, comm, &count))) return info;
   *size += count;
   return (info);
 }
@@ -403,7 +415,7 @@ static int size_basis(const PnlObject *Obj, MPI_Comm comm, int *size)
  * @param comm an MPI Communicator
  * @param size the upper bound on the number of bytes needed to pack Obj
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int size_rng(const PnlObject *Obj, MPI_Comm comm, int *size)
 {
@@ -442,7 +454,7 @@ static int size_rng(const PnlObject *Obj, MPI_Comm comm, int *size)
  * @param comm an MPI Communicator
  * @param size the upper bound on the number of bytes needed to pack Obj
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int size_list(const PnlObject *Obj, MPI_Comm comm, int *size)
 {
@@ -480,7 +492,7 @@ static int size_list(const PnlObject *Obj, MPI_Comm comm, int *size)
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int pack_vector(const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -519,7 +531,7 @@ static int pack_vector(const PnlObject *Obj, void *buf, int bufsize, int *pos, M
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int pack_matrix(const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -557,7 +569,7 @@ static int pack_matrix(const PnlObject *Obj, void *buf, int bufsize, int *pos, M
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int pack_sp_matrix(const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -597,7 +609,7 @@ static int pack_sp_matrix(const PnlObject *Obj, void *buf, int bufsize, int *pos
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int pack_tridiag_matrix(const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -625,7 +637,7 @@ static int pack_tridiag_matrix(const PnlObject *Obj, void *buf, int bufsize, int
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int pack_tridiag_matrix_lu(const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -655,7 +667,7 @@ static int pack_tridiag_matrix_lu(const PnlObject *Obj, void *buf, int bufsize, 
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int pack_band_matrix(const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -685,7 +697,7 @@ static int pack_band_matrix(const PnlObject *Obj, void *buf, int bufsize, int *p
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int pack_hmatrix(const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -723,14 +735,22 @@ static int pack_hmatrix(const PnlObject *Obj, void *buf, int bufsize, int *pos, 
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int pack_basis(const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
   int info;
   PnlBasis *B = PNL_BASIS_OBJECT(Obj);
   if ((info = MPI_Pack(&B->id, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
-  if ((info = pnl_object_mpi_pack(PNL_OBJECT(B->T), buf, bufsize, pos, comm))) return info;
+  if (BASIS_HAS_TENSOR_REP(B))
+    {
+      if ((info = pnl_object_mpi_pack(PNL_OBJECT(B->T), buf, bufsize, pos, comm))) return info;
+    }
+  else
+    {
+      if ((info = MPI_Pack(&B->nb_func, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
+      if ((info = MPI_Pack(&B->nb_variates, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
+    }
   if ((info = MPI_Pack(&B->isreduced, 1, MPI_INT, buf, bufsize, pos, comm))) return info;
   if (B->isreduced == 1)
     {
@@ -738,8 +758,8 @@ static int pack_basis(const PnlObject *Obj, void *buf, int bufsize, int *pos, MP
       if ((info = MPI_Pack(B->center, n, MPI_DOUBLE, buf, bufsize, pos, comm))) return info;
       if ((info = MPI_Pack(B->scale, n, MPI_DOUBLE, buf, bufsize, pos, comm))) return info;
     }
-  if ((info = MPI_Pack(&B->params_size, 1, MPI_SIZE_T, buf, bufsize, pos, comm))) return info;
-  if ((info = MPI_Pack(&B->params, B->params_size, MPI_BYTE, buf, bufsize, pos, comm))) return info;
+  if ((info = MPI_Pack(&B->f_params_size, 1, MPI_SIZE_T, buf, bufsize, pos, comm))) return info;
+  if ((info = MPI_Pack(B->f_params, B->f_params_size, MPI_BYTE, buf, bufsize, pos, comm))) return info;
   return (info);
 }
 
@@ -753,7 +773,7 @@ static int pack_basis(const PnlObject *Obj, void *buf, int bufsize, int *pos, MP
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int pack_rng(const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -782,7 +802,7 @@ static int pack_rng(const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int pack_list(const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -811,7 +831,7 @@ static int pack_list(const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int unpack_vector(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -858,7 +878,7 @@ static int unpack_vector(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_C
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int unpack_matrix(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -903,7 +923,7 @@ static int unpack_matrix(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_C
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int unpack_sp_matrix(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -950,7 +970,7 @@ static int unpack_sp_matrix(PnlObject *Obj, void *buf, int bufsize, int *pos, MP
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int unpack_tridiag_matrix(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -979,7 +999,7 @@ static int unpack_tridiag_matrix(PnlObject *Obj, void *buf, int bufsize, int *po
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int unpack_tridiag_matrix_lu(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -1010,7 +1030,7 @@ static int unpack_tridiag_matrix_lu(PnlObject *Obj, void *buf, int bufsize, int 
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int unpack_band_matrix(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -1042,7 +1062,7 @@ static int unpack_band_matrix(PnlObject *Obj, void *buf, int bufsize, int *pos, 
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int unpack_hmatrix(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -1086,19 +1106,28 @@ static int unpack_hmatrix(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int unpack_basis(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
   int id, info, basis_id;
   PnlBasis *B = PNL_BASIS_OBJECT(Obj);
-  PnlMatInt *T = pnl_mat_int_new();
   if ((info = MPI_Unpack(buf, bufsize, pos, &id, 1, MPI_INT, comm))) return info;
   if ((info = MPI_Unpack(buf, bufsize, pos, &basis_id, 1, MPI_INT, comm))) return info;
-  if ((info = pnl_object_mpi_unpack(PNL_OBJECT(T), buf, bufsize, pos, comm))) return info;
-  pnl_basis_set_from_tensor(B, T);
   pnl_basis_set_type(B, basis_id);
-  /* do not free T, it will be done by pnl_basis_free later */
+  if (BASIS_HAS_TENSOR_REP(B))
+    {
+      PnlMatInt *T = pnl_mat_int_new();
+      if ((info = pnl_object_mpi_unpack(PNL_OBJECT(T), buf, bufsize, pos, comm))) return info;
+      pnl_basis_set_from_tensor(B, T);
+    }
+  else
+    {
+      B->T = NULL;
+      B->SpT = NULL;
+      if ((info = MPI_Unpack(buf, bufsize, pos, &B->nb_func, 1, MPI_INT, comm))) return info;
+      if ((info = MPI_Unpack(buf, bufsize, pos, &B->nb_variates, 1, MPI_INT, comm))) return info;
+    }
   if ((info = MPI_Unpack(buf, bufsize, pos, &B->isreduced, 1, MPI_INT, comm))) return info;
   if (B->isreduced == 1)
     {
@@ -1108,9 +1137,9 @@ static int unpack_basis(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Co
       B->scale = malloc(n * sizeof(double));
       if ((info = MPI_Unpack(buf, bufsize, pos, B->scale, n, MPI_DOUBLE, comm))) return info;
     }
-  if ((info = MPI_Unpack(buf, bufsize, pos, &B->params_size, 1, MPI_SIZE_T, comm))) return info;
-  B->params = malloc(B->params_size);
-  if ((info = MPI_Unpack(buf, bufsize, pos, B->params, B->params_size, MPI_BYTE, comm))) return info;
+  if ((info = MPI_Unpack(buf, bufsize, pos, &B->f_params_size, 1, MPI_SIZE_T, comm))) return info;
+  B->f_params = malloc(B->f_params_size);
+  if ((info = MPI_Unpack(buf, bufsize, pos, B->f_params, B->f_params_size, MPI_BYTE, comm))) return info;
   return (MPI_SUCCESS);
 }
 
@@ -1124,7 +1153,7 @@ static int unpack_basis(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Co
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int unpack_rng(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -1167,7 +1196,7 @@ static int unpack_rng(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 static int unpack_list(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -1228,7 +1257,7 @@ static int unpack_list(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Com
  * @param comm an MPI Communicator
  * @param size the upper bound on the number of bytes needed to pack Obj
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 int pnl_object_mpi_pack_size(const PnlObject *Obj, MPI_Comm comm, int *size)
 {
@@ -1291,7 +1320,7 @@ int pnl_object_mpi_pack_size(const PnlObject *Obj, MPI_Comm comm, int *size)
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 int pnl_object_mpi_pack(const PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {
@@ -1349,7 +1378,7 @@ int pnl_object_mpi_pack(const PnlObject *Obj, void *buf, int bufsize, int *pos, 
  * @param comm an MPI Communicator
  * @param pos (in/out) the current position in buf
  *
- * @return an error value equal to MPI_SUCCESS when everything is PNL_OK
+ * @return an error value equal to MPI_SUCCESS when everything is ok
  */
 int pnl_object_mpi_unpack(PnlObject *Obj, void *buf, int bufsize, int *pos, MPI_Comm comm)
 {

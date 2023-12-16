@@ -3,6 +3,7 @@
 
 #include "pnl/pnl_object.h"
 #include "pnl/pnl_complex.h"
+#include "pnl/pnl_basis.h"
 
 /**
  * \defgroup PnlInternals Internal macros
@@ -29,6 +30,9 @@ extern double pnl_d1mach (int i);
 extern double pnl_dlamch (char *);
 
 #define NULLINT -1
+
+#define BASIS_HAS_TENSOR_REP(basis) \
+  (basis->id != PNL_BASIS_LOCAL)
 
 /*@}*/
 

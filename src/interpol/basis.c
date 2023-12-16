@@ -58,9 +58,6 @@
       abort();                                            \
     }
 
-#define CHECK_HAS_TENSOR_REP(basis) \
-  if (basis->SpT != NULL && basis->id != PNL_BASIS_LOCAL)
-
 #define CHECK_IS_CONSTRUCTIBLE_FROM_TENSOR(index, msg) \
   if (index == PNL_BASIS_LOCAL)                         \
     {                                                   \
@@ -767,8 +764,8 @@ PnlBasis *pnl_basis_new()
   o->func_list = NULL;
   o->len_func_list = 0;
   o->len_T = 0;
-  o->params = NULL;
-  o->params_size = 0;
+  o->f_params = NULL;
+  o->f_params_size = 0;
   o->object.type = PNL_TYPE_BASIS;
   o->object.parent_type = PNL_TYPE_BASIS;
   o->object.label = pnl_basis_label;
@@ -798,15 +795,6 @@ void pnl_basis_set_from_tensor(PnlBasis *b, const PnlMatInt *T)
   /* Not sure this is the right place to put it */
   pnl_mat_int_free(&(b->T));
   pnl_sp_mat_int_free(&(b->SpT));
-  if (b->isreduced == 1)
-    {
-      b->isreduced = 0;
-      free(b->center);
-      b->center = NULL;
-      free(b->scale);
-      b->scale = NULL;
-    }
-
   b->T = (PnlMatInt *) T;
   b->SpT = pnl_sp_mat_int_create_from_mat(T);
 }
@@ -927,18 +915,19 @@ PnlBasis *pnl_basis_create_from_hyperbolic_degree(int index, double degree, doub
 /**
  * Return a PnlBasis with local and orthogonal function
  *
- * @param n_intervals this is an array of size \a space_dim describing the number of intervals for every dimension
+ * @param n_intervals this is an array of size @p space_dim describing the number of intervals for every dimension.
  * @param space_dim the dimension of the state space
  * @return PnlBasis
  */
-PnlBasis* pnl_basis_local_create(int *n_intervals, int space_dim)
+PnlBasis* pnl_basis_local_create(const int *n_intervals, int space_dim)
 {
   PnlBasis *B;
   int i, prod = 1;
   if ((B = pnl_basis_new()) == NULL) return NULL;
   pnl_basis_set_type(B, PNL_BASIS_LOCAL);
-  B->params_size = space_dim * sizeof(int);
-  B->params = n_intervals;
+  B->f_params_size = space_dim * sizeof(int);
+  B->f_params = malloc(B->f_params_size);
+  memcpy(B->f_params, n_intervals, B->f_params_size);
   B->nb_variates = space_dim;
   for (i = 0; i < space_dim; i++)
     {
@@ -962,6 +951,7 @@ PnlBasis* pnl_basis_local_create_regular(int n_intervals, int space_dim)
   int *intervals_tab = malloc(space_dim * sizeof(int));
   for (i = 0; i < space_dim; i++) intervals_tab[i] = n_intervals;
   B = pnl_basis_local_create(intervals_tab, space_dim);
+  free(intervals_tab);
   return B;
 }
 
@@ -998,13 +988,14 @@ void pnl_basis_clone(PnlBasis *dest, const PnlBasis *src)
   dest->f = src->f;
   dest->Df = src->Df;
   dest->D2f = src->D2f;
-  dest->params = realloc(dest->params, src->params_size);
-  dest->params_size = src->params_size;
+  dest->f_params = realloc(dest->f_params, src->f_params_size);
+  memcpy(dest->f_params, src->f_params, src->f_params_size);
+  dest->f_params_size = src->f_params_size;
+  pnl_basis_reset_reduced(dest);
   if (src->isreduced == 1)
     {
       int n = dest->nb_variates;
       dest->isreduced = 0;
-      /* No need to free, basis_set_from_tensor does it */
       dest->center = malloc(n * sizeof(double));
       dest->scale = malloc(n * sizeof(double));
       memcpy(dest->center, src->center, n * sizeof(double));
@@ -1093,11 +1084,9 @@ void pnl_basis_set_domain(PnlBasis *B, const PnlVect *xmin, const PnlVect *xmax)
   PNL_CHECK(xmin->size != xmax->size || xmin->size != B->nb_variates,
             "size mismatch", "pnl_basis_set_domain");
 
-  if (B->center != NULL) free(B->center);
-  if (B->scale != NULL) free(B->scale);
   n = B->nb_variates;
-  B->center = malloc(n * sizeof(double));
-  B->scale = malloc(n * sizeof(double));
+  B->center = realloc(B->center, n * sizeof(double));
+  B->scale = realloc(B->scale, n * sizeof(double));
   B->isreduced = 1;
   for (i = 0 ; i < n ; i++)
     {
@@ -1121,16 +1110,31 @@ void pnl_basis_set_reduced(PnlBasis *B, const PnlVect *center, const PnlVect *sc
   PNL_CHECK(center->size != scale->size || center->size != B->nb_variates,
             "size mismatch", "pnl_basis_set_reduced");
 
-  if (B->center != NULL) free(B->center);
-  if (B->scale != NULL) free(B->scale);
   n = B->nb_variates;
-  B->center = malloc(n * sizeof(double));
-  B->scale = malloc(n * sizeof(double));
+  B->center = realloc(B->center, n * sizeof(double));
+  B->scale = realloc(B->scale, n * sizeof(double));
   B->isreduced = 1;
   memcpy(B->center, center->array, n * sizeof(double));
   for (i = 0 ; i < n ; i++)
     {
       B->scale[i] = 1. / PNL_GET(scale, i);
+    }
+}
+
+/**
+ * @brief Reset center and scale. @p is_reduced is et to 0.
+ *
+ * @param B a PnlBasis
+ */
+void pnl_basis_reset_reduced(PnlBasis *B)
+{
+  if (B->isreduced == 1)
+    {
+      free(B->center);
+      B->center = NULL;
+      free(B->scale);
+      B->scale = NULL;
+      B->isreduced = 0;
     }
 }
 
@@ -1144,18 +1148,13 @@ void pnl_basis_free(PnlBasis **B)
   if (*B == NULL) return;
   pnl_mat_int_free(&((*B)->T));
   pnl_sp_mat_int_free(&(*B)->SpT);
-  if ((*B)->params_size > 0) {
-    free((*B)->params);
-    (*B)->params = NULL;
-    (*B)->params_size = 0;
-  }
-  if ((*B)->isreduced == 1)
+  if ((*B)->f_params_size > 0)
     {
-      free((*B)->center);
-      (*B)->center = NULL;
-      free((*B)->scale);
-      (*B)->scale = NULL;
+      free((*B)->f_params);
+      (*B)->f_params = NULL;
+      (*B)->f_params_size = 0;
     }
+  pnl_basis_reset_reduced(*B);
   if ((*B)->len_func_list > 0) free((*B)->func_list);
   free(*B);
   *B = NULL;
@@ -1169,11 +1168,11 @@ void pnl_basis_print(const PnlBasis *B)
 {
   printf("Basis Name: %s\n", B->label);
   printf("\tNumber of variates: %d\n", B->nb_variates);
-  printf("\tExtra parameters size: %zu\n", B->params_size);
+  printf("\tExtra parameters size: %zu\n", B->f_params_size);
   printf("\tNumber of functions in tensor: %d\n", B->len_T);;
   printf("\tNumber of extra functions: %d\n", B->len_func_list);
   printf("\tTotal number of functions: %d\n", B->nb_func);
-  printf("\tisreduced = %d\n", B->isreduced);
+  printf("\tIs reduced = %d\n", B->isreduced);
   if (B->isreduced)
     {
       int i;
@@ -1185,7 +1184,7 @@ void pnl_basis_print(const PnlBasis *B)
     }
   if (B->SpT)
     {
-      printf("\tTensor matrix : \n");
+      printf("\tTensor matrix: \n");
       pnl_sp_mat_int_print(B->SpT);
       printf("\n");
     }
@@ -1218,11 +1217,11 @@ double pnl_basis_ik(const PnlBasis *b, const double *x, int i, int k)
   if (Tik == 0) return 1.;
   if (b->isreduced == 1)
     {
-      return (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->params);
+      return (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->f_params);
     }
   else
     {
-      return (b->f)(x[k], Tik, k, b->params);
+      return (b->f)(x[k], Tik, k, b->f_params);
     }
 }
 
@@ -1234,8 +1233,7 @@ double pnl_basis_ik(const PnlBasis *b, const double *x, int i, int k)
  * @param b a PnlBasis
  * @param x a C array containing the coordinates of the point at which to
  * evaluate the basis
- * @param i an integer describing the index of the element of the basis to
- * considier
+ * @param i an integer describing the index of the element of the basis to consider
  *
  * @return f_i(x) where f is the i-th basis function
  */
@@ -1254,7 +1252,7 @@ double pnl_basis_i(const PnlBasis *b, const double *x, int i)
         {
           const int j = b->SpT->J[k];
           const int Tij = b->SpT->array[k];
-          aux *= (b->f)((x[j] - b->center[j]) * b->scale[j], Tij, j, b->params);
+          aux *= (b->f)((x[j] - b->center[j]) * b->scale[j], Tij, j, b->f_params);
         }
     }
   else
@@ -1263,7 +1261,7 @@ double pnl_basis_i(const PnlBasis *b, const double *x, int i)
         {
           const int j = b->SpT->J[k];
           const int Tij = b->SpT->array[k];
-          aux *= (b->f)(x[j], Tij, j, b->params);
+          aux *= (b->f)(x[j], Tij, j, b->f_params);
         }
     }
   return aux;
@@ -1297,9 +1295,9 @@ double pnl_basis_i_D(const PnlBasis *b, const double *x, int i, int j)
           const int k = b->SpT->J[l];
           const int Tik = b->SpT->array[l];
           if (k == j)
-            aux *= b->scale[k] * (b->Df)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->params);
+            aux *= b->scale[k] * (b->Df)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->f_params);
           else
-            aux *= (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->params);
+            aux *= (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->f_params);
         }
     }
   else
@@ -1309,9 +1307,9 @@ double pnl_basis_i_D(const PnlBasis *b, const double *x, int i, int j)
           const int k = b->SpT->J[l];
           const int Tik = b->SpT->array[l];
           if (k == j)
-            aux *= (b->Df)(x[k], Tik, k, b->params);
+            aux *= (b->Df)(x[k], Tik, k, b->f_params);
           else
-            aux *= (b->f)(x[k], Tik, k, b->params);
+            aux *= (b->f)(x[k], Tik, k, b->f_params);
         }
     }
   return aux;
@@ -1348,9 +1346,9 @@ double pnl_basis_i_D2(const PnlBasis *b, const double *x, int i, int j1, int j2)
                 const int k = b->SpT->J[l];
                 const int Tik = b->SpT->array[l];
               if (k == j1)
-                aux *= b->scale[k] * b->scale[k] * (b->D2f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->params);
+                aux *= b->scale[k] * b->scale[k] * (b->D2f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->f_params);
               else
-                aux *= (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->params);
+                aux *= (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->f_params);
             }
         }
       else
@@ -1360,9 +1358,9 @@ double pnl_basis_i_D2(const PnlBasis *b, const double *x, int i, int j1, int j2)
               const int k = b->SpT->J[l];
               const int Tik = b->SpT->array[l];
               if (k == j1 || k == j2)
-                aux *= b->scale[k] * (b->Df)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->params);
+                aux *= b->scale[k] * (b->Df)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->f_params);
               else
-                aux *= (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->params);
+                aux *= (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->f_params);
             }
         }
     }
@@ -1375,9 +1373,9 @@ double pnl_basis_i_D2(const PnlBasis *b, const double *x, int i, int j1, int j2)
               const int k = b->SpT->J[l];
               const int Tik = b->SpT->array[l];
               if (k == j1)
-                aux *= (b->D2f)(x[k], Tik, k, b->params);
+                aux *= (b->D2f)(x[k], Tik, k, b->f_params);
               else
-                aux *= (b->f)(x[k], Tik, k, b->params);
+                aux *= (b->f)(x[k], Tik, k, b->f_params);
             }
         }
       else
@@ -1387,9 +1385,9 @@ double pnl_basis_i_D2(const PnlBasis *b, const double *x, int i, int j1, int j2)
               const int k = b->SpT->J[l];
               const int Tik = b->SpT->array[l];
               if (k == j1 || k == j2)
-                aux *= (b->Df)(x[k], Tik, k, b->params);
+                aux *= (b->Df)(x[k], Tik, k, b->f_params);
               else
-                aux *= (b->f)(x[k], Tik, k, b->params);
+                aux *= (b->f)(x[k], Tik, k, b->f_params);
             }
         }
 
@@ -1409,7 +1407,7 @@ int pnl_basis_local_get_index(const PnlBasis *basis, const double *x)
 {
   int i;
   int index_per_dim, global_index, n_intervals_prod;
-  int *n_intervals = (int*) basis->params;
+  int *n_intervals = (int*) basis->f_params;
   global_index = 0;
   n_intervals_prod = 1;
   for (i = 0; i < basis->nb_variates; i++)
@@ -1596,7 +1594,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
             {
               const int k = b->SpT->J[l];
               const int Tik = b->SpT->array[l];
-              f[k] = (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->params);
+              f[k] = (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->f_params);
               auxf *= f[k];
             }
         }
@@ -1606,7 +1604,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
             {
               const int k = b->SpT->J[l];
               const int Tik = b->SpT->array[l];
-              f[k] = (b->f)(x[k], Tik, k, b->params);
+              f[k] = (b->f)(x[k], Tik, k, b->f_params);
               auxf *= f[k];
             }
         }
@@ -1628,7 +1626,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
               /* gradient */
               if (Tij >= 1)
                 {
-                  Df[j] = b->scale[j] * (b->Df)((x[j] - b->center[j]) * b->scale[j], Tij, j, b->params);
+                  Df[j] = b->scale[j] * (b->Df)((x[j] - b->center[j]) * b->scale[j], Tij, j, b->f_params);
                   PNL_LET(grad, j) += a * auxf * Df[j];
                 }
               else
@@ -1637,7 +1635,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
               /* diagonal terms of the Hessian matrix */
               if (Tij >= 2)
                 {
-                  D2f = b->scale[j] * b->scale[j] * (b->D2f)((x[j] - b->center[j]) * b->scale[j], Tij, j, b->params);
+                  D2f = b->scale[j] * b->scale[j] * (b->D2f)((x[j] - b->center[j]) * b->scale[j], Tij, j, b->f_params);
                   PNL_MLET(hes, j, j) += a * auxf * D2f;
                 }
             }
@@ -1647,7 +1645,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
               /* gradient */
               if (Tij >= 1)
                 {
-                  Df[j] = (b->Df)(x[j], Tij, j, b->params);
+                  Df[j] = (b->Df)(x[j], Tij, j, b->f_params);
                   PNL_LET(grad, j) += a * auxf * Df[j];
                 }
               else
@@ -1656,7 +1654,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
               /* diagonal terms of the Hessian matrix */
               if (Tij >= 2)
                 {
-                  D2f = (b->D2f)(x[j], Tij, j, b->params);
+                  D2f = (b->D2f)(x[j], Tij, j, b->f_params);
                   PNL_MLET(hes, j, j) += a * auxf * D2f;
                 }
             }

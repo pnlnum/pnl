@@ -6,6 +6,7 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "pnl/pnl_sp_matrix.h"
+#include "pnl/pnl_basis.h"
 
 /**
  * \defgroup PnlTest a unit test framework
@@ -45,6 +46,7 @@ extern int pnl_test_mat_complex_eq_abs (const PnlMatComplex *X, const PnlMatComp
 extern int pnl_test_hmat_eq(const PnlHmat *X, const PnlHmat *Y, double relerr, const char *str, const char *fmt, ...);
 extern int pnl_test_hmat_eq_rel(const PnlHmat *X, const PnlHmat *Y, double relerr, const char *str, const char *fmt, ...);
 extern int pnl_test_hmat_eq_abs(const PnlHmat *X, const PnlHmat *Y, double relerr, const char *str, const char *fmt, ...);
+extern int pnl_test_basis_eq(const PnlBasis *observed, const PnlBasis *expected);
 
 extern void pnl_test_init(int argc, char **argv);
 extern int pnl_test_finalize(const char *str);

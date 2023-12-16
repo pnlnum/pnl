@@ -84,16 +84,16 @@ struct _PnlBasis
   /** The number of functions in #func_list */
   int           len_func_list;
   /** Extra parameters to pass to basis functions */
-  void         *params;
+  void         *f_params;
   /** Size of params in bytes to be passed to malloc */
-  size_t        params_size;
+  size_t        f_params_size; 
 };
 
 extern int pnl_basis_type_register(const char *name, double (*f)(double, int, int, void*), double (*Df)(double, int, int, void*), double (*D2f)(double, int, int, void*), int is_orthogonal);
 extern PnlBasis* pnl_basis_new();
 extern PnlBasis* pnl_basis_create(int index, int nb_func, int space_dim);
 extern PnlBasis* pnl_basis_create_from_degree(int index, int degree, int space_dim);
-extern PnlBasis* pnl_basis_local_create(int *n_intervals, int space_dim);
+extern PnlBasis* pnl_basis_local_create(const int *n_intervals, int space_dim);
 extern PnlBasis* pnl_basis_local_create_regular(int n_intervals, int space_dim);
 extern PnlBasis* pnl_basis_create_from_prod_degree(int index, int degree, int nb_variates);
 extern PnlBasis* pnl_basis_create_from_hyperbolic_degree(int index, double degree, double q, int n);
@@ -108,6 +108,7 @@ extern void pnl_basis_add_elt(PnlBasis *B, const PnlVectInt *d);
 extern int pnl_basis_local_get_index(const PnlBasis *basis, const double *x);
 extern void pnl_basis_set_domain(PnlBasis *B, const PnlVect *xmin, const PnlVect *xmax);
 extern void pnl_basis_set_reduced(PnlBasis *B, const PnlVect *center, const PnlVect *scale);
+extern void pnl_basis_reset_reduced(PnlBasis *B);
 extern void pnl_basis_free(PnlBasis **basis);
 extern void pnl_basis_print(const PnlBasis *B);
 extern int pnl_basis_fit_ls(const PnlBasis *f, PnlVect *coef, const PnlMat *x, const PnlVect *y);
