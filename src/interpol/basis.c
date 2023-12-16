@@ -678,17 +678,23 @@ static double D2f_reduction_map(const PnlBasis *B, double x, int i, int dim)
     }
   if (B->isreduced)
     {
-      y1 = (B->Df)((map_x - B->center[dim]) * B->scale[dim], i, dim, B->f_params) * B->scale[dim];
       y2 = (B->D2f)((map_x - B->center[dim]) * B->scale[dim], i, dim, B->f_params) * B->scale[dim] * B->scale[dim];
     }
   else
     {
-      y1 = (B->Df)(map_x, i, dim, B->f_params);
       y2 = (B->D2f)(map_x, i, dim, B->f_params);
     }
-  if (B->Dmap)
+  if (B->Dmap && B->D2map)
     {
       double Dmap = B->Dmap(x, dim, B->map_params);
+      if (B->isreduced)
+        {
+          y1 = (B->Df)((map_x - B->center[dim]) * B->scale[dim], i, dim, B->f_params) * B->scale[dim];
+        }
+      else
+        {
+          y1 = (B->Df)(map_x, i, dim, B->f_params);
+        }
       y = y2 * Dmap * Dmap + y1 * (B->D2map)(x, dim, B->map_params);
     }
   else
