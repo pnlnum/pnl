@@ -631,6 +631,73 @@ static double D2LocalD1(double x, int n, int dim, void *params)
   abort();
 }
 
+static double f_reduction_map(const PnlBasis *B, double x, int i, int dim)
+{
+  double map_x = x;
+  if (B->map)
+    {
+      map_x = B->map(x, i, B->map_params);
+    }
+  if (B->isreduced)
+    {
+      return (B->f)((map_x - B->center[dim]) * B->scale[dim], i, dim, B->f_params);
+    }
+  return (B->f)(map_x, i, dim, B->f_params);
+}
+
+static double Df_reduction_map(const PnlBasis *B, double x, int i, int dim)
+{
+  double map_x = x;
+  double y;
+  if (B->map)
+    {
+      map_x = B->map(x, i, B->map_params);
+    }
+  if (B->isreduced)
+    {
+      y = (B->Df)((map_x - B->center[dim]) * B->scale[dim], i, dim, B->f_params) * B->scale[dim];
+    }
+  else
+    {
+      y = (B->Df)(map_x, i, dim, B->f_params);
+    }
+  if (B->Dmap)
+    {
+      y *= B->Dmap(x, dim, B->map_params);
+    }
+  return y;
+}
+
+static double D2f_reduction_map(const PnlBasis *B, double x, int i, int dim)
+{
+  double map_x = x;
+  double y, y1, y2;
+  if (B->map)
+    {
+      map_x = B->map(x, dim, B->map_params);
+    }
+  if (B->isreduced)
+    {
+      y1 = (B->Df)((map_x - B->center[dim]) * B->scale[dim], i, dim, B->f_params) * B->scale[dim];
+      y2 = (B->D2f)((map_x - B->center[dim]) * B->scale[dim], i, dim, B->f_params) * B->scale[dim] * B->scale[dim];
+    }
+  else
+    {
+      y1 = (B->Df)(map_x, i, dim, B->f_params);
+      y2 = (B->D2f)(map_x, i, dim, B->f_params);
+    }
+  if (B->Dmap)
+    {
+      double Dmap = B->Dmap(x, dim, B->map_params);
+      y = y2 * Dmap * Dmap + y1 * (B->D2map)(x, dim, B->map_params);
+    }
+  else
+    {
+      y = y2;
+    }
+  return y;
+}
+
 /**
  * Struture used to describe the type of a basis
  */
@@ -1255,14 +1322,7 @@ double pnl_basis_ik(const PnlBasis *b, const double *x, int i, int k)
 {
   const int Tik = PNL_MGET(b->T, i, k);
   if (Tik == 0) return 1.;
-  if (b->isreduced == 1)
-    {
-      return (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->f_params);
-    }
-  else
-    {
-      return (b->f)(x[k], Tik, k, b->f_params);
-    }
+  return f_reduction_map(b, x[k], Tik, k);
 }
 
 /**
@@ -1286,24 +1346,12 @@ double pnl_basis_i(const PnlBasis *b, const double *x, int i)
       PnlVect view = pnl_vect_wrap_array(x, b->nb_variates);
       return PNL_EVAL_RNFUNCR(&(b->func_list[i-b->len_T]), &view);
     }
-  if (b->isreduced == 1)
-    {
-      for (k = b->SpT->I[i] ; k < b->SpT->I[i + 1] ; k++)
-        {
-          const int j = b->SpT->J[k];
-          const int Tij = b->SpT->array[k];
-          aux *= (b->f)((x[j] - b->center[j]) * b->scale[j], Tij, j, b->f_params);
-        }
-    }
-  else
-    {
-      for (k = b->SpT->I[i] ; k < b->SpT->I[i + 1] ; k++)
-        {
-          const int j = b->SpT->J[k];
-          const int Tij = b->SpT->array[k];
-          aux *= (b->f)(x[j], Tij, j, b->f_params);
-        }
-    }
+    for (k = b->SpT->I[i] ; k < b->SpT->I[i + 1] ; k++)
+      {
+        const int j = b->SpT->J[k];
+        const int Tij = b->SpT->array[k];
+        aux *= f_reduction_map(b, x[j], Tij, j);
+      }
   return aux;
 }
 
@@ -1328,29 +1376,14 @@ double pnl_basis_i_D(const PnlBasis *b, const double *x, int i, int j)
   /* Test if the partial degree is small enough to return 0 */
   if (PNL_MGET(b->T, i, j) == 0) return 0.;
 
-  if (b->isreduced == 1)
+  for (l = b->SpT->I[i] ; l < b->SpT->I[i + 1] ; l++)
     {
-      for (l = b->SpT->I[i] ; l < b->SpT->I[i + 1] ; l++)
-        {
-          const int k = b->SpT->J[l];
-          const int Tik = b->SpT->array[l];
-          if (k == j)
-            aux *= b->scale[k] * (b->Df)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->f_params);
-          else
-            aux *= (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->f_params);
-        }
-    }
-  else
-    {
-      for (l = b->SpT->I[i] ; l < b->SpT->I[i + 1] ; l++)
-        {
-          const int k = b->SpT->J[l];
-          const int Tik = b->SpT->array[l];
-          if (k == j)
-            aux *= (b->Df)(x[k], Tik, k, b->f_params);
-          else
-            aux *= (b->f)(x[k], Tik, k, b->f_params);
-        }
+      const int k = b->SpT->J[l];
+      const int Tik = b->SpT->array[l];
+      if (k == j)
+        aux *= Df_reduction_map(b, x[k], Tik, k);
+      else
+        aux *= f_reduction_map(b, x[k], Tik, k);
     }
   return aux;
 }
@@ -1377,63 +1410,31 @@ double pnl_basis_i_D2(const PnlBasis *b, const double *x, int i, int j1, int j2)
   if ((j1 == j2) && PNL_MGET(b->T, i, j1) <= 1) return 0.;
   if (PNL_MGET(b->T, i, j1) == 0 || PNL_MGET(b->T, i, j2) == 0) return 0.;
 
-  if (b->isreduced == 1)
+  if (j1 == j2)
     {
-      if (j1 == j2)
+      for (l = b->SpT->I[i] ; l < b->SpT->I[i + 1] ; l++)
         {
-            for (l = b->SpT->I[i] ; l < b->SpT->I[i + 1] ; l++)
-              {
-                const int k = b->SpT->J[l];
-                const int Tik = b->SpT->array[l];
-              if (k == j1)
-                aux *= b->scale[k] * b->scale[k] * (b->D2f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->f_params);
-              else
-                aux *= (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->f_params);
-            }
-        }
-      else
-        {
-          for (l = b->SpT->I[i] ; l < b->SpT->I[i + 1] ; l++)
-            {
-              const int k = b->SpT->J[l];
-              const int Tik = b->SpT->array[l];
-              if (k == j1 || k == j2)
-                aux *= b->scale[k] * (b->Df)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->f_params);
-              else
-                aux *= (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->f_params);
-            }
-        }
+          const int k = b->SpT->J[l];
+          const int Tik = b->SpT->array[l];
+          if (k == j1)
+            aux *= D2f_reduction_map(b, x[k], Tik, k);
+          else
+            aux *= f_reduction_map(b, x[k], Tik, k);
+      }
     }
   else
     {
-      if (j1 == j2)
+      for (l = b->SpT->I[i] ; l < b->SpT->I[i + 1] ; l++)
         {
-          for (l = b->SpT->I[i] ; l < b->SpT->I[i + 1] ; l++)
-            {
-              const int k = b->SpT->J[l];
-              const int Tik = b->SpT->array[l];
-              if (k == j1)
-                aux *= (b->D2f)(x[k], Tik, k, b->f_params);
-              else
-                aux *= (b->f)(x[k], Tik, k, b->f_params);
-            }
+          const int k = b->SpT->J[l];
+          const int Tik = b->SpT->array[l];
+          if (k == j1 || k == j2)
+            aux *= Df_reduction_map(b, x[k], Tik, k);
+          else
+            aux *= f_reduction_map(b, x[k], Tik, k);
         }
-      else
-        {
-          for (l = b->SpT->I[i] ; l < b->SpT->I[i + 1] ; l++)
-            {
-              const int k = b->SpT->J[l];
-              const int Tik = b->SpT->array[l];
-              if (k == j1 || k == j2)
-                aux *= (b->Df)(x[k], Tik, k, b->f_params);
-              else
-                aux *= (b->f)(x[k], Tik, k, b->f_params);
-            }
-        }
-
     }
   return aux;
-
 }
 
 /**
@@ -1628,25 +1629,12 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
       /*
        * computation of val
        */
-      if (b->isreduced == 1)
+      for (l = b->SpT->I[i] ; l < b->SpT->I[i + 1] ; l++)
         {
-          for (l = b->SpT->I[i] ; l < b->SpT->I[i + 1] ; l++)
-            {
-              const int k = b->SpT->J[l];
-              const int Tik = b->SpT->array[l];
-              f[k] = (b->f)((x[k] - b->center[k]) * b->scale[k], Tik, k, b->f_params);
-              auxf *= f[k];
-            }
-        }
-      else
-        {
-          for (l = b->SpT->I[i] ; l < b->SpT->I[i + 1] ; l++)
-            {
-              const int k = b->SpT->J[l];
-              const int Tik = b->SpT->array[l];
-              f[k] = (b->f)(x[k], Tik, k, b->f_params);
-              auxf *= f[k];
-            }
+          const int k = b->SpT->J[l];
+          const int Tik = b->SpT->array[l];
+          f[k] = f_reduction_map(b, x[k], Tik, k);
+          auxf *= f[k];
         }
       y += a * auxf;
       /*
@@ -1660,45 +1648,22 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
               const int k = b->SpT->J[l];
               if (k != j) auxf *= f[k];
             }
-          if (b->isreduced == 1)
-            {
-              const int Tij = PNL_MGET(b->T, i, j);
-              /* gradient */
-              if (Tij >= 1)
-                {
-                  Df[j] = b->scale[j] * (b->Df)((x[j] - b->center[j]) * b->scale[j], Tij, j, b->f_params);
-                  PNL_LET(grad, j) += a * auxf * Df[j];
-                }
-              else
-                Df[j] = 0.;
+            const int Tij = PNL_MGET(b->T, i, j);
+            /* gradient */
+            if (Tij >= 1)
+              {
+                Df[j] = Df_reduction_map(b, x[j], Tij, j);
+                PNL_LET(grad, j) += a * auxf * Df[j];
+              }
+            else
+              Df[j] = 0.;
 
-              /* diagonal terms of the Hessian matrix */
-              if (Tij >= 2)
-                {
-                  D2f = b->scale[j] * b->scale[j] * (b->D2f)((x[j] - b->center[j]) * b->scale[j], Tij, j, b->f_params);
-                  PNL_MLET(hes, j, j) += a * auxf * D2f;
-                }
-            }
-          else
-            {
-              const int Tij = PNL_MGET(b->T, i, j);
-              /* gradient */
-              if (Tij >= 1)
-                {
-                  Df[j] = (b->Df)(x[j], Tij, j, b->f_params);
-                  PNL_LET(grad, j) += a * auxf * Df[j];
-                }
-              else
-                Df[j] = 0.;
-
-              /* diagonal terms of the Hessian matrix */
-              if (Tij >= 2)
-                {
-                  D2f = (b->D2f)(x[j], Tij, j, b->f_params);
-                  PNL_MLET(hes, j, j) += a * auxf * D2f;
-                }
-            }
-
+            /* diagonal terms of the Hessian matrix */
+            if (Tij >= 2)
+              {
+                D2f = D2f_reduction_map(b, x[j], Tij, j);
+                PNL_MLET(hes, j, j) += a * auxf * D2f;
+              }
           /* non diagonal terms of the Hessian matrix */
           for (m = 0 ; m < j ; m++)
             {
