@@ -505,8 +505,6 @@ dim_fail:
 
 int pnl_test_basis_eq(const PnlBasis *observed, const PnlBasis *expected)
 {
-  int i;
-  char *expected_params, *observed_params;
   if (
     expected->id != observed->id ||
     expected->nb_func != observed->nb_func ||
@@ -524,17 +522,25 @@ int pnl_test_basis_eq(const PnlBasis *observed, const PnlBasis *expected)
       pnl_test_array(expected->scale, observed->scale, expected->nb_variates, 1E-12, pnl_isequal_abs, "test_basis scale", "");
       return PNL_FALSE;
     }
-  expected_params = (char *) expected->f_params;
-  observed_params = (char *) observed->f_params;
-  for (i = 0; i < expected->f_params_size; i++)
+  if (memcmp(expected->f_params, observed->f_params, expected->f_params_size) != 0)
     {
-      if (expected_params[i] != observed_params[i])
-        {
-          pnl_test_set_fail0("PnlBasis: f_params differ");
-          return PNL_FALSE;
-        }
+      pnl_test_set_fail0("PnlBasis: f_params differ");
+      return PNL_FALSE;
     }
-  return pnl_test_sp_mat_int_eq(expected->SpT, observed->SpT, "basis test tensor", "");
+  if (expected->SpT != NULL && observed->SpT != NULL)
+    {
+      return pnl_test_sp_mat_int_eq(expected->SpT, observed->SpT, "basis test tensor", "");
+    }
+  if (expected->SpT == NULL && observed->SpT == NULL)
+    {
+      pnl_test_set_ok("basis test local");
+      return PNL_TRUE;
+    }
+  else
+    {
+      pnl_test_set_fail0("basis test");
+      return PNL_FALSE;
+    }
 }
 
 void run_all_test (tst_list *l)

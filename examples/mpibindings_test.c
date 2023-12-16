@@ -563,17 +563,10 @@ static void test_reduce (int rank)
     }
 }
 
-static void test_basis()
+static void send_and_compare_basis(const PnlBasis *B)
 {
-  PnlBasis *B;
-  int rank;
-  int info, index, degree, spaced;
-  index = PNL_BASIS_CANONICAL;
-  degree = 4;
-  spaced =3;
+  int rank, info;
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-  B = pnl_basis_create_from_degree (index, degree, spaced);
-
   if (rank == 0)
     {
       info = pnl_object_mpi_send (PNL_OBJECT(B), 1, SENDTAG, MPI_COMM_WORLD);
@@ -592,6 +585,17 @@ static void test_basis()
       res = pnl_test_basis_eq(recvB, B);
       pnl_basis_free(&recvB);
     }
+
+}
+
+static void test_basis()
+{
+  PnlBasis *B;
+  B = pnl_basis_create_from_degree (PNL_BASIS_CANONICAL, 4, 3);
+  send_and_compare_basis(B);
+  pnl_basis_free (&B);
+  B = pnl_basis_local_create_regular(10, 3);
+  send_and_compare_basis(B);
   pnl_basis_free (&B);
 }
 
