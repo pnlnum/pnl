@@ -45,7 +45,17 @@ struct _PnlBasis
   /** Extra parameters to pass to basis functions */
   void         *f_params;
   /** Size of params in bytes to be passed to malloc */
-  size_t        f_params_size; 
+  size_t        f_params_size;
+  /** Non linear mapping of the data */
+  double       (*map)(double x, int dim, void *params);
+  /** First derivative of the non linear mapping  */
+  double       (*Dmap)(double x, int dim, void *params);
+  /** Second dérivate of the linear mapping */
+  double       (*D2map)(double x, int dim, void *params);
+  /** Extra paramaters for map, Dmap and D2map */
+  void          *map_params;
+  /** Size of @p map_params in bytes to be passed to malloc */
+  size_t         map_params_size;
 };
 \end{lstlisting}
 
@@ -84,14 +94,14 @@ The two tensors \var{T} and \var{SpT} do actually store the same information ---
   \item \describefun{\PnlBasis *}{pnl_basis_create}{int index, int
       nb_func, int nb_variates}
     \sshortdescribe Create a \PnlBasis for the family
-    defined by \var{index} (see Table~\ref{basis_index} and
+    defined by \var{index} (see Table~\ref{tab:basis_index} and
     \reffun{pnl_basis_type_register}) with \var{nb_variates}
     variates. The basis will contain \var{nb_func}.
 
   \item \describefun{\PnlBasis *}{pnl_basis_create_from_degree}{int
       index, int degree, int nb_variates}
     \sshortdescribe Create a \PnlBasis for the family
-    defined by \var{index} (see Table~\ref{basis_index} and \reffun{pnl_basis_type_register}) with total degree less
+    defined by \var{index} (see Table~\ref{tab:basis_index} and \reffun{pnl_basis_type_register}) with total degree less
     or equal than \var{degree} and \var{nb_variates} variates. The total degree is
     the sum of the partial degrees.\\
     For instance, calling \verb!pnl_basis_create_from_degree(index, 2, 4)! is
@@ -118,7 +128,7 @@ The two tensors \var{T} and \var{SpT} do actually store the same information ---
     \right) \]
   \item \describefun{\PnlBasis *}{pnl_basis_create_from_prod_degree}{int index, int degree, int nb_variates}
     \sshortdescribe Create a \PnlBasis for the family
-    defined by \var{index} (see Table~\ref{basis_index} and \reffun{pnl_basis_type_register}) with total degree less
+    defined by \var{index} (see Table~\ref{tab:basis_index} and \reffun{pnl_basis_type_register}) with total degree less
     or equal than \var{degree} and \var{nb_variates} variates. The total degree is
     the product of \var{MAX(1, d_i)} where the \var{d_i} are the partial degrees.
 
@@ -133,7 +143,7 @@ The two tensors \var{T} and \var{SpT} do actually store the same information ---
   \item \describefun{\PnlBasis *}{pnl_basis_create_from_tensor}{int
       index, PnlMatInt \ptr T}
     \sshortdescribe Create a \PnlBasis for the polynomial family
-    defined by \var{index} (see Table~\ref{basis_index}) using the basis
+    defined by \var{index} (see Table~\ref{tab:basis_index}) using the basis
     described by the tensor matrix \var{T}. The number of lines of \var{T} is
     the number of functions of the basis whereas the numbers of columns of
     \var{T} is the number of variates of the functions.
@@ -160,7 +170,7 @@ The two tensors \var{T} and \var{SpT} do actually store the same information ---
   \item \describefun{void }{pnl_basis_set_from_tensor}{\PnlBasis \ptr
       b, int index, const \PnlMatInt \ptr T}
     \sshortdescribe Set an alredy existing basis \var{b} to a polynomial family
-    defined by \var{index} (see Table~\ref{basis_index}) using the basis
+    defined by \var{index} (see Table~\ref{tab:basis_index}) using the basis
     described by the tensor matrix \var{T}. The number of lines of \var{T} is
     the number of functions of the basis whereas the numbers of columns of
     \var{T} is the number of variates of the functions. \\
@@ -254,7 +264,7 @@ PNL_BASIS_CANONICAL, so the following example may look a little fake)
 \end{itemize}
 
 
-Functional regression based on a least square approach often leads to ill conditioned linear systems. One way of improving the stability of the system is to use centered and renormalised polynomials so that the original domain of interest $\cD$ (a subset of $\R^d$) is mapped to $[-1,1]^d$. If the domain $\cD$ is rectangular and writes $[a, b]$ where $a,b \in \R^d$, the mapping is done by 
+Functional regression based on a least square approach often leads to ill conditioned linear systems. One way of improving the stability of the system is to use centered and renormalized polynomials so that the original domain of interest $\cD$ (a subset of $\R^d$) is mapped to $[-1,1]^d$. If the domain $\cD$ is rectangular and writes $[a, b]$ where $a,b \in \R^d$, the \emph{reduction} mapping is done by 
 \begin{equation}
   \label{basis_reduced}
   x \in \cD \longmapsto \left(\frac{x_i - (b_i+a_i)/2}{(b_i - a_i)/2}
@@ -263,21 +273,34 @@ Functional regression based on a least square approach often leads to ill condit
 \begin{itemize}
 \item \describefun{void}{pnl_basis_set_domain}{\PnlBasis \ptr B, 
   const \PnlVect \ptr a, const \PnlVect \ptr b}
-  \sshortdescribe This function declares \var{B} as a centered and normalised basis
+  \sshortdescribe This function declares \var{B} as a centered and normalized basis
   as defined by Equation~\ref{basis_reduced}. Calling this function is equivalent to
   calling \reffun{pnl_basis_set_reduced} with \var{center=(b+a)/2} and
   \var{scale=(b-a)/2}.
 \item \describefun{void}{pnl_basis_set_reduced}{\PnlBasis \ptr B,
   const \PnlVect \ptr center, const \PnlVect \ptr scale}
-  \sshortdescribe This function declares \var{B} as a centered and normalised basis
-  using the mapping
+  \sshortdescribe This function declares \var{B} as a centered and normalized basis using the mapping
   \begin{equation*}
     x \in \cD \longmapsto \left(\frac{x_i - \var{center}_i }{\var{scale}_i}
-    \right)_{i=1,\cdots,d}
+    \right)_{i=1,\dots,d}
   \end{equation*}
+\item \describefun{void}{pnl_basis_reset_reduced}{\PnlBasis \ptr B}
+  \sshortdescribe Reset the reduction settings.
 \end{itemize}
-Note that this renormlization does not apply to the extra functions by \reffun{pnl_basis_add_function} but only to the functions defined by the tensor \var{T}.
+Note that this renormalization does not apply to the extra functions by \reffun{pnl_basis_add_function} but only to the functions defined by the tensor \var{T}.
 
+It is also possible to apply a non linear map $\varphi:\R \to \R$ to each coordinate of the input variable before the reduction operation if any. Then, the input variables are transformed according to
+\begin{equation}
+  \label{basis_non_linear_reduced}
+  x \in \cD \longmapsto \left(\frac{\varphi(x_i) - (b_i+a_i)/2}{(b_i - a_i)/2}
+  \right)_{i=1,\dots,d}
+\end{equation}
+
+
+\begin{itemize}
+\item \describefun{void}{pnl_basis_set_map}{\PnlBasis \ptr B, double (\ptr map)(double, int, void\ptr ), double (\ptr Dmap)(double, int, void\ptr ), double (\ptr D2map)(double, int, void\ptr), void \ptr params, size_t size_params}
+\sshortdescribe Define the non linear applied to the input variables before the reduction operation. The parameters \var{Dmap} and \var{D2map} can be \var{NULL}.
+\end{itemize}
 
 \begin{itemize}
 \item \describefun{int}{pnl_basis_fit_ls}{\PnlBasis \ptr
