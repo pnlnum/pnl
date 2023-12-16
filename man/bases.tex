@@ -195,7 +195,7 @@ We provide the helper function \reffun{pnl_basis_local_get_index} to compute the
   \sshortdescribe Return the linear index of the cell containing \var{x}. It is an integer between $0$ and $(\prod_{i=1}^d n_i) - 1$.
 \end{itemize}
 
-If the domain you want to consider is not ${[-1,1]}^d$, use the functions \reffun{pnl_basis_set_domain} or \reffun{pnl_basis_set_reduced} to map your product space into ${[-1,1]}^d$.
+If the domain you want to consider is not ${[-1,1]}^d$, use the functions \reffun{pnl_basis_set_domain}, \reffun{pnl_basis_set_reduced} and \reffun{pnl_basis_set_map} to map your product space into ${[-1,1]}^d$.
 
 \subsubsection{Standard multivariate functions}
 
@@ -289,23 +289,21 @@ Functional regression based on a least square approach often leads to ill condit
 \end{itemize}
 Note that this renormalization does not apply to the extra functions by \reffun{pnl_basis_add_function} but only to the functions defined by the tensor \var{T}.
 
-It is also possible to apply a non linear map $\varphi:\R \to \R$ to each coordinate of the input variable before the reduction operation if any. Then, the input variables are transformed according to
+It is also possible to apply a non linear map $\varphi_i:\R \to \R$ to the $i-$th coordinate of the input variable before the reduction operation if any. Then, the input variables are transformed according to
 \begin{equation}
   \label{basis_non_linear_reduced}
-  x \in \cD \longmapsto \left(\frac{\varphi(x_i) - (b_i+a_i)/2}{(b_i - a_i)/2}
+  x \in \cD \longmapsto \left(\frac{\varphi_i(x_i) - (b_i+a_i)/2}{(b_i - a_i)/2}
   \right)_{i=1,\dots,d}
 \end{equation}
 
 
 \begin{itemize}
-\item \describefun{void}{pnl_basis_set_map}{\PnlBasis \ptr B, double (\ptr map)(double, int, void\ptr ), double (\ptr Dmap)(double, int, void\ptr ), double (\ptr D2map)(double, int, void\ptr), void \ptr params, size_t size_params}
-\sshortdescribe Define the non linear applied to the input variables before the reduction operation. The parameters \var{Dmap} and \var{D2map} can be \var{NULL}.
+\item \describefun{void}{pnl_basis_set_map}{\PnlBasis \ptr B, double (\ptr map)(double x, int i, void\ptr params), double (\ptr Dmap)(double x, int i, void\ptr params), double (\ptr D2map)(double x, int i, void\ptr params), void \ptr params, size_t size_params}
+\sshortdescribe Define the non linear applied to the input variables before the reduction operation. The parameters \var{Dmap} and \var{D2map} can be \var{NULL}. The three functions \var{map}, \var{Dmap} and \var{D2map} take as second argument the index of the coordinate, while their third argument is used to passe extra parameters defined by \var{params}.
 \end{itemize}
 
 \begin{itemize}
-\item \describefun{int}{pnl_basis_fit_ls}{\PnlBasis \ptr
-    P, \PnlVect \ptr  coef, \PnlMat \ptr  x,
-    \PnlVect \ptr  y}
+\item \describefun{int}{pnl_basis_fit_ls}{\PnlBasis \ptr P, \PnlVect \ptr  coef, \PnlMat \ptr  x, \PnlVect \ptr  y}
   \sshortdescribe Compute the coefficients \var{coef} defined by
   \begin{equation*}
     \var{coef} = \arg\min_\alpha \sum_{i=1}^n
