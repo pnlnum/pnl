@@ -1459,13 +1459,14 @@ int pnl_basis_local_get_index(const PnlBasis *basis, const double *x)
   n_intervals_prod = 1;
   for (i = 0; i < basis->nb_variates; i++)
     {
+      double map_xi = basis->map ? basis->map(x[i], i, basis->map_params) : x[i];
       if (basis->isreduced)
         {
-          index_per_dim = (int) (((x[i] - basis->center[i]) * basis->scale[i] + 1) * n_intervals[i] / 2.);
+          index_per_dim = (int) (((map_xi - basis->center[i]) * basis->scale[i] + 1) * n_intervals[i] / 2.);
         }
       else
         {
-          index_per_dim = (int) ((x[i] + 1) * n_intervals[i] / 2.);
+          index_per_dim = (int) ((map_xi + 1) * n_intervals[i] / 2.);
         }
       if (index_per_dim < 0 || index_per_dim >= n_intervals[i])
         {
