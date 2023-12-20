@@ -5,6 +5,21 @@ All notable changes to PNL will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.14.0] - 2023-12-20
+
+### Added
+
+- Add optional non-linear mapping to the data before renormalisation in `PnlBasis` (#8)
+
+### Changed
+
+- Remove internal C translation of Blas & Lapack.
+- Improve basis memory management (#7).
+
+### Fixed
+
+- Fix packing/unpacking of `PnlBasis` objects.
+
 ## [1.13.1] - 2023-11-04
 
 ### Fixed
