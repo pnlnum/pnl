@@ -25,6 +25,7 @@
 #include "pnl/pnl_basis.h"
 #include "pnl/pnl_mathtools.h"
 #include "pnl/pnl_random.h"
+#include "pnl/pnl_cdf.h"
 
 #define DATA_DIR "Data_basis"
 #include "tests_utils.h"
@@ -200,10 +201,20 @@ static double function2d_3(double *x)
   return (x[0] * x[1]);
 }
 
+static double function2d_4(double *x)
+{
+  return exp(1 + 2 * x[0] + x[1]);
+}
+
 static double myfunction(const PnlVect *x, void *p)
 {
   double a = ((double *) p)[0];
   return log(1 + a * SQR(pnl_vect_norm_two(x)));
+}
+
+static double map(double x, int _dim, void *_p)
+{
+  return exp(x);
 }
 
 enum {ABS_ERR = 1, MEAN_ERR = 2};
@@ -246,8 +257,7 @@ static double regression_multid_aux(double(*f)(double *), PnlBasis *basis, int e
   mean = err = 0.;
   for (i = 0; i < n; i++)
     {
-      double tmp = (*f)(pnl_mat_lget(t, i, 0)) -
-                   pnl_basis_eval(basis, alpha, pnl_mat_lget(t, i, 0));
+      double tmp = (*f)(pnl_mat_lget(t, i, 0)) - pnl_basis_eval(basis, alpha, pnl_mat_lget(t, i, 0));
       mean += tmp * tmp;
       if (fabs(tmp) > err) err = fabs(tmp);
     }
@@ -318,6 +328,18 @@ static void regression_multid()
     pnl_basis_add_function(basis, &F);
     err = regression_multid_aux(function2d_2, basis, ABS_ERR);
     pnl_test_eq_abs(err, 0., 1E-5, "pnl_basis_eval (extra functions)", "log (1+x[0]*x[0] + x[1]*x[1]) + (x[0]*x[0] + x[1]*x[1]) on [-2,2]^2");
+    pnl_basis_free(&basis);
+  }
+
+  {
+    double err;
+    int basis_name = PNL_BASIS_HERMITE;
+    int nb_variates = 2; /* functions with values in R^2 */
+    int degree = 3; /* total product degree */
+    PnlBasis *basis = pnl_basis_create_from_prod_degree(basis_name, degree, nb_variates);
+    pnl_basis_set_map(basis, map, NULL, NULL, NULL, 0);
+    err = regression_multid_aux(function2d_4, basis, ABS_ERR);
+    pnl_test_eq_abs(err, 0., 1E-5, "pnl_basis_eval (map)", "exp(1 + 2 * x[0] + x[1]) on [-2,2]^2");
     pnl_basis_free(&basis);
   }
 }
@@ -411,7 +433,7 @@ static void pnl_basis_eval_test()
   pnl_rng_sseed(rng, 0);
 
   /*
-   * Random points where the function will be evaluted
+   * Random points where the function will be evaluated
    */
   pnl_vect_rng_uni(x, n, -5, 4, rng);
   pnl_vect_rng_uni(t, n, 0, 1, rng);
@@ -524,11 +546,30 @@ static void pnl_basis_eval_test()
   pnl_mat_free(&X);
 }
 
+static double piecewise_constant1d(double x, double a, double b, int n)
+{
+  if (x < a || x > b) return 0.;
+  int i = (x - a) / (b - a) * n;
+  return (double) i;
+}
+
+
+static double piecewise_constant2d(double x1, double x2, double a1, double b1, double a2, double b2, int n)
+{
+  return piecewise_constant1d(pnl_cdfnor(x1), a1, b1, n) + piecewise_constant1d(pnl_cdfnor(x2), a2, b2, n);
+}
+
+static double map_local(double x, int _dim, void *_p)
+{
+  return pnl_cdfnor(x);
+}
+
 static void local_basis_test()
 {
   int i;
   int dim = 2;
-  PnlBasis *B = pnl_basis_local_create_regular(30, dim);
+  int n_intervals = 30;
+  PnlBasis *B = pnl_basis_local_create_regular(n_intervals, dim);
   int n = 100000;
   PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
   PnlMat *x = pnl_mat_new();
@@ -540,7 +581,34 @@ static void local_basis_test()
   pnl_basis_fit_ls(B, alpha, x, y);
   for (i = 0; i < alpha->size; i++)
     {
-      pnl_test_eq_abs(GET(alpha, i), 1, 1E-6, "local_constant_regression", "");
+      if (pnl_isequal_abs(GET(alpha, i), 1, 1E-6) == PNL_FALSE)
+        {
+          pnl_test_set_fail( "local_constant_regression", GET(alpha, i), 1);
+          return;
+        }
+    }
+    if (i == alpha->size)
+      {
+        pnl_test_set_ok("local_constant_regression");
+      }
+  for (i = 0; i < x->m; i++)
+    {
+      LET(y, i) = piecewise_constant2d(MGET(x, i, 0),MGET(x, i, 1), -1, 1, -1, 1, n_intervals);
+    }
+  pnl_basis_set_map(B, map_local, NULL, NULL, NULL, 0);
+  pnl_basis_fit_ls(B, alpha, x, y);
+  for (i = 0; i < x->m; i++)
+    {
+      double evalB = pnl_basis_eval(B, alpha, pnl_mat_lget(x, i, 0));
+      if (pnl_isequal_abs(evalB, GET(y, i), 1E-6) == PNL_FALSE)
+        {
+          pnl_test_set_fail( "local_cdfnor_regression", evalB, GET(y, i));
+          return;
+        }
+    }
+  if (i == alpha->size)
+    {
+      pnl_test_set_ok("local_constant_regression");
     }
   pnl_basis_free(&B);
   pnl_vect_free(&y);
