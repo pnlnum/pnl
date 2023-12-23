@@ -37,7 +37,7 @@ class="lmmi-10x-x-109">c </span>is defined by
 class="equation-star"><tr><td>
 <div class="math-display" >
 <img 
-src="pnl-manual30x.png" alt="     N&#x2211;- 1   -ijk2&#x03C0;&#x2215;N
+src="pnl-manual31x.png" alt="     N&#x2211;- 1   -ijk2&#x03C0;&#x2215;N
 zj =     cke       ,  j = 0,&#x22C5;&#x22C5;&#x22C5; ,N - 1
      k=0
 " class="math-display"  /></div>
@@ -50,7 +50,7 @@ class="lmmi-10x-x-109">z </span>and is defined by
 class="equation-star"><tr><td>
 <div class="math-display" >
 <img 
-src="pnl-manual31x.png" alt="       N&#x2211;- 1
+src="pnl-manual32x.png" alt="       N&#x2211;- 1
 ck = -1     ckeijk2&#x03C0;&#x2215;N,  j = 0,&#x22C5;&#x22C5;&#x22C5; ,N - 1
     N  k=0
 " class="math-display"  /></div>
@@ -59,7 +59,7 @@ ck = -1     ckeijk2&#x03C0;&#x2215;N,  j = 0,&#x22C5;&#x22C5;&#x22C5; ,N - 1
 
                                                                                     
 <!--l. 14--><p class="nopar" >Note that the inverse Fourier transform is scaled by <img 
-src="pnl-manual32x.png" alt="N1"  class="frac" align="middle" />, such that the inverse Fourier transform
+src="pnl-manual33x.png" alt="N1"  class="frac" align="middle" />, such that the inverse Fourier transform
 applies to the Fourier transform just yields the original vector.
 </p><!--l. 18--><p class="noindent" >The coefficients of the Fourier transform of a real function satisfy the following relation
 </p>
@@ -67,10 +67,10 @@ applies to the Fourier transform just yields the original vector.
 class="equation"><tr><td>
 <div class="math-display" >
 <img 
-src="pnl-manual33x.png" alt="zk = zN-k,
+src="pnl-manual34x.png" alt="zk = zN-k,
 " class="math-display"  /><a 
- id="x11-114001r2"></a></div>
-</td><td class="equation-label">(2)</td></tr></table>
+ id="x11-114001r3"></a></div>
+</td><td class="equation-label">(3)</td></tr></table>
 <!--l. 23--><p class="nopar" >where <span 
 class="lmmi-10x-x-109">N </span>is the number of discretization points.
 </p><!--l. 26--><p class="noindent" >A few remarks on the FFT of real functions and its inverse transform: </p>
@@ -86,7 +86,7 @@ class="lmmi-10x-x-109">N </span>is the number of discretization points.
      <!--l. 32--><p class="noindent" >For a sequence of even length the imaginary part of the frequency <span 
 class="lmmi-10x-x-109">n&#x2215;</span><span 
 class="rm-lmr-10x-x-109">2 </span>is not stored
-     either, since the symmetry (2) implies that this is purely real too.</p></li></ul>
+     either, since the symmetry (3) implies that this is purely real too.</p></li></ul>
 <!--l. 38--><p class="noindent" ><span class="paragraphHead"><a 
  id="x11-115000"></a><span 
 class="ec-lmbx-10x-x-109">FFTPack storage</span></span>
@@ -115,14 +115,14 @@ imaginary parts set to 0),
 class="equation"><tr><td>
 <div class="math-display" >
 <img 
-src="pnl-manual34x.png" alt="C(0) = V(0) + i0,
+src="pnl-manual35x.png" alt="C(0) = V(0) + i0,
 C(1) = V(1) + iV (2),
 C(2) = V(3) + iV (4), -----
 C(3) = V(3) - iV (4) = C-(2),
 C(4) = V(1) + iV (2) = C (1)
 " class="math-display"  /><a 
- id="x11-115001r3"></a></div>
-</td><td class="equation-label">(3)</td></tr></table>
+ id="x11-115001r4"></a></div>
+</td><td class="equation-label">(4)</td></tr></table>
 <!--l. 60--><p class="nopar" >
 </p><!--l. 62--><p class="noindent" >The elements of index greater than <span 
 class="lmmi-10x-x-109">N&#x2215;</span><span 
@@ -141,7 +141,7 @@ values which are purely real,
 class="equation"><tr><td>
 <div class="math-display" >
 <img 
-src="pnl-manual35x.png" alt="C(0) = V(0) + i0,
+src="pnl-manual36x.png" alt="C(0) = V(0) + i0,
 C(1) = V(1) + iV (2),
 
 C(2) = V(3) + iV (4),---
@@ -149,8 +149,8 @@ C(3) = V(5) - i0 = C (0),---
 C(4) = V(3) - iV (4) = C-(2),
 C(5) = V(1) + iV (2) = C (1)
 " class="math-display"  /><a 
- id="x11-115002r4"></a></div>
-</td><td class="equation-label">(4)</td></tr></table>
+ id="x11-115002r5"></a></div>
+</td><td class="equation-label">(5)</td></tr></table>
 <!--l. 76--><p class="nopar" >
 </p><!--l. 79--><p class="noindent" >
 </p>
