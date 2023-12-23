@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- Add optional non-linear mapping to the data before renormalisation in `PnlBasis` (#8)
+- Apply optional non-linear pre-treatment to the data before renormalisation in `PnlBasis` (#8).
 
 ### Changed
 
@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-- `pnl_mat_fprint` was printing to `stdout` instead of the file descriptor
+- `pnl_mat_fprint` was printing to `stdout` instead of the file descriptor.
 
 ## [1.13.0] - 2023-11-04
 
@@ -57,7 +57,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-- The macros `RETRIEVE` and `CREATE` are prefix with `PNL_RAND`. This is a breaking change.
+- The macros `RETRIEVE` and `CREATE` are prefixed with `PNL_RAND`. This is a breaking change.
 - Add `PNL_` prefix to `FALSE`, `TRUE`, `OK` and `FAIL`. This is a breaking change.
 
 ### Added
