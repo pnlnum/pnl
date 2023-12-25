@@ -87,8 +87,7 @@ static int psize = 0;
 /* Initialize max degree of polynomials
  * and allocate temporary storage.
  */
-void polini( maxdeg )
-     int maxdeg;
+void polini(int maxdeg)
 {
 
   MAXPOL = maxdeg;
@@ -121,9 +120,7 @@ void polini( maxdeg )
  */
 static char *form = "abcdefghijk";
 
-void polprt( a, na, d )
-     double a[];
-     int na, d;
+void polprt(double a[], int na, int d)
 {
   int i, j, d1;
   char *p;
@@ -171,9 +168,7 @@ void polprt( a, na, d )
 
 /* Set a = 0.
  */
-void polclr( a, n )
-     register double *a;
-     int n;
+void polclr( double *a, int n )
 {
   int i;
 
@@ -187,9 +182,7 @@ void polclr( a, n )
 
 /* Set b = a.
  */
-void polmov( a, na, b )
-     register double *a, *b;
-     int na;
+void polmov(double *a, int na, double *b)
 {
   int i;
 
@@ -205,9 +198,7 @@ void polmov( a, na, b )
 
 /* c = b * a.
  */
-void polmul( a, na, b, nb, c )
-     double a[], b[], c[];
-     int na, nb;
+void polmul(double a[], int na, double b[], int nb, double c[])
 {
   int i, j, k, nc;
   double x;
@@ -238,9 +229,7 @@ void polmul( a, na, b, nb, c )
  
 /* c = b + a.
  */
-void poladd( a, na, b, nb, c )
-     double a[], b[], c[];
-     int na, nb;
+void poladd( double a[], int na, double b[], int nb, double c[] )
 {
   int i, n;
 
@@ -266,9 +255,7 @@ void poladd( a, na, b, nb, c )
 
 /* c = b - a.
  */
-void polsub( a, na, b, nb, c )
-     double a[], b[], c[];
-     int na, nb;
+void polsub(double a[], int na, double b[], int nb, double c[] )
 {
   int i, n;
 
@@ -296,9 +283,7 @@ void polsub( a, na, b, nb, c )
 
 /* c = b/a
  */
-int poldiv( a, na, b, nb, c )
-     double a[], b[], c[];
-     int na, nb;
+int poldiv(double a[], int na, double b[], int nb, double c[])
 {
   double quot;
   double *ta, *tb, *tq;
@@ -394,9 +379,7 @@ int poldiv( a, na, b, nb, c )
  * c(x) = b(x) = b(a(y)).
  */
 
-void polsbt( a, na, b, nb, c )
-     double a[], b[], c[];
-     int na, nb;
+void polsbt(double a[], int na, double b[], int nb, double c[])
 {
   int i, j, k, n2;
   double x;
@@ -437,10 +420,7 @@ void polsbt( a, na, b, nb, c )
 
 /* Evaluate polynomial a(t) at t = x.
  */
-double poleva( a, na, x )
-     double a[];
-     int na;
-     double x;
+double poleva(double a[], int na, double x)
 {
   double s;
   int i;

@@ -76,8 +76,7 @@ static double hy1f1p(double, double, double, double *);
 static double hy1f1a(double, double, double, double *);
 double hyperg (double, double, double);
 
-double hyperg( a, b, x)
-     double a, b, x;
+double hyperg(double a, double b, double x)
 {
   double asum, psum, acanc, pcanc, temp;
 
@@ -124,9 +123,7 @@ double hyperg( a, b, x)
 /* Power series summation for confluent hypergeometric function         */
 
 
-static double hy1f1p( a, b, x, err )
-     double a, b, x;
-     double *err;
+static double hy1f1p( double a, double b, double x, double *err )
 {
   double n, a0, sum, t, u, temp, maxn;
   double an, bn, maxt;
@@ -220,9 +217,7 @@ static double hy1f1p( a, b, x, err )
  *                               |  (a)                        )
  */
 
-static double hy1f1a( a, b, x, err )
-     double a, b, x;
-     double *err;
+static double hy1f1a( double a, double b, double x, double *err )
 {
   double h1, h2, t, u, temp, acanc, asum, err1, err2;
 
@@ -297,10 +292,8 @@ static double hy1f1a( a, b, x, err )
 
 /*                                                      hyp2f0()        */
 
-double hyp2f0( a, b, x, type, err )
-     double a, b, x;
-     int type;       /* determines what converging factor to use */
-     double *err;
+double hyp2f0( double a, double b, double x, int type, double *err )
+/* type: determines what converging factor to use */
 {
   double a0, alast, t, tlast, maxt;
   double n, an, bn, u, sum, temp;

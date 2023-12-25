@@ -46,9 +46,7 @@ double psqrt[N+1] = {
 /* Arctangent of the ratio num/den of two polynomials.
  */
 void
-polatn( num, den, ans, nn )
-     double num[], den[], ans[];
-     int nn;
+polatn(double num[],double den[],double ans[], int nn)
 {
   double a, t;
   double *polq, *polu, *polt;
@@ -99,9 +97,7 @@ polatn( num, den, ans, nn )
  * if the Newton iteration does not converge.
  */
 void
-polsqt( pol, ans, nn )
-     double pol[], ans[];
-     int nn;
+polsqt(double pol[],double ans[], int nn)
 {
   double t;
   double *x, *y;
@@ -201,9 +197,7 @@ polsqt( pol, ans, nn )
  * the value of b should be small.
  */
 void
-polsin( x, y, nn )
-     double x[], y[];
-     int nn;
+polsin(double x[],double y[], int nn)
 {
   double a, sc;
   double *w, *c;
@@ -249,9 +243,7 @@ polsin( x, y, nn )
  * the value of b should be small.
  */
 void
-polcos( x, y, nn )
-     double x[], y[];
-     int nn;
+polcos(double x[],double y[], int nn)
 {
   double a, sc;
   double *w, *c;
