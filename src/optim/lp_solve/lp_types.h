@@ -90,6 +90,8 @@
 #define AUTOMATIC                2
 #define DYNAMIC                  4
 
+#define PRECISION                4
+
 /* Sorting and comparison constants */
 #define COMP_PREFERCANDIDATE     1
 #define COMP_PREFERNONE          0

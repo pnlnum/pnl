@@ -222,6 +222,7 @@ static struct _values print_sol[] =
   { FALSE, "0" },
   { TRUE,  "1" },
   { setvalue(AUTOMATIC) },
+  { setvalue(PRECISION) },
 };
 
 static struct _values scaling[] =

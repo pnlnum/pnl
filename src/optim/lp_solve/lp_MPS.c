@@ -1172,7 +1172,7 @@ MYBOOL __WINAPI MPS_readex(lprec **newlp, void *userhandle, read_modeldata_func 
   return( CompleteStatus );
 }
 
-static void number(char *str,REAL value)
+static void number(char *str,REAL value,int l)
  {
   char __str[80], *_str;
   int  i;
@@ -1181,34 +1181,34 @@ static void number(char *str,REAL value)
   _str=__str+2;
   if (value>=0.0)
    if ((value!=0.0) && ((value>0.99999999e12) || (value<0.0001))) {
-    int n=15;
+    int n=l+3;
 
     do {
      n--;
-     i=sprintf(_str,"%*.*E",n,n-6,(double) value);
-     if (i>12) {
+     i=sprintf(_str,"%*.*E",n,n-(l-6),(double) value);
+     if (i>l) {
       char *ptr=strchr(_str,'E');
 
       if (ptr!=NULL) {
        if (*(++ptr)=='-') ptr++;
-       while ((i>12) && ((*ptr=='+') || (*ptr=='0'))) {
+       while ((i>l) && ((*ptr=='+') || (*ptr=='0'))) {
         strcpy(ptr,ptr+1);
         i--;
        }
       }
      }
-    } while (i>12);
+    } while (i>l);
    }
    else if (value>=1.0e10) {
-    int n=13;
+    int n=l+1;
 
     do {
      i=sprintf(_str,"%*.0f",--n,(double) value);
-    } while (i>12);
+    } while (i>l);
    }
    else {
-    if (((i=sprintf(_str,"%12.10f",(double) value))>12) && (_str[12]>='5')) {
-     for (i=11;i>=0;i--)
+    if (((i=sprintf(_str,"%*.*f",l,l-2,(double) value))>l) && (_str[l]>='5')) {
+     for (i=l-1;i>=0;i--)
       if (_str[i]!='.') {
        if (++_str[i]>'9') _str[i]='0';
        else break;
@@ -1221,34 +1221,34 @@ static void number(char *str,REAL value)
    }
   else
    if ((value<-0.99999999e11) || (value>-0.0001)) {
-    int n=15;
+    int n=l+3;
 
     do {
      n--;
-     i=sprintf(_str,"%*.*E",n,n-7,(double) value);
-     if (i>12) {
+     i=sprintf(_str,"%*.*E",n,n-(l-5),(double) value);
+     if (i>l) {
       char *ptr=strchr(_str,'E');
 
       if (ptr!=NULL) {
        if (*(++ptr)=='-') ptr++;
-       while ((i>12) && ((*ptr=='+') || (*ptr=='0'))) {
+       while ((i>l) && ((*ptr=='+') || (*ptr=='0'))) {
         strcpy(ptr,ptr+1);
         i--;
        }
       }
      }
-    } while (i>12);
+    } while (i>l);
    }
    else if (value<=-1.0e9) {
-    int n=13;
+    int n=l+1;
 
     do {
      i=sprintf(_str,"%*.0f",--n,(double) value);
-    } while (i>12);
+    } while (i>l);
    }
    else
-    if (((i=sprintf(_str,"%12.9f",(double) value))>12) && (_str[12]>='5')) {
-     for (i=11;i>=1;i--)
+    if (((i=sprintf(_str,"%*.*f",l,l-3,(double) value))>l) && (_str[l]>='5')) {
+     for (i=l-1;i>=1;i--)
       if (_str[i]!='.') {
        if (++_str[i]>'9') _str[i]='0';
        else break;
@@ -1259,15 +1259,15 @@ static void number(char *str,REAL value)
       *(--_str)=' ';
      }
     }
-  strncpy(str,_str,12);
+  strncpy(str,_str,l);
  }
 
-static char *formatnumber12(char *numberbuffer, double a)
+static char *formatnumber(char *numberbuffer, double a, int l)
 {
 #if 0
   return(sprintf(numberbuffer, "%12g", a));
 #else
-  number(numberbuffer, a);
+  number(numberbuffer, a, l);
   return(numberbuffer);
 #endif
 }
@@ -1299,11 +1299,11 @@ static void write_data(void *userhandle, write_modeldata_func write_modeldata, c
 
 MYBOOL __WINAPI MPS_writefileex(lprec *lp, int typeMPS, void *userhandle, write_modeldata_func write_modeldata)
 {
-  int    i, j, jj, je, k, marker, putheader, ChangeSignObj = FALSE, *idx, *idx1;
+  int    i, j, jj, je, k, marker, putheader, ChangeSignObj = FALSE, *idx, *idx1, l = 12;
   MYBOOL ok = TRUE, names_used;
   REAL   a, *val, *val1;
   char * (*MPSname)(char *name0, char *name);
-  char numberbuffer[15];
+  char numberbuffer[20];
   char name0[9];
 
   if((typeMPS & MPSFIXED) == MPSFIXED) {
@@ -1330,6 +1330,9 @@ MYBOOL __WINAPI MPS_writefileex(lprec *lp, int typeMPS, void *userhandle, write_
       if(strncmp(lp->col_name[i]->name, lp->col_name[j]->name, 8) == 0)
         ok = FALSE;
   }
+  else
+    if((typeMPS & MPSFREEFULLPRECISION) == MPSFREEFULLPRECISION)
+      l = 15;
 
   if(!ok) {
     lp->names_used = FALSE;
@@ -1400,14 +1403,12 @@ MYBOOL __WINAPI MPS_writefileex(lprec *lp, int typeMPS, void *userhandle, write_
                           MPSname(name0, get_col_name(lp, i)));
           write_data(userhandle, write_modeldata, "  %s  %s",
                           MPSname(name0, get_row_name(lp, j)),
-/*                          formatnumber12(numberbuffer, (double) a)); */
-                          formatnumber12(numberbuffer, (double) (a * (j == 0 && ChangeSignObj ? -1 : 1))));
+                          formatnumber(numberbuffer, (double) (a * (j == 0 && ChangeSignObj ? -1 : 1)), l));
     }
         else
           write_data(userhandle, write_modeldata, "   %s  %s\n",
                           MPSname(name0, get_row_name(lp, j)),
-                          formatnumber12(numberbuffer, (double) (a * (j == 0 && ChangeSignObj ? -1 : 1))));
-/*                          formatnumber12(numberbuffer, (double) a)); */
+                          formatnumber(numberbuffer, (double) (a * (j == 0 && ChangeSignObj ? -1 : 1)), l));
       }
       if(k == 0)
         write_data(userhandle, write_modeldata, "\n");
@@ -1434,11 +1435,11 @@ MYBOOL __WINAPI MPS_writefileex(lprec *lp, int typeMPS, void *userhandle, write_
       if(k == 0)
         write_data(userhandle, write_modeldata, "    RHS       %s  %s",
                         MPSname(name0, get_row_name(lp, i)),
-                        formatnumber12(numberbuffer, (double)a));
+                        formatnumber(numberbuffer, (double)a, l));
       else
         write_data(userhandle, write_modeldata, "   %s  %s\n",
                         MPSname(name0, get_row_name(lp, i)),
-                        formatnumber12(numberbuffer, (double)a));
+                        formatnumber(numberbuffer, (double)a, l));
     }
   }
   if(k == 0)
@@ -1459,11 +1460,11 @@ MYBOOL __WINAPI MPS_writefileex(lprec *lp, int typeMPS, void *userhandle, write_
       if(k == 0)
         write_data(userhandle, write_modeldata, "    RGS       %s  %s",
                         MPSname(name0, get_row_name(lp, i)),
-                        formatnumber12(numberbuffer, (double)a));
+                        formatnumber(numberbuffer, (double)a, l));
       else
         write_data(userhandle, write_modeldata, "   %s  %s\n",
                         MPSname(name0, get_row_name(lp, i)),
-                        formatnumber12(numberbuffer, (double)a));
+                        formatnumber(numberbuffer, (double)a, l));
     }
   }
   if(k == 0)
@@ -1474,7 +1475,8 @@ MYBOOL __WINAPI MPS_writefileex(lprec *lp, int typeMPS, void *userhandle, write_
     if(!is_splitvar(lp, i - lp->rows)) {
       j = i - lp->rows;
       if((lp->orig_lowbo[i] != 0) && (lp->orig_upbo[i] < lp->infinite) &&
-         (lp->orig_lowbo[i] == lp->orig_upbo[i])) {
+         (lp->orig_lowbo[i] == lp->orig_upbo[i]) &&
+         (!is_semicont(lp, j))) {
         a = lp->orig_upbo[i];
         a = unscaled_value(lp, a, i);
         if(putheader) {
@@ -1483,7 +1485,7 @@ MYBOOL __WINAPI MPS_writefileex(lprec *lp, int typeMPS, void *userhandle, write_
         }
         write_data(userhandle, write_modeldata, " FX BND       %s  %s\n",
                         MPSname(name0, get_col_name(lp, j)),
-                        formatnumber12(numberbuffer, (double)a));
+                        formatnumber(numberbuffer, (double)a, l));
       }
       else if(is_binary(lp, j)) {
         if(putheader) {
@@ -1502,7 +1504,15 @@ MYBOOL __WINAPI MPS_writefileex(lprec *lp, int typeMPS, void *userhandle, write_
                         MPSname(name0, get_col_name(lp, j)));
       }
       else {
-        if((lp->orig_lowbo[i] != 0) || (is_int(lp, j))) { /* Some solvers like CPLEX need to have a bound on a variable if it is integer, but not binary else it is interpreted as binary which is not ment */
+       int k1 = 1;
+       int k2 = 2;
+       
+       if(((typeMPS & MPSLINDO) == MPSLINDO) && (is_semicont(lp, j))) {
+         k1 = 2;
+         k2 = 1;
+       }
+       for (k = k1; k >= 1 && k <= 2; k += k2 - k1)
+        if((k == 1) && ((lp->orig_lowbo[i] != 0) || (is_int(lp, j)))) { /* Some solvers like CPLEX need to have a bound on a variable if it is integer, but not binary else it is interpreted as binary which is not ment */
           a = lp->orig_lowbo[i];
           a = unscaled_value(lp, a, i);
           if(putheader) {
@@ -1512,13 +1522,12 @@ MYBOOL __WINAPI MPS_writefileex(lprec *lp, int typeMPS, void *userhandle, write_
           if(lp->orig_lowbo[i] != -lp->infinite)
             write_data(userhandle, write_modeldata, " LO BND       %s  %s\n",
                             MPSname(name0, get_col_name(lp, j)),
-                            formatnumber12(numberbuffer, (double)a));
+                            formatnumber(numberbuffer, (double)a, l));
           else
             write_data(userhandle, write_modeldata, " MI BND       %s\n",
                             MPSname(name0, get_col_name(lp, j)));
         }
-
-        if((lp->orig_upbo[i] < lp->infinite) || (is_semicont(lp, j))) {
+        else if((k == 2) && ((lp->orig_upbo[i] < lp->infinite) || (is_semicont(lp, j)))) {
           a = lp->orig_upbo[i];
           if(a < lp->infinite)
             a = unscaled_value(lp, a, i);
@@ -1530,16 +1539,16 @@ MYBOOL __WINAPI MPS_writefileex(lprec *lp, int typeMPS, void *userhandle, write_
             if(is_int(lp, j))
               write_data(userhandle, write_modeldata, " SI BND       %s  %s\n",
                               MPSname(name0, get_col_name(lp, j)),
-                  (a < lp->infinite) ? formatnumber12(numberbuffer, (double)a) : "            ");
+                  (a < lp->infinite) ? formatnumber(numberbuffer, (double)a, l) : "            ");
             else
               write_data(userhandle, write_modeldata, " SC BND       %s  %s\n",
                               MPSname(name0, get_col_name(lp, j)),
-                              (a < lp->infinite) ? formatnumber12(numberbuffer, (double)a) : "            ");
+                              (a < lp->infinite) ? formatnumber(numberbuffer, (double)a, l) : "            ");
           }
           else
             write_data(userhandle, write_modeldata, " UP BND       %s  %s\n",
                             MPSname(name0, get_col_name(lp, j)),
-                            formatnumber12(numberbuffer, (double)a));
+                            formatnumber(numberbuffer, (double)a, l));
         }
       }
     }
@@ -1556,11 +1565,11 @@ MYBOOL __WINAPI MPS_writefileex(lprec *lp, int typeMPS, void *userhandle, write_
     write_data(userhandle, write_modeldata, " S%1d SOS       %s  %s\n",
                     SOS->sos_list[i]->type,
                     MPSname(name0, SOS->sos_list[i]->name),
-                    formatnumber12(numberbuffer, (double) SOS->sos_list[i]->priority));
+                    formatnumber(numberbuffer, (double) SOS->sos_list[i]->priority, l));
     for(j = 1; j <= SOS->sos_list[i]->size; j++) {
       write_data(userhandle, write_modeldata, "    SOS       %s  %s\n",
                       MPSname(name0, get_col_name(lp, SOS->sos_list[i]->members[j])),
-                      formatnumber12(numberbuffer, (double) SOS->sos_list[i]->weights[j]));
+                      formatnumber(numberbuffer, (double) SOS->sos_list[i]->weights[j], l));
     }
   }
 

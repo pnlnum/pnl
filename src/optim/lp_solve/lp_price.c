@@ -14,8 +14,6 @@
 # include "lp_fortify.h"
 #endif
 
-INLINE REAL normalizeEdge(lprec *lp, int item, REAL edge, MYBOOL isdual);
-
 /* Simplex pricing utility module - w/interface for lp_solve v5.0+
    -------------------------------------------------------------------------
     Author:        Kjell Eikland

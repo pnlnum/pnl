@@ -565,7 +565,7 @@ STATIC int primloop(lprec *lp, MYBOOL primalfeasible, REAL primaloffset)
   MYBOOL primal = TRUE, bfpfinal = FALSE, changedphase = FALSE, forceoutEQ = AUTOMATIC,
          primalphase1, pricerCanChange, minit, stallaccept, pendingunbounded;
   int    i, j, k, colnr = 0, rownr = 0, lastnr = 0,
-         candidatecount = 0, minitcount = 0, ok = TRUE;
+         candidatecount = 0, minitcount = 0, ok = TRUE, forceoutEQcount = 0;
   LREAL  theta = 0.0;
   REAL   epsvalue, xviolated = 0.0, cviolated = 0.0,
          *prow = NULL, *pcol = NULL,
@@ -733,6 +733,11 @@ RetryCol:
 #ifdef AcceptMarginalAccuracy
       /* Check for marginal accuracy */
       if((rownr > 0) && (xviolated+cviolated < lp->epspivot)) {
+	if (forceoutEQ == TRUE && (++forceoutEQcount) < 5)
+	{
+	  forceoutEQ = AUTOMATIC;
+	  continue;
+	}
         if(lp->bb_trace || (lp->bb_totalnodes == 0))
           report(lp, DETAILED, "primloop: Assuming convergence with reduced accuracy %g.\n",
                                MAX(xviolated, cviolated));
@@ -987,7 +992,7 @@ STATIC int dualloop(lprec *lp, MYBOOL dualfeasible, int dualinfeasibles[], REAL 
          pricerCanChange, minit, stallaccept, longsteps,
          forceoutEQ = FALSE, bfpfinal = FALSE;
   int    i, colnr = 0, rownr = 0, lastnr = 0,
-         candidatecount = 0, minitcount = 0,
+         candidatecount = 0, minitcount = 0, forceoutEQcount = 0,
 #ifdef FixInaccurateDualMinit
          minitcolnr = 0,
 #endif
@@ -1154,6 +1159,11 @@ RetryRow:
       }
 #ifdef AcceptMarginalAccuracy
       else if(xviolated+cviolated < lp->epspivot) {
+ 	if (forceoutEQ == TRUE && (++forceoutEQcount) < 5)
+ 	{
+ 	  forceoutEQ = AUTOMATIC;
+ 	  continue;
+ 	}
         if(lp->bb_trace || (lp->bb_totalnodes == 0))
           report(lp, DETAILED, "dualloop: Assuming convergence with reduced accuracy %g.\n",
                                MAX(xviolated, cviolated));

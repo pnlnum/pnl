@@ -44,70 +44,6 @@
 # include "lp_fortify.h"
 #endif
 
-INLINE int presolve_rowlength(presolverec *psdata, int rownr)
-{
-  int *items = psdata->rows->next[rownr];
-
-  if(items == NULL)
-    return( 0 );
-  else
-    return( items[0] );
-}
-INLINE int presolve_collength(presolverec *psdata, int colnr)
-{
-  int *items = psdata->cols->next[colnr];
-  if(items == NULL)
-    return( 0 );
-  else
-    return( items[0] );
-}
-
-INLINE int presolve_nextrecord(psrec *ps, int recnr, int *previtem)
-{
-  int *nzlist = ps->next[recnr], nzcount = nzlist[0], status = -1;
-
-  /* Check if we simply wish the last active column */
-  if(previtem == NULL) {
-    if(nzlist != NULL)
-      status = nzlist[*nzlist];
-    return( status );
-  }
-
-  /* Step to next */
-#ifdef Paranoia
-  else if((*previtem < 0) || (*previtem > nzcount))
-    return( status );
-#endif
-  (*previtem)++;
-
-  /* Set the return values */
-  if(*previtem > nzcount)
-    (*previtem) = 0;
-  else
-    status = nzlist[*previtem];
-
-  return( status );
-}
-
-
-INLINE int presolve_nextcol(presolverec *psdata, int rownr, int *previtem)
-/* Find the first active (non-eliminated) nonzero column in rownr after prevcol */
-{
-  return( presolve_nextrecord(psdata->rows, rownr, previtem) );
-}
-INLINE int presolve_lastcol(presolverec *psdata, int rownr)
-{
-  return( presolve_nextrecord(psdata->rows, rownr, NULL) );
-}
-INLINE int presolve_nextrow(presolverec *psdata, int colnr, int *previtem)
-/* Find the first active (non-eliminated) nonzero row in colnr after prevrow */
-{
-  return( presolve_nextrecord(psdata->cols, colnr, previtem) );
-}
-INLINE int presolve_lastrow(presolverec *psdata, int colnr)
-{
-  return( presolve_nextrecord(psdata->cols, colnr, NULL) );
-}
 
 #define presolve_setstatus(one, two)  presolve_setstatusex(one, two, __LINE__, __FILE__)
 STATIC int presolve_setstatusex(presolverec *psdata, int status, int lineno, char *filename)
@@ -405,7 +341,7 @@ STATIC MYBOOL presolve_SOScheck(presolverec *psdata)
 /* Presolve routines for tightening the model                                    */
 /* ----------------------------------------------------------------------------- */
 
-REAL presolve_roundrhs(lprec *lp, REAL value, MYBOOL isGE)
+INLINE REAL presolve_roundrhs(lprec *lp, REAL value, MYBOOL isGE)
 {
 #ifdef DoPresolveRounding
   REAL eps = PRESOLVE_EPSVALUE*1000,
@@ -438,7 +374,7 @@ INLINE REAL presolve_roundval(lprec *lp, REAL value)
   return( value );
 }
 
-/* INLINE MYBOOL presolve_mustupdate(lprec *lp, int colnr)
+INLINE MYBOOL presolve_mustupdate(lprec *lp, int colnr)
 {
 #if 0
   return( my_infinite(lp, get_lowbo(lp, colnr)) ||
@@ -447,7 +383,7 @@ INLINE REAL presolve_roundval(lprec *lp, REAL value)
   return( my_infinite(lp, lp->orig_lowbo[lp->rows+colnr]) ||
           my_infinite(lp, lp->orig_upbo[lp->rows+colnr]) );
 #endif
-} */
+}
 
 INLINE REAL presolve_sumplumin(lprec *lp, int item, psrec *ps, MYBOOL doUpper)
 {
@@ -782,6 +718,51 @@ STATIC int presolve_rowlengthdebug(presolverec *psdata)
     rownr = nextActiveLink(psdata->rows->varmap, rownr))
     n += presolve_rowlengthex(psdata, rownr);
   return( n );
+}
+
+INLINE int presolve_nextrecord(psrec *ps, int recnr, int *previtem)
+{
+  int *nzlist = ps->next[recnr], nzcount = nzlist[0], status = -1;
+
+  /* Check if we simply wish the last active column */
+  if(previtem == NULL) {
+    if(nzlist != NULL)
+      status = nzlist[*nzlist];
+    return( status );
+  }
+
+  /* Step to next */
+#ifdef Paranoia
+  else if((*previtem < 0) || (*previtem > nzcount))
+    return( status );
+#endif
+  (*previtem)++;
+
+  /* Set the return values */
+  if(*previtem > nzcount)
+    (*previtem) = 0;
+  else
+    status = nzlist[*previtem];
+
+  return( status );
+}
+INLINE int presolve_nextcol(presolverec *psdata, int rownr, int *previtem)
+/* Find the first active (non-eliminated) nonzero column in rownr after prevcol */
+{
+  return( presolve_nextrecord(psdata->rows, rownr, previtem) );
+}
+INLINE int presolve_lastcol(presolverec *psdata, int rownr)
+{
+  return( presolve_nextrecord(psdata->rows, rownr, NULL) );
+}
+INLINE int presolve_nextrow(presolverec *psdata, int colnr, int *previtem)
+/* Find the first active (non-eliminated) nonzero row in colnr after prevrow */
+{
+  return( presolve_nextrecord(psdata->cols, colnr, previtem) );
+}
+INLINE int presolve_lastrow(presolverec *psdata, int colnr)
+{
+  return( presolve_nextrecord(psdata->cols, colnr, NULL) );
 }
 
 INLINE void presolve_adjustrhs(presolverec *psdata, int rownr, REAL fixdelta, REAL epsvalue)
@@ -5329,7 +5310,7 @@ STATIC int presolve_rows(presolverec *psdata, int *nCoeffChanged, int *nConRemov
           if((Value1 != 0) && deleteSOS) {
             if(!presolve_fixSOS1(psdata, j, Value1, &iConRemove, &iVarFixed))
               status = presolve_setstatus(psdata, INFEASIBLE);
-            psdata->forceupdate = TRUE;
+              psdata->forceupdate = TRUE;
           }
           else {
             if(!presolve_colfix(psdata, j, Value1, (MYBOOL) !isSOS, NULL))

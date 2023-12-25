@@ -11,6 +11,7 @@ extern "C" {
 
 /* Price norm management routines */
 STATIC MYBOOL initPricer(lprec *lp);
+INLINE MYBOOL applyPricer(lprec *lp);
 STATIC void simplexPricer(lprec *lp, MYBOOL isdual);
 STATIC void freePricer(lprec *lp);
 STATIC MYBOOL resizePricer(lprec *lp);

@@ -87,7 +87,6 @@
 #endif
 
 #define sensrejvar TRUE
-#include "pnl/pnl_mathtools.h"
 
 /* Return lp_solve version information */
 void __WINAPI lp_solve_version(int *majorversion, int *minorversion, int *release, int *build)
@@ -448,6 +447,9 @@ int __WINAPI solve(lprec *lp)
 #if defined FPUexception
   catchFPU(_EM_INVALID | _EM_ZERODIVIDE | _EM_OVERFLOW | _EM_UNDERFLOW);
 #endif
+
+
+//write_lp(lp, "c:\\temp\\lpsolve.lp");
 
   if(has_BFP(lp)) {
     lp->solvecount++;
@@ -1252,13 +1254,13 @@ MYBOOL __WINAPI get_ptr_sensitivity_objex(lprec *lp, REAL **objfrom, REAL **objt
   }
 
   if((objfromvalue != NULL) /* || (objtillvalue != NULL) */) {
-    if(lp->objfromvalue == NULL) /* || (lp->objtillvalue == NULL) */ {
+    if((lp->objfromvalue == NULL) /* || (lp->objtillvalue == NULL) */) {
       if((MIP_count(lp) > 0) && (lp->bb_totalnodes > 0)) {
         report(lp, CRITICAL, "get_ptr_sensitivity_objex: Sensitivity unknown\n");
         return(FALSE);
       }
       construct_sensitivity_duals(lp);
-      if(lp->objfromvalue == NULL) /* || (lp->objtillvalue == NULL) */
+      if((lp->objfromvalue == NULL) /* || (lp->objtillvalue == NULL) */)
         return(FALSE);
     }
   }
@@ -1349,6 +1351,7 @@ char * __WINAPI get_statustext(lprec *lp, int statuscode)
   else if (statuscode == USERABORT)    return("User-requested termination");
   else if (statuscode == TIMEOUT)      return("Termination due to timeout");
   else if (statuscode == PRESOLVED)    return("Model solved by presolve");
+  else if (statuscode == ACCURACYERROR) return("Accuracy errors detected");
   else if (statuscode == PROCFAIL)     return("B&B routine failed");
   else if (statuscode == PROCBREAK)    return("B&B routine terminated");
   else if (statuscode == FEASFOUND)    return("Feasible B&B solution found");
@@ -2725,8 +2728,8 @@ STATIC MYBOOL inc_rowcol_space(lprec *lp, int delta, MYBOOL isrows)
      !allocREAL(lp, &lp->orig_upbo, rowcolsum, AUTOMATIC) ||
      !allocREAL(lp, &lp->lowbo, rowcolsum, AUTOMATIC) ||
      !allocREAL(lp, &lp->orig_lowbo, rowcolsum, AUTOMATIC) ||
-     !allocREAL(lp, &lp->solution, rowcolsum, AUTOMATIC) ||
-     !allocREAL(lp, &lp->best_solution, rowcolsum, AUTOMATIC) ||
+     !allocREAL(lp, &lp->solution, rowcolsum, AUTOMATIC | TRUE) ||
+     !allocREAL(lp, &lp->best_solution, rowcolsum, AUTOMATIC | TRUE) ||
      !allocMYBOOL(lp, &lp->is_basic, rowcolsum, AUTOMATIC) ||
      !allocMYBOOL(lp, &lp->is_lower, rowcolsum, AUTOMATIC) ||
      ((lp->scalars != NULL) && !allocREAL(lp, &lp->scalars, rowcolsum, AUTOMATIC)))
@@ -6841,7 +6844,7 @@ STATIC REAL MIP_stepOF(lprec *lp)
     /* Check non-ints in the OF to see if we can get more info */
     if(realcount > 0) {
       int niv = 0;            /* Number of real variables identified as integer */
-      /* int nrows = lp->rows; */
+      int nrows = lp->rows;
       REAL    rowdelta;
 
       OFdelta = lp->infinite;
@@ -7609,7 +7612,7 @@ STATIC MYBOOL is_sc_violated(lprec *lp, int column)
 {
   int  varno;
   REAL tmpreal;
-  REAL eps = lp->epsvalue;                                    /* ÃŸ adding eps here*/
+  REAL eps = lp->epsvalue;                                    /* ß adding eps here*/
 
   varno = lp->rows+column;
   tmpreal = unscaled_value(lp, lp->sc_lobound[column], varno);
@@ -8131,7 +8134,7 @@ STATIC void update_pseudocost(BBPSrec *pc, int mipvar, int varcode, MYBOOL capup
   else
     OFsol = pc->lp->solution[0];              /* The problem's objective function value */
 
-  if(pnl_isnan(varsol)) {
+  if(isnan(varsol)) {
     pc->lp->bb_parentOF = OFsol;
     return;
   }
@@ -8190,7 +8193,7 @@ STATIC REAL get_pseudonodecost(BBPSrec *pc, int mipvar, int vartype, REAL varsol
 
   uplim = get_pseudorange(pc, mipvar, vartype);
   varsol = modf(varsol/uplim, &hold);
-  if(pnl_isnan(varsol))
+  if(isnan(varsol))
     varsol = 0;
 
   hold = pc->LOcost[mipvar].value*varsol +
@@ -8944,7 +8947,7 @@ STATIC int check_solution(lprec *lp, int  lastcolumn, REAL *solution,
 /*#define UseMaxValueInCheck*/
 #define RelativeAccuracyCheck
   MYBOOL isSC;
-  REAL   test, value, diff, maxdiff = 0.0, maxerr = 0.0;
+  REAL   test, value, diff, maxdiff = 0.0, maxerr = 0.0, *matValue;
 #ifndef RelativeAccuracyCheck
   REAL   hold;
 #endif
@@ -8953,12 +8956,8 @@ STATIC int check_solution(lprec *lp, int  lastcolumn, REAL *solution,
 #elif !defined RelativeAccuracyCheck
   REAL *plusum = NULL, *negsum = NULL;
 #endif
-#if defined UseMaxValueInCheck || !defined RelativeAccuracyCheck
- REAL *matValue;
- int *matRownr, *matColnr;
-#endif
-  int    i,j,n, errlevel = IMPORTANT, errlimit = 10;
-  /* MATrec *mat = lp->matA; */
+  int    i,j,n, errlevel = IMPORTANT, errlimit = 10, *matRownr, *matColnr;
+  MATrec *mat = lp->matA;
   int    solveStatus = OPTIMAL;
 
   report(lp, NORMAL, " \n");
@@ -9082,7 +9081,10 @@ STATIC int check_solution(lprec *lp, int  lastcolumn, REAL *solution,
       test += fabs(upbo[i]);
     }
     value = solution[i];
-    test = unscaled_value(lp, test, i);
+    if (fabs(test) < lp->epsvalue)
+        value = scaled_value(lp, value, i);
+    else
+        test = unscaled_value(lp, test, i);
 #ifndef LegacySlackDefinition
     value += test;
 #endif
@@ -9136,7 +9138,10 @@ STATIC int check_solution(lprec *lp, int  lastcolumn, REAL *solution,
       value = fabs(upbo[i]) - value;
 #endif
     }
-    test = unscaled_value(lp, test, i);
+    if (fabs(test) < lp->epsvalue)
+        value = scaled_value(lp, value, i);
+    else
+        test = unscaled_value(lp, test, i);
 #ifndef LegacySlackDefinition
     value += test;
 #endif
@@ -9556,7 +9561,7 @@ Abandon:
             from = OrigObj[i]-min1;
           if (min2<infinite)
             till = OrigObj[i]+min2;
-          a = lp->solution[varnr];
+          a = scaled_value(lp, lp->solution[varnr], varnr);
           if (is_maxim(lp)) {
             if (a - lp->lowbo[varnr] < epsvalue)
               from = -infinite; /* if variable is at lower bound then decrementing objective coefficient will not result in extra iterations because it would only extra decrease the value, but since it is at its lower bound ... */

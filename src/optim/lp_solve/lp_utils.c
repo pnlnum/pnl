@@ -6,7 +6,7 @@
 #include "lp_utils.h"
 #include <time.h>
 #include <sys/timeb.h>
-/* #include "lp_bit.h" */
+#include "lp_bit.h"
 
 #ifdef FORTIFY
 # include "lp_fortify.h"
@@ -531,14 +531,14 @@ STATIC int searchFor(int target, int *attributes, int size, int offset, MYBOOL a
     match = attributes[beginPos];
     if(absolute)
       match = abs(match);
-    while((beginPos < endPos) && (match != target)) {
-      beginPos++;
-      match = attributes[beginPos];
-      if(absolute)
-        match = abs(match);
-    }
-    if(match == target)
-      endPos = beginPos;
+      while((beginPos < endPos) && (match != target)) {
+        beginPos++;
+        match = attributes[beginPos];
+        if(absolute)
+          match = abs(match);
+      }
+      if(match == target)
+        endPos = beginPos;
   }
 
  /* Return the index if a match was found, or signal failure with a -1 */
@@ -926,8 +926,8 @@ STATIC int compareLink(LLrec *linkmap1, LLrec *linkmap2)
   test = memcmp(&linkmap1->size, &linkmap2->size, sizeof(int));
   if(test == 0)
     test = memcmp(&linkmap1->count, &linkmap2->count, sizeof(int));
-  if(test == 0)
-    test = memcmp(linkmap1->map, linkmap2->map, sizeof(int)*(2*linkmap1->size+1));
+    if(test == 0)
+      test = memcmp(linkmap1->map, linkmap2->map, sizeof(int)*(2*linkmap1->size+1));
 
   return( test );
 }

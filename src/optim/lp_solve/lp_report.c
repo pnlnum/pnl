@@ -369,6 +369,7 @@ void REPORT_solution(lprec *lp, int columns)
   REAL value;
   presolveundorec *psundo = lp->presolve_undo;
   MYBOOL NZonly = (MYBOOL) ((lp->print_sol & AUTOMATIC) > 0);
+  MYBOOL precision = (MYBOOL) ((lp->print_sol & PRECISION) > 0);
 
   if(lp->outstream == NULL)
     return;
@@ -383,7 +384,10 @@ void REPORT_solution(lprec *lp, int columns)
     if(NZonly && (fabs(value) < lp->epsprimal))
       continue;
     n = (n+1) % columns;
-    fprintf(lp->outstream, "%-20s %12g", get_origcol_name(lp, i), (double) value);
+    if (precision)
+      fprintf(lp->outstream, "%-20s %.17g", get_origcol_name(lp, i), (double) value);
+    else
+      fprintf(lp->outstream, "%-20s %12g", get_origcol_name(lp, i), (double) value);
     if(n == 0)
       fprintf(lp->outstream, "\n");
     else
@@ -398,6 +402,7 @@ void REPORT_constraints(lprec *lp, int columns)
   int i, n;
   REAL value;
   MYBOOL NZonly = (MYBOOL) ((lp->print_sol & AUTOMATIC) > 0);
+  MYBOOL precision = (MYBOOL) ((lp->print_sol & PRECISION) > 0);
 
   if(lp->outstream == NULL)
     return;
@@ -412,7 +417,10 @@ void REPORT_constraints(lprec *lp, int columns)
     if(NZonly && (fabs(value) < lp->epsprimal))
       continue;
     n = (n+1) % columns;
-    fprintf(lp->outstream, "%-20s %12g", get_row_name(lp, i), value);
+    if (precision)
+      fprintf(lp->outstream, "%-20s %.17g", get_row_name(lp, i), (double) value);
+    else
+      fprintf(lp->outstream, "%-20s %12g", get_row_name(lp, i), (double) value);
     if(n == 0)
       fprintf(lp->outstream, "\n");
     else
