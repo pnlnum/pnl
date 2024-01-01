@@ -941,6 +941,7 @@ static int unpack_sp_matrix(PnlObject *Obj, void *buf, int bufsize, int *pos, MP
   if ((info = MPI_Unpack(buf, bufsize, pos, &n, 1, MPI_INT, comm))) return info;
   if ((info = MPI_Unpack(buf, bufsize, pos, &nz, 1, MPI_INT, comm))) return info;
   pnl_sp_mat_object_resize(M, m, n, nz);
+  M->nz = nz;
   if ((info = MPI_Unpack(buf, bufsize, pos, M->I, m + 1, MPI_INT, comm))) return info;
   if ((info = MPI_Unpack(buf, bufsize, pos, M->J, nz, MPI_INT, comm))) return info;
   switch (PNL_GET_TYPE(M))
