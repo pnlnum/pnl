@@ -102,30 +102,7 @@ The two tensors \var{T} and \var{SpT} do actually store the same information ---
       index, int degree, int nb_variates}
     \sshortdescribe Create a \PnlBasis for the family
     defined by \var{index} (see Table~\ref{tab:basis_index} and \reffun{pnl_basis_type_register}) with total degree less
-    or equal than \var{degree} and \var{nb_variates} variates. The total degree is
-    the sum of the partial degrees.\\
-    For instance, calling \verb!pnl_basis_create_from_degree(index, 2, 4)! is
-    equivalent to calling \verb!pnl_basis_create_from_tensor(index, T)! where
-    \var{T} is given by
-    \[ \left(
-      \begin{array}{cccc}
-        0 & 0 & 0 & 0\\
-        1 & 0 & 0 & 0\\
-        0 & 1 & 0 & 0\\
-        0 & 0 & 1 & 0\\
-        0 & 0 & 0 & 1\\
-        1 & 1 & 0 & 0\\
-        1 & 0 & 1 & 0\\
-        1 & 0 & 0 & 1\\
-        0 & 1 & 1 & 0\\
-        0 & 1 & 0 & 1\\
-        0 & 0 & 1 & 1\\
-        2 & 0 & 0 & 0\\
-        0 & 2 & 0 & 0\\
-        0 & 0 & 2 & 0\\
-        0 & 0 & 0 & 2\\
-      \end{array}
-    \right) \]
+    or equal than \var{degree} and \var{nb_variates} variates. The total degree is the sum of the partial degrees.
   \item \describefun{\PnlBasis *}{pnl_basis_create_from_prod_degree}{int index, int degree, int nb_variates}
     \sshortdescribe Create a \PnlBasis for the family
     defined by \var{index} (see Table~\ref{tab:basis_index} and \reffun{pnl_basis_type_register}) with total degree less
@@ -147,9 +124,7 @@ The two tensors \var{T} and \var{SpT} do actually store the same information ---
     described by the tensor matrix \var{T}. The number of lines of \var{T} is
     the number of functions of the basis whereas the numbers of columns of
     \var{T} is the number of variates of the functions.
-    Note that \var{T} is not copied inside this function but only its address is
-    stored, so {\bf never} free \var{T}. It will be freed when calling
-    \reffun{pnl_basis_free} on the returned object. i\\
+    \\
     Here is an example of a tensor matrix. Assume you are working with three
     variate functions, the basis \verb!{ 1, x, y, z, x^2, xy, yz, z^3}! is
     decomposed in the one dimensional canonical basis using the following tensor
@@ -166,6 +141,12 @@ The two tensors \var{T} and \var{SpT} do actually store the same information ---
         0 & 0 & 3
       \end{array}
     \right) \]
+
+  \item \describefun{\PnlBasis *}{pnl_basis_create_from_sparse_tensor}{int
+      index, PnlSpMatInt \ptr SpT}
+    \sshortdescribe Create a \PnlBasis for the polynomial family
+    defined by \var{index} (see Table~\ref{tab:basis_index}) using the basis
+    described by the sparse tensor matrix \var{SpT}. The number of lines of \var{SpT} is the number of functions of the basis whereas the numbers of columns of \var{SpT} is the number of variates of the functions.
 
   \item \describefun{void }{pnl_basis_set_from_tensor}{\PnlBasis \ptr
       b, int index, const \PnlMatInt \ptr T}
