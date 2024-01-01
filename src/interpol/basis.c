@@ -829,7 +829,6 @@ PnlBasis *pnl_basis_new()
   o->id = 0;
   o->label = "";
   o->nb_variates = 0;
-  o->T = NULL;
   o->SpT = NULL;
   o->isreduced = 0;
   o->center = NULL;
@@ -854,25 +853,35 @@ PnlBasis *pnl_basis_new()
 }
 
 /**
- * Create a PnlBasis and stores it into its first argument
+ * Set an existing basis to a given full tensor representation
  *
  * @param b an already allocated basis (as returned by pnl_basis_new for instance)
- * @param T the tensor of the multi-dimensional basis. No copy of T is done, so
- * do not free T. It will be freed transparently by pnl_basis_free
+ * @param T the full tensor of the multi-dimensional basis.
  */
 void pnl_basis_set_from_tensor(PnlBasis *b, const PnlMatInt *T)
 {
-  b->nb_func = T->m;
-  b->nb_variates = T->n;
+  PnlSpMatInt *SpT = pnl_sp_mat_int_create_from_mat(T);
+  pnl_basis_set_from_sparse_tensor(b, SpT);
+}
+
+/**
+ * Set an existing basis to a given sparse tensor representation
+ *
+ * @param b an already allocated basis (as returned by pnl_basis_new for instance)
+ * @param SpT the sparse tensor of the multi-dimensional basis. No copy of SpT is done, so
+ * do not free it. It will be freed transparently by pnl_basis_free
+ */
+void pnl_basis_set_from_sparse_tensor(PnlBasis *b, const PnlSpMatInt *SpT)
+{
+  b->nb_func = SpT->m;
+  b->nb_variates = SpT->n;
   if(b->func_list) free(b->func_list);
   b->len_func_list = 0;
-  b->len_T = T->m;
+  b->len_T = SpT->m;
 
   /* Not sure this is the right place to put it */
-  pnl_mat_int_free(&(b->T));
   pnl_sp_mat_int_free(&(b->SpT));
-  b->T = (PnlMatInt *) T;
-  b->SpT = pnl_sp_mat_int_create_from_mat(T);
+  b->SpT = (PnlSpMatInt *) SpT;
 }
 
 /**
@@ -1057,7 +1066,7 @@ void pnl_basis_add_function(PnlBasis *b, PnlRnFuncR *f)
  */
 void pnl_basis_clone(PnlBasis *dest, const PnlBasis *src)
 {
-  pnl_basis_set_from_tensor(dest, src->T);
+  pnl_basis_set_from_sparse_tensor(dest, src->SpT);
   dest->id = src->id;
   dest->label = src->label;
   dest->f = src->f;
@@ -1091,7 +1100,6 @@ void pnl_basis_clone(PnlBasis *dest, const PnlBasis *src)
 void pnl_basis_del_elt_i(PnlBasis *B, int i)
 {
   PNL_CHECK(i >= B->len_T, "size mismatch",  "basis_del_elt_i");
-  pnl_mat_int_del_row(B->T, i);
   pnl_sp_mat_int_del_row(B->SpT, i);
   --(B->nb_func);
   --(B->len_T);
@@ -1109,8 +1117,17 @@ void pnl_basis_del_elt(PnlBasis *B, const PnlVectInt *d)
   PNL_CHECK(B->nb_variates != d->size, "size mismatch",  "basis_del_elt");
   for (i = 0 ; i < B->nb_func ; i++)
     {
-      PnlVectInt Ti = pnl_vect_int_wrap_mat_row(B->T, i);
-      if (pnl_vect_int_eq(&Ti, d) == PNL_TRUE) break;
+      int j;
+      int test = 1;
+      for (j = 0; j < d->size; j++)
+        {
+          if (pnl_sp_mat_int_get(B->SpT, i, j) != pnl_vect_int_get(d, j))
+            {
+              test = 0;
+              break;
+            }
+        }
+      if (test) break;
     }
   if (i < B->nb_func) pnl_basis_del_elt_i(B, i);
 }
@@ -1124,7 +1141,6 @@ void pnl_basis_del_elt(PnlBasis *B, const PnlVectInt *d)
 void pnl_basis_add_elt(PnlBasis *B, const PnlVectInt *d)
 {
   PNL_CHECK(B->nb_variates != d->size, "size mismatch",  "basis_del_elt");
-  pnl_mat_int_add_row(B->T, B->T->m, d);
   pnl_sp_mat_int_add_row(B->SpT, B->SpT->m, d);
   ++(B->nb_func);
   ++(B->len_T);
@@ -1246,7 +1262,6 @@ void pnl_basis_set_map(
 void pnl_basis_free(PnlBasis **B)
 {
   if (*B == NULL) return;
-  pnl_mat_int_free(&((*B)->T));
   pnl_sp_mat_int_free(&(*B)->SpT);
   if ((*B)->f_params_size > 0)
     {
@@ -1326,7 +1341,7 @@ void pnl_basis_print(const PnlBasis *B)
  */
 double pnl_basis_ik(const PnlBasis *b, const double *x, int i, int k)
 {
-  const int Tik = PNL_MGET(b->T, i, k);
+  const int Tik = pnl_sp_mat_int_get(b->SpT, i, k);
   if (Tik == 0) return 1.;
   return f_reduction_map(b, x[k], Tik, k);
 }
@@ -1380,7 +1395,7 @@ double pnl_basis_i_D(const PnlBasis *b, const double *x, int i, int j)
 
   CHECK_IS_DIFFERENTIABLE(b);
   /* Test if the partial degree is small enough to return 0 */
-  if (PNL_MGET(b->T, i, j) == 0) return 0.;
+  if (pnl_sp_mat_int_get(b->SpT, i, j) == 0) return 0.;
 
   for (l = b->SpT->I[i] ; l < b->SpT->I[i + 1] ; l++)
     {
@@ -1413,8 +1428,8 @@ double pnl_basis_i_D2(const PnlBasis *b, const double *x, int i, int j1, int j2)
   double aux = 1;
   CHECK_IS_DIFFERENTIABLE(b);
   /* Test if the partial degree is small enough to return 0 */
-  if ((j1 == j2) && PNL_MGET(b->T, i, j1) <= 1) return 0.;
-  if (PNL_MGET(b->T, i, j1) == 0 || PNL_MGET(b->T, i, j2) == 0) return 0.;
+  if ((j1 == j2) && pnl_sp_mat_int_get(b->SpT, i, j1) <= 1) return 0.;
+  if (pnl_sp_mat_int_get(b->SpT, i, j1) == 0 || pnl_sp_mat_int_get(b->SpT, i, j2) == 0) return 0.;
 
   if (j1 == j2)
     {
@@ -1655,7 +1670,7 @@ void pnl_basis_eval_derivs(const PnlBasis *b, const PnlVect *coef, const double 
               const int k = b->SpT->J[l];
               if (k != j) auxf *= f[k];
             }
-            const int Tij = PNL_MGET(b->T, i, j);
+            const int Tij = pnl_sp_mat_int_get(b->SpT, i, j);
             /* gradient */
             if (Tij >= 1)
               {
