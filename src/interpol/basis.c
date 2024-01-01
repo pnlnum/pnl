@@ -228,48 +228,6 @@ static PnlMatInt *compute_tensor_from_prod_degree(int degree, int nb_variates)
 }
 
 /**
- * Compute the tensor for a tensor local basis
- *
- * @param space_dim the dimension of the state space
- * @param n_intervals this is an array of size \a space_dim describing the number of intervals for every dimension
- * @return PnlMatInt
- */
-static PnlMatInt* compute_tensor_permutation(int space_dim, int *n_elements)
-{
-  int permutation_length, i, col;
-  int inner_loop_length, outer_loop_length;
-  PnlMatInt *T;
-  permutation_length = 1;
-  for (i = 0; i < space_dim; i++)
-    {
-      permutation_length *= n_elements[i];
-    }
-  T = pnl_mat_int_create(permutation_length, space_dim);
-  outer_loop_length = permutation_length;
-  inner_loop_length = 1;
-  for (col = 0; col < space_dim; col++)
-    {
-      int outer_index;
-      outer_loop_length /= n_elements[col];
-      for (outer_index = 0; outer_index < outer_loop_length; outer_index++)
-        {
-          int middle_loop;
-          for (middle_loop = 0; middle_loop < n_elements[col]; middle_loop++)
-            {
-              int inner_loop;
-              for (inner_loop = 0; inner_loop < inner_loop_length; inner_loop++)
-                {
-                  int row = outer_index * inner_loop_length * n_elements[col] + middle_loop * inner_loop_length + inner_loop;
-                  PNL_MLET(T, row, col) = middle_loop + 1;
-                }
-            }
-        }
-      inner_loop_length *= n_elements[col];
-    }
-  return T;
-}
-
-/**
  *  Canonical polynomials
  *  @param x the address of a real number
  *  @param l the index of the polynomial to be evaluated
