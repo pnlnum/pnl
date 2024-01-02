@@ -79,7 +79,7 @@ struct _PnlBasis
   double       *scale;
   /** An array of additional functions */
   PnlRnFuncR   *func_list;
-  /** The number of functions in #func_list */
+  /** The number of functions in @p func_list */
   int           len_func_list;
   /** Extra parameters to pass to basis functions */
   void         *f_params;
