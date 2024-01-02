@@ -20,11 +20,9 @@ struct _PnlBasis
   int           nb_variates;
   /** The total number of elements in the basis */
   int           nb_func;
-  /** The tensor matrix */
-  PnlMatInt    *T;
   /** The sparse Tensor matrix */
   PnlSpMatInt  *SpT;
-  /** The number of functions in the tensor #T */
+  /** The number of functions in the tensor @p SpT */
   int           len_T;
   /** Compute the i-th element of the one dimensional basis.  As a convention, (*f)(x, 0) MUST be equal to 1 */
   double      (*f)(double x, int i, int dim, void *params);
@@ -40,7 +38,7 @@ struct _PnlBasis
   double       *scale;
   /** An array of additional functions */
   PnlRnFuncR   *func_list;
-  /** The number of functions in #func_list */
+  /** The number of functions in @p func_list */
   int           len_func_list;
   /** Extra parameters to pass to basis functions */
   void         *f_params;
