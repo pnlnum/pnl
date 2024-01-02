@@ -89,9 +89,9 @@ struct _PnlBasis
   double       (*map)(double x, int dim, void *params);
   /** First derivative of the non linear mapping  */
   double       (*Dmap)(double x, int dim, void *params);
-  /** Second dérivate of the linear mapping */
+  /** Second derivate of the linear mapping */
   double       (*D2map)(double x, int dim, void *params);
-  /** Extra paramaters for map, Dmap and D2map */
+  /** Extra parameters for map, Dmap and D2map */
   void          *map_params;
   /** Size of @p map_params in bytes to be passed to malloc */
   size_t         map_params_size;
