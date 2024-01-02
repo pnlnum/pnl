@@ -25,8 +25,12 @@ h5 { font-size: 110%;   font-style: bold; }
 
 
 /* Font settings for page elements */
-code, pre, tt,  {
+code, pre, tt {
     font-family:  monospace;
+}
+
+pre.lstlisting, span.verb {
+    font-size: 80%;
 }
 
 /* Indented block */
