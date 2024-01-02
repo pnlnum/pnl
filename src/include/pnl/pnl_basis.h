@@ -62,10 +62,8 @@ struct _PnlBasis
   /** The total number of elements in the basis */
   int           nb_func;
   /** The tensor matrix */
-  PnlMatInt    *T;
-  /** The sparse Tensor matrix */
   PnlSpMatInt  *SpT;
-  /** The number of functions in the tensor #T */
+  /** The number of functions in the tensor @p SpT */
   int           len_T;
   /** Compute the i-th element of the one dimensional basis.  As a convention, (*f)(x, 0) MUST be equal to 1 */
   double      (*f)(double x, int i, int dim, void *params);
@@ -81,7 +79,7 @@ struct _PnlBasis
   double       *scale;
   /** An array of additional functions */
   PnlRnFuncR   *func_list;
-  /** The number of functions in #func_list */
+  /** The number of functions in @p func_list */
   int           len_func_list;
   /** Extra parameters to pass to basis functions */
   void         *f_params;
@@ -91,9 +89,9 @@ struct _PnlBasis
   double       (*map)(double x, int dim, void *params);
   /** First derivative of the non linear mapping  */
   double       (*Dmap)(double x, int dim, void *params);
-  /** Second dérivate of the linear mapping */
+  /** Second derivate of the linear mapping */
   double       (*D2map)(double x, int dim, void *params);
-  /** Extra paramaters for map, Dmap and D2map */
+  /** Extra parameters for map, Dmap and D2map */
   void          *map_params;
   /** Size of @p map_params in bytes to be passed to malloc */
   size_t         map_params_size;
@@ -111,6 +109,7 @@ extern void pnl_basis_clone(PnlBasis *dest, const PnlBasis *src);
 extern PnlBasis* pnl_basis_copy(const PnlBasis *B);
 extern void pnl_basis_set_type(PnlBasis *B, int index);
 extern void  pnl_basis_set_from_tensor(PnlBasis *b, const PnlMatInt *T);
+extern void  pnl_basis_set_from_sparse_tensor(PnlBasis *b, const PnlSpMatInt *T);
 extern PnlBasis* pnl_basis_create_from_tensor( int index, const PnlMatInt *T);
 extern void pnl_basis_del_elt(PnlBasis *B, const PnlVectInt *d);
 extern void pnl_basis_del_elt_i(PnlBasis *B, int i);
