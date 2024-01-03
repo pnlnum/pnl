@@ -12,7 +12,7 @@ FUNCTIONS_TO_BE_REMOVED="\($FUNCTIONS_TO_BE_REMOVED\)"
 echo $FUNCTIONS_TO_BE_REMOVED
 
 # Get the list of all _pnl function symbols and discard any MPI related stuff
-nm $BUILD/lib/libpnl.dylib | grep ' T ' | awk '{print $3;}' | grep -v "$FUNCTIONS_TO_BE_REMOVED" | grep _pnl | grep -v '\.' | sed 's/^_/    /' > $TMPDIR/new.def
+nm $BUILD/src/libpnl.dylib | grep ' T ' | awk '{print $3;}' | grep -v "$FUNCTIONS_TO_BE_REMOVED" | grep _pnl | grep -v '\.' | sed 's/^_/    /' > $TMPDIR/new.def
 
 # Compute the difference with the current pnl.def
 diff -u -w src/pnl.def $TMPDIR/new.def > $TMPDIR/def.patch
