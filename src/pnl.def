@@ -157,6 +157,7 @@ EXPORTS
     pnl_basis_print 
     pnl_basis_reset_reduced
     pnl_basis_set_domain 
+    pnl_basis_set_from_sparse_tensor
     pnl_basis_set_from_tensor 
     pnl_basis_set_map
     pnl_basis_set_reduced 
