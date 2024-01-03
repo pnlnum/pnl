@@ -1,5 +1,6 @@
 # PNL
 
+![GitHub release (with filter)](https://img.shields.io/github/v/release/pnlnum/pnl)
 ![Build Status](https://github.com/pnlnum/pnl/actions/workflows/cmake.yml/badge.svg?branch=master)
 
 This is PNL, a library for scientific computing. PNL is free software:
