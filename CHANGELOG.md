@@ -5,6 +5,16 @@ All notable changes to PNL will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.15.0] - 2024-01-03
+
+### Changed
+
+- Remove the full tensor representation of `PnlBasis` and only use the sparse tensor (#9).
+
+### Fixed
+
+- Fix unpacking of sparse matrices.
+
 ## [1.14.0] - 2023-12-20
 
 ### Added
