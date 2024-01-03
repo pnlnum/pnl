@@ -1,7 +1,6 @@
 # PNL
 
-[![Build Status](https://travis-ci.org/pnlnum/pnl.svg?branch=master)](https://travis-ci.org/pnlnum/pnl)
-[![Build Status](https://ci.appveyor.com/api/projects/status/github/pnlnum/pnl?branch=master&svg=true)](https://ci.appveyor.com/project/pnlnum/pnl/branch/master)
+![Build Status](https://github.com/pnlnum/pnl/actions/workflows/cmake.yml/badge.svg?branch=master)
 
 This is PNL, a library for scientific computing. PNL is free software:
 you can redistribute it and/or modify it under the terms of the GNU Lesser
