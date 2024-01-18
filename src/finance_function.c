@@ -24,7 +24,7 @@
 /************************************************************************/
 
 /*
- * This code has been significantly modified by 
+ * This code has been significantly modified by
  * Jérôme Lelong <jerome.lelong@gmail.com>
  * November 2009
  */
@@ -47,7 +47,7 @@ typedef struct Pnl_Data_Vol_Impli_BS{
  * @param ptprice a pointer to store price
  * @param ptdelta a pointer to store first derivative against spot
  */
-int pnl_cf_call_bs(double s, double k, double t, double r, double divid, 
+int pnl_cf_call_bs(double s, double k, double t, double r, double divid,
                    double sigma, double *ptprice, double *ptdelta)
 {
   double V_Sqrt_T;
@@ -60,12 +60,12 @@ int pnl_cf_call_bs(double s, double k, double t, double r, double divid,
   PNL_CHECK(k < 0., "Strike required to be >= 0", "pnl_cf_call_bs");
 
   V_Sqrt_T = sigma * sqrt(t);
-  D1 = (log (s / k) + ((r - divid) *t + 0.5 * sigma * sigma * t)) / V_Sqrt_T; 
+  D1 = (log (s / k) + ((r - divid) *t + 0.5 * sigma * sigma * t)) / V_Sqrt_T;
   D2 = D1 - V_Sqrt_T;
-  /* price */
-  *ptprice = s * exp (-divid * t) * cdf_nor(D1) - k * exp (-r * t) * cdf_nor(D2);
   /*Delta*/
   *ptdelta = exp ( -divid * t) * cdf_nor(D1);
+  /* price */
+  *ptprice = s * (*ptdelta) - k * exp (-r * t) * cdf_nor(D2);
   return PNL_OK;
 }
 
@@ -94,12 +94,12 @@ int pnl_cf_put_bs(double s, double k, double t, double r, double divid,
   PNL_CHECK(k < 0., "Strike required to be >= 0", "pnl_cf_put_bs");
 
   V_Sqrt_T = sigma * sqrt(t);
-  D1 = (log (s / k) + ((r - divid) *t + 0.5 * sigma * sigma * t)) / V_Sqrt_T; 
+  D1 = (log (s / k) + ((r - divid) *t + 0.5 * sigma * sigma * t)) / V_Sqrt_T;
   D2 = D1 - V_Sqrt_T;
-  /* price */
-  *ptprice = k * exp (-r * t) * cdf_nor(-D2) - s * exp (-divid * t) * cdf_nor(-D1);
   /*Delta*/
   *ptdelta = -exp ( -divid * t) * cdf_nor(-D1);
+  /* price */
+  *ptprice = k * exp (-r * t) * cdf_nor(-D2) + s * (*ptdelta);
   return PNL_OK;
 }
 
@@ -129,7 +129,7 @@ double pnl_bs_call(double s, double k, double t, double r, double divid, double 
  * @param t a double, the Maturity
  * @param r a double, the interest rate
  * @param divid a double, dividend rate
- * @param sigma a doule the volatility
+ * @param sigma a double, the volatility
  */
 double pnl_bs_put(double s, double k, double t, double r, double divid, double sigma)
 {
@@ -148,11 +148,11 @@ double pnl_bs_put(double s, double k, double t, double r, double divid, double s
  * @param t a double, the Maturity
  * @param r a double, the interest rate
  * @param divid a double, dividend rate
- * @param sigma a doule the volatility
+ * @param sigma a double, the volatility
  */
 double pnl_bs_call_put(int iscall, double s, double k, double t, double r, double divid, double sigma)
 {
-  if (iscall) 
+  if (iscall)
     return pnl_bs_call(s, k, t, r, divid, sigma);
   else
     return pnl_bs_put(s, k, t, r, divid, sigma);
@@ -160,14 +160,14 @@ double pnl_bs_call_put(int iscall, double s, double k, double t, double r, doubl
 
 
 /**
- * give the second derivative w.r.t the spot of a call/put option price in the BS model 
+ * give the second derivative w.r.t the spot of a call/put option price in the BS model
  *
  * @param s a double value of spot
  * @param k a double, the Strike
  * @param t a double, the Maturity
  * @param r a double, the interest rate
  * @param divid a double, dividend rate
- * @param sigma a doule the volatility
+ * @param sigma a double, the volatility
  * @return gamma of a call/put option
  */
 double pnl_bs_gamma(double s, double k, double t, double r, double divid, double sigma)
@@ -181,7 +181,7 @@ double pnl_bs_gamma(double s, double k, double t, double r, double divid, double
   PNL_CHECK(k < 0., "Strike required to be >= 0", "pnl_cf_gamma_bs");
 
   V_Sqrt_T = sigma * sqrt(t);
-  D1 = (log (s / k) + ((r - divid) *t + 0.5 * sigma * sigma * t)) / V_Sqrt_T; 
+  D1 = (log (s / k) + ((r - divid) *t + 0.5 * sigma * sigma * t)) / V_Sqrt_T;
   return exp (-divid * t) * pnl_normal_density (D1) / (s * V_Sqrt_T);
 }
 
@@ -194,7 +194,7 @@ double pnl_bs_gamma(double s, double k, double t, double r, double divid, double
  * @param t a double, the Maturity
  * @param r a double, the interest rate
  * @param divid a double, dividend rate
- * @param sigma a doule the volatility
+ * @param sigma a double, the volatility
  * @return vega of a call/put option
  */
 double pnl_bs_vega (double s, double k, double t, double r, double divid, double sigma)
@@ -208,7 +208,7 @@ double pnl_bs_vega (double s, double k, double t, double r, double divid, double
   PNL_CHECK(k < 0., "Strike required to be >= 0", "pnl_cf_vega_bs");
 
   V_Sqrt_T = sigma * sqrt(t);
-  D1 = (log (s / k) + ((r - divid) *t + 0.5 * sigma * sigma * t)) / V_Sqrt_T; 
+  D1 = (log (s / k) + ((r - divid) *t + 0.5 * sigma * sigma * t)) / V_Sqrt_T;
   return s * exp (-divid * t) * pnl_normal_density (D1) * sqrt (t);
 
 }
@@ -231,8 +231,8 @@ static void pnl_bs_increment_call_put(double x, double * fx, double * dfx, void*
  * @param divid the instantaneous dividend rate
  * @param spot the initial value of the asset
  * @param Strike a double, for value contract
- * @param T a double, echeance time (T)
- * @param error an integer containing the error code on output (PNL_OK or PNL_FAIL) 
+ * @param T a double, time to maturity
+ * @param error an integer containing the error code on output (PNL_OK or PNL_FAIL)
  * @return implied of a call/put option
  */
 double pnl_bs_implicit_vol (int is_call, double Price, double spot, double Strike,
@@ -281,7 +281,7 @@ double pnl_bs_implicit_vol (int is_call, double Price, double spot, double Strik
  * @param r the instantaneous interest rate
  * @param divid the instantaneous dividend rate
  * @param Strike a Vector, for value contract
- * @param Maturity a Vector, echeance time (T)
+ * @param Maturity a Vector, time to maturity
  * @param Vol a Matrix, to store matrix volatility
  * @return error code  indicating the number of errors (0 if all was PNL_OK)
  */
