@@ -739,7 +739,7 @@ and the size of the matrix.
 
 \item \describefun{int}{pnl_mat_resize}{\PnlMat \ptr M, int m, int n}
   \sshortdescribe Resize a \PnlMat. The new matrix is of size
-  \var{m x n}. The old data are lost.
+  \var{m x n}. As much as possible of the old data is kept in the row-wise storage: if the number of columns does not change, the common line values are kept unchanged.
 \item \describefun{\PnlVect \ptr }{pnl_vect_create_submat}{const
   \PnlMat \ptr M, const \PnlVectInt \ptr indi, const
   \PnlVectInt \ptr indj}
