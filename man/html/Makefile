@@ -7,7 +7,7 @@ all:
 manual:
 	@echo "running htlatex"
 	@export TEXINPUTS=`pwd`/..//:: ; \
-	htlatex ../pnl-manual 'xhtml,uni-html4,2,subsection+,next'
+	htlatex ../pnl-manual 'xhtml,early_'
 
 
 index:
