@@ -10,16 +10,6 @@
 .lmsy8-{font-size:72%;}
 .lmsy6-{font-size:54%;}
 .lmex-10{font-size:90%;}
-.ec-lmri-10x-x-109{ font-style:italic;}
-.ec-lmri-10x-x-109{ font-style:italic;}
-.ec-lmri-10x-x-109{ font-style:italic;}
-.ec-lmri-10x-x-109{ font-style:italic;}
-.ec-lmri-10x-x-109{ font-style:italic;}
-.ec-lmri-10x-x-109{ font-style:italic;}
-.ec-lmri-10x-x-109{ font-style:italic;}
-.ec-lmri-10x-x-109{ font-style:italic;}
-.ec-lmri-10x-x-109{ font-style:italic;}
-.ec-lmri-10x-x-109{ font-style:italic;}
 .ec-lmtt-10x-x-109{ font-family: monospace,monospace;}
 .ec-lmtt-10x-x-109{ font-family: monospace,monospace;}
 .ec-lmtt-10x-x-109{ font-family: monospace,monospace;}
@@ -30,6 +20,16 @@
 .ec-lmtt-10x-x-109{ font-family: monospace,monospace;}
 .ec-lmtt-10x-x-109{ font-family: monospace,monospace;}
 .ec-lmtt-10x-x-109{ font-family: monospace,monospace;}
+.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmri-10x-x-109{ font-style:italic;}
+.ec-lmri-10x-x-109{ font-style:italic;}
 .ts1-lmr10-x-x-109{}
 .rm-lmr-10x-x-109{}
 .lmmi-10x-x-109{}
@@ -88,7 +88,6 @@
 .ts1-lmbx10-x-x-109{}
 .htf-calligraphy {font-family:cursive}
 .htf-calligraphy-bold {font-family:cursive ; font-weight: bold; }
-@media print {span.next {visibility:hidden;}}
 p{margin-top:0;margin-bottom:0}
 p.indent{text-indent:0;}
 p + p{margin-top:1em;}
@@ -139,6 +138,7 @@ div.flushleft {text-align: left;}
 .framebox-r {text-align:right;}
 span.thank-mark{ vertical-align: super }
 span.footnote-mark sup.textsuperscript, span.footnote-mark a sup.textsuperscript{ font-size:80%; }
+code.verb{font-family:monospace,monospace;}
 div.tabular, div.center div.tabular {text-align: center; margin-top:0.5em; margin-bottom:0.5em; }
 table.tabular td p{margin-top:0em;}
 table.tabular {margin-left: auto; margin-right: auto;}
@@ -270,8 +270,12 @@ h5 { font-size: 110%;   font-style: bold; }
 
 
 /* Font settings for page elements */
-code, pre, tt,  {
+code, pre, tt {
     font-family:  monospace;
+}
+
+pre.lstlisting, span.verb {
+    font-size: 80%;
 }
 
 /* Indented block */
