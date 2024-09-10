@@ -65,12 +65,14 @@ struct _PnlRng
 \item \describefun{\PnlRng\ptr }{pnl_rng_create}{int type}
   \sshortdescribe Create a \PnlRng corresponding to \var{type}
   which can be any of the values \var{PNL_RNG_XXX} listed in
-  Table~\ref{rng-indices} which correspond to {\bf pseudo} random number generators.
-  Once a generator has been created, you {\bf must} call
-  \reffun{pnl_rng_sseed} before using it. 
+  Table~\ref{rng-indices}. Once a generator has been created, before using it, you {\bf must} call 
+  \begin{itemize}
+    \item \reffun{pnl_rng_sseed} if it is a pseudo random number generator,
+    \item \reffun{pnl_rng_sdim} if it is a quasi random number generator,
+  \end{itemize}
 \item \describefun{void}{pnl_rng_sseed}{\PnlRng \ptr rng, unsigned
     long int s}
-  \sshortdescribe Set the seed of the genrator \var{rng} using \var{s}. If
+  \sshortdescribe Set the seed of the generator \var{rng} using \var{s}. If
   \var{s=0}, then a default seed (depending on the generator) is used.
 \item \describefun{int}{pnl_rng_sdim}{\PnlRng \ptr rng, int dim}
   \sshortdescribe Set the dimension of the state space for a QMC generator and
