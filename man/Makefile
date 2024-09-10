@@ -10,9 +10,7 @@ pnl-manual.pdf: bases.tex cdf.tex complex.tex fft.tex finance.tex integ.tex\
 		laplace.tex  linear_algebra.tex mathematical_functions.tex \
 		mathtools.tex ode.tex  optim.tex pnl-manual.tex rng.tex roots.tex \
 		some_bindings.tex specfun.tex  types.tex 
-	pdflatex pnl-manual
-	makeindex -s index.isty pnl-manual
-	pdflatex pnl-manual
+	latexmk pnl-manual
 
 clean:
 	for i in aux idx ilg ind log out dvi toc;\
