@@ -727,9 +727,7 @@ and the size of the matrix.
 \item \describefun{\PnlMat}{pnl_mat_wrap_vect}
   {const \PnlVect \ptr V}
   \sshortdescribe Return a \PnlMat (not a pointer) whose array is
-  the array of \var{V}. The new matrix shares its data with the
-  vector \var{V}, which means that any modification to one of them will affect
-  the other.
+  the array of \var{V}. The new matrix has size \var{V->size x 1} and shares its data with the vector \var{V}, which means that any modification to one of them will affect the other.
 
 
 \item \describefun{void}{pnl_mat_clone}{\PnlMat \ptr clone, const
