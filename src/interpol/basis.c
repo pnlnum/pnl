@@ -914,7 +914,9 @@ PnlBasis *pnl_basis_create_from_degree(int index, int degree, int nb_variates)
   PnlMatInt *T;
   CHECK_IS_CONSTRUCTIBLE_FROM_TENSOR(index, "Use pnl_basis_local_create to create a local basis");
   T = compute_tensor_from_sum_degree(degree, nb_variates);
-  return pnl_basis_create_from_tensor(index, T);
+  PnlBasis *basis = pnl_basis_create_from_tensor(index, T);
+  pnl_mat_int_free(&T);
+  return basis;
 }
 
 /**
