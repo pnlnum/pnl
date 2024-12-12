@@ -897,7 +897,9 @@ PnlBasis *pnl_basis_create(int index, int nb_func, int nb_variates)
     }
   degree--;
   T = compute_tensor_from_degree_function(degree, nb_variates, nb_func, NULL, count_sum_degree);
-  return pnl_basis_create_from_tensor(index, T);
+  PnlBasis *basis = pnl_basis_create_from_tensor(index, T);
+  pnl_mat_int_free(&T);
+  return basis;
 }
 
 /**
