@@ -366,7 +366,7 @@ static double D2HermiteD1(double x, int n, int dim, void *params)
  */
 static double Tchebychev_rec(double x, int n, int n0, double *f_n0, double *f_n1)
 {
-  if (n == 7)
+  if (n == n0)
     {
       return *f_n0;
     }
