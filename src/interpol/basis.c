@@ -380,7 +380,7 @@ static double Tchebychev_rec(double x, int n, int n0, double *f_n0, double *f_n1
 }
 
 /**
- *  Tchebytchev polynomials of any order
+ *  Tchebychev polynomials of any order
  *  @param x the address of a real number
  *  @param n the order of the polynomial to be evaluated
  *  @param dim the index of the component on which the function is applied
@@ -1329,12 +1329,12 @@ double pnl_basis_i(const PnlBasis *b, const double *x, int i)
       PnlVect view = pnl_vect_wrap_array(x, b->nb_variates);
       return PNL_EVAL_RNFUNCR(&(b->func_list[i-b->len_T]), &view);
     }
-    for (k = b->SpT->I[i] ; k < b->SpT->I[i + 1] ; k++)
-      {
-        const int j = b->SpT->J[k];
-        const int Tij = b->SpT->array[k];
-        aux *= f_reduction_map(b, x[j], Tij, j);
-      }
+  for (k = b->SpT->I[i] ; k < b->SpT->I[i + 1] ; k++)
+    {
+      const int j = b->SpT->J[k];
+      const int Tij = b->SpT->array[k];
+      aux *= f_reduction_map(b, x[j], Tij, j);
+    }
   return aux;
 }
 
@@ -1756,7 +1756,7 @@ static int pnl_basis_fit_ls_local(const PnlBasis *basis, PnlVect *coef, const Pn
 
   for (k = 0 ; k < coef->size; k++)
     {
-      PNL_LET(coef, k) /= count[k];
+      if (count[k] > 0) { PNL_LET(coef, k) /= count[k]; }
     }
   free(count);
   return PNL_OK;
